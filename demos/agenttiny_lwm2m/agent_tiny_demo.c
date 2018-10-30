@@ -41,17 +41,38 @@
 
 #define LWM2M_LIFE_TIME     50000
 
-char *g_endpoint_name = "44440003";
-#ifdef WITH_DTLS
+//char * g_endpoint_name = "zqf04";
+//unsigned char g_psk_value[32];
 
-char *g_endpoint_name_s = "99990009";
-char *g_endpoint_name_iots = "99990009";
-char *g_endpoint_name_bs = "99990009";
-unsigned char g_psk_iot_value[] = {0x58,0xea,0xfd,0xab,0x2f,0x38,0x4d,0x39,0x80,0x69,0x4d,0x1c,0xda,0x69,0xb0,0x43}; //0x33 -> 0x32
-unsigned char g_psk_bs_value[] = {0x58,0xea,0xfd,0xab,0x2f,0x38,0x4d,0x39,0x80,0x69,0x4d,0x1c,0xda,0x69,0xb0,0x43};
+char * g_endpoint_name = "ledfota01";
+unsigned char g_psk_value[32];
+const char *g_psk_string="6c74374a7124eed651950da81e5e2b96";
+
 //unsigned char g_psk_value[16] = {0x58,0xea,0xfd,0xab,0x2f,0x38,0x4d,0x39,0x80,0x69,0x4d,0x1c,0xda,0x69,0xb0,0x43};
+static int pskstring_to_array(const char *str,unsigned char *buf,int len)
+{
+	int ret = 0;
+	char tmp[8];
+	unsigned int value;
+	int i = 0;
+	if((len *2)!= strlen(str))
+	{
+		return ret;
+	}
+	memset(tmp,0,8);
+	tmp[0] = '0';
+	tmp[1] = 'x';
+	for(i = 0;i<strlen(str);i=i+2)
+	{
+		tmp[2] = str[i];
+		tmp[3] = str[i+1];
+		value = strtoul(tmp,NULL,0);
+		buf[ret] = value&0xff;
+		ret = ret+1;
+	}
+	return ret;
+}
 
-#endif
 
 static void *g_phandle = NULL;
 static atiny_device_info_t g_device_info;

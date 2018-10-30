@@ -20,7 +20,7 @@ DEBUG = 1
 OPT = -Og
 
 
-USE_OTA := no
+USE_OTA := yes
 OTA_IS_NEED_DTLS := no
 ifeq ($(USE_FOTA), yes)
 	USE_OTA = yes
