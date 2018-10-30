@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2013-2015>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2013-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -161,12 +161,12 @@ extern "C"{
 typedef struct
 {
     UINT8           ucRWLockStat;       /**< State OS_RWLOCK_UNUSED,OS_RWLOCK_USED  */
-    UINT8           ucRCount;
-    UINT8           ucRWLockCount;      /**< Times of locking a RWLock */
+    UINT8           ucRCount;           /**< Times of locking a RWLock by readers*/
+    UINT8           ucWCount;           /**< Times of locking a RWLock by writers*/
     UINT32          ucRWLockID;         /**< Handle ID*/
-    LOS_DL_LIST     stRLockList;       /**< RLock linked list*/
-    LOS_DL_LIST     stWLockList;       /**< WLock linked list*/
-    LOS_TASK_CB     *pstWOwner;          /**< The current write thread that is locking a RWLock*/
+    LOS_DL_LIST     stRPendList;        /**< RLock pended linked list*/
+    LOS_DL_LIST     stWPendList;        /**< WLock pended linked list*/
+    LOS_TASK_CB     *pstWOwner;         /**< The current write thread that is locking a RWLock*/
 } RWLOCK_CB_S;
 
 /**
@@ -181,15 +181,15 @@ typedef struct
  */
 #define OS_RWLOCK_USED                     1
 
-extern RWLOCK_CB_S             *g_pstAllRWLock;
+extern RWLOCK_CB_S                         *g_pstAllRWLock;
 
 /**
  * @ingroup los_rwlock
  * Obtain the pointer to a rwlock object of the rwlock that has a specified handle.
  */
-#define GET_RWLOCK(rwlockid)                  (((RWLOCK_CB_S *)g_pstAllRWLock) + (rwlockid))
+#define GET_RWLOCK(rwlockid)                  &g_pstAllRWLock[rwlockid]
 
-#define GET_RWLOCK_LIST(ptr)                  LOS_DL_LIST_ENTRY(ptr, RWLOCK_CB_S, stRLockList)
+#define GET_RWLOCK_LIST(ptr)                  LOS_DL_LIST_ENTRY(ptr, RWLOCK_CB_S, stRPendList)
 /**
  *@ingroup los_rwlock
  *@brief Initializes the rwlock.
@@ -283,10 +283,10 @@ UINT32 LOS_RWLockDelete(UINT32 uwRWLockHandle);
  *@retval #LOS_OK                              The rwlock is successfully locked.
  *@par Dependency:
  *<ul><li>los_rwlock.h: the header file that contains the API declaration.</li></ul>
- *@see LOS_RWLockCreate | LOS_RUnLock
+ *@see LOS_RWLockCreate | LOS_RWReadUnLock
  *@since Huawei LiteOS
  */
-UINT32 LOS_RLock(UINT32 uwRWLockHandle, UINT32 uwTimeout);
+UINT32 LOS_RWReadLock(UINT32 uwRWLockHandle, UINT32 uwTimeout);
 
 /**
  *@ingroup los_rwlock
@@ -314,10 +314,10 @@ UINT32 LOS_RLock(UINT32 uwRWLockHandle, UINT32 uwTimeout);
  *@retval #LOS_OK                              The rwlock is successfully locked.
  *@par Dependency:
  *<ul><li>los_rwlock.h: the header file that contains the API declaration.</li></ul>
- *@see LOS_RWLockCreate | LOS_WUnLock
+ *@see LOS_RWLockCreate | LOS_RWWriteUnLock
  *@since Huawei LiteOS
  */
-UINT32 LOS_WLock(UINT32 uwRWLockHandle, UINT32 uwTimeout);
+UINT32 LOS_RWWriteLock(UINT32 uwRWLockHandle, UINT32 uwTimeout);
 
 /**
  *@ingroup los_rwlock
@@ -338,10 +338,10 @@ UINT32 LOS_WLock(UINT32 uwRWLockHandle, UINT32 uwTimeout);
  *@retval #LOS_OK                              The rwlock is successfully unlock.
  *@par Dependency:
  *<ul><li>los_rwlock.h: the header file that contains the API declaration.</li></ul>
- *@see LOS_RWLockCreate | LOS_RLock
+ *@see LOS_RWLockCreate | LOS_RWReadLock
  *@since Huawei LiteOS
  */
-UINT32 LOS_RUnLock(UINT32 uwRWLockHandle);
+UINT32 LOS_RWReadUnLock(UINT32 uwRWLockHandle);
 
 /**
  *@ingroup los_rwlock
@@ -362,10 +362,10 @@ UINT32 LOS_RUnLock(UINT32 uwRWLockHandle);
  *@retval #LOS_OK                              The rwlock is successfully unlock.
  *@par Dependency:
  *<ul><li>los_rwlock.h: the header file that contains the API declaration.</li></ul>
- *@see LOS_RWLockCreate | LOS_WLock
+ *@see LOS_RWLockCreate | LOS_RWWriteLock
  *@since Huawei LiteOS
  */
-UINT32 LOS_WUnLock(UINT32 uwRWLockHandle);
+UINT32 LOS_RWWriteUnLock(UINT32 uwRWLockHandle);
 
 
 #ifdef __cplusplus

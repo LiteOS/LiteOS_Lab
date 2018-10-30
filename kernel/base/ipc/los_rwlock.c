@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2013-2015>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2013-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -82,13 +82,13 @@ LITE_OS_SEC_TEXT_INIT UINT32 osRWLockInit(VOID)
 
     for (uwIndex = 0; uwIndex < LOSCFG_BASE_IPC_RWLOCK_LIMIT; uwIndex++)
     {
-        pstRWLockNode                 = ((RWLOCK_CB_S *)g_pstAllRWLock) + uwIndex;
+        pstRWLockNode                 = &g_pstAllRWLock[uwIndex];
         pstRWLockNode->ucRWLockID     = uwIndex;
         pstRWLockNode->pstWOwner      = NULL;
-        pstRWLockNode->ucRWLockCount  = 0;
+        pstRWLockNode->ucWCount       = 0;
         pstRWLockNode->ucRCount       = 0;
         pstRWLockNode->ucRWLockStat   = OS_RWLOCK_UNUSED;
-        LOS_ListTailInsert(&g_stUnusedRWLockList, &pstRWLockNode->stRLockList);
+        LOS_ListTailInsert(&g_stUnusedRWLockList, &pstRWLockNode->stRPendList);
     }
     return LOS_OK;
 }
@@ -117,23 +117,21 @@ LITE_OS_SEC_TEXT_INIT  UINT32  LOS_RWLockCreate (UINT32 *puwRWLockHandle)
     if (LOS_ListEmpty(&g_stUnusedRWLockList))
     {
         LOS_IntRestore(uwIntSave);
-        OS_GOTO_ERR_HANDLER(LOS_ERRNO_RWLOCK_ALL_BUSY);
+        return LOS_ERRNO_RWLOCK_ALL_BUSY;
     }
 
     pstUnusedRWLock                 = LOS_DL_LIST_FIRST(&(g_stUnusedRWLockList));
     LOS_ListDelete(pstUnusedRWLock);
+    LOS_IntRestore(uwIntSave);
     pstRWLockCreated                = (GET_RWLOCK_LIST(pstUnusedRWLock)); /*lint !e413*/
-    LOS_ListInit(&pstRWLockCreated->stRLockList);
-    LOS_ListInit(&pstRWLockCreated->stWLockList);
-    pstRWLockCreated->ucRWLockCount = 0;
+    LOS_ListInit(&pstRWLockCreated->stRPendList);
+    LOS_ListInit(&pstRWLockCreated->stWPendList);
     pstRWLockCreated->ucRWLockStat  = OS_RWLOCK_USED;
     pstRWLockCreated->ucRCount      = 0;
+	pstRWLockCreated->ucWCount      = 0;
     pstRWLockCreated->pstWOwner     = (LOS_TASK_CB *)NULL;
     *puwRWLockHandle                = (UINT32)pstRWLockCreated->ucRWLockID;
-    LOS_IntRestore(uwIntSave);
     return LOS_OK;
-ErrHandler:
-    OS_RETURN_ERROR_P2(uwErrLine, uwErrNo);
 }
 
 /*****************************************************************************
@@ -152,7 +150,7 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_RWLockDelete(UINT32 uwRWLockHandle)
 
     if (uwRWLockHandle >= (UINT32)LOSCFG_BASE_IPC_RWLOCK_LIMIT)
     {
-        OS_GOTO_ERR_HANDLER(LOS_ERRNO_RWLOCK_INVALID);
+        return LOS_ERRNO_RWLOCK_INVALID;
     }
 
     pstRWLockDeleted = GET_RWLOCK(uwRWLockHandle);
@@ -160,39 +158,36 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_RWLockDelete(UINT32 uwRWLockHandle)
     if (OS_RWLOCK_UNUSED == pstRWLockDeleted->ucRWLockStat)
     {
         LOS_IntRestore(uwIntSave);
-        OS_GOTO_ERR_HANDLER(LOS_ERRNO_RWLOCK_INVALID);
+        return LOS_ERRNO_RWLOCK_INVALID;
     }
 
-    if ((!LOS_ListEmpty(&pstRWLockDeleted->stRLockList)) \
-        || (!LOS_ListEmpty(&pstRWLockDeleted->stRLockList)) \
-        || pstRWLockDeleted->ucRWLockCount)
+    if ((!LOS_ListEmpty(&pstRWLockDeleted->stRPendList)) \
+        || (!LOS_ListEmpty(&pstRWLockDeleted->stWPendList)) \
+        || pstRWLockDeleted->ucRCount || pstRWLockDeleted->ucWCount)
     {
         LOS_IntRestore(uwIntSave);
-        OS_GOTO_ERR_HANDLER(LOS_ERRNO_RWLOCK_PENDED);
+        return LOS_ERRNO_RWLOCK_PENDED;
     }
 
-    LOS_ListAdd(&g_stUnusedRWLockList, &pstRWLockDeleted->stRLockList);
+    LOS_ListAdd(&g_stUnusedRWLockList, &pstRWLockDeleted->stRPendList);
     pstRWLockDeleted->ucRWLockStat  = OS_RWLOCK_UNUSED;
     pstRWLockDeleted->pstWOwner     = NULL;
-    pstRWLockDeleted->ucRWLockCount = 0;
+    pstRWLockDeleted->ucWCount      = 0;
     pstRWLockDeleted->ucRCount      = 0;
-
     LOS_IntRestore(uwIntSave);
 
     return LOS_OK;
-ErrHandler:
-    OS_RETURN_ERROR_P2(uwErrLine, uwErrNo);
 }
 
 /*****************************************************************************
- Function     : LOS_RLock
+ Function     : LOS_RWReadLock
  Description  : Specify the rwlock r lock operation,
  Input        : uwRWLockHandle ------ RWLock operation handleone,
                 uwTimeOut  ------- waiting time,
  Output       : None
  Return       : LOS_OK on success ,or error code on failure
  *****************************************************************************/
-LITE_OS_SEC_TEXT UINT32 LOS_RLock(UINT32 uwRWLockHandle, UINT32 uwTimeout)
+LITE_OS_SEC_TEXT UINT32 LOS_RWReadLock(UINT32 uwRWLockHandle, UINT32 uwTimeout)
 {
     UINT32     uwIntSave;
     RWLOCK_CB_S  *pstRWLockPended;
@@ -201,7 +196,7 @@ LITE_OS_SEC_TEXT UINT32 LOS_RLock(UINT32 uwRWLockHandle, UINT32 uwTimeout)
 
     if (uwRWLockHandle >= (UINT32)LOSCFG_BASE_IPC_RWLOCK_LIMIT)
     {
-        OS_RETURN_ERROR(LOS_ERRNO_RWLOCK_INVALID);
+        return LOS_ERRNO_RWLOCK_INVALID;
     }
 
     pstRWLockPended = GET_RWLOCK(uwRWLockHandle);
@@ -209,7 +204,7 @@ LITE_OS_SEC_TEXT UINT32 LOS_RLock(UINT32 uwRWLockHandle, UINT32 uwTimeout)
     if (OS_RWLOCK_UNUSED == pstRWLockPended->ucRWLockStat)
     {
         LOS_IntRestore(uwIntSave);
-        OS_RETURN_ERROR(LOS_ERRNO_RWLOCK_INVALID);
+        return LOS_ERRNO_RWLOCK_INVALID;
     }
 
     if (OS_INT_ACTIVE)
@@ -219,17 +214,8 @@ LITE_OS_SEC_TEXT UINT32 LOS_RLock(UINT32 uwRWLockHandle, UINT32 uwTimeout)
     }
 
     pstRunTsk = (LOS_TASK_CB *)g_stLosTask.pstRunTask;
-    if (pstRWLockPended->ucRWLockCount == 0)
+    if ((pstRWLockPended->ucWCount == 0) && LOS_ListEmpty(&pstRWLockPended->stWPendList))
     {
-        pstRWLockPended->ucRWLockCount++;
-        pstRWLockPended->ucRCount++;
-        LOS_IntRestore(uwIntSave);
-        return LOS_OK;
-    }
-
-    if (pstRWLockPended->ucRWLockCount == pstRWLockPended->ucRCount)
-    {
-        pstRWLockPended->ucRWLockCount++;
         pstRWLockPended->ucRCount++;
         LOS_IntRestore(uwIntSave);
         return LOS_OK;
@@ -251,15 +237,13 @@ LITE_OS_SEC_TEXT UINT32 LOS_RLock(UINT32 uwRWLockHandle, UINT32 uwTimeout)
         goto errre_uniRWLockPend;
     }
 
-    osTaskWait(&pstRWLockPended->stRLockList, OS_TASK_STATUS_PEND, uwTimeout);
-    pstRWLockPended->ucRWLockCount++;
+    osTaskWait(&pstRWLockPended->stRPendList, OS_TASK_STATUS_PEND, uwTimeout);
     (VOID)LOS_IntRestore(uwIntSave);
     LOS_Schedule();
 
     if (pstRunTsk->usTaskStatus & OS_TASK_STATUS_TIMEOUT)
     {
         uwIntSave = LOS_IntLock();
-        pstRWLockPended->ucRWLockCount--;
         pstRunTsk->usTaskStatus &= (~OS_TASK_STATUS_TIMEOUT);
         (VOID)LOS_IntRestore(uwIntSave);
         uwRetErr = LOS_ERRNO_RWLOCK_TIMEOUT;
@@ -275,14 +259,14 @@ error_uniRWLockPend:
 }
 
 /*****************************************************************************
- Function     : LOS_WLock
+ Function     : LOS_RWWriteLock
  Description  : Specify the rwlock w lock operation,
  Input        : uwRWLockHandle ------ RWLock operation handleone,
                 uwTimeOut  ------- waiting time,
  Output       : None
  Return       : LOS_OK on success ,or error code on failure
  *****************************************************************************/
-LITE_OS_SEC_TEXT UINT32 LOS_WLock(UINT32 uwRWLockHandle, UINT32 uwTimeout)
+LITE_OS_SEC_TEXT UINT32 LOS_RWWriteLock(UINT32 uwRWLockHandle, UINT32 uwTimeout)
 {
     UINT32     uwIntSave;
     RWLOCK_CB_S  *pstRWLockPended;
@@ -291,7 +275,7 @@ LITE_OS_SEC_TEXT UINT32 LOS_WLock(UINT32 uwRWLockHandle, UINT32 uwTimeout)
 
     if (uwRWLockHandle >= (UINT32)LOSCFG_BASE_IPC_RWLOCK_LIMIT)
     {
-        OS_RETURN_ERROR(LOS_ERRNO_RWLOCK_INVALID);
+        return LOS_ERRNO_RWLOCK_INVALID;
     }
 
     pstRWLockPended = GET_RWLOCK(uwRWLockHandle);
@@ -299,7 +283,7 @@ LITE_OS_SEC_TEXT UINT32 LOS_WLock(UINT32 uwRWLockHandle, UINT32 uwTimeout)
     if (OS_RWLOCK_UNUSED == pstRWLockPended->ucRWLockStat)
     {
         LOS_IntRestore(uwIntSave);
-        OS_RETURN_ERROR(LOS_ERRNO_RWLOCK_INVALID);
+        return LOS_ERRNO_RWLOCK_INVALID;
     }
 
     if (OS_INT_ACTIVE)
@@ -310,9 +294,11 @@ LITE_OS_SEC_TEXT UINT32 LOS_WLock(UINT32 uwRWLockHandle, UINT32 uwTimeout)
 
     pstRunTsk = (LOS_TASK_CB *)g_stLosTask.pstRunTask;
 
-    if (pstRWLockPended->ucRWLockCount == 0)
+    if ((pstRWLockPended->ucRCount == 0) \
+        && (pstRWLockPended->pstWOwner == NULL)
+        && LOS_ListEmpty(&pstRWLockPended->stRPendList))
     {
-        pstRWLockPended->ucRWLockCount++;
+        pstRWLockPended->ucWCount++;
         pstRWLockPended->pstWOwner = pstRunTsk;
         LOS_IntRestore(uwIntSave);
         return LOS_OK;
@@ -320,7 +306,7 @@ LITE_OS_SEC_TEXT UINT32 LOS_WLock(UINT32 uwRWLockHandle, UINT32 uwTimeout)
 
     if (pstRWLockPended->pstWOwner == pstRunTsk)
     {
-        pstRWLockPended->ucRWLockCount++;
+        pstRWLockPended->ucWCount++;
         LOS_IntRestore(uwIntSave);
         return LOS_OK;
     }
@@ -341,8 +327,7 @@ LITE_OS_SEC_TEXT UINT32 LOS_WLock(UINT32 uwRWLockHandle, UINT32 uwTimeout)
         goto errre_uniRWLockPend;
     }
 
-    osTaskWait(&pstRWLockPended->stWLockList, OS_TASK_STATUS_PEND, uwTimeout);
-    pstRWLockPended->ucRWLockCount++;
+    osTaskWait(&pstRWLockPended->stWPendList, OS_TASK_STATUS_PEND, uwTimeout);
 
     (VOID)LOS_IntRestore(uwIntSave);
     LOS_Schedule();
@@ -350,7 +335,6 @@ LITE_OS_SEC_TEXT UINT32 LOS_WLock(UINT32 uwRWLockHandle, UINT32 uwTimeout)
     if (pstRunTsk->usTaskStatus & OS_TASK_STATUS_TIMEOUT)
     {
         uwIntSave = LOS_IntLock();
-        pstRWLockPended->ucRWLockCount--;
         pstRunTsk->usTaskStatus &= (~OS_TASK_STATUS_TIMEOUT);
         (VOID)LOS_IntRestore(uwIntSave);
         uwRetErr = LOS_ERRNO_RWLOCK_TIMEOUT;
@@ -366,13 +350,13 @@ error_uniRWLockPend:
 }
 
 /*****************************************************************************
- Function     : LOS_RUnLock
+ Function     : LOS_RWReadUnLock
  Description  : Specify the rlock unlock operation,
  Input        : uwRWLockHandle ------ RWLock operation handle,
  Output       : None
  Return       : LOS_OK on success ,or error code on failure
  *****************************************************************************/
-LITE_OS_SEC_TEXT UINT32 LOS_RUnLock(UINT32 uwRWLockHandle)
+LITE_OS_SEC_TEXT UINT32 LOS_RWReadUnLock(UINT32 uwRWLockHandle)
 {
     UINT32      uwIntSave;
     RWLOCK_CB_S    *pstRWLockPosted = GET_RWLOCK(uwRWLockHandle);
@@ -384,26 +368,25 @@ LITE_OS_SEC_TEXT UINT32 LOS_RUnLock(UINT32 uwRWLockHandle)
         (OS_RWLOCK_UNUSED == pstRWLockPosted->ucRWLockStat))
     {
         LOS_IntRestore(uwIntSave);
-        OS_RETURN_ERROR(LOS_ERRNO_RWLOCK_INVALID);
+        return LOS_ERRNO_RWLOCK_INVALID;
     }
 
-    if ((pstRWLockPosted->ucRWLockCount == 0))
+    if ((pstRWLockPosted->ucRCount == 0))
     {
         LOS_IntRestore(uwIntSave);
-        OS_RETURN_ERROR(LOS_ERRNO_RWLOCK_INVALID);
+        return LOS_ERRNO_RWLOCK_INVALID;
     }
 
-    if (pstRWLockPosted->ucRWLockCount > 0 && (--(pstRWLockPosted->ucRCount) > 0))
+    if (--(pstRWLockPosted->ucRCount) > 0)
     {
-        pstRWLockPosted->ucRWLockCount--;
         LOS_IntRestore(uwIntSave);
         return LOS_OK;
     }
 
-    if ( (pstRWLockPosted->ucRCount == 0) && (!LOS_ListEmpty(&pstRWLockPosted->stWLockList)))
+    if ( (pstRWLockPosted->ucRCount == 0) && (!LOS_ListEmpty(&pstRWLockPosted->stWPendList)))
     {
-        pstResumedTask = OS_TCB_FROM_PENDLIST(LOS_DL_LIST_FIRST(&(pstRWLockPosted->stWLockList))); /*lint !e413*/
-        pstRWLockPosted->ucRWLockCount--;
+        pstResumedTask = OS_TCB_FROM_PENDLIST(LOS_DL_LIST_FIRST(&(pstRWLockPosted->stWPendList))); /*lint !e413*/
+        pstRWLockPosted->ucWCount++;
         pstRWLockPosted->pstWOwner     = pstResumedTask;
         osTaskWake(pstResumedTask, OS_TASK_STATUS_PEND);
         (VOID)LOS_IntRestore(uwIntSave);
@@ -418,16 +401,15 @@ LITE_OS_SEC_TEXT UINT32 LOS_RUnLock(UINT32 uwRWLockHandle)
 }
 
 /*****************************************************************************
- Function     : LOS_RUnLock
+ Function     : LOS_RWWriteUnLock
  Description  : Specify the rlock unlock operation,
  Input        : uwRWLockHandle ------ RWLock operation handle,
  Output       : None
  Return       : LOS_OK on success ,or error code on failure
  *****************************************************************************/
-LITE_OS_SEC_TEXT UINT32 LOS_WUnLock(UINT32 uwRWLockHandle)
+LITE_OS_SEC_TEXT UINT32 LOS_RWWriteUnLock(UINT32 uwRWLockHandle)
 {
     UINT32      uwIntSave;
-    UINT32      count=0;
     RWLOCK_CB_S    *pstRWLockPosted = GET_RWLOCK(uwRWLockHandle);
     LOS_TASK_CB *pstResumedTask;
     LOS_TASK_CB *pstRunTsk;
@@ -439,41 +421,38 @@ LITE_OS_SEC_TEXT UINT32 LOS_WUnLock(UINT32 uwRWLockHandle)
         (OS_RWLOCK_UNUSED == pstRWLockPosted->ucRWLockStat))
     {
         LOS_IntRestore(uwIntSave);
-        OS_RETURN_ERROR(LOS_ERRNO_RWLOCK_INVALID);
+        return LOS_ERRNO_RWLOCK_INVALID;
     }
 
     pstRunTsk = (LOS_TASK_CB *)g_stLosTask.pstRunTask;
-    if ((pstRWLockPosted->ucRWLockCount == 0) || (pstRWLockPosted->pstWOwner != pstRunTsk))
+    if ((pstRWLockPosted->ucWCount == 0) || (pstRWLockPosted->pstWOwner != pstRunTsk))
     {
         LOS_IntRestore(uwIntSave);
-        OS_RETURN_ERROR(LOS_ERRNO_RWLOCK_INVALID);
+        return LOS_ERRNO_RWLOCK_INVALID;
     }
 
-    LOS_DL_LIST_FOR_EACH(item, &(pstRWLockPosted->stWLockList)) count++;
-    LOS_DL_LIST_FOR_EACH(item, &(pstRWLockPosted->stRLockList)) count++;
-    if((pstRWLockPosted->ucRWLockCount) > (count + 1))
+	if(--(pstRWLockPosted->ucWCount) > 0)
     {
-        pstRWLockPosted->ucRWLockCount--;
         LOS_IntRestore(uwIntSave);
         return LOS_OK;
     }
 
-    if (!LOS_ListEmpty(&pstRWLockPosted->stWLockList))
+    if (!LOS_ListEmpty(&pstRWLockPosted->stWPendList))
     {
-        pstResumedTask = OS_TCB_FROM_PENDLIST(LOS_DL_LIST_FIRST(&(pstRWLockPosted->stWLockList))); /*lint !e413*/
-        pstRWLockPosted->ucRWLockCount--;
+        pstResumedTask = OS_TCB_FROM_PENDLIST(LOS_DL_LIST_FIRST(&(pstRWLockPosted->stWPendList))); /*lint !e413*/
+        pstRWLockPosted->ucWCount++;
         pstRWLockPosted->pstWOwner     = pstResumedTask;
         osTaskWake(pstResumedTask, OS_TASK_STATUS_PEND);
         (VOID)LOS_IntRestore(uwIntSave);
         LOS_Schedule();
     }
-    else if(!LOS_ListEmpty(&pstRWLockPosted->stRLockList))
+    else if(!LOS_ListEmpty(&pstRWLockPosted->stRPendList))
     {
-        while(!LOS_ListEmpty(&pstRWLockPosted->stRLockList))
+        while(!LOS_ListEmpty(&pstRWLockPosted->stRPendList))
         {
-            pstResumedTask = OS_TCB_FROM_PENDLIST(LOS_DL_LIST_FIRST(&(pstRWLockPosted->stRLockList))); /*lint !e413*/
-            pstRWLockPosted->ucRWLockCount--;
-            pstRWLockPosted->pstWOwner = pstResumedTask;
+            pstResumedTask = OS_TCB_FROM_PENDLIST(LOS_DL_LIST_FIRST(&(pstRWLockPosted->stRPendList))); /*lint !e413*/
+            pstRWLockPosted->ucRCount++;
+            //pstRWLockPosted->pstWOwner = pstResumedTask;
 
             osTaskWake(pstResumedTask, OS_TASK_STATUS_PEND);
         }
