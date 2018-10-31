@@ -295,8 +295,7 @@ LITE_OS_SEC_TEXT UINT32 LOS_RWWriteLock(UINT32 uwRWLockHandle, UINT32 uwTimeout)
     pstRunTsk = (LOS_TASK_CB *)g_stLosTask.pstRunTask;
 
     if ((pstRWLockPended->ucRCount == 0) \
-        && (pstRWLockPended->pstWOwner == NULL)
-        && LOS_ListEmpty(&pstRWLockPended->stRPendList))
+        && (pstRWLockPended->pstWOwner == NULL))
     {
         pstRWLockPended->ucWCount++;
         pstRWLockPended->pstWOwner = pstRunTsk;
@@ -437,6 +436,8 @@ LITE_OS_SEC_TEXT UINT32 LOS_RWWriteUnLock(UINT32 uwRWLockHandle)
         return LOS_OK;
     }
 
+	pstRWLockPosted->pstWOwner = NULL;
+
     if (!LOS_ListEmpty(&pstRWLockPosted->stWPendList))
     {
         pstResumedTask = OS_TCB_FROM_PENDLIST(LOS_DL_LIST_FIRST(&(pstRWLockPosted->stWPendList))); /*lint !e413*/
@@ -452,8 +453,6 @@ LITE_OS_SEC_TEXT UINT32 LOS_RWWriteUnLock(UINT32 uwRWLockHandle)
         {
             pstResumedTask = OS_TCB_FROM_PENDLIST(LOS_DL_LIST_FIRST(&(pstRWLockPosted->stRPendList))); /*lint !e413*/
             pstRWLockPosted->ucRCount++;
-            //pstRWLockPosted->pstWOwner = pstResumedTask;
-
             osTaskWake(pstResumedTask, OS_TASK_STATUS_PEND);
         }
 
