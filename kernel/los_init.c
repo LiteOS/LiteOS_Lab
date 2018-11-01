@@ -200,6 +200,16 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_KernelInit(VOID)
     }
 #endif
 
+#if (LOSCFG_BASE_IPC_RWLOCK == YES)
+    {
+        uwRet = osRWLockInit();
+        if (uwRet != LOS_OK)
+        {
+            return uwRet;
+        }
+    }
+#endif
+
 #if (LOSCFG_BASE_IPC_QUEUE == YES)
     {
         uwRet = osQueueInit();
