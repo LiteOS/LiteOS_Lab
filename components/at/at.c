@@ -31,10 +31,12 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <at.h>
+
 
 #if CN_OS_AT
 
@@ -63,14 +65,6 @@ struct at_oob
     const char *index;    //used to match the out of band data,only compared from the header
 };
 
-typedef enum
-{
-    en_at_debug_none = 0,
-    en_at_debug_ascii,
-    en_at_debug_hex,
-}enRxTxDebugMode;        //FUNCTION USED TO CONTROL THE DEBUG MODE
-
-
 struct at_cb
 {
     fnframe_read            read;     //the member function to read a frame from the at module
@@ -80,37 +74,74 @@ struct at_cb
     struct at_oob           oob[cn_at_oob_len];        //storage the out of band dealer
     u8_t                    rcvbuf[cn_at_resp_maxlen]; //used storage one frame,read from the at channel
     u32_t                   passmode:1;                //if zero, then use the at mode,else use the pass mode,pass all the data to fnoob
-    u32_t                   rxdebugmode:2;             //receive debug mode
-    u32_t                   txdebugmode:2;             //send debug mode
+    u32_t                   rxdebugmode:1;             //receive debug mode
+    u32_t                   txdebugmode:1;             //send debug mode
 };
 static struct at_cb g_at_cb;   //this is the at controller here
+
+static void print_indent(FILE * stream,int num)
+{
+    int i;
+
+    for ( i = 0 ; i < num ; i++)
+        fprintf(stream, "    ");
+}
+static void  output_buffer(FILE * stream, uint8_t * buffer, int length,int indent)
+{
+    int i;
+
+    if (length == 0) fprintf(stream, "\r\n");
+
+    if (buffer == NULL) return;
+
+    i = 0;
+    while (i < length)
+    {
+        uint8_t array[16];
+        int j;
+
+        print_indent(stream, indent);
+        memcpy(array, buffer+i, 16);
+        for (j = 0 ; j < 16 && i+j < length; j++)
+        {
+            fprintf(stream, "%02X ", array[j]);
+            if (j%4 == 3) fprintf(stream, " ");
+        }
+        if (length > 16)
+        {
+            while (j < 16)
+            {
+                fprintf(stream, "   ");
+                if (j%4 == 3) fprintf(stream, " ");
+                j++;
+            }
+        }
+        fprintf(stream, " ");
+        for (j = 0 ; j < 16 && i+j < length; j++)
+        {
+            if (isprint(array[j]))
+                fprintf(stream, "%c", array[j]);
+            else
+                fprintf(stream, ".");
+        }
+        fprintf(stream, "\r\n");
+        i += 16;
+    }
+}
 
 //this function used to send the data to the AT channel
 static s32_t __cmd_send(u8_t *buf,s32_t buflen,u32_t timeout)
 {
-    s32_t i = 0;
     s32_t ret = 0;
-    s32_t debugmode;
     if(NULL != g_at_cb.write)
     {
         ret = g_at_cb.write(buf,buflen,timeout);
         if(ret > 0)
         {
-            debugmode = g_at_cb.txdebugmode;
-            switch (debugmode)
+            if(g_at_cb.txdebugmode)
             {
-                case en_at_debug_ascii:
-                    printf("ATSND:%d Bytes:%s\n\r",ret,(char *)buf);
-                    break;
-                case en_at_debug_hex:
-                    printf("ATSND:%d Bytes:",ret);
-                    for(i =0;i<ret;i++)
-                    {
-                        printf("%02x ",buf[i]);
-                    }
-                    printf("\n\r");
-                default:
-                    break;
+                printf("send:%d bytes\r\n",buflen);
+                output_buffer(NULL,buf,buflen,1);
             }
         }  
     }   
@@ -120,29 +151,16 @@ static s32_t __cmd_send(u8_t *buf,s32_t buflen,u32_t timeout)
 //this function used to receive data from the AT channel
 static s32_t __resp_rcv(u8_t *buf,s32_t buflen,u32_t timeout)
 {
-    s32_t i = 0;
     s32_t ret = 0;
-    s32_t debugmode;
     if(NULL != g_at_cb.write)
     {
         ret = g_at_cb.read(buf,buflen,timeout);
         if(ret > 0)
         {
-            debugmode = g_at_cb.rxdebugmode;
-            switch (debugmode)
+            if(g_at_cb.rxdebugmode)
             {
-                case en_at_debug_ascii:
-                    printf("ATRCV:%d Bytes:%s\n\r",ret,(char *)buf);
-                    break;
-                case en_at_debug_hex:
-                    printf("ATRCV:%d Bytes:",ret);
-                    for(i =0;i<ret;i++)
-                    {
-                        printf("%02x ",buf[i]);
-                    }
-                    printf("\n\r");
-                default:
-                    break;
+                printf("recv:%d bytes\r\n",ret);
+                output_buffer(NULL,buf,ret,1);
             }
         }    
     }   
@@ -432,6 +450,7 @@ EXIT_PARA:
 }
 
 //////////////////////////////////DEBUG COMMAND FOLLOWING/////////////////////////////////////////
+
 #include <shell.h>
 //use this shell command,you could input at command through the terminal
 static s32_t shell_at(s32_t argc, const char *argv[])
@@ -474,24 +493,20 @@ OSSHELL_EXPORT_CMD(shell_at,"atcmd","atcmd atcommand atrespindex");
 //use this function to set the at command display mode:none/ascii/hex
 static s32_t shell_atdebug(s32_t argc,const char *argv[])
 {
-    s32_t mode = en_at_debug_none;
+    s32_t mode = 0;
     if(argc != 3)
     {
         printf("paras error\n\r");
         return -1;
     }
 
-    if(0 == strcmp(argv[2],"none"))
+    if(0 == strcmp(argv[2],"start"))
     {
-        mode = en_at_debug_none;
+        mode = 1;
     }
-    else if(0 == strcmp(argv[2],"ascii"))
+    else if(0 == strcmp(argv[2],"stop"))
     {
-        mode = en_at_debug_ascii;
-    }
-    else if(0 == strcmp(argv[2],"hex"))
-    {
-        mode = en_at_debug_hex;
+        mode = 0;
     }
     else
     {
@@ -515,7 +530,7 @@ static s32_t shell_atdebug(s32_t argc,const char *argv[])
 
     return 0;
 }
-OSSHELL_EXPORT_CMD(shell_atdebug,"atdebug","atdebug rx/tx none/ascii/hex");
+OSSHELL_EXPORT_CMD(shell_atdebug,"atdebug","atdebug rx/tx start/stop");
 
 #endif
 

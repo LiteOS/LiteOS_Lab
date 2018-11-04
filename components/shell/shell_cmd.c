@@ -227,7 +227,7 @@ instruction  :different compiler has different method to ge the section("oshell"
 #ifdef __CC_ARM /* ARM C Compiler ,like keil,options for linker:--keep *.o(oshell)*/
 extern u32_t oshell$$Base;
 extern u32_t oshell$$Limit;         
-#pragma section("oshell", read) 
+//#pragma section("oshell", read) 
 #endif        
 
 
