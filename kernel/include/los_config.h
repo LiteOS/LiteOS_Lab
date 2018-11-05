@@ -743,6 +743,31 @@ extern UINT32 g_sys_mem_addr_end;
 
 
 /*=============================================================================
+                                       Task statical creation configuration
+=============================================================================*/
+
+/**
+ * @ingroup los_config
+ * Configuration item creating tasks statically.
+ */
+#ifndef LOSCFG_STATIC_TASK
+#define LOSCFG_STATIC_TASK                                  NO
+#endif
+
+/*=============================================================================
+                                       MPU module configuration
+=============================================================================*/
+
+/**
+ * @ingroup los_config
+ * Configuration item for enabling MPU
+ */
+
+#ifndef LOSCFG_ENABLE_MPU
+#define LOSCFG_ENABLE_MPU                                   NO
+#endif
+
+/*=============================================================================
                                        Declaration of Huawei LiteOS module initialization functions
 =============================================================================*/
 

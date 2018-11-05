@@ -31,7 +31,7 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-#include "osdepends/liteos/cmsis_os.h"
+#include "cmsis_os.h"
 #include "los_typedef.h"
 #include "los_printf.h"
 
@@ -362,6 +362,7 @@ uint32_t osKernelGetSysTimerFreq (void)
 
 //  ==== Thread Management Functions ====
 
+#if (LOSCFG_STATIC_TASK == NO)
 osThreadId_t osThreadNew (osThreadFunc_t func, void *argument, const osThreadAttr_t *attr)
 {
     UNUSED(argument);
@@ -401,6 +402,7 @@ osThreadId_t osThreadNew (osThreadFunc_t func, void *argument, const osThreadAtt
 
     return (osThreadId_t)pstTaskCB;
 }
+#endif
 
 
 const char *osThreadGetName (osThreadId_t thread_id)
@@ -734,7 +736,7 @@ uint32_t osThreadGetCount (void)
 
     for(; index <= LOSCFG_BASE_CORE_TSK_LIMIT; index++)
     {
-        if (!((g_pstTaskCBArray + index)->usTaskStatus & OS_TASK_STATUS_UNUSED))
+        if (!((OS_TCB_FROM_TID(index))->usTaskStatus & OS_TASK_STATUS_UNUSED))
         {
             uwCount++;
         }

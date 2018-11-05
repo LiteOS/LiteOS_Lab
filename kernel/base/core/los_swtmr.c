@@ -42,6 +42,9 @@
 #if (LOSCFG_PLATFORM_EXC == YES)
 #include "los_exc.h"
 #endif
+#if (LOSCFG_STATIC_TASK == YES)
+#include "los_hw.h"
+#endif
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -116,6 +119,11 @@ LITE_OS_SEC_TEXT VOID osSwTmrTask(VOID)
     }//end of for
 }
 
+#if (LOSCFG_STATIC_TASK == YES)
+LOS_TASK_DEF (Swt_Task, "Swt_Task", osSwTmrTask, 0, 0,
+    LOSCFG_BASE_CORE_TSK_SWTMR_STACK_SIZE, 0, NULL);
+#endif
+
 /*****************************************************************************
 Function   : osSwTmrTaskCreate
 Description: Create Software Timer
@@ -125,6 +133,7 @@ Return     : LOS_OK on success or error code on failure
 *****************************************************************************/
 LITE_OS_SEC_TEXT_INIT UINT32 osSwTmrTaskCreate(VOID)
 {
+#if (LOSCFG_STATIC_TASK == NO)
     UINT32 uwRet;
     TSK_INIT_PARAM_S stSwTmrTask;
 
@@ -135,6 +144,9 @@ LITE_OS_SEC_TEXT_INIT UINT32 osSwTmrTaskCreate(VOID)
     stSwTmrTask.usTaskPrio      = 0;
     uwRet = LOS_TaskCreate(&g_uwSwtmrTaskID, &stSwTmrTask);
     return uwRet;
+#else
+    return LOS_TASK_INIT(Swt_Task, &g_uwIdleTaskID);
+#endif
 }
 
 /*****************************************************************************

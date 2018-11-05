@@ -241,6 +241,21 @@ osHFExcCommonBMU
 ;        SVC Handler.
 ;****************************************************************************************
 SVC_Handler
+
+#ifdef LOSCFG_ENABLE_MPU
+    MRS  R0, PSP
+    LDR  R1, [R0]           ; get the previous PSR in R0
+    CMP  R1, #3
+    BNE  __ret
+    LDR  R1, [R0, #0x10]    ; get the magic in R12
+    CMP  R1, #0x5a
+    BNE  __ret
+
+    MOV  R0, #2
+    MSR  CONTROL, R0
+__ret
+    BX   LR
+#else
     TST   LR, #0x4                     ; EXC_RETURN[b2] --- PSP or MSP
     ITE   EQ
     MRSEQ R0, MSP
@@ -251,6 +266,7 @@ SVC_Handler
     ;B     osExcDispatch
 _SvcLoop
     B     _SvcLoop
+#endif
 
 ;****************************************************************************************
 ; Function:
