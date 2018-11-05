@@ -34,7 +34,7 @@
     varhelp为该全局变量的描述
 
   #### 使用范例
-
+```
 #include <shell.h>
 
 int shell_test_func(int argc, const char *argv[]){
@@ -49,7 +49,7 @@ static u32_t gs_shell_test_var =123;
 //here we export to shell command,you could add your own shell like this
 OSSHELL_EXPORT_VAR(gs_shell_test_var,"shell_test_var","shell test var");
 OSSHELL_EXPORT_CMD(shell_test_func,"shell_test_func","shell test func");
-
+```
 
 
   ​              
