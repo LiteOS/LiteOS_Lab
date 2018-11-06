@@ -134,6 +134,26 @@ LOS_StartToRun:
      *                                        Stack pointer after LOS_StartToRun--->|
      */
     LDR     R12, [R1]
+
+
+#ifdef LOSCFG_ENABLE_MPU
+    LDR     R0, [R1, #8]           /* TCB->pMpuSettings */
+    LDR     R1, =0xe000ed9c
+    LDM     R0!, {R2-R7}
+    STM     R1, {R2-R7}
+    LDM     R0!, {R2-R7}
+    STM     R1, {R2-R7}
+
+    LDR     R0, [R12], #4          /* get the CONTROL value */
+#else
+    MOV     R0, #2
+#endif
+
+    /**
+     * Set the CONTROL register, after schedule start, privilege level and stack = PSP.
+     */
+    MSR     CONTROL, R0
+
     ADD     R12, R12, #36          /* skip R4-R11, PRIMASK. */
 #if defined (__VFP_FP__) && !defined(__SOFTFP__)
     ADD     R12, R12, #4           /* if FPU exist, skip EXC_RETURN. */
@@ -144,12 +164,6 @@ LOS_StartToRun:
      * Set the stack pointer of g_stLosTask.pstRunTask to PSP.
      */
     MSR     PSP, R12
-
-    /**
-     * Set the CONTROL register, after schedule start, privilege level and stack = PSP.
-     */
-    MOV     R12, #2
-    MSR     CONTROL, R12
 
     /**
      * Enable interrupt. (The default PRIMASK value is 0, so enable directly)
@@ -275,6 +289,11 @@ TaskSwitch:
 #endif
     STMFD   R0!, {R4-R12}          /* save the core registers and PRIMASK. */
 
+#ifdef LOSCFG_ENABLE_MPU
+    MRS     R1, CONTROL
+    STR     R1, [R0, #-4]!
+#endif
+
     /**
      * R5,R8.
      */
@@ -316,6 +335,21 @@ TaskSwitch:
      * (R1 = g_stLosTask.pstNewTask->pStackPointer)
      */
     LDR     R1, [R0]
+
+#ifdef LOSCFG_ENABLE_MPU
+    /**
+     * Set the CONTROL register
+     */
+
+    LDR     R4, [R0, #8]           /* TCB->pMpuSettings */
+    LDR     R5, =0xe000ed9c
+    LDM     R4!, {R6-R11}
+    STM     R5, {R6-R11}
+    LDM     R4!, {R6-R11}
+    STM     R5, {R6-R11}
+    LDR     R4, [R1], #4
+    MSR     CONTROL, R4
+#endif
 
     /**
      * Restore the stack frame(R4-R11,[S16-S31]) of the next running task.
@@ -367,4 +401,52 @@ TaskSwitch:
      */
     MSR     PRIMASK, R12
     BX      LR
+
+#ifdef LOSCFG_ENABLE_MPU
+    .global osEnterPrivileged
+    .global osExitPrivileged
+    .global osIsPrivileged
+    .global SVC_Handler
+
+SVC_Handler:
+    MRS  R0, PSP
+    LDR  R1, [R0]           /* get the previous PSR in R0 */
+    CMP  R1, #3
+    BNE  0f
+    LDR  R1, [R0, #0x10]    /* get the magic in R12 */
+    CMP  R1, #0x5a
+    BNE  0f
+
+    MOV  R0, #2
+    MSR  CONTROL, R0
+0:
+    BX   LR
+
+osEnterPrivileged:
+    MRS     R0, CONTROL
+    TST     R0, #1
+    BEQ     0f
+
+    MOV     R12, #0x5a  /* magic */
+
+    SVC     #0
+0:
+    BX      LR
+
+osExitPrivileged:
+    TST     R0, #1
+    BEQ     0f
+
+    MRS     R0, CONTROL
+    ORR     R0, R0, #1
+    MSR     CONTROL, R0
+0:
+    BX      LR
+
+osIsPrivileged:
+    MRS     R0, CONTROL
+    AND     R0, R0, #1
+    BX      LR
+
+#endif
 

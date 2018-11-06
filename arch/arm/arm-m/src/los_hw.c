@@ -32,10 +32,14 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
+#include "los_config.h"
 #include "los_base.h"
 #include "los_task.ph"
 #include "los_hw.h"
 #include "los_priqueue.ph"
+#include "los_mpu.h"
+#include "los_memory.h"
+#include "los_printf.h"
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -104,21 +108,113 @@ LITE_OS_SEC_TEXT_MINOR VOID osTaskExit(VOID)
 /*****************************************************************************
  Function    : osTskStackInit
  Description : Task stack initialization function
- Input       : uwTaskID     --- TaskID
-               uwStackSize  --- Total size of the stack
-               pTopStack    --- Top of task's stack
+ Input       : pstTaskCB    --- TCB
+               pstInitParam --- Task init parameters
  Output      : None
- Return      : Context pointer
+ Return      :
  *****************************************************************************/
-LITE_OS_SEC_TEXT_INIT VOID *osTskStackInit(UINT32 uwTaskID, UINT32 uwStackSize, VOID *pTopStack)
+LITE_OS_SEC_TEXT_INIT VOID osTskStackInit(LOS_TASK_CB *pstTaskCB, TSK_INIT_PARAM_S *pstInitParam)
 {
     TSK_CONTEXT_S  *pstContext;
+    char *pTopStack = (char *)pstTaskCB->uwTopOfStack;
+    char *pStack = pTopStack + pstTaskCB->uwStackSize;
+    int i;
+
+#if (LOSCFG_ENABLE_MPU == YES)
+    static LOS_MPU_ENTRY astNullMpuSetting [MPU_NR_USR_ENTRIES + 1] = {0};
+    LOS_MPU_ENTRY * pstMpuSetting = NULL;
+#if (LOSCFG_STATIC_TASK == YES)
+    LOS_MPU_PARA  * pstMpuPara = (LOS_MPU_PARA *)pstTaskCB->pMpuSettings;
+#else
+    LOS_MPU_PARA  * pstMpuPara = (LOS_MPU_PARA *)pstInitParam->pRegions;
+#endif
+#endif
 
     /*initialize the task stack, write magic num to stack top*/
-    memset(pTopStack, OS_TASK_STACK_INIT, uwStackSize);
+    memset(pTopStack, OS_TASK_STACK_INIT, pstTaskCB->uwStackSize);
     *((UINT32 *)(pTopStack)) = OS_TASK_MAGIC_WORD;
 
-    pstContext    = (TSK_CONTEXT_S *)(((UINT32)pTopStack + uwStackSize) - sizeof(TSK_CONTEXT_S));
+#if (LOSCFG_ENABLE_MPU == YES)
+
+    if (pstMpuPara != NULL)
+    {
+        UINT32 allRegionBase, allRegionSize;
+
+        /* per-task heap is only used for unprivileged task */
+
+#if (LOSCFG_STATIC_TASK == NO)
+        pstTaskCB->uwHeapSize = pstInitParam->uwHeapSize;
+#endif
+
+        if (pstTaskCB->uwHeapSize)
+        {
+            /* the pool address is just the begin of stack, see osTskStackAlloc */
+
+            if (LOS_MemInit(pStack, pstTaskCB->uwHeapSize) != LOS_OK)
+            {
+                PRINT_ERR("init per task heap fail!\n");
+                pstTaskCB->pPool = NULL;
+            }
+            else
+            {
+                pstTaskCB->pPool = pStack;
+            }
+        }
+
+        /* plus 1 for stack */
+
+        pStack -= sizeof(LOS_MPU_ENTRY) * (MPU_NR_USR_ENTRIES + 1);
+        pstMpuSetting = (LOS_MPU_ENTRY *)pStack;
+
+        for (i = 0; i < MPU_NR_USR_ENTRIES; i++)
+        {
+            pstMpuSetting [i].uwRegionAddr = pstMpuPara[i].uwRegionAddr |
+                MPU_RBAR_REGION (i + MPU_FIRST_USR_REGION) | MPU_RBAR_VALID;
+            pstMpuSetting [i].uwRegionAttr = pstMpuPara[i].uwRegionAttr |
+                MPU_ATTR_SZ (pstMpuPara[i].uwRegionSize);
+        }
+
+        allRegionBase = pstTaskCB->uwTopOfStack;
+        allRegionSize = pstTaskCB->uwStackSize + pstTaskCB->uwHeapSize;
+
+        pstMpuSetting [MPU_NR_USR_ENTRIES].uwRegionAddr =
+            allRegionBase | MPU_RBAR_VALID |
+            MPU_RBAR_REGION (MPU_NR_USR_ENTRIES + MPU_FIRST_USR_REGION);
+        pstMpuSetting [MPU_NR_USR_ENTRIES].uwRegionAttr =
+            MPU_ATTR_RW_RW | MPU_ATTR_SZ (allRegionSize) | MPU_ATTR_WB |
+            MPU_ATTR_EN | MPU_ATTR_XN;
+    }
+    else
+    {
+        pstTaskCB->pPool = (void *)OS_SYS_MEM_ADDR;
+
+        pstMpuSetting = astNullMpuSetting;
+
+        for (i = 0; i < MPU_NR_USR_ENTRIES + 1; i++)
+        {
+            pstMpuSetting [i].uwRegionAddr = 0 |
+                MPU_RBAR_REGION (i + MPU_FIRST_USR_REGION) | MPU_RBAR_VALID;
+            pstMpuSetting [i].uwRegionAttr = 0;
+        }
+    }
+
+    pstTaskCB->pMpuSettings = (VOID *)pstMpuSetting;
+#endif
+
+    pStack -= sizeof(TSK_CONTEXT_S);
+
+    pstContext = (TSK_CONTEXT_S *)pStack;
+
+#if (LOSCFG_ENABLE_MPU == YES)
+    if (pstMpuPara != NULL)
+    {
+        pstContext->uwControl = 3;
+    }
+    else
+    {
+        pstContext->uwControl = 2;
+    }
+#endif
 
     pstContext->uwR4  = 0x04040404L;
     pstContext->uwR5  = 0x05050505L;
@@ -137,7 +233,7 @@ LITE_OS_SEC_TEXT_INIT VOID *osTskStackInit(UINT32 uwTaskID, UINT32 uwStackSize, 
      */
     pstContext->uwExcReturn = 0xFFFFFFFD;
 #endif
-    pstContext->uwR0  = uwTaskID;
+    pstContext->uwR0  = pstTaskCB->uwTaskID;
     pstContext->uwR1  = 0x01010101L;
     pstContext->uwR2  = 0x02020202L;
     pstContext->uwR3  = 0x03030303L;
@@ -146,8 +242,64 @@ LITE_OS_SEC_TEXT_INIT VOID *osTskStackInit(UINT32 uwTaskID, UINT32 uwStackSize, 
     pstContext->uwPC  = (UINT32)osTaskEntry;
     pstContext->uwxPSR = 0x01000000L;
 
-    return (VOID *)pstContext;
+    pstTaskCB->pStackPointer = (VOID *)pStack;
+
+    return;
 }
+
+#if (LOSCFG_STATIC_TASK == NO)
+LITE_OS_SEC_TEXT_INIT VOID *osTskStackAlloc (TSK_INIT_PARAM_S *pstInitParam)
+{
+    UINT32 align = LOSCFG_STACK_POINT_ALIGN_SIZE;
+    UINT32 alloc;
+
+    /* TSK_CONTEXT_S will take space in stack, reserve space for it */
+
+    pstInitParam->uwStackSize += sizeof (TSK_CONTEXT_S);
+
+#if (LOSCFG_ENABLE_MPU == YES)
+    if (pstInitParam->pRegions != NULL)
+    {
+
+        /* LOS_MPU_ENTRY will be allocated from stack, reserve space for it,
+           +1 for the stack entry */
+
+        pstInitParam->uwStackSize += sizeof (LOS_MPU_ENTRY) * (MPU_NR_USR_ENTRIES + 1);
+
+        /* make sure the heap size is correctly aligned */
+
+        pstInitParam->uwHeapSize = ALIGN(pstInitParam->uwHeapSize, 8);
+
+        alloc = pstInitParam->uwStackSize + pstInitParam->uwHeapSize;
+
+        if (alloc < 256)        /* the minimal supported region size is 256 */
+        {
+            alloc = 256;
+        }
+        else
+        {
+            /* make sure the size is power of 2 */
+
+            if (alloc & (alloc - 1))
+            {
+                alloc = 1 << (32 - CLZ (alloc));
+            }
+        }
+
+        pstInitParam->uwStackSize = alloc - pstInitParam->uwHeapSize;
+
+        align = alloc;
+    }
+    else
+#endif
+    {
+        alloc = pstInitParam->uwStackSize;
+    }
+
+    return LOS_MemAllocAlign(OS_TASK_STACK_ADDR, alloc, align);
+}
+#endif
+
 
 LITE_OS_SEC_TEXT_INIT VOID osEnterSleep(VOID)
 {

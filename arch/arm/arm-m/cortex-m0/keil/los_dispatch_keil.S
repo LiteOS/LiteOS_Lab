@@ -79,7 +79,7 @@ OS_TASK_STATUS_RUNNING        EQU    0x0010      ; Task Status Flag (RUNNING).
 ;        Start the first task, which is the highest priority task in the priority queue.
 ;        Other tasks are started by task scheduling.
 ;****************************************************************************************
-LOS_StartToRun
+LOS_StartToRun PROC
     CPSID   I
 
     ;/**
@@ -147,6 +147,23 @@ LOS_StartToRun
     ; *                                    Stack pointer after LOS_StartToRun--->|
     ; */
     LDR     R3, [R1]
+
+    IF :DEF:LOSCFG_ENABLE_MPU
+    LDR     R0, [R1, #8]           ; TCB->pMpuSettings
+    LDR     R1, =0xe000ed9c
+    MOVS    R4, #6                 ; 6 regions
+0
+    LDM     R0!, {R2, R5}
+    STR     R2, [r1]
+    STR     R5, [r1, #4]
+    SUBS    R4, R4, #1
+    BNE     %B0
+
+    LDR     R0, [R3]
+    MSR     CONTROL, R0
+    ADDS    R3, R3, #4
+    ENDIF
+
     ADDS    R3, R3, #36            ; skip R4-R11, PRIMASK.
 
     LDMFD   R3!, {R0-R2}           ; restore R0-R2.
@@ -172,6 +189,7 @@ LOS_StartToRun
     ; * of the main function will be destroyed and will never be returned.
     ; */
     BX      R6
+    ENDP
 
 ;****************************************************************************************
 ; Function:
@@ -186,19 +204,22 @@ LOS_StartToRun
 ;        Restore the locked interruption of LOS_IntLock.
 ;        The caller must pass in the value of interruption state previously saved.
 ;****************************************************************************************
-LOS_IntLock
+LOS_IntLock PROC
     MRS     R0, PRIMASK
     CPSID   I
     BX      LR
+    ENDP
 
-LOS_IntUnLock
+LOS_IntUnLock PROC
     MRS     R0, PRIMASK
     CPSIE   I
     BX      LR
+    ENDP
 
-LOS_IntRestore
+LOS_IntRestore PROC
     MSR     PRIMASK, R0
     BX      LR
+    ENDP
 
 ;****************************************************************************************
 ; Function:
@@ -206,11 +227,12 @@ LOS_IntRestore
 ; Description:
 ;        Start the task swtich process by software trigger PendSV interrupt.
 ;****************************************************************************************
-osTaskSchedule
+osTaskSchedule PROC
     LDR     R0, =OS_NVIC_INT_CTRL
     LDR     R1, =OS_NVIC_PENDSVSET
     STR     R1, [R0]
     BX      LR
+    ENDP
 
 ;****************************************************************************************
 ; Function:
@@ -222,7 +244,7 @@ osTaskSchedule
 ;        Second: Restore the context of the next running task(g_stLosTask.pstNewTask)
 ;                from its own stack.
 ;****************************************************************************************
-PendSV_Handler
+PendSV_Handler PROC
     ;/**
     ; * R12: Save the interruption state of the current running task.
     ; * Disable all interrupts except Reset,NMI and HardFault
@@ -278,6 +300,12 @@ TaskSwitch
     STMIA   R0!, {R3-R7}           ; save R8-R12.
     SUBS    R0, #36
 
+    IF :DEF:LOSCFG_ENABLE_MPU
+    SUBS    R0, R0, #4
+    MRS     R1, CONTROL
+    STR     R1, [R0]
+    ENDIF
+
     ;/**
     ; * R5,R3.
     ; */
@@ -319,6 +347,22 @@ TaskSwitch
     ; * (R1 = g_stLosTask.pstNewTask->pStackPointer)
     ; */
     LDR     R1, [R0]
+
+    IF :DEF:LOSCFG_ENABLE_MPU
+    LDR     R4, [R0, #8]           ; TCB->pMpuSettings
+    LDR     R5, =0xe000ed9c
+    MOVS    R6, #6                 ; 6 regions, cortex-m0+ do not have alias reg
+0
+    LDM     R4!, {R2, R3}
+    STM     R5!, {R2, R3}
+    SUBS    R5, R5, #8
+    SUBS    R6, R6, #1
+    BNE     %B0
+
+    LDR     R4, [R1]
+    ADDS    R1, R1, #4
+    MSR     CONTROL, R4
+    ENDIF
 
     ;/**
     ; * Restore the stack frame(R4-R11) of the next running task.
@@ -371,6 +415,61 @@ TaskSwitch
     ; */
     MSR     PRIMASK, R12
     BX      LR
+    ENDP
+
+    IF :DEF:LOSCFG_ENABLE_MPU
+    EXPORT  osEnterPrivileged
+    EXPORT  osExitPrivileged
+    EXPORT  osIsPrivileged
+    EXPORT  SVC_Handler
+SVC_Handler PROC
+    MRS     R0, PSP
+    LDR     R1, [R0]           ; get the previous PSR in R0
+    CMP     R1, #3
+    BNE     %F0
+    LDR     R1, [R0, #0x10]    ; get the magic in R12
+    CMP     R1, #0x5a
+    BNE     %F0
+
+    MOVS    R0, #2
+    MSR     CONTROL, R0
+0
+    BX      LR
+    ENDP
+
+osEnterPrivileged PROC
+    MRS     R0, CONTROL
+    MOVS    R1, #1
+    TST     R0, R1
+    BEQ     %F0
+
+    MOVS    R1, #0x5a   ; magic
+    MOV     R12, R1
+
+    SVC     #0
+0
+    BX      LR
+    ENDP
+
+osExitPrivileged PROC
+    MOVS    R1, #1
+    TST     R0, R1
+    BEQ     %F0
+
+    MRS     R0, CONTROL
+    ADDS    R0, R0, #1
+    MSR     CONTROL, R0
+0
+    BX      LR
+    ENDP
+
+osIsPrivileged PROC
+    MRS     R0, CONTROL
+    MOVS    R1, #1
+    ANDS    R0, R0, R1
+    BX      LR
+    ENDP
+    ENDIF
 
     ALIGN
     END

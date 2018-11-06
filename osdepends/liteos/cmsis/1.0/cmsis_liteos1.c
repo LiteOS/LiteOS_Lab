@@ -87,6 +87,7 @@ osStatus osKernelInitialize (void)
 
 // Thread Public API
 
+#if (LOSCFG_STATIC_TASK == NO)
 /// Create a thread and add it to Active Threads and set it to state READY
 osThreadId osThreadCreate(const osThreadDef_t *thread_def, void *argument)
 {
@@ -120,6 +121,7 @@ osThreadId osThreadCreate(const osThreadDef_t *thread_def, void *argument)
 
     return tskcb;
 }
+#endif
 
 /// Return the thread ID of the current running thread
 osThreadId osThreadGetId(void)
