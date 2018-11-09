@@ -45,7 +45,6 @@ VOID HardWare_Init(VOID)
 
 VOID liteos_task(VOID)
 {
-	
     gd_eval_led_init(LED1);
     gd_eval_led_init(LED2);
     gd_eval_led_init(LED3);
@@ -67,18 +66,15 @@ VOID liteos_task(VOID)
         gd_eval_led_off(LED3);
         LOS_TaskDelay(50);
     }
-
 }
 UINT32 creat_main_task()
 {
     UINT32 uwRet = LOS_OK;
-	
     TSK_INIT_PARAM_S task_init_param;
     task_init_param.usTaskPrio = 0;
     task_init_param.pcName = "liteos_task";
     task_init_param.pfnTaskEntry = (TSK_ENTRY_FUNC)liteos_task;
     task_init_param.uwStackSize = 0x300;
-
     uwRet = LOS_TaskCreate(&g_TskHandle, &task_init_param);
     if(LOS_OK != uwRet)
     {
@@ -91,7 +87,7 @@ int main(void)
 {
     UINT32 uwRet = LOS_OK;
     HardWare_Init();
-	SystemInit();
+	  SystemInit();
 
     uwRet = LOS_KernelInit();
     if (uwRet != LOS_OK)
