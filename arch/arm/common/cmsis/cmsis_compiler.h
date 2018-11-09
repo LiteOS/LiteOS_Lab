@@ -53,6 +53,8 @@
  */
 #elif defined ( __ICCARM__ )
 
+  #define PRAGMA(x)                   _Pragma(#x)
+
   #ifndef   __ASM
     #define __ASM                     __asm
   #endif
@@ -79,7 +81,7 @@
       #define __UNALIGNED_UINT32(x)     (((struct T_UINT32 *)(x))->v)
   #endif
   #ifndef   __ALIGNED
-    #define __ALIGNED(x)
+    #define __ALIGNED(x)              PRAGMA(data_alignment=x)
   #endif
   #ifndef   __PACKED
     #define __PACKED                  __packed

@@ -84,6 +84,14 @@ struct LOS_HEAP_MANAGER{
 #if (LOSCFG_KERNEL_MEM_SLAB == YES)
     struct LOS_SLAB_CONTROL_HEADER stSlabCtrlHdr;
 #endif
+
+    UINT32 uwAllocCount;
+    UINT32 uwFreeCount;
+
+#if (LOSCFG_HEAP_MEMORY_PEAK_STATISTICS == YES)
+    UINT32 uwCurHeapUsed;
+    UINT32 uwMaxHeapUsed;
+#endif
 };
 
 /**
@@ -186,7 +194,7 @@ extern BOOL osHeapFree(VOID *pPool, VOID* pPtr);
  *<ul>
  *<li>None.</li>
  *</ul>
- *@param None.
+ *@param pPool   [IN] A pointer pointed to the memory pool.
  *
  *@retval   UINT32  Max size of heap memory being used.
  *
@@ -196,7 +204,7 @@ extern BOOL osHeapFree(VOID *pPool, VOID* pPtr);
  *@since Huawei LiteOS
  */
 #if (LOSCFG_HEAP_MEMORY_PEAK_STATISTICS == YES)
-extern UINT32 osHeapGetHeapMemoryPeak(VOID);
+extern UINT32 osHeapGetHeapMemoryPeak(VOID *pPool);
 #endif
 
 #ifdef __cplusplus
