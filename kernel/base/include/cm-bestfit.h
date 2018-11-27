@@ -74,16 +74,9 @@ typedef struct chunk_mgr
      *    idx = (chunk->size - sizeof (chunk_t)) / ALLOC_ALIGN_SIZE
      */
 
-#ifdef HEAP_DEBUG
-    size_node_t        sn_guard0;
-#endif
-
     size_node_t        size_nodes [round_up (sizeof (size_node_t), ALLOC_ALIGN_SIZE) /
                                    ALLOC_ALIGN_SIZE];
 
-#ifdef HEAP_DEBUG
-    size_node_t        sn_guard1;
-#endif
 } chunk_mgr_t;
 
 /**
@@ -120,11 +113,6 @@ static int __heap_compare_nn (bi_node_t * a, bi_node_t * b)
 
 static inline int __cm_init (chunk_mgr_t * cm)
 {
-#ifdef HEAP_DEBUG
-    memset (&cm->sn_guard0, 0x5c, sizeof (struct size_node));
-    memset (&cm->sn_guard1, 0x5c, sizeof (struct size_node));
-#endif
-
     rb_init (&cm->sizes, __heap_compare_nn, __heap_compare_nk);
 
     return 0;
