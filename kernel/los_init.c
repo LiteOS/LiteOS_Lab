@@ -36,6 +36,8 @@
 #include "los_task.ph"
 #include "los_config.h"
 
+#include "mem.h"
+
 #if (LOSCFG_PLATFORM_EXC == YES)
 #include "los_exc.ph"
 #endif
@@ -136,8 +138,14 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_KernelInit(VOID)
 
     osRegister();
 
+#ifdef LOSCFG_HEAP_IMPROVED
+    uwRet = LOS_MemInit();
+    m_aucSysMem0 = (UINT8 *) kernel_heap;
+#else
     m_aucSysMem0 = OS_SYS_MEM_ADDR;
     uwRet = osMemSystemInit();
+#endif
+
     if (uwRet != LOS_OK)
     {
         PRINT_ERR("osMemSystemInit error %d\n", uwRet);/*lint !e515*/
