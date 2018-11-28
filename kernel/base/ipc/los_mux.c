@@ -51,7 +51,7 @@ extern "C"{
 
 #if (LOSCFG_BASE_IPC_MUX == YES)
 
-LITE_OS_SEC_BSS MUX_CB_S             *g_pstAllMux;
+LITE_OS_SEC_BSS MUX_CB_S             *g_pstAllMux = NULL;
 LITE_OS_SEC_BSS LOS_DL_LIST          g_stUnusedMuxList;
 
 
@@ -67,17 +67,20 @@ LITE_OS_SEC_TEXT_INIT UINT32 osMuxInit(VOID)
     MUX_CB_S *pstMuxNode;
     UINT32   uwIndex;
 
+    static MUX_CB_S s_astAllMux [LOSCFG_BASE_IPC_MUX_LIMIT];
+
+    if (g_pstAllMux != NULL)
+        {
+        return LOS_OK;
+        }
+
+    g_pstAllMux = s_astAllMux;
+
     LOS_ListInit(&g_stUnusedMuxList);
 
     if (LOSCFG_BASE_IPC_MUX_LIMIT == 0)   /*lint !e506*/
     {
         return LOS_ERRNO_MUX_MAXNUM_ZERO;
-    }
-
-    g_pstAllMux = (MUX_CB_S *)LOS_MemAlloc(m_aucSysMem0, (LOSCFG_BASE_IPC_MUX_LIMIT * sizeof(MUX_CB_S)));
-    if (NULL == g_pstAllMux)
-    {
-        return LOS_ERRNO_MUX_NO_MEMORY;
     }
 
     for (uwIndex = 0; uwIndex < LOSCFG_BASE_IPC_MUX_LIMIT; uwIndex++)
@@ -104,6 +107,11 @@ LITE_OS_SEC_TEXT_INIT  UINT32  LOS_MuxCreate (UINT32 *puwMuxHandle)
     LOS_DL_LIST *pstUnusedMux;
     UINT32      uwErrNo;
     UINT32      uwErrLine;
+
+    if (g_pstAllMux == NULL)
+        {
+        osMuxInit ();
+        }
 
     if (NULL == puwMuxHandle)
     {
