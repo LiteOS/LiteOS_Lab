@@ -12,18 +12,20 @@ MPU实现中存在一种叫做“背景映射”的概念，“背景映射”�
 
 1. **仅**对特权模式有效
 2. 当所有映射都不匹配地址会使用”背景映射“中的属性
+
 MPU背景映射属性：
-|地址区间               | 权限 |cache属性|区间内容            |
-|-----------------------|------|---------|--------------------|
-|0x00000000 ~ 0x1fffffff| XRW  |WT       |ROM/FLASH           |
-|0x20000000 ~ 0x3fffffff| XRW  |WB       |SRAM                |
-|0x40000000 ~ 0x5fffffff| -RW  |device   |on-chip peripheral  |
-|0x60000000 ~ 0x7fffffff| XRW  |WB       |RAM                 |
-|0x80000000 ~ 0x9fffffff| -RW  |WT       |RAM                 |
-|0xa0000000 ~ 0xbfffffff| -RW  |device   |shared device       |
-|0xc0000000 ~ 0xdfffffff| -RW  |device   |non-shared device   |
-|0xe0000000 ~ 0xe00fffff| -RW  |strongly |PPB                 |
-|0xe0100000 ~ 0xffffffff| -RW  |device   |vendor system region|
+
+| 地址区间                | 权限 | cache属性 | 区间内容             |
+| ----------------------- | ---- | --------- | -------------------- |
+| 0x00000000 ~ 0x1fffffff | XRW  | WT        | ROM/FLASH            |
+| 0x20000000 ~ 0x3fffffff | XRW  | WB        | SRAM                 |
+| 0x40000000 ~ 0x5fffffff | -RW  | device    | on-chip peripheral   |
+| 0x60000000 ~ 0x7fffffff | XRW  | WB        | RAM                  |
+| 0x80000000 ~ 0x9fffffff | -RW  | WT        | RAM                  |
+| 0xa0000000 ~ 0xbfffffff | -RW  | device    | shared device        |
+| 0xc0000000 ~ 0xdfffffff | -RW  | device    | non-shared device    |
+| 0xe0000000 ~ 0xe00fffff | -RW  | strongly  | PPB                  |
+| 0xe0100000 ~ 0xffffffff | -RW  | device    | vendor system region |
 
 # LiteOS对MPU的支持简介
 
