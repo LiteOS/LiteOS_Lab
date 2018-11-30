@@ -128,7 +128,7 @@ LITE_OS_SEC_TEXT_INIT  UINT32  LOS_RWLockCreate (UINT32 *puwRWLockHandle)
     LOS_ListInit(&pstRWLockCreated->stWPendList);
     pstRWLockCreated->ucRWLockStat  = OS_RWLOCK_USED;
     pstRWLockCreated->ucRCount      = 0;
-	pstRWLockCreated->ucWCount      = 0;
+    pstRWLockCreated->ucWCount      = 0;
     pstRWLockCreated->pstWOwner     = (LOS_TASK_CB *)NULL;
     *puwRWLockHandle                = (UINT32)pstRWLockCreated->ucRWLockID;
     return LOS_OK;

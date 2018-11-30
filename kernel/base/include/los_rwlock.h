@@ -147,10 +147,10 @@ extern "C"{
 /**
  * @ingroup los_rwlock
  *
- * RWLock error code: LOS_ERRNO_RWLOCK_MAXNUM_ZERO is zero.
+ * RWLock error code: LOSCFG_BASE_IPC_RWLOCK_LIMIT is zero.
  * Value: 0x02001f0A
  *
- * Solution: LOS_ERRNO_RWLOCK_MAXNUM_ZERO should not be zero.
+ * Solution: LOSCFG_BASE_IPC_RWLOCK_LIMIT should not be zero.
  */
 #define LOS_ERRNO_RWLOCK_MAXNUM_ZERO       LOS_ERRNO_OS_ERROR(LOS_MOD_RWLOCK, 0x0A)
 
