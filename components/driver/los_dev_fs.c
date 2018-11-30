@@ -35,4 +35,118 @@
 //open/read/write/close/ioctl and so on
 
 #include <los_dev.h>
-#include <los_vfs.h>
+#include <fs/los_vfs.h>
+
+#if LOSCFG_ENABLE_DEVFS
+
+#define cn_devfs_timeout 0xffffffff
+#define cn_devfs_name    "devfs"
+#define cn_devfs_path    "/dev/"
+
+//make the corresponding interface for the file system
+static s32_t devfs_open (struct file *file, const char *devname,s32_t flag)
+{
+    s32_t ret = -1;
+    los_dev_t dev;
+
+    dev = los_dev_open(devname,(u32_t)flag);
+    if(NULL != dev)
+    {
+        file->f_data = dev;
+        ret = 0;
+    }
+    return ret;
+}
+
+static s32_t devfs_close (struct file *file)
+{
+    s32_t ret = -1;
+    los_dev_t dev;
+
+    dev = file->f_data;
+    if(los_dev_close(dev))
+    {
+        ret = 0;
+    }
+    return ret;
+}
+
+static ssize_t devfs_read (struct file *file, char *buf, size_t len)
+{
+    ssize_t ret = 0;
+    los_dev_t dev;
+
+    dev = file->f_data;
+    ret = los_dev_read (dev,file->f_offset,(u8_t *)buf,len,cn_devfs_timeout);
+    if(ret > 0)
+    {
+        file->f_offset += ret;
+    }
+
+    return ret;
+
+}
+
+
+static ssize_t devfs_write (struct file *file, const char *buf, size_t len)
+{
+    ssize_t ret = 0;
+    los_dev_t dev;
+
+    dev = file->f_data;
+    ret = los_dev_write (dev,file->f_offset,(u8_t *)buf,len,cn_devfs_timeout);
+    if(ret > 0)
+    {
+        file->f_offset += ret;
+    }
+    return ret;
+}
+
+static s32_t devfs_ioctl (struct file *file, int cmd, unsigned long para)
+{
+
+    s32_t ret = -1;
+    los_dev_t dev;
+
+    dev = file->f_data;
+
+    if(los_dev_ioctl(dev,cmd,(void *)para,0))
+    {
+        ret = 0;
+    }
+
+    return ret;
+}
+
+static const struct file_ops  s_devfs_ops ={
+    .open = devfs_open,
+    .close = devfs_close,
+    .read = devfs_read,
+    .write = devfs_write,
+    .ioctl = devfs_ioctl,
+};
+
+static struct file_system s_devfs =
+{
+    cn_devfs_name,
+    (struct file_ops *)&s_devfs_ops,
+    NULL,
+    0
+};
+bool_t devfs_install(void)
+{
+    los_fs_register(&s_devfs);
+    los_fs_mount(cn_devfs_name,cn_devfs_path,NULL);
+
+    return  true;  //make nothing check, should we do it?
+}
+
+#endif
+
+
+
+
+
+
+
+

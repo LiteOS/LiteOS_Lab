@@ -191,7 +191,7 @@ int los_open (const char *path, int flags)
 
     if (path == NULL)
     {
-        VFS_ERRNO_SET (EINVAL);
+        VFS_ERRNO_SET(EINVAL);
         return fd;
     }
 
@@ -199,7 +199,7 @@ int los_open (const char *path, int flags)
 
     if (path [strlen (path) - 1] == '/')
     {
-        VFS_ERRNO_SET (EINVAL);
+        VFS_ERRNO_SET(EINVAL);
         return fd;
     }
 
@@ -207,7 +207,7 @@ int los_open (const char *path, int flags)
 
     if (LOS_OK != LOS_MuxPend (fs_mutex, LOS_WAIT_FOREVER))
     {
-        VFS_ERRNO_SET (EAGAIN);
+        VFS_ERRNO_SET(EAGAIN);
         return fd;
     }
 
@@ -215,7 +215,7 @@ int los_open (const char *path, int flags)
 
     if (file == NULL)
     {
-        VFS_ERRNO_SET (ENFILE);
+        VFS_ERRNO_SET(ENFILE);
         goto err_post_exit;
     }
 
@@ -229,7 +229,7 @@ int los_open (const char *path, int flags)
 
     if (LOS_OK != LOS_MuxPend (mp->m_mutex, LOS_WAIT_FOREVER))
     {
-        VFS_ERRNO_SET (EAGAIN);
+        VFS_ERRNO_SET(EAGAIN);
         goto err_post_exit;
     }
 
@@ -277,7 +277,7 @@ static struct file *_los_attach_file (int fd, UINT32 status)
 
     if ((fd < 0) || (fd >= LOS_MAX_FILES))
     {
-        VFS_ERRNO_SET (EBADF);
+        VFS_ERRNO_SET(EBADF);
         return file;
     }
 
@@ -337,7 +337,7 @@ static struct file *_los_attach_file (int fd, UINT32 status)
     }
     else
     {
-        VFS_ERRNO_SET (EBADF);
+        VFS_ERRNO_SET(EBADF);
         file = NULL;
     }
 
@@ -404,7 +404,7 @@ ssize_t los_read (int fd, char *buff, size_t bytes)
 
     if ((file->f_flags & O_ACCMODE) == O_WRONLY)
     {
-        VFS_ERRNO_SET (EACCES);
+        VFS_ERRNO_SET(EACCES);
     }
     else if (file->f_fops->read != NULL)
     {
@@ -432,7 +432,7 @@ ssize_t los_write (int fd, const void *buff, size_t bytes)
 
     if ((file->f_flags & O_ACCMODE) == O_RDONLY)
     {
-        VFS_ERRNO_SET (EACCES);
+        VFS_ERRNO_SET(EACCES);
     }
     else if (file->f_fops->write != NULL)
     {
@@ -553,7 +553,7 @@ int los_rename (const char *old, const char *new)
 
     if (mp_old != mp_new)
     {
-        VFS_ERRNO_SET (EXDEV);
+        VFS_ERRNO_SET(EXDEV);
         goto out;
     }
 
@@ -632,13 +632,13 @@ struct dir *los_opendir (const char *path)
     {
         PRINT_ERR ("fail to malloc memory in VFS, <malloc.c> is needed,"
                    "make sure it is added\n");
-        VFS_ERRNO_SET (ENOMEM);
+        VFS_ERRNO_SET(ENOMEM);
         return NULL;
     }
 
     if (LOS_OK != LOS_MuxPend (fs_mutex, LOS_WAIT_FOREVER))
     {
-        VFS_ERRNO_SET (EAGAIN);
+        VFS_ERRNO_SET(EAGAIN);
         free (dir);
         return NULL;
     }
@@ -647,7 +647,7 @@ struct dir *los_opendir (const char *path)
 
     if (mp == NULL)
     {
-        VFS_ERRNO_SET (ENOENT);
+        VFS_ERRNO_SET(ENOENT);
         LOS_MuxPost (fs_mutex);
         free (dir);
         return NULL;
@@ -659,7 +659,7 @@ struct dir *los_opendir (const char *path)
 
     if (ret != LOS_OK)
     {
-        VFS_ERRNO_SET (EAGAIN);
+        VFS_ERRNO_SET(EAGAIN);
         free (dir);
         return NULL;
     }
@@ -698,7 +698,7 @@ struct dirent *los_readdir (struct dir *dir)
 
     if (dir == NULL)
     {
-        VFS_ERRNO_SET (EINVAL);
+        VFS_ERRNO_SET(EINVAL);
         return NULL;
     }
 
@@ -706,7 +706,7 @@ struct dirent *los_readdir (struct dir *dir)
 
     if (LOS_OK != LOS_MuxPend (mp->m_mutex, LOS_WAIT_FOREVER))
     {
-        VFS_ERRNO_SET (EAGAIN);
+        VFS_ERRNO_SET(EAGAIN);
         return NULL;
     }
 
@@ -728,7 +728,7 @@ int los_closedir (struct dir *dir)
 
     if (dir == NULL)
     {
-        VFS_ERRNO_SET (EINVAL);
+        VFS_ERRNO_SET(EINVAL);
         return -1;
     }
 
@@ -736,7 +736,7 @@ int los_closedir (struct dir *dir)
 
     if (LOS_OK != LOS_MuxPend (mp->m_mutex, LOS_WAIT_FOREVER))
     {
-        VFS_ERRNO_SET (EAGAIN);
+        VFS_ERRNO_SET(EAGAIN);
         return -1;
     }
 
@@ -766,7 +766,7 @@ int los_mkdir (const char *path, int mode)
 
     if (LOS_OK != LOS_MuxPend (fs_mutex, LOS_WAIT_FOREVER))
     {
-        VFS_ERRNO_SET (EAGAIN);
+        VFS_ERRNO_SET(EAGAIN);
         return -1;
     }
 
@@ -774,7 +774,7 @@ int los_mkdir (const char *path, int mode)
 
     if (mp == NULL)
     {
-        VFS_ERRNO_SET (ENOENT);
+        VFS_ERRNO_SET(ENOENT);
         LOS_MuxPost (fs_mutex);
         return -1;
     }
@@ -785,7 +785,7 @@ int los_mkdir (const char *path, int mode)
 
     if (ret != LOS_OK)
     {
-        VFS_ERRNO_SET (EAGAIN);
+        VFS_ERRNO_SET(EAGAIN);
         return -1;
     }
 

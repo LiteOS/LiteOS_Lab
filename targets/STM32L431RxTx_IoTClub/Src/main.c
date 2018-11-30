@@ -81,6 +81,8 @@ VOID HardWare_Init(VOID)
 #include <at.h>
 #include <shell.h>
 
+#include <los_dev.h>
+
 int main(void)
 {
     UINT32 uwRet = LOS_OK;
@@ -106,11 +108,21 @@ int main(void)
     extern s32_t uart_at_receive(u8_t *buf,s32_t len,u32_t timeout);
     uart_at_init(9600);
     at_install(uart_at_receive,uart_at_send);
-    
+  #endif    
     //create the main task of the application
+#if 0    
     extern u32_t app_main(void *args);
     task_create("appmain",app_main,0x800,NULL,NULL,12);
-    #endif
+#endif
+
+#if 1
+    extern int      los_vfs_init (void);
+    los_vfs_init();
+    
+    los_driv_init();
+ 
+    devfs_install(); 
+#endif   
     ////////////////////////APPLICATION INITIALIZE END///////////////////
     //start the system
     LOS_Start();
