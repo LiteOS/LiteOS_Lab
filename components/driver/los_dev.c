@@ -36,6 +36,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <los_dev.h>
+
+#if LOSCFG_ENABLE_DRIVER
+
 #include <sys/fcntl.h>
 
 #define cn_driv_status_initialized     (1<<0)
@@ -98,7 +101,8 @@ function     :bsp developer use this function to add a device to the system
 parameters   :
 instruction  :NULL if failed else return the device handle
 *******************************************************************************/
-los_driv_t los_driv_register(const char *name, const los_driv_op_t *op,void *pri,u32_t flagmask)
+los_driv_t los_driv_register(const char *name, const los_driv_op_t *op,\
+                             void *pri,u32_t flagmask)
 {
     struct driv_cb  *driv = NULL;
 
@@ -221,12 +225,12 @@ extern u32_t osdriv$$Limit;
 
 static void osdriv_load_static(void){
     
-    os_driv_install_t *install;
+    os_driv_para_t *para;
 	u32_t num = 0;
     s32_t i = 0;
 #if defined (__CC_ARM)    //you could add other compiler like this
-	num = ((u32_t)&osdriv$$Limit-(u32_t)&osdriv$$Base)/sizeof(os_driv_install_t);
-    install = (os_driv_install_t *) &osdriv$$Base;
+	num = ((u32_t)&osdriv$$Limit-(u32_t)&osdriv$$Base)/sizeof(os_driv_para_t);
+    para = (os_driv_para_t *) &osdriv$$Base;
 #elif defined(__GNUC_LIKE)
 	extern unsigned int __osdriv_start;
 	extern unsigned int __osdriv_end;
@@ -237,7 +241,8 @@ static void osdriv_load_static(void){
 #endif    
     for(i =0;i<num;i++)
     {
-        install->install();
+        los_driv_register(para->name,para->op,para->pri,para->flag);
+        para++;
     }
 
 	return;
@@ -249,7 +254,7 @@ parameters   :
 instruction  :call this function to initialize the device module here
               load the static init from section os_device
 *******************************************************************************/
-bool_t  los_driv_module_init(void)
+bool_t  los_driv_init(void)
 {
     bool_t ret = false;
 
@@ -272,8 +277,8 @@ struct dev_cb
     void *nxt;            //used by the open lst
     void *driv;           //which attached dri here
     s32_t openflag;       //here means the open state here
-
-    //the following for the debuge
+    u32_t offset;
+    //the following for the debug
     u32_t readbytes;
     u32_t writebytes; 
 };
@@ -311,12 +316,7 @@ los_dev_t  los_dev_open  (const char *name,u32_t flag)
     {
         goto EXIT_DRIVERR;
     }
-
-    if( flag != (flag & driv->flagmask))
-    {
-        goto EXIT_FLAGERR;
-    }
-
+    //WE DON'T CARE TOO MUCH ABOUT THE RD AND WR FLAG,MAY BE TODO IT IN THE NEXT VERSION HERE
     if((O_EXCL & driv->flagmask) && (NULL != driv->devlst))
     {
         goto EXIT_EXCLERR;
@@ -351,7 +351,7 @@ los_dev_t  los_dev_open  (const char *name,u32_t flag)
     driv->devlst = dev;
 
     dev->driv = driv;
-    dev->openflag = driv->flagmask & flag;
+    dev->openflag =  flag;
 
     mutex_unlock(s_los_driv_module.lock);
     return dev;
@@ -359,7 +359,6 @@ los_dev_t  los_dev_open  (const char *name,u32_t flag)
 EXIT_OPENERR:
 EXIT_INITERR:
 EXIT_EXCLERR:
-EXIT_FLAGERR:
 EXIT_DRIVERR:
     mutex_unlock(s_los_driv_module.lock);
 EXIT_MUTEXERR:
@@ -450,12 +449,13 @@ EXIT_PARAERR:
 /*******************************************************************************
 function     :use this function to read data from the device
 parameters   :dev,returned by the los_dev_open function
+              offet:from where to read,only used for storage device
               buf:used to storage the data
               len:the length of the buf
               timeout:the waittime if no data current
 instruction  :how many data has been read to the buf
 *******************************************************************************/
-s32_t   los_dev_read  (los_dev_t dev,u8_t *buf,s32_t len,u32_t timeout)
+s32_t   los_dev_read  (los_dev_t dev,u32_t offset,u8_t *buf,s32_t len,u32_t timeout)
 {
     s32_t ret = 0;
     struct dev_cb  *devcb;
@@ -469,8 +469,11 @@ s32_t   los_dev_read  (los_dev_t dev,u8_t *buf,s32_t len,u32_t timeout)
             drivcb = devcb->driv;
             if((NULL != drivcb->op)&&(NULL != drivcb->op->read))
             {
-                ret = drivcb->op->read( drivcb->pri,buf,len,timeout);
-                drivcb->total_read += ret;
+                ret = drivcb->op->read( drivcb->pri,offset,buf,len,timeout);
+                if(ret > 0)
+                {
+                    drivcb->total_read += ret;
+                }
             }
         }
     }
@@ -481,13 +484,13 @@ s32_t   los_dev_read  (los_dev_t dev,u8_t *buf,s32_t len,u32_t timeout)
 /*******************************************************************************
 function     :use this function to write data to the device
 parameters   :dev,returned by the los_dev_open function
+              offset: from where to write,only used for storage device
               buf:the data to be written
               len:the length of the buf
               timeout:the waittime if no data current
 instruction  :how many data has been written to the device
 *******************************************************************************/
-
-s32_t los_dev_write (los_dev_t dev,u8_t *buf,s32_t len,u32_t timeout)
+s32_t los_dev_write (los_dev_t dev,u32_t offset,u8_t *buf,s32_t len,u32_t timeout)
 {
     s32_t ret = 0;
     struct dev_cb  *devcb;
@@ -501,8 +504,11 @@ s32_t los_dev_write (los_dev_t dev,u8_t *buf,s32_t len,u32_t timeout)
             drivcb = devcb->driv;
             if((NULL != drivcb->op)&&(NULL != drivcb->op->write))
             {
-                ret = drivcb->op->write( drivcb->pri,buf,len,timeout);
-                drivcb->total_write += ret;
+                ret = drivcb->op->write( drivcb->pri,offset,buf,len,timeout);
+                if(ret > 0)
+                {
+                    drivcb->total_write += ret;
+                }
             }
         }
     }
@@ -574,7 +580,7 @@ static s32_t  __driv_show_shell(s32_t argc,const char *argv[])
 
 OSSHELL_EXPORT_CMD(__driv_show_shell,"drivinfo","drivinfo");
 
-
+#endif
 
 
 

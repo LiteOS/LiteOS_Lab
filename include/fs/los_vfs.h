@@ -54,11 +54,14 @@ typedef int                                 ssize_t;
 typedef long                                off_t;
 //#endif
 
-#ifdef __GNUC__
+#if defined __CC_ARM                       //the KEIL  may has the extension of GNU
+#define VFS_ERRNO_SET(err)
+#elif defined  __GNUC__
 #define VFS_ERRNO_SET(err)                  (errno = (-err))
 #else
 #define VFS_ERRNO_SET(err)
 #endif
+
 /*lint -e145*/
 struct file_ops
 {

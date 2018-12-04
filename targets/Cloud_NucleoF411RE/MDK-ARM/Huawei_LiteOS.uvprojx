@@ -172,7 +172,7 @@
             <AdsLsun>1</AdsLsun>
             <AdsLven>1</AdsLven>
             <AdsLsxf>1</AdsLsxf>
-            <RvctClst>0</RvctClst>
+            <RvctClst>1</RvctClst>
             <GenPPlst>0</GenPPlst>
             <AdsCpuType>"Cortex-M4"</AdsCpuType>
             <RvctDeviceName></RvctDeviceName>
@@ -324,7 +324,7 @@
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <uC99>1</uC99>
-            <uGnu>0</uGnu>
+            <uGnu>1</uGnu>
             <useXO>0</useXO>
             <v6Lang>1</v6Lang>
             <v6LangP>1</v6LangP>
@@ -337,7 +337,7 @@
               <MiscControls>--diag_suppress=1,47,177,186,223,1295</MiscControls>
               <Define>USE_HAL_DRIVER,USE_MBED_TLS,MBEDTLS_CONFIG_FILE=&lt;los_mbedtls_config.h&gt;,LWM2M_LITTLE_ENDIAN,LWM2M_CLIENT_MODE,NDEBUG,LOS_KERNEL_DEBUG_OUT,ATINY_DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Inc;..\..\..\osdepends\liteos;..\..\..\kernel\base\include;..\..\..\kernel\include;..\..\..\kernel\extended\include;..\OS_CONFIG;..\..\..\arch\arm\arm-m\include;..\..\..\arch\arm\arm-m\cortex-m3;..\..\..\drivers\third_party\ST\STM32F4xx_HAL_Driver\Inc;..\..\..\drivers\third_party\ST\STM32F4xx_HAL_Driver\Inc\Legacy;..\..\..\components\connectivity\lwm2m\core\er-coap-13;..\..\..\components\connectivity\lwm2m\core;..\..\..\drivers\thrid_party\ST\STM32F4xx_HAL_Driver\Inc\Legacy;..\..\..\components\security\mbedtls\mbedtls_port;..\..\..\components\security\mbedtls\mbedtls-2.6.0\include;..\..\..\components\security\mbedtls\mbedtls-2.6.0\include\mbedtls;..\..\..\include\atiny_lwm2m;..\..\..\include\ota;..\..\..\components\ota\package;..\..\..\components\ota\package\opt;..\..\..\components\ota\utility;..\..\..\components\at;..\..\..\components\shell;..\..\..\components\osport;..\..\..\osdepends;..\..\..\include;..\..\..\components\ota\flag_operate;..\..\..\components\connectivity\lwm2m\examples\shared</IncludePath>
+              <IncludePath>..\Inc;..\..\..\osdepends\liteos;..\..\..\kernel\base\include;..\..\..\kernel\include;..\..\..\kernel\extended\include;..\OS_CONFIG;..\..\..\arch\arm\arm-m\include;..\..\..\arch\arm\arm-m\cortex-m3;..\..\..\drivers\third_party\ST\STM32F4xx_HAL_Driver\Inc;..\..\..\drivers\third_party\ST\STM32F4xx_HAL_Driver\Inc\Legacy;..\..\..\components\connectivity\lwm2m\core\er-coap-13;..\..\..\components\connectivity\lwm2m\core;..\..\..\drivers\thrid_party\ST\STM32F4xx_HAL_Driver\Inc\Legacy;..\..\..\components\security\mbedtls\mbedtls_port;..\..\..\components\security\mbedtls\mbedtls-2.6.0\include;..\..\..\components\security\mbedtls\mbedtls-2.6.0\include\mbedtls;..\..\..\include\atiny_lwm2m;..\..\..\include\ota;..\..\..\components\ota\package;..\..\..\components\ota\package\opt;..\..\..\components\ota\utility;..\..\..\components\at;..\..\..\components\shell;..\..\..\components\osport;..\..\..\osdepends;..\..\..\include;..\..\..\components\ota\flag_operate;..\..\..\components\connectivity\lwm2m\examples\shared;..\..\..\components\driver;..\..\..\include\osdepends\liteos;..\..\..\include\fs</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1335,6 +1335,36 @@
               <FileName>at.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\..\components\at\at.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>driver</GroupName>
+          <Files>
+            <File>
+              <FileName>los_dev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\driver\los_dev.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_dev_fs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\driver\los_dev_fs.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_dev_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\driver\los_dev_test.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>fs</GroupName>
+          <Files>
+            <File>
+              <FileName>los_vfs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\fs\vfs\los_vfs.c</FilePath>
             </File>
           </Files>
         </Group>

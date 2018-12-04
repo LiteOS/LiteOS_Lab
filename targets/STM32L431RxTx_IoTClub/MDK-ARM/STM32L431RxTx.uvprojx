@@ -324,7 +324,7 @@
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <uC99>1</uC99>
-            <uGnu>0</uGnu>
+            <uGnu>1</uGnu>
             <useXO>0</useXO>
             <v6Lang>3</v6Lang>
             <v6LangP>3</v6LangP>
@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32L431xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;..\..\..\drivers\third_party\ST\STM32L4xx_HAL_Driver\Inc;..\..\..\drivers\third_party\ST\STM32L4xx_HAL_Driver\Inc\Legacy;..\Hardware\OLED;..\Hardware\BC95;..\Hardware\BH1750;..\Hardware\DHT11;..\Hardware\GPS;..\..\..\components\cmsis;..\..\..\components\cmsis\1.0;..\..\..\components\cmsis\2.0;..\..\..\kernel\base\include;..\..\..\kernel\include;..\..\..\kernel\extended\include;..\..\..\arch\arm\arm-m\include;..\..\..\arch\arm\arm-m\cortex-m4;..\..\..\examples\include;..\OS_CONFIG;..\..\..\components\at;..\..\..\components\osport;..\..\..\components\shell;..\..\..\include</IncludePath>
+              <IncludePath>../Inc;..\..\..\drivers\third_party\ST\STM32L4xx_HAL_Driver\Inc;..\..\..\drivers\third_party\ST\STM32L4xx_HAL_Driver\Inc\Legacy;..\Hardware\OLED;..\Hardware\BC95;..\Hardware\BH1750;..\Hardware\DHT11;..\Hardware\GPS;..\..\..\components\cmsis;..\..\..\components\cmsis\1.0;..\..\..\components\cmsis\2.0;..\..\..\kernel\base\include;..\..\..\kernel\include;..\..\..\kernel\extended\include;..\..\..\arch\arm\arm-m\include;..\..\..\arch\arm\arm-m\cortex-m4;..\..\..\examples\include;..\OS_CONFIG;..\..\..\components\at;..\..\..\components\osport;..\..\..\components\shell;..\..\..\include;..\..\..\components\driver;..\..\..\include\fs;..\..\..\include\osdepends\liteos</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -835,6 +835,31 @@
               <FileName>stm32l4xx_hal_usart_ex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\drivers\third_party\ST\STM32L4xx_HAL_Driver\Src\stm32l4xx_hal_usart_ex.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>driver</GroupName>
+          <Files>
+            <File>
+              <FileName>los_dev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\driver\los_dev.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_dev_fs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\driver\los_dev_fs.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_dev_test.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\driver\los_dev_test.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_vfs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\fs\vfs\los_vfs.c</FilePath>
             </File>
           </Files>
         </Group>

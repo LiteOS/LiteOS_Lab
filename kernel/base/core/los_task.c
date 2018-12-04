@@ -433,16 +433,16 @@ LITE_OS_SEC_TEXT_MINOR UINT32 osGetAllTskInfo(VOID)
     LOS_TaskUnlock();
 #endif
 
-    PRINT_ERR("\r\nName                          TID    Priority   Status       StackSize    WaterLine    StackPoint  TopOfStack   EventMask  SemID");/*lint !e515*/
+    PRINTK("\r\nName            TID    Priority   Status       StackSize    WaterLine    StackPoint  TopOfStack   EventMask  SemID");/*lint !e515*/
 #if (LOSCFG_BASE_CORE_CPUP == YES)
     PRINT_ERR(" CPUUSE   CPUUSE10s  CPUUSE1s  ");/*lint !e515*/
 #endif /* LOSCFG_BASE_CORE_CPUP */
-    PRINT_ERR("\n");/*lint !e515*/
-    PRINT_ERR("----                          ---    --------   --------     ---------    ----------   ----------  ----------   ---------  -----");/*lint !e515*/
+    PRINTK("\n\r");/*lint !e515*/
+    PRINTK("----            ---    --------   --------     ---------    ----------   ----------  ----------   ---------  -----");/*lint !e515*/
 #if (LOSCFG_BASE_CORE_CPUP == YES)
     PRINT_ERR("  ------- ---------  ---------");/*lint !e515*/
 #endif /* LOSCFG_BASE_CORE_CPUP */
-    PRINT_ERR("\n");/*lint !e515*/
+    PRINTK("\n\r");/*lint !e515*/
 
     for (uwLoop = 0; uwLoop < g_uwTskMaxNum; uwLoop++)
     {
@@ -454,7 +454,7 @@ LITE_OS_SEC_TEXT_MINOR UINT32 osGetAllTskInfo(VOID)
             continue;
         }
 
-        PRINT_ERR("%-30s, 0x%-5x, %-11d, %-13s, 0x%-11x, 0x%-11x, 0x%-10x, 0x%-11x, 0x%-9x",
+        PRINTK("%-16s0x%-5x%-11d%-13s0x%-11x0x%-11x0x%-10x0x%-11x0x%-9x",
                           pstTaskCB->pcTaskName,
                           pstTaskCB->uwTaskID,
                           pstTaskCB->usPriority,
@@ -467,11 +467,11 @@ LITE_OS_SEC_TEXT_MINOR UINT32 osGetAllTskInfo(VOID)
 
         if (pstTaskCB->pTaskSem != NULL)
         {
-            PRINT_ERR("0x%-7x", ((SEM_CB_S *)pstTaskCB->pTaskSem)->usSemID);/*lint !e516*/
+            PRINTK("0x%-7x", ((SEM_CB_S *)pstTaskCB->pTaskSem)->usSemID);/*lint !e516*/
         }
         else
         {
-            PRINT_ERR("0x%-7x", 0xFFFF);
+            PRINTK("0x%-7x", 0xFFFF);
         }
 
 #if (LOSCFG_BASE_CORE_CPUP == YES)
@@ -485,7 +485,7 @@ LITE_OS_SEC_TEXT_MINOR UINT32 osGetAllTskInfo(VOID)
                           pstCpu1s[pstTaskCB->uwTaskID].uwUsage / LOS_CPUP_PRECISION_MULT,
                           pstCpu1s[pstTaskCB->uwTaskID].uwUsage % LOS_CPUP_PRECISION_MULT);/*lint !e515 !e516*/
 #endif /* LOSCFG_BASE_CORE_CPUP */
-        PRINT_ERR("\n");/*lint !e515*/
+        PRINTK("\r\n");/*lint !e515*/
     }
 
 #if (LOSCFG_BASE_CORE_CPUP == YES)
