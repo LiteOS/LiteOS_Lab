@@ -32,96 +32,41 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
+#define AT_CMD_AT    		"AT"
+#define AT_CMD_CPIN         "AT+CPIN?\r"//check sim card
+#define AT_CMD_COPS         "AT+COPS?"//check register network
+#define AT_CMD_CLOSE    	"AT+CIPCLOSE"
+#define AT_CMD_SHUT    		"AT+CIPSHUT\r"
+#define AT_CMD_ECHO_OFF 	"ATE0\r"
+#define AT_CMD_ECHO_ON  	"ATE1\r"
+#define AT_CMD_MUX_ON       "AT+CIPMUX=1\r"
+#define AT_CMD_CLASS        "AT+CGCLASS=\"B\"\r"//set MS type
+#define AT_CMD_PDP_CONT   	"AT+CGDCONT=1,\"IP\",\"CMNET\"\r"//configure pdp context
+
+#define AT_CMD_PDP_ATT    	"AT+CGATT=1\r"//pdp attach network
+#define AT_CMD_PDP_ATT_Q    "AT+CGATT?\r"//pdp attach network
+#define AT_CMD_PDP_ACT		"AT+CGACT=1,1\r"//active pdp context
+#define AT_CMD_CSTT			"AT+CSTT\r"//start task
+#define AT_CMD_CIICR		"AT+CIICR\r"//start gprs connect
+#define AT_CMD_CIFSR		"AT+CIFSR\r"//get local ip
+#define AT_CMD_CIPHEAD		"AT+CIPHEAD=1\r"
+#define AT_CMD_CONN			"AT+CIPSTART"
+#define AT_CMD_SEND			"AT+CIPSEND"
+
+#define AT_DATAF_PREFIX      "\r\n+IPD"
+#define AT_DATAF_PREFIX_MULTI      "\r\n+RECEIVE"
+
+
+#include <stdio.h>
+#include <stddef.h>
 #include <stdlib.h>
+
+#include <osport.h>
 #include <at.h>
-//open the network
-static bool_t __close_echo(void)
-{
-    bool_t ret = false;
-    s32_t  resplen;
-    const char *cmd = "ate0\r";
-    u8_t respbuf[64];
-    
-    memset(respbuf, 0,64);
-    resplen = at_command((u8_t *)cmd,strlen(cmd),"OK",respbuf,64,1000);
-    if(resplen > 0)
-    {
-        ret = true;
-    }
-    return ret;
-}
 
 
-static bool_t __open_network(void)
-{
-    bool_t ret = false;
-    s32_t  resplen;
-    const char *cmd = "at+netopen\r";
-    u8_t respbuf[64];
-    
-    memset(respbuf, 0,64);
-    resplen = at_command((u8_t *)cmd,strlen(cmd),"OK",respbuf,64,1000);
-    if(resplen > 0)
-    {
-        ret = true;
-    }
-    return ret;
-}
-static bool_t __csq_get(s32_t *signal,s32_t *ber)
-{
-    bool_t ret = false;
-    s32_t  resplen;
-    s32_t  argc = 6;
-    char*  argv[6];
-    const char *cmd = "at+csq\r";
-    u8_t respbuf[64];
-    
-    memset(respbuf, 0,64);
-    resplen = at_command((u8_t *)cmd,strlen(cmd),"+CSQ",respbuf,64,1000);
-    if(resplen > 0)
-    {
-        argc = string_split((char *)respbuf,"\r\n",argv,argc);
-        if((argc > 0)&&(0 == strcmp(argv[argc-1],"OK")))
-        {
-            sscanf(argv[argc-2],"+CSQ: %d,%d",signal,ber);
-            ret = true;
-        }
-    }
-    return ret;
-}
-static bool_t __cpin_check(void)  //return true ,read get else failed
-{
-    bool_t ret = false;
-    s32_t  resplen;
-    const char *cmd = "at+cpin?\r";
-    u8_t respbuf[64];
-    
-    memset(respbuf, 0,64);
-    resplen = at_command((u8_t *)cmd,strlen(cmd),"READY",respbuf,64,1000);
-    if(resplen > 0)
-    {             
-        ret = true;
-    }
-    return ret;
-}
-static bool_t __cgatt_check(void)  //return true ,read get else failed
-{
-    bool_t ret = false;
-    s32_t  resplen;
-    const char *cmd = "at+cgatt?\r";
-    u8_t respbuf[64];
-        
-    memset(respbuf, 0,64);
-    resplen = at_command((u8_t *)cmd,strlen(cmd),"+CGATT: 1",respbuf,64,1000);
-    if(resplen > 0)
-    {
-        ret = true;
-    }
-    return ret;
-}
-
-#define cn_5320e_socket_max 9
-#define cn_5320e_socket_rcvlen 768
+#define cn_socket_max                         9
+#define cn_socket_buflen                      768
 struct socket_item
 {
     char host[24];
@@ -129,10 +74,10 @@ struct socket_item
     char proto[4];
     semp_t   rcvsync;
     mutex_t  mutex;
-    u8_t     rcvbuf[cn_5320e_socket_rcvlen];
+    u8_t     rcvbuf[cn_socket_buflen];
     s32_t    rcvdatalen;
 };
-static struct socket_item *g_socket_cb[cn_5320e_socket_max];
+static struct socket_item *s_socket_cb[cn_socket_max];
 
 //not support tcp yet
 static s32_t socket_connect(const char* host, const char* port, int proto)
@@ -142,17 +87,15 @@ static s32_t socket_connect(const char* host, const char* port, int proto)
     s32_t ret = 0;
     s32_t resplen = 0;
     struct socket_item *item;
-    s32_t argc =4;
-    char *argv[4];
    
-    for(ret = 0;ret<cn_5320e_socket_max;ret++ )
+    for(ret = 0;ret<cn_socket_max;ret++ )
     {
-        if(NULL == g_socket_cb[ret])
+        if(NULL == s_socket_cb[ret])
         {
             break;
         }
     }
-    if(ret == cn_5320e_socket_max)
+    if(ret == cn_socket_max)
     {
         ret = -1;
         return ret;
@@ -176,31 +119,49 @@ static s32_t socket_connect(const char* host, const char* port, int proto)
     }
     strncpy(item->host,host,24);
     strncpy(item->port,port,8);
-    //anyway ,we should create a hard socket here
-   //close the hard socket
-    memset(cmdbuf,0,64);
-    memset(respbuf,0,64);
-    snprintf((char *)cmdbuf,64,"at+cipclose=%d\r",ret);
-    resplen = at_command(cmdbuf,strlen((char *)cmdbuf),"OK",respbuf,64,1000);
     
+    
+    //do some settings here
+    at_command((u8_t *)AT_CMD_SHUT,strlen((char *)AT_CMD_SHUT),"OK",respbuf,64,1000);    
+        
+    at_command((u8_t *)AT_CMD_CLASS,strlen((char *)AT_CMD_CLASS),"OK",respbuf,64,1000);    
+        
+    at_command((u8_t *)AT_CMD_PDP_CONT,strlen((char *)AT_CMD_PDP_CONT),"OK",respbuf,64,1000); 
+
+    at_command((u8_t *)AT_CMD_PDP_ATT,strlen((char *)AT_CMD_PDP_ATT),"OK",respbuf,64,1000);    
+    
+    at_command((u8_t *)AT_CMD_CIPHEAD,strlen((char *)AT_CMD_CIPHEAD),"OK",respbuf,64,1000);    
+    
+    at_command((u8_t *)AT_CMD_PDP_ACT,strlen((char *)AT_CMD_PDP_ACT),"OK",respbuf,64,1000);  
+
+    at_command((u8_t *)AT_CMD_CSTT,strlen((char *)AT_CMD_CSTT),"OK",respbuf,64,1000);    
+
+    at_command((u8_t *)AT_CMD_CIICR,strlen((char *)AT_CMD_CIICR),"OK",respbuf,64,1000);  
+
+    at_command((u8_t *)AT_CMD_CIFSR,strlen((char *)AT_CMD_CIFSR),"OK",respbuf,64,1000);    
+       
+    
+    //anyway ,we should create a hard socket here
+    //close the hard socket
+ #if 0   
     memset(cmdbuf,0,64);
     memset(respbuf,0,64);
-    snprintf((char *)cmdbuf,64,"at+cipopen=%d,\"%s\",,,%d\r",ret,"udp",ret);
-    resplen = at_command(cmdbuf,strlen((const char *)cmdbuf),"+CIPOPEN",respbuf,64,10000);
+    snprintf((char *)cmdbuf,64,"%s=%d\r",AT_CMD_CLOSE,ret);
+    resplen = at_command(cmdbuf,strlen((char *)cmdbuf),"OK",respbuf,64,1000);
+ #endif   
+    memset(cmdbuf,0,64);
+    memset(respbuf,0,64);
+    snprintf((char *)cmdbuf,64,"%s=%d,\"%s\",\"%s\",\"%s\"\r", AT_CMD_CONN, ret, "UDP", host, port);
+
+    resplen = at_command(cmdbuf,strlen((const char *)cmdbuf),"CONNECT OK",respbuf,64,10000);
     if(resplen <= 0)
     {
         printf("%s:at create socket command timeout\n\r",__FUNCTION__);
         goto EXIT_AT;
     }
-    argc = string_split((char *)respbuf,"\n\r",argv,argc);
-    if((argc < 2)||(0 != strcmp(argv[argc -1],"OK")))
-    {
-        printf("%s:at create socket failed\n\r",__FUNCTION__);
-        goto EXIT_AT;
-    }
-    
+
     //reach here means create ok
-    g_socket_cb[ret] = item;
+    s_socket_cb[ret] = item;
     return ret;
 
 EXIT_AT:
@@ -214,7 +175,7 @@ EXIT_MALLOC:
     ret = -1;
     return ret;
 }
- 
+
 //close the socket we create ,remember to free the firmware socket
 static  void socket_close(s32_t fd)
 {
@@ -223,17 +184,17 @@ static  void socket_close(s32_t fd)
     u8_t respbuf[64];
     
     struct socket_item *item;
-    if((fd >=0)&&(fd < cn_5320e_socket_max)&&(NULL != g_socket_cb[fd]))
+    if((fd >=0)&&(fd < cn_socket_max)&&(NULL != s_socket_cb[fd]))
     {
-        item =  g_socket_cb[fd];
-        g_socket_cb[fd] = NULL;
+        item =  s_socket_cb[fd];
+        s_socket_cb[fd] = NULL;
         semp_del(&item->rcvsync); 
         mutex_del(&item->mutex);       
         free(item);
         //close the hard socket
         memset(respbuf, 0,64);
         memset(cmdbuf, 0,64);
-        snprintf((char *)cmdbuf,64,"at+cipclose=%d\r",fd);
+        snprintf((char *)cmdbuf,64,"%s=%d\r",AT_CMD_CLOSE,fd);
         resplen = at_command(cmdbuf,strlen((char *)cmdbuf),"OK",respbuf,64,1000);
         if(resplen > 0)
         {
@@ -251,24 +212,23 @@ static s32_t socket_send(s32_t fd, u8_t *buf,s32_t len)
     u8_t cmdbuf[64];
     struct socket_item *item;
 
-    if((fd <0)||(fd >= cn_5320e_socket_max)||(NULL == g_socket_cb[fd]))
+    if((fd <0)||(fd >= cn_socket_max)||(NULL == s_socket_cb[fd]))
     {
         return ret;
     }
      
-
-    item =  g_socket_cb[fd];
+    item =  s_socket_cb[fd];
     if(mutex_lock(item->mutex))
     {
         memset(respbuf, 0,64);
         memset(cmdbuf,0,64);
-        snprintf((char *)cmdbuf,64,"at+cipsend=%d,%d,\"%s\",%s\r",fd,len,item->host,item->port);
+        snprintf((char *)cmdbuf,64,"%s=%d,%d\r",AT_CMD_SEND,fd,len);
 
         resplen = at_command(cmdbuf,strlen((const char *)cmdbuf),">",respbuf,64,1000);
         if(resplen > 0)
         {
             memset(respbuf, 0,64);
-            resplen = at_command(buf,len,"+CIPSEND:",respbuf,64,1000);
+            resplen = at_command(buf,len,"SEND OK",respbuf,64,1000);
             if(resplen > 0)
             {
                 ret = len;
@@ -287,11 +247,11 @@ static s32_t socket_receive(s32_t fd, u8_t *buf,s32_t len,u32_t timeout)
 
     struct socket_item *item;
 
-    if((fd <0)||(fd >= cn_5320e_socket_max)||(NULL == g_socket_cb[fd]))
+    if((fd <0)||(fd >= cn_socket_max)||(NULL == s_socket_cb[fd]))
     {
         return ret;
     }
-    item =  g_socket_cb[fd]; 
+    item =  s_socket_cb[fd]; 
     
     if(semp_pend(item->rcvsync,timeout))
     {
@@ -306,34 +266,24 @@ static s32_t socket_receive(s32_t fd, u8_t *buf,s32_t len,u32_t timeout)
     return ret;
 }
 
-
-
 //match the data to the socket here
-static void  __push_data(char *host, u8_t *data, s32_t datalen)
+static void  __push_data(s32_t fd, u8_t *data, s32_t datalen)
 {
     u8_t sockhost[64];
     struct socket_item *item;
-    u8_t i;
     s32_t cpylen;
-    for(i =0;i < cn_5320e_socket_max;i++)
+    if((fd < cn_socket_max)&&(NULL != s_socket_cb[fd]))
     {   
-        item = g_socket_cb[i];
-        if(item != NULL)
+        item = s_socket_cb[fd];
+        snprintf((char *)sockhost,64,"%s:%s",item->host,item->port);
+        if(mutex_lock(item->mutex))
         {
-            snprintf((char *)sockhost,64,"%s:%s",item->host,item->port);
-            if(0 == memcmp(sockhost,host,strlen(host))) //match it
-            {
-                if(mutex_lock(item->mutex))
-                {
-                    cpylen = datalen > cn_5320e_socket_rcvlen?cn_5320e_socket_rcvlen:datalen;
-                    memcpy(item->rcvbuf,data,cpylen);
-                    item->rcvdatalen = cpylen;
+            cpylen = datalen > cn_socket_buflen?cn_socket_buflen:datalen;
+            memcpy(item->rcvbuf,data,cpylen);
+            item->rcvdatalen = cpylen;
 
-                    mutex_unlock(item->mutex);
-                    semp_post(item->rcvsync);
-                }
-            }
-
+            mutex_unlock(item->mutex);
+            semp_post(item->rcvsync);
         }
     }
 }
@@ -343,10 +293,10 @@ static s32_t handler_rcvdata(u8_t *buf,s32_t len)
 {
     s32_t  ret = 0;
     char  *cmpaddr;
-    char  *host;
     u8_t  *data;
     s32_t datalen = 0;
     const char *checkaddr;
+    s32_t  fd;
     
     checkaddr = (const char *)buf;
     cmpaddr = strstr(checkaddr,":");
@@ -354,48 +304,25 @@ static s32_t handler_rcvdata(u8_t *buf,s32_t len)
     {
         return ret;
     }
-    host = cmpaddr+1;
-    checkaddr = host;
-
-    cmpaddr = strstr(checkaddr,"\r");
-    if(NULL == cmpaddr)
-    {
-        return ret;
-    }
-    *cmpaddr = '\0';  //find the host and  the end
-    checkaddr = cmpaddr +2;
+    *cmpaddr = '\0';
     
-    cmpaddr = strstr(checkaddr,"IPD");
-    if(NULL == cmpaddr)
+    sscanf(checkaddr,"\r\n+RECEIVE,%d,%d",&fd,&datalen);
+    data = (u8_t *)(cmpaddr + 3);  //jump the ":\r\n"
+    
+    if((u32_t)(buf + len) < (u32_t)(data + datalen)) //if not equel,which means something wrong happened to the frame
     {
         return ret;
-    }
-    checkaddr = cmpaddr+3;
-    for (; *checkaddr <= '9' && *checkaddr >= '0' ;checkaddr++)
-    {
-        datalen = (datalen * 10 + (*checkaddr - '0'));
     }
     
-    cmpaddr = strstr(checkaddr,"\n");
-    if(NULL == cmpaddr)
-    {
-        return ret;
-    }
-    data = (u8_t*)(cmpaddr +1); //find the data start address
-    len  =len - (s32_t)(data - buf);
-    if(len < datalen)
-    {
-        return ret;  //not implement data;
-    }
-  //  printf("applicationdata:len:%d bytes\n\r",datalen);
-    __push_data(host,data,datalen);
+    //push the data to the socket
+    __push_data(fd,data,datalen);
     ret = len;
 
     return ret;
 }
 
 #include <sal/atiny_socket.h>
-const struct atiny_netdevice  g_sim5320E=
+static const struct atiny_netdevice  s_sim800c_900a=
 {
     .connect = socket_connect,
     .close = socket_close,
@@ -404,16 +331,18 @@ const struct atiny_netdevice  g_sim5320E=
 };
 
 //the sim5320e device init function here
-bool_t  sim5320e_init(void)
+bool_t  sim800c_900a_init(void)
 {
     bool_t ret = false;
     
-    atiny_install_netdevice((struct atiny_netdevice *)&g_sim5320E);
-    at_oobregister(handler_rcvdata,"\r\nRECV FROM:");
+    //each time reset the module
+    
     while(1)
     {
-        task_sleepms(5000);
-        if(false == __close_echo())
+           
+        task_sleepms(1000*5);
+        at_command((u8_t *)AT_CMD_SHUT,strlen(AT_CMD_SHUT),"OK",NULL,0,1000);
+        if(at_command((u8_t *)AT_CMD_ECHO_OFF,strlen(AT_CMD_ECHO_OFF),"OK",NULL,0,1000)  == 0)
         {
             printf("echo close err,do continue...\n\r");
             continue;
@@ -422,126 +351,47 @@ bool_t  sim5320e_init(void)
         {
             printf("echo close success\n\r");
         }
-
-        if(false == __cpin_check())
+        
+        if(at_command((u8_t *)AT_CMD_CPIN,strlen(AT_CMD_CPIN),"OK",NULL,0,1000)  == 0)
         {
             printf("sim card not detected,continue to detect...\n\r");
-            task_sleepms(1000);
             continue;
         }
         else
         {
             printf("cpin check success\n\r");
         }
-
-        if(false == __cgatt_check())
+        
+        if(at_command((u8_t *)AT_CMD_PDP_ATT_Q,strlen(AT_CMD_PDP_ATT_Q),"+CGATT: 1",NULL,0,1000)  == 0)
         {
             printf("net work not detected,continue to detect...\n\r");
-            task_sleepms(1000);
             continue;
         }
         else
         {
             printf("cgatt check success\n\r");
         }
-        __open_network();  //we don't check the result for sometimes the network has been opened
+        
+        at_command((u8_t *)AT_CMD_MUX_ON,strlen(AT_CMD_MUX_ON),"OK",NULL,0,1000);
+            
         //reach here means all the detect has passed
         ret = true;
         break;
     }
+    
+    atiny_install_netdevice((struct atiny_netdevice *)&s_sim800c_900a);
+    at_oobregister(handler_rcvdata,"\r\n+RECEIVE,");
     return ret;
 }
 
-
-
-
-
-//
-
-static bool_t s_gps_report = false;
-
-static u32_t __task_gps_entry(void *arg)
-{
-    u8_t   respbuf[128];
-    u32_t  resplen;
-    const char *cmdbuf;
-   
-    while(1)
-    {
-        if(s_gps_report)
-        {
-             memset(respbuf,0,128);
-             cmdbuf =  "AT+CGPS=1\r";  //which will open the gps
-             resplen = at_command((u8_t *)cmdbuf,strlen((char *)cmdbuf),"OK",respbuf,128,1000);
-             if(resplen > 0)
-             {
-                 printf("%s:%s\r\n",__FUNCTION__,respbuf);
-             }
-             
-             memset(respbuf,0,128);
-             cmdbuf =  "AT+CGPSINFO\r";  //which will open the gps
-             resplen = at_command((u8_t *)cmdbuf,strlen((char *)cmdbuf),"OK",respbuf,128,1000);
-             if(resplen > 0)
-             {
-                 printf("%s:%s\r\n",__FUNCTION__,respbuf);
-             }       
-        }
-        task_sleepms(5*1000);
-    }
-
-}
-
-
-
-static s32_t __sim5320e_gps_en(s32_t argc,const char *argv[])
-{
-    task_create("gpsreport",__task_gps_entry,0x800,NULL,NULL,14);
-
-    return 0;
-}
-
-static s32_t __sim5320e_gps_report(s32_t argc,const char *argv[])
-{
-    if ( 2 == argc )
-    {
-        if( 0 == strcmp ( "enable" , argv[1] ) )
-        {
-            s_gps_report = true ;
-        }
-        else 
-        {
-            s_gps_report = false ;
- 
-        }
-    
-    }
-    
-    return 0;
-}
-
-
 #include <shell.h>
 
-OSSHELL_EXPORT_CMD(__sim5320e_gps_en,"gpsen","gpsen");
-OSSHELL_EXPORT_CMD(__sim5320e_gps_report,"gpsreport","gpsreport  enable/disable");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+static bool_t shell_connect(s32_t argc, const char *argv[])
+{
+    s32_t ret ;
+    ret = socket_connect(argv[1],argv[2],17);
+    return ret;
+}
+OSSHELL_EXPORT_CMD(shell_connect,"connect","connect");
 
 
