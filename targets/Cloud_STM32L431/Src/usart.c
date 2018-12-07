@@ -262,13 +262,15 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
   /* USER CODE END USART3_MspDeInit 1 */
   }
 } 
-#if 0
+#ifdef __GNUC__
 int _write(int fd, char *ptr, int len)
 (
 	HAL_UART_Transmit(&huart1, (uint8_t *)ptr, len, 0xFFFF);
 	return len;
 )
+#else
 
+#if 0
 int fputc(int ch, FILE *f) 
 {
   HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);
@@ -285,6 +287,7 @@ int fgetc(FILE *f)
 }
 #endif    
 
+#endif /* __GNUC__ */
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */

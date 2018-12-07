@@ -31,70 +31,86 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-
-#include "sys_init.h"
+#include <string.h>
+#include <stdlib.h>
 #include <osport.h>
-#include <at.h>
-#include <shell.h>
+
+
+#include <app_main.h>
+
+#include <los_dev.h>
+
+
+#include <gps.h>
+
+static los_dev_t  s_sensor_dev = NULL;
 
 
 
-static VOID HardWare_Init(VOID)
+//do the light intensity report
+static s32_t gps_report(u8_t *buf, s32_t buflen)
 {
-    SystemClock_Config();
-    dwt_delay_init(SystemCoreClock);
-}
 
-static u32_t apptask_entry(void *args)
-{
-    //extern at_adaptor_api at_interface;
-    //at_api_register(&at_interface);
-    
-    extern bool_t  sim5320e_init(void);
-    sim5320e_init();
-    agent_tiny_entry();
-    
-    return 0;
-}
-
-int main(void){
-    UINT32 uwRet = LOS_OK;
-	HardWare_Init();
-    uwRet = LOS_KernelInit();
-    if (uwRet != LOS_OK){
-        return LOS_NOK;
-    } 
-  
-#if 0
-    extern  UINT32 LOS_Inspect_Entry(VOID);
-    LOS_Inspect_Entry();
-#endif    
-    //////////////////////APPLICATION INITIALIZE HERE/////////////////////
-    //do the shell module initlialize:use uart 2
-    extern void uart_debug_init(s32_t baud);
-    uart_debug_init(115200);
-    shell_install();
- 
-#if 1   
-    //do the at module initialize:use uart 1
-    extern bool_t uart_at_init(s32_t baudrate);
-    extern s32_t uart_at_send(u8_t *buf, s32_t len,u32_t timeout);
-    extern s32_t uart_at_receive(u8_t *buf,s32_t len,u32_t timeout);
-    uart_at_init(115200);
-    at_install(uart_at_receive,uart_at_send);
-#endif
-
+    s32_t ret = 0;
+    u32_t  value  =0;
+    u8_t  databuf[128];
+    //sample light intensity and report
 #if 0    
-    extern bool_t  los_driv_module_init(void);
-    los_driv_module_init();
+	  HAL_UART_Receive_IT(&huart3,gps_uart,1000);
+		NMEA_BDS_GPRMC_Analysis(&gpsmsg,(uint8_t*)gps_uart);	//?????
+		Longitude=(float)((float)gpsmsg.longitude_bd/100000);	
+		printf("Longitude:%.5f %lc     \r\n",Longitude,gpsmsg.ewhemi_bd);
+		Latitude=(float)((float)gpsmsg.latitude_bd/100000);
+		printf("Latitude:%.5f %1c   \r\n",Latitude,gpsmsg.nshemi_bd);	
 #endif
-
- #if 0
-    task_create("appmain",apptask_entry,0x2000,NULL,NULL,0);
- #endif 
-
-    (void)LOS_Start();
+    ret = los_dev_read(s_sensor_dev,0,databuf,128,1000);
+    printf("read :%d bytes\n\r",ret);
+    
+    
     return 0;
 }
+
+
+static void GPS_Init(void)
+{
+	//HAL_UART_Transmit(&huart3, "$CCMSG,GGA,1,0,*19\r\n", 20, 200);
+    //HAL_UART_Transmit(&huart3, "$CCMSG,GSA,1,0,*0D\r\n", 20, 200);
+	//HAL_UART_Transmit(&huart3, "$CCMSG,GSV,1,0,*1A\r\n", 20, 200);
+    
+    const char *cmd;
+    cmd = "$CCMSG,GGA,1,0,*19\r\n";  
+    los_dev_write(s_sensor_dev,0,(u8_t *)cmd,strlen(cmd),200);
+    
+    cmd = "$CCMSG,GSA,1,0,*0D\r\n";  
+    los_dev_write(s_sensor_dev,0,(u8_t *)cmd,strlen(cmd),200);
+    
+    cmd = "$CCMSG,GSV,1,0,*1A\r\n";  
+    los_dev_write(s_sensor_dev,0,(u8_t *)cmd,strlen(cmd),200);
+}
+
+bool_t app_gps_report()
+{
+    bool_t ret= false;
+    
+    //do the sensor module init
+    extern bool_t sensor_uart_init(s32_t baudrate);
+    sensor_uart_init(9600);
+    
+    s_sensor_dev = los_dev_open("sensor_uart",O_RDWR);
+    if(NULL != s_sensor_dev)
+    {
+        ret = app_register("appgps",en_app_direction_report,en_app_msgid_gps,\
+          gps_report,10);
+    }
+
+    return ret;
+}
+
+
+
+
+
+
+
 
 

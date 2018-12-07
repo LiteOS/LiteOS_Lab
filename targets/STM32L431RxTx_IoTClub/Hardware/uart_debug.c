@@ -108,7 +108,7 @@ int fgetc(FILE *f){
 #elif defined ( __GNUC__ )  /* GCC: printf will call _write to print */
 __attribute__((used)) int _write(int fd, char *ptr, int len)
 {
-    HAL_UART_Transmit(&huart1, (uint8_t *)ptr, len, 0xFFFF);
+    HAL_UART_Transmit(&uart_debug, (uint8_t *)ptr, len, 0xFFFF);
     return len;
 }
 __attribute__((used)) int _read(int fd, char *ptr, int len)

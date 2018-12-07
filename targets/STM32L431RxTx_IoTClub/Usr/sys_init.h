@@ -32,69 +32,50 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#include "sys_init.h"
-#include <osport.h>
-#include <at.h>
-#include <shell.h>
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __SYS_H_
+#define __SYS_H_
 
+/* Includes LiteOS------------------------------------------------------------------*/
 
+#include "los_base.h"
+#include "los_config.h"
+#include "los_sys.h"
+#include "los_typedef.h"
+#include "los_task.ph"
+#include "los_hwi.h"
+#include "los_sem.h"
+#include "los_event.h"
+#include "los_memory.h"
+#include "los_queue.ph"
 
-static VOID HardWare_Init(VOID)
-{
-    SystemClock_Config();
-    dwt_delay_init(SystemCoreClock);
-}
+#include "stdlib.h"
+#include "string.h"
+#include <stdio.h>
+#include "stm32l4xx_hal.h"
+#include "stm32l4xx_it.h"
+#include "delay.h"
+#include "adc.h"
+#include "i2c.h"
+#include "usart.h"
+#include "gpio.h"
+#include "oled.h"
+#include "DHT11_BUS.h"
+#include "BH1750.h" 
+#include "gps.h"
 
-static u32_t apptask_entry(void *args)
-{
-    //extern at_adaptor_api at_interface;
-    //at_api_register(&at_interface);
-    
-    extern bool_t  sim5320e_init(void);
-    sim5320e_init();
-    agent_tiny_entry();
-    
-    return 0;
-}
-
-int main(void){
-    UINT32 uwRet = LOS_OK;
-	HardWare_Init();
-    uwRet = LOS_KernelInit();
-    if (uwRet != LOS_OK){
-        return LOS_NOK;
-    } 
-  
-#if 0
-    extern  UINT32 LOS_Inspect_Entry(VOID);
-    LOS_Inspect_Entry();
-#endif    
-    //////////////////////APPLICATION INITIALIZE HERE/////////////////////
-    //do the shell module initlialize:use uart 2
-    extern void uart_debug_init(s32_t baud);
-    uart_debug_init(115200);
-    shell_install();
- 
-#if 1   
-    //do the at module initialize:use uart 1
-    extern bool_t uart_at_init(s32_t baudrate);
-    extern s32_t uart_at_send(u8_t *buf, s32_t len,u32_t timeout);
-    extern s32_t uart_at_receive(u8_t *buf,s32_t len,u32_t timeout);
-    uart_at_init(115200);
-    at_install(uart_at_receive,uart_at_send);
+#ifdef __cplusplus
+ extern "C" {
 #endif
 
-#if 0    
-    extern bool_t  los_driv_module_init(void);
-    los_driv_module_init();
+uint32_t HAL_GetTick(void);
+void SystemClock_Config(void);
+void _Error_Handler(char *, int);
+
+#define Error_Handler() _Error_Handler(__FILE__, __LINE__)
+#ifdef __cplusplus
+}
 #endif
 
- #if 0
-    task_create("appmain",apptask_entry,0x2000,NULL,NULL,0);
- #endif 
-
-    (void)LOS_Start();
-    return 0;
-}
-
+#endif /* __SYS_H_ */
 

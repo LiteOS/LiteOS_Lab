@@ -32,69 +32,73 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
+#include <app_main.h>
 #include "sys_init.h"
-#include <osport.h>
-#include <at.h>
+
+/****** chose a sensor for your application*****/
+
+//led control
+void led_on(void)
+{
+	HAL_GPIO_WritePin(LED_GPIO_Port,LED_Pin,GPIO_PIN_SET);    // 输出高电平
+}
+
+void led_off(void)
+{
+    HAL_GPIO_WritePin(LED_GPIO_Port,LED_Pin,GPIO_PIN_RESET);  // 输出低电平
+}
+
+
+static bool_t s_app_led_on = false;   //true means on while false off
+
+//this function used to deal all the received message here
+//message format:content
+static s32_t  led_switch(u8_t *msg, s32_t msglen)
+{
+    char *payload;
+    
+    payload = (char *)msg;
+
+    if(0 == strcmp(payload,"ON"))
+    {
+        led_on();
+        s_app_led_on = true;
+    }
+    else if(0 == strcmp(payload,"OFF"))
+    {
+        led_off();
+        s_app_led_on = false;
+    }
+    else
+    {
+        printf("LED CMD ERROR\r\n");
+    }
+    printf("LEDSTATUS:%s\n\r",s_app_led_on?"ON":"OFF");
+    
+    return msglen;
+}
+
+bool_t app_led_switch()
+{
+    bool_t ret;
+    ret = app_register("appled",en_app_direction_command,en_app_msgid_ledctrl,led_switch,0);
+
+    return ret;
+}
+
 #include <shell.h>
-
-
-
-static VOID HardWare_Init(VOID)
+static s32_t shell_beepcmd(s32_t argc, const char *argv[])
 {
-    SystemClock_Config();
-    dwt_delay_init(SystemCoreClock);
-}
-
-static u32_t apptask_entry(void *args)
-{
-    //extern at_adaptor_api at_interface;
-    //at_api_register(&at_interface);
-    
-    extern bool_t  sim5320e_init(void);
-    sim5320e_init();
-    agent_tiny_entry();
-    
+    if(strcmp((char *)argv[1],"on")==0)                             
+    {	
+        led_on();
+    }
+    if(strcmp((char *)argv[1],"off")==0)                             
+    {	
+        led_off();
+    }
     return 0;
 }
-
-int main(void){
-    UINT32 uwRet = LOS_OK;
-	HardWare_Init();
-    uwRet = LOS_KernelInit();
-    if (uwRet != LOS_OK){
-        return LOS_NOK;
-    } 
-  
-#if 0
-    extern  UINT32 LOS_Inspect_Entry(VOID);
-    LOS_Inspect_Entry();
-#endif    
-    //////////////////////APPLICATION INITIALIZE HERE/////////////////////
-    //do the shell module initlialize:use uart 2
-    extern void uart_debug_init(s32_t baud);
-    uart_debug_init(115200);
-    shell_install();
- 
-#if 1   
-    //do the at module initialize:use uart 1
-    extern bool_t uart_at_init(s32_t baudrate);
-    extern s32_t uart_at_send(u8_t *buf, s32_t len,u32_t timeout);
-    extern s32_t uart_at_receive(u8_t *buf,s32_t len,u32_t timeout);
-    uart_at_init(115200);
-    at_install(uart_at_receive,uart_at_send);
-#endif
-
-#if 0    
-    extern bool_t  los_driv_module_init(void);
-    los_driv_module_init();
-#endif
-
- #if 0
-    task_create("appmain",apptask_entry,0x2000,NULL,NULL,0);
- #endif 
-
-    (void)LOS_Start();
-    return 0;
-}
+OSSHELL_EXPORT_CMD(shell_beepcmd,"ledcmd","ledcmd on/off");
 
 

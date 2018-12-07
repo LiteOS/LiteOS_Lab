@@ -31,70 +31,58 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-
-#include "sys_init.h"
-#include <osport.h>
-#include <at.h>
-#include <shell.h>
-
-
-
-static VOID HardWare_Init(VOID)
-{
-    SystemClock_Config();
-    dwt_delay_init(SystemCoreClock);
-}
-
-static u32_t apptask_entry(void *args)
-{
-    //extern at_adaptor_api at_interface;
-    //at_api_register(&at_interface);
-    
-    extern bool_t  sim5320e_init(void);
-    sim5320e_init();
-    agent_tiny_entry();
-    
-    return 0;
-}
-
-int main(void){
-    UINT32 uwRet = LOS_OK;
-	HardWare_Init();
-    uwRet = LOS_KernelInit();
-    if (uwRet != LOS_OK){
-        return LOS_NOK;
-    } 
   
-#if 0
-    extern  UINT32 LOS_Inspect_Entry(VOID);
-    LOS_Inspect_Entry();
-#endif    
-    //////////////////////APPLICATION INITIALIZE HERE/////////////////////
-    //do the shell module initlialize:use uart 2
-    extern void uart_debug_init(s32_t baud);
-    uart_debug_init(115200);
-    shell_install();
- 
-#if 1   
-    //do the at module initialize:use uart 1
-    extern bool_t uart_at_init(s32_t baudrate);
-    extern s32_t uart_at_send(u8_t *buf, s32_t len,u32_t timeout);
-    extern s32_t uart_at_receive(u8_t *buf,s32_t len,u32_t timeout);
-    uart_at_init(115200);
-    at_install(uart_at_receive,uart_at_send);
+#ifndef APP_MAIN_H
+#define APP_MAIN_H
+
+#include <osport.h>
+
+typedef enum
+{
+    en_app_msgid_start =0,
+	en_app_msgid_intensity = en_app_msgid_start,
+    en_app_msgid_ledctrl,
+	en_app_msgid_netcsq,
+    en_app_msgid_dht11,
+    en_app_msgid_smoke,
+    en_app_msgid_beep,
+    en_app_msgid_gps,
+//the following for the test
+    en_app_msgid_cmdresponse,
+    en_app_msgid_respcode,
+	en_app_msgid_lightstate,
+	en_app_msgid_last    //the last one
+}en_app_msgid;
+
+typedef enum
+{
+    en_app_direction_report = 0,   //if you register function with report, then app main will
+                                   //call this function to get data and report it when timeout
+    
+    en_app_direction_command       //if you regitser function with command, then app main will 
+                                   //call this function to deal the data received with the same 
+                                   //message id
+
+}en_app_msg_direction;
+
+
+//if used for reporter, then will report how many data has beed get to report
+//if used for dealer, then will tell you the message to dealt
+//message id has been dealt
+typedef s32_t (*app_msg_function) (u8_t *buf,s32_t buflen);   
+
+#define cn_app_report_cyle      (1000)   //unit:ms, and the value for 1 second
+//cycle, only could be used when report, unit:cn_app_report_cyle
+//this function could be called before appsmain_init
+bool_t app_register(const char *appname,en_app_msg_direction direction,en_app_msgid msgid, app_msg_function func, s32_t cycle); 
+
+//this function must be called by manual or by shell command
+bool_t app_main_init(const char *server,u16_t port,u16_t band);
+
+//this function used for the raw send to the nb
+bool_t app_send_raw(u8_t *msg, s32_t len);
+
+
 #endif
-
-#if 0    
-    extern bool_t  los_driv_module_init(void);
-    los_driv_module_init();
-#endif
-
- #if 0
-    task_create("appmain",apptask_entry,0x2000,NULL,NULL,0);
- #endif 
-
-    (void)LOS_Start();
-    return 0;
-}
 
 

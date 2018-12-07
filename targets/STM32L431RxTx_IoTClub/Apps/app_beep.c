@@ -31,70 +31,61 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
+#include <string.h>
+#include <stdlib.h>
+#include <osport.h>
+
+
+#include <app_main.h>
 
 #include "sys_init.h"
-#include <osport.h>
-#include <at.h>
+
+//do the light intensity report
+static s32_t beep_switch(u8_t *buf, s32_t buflen)
+{
+    if(strcmp((char *)buf,"ON")==0)                                 //开蜂鸣器
+    {	
+        HAL_GPIO_WritePin(Beep_GPIO_Port,Beep_Pin,GPIO_PIN_SET);    // 输出高电平
+    }
+    if(strcmp((char *)buf,"OFF")==0)                                //关蜂鸣器
+    {	
+        HAL_GPIO_WritePin(Beep_GPIO_Port,Beep_Pin,GPIO_PIN_RESET);  // 输出低电平
+    }
+    return buflen;
+}
+
+bool_t app_beep_switch()
+{
+    bool_t ret = true;
+        
+    ret = app_register("appbeep",en_app_direction_command,en_app_msgid_beep,\
+          beep_switch,2);
+
+    return ret;
+}
+
 #include <shell.h>
 
-
-
-static VOID HardWare_Init(VOID)
+static s32_t shell_beepcmd(s32_t argc, const char *argv[])
 {
-    SystemClock_Config();
-    dwt_delay_init(SystemCoreClock);
-}
+    if(strcmp((char *)argv[1],"on")==0)                                 //开蜂鸣器
+    {	
+        HAL_GPIO_WritePin(Beep_GPIO_Port,Beep_Pin,GPIO_PIN_SET);        // 输出高电平
+    }
+    if(strcmp((char *)argv[1],"off")==0)                                //关蜂鸣器
+    {	
+        HAL_GPIO_WritePin(Beep_GPIO_Port,Beep_Pin,GPIO_PIN_RESET);      // 输出低电平
+    }
 
-static u32_t apptask_entry(void *args)
-{
-    //extern at_adaptor_api at_interface;
-    //at_api_register(&at_interface);
-    
-    extern bool_t  sim5320e_init(void);
-    sim5320e_init();
-    agent_tiny_entry();
-    
     return 0;
 }
+OSSHELL_EXPORT_CMD(shell_beepcmd,"beepcmd","beepcmd on/off");
 
-int main(void){
-    UINT32 uwRet = LOS_OK;
-	HardWare_Init();
-    uwRet = LOS_KernelInit();
-    if (uwRet != LOS_OK){
-        return LOS_NOK;
-    } 
-  
-#if 0
-    extern  UINT32 LOS_Inspect_Entry(VOID);
-    LOS_Inspect_Entry();
-#endif    
-    //////////////////////APPLICATION INITIALIZE HERE/////////////////////
-    //do the shell module initlialize:use uart 2
-    extern void uart_debug_init(s32_t baud);
-    uart_debug_init(115200);
-    shell_install();
- 
-#if 1   
-    //do the at module initialize:use uart 1
-    extern bool_t uart_at_init(s32_t baudrate);
-    extern s32_t uart_at_send(u8_t *buf, s32_t len,u32_t timeout);
-    extern s32_t uart_at_receive(u8_t *buf,s32_t len,u32_t timeout);
-    uart_at_init(115200);
-    at_install(uart_at_receive,uart_at_send);
-#endif
 
-#if 0    
-    extern bool_t  los_driv_module_init(void);
-    los_driv_module_init();
-#endif
 
- #if 0
-    task_create("appmain",apptask_entry,0x2000,NULL,NULL,0);
- #endif 
 
-    (void)LOS_Start();
-    return 0;
-}
+
+
+
 
 

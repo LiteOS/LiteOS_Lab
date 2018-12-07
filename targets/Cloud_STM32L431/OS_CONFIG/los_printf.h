@@ -32,69 +32,84 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#include "sys_init.h"
-#include <osport.h>
-#include <at.h>
-#include <shell.h>
+/**@defgroup los_printf Printf
+ * @ingroup kernel
+ */
 
+#ifndef _LOS_PRINTF_H
+#define _LOS_PRINTF_H
+//#ifdef LOSCFG_LIB_LIBC
+#include "stdarg.h"
+//#endif
+#ifdef LOSCFG_LIB_LIBCMINI
+#include "libcmini.h"
+#endif
+#include "los_typedef.h"
+#include "los_config.h"
 
+#ifdef __cplusplus
+#if __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+#endif /* __cplusplus */
 
-static VOID HardWare_Init(VOID)
-{
-    SystemClock_Config();
-    dwt_delay_init(SystemCoreClock);
-}
+#define LOS_EMG_LEVEL   0
 
-static u32_t apptask_entry(void *args)
-{
-    //extern at_adaptor_api at_interface;
-    //at_api_register(&at_interface);
-    
-    extern bool_t  sim5320e_init(void);
-    sim5320e_init();
-    agent_tiny_entry();
-    
-    return 0;
-}
+#define LOS_COMMOM_LEVEL   (LOS_EMG_LEVEL + 1)
 
-int main(void){
-    UINT32 uwRet = LOS_OK;
-	HardWare_Init();
-    uwRet = LOS_KernelInit();
-    if (uwRet != LOS_OK){
-        return LOS_NOK;
-    } 
-  
-#if 0
-    extern  UINT32 LOS_Inspect_Entry(VOID);
-    LOS_Inspect_Entry();
-#endif    
-    //////////////////////APPLICATION INITIALIZE HERE/////////////////////
-    //do the shell module initlialize:use uart 2
-    extern void uart_debug_init(s32_t baud);
-    uart_debug_init(115200);
-    shell_install();
- 
-#if 1   
-    //do the at module initialize:use uart 1
-    extern bool_t uart_at_init(s32_t baudrate);
-    extern s32_t uart_at_send(u8_t *buf, s32_t len,u32_t timeout);
-    extern s32_t uart_at_receive(u8_t *buf,s32_t len,u32_t timeout);
-    uart_at_init(115200);
-    at_install(uart_at_receive,uart_at_send);
+#define LOS_ERR_LEVEL   (LOS_COMMOM_LEVEL + 1)
+
+#define LOS_WARN_LEVEL  (LOS_ERR_LEVEL + 1)
+
+#define LOS_INFO_LEVEL  (LOS_WARN_LEVEL + 1)
+
+#define LOS_DEBUG_LEVEL (LOS_INFO_LEVEL + 1)
+
+#define PRINT_LEVEL LOS_ERR_LEVEL
+
+#if PRINT_LEVEL < LOS_DEBUG_LEVEL
+#define PRINT_DEBUG(fmt, args...)
+#else
+#define PRINT_DEBUG(fmt, args...)   do{(printf("[DEBUG] "), printf(fmt, ##args));}while(0)
 #endif
 
-#if 0    
-    extern bool_t  los_driv_module_init(void);
-    los_driv_module_init();
+#if PRINT_LEVEL < LOS_INFO_LEVEL
+#define PRINT_INFO(fmt, args...)
+#else
+#define PRINT_INFO(fmt, args...)    do{(printf("[INFO] "), printf(fmt, ##args));}while(0)
 #endif
 
- #if 0
-    task_create("appmain",apptask_entry,0x2000,NULL,NULL,0);
- #endif 
+#if PRINT_LEVEL < LOS_WARN_LEVEL
+#define PRINT_WARN(fmt, args...)
+#else
+#define PRINT_WARN(fmt, args...)    do{(printf("[WARN] "), printf(fmt, ##args));}while(0)
+#endif
 
-    (void)LOS_Start();
-    return 0;
+#if PRINT_LEVEL < LOS_ERR_LEVEL
+#define PRINT_ERR(fmt, args...)
+#else
+#define PRINT_ERR(fmt, args...)     do{(printf("[ERR] "), printf(fmt, ##args));}while(0)
+#endif
+
+#if PRINT_LEVEL < LOS_COMMOM_LEVEL
+#define PRINTK(fmt, args...)
+#else
+#define PRINTK(fmt, args...)     printf(fmt, ##args)
+#endif
+
+#if PRINT_LEVEL < LOS_EMG_LEVEL
+#define PRINT_EMG(fmt, args...)
+#else
+#define PRINT_EMG(fmt, args...)     do{(printf("[EMG] "), printf(fmt, ##args));}while(0)
+#endif
+
+#define PRINT_RELEASE(fmt, args...)   printf(fmt, ##args)
+
+
+#ifdef __cplusplus
+#if __cplusplus
 }
+#endif /* __cplusplus */
+#endif /* __cplusplus */
 
-
+#endif /* _LOS_PRINTF_H */

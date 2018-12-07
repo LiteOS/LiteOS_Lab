@@ -31,70 +31,58 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-
-#include "sys_init.h"
+#include <string.h>
+#include <stdlib.h>
 #include <osport.h>
-#include <at.h>
-#include <shell.h>
+
+
+#include <app_main.h>
+
+#include "DHT11_BUS.h"   //dht11 driver
 
 
 
-static VOID HardWare_Init(VOID)
+//do the light intensity report
+static s32_t dht11_report(u8_t *buf, s32_t buflen)
 {
-    SystemClock_Config();
-    dwt_delay_init(SystemCoreClock);
+    s32_t ret = 0;
+    DHT11_Data_TypeDef DHT11_Data;
+
+    char tmp[12];
+    if(DHT11_Read_TempAndHumidity(&DHT11_Data)==SUCCESS)
+    {
+        snprintf(tmp,5,"%.2f",DHT11_Data.temperature);
+        snprintf(&tmp[4],5,"%.2f",DHT11_Data.humidity);   //the OC do not need '\0'
+        
+        printf("DHT11-->%.1f,%.1f \n\r",DHT11_Data.humidity,DHT11_Data.temperature);
+        
+        memcpy(buf,tmp,8);
+        ret = 8;    
+    }
+    else
+    {
+        DHT11_Init();      
+    }
+    return ret;
 }
 
-static u32_t apptask_entry(void *args)
+bool_t app_dht11_report()
 {
-    //extern at_adaptor_api at_interface;
-    //at_api_register(&at_interface);
+    bool_t ret = true;
     
-    extern bool_t  sim5320e_init(void);
-    sim5320e_init();
-    agent_tiny_entry();
+    DHT11_Init();	; //iniitialize the bh1750
     
-    return 0;
+    ret = app_register("appdht11",en_app_direction_report,en_app_msgid_dht11,\
+          dht11_report,2);
+
+    return ret;
 }
 
-int main(void){
-    UINT32 uwRet = LOS_OK;
-	HardWare_Init();
-    uwRet = LOS_KernelInit();
-    if (uwRet != LOS_OK){
-        return LOS_NOK;
-    } 
-  
-#if 0
-    extern  UINT32 LOS_Inspect_Entry(VOID);
-    LOS_Inspect_Entry();
-#endif    
-    //////////////////////APPLICATION INITIALIZE HERE/////////////////////
-    //do the shell module initlialize:use uart 2
-    extern void uart_debug_init(s32_t baud);
-    uart_debug_init(115200);
-    shell_install();
- 
-#if 1   
-    //do the at module initialize:use uart 1
-    extern bool_t uart_at_init(s32_t baudrate);
-    extern s32_t uart_at_send(u8_t *buf, s32_t len,u32_t timeout);
-    extern s32_t uart_at_receive(u8_t *buf,s32_t len,u32_t timeout);
-    uart_at_init(115200);
-    at_install(uart_at_receive,uart_at_send);
-#endif
 
-#if 0    
-    extern bool_t  los_driv_module_init(void);
-    los_driv_module_init();
-#endif
 
- #if 0
-    task_create("appmain",apptask_entry,0x2000,NULL,NULL,0);
- #endif 
 
-    (void)LOS_Start();
-    return 0;
-}
+
+
+
 
 

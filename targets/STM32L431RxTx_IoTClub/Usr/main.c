@@ -33,68 +33,55 @@
  *---------------------------------------------------------------------------*/
 
 #include "sys_init.h"
+
+#include <shell.h>
+#include <los_dev.h>
 #include <osport.h>
 #include <at.h>
-#include <shell.h>
 
-
-
-static VOID HardWare_Init(VOID)
+VOID HardWare_Init(VOID)
 {
-    SystemClock_Config();
-    dwt_delay_init(SystemCoreClock);
+	HAL_Init();
+	/* Configure the system clock */
+	SystemClock_Config();
+
+	/* Initialize all configured peripherals */
+	DelayInit();	
+	MX_GPIO_Init();
+	MX_I2C1_Init();
 }
 
-static u32_t apptask_entry(void *args)
+int main(void)
 {
-    //extern at_adaptor_api at_interface;
-    //at_api_register(&at_interface);
-    
-    extern bool_t  sim5320e_init(void);
-    sim5320e_init();
-    agent_tiny_entry();
-    
-    return 0;
-}
-
-int main(void){
     UINT32 uwRet = LOS_OK;
-	HardWare_Init();
+    //do the hardware initialize
+    HardWare_Init();
+    
+    //do the liteos kernel initialize
     uwRet = LOS_KernelInit();
-    if (uwRet != LOS_OK){
+    if (uwRet != LOS_OK)
+    {
         return LOS_NOK;
-    } 
-  
-#if 0
-    extern  UINT32 LOS_Inspect_Entry(VOID);
-    LOS_Inspect_Entry();
-#endif    
+    }
+    //system frame work initilized here
+    shell_install();     //which means you could use shell
+    los_driv_init();     //which means you could use the driver framwork
+    at_install("atdev"); //which means you could use the at framework
     //////////////////////APPLICATION INITIALIZE HERE/////////////////////
-    //do the shell module initlialize:use uart 2
+    //do the shell module initlialize:use uart 1
     extern void uart_debug_init(s32_t baud);
     uart_debug_init(115200);
-    shell_install();
- 
-#if 1   
-    //do the at module initialize:use uart 1
+    //do the at module initialize:use uart 2
     extern bool_t uart_at_init(s32_t baudrate);
-    extern s32_t uart_at_send(u8_t *buf, s32_t len,u32_t timeout);
-    extern s32_t uart_at_receive(u8_t *buf,s32_t len,u32_t timeout);
-    uart_at_init(115200);
-    at_install(uart_at_receive,uart_at_send);
-#endif
-
-#if 0    
-    extern bool_t  los_driv_module_init(void);
-    los_driv_module_init();
-#endif
-
- #if 0
-    task_create("appmain",apptask_entry,0x2000,NULL,NULL,0);
- #endif 
-
-    (void)LOS_Start();
-    return 0;
+    uart_at_init(9600);
+     
+#if 1 
+    //create the main task of the application
+    #include <app_main.h>
+    //app_main_init("178.15.147.143", 5683,20);
+    app_main_init("testdevice.hw-oc.com", 5683,20);
+ #endif
+    ////////////////////////APPLICATION INITIALIZE END///////////////////
+    //start the system
+    LOS_Start();
 }
-
-

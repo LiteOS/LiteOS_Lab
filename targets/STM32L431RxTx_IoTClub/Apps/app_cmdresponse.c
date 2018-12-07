@@ -32,69 +32,55 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#include "sys_init.h"
-#include <osport.h>
-#include <at.h>
-#include <shell.h>
+#include <app_main.h>
 
 
+#include <led.h>   //for led driver
 
-static VOID HardWare_Init(VOID)
+
+//this function used to deal all the received message here
+//message format:content
+//
+static s32_t  __app_cmd_response(u8_t *msg, s32_t msglen)
 {
-    SystemClock_Config();
-    dwt_delay_init(SystemCoreClock);
+    s32_t i =0;
+    u8_t resp[5];
+    const char *result = "YN"; 
+    static u8_t code_execute = 0;
+    const u8_t *payload;
+   
+    payload = msg;
+    printf("cmdresponse:");
+    for (i =0;i< msglen;i++)
+    {
+        printf("0x%02x ",*payload++);
+    }
+    printf("\n\r");
+    
+    payload = msg;
+    code_execute ++;
+    code_execute = code_execute%2;
+    //fill the messageid
+    resp[0] =  en_app_msgid_respcode;
+    //execute code
+    resp[1] = code_execute;
+    //mid
+    resp[2] = *payload++;
+    resp[3] = *payload++;
+    
+    //result message
+    resp[4] = (u8_t)result[code_execute];
+     
+    app_send_raw(resp,sizeof(resp));
+
+    return msglen;
 }
 
-static u32_t apptask_entry(void *args)
+bool_t app_cmd_response()
 {
-    //extern at_adaptor_api at_interface;
-    //at_api_register(&at_interface);
-    
-    extern bool_t  sim5320e_init(void);
-    sim5320e_init();
-    agent_tiny_entry();
-    
-    return 0;
+    bool_t ret;
+    ret = app_register("appresponse",en_app_direction_command,en_app_msgid_cmdresponse,__app_cmd_response,0);
+
+    return ret;
 }
-
-int main(void){
-    UINT32 uwRet = LOS_OK;
-	HardWare_Init();
-    uwRet = LOS_KernelInit();
-    if (uwRet != LOS_OK){
-        return LOS_NOK;
-    } 
-  
-#if 0
-    extern  UINT32 LOS_Inspect_Entry(VOID);
-    LOS_Inspect_Entry();
-#endif    
-    //////////////////////APPLICATION INITIALIZE HERE/////////////////////
-    //do the shell module initlialize:use uart 2
-    extern void uart_debug_init(s32_t baud);
-    uart_debug_init(115200);
-    shell_install();
- 
-#if 1   
-    //do the at module initialize:use uart 1
-    extern bool_t uart_at_init(s32_t baudrate);
-    extern s32_t uart_at_send(u8_t *buf, s32_t len,u32_t timeout);
-    extern s32_t uart_at_receive(u8_t *buf,s32_t len,u32_t timeout);
-    uart_at_init(115200);
-    at_install(uart_at_receive,uart_at_send);
-#endif
-
-#if 0    
-    extern bool_t  los_driv_module_init(void);
-    los_driv_module_init();
-#endif
-
- #if 0
-    task_create("appmain",apptask_entry,0x2000,NULL,NULL,0);
- #endif 
-
-    (void)LOS_Start();
-    return 0;
-}
-
 

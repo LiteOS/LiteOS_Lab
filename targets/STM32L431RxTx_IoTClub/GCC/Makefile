@@ -13,7 +13,7 @@
 ######################################
 # target
 ######################################
-TARGET = STM32F103VET6_NB_GCC
+TARGET = STM32L431XX_NB_GCC
 
 
 ######################################
@@ -60,14 +60,14 @@ BUILD_DIR = build
 ######################################
 # C sources
 KERNEL_SRC =  \
-        ${wildcard $(TOP_DIR)/kernel/*.c} \
+				${wildcard $(TOP_DIR)/kernel/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/core/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/ipc/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/mem/bestfit_little/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/mem/membox/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_slab.c} \
-	  ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_slabmem.c} \
-	  ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_memcheck.c} \
+				${wildcard $(TOP_DIR)/kernel/base/mem/common/los_slabmem.c} \
+	    	${wildcard $(TOP_DIR)/kernel/base/mem/common/los_memcheck.c} \
         ${wildcard $(TOP_DIR)/kernel/base/misc/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/om/*.c} \
         ${wildcard $(TOP_DIR)/kernel/extended/tickless/*.c}
@@ -79,55 +79,81 @@ CMSIS_SRC =  \
 ARCH_SRC =  \
         ${wildcard $(TOP_DIR)/arch/arm/arm-m/src/*.c}
         C_SOURCES += $(ARCH_SRC)
-HAL_DRIVER_SRC =  \
-        $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c  \
-        $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.c \
-        $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio_ex.c \
-        $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pwr.c \
-        $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.c \
-        $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c \
-        $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c \
-        $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash.c \
-        $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.c \
-        $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.c \
-        $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Drivers/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c \
-        $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.c \
-        $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_dma.c \
         
-
-        C_SOURCES += $(HAL_DRIVER_SRC)
-	
-	
-USER_SRC =  \
-        $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Src/main.c \
-        $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Src/stm32f1xx_it.c \
-        $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Src/usart.c \
-	$(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Src/stm32f1xx_hal_msp.c \
-	$(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Src/system_stm32f1xx.c  	
-	
-	C_SOURCES += $(USER_SRC)
-
-
-AT_FRAME_SRC = \
-    ${wildcard $(TOP_DIR)/components/net/at_frame/*.c} \
-     $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Src/at_hal.c
-    C_SOURCES += $(AT_FRAME_SRC)
-    
-
-
-    USER_DRIVERS_SRC = \
-	${wildcard $(TOP_DIR)/components/net/at_device/nb_bc95/*.c} \
-	${wildcard $(TOP_DIR)/components/connectivity/nb_iot/*.c}
-
-
-    C_SOURCES += $(USER_DRIVERS_SRC)
+#AT FRAMEWORK        
+AT_SRC =  \
+        ${wildcard $(TOP_DIR)/components/at/*.c}
+        C_SOURCES += $(AT_SRC)
+#driver hal
+DIRVERHAL_SRC =  \
+        $(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c	\
+				$(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_adc.c	\
+					$(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_adc_ex.c	\
+					$(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.c	\
+					$(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dac.c	\
+					$(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dac_ex.c	\
+					$(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma.c	\
+					$(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma_ex.c	\
+					$(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash.c	\
+					$(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ex.c	\
+					$(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_gpio.c	\
+					$(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_i2c.c	\
+					$(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_i2c_ex.c	\
+					$(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr.c	\
+					$(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr_ex.c	\
+					$(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc.c	\
+					$(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc_ex.c	\
+					$(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_spi.c	\
+					$(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_spi_ex.c	\
+					$(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c	\
+					$(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c	\
+					$(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_usart.c	\
+					$(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_usart_ex.c	
+					  
+					C_SOURCES += $(DIRVERHAL_SRC)     
+        
+#SHELL FRAMEWORK
+SHELL_SRC =  \
+        ${wildcard $(TOP_DIR)/components/shell/*.c}
+        C_SOURCES += $(SHELL_SRC)   
+          
+#OS_PORT COMPONENTS 
+OSPORT_SRC =  \
+        ${wildcard $(TOP_DIR)/components/osport/*.c}
+        C_SOURCES += $(OSPORT_SRC) 
+        
+#DRIVER_FRAME COMPONENTS 
+DIRVERFRAME_SRC =  \
+        $(TOP_DIR)/components/driver/los_dev.c
+				C_SOURCES += $(DIRVERFRAME_SRC) 
+        					       
+#project applications source
+#device driver
+DEVICEDRIVER_SRC =  \
+				$(TOP_DIR)/targets/STM32L431RxTx_IoTClub/DeviceDriver/BC35_95/NB_DRIVER.c  \
+				$(TOP_DIR)/targets/STM32L431RxTx_IoTClub/DeviceDriver/BH1750/BH1750.c      \
+				$(TOP_DIR)/targets/STM32L431RxTx_IoTClub/DeviceDriver/DHT11/DHT11_BUS.c    \
+				$(TOP_DIR)/targets/STM32L431RxTx_IoTClub/DeviceDriver/OLED/oled.c        \
+        
+        C_SOURCES += $(DEVICEDRIVER_SRC)
+#common hardware        
+HARDWARE_SRC =  \
+        ${wildcard $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/Hardware/*.c}
+        C_SOURCES += $(HARDWARE_SRC)     
+        
+#startup code and applications
+USR_SRC =	\
+		${wildcard $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/Usr/*.c}	\
+		${wildcard $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/Apps/*.c}
+		C_SOURCES += $(USR_SRC)                
+                  
 
 # ASM sources
 ASM_SOURCES_s =  \
-        ${wildcard $(PROJECTBASE)/startup_stm32f103xe.s}
+         ${wildcard $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/Usr/los_startup_gcc.s}
 
 ASM_SOURCES_S =  \
-       ${wildcard $(TOP_DIR)/arch/arm/arm-m/cortex-m3/gcc/los_dispatch_gcc.S}
+       ${wildcard $(TOP_DIR)/arch/arm/arm-m/cortex-m4/gcc/los_dispatch_gcc.S}
 
 ######################################
 # firmware library
@@ -140,16 +166,14 @@ PERIFLIB_SOURCES =
 # CFLAGS
 #######################################
 # cpu
-CPU = -mcpu=cortex-m3
-
+CPU = -mcpu=cortex-m4
 # fpu
-# NONE for Cortex-M0/M0+/M3
-
+FPU = -mfpu=fpv4-sp-d16
 # float-abi
-
-
+FLOAT-ABI = -mfloat-abi=hard
 # mcu
 MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
+
 
 # macros for gcc
 # AS defines
@@ -157,49 +181,56 @@ AS_DEFS =
 
 # C defines
 C_DEFS =  \
--DUSE_HAL_DRIVER \
--DSTM32F103xE\
--DWITH_AT_FRAMEWORK\
--DUSE_NB_NEUL95
-
+	-DUSE_HAL_DRIVER \
+	-DSTM32L431xx	\
+	-D__GNUC_LIKE
 
 # AS includes
 AS_INCLUDES = 
 
 # C includes
 KERNEL_INC = \
-        -I $(TOP_DIR)/kernel/include \
-	-I $(TOP_DIR)/kernel/base/include \
-	-I $(TOP_DIR)/kernel/extended/include
+		-I $(TOP_DIR)/kernel/include \
+		-I $(TOP_DIR)/kernel/base/include \
+		-I $(TOP_DIR)/kernel/extended/include
         C_INCLUDES += $(KERNEL_INC)
-
-
 
 INCLUDE_INC = \
         -I $(TOP_DIR)/include
         C_INCLUDES += $(INCLUDE_INC)	
 
-
-USER_INC = \
-        -I $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Inc \
-        -I $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/OS_CONFIG
-        C_INCLUDES += $(USER_INC)
-
 CMSIS_INC = \
         -I $(TOP_DIR)/include/osdepends/liteos 
         C_INCLUDES += $(CMSIS_INC)
 
-
-HAL_DRIVER_INC = \
-        -I $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Drivers/STM32F1xx_HAL_Driver/Inc \
-        -I $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Drivers/CMSIS/Device/ST/STM32F1xx/Include \
-        -I $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Drivers/STM32F1xx_HAL_Driver/Inc/Legacy
-        C_INCLUDES += $(HAL_DRIVER_INC)
-
 ARCH_INC = \
         -I $(TOP_DIR)/arch/arm/arm-m/include \
-	-I $(TOP_DIR)/arch/arm/common/cmsis
+		-I $(TOP_DIR)/arch/arm/common/cmsis
         C_INCLUDES += $(ARCH_INC)
+        
+COMPONENTS_INC = \
+		-I $(TOP_DIR)/components/osport \
+		-I $(TOP_DIR)/components/at \
+		-I $(TOP_DIR)/components/shell \
+		-I $(TOP_DIR)/components/driver	
+		C_INCLUDES += $(COMPONENTS_INC)	
+        
+DEVICEDRIV_INC = \
+		-I $(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc	\
+		-I $(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/Legacy	\
+		-I $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/DeviceDriver/BC35_95	\
+		-I $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/DeviceDriver/BH1750	\
+		-I $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/DeviceDriver/DHT11	\
+		-I $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/DeviceDriver/OLED	\
+		-I $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/DeviceDriver/GPS	\
+		-I $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/Hardware	\
+		-I $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/Apps	\
+		-I $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/OS_CONFIG	\
+		-I $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/Usr			
+
+		C_INCLUDES += $(DEVICEDRIV_INC)	        
+
+        
 
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
@@ -220,7 +251,7 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)"
 #######################################
 # link script
 
-LD_FILE = STM32F103VETx_FLASH.ld
+LD_FILE = STM32L431RCTx_FLASH.ld
 LDSCRIPT = $(PROJECTBASE)/$(LD_FILE)
 
 # libraries

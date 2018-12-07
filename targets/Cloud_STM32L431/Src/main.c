@@ -38,11 +38,46 @@
 #include <shell.h>
 
 
+/****** chose a sensor for your application*****/
 
-static VOID HardWare_Init(VOID)
+//led control
+void led_on(void)
 {
-    SystemClock_Config();
-    dwt_delay_init(SystemCoreClock);
+	HAL_GPIO_WritePin(LED_GPIO_Port,LED_Pin,GPIO_PIN_SET);    // 输出高电平
+}
+
+void led_off(void)
+{
+    HAL_GPIO_WritePin(LED_GPIO_Port,LED_Pin,GPIO_PIN_RESET);  // 输出低电平
+}
+
+void led_display(void)
+{
+	char *str = "PoweredBy LiteOS";
+	OLED_Init();
+	OLED_Clear();
+	OLED_ShowCHinese(0,0,0);
+	OLED_ShowCHinese(18,0,1);
+	OLED_ShowCHinese(36,0,2);
+	OLED_ShowCHinese(54,0,3);
+	OLED_ShowCHinese(72,0,4);
+	OLED_ShowCHinese(90,0,5);
+	OLED_ShowString(0,2,(uint8_t*)str,16);
+}
+
+VOID HardWare_Init(VOID)
+{
+	HAL_Init();
+	/* Configure the system clock */
+	SystemClock_Config();
+
+	/* Initialize all configured peripherals */
+	DelayInit();	
+	MX_GPIO_Init();
+	//MX_USART1_UART_Init();
+	//MX_USART3_UART_Init();
+	//MX_ADC1_Init();
+	MX_I2C1_Init();
 }
 
 static u32_t apptask_entry(void *args)
@@ -50,51 +85,54 @@ static u32_t apptask_entry(void *args)
     //extern at_adaptor_api at_interface;
     //at_api_register(&at_interface);
     
-    extern bool_t  sim5320e_init(void);
-    sim5320e_init();
+        led_display();
+
+    
+    extern bool_t  sim800c_900a_init(void);
+    sim800c_900a_init();
     agent_tiny_entry();
     
     return 0;
 }
 
-int main(void){
+
+#include <osport.h>
+#include <at.h>
+#include <shell.h>
+
+int main(void)
+{
     UINT32 uwRet = LOS_OK;
-	HardWare_Init();
+    //do the hardware initialize
+    HardWare_Init();
+    
+    //do the liteos kernel initialize
     uwRet = LOS_KernelInit();
-    if (uwRet != LOS_OK){
+    if (uwRet != LOS_OK)
+    {
         return LOS_NOK;
-    } 
-  
-#if 0
-    extern  UINT32 LOS_Inspect_Entry(VOID);
-    LOS_Inspect_Entry();
-#endif    
+    }
+    
+#if 1
     //////////////////////APPLICATION INITIALIZE HERE/////////////////////
-    //do the shell module initlialize:use uart 2
+    //do the shell module initlialize:use uart 1
     extern void uart_debug_init(s32_t baud);
     uart_debug_init(115200);
     shell_install();
- 
-#if 1   
-    //do the at module initialize:use uart 1
+    
+    //do the at module initialize:use uart 2
     extern bool_t uart_at_init(s32_t baudrate);
     extern s32_t uart_at_send(u8_t *buf, s32_t len,u32_t timeout);
     extern s32_t uart_at_receive(u8_t *buf,s32_t len,u32_t timeout);
     uart_at_init(115200);
     at_install(uart_at_receive,uart_at_send);
-#endif
+#endif    
 
-#if 0    
-    extern bool_t  los_driv_module_init(void);
-    los_driv_module_init();
-#endif
-
- #if 0
+ #if 1
     task_create("appmain",apptask_entry,0x2000,NULL,NULL,0);
- #endif 
-
-    (void)LOS_Start();
-    return 0;
+ #endif
+    
+    ////////////////////////APPLICATION INITIALIZE END///////////////////
+    //start the system
+    LOS_Start();
 }
-
-
