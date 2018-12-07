@@ -219,7 +219,7 @@ bool_t los_driv_event(los_driv_t driv,u32_t event,void *para)
 #ifdef __CC_ARM /* ARM C Compiler ,like keil,options for linker:--keep *.o(osdriv)*/
 extern u32_t osdriv$$Base;
 extern u32_t osdriv$$Limit;         
-#pragma section("osdriv", read) 
+//#pragma section("osdriv", read) 
 #endif        
 
 
@@ -234,8 +234,8 @@ static void osdriv_load_static(void){
 #elif defined(__GNUC_LIKE)
 	extern unsigned int __osdriv_start;
 	extern unsigned int __osdriv_end;
-	install = (os_driv_install_t *)&__osdriv_start;
-	len = ((unsigned int )&__oshell_end - (unsigned int)&__oshell_start)/sizeof(os_driv_install_t);
+	para = (os_driv_para_t *)&__osdriv_start;
+	i = ((unsigned int )&__osdriv_end - (unsigned int)&__osdriv_start)/sizeof(os_driv_para_t);
 #else 
 	#error("unknown compiler here");
 #endif    
@@ -578,7 +578,7 @@ static s32_t  __driv_show_shell(s32_t argc,const char *argv[])
 	return 0;
 }	
 
-OSSHELL_EXPORT_CMD(__driv_show_shell,"drivinfo","drivinfo");
+OSSHELL_EXPORT_CMD(__driv_show_shell,"devlst","devlst");
 
 #endif
 
