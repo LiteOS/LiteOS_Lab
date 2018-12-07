@@ -612,6 +612,10 @@ extern VOID osTaskWake(LOS_TASK_CB *pstResumedTask, UINT32 uwTaskStatus);
  */
 extern UINT32 osGetTaskWaterLine(UINT32 uwTaskID);
 
+
+extern VOID LOS_Schedule(VOID);
+
+
 #ifdef __cplusplus
 #if __cplusplus
 }

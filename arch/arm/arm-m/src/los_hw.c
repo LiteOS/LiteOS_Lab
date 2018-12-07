@@ -118,9 +118,9 @@ LITE_OS_SEC_TEXT_INIT VOID osTskStackInit(LOS_TASK_CB *pstTaskCB, TSK_INIT_PARAM
     TSK_CONTEXT_S  *pstContext;
     char *pTopStack = (char *)pstTaskCB->uwTopOfStack;
     char *pStack = pTopStack + pstTaskCB->uwStackSize;
-    int i;
 
 #if (LOSCFG_ENABLE_MPU == YES)
+	  int i;   //this var only be used when mpu enabled --zhangqf
     static LOS_MPU_ENTRY astNullMpuSetting [MPU_NR_USR_ENTRIES + 1] = {0};
     LOS_MPU_ENTRY * pstMpuSetting = NULL;
 #if (LOSCFG_STATIC_TASK == YES)

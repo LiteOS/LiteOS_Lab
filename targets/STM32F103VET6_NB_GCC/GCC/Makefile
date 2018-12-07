@@ -44,7 +44,8 @@ BIN       = $(OBJCOPY) -O binary -S
 
 PROJECTBASE = $(PWD)
 override PROJECTBASE    := $(abspath $(PROJECTBASE))
-TOP_DIR = $(PROJECTBASE)/../../..
+TOP_DIR_TMP = $(PROJECTBASE)/../../..
+TOP_DIR = $(abspath $(TOP_DIR_TMP))
 
 
 
@@ -64,7 +65,9 @@ KERNEL_SRC =  \
         ${wildcard $(TOP_DIR)/kernel/base/ipc/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/mem/bestfit_little/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/mem/membox/*.c} \
-        ${wildcard $(TOP_DIR)/kernel/base/mem/common/*.c} \
+        ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_slab.c} \
+	  ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_slabmem.c} \
+	  ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_memcheck.c} \
         ${wildcard $(TOP_DIR)/kernel/base/misc/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/om/*.c} \
         ${wildcard $(TOP_DIR)/kernel/extended/tickless/*.c}
@@ -181,6 +184,10 @@ USER_INC = \
         -I $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Inc \
         -I $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/OS_CONFIG
         C_INCLUDES += $(USER_INC)
+
+CMSIS_INC = \
+        -I $(TOP_DIR)/include/osdepends/liteos 
+        C_INCLUDES += $(CMSIS_INC)
 
 
 HAL_DRIVER_INC = \

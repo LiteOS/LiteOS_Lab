@@ -39,8 +39,6 @@ static bool_t __close_echo(void)
 {
     bool_t ret = false;
     s32_t  resplen;
-    s32_t  argc = 6;
-    char*  argv[6];
     const char *cmd = "ate0\r";
     u8_t respbuf[64];
     
@@ -58,8 +56,6 @@ static bool_t __open_network(void)
 {
     bool_t ret = false;
     s32_t  resplen;
-    s32_t  argc = 6;
-    char*  argv[6];
     const char *cmd = "at+netopen\r";
     u8_t respbuf[64];
     
@@ -97,8 +93,6 @@ static bool_t __cpin_check(void)  //return true ,read get else failed
 {
     bool_t ret = false;
     s32_t  resplen;
-    s32_t  argc = 6;
-    char*  argv[6];
     const char *cmd = "at+cpin?\r";
     u8_t respbuf[64];
     
@@ -114,8 +108,6 @@ static bool_t __cgatt_check(void)  //return true ,read get else failed
 {
     bool_t ret = false;
     s32_t  resplen;
-    s32_t  argc = 6;
-    char*  argv[6];
     const char *cmd = "at+cgatt?\r";
     u8_t respbuf[64];
         
@@ -142,7 +134,7 @@ struct socket_item
 };
 static struct socket_item *g_socket_cb[cn_5320e_socket_max];
 
-//not support udp yet
+//not support tcp yet
 static s32_t socket_connect(const char* host, const char* port, int proto)
 {
     u8_t cmdbuf[64];
@@ -350,7 +342,6 @@ static void  __push_data(char *host, u8_t *data, s32_t datalen)
 static s32_t handler_rcvdata(u8_t *buf,s32_t len)
 {
     s32_t  ret = 0;
-    s32_t  cmplen;
     char  *cmpaddr;
     char  *host;
     u8_t  *data;

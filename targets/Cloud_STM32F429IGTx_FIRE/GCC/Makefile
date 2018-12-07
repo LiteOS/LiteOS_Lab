@@ -107,7 +107,9 @@ KERNEL_SRC =  \
         ${wildcard $(TOP_DIR)/kernel/base/ipc/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/mem/bestfit_little/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/mem/membox/*.c} \
-        ${wildcard $(TOP_DIR)/kernel/base/mem/common/*.c} \
+        ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_slab.c} \
+	  ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_slabmem.c} \
+	  ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_memcheck.c} \
         ${wildcard $(TOP_DIR)/kernel/base/misc/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/om/*.c} \
         ${wildcard $(TOP_DIR)/kernel/extended/tickless/*.c}

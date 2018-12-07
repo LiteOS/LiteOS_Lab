@@ -57,7 +57,6 @@ static u32_t apptask_entry(void *args)
     return 0;
 }
 
-
 int main(void){
     UINT32 uwRet = LOS_OK;
 	HardWare_Init();
@@ -93,12 +92,6 @@ int main(void){
  #if 0
     task_create("appmain",apptask_entry,0x2000,NULL,NULL,0);
  #endif 
- 
-    extern bool_t  los_driv_module_init(void);
-    los_driv_module_init();
- 
-    extern bool_t devfs_install(void);
-    devfs_install();
 
     (void)LOS_Start();
     return 0;

@@ -810,7 +810,6 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_TaskCreateOnly(UINT32 *puwTaskID, TSK_INIT_PARA
     UINT32 uwTaskID = 0;
     UINTPTR uvIntSave;
     VOID  *pTopStack;
-    VOID  *pStackPtr;
     LOS_TASK_CB *pstTaskCB;
     UINT32 uwErrRet = OS_ERROR;
 
