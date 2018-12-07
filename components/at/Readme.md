@@ -4,17 +4,20 @@
 
 #### 安装配置
 
-在使用at框架之前，需要系统的配置文件配置CN_OS_AT。
+在使用at框架之前，需要系统的配置文件配置LOSCFG_ENABLE_AT。
+
+```
+如在target_config.h中配置
+#define LOSCFG_ENABLE_AT     1
+```
 
 然后可以安装AT框架了。
 
 ```
-typedef s32_t (*fnframe_read)(u8_t *buf,s32_t buflen,u32_t timeout);
-typedef s32_t (*fnframe_write)(u8_t *buf,s32_t buflen,u32_t timeout);
-bool_t at_install(fnframe_read func_read,fnframe_write func_write); //install the at module
+bool_t at_install(const char *devname);           //install the at module
 ```
 
-从安装函数可以看出，其需要我们提供两个函数：数据读取接口和数据发送接口；开发者需要在意的是读取的一定是一帧AT返回数据，如果使用串口，可以用串口的IDLE中断来区别不同的帧；其他的设备接口也会有自己的相应说明该帧的区分形式（一般是几个字节的时间没有数据到达），当调用该函数之后，我们就可以使用at的接口发送AT命令了，同时我们提供了shell端口的atcmd命令用作调试（如果shell已经被配置的话）；
+为了保证AT框架和具体的硬件驱动解耦，此处使用的注册的设备驱动，开发者配置驱动设备的名字额时候，应该保证该驱动已经注册成功。同时应该注意到，at设备接口的特点：开发者需要在意的是读取的一定是一帧AT返回数据，如果使用串口，可以用串口的IDLE中断来区别不同的帧；其他的设备接口也会有自己的相应说明该帧的区分形式（一般是几个字节的时间没有数据到达），当调用该函数之后，我们就可以使用at的接口发送AT命令了，同时我们提供了shell端口的atcmd命令用作调试（如果shell已经被配置的话）；
 
 ####  AT命令使用
 
