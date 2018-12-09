@@ -262,6 +262,8 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
   /* USER CODE END USART3_MspDeInit 1 */
   }
 } 
+
+#if 0
 #ifdef __GNUC__
 int _write(int fd, char *ptr, int len)
 (
@@ -270,7 +272,7 @@ int _write(int fd, char *ptr, int len)
 )
 #else
 
-#if 0
+
 int fputc(int ch, FILE *f) 
 {
   HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);
