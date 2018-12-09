@@ -2,8 +2,8 @@
 
 #### 如何加载shell组件
 
-* 1，需要在target_config.h中配置CN_OS_SHELL 为1
-* 2，需要在系统初始化完毕后，调用shell_install函数（shell.h中定义）
+* 1，需要在target_config.h中配置LOSCFG_ENABLE_SHELL为1
+* 2，需要在系统初始化完毕后，调用los_shell_init函数（shell.h中定义）
 * 3，目前支持tab补全（找到最像的一条）；支持上下键切换历史命令
 * 4，如果需要重定向输入输出，请修改shell_get_char和shell_put_char,默认使用getchar和putchar
 

@@ -36,7 +36,7 @@
 #define __OSSHELL_H
 
 #include <los_config.h>
-#if CN_OS_SHELL
+#if LOSCFG_ENABLE_SHELL
 
 #include <osport.h>
 //this is a shell module designed for the os
@@ -85,11 +85,11 @@ struct shell_item_t{
 		.len =sizeof(var),               \
     }
     
-void shell_install(void);    
+void los_shell_init(void);    
 #else
 #define OSSHELL_EXPORT_CMD(cmdname,cmdentry,cmdhelp)
 #define OSSHELL_EXPORT_VAR(varname,var,varhelp)
-#define shell_install()
+#define los_shell_init()
 
 #endif   //end for the shell_config
 
