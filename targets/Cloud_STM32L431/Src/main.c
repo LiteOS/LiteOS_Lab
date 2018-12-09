@@ -99,6 +99,7 @@ static u32_t apptask_entry(void *args)
 #include <osport.h>
 #include <at.h>
 #include <shell.h>
+#include <los_dev.h>
 
 int main(void)
 {
@@ -114,20 +115,19 @@ int main(void)
     }
     
 #if 1
+    //system frame work initilized here
+    los_shell_init();     //which means you could use shell
+    los_driv_init();     //which means you could use the driver framwork
+    los_at_init("atdev"); //which means you could use the at framework
     //////////////////////APPLICATION INITIALIZE HERE/////////////////////
     //do the shell module initlialize:use uart 1
     extern void uart_debug_init(s32_t baud);
     uart_debug_init(115200);
-    shell_install();
-    
     //do the at module initialize:use uart 2
     extern bool_t uart_at_init(s32_t baudrate);
-    extern s32_t uart_at_send(u8_t *buf, s32_t len,u32_t timeout);
-    extern s32_t uart_at_receive(u8_t *buf,s32_t len,u32_t timeout);
     uart_at_init(115200);
-    at_install(uart_at_receive,uart_at_send);
 #endif    
-
+//////////////////////APPLICATION INITIALIZE HERE/////////////////////
  #if 1
     task_create("appmain",apptask_entry,0x2000,NULL,NULL,0);
  #endif

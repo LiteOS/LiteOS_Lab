@@ -228,3 +228,30 @@ static s32_t __atio_debug(s32_t argc,const char *argv[])
     return 0;
 }
 OSSHELL_EXPORT_CMD(__atio_debug,"atiostatus","atiostatus");
+
+
+
+//make it as the at device here
+#include <los_dev.h>
+
+static s32_t  __at_read  (void *pri,u32_t offset,u8_t *buf,s32_t len,u32_t timeout)
+{
+    return uart_at_receive(buf,len, timeout);
+
+}
+static s32_t  __at_write (void *pri,u32_t offset,u8_t *buf,s32_t len,u32_t timeout)
+{
+    return uart_at_send(buf, len, timeout);
+
+}
+
+
+static const los_driv_op_t s_at_op = {
+
+    .read = __at_read,
+    .write = __at_write,
+};
+
+OSDRIV_EXPORT(uart_at_driv,"atdev",(los_driv_op_t *)&s_at_op,NULL,O_RDWR);
+
+

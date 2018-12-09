@@ -48,7 +48,7 @@ this file implement the shell for the system.the following instruction you must 
 *******************************************************************************/
 /**************************************FILE INCLIUDES**************************/
 #include <shell.h>
-#if CN_OS_SHELL
+#if LOSCFG_ENABLE_SHELL
 #include <stdint.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -451,11 +451,11 @@ static u32_t shell_server_entry(void *args){
 function     :this is the  shell module initialize function
 parameters   :
 instruction  :if you want use shell,you should do two things
-              1,make CN_OS_SHELL true in target_config.h
+              1,make LOSCFG_ENABLE_SHELL true in target_config.h
 			  2,call shell_install in your process:make sure after the system has
 			    been initialized
 *******************************************************************************/
-void shell_install(){
+void los_shell_init(){
     shell_cmd_init();
     task_create("shell_server",shell_server_entry,\
 				CN_SHELL_STACKSIZE+CN_CMD_CACHE*CN_CMDLEN_MAX,NULL,NULL,10);
