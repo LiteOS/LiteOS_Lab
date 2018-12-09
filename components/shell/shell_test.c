@@ -32,7 +32,7 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 #include <shell.h>
-#if CN_OS_SHELL
+#if LOSCFG_ENABLE_SHELL
 
 /*
 //here we export to shell command,you could add your own shell like this

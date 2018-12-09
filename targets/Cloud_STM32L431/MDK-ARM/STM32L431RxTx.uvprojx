@@ -54,7 +54,7 @@
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
-          <BrowseInformation>1</BrowseInformation>
+          <BrowseInformation>0</BrowseInformation>
           <ListingPath></ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
@@ -324,7 +324,7 @@
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <uC99>1</uC99>
-            <uGnu>0</uGnu>
+            <uGnu>1</uGnu>
             <useXO>0</useXO>
             <v6Lang>3</v6Lang>
             <v6LangP>3</v6LangP>
@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32L431xx,USE_MBED_TLS,MBEDTLS_CONFIG_FILE=&lt;los_mbedtls_config.h&gt;,LWM2M_LITTLE_ENDIAN,LWM2M_CLIENT_MODE,NDEBUG,LOS_KERNEL_DEBUG_OUT,ATINY_DEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Inc;..\..\..\include\osdepends\liteos;..\..\..\kernel\base\include;..\..\..\kernel\include;..\..\..\kernel\extended\include;..\..\..\arch\arm\arm-m\include;..\..\..\arch\arm\arm-m\cortex-m4;..\OS_CONFIG;..\..\..\drivers\third_party\ST\STM32L4xx_HAL_Driver\Inc\Legacy;..\..\..\drivers\third_party\ST\STM32L4xx_HAL_Driver\Inc;..\Hardware\OLED;..\Hardware\BC95;..\Hardware\BH1750;..\Hardware\DHT11;..\Hardware\GPS;..\..\..\examples\include;..\..\..\components\at;..\..\..\components\osport;..\..\..\components\shell;..\..\..\include;..\..\..\components\connectivity\lwm2m\core;..\..\..\components\connectivity\lwm2m\core;..\..\..\components\security\mbedtls\mbedtls_port;..\..\..\components\security\mbedtls\mbedtls-2.6.0\include;..\..\..\components\security\mbedtls\mbedtls-2.6.0\include\mbedtls;..\..\..\include\atiny_lwm2m;..\..\..\include\ota;..\..\..\components\ota\package;..\..\..\components\ota\package\opt;..\..\..\components\ota\utility;..\..\..\osdepends;..\..\..\components\ota\flag_operate;..\..\..\components\connectivity\lwm2m\examples\shared</IncludePath>
+              <IncludePath>..\Inc;..\..\..\include\osdepends\liteos;..\..\..\kernel\base\include;..\..\..\kernel\include;..\..\..\kernel\extended\include;..\..\..\arch\arm\arm-m\include;..\..\..\arch\arm\arm-m\cortex-m4;..\OS_CONFIG;..\..\..\drivers\third_party\ST\STM32L4xx_HAL_Driver\Inc\Legacy;..\..\..\drivers\third_party\ST\STM32L4xx_HAL_Driver\Inc;..\Hardware\OLED;..\Hardware\BC95;..\Hardware\BH1750;..\Hardware\DHT11;..\Hardware\GPS;..\..\..\examples\include;..\..\..\components\at;..\..\..\components\osport;..\..\..\components\shell;..\..\..\include;..\..\..\components\connectivity\lwm2m\core;..\..\..\components\connectivity\lwm2m\core;..\..\..\components\security\mbedtls\mbedtls_port;..\..\..\components\security\mbedtls\mbedtls-2.6.0\include;..\..\..\components\security\mbedtls\mbedtls-2.6.0\include\mbedtls;..\..\..\include\atiny_lwm2m;..\..\..\include\ota;..\..\..\components\ota\package;..\..\..\components\ota\package\opt;..\..\..\components\ota\utility;..\..\..\osdepends;..\..\..\components\ota\flag_operate;..\..\..\components\connectivity\lwm2m\examples\shared;..\..\..\components\driver;..\..\..\include\fs</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1450,6 +1450,16 @@
               <FileName>sim5320E.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\components\net\at_device\sim5320E\sim5320E.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>driverframe</GroupName>
+          <Files>
+            <File>
+              <FileName>los_dev.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\driver\los_dev.c</FilePath>
             </File>
           </Files>
         </Group>

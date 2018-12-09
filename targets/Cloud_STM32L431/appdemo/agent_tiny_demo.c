@@ -242,7 +242,7 @@ void agent_tiny_fota_init(void)
 
 void agent_tiny_entry(void)
 {
-	int psklen = 0;
+    int psklen = 0;
     UINT32 uwRet = LOS_OK;
     atiny_param_t *atiny_params;
     atiny_security_param_t  *iot_security_param = NULL;
@@ -251,6 +251,7 @@ void agent_tiny_entry(void)
     atiny_device_info_t *device_info = &g_device_info;
 
 #ifdef CONFIG_FEATURE_FOTA
+    
     hal_init_ota();
 #endif
 

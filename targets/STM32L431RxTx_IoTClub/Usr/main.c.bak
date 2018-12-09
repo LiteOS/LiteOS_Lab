@@ -64,9 +64,9 @@ int main(void)
         return LOS_NOK;
     }
     //system frame work initilized here
-    los_shell_init();     //which means you could use shell
+    shell_install();     //which means you could use shell
     los_driv_init();     //which means you could use the driver framwork
-    los_at_init("atdev"); //which means you could use the at framework
+    at_install("atdev"); //which means you could use the at framework
     //////////////////////APPLICATION INITIALIZE HERE/////////////////////
     //do the shell module initlialize:use uart 1
     extern void uart_debug_init(s32_t baud);

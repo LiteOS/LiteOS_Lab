@@ -14,7 +14,7 @@
 然后可以安装AT框架了。
 
 ```
-bool_t at_install(const char *devname);           //install the at module
+bool_t los_at_init(const char *devname);           //install the at module
 ```
 
 为了保证AT框架和具体的硬件驱动解耦，此处使用的注册的设备驱动，开发者配置驱动设备的名字额时候，应该保证该驱动已经注册成功。同时应该注意到，at设备接口的特点：开发者需要在意的是读取的一定是一帧AT返回数据，如果使用串口，可以用串口的IDLE中断来区别不同的帧；其他的设备接口也会有自己的相应说明该帧的区分形式（一般是几个字节的时间没有数据到达），当调用该函数之后，我们就可以使用at的接口发送AT命令了，同时我们提供了shell端口的atcmd命令用作调试（如果shell已经被配置的话）；
