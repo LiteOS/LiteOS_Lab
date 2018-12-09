@@ -381,7 +381,7 @@ instruction  :if you want to use the at frame work, please call this function
               please supply the function read and write.the read function must be
               a block function controlled by timeout
 *******************************************************************************/
-bool_t at_install(const char *devname)
+bool_t los_at_init(const char *devname)
 {
     bool_t ret = false;
     if(NULL == devname)
