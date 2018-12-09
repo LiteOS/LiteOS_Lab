@@ -397,7 +397,7 @@ extern UINT32 g_sys_mem_addr_end;
 
 //component enable options
 
-#define CN_OS_SHELL           1
+#define LOSCFG_ENABLE_SHELL   1
 #define LOSCFG_ENABLE_AT      1
 #define LOSCFG_ENABLE_VFS     1
 #define LOSCFG_ENABLE_DRIVER  1
