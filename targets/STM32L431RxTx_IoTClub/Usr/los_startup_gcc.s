@@ -85,6 +85,19 @@ __LOS_HEAP_ADDR_END__:
 Reset_Handler:
   ldr   sp, =_estack    /* Atollic update: set stack pointer */
 
+  /*first we should so something initialize as the keil did*/
+  ldr  r0, =0xE000ED88
+  ldr  r1, [r0]
+  orr  r1, r1, #(0xF << 20)   /* open the cp10 cp11 as the float*/
+  str  r1, [r0]
+
+  CPSID   I    /*this must be done*/
+
+  ldr   r0, =SystemInit
+  blx   r0
+
+/*after the initailize we do the data copy and initialize, which will be done by keil __main*/
+
 /* Copy the data segment initializers from flash to SRAM */
   movs	r1, #0
   b	LoopCopyDataInit

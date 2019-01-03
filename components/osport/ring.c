@@ -40,7 +40,7 @@
 s32_t ring_init(tagRingBuf *ring,u8_t *buf, s32_t buflen,s32_t offset,s32_t datalen)
 {
     int ret = -1;
-    if((NULL == ret))
+    if((NULL == ring))
     {
         return ret;
     }

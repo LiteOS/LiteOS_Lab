@@ -71,7 +71,7 @@ static s32_t gps_report(u8_t *buf, s32_t buflen)
 }
 
 
-static void GPS_Init(void)
+static void gps_device_init(void)
 {
 	//HAL_UART_Transmit(&huart3, "$CCMSG,GGA,1,0,*19\r\n", 20, 200);
     //HAL_UART_Transmit(&huart3, "$CCMSG,GSA,1,0,*0D\r\n", 20, 200);

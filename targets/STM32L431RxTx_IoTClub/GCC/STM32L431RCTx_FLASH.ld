@@ -76,11 +76,17 @@ SECTIONS
   /* Constant data goes into FLASH */
   .rodata :
   {
-    . = ALIGN(8);
+    . = ALIGN(4);
     __oshell_start = .;
-    *(oshell)
+    KEEP (*(oshell))
     __oshell_end = .;
     
+    . = ALIGN(4);
+    __osdriv_start = .;
+    KEEP (*(osdriv))
+    __osdriv_end = .;
+    
+    . = ALIGN(8);
     *(.rodata)         /* .rodata sections (constants, strings, etc.) */
     *(.rodata*)        /* .rodata* sections (constants, strings, etc.) */
     . = ALIGN(8);

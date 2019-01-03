@@ -42,11 +42,11 @@
 VOID HardWare_Init(VOID)
 {
 	HAL_Init();
-	/* Configure the system clock */
+	/*configure the system clock*/
 	SystemClock_Config();
 
 	/* Initialize all configured peripherals */
-	DelayInit();	
+	DelayInit();
 	MX_GPIO_Init();
 	MX_I2C1_Init();
 }
@@ -54,9 +54,10 @@ VOID HardWare_Init(VOID)
 int main(void)
 {
     UINT32 uwRet = LOS_OK;
+
     //do the hardware initialize
     HardWare_Init();
-    
+
     //do the liteos kernel initialize
     uwRet = LOS_KernelInit();
     if (uwRet != LOS_OK)
@@ -79,7 +80,9 @@ int main(void)
     //create the main task of the application
     #include <app_main.h>
     //app_main_init("178.15.147.143", 5683,20);
-    app_main_init("testdevice.hw-oc.com", 5683,20);
+    //app_main_init("testdevice.hw-oc.com", 5683,20);  //Europe openlab use this configure
+
+    app_main_init("139.159.140.34", 5683,5);  //China telecom
  #endif
     ////////////////////////APPLICATION INITIALIZE END///////////////////
     //start the system
