@@ -92,8 +92,7 @@ static  char *gs_welcome_info= "WELCOME TO LITEOS SHELL";
 extern s32_t shell_cmd_execute(char *param);            //execute the command
 extern s32_t shell_cmd_init(void);                      //do the command table load
 extern const struct shell_tab_matches *shell_cmd_index(const char *index);  //find the most like command
-//functions export
-void shell_install(void);                                   //install the shell component
+
 
 /**************************************FUNCTION IMPLEMENT**********************/
 /*******************************************************************************
@@ -111,6 +110,8 @@ instruction  :you could reimplement by redirection
 *******************************************************************************/
 static void shell_put_char(int ch){
     putchar(ch);
+    fflush (stdout) ; //if you use the glibc, then the you must use this to make it
+                      //output immediately
 }
 
 /*******************************************************************************
@@ -253,7 +254,7 @@ instruction  :we get character from the input device each time,cached it in the
               current command line,if enter key received, then do command execute;
 			  if other virtual key received, then do the specified action.
 *******************************************************************************/
-static u32_t shell_server_entry(void *args){
+static void shell_server_entry(void *args){
 	s32_t    ch;
 	s32_t   len;
 	u8_t    offset;
@@ -445,6 +446,7 @@ static u32_t shell_server_entry(void *args){
 				break;
 		}
     }
+
 }
 
 /*******************************************************************************
@@ -452,12 +454,12 @@ function     :this is the  shell module initialize function
 parameters   :
 instruction  :if you want use shell,you should do two things
               1,make LOSCFG_ENABLE_SHELL true in target_config.h
-			  2,call shell_install in your process:make sure after the system has
+			  2,call los_shell_init in your process:make sure after the system has
 			    been initialized
 *******************************************************************************/
 void los_shell_init(){
     shell_cmd_init();
-    task_create("shell_server",shell_server_entry,\
+    task_create("shell_server",(fnTaskEntry)shell_server_entry,\
 				CN_SHELL_STACKSIZE+CN_CMD_CACHE*CN_CMDLEN_MAX,NULL,NULL,10);
 }
 
