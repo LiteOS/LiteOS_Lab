@@ -22,7 +22,7 @@ TARGET = STM32L431XX_NB_GCC
 # debug build?
 DEBUG = 1
 # optimization
-OPT = -Og
+OPT = -O0 -g
 
 
 #######################################

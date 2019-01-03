@@ -125,14 +125,14 @@ bool_t app_send_raw(u8_t *msg, s32_t len)
 static  u8_t  s_report_buf[cn_report_buf_len];
 
 
-#define LIGHT_SERSOR_EN   1   //need to insert the dht11 mini board
+#define LIGHT_SERSOR_EN   0   //need to insert the dht11 mini board
 #define CSQ_SENSOR_EN     1   //on the main board :NB MODULE support
 #define LED_SWITCH_EN     1   //on the main board :D1
 #define DHT11_SENSOR_EN   0   //need to insert the dht11 mini board
 #define SMOKE_SENSOR_EN   0   //need to insert the smoke mini board
 #define BEEP_SWICTH_EN    0   //need to insert the smoke mini board
 
-static u32_t __app_main_taskentry(void *args)
+static void __app_main_taskentry(void *args)
 {   
     en_app_msgid   appmsgid;
     tagAppItem    *appitem;
@@ -223,7 +223,7 @@ bool_t app_main_init(const char *server,u16_t port,u16_t band)
         s_app_manager.status |= cn_app_task_status_running;  //make it running       
         s_app_manager.timeout = cn_app_report_cyle;
         
-        task_create("appmain",__app_main_taskentry,0x800,NULL,NULL,12);
+        task_create("appmain",(fnTaskEntry)__app_main_taskentry,0x800,NULL,NULL,12);
         
         ret = true;
     }
