@@ -173,7 +173,7 @@ bool_t los_driv_unregister(const char *name)
     {
         tmp = s_los_driv_module.drivlst;
         pre = NULL;
-        while(NULL != ret)
+        while(NULL != tmp)
         {
             if( 0 == strcmp(name,tmp->name))
             {
@@ -231,11 +231,11 @@ static void osdriv_load_static(void){
 #if defined (__CC_ARM)    //you could add other compiler like this
 	num = ((u32_t)&osdriv$$Limit-(u32_t)&osdriv$$Base)/sizeof(os_driv_para_t);
     para = (os_driv_para_t *) &osdriv$$Base;
-#elif defined(__GNUC_LIKE)
+#elif defined(__GNUC__)
 	extern unsigned int __osdriv_start;
 	extern unsigned int __osdriv_end;
 	para = (os_driv_para_t *)&__osdriv_start;
-	i = ((unsigned int )&__osdriv_end - (unsigned int)&__osdriv_start)/sizeof(os_driv_para_t);
+	num = ((unsigned int )&__osdriv_end - (unsigned int)&__osdriv_start)/sizeof(os_driv_para_t);
 #else 
 	#error("unknown compiler here");
 #endif    
