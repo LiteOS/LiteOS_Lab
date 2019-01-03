@@ -109,6 +109,7 @@ static s32_t __cmd_send(u8_t *buf,s32_t buflen,u32_t timeout)
                     printf("%02x ",buf[i]);
                 }
                 printf("\n\r");
+                break;
             default:
                 break;
         }
@@ -139,6 +140,7 @@ static s32_t __resp_rcv(u8_t *buf,s32_t buflen,u32_t timeout)
                     printf("%02x ",buf[i]);
                 }
                 printf("\n\r");
+                break;
             default:
                 break;
         }
