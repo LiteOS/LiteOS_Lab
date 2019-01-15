@@ -232,6 +232,31 @@ static s32_t bc95_rcvdeal(u8_t *data,s32_t len)
     return len;    
 }
 
+#define cn_urc_qlwevtind    "\r\n+QLWEVTIND:"
+
+static bool_t s_lwm2m_observed  = false;
+static s32_t urc_qlwevtind(u8_t *data,s32_t len)
+{
+
+	int index_str;
+	int ind;
+
+	index_str = strlen(cn_urc_qlwevtind);
+
+	if(len > index_str)
+	{
+		ind = data[index_str]-'0';
+		printf("GET THE LWM2M:ind:%d\n\r",ind);
+		if(ind == 3)
+		{
+			s_lwm2m_observed = true;
+		}
+
+	}
+	return len;
+}
+
+
 
 //use this function to set the band,which corresponding with YUNYINGSHANG AND MOZU
 bool_t bc95_init(const char *server,u16_t port,s32_t band)
@@ -241,8 +266,13 @@ bool_t bc95_init(const char *server,u16_t port,s32_t band)
   
     char cmd[64];
     
+    at_oobregister(urc_qlwevtind,cn_urc_qlwevtind);
+
     while(1)
     {
+
+    	s_lwm2m_observed = false;
+
         //do the module reset 
         bc95_atcmd("ATE0\r","OK");
         bc95_atcmd("ATE0\r","OK");
@@ -320,6 +350,23 @@ bool_t bc95_init(const char *server,u16_t port,s32_t band)
         {
             continue;
         }
+        //wait for the server observed
+        ret = false;
+        times = cn_try_times;
+        for(times =0;times <cn_try_times;times++ )
+        {
+        	if(s_lwm2m_observed )
+        	{
+        		ret = true;
+        		break;
+        	}
+        	task_sleepms(1000);
+        }
+        if(false == ret)
+        {
+            continue;
+        }
+
         break;
     }
    //reach here means everything is ok, we can go now
