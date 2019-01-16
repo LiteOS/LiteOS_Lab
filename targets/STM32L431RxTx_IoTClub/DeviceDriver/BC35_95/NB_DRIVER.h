@@ -38,11 +38,23 @@
 
 #include <osport.h>
 
+
+typedef struct
+{
+	const char *server;   //format:192.168.2.1,5683
+	const char *plmn;     //format:4600110
+	const char *apn;      //format:1,"IP","HUAWEI.COM"
+	const char *bands;    //format:5,8,20
+}tagNbConfig;
+
 //bc95 interface
 extern bool_t bc95_init(const char *server,u16_t port,s32_t band);
 extern bool_t bc95_send(u8_t *buf,s32_t len, u32_t timeout);
 extern void bc95_regester_receivehandle(void *handle);
 extern bool_t bc95_csq(u32_t *value);
+
+bool_t nb_init(tagNbConfig *config);
+
 
 #endif
 

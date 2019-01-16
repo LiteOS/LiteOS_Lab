@@ -36,6 +36,8 @@
 //the bc95 module;
 #include <at.h>  
 
+#include <NB_DRIVER.h>
+
 #define cn_bc95_cmd_timeout  (2*1000)
 #define cn_try_times         (32)
 
@@ -51,18 +53,22 @@ struct bc95_cb
     //for the debug
     u32_t   rcvlen;
     u32_t   sndlen;
+
+    //states for the lwm2m
+    bool_t  lwm2m_observe;
+
 };
-static struct bc95_cb   s_bc95_cb;
+static struct bc95_cb   s_nb_cb;
 
 //use this function to register a handle to deal with the received data
 void bc95_regester_receivehandle(void *handle)
 {
-    s_bc95_cb.rcvhandle = (fnhandle)handle;
+    s_nb_cb.rcvhandle = (fnhandle)handle;
     return;
 }
 
 //bc95 common at command
-static bool_t bc95_atcmd(const char *cmd,const char *index)
+static bool_t nb_atcmd(const char *cmd,const char *index)
 {
     s32_t ret = 0;
     ret = at_command((u8_t *)cmd,strlen(cmd),index,NULL,0,cn_bc95_cmd_timeout);
@@ -76,13 +82,27 @@ static bool_t bc95_atcmd(const char *cmd,const char *index)
     } 
 }
 
-
+//nb command  with response
+//bc95 common at command
+static bool_t nb_atcmd_response(const char *cmd,const char *index,char *buf, int len)
+{
+    s32_t ret = 0;
+    ret = at_command((u8_t *)cmd,strlen(cmd),index,(u8_t *)buf,len,cn_bc95_cmd_timeout);
+    if(ret > 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 
 //this function to get the csq
 bool_t bc95_csq(u32_t *value)
 {
     char cmd[64];
-    u8_t resp[64];
+    char resp[64];
     const char *index = "OK";
     const char *str;
     u32_t csq = 0;
@@ -96,7 +116,7 @@ bool_t bc95_csq(u32_t *value)
     memset(cmd,0,64);
     memset(resp,0,64);
     snprintf(cmd,64,"AT+CSQ\r");
-    if(at_command((u8_t *)cmd,strlen(cmd),index,resp,64,cn_bc95_cmd_timeout))
+    if(nb_atcmd_response(cmd,index,resp,64))
     {
         str = strstr((char *)resp,"+CSQ:");
         if(NULL != str)
@@ -135,15 +155,15 @@ bool_t bc95_send(u8_t *buf,s32_t len, u32_t timeout)
     s32_t ret = 0;
     const char *cmd = "AT+NMGS=";
     const char *index = "OK";
-    if (NULL == buf || len >= 128 ||(false == s_bc95_cb.sndenable))
+    if (NULL == buf || len >= 128 ||(false == s_nb_cb.sndenable))
     {
         return false;
     }
-    memset(s_bc95_cb.sndbuf, 0, cn_bc95_cachelen);
-    snprintf((char *)s_bc95_cb.sndbuf,cn_bc95_cachelen,"%s%d,",cmd,len);    
-    ret = bc95_str_to_hex((unsigned char *)buf, len, (char *)&s_bc95_cb.sndbuf[strlen((char *)s_bc95_cb.sndbuf)]);
-    s_bc95_cb.sndbuf[strlen((char *)s_bc95_cb.sndbuf)]='\r';
-    ret = at_command((u8_t *)s_bc95_cb.sndbuf,strlen((char *)s_bc95_cb.sndbuf),index,NULL,0,timeout);
+    memset(s_nb_cb.sndbuf, 0, cn_bc95_cachelen);
+    snprintf((char *)s_nb_cb.sndbuf,cn_bc95_cachelen,"%s%d,",cmd,len);
+    ret = bc95_str_to_hex((unsigned char *)buf, len, (char *)&s_nb_cb.sndbuf[strlen((char *)s_nb_cb.sndbuf)]);
+    s_nb_cb.sndbuf[strlen((char *)s_nb_cb.sndbuf)]='\r';
+    ret = at_command((u8_t *)s_nb_cb.sndbuf,strlen((char *)s_nb_cb.sndbuf),index,NULL,0,timeout);
     if(ret > 0)
     {
         return true;
@@ -222,25 +242,203 @@ static s32_t bc95_rcvdeal(u8_t *data,s32_t len)
         printf("%s:frame over: frame:%d  cachelen:%d \n\r",__FUNCTION__,datalen,cn_bc95_cachelen);
         return ret; //
     }
-    memset(s_bc95_cb.rcvbuf,0,cn_bc95_cachelen);
-    bc95_hex_to_str(str,datalen*2,(char *)s_bc95_cb.rcvbuf);
+    memset(s_nb_cb.rcvbuf,0,cn_bc95_cachelen);
+    bc95_hex_to_str(str,datalen*2,(char *)s_nb_cb.rcvbuf);
     printf("%s:appdata:%d bytes\n\r",__FUNCTION__,datalen);
-    if(NULL != s_bc95_cb.rcvhandle)
+    if(NULL != s_nb_cb.rcvhandle)
     {
-        s_bc95_cb.rcvhandle(s_bc95_cb.rcvbuf,datalen);
+        s_nb_cb.rcvhandle(s_nb_cb.rcvbuf,datalen);
     }
     return len;    
 }
 
-#define cn_urc_qlwevtind    "\r\n+QLWEVTIND:"
 
-static bool_t s_lwm2m_observed  = false;
+
+//use this function to do the module reboot
+static bool_t nb_reboot(void)
+{
+    //do the module reset
+    nb_atcmd("ATE0\r","OK");
+    nb_atcmd("ATE0\r","OK");
+    nb_atcmd("AT+NRB\r","REBOOTING");
+    task_sleepms(10000); //wait for the module boot
+    nb_atcmd("ATE0\r","OK");
+    nb_atcmd("ATE0\r","OK");
+
+
+    return true;
+}
+
+//enable the echooff
+static bool_t nb_echoff(void)
+{
+    return nb_atcmd("ATE0\r","OK");
+}
+
+
+//use this function to set the band
+static bool_t nb_setband(const char *bands)
+{
+    char cmd[64];
+    char resp[64];
+    bool_t ret = true;
+
+    if(NULL != bands)  //which measn we need to set if the default is not the same
+    {
+        memset(resp,0,64);
+        ret = nb_atcmd_response("AT+NBAND?\r","OK",resp,64);
+        if((false == ret)||(NULL == strstr(resp,bands)))//which means we need to set it
+        {
+            nb_atcmd("AT+CFUN=0\r","OK");
+        	memset(cmd,0,64);
+        	snprintf(cmd,64,"AT+NBAND=%s\r",bands);
+        	ret = nb_atcmd(cmd,"OK");
+            nb_atcmd("AT+CFUN=1\r","OK");
+        }
+        else
+        {
+        	ret = true;  //we need not to set
+        }
+    }
+    return ret;
+}
+
+//set the plmn
+static bool_t nb_setplmn(const char *plmn)
+{
+    char cmd[64];
+    char resp[64];
+    bool_t ret;
+
+    if(NULL != plmn)  //which measn we need to set if the default is not the same
+    {
+        memset(resp,0,64);
+        ret = nb_atcmd_response("AT+COPS?\r","+COPS",resp,64);
+        if((false == ret)||(NULL == strstr(resp,plmn)))//which means we need to set it
+        {
+        	memset(cmd,0,64);
+        	snprintf(cmd,64,"AT+COPS=1,2,\"%s\"\r",plmn);
+        	ret = nb_atcmd(cmd,"OK");
+        }
+        else
+        {
+        	ret = true;  //we need not to set
+        }
+    }
+    else  //set it to auto
+    {
+    	memset(cmd,0,64);
+    	snprintf(cmd,64,"AT+COPS=0\r");
+    	ret = nb_atcmd(cmd,"OK");
+    }
+
+    return ret;
+}
+
+//set the apn
+static bool_t nb_setapn(const char *apn)
+{
+    char cmd[64];
+    char resp[64];
+    bool_t ret = true;
+
+    if(NULL != apn)  //which measn we need to set if the default is not the same
+    {
+        memset(resp,0,64);
+        ret = nb_atcmd_response("AT+CGDCONT?\r","OK",resp,64);
+        if((false == ret)||(NULL == strstr(resp,apn)))//which means we need to set it
+        {
+        	memset(cmd,0,64);
+        	snprintf(cmd,64,"AT+CGDCONT=%s\r",apn);
+        	ret = nb_atcmd(cmd,"OK");
+        }
+        else
+        {
+        	ret = true;  //we need not to set
+        }
+    }
+    return ret;
+}
+
+//set the ncdp
+static bool_t nb_setserver(const char *server)
+{
+    char cmd[64];
+    char resp[64];
+    bool_t ret = true;
+
+    if(NULL != server)  //which measn we need to set if the default is not the same
+    {
+        memset(resp,0,64);
+        ret = nb_atcmd_response("AT+NCDP?\r","OK",resp,64);
+        if((false == ret)||(NULL == strstr(resp,server)))//which means we need to set it
+        {
+        	memset(cmd,0,64);
+        	snprintf(cmd,64,"AT+NCDP=%s\r",server);
+        	ret = nb_atcmd(cmd,"OK");
+        }
+        else
+        {
+        	ret = true;  //we need not to set
+        }
+    }
+    return ret;
+}
+
+//enable the cmee
+
+static bool_t nb_setcmee()
+{
+	bool_t ret;
+
+    ret = nb_atcmd("AT+CMEE=1\r","OK");
+
+    return ret;
+}
+
+//enable the network
+static bool_t nb_setcgatt()  //unit second
+{
+    //wait for the server observed
+    bool_t ret = false;
+
+    ret = nb_atcmd("AT+CGATT=1\r","OK");
+
+    return ret;
+}
+
+//enable the NNMI
+static bool_t nb_setnnmi()  //unit second
+{
+    //wait for the server observed
+    bool_t ret = false;
+
+    ret = nb_atcmd("AT+NNMI=1\r","OK");
+
+    return ret;
+}
+//enable the cfun
+static bool_t nb_setcfun()  //unit second
+{
+    //wait for the server observed
+    bool_t ret = false;
+
+    ret = nb_atcmd("AT+CFUN=1\r","OK");
+
+    //i think we should do some wait here
+    task_sleepms(2000);
+
+    return ret;
+}
+
+
+//wait for the lwm2m observe
+#define cn_urc_qlwevtind    "\r\n+QLWEVTIND:"
 static s32_t urc_qlwevtind(u8_t *data,s32_t len)
 {
 
 	int index_str;
 	int ind;
-
 	index_str = strlen(cn_urc_qlwevtind);
 
 	if(len > index_str)
@@ -249,134 +447,129 @@ static s32_t urc_qlwevtind(u8_t *data,s32_t len)
 		printf("GET THE LWM2M:ind:%d\n\r",ind);
 		if(ind == 3)
 		{
-			s_lwm2m_observed = true;
+			s_nb_cb.lwm2m_observe = true;
 		}
-
 	}
 	return len;
 }
 
 
+//check the lwm2m server observed
+static bool_t nb_checklwm2m(s32_t time)  //unit second
+{
+    //wait for the server observed
+    bool_t ret = false;
+    s32_t times;
+
+    for(times =0;times <time;times++ )
+    {
+    	if(s_nb_cb.lwm2m_observe )
+    	{
+    		ret = true;
+    		break;
+    	}
+    	task_sleepms(1000);
+    }
+
+    return ret;
+}
+
+//check if attached to the network
+static bool_t nb_checknetwork(s32_t time)  //unit second
+{
+    //wait for the server observed
+    bool_t ret = false;
+    s32_t times;
+
+    for(times =0;times <time;times++ )
+    {
+    	if(nb_atcmd("AT+CGATT?\r", "CGATT:1"))
+    	{
+    		ret = true;
+    		break;
+    	}
+    	task_sleepms(1000);
+    }
+
+    return ret;
+}
+
+//set the autoconfig mode
+static bool_t nb_setnconfig(const char *mode)
+{
+    char cmd[64];
+    char resp[64];
+    bool_t ret = true;
+
+    if(NULL != mode)  //which measn we need to set if the default is not the same
+    {
+        memset(resp,0,64);
+        ret = nb_atcmd_response("AT+NCONFIG?\r","+NCONFIG",resp,64);
+        if((false == ret)||(NULL == strstr(resp,mode)))//which means we need to set it
+        {
+        	memset(cmd,0,64);
+        	snprintf(cmd,64,"AT+NCONFIG=%s\r",mode);
+        	ret = nb_atcmd(cmd,"OK");
+
+        	nb_reboot();
+        }
+        else
+        {
+        	ret = true;  //we need not to set
+        }
+    }
+    return ret;
+}
 
 //use this function to set the band,which corresponding with YUNYINGSHANG AND MOZU
-bool_t bc95_init(const char *server,u16_t port,s32_t band)
+bool_t nb_init(tagNbConfig *config)
 {
-    bool_t ret = false;
-    s32_t times = 0;
-  
-    char cmd[64];
-    
+    memset(&s_nb_cb,0,sizeof(s_nb_cb));
     at_oobregister(urc_qlwevtind,cn_urc_qlwevtind);
+    at_oobregister(bc95_rcvdeal,cn_bc95_rcvindex);
 
     while(1)
     {
 
-    	s_lwm2m_observed = false;
+    	s_nb_cb.lwm2m_observe = false;
 
-        //do the module reset 
-        bc95_atcmd("ATE0\r","OK");
-        bc95_atcmd("ATE0\r","OK");
+    	nb_reboot();
 
-        bc95_atcmd("AT+CFUN=0\r","OK");      
-        memset(cmd,0,32);
-        snprintf(cmd,32,"AT+NBAND=%d\r",band);
-        bc95_atcmd(cmd,"OK");       
-        bc95_atcmd("AT+CFUN=1\r","OK");
-        bc95_atcmd("AT+NRB\r","REBOOTING");
-        task_sleepms(5000); //wait for some time  
+    	nb_echoff();
 
-        //make the echo off
-        bc95_atcmd("ATE0\r","OK"); 
-        bc95_atcmd("AT+NCONFIG=AUTOCONNECT,TRUE\r","OK");
-        //wait for the cgatt
-        times = cn_try_times;
-        for(times =0;times <cn_try_times;times++ )
-        {
-            ret = bc95_atcmd("AT+CGATT?\r","CGATT:1");;
-            if(ret)
-            {
-                printf("wait for the network. OK\r\n");
-                break;
-            }
-            else
-            {
-                printf("wait for the network. FAILED\r\n");
-            }
-        }
-        if(false == ret)
-        {
-            continue;
-        }
+    	nb_setcmee();
 
-        //set the ncdp
-        times = cn_try_times;
-        memset(cmd,0,sizeof(cmd));
-        snprintf(cmd,sizeof(cmd),"AT+NCDP=%s,%d\r",server,port);
-        for(times =0;times <cn_try_times;times++ )
-        {
-            ret = bc95_atcmd(cmd,"OK");;
-            if(ret)
-            {
-                printf("wait for the ncdp. OK\r\n");
-                break;
-            }
-            else
-            {
-                printf("wait for the ncdp. FAILED\r\n");
-            }
-        }
-        if(false == ret)
-        {
-            continue;
-        }
-        
-        //make the report auto
-        printf("set nnmi and wait  ");
-        times = cn_try_times;
-        for(times =0;times <cn_try_times;times++ )
-        {
-            ret = bc95_atcmd("AT+NNMI=1\r","OK");;
-            if(ret)
-            {
-                printf("wait for the nnmi. OK\r\n");
-                break;
-            }
-            else
-            {
-                printf("wait for the nnmi. FAILED\r\n");
-            }
-        }
-        if(false == ret)
-        {
-            continue;
-        }
-        //wait for the server observed
-        ret = false;
-        times = cn_try_times;
-        for(times =0;times <cn_try_times;times++ )
-        {
-        	if(s_lwm2m_observed )
-        	{
-        		ret = true;
-        		break;
-        	}
-        	task_sleepms(1000);
-        }
-        if(false == ret)
-        {
-            continue;
-        }
+    	nb_setnconfig("AUTOCONNECT,FALSE");    	//cgatt and cfun must be called if autoconnect is false
+
+    	nb_setband(config->bands);
+
+    	nb_setcfun();
+
+    	nb_setplmn(config->plmn);
+
+    	nb_setapn(config->apn);
+
+    	nb_setserver(config->server);
+
+    	nb_setcgatt();
+
+    	nb_setnnmi();
+
+    	nb_checknetwork(16);
+
+    	if(false == nb_checklwm2m(16))
+    	{
+    		continue; //we should do the reboot for the nB
+    	}
 
         break;
     }
    //reach here means everything is ok, we can go now
-    memset(&s_bc95_cb,0,sizeof(s_bc95_cb));
-    at_oobregister(bc95_rcvdeal,cn_bc95_rcvindex);
-    s_bc95_cb.sndenable = true;
-    
-    printf("BC95 READY NOW\n\r");
+    s_nb_cb.sndenable = true;
+    printf("NB MODULE RXTX READY NOW\n\r");
     return true;
 }
+
 
 
 #include <shell.h>
