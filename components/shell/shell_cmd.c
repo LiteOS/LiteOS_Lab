@@ -237,6 +237,11 @@ s32_t shell_cmd_init(void){
 #if defined (__CC_ARM)    //you could add other compiler like this
 	len = (u32_t)&oshell$$Limit-(u32_t)&oshell$$Base;
     cmd_start = &oshell$$Base;
+#elif defined(__GNUC__)
+	extern unsigned int __oshell_start;
+	extern unsigned int __oshell_end;
+	cmd_start = &__oshell_start;
+	len = (unsigned int )&__oshell_end - (unsigned int)&__oshell_start;
 #elif defined(__GNUC_LIKE)
 	extern unsigned int __oshell_start;
 	extern unsigned int __oshell_end;

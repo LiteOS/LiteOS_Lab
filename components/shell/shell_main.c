@@ -44,8 +44,9 @@ this file implement the shell for the system.the following instruction you must 
 7,1B XX 43 move the current cursor right
 8,'\B' move the current cursor left
 9,1B delete all the input and make the following code transfer
-10,not support the command insert dynamic yet
+10,support insert dynamicly, which implemented  by lynus, thanks
 *******************************************************************************/
+
 /**************************************FILE INCLIUDES**************************/
 #include <shell.h>
 #if LOSCFG_ENABLE_SHELL

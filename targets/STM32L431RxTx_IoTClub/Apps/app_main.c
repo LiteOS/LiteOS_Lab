@@ -47,18 +47,15 @@ typedef struct
     s32_t                deadtime;    //if read, how much time left to report
     app_msg_function     func;        //used to get a message or deal with the received message
 }tagAppItem;
-    
+
 typedef struct
 {
-   const char  *server;
-   u16_t        port;
-   u16_t        band; 
-   u16_t        status;     //create or not, report or not
-   u32_t        totalsnt;
-   u32_t        totalrcv;
-   u32_t        timeout;   //hou much time wait to report
-   tagAppItem   apps[en_app_msgid_last]; 
-
+	tagNbConfig  config;
+	u16_t        status;     //create or not, report or not
+	u32_t        totalsnt;
+	u32_t        totalrcv;
+	u32_t        timeout;   //hou much time wait to report
+	tagAppItem   apps[en_app_msgid_last];
 }tagAppManager;
 
 static tagAppManager  s_app_manager;
@@ -132,6 +129,8 @@ static  u8_t  s_report_buf[cn_report_buf_len];
 #define SMOKE_SENSOR_EN   0   //need to insert the smoke mini board
 #define BEEP_SWICTH_EN    0   //need to insert the smoke mini board
 
+
+
 static void __app_main_taskentry(void *args)
 {   
     en_app_msgid   appmsgid;
@@ -170,7 +169,7 @@ static void __app_main_taskentry(void *args)
     app_beep_switch();
 #endif
 
-    bc95_init(s_app_manager.server,s_app_manager.port,s_app_manager.band);
+    nb_init(&s_app_manager.config);
     bc95_regester_receivehandle(app_rcv_deal);
     
     while(1)
@@ -209,17 +208,15 @@ static void __app_main_taskentry(void *args)
     }    
 }
 
-bool_t app_main_init(const char *server,u16_t port,u16_t band)
+bool_t app_main_init(tagNbConfig *config)
 {
     bool_t ret = false;
        
     if(0 == (s_app_manager.status & cn_app_task_status_create))
     {
-        s_app_manager.server = server;
-        s_app_manager.band = band;
-        s_app_manager.port = port;
+
+    	s_app_manager.config = *config;
         s_app_manager.status |= cn_app_task_status_create;  
-        
         s_app_manager.status |= cn_app_task_status_running;  //make it running       
         s_app_manager.timeout = cn_app_report_cyle;
         
@@ -240,8 +237,8 @@ static void __app_main_status(void)
             s_app_manager.status&cn_app_task_status_running?"YES":"NO ");
     if(s_app_manager.status&cn_app_task_status_create)
     {
-        printf("SERVER:%s PORT:%d  BAND:%d\n\r",\
-                s_app_manager.server,s_app_manager.port,s_app_manager.band);
+        printf("SERVER:%s   BAND:%s\n\r",\
+                s_app_manager.config.server,s_app_manager.config.bands);
     
         printf("CYCLE:%d (ms) SNT:%d (bytes) RCV:%d (bytes)\n\r",\
                 s_app_manager.timeout,s_app_manager.totalsnt,s_app_manager.totalrcv);
@@ -298,14 +295,7 @@ static s32_t shell_appreport(s32_t argc,const char *argv[])
 }
 OSSHELL_EXPORT_CMD(shell_appreport,"appreport","appreport [stop/start/timeout] [timeout]");
 
-static s32_t shell_appcreate(s32_t argc, const char *argv[])
-{
-    
-    app_main_init("testdevice.hw-oc.com", 5683,20);
 
-    return 0;
-}
-OSSHELL_EXPORT_CMD(shell_appcreate,"appcreate","appcreate");
 
 
 

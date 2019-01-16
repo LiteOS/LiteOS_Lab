@@ -36,6 +36,7 @@
 #define APP_MAIN_H
 
 #include <osport.h>
+#include <NB_DRIVER.h>
 
 typedef enum
 {
@@ -77,7 +78,7 @@ typedef s32_t (*app_msg_function) (u8_t *buf,s32_t buflen);
 bool_t app_register(const char *appname,en_app_msg_direction direction,en_app_msgid msgid, app_msg_function func, s32_t cycle); 
 
 //this function must be called by manual or by shell command
-bool_t app_main_init(const char *server,u16_t port,u16_t band);
+bool_t app_main_init(tagNbConfig *config);
 
 //this function used for the raw send to the nb
 bool_t app_send_raw(u8_t *msg, s32_t len);
