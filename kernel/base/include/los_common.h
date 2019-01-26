@@ -32,8 +32,8 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef __COMMON_H__
-#define __COMMON_H__
+#ifndef __LOS_COMMON_H__
+#define __LOS_COMMON_H__
 
 /*
  * offset_of - caculate the offset for a member in a struct
@@ -69,5 +69,5 @@
 #define round_down(x, a)        ((x) & ~((uintptr_t) (a) - 1))
 
 
-#endif /* __COMMON_H__ */
+#endif /* __LOS_COMMON_H__ */
 

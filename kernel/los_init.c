@@ -36,7 +36,9 @@
 #include "los_task.ph"
 #include "los_config.h"
 
+#ifdef LOSCFG_HEAP_IMPROVED
 #include "mem.h"
+#endif
 
 #if (LOSCFG_PLATFORM_EXC == YES)
 #include "los_exc.ph"

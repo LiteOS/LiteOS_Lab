@@ -105,7 +105,7 @@ KERNEL_SRC =  \
         ${wildcard $(TOP_DIR)/kernel/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/core/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/ipc/*.c} \
-        ${wildcard $(TOP_DIR)/kernel/base/mem/bestfit_little/*.c} \
+        ${wildcard $(TOP_DIR)/kernel/base/mem/heap/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/mem/membox/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_slab.c} \
 	  ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_slabmem.c} \
@@ -366,6 +366,9 @@ USER_SRC = \
 
 endif
 
+UTIL_SRC = \
+        $(TOP_DIR)/utils/rbtree.c
+        C_SOURCES += $(UTIL_SRC)
 
 ######################################
 # firmware library
@@ -374,7 +377,7 @@ PERIFLIB_SOURCES =
 
 
 #######################################
-# CFLAGS
+g CFLAGS
 #######################################
 # cpu
 CPU = -mcpu=cortex-m4

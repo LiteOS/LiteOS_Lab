@@ -324,7 +324,7 @@
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <uC99>1</uC99>
-            <uGnu>0</uGnu>
+            <uGnu>1</uGnu>
             <useXO>0</useXO>
             <v6Lang>1</v6Lang>
             <v6LangP>1</v6LangP>
@@ -537,11 +537,6 @@
               <FilePath>..\..\..\kernel\base\ipc\los_sem.c</FilePath>
             </File>
             <File>
-              <FileName>los_heap.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\kernel\base\mem\bestfit_little\los_heap.c</FilePath>
-            </File>
-            <File>
               <FileName>los_membox.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\kernel\base\mem\membox\los_membox.c</FilePath>
@@ -550,11 +545,6 @@
               <FileName>los_memcheck.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\kernel\base\mem\common\los_memcheck.c</FilePath>
-            </File>
-            <File>
-              <FileName>los_memory.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\kernel\base\mem\bestfit_little\los_memory.c</FilePath>
             </File>
             <File>
               <FileName>los_slab.c</FileName>
@@ -585,6 +575,16 @@
               <FileName>los_tickless.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\kernel\extended\tickless\los_tickless.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_heap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\kernel\base\mem\heap\los_heap.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_memory.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\kernel\base\mem\heap\los_memory.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1750,6 +1750,16 @@
               <FileName>fs_test.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\tests\test_suit\fs_test.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>utils</GroupName>
+          <Files>
+            <File>
+              <FileName>rbtree.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utils\rbtree.c</FilePath>
             </File>
           </Files>
         </Group>

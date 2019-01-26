@@ -280,24 +280,6 @@ extern UINT32 __LOS_HEAP_ADDR_END__;
 
 /**
  * @ingroup los_config
- * Starting address of the memory
- */
-#define OS_SYS_MEM_ADDR                                     (VOID *)__LOS_HEAP_ADDR_START__
-
-/**
- * @ingroup los_config
- * Ending address of the memory
- */
-extern UINT32 g_sys_mem_addr_end;
-
-/**
- * @ingroup los_config
- * Memory size
- */
-#define OS_SYS_MEM_SIZE                                     ((UINT32)(__LOS_HEAP_ADDR_END__ - __LOS_HEAP_ADDR_START__ + 1))
-
-/**
- * @ingroup los_config
  * Configuration module tailoring of mem node integrity checking
  */
 #define LOSCFG_BASE_MEM_NODE_INTEGRITY_CHECK                YES
@@ -407,6 +389,7 @@ extern UINT32 g_sys_mem_addr_end;
 #define LOSCFG_ENABLE_VFS                                   YES
 #endif
 
+#define LOSCFG_HEAP_IMPROVED                                YES
 
 #ifdef __cplusplus
 #if __cplusplus
