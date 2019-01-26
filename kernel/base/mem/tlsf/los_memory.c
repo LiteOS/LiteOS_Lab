@@ -54,10 +54,6 @@ extern "C" {
 #endif /* __cplusplus */
 #endif /* __cplusplus */
 
-LITE_OS_SEC_DATA_INIT static UINT32 g_uwTlsf_AllocCount = 0;
-LITE_OS_SEC_DATA_INIT static UINT32 g_uwTlsf_FreeCount = 0;
-
-
 extern ST_LOS_TASK g_stLosTask;
 
 #define AARCHPTR UINT32
@@ -132,6 +128,8 @@ typedef struct LOS_MEM_POOL_INFO {
 #if (LOSCFG_MEM_MUL_POOL == YES)
     VOID *pNextPool;
 #endif
+    UINT32 uwTlsf_AllocCount;
+    UINT32 uwTlsf_FreeCount;
 } LOS_MEM_POOL_INFO;
 
 /* pool_t: a pNode of memory that TLSF can manage. */
@@ -648,11 +646,18 @@ EXIT:
 LITE_OS_SEC_TEXT static VOID *osMemUsedNodePrepare(control_t *control, LOS_MEM_DYN_NODE *pNode, UINT32 uwSize)
 {
     VOID *pPtr = NULL;
+#if LOSCFG_ENABLE_MPU == YES
+    UINT32 flags;
+#endif
     if (pNode)
     {
         tlsf_assert(uwSize && "size must be non-zero");
         osMemFreeNodeTrim(control, pNode, uwSize);
         osMemUsedSet(pNode);
+
+#if LOSCFG_ENABLE_MPU == YES
+        flags = osEnterPrivileged();
+#endif
 
         /* If the operation occured before task initialization(g_stLosTask.pstRunTask was not assigned)
            or in interrupt,make the value of taskid of pNode to oxffffffff*/
@@ -666,6 +671,11 @@ LITE_OS_SEC_TEXT static VOID *osMemUsedNodePrepare(control_t *control, LOS_MEM_D
             OS_MEM_TASKID_SET(pNode, OS_NULL_INT);
             /* TODO: the commend task-MEMUSE is not include system initialization malloc */
         }
+
+#if LOSCFG_ENABLE_MPU == YES
+        osExitPrivileged (flags);
+#endif
+
         pPtr = osMemNodeToPtr(pNode);
     }
     else
@@ -742,6 +752,7 @@ LITE_OS_SEC_TEXT UINT32 osMemInfoGet(pool_t pPool, LOS_MEM_STATUS *pstStatus)
     UINT32 uwTotalUsedSize = 0, uwTotalFreeSize = 0, uwMaxFreeNodeSize = 0;
     UINT32 uwTmpSize = 0;
     UINTPTR uvIntSave;
+    control_t *control = tlsf_cast(control_t *, pPool);
 
     if (pstStatus == NULL)
     {
@@ -780,8 +791,8 @@ LITE_OS_SEC_TEXT UINT32 osMemInfoGet(pool_t pPool, LOS_MEM_STATUS *pstStatus)
     pstStatus->usedSize = uwTotalUsedSize + block_start_offset;
     pstStatus->freeSize = uwTotalFreeSize;
     pstStatus->totalSize = uwMaxFreeNodeSize;
-    pstStatus->allocCount = g_uwTlsf_AllocCount;
-    pstStatus->freeCount = g_uwTlsf_FreeCount;
+    pstStatus->allocCount = control->uwTlsf_AllocCount;
+    pstStatus->freeCount = control->uwTlsf_FreeCount;
 
     LOS_IntRestore(uvIntSave);
 
@@ -1041,7 +1052,7 @@ LITE_OS_SEC_TEXT VOID *osHeapAlloc(VOID *tlsf, UINT32 uwSize)
 
     if (NULL != pPtr)
     {
-        g_uwTlsf_AllocCount++;
+        control->uwTlsf_AllocCount++;
     }
 
     return pPtr;
@@ -1203,7 +1214,8 @@ LITE_OS_SEC_TEXT BOOL osHeapFree(VOID * tlsf, VOID *pPtr)
     pNode = osMemNextNodeMerge(control, pNode);
     osMemNodeInsert(control, pNode);
 
-    g_uwTlsf_FreeCount++;
+    control->uwTlsf_FreeCount++;
+
     return TRUE;
 }
 

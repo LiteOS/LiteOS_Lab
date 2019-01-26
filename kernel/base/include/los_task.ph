@@ -261,7 +261,13 @@ extern "C" {
 * @see
 * @since Huawei LiteOS V100R001C00
 */
+
+#if (LOSCFG_STATIC_TASK == YES)
+#define OS_TCB_FROM_TID(TaskID)                       (g_apstTaskCBArray[(TaskID)])
+#else
 #define OS_TCB_FROM_TID(TaskID)                       (((LOS_TASK_CB *)g_pstTaskCBArray) + (TaskID))
+#endif
+
 #define OS_IDLE_TASK_ENTRY                            ((TSK_ENTRY_FUNC)osIdleTask)
 
 /**
@@ -273,6 +279,11 @@ typedef struct tagTaskCB
     VOID                        *pStackPointer;             /**< Task stack pointer          */
     UINT16                      usTaskStatus;
     UINT16                      usPriority;
+#if (LOSCFG_ENABLE_MPU == YES)
+    VOID                        *pMpuSettings;              /**< address space id            */
+    UINT32                      uwHeapSize;                 /**< heap size                   */
+    VOID                        *pPool;                     /**< per-task heap               */
+#endif
     UINT32                      uwStackSize;                /**< Task stack size             */
     UINT32                      uwTopOfStack;               /**< Task stack top              */
     UINT32                      uwTaskID;                   /**< Task ID                     */
@@ -331,13 +342,6 @@ extern UINT32               g_uwSwtmrTaskID;
 
 /**
  * @ingroup los_task
- * Starting address of a task.
- *
- */
-extern LOS_TASK_CB          *g_pstTaskCBArray;
-
-/**
- * @ingroup los_task
  * Delayed task linked list.
  *
  */
@@ -345,10 +349,21 @@ extern LOS_DL_LIST          g_stTaskTimerList;
 
 /**
  * @ingroup los_task
+ * Starting address of a task.
+ *
+ */
+#if (LOSCFG_STATIC_TASK == YES)
+extern  LOS_TASK_CB         *g_apstTaskCBArray[];
+#else
+extern LOS_TASK_CB          *g_pstTaskCBArray;
+
+/**
+ * @ingroup los_task
  * Free task linked list.
  *
  */
 extern LOS_DL_LIST          g_stLosFreeTask;
+#endif
 
 /**
  * @ingroup los_task
@@ -596,6 +611,10 @@ extern VOID osTaskWake(LOS_TASK_CB *pstResumedTask, UINT32 uwTaskStatus);
  * @since Huawei LiteOS V100R001C00
  */
 extern UINT32 osGetTaskWaterLine(UINT32 uwTaskID);
+
+
+extern VOID LOS_Schedule(VOID);
+
 
 #ifdef __cplusplus
 #if __cplusplus

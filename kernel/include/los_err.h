@@ -155,6 +155,7 @@ enum LOS_MOUDLE_ID
     LOS_MOD_EVENT            = 0x1c,
     LOS_MOD_MUX              = 0X1d,
     LOS_MOD_CPUP             = 0x1e,
+    LOS_MOD_RWLOCK           = 0x1f,
     LOS_MOD_SHELL            = 0x31,
     LOS_MOD_BUTT
 };

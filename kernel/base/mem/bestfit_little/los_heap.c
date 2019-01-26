@@ -45,14 +45,6 @@
 #include "los_memstat.inc"
 #endif
 
-LITE_OS_SEC_DATA_INIT static UINT32 g_uwAllocCount = 0;
-LITE_OS_SEC_DATA_INIT static UINT32 g_uwFreeCount = 0;
-
-#if (LOSCFG_HEAP_MEMORY_PEAK_STATISTICS == YES)
-LITE_OS_SEC_DATA_INIT static UINT32 g_uwCurHeapUsed = 0;
-LITE_OS_SEC_DATA_INIT static UINT32 g_uwMaxHeapUsed = 0;
-#endif
-
 #define HEAP_CAST(t, exp) ((t)(exp))
 #define HEAP_ALIGN 4
 #define ALIGNE(sz) (sz + HEAP_ALIGN - 1) & ~(HEAP_ALIGN - 1)
@@ -178,14 +170,14 @@ SIZE_MATCH:
 #endif
 
 #if (LOSCFG_HEAP_MEMORY_PEAK_STATISTICS == YES)
-    g_uwCurHeapUsed += (uwSz + sizeof(struct LOS_HEAP_NODE));
-    if(g_uwCurHeapUsed > g_uwMaxHeapUsed)
+    pstHeapMan->uwCurHeapUsed += (uwSz + sizeof(struct LOS_HEAP_NODE));
+    if(pstHeapMan->uwCurHeapUsed > pstHeapMan->uwMaxHeapUsed)
     {
-        g_uwMaxHeapUsed = g_uwCurHeapUsed;
+        pstHeapMan->uwMaxHeapUsed = pstHeapMan->uwCurHeapUsed;
     }
 #endif
 
-    g_uwAllocCount++;
+    pstHeapMan->uwAllocCount++;
 
 out:
     if (pstHeapMan->pstTail->uwSize < 1024)
@@ -297,9 +289,9 @@ LITE_OS_SEC_TEXT BOOL osHeapFree(VOID *pPool, VOID* pPtr)
 #endif
 
 #if (LOSCFG_HEAP_MEMORY_PEAK_STATISTICS == YES)
-    if (g_uwCurHeapUsed >= (pstNode->uwSize + sizeof(struct LOS_HEAP_NODE)))
+    if (pstHeapMan->uwCurHeapUsed >= (pstNode->uwSize + sizeof(struct LOS_HEAP_NODE)))
     {
-        g_uwCurHeapUsed -= (pstNode->uwSize + sizeof(struct LOS_HEAP_NODE));
+        pstHeapMan->uwCurHeapUsed -= (pstNode->uwSize + sizeof(struct LOS_HEAP_NODE));
     }
 #endif
 
@@ -317,9 +309,10 @@ LITE_OS_SEC_TEXT BOOL osHeapFree(VOID *pPool, VOID* pPtr)
     if ((pstT = osHeapPrvGetNext(pstHeapMan, pstNode)) != NULL)
         pstT->pstPrev = pstNode;
 
-    g_uwFreeCount++;
+    pstHeapMan->uwFreeCount++;
 
 out:
+
     LOS_IntRestore(uvIntSave);
 
     return bRet;
@@ -332,8 +325,18 @@ LITE_OS_SEC_TEXT_MINOR VOID osAlarmHeapInfo(VOID *pPool)
     if (LOS_NOK == osHeapStatisticsGet(pPool, &stStatus))
         return;
 
-    PRINT_INFO("pool addr    pool size    total size     used size    free size   alloc Count    free Count\n0x%-8x   0x%-8x   0x%-8x    0x%-8x   0x%-16x   0x%-13x    0x%-13x\n",
-                        pPool, pstHeapMan->uwSize, stStatus.totalSize, stStatus.usedSize, stStatus.freeSize, stStatus.allocCount, stStatus.freeCount);
+    //PRINT_INFO("pool addr    pool size    total size     used size    free size   alloc Count    free Count\n\r0x%-8x   0x%-8x   0x%-8x    0x%-8x   0x%-16x   0x%-13x    0x%-13x\n\r",
+#if (LOSCFG_HEAP_MEMORY_PEAK_STATISTICS == YES)
+    PRINTK("%-8s %-8s %-8s %-8s %-8s %-8s %-8s %-8s\r\n",\
+        "POOLADDR","POOLSIZE","TOTAL","USED","FREE","ALLOC_C","FREE_C","MaxUsed");
+    PRINTK("%-8x %-8x %-8x %-8x %-8x %-8x %-8x %-8x\r\n",\
+         (UINT32)pPool, pstHeapMan->uwSize, stStatus.totalSize, stStatus.usedSize, stStatus.freeSize, stStatus.allocCount, stStatus.freeCount,osHeapGetHeapMemoryPeak(pPool));
+#else
+    PRINTK("%-8s %-8s %-8s %-8s %-8s %-8s %-8s %-8s\r\n",\
+        "POOLADDR","POOLSIZE","TOTAL","USED","FREE","ALLOC_C","FREE_C");
+    PRINTK("%-8x %-8x %-8x %-8x %-8x %-8x %-8x %-8x\r\n",\
+         (UINT32)pPool, pstHeapMan->uwSize, stStatus.totalSize, stStatus.usedSize, stStatus.freeSize, stStatus.allocCount, stStatus.freeCount);
+#endif
     (void)pstHeapMan;
 }
 
@@ -371,16 +374,18 @@ LITE_OS_SEC_TEXT_MINOR UINT32 osHeapStatisticsGet(VOID *pPool, LOS_HEAP_STATUS *
     pstStatus->usedSize    = uwHeapUsed;
     pstStatus->totalSize   = pstRamHeap->uwSize;
     pstStatus->freeSize    = pstStatus->totalSize - pstStatus->usedSize;
-    pstStatus->allocCount  = g_uwAllocCount;
-    pstStatus->freeCount   = g_uwFreeCount;
+    pstStatus->allocCount  = pstRamHeap->uwAllocCount;
+    pstStatus->freeCount   = pstRamHeap->uwFreeCount;
 
     return LOS_OK;
 }
 
 #if (LOSCFG_HEAP_MEMORY_PEAK_STATISTICS == YES)
-LITE_OS_SEC_TEXT_MINOR UINT32 osHeapGetHeapMemoryPeak(VOID)
+LITE_OS_SEC_TEXT_MINOR UINT32 osHeapGetHeapMemoryPeak(VOID *pPool)
 {
-    return g_uwMaxHeapUsed;
+    struct LOS_HEAP_MANAGER *pstHeapMan = HEAP_CAST(struct LOS_HEAP_MANAGER *, pPool);
+
+    return pstHeapMan->uwMaxHeapUsed;
 }
 #endif
 

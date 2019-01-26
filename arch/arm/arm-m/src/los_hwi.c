@@ -216,7 +216,10 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_HwiCreate( HWI_HANDLE_T  uwHwiNum,
         return OS_ERRNO_HWI_ALREADY_CREATED;
     }
 
-    if ((usHwiPrio > OS_HWI_PRIO_LOWEST) || (usHwiPrio < OS_HWI_PRIO_HIGHEST))
+    //because unsigned interger could be less than zero,so if OS_HWI_PRIO_HIGHEST is zero,there 
+    //will be warning using usHwiPrio < OS_HWI_PRIO_HIGHEST 
+    //  if ((usHwiPrio > OS_HWI_PRIO_LOWEST) || (usHwiPrio < OS_HWI_PRIO_HIGHEST))  --modified by  zhangqf
+    if ( usHwiPrio > OS_HWI_PRIO_LOWEST )  
     {
         return OS_ERRNO_HWI_PRIO_INVALID;
     }

@@ -70,6 +70,15 @@
 #define SOCKET_LOG(fmt, ...) ((void)0)
 #endif
 
+struct atiny_netdevice  g_atiny_dev;
+void   atiny_install_netdevice(struct atiny_netdevice  *dev)
+{
+    if(NULL != dev)
+    {
+        g_atiny_dev = *dev;
+    }
+    return;
+}
 
 typedef struct
 {
@@ -402,6 +411,22 @@ void *atiny_net_connect(const char *host, const char *port, int proto)
         ctx = NULL;
     }
 #else
+    if(NULL != g_atiny_dev.connect)
+    {
+        ctx = atiny_malloc(sizeof(atiny_net_context));
+        if (NULL == ctx)
+        {
+            SOCKET_LOG("malloc failed for socket context");
+            return NULL;
+        }
+        ctx->fd = g_atiny_dev.connect(host, port, proto);
+        if (ctx->fd < 0)
+        {
+            SOCKET_LOG("unkown host(%s) or port(%s)", host, port);
+            atiny_free(ctx);
+            ctx = NULL;
+        }
+    }
 #endif
     return ctx;
 }
@@ -418,6 +443,10 @@ int atiny_net_recv(void *ctx, unsigned char *buf, size_t len)
     ret = wiznet_recv(fd, buf, len);
 #else
     (void)fd; //clear unuse warning
+    if(NULL != g_atiny_dev.rcv)
+    {
+        ret = g_atiny_dev.rcv(fd,buf,len,0xFFFFFFFF);
+    }
 #endif
 
 #if defined(WITH_LINUX) || defined(WITH_LWIP)
@@ -490,6 +519,10 @@ int atiny_net_recv_timeout(void *ctx, unsigned char *buf, size_t len,
     ret = wiznet_recv_timeout(fd, buf, len, timeout);
 #else
     (void)fd; //clear unuse warning
+    if(NULL != g_atiny_dev.rcv)
+    {
+        ret = g_atiny_dev.rcv(fd,buf,len,timeout);
+    }
 #endif
     return ret;
 }
@@ -512,6 +545,10 @@ int atiny_net_send(void *ctx, const unsigned char *buf, size_t len)
 #elif defined(WITH_WIZNET)
     ret = wiznet_send(fd, buf, len);
 #else
+    if(NULL != g_atiny_dev.snd)
+    {
+        ret = g_atiny_dev.snd(fd,(unsigned char *)buf,len);
+    }
 #endif
 
 #if defined(WITH_LINUX) || defined(WITH_LWIP)
@@ -545,6 +582,11 @@ void atiny_net_close(void *ctx)
         at_api_close(fd);
 #elif defined(WITH_WIZNET)
         wiznet_close(fd);
+#else
+        if(NULL != g_atiny_dev.close)
+        {
+            g_atiny_dev.close(fd);
+        }
 #endif
     }
 

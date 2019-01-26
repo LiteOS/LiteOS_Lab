@@ -147,6 +147,23 @@ LOS_StartToRun
     ; *                                    Stack pointer after LOS_StartToRun--->|
     ; */
     LDR     R3, [R1]
+
+#ifdef LOSCFG_ENABLE_MPU
+    LDR     R0, [R1, #8]           ; TCB->pMpuSettings
+    LDR     R1, =0xe000ed9c
+    MOVS    R4, #6                 ; 6 regions
+__mpusetloop0
+    LDM     R0!, {R2, R5}
+    STR     R2, [r1]
+    STR     R5, [r1, #4]
+    SUBS    R4, R4, #1
+    BNE     __mpusetloop0
+
+    LDR     R0, [R3]
+    MSR     CONTROL, R0
+    ADDS    R3, R3, #4
+#endif
+
     ADDS    R3, R3, #36            ; skip R4-R11, PRIMASK.
 
     LDMFD   R3!, {R0-R2}           ; restore R0-R2.
@@ -278,6 +295,13 @@ TaskSwitch
     STMIA   R0!, {R3-R7}           ; save R8-R12.
     SUBS    R0, #36
 
+
+#ifdef LOSCFG_ENABLE_MPU
+    SUBS    R0, R0, #4
+    MRS     R1, CONTROL
+    STR     R1, [R0]
+#endif
+
     ;/**
     ; * R5,R3.
     ; */
@@ -319,6 +343,22 @@ TaskSwitch
     ; * (R1 = g_stLosTask.pstNewTask->pStackPointer)
     ; */
     LDR     R1, [R0]
+
+#ifdef LOSCFG_ENABLE_MPU
+    LDR     R4, [R0, #8]           ; TCB->pMpuSettings
+    LDR     R5, =0xe000ed9c
+    MOVS    R6, #6                 ; 6 regions, cortex-m0+ do not have alias reg
+__mpusetloop1
+    LDM     R4!, {R2, R3}
+    STM     R5!, {R2, R3}
+    SUBS    R5, R5, #8
+    SUBS    R6, R6, #1
+    BNE     __mpusetloop1
+
+    LDR     R4, [R1]
+    ADDS    R1, R1, #4
+    MSR     CONTROL, R4
+#endif
 
     ;/**
     ; * Restore the stack frame(R4-R11) of the next running task.
@@ -371,6 +411,57 @@ TaskSwitch
     ; */
     MSR     PRIMASK, R12
     BX      LR
+
+#ifdef LOSCFG_ENABLE_MPU
+    EXPORT  osEnterPrivileged
+    EXPORT  osExitPrivileged
+    EXPORT  osIsPrivileged
+    EXPORT  SVC_Handler
+
+SVC_Handler
+    MRS     R0, PSP
+    LDR     R1, [R0]           ; get the previous PSR in R0
+    CMP     R1, #3
+    BNE     __ret
+    LDR     R1, [R0, #0x10]    ; get the magic in R12
+    CMP     R1, #0x5a
+    BNE     __ret
+
+    MOVS    R0, #2
+    MSR     CONTROL, R0
+__ret
+    BX      LR
+
+osEnterPrivileged
+    MRS     R0, CONTROL
+    MOVS    R1, #1
+    TST     R0, R1
+    BEQ     __ret
+
+    MOVS    R1, #0x5a   ; magic
+    MOV     R12, R1
+
+    SVC     #0
+
+    BX      LR
+
+osExitPrivileged
+    MOVS    R1, #1
+    TST     R0, R1
+    BEQ     __ret
+
+    MRS     R0, CONTROL
+    ADDS    R0, R0, #1
+    MSR     CONTROL, R0
+
+    BX      LR
+
+osIsPrivileged
+    MRS     R0, CONTROL
+    MOVS    R1, #1
+    ANDS    R0, R0, R1
+    BX      LR
+#endif
 
     END
 

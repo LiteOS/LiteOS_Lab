@@ -192,6 +192,18 @@ int atiny_net_send_timeout(void *ctx, const unsigned char *buf, size_t len,
  */
 void atiny_net_close(void* ctx);
 
+typedef int (*fn_netconnect)(const char* host, const char* port, int proto);
+typedef void (*fn_netclose)(int fd);
+typedef int (*fn_netsnd)(int fd,unsigned char *buf,int len);
+typedef int (*fn_netrcv)(int fd,unsigned char *buf,int len,unsigned int timeout);
+struct atiny_netdevice
+{
+    fn_netconnect connect;
+    fn_netclose   close;
+    fn_netsnd     snd;
+    fn_netrcv     rcv;
+};
+void   atiny_install_netdevice(struct atiny_netdevice  *dev);
 #ifdef __cplusplus
 }
 #endif
