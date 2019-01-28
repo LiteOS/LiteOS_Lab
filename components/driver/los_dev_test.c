@@ -116,7 +116,7 @@ OSDRIV_EXPORT(drivpara6,"dev1",(los_driv_op_t *)&s_testdriv,NULL,O_RDWR);
 
 //all the following command for the interface supplied debug
 
-//#define CN_DEV_TEST_DRIMODE   //dri mode or filesystem mode
+#define CN_DEV_TEST_DRIMODE   //dri mode or filesystem mode
 
 #if defined CN_DEV_TEST_DRIMODE
 static los_dev_t s_shell_opendev = NULL;

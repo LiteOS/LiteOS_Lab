@@ -67,28 +67,7 @@ static bool_t __open_network(void)
     }
     return ret;
 }
-static bool_t __csq_get(s32_t *signal,s32_t *ber)
-{
-    bool_t ret = false;
-    s32_t  resplen;
-    s32_t  argc = 6;
-    char*  argv[6];
-    const char *cmd = "at+csq\r";
-    u8_t respbuf[64];
-    
-    memset(respbuf, 0,64);
-    resplen = at_command((u8_t *)cmd,strlen(cmd),"+CSQ",respbuf,64,1000);
-    if(resplen > 0)
-    {
-        argc = string_split((char *)respbuf,"\r\n",argv,argc);
-        if((argc > 0)&&(0 == strcmp(argv[argc-1],"OK")))
-        {
-            sscanf(argv[argc-2],"+CSQ: %d,%d",signal,ber);
-            ret = true;
-        }
-    }
-    return ret;
-}
+
 static bool_t __cpin_check(void)  //return true ,read get else failed
 {
     bool_t ret = false;
