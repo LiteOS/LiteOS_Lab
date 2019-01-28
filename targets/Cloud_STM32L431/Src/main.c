@@ -84,12 +84,15 @@ static u32_t apptask_entry(void *args)
 {
     //extern at_adaptor_api at_interface;
     //at_api_register(&at_interface);
-    
-        led_display();
-
+    led_display();
     
     extern bool_t  sim800c_900a_init(void);
     sim800c_900a_init();
+    
+    //extern bool_t  sim5320e_init(void);
+    //sim5320e_init();
+    
+    extern void agent_tiny_entry(void);
     agent_tiny_entry();
     
     return 0;

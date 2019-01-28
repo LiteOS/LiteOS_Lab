@@ -32,6 +32,7 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
+#include "stdlib.h"
 #include "agent_tiny_demo.h"
 #ifdef CONFIG_FEATURE_FOTA
 #include "ota_port.h"
@@ -52,6 +53,8 @@
 char * g_endpoint_name = "ledfota01";
 unsigned char g_psk_value[32];
 const char *g_psk_string="6c74374a7124eed651950da81e5e2b96";
+
+#ifdef WITH_DTLS
 
 //use this function to transfer the string to the byte array
 //return the array length transfered while  failed
@@ -80,7 +83,7 @@ static int pskstring_to_array(const char *str,unsigned char *buf,int len)
 	return ret;
 }
 
-
+#endif
 
 static void *g_phandle = NULL;
 static atiny_device_info_t g_device_info;
@@ -118,9 +121,7 @@ void app_data_report(void)
     int cnt = 0;
     int times = 0;
     struct data_ledstate      ledstate;
-    struct data_envrionstate  environstate;
     data_report_t report_data;
-    float v1;
     while(1)
     {  
         if(s_report_en)
@@ -242,7 +243,6 @@ void agent_tiny_fota_init(void)
 
 void agent_tiny_entry(void)
 {
-    int psklen = 0;
     UINT32 uwRet = LOS_OK;
     atiny_param_t *atiny_params;
     atiny_security_param_t  *iot_security_param = NULL;
@@ -284,7 +284,7 @@ void agent_tiny_entry(void)
     bs_security_param->server_ip = DEFAULT_SERVER_IPV4;
 
 #ifdef WITH_DTLS
-
+    int psklen = 0;
 	psklen = pskstring_to_array(g_psk_string,g_psk_value,16);
 	if(psklen <=0)   //check if the psk transfered right
 	{
