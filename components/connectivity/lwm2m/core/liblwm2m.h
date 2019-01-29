@@ -90,7 +90,7 @@
 #define _LWM2M_CLIENT_H_
 
 #include "liblwm2m_api.h"
-#include "atiny_lwm2m/connection.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -147,6 +147,9 @@ time_t lwm2m_gettime(void);
 //get len of random bytes in output.
 int lwm2m_rand(void *output, size_t len);
 
+//delay sometime
+void lwm2m_delay(uint32_t second);
+
 //#define LWM2M_WITH_LOGS
 #ifdef LWM2M_WITH_LOGS
 // Same usage as C89 printf()
@@ -158,22 +161,29 @@ int lwm2m_rand(void *output, size_t len);
 // Returns a session handle that MUST uniquely identify a peer.
 // secObjInstID: ID of the Securty Object instance to open a connection to
 // userData: parameter to lwm2m_init()
-//void* lwm2m_connect_server(uint16_t secObjInstID, void* userData, bool bootstrap_flag);
+// bootstrap_flag: If BootstrapServer
+void *lwm2m_connect_server(uint16_t secObjInstID, void *userData, bool isServer);
+
 // Close a session created by lwm2m_connect_server()
 // sessionH: session handle identifying the peer (opaque to the core)
 // userData: parameter to lwm2m_init()
-//void lwm2m_close_connection(void* sessionH, void* userData);
+void lwm2m_close_connection(void* sessionH, void* userData);
+
 #endif
 // Send data to a peer
 // Returns COAP_NO_ERROR or a COAP_NNN error code
 // sessionH: session handle identifying the peer (opaque to the core)
 // buffer, length: data to send
 // userData: parameter to lwm2m_init()
-//uint8_t lwm2m_buffer_send(void* sessionH, uint8_t* buffer, size_t length, void* userData);
+uint8_t lwm2m_buffer_send(void* sessionH,
+                          uint8_t* buffer,
+                          size_t length,
+                          void* userdata);
+
 // Compare two session handles
 // Returns true if the two sessions identify the same peer. false otherwise.
 // userData: parameter to lwm2m_init()
-//bool lwm2m_session_is_equal(void* session1, void* session2, void* userData);
+bool lwm2m_session_is_equal(void* session1, void* session2, void* userData);
 
 /*
  * Error code
@@ -704,9 +714,7 @@ typedef enum
     STATE_BOOTSTRAPPING,
     STATE_REGISTER_REQUIRED,
     STATE_REGISTERING,
-    STATE_READY,
-    STATE_DELAY, // use to delay the retry  register and bootstrap
-    STATE_NON = STATE_DELAY
+    STATE_READY
 } lwm2m_client_state_t;
 
 typedef enum
@@ -744,8 +752,6 @@ typedef struct
     lwm2m_bootstrap_type_e bsType;
     lwm2m_client_state_t state;
     uint32_t cnt;
-    uint32_t expireTime;
-    bool startFlag;
 }lwm2m_bs_control_t;
 #endif
 

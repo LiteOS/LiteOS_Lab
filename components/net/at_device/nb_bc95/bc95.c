@@ -33,19 +33,9 @@
  *---------------------------------------------------------------------------*/
 #include <string.h>
 #include <ctype.h>
-#if defined(WITH_AT_FRAMEWORK) && defined(USE_NB_NEUL95)
+#if defined(WITH_AT_FRAMEWORK)
 #include "at_device/bc95.h"
 #include "at_hal.h"
-#define NB_STAT_LOCALPORT 56
-#define AT_LINE_END 		"\r\n"
-#define AT_CMD_BEGIN		"\r\n"
-#define AT_DATAF_PREFIX      "+NSONMI:"
-#define MAX_SOCK_NUM 5
-#define UDP_PROTO   17
-
-#define CGATT  "AT+CGATT?\r"
-#define CGATT_ATTACH "AT+CGATT=1\r"
-#define CGATT_DEATTACH  "AT+CGATT=0\r"
 
 //#include "bc95_test.h"
 
@@ -53,20 +43,10 @@
 
 
 extern at_task at;
-at_adaptor_api at_interface;
+at_adaptor_api bc95_interface;
 extern char rbuf[AT_DATA_LEN];
 extern char wbuf[AT_DATA_LEN];
-at_config at_user_conf = {
-    .name = AT_MODU_NAME,
-    .usart_port = AT_USART_PORT,
-    .buardrate = AT_BUARDRATE,
-    .linkid_num = AT_MAX_LINK_NUM,
-    .user_buf_len = MAX_AT_USERDATA_LEN,
-    .cmd_begin = AT_CMD_BEGIN,
-    .line_end = AT_LINE_END,
-    .mux_mode = 1, //support multi connection mode
-    .timeout = AT_CMD_TIMEOUT,   //  ms
-};
+
 
 typedef struct
 {
@@ -80,9 +60,8 @@ char tmpbuf[AT_DATA_LEN]={0}; //transform to hex
 socket_info sockinfo[MAX_SOCK_NUM];
 static nb_data_ind_info_s g_data_ind_info;
 
-
-#if defined ( __CC_ARM ) || defined ( __ICCARM__ )  /* KEIL and IAR: printf will call fputc to print */
-char *strnstr(const char *s1, const char *s2, size_t len)
+#if defined ( __CC_ARM ) || defined ( __ICCARM__ )
+static char *strnstr(const char *s1, const char *s2, size_t len)
 {
     size_t l2;
 
@@ -392,7 +371,7 @@ int32_t nb_create_sock(int port,int proto)
 static bool nb_is_addr_valid(const char *addr)
 {
     const int size = 4;
-    int tmp[size];
+    int tmp[4];
     int ret;
 
     ret = sscanf(addr, "%d.%d.%d.%d", &tmp[0], &tmp[1], &tmp[2], &tmp[3]);
@@ -722,8 +701,21 @@ int32_t nb_recv_cb(int32_t id)
     return AT_FAILED;
 }
 
-static int32_t nb_int(void)
+static int32_t nb_init(void)
 {
+    at_config at_user_conf = {
+        .name = AT_MODU_NAME,
+        .usart_port = AT_USART_PORT,
+        .buardrate = AT_BUARDRATE,
+        .linkid_num = AT_MAX_LINK_NUM,
+        .user_buf_len = MAX_AT_USERDATA_LEN,
+        .cmd_begin = AT_CMD_BEGIN,
+        .line_end = AT_LINE_END,
+        .mux_mode = 1, //support multi connection mode
+        .timeout = AT_CMD_TIMEOUT,   //  ms
+    };
+    
+    at_set_config(&at_user_conf);
     memset(&sockinfo, 0, sizeof(sockinfo));
     memset(&g_data_ind_info, 0, sizeof(g_data_ind_info));
     at_reg_step_callback(&at, nb_step);
@@ -744,9 +736,9 @@ int32_t nb_deinit(void)
     return nb_reboot();
 }
 
-at_adaptor_api at_interface =
+at_adaptor_api bc95_interface =
 {
-    .init = nb_int,
+    .init = nb_init,
 
     .bind = nb_bind,
 

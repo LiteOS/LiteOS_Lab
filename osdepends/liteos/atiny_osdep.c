@@ -37,9 +37,21 @@
 #include "los_sys.ph"
 #include "los_sem.ph"
 #include "los_tick.ph"
+#include <stdbool.h>
+#include "los_mux.h"
+
 
 #define ATINY_CNT_MAX_WAITTIME 0xFFFFFFFF
 #define LOG_BUF_SIZE (256)
+
+#ifndef OK
+#define OK 0
+#endif
+
+#ifndef ERR
+#define ERR -1
+#endif
+
 
 static uint64_t osKernelGetTickCount (void)
 {
@@ -119,6 +131,11 @@ char *atiny_strdup(const char *ch)
     copy[length] = '\0';
 
     return copy;
+}
+
+void atiny_delay(uint32_t second)
+{
+    (void)LOS_TaskDelay(second * LOSCFG_BASE_CORE_TICK_PER_SECOND);
 }
 
 #if (LOSCFG_BASE_IPC_SEM == YES)
@@ -208,4 +225,76 @@ void atiny_mutex_unlock(void *mutex)
 }
 
 #endif /* LOSCFG_BASE_IPC_SEM == YES */
+
+
+#if (LOSCFG_BASE_IPC_MUX == YES)
+static bool atiny_task_mutex_is_valid(const atiny_task_mutex_s *mutex)
+{
+    return (mutex != NULL) && (mutex->valid);
+}
+
+int atiny_task_mutex_create(atiny_task_mutex_s *mutex)
+{
+    UINT32 ret;
+
+    if (mutex == NULL)
+    {
+        return ERR;
+    }
+
+    memset(mutex, 0, sizeof(*mutex));
+    ret = LOS_MuxCreate(&mutex->mutex);
+    if (ret != LOS_OK)
+    {
+        return ret;
+    }
+    mutex->valid = true;
+    return LOS_OK;
+}
+
+#define ATINY_DESTROY_MUTEX_WAIT_INTERVAL 100
+int atiny_task_mutex_delete(atiny_task_mutex_s *mutex)
+{
+    int ret;
+
+    if (!atiny_task_mutex_is_valid(mutex))
+    {
+        return ERR;
+    }
+
+    do
+    {
+        ret = LOS_MuxDelete(mutex->mutex);
+        if (LOS_ERRNO_MUX_PENDED == ret)
+        {
+            LOS_TaskDelay(ATINY_DESTROY_MUTEX_WAIT_INTERVAL);
+        }
+        else
+        {
+            break;
+        }
+    }while (true);
+
+    memset(mutex, 0, sizeof(*mutex));
+
+    return ret;
+}
+int atiny_task_mutex_lock(atiny_task_mutex_s *mutex)
+{
+    if (!atiny_task_mutex_is_valid(mutex))
+    {
+        return ERR;
+    }
+    return LOS_MuxPend(mutex->mutex, ATINY_CNT_MAX_WAITTIME);
+}
+int atiny_task_mutex_unlock(atiny_task_mutex_s *mutex)
+{
+    if (!atiny_task_mutex_is_valid(mutex))
+    {
+        return ERR;
+    }
+    return LOS_MuxPost(mutex->mutex);
+}
+#endif /* LOSCFG_BASE_IPC_MUX == YES */
+
 

@@ -6,9 +6,6 @@
 .global  g_pfnVectors
 .global  Default_Handler
 
-.word  __los_heap_addr_start__
-.word  __los_heap_addr_end__
-
 /* start address for the initialization values of the .vector_ram section.
 defined in linker script */
 .word _si_liteos_vector_data
@@ -40,12 +37,6 @@ defined in linker script */
 */
 
     .section  .text
-    .global __LOS_HEAP_ADDR_START__
-    .global __LOS_HEAP_ADDR_END__
-__LOS_HEAP_ADDR_START__:
-    .word  __los_heap_addr_start__
-__LOS_HEAP_ADDR_END__:
-    .word  __los_heap_addr_end__
 
     .section  .text.Reset_Handler
   .weak  Reset_Handler

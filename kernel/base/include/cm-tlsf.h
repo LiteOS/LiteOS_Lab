@@ -36,7 +36,7 @@
 #define __CM_TLSF_H__
 
 #include <list.h>
-#include <common.h>
+#include "los_common.h"
 
 #include "chunk.h"
 
@@ -130,7 +130,7 @@ enum
     FL_IDX_MAX_002G,
 };
 
-#define FL_IDX_MAX              (FL_IDX_MAX_001M)
+#define FL_IDX_MAX              (FL_IDX_MAX_512M)
 #define FL_IDX_BIAS             (MIN_CHUNK_SIZE_LOG2)
 #define FL_IDXES                (FL_IDX_MAX - FL_IDX_BIAS)
 #define SL_IDXES                (1 << SL_BITS)

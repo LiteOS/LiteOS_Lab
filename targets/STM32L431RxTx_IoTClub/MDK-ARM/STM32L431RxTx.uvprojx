@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32L431xx</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\drivers\third_party\ST\STM32L4xx_HAL_Driver\Inc;..\..\..\drivers\third_party\ST\STM32L4xx_HAL_Driver\Inc\Legacy;..\..\..\components\cmsis;..\..\..\components\cmsis\1.0;..\..\..\components\cmsis\2.0;..\..\..\kernel\base\include;..\..\..\kernel\include;..\..\..\kernel\extended\include;..\..\..\arch\arm\arm-m\include;..\..\..\arch\arm\arm-m\cortex-m4;..\..\..\examples\include;..\..\..\components\at;..\..\..\components\osport;..\..\..\components\shell;..\..\..\components\driver;..\..\..\include;..\..\..\include\osdepends\liteos;..\OS_CONFIG;..\DeviceDriver\BC35_95;..\DeviceDriver\BH1750;..\DeviceDriver\DHT11;..\DeviceDriver\GPS;..\DeviceDriver\OLED;..\Apps;..\Hardware;..\Usr;..\..\..\include\fs</IncludePath>
+              <IncludePath>..\..\..\drivers\third_party\ST\STM32L4xx_HAL_Driver\Inc;..\..\..\drivers\third_party\ST\STM32L4xx_HAL_Driver\Inc\Legacy;..\..\..\kernel\base\include;..\..\..\kernel\include;..\..\..\kernel\extended\include;..\..\..\arch\arm\arm-m\include;..\..\..\arch\arm\arm-m\cortex-m4;..\..\..\examples\include;..\..\..\components\at;..\..\..\components\osport;..\..\..\components\shell;..\..\..\components\driver;..\..\..\include;..\..\..\include\osdepends\liteos;..\OS_CONFIG;..\DeviceDriver\BC35_95;..\DeviceDriver\BH1750;..\DeviceDriver\DHT11;..\DeviceDriver\GPS;..\DeviceDriver\OLED;..\Apps;..\Hardware;..\Usr;..\..\..\include\fs;..\..\..\osdepends\liteos\cmsis;..\..\..\osdepends\liteos\cmsis\1.0;..\..\..\osdepends\liteos\cmsis\2.0</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>

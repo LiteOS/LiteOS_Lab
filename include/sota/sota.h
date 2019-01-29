@@ -36,50 +36,44 @@
 
 #include<stdint.h>
 #include"ota/ota_api.h"
+#include<stddef.h>
+
+#define SOTA_DEBUG 1
 
 typedef enum
 {
-    IDLE = 0,
-    DOWNLOADING,
-    DOWNLOADED,
-    UPDATING,
-    UPDATED,
-}at_fota_state;
+    APPLICATION = 0,
+    BOOTLOADER = 1,
+} sota_run_mode_e;
+
+typedef enum
+{
+    SOTA_OK = 0,
+    SOTA_DOWNLOADING = 1,
+    SOTA_UPDATING    = 2,
+    SOTA_UPDATED     = 3,
+    SOTA_FAILED             = 101,
+    SOTA_EXIT               = 102,
+    SOTA_INVALID_PACKET     = 103,
+    SOTA_UNEXPECT_PACKET    = 104,
+    SOTA_WRITE_FLASH_FAILED = 105
+} sota_ret_e;
 
 typedef struct
 {
     int (*get_ver)(char* buf, uint32_t len);
-    int (*set_ver)(const char* buf, uint32_t len);
     int (*sota_send)(const char* buf, int len);
-    uint32_t user_data_len;
+    void* (*sota_malloc)(size_t size);
+    void (*sota_free)(void *ptr);
+    int  (*sota_printf)(const char *fmt, ...);
+    sota_run_mode_e  firmware_download_stage;
+    sota_run_mode_e  current_run_stage;
     ota_opt_s ota_info;
-} sota_op_t;
+} sota_arg_s;
 
-typedef struct
-{
-    int (*read_flash)(ota_flash_type_e type, void *buf, int32_t len, uint32_t location);
-    int (*write_flash)(ota_flash_type_e type, const void *buf, int32_t len, uint32_t location);
-}sota_flag_opt_s;
 
-int sota_init(sota_op_t* flash_op);
-int32_t sota_process_main(void *arg, int8_t *buf, int32_t buflen);
-void sota_tmr(void);
-
-#define SOTA_DEBUG
-#ifdef SOTA_DEBUG
-#define SOTA_LOG(fmt, arg...)  printf("[%s:%d][I]"fmt"\n", __func__, __LINE__, ##arg)
-#else
-#define SOTA_LOG(fmt, arg...)
-#endif
-
-typedef enum
-{
-SOTA_OK = 0,
-SOTA_DOWNLOADING = 1,
-SOTA_NEEDREBOOT = 2,
-SOTA_BOOTLOADER_DOWNLOADING = 3,
-SOTA_MEM_FAILED = 4,
-SOTA_FAILED = -1,
-SOTA_TIMEOUT = -2,
-}sota_ret;
+int32_t sota_init(const sota_arg_s* sota_arg);
+int32_t sota_parse(const int8_t *in_buf, int32_t in_len, int8_t * out_buf,  int32_t out_len);
+int32_t sota_process(void *arg, const int8_t *buf, int32_t buf_len);
+void    sota_timeout_handler(void);
 #endif

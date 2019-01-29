@@ -32,7 +32,7 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#if defined(WITH_AT_FRAMEWORK) && defined(USE_ESP8266)
+#if defined(WITH_AT_FRAMEWORK)
 #include "esp8266.h"
 
 extern at_task at;
@@ -98,7 +98,7 @@ int32_t esp8266_connect(const int8_t *host, const int8_t *port, int32_t proto)
 
     //init at_link
     memcpy(at.linkid[id].remote_ip, host, sizeof(at.linkid[id].remote_ip));
-    sscanf(port, "%d", &at.linkid[id].remote_port);
+    (void)sscanf((char*)port, "%d", &at.linkid[id].remote_port);
 
     ret = LOS_QueueCreate("dataQueue", 16, &at.linkid[id].qid, 0, sizeof(QUEUE_BUFF));
     if (ret != LOS_OK)
@@ -111,6 +111,7 @@ int32_t esp8266_connect(const int8_t *host, const int8_t *port, int32_t proto)
     if (AT_FAILED == ret)
     {
         AT_LOG("at.cmd return failed!");
+       (void)LOS_QueueDelete(at.linkid[id].qid);
         at.linkid[id].usable = AT_LINK_UNUSE;
         return AT_FAILED;
     }
@@ -186,7 +187,7 @@ int32_t esp8266_close(int32_t id)
                 memset(&qbuf, 0, sizeof(QUEUE_BUFF)); // don't use qlen
             }
         }
-        LOS_QueueDelete(at.linkid[id].qid);
+        (void)LOS_QueueDelete(at.linkid[id].qid);
         memset(&at.linkid[id], 0, sizeof(at_link));
         snprintf(cmd, 64, "%s=%ld", AT_CMD_CLOSE, id);
     }
@@ -237,7 +238,7 @@ LOOP:
         }
 
         //remote ip:str
-        remote_ip = at.linkid[linkid].remote_ip;
+        remote_ip = (char *)at.linkid[linkid].remote_ip;
         for (p2++; *p2 != ',' ; p2++)
         {
             *(remote_ip++) = *p2;
@@ -336,13 +337,13 @@ int8_t esp8266_get_localmac(int8_t *mac) /*get local mac*/
     return AT_OK;
 }
 
-int32_t esp8266_bind(const char *host, const char *port, int proto)
+int32_t esp8266_bind(const int8_t *host, const int8_t *port, int32_t proto)
 {
 	int ret = AT_FAILED;
 	int port_i = 0;
 	char cmd[64] = {0};
 
-	sscanf(port, "%d", &port_i);
+	(void)sscanf((char *)port, "%d", &port_i);
 	AT_LOG("get port = %d\r\n", port_i);
 
 	if (at.mux_mode != AT_MUXMODE_MULTI)
@@ -362,7 +363,7 @@ int32_t esp8266_bind(const char *host, const char *port, int proto)
 
 	snprintf(cmd, 64, "%s=%d,\"%s\",\"0.0.0.0\",0,%d,0", AT_CMD_CONN, id, proto == ATINY_PROTO_UDP ? "UDP" : "TCP", port_i);
 
-	esp8266_cmd(cmd, strlen(cmd), "OK\r\n", NULL, NULL);
+	esp8266_cmd((int8_t *)cmd, strlen(cmd), "OK\r\n", NULL, NULL);
 	return id;
 }
 int32_t esp8266_recv_cb(int32_t id)
@@ -395,15 +396,33 @@ int32_t esp8266_deinit(void)
 int32_t esp8266_show_dinfo(int32_t s)
 {
     char cmd[64] = {0};
-    snprintf(cmd, 64, "%s=%d", AT_CMD_SHOW_DINFO, s);
+    snprintf(cmd, 64, "%s=%ld", AT_CMD_SHOW_DINFO, s);
     return esp8266_cmd((int8_t *)cmd, strlen(cmd), "OK\r\n", NULL, NULL);
+}
+
+int32_t esp8266_cmd_match(const char *buf, char* featurestr,int len)
+{
+    return memcmp(buf,featurestr,len);
 }
 
 int32_t esp8266_init()
 {
-    at.init();
+    at_config at_user_conf =
+    {
+        .name = AT_MODU_NAME,
+        .usart_port = AT_USART_PORT,
+        .buardrate = AT_BUARDRATE,
+        .linkid_num = AT_MAX_LINK_NUM,
+        .user_buf_len = MAX_AT_USERDATA_LEN,
+        .cmd_begin = AT_CMD_BEGIN,
+        .line_end = AT_LINE_END,
+        .mux_mode = 1, //support multi connection mode
+        .timeout = AT_CMD_TIMEOUT,   //  ms
+
+    };
+    at.init(&at_user_conf);
     //at.add_listener((int8_t*)AT_DATAF_PREFIX, NULL, esp8266_data_handler);
-    at.oob_register(AT_DATAF_PREFIX, strlen(AT_DATAF_PREFIX), esp8266_data_handler, memcmp);
+    at.oob_register(AT_DATAF_PREFIX, strlen(AT_DATAF_PREFIX), esp8266_data_handler, esp8266_cmd_match);
 
     esp8266_reset();
     esp8266_echo_off();
@@ -421,25 +440,13 @@ int32_t esp8266_init()
     static int8_t mac[32];
     esp8266_get_localip(ip, gw, NULL);
     esp8266_get_localmac(mac);
-    AT_LOG("get ip:%s, gw:%s mac:%s", ip, gw, mac);
+    AT_LOG_DEBUG("get ip:%s, gw:%s mac:%s", ip, gw, mac);
     return AT_OK;
 }
 
-at_config at_user_conf =
-{
-    .name = AT_MODU_NAME,
-    .usart_port = AT_USART_PORT,
-    .buardrate = AT_BUARDRATE,
-    .linkid_num = AT_MAX_LINK_NUM,
-    .user_buf_len = MAX_AT_USERDATA_LEN,
-    .cmd_begin = AT_CMD_BEGIN,
-    .line_end = AT_LINE_END,
-    .mux_mode = 1, //support multi connection mode
-    .timeout = AT_CMD_TIMEOUT,   //  ms
 
-};
 
-at_adaptor_api at_interface =
+at_adaptor_api esp8266_interface =
 {
 
     .init = esp8266_init,

@@ -33,19 +33,18 @@
  *---------------------------------------------------------------------------*/
 
 /* Includes -----------------------------------------------------------------*/
-#include "fs/los_fatfs.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "fs/sys/errno.h"
+#include "fs/sys/fcntl.h"
 #include "fs/sys/stat.h"
 #include "fs/los_vfs.h"
+#include "fs/los_fatfs.h"
+#include "los_printf.h"
 
-#if defined (__GNUC__) || defined (__CC_ARM)
-#include "fs/sys/fcntl.h"
-#endif
 
-#include <los_printf.h>
 /* Defines ------------------------------------------------------------------*/
 /* Typedefs -----------------------------------------------------------------*/
 
@@ -58,7 +57,7 @@
 #define POINTER_ASSERT(p) \
     if(p == NULL) \
     { \
-        return -1; \
+        return -EINVAL; \
     }
 #endif
 /* Local variables ----------------------------------------------------------*/
@@ -68,6 +67,88 @@ struct disk_mnt disk;
 /* Global variables ---------------------------------------------------------*/
 /* Private function prototypes ----------------------------------------------*/
 /* Public functions ---------------------------------------------------------*/
+
+static int ret_to_errno(FRESULT result)
+{
+    int err = 0;
+
+    switch (result)
+    {
+    case FR_OK:
+        return 0;
+
+    case FR_NO_PATH:
+        err = ENOTDIR;
+        break;
+
+    case FR_NO_FILE:
+        err = ENOENT;
+        break;
+
+    case FR_NO_FILESYSTEM:
+        err = ENODEV;
+        break;
+
+    case FR_TOO_MANY_OPEN_FILES:
+        err = ENFILE;
+        break;
+
+    case FR_INVALID_NAME:
+        err = ENAMETOOLONG;
+        break;
+
+    case FR_INVALID_PARAMETER:
+    case FR_INVALID_OBJECT:
+    case FR_INT_ERR:
+        err = EINVAL;
+        break;
+
+    case FR_INVALID_DRIVE:
+    case FR_NOT_ENABLED:
+        err = ENXIO;
+        break;
+
+    case FR_EXIST:
+        err = EEXIST;
+        break;
+
+    case FR_DISK_ERR:
+    case FR_NOT_READY:
+        err = EIO;
+        break;
+
+    case FR_WRITE_PROTECTED:
+        err = EROFS;
+        break;
+
+    case FR_LOCKED:
+    	err = EBUSY;
+    	break;
+
+    case FR_DENIED:
+        err = EISDIR;
+        break;
+
+    case FR_MKFS_ABORTED:
+        err = EBUSY;
+        break;
+
+    case FR_NOT_ENOUGH_CORE:
+        err = ENOMEM;
+        break;
+
+    case FR_TIMEOUT:
+        err = ETIMEDOUT;
+        break;
+
+    default:
+        err = EIO;
+        break;
+    }
+
+    VFS_ERRNO_SET (err);
+    return -err;
+}
 
 /**
   * @brief  Links a compatible diskio driver/lun id and increments the number of active
@@ -157,17 +238,17 @@ static int fatfs_flags_get (int oflags)
 
     if (oflags & O_CREAT)
     {
-        flags |= FA_CREATE_ALWAYS;
+        flags |= FA_OPEN_ALWAYS;
     }
 
-    if (oflags & O_EXCL)
+    if ((oflags & O_CREAT) && (oflags & O_EXCL))
     {
-        flags |= FA_OPEN_ALWAYS;
+        flags |= FA_CREATE_NEW;
     }
 
     if (oflags & O_TRUNC)
     {
-        flags |= FA_OPEN_ALWAYS;
+        flags |= FA_CREATE_ALWAYS;
     }
 
     if (oflags & O_APPEND)
@@ -182,13 +263,24 @@ static int fatfs_op_open (struct file *file, const char *path_in_mp, int flags)
 {
     FRESULT res;
     FIL     *fp;
+    FILINFO info = {0};
 
     fp = (FIL *) malloc (sizeof(FIL));
     if (fp == NULL)
     {
         PRINT_ERR ("fail to malloc memory in FATFS, <malloc.c> is needed,"
                    "make sure it is added\n");
-        return -1;
+        return -EINVAL;
+    }
+
+    if (!(flags & O_CREAT) && (flags & O_TRUNC))
+    {
+        res = f_stat(path_in_mp, &info);
+        if(res != FR_OK)
+        {
+            free(fp);
+            return res;
+        }
     }
 
     res = f_open (fp, path_in_mp, fatfs_flags_get (flags));
@@ -200,8 +292,17 @@ static int fatfs_op_open (struct file *file, const char *path_in_mp, int flags)
     {
         free(fp);
     }
-
-    return res;
+    if (FR_LOCKED == res)
+    {
+        int err = 0;
+        VFS_ERRNO_SET (EACCES);
+        err = EACCES;
+        return -err;
+    }
+    else
+    {
+        return ret_to_errno(res);
+    }
 }
 
 static int fatfs_op_close (struct file *file)
@@ -218,7 +319,7 @@ static int fatfs_op_close (struct file *file)
         file->f_data = NULL;
     }
 
-    return res;
+    return ret_to_errno(res);
 }
 
 static ssize_t fatfs_op_read (struct file *file, char *buff, size_t bytes)
@@ -228,14 +329,14 @@ static ssize_t fatfs_op_read (struct file *file, char *buff, size_t bytes)
     FIL     *fp = (FIL *)file->f_data;
 
     if (buff == NULL || bytes == 0)
-        return -1;
+        return -EINVAL;
 
     POINTER_ASSERT(fp);
     res = f_read (fp, buff, bytes, (UINT *)&size);
     if(res != FR_OK)
     {
         PRINT_ERR ("failed to read, res=%d\n", res);
-        return -1;
+        return ret_to_errno(res);
     }
     return size;
 }
@@ -247,14 +348,14 @@ static ssize_t fatfs_op_write (struct file *file, const char *buff, size_t bytes
     FIL     *fp = (FIL *)file->f_data;
 
     if (buff == NULL || bytes == 0)
-        return -1;
+        return -EINVAL;
 
     POINTER_ASSERT(fp);
     res = f_write (fp, buff, bytes, (UINT *)&size);
     if(res != FR_OK || size == 0)
     {
         PRINT_ERR ("failed to write, res=%d\n", res);
-        return -1;
+        return ret_to_errno(res);
     }
     return size;
 }
@@ -264,7 +365,6 @@ static off_t fatfs_op_lseek (struct file *file, off_t off, int whence)
     FIL *fp = (FIL *)file->f_data;
 
     POINTER_ASSERT(fp);
-
     switch (whence)
     {
     case 0: // SEEK_SET
@@ -276,44 +376,81 @@ static off_t fatfs_op_lseek (struct file *file, off_t off, int whence)
         off += f_size(fp);
         break;
     default:
+    	ret_to_errno(FR_INVALID_PARAMETER);
         return -1;
     }
-
+    
+    if (off < 0)
+    {
+        return ret_to_errno(FR_INVALID_PARAMETER);
+    }
+    
     FRESULT res = f_lseek(fp, off);
     if (res == FR_OK)
-        return off;
+    {
+
+    	return off;
+    }
     else
-        return -1;
+        return ret_to_errno(res);
 }
 
-int fatfs_op_stat (struct file *file, struct stat *stat)
+int fatfs_op_stat (struct mount_point *mp, const char *path_in_mp, struct stat *stat)
 {
-    FIL *fp = (FIL *)file->f_data;
-    POINTER_ASSERT(fp);
+    FRESULT res;
+    FILINFO info = {0};
 
     memset(stat, 0, sizeof(*stat));
-    stat->st_size = f_size(fp);
+    res = f_stat(path_in_mp, &info);
+    if (res == FR_OK)
+    {
+        stat->st_size = info.fsize;
+        if (info.fattrib & AM_DIR)
+        {
+            stat->st_mode = S_IFDIR;
+        }
+        else
+        {
+            stat->st_mode = S_IFREG;
+        }
+    }
 
-    return 0;
+    return ret_to_errno(res);
 }
 
 static int fatfs_op_unlink (struct mount_point *mp, const char *path_in_mp)
 {
-    return f_unlink(path_in_mp);
+    FRESULT res = f_unlink(path_in_mp);
+    if (FR_NO_PATH == res)
+    {
+        int err = 0;
+        VFS_ERRNO_SET (ENOENT);
+        err = ENOENT;
+        return -err;
+    }
+    else
+    {
+    	return ret_to_errno(res);
+    }
+
 }
 
 static int fatfs_op_rename (struct mount_point *mp, const char *path_in_mp_old,
                              const char *path_in_mp_new)
 {
-    return f_rename(path_in_mp_old, path_in_mp_new);
+    FRESULT res = f_rename(path_in_mp_old, path_in_mp_new);
+    return ret_to_errno(res);
 }
 
 static int fatfs_op_sync (struct file *file)
 {
     FIL *fp = (FIL *)file->f_data;
+    FRESULT res;
 
     POINTER_ASSERT(fp);
-    return f_sync(fp);
+
+    res = f_sync(fp);
+    return ret_to_errno(res);
 }
 
 static int fatfs_op_opendir (struct dir *dir, const char *path)
@@ -327,20 +464,20 @@ static int fatfs_op_opendir (struct dir *dir, const char *path)
     {
         PRINT_ERR ("fail to malloc memory in SPIFFS, <malloc.c> is needed,"
                    "make sure it is added\n");
-        return -1;
+        return -ENOMEM;
     }
 
     res = f_opendir(dp, path);
     if(res != FR_OK)
     {
         free(dp);
-        return res;
+        return ret_to_errno(res);
     }
 
     dir->d_data   = dp;
     dir->d_offset = 0;
 
-    return res;
+    return FR_OK;
 }
 
 static int fatfs_op_readdir (struct dir *dir, struct dirent *dent)
@@ -355,10 +492,10 @@ static int fatfs_op_readdir (struct dir *dir, struct dirent *dent)
     res = f_readdir(dp, &e);
     if (res != FR_OK)
     {
-        return -1;
+        return ret_to_errno(res);
     }
 
-    len = MIN(sizeof(e.fname), LOS_MAX_FILE_NAME_LEN) - 1;
+    len = MIN(sizeof(e.fname), LOS_MAX_DIR_NAME_LEN+1) - 1;
     strncpy ((char *)dent->name, (const char *) e.fname, len);
     dent->name [len] = '\0';
     dent->size = e.fsize;
@@ -389,12 +526,23 @@ static int fatfs_op_closedir (struct dir *dir)
         dir->d_data = NULL;
     }
 
-    return res;
+    return ret_to_errno(res);
 }
 
 static int fatfs_op_mkdir(struct mount_point *mp, const char *path)
 {
-    return f_mkdir(path);
+    FRESULT res = f_mkdir(path);
+    if (FR_NO_PATH == res)
+    {
+        int err = 0;
+        VFS_ERRNO_SET (ENOENT);
+        err = ENOENT;
+        return -err;
+    }
+    else
+    {
+    	return ret_to_errno(res);
+    }
 }
 
 static struct file_ops fatfs_ops =

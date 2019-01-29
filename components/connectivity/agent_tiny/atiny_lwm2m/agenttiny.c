@@ -32,50 +32,21 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#include "liblwm2m.h"
 #include "internals.h"
 #include "atiny_lwm2m/agenttiny.h"
-#include "atiny_lwm2m/object_comm.h"
-#include "atiny_lwm2m/connection.h"
+#include "atiny_context.h"
+#include "connection.h"
 #include "log/atiny_log.h"
-#include "atiny_lwm2m/atiny_rpt.h"
+#include "atiny_rpt.h"
 #include "osdepends/atiny_osdep.h"
 #ifdef CONFIG_FEATURE_FOTA
-#include "atiny_lwm2m/atiny_fota_manager.h"
+#include "atiny_fota_manager.h"
 #endif
 
-#define SERVER_URI_MAX_LEN      (64)
-#define MAX_PACKET_SIZE         (1024)
-#define SERVER_ID               (123)
-#define BIND_TIMEOUT            (10)
+
 
 int g_reboot = 0;
 
-enum
-{
-    OBJ_SECURITY_INDEX = 0,
-    OBJ_SERVER_INDEX,
-    OBJ_ACCESS_CONTROL_INDEX,
-    OBJ_DEVICE_INDEX,
-    OBJ_CONNECT_INDEX,
-    OBJ_FIRMWARE_INDEX,
-    OBJ_LOCATION_INDEX,
-    OBJ_APP_INDEX,
-    OBJ_MAX_NUM,
-};
-
-typedef struct
-{
-    lwm2m_context_t  *lwm2m_context;
-    atiny_param_t     atiny_params;
-    client_data_t     client_data;
-    lwm2m_object_t   *obj_array[OBJ_MAX_NUM];
-    int atiny_quit;
-    int reconnect_flag;
-    void *quit_sem;
-    int reboot_flag;
-    uint8_t *recv_buffer;
-} handle_data_t;
 
 void observe_handle_ack(lwm2m_transaction_t *transacP, void *message);
 static int atiny_check_bootstrap_init_param(atiny_param_t *atiny_params);
@@ -547,18 +518,21 @@ int atiny_bind(atiny_device_info_t *device_info, void *phandle)
     if ((NULL == device_info) || (NULL == phandle))
     {
         ATINY_LOG(LOG_FATAL, "Parameter null");
+        atiny_deinit(phandle);
         return ATINY_ARG_INVALID;
     }
 
     if (NULL == device_info->endpoint_name)
     {
         ATINY_LOG(LOG_FATAL, "Endpoint name null");
+        atiny_deinit(phandle);
         return ATINY_ARG_INVALID;
     }
 
     if (NULL == device_info->manufacturer)
     {
         ATINY_LOG(LOG_FATAL, "Manufacturer name null");
+        atiny_deinit(phandle);
         return ATINY_ARG_INVALID;
     }
 

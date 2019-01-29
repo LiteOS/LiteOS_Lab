@@ -39,7 +39,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include <common.h>
+#include "los_common.h"
 
 typedef struct bi_node
 {

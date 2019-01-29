@@ -50,7 +50,7 @@
  *
  *******************************************************************************/
 #include <ctype.h>
-#include "atiny_lwm2m/connection.h"
+#include "connection.h"
 
 
 #if defined (WITH_DTLS)
@@ -58,7 +58,7 @@
 #endif
 #include "sal/atiny_socket.h"
 #include "log/atiny_log.h"
-#include "atiny_lwm2m/object_comm.h"
+#include "object_comm.h"
 
 #define COAP_PORT "5683"
 #define COAPS_PORT "5684"
@@ -83,12 +83,11 @@ static inline void inc_connection_stat(connection_t *connection, connection_err_
 }
 
 
-int connection_parse_host_ip(security_instance_t *targetP, char **parsed_host, char **parsed_port)
+int connection_parse_host_ip(char *uri, char **parsed_host, char **parsed_port)
 {
     char *host;
     char *port;
     char *defaultport;
-    char *uri = targetP->uri;
     if (uri == NULL)
     {
         ATINY_LOG(LOG_INFO, "uri is NULL!!!");
@@ -162,8 +161,15 @@ int connection_connect_dtls(connection_t *connP, security_instance_t *targetP, c
 {
     int ret;
     dtls_shakehand_info_s info;
+    dtls_establish_info_s establish_info;
 
-    connP->net_context = (void *)dtls_ssl_new_with_psk(targetP->secretKey, targetP->secretKeyLen, targetP->publicIdentity, client_or_server);
+    establish_info.psk_or_cert = VERIFY_WITH_PSK;
+    establish_info.udp_or_tcp = MBEDTLS_NET_PROTO_UDP;
+    establish_info.v.p.psk = (const unsigned char *)targetP->secretKey;
+    establish_info.v.p.psk_len = targetP->secretKeyLen;
+    establish_info.v.p.psk_identity = (const unsigned char *)targetP->publicIdentity;
+
+    connP->net_context = (void *)dtls_ssl_new(&establish_info, client_or_server);
     if (NULL == connP->net_context)
     {
         ATINY_LOG(LOG_INFO, "connP->ssl is NULL in connection_create");
@@ -174,7 +180,9 @@ int connection_connect_dtls(connection_t *connP, security_instance_t *targetP, c
     memset(&info, 0, sizeof(info));
     info.client_or_server = client_or_server;
     info.finish_notify = NULL;
-    info.step_notify   = NULL; 
+    info.step_notify   = NULL;
+    info.udp_or_tcp = MBEDTLS_NET_PROTO_UDP;
+    info.psk_or_cert = VERIFY_WITH_PSK;
 #ifdef LWM2M_BOOTSTRAP
     info.step_notify = (void(*)(void *))lwm2m_step_striger_server_initiated_bs;
     info.param = (void(*)(void *))connP;
@@ -184,18 +192,19 @@ int connection_connect_dtls(connection_t *connP, security_instance_t *targetP, c
     {
         info.u.c.host = host;
         info.u.c.port = port;
+        info.timeout = DTLS_UDP_CLIENT_SHAKEHAND_TIMEOUT;
     }
     else
     {
-#ifdef LWM2M_BOOTSTRAP    
-        info.u.s.timeout = targetP->clientHoldOffTime;
+#ifdef LWM2M_BOOTSTRAP
+        info.timeout = targetP->clientHoldOffTime;
         info.u.s.local_port = port;
         timer_init(&connP->server_triger_timer, LWM2M_TRIGER_SERVER_MODE_INITIATED_TIME, (void(*)(void*))connection_striger_server_initiated_bs, connP);
         timer_start(&connP->server_triger_timer);
 #endif
     }
     ret = dtls_shakehand(connP->net_context, &info);
-#ifdef LWM2M_BOOTSTRAP  
+#ifdef LWM2M_BOOTSTRAP
     timer_stop(&connP->server_triger_timer);
 #endif
     if (ret != 0)
@@ -224,20 +233,29 @@ connection_t *connection_create(connection_t *connList,
     char *host;
     char *port;
     security_instance_t *targetP;
+    char *uri = NULL;
+    connection_t * ret = NULL;
 
     ATINY_LOG(LOG_INFO, "now come into connection_create!!!");
 
     targetP = (security_instance_t *)LWM2M_LIST_FIND(securityObj->instanceList, instanceId);
-    if (NULL == targetP)
+    if (NULL == targetP || targetP->uri == NULL)
     {
         return NULL;
     }
 
+
     if (LWM2M_IS_CLIENT == client_or_server)
     {
-        if (connection_parse_host_ip(targetP, &host, &port) != COAP_NO_ERROR)
+        uri = atiny_strdup(targetP->uri);
+        if (uri == NULL)
         {
-            return NULL;
+            ATINY_LOG(LOG_INFO, "atiny_strdup null!!!");
+            goto fail;
+        }
+        if (connection_parse_host_ip(uri, &host, &port) != COAP_NO_ERROR)
+        {
+            goto fail;
         }
     }
     else
@@ -250,7 +268,7 @@ connection_t *connection_create(connection_t *connList,
     if (connP == NULL)
     {
         ATINY_LOG(LOG_INFO, "connP is NULL!!!");
-        return NULL;
+         goto fail;
     }
 
     memset(connP, 0, sizeof(connection_t));
@@ -300,12 +318,18 @@ connection_t *connection_create(connection_t *connList,
     connP->lwm2mH = lwm2mH;
     connP->bootstrap_flag = targetP->isBootstrap;
 
-    return connP;
-
+    ret = connP;
 fail:
-    lwm2m_free(connP);
-    return NULL;
+    if (uri)
+    {
+        lwm2m_free(uri);
+    }
+    if (ret == NULL && connP)
+    {
+        lwm2m_free(connP);
+    }
 
+    return ret;
 }
 
 void connection_free(connection_t *connP)
@@ -433,6 +457,28 @@ int lwm2m_buffer_recv(void *sessionH, uint8_t *buffer, size_t length, uint32_t t
     return ret;
 }
 
+static bool connection_is_valid(void *user_data, void *session)
+{
+    client_data_t *data = (client_data_t *)user_data;
+    connection_t *conn;
+    if (data == NULL || data->connList == NULL)
+    {
+        return false;
+    }
+
+    conn = data->connList;
+    while(conn != NULL)
+    {
+        if (conn == session)
+        {
+            return true;
+        }
+        conn = conn->next;
+    }
+
+    return false;
+}
+
 uint8_t lwm2m_buffer_send(void *sessionH,
                           uint8_t *buffer,
                           size_t length,
@@ -440,8 +486,8 @@ uint8_t lwm2m_buffer_send(void *sessionH,
 {
     connection_t *connP = (connection_t *) sessionH;
     int ret;
-
-    if (connP == NULL)
+    /* should check the valid of the connection,because coap tranctions does not update the session */
+    if (connP == NULL || (!connection_is_valid(userdata, sessionH)))
     {
         ATINY_LOG(LOG_INFO, "#> failed sending %lu bytes, missing connection\r\n", (unsigned long)length);
         return COAP_500_INTERNAL_SERVER_ERROR ;

@@ -39,11 +39,12 @@
 #ifndef PACKAGE_H
 #define PACKAGE_H
 
-#include "ota/package.h"
-
-
 //#ifdef WITH_SOTA
 #include "ota_api.h"
+#include <stdio.h>
+
+
+
 //#endif
 
 /* use sha256 rsa2048 for checksum */
@@ -69,9 +70,23 @@ write entire block size and need no buffer. but it is not suitable to write to f
 #endif
 
 
+/* package head len should not bigger than this */
+#ifndef PACK_MAX_HEAD_LEN
+#define PACK_MAX_HEAD_LEN (4 * 1024)
+#endif
+
+
 #if defined(__cplusplus)
 extern "C" {
 #endif
+
+typedef struct
+{
+    ota_opt_s ota_opt;
+    void* (*malloc)(size_t size);
+    void (*free)(void *ptr);
+    int (*printf)(const char *fmt, ...);
+}pack_params_s;
 
 typedef struct pack_storage_device_api_tag_s pack_storage_device_api_s;
 
@@ -118,7 +133,7 @@ pack_storage_device_api_s *pack_get_device(void);
  *@par Dependency: none.
  *@see none
  */
-int pack_init_device(const ota_opt_s *ota_opt);
+int pack_init_device(const pack_params_s *params);
 
 
 #if defined(__cplusplus)

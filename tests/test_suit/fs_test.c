@@ -29,11 +29,9 @@
 /* Defines ------------------------------------------------------------------*/
 #define TEST_FS_SPIFFS      0
 #define TEST_FS_FATFS       1
-#define TEST_FS_JFFS2       2
 
 #define SPIFFS_PATH         "/spiffs"
 #define FATFS_PATH          "/fatfs"
-#define JFFS2_PATH          "/jffs2"
 
 #define LOS_FILE            "f.txt"
 #define LOS_FILE_RN         "file.txt"
@@ -62,10 +60,8 @@ static int fs_type;
 /* Extern variables ---------------------------------------------------------*/
 extern int stm32f4xx_spiffs_init(int need_erase);
 extern int stm32f4xx_fatfs_init(int need_erase);
-extern int stm32f4xx_jffs2_init(int need_erase);
 extern int spiffs_unmount(const char *path);
 extern int fatfs_unmount(const char *path, uint8_t drive);
-extern int jffs2_unmount(const char *path);
 
 /* Global variables ---------------------------------------------------------*/
 /* Private function prototypes ----------------------------------------------*/
@@ -97,7 +93,7 @@ static void print_dir(const char *name, int level)
             && strcmp(dirent->name, ".")
             && strcmp(dirent->name, ".."))
         {
-            char tmp_path[128];
+            char tmp_path[LOS_MAX_DIR_NAME_LEN+2];
             printf("|%*s%s/\n", level*4, "--->", dirent->name);
             snprintf(tmp_path, sizeof(tmp_path), "%s/%s", name, dirent->name);
             print_dir(tmp_path, level+1);
@@ -191,10 +187,10 @@ static void test_file_read_exception(void **state)
     assert_in_range(fd, 0, LOS_MAX_FILES);
 
     ret = los_read(fd, 0, sizeof(read_buf));
-    assert_int_equal(ret, -1);
+    assert_true(ret < 0);
 
     ret = los_read(fd, read_buf, 0);
-    assert_int_equal(ret, -1);
+    assert_true(ret < 0);
 
     ret = los_close(fd);
     assert_int_equal(ret, 0);
@@ -373,7 +369,7 @@ static void test_file_stat_normal(void **state)
 
     struct stat s;
     ret = los_stat(file_rename, &s);
-    assert_int_equal(ret, -1);
+    assert_true(ret < 0);
 
     fd = los_open(file_name, O_CREAT | O_RDWR | O_TRUNC);
     assert_in_range(fd, 0, LOS_MAX_FILES);
@@ -580,20 +576,12 @@ static void test_dir_read_normal(void **state)
     {
         assert_true(strcasecmp(dirent->name, LOS_FILE) == 0);
     }
-    else if (fs_type == TEST_FS_SPIFFS)
-    {
-        // spiffs does not support directories. It produces a flat structure.
-        // Creating a file with path d/f.txt will create a file called
-        // d/f.txt instead of a f.txt under directory d
-        assert_string_equal(dirent->name, "d/f.txt");
-    }
-    else
-    {
-        assert_string_equal(dirent->name, LOS_FILE);
-    }
 
-    dirent = los_readdir(dir);
-    assert_true(dirent == NULL || dirent->name[0] == 0);
+    if (fs_type != TEST_FS_SPIFFS)
+    {
+        dirent = los_readdir(dir);
+        assert_true(dirent == NULL || dirent->name[0] == 0);
+    }
 
     ret = los_closedir(dir);
     assert_int_equal(ret, 0);
@@ -604,10 +592,13 @@ static void test_dir_read_normal(void **state)
     dir = los_opendir(dir_name);
     assert_true(dir != NULL);
 
-    dirent = los_readdir(dir);
-    // when reading a empty directory, jffs2 returns NULL,
-    // and fatfs returns dirent with name ""
-    assert_true(dirent == NULL || dirent->name[0] == 0);
+    if (fs_type != TEST_FS_SPIFFS)
+    {
+        dirent = los_readdir(dir);
+        // when reading a empty directory, jffs2 returns NULL,
+        // and fatfs returns dirent with name ""
+        assert_true(dirent == NULL || dirent->name[0] == 0);
+    }
 
     ret = los_closedir(dir);
     assert_int_equal(ret, 0);
@@ -679,26 +670,8 @@ int fs_test_main(void)
 
     printf("Huawei LiteOS File System Test\n");
 
-    // jffs2
-    int ret = stm32f4xx_jffs2_init(1);
-    if(ret < 0)
-    {
-        FS_PRINTF("stm32f4xx_jffs2_init failed: %d", ret);
-        return -1;
-    }
-
-    snprintf(file_name, sizeof(file_name), "%s/%s", JFFS2_PATH, LOS_FILE);
-    snprintf(file_rename, sizeof(file_rename), "%s/%s", JFFS2_PATH, LOS_FILE_RN);
-    snprintf(dir_name, sizeof(dir_name), "%s/%s", JFFS2_PATH, LOS_DIR);
-    snprintf(path_name, sizeof(path_name), "%s/%s", dir_name, LOS_FILE);
-
-    print_dir("/jffs2", 1);
-    fs_type = TEST_FS_JFFS2;
-    run_tests(tests);
-    jffs2_unmount("/jffs2/");
-
     // spiffs
-    ret = stm32f4xx_spiffs_init(0);
+    int ret = stm32f4xx_spiffs_init(0);
     if(ret < 0)
     {
         FS_PRINTF("stm32f4xx_spiffs_init failed: %d", ret);

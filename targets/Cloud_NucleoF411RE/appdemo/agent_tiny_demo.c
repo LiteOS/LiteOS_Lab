@@ -49,9 +49,17 @@
 //unsigned char g_psk_value[32];
 //const char *g_psk_string="6c74374a7124eed651950da81e5e2b96";
 
+#ifndef WITH_DTLS
 char * g_endpoint_name = "ledfota01";
 unsigned char g_psk_value[32];
 const char *g_psk_string="6c74374a7124eed651950da81e5e2b96";
+#else
+char * g_endpoint_name = "test_dtls_01";
+unsigned char g_psk_value[32];
+const char *g_psk_string="dcf52970860ee4b30ebc2d56f7c4d7ea";
+
+#endif
+
 
 //use this function to transfer the string to the byte array
 //return the array length transfered while  failed
@@ -348,8 +356,3 @@ static s32_t __shell_appreport(s32_t argc,const char *argv[])
 }
 
 OSSHELL_EXPORT_CMD(__shell_appreport,"appreport","appreport start/stop");
-
-
-
-
-

@@ -30,11 +30,15 @@ WITH_LWIP  := no
 
 #######################################
 # use usart AT command
+# (NB_NEUL95_NO_ATINY: nb without agenttiny)
+# (NB_NEUL95: nb with agenttiny)
 #######################################
 WITH_AT_FRAMEWORK := yes
 ifeq ($(WITH_AT_FRAMEWORK), yes)
-#ESP8266   # SIM900A  # NB_NEUL95  # ALL
-	NETWORK_TYPE := NB_NEUL95
+#ESP8266   # SIM900A  # NB_NEUL95  # EMTC_BG36 # NB_NEUL95_NO_ATINY
+	NETWORK_TYPE := NB_NEUL95_NO_ATINY
+#ONLYONE  #ALL
+	AT_COMPILE_ALL := ALL
 endif
 
 #######################################
@@ -59,12 +63,12 @@ USE_FOTA := no
 USE_SOTA := yes
 
 #######################################
-# Lwm2m bootstrap program 
+# Lwm2m bootstrap program
 #######################################
 LWM2M_BOOTSTRAP := no
 
 #######################################
-# Lwm2m bootstrap used 
+# Lwm2m bootstrap used
 #######################################
 SUPPORT_DTLS_SRV := no
 
@@ -85,6 +89,8 @@ WITH_FILESYSTEM := no
 ifeq ($(WITH_FILESYSTEM), yes)
 #SPIFFS   #FATFS   #JFFS2
 	FILESYSTEM_TYPE := FATFS
+#ONLYONE  #ALL
+	IS_COMPILE_ALLFS := ALL
 endif
 
 #######################################

@@ -30,11 +30,15 @@ WITH_LWIP  := no
 
 #######################################
 # use usart AT command
+# (NB_NEUL95_NO_ATINY: nb without agenttiny)
+# (NB_NEUL95: nb with agenttiny)
 #######################################
 WITH_AT_FRAMEWORK := yes
 ifeq ($(WITH_AT_FRAMEWORK), yes)
-#ESP8266   # SIM900A  # NB_NEUL95  # ALL
+#ESP8266   # SIM900A  # NB_NEUL95  # NB_NEUL95_NO_ATINY
 	NETWORK_TYPE := NB_NEUL95
+#ONLYONE  #ALL
+	AT_COMPILE_ALL := ALL
 endif
 
 #######################################
@@ -85,9 +89,21 @@ WITH_FILESYSTEM := yes
 ifeq ($(WITH_FILESYSTEM), yes)
 #SPIFFS   #FATFS   #JFFS2
 	FILESYSTEM_TYPE := FATFS
+#ONLYONE  #ALL
+	IS_COMPILE_ALLFS := ALL
 endif
 
 #######################################
 # CMockery Test
 #######################################
 WITH_CMOCKERY_TEST := no
+
+#######################################
+# IPv4
+#######################################
+WITH_IPV4 := yes
+
+#######################################
+# IPv6
+#######################################
+WITH_IPV6 := no

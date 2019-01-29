@@ -48,7 +48,6 @@ static u32_t apptask_entry(void *args)
 {
     //extern at_adaptor_api at_interface;
     //at_api_register(&at_interface);
-    
     extern bool_t  sim5320e_init(void);
     sim5320e_init();
     agent_tiny_entry();
@@ -81,7 +80,7 @@ int main(void){
     uart_at_init(115200);
 
 //////////////////////APPLICATION INITIALIZE HERE/////////////////////
- #if 0
+ #if 1
     task_create("appmain",apptask_entry,0x2000,NULL,NULL,0);
  #endif 
 

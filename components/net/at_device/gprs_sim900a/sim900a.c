@@ -32,11 +32,11 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#if defined(WITH_AT_FRAMEWORK) && defined(USE_SIM900A)
+#if defined(WITH_AT_FRAMEWORK)
 #include "sim900a.h"
 
 extern at_task at;
-at_adaptor_api at_interface;
+at_adaptor_api sim900a_interface;
 char prefix_name[15];
 
 int32_t sim900a_echo_off(void)
@@ -81,7 +81,7 @@ int32_t sim900a_connect(const int8_t *host, const int8_t *port, int32_t proto)
     at.cmd((int8_t *)cmd4, strlen(cmd4), "OK", NULL,NULL);
     char cmd5[64] = {0};
 
-    AT_LOG("host:%s, port:%s", host, port);
+    AT_LOG_DEBUG("host:%s, port:%s", host, port);
 
     if (AT_MUXMODE_SINGLE == at.mux_mode)
     {
@@ -203,7 +203,7 @@ int32_t sim900a_close(int32_t id)
                 memset(&qbuf, 0, sizeof(QUEUE_BUFF)); // don't use qlen
             }
         }
-        LOS_QueueDelete(at.linkid[id].qid);
+        (void)LOS_QueueDelete(at.linkid[id].qid);
         at.linkid[id].usable = 0;
         snprintf(cmd, 64, "%s=%ld", AT_CMD_CLOSE, id);
     }
@@ -249,6 +249,12 @@ int32_t sim900a_data_handler(void *arg, int8_t *buf, int32_t len)
         }
         p2++; //over ':'
 
+        if (data_len > len)
+        {
+            AT_LOG("error !! receive data not complete data_len:%ld len:%ld",data_len,len);
+            goto END;
+        }
+
         qbuf.addr = at_malloc(data_len);
         if (NULL == qbuf.addr)
         {
@@ -275,9 +281,27 @@ int32_t sim900a_data_handler(void *arg, int8_t *buf, int32_t len)
 END:
     return ret;
 }
+
+int32_t sim900a_cmd_match(const char *buf, char* featurestr,int len)
+{
+    return memcmp(buf,featurestr,len);
+}
+
 int32_t sim900a_ini()
 {
-    at.init();
+    at_config at_user_conf =
+    {
+        .name = AT_MODU_NAME,
+        .usart_port = AT_USART_PORT,
+        .buardrate = AT_BUARDRATE,
+        .linkid_num = AT_MAX_LINK_NUM,
+        .user_buf_len = MAX_AT_USERDATA_LEN,
+        .cmd_begin = AT_CMD_BEGIN,
+        .line_end = AT_LINE_END,
+        .mux_mode = 1, //support multi connection mode
+        .timeout = AT_CMD_TIMEOUT,   //  ms
+    };
+    at.init(&at_user_conf);
     //single and multi connect prefix is different
     if (AT_MUXMODE_MULTI == at.mux_mode)
     {
@@ -287,7 +311,7 @@ int32_t sim900a_ini()
     {
         memcpy(prefix_name, AT_DATAF_PREFIX, sizeof(AT_DATAF_PREFIX));
     }
-    at.oob_register((char *)prefix_name, strlen((char *)prefix_name), sim900a_data_handler,NULL);
+    at.oob_register((char *)prefix_name, strlen((char *)prefix_name), sim900a_data_handler,sim900a_cmd_match);
     sim900a_echo_off();
     sim900a_check();
     sim900a_reset();
@@ -318,20 +342,9 @@ int32_t sim900a_deinit(void)
     return AT_OK;
 }
 
-at_config at_user_conf =
-{
-    .name = AT_MODU_NAME,
-    .usart_port = AT_USART_PORT,
-    .buardrate = AT_BUARDRATE,
-    .linkid_num = AT_MAX_LINK_NUM,
-    .user_buf_len = MAX_AT_USERDATA_LEN,
-    .cmd_begin = AT_CMD_BEGIN,
-    .line_end = AT_LINE_END,
-    .mux_mode = 1, //support multi connection mode
-    .timeout = AT_CMD_TIMEOUT,   //  ms
-};
 
-at_adaptor_api at_interface =
+
+at_adaptor_api sim900a_interface =
 {
     .init = sim900a_ini,
     .connect = sim900a_connect, /*TCP or UDP connect*/

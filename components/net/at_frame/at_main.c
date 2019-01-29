@@ -43,8 +43,13 @@
 #include "los_sys.ph"
 #include "los_tick.ph"
 
+static at_config at_user_conf;
+
 /* FUNCTION */
-void at_init(void);
+void at_set_config(at_config *config);
+at_config *at_get_config(void);
+
+int32_t at_init(at_config *config);
 //int32_t at_read(int32_t id, int8_t * buf, uint32_t len, int32_t timeout);
 int32_t at_write(int8_t *cmd, int8_t *suffix, int8_t *buf, int32_t len);
 int32_t at_get_unuse_linkid(void);
@@ -129,11 +134,9 @@ void at_listner_list_del(at_listener *p)
 void at_listner_list_destroy(at_task *at_tsk)
 {
     at_listener *head;
-
-    head = at_tsk->head;
-
-    while(head != NULL)
+    while(at_tsk->head != NULL)
     {
+        head = at_tsk->head;
         at_tsk->head = head->next;
         if (head->handle_data != NULL)
         {
@@ -283,7 +286,7 @@ int32_t at_cmd_multi_suffix(const int8_t *cmd, int  len, at_cmd_info_s *cmd_info
     memset(&listener, 0, sizeof(listener));
     listener.cmd_info = *cmd_info;
     print_len = ((cmd_info->resp_buf && cmd_info->resp_len) ? (int)*(cmd_info->resp_len) : -1);
-    AT_LOG("cmd:%s len %d, %p,%d", cmd, print_len,cmd_info->resp_buf,(int)cmd_info->resp_len);
+    AT_LOG("cmd len %d, %p,%d", print_len,cmd_info->resp_buf,(int)cmd_info->resp_len);
 
     LOS_MuxPend(at.trx_mux, LOS_WAIT_FOREVER);
 
@@ -530,16 +533,12 @@ void at_recv_task()
         recv_len = read_resp(tmp, &recv_buf);
 
         if (recv_len <= 0)
-            continue;
-
-        //int32_t data_len = 0;
-        AT_LOG_DEBUG("recv len = %lu buf = %s ", recv_len, tmp);
-
-        if (recv_len <= 0)
         {
             AT_LOG("err, recv_len = %ld", recv_len);
             continue;
         }
+
+        AT_LOG_DEBUG("recv len = %lu buf = %s ", recv_len, tmp);
 
         ret = cloud_cmd_matching((int8_t *)tmp, recv_len);
         if(ret > 0)
@@ -668,6 +667,7 @@ int32_t at_struct_init(at_task *at)
         AT_LOG("malloc for at linkid array failed!");
         goto malloc_linkid_failed;
     }
+    memset(at->linkid, 0, at_user_conf.linkid_num * sizeof(at_link));
 
     at->head = NULL;
     at->mux_mode = at_user_conf.mux_mode;
@@ -676,9 +676,9 @@ int32_t at_struct_init(at_task *at)
 
     //        atiny_free(at->linkid);
 malloc_linkid_failed:
-    at_free(at->userdata);
-malloc_saveddata_buf:
     at_free(at->saveddata);
+malloc_saveddata_buf:
+    at_free(at->userdata);
 malloc_userdata_buf:
     at_free(at->cmdresp);
 malloc_resp_buf:
@@ -767,6 +767,12 @@ int32_t at_struct_deinit(at_task *at)
         at->userdata = NULL;
     }
 
+    if (NULL != at->saveddata)
+    {
+        at_free(at->saveddata);
+        at->saveddata = NULL;
+    }
+
     if (NULL != at->linkid)
     {
         at_free(at->linkid);
@@ -781,15 +787,37 @@ int32_t at_struct_deinit(at_task *at)
     return ret;
 }
 
-void at_init(void)
+void at_set_config(at_config *config)
 {
-    AT_LOG("Config %s(buffer total is %lu)......\n", at_user_conf.name, at_user_conf.user_buf_len);
+    if(NULL != config){
+        memcpy(&at_user_conf,config,sizeof(at_config));
+    }
+}
 
-    LOS_TaskDelay(200);
+at_config *at_get_config(void)
+{
+    return &at_user_conf;
+}
+
+
+int32_t at_init(at_config *config)
+{
+
+    if(NULL == config)
+    {
+        AT_LOG("Config is NULL, failed!!\n");
+        return AT_FAILED;
+    }
+
+    memcpy(&at_user_conf,config,sizeof(at_config));
+
+    AT_LOG_DEBUG("Config %s(buffer total is %lu)......\n", at_user_conf.name, at_user_conf.user_buf_len);
+
+    //LOS_TaskDelay(200);
     if (AT_OK != at_struct_init(&at))
     {
         AT_LOG("prepare AT struct failed!");
-        return;
+        return AT_FAILED;
     }
     at_init_oob();
 
@@ -797,17 +825,18 @@ void at_init(void)
     {
         AT_LOG("at_usart_init failed!");
         (void)at_struct_deinit(&at);
-        return;
+        return AT_FAILED;
     }
     if(LOS_OK != create_at_recv_task())
     {
         AT_LOG("create_at_recv_task failed!");
         at_usart_deinit();
         (void)at_struct_deinit(&at);
-        return;
+        return AT_FAILED;
     }
 
     AT_LOG("Config complete!!\n");
+    return AT_OK;
 }
 
 

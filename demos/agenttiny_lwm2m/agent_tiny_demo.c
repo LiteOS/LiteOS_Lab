@@ -33,29 +33,35 @@
  *---------------------------------------------------------------------------*/
 
 #include "agent_tiny_demo.h"
-#ifdef CONFIG_FEATURE_FOTA
-#include "ota_port.h"
+
+#if defined WITH_AT_FRAMEWORK
+#include "at_frame/at_api.h"
 #endif
 
-#define DEFAULT_SERVER_IPV4 "180.101.147.115" /*dianxin*/
+//#define DEFAULT_SERVER_IP "180.101.147.115" /*dianxin*/
+//#define DEFAULT_SERVER_IP "2000::1"
+#define DEFAULT_SERVER_IP "192.168.1.104" /*local ipv4*/
+
 
 #define LWM2M_LIFE_TIME     50000
 
 char *g_endpoint_name = "44440003";
 #ifdef WITH_DTLS
 
-char *g_endpoint_name_s = "99990009";
-char *g_endpoint_name_iots = "99990009";
-char *g_endpoint_name_bs = "99990009";
-unsigned char g_psk_iot_value[] = {0x58,0xea,0xfd,0xab,0x2f,0x38,0x4d,0x39,0x80,0x69,0x4d,0x1c,0xda,0x69,0xb0,0x43}; //0x33 -> 0x32
-unsigned char g_psk_bs_value[] = {0x58,0xea,0xfd,0xab,0x2f,0x38,0x4d,0x39,0x80,0x69,0x4d,0x1c,0xda,0x69,0xb0,0x43};
+char *g_endpoint_name_s = "20181214";
+char *g_endpoint_name_iots = "20181214";
+char *g_endpoint_name_bs = "20181214";
+unsigned char g_psk_iot_value[] = {0x68,0xda,0x7a,0xea,0xf6,0x12,0xfd,0x95,0xbb,0xe0,0x91,0x5a,0x67,0xca,0x56,0xb3}; //0x33 -> 0x32
+unsigned char g_psk_bs_value[] = {0x68,0xda,0x7a,0xea,0xf6,0x12,0xfd,0x95,0xbb,0xe0,0x91,0x5a,0x67,0xca,0x56,0xb3};
 //unsigned char g_psk_value[16] = {0x58,0xea,0xfd,0xab,0x2f,0x38,0x4d,0x39,0x80,0x69,0x4d,0x1c,0xda,0x69,0xb0,0x43};
+
 
 #endif
 
 static void *g_phandle = NULL;
 static atiny_device_info_t g_device_info;
 static atiny_param_t g_atiny_params;
+
 
 void ack_callback(atiny_report_type_e type, int cookie, data_send_status_e status)
 {
@@ -117,9 +123,6 @@ void agent_tiny_entry(void)
 
     atiny_device_info_t *device_info = &g_device_info;
 
-#ifdef CONFIG_FEATURE_FOTA
-    hal_init_ota();
-#endif
 
 #ifdef WITH_DTLS
     device_info->endpoint_name = g_endpoint_name_s;
@@ -146,8 +149,9 @@ void agent_tiny_entry(void)
     bs_security_param = &(atiny_params->security_params[1]);
 
 
-    iot_security_param->server_ip = DEFAULT_SERVER_IPV4;
-    bs_security_param->server_ip = DEFAULT_SERVER_IPV4;
+    iot_security_param->server_ip = DEFAULT_SERVER_IP;
+    bs_security_param->server_ip  = DEFAULT_SERVER_IP;
+
 
 #ifdef WITH_DTLS
     iot_security_param->server_port = "5684";
@@ -186,3 +190,8 @@ void agent_tiny_entry(void)
 
     (void)atiny_bind(device_info, g_phandle);
 }
+
+
+
+
+

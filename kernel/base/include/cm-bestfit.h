@@ -37,7 +37,7 @@
 
 #include <string.h>
 
-#include <common.h>
+#include <los_common.h>
 #include <rbtree.h>
 #include <list.h>
 

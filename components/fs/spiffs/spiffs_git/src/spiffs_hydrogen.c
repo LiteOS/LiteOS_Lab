@@ -703,21 +703,26 @@ s32_t SPIFFS_lseek(spiffs *fs, spiffs_file fh, s32_t offs, int whence)
 
     switch (whence)
     {
+    case SPIFFS_SEEK_SET:
+        break;
     case SPIFFS_SEEK_CUR:
         offs = fd->fdoffset + offs;
         break;
     case SPIFFS_SEEK_END:
         offs = file_size + offs;
         break;
+    default:
+        res = SPIFFS_ERR_INVALID_PARA;
+        break;
     }
     if (offs < 0)
     {
-        SPIFFS_API_CHECK_RES_UNLOCK(fs, SPIFFS_ERR_SEEK_BOUNDS);
+        SPIFFS_API_CHECK_RES_UNLOCK(fs, SPIFFS_ERR_INVALID_PARA);
     }
     if (offs > file_size)
     {
         fd->fdoffset = file_size;
-        res = SPIFFS_ERR_END_OF_OBJECT;
+        res = SPIFFS_ERR_SEEK_BOUNDS;
     }
     SPIFFS_API_CHECK_RES_UNLOCK(fs, res);
 
@@ -1613,7 +1618,7 @@ s32_t SPIFFS_vis(spiffs *fs)
 
         if (erase_count != (spiffs_obj_id) - 1)
         {
-            spiffs_printf("\tera_cnt: "_SPIPRIi"\n", erase_count);
+            spiffs_printf("\tera_cnt: %d\n", erase_count);
         }
         else
         {
@@ -1623,7 +1628,7 @@ s32_t SPIFFS_vis(spiffs *fs)
         bix++;
     } // per block
 
-    spiffs_printf("era_cnt_max: "_SPIPRIi"\n", fs->max_erase_count);
+    spiffs_printf("era_cnt_max: %d\n", fs->max_erase_count);
     spiffs_printf("last_errno:  "_SPIPRIi"\n", fs->err_code);
     spiffs_printf("blocks:      "_SPIPRIi"\n", fs->block_count);
     spiffs_printf("free_blocks: "_SPIPRIi"\n", fs->free_blocks);

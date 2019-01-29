@@ -43,15 +43,19 @@
 #include "sal/atiny_socket.h"
 #include "at_frame/at_api.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 /* MACRO DEFINE */
-#define AT_INTO
 #ifdef AT_INTO
 #define AT_LOG(fmt, arg...)  printf("[%lu][%s:%d][I]"fmt"\n", at_get_time(), __func__, __LINE__, ##arg)
 #else
-#define AT_LOG(fmt, arg...)
+static inline void __do_nothing(const char *fmt, ...) { (void)fmt; }
+#define AT_LOG(fmt, arg...)  __do_nothing(fmt, ##arg)
 #endif
 
-#define AT_DEBUG
 #ifdef AT_DEBUG
 #define AT_LOG_DEBUG(fmt, arg...)  printf("[%lu][%s:%d][D]"fmt"\n", at_get_time(), __func__, __LINE__, ##arg)
 #else
@@ -182,7 +186,7 @@ typedef struct at_task{
 
 	void (*step_callback)();
 
-	void    (*init)();
+	int32_t (*init)(at_config *config);
 	int32_t (*cmd)(int8_t * cmd, int32_t len, const char * suffix, char * resp_buf, int* resp_len);
 	int32_t (*write)(int8_t * cmd, int8_t * suffix, int8_t * buf, int32_t len);
 	/* get unused linkid, use in multi connection mode*/
@@ -192,6 +196,10 @@ typedef struct at_task{
 	void (*deinit)();
     int32_t (*cmd_multi_suffix)(const int8_t *cmd, int  len, at_cmd_info_s *cmd_info);
 } at_task;
+
+void at_set_config(at_config *config);
+at_config *at_get_config(void);
+
 
 void* at_malloc(size_t size);
 void at_free(void* ptr);
@@ -205,4 +213,9 @@ void at_reg_step_callback(at_task *at_tsk, void (*step_callback)(void));
 extern at_task at;
 
 extern uint16_t at_fota_timer;
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

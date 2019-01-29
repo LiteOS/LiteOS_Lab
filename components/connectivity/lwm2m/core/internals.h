@@ -97,6 +97,8 @@
 #include <stdbool.h>
 
 #include "er-coap-13/er-coap-13.h"
+#include "connection.h"
+
 
 #ifdef LWM2M_WITH_LOGS
 #include <inttypes.h>
@@ -145,8 +147,7 @@
 ((S) == STATE_REGISTER_REQUIRED ? "STATE_REGISTER_REQUIRED" :        \
 ((S) == STATE_REGISTERING ? "STATE_REGISTERING" :      \
 ((S) == STATE_READY ? "STATE_READY" :      \
-((S) == STATE_DELAY ? "STATE_DELAY" :  \
-"Unknown")))))))
+"Unknown"))))))
 #else
 #define UNUSEX(x) (x)=(x)
 #define LOG_ARG(FMT, ...)

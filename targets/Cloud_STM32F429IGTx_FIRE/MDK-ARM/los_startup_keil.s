@@ -32,22 +32,10 @@
  ; applicable export control laws and regulations.
  ;---------------------------------------------------------------------------*/
 
-LOS_Heap_Min_Size   EQU     0x400
-
-                AREA    LOS_HEAP, NOINIT, READWRITE, ALIGN=3
-__los_heap_base
-LOS_Heap_Mem    SPACE   LOS_Heap_Min_Size
-
-
-                AREA    LOS_HEAP_INFO, DATA, READONLY, ALIGN=2
-                IMPORT  |Image$$ARM_LIB_STACKHEAP$$ZI$$Base|
-                EXPORT  __LOS_HEAP_ADDR_START__
-                EXPORT  __LOS_HEAP_ADDR_END__
-__LOS_HEAP_ADDR_START__
-                DCD     __los_heap_base
-__LOS_HEAP_ADDR_END__
-                DCD     |Image$$ARM_LIB_STACKHEAP$$ZI$$Base| - 1
-
+                EXPORT  __heap_start__
+                AREA    HEAP_START, NOINIT, READWRITE, ALIGN=3
+__heap_start__
+                SPACE   0
 
                 PRESERVE8
 

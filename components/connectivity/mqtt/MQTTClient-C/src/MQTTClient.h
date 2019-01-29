@@ -16,8 +16,8 @@
  *    Ian Craggs - add setMessageHandler function
  *******************************************************************************/
 
-#if !defined(__MQTT_CLIENT_C_)
-#define __MQTT_CLIENT_C_
+#if !defined(MQTT_CLIENT_H)
+#define MQTT_CLIENT_H
 
 #if defined(__cplusplus)
  extern "C" {
@@ -36,8 +36,12 @@
 
 #include "MQTTPacket.h"
 #include "stdio.h"
+#define __MQTT_LITE_OS__
+#ifdef __MQTT_LITE_OS__
 #include "MQTTliteos.h"
-	
+#endif
+
+
 #if defined(MQTTCLIENT_PLATFORM_HEADER)
 /* The following sequence of macros converts the MQTTCLIENT_PLATFORM_HEADER value
  * into a string constant suitable for use with include.
@@ -89,7 +93,6 @@ typedef struct MessageData
 {
     MQTTMessage* message;
     MQTTString* topicName;
-    const char* topic_sub;
 } MessageData;
 
 typedef struct MQTTConnackData
@@ -132,9 +135,6 @@ typedef struct MQTTClient
     Mutex mutex;
     Thread thread;
 #endif
-#ifdef __MQTT_LITE_OS__
-    void *mutex;
-#endif
 } MQTTClient;
 
 #define DefaultClient {0, 0, 0, 0, NULL, NULL, 0, 0, 0}
@@ -147,7 +147,7 @@ typedef struct MQTTClient
  * @param command_timeout_ms
  * @param
  */
-DLLExport void MQTTClientInit(MQTTClient* client, Network* network, unsigned int command_timeout_ms,
+DLLExport int MQTTClientInit(MQTTClient* client, Network* network, unsigned int command_timeout_ms,
 		unsigned char* sendbuf, size_t sendbuf_size, unsigned char* readbuf, size_t readbuf_size);
 
 DLLExport void MQTTClientDeInit(MQTTClient* c);
