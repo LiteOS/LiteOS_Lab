@@ -274,9 +274,8 @@ extern "C" {
                                        Memory module configuration
 =============================================================================*/
 
-extern UINT8 *m_aucSysMem0;
-extern UINT32 __LOS_HEAP_ADDR_START__;
-extern UINT32 __LOS_HEAP_ADDR_END__;
+#define LOSCFG_HEAP_IMPROVED                                YES
+#define LOSCFG_MEM_STATISTICS                               YES
 
 /**
  * @ingroup los_config
@@ -388,8 +387,6 @@ extern UINT32 __LOS_HEAP_ADDR_END__;
 #ifndef LOSCFG_ENABLE_VFS
 #define LOSCFG_ENABLE_VFS                                   YES
 #endif
-
-#define LOSCFG_HEAP_IMPROVED                                YES
 
 #ifdef __cplusplus
 #if __cplusplus

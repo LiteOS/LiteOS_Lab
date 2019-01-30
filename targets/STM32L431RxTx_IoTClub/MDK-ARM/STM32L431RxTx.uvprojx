@@ -562,16 +562,6 @@
               <FilePath>..\..\..\kernel\base\ipc\los_sem.c</FilePath>
             </File>
             <File>
-              <FileName>los_heap.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\kernel\base\mem\bestfit_little\los_heap.c</FilePath>
-            </File>
-            <File>
-              <FileName>los_memory.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\kernel\base\mem\bestfit_little\los_memory.c</FilePath>
-            </File>
-            <File>
               <FileName>los_slab.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\kernel\base\mem\common\los_slab.c</FilePath>
@@ -610,6 +600,21 @@
               <FileName>los_memcheck.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\kernel\base\mem\common\los_memcheck.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_heap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\kernel\base\mem\heap\los_heap.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_memory.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\kernel\base\mem\heap\los_memory.c</FilePath>
+            </File>
+            <File>
+              <FileName>malloc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\lib\libc\malloc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -925,6 +930,16 @@
               <FileName>los_dev.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\components\driver\los_dev.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>utils</GroupName>
+          <Files>
+            <File>
+              <FileName>rbtree.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utils\rbtree.c</FilePath>
             </File>
           </Files>
         </Group>

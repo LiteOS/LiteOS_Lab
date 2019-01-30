@@ -63,7 +63,7 @@ KERNEL_SRC =  \
 		${wildcard $(TOP_DIR)/kernel/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/core/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/ipc/*.c} \
-        ${wildcard $(TOP_DIR)/kernel/base/mem/bestfit_little/*.c} \
+        ${wildcard $(TOP_DIR)/kernel/base/mem/heap/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/mem/membox/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_slab.c} \
 		${wildcard $(TOP_DIR)/kernel/base/mem/common/los_slabmem.c} \
@@ -79,6 +79,11 @@ CMSIS_SRC =  \
 ARCH_SRC =  \
         ${wildcard $(TOP_DIR)/arch/arm/arm-m/src/*.c}
         C_SOURCES += $(ARCH_SRC)
+
+UTIL_SRC =  \
+        ${wildcard $(TOP_DIR)/utils/*.c} \
+        $(TOP_DIR)/components/lib/libc/malloc.c
+        C_SOURCES += $(UTIL_SRC)
         
 #AT FRAMEWORK        
 AT_SRC =  \

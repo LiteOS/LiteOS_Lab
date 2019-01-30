@@ -33,6 +33,7 @@
  *---------------------------------------------------------------------------*/
 
 #include <los_config.h>
+#include <los_printf.h>
 
 #ifdef LOSCFG_HEAP_IMPROVED
 
@@ -48,7 +49,7 @@ static inline int __put_chunk (heap_t * heap, chunk_t * chunk)
         return -1;
     }
 
-#ifdef RTW_CONFIG_MEM_STATISTICS
+#if (LOSCFG_MEM_STATISTICS == YES)
     __stat_chunk_add (&heap->stat, chunk);
 #endif
 
@@ -59,7 +60,7 @@ static inline void __del_chunk (heap_t * heap, chunk_t * chunk)
 {
     __cm_del_chunk (&heap->cm, chunk);
 
-#ifdef RTW_CONFIG_MEM_STATISTICS
+#if (LOSCFG_MEM_STATISTICS == YES)
     __stat_chunk_del (&heap->stat, chunk);
 #endif
 }
@@ -330,7 +331,7 @@ static inline char * __carve_extra (heap_t * heap, chunk_t * chunk,
         __put_chunk (heap, chunk);
     }
 
-#ifdef RTW_CONFIG_MEM_STATISTICS
+#if (LOSCFG_MEM_STATISTICS == YES)
     __stat_chunk_alloc (&heap->stat, (chunk_t *) ach);
 #endif
 
@@ -443,7 +444,7 @@ int heap_free (heap_t * heap, char * mem)
 
     __set_chunk_free (chunk);
 
-#ifdef RTW_CONFIG_MEM_STATISTICS
+#if (LOSCFG_MEM_STATISTICS == YES)
     __stat_chunk_free (&heap->stat, chunk);
 #endif
 
@@ -571,5 +572,90 @@ char * heap_realloc (heap_t * heap, char * ptr, size_t size)
 
     return ptr;
 }
+
+#if (LOSCFG_MEM_STATISTICS == YES)
+int heap_stat_get (heap_t * heap, mem_stat_t * stat)
+    {
+    if ((heap == NULL) || (stat == NULL))
+        {
+        return NULL;
+        }
+
+    if (LOS_MuxPend (heap->mux, LOS_WAIT_FOREVER) != LOS_OK)
+        {
+        return LOS_NOK;
+        }
+
+    *stat = heap->stat;
+
+    stat->max_free_size = __get_max_free (&heap->cm);
+
+    (void) LOS_MuxPost (heap->mux);
+
+    return LOS_OK;
+    }
+#endif
+
+static inline void __dump_block (block_t * block)
+    {
+    chunk_t * chunk = (chunk_t *) (block + 1);
+
+    PRINTK ("\taddress    size       status\n\r");
+    PRINTK ("\t---------- ---------- ---------\n\r");
+
+    do
+        {
+        PRINTK ("\t0x%08x 0x%08x %s", chunk, chunk->size & ~1,
+                 (chunk->size & 1) == 0 ? "free\n\r" : "allocated\n\r");
+
+        if ((chunk->prev != NULL) && (chunk->size == (sizeof (ach_t) | 1)))
+            {
+            break;
+            }
+
+        chunk = __get_next_chunk (chunk);
+        } while (1);
+    }
+
+void __cmd_dump_heap (heap_t * heap, bool show_chunk)
+    {
+    block_t * block = heap->blocks;
+
+    if (show_chunk)
+        {
+        PRINTK ("\tchunk information:\n\r\n\r");
+        }
+
+    if (LOS_MuxPend (heap->mux, LOS_WAIT_FOREVER) != LOS_OK)
+        {
+        return;
+        }
+
+    if (show_chunk)
+        {
+        while (block)
+            {
+            __dump_block (block);
+            block = block->next;
+            }
+        }
+
+#if (LOSCFG_MEM_STATISTICS == YES)
+    PRINTK ("\n\r\tSUMMARY:\n\r\n\r");
+    PRINTK ("\tstatus  bytes              blocks\n\r");
+    PRINTK ("\t------  ------------------ ------\n\r");
+    PRINTK ("\tcurrent:\n\r");
+    PRINTK ("\tfree\t0x%-16x %d\n\r", heap->stat.free_size, heap->stat.free_chunks);
+    PRINTK ("\talloc\t0x%-16x %d\n\r", heap->stat.busy_size, heap->stat.busy_chunks);
+    PRINTK ("\tcumulative:\n\r");
+    PRINTK ("\tfree\t0x%-16llx %lld\n\r", heap->stat.cum_size_freed, heap->stat.cum_freed);
+    PRINTK ("\talloc\t0x%-16llx %lld\n\r", heap->stat.cum_size_allocated, heap->stat.cum_allocated);
+
+    PRINTK ("\n\r\tmaximum allocated size ever: 0x%08x\n\r", heap->stat.max_busy_size);
+    PRINTK ("\n\r\tmaximum free size: 0x%08x\n\r", __get_max_free (&heap->cm));
+#endif
+
+    LOS_MuxPost (heap->mux);
+    }
 
 #endif

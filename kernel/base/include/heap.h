@@ -43,17 +43,14 @@
 
 #include "chunk.h"
 
-#undef  RTW_CONFIG_CM_TLSF
-#define RTW_CONFIG_CM_BESTFIT
+#undef  LOSCFG_CONFIG_CM_TLSF
+#define LOSCFGTW_CONFIG_CM_BESTFIT
 
-#if   defined (RTW_CONFIG_CM_TLSF)
+#if   defined (LOSCFGTW_CONFIG_CM_TLSF)
 #include "cm-tlsf.h"
-#elif defined (RTW_CONFIG_CM_BESTFIT)
+#elif defined (LOSCFGTW_CONFIG_CM_BESTFIT)
 #include "cm-bestfit.h"
 #endif
-
-// TODO: remove this, default NO, or connect with config system
-#define RTW_CONFIG_MEM_STATISTICS
 
 #define MIN_BLOCK_SIZE          (sizeof (block_t) + sizeof (ach_t) * 2 + \
                                  sizeof (fch_t))
@@ -68,7 +65,7 @@ typedef struct block
     size_t         size;
 } block_t;
 
-#ifdef RTW_CONFIG_MEM_STATISTICS
+#if (LOSCFG_MEM_STATISTICS == YES)
 typedef struct mem_stat
 {
     unsigned int       free_chunks;
@@ -76,6 +73,7 @@ typedef struct mem_stat
     unsigned int       busy_chunks;
     size_t             busy_size;
     size_t             max_busy_size;
+    size_t             max_free_size;
     unsigned long long cum_allocated;
     unsigned long long cum_size_allocated;
     unsigned long long cum_freed;
@@ -88,7 +86,7 @@ typedef struct heap
     chunk_mgr_t        cm;
     block_t          * blocks;
     uint32_t           mux;
-#ifdef RTW_CONFIG_MEM_STATISTICS
+#if (LOSCFG_MEM_STATISTICS == YES)
     struct mem_stat    stat;
 #endif
 #if (LOSCFG_KERNEL_MEM_SLAB == YES)
@@ -98,7 +96,7 @@ typedef struct heap
 
 /* inlines */
 
-#ifdef RTW_CONFIG_MEM_STATISTICS
+#if (LOSCFG_MEM_STATISTICS == YES)
 static inline void __stat_chunk_add (mem_stat_t * stat, chunk_t * chunk)
 {
     stat->free_chunks++;
@@ -141,6 +139,9 @@ extern int    heap_free        (heap_t * heap, char * mem);
 extern char * heap_realloc     (heap_t * heap, char * ptr, size_t size);
 extern int    heap_init        (heap_t * heap);
 extern int    heap_add         (heap_t * heap, char * buff, size_t size);
+#if (LOSCFG_MEM_STATISTICS == YES)
+extern int    heap_stat_get    (heap_t * heap, mem_stat_t * stat);
+#endif
 
 #endif  /* __HEAP_H__ */
 

@@ -43,6 +43,8 @@
 
 heap_t kernel_heap [1] = {0,};
 
+extern void __cmd_dump_heap (heap_t * heap, bool show_chunk);
+
 /*****************************************************************************
  Function : LOS_MemInit
  Description : Initialize Dynamic Memory pool
@@ -217,5 +219,10 @@ VOID * osSlabCtrlHdrGet (VOID * pPool)
     return NULL;
 #endif
 }
+
+VOID LOS_MemInfo (bool bShowDetail)
+    {
+    __cmd_dump_heap (kernel_heap, bShowDetail);
+    }
 
 #endif
