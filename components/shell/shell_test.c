@@ -32,6 +32,7 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 #include <shell.h>
+
 #if LOSCFG_ENABLE_SHELL
 
 /*
@@ -59,10 +60,10 @@ static s32_t shell_taskinfo(s32_t argc,const char *argv[]){
 OSSHELL_EXPORT_CMD(shell_taskinfo,"taskinfo","taskinfo");
 
 //show the memstatus here
-extern UINT32 LOS_MemPoolList(VOID);
+extern VOID LOS_MemInfo (BOOL bShowDetail);
 static s32_t shell_heapinfo(s32_t argc,const char *argv[])
 {
-    LOS_MemPoolList();
+    LOS_MemInfo(1);
     return 0;
 }
 OSSHELL_EXPORT_CMD(shell_heapinfo,"heapinfo","heapinfo");

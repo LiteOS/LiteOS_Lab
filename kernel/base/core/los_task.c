@@ -844,11 +844,6 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_TaskCreateOnly(UINT32 *puwTaskID, TSK_INIT_PARA
         return LOS_ERRNO_TSK_PRIOR_ERROR;
     }
 
-    if (pstInitParam->uwStackSize > OS_SYS_MEM_SIZE)
-    {
-        return LOS_ERRNO_TSK_STKSZ_TOO_LARGE;
-    }
-
     if (0 == pstInitParam->uwStackSize)
     {
         pstInitParam->uwStackSize = LOSCFG_BASE_CORE_TSK_DEFAULT_STACK_SIZE;

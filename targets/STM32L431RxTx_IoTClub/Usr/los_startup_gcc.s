@@ -72,12 +72,6 @@ defined in linker script */
  * @retval : None
 */
     .section  .text
-    .global __LOS_HEAP_ADDR_START__
-    .global __LOS_HEAP_ADDR_END__
-__LOS_HEAP_ADDR_START__:
-    .word  __los_heap_addr_start__
-__LOS_HEAP_ADDR_END__:
-    .word  __los_heap_addr_end__
 
     .section	.text.Reset_Handler
 	.weak	Reset_Handler

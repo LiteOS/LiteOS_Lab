@@ -39,6 +39,29 @@
 #include <osport.h>
 #include <at.h>
 
+#include <mem.h>
+
+#if defined (__CC_ARM)
+extern char __heap_start__ [];
+#elif defined (__GNUC__)
+extern char __los_heap_addr_start__ [];
+extern char __los_heap_addr_end__ [];
+#else
+#error "fix me"
+#endif
+
+const struct phys_mem system_phys_mem [] =
+    {
+#if defined (__CC_ARM)
+        { __heap_start__, (char *) 0x2000FC00, },
+#elif defined (__GNUC__)
+        { __los_heap_addr_start__, __los_heap_addr_end__, },
+#else
+#error "unsupported tool!"
+#endif
+        { 0, 0 }
+    };
+
 VOID HardWare_Init(VOID)
 {
 	HAL_Init();
