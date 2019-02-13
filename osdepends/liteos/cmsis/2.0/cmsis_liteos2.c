@@ -1103,7 +1103,7 @@ osStatus_t osEventFlagsDelete (osEventFlagsId_t ef_id)
     osStatus_t uwRet;
 
     uwIntSave = LOS_IntLock();
-    if (LOS_EventDestory(pstEventCB) == LOS_OK)
+    if (LOS_EventDestroy(pstEventCB) == LOS_OK)
     {
         uwRet = osOK;
     }

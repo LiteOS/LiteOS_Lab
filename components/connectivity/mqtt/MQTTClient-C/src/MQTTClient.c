@@ -88,7 +88,7 @@ void MQTTClientDeInit(MQTTClient *c)
     if(!c)
         return;
 #if defined(MQTT_TASK)
-    MutexDestory(&c->mutex);
+    MutexDestroy(&c->mutex);
 #endif
     return;
 }
