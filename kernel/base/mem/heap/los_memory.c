@@ -34,14 +34,16 @@
 
 #include <los_config.h>
 
-#ifdef LOSCFG_HEAP_IMPROVED
+#if (LOSCFG_HEAP_IMPROVED == YES)
 
 #include <string.h>
 
 #include <mem.h>
 #include <heap.h>
 
-heap_t kernel_heap [1] = {0,};
+#ifdef LOSCFG_ENABLE_MPU
+#include <los_task.ph>
+#endif
 
 extern void __cmd_dump_heap (heap_t * heap, bool show_chunk);
 
@@ -53,24 +55,55 @@ extern void __cmd_dump_heap (heap_t * heap, bool show_chunk);
  Output      : None
  Return      : LOS_OK - Ok, LOS_NOK - Error
 *****************************************************************************/
-int LOS_MemInit (void)
+UINT32 LOS_MemInit (VOID *pPool, UINT32 uwSize)
 {
-    const struct phys_mem * spm = system_phys_mem;
-    int                     block_added = 0;
+    heap_t *                heap;
 
-    heap_init (kernel_heap);
+    uwSize -= (UINT32) pPool & ALLOC_ALIGN_MASK;
+    uwSize &= ~ALLOC_ALIGN_MASK;
+    pPool  = (char *) ((UINT32) pPool & ~ALLOC_ALIGN_MASK);
+
+    if (pPool == NULL || uwSize <= sizeof(heap_t))
+    {
+        return LOS_NOK;
+    }
+
+    heap = (heap_t *) pPool;
+
+    heap_init (heap);
+
+    if (heap_add (heap, (char *) (heap + 1), uwSize - sizeof (heap_t)) != 0)
+    {
+        return LOS_NOK;
+    }
+
+    return LOS_OK;
+}
+
+UINT32 osMemSystemInit(VOID)
+{
+    UINT32                  uwRet;
+    const struct phys_mem * spm = system_phys_mem;
+
+    uwRet = LOS_MemInit(spm->start, spm->end - spm->start);
+
+    if (uwRet != LOS_OK)
+    {
+        return uwRet;
+    }
+
+    m_aucSysMem0 = (UINT8*) spm->start;
+
+    spm++;
 
     while (spm->end)
     {
-        if (heap_add (kernel_heap, spm->start, spm->end - spm->start) == 0)
-        {
-            block_added++;
-        }
+        heap_add ((heap_t *) m_aucSysMem0, spm->start, spm->end - spm->start);
 
         spm++;
     }
 
-    return block_added == 0 ? LOS_NOK : LOS_OK;
+    return LOS_OK;
 }
 
 /*****************************************************************************
@@ -114,7 +147,7 @@ BOOL osHeapFree (VOID * pPool, VOID * pMem)
     {
         return FALSE;
     }
-    
+
     return TRUE;
 }
 
@@ -143,9 +176,18 @@ LITE_OS_SEC_TEXT VOID *LOS_MemAlloc (VOID *pPool, UINT32 uwSize)
 {
     VOID *pRet = NULL;
 
-    if ((NULL == pPool) || (0 == uwSize))
+    if (0 == uwSize)
     {
         return pRet;
+    }
+
+    if (NULL == pPool)
+    {
+#if (LOSCFG_ENABLE_MPU == YES)
+        pPool = g_stLosTask.pstRunTask->pPool;
+#else
+        return pRet;
+#endif
     }
 
 #if (LOSCFG_KERNEL_MEM_SLAB == YES)
@@ -222,7 +264,7 @@ VOID * osSlabCtrlHdrGet (VOID * pPool)
 
 VOID LOS_MemInfo (bool bShowDetail)
     {
-    __cmd_dump_heap (kernel_heap, bShowDetail);
+    __cmd_dump_heap ((heap_t *) m_aucSysMem0, bShowDetail);
     }
 
 #endif

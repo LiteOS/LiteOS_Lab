@@ -63,7 +63,7 @@ typedef struct atiny_task_mutex_tag_s Mutex;
 int MutexInit(Mutex* mutex);
 int MutexLock(Mutex* mutex);
 int MutexUnlock(Mutex* mutex);
-void MutexDestory(Mutex* mutex);
+void MutexDestroy(Mutex* mutex);
 
 typedef struct
 {

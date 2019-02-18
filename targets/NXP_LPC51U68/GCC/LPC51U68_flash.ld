@@ -200,7 +200,7 @@ SECTIONS
     __END_BSS = .;
   } > m_data
 
-  .heap :
+  .sbrk_heap :
   {
     . = ALIGN(8);
     __end__ = .;
@@ -209,21 +209,21 @@ SECTIONS
     . += HEAP_SIZE;
     __HeapLimit = .;
     __heap_limit = .; /* Add for _sbrk */
-  } > m_data_sramx
+  } > m_data
+
+  .heap :
+  {
+    __los_heap_addr_start__ = .;
+  } > m_data
 
   .stack :
   {
     . = ALIGN(8);
     . += STACK_SIZE;
+    __StackTop = .;
+    PROVIDE(__stack = __StackTop);
   } > m_data_sramx
 
-  /* Initializes stack on the end of block */
-  __StackTop   = ORIGIN(m_data_sramx) + LENGTH(m_data_sramx);
-  __StackLimit = __StackTop - STACK_SIZE;
-  PROVIDE(__stack = __StackTop);
-
   .ARM.attributes 0 : { *(.ARM.attributes) }
-
-  ASSERT(__StackLimit >= __HeapLimit, "region m_data_sramx overflowed with stack and heap")
 }
 

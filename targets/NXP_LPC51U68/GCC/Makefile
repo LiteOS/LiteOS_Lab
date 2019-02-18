@@ -90,7 +90,7 @@ KERNEL_SRC =  \
         ${wildcard $(TOP_DIR)/kernel/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/core/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/ipc/*.c} \
-        ${wildcard $(TOP_DIR)/kernel/base/mem/bestfit_little/*.c} \
+        ${wildcard $(TOP_DIR)/kernel/base/mem/heap/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/mem/membox/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/mem/common/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/misc/*.c} \
@@ -204,18 +204,19 @@ endif
 
 ifeq ($(USE_FOTA), yes)
 OTA_SRC = \
-    ${wildcard  $(TOP_DIR)/components/ota/flag_operate/*.c} \
-    ${wildcard  $(TOP_DIR)/components/ota/package/*.c} \
-	${wildcard  $(TOP_DIR)/components/ota/utility/*.c}
-    C_SOURCES += $(OTA_SRC)
+        ${wildcard  $(TOP_DIR)/components/ota/flag_operate/*.c} \
+        ${wildcard  $(TOP_DIR)/components/ota/package/*.c} \
+        ${wildcard  $(TOP_DIR)/components/ota/utility/*.c}
+        C_SOURCES += $(OTA_SRC)
 endif
-
 
 USER_SRC =  \
         ${wildcard  $(TOP_DIR)/targets/NXP_LPC51U68/Src/*.c}
         C_SOURCES += $(USER_SRC)
 
-
+UTIL_SRC =  \
+        ${wildcard $(TOP_DIR)/utils/*.c}
+        C_SOURCES += $(UTIL_SRC)
 
 # ASM sources
 ASM_SOURCES_s =  \

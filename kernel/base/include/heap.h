@@ -85,7 +85,7 @@ typedef struct heap
 {
     chunk_mgr_t        cm;
     block_t          * blocks;
-    uint32_t           mux;
+    UINT32             mux;
 #if (LOSCFG_MEM_STATISTICS == YES)
     struct mem_stat    stat;
 #endif

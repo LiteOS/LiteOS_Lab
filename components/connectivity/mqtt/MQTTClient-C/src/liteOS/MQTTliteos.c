@@ -118,7 +118,7 @@ int MutexUnlock(Mutex* mutex)
     return ret;
 }
 
-void MutexDestory(Mutex* mutex)
+void MutexDestroy(Mutex* mutex)
 {
     int ret = atiny_task_mutex_delete(mutex);
     if (ret != LOS_OK)
