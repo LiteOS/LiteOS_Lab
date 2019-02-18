@@ -44,6 +44,24 @@
 #include "osport.h"
 #include<stdlib.h>
 
+#include <mem.h>
+
+#if defined (__GNUC__)
+extern char __los_heap_addr_start__ [];
+extern char __stack [];
+#else
+#error "unsupported tool!"
+#endif
+
+const struct phys_mem system_phys_mem [] =
+{
+#if defined (__GNUC__)
+    { __los_heap_addr_start__, (char *) 0x20010000, },
+#endif
+    { __stack,                 (char *) 0x04008000, },
+    { 0, 0 }
+};
+
 //import the uart here
 extern void uart_init(void);
 extern s32_t uart_read(u8_t *buf,s32_t len,s32_t timeout);
@@ -186,8 +204,6 @@ UINT32 creat_tmp_task()
     return uwRet;
 }
 
-
-
 int main(void)
 {
     UINT32 uwRet = LOS_OK;
@@ -203,8 +219,4 @@ int main(void)
     LOS_Start();
     return 0;
 }
-
-
-
-
 

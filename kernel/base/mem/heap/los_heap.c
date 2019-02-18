@@ -35,7 +35,7 @@
 #include <los_config.h>
 #include <los_printf.h>
 
-#ifdef LOSCFG_HEAP_IMPROVED
+#if (LOSCFG_HEAP_IMPROVED == YES)
 
 #include <string.h>
 
@@ -87,14 +87,14 @@ static inline chunk_t * __get_chunk (heap_t * heap, size_t size)
 int heap_init (heap_t * heap)
 {
     UINT32 ret;
-    
+
     if (heap == NULL)
     {
         return -1;
     }
 
     memset (heap, 0, sizeof (heap_t));
-    
+
     ret = LOS_MuxCreate (&heap->mux);
 
     if (ret != LOS_OK)
@@ -376,7 +376,6 @@ char * heap_alloc_align (heap_t * heap, size_t align, size_t bytes)
     }
 
     bytes = round_up (bytes, ALLOC_ALIGN_SIZE);
-    
 
     if (LOS_MuxPend (heap->mux, LOS_WAIT_FOREVER) != LOS_OK)
     {
@@ -422,7 +421,7 @@ int heap_free (heap_t * heap, char * mem)
     chunk_t * chunk;
     chunk_t * prev_chunk;
     chunk_t * next_chunk;
-    
+
     if (heap == NULL)
     {
         return -1;
@@ -471,7 +470,7 @@ int heap_free (heap_t * heap, char * mem)
     __put_chunk (heap, chunk);
 
     (void) LOS_MuxPost (heap->mux);
-    
+
     return 0;
 }
 
@@ -578,7 +577,7 @@ int heap_stat_get (heap_t * heap, mem_stat_t * stat)
     {
     if ((heap == NULL) || (stat == NULL))
         {
-        return NULL;
+        return LOS_NOK;
         }
 
     if (LOS_MuxPend (heap->mux, LOS_WAIT_FOREVER) != LOS_OK)
@@ -605,7 +604,7 @@ static inline void __dump_block (block_t * block)
 
     do
         {
-        PRINTK ("\t0x%08x 0x%08x %s", chunk, chunk->size & ~1,
+        PRINTK ("\t%p 0x%08x %s", chunk, chunk->size & ~1,
                  (chunk->size & 1) == 0 ? "free\n\r" : "allocated\n\r");
 
         if ((chunk->prev != NULL) && (chunk->size == (sizeof (ach_t) | 1)))

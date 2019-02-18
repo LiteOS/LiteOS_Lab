@@ -36,7 +36,7 @@
 #include "los_task.ph"
 #include "los_config.h"
 
-#ifdef LOSCFG_HEAP_IMPROVED
+#if (LOSCFG_HEAP_IMPROVED == YES)
 #include "mem.h"
 #endif
 
@@ -140,13 +140,12 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_KernelInit(VOID)
 
     osRegister();
 
-#ifdef LOSCFG_HEAP_IMPROVED
-    uwRet = LOS_MemInit();
-    m_aucSysMem0 = (UINT8 *) kernel_heap;
-#else
+#if (LOSCFG_HEAP_IMPROVED != YES)
+
     m_aucSysMem0 = OS_SYS_MEM_ADDR;
-    uwRet = osMemSystemInit();
 #endif
+
+    uwRet = osMemSystemInit();
 
     if (uwRet != LOS_OK)
     {
@@ -254,17 +253,6 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_KernelInit(VOID)
 #if (LOSCFG_ENABLE_MPU == YES)
     void mpu_init (void);
     mpu_init ();
-
-
-#if (LOSCFG_PLATFORM_HWI == YES)
-#if (OS_HWI_WITH_ARG == YES)
-    extern void SVC_Handler (void *);
-    osSetVector(SVCall_IRQn, (HWI_PROC_FUNC)SVC_Handler, NULL);
-#else
-    extern void SVC_Handler (void);
-    osSetVector(SVCall_IRQn, SVC_Handler);
-#endif
-#endif
 #endif
 
     return LOS_OK;
