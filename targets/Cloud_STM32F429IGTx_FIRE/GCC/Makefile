@@ -108,8 +108,8 @@ KERNEL_SRC =  \
         ${wildcard $(TOP_DIR)/kernel/base/mem/heap/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/mem/membox/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_slab.c} \
-	  ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_slabmem.c} \
-	  ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_memcheck.c} \
+        ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_slabmem.c} \
+        ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_memcheck.c} \
         ${wildcard $(TOP_DIR)/kernel/base/misc/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/om/*.c} \
         ${wildcard $(TOP_DIR)/kernel/extended/tickless/*.c}
@@ -255,6 +255,19 @@ CMOCKERY_TEST_FS_SRC = \
 endif
 endif
 
+ifeq ($(WITH_HILINK), yes)
+HILINK_SRC =  \
+        $(TOP_DIR)/components/hilink_hislip/hilinkexample.c \
+        $(TOP_DIR)/components/hilink_hislip/src/dev_profile.c \
+        $(TOP_DIR)/components/hilink_hislip/src/hilink.c \
+        $(TOP_DIR)/components/hilink_hislip/src/hislip.c \
+        $(TOP_DIR)/components/hilink_hislip/src/hislip_uart.c \
+        $(TOP_DIR)/components/hilink_hislip/port/hislip_port.c \
+        $(TOP_DIR)/components/hilink_hislip/port/bsp_led.c
+        C_SOURCES += $(HILINK_SRC)
+endif
+
+
 ifeq ($(WITH_CMOCKERY_TEST), yes)
 ifeq ($(USE_SOTA),yes)
 CMOCKERY_TEST_SOTA_TEST = \
@@ -398,6 +411,10 @@ C_DEFS =  \
         -D STM32F429xx \
         -D NDEBUG
 
+ifeq ($(WITH_HILINK), yes)
+    C_DEFS += -DWITH_HILINK
+endif
+
 ifeq ($(WITH_LWM2M), yes)
 		C_DEFS += \
 			-D LWM2M_LITTLE_ENDIAN \
@@ -516,6 +533,13 @@ HARDWARE_INC = \
         -I $(TOP_DIR)/targets/Cloud_STM32F429IGTx_FIRE/Hardware/Inc
         C_INCLUDES += $(HARDWARE_INC)
 
+ifeq ($(WITH_HILINK), yes)
+HILINK_INC = \
+        -I $(TOP_DIR)/components/hilink_hislip/inc \
+        -I $(TOP_DIR)/components/hilink_hislip/profile
+        C_INCLUDES += $(HILINK_INC)
+endif
+
 USER_INC = \
         -I $(TOP_DIR)/targets/Cloud_STM32F429IGTx_FIRE/Inc
         C_INCLUDES += $(USER_INC)
@@ -589,8 +613,8 @@ ifeq ($(WITH_MQTT), yes)
 MQTT_INC = \
         -I $(TOP_DIR)/components/connectivity/mqtt/MQTTClient-C/src \
         -I $(TOP_DIR)/components/connectivity/mqtt/MQTTClient-C/src/liteOS \
-		-I $(TOP_DIR)/components/connectivity/mqtt/MQTTPacket/src \
-		-I $(TOP_DIR)/components/lib/cJSON
+        -I $(TOP_DIR)/components/connectivity/mqtt/MQTTPacket/src \
+        -I $(TOP_DIR)/components/lib/cJSON
         C_INCLUDES += $(MQTT_INC)
 endif
 
