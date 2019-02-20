@@ -144,18 +144,17 @@ LOS_StartToRun:
     LDM     R0!, {R2-R7}
     STM     R1, {R2-R7}
 
-    LDR     R0, [R12], #4          /* get the CONTROL value */
+    LDR     R3, [R12], #4          /* get the CONTROL value */
 #else
-    MOV     R0, #2
+    MOV     R3, #2
 #endif
 
-    /**
-     * Set the CONTROL register, after schedule start, privilege level and stack = PSP.
-     */
-    MSR     CONTROL, R0
-
     ADD     R12, R12, #36          /* skip R4-R11, PRIMASK. */
-    LDMFD   R12!, {R0-R7}
+    LDR     R0, [R12]
+    LDR     LR, [R12, #4 * 5]
+    LDR     R2, [R12, #4 * 6]
+
+    ADD     R12, R12, #4 * 8
 
     /**
      * Set the stack pointer of g_stLosTask.pstRunTask to PSP.
@@ -165,14 +164,18 @@ LOS_StartToRun:
     /**
      * Enable interrupt. (The default PRIMASK value is 0, so enable directly)
      */
-    MOV     LR, R5
     CPSIE   I
+
+    /**
+     * Set the CONTROL register, after schedule start, privilege level and stack = PSP.
+     */
+    MSR     CONTROL, R3
 
     /**
      * Jump directly to the default PC of g_stLosTask.pstRunTask, the field information
      * of the main function will be destroyed and will never be returned.
      */
-    BX      R6
+    BX      R2
 
 /****************************************************************************************
 * Function:
@@ -384,32 +387,18 @@ TaskSwitch:
     .global osEnterPrivileged
     .global osExitPrivileged
     .global osIsPrivileged
-    .global SVC_Handler
-
-SVC_Handler:
-    MRS  R0, PSP
-    LDR  R1, [R0]           /* get the previous PSR in R0 */
-    CMP  R1, #3
-    BNE  0f
-    LDR  R1, [R0, #0x10]    /* get the magic in R12 */
-    CMP  R1, #0x5a
-    BNE  0f
-
-    MOV  R0, #2
-    MSR  CONTROL, R0
-0:
-    BX   LR
 
 osEnterPrivileged:
+    PUSH    {R7, LR}
     MRS     R0, CONTROL
     TST     R0, #1
     BEQ     0f
 
-    MOV     R12, #0x5a  /* magic */
+    MVN     R7, #0
 
     SVC     #0
 0:
-    BX      LR
+    POP     {R7, PC}
 
 osExitPrivileged:
     TST     R0, #1

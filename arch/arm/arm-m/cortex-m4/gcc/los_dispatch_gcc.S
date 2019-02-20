@@ -144,21 +144,21 @@ LOS_StartToRun:
     LDM     R0!, {R2-R7}
     STM     R1, {R2-R7}
 
-    LDR     R0, [R12], #4          /* get the CONTROL value */
+    LDR     R3, [R12], #4          /* get the CONTROL value */
 #else
-    MOV     R0, #2
+    MOV     R3, #2
 #endif
-
-    /**
-     * Set the CONTROL register, after schedule start, privilege level and stack = PSP.
-     */
-    MSR     CONTROL, R0
 
     ADD     R12, R12, #36          /* skip R4-R11, PRIMASK. */
 #if defined (__VFP_FP__) && !defined(__SOFTFP__)
     ADD     R12, R12, #4           /* if FPU exist, skip EXC_RETURN. */
 #endif
-    LDMFD   R12!, {R0-R7}
+
+    LDR     R0, [R12]
+    LDR     LR, [R12, #4 * 5]
+    LDR     R2, [R12, #4 * 6]
+
+    ADD     R12, R12, #4 * 8
 
     /**
      * Set the stack pointer of g_stLosTask.pstRunTask to PSP.
@@ -168,14 +168,18 @@ LOS_StartToRun:
     /**
      * Enable interrupt. (The default PRIMASK value is 0, so enable directly)
      */
-    MOV     LR, R5
     CPSIE   I
+
+    /**
+     * Set the CONTROL register, after schedule start, privilege level and stack = PSP.
+     */
+    MSR     CONTROL, R3
 
     /**
      * Jump directly to the default PC of g_stLosTask.pstRunTask, the field information
      * of the main function will be destroyed and will never be returned.
      */
-    BX      R6
+    BX      R2
 
 /****************************************************************************************
 * Function:
@@ -287,6 +291,7 @@ TaskSwitch:
     VSTMDBEQ  R0!, {D8-D15}
     STMFD   R0!, {R14}             /* save EXC_RETURN. */
 #endif
+
     STMFD   R0!, {R4-R12}          /* save the core registers and PRIMASK. */
 
 #ifdef LOSCFG_ENABLE_MPU
@@ -384,6 +389,7 @@ TaskSwitch:
      *                                     Stack pointer after exiting exception--->|
      */
     LDMFD   R1!, {R4-R12}          /* restore the core registers and PRIMASK. */
+
 #if defined (__VFP_FP__) && !defined(__SOFTFP__)       /* if FPU exist. */
     LDMFD   R1!, {R14}             /* restore EXC_RETURN. */
     TST     R14, #0x10             /* if the task using the FPU context, pop s16-s31. */
@@ -408,15 +414,16 @@ TaskSwitch:
     .global osIsPrivileged
 
 osEnterPrivileged:
+    PUSH    {R7, LR}
     MRS     R0, CONTROL
     TST     R0, #1
     BEQ     0f
 
-    MOV     R12, #0x5a  /* magic */
+    MVN     R7, #0
 
     SVC     #0
 0:
-    BX      LR
+    POP     {R7, PC}
 
 osExitPrivileged:
     TST     R0, #1

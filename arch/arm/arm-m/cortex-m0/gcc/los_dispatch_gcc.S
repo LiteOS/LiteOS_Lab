@@ -109,12 +109,6 @@ LOS_StartToRun:
     MSR     PSP, R0
 
     /**
-     * Set the CONTROL register, after schedule start, privilege level and stack = PSP.
-     */
-    MOVS    R0, #2
-    MSR     CONTROL, R0
-
-    /**
      * Set g_stLosTask.pstRunTask = g_stLosTask.pstNewTask.
      */
     LDR     R0, =g_stLosTask
@@ -160,36 +154,41 @@ LOS_StartToRun:
     SUBS    R4, R4, #1
     BNE     0b
 
-    LDR     R0, [R3]
-    MSR     CONTROL, R0
+    LDR     R2, [R3]
     ADDS    R3, R3, #4
+#else
+    MOVS    R2, #2
 #endif
 
     ADDS    R3, R3, #36            /* skip R4-R11, PRIMASK. */
 
-    LDMFD   R3!, {R0-R2}           /* restore R0-R2. */
-    ADDS    R3, R3, #4             /* skip R3. */
-    LDMFD   R3!, {R4-R7}           /* restore R12,LR,PC,xPSR. */
+    LDR     R0, [R3]
+    LDR     R1, [r3, #4 * 5]
+    MOV     LR, R1
+    LDR     R1, [R3, #4 * 6]
+    
+    ADDS    R3, R3, #4 * 8
 
     /**
      * Set the stack pointer of g_stLosTask.pstRunTask to PSP.
      */
     MSR     PSP, R3
 
-    SUBS    R3, R3, #20
-    LDR     R3, [R3]               /* restore R3. */
-
     /**
      * Enable interrupt. (The default PRIMASK value is 0, so enable directly)
      */
-    MOV     LR, R5
     CPSIE   I
+
+    /**
+     * Set the CONTROL register, after schedule start, privilege level and stack = PSP.
+     */
+    MSR     CONTROL, R2
 
     /**
      * Jump directly to the default PC of g_stLosTask.pstRunTask, the field information
      * of the main function will be destroyed and will never be returned.
      */
-    BX      R6
+    BX      R1
 
 /****************************************************************************************
 * Function:
@@ -418,37 +417,23 @@ TaskSwitch:
     BX      LR
 
 #ifdef LOSCFG_ENABLE_MPU
-    .global  SVC_Handler
     .global  osEnterPrivileged
     .global  osExitPrivileged
     .global  osIsPrivileged
 
-SVC_Handler:
-    MRS     R0, PSP
-    LDR     R1, [R0]           /* get the previous PSR in R0 */
-    CMP     R1, #3
-    BNE     0f
-    LDR     R1, [R0, #0x10]    /* get the magic in R12 */
-    CMP     R1, #0x5a
-    BNE     0f
-
-    MOVS    R0, #2
-    MSR     CONTROL, R0
-0:
-    BX      LR
-
 osEnterPrivileged:
+    PUSH    {R7, LR}
     MRS     R0, CONTROL
     MOVS    R1, #1
     TST     R0, R1
     BEQ     0f
 
-    MOVS    R1, #0x5a   /* magic */
-    MOV     R12, R1
+    MOVS    R7, #0
+    MVNS    R7, R7
 
     SVC     #0
 0:
-    BX      LR
+    POP     {R7, PC}
 
 osExitPrivileged:
     MOVS    R1, #1

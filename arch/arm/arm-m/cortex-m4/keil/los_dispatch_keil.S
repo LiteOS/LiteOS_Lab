@@ -141,22 +141,22 @@ LOS_StartToRun PROC
     STM     R1, {R2-R7}
     LDM     R0!, {R2-R7}
     STM     R1, {R2-R7}
-    LDR     R0, [R12], #4          ; get the CONTROL value
+    LDR     R3, [R12], #4          ; get the CONTROL value
     ELSE
-    MOV     R0, #2
+    MOV     R3, #2
     ENDIF
-
-    ;/**
-    ; * Set the CONTROL register, after schedule start, privilege level and stack = PSP.
-    ; */
-    MSR     CONTROL, R0
 
     ADD     R12, R12, #36          ; skip R4-R11, PRIMASK.
 
     IF      {FPU} != "SoftVFP"
     ADD     R12, R12, #4           ; if FPU exist, skip EXC_RETURN.
     ENDIF
-    LDMFD   R12!, {R0-R7}
+
+    LDR     R0, [R12]
+    LDR     LR, [R12, #4 * 5]
+    LDR     R2, [R12, #4 * 6]
+
+    ADD     R12, R12, #4 * 8
 
     ;/**
     ; * Set the stack pointer of g_stLosTask.pstRunTask to PSP.
@@ -166,14 +166,19 @@ LOS_StartToRun PROC
     ;/**
     ; * Enable interrupt. (The default PRIMASK value is 0, so enable directly)
     ; */
-    MOV     LR, R5
     CPSIE   I
+
+    ;/**
+    ; * Set the CONTROL register, after schedule start, privilege level and stack = PSP.
+    ; */
+    MSR     CONTROL, R3
 
     ;/**
     ; * Jump directly to the default PC of g_stLosTask.pstRunTask, the field information
     ; * of the main function will be destroyed and will never be returned.
     ; */
-    BX      R6
+    BX      R2
+
     ENDP
 
 ;****************************************************************************************
@@ -410,15 +415,16 @@ TaskSwitch
     EXPORT  osIsPrivileged
 
 osEnterPrivileged PROC
+    PUSH    {R7, LR}
     MRS     R0, CONTROL
     TST     R0, #1
     BEQ     %F0
 
-    MOV     R12, #0x5a         ; magic
+    MVN     R7, #0             ; magic
 
     SVC     #0
 0
-    BX      LR
+    POP     {R7, PC}
     ENDP
 
 osExitPrivileged PROC
