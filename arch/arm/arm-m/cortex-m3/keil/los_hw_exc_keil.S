@@ -49,7 +49,6 @@
     EXPORT  MemManage_Handler
     EXPORT  BusFault_Handler
     EXPORT  UsageFault_Handler
-    EXPORT  SVC_Handler
 
 ;****************************************************************************************
 ;                                  EXTERN PARAMETERS
@@ -236,24 +235,6 @@ osHFExcCommonBMU
 
 ;****************************************************************************************
 ; Function:
-;        VOID SVC_Handler(VOID);
-; Description:
-;        SVC Handler.
-;****************************************************************************************
-SVC_Handler
-    TST   LR, #0x4                     ; EXC_RETURN[b2] --- PSP or MSP
-    ITE   EQ
-    MRSEQ R0, MSP
-    MRSNE R0, PSP
-    LDR   R1, [R0, #24]                ; The PC value in the stack frame
-    LDRB  R0, [R1, #-2]                ; R0: The number of SVC (0 - 255)
-    MOV   R1, #0
-    ;B     osExcDispatch
-_SvcLoop
-    B     _SvcLoop
-
-;****************************************************************************************
-; Function:
 ;        VOID BusFault_Handler(VOID);
 ; Description:
 ;        BusFault Handler.
@@ -309,7 +290,6 @@ _ExcMemNoADDR
 ;        UsageFault Handler.
 ;****************************************************************************************
 UsageFault_Handler
-	
     LDR  R0, =OS_NVIC_CFSR
     LDR  R0, [R0]
     LDR  R2, =OS_EXC_CAUSE_USAGEFAULT
@@ -318,8 +298,6 @@ UsageFault_Handler
     LSL  R1, R1, #16
     AND  R0, R0, R1                    ; R0:  reserved UFSR
     MOV  R12, #0                       ; R12: Fault addr invalid
-	
-
 
     ;/**
     ; * osExcCommonBMU: BusFault_Handler,MemManage_Handler and UsageFault_Handler share.
@@ -344,11 +322,9 @@ osExcCommonBMU
     LSL  R0, R0, #0x8
     ORR  R0, R0, R2
     ORR  R0, R0, R12
-	
-	;MRS R2,PSP		;PSP-->>37D8
 
     ;****************************************************************************************
-    ; osExcDispatch: NMI_Handler, HardFault_Handler, SVC_Handler, BusFault_Handler, MemManage_Handler,
+    ; osExcDispatch: NMI_Handler, HardFault_Handler, BusFault_Handler, MemManage_Handler,
     ;                  UsageFault_Handler sharing.
     ;****************************************************************************************
 
@@ -378,8 +354,6 @@ osExcCommonBMU
 osExcDispatch
     LDR   R2, =OS_NVIC_ACT_BASE
     MOV   R12, #8                      ; #8: externel interrupt active check loop counter(#0 - #239)
-	
-
 
 _hwiActiveCheck
     LDR   R3, [R2]                     ; R3 store the value of externel interrupt active status
@@ -399,8 +373,6 @@ _hwiActiveCheck
     ; * Interrupts and initialization phase always use MSP.
     ; */
 _ExcInMSP
-    ;TST   LR, #0x10                    ; EXC_RETURN[b4] --- FPU(0) or without FPU(1)
-    ;BNE   _NoFloatInMsp
 
     ;/**
     ; * Before executing instruction 'B _handleEntry', MSP is as follows.
@@ -418,8 +390,7 @@ _NoFloatInMsp
     PUSH  {R3}                         ; push [SAVED_SP]: MSP+32 = Stack pointer in MSP before entering the exception
     MRS   R12, PRIMASK
     PUSH  {R4-R12}                     ; push R4-R11,PRIMASK to MSP
-
-	ORR   R0, R0, #FLAG_NO_FLOAT       ; R0[b28] = 1, no FPU    &&&&&&&&&&
+    ORR   R0, R0, #FLAG_NO_FLOAT       ; R0[b28] = 1, no FPU    &&&&&&&&&&
     B     _handleEntry
 
 _hwiActiveCheckNext
@@ -465,15 +436,14 @@ _NoFloatInPsp
 
     MRS   R3, PSP
     ADD   R12, R3, #32                 ; PSP+32 = Stack pointer of the task before entering the exception
-	
-	PUSH  {R12}                        ; push task SP to MSP
+    PUSH  {R12}                        ; push task SP to MSP
+
     MRS   R12, PRIMASK
     PUSH  {R4-R12}                     ; push R4-R11,PRIMASK of the current running task to MSP
 
     ;/* Copy stack frame from the stack of the current running task to MSP */
     LDMFD R3, {R4-R11}                 ; restore stack frame of PSP to R4-R11
     STMFD R2!, {R4-R11}                ; save stack frame to MSP
-
     ORR   R0, R0, #FLAG_NO_FLOAT       ; R0[b28] = 1, no FPU    &&&&&&&&&&
 
     ;/**

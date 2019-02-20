@@ -49,7 +49,6 @@
     EXPORT  MemManage_Handler
     EXPORT  BusFault_Handler
     EXPORT  UsageFault_Handler
-;    EXPORT  SVC_Handler
 
 ;****************************************************************************************
 ;                                  EXTERN PARAMETERS

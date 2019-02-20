@@ -49,7 +49,6 @@
     EXPORT  MemManage_Handler
     EXPORT  BusFault_Handler
     EXPORT  UsageFault_Handler
-    EXPORT  SVC_Handler
 
 ;****************************************************************************************
 ;                                  EXTERN PARAMETERS
@@ -236,24 +235,6 @@ osHFExcCommonBMU
 
 ;****************************************************************************************
 ; Function:
-;        VOID SVC_Handler(VOID);
-; Description:
-;        SVC Handler.
-;****************************************************************************************
-SVC_Handler
-    TST   LR, #0x4                     ; EXC_RETURN[b2] --- PSP or MSP
-    ITE   EQ
-    MRSEQ R0, MSP
-    MRSNE R0, PSP
-    LDR   R1, [R0, #24]                ; The PC value in the stack frame
-    LDRB  R0, [R1, #-2]                ; R0: The number of SVC (0 - 255)
-    MOV   R1, #0
-    ;B     osExcDispatch
-_SvcLoop
-    B     _SvcLoop
-
-;****************************************************************************************
-; Function:
 ;        VOID BusFault_Handler(VOID);
 ; Description:
 ;        BusFault Handler.
@@ -343,7 +324,7 @@ osExcCommonBMU
     ORR  R0, R0, R12
 
     ;****************************************************************************************
-    ; osExcDispatch: NMI_Handler, HardFault_Handler, SVC_Handler, BusFault_Handler, MemManage_Handler,
+    ; osExcDispatch: NMI_Handler, HardFault_Handler, BusFault_Handler, MemManage_Handler,
     ;                  UsageFault_Handler sharing.
     ;****************************************************************************************
 
@@ -440,6 +421,7 @@ _hwiActiveCheckNext
     ;/**
     ; * Not in externel interrupt, check whether it is SysTick or PendSV.
     ; */
+
     LDR   R2, =OS_NVIC_SHCSRS
     LDRH  R2,[R2]
     LDR   R3,=OS_NVIC_SHCSR_MASK

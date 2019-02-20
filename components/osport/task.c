@@ -48,6 +48,8 @@ s32_t task_create(const char *name,fnTaskEntry fnTask,s32_t stackisize,void *sta
     UINT32 uwRet = LOS_OK;
     UINT32  handle;
     TSK_INIT_PARAM_S task_init_param;
+
+    memset (&task_init_param, 0, sizeof (TSK_INIT_PARAM_S));
 	
     task_init_param.uwArg = (unsigned int)args;
     task_init_param.usTaskPrio = prior;

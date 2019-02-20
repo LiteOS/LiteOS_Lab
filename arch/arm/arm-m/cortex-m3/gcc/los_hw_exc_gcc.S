@@ -1,100 +1,99 @@
 /*----------------------------------------------------------------------------
-  Copyright (c) <2013-2015>, <Huawei Technologies Co., Ltd>
-  All rights reserved.
-  Redistribution and use in source and binary forms, with or without modification,
-  are permitted provided that the following conditions are met:
-  1. Redistributions of source code must retain the above copyright notice, this list of
-  conditions and the following disclaimer.
-  2. Redistributions in binary form must reproduce the above copyright notice, this list
-  of conditions and the following disclaimer in the documentation and/or other materials
-  provided with the distribution.
-  3. Neither the name of the copyright holder nor the names of its contributors may be used
-  to endorse or promote products derived from this software without specific prior written
-  permission.
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
-  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-  EXEMPLARY, OR CONSENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES LOSS OF USE, DATA, OR PROFITS
-  OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
-  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
-  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-----------------------------------------------------------------------------
-  Notice of Export Control Law
-  ===============================================
-  Huawei LiteOS may be subject to applicable export control laws and regulations, which might
-  include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
-  Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
-  applicable export control laws and regulations.
- ---------------------------------------------------------------------------*/
-/*****************************************************************************************
-                                  CODE GENERATION DIRECTIVES
-*****************************************************************************************/
+ * Copyright (c) <2013-2015>, <Huawei Technologies Co., Ltd>
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 1. Redistributions of source code must retain the above copyright notice, this list of
+ * conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+ * of conditions and the following disclaimer in the documentation and/or other materials
+ * provided with the distribution.
+ * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+ * to endorse or promote products derived from this software without specific prior written
+ * permission.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *---------------------------------------------------------------------------*/
+ /*----------------------------------------------------------------------------
+ * Notice of Export Control Law
+ * ===============================================
+ * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+ * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+ * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+ * applicable export control laws and regulations.
+ *---------------------------------------------------------------------------*/
+
+/****************************************************************************************
+*                                  CODE GENERATION DIRECTIVES
+****************************************************************************************/
 
     .syntax unified
     .arch armv7e-m
     .thumb
     .section .text
 
-/*****************************************************************************************
-                                  EXPORT FUNCTIONS
-*****************************************************************************************/
+/****************************************************************************************
+*                                  EXPORT FUNCTIONS
+****************************************************************************************/
 
     .global  NMI_Handler
     .global  HardFault_Handler
     .global  MemManage_Handler
     .global  BusFault_Handler
     .global  UsageFault_Handler
-    .global  SVC_Handler
-    .global  UART4_IRQHandler
 
-/*****************************************************************************************
-                                  EXTERN PARAMETERS
-*****************************************************************************************/
+/****************************************************************************************
+*                                  EXTERN PARAMETERS
+****************************************************************************************/
 
     .extern osExcHandleEntry
     .extern g_uwExcTbl
     .extern g_bTaskScheduled
 
 /****************************************************************************************
+*                                  EQU
+****************************************************************************************/
 
-*****************************************************************************************/
+.equ    OS_EXC_CAUSE_NMI,            18
+.equ    OS_EXC_CAUSE_HARDFAULT,      19
+.equ    OS_EXC_CAUSE_MEMFAULT,       20
+.equ    OS_EXC_CAUSE_BUSFAULT,       21
+.equ    OS_EXC_CAUSE_USAGEFAULT,     22
+.equ    OS_EXC_CAUSE_SVC,            23
 
-.equ OS_EXC_CAUSE_NMI,               18
-.equ OS_EXC_CAUSE_HARDFAULT,         19
-.equ OS_EXC_CAUSE_MEMFAULT,          20
-.equ OS_EXC_CAUSE_BUSFAULT,          21
-.equ OS_EXC_CAUSE_USAGEFAULT,        22
-.equ OS_EXC_CAUSE_SVC,               23
+.equ    HF_DEBUGEVT,                 24
+.equ    HF_VECTBL,                   25
 
-.equ HF_DEBUGEVT,                    24
-.equ HF_VECTBL,                      25
+.equ    FLAG_ADDR_VALID,             0x10000       /* bit 16 */
+.equ    FLAG_HWI_ACTIVE,             0x20000       /* bit 17 */
+.equ    FLAG_NO_FLOAT,               0x10000000    /* bit 28 */
 
-.equ FLAG_ADDR_VALID,                0x10000        /* bit 16 */
-.equ FLAG_HWI_ACTIVE,                0x20000        /* bit 17 */
-.equ FLAG_NO_FLOAT,                  0x10000000     /* bit 28 */
-
-.equ OS_NVIC_CFSR,                   0xE000ED28     /* include BusFault/MemFault/UsageFault State Regeister */
-.equ OS_NVIC_HFSR,                   0xE000ED2C     /* HardFault State Regeister */
-.equ OS_NVIC_BFAR,                   0xE000ED38
-.equ OS_NVIC_MMFAR,                  0xE000ED34
-.equ OS_NVIC_ACT_BASE,               0xE000E300
-.equ OS_NVIC_SHCSRS,                 0xE000ED24
-.equ OS_NVIC_SHCSR_MASK,             0xC00          /* SYSTICKACT and PENDSVACT */
-
+.equ    OS_NVIC_CFSR,                0xE000ED28    /* include BusFault/MemFault/UsageFault State Regeister */
+.equ    OS_NVIC_HFSR,                0xE000ED2C    /* HardFault State Regeister */
+.equ    OS_NVIC_BFAR,                0xE000ED38
+.equ    OS_NVIC_MMFAR,               0xE000ED34
+.equ    OS_NVIC_ACT_BASE,            0xE000E300
+.equ    OS_NVIC_SHCSRS,              0xE000ED24
+.equ    OS_NVIC_SHCSR_MASK,          0xC00         /* SYSTICKACT and PENDSVACT */
 
 /****************************************************************************************
- Function:
-        VOID NMI_Handler(VOID)
- Description:
-        NMI Handler.
-*****************************************************************************************/
-	.type NMI_Handler, %function
+* Function:
+*        VOID NMI_Handler(VOID);
+* Description:
+*        NMI Handler.
+****************************************************************************************/
+    .type NMI_Handler, %function
 NMI_Handler:
-    /*
+    /**
      * Before executing instruction 'B osExcDispatch', the value of R0 is as follows.
      * < R0 >:
      * +------------------------------------------------------+------------------------+
@@ -109,12 +108,12 @@ NMI_Handler:
     B  osExcDispatch
 
 /****************************************************************************************
- Function:
-        VOID HardFault_Handler(VOID)
- Description:
-        HardFault Handler.
+* Function:
+*        VOID HardFault_Handler(VOID);
+* Description:
+*        HardFault Handler.
 ****************************************************************************************/
-	.type HardFault_Handler, %function
+    .type HardFault_Handler, %function
 HardFault_Handler:
     /**
      * Check HardFault state register.
@@ -180,11 +179,11 @@ HardFault_Handler:
     LDR  R2, =OS_NVIC_CFSR
     LDR  R2, [R2]
 
-    TST  R2, #0x8000                    /* BFSR->BFARVALID */
-    BNE  _HFBusFault                    /* BusFault */
+    TST  R2, #0x8000                   /* BFSR->BFARVALID */
+    BNE  _HFBusFault                   /* BusFault */
 
-    TST  R2, #0x80                      /* MFSR->MMARVALID */
-    BNE  _HFMemFault                    /* MemFault */
+    TST  R2, #0x80                     /* MFSR->MMARVALID */
+    BNE  _HFMemFault                   /* MemFault */
 
     /**
      * BFARVALID and MMARVALID flag both invalid.
@@ -237,13 +236,11 @@ osHFExcCommonBMU:
     ORR  R0, R0, R12
     B    osExcDispatch
 
-
-
 /****************************************************************************************
- Function:
-        VOID BusFault_Handler(VOID)
- Description:
-        BusFault Handler.
+* Function:
+*        VOID BusFault_Handler(VOID);
+* Description:
+*        BusFault Handler.
 ****************************************************************************************/
     .type BusFault_Handler, %function
 BusFault_Handler:
@@ -251,66 +248,62 @@ BusFault_Handler:
     LDR  R0, [R0]
     LDR  R2, =OS_EXC_CAUSE_BUSFAULT
 
-    TST  R0, #0x8000                    /* BFSR->BFARVALID */
+    TST  R0, #0x8000                   /* BFSR->BFARVALID */
     BEQ  _ExcBusNoADDR
 
     LDR  R1, =OS_NVIC_BFAR
-    LDR  R1, [R1]                       /* R1:  The value of BFAR */
-    MOV  R12, #FLAG_ADDR_VALID          /* R12: BusFault addr valid */
-    AND  R0, R0, #0x3F00                /* R0:  Reserved the b13-b8 of the BFSR */
+    LDR  R1, [R1]                      /* R1:  The value of BFAR */
+    MOV  R12, #FLAG_ADDR_VALID         /* R12: BusFault addr valid */
+    AND  R0, R0, #0x3F00               /* R0:  Reserved the b13-b8 of the BFSR */
     B    osExcCommonBMU
 
 _ExcBusNoADDR:
-    MOV  R12, #0                        /* R12: BusFault addr invalid */
-    AND  R0, R0, #0x3F00                /* R0:  Reserved the b13-b8 of the BFSR */
+    MOV  R12, #0                       /* R12: BusFault addr invalid */
+    AND  R0, R0, #0x3F00               /* R0:  Reserved the b13-b8 of the BFSR */
     B    osExcCommonBMU
 
 /****************************************************************************************
- Function:
-        VOID MemManage_Handler(VOID)
- Description:
-        MemManage Handler.
+* Function:
+*        VOID MemManage_Handler(VOID);
+* Description:
+*        MemManage Handler.
 ****************************************************************************************/
-	.type MemManage_Handler, %function
+    .type MemManage_Handler, %function
 MemManage_Handler:
     LDR  R0, =OS_NVIC_CFSR
     LDR  R0, [R0]
     LDR  R2, =OS_EXC_CAUSE_MEMFAULT
 
-    TST  R0, #0x80                      /* MFSR->MMARVALID
+    TST  R0, #0x80                     /* MFSR->MMARVALID */
     BEQ  _ExcMemNoADDR
 
     LDR  R1, =OS_NVIC_MMFAR
-    LDR  R1, [R1]                       /* R1:  The value of MMFAR */
-    MOV  R12, #FLAG_ADDR_VALID          /* R12: MemFault addr valid */
-    AND  R0, R0, #0x3B                  /* R0:  Reserved the b5-b0 of the MFSR */
+    LDR  R1, [R1]                      /* R1:  The value of MMFAR */
+    MOV  R12, #FLAG_ADDR_VALID         /* R12: MemFault addr valid */
+    AND  R0, R0, #0x3B                 /* R0:  Reserved the b5-b0 of the MFSR */
     B    osExcCommonBMU
 
 _ExcMemNoADDR:
-    MOV  R12, #0                        /* R12: MemFault addr invalid */
-    AND  R0, R0, #0x3B                  /* R0:  Reserved the b5-b0 of the MFSR */
+    MOV  R12, #0                       /* R12: MemFault addr invalid */
+    AND  R0, R0, #0x3B                 /* R0:  Reserved the b5-b0 of the MFSR */
     B    osExcCommonBMU
 
 /****************************************************************************************
-
- Function:
-        VOID UsageFault_Handler(VOID)
- Description:
-        UsageFault Handler.
+* Function:
+*        VOID UsageFault_Handler(VOID);
+* Description:
+*        UsageFault Handler.
 ****************************************************************************************/
     .type UsageFault_Handler, %function
 UsageFault_Handler:
-
     LDR  R0, =OS_NVIC_CFSR
     LDR  R0, [R0]
     LDR  R2, =OS_EXC_CAUSE_USAGEFAULT
 
     LDR  R1, =#0x030F
     LSL  R1, R1, #16
-    AND  R0, R0, R1                     /* R0:  reserved UFSR */
-    MOV  R12, #0                        /* R12: Fault addr invalid */
-
-
+    AND  R0, R0, R1                    /* R0:  reserved UFSR */
+    MOV  R12, #0                       /* R12: Fault addr invalid */
 
     /**
      * osExcCommonBMU: BusFault_Handler,MemManage_Handler and UsageFault_Handler share.
@@ -336,11 +329,9 @@ osExcCommonBMU:
     ORR  R0, R0, R2
     ORR  R0, R0, R12
 
-	MRS R2,PSP		/* PSP-->>37D8 */
-
-/*  ****************************************************************************************
-     osExcDispatch: NMI_Handler, HardFault_Handler, SVC_Handler, BusFault_Handler, MemManage_Handler,
-                      UsageFault_Handler sharing.
+    /****************************************************************************************
+    * osExcDispatch: NMI_Handler, HardFault_Handler, BusFault_Handler, MemManage_Handler,
+    *                  UsageFault_Handler sharing.
     ****************************************************************************************/
 
     /**
@@ -368,30 +359,26 @@ osExcCommonBMU:
      */
 osExcDispatch:
     LDR   R2, =OS_NVIC_ACT_BASE
-    MOV   R12, #8                       /* #8: externel interrupt active check loop counter(#0 - #239) */
-
-
+    MOV   R12, #8                      /* #8: externel interrupt active check loop counter(#0 - #239) */
 
 _hwiActiveCheck:
-    LDR   R3, [R2]                      /* R3 store the value of externel interrupt active status */
+    LDR   R3, [R2]                     /* R3 store the value of externel interrupt active status */
     CMP   R3, #0
     BEQ   _hwiActiveCheckNext
 
     /**
      * Exception occured in external interrupt.
      */
-    ORR   R0, R0, #FLAG_HWI_ACTIVE      /* R0[b17] = 1, externel interrupt active valid    &&&&&&&&&& */
-    RBIT  R2, R3                        /* bit reversal */
+    ORR   R0, R0, #FLAG_HWI_ACTIVE     /* R0[b17] = 1, externel interrupt active valid    &&&&&&&&&& */
+    RBIT  R2, R3                       /* bit reversal */
     CLZ   R2, R2
-    RSB   R12, R12, #8                  /* R12 = 8 - R12 */
-    ADD   R2, R2, R12, LSL #5           /* R2: external interrupt number as uwPid */
+    RSB   R12, R12, #8                 /* R12 = 8 - R12 */
+    ADD   R2, R2, R12, LSL #5          /* R2: external interrupt number as uwPid */
 
     /**
      * Interrupts and initialization phase always use MSP.
      */
 _ExcInMSP:
-    TST   LR, #0x10                     /* EXC_RETURN[b4] --- FPU(0) or without FPU(1) */
-    BNE   _NoFloatInMsp
 
     /**
      * Before executing instruction 'B _handleEntry', MSP is as follows.
@@ -405,16 +392,15 @@ _ExcInMSP:
      *
      */
 _NoFloatInMsp:
-    ADD   R3, R13, #32                  /* #32: skip [R0-R3,R12,LR,PC,xPSR] */
-    PUSH  {R3}                          /* push [SAVED_SP]: MSP+32 = Stack pointer in MSP before entering the exception */
+    ADD   R3, R13, #32                 /* #32: skip [R0-R3,R12,LR,PC,xPSR] */
+    PUSH  {R3}                         /* push [SAVED_SP]: MSP+32 = Stack pointer in MSP before entering the exception */
     MRS   R12, PRIMASK
-    PUSH  {R4-R12}                      /* push R4-R11,PRIMASK to MSP */
-
-	ORR   R0, R0, #FLAG_NO_FLOAT        /* R0[b28] = 1, no FPU    &&&&&&&&&& */
+    PUSH  {R4-R12}                     /* push R4-R11,PRIMASK to MSP */
+    ORR   R0, R0, #FLAG_NO_FLOAT       /* R0[b28] = 1, no FPU    &&&&&&&&&& */
     B     _handleEntry
 
 _hwiActiveCheckNext:
-    ADD   R2, R2, #4                    /* next NVIC ACT ADDR */
+    ADD   R2, R2, #4                   /* next NVIC ACT ADDR */
     SUBS  R12, R12, #1
     BNE   _hwiActiveCheck
 
@@ -427,7 +413,7 @@ _hwiActiveCheckNext:
     LDR   R3,=OS_NVIC_SHCSR_MASK
     AND   R2, R2, R3
     CMP   R2, #0
-    BNE   _ExcInMSP                     /* SysTick or PendSV active */
+    BNE   _ExcInMSP                    /* SysTick or PendSV active */
 
     /**
      * Check whether an exception occurs during the initialization phase.
@@ -436,7 +422,7 @@ _hwiActiveCheckNext:
     LDR  R2, =g_bTaskScheduled
     LDR  R2, [R2]
     TST  R2, #1
-    BEQ  _ExcInMSP                      /* initialization phase use MSP */
+    BEQ  _ExcInMSP                     /* initialization phase use MSP */
     /**
      * Before executing _handleEntry, MSP is as follows.
      * MSP:
@@ -452,20 +438,19 @@ _hwiActiveCheckNext:
      */
 _NoFloatInPsp:
     MOV   R2, R13
-    SUB   R13, #32                      /* #32: MSP reserved, used to store stack frame in PSP */
+    SUB   R13, #32                     /* #32: MSP reserved, used to store stack frame in PSP */
 
     MRS   R3, PSP
-    ADD   R12, R3, #32                  /* PSP+32 = Stack pointer of the task before entering the exception */
+    ADD   R12, R3, #32                 /* PSP+32 = Stack pointer of the task before entering the exception */
+    PUSH  {R12}                        /* push task SP to MSP */
 
-	PUSH  {R12}                         /* push task SP to MSP */
     MRS   R12, PRIMASK
-    PUSH  {R4-R12}                      /* push R4-R11,PRIMASK of the current running task to MSP */
+    PUSH  {R4-R12}                     /* push R4-R11,PRIMASK of the current running task to MSP */
 
     /* Copy stack frame from the stack of the current running task to MSP */
-    LDMFD R3, {R4-R11}                  /* restore stack frame of PSP to R4-R11 */
-    STMFD R2!, {R4-R11}                 /* save stack frame to MSP */
-
-    ORR   R0, R0, #FLAG_NO_FLOAT        /* R0[b28] = 1, no FPU    &&&&&&&&&& */
+    LDMFD R3, {R4-R11}                 /* restore stack frame of PSP to R4-R11 */
+    STMFD R2!, {R4-R11}                /* save stack frame to MSP */
+    ORR   R0, R0, #FLAG_NO_FLOAT       /* R0[b28] = 1, no FPU    &&&&&&&&&& */
 
     /**
      * _handleEntry: Call osExcHandleEntry

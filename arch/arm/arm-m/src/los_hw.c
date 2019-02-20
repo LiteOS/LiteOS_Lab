@@ -41,6 +41,10 @@
 #include "los_memory.h"
 #include "los_printf.h"
 
+#if (LOSCFG_ENABLE_MPU == YES)
+#include "heap.h"
+#endif
+
 #ifdef __cplusplus
 #if __cplusplus
 extern "C" {
@@ -120,7 +124,7 @@ LITE_OS_SEC_TEXT_INIT VOID osTskStackInit(LOS_TASK_CB *pstTaskCB, TSK_INIT_PARAM
     char *pStack = pTopStack + pstTaskCB->uwStackSize;
 
 #if (LOSCFG_ENABLE_MPU == YES)
-	  int i;   //this var only be used when mpu enabled --zhangqf
+    int i;   //this var only be used when mpu enabled --zhangqf
     static LOS_MPU_ENTRY astNullMpuSetting [MPU_NR_USR_ENTRIES + 1] = {0};
     LOS_MPU_ENTRY * pstMpuSetting = NULL;
 #if (LOSCFG_STATIC_TASK == YES)
@@ -148,9 +152,10 @@ LITE_OS_SEC_TEXT_INIT VOID osTskStackInit(LOS_TASK_CB *pstTaskCB, TSK_INIT_PARAM
 
         if (pstTaskCB->uwHeapSize)
         {
+
             /* the pool address is just the begin of stack, see osTskStackAlloc */
 
-            if (LOS_MemInit(pStack, pstTaskCB->uwHeapSize) != LOS_OK)
+            if (LOS_MemInit (pStack, pstTaskCB->uwHeapSize))
             {
                 PRINT_ERR("init per task heap fail!\n");
                 pstTaskCB->pPool = NULL;
@@ -267,6 +272,11 @@ LITE_OS_SEC_TEXT_INIT VOID *osTskStackAlloc (TSK_INIT_PARAM_S *pstInitParam)
         pstInitParam->uwStackSize += sizeof (LOS_MPU_ENTRY) * (MPU_NR_USR_ENTRIES + 1);
 
         /* make sure the heap size is correctly aligned */
+
+        if (pstInitParam->uwHeapSize != 0)
+            {
+            pstInitParam->uwHeapSize += sizeof (heap_t);
+            }
 
         pstInitParam->uwHeapSize = ALIGN(pstInitParam->uwHeapSize, 8);
 

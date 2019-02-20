@@ -48,6 +48,8 @@ extern "C" {
 
 #if (LOSCFG_PLATFORM_HWI == YES)
 
+extern void SVC_Handler(void);
+
 /*lint -save -e40 -e522 -e533*/
 
 LITE_OS_SEC_DATA_INIT UINT32  g_vuwIntCount = 0;
@@ -71,7 +73,7 @@ HWI_PROC_FUNC m_pstHwiForm[OS_VECTOR_CNT] =
     (HWI_PROC_FUNC)0,                    // [8] Reserved
     (HWI_PROC_FUNC)0,                    // [9] Reserved
     (HWI_PROC_FUNC)0,                    // [10] Reserved
-    (HWI_PROC_FUNC)osHwiDefaultHandler,  // [11] SVCall Handler
+    (HWI_PROC_FUNC)SVC_Handler,          // [11] SVCall Handler
     (HWI_PROC_FUNC)osHwiDefaultHandler,  // [12] Debug Monitor Handler
     (HWI_PROC_FUNC)0,                    // [13] Reserved
     (HWI_PROC_FUNC)PendSV_Handler,       // [14] PendSV Handler
@@ -107,6 +109,21 @@ LITE_OS_SEC_TEXT_MINOR UINT32 osIntNumGet(VOID)
  *****************************************************************************/
 /*lint -e529*/
 LITE_OS_SEC_TEXT_MINOR VOID  osHwiDefaultHandler(VOID)
+{
+    UINT32 uwIrqNum = osIntNumGet();
+    PRINT_ERR("%s irqnum:%d\n", __FUNCTION__, uwIrqNum);
+    while(1);
+}
+
+/*****************************************************************************
+ Function    : SVC_Handler
+ Description : default handler of svc
+ Input       : None
+ Output      : None
+ Return      : None
+ *****************************************************************************/
+/*lint -e529*/
+WEAK VOID SVC_Handler (VOID)
 {
     UINT32 uwIrqNum = osIntNumGet();
     PRINT_ERR("%s irqnum:%d\n", __FUNCTION__, uwIrqNum);
