@@ -50,10 +50,31 @@
 
 static UINT32 g_atiny_tskHandle;
 static UINT32 g_fs_tskHandle;
+static UINT32 g_hilink_tskHandle;
 
+#ifdef WITH_HILINK
 
+UINT32 creat_hilink_task(VOID)
+{
+    extern void hilink_example();
+    UINT32 uwRet = LOS_OK;
+    TSK_INIT_PARAM_S task_init_param;
 
+    task_init_param.usTaskPrio = 2;
+    task_init_param.pcName = "hilink_task";
+    task_init_param.pfnTaskEntry = (TSK_ENTRY_FUNC)hilink_example;
 
+    task_init_param.uwStackSize = 0x1000;
+
+    uwRet = LOS_TaskCreate(&g_hilink_tskHandle, &task_init_param);
+    if(LOS_OK != uwRet)
+    {
+        return uwRet;
+    }
+    return uwRet;
+}
+
+#else
 
 void atiny_task_entry(void)
 {
@@ -137,7 +158,7 @@ UINT32 creat_agenttiny_task(VOID)
     }
     return uwRet;
 }
-
+#endif
 
 UINT32 creat_fs_task(void)
 {
@@ -190,11 +211,19 @@ UINT32 create_work_tasks(VOID)
 {
     UINT32 uwRet = LOS_OK;
 
+#ifdef WITH_HILINK
+    uwRet = creat_hilink_task();
+    if (uwRet != LOS_OK)
+    {
+        return LOS_NOK;
+    }
+#else
     uwRet = creat_agenttiny_task();
     if (uwRet != LOS_OK)
     {
-    	return LOS_NOK;
+        return LOS_NOK;
     }
+#endif
 
 #if defined(FS_SPIFFS) || defined(FS_FATFS)
     uwRet = creat_fs_task();
