@@ -512,7 +512,11 @@ LITE_OS_SEC_TEXT_INIT UINT32 osTaskInit(VOID)
 
 #if (LOSCFG_STATIC_TASK == NO)
 
-    uwSize = (g_uwTskMaxNum) * sizeof(LOS_TASK_CB);
+    /*
+     * allocate (g_uwTskMaxNum + 1) tcbs because, LOS_TaskDelete will use g_pstTaskCBArray [g_uwTskMaxNum] derectlly !
+     */
+
+    uwSize = (g_uwTskMaxNum + 1) * sizeof(LOS_TASK_CB);
     g_pstTaskCBArray = (LOS_TASK_CB *)LOS_MemAlloc(m_aucSysMem0, uwSize);
     if (NULL == g_pstTaskCBArray)
     {
