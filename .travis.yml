@@ -15,6 +15,23 @@ before_install:
 
 script:
   -  cd targets/Cloud_STM32F429IGTx_FIRE/GCC
-  -  make
-
-
+  -  make -j4
+  -  cd ../../../
+  -  cd targets/Mini_Project/cortex-m0plus_without_driver/GCC
+  -  make -j4
+  -  cd ../../../..
+  -  cd targets/Mini_Project/cortex-m3_without_driver/GCC
+  -  make -j4
+  -  cd ../../../..
+  -  cd targets/Mini_Project/cortex-m4_without_driver/GCC
+  -  make -j4
+  -  cd ../../../..
+  -  cd targets/NXP_LPC51U68/GCC
+  -  make -j4
+  -  cd ../../../
+  -  cd targets/STM32F103VET6_NB_GCC/GCC
+  -  make -j4
+  -  cd ../../../
+  -  cd targets/STM32L431RxTx_IoTClub/GCC
+  -  make -j4
+  -  cd ../../../
