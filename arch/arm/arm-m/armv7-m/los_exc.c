@@ -34,14 +34,13 @@
 
 
 #include "los_exc.inc"
-#include "los_task.ph"
 
 #ifdef __cplusplus
 #if __cplusplus
 extern "C" {
 #endif /* __cpluscplus */
 #endif /* __cpluscplus */
-//extern ST_LOS_TASK g_stLosTask;
+
 #if (LOSCFG_PLATFORM_EXC == YES)
 
 UINT32 g_uwCurNestCount = 0;
@@ -99,36 +98,36 @@ extern VOID LOS_Reboot(VOID);
  *****************************************************************************/
 LITE_OS_SEC_TEXT VOID osExcInfoDisplay(EXC_INFO_S *pstExc)
 {
-    PRINT_ERR("Phase      = 0x%x\n", pstExc->usPhase);
-    PRINT_ERR("Type       = 0x%x\n", pstExc->usType);
-    PRINT_ERR("FaultAddr  = 0x%x\n", pstExc->uwFaultAddr);
-    PRINT_ERR("ThrdPid    = 0x%x\n", pstExc->uwThrdPid);
-    PRINT_ERR("R0         = 0x%x\n", pstExc->pstContext->uwR0);
-    PRINT_ERR("R1         = 0x%x\n", pstExc->pstContext->uwR1);
-    PRINT_ERR("R2         = 0x%x\n", pstExc->pstContext->uwR2);
-    PRINT_ERR("R3         = 0x%x\n", pstExc->pstContext->uwR3);
-    PRINT_ERR("R4         = 0x%x\n", pstExc->pstContext->uwR4);
-    PRINT_ERR("R5         = 0x%x\n", pstExc->pstContext->uwR5);
-    PRINT_ERR("R6         = 0x%x\n", pstExc->pstContext->uwR6);
-    PRINT_ERR("R7         = 0x%x\n", pstExc->pstContext->uwR7);
-    PRINT_ERR("R8         = 0x%x\n", pstExc->pstContext->uwR8);
-    PRINT_ERR("R9         = 0x%x\n", pstExc->pstContext->uwR9);
-    PRINT_ERR("R10        = 0x%x\n", pstExc->pstContext->uwR10);
-    PRINT_ERR("R11        = 0x%x\n", pstExc->pstContext->uwR11);
-    PRINT_ERR("R12        = 0x%x\n", pstExc->pstContext->uwR12);
-    PRINT_ERR("PriMask    = 0x%x\n", pstExc->pstContext->uwPriMask);
-    PRINT_ERR("SP         = 0x%x\n", pstExc->pstContext->uwSP);
-    PRINT_ERR("LR         = 0x%x\n", pstExc->pstContext->uwLR);
-    PRINT_ERR("PC         = 0x%x\n", pstExc->pstContext->uwPC);
-    PRINT_ERR("xPSR       = 0x%x\n", pstExc->pstContext->uwxPSR);
+    PRINT_ERR("\n\n");
+    PRINT_ERR("Phase      = 0x%8x\n", pstExc->usPhase);
+    PRINT_ERR("Type       = 0x%8x\n", pstExc->usType);
+    PRINT_ERR("FaultAddr  = 0x%8x\n", pstExc->uwFaultAddr);
+    PRINT_ERR("ThrdPid    = 0x%8x\n", pstExc->uwThrdPid);
+    PRINT_ERR("R0         = 0x%8x\n", pstExc->pstContext->uwR0);
+    PRINT_ERR("R1         = 0x%8x\n", pstExc->pstContext->uwR1);
+    PRINT_ERR("R2         = 0x%8x\n", pstExc->pstContext->uwR2);
+    PRINT_ERR("R3         = 0x%8x\n", pstExc->pstContext->uwR3);
+    PRINT_ERR("R4         = 0x%8x\n", pstExc->pstContext->uwR4);
+    PRINT_ERR("R5         = 0x%8x\n", pstExc->pstContext->uwR5);
+    PRINT_ERR("R6         = 0x%8x\n", pstExc->pstContext->uwR6);
+    PRINT_ERR("R7         = 0x%8x\n", pstExc->pstContext->uwR7);
+    PRINT_ERR("R8         = 0x%8x\n", pstExc->pstContext->uwR8);
+    PRINT_ERR("R9         = 0x%8x\n", pstExc->pstContext->uwR9);
+    PRINT_ERR("R10        = 0x%8x\n", pstExc->pstContext->uwR10);
+    PRINT_ERR("R11        = 0x%8x\n", pstExc->pstContext->uwR11);
+    PRINT_ERR("R12        = 0x%8x\n", pstExc->pstContext->uwR12);
+    PRINT_ERR("PriMask    = 0x%8x\n", pstExc->pstContext->uwPriMask);
+    PRINT_ERR("SP         = 0x%8x\n", pstExc->pstContext->uwSP);
+    PRINT_ERR("LR         = 0x%8x\n", pstExc->pstContext->uwLR);
+    PRINT_ERR("PC         = 0x%8x\n", pstExc->pstContext->uwPC);
+    PRINT_ERR("xPSR       = 0x%8x\n", pstExc->pstContext->uwxPSR);
 
     PRINT_ERR("\nplease use the addr2line tool to analyze the call stack on PC:\n");
     PRINT_ERR("addr2line -e (xxx.axf/xxx.elf/xxx.out) -a -f ");
     for (UINT32 i = 0; i < pstExc->uwCallStackDepth; i++)
     {
-        printf("%#x ", pstExc->uwCallStack[i]);
+        PRINT_ERR("%#x ", pstExc->uwCallStack[i]);
     }
-    printf("\n");
 
     return;
 }

@@ -624,7 +624,7 @@
             <File>
               <FileName>los_dispatch_keil.S</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\..\arch\arm\arm-m\cortex-m4\keil\los_dispatch_keil.S</FilePath>
+              <FilePath>..\..\..\arch\arm\arm-m\armv7-m\keil\los_dispatch_keil.S</FilePath>
             </File>
             <File>
               <FileName>los_hw.c</FileName>

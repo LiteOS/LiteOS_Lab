@@ -421,7 +421,6 @@ _hwiActiveCheckNext
     ;/**
     ; * Not in externel interrupt, check whether it is SysTick or PendSV.
     ; */
-
     LDR   R2, =OS_NVIC_SHCSRS
     LDRH  R2,[R2]
     LDR   R3,=OS_NVIC_SHCSR_MASK

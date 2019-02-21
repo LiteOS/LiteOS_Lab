@@ -67,7 +67,7 @@ OS_TASK_STATUS_RUNNING        EQU    0x0010      ; Task Status Flag (RUNNING).
 ;                                  CODE GENERATION DIRECTIVES
 ;****************************************************************************************
 
-    SECTION    .text:CODE(2)
+    AREA    |.text|, CODE, READONLY
     THUMB
     REQUIRE8
     PRESERVE8
@@ -79,7 +79,7 @@ OS_TASK_STATUS_RUNNING        EQU    0x0010      ; Task Status Flag (RUNNING).
 ;        Start the first task, which is the highest priority task in the priority queue.
 ;        Other tasks are started by task scheduling.
 ;****************************************************************************************
-LOS_StartToRun
+LOS_StartToRun PROC
     CPSID   I
 
     ;/**
@@ -117,45 +117,47 @@ LOS_StartToRun
 
     ;/**
     ; * Restore the default stack frame(R0-R3,R12,LR,PC,xPSR) of g_stLosTask.pstRunTask to R0-R7.
-    ; * [Initial EXC_RETURN ignore,] return by setting the CONTROL register.
+    ; * [Initial EXC_RETURN ignore, if FPU supported] return by setting the CONTROL register.
     ; *
     ; * The initial stack of the current running task is as follows:
     ; *
-    ; *                     POP: Restore the context of the current running task ===>|
-    ; *                                                                 High addr--->|
-    ; *                                                       Bottom of the stack--->|
-    ; * ----------+---------------------------------+--------------------------------+
-    ; *           |  R4-R11,  PRIMASK,  EXC_RETURN  |  R0-R3,  R12,  LR,  PC,  xPSR  |
-    ; * ----------+---------------------------------+--------------------------------+
+    ; *       POP: Restore the context of the current running task ===>|
+    ; *                                                   High addr--->|
+    ; *                                         Bottom of the stack--->|
+    ; * ----------+-----------------------------+----------------------+
+    ; *           | R4-R11,PRIMASK[,EXC_RETURN] | R0-R3,R12,LR,PC,xPSR |
+    ; * ----------+-----------------------------+----------------------+
     ; *           |<---Top of the stack, restored from g_stLosTask.pstRunTask->pStackPointer
-    ; *           |<---           skip          --->|<---     copy to R0-R7      --->|
-    ; *                                                                R12 to PSP--->|
-    ; *                                        Stack pointer after LOS_StartToRun--->|
+    ; *           |<---         skip        --->|<--- get r0,lr,pc --->|
+    ; *                                                  R12 to PSP--->|
+    ; *                          Stack pointer after LOS_StartToRun--->|
     ; */
     LDR     R12, [R1]
 
-#if defined (LOSCFG_ENABLE_MPU)
+    IF :DEF:LOSCFG_ENABLE_MPU
     LDR     R0, [R1, #8]           ; TCB->pMpuSettings
     LDR     R1, =0xe000ed9c
     LDM     R0!, {R2-R7}
     STM     R1, {R2-R7}
     LDM     R0!, {R2-R7}
     STM     R1, {R2-R7}
-    LDR     R0, [R12], #4          ; get the CONTROL value
-#else
-    MOV     R0, #2
-#endif
 
-    ;/**
-    ; * Set the CONTROL register, after schedule start, privilege level and stack = PSP.
-    ; */
-    MSR     CONTROL, R0
+    LDR     R3, [R12], #4          ; get the CONTROL value
+    ELSE
+    MOV     R3, #2
+    ENDIF
 
     ADD     R12, R12, #36          ; skip R4-R11, PRIMASK.
-#if defined (__ARMVFP__)
+
+    IF      {FPU} != "SoftVFP"
     ADD     R12, R12, #4           ; if FPU exist, skip EXC_RETURN.
-#endif
-    LDMFD   R12!, {R0-R7}
+    ENDIF
+
+    LDR     R0, [R12]
+    LDR     LR, [R12, #4 * 5]
+    LDR     R2, [R12, #4 * 6]
+
+    ADD     R12, R12, #4 * 8
 
     ;/**
     ; * Set the stack pointer of g_stLosTask.pstRunTask to PSP.
@@ -165,14 +167,20 @@ LOS_StartToRun
     ;/**
     ; * Enable interrupt. (The default PRIMASK value is 0, so enable directly)
     ; */
-    MOV     LR, R5
     CPSIE   I
+
+    ;/**
+    ; * Set the CONTROL register, after schedule start, privilege level and stack = PSP.
+    ; */
+    MSR     CONTROL, R3
 
     ;/**
     ; * Jump directly to the default PC of g_stLosTask.pstRunTask, the field information
     ; * of the main function will be destroyed and will never be returned.
     ; */
-    BX      R6
+    BX      R2
+
+    ENDP
 
 ;****************************************************************************************
 ; Function:
@@ -187,19 +195,22 @@ LOS_StartToRun
 ;        Restore the locked interruption of LOS_IntLock.
 ;        The caller must pass in the value of interruption state previously saved.
 ;****************************************************************************************
-LOS_IntLock
+LOS_IntLock PROC
     MRS     R0, PRIMASK
     CPSID   I
     BX      LR
+    ENDP
 
-LOS_IntUnLock
+LOS_IntUnLock PROC
     MRS     R0, PRIMASK
     CPSIE   I
     BX      LR
+    ENDP
 
-LOS_IntRestore
+LOS_IntRestore PROC
     MSR     PRIMASK, R0
     BX      LR
+    ENDP
 
 ;****************************************************************************************
 ; Function:
@@ -207,11 +218,12 @@ LOS_IntRestore
 ; Description:
 ;        Start the task swtich process by software trigger PendSV interrupt.
 ;****************************************************************************************
-osTaskSchedule
+osTaskSchedule PROC
     LDR     R0, =OS_NVIC_INT_CTRL
     LDR     R1, =OS_NVIC_PENDSVSET
     STR     R1, [R0]
     BX      LR
+    ENDP
 
 ;****************************************************************************************
 ; Function:
@@ -223,7 +235,7 @@ osTaskSchedule
 ;        Second: Restore the context of the next running task(g_stLosTask.pstNewTask)
 ;                from its own stack.
 ;****************************************************************************************
-PendSV_Handler
+PendSV_Handler PROC
     ;/**
     ; * R12: Save the interruption state of the current running task.
     ; * Disable all interrupts except Reset,NMI and HardFault
@@ -248,7 +260,7 @@ TaskSwitch
     MRS     R0, PSP
 
     ;/**
-    ; * Save the stack frame([S16-S31],R4-R11) of the current running task.
+    ; * Save the stack frame([S16-S31,]R4-R11) of the current running task.
     ; * R12 save the PRIMASK value of the current running task.
     ; * NOTE: 1. Before entering the exception handler function, these registers
     ; *       ([NO_NAME,FPSCR,S15-S0],xPSR,PC,LR,R12,R3-R0) have been automatically
@@ -263,28 +275,30 @@ TaskSwitch
     ; * The stack of the current running task is as follows:
     ; *
     ; *   |<=== PUSH: Save the context of the current running task
-    ; *   |                                                                     High addr--->|
-    ; * --+-----------------------------------+-------------------------------------------+---
-    ; *   | R4-R11,PRIMASK,EXC_RETURN,S16-S31 | R0-R3,R12,LR,PC,xPSR,S0-S15,FPSCR,NO_NAME |
-    ; *   |                                                         [   lazy stacking    ]|
-    ; * --+-----------------------------------+-------------------------------------------+---
-    ; *                                        Stack pointer before entering exception--->|
-    ; *                                       |<---           cpu auto saved          --->|
-    ; *                                       |<---PSP to R0
+    ; *   |                                                                        High addr--->|
+    ; * --+---------------------------------------+---------------------------------------------+---
+    ; *   | R4-R11,PRIMASK[,EXC_RETURN[,S16-S31]] | R0-R3,R12,LR,PC,xPSR[,S0-S15,FPSCR,NO_NAME] |
+    ; *   |                                                             [    lazy stacking    ] |
+    ; * --+---------------------------------------+---------------------------------------------+---
+    ; *                                              Stack pointer before entering exception--->|
+    ; *                                           |<---            cpu auto saved           --->|
+    ; *                                           |<---PSP to R0
     ; *   |<---Top of the stack, save to g_stLosTask.pstRunTask->pStackPointer
     ; */
-#if defined (__ARMVFP__)           ; if FPU exist.
+    IF      {FPU} != "SoftVFP"     ; if FPU exist.
     TST     R14, #0x10             ; if the task using the FPU context, push s16-s31.
-    IT      EQ
-    VSTMDBEQ  R0!, {D8-D15}
+    BNE     %F0
+    VSTMDB  R0!, {D8-D15}
+0
     STMFD   R0!, {R14}             ; save EXC_RETURN.
-#endif
+    ENDIF
+
     STMFD   R0!, {R4-R12}          ; save the core registers and PRIMASK.
 
-#ifdef LOSCFG_ENABLE_MPU
+    IF :DEF:LOSCFG_ENABLE_MPU
     MRS     R1, CONTROL
     STR     R1, [R0, #-4]!
-#endif
+    ENDIF
 
     ;/**
     ; * R5,R8.
@@ -328,7 +342,7 @@ TaskSwitch
     ; */
     LDR     R1, [R0]
 
-#ifdef LOSCFG_ENABLE_MPU
+    IF :DEF:LOSCFG_ENABLE_MPU
     ;/**
     ; * Set the CONTROL register
     ; */
@@ -341,47 +355,49 @@ TaskSwitch
     STM     R5, {R6-R11}
     LDR     R4, [R1], #4
     MSR     CONTROL, R4
-#endif
+    ENDIF
 
     ;/**
-    ; * Restore the stack frame(R4-R11,[S16-S31]) of the next running task.
+    ; * Restore the stack frame(R4-R11[,S16-S31]) of the next running task.
     ; * R12 restore the PRIMASK value of the next running task.
     ; * NOTE: After exiting the exception handler function, these registers
-    ; *       (PC,xPSR,R0-R3,R12,LR,[S0-S15,FPSCR,NO_NAME]) will be automatically
+    ; *       (PC,xPSR,R0-R3,R12,LR[,S0-S15,FPSCR,NO_NAME]) will be automatically
     ; *       restored by the CPU from the stack of the next running task.
     ; *
     ; * 1. The stack of the next running task is as follows:
     ; *
-    ; *                             POP: Restore the context of the next running task ===>|
-    ; *                                                                         High addr--->|
-    ; * --+-----------------------------------+-------------------------------------------+---
-    ; *   | R4-R11,PRIMASK,EXC_RETURN,S16-S31 | R0-R3,R12,LR,PC,xPSR,S0-S15,FPSCR,NO_NAME |
-    ; * --+-----------------------------------+-------------------------------------------+---
+    ; *                                   POP: Restore the context of the next running task ===>|
+    ; *                                                                            High addr--->|
+    ; * --+---------------------------------------+---------------------------------------------+---
+    ; *   | R4-R11,PRIMASK[,EXC_RETURN[,S16-S31]] | R0-R3,R12,LR,PC,xPSR[,S0-S15,FPSCR,NO_NAME] |
+    ; * --+---------------------------------------+---------------------------------------------+---
     ; *   |<---Top of the stack, restored from g_stLosTask.pstNewTask->pStackPointer
-    ; *                          R1 to PSP--->|
-    ; *                                       |<---        cpu auto restoring         --->|
-    ; *                                          Stack pointer after exiting exception--->|
+    ; *                              R1 to PSP--->|
+    ; *                                           |<---         cpu auto restoring          --->|
+    ; *                                                Stack pointer after exiting exception--->|
     ; *
     ; * 2. If the next running task is run for the first time, the stack is as follows:
     ; *
-    ; *                        POP: Restore the context of the next running task ===>|
-    ; *                                                                 High addr--->|
-    ; *                                                       Bottom of the stack--->|
-    ; * ----------+---------------------------------+--------------------------------+
-    ; *           |  R4-R11,  PRIMASK,  EXC_RETURN  |  R0-R3,  R12,  LR,  PC,  xPSR  |
-    ; * ----------+---------------------------------+--------------------------------+
+    ; *          POP: Restore the context of the next running task ===>|
+    ; *                                                   High addr--->|
+    ; *                                         Bottom of the stack--->|
+    ; * ----------+-----------------------------+----------------------+
+    ; *           | R4-R11,PRIMASK[,EXC_RETURN] | R0-R3,R12,LR,PC,xPSR |
+    ; * ----------+-----------------------------+----------------------+
     ; *           |<---Top of the stack, restored from g_stLosTask.pstNewTask->pStackPointer
-    ; *                                R1 to PSP--->|
-    ; *                                             |<---   cpu auto restoring   --->|
-    ; *                                     Stack pointer after exiting exception--->|
+    ; *                            R1 to PSP--->|
+    ; *                                         |<---auto restoring--->|
+    ; *                       Stack pointer after exiting exception--->|
     ; */
     LDMFD   R1!, {R4-R12}          ; restore the core registers and PRIMASK.
-#if defined (__ARMVFP__)           ; if FPU exist.
+
+    IF      {FPU} != "SoftVFP"     ; if FPU exist.
     LDMFD   R1!, {R14}             ; restore EXC_RETURN.
     TST     R14, #0x10             ; if the task using the FPU context, pop s16-s31.
-    IT      EQ
-    VLDMIAEQ  R1!, {D8-D15}
-#endif
+    BNE     %F0
+    VLDMIA  R1!, {D8-D15}
+0
+    ENDIF
 
     ;/**
     ; * Set the stack pointer of the next running task to PSP.
@@ -393,39 +409,41 @@ TaskSwitch
     ; */
     MSR     PRIMASK, R12
     BX      LR
+    ENDP
 
-#ifdef LOSCFG_ENABLE_MPU
+    IF :DEF:LOSCFG_ENABLE_MPU
 
     EXPORT  osEnterPrivileged
     EXPORT  osExitPrivileged
-    EXPORT  osIsPrivileged
 
-osEnterPrivileged
+osEnterPrivileged PROC
+    PUSH    {R7, LR}
     MRS     R0, CONTROL
     TST     R0, #1
-    BEQ     __ret
+    IT      EQ
+    POPEQ   {R7, PC}
 
-    MOV     R12, #0x5a  ; magic
+    MVN     R7, #0             ; magic
 
     SVC     #0
-__ret
-    BX      LR
 
-osExitPrivileged
+    POP     {R7, PC}
+    ENDP
+
+osExitPrivileged PROC
     TST     R0, #1
-    BEQ     __ret
+    IT      EQ
+    BXEQ    LR
 
     MRS     R0, CONTROL
     ORR     R0, R0, #1
     MSR     CONTROL, R0
 
     BX      LR
+    ENDP
 
-osIsPrivileged
-    MRS     R0, CONTROL
-    AND     R0, R0, #1
-    BX      LR
-#endif
+    ENDIF
 
+    ALIGN
     END
 

@@ -682,7 +682,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\arch\arm\arm-m\cortex-m4\keil\los_dispatch_keil.S</PathWithFileName>
+      <PathWithFileName>..\..\..\arch\arm\arm-m\armv7-m\keil\los_dispatch_keil.S</PathWithFileName>
       <FilenameWithoutPath>los_dispatch_keil.S</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2315,7 +2315,7 @@
 
   <Group>
     <GroupName>agent_tiny</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -2515,7 +2515,7 @@
 
   <Group>
     <GroupName>agent_demo</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -2547,7 +2547,7 @@
 
   <Group>
     <GroupName>osport</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -2703,7 +2703,7 @@
 
   <Group>
     <GroupName>gprs</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

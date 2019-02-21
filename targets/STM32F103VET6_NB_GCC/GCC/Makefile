@@ -78,7 +78,7 @@ CMSIS_SRC =  \
 
 ARCH_SRC =  \
         ${wildcard $(TOP_DIR)/arch/arm/arm-m/src/*.c} \
-        ${wildcard $(TOP_DIR)/arch/arm/arm-m/cortex-m3/*.c}
+        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/*.c}
         C_SOURCES += $(ARCH_SRC)
 HAL_DRIVER_SRC =  \
         $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c  \
@@ -128,7 +128,7 @@ ASM_SOURCES_s =  \
         ${wildcard $(PROJECTBASE)/startup_stm32f103xe.s}
 
 ASM_SOURCES_S =  \
-       ${wildcard $(TOP_DIR)/arch/arm/arm-m/cortex-m3/gcc/los_dispatch_gcc.S}
+       ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_dispatch_gcc.S}
 
 ######################################
 # firmware library
@@ -200,7 +200,7 @@ HAL_DRIVER_INC = \
 ARCH_INC = \
         -I $(TOP_DIR)/arch/arm/arm-m/include \
 	-I $(TOP_DIR)/arch/arm/common/cmsis \
-	-I $(TOP_DIR)/arch/arm/arm-m/cortex-m3
+	-I $(TOP_DIR)/arch/arm/arm-m/armv7-m
         C_INCLUDES += $(ARCH_INC)
 
 LITEOS_CMSIS = \
