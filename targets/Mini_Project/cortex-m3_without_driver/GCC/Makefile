@@ -48,10 +48,9 @@ HEX       = $(OBJCOPY) -O ihex
 BIN       = $(OBJCOPY) -O binary -S
 
 
-PROJECTBASE = $(PWD)
-override PROJECTBASE    := $(abspath $(PROJECTBASE))
-TOP_DIR = $(PROJECTBASE)/../../../..
-TARGET_DIR = $(PROJECTBASE)/..
+PROJECTBASE = $(abspath $(CURDIR))
+TOP_DIR     = $(PROJECTBASE)/../../../..
+TARGET_DIR  = $(PROJECTBASE)/..
 
 #######################################
 # paths
