@@ -49,7 +49,7 @@ BIN       = $(OBJCOPY) -O binary -S
 
 
 PROJECTBASE = $(abspath $(CURDIR))
-TOP_DIR     = $(PROJECTBASE)/../../..
+TOP_DIR     = $(abspath $(PROJECTBASE)/../../..)
 
 
 #######################################
