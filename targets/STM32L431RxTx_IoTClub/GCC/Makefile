@@ -42,11 +42,9 @@ BIN       = $(OBJCOPY) -O binary -S
 #######################################
 
 
-PROJECTBASE = $(PWD)
-override PROJECTBASE    := $(abspath $(PROJECTBASE))
+PROJECTBASE = $(abspath $(CURDIR))
 TOP_DIR_TMP = $(PROJECTBASE)/../../..
-TOP_DIR = $(abspath $(TOP_DIR_TMP))
-
+TOP_DIR     = $(abspath $(TOP_DIR_TMP))
 
 
 # firmware library path

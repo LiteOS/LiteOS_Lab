@@ -61,7 +61,7 @@
 #include "gpio.h"
 #include "oled.h"
 #include "DHT11_BUS.h"
-#include "BH1750.h" 
+#include "bh1750.h" 
 #include "gps.h"
 
 #ifdef __cplusplus
