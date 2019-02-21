@@ -84,7 +84,7 @@ CMSIS_SRC =  \
 
 ARCH_SRC =  \
         ${wildcard $(TOP_DIR)/arch/arm/arm-m/src/*.c} \
-        ${wildcard $(TOP_DIR)/arch/arm/arm-m/cortex-m3/*.c}
+        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/*.c}
         C_SOURCES += $(ARCH_SRC)
 		
 ifeq ($(WITH_LWIP), yes)
@@ -196,7 +196,7 @@ ASM_SOURCES_s =  \
         ${wildcard $(PROJECTBASE)/los_startup_gcc.s}
 
 ASM_SOURCES_S =  \
-       ${wildcard $(TOP_DIR)/arch/arm/arm-m/cortex-m3/gcc/los_dispatch_gcc.S}
+       ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_dispatch_gcc.S}
 
 
 ######################################
@@ -296,7 +296,7 @@ LWM2M_ATINY_INC = \
 ARCH_INC = \
         -I $(TOP_DIR)/arch/arm/arm-m/include \
 	-I $(TOP_DIR)/arch/arm/common/cmsis \
-	-I $(TOP_DIR)/arch/arm/arm-m/cortex-m3
+	-I $(TOP_DIR)/arch/arm/arm-m/armv7-m
         C_INCLUDES += $(ARCH_INC)
 
 LITEOS_CMSIS = \

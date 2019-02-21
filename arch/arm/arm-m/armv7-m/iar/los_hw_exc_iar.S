@@ -37,7 +37,7 @@
 ;****************************************************************************************
 
     PRESERVE8
-    AREA    |.text|, CODE, READONLY
+    SECTION    .text:CODE(2)
     THUMB
 
 ;****************************************************************************************
@@ -49,6 +49,7 @@
     EXPORT  MemManage_Handler
     EXPORT  BusFault_Handler
     EXPORT  UsageFault_Handler
+    EXPORT  SVC_Handler
 
 ;****************************************************************************************
 ;                                  EXTERN PARAMETERS
@@ -232,6 +233,36 @@ osHFExcCommonBMU
     ORR  R0, R0, R2, LSL #0x8
     ORR  R0, R0, R12
     B    osExcDispatch
+
+;****************************************************************************************
+; Function:
+;        VOID SVC_Handler(VOID);
+; Description:
+;        SVC Handler.
+;****************************************************************************************
+SVC_Handler
+
+#ifdef LOSCFG_ENABLE_MPU
+    ADDS R7, #1
+    IT   EQ
+    BXEQ LR
+
+    MOV  R0, #2
+    MSR  CONTROL, R0
+
+    BX   LR
+#else
+    TST   LR, #0x4                     ; EXC_RETURN[b2] --- PSP or MSP
+    ITE   EQ
+    MRSEQ R0, MSP
+    MRSNE R0, PSP
+    LDR   R1, [R0, #24]                ; The PC value in the stack frame
+    LDRB  R0, [R1, #-2]                ; R0: The number of SVC (0 - 255)
+    MOV   R1, #0
+    ;B     osExcDispatch
+_SvcLoop
+    B     _SvcLoop
+#endif
 
 ;****************************************************************************************
 ; Function:
@@ -421,7 +452,6 @@ _hwiActiveCheckNext
     ;/**
     ; * Not in externel interrupt, check whether it is SysTick or PendSV.
     ; */
-
     LDR   R2, =OS_NVIC_SHCSRS
     LDRH  R2,[R2]
     LDR   R3,=OS_NVIC_SHCSR_MASK
@@ -526,5 +556,4 @@ _handleEntry
     B  osExcHandleEntry
 
     NOP
-    ALIGN
     END

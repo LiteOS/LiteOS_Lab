@@ -37,7 +37,6 @@
 ****************************************************************************************/
 
     .syntax unified
-    .arch armv7e-m
     .thumb
     .section .text
 
@@ -143,7 +142,7 @@ HardFault_Handler:
     MOV  R1, #HF_DEBUGEVT
     ORR  R0, R0, R1, LSL #0x8
     TST  R2, #0x80000000
-    BNE  osExcDispatch
+    BNE  osExcDispatch                 /* DEBUGEVT */
 
     /**
      * Check whether HardFault is caused by the failure of the fetch vector.
@@ -160,7 +159,7 @@ HardFault_Handler:
     MOV  R1, #HF_VECTBL
     ORR  R0, R0, R1, LSL #0x8
     TST  R2, #0x00000002
-    BNE  osExcDispatch
+    BNE  osExcDispatch                  /* VECTBL */
 
     /**
      * If it`s not DEBUGEVT and VECTBL, that is FORCED, then read the CFSR register to
@@ -379,6 +378,30 @@ _hwiActiveCheck:
      * Interrupts and initialization phase always use MSP.
      */
 _ExcInMSP:
+#if defined (__VFP_FP__) && !defined(__SOFTFP__)       /* if FPU exist. */
+    TST   LR, #0x10                    /* EXC_RETURN[b4] --- FPU(0) or without FPU(1) */
+    BNE   _NoFloatInMsp
+
+    /**
+     * Before executing instruction 'B _handleEntry', MSP is as follows.
+     * MSP:
+     *                                                                              High addr--->|
+     * +--------------------------------------------------------------------------------+---------
+     *    | S16-S31,R4-R11,PRIMASK,SAVED_SP | R0-R3,R12,LR,PC,xPSR,S0-S15,FPSCR,NO_NAME |
+     * +--------------------------------------------------------------------------------+---------
+     *    |<---R13           Initial R13--->|<---                #104               --->|<---SAVED_SP
+     *                                      |              (CPU auto saved)             |
+     *
+     */
+    ADD   R3, R13, #104                /* #104: skip [R0-xPSR,D0-D7,FPSCR,NO_NAME] */
+    PUSH  {R3}                         /* push [SAVED_SP]: MSP+104 = Stack pointer in MSP before entering the exception */
+    MRS   R12, PRIMASK
+    PUSH  {R4-R12}                     /* push R4-R11,PRIMASK to MSP */
+    VPUSH {D8-D15}                     /* push D8-D15 to MSP */
+    B     _handleEntry
+
+_NoFloatInMsp:
+#endif
 
     /**
      * Before executing instruction 'B _handleEntry', MSP is as follows.
@@ -391,7 +414,7 @@ _ExcInMSP:
      *                                                           |   (CPU auto saved)   |
      *
      */
-_NoFloatInMsp:
+
     ADD   R3, R13, #32                 /* #32: skip [R0-R3,R12,LR,PC,xPSR] */
     PUSH  {R3}                         /* push [SAVED_SP]: MSP+32 = Stack pointer in MSP before entering the exception */
     MRS   R12, PRIMASK
@@ -423,6 +446,51 @@ _hwiActiveCheckNext:
     LDR  R2, [R2]
     TST  R2, #1
     BEQ  _ExcInMSP                     /* initialization phase use MSP */
+
+#if defined (__VFP_FP__) && !defined(__SOFTFP__)       /* if FPU exist. */
+    /**
+     * Exception occured in Task.
+     */
+    TST   LR, #0x10
+    BNE   _NoFloatInPsp
+
+    /**
+     * Before executing _handleEntry, MSP is as follows.
+     * MSP:
+     *                                                                              High addr--->|
+     * +--------------------------------------------------------------------------------+---------
+     *     | S16-S31,R4-R11,PRIMASK,TASK_SP | R0-R3,R12,LR,PC,xPSR,S0-S15,FPSCR,NO_NAME |
+     * +--------------------------------------------------------------------------------+---------
+     *     |<---R13                         |<---                #104               --->|<---Initial R13
+     *                                      |              (copied from PSP)            |
+     *                                                                    R2(no use)--->|
+     *
+     * NOTE: stack frame: R0-R3,R12,LR,PC,xPSR,S0-S15,FPSCR,NO_NAME.
+     */
+    MOV   R2, R13
+    SUB   R2, R2, #8                   /* #8: reserved for [FPSCR,NO_NAME] */
+    SUB   R13, #104                    /* #104: MSP reserved, used to store stack frame in PSP */
+
+    MRS   R3, PSP
+    ADD   R12, R3, #104                /* PSP+104 = Stack pointer of the task before entering the exception */
+    PUSH  {R12}                        /* push task SP to MSP */
+    MRS   R12, PRIMASK
+    PUSH  {R4-R12}                     /* push R4-R11,PRIMASK of the current running task to MSP */
+    VPUSH {D8-D15}                     /* push D8-D15 of the currnent running task to MSP */
+
+    /* Copy stack frame from the stack of the current running task to MSP */
+    LDMFD R3!, {R4-R11}                /* restore stack frame[R0-xPSR] of PSP to R4-R11 */
+    VLDMIA  R3!, {D8-D15}              /* restore stack frame[D0-D7] of PSP to D8-D15 */
+    VSTMDB  R2!, {D8-D15}              /* save stack frame[D0-D7] to MSP */
+    STMFD R2!, {R4-R11}                /* save stack frame[R0-xPSR] to MSP */
+    LDMFD R3, {R4-R5}                  /* restore stack frame[FPSCR,NO_NAME] to R4-R5 */
+    ADD   R2, R2, #104                 /* skip stack frame */
+    STMFD R2, {R4-R5}                  /* save stack frame[FPSCR,NO_NAME] to MSP */
+    B     _handleEntry
+
+_NoFloatInPsp:
+#endif
+
     /**
      * Before executing _handleEntry, MSP is as follows.
      * MSP:
@@ -436,7 +504,7 @@ _hwiActiveCheckNext:
      *
      * NOTE: stack frame: R0-R3,R12,LR,PC,xPSR.
      */
-_NoFloatInPsp:
+
     MOV   R2, R13
     SUB   R13, #32                     /* #32: MSP reserved, used to store stack frame in PSP */
 
