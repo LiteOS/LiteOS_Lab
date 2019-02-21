@@ -48,10 +48,9 @@ HEX       = $(OBJCOPY) -O ihex
 BIN       = $(OBJCOPY) -O binary -S
 
 
-PROJECTBASE = $(PWD)
-override PROJECTBASE    := $(abspath $(PROJECTBASE))
-TOP_DIR = $(PROJECTBASE)/../../../..
-TARGET_DIR = $(PROJECTBASE)/..
+PROJECTBASE = $(abspath $(CURDIR))
+TOP_DIR     = $(abspath $(PROJECTBASE)/../../../..)
+TARGET_DIR  = $(abspath $(PROJECTBASE)/..)
 
 #######################################
 # paths
@@ -88,7 +87,7 @@ CMSIS_SRC =  \
 
 ARCH_SRC =  \
         ${wildcard $(TOP_DIR)/arch/arm/arm-m/src/*.c} \
-        ${wildcard $(TOP_DIR)/arch/arm/arm-m/cortex-m4/*.c}
+        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/*.c}
         C_SOURCES += $(ARCH_SRC)
 		
 ifeq ($(WITH_LWIP), yes)
@@ -182,9 +181,7 @@ endif
 # ASM sources
 
 ASM_SOURCES_S =  \
-        ${wildcard $(TOP_DIR)/arch/arm/arm-m/cortex-m4/gcc/los_dispatch_gcc.S}
-
-
+        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_dispatch_gcc.S}
 
 
 ######################################
@@ -323,7 +320,7 @@ KERNEL_INC = \
 
 ARCH_INC = \
         -I $(TOP_DIR)/arch/arm/arm-m/include \
-        -I $(TOP_DIR)/arch/arm/arm-m/cortex-m4
+        -I $(TOP_DIR)/arch/arm/arm-m/armv7-m
         C_INCLUDES += $(ARCH_INC)
 
 LITEOS_CMSIS = \

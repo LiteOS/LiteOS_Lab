@@ -42,11 +42,9 @@ BIN       = $(OBJCOPY) -O binary -S
 #######################################
 
 
-PROJECTBASE = $(PWD)
-override PROJECTBASE    := $(abspath $(PROJECTBASE))
-TOP_DIR_TMP = $(PROJECTBASE)/../../..
-TOP_DIR = $(abspath $(TOP_DIR_TMP))
-
+PROJECTBASE = $(abspath $(CURDIR))
+TOP_DIR_TMP = $(abspath $(PROJECTBASE)/../../..)
+TOP_DIR     = $(abspath $(TOP_DIR_TMP))
 
 
 # firmware library path
@@ -158,7 +156,7 @@ ASM_SOURCES_s =  \
          ${wildcard $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/Usr/los_startup_gcc.s}
 
 ASM_SOURCES_S =  \
-       ${wildcard $(TOP_DIR)/arch/arm/arm-m/cortex-m4/gcc/los_dispatch_gcc.S}
+       ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_dispatch_gcc.S}
 
 ######################################
 # firmware library

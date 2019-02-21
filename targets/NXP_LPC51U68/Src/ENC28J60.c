@@ -31,7 +31,7 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-#include "enc28j60.h"
+#include "ENC28J60.h"
 #include <stdio.h>
 
 #include <stdio.h>

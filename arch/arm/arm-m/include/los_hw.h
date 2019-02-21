@@ -48,6 +48,10 @@ extern "C" {
 
 #include "los_task.ph"
 
+#if (LOSCFG_STATIC_TASK == YES) && (LOSCFG_ENABLE_MPU == YES)
+#include <heap.h>
+#endif
+
 #if (LOSCFG_ENABLE_MPU == YES)
 #include "los_mpu.h"
 #endif
@@ -132,9 +136,10 @@ LOS_STATIC_ASSERT (taskPrio >= 0);                                             \
 LOS_STATIC_ASSERT ((stackSize & 7) == 0);                                      \
 LOS_STATIC_ASSERT ((heapSize & 7) == 0);                                       \
 enum {                                                                         \
+    s_##name##_hpsz = heapSize == 0 ? 0 : heapSize + sizeof (heap_t),          \
     s_##name##_ss_0 = stackSize + sizeof (TSK_CONTEXT_S) +                     \
                       sizeof (LOS_MPU_ENTRY) * (MPU_NR_USR_ENTRIES + 1),       \
-    s_##name##_as_0 = s_##name##_ss_0 + heapSize - 1,                          \
+    s_##name##_as_0 = s_##name##_ss_0 + s_##name##_hpsz - 1,                   \
     s_##name##_as_1 = s_##name##_as_0 | (s_##name##_as_0 >> 1),                \
     s_##name##_as_2 = s_##name##_as_1 | (s_##name##_as_1 >> 2),                \
     s_##name##_as_3 = s_##name##_as_2 | (s_##name##_as_2 >> 4),                \
@@ -142,7 +147,7 @@ enum {                                                                         \
     s_##name##_as_5 = s_##name##_as_4 | (s_##name##_as_4 >> 16),               \
     s_##name##_as_6 = s_##name##_as_5 + 1,                                     \
     s_##name##_allocSize = s_##name##_as_6 < 256 ? 256 : s_##name##_as_6,      \
-    s_##name##_stackSize = s_##name##_allocSize - heapSize,                    \
+    s_##name##_stackSize = s_##name##_allocSize - s_##name##_hpsz,             \
     };                                                                         \
 __ALIGNED (s_##name##_allocSize) static char                                   \
     s_##sp_##name [s_##name##_allocSize] = {0};                                \
@@ -152,8 +157,8 @@ static LOS_TASK_CB s_##name##CB =                                              \
     OS_TASK_STATUS_SUSPEND,                                                    \
     taskPrio,                                                                  \
     (VOID *) regions,                                                          \
-    heapSize,                                                                  \
-    heapSize ? s_##sp_##name + s_##name##_stackSize : NULL,                    \
+    s_##name##_hpsz,                                                           \
+    s_##name##_hpsz ? s_##sp_##name + s_##name##_stackSize : NULL,             \
     s_##name##_stackSize,                                                      \
     NULL,                                                                      \
     0,  /* uwTaskID init later? */                                             \

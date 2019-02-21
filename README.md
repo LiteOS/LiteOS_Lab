@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/LiteOS/LiteOS.svg?branch=develop)](https://travis-ci.org/LiteOS/LiteOS)
+[![Build Status](https://travis-ci.org/LiteOS/LiteOS_Lab.svg?branch=master)](https://travis-ci.org/LiteOS/LiteOS_Lab)
 
 ## Huawei LiteOS简介
 
@@ -15,12 +15,14 @@ LiteOS_Lab的Lab是实验室英文单词的简写，用于一些新的特性快�
 ### LiteOS_Lab roadmap
 
 1. 读写锁（初步完成，原定时间点2018.12.31）
-2. 驱动框架（开发中，原定时间点2018.12.31）
+2. 驱动框架（初步完成，原定时间点2018.12.31）
 3. MPU支持（初步完成，原定时间点2018.12.31）
 4. 静态创建任务（初步完成，原定时间点2018.12.31）
-5. 内存管理改进（规划中，预计时间点2019.1.31）
-6. AT命令解析框架（规划中，预计时间点2019.2.28）
-7. shell框架以及一组简单命令（初步完成）
+5. 内存管理改进（初步完成，部分target依然使用旧版本，原定时间点2019.1.31）
+6. SVC调用（初步完成，IAR未支持）
+7. cortex-m arch代码去冗余，M3，M4，M7公用代码（初步完成）
+8. shell框架以及一组简单命令（初步完成）
+9. AT命令解析框架（规划中）
 
 ## LiteOS 代码导读
 
@@ -45,8 +47,11 @@ LiteOS_Lab的Lab是实验室英文单词的简写，用于一些新的特性快�
 
 LiteOS SDK是Huawei LiteOS软件开发工具包（Software Development Kit），通过LiteOS SDK端云互通组件，简单快速地实现与华为 OceanConnect IoT平台安全可靠连接，可以大大减少开发周期，快速构建IoT产品。
 
+LiteOS SDK是Huawei LiteOS软件开发工具包（Software Development Kit），通过LiteOS SDK端云互通组件，简单快速地实现与华为 OceanConnect IoT平台安全可靠连接，可以大大减少开发周期，快速构建IoT产品。
+* [LiteOS SDK端云互通组件Coap开发指南](./doc/Huawei_LiteOS_SDK_Coap_LwM2M_Developer_Guide_zh.md)
+* [LiteOS SDK端云互通组件MQTT开发指南](./doc/Huawei_LiteOS_SDK_MQTT_Developer_Guide.md)
+
 * [LiteOS接入3rd云平台](https://github.com/LiteOS/LiteOS_Connect_to_3rd_Cloud)
-  * [LiteOS接入OneNET](https://github.com/LiteOS/LiteOS/tree/develop/thirdparty/OneNET)
 
 
 ## LiteOS 支持的硬件
