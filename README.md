@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/LiteOS/LiteOS.svg?branch=develop)](https://travis-ci.org/LiteOS/LiteOS)
+[![Build Status](https://travis-ci.org/LiteOS/LiteOS_Lab.svg?branch=master)](https://travis-ci.org/LiteOS/LiteOS_Lab)
 
 ## Huawei LiteOS简介
 
@@ -18,7 +18,7 @@ LiteOS_Lab的Lab是实验室英文单词的简写，用于一些新的特性快�
 2. 驱动框架（初步完成，原定时间点2018.12.31）
 3. MPU支持（初步完成，原定时间点2018.12.31）
 4. 静态创建任务（初步完成，原定时间点2018.12.31）
-5. 内存管理改进（初步完成，部分target依然使用旧版本，预计时间点2019.1.31）
+5. 内存管理改进（初步完成，部分target依然使用旧版本，原定时间点2019.1.31）
 6. SVC调用（初步完成，IAR未支持）
 7. cortex-m arch代码去冗余，M3，M4，M7公用代码（初步完成）
 8. shell框架以及一组简单命令（初步完成）
