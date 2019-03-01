@@ -126,7 +126,7 @@ ASM_SOURCES_s =  \
         ${wildcard $(PROJECTBASE)/startup_stm32f103xe.s}
 
 ASM_SOURCES_S =  \
-       ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_dispatch_gcc.S}
+       ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_dispatch.S}
 
 ######################################
 # firmware library

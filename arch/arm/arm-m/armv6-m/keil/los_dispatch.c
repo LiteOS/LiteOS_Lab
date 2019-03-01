@@ -1,85 +1,62 @@
-;----------------------------------------------------------------------------
- ; Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
- ; All rights reserved.
- ; Redistribution and use in source and binary forms, with or without modification,
- ; are permitted provided that the following conditions are met:
- ; 1. Redistributions of source code must retain the above copyright notice, this list of
- ; conditions and the following disclaimer.
- ; 2. Redistributions in binary form must reproduce the above copyright notice, this list
- ; of conditions and the following disclaimer in the documentation and/or other materials
- ; provided with the distribution.
- ; 3. Neither the name of the copyright holder nor the names of its contributors may be used
- ; to endorse or promote products derived from this software without specific prior written
- ; permission.
- ; THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- ; "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- ; THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- ; PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
- ; CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- ; EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- ; PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
- ; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- ; WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
- ; OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
- ; ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- ;---------------------------------------------------------------------------*/
-;----------------------------------------------------------------------------
- ; Notice of Export Control Law
- ; ===============================================
- ; Huawei LiteOS may be subject to applicable export control laws and regulations, which might
- ; include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
- ; Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
- ; applicable export control laws and regulations.
- ;---------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------
+ * Copyright (c) <2019>, <Huawei Technologies Co., Ltd>
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 1. Redistributions of source code must retain the above copyright notice, this list of
+ * conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+ * of conditions and the following disclaimer in the documentation and/or other materials
+ * provided with the distribution.
+ * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+ * to endorse or promote products derived from this software without specific prior written
+ * permission.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *---------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------
+ * Notice of Export Control Law
+ * ===============================================
+ * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+ * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+ * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+ * applicable export control laws and regulations.
+ *---------------------------------------------------------------------------*/
 
-;****************************************************************************************
-;                                  EXPORT FUNCTIONS
-;****************************************************************************************
+#include <los_config.h>
+#include <los_typedef.h>
 
-    EXPORT  LOS_IntLock
-    EXPORT  LOS_IntUnLock
-    EXPORT  LOS_IntRestore
-    EXPORT  LOS_StartToRun
-    EXPORT  osTaskSchedule
-    EXPORT  PendSV_Handler
+#define OS_NVIC_INT_CTRL            0xE000ED04  // Interrupt Control and State Register.
+#define OS_NVIC_PENDSVSET           0x10000000  // Value to trigger PendSV exception.
 
-;****************************************************************************************
-;                                  EXTERN PARAMETERS
-;****************************************************************************************
+#define OS_NVIC_SYSPRI2             0xE000ED20  // System Handler Priority Register 2.
+#define OS_NVIC_PENDSV_SYSTICK_PRI  0xC0C00000  // SysTick + PendSV priority level (lowest).
 
-    IMPORT  g_stLosTask
-    IMPORT  g_pfnTskSwitchHook
-    IMPORT  g_bTaskScheduled
+#define OS_TASK_STATUS_RUNNING      0x0010      // Task Status Flag (RUNNING).
 
-;****************************************************************************************
-;                                  EQU
-;****************************************************************************************
-
-OS_NVIC_INT_CTRL              EQU    0xE000ED04  ; Interrupt Control and State Register.
-OS_NVIC_PENDSVSET             EQU    0x10000000  ; Value to trigger PendSV exception.
-
-OS_NVIC_SYSPRI2               EQU    0xE000ED20  ; System Handler Priority Register 2.
-OS_NVIC_PENDSV_SYSTICK_PRI    EQU    0xC0C00000  ; SysTick + PendSV priority level (lowest).
-
-OS_TASK_STATUS_RUNNING        EQU    0x0010      ; Task Status Flag (RUNNING).
-
-;****************************************************************************************
-;                                  CODE GENERATION DIRECTIVES
-;****************************************************************************************
-
-    AREA    |.text|, CODE, READONLY
-    THUMB
-    REQUIRE8
+/*******************************************************************************
+ Function:
+        VOID LOS_StartToRun(VOID);
+ Description:
+        Start the first task, which is the highest priority task in the priority queue.
+        Other tasks are started by task scheduling.
+*******************************************************************************/
+__asm void LOS_StartToRun (void)
+{
     PRESERVE8
 
-;****************************************************************************************
-; Function:
-;        VOID LOS_StartToRun(VOID);
-; Description:
-;        Start the first task, which is the highest priority task in the priority queue.
-;        Other tasks are started by task scheduling.
-;****************************************************************************************
-LOS_StartToRun PROC
+    IMPORT  g_stLosTask
+    IMPORT  g_bTaskScheduled
+
     CPSID   I
 
     ;/**
@@ -142,7 +119,7 @@ LOS_StartToRun PROC
     ; */
     LDR     R3, [R1]
 
-    IF :DEF:LOSCFG_ENABLE_MPU
+#if (LOSCFG_ENABLE_MPU == YES)
     LDR     R0, [R1, #8]           ; TCB->pMpuSettings
     LDR     R1, =0xe000ed9c
     MOVS    R4, #6                 ; 6 regions
@@ -155,9 +132,9 @@ LOS_StartToRun PROC
 
     LDR     R2, [R3]
     ADDS    R3, R3, #4
-    ELSE
+#else
     MOVS    R2, #2
-    ENDIF
+#endif
 
     ADDS    R3, R3, #36            ; skip R4-R11, PRIMASK.
 
@@ -188,62 +165,89 @@ LOS_StartToRun PROC
     ; * of the main function will be destroyed and will never be returned.
     ; */
     BX      R1
-    ENDP
 
-;****************************************************************************************
-; Function:
-;        UINTPTR LOS_IntLock(VOID);
-; Description:
-;        Disable all interrupts except Reset,NMI and HardFault.
-;        The value of currnet interruption state will be returned to the caller to save.
-;
-; Function:
-;        VOID LOS_IntRestore(UINTPTR uvIntSave);
-; Description:
-;        Restore the locked interruption of LOS_IntLock.
-;        The caller must pass in the value of interruption state previously saved.
-;****************************************************************************************
-LOS_IntLock PROC
+    ALIGN
+}
+
+/*******************************************************************************
+ Function:
+        UINTPTR LOS_IntLock(VOID);
+ Description:
+        Disable all interrupts except Reset,NMI and HardFault.
+        The value of currnet interruption state will be returned to the caller to save.
+
+ Function:
+        VOID LOS_IntRestore(UINTPTR uvIntSave);
+ Description:
+        Restore the locked interruption of LOS_IntLock.
+        The caller must pass in the value of interruption state previously saved.
+*******************************************************************************/
+__asm UINTPTR LOS_IntLock(VOID)
+{
+    PRESERVE8
+
     MRS     R0, PRIMASK
     CPSID   I
     BX      LR
-    ENDP
 
-LOS_IntUnLock PROC
+    ALIGN
+}
+
+__asm UINTPTR LOS_IntUnLock(VOID)
+{
+    PRESERVE8
+
     MRS     R0, PRIMASK
     CPSIE   I
     BX      LR
-    ENDP
 
-LOS_IntRestore PROC
+    ALIGN
+}
+
+__asm VOID LOS_IntRestore(UINTPTR r0)
+{
+    PRESERVE8
+
     MSR     PRIMASK, R0
     BX      LR
-    ENDP
 
-;****************************************************************************************
-; Function:
-;        VOID osTaskSchedule(VOID);
-; Description:
-;        Start the task swtich process by software trigger PendSV interrupt.
-;****************************************************************************************
-osTaskSchedule PROC
+    ALIGN
+}
+
+/*******************************************************************************
+ Function:
+        VOID osTaskSchedule(VOID);
+ Description:
+        Start the task swtich process by software trigger PendSV interrupt.
+*******************************************************************************/
+__asm VOID osTaskSchedule(VOID)
+{
+    PRESERVE8
+
     LDR     R0, =OS_NVIC_INT_CTRL
     LDR     R1, =OS_NVIC_PENDSVSET
     STR     R1, [R0]
     BX      LR
-    ENDP
 
-;****************************************************************************************
-; Function:
-;        VOID PendSV_Handler(VOID);
-; Description:
-;        PendSV interrupt handler, switch the context of the task.
-;        First: Save the context of the current running task(g_stLosTask.pstRunTask)
-;               to its own stack.
-;        Second: Restore the context of the next running task(g_stLosTask.pstNewTask)
-;                from its own stack.
-;****************************************************************************************
-PendSV_Handler PROC
+    ALIGN
+}
+
+/*******************************************************************************
+ Function:
+        VOID PendSV_Handler(VOID);
+ Description:
+        PendSV interrupt handler, switch the context of the task.
+        First: Save the context of the current running task(g_stLosTask.pstRunTask)
+               to its own stack.
+        Second: Restore the context of the next running task(g_stLosTask.pstNewTask)
+                from its own stack.
+*******************************************************************************/
+__asm VOID PendSV_Handler(VOID)
+{
+    PRESERVE8
+
+    IMPORT  g_pfnTskSwitchHook
+
     ;/**
     ; * R12: Save the interruption state of the current running task.
     ; * Disable all interrupts except Reset,NMI and HardFault
@@ -299,11 +303,11 @@ TaskSwitch
     STMIA   R0!, {R3-R7}           ; save R8-R12.
     SUBS    R0, #36
 
-    IF :DEF:LOSCFG_ENABLE_MPU
+#if (LOSCFG_ENABLE_MPU == YES)
     SUBS    R0, R0, #4
     MRS     R1, CONTROL
     STR     R1, [R0]
-    ENDIF
+#endif
 
     ;/**
     ; * R5,R3.
@@ -347,7 +351,7 @@ TaskSwitch
     ; */
     LDR     R1, [R0]
 
-    IF :DEF:LOSCFG_ENABLE_MPU
+#if (LOSCFG_ENABLE_MPU == YES)
     LDR     R4, [R0, #8]           ; TCB->pMpuSettings
     LDR     R5, =0xe000ed9c
     MOVS    R6, #6                 ; 6 regions, cortex-m0+ do not have alias reg
@@ -361,7 +365,7 @@ TaskSwitch
     LDR     R4, [R1]
     ADDS    R1, R1, #4
     MSR     CONTROL, R4
-    ENDIF
+#endif
 
     ;/**
     ; * Restore the stack frame(R4-R11) of the next running task.
@@ -414,14 +418,15 @@ TaskSwitch
     ; */
     MSR     PRIMASK, R12
     BX      LR
-    ENDP
 
-    IF :DEF:LOSCFG_ENABLE_MPU
-    EXPORT  osEnterPrivileged
-    EXPORT  osExitPrivileged
-    EXPORT  osIsPrivileged
+    ALIGN
+}
 
-osEnterPrivileged PROC
+#if (LOSCFG_ENABLE_MPU == YES)
+__asm UINT32 osEnterPrivileged(void)
+{
+    PRESERVE8
+
     PUSH    {R7, LR}
     MRS     R0, CONTROL
     MOVS    R1, #1
@@ -434,9 +439,14 @@ osEnterPrivileged PROC
     SVC     #0
 0
     POP     {R7, PC}
-    ENDP
 
-osExitPrivileged PROC
+    ALIGN
+}
+
+__asm void osExitPrivileged(UINT32 flag)
+{
+    PRESERVE8
+
     MOVS    R1, #1
     TST     R0, R1
     BEQ     %F0
@@ -446,16 +456,8 @@ osExitPrivileged PROC
     MSR     CONTROL, R0
 0
     BX      LR
-    ENDP
-
-osIsPrivileged PROC
-    MRS     R0, CONTROL
-    MOVS    R1, #1
-    ANDS    R0, R0, R1
-    BX      LR
-    ENDP
-    ENDIF
 
     ALIGN
-    END
+}
+#endif
 

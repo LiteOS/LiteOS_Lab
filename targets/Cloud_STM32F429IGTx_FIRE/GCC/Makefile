@@ -360,7 +360,7 @@ endif
 # ASM sources
 
 ASM_SOURCES_S =  \
-        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_dispatch_gcc.S}
+        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_dispatch.S}
 
 #blow use bootloader
 else 

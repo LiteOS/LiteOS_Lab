@@ -156,7 +156,7 @@ ASM_SOURCES_s =  \
          ${wildcard $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/Usr/los_startup_gcc.s}
 
 ASM_SOURCES_S =  \
-       ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_dispatch_gcc.S}
+       ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_dispatch.S}
 
 ######################################
 # firmware library
