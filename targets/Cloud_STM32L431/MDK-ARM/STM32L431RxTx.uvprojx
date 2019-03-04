@@ -572,11 +572,6 @@
           <GroupName>liteos/arch</GroupName>
           <Files>
             <File>
-              <FileName>los_dispatch_keil.S</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\..\..\arch\arm\arm-m\armv7-m\keil\los_dispatch_keil.S</FilePath>
-            </File>
-            <File>
               <FileName>los_hw.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\arch\arm\arm-m\src\los_hw.c</FilePath>
@@ -590,6 +585,11 @@
               <FileName>los_hwi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\arch\arm\arm-m\src\los_hwi.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_dispatch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\arch\arm\arm-m\armv7-m\keil\los_dispatch.c</FilePath>
             </File>
           </Files>
         </Group>

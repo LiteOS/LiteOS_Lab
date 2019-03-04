@@ -222,7 +222,7 @@ ASM_SOURCES_s =  \
         ${wildcard $(PROJECTBASE)/startup_LPC51U68.s}
 
 ASM_SOURCES_S =  \
-       ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv6-m/gcc/los_dispatch_gcc.S}
+       ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv6-m/gcc/los_dispatch.S}
 
 
 ######################################

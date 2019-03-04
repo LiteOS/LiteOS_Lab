@@ -21,3 +21,4 @@ script:
   -  make -j2 -C targets/NXP_LPC51U68/GCC
   -  make -j2 -C targets/STM32F103VET6_NB_GCC/GCC
   -  make -j2 -C targets/STM32L431RxTx_IoTClub/GCC
+  -  make -j2 -C targets/IoTClub-EVB-L1/GCC
