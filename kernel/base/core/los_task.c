@@ -1721,6 +1721,93 @@ LITE_OS_SEC_TEXT VOID *osTaskHeapGet(VOID)
 }
 #endif
 
+#if (LOSCFG_TASK_TLS_LIMIT != 0)
+/*****************************************************************************
+ Function : LOS_TaskTlsSet
+ Description : set the TLS data of a task
+ Input       : None
+ Output      : None
+ Return      : None
+ *****************************************************************************/
+UINT32 LOS_TaskTlsSet(UINT32 uwTaskID, UINT32 uwIdx, UINTPTR uvTls)
+{
+    UINTPTR      uvIntSave;
+    LOS_TASK_CB *pstTaskCB;
+    UINT32       ret;
+
+    if (uwIdx >= LOSCFG_TASK_TLS_LIMIT)
+    {
+        return LOS_ERRNO_TSK_TLS_IDX_INVALID;
+    }
+
+    if (uwTaskID > LOSCFG_BASE_CORE_TSK_LIMIT)
+    {
+        return LOS_ERRNO_TSK_ID_INVALID;
+    }
+
+    uvIntSave = LOS_IntLock();
+
+    pstTaskCB = OS_TCB_FROM_TID(uwTaskID);
+
+    if (OS_TASK_STATUS_UNUSED & pstTaskCB->usTaskStatus)
+    {
+        ret = LOS_ERRNO_TSK_NOT_CREATED;
+    }
+    else
+    {
+        pstTaskCB->auvTaskTls[uwIdx] = uvTls;
+        ret = LOS_OK;
+    }
+
+    LOS_IntRestore(uvIntSave);
+
+    return ret;
+}
+
+/*****************************************************************************
+ Function : LOS_TaskTlsGet
+ Description : get the TLS data of a task
+ Input       : None
+ Output      : None
+ Return      : None
+ *****************************************************************************/
+UINT32 LOS_TaskTlsGet(UINT32 uwTaskID, UINT32 uwIdx, UINTPTR * puvTls)
+{
+    UINTPTR      uvIntSave;
+    LOS_TASK_CB *pstTaskCB;
+    UINT32       ret;
+
+    if (uwIdx >= LOSCFG_TASK_TLS_LIMIT)
+    {
+        return LOS_ERRNO_TSK_TLS_IDX_INVALID;
+    }
+
+    if (uwTaskID > LOSCFG_BASE_CORE_TSK_LIMIT)
+    {
+        return LOS_ERRNO_TSK_ID_INVALID;
+    }
+
+    uvIntSave = LOS_IntLock();
+
+    pstTaskCB = OS_TCB_FROM_TID(uwTaskID);
+
+    if (OS_TASK_STATUS_UNUSED & pstTaskCB->usTaskStatus)
+    {
+        ret = LOS_ERRNO_TSK_NOT_CREATED;
+    }
+    else
+    {
+        *puvTls = pstTaskCB->auvTaskTls[uwIdx];
+        ret = LOS_OK;
+    }
+
+    LOS_IntRestore(uvIntSave);
+
+    return ret;
+}
+
+#endif
+
 #ifdef __cplusplus
 #if __cplusplus
 }

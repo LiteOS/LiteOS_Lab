@@ -374,6 +374,17 @@ extern "C" {
 
 /**
  * @ingroup los_task
+ * Task error code: The TLS entry index too large.
+ *
+ * Value: 0x02000223
+ *
+ * Solution: Check the TLS entry index.
+ */
+
+#define LOS_ERRNO_TSK_TLS_IDX_INVALID               LOS_ERRNO_OS_ERROR(LOS_MOD_TSK, 0x23)
+
+/**
+ * @ingroup los_task
  * Define the type of the task switching hook function.
  *
  */
@@ -1012,7 +1023,7 @@ extern BOOL LOS_TaskIsRunning(VOID);
   * @brief Obtain current new task name.
   *
   * @par Description:
-  * This API is used to obtain the name of new  task.
+  * This API is used to obtain the name of new task.
   *
   * @attention None.
   *
@@ -1025,6 +1036,56 @@ extern BOOL LOS_TaskIsRunning(VOID);
   * @since Huawei LiteOS V100R001C00
   */
  extern CHAR* LOS_TaskNameGet(UINT32 uwTaskID);
+
+#if (LOSCFG_TASK_TLS_LIMIT != 0)
+
+/**
+ * @ingroup  los_task
+ * @brief Set TLS data of a task.
+ *
+ * @par Description:
+ * This API is used to set TLS data of a task.
+ *
+ * @attention None.
+ *
+ * @param  uwTaskID         [IN] Type  #UINT32  The task ID.
+ * @param  uwIdx            [IN] Type  #UINT32  The TLS index
+ * @param  puvTls           [IN] Type  #UINTPTR The TLS data
+ *
+ *
+ * @retval #LOS_ERRNO_TSK_TLS_IDX_INVALID    0x02000223: TLS index too large.
+ * @retval #LOS_ERRNO_TSK_ID_INVALID         0x02000207: Task ID invalid.
+ * @retval #LOS_ERRNO_TSK_NOT_CREATED        0x0200020a: Task not created.
+ * @retval #LOS_OK                           0: TLS data successfully set.
+ * @par Dependency:
+ * <ul><li>los_task.h: the header file that contains the API declaration.</li></ul>
+ */
+extern UINT32 LOS_TaskTlsSet(UINT32 uwTaskID, UINT32 uwIdx, UINTPTR uvTls);
+
+/**
+ * @ingroup  los_task
+ * @brief Obtain TLS data of a task.
+ *
+ * @par Description:
+ * This API is used to obtain TLS data of a task.
+ *
+ * @attention None.
+ *
+ * @param  uwTaskID         [IN]  Type  #UINT32   The task ID.
+ * @param  uwIdx            [IN]  Type  #UINT32   The TLS index
+ * @param  puvTls           [OUT] Type  #UINTPTR* The address to write the TLS data
+ *
+ *
+ * @retval #LOS_ERRNO_TSK_TLS_IDX_INVALID    0x02000223: TLS index too large.
+ * @retval #LOS_ERRNO_TSK_ID_INVALID         0x02000207: Task ID invalid.
+ * @retval #LOS_ERRNO_TSK_NOT_CREATED        0x0200020a: Task not created.
+ * @retval #LOS_OK                           0: TLS data successfully got.
+ * @par Dependency:
+ * <ul><li>los_task.h: the header file that contains the API declaration.</li></ul>
+ */
+extern UINT32 LOS_TaskTlsGet(UINT32 uwTaskID, UINT32 uwIdx, UINTPTR * puvTls);
+
+#endif
 
 #ifdef __cplusplus
 #if __cplusplus
