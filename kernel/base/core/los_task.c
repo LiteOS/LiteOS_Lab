@@ -355,7 +355,7 @@ LITE_OS_SEC_TEXT_MINOR UINT8 *osConvertTskStatus(UINT16 usTaskStatus)
         return (UINT8 *)"QueuePend";
     }
 
-    return (UINT8 *)"Impossible";
+    return (UINT8 *)"ible";
 }
 
 LITE_OS_SEC_TEXT_MINOR UINT32 osGetTaskWaterLine(UINT32 uwTaskID)
