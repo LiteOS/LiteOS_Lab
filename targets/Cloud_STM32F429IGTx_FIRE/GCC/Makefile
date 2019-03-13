@@ -5,7 +5,12 @@
 # ------------------------------------------------
 # Generic Makefile (based on gcc)
 # ------------------------------------------------
-include config.mk
+
+ifndef CONFIG_FILE
+    CONFIG_FILE = config.mk
+endif
+
+include $(CONFIG_FILE)
 include prune.mk
 ######################################
 # target
@@ -378,9 +383,11 @@ USER_SRC = \
 
 endif
 
+ifeq ($(USE_BOOTLOADER), no)
 UTIL_SRC = \
         $(TOP_DIR)/utils/rbtree.c
         C_SOURCES += $(UTIL_SRC)
+endif
 
 ######################################
 # firmware library
