@@ -430,6 +430,9 @@ CFLAGS += -mfloat-abi=soft
 # Generate dependency information
 CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$@"
 
+# excluded unnecessary warnings
+CFLAGS += -Wno-missing-braces
+
 
 #######################################
 # LDFLAGS

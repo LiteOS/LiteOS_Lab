@@ -241,9 +241,11 @@ ifeq ($(DEBUG), 1)
 CFLAGS += -g -gdwarf-2
 endif
 
-
 # Generate dependency information
 CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)"
+
+# excluded unnecessary warnings
+CFLAGS += -Wno-missing-braces
 
 
 #######################################
