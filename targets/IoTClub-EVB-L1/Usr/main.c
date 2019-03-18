@@ -71,7 +71,7 @@ VOID HardWare_Init(VOID)
 	/* Initialize all configured peripherals */
 	DelayInit();
 	MX_GPIO_Init();
-	MX_I2C1_Init();
+	//MX_I2C1_Init();
 }
 
 int main(void)
@@ -116,18 +116,18 @@ int main(void)
 
 
     //this is used in china for China Telecom
-    tagNbConfig config;
-    config.server = "139.159.140.34,5683";
-    config.bands = "5,8,20";
-    config.plmn = "46011";
-    config.apn = "1,\"IP\",\"HUAWEI.COM\"";
+//    tagNbConfig config;
+//    config.server = "49.4.85.232,5683";
+//    config.bands = "5,8,20";
+//    config.plmn = "46011";
+//    config.apn = "1,\"IP\",\"HUAWEI.COM\"";
 
     //this is used in china for China  Mobile
-//    tagNbConfig config;
-//    config.server = "139.159.140.34,5683";
-//    config.bands = "5,8,20";
-//    config.plmn = "46000" ;
-//    config.apn = "1,\"IP\",\"HUAWEI.COM\"";
+    tagNbConfig config;
+    config.server = "49.4.85.232,5683";
+    config.bands = "8,5,20";
+    config.plmn = "46000" ;
+    config.apn = "1,\"IP\",\"HUAWEI.COM\"";
 
     app_main_init(&config);  //China telecom
  #endif

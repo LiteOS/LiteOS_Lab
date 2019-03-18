@@ -54,7 +54,7 @@
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
-          <BrowseInformation>0</BrowseInformation>
+          <BrowseInformation>1</BrowseInformation>
           <ListingPath>.\Objects\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
@@ -303,8 +303,8 @@
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
-                <StartAddress>0x0</StartAddress>
-                <Size>0x0</Size>
+                <StartAddress>0x10000000</StartAddress>
+                <Size>0x4000</Size>
               </OCR_RVCT10>
             </OnChipMemories>
             <RvctStartVector></RvctStartVector>
@@ -900,11 +900,6 @@
               <FileName>app_smoke.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Apps\app_smoke.c</FilePath>
-            </File>
-            <File>
-              <FileName>app_beep.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Apps\app_beep.c</FilePath>
             </File>
             <File>
               <FileName>app_led.c</FileName>
