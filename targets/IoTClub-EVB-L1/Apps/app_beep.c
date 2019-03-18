@@ -43,13 +43,13 @@
 //do the light intensity report
 static s32_t beep_switch(u8_t *buf, s32_t buflen)
 {
-    if(strcmp((char *)buf,"ON")==0)                                 //开蜂鸣器
+    if(strcmp((char *)buf,"ON")==0)                                 //????????
     {	
-        HAL_GPIO_WritePin(Beep_GPIO_Port,Beep_Pin,GPIO_PIN_SET);    // 输出高电平
+        HAL_GPIO_WritePin(Beep_GPIO_Port,Beep_Pin,GPIO_PIN_SET);    // ???????
     }
-    if(strcmp((char *)buf,"OFF")==0)                                //关蜂鸣器
+    if(strcmp((char *)buf,"OFF")==0)                                //???????
     {	
-        HAL_GPIO_WritePin(Beep_GPIO_Port,Beep_Pin,GPIO_PIN_RESET);  // 输出低电平
+        HAL_GPIO_WritePin(Beep_GPIO_Port,Beep_Pin,GPIO_PIN_RESET);  // ???????
     }
     return buflen;
 }
@@ -68,19 +68,18 @@ bool_t app_beep_switch()
 
 static s32_t shell_beepcmd(s32_t argc, const char *argv[])
 {
-    if(strcmp((char *)argv[1],"on")==0)                                 //开蜂鸣器
+    if(strcmp((char *)argv[1],"on")==0)                                 //????????
     {	
-        HAL_GPIO_WritePin(Beep_GPIO_Port,Beep_Pin,GPIO_PIN_SET);        // 输出高电平
+        HAL_GPIO_WritePin(Beep_GPIO_Port,Beep_Pin,GPIO_PIN_SET);        // ???????
     }
-    if(strcmp((char *)argv[1],"off")==0)                                //关蜂鸣器
+    if(strcmp((char *)argv[1],"off")==0)                                //???????
     {	
-        HAL_GPIO_WritePin(Beep_GPIO_Port,Beep_Pin,GPIO_PIN_RESET);      // 输出低电平
+        HAL_GPIO_WritePin(Beep_GPIO_Port,Beep_Pin,GPIO_PIN_RESET);      // ???????
     }
 
     return 0;
 }
 OSSHELL_EXPORT_CMD(shell_beepcmd,"beepcmd","beepcmd on/off");
-
 
 
 

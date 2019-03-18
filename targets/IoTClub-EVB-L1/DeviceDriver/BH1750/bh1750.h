@@ -22,8 +22,8 @@
 #define I2C_WR	        0		/* Ð´¿ØÖÆbit */
 #define I2C_RD	        1		/* ¶Á¿ØÖÆbit */
 
-#define I2C_GPIO_CLK_ENABLE()               __HAL_RCC_GPIOC_CLK_ENABLE()
-#define I2C_GPIO_PORT                       GPIOC   
+#define I2C_GPIO_CLK_ENABLE()               __HAL_RCC_GPIOB_CLK_ENABLE()
+#define I2C_GPIO_PORT                       GPIOB   
 #define I2C_SCL_PIN                         GPIO_PIN_11
 #define I2C_SDA_PIN                         GPIO_PIN_10
 
@@ -42,8 +42,8 @@
 #define BH1750_ONE  0x20
 #define BH1750_RSET 0x07
 
-#define SDA_IN()  {GPIOC->MODER&=~(3<<(10*2));GPIOC->MODER|=0<<10*2;}       //PH5????  
-#define SDA_OUT() {GPIOC->MODER&=~(3<<(10*2));GPIOC->MODER|=1<<10*2;}   //PH5???? 
+#define SDA_IN()  {GPIOB->MODER&=~(3<<(10*2));GPIOB->MODER|=0<<10*2;}       //PH5????  
+#define SDA_OUT() {GPIOB->MODER&=~(3<<(10*2));GPIOB->MODER|=1<<10*2;}   //PH5???? 
 
 
 void    I2C_Start(void);

@@ -121,7 +121,7 @@ bool_t app_send_raw(u8_t *msg, s32_t len)
 static  u8_t  s_report_buf[cn_report_buf_len];
 
 
-#define LIGHT_SERSOR_EN   0   //need to insert the dht11 mini board
+#define LIGHT_SERSOR_EN   1   //need to insert the bh1750 mini board
 #define CSQ_SENSOR_EN     1   //on the main board :NB MODULE support
 #define LED_SWITCH_EN     1   //on the main board :D1
 #define DHT11_SENSOR_EN   0   //need to insert the dht11 mini board
@@ -159,11 +159,6 @@ static void __app_main_taskentry(void *args)
 #if SMOKE_SENSOR_EN
     extern bool_t app_smoke_report();
     app_smoke_report();
-#endif
-
-#if BEEP_SWICTH_EN
-    extern bool_t app_beep_switch();
-    app_beep_switch();
 #endif
 
     nb_init(&s_app_manager.config);

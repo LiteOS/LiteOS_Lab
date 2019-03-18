@@ -53,30 +53,21 @@
 /* USER CODE END Includes */
 
 /* Private define ------------------------------------------------------------*/
-#define Beep_Pin         GPIO_PIN_5
-#define Beep_GPIO_Port   GPIOB
-#define LED_Pin GPIO_PIN_13
-#define LED_GPIO_Port GPIOC
-#define Light_Pin GPIO_PIN_5
-#define Light_GPIO_Port GPIOA
-#define KEY1_Pin GPIO_PIN_0
-#define KEY1_GPIO_Port GPIOC
-#define KEY1_EXTI_IRQn EXTI0_IRQn
-#define KEY2_Pin GPIO_PIN_1
-#define KEY2_GPIO_Port GPIOC
-#define KEY2_EXTI_IRQn EXTI1_IRQn
-#define KEY3_Pin GPIO_PIN_2
-#define KEY3_GPIO_Port GPIOC
-#define KEY3_EXTI_IRQn EXTI2_IRQn
-#define KEY4_Pin GPIO_PIN_3
-#define KEY4_GPIO_Port GPIOC
-#define KEY4_EXTI_IRQn EXTI3_IRQn
-#define MQ2_DO_Pin GPIO_PIN_6
-#define MQ2_DO_GPIO_Port GPIOA
-#define OLED_SCL_Pin GPIO_PIN_10
-#define OLED_SCL_GPIO_Port GPIOB
-#define OLED_SDA_Pin GPIO_PIN_11
-#define OLED_SDA_GPIO_Port GPIOB
+#define LED_Pin GPIO_PIN_1
+#define LED_GPIO_Port GPIOA
+#define KEY1_Pin GPIO_PIN_1
+#define KEY1_GPIO_Port GPIOB
+#define KEY1_EXTI_IRQn EXTI1_IRQn
+#define KEY2_Pin GPIO_PIN_2
+#define KEY2_GPIO_Port GPIOB
+#define KEY2_EXTI_IRQn EXTI2_IRQn
+
+//#define MQ2_DO_Pin GPIO_PIN_6
+//#define MQ2_DO_GPIO_Port GPIOA
+//#define OLED_SCL_Pin GPIO_PIN_10
+//#define OLED_SCL_GPIO_Port GPIOB
+//#define OLED_SDA_Pin GPIO_PIN_11
+//#define OLED_SDA_GPIO_Port GPIOB
 //#define DHT11_Pin GPIO_PIN_11
 //#define DHT11_GPIO_Port GPIOA
 
