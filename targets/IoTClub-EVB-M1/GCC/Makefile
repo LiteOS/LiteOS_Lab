@@ -133,27 +133,27 @@ DIRVERFRAME_SRC =  \
 #project applications source
 #device driver
 DEVICEDRIVER_SRC =  \
-        $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/DeviceDriver/BC35_95/NB_DRIVER.c  \
-        $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/DeviceDriver/BH1750/BH1750.c      \
-        $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/DeviceDriver/DHT11/DHT11_BUS.c    \
-        $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/DeviceDriver/OLED/oled.c        \
-
+        $(TOP_DIR)/targets/IoTClub-EVB-M1/DeviceDriver/BC35_95/NB_DRIVER.c  \
+        $(TOP_DIR)/targets/IoTClub-EVB-M1/DeviceDriver/BH1750/BH1750.c      \
+        $(TOP_DIR)/targets/IoTClub-EVB-M1/DeviceDriver/DHT11/DHT11_BUS.c    \
+        $(TOP_DIR)/targets/IoTClub-EVB-M1/DeviceDriver/OLED/oled.c
         C_SOURCES += $(DEVICEDRIVER_SRC)
+
 #common hardware
 HARDWARE_SRC =  \
-        ${wildcard $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/Hardware/*.c}
+        ${wildcard $(TOP_DIR)/targets/IoTClub-EVB-M1/Hardware/*.c}
         C_SOURCES += $(HARDWARE_SRC)
 
 #startup code and applications
 USR_SRC = \
-        ${wildcard $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/Usr/*.c}    \
-        ${wildcard $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/Apps/*.c}
+        ${wildcard $(TOP_DIR)/targets/IoTClub-EVB-M1/Usr/*.c}               \
+        ${wildcard $(TOP_DIR)/targets/IoTClub-EVB-M1/Apps/*.c}
         C_SOURCES += $(USR_SRC)
 
 
 # ASM sources
 ASM_SOURCES_S =  \
-       ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_dispatch.S} \
+       ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_dispatch.S}     \
        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_startup.S}
 
 ######################################
@@ -218,15 +218,15 @@ COMPONENTS_INC = \
 DEVICEDRIV_INC = \
         -I $(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc           \
         -I $(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/Legacy    \
-        -I $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/DeviceDriver/BC35_95        \
-        -I $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/DeviceDriver/BH1750         \
-        -I $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/DeviceDriver/DHT11          \
-        -I $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/DeviceDriver/OLED           \
-        -I $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/DeviceDriver/GPS            \
-        -I $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/Hardware                    \
-        -I $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/Apps                        \
-        -I $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/OS_CONFIG                   \
-        -I $(TOP_DIR)/targets/STM32L431RxTx_IoTClub/Usr
+        -I $(TOP_DIR)/targets/IoTClub-EVB-M1/DeviceDriver/BC35_95        \
+        -I $(TOP_DIR)/targets/IoTClub-EVB-M1/DeviceDriver/BH1750         \
+        -I $(TOP_DIR)/targets/IoTClub-EVB-M1/DeviceDriver/DHT11          \
+        -I $(TOP_DIR)/targets/IoTClub-EVB-M1/DeviceDriver/OLED           \
+        -I $(TOP_DIR)/targets/IoTClub-EVB-M1/DeviceDriver/GPS            \
+        -I $(TOP_DIR)/targets/IoTClub-EVB-M1/Hardware                    \
+        -I $(TOP_DIR)/targets/IoTClub-EVB-M1/Apps                        \
+        -I $(TOP_DIR)/targets/IoTClub-EVB-M1/OS_CONFIG                   \
+        -I $(TOP_DIR)/targets/IoTClub-EVB-M1/Usr
 
         C_INCLUDES += $(DEVICEDRIV_INC)
 
@@ -251,7 +251,7 @@ CFLAGS += -Wno-missing-braces
 #######################################
 # link script
 
-LD_FILE = STM32L431RCTx_FLASH.ld
+LD_FILE = IoTClub-EVB-M1.ld
 LDSCRIPT = $(PROJECTBASE)/$(LD_FILE)
 
 # libraries
