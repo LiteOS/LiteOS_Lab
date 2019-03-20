@@ -75,9 +75,12 @@ LITE_OS_SEC_TEXT_INIT UINT32 osTickStart(VOID)
         return LOS_ERRNO_TICK_CFG_INVALID;
     }
 
+#if (LOSCFG_PLATFORM_HWI == YES)
+
     /* SysTick_Config will update the priority, use OS_HWI_PRIO_LOWEST here */
 
     LOS_HwiCreate((UINT32)SysTick_IRQn, OS_HWI_PRIO_LOWEST, 0, osTickHandler, 0);
+#endif
 
     g_uwCyclesPerTick = OS_SYS_CLOCK / LOSCFG_BASE_CORE_TICK_PER_SECOND;
     g_ullTickCount = 0;

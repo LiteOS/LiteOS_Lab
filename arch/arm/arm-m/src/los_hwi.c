@@ -176,7 +176,7 @@ __attribute__ ((section("RESET")))
 __attribute__ ((section(".isr_vector")))
 #endif
 
-static VOID (* const s_pstHwiForm[])(VOID)  =
+VOID (* const g_pstHwiForm[])(VOID)  =
 {
     NULL,                // [0] Top of Stack
     Reset_Handler,       // [1] reset
@@ -262,11 +262,11 @@ LITE_OS_SEC_TEXT_INIT VOID osHwiInit()
 {
 #if ((__CORTEX_M == 0U) || (__CORTEX_M == 23U)) && \
     defined (__VTOR_PRESENT) && (__VTOR_PRESENT == 1U)
-    SCB->VTOR = (UINT32)s_pstHwiForm;
+    SCB->VTOR = (UINT32)g_pstHwiForm;
 #endif
 
 #if (__CORTEX_M >= 0x03U)  /* only for Cortex-M3 and above */
-    SCB->VTOR = (UINT32)s_pstHwiForm;
+    SCB->VTOR = (UINT32)g_pstHwiForm;
     NVIC_SetPriorityGrouping(OS_NVIC_AIRCR_PRIGROUP);
 #endif
 
