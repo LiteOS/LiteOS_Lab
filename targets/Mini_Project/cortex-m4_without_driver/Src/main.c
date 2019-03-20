@@ -51,15 +51,27 @@
 #include "mbedtls/net.h"
 #include "mbedtls/ssl.h"
 
-
-
 #include "los_base.h"
 #include "los_task.ph"
 #include "los_typedef.h"
 #include "los_sys.h"
 
+#include <mem.h>
 
+#if defined (__GNUC__)
+extern char __los_heap_addr_start__ [];
+extern char __los_heap_addr_end__ [];
+#else
+#error "unsupported tool!"
+#endif
 
+const struct phys_mem system_phys_mem [] =
+{
+#if defined (__GNUC__)
+    { __los_heap_addr_start__, __los_heap_addr_end__, },
+#endif
+    { 0, 0 }
+};
 
 UINT32 g_TskHandle;
 

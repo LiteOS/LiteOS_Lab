@@ -192,7 +192,7 @@ USER_SRC =  \
 # ASM sources
 ASM_SOURCES_S =  \
     ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_dispatch.S} \
-    ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_startup.S}
+    ${wildcard $(PROJECTBASE)/los_startup_gcc.S}
 
 
 ######################################
