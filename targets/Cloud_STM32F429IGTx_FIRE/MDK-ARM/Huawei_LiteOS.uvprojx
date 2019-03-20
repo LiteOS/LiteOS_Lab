@@ -379,16 +379,6 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>startup</GroupName>
-          <Files>
-            <File>
-              <FileName>los_startup_keil.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\los_startup_keil.s</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>user</GroupName>
           <Files>
             <File>
@@ -615,6 +605,11 @@
               <FileName>los_dispatch.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\arch\arm\arm-m\armv7-m\keil\los_dispatch.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_startup.S</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\..\arch\arm\arm-m\armv7-m\keil\los_startup.S</FilePath>
             </File>
           </Files>
         </Group>

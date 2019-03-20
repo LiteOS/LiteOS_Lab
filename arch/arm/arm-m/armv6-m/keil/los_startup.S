@@ -1,5 +1,5 @@
 ;----------------------------------------------------------------------------
- ; Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+ ; Copyright (c) <2019>, <Huawei Technologies Co., Ltd>
  ; All rights reserved.
  ; Redistribution and use in source and binary forms, with or without modification,
  ; are permitted provided that the following conditions are met:
@@ -32,15 +32,34 @@
  ; applicable export control laws and regulations.
  ;---------------------------------------------------------------------------*/
 
-    MODULE  ?cstartup
+        EXPORT  __heap_start__
+        EXPORT  Reset_Handler                                   [WEAK]
 
-    THUMB
-    PUBLIC  Reset_Handler
-    SECTION .text:CODE:REORDER:NOROOT(2)
-Reset_Handler
-    LDR     SP, =sfe(CSTACK)
-    LDR     R0, =SystemInit
-    BLX     R0
-    LDR     R0, =__iar_program_start
-    BX      R0
-    END
+        IMPORT  ||Image$$ARM_LIB_STACKHEAP$$ZI$$Limit||
+        IMPORT  SystemInit
+        IMPORT  __main
+
+        AREA    LOS_HEAP, NOINIT, READWRITE, ALIGN=3
+__heap_start__
+        SPACE   0
+
+        PRESERVE8
+
+        AREA    |.text|, CODE, READONLY
+        THUMB
+
+Reset_Handler   PROC
+        CPSID   I
+
+        LDR     R0, =||Image$$ARM_LIB_STACKHEAP$$ZI$$Limit||
+        MOV     SP, R0
+
+        LDR     R0, =SystemInit
+        BLX     R0
+        LDR     R0, =__main
+        BX      R0
+        
+        ENDP
+
+        ALIGN
+        END

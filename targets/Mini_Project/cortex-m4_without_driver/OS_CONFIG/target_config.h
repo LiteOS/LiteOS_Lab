@@ -279,27 +279,8 @@ extern "C" {
                                        Memory module configuration
 =============================================================================*/
 
-extern UINT8 *m_aucSysMem0;
-extern UINT32 __LOS_HEAP_ADDR_START__;
-extern UINT32 __LOS_HEAP_ADDR_END__;
-
-/**
- * @ingroup los_config
- * Starting address of the memory
- */
-#define OS_SYS_MEM_ADDR                                     (VOID *)__LOS_HEAP_ADDR_START__
-
-/**
- * @ingroup los_config
- * Ending address of the memory
- */
-extern UINT32 g_sys_mem_addr_end;
-
-/**
- * @ingroup los_config
- * Memory size
- */
-#define OS_SYS_MEM_SIZE                                     ((UINT32)(__LOS_HEAP_ADDR_END__ - __LOS_HEAP_ADDR_START__ + 1))
+#define LOSCFG_HEAP_IMPROVED                                YES
+#define LOSCFG_MEM_STATISTICS                               YES
 
 /**
  * @ingroup los_config

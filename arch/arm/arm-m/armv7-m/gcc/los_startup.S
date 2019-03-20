@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2019>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -32,78 +32,63 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#include "sys_init.h"
-#include <osport.h>
-#include <at.h>
-#include <shell.h>
-#include <los_dev.h>
+    .syntax unified
+    .thumb
 
-#include "mem.h"
+/**
+ * @brief  This is the code that gets called when the processor first
+ *         starts execution following a reset event. Only the absolutely
+ *         necessary set is performed, after which the application
+ *         supplied main() routine is called.
+ *         This the default implementation for gcc, this routine is 
+ *         defined as weak so it can be overrided.
+ * @param  None
+ * @retval : None
+ */
+    .text
 
-#if defined (__CC_ARM)
-extern char __heap_start__ [];
-#else
-#error "fix me"
+    .weak   Reset_Handler
+    .type   Reset_Handler, %function
+Reset_Handler:
+    cpsid   i
+    ldr     sp, =_estack            /* set msp, as it is not set in the vector */
+
+#if defined (__VFP_FP__) && !defined(__SOFTFP__)    /* if FPU exist. */
+    /* enable FPU */
+
+    ldr     r0, =0xE000ED88
+    ldr     r1, [r0]
+    orr     r1, r1, #(0xf << 20)                    /* enable cp10 cp11 both */
+    str     r1, [r0]
 #endif
 
-const struct phys_mem system_phys_mem [] =
-    {
-#if defined (__CC_ARM)
-        { __heap_start__, (char *) 0x2001FC00, },
-#else
-#error "fix me"
-#endif
-        { 0, 0 }
-    };
+    /* init the data section */
 
-static VOID HardWare_Init(VOID)
-{
-    SystemClock_Config();
-    dwt_delay_init(SystemCoreClock);
-}
+    ldr     r1, =_sdata
+    ldr     r2, =_edata
+    ldr     r3, =_sidata
+0:
+    cmp     r1, r2
+    beq     0f
+    ldr     r0, [r3], #4
+    str     r0, [r1], #4
+    b       0b
+0:
 
-static u32_t apptask_entry(void *args)
-{
-    //extern at_adaptor_api at_interface;
-    //at_api_register(&at_interface);
-    extern bool_t  sim5320e_init(void);
-    sim5320e_init();
-    agent_tiny_entry();
-    
-    return 0;
-}
+    /* init the bss section */
 
-int main(void){
-    UINT32 uwRet = LOS_OK;
-	HardWare_Init();
-    uwRet = LOS_KernelInit();
-    if (uwRet != LOS_OK){
-        return LOS_NOK;
-    } 
-  
-#if 0
-    extern  UINT32 LOS_Inspect_Entry(VOID);
-    LOS_Inspect_Entry();
-#endif    
-    //system frame work initilized here
-    los_shell_init();     //which means you could use shell
-    los_driv_init();     //which means you could use the driver framwork
-    los_at_init("atdev"); //which means you could use the at framework
-    //////////////////////APPLICATION INITIALIZE HERE/////////////////////
-    //do the shell module initlialize:use uart 1
-    extern void uart_debug_init(s32_t baud);
-    uart_debug_init(115200);
-    //do the at module initialize:use uart 2
-    extern bool_t uart_at_init(s32_t baudrate);
-    uart_at_init(115200);
+    mov     r0, #0
+    ldr     r1, =_sbss
+    ldr     r2, =_ebss
+0:
+    cmp     r1, r2
+    beq     0f
+    str     r0, [r1], #4
+    b       0b
+0:
+    bl      SystemInit
+    bl      __libc_init_array
+    bl      main
 
-//////////////////////APPLICATION INITIALIZE HERE/////////////////////
- #if 1
-    task_create("appmain",apptask_entry,0x2000,NULL,NULL,0);
- #endif 
-
-    (void)LOS_Start();
-    return 0;
-}
-
-
+    b       .
+.size  Reset_Handler, . - Reset_Handler

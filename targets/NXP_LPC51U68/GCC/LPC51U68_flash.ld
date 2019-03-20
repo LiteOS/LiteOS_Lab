@@ -74,6 +74,7 @@ SECTIONS
   /* The startup code goes first into internal flash */
   .interrupts :
   {
+    __Vectors = .;
     . = ALIGN(4);
     KEEP(*(.isr_vector))     /* Startup code */
     . = ALIGN(4);
@@ -168,9 +169,13 @@ SECTIONS
   __etext = .;    /* define a global symbol at end of code */
   __DATA_ROM = .; /* Symbol is used by startup for data initialization */
 
+  /* used by the startup to initialize data */
+  _sidata = LOADADDR(.data);
+
   .data : AT(__DATA_ROM)
   {
     . = ALIGN(4);
+    _sdata = .;
     __DATA_RAM = .;
     __data_start__ = .;      /* create a global symbol at data start */
     *(.ramfunc*)             /* for functions in ram */
@@ -179,6 +184,7 @@ SECTIONS
     KEEP(*(.jcr*))
     . = ALIGN(4);
     __data_end__ = .;        /* define a global symbol at data end */
+    _edata = .;
   } > m_data
 
   __DATA_END = __DATA_ROM + (__data_end__ - __data_start__);
@@ -192,12 +198,14 @@ SECTIONS
     . = ALIGN(4);
     __START_BSS = .;
     __bss_start__ = .;
+    _sbss = .;
     *(.bss)
     *(.bss*)
     *(COMMON)
     . = ALIGN(4);
     __bss_end__ = .;
     __END_BSS = .;
+    _ebss = .;
   } > m_data
 
   .sbrk_heap :
@@ -220,8 +228,7 @@ SECTIONS
   {
     . = ALIGN(8);
     . += STACK_SIZE;
-    __StackTop = .;
-    PROVIDE(__stack = __StackTop);
+    _estack = .;
   } > m_data_sramx
 
   .ARM.attributes 0 : { *(.ARM.attributes) }

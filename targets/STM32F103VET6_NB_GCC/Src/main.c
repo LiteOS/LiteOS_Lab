@@ -48,6 +48,24 @@
 #endif
 #endif
 
+#include <mem.h>
+
+#if defined (__GNUC__)
+extern char __los_heap_addr_start__ [];
+extern char __los_heap_addr_end__ [];
+#else
+#error "fix me"
+#endif
+
+const struct phys_mem system_phys_mem [] =
+    {
+#if defined (__GNUC__)
+        { __los_heap_addr_start__, __los_heap_addr_end__, },
+#else
+#error "unsupported tool!"
+#endif
+        { 0, 0 }
+    };
 
 /* USER CODE END Includes */
 
