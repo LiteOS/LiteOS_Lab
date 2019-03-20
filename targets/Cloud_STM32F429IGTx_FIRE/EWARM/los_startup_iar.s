@@ -34,53 +34,13 @@
 
     MODULE  ?cstartup
 
-    ;; Forward declaration of sections.
-    SECTION CSTACK:DATA:NOROOT(3)
-    SECTION LOS_HEAP:DATA:NOROOT(3)
-
-    SECTION .text:CODE:NOROOT(2)
-    PUBLIC  __LOS_HEAP_ADDR_START__
-    PUBLIC  __LOS_HEAP_ADDR_END__
-    EXTERN  __ICFEDIT_region_RAM_end__
-    DATA
-__LOS_HEAP_ADDR_START__
-    DCD     sfb(LOS_HEAP)
-__LOS_HEAP_ADDR_END__
-    DCD     __ICFEDIT_region_RAM_end__
-
-    SECTION .intvec:CODE:NOROOT(2)
-    
-    EXTERN  __iar_program_start
-    EXTERN  SystemInit
-    EXPORT  Reset_Handler
-    PUBLIC  __vector_table
-
-    DATA
-__vector_table
-    DCD     sfe(CSTACK)
-    DCD     Reset_Handler   ; Reset Handler
-    DCD     0               ; NMI Handler
-    DCD     0               ; Hard Fault Handler
-    DCD     0               ; MPU Fault Handler
-    DCD     0               ; Bus Fault Handler
-    DCD     0               ; Usage Fault Handler
-    DCD     0               ; Reserved
-    DCD     0               ; Reserved
-    DCD     0               ; Reserved
-    DCD     0               ; Reserved
-    DCD     0               ; SVCall Handler
-    DCD     0               ; Debug Monitor Handler
-    DCD     0               ; Reserved
-    DCD     0               ; PendSV Handler
-    DCD     0               ; SysTick_Handler
-
     THUMB
-    PUBWEAK Reset_Handler
+    PUBLIC  Reset_Handler
     SECTION .text:CODE:REORDER:NOROOT(2)
 Reset_Handler
+    LDR     SP, =sfe(CSTACK)
     LDR     R0, =SystemInit
     BLX     R0
     LDR     R0, =__iar_program_start
     BX      R0
     END
-

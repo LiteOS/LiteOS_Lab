@@ -94,6 +94,12 @@ LITE_OS_SEC_TEXT VOID osTickHandlerLoop(UINT32 uwElapseTicks)
  *****************************************************************************/
 LITE_OS_SEC_TEXT VOID osTickHandler(VOID)
 {
+    if (!g_bSysTickStart)
+    {
+        g_ullTickCount++;
+        return;
+    }
+
 #if (LOSCFG_KERNEL_TICKLESS == YES)
     if (g_bReloadSysTickFlag)
     {

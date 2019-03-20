@@ -48,7 +48,7 @@
             <NotGenerated>0</NotGenerated>
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
-          <OutputDirectory>STM32L431RxTx\</OutputDirectory>
+          <OutputDirectory>.\Objects\</OutputDirectory>
           <OutputName>Huawei_LiteOS</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
@@ -641,6 +641,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\arch\arm\arm-m\armv7-m\keil\los_dispatch.c</FilePath>
             </File>
+            <File>
+              <FileName>los_startup.S</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\..\arch\arm\arm-m\armv7-m\keil\los_startup.S</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -846,11 +851,6 @@
         <Group>
           <GroupName>usr</GroupName>
           <Files>
-            <File>
-              <FileName>los_startup_keil.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\Usr\los_startup_keil.s</FilePath>
-            </File>
             <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>

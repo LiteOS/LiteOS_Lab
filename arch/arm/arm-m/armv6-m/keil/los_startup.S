@@ -1,5 +1,5 @@
 ;----------------------------------------------------------------------------
- ; Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+ ; Copyright (c) <2019>, <Huawei Technologies Co., Ltd>
  ; All rights reserved.
  ; Redistribution and use in source and binary forms, with or without modification,
  ; are permitted provided that the following conditions are met:
@@ -32,54 +32,34 @@
  ; applicable export control laws and regulations.
  ;---------------------------------------------------------------------------*/
 
-LOS_Heap_Min_Size   EQU     0x400
+        EXPORT  __heap_start__
+        EXPORT  Reset_Handler                                   [WEAK]
 
-                AREA    LOS_HEAP, NOINIT, READWRITE, ALIGN=3
-__los_heap_base
-LOS_Heap_Mem    SPACE   LOS_Heap_Min_Size
+        IMPORT  ||Image$$ARM_LIB_STACKHEAP$$ZI$$Limit||
+        IMPORT  SystemInit
+        IMPORT  __main
 
+        AREA    LOS_HEAP, NOINIT, READWRITE, ALIGN=3
+__heap_start__
+        SPACE   0
 
-                AREA    LOS_HEAP_INFO, DATA, READONLY, ALIGN=2
-                IMPORT  |Image$$ARM_LIB_STACKHEAP$$ZI$$Base|
-                EXPORT  __LOS_HEAP_ADDR_START__
-                EXPORT  __LOS_HEAP_ADDR_END__
-__LOS_HEAP_ADDR_START__
-                DCD     __los_heap_base
-__LOS_HEAP_ADDR_END__
-                DCD     |Image$$ARM_LIB_STACKHEAP$$ZI$$Base| - 1
+        PRESERVE8
 
+        AREA    |.text|, CODE, READONLY
+        THUMB
 
-                PRESERVE8
+Reset_Handler   PROC
+        CPSID   I
 
-                AREA    RESET, CODE, READONLY
-                THUMB
+        LDR     R0, =||Image$$ARM_LIB_STACKHEAP$$ZI$$Limit||
+        MOV     SP, R0
 
-                IMPORT  ||Image$$ARM_LIB_STACKHEAP$$ZI$$Limit||
-                ;IMPORT  osPendSV
+        LDR     R0, =SystemInit
+        BLX     R0
+        LDR     R0, =__main
+        BX      R0
+        
+        ENDP
 
-                EXPORT  _BootVectors
-                EXPORT  Reset_Handler
-
-_BootVectors
-                DCD     ||Image$$ARM_LIB_STACKHEAP$$ZI$$Limit||
-                DCD     Reset_Handler
-
-
-Reset_Handler
-                LDR.W   R0, =0xE000ED88
-                LDR     R1, [R0]
-                ORR     R1, R1, #(0xF << 20)
-                STR     R1, [R0]
-                CPSID   I
-
-                IMPORT  SystemInit
-                IMPORT  __main
-                LDR     R0, =SystemInit
-                BLX     R0
-                LDR     R0, =__main
-                BX      R0
-
-
-                ALIGN
-                END
-
+        ALIGN
+        END

@@ -44,12 +44,9 @@
 #include <stdio.h>
 #include <string.h>
 
-
 #include "__hal_simulate.h"
 #include "core_cm0.h"
 #include <stdint.h>
-
-
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -92,7 +89,7 @@ extern "C" {
  * @ingroup los_config
  * Configuration item for hardware interrupt tailoring
  */
-#define LOSCFG_PLATFORM_HWI                                 NO
+#define LOSCFG_PLATFORM_HWI                                 YES
 
 /**
  * @ingroup los_config
@@ -279,110 +276,8 @@ extern "C" {
                                        Memory module configuration
 =============================================================================*/
 
-/**
- * Without modify default link script and startup file, In order to use all the remaining SRAM space
- * as LiteOS`s heap, User must config the start address and size of the board`s memory, Because in
- * KEIL and IAR compiler, the program can`t get the end address of SRAM.
- */
-#define BOARD_SRAM_START_ADDR     0x20000000
-#define BOARD_SRAM_SIZE_KB        96
-#define BOARD_SRAM_END_ADDR       (BOARD_SRAM_START_ADDR + 1024 * BOARD_SRAM_SIZE_KB)
-
-/**
- * Config the start address and size of the LiteOS`s heap memory
- */
-#if defined ( __CC_ARM )
-    /**
-     * SRAM diagram as below:
-     *  -----------------------------------------------------------------------------------------
-     * |  .data  |  .bss  |  HEAP  |  STACK  |                     LOS_HEAP                      |
-     * |                   <NOINIT>   <MSP>                                                      |
-     *  -----------------------------------------------------------------------------------------
-     * |<--------  .ANY (+RW +ZI)  --------->|                                                   |
-     * |                                     |<---Image$$RW_IRAM1$$ZI$$Limit(LOS_HEAP_MEM_BEGIN) |
-     * |                     __initial_sp--->|                            BOARD_SRAM_END_ADDR--->|
-     *  -----------------------------------------------------------------------------------------
-     * NOTE:
-     * 1. Symbol Image$$RW_IRAM1$$ZI$$Limit will automatically align to the boundary of the address 4,
-     *    if startup.s file is not modified, it will be aligned on the boundary of the address 8.
-     * 2. If you want to modify the .sct file, for example, add a segment,etc., you must ensure that
-     *    the address indicated by this symbol is at the end of all segments.
-     * 3. If it is not necessary, please do not modify the default .sct and startup.s files. If you
-     *    have modified, please check symobl Image$$RW_IRAM1$$ZI$$Limit to make sure there is no error.
-     */
-    extern UINT32 Image$$RW_IRAM1$$ZI$$Limit;
-    #define LOS_HEAP_MEM_BEGIN    (&(Image$$RW_IRAM1$$ZI$$Limit))
-    #define LOS_HEAP_MEM_END      BOARD_SRAM_END_ADDR
-
-#elif defined ( __ICCARM__ )
-    /**
-     * SRAM diagram as below:
-     *  ------------------------------------------------------------------------------------------
-     * |  .data  |  .bss  |  CSTACK  |  HEAP  |                     LOS_HEAP                      |
-     * |                     <MSP>                                                                |
-     *  ------------------------------------------------------------------------------------------
-     * |<-- readwrite --->|  block   | block  |                                                   |
-     * |                                      |<---__segment_end("HEAP")(LOS_HEAP_MEM_BEGIN)      |
-     * |              sfe(CSTACK)--->|        |                            BOARD_SRAM_END_ADDR--->|
-     *  ------------------------------------------------------------------------------------------
-     * NOTE:
-     * 1. Symbol __segment_end("HEAP") does not align automatically, if .icf file is not modified,
-     *    it will be aligned on the boundary of the address 8.
-     * 2. If you want to modify the .icf file, for example, add a segment,etc., you must ensure that
-     *    block HEAP is at the end of all segments, if not, please reset segment="HEAP" to represent
-     *    the last segment.
-     * 3. If it is not necessary, please do not modify the default .icf and startup.s files. If you
-     *    have modified, please check symobl __segment_end("HEAP") to make sure there is no error.
-     * 4. you can set __ICFEDIT_size_heap__=0x000 to make full use of SRAM, change size of last block
-     *    to make sure LOS_HEAP_MEM_BEGIN is aligned.
-     */
-    #pragma segment="HEAP"
-    #define LOS_HEAP_MEM_BEGIN    (__segment_end("HEAP"))
-    #define LOS_HEAP_MEM_END      BOARD_SRAM_END_ADDR
-
-#elif defined ( __GNUC__ )
-    /**
-     * SRAM diagram as below:
-     *  ------------------------------------------------------------------------------------------
-     * | .data | .bss | .user_heap_stack |               LOS_HEAP              | .user_heap_stack |
-     * |              | (_Min_Heap_Size) |                                     | (_Min_Stack_Size)|
-     * |                                                                                 <MSP>    |
-     *  ------------------------------------------------------------------------------------------
-     * |              |<---_ebss                                                       _estack--->|
-     * |                                 |<---LOS_HEAP_MEM_BEGIN               |                  |
-     * |                                 |                 LOS_HEAP_MEM_END--->|                  |
-     * |                                                                   BOARD_SRAM_END_ADDR--->|
-     *  ------------------------------------------------------------------------------------------
-     * NOTE:
-     * 1. If .ld file is not modified, Symbol LOS_HEAP_MEM_BEGIN will be aligned on the boundary of
-     *    the address 4.
-     * 2. If you want to modify the .ld file, for example, add a segment,etc., you must ensure that
-     *    symbol LOS_HEAP_MEM_BEGIN and LOS_HEAP_MEM_END is algned. if not, please adjust the size
-     *    of the segment.
-     * 3. If it is not necessary, please do not modify the default .ld and startup.s files. If you
-     *    have modified, please check the symobls shown above to make sure there is no error.
-     */
-    extern UINT32 __bss_end__;
-    extern UINT32 HEAP_SIZE;
-    extern UINT32 STACK_SIZE;
-    #define LOS_HEAP_MEM_BEGIN    ((UINT32)(&__bss_end__) + (UINT32)(&HEAP_SIZE) + (UINT32)(&STACK_SIZE) )
-    #define LOS_HEAP_MEM_END      ((UINT32)BOARD_SRAM_END_ADDR  )
-
-#else
-    #error "Unknown compiler"
-#endif
-
-/**
- * @ingroup los_config
- * Starting address of the LiteOS heap memory
- */
-#define OS_SYS_MEM_ADDR                                     (VOID *)LOS_HEAP_MEM_BEGIN
-
-/**
- * @ingroup los_config
- * Size of LiteOS heap memory
- */
-#define OS_SYS_MEM_SIZE                                     (UINT32)((UINT32)LOS_HEAP_MEM_END - (UINT32)LOS_HEAP_MEM_BEGIN)
+#define LOSCFG_HEAP_IMPROVED                                YES
+#define LOSCFG_MEM_STATISTICS                               YES
 
 /**
  * @ingroup los_config

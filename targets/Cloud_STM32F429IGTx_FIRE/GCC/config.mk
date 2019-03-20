@@ -55,12 +55,12 @@ OTA_PACK_CHECKSUM := SHA256_RSA2048
 #######################################
 # Firmware Over-The-Air
 #######################################
-USE_FOTA := yes
+USE_FOTA := no
 
 #######################################
 # Firmware Over-The-Air
 #######################################
-USE_SOTA := yes
+USE_SOTA := no
 
 #######################################
 # Lwm2m bootstrap program 

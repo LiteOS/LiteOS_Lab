@@ -75,6 +75,7 @@ SECTIONS
   .interrupts :
   {
     . = ALIGN(4);
+    __Vectors = .;
     KEEP(*(.isr_vector))     /* Startup code */
     . = ALIGN(4);
   } > m_interrupts
@@ -168,9 +169,13 @@ SECTIONS
   __etext = .;    /* define a global symbol at end of code */
   __DATA_ROM = .; /* Symbol is used by startup for data initialization */
 
+  /* used by the startup to initialize data */
+  _sidata = LOADADDR(.data);
+
   .data : AT(__DATA_ROM)
   {
     . = ALIGN(4);
+    _sdata = .;
     __DATA_RAM = .;
     __data_start__ = .;      /* create a global symbol at data start */
     *(.ramfunc*)             /* for functions in ram */
@@ -179,6 +184,7 @@ SECTIONS
     KEEP(*(.jcr*))
     . = ALIGN(4);
     __data_end__ = .;        /* define a global symbol at data end */
+    _edata = .;
   } > m_data
 
   __DATA_END = __DATA_ROM + (__data_end__ - __data_start__);
@@ -192,15 +198,17 @@ SECTIONS
     . = ALIGN(4);
     __START_BSS = .;
     __bss_start__ = .;
+    _sbss = .;
     *(.bss)
     *(.bss*)
     *(COMMON)
     . = ALIGN(4);
     __bss_end__ = .;
     __END_BSS = .;
+    _ebss = .;
   } > m_data
 
-  .heap :
+  .sbrk_heap :
   {
     . = ALIGN(8);
     __end__ = .;
@@ -209,21 +217,20 @@ SECTIONS
     . += HEAP_SIZE;
     __HeapLimit = .;
     __heap_limit = .; /* Add for _sbrk */
-  } > m_data_sramx
+  } > m_data
+
+  .heap :
+  {
+    __los_heap_addr_start__ = .;
+  } > m_data
 
   .stack :
   {
     . = ALIGN(8);
     . += STACK_SIZE;
+    _estack = .;
   } > m_data_sramx
 
-  /* Initializes stack on the end of block */
-  __StackTop   = ORIGIN(m_data_sramx) + LENGTH(m_data_sramx);
-  __StackLimit = __StackTop - STACK_SIZE;
-  PROVIDE(__stack = __StackTop);
-
   .ARM.attributes 0 : { *(.ARM.attributes) }
-
-  ASSERT(__StackLimit >= __HeapLimit, "region m_data_sramx overflowed with stack and heap")
 }
 

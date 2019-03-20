@@ -54,7 +54,7 @@
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
-          <BrowseInformation>1</BrowseInformation>
+          <BrowseInformation>0</BrowseInformation>
           <ListingPath>.\Objects\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
@@ -641,6 +641,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\arch\arm\arm-m\armv7-m\keil\los_dispatch.c</FilePath>
             </File>
+            <File>
+              <FileName>los_startup.S</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\..\arch\arm\arm-m\armv7-m\keil\los_startup.S</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -836,11 +841,6 @@
         <Group>
           <GroupName>usr</GroupName>
           <Files>
-            <File>
-              <FileName>los_startup_keil.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\Usr\los_startup_keil.s</FilePath>
-            </File>
             <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>

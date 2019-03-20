@@ -45,6 +45,19 @@ extern "C" {
 #endif /* __cpluscplus */
 
 /*****************************************************************************
+ Function    : SysTick_Handler
+ Description : This function handles SysTick exception, Call LiteOS interface
+               osTickHandler.
+ Input       : None
+ Output      : None
+ Return      : None
+ *****************************************************************************/
+void SysTick_Handler(void)
+{
+    osTickHandler();
+}
+
+/*****************************************************************************
 Function   : osTickStart
 Description: Configure Tick Interrupt Start
 Input   : none
@@ -62,13 +75,9 @@ LITE_OS_SEC_TEXT_INIT UINT32 osTickStart(VOID)
         return LOS_ERRNO_TICK_CFG_INVALID;
     }
 
-#if (LOSCFG_PLATFORM_HWI == YES)
-#if (OS_HWI_WITH_ARG == YES)
-    osSetVector(SysTick_IRQn, (HWI_PROC_FUNC)osTickHandler, NULL);
-#else
-    osSetVector(SysTick_IRQn, osTickHandler);
-#endif
-#endif
+    /* SysTick_Config will update the priority, use OS_HWI_PRIO_LOWEST here */
+
+    LOS_HwiCreate((UINT32)SysTick_IRQn, OS_HWI_PRIO_LOWEST, 0, osTickHandler, 0);
 
     g_uwCyclesPerTick = OS_SYS_CLOCK / LOSCFG_BASE_CORE_TICK_PER_SECOND;
     g_ullTickCount = 0;

@@ -38,6 +38,24 @@
 #include <shell.h>
 #include <los_dev.h>
 
+#include "mem.h"
+
+#if defined (__CC_ARM)
+extern char __heap_start__ [];
+#else
+#error "fix me"
+#endif
+
+const struct phys_mem system_phys_mem [] =
+    {
+#if defined (__CC_ARM)
+        { __heap_start__, (char *) 0x2001FC00, },
+#else
+#error "fix me"
+#endif
+        { 0, 0 }
+    };
+
 static VOID HardWare_Init(VOID)
 {
     SystemClock_Config();

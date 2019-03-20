@@ -1,5 +1,5 @@
 ;----------------------------------------------------------------------------
- ; Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+ ; Copyright (c) <2019>, <Huawei Technologies Co., Ltd>
  ; All rights reserved.
  ; Redistribution and use in source and binary forms, with or without modification,
  ; are permitted provided that the following conditions are met:
@@ -32,41 +32,40 @@
  ; applicable export control laws and regulations.
  ;---------------------------------------------------------------------------*/
 
-                EXPORT  __heap_start__
-                AREA    HEAP_START, NOINIT, READWRITE, ALIGN=3
+        EXPORT  __heap_start__
+        EXPORT  Reset_Handler                                   [WEAK]
+
+        IMPORT  ||Image$$ARM_LIB_STACKHEAP$$ZI$$Limit||
+        IMPORT  SystemInit
+        IMPORT  __main
+
+        AREA    LOS_HEAP, NOINIT, READWRITE, ALIGN=3
 __heap_start__
-                SPACE   0
+        SPACE   0
 
-                PRESERVE8
+        PRESERVE8
 
-                AREA    RESET, CODE, READONLY
-                THUMB
+        AREA    |.text|, CODE, READONLY
+        THUMB
 
-                IMPORT  ||Image$$ARM_LIB_STACKHEAP$$ZI$$Limit||
+Reset_Handler   PROC
+        CPSID   I
 
-                EXPORT  _BootVectors
-                EXPORT  Reset_Handler
+        LDR     SP, =||Image$$ARM_LIB_STACKHEAP$$ZI$$Limit||
 
-_BootVectors
-                DCD     ||Image$$ARM_LIB_STACKHEAP$$ZI$$Limit||
-                DCD     Reset_Handler
+        IF      {FPU} != "SoftVFP"
+        LDR.W   R0, =0xE000ED88
+        LDR     R1, [R0]
+        ORR     R1, R1, #(0xF << 20)
+        STR     R1, [R0]
+        ENDIF
 
+        LDR     R0, =SystemInit
+        BLX     R0
+        LDR     R0, =__main
+        BX      R0
+        
+        ENDP
 
-Reset_Handler
-                LDR.W   R0, =0xE000ED88
-                LDR     R1, [R0]
-                ORR     R1, R1, #(0xF << 20)
-                STR     R1, [R0]
-                CPSID   I
-
-                IMPORT  SystemInit
-                IMPORT  __main
-                LDR     R0, =SystemInit
-                BLX     R0
-                LDR     R0, =__main
-                BX      R0
-
-
-                ALIGN
-                END
-
+        ALIGN
+        END

@@ -78,7 +78,23 @@ struct ethernet_api g_eth_api = {
     .input    = NULL,
 };
 
+#include <mem.h>
 
+#if defined (__GNUC__)
+extern char __los_heap_addr_start__ [];
+extern char _estack [];
+#else
+#error "unsupported tool!"
+#endif
+
+const struct phys_mem system_phys_mem [] =
+{
+#if defined (__GNUC__)
+    { __los_heap_addr_start__, (char *) 0x20010000, },
+#endif
+    { _estack,                 (char *) 0x04008000, },
+    { 0, 0 }
+};
 
 void net_init(void)
 {

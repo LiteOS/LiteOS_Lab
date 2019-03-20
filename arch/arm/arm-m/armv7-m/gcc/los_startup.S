@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2019>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -32,52 +32,63 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __SYS_H_
-#define __SYS_H_
+    .syntax unified
+    .thumb
 
-/* Includes LiteOS------------------------------------------------------------------*/
+/**
+ * @brief  This is the code that gets called when the processor first
+ *         starts execution following a reset event. Only the absolutely
+ *         necessary set is performed, after which the application
+ *         supplied main() routine is called.
+ *         This the default implementation for gcc, this routine is 
+ *         defined as weak so it can be overrided.
+ * @param  None
+ * @retval : None
+ */
+    .text
 
-#include "los_base.h"
-#include "los_config.h"
-#include "los_sys.h"
-#include "los_typedef.h"
-#include "los_task.ph"
-#include "los_hwi.h"
-#include "los_sem.h"
-#include "los_event.h"
-#include "los_memory.h"
-#include "los_queue.ph"
+    .weak   Reset_Handler
+    .type   Reset_Handler, %function
+Reset_Handler:
+    cpsid   i
+    ldr     sp, =_estack            /* set msp, as it is not set in the vector */
 
-#include "stdlib.h"
-#include "string.h"
-#include <stdio.h>
-#include "stm32l4xx_hal.h"
-#include "stm32l4xx_it.h"
-#include "delay.h"
-#include "adc.h"
-#include "i2c.h"
-#include "usart.h"
-#include "gpio.h"
-#include "oled.h"
-#include "neul_bc95.h"
-#include "los_dev_st_uart.h"
-#include "DHT11_BUS.h"
-#include "BH1750.h" 
-#include "gps.h"
+#if defined (__VFP_FP__) && !defined(__SOFTFP__)    /* if FPU exist. */
+    /* enable FPU */
 
-#ifdef __cplusplus
- extern "C" {
+    ldr     r0, =0xE000ED88
+    ldr     r1, [r0]
+    orr     r1, r1, #(0xf << 20)                    /* enable cp10 cp11 both */
+    str     r1, [r0]
 #endif
 
-uint32_t HAL_GetTick(void);
-void SystemClock_Config(void);
-void _Error_Handler(char *, int);
+    /* init the data section */
 
-#define Error_Handler() _Error_Handler(__FILE__, __LINE__)
-#ifdef __cplusplus
-}
-#endif
+    ldr     r1, =_sdata
+    ldr     r2, =_edata
+    ldr     r3, =_sidata
+0:
+    cmp     r1, r2
+    beq     0f
+    ldr     r0, [r3], #4
+    str     r0, [r1], #4
+    b       0b
+0:
 
-#endif /* __SYS_H_ */
+    /* init the bss section */
 
+    mov     r0, #0
+    ldr     r1, =_sbss
+    ldr     r2, =_ebss
+0:
+    cmp     r1, r2
+    beq     0f
+    str     r0, [r1], #4
+    b       0b
+0:
+    bl      SystemInit
+    bl      __libc_init_array
+    bl      main
+
+    b       .
+.size  Reset_Handler, . - Reset_Handler

@@ -70,18 +70,18 @@ LIBDIR = $(PROJECTBASE)/../Lib
 
 ifeq ($(OTA_IS_NEED_DTLS), yes)
 MBEDTLS_SRC = \
-		${wildcard $(TOP_DIR)/components/security/mbedtls/mbedtls-2.6.0/library/*.c}
-		C_SOURCES += $(MBEDTLS_SRC)
+    ${wildcard $(TOP_DIR)/components/security/mbedtls/mbedtls-2.6.0/library/*.c}
+    C_SOURCES += $(MBEDTLS_SRC)
 endif
 
 SOTA_SRC = \
-		${wildcard $(TOP_DIR)/components/ota/sota/*.c}
-		C_SOURCES += $(SOTA_SRC)
+    ${wildcard $(TOP_DIR)/components/ota/sota/*.c}
+    C_SOURCES += $(SOTA_SRC)
 
 OTA_SRC = \
-		${wildcard  $(TOP_DIR)/components/ota/flag_operate/*.c} \
-		${wildcard  $(TOP_DIR)/components/ota/package/*.c}
-		C_SOURCES += $(OTA_SRC)
+    ${wildcard  $(TOP_DIR)/components/ota/flag_operate/*.c} \
+    ${wildcard  $(TOP_DIR)/components/ota/package/*.c}
+    C_SOURCES += $(OTA_SRC)
 
 
 ######################################
@@ -108,16 +108,16 @@ MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
 C_DEFS =
 
 ifeq ($(OTA_IS_NEED_DTLS), yes)
-		C_DEFS += -D WITH_SOTA
-		C_DEFS += -D MBEDTLS_CONFIG_FILE=\"los_mbedtls_config.h\"
+    C_DEFS += -D WITH_SOTA
+    C_DEFS += -D MBEDTLS_CONFIG_FILE=\"los_mbedtls_config.h\"
 endif
 
 ifeq ($(OTA_PACK_CHECKSUM), CHECKSUM_NONE)
-		C_DEFS += -D PACK_CHECKSUM=2
+    C_DEFS += -D PACK_CHECKSUM=2
 else ifeq ($(OTA_PACK_CHECKSUM), CHECKSUM_SHA256)
-		C_DEFS += -D PACK_CHECKSUM=1
+    C_DEFS += -D PACK_CHECKSUM=1
 else ifeq ($(OTA_PACK_CHECKSUM), CHECKSUM_SHA256_RSA2048)
-		C_DEFS += -D PACK_CHECKSUM=0
+    C_DEFS += -D PACK_CHECKSUM=0
 else
 endif
 
@@ -125,21 +125,21 @@ endif
 # C includes
 
 INCLUDE_INC = \
-        -I $(TOP_DIR)/include
-        C_INCLUDES += $(INCLUDE_INC)
+     -I $(TOP_DIR)/include
+     C_INCLUDES += $(INCLUDE_INC)
 
 OTA_INC = \
-		-I $(TOP_DIR)/components/ota/flag_operate \
-		-I $(TOP_DIR)/components/ota/utility
-		C_INCLUDES += $(OTA_INC)
+    -I $(TOP_DIR)/components/ota/flag_operate \
+    -I $(TOP_DIR)/components/ota/utility
+    C_INCLUDES += $(OTA_INC)
 
 MBEDTLS_INC = \
-		-I $(TOP_DIR)/components/security/mbedtls/mbedtls-2.6.0/include
-		C_INCLUDES += $(MBEDTLS_INC)
+    -I $(TOP_DIR)/components/security/mbedtls/mbedtls-2.6.0/include
+    C_INCLUDES += $(MBEDTLS_INC)
 
 MBEDTLS_PORT_INC = \
-		-I $(TOP_DIR)/components/security/mbedtls/mbedtls_port
-		C_INCLUDES += $(MBEDTLS_PORT_INC)
+    -I $(TOP_DIR)/components/security/mbedtls/mbedtls_port
+    C_INCLUDES += $(MBEDTLS_PORT_INC)
 
 
 # compile gcc flags
@@ -184,4 +184,4 @@ $(BUILD_DIR):
 # clean up
 #######################################
 clean:
-		-rm -fR .dep $(BUILD_DIR) $(LIBDIR)/$(TARGET).a
+	-rm -fR .dep $(BUILD_DIR) $(LIBDIR)/$(TARGET).a

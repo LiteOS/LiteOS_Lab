@@ -6,14 +6,14 @@
 # Generic Makefile (based on gcc)
 #
 # ChangeLog :
-#	2017-02-10 - Several enhancements + project update mode
+#   2017-02-10 - Several enhancements + project update mode
 #   2015-07-22 - first version
 # ------------------------------------------------
 
 ######################################
 # target
 ######################################
-TARGET = STM32F103VET6_NB_GCC
+TARGET = Huawei_LiteOS
 
 
 ######################################
@@ -61,11 +61,9 @@ KERNEL_SRC =  \
         ${wildcard $(TOP_DIR)/kernel/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/core/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/ipc/*.c} \
-        ${wildcard $(TOP_DIR)/kernel/base/mem/bestfit_little/*.c} \
+        ${wildcard $(TOP_DIR)/kernel/base/mem/heap/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/mem/membox/*.c} \
-        ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_slab.c} \
-	  ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_slabmem.c} \
-	  ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_memcheck.c} \
+        ${wildcard $(TOP_DIR)/kernel/base/mem/common/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/misc/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/om/*.c} \
         ${wildcard $(TOP_DIR)/kernel/extended/tickless/*.c}
@@ -78,6 +76,7 @@ ARCH_SRC =  \
         ${wildcard $(TOP_DIR)/arch/arm/arm-m/src/*.c} \
         ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/*.c}
         C_SOURCES += $(ARCH_SRC)
+
 HAL_DRIVER_SRC =  \
         $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c  \
         $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.c \
@@ -92,41 +91,36 @@ HAL_DRIVER_SRC =  \
         $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc_ex.c \
         $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.c \
         $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_dma.c
-        
-
         C_SOURCES += $(HAL_DRIVER_SRC)
-	
-	
+
+UTIL_SRC =  \
+        ${wildcard $(TOP_DIR)/utils/*.c}
+        C_SOURCES += $(UTIL_SRC)
+
 USER_SRC =  \
         $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Src/main.c \
         $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Src/stm32f1xx_it.c \
         $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Src/usart.c \
-	$(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Src/stm32f1xx_hal_msp.c \
-	$(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Src/system_stm32f1xx.c  	
-	
-	C_SOURCES += $(USER_SRC)
+        $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Src/stm32f1xx_hal_msp.c \
+        $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Src/system_stm32f1xx.c
 
+        C_SOURCES += $(USER_SRC)
 
 AT_FRAME_SRC = \
-    ${wildcard $(TOP_DIR)/components/net/at_frame/*.c} \
-     $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Src/at_hal.c
-    C_SOURCES += $(AT_FRAME_SRC)
+        ${wildcard $(TOP_DIR)/components/net/at_frame/*.c} \
+        $(TOP_DIR)/targets/STM32F103VET6_NB_GCC/Src/at_hal.c
+        C_SOURCES += $(AT_FRAME_SRC)
     
 
-
-    USER_DRIVERS_SRC = \
-	${wildcard $(TOP_DIR)/components/net/at_device/nb_bc95/*.c} \
-	${wildcard $(TOP_DIR)/components/connectivity/nb_iot/*.c}
-
-
-    C_SOURCES += $(USER_DRIVERS_SRC)
+USER_DRIVERS_SRC = \
+        ${wildcard $(TOP_DIR)/components/net/at_device/nb_bc95/*.c} \
+        ${wildcard $(TOP_DIR)/components/connectivity/nb_iot/*.c}
+        C_SOURCES += $(USER_DRIVERS_SRC)
 
 # ASM sources
-ASM_SOURCES_s =  \
-        ${wildcard $(PROJECTBASE)/startup_stm32f103xe.s}
-
 ASM_SOURCES_S =  \
-       ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_dispatch.S}
+       ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_dispatch.S} \
+       ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_startup.S}
 
 ######################################
 # firmware library
@@ -168,15 +162,15 @@ AS_INCLUDES =
 # C includes
 KERNEL_INC = \
         -I $(TOP_DIR)/kernel/include \
-	-I $(TOP_DIR)/kernel/base/include \
-	-I $(TOP_DIR)/kernel/extended/include
+        -I $(TOP_DIR)/kernel/base/include \
+        -I $(TOP_DIR)/kernel/extended/include
         C_INCLUDES += $(KERNEL_INC)
 
 
 
 INCLUDE_INC = \
         -I $(TOP_DIR)/include
-        C_INCLUDES += $(INCLUDE_INC)	
+        C_INCLUDES += $(INCLUDE_INC)
 
 
 USER_INC = \
@@ -197,8 +191,8 @@ HAL_DRIVER_INC = \
 
 ARCH_INC = \
         -I $(TOP_DIR)/arch/arm/arm-m/include \
-	-I $(TOP_DIR)/arch/arm/common/cmsis \
-	-I $(TOP_DIR)/arch/arm/arm-m/armv7-m
+        -I $(TOP_DIR)/arch/arm/common/cmsis \
+        -I $(TOP_DIR)/arch/arm/arm-m/armv7-m
         C_INCLUDES += $(ARCH_INC)
 
 LITEOS_CMSIS = \
@@ -245,16 +239,11 @@ all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET
 OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(C_SOURCES:.c=.o)))
 vpath %.c $(sort $(dir $(C_SOURCES)))
 # list of ASM program objects
-OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES_s:.s=.o)))
-vpath %.s $(sort $(dir $(ASM_SOURCES_s)))
 OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES_S:.S=.o)))
 vpath %.S $(sort $(dir $(ASM_SOURCES_S)))
 
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR) 
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
-
-$(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
-	$(AS) -c $(CFLAGS) $< -o $@
 
 $(BUILD_DIR)/%.o: %.S Makefile  | $(BUILD_DIR)
 	$(AS) -c $(CFLAGS) $< -o $@
@@ -267,10 +256,10 @@ $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(HEX) $< $@
 	
 $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
-	$(BIN) $< $@	
+	$(BIN) $< $@
 	
 $(BUILD_DIR):
-	mkdir $@		
+	mkdir $@
 
 #######################################
 # clean up

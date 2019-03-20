@@ -25,17 +25,17 @@ DEBUG = 1
 OPT = -Og
 
 
-USE_OTA := yes
+USE_OTA := no
 OTA_IS_NEED_DTLS := no
 ifeq ($(USE_FOTA), yes)
-	USE_OTA = yes
+    USE_OTA = yes
 endif
 ifeq ($(USE_SOTA), yes)
-	USE_OTA = yes
+    USE_OTA = yes
 endif
 ifeq ($(USE_OTA), yes)
     ifneq ($(OTA_PACK_CHECKSUM), NO_CHECKSUM)
-	OTA_IS_NEED_DTLS = yes
+    OTA_IS_NEED_DTLS = yes
     endif
 endif
 
@@ -72,8 +72,9 @@ BUILD_DIR = build
 # source
 ######################################
 # ASM
-ASM_SOURCES_s =  \
-        ${wildcard $(PROJECTBASE)/los_startup_gcc.s}
+ASM_SOURCES_S =   \
+        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_startup.S}
+
 # C sources
 
 HAL_DRIVER_SRC =  \
@@ -97,14 +98,14 @@ HAL_DRIVER_SRC =  \
 HARDWARE_SRC =  \
         ${wildcard $(TOP_DIR)/targets/Cloud_STM32F429IGTx_FIRE/Hardware/Src/*.c}
         C_SOURCES += $(HARDWARE_SRC)
-		
+
 ifeq ($(USE_BOOTLOADER), no)
 HAL_DRIVER_SRC_NO_BOOTLOADER =  \
-		$(TOP_DIR)/targets/Cloud_STM32F429IGTx_FIRE/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c \
-		$(TOP_DIR)/targets/Cloud_STM32F429IGTx_FIRE/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c \
-		$(TOP_DIR)/targets/Cloud_STM32F429IGTx_FIRE/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_eth.c \
+        $(TOP_DIR)/targets/Cloud_STM32F429IGTx_FIRE/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c \
+        $(TOP_DIR)/targets/Cloud_STM32F429IGTx_FIRE/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c \
+        $(TOP_DIR)/targets/Cloud_STM32F429IGTx_FIRE/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_eth.c \
         $(TOP_DIR)/targets/Cloud_STM32F429IGTx_FIRE/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rng.c
-		C_SOURCES += $(HAL_DRIVER_SRC_NO_BOOTLOADER)
+        C_SOURCES += $(HAL_DRIVER_SRC_NO_BOOTLOADER)
 KERNEL_SRC =  \
         ${wildcard $(TOP_DIR)/kernel/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/core/*.c} \
@@ -127,7 +128,7 @@ ARCH_SRC =  \
         ${wildcard $(TOP_DIR)/arch/arm/arm-m/src/*.c} \
         ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/*.c}
         C_SOURCES += $(ARCH_SRC)
-		
+
 ifeq ($(WITH_LWIP), yes)
 LWIP_SRC =  \
         ${wildcard $(TOP_DIR)/components/net/lwip/lwip-2.0.3/src/api/*.c} \
@@ -159,28 +160,27 @@ ER_COAP_SRC = \
 
 LWM2M_SRC = \
         ${wildcard $(TOP_DIR)/components/connectivity/lwm2m/core/*.c} \
-		${wildcard $(TOP_DIR)/components/connectivity/lwm2m/examples/shared/*.c}
+        ${wildcard $(TOP_DIR)/components/connectivity/lwm2m/examples/shared/*.c}
         C_SOURCES += $(LWM2M_SRC)
 
 ATINY_TINY_SRC = \
         ${wildcard $(TOP_DIR)/components/connectivity/agent_tiny/atiny_lwm2m/*.c}
 
 ifeq ($(USE_FOTA), yes)
-	C_SOURCES += $(ATINY_TINY_SRC)
+        C_SOURCES += $(ATINY_TINY_SRC)
 else
-	ATINY_TINY_SRC_NO_FOTA = \
-			$(filter-out $(TOP_DIR)/components/connectivity/agent_tiny/atiny_lwm2m/atiny_fota_manager.c \
-			$(TOP_DIR)/components/connectivity/agent_tiny/atiny_lwm2m/atiny_fota_state.c \
-			$(TOP_DIR)/components/connectivity/agent_tiny/atiny_lwm2m/firmware_update.c, $(ATINY_TINY_SRC))
-	C_SOURCES += $(ATINY_TINY_SRC_NO_FOTA)
+        ATINY_TINY_SRC_NO_FOTA = \
+        $(filter-out $(TOP_DIR)/components/connectivity/agent_tiny/atiny_lwm2m/atiny_fota_manager.c \
+        $(TOP_DIR)/components/connectivity/agent_tiny/atiny_lwm2m/atiny_fota_state.c \
+        $(TOP_DIR)/components/connectivity/agent_tiny/atiny_lwm2m/firmware_update.c, $(ATINY_TINY_SRC))
+        C_SOURCES += $(ATINY_TINY_SRC_NO_FOTA)
 endif
-		
+
 AGENT_DEMO_SRC = \
         ${wildcard $(TOP_DIR)/demos/agenttiny_lwm2m/*.c}
         C_SOURCES += $(AGENT_DEMO_SRC)
 
 endif
-
 
 
 OS_DEPENDS_SRC = \
@@ -194,9 +194,9 @@ SOCKET_ADAPTER_SRC = \
 NEWLIB_SRC = \
         ${wildcard $(TOP_DIR)/components/lib/libc/malloc.c}\
         ${wildcard $(TOP_DIR)/components/lib/libc/newlib_stub.c} \
-	${wildcard $(TOP_DIR)/components/lib/libc/errno.c}
+        ${wildcard $(TOP_DIR)/components/lib/libc/errno.c}
         C_SOURCES += $(NEWLIB_SRC)
-		
+
 
 ATINY_LOG = \
         ${wildcard $(TOP_DIR)/components/log/*.c}
@@ -243,14 +243,14 @@ FS_FATFS_SRC = \
 ifeq ($(IS_COMPILE_ALLFS), ALL)
         C_SOURCES += $(FS_SPIFFS_SRC)
         C_SOURCES += $(FS_FATFS_SRC)
-		C_SOURCES += $(TOP_DIR)/demos/fs/fatfs_demo.c
-		C_SOURCES += $(TOP_DIR)/demos/fs/spiffs_demo.c
+        C_SOURCES += $(TOP_DIR)/demos/fs/fatfs_demo.c
+        C_SOURCES += $(TOP_DIR)/demos/fs/spiffs_demo.c
 else ifeq ($(FILESYSTEM_TYPE), SPIFFS)
         C_SOURCES += $(FS_SPIFFS_SRC)
-		C_SOURCES += $(TOP_DIR)/demos/fs/spiffs_demo.c
+        C_SOURCES += $(TOP_DIR)/demos/fs/spiffs_demo.c
 else ifeq ($(FILESYSTEM_TYPE), FATFS)
         C_SOURCES += $(FS_FATFS_SRC)
-		C_SOURCES += $(TOP_DIR)/demos/fs/fatfs_demo.c
+        C_SOURCES += $(TOP_DIR)/demos/fs/fatfs_demo.c
 endif
 ifeq ($(WITH_CMOCKERY_TEST), yes)
 CMOCKERY_TEST_FS_SRC = \
@@ -319,39 +319,39 @@ else ifeq ($(NETWORK_TYPE), EMTC_BG36)
     USER_DRIVERS_SRC = ${wildcard $(TOP_DIR)/components/net/at_device/emtc_bg36/*.c}
 else ifneq ($(findstring $(NETWORK_TYPE)$(NETWORK_TYPE), NB_NEUL95 NB_NEUL95_NO_ATINY),)
     USER_DRIVERS_SRC = \
-	${wildcard $(TOP_DIR)/components/net/at_device/nb_bc95/*.c} \
-	${wildcard $(TOP_DIR)/components/connectivity/nb_iot/*.c}
+    ${wildcard $(TOP_DIR)/components/net/at_device/nb_bc95/*.c} \
+    ${wildcard $(TOP_DIR)/components/connectivity/nb_iot/*.c}
 endif
 #As default,below compile all device file for AT_FRAMEWORK
 ifeq ($(AT_COMPILE_ALL), ALL)
     USER_DRIVERS_SRC = ${wildcard $(TOP_DIR)/components/net/at_device/wifi_esp8266/*.c}
-	USER_DRIVERS_SRC += ${wildcard $(TOP_DIR)/components/net/at_device/gprs_sim900a/*.c}
-	USER_DRIVERS_SRC += ${wildcard $(TOP_DIR)/components/net/at_device/emtc_bg36/*.c}
-	USER_DRIVERS_SRC += \
-	${wildcard $(TOP_DIR)/components/net/at_device/nb_bc95/*.c} \
-	${wildcard $(TOP_DIR)/components/connectivity/nb_iot/*.c}
+    USER_DRIVERS_SRC += ${wildcard $(TOP_DIR)/components/net/at_device/gprs_sim900a/*.c}
+    USER_DRIVERS_SRC += ${wildcard $(TOP_DIR)/components/net/at_device/emtc_bg36/*.c}
+    USER_DRIVERS_SRC += \
+    ${wildcard $(TOP_DIR)/components/net/at_device/nb_bc95/*.c} \
+    ${wildcard $(TOP_DIR)/components/connectivity/nb_iot/*.c}
 endif
 
     C_SOURCES += $(USER_DRIVERS_SRC)
 endif
 ifeq ($(NETWORK_TYPE), NB_NEUL95_NO_ATINY)
-	NB_NEUL95_ONYL_DEMO = ${wildcard $(TOP_DIR)/demos/nbiot_without_atiny/nb_demo.c}
-	C_SOURCES += $(NB_NEUL95_ONYL_DEMO)
+    NB_NEUL95_ONYL_DEMO = ${wildcard $(TOP_DIR)/demos/nbiot_without_atiny/nb_demo.c}
+    C_SOURCES += $(NB_NEUL95_ONYL_DEMO)
 endif
 
 ifeq ($(USE_SOTA), yes)
 SOTA_SRC = \
         ${wildcard $(TOP_DIR)/components/ota/sota/*.c}
         C_SOURCES += $(SOTA_SRC)
-	SOTA_DEMO = ${wildcard $(TOP_DIR)/demos/nbiot_without_atiny/sota_demo.c}
-	C_SOURCES += $(SOTA_DEMO)
+        SOTA_DEMO = ${wildcard $(TOP_DIR)/demos/nbiot_without_atiny/sota_demo.c}
+        C_SOURCES += $(SOTA_DEMO)
 endif
 
 ifeq ($(USE_OTA), yes)
 OTA_SRC = \
     ${wildcard  $(TOP_DIR)/components/ota/flag_operate/*.c} \
     ${wildcard  $(TOP_DIR)/components/ota/package/*.c} \
-	${wildcard  $(TOP_DIR)/components/ota/utility/*.c}
+    ${wildcard  $(TOP_DIR)/components/ota/utility/*.c}
     C_SOURCES += $(OTA_SRC)
 C_SOURCES += $(TOP_DIR)/targets/Cloud_STM32F429IGTx_FIRE/Src/board.c
 C_SOURCES += $(TOP_DIR)/targets/Cloud_STM32F429IGTx_FIRE/Src/ota_port.c
@@ -361,10 +361,13 @@ C_SOURCES += $(TOP_DIR)/targets/Cloud_STM32F429IGTx_FIRE/Src/flash_adaptor.c
 endif
 endif
 
+UTIL_SRC = \
+        $(TOP_DIR)/utils/rbtree.c
+        C_SOURCES += $(UTIL_SRC)
 
 # ASM sources
 
-ASM_SOURCES_S =  \
+ASM_SOURCES_S += \
         ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_dispatch.S}
 
 #blow use bootloader
@@ -381,12 +384,6 @@ USER_SRC = \
         $(TOP_DIR)/targets/Cloud_STM32F429IGTx_FIRE/Src/usart.c
         C_SOURCES += $(USER_SRC)
 
-endif
-
-ifeq ($(USE_BOOTLOADER), no)
-UTIL_SRC = \
-        $(TOP_DIR)/utils/rbtree.c
-        C_SOURCES += $(UTIL_SRC)
 endif
 
 ######################################
@@ -413,92 +410,92 @@ AS_DEFS =
 
 # C defines
 C_DEFS =  \
-        -D USE_HAL_DRIVER \
-        -D STM32F429xx \
-        -D NDEBUG
+    -D USE_HAL_DRIVER \
+    -D STM32F429xx \
+    -D NDEBUG
 
 ifeq ($(WITH_HILINK), yes)
     C_DEFS += -DWITH_HILINK
 endif
 
 ifeq ($(WITH_LWM2M), yes)
-		C_DEFS += \
-			-D LWM2M_LITTLE_ENDIAN \
-			-D LWM2M_CLIENT_MODE
+C_DEFS += \
+    -D LWM2M_LITTLE_ENDIAN \
+    -D LWM2M_CLIENT_MODE
 endif
 ifneq ($(OTA_IS_NEED_DTLS)_$(WITH_DTLS), no_no)
-	ifeq ($(WITH_MQTT), yes)
-		C_DEFS += -D MBEDTLS_CONFIG_FILE=\"los_mbedtls_config_cert.h\"
-	else
-		C_DEFS += -D MBEDTLS_CONFIG_FILE=\"los_mbedtls_config.h\"
-	endif
-	ifeq ($(USE_MBEDTLS_DEBUG_C), yes)
-		C_DEFS += -DMBEDTLS_DEBUG_C
-	endif
+    ifeq ($(WITH_MQTT), yes)
+        C_DEFS += -D MBEDTLS_CONFIG_FILE=\"los_mbedtls_config_cert.h\"
+    else
+        C_DEFS += -D MBEDTLS_CONFIG_FILE=\"los_mbedtls_config.h\"
+    endif
+    ifeq ($(USE_MBEDTLS_DEBUG_C), yes)
+        C_DEFS += -DMBEDTLS_DEBUG_C
+    endif
 
-	ifeq ($(USE_MBEDTLS_AES_ROM_TABLES), yes)
-		C_DEFS += -DMBEDTLS_AES_ROM_TABLES
-	endif
+    ifeq ($(USE_MBEDTLS_AES_ROM_TABLES), yes)
+        C_DEFS += -DMBEDTLS_AES_ROM_TABLES
+    endif
 endif
 ifeq ($(WITH_DTLS), yes)
-		C_DEFS += -DWITH_DTLS
+    C_DEFS += -DWITH_DTLS
 endif
 
 ifeq ($(WITH_LWIP), yes)
-		C_DEFS += \
-			-DWITH_LWIP \
-			-D LWIP_TIMEVAL_PRIVATE=0 
+C_DEFS += \
+    -DWITH_LWIP \
+    -D LWIP_TIMEVAL_PRIVATE=0 
 
-	ifeq ($(USE_LWIP_TCP), yes)
-		C_DEFS += -DLWIP_TCP=1
-	else
-		C_DEFS += -DLWIP_TCP=0
-	endif
+    ifeq ($(USE_LWIP_TCP), yes)
+        C_DEFS += -DLWIP_TCP=1
+    else
+        C_DEFS += -DLWIP_TCP=0
+    endif
 endif
 
 ifeq ($(WITH_AT_FRAMEWORK), yes)
-	C_DEFS += -DWITH_AT_FRAMEWORK
-	C_DEFS += -DUSE_$(NETWORK_TYPE)
+    C_DEFS += -DWITH_AT_FRAMEWORK
+    C_DEFS += -DUSE_$(NETWORK_TYPE)
 endif
 
 
 ifeq ($(OTA_PACK_CHECKSUM), NO_CHECKSUM)
-		C_DEFS += -DPACK_CHECKSUM=2
+    C_DEFS += -DPACK_CHECKSUM=2
 else ifeq ($(OTA_PACK_CHECKSUM), SHA256)
-		C_DEFS += -DPACK_CHECKSUM=1
+    C_DEFS += -DPACK_CHECKSUM=1
 else ifeq ($(OTA_PACK_CHECKSUM), SHA256_RSA2048)
-		C_DEFS += -DPACK_CHECKSUM=0
+    C_DEFS += -DPACK_CHECKSUM=0
 else
 endif
 
 
 
 ifeq ($(USE_FOTA), yes)
-		C_DEFS += -DCONFIG_FEATURE_FOTA
+    C_DEFS += -DCONFIG_FEATURE_FOTA
 endif
 
 ifeq ($(USE_SOTA), yes)
-		C_DEFS += -DWITH_SOTA
+    C_DEFS += -DWITH_SOTA
 endif
 
 ifeq ($(LWM2M_BOOTSTRAP), yes)
-		C_DEFS += -DLWM2M_BOOTSTRAP
+    C_DEFS += -DLWM2M_BOOTSTRAP
 endif
 
 ifeq ($(SUPPORT_DTLS_SRV), yes)
-		C_DEFS += -DSUPPORT_DTLS_SRV
+    C_DEFS += -DSUPPORT_DTLS_SRV
 endif
 
 ifeq ($(LWM2M_WITH_LOGS), yes)
-		C_DEFS += -DLWM2M_WITH_LOGS
+    C_DEFS += -DLWM2M_WITH_LOGS
 endif
 
 ifeq ($(ATINY_DEBUG), yes)
-		C_DEFS += -DATINY_DEBUG
+    C_DEFS += -DATINY_DEBUG
 endif
 
 ifeq ($(WITH_FILESYSTEM), yes)
-		C_DEFS += -DFS_$(FILESYSTEM_TYPE)
+    C_DEFS += -DFS_$(FILESYSTEM_TYPE)
 endif
 
 
@@ -526,14 +523,14 @@ HAL_DRIVER_INC = \
         -I $(TOP_DIR)/targets/Cloud_STM32F429IGTx_FIRE/Drivers/STM32F4xx_HAL_Driver/Inc \
         -I $(TOP_DIR)/targets/Cloud_STM32F429IGTx_FIRE/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
         C_INCLUDES += $(HAL_DRIVER_INC)
-		
+
 INCLUDE_INC = \
         -I $(TOP_DIR)/include
         C_INCLUDES += $(INCLUDE_INC)
-		
+
 LWM2M_ATINY_INC = \
         -I $(TOP_DIR)/components/connectivity/agent_tiny/atiny_lwm2m        
-        C_INCLUDES += $(LWM2M_ATINY_INC)		
+        C_INCLUDES += $(LWM2M_ATINY_INC)
 
 HARDWARE_INC = \
         -I $(TOP_DIR)/targets/Cloud_STM32F429IGTx_FIRE/Hardware/Inc
@@ -558,22 +555,22 @@ OTA_INC = \
 endif
 
 CMSIS_INC = \
-		-I $(TOP_DIR)/arch/arm/arm-m/include \
+        -I $(TOP_DIR)/arch/arm/arm-m/include \
         -I $(TOP_DIR)/arch/arm/common/cmsis
         C_INCLUDES += $(CMSIS_INC)
 
 LITEOS_CMSIS = \
         -I $(TOP_DIR)/osdepends/liteos/cmsis
         C_INCLUDES += $(LITEOS_CMSIS)
-		
-ifeq ($(USE_BOOTLOADER), no)	
+
+ifeq ($(USE_BOOTLOADER), no)
 OS_CONFIG_INC = \
-		-I $(TOP_DIR)/targets/Cloud_STM32F429IGTx_FIRE/OS_CONFIG
-		C_INCLUDES += $(OS_CONFIG_INC)
+        -I $(TOP_DIR)/targets/Cloud_STM32F429IGTx_FIRE/OS_CONFIG
+        C_INCLUDES += $(OS_CONFIG_INC)
 KERNEL_INC = \
         -I $(TOP_DIR)/kernel/include \
-	-I $(TOP_DIR)/kernel/base/include \
-	-I $(TOP_DIR)/kernel/extended/include
+        -I $(TOP_DIR)/kernel/base/include \
+        -I $(TOP_DIR)/kernel/extended/include
         C_INCLUDES += $(KERNEL_INC)
 
 ARCH_INC = \
@@ -581,7 +578,7 @@ ARCH_INC = \
         -I $(TOP_DIR)/arch/arm/arm-m/armv7-m
         C_INCLUDES += $(ARCH_INC)
 
-	
+
 ifeq ($(WITH_LWIP), yes)
 LWIP_INC = \
         -I $(TOP_DIR)/components/net/lwip/lwip-2.0.3/src/include
@@ -615,7 +612,7 @@ endif
 
 
 
-ifeq ($(WITH_MQTT), yes)	
+ifeq ($(WITH_MQTT), yes)
 MQTT_INC = \
         -I $(TOP_DIR)/components/connectivity/mqtt/MQTTClient-C/src \
         -I $(TOP_DIR)/components/connectivity/mqtt/MQTTClient-C/src/liteOS \
@@ -717,23 +714,14 @@ all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET
 OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(C_SOURCES:.c=.o)))
 vpath %.c $(sort $(dir $(C_SOURCES)))
 # list of ASM program objects
-OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES_s:.s=.o)))
-vpath %.s $(sort $(dir $(ASM_SOURCES_s)))
-ifeq ($(USE_BOOTLOADER), no)
 OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES_S:.S=.o)))
 vpath %.S $(sort $(dir $(ASM_SOURCES_S)))
-endif
 
 $(BUILD_DIR)/%.o: %.c Makefile config.mk prune.mk | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
 
-$(BUILD_DIR)/%.o: %.s Makefile config.mk prune.mk | $(BUILD_DIR)
-	$(AS) -c $(CFLAGS) $< -o $@
-
-ifeq ($(USE_BOOTLOADER), no)
 $(BUILD_DIR)/%.o: %.S Makefile config.mk prune.mk | $(BUILD_DIR)
 	$(AS) -c $(CFLAGS) $< -o $@
-endif
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile config.mk prune.mk
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@

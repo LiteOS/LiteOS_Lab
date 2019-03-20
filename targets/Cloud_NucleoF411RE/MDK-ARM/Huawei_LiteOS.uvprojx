@@ -379,16 +379,6 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>startup</GroupName>
-          <Files>
-            <File>
-              <FileName>los_startup_keil.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\los_startup_keil.s</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>user</GroupName>
           <Files>
             <File>
@@ -502,11 +492,6 @@
               <FilePath>..\..\..\kernel\base\ipc\los_sem.c</FilePath>
             </File>
             <File>
-              <FileName>los_heap.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\kernel\base\mem\bestfit_little\los_heap.c</FilePath>
-            </File>
-            <File>
               <FileName>los_membox.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\kernel\base\mem\membox\los_membox.c</FilePath>
@@ -515,11 +500,6 @@
               <FileName>los_memcheck.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\kernel\base\mem\common\los_memcheck.c</FilePath>
-            </File>
-            <File>
-              <FileName>los_memory.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\kernel\base\mem\bestfit_little\los_memory.c</FilePath>
             </File>
             <File>
               <FileName>los_slab.c</FileName>
@@ -551,6 +531,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\kernel\extended\tickless\los_tickless.c</FilePath>
             </File>
+            <File>
+              <FileName>los_heap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\kernel\base\mem\heap\los_heap.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_memory.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\kernel\base\mem\heap\los_memory.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -575,6 +565,11 @@
               <FileName>los_dispatch.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\arch\arm\arm-m\armv7-m\keil\los_dispatch.c</FilePath>
+            </File>
+            <File>
+              <FileName>los_startup.S</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\..\arch\arm\arm-m\armv7-m\keil\los_startup.S</FilePath>
             </File>
           </Files>
         </Group>
@@ -1380,6 +1375,16 @@
               <FileName>malloc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\components\lib\libc\malloc.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>util</GroupName>
+          <Files>
+            <File>
+              <FileName>rbtree.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\utils\rbtree.c</FilePath>
             </File>
           </Files>
         </Group>

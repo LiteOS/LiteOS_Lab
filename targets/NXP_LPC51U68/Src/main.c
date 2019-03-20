@@ -48,7 +48,7 @@
 
 #if defined (__GNUC__)
 extern char __los_heap_addr_start__ [];
-extern char __stack [];
+extern char _estack [];
 #else
 #error "unsupported tool!"
 #endif
@@ -58,7 +58,7 @@ const struct phys_mem system_phys_mem [] =
 #if defined (__GNUC__)
     { __los_heap_addr_start__, (char *) 0x20010000, },
 #endif
-    { __stack,                 (char *) 0x04008000, },
+    { _estack,                 (char *) 0x04008000, },
     { 0, 0 }
 };
 

@@ -115,27 +115,20 @@ typedef UINT32 HWI_ARG_T;
  * @ingroup  los_hwi
  * Define the type of a hardware interrupt handling function.
  */
-#if (OS_HWI_WITH_ARG == YES)
 
+#if (OS_HWI_WITH_ARG == YES)
 typedef VOID (* HWI_PROC_FUNC)(VOID *pParm);
+#else
+typedef VOID (* HWI_PROC_FUNC)(VOID);
+#endif
+
 typedef struct
 {
     HWI_PROC_FUNC pfnHandler;
+#if (OS_HWI_WITH_ARG == YES)
     VOID*         pParm;
-} HWI_SLAVE_FUNC;
-
-#else
-
-typedef VOID (* HWI_PROC_FUNC)(void);
-
 #endif
-
-/**
- * @ingroup  los_hwi
- * Define the type of a hardware interrupt vector table function.
- */
-typedef VOID (**HWI_VECTOR_FUNC)(void);
-
+} HWI_HANDLER_T;
 
 /**
  * @ingroup los_hwi
@@ -168,12 +161,6 @@ extern UINT32  g_vuwIntCount;
  * Count of M-Core system interrupt vector.
  */
 #define OS_SYS_VECTOR_CNT           16
-
-/**
- * @ingroup los_hwi
- * Count of M-Core interrupt vector.
- */
-#define OS_VECTOR_CNT               (OS_SYS_VECTOR_CNT + OS_HWI_MAX_NUM)
 
 /**
  * @ingroup los_hwi
@@ -393,44 +380,6 @@ extern UINT32 _BootVectors[];
  */
 #define OS_EXC_SYS_TICK        15
 
-
-/**
- * @ingroup los_hwi
- * hardware interrupt form mapping handling function array.
- */
-extern HWI_PROC_FUNC m_pstHwiForm[OS_VECTOR_CNT];
-
-#if (OS_HWI_WITH_ARG == YES)
-/**
- * @ingroup los_hwi
- * hardware interrupt Slave form mapping handling function array.
- */
-extern HWI_SLAVE_FUNC m_pstHwiSlaveForm[OS_VECTOR_CNT];
-
-/**
- * @ingroup los_hwi
- * Set interrupt vector table.
- */
-#define osSetVector(uwNum, pfnVector, uwArg)       \
-    m_pstHwiForm[uwNum + OS_SYS_VECTOR_CNT] = (HWI_PROC_FUNC)osInterrupt;\
-    m_pstHwiSlaveForm[uwNum + OS_SYS_VECTOR_CNT].pfnHandler= pfnVector; \
-    m_pstHwiSlaveForm[uwNum + OS_SYS_VECTOR_CNT].pParm = (VOID*)uwArg;
-#else
-/**
- * @ingroup los_hwi
- * hardware interrupt Slave form mapping handling function array.
- */
-extern HWI_PROC_FUNC m_pstHwiSlaveForm[OS_VECTOR_CNT];
-
-/**
- * @ingroup los_hwi
- * Set interrupt vector table.
- */
-#define osSetVector(uwNum, pfnVector)       \
-    m_pstHwiForm[uwNum + OS_SYS_VECTOR_CNT] = osInterrupt;\
-    m_pstHwiSlaveForm[uwNum + OS_SYS_VECTOR_CNT] = pfnVector;
-#endif
-
 /**
  * @ingroup  los_hwi
  * @brief Create a hardware interrupt.
@@ -471,28 +420,6 @@ extern UINT32 LOS_HwiCreate( HWI_HANDLE_T  uwHwiNum,
 
 /**
  * @ingroup  los_hwi
- * @brief: Hardware interrupt entry function.
- *
- * @par Description:
- * This API is used as all hardware interrupt handling function entry.
- *
- * @attention:
- * <ul><li>None.</li></ul>
- *
- * @param:None.
- *
- * @retval:None.
- * @par Dependency:
- * <ul><li>los_hwi.h: the header file that contains the API declaration.</li></ul>
- * @see None.
- * @since Huawei LiteOS V100R001C00
- */
-extern VOID  osInterrupt(VOID);
-
-
-
-/**
- * @ingroup  los_hwi
  * @brief: Get a interrupt number.
  *
  * @par Description:
@@ -512,68 +439,6 @@ extern VOID  osInterrupt(VOID);
 extern UINT32 osIntNumGet(VOID);
 
 /**
- * @ingroup  los_hwi
- * @brief: Default vector handling function.
- *
- * @par Description:
- * This API is used to configure interrupt for null function.
- *
- * @attention:
- * <ul><li>None.</li></ul>
- *
- * @param:None.
- *
- * @retval:None.
- * @par Dependency:
- * <ul><li>los_hwi.h: the header file that contains the API declaration.</li
-></ul>
- * @see None.
- * @since Huawei LiteOS V100R001C00
- */
-extern VOID  osHwiDefaultHandler(VOID);
-
-/**
- * @ingroup  los_hwi
- * @brief: Reset the vector table.
- *
- * @par Description:
- * This API is used to reset the vector table.
- *
- * @attention:
- * <ul><li>None.</li></ul>
- *
- * @param:None.
- *
- * @retval:None.
- * @par Dependency:
- * <ul><li>los_hwi.h: the header file that contains the API declaration.</li></ul>
- * @see None.
- * @since Huawei LiteOS V100R001C00
- */
-extern VOID Reset_Handler(VOID);
-
-/**
- * @ingroup  los_hwi
- * @brief: Pended System Call.
- *
- * @par Description:
- * PendSV can be pended and is useful for an OS to pend an exception
- * so that an action can be performed after other important tasks are completed.
- *
- * @attention:
- * <ul><li>None.</li></ul>
- *
- * @param:None.
- *
- * @retval:None.
- * @par Dependency:
- * <ul><li>los_hwi.h: the header file that contains the API declaration.</li></ul>
- * @see None.
- * @since Huawei LiteOS V100R001C00
- */
-extern VOID PendSV_Handler(VOID);
-
- /**
  *@ingroup los_hwi
  *@brief Enable all interrupts.
  *
@@ -596,9 +461,7 @@ extern VOID PendSV_Handler(VOID);
  */
 extern UINTPTR LOS_IntUnLock(VOID);
 
-
-
- /**
+/**
  *@ingroup los_hwi
  *@brief Disable all interrupts.
  *
@@ -621,9 +484,7 @@ extern UINTPTR LOS_IntUnLock(VOID);
  */
 extern UINTPTR LOS_IntLock(VOID);
 
-
-
- /**
+/**
  *@ingroup los_hwi
  *@brief Restore interrupts.
  *
@@ -645,33 +506,6 @@ extern UINTPTR LOS_IntLock(VOID);
  *@since Huawei LiteOS V100R001C00
  */
 extern VOID LOS_IntRestore(UINTPTR uvIntSave);
-
-  /**
- *@ingroup los_hwi
- *@brief Get value from xPSR register.
- *
- *@par Description:
- *<ul>
- *<li>This API is used to Get value from xPSR register.</li>
- *</ul>
- *@attention
- *<ul>
- *<li>None.</li>
- *</ul>
- *
- *@param None.
- *
- *@retval xPSR register value.
- *@par Dependency:
- *<ul><li>los_hwi.h: the header file that contains the API declaration.</li></
-ul>
- *@see LOS_IntRestore
- *@since Huawei LiteOS V100R001C00
- */
-extern VOID LOS_GetCpuCycle(UINT32 *puwCntHi, UINT32 *puwCntLo);
-
-extern UINT32 LOS_SysTickCurrCycleGet(VOID);
-
 
 /**
  * @ingroup  los_hwi
@@ -704,8 +538,6 @@ extern UINT32 LOS_HwiDelete(HWI_HANDLE_T uwHwiNum);
 }
 #endif /* __cplusplus */
 #endif /* __cplusplus */
-
-
 
 #endif /* _LOS_HWI_H */
 
