@@ -456,7 +456,7 @@ static void * __connect(mqtt_al_conpara_t *conparam)
 	    goto EIXT_BUF_MEM_ERR;
 	}
 	c = &cb->client;
-    if(PAHO_SUCCESS != MQTTClientInit(c, n, cn_mqtt_cmd_timeout_ms,\
+    if(MQTT_SUCCESS != MQTTClientInit(c, n, cn_mqtt_cmd_timeout_ms,\
     		cb->sndbuf, cn_mqtt_sndbuf_size, cb->rcvbuf, cn_mqtt_rcvbuf_size))
     {
 	    ATINY_LOG(LOG_FATAL, " PAHO INIT ERR\r\n");
@@ -504,7 +504,7 @@ static void * __connect(mqtt_al_conpara_t *conparam)
     option.password.lenstring.len = conparam->passwd.len;
     option.password.lenstring.data = conparam->passwd.data;
 
-    if((PAHO_SUCCESS != MQTTConnectWithResults(c, &option,&conack)) || \
+    if((MQTT_SUCCESS != MQTTConnectWithResults(c, &option,&conack)) || \
     	 (conack.rc != cn_mqtt_al_con_code_ok))
     {
         conparam->conret = conack.rc;
@@ -627,7 +627,7 @@ static int __subscribe(void *handle,mqtt_al_subpara_t *para)
 	cb = handle;
 	c = &cb->client;
 
-	if(PAHO_SUCCESS == MQTTSubscribeWithResultsArgs(c,para->topic.data,para->qos,\
+	if(MQTT_SUCCESS == MQTTSubscribeWithResultsArgs(c,para->topic.data,para->qos,\
 			general_dealer,&ack,para->dealer))
 	{
 		para->subret = ack.grantedQoS;
@@ -651,7 +651,7 @@ static int __unsubscribe(void *handle,mqtt_al_unsubpara_t *para)
 	cb = handle;
 	c = &cb->client;
 
-	if(PAHO_SUCCESS == MQTTUnsubscribe(c,para->topic.data))
+	if(MQTT_SUCCESS == MQTTUnsubscribe(c,para->topic.data))
 	{
 		ret = 0;
 	}
@@ -680,7 +680,7 @@ static int __publish(void *handle, mqtt_al_pubpara_t *para)
 	msg.qos = QOS0 + para->qos;
 	msg.payload = para->msg.data;
 	msg.payloadlen = para->msg.len;
-    if(PAHO_SUCCESS ==  MQTTPublish(c, para->topic.data, &msg))
+    if(MQTT_SUCCESS ==  MQTTPublish(c, para->topic.data, &msg))
     {
     	ret = 0;
     }
