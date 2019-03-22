@@ -50,9 +50,9 @@
 
 static UINT32 g_atiny_tskHandle;
 static UINT32 g_fs_tskHandle;
-static UINT32 g_hilink_tskHandle;
 
 #ifdef WITH_HILINK
+static UINT32 g_hilink_tskHandle;
 
 UINT32 creat_hilink_task(VOID)
 {
@@ -124,6 +124,9 @@ void atiny_task_entry(void)
                                    .read_flash_info = flash_adaptor_read_mqtt_info};
         agent_tiny_demo_init(&demo_param);
     }
+    extern  int mqtt_lib_load();
+    mqtt_lib_load();
+
 #endif
 
 
