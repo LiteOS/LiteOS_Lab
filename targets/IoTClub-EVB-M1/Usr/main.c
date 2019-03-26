@@ -42,7 +42,8 @@
 #include <mem.h>
 
 #if defined (__CC_ARM)
-extern char __heap_start__ [];
+extern char Image$$RW_IRAM1$$ZI$$Limit [];
+extern char Image$$ARM_LIB_STACKHEAP$$Base [];
 #elif defined (__GNUC__)
 extern char __los_heap_addr_start__ [];
 extern char __los_heap_addr_end__ [];
@@ -53,9 +54,9 @@ extern char __los_heap_addr_end__ [];
 const struct phys_mem system_phys_mem [] =
     {
 #if defined (__CC_ARM)
-        { __heap_start__, (char *) 0x2000FC00, },
+        { Image$$RW_IRAM1$$ZI$$Limit, Image$$ARM_LIB_STACKHEAP$$Base },
 #elif defined (__GNUC__)
-        { __los_heap_addr_start__, __los_heap_addr_end__, },
+        { __los_heap_addr_start__, __los_heap_addr_end__ },
 #else
 #error "unsupported tool!"
 #endif
