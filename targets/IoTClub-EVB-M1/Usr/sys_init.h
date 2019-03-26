@@ -62,7 +62,6 @@
 #include "oled.h"
 #include "DHT11_BUS.h"
 #include "bh1750.h" 
-#include "gps.h"
 
 #ifdef __cplusplus
  extern "C" {

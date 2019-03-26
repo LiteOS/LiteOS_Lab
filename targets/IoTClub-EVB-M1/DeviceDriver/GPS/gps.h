@@ -8,7 +8,7 @@
 *GPS NMEA-0183协议重要参数结构体定义
 *卫星信息
 \***************************************************/
-__packed typedef struct
+typedef struct
 {
 	uint32_t latitude_bd;					//纬度   分扩大100000倍，实际要除以100000
 	uint8_t nshemi_bd;						//北纬/南纬,N:北纬;S:南纬	

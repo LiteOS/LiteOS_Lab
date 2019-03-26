@@ -122,7 +122,7 @@ bool_t app_send_raw(u8_t *msg, s32_t len)
 static  u8_t  s_report_buf[cn_report_buf_len];
 
 
-#define LIGHT_SERSOR_EN   0   //need to insert the dht11 mini board
+#define LIGHT_SERSOR_EN   1   //need to insert the dht11 mini board
 #define CSQ_SENSOR_EN     1   //on the main board :NB MODULE support
 #define LED_SWITCH_EN     1   //on the main board :D1
 #define DHT11_SENSOR_EN   0   //need to insert the dht11 mini board

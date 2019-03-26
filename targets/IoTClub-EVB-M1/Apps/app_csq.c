@@ -48,13 +48,15 @@ static s32_t csq_report(u8_t *buf, s32_t buflen)
 {
 
     s32_t ret = 0;
-    u32_t  value  =0;
+    u32_t value  =0;
+    char  logbuf[16];
     //sample light intensity and report
     if((buflen > 3)&&bc95_csq(&value))
     {
         memset(buf,' ',3);
         sprintf((char *)buf,"%3d",(s32_t)value);
-        oled_disp("csq",value,0);  
+        snprintf(logbuf,16,"%s:%d","CSQ",value);
+        oled_display(0,logbuf);
         ret = 3;
     }
 
