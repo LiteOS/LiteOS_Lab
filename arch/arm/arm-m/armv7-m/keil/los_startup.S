@@ -32,16 +32,11 @@
  ; applicable export control laws and regulations.
  ;---------------------------------------------------------------------------*/
 
-        EXPORT  __heap_start__
         EXPORT  Reset_Handler                                   [WEAK]
 
         IMPORT  ||Image$$ARM_LIB_STACKHEAP$$ZI$$Limit||
         IMPORT  SystemInit
         IMPORT  __main
-
-        AREA    LOS_HEAP, NOINIT, READWRITE, ALIGN=3
-__heap_start__
-        SPACE   0
 
         PRESERVE8
 

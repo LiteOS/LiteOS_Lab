@@ -41,7 +41,8 @@
 #include "mem.h"
 
 #if defined (__CC_ARM)
-extern char __heap_start__ [];
+extern char Image$$RW_IRAM1$$ZI$$Limit [];
+extern char Image$$ARM_LIB_STACKHEAP$$Base [];
 #else
 #error "fix me"
 #endif
@@ -49,7 +50,7 @@ extern char __heap_start__ [];
 const struct phys_mem system_phys_mem [] =
     {
 #if defined (__CC_ARM)
-        { __heap_start__, (char *) 0x2001FC00, },
+        { Image$$RW_IRAM1$$ZI$$Limit, Image$$ARM_LIB_STACKHEAP$$Base },
 #else
 #error "fix me"
 #endif
