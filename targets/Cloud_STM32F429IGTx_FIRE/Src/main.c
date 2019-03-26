@@ -38,6 +38,7 @@
 #include "los_task.ph"
 #include "los_typedef.h"
 #include "los_sys.h"
+#include "los_memory.h"
 
 #include "mem.h"
 
@@ -88,6 +89,7 @@ int main(void)
         return LOS_NOK;
     }
 
+    LOS_MemInfo (NULL, 1);
 
     (void)LOS_Start();
     return 0;

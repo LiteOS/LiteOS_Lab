@@ -562,6 +562,27 @@ extern UINT32 LOS_MemDeInit(VOID *pPool);
 extern UINT32 LOS_MemPoolList(VOID);
 #endif
 
+#if (LOSCFG_HEAP_IMPROVED == YES)
+
+/**
+ *@ingroup los_memory
+ *@brief Print infomation about a pool.
+ *
+ *@par Description:
+ *<ul>
+ *<li>This API is used to print infomation about a pool.</li>
+ *</ul>
+ *
+ *@param pPool          [IN] Starting address of pool, if NULL, use kernel pool.
+ *@param bShowDetail    [IN] If show detailed information.
+ *<ul>
+ *<li>los_memory.h: the header file that contains the API declaration.</li>
+ *</ul>
+ *@see None.
+ */
+
+extern VOID LOS_MemInfo (VOID * pPool, BOOL bShowDetail);
+#endif
 
 #ifdef __cplusplus
 #if __cplusplus

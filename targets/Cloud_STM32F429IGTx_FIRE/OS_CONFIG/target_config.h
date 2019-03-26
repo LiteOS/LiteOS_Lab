@@ -276,6 +276,7 @@ extern "C" {
 
 #define LOSCFG_HEAP_IMPROVED                                YES
 #define LOSCFG_MEM_STATISTICS                               YES
+#define LOSCFG_CONFIG_CM_TLSF
 
 /**
  * @ingroup los_config

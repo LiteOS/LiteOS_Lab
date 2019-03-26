@@ -616,13 +616,13 @@ static inline void __dump_block (block_t * block)
         } while (1);
     }
 
-void __cmd_dump_heap (heap_t * heap, bool show_chunk)
+void __dump_heap (heap_t * heap, bool show_chunk)
     {
     block_t * block = heap->blocks;
 
     if (show_chunk)
         {
-        PRINTK ("\tchunk information:\n\r\n\r");
+        PRINTK ("\r\n\tchunk information:\n\r\n\r");
         }
 
     if (LOS_MuxPend (heap->mux, LOS_WAIT_FOREVER) != LOS_OK)

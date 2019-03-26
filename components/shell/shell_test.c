@@ -35,6 +35,8 @@
 
 #include <shell.h>
 
+#include <los_memory.h>
+
 #if LOSCFG_ENABLE_SHELL
 
 /*
@@ -62,11 +64,10 @@ static s32_t shell_taskinfo(s32_t argc,const char *argv[]){
 OSSHELL_EXPORT_CMD(shell_taskinfo,"taskinfo","taskinfo");
 
 //show the memstatus here
-extern VOID LOS_MemInfo (BOOL bShowDetail);
 static s32_t shell_heapinfo(s32_t argc,const char *argv[])
 {
 #if (LOSCFG_HEAP_IMPROVED == YES)
-    LOS_MemInfo(1);
+    LOS_MemInfo(NULL, 1);
 #else
     LOS_MemPoolList();
 #endif
