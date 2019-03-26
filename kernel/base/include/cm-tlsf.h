@@ -104,9 +104,6 @@ enum
                         : 0,
 };
 
-STATIC_ASSERT (sizeof (chunk_t) == (1 << MIN_CHUNK_SIZE_LOG2));
-STATIC_ASSERT (SL_BITS <= MIN_CHUNK_SIZE_LOG2);
-
 enum
 {
     FL_IDX_MAX_008K = 13,
@@ -144,6 +141,8 @@ typedef struct chunk_mgr
     chunk_t * chunks  [FL_IDXES] [SL_IDXES];
 } chunk_mgr_t;
 
+#define CTZ(x)                  (32 - CLZ (~(x) & ((x) - 1)))
+
 /**
  * __cm_init - initialize chunk manager
  * @cm: the given chunk manager
@@ -158,7 +157,7 @@ static inline int __cm_init (chunk_mgr_t * cm)
 
 static inline int __get_fl_idx (size_t size)
 {
-    return 31 - __clz (size);   /* size is never 0 */
+    return 31 - CLZ (size);     /* size is never 0 */
 }
 
 static inline int __get_sl_idx (size_t size, int fl_idx)
@@ -269,11 +268,11 @@ static inline chunk_t * __cm_get_chunk (chunk_mgr_t * cm, size_t bytes)
             return NULL;
         }
 
-        fl_idx  = __ctz (fl_bmap);
+        fl_idx  = CTZ (fl_bmap);
         sl_bmap = cm->sl_bmap [fl_idx - FL_IDX_BIAS];
     }
 
-    sl_idx = __ctz (sl_bmap);
+    sl_idx = CTZ (sl_bmap);
 
     return cm->chunks [fl_idx - FL_IDX_BIAS] [sl_idx];
 }
@@ -293,8 +292,8 @@ static inline size_t __get_max_free (chunk_mgr_t * cm)
 
     /* find the highest bit in fl_bmap */
 
-    fl_idx = __clzl (1) - __clzl (cm->fl_bmap) - FL_IDX_BIAS;
-    sl_idx = __clzl (1) - __clzl (cm->sl_bmap [fl_idx]);
+    fl_idx = CLZ (1) - CLZ (cm->fl_bmap) - FL_IDX_BIAS;
+    sl_idx = CLZ (1) - CLZ (cm->sl_bmap [fl_idx]);
 
     if (fl_idx >= FL_IDXES)
     {
