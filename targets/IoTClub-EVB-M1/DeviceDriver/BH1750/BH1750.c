@@ -190,9 +190,13 @@ for (i = 0; i < 8; i++)
         delay_us(1);  
     }  
 		if (!ack)
+	{
         I2C_NAck();//·¢ËÍnACK
+	}
     else
+	{
         I2C_Ack(); //·¢ËÍACK  
+	}
 	return value;
 }
 

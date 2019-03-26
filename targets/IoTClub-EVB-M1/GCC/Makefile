@@ -222,7 +222,6 @@ DEVICEDRIV_INC = \
         -I $(TOP_DIR)/targets/IoTClub-EVB-M1/DeviceDriver/BH1750         \
         -I $(TOP_DIR)/targets/IoTClub-EVB-M1/DeviceDriver/DHT11          \
         -I $(TOP_DIR)/targets/IoTClub-EVB-M1/DeviceDriver/OLED           \
-        -I $(TOP_DIR)/targets/IoTClub-EVB-M1/DeviceDriver/GPS            \
         -I $(TOP_DIR)/targets/IoTClub-EVB-M1/Hardware                    \
         -I $(TOP_DIR)/targets/IoTClub-EVB-M1/Apps                        \
         -I $(TOP_DIR)/targets/IoTClub-EVB-M1/OS_CONFIG                   \

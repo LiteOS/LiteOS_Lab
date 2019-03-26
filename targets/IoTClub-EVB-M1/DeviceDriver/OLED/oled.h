@@ -42,7 +42,7 @@ void OLED_Set_Pos(unsigned char x, unsigned char y);
 
 #include <osport.h>
 void oled_initialize(void);
-void oled_disp(const char *name,u32_t value,s32_t line);
+void oled_display(s32_t line,char *str);
 
 #endif  
 	 

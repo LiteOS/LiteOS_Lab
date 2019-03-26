@@ -105,9 +105,8 @@ int main(void)
     //app_main_init("178.15.147.143", 5683,20);
     //app_main_init("testdevice.hw-oc.com", 5683,20);  //Europe openlab use this configure
 
-
+    tagNbConfig config;
     //this is used in dus using 1nce card
-//    tagNbConfig config;
 //    config.server = "178.15.147.143,5683";
 //    config.bands = "8,5,20";
 //    config.plmn = "26201";
@@ -116,18 +115,16 @@ int main(void)
 
 
     //this is used in china for China Telecom
-    tagNbConfig config;
-    config.server = "139.159.140.34,5683";
-    config.bands = "5,8,20";
-    config.plmn = "46011";
-    config.apn = "1,\"IP\",\"HUAWEI.COM\"";
-
-    //this is used in china for China  Mobile
-//    tagNbConfig config;
 //    config.server = "139.159.140.34,5683";
 //    config.bands = "5,8,20";
-//    config.plmn = "46000" ;
+//    config.plmn = "46011";
 //    config.apn = "1,\"IP\",\"HUAWEI.COM\"";
+
+    //this is used in china for China  Mobile
+    config.server = "139.159.140.34,5683";
+    config.bands = "5,8,20";
+    config.plmn = NULL ;
+    config.apn = NULL;
 
     app_main_init(&config);  //China telecom
  #endif

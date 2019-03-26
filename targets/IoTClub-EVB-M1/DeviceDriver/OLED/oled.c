@@ -179,10 +179,14 @@ void OLED_ShowChar(uint8_t x,uint8_t y,uint8_t chr,uint8_t Char_Size)
 	{
 		OLED_Set_Pos(x,y);	
 		for(i=0;i<8;i++)
+		{
 			OLED_WR_Byte(F8X16[c*16+i],OLED_DATA);
+		}
 			OLED_Set_Pos(x,y+1);
 		for(i=0;i<8;i++)
+		{
 			OLED_WR_Byte(F8X16[c*16+i+8],OLED_DATA);
+		}
 	}
 	else 
 	{	
@@ -316,10 +320,6 @@ void OLED_Init(void)
 	OLED_Clear();
 }  
 
-
-
-
-
 void oled_initialize(void)
 {
 	char *str  = "PoweredBy LiteOS";
@@ -336,10 +336,13 @@ void oled_initialize(void)
 #endif
 	OLED_ShowString(0,0,(uint8_t*)str,16);
 }
-void oled_disp(const char *name,u32_t value,s32_t line)
+
+
+#define cn_ascii_show_len   16 //at most we could show 16 character
+void oled_display(s32_t line,char *str)
 {
-    char buf[17];
-    memset(buf,' ',17);
+	s32_t len;
+    char buf[cn_ascii_show_len+1];
     if(line)
     {
         line = 2;
@@ -348,14 +351,15 @@ void oled_disp(const char *name,u32_t value,s32_t line)
     {
         line = 0;
     }
-    buf[16] = 0;//make the end
-	OLED_ShowString(0,line,(uint8_t*)buf,16);  //first clean it 
-    
-    snprintf(buf,16,"%-7s:%-8d",name,value);
-    buf[16] = 0;//make the end
+    memset(buf,' ',cn_ascii_show_len);
+    buf[cn_ascii_show_len] = '\0';
+	OLED_ShowString(0,line,(uint8_t*)buf,16);  //first clean it
+
+	len  = strlen(str) > cn_ascii_show_len?cn_ascii_show_len:strlen(str);
+
+	memcpy(buf,str,len);
+	buf[len] = '\0';
     OLED_ShowString(0,line,(uint8_t*)buf,16);  //then show it
 
-
-    
 }
 

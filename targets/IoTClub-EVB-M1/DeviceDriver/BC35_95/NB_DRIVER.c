@@ -287,12 +287,18 @@ static bool_t nb_setband(const char *bands)
     {
         memset(resp,0,64);
         ret = nb_atcmd_response("AT+NBAND?\r","OK",resp,64);
-        if((false == ret)||(NULL == strstr(resp,bands)))//which means we need to set it
+
+        memset(cmd,0,64);
+        snprintf(cmd,63,"+NBAND:%s\r",bands);
+
+        if((false == ret)||(NULL == strstr(resp,cmd)))//which means we need to set it
         {
             nb_atcmd("AT+CFUN=0\r","OK");
+
         	memset(cmd,0,64);
-        	snprintf(cmd,64,"AT+NBAND=%s\r",bands);
+        	snprintf(cmd,63,"AT+NBAND=%s\r",bands);
         	ret = nb_atcmd(cmd,"OK");
+
             nb_atcmd("AT+CFUN=1\r","OK");
         }
         else
@@ -314,10 +320,15 @@ static bool_t nb_setplmn(const char *plmn)
     {
         memset(resp,0,64);
         ret = nb_atcmd_response("AT+COPS?\r","+COPS",resp,64);
-        if((false == ret)||(NULL == strstr(resp,plmn)))//which means we need to set it
+
+        memset(cmd,0,64);
+        snprintf(cmd,63,"+COPS:1,2,\"%s\"\r",plmn);
+
+        if((false == ret)||(NULL == strstr(resp,cmd)))//which means we need to set it
         {
-        	memset(cmd,0,64);
-        	snprintf(cmd,64,"AT+COPS=1,2,\"%s\"\r",plmn);
+            memset(cmd,0,64);
+        	snprintf(cmd,63,"AT+COPS=1,2,\"%s\"\r",plmn);
+
         	ret = nb_atcmd(cmd,"OK");
         }
         else
@@ -340,16 +351,20 @@ static bool_t nb_setapn(const char *apn)
 {
     char cmd[64];
     char resp[64];
+
     bool_t ret = true;
 
     if(NULL != apn)  //which measn we need to set if the default is not the same
     {
         memset(resp,0,64);
         ret = nb_atcmd_response("AT+CGDCONT?\r","OK",resp,64);
-        if((false == ret)||(NULL == strstr(resp,apn)))//which means we need to set it
+
+        memset(cmd,0,64);
+        snprintf(cmd,63,"+COPS:1,2,\"%s\"\r",apn);
+        if((false == ret)||(NULL == strstr(resp,cmd)))//which means we need to set it
         {
         	memset(cmd,0,64);
-        	snprintf(cmd,64,"AT+CGDCONT=%s\r",apn);
+        	snprintf(cmd,63,"AT+CGDCONT=%s\r",apn);
         	ret = nb_atcmd(cmd,"OK");
         }
         else
@@ -365,13 +380,17 @@ static bool_t nb_setserver(const char *server)
 {
     char cmd[64];
     char resp[64];
+    char cmp[64];
     bool_t ret = true;
 
     if(NULL != server)  //which measn we need to set if the default is not the same
     {
         memset(resp,0,64);
+        memset(cmp,0,64);
+        memset(cmd,0,64);
         ret = nb_atcmd_response("AT+NCDP?\r","OK",resp,64);
-        if((false == ret)||(NULL == strstr(resp,server)))//which means we need to set it
+        snprintf(cmp,64,"+NCDP:%s\r",server);
+        if((false == ret)||(NULL == strstr(resp,cmp)))//which means we need to set it
         {
         	memset(cmd,0,64);
         	snprintf(cmd,64,"AT+NCDP=%s\r",server);

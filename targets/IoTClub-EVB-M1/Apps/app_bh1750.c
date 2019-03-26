@@ -49,15 +49,16 @@ static s32_t intensity_report(u8_t *buf, s32_t buflen)
 
     s32_t ret = 0;
     u32_t  value;
+    char  logbuf[16];
+
     //sample light intensity and report
     if(buflen > 5)
     {
         value = Convert_BH1750();
         memset(buf,' ',5);
         sprintf((char *)buf,"%5d",(s32_t)value);
-        
-        oled_disp("light",value,2);
-        
+        snprintf(logbuf,16,"%s:%d","Light",value);
+        oled_display(1,logbuf);
         ret =5;
     }
     return ret;

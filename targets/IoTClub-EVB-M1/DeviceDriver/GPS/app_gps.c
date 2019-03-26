@@ -52,31 +52,32 @@ static s32_t gps_report(u8_t *buf, s32_t buflen)
 {
 
     s32_t ret = 0;
-    u32_t  value  =0;
     u8_t  databuf[128];
     //sample light intensity and report
-#if 0    
+#if 0
+      u32_t  value  =0;
 	  HAL_UART_Receive_IT(&huart3,gps_uart,1000);
 		NMEA_BDS_GPRMC_Analysis(&gpsmsg,(uint8_t*)gps_uart);	//?????
 		Longitude=(float)((float)gpsmsg.longitude_bd/100000);	
 		printf("Longitude:%.5f %lc     \r\n",Longitude,gpsmsg.ewhemi_bd);
 		Latitude=(float)((float)gpsmsg.latitude_bd/100000);
-		printf("Latitude:%.5f %1c   \r\n",Latitude,gpsmsg.nshemi_bd);	
+		printf("Latitude:%.5f %1c   \r\n",Latitude,gpsmsg.nshemi_bd);
+#else
+	    ret = los_dev_read(s_sensor_dev,0,databuf,128,1000);
+	    printf("read :%d bytes\n\r",ret);
 #endif
-    ret = los_dev_read(s_sensor_dev,0,databuf,128,1000);
-    printf("read :%d bytes\n\r",ret);
-    
-    
     return 0;
 }
 
 
 static void gps_device_init(void)
 {
-	//HAL_UART_Transmit(&huart3, "$CCMSG,GGA,1,0,*19\r\n", 20, 200);
-    //HAL_UART_Transmit(&huart3, "$CCMSG,GSA,1,0,*0D\r\n", 20, 200);
-	//HAL_UART_Transmit(&huart3, "$CCMSG,GSV,1,0,*1A\r\n", 20, 200);
-    
+
+#if 0
+	HAL_UART_Transmit(&huart3, "$CCMSG,GGA,1,0,*19\r\n", 20, 200);
+    HAL_UART_Transmit(&huart3, "$CCMSG,GSA,1,0,*0D\r\n", 20, 200);
+	HAL_UART_Transmit(&huart3, "$CCMSG,GSV,1,0,*1A\r\n", 20, 200);
+#else
     const char *cmd;
     cmd = "$CCMSG,GGA,1,0,*19\r\n";  
     los_dev_write(s_sensor_dev,0,(u8_t *)cmd,strlen(cmd),200);
@@ -86,10 +87,18 @@ static void gps_device_init(void)
     
     cmd = "$CCMSG,GSV,1,0,*1A\r\n";  
     los_dev_write(s_sensor_dev,0,(u8_t *)cmd,strlen(cmd),200);
+
+#endif
+
 }
 
 bool_t app_gps_report()
 {
+
+#if 0
+
+
+#else
     bool_t ret= false;
     
     //do the sensor module init
@@ -103,7 +112,10 @@ bool_t app_gps_report()
           gps_report,10);
     }
 
+    gps_device_init();
+
     return ret;
+#endif
 }
 
 
