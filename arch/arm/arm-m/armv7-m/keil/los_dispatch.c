@@ -112,22 +112,23 @@ __asm VOID LOS_StartToRun(VOID)
     LDR     R12, [R1]
 
 #if (LOSCFG_ENABLE_MPU == YES)
-    LDR     R0, [R1, #8]           ; TCB->pMpuSettings
+    LDR     R0, [R1, #8]            ; TCB->pMpuSettings
     LDR     R1, =0xe000ed9c
     LDM     R0!, {R2-R7}
     STM     R1, {R2-R7}
     LDM     R0!, {R2-R7}
     STM     R1, {R2-R7}
 
-    LDR     R3, [R12], #4          ; get the CONTROL value
+    LDR     R3, [R12], #4           ; get the CONTROL value
+    ORR     R3, #2                  ; regset->control do not have CONTROL.SPSEL bit
 #else
     MOV     R3, #2
 #endif
 
-    ADD     R12, R12, #36          ; skip R4-R11, PRIMASK.
+    ADD     R12, R12, #36           ; skip R4-R11, PRIMASK.
 
 #ifndef     __TARGET_FPU_SOFTVFP
-    ADD     R12, R12, #4           ; if FPU exist, skip EXC_RETURN.
+    ADD     R12, R12, #4            ; if FPU exist, skip EXC_RETURN.
 #endif
 
     LDR     R0, [R12]
@@ -290,14 +291,14 @@ TaskSwitch
     ; */
 
 #ifndef     __TARGET_FPU_SOFTVFP
-    TST     R14, #0x10             ; if the task using the FPU context, push s16-s31.
+    TST     R14, #0x10              ; if the task using the FPU context, push s16-s31.
     BNE     %F0
     VSTMDB  R0!, {D8-D15}
 0
-    STMFD   R0!, {R14}             ; save EXC_RETURN.
+    STMFD   R0!, {R14}              ; save EXC_RETURN.
 #endif
 
-    STMFD   R0!, {R4-R12}          ; save the core registers and PRIMASK.
+    STMFD   R0!, {R4-R12}           ; save the core registers and PRIMASK.
 
 #if (LOSCFG_ENABLE_MPU == YES)
     MRS     R1, CONTROL
@@ -351,7 +352,7 @@ TaskSwitch
     ; * Set the CONTROL register
     ; */
 
-    LDR     R4, [R0, #8]           ; TCB->pMpuSettings
+    LDR     R4, [R0, #8]            ; TCB->pMpuSettings
     LDR     R5, =0xe000ed9c
     LDM     R4!, {R6-R11}
     STM     R5, {R6-R11}
@@ -393,11 +394,11 @@ TaskSwitch
     ; *                                         |<---auto restoring--->|
     ; *                       Stack pointer after exiting exception--->|
     ; */
-    LDMFD   R1!, {R4-R12}          ; restore the core registers and PRIMASK.
+    LDMFD   R1!, {R4-R12}           ; restore the core registers and PRIMASK.
 
 #ifndef     __TARGET_FPU_SOFTVFP
-    LDMFD   R1!, {R14}             ; restore EXC_RETURN.
-    TST     R14, #0x10             ; if the task using the FPU context, pop s16-s31.
+    LDMFD   R1!, {R14}              ; restore EXC_RETURN.
+    TST     R14, #0x10              ; if the task using the FPU context, pop s16-s31.
     BNE     %F0
     VLDMIA  R1!, {D8-D15}
 0
@@ -416,44 +417,4 @@ TaskSwitch
 
     ALIGN
 }
-
-#if (LOSCFG_ENABLE_MPU == YES)
-
-__asm UINT32 osEnterPrivileged(VOID)
-{
-    PRESERVE8
-
-    PUSH    {R7, LR}
-    MRS     R0, CONTROL
-    TST     R0, #1
-    IT      EQ
-    POPEQ   {R7, PC}
-
-    MVN     R7, #0             ; magic
-
-    SVC     #0
-
-    POP     {R7, PC}
-
-    ALIGN
-}
-
-__asm VOID osExitPrivileged(UINT32 flag)
-{
-    PRESERVE8
-
-    TST     R0, #1
-    IT      EQ
-    BXEQ    LR
-
-    MRS     R0, CONTROL
-    ORR     R0, R0, #1
-    MSR     CONTROL, R0
-
-    BX      LR
-
-    ALIGN
-}
-
-#endif
 

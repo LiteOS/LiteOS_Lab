@@ -1,5 +1,5 @@
 ##########################################################################################################################
-# Cloud_STM32F429IGTx_FIRE GCC compiler Makefile
+# STM32F429IGTx_FIRE GCC compiler Makefile
 ##########################################################################################################################
 
 # ------------------------------------------------
@@ -152,7 +152,8 @@ CMSIS_SRC =  \
 
 ARCH_SRC =  \
         ${wildcard $(TOP_DIR)/arch/arm/arm-m/src/*.c} \
-        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/*.c}
+        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/*.c} \
+        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/*.c}
         C_SOURCES += $(ARCH_SRC)
 
 ifeq ($(WITH_LWIP), yes)
@@ -373,11 +374,6 @@ endif
 UTIL_SRC = \
         $(TOP_DIR)/utils/rbtree.c
         C_SOURCES += $(UTIL_SRC)
-
-# ASM sources
-
-ASM_SOURCES_S += \
-        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_dispatch.S}
 
 #blow use bootloader
 else 

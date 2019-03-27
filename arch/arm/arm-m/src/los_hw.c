@@ -43,6 +43,7 @@
 
 #if (LOSCFG_ENABLE_MPU == YES)
 #include "heap.h"
+#include "los_svc.h"
 #endif
 
 #ifdef __cplusplus
@@ -108,6 +109,28 @@ LITE_OS_SEC_TEXT_MINOR VOID osTaskExit(VOID)
     __disable_irq();
     while(1);
 }
+
+#if (LOSCFG_ENABLE_MPU == YES)
+LITE_OS_SEC_TEXT_INIT VOID osUsrTaskEntry(UINT32 uwTaskID)
+{
+    LOS_TASK_CB    *pstTaskCB;
+    TSK_ENTRY_FUNC entry;
+    UINT32         arg;
+
+    pstTaskCB = OS_TCB_FROM_TID(uwTaskID);
+
+    entry = pstTaskCB->pfnTaskEntry;
+    arg   = pstTaskCB->uwArg;
+
+    /* enter unprivileged */
+
+    __set_CONTROL(__get_CONTROL() | CONTROL_nPRIV_Msk);
+
+    (VOID)entry(arg);
+
+    (VOID)LOS_UsrTaskDelete(uwTaskID);
+}
+#endif
 
 /*****************************************************************************
  Function    : osTskStackInit
@@ -211,14 +234,15 @@ LITE_OS_SEC_TEXT_INIT VOID osTskStackInit(LOS_TASK_CB *pstTaskCB, TSK_INIT_PARAM
     pstContext = (TSK_CONTEXT_S *)pStack;
 
 #if (LOSCFG_ENABLE_MPU == YES)
-    if (pstMpuPara != NULL)
-    {
-        pstContext->uwControl = 3;
-    }
-    else
-    {
-        pstContext->uwControl = 2;
-    }
+
+    /*
+     * 1. CONTROL.SPSEL is reserved in handler mode, and context load is always
+     *    happend in handler mode expected the first one, so do not set this bit
+     * 2. task is created at priveledged mode, for usr task, it is switched to
+     *    usr mode in osUsrTaskEntry
+     */
+
+    pstContext->uwControl = 0;
 #endif
 
     pstContext->uwR4  = 0x04040404L;
@@ -244,6 +268,13 @@ LITE_OS_SEC_TEXT_INIT VOID osTskStackInit(LOS_TASK_CB *pstTaskCB, TSK_INIT_PARAM
     pstContext->uwR3  = 0x03030303L;
     pstContext->uwR12 = 0x12121212L;
     pstContext->uwLR  = (UINT32)osTaskExit;
+#if (LOSCFG_ENABLE_MPU == YES)
+    if (pstMpuPara != NULL)
+    {
+        pstContext->uwPC  = (UINT32)osUsrTaskEntry;
+    }
+    else
+#endif
     pstContext->uwPC  = (UINT32)osTaskEntry;
     pstContext->uwxPSR = 0x01000000L;
 

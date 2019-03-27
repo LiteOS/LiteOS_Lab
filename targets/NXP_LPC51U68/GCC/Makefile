@@ -126,10 +126,11 @@ CMSIS_SRC =  \
         C_SOURCES += $(CMSIS_SRC)
 
 ARCH_SRC =  \
-        ${wildcard $(TOP_DIR)/arch/arm/arm-m/src/*.c} \
-		${wildcard $(TOP_DIR)/arch/arm/arm-m/armv6-m/*.c}
+        ${wildcard $(TOP_DIR)/arch/arm/arm-m/src/*.c}        \
+        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv6-m/*.c}    \
+        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv6-m/gcc/*.c}
         C_SOURCES += $(ARCH_SRC)
-		
+
 ifeq ($(WITH_LWIP), yes)
 LWIP_SRC =  \
         ${wildcard $(TOP_DIR)/components/net/lwip/lwip-2.0.3/src/api/*.c} \
@@ -231,7 +232,6 @@ UTIL_SRC =  \
 
 # ASM sources
 ASM_SOURCES_S =  \
-       ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv6-m/gcc/los_dispatch.S} \
        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv6-m/gcc/los_startup.S}
 
 

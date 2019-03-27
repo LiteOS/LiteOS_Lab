@@ -63,7 +63,9 @@ CMSIS_SRC =  \
         C_SOURCES += $(CMSIS_SRC)
 
 ARCH_SRC =  \
-        ${wildcard $(TOP_DIR)/arch/arm/arm-m/src/*.c}
+        ${wildcard $(TOP_DIR)/arch/arm/arm-m/src/*.c} \
+        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/*.c} \
+        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/*.c}
         C_SOURCES += $(ARCH_SRC)
 
 UTIL_SRC =  \
@@ -140,7 +142,6 @@ USR_SRC =       \
 
 # ASM sources
 ASM_SOURCES_S =  \
-        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_dispatch.S} \
         ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_startup.S}
 
 ######################################

@@ -1,5 +1,5 @@
 /** ----------------------------------------------------------------------------
- * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2019>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -31,45 +31,18 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
+ 
+#include <los_config.h>
+#include <los_typedef.h>
 
-/****************************************************************************************
-*                                  EXPORT FUNCTIONS
-****************************************************************************************/
+#define NVIC_INT_CTRL                   0xE000ED04  /* Interrupt Control and State Register. */
+#define NVIC_PENDSVSET                  0x10000000  /* Value to trigger PendSV exception. */
 
-    .global  LOS_IntLock
-    .global  LOS_IntUnLock
-    .global  LOS_IntRestore
-    .global  LOS_StartToRun
-    .global  osTaskSchedule
-    .global  PendSV_Handler
+#define NVIC_SYSPRI2                    0xE000ED20  /* System Handler Priority Register 2. */
+#define NVIC_PENDSV_SYSTICK_PRI         0xFFFF0000  /* SysTick + PendSV priority level (lowest). */
+#define MPU_RBAR                        0xE000ED9C  /* MPU Region Base Address register */
 
-/****************************************************************************************
-*                                  EXTERN PARAMETERS
-****************************************************************************************/
-
-    .extern  g_stLosTask
-    .extern  g_pfnTskSwitchHook
-    .extern  g_bTaskScheduled
-
-/****************************************************************************************
-*                                  EQU
-****************************************************************************************/
-
-.equ    OS_NVIC_INT_CTRL,              0xE000ED04  /* Interrupt Control and State Register. */
-.equ    OS_NVIC_PENDSVSET,             0x10000000  /* Value to trigger PendSV exception. */
-
-.equ    OS_NVIC_SYSPRI2,               0xE000ED20  /* System Handler Priority Register 2. */
-.equ    OS_NVIC_PENDSV_SYSTICK_PRI,    0xFFFF0000  /* SysTick + PendSV priority level (lowest). */
-
-.equ    OS_TASK_STATUS_RUNNING,        0x0010      /* Task Status Flag (RUNNING). */
-
-/****************************************************************************************
-*                                  CODE GENERATION DIRECTIVES
-****************************************************************************************/
-
-    .section .text
-    .thumb
-    .syntax unified
+#define OS_TASK_STATUS_RUNNING          0x00000010  /* Task Status Flag (RUNNING). */
 
 /****************************************************************************************
 * Function:
@@ -78,42 +51,47 @@
 *        Start the first task, which is the highest priority task in the priority queue.
 *        Other tasks are started by task scheduling.
 ****************************************************************************************/
-    .type LOS_StartToRun, %function
-LOS_StartToRun:
-    CPSID   I
+__attribute__((naked)) void LOS_StartToRun(void)
+{
+    asm (
+    ".syntax unified\n\t"
+
+    "CPSID  I\n\t"
 
     /**
      * Set PendSV and SysTick prority to the lowest.
      * read ---> modify ---> write-back.
      */
-    LDR     R0, =OS_NVIC_SYSPRI2
-    LDR     R1, =OS_NVIC_PENDSV_SYSTICK_PRI
-    LDR     R2, [R0]
-    ORR     R1, R1, R2
-    STR     R1, [R0]
+
+    "LDR    R0, =%0                 @ NVIC_SYSPRI2\n\t"
+    "LDR    R1, =%1                 @ NVIC_PENDSV_SYSTICK_PRI\n\t"
+    "LDR    R2, [R0]\n\t"
+    "ORR    R1, R1, R2\n\t"
+    "STR    R1, [R0]\n\t"
 
     /**
      * Set g_bTaskScheduled = 1.
      */
-    LDR     R0, =g_bTaskScheduled
-    MOV     R1, #1
-    STR     R1, [R0]
+
+    "LDR    R0, =g_bTaskScheduled\n\t"
+    "MOV    R1, #1\n\t"
+    "STR    R1, [R0]\n\t"
 
     /**
      * Set g_stLosTask.pstRunTask = g_stLosTask.pstNewTask.
      */
-    LDR     R0, =g_stLosTask
-    LDR     R1, [R0, #4]
-    STR     R1, [R0]
+    "LDR    R0, =g_stLosTask\n\t"
+    "LDR    R1, [R0, #4]\n\t"
+    "STR    R1, [R0]\n\t"
 
     /**
      * Set g_stLosTask.pstRunTask->usTaskStatus |= OS_TASK_STATUS_RUNNING.
      */
-    LDR     R1, [R0]
-    LDRH    R2, [R1, #4]
-    MOV     R3, #OS_TASK_STATUS_RUNNING
-    ORR     R2, R2, R3
-    STRH    R2, [R1, #4]
+    "LDR    R1, [R0]\n\t"
+    "LDRH   R2, [R1, #4]\n\t"
+    "MOV    R3, %2                  @ OS_TASK_STATUS_RUNNING\n\t"
+    "ORR    R2, R2, R3\n\t"
+    "STRH   R2, [R1, #4]\n\t"
 
     /**
      * Restore the default stack frame(R0-R3,R12,LR,PC,xPSR) of g_stLosTask.pstRunTask to R0-R7.
@@ -132,53 +110,60 @@ LOS_StartToRun:
      *                                                  R12 to PSP--->|
      *                          Stack pointer after LOS_StartToRun--->|
      */
-    LDR     R12, [R1]
 
-#ifdef LOSCFG_ENABLE_MPU
-    LDR     R0, [R1, #8]           /* TCB->pMpuSettings */
-    LDR     R1, =0xe000ed9c
-    LDM     R0!, {R2-R7}
-    STM     R1, {R2-R7}
-    LDM     R0!, {R2-R7}
-    STM     R1, {R2-R7}
+    "LDR    R12, [R1]\n\t"
 
-    LDR     R3, [R12], #4          /* get the CONTROL value */
+#if (LOSCFG_ENABLE_MPU == YES)
+    "LDR    R0, [R1, #8]            @ TCB->pMpuSettings\n\t"
+    "LDR    R1, =%3                 @ MPU_RBAR\n\t"
+    "LDM    R0!, {R2-R7}\n\t"
+    "STM    R1, {R2-R7}\n\t"
+    "LDM    R0!, {R2-R7}\n\t"
+    "STM    R1, {R2-R7}\n\t"
+
+    "LDR    R3, [R12], #4           @ get the CONTROL value\n\t"
+    "ORR    R3, #2                  @ set CONTROL.SPSEL\n\t"
 #else
-    MOV     R3, #2
+    "MOV    R3, #2\n\t"
 #endif
 
-    ADD     R12, R12, #36          /* skip R4-R11, PRIMASK. */
+    "ADD    R12, R12, #36           @ skip R4-R11, PRIMASK.\n\t"
 
 #if defined (__VFP_FP__) && !defined(__SOFTFP__)
-    ADD     R12, R12, #4           /* if FPU exist, skip EXC_RETURN. */
+    "ADD    R12, R12, #4            @ if FPU exist, skip EXC_RETURN.\n\t"
 #endif
 
-    LDR     R0, [R12]
-    LDR     LR, [R12, #4 * 5]
-    LDR     R2, [R12, #4 * 6]
+    "LDR    R0, [R12]\n\t"
+    "LDR    LR, [R12, #4 * 5]\n\t"
+    "LDR    R2, [R12, #4 * 6]\n\t"
 
-    ADD     R12, R12, #4 * 8
+    "ADD    R12, R12, #4 * 8\n\t"
 
     /**
      * Set the stack pointer of g_stLosTask.pstRunTask to PSP.
      */
-    MSR     PSP, R12
+    "MSR    PSP, R12\n\t"
 
     /**
      * Enable interrupt. (The default PRIMASK value is 0, so enable directly)
      */
-    CPSIE   I
+    "CPSIE  I\n\t"
 
     /**
      * Set the CONTROL register, after schedule start, privilege level and stack = PSP.
      */
-    MSR     CONTROL, R3
+    "MSR    CONTROL, R3\n\t"
 
     /**
      * Jump directly to the default PC of g_stLosTask.pstRunTask, the field information
      * of the main function will be destroyed and will never be returned.
      */
-    BX      R2
+    "BX     R2\n\t"
+    :
+    : "X" (NVIC_SYSPRI2), "X" (NVIC_PENDSV_SYSTICK_PRI),
+      "I" (OS_TASK_STATUS_RUNNING), "X" (MPU_RBAR)
+    );
+}
 
 /****************************************************************************************
 * Function:
@@ -193,22 +178,37 @@ LOS_StartToRun:
 *        Restore the locked interruption of LOS_IntLock.
 *        The caller must pass in the value of interruption state previously saved.
 ****************************************************************************************/
-    .type LOS_IntLock, %function
-LOS_IntLock:
-    MRS     R0, PRIMASK
-    CPSID   I
-    BX      LR
+__attribute__((naked)) UINTPTR LOS_IntLock(void)
+{
+    asm (
+    ".syntax unified\n\t"
 
-    .type LOS_IntUnLock, %function
-LOS_IntUnLock:
-    MRS     R0, PRIMASK
-    CPSIE   I
-    BX      LR
+    "MRS    R0, PRIMASK\n\t"
+    "CPSID  I\n\t"
+    "BX     LR\n\t"
+    );
+}
 
-    .type LOS_IntRestore, %function
-LOS_IntRestore:
-    MSR     PRIMASK, R0
-    BX      LR
+__attribute__((naked)) UINTPTR LOS_IntUnLock(void)
+{
+    asm (
+    ".syntax unified\n\t"
+
+    "MRS    R0, PRIMASK\n\t"
+    "CPSIE  I\n\t"
+    "BX     LR\n\t"
+    );
+}
+
+__attribute__((naked)) VOID LOS_IntRestore(UINTPTR key)
+{
+    asm (
+    ".syntax unified\n\t"
+
+    "MSR    PRIMASK, R0\n\t"
+    "BX     LR\n\t"
+    );
+}
 
 /****************************************************************************************
 * Function:
@@ -216,12 +216,19 @@ LOS_IntRestore:
 * Description:
 *        Start the task swtich process by software trigger PendSV interrupt.
 ****************************************************************************************/
-    .type osTaskSchedule, %function
-osTaskSchedule:
-    LDR     R0, =OS_NVIC_INT_CTRL
-    LDR     R1, =OS_NVIC_PENDSVSET
-    STR     R1, [R0]
-    BX      LR
+__attribute__((naked)) VOID osTaskSchedule(VOID)
+{
+    asm (
+    ".syntax unified\n\t"
+
+    "LDR    R0, =%0                 @ NVIC_INT_CTRL\n\t"
+    "LDR    R1, =%1                 @ NVIC_PENDSVSET\n\t"
+    "STR    R1, [R0]\n\t"
+    "BX     LR\n\t"
+    :
+    : "X" (NVIC_INT_CTRL), "X" (NVIC_PENDSVSET)
+    );
+}
 
 /****************************************************************************************
 * Function:
@@ -233,30 +240,34 @@ osTaskSchedule:
 *        Second: Restore the context of the next running task(g_stLosTask.pstNewTask)
 *                from its own stack.
 ****************************************************************************************/
-    .type PendSV_Handler, %function
-PendSV_Handler:
+__attribute__((naked)) VOID PendSV_Handler(VOID)
+{
+    asm (
+    ".syntax unified\n\t"
+
     /**
      * R12: Save the interruption state of the current running task.
      * Disable all interrupts except Reset,NMI and HardFault
      */
-    MRS     R12, PRIMASK
-    CPSID   I
+    "MRS    R12, PRIMASK\n\t"
+    "CPSID  I\n\t"
 
     /**
      * Call task switch hook.
      */
-    LDR     R2, =g_pfnTskSwitchHook
-    LDR     R2, [R2]
-    CBZ     R2, TaskSwitch
-    PUSH    {R12, LR}
-    BLX     R2
-    POP     {R12, LR}
+    "LDR    R2, =g_pfnTskSwitchHook\n\t"
+    "LDR    R2, [R2]\n\t"
+    "CBZ    R2, 0f\n\t"
+    "PUSH   {R12, LR}\n\t"
+    "BLX    R2\n\t"
+    "POP    {R12, LR}\n\t"
 
-TaskSwitch:
+    "0:\n\t"
+
     /**
      * R0 = now stack pointer of the current running task.
      */
-    MRS     R0, PSP
+    "MRS    R0, PSP\n\t"
 
     /**
      * Save the stack frame([S16-S31,]R4-R11) of the current running task.
@@ -285,75 +296,75 @@ TaskSwitch:
      *   |<---Top of the stack, save to g_stLosTask.pstRunTask->pStackPointer
      */
 #if defined (__VFP_FP__) && !defined(__SOFTFP__)       /* if FPU exist. */
-    TST     R14, #0x10             /* if the task using the FPU context, push s16-s31. */
-    BNE     0f
-    VSTMDB  R0!, {D8-D15}
-0:
-    STMFD   R0!, {R14}             /* save EXC_RETURN. */
+    "TST    R14, #0x10              @ if the task using the FPU context\n\t"
+    "BNE    0f\n\t"
+    "VSTMDB R0!, {D8-D15}\n\t"
+    "0:\n\t"
+    "STMFD  R0!, {R14}              @ save EXC_RETURN\n\t"
 #endif
 
-    STMFD   R0!, {R4-R12}          /* save the core registers and PRIMASK. */
+    "STMFD  R0!, {R4-R12}           @ save the core registers and PRIMASK.\n\t"
 
-#ifdef LOSCFG_ENABLE_MPU
-    MRS     R1, CONTROL
-    STR     R1, [R0, #-4]!
+#if (LOSCFG_ENABLE_MPU == YES)
+    "MRS    R1, CONTROL\n\t"
+    "STR    R1, [R0, #-4]!\n\t"
 #endif
 
     /**
      * R5,R8.
      */
-    LDR     R5, =g_stLosTask
-    MOV     R8, #OS_TASK_STATUS_RUNNING
+    "LDR    R5, =g_stLosTask\n\t"
+    "MOV    R8, %0                 @ OS_TASK_STATUS_RUNNING\n\t"
 
     /**
      * Save the stack pointer of the current running task to TCB.
      * (g_stLosTask.pstRunTask->pStackPointer = R0)
      */
-    LDR     R6, [R5]
-    STR     R0, [R6]
+    "LDR    R6, [R5]\n\t"
+    "STR    R0, [R6]\n\t"
 
     /**
      * Clear the RUNNING state of the current running task.
      * (g_stLosTask.pstRunTask->usTaskStatus &= ~OS_TASK_STATUS_RUNNING)
      */
-    LDRH    R7, [R6, #4]
-    BIC     R7, R7, R8
-    STRH    R7, [R6, #4]
+    "LDRH   R7, [R6, #4]\n\t"
+    "BIC    R7, R7, R8\n\t"
+    "STRH   R7, [R6, #4]\n\t"
 
     /**
      * Switch the current running task to the next running task.
      * (g_stLosTask.pstRunTask = g_stLosTask.pstNewTask)
      */
-    LDR     R0, [R5, #4]
-    STR     R0, [R5]
+    "LDR    R0, [R5, #4]\n\t"
+    "STR    R0, [R5]\n\t"
 
     /**
      * Set the RUNNING state of the next running task.
      * (g_stLosTask.pstNewTask->usTaskStatus |= OS_TASK_STATUS_RUNNING)
      */
-    LDRH    R7, [R0, #4]
-    ORR     R7, R7, R8
-    STRH    R7, [R0, #4]
+    "LDRH   R7, [R0, #4]\n\t"
+    "ORR    R7, R7, R8\n\t"
+    "STRH   R7, [R0, #4]\n\t"
 
     /**
      * Restore the stack pointer of the next running task from TCB.
      * (R1 = g_stLosTask.pstNewTask->pStackPointer)
      */
-    LDR     R1, [R0]
+    "LDR    R1, [R0]\n\t"
 
-#ifdef LOSCFG_ENABLE_MPU
+#if (LOSCFG_ENABLE_MPU == YES)
     /**
      * Set the CONTROL register
      */
 
-    LDR     R4, [R0, #8]           /* TCB->pMpuSettings */
-    LDR     R5, =0xe000ed9c
-    LDM     R4!, {R6-R11}
-    STM     R5, {R6-R11}
-    LDM     R4!, {R6-R11}
-    STM     R5, {R6-R11}
-    LDR     R4, [R1], #4
-    MSR     CONTROL, R4
+    "LDR    R4, [R0, #8]            @ TCB->pMpuSettings\n\t"
+    "LDR    R5, =%1                 @ MPU_RBAR\n\t"
+    "LDM    R4!, {R6-R11}\n\t"
+    "STM    R5, {R6-R11}\n\t"
+    "LDM    R4!, {R6-R11}\n\t"
+    "STM    R5, {R6-R11}\n\t"
+    "LDR    R4, [R1], #4\n\t"
+    "MSR    CONTROL, R4\n\t"
 #endif
 
     /**
@@ -388,55 +399,28 @@ TaskSwitch:
      *                                         |<---auto restoring--->|
      *                       Stack pointer after exiting exception--->|
      */
-    LDMFD   R1!, {R4-R12}          /* restore the core registers and PRIMASK. */
+    "LDMFD  R1!, {R4-R12}           @ restore the core registers and PRIMASK\n\t"
 
 #if defined (__VFP_FP__) && !defined(__SOFTFP__)       /* if FPU exist. */
-    LDMFD   R1!, {R14}             /* restore EXC_RETURN. */
-    TST     R14, #0x10             /* if the task using the FPU context, pop s16-s31. */
-    BNE     0f
-    VLDMIA  R1!, {D8-D15}
-0:
+    "LDMFD  R1!, {R14}              @ restore EXC_RETURN\n\t"
+    "TST    R14, #0x10              @ if the task using the FPU context\n\t"
+    "BNE    0f\n\t"
+    "VLDMIA R1!, {D8-D15}\n\t"
+    "0:\n\t"
 #endif
 
     /**
      * Set the stack pointer of the next running task to PSP.
      */
-    MSR     PSP, R1
+    "MSR    PSP, R1\n\t"
 
     /**
      * Restore the interruption state of the next running task.
      */
-    MSR     PRIMASK, R12
-    BX      LR
-
-#ifdef LOSCFG_ENABLE_MPU
-    .global osEnterPrivileged
-    .global osExitPrivileged
-    .global osIsPrivileged
-
-osEnterPrivileged:
-    PUSH    {R7, LR}
-    MRS     R0, CONTROL
-    TST     R0, #1
-    IT      EQ
-    POPEQ   {R7, PC}
-
-    MVN     R7, #0             /* magic */
-
-    SVC     #0
-
-    POP     {R7, PC}
-
-osExitPrivileged:
-    TST     R0, #1
-    IT      EQ
-    BXEQ    LR
-
-    MRS     R0, CONTROL
-    ORR     R0, R0, #1
-    MSR     CONTROL, R0
-
-    BX      LR
-
-#endif
+    "MSR    PRIMASK, R12\n\t"
+    "BX     LR\n\t"
+    :
+    : "I" (OS_TASK_STATUS_RUNNING), "X" (MPU_RBAR)
+    );
+}
 
