@@ -107,7 +107,8 @@ CMSIS_SRC =  \
 
 ARCH_SRC =  \
     ${wildcard $(TOP_DIR)/arch/arm/arm-m/src/*.c} \
-    ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/*.c}
+    ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/*.c} \
+    ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/*.c}
     C_SOURCES += $(ARCH_SRC)
 
 ifeq ($(WITH_LWIP), yes)
@@ -202,7 +203,6 @@ USER_SRC =  \
 
 # ASM sources
 ASM_SOURCES_S =  \
-    ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_dispatch.S} \
     ${wildcard $(PROJECTBASE)/los_startup_gcc.S}
 
 

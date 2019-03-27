@@ -404,36 +404,5 @@ __no_restore_fpu
     MSR     PRIMASK, R12
     BX      LR
 
-#ifdef LOSCFG_ENABLE_MPU
-
-    EXPORT  osEnterPrivileged
-    EXPORT  osExitPrivileged
-
-osEnterPrivileged
-    PUSH    {R7, LR}
-    MRS     R0, CONTROL
-    TST     R0, #1
-    IT      EQ
-    POPEQ   {R7, PC}
-
-    MVN     R7, #0             ; magic
-
-    SVC     #0
-
-    POP     {R7, PC}
-
-osExitPrivileged
-    TST     R0, #1
-    IT      EQ
-    BXEQ    LR
-
-    MRS     R0, CONTROL
-    ORR     R0, R0, #1
-    MSR     CONTROL, R0
-
-    BX      LR
-
-#endif
-
     END
 

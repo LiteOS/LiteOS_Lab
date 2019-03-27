@@ -728,32 +728,11 @@ LITE_OS_SEC_TEXT_INIT VOID osTaskEntry(UINT32 uwTaskID)
 {
     LOS_TASK_CB *pstTaskCB;
 
-#if (LOSCFG_ENABLE_MPU == YES)
-    TSK_ENTRY_FUNC entry;
-    UINT32 arg;
-    UINT32 flags = osEnterPrivileged();
-
-    OS_TASK_ID_CHECK(uwTaskID);
-
-    pstTaskCB = OS_TCB_FROM_TID(uwTaskID);
-
-    entry = pstTaskCB->pfnTaskEntry;
-    arg   = pstTaskCB->uwArg;
-
-    osExitPrivileged(flags);
-
-    (VOID)entry(arg);
-
-    flags = osEnterPrivileged();
-#else
     OS_TASK_ID_CHECK(uwTaskID);
 
     pstTaskCB = OS_TCB_FROM_TID(uwTaskID);
 
     (VOID)pstTaskCB->pfnTaskEntry(pstTaskCB->uwArg);
-#endif
-
-    g_usLosTaskLock = 0;
 
     (VOID)LOS_TaskDelete(pstTaskCB->uwTaskID);
 }
@@ -1101,6 +1080,13 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_TaskDelete(UINT32 uwTaskID)
 
     CHECK_TASKID(uwTaskID);
     uvIntSave = LOS_IntLock();
+
+    /* if self deleting, unlock the scheduler */
+
+    if (uwTaskID == LOS_CurTaskIDGet())
+    {
+        g_usLosTaskLock = 0;
+    }
 
     pstTaskCB = OS_TCB_FROM_TID(uwTaskID);
 
@@ -1689,35 +1675,6 @@ LITE_OS_SEC_TEXT VOID osTaskSwitchImpurePtr(VOID)
     /* Switch Newlib's _impure_ptr variable to point to the _reent
        structure specific to next run task. */
     _impure_ptr = &(g_stLosTask.pstNewTask->stNewLibReent);
-}
-#endif
-
-#if (LOSCFG_ENABLE_MPU == YES)
-/*****************************************************************************
- Function : osTaskHeapGet
- Description : get the heap of current task.
- Input       : None
- Output      : None
- Return      : None
- *****************************************************************************/
-LITE_OS_SEC_TEXT VOID *osTaskHeapGet(VOID)
-{
-    VOID * pPool;
-    UINT32 flags = osEnterPrivileged ();
-
-    if (g_stLosTask.pstRunTask == NULL)
-        {
-        /* prekernel; */
-        pPool = (void *)OS_SYS_MEM_ADDR;
-        }
-    else
-        {
-        pPool = g_stLosTask.pstRunTask->pPool;
-        }
-
-    osExitPrivileged (flags);
-
-    return pPool;
 }
 #endif
 

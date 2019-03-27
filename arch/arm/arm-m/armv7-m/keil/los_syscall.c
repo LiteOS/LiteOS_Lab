@@ -47,30 +47,23 @@ __asm VOID SVC_Handler(VOID)
     IMPORT svc_tables
 
     MRS   R3, CONTROL
-    MOV   R1, #2
+    MOV   R1, #0
     MSR   CONTROL, R1
 
-    ; if r7 == -1, enter privileged
+    ; if LR bit 2 is 0, using MSP, 1 using PSP
 
-    MVN   r1, #0
-    CMP   r1, r7
-    BNE   %F0
-    BX    LR
-0
     TST   LR, #4
     MOVEQ R0, SP
     MRSNE R0, PSP
 
-    LDR   R1, [R0, #4 * 6]
-    ORRS  R1, R3
+    LDR   R1, [R0, #4 * 6]      ; get original PC
+    ORRS  R1, R3                ; get CONTROL.nPRIV (usr-bit)
     STR   R1, [R0, #4 * 4]      ; save original (PC | usr-bit) in R12
 
     ADR   R1, __svc_usr_stub
     STR   R1, [R0, #4 * 6]
 
     BX    LR
-
-    NOP
 
 __svc_usr_stub
     PUSH  {R4, R5, R12, LR}

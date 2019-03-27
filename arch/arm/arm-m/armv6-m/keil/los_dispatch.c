@@ -50,7 +50,7 @@
         Start the first task, which is the highest priority task in the priority queue.
         Other tasks are started by task scheduling.
 *******************************************************************************/
-__asm void LOS_StartToRun (void)
+__asm VOID LOS_StartToRun(VOID)
 {
     PRESERVE8
 
@@ -75,14 +75,6 @@ __asm void LOS_StartToRun (void)
     LDR     R0, =g_bTaskScheduled
     MOVS    R1, #1
     STR     R1, [R0]
-
-    ;/**
-    ; * Now PSP is an invalid value, R13 uses MSP as the stack pointer.
-    ; * After setting the control register, R13 will switch to PSP.
-    ; * To ensure that R13 is valid, set PSP = MSP.
-    ; */
-    MRS     R0, MSP
-    MSR     PSP, R0
 
     ;/**
     ; * Set g_stLosTask.pstRunTask = g_stLosTask.pstNewTask.
@@ -120,9 +112,9 @@ __asm void LOS_StartToRun (void)
     LDR     R3, [R1]
 
 #if (LOSCFG_ENABLE_MPU == YES)
-    LDR     R0, [R1, #8]           ; TCB->pMpuSettings
+    LDR     R0, [R1, #8]            ; TCB->pMpuSettings
     LDR     R1, =0xe000ed9c
-    MOVS    R4, #6                 ; 6 regions
+    MOVS    R4, #6                  ; 6 regions
 0
     LDM     R0!, {R2, R5}
     STR     R2, [r1]
@@ -132,11 +124,12 @@ __asm void LOS_StartToRun (void)
 
     LDR     R2, [R3]
     ADDS    R3, R3, #4
+    ORRS    R2, #2                  ; regset->control do not have CONTROL.SPSEL bit
 #else
     MOVS    R2, #2
 #endif
 
-    ADDS    R3, R3, #36            ; skip R4-R11, PRIMASK.
+    ADDS    R3, R3, #36             ; skip R4-R11, PRIMASK.
 
     LDR     R0, [R3]
     LDR     R1, [r3, #4 * 5]
@@ -204,7 +197,7 @@ __asm UINTPTR LOS_IntUnLock(VOID)
     ALIGN
 }
 
-__asm VOID LOS_IntRestore(UINTPTR r0)
+__asm VOID LOS_IntRestore(UINTPTR flag)
 {
     PRESERVE8
 
@@ -294,13 +287,13 @@ TaskSwitch
     ; *           |<---Top of the stack, save to g_stLosTask.pstRunTask->pStackPointer
     ; */
     SUBS    R0, #36
-    STMIA   R0!, {R4-R7}           ; save R4-R7.
-    MOV     R3, R8                 ; copy R8-r12 to R3-r7.
+    STMIA   R0!, {R4-R7}            ; save R4-R7.
+    MOV     R3, R8                  ; copy R8-r12 to R3-r7.
     MOV     R4, R9
     MOV     R5, R10
     MOV     R6, R11
     MOV     R7, R12
-    STMIA   R0!, {R3-R7}           ; save R8-R12.
+    STMIA   R0!, {R3-R7}            ; save R8-R12.
     SUBS    R0, #36
 
 #if (LOSCFG_ENABLE_MPU == YES)
@@ -352,9 +345,9 @@ TaskSwitch
     LDR     R1, [R0]
 
 #if (LOSCFG_ENABLE_MPU == YES)
-    LDR     R4, [R0, #8]           ; TCB->pMpuSettings
+    LDR     R4, [R0, #8]            ; TCB->pMpuSettings
     LDR     R5, =0xe000ed9c
-    MOVS    R6, #6                 ; 6 regions, cortex-m0+ do not have alias reg
+    MOVS    R6, #6                  ; 6 regions, cortex-m0+ do not have alias reg
 0
     LDM     R4!, {R2, R3}
     STM     R5!, {R2, R3}
@@ -400,8 +393,8 @@ TaskSwitch
     ; *                                 Stack pointer after exiting exception--->|
     ; */
     ADDS    R1, #16
-    LDMFD   R1!, {R3-R7}           ; restore R8-R12 to R3-R7.
-    MOV     R8, R3                 ; copy R3-R7 to R8-R12.
+    LDMFD   R1!, {R3-R7}            ; restore R8-R12 to R3-R7.
+    MOV     R8, R3                  ; copy R3-R7 to R8-R12.
     MOV     R9, R4
     MOV     R10, R5
     MOV     R11, R6
@@ -411,7 +404,7 @@ TaskSwitch
     ; */
     MSR     PSP, R1
     SUBS    R1, #36
-    LDMFD   R1!, {R4-R7}           ; restore R4-R7.
+    LDMFD   R1!, {R4-R7}            ; restore R4-R7.
 
     ;/**
     ; * Restore the interruption state of the next running task.
@@ -421,43 +414,4 @@ TaskSwitch
 
     ALIGN
 }
-
-#if (LOSCFG_ENABLE_MPU == YES)
-__asm UINT32 osEnterPrivileged(void)
-{
-    PRESERVE8
-
-    PUSH    {R7, LR}
-    MRS     R0, CONTROL
-    MOVS    R1, #1
-    TST     R0, R1
-    BEQ     %F0
-
-    MOVS    R7, #0
-    MVNS    R7, R7
-
-    SVC     #0
-0
-    POP     {R7, PC}
-
-    ALIGN
-}
-
-__asm void osExitPrivileged(UINT32 flag)
-{
-    PRESERVE8
-
-    MOVS    R1, #1
-    TST     R0, R1
-    BEQ     %F0
-
-    MRS     R0, CONTROL
-    ADDS    R0, R0, #1
-    MSR     CONTROL, R0
-0
-    BX      LR
-
-    ALIGN
-}
-#endif
 

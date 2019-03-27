@@ -389,7 +389,5 @@ extern "C" {
 #endif /* __cplusplus */
 #endif /* __cplusplus */
 
-
-
-
 #endif /* _TARGET_CONFIG_H */
+
