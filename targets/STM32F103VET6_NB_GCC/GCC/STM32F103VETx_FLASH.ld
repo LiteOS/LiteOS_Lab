@@ -153,7 +153,9 @@ SECTIONS
     . = ALIGN(8);
   } >RAM
 
-  
+    . = ALIGN(8);
+  __los_heap_addr_start__ = .;
+  __los_heap_addr_end__ = ORIGIN(RAM) + LENGTH(RAM) - _Min_Stack_Size - 1;
 
   /* Remove information from the standard libraries */
   /DISCARD/ :

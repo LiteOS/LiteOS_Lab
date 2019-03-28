@@ -728,32 +728,11 @@ LITE_OS_SEC_TEXT_INIT VOID osTaskEntry(UINT32 uwTaskID)
 {
     LOS_TASK_CB *pstTaskCB;
 
-#if (LOSCFG_ENABLE_MPU == YES)
-    TSK_ENTRY_FUNC entry;
-    UINT32 arg;
-    UINT32 flags = osEnterPrivileged();
-
-    OS_TASK_ID_CHECK(uwTaskID);
-
-    pstTaskCB = OS_TCB_FROM_TID(uwTaskID);
-
-    entry = pstTaskCB->pfnTaskEntry;
-    arg   = pstTaskCB->uwArg;
-
-    osExitPrivileged(flags);
-
-    (VOID)entry(arg);
-
-    flags = osEnterPrivileged();
-#else
     OS_TASK_ID_CHECK(uwTaskID);
 
     pstTaskCB = OS_TCB_FROM_TID(uwTaskID);
 
     (VOID)pstTaskCB->pfnTaskEntry(pstTaskCB->uwArg);
-#endif
-
-    g_usLosTaskLock = 0;
 
     (VOID)LOS_TaskDelete(pstTaskCB->uwTaskID);
 }
@@ -1101,6 +1080,13 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_TaskDelete(UINT32 uwTaskID)
 
     CHECK_TASKID(uwTaskID);
     uvIntSave = LOS_IntLock();
+
+    /* if self deleting, unlock the scheduler */
+
+    if (uwTaskID == LOS_CurTaskIDGet())
+    {
+        g_usLosTaskLock = 0;
+    }
 
     pstTaskCB = OS_TCB_FROM_TID(uwTaskID);
 
@@ -1692,33 +1678,91 @@ LITE_OS_SEC_TEXT VOID osTaskSwitchImpurePtr(VOID)
 }
 #endif
 
-#if (LOSCFG_ENABLE_MPU == YES)
+#if (LOSCFG_TASK_TLS_LIMIT != 0)
 /*****************************************************************************
- Function : osTaskHeapGet
- Description : get the heap of current task.
+ Function : LOS_TaskTlsSet
+ Description : set the TLS data of a task
  Input       : None
  Output      : None
  Return      : None
  *****************************************************************************/
-LITE_OS_SEC_TEXT VOID *osTaskHeapGet(VOID)
+UINT32 LOS_TaskTlsSet(UINT32 uwTaskID, UINT32 uwIdx, UINTPTR uvTls)
 {
-    VOID * pPool;
-    UINT32 flags = osEnterPrivileged ();
+    UINTPTR      uvIntSave;
+    LOS_TASK_CB *pstTaskCB;
+    UINT32       ret;
 
-    if (g_stLosTask.pstRunTask == NULL)
-        {
-        /* prekernel; */
-        pPool = (void *)OS_SYS_MEM_ADDR;
-        }
+    if (uwIdx >= LOSCFG_TASK_TLS_LIMIT)
+    {
+        return LOS_ERRNO_TSK_TLS_IDX_INVALID;
+    }
+
+    if (uwTaskID > LOSCFG_BASE_CORE_TSK_LIMIT)
+    {
+        return LOS_ERRNO_TSK_ID_INVALID;
+    }
+
+    uvIntSave = LOS_IntLock();
+
+    pstTaskCB = OS_TCB_FROM_TID(uwTaskID);
+
+    if (OS_TASK_STATUS_UNUSED & pstTaskCB->usTaskStatus)
+    {
+        ret = LOS_ERRNO_TSK_NOT_CREATED;
+    }
     else
-        {
-        pPool = g_stLosTask.pstRunTask->pPool;
-        }
+    {
+        pstTaskCB->auvTaskTls[uwIdx] = uvTls;
+        ret = LOS_OK;
+    }
 
-    osExitPrivileged (flags);
+    LOS_IntRestore(uvIntSave);
 
-    return pPool;
+    return ret;
 }
+
+/*****************************************************************************
+ Function : LOS_TaskTlsGet
+ Description : get the TLS data of a task
+ Input       : None
+ Output      : None
+ Return      : None
+ *****************************************************************************/
+UINT32 LOS_TaskTlsGet(UINT32 uwTaskID, UINT32 uwIdx, UINTPTR * puvTls)
+{
+    UINTPTR      uvIntSave;
+    LOS_TASK_CB *pstTaskCB;
+    UINT32       ret;
+
+    if (uwIdx >= LOSCFG_TASK_TLS_LIMIT)
+    {
+        return LOS_ERRNO_TSK_TLS_IDX_INVALID;
+    }
+
+    if (uwTaskID > LOSCFG_BASE_CORE_TSK_LIMIT)
+    {
+        return LOS_ERRNO_TSK_ID_INVALID;
+    }
+
+    uvIntSave = LOS_IntLock();
+
+    pstTaskCB = OS_TCB_FROM_TID(uwTaskID);
+
+    if (OS_TASK_STATUS_UNUSED & pstTaskCB->usTaskStatus)
+    {
+        ret = LOS_ERRNO_TSK_NOT_CREATED;
+    }
+    else
+    {
+        *puvTls = pstTaskCB->auvTaskTls[uwIdx];
+        ret = LOS_OK;
+    }
+
+    LOS_IntRestore(uvIntSave);
+
+    return ret;
+}
+
 #endif
 
 #ifdef __cplusplus

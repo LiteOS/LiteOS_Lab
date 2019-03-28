@@ -60,6 +60,29 @@ PERIFLIB_PATH =
 
 # Build path
 BUILD_DIR = build
+######################################
+#common variables for other module or components
+C_SOURCES =
+C_DEFS =
+C_INCLUDES =
+LDFLAGS =
+
+######################################
+
+###############LOAD MQTT###############
+#load the mqtt if enabled
+ifeq ($(WITH_MQTT), yes)
+
+#LOAD THE MQTT LIB
+include $(TOP_DIR)/components/mqtt/mqtt.mk
+#LOAD THE ATINY_MQTT
+include $(TOP_DIR)/components/connectivity/agent_tiny/atiny_mqtt/atiny_mqtt.mk
+#LOAD THE ATINY_MQTT_DEMO
+include $(TOP_DIR)/demos/agenttiny_mqtt/atiny_mqtt_demo.mk
+
+endif
+
+######################################
 
 ######################################
 # source
@@ -83,7 +106,8 @@ CMSIS_SRC =  \
 
 ARCH_SRC =  \
         ${wildcard $(TOP_DIR)/arch/arm/arm-m/src/*.c} \
-        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv6-m/*.c}
+        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv6-m/*.c} \
+        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv6-m/gcc/*.c}
         C_SOURCES += $(ARCH_SRC)
 		
 ifeq ($(WITH_LWIP), yes)
@@ -158,19 +182,7 @@ ATINY_LOG = \
         C_SOURCES += $(ATINY_LOG)
 
 
-ifeq ($(WITH_MQTT), yes)
-MQTT_SRC = \
-        ${wildcard $(TOP_DIR)/components/connectivity/mqtt/MQTTPacket/src/*.c} \
-        $(TOP_DIR)/components/connectivity/mqtt/MQTTClient-C/src/MQTTClient.c \
-        $(TOP_DIR)/components/connectivity/mqtt/MQTTClient-C/src/liteOS/MQTTliteos.c
-        C_SOURCES += $(MQTT_SRC)
-ATINY_TINY_MQTT_SRC = \
-        ${wildcard $(TOP_DIR)/components/connectivity/agent_tiny/mqtt_client/*.c}
-        C_SOURCES += $(ATINY_TINY_MQTT_SRC)
-AGENT_DEMO_MQTT_SRC = \
-        ${wildcard $(TOP_DIR)/demos/agenttiny_mqtt/*.c}
-        C_SOURCES += $(AGENT_DEMO_MQTT_SRC)
-endif
+
 
 ifeq ($(USE_FOTA), yes)
 OTA_SRC = \
@@ -191,11 +203,8 @@ USER_SRC =  \
 
 
 # ASM sources
-ASM_SOURCES_s =  \
-        ${wildcard $(PROJECTBASE)/startup_LPC51U68.s}
-
 ASM_SOURCES_S =  \
-       ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv6-m/gcc/los_dispatch_gcc.S}
+       ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv6-m/gcc/los_startup.S}
 
 
 ######################################
@@ -221,7 +230,7 @@ MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
 AS_DEFS =
 
 # C defines
-C_DEFS =  \
+C_DEFS +=  \
         -D LWM2M_LITTLE_ENDIAN \
         -D LWM2M_CLIENT_MODE
 
@@ -336,13 +345,6 @@ OTA_INC = \
         C_INCLUDES += $(OTA_INC)
 endif
 
-ifeq ($(WITH_MQTT), yes)	
-MQTT_INC = \
-        -I $(TOP_DIR)/components/connectivity/mqtt/MQTTClient-C/src \
-        -I $(TOP_DIR)/components/connectivity/mqtt/MQTTClient-C/src/liteOS \
-		-I $(TOP_DIR)/components/connectivity/mqtt/MQTTPacket/src
-        C_INCLUDES += $(MQTT_INC)
-endif
 
 DEMO_INC = \
         -I $(TOP_DIR)/demos
@@ -370,6 +372,9 @@ CFLAGS += -mfloat-abi=soft
 # Generate dependency information
 CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$@"
 
+# excluded unnecessary warnings
+CFLAGS += -Wno-missing-braces
+
 
 #######################################
 # LDFLAGS
@@ -395,16 +400,11 @@ all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET
 OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(C_SOURCES:.c=.o)))
 vpath %.c $(sort $(dir $(C_SOURCES)))
 # list of ASM program objects
-OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES_s:.s=.o)))
-vpath %.s $(sort $(dir $(ASM_SOURCES_s)))
 OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES_S:.S=.o)))
 vpath %.S $(sort $(dir $(ASM_SOURCES_S)))
 
 $(BUILD_DIR)/%.o: %.c Makefile config.mk prune.mk | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
-
-$(BUILD_DIR)/%.o: %.s Makefile config.mk prune.mk | $(BUILD_DIR)
-	$(AS) -c $(CFLAGS) $< -o $@
 
 $(BUILD_DIR)/%.o: %.S Makefile config.mk prune.mk | $(BUILD_DIR)
 	$(AS) -c $(CFLAGS) $< -o $@

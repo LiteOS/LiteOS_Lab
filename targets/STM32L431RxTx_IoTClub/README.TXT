@@ -1,0 +1,1 @@
+NOTE: This project has been renamed as `IoTClub-EVB-M1`, please use `IoTClub-EVB-M1` instead.

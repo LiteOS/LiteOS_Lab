@@ -38,6 +38,25 @@
 #include <shell.h>
 #include <los_dev.h>
 
+#include "mem.h"
+
+#if defined (__CC_ARM)
+extern char Image$$RW_IRAM1$$ZI$$Limit [];
+extern char Image$$ARM_LIB_STACKHEAP$$Base [];
+#else
+#error "fix me"
+#endif
+
+const struct phys_mem system_phys_mem [] =
+    {
+#if defined (__CC_ARM)
+        { Image$$RW_IRAM1$$ZI$$Limit, Image$$ARM_LIB_STACKHEAP$$Base },
+#else
+#error "fix me"
+#endif
+        { 0, 0 }
+    };
+
 static VOID HardWare_Init(VOID)
 {
     SystemClock_Config();

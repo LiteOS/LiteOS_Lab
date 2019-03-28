@@ -412,56 +412,5 @@ __mpusetloop1
     MSR     PRIMASK, R12
     BX      LR
 
-#ifdef LOSCFG_ENABLE_MPU
-    EXPORT  osEnterPrivileged
-    EXPORT  osExitPrivileged
-    EXPORT  osIsPrivileged
-    EXPORT  SVC_Handler
-
-SVC_Handler
-    MRS     R0, PSP
-    LDR     R1, [R0]           ; get the previous PSR in R0
-    CMP     R1, #3
-    BNE     __ret
-    LDR     R1, [R0, #0x10]    ; get the magic in R12
-    CMP     R1, #0x5a
-    BNE     __ret
-
-    MOVS    R0, #2
-    MSR     CONTROL, R0
-__ret
-    BX      LR
-
-osEnterPrivileged
-    MRS     R0, CONTROL
-    MOVS    R1, #1
-    TST     R0, R1
-    BEQ     __ret
-
-    MOVS    R1, #0x5a   ; magic
-    MOV     R12, R1
-
-    SVC     #0
-
-    BX      LR
-
-osExitPrivileged
-    MOVS    R1, #1
-    TST     R0, R1
-    BEQ     __ret
-
-    MRS     R0, CONTROL
-    ADDS    R0, R0, #1
-    MSR     CONTROL, R0
-
-    BX      LR
-
-osIsPrivileged
-    MRS     R0, CONTROL
-    MOVS    R1, #1
-    ANDS    R0, R0, R1
-    BX      LR
-#endif
-
     END
 

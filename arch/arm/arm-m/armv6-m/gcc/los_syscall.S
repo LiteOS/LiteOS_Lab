@@ -62,17 +62,11 @@
     .type SVC_Handler, %function
 SVC_Handler:
     MRS   R3, CONTROL
-    MOVS  R1, #2
+    MOVS  R1, #0
     MSR   CONTROL, R1
 
-    /* if r7 == -1, enter privileged */
+    /* if LR bit 2 is 0, using MSP, 1 using PSP */
 
-    MOVS  R1, #0
-    MVNS  R1, R1
-    CMP   R1, r7
-    BNE   0f
-    BX    LR
-0:
     MOVS  R1, #4
     MOV   R0, LR
     TST   R0, R1
@@ -80,13 +74,13 @@ SVC_Handler:
     BEQ   0f
     MRS   R0, PSP
 0:
-    LDR   R1, [R0, #4 * 6]
-    ORRS  R1, R3
+    LDR   R1, [R0, #4 * 6]      /* get original PC */
+    ORRS  R1, R3                /* get CONTROL.nPRIV (usr-bit) */
     STR   R1, [R0, #4 * 4]      /* save original (PC | usr-bit) in R12 */
-    
+
     ADR   R1, __svc_usr_stub
     STR   R1, [R0, #4 * 6]
-    
+
     BX    LR
 
     NOP
@@ -95,12 +89,12 @@ __svc_usr_stub:
     PUSH  {R4, R5}
     MOV   R4, R12
     PUSH  {R4, LR}
-    
+
     LDR   R4, =svc_tables
 
     LSRS  R5, r7, #22           /* get module id in r0 */
     LDR   R4, [r4, r5]
-        
+
     CMP   R4, #0
     BEQ   2f
 
@@ -108,16 +102,16 @@ __svc_usr_stub:
     LSRS  R5, r5, #14           /* get svc id in r1 */
 
     LDR   R4, [r4, r5]
-    
+
     CMP   R4, #0
     BEQ   2f
-    
+
     BLX   R4
 0:
     POP   {R2, R3}
     POP   {R4, R5}
     MOV   LR, R3
-    
+
     MOVS  R3, #1
     TST   R2, R3
     BEQ   1f
