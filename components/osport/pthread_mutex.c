@@ -40,7 +40,7 @@ static const mutex_attr_t def_mutex_attr =
     .type = MUTEX_DEFAULT,
 };
 
-int pthread_mutex_init(mutex_t *mutex, const mutex_attr_t *attr)
+int mutex_init(mutex_t *mutex, const mutex_attr_t *attr)
 {
     int ret;
     if(attr == NULL)
@@ -75,7 +75,7 @@ int mutex_trylock(mutex_t *mutex)
 
     uwIntSave = LOS_IntLock();
     if(g_pstAllMux[mutex->lock].pstOwner == (LOS_TASK_CB *)g_stLosTask.pstRunTask &&
-       mutex->attr.type != PTHREAD_MUTEX_RECURSIVE)
+       mutex->attr.type != MUTEX_RECURSIVE)
     {
         LOS_IntRestore(uwIntSave);
         return EDEADLK;
@@ -96,7 +96,7 @@ int mutex_lock(mutex_t *mutex)
 
     uwIntSave = LOS_IntLock();
     if(g_pstAllMux[mutex->lock].pstOwner == (LOS_TASK_CB *)g_stLosTask.pstRunTask &&
-       mutex->attr.type != PTHREAD_MUTEX_RECURSIVE)
+       mutex->attr.type != MUTEX_RECURSIVE)
     {
         LOS_IntRestore(uwIntSave);
         return EDEADLK;
@@ -117,7 +117,7 @@ int mutex_timedlock(mutex_t *mutex, const struct time_spec *ts)
 
     uwIntSave = LOS_IntLock();
     if(g_pstAllMux[mutex->lock].pstOwner == (LOS_TASK_CB *)g_stLosTask.pstRunTask &&
-       mutex->attr.type != PTHREAD_MUTEX_RECURSIVE)
+       mutex->attr.type != MUTEX_RECURSIVE)
     {
         LOS_IntRestore(uwIntSave);
         return EDEADLK;
@@ -168,7 +168,7 @@ int mutex_attr_gettype(const mutex_attr_t *attr, int *type)
 {
     if(attr && type)
     {
-        if(attr->type == MUTEX_NORMAL || attr->type == PTHREAD_MUTEX_RECURSIVE)
+        if(attr->type == MUTEX_NORMAL || attr->type == MUTEX_RECURSIVE)
         {
             *type = attr->type;
             return 0;
@@ -182,7 +182,7 @@ int mutex_attr_settype(mutex_attr_t *attr, int type)
 {
     if(attr)
     {
-        if(type == MUTEX_NORMAL || type == PTHREAD_MUTEX_RECURSIVE)
+        if(type == MUTEX_NORMAL || type == MUTEX_RECURSIVE)
         {
             attr->type = type;
             return 0;

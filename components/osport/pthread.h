@@ -50,7 +50,7 @@ int once(once_t *once_control, void (* init_func)(void));
 enum
 {
     MUTEX_NORMAL = 0,
-    PTHREAD_MUTEX_RECURSIVE,
+    MUTEX_RECURSIVE,
     MUTEX_ERRORCHECK,
     MUTEX_DEFAULT = MUTEX_NORMAL
 };
@@ -62,21 +62,19 @@ struct mutex_attr
 
 typedef struct mutex_attr mutex_attr_t;
 
-typedef struct mutex_1
+typedef struct mutex
 {
     mutex_attr_t attr;
     u32_t lock;
 } mutex_t;
 
-typedef struct mutex
-{
-    mutex_attr_t attr;
-    u32_t lock;
-} pthread_mutex_t;
 
 
 /* POSIX pthread mutex interface */
 int pthread_mutex_init(pthread_mutex_t *mutex, const mutex_attr_t *attr);
+
+/* POSIX pthread mutex interface */
+int mutex_init(mutex_t *mutex, const mutex_attr_t *attr);
 int mutex_destroy(mutex_t *mutex);
 int mutex_trylock(mutex_t *mutex);
 int mutex_lock(mutex_t *mutex);
