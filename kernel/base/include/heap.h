@@ -35,7 +35,10 @@
 #ifndef __HEAP_H__
 #define __HEAP_H__
 
+#include <los_config.h>
+
 #include <stddef.h>
+#include <stdbool.h>
 
 #include <los_mux.h>
 
@@ -43,12 +46,13 @@
 
 #include "chunk.h"
 
-#undef  LOSCFG_CONFIG_CM_TLSF
-#define LOSCFGTW_CONFIG_CM_BESTFIT
+#if !defined (LOSCFG_CONFIG_CM_TLSF) && !defined (LOSCFG_CONFIG_CM_BESTFIT)
+#define LOSCFG_CONFIG_CM_BESTFIT
+#endif
 
-#if   defined (LOSCFGTW_CONFIG_CM_TLSF)
+#if   defined (LOSCFG_CONFIG_CM_TLSF)
 #include "cm-tlsf.h"
-#elif defined (LOSCFGTW_CONFIG_CM_BESTFIT)
+#elif defined (LOSCFG_CONFIG_CM_BESTFIT)
 #include "cm-bestfit.h"
 #endif
 
@@ -139,6 +143,7 @@ extern int    heap_free        (heap_t * heap, char * mem);
 extern char * heap_realloc     (heap_t * heap, char * ptr, size_t size);
 extern int    heap_init        (heap_t * heap);
 extern int    heap_add         (heap_t * heap, char * buff, size_t size);
+extern void __dump_heap        (heap_t * heap, bool show_chunk);
 #if (LOSCFG_MEM_STATISTICS == YES)
 extern int    heap_stat_get    (heap_t * heap, mem_stat_t * stat);
 #endif

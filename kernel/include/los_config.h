@@ -767,6 +767,15 @@ extern UINT32 g_sys_mem_addr_end;
 #define LOSCFG_ENABLE_MPU                                   NO
 #endif
 
+/**
+ * @ingroup los_config
+ * Maximum number of task local storage entries.
+ */
+
+#ifndef LOSCFG_TASK_TLS_LIMIT
+#define LOSCFG_TASK_TLS_LIMIT                               0
+#endif
+
 /*=============================================================================
                                        Declaration of Huawei LiteOS module initialization functions
 =============================================================================*/

@@ -96,6 +96,32 @@ LITE_OS_SEC_TEXT_MINOR static inline UINT32 LOS_SysTickGetIntStatus(VOID)
     return SCB->ICSR & SCB_ICSR_PENDSTSET_Msk;
 }
 
+/**
+ *@ingroup los_hwi
+ *@brief Get value from xPSR register.
+ *
+ *@par Description:
+ *<ul>
+ *<li>This API is used to Get value from xPSR register.</li>
+ *</ul>
+ *@attention
+ *<ul>
+ *<li>None.</li>
+ *</ul>
+ *
+ *@param None.
+ *
+ *@retval xPSR register value.
+ *@par Dependency:
+ *<ul><li>los_hwi.h: the header file that contains the API declaration.</li></
+ul>
+ *@see LOS_IntRestore
+ *@since Huawei LiteOS V100R001C00
+ */
+extern VOID LOS_GetCpuCycle(UINT32 *puwCntHi, UINT32 *puwCntLo);
+
+extern UINT32 LOS_SysTickCurrCycleGet(VOID);
+
 extern VOID LOS_SysTickReload(UINT32 uwCyclesPerTick);
 
 #endif

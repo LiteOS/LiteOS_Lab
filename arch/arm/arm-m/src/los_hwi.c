@@ -46,47 +46,6 @@ extern "C" {
 #endif /* __cplusplus */
 #endif /* __cplusplus */
 
-#if (LOSCFG_PLATFORM_HWI == YES)
-
-extern void SVC_Handler(void);
-
-/*lint -save -e40 -e522 -e533*/
-
-LITE_OS_SEC_DATA_INIT UINT32  g_vuwIntCount = 0;
-/*lint -restore*/
-#ifdef __ICCARM__
-#pragma  location = ".data.vector"
-#elif defined (__CC_ARM) || defined (__GNUC__)
-LITE_OS_SEC_VEC
-#endif
-
-HWI_PROC_FUNC m_pstHwiForm[OS_VECTOR_CNT] =
-{
-    (HWI_PROC_FUNC)0,                    // [0] Top of Stack
-    (HWI_PROC_FUNC)Reset_Handler,        // [1] reset
-    (HWI_PROC_FUNC)osHwiDefaultHandler,  // [2] NMI Handler
-    (HWI_PROC_FUNC)osHwiDefaultHandler,  // [3] Hard Fault Handler
-    (HWI_PROC_FUNC)osHwiDefaultHandler,  // [4] MPU Fault Handler
-    (HWI_PROC_FUNC)osHwiDefaultHandler,  // [5] Bus Fault Handler
-    (HWI_PROC_FUNC)osHwiDefaultHandler,  // [6] Usage Fault Handler
-    (HWI_PROC_FUNC)0,                    // [7] Reserved
-    (HWI_PROC_FUNC)0,                    // [8] Reserved
-    (HWI_PROC_FUNC)0,                    // [9] Reserved
-    (HWI_PROC_FUNC)0,                    // [10] Reserved
-    (HWI_PROC_FUNC)SVC_Handler,          // [11] SVCall Handler
-    (HWI_PROC_FUNC)osHwiDefaultHandler,  // [12] Debug Monitor Handler
-    (HWI_PROC_FUNC)0,                    // [13] Reserved
-    (HWI_PROC_FUNC)PendSV_Handler,       // [14] PendSV Handler
-    (HWI_PROC_FUNC)osHwiDefaultHandler,  // [15] SysTick Handler
-};
-#if (OS_HWI_WITH_ARG == YES)
-LITE_OS_SEC_DATA_INIT HWI_SLAVE_FUNC m_pstHwiSlaveForm[OS_VECTOR_CNT] = {{(HWI_PROC_FUNC)0,(HWI_ARG_T)0}};
-#else
-LITE_OS_SEC_DATA_INIT HWI_PROC_FUNC m_pstHwiSlaveForm[OS_VECTOR_CNT] = {0};
-#endif
-
-#endif /*(LOSCFG_PLATFORM_HWI == YES)*/
-
 /*****************************************************************************
  Function    : osIntNumGet
  Description : Get a interrupt number
@@ -110,9 +69,69 @@ LITE_OS_SEC_TEXT_MINOR UINT32 osIntNumGet(VOID)
 /*lint -e529*/
 LITE_OS_SEC_TEXT_MINOR VOID  osHwiDefaultHandler(VOID)
 {
-    UINT32 uwIrqNum = osIntNumGet();
-    PRINT_ERR("%s irqnum:%d\n", __FUNCTION__, uwIrqNum);
+    PRINT_ERR("%s irqnum:%d\n", __FUNCTION__, osIntNumGet());
+
     while(1);
+}
+
+/*****************************************************************************
+ Function    : NMI_Handler
+ Description : default handler of nmi
+ Input       : None
+ Output      : None
+ Return      : None
+ *****************************************************************************/
+WEAK VOID NMI_Handler (VOID)
+{
+    osHwiDefaultHandler();
+}
+
+/*****************************************************************************
+ Function    : HardFault_Handler
+ Description : default handler of hard fault
+ Input       : None
+ Output      : None
+ Return      : None
+ *****************************************************************************/
+WEAK VOID HardFault_Handler (VOID)
+{
+    osHwiDefaultHandler();
+}
+
+/*****************************************************************************
+ Function    : MemManage_Handler
+ Description : default handler of MPU fault
+ Input       : None
+ Output      : None
+ Return      : None
+ *****************************************************************************/
+WEAK VOID MemManage_Handler (VOID)
+{
+    osHwiDefaultHandler();
+}
+
+/*****************************************************************************
+ Function    : BusFault_Handler
+ Description : default handler of bus fault
+ Input       : None
+ Output      : None
+ Return      : None
+ *****************************************************************************/
+WEAK VOID BusFault_Handler (VOID)
+{
+    osHwiDefaultHandler();
+}
+
+/*****************************************************************************
+ Function    : UsageFault_Handler
+ Description : default handler of usage fault
+ Input       : None
+ Output      : None
+ Return      : None
+ *****************************************************************************/
+WEAK VOID UsageFault_Handler (VOID)
+{
+    osHwiDefaultHandler();
 }
 
 /*****************************************************************************
@@ -122,13 +141,70 @@ LITE_OS_SEC_TEXT_MINOR VOID  osHwiDefaultHandler(VOID)
  Output      : None
  Return      : None
  *****************************************************************************/
-/*lint -e529*/
 WEAK VOID SVC_Handler (VOID)
 {
-    UINT32 uwIrqNum = osIntNumGet();
-    PRINT_ERR("%s irqnum:%d\n", __FUNCTION__, uwIrqNum);
-    while(1);
+    osHwiDefaultHandler();
 }
+
+/*****************************************************************************
+ Function    : Debug_Handler
+ Description : default handler of debug
+ Input       : None
+ Output      : None
+ Return      : None
+ *****************************************************************************/
+WEAK VOID Debug_Handler (VOID)
+{
+    osHwiDefaultHandler();
+}
+
+extern void Reset_Handler(void);
+extern void PendSV_Handler(void);
+
+VOID osInterrupt(VOID);
+
+/*lint -save -e40 -e522 -e533*/
+
+LITE_OS_SEC_DATA_INIT UINT32 g_vuwIntCount = 0;
+
+/*lint -restore*/
+#if    defined (__ICCARM__)
+#pragma location = ".intvec"
+#elif  defined (__CC_ARM)
+__attribute__ ((section("RESET")))
+#elif  defined (__GNUC__)
+__attribute__ ((section(".isr_vector")))
+#endif
+
+VOID (* const g_pstHwiForm[])(VOID)  =
+{
+    NULL,                // [0] Top of Stack
+    Reset_Handler,       // [1] reset
+    NMI_Handler,         // [2] NMI Handler
+    HardFault_Handler,   // [3] Hard Fault Handler
+    MemManage_Handler,   // [4] MPU Fault Handler
+    BusFault_Handler,    // [5] Bus Fault Handler
+    UsageFault_Handler,  // [6] Usage Fault Handler
+    NULL,                // [7] Reserved
+    NULL,                // [8] Reserved
+    NULL,                // [9] Reserved
+    NULL,                // [10] Reserved
+    SVC_Handler,         // [11] SVCall Handler
+    Debug_Handler,       // [12] Debug Monitor Handler
+    NULL,                // [13] Reserved
+    PendSV_Handler,      // [14] PendSV Handler
+    osInterrupt,         // [15] SysTick Handler, can be connected with LOS_HwiCreate
+
+    /* so SysTick Handler will be index == 0, following IRQs starts from 1 */
+
+#include "__vectors.h"
+};
+
+/* SysTick_IRQn == -1, and it have the index of 0, IRQs starts from 1 */
+
+#define VECTOR_IDX_OFFSET       1
+
+HWI_HANDLER_T m_pstHwiSlaveForm[OS_HWI_MAX_NUM + VECTOR_IDX_OFFSET];
 
 /*****************************************************************************
  Function    : osInterrupt
@@ -137,7 +213,7 @@ WEAK VOID SVC_Handler (VOID)
  Output      : None
  Return      : None
  *****************************************************************************/
-LITE_OS_SEC_TEXT VOID  osInterrupt(VOID)
+LITE_OS_SEC_TEXT VOID osInterrupt(VOID)
 {
     UINT32 uwHwiIndex;
     UINT32 uwIntSave;
@@ -147,33 +223,33 @@ LITE_OS_SEC_TEXT VOID  osInterrupt(VOID)
 #endif
 
     uwIntSave = LOS_IntLock();
-
     g_vuwIntCount++;
-
     LOS_IntRestore(uwIntSave);
 
     uwHwiIndex = osIntNumGet();
+
 #if (LOSCFG_KERNEL_TICKLESS == YES)
     osUpdateKernelTickCount(uwHwiIndex);
 #endif
 
+	uwHwiIndex = uwHwiIndex - OS_SYS_VECTOR_CNT + VECTOR_IDX_OFFSET;
+
+    if (m_pstHwiSlaveForm[uwHwiIndex].pfnHandler != NULL)
+    {
 #if (OS_HWI_WITH_ARG == YES)
-    if (m_pstHwiSlaveForm[uwHwiIndex].pfnHandler!=0)
-    {
-        m_pstHwiSlaveForm[uwHwiIndex].pfnHandler((VOID*)m_pstHwiSlaveForm[uwHwiIndex].pParm);
-    }
+        m_pstHwiSlaveForm[uwHwiIndex].pfnHandler(m_pstHwiSlaveForm[uwHwiIndex].pParm);
 #else
-    if (m_pstHwiSlaveForm[uwHwiIndex] !=0)
-    {
-        m_pstHwiSlaveForm[uwHwiIndex]();
-    }
+        m_pstHwiSlaveForm[uwHwiIndex].pfnHandler();
 #endif
+    }
+    else
+    {
+        osHwiDefaultHandler();
+    }
+
     uwIntSave = LOS_IntLock();
-
     g_vuwIntCount--;
-
     LOS_IntRestore(uwIntSave);
-
 }
 /*****************************************************************************
  Function    : osHwiInit
@@ -184,16 +260,13 @@ LITE_OS_SEC_TEXT VOID  osInterrupt(VOID)
  *****************************************************************************/
 LITE_OS_SEC_TEXT_INIT VOID osHwiInit()
 {
-    UINT32 uwIndex;
+#if ((__CORTEX_M == 0U) || (__CORTEX_M == 23U)) && \
+    defined (__VTOR_PRESENT) && (__VTOR_PRESENT == 1U)
+    SCB->VTOR = (UINT32)g_pstHwiForm;
+#endif
 
-    for(uwIndex = OS_SYS_VECTOR_CNT; uwIndex < OS_VECTOR_CNT; uwIndex++)
-    {
-        m_pstHwiForm[uwIndex] = (HWI_PROC_FUNC)osHwiDefaultHandler;
-    }
-
-    /* Interrupt vector table location */
-    SCB->VTOR = (UINT32)m_pstHwiForm;
 #if (__CORTEX_M >= 0x03U)  /* only for Cortex-M3 and above */
+    SCB->VTOR = (UINT32)g_pstHwiForm;
     NVIC_SetPriorityGrouping(OS_NVIC_AIRCR_PRIGROUP);
 #endif
 
@@ -210,11 +283,11 @@ LITE_OS_SEC_TEXT_INIT VOID osHwiInit()
  Output      : None
  Return      : OS_SUCCESS on success or error code on failure
  *****************************************************************************/
-LITE_OS_SEC_TEXT_INIT UINT32 LOS_HwiCreate( HWI_HANDLE_T  uwHwiNum,
-                                      HWI_PRIOR_T   usHwiPrio,
-                                      HWI_MODE_T    usMode,
-                                      HWI_PROC_FUNC pfnHandler,
-                                      HWI_ARG_T     uwArg )
+LITE_OS_SEC_TEXT_INIT UINT32 LOS_HwiCreate(HWI_HANDLE_T  uwHwiNum,
+                                           HWI_PRIOR_T   usHwiPrio,
+                                           HWI_MODE_T    usMode,
+                                           HWI_PROC_FUNC pfnHandler,
+                                           HWI_ARG_T     uwArg )
 {
     UINTPTR uvIntSave;
 
@@ -223,37 +296,35 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_HwiCreate( HWI_HANDLE_T  uwHwiNum,
         return OS_ERRNO_HWI_PROC_FUNC_NULL;
     }
 
-    if (uwHwiNum >= OS_HWI_MAX_NUM)
+    /* SysTick_IRQn == (UINT32) -1 */
+
+    if ((uwHwiNum >= OS_HWI_MAX_NUM) && (uwHwiNum != (UINT32)SysTick_IRQn))
     {
         return OS_ERRNO_HWI_NUM_INVALID;
     }
 
-    if (m_pstHwiForm[uwHwiNum + OS_SYS_VECTOR_CNT] != (HWI_PROC_FUNC)osHwiDefaultHandler)
-    {
-        return OS_ERRNO_HWI_ALREADY_CREATED;
-    }
-
-    //because unsigned interger could be less than zero,so if OS_HWI_PRIO_HIGHEST is zero,there 
-    //will be warning using usHwiPrio < OS_HWI_PRIO_HIGHEST 
+    //because unsigned interger could be less than zero,so if OS_HWI_PRIO_HIGHEST is zero,there
+    //will be warning using usHwiPrio < OS_HWI_PRIO_HIGHEST
     //  if ((usHwiPrio > OS_HWI_PRIO_LOWEST) || (usHwiPrio < OS_HWI_PRIO_HIGHEST))  --modified by  zhangqf
-    if ( usHwiPrio > OS_HWI_PRIO_LOWEST )  
+    if (usHwiPrio > OS_HWI_PRIO_LOWEST)
     {
         return OS_ERRNO_HWI_PRIO_INVALID;
     }
 
     uvIntSave = LOS_IntLock();
+
+    m_pstHwiSlaveForm[uwHwiNum + VECTOR_IDX_OFFSET].pfnHandler = pfnHandler;
+
 #if (OS_HWI_WITH_ARG == YES)
-    osSetVector(uwHwiNum, pfnHandler, uwArg);
-#else
-    osSetVector(uwHwiNum, pfnHandler);
+    m_pstHwiSlaveForm[uwHwiNum + VECTOR_IDX_OFFSET].pParm = (VOID*)uwArg;
 #endif
+
     NVIC_EnableIRQ((IRQn_Type)uwHwiNum);
     NVIC_SetPriority((IRQn_Type)uwHwiNum, usHwiPrio);
 
     LOS_IntRestore(uvIntSave);
 
     return LOS_OK;
-
 }
 
 /*****************************************************************************
@@ -275,34 +346,11 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_HwiDelete(HWI_HANDLE_T uwHwiNum)
     NVIC_DisableIRQ((IRQn_Type)uwHwiNum);
 
     uwIntSave = LOS_IntLock();
-
-    m_pstHwiForm[uwHwiNum + OS_SYS_VECTOR_CNT] = (HWI_PROC_FUNC)osHwiDefaultHandler;
+    m_pstHwiSlaveForm[uwHwiNum + VECTOR_IDX_OFFSET].pfnHandler = NULL;
 
     LOS_IntRestore(uwIntSave);
 
     return LOS_OK;
-}
-
-#else
-
-/*****************************************************************************
- Function    : SysTick_Handler
- Description : This function handles SysTick exception, Call LiteOS interface
-               osTickHandler.
- Input       : None
- Output      : None
- Return      : None
- *****************************************************************************/
-void SysTick_Handler(void)
-{
-    if (g_bSysTickStart)
-    {
-        osTickHandler();
-    }
-    else
-    {
-        g_ullTickCount++;
-    }
 }
 
 #endif /*(LOSCFG_PLATFORM_HWI == YES)*/

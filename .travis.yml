@@ -14,10 +14,4 @@ before_install:
 
 
 script:
-  -  make -j2 -C targets/Cloud_STM32F429IGTx_FIRE/GCC
-  -  make -j2 -C targets/Mini_Project/cortex-m0plus_without_driver/GCC
-  -  make -j2 -C targets/Mini_Project/cortex-m3_without_driver/GCC
-  -  make -j2 -C targets/Mini_Project/cortex-m4_without_driver/GCC
-  -  make -j2 -C targets/NXP_LPC51U68/GCC
-  -  make -j2 -C targets/STM32F103VET6_NB_GCC/GCC
-  -  make -j2 -C targets/STM32L431RxTx_IoTClub/GCC
+  -  bash ./.ci-build.sh

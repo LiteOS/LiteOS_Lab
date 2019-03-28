@@ -45,7 +45,7 @@
 #include <los_task.ph>
 #endif
 
-extern void __cmd_dump_heap (heap_t * heap, bool show_chunk);
+#include <stdbool.h>
 
 /*****************************************************************************
  Function : LOS_MemInit
@@ -262,9 +262,11 @@ VOID * osSlabCtrlHdrGet (VOID * pPool)
 #endif
 }
 
-VOID LOS_MemInfo (bool bShowDetail)
+VOID LOS_MemInfo (VOID * pPool, BOOL bShowDetail)
     {
-    __cmd_dump_heap ((heap_t *) m_aucSysMem0, bShowDetail);
+    heap_t * pHeap = pPool == NULL ? (heap_t *) m_aucSysMem0 : (heap_t *) pPool;
+
+    __dump_heap (pHeap, (bool)bShowDetail);
     }
 
 #endif
