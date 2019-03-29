@@ -77,26 +77,7 @@ __attribute__((noreturn)) __attribute__((naked)) void boot_app(uint32_t stack,ui
 }
 #endif
 
-typedef enum
-{
-    BOARD_INIT = 0,
-    BOARD_BCK,
-    BOARD_UPDATE,
-    BOARD_ROLLBACK,
-} board_state;
-
 typedef void (*jump_func)(void);
-
-//static void set_msp(uint32_t stack)
-//{
-//    __asm volatile ("MSR MSP, r0; BX r14");
-//}
-
-//__ASM void set_msp(uint32_t stack)
-//{
-//	MSR MSP, r0
-//	BX r14
-//}
 
 static int prv_spi2inner_copy(uint32_t addr_source, int32_t image_len)
 {
