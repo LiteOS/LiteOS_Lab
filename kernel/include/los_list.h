@@ -77,7 +77,10 @@ typedef struct LOS_DL_LIST
  *@see
  *@since Huawei LiteOS V100R001C00
  */
-LITE_OS_SEC_ALW_INLINE STATIC_INLINE VOID LOS_ListInit(LOS_DL_LIST *pstList)
+#define SS static inline
+//#undef STATIC_INLINE
+//#define STATIC_INLINE static inline
+LITE_OS_SEC_ALW_INLINE STATIC_INLINE /*SS*/ VOID LOS_ListInit(LOS_DL_LIST *pstList)
 {
     pstList->pstNext = pstList;
     pstList->pstPrev = pstList;
