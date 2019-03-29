@@ -59,12 +59,44 @@
 
 #define OTA_COPY_BUF_SIZE          0x1000
 
+
+#ifdef __CC_ARM
+__asm void boot_app(uint32_t stack,uint32_t pc)
+{
+	PRESERVE8
+	msr msp, r0
+	bx r1
+}
+#elif defined __GNUC__
+__attribute__((noreturn)) __attribute__((naked)) void boot_app(uint32_t stack,uint32_t pc)
+{
+	__asm volatile (
+			"msr msp, %0\n\t"
+			"bx %1\n\t"
+			::"r"(stack),"r"(pc));
+}
+#endif
+
+typedef enum
+{
+    BOARD_INIT = 0,
+    BOARD_BCK,
+    BOARD_UPDATE,
+    BOARD_ROLLBACK,
+} board_state;
+
 typedef void (*jump_func)(void);
 
-static void set_msp(uint32_t stack)
-{
-    __asm volatile ("MSR MSP, r0; BX r14");
-}
+//static void set_msp(uint32_t stack)
+//{
+//    __asm volatile ("MSR MSP, r0; BX r14");
+//}
+
+//__ASM void set_msp(uint32_t stack)
+//{
+//	MSR MSP, r0
+//	BX r14
+//}
 
 static int prv_spi2inner_copy(uint32_t addr_source, int32_t image_len)
 {
@@ -151,7 +183,6 @@ static int prv_inner2spi_copy(int32_t image_len)
 
 int board_jump2app(void)
 {
-    jump_func jump;
     uint32_t pc = *(__IO uint32_t *)(OTA_DEFAULT_IMAGE_ADDR + 4);
     uint32_t stack = *(__IO uint32_t *)(OTA_DEFAULT_IMAGE_ADDR);
 
@@ -159,9 +190,7 @@ int board_jump2app(void)
     {
         if ((stack & OTA_STACK_MASK) == OTA_MEMORY_BASE)
         {
-            jump = (jump_func)pc;
-            set_msp(stack);
-            jump();
+            boot_app(stack,pc);
         }
         else
         {
