@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2019>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -32,21 +32,130 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef __MEM_H__
-#define __MEM_H__
+#include "los_task.h"
+#include "msp430.h"
 
-#include <stddef.h>
+extern UINT32 uart_init (void);
+extern void uart_puts (unsigned char * str);
+extern void uart_putc (unsigned char ch);
+extern unsigned char uart_getc (void);
 
-#include <heap.h>
+UINT32 g_TskHandle;
 
-struct phys_mem
+static void HardWare_Init (void)
 {
-    unsigned long start;
-    unsigned long end;
-};
+    WDTCTL = WDTPW + WDTHOLD;
+}
 
-extern heap_t                kernel_heap [1];
-extern const struct phys_mem system_phys_mem [];
+void task1 (void)
+{
+    int i;
 
-#endif /* __MEM_H__ */
+    for (;;) {
+        for (i = 0; i < 20; i++)
+        {
+            uart_putc ('1');
+        }
+
+        LOS_TaskDelay (5);
+    }
+}
+
+void task2 (void)
+{
+    for (;;) {
+        uart_putc ('2');
+    }
+}
+
+void task3 (void)
+{
+    for (;;) {
+        uart_putc ('3');
+    }
+}
+
+void rxtxt (void)
+{
+    unsigned char ch;
+
+    for (;;) {
+        ch = uart_getc ();
+        uart_putc (ch);
+    }
+}
+
+UINT32 creat_main_task()
+{
+    UINT32 uwRet = LOS_OK;
+    TSK_INIT_PARAM_S task_init_param;
+
+    task_init_param.usTaskPrio = 1;
+    task_init_param.pcName = "t1";
+    task_init_param.pfnTaskEntry = (TSK_ENTRY_FUNC)task1;
+    task_init_param.uwStackSize = 0x100;
+
+    uwRet = LOS_TaskCreate(&g_TskHandle, &task_init_param);
+    if(LOS_OK != uwRet)
+    {
+        return uwRet;
+    }
+
+    task_init_param.usTaskPrio = 2;
+    task_init_param.pcName = "t2";
+    task_init_param.pfnTaskEntry = (TSK_ENTRY_FUNC)task2;
+
+    uwRet = LOS_TaskCreate(&g_TskHandle, &task_init_param);
+    if(LOS_OK != uwRet)
+    {
+        return uwRet;
+    }
+
+    task_init_param.pcName = "t3";
+    task_init_param.pfnTaskEntry = (TSK_ENTRY_FUNC)task3;
+
+    uwRet = LOS_TaskCreate(&g_TskHandle, &task_init_param);
+    if(LOS_OK != uwRet)
+    {
+        return uwRet;
+    }
+
+    task_init_param.usTaskPrio = 0;
+    task_init_param.pcName = "rx-tx-test";
+    task_init_param.pfnTaskEntry = (TSK_ENTRY_FUNC)rxtxt;
+
+    uwRet = LOS_TaskCreate(&g_TskHandle, &task_init_param);
+    if(LOS_OK != uwRet)
+    {
+        return uwRet;
+    }
+
+    return uwRet;
+}
+
+int main(void)
+{
+    UINT32 uwRet = LOS_OK;
+    HardWare_Init();
+
+    uwRet = LOS_KernelInit();
+    if (uwRet != LOS_OK)
+    {
+        return LOS_NOK;
+    }
+
+    uart_init ();
+
+    uwRet = creat_main_task();
+    if (uwRet != LOS_OK)
+    {
+        return LOS_NOK;
+    }
+
+    uart_puts ("\nHuawei LiteOS on MSP430F5438A\n");
+
+    (void)LOS_Start();
+
+    return 0;
+}
 

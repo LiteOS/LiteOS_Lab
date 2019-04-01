@@ -35,19 +35,11 @@
         .cdecls C, LIST, "msp430.h"         ; Include device header file
         .cdecls C, LIST, "ccsmacros.h"      ; Include macros used ccs header file
 
-        .data
-        .global _los_heap_start
-        .global _los_heap_end
-
-        .asg    256,    LOSCFG_MSP430_IRQ_SIZE
-
-        .align  4
-_los_heap_start:
-        .ulong  __HEAP_START
-_los_heap_end:
-        .ulong  __STACK_END - LOSCFG_MSP430_IRQ_SIZE
+        .asg    0x400,  LOSCFG_IRQ_STACK_SIZE
+        .asg    0x10,   TASK_STATUS_RUNNING
 
         .text
+        .global system_phys_mem
         .global LOS_IntLock
         .global LOS_IntUnLock
         .global LOS_IntRestore
@@ -62,7 +54,11 @@ _los_heap_end:
         .retain
         .retainrefs
 
-        .asg    0x10, TASK_STATUS_RUNNING
+system_phys_mem:
+        .ulong  __HEAP_START
+        .ulong  __STACK_END - LOSCFG_IRQ_STACK_SIZE
+        .ulong  0, 0
+
 
 ;-------------------------------------------------------------------------------
 ;       irq vectors

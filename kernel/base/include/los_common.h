@@ -41,7 +41,7 @@
  * @m: the name of the member within the struct
  */
 
-#define offset_of(t, m)         ((size_t) &((t *) 0)->m)
+#define offset_of(t, m)         ((uintptr_t) &((t *) 0)->m)
 
 /*
  * container_of - cast a member of a structure out to the containing structure

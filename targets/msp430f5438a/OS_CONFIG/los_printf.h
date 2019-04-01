@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -32,21 +32,81 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef __MEM_H__
-#define __MEM_H__
+/**@defgroup los_printf Printf
+ * @ingroup kernel
+ */
 
-#include <stddef.h>
+#ifndef _LOS_PRINTF_H
+#define _LOS_PRINTF_H
+//#ifdef LOSCFG_LIB_LIBC
+#include "stdarg.h"
+//#endif
+#ifdef LOSCFG_LIB_LIBCMINI
+#include "libcmini.h"
+#endif
+#include "los_typedef.h"
+#include "los_config.h"
+#include "stdio.h"
 
-#include <heap.h>
+#ifdef __cplusplus
+#if __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+#endif /* __cplusplus */
 
-struct phys_mem
-{
-    unsigned long start;
-    unsigned long end;
-};
+#define LOS_EMG_LEVEL           (0)
 
-extern heap_t                kernel_heap [1];
-extern const struct phys_mem system_phys_mem [];
+#define LOS_COMMOM_LEVEL        (LOS_EMG_LEVEL + 1)
+#define LOS_ERR_LEVEL           (LOS_COMMOM_LEVEL + 1)
+#define LOS_WARN_LEVEL          (LOS_ERR_LEVEL + 1)
+#define LOS_INFO_LEVEL          (LOS_WARN_LEVEL + 1)
+#define LOS_DEBUG_LEVEL         (LOS_INFO_LEVEL + 1)
 
-#endif /* __MEM_H__ */
+#define PRINT_LEVEL             (0)
 
+#if PRINT_LEVEL < LOS_DEBUG_LEVEL
+#define PRINT_DEBUG(...)
+#else
+#define PRINT_DEBUG(...)        do{(printf("[DEBUG] "), printf(__VA_ARGS__));}while(0)
+#endif
+
+#if PRINT_LEVEL < LOS_INFO_LEVEL
+#define PRINT_INFO(...)
+#else
+#define PRINT_INFO(...)         do{(printf("[INFO] "), printf(__VA_ARGS__));}while(0)
+#endif
+
+#if PRINT_LEVEL < LOS_WARN_LEVEL
+#define PRINT_WARN(args, ...)
+#else
+#define PRINT_WARN(...)         do{(printf("[WARN] "), printf(__VA_ARGS__));}while(0)
+#endif
+
+#if PRINT_LEVEL < LOS_ERR_LEVEL
+#define PRINT_ERR(...)
+#else
+#define PRINT_ERR(...)          do{(printf("[ERR] "), printf(__VA_ARGS__));}while(0)
+#endif
+
+#if PRINT_LEVEL < LOS_COMMOM_LEVEL
+#define PRINTK(...)
+#else
+#define PRINTK(...)             printf(__VA_ARGS__)
+#endif
+
+#if PRINT_LEVEL < LOS_EMG_LEVEL
+#define PRINT_EMG(args, ...)
+#else
+#define PRINT_EMG(...)          do{(printf("[EMG] "), printf(__VA_ARGS__));}while(0)
+#endif
+
+#define PRINT_RELEASE(...)      printf(__VA_ARGS__)
+
+
+#ifdef __cplusplus
+#if __cplusplus
+}
+#endif /* __cplusplus */
+#endif /* __cplusplus */
+
+#endif /* _LOS_PRINTF_H */
