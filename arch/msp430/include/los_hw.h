@@ -46,6 +46,8 @@ extern "C" {
 #endif /* __cplusplus */
 #endif /* __cplusplus */
 
+#include "los_task.ph"
+
 /**
  * @ingroup los_hw
  * The initialization value of stack space.
@@ -119,7 +121,7 @@ typedef struct tagTskContext
  * @see None.
  * @since Huawei LiteOS V100R001C00
  */
-extern VOID * osTskStackInit(UINT32 uwTaskID, UINT32 uwStackSize, VOID *pTopStack);
+extern void osTskStackInit(LOS_TASK_CB *pstTaskCB, TSK_INIT_PARAM_S *pstInitParam);
 
 
 

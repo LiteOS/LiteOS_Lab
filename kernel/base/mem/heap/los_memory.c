@@ -85,7 +85,7 @@ UINT32 osMemSystemInit(VOID)
     UINT32                  uwRet;
     const struct phys_mem * spm = system_phys_mem;
 
-    uwRet = LOS_MemInit(spm->start, spm->end - spm->start);
+    uwRet = LOS_MemInit((VOID *)spm->start, (UINT32)(spm->end - spm->start));
 
     if (uwRet != LOS_OK)
     {
@@ -98,7 +98,8 @@ UINT32 osMemSystemInit(VOID)
 
     while (spm->end)
     {
-        heap_add ((heap_t *) m_aucSysMem0, spm->start, spm->end - spm->start);
+        heap_add ((heap_t *) m_aucSysMem0, (char *) spm->start,
+                  (size_t) spm->end - spm->start);
 
         spm++;
     }

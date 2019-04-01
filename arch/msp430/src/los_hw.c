@@ -33,6 +33,7 @@
  *---------------------------------------------------------------------------*/
 
 #include "los_base.h"
+#include "los_hw.h"
 #include "los_hwi.h"
 #include "los_task.ph"
 #include "los_memory.h"
@@ -79,9 +80,12 @@ static void osTaskExit (void)
  Output      : None
  Return      : OS_SUCCESS on success or error code on failure
  *****************************************************************************/
-void * osTskStackInit (UINT32 tid, UINT32 stack_size, VOID * stack)
+void osTskStackInit (LOS_TASK_CB *pstTaskCB, TSK_INIT_PARAM_S *pstInitParam)
 {
     TSK_CONTEXT_S * context;
+    UINT32          stack_size = pstTaskCB->uwStackSize;
+    UINT32          tid = pstTaskCB->uwTaskID;
+    char          * stack = (char *) pstTaskCB->uwTopOfStack;
 
 #if (LOSCFG_STATIC_TASK == NO)
 
@@ -101,16 +105,16 @@ void * osTskStackInit (UINT32 tid, UINT32 stack_size, VOID * stack)
     /* fake return address in stack */
 
 #if __CODE_MODEL__ == __CODE_MODEL_LARGE__
-    stack = (void *) (((char *) stack + stack_size) - 4);
+    stack = (void *) ((stack + stack_size) - 4);
 #else
-    stack = (void *) (((char *) stack + stack_size) - 2);
+    stack = (void *) ((stack + stack_size) - 2);
 #endif
 
     *((void (**) (void)) stack) = osTaskExit;
 
     /* make extra 4 bytes after the context to fake return address in stack */
 
-    context = (TSK_CONTEXT_S *) (((char *) stack) - sizeof (TSK_CONTEXT_S));
+    context = (TSK_CONTEXT_S *) ((stack) - sizeof (TSK_CONTEXT_S));
 
     /*initialize the task context*/
 
@@ -125,7 +129,28 @@ void * osTskStackInit (UINT32 tid, UINT32 stack_size, VOID * stack)
     context->r12 = tid;
     context->r13 = 0;
 
-    return (void *) context;
+    pstTaskCB->pStackPointer = (VOID *) context;
+}
+
+LITE_OS_SEC_TEXT_INIT VOID *osTskStackAlloc (TSK_INIT_PARAM_S *pstInitParam)
+{
+    UINT32 align = LOSCFG_STACK_POINT_ALIGN_SIZE;
+    UINT32 alloc;
+
+    /*
+     * TSK_CONTEXT_S will take space in stack, reserve space for it
+     * +4 or + 2 reserve space for the fake return address in stack
+     */
+
+#if __CODE_MODEL__ == __CODE_MODEL_LARGE__
+    pstInitParam->uwStackSize += sizeof (TSK_CONTEXT_S) + 4;
+#else
+    pstInitParam->uwStackSize += sizeof (TSK_CONTEXT_S) + 2;
+#endif
+
+    alloc = pstInitParam->uwStackSize;
+
+    return LOS_MemAllocAlign(OS_TASK_STACK_ADDR, alloc, align);
 }
 
 #if (LOSCFG_KERNEL_RUNSTOP == YES)

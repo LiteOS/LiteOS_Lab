@@ -911,8 +911,16 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_TaskCreate(UINT32 *puwTaskID, TSK_INIT_PARAM_S 
     UINT32 uwRet = LOS_OK;
     UINTPTR uvIntSave;
     LOS_TASK_CB *pstTaskCB;
+    TSK_INIT_PARAM_S stInitParam;
 
-    uwRet = LOS_TaskCreateOnly(puwTaskID, pstInitParam);
+    if (NULL == pstInitParam)
+    {
+        return LOS_ERRNO_TSK_PTR_NULL;
+    }
+
+    stInitParam = *pstInitParam;
+
+    uwRet = LOS_TaskCreateOnly(puwTaskID, &stInitParam);
     if (LOS_OK != uwRet)
     {
         return uwRet;

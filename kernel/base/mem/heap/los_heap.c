@@ -243,7 +243,7 @@ static inline char * __carve_extra (heap_t * heap, chunk_t * chunk,
         }
         else
         {
-            ach = container_of (aligned_mem, ach_t, mem);
+            ach = (ach_t *) (aligned_mem - sizeof (ach_t));
 
             ach->prev = chunk;
             ach->size = chunk->size - ((char *) ach - (char *) chunk);

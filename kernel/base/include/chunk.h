@@ -51,26 +51,14 @@
 typedef struct chunk
 {
     struct chunk * prev;
-    size_t         size;        /* bit[0] means is_allocated */
-    union
-    {
-        dlist_t    node;        /* used for free chunks only */
-        char       mem [0];     /* used for allocated chunks */
-    };
-} chunk_t;
-
-typedef struct fch
-{
-    struct chunk * prev;
-    size_t         size;        /* bit[0] means is_allocated */
+    uintptr_t      size;        /* bit[0] means is_allocated */
     dlist_t        node;        /* used for free chunks only */
-} fch_t;
+} fch_t, chunk_t;
 
 typedef struct ach
 {
     struct chunk * prev;
-    size_t         size;        /* bit[0] means is_allocated */
-    char           mem [0];     /* used for allocated chunks */
+    uintptr_t      size;        /* bit[0] means is_allocated */
 } ach_t;
 
 /* inlines */
@@ -140,7 +128,7 @@ static inline chunk_t * __get_prev_chunk (chunk_t * chunk)
 
 static inline char * __get_mem_block (chunk_t * chunk)
 {
-    return chunk->mem;
+    return (char *) chunk + sizeof (ach_t);
 }
 
 /**

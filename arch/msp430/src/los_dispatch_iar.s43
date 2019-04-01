@@ -49,8 +49,7 @@
         PUBLIC  LOS_IntRestore
         PUBLIC  LOS_StartToRun
         PUBLIC  osSchedule
-        PUBLIC  _los_heap_start
-        PUBLIC  _los_heap_size
+        PUBLIC  system_phys_mem
 
 #define TASK_STATUS_RUNNING             0x10
 
@@ -89,14 +88,15 @@ stub    SET     stub + 4
         ; entry (reset) at 0xfffe set by __program_start
 
 #ifndef LOSCFG_MSP430_IRQ_SIZE
-#define LOSCFG_MSP430_IRQ_SIZE          256
+#define LOSCFG_MSP430_IRQ_SIZE          0x400
 #endif
 
         RSEG    DATA16_C
-_los_heap_start
+system_phys_mem
         DC32    (sfe (DATA20_HEAP) + 7) & ~7
-_los_heap_size
-        DC32    ((sfe (CSTACK)) & ~7) - ((sfe (DATA20_HEAP) + 7) & ~7) - LOSCFG_MSP430_IRQ_SIZE
+        DC32    ((sfe (CSTACK)) & ~7) - LOSCFG_MSP430_IRQ_SIZE
+        DC32    0
+        DC32    0
 
         RSEG    CODE16                  ; place program in 'CODE16' segment
 
