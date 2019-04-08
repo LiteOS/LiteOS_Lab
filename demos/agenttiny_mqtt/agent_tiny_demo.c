@@ -63,7 +63,7 @@
 #ifndef array_size
 #define array_size(a) (sizeof(a)/sizeof(*(a)))
 #endif
-static char g_mqtt_ca_crt[] =
+static char s_mqtt_ca_crt[] =
 "-----BEGIN CERTIFICATE-----\r\n"
 "MIID4DCCAsigAwIBAgIJAK97nNS67HRvMA0GCSqGSIb3DQEBCwUAMFMxCzAJBgNV\r\n"
 "BAYTAkNOMQswCQYDVQQIEwJHRDELMAkGA1UEBxMCU1oxDzANBgNVBAoTBkh1YXdl\r\n"
