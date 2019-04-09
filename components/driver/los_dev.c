@@ -45,7 +45,7 @@
 #define cn_driv_status_opend           (1<<1)
 
 
-//define the error type has happedn in the driver
+//define the error type has happened in the driver
 typedef enum
 {
     en_dev_err_none = 0,   //no err happened
@@ -254,7 +254,7 @@ parameters   :
 instruction  :call this function to initialize the device module here
               load the static init from section os_device
 *******************************************************************************/
-bool_t  los_driv_init(void)
+bool_t  los_driv_init()
 {
     bool_t ret = false;
 
@@ -523,7 +523,7 @@ parameters   :dev,returned by the los_dev_open function
               para,used with cmd, its length and format depend on the bsp develop
 instruction  :ctrol true or false
 *******************************************************************************/
-bool_t     los_dev_ioctl (los_dev_t dev,u32_t cmd,void *para,s32_t paralen)
+bool_t los_dev_ioctl (los_dev_t dev,u32_t cmd,void *para,s32_t paralen)
 {
     bool_t ret = false;
     struct dev_cb  *devcb;
@@ -542,10 +542,37 @@ bool_t     los_dev_ioctl (los_dev_t dev,u32_t cmd,void *para,s32_t paralen)
     return ret;
 }
 
+/*******************************************************************************
+function     :use this function to set the buffer current position,like lseek
+parameters   :dev,returned by the los_dev_open function
+              offset, refer to the lseek
+              fromwhere, refer to the lseek
+instruction  :return the current write/read position if success, else -1
+*******************************************************************************/
+off_t  los_dev_seek (los_dev_t dev,off_t offset,int fromwhere)
+{
+    off_t ret = -1;
+    struct dev_cb  *devcb;
+    struct driv_cb *drivcb;
+
+    if(NULL != dev)
+    {
+        devcb = dev;
+        drivcb = devcb->driv;
+        if((NULL != drivcb->op)&&(NULL != drivcb->op->seek))
+        {
+            ret = drivcb->op->ioctl( drivcb->pri,offset,fromwhere);
+        }
+    }
+
+    return ret;
+}
+
+
 //the following function should be implement by the vfs,
 //this is very important for the multi io operation, like the select epoll and so on
-bool_t     los_dev_upara_set (los_dev_t dev,void *para);
-void*      los_dev_upara_get (los_dev_t dev);
+//bool_t     los_dev_upara_set (los_dev_t dev,void *para);
+//void*      los_dev_upara_get (los_dev_t dev);
 
 //export some shell for the driver debug
 #include <shell.h>
