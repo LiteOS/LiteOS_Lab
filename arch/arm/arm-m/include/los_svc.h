@@ -73,6 +73,7 @@
 #define MOD_SEM                         5
 #define MOD_SWTIMER                     6
 #define MOD_SYS                         7
+#define MOD_CUSTOM                      15
 
 /* syscall numbers for task module */
 

@@ -176,6 +176,15 @@ const syscall_rtn_t svc_tbl_sys [] =
     (syscall_rtn_t) printf,
 };
 
+WEAK const syscall_rtn_t svc_tbl_custom [] =
+{
+    (syscall_rtn_t) NULL,
+    (syscall_rtn_t) NULL,
+    (syscall_rtn_t) NULL,
+    (syscall_rtn_t) NULL,
+    (syscall_rtn_t) NULL,
+};
+
 const syscall_rtn_t * svc_tables [] =
 {
     svc_tbl_task,
@@ -202,6 +211,14 @@ const syscall_rtn_t * svc_tables [] =
     NULL,
 #endif
     svc_tbl_sys,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    svc_tbl_custom,
     NULL,
 };
 
