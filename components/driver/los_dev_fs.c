@@ -118,6 +118,20 @@ static s32_t devfs_ioctl (struct file *file, int cmd, unsigned long para)
     return ret;
 }
 
+static off_t devfs_seek (struct file *file, off_t offset, int fromwhere)
+{
+
+    s32_t ret = -1;
+    los_dev_t dev;
+
+    dev = file->f_data;
+
+    ret = los_dev_seek(dev,offset,fromwhere);
+
+    return ret;
+}
+
+
 static const struct file_ops  s_devfs_ops ={
     .open = devfs_open,
     .close = devfs_close,
@@ -133,7 +147,7 @@ static struct file_system s_devfs =
     NULL,
     0
 };
-bool_t devfs_install(void)
+bool_t devfs_install()
 {
     los_fs_register(&s_devfs);
     los_fs_mount(cn_devfs_name,cn_devfs_path,NULL);
