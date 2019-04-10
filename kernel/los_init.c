@@ -250,6 +250,11 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_KernelInit(VOID)
     }
 #endif
 
+#if (LOSCFG_DEFERED_JOB == YES)
+    extern UINT32 osDeferedTaskInit(VOID);
+    osDeferedTaskInit();
+#endif
+
 #if (LOSCFG_ENABLE_MPU == YES)
     void mpu_init (void);
     mpu_init ();

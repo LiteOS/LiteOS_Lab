@@ -340,7 +340,7 @@ extern "C" {
  * Software timer task stack size
  */
 #ifndef LOSCFG_BASE_CORE_TSK_SWTMR_STACK_SIZE
-#define LOSCFG_BASE_CORE_TSK_SWTMR_STACK_SIZE               LOSCFG_BASE_CORE_TSK_DEFAULT_STACK_SIZE
+#define LOSCFG_BASE_CORE_TSK_SWTMR_STACK_SIZE               0x1000
 #endif
 
 /**
@@ -767,6 +767,10 @@ extern UINT32 g_sys_mem_addr_end;
 #define LOSCFG_ENABLE_MPU                                   NO
 #endif
 
+/*=============================================================================
+                                       Task Local Storage limit
+=============================================================================*/
+
 /**
  * @ingroup los_config
  * Maximum number of task local storage entries.
@@ -774,6 +778,19 @@ extern UINT32 g_sys_mem_addr_end;
 
 #ifndef LOSCFG_TASK_TLS_LIMIT
 #define LOSCFG_TASK_TLS_LIMIT                               0
+#endif
+
+/*=============================================================================
+                                       defered job
+=============================================================================*/
+
+/**
+ * @ingroup los_config
+ * Configuration item for enabling defered job
+ */
+
+#ifndef LOSCFG_DEFERED_JOB
+#define LOSCFG_DEFERED_JOB                                  NO
 #endif
 
 /*=============================================================================
