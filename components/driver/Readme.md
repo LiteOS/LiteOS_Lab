@@ -14,24 +14,26 @@
 
 ```
 typedef void* los_driv_t ;//returned by the driver register
-typedef bool_t (*fn_open)  (void *pri,s32_t flag);                                     
-typedef s32_t  (*fn_read)  (void *pri,u32_t offset,u8_t *buf,s32_t len,u32_t timeout);
-typedef s32_t  (*fn_write) (void *pri,u32_t offset,u8_t *buf,s32_t len,u32_t timeout);
-typedef void   (*fn_close) (void *pri); 
-typedef bool_t (*fn_ioctl) (void *pri,u32_t cmd, void *para,s32_t len);
-typedef bool_t (*fn_init)  (void *pri);
-typedef void   (*fn_deinit)(void *pri);
+typedef bool_t (*fn_devopen)  (void *pri,s32_t flag);
+typedef s32_t  (*fn_devread)  (void *pri,u32_t offset,u8_t *buf,s32_t len,u32_t timeout);
+typedef s32_t  (*fn_devwrite) (void *pri,u32_t offset,u8_t *buf,s32_t len,u32_t timeout);
+typedef void   (*fn_devclose) (void *pri);
+typedef bool_t (*fn_devioctl) (void *pri,u32_t cmd, void *para,s32_t len);
+typedef bool_t (*fn_devinit)  (void *pri);
+typedef void   (*fn_devdeinit)(void *pri);
+typedef off_t  (*fn_devseek) (void *pri,off_t offset,int fromwhere);
 //all the member function of pri is inherited by the register function
 typedef struct
 {
-    fn_open    open;   //triggered by the application
-    fn_read    read;   //triggered by the application
-    fn_write   write;  //triggered by the application
-    fn_close   close;  //triggered by the application
-    fn_ioctl   ioctl;  //triggered by the application
-    fn_init    init;   //if first open,then will be called
-    fn_deinit  deinit; //if the last close, then will be called
-}los_driv_op_t
+    fn_devopen    open;   //triggered by the application
+    fn_devread    read;   //triggered by the application
+    fn_devwrite   write;  //triggered by the application
+    fn_devclose   close;  //triggered by the application
+    fn_devioctl   ioctl;  //triggered by the application
+    fn_devseek    seek ;  //triggered by the application
+    fn_devinit    init;   //if first open,then will be called
+    fn_devdeinit  deinit; //if the last close, then will be called
+}los_driv_op_t;
 //the member could be NULL,depend on the device property
 //attention that whether the device support multi read and write depend on the device itself
 ```
@@ -81,6 +83,7 @@ s32_t      los_dev_read  (los_dev_t dev,u32_t offset,u8_t *buf,s32_t len,u32_t t
 s32_t      los_dev_write (los_dev_t dev,u32_t offset,u8_t *buf,s32_t len,u32_t timeout);
 bool_t     los_dev_close (los_dev_t dev);
 bool_t     los_dev_ioctl (los_dev_t dev,u32_t cmd,void *para,s32_t paralen);
+off_t      los_dev_seek  (los_dev_t dev,off_t offset, int fromwhere);
 ```
 
 当然，如果使能了DEVFS和VFS的话，则可以使用文件系统的api直接调用；需要注意的是如果使用文件系统接口，则传入的设备名字必须前缀/dev/，因为所有的设备驱动都在/dev/目录下。
