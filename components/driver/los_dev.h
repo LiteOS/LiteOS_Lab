@@ -41,7 +41,7 @@
 #include <sys/fcntl.h>
 #include <sys/types.h>
 
-#define LOSCFG_ENABLE_DRIVER  1
+//#define LOSCFG_ENABLE_DRIVER  1  //for the test 
 
 typedef void* los_driv_t ;//returned by the driver register
 typedef bool_t (*fn_devopen)  (void *pri,s32_t flag);
