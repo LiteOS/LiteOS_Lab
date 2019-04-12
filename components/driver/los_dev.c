@@ -561,7 +561,7 @@ off_t  los_dev_seek (los_dev_t dev,off_t offset,int fromwhere)
         drivcb = devcb->driv;
         if((NULL != drivcb->op)&&(NULL != drivcb->op->seek))
         {
-            ret = drivcb->op->ioctl( drivcb->pri,offset,fromwhere);
+            ret = drivcb->op->seek( drivcb->pri,offset,fromwhere);
         }
     }
 
