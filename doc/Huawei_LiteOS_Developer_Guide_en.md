@@ -2991,8 +2991,6 @@ Software timer typical development process:
 
  * Set LOSCFG_BASE_CORE_SWTMR_LIMIT to the maximum number of software timers supported by the operating system.
 
- * Set OS_SWTMR_HANDLE_QUEUE_SIZE to the maximum size of the software timer queue.
-
 2 Call the LOS_SwtmrCreate API to create a software timer.
 
  * Creates a software timer that has a user-defined timer length, Timer_Callback function, and trigger mode; returns the software timer handler after successful creation.
@@ -3080,8 +3078,6 @@ Prerequisites
 * The LOSCFG_BASE_CORE_SWTMR parameter in the los_config.h file is set to YES.
 
 * The LOSCFG_BASE_CORE_SWTMR_LIMIT parameter in the los_config.h file is set to the maximum number of software timers supported by the operating system.
-
-* The OS_SWTMR_HANDLE_QUEUE_SIZE parameter in the los_config.h file is set to the maximum size of the software timer queue.
 
 The code is as follows:
 

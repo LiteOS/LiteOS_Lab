@@ -47,7 +47,7 @@ extern "C" {
 #endif /* __cpluscplus */
 UINT32 memexc_count = 0;
 
-#if ((LOSCFG_PLATFORM_EXC == YES) && (LOSCFG_SAVE_EXC_INFO == YES))
+#ifdef CONFIG_SAVE_EXC_INFO
 LITE_OS_SEC_BSS UINT8 g_aucMemMang[MEM_INFO_SIZE];
 /*****************************************************************************
  Function	 : LOS_MemExcInfoGet
@@ -161,7 +161,7 @@ LITE_OS_SEC_TEXT UINT32 osMemInfoUpdate(VOID *pPool, UINT32 uwSize, UINT32 uwTyp
         }
         pstMemInfo++;
     }
-    if(*puwMemCount < OS_SYS_MEM_NUM && uwType != MEM_MANG_EMPTY)
+    if(*puwMemCount < LOSCFG_MEM_CHECK_BLOCKS && uwType != MEM_MANG_EMPTY)
     {
         pstMemInfo->uwType = uwType;
         pstMemInfo->uwStartAddr = (UINT32)pPool;

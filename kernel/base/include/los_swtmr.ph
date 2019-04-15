@@ -43,6 +43,9 @@ extern "C" {
 #endif /* __cplusplus */
 #endif /* __cplusplus */
 
+#define OS_SWTMR_MAX_TIMERID            ((65535 / LOSCFG_BASE_CORE_SWTMR_LIMIT) * LOSCFG_BASE_CORE_SWTMR_LIMIT)
+
+#define LOS_COMMON_DIVISOR              10
 
 /**
  * @ingroup los_swtmr

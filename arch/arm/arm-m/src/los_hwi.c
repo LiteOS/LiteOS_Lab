@@ -204,7 +204,7 @@ VOID (* const g_pstHwiForm[])(VOID)  =
 
 #define VECTOR_IDX_OFFSET       1
 
-HWI_HANDLER_T m_pstHwiSlaveForm[OS_HWI_MAX_NUM + VECTOR_IDX_OFFSET];
+HWI_HANDLER_T m_pstHwiSlaveForm[LOSCFG_PLATFORM_HWI_LIMIT + VECTOR_IDX_OFFSET];
 
 /*****************************************************************************
  Function    : osInterrupt
@@ -236,7 +236,7 @@ LITE_OS_SEC_TEXT VOID osInterrupt(VOID)
 
     if (m_pstHwiSlaveForm[uwHwiIndex].pfnHandler != NULL)
     {
-#if (OS_HWI_WITH_ARG == YES)
+#ifdef LOSCFG_PLATFORM_HWI_ARG
         m_pstHwiSlaveForm[uwHwiIndex].pfnHandler(m_pstHwiSlaveForm[uwHwiIndex].pParm);
 #else
         m_pstHwiSlaveForm[uwHwiIndex].pfnHandler();
@@ -298,7 +298,7 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_HwiCreate(HWI_HANDLE_T  uwHwiNum,
 
     /* SysTick_IRQn == (UINT32) -1 */
 
-    if ((uwHwiNum >= OS_HWI_MAX_NUM) && (uwHwiNum != (UINT32)SysTick_IRQn))
+    if ((uwHwiNum >= LOSCFG_PLATFORM_HWI_LIMIT) && (uwHwiNum != (UINT32)SysTick_IRQn))
     {
         return OS_ERRNO_HWI_NUM_INVALID;
     }
@@ -315,7 +315,7 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_HwiCreate(HWI_HANDLE_T  uwHwiNum,
 
     m_pstHwiSlaveForm[uwHwiNum + VECTOR_IDX_OFFSET].pfnHandler = pfnHandler;
 
-#if (OS_HWI_WITH_ARG == YES)
+#ifdef LOSCFG_PLATFORM_HWI_ARG
     m_pstHwiSlaveForm[uwHwiNum + VECTOR_IDX_OFFSET].pParm = (VOID*)uwArg;
 #endif
 
@@ -338,7 +338,7 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_HwiDelete(HWI_HANDLE_T uwHwiNum)
 {
     UINT32 uwIntSave;
 
-    if (uwHwiNum >= OS_HWI_MAX_NUM)
+    if (uwHwiNum >= LOSCFG_PLATFORM_HWI_LIMIT)
     {
         return OS_ERRNO_HWI_NUM_INVALID;
     }

@@ -32,7 +32,7 @@ extern "C" {
 #endif /* __cpluscplus */
 #endif /* __cpluscplus */
 
-#define MEM_INFO_SIZE                   (sizeof(MEM_INFO) * OS_SYS_MEM_NUM + 4)
+#define MEM_INFO_SIZE                   (sizeof(MEM_INFO) * LOSCFG_MEM_CHECK_BLOCKS + 4)
 extern UINT8 g_aucMemMang[];
 
 enum _MEM_MANG_TYPE

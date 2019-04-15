@@ -1,0 +1,20 @@
+#!/usr/bin/env python3
+
+import sys, os
+
+from kconfig.kconfiglib import Kconfig
+
+def main ():
+    root = os.path.abspath (os.path.dirname (__file__) + "/..")
+    
+    os.environ ["CONFIG_"] = "LOSCFG_"
+
+    kconf = Kconfig (root + "/los.config")
+
+    kconf.load_config ("bsp.config")
+
+    kconf.write_config ("GCC/kconfig.mk")
+    kconf.write_autoconf ("OS_CONFIG/kconfig.h")
+
+if __name__ == "__main__":
+    main()

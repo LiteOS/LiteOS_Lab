@@ -90,7 +90,7 @@ typedef struct tagExcInfoCallBackArray
 #endif
 
 #if (LOSCFG_BASE_MEM_NODE_INTEGRITY_CHECK == YES)
-#define MAX_MEM_INFO_SIZE       (8 + sizeof(MEM_INFO_S) * OS_SYS_MEM_NUM)
+#define MAX_MEM_INFO_SIZE       (8 + sizeof(MEM_INFO_S) * LOSCFG_MEM_CHECK_BLOCKS)
 #else
 #define MAX_MEM_INFO_SIZE       (0)
 #endif

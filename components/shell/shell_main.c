@@ -49,7 +49,7 @@ this file implement the shell for the system.the following instruction you must 
 
 /**************************************FILE INCLIUDES**************************/
 #include <shell.h>
-#if LOSCFG_ENABLE_SHELL
+#if LOSCFG_COMPONENT_SHELL
 #include <stdint.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -454,7 +454,7 @@ static void shell_server_entry(void *args){
 function     :this is the  shell module initialize function
 parameters   :
 instruction  :if you want use shell,you should do two things
-              1,make LOSCFG_ENABLE_SHELL true in target_config.h
+              1,make LOSCFG_COMPONENT_SHELL true in target_config.h
 			  2,call los_shell_init in your process:make sure after the system has
 			    been initialized
 *******************************************************************************/

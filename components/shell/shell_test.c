@@ -37,7 +37,7 @@
 
 #include <los_memory.h>
 
-#if LOSCFG_ENABLE_SHELL
+#if LOSCFG_COMPONENT_SHELL
 
 /*
 //here we export to shell command,you could add your own shell like this
@@ -66,7 +66,7 @@ OSSHELL_EXPORT_CMD(shell_taskinfo,"taskinfo","taskinfo");
 //show the memstatus here
 static s32_t shell_heapinfo(s32_t argc,const char *argv[])
 {
-#if (LOSCFG_HEAP_IMPROVED == YES)
+#if (LOSCFG_NEW_HEAP == YES)
     LOS_MemInfo(NULL, 1);
 #else
     LOS_MemPoolList();

@@ -103,7 +103,7 @@ LITE_OS_SEC_TEXT VOID osTickHandler(VOID)
 #if (LOSCFG_KERNEL_TICKLESS == YES)
     if (g_bReloadSysTickFlag)
     {
-        LOS_SysTickReload(OS_SYS_CLOCK / LOSCFG_BASE_CORE_TICK_PER_SECOND);
+        LOS_SysTickReload(LOSCFG_SYS_CLOCK / LOSCFG_BASE_CORE_TICK_PER_SECOND);
         g_bReloadSysTickFlag = 0;
     }
     g_bTickIrqFlag = g_bTicklessFlag;

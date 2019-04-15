@@ -37,7 +37,7 @@
 #include <los_dev.h>
 #include <fs/los_vfs.h>
 
-#if LOSCFG_ENABLE_DEVFS
+#if LOSCFG_COMPONENT_DEVFS
 
 #define cn_devfs_timeout 0xffffffff
 #define cn_devfs_name    "devfs"

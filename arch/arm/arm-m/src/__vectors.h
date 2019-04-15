@@ -1,725 +1,725 @@
 /* IAR do not support the syntax of [n ... m] = x, so ... */
 
-#if OS_HWI_MAX_NUM > 0
+#if LOSCFG_PLATFORM_HWI_LIMIT > 0
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 1
+#if LOSCFG_PLATFORM_HWI_LIMIT > 1
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 2
+#if LOSCFG_PLATFORM_HWI_LIMIT > 2
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 3
+#if LOSCFG_PLATFORM_HWI_LIMIT > 3
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 4
+#if LOSCFG_PLATFORM_HWI_LIMIT > 4
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 5
+#if LOSCFG_PLATFORM_HWI_LIMIT > 5
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 6
+#if LOSCFG_PLATFORM_HWI_LIMIT > 6
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 7
+#if LOSCFG_PLATFORM_HWI_LIMIT > 7
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 8
+#if LOSCFG_PLATFORM_HWI_LIMIT > 8
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 9
+#if LOSCFG_PLATFORM_HWI_LIMIT > 9
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 10
+#if LOSCFG_PLATFORM_HWI_LIMIT > 10
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 11
+#if LOSCFG_PLATFORM_HWI_LIMIT > 11
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 12
+#if LOSCFG_PLATFORM_HWI_LIMIT > 12
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 13
+#if LOSCFG_PLATFORM_HWI_LIMIT > 13
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 14
+#if LOSCFG_PLATFORM_HWI_LIMIT > 14
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 15
+#if LOSCFG_PLATFORM_HWI_LIMIT > 15
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 16
+#if LOSCFG_PLATFORM_HWI_LIMIT > 16
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 17
+#if LOSCFG_PLATFORM_HWI_LIMIT > 17
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 18
+#if LOSCFG_PLATFORM_HWI_LIMIT > 18
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 19
+#if LOSCFG_PLATFORM_HWI_LIMIT > 19
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 20
+#if LOSCFG_PLATFORM_HWI_LIMIT > 20
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 21
+#if LOSCFG_PLATFORM_HWI_LIMIT > 21
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 22
+#if LOSCFG_PLATFORM_HWI_LIMIT > 22
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 23
+#if LOSCFG_PLATFORM_HWI_LIMIT > 23
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 24
+#if LOSCFG_PLATFORM_HWI_LIMIT > 24
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 25
+#if LOSCFG_PLATFORM_HWI_LIMIT > 25
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 26
+#if LOSCFG_PLATFORM_HWI_LIMIT > 26
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 27
+#if LOSCFG_PLATFORM_HWI_LIMIT > 27
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 28
+#if LOSCFG_PLATFORM_HWI_LIMIT > 28
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 29
+#if LOSCFG_PLATFORM_HWI_LIMIT > 29
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 30
+#if LOSCFG_PLATFORM_HWI_LIMIT > 30
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 31
+#if LOSCFG_PLATFORM_HWI_LIMIT > 31
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 32
+#if LOSCFG_PLATFORM_HWI_LIMIT > 32
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 33
+#if LOSCFG_PLATFORM_HWI_LIMIT > 33
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 34
+#if LOSCFG_PLATFORM_HWI_LIMIT > 34
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 35
+#if LOSCFG_PLATFORM_HWI_LIMIT > 35
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 36
+#if LOSCFG_PLATFORM_HWI_LIMIT > 36
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 37
+#if LOSCFG_PLATFORM_HWI_LIMIT > 37
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 38
+#if LOSCFG_PLATFORM_HWI_LIMIT > 38
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 39
+#if LOSCFG_PLATFORM_HWI_LIMIT > 39
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 40
+#if LOSCFG_PLATFORM_HWI_LIMIT > 40
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 41
+#if LOSCFG_PLATFORM_HWI_LIMIT > 41
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 42
+#if LOSCFG_PLATFORM_HWI_LIMIT > 42
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 43
+#if LOSCFG_PLATFORM_HWI_LIMIT > 43
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 44
+#if LOSCFG_PLATFORM_HWI_LIMIT > 44
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 45
+#if LOSCFG_PLATFORM_HWI_LIMIT > 45
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 46
+#if LOSCFG_PLATFORM_HWI_LIMIT > 46
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 47
+#if LOSCFG_PLATFORM_HWI_LIMIT > 47
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 48
+#if LOSCFG_PLATFORM_HWI_LIMIT > 48
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 49
+#if LOSCFG_PLATFORM_HWI_LIMIT > 49
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 50
+#if LOSCFG_PLATFORM_HWI_LIMIT > 50
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 51
+#if LOSCFG_PLATFORM_HWI_LIMIT > 51
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 52
+#if LOSCFG_PLATFORM_HWI_LIMIT > 52
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 53
+#if LOSCFG_PLATFORM_HWI_LIMIT > 53
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 54
+#if LOSCFG_PLATFORM_HWI_LIMIT > 54
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 55
+#if LOSCFG_PLATFORM_HWI_LIMIT > 55
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 56
+#if LOSCFG_PLATFORM_HWI_LIMIT > 56
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 57
+#if LOSCFG_PLATFORM_HWI_LIMIT > 57
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 58
+#if LOSCFG_PLATFORM_HWI_LIMIT > 58
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 59
+#if LOSCFG_PLATFORM_HWI_LIMIT > 59
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 60
+#if LOSCFG_PLATFORM_HWI_LIMIT > 60
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 61
+#if LOSCFG_PLATFORM_HWI_LIMIT > 61
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 62
+#if LOSCFG_PLATFORM_HWI_LIMIT > 62
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 63
+#if LOSCFG_PLATFORM_HWI_LIMIT > 63
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 64
+#if LOSCFG_PLATFORM_HWI_LIMIT > 64
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 65
+#if LOSCFG_PLATFORM_HWI_LIMIT > 65
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 66
+#if LOSCFG_PLATFORM_HWI_LIMIT > 66
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 67
+#if LOSCFG_PLATFORM_HWI_LIMIT > 67
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 68
+#if LOSCFG_PLATFORM_HWI_LIMIT > 68
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 69
+#if LOSCFG_PLATFORM_HWI_LIMIT > 69
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 70
+#if LOSCFG_PLATFORM_HWI_LIMIT > 70
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 71
+#if LOSCFG_PLATFORM_HWI_LIMIT > 71
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 72
+#if LOSCFG_PLATFORM_HWI_LIMIT > 72
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 73
+#if LOSCFG_PLATFORM_HWI_LIMIT > 73
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 74
+#if LOSCFG_PLATFORM_HWI_LIMIT > 74
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 75
+#if LOSCFG_PLATFORM_HWI_LIMIT > 75
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 76
+#if LOSCFG_PLATFORM_HWI_LIMIT > 76
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 77
+#if LOSCFG_PLATFORM_HWI_LIMIT > 77
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 78
+#if LOSCFG_PLATFORM_HWI_LIMIT > 78
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 79
+#if LOSCFG_PLATFORM_HWI_LIMIT > 79
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 80
+#if LOSCFG_PLATFORM_HWI_LIMIT > 80
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 81
+#if LOSCFG_PLATFORM_HWI_LIMIT > 81
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 82
+#if LOSCFG_PLATFORM_HWI_LIMIT > 82
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 83
+#if LOSCFG_PLATFORM_HWI_LIMIT > 83
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 84
+#if LOSCFG_PLATFORM_HWI_LIMIT > 84
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 85
+#if LOSCFG_PLATFORM_HWI_LIMIT > 85
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 86
+#if LOSCFG_PLATFORM_HWI_LIMIT > 86
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 87
+#if LOSCFG_PLATFORM_HWI_LIMIT > 87
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 88
+#if LOSCFG_PLATFORM_HWI_LIMIT > 88
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 89
+#if LOSCFG_PLATFORM_HWI_LIMIT > 89
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 90
+#if LOSCFG_PLATFORM_HWI_LIMIT > 90
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 91
+#if LOSCFG_PLATFORM_HWI_LIMIT > 91
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 92
+#if LOSCFG_PLATFORM_HWI_LIMIT > 92
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 93
+#if LOSCFG_PLATFORM_HWI_LIMIT > 93
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 94
+#if LOSCFG_PLATFORM_HWI_LIMIT > 94
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 95
+#if LOSCFG_PLATFORM_HWI_LIMIT > 95
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 96
+#if LOSCFG_PLATFORM_HWI_LIMIT > 96
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 97
+#if LOSCFG_PLATFORM_HWI_LIMIT > 97
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 98
+#if LOSCFG_PLATFORM_HWI_LIMIT > 98
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 99
+#if LOSCFG_PLATFORM_HWI_LIMIT > 99
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 100
+#if LOSCFG_PLATFORM_HWI_LIMIT > 100
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 101
+#if LOSCFG_PLATFORM_HWI_LIMIT > 101
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 102
+#if LOSCFG_PLATFORM_HWI_LIMIT > 102
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 103
+#if LOSCFG_PLATFORM_HWI_LIMIT > 103
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 104
+#if LOSCFG_PLATFORM_HWI_LIMIT > 104
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 105
+#if LOSCFG_PLATFORM_HWI_LIMIT > 105
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 106
+#if LOSCFG_PLATFORM_HWI_LIMIT > 106
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 107
+#if LOSCFG_PLATFORM_HWI_LIMIT > 107
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 108
+#if LOSCFG_PLATFORM_HWI_LIMIT > 108
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 109
+#if LOSCFG_PLATFORM_HWI_LIMIT > 109
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 110
+#if LOSCFG_PLATFORM_HWI_LIMIT > 110
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 111
+#if LOSCFG_PLATFORM_HWI_LIMIT > 111
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 112
+#if LOSCFG_PLATFORM_HWI_LIMIT > 112
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 113
+#if LOSCFG_PLATFORM_HWI_LIMIT > 113
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 114
+#if LOSCFG_PLATFORM_HWI_LIMIT > 114
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 115
+#if LOSCFG_PLATFORM_HWI_LIMIT > 115
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 116
+#if LOSCFG_PLATFORM_HWI_LIMIT > 116
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 117
+#if LOSCFG_PLATFORM_HWI_LIMIT > 117
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 118
+#if LOSCFG_PLATFORM_HWI_LIMIT > 118
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 119
+#if LOSCFG_PLATFORM_HWI_LIMIT > 119
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 120
+#if LOSCFG_PLATFORM_HWI_LIMIT > 120
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 121
+#if LOSCFG_PLATFORM_HWI_LIMIT > 121
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 122
+#if LOSCFG_PLATFORM_HWI_LIMIT > 122
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 123
+#if LOSCFG_PLATFORM_HWI_LIMIT > 123
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 124
+#if LOSCFG_PLATFORM_HWI_LIMIT > 124
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 125
+#if LOSCFG_PLATFORM_HWI_LIMIT > 125
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 126
+#if LOSCFG_PLATFORM_HWI_LIMIT > 126
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 127
+#if LOSCFG_PLATFORM_HWI_LIMIT > 127
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 128
+#if LOSCFG_PLATFORM_HWI_LIMIT > 128
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 129
+#if LOSCFG_PLATFORM_HWI_LIMIT > 129
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 130
+#if LOSCFG_PLATFORM_HWI_LIMIT > 130
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 131
+#if LOSCFG_PLATFORM_HWI_LIMIT > 131
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 132
+#if LOSCFG_PLATFORM_HWI_LIMIT > 132
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 133
+#if LOSCFG_PLATFORM_HWI_LIMIT > 133
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 134
+#if LOSCFG_PLATFORM_HWI_LIMIT > 134
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 135
+#if LOSCFG_PLATFORM_HWI_LIMIT > 135
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 136
+#if LOSCFG_PLATFORM_HWI_LIMIT > 136
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 137
+#if LOSCFG_PLATFORM_HWI_LIMIT > 137
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 138
+#if LOSCFG_PLATFORM_HWI_LIMIT > 138
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 139
+#if LOSCFG_PLATFORM_HWI_LIMIT > 139
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 140
+#if LOSCFG_PLATFORM_HWI_LIMIT > 140
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 141
+#if LOSCFG_PLATFORM_HWI_LIMIT > 141
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 142
+#if LOSCFG_PLATFORM_HWI_LIMIT > 142
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 143
+#if LOSCFG_PLATFORM_HWI_LIMIT > 143
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 144
+#if LOSCFG_PLATFORM_HWI_LIMIT > 144
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 145
+#if LOSCFG_PLATFORM_HWI_LIMIT > 145
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 146
+#if LOSCFG_PLATFORM_HWI_LIMIT > 146
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 147
+#if LOSCFG_PLATFORM_HWI_LIMIT > 147
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 148
+#if LOSCFG_PLATFORM_HWI_LIMIT > 148
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 149
+#if LOSCFG_PLATFORM_HWI_LIMIT > 149
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 150
+#if LOSCFG_PLATFORM_HWI_LIMIT > 150
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 151
+#if LOSCFG_PLATFORM_HWI_LIMIT > 151
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 152
+#if LOSCFG_PLATFORM_HWI_LIMIT > 152
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 153
+#if LOSCFG_PLATFORM_HWI_LIMIT > 153
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 154
+#if LOSCFG_PLATFORM_HWI_LIMIT > 154
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 155
+#if LOSCFG_PLATFORM_HWI_LIMIT > 155
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 156
+#if LOSCFG_PLATFORM_HWI_LIMIT > 156
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 157
+#if LOSCFG_PLATFORM_HWI_LIMIT > 157
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 158
+#if LOSCFG_PLATFORM_HWI_LIMIT > 158
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 159
+#if LOSCFG_PLATFORM_HWI_LIMIT > 159
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 160
+#if LOSCFG_PLATFORM_HWI_LIMIT > 160
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 161
+#if LOSCFG_PLATFORM_HWI_LIMIT > 161
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 162
+#if LOSCFG_PLATFORM_HWI_LIMIT > 162
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 163
+#if LOSCFG_PLATFORM_HWI_LIMIT > 163
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 164
+#if LOSCFG_PLATFORM_HWI_LIMIT > 164
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 165
+#if LOSCFG_PLATFORM_HWI_LIMIT > 165
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 166
+#if LOSCFG_PLATFORM_HWI_LIMIT > 166
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 167
+#if LOSCFG_PLATFORM_HWI_LIMIT > 167
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 168
+#if LOSCFG_PLATFORM_HWI_LIMIT > 168
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 169
+#if LOSCFG_PLATFORM_HWI_LIMIT > 169
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 170
+#if LOSCFG_PLATFORM_HWI_LIMIT > 170
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 171
+#if LOSCFG_PLATFORM_HWI_LIMIT > 171
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 172
+#if LOSCFG_PLATFORM_HWI_LIMIT > 172
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 173
+#if LOSCFG_PLATFORM_HWI_LIMIT > 173
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 174
+#if LOSCFG_PLATFORM_HWI_LIMIT > 174
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 175
+#if LOSCFG_PLATFORM_HWI_LIMIT > 175
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 176
+#if LOSCFG_PLATFORM_HWI_LIMIT > 176
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 177
+#if LOSCFG_PLATFORM_HWI_LIMIT > 177
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 178
+#if LOSCFG_PLATFORM_HWI_LIMIT > 178
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 179
+#if LOSCFG_PLATFORM_HWI_LIMIT > 179
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 180
+#if LOSCFG_PLATFORM_HWI_LIMIT > 180
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 181
+#if LOSCFG_PLATFORM_HWI_LIMIT > 181
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 182
+#if LOSCFG_PLATFORM_HWI_LIMIT > 182
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 183
+#if LOSCFG_PLATFORM_HWI_LIMIT > 183
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 184
+#if LOSCFG_PLATFORM_HWI_LIMIT > 184
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 185
+#if LOSCFG_PLATFORM_HWI_LIMIT > 185
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 186
+#if LOSCFG_PLATFORM_HWI_LIMIT > 186
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 187
+#if LOSCFG_PLATFORM_HWI_LIMIT > 187
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 188
+#if LOSCFG_PLATFORM_HWI_LIMIT > 188
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 189
+#if LOSCFG_PLATFORM_HWI_LIMIT > 189
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 190
+#if LOSCFG_PLATFORM_HWI_LIMIT > 190
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 191
+#if LOSCFG_PLATFORM_HWI_LIMIT > 191
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 192
+#if LOSCFG_PLATFORM_HWI_LIMIT > 192
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 193
+#if LOSCFG_PLATFORM_HWI_LIMIT > 193
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 194
+#if LOSCFG_PLATFORM_HWI_LIMIT > 194
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 195
+#if LOSCFG_PLATFORM_HWI_LIMIT > 195
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 196
+#if LOSCFG_PLATFORM_HWI_LIMIT > 196
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 197
+#if LOSCFG_PLATFORM_HWI_LIMIT > 197
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 198
+#if LOSCFG_PLATFORM_HWI_LIMIT > 198
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 199
+#if LOSCFG_PLATFORM_HWI_LIMIT > 199
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 200
+#if LOSCFG_PLATFORM_HWI_LIMIT > 200
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 201
+#if LOSCFG_PLATFORM_HWI_LIMIT > 201
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 202
+#if LOSCFG_PLATFORM_HWI_LIMIT > 202
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 203
+#if LOSCFG_PLATFORM_HWI_LIMIT > 203
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 204
+#if LOSCFG_PLATFORM_HWI_LIMIT > 204
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 205
+#if LOSCFG_PLATFORM_HWI_LIMIT > 205
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 206
+#if LOSCFG_PLATFORM_HWI_LIMIT > 206
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 207
+#if LOSCFG_PLATFORM_HWI_LIMIT > 207
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 208
+#if LOSCFG_PLATFORM_HWI_LIMIT > 208
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 209
+#if LOSCFG_PLATFORM_HWI_LIMIT > 209
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 210
+#if LOSCFG_PLATFORM_HWI_LIMIT > 210
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 211
+#if LOSCFG_PLATFORM_HWI_LIMIT > 211
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 212
+#if LOSCFG_PLATFORM_HWI_LIMIT > 212
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 213
+#if LOSCFG_PLATFORM_HWI_LIMIT > 213
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 214
+#if LOSCFG_PLATFORM_HWI_LIMIT > 214
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 215
+#if LOSCFG_PLATFORM_HWI_LIMIT > 215
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 216
+#if LOSCFG_PLATFORM_HWI_LIMIT > 216
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 217
+#if LOSCFG_PLATFORM_HWI_LIMIT > 217
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 218
+#if LOSCFG_PLATFORM_HWI_LIMIT > 218
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 219
+#if LOSCFG_PLATFORM_HWI_LIMIT > 219
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 220
+#if LOSCFG_PLATFORM_HWI_LIMIT > 220
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 221
+#if LOSCFG_PLATFORM_HWI_LIMIT > 221
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 222
+#if LOSCFG_PLATFORM_HWI_LIMIT > 222
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 223
+#if LOSCFG_PLATFORM_HWI_LIMIT > 223
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 224
+#if LOSCFG_PLATFORM_HWI_LIMIT > 224
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 225
+#if LOSCFG_PLATFORM_HWI_LIMIT > 225
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 226
+#if LOSCFG_PLATFORM_HWI_LIMIT > 226
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 227
+#if LOSCFG_PLATFORM_HWI_LIMIT > 227
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 228
+#if LOSCFG_PLATFORM_HWI_LIMIT > 228
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 229
+#if LOSCFG_PLATFORM_HWI_LIMIT > 229
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 230
+#if LOSCFG_PLATFORM_HWI_LIMIT > 230
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 231
+#if LOSCFG_PLATFORM_HWI_LIMIT > 231
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 232
+#if LOSCFG_PLATFORM_HWI_LIMIT > 232
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 233
+#if LOSCFG_PLATFORM_HWI_LIMIT > 233
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 234
+#if LOSCFG_PLATFORM_HWI_LIMIT > 234
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 235
+#if LOSCFG_PLATFORM_HWI_LIMIT > 235
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 236
+#if LOSCFG_PLATFORM_HWI_LIMIT > 236
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 237
+#if LOSCFG_PLATFORM_HWI_LIMIT > 237
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 238
+#if LOSCFG_PLATFORM_HWI_LIMIT > 238
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 239
+#if LOSCFG_PLATFORM_HWI_LIMIT > 239
     (HWI_PROC_FUNC) osInterrupt,
 #endif
-#if OS_HWI_MAX_NUM > 240
-    #error "OS_HWI_MAX_NUM must be less or equal to 240!"
+#if LOSCFG_PLATFORM_HWI_LIMIT > 240
+    #error "LOSCFG_PLATFORM_HWI_LIMIT must be less or equal to 240!"
 #endif

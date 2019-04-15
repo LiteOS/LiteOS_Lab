@@ -43,7 +43,7 @@
 #include "fs/los_vfs.h"
 
 
-#if (LOSCFG_ENABLE_VFS == YES)
+#if (LOSCFG_COMPONENT_VFS == YES)
 
 struct file          files [LOS_MAX_FILES];
 UINT32               fs_mutex = LOS_ERRNO_MUX_PTR_NULL;

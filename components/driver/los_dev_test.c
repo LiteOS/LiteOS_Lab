@@ -39,7 +39,7 @@
 #include <fs/los_vfs.h>
 
 
-#if LOSCFG_ENABLE_DRIVER
+#if LOSCFG_COMPONENT_DRIVER
 
 //this file implement some demo to test the device module
 #define cn_testdriv_buf_len 256
@@ -409,4 +409,4 @@ OSSHELL_EXPORT_CMD(__driv_close,"close","close");
 #endif 
 
 
-#endif  //end for LOSCFG_ENABLE_DRIVER
+#endif  //end for LOSCFG_COMPONENT_DRIVER

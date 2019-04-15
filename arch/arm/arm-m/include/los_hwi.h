@@ -49,22 +49,6 @@ extern "C" {
 
 /**
  * @ingroup los_hwi
- * Maximum number of used hardware interrupts.
- */
-/*lint -e553*/
-#ifndef OS_HWI_MAX_NUM
-#if (__CORTEX_M == 0U)
-/* Cortex-m0 and Cortex-m0plus default 32 */
-#define OS_HWI_MAX_NUM              32
-#elif (__CORTEX_M == 3U || __CORTEX_M == 4U || __CORTEX_M == 7U)
-/* Cortex-m3,Cortex-m4 and Cortex-m7 default 240 */
-#define OS_HWI_MAX_NUM              240
-#endif
-#endif
-/*lint +e553*/
-
-/**
- * @ingroup los_hwi
  * Highest priority of a hardware interrupt.
  */
 #ifndef OS_HWI_PRIO_HIGHEST
@@ -77,14 +61,6 @@ extern "C" {
  */
 #ifndef OS_HWI_PRIO_LOWEST
 #define OS_HWI_PRIO_LOWEST          7
-#endif
-
-/**
- * @ingroup los_config
- * Configuration item for interrupt with argument
- */
-#ifndef OS_HWI_WITH_ARG
-#define OS_HWI_WITH_ARG             NO
 #endif
 
 /**
@@ -116,7 +92,7 @@ typedef UINT32 HWI_ARG_T;
  * Define the type of a hardware interrupt handling function.
  */
 
-#if (OS_HWI_WITH_ARG == YES)
+#ifdef LOSCFG_PLATFORM_HWI_ARG
 typedef VOID (* HWI_PROC_FUNC)(VOID *pParm);
 #else
 typedef VOID (* HWI_PROC_FUNC)(VOID);
@@ -125,7 +101,7 @@ typedef VOID (* HWI_PROC_FUNC)(VOID);
 typedef struct
 {
     HWI_PROC_FUNC pfnHandler;
-#if (OS_HWI_WITH_ARG == YES)
+#ifdef LOSCFG_PLATFORM_HWI_ARG
     VOID*         pParm;
 #endif
 } HWI_HANDLER_T;
@@ -391,7 +367,7 @@ extern UINT32 _BootVectors[];
  * <ul>
  * <li>The hardware interrupt module is usable only when the configuration item for hardware interrupt tailoring is enabled.</li>
  * <li>Hardware interrupt number value range: [OS_USER_HWI_MIN,OS_USER_HWI_MAX]. The value range applicable for a Cortex-A7 platform is [32,95].</li>
- * <li>OS_HWI_MAX_NUM specifies the maximum number of interrupts that can be created.</li>
+ * <li>LOSCFG_PLATFORM_HWI_LIMIT specifies the maximum number of interrupts that can be created.</li>
  * <li>Before executing an interrupt on a platform, refer to the chip manual of the platform.</li>
  * </ul>
  *
@@ -518,7 +494,7 @@ extern VOID LOS_IntRestore(UINTPTR uvIntSave);
  * <ul>
  * <li>The hardware interrupt module is usable only when the configuration item for hardware interrupt tailoring is enabled.</li>
  * <li>Hardware interrupt number value range: [OS_USER_HWI_MIN,OS_USER_HWI_MAX]. The value range applicable for a Cortex-A7 platform is [32,95].</li>
- * <li>OS_HWI_MAX_NUM specifies the maximum number of interrupts that can be created.</li>
+ * <li>LOSCFG_PLATFORM_HWI_LIMIT specifies the maximum number of interrupts that can be created.</li>
  * <li>Before executing an interrupt on a platform, refer to the chip manual of the platform.</li>
  * </ul>
  *

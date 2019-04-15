@@ -34,8 +34,8 @@
 
 #include "los_config.h"
 
-#if (CMSIS_OS_VER == 1)
+#if (LOSCFG_CMSIS_VER == 1)
 #include "1.0/cmsis_os1.h"
-#elif (CMSIS_OS_VER == 2)
+#elif (LOSCFG_CMSIS_VER == 2)
 #include "2.0/cmsis_os2.h"
 #endif

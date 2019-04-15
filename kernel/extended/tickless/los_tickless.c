@@ -89,7 +89,7 @@ inline VOID osUpdateKernelTickCount(UINT32 uwHwiIndex)
     /** this function must be called in interrupt context */
     if (g_uwSleepTicks > 1)
     {
-        UINT32 uwCyclesPerTick = OS_SYS_CLOCK / LOSCFG_BASE_CORE_TICK_PER_SECOND;
+        UINT32 uwCyclesPerTick = LOSCFG_SYS_CLOCK / LOSCFG_BASE_CORE_TICK_PER_SECOND;
         UINT32 uwCurrSysCycles, uwElapseSysCycles, uwElapseTicks, uwRemainSysCycles;
 
         g_bReloadSysTickFlag = 0;
@@ -100,7 +100,7 @@ inline VOID osUpdateKernelTickCount(UINT32 uwHwiIndex)
     #endif
         {
             uwElapseTicks = (g_uwSleepTicks - 1);
-            LOS_SysTickReload(OS_SYS_CLOCK / LOSCFG_BASE_CORE_TICK_PER_SECOND);
+            LOS_SysTickReload(LOSCFG_SYS_CLOCK / LOSCFG_BASE_CORE_TICK_PER_SECOND);
         }
         else
         {
@@ -132,7 +132,7 @@ inline VOID osUpdateKernelTickCount(UINT32 uwHwiIndex)
 
 VOID osTicklessStart(VOID)
 {
-    UINT32 uwCyclesPerTick = OS_SYS_CLOCK / LOSCFG_BASE_CORE_TICK_PER_SECOND;
+    UINT32 uwCyclesPerTick = LOSCFG_SYS_CLOCK / LOSCFG_BASE_CORE_TICK_PER_SECOND;
     UINT32 uwMaxTicks = LOSCFG_SYSTICK_LOAD_RELOAD_MAX / uwCyclesPerTick;
     UINTPTR uvIntSave = 0;
     UINT32 uwSleepTicks = 0;

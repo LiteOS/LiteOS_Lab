@@ -37,7 +37,7 @@
 #include <stdlib.h>
 #include <los_dev.h>
 
-#if LOSCFG_ENABLE_DRIVER
+#if LOSCFG_COMPONENT_DRIVER
 
 #include <sys/fcntl.h>
 

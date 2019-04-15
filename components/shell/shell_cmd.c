@@ -42,7 +42,7 @@
 /**************************************FILE INCLIUDES**************************/
 #include <shell.h>
 
-#if LOSCFG_ENABLE_SHELL
+#if LOSCFG_COMPONENT_SHELL
 
 #include <stdint.h>
 #include <stddef.h>

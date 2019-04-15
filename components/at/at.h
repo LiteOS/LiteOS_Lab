@@ -44,7 +44,7 @@
 
 typedef s32_t (*fnoob)(u8_t *data,s32_t datalen);
 
-#if   LOSCFG_ENABLE_AT
+#if   LOSCFG_COMPONENT_AT
 bool_t los_at_init(const char *devname);               //install the at frame work,which binded to the device
 
 bool_t at_oobregister(fnoob func,const char *index);  //register a out of band data dealer

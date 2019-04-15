@@ -35,7 +35,7 @@
 #include <los_config.h>
 #include <los_devfs.h>
 
-#if (LOSCFG_ENABLE_DEVFS == YES)
+#if (LOSCFG_COMPONENT_DEVFS == YES)
 
 static void *devfs_root = NULL;
 

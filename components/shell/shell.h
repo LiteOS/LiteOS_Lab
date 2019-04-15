@@ -36,7 +36,7 @@
 #define __OSSHELL_H
 
 #include <los_config.h>
-#if LOSCFG_ENABLE_SHELL
+#if LOSCFG_COMPONENT_SHELL
 
 #include <osport.h>
 //this is a shell module designed for the os

@@ -52,7 +52,7 @@ extern "C"{
 /*lint -save -e64*/
 LITE_OS_SEC_BSS      QUEUE_CB_S       *g_pstAllQueue;
 LITE_OS_SEC_BSS      LOS_DL_LIST      g_stFreeQueueList;
-#if ((LOSCFG_PLATFORM_EXC == YES) && (LOSCFG_SAVE_EXC_INFO == YES))
+#ifdef LOSCFG_SAVE_EXC_INFO
 LITE_OS_SEC_BSS      UINT32           g_uwExcQueueMaxNum;
 #endif
 
@@ -89,7 +89,7 @@ LITE_OS_SEC_TEXT_INIT UINT32 osQueueInit(VOID)
         LOS_ListTailInsert(&g_stFreeQueueList, &pstQueueNode->stReadWriteList[OS_QUEUE_WRITE]);
     }
 
-#if ((LOSCFG_PLATFORM_EXC == YES) && (LOSCFG_SAVE_EXC_INFO == YES))
+#if LOSCFG__SAVE_EXC_INFO
     g_uwExcQueueMaxNum = LOSCFG_BASE_IPC_QUEUE_LIMIT;
     osExcRegister(OS_EXC_TYPE_QUE, (EXC_INFO_SAVE_CALLBACK)LOS_QueueInfoGet, &g_uwExcQueueMaxNum);
 #endif

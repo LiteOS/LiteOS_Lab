@@ -167,7 +167,7 @@ extern UINT32 LOS_CyclePerTickGet(VOID);
  *<li>The number of milliseconds obtained through the conversion is 32-bit.</li>
  *</ul>
  *
- *@param  uwTick  [IN] Number of Ticks. The value range is (0,OS_SYS_CLOCK).
+ *@param  uwTick  [IN] Number of Ticks. The value range is (0,LOSCFG_SYS_CLOCK).
  *
  *@retval UINT32 Number of milliseconds obtained through the conversion. Ticks are successfully converted to milliseconds.
  *@par  Dependency:

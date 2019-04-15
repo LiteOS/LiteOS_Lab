@@ -37,7 +37,7 @@
 #include <at.h>
 #include <los_dev.h>
 
-#if LOSCFG_ENABLE_AT
+#if LOSCFG_COMPONENT_AT
 
 //these defines could be moved to the configuration of the at module
 #define cn_at_oob_len           6            //only allow 6 oob command monitor here,you could configure it more

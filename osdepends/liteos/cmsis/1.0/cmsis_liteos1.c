@@ -49,7 +49,7 @@
 extern "C" {
 #endif /* __cplusplus */
 #endif /* __cplusplus */
-#if (CMSIS_OS_VER == 1)
+#if (LOSCFG_CMSIS_VER == 1)
 
 #define PRIORITY_WIN 4u
 
@@ -1456,7 +1456,7 @@ UINT32 fwMailQGetStatus(void)
     return 0;
 #endif
 }
-#endif // (CMSIS_OS_VER == 1)
+#endif // (LOSCFG_CMSIS_VER == 1)
 #ifdef __cplusplus
 #if __cplusplus
 }

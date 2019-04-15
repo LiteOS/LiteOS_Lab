@@ -50,7 +50,6 @@ extern "C" {
  * Define whether to check the address validity
  */
 #if (LOSCFG_PLATFORM_EXC == YES)
-#define LOS_MEMBOX_CHECK
 extern UINT8 g_aucMemMang[];
 #endif
 

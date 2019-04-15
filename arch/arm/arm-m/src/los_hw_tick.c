@@ -68,9 +68,9 @@ LITE_OS_SEC_TEXT_INIT UINT32 osTickStart(VOID)
 {
     UINT32 uwRet;
 
-    if ((0 == OS_SYS_CLOCK)
+    if ((0 == LOSCFG_SYS_CLOCK)
         || (0 == LOSCFG_BASE_CORE_TICK_PER_SECOND)
-        || (LOSCFG_BASE_CORE_TICK_PER_SECOND > OS_SYS_CLOCK))/*lint !e506*/
+        || (LOSCFG_BASE_CORE_TICK_PER_SECOND > LOSCFG_SYS_CLOCK))/*lint !e506*/
     {
         return LOS_ERRNO_TICK_CFG_INVALID;
     }
@@ -82,10 +82,10 @@ LITE_OS_SEC_TEXT_INIT UINT32 osTickStart(VOID)
     LOS_HwiCreate((UINT32)SysTick_IRQn, OS_HWI_PRIO_LOWEST, 0, osTickHandler, 0);
 #endif
 
-    g_uwCyclesPerTick = OS_SYS_CLOCK / LOSCFG_BASE_CORE_TICK_PER_SECOND;
+    g_uwCyclesPerTick = LOSCFG_SYS_CLOCK / LOSCFG_BASE_CORE_TICK_PER_SECOND;
     g_ullTickCount = 0;
 
-    uwRet = SysTick_Config(OS_SYS_CLOCK/LOSCFG_BASE_CORE_TICK_PER_SECOND);
+    uwRet = SysTick_Config(LOSCFG_SYS_CLOCK/LOSCFG_BASE_CORE_TICK_PER_SECOND);
     if (uwRet == 1)
     {
         return LOS_ERRNO_TICK_PER_SEC_TOO_SMALL;

@@ -194,7 +194,7 @@ LITE_OS_SEC_TEXT_INIT UINT32 osSwTmrInit(VOID)
         pstTemp = pstSwtmr;
     }
 
-    uwRet = LOS_QueueCreate((CHAR *)NULL, OS_SWTMR_HANDLE_QUEUE_SIZE, &m_uwSwTmrHandlerQueue, 0, sizeof(SWTMR_HANDLER_ITEM_S));
+    uwRet = LOS_QueueCreate((CHAR *)NULL, LOSCFG_BASE_CORE_SWTMR_LIMIT, &m_uwSwTmrHandlerQueue, 0, sizeof(SWTMR_HANDLER_ITEM_S));
     if (uwRet != LOS_OK)
     {
         return LOS_ERRNO_SWTMR_QUEUE_CREATE_FAILED;

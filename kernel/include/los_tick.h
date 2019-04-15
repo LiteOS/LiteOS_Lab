@@ -54,7 +54,7 @@ extern "C" {
  *
  * Value: 0x02000400
  *
- * Solution: Change values of the OS_SYS_CLOCK and LOSCFG_BASE_CORE_TICK_PER_SECOND system time configuration modules in Los_config.h.
+ * Solution: Change values of the LOSCFG_SYS_CLOCK and LOSCFG_BASE_CORE_TICK_PER_SECOND system time configuration modules in Los_config.h.
  */
 #define LOS_ERRNO_TICK_CFG_INVALID                  LOS_ERRNO_OS_ERROR(LOS_MOD_TICK, 0x00)
 
@@ -74,7 +74,7 @@ extern "C" {
  *
  * Value: 0x02000402
  *
- * Solution: Change values of the OS_SYS_CLOCK and LOSCFG_BASE_CORE_TICK_PER_SECOND system time configuration modules according to the SysTick_Config function.
+ * Solution: Change values of the LOSCFG_SYS_CLOCK and LOSCFG_BASE_CORE_TICK_PER_SECOND system time configuration modules according to the SysTick_Config function.
  */
 #define LOS_ERRNO_TICK_PER_SEC_TOO_SMALL            LOS_ERRNO_OS_ERROR(LOS_MOD_TICK, 0x02)
 

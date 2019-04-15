@@ -1,0 +1,1 @@
+src-$(LOSCFG_COMPONENT_VFS) += vfs/*.c

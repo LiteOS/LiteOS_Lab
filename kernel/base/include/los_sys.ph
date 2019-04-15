@@ -79,7 +79,7 @@ extern "C" {
  */
 STATIC_INLINE UINT64 osCycle2MS(UINT64 ullCycle)
 {
-    return (UINT64)((ullCycle / (OS_SYS_CLOCK / OS_SYS_MS_PER_SECOND)));
+    return (UINT64)((ullCycle / (LOSCFG_SYS_CLOCK / OS_SYS_MS_PER_SECOND)));
 }
 
 /**
@@ -103,7 +103,7 @@ STATIC_INLINE UINT64 osCycle2MS(UINT64 ullCycle)
  */
 STATIC_INLINE UINT64 osCycle2US(UINT64 ullCycle)
 {
-    UINT64 ullTmp = OS_SYS_CLOCK / OS_SYS_US_PER_SECOND;
+    UINT64 ullTmp = LOSCFG_SYS_CLOCK / OS_SYS_US_PER_SECOND;
     return (UINT64)(ullCycle / ullTmp);
 }
 

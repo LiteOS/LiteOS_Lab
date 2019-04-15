@@ -36,7 +36,7 @@
 #include "los_task.ph"
 #include "los_config.h"
 
-#if (LOSCFG_HEAP_IMPROVED == YES)
+#if (LOSCFG_NEW_HEAP == YES)
 #include "mem.h"
 #endif
 
@@ -52,7 +52,7 @@ extern "C" {
 
 LITE_OS_SEC_BSS UINT8* m_aucSysMem0;
 
-#if ((LOSCFG_PLATFORM_EXC == YES) && (LOSCFG_SAVE_EXC_INFO == YES))
+#ifdef LOSCFG_SAVE_EXC_INFO
 LITE_OS_SEC_BSS UINT8 m_aucTaskArray[MAX_EXC_MEM_SIZE];
 #endif
 
@@ -140,7 +140,7 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_KernelInit(VOID)
 
     osRegister();
 
-#if (LOSCFG_HEAP_IMPROVED != YES)
+#if (LOSCFG_OLD_HEAP == YES)
 
     m_aucSysMem0 = OS_SYS_MEM_ADDR;
 #endif

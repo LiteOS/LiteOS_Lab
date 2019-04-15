@@ -34,7 +34,7 @@
 
 #include <los_config.h>
 
-#if (LOSCFG_HEAP_IMPROVED == YES)
+#if (LOSCFG_NEW_HEAP == YES)
 
 #include <string.h>
 

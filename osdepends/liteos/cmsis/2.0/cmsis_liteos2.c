@@ -57,7 +57,7 @@
 extern "C" {
 #endif /* __cplusplus */
 #endif /* __cplusplus */
-#if (CMSIS_OS_VER == 2)
+#if (LOSCFG_CMSIS_VER == 2)
 
 /* Kernel initialization state */
 static osKernelState_t KernelState;
@@ -1639,7 +1639,7 @@ void osRemoveStopClocksVeto(void)
 }
 #endif
 
-#endif // (CMSIS_OS_VER == 2)
+#endif // (LOSCFG_CMSIS_VER == 2)
 #ifdef __cplusplus
 #if __cplusplus
 }

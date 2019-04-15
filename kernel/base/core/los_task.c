@@ -558,7 +558,7 @@ LITE_OS_SEC_TEXT_INIT UINT32 osTaskInit(VOID)
         LOS_ListInit(pstListObject);
     }
 
-#if ((LOSCFG_PLATFORM_EXC == YES) && (LOSCFG_SAVE_EXC_INFO == YES))
+#ifdef LOSCFG_SAVE_EXC_INFO
     osExcRegister((EXC_INFO_TYPE)OS_EXC_TYPE_TSK, (EXC_INFO_SAVE_CALLBACK)LOS_TaskInfoGet, &g_uwTskMaxNum);
 #endif
 
@@ -707,7 +707,7 @@ LITE_OS_SEC_TEXT_MINOR VOID osTaskMonInit(VOID)
 #if (LOSCFG_BASE_CORE_EXC_TSK_SWITCH == YES)
     (VOID)memset(&g_astTskSwitchInfo, 0, sizeof(OS_TASK_SWITCH_INFO));
     g_astTskSwitchInfo.ucIsFull = 0x7F & OS_TASK_SWITCH_INFO_COUNT;
-#if ((LOSCFG_PLATFORM_EXC == YES) && (LOSCFG_SAVE_EXC_INFO == YES))
+#ifdef LOSCFG_SAVE_EXC_INFO
     osExcRegister((EXC_INFO_TYPE)OS_EXC_TYPE_TSK_SWITCH, (EXC_INFO_SAVE_CALLBACK)LOS_TaskSwitchInfoGet, &g_astTskSwitchInfo);
 #endif
 #endif

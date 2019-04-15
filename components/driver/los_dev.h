@@ -41,8 +41,6 @@
 #include <sys/fcntl.h>
 #include <sys/types.h>
 
-//#define LOSCFG_ENABLE_DRIVER  1  //for the test 
-
 typedef void* los_driv_t ;//returned by the driver register
 typedef bool_t (*fn_devopen)  (void *pri,s32_t flag);
 typedef s32_t  (*fn_devread)  (void *pri,u32_t offset,u8_t *buf,s32_t len,u32_t timeout);
@@ -71,7 +69,7 @@ typedef void* los_dev_t ;                   //this type is returned by the dev o
 
 
 
-#if LOSCFG_ENABLE_DRIVER
+#if LOSCFG_COMPONENT_DRIVER
 //device module init entry
 bool_t  los_driv_init(void);
 //these interface called by the bsp develop
@@ -123,14 +121,14 @@ typedef struct
 #define   los_dev_seek (dev,offset,fromwhere)          -1
    
 #define OSDRIV_EXPORT(varname,drivname,operate,pridata,flagmask)
-#endif   //end for LOSCFG_ENABLE_DRIVER
+#endif   //end for LOSCFG_COMPONENT_DRIVER
     
-#if LOSCFG_ENABLE_DEVFS
+#if LOSCFG_COMPONENT_DRIVER
 bool_t devfs_install(void);       
 #else 
                                                
 #define   devfs_install()      
-#endif  //end for the LOSCFG_ENABLE_DRIVER
+#endif  //end for the LOSCFG_COMPONENT_DRIVER
    
 #endif  //end for the file
 

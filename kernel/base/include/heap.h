@@ -46,14 +46,12 @@
 
 #include "chunk.h"
 
-#if !defined (LOSCFG_CONFIG_CM_TLSF) && !defined (LOSCFG_CONFIG_CM_BESTFIT)
-#define LOSCFG_CONFIG_CM_BESTFIT
-#endif
-
-#if   defined (LOSCFG_CONFIG_CM_TLSF)
+#if   defined (LOSCFG_MEMORY_BESTFIT)
 #include "cm-tlsf.h"
-#elif defined (LOSCFG_CONFIG_CM_BESTFIT)
+#elif defined (LOSCFG_MEMORY_TLSF)
 #include "cm-bestfit.h"
+#else
+#error "BUG! DSA not selected!"
 #endif
 
 #define MIN_BLOCK_SIZE          (sizeof (block_t) + sizeof (ach_t) * 2 + \
