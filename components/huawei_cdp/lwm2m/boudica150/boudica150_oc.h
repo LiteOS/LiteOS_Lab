@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -32,33 +32,31 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef __AT_H
-#define __AT_H
 
-#include <stdint.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <osport.h>
+#ifndef __BOUDICA150_OC_H
+#define __BOUDICA150_OC_H
 
-#include <los_config.h>
+/**
+ *@brief this function should be called after oc_lwm2m_agent_init
+ *
+ *@param[in]  plmn which used by at+cops
+ *@param[in]  apn which used by
+ *
+ */
+int boudica150_init(const char *plmn, const char *apn, const char *bands);
 
-typedef s32_t (*fnoob)(u8_t *data,s32_t datalen);
-
-#if   LOSCFG_ENABLE_AT
-bool_t los_at_init(const char *devname);               //install the at frame work,which binded to the device
-
-bool_t at_oobregister(fnoob func,const char *index);  //register a out of band data dealer
-s32_t  at_command(u8_t *cmd, s32_t cmdlen,const char *index,u8_t *respbuf,s32_t respbuflen,u32_t timeout); //send at command and receive response
-bool_t at_workmode(bool_t passby,fnoob func);   //use to set the at module work as the passer by
-#else
-
-#define los_at_init(name)              false
-#define at_oobregister(x,y)            false
-#define at_command(a,b,c,d,e,f)        0   
-#define at_workmode(x,y)               false
+/**
+ *@brief this function to get the csq of the MODULES
+ *
+ *@param[in]  value, storage the csq
+ *@param[out] value, the csq get
+ *
+ *return 0 success while <0 failed
+ */
+int boudica150_get_csq(int *value);
 
 
-#endif
 
 
-#endif
+
+#endif /* __BOUDICA150_OC_H */

@@ -32,33 +32,49 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef __AT_H
-#define __AT_H
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __SYS_H_
+#define __SYS_H_
 
-#include <stdint.h>
-#include <stddef.h>
+/* Includes LiteOS------------------------------------------------------------------*/
+
+#include "los_base.h"
+#include "los_config.h"
+#include "los_sys.h"
+#include "los_typedef.h"
+#include "los_task.ph"
+#include "los_hwi.h"
+#include "los_sem.h"
+#include "los_event.h"
+#include "los_memory.h"
+#include "los_queue.ph"
+
+#include "stdlib.h"
+#include "string.h"
 #include <stdio.h>
-#include <osport.h>
+#include "stm32l4xx_hal.h"
+#include "stm32l4xx_it.h"
+#include "delay.h"
+#include "adc.h"
+#include "i2c.h"
+#include "usart.h"
+#include "gpio.h"
+#include "oled.h"
+#include "DHT11_BUS.h"
+#include "bh1750.h" 
 
-#include <los_config.h>
-
-typedef s32_t (*fnoob)(u8_t *data,s32_t datalen);
-
-#if   LOSCFG_ENABLE_AT
-bool_t los_at_init(const char *devname);               //install the at frame work,which binded to the device
-
-bool_t at_oobregister(fnoob func,const char *index);  //register a out of band data dealer
-s32_t  at_command(u8_t *cmd, s32_t cmdlen,const char *index,u8_t *respbuf,s32_t respbuflen,u32_t timeout); //send at command and receive response
-bool_t at_workmode(bool_t passby,fnoob func);   //use to set the at module work as the passer by
-#else
-
-#define los_at_init(name)              false
-#define at_oobregister(x,y)            false
-#define at_command(a,b,c,d,e,f)        0   
-#define at_workmode(x,y)               false
-
-
+#ifdef __cplusplus
+ extern "C" {
 #endif
 
+uint32_t HAL_GetTick(void);
+void SystemClock_Config(void);
+void _Error_Handler(char *, int);
 
+#define Error_Handler() _Error_Handler(__FILE__, __LINE__)
+#ifdef __cplusplus
+}
 #endif
+
+#endif /* __SYS_H_ */
+
