@@ -35,9 +35,7 @@
 #include "sys_init.h"
 
 #include <shell.h>
-#include <los_dev.h>
 #include <osport.h>
-#include <at.h>
 
 #include <mem.h>
 
@@ -65,14 +63,14 @@ const struct phys_mem system_phys_mem [] =
 
 VOID HardWare_Init(VOID)
 {
-	HAL_Init();
-	/*configure the system clock*/
-	SystemClock_Config();
+    HAL_Init();
+    /*configure the system clock*/
+    SystemClock_Config();
 
-	/* Initialize all configured peripherals */
-	DelayInit();
-	MX_GPIO_Init();
-	MX_I2C1_Init();
+    /* Initialize all configured peripherals */
+    DelayInit();
+    MX_GPIO_Init();
+    MX_I2C1_Init();
 }
 int main(void)
 {
@@ -87,48 +85,13 @@ int main(void)
     {
         return LOS_NOK;
     }
-    //system frame work initilized here
     los_shell_init();     //which means you could use shell
-    los_driv_init();     //which means you could use the driver framwork
-    los_at_init("atdev"); //which means you could use the at framework
-    //////////////////////APPLICATION INITIALIZE HERE/////////////////////
-    //do the shell module initlialize:use uart 1
     extern void uart_debug_init(s32_t baud);
     uart_debug_init(115200);
-    //do the at module initialize:use uart 2
-    extern bool_t uart_at_init(s32_t baudrate);
-    uart_at_init(9600);
-     
-#if 1 
-    //create the main task of the application
-    #include <app_main.h>
-    //app_main_init("178.15.147.143", 5683,20);
-    //app_main_init("testdevice.hw-oc.com", 5683,20);  //Europe openlab use this configure
 
-    tagNbConfig config;
-    //this is used in dus using 1nce card
-//    config.server = "178.15.147.143,5683";
-//    config.bands = "8,5,20";
-//    config.plmn = "26201";
-//    config.apn = "1,\"IP\",\"iot.1nce.net\"";
-//    app_main_init(&config);
-
-
-    //this is used in china for China Telecom
-//    config.server = "139.159.140.34,5683";
-//    config.bands = "5,8,20";
-//    config.plmn = "46011";
-//    config.apn = "1,\"IP\",\"HUAWEI.COM\"";
-
-    //this is used in china for China  Mobile
-    config.server = "139.159.140.34,5683";
-    config.bands = "5,8,20";
-    config.plmn = NULL ;
-    config.apn = NULL;
-
-    app_main_init(&config);  //China telecom
- #endif
     ////////////////////////APPLICATION INITIALIZE END///////////////////
+    extern int app_init();
+    app_init();
     //start the system
     LOS_Start();
 }
