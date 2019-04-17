@@ -360,7 +360,7 @@ static bool_t nb_setapn(const char *apn)
         ret = nb_atcmd_response("AT+CGDCONT?\r","OK",resp,64);
 
         memset(cmd,0,64);
-        snprintf(cmd,63,"+COPS:1,2,\"%s\"\r",apn);
+        snprintf(cmd,63,"+CGDCONT:%s",apn);
         if((false == ret)||(NULL == strstr(resp,cmd)))//which means we need to set it
         {
         	memset(cmd,0,64);
