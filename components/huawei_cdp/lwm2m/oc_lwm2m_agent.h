@@ -40,9 +40,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
-
-#define LOS_CFG_OC_LWM2M_AGENT  1
-
 /** @brief this is the message dealer module for the application*/
 typedef int32_t (*fn_oc_msg_deal)(uint8_t *msg, int32_t len);
 
@@ -60,13 +57,15 @@ typedef struct
 ///////////////////////////LWM2M AGENT INTERFACE////////////////////////////////
 typedef int (*fn_oc_lwm2m_report)(uint8_t *buf, int32_t len, int32_t timeout);
 typedef int (*fn_oc_lwm2m_config)(tag_oc_config_param *param);
+typedef int (*fn_oc_lwm2m_deconfig)();
 /**
  * @brief this data structure defines the lwm2m agent implement
  */
 typedef struct
 {
-    fn_oc_lwm2m_config config; ///< this function used for the configuration
-    fn_oc_lwm2m_report report; ///< this function used for the report data to the cdp
+    fn_oc_lwm2m_config   config;   ///< this function used for the configuration
+    fn_oc_lwm2m_report   report;   ///< this function used for the report data to the cdp
+    fn_oc_lwm2m_deconfig deconfig; ///< this function used for the deconfig
 }tag_oc_lwm2m_opt;
 
 
@@ -115,6 +114,14 @@ int32_t oc_lwm2m_report(uint8_t *buf, int32_t len,int32_t timeout);
 int32_t oc_lwm2m_config(tag_oc_config_param *param);
 
 /**
+ *@brief: the application use this function to deconfigure the lwm2m agent
+ *
+ * return 0 success while <0 failed
+ */
+
+int32_t oc_lwm2m_deconfig();
+
+/**
  *@brief this is the oc lwm2m agent initialize function,must be called first
  *
  *@return 0 success while <0 failed
@@ -130,6 +137,7 @@ int32_t oc_lwm2m_agent_init();
 #define oc_lwm2m_report(buf,len,timeout)                                    -1
 #define oc_lwm2m_config(param)                                              -1
 #define oc_lwm2m_agent_init                                                 -1
+#define oc_lwm2m_deconfig                                                   -1
 
 #endif
 

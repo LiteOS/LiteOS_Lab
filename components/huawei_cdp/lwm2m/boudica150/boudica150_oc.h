@@ -56,7 +56,4 @@ int boudica150_init(const char *plmn, const char *apn, const char *bands);
 int boudica150_get_csq(int *value);
 
 
-
-
-
 #endif /* __BOUDICA150_OC_H */
