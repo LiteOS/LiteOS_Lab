@@ -75,10 +75,10 @@ include $(TOP_DIR)/demos/agenttiny_mqtt/atiny_mqtt_demo.mk
 endif
 
 
-WITH_LWM2M_AGENT = yes
+WITH_OC_LWM2M_AGENT = yes
 ###############LOAD OC LWM2M AGENT###############
 #load the mqtt if enabled
-ifeq ($(WITH_LWM2M_AGENT), yes)
+ifeq ($(WITH_OC_LWM2M_AGENT), yes)
 
 include $(TOP_DIR)/components/huawei_cdp/lwm2m/oc_lwm2m_agent.mk
 

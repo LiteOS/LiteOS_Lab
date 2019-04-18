@@ -25,6 +25,7 @@
 #define cn_app_light           0
 #define cn_app_ledcmd          1
 #define cn_app_csq             2
+#define cn_app_iocmd           3
 
 #pragma pack(1)
 typedef struct
@@ -47,25 +48,65 @@ typedef struct
 }tag_app_net_csq;
 #pragma pack()
 
-static uint8_t s_app_msg_id[] = {cn_app_light,cn_app_ledcmd,cn_app_csq};
+//if your command is very fast,please use a queue here--TODO
+#define cn_app_rcv_buf_len 128
+static uint8_t    s_rcv_buffer[cn_app_rcv_buf_len];
+static uint32_t   s_rcv_datalen;
+static semp_t     s_rcv_sync;
 
-
-static int32_t led_msg_deal(uint8_t *msg, int32_t len)
+//use this function to push all the message to the buffer
+static int32_t app_msg_deal(uint8_t *msg, int32_t len)
 {
     int32_t ret = -1;
-    tag_app_led_cmd  cmd;
 
-    memset(&cmd,0,sizeof(cmd));
+    if(len <= cn_app_rcv_buf_len)
+    {
+        memcpy(s_rcv_buffer,msg,len);
+        s_rcv_datalen = len;
 
-    cmd = *(tag_app_led_cmd *)msg;
-    //add your own process code here --TODO
-    printf("msgid:%d cmd:%s\n\r",cmd.msgid,cmd.led);
+        semp_post(s_rcv_sync);
 
+        ret = 0;
+
+    }
     return ret;
 }
 
 
-static int app_task_entry()
+static int32_t app_cmd_task_entry()
+{
+    int32_t ret = -1;
+    uint8_t msgid;
+
+    tag_app_led_cmd *led_cmd;
+
+
+    while(1)
+    {
+        if(semp_pend(s_rcv_sync,0x7fffffff))
+        {
+            msgid = s_rcv_buffer[0];
+
+            switch (msgid)
+            {
+                case cn_app_ledcmd:
+
+                    led_cmd = (tag_app_led_cmd *)s_rcv_buffer;
+                    printf("LEDCMD:msgid:%d msg:%s \n\r",led_cmd->msgid,led_cmd->led);
+
+                    //if you need response,do it here--TODO
+
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    return ret;
+}
+
+static int app_report_task_entry()
 {
     int ret = -1;
 
@@ -91,7 +132,7 @@ static int app_task_entry()
     if(0 == oc_lwm2m_config(&oc_param))   //success ,so we could receive and send
     {
         //install a dealer for the led message received
-        oc_lwm2m_install_msgdealer(led_msg_deal,(const char *)&s_app_msg_id[cn_app_ledcmd],1);
+        oc_lwm2m_install_msgdealer(app_msg_deal,NULL,0);
 
         while(1) //--TODO ,you could add your own code here
         {
@@ -114,8 +155,9 @@ static int app_task_entry()
 
 int app_init()
 {
-
-    task_create("oc_lwm2m",(fnTaskEntry)app_task_entry,0x1000,NULL,NULL,2);
+    semp_create(&s_rcv_sync,1,0);
+    task_create("app_report",(fnTaskEntry)app_report_task_entry,0x1000,NULL,NULL,2);
+    task_create("app_command",(fnTaskEntry)app_cmd_task_entry,0x1000,NULL,NULL,3);
 
     return 0;
 }

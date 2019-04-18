@@ -202,11 +202,6 @@ static s32_t boudica150_rcvdeal(uint8_t *data,s32_t len)
     }
     memset(s_boudica150_oc_cb.rcvbuf,0,cn_boudica150_cachelen);
     hexstr_to_byte(str,datalen*2,(char *)s_boudica150_oc_cb.rcvbuf);
-//    printf("%s:appdata:%d bytes\n\r",__FUNCTION__,datalen);
-//    if(NULL != s_boudica150_oc_cb.rcvhandle)
-//    {
-//        s_boudica150_oc_cb.rcvhandle(s_boudica150_oc_cb.rcvbuf,datalen);
-//    }
 
     oc_lwm2m_msg_push(s_boudica150_oc_cb.rcvbuf,datalen);
 
@@ -597,6 +592,12 @@ static int boudica150_oc_config(tag_oc_config_param *param)
     return ret;
 }
 
+static int boudica150_oc_deconfig()
+{
+    return 0;
+}
+
+
 //this function to get the csq
 int boudica150_get_csq(int *value)
 {
@@ -640,6 +641,7 @@ int boudica150_get_csq(int *value)
 const tag_oc_lwm2m_opt  g_boudica150_oc_opt = \
 {
     .config = boudica150_oc_config,
+    .deconfig = boudica150_oc_deconfig,
     .report = boudica150_oc_report,
 };
 

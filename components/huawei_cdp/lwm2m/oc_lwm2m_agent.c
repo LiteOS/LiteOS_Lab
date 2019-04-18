@@ -160,6 +160,20 @@ int32_t oc_lwm2m_config(tag_oc_config_param *param)
     return ret;
 }
 
+
+int32_t oc_lwm2m_deconfig()
+{
+    int32_t ret = -1;
+
+    if((NULL != s_oc_lwm2m_agent) &&(NULL != s_oc_lwm2m_agent->deconfig))
+    {
+       ret = s_oc_lwm2m_agent->deconfig();
+    }
+
+    return ret;
+}
+
+
 ///////////////////////OC LWM2M AGENT INITIALIZE////////////////////////////////
 int32_t oc_lwm2m_agent_init()
 {
