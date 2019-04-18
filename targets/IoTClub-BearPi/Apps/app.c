@@ -78,7 +78,7 @@ static int32_t app_cmd_task_entry()
     int32_t ret = -1;
     uint8_t msgid;
 
-    tag_app_led_cmd led_cmd;
+    tag_app_led_cmd *led_cmd;
 
 
     while(1)
@@ -90,8 +90,12 @@ static int32_t app_cmd_task_entry()
             switch (msgid)
             {
                 case cn_app_ledcmd:
-                    memcpy(&led_cmd,s_rcv_buffer,sizeof(tag_app_led_cmd));
-                    printf("LEDCMD:msgid:%d msg:%s \n\r",led_cmd.msgid,led_cmd.led);
+
+                    led_cmd = (tag_app_led_cmd *)s_rcv_buffer;
+                    printf("LEDCMD:msgid:%d msg:%s \n\r",led_cmd->msgid,led_cmd->led);
+
+                    //if you need response,do it here--TODO
+
                     break;
                 default:
                     break;
