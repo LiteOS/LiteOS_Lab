@@ -2,16 +2,20 @@
 
 为了让at框架和硬件做解耦，特优化或者说是更新以前的版本，让AT框架的本质回归到AT。
 
-#### 安装配置
+#### 编译配置
 
 在使用at框架之前，需要系统的配置文件配置LOSCFG_ENABLE_AT。
 
+如果使用KEIL以及IAR等工具，建议在target_config.h文件中进行配置
 ```
 如在target_config.h中配置
 #define LOSCFG_ENABLE_AT     1
 ```
 
-然后可以安装AT框架了。
+如果使用MAKE，则建议在makefile文件中直接包含AT组件目录下的at.mk即可
+
+#### 组件安装
+安装该组件必须调用los_at_init进行初始化，需要使用者提供相关的AT通道设备
 
 ```
 bool_t los_at_init(const char *devname);           //install the at module

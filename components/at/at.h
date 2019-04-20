@@ -40,23 +40,22 @@
 #include <stdio.h>
 #include <osport.h>
 
-#include <los_config.h>
 
 typedef s32_t (*fnoob)(u8_t *data,s32_t datalen);
 
-#if   LOSCFG_ENABLE_AT
+#if  LOSCFG_ENABLE_AT
 bool_t los_at_init(const char *devname);               //install the at frame work,which binded to the device
 
 bool_t at_oobregister(fnoob func,const char *index);  //register a out of band data dealer
 s32_t  at_command(u8_t *cmd, s32_t cmdlen,const char *index,u8_t *respbuf,s32_t respbuflen,u32_t timeout); //send at command and receive response
-bool_t at_workmode(bool_t passby,fnoob func);   //use to set the at module work as the passer by
+bool_t at_workmode(bool_t passby,fnoob func);          //use to set the at module work as the passer by
+
 #else
 
 #define los_at_init(name)              false
 #define at_oobregister(x,y)            false
 #define at_command(a,b,c,d,e,f)        0   
 #define at_workmode(x,y)               false
-
 
 #endif
 
