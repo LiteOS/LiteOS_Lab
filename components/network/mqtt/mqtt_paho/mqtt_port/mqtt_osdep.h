@@ -32,32 +32,57 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef __AT_H
-#define __AT_H
+#ifndef MQTT_OSDEP_H
+#define MQTT_OSDEP_H
 
-#include <stdint.h>
-#include <stddef.h>
+
 #include <stdio.h>
-#include <osport.h>
+#include <stdlib.h>
+#include <string.h>
+#include <los_typedef.h>
+#include <los_sys.h>
 
+#include "mqtt_al.h"
+#include "osdepends/atiny_osdep.h"
 
-typedef s32_t (*fnoob)(u8_t *data,s32_t datalen);
+#define MQTT_TASK 1
 
-#if  LOSCFG_ENABLE_AT
-bool_t los_at_init(const char *devname);               //install the at frame work,which binded to the device
+typedef struct Timer
+{
+	unsigned long long end_time;
+} Timer;
 
-bool_t at_oobregister(fnoob func,const char *index);  //register a out of band data dealer
-s32_t  at_command(u8_t *cmd, s32_t cmdlen,const char *index,u8_t *respbuf,s32_t respbuflen,u32_t timeout); //send at command and receive response
-bool_t at_workmode(bool_t passby,fnoob func);          //use to set the at module work as the passer by
+void TimerInit(Timer*);
+char TimerIsExpired(Timer*);
+void TimerCountdownMS(Timer*, unsigned int);
+void TimerCountdown(Timer*, unsigned int);
+int TimerLeftMS(Timer*);
 
-#else
+typedef struct atiny_task_mutex_tag_s Mutex;
+int MutexInit(Mutex* mutex);
+int MutexLock(Mutex* mutex);
+int MutexUnlock(Mutex* mutex);
+void MutexDestory(Mutex* mutex);
 
-#define los_at_init(name)              false
-#define at_oobregister(x,y)            false
-#define at_command(a,b,c,d,e,f)        0   
-#define at_workmode(x,y)               false
+typedef struct
+{
+	void * no_used;
+} Thread;
+int ThreadStart(Thread *thread, void (*fn)(void *), void *arg);
 
-#endif
+typedef struct mqtt_context
+{
+    int fd;
+}mqtt_context_t;
+
+typedef struct Network
+{
+    void *ctx;
+    mqtt_al_security_para_t arg;
+    int (*mqttread) (struct Network*, unsigned char*, int, int);
+    int (*mqttwrite) (struct Network*, unsigned char*, int, int);
+} Network;
+
 
 
 #endif

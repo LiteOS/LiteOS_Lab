@@ -32,32 +32,86 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef __AT_H
-#define __AT_H
+#include "mqtt_osdep.h"
+#include "osdepends/atiny_osdep.h"
+#include "log/atiny_log.h"
 
-#include <stdint.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <osport.h>
+#define get_time_ms atiny_gettime_ms
+
+void TimerInit(Timer *timer)
+{
+    timer->end_time = get_time_ms();
+}
+
+char TimerIsExpired(Timer *timer)
+{
+    unsigned long long now = get_time_ms();
+    return now >= timer->end_time;
+}
+
+void TimerCountdownMS(Timer *timer, unsigned int timeout)
+{
+    unsigned long long now = get_time_ms();
+    timer->end_time = now + timeout;
+}
+
+void TimerCountdown(Timer *timer, unsigned int timeout)
+{
+    unsigned long long now = get_time_ms();
+    timer->end_time = now + timeout * 1000;
+}
+
+int TimerLeftMS(Timer *timer)
+{
+    UINT64 now = get_time_ms();
+    return timer->end_time <= now ? 0 : timer->end_time - now;
+}
+
+int MutexInit(Mutex* mutex)
+{
+    int ret = atiny_task_mutex_create(mutex);
+    if (ret != LOS_OK)
+    {
+        ATINY_LOG(LOG_ERR, "create mutex fail, ret %d.", ret);
+    }
+    return ret;
+}
+int MutexLock(Mutex* mutex)
+{
+    int ret = atiny_task_mutex_lock(mutex);
+    if (ret != LOS_OK)
+    {
+        ATINY_LOG(LOG_ERR, "lock mutex fail,mutex %d,ret %d.", mutex->mutex, ret);
+    }
+    return ret;
+}
+
+int MutexUnlock(Mutex* mutex)
+{
+    int ret = atiny_task_mutex_unlock(mutex);
+    if (ret != LOS_OK)
+    {
+        ATINY_LOG(LOG_ERR, "unlock mutex fail,mutex %d,ret %d.", mutex->mutex, ret);
+    }
+    return ret;
+}
+
+void MutexDestory(Mutex* mutex)
+{
+    int ret = atiny_task_mutex_delete(mutex);
+    if (ret != LOS_OK)
+    {
+        ATINY_LOG(LOG_ERR, "delete mutex fail,mutex %d,ret %d.", mutex->mutex, ret);
+    }
+}
+
+int ThreadStart(Thread *thread, void (*fn)(void *), void *arg)
+{
+    (void)thread;
+    (void)fn;
+    (void)arg;
+    return -1;
+}
 
 
-typedef s32_t (*fnoob)(u8_t *data,s32_t datalen);
 
-#if  LOSCFG_ENABLE_AT
-bool_t los_at_init(const char *devname);               //install the at frame work,which binded to the device
-
-bool_t at_oobregister(fnoob func,const char *index);  //register a out of band data dealer
-s32_t  at_command(u8_t *cmd, s32_t cmdlen,const char *index,u8_t *respbuf,s32_t respbuflen,u32_t timeout); //send at command and receive response
-bool_t at_workmode(bool_t passby,fnoob func);          //use to set the at module work as the passer by
-
-#else
-
-#define los_at_init(name)              false
-#define at_oobregister(x,y)            false
-#define at_command(a,b,c,d,e,f)        0   
-#define at_workmode(x,y)               false
-
-#endif
-
-
-#endif
