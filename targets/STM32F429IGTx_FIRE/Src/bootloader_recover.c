@@ -43,10 +43,10 @@
 #include "board.h"
 #include "ota/recover_image.h"
 
-void SysTick_Handler(void)
-{
-    HAL_IncTick();
-}
+//void SysTick_Handler(void)
+//{
+//    HAL_IncTick();
+//}
 
 void _Error_Handler(char *file, int line)
 {

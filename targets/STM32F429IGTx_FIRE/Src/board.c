@@ -59,12 +59,25 @@
 
 #define OTA_COPY_BUF_SIZE          0x1000
 
-typedef void (*jump_func)(void);
 
-static void set_msp(uint32_t stack)
+
+#ifdef __CC_ARM
+__asm void boot_app(uint32_t stack,uint32_t pc)
 {
-    __asm volatile ("MSR MSP, r0; BX r14");
+	PRESERVE8
+	msr msp, r0
+	bx r1
 }
+#elif defined __GNUC__
+__attribute__((noreturn)) __attribute__((naked)) void boot_app(uint32_t stack,uint32_t pc)
+{
+	__asm volatile (
+			"msr msp, %0\n\t"
+			"bx %1\n\t"
+			::"r"(stack),"r"(pc));
+}
+#endif
+
 
 static int prv_spi2inner_copy(uint32_t addr_source, int32_t image_len)
 {
@@ -151,23 +164,12 @@ static int prv_inner2spi_copy(int32_t image_len)
 
 int board_jump2app(void)
 {
-    jump_func jump;
     uint32_t pc = *(__IO uint32_t *)(OTA_DEFAULT_IMAGE_ADDR + 4);
     uint32_t stack = *(__IO uint32_t *)(OTA_DEFAULT_IMAGE_ADDR);
 
     if ((pc & OTA_PC_MASK) == OTA_FLASH_BASE)
     {
-        if ((stack & OTA_STACK_MASK) == OTA_MEMORY_BASE)
-        {
-            jump = (jump_func)pc;
-            set_msp(stack);
-            jump();
-        }
-        else
-        {
-            OTA_LOG("stack value(%lx) of the image is ilegal", stack);
-            return OTA_ERRNO_ILEGAL_STACK;
-        }
+        boot_app(stack,pc);
     }
     else
     {
