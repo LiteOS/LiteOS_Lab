@@ -165,6 +165,7 @@ static int prv_inner2spi_copy(int32_t image_len)
 int board_jump2app(void)
 {
     uint32_t pc = *(__IO uint32_t *)(OTA_DEFAULT_IMAGE_ADDR + 4);
+    uint32_t stack = *(__IO uint32_t *)(OTA_DEFAULT_IMAGE_ADDR);
 
     if ((pc & OTA_PC_MASK) == OTA_FLASH_BASE)
     {
