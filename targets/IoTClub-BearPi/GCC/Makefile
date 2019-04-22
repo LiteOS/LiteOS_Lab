@@ -85,6 +85,16 @@ include $(TOP_DIR)/components/huawei_cdp/lwm2m/oc_lwm2m_agent.mk
 endif
 
 
+WITH_AT_MODULE = yes
+###############LOAD AT MODULE###################################################
+#load the at if enabled
+ifeq ($(WITH_AT_MODULE), yes)
+
+include $(TOP_DIR)/components/at/at.mk
+
+endif
+
+
 ######################################
 # source
 ######################################
@@ -117,10 +127,7 @@ UTIL_SRC =  \
         $(TOP_DIR)/components/lib/libc/malloc.c
         C_SOURCES += $(UTIL_SRC)
 
-#AT FRAMEWORK
-AT_SRC =  \
-        ${wildcard $(TOP_DIR)/components/at/*.c}
-        C_SOURCES += $(AT_SRC)
+
 #driver hal
 DIRVERHAL_SRC =  \
         $(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c          \
@@ -243,7 +250,6 @@ ARCH_INC = \
 
 COMPONENTS_INC = \
         -I $(TOP_DIR)/components/osport \
-        -I $(TOP_DIR)/components/at \
         -I $(TOP_DIR)/components/shell \
         -I $(TOP_DIR)/components/driver
         C_INCLUDES += $(COMPONENTS_INC)

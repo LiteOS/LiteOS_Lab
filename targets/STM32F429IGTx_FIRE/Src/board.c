@@ -60,6 +60,7 @@
 #define OTA_COPY_BUF_SIZE          0x1000
 
 
+
 #ifdef __CC_ARM
 __asm void boot_app(uint32_t stack,uint32_t pc)
 {
@@ -77,7 +78,6 @@ __attribute__((noreturn)) __attribute__((naked)) void boot_app(uint32_t stack,ui
 }
 #endif
 
-typedef void (*jump_func)(void);
 
 static int prv_spi2inner_copy(uint32_t addr_source, int32_t image_len)
 {
@@ -169,15 +169,7 @@ int board_jump2app(void)
 
     if ((pc & OTA_PC_MASK) == OTA_FLASH_BASE)
     {
-        if ((stack & OTA_STACK_MASK) == OTA_MEMORY_BASE)
-        {
-            boot_app(stack,pc);
-        }
-        else
-        {
-            OTA_LOG("stack value(%lx) of the image is ilegal", stack);
-            return OTA_ERRNO_ILEGAL_STACK;
-        }
+        boot_app(stack,pc);
     }
     else
     {
