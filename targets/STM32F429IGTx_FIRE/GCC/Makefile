@@ -124,14 +124,8 @@ HAL_DRIVER_SRC =  \
 HARDWARE_SRC =  \
         ${wildcard $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Hardware/Src/*.c}
         C_SOURCES += $(HARDWARE_SRC)
-
-ifeq ($(USE_BOOTLOADER), no)
-HAL_DRIVER_SRC_NO_BOOTLOADER =  \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_eth.c \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rng.c
-        C_SOURCES += $(HAL_DRIVER_SRC_NO_BOOTLOADER)
+        
+        
 KERNEL_SRC =  \
         ${wildcard $(TOP_DIR)/kernel/*.c} \
         ${wildcard $(TOP_DIR)/kernel/base/core/*.c} \
@@ -155,6 +149,15 @@ ARCH_SRC =  \
         ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/*.c} \
         ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/*.c}
         C_SOURCES += $(ARCH_SRC)
+        
+ifeq ($(USE_BOOTLOADER), no)
+HAL_DRIVER_SRC_NO_BOOTLOADER =  \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_eth.c \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rng.c
+        C_SOURCES += $(HAL_DRIVER_SRC_NO_BOOTLOADER)
+
 
 ifeq ($(WITH_LWIP), yes)
 LWIP_SRC =  \
@@ -565,7 +568,6 @@ LITEOS_CMSIS = \
         -I $(TOP_DIR)/osdepends/liteos/cmsis
         C_INCLUDES += $(LITEOS_CMSIS)
 
-ifeq ($(USE_BOOTLOADER), no)
 OS_CONFIG_INC = \
         -I $(TOP_DIR)/targets/STM32F429IGTx_FIRE/OS_CONFIG
         C_INCLUDES += $(OS_CONFIG_INC)
@@ -579,7 +581,8 @@ ARCH_INC = \
         -I $(TOP_DIR)/arch/arm/arm-m/include \
         -I $(TOP_DIR)/arch/arm/arm-m/armv7-m
         C_INCLUDES += $(ARCH_INC)
-
+        
+ifeq ($(USE_BOOTLOADER), no)
 
 ifeq ($(WITH_LWIP), yes)
 LWIP_INC = \
