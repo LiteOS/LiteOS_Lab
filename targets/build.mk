@@ -1,1 +1,2 @@
 sub-$(LOSCFG_IOTCLUB_EVB_L1) += IoTClub-EVB-L1
+sub-$(LOSCFG_IOTCLUB_EVB_M1) += IoTClub-EVB-M1

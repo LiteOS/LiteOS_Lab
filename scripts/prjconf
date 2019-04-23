@@ -1,17 +1,35 @@
 #!/usr/bin/env python3
 
-import sys, os
+import sys, os, re, tempfile
 
 from kconfig.kconfiglib import Kconfig
 
 def main ():
     root = os.path.abspath (os.path.dirname (__file__) + "/..")
-    
+
     os.environ ["CONFIG_"] = "LOSCFG_"
 
     kconf = Kconfig (root + "/los.config")
 
+    kconf.disable_redun_warnings ()
+    kconf.disable_override_warnings ()
+
     kconf.load_config ("bsp.config")
+
+    if os.path.isfile ("GCC/kconfig.mk"):
+        kconf.load_config ("GCC/kconfig.mk", False, False)
+
+    tmphandle, tmppath = tempfile.mkstemp (prefix = "loscfg.", text=True)
+    tmpfile = os.fdopen (tmphandle, "w")
+
+    for s in sys.argv:
+        match = re.match ("LOSCFG_[^=]+=.*", s)
+        if match:
+            tmpfile.write (s + "\n")
+
+    tmpfile.close ()
+    kconf.load_config (tmppath, False, False)
+    os.remove (tmppath)
 
     kconf.write_config ("GCC/kconfig.mk")
     kconf.write_autoconf ("OS_CONFIG/kconfig.h")
