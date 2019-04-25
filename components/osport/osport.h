@@ -136,6 +136,10 @@ bool_t  semp_del(semp_t *semp);
 //void *malloc(int size);
 //bool_t free(void *addr);
 
+void *mem_malloc(int size);
+void  mem_free(void *addr);
+
+
 #endif
 
 
