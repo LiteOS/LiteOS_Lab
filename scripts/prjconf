@@ -16,8 +16,8 @@ def main ():
 
     kconf.load_config ("bsp.config")
 
-    if os.path.isfile ("GCC/kconfig.mk"):
-        kconf.load_config ("GCC/kconfig.mk", False, False)
+    if os.path.isfile ("kconfig.mk"):
+        kconf.load_config ("kconfig.mk", False, False)
 
     tmphandle, tmppath = tempfile.mkstemp (prefix = "loscfg.", text=True)
     tmpfile = os.fdopen (tmphandle, "w")
@@ -31,7 +31,7 @@ def main ():
     kconf.load_config (tmppath, False, False)
     os.remove (tmppath)
 
-    kconf.write_config ("GCC/kconfig.mk")
+    kconf.write_config ("kconfig.mk")
     kconf.write_autoconf ("OS_CONFIG/kconfig.h")
 
 if __name__ == "__main__":

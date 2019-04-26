@@ -172,3 +172,4 @@ LOSCFG_TASK_TLS_LIMIT=0
 # targets/bsps configuration
 #
 LOSCFG_IOTCLUB_EVB_L1=y
+# LOSCFG_IOTCLUB_EVB_M1 is not set

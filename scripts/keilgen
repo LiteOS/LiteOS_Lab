@@ -1,0 +1,140 @@
+#!/usr/bin/env python3
+
+import sys, os, argparse, shutil, json, tempfile, re
+
+keil_header = '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<Project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="project_projx.xsd">
+
+  <SchemaVersion>2.1</SchemaVersion>
+
+  <Header>### uVision Project, (C) Keil Software</Header>
+
+  <Targets>
+    <Target>
+      <TargetName>Huawei_LiteOS</TargetName>
+      <ToolsetNumber>0x4</ToolsetNumber>
+      <pCCUsed>5060750::V5.06 update 6 (build 750)::ARMCC</pCCUsed>
+      <TargetOption>
+        <TargetCommonOption>
+          <Device>{device}</Device>
+          <Vendor>{vendor}</Vendor>
+          <Cpu>{cpu}</Cpu>
+          <OutputDirectory>out</OutputDirectory>
+          <OutputName>Huawei_LiteOS</OutputName>
+          <CreateExecutable>1</CreateExecutable>
+          <ListingPath>out</ListingPath>
+        </TargetCommonOption>
+        <TargetArmAds>
+          <Cads>
+            <OneElfS>1</OneElfS>
+            <wLevel>2</wLevel>
+            <uC99>1</uC99>
+            <uGnu>1</uGnu>
+            <VariousControls>
+              <MiscControls>--reduce_paths</MiscControls>
+              <Define>{define}</Define>
+              <Undefine></Undefine>
+              <IncludePath>{inc};.\\OS_CONFIG;..\\;.\\</IncludePath>
+            </VariousControls>
+          </Cads>
+          <LDads>
+            <TextAddressRange>0x00000000</TextAddressRange>
+            <DataAddressRange>0x20000000</DataAddressRange>
+            <ScatterFile>.\\{bsp_name}.sct</ScatterFile>
+            <Misc>--keep *.o(driver_init_tbl) --keep *.o(cmder_cmd_tbl)</Misc>
+          </LDads>
+        </TargetArmAds>
+      </TargetOption>
+      <Groups>
+'''
+
+keil_tail = '''
+      </Groups>
+    </Target>
+  </Targets>
+</Project>
+'''
+
+def get_root_relative (root, proj):
+    rel = ".."
+    
+    while os.path.abspath (proj + "/" + rel) != root:
+        rel += "/.."
+        
+    return rel
+
+def get_group (file):
+    return file.replace ("..\\", "").split (sep = "\\") [0]
+
+group_head = '''
+        <Group>
+          <GroupName>{0}</GroupName>
+          <Files>
+'''
+
+group_tail = '''
+          </Files>
+        </Group>
+'''
+
+file_entry = '''
+            <File>
+              <FileName>{0}</FileName>
+              <FileType>{1}</FileType>
+              <FilePath>{2}</FilePath>
+            </File>
+'''
+
+def add_files (p, files):
+    last_group = None
+    for f in files:
+        ext = os.path.splitext (f) [1]
+        type = 1
+        if ext in (".s", ".S"):
+            type = 2
+        group = get_group (f)
+        if last_group != group:
+            if last_group:
+                p.write (group_tail)
+            p.write (group_head.format (group))
+        p.write (file_entry.format (f.split (sep = "\\") [-1], type, f))
+        last_group = group
+    if last_group:
+        p.write (group_tail)
+
+def main ():
+    info = {}
+
+    if not os.path.isfile ("keil.config"):
+        print ("file keil.config missing, keil not supported by this target")
+        quit ()
+    
+    root = os.path.abspath (os.getcwd () + "/../../")
+    proj_dir_rel = get_root_relative (root, os.path.abspath (".")).replace ("/", "\\")
+    bsp_name = os.path.split (os.getcwd ()) [1]
+        
+    # get header path
+    h = map (lambda x : x [2:], filter (lambda x : x [0:2] == "-I", sys.argv [1:]))
+    h = list (map (lambda x : x.replace (root, proj_dir_rel).replace ("/", "\\"), h))
+    
+    # get src
+    f = filter (lambda x : x [0:1] != "-", sys.argv [1:])
+    f = list (map (lambda x : x.replace (root, proj_dir_rel).replace ("/", "\\"), f))
+    f.sort ()
+
+    # get define
+    d = list(set (map (lambda x : x [2:], filter (lambda x : x [0:2] == "-D", sys.argv [1:]))))
+
+    with open ("keil.config", "r") as x:
+        info = json.load (x)
+
+    p = open ("Huawei_LiteOS.uvprojx", "w", encoding = "utf-8")
+    p.write (keil_header.format (device = info ["device"], vendor = info ["vendor"], cpu = info ["cpu"], root = proj_dir_rel, inc = ";".join (h), bsp_name = bsp_name, define = ";".join (d)))
+
+    add_files (p, f)
+
+    p.write (keil_tail)
+    p.close ()
+
+if __name__ == "__main__":
+    main ()

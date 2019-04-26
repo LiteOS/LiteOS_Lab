@@ -13,7 +13,7 @@ D              ?= 0
 # parse from $(los_root)
 subs           := $(abspath $(los_root))
 curdir         :=
-proj           := $(abspath ../)
+proj           := $(abspath ./)
 
 # all dir (not abspath) being built will be added to dirs
 dirs           :=
@@ -45,8 +45,20 @@ ifeq ($(V),1)
 endif
 
 .PHONY: all
+ifdef LOSCFG_GNUC
 all: $(outdir)/Huawei_LiteOS.out
 	$(SIZE) $<
+else
+ifdef LOSCFG_KEIL
+defines        := $(filter -D%, $(cflags-global))
+all:
+	@rm out -rf
+	@$(los_root)/scripts/keilgen $(foreach d,$(dirs),$(src-$(d))) $(inc-global) $(defines)
+else
+all:
+	@echo "error, do nothing"
+endif
+endif
 
 $(outdir)/Huawei_LiteOS.out : $(objs)
 	$(CC) $^ $(cflags-arch) $(lflags) -o $@
@@ -61,8 +73,18 @@ $(outdir)/%.o : %.S
 	$(strip $(CC) $(cflags-common) $(cflags-global) $(cflags-$<) -I$(proj)/OS_CONFIG $(inc-global) $< -c -o $@)
 
 .PHONY: clean
+ifdef LOSCFG_GNUC
 clean:
 	@rm -rf $(objs) $(objs:.o=.d) $(objs:.o=.list)
+else
+ifdef LOSCFG_KEIL
+clean:
+	@rm -rf Huawei_LiteOS.uvguix* Huawei_LiteOS.uvprojx out
+else
+clean:
+	@echo "error, do nothing"
+endif
+endif
 
 # define rules for creating out dirs
 define dir-rule
