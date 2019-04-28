@@ -1011,11 +1011,11 @@ int atiny_mqtt_data_send(mqtt_client_s *phandle, const char *msg,  uint32_t msg_
     if(0 != mqtt_al_publish(phandle->mqtthandle,&pubpara))
     {
         ATINY_LOG(LOG_FATAL, "MQTTPublish fail");
-        rc = ATINY_OK;
+        rc = ATINY_ERR;
     }
     else
     {
-    	rc = ATINY_ERR;
+    	rc = ATINY_OK;
     }
     atiny_free(topic);
 
