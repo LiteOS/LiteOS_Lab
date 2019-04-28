@@ -13,7 +13,7 @@
 #include <stdio.h>
 
 
-#include <osal_types.h>
+#include "../oskernel/osal_types.h"
 
 //we need nothing here except the standard struct here
 //kernel port here

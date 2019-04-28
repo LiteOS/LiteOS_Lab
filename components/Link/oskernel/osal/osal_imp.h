@@ -9,7 +9,7 @@
 #define __OSAL_IMP_H
 
 
-#include <osal_types.h>
+#include "../oskernel/osal_types.h"
 
 typedef struct
 {

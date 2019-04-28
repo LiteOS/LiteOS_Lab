@@ -5,8 +5,9 @@
  *      Author: zhangqf
  */
 
-#include <osal_imp.h>
-#include <osal.h>
+#include "../oskernel/osal.h"
+
+#include "../oskernel/osal_imp.h"
 
 static const tag_os *s_os_cb = NULL;
 
