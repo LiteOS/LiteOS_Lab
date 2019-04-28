@@ -78,6 +78,11 @@ SECTIONS
   .rodata :
   {
     . = ALIGN(4);
+    __oshell_start = .;
+    KEEP (*(oshell))
+    __oshell_end = .;
+    
+    . = ALIGN(4);   
     *(.rodata)         /* .rodata sections (constants, strings, etc.) */
     *(.rodata*)        /* .rodata* sections (constants, strings, etc.) */
     . = ALIGN(4);

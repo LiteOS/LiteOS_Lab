@@ -711,13 +711,14 @@ static en_mqtt_al_connect_state __check_status(void *handle)
 }
 
 
-int mqtt_lib_load()
+int mqtt_al_install_pahomqtt()
 {
 	int ret = -1;
+
+	__init();
+
 	mqtt_al_op_t paho_mqtt_op =
 	{
-		.init = __init ,
-		.deinit = __deinit,
 		.connect = __connect,
 		.disconnect = __disconnect,
 		.subscribe = __subscribe,
@@ -725,7 +726,6 @@ int mqtt_lib_load()
 		.publish = __publish,
 		.check_status = __check_status,
 	};
-
 	if(0 != mqtt_al_install(&paho_mqtt_op))
 	{
         ATINY_LOG(LOG_FATAL, "register paho mqtt to mqtt_al err!\r\n");

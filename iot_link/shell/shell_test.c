@@ -31,13 +31,11 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-#include <los_config.h>
 
 #include <shell.h>
-
 #include <los_memory.h>
 
-#if LOSCFG_ENABLE_SHELL
+#ifdef LINK_CFG_EN_SHELL
 
 /*
 //here we export to shell command,you could add your own shell like this
@@ -57,14 +55,14 @@ OSSHELL_EXPORT_VAR(gs_shell_test_var,"shell_test_var","shell test var");  //expo
 */
 //show all the task status here
 extern UINT32 osGetAllTskInfo(VOID);
-static s32_t shell_taskinfo(s32_t argc,const char *argv[]){
+static int shell_taskinfo(int argc,const char *argv[]){
     osGetAllTskInfo();
     return 0;
 }
 OSSHELL_EXPORT_CMD(shell_taskinfo,"taskinfo","taskinfo");
 
 //show the memstatus here
-static s32_t shell_heapinfo(s32_t argc,const char *argv[])
+static int shell_heapinfo(int argc,const char *argv[])
 {
 #if (LOSCFG_HEAP_IMPROVED == YES)
     LOS_MemInfo(NULL, 1);
@@ -75,4 +73,6 @@ static s32_t shell_heapinfo(s32_t argc,const char *argv[])
 }
 OSSHELL_EXPORT_CMD(shell_heapinfo,"heapinfo","heapinfo");
 
+
 #endif
+

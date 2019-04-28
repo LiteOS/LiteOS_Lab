@@ -35,34 +35,40 @@
 #ifndef __OSSHELL_H
 #define __OSSHELL_H
 
-#include <los_config.h>
-#if LOSCFG_ENABLE_SHELL
+#include <stdint.h>
+#include <stddef.h>
 
-#include <osport.h>
+
+
+#ifdef LINK_CFG_EN_SHELL
+
 //this is a shell module designed for the os
 //this is a shell type,maybe a command or the data variables
-enum en_os_shell_type{
+enum en_os_shell_type
+{
 	EN_OSSHELL_CMD = 0,
 	EN_OSSHELL_VAR,       //up till now, we only support 4 bytes
 	EN_OSSHELL_LAST,
 };
 
-#define BUILD_VAR_NAME(A,B)    A##B
+#define BUILD_VAR_NAME(A,B)         A##B
 #define  MAX_TAB_MATCHES			16
-struct shell_tab_matches {
+struct shell_tab_matches
+{
 	const char *matches[MAX_TAB_MATCHES];
-	u16_t len;
+	unsigned short len;
 };
 
 //this is the shell function module.the register function must have the same type
 //uptils now, we don't care the return value
-typedef s32_t (*fn_shell_cmdentry)(s32_t argc, const char *argv[]); 
-struct shell_item_t{
+typedef int (*fn_shell_cmdentry)(int argc, const char *argv[]);
+struct shell_item_t
+{
 	const char     *name;   //point to the shell name string
 	const char     *help;   //point to the shell description string
 	void           *addr;   //point to the shell function or the shell data
-	u16_t           type;   //used to  point the shell type:command or a data
-	u16_t           len;    //used to  point the shell command or data length
+	unsigned short  type;   //used to  point the shell type:command or a data
+	unsigned short  len;    //used to  point the shell command or data length
 };
 //this define will create  a shell command with the specified cmdname
 #define OSSHELL_EXPORT_CMD(cmdentry,cmdname,cmdhelp)      \
@@ -85,11 +91,11 @@ struct shell_item_t{
 		.len =sizeof(var),               \
     }
     
-void los_shell_init(void);    
+void shell_init(void);
 #else
 #define OSSHELL_EXPORT_CMD(cmdname,cmdentry,cmdhelp)
 #define OSSHELL_EXPORT_VAR(varname,var,varhelp)
-#define los_shell_init()
+#define shell_init()
 
 #endif   //end for the shell_config
 

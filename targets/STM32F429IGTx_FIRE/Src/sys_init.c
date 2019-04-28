@@ -89,10 +89,6 @@ void net_init(void)
 
     lwip_impl_register();
 
-    /* Initilialize the LwIP stack without RTOS */
-    tcpip_init(NULL, NULL);
-    printf("lwip test init ok.\n");
-    
 
     (void)ethernetif_api_register(&g_eth_api);/*×¢²áÌØ¶¨Íø¿¨µÄAPI*/
     /* add the network interface (IPv4/IPv6) without RTOS */
@@ -145,6 +141,20 @@ void net_init(void)
         netif_set_down(&gnetif);
     }
 }
+
+
+int netdriver_install()
+{
+
+    hieth_hw_init();
+    net_init();
+
+    printf("%s:install the netdriver\r\n",__FUNCTION__);
+
+    return 0;
+}
+
+
 #endif
 uint32_t HAL_GetTick(void)
 {

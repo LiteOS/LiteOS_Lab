@@ -27,10 +27,10 @@ typedef struct
     bool_t  (* mutex_del)(osal_mutex_t mutex);
 
     ///< semp function needed
-    bool_t (*semp_create)(semp_t *semp,s32_t limit,s32_t initvalue);
-    bool_t (*semp_pend)(semp_t semp,u32_t timeout);
-    bool_t (*semp_post)(semp_t semp);
-    bool_t (*semp_del)(semp_t semp);
+    bool_t (*semp_create)(osal_semp_t *semp,int limit,int initvalue);
+    bool_t (*semp_pend)(osal_semp_t semp,int timeout);
+    bool_t (*semp_post)(osal_semp_t semp);
+    bool_t (*semp_del)(osal_semp_t semp);
 
     ///< memory function needed
     void *(*malloc)(int size);

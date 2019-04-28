@@ -23,4 +23,6 @@ typedef void*  osal_mutex_t;
 typedef void*  osal_semp_t;
 #define cn_semp_invalid   NULL
 
+#define cn_osal_timeout_forever  -1
+
 #endif /* __OSAL_TYPES_H */

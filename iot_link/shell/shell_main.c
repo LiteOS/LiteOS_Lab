@@ -48,12 +48,16 @@ this file implement the shell for the system.the following instruction you must 
 *******************************************************************************/
 
 /**************************************FILE INCLIUDES**************************/
-#include <shell.h>
-#if LOSCFG_ENABLE_SHELL
+
+
 #include <stdint.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
+#include <shell.h>
+#include <osal.h>
+
+#ifdef LINK_CFG_EN_SHELL
 
 
 /**************************************FILE DEFINES****************************/
@@ -78,20 +82,21 @@ this file implement the shell for the system.the following instruction you must 
 
 /**************************************FILE DATA STRUCTURE*********************/
 //data structure used for cache the command
-struct shell_buffer_t{
-	char    curcmd[CN_CMDLEN_MAX];               //current command edited
-	u8_t    curoffset;                           //position to be edit
-	char    tab[CN_CMD_CACHE][CN_CMDLEN_MAX];    //command cache table
-	u8_t    taboffset;                           //position to be cached in table
+struct shell_buffer_t
+{
+	char             curcmd[CN_CMDLEN_MAX];               //current command edited
+	unsigned char    curoffset;                           //position to be edit
+	char             tab[CN_CMD_CACHE][CN_CMDLEN_MAX];    //command cache table
+	unsigned char    taboffset;                           //position to be cached in table
 };
 
 /**************************************FILE VARS*******************************/
 //define your global variables here
-static  char *gs_welcome_info= "WELCOME TO LITEOS SHELL";
+static  char *gs_welcome_info= "WELCOME TO IOT_LINK SHELL";
 /**************************************FILE FUNCTIONS**************************/
 //functions import
-extern s32_t shell_cmd_execute(char *param);            //execute the command
-extern s32_t shell_cmd_init(void);                      //do the command table load
+extern int shell_cmd_execute(char *param);            //execute the command
+extern int shell_cmd_init(void);                      //do the command table load
 extern const struct shell_tab_matches *shell_cmd_index(const char *index);  //find the most like command
 
 
@@ -101,7 +106,8 @@ function     :function used to get char from the input device
 parameters   :
 instruction  :you could reimplement by redirection,make sure it is block mode
 *******************************************************************************/
-static int shell_get_char(){
+static int shell_get_char()
+{
     return getchar();
 }
 /*******************************************************************************
@@ -109,7 +115,8 @@ function     :function used to put char to the output device
 parameters   :
 instruction  :you could reimplement by redirection
 *******************************************************************************/
-static void shell_put_char(int ch){
+static void shell_put_char(int ch)
+{
     putchar(ch);
     fflush (stdout) ; //if you use the glibc, then the you must use this to make it
                       //output immediately
@@ -120,11 +127,13 @@ function     :function used to put a string
 parameters   :
 instruction  :you could reimplement by redirection
 *******************************************************************************/
-static void  shell_put_string(const char *str){
+static void  shell_put_string(const char *str)
+{
     int len;
     int i;
     len = strlen(str);
-    for(i =0;i<len;i++){
+    for(i =0;i<len;i++)
+    {
         shell_put_char(*str);
         str++;
     }
@@ -135,7 +144,8 @@ function     :function used to print the path index
 parameters   :
 instruction  :if you has a getcwd function,you could modify this
 *******************************************************************************/
-static void shell_put_index(){
+static void shell_put_index()
+{
 	shell_put_string("\n\rLiteOS:/>");
 }
 
@@ -144,10 +154,12 @@ function     :function used to delete a string in the user display
 parameters   :
 instruction  :
 *******************************************************************************/
-static void shell_put_backspace(int times){
+static void shell_put_backspace(int times)
+{
 	int i =0;
 	char *str = "\b \b";
-	for(i =0;i<times;i++){
+	for(i =0;i<times;i++)
+	{
 		shell_put_string(str);
 	}
 }
@@ -157,9 +169,11 @@ function     :function used to put a space to display
 parameters   :
 instruction  :
 *******************************************************************************/
-static void shell_put_space(int times){
+static void shell_put_space(int times)
+{
 	int i =0;
-	for(i =0;i<times;i++){
+	for(i =0;i<times;i++)
+	{
 		shell_put_char(' ');
 	}
 }
@@ -168,10 +182,12 @@ function     :function used to move cursor right
 parameters   :
 instruction  :
 *******************************************************************************/
-static void  shell_moves_cursor_right(int times,u32_t vk){
+static void  shell_moves_cursor_right(int times,unsigned int vk)
+{
 	char ch;
 	int i =0;
-	for(i =0;i<times;i++){
+	for(i =0;i<times;i++)
+	{
 		ch = (char)(vk&0xff);
 		shell_put_char(ch);
 		ch = (char)((vk>>8)&0xff);
@@ -255,12 +271,13 @@ instruction  :we get character from the input device each time,cached it in the
               current command line,if enter key received, then do command execute;
 			  if other virtual key received, then do the specified action.
 *******************************************************************************/
-static void shell_server_entry(void *args){
-	s32_t    ch;
-	s32_t   len;
-	u8_t    offset;
-	u32_t   vk = CN_VIRTUAL_KEY_NULL;    
-	u32_t   vkmask = CN_VIRTUAL_KEY_NULL;
+static int shell_server_entry(void *args)
+{
+	int    ch;
+	int   len;
+	unsigned char    offset;
+	unsigned int   vk = CN_VIRTUAL_KEY_NULL;
+	unsigned int   vkmask = CN_VIRTUAL_KEY_NULL;
     struct shell_buffer_t shell_cmd_cache; 
 
 	memset(&shell_cmd_cache,0,sizeof(shell_cmd_cache));  //initialize the buffer
@@ -448,24 +465,26 @@ static void shell_server_entry(void *args){
 		}
     }
 
+    return -1;
 }
 
 /*******************************************************************************
 function     :this is the  shell module initialize function
 parameters   :
 instruction  :if you want use shell,you should do two things
-              1,make LOSCFG_ENABLE_SHELL true in target_config.h
-			  2,call los_shell_init in your process:make sure after the system has
+              1,make LINK_CFG_EN_SHELL true in target_config.h
+			  2,call shell_init in your process:make sure after the system has
 			    been initialized
 *******************************************************************************/
-void los_shell_init(){
+void shell_init()
+{
     shell_cmd_init();
-    task_create("shell_server",(fnTaskEntry)shell_server_entry,\
-				CN_SHELL_STACKSIZE+CN_CMD_CACHE*CN_CMDLEN_MAX,NULL,NULL,10);
+
+    osal_task_create("shell_server",shell_server_entry,NULL,\
+                      CN_SHELL_STACKSIZE+CN_CMD_CACHE*CN_CMDLEN_MAX,NULL,10);
 }
 
 #endif
-
 
 
 

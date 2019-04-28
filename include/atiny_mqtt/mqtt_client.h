@@ -150,7 +150,7 @@ typedef enum
 {
     MQTT_GET_TIME,          // get the system time, the format is YYYYMMDDHH
     MQTT_RCV_MSG,           // notify user a message received.
-    MQTT_SAVE_SECRET_INFO, // write the connection secret info for dynamic connection, the info length is fixed, may be encrypted.
+    MQTT_SAVE_SECRET_INFO,  // write the connection secret info for dynamic connection, the info length is fixed, may be encrypted.
     MQTT_READ_SECRET_INFO, // read the connection secret info for dynamic connection, the info length is fixed.
 }mqtt_cmd_e;
 

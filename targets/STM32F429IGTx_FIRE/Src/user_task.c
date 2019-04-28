@@ -78,6 +78,9 @@ UINT32 creat_hilink_task(VOID)
 
 void atiny_task_entry(void)
 {
+    extern int link_main(void *args);
+    link_main(NULL);
+
     extern void agent_tiny_entry();
 #if defined(WITH_LINUX) || defined(WITH_LWIP)
     hieth_hw_init();
@@ -124,9 +127,6 @@ void atiny_task_entry(void)
                                    .read_flash_info = flash_adaptor_read_mqtt_info};
         agent_tiny_demo_init(&demo_param);
     }
-    extern  int mqtt_lib_load();
-    mqtt_lib_load();
-
 #endif
 
 

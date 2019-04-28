@@ -32,13 +32,13 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef LITEOS_MQTT_AL_H
-#define LITEOS_MQTT_AL_H
+#ifndef MQTT_AL_H
+#define MQTT_AL_H
 
 #include <stdint.h>
 
-#define WITH_MQTT    1
 
+#define  CFG_MQTT_EN   1
 
 #if defined(__cplusplus)
 extern "C" {
@@ -209,10 +209,10 @@ typedef enum
  */
 typedef struct
 {
-	///< the mqtt init function
-	int  (*  init)      (void);
-	///< the mqtt deinit function
-	int   (* deinit)    (void );
+//	///< the mqtt init function
+//	int  (*  init)      (void);
+//	///< the mqtt deinit function
+//	int   (* deinit)    (void );  ---TODO, have a thought if we really need it
 	///< connect to the server
 	void* (* connect)   (mqtt_al_conpara_t *param);
 	///< disconnect from the server
@@ -228,8 +228,7 @@ typedef struct
 
 }mqtt_al_op_t;
 
-
-#ifdef WITH_MQTT
+#ifdef CFG_MQTT_EN
 //////////////////////API USED FOR THE MQTT APPLICAITON/////////////////////////
 
 /**
@@ -356,4 +355,4 @@ int mqtt_al_uninstall();
 }
 #endif
 
-#endif /* LITEOS_MQTT_AL_H */
+#endif /* MQTT_AL_H */

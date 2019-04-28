@@ -11,7 +11,3 @@ USE_MBEDTLS_DEBUG_C := yes
 #######################################
 USE_MBEDTLS_AES_ROM_TABLES := yes
 
-#######################################
-# If Use TCP, when use lwm2m,not need tcp
-#######################################
-USE_LWIP_TCP := yes

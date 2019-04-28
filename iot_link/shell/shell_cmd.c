@@ -42,7 +42,7 @@
 /**************************************FILE INCLIUDES**************************/
 #include <shell.h>
 
-#if LOSCFG_ENABLE_SHELL
+#ifdef LINK_CFG_EN_SHELL
 
 #include <stdint.h>
 #include <stddef.h>
@@ -50,17 +50,20 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "../link_misc/link_misc.h"
+
 /**************************************FILE DEFINES****************************/
 #define cn_shell_args       16     //at most could support 16 parameters for command
 #define cn_shell_ver_major  1
 #define cn_shell_ver_minor  0
 
 /**************************************FILE DATA STRUCTURE*********************/
-struct shell_cb_t{
+struct shell_cb_t
+{
 	struct shell_item_t *s;      //static tabs
-	s32_t                s_num;  //static number
+	int                  s_num;  //static number
 	struct shell_item_t *d;      //dynamic list
-	s32_t                d_num;  //dynamic number;
+	int                  d_num;  //dynamic number;
 };
 
 
@@ -74,8 +77,8 @@ static const char *gs_os_shell_type[EN_OSSHELL_LAST]={
 static struct shell_tab_matches tab_matches;
 /**************************************FILE FUNCTIONS**************************/
 //export functions
-s32_t shell_cmd_execute(char *param);            //execute the command
-s32_t shell_cmd_init(void);                      //do the command table load
+int   shell_cmd_execute(char *param);            //execute the command
+int   shell_cmd_init(void);                      //do the command table load
 const struct shell_tab_matches *shell_cmd_index(const char *index);  //find the most like command
 
 
@@ -86,8 +89,8 @@ function     :system help
 parameters   :
 instruction  :take care of help specified command
 *******************************************************************************/
-static s32_t shell_cmd_help(int argc, const char *argv[]){
-	s32_t i ;
+static int   shell_cmd_help(int argc, const char *argv[]){
+	int   i ;
 	struct shell_item_t *item;
 
 	printf("%-16s%-5s%-4s%-10s%-20s\n\r",\
@@ -114,8 +117,9 @@ instruction  :
 *******************************************************************************/
 static struct shell_item_t *shell_cmd_match(const char *name)
 {
-	struct shell_item_t *item,*ret;
-	s32_t i;
+	struct shell_item_t *item = NULL;
+	struct shell_item_t  *ret = NULL;
+	int   i;
 	//search the static tab first,if not found then find the dynamic tab
 	ret = NULL;
 	for(i = 0;i <gs_shell_cb.s_num;i++){
@@ -144,7 +148,7 @@ instruction  :
 *******************************************************************************/
 const struct shell_tab_matches *shell_cmd_index(const char *index){
     struct shell_item_t *item;
-	s32_t i;
+	int   i;
 	//search the static tab first,if not found then find the dynamic tab
 	tab_matches.len = 0;
 	for(i = 0;i <gs_shell_cb.s_num && tab_matches.len < MAX_TAB_MATCHES; i++){
@@ -174,16 +178,16 @@ instruction  :we will split the string with the blank space, and the first one
              "get" or set "action";attention that the first arg is the shell name
              itself!
 *******************************************************************************/
-s32_t shell_cmd_execute(char *param){
-	s32_t ret= -1;
-	s32_t  argc = cn_shell_args;           //split the params to argc and argv format
-	u32_t  value;
-	u8_t   *bytes;
-	s32_t   i;
+int   shell_cmd_execute(char *param){
+	int   ret= -1;
+	int    argc = cn_shell_args;           //split the params to argc and argv format
+	unsigned int     value;
+	unsigned char   *bytes;
+	int     i;
 	const  char *argv[cn_shell_args];
 	struct shell_item_t *item;            //match the command item
 	fn_shell_cmdentry shell_cmd_entry;    //command function entry
-	string2arg(&argc,argv,param);            //format the parameters
+	string_to_arg(&argc,argv,param);      //format the parameters
 	if(argc == 0){
 		shell_cmd_help(0,NULL);               //if no args we show system help
 		ret = 0;
@@ -207,7 +211,7 @@ s32_t shell_cmd_execute(char *param){
 				}
 				else{
 					bytes = item->addr;
-                    printf("(HEX):ADDR:0X%08X:",(u32_t)bytes);
+                    printf("(HEX):ADDR:0X%08X:",(unsigned int)bytes);
 					for(i = 0;i<item->len;i++){
 						printf("%02x ",*bytes++);
 					}
@@ -225,26 +229,24 @@ instruction  :different compiler has different method to ge the section("oshell"
               so take care of your compiler
 *******************************************************************************/
 #ifdef __CC_ARM /* ARM C Compiler ,like keil,options for linker:--keep *.o(oshell)*/
-extern u32_t oshell$$Base;
-extern u32_t oshell$$Limit;         
+extern unsigned int oshell$$Base;
+extern unsigned int oshell$$Limit;
 //#pragma section("oshell", read) 
+#elif defined(__GNUC__)
+    extern unsigned int __oshell_start;
+    extern unsigned int __oshell_end;
+#else
+    #error("unknown compiler here");
 #endif        
 
 
-s32_t shell_cmd_init(void){
+int   shell_cmd_init(void){
     void  *cmd_start = NULL;
-	u32_t len = 0;
+	unsigned int len = 0;
 #if defined (__CC_ARM)    //you could add other compiler like this
-	len = (u32_t)&oshell$$Limit-(u32_t)&oshell$$Base;
+	len = (unsigned int)&oshell$$Limit-(unsigned int)&oshell$$Base;
     cmd_start = &oshell$$Base;
 #elif defined(__GNUC__)
-	extern unsigned int __oshell_start;
-	extern unsigned int __oshell_end;
-	cmd_start = &__oshell_start;
-	len = (unsigned int )&__oshell_end - (unsigned int)&__oshell_start;
-#elif defined(__GNUC_LIKE)
-	extern unsigned int __oshell_start;
-	extern unsigned int __oshell_end;
 	cmd_start = &__oshell_start;
 	len = (unsigned int )&__oshell_end - (unsigned int)&__oshell_start;
 #else 
@@ -258,7 +260,7 @@ s32_t shell_cmd_init(void){
 	return 0;
 }
 
-static s32_t os_shell_version(int argc, char *argv){
+static int   os_shell_version(int argc, char *argv){
 	printf("os_shell_version:%d.%d\n\r",cn_shell_ver_major,cn_shell_ver_minor);
 	return 0;
 };

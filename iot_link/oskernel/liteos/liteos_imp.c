@@ -83,17 +83,15 @@ static int __task_kill(void *task)
 	return ret;
 }
 
-static int __task_exit()
+static void __task_exit()
 {
 	while(1);  //not supported yet
-
-	return 0;
 }
 
 ///< this is implement for the mutex
 #include <los_mux.h>
 //creat a mutex for the os
-static bool_t  __mutex_create(mutex_t *mutex)
+static bool_t  __mutex_create(osal_mutex_t *mutex)
 {
     if(LOS_OK == LOS_MuxCreate((UINT32 *)mutex))
     {
@@ -105,7 +103,7 @@ static bool_t  __mutex_create(mutex_t *mutex)
     }
 }
 //lock the mutex
-static bool_t  __mutex_lock(mutex_t mutex)
+static bool_t  __mutex_lock(osal_mutex_t mutex)
 {
     if(LOS_OK == LOS_MuxPend((UINT32)mutex,LOS_WAIT_FOREVER))
     {
@@ -118,7 +116,7 @@ static bool_t  __mutex_lock(mutex_t mutex)
 }
 
 //unlock the mutex
-static bool_t  __mutex_unlock(mutex_t mutex)
+static bool_t  __mutex_unlock(osal_mutex_t mutex)
 {
     if(LOS_OK == LOS_MuxPost((UINT32)mutex))
     {
@@ -130,9 +128,9 @@ static bool_t  __mutex_unlock(mutex_t mutex)
     }
 }
 //delete the mutex
-static bool_t  __mutex_del(mutex_t *mutex)
+static bool_t  __mutex_del(osal_mutex_t mutex)
 {
-    if(LOS_OK == LOS_MuxDelete((UINT32)*mutex))
+    if(LOS_OK == LOS_MuxDelete((UINT32)mutex))
     {
         return true;
     }
@@ -148,7 +146,7 @@ static bool_t  __mutex_del(mutex_t *mutex)
 
 
 //semp of the os
-static bool_t  __semp_create(semp_t *semp,int limit,int initvalue)
+static bool_t  __semp_create(osal_semp_t *semp,int limit,int initvalue)
 {
     extern UINT32 osSemCreate (UINT16 usCount, UINT16 usMaxCount, UINT32 *puwSemHandle);
     if(LOS_OK == osSemCreate(initvalue,limit,(UINT32 *)semp))
@@ -160,9 +158,14 @@ static bool_t  __semp_create(semp_t *semp,int limit,int initvalue)
         return false;
     }
 }
-static bool_t  __semp_pend(semp_t semp,u32_t timeout)
+static bool_t  __semp_pend(osal_semp_t semp,int timeout)
 {
-    if(LOS_OK == LOS_SemPend((UINT32)semp,timeout))
+    if(timeout == cn_osal_timeout_forever)
+    {
+        timeout = LOS_WAIT_FOREVER;
+    }
+
+    if(LOS_OK == LOS_SemPend((UINT32)semp,(UINT32)timeout))
     {
         return true;
     }
@@ -171,7 +174,7 @@ static bool_t  __semp_pend(semp_t semp,u32_t timeout)
         return false;
     }
 }
-static bool_t  __semp_post(semp_t semp)
+static bool_t  __semp_post(osal_semp_t semp)
 {
     if(LOS_OK == LOS_SemPost((UINT32)semp))
     {
@@ -183,9 +186,9 @@ static bool_t  __semp_post(semp_t semp)
     }
 }
 
-static bool_t  __semp_del(semp_t *semp)
+static bool_t  __semp_del(osal_semp_t semp)
 {
-    if(LOS_OK == LOS_SemDelete((UINT32)*semp))
+    if(LOS_OK == LOS_SemDelete((UINT32)semp))
     {
         return true;
     }
@@ -244,11 +247,11 @@ static const tag_os s_link_liteos =
 	.ops = &s_liteos_ops,
 };
 
-int link_liteos_install(void)
+int osal_install_liteos(void)
 {
 	int ret = -1;
 
-	ret = osal_os_install(&s_link_liteos);
+	ret = osal_install(&s_link_liteos);
 
 	return ret;
 }

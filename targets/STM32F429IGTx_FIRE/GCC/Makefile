@@ -81,14 +81,23 @@ LDFLAGS =
 #load the mqtt if enabled
 ifeq ($(WITH_MQTT), yes)
 
-#LOAD THE MQTT LIB
-include $(TOP_DIR)/components/mqtt/mqtt.mk
 #LOAD THE ATINY_MQTT
 include $(TOP_DIR)/components/connectivity/agent_tiny/atiny_mqtt/atiny_mqtt.mk
 #LOAD THE ATINY_MQTT_DEMO
 include $(TOP_DIR)/demos/agenttiny_mqtt/atiny_mqtt_demo.mk
 #FLASH FOR THE ATINY MQTT DYNATIC MODE
 C_SOURCES += $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/flash_adaptor.c
+
+endif
+
+
+###############LOAD IOT_LINK###############
+IOT_LINK = yes
+#load the mqtt if enabled
+ifeq ($(IOT_LINK), yes)
+
+include $(TOP_DIR)/iot_link/iot_link.mk
+
 
 endif
 
@@ -157,31 +166,6 @@ HAL_DRIVER_SRC_NO_BOOTLOADER =  \
         $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_eth.c \
         $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rng.c
         C_SOURCES += $(HAL_DRIVER_SRC_NO_BOOTLOADER)
-
-
-ifeq ($(WITH_LWIP), yes)
-LWIP_SRC =  \
-        ${wildcard $(TOP_DIR)/components/net/lwip/lwip-2.0.3/src/api/*.c} \
-        ${wildcard $(TOP_DIR)/components/net/lwip/lwip-2.0.3/src/core/ipv4/*.c} \
-        ${wildcard $(TOP_DIR)/components/net/lwip/lwip-2.0.3/src/core/ipv6/*.c} \
-        ${wildcard $(TOP_DIR)/components/net/lwip/lwip-2.0.3/src/core/*.c} \
-        ${wildcard $(TOP_DIR)/components/net/lwip/lwip-2.0.3/src/netif/ethernet.c}
-        C_SOURCES += $(LWIP_SRC)
-
-LWIP_PORT_SRC = \
-        ${wildcard $(TOP_DIR)/components/net/lwip/lwip_port/OS/*.c}
-        C_SOURCES += $(LWIP_PORT_SRC)
-endif
-
-ifneq ($(OTA_IS_NEED_DTLS)_$(WITH_DTLS), no_no)
-MBEDTLS_SRC = \
-        ${wildcard $(TOP_DIR)/components/security/mbedtls/mbedtls-2.6.0/library/*.c}
-        C_SOURCES += $(MBEDTLS_SRC)
-
-MBEDTLS_PORT_SRC = \
-        ${wildcard $(TOP_DIR)/components/security/mbedtls/mbedtls_port/*.c}
-        C_SOURCES += $(MBEDTLS_PORT_SRC)
-endif
 
 ifeq ($(WITH_LWM2M), yes)
 ER_COAP_SRC = \
@@ -309,14 +293,12 @@ USER_SRC =  \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/main.c \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/system_stm32f4xx.c \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/usart.c \
+        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/uart_debug.c \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/dwt.c \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/eth.c \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/sys_init.c \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/user_task.c
         C_SOURCES += $(USER_SRC)
-
-
-
 
 ifeq ($(WITH_AT_FRAMEWORK), yes)
 AT_FRAME_SRC = \
@@ -431,35 +413,7 @@ C_DEFS += \
     -D LWM2M_LITTLE_ENDIAN \
     -D LWM2M_CLIENT_MODE
 endif
-ifneq ($(OTA_IS_NEED_DTLS)_$(WITH_DTLS), no_no)
-    ifeq ($(WITH_MQTT), yes)
-        C_DEFS += -D MBEDTLS_CONFIG_FILE=\"los_mbedtls_config_cert.h\"
-    else
-        C_DEFS += -D MBEDTLS_CONFIG_FILE=\"los_mbedtls_config.h\"
-    endif
-    ifeq ($(USE_MBEDTLS_DEBUG_C), yes)
-        C_DEFS += -DMBEDTLS_DEBUG_C
-    endif
 
-    ifeq ($(USE_MBEDTLS_AES_ROM_TABLES), yes)
-        C_DEFS += -DMBEDTLS_AES_ROM_TABLES
-    endif
-endif
-ifeq ($(WITH_DTLS), yes)
-    C_DEFS += -DWITH_DTLS
-endif
-
-ifeq ($(WITH_LWIP), yes)
-C_DEFS += \
-    -DWITH_LWIP \
-    -D LWIP_TIMEVAL_PRIVATE=0 
-
-    ifeq ($(USE_LWIP_TCP), yes)
-        C_DEFS += -DLWIP_TCP=1
-    else
-        C_DEFS += -DLWIP_TCP=0
-    endif
-endif
 
 ifeq ($(WITH_AT_FRAMEWORK), yes)
     C_DEFS += -DWITH_AT_FRAMEWORK
@@ -508,17 +462,7 @@ endif
 
 
 
-ifeq ($(WITH_IPV4), no)
-C_DEFS += -DLWIP_IPV4=0
-else
-C_DEFS += -DLWIP_IPV4=1
-endif
 
-ifeq ($(WITH_IPV6), yes)
-C_DEFS += -DLWIP_IPV6=1
-else
-C_DEFS += -DLWIP_IPV6=0
-endif
 
 # AS includes
 AS_INCLUDES =
@@ -584,26 +528,6 @@ ARCH_INC = \
         
 ifeq ($(USE_BOOTLOADER), no)
 
-ifeq ($(WITH_LWIP), yes)
-LWIP_INC = \
-        -I $(TOP_DIR)/components/net/lwip/lwip-2.0.3/src/include
-        C_INCLUDES += $(LWIP_INC)
-
-LWIP_PORT_INC = \
-        -I $(TOP_DIR)/components/net/lwip/lwip_port \
-        -I $(TOP_DIR)/components/net/lwip/lwip_port/OS
-        C_INCLUDES += $(LWIP_PORT_INC)
-endif
-
-ifneq ($(OTA_IS_NEED_DTLS)_$(WITH_DTLS), no_no)
-MBEDTLS_INC = \
-        -I $(TOP_DIR)/components/security/mbedtls/mbedtls-2.6.0/include
-        C_INCLUDES += $(MBEDTLS_INC)
-
-MBEDTLS_PORT_INC = \
-        -I $(TOP_DIR)/components/security/mbedtls/mbedtls_port
-        C_INCLUDES += $(MBEDTLS_PORT_INC)
-endif
 
 ifeq ($(WITH_LWM2M), yes)
 ER_COAP_INC = \

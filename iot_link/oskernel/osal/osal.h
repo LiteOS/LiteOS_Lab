@@ -28,7 +28,7 @@
  *
  * */
 void* osal_task_create(const char *name,int (*task_entry)(void *args),\
-                      void *args,int stack_size,void *stack,,int prior);
+                      void *args,int stack_size,void *stack,int prior);
 
 /**
  * @brief:use this funciton to kill the task
@@ -43,7 +43,7 @@ int osal_task_kill(void *task);
  * @brief:use this function  to exit from the current task
  *
  **/
-int osal_task_exit();
+void osal_task_exit();
 
 /**
  * @brief:use this function to make the task to sleep
@@ -52,7 +52,7 @@ int osal_task_exit();
  *
  * @return:0 success while -1 failed
  **/
-int osal_task_sleep(int ms);
+void osal_task_sleep(int ms);
 
 /**
  *@brief: the mutex that the os must supplied for the link
@@ -80,7 +80,15 @@ bool_t  osal_semp_del(osal_semp_t  semp);
  **/
 void *osal_malloc(int size);
 void  osal_free(void *addr);
+void *os_zalloc(int size);
 
+
+/**
+ * @brief:use this function to initialize the os abstract layer
+ *
+ * @return:0 success while -1 failed
+ * */
+void osal_init(void);
 
 
 #endif /* __OS_AL_H */

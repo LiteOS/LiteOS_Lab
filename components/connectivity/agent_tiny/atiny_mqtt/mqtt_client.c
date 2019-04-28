@@ -46,8 +46,6 @@
 #include  "atiny_error.h"
 #include "log/atiny_log.h"
 
-
-
 #define VARIABLE_SIZE (4 + 1)
 #define CMD_TOPIC_FMT            "/huawei/v1/devices/%s/command/%s"
 #define DATA_TOPIC_FMT           "/huawei/v1/devices/%s/data/%s"
@@ -855,7 +853,7 @@ int  atiny_mqtt_init(const mqtt_param_s *params, mqtt_client_s **phandle)
 int atiny_mqtt_bind(const mqtt_device_info_s* device_info, mqtt_client_s* handle)
 {
     int32_t conn_failed_cnt = 0;
-//    Timer timer;
+    Timer timer;
     int ret = ATINY_ERR;
 
     if (NULL == handle)
@@ -879,11 +877,6 @@ int atiny_mqtt_bind(const mqtt_device_info_s* device_info, mqtt_client_s* handle
     }
 
     mqtt_read_flash_info(handle);
-
-    if(0 != mqtt_al_init())
-    {
-    	goto EXIT_ATINY_BIND_QUIT;
-    }
 
     while(true)
     {
@@ -909,11 +902,11 @@ int atiny_mqtt_bind(const mqtt_device_info_s* device_info, mqtt_client_s* handle
         }
 
         conn_failed_cnt = 0;
-//        if (!mqtt_is_connectting_with_deviceid(handle))
-//        {
-//            TimerInit(&timer);
-//            TimerCountdownMS(&timer, MQTT_WRITE_FOR_SECRET_TIMEOUT);
-//        }
+        if (!mqtt_is_connectting_with_deviceid(handle))
+        {
+            TimerInit(&timer);
+            TimerCountdownMS(&timer, MQTT_WRITE_FOR_SECRET_TIMEOUT);
+        }
         while (en_mqtt_al_connect_ok == mqtt_al_check_status(handle->mqtthandle))
         {
 
@@ -927,15 +920,15 @@ int atiny_mqtt_bind(const mqtt_device_info_s* device_info, mqtt_client_s* handle
                 break;
             }
 
-//            // wait secret info timeout.
-//            if (!mqtt_is_connectting_with_deviceid(handle) && (TimerIsExpired(&timer)))
-//            {
-//                if (handle->dynamic_info.has_device_id)
-//                {
-//                    handle->dynamic_info.state = MQTT_CONNECT_WITH_DEVICE_ID;
-//                }
-//                break;
-//            }
+            // wait secret info timeout.
+            if (!mqtt_is_connectting_with_deviceid(handle) && (TimerIsExpired(&timer)))
+            {
+                if (handle->dynamic_info.has_device_id)
+                {
+                    handle->dynamic_info.state = MQTT_CONNECT_WITH_DEVICE_ID;
+                }
+                break;
+            }
             atiny_delay(10);
         }
 

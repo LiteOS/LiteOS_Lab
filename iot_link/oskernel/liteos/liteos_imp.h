@@ -1,7 +1,7 @@
 /*
  * liteos_imp.h
  *
- *  Created on: 2019年4月27日
+ *  Created on: 2019骞�4鏈�27鏃�
  *      Author: jwrr
  */
 
@@ -16,7 +16,7 @@
  *
  * */
 
-int link_liteos_install(void);
+int osal_install_liteos(void);
 
 
 #endif /* __LITEOS_IMP_H */
