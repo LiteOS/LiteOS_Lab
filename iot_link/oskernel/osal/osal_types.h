@@ -21,6 +21,6 @@ typedef void*  osal_mutex_t;
 #define cn_mutex_invalid  NULL
 
 typedef void*  osal_semp_t;
-#define cn_semp_invalid  NULL
+#define cn_semp_invalid   NULL
 
 #endif /* __OSAL_TYPES_H */

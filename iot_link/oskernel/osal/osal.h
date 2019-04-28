@@ -1,9 +1,4 @@
-/*
- * os_al.h
- *
- *  Created on: 2019Äê4ÔÂ26ÈÕ
- *      Author: zhangqf
- */
+
 
 #ifndef __OS_AL_H
 #define __OS_AL_H
@@ -13,7 +8,7 @@
 #include <stdio.h>
 
 
-#include "../oskernel/osal_types.h"
+#include <osal_types.h>
 
 //we need nothing here except the standard struct here
 //kernel port here
@@ -83,8 +78,8 @@ bool_t  osal_semp_del(osal_semp_t  semp);
  *@brief: the memory method that the os must supplied for the link
  *
  **/
-void *osal_mem_malloc(int size);
-void  osal_mem_free(void *addr);
+void *osal_malloc(int size);
+void  osal_free(void *addr);
 
 
 

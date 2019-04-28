@@ -1,13 +1,7 @@
-/*
- * os_al.c
- *
- *  Created on: 2019Äê4ÔÂ26ÈÕ
- *      Author: zhangqf
- */
 
-#include "../oskernel/osal.h"
 
-#include "../oskernel/osal_imp.h"
+#include <osal_imp.h>
+#include <osal.h>
 
 static const tag_os *s_os_cb = NULL;
 
@@ -189,7 +183,7 @@ bool_t  osal_semp_del(osal_semp_t *semp)
 }
 
 
-void *osal_mem_malloc(int size)
+void *osal_malloc(int size)
 {
     void *ret = NULL;
 
@@ -202,7 +196,7 @@ void *osal_mem_malloc(int size)
 
 }
 
-void  osal_mem_free(void *addr)
+void  osal_free(void *addr)
 {
 
     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->free))
