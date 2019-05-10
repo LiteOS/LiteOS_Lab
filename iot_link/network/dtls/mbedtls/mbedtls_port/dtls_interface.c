@@ -54,9 +54,11 @@
  */
 
 #include "dtls_interface.h"
-#include "osdepends/atiny_osdep.h"
 #include "mbedtls/net_sockets.h"
-#include "sal/atiny_socket.h"
+
+#include <sal.h>
+#include <osal.h>
+
 
 #define MBEDTLS_DEBUG
 
@@ -64,7 +66,7 @@
 #define MBEDTLS_LOG(fmt, ...) \
     do \
     { \
-        (void)atiny_printf("[MBEDTLS][%s:%d] " fmt "\r\n", \
+        (void)printf("[MBEDTLS][%s:%d] " fmt "\r\n", \
         __FUNCTION__, __LINE__, ##__VA_ARGS__); \
     } while (0)
 #else
@@ -72,16 +74,6 @@
 #endif
 
 
-static void *atiny_calloc(size_t n, size_t size)
-{
-    void *p = atiny_malloc(n * size);
-    if(p)
-    {
-        memset(p, 0, n * size);
-    }
-
-    return p;
-}
 
 mbedtls_ssl_context *dtls_ssl_new(dtls_establish_info_s *info, char plat_type)
 {
@@ -206,13 +198,6 @@ mbedtls_ssl_context *dtls_ssl_new(dtls_establish_info_s *info, char plat_type)
 
     mbedtls_ssl_conf_authmode(conf, MBEDTLS_SSL_VERIFY_NONE);  //TODO--test for no check the ca_rt--only for the debug
 
-
-#ifndef WITH_MQTT
-    if (info->udp_or_tcp == MBEDTLS_NET_PROTO_UDP)
-    {
-        mbedtls_ssl_conf_dtls_cookies(conf, NULL, NULL,NULL);
-    }
-#endif
     if ((ret = mbedtls_ssl_setup(ssl, conf)) != 0)
     {
         MBEDTLS_LOG("mbedtls_ssl_setup failed: -0x%x", -ret);
@@ -272,7 +257,7 @@ exit_fail:
 
 static inline uint32_t dtls_gettime()
 {
-    return (uint32_t)(atiny_gettime_ms() / 1000);
+    return (uint32_t)(osal_sys_time() / 1000);
 }
 
 int dtls_shakehand(mbedtls_ssl_context *ssl, const dtls_shakehand_info_s *info)
@@ -314,8 +299,7 @@ int dtls_shakehand(mbedtls_ssl_context *ssl, const dtls_shakehand_info_s *info)
     do
     {
         ret = mbedtls_ssl_handshake(ssl);
-        //MBEDTLS_LOG("mbedtls_ssl_handshake %d %d", change_value, max_value);
-        //LOS_TaskDelay(1);
+
         if (MBEDTLS_SSL_IS_CLIENT == info->client_or_server && info->udp_or_tcp == MBEDTLS_NET_PROTO_TCP)
         {
             change_value++;
@@ -453,7 +437,14 @@ void dtls_ssl_destroy(mbedtls_ssl_context *ssl)
 
 int dtls_write(mbedtls_ssl_context *ssl, const unsigned char *buf, size_t len)
 {
-    int ret = mbedtls_ssl_write(ssl, (unsigned char *) buf, len);
+
+    int ret;
+
+    MBEDTLS_LOG("++++DTLS_WRITE:ENTER\r\n");
+    ret = mbedtls_ssl_write(ssl, (unsigned char *) buf, len);
+
+    MBEDTLS_LOG("----DTLS_WRITE:EXIT\r\n");
+
 
     if (ret == MBEDTLS_ERR_SSL_WANT_WRITE)
     {
@@ -471,9 +462,14 @@ int dtls_read(mbedtls_ssl_context *ssl, unsigned char *buf, size_t len, uint32_t
 {
     int ret;
 
+    MBEDTLS_LOG("++++DTLS_READ:ENTER\r\n");
+
     mbedtls_ssl_conf_read_timeout(ssl->conf, timeout);
 
     ret = mbedtls_ssl_read(ssl, buf, len);
+
+    MBEDTLS_LOG("----DTLS_READ:EXIT\r\n");
+
 
     if (ret == MBEDTLS_ERR_SSL_WANT_READ)
     {
@@ -481,9 +477,9 @@ int dtls_read(mbedtls_ssl_context *ssl, unsigned char *buf, size_t len, uint32_t
     }
     else if (ret == MBEDTLS_ERR_SSL_TIMEOUT)
     {
-        return -2;
+        return 0;
     }
-    else if (ret < 0)
+    else if (ret <= 0)
     {
         return -1;
     }
@@ -491,17 +487,18 @@ int dtls_read(mbedtls_ssl_context *ssl, unsigned char *buf, size_t len, uint32_t
     return ret;
 }
 
-void dtls_init(void)
-{
-    (void)mbedtls_platform_set_calloc_free(atiny_calloc, atiny_free);
-    (void)mbedtls_platform_set_snprintf(atiny_snprintf);
-    (void)mbedtls_platform_set_printf(atiny_printf);
-}
+
 
 int dtls_accept( mbedtls_net_context *bind_ctx,
-                            mbedtls_net_context *client_ctx,
-                            void *client_ip, size_t buf_size, size_t *ip_len )
+                mbedtls_net_context *client_ctx,
+                void *client_ip, size_t buf_size, size_t *ip_len )
 {
     return mbedtls_net_accept(bind_ctx, client_ctx, client_ip, buf_size, ip_len);
 }
 
+void dtls_init(void)
+{
+    (void)mbedtls_platform_set_calloc_free(osal_calloc, osal_free);
+    (void)mbedtls_platform_set_snprintf(snprintf);
+    (void)mbedtls_platform_set_printf(printf);
+}

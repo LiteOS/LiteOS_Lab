@@ -72,28 +72,28 @@ VOID HardWare_Init(VOID)
     dwt_delay_init(SystemCoreClock);
 }
 
-//extern int link_main(void *args);
-//static int link_test()
-//{
-//    int ret = -1;
-//    UINT32 uwRet = LOS_OK;
-//    UINT32  handle;
-//    TSK_INIT_PARAM_S task_init_param;
-//
-//    memset (&task_init_param, 0, sizeof (TSK_INIT_PARAM_S));
-//
-//    task_init_param.uwArg = (unsigned int)NULL;
-//    task_init_param.usTaskPrio = 2;
-//    task_init_param.pcName =(char *) "link_main";
-//    task_init_param.pfnTaskEntry = (TSK_ENTRY_FUNC)link_main;
-//    task_init_param.uwStackSize = 0x1000;
-//    uwRet = LOS_TaskCreate(&handle, &task_init_param);
-//    if(LOS_OK == uwRet){
-//        ret = 0;
-//    }
-//
-//    return ret;
-//}
+extern int link_main(void *args);
+static int link_test()
+{
+    int ret = -1;
+    UINT32 uwRet = LOS_OK;
+    UINT32  handle;
+    TSK_INIT_PARAM_S task_init_param;
+
+    memset (&task_init_param, 0, sizeof (TSK_INIT_PARAM_S));
+
+    task_init_param.uwArg = (unsigned int)NULL;
+    task_init_param.usTaskPrio = 2;
+    task_init_param.pcName =(char *) "link_main";
+    task_init_param.pfnTaskEntry = (TSK_ENTRY_FUNC)link_main;
+    task_init_param.uwStackSize = 0x1000;
+    uwRet = LOS_TaskCreate(&handle, &task_init_param);
+    if(LOS_OK == uwRet){
+        ret = 0;
+    }
+
+    return ret;
+}
 
 
 int main(void)
@@ -108,11 +108,11 @@ int main(void)
     }
 
 
-//#if 1
-//    link_test();
-//#endif
-
 #if 1
+    link_test();
+#endif
+
+#if 0
     extern UINT32 create_work_tasks(VOID);
     uwRet = create_work_tasks();
     if (uwRet != LOS_OK)

@@ -55,7 +55,7 @@ int oc_mqtt_register(const tag_oc_mqtt_ops *opt)
 }
 
 //////////////////////////APPLICATION INTERFACE/////////////////////////////////
-int oc_mqtt_config(tag_oc_config_param *param)
+void* oc_mqtt_config(tag_oc_mqtt_config *param)
 {
     void *ret = NULL;
 
@@ -74,7 +74,7 @@ int oc_mqtt_deconfig(void *handle)
     if((NULL != handle)&&(NULL != s_oc_mqtt) \
        &&(NULL != s_oc_mqtt->deconfig))
     {
-       ret = s_oc_mqtt->deconfig();
+       ret = s_oc_mqtt->deconfig(handle);
     }
 
     return ret;
@@ -193,12 +193,12 @@ cJSON *oc_mqtt_json_fmt_report(tag_oc_mqtt_report  *report)
     }
 
     ///< create the time service_data object and add it to the service
-    tmp = cJSON_CreateString(cn_service_time_value);
+    tmp = cJSON_CreateString(report->eventtime);
     if(NULL == tmp)
     {
         goto EXIT_CJSON_ERR;
     }
-    cJSON_AddItemToObject(service,cn_service_time_value,tmp);
+    cJSON_AddItemToObject(service,cn_service_time_name,tmp);
 
     ret = root;
     return ret;

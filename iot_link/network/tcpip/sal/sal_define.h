@@ -123,6 +123,17 @@
 #define PF_MAX      AF_MAX
 
 /**
+ *
+ * @brief: defines the type for socket,the support depends on the implement of the stack
+ * */
+
+#define SOCK_STREAM     1
+#define SOCK_DGRAM      2
+#define SOCK_RAW        3
+#define SOCK_RDW        4
+#define SOCK_SEQPACKET  5
+
+/**
  * @brief:list out all the flags maybe  used in the send and recv functions.
  *        not all the flags supported yet, depends on the tcpip stack
  * */
@@ -197,7 +208,7 @@
 #define SOL_KCM         281
 #define SOL_TLS         282
 #define SOL_XDP         283
-#define SOL_SOCKET      0xffff
+#define SOL_SOCKET      0xfff
 
 /**
  *@brief:list all the option name for option level SOL_SOCKET,supported depends on the implement of
@@ -307,6 +318,12 @@
 #define SHUT_WR   1
 #define SHUT_RDWR 2
 #endif
+
+
+///< defines the address
+#define INADDR_NONE  0
+
+
 
 
 

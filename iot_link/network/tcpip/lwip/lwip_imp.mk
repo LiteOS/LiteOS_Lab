@@ -59,6 +59,7 @@ LWIP_PORT_SRC = \
 
 C_DEFS += \
     -DWITH_LWIP \
+    -DLWIP_DEBUG \
     -D LWIP_TIMEVAL_PRIVATE=0 
 
     ifeq ($(USE_LWIP_TCP), yes)

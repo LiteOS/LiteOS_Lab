@@ -38,65 +38,115 @@
 #include MBEDTLS_CONFIG_FILE
 #endif
 
+#if !defined(MBEDTLS_NET_C)
 
+
+#if defined(MBEDTLS_PLATFORM_C)
+#include "mbedtls/platform.h"
+#else
+#include <stdlib.h>
+#endif
+
+#include "mbedtls/net_sockets.h"
 #include <osal.h>
 
-#include <timing_alt.h>
-
-unsigned long mbedtls_timing_get_timer(struct mbedtls_timing_hr_time *val, int reset)
+void mbedtls_net_init(mbedtls_net_context *ctx)
 {
-    struct mbedtls_timing_hr_time now;
-    now.timer_ms = osal_sys_time();
-
-    if (reset)
-    {
-        val->timer_ms = now.timer_ms;
-    }
-
-    return (unsigned long)(now.timer_ms - val->timer_ms);
+    ctx->fd = -1;
 }
 
-/*
- * Set delays to watch
- */
-void mbedtls_timing_set_delay(void *data, uint32_t int_ms, uint32_t fin_ms)
+void *mbedtls_net_connect(const char *host, const char *port, int proto)
 {
-    mbedtls_timing_delay_context *ctx = (mbedtls_timing_delay_context *) data;
+    mbedtls_net_context *ret;
 
-    ctx->int_ms = int_ms;
-    ctx->fin_ms = fin_ms;
+    struct sock_add
 
-    if (fin_ms != 0)
-    {
-        (void)mbedtls_timing_get_timer(&ctx->timer, 1);
-    }
+
+
+    return atiny_net_connect(host, port, proto);
 }
 
-/*
- * Get number of delays expired
- */
-int mbedtls_timing_get_delay(void *data)
+void mbedtls_net_usleep(unsigned long usec)
 {
-    mbedtls_timing_delay_context *ctx = (mbedtls_timing_delay_context *)data;
-    unsigned long elapsed_ms;
-
-    if (ctx->fin_ms == 0)
-    {
-        return -1;
-    }
-
-    elapsed_ms = mbedtls_timing_get_timer(&ctx->timer, 0);
-
-    if (elapsed_ms >= ctx->fin_ms)
-    {
-        return 2;
-    }
-
-    if (elapsed_ms >= ctx->int_ms)
-    {
-        return 1;
-    }
-
-    return 0;
+    atiny_usleep(usec);
 }
+
+int mbedtls_net_recv(void *ctx, unsigned char *buf, size_t len)
+{
+    int ret = atiny_net_recv(ctx, buf, len);
+
+    if (ret == 0)
+    {
+        return MBEDTLS_ERR_SSL_WANT_READ;
+    }
+    else if (ret < 0)
+    {
+        return MBEDTLS_ERR_NET_RECV_FAILED;
+    }
+
+    return ret;
+}
+
+int mbedtls_net_recv_timeout(void *ctx, unsigned char *buf, size_t len,
+                             uint32_t timeout)
+{
+    int ret = atiny_net_recv_timeout(ctx, buf, len, timeout);
+
+	///< fixed by zhangqianfu,must keep sync with mbedtls_net_recv
+    if (ret == -1)
+    {
+        return MBEDTLS_ERR_NET_RECV_FAILED;
+    }
+    else if ((ret == 0) || (ret == -2))
+    {
+        return MBEDTLS_ERR_SSL_WANT_READ;
+    }
+
+
+    return ret;
+}
+
+int mbedtls_net_send(void *ctx, const unsigned char *buf, size_t len)
+{
+    int ret = atiny_net_send(ctx, buf, len);
+
+    if (ret == 0)
+    {
+        return MBEDTLS_ERR_SSL_WANT_WRITE;
+    }
+    else if (ret < 0)
+    {
+        return MBEDTLS_ERR_NET_SEND_FAILED;
+    }
+
+    return ret;
+}
+
+void mbedtls_net_free(mbedtls_net_context *ctx)
+{
+    atiny_net_close(ctx);
+}
+
+int mbedtls_net_accept( mbedtls_net_context *bind_ctx,
+                        mbedtls_net_context *client_ctx,
+                        void *client_ip, size_t buf_size, size_t *ip_len )
+{
+    int ret = atiny_net_accept(bind_ctx, client_ctx, client_ip, buf_size, ip_len);
+
+    if (ret == ATINY_NET_ERR)
+       return MBEDTLS_ERR_NET_UNKNOWN_HOST;
+    else if (ret == ATINY_NET_SOCKET_FAILED)
+       return MBEDTLS_ERR_NET_SOCKET_FAILED;
+    else if (ret == ATINY_NET_BIND_FAILED)
+      return MBEDTLS_ERR_NET_BIND_FAILED;
+    else if (ret == ATINY_NET_LISTEN_FAILED)
+        return MBEDTLS_ERR_NET_LISTEN_FAILED;
+    else if (ret == ATINY_NET_ACCEPT_FAILED)
+        return MBEDTLS_ERR_NET_ACCEPT_FAILED;
+    else if(ret == ATINY_NET_BUF_SMALL_FAILED)
+        return MBEDTLS_ERR_NET_BUFFER_TOO_SMALL;
+
+    return ret;
+}
+#endif /* MBEDTLS_NET_C */
 

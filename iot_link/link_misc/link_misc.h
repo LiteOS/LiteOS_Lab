@@ -174,6 +174,18 @@ int ring_reset(tag_ring_buffer_t *ring);
 int ring_deinit(tag_ring_buffer_t *ring);
 
 
+///< random
+/**
+ * @brief: use this function to generate the random ,could be reprogramed by yourelf
+ *
+ * @param[in]:output, this is the random data storage buffer
+ * @param[in]:len, the output buffer length
+ *
+ * @retrun:0 success while -1 failed
+ *
+ * */
+int link_random(void* output, int len);
+
 
 
 #endif /* LITEOS_LAB_IOT_LINK_LINK_MISC_LINK_MISC_H_ */

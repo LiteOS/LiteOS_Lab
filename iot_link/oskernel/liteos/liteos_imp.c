@@ -219,6 +219,14 @@ static void __mem_free(void *addr)
 	LOS_MemFree(m_aucSysMem0,addr);
 }
 
+///< sys time
+#include <los_sys.ph>
+static unsigned long long __get_sys_time()
+{
+    return osKernelGetTickCount() * (OS_SYS_MS_PER_SECOND / LOSCFG_BASE_CORE_TICK_PER_SECOND);
+}
+
+
 static const tag_os_ops s_liteos_ops =
 {
 	.task_sleep = __task_sleep,
@@ -239,7 +247,10 @@ static const tag_os_ops s_liteos_ops =
 	.malloc = __mem_malloc,
 	.free = __mem_free,
 
+	.get_sys_time = __get_sys_time,
 };
+
+
 
 static const tag_os s_link_liteos =
 {

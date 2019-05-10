@@ -34,12 +34,16 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <string.h>
 
 
 #include <osal.h>
 #include <oc_mqtt_al.h>
 
-#if CFG_OC_MQTT_DEMO_STATIC
+
+#define CFG_OC_MQTT_DEMO_STATIC_EN 1
+
+#if CFG_OC_MQTT_DEMO_STATIC_EN
 
 /* brief : the oceanconnect platform only support the ca_crt up tills now*/
 /** the address product_id device_id password crt is only for the test  */
@@ -53,50 +57,179 @@
 
 static char s_mqtt_ca_crt[] =
 "-----BEGIN CERTIFICATE-----\r\n"
-"MIID4DCCAsigAwIBAgIJAK97nNS67HRvMA0GCSqGSIb3DQEBCwUAMFMxCzAJBgNV\r\n"
-"BAYTAkNOMQswCQYDVQQIEwJHRDELMAkGA1UEBxMCU1oxDzANBgNVBAoTBkh1YXdl\r\n"
-"aTELMAkGA1UECxMCQ04xDDAKBgNVBAMTA0lPVDAeFw0xNjA1MDQxMjE3MjdaFw0y\r\n"
-"NjA1MDIxMjE3MjdaMFMxCzAJBgNVBAYTAkNOMQswCQYDVQQIEwJHRDELMAkGA1UE\r\n"
-"BxMCU1oxDzANBgNVBAoTBkh1YXdlaTELMAkGA1UECxMCQ04xDDAKBgNVBAMTA0lP\r\n"
-"VDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAJxM9fwkwvxeILpkvoAM\r\n"
-"Gdqq3x0G9o445F6Shg3I0xmmzu9Of8wYuW3c4jtQ/6zscuIGyWf06ke1z//AVZ/o\r\n"
-"dp8LkuFbBbDXR5swjUJ6z15b6yaYH614Ty/d6DrCM+RaU+FWmxmOon9W/VELu2BB\r\n"
-"NXDQHJBSbWrLNGnZA2erk4JSMp7RhHrZ0QaNtT4HhIczFYtQ2lYF+sQJpQMrjoRn\r\n"
-"dSV9WB872Ja4DgcISU1+wuWLmS/NKjIvOWW1upS79yu2I4Rxos2mFy9xxz311rGC\r\n"
-"Z3X65ejFNzCUrNgf6NEP1N7wB9hUu7u50aA+/56D7EgjeI0gpFytC+a4f6JCPVWI\r\n"
-"Lr0CAwEAAaOBtjCBszAdBgNVHQ4EFgQUcGqy59oawLEgMl21//7F5RyABpwwgYMG\r\n"
-"A1UdIwR8MHqAFHBqsufaGsCxIDJdtf/+xeUcgAacoVekVTBTMQswCQYDVQQGEwJD\r\n"
-"TjELMAkGA1UECBMCR0QxCzAJBgNVBAcTAlNaMQ8wDQYDVQQKEwZIdWF3ZWkxCzAJ\r\n"
-"BgNVBAsTAkNOMQwwCgYDVQQDEwNJT1SCCQCve5zUuux0bzAMBgNVHRMEBTADAQH/\r\n"
-"MA0GCSqGSIb3DQEBCwUAA4IBAQBgv2PQn66gRMbGJMSYS48GIFqpCo783TUTePNS\r\n"
-"tV8G1MIiQCpYNdk2wNw/iFjoLRkdx4va6jgceht5iX6SdjpoQF7y5qVDVrScQmsP\r\n"
-"U95IFcOkZJCNtOpUXdT+a3N+NlpxiScyIOtSrQnDFixWMCJQwEfg8j74qO96UvDA\r\n"
-"FuTCocOouER3ZZjQ8MEsMMquNEvMHJkMRX11L5Rxo1pc6J/EMWW5scK2rC0Hg91a\r\n"
-"Lod6aezh2K7KleC0V5ZlIuEvFoBc7bCwcBSAKA3BnQveJ8nEu9pbuBsVAjHOroVb\r\n"
-"8/bL5retJigmAN2GIyFv39TFXIySw+lW0wlp+iSPxO9s9J+t\r\n"
+"MIIEwTCCAqmgAwIBAgIRdi8oqJITu4uSWV2C/dUS1swwDQYJKoZIhvcNAQELBQAw\r\n"
+"PDELMAkGA1UEBhMCQ04xDzANBgNVBAoTBkh1YXdlaTEcMBoGA1UEAxMTSHVhd2Vp\r\n"
+"IEVxdWlwbWVudCBDQTAeFw0xNzAyMTYwNjM0MzVaFw00MTEwMDgwNjM0MzVaME0x\r\n"
+"CzAJBgNVBAYTAkNOMQ8wDQYDVQQKEwZIdWF3ZWkxLTArBgNVBAMTJEh1YXdlaSBD\r\n"
+"bG91ZCBDb3JlIE5ldHdvcmsgUHJvZHVjdCBDQTCCASIwDQYJKoZIhvcNAQEBBQAD\r\n"
+"ggEPADCCAQoCggEBAKQQz5uvp3lmtK9uzeje7cZUF8RlRKavEQj9EQk45ly9a/Kr\r\n"
+"07TlGIhaZv7j+N9ZV1jTiwA0+XWlni1anjy01qsBQ22eIzX3HQ3fTMjPfk67SFhS\r\n"
+"aHdzkJwO66/Nojnaum84HfUTBuXfgiBNH4C2Bc9YBongLktwunqMGvMWEKj4YqjN\r\n"
+"bjjZQ1G1Qnhk15qpEWI9YUv0I5X94oT5idEMIH+V+2hcW/6GmztoOgCekW3GPHGl\r\n"
+"UJLt3cSaDkp1b5IchnGpwocZLJMd+V3emcLhbjXewIY3meUIkXMrqJ12L3ltkRVp\r\n"
+"nHElgmpvp3dBjUrBiITLakrGq8P/Ta7OO5kf9JUCAwEAAaOBrDCBqTAfBgNVHSME\r\n"
+"GDAWgBQq+BBZJ4A1H6d8ujufKuRKqpuS6jBGBgNVHSAEPzA9MDsGBFUdIAAwMzAx\r\n"
+"BggrBgEFBQcCARYlaHR0cDovL3N1cHBvcnQuaHVhd2VpLmNvbS9zdXBwb3J0L3Br\r\n"
+"aTAPBgNVHRMECDAGAQH/AgEAMA4GA1UdDwEB/wQEAwIBBjAdBgNVHQ4EFgQU9CcR\r\n"
+"7wi0DatgF91OjC2HvAn0bG4wDQYJKoZIhvcNAQELBQADggIBADli3WJezyDe4qVl\r\n"
+"jSpF3kxRvBPf6hPhf81WT/A3lo5f7rTOEkRqTB515i5p8Xv8QgP8WTcMu22K5oZt\r\n"
+"6iV4PpWCaEVaHgAYeI8sjjWqI498nKWrJ1kaJkdOxB3omVa2Fet7xDCL6MR2jDZq\r\n"
+"dtZGF2XCIiNuZhvTYOTvKTfuzN5/gi/z8GD8xP95V4vX3sB2jqgleMTirFdeA+RB\r\n"
+"HDbS55MSIfA2jeXJt0IHoB5FKshcCPNLIW/s0O7lbSH62o4d+5PeVV8tbMESQ6Ve\r\n"
+"NSRt22+n6Z2Z6n/ZMfM2jSziEZNIyPXQtywltkcrhRIbxWoB0IEr0Ci+7FVr9CRu\r\n"
+"ZlcpliSKemrxiLo5EkoznWwxfUP11i473lUVljloJRglYWh6uo9Ci5Cu001occ4L\r\n"
+"9qs13MTtpC96LouOyrqBUOlUmJvitqCrHSfqOowyi8B0pxH/+m+Q8+fP9cBztw22\r\n"
+"JId8bth5j0OUbNDoY7DnjQLCI0bEZt4RSpQN1c6xf90gHutM62qoGI6NKlb2IH+r\r\n"
+"Yfun6P4jYTN9vMnaDfxBH7ofz4q9nj27UBkX9ebqM8kS+RijnUUy8L2N6KsUpp2R\r\n"
+"01cjcmp699kFIJ7ShCOmI95ZC9cociTnhTK6WScCweBH7eBxZwoQLi5ER3VkDs1r\r\n"
+"rqnNVUgf2j9TOshCI6zuaxsA35wr\r\n"
 "-----END CERTIFICATE-----\r\n";
 
-static int msg_deader(void *handle, char *msg, int len, )
+
+//if your command is very fast,please use a queue here--TODO
+#define cn_app_rcv_buf_len 256
+static char            s_rcv_buffer[cn_app_rcv_buf_len];
+static int             s_rcv_datalen;
+static osal_semp_t     s_rcv_sync;
+static void           *s_mqtt_handle;
+//use this function to push all the message to the buffer
+static int app_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
 {
+    int ret = -1;
+    printf("topic:%s qos:%d\n\r",msg->topic.data,msg->qos);
+
+    if(msg->msg.len < cn_app_rcv_buf_len)
+    {
+        memcpy(s_rcv_buffer,msg->msg.data,msg->msg.len );
+        s_rcv_buffer[msg->msg.len] = '\0'; ///< the json need it
+        s_rcv_datalen = msg->msg.len;
+
+        printf("msg:%s\n\r",s_rcv_buffer);
+
+        osal_semp_post(s_rcv_sync);
+        ret = 0;
+
+    }
+    return ret;
+}
+
+
+static int oc_mqtt_cmd_entry( void *args)
+{
+
+    cJSON  *msg;
+    cJSON  *mid;
+    cJSON  *ioswitch;
+    cJSON  *msgType;
+    cJSON  *paras;
+    cJSON  *serviceId;
+    cJSON  *cmd;
+    char   *buf;
+
+    tag_oc_mqtt_response response;
+    tag_key_value_list   list;
+
+    int mid_int;
+    int err_int;
+    while(1)
+    {
+        if(osal_semp_pend(s_rcv_sync,0x7fffffff))
+        {
+            err_int = 1;
+            mid_int = 1;
+            msg = cJSON_Parse(s_rcv_buffer);
+
+            if(NULL != msg)
+            {
+                serviceId = cJSON_GetObjectItem(msg,"serviceId");
+                if(NULL != serviceId)
+                {
+                    printf("msgType:%s\n\r",serviceId->valuestring);
+                }
+
+                mid = cJSON_GetObjectItem(msg,"mid");
+                if(NULL != mid)
+                {
+                    mid_int = mid->valueint;
+                    printf("mid:%d\n\r",mid_int);
+                }
+                msgType = cJSON_GetObjectItem(msg,"msgType");
+                if(NULL != msgType)
+                {
+                    printf("msgType:%s\n\r",msgType->valuestring);
+                }
+                cmd =  cJSON_GetObjectItem(msg,"cmd");
+                if(NULL != cmd)
+                {
+                    printf("cmd:%s\n\r",cmd->valuestring);
+                }
+
+                paras = cJSON_GetObjectItem(msg,"paras");
+                if(NULL != paras)
+                {
+                    ioswitch = cJSON_GetObjectItem(paras,"ioswitch");
+                    printf("ioswitch:%d\n\r",ioswitch->valueint);
+                    err_int = 0;
+                }
+                cJSON_Delete(msg);
+
+                list.item.name = "body_para";
+                list.item.buf = "body_para";
+                list.item.type = en_key_value_type_string;
+                list.next = NULL;
+
+                response.hasmore = 0;
+                response.errcode = err_int;
+                response.mid = mid_int;
+                response.bodylst = &list;
+
+                msg = oc_mqtt_json_fmt_response(&response);
+                if(NULL != msg)
+                {
+                    buf = cJSON_Print(msg);
+                    if(NULL != buf)
+                    {
+                        if(0 == oc_mqtt_report(s_mqtt_handle,buf,strlen(buf),en_mqtt_al_qos_1))
+                        {
+                           // printf("SNDMSG:%s\n\r",buf);
+                        }
+                        osal_free(buf);
+                    }
+                    cJSON_Delete(msg);
+                }
+            }
+        }
+    }
+
     return 0;
 }
 
 
-static int oc_mqtt_entry(void *args)
+
+static int oc_mqtt_report_entry(void *args)
 {
+    int leftpower = 0;
     void *handle;
-
+    tag_oc_mqtt_report  report;
+    tag_key_value_list  lst;
     tag_oc_mqtt_config config;
-    tag_oc_mqtt_report report;
+    cJSON *root;
+    char  *buf;
 
+    int times= 0;
 
     config.server = DEFAULT_SERVER_IPV4;
     config.port = DEFAULT_SERVER_PORT;
-    config.msgdealer = msg_deader;
-    config.device_type = en_oc_mqtt_type_static;
+    config.msgdealer = app_msg_deal;
+    config.code_mode = en_oc_mqtt_code_mode_json;
+    config.sign_type = en_mqtt_sign_type_hmacsha256_check_time_no;
+    config.device_type = en_oc_mqtt_device_type_static;
     config.device_info.s_device.deviceid = AGENT_TINY_DEMO_DEVICEID;
     config.device_info.s_device.devicepasswd = AGENT_TINY_DEMO_PASSWORD;
-    config.crt = s_mqtt_ca_crt;
+
+    config.security.type = en_mqtt_al_security_cas;
+    config.security.u.cas.ca_crt.data = s_mqtt_ca_crt;
+    config.security.u.cas.ca_crt.len = sizeof(s_mqtt_ca_crt); ///< must including the end '\0'
 
     handle = oc_mqtt_config(&config);
     if(NULL == handle)
@@ -104,24 +237,54 @@ static int oc_mqtt_entry(void *args)
         printf("config err\r\n");
     }
 
+    s_mqtt_handle = handle;
+    leftpower =33;
     while(1)  //do the loop here
     {
-        report.reseved = NULL;                 ///< add your report data here
-        if(0 != oc_mqtt_report(handle,&report))
+        leftpower = (leftpower + 7 )%100;
+
+        lst.item.name = "batteryLevel";
+        lst.item.buf = (char *)&leftpower;
+        lst.item.len = sizeof(leftpower);
+        lst.item.type = en_key_value_type_int;
+        lst.next = NULL;
+
+        report.hasmore = en_oc_mqtt_has_more_no;
+        report.paralst= &lst;
+        report.serviceid = "Battery";
+        report.eventtime = "20190508T112020Z";
+
+        root = oc_mqtt_json_fmt_report(&report);
+        if(NULL != root)
         {
-            printf("report err\r\n");
-            break;
+            buf = cJSON_Print(root);
+            if(NULL != buf)
+            {
+                printf("ENTER:REPORT\r\n");
+                if(0 == oc_mqtt_report(handle,buf,strlen(buf),en_mqtt_al_qos_1))
+                {
+                    printf("times:%d power:%d\r\n",times++,leftpower);
+                }
+                printf("EXIT:REPORT\r\n");
+                osal_free(buf);
+            }
+
+            cJSON_Delete(root);
         }
 
-        task_sleep(1000); ///< do a sleep here
+        osal_task_sleep(2*1000); ///< do a sleep here
     }
     return 0;
 }
 
-
 int oc_mqtt_demo_main()
 {
-    osal_task_create("ocmqtt_report",oc_mqtt_entry,NULL,0x800,NULL,10);
+    osal_semp_create(&s_rcv_sync,1,0);
+
+    osal_task_create("ocmqtt_report",oc_mqtt_report_entry,NULL,0x800,NULL,10);
+
+    osal_task_create("ocmqtt_cmd",oc_mqtt_cmd_entry,NULL,0x800,NULL,10);
+
 
     return 0;
 

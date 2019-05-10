@@ -54,8 +54,9 @@ int tcpip_sal_init( int socknum)
     }
 
     memset(s_sal_cb.sock_cb_tab,0,socknum*sizeof(void *));
-
+    s_sal_cb.sock_cb_num = socknum;
     s_sal_cb.domain = NULL;
+
     ret = 0;
 
     return ret;

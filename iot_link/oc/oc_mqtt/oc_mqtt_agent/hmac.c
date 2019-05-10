@@ -31,56 +31,95 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
+#include "hmac.h"
 
-#ifndef MQTT_OSDEP_H
-#define MQTT_OSDEP_H
+#ifdef WITH_DTLS
 
+#include "mbedtls/md.h"
+#include "mbedtls/ssl.h"
+#include "mbedtls/entropy.h"
+#include "mbedtls/ctr_drbg.h"
+#include "mbedtls/platform.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <los_typedef.h>
-#include <los_sys.h>
-
-#include "mqtt_al.h"
+#include "mbedtls/md_internal.h"
 #include "osdepends/atiny_osdep.h"
+#include "dtls_interface.h"
 
-#define MQTT_TASK 1
-
-typedef struct Timer
+typedef struct _mbedtls_hmac_t
 {
-	unsigned long long end_time;
-} Timer;
+    const unsigned char *secret;
+    const unsigned char *input;
+    unsigned char *digest;
+    size_t secret_len;
+    size_t input_len;
+    size_t digest_len;
+    mbedtls_md_type_t hmac_type;
+}mbedtls_hmac_t;
 
-void TimerInit(Timer*);
-char TimerIsExpired(Timer*);
-void TimerCountdownMS(Timer*, unsigned int);
-void TimerCountdown(Timer*, unsigned int);
-int TimerLeftMS(Timer*);
-
-typedef struct atiny_task_mutex_tag_s Mutex;
-int MutexInit(Mutex* mutex);
-int MutexLock(Mutex* mutex);
-int MutexUnlock(Mutex* mutex);
-void MutexDestory(Mutex* mutex);
-
-typedef struct
+int mbedtls_hmac_calc(mbedtls_hmac_t *hmac_info)
 {
-	void * no_used;
-} Thread;
-int ThreadStart(Thread *thread, void (*fn)(void *), void *arg);
+    int ret;
 
-typedef struct mqtt_context
-{
-    int fd;
-}mqtt_context_t;
+    mbedtls_md_context_t mbedtls_md_ctx;
+    const mbedtls_md_info_t *md_info;
 
-typedef struct Network
+    if (hmac_info == NULL || hmac_info->secret == NULL || hmac_info->input == NULL
+        || hmac_info->secret_len <= 0 || hmac_info->input_len <= 0 || hmac_info->digest_len <= 0)
+    {
+        return MBEDTLS_ERR_MD_BAD_INPUT_DATA;
+    }
+
+    md_info = mbedtls_md_info_from_type(hmac_info->hmac_type);
+    if (md_info == NULL || md_info->size > hmac_info->digest_len)
+    {
+        return MBEDTLS_ERR_MD_BAD_INPUT_DATA;
+    }
+
+    mbedtls_md_init(&mbedtls_md_ctx);
+    memset(hmac_info->digest, 0x00, hmac_info->digest_len);
+
+    ret = mbedtls_md_setup(&mbedtls_md_ctx, md_info, 1);
+    if (ret != 0)
+    {
+        printf("mbedtls_md_setup() returned -0x%04x\n", -ret);
+        goto exit;
+    }
+
+    (void)mbedtls_md_hmac_starts(&mbedtls_md_ctx, hmac_info->secret, hmac_info->secret_len);
+    (void)mbedtls_md_hmac_update(&mbedtls_md_ctx, hmac_info->input, hmac_info->input_len);
+    (void)mbedtls_md_hmac_finish(&mbedtls_md_ctx, hmac_info->digest);
+
+    exit:
+    mbedtls_md_free(&mbedtls_md_ctx);
+
+    return ret;
+}
+
+int hmac_generate_passwd(char *content, int contentlen,char *key,int keylen,char *buf,int buflen)
 {
-    void *ctx;
-    mqtt_al_security_para_t arg;
-    int (*mqttread) (struct Network*, unsigned char*, int, int);
-    int (*mqttwrite) (struct Network*, unsigned char*, int, int);
-} Network;
+	int ret = -1;
+	mbedtls_hmac_t hmac;
+	hmac.secret = (uint8_t *)key;
+	hmac.secret_len = keylen;
+	hmac.input = (unsigned char *)content;
+	hmac.input_len = contentlen;
+	hmac.digest =(unsigned char *) buf;
+	hmac.digest_len = buflen;
+	hmac.hmac_type = MBEDTLS_MD_SHA256;
+
+    ret = mbedtls_hmac_calc(&hmac);
+
+    return ret;
+}
+
+#else
+
+int hmac_generate_passwd(char *content, int contentlen,char *key,int keylen,char *buf,int buflen)
+{
+	return -1;
+}
+
 
 #endif
+
+

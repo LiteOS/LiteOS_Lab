@@ -208,7 +208,7 @@ void  osal_free(void *addr)
     return;
 }
 
-void *os_zalloc(int size)
+void *osal_zalloc(int size)
 {
     void *ret = NULL;
 
@@ -224,6 +224,68 @@ void *os_zalloc(int size)
     return ret;
 
 }
+
+void *osal_realloc(void *ptr,int newsize)
+{
+    void *ret = NULL;
+
+    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->realloc))
+    {
+        ret = s_os_cb->ops->realloc(ptr,newsize);
+    }
+
+    return ret;
+}
+
+void *osal_calloc(int n, int size)
+{
+    void *p = osal_malloc(n * size);
+    if(NULL != p)
+    {
+        memset(p, 0, n * size);
+    }
+
+    return p;
+}
+
+
+
+unsigned long long osal_sys_time()
+{
+
+    unsigned long long  ret = 0;
+
+    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->get_sys_time))
+    {
+        ret = s_os_cb->ops->get_sys_time();
+    }
+
+    return ret;
+}
+
+void osal_loop_timer_init(osal_loop_timer_t *timer)
+{
+    timer->dead_time = osal_sys_time();
+}
+
+char osal_loop_timer_expired(osal_loop_timer_t *timer)
+{
+    unsigned long long now = osal_sys_time();
+    return now >= timer->dead_time;
+}
+
+void osal_loop_timer_count_down(osal_loop_timer_t *timer, unsigned int timeout)
+{
+    unsigned long long now = osal_sys_time();
+    timer->dead_time = now + timeout;
+}
+
+int osal_loop_timer_left(osal_loop_timer_t *timer)
+{
+    unsigned long long now = osal_sys_time();
+    return timer->dead_time <= now ? 0 : timer->dead_time - now;
+}
+
 
 int osal_init(void)
 {

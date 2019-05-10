@@ -22,7 +22,7 @@ TARGET = Huawei_LiteOS
 # debug build?
 DEBUG = 1
 # optimization
-OPT = -Og
+OPT = -O0 -g
 
 
 USE_OTA := no
@@ -76,20 +76,6 @@ C_INCLUDES =
 LDFLAGS =
 
 ######################################
-
-###############LOAD MQTT###############
-#load the mqtt if enabled
-ifeq ($(WITH_MQTT), yes)
-
-#LOAD THE ATINY_MQTT
-include $(TOP_DIR)/components/connectivity/agent_tiny/atiny_mqtt/atiny_mqtt.mk
-#LOAD THE ATINY_MQTT_DEMO
-include $(TOP_DIR)/demos/agenttiny_mqtt/atiny_mqtt_demo.mk
-#FLASH FOR THE ATINY MQTT DYNATIC MODE
-C_SOURCES += $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/flash_adaptor.c
-
-endif
-
 
 ###############LOAD IOT_LINK###############
 IOT_LINK = yes

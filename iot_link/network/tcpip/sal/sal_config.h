@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -31,56 +31,16 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2019-05-09 16:22  zhangqianfu  The first version  
+ *
+ */
+#ifndef LITEOS_LAB_IOT_LINK_NETWORK_TCPIP_SAL_SAL_CONFIG_H_
+#define LITEOS_LAB_IOT_LINK_NETWORK_TCPIP_SAL_SAL_CONFIG_H_
 
-#ifndef MQTT_OSDEP_H
-#define MQTT_OSDEP_H
+
+#define cn_host_endian_little   1 ///< 1 means little endian while others means big endian
 
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <los_typedef.h>
-#include <los_sys.h>
-
-#include "mqtt_al.h"
-#include "osdepends/atiny_osdep.h"
-
-#define MQTT_TASK 1
-
-typedef struct Timer
-{
-	unsigned long long end_time;
-} Timer;
-
-void TimerInit(Timer*);
-char TimerIsExpired(Timer*);
-void TimerCountdownMS(Timer*, unsigned int);
-void TimerCountdown(Timer*, unsigned int);
-int TimerLeftMS(Timer*);
-
-typedef struct atiny_task_mutex_tag_s Mutex;
-int MutexInit(Mutex* mutex);
-int MutexLock(Mutex* mutex);
-int MutexUnlock(Mutex* mutex);
-void MutexDestory(Mutex* mutex);
-
-typedef struct
-{
-	void * no_used;
-} Thread;
-int ThreadStart(Thread *thread, void (*fn)(void *), void *arg);
-
-typedef struct mqtt_context
-{
-    int fd;
-}mqtt_context_t;
-
-typedef struct Network
-{
-    void *ctx;
-    mqtt_al_security_para_t arg;
-    int (*mqttread) (struct Network*, unsigned char*, int, int);
-    int (*mqttwrite) (struct Network*, unsigned char*, int, int);
-} Network;
-
-#endif
+#endif /* LITEOS_LAB_IOT_LINK_NETWORK_TCPIP_SAL_SAL_CONFIG_H_ */

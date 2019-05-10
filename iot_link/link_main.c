@@ -49,12 +49,21 @@
 #include <sal.h>
 #include <lwip_imp.h>
 
+//(d)tls stack
+#include <dtls_interface.h>
 //mqtt protocol
 #include <mqtt_al.h>
 #include <mqtt_port.h>
 
-extern int netdriver_init();
-int __attribute__((weak))  netdriver_install()
+//oc mqtt
+#include <oc_mqtt_al.h>
+#include <oc_mqtt_agent.h>
+
+//oc mqtt demo
+#include <oc_mqtt_demo.h>
+
+extern int netdriver_install();
+__attribute__((weak)) int netdriver_install()
 {
     printf("please remember to supply a netdriver---- please\n\r");
 
@@ -67,6 +76,12 @@ int link_main(void *args)
     osal_init();
     osal_install_liteos();
 
+    //install the json
+    cJSON_Hooks  hook;
+    hook.free_fn = osal_free;
+    hook.malloc_fn = osal_malloc;
+    cJSON_InitHooks(&hook);
+
     //install the shell for the link
     extern void shell_uart_init(int baud);
     shell_uart_init(115200);
@@ -74,7 +89,10 @@ int link_main(void *args)
 
     //install the tcpip stack and net driver for the link
     tcpip_sal_init(10);
-    tcpip_sal_install_lwip(netdriver_init);
+    tcpip_sal_install_lwip(netdriver_install);
+
+    //install the dtls
+    dtls_init();
 
     //install the mqtt for the link
     mqtt_al_init();
@@ -82,8 +100,9 @@ int link_main(void *args)
 
     //oc mqtt service for the link
     oc_mqtt_init();
+    oc_mqtt_install_agent();
 
-    extern int oc_mqtt_demo_main();
+    //oc mqtt demo
     oc_mqtt_demo_main();
 
     return 0;

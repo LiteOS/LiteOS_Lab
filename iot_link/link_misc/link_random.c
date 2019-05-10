@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -31,56 +31,39 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2019-05-10 10:26  zhangqianfu  The first version  
+ *
+ */
+#include <stdint.h>
+#include <stddef.h>
 
-#ifndef MQTT_OSDEP_H
-#define MQTT_OSDEP_H
-
-
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <los_typedef.h>
-#include <los_sys.h>
 
-#include "mqtt_al.h"
-#include "osdepends/atiny_osdep.h"
+#include <osal.h>
 
-#define MQTT_TASK 1
-
-typedef struct Timer
+__attribute__((weak)) int link_random(void* output, int len)
 {
-	unsigned long long end_time;
-} Timer;
+    int i;
+    int random_number;
+    char* pbuf;
 
-void TimerInit(Timer*);
-char TimerIsExpired(Timer*);
-void TimerCountdownMS(Timer*, unsigned int);
-void TimerCountdown(Timer*, unsigned int);
-int TimerLeftMS(Timer*);
+    if (NULL == output)
+    {
+        return -1;
+    }
 
-typedef struct atiny_task_mutex_tag_s Mutex;
-int MutexInit(Mutex* mutex);
-int MutexLock(Mutex* mutex);
-int MutexUnlock(Mutex* mutex);
-void MutexDestory(Mutex* mutex);
+    pbuf = (int*)output;
+    srand(osal_sys_time());
 
-typedef struct
-{
-	void * no_used;
-} Thread;
-int ThreadStart(Thread *thread, void (*fn)(void *), void *arg);
+    for (i = 0; i < len; i += sizeof(int))
+    {
+        random_number = rand();
+        memcpy(pbuf + i, &random_number,
+               sizeof(int) > len - i ? len - i : sizeof(int));
+    }
 
-typedef struct mqtt_context
-{
-    int fd;
-}mqtt_context_t;
-
-typedef struct Network
-{
-    void *ctx;
-    mqtt_al_security_para_t arg;
-    int (*mqttread) (struct Network*, unsigned char*, int, int);
-    int (*mqttwrite) (struct Network*, unsigned char*, int, int);
-} Network;
-
-#endif
+    return 0;
+}

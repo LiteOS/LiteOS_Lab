@@ -32,55 +32,30 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef MQTT_OSDEP_H
-#define MQTT_OSDEP_H
+#ifndef _HMAC_H_
+#define _HMAC_H_
+
+#ifdef __cplusplus
+#if __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+#endif /* __cplusplus */
 
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <los_typedef.h>
-#include <los_sys.h>
+/**
+ * @brief :use this function to gernerate the password for the cloud platform
+ *        :and now it depends on the mbedtls,please define the WITH_DTLS
+ * @return:0 success while -1 failed
+ *
+ */
+int hmac_generate_passwd(char *content, int contentlen,char *key,int keylen,char *buf,int buflen);
 
-#include "mqtt_al.h"
-#include "osdepends/atiny_osdep.h"
 
-#define MQTT_TASK 1
 
-typedef struct Timer
-{
-	unsigned long long end_time;
-} Timer;
+#ifdef __cplusplus
+#if __cplusplus
+}
+#endif /* __cplusplus */
+#endif /* __cplusplus */
 
-void TimerInit(Timer*);
-char TimerIsExpired(Timer*);
-void TimerCountdownMS(Timer*, unsigned int);
-void TimerCountdown(Timer*, unsigned int);
-int TimerLeftMS(Timer*);
-
-typedef struct atiny_task_mutex_tag_s Mutex;
-int MutexInit(Mutex* mutex);
-int MutexLock(Mutex* mutex);
-int MutexUnlock(Mutex* mutex);
-void MutexDestory(Mutex* mutex);
-
-typedef struct
-{
-	void * no_used;
-} Thread;
-int ThreadStart(Thread *thread, void (*fn)(void *), void *arg);
-
-typedef struct mqtt_context
-{
-    int fd;
-}mqtt_context_t;
-
-typedef struct Network
-{
-    void *ctx;
-    mqtt_al_security_para_t arg;
-    int (*mqttread) (struct Network*, unsigned char*, int, int);
-    int (*mqttwrite) (struct Network*, unsigned char*, int, int);
-} Network;
-
-#endif
+#endif /* _HMAC_H_ */

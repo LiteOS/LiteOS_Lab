@@ -21,6 +21,9 @@ include $(TOP_DIR)/iot_link/network/dtls/dtls.mk
 #configure the mqtt
 include $(TOP_DIR)/iot_link/network/mqtt/mqtt.mk
 
+#configure the oc mqtt
+include $(TOP_DIR)/iot_link/oc/oc_mqtt/oc_mqtt.mk
+
 
 IOT_LINK_SOURCE  = ${wildcard $(TOP_DIR)/iot_link/*.c} 
 C_SOURCES += $(IOT_LINK_SOURCE)	

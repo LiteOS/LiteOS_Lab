@@ -80,7 +80,52 @@ bool_t  osal_semp_del(osal_semp_t  semp);
  **/
 void *osal_malloc(int size);
 void  osal_free(void *addr);
-void *os_zalloc(int size);
+void *osal_zalloc(int size);
+void *osal_realloc(void *ptr,int newsize);
+void *osal_calloc(int n, int size);
+
+
+/**
+ * @brief: use this function to get the system time
+ *
+ * @return:system time (unit ms)
+ * */
+unsigned long long osal_sys_time();
+
+/**
+ *
+ * @brief: the loop soft timer
+ * @param[in] : timer, the loop timer to be initialized
+ *
+ * */
+void osal_loop_timer_init(osal_loop_timer_t *timer);
+
+/**
+ *
+ * @brief: the loop soft timer
+ * @param[in] : timer, the loop timer
+ *
+ * @return: true expired while false not expired
+ *
+ * */
+char osal_loop_timer_expired(osal_loop_timer_t *timer);
+
+/**
+ *
+ * @brief: the loop soft timer
+ * @param[in]: timer, the loop timer
+ * @param[in]: timeout, how many time to be expired
+ *
+ * */
+void osal_loop_timer_count_down(osal_loop_timer_t *timer, unsigned int timeout);
+
+/**
+ *
+ * @brief: the loop soft timer
+ * @param[in]: timer, the loop timer
+ * @return: how many ms to be expired
+ * */
+int osal_loop_timer_left(osal_loop_timer_t *timer);
 
 
 /**
@@ -88,7 +133,7 @@ void *os_zalloc(int size);
  *
  * @return:0 success while -1 failed
  * */
-void osal_init(void);
+int osal_init(void);
 
 
 #endif /* __OS_AL_H */

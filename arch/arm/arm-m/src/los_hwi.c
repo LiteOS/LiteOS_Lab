@@ -175,7 +175,6 @@ __attribute__ ((section("RESET")))
 #elif  defined (__GNUC__)
 __attribute__ ((section(".isr_vector")))
 #endif
-
 VOID (* const g_pstHwiForm[])(VOID)  =
 {
     NULL,                // [0] Top of Stack

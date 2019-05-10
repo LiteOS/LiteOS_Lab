@@ -35,6 +35,10 @@ typedef struct
     ///< memory function needed
     void *(*malloc)(int size);
     void  (*free)(void *addr);
+    void *(*realloc)(void *ptr, int newsize);
+
+    ///< system time
+    unsigned long long (*get_sys_time)(void);
 
 }tag_os_ops;
 

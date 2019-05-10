@@ -33,17 +33,15 @@
 
 #include "lwip/opt.h"
 #include "lwip/err.h"
-#include "los_sem.h"
-#include "los_sem.ph"
-#include "los_typedef.h"
-#include "los_memory.h"
+//#include "los_sem.h"
+//#include "los_sem.ph"
+//#include "los_typedef.h"
+//#include "los_memory.h"
 
-typedef struct los_sem
-{
-    SEM_CB_S* sem;        /**< Semaphore attribute structure*/
-} sem_t;
+#include <osal.h>
 
-typedef struct los_sem sys_sem_t;
+typedef struct osal_mutex_t sys_sem_t;
+
 
 struct sys_mbox
 {
@@ -52,9 +50,9 @@ struct sys_mbox
     int mbox_size;
     int isFull;
     int isEmpty;
-    unsigned int  not_empty;
-    unsigned int  not_full;
-    unsigned int  mutex;
+    osal_semp_t  not_empty;
+    osal_semp_t  not_full;
+    osal_mutex_t mutex;
 };
 
 typedef struct sys_mbox* sys_mbox_t;
@@ -62,35 +60,34 @@ typedef struct sys_mbox* sys_mbox_t;
 struct sys_thread
 {
     struct sys_thread* next;
-    UINT32 pthread;
+    void * pthread;
 };
 
 typedef unsigned int sys_thread_t;
 
-#define sys_sem_valid(x)        (((*x).sem == NULL) ? 0 : 1)
-#define sys_sem_set_invalid(x)  ( (*x).sem = NULL)
+#define sys_sem_valid(x)        (((*x) == cn_semp_invalid) ? 0 : 1)
+#define sys_sem_set_invalid(x)  ((*x) = cn_semp_invalid)
 
 #define sys_arch_mbox_tryfetch(mbox,msg)   sys_arch_mbox_fetch(mbox,msg,1)
-#define SYS_MBOX_NULL               (NULL)
-#define sys_mbox_valid(mbox)  (*(mbox) != NULL)
-#define sys_mbox_set_invalid(mbox) do { if((mbox) != NULL) { *(mbox) = NULL; }}while(0)
+#define SYS_MBOX_NULL                      (NULL)
+#define sys_mbox_valid(mbox)               (*(mbox) != NULL)
+#define sys_mbox_set_invalid(mbox)         do { if((mbox) != NULL) { *(mbox) = NULL; }}while(0)
 
 // === PROTECTION ===
 typedef int sys_prot_t;
 
-typedef u32_t sys_mutex_t;
+typedef osal_mutex_t sys_mutex_t;
 
 #if (MEM_MALLOC_DMA_ALIGN != 1)
-extern UINT8* m_aucSysMem0;
 
 static inline void* sys_align_malloc(u16_t length)
 {
-    return LOS_MemAllocAlign(m_aucSysMem0, length, 4);
+    return osal_malloc(length);
 }
 
 static inline void sys_align_free(void* mem)
 {
-    (void)LOS_MemFree(m_aucSysMem0, mem);
+    osal_free(mem);
 }
 #endif
 

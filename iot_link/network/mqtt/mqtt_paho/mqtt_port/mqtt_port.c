@@ -97,13 +97,7 @@ static int los_mqtt_tls_read(mbedtls_ssl_context *ssl, unsigned char *buffer, in
         return -1;
     }
 
-    mbedtls_ssl_conf_read_timeout(ssl->conf, timeout_ms);
-
-    ret = mbedtls_ssl_read(ssl, buffer, len);
-    if(ret == MBEDTLS_ERR_SSL_WANT_READ
-            || ret == MBEDTLS_ERR_SSL_WANT_WRITE
-            || ret == MBEDTLS_ERR_SSL_TIMEOUT)
-        ret = 0;
+    ret = dtls_read(ssl,buffer,len, timeout_ms);
 
     return ret;
 }
@@ -393,17 +387,8 @@ static int __init()
 #ifdef WITH_DTLS
     dtls_init();
 #endif
-
-    ATINY_LOG(LOG_DEBUG, "MQTT PAHO INIT\r\n");
 	return 0;
 }
-
-static int __deinit()
-{
-    ATINY_LOG(LOG_DEBUG, "MQTT PAHO DEINIT\r\n");
-	return 0;
-}
-
 static 	MQTTClient       *s_static_client_debug = NULL;
 
 

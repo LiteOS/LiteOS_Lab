@@ -78,9 +78,6 @@ UINT32 creat_hilink_task(VOID)
 
 void atiny_task_entry(void)
 {
-    extern int link_main(void *args);
-    link_main(NULL);
-
     extern void agent_tiny_entry();
 #if defined(WITH_LINUX) || defined(WITH_LWIP)
     hieth_hw_init();
@@ -134,7 +131,7 @@ void atiny_task_entry(void)
 #ifdef CONFIG_FEATURE_FOTA
     hal_init_ota();
 #endif
-    agent_tiny_entry();
+    //agent_tiny_entry();
 #endif
 }
 

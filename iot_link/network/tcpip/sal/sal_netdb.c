@@ -33,7 +33,7 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-04-29 09:50  zhangqianfu  The first version  
+ *  2019-05-09 16:17  zhangqianfu  The first version  
  *
  */
 
@@ -41,73 +41,115 @@
 #include <stddef.h>
 #include <string.h>
 
-#include <osal.h>
-#include <link_misc.h>
+#include <sal.h>
 
-//this function is used to format the char string to the argc mode
-//this function will changed the original string, used it carefully
-//return how many arguments has been
-int string_to_arg(int *argc, const char *argv[],char *string)
+__attribute__((weak)) in_addr_t inet_addr(const char *addr)
 {
-    int argvlen = 0;
-    int paramnum = 0;
-    char *tmp = NULL;
-    char bak;
-    int len;
+    int para;
+    int tmp[4];
+    in_addr_t result = INADDR_NONE;
+    unsigned char  ip[4];
 
-    argvlen = *argc;
-    *argc = paramnum;
-    if(NULL == string)
+    para = sscanf(addr,"%d.%d.%d.%d",&tmp[0],&tmp[1],&tmp[2],&tmp[3]);
+    if(para == 4)
     {
-        return paramnum;
+        ip[0] = (unsigned char)tmp[0];
+        ip[1] = (unsigned char)tmp[1];
+        ip[2] = (unsigned char)tmp[2];
+        ip[3] = (unsigned char)tmp[3];
+        memcpy((void *)&result,(void *)ip,sizeof(result));
+    }
+    return result;
+}
+
+__attribute__((weak)) int inet_aton(const char *string,struct in_addr *addr)
+{
+    int para;
+    int tmp[4];
+    unsigned char  ip[4];
+    int result = 0;
+
+    para = sscanf(string,"%d.%d.%d.%d",&tmp[0],&tmp[1],&tmp[2],&tmp[3]);
+    if(para == 4)
+    {
+        ip[0] = (unsigned char)tmp[0];
+        ip[1] = (unsigned char)tmp[1];
+        ip[2] = (unsigned char)tmp[2];
+        ip[3] = (unsigned char)tmp[3];
+        memcpy((void *)addr,(void *)ip,sizeof(ip));
+        result = 1;
     }
 
-    //use the '\0' to replace the ' '
-    len = strlen(string);
-    tmp = string;
-    while(tmp < (string + len))
-    {
-        if(*tmp == ' ')
-        {
-            *tmp = '\0';
-        }
-        tmp++;
-    }
-    bak = '\0';
-    tmp = string;
-    while(tmp < (string + len))
-    {
-        if((*tmp != '\0')&&(bak =='\0'))
-        {
-            if(paramnum < argvlen)
-            {
-                argv[paramnum] = tmp;
-                paramnum++;
-            }
-        }
-        bak = *tmp;
-        tmp++;
-    }
-    *argc = paramnum;
-
-    return paramnum;
+    return result;
 }
 
 
-char *osal_strdup(const char *ch)
+#define cn_inet_addrlen_max     16
+static  char s_inet_addr_buf[cn_inet_addrlen_max];
+
+__attribute__((weak)) char *inet_ntoa(struct in_addr addr)
 {
-    char *copy;
-    size_t length;
+    unsigned char ip[4];
+    int tmp[4];
+    memcpy((void *)ip,(void *)&addr,sizeof(ip));
+    memset((void *)s_inet_addr_buf,0,cn_inet_addrlen_max);
 
-    if(NULL == ch)
-        return NULL;
+    tmp[0] = (int)ip[0];
+    tmp[1] = (int)ip[1];
+    tmp[2] = (int)ip[2];
+    tmp[3] = (int)ip[3];
+    sprintf(s_inet_addr_buf,"%d.%d.%d.%d",tmp[0],tmp[1],tmp[2],tmp[3]);
 
-    length = strlen(ch);
-    copy = (char *)osal_malloc(length + 1);
-    if(NULL == copy)
-        return NULL;
-    strncpy(copy, ch, length);
-    copy[length] = '\0';
+    return (char *)s_inet_addr_buf;
+}
 
-    return copy;
+__attribute__((weak)) const char *inet_ntop(int af, const void *src, char *dst, socklen_t cnt)
+{
+    char *str;
+    char          *result = NULL;
+    struct in_addr addr;
+
+    if((NULL == src)||(NULL == dst))
+    {
+        return result;
+    }
+
+    if(af==AF_INET)
+    {
+
+        memcpy((void *)&addr,src,sizeof(addr));
+        str = inet_ntoa(addr);
+
+        if((NULL != str)&&(cnt > (strlen(str)+1)))
+        {
+            memcpy((void*)dst,(void*)str,strlen(str)+1);
+            result = dst;
+        }
+    }
+
+    return result;
+}
+
+__attribute__((weak)) int inet_pton(int af, const char *src, void *dst)
+{
+
+    int result = -1;
+    struct in_addr addr;
+
+    if((NULL == src)||(NULL == dst))
+    {
+        result = 0;
+        return result;
+    }
+
+    if(af==AF_INET)
+    {
+        if(inet_aton(src,&addr))
+        {
+            memcpy((void *)dst,&addr,sizeof(addr));
+            result = 1;
+        }
+    }
+
+    return result;
 }

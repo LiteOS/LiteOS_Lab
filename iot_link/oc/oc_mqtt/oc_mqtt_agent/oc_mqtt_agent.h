@@ -37,11 +37,7 @@
  *
  */
 
-
-#define CFG_OC_MQTT_AGENT  1
-
-#if CFG_OC_MQTT_AGENT
-
+#if CFG_OC_MQTT_AGENT_EN
 
 /**
  *
@@ -49,7 +45,8 @@
  *
  * @return: 0 success while -1 failed
  * */
-int oc_mqtt_agent(void);
+int oc_mqtt_install_agent();
+
 
 
 #else

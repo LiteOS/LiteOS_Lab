@@ -12,6 +12,7 @@ MQTT_AL_INC = \
 C_INCLUDES += $(MQTT_AL_INC)
 
 C_DEFS += -DCFG_MQTT_EN
+
 ##uptils now , we only support the paho mqtt
 MQTT_AL_CFG_TYPE = paho_mqtt
 				

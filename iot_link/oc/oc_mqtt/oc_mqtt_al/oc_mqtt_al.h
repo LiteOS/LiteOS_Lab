@@ -48,25 +48,26 @@
 
 typedef enum
 {
-    en_oc_mqtt_type_dynamic = 0,
-    en_oc_mqtt_type_static,
-}en_mqtt_device_type;
+    en_oc_mqtt_device_type_dynamic = 0,
+    en_oc_mqtt_device_type_static,
+}en_oc_mqtt_device_type;
 
 typedef enum
 {
     en_oc_mqtt_code_mode_binary = 0,   ///< the report and command is binary mode
     en_oc_mqtt_code_mode_json,         ///< the report and command is json mode
+    en_oc_mqtt_code_mode_max,
 }en_oc_mqtt_code_mode;
 
 typedef enum
 {
     en_mqtt_sign_type_hmacsha256_check_time_no = 0, //use HMACSHA256 to encode password but no check current time
     en_mqtt_sign_type_hmacsha256_check_time_yes   , //use HMACSHA256 to encode password and check current time
-}en_mqtt_sign_type;
+}en_oc_mqtt_sign_type;
 
 
 /** @brief this is the message dealer module for the application*/
-typedef int (*oc_mqtt_msgdealer)(void *handle,char *msg,int len,en_mqtt_al_qos_t qos);
+typedef int (*oc_mqtt_msgdealer)(void *handle,mqtt_al_msgrcv_t *msg);
 
 /**
  * @brief: you must supply a media (nonvolatile,like the rom flash) for the dynamic mode
@@ -95,10 +96,10 @@ typedef struct
 {
     const char   *server;            ///< cdp server address
     const char   *port;              ///< cdp server port
-    const char   *crt;               ///< cdp server crt,used for the tls
-    en_oc_mqtt_code_mode   code_mode;   ///< cdp encode mode:now only support the json mode
-    en_mqtt_sign_type      sign_type;   ///< generate the passwd supported
-    en_mqtt_device_type    device_type;
+    mqtt_al_security_para_t security;///< only support crt mode now
+    en_oc_mqtt_code_mode    code_mode;   ///< cdp encode mode:now only support the json mode
+    en_oc_mqtt_sign_type    sign_type;   ///< generate the passwd supported
+    en_oc_mqtt_device_type  device_type;
 
     union
     {
@@ -118,6 +119,7 @@ typedef int (*fn_oc_mqtt_report)(void *handle,char *msg,int len,en_mqtt_al_qos_t
  */
 typedef struct
 {
+    const char         *name;     ///< this is the name for the ops
     fn_oc_mqtt_config   config;   ///< this function used for the configuration
     fn_oc_mqtt_report   report;   ///< this function used for the report data to the cdp
     fn_oc_mqtt_deconfig deconfig; ///< this function used for the deconfig
@@ -164,7 +166,6 @@ typedef enum
 
 /* service data, json name, its value is string, format yyyyMMddTHHmmssZ such as 20161219T114920Z */
 #define cn_service_time_name  "eventTime"
-#define cn_service_time_value "20161219T114920Z"
 
 
 #define cn_cmd_name       "cmd"
@@ -249,6 +250,7 @@ typedef struct
 {
     char                  *serviceid;
     tag_key_value_list    *paralst;
+    char                  *eventtime;
     en_oc_mqtt_has_more    hasmore;
 }tag_oc_mqtt_report;
 
@@ -269,8 +271,6 @@ typedef struct
 }tag_oc_mqtt_response;
 ///< use this function to format the response message to json mode
 cJSON *oc_mqtt_json_fmt_response(tag_oc_mqtt_response *response);
-
-
 
 /**
  * @brief the application use this function to configure the lwm2m agent

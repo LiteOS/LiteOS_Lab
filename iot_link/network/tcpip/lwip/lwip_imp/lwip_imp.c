@@ -42,19 +42,104 @@
 #include "lwip/tcpip.h"
 
 #include <sal_imp.h>   ///< register the lwip to sal
+#include <lwip_imp.h>
+
+///< struct sockaddr and struct sockaddr_in is quit different from the normal defines, so must translate it here
+///< something which seems very foolish i think
+static int __lwip_bind(int fd, struct sockaddr *addr, int addrlen)
+{
+    int ret;
+    unsigned char buf[2];
+    unsigned short family;
+
+    memcpy(&family,addr,2);
+    buf[0] = addrlen;
+    buf[1] = family;
+    memcpy(addr,buf,2);
+
+    ret = lwip_bind(fd,addr,addrlen);
+
+    return ret;
+}
+
+static int __lwip_connect(int fd, struct sockaddr *addr, int addrlen)
+{
+    int ret;
+    unsigned char buf[2];
+    unsigned short family;
+
+    memcpy(&family,addr,2);
+    buf[0] = addrlen;
+    buf[1] = family;
+    memcpy(addr,buf,2);
+
+    ret = lwip_connect(fd,addr,addrlen);
+
+    return ret;
+}
+
+static int __lwip_accept(int fd, struct sockaddr *addr, socklen_t *addrlen)
+{
+    int ret;
+    unsigned char buf[2];
+    unsigned short family;
+
+    ret = lwip_accept(fd, addr, addrlen);
+
+    memcpy(buf,addr,2);
+    family = buf[2];
+    memcpy(addr,&family,2);
+
+    return ret;
+}
+
+
+static int __lwip_sendto(int fd, void *msg, int len, int flag, struct sockaddr *addr, int addrlen)
+{
+
+    int ret;
+    unsigned char buf[2];
+    unsigned short family;
+
+    memcpy(&family,addr,2);
+    buf[0] = addrlen;
+    buf[1] = family;
+    memcpy(addr,buf,2);
+
+    ret = lwip_sendto(fd,msg,len,flag,addr,addrlen);
+
+    return ret;
+}
+
+static int __lwip_recvfrom(int fd, void *msg, int len, int flag, struct sockaddr *addr, socklen_t *addrlen)
+{
+
+    int ret;
+    unsigned char buf[2];
+    unsigned short family;
+
+    ret = lwip_recvfrom(fd, msg, len,flag,addr,addrlen);
+
+    memcpy(buf,addr,2);
+    family = buf[2];
+    memcpy(addr,&family,2);
+
+    return ret;
+}
+
 
 
 static const tag_tcpip_ops s_tcpip_lwip_ops =
 {
    .socket = (fn_sal_socket)lwip_socket,
-   .bind = (fn_sal_bind)lwip_bind,
+   .bind = (fn_sal_bind)__lwip_bind,
    .listen = (fn_sal_listen)lwip_listen,
-   .connect = (fn_sal_connect)lwip_connect,
-   .accept = (fn_sal_accept)lwip_accept,
+   .connect = (fn_sal_connect)__lwip_connect,
+   .accept = (fn_sal_accept)__lwip_accept,
    .send = (fn_sal_send)lwip_send,
-   .sendto = (fn_sal_sendto)lwip_sendto,
+   .sendto = (fn_sal_sendto)__lwip_sendto,
    .recv = (fn_sal_recv)lwip_recv,
-   .recvfrom = (fn_sal_recvfrom)lwip_recv,
+   .recvfrom = (fn_sal_recvfrom)__lwip_recvfrom,
    .setsockopt = (fn_sal_setsockopt)lwip_setsockopt,
    .getsockopt = (fn_sal_getsockopt)lwip_getsockopt,
    .shutdown =(fn_sal_shutdown) lwip_shutdown,

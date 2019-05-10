@@ -18,11 +18,17 @@
 #define false 0
 #endif
 typedef void*  osal_mutex_t;
-#define cn_mutex_invalid  NULL
+#define cn_mutex_invalid  (0xFFFFFFFF)
 
 typedef void*  osal_semp_t;
-#define cn_semp_invalid   NULL
+#define cn_semp_invalid   (0xFFFFFFFF)
 
-#define cn_osal_timeout_forever  -1
+#define cn_osal_timeout_forever  0xFFFFFFFF
+
+typedef struct
+{
+    unsigned long long dead_time;
+}osal_loop_timer_t;
+
 
 #endif /* __OSAL_TYPES_H */

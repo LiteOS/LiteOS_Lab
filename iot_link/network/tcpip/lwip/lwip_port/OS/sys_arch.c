@@ -1,49 +1,49 @@
-/* Copyright (C) 2012 mbed.org, MIT License
- * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+/*----------------------------------------------------------------------------
+ * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
- * and associated documentation files (the "Software"), to deal in the Software without restriction,
- * including without limitation the rights to use, copy, modify, merge, publish, distribute,
- * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all copies or
- * substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
- * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
-/**********************************************************************************
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 1. Redistributions of source code must retain the above copyright notice, this list of
+ * conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+ * of conditions and the following disclaimer in the documentation and/or other materials
+ * provided with the distribution.
+ * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+ * to endorse or promote products derived from this software without specific prior written
+ * permission.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *---------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
- * Huawei LiteOS may be subject to applicable export control laws and regulations, which
- * might include those applicable to Huawei LiteOS of U.S. and the country in which you
- * are located.
- * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance
- * with such applicable export control laws and regulations.
- **********************************************************************************/
+ * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+ * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+ * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+ * applicable export control laws and regulations.
+ *---------------------------------------------------------------------------*/
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2019-05-10 17:26  zhangqianfu  The first version  
+ *
+ */
 
-/* lwIP includes. */
-#include "lwip/opt.h"
-#include "lwip/debug.h"
-#include "lwip/def.h"
-#include "lwip/sys.h"
-#include "lwip/mem.h"
-#include "lwip/stats.h"
+#include <stddef.h>
+#include <stdint.h>
+#include <string.h>
 
-#include "los_config.h"
-#include "arch/sys_arch.h"
+#include <sys_arch.h>
 
-//#include "linux/wait.h"
-#include "los_sys.ph"
-#include "los_sem.ph"
-#include "string.h"
-
+#include <osal.h>
 /*lint -e**/
 /*-----------------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*
@@ -69,7 +69,7 @@ err_t sys_mbox_new(struct sys_mbox **mb, int size)
         return ERR_MEM;
     }
 
-    mbox = (struct sys_mbox *)mem_malloc(sizeof(struct sys_mbox));
+    mbox = (struct sys_mbox *)osal_malloc(sizeof(struct sys_mbox));
 
     if (mbox == NULL)
     {
@@ -78,7 +78,7 @@ err_t sys_mbox_new(struct sys_mbox **mb, int size)
 
     (void)memset(mbox, 0, sizeof(struct sys_mbox)); //CSEC_FIX_2302
 
-    mbox->msgs = (void **)mem_malloc(sizeof(void *) * size);
+    mbox->msgs = (void **)osal_malloc(sizeof(void *) * size);
 
     if (mbox->msgs == NULL)
     {
@@ -94,28 +94,25 @@ err_t sys_mbox_new(struct sys_mbox **mb, int size)
     mbox->isFull = 0;
     mbox->isEmpty = 1;
 
-    mbox->mutex = (unsigned int) - 1;
-    mbox->not_empty = (unsigned int) - 1;
-    mbox->not_full = (unsigned int) - 1;
+    mbox->mutex = cn_mutex_invalid;
+    mbox->not_empty = cn_semp_invalid;
+    mbox->not_full = cn_semp_invalid;
 
-    ret = LOS_SemCreate(1, &(mbox->mutex));
-
-    if (ret != LOS_OK)
+    if(false == osal_mutex_create(&mbox->mutex))
     {
+        mbox->mutex = cn_mutex_invalid;
         goto err_handler;
     }
 
-    ret = LOS_SemCreate(0, &(mbox->not_empty));
-
-    if (ret != LOS_OK)
+    if(false == osal_semp_create(&(mbox->not_empty),size,0)) //which means could be read
     {
+        mbox->not_empty = cn_semp_invalid;
         goto err_handler;
     }
 
-    ret = LOS_SemCreate(0, &(mbox->not_full));
-
-    if (ret != LOS_OK)
+    if(false == osal_semp_create(&(mbox->not_full),size,size))  ///which means could be write
     {
+        mbox->not_full = cn_semp_invalid;
         goto err_handler;
     }
 
@@ -130,25 +127,26 @@ err_handler:
     {
         if (mbox->msgs != NULL)
         {
-            mem_free(mbox->msgs);
+            osal_free(mbox->msgs);
         }
 
-        mem_free(mbox);
+        osal_free(mbox);
     }
 
-    if (mbox->mutex != (unsigned int) - 1)
+    if (mbox->mutex != cn_mutex_invalid)
     {
-        (void)LOS_SemDelete(mbox->mutex);
+        (void)osal_mutex_del(mbox->mutex);
     }
 
-    if (mbox->not_empty != (unsigned int) - 1)
+    if (mbox->not_empty != cn_semp_invalid)
     {
-        (void)LOS_SemDelete(mbox->not_empty);
+        (void)osal_semp_del(mbox->not_empty);
     }
 
-    if (mbox->not_full != (unsigned int) - 1)
+    if (mbox->not_full != cn_semp_invalid)
     {
-        (void)LOS_SemDelete(mbox->not_full);
+        osal_semp_del(mbox->not_full);
+        (void)osal_semp_del(mbox->not_full);
     }
 
     return ERR_MEM;
@@ -161,20 +159,20 @@ sys_mbox_free(struct sys_mbox **mb)
     if ((mb != NULL) && (*mb != SYS_MBOX_NULL))
     {
         struct sys_mbox *mbox = *mb;
-        SYS_STATS_DEC(mbox.used);
+        SYS_STATS_DEC(mbox);
 
         LWIP_DEBUGF(SYS_DEBUG, ("sys_mbox_free: going to free mbox 0x%p\n", (void *)mbox));
 
-        (void)LOS_SemPend(mbox->mutex, LOS_WAIT_FOREVER);
+        (void)osal_mutex_lock(mbox->mutex);
 
-        (void)LOS_SemDelete(mbox->not_empty);
-        (void)LOS_SemDelete(mbox->not_full);
+        (void)osal_semp_del(mbox->not_empty);
+        (void)osal_semp_del(mbox->not_full);
 
-        (void)LOS_SemPost(mbox->mutex);
-        (void)LOS_SemDelete(mbox->mutex);
+        (void)osal_mutex_unlock(mbox->mutex);
+        (void)osal_mutex_del(mbox->mutex);
 
-        mem_free(mbox->msgs);
-        mem_free(mbox);
+        osal_free(mbox->msgs);
+        osal_free(mbox);
         *mb = NULL;
 
         LWIP_DEBUGF(SYS_DEBUG, ("sys_mbox_free: freed mbox\n"));
@@ -190,21 +188,59 @@ sys_mbox_free(struct sys_mbox **mb)
  *      sys_mbox_t mbox        -- Handle of mailbox
  *      void *msg              -- Pointer to data to post
  *---------------------------------------------------------------------------*/
-void
-sys_mbox_post(struct sys_mbox **mb, void *msg)
+//void
+//sys_mbox_post(struct sys_mbox **mb, void *msg)
+//{
+//    struct sys_mbox *mbox;
+//    mbox = *mb;
+//    LWIP_DEBUGF(SYS_DEBUG, ("sys_mbox_post: mbox 0x%p msg 0x%p\n", (void *)mbox, (void *)msg));
+//
+//    (void)LOS_SemPend(mbox->mutex, cn_osal_timeout_forever);
+//
+//    while (mbox->isFull)
+//    {
+//        LWIP_DEBUGF(SYS_DEBUG, ("sys_mbox_post : mbox 0x%p mbox 0x%p, queue is full\n", (void *)mbox, (void *)msg));
+//        (void)LOS_SemPost(mbox->mutex);
+//        (void)LOS_SemPend(mbox->not_full, cn_osal_timeout_forever);
+//        (void)LOS_SemPend(mbox->mutex, cn_osal_timeout_forever);
+//    }
+//
+//    mbox->msgs[mbox->last] = msg;
+//
+//    mbox->last = (mbox->last + 1) % mbox->mbox_size;
+//
+//    if (mbox->first == mbox->last)
+//    {
+//        mbox->isFull = 1;
+//    }
+//
+//    if (mbox->isEmpty)
+//    {
+//        mbox->isEmpty = 0;
+//        (void)LOS_SemPost(mbox->not_empty);
+//        LWIP_DEBUGF(SYS_DEBUG, ("sys_mbox_post : mbox 0x%p msg 0x%p, signalling not empty\n", (void *)mbox, (void *)msg));
+//    }
+//
+//    LWIP_DEBUGF(SYS_DEBUG, ("sys_mbox_post: mbox 0x%p msg 0%p posted\n", (void *)mbox, (void *)msg));
+//    (void)LOS_SemPost(mbox->mutex);
+//}
+void  sys_mbox_post(struct sys_mbox **mb, void *msg)   ///< check if it is empty or not
 {
     struct sys_mbox *mbox;
     mbox = *mb;
     LWIP_DEBUGF(SYS_DEBUG, ("sys_mbox_post: mbox 0x%p msg 0x%p\n", (void *)mbox, (void *)msg));
 
-    (void)LOS_SemPend(mbox->mutex, LOS_WAIT_FOREVER);
+    (void)LOS_SemPend(mbox->mutex, cn_osal_timeout_forever);
+
+    while(false == osal_semp_pend(mbox->is))
+
 
     while (mbox->isFull)
     {
         LWIP_DEBUGF(SYS_DEBUG, ("sys_mbox_post : mbox 0x%p mbox 0x%p, queue is full\n", (void *)mbox, (void *)msg));
         (void)LOS_SemPost(mbox->mutex);
-        (void)LOS_SemPend(mbox->not_full, LOS_WAIT_FOREVER);
-        (void)LOS_SemPend(mbox->mutex, LOS_WAIT_FOREVER);
+        (void)LOS_SemPend(mbox->not_full, cn_osal_timeout_forever);
+        (void)LOS_SemPend(mbox->mutex, cn_osal_timeout_forever);
     }
 
     mbox->msgs[mbox->last] = msg;
@@ -246,7 +282,7 @@ sys_mbox_trypost(struct sys_mbox **mb, void *msg)
     struct sys_mbox *mbox;
     mbox = *mb;
     LWIP_DEBUGF(SYS_DEBUG, ("sys_mbox_trypost: mbox 0x%p msg 0x%p \n", (void *)mbox, (void *)msg));
-    (void)LOS_SemPend(mbox->mutex, LOS_WAIT_FOREVER);
+    (void)LOS_SemPend(mbox->mutex, cn_osal_timeout_forever);
 
     if (mbox->isFull)
     {
@@ -291,7 +327,7 @@ sys_arch_mbox_fetch_ext(struct sys_mbox **mb, void **msg, u32_t timeout, u8_t ig
 
     /* The mutex lock is quick so we don't bother with the timeout
        stuff here. */
-    (void)LOS_SemPend(mbox->mutex, LOS_WAIT_FOREVER);
+    (void)LOS_SemPend(mbox->mutex, cn_osal_timeout_forever);
 
     while (mbox->isEmpty && !ignore_timeout)
     {
@@ -299,7 +335,7 @@ sys_arch_mbox_fetch_ext(struct sys_mbox **mb, void **msg, u32_t timeout, u8_t ig
 
         if (timeout == 0)
         {
-            timeout = LOS_WAIT_FOREVER;
+            timeout = cn_osal_timeout_forever;
         }
         else
         {
@@ -319,7 +355,7 @@ sys_arch_mbox_fetch_ext(struct sys_mbox **mb, void **msg, u32_t timeout, u8_t ig
 
         u64EndTick = LOS_TickCountGet();
         time_needed = (u32_t)(((u64EndTick - u64StartTick) * OS_SYS_MS_PER_SECOND) / LOSCFG_BASE_CORE_TICK_PER_SECOND);
-        (void)LOS_SemPend(mbox->mutex, LOS_WAIT_FOREVER);
+        (void)LOS_SemPend(mbox->mutex, cn_osal_timeout_forever);
     }
 
     if (msg != NULL)
@@ -576,7 +612,7 @@ u32_t sys_arch_sem_wait(sys_sem_t *sem, u32_t timeout)
 
     if (timeout == 0)
     {
-        timeout = LOS_WAIT_FOREVER;
+        timeout = cn_osal_timeout_forever;
     }
     else
     {
@@ -646,8 +682,8 @@ void sys_sem_free(sys_sem_t *sem)
         return;
     }
 
-    uwRet = LOS_SemDelete(sem->sem->usSemID);
-    LWIP_ASSERT("LOS_SemDelete failed", (uwRet == 0));
+    uwRet = osal_semp_del(sem->sem->usSemID);
+    LWIP_ASSERT("osal_semp_del failed", (uwRet == 0));
 
     ((void)(uwRet));
 

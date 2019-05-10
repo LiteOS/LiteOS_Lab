@@ -255,6 +255,10 @@ The STM32F4x7 allows computing and verifying the IP, UDP, TCP and ICMP checksums
 //for dtls server
 #define SO_REUSE 1
 
+#define LWIP_SO_SNDTIMEO   1
+#define LWIP_SO_RCVTIMEO   1
+
+
 #define LWIP_HOOK_ND6_GET_GW get_lwip_ipv6_default_gw
 
 #endif /* __LWIPOPTS_H__ */

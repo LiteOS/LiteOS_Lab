@@ -91,4 +91,5 @@ Reset_Handler:
     bl      main
 
     b       .
+
 .size  Reset_Handler, . - Reset_Handler
