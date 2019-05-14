@@ -3,17 +3,17 @@
 ################################################################################
 
 
-OSAL_SOURCE  = ${wildcard $(TOP_DIR)/iot_link/oskernel/osal/*.c}
+OSAL_SOURCE  = ${wildcard $(iot_link_root)/oskernel/osal/*.c}
 C_SOURCES += $(OSAL_SOURCE)
 		
-OSAL_INC = -I $(TOP_DIR)/iot_link/oskernel/osal
+OSAL_INC = -I $(iot_link_root)/oskernel/osal
 C_INCLUDES += $(OSAL_INC)
 
 #now only suport liteos
 OSAL_CONFIG_OS = liteos
 
 ifeq ($(OSAL_CONFIG_OS), liteos)
-	include $(TOP_DIR)/iot_link/oskernel/liteos/liteos_imp.mk
+	include $(iot_link_root)/oskernel/liteos/liteos_imp.mk
 endif
 
 

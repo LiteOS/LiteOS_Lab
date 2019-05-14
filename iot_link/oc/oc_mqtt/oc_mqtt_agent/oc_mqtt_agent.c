@@ -914,7 +914,7 @@ static void *__oc_config(tag_oc_mqtt_config *config)
     {
         goto EXIT_CHECK_CLONE;
     }
-    if(NULL == osal_task_create(ret->config.server,__oc_agent_engine,ret,0x1000,NULL,6))
+    if(NULL == osal_task_create("oc_mqtt_agent",__oc_agent_engine,ret,0x1000,NULL,6))
     {
         goto EXIT_ENGINE_CREATE;
     }

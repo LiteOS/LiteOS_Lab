@@ -278,7 +278,9 @@ int dtls_shakehand(mbedtls_ssl_context *ssl, const dtls_shakehand_info_s *info)
     }
     else
     {
-        server_fd = (mbedtls_net_context*)atiny_net_bind(NULL, info->u.s.local_port, MBEDTLS_NET_PROTO_UDP);
+        //server_fd = (mbedtls_net_context*)atiny_net_bind(NULL, info->u.s.local_port, MBEDTLS_NET_PROTO_UDP);
+    	server_fd = osal_malloc(sizeof(mbedtls_net_context));
+    	///< --TODO ,not implement yet
     }
 
     if (server_fd == NULL)

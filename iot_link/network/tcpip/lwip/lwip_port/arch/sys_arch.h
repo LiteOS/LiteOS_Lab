@@ -40,7 +40,8 @@
 
 #include <osal.h>
 
-typedef struct osal_mutex_t sys_sem_t;
+
+typedef osal_mutex_t sys_sem_t;
 
 
 struct sys_mbox
@@ -77,6 +78,8 @@ typedef unsigned int sys_thread_t;
 typedef int sys_prot_t;
 
 typedef osal_mutex_t sys_mutex_t;
+#define sys_mutex_valid(pmutex)   ((*pmutex)== cn_mutex_invalid?0:1)
+#define sys_mutex_set_invalid(pmutex) ((*pmutex)=cn_mutex_invalid)
 
 #if (MEM_MALLOC_DMA_ALIGN != 1)
 

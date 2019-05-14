@@ -53,14 +53,12 @@
 #include <dtls_interface.h>
 //mqtt protocol
 #include <mqtt_al.h>
-#include <mqtt_port.h>
-
-//oc mqtt
 #include <oc_mqtt_al.h>
 #include <oc_mqtt_agent.h>
 
 //oc mqtt demo
 #include <oc_mqtt_demo.h>
+#include <paho_mqtt_port.h>
 
 extern int netdriver_install();
 __attribute__((weak)) int netdriver_install()

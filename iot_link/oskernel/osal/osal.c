@@ -274,10 +274,16 @@ char osal_loop_timer_expired(osal_loop_timer_t *timer)
     return now >= timer->dead_time;
 }
 
-void osal_loop_timer_count_down(osal_loop_timer_t *timer, unsigned int timeout)
+void osal_loop_timer_count_downms(osal_loop_timer_t *timer, unsigned int timeout)
 {
     unsigned long long now = osal_sys_time();
     timer->dead_time = now + timeout;
+}
+
+
+void osal_loop_timer_count_down(osal_loop_timer_t *timer, unsigned int timeout)
+{
+    osal_loop_timer_count_downms(timer,timeout*1000);
 }
 
 int osal_loop_timer_left(osal_loop_timer_t *timer)

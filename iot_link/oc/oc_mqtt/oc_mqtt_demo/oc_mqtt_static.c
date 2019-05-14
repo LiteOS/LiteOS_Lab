@@ -281,9 +281,9 @@ int oc_mqtt_demo_main()
 {
     osal_semp_create(&s_rcv_sync,1,0);
 
-    osal_task_create("ocmqtt_report",oc_mqtt_report_entry,NULL,0x800,NULL,10);
+    osal_task_create("ocmqtt_report",oc_mqtt_report_entry,NULL,0x1000,NULL,10);
 
-    osal_task_create("ocmqtt_cmd",oc_mqtt_cmd_entry,NULL,0x800,NULL,10);
+    osal_task_create("ocmqtt_cmd",oc_mqtt_cmd_entry,NULL,0x1000,NULL,10);
 
 
     return 0;

@@ -35,9 +35,9 @@
 
 //the bc95 module;
 
-#include <at.h>
 #include <boudica150_oc.h>
 #include <oc_lwm2m_agent.h>
+#include "../../../at/at.h"
 
 #define cn_boudica150_cmd_timeout  (2*1000)
 #define cn_boudica150_try_times    (32)

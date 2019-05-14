@@ -55,7 +55,7 @@ __attribute__((weak)) int link_random(void* output, int len)
         return -1;
     }
 
-    pbuf = (int*)output;
+    pbuf = output;
     srand(osal_sys_time());
 
     for (i = 0; i < len; i += sizeof(int))

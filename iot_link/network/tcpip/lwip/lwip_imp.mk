@@ -41,6 +41,7 @@ LWIP_INC = \
 
 LWIP_PORT_INC = \
         -I $(TOP_DIR)/iot_link/network/tcpip/lwip/lwip_port \
+        -I $(TOP_DIR)/iot_link/network/tcpip/lwip/lwip_port/arch \
         -I $(TOP_DIR)/iot_link/network/tcpip/lwip/lwip_port/OS
         C_INCLUDES += $(LWIP_PORT_INC)
 

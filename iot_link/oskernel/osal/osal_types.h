@@ -18,10 +18,10 @@
 #define false 0
 #endif
 typedef void*  osal_mutex_t;
-#define cn_mutex_invalid  (0xFFFFFFFF)
+#define cn_mutex_invalid  ((osal_mutex_t)0xFFFFFFFF)
 
 typedef void*  osal_semp_t;
-#define cn_semp_invalid   (0xFFFFFFFF)
+#define cn_semp_invalid   ((osal_semp_t)0xFFFFFFFF)
 
 #define cn_osal_timeout_forever  0xFFFFFFFF
 

@@ -183,9 +183,6 @@ int tcpip_sal_install_lwip(fn_lwip_netdriver driver)
         printf("sal:install lwip failed\r\n");
     }
 
-
-
-
     return 0;
 }
 

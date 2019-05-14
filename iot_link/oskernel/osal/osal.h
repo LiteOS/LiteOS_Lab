@@ -114,10 +114,18 @@ char osal_loop_timer_expired(osal_loop_timer_t *timer);
  *
  * @brief: the loop soft timer
  * @param[in]: timer, the loop timer
- * @param[in]: timeout, how many time to be expired
+ * @param[in]: timeout, how many time to be expired,unit:second
  *
  * */
 void osal_loop_timer_count_down(osal_loop_timer_t *timer, unsigned int timeout);
+/**
+ *
+ * @brief: the loop soft timer
+ * @param[in]: timer, the loop timer
+ * @param[in]: timeout, how many time to be expired,unit:ms
+ *
+ * */
+void osal_loop_timer_count_downms(osal_loop_timer_t *timer, unsigned int timeout);
 
 /**
  *

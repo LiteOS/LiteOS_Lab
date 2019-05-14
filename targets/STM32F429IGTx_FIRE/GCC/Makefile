@@ -79,12 +79,9 @@ LDFLAGS =
 
 ###############LOAD IOT_LINK###############
 IOT_LINK = yes
-#load the mqtt if enabled
+#load iot link
 ifeq ($(IOT_LINK), yes)
-
 include $(TOP_DIR)/iot_link/iot_link.mk
-
-
 endif
 
 ######################################
@@ -120,31 +117,7 @@ HARDWARE_SRC =  \
         ${wildcard $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Hardware/Src/*.c}
         C_SOURCES += $(HARDWARE_SRC)
         
-        
-KERNEL_SRC =  \
-        ${wildcard $(TOP_DIR)/kernel/*.c} \
-        ${wildcard $(TOP_DIR)/kernel/base/core/*.c} \
-        ${wildcard $(TOP_DIR)/kernel/base/ipc/*.c} \
-        ${wildcard $(TOP_DIR)/kernel/base/mem/heap/*.c} \
-        ${wildcard $(TOP_DIR)/kernel/base/mem/membox/*.c} \
-        ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_slab.c} \
-        ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_slabmem.c} \
-        ${wildcard $(TOP_DIR)/kernel/base/mem/common/los_memcheck.c} \
-        ${wildcard $(TOP_DIR)/kernel/base/misc/*.c} \
-        ${wildcard $(TOP_DIR)/kernel/base/om/*.c} \
-        ${wildcard $(TOP_DIR)/kernel/extended/tickless/*.c}
-        C_SOURCES += $(KERNEL_SRC)
-
-CMSIS_SRC =  \
-        ${wildcard $(TOP_DIR)/osdepends/liteos/cmsis/*.c}
-        C_SOURCES += $(CMSIS_SRC)
-
-ARCH_SRC =  \
-        ${wildcard $(TOP_DIR)/arch/arm/arm-m/src/*.c} \
-        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/*.c} \
-        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/*.c}
-        C_SOURCES += $(ARCH_SRC)
-        
+       
 ifeq ($(USE_BOOTLOADER), no)
 HAL_DRIVER_SRC_NO_BOOTLOADER =  \
         $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c \
@@ -203,58 +176,6 @@ ATINY_LOG = \
         C_SOURCES += $(ATINY_LOG)
 
 
-
-ifeq ($(WITH_FILESYSTEM), yes)
-FS_SRC = \
-        ${wildcard $(TOP_DIR)/components/fs/vfs/*.c}
-        C_SOURCES += $(FS_SRC)
-
-FS_DEMO_COMMON_SRC = \
-        ${wildcard $(TOP_DIR)/demos/fs/fs_common.c}
-        C_SOURCES += $(FS_DEMO_COMMON_SRC)
-
-FS_SPIFFS_SRC = \
-        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/spiffs_hal.c \
-        ${wildcard $(TOP_DIR)/components/fs/spiffs/*.c} \
-        ${wildcard $(TOP_DIR)/components/fs/spiffs/spiffs_git/src/*.c}
-
-FS_FATFS_SRC = \
-        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/fatfs_hal.c \
-        ${wildcard $(TOP_DIR)/components/fs/fatfs/*.c} \
-        ${wildcard $(TOP_DIR)/components/fs/fatfs/ff13b/source/*.c}
-
-ifeq ($(IS_COMPILE_ALLFS), ALL)
-        C_SOURCES += $(FS_SPIFFS_SRC)
-        C_SOURCES += $(FS_FATFS_SRC)
-        C_SOURCES += $(TOP_DIR)/demos/fs/fatfs_demo.c
-        C_SOURCES += $(TOP_DIR)/demos/fs/spiffs_demo.c
-else ifeq ($(FILESYSTEM_TYPE), SPIFFS)
-        C_SOURCES += $(FS_SPIFFS_SRC)
-        C_SOURCES += $(TOP_DIR)/demos/fs/spiffs_demo.c
-else ifeq ($(FILESYSTEM_TYPE), FATFS)
-        C_SOURCES += $(FS_FATFS_SRC)
-        C_SOURCES += $(TOP_DIR)/demos/fs/fatfs_demo.c
-endif
-ifeq ($(WITH_CMOCKERY_TEST), yes)
-CMOCKERY_TEST_FS_SRC = \
-        ${wildcard $(TOP_DIR)/tests/test_suit/fs_test.c}
-        C_SOURCES += $(CMOCKERY_TEST_FS_SRC)
-endif
-endif
-
-ifeq ($(WITH_HILINK), yes)
-HILINK_SRC =  \
-        $(TOP_DIR)/components/hilink_hislip/hilinkexample.c \
-        $(TOP_DIR)/components/hilink_hislip/src/dev_profile.c \
-        $(TOP_DIR)/components/hilink_hislip/src/hilink.c \
-        $(TOP_DIR)/components/hilink_hislip/src/hislip.c \
-        $(TOP_DIR)/components/hilink_hislip/src/hislip_uart.c \
-        $(TOP_DIR)/components/hilink_hislip/port/hislip_port.c \
-        $(TOP_DIR)/components/hilink_hislip/port/bsp_led.c
-        C_SOURCES += $(HILINK_SRC)
-endif
-
-
 ifeq ($(WITH_CMOCKERY_TEST), yes)
 ifeq ($(USE_SOTA),yes)
 CMOCKERY_TEST_SOTA_TEST = \
@@ -286,35 +207,7 @@ USER_SRC =  \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/user_task.c
         C_SOURCES += $(USER_SRC)
 
-ifeq ($(WITH_AT_FRAMEWORK), yes)
-AT_FRAME_SRC = \
-    ${wildcard $(TOP_DIR)/components/net/at_frame/*.c} \
-     $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/at_hal.c
-    C_SOURCES += $(AT_FRAME_SRC)
 
-ifeq ($(NETWORK_TYPE), ESP8266)
-    USER_DRIVERS_SRC = ${wildcard $(TOP_DIR)/components/net/at_device/wifi_esp8266/*.c}
-else ifeq ($(NETWORK_TYPE), SIM900A)
-    USER_DRIVERS_SRC = ${wildcard $(TOP_DIR)/components/net/at_device/gprs_sim900a/*.c}
-else ifeq ($(NETWORK_TYPE), EMTC_BG36)
-    USER_DRIVERS_SRC = ${wildcard $(TOP_DIR)/components/net/at_device/emtc_bg36/*.c}
-else ifneq ($(findstring $(NETWORK_TYPE)$(NETWORK_TYPE), NB_NEUL95 NB_NEUL95_NO_ATINY),)
-    USER_DRIVERS_SRC = \
-    ${wildcard $(TOP_DIR)/components/net/at_device/nb_bc95/*.c} \
-    ${wildcard $(TOP_DIR)/components/connectivity/nb_iot/*.c}
-endif
-#As default,below compile all device file for AT_FRAMEWORK
-ifeq ($(AT_COMPILE_ALL), ALL)
-    USER_DRIVERS_SRC = ${wildcard $(TOP_DIR)/components/net/at_device/wifi_esp8266/*.c}
-    USER_DRIVERS_SRC += ${wildcard $(TOP_DIR)/components/net/at_device/gprs_sim900a/*.c}
-    USER_DRIVERS_SRC += ${wildcard $(TOP_DIR)/components/net/at_device/emtc_bg36/*.c}
-    USER_DRIVERS_SRC += \
-    ${wildcard $(TOP_DIR)/components/net/at_device/nb_bc95/*.c} \
-    ${wildcard $(TOP_DIR)/components/connectivity/nb_iot/*.c}
-endif
-
-    C_SOURCES += $(USER_DRIVERS_SRC)
-endif
 ifeq ($(NETWORK_TYPE), NB_NEUL95_NO_ATINY)
     NB_NEUL95_ONYL_DEMO = ${wildcard $(TOP_DIR)/demos/nbiot_without_atiny/nb_demo.c}
     C_SOURCES += $(NB_NEUL95_ONYL_DEMO)
@@ -342,9 +235,7 @@ C_SOURCES += $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/flash_adaptor.c
 endif
 endif
 
-UTIL_SRC = \
-        $(TOP_DIR)/utils/rbtree.c
-        C_SOURCES += $(UTIL_SRC)
+
 
 #blow use bootloader
 else 
@@ -471,12 +362,7 @@ HARDWARE_INC = \
         -I $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Hardware/Inc
         C_INCLUDES += $(HARDWARE_INC)
 
-ifeq ($(WITH_HILINK), yes)
-HILINK_INC = \
-        -I $(TOP_DIR)/components/hilink_hislip/inc \
-        -I $(TOP_DIR)/components/hilink_hislip/profile
-        C_INCLUDES += $(HILINK_INC)
-endif
+
 
 USER_INC = \
         -I $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Inc
@@ -489,28 +375,11 @@ OTA_INC = \
         C_INCLUDES += $(OTA_INC)
 endif
 
-CMSIS_INC = \
-        -I $(TOP_DIR)/arch/arm/arm-m/include \
-        -I $(TOP_DIR)/arch/arm/common/cmsis
-        C_INCLUDES += $(CMSIS_INC)
-
-LITEOS_CMSIS = \
-        -I $(TOP_DIR)/osdepends/liteos/cmsis
-        C_INCLUDES += $(LITEOS_CMSIS)
 
 OS_CONFIG_INC = \
         -I $(TOP_DIR)/targets/STM32F429IGTx_FIRE/OS_CONFIG
         C_INCLUDES += $(OS_CONFIG_INC)
-KERNEL_INC = \
-        -I $(TOP_DIR)/kernel/include \
-        -I $(TOP_DIR)/kernel/base/include \
-        -I $(TOP_DIR)/kernel/extended/include
-        C_INCLUDES += $(KERNEL_INC)
 
-ARCH_INC = \
-        -I $(TOP_DIR)/arch/arm/arm-m/include \
-        -I $(TOP_DIR)/arch/arm/arm-m/armv7-m
-        C_INCLUDES += $(ARCH_INC)
         
 ifeq ($(USE_BOOTLOADER), no)
 
