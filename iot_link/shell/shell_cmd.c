@@ -40,17 +40,16 @@
 
 
 /**************************************FILE INCLIUDES**************************/
-#include <shell.h>
 
-#ifdef LINK_CFG_EN_SHELL
+#if CFG_SHELL_ENABLE
 
 #include <stdint.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
-#include "../link_misc/link_misc.h"
+#include <shell.h>
+#include  <link_misc.h>
 
 /**************************************FILE DEFINES****************************/
 #define cn_shell_args       16     //at most could support 16 parameters for command

@@ -36,7 +36,6 @@
  *  2019-04-28 15:00  zhangqianfu  The first version  
  *
  */
-
 //RTOS KERNEL
 #include <osal.h>
 #include <liteos_imp.h>

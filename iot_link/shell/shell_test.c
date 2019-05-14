@@ -31,11 +31,10 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
+#if CFG_SHELL_ENABLE
 
 #include <shell.h>
 #include <los_memory.h>
-
-#ifdef LINK_CFG_EN_SHELL
 
 /*
 //here we export to shell command,you could add your own shell like this

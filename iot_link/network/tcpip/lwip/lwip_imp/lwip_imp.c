@@ -41,6 +41,7 @@
 #include "lwip/errno.h"
 #include "lwip/tcpip.h"
 
+#include <string.h>
 #include <sal_imp.h>   ///< register the lwip to sal
 #include <lwip_imp.h>
 
@@ -170,7 +171,6 @@ int tcpip_sal_install_lwip(fn_lwip_netdriver driver)
             return ret;
         }
     }
-
 
     ret = tcpip_sal_install(&s_tcpip_lwip);
 

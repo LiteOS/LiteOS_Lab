@@ -35,13 +35,10 @@
 #ifndef __OSSHELL_H
 #define __OSSHELL_H
 
+#if CFG_SHELL_ENABLE
+
 #include <stdint.h>
 #include <stddef.h>
-
-
-
-#ifdef LINK_CFG_EN_SHELL
-
 //this is a shell module designed for the os
 //this is a shell type,maybe a command or the data variables
 enum en_os_shell_type
@@ -93,6 +90,7 @@ struct shell_item_t
     
 void shell_init(void);
 #else
+
 #define OSSHELL_EXPORT_CMD(cmdname,cmdentry,cmdhelp)
 #define OSSHELL_EXPORT_VAR(varname,var,varhelp)
 #define shell_init()

@@ -2,15 +2,31 @@
 # this is used for compile the iotlink
 ################################################################################
 
+#we will add more arch here,now only support the armv7-m
+ARCH_CPU_TYPE=armv7-m
+ifeq ($(ARCH_CPU_TYPE), armv7-m)
 ARCH_SRC =  \
-        ${wildcard $(TOP_DIR)/arch/arm/arm-m/src/*.c} \
         ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/*.c} \
         ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/*.c}
-        C_SOURCES += $(ARCH_SRC)
-ARCH_INC = \
-        -I $(TOP_DIR)/arch/arm/arm-m/include \
-        -I $(TOP_DIR)/arch/arm/arm-m/armv7-m
-        C_INCLUDES += $(ARCH_INC)         
+C_SOURCES += $(ARCH_SRC)
+
+ARCH_INC = -I $(TOP_DIR)/arch/arm/arm-m/armv7-m
+C_INCLUDES += $(ARCH_INC)
+else ifeq ($(ARCH_CPU_TYPE), armv6-m)
+ARCH_SRC =  \
+        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv6-m/*.c} \
+        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv6-m/gcc/*.c}
+C_SOURCES += $(ARCH_SRC)
+
+ARCH_INC = -I $(TOP_DIR)/arch/arm/arm-m/armv6-m
+C_INCLUDES += $(ARCH_INC)    
+endif
+
+ARCH_COMMON_SRC = ${wildcard $(TOP_DIR)/arch/arm/arm-m/src/*.c} 
+        C_SOURCES += $(ARCH_COMMON_SRC)
+ARCH_COMMON_INC = -I $(TOP_DIR)/arch/arm/arm-m/include 
+        C_INCLUDES += $(ARCH_COMMON_INC)
+                         
 UTIL_SRC = \
         $(TOP_DIR)/utils/rbtree.c
         C_SOURCES += $(UTIL_SRC)

@@ -50,6 +50,9 @@ this file implement the shell for the system.the following instruction you must 
 /**************************************FILE INCLIUDES**************************/
 
 
+#if CFG_SHELL_ENABLE
+
+
 #include <stdint.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -57,7 +60,7 @@ this file implement the shell for the system.the following instruction you must 
 #include <shell.h>
 #include <osal.h>
 
-#ifdef LINK_CFG_EN_SHELL
+
 
 
 /**************************************FILE DEFINES****************************/
@@ -472,7 +475,7 @@ static int shell_server_entry(void *args)
 function     :this is the  shell module initialize function
 parameters   :
 instruction  :if you want use shell,you should do two things
-              1,make LINK_CFG_EN_SHELL true in target_config.h
+              1,make CFG_SHELL_ENABLE true in target_config.h
 			  2,call shell_init in your process:make sure after the system has
 			    been initialized
 *******************************************************************************/
