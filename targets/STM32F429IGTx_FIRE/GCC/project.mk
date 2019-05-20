@@ -1,0 +1,38 @@
+HAL_DRIVER_SRC =  \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_iwdg.c
+        C_SOURCES += $(HAL_DRIVER_SRC)
+
+HARDWARE_SRC =  \
+        ${wildcard $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Hardware/Src/*.c}
+        C_SOURCES += $(HARDWARE_SRC)
+HAL_DRIVER_SRC_NO_BOOTLOADER =  \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_eth.c \
+        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rng.c
+        C_SOURCES += $(HAL_DRIVER_SRC_NO_BOOTLOADER) 
+        
+USER_SRC =  \
+        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/main.c \
+        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/system_stm32f4xx.c \
+        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/usart.c \
+        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/uart_debug.c \
+        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/dwt.c \
+        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/eth.c \
+        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/sys_init.c \
+        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/user_task.c
+        C_SOURCES += $(USER_SRC)       

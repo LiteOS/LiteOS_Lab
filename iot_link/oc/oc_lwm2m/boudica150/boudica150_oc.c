@@ -32,12 +32,14 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
+///< you must config the at module ,for the NB modules need the at
 
-//the bc95 module;
 
+#if  CFG_BOUDICA150_ENABLE
+
+#include <at.h>
 #include <boudica150_oc.h>
-#include <oc_lwm2m_agent.h>
-#include "../../../at/at.h"
+#include <oc_lwm2m_al.h>
 
 #define cn_boudica150_cmd_timeout  (2*1000)
 #define cn_boudica150_try_times    (32)
@@ -53,26 +55,26 @@ typedef struct
     const char *bands;
 
     //initialized by the applicaiton
-    tag_oc_config_param  oc_param;
+    oc_config_param_t  oc_param;
 
     //this is the control block
-    bool_t      sndenable;
-    uint8_t     sndbuf[cn_boudica150_cachelen];  //used for the receive
-    uint8_t     rcvbuf[cn_boudica150_cachelen];
+    bool_t            sndenable;
+    unsigned char     sndbuf[cn_boudica150_cachelen];  //used for the receive
+    unsigned char     rcvbuf[cn_boudica150_cachelen];
     //for the debug
-    uint32_t   rcvlen;
-    uint32_t   sndlen;
+    unsigned int   rcvlen;
+    unsigned int   sndlen;
     //states for the lwm2m
-    bool_t     lwm2m_observe;
+    bool_t         lwm2m_observe;
 
-}tag_boudica150_cb;
-static tag_boudica150_cb   s_boudica150_oc_cb;
+}boudica150_cb_t;
+static boudica150_cb_t   s_boudica150_oc_cb;
 
 //bc95 common at command
 static bool_t boudica150_atcmd(const char *cmd,const char *index)
 {
-    s32_t ret = 0;
-    ret = at_command((uint8_t *)cmd,strlen(cmd),index,NULL,0,cn_boudica150_cmd_timeout);
+    int ret = 0;
+    ret = at_command((unsigned char *)cmd,strlen(cmd),index,NULL,0,cn_boudica150_cmd_timeout);
     if(ret > 0)
     {
         return true;
@@ -87,8 +89,8 @@ static bool_t boudica150_atcmd(const char *cmd,const char *index)
 //bc95 common at command
 static bool_t boudica150_atcmd_response(const char *cmd,const char *index,char *buf, int len)
 {
-    s32_t ret = 0;
-    ret = at_command((uint8_t *)cmd,strlen(cmd),index,(uint8_t *)buf,len,cn_boudica150_cmd_timeout);
+    int ret = 0;
+    ret = at_command((unsigned char *)cmd,strlen(cmd),index,(unsigned char *)buf,len,cn_boudica150_cmd_timeout);
     if(ret > 0)
     {
         return true;
@@ -117,9 +119,9 @@ static int byte_to_hexstr(const unsigned char *bufin, int len, char *bufout)
 }
 
 
-static int boudica150_oc_report(uint8_t *buf,int len, int timeout)
+static int boudica150_oc_report(unsigned char *buf,int len, int timeout)
 {
-    s32_t ret = -1;
+    int ret = -1;
     const char *cmd = "AT+NMGS=";
     const char *index = "OK";
     if ((NULL == buf) || (len >= cn_boudica150_cachelen/2 )||(false == s_boudica150_oc_cb.sndenable))
@@ -130,7 +132,7 @@ static int boudica150_oc_report(uint8_t *buf,int len, int timeout)
     snprintf((char *)s_boudica150_oc_cb.sndbuf,cn_boudica150_cachelen,"%s%d,",cmd,len);
     ret = byte_to_hexstr((unsigned char *)buf, len, (char *)&s_boudica150_oc_cb.sndbuf[strlen((char *)s_boudica150_oc_cb.sndbuf)]);
     s_boudica150_oc_cb.sndbuf[strlen((char *)s_boudica150_oc_cb.sndbuf)]='\r';
-    ret = at_command((uint8_t *)s_boudica150_oc_cb.sndbuf,strlen((char *)s_boudica150_oc_cb.sndbuf),index,NULL,0,timeout);
+    ret = at_command((unsigned char *)s_boudica150_oc_cb.sndbuf,strlen((char *)s_boudica150_oc_cb.sndbuf),index,NULL,0,timeout);
     if(ret > 0)
     {
         ret = 0;
@@ -164,10 +166,10 @@ static int hexstr_to_byte(const char *bufin, int len, char *bufout)
     return 0;
 }
 
-static s32_t boudica150_rcvdeal(uint8_t *data,s32_t len)
+static int boudica150_rcvdeal(unsigned char *data,int len)
 {
-    s32_t ret = 0;
-    s32_t datalen;
+    int ret = 0;
+    int datalen;
 
     char  *str;
     if(len <strlen(cn_boudica150_rcvindex))
@@ -190,7 +192,7 @@ static s32_t boudica150_rcvdeal(uint8_t *data,s32_t len)
     }
     str++;
     //now this is data of hex string
-    if((uint32_t)(str + datalen*2 +2) > (uint32_t)(data + len))
+    if((unsigned int)(str + datalen*2 +2) > (unsigned int)(data + len))
     {
         printf("%s:implement error\n\r",__FUNCTION__);
         return ret; //
@@ -426,7 +428,7 @@ static bool_t boudica150_set_nnmi(int enable)  //unit second
 
 
 //wait for the lwm2m observe
-static s32_t urc_qlwevtind(uint8_t *data,s32_t len)
+static int urc_qlwevtind(unsigned char *data,int len)
 {
 
     int index_str;
@@ -447,11 +449,11 @@ static s32_t urc_qlwevtind(uint8_t *data,s32_t len)
 
 
 //check the lwm2m server observed
-static bool_t boudica150_check_observe(s32_t time)  //unit second
+static bool_t boudica150_check_observe(int time)  //unit second
 {
     //wait for the server observed
     bool_t ret = false;
-    s32_t times;
+    int times;
 
     for(times =0;times <time;times++ )
     {
@@ -467,11 +469,11 @@ static bool_t boudica150_check_observe(s32_t time)  //unit second
 }
 
 //check if attached to the network
-static bool_t boudica150_check_netattach(s32_t time)  //unit second
+static bool_t boudica150_check_netattach(int time)  //unit second
 {
     //wait for the server observed
     bool_t ret = false;
-    s32_t times;
+    int times;
 
     for(times =0;times <time;times++ )
     {
@@ -573,7 +575,7 @@ static bool_t boudica150_boot(const char *plmn, const char *apn, const char *ban
     return true;
 }
 
-static int boudica150_oc_config(tag_oc_config_param *param)
+static int boudica150_oc_config(oc_config_param_t *param)
 {
     int ret = -1;
 
@@ -638,7 +640,7 @@ int boudica150_get_csq(int *value)
 
 
 
-const tag_oc_lwm2m_opt  g_boudica150_oc_opt = \
+const oc_lwm2m_opt_t  g_boudica150_oc_opt = \
 {
     .config = boudica150_oc_config,
     .deconfig = boudica150_oc_deconfig,
@@ -660,6 +662,6 @@ int boudica150_init(const char *plmn, const char *apn, const char *bands)
 }
 
 
-
+#endif
 
 

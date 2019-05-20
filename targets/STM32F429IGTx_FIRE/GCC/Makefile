@@ -24,20 +24,9 @@ DEBUG = 1
 # optimization
 OPT = -O0 -g
 
-
 USE_OTA := no
 OTA_IS_NEED_DTLS := no
-ifeq ($(USE_FOTA), yes)
-    USE_OTA = yes
-endif
-ifeq ($(USE_SOTA), yes)
-    USE_OTA = yes
-endif
-ifeq ($(USE_OTA), yes)
-    ifneq ($(OTA_PACK_CHECKSUM), NO_CHECKSUM)
-    OTA_IS_NEED_DTLS = yes
-    endif
-endif
+
 
 
 #######################################
@@ -74,7 +63,7 @@ C_SOURCES =
 C_DEFS =
 C_INCLUDES =
 LDFLAGS =
-
+ASM_SOURCES_S =
 ######################################
 
 ###############LOAD IOT_LINK###############
@@ -82,83 +71,15 @@ IOT_LINK = yes
 #load iot link
 ifeq ($(IOT_LINK), yes)
 include $(TOP_DIR)/iot_link/iot_link.mk
+include project.mk
 endif
 
 ######################################
-
-######################################
-# source
-######################################
-# ASM
-ASM_SOURCES_S =   \
-        ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_startup.S}
-
 # C sources
 
-HAL_DRIVER_SRC =  \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_iwdg.c
-        C_SOURCES += $(HAL_DRIVER_SRC)
 
-HARDWARE_SRC =  \
-        ${wildcard $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Hardware/Src/*.c}
-        C_SOURCES += $(HARDWARE_SRC)
-        
        
 ifeq ($(USE_BOOTLOADER), no)
-HAL_DRIVER_SRC_NO_BOOTLOADER =  \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_eth.c \
-        $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rng.c
-        C_SOURCES += $(HAL_DRIVER_SRC_NO_BOOTLOADER)
-
-ifeq ($(WITH_LWM2M), yes)
-ER_COAP_SRC = \
-        ${wildcard $(TOP_DIR)/components/connectivity/lwm2m/core/er-coap-13/er-coap-13.c}
-        C_SOURCES += $(ER_COAP_SRC)
-
-LWM2M_SRC = \
-        ${wildcard $(TOP_DIR)/components/connectivity/lwm2m/core/*.c} \
-        ${wildcard $(TOP_DIR)/components/connectivity/lwm2m/examples/shared/*.c}
-        C_SOURCES += $(LWM2M_SRC)
-
-ATINY_TINY_SRC = \
-        ${wildcard $(TOP_DIR)/components/connectivity/agent_tiny/atiny_lwm2m/*.c}
-
-ifeq ($(USE_FOTA), yes)
-        C_SOURCES += $(ATINY_TINY_SRC)
-else
-        ATINY_TINY_SRC_NO_FOTA = \
-        $(filter-out $(TOP_DIR)/components/connectivity/agent_tiny/atiny_lwm2m/atiny_fota_manager.c \
-        $(TOP_DIR)/components/connectivity/agent_tiny/atiny_lwm2m/atiny_fota_state.c \
-        $(TOP_DIR)/components/connectivity/agent_tiny/atiny_lwm2m/firmware_update.c, $(ATINY_TINY_SRC))
-        C_SOURCES += $(ATINY_TINY_SRC_NO_FOTA)
-endif
-
-AGENT_DEMO_SRC = \
-        ${wildcard $(TOP_DIR)/demos/agenttiny_lwm2m/*.c}
-        C_SOURCES += $(AGENT_DEMO_SRC)
-
-endif
-
-
-OS_DEPENDS_SRC = \
-        ${wildcard $(TOP_DIR)/osdepends/liteos/*.c}
-        C_SOURCES += $(OS_DEPENDS_SRC)
 
 SOCKET_ADAPTER_SRC = \
         ${wildcard $(TOP_DIR)/components/net/sal/*.c}
@@ -176,36 +97,9 @@ ATINY_LOG = \
         C_SOURCES += $(ATINY_LOG)
 
 
-ifeq ($(WITH_CMOCKERY_TEST), yes)
-ifeq ($(USE_SOTA),yes)
-CMOCKERY_TEST_SOTA_TEST = \
-         ${wildcard $(TOP_DIR)/tests/test_sota/sota_test.c}
-         C_SOURCES += $(CMOCKERY_TEST_SOTA_TEST)
-endif
-endif
 
-ifeq ($(WITH_CMOCKERY_TEST), yes)
-CMOCKERY_TEST_SRC = \
-        ${wildcard $(TOP_DIR)/tests/cmockery/src/cmockery.c} \
-        ${wildcard $(TOP_DIR)/tests/test_main.c}
-        C_SOURCES += $(CMOCKERY_TEST_SRC)
-ifeq ($(WITH_LWIP), yes)
-CMOCKERY_AGENTTINY_TEST_SRC = \
-        ${wildcard $(TOP_DIR)/tests/test_agenttiny/*.c}
-        C_SOURCES += $(CMOCKERY_AGENTTINY_TEST_SRC)
-endif
-endif
 
-USER_SRC =  \
-        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/main.c \
-        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/system_stm32f4xx.c \
-        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/usart.c \
-        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/uart_debug.c \
-        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/dwt.c \
-        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/eth.c \
-        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/sys_init.c \
-        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/user_task.c
-        C_SOURCES += $(USER_SRC)
+
 
 
 ifeq ($(NETWORK_TYPE), NB_NEUL95_NO_ATINY)
@@ -394,14 +288,9 @@ LWM2M_INC = \
         C_INCLUDES += $(LWM2M_INC)
 endif
 
-
-
-
 DEMO_INC = \
         -I $(TOP_DIR)/demos
         C_INCLUDES += $(DEMO_INC)
-
-
 
 ifeq ($(WITH_FILESYSTEM), yes)
 FS_SPIFFS_INC = \

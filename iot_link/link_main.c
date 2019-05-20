@@ -69,37 +69,37 @@ __attribute__((weak)) int netdriver_install()
 
 int link_main(void *args)
 {
-    //install the RTOS kernel for the link
+    ///< install the RTOS kernel for the link
     osal_init();
     osal_install_liteos();
 
-    //install the json
+    ///< install the json component
     cJSON_Hooks  hook;
     hook.free_fn = osal_free;
     hook.malloc_fn = osal_malloc;
     cJSON_InitHooks(&hook);
 
-    //install the shell for the link
+    ///< install the shell for the link
     extern void shell_uart_init(int baud);
     shell_uart_init(115200);
     shell_init();
 
-    //install the tcpip stack and net driver for the link
+    ///< install the tcpip stack and net driver for the link
     tcpip_sal_init(10);
     tcpip_sal_install_lwip(netdriver_install);
 
-    //install the dtls
+    ///< install the tls
     dtls_init();
 
-    //install the mqtt for the link
+    ///< install the mqtt for the link
     mqtt_al_init();
     mqtt_al_install_pahomqtt();
 
-    //oc mqtt service for the link
+    ///< oc mqtt service for the link
     oc_mqtt_init();
     oc_mqtt_install_agent();
 
-    //oc mqtt demo
+    ///< oc mqtt demo
     oc_mqtt_demo_main();
 
     return 0;

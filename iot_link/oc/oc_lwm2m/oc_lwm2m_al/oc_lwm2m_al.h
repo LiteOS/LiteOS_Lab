@@ -31,17 +31,20 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-
-
-#ifndef __OC_LWM2M_AL_H
-#define __OC_LWM2M_AL_H
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2019-05-14 17:22  zhangqianfu  The first version  
+ *
+ */
+#ifndef LITEOS_LAB_IOT_LINK_OC_OC_LWM2M_OC_LWM2M_AL_OC_LWM2M_AL_H_
+#define LITEOS_LAB_IOT_LINK_OC_OC_LWM2M_OC_LWM2M_AL_OC_LWM2M_AL_H_
 
 
 #include <stddef.h>
 #include <stdint.h>
 
 /** @brief this is the message dealer module for the application*/
-typedef int32_t (*fn_oc_msg_deal)(uint8_t *msg, int32_t len);
+typedef int (*fn_oc_msg_deal)(char *msg, int len);
 
 /** @brief this is the agent configuration */
 typedef struct
@@ -51,12 +54,12 @@ typedef struct
     const char   *port;            ///< cdp server port
     const char   *psk_id;          ///< pskid if use psk
     const char   *psk_value;       ///< psk value if use psk
-    int32_t       psk_value_len;   ///< psk value length if use psk
-}tag_oc_config_param;
+    int           psk_value_len;   ///< psk value length if use psk
+}oc_config_param_t;
 
 ///////////////////////////LWM2M AGENT INTERFACE////////////////////////////////
-typedef int (*fn_oc_lwm2m_report)(uint8_t *buf, int32_t len, int32_t timeout);
-typedef int (*fn_oc_lwm2m_config)(tag_oc_config_param *param);
+typedef int (*fn_oc_lwm2m_report)(char *buf, int len, int timeout);
+typedef int (*fn_oc_lwm2m_config)(oc_config_param_t *param);
 typedef int (*fn_oc_lwm2m_deconfig)();
 /**
  * @brief this data structure defines the lwm2m agent implement
@@ -66,17 +69,18 @@ typedef struct
     fn_oc_lwm2m_config   config;   ///< this function used for the configuration
     fn_oc_lwm2m_report   report;   ///< this function used for the report data to the cdp
     fn_oc_lwm2m_deconfig deconfig; ///< this function used for the deconfig
-}tag_oc_lwm2m_opt;
+}oc_lwm2m_opt_t;
 
+#define CFG_OC_LWM2M_ENABLE  1  //for test
 
-#if LOS_CFG_OC_LWM2M_AGENT
+#if CFG_OC_LWM2M_ENABLE
 /**
  *@brief the lwm2m agent should use this function to register the method for the application
  *
  *@param[in] opt, the operation method implement by the lwm2m agent developer
  *@return 0 success while <0 failed
  */
-int32_t oc_lwm2m_register(const tag_oc_lwm2m_opt *opt);
+int oc_lwm2m_register(const oc_lwm2m_opt_t *opt);
 
 /**
  *@brief when the lwm2m agent receive any application message, please call this function
@@ -84,7 +88,7 @@ int32_t oc_lwm2m_register(const tag_oc_lwm2m_opt *opt);
  *@param[in] len, the received message length
  *@return 0 success while <0 failed
  */
-int32_t oc_lwm2m_msg_push(uint8_t *msg, int32_t len);
+int oc_lwm2m_msg_push(char *msg, int len);
 
 //////////////////////////APPLICATION INTERFACE/////////////////////////////////
 /**
@@ -94,7 +98,7 @@ int32_t oc_lwm2m_msg_push(uint8_t *msg, int32_t len);
  * @param[in] match_len, match_buf length
  * @return 0 success while <0 failed
  */
-int32_t oc_lwm2m_install_msgdealer(fn_oc_msg_deal dealer,const char *match_buf,int32_t match_len);
+int oc_lwm2m_install_msgdealer(fn_oc_msg_deal dealer,const char *match_buf,int match_len);
 
 /**
  * @brief the application use this function to send the message to the cdp
@@ -104,14 +108,14 @@ int32_t oc_lwm2m_install_msgdealer(fn_oc_msg_deal dealer,const char *match_buf,i
  *
  * @return 0 success while <0 failed
  */
-int32_t oc_lwm2m_report(uint8_t *buf, int32_t len,int32_t timeout);
+int oc_lwm2m_report(char *buf, int len,int timeout);
 
 /**
  * @brief the application use this function to configure the lwm2m agent
- * @param[in] param, refer to tag_oc_config_param
+ * @param[in] param, refer to oc_config_param_t
  * @return 0 success while <0 failed
  */
-int32_t oc_lwm2m_config(tag_oc_config_param *param);
+int oc_lwm2m_config(oc_config_param_t *param);
 
 /**
  *@brief: the application use this function to deconfigure the lwm2m agent
@@ -119,14 +123,14 @@ int32_t oc_lwm2m_config(tag_oc_config_param *param);
  * return 0 success while <0 failed
  */
 
-int32_t oc_lwm2m_deconfig();
+int oc_lwm2m_deconfig();
 
 /**
  *@brief this is the oc lwm2m agent initialize function,must be called first
  *
  *@return 0 success while <0 failed
  */
-int32_t oc_lwm2m_agent_init();
+int oc_lwm2m_init();
 
 
 #else   //not configure the lwm2m agent
@@ -136,9 +140,9 @@ int32_t oc_lwm2m_agent_init();
 #define oc_lwm2m_install_msgdealer(dealer,match_buf, match_len)             -1
 #define oc_lwm2m_report(buf,len,timeout)                                    -1
 #define oc_lwm2m_config(param)                                              -1
-#define oc_lwm2m_agent_init                                                 -1
+#define oc_lwm2m_init                                                       -1
 #define oc_lwm2m_deconfig                                                   -1
 
 #endif
 
-#endif /* __OC_LWM2M_AL_H */
+#endif /* LITEOS_LAB_IOT_LINK_OC_OC_LWM2M_OC_LWM2M_AL_OC_LWM2M_AL_H_ */

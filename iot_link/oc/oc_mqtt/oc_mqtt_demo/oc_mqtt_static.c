@@ -133,7 +133,7 @@ static int oc_mqtt_cmd_entry( void *args)
     int err_int;
     while(1)
     {
-        if(osal_semp_pend(s_rcv_sync,0x7fffffff))
+        if(osal_semp_pend(s_rcv_sync,cn_osal_timeout_forever))
         {
             err_int = 1;
             mid_int = 1;
