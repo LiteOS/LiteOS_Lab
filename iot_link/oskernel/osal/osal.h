@@ -7,7 +7,7 @@
 #include <stddef.h>
 #include <stdio.h>
 
-
+#include <link_misc.h>
 #include <osal_types.h>
 
 //we need nothing here except the standard struct here

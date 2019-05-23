@@ -31,38 +31,60 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-
-
-#ifndef __BOUDICA150_OC_H
-#define __BOUDICA150_OC_H
-
-#if  CFG_BOUDICA150_ENABLE
-
 /**
- *@brief this function should be called after oc_lwm2m_agent_init
- *
- *@param[in]  plmn which used by at+cops
- *@param[in]  apn which used by
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2019-05-21 16:25  zhangqianfu  The first version  
  *
  */
-int boudica150_init(const char *plmn, const char *apn, const char *bands);
 
-/**
- *@brief this function to get the csq of the MODULES
- *
- *@param[in]  value, storage the csq
- *@param[out] value, the csq get
- *
- *return 0 success while <0 failed
- */
-int boudica150_get_csq(int *value);
+#include <osal.h>
+#include <string.h>
+#include <oc_lwm2m_al.h>
+#include <agent_lwm2m.h>
 
-#else
+typedef struct
+{
+    oc_config_param_t para;
+}oc_lwm2m_impdemo_t;
 
-#define boudica150_init(plmn,apn,bands)    -1
-#define boudica150_get_csq(value)          -1
+static oc_lwm2m_impdemo_t  s_oc_lwm2m_impdemo;
 
-#endif
+static void *__demo_config(oc_config_param_t *param)
+{
+    void *ret;
 
+    s_oc_lwm2m_impdemo.para = *param;
 
-#endif /* __BOUDICA150_OC_H */
+    ret = &s_oc_lwm2m_impdemo;
+
+    return ret;
+}
+
+static int __demo_deconfig(void *handle)
+{
+    memset(&s_oc_lwm2m_impdemo,0,sizeof(s_oc_lwm2m_impdemo));
+    return 0;
+}
+
+static int __demo_report(void *handle, char *msg, int len, int timeout)
+{
+    printf("%s:report:len:%d  timeout:%d\n\r",__FUNCTION__,len,timeout);
+
+    return 0;
+}
+
+const oc_lwm2m_opt_t  g_oc_demo_opt = \
+{
+    .config = __demo_config,
+    .deconfig = __demo_deconfig,
+    .report = __demo_report,
+};
+
+int oc_lwm2m_install_impdemo()
+{
+    int ret = -1;
+
+    ret = oc_lwm2m_register("impdemo",&g_oc_demo_opt);
+
+    return ret;
+}

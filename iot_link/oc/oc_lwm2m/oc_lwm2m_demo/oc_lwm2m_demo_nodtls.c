@@ -38,38 +38,37 @@
  */
 #include <stdint.h>
 #include <stddef.h>
+#include <string.h>
+
 #include <osal.h>
 #include <oc_lwm2m_al.h>
 
-#define cn_app_bands          "5,8,20"
-#define cn_app_plmn           "46011";
-#define cn_app_apn            "1,\"IP\",\"HUAWEI.COM\""
 
-#define cn_app_server         "139.159.140.34"
+#define cn_endpoint_id        "SDK_LWM2M_NODTLS"
+#define cn_app_server         "49.4.85.232"
 #define cn_app_port           "5683"
 
 #define cn_app_light           0
 #define cn_app_ledcmd          1
 #define cn_app_csq             2
-#define cn_app_iocmd           3
 
 #pragma pack(1)
 typedef struct
 {
-    int msgid;
+    int8_t msgid;
     char    intensity[5];
 }app_light_intensity_t;
 
 
 typedef struct
 {
-    int msgid;
+    int8_t msgid;
     char    led[3];
 }app_led_cmd_t;
 
 typedef struct
 {
-    int msgid;
+    int8_t msgid;
     char    csq[3];
 }app_net_csq_t;
 #pragma pack()
@@ -81,7 +80,7 @@ static int             s_rcv_datalen;
 static osal_semp_t     s_rcv_sync;
 
 //use this function to push all the message to the buffer
-static int app_msg_deal(int *msg, int len)
+static int app_msg_deal(void *usr_data,char *msg, int len)
 {
     int ret = -1;
 
@@ -117,7 +116,6 @@ static int app_cmd_task_entry()
                     led_cmd = (app_led_cmd_t *)s_rcv_buffer;
                     printf("LEDCMD:msgid:%d msg:%s \n\r",led_cmd->msgid,led_cmd->led);
                     //if you need response,do it here--TODO
-
                     break;
                 default:
                     break;
@@ -135,38 +133,43 @@ static int app_report_task_entry()
     oc_config_param_t      oc_param;
     app_light_intensity_t  light;
     app_net_csq_t          csq;
+    void                  *context;
 
-    oc_param.server = cn_app_server;
-    oc_param.port = cn_app_port;
-    if(0 == oc_lwm2m_config(&oc_param))   //success ,so we could receive and send
+    memset(&oc_param,0,sizeof(oc_param));
+
+    oc_param.app_server.address = cn_app_server;
+    oc_param.app_server.port = cn_app_port;
+    oc_param.app_server.ep_id = cn_endpoint_id;
+    oc_param.boot_mode = en_oc_boot_strap_mode_factory;
+    oc_param.rcv_func = app_msg_deal;
+
+    context = oc_lwm2m_config(&oc_param);
+
+    if(NULL != context)   //success ,so we could receive and send
     {
         //install a dealer for the led message received
-        oc_lwm2m_install_msgdealer(app_msg_deal,NULL,0);
-
         while(1) //--TODO ,you could add your own code here
         {
             light.msgid = cn_app_light;
             memcpy(light.intensity,"12345",5);
-            oc_lwm2m_report((char *)&light,sizeof(light),1000); //report the light message
+            oc_lwm2m_report(context,(char *)&light,sizeof(light),1000); ///< report the light message
+            osal_task_sleep(10*1000);
 
             csq.msgid = cn_app_csq;
             memcpy(csq.csq,"012",3);
-            oc_lwm2m_report((char *)&csq,sizeof(csq),1000); //report the light message
-
-            osal_sleep(10*1000);
+            oc_lwm2m_report(context,(char *)&csq,sizeof(csq),1000);    ///< report the light message
+            osal_task_sleep(10*1000);
         }
     }
 
     return ret;
 }
 
-
-
-int app_init()
+int oc_lwm2m_demo_main()
 {
-    semp_create(&s_rcv_sync,1,0);
-    task_create("app_report",(fnTaskEntry)app_report_task_entry,0x1000,NULL,NULL,2);
-    task_create("app_command",(fnTaskEntry)app_cmd_task_entry,0x1000,NULL,NULL,3);
+    osal_semp_create(&s_rcv_sync,1,0);
+    osal_task_create("app_report",app_report_task_entry,NULL,0x1000,NULL,2);
+    osal_task_create("app_command",app_cmd_task_entry,NULL,0x1000,NULL,3);
 
     return 0;
 }

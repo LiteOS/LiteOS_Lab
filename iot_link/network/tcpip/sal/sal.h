@@ -58,7 +58,7 @@ int sal_closesocket(int sockfd);
  *
  * @return:0 success while -1 failed
  * */
-int tcpip_sal_init( int socknum);
+int tcpipstack_init( int socknum);
 
 
 

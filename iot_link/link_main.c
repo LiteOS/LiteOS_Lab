@@ -50,14 +50,19 @@
 
 //(d)tls stack
 #include <dtls_interface.h>
-//mqtt protocol
-#include <mqtt_al.h>
-#include <oc_mqtt_al.h>
-#include <oc_mqtt_agent.h>
 
-//oc mqtt demo
-#include <oc_mqtt_demo.h>
+//mqtt protocol and oc mqtt and mqtt demo
+#include <cJSON.h>
+#include <mqtt_al.h>
 #include <paho_mqtt_port.h>
+#include <oc_mqtt_al.h>
+#include <atiny_mqtt.h>
+#include <oc_mqtt_demo.h>
+
+/////< oc lwm2m demo
+//#include <oc_lwm2m_al.h>
+//#include <agent_lwm2m.h>
+//#include <oc_lwm2m_demo.h>
 
 extern int netdriver_install();
 __attribute__((weak)) int netdriver_install()
@@ -73,34 +78,39 @@ int link_main(void *args)
     osal_init();
     osal_install_liteos();
 
-    ///< install the json component
-    cJSON_Hooks  hook;
-    hook.free_fn = osal_free;
-    hook.malloc_fn = osal_malloc;
-    cJSON_InitHooks(&hook);
-
     ///< install the shell for the link
     extern void shell_uart_init(int baud);
     shell_uart_init(115200);
     shell_init();
 
     ///< install the tcpip stack and net driver for the link
-    tcpip_sal_init(10);
-    tcpip_sal_install_lwip(netdriver_install);
+    tcpipstack_init(10);
+    tcpipstack_install_lwip(netdriver_install);
 
     ///< install the tls
     dtls_init();
 
+
+////////////////////////////  OC MQTT  EXAMPLE     /////////////////////////////
     ///< install the mqtt for the link
-    mqtt_al_init();
-    mqtt_al_install_pahomqtt();
+    mqtt_init();
+    mqtt_install_pahomqtt();
+
+    ///< install the cJSON, for the oc mqtt agent need the cJSON
+    cJSON_Hooks  hook;
+    hook.free_fn = osal_free;
+    hook.malloc_fn = osal_malloc;
+    cJSON_InitHooks(&hook);
 
     ///< oc mqtt service for the link
     oc_mqtt_init();
-    oc_mqtt_install_agent();
-
-    ///< oc mqtt demo
+    oc_mqtt_install_atiny_mqtt();
     oc_mqtt_demo_main();
+
+////////////////////////////  OC LWM2M EXAMPLE     /////////////////////////////
+//    oc_lwm2m_init();
+//    oc_lwm2m_install_agent();
+//    oc_lwm2m_demo_main();
 
     return 0;
 }

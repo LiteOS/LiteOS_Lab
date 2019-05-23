@@ -18,3 +18,7 @@ HILINK_INC = \
         -I $(TOP_DIR)/components/hilink_hislip/profile
         C_INCLUDES += $(HILINK_INC)
 endif
+
+ifeq ($(WITH_HILINK), yes)
+    C_DEFS += -DWITH_HILINK
+endif

@@ -37,7 +37,6 @@
 #include <string.h>
 #include <driver.h>
 
-#if CFG_ATCLIENT_ENABLE
 
 //these defines could be moved to the configuration of the at module
 #define cn_at_oob_len          6            //only allow 6 oob command monitor here,you could configure it more
@@ -524,7 +523,6 @@ static int shell_atdebug(int argc,const char *argv[])
 }
 OSSHELL_EXPORT_CMD(shell_atdebug,"atdebug","atdebug rx/tx none/ascii/hex");
 
-#endif
 
 
 

@@ -31,27 +31,40 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
+
+
+#ifndef __BOUDICA150_OC_H
+#define __BOUDICA150_OC_H
+
+#define CFG_BOUDICA150_ENABLE  1
+
+#if  CFG_BOUDICA150_ENABLE
+
 /**
- *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-05 19:16  zhangqianfu  The first version  
+ *@brief this function should be called after oc_lwm2m_agent_init
+ *
+ *@param[in]  plmn which used by at+cops
+ *@param[in]  apn which used by
  *
  */
-
-#if CFG_OC_MQTT_AGENT_EN
+int boudica150_init(const char *plmn, const char *apn, const char *bands);
 
 /**
+ *@brief this function to get the csq of the MODULES
  *
- * @brief: use this function to install the oc_mqtt_agent to oc_mqtt_al
+ *@param[in]  value, storage the csq
+ *@param[out] value, the csq get
  *
- * @return: 0 success while -1 failed
- * */
-int oc_mqtt_install_agent();
-
-
+ *return 0 success while <0 failed
+ */
+int boudica150_get_csq(int *value);
 
 #else
 
-#define oc_mqtt_agent()    -1
-
+#define boudica150_init(plmn,apn,bands)    -1
+#define boudica150_get_csq(value)          -1
 
 #endif
+
+
+#endif /* __BOUDICA150_OC_H */

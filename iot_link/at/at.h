@@ -41,14 +41,18 @@
 #include <osal.h>
 
 
+#define CFG_ATCLIENT_ENABLE  1
+
 typedef int (*fnoob)(char *data,int datalen);
 
 #if  CFG_ATCLIENT_ENABLE
-bool_t at_init(const char *devname);               //install the at frame work,which binded to the device
 
-bool_t at_oobregister(fnoob func,const char *index);  //register a out of band data dealer
-int  at_command(char *cmd, int cmdlen,const char *index,char *respbuf,int respbuflen,int timeout); //send at command and receive response
-bool_t at_workmode(bool_t passby,fnoob func);          //use to set the at module work as the passer by
+
+bool_t at_init(const char *devname);                       //install the at frame work,which binded to the device
+bool_t at_oobregister(fnoob func,const char *index);       //register a out of band data dealer
+int  at_command(char *cmd, int cmdlen,const char *index,\
+                char *respbuf,int respbuflen,int timeout); //send at command and receive response
+bool_t at_workmode(bool_t passby,fnoob func);              //use to set the at module work as the passer by
 
 #else
 

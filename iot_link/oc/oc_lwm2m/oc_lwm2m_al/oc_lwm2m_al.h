@@ -43,24 +43,41 @@
 #include <stddef.h>
 #include <stdint.h>
 
+typedef struct
+{
+    char *ep_id;                  ///< endpoint identifier, which could be recognized by the server
+    char *address;                ///< server address,maybe domain name
+    char *port;                   ///< server port
+    char *psk_id;                 ///< server encode by psk, if not set NULL here
+    char *psk;
+    int   psk_len;
+}oc_server_t;
+
 /** @brief this is the message dealer module for the application*/
-typedef int (*fn_oc_msg_deal)(char *msg, int len);
+typedef int (*fn_oc_lwm2m_msg_deal)(void *user_data,char *msg, int len);
+
+
+typedef enum
+{
+    en_oc_boot_strap_mode_factory = 0,
+    en_oc_boot_strap_mode_client_initialize,
+    en_oc_boot_strap_mode_sequence,
+}en_oc_boot_strap_mode_t;
 
 /** @brief this is the agent configuration */
 typedef struct
 {
-    const char   *devname;         ///< device name
-    const char   *server;          ///< cdp server address
-    const char   *port;            ///< cdp server port
-    const char   *psk_id;          ///< pskid if use psk
-    const char   *psk_value;       ///< psk value if use psk
-    int           psk_value_len;   ///< psk value length if use psk
+    en_oc_boot_strap_mode_t  boot_mode;       ///< bootmode,if boot client_initialize, then the bs must be set
+    oc_server_t              boot_server;     ///< which will be used by the bootstrap, if not, set NULL here
+    oc_server_t              app_server;      ///< if factory or smart boot, must be set here
+    fn_oc_lwm2m_msg_deal     rcv_func;        ///< receive function caller here
+    void                    *usr_data;        ///< used for the user
 }oc_config_param_t;
 
 ///////////////////////////LWM2M AGENT INTERFACE////////////////////////////////
-typedef int (*fn_oc_lwm2m_report)(char *buf, int len, int timeout);
-typedef int (*fn_oc_lwm2m_config)(oc_config_param_t *param);
-typedef int (*fn_oc_lwm2m_deconfig)();
+typedef int (*fn_oc_lwm2m_report)(void *handle, char *buf, int len, int timeout);
+typedef void* (*fn_oc_lwm2m_config)(oc_config_param_t *param);
+typedef int   (*fn_oc_lwm2m_deconfig)(void *handle);
 /**
  * @brief this data structure defines the lwm2m agent implement
  */
@@ -77,53 +94,47 @@ typedef struct
 /**
  *@brief the lwm2m agent should use this function to register the method for the application
  *
+ *@param[in] name, the operation method name
  *@param[in] opt, the operation method implement by the lwm2m agent developer
  *@return 0 success while <0 failed
  */
-int oc_lwm2m_register(const oc_lwm2m_opt_t *opt);
+int oc_lwm2m_register(const char *name,const oc_lwm2m_opt_t *opt);
 
 /**
- *@brief when the lwm2m agent receive any application message, please call this function
- *@param[in] msg, the received message buffer
- *@param[in] len, the received message length
+ *@brief the lwm2m agent should use this function to unregister the method for the application
+ *
+ *@param[in] opt, the operation method implement by the lwm2m agent developer
  *@return 0 success while <0 failed
  */
-int oc_lwm2m_msg_push(char *msg, int len);
+int oc_lwm2m_unregister(const char *name);
 
 //////////////////////////APPLICATION INTERFACE/////////////////////////////////
 /**
- * @brief the application could use this function to register a dealer to deal the message received
- * @param[in] dealer when the lwm2m agent receive a message, and match the preset data, then call the dealer
- * @param[in] match_buf, used to match the message,if NULL then this one is default
- * @param[in] match_len, match_buf length
- * @return 0 success while <0 failed
+ * @brief the application use this function to configure the lwm2m agent
+ * @param[in] param, refer to oc_config_param_t
+ * @return  the context, while NULL means failed
  */
-int oc_lwm2m_install_msgdealer(fn_oc_msg_deal dealer,const char *match_buf,int match_len);
-
+void* oc_lwm2m_config(oc_config_param_t *param);
 /**
  * @brief the application use this function to send the message to the cdp
+ * @param[in] hanlde, returned by the config
  * @param[in] buf the message to send
  * @param[in] len the message length
  * @param[in] timeout block time
  *
  * @return 0 success while <0 failed
  */
-int oc_lwm2m_report(char *buf, int len,int timeout);
-
-/**
- * @brief the application use this function to configure the lwm2m agent
- * @param[in] param, refer to oc_config_param_t
- * @return 0 success while <0 failed
- */
-int oc_lwm2m_config(oc_config_param_t *param);
+int oc_lwm2m_report(void *context,char *buf, int len,int timeout);
 
 /**
  *@brief: the application use this function to deconfigure the lwm2m agent
  *
+ *@param[in] context, returned by the config
+ *
  * return 0 success while <0 failed
  */
 
-int oc_lwm2m_deconfig();
+int oc_lwm2m_deconfig(void *context);
 
 /**
  *@brief this is the oc lwm2m agent initialize function,must be called first
@@ -137,7 +148,6 @@ int oc_lwm2m_init();
 
 #define oc_lwm2m_register(opt)                                              -1
 #define oc_lwm2m_msg_push(msg,len)                                          -1
-#define oc_lwm2m_install_msgdealer(dealer,match_buf, match_len)             -1
 #define oc_lwm2m_report(buf,len,timeout)                                    -1
 #define oc_lwm2m_config(param)                                              -1
 #define oc_lwm2m_init                                                       -1

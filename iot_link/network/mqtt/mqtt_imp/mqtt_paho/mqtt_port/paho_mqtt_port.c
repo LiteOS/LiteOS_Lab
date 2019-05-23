@@ -57,32 +57,62 @@ typedef struct
 	void          *sndbuf;
 }paho_mqtt_cb_t;
 
+///< waring: the paho mqtt has the opposite return code with normal socket read and write
+
 
 #ifdef WITH_DTLS
 
 static int __tls_read(mbedtls_ssl_context *ssl, unsigned char *buffer, int len, int timeout)
 {
     int ret= -1;
+    int rcvlen = -1;
 
     if(NULL == ssl || NULL == buffer)
     {
         return -1;
     }
 
-    ret = dtls_read(ssl,buffer,len, timeout);
+    rcvlen = dtls_read(ssl,buffer,len, timeout);
+
+    if(rcvlen == 0)
+    {
+        ret = -1;
+    }
+    else if(rcvlen < 0)
+    {
+        ret = 0;
+    }
+    else
+    {
+        ret = rcvlen;
+    }
 
     return ret;
 }
 static int __tls_write(mbedtls_ssl_context *ssl, unsigned char *buffer, int len, int timeout)
 {
     int ret= -1;
+    int sndlen = -1;
 
     if(NULL == ssl || NULL == buffer)
     {
         return -1;
     }
 
-    ret = dtls_write(ssl,buffer,len);
+    sndlen = dtls_write(ssl,buffer,len);
+
+    if(sndlen == 0)
+    {
+        ret = -1;
+    }
+    else if(sndlen < 0)
+    {
+        ret = 0;
+    }
+    else
+    {
+        ret = sndlen;
+    }
 
     return ret;
 }
@@ -703,7 +733,7 @@ static en_mqtt_al_connect_state __check_status(void *handle)
 }
 
 
-int mqtt_al_install_pahomqtt()
+int mqtt_install_pahomqtt()
 {
 	int ret = -1;
 

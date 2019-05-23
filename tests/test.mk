@@ -21,3 +21,9 @@ CMOCKERY_AGENTTINY_TEST_SRC = \
         C_SOURCES += $(CMOCKERY_AGENTTINY_TEST_SRC)
 endif
 endif
+
+ifeq ($(WITH_CMOCKERY_TEST), yes)
+CMOCKERY_TEST_INC = \
+        -I $(TOP_DIR)/tests/cmockery/src/google
+        C_INCLUDES += $(CMOCKERY_TEST_INC)
+endif

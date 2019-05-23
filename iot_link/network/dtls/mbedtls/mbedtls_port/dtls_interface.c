@@ -442,48 +442,38 @@ int dtls_write(mbedtls_ssl_context *ssl, const unsigned char *buf, size_t len)
 
     int ret;
 
-    MBEDTLS_LOG("++++DTLS_WRITE:ENTER\r\n");
     ret = mbedtls_ssl_write(ssl, (unsigned char *) buf, len);
 
-    MBEDTLS_LOG("----DTLS_WRITE:EXIT\r\n");
-
-
-    if (ret == MBEDTLS_ERR_SSL_WANT_WRITE)
+    if ((ret == MBEDTLS_ERR_SSL_WANT_WRITE) ||(ret == MBEDTLS_ERR_SSL_TIMEOUT))
     {
-        return 0;
+        ret =  -1;
     }
-    else if (ret < 0)
+    else if (ret <= 0)
     {
-        return -1;
+        ret = 0;
     }
 
     return ret;
 }
 
+
+///< make it return as normal socket return
 int dtls_read(mbedtls_ssl_context *ssl, unsigned char *buf, size_t len, uint32_t timeout)
 {
     int ret;
 
-    MBEDTLS_LOG("++++DTLS_READ:ENTER\r\n");
 
     mbedtls_ssl_conf_read_timeout(ssl->conf, timeout);
 
     ret = mbedtls_ssl_read(ssl, buf, len);
 
-    MBEDTLS_LOG("----DTLS_READ:EXIT\r\n");
-
-
-    if (ret == MBEDTLS_ERR_SSL_WANT_READ)
+    if ((ret == MBEDTLS_ERR_SSL_WANT_READ) ||(ret == MBEDTLS_ERR_SSL_TIMEOUT))
     {
-        return 0;
-    }
-    else if (ret == MBEDTLS_ERR_SSL_TIMEOUT)
-    {
-        return 0;
+        ret = -1;
     }
     else if (ret <= 0)
     {
-        return -1;
+        ret = 0;
     }
 
     return ret;

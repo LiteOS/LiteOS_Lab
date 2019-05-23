@@ -41,9 +41,6 @@
 #include <oc_mqtt_al.h>
 
 
-#define CFG_OC_MQTT_DEMO_STATIC_EN 1
-
-#if CFG_OC_MQTT_DEMO_STATIC_EN
 
 /* brief : the oceanconnect platform only support the ca_crt up tills now*/
 /** the address product_id device_id password crt is only for the test  */
@@ -260,19 +257,17 @@ static int oc_mqtt_report_entry(void *args)
             buf = cJSON_Print(root);
             if(NULL != buf)
             {
-                printf("ENTER:REPORT\r\n");
                 if(0 == oc_mqtt_report(handle,buf,strlen(buf),en_mqtt_al_qos_1))
                 {
                     printf("times:%d power:%d\r\n",times++,leftpower);
                 }
-                printf("EXIT:REPORT\r\n");
                 osal_free(buf);
             }
 
             cJSON_Delete(root);
         }
 
-        osal_task_sleep(2*1000); ///< do a sleep here
+        osal_task_sleep(5*1000); ///< do a sleep here
     }
     return 0;
 }
@@ -290,5 +285,4 @@ int oc_mqtt_demo_main()
 
 }
 
-#endif
 

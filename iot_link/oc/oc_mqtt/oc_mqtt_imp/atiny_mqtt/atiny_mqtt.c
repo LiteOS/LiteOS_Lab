@@ -47,17 +47,13 @@
 #include <string.h>
 #include <link_misc.h>
 
-
-#define CFG_OC_MQTT_AGENT_EN 1
-
-#if CFG_OC_MQTT_AGENT_EN
-
 #include <osal.h>
 #include <mqtt_al.h>
 #include <oc_mqtt_al.h>
 
 #include <cJSON.h>           //json mode
-#include <hmac.h>            //used to generate the user passwd
+#include "hmac.h"            //used to generate the user passwd
+#include <atiny_mqtt.h>
 
 #define VARIABLE_SIZE (4 + 1)
 #define cn_cmd_topic_fmt               "/huawei/v1/devices/%s/command/%s"
@@ -914,7 +910,7 @@ static void *__oc_config(tag_oc_mqtt_config *config)
     {
         goto EXIT_CHECK_CLONE;
     }
-    if(NULL == osal_task_create("oc_mqtt_agent",__oc_agent_engine,ret,0x1000,NULL,6))
+    if(NULL == osal_task_create("oc_mqtt_agent",__oc_agent_engine,ret,0x1400,NULL,6))
     {
         goto EXIT_ENGINE_CREATE;
     }
@@ -987,7 +983,7 @@ static const tag_oc_mqtt_ops s_oc_mqtt_ops_agent= \
     .report = __oc_report,
 };
 
-int oc_mqtt_install_agent()
+int oc_mqtt_install_atiny_mqtt()
 {
     int ret;
 
@@ -997,4 +993,3 @@ int oc_mqtt_install_agent()
 }
 
 
-#endif

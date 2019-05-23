@@ -35,11 +35,13 @@
 ///< you must config the at module ,for the NB modules need the at
 
 
-#if  CFG_BOUDICA150_ENABLE
 
 #include <at.h>
 #include <boudica150_oc.h>
 #include <oc_lwm2m_al.h>
+
+
+///<  only support the bootstrap mode
 
 #define cn_boudica150_cmd_timeout  (2*1000)
 #define cn_boudica150_try_times    (32)
@@ -119,7 +121,7 @@ static int byte_to_hexstr(const unsigned char *bufin, int len, char *bufout)
 }
 
 
-static int boudica150_oc_report(unsigned char *buf,int len, int timeout)
+static int boudica150_oc_report(void *handle,unsigned char *buf,int len, int timeout)
 {
     int ret = -1;
     const char *cmd = "AT+NMGS=";
@@ -205,7 +207,11 @@ static int boudica150_rcvdeal(unsigned char *data,int len)
     memset(s_boudica150_oc_cb.rcvbuf,0,cn_boudica150_cachelen);
     hexstr_to_byte(str,datalen*2,(char *)s_boudica150_oc_cb.rcvbuf);
 
-    oc_lwm2m_msg_push(s_boudica150_oc_cb.rcvbuf,datalen);
+    if(NULL != s_boudica150_oc_cb.oc_param.rcv_func)
+    {
+        s_boudica150_oc_cb.oc_param.rcv_func(s_boudica150_oc_cb.oc_param.usr_data,\
+                                             s_boudica150_oc_cb.rcvbuf,datalen);
+    }
 
     return len;
 }
@@ -575,27 +581,28 @@ static bool_t boudica150_boot(const char *plmn, const char *apn, const char *ban
     return true;
 }
 
-static int boudica150_oc_config(oc_config_param_t *param)
-{
-    int ret = -1;
+static void  *s_oc_handle = NULL;
 
-    if(NULL != param)
+static void *boudica150_oc_config(oc_config_param_t *param)
+{
+    void *ret = NULL;
+    if((NULL != param) && (NULL != s_oc_handle))
     {
         s_boudica150_oc_cb.oc_param = *param;
 
         if(boudica150_boot(s_boudica150_oc_cb.plmn,s_boudica150_oc_cb.apn,s_boudica150_oc_cb.bands,\
-                s_boudica150_oc_cb.oc_param.server,s_boudica150_oc_cb.oc_param.port))
+                s_boudica150_oc_cb.oc_param.app_server.address,s_boudica150_oc_cb.oc_param.app_server.port))
         {
-            ret = 0;
+            ret = s_oc_handle;
         }
-
     }
 
     return ret;
 }
 
-static int boudica150_oc_deconfig()
+static int boudica150_oc_deconfig(void *handle)
 {
+    s_oc_handle = NULL;
     return 0;
 }
 
@@ -656,12 +663,9 @@ int boudica150_init(const char *plmn, const char *apn, const char *bands)
     s_boudica150_oc_cb.apn = apn;
     s_boudica150_oc_cb.bands = bands;
 
-    ret = oc_lwm2m_register(&g_boudica150_oc_opt);
+    ret = oc_lwm2m_register("boudica150",&g_boudica150_oc_opt);
 
     return ret;
 }
-
-
-#endif
 
 

@@ -35,4 +35,24 @@ USER_SRC =  \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/eth.c \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/sys_init.c \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/user_task.c
-        C_SOURCES += $(USER_SRC)       
+        C_SOURCES += $(USER_SRC)  
+        
+ OS_CONFIG_INC = \
+        -I $(TOP_DIR)/targets/STM32F429IGTx_FIRE/OS_CONFIG
+        C_INCLUDES += $(OS_CONFIG_INC)       
+# C includes
+HAL_DRIVER_INC = \
+        -I $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Inc \
+        -I $(TOP_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Inc/Legacy
+        C_INCLUDES += $(HAL_DRIVER_INC)        
+HARDWARE_INC = \
+        -I $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Hardware/Inc
+        C_INCLUDES += $(HARDWARE_INC)
+
+USER_INC = \
+        -I $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Inc
+        C_INCLUDES += $(USER_INC)
+        
+# C defines
+C_DEFS +=  -D USE_HAL_DRIVER -D STM32F429xx -D NDEBUG
+                 

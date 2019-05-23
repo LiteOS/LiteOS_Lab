@@ -32,14 +32,21 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef PAHO_MQTT_PORT_H
-#define PAHO_MQTT_PORT_H
-/**
- * @brief   : this function for install the paho mqtt to the mqtt_al, must be call only once
- *
- */
+#ifndef __FIRMWARE_UPDATE_H__
+#define __FIRMWARE_UPDATE_H__
 
-int mqtt_al_install_pahomqtt();
+typedef enum firmware_update_rst
+{
+    FIRMWARE_UPDATE_RST_SUCCESS = 0,
+    FIRMWARE_UPDATE_RST_FAILED,
+    FIRMWARE_UPDATE_RST_MAX
+}firmware_update_rst_e;
 
+typedef void (*firmware_update_notify)(firmware_update_rst_e rst, void *param);
 
-#endif /* PAHO_MQTT_PORT_H */
+void set_firmware_update_notify(firmware_update_notify notify_cb, void *param);
+int start_firmware_download(lwm2m_context_t *contextP, char *uri, pack_storage_device_api_s *storage_device_p);
+void clean_firmware_record(void);
+
+#endif /* __FIRMWARE_UPDATE_H__ */
+

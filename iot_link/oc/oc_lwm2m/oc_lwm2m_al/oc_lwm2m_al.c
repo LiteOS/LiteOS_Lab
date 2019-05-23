@@ -37,146 +37,115 @@
  *
  */
 
-#define CFG_OC_LWM2M_ENABLE  1  //for test
+#include <stdint.h>
+#include <stddef.h>
 
-
-#if CFG_OC_LWM2M_ENABLE
+#include <string.h>
 
 #include <stdlib.h>
-#include <osport.h>
+#include <osal.h>
 #include <oc_lwm2m_al.h>
 
-static oc_lwm2m_opt_t *s_oc_lwm2m_agent = NULL;
+typedef struct
+{
+    const char            *name;    ///< lwm2m implement name
+    const oc_lwm2m_opt_t  *opt;     ///< lwm2m implement method
+}oc_lwm2m_t;
+static oc_lwm2m_t  s_oc_lwm2m_ops;
 
 typedef struct
 {
-    void       *nxt;        // next item
-    const char *match_buf;  //used to compare
-    int     match_len;  //compare length
-    fn_oc_msg_deal dealer;  //the message dealer
-}tag_msg_dealer_item;       //item structure
+    void                    *handle;
+    const oc_lwm2m_opt_t    *ops;
+    oc_config_param_t        param;
+}oc_lwm2m_context_t;
 
-typedef struct
-{
-    osal_mutex_t               mux;
-    tag_msg_dealer_item       *item;
-}oc_lwm2m_msgcb_t;
 
-static oc_lwm2m_msgcb_t  s_msg_dealer_cb;
-
-int oc_lwm2m_register(const oc_lwm2m_opt_t *opt)
+int oc_lwm2m_register(const char *name,const oc_lwm2m_opt_t *opt)
 {
     int ret = -1;
 
-    if(NULL != opt)
+    if(NULL == s_oc_lwm2m_ops.opt)
     {
-        s_oc_lwm2m_agent = (oc_lwm2m_opt_t *) opt;
-
+        s_oc_lwm2m_ops.name = name;
+        s_oc_lwm2m_ops.opt =  opt;
         ret = 0;
     }
-
     return ret;
 }
 
-int oc_lwm2m_msg_push(uint8_t *msg, int len)
+int oc_lwm2m_unregister(const char *name)
 {
     int ret = -1;
-    tag_msg_dealer_item *item;
 
-    if(mutex_lock(s_msg_dealer_cb.mux))
+    if((NULL != name) && (NULL != s_oc_lwm2m_ops.name))
     {
-        item = s_msg_dealer_cb.item;
-
-        while(NULL != item)
+        if(0 == strcmp(name,s_oc_lwm2m_ops.name))
         {
-            if((item->match_buf == NULL)||((len >= item->match_len)&&\
-               (0 == memcmp(msg,item->match_buf,item->match_len))))
-            {
-                ret = item->dealer(msg,len);
-            }
-            item = item->nxt;
+            s_oc_lwm2m_ops.opt = NULL;   ///< also think about clear all the ops in the context,
+            s_oc_lwm2m_ops.name = NULL;
+            ret = 0;
         }
-
-        mutex_unlock(s_msg_dealer_cb.mux);
     }
 
     return ret;
 }
+
 
 //////////////////////////APPLICATION INTERFACE/////////////////////////////////
-int oc_lwm2m_install_msgdealer(fn_oc_msg_deal dealer,const char *match_buf,int match_len)
+int oc_lwm2m_report(void *context,char  *buf, int len,int timeout)
 {
     int ret = -1;
+    oc_lwm2m_context_t  *oc_lwm2m;
+    oc_lwm2m = context;
 
-    tag_msg_dealer_item *item;
-
-    if(NULL == dealer)
+    if((NULL != oc_lwm2m) &&(NULL != oc_lwm2m->ops) &&(NULL != oc_lwm2m->ops->report))
     {
-        return ret;
-    }
-
-    item = malloc(sizeof(tag_msg_dealer_item));
-    if(NULL== item)
-    {
-        return ret;
-    }
-
-    item->dealer = dealer;
-    item->match_buf = match_buf;
-    item->match_len = match_len;
-
-    if(mutex_lock(s_msg_dealer_cb.mux))
-    {
-        item->nxt = s_msg_dealer_cb.item;
-        s_msg_dealer_cb.item = item;
-
-        mutex_unlock(s_msg_dealer_cb.mux);
-
-        ret = 0;
-    }
-    else
-    {
-        free(item);
-    }
-
-    return ret;
-
-}
-
-
-int oc_lwm2m_report(uint8_t *buf, int len,int timeout)
-{
-    int ret = -1;
-
-    if((NULL != s_oc_lwm2m_agent) &&(NULL != s_oc_lwm2m_agent->report))
-    {
-       ret = s_oc_lwm2m_agent->report(buf,len,timeout);
+       ret = oc_lwm2m->ops->report(oc_lwm2m->handle,buf,len,timeout);
     }
 
     return ret;
 }
 
 
-int oc_lwm2m_config(oc_config_param_t *param)
+void *oc_lwm2m_config(oc_config_param_t *param)
 {
-    int ret = -1;
+    void *ret = NULL;
+    oc_lwm2m_context_t  *oc_lwm2m;
 
-    if((NULL != s_oc_lwm2m_agent) &&(NULL != s_oc_lwm2m_agent->config))
+    if((NULL != s_oc_lwm2m_ops.opt) &&(NULL != s_oc_lwm2m_ops.opt->config))
     {
-       ret = s_oc_lwm2m_agent->config(param);
+        oc_lwm2m = osal_zalloc(sizeof(oc_lwm2m_context_t));
+        if(NULL != oc_lwm2m)
+        {
+            oc_lwm2m->param = *param;
+            oc_lwm2m->ops = s_oc_lwm2m_ops.opt;
+            oc_lwm2m->handle = s_oc_lwm2m_ops.opt->config(param);
+            if(NULL == oc_lwm2m->handle)
+            {
+                osal_free(oc_lwm2m);
+            }
+            else
+            {
+                ret = oc_lwm2m;
+            }
+        }
     }
 
     return ret;
 }
 
 
-int oc_lwm2m_deconfig()
+int oc_lwm2m_deconfig(void *context)
 {
     int ret = -1;
+    oc_lwm2m_context_t  *oc_lwm2m;
+    oc_lwm2m = context;
 
-    if((NULL != s_oc_lwm2m_agent) &&(NULL != s_oc_lwm2m_agent->deconfig))
+    if((NULL != oc_lwm2m) &&(NULL != oc_lwm2m->ops) && (NULL != oc_lwm2m->ops->deconfig))
     {
-       ret = s_oc_lwm2m_agent->deconfig();
+        oc_lwm2m->ops->deconfig(oc_lwm2m->handle); ///<  should check if deconfigure error
+        osal_free(oc_lwm2m);
     }
 
     return ret;
@@ -188,12 +157,8 @@ int oc_lwm2m_init()
 {
     int ret = -1;
 
-    if (osal_mutex_create(&s_msg_dealer_cb.mux))
-    {
-        ret = 0;
-    }
+    ret = 0;   ///< uptils now, we should do nothing here
 
     return ret;
 }
 
-#endif

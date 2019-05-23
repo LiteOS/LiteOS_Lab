@@ -20,13 +20,26 @@ include $(iot_link_root)/network/tcpip/tcpip.mk
 #configure the dtls for the iot link
 include $(iot_link_root)/network/dtls/dtls.mk
 
-#configure the mqtt
+###############################OC MQTT EXAMPLE##################################
+##configure the mqtt
 include $(iot_link_root)/network/mqtt/mqtt.mk
 
 #configure the oc mqtt
 include $(iot_link_root)/oc/oc_mqtt/oc_mqtt.mk
 
+#configure the cJSON <which needed by the oc_mqtt agent>
+include $(iot_link_root)/cJSON/cJSON.mk
+ 
 
+###############################OC LWM2M EXAMPLE#################################
+##configure the  lwm2m  protocol
+#include $(iot_link_root)/network/lwm2m/lwm2m.mk
+#
+##configure the oc lwm2m models
+#include $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m.mk
+
+
+################################################################################
 IOT_LINK_SOURCE  = ${wildcard $(iot_link_root)/*.c} 
 C_SOURCES += $(IOT_LINK_SOURCE)	
 		
