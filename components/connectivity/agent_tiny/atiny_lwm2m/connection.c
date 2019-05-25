@@ -56,7 +56,7 @@
 #if defined (WITH_DTLS)
 #include "dtls_interface.h"
 #endif
-#include "sal/atiny_socket.h"
+#include "../../../../include/sal/atiny_socket.h.bak"
 #include "log/atiny_log.h"
 #include "object_comm.h"
 

@@ -2,7 +2,7 @@
 # this is used for compile the mbedtls
 ################################################################################
 #only support the mqtt test
-WITH_MQTT = yes
+WITH_MQTT = no
 
 MBEDTLS_INC = \
         -I $(TOP_DIR)/iot_link/network/dtls/mbedtls/mbedtls-2.6.0/include

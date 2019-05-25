@@ -67,9 +67,7 @@ const struct phys_mem system_phys_mem [] =
 VOID HardWare_Init(VOID)
 {
     SystemClock_Config();
-//  Debug_USART1_UART_Init();
     hal_rng_config();
-    dwt_delay_init(SystemCoreClock);
 }
 
 extern int link_main(void *args);
@@ -107,19 +105,7 @@ int main(void)
         return LOS_NOK;
     }
 
-
-#if 1
     link_test();
-#endif
-
-#if 0
-    extern UINT32 create_work_tasks(VOID);
-    uwRet = create_work_tasks();
-    if (uwRet != LOS_OK)
-    {
-        return LOS_NOK;
-    }
-#endif
 
     LOS_MemInfo (NULL, 1);
 

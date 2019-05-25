@@ -373,7 +373,7 @@ static s32_t handler_rcvdata(u8_t *buf,s32_t len)
     return ret;
 }
 
-#include <sal/atiny_socket.h>
+#include "../../../include/sal/atiny_socket.h.bak"
 const struct atiny_netdevice  g_sim5320E=
 {
     .connect = socket_connect,

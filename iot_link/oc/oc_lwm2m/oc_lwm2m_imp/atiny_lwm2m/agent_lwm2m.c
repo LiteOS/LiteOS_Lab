@@ -157,7 +157,7 @@ void ack_callback(atiny_report_type_e type, int cookie, data_send_status_e statu
     printf("type:%d cookie:%d status:%d\n", type, cookie, status);
 }
 
-static int __demo_report(void *handle, char *msg, int len, int timeout)
+static int __agent_report(void *handle, char *msg, int len, int timeout)
 {
 
     oc_lwm2m_imp_agent_t  *agent = handle;
@@ -186,7 +186,7 @@ const oc_lwm2m_opt_t  s_oc_lwm2m_agent_opt = \
 {
     .config = __agent_config,
     .deconfig = __agent_deconfig,
-    .report = __demo_report,
+    .report = __agent_report,
 };
 
 int oc_lwm2m_install_agent()

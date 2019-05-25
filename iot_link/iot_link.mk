@@ -10,6 +10,8 @@ include $(iot_link_root)/link_misc/link_misc.mk
 #configure the operation system for the iot_link
 include $(iot_link_root)/oskernel/oskernel.mk
 
+#configure the cJSON 
+include $(iot_link_root)/cJSON/cJSON.mk
 
 #configure the shell for the iot_link
 include $(iot_link_root)/shell/shell.mk
@@ -21,22 +23,19 @@ include $(iot_link_root)/network/tcpip/tcpip.mk
 include $(iot_link_root)/network/dtls/dtls.mk
 
 ###############################OC MQTT EXAMPLE##################################
-##configure the mqtt
-include $(iot_link_root)/network/mqtt/mqtt.mk
-
-#configure the oc mqtt
-include $(iot_link_root)/oc/oc_mqtt/oc_mqtt.mk
-
-#configure the cJSON <which needed by the oc_mqtt agent>
-include $(iot_link_root)/cJSON/cJSON.mk
+###configure the mqtt
+#include $(iot_link_root)/network/mqtt/mqtt.mk
+#
+##configure the oc mqtt
+#include $(iot_link_root)/oc/oc_mqtt/oc_mqtt.mk
  
 
 ###############################OC LWM2M EXAMPLE#################################
-##configure the  lwm2m  protocol
-#include $(iot_link_root)/network/lwm2m/lwm2m.mk
-#
-##configure the oc lwm2m models
-#include $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m.mk
+#configure the  lwm2m  protocol
+include $(iot_link_root)/network/lwm2m/lwm2m.mk
+
+#configure the oc lwm2m models
+include $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m.mk
 
 
 ################################################################################

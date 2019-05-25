@@ -553,7 +553,7 @@ int lwm2m_buffer_recv(void *sessionH, uint8_t *buffer, size_t length, uint32_t t
     {
         // security
         ret = dtls_read(connP->net_context, buffer, length, timeout);
-        if((ret < 0) && (ret != TIME_OUT))
+        if(0 == ret)
         {
             inc_connection_stat(connP, CONNECTION_RECV_ERR);
         }
@@ -623,15 +623,15 @@ uint8_t lwm2m_buffer_send(void *sessionH,
     {
         // security
         ret = dtls_write(connP->net_context, buffer, length);
-        if(ret >= 0)
-        {
-            connP->errs[CONNECTION_SEND_ERR] = 0;
-            return COAP_NO_ERROR;
-        }
-        else
+        if(0 == ret)
         {
             inc_connection_stat(connP, CONNECTION_SEND_ERR);
             return COAP_500_INTERNAL_SERVER_ERROR;
+        }
+        else
+        {
+            connP->errs[CONNECTION_SEND_ERR] = 0;
+            return COAP_NO_ERROR;
         }
     }
     else

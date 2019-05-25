@@ -124,7 +124,9 @@ int atiny_get_baterry_level(int *voltage)
 int atiny_get_memory_free(int *voltage)
 {
     int tmp;
-    (void)atiny_random(&tmp, sizeof(tmp));
+//    (void)atiny_random(&tmp, sizeof(tmp));
+    link_random(&tmp, sizeof(tmp));
+
     tmp %= 30;
     *voltage = ATINY_MEMORY_FREE + tmp;
     return ATINY_OK;

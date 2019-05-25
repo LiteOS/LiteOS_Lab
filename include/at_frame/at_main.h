@@ -35,12 +35,13 @@
 #ifndef __AT_MAIN_H__
 #define __AT_MAIN_H__
 #include <stdbool.h>
+
+#include "../sal/atiny_socket.h.bak"
 #include "los_queue.h"
 #include "los_mux.h"
 #include "los_task.h"
 #include "los_sem.h"
 
-#include "sal/atiny_socket.h"
 #include "at_frame/at_api.h"
 
 #ifdef __cplusplus
