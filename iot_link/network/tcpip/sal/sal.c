@@ -28,7 +28,7 @@ typedef struct
 
 static tag_sal_cb   s_sal_cb;
 
-int tcpip_sal_init( int socknum)
+int tcpipstack_init( int socknum)
 {
     int ret = -1;
 

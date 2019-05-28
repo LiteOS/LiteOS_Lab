@@ -1,7 +1,8 @@
 #include "test_dtls_server.h"
+
+#include "../../include/sal/atiny_socket.h.bak"
 #include "dtls_interface.h"
 #include "osdepends/atiny_osdep.h"
-#include "sal/atiny_socket.h"
 
 #if defined(WITH_DTLS) && defined(SUPPORT_DTLS_SRV)
 

@@ -46,7 +46,6 @@ extern "C" {
 
 #include <mqtt_al.h>
 
-#ifdef CFG_MQTT_EN
 
 typedef struct
 {
@@ -87,7 +86,7 @@ int mqtt_al_uninstall()
 
 //////////////////////////CREATE THE API FOR THE MQTT APPLICATopsN///////////////
 
-int mqtt_al_init()
+int mqtt_init()
 {
 	int ret = 0;
 
@@ -198,7 +197,6 @@ en_mqtt_al_connect_state mqtt_al_check_status(void *handle)
 }
 
 
-#endif
 
 
 #ifdef __cplusplus

@@ -38,3 +38,22 @@ CMOCKERY_TEST_FS_SRC = \
         C_SOURCES += $(CMOCKERY_TEST_FS_SRC)
 endif
 endif
+
+ifeq ($(WITH_FILESYSTEM), yes)
+FS_SPIFFS_INC = \
+        -I $(TOP_DIR)/components/fs/spiffs/spiffs_git/src \
+        -I $(TOP_DIR)/components/fs/spiffs/spiffs_git/src/default
+
+FS_FATFS_INC = \
+        -I $(TOP_DIR)/components/fs/fatfs/ff13b/source \
+        -I $(TOP_DIR)/components/fs/fatfs/ff13b/source/default
+
+ifeq ($(IS_COMPILE_ALLFS), ALL)
+        C_INCLUDES += $(FS_SPIFFS_INC)
+        C_INCLUDES += $(FS_FATFS_INC)
+else ifeq ($(FILESYSTEM_TYPE), SPIFFS)
+        C_INCLUDES += $(FS_SPIFFS_INC)
+else ifeq ($(FILESYSTEM_TYPE), FATFS)
+        C_INCLUDES += $(FS_FATFS_INC)
+endif
+endif

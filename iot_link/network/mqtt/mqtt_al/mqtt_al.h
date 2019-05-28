@@ -38,7 +38,6 @@
 #include <stdint.h>
 
 
-#define  CFG_MQTT_EN   1
 
 #if defined(__cplusplus)
 extern "C" {
@@ -228,7 +227,7 @@ typedef struct
 
 }mqtt_al_op_t;
 
-#ifdef CFG_MQTT_EN
+#if cfg_mqtt_enable
 //////////////////////API USED FOR THE MQTT APPLICAITON/////////////////////////
 
 /**
@@ -237,7 +236,7 @@ typedef struct
  * @return 0 success while -1 failed
  *
  */
-int mqtt_al_init();
+int mqtt_init();
 
 /**
  * @brief     :when you don't want to use the mqtt service ,please call this function

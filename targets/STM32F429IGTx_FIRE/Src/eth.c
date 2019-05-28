@@ -32,13 +32,13 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 #ifdef WITH_LWIP
-#include "eth.h"
+
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx_hal_eth.h"
 #include "lwip/timeouts.h"
 #include "netif/etharp.h"
 #include <string.h>
-
+#include <ethernetif.h>
 
 #define netifINTERFACE_TASK_STACK_SIZE              ( 4096u )
 #define netifINTERFACE_TASK_PRIORITY                ( 6u   )

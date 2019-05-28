@@ -157,7 +157,7 @@ static const tag_tcpip_domain s_tcpip_lwip =
 };
 
 
-int tcpip_sal_install_lwip(fn_lwip_netdriver driver)
+int tcpipstack_install_lwip(fn_lwip_netdriver driver)
 {
     int ret = -1;
     /* Initilialize the LwIP stack with RTOS */

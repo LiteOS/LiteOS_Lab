@@ -46,7 +46,7 @@
  * */
 typedef int (*fn_lwip_netdriver)(void);
 
-int tcpip_sal_install_lwip(fn_lwip_netdriver driver);
+int tcpipstack_install_lwip(fn_lwip_netdriver driver);
 
 
 #endif /* LITEOS_LAB_IOT_LINK_NETWORK_TCPIP_LWIP_LWIP_IMP_H_ */

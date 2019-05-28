@@ -10,6 +10,8 @@ ARCH_SRC =  \
         ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/*.c}
 C_SOURCES += $(ARCH_SRC)
 
+ASM_SOURCES_S += ${wildcard $(TOP_DIR)/arch/arm/arm-m/armv7-m/gcc/los_startup.S}
+
 ARCH_INC = -I $(TOP_DIR)/arch/arm/arm-m/armv7-m
 C_INCLUDES += $(ARCH_INC)
 else ifeq ($(ARCH_CPU_TYPE), armv6-m)
@@ -67,4 +69,8 @@ C_SOURCES += $(LITEOS_IMP_SOURCE)
 		
 LITEOS_IMP_INC = -I $(iot_link_root)/oskernel/liteos
 C_INCLUDES += $(LITEOS_IMP_INC)
+
+OS_DEPENDS_SRC = \
+        ${wildcard $(TOP_DIR)/osdepends/liteos/*.c}
+        C_SOURCES += $(OS_DEPENDS_SRC)
 
