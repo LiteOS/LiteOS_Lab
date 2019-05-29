@@ -40,7 +40,7 @@
 #ifndef __OSSHELL_H
 #define __OSSHELL_H
 
-#if CFG_SHELL_ENABLE
+#if cfg_shell_enable
 
 #include <stdint.h>
 #include <stddef.h>
@@ -96,8 +96,8 @@ struct shell_item_t
 void shell_init(void);
 #else
 
-#define OSSHELL_EXPORT_CMD(cmdname,cmdentry,cmdhelp)
-#define OSSHELL_EXPORT_VAR(varname,var,varhelp)
+#define OSSHELL_EXPORT_CMD(cmdentry,cmdname,cmdhelp)
+#define OSSHELL_EXPORT_VAR(var,varname,varhelp)
 #define shell_init()
 
 #endif   //end for the shell_config

@@ -649,12 +649,12 @@ lwm2m_object_t *get_security_object(uint16_t serverId, atiny_param_t *atiny_para
         {
             if (psk != NULL)
             {
-                (void)atiny_snprintf(serverUri, URI_MAX_LEN, "coaps://%s:%s", atiny_params->security_params[security_params_index].server_ip,
+                (void)snprintf(serverUri, URI_MAX_LEN, "coaps://%s:%s", atiny_params->security_params[security_params_index].server_ip,
                                      atiny_params->security_params[security_params_index].server_port);
             }
             else
             {
-                (void)atiny_snprintf(serverUri, URI_MAX_LEN, "coap://%s:%s", atiny_params->security_params[security_params_index].server_ip,
+                (void)snprintf(serverUri, URI_MAX_LEN, "coap://%s:%s", atiny_params->security_params[security_params_index].server_ip,
                                      atiny_params->security_params[security_params_index].server_port);
             }
         }

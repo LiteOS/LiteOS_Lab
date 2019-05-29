@@ -45,9 +45,9 @@
  *  Data |  0 |    R/W     |    No     |    Yes    | Opaque  |       |       |             |
  *
  */
+#include <atiny_log.h>
 #include "object_comm.h"
 #include "atiny_rpt.h"
-#include "log/atiny_log.h"
 
 
 

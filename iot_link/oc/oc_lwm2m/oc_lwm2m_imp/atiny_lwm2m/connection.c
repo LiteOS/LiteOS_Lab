@@ -59,7 +59,7 @@
 #include "dtls_interface.h"
 #endif
 //#include "sal/atiny_socket.h"
-#include "log/atiny_log.h"
+#include <atiny_log.h>
 #include "object_comm.h"
 
 #define COAP_PORT "5683"
@@ -366,7 +366,7 @@ connection_t *connection_create(connection_t *connList,
 
     if (LWM2M_IS_CLIENT == client_or_server)
     {
-        uri = atiny_strdup(targetP->uri);
+        uri = osal_strdup(targetP->uri);
         if (uri == NULL)
         {
             ATINY_LOG(LOG_INFO, "atiny_strdup null!!!");
@@ -544,8 +544,6 @@ int lwm2m_buffer_recv(void *sessionH, uint8_t *buffer, size_t length, uint32_t t
 {
     connection_t *connP = (connection_t *) sessionH;
     int ret = -1;
-    const int TIME_OUT = -2;
-
     timeout *= 1000;
 #ifdef WITH_DTLS
 

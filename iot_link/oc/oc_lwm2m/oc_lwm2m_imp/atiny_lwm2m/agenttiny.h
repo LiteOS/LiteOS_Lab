@@ -38,10 +38,9 @@
  */
 #ifndef AGENT_TINY_H
 #define AGENT_TINY_H
-#include "atiny_error.h"
 #include <stdbool.h>
 #include <stdint.h>
-#include "log/atiny_log.h"
+#include <atiny_log.h>
 #ifdef CONFIG_FEATURE_FOTA
 #include "ota/ota_api.h"
 #endif
@@ -50,6 +49,21 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+typedef enum
+{
+    ATINY_OK                   = 0,
+    ATINY_ARG_INVALID          = -1,
+    ATINY_BUF_OVERFLOW         = -2,
+    ATINY_MSG_CONGEST          = -3,
+    ATINY_MALLOC_FAILED        = -4,
+    ATINY_RESOURCE_NOT_FOUND   = -5,
+    ATINY_RESOURCE_NOT_ENOUGH  = -6,
+    ATINY_CLIENT_UNREGISTERED  = -7,
+    ATINY_SOCKET_CREATE_FAILED = -8,
+    ATINY_ERR                  = -9
+} atiny_error_e;
+
 
 /******************The following interfaces are implemented by user***********************/
 
@@ -156,9 +170,9 @@ typedef lwm2m_bootstrap_type_e   atiny_bootstrap_type_e;
 
 typedef struct
 {
-    char* binding;               /*目前支持U或者UQ*/
-    int   life_time;             /*必选，默认50000,如过短，则频繁发送update报文，如过长，在线状态更新时间长*/
-    unsigned int  storing_cnt;   /*storing为true时，lwm2m缓存区总字节个数*/
+    char* binding;               /*鐩墠鏀寔U鎴栬�匲Q*/
+    int   life_time;             /*蹇呴�夛紝榛樿50000,濡傝繃鐭紝鍒欓绻佸彂閫乽pdate鎶ユ枃锛屽杩囬暱锛屽湪绾跨姸鎬佹洿鏂版椂闂撮暱*/
+    unsigned int  storing_cnt;   /*storing涓簍rue鏃讹紝lwm2m缂撳瓨鍖烘�诲瓧鑺備釜鏁�*/
  
     atiny_bootstrap_type_e  bootstrap_mode; /* bootstrap mode  */
     int   hold_off_time; /* bootstrap hold off time for server initiated bootstrap */
@@ -272,11 +286,11 @@ typedef void (*atiny_ack_callback) (atiny_report_type_e type, int cookie, data_s
 
 typedef struct _data_report_t
 {
-    atiny_report_type_e type;     /*数据上报类型*/
-    int cookie;                   /*数据cookie,用以在ack回调中，区分不同的数据*/
-    int len;                      /*数据长度，不应大于MAX_REPORT_DATA_LEN*/
-    uint8_t* buf;                 /*数据缓冲区首地址*/
-    atiny_ack_callback callback;  /*ack回调*/
+    atiny_report_type_e type;     /*鏁版嵁涓婃姤绫诲瀷*/
+    int cookie;                   /*鏁版嵁cookie,鐢ㄤ互鍦╝ck鍥炶皟涓紝鍖哄垎涓嶅悓鐨勬暟鎹�*/
+    int len;                      /*鏁版嵁闀垮害锛屼笉搴斿ぇ浜嶮AX_REPORT_DATA_LEN*/
+    uint8_t* buf;                 /*鏁版嵁缂撳啿鍖洪鍦板潃*/
+    atiny_ack_callback callback;  /*ack鍥炶皟*/
 } data_report_t;
 
 /**

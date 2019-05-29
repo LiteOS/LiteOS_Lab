@@ -88,9 +88,8 @@ typedef struct
     fn_oc_lwm2m_deconfig deconfig; ///< this function used for the deconfig
 }oc_lwm2m_opt_t;
 
-#define CFG_OC_LWM2M_ENABLE  1  //for test
 
-#if CFG_OC_LWM2M_ENABLE
+#if cfg_oc_lwm2m_enable
 /**
  *@brief the lwm2m agent should use this function to register the method for the application
  *

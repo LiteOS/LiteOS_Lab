@@ -150,13 +150,13 @@ static int64_t g_current_time = ATINY_TIME_CODE;
 
 int atiny_get_current_time(int64_t *arg)
 {
-    *arg = g_current_time + (int64_t)atiny_gettime_ms() / 1000;
+    *arg = g_current_time + (int64_t)osal_sys_time() / 1000;
     return ATINY_OK;
 }
 
 int atiny_set_current_time(const int64_t *arg)
 {
-    g_current_time = *arg - (int64_t)atiny_gettime_ms() / 1000;
+    g_current_time = *arg - (int64_t)osal_sys_time() / 1000;
     return ATINY_OK;
 }
 
@@ -296,7 +296,7 @@ int atiny_get_speed(float *speed)
 
 int atiny_get_timestamp(uint64_t *timestamp)
 {
-    *timestamp = atiny_gettime_ms() / 1000 + ATINY_TIME_CODE;
+    *timestamp = osal_sys_time() / 1000 + ATINY_TIME_CODE;
     return ATINY_OK;
 }
 

@@ -34,10 +34,10 @@
 
 #include <oc_mqtt_al.h>
 
-#if CFG_OC_MQTT_EN
+
+#if  cfg_oc_mqtt_enable
 
 static tag_oc_mqtt_ops *s_oc_mqtt = NULL;
-
 
 ///////////////////////OC AGENT INSTALL INTERFACE///////////////////////////////////////
 int oc_mqtt_register(const tag_oc_mqtt_ops *opt)

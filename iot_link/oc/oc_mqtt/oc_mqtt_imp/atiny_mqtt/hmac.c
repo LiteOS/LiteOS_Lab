@@ -42,7 +42,6 @@
 #include "mbedtls/platform.h"
 
 #include "mbedtls/md_internal.h"
-#include "osdepends/atiny_osdep.h"
 #include "dtls_interface.h"
 
 typedef struct _mbedtls_hmac_t

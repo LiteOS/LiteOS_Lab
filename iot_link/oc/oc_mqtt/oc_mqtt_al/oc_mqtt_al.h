@@ -43,9 +43,6 @@
 
 #include <cJSON.h>
 
-
-#define  CFG_OC_MQTT_EN   1
-
 typedef enum
 {
     en_oc_mqtt_device_type_dynamic = 0,
@@ -126,7 +123,7 @@ typedef struct
 }tag_oc_mqtt_ops;
 
 
-#if CFG_OC_MQTT_EN
+#if cfg_oc_mqtt_enable
 /**
  *@brief the mqtt agent should use this function to register the method for the application
  *

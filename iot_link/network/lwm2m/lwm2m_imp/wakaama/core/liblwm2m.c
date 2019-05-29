@@ -84,11 +84,11 @@
 */
 
 #include "internals.h"
-#include "osdepends/atiny_osdep.h"
 #include <stdlib.h>
 #include <string.h>
 
 #include <stdio.h>
+#include <osal.h>
 
 
 lwm2m_context_t *lwm2m_init(void *userData)
@@ -190,7 +190,7 @@ static void prv_deleteBootstrapServerList(lwm2m_context_t *context)
 
 static void prv_deleteObservedList(lwm2m_context_t *contextP)
 {
-    atiny_mutex_lock(contextP->observe_mutex);
+    osal_mutex_lock(contextP->observe_mutex);
     while (NULL != contextP->observedList)
     {
         lwm2m_observed_t *targetP;
@@ -209,7 +209,7 @@ static void prv_deleteObservedList(lwm2m_context_t *contextP)
 
         lwm2m_free(targetP);
     }
-    atiny_mutex_unlock(contextP->observe_mutex);
+    osal_mutex_unlock(contextP->observe_mutex);
 }
 #endif
 

@@ -55,7 +55,7 @@ this file implement the shell for the system.the following instruction you must 
 /**************************************FILE INCLIUDES**************************/
 
 
-#if CFG_SHELL_ENABLE
+#if cfg_shell_enable
 
 
 #include <stdint.h>

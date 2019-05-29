@@ -1,24 +1,18 @@
-##########################################################################################################################
+################################################################################
 # STM32F429IGTx_FIRE GCC compiler Makefile
-##########################################################################################################################
-
+################################################################################
 # ------------------------------------------------
 # Generic Makefile (based on gcc)
 # ------------------------------------------------
 
-ifndef CONFIG_FILE
-    CONFIG_FILE = config.mk
-endif
-
-include $(CONFIG_FILE)
 include prune.mk
-######################################
+################################################################################
 # target
-######################################
+################################################################################
 TARGET = Huawei_LiteOS
-######################################
+################################################################################
 # building variables
-######################################
+################################################################################
 # debug build?
 DEBUG = 1
 # optimization
@@ -27,9 +21,9 @@ OPT = -O0 -g
 USE_OTA := no
 OTA_IS_NEED_DTLS := no
 
-#######################################
+################################################################################
 # binaries
-#######################################
+################################################################################
 PREFIX    = arm-none-eabi-
 CC        = $(PREFIX)gcc
 AS        = $(PREFIX)gcc -x assembler-with-cpp
@@ -46,16 +40,9 @@ PROJECTBASE = $(abspath $(CURDIR))
 TOP_DIR     = $(abspath $(PROJECTBASE)/../../..)
 
 
-#######################################
-# paths
-#######################################
-# firmware library path
-PERIFLIB_PATH =
 
-# Build path
-BUILD_DIR = build
 
-######################################
+################################################################################
 #common variables for other module or components
 C_SOURCES =
 C_DEFS =
@@ -65,41 +52,58 @@ ASM_SOURCES_S =
 AS_DEFS =
 AS_INCLUDES =
 PERIFLIB_SOURCES =
+LIBS =
+LIBDIR =
+LDFLAGS =
+ASFLAGS =
+CFLAGS =
 
-######################################
+################################################################################
 
-###############LOAD IOT_LINK###############
-IOT_LINK = yes
-#load iot link
-ifeq ($(IOT_LINK), yes)
-include $(TOP_DIR)/iot_link/iot_link.mk
-include project.mk
+cfg_seperate_load_mode = yes
+cfg_loader_part = no
+cfg_loader_enable = no
+cfg_oc_mqtt_enable = no
+cfg_oc_lwm2m_enable = yes
+
+################################################################################
+# paths
+################################################################################
+# firmware library path
+PERIFLIB_PATH =
+# Build path
+
+ifeq ($(cfg_loader_part),yes)
+	BUILD_DIR = loaderbuild
+	C_DEFS += -D cn_app_bin_addr=0x08010004
+else
+	BUILD_DIR = appbuild
 endif
 
-######################################
-# C sources      
-#SOCKET_ADAPTER_SRC = \
-#        ${wildcard $(TOP_DIR)/components/net/sal/*.c}
-#        C_SOURCES += $(SOCKET_ADAPTER_SRC)
 
-NEWLIB_SRC = \
-        ${wildcard $(TOP_DIR)/components/lib/libc/malloc.c}\
-        ${wildcard $(TOP_DIR)/components/lib/libc/newlib_stub.c} \
-        ${wildcard $(TOP_DIR)/components/lib/libc/errno.c}
-        C_SOURCES += $(NEWLIB_SRC)
+#################################LOAD IOT_LINK##################################
+ifeq ($(cfg_loader_enable),yes)
+	include $(TOP_DIR)/iot_link/iot_link_loader.mk
+else ifeq ($(cfg_oc_mqtt_enable),yes)
+	include $(TOP_DIR)/iot_link/iot_link_tcpip_dtls_mqtt.mk
+else ifeq ($(cfg_oc_lwm2m_enable),yes)
+	include $(TOP_DIR)/iot_link/iot_link_tcpip_dtls_lwm2m.mk
+else
+	include $(TOP_DIR)/iot_link/iot_link.mk
+endif
 
 
-ATINY_LOG = ${wildcard $(TOP_DIR)/components/log/*.c}
-C_SOURCES += $(ATINY_LOG)
+include project.mk
 
-######################################
+
+################################################################################
 # firmware library
-######################################
+################################################################################
 
 
-#######################################
+################################################################################
 # CFLAGS
-#######################################
+################################################################################
 # cpu
 CPU = -mcpu=cortex-m4
 # fpu
@@ -109,19 +113,10 @@ FLOAT-ABI = -mfloat-abi=hard
 # mcu
 MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
 
-
-INCLUDE_INC = \
-        -I $(TOP_DIR)/include
-        C_INCLUDES += $(INCLUDE_INC)
-
-LWM2M_ATINY_INC = \
-        -I $(TOP_DIR)/components/connectivity/agent_tiny/atiny_lwm2m        
-        C_INCLUDES += $(LWM2M_ATINY_INC)
-
 # compile gcc flags
-ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
+ASFLAGS += $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
-CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
+CFLAGS += $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
 ifeq ($(DEBUG), 1)
 CFLAGS += -g -gdwarf-2
@@ -133,38 +128,37 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$@"
 # excluded unnecessary warnings
 CFLAGS += -Wno-missing-braces
 
-#######################################
+################################################################################
 # LDFLAGS
-#######################################
-# link script
-ifeq ($(USE_BOOTLOADER), yes)
-LD_FILE = STM32F429IGTx_LiteOS.ld
-else ifeq ($(USE_OTA), yes)
-LD_FILE = STM32F429IGTx_LiteOS_bootloader.ld
+################################################################################
+ifeq ($(cfg_seperate_load_mode),yes)
+	ifeq ($(cfg_loader_part),yes)
+		LD_FILE = os_loader.ld
+	else
+		LD_FILE = os_app.ld
+	endif
 else
-LD_FILE = STM32F429IGTx_LiteOS.ld
+	LD_FILE = os.ld
 endif
+			
 
 LDSCRIPT = $(PROJECTBASE)/$(LD_FILE)
-
 # libraries
-LIBS = -lc -lm -lnosys
+LIBS += -lc -lm -lnosys
 ifeq ($(USE_OTA), yes)
 LIBS += -lhwpatch
 endif
-LIBDIR = -L$(PROJECTBASE)/../Lib
-LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
+LIBDIR  += -L$(PROJECTBASE)/../Lib
+LDFLAGS += $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
-ifeq ($(WITH_MQTT), yes)
-LDFLAGS += -u _printf_float
-endif
+
 
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
 
-#######################################
+################################################################################
 # build the application
-#######################################
+################################################################################
 # list of objects
 OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(C_SOURCES:.c=.o)))
 vpath %.c $(sort $(dir $(C_SOURCES)))
@@ -174,6 +168,7 @@ vpath %.S $(sort $(dir $(ASM_SOURCES_S)))
 
 $(BUILD_DIR)/%.o: %.c Makefile config.mk prune.mk | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
+#	$(CC) -E $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< > $@.i
 
 $(BUILD_DIR)/%.o: %.S Makefile config.mk prune.mk | $(BUILD_DIR)
 	$(AS) -c $(CFLAGS) $< -o $@
@@ -191,15 +186,15 @@ $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 $(BUILD_DIR):
 	mkdir $@
 
-#######################################
+################################################################################
 # clean up
-#######################################
+################################################################################
 clean:
 	-rm -fR .dep $(BUILD_DIR)
 
-#######################################
+################################################################################
 # dependencies
-#######################################
+################################################################################
 #-include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
 -include $(wildcard $(BUILD_DIR)/*.d)
 

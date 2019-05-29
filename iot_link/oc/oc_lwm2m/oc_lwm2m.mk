@@ -8,7 +8,7 @@ C_SOURCES += $(OC_LWM2M_AL_SOURCE)
 OC_LWM2M_AL_INC = -I $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m_al
 C_INCLUDES += $(OC_LWM2M_AL_INC)
 
-OC_LWM2M_AL_DEFS = -D CFG_OC_LWM2M_ENABLE=1  -D WITH_LWM2M   
+OC_LWM2M_AL_DEFS = -D cfg_oc_lwm2m_enable=1
 C_DEFS += $(OC_LWM2M_AL_DEFS)
 
 #we should choose one of the oc lwm2m implemnt

@@ -114,10 +114,10 @@ int atiny_fota_manager_start_download(atiny_fota_manager_s *thi, const char *uri
 
     if(thi->pkg_uri)
     {
-        atiny_free(thi->pkg_uri);
+        osal_free(thi->pkg_uri);
         thi->pkg_uri = NULL;
     }
-    thi->pkg_uri = atiny_malloc(len + 1);
+    thi->pkg_uri = osal_malloc(len + 1);
     if(NULL == thi->pkg_uri)
     {
         ATINY_LOG(LOG_ERR, "lwm2m_strdup fail");
@@ -289,9 +289,9 @@ int atiny_fota_manager_set_storage_device(atiny_fota_manager_s *thi)
     }
 
     memcpy(&pack_param.ota_opt, &thi->ota_opt, sizeof(pack_param.ota_opt));
-    pack_param.malloc = atiny_malloc;
-    pack_param.free = atiny_free;
-    pack_param.printf = atiny_printf;
+    pack_param.malloc = osal_malloc;
+    pack_param.free = osal_free;
+    pack_param.printf = printf;
     ret = pack_init_device(&pack_param);
     if (ret != ATINY_OK)
     {
@@ -334,7 +334,7 @@ void atiny_fota_manager_destroy(atiny_fota_manager_s *thi)
 
     if(thi->pkg_uri)
     {
-        atiny_free(thi->pkg_uri);
+        osal_free(thi->pkg_uri);
     }
     /*lint -e668 */
     memset(thi, 0, sizeof(*thi));

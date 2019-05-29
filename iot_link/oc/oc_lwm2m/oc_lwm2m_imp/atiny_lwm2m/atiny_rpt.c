@@ -34,7 +34,10 @@
 
 #include "liblwm2m.h"
 #include "atiny_rpt.h"
-#include "log/atiny_log.h"
+
+#include <atiny_log.h>
+#include <string.h>
+#include <osal.h>
 
 typedef struct _atiny_rpt_list_t
 {
@@ -52,7 +55,7 @@ typedef struct
 } atiny_rpt_node_t;
 
 static atiny_dl_list g_atiny_rpt_table;
-static void *g_mutex = NULL;
+static osal_mutex_t g_mutex = cn_mutex_invalid;
 
 // TODO: when free, recorrect then callback code
 
@@ -150,15 +153,16 @@ static void atiny_notify_stack_rpt_data_change(atiny_dl_list *node, void *contex
 int atiny_init_rpt(void)
 {
     atiny_list_init(&g_atiny_rpt_table);
-    g_mutex = atiny_mutex_create();
 
-    if (NULL == g_mutex)
+    if(true == osal_mutex_create(&g_mutex))
     {
-        ATINY_LOG(LOG_ERR, "atiny_mutex_create fail");
+        return ATINY_OK;
+    }
+    else
+    {
+        ATINY_LOG(LOG_ERR, "osal_mutex_create fail");
         return ATINY_RESOURCE_NOT_ENOUGH;;
     }
-
-    return ATINY_OK;
 }
 
 int atiny_add_rpt_uri(const lwm2m_uri_t *uri,  rpt_list_t *list)
@@ -180,7 +184,7 @@ int atiny_add_rpt_uri(const lwm2m_uri_t *uri,  rpt_list_t *list)
 
     *list = NULL;
 
-    atiny_mutex_lock(g_mutex);
+    osal_mutex_lock(g_mutex);
 
     do
     {
@@ -210,7 +214,7 @@ int atiny_add_rpt_uri(const lwm2m_uri_t *uri,  rpt_list_t *list)
     }
     while (0);
 
-    atiny_mutex_unlock(g_mutex);
+    osal_mutex_unlock(g_mutex);
 
     *list = rpt_list;
 
@@ -228,7 +232,7 @@ int atiny_rm_rpt_uri(const lwm2m_uri_t *uri)
         return ATINY_ARG_INVALID;
     }
 
-    atiny_mutex_lock(g_mutex);
+    osal_mutex_lock(g_mutex);
 
     do
     {
@@ -249,7 +253,7 @@ int atiny_rm_rpt_uri(const lwm2m_uri_t *uri)
     }
     while (0);
 
-    atiny_mutex_unlock(g_mutex);
+    osal_mutex_unlock(g_mutex);
 
     return ret;
 }
@@ -264,7 +268,7 @@ int atiny_dequeue_rpt_data(rpt_list_t rpt_list,  data_report_t *data)
         return ATINY_ARG_INVALID;
     }
 
-    atiny_mutex_lock(g_mutex);
+    osal_mutex_lock(g_mutex);
 
     do
     {
@@ -288,7 +292,7 @@ int atiny_dequeue_rpt_data(rpt_list_t rpt_list,  data_report_t *data)
     }
     while (0);
 
-    atiny_mutex_unlock(g_mutex);
+    osal_mutex_unlock(g_mutex);
 
     return ret;
 }
@@ -303,7 +307,7 @@ int atiny_queue_rpt_data(const lwm2m_uri_t *uri, const data_report_t *data)
         return ATINY_ARG_INVALID;
     }
 
-    atiny_mutex_lock(g_mutex);
+    osal_mutex_lock(g_mutex);
 
     do
     {
@@ -345,7 +349,7 @@ int atiny_queue_rpt_data(const lwm2m_uri_t *uri, const data_report_t *data)
     }
     while (0);
 
-    atiny_mutex_unlock(g_mutex);
+    osal_mutex_unlock(g_mutex);
 
     return ret;
 
@@ -361,7 +365,7 @@ int atiny_clear_rpt_data(const lwm2m_uri_t *uri, int result)
         return ATINY_ARG_INVALID;
     }
 
-    atiny_mutex_lock(g_mutex);
+    osal_mutex_lock(g_mutex);
 
     do
     {
@@ -382,23 +386,23 @@ int atiny_clear_rpt_data(const lwm2m_uri_t *uri, int result)
     }
     while (0);
 
-    atiny_mutex_unlock(g_mutex);
+    osal_mutex_unlock(g_mutex);
 
     return ret;
 }
 
 int atiny_step_rpt(lwm2m_context_t *context)
 {
-    atiny_mutex_lock(g_mutex);
+    osal_mutex_lock(g_mutex);
     atiny_visit_list(&g_atiny_rpt_table, atiny_notify_stack_rpt_data_change, context);
-    atiny_mutex_unlock(g_mutex);
+    osal_mutex_unlock(g_mutex);
     return ATINY_OK;
 }
 
 void atiny_destroy_rpt(void)
 {
     atiny_free_list(&g_atiny_rpt_table, atiny_clear_rpt_list, (void *)NOT_SENT);
-    atiny_mutex_destroy(g_mutex);
+    osal_mutex_del(g_mutex);
     g_mutex = NULL;
 }
 
@@ -406,7 +410,7 @@ int atiny_set_max_rpt_cnt(const lwm2m_uri_t *uri, uint32_t max_rpt_cnt)
 {
     int ret = ATINY_RESOURCE_NOT_FOUND;
 
-    atiny_mutex_lock(g_mutex);
+    osal_mutex_lock(g_mutex);
 
     do
     {
@@ -425,7 +429,7 @@ int atiny_set_max_rpt_cnt(const lwm2m_uri_t *uri, uint32_t max_rpt_cnt)
     }
     while (0);
 
-    atiny_mutex_unlock(g_mutex);
+    osal_mutex_unlock(g_mutex);
 
     return ret;
 }

@@ -143,7 +143,7 @@ static int app_report_task_entry()
     oc_param.app_server.address = cn_app_server;
     oc_param.app_server.port = cn_app_port;
     oc_param.app_server.ep_id = cn_endpoint_id;
-    oc_param.app_server.psk = s_app_psk;
+    oc_param.app_server.psk = (char *)s_app_psk;
     oc_param.app_server.psk_len = sizeof(s_app_psk);
     oc_param.app_server.psk_id = cn_endpoint_id;
 

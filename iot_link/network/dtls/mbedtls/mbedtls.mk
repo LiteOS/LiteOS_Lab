@@ -1,8 +1,8 @@
 ################################################################################
 # this is used for compile the mbedtls
 ################################################################################
-#only support the mqtt test
-WITH_MQTT = no
+#only support the crt mode and psk mode
+embedtls_mode_crt = no
 
 MBEDTLS_INC = \
         -I $(TOP_DIR)/iot_link/network/dtls/mbedtls/mbedtls-2.6.0/include
@@ -19,7 +19,7 @@ MBEDTLS_PORT_SRC = \
         ${wildcard $(TOP_DIR)/iot_link/network/dtls/mbedtls/mbedtls_port/*.c}
         C_SOURCES += $(MBEDTLS_PORT_SRC)        
         
-ifeq ($(WITH_MQTT), yes)
+ifeq ($(embedtls_mode_crt), yes)
     C_DEFS += -D MBEDTLS_CONFIG_FILE=\"los_mbedtls_config_cert.h\"
 else
     C_DEFS += -D MBEDTLS_CONFIG_FILE=\"los_mbedtls_config.h\"

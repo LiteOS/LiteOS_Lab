@@ -10,6 +10,7 @@
 #include <sal.h>
 #include <sal_imp.h>
 
+#if cfg_tcpip_enable
 
 typedef struct
 {
@@ -492,5 +493,7 @@ int sal_closesocket(int sockfd)
     return ret;
 }
 
+
+#endif
 
 
