@@ -53,6 +53,7 @@
 #include <stddef.h>
 #include <string.h>
 
+
 #include <osal.h>
 #include <link_misc.h>
 
@@ -84,7 +85,7 @@ int lwm2m_strncmp(const char *s1,
     return strncmp(s1, s2, n);
 }
 
-time_t lwm2m_gettime(void)
+unsigned int lwm2m_gettime(void)
 {
     return (uint32_t)(osal_sys_time()/1000);
 }

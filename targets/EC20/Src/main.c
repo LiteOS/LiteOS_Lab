@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2017-2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -26,55 +26,23 @@
 /*----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
+ * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+ * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+ * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+ * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-#include <string.h>
-#include "hislip_uart.h"
-#include "hilink.h"
-#include "bsp_led.h"
+#include <stdio.h>
+#include <pthread.h>
 
-void hilink_example(void)
+
+extern int link_main(void *args);
+
+
+int main(void)
 {
-    hislip_u32 curtm = 0;
-    hislip_u32 starttm = 0;
-    hislip_u32 value= 0;
-
-    
-    hilink_env_init();
-    LED_GPIO_Config();
-    while(1)
-    {
-        hilink_main_process();
-        /* netstatus == NET_ONLINE means wifi module already connected to hilink server */
-        if(NET_ONLINE == hlk_get_loacal_net_status())
-        {
-            //todo: here just some example code, just for some funcs using reference 
-            curtm = (hislip_u32)hislip_get_cur_time();
-            if (starttm == 0)
-            {
-                starttm = curtm;
-            }
-            if ((curtm - starttm >= 2000))
-            {
-                //hlk_dev_reset();
-                starttm = curtm;
-                //testflg = 1;
-				value++;
-				if (value > 1300)
-				{
-					value = 100;
-				}
-                /* report one key value right now */
-				//hlk_update_local_val(0x43,0x5c,value,NULL);
-                
-                /* just store one key value locally, until use DEV_REPORT_NOW*/
-				//hlk_update_local_svcvals(0x43,0x5c,value,NULL, DEV_REPORT_LATER);
-				
-                /* store one key value locally, and report all service's all keys values right now */
-				//hlk_update_local_svcvals(0x43,0x5c,value,NULL, DEV_REPORT_NOW);
-				
-				//hlk_get_factory_infos(NULL);
-            }
-        }
-		LOS_TaskDelay(10);
-    }
+    link_main(NULL);
+    while(1);
+    return 0;
 }
+
+

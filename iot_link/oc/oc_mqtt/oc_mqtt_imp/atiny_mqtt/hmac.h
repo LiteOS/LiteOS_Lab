@@ -48,7 +48,7 @@ extern "C" {
  * @return:0 success while -1 failed
  *
  */
-int hmac_generate_passwd(char *content, int contentlen,char *key,int keylen,char *buf,int buflen);
+int hmac_generate_passwd(char *content, int contentlen,char *key,int keylen, unsigned char *buf,int buflen);
 
 
 

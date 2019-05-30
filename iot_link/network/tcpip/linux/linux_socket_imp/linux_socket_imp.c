@@ -33,21 +33,68 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-04-28 11:05  zhangqianfu  The first version
- *  2019-05023 09:53  huerjia      The second version
+ *  2019-05-23 15:09    huerjia     The first version  
+ *
  */
-#ifndef _LINUX_IMP_H_
-#define _LINUX_IMP_H_
 
-/**
- *
- * @brief: use this function to supply the operation function for the link
- *
- * @return:0 success while -1 failed
- *
- * */
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 
-int osal_install_linux(void);
+#include <sys/types.h>
+#include <sys/socket.h>
+
+#include <sal_imp.h>   ///< register the lwip to sal
+#include <linux_socket_imp.h>
 
 
-#endif /* _LINUX_IMP_H_ */
+static const tag_tcpip_ops s_tcpip_socket_ops =
+{
+   .socket = (fn_sal_socket)socket,
+   .bind = (fn_sal_bind)bind,
+   .listen = (fn_sal_listen)listen,
+   .connect = (fn_sal_connect)connect,
+   .accept = (fn_sal_accept)accept,
+   .send = (fn_sal_send)send,
+   .sendto = (fn_sal_sendto)sendto,
+   .recv = (fn_sal_recv)recv,
+   .recvfrom = (fn_sal_recvfrom)recvfrom,
+   .setsockopt = (fn_sal_setsockopt)setsockopt,
+   .getsockopt = (fn_sal_getsockopt)getsockopt,
+   .shutdown =(fn_sal_shutdown)shutdown,
+   .closesocket =(fn_sal_closesocket)close,
+   .getpeername =(fn_sal_getpeername)getpeername,
+   .getsockname = (fn_sal_getsockname)getsockname,
+};
+
+static const tag_tcpip_domain s_tcpip_socket =
+{
+    .name = "socket",
+    .domain = AF_INET,
+    .ops = &s_tcpip_socket_ops,
+};
+
+
+int tcpipstack_install_linux_socket(void)
+{
+    int ret = -1;
+
+    ret = tcpip_sal_install(&s_tcpip_socket);
+
+    if(0 == ret)
+    {
+        printf("sal:install socket success\r\n");
+    }
+    else
+    {
+        printf("sal:install socket failed\r\n");
+    }
+
+    return 0;
+}
+
+
+
+
+
+
