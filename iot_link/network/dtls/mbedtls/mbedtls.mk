@@ -2,7 +2,7 @@
 # this is used for compile the mbedtls
 ################################################################################
 #only support the crt mode and psk mode
-embedtls_mode_crt = no
+embedtls_mode_crt = yes
 
 MBEDTLS_INC = \
         -I $(TOP_DIR)/iot_link/network/dtls/mbedtls/mbedtls-2.6.0/include

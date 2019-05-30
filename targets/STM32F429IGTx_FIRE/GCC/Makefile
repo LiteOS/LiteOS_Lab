@@ -63,8 +63,8 @@ CFLAGS =
 cfg_seperate_load_mode = yes
 cfg_loader_part = no
 cfg_loader_enable = no
-cfg_oc_mqtt_enable = no
-cfg_oc_lwm2m_enable = yes
+cfg_oc_mqtt_enable = yes
+cfg_oc_lwm2m_enable = no
 
 ################################################################################
 # paths
