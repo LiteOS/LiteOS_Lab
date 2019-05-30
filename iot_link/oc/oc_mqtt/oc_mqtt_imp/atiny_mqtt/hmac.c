@@ -94,7 +94,7 @@ int mbedtls_hmac_calc(mbedtls_hmac_t *hmac_info)
     return ret;
 }
 
-int hmac_generate_passwd(char *content, int contentlen,char *key,int keylen,char *buf,int buflen)
+int hmac_generate_passwd(char *content, int contentlen,char *key,int keylen, unsigned char *buf,int buflen)
 {
 	int ret = -1;
 	mbedtls_hmac_t hmac;
@@ -112,8 +112,7 @@ int hmac_generate_passwd(char *content, int contentlen,char *key,int keylen,char
 }
 
 #else
-
-int hmac_generate_passwd(char *content, int contentlen,char *key,int keylen,char *buf,int buflen)
+int hmac_generate_passwd(char *content, int contentlen,char *key,int keylen, unsigned char *buf,int buflen)
 {
 	return -1;
 }

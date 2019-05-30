@@ -33,21 +33,18 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-04-28 11:05  zhangqianfu  The first version
- *  2019-05023 09:53  huerjia      The second version
+ *  2019-05-23 15:09    huerjia     The first version  
+ *
  */
-#ifndef _LINUX_IMP_H_
-#define _LINUX_IMP_H_
+#ifndef _LINUX_SOCKET_IMP_H_
+#define _LINUX_SOCKET_IMP_H_
 
 /**
- *
- * @brief: use this function to supply the operation function for the link
+ * @brief: the user should supply a function to install the network driver
  *
  * @return:0 success while -1 failed
- *
  * */
+int tcpipstack_install_linux_socket(void);
 
-int osal_install_linux(void);
 
-
-#endif /* _LINUX_IMP_H_ */
+#endif /* _LINUX_SOCKET_IMP_H_ */

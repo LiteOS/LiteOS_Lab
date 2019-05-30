@@ -74,3 +74,5 @@ C_SOURCES += $(LWIP_IMP_SOURCE)
 		
 LWIP_IMP_INC = -I $(TOP_DIR)/iot_link/network/tcpip/lwip/lwip_imp
 C_INCLUDES += $(LWIP_IMP_INC)
+
+C_DEFS += -D cfg_lwip_enable=1

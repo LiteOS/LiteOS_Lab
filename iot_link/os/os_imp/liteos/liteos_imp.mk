@@ -73,4 +73,4 @@ cmsis_inc = -I $(iot_link_root)/os/os_imp/liteos/cmsis
 #C_INCLUDES += $(liteos_imp_inc)
 
 
-
+C_DEFS += -D cfg_liteos_enable=1

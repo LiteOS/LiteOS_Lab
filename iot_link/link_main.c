@@ -38,9 +38,15 @@
  */
 //RTOS KERNEL
 #include <osal.h>
+#if cfg_liteos_enable
 #include <liteos_imp.h>
+#elif cfg_linux_enable
+#include <linux_imp.h>
+#endif
 
+#if cfg_shell_enable
 #include <shell.h>
+#endif
 
 #ifdef WITH_DTLS
 #include <dtls_interface.h>
@@ -59,6 +65,7 @@ __attribute__((weak)) int netdriver_install()
 int link_main(void *args)
 {
     ///< install the RTOS kernel for the link
+#if cfg_liteos_enable
     osal_init();
     osal_install_liteos();
 
@@ -66,6 +73,10 @@ int link_main(void *args)
     extern void shell_uart_init(int baud);
     shell_uart_init(115200);
     shell_init();
+#elif cfg_linux_enable
+    osal_init();
+    osal_install_linux();
+#endif
 
     ///< install the cJSON, for the oc mqtt agent need the cJSON
 #if cfg_json_enable
@@ -80,10 +91,19 @@ int link_main(void *args)
 #if cfg_tcpip_enable
 
     #include <sal.h>
+    #if cfg_lwip_enable
     #include <lwip_imp.h>
+    #elif cfg_linux_socket_enable
+    #include <linux_socket_imp.h>
+    #endif
 
     tcpipstack_init(10);
+    #if cfg_lwip_enable
     tcpipstack_install_lwip(netdriver_install);
+    #elif cfg_linux_socket_enable
+    tcpipstack_install_linux_socket();
+    #endif
+
 #endif
 
 #ifdef WITH_DTLS

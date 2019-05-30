@@ -368,7 +368,7 @@ static int check_clone_config_params(tag_oc_mqtt_agent_cb *cb,tag_oc_mqtt_config
     if(en_oc_mqtt_device_type_static == config->device_type)
     {
         if((NULL == config->device_info.s_device.deviceid) ||\
-           (NULL == config->device_info.s_device.deviceid))
+           (NULL == config->device_info.s_device.devicepasswd))
         {
             goto EXIT_ERR;
         }
@@ -443,7 +443,7 @@ static int gen_mqtt_para(tag_oc_mqtt_agent_cb *cb)
     int ret = -1;
     int len;
     int i;
-    char hmac[32];
+    unsigned char hmac[32];
     char  *time_value;
     char  *passwd;
 

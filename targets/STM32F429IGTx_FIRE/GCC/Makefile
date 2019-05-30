@@ -60,6 +60,8 @@ CFLAGS =
 
 ################################################################################
 
+cfg_os_type := liteos
+SAL_CONFIG_TYPE := lwip
 cfg_seperate_load_mode = yes
 cfg_loader_part = no
 cfg_loader_enable = no

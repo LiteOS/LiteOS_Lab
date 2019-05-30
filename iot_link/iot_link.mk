@@ -14,10 +14,10 @@ include $(iot_link_root)/link_log/link_log.mk
 include $(iot_link_root)/os/os.mk
 
 #configure the shell for the iot_link
-include $(iot_link_root)/shell/shell.mk
+#include $(iot_link_root)/shell/shell.mk
 
 #configure the libc
-include $(iot_link_root)/libc/libc.mk
+#include $(iot_link_root)/libc/libc.mk
 
 #configure the cJSON 
 include $(iot_link_root)/cJSON/cJSON.mk 
@@ -29,12 +29,12 @@ include $(iot_link_root)/network/tcpip/tcpip.mk
 include $(iot_link_root)/network/dtls/dtls.mk
 
 #configure the mqtt
-#include $(iot_link_root)/network/mqtt/mqtt.mk
-#include $(iot_link_root)/oc/oc_mqtt/oc_mqtt.mk
+include $(iot_link_root)/network/mqtt/mqtt.mk
+include $(iot_link_root)/oc/oc_mqtt/oc_mqtt.mk
 
 #configure the lwm2m
-include $(iot_link_root)/network/lwm2m/lwm2m.mk
-include $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m.mk
+#include $(iot_link_root)/network/lwm2m/lwm2m.mk
+#include $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m.mk
 
 iot_link_src  = ${wildcard $(iot_link_root)/*.c} 
 C_SOURCES += $(iot_link_src)	
