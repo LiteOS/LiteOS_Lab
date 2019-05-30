@@ -36,7 +36,7 @@
 #include "hal_spi_flash.h"
 #include <string.h>
 #include <stdlib.h>
-#include "osdepends/atiny_osdep.h"
+#include <osal.h>
 #include <board.h>
 #include "common.h"
 
@@ -66,7 +66,7 @@ int flash_adaptor_write(uint32_t offset, const uint8_t *buffer, uint32_t len)
         return ret;
     }
 
-    block_buff = atiny_malloc(FLASH_BLOCK_SIZE);
+    block_buff = osal_malloc(FLASH_BLOCK_SIZE);
     if(NULL == block_buff)
     {
         HAL_OTA_LOG("atiny_malloc fail");
@@ -86,7 +86,7 @@ int flash_adaptor_write(uint32_t offset, const uint8_t *buffer, uint32_t len)
         HAL_OTA_LOG("hal_ota_write_flash fail offset %lu, len %u", offset, FLASH_BLOCK_SIZE);
     }
 EXIT:
-    atiny_free(block_buff);
+    osal_free(block_buff);
     return ret;
 }
 

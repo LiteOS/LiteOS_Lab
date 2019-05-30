@@ -52,7 +52,7 @@
 #ifndef ATINY_FOTA_MANAGER_H_
 #define ATINY_FOTA_MANAGER_H_
 
-#include "atiny_lwm2m/agenttiny.h"
+#include <agenttiny.h>
 #include "liblwm2m.h"
 #include "ota/package.h"
 

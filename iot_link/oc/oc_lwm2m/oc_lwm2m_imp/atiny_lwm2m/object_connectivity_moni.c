@@ -71,7 +71,7 @@
  */
 
 #include "internals.h"
-#include "atiny_lwm2m/agenttiny.h"
+#include <agenttiny.h>
 
 // Resource Id's:
 #define RES_M_NETWORK_BEARER            0

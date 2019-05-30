@@ -68,9 +68,9 @@
  * 5 update result             read
  */
 
+#include <atiny_log.h>
 #include "internals.h"
-#include "atiny_lwm2m/agenttiny.h"
-#include "log/atiny_log.h"
+#include "agenttiny.h"
 
 #ifdef CONFIG_FEATURE_FOTA
 #include "atiny_fota_manager.h"

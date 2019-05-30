@@ -12,7 +12,6 @@ C_INCLUDES += $(oc_lwm2m_demo_inc)
 
 ifeq ($(cfg_oc_lwm2m_demo_type),oc_lwm2m_demo_dtls)
 	oc_lwm2m_demo_src  = ${wildcard $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m_demo/oc_lwm2m_demo_dtls.c}
-	oc_lwm2m_demo_defs = -D WITH_DTLS
 		
 else ifeq ($(cfg_oc_lwm2m_demo_type),oc_lwm2m_demo_nodtls)	
 	oc_lwm2m_demo_src  = ${wildcard $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m_demo/oc_lwm2m_demo_nodtls.c}

@@ -413,7 +413,7 @@ int transaction_send(lwm2m_context_t *contextP,
 
     LOG_ARG("transaction_send: ver %u, type %u, tkl %u, code %u.%.2u, mid %u, Content type: %d",
             message->version, message->type, message->token_len, message->code >> 5, message->code & 0x1F, message->mid, message->content_type);
-    LOG_ARG("time:%llu", atiny_gettime_ms());
+    LOG_ARG("time:%llu", osal_sys_time());
     if (transacP->buffer == NULL)
     {
         transacP->buffer_len = coap_serialize_get_size(message);

@@ -39,8 +39,10 @@
 #include "los_typedef.h"
 #include "los_sys.h"
 #include "los_memory.h"
-
 #include "mem.h"
+
+#include <hal_rng.h>
+
 
 #if defined (__CC_ARM)
 extern char Image$$RW_IRAM1$$ZI$$Limit [];
@@ -79,7 +81,6 @@ static int link_test()
     TSK_INIT_PARAM_S task_init_param;
 
     memset (&task_init_param, 0, sizeof (TSK_INIT_PARAM_S));
-
     task_init_param.uwArg = (unsigned int)NULL;
     task_init_param.usTaskPrio = 2;
     task_init_param.pcName =(char *) "link_main";
@@ -89,7 +90,6 @@ static int link_test()
     if(LOS_OK == uwRet){
         ret = 0;
     }
-
     return ret;
 }
 
@@ -106,8 +106,6 @@ int main(void)
     }
 
     link_test();
-
-    LOS_MemInfo (NULL, 1);
 
     (void)LOS_Start();
     return 0;

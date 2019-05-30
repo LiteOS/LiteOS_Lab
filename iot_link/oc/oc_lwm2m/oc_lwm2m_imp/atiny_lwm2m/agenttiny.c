@@ -33,10 +33,12 @@
  *---------------------------------------------------------------------------*/
 
 #include "internals.h"
-#include "atiny_lwm2m/agenttiny.h"
+#include <agenttiny.h>
+
+
+#include <atiny_log.h>
 #include "atiny_context.h"
 #include "connection.h"
-#include "log/atiny_log.h"
 #include "atiny_rpt.h"
 #ifdef CONFIG_FEATURE_FOTA
 #include "atiny_fota_manager.h"
@@ -170,13 +172,11 @@ int  atiny_init(atiny_param_t *atiny_params, void **phandle)
 
     memset((void *)&g_atiny_handle, 0, sizeof(handle_data_t));
 
-    g_atiny_handle.quit_sem = atiny_mutex_create();
-    if (NULL == g_atiny_handle.quit_sem)
+    if (false == osal_semp_create(&g_atiny_handle.quit_sem,1,0))
     {
-        ATINY_LOG(LOG_FATAL, "atiny_mutex_create fail");
+        ATINY_LOG(LOG_FATAL, "osal_semp_create fail");
         return ATINY_RESOURCE_NOT_ENOUGH;
     }
-    atiny_mutex_lock(g_atiny_handle.quit_sem);
     g_atiny_handle.atiny_params = *atiny_params;
     *phandle = &g_atiny_handle;
 
@@ -231,10 +231,10 @@ int atiny_init_objects(atiny_param_t *atiny_params, const atiny_device_info_t *d
         ATINY_LOG(LOG_FATAL, "lwm2m_init fail");
         return ATINY_MALLOC_FAILED;
     }
-    lwm2m_context->observe_mutex = atiny_mutex_create();
-    if (NULL == lwm2m_context->observe_mutex)
+
+    if (false == osal_mutex_create(&lwm2m_context->observe_mutex))
     {
-        ATINY_LOG(LOG_FATAL, "atiny_mutex_create fail");
+        ATINY_LOG(LOG_FATAL, "osal_mutex_create fail");
         lwm2m_free(lwm2m_context);
         return ATINY_RESOURCE_NOT_ENOUGH;
     }
@@ -403,13 +403,13 @@ void atiny_destroy(void *handle)
 
     if (handle_data->lwm2m_context != NULL)
     {
-        if (handle_data->lwm2m_context->observe_mutex != NULL)
+        if (handle_data->lwm2m_context->observe_mutex != cn_mutex_invalid)
         {
-            atiny_mutex_destroy(handle_data->lwm2m_context->observe_mutex);
+            osal_mutex_del(handle_data->lwm2m_context->observe_mutex);
         }
         lwm2m_close(handle_data->lwm2m_context);
     }
-    atiny_mutex_unlock(handle_data->quit_sem);
+    osal_semp_post(handle_data->quit_sem);
 }
 
 void atiny_event_handle(module_type_t type, int code, const char *arg, int arg_len)
@@ -575,7 +575,6 @@ int atiny_bind(atiny_device_info_t *device_info, void *phandle)
 void atiny_deinit(void *phandle)
 {
     handle_data_t *handle;
-    void *sem = NULL;
 
     if (phandle == NULL)
     {
@@ -584,9 +583,10 @@ void atiny_deinit(void *phandle)
 
     handle = (handle_data_t *)phandle;
     handle->atiny_quit = 1;
-    sem = handle->quit_sem;
-    atiny_mutex_lock(sem);
-    atiny_mutex_destroy(sem);
+
+    osal_semp_pend(handle->quit_sem,cn_osal_timeout_forever);
+    osal_semp_del(handle->quit_sem);
+    handle->quit_sem = cn_semp_invalid;
 }
 
 int atiny_data_report(void *phandle, data_report_t *report_data)
@@ -661,9 +661,9 @@ int atiny_data_change(void *phandle, const char *data_type)
 
     (void)lwm2m_stringToUri(data_type, strlen(data_type), &uri);
 
-    atiny_mutex_lock(handle->lwm2m_context->observe_mutex);
+    osal_mutex_lock(handle->lwm2m_context->observe_mutex);
     lwm2m_resource_value_changed(handle->lwm2m_context, &uri);
-    atiny_mutex_unlock(handle->lwm2m_context->observe_mutex);
+    osal_mutex_unlock(handle->lwm2m_context->observe_mutex);
 
     return ATINY_OK;
 }

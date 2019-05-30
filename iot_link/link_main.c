@@ -40,30 +40,13 @@
 #include <osal.h>
 #include <liteos_imp.h>
 
-//debug
-#include <osal.h>
 #include <shell.h>
-#include <cJSON.h>
 
-
-//tcpip stack
-#include <sal.h>
-#include <lwip_imp.h>
-
-//(d)tls stack
+#ifdef WITH_DTLS
 #include <dtls_interface.h>
 
-//mqtt protocol and oc mqtt and mqtt demo
-//#include <mqtt_al.h>
-//#include <paho_mqtt_port.h>
-//#include <oc_mqtt_al.h>
-//#include <atiny_mqtt.h>
-//#include <oc_mqtt_demo.h>
+#endif
 
-///< oc lwm2m demo
-#include <oc_lwm2m_al.h>
-#include <agent_lwm2m.h>
-#include <oc_lwm2m_demo.h>
 
 extern int netdriver_install();
 __attribute__((weak)) int netdriver_install()
@@ -85,33 +68,62 @@ int link_main(void *args)
     shell_init();
 
     ///< install the cJSON, for the oc mqtt agent need the cJSON
+#if cfg_json_enable
+    #include <cJSON.h>
+
     cJSON_Hooks  hook;
     hook.free_fn = osal_free;
     hook.malloc_fn = osal_malloc;
     cJSON_InitHooks(&hook);
-
+#endif
     ///< install the tcpip stack and net driver for the link
+#if cfg_tcpip_enable
+
+    #include <sal.h>
+    #include <lwip_imp.h>
+
     tcpipstack_init(10);
     tcpipstack_install_lwip(netdriver_install);
+#endif
 
-    ///< install the tls
+#ifdef WITH_DTLS
+
     dtls_init();
+#endif
 
+//////////////////////////  MQTT PROTOCOL  /////////////////////////////////////
+#if cfg_mqtt_enable
+    #include <mqtt_al.h>
+    #include <paho_mqtt_port.h>
 
-////////////////////////////  OC MQTT  EXAMPLE     /////////////////////////////
-//    ///< install the mqtt for the link
-//    mqtt_init();
-//    mqtt_install_pahomqtt();
-//
-//    ///< oc mqtt service for the link
-//    oc_mqtt_init();
-//    oc_mqtt_install_atiny_mqtt();
-//    oc_mqtt_demo_main();
+    mqtt_init();
+    mqtt_install_pahomqtt();
+#endif
 
-////////////////////////////  OC LWM2M EXAMPLE     /////////////////////////////
+//////////////////////////  OC MQTT && DEMOS  //////////////////////////////////
+
+#if cfg_oc_mqtt_enable
+    #include <oc_mqtt_al.h>
+    #include <atiny_mqtt.h>
+    #include <oc_mqtt_demo.h>
+
+    oc_mqtt_init();
+    oc_mqtt_install_atiny_mqtt();
+    oc_mqtt_demo_main();
+#endif
+
+////////////////////////////  OC LWM2M && DEMOS     /////////////////////////////
+
+#if cfg_oc_lwm2m_enable
+    #include <oc_lwm2m_al.h>
+    #include <agent_lwm2m.h>
+    #include <oc_lwm2m_demo.h>
+
     oc_lwm2m_init();
     oc_lwm2m_install_agent();
     oc_lwm2m_demo_main();
+#endif
+
 
     return 0;
 }

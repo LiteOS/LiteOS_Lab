@@ -13,3 +13,5 @@ C_INCLUDES += $(atiny_mqtt_inc)
 
 atiny_mqtt_defs = -D cfg_atiny_mqtt_enable=1    
 C_DEFS += $(atiny_mqtt_defs)
+
+LDFLAGS += -u _printf_float

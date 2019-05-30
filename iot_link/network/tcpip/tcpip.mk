@@ -16,3 +16,4 @@ ifeq ($(SAL_CONFIG_TYPE), lwip)
 endif
 
 
+C_DEFS += -D cfg_tcpip_enable=1

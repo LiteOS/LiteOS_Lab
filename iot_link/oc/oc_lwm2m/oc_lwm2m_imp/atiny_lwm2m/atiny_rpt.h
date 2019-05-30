@@ -34,7 +34,7 @@
 
 #ifndef ATINY_RPT_H
 #define ATINY_RPT_H
-#include "atiny_lwm2m/agenttiny.h"
+#include <agenttiny.h>
 #include "agent_list.h"
 
 #ifdef __cplusplus

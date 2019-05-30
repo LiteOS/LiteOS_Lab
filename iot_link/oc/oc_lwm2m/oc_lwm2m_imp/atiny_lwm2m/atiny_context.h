@@ -35,8 +35,10 @@
 #ifndef _ATINY_CONTEXT_H
 #define _ATINY_CONTEXT_H
 #include "liblwm2m.h"
-#include "atiny_lwm2m/agenttiny.h"
+#include <agenttiny.h>
 #include "object_comm.h"
+
+#include <osal.h>
 
 #define SERVER_URI_MAX_LEN      (64)
 #define MAX_PACKET_SIZE         (1024)
@@ -78,7 +80,7 @@ typedef struct
     lwm2m_object_t   *obj_array[OBJ_MAX_NUM];
     int atiny_quit;
     int reconnect_flag;
-    void *quit_sem;
+    osal_semp_t quit_sem;
     int reboot_flag;
     uint8_t *recv_buffer;
 } handle_data_t;
