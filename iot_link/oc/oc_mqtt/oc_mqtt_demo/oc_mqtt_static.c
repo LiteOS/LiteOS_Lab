@@ -48,8 +48,8 @@
 //#define MQTT_DEMO_CONNECT_DYNAMIC
 #define DEFAULT_SERVER_IPV4         "49.4.93.24"     ///<  server ip address
 #define DEFAULT_SERVER_PORT         "8883"           ///<  server mqtt service port
-#define AGENT_TINY_DEMO_DEVICEID    "7886a5fd-fe90-40b6-9944-97e71def3d4c"
-#define AGENT_TINY_DEMO_PASSWORD    "851db9545882d0e25df9"
+#define AGENT_TINY_DEMO_DEVICEID    "653a8a63-7ec4-4b2b-99f9-911f5a665ce6"
+#define AGENT_TINY_DEMO_PASSWORD    "92d0f1a1f268acaedb0a"
 
 
 static char s_mqtt_ca_crt[] =

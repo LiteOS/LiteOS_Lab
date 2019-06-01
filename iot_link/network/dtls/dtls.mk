@@ -8,7 +8,7 @@ C_SOURCES += $(DTLS_AL_SOURCE)
 DTLS_AL_INC = -I $(iot_link_root)/network/dtls/dtls_al
 C_INCLUDES += $(DTLS_AL_INC)
 
-C_DEFS += -DWITH_DTLS
+C_DEFS += -D WITH_DTLS
 
 #only support it mbedtls now
 DTLS_AL_CONFIG_TYPE = mbedtls

@@ -144,6 +144,14 @@ int osal_loop_timer_left(osal_loop_timer_t *timer);
 int osal_printf(const char *format, ...);
 
 /**
+ * @brief:  you could use this function to do the system reboot
+ *
+ *
+ * */
+int osal_reboot(void);
+
+
+/**
  * @brief:use this function to initialize the os abstract layer
  *
  * @return:0 success while -1 failed

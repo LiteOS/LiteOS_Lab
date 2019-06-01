@@ -149,10 +149,6 @@ int mbedtls_net_recv_timeout(void *ctx, unsigned char *buf, size_t len,
     timedelay.tv_usec = (timeout%1000)*1000;
 
     ///< set the recv timeout
-#if (cfg_linux_enable && cfg_linux_socket_enable)
-    #define SOL_SOCKET     1
-    #define SO_RCVTIMEO    20
-#endif 
     if(0 != sal_setsockopt(fd,SOL_SOCKET,SO_RCVTIMEO,&timedelay,sizeof(timedelay)))
     {
         return ret;  //could not support the rcv timeout

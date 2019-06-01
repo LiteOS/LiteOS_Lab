@@ -836,7 +836,7 @@ void SystemClock_Config(void)
 
 
 
-void atiny_reboot(void)
+void liteos_reboot(void)
 {
     HAL_NVIC_SystemReset();
 }

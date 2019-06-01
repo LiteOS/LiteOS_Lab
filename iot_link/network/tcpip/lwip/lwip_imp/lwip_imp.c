@@ -129,6 +129,17 @@ static int __lwip_recvfrom(int fd, void *msg, int len, int flag, struct sockaddr
 }
 
 
+static int __lwip_setsockopt(int fd, int level, int option, const void *option_value,int option_len)
+{
+    if(level == 0xffff)  ///< the lwip make some level and option map
+    {
+        level = SOL_SOCKET;
+    }
+
+    return lwip_setsockopt(fd,level,option,option_value,option_len);
+}
+
+
 
 static const tag_tcpip_ops s_tcpip_lwip_ops =
 {
@@ -141,7 +152,7 @@ static const tag_tcpip_ops s_tcpip_lwip_ops =
    .sendto = (fn_sal_sendto)__lwip_sendto,
    .recv = (fn_sal_recv)lwip_recv,
    .recvfrom = (fn_sal_recvfrom)__lwip_recvfrom,
-   .setsockopt = (fn_sal_setsockopt)lwip_setsockopt,
+   .setsockopt = (fn_sal_setsockopt)__lwip_setsockopt,
    .getsockopt = (fn_sal_getsockopt)lwip_getsockopt,
    .shutdown =(fn_sal_shutdown) lwip_shutdown,
    .closesocket =(fn_sal_closesocket) lwip_close,

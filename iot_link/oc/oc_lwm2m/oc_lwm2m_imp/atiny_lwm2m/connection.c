@@ -308,7 +308,7 @@ static int __socket_recv_timeout(con_net_conext_t *ctx, unsigned char *buf, size
         return ret;
     }
 
-    fd = ((mbedtls_net_context *)ctx)->fd;
+    fd = ctx->fd;
 
     timedelay.tv_sec = timeout/1000;
     timedelay.tv_usec = (timeout%1000)*1000;
@@ -324,7 +324,7 @@ static int __socket_recv_timeout(con_net_conext_t *ctx, unsigned char *buf, size
     return ret;
 }
 
-static int __socket_send(void *ctx, const unsigned char *buf, size_t len)
+static int __socket_send(con_net_conext_t *ctx, const unsigned char *buf, size_t len)
 {
     int fd;
     int ret = -1;
@@ -334,7 +334,7 @@ static int __socket_send(void *ctx, const unsigned char *buf, size_t len)
         return ret;
     }
 
-    fd = ((mbedtls_net_context *)ctx)->fd;
+    fd = ctx->fd;
 
     ret = sal_send(fd,buf,len,0);
 

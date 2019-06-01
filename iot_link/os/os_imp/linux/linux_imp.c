@@ -134,12 +134,20 @@ static bool_t  __semp_create(osal_semp_t *semp,int limit,int initvalue)
     sem_t *s;
 
     s = malloc(sizeof(sem_t));
-    *semp = s;
+	if(NULL == s)
+	{
+		return false;
+	}
+	
 
     if(sem_init(s, 0, initvalue))
+    {
+        free(s);
         return false;
+    }
     else
     {
+        *semp = s;
         return true;
     }
 }

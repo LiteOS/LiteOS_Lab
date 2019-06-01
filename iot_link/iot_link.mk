@@ -32,7 +32,7 @@ include $(iot_link_root)/network/dtls/dtls.mk
 include $(iot_link_root)/network/mqtt/mqtt.mk
 include $(iot_link_root)/oc/oc_mqtt/oc_mqtt.mk
 
-#configure the lwm2m
+##configure the lwm2m
 #include $(iot_link_root)/network/lwm2m/lwm2m.mk
 #include $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m.mk
 

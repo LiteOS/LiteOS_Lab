@@ -31,71 +31,18 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-
-/*******************************************************************************
- *
- * Copyright (c) 2013, 2014, 2015 Intel Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * and Eclipse Distribution License v1.0 which accompany this distribution.
- *
- * The Eclipse Public License is available at
- *    http://www.eclipse.org/legal/epl-v10.html
- * The Eclipse Distribution License is available at
- *    http://www.eclipse.org/org/documents/edl-v10.php.
- *
- * Contributors:
- *    David Navarro, Intel Corporation - initial API and implementation
- *******************************************************************************/
+#include <stdio.h>
+#include <pthread.h>
 
 
-#include <stdint.h>
-#include <stddef.h>
-#include <string.h>
-
-#include <osal.h>
-#include <link_misc.h>
+extern int link_main(void *args);
 
 
-#ifndef LWM2M_MEMORY_TRACE
-
-void *lwm2m_malloc(size_t s)
+int main(void)
 {
-    return osal_malloc(s);
-
+    link_main(NULL);
+    while(1);
+    return 0;
 }
 
-void lwm2m_free(void *p)
-{
-    osal_free(p);
-}
-
-char *lwm2m_strdup(const char *str)
-{
-    return osal_strdup(str);
-}
-
-#endif
-
-int lwm2m_strncmp(const char *s1,
-                  const char *s2,
-                  size_t n)
-{
-    return strncmp(s1, s2, n);
-}
-
-unsigned int lwm2m_gettime(void)
-{
-    return (uint32_t)(osal_sys_time()/1000);
-}
-
-int lwm2m_rand(void *output, size_t len)
-{
-    return link_random(output, len);
-}
-
-void lwm2m_delay(uint32_t second)
-{
-    osal_task_sleep(second*1000);
-}
 

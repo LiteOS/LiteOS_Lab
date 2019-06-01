@@ -96,7 +96,7 @@ static void *__agent_config(oc_config_param_t *param)
     atiny_params->server_params.life_time = 20;
     atiny_params->server_params.storing_cnt = 0;
 
-    atiny_params->server_params.bootstrap_mode = BOOTSTRAP_FACTORY;
+    atiny_params->server_params.bootstrap_mode = param->boot_mode;
     atiny_params->server_params.hold_off_time = 10;
 
     //pay attention: index 0 for iot server, index 1 for bootstrap server.

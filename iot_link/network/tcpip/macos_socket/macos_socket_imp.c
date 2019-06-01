@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -31,71 +31,72 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-
-/*******************************************************************************
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2019-05-23 15:09    huerjia     The first version  
  *
- * Copyright (c) 2013, 2014, 2015 Intel Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * and Eclipse Distribution License v1.0 which accompany this distribution.
- *
- * The Eclipse Public License is available at
- *    http://www.eclipse.org/legal/epl-v10.html
- * The Eclipse Distribution License is available at
- *    http://www.eclipse.org/org/documents/edl-v10.php.
- *
- * Contributors:
- *    David Navarro, Intel Corporation - initial API and implementation
- *******************************************************************************/
+ */
 
-
-#include <stdint.h>
-#include <stddef.h>
+#include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
-#include <osal.h>
-#include <link_misc.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+
+#include <sal_imp.h>   ///< register the lwip to sal
+#include <macos_socket_imp.h>
 
 
-#ifndef LWM2M_MEMORY_TRACE
 
-void *lwm2m_malloc(size_t s)
+
+static const tag_tcpip_ops s_tcpip_socket_ops =
 {
-    return osal_malloc(s);
+   .socket = (fn_sal_socket)socket,
+   .bind = (fn_sal_bind)bind,
+   .listen = (fn_sal_listen)listen,
+   .connect = (fn_sal_connect)connect,
+   .accept = (fn_sal_accept)accept,
+   .send = (fn_sal_send)send,
+   .sendto = (fn_sal_sendto)sendto,
+   .recv = (fn_sal_recv)recv,
+   .recvfrom = (fn_sal_recvfrom)recvfrom,
+   .setsockopt = (fn_sal_setsockopt)setsockopt,
+   .getsockopt = (fn_sal_getsockopt)getsockopt,
+   .shutdown =(fn_sal_shutdown)shutdown,
+   .closesocket =(fn_sal_closesocket)close,
+   .getpeername =(fn_sal_getpeername)getpeername,
+   .getsockname = (fn_sal_getsockname)getsockname,
+};
 
+static const tag_tcpip_domain s_tcpip_socket =
+{
+    .name = "macos socket",
+    .domain = AF_INET,
+    .ops = &s_tcpip_socket_ops,
+};
+
+
+int tcpipstack_install_macos_socket(void)
+{
+    int ret = -1;
+
+    ret = tcpip_sal_install(&s_tcpip_socket);
+
+    if(0 == ret)
+    {
+        printf("sal:install socket success\r\n");
+    }
+    else
+    {
+        printf("sal:install socket failed\r\n");
+    }
+
+    return 0;
 }
 
-void lwm2m_free(void *p)
-{
-    osal_free(p);
-}
 
-char *lwm2m_strdup(const char *str)
-{
-    return osal_strdup(str);
-}
 
-#endif
 
-int lwm2m_strncmp(const char *s1,
-                  const char *s2,
-                  size_t n)
-{
-    return strncmp(s1, s2, n);
-}
 
-unsigned int lwm2m_gettime(void)
-{
-    return (uint32_t)(osal_sys_time()/1000);
-}
-
-int lwm2m_rand(void *output, size_t len)
-{
-    return link_random(output, len);
-}
-
-void lwm2m_delay(uint32_t second)
-{
-    osal_task_sleep(second*1000);
-}
 

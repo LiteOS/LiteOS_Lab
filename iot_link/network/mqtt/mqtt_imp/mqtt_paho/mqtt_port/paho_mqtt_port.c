@@ -427,7 +427,7 @@ static  int __loop_entry(void *arg)
 		}
 		else
 		{
-			osal_task_sleep(1);
+			osal_task_sleep(1);///< when disconnect, this has been killed
 		}
 	}
 	return 0;
@@ -539,7 +539,7 @@ static void * __connect(mqtt_al_conpara_t *conparam)
         conparam->conret = conack.rc;
     }
     //create the loop task here
-    cb->task = osal_task_create("paho",__loop_entry,NULL,0x800,NULL,4);
+    cb->task = osal_task_create("paho",__loop_entry,cb,0x800,NULL,4);
     if(NULL == cb->task)
     {
 	    goto EXIT_MQTT_MAINTASK;

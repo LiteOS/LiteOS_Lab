@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -31,71 +31,42 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-
-/*******************************************************************************
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2019-05-30 14:19  zhangqianfu  The first version
  *
- * Copyright (c) 2013, 2014, 2015 Intel Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * and Eclipse Distribution License v1.0 which accompany this distribution.
- *
- * The Eclipse Public License is available at
- *    http://www.eclipse.org/legal/epl-v10.html
- * The Eclipse Distribution License is available at
- *    http://www.eclipse.org/org/documents/edl-v10.php.
- *
- * Contributors:
- *    David Navarro, Intel Corporation - initial API and implementation
- *******************************************************************************/
+ */
+#ifndef LITEOS_LAB_IOT_LINK_OTA_BOOT_FLAG_BOOT_FLAG_H_
+#define LITEOS_LAB_IOT_LINK_OTA_BOOT_FLAG_BOOT_FLAG_H_
 
-
-#include <stdint.h>
-#include <stddef.h>
-#include <string.h>
-
-#include <osal.h>
-#include <link_misc.h>
-
-
-#ifndef LWM2M_MEMORY_TRACE
-
-void *lwm2m_malloc(size_t s)
+typedef enum
 {
-    return osal_malloc(s);
+    en_ota_upgrade_type_none = 0,
+    en_ota_upgrade_type_full,
+    en_ota_upgrade_type_diff,
+}en_ota_upgrade_type;
 
-}
-
-void lwm2m_free(void *p)
+typedef enum
 {
-    osal_free(p);
-}
+    en_ota_upgrade_state_idle = 0,    ///< which means could be upgrade
+    en_ota_upgrade_state_trigerring,  ///< which means has been triggered and need upgrade
+    en_ota_upgrade_state_success,     ///< which means upgrade success
+    en_ota_upgrade_state_failed,      ///< which means upgrade failed
+}en_ota_upgrade_state;
 
-char *lwm2m_strdup(const char *str)
-{
-    return osal_strdup(str);
-}
+int ota_boot_flag_trigger(en_ota_upgrade_type,int img_size);  ///< trans protocol use this to set to trigger state
 
-#endif
+///< the loader use this to set the success of failed
+int ota_boot_flag_set_status(en_ota_upgrade_state state,int runimg_size, int bakimg_size,int newimg_size);
 
-int lwm2m_strncmp(const char *s1,
-                  const char *s2,
-                  size_t n)
-{
-    return strncmp(s1, s2, n);
-}
+///< the  protocols use this to get the upgrade status
+int ota_boot_flag_get_status(en_ota_upgrade_state *state);
 
-unsigned int lwm2m_gettime(void)
-{
-    return (uint32_t)(osal_sys_time()/1000);
-}
+///< the loader use this function to get the upgrade information
+int ota_boot_flag_get(en_ota_upgrade_type *type,en_ota_upgrade_state *state,\
+                     int *newimg_size,int *runimg_size, int *bakimg_size);
 
-int lwm2m_rand(void *output, size_t len)
-{
-    return link_random(output, len);
-}
+int ota_boot_flag_init();
 
-void lwm2m_delay(uint32_t second)
-{
-    osal_task_sleep(second*1000);
-}
 
+#endif /* LITEOS_LAB_IOT_LINK_OTA_BOOT_FLAG_BOOT_FLAG_H_ */

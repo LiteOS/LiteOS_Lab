@@ -33,168 +33,173 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-14 17:22  zhangqianfu  The first version
- *
+ *  2019-04-28 11:04  zhangqianfu  The first version
+ *  2019-05-23 09:53  huerjia      The second version
  */
-
-//include the file which implement the function
 #include  <osal_imp.h>
 
-///< this is implement for the task
-#include <los_task.ph>
-#include <los_task.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <time.h>
+#include <pthread.h>
+#include <semaphore.h>
+
+typedef void *(*pthread_entry) (void *);
+
 static void __task_sleep(int ms)
 {
-    LOS_TaskDelay(ms);//which tick is ms
-    return;
+    usleep(ms*1000);
 }
 
 static void *__task_create(const char *name,int (*task_entry)(void *args),\
         void *args,int stack_size,void *stack,int prior)
 {
     void *ret = NULL;
-    UINT32 uwRet = LOS_OK;
-    UINT32  handle;
-    TSK_INIT_PARAM_S task_init_param;
-
-    memset (&task_init_param, 0, sizeof (TSK_INIT_PARAM_S));
-
-    task_init_param.uwArg = (unsigned int)args;
-    task_init_param.usTaskPrio = prior;
-    task_init_param.pcName =(char *) name;
-    task_init_param.pfnTaskEntry = (TSK_ENTRY_FUNC)task_entry;
-    task_init_param.uwStackSize = stack_size;
-    uwRet = LOS_TaskCreate(&handle, &task_init_param);
-    if(LOS_OK != uwRet){
+    pthread_t pid;
+    printf("task create name:%s\r\n", name);
+    if(pthread_create(&pid, NULL, (pthread_entry)task_entry, args))
         return ret;
-    }
-    ret = (void *)handle;
+
+    ret = (void *)pid;
     return ret;
 }
 
 static int __task_kill(void *task)
 {
-	int ret = -1;
-	UINT32 handle;
-	if(NULL != task)
-	{
-		handle = (UINT32) task;
-		if(LOS_OK == LOS_TaskDelete(handle))
-		{
-			ret = 0;
-		}
-	}
+    pthread_t pid;
 
-	return ret;
+    pid = (pthread_t)task;
+    return pthread_cancel(pid);
 }
 
 static void __task_exit()
 {
-	while(1);  //not supported yet
+    pthread_exit(NULL);
 }
 
 ///< this is implement for the mutex
-#include <los_mux.h>
 //creat a mutex for the os
 static bool_t  __mutex_create(osal_mutex_t *mutex)
 {
-    if(LOS_OK == LOS_MuxCreate((UINT32 *)mutex))
+    pthread_mutex_t *m;
+    m = malloc(sizeof(pthread_mutex_t));
+    *mutex = m;
+    if(!pthread_mutex_init((pthread_mutex_t *)m,NULL))
     {
         return true;
     }
-    else
-    {
-        return false;
-    }
+
+    return false;
 }
+
 //lock the mutex
 static bool_t  __mutex_lock(osal_mutex_t mutex)
 {
-    if(LOS_OK == LOS_MuxPend((UINT32)mutex,LOS_WAIT_FOREVER))
+    int ret ;
+    ret = pthread_mutex_lock((pthread_mutex_t *)mutex);
+    if(!ret)
     {
         return true;
     }
-    else
-    {
-        return false;
-    }
+
+    return false;
 }
 
 //unlock the mutex
 static bool_t  __mutex_unlock(osal_mutex_t mutex)
 {
-    if(LOS_OK == LOS_MuxPost((UINT32)mutex))
-    {
+    if(!pthread_mutex_unlock((pthread_mutex_t *)mutex))
         return true;
-    }
-    else
-    {
-        return false;
-    }
+
+    return false;
 }
 //delete the mutex
 static bool_t  __mutex_del(osal_mutex_t mutex)
 {
-    if(LOS_OK == LOS_MuxDelete((UINT32)mutex))
+    if(!pthread_mutex_destroy((pthread_mutex_t *)mutex))
     {
+        free(mutex);
         return true;
     }
-    else
-    {
-        return false;
-    }
+
+    return false;
 }
 
 
 ///< this is implement for the semp
-#include <los_sem.h>
-
-
 //semp of the os
+#include <errno.h>
+
+//static bool_t  __semp_create(osal_semp_t *semp,int limit,int initvalue)
+//{
+//    int ret = -1;
+//
+//    sem_t *s;
+//    s = malloc(sizeof(sem_t));
+//
+//    ret = sem_init(s, 1, initvalue);
+//    if(ret == 0)
+//    {
+//        *semp = s;
+//        return true;
+//    }
+//    else
+//    {
+//        free(s);
+//        if(errno == EINVAL)
+//        {
+//            printf("%s:invalid value \n\r",__FUNCTION__);
+//        }
+//        else if(errno == ENOSYS)
+//        {
+//            printf("%s:no share semp yet \n\r",__FUNCTION__);
+//        }
+//        else
+//        {
+//            printf("%s:unknown reason:%d\n\r",__FUNCTION__,errno);
+//        }
+//
+//        return false;
+//    }
+//}
+//
+//static bool_t  __semp_del(osal_semp_t semp)
+//{
+//    if(sem_destroy((sem_t *)semp))
+//        return false;
+//    else
+//        return true;
+//}
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 static bool_t  __semp_create(osal_semp_t *semp,int limit,int initvalue)
 {
-    extern UINT32 osSemCreate (UINT16 usCount, UINT16 usMaxCount, UINT32 *puwSemHandle);
-    if(LOS_OK == osSemCreate(initvalue,limit,(UINT32 *)semp))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-static bool_t  __semp_pend(osal_semp_t semp,int timeout)
-{
-    if(timeout == cn_osal_timeout_forever)
-    {
-        timeout = LOS_WAIT_FOREVER;
-    }
+    int ret = -1;
 
-    if(LOS_OK == LOS_SemPend((UINT32)semp,(UINT32)timeout))
+    sem_t *s;
+
+    s = sem_open(NULL,O_CREAT,initvalue);
+    if(NULL != s)
     {
+        *semp = s;
         return true;
     }
     else
     {
-        return false;
-    }
-}
-static bool_t  __semp_post(osal_semp_t semp)
-{
-    if(LOS_OK == LOS_SemPost((UINT32)semp))
-    {
-        return true;
-    }
-    else
-    {
+        printf("%s:create semp failed\n\r",__FUNCTION__);
         return false;
     }
 }
 
 static bool_t  __semp_del(osal_semp_t semp)
 {
-    if(LOS_OK == LOS_SemDelete((UINT32)semp))
+    sem_t *s= semp;
+    if(NULL != s)
     {
+        sem_close(s);
         return true;
     }
     else
@@ -203,8 +208,47 @@ static bool_t  __semp_del(osal_semp_t semp)
     }
 }
 
-///< this implement for the memory management
-#include <los_memory.h>
+
+static bool_t  __semp_pend(osal_semp_t semp,int timeout)
+{
+    bool_t ret = false;
+
+    if(timeout == cn_osal_timeout_forever)
+    {
+        if(0 == sem_wait((sem_t *)semp))
+        {
+            ret = true;
+        }
+    }
+    else
+    {
+        while(timeout >0)
+        {
+            timeout--;
+            usleep(1000);
+            if(0 == sem_trywait((sem_t *)semp))
+            {
+                ret = true;
+                break;
+            }
+        }
+    }
+
+    return ret;
+}
+
+static bool_t  __semp_post(osal_semp_t semp)
+{
+    if(sem_post((sem_t *)semp))
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
 
 
 static void *__mem_malloc(int size)
@@ -213,7 +257,7 @@ static void *__mem_malloc(int size)
 
     if(size > 0)
     {
-         ret = LOS_MemAlloc(m_aucSysMem0,size);
+         ret = malloc(size);
     }
 
     return ret;
@@ -221,66 +265,55 @@ static void *__mem_malloc(int size)
 
 static void __mem_free(void *addr)
 {
-	LOS_MemFree(m_aucSysMem0,addr);
+    free(addr);
 }
 
 ///< sys time
-#include <los_sys.ph>
+#include <sys/time.h>
 static unsigned long long __get_sys_time()
 {
-    return osKernelGetTickCount() * (OS_SYS_MS_PER_SECOND / LOSCFG_BASE_CORE_TICK_PER_SECOND);
+    struct    timeval    tv;
+
+    gettimeofday(&tv, NULL);
+
+    return (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 }
 
-__attribute__((weak)) int liteos_reboot()
+
+static const tag_os_ops s_macos_ops =
 {
-    while(1);   ///< waiting for the dog if not impelment. you could implement it your self
-    return 0;
-}
+    .task_sleep = __task_sleep,
+    .task_create = __task_create,
+    .task_kill = __task_kill,
+    .task_exit = __task_exit,
 
+    .mutex_create = __mutex_create,
+    .mutex_lock = __mutex_lock,
+    .mutex_unlock = __mutex_unlock,
+    .mutex_del = __mutex_del,
 
-static const tag_os_ops s_liteos_ops =
-{
-	.task_sleep = __task_sleep,
-	.task_create = __task_create,
-	.task_kill = __task_kill,
-	.task_exit = __task_exit,
+    .semp_create = __semp_create,
+    .semp_pend = __semp_pend,
+    .semp_post = __semp_post,
+    .semp_del = __semp_del,
 
-	.mutex_create = __mutex_create,
-	.mutex_lock = __mutex_lock,
-	.mutex_unlock = __mutex_unlock,
-	.mutex_del = __mutex_del,
+    .malloc = __mem_malloc,
+    .free = __mem_free,
 
-	.semp_create = __semp_create,
-	.semp_pend = __semp_pend,
-	.semp_post = __semp_post,
-	.semp_del = __semp_del,
-
-	.malloc = __mem_malloc,
-	.free = __mem_free,
-
-	.get_sys_time = __get_sys_time,
-	.reboot = liteos_reboot,
+    .get_sys_time = __get_sys_time,
 };
 
-
-
-static const tag_os s_link_liteos =
+static const tag_os s_link_macos =
 {
-	.name = "LiteOS",
-	.ops = &s_liteos_ops,
+    .name = "Linux",
+    .ops = &s_macos_ops,
 };
 
-int osal_install_liteos(void)
+int osal_install_macos(void)
 {
-	int ret = -1;
+    int ret = -1;
 
-	ret = osal_install(&s_link_liteos);
+    ret = osal_install(&s_link_macos);
 
-	return ret;
+    return ret;
 }
-
-
-
-
-
-

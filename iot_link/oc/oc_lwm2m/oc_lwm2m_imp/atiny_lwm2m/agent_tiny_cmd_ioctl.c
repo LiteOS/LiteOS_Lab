@@ -87,7 +87,7 @@ int atiny_do_dev_reboot(void)
 {
     (void)printf("device is rebooting......\r\n");
     //LOS_TaskDelay(1000);
-    atiny_reboot();
+    osal_reboot();///< here may be we never comeback
     return ATINY_OK;
 }
 

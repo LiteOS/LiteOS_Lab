@@ -1,7 +1,7 @@
 /*
  * osal_imp.h
  *
- *  Created on: 2019Äê4ÔÂ26ÈÕ
+ *  Created on:
  *      Author: zhangqf
  */
 
@@ -37,8 +37,12 @@ typedef struct
     void  (*free)(void *addr);
     void *(*realloc)(void *ptr, int newsize);
 
+
     ///< system time
     unsigned long long (*get_sys_time)(void);
+
+    ///< reboot
+    int (*reboot)(void); ///< never come back only if failed
 
 }tag_os_ops;
 
