@@ -45,6 +45,11 @@
 #include <pthread.h>
 #include <semaphore.h>
 
+
+///< the macos has not implement the sem_init and sem_timedwait, so we must do
+///< something instead of it
+
+
 typedef void *(*pthread_entry) (void *);
 
 static void __task_sleep(int ms)
@@ -170,7 +175,56 @@ static bool_t  __mutex_del(osal_mutex_t mutex)
 //        return false;
 //    else
 //        return true;
+////}
+//
+//static bool_t  __semp_pend(osal_semp_t semp,int timeout)
+//{
+//    bool_t ret = false;
+//
+//    if(timeout == cn_osal_timeout_forever)
+//    {
+//        if(0 == sem_wait((sem_t *)semp))
+//        {
+//            ret = true;
+//        }
+//    }
+//    else
+//    {
+//        while(timeout >0)
+//        {
+//            timeout--;
+//            usleep(1000);
+//            if(0 == sem_trywait((sem_t *)semp))
+//            {
+//                ret = true;
+//                break;
+//            }
+//        }
+//    }
+//
+//    return ret;
 //}
+//
+//static bool_t  __semp_post(osal_semp_t semp)
+//{
+//    if(sem_post((sem_t *)semp))
+//    {
+//        return false;
+//    }
+//    else
+//    {
+//        return true;
+//    }
+//}
+///< for the macos could not use the unnamed sem,so we use time as the name for semaphore
+
+typedef struct
+{
+    sem_t *sem;
+    char  *time;
+}macos_sem_t;
+
+#include <time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -178,28 +232,47 @@ static bool_t  __mutex_del(osal_mutex_t mutex)
 static bool_t  __semp_create(osal_semp_t *semp,int limit,int initvalue)
 {
     int ret = -1;
+    time_t       timenow;
+    macos_sem_t *macos_sem;
 
-    sem_t *s;
-
-    s = sem_open(NULL,O_CREAT,initvalue);
-    if(NULL != s)
+    sleep(2);
+    macos_sem = malloc(sizeof(macos_sem_t));
+    if(NULL != macos_sem)
     {
-        *semp = s;
-        return true;
+        time(&timenow);
+        macos_sem->time = ctime(&timenow);
+        printf("%s:%s\n\r",__FUNCTION__,macos_sem->time);
+        macos_sem->sem = sem_open(macos_sem->time,O_CREAT, S_IRUSR | S_IWUSR, initvalue);
+
+        printf("%s:address:0x%08x\n\r",__FUNCTION__,(unsigned int)macos_sem->sem);
+
+        if(NULL == macos_sem->sem)
+        {
+            free(macos_sem->time);
+            free(macos_sem);
+            return false;
+        }
+        else
+        {
+            *semp = macos_sem;
+            return true;
+        }
     }
     else
     {
-        printf("%s:create semp failed\n\r",__FUNCTION__);
         return false;
     }
 }
 
 static bool_t  __semp_del(osal_semp_t semp)
 {
-    sem_t *s= semp;
-    if(NULL != s)
+    macos_sem_t *macos_sem = semp;
+
+    if(NULL != macos_sem)
     {
-        sem_close(s);
+        sem_close(macos_sem->sem);
+        free(macos_sem->time);
+        free(macos_sem);
         return true;
     }
     else
@@ -212,10 +285,15 @@ static bool_t  __semp_del(osal_semp_t semp)
 static bool_t  __semp_pend(osal_semp_t semp,int timeout)
 {
     bool_t ret = false;
+    macos_sem_t *macos_sem = semp;
+    if(NULL == macos_sem)
+    {
+        return ret;
+    }
 
     if(timeout == cn_osal_timeout_forever)
     {
-        if(0 == sem_wait((sem_t *)semp))
+        if(0 == sem_wait(macos_sem->sem))
         {
             ret = true;
         }
@@ -226,7 +304,7 @@ static bool_t  __semp_pend(osal_semp_t semp,int timeout)
         {
             timeout--;
             usleep(1000);
-            if(0 == sem_trywait((sem_t *)semp))
+            if(0 == sem_trywait(macos_sem->sem))
             {
                 ret = true;
                 break;
@@ -239,7 +317,14 @@ static bool_t  __semp_pend(osal_semp_t semp,int timeout)
 
 static bool_t  __semp_post(osal_semp_t semp)
 {
-    if(sem_post((sem_t *)semp))
+    macos_sem_t *macos_sem = semp;
+    if(NULL == macos_sem)
+    {
+        return false;
+    }
+
+
+    if(sem_post(macos_sem->sem))
     {
         return false;
     }

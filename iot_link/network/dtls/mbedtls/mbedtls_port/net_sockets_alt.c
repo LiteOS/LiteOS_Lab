@@ -70,13 +70,13 @@ void *mbedtls_net_connect(const char *host, const char *port, int proto)
     {
         ret->fd = -1;
     }
+
     if(ret->fd == -1)
     {
         osal_free(ret);
         ret = NULL;
         return ret;
     }
-
 
     memset(&addr,0,sizeof(addr));
     addr.sin_family = AF_INET;

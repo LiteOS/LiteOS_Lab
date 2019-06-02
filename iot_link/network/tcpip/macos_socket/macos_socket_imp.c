@@ -44,8 +44,93 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
-#include <sal_imp.h>   ///< register the lwip to sal
+#include <sal_imp.h>   ///< register the macos socket to sal
 #include <macos_socket_imp.h>
+
+
+///< struct sockaddr and struct sockaddr_in is quit different from the normal defines, so must translate it here
+///< something which seems very foolish i think
+static int __macos_bind(int fd, struct sockaddr *addr, int addrlen)
+{
+    int ret;
+    unsigned char buf[2];
+    unsigned short family;
+
+    memcpy(&family,addr,2);
+    buf[0] = addrlen;
+    buf[1] = family;
+    memcpy(addr,buf,2);
+
+    ret = bind(fd,addr,addrlen);
+
+    return ret;
+}
+
+static int __macos_connect(int fd, struct sockaddr *addr, int addrlen)
+{
+    int ret;
+    unsigned char buf[2];
+    unsigned short family;
+
+    memcpy(&family,addr,2);
+    buf[0] = addrlen;
+    buf[1] = family;
+    memcpy(addr,buf,2);
+
+    ret = connect(fd,addr,addrlen);
+
+    return ret;
+}
+
+static int __macos_accept(int fd, struct sockaddr *addr, socklen_t *addrlen)
+{
+    int ret;
+    unsigned char buf[2];
+    unsigned short family;
+
+    ret = accept(fd, addr, addrlen);
+
+    memcpy(buf,addr,2);
+    family = buf[2];
+    memcpy(addr,&family,2);
+
+    return ret;
+}
+
+
+static int __macos_sendto(int fd, void *msg, int len, int flag, struct sockaddr *addr, int addrlen)
+{
+
+    int ret;
+    unsigned char buf[2];
+    unsigned short family;
+
+    memcpy(&family,addr,2);
+    buf[0] = addrlen;
+    buf[1] = family;
+    memcpy(addr,buf,2);
+
+    ret = sendto(fd,msg,len,flag,addr,addrlen);
+
+    return ret;
+}
+
+static int __macos_recvfrom(int fd, void *msg, int len, int flag, struct sockaddr *addr, socklen_t *addrlen)
+{
+
+    int ret;
+    unsigned char buf[2];
+    unsigned short family;
+
+    ret = recvfrom(fd, msg, len,flag,addr,addrlen);
+
+    memcpy(buf,addr,2);
+    family = buf[2];
+    memcpy(addr,&family,2);
+
+    return ret;
+}
+
 
 
 
@@ -53,14 +138,14 @@
 static const tag_tcpip_ops s_tcpip_socket_ops =
 {
    .socket = (fn_sal_socket)socket,
-   .bind = (fn_sal_bind)bind,
+   .bind = (fn_sal_bind)__macos_bind,
    .listen = (fn_sal_listen)listen,
-   .connect = (fn_sal_connect)connect,
-   .accept = (fn_sal_accept)accept,
+   .connect = (fn_sal_connect)__macos_connect,
+   .accept = (fn_sal_accept)__macos_accept,
    .send = (fn_sal_send)send,
-   .sendto = (fn_sal_sendto)sendto,
+   .sendto = (fn_sal_sendto)__macos_sendto,
    .recv = (fn_sal_recv)recv,
-   .recvfrom = (fn_sal_recvfrom)recvfrom,
+   .recvfrom = (fn_sal_recvfrom)__macos_recvfrom,
    .setsockopt = (fn_sal_setsockopt)setsockopt,
    .getsockopt = (fn_sal_getsockopt)getsockopt,
    .shutdown =(fn_sal_shutdown)shutdown,
