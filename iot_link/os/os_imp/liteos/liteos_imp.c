@@ -231,6 +231,12 @@ static unsigned long long __get_sys_time()
     return osKernelGetTickCount() * (OS_SYS_MS_PER_SECOND / LOSCFG_BASE_CORE_TICK_PER_SECOND);
 }
 
+__attribute__((weak)) int liteos_reboot()
+{
+    while(1);   ///< waiting for the dog if not impelment. you could implement it your self
+    return 0;
+}
+
 
 static const tag_os_ops s_liteos_ops =
 {
@@ -253,6 +259,7 @@ static const tag_os_ops s_liteos_ops =
 	.free = __mem_free,
 
 	.get_sys_time = __get_sys_time,
+	.reboot = liteos_reboot,
 };
 
 

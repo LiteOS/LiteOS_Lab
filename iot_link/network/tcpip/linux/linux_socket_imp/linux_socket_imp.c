@@ -47,6 +47,22 @@
 #include <sal_imp.h>   ///< register the lwip to sal
 #include <linux_socket_imp.h>
 
+///< map the level and option
+static int __linux_setsockopt(int fd, int level, int option, const void *option_value, int option_len)
+{
+
+    if(level == 0xffff)
+    {
+        level = SOL_SOCKET;
+        if(option == 0x1006)
+        {
+            option = SO_RCVTIMEO;
+        }
+    }
+
+    return setsockopt(fd, level, option, option_value, option_len);
+}
+
 
 static const tag_tcpip_ops s_tcpip_socket_ops =
 {
@@ -59,7 +75,7 @@ static const tag_tcpip_ops s_tcpip_socket_ops =
    .sendto = (fn_sal_sendto)sendto,
    .recv = (fn_sal_recv)recv,
    .recvfrom = (fn_sal_recvfrom)recvfrom,
-   .setsockopt = (fn_sal_setsockopt)setsockopt,
+   .setsockopt = (fn_sal_setsockopt)__linux_setsockopt,
    .getsockopt = (fn_sal_getsockopt)getsockopt,
    .shutdown =(fn_sal_shutdown)shutdown,
    .closesocket =(fn_sal_closesocket)close,

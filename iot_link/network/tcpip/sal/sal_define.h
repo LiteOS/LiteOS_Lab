@@ -1,7 +1,7 @@
 /*
  * sal_define.h
  *
- *  Created on: 2019Äê4ÔÂ26ÈÕ
+ *  Created on: 
  *      Author: zhangqf
  */
 
@@ -208,7 +208,7 @@
 #define SOL_KCM         281
 #define SOL_TLS         282
 #define SOL_XDP         283
-#define SOL_SOCKET      0xfff
+#define SOL_SOCKET      0xffff
 
 /**
  *@brief:list all the option name for option level SOL_SOCKET,supported depends on the implement of

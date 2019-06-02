@@ -531,12 +531,12 @@ void MQTTRun(void* parm)
 }
 
 
-#if defined(MQTT_TASK)
-int MQTTStartTask(MQTTClient* client)
-{
-	return ThreadStart(&client->thread, &MQTTRun, client);
-}
-#endif
+//#if defined(MQTT_TASK)
+//int MQTTStartTask(MQTTClient* client)
+//{
+//	return ThreadStart(&client->thread, &MQTTRun, client);
+//}
+//#endif
 
 
 int waitfor(MQTTClient* c, int packet_type, Timer* timer)

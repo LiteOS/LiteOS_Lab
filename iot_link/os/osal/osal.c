@@ -314,6 +314,18 @@ int osal_printf(const char *format, ...)
 
 }
 
+int osal_reboot()  ///< maybe we should never come back
+{
+    int ret = -1;
+
+    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->reboot))
+    {
+        ret = s_os_cb->ops->reboot();
+    }
+
+    return ret;
+}
+
 
 
 int osal_init(void)

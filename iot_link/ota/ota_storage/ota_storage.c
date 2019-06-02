@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -31,71 +31,65 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-
-/*******************************************************************************
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2019-05-30 11:18  zhangqianfu  The first version
  *
- * Copyright (c) 2013, 2014, 2015 Intel Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * and Eclipse Distribution License v1.0 which accompany this distribution.
- *
- * The Eclipse Public License is available at
- *    http://www.eclipse.org/legal/epl-v10.html
- * The Eclipse Distribution License is available at
- *    http://www.eclipse.org/org/documents/edl-v10.php.
- *
- * Contributors:
- *    David Navarro, Intel Corporation - initial API and implementation
- *******************************************************************************/
-
+ */
 
 #include <stdint.h>
 #include <stddef.h>
-#include <string.h>
+#include <ota_storage.h>
 
-#include <osal.h>
-#include <link_misc.h>
+const ota_storage_device *s_ota_storage_device = NULL;
 
-
-#ifndef LWM2M_MEMORY_TRACE
-
-void *lwm2m_malloc(size_t s)
+int ota_storage_init()
 {
-    return osal_malloc(s);
+    return 0; ///< uptils now, we should do nothing here
+}
+
+int ota_storage_install(const ota_storage_device *device)
+{
+    if((NULL != s_ota_storage_device) &&\
+            (NULL != device->name) && (0 != device->name) &&\
+            (NULL != device->opt.read) && (NULL != device->opt.write))
+    {
+        s_ota_storage_device = device;
+        return 0;
+    }
+    else
+    {
+        return -1;
+    }
 
 }
 
-void lwm2m_free(void *p)
+int ota_read_msg(en_ota_storage_msg_type type,void *msg,int len, int offset)
 {
-    osal_free(p);
+    int ret =-1;
+
+    if(NULL != s_ota_storage_device)
+    {
+        ret = s_ota_storage_device->opt.read(type,msg,len,offset);
+    }
+
+    return ret;
 }
 
-char *lwm2m_strdup(const char *str)
+int ota_write_msg(en_ota_storage_msg_type type,void *msg,int len, int offset)
 {
-    return osal_strdup(str);
+    int ret = -1;
+
+    if(NULL != s_ota_storage_device)
+    {
+        ret = s_ota_storage_device->opt.write(type,msg, len,offset);
+    }
+
+    return ret;
 }
 
-#endif
+int ota_img_back_up();  ///< we use this function to do the back up moving
 
-int lwm2m_strncmp(const char *s1,
-                  const char *s2,
-                  size_t n)
-{
-    return strncmp(s1, s2, n);
-}
+int ota_img_roll_back(); ///< we use this function to do the roll back moving
 
-unsigned int lwm2m_gettime(void)
-{
-    return (uint32_t)(osal_sys_time()/1000);
-}
-
-int lwm2m_rand(void *output, size_t len)
-{
-    return link_random(output, len);
-}
-
-void lwm2m_delay(uint32_t second)
-{
-    osal_task_sleep(second*1000);
-}
 

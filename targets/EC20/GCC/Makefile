@@ -59,7 +59,7 @@ AS_INCLUDES =
 PERIFLIB_SOURCES =
 
 cfg_os_type := linux
-SAL_CONFIG_TYPE := socket
+cfg_sal_type := socket
 
 
 ######################################

@@ -61,9 +61,8 @@ CFLAGS =
 ################################################################################
 
 cfg_os_type := liteos
-SAL_CONFIG_TYPE := lwip
+cfg_sal_type := lwip
 cfg_seperate_load_mode = yes
-cfg_loader_part = no
 cfg_loader_enable = no
 cfg_oc_mqtt_enable = yes
 cfg_oc_lwm2m_enable = no
@@ -75,7 +74,7 @@ cfg_oc_lwm2m_enable = no
 PERIFLIB_PATH =
 # Build path
 
-ifeq ($(cfg_loader_part),yes)
+ifeq ($(cfg_loader_enable),yes)
 	BUILD_DIR = loaderbuild
 	C_DEFS += -D cn_app_bin_addr=0x08010004
 else
@@ -134,7 +133,7 @@ CFLAGS += -Wno-missing-braces
 # LDFLAGS
 ################################################################################
 ifeq ($(cfg_seperate_load_mode),yes)
-	ifeq ($(cfg_loader_part),yes)
+	ifeq ($(cfg_loader_enable),yes)
 		LD_FILE = os_loader.ld
 	else
 		LD_FILE = os_app.ld
