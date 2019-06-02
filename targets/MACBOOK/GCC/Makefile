@@ -1,5 +1,5 @@
 ##########################################################################################################################
-# STM32F429IGTx_FIRE GCC compiler Makefile
+# MACOS GCC compiler Makefile :YOU NEED GCC VERSION5.0 OR HIGHER
 ##########################################################################################################################
 
 # ------------------------------------------------
@@ -23,11 +23,11 @@ OPT = -O0 -g
 # binaries
 #######################################
 PREFIX    =
-CC        = $(PREFIX)gcc-5
-AS        = $(PREFIX)gcc-5 -x assembler-with-cpp
-OBJCOPY   = $(PREFIX)objcopy-5
-OBJDUMP   = $(PREFIX)objdump-5
-AR        = $(PREFIX)ar-5
+CC        = $(PREFIX)gcc
+AS        = $(PREFIX)gcc -x assembler-with-cpp
+OBJCOPY   = $(PREFIX)objcopy
+OBJDUMP   = $(PREFIX)objdump
+AR        = $(PREFIX)ar
 SZ        = $(PREFIX)size
 LD        = $(PREFIX)ld
 HEX       = $(OBJCOPY) -O ihex
