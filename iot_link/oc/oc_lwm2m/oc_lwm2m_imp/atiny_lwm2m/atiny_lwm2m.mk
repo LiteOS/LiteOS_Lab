@@ -13,3 +13,4 @@ endif
 
 OC_LWM2M_ATINY_INC = -I $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m_imp/atiny_lwm2m        
 C_INCLUDES += $(OC_LWM2M_ATINY_INC)
+C_DEFS += -D cfg_oc_lwm2m_agent_enable=1

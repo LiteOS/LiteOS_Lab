@@ -40,7 +40,7 @@
 
 #include <shell.h>
 #include <los_memory.h>
-
+#include <osal.h>
 /*
 //here we export to shell command,you could add your own shell like this
 //test fucntion:print the params passed in
@@ -76,6 +76,18 @@ static int shell_heapinfo(int argc,const char *argv[])
     return 0;
 }
 OSSHELL_EXPORT_CMD(shell_heapinfo,"heapinfo","heapinfo");
+
+
+static int shell_reboot(int argc,const char *argv[])
+{
+    osal_reboot();
+
+    printf("reboot failed\n\r");
+
+    return -1;
+}
+
+OSSHELL_EXPORT_CMD(shell_reboot,"reboot","reboot");
 
 
 #endif

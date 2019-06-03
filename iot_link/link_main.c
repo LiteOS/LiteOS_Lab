@@ -132,11 +132,13 @@ int link_main(void *args)
 
 #if cfg_oc_mqtt_enable
     #include <oc_mqtt_al.h>
-    #include <atiny_mqtt.h>
     #include <oc_mqtt_demo.h>
-
     oc_mqtt_init();
+
+#if cfg_atiny_mqtt_enable
+    #include <atiny_mqtt.h>
     oc_mqtt_install_atiny_mqtt();
+#endif
     oc_mqtt_demo_main();
 #endif
 
