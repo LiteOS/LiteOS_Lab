@@ -45,7 +45,7 @@
 
 
 #define cn_endpoint_id        "SDK_LWM2M_DTLS"
-#define cn_app_server         "49.4.85.232"
+#define cn_app_server         "119.3.184.255"
 #define cn_app_port           "5684"
 
 #define cn_app_light           0
@@ -154,7 +154,7 @@ static int app_report_task_entry()
     oc_param.boot_server.psk_len = sizeof(s_app_psk);
     oc_param.boot_server.psk_id = cn_endpoint_id;
 
-    oc_param.boot_mode = en_oc_boot_strap_mode_sequence;
+    oc_param.boot_mode = en_oc_boot_strap_mode_client_initialize;
     oc_param.rcv_func = app_msg_deal;
 
     context = oc_lwm2m_config(&oc_param);

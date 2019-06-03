@@ -1,3 +1,7 @@
+
+### this is the template to tell you how to configure the iot_link, maybe 
+### not good enough, please give some advice if any idea.
+
 ##############################CONFIGURE INTRODUCTION############################
 #configure type      configure value
 #------------------:------------------
@@ -62,3 +66,4 @@ cfg_loader_enable := no
 ################################################################################
 
 include $(TOP_DIR)/iot_link/iot.mk
+

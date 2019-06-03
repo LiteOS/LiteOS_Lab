@@ -50,7 +50,7 @@ BUILD_DIR = build
 ######################################
 #common variables for other module or components
 C_SOURCES =
-C_DEFS = -DMBEDTLS_DEBUG_C
+C_DEFS =
 C_INCLUDES =
 LDFLAGS =
 ASM_SOURCES_S =
@@ -58,19 +58,9 @@ AS_DEFS =
 AS_INCLUDES =
 PERIFLIB_SOURCES =
 
-cfg_os_type := macos
-cfg_sal_type := macos_socket
 
-
-######################################
-
-###############LOAD IOT_LINK###############
-IOT_LINK = yes
-#load iot link
-ifeq ($(IOT_LINK), yes)
-include $(TOP_DIR)/iot_link/iot_link.mk
-endif
-
+##########################LOAD THE SOURCES INCLUDES AND DEFINES#################
+include $(PROJECTBASE)/config.mk
 
 MAIN_SRC = ${wildcard $(TOP_DIR)/targets/MACBOOK/Src/*.c}
 C_SOURCES += $(MAIN_SRC)
@@ -107,8 +97,6 @@ CFLAGS += -Wno-missing-braces
 # libraries
 LIBS = -lc -lm -lpthread
 LDFLAGS = $(LIBS)
-
-
 
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf

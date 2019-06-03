@@ -5,7 +5,6 @@
 # Generic Makefile (based on gcc)
 # ------------------------------------------------
 
-include prune.mk
 ################################################################################
 # target
 ################################################################################
@@ -58,22 +57,17 @@ LDFLAGS =
 ASFLAGS =
 CFLAGS =
 
-################################################################################
 
-cfg_os_type := liteos
-cfg_sal_type := lwip
-cfg_seperate_load_mode = yes
-cfg_loader_enable = no
-cfg_oc_mqtt_enable = yes
-cfg_oc_lwm2m_enable = no
-
+##########################LOAD THE SOURCES INCLUDES AND DEFINES#################
+include $(PROJECTBASE)/config.mk
+include $(PROJECTBASE)/project.mk
 ################################################################################
 # paths
 ################################################################################
 # firmware library path
 PERIFLIB_PATH =
 # Build path
-
+cfg_seperate_load_mode = yes
 ifeq ($(cfg_loader_enable),yes)
 	BUILD_DIR = loaderbuild
 	C_DEFS += -D cn_app_bin_addr=0x08010004
@@ -81,20 +75,6 @@ else
 	BUILD_DIR = appbuild
 endif
 
-
-#################################LOAD IOT_LINK##################################
-ifeq ($(cfg_loader_enable),yes)
-	include $(TOP_DIR)/iot_link/iot_link_loader.mk
-else ifeq ($(cfg_oc_mqtt_enable),yes)
-	include $(TOP_DIR)/iot_link/iot_link_tcpip_dtls_mqtt.mk
-else ifeq ($(cfg_oc_lwm2m_enable),yes)
-	include $(TOP_DIR)/iot_link/iot_link_tcpip_dtls_lwm2m.mk
-else
-	include $(TOP_DIR)/iot_link/iot_link.mk
-endif
-
-
-include project.mk
 
 
 ################################################################################
@@ -156,6 +136,8 @@ LDFLAGS += $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(B
 
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
+#all:
+#	$(C_DEFS)
 
 ################################################################################
 # build the application
@@ -167,14 +149,14 @@ vpath %.c $(sort $(dir $(C_SOURCES)))
 OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES_S:.S=.o)))
 vpath %.S $(sort $(dir $(ASM_SOURCES_S)))
 
-$(BUILD_DIR)/%.o: %.c Makefile config.mk prune.mk | $(BUILD_DIR)
+$(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
 #	$(CC) -E $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< > $@.i
 
-$(BUILD_DIR)/%.o: %.S Makefile config.mk prune.mk | $(BUILD_DIR)
+$(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
 	$(AS) -c $(CFLAGS) $< -o $@
 
-$(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile config.mk prune.mk
+$(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 	$(SZ) $@
 

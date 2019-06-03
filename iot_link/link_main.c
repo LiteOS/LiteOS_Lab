@@ -144,12 +144,17 @@ int link_main(void *args)
 
 #if cfg_oc_lwm2m_enable
     #include <oc_lwm2m_al.h>
-    #include <agent_lwm2m.h>
     #include <oc_lwm2m_demo.h>
-
     oc_lwm2m_init();
+
+#if cfg_oc_lwm2m_agent_enable
+    #include <agent_lwm2m.h>
     oc_lwm2m_install_agent();
+#endif
+
     oc_lwm2m_demo_main();
+
+
 #endif
 
 
