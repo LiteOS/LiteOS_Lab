@@ -6,10 +6,7 @@
 
 #uptils now, we only support the atiny_mqtt mode, you could add more implement as you wish
 
-
-cfg_oc_mqtt_type = atiny_mqtt
-
-ifeq ($(cfg_oc_mqtt_type),atiny_mqtt)
+ifeq ($(cfg_oc_mqtt_type),soft)
 	include $(iot_link_root)/oc/oc_mqtt/oc_mqtt_imp/atiny_mqtt/atiny_mqtt.mk
 endif 
 

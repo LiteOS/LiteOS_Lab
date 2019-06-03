@@ -11,7 +11,7 @@ oc_lwm2m_demo_inc = -I $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m_demo
 C_INCLUDES += $(oc_lwm2m_demo_inc)
 
 ifeq ($(cfg_oc_lwm2m_demo_type),oc_lwm2m_demo_dtls_bs)
-	oc_lwm2m_demo_src  = ${wildcard $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m_demo/oc_lwm2m_demo_dtls_bs.c}
+	oc_lwm2m_demo_src  = ${wildcard $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m_demo/oc_lwm2m_demo_bs.c}
 	cfg_oc_lwm2m_demo_defs = -D LWM2M_BOOTSTRAP=1
 
 else ifeq ($(cfg_oc_lwm2m_demo_type),oc_lwm2m_demo_dtls)

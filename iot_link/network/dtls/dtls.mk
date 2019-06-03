@@ -2,17 +2,17 @@
 # this is used for compile the dtls
 ################################################################################
 
-DTLS_AL_SOURCE  = ${wildcard $(iot_link_root)/network/dtls/dtls_al/*.c}
-C_SOURCES += $(DTLS_AL_SOURCE)
-		
-DTLS_AL_INC = -I $(iot_link_root)/network/dtls/dtls_al
-C_INCLUDES += $(DTLS_AL_INC)
+ifneq ($(cfg_dtls_type),none)
 
-C_DEFS += -D WITH_DTLS
+    DTLS_AL_SOURCE  = ${wildcard $(iot_link_root)/network/dtls/dtls_al/*.c}
+    C_SOURCES += $(DTLS_AL_SOURCE)
+    		
+    DTLS_AL_INC = -I $(iot_link_root)/network/dtls/dtls_al
+    C_INCLUDES += $(DTLS_AL_INC)
+    
+    ifeq ($(cfg_dtls_type), mbedtls)    	
+    	include $(iot_link_root)/network/dtls/mbedtls/mbedtls.mk
+    endif
 
-#only support it mbedtls now
-DTLS_AL_CONFIG_TYPE = mbedtls
-
-ifeq ($(DTLS_AL_CONFIG_TYPE), mbedtls)
-	include $(iot_link_root)/network/dtls/mbedtls/mbedtls.mk
 endif
+

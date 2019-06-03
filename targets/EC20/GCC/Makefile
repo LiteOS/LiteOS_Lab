@@ -58,19 +58,9 @@ AS_DEFS =
 AS_INCLUDES =
 PERIFLIB_SOURCES =
 
-cfg_os_type := linux
-cfg_sal_type := socket
 
-
-######################################
-
-###############LOAD IOT_LINK###############
-IOT_LINK = yes
-#load iot link
-ifeq ($(IOT_LINK), yes)
-include $(TOP_DIR)/iot_link/iot_link.mk
-endif
-
+##########################LOAD THE SOURCES INCLUDES AND DEFINES#################
+include $(PROJECTBASE)/config.mk
 
 MAIN_SRC = ${wildcard $(TOP_DIR)/targets/EC20/Src/*.c}
 C_SOURCES += $(MAIN_SRC)
@@ -114,14 +104,10 @@ CFLAGS += -Wno-missing-braces
 
 # libraries
 LIBS = -lc -lm -lpthread
-LDFLAGS =   $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
-
-ifeq ($(WITH_MQTT), yes)
-LDFLAGS += -u _printf_float
-endif
+LDFLAGS = $(LIBS)
 
 # default action: build all
-all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
+all: $(BUILD_DIR)/$(TARGET).elf
 
 #######################################
 # build the application
@@ -142,13 +128,7 @@ $(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 	$(SZ) $@
-
-$(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
-	$(HEX) $< $@
-
-$(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
-	$(BIN) $< $@
-
+	
 $(BUILD_DIR):
 	mkdir $@
 
