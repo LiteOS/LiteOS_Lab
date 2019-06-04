@@ -67,7 +67,7 @@ include $(PROJECTBASE)/project.mk
 # firmware library path
 PERIFLIB_PATH =
 # Build path
-cfg_seperate_load_mode = yes
+cfg_seperate_load_mode = no
 ifeq ($(cfg_loader_enable),yes)
 	BUILD_DIR = loaderbuild
 	C_DEFS += -D cn_app_bin_addr=0x08010004
@@ -75,7 +75,21 @@ else
 	BUILD_DIR = appbuild
 endif
 
+################################################################################
+# LDFLAGS
+################################################################################
+ifeq ($(cfg_seperate_load_mode),yes)
+	ifeq ($(cfg_loader_enable),yes)
+		LD_FILE = os_loader.ld
+	else
+		LD_FILE = os_app.ld
+	endif
+else
+	LD_FILE = os.ld
+endif
+			
 
+LDSCRIPT = $(PROJECTBASE)/$(LD_FILE)
 
 ################################################################################
 # firmware library
@@ -109,21 +123,7 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$@"
 # excluded unnecessary warnings
 CFLAGS += -Wno-missing-braces
 
-################################################################################
-# LDFLAGS
-################################################################################
-ifeq ($(cfg_seperate_load_mode),yes)
-	ifeq ($(cfg_loader_enable),yes)
-		LD_FILE = os_loader.ld
-	else
-		LD_FILE = os_app.ld
-	endif
-else
-	LD_FILE = os.ld
-endif
-			
 
-LDSCRIPT = $(PROJECTBASE)/$(LD_FILE)
 # libraries
 LIBS += -lc -lm -lnosys
 ifeq ($(USE_OTA), yes)
