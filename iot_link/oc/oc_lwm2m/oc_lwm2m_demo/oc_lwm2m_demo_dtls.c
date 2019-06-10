@@ -45,7 +45,8 @@
 
 
 #define cn_endpoint_id        "SDK_LWM2M_DTLS"
-#define cn_app_server         "49.4.85.232"
+//#define cn_app_server         "49.4.85.232"
+#define cn_app_server    "139.159.140.34"
 #define cn_app_port           "5684"
 
 #define cn_app_light           0

@@ -15,7 +15,7 @@
 #cfg_oc_bs_enable  : yes no
 #cfg_loader_enable : yes no
  
-#####################     CONFIURE MQTT TEMPLATE################################
+####################     CONFIURE MQTT TEMPLATE################################
 cfg_os_type       := macos
 cfg_shell_enble   := no
 cfg_libc_enable   := no
