@@ -57,7 +57,7 @@ static void *__task_create(const char *name,int (*task_entry)(void *args),\
 {
     void *ret = NULL;
     pthread_t pid;
-    printf("task create name:%s\r\n", name);
+
     if(pthread_create(&pid, NULL, (pthread_entry)task_entry, args))
         return ret;
 
@@ -96,9 +96,7 @@ static bool_t  __mutex_create(osal_mutex_t *mutex)
 //lock the mutex
 static bool_t  __mutex_lock(osal_mutex_t mutex)
 {
-    int ret ;
-    ret = pthread_mutex_lock((pthread_mutex_t *)mutex);
-    if(!ret)
+    if(!pthread_mutex_lock((pthread_mutex_t *)mutex))
     {
         return true;
     }
@@ -110,7 +108,10 @@ static bool_t  __mutex_lock(osal_mutex_t mutex)
 static bool_t  __mutex_unlock(osal_mutex_t mutex)
 {
     if(!pthread_mutex_unlock((pthread_mutex_t *)mutex))
+    {
+        sleep(0);
         return true;
+    }
 
     return false;
 }
@@ -154,13 +155,13 @@ static bool_t  __semp_create(osal_semp_t *semp,int limit,int initvalue)
 
 static bool_t  __semp_pend(osal_semp_t semp,int timeout)
 {
-    struct timespec tv;
+    struct timespec ts;
 
-    clock_gettime(CLOCK_REALTIME, &tv);
+    clock_gettime(CLOCK_REALTIME, &ts);
 
-    tv.tv_sec += (timeout / 1000);
-    tv.tv_nsec += ((timeout % 1000) * 1000);
-    if(sem_timedwait((sem_t *)semp, &tv))
+    ts.tv_sec += (timeout / 1000);
+    ts.tv_nsec += ((timeout % 1000) * 1000);
+    if(sem_timedwait((sem_t *)semp, &ts))
     {
         return false;
     }
@@ -187,7 +188,10 @@ static bool_t  __semp_del(osal_semp_t semp)
     if(sem_destroy((sem_t *)semp))
         return false;
     else
+    {
+        free(semp);
         return true;
+    }
 }
 
 static void *__mem_malloc(int size)
