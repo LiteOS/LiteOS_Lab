@@ -32,7 +32,7 @@
 static void prv_handleResponse(lwm2m_server_t *bootstrapServer,
                                coap_packet_t *message)
 {
-    if (COAP_204_CHANGED == message->code)
+    if ((COAP_204_CHANGED == message->code)||(COAP_201_CREATED == message->code))
     {
         LOG("Received ACK/2.04, Bootstrap pending, waiting for DEL/PUT from BS server...");
         bootstrapServer->status = STATE_BS_PENDING;

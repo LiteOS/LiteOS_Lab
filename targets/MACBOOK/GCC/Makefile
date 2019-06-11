@@ -100,6 +100,7 @@ LDFLAGS = $(LIBS)
 
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf
+
 #######################################
 # build the application
 #######################################

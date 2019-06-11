@@ -929,14 +929,23 @@ int object_getServers(lwm2m_context_t *contextP, bool checkOnly)
                 return -1;
             }
 
+//            if (0 == lwm2m_data_decode_int(dataP + 1, &value)
+//                    || value < (isBootstrap ? 0 : 1) || value > 0xFFFF)                // 0 is forbidden as a Short Server ID
+//            {
+//                LOG_ARG("lwm2m_data_decode_int fail id %d", securityInstP->id);
+//                lwm2m_free(targetP);
+//                lwm2m_data_free(size, dataP);
+//                return -1;
+//            }
             if (0 == lwm2m_data_decode_int(dataP + 1, &value)
-                    || value < (isBootstrap ? 0 : 1) || value > 0xFFFF)                // 0 is forbidden as a Short Server ID
+                 || value > 0xFFFF)                // 0 is forbidden as a Short Server ID--TODO, this instance has been created short id not set  by bootstrap,so it is zero
             {
                 LOG_ARG("lwm2m_data_decode_int fail id %d", securityInstP->id);
                 lwm2m_free(targetP);
                 lwm2m_data_free(size, dataP);
                 return -1;
             }
+
             targetP->shortID = value;
 
             if (isBootstrap == true)
