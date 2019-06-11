@@ -64,13 +64,20 @@ const struct phys_mem system_phys_mem [] =
 VOID HardWare_Init(VOID)
 {
     HAL_Init();
-    /*configure the system clock*/
+    /* Configure the system clock */
     SystemClock_Config();
-
-    /* Initialize all configured peripherals */
-    DelayInit();
     MX_GPIO_Init();
     MX_I2C1_Init();
+    MX_USART1_UART_Init();
+    MX_SPI2_Init();
+    dwt_delay_init(SystemCoreClock);
+    LCD_Init();
+    LCD_Clear(WHITE);
+    POINT_COLOR = RED;
+    LCD_ShowString(10, 50, 240, 24, 24, "Welcome to IoTCluB!");
+    LCD_ShowString(20, 90, 240, 16, 16, "BearPi IoT Develop Board");
+    LCD_ShowString(20, 130, 240, 16, 16, "Powerd by Huawei LiteOS!");
+    LCD_ShowString(10, 170, 240, 16, 16, "Please wait for system init");
 }
 int main(void)
 {
@@ -86,8 +93,6 @@ int main(void)
         return LOS_NOK;
     }
     los_shell_init();     //which means you could use shell
-    extern void uart_debug_init(s32_t baud);
-    uart_debug_init(115200);
 
     ////////////////////////APPLICATION INITIALIZE END///////////////////
     extern int app_init();

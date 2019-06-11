@@ -1,279 +1,66 @@
 /********************************************************************************
-    * ÎÄ¼şÃû³Æ £ºBH1750.c
-    * ×÷     Õß£ºÎïÁªÍø¾ãÀÖ²¿
-    * °æ     ±¾£ºV1.0
-    * ±àĞ´ÈÕÆÚ £º2018-4-1
-    * ¹¦     ÄÜ£ºEVB_M/H ¹âÕÕÇ¿¶ÈÀ©Õ¹°åÇı¶¯
+    * æ–‡ä»¶åç§° ï¼šBH1750.c
+    * ä½œ     è€…ï¼šç‰©è”ç½‘ä¿±ä¹éƒ¨
+    * ç‰ˆ     æœ¬ï¼šV1.0
+    * ç¼–å†™æ—¥æœŸ ï¼š2018-4-1
+    * åŠŸ     èƒ½ï¼šå…‰ç…§å¼ºåº¦æ‰©å±•æ¿é©±åŠ¨
 *********************************************************************************
-    * Ëµ    Ã÷ £º±¾Àı³ÌÅäÌ×ÎïÁªÍø¾ãÀÖ²¿EVB_M1¿ª·¢°åÊ¹ÓÃ
+    * è¯´    æ˜ ï¼šæœ¬ä¾‹ç¨‹é…å¥—ç‰©è”ç½‘ä¿±ä¹éƒ¨å¼€å‘æ¿ä½¿ç”¨
     *
-    * ÌÔ     ±¦£ºhttps://shop128001708.taobao.com/
-    * ÂÛ     Ì³£ºbbs.iot-club.cn
+    * æ·˜     å®ï¼šhttps://shop128001708.taobao.com/
+    * è®º     å›ï¼šbbs.iot-club.cn
 *********************************************************************************/
 
 #include "bh1750.h"
 #include "stm32l4xx.h"
-#include "delay.h"
-
-float result_lx=0;
-uint8_t BUF[2]={0};
-uint16_t result=0;
+#include "i2c.h"
 
 
-/**
-  * º¯Êı¹¦ÄÜ: ÅäÖÃI2C×ÜÏßµÄGPIO£¬²ÉÓÃÄ£ÄâIOµÄ·½Ê½ÊµÏÖ
-  * ÊäÈë²ÎÊı: ÎŞ
-  * ·µ »Ø Öµ: ÎŞ
-  * Ëµ    Ã÷£ºÎŞ
-  */
-static void I2C_InitGPIO(void)
-{
-  GPIO_InitTypeDef GPIO_InitStruct;
-  
-  /* ´ò¿ªGPIOÊ±ÖÓ */
-	I2C_GPIO_CLK_ENABLE();
-
-  GPIO_InitStruct.Pin = I2C_SCL_PIN|I2C_SDA_PIN;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH ;
-  HAL_GPIO_Init(I2C_GPIO_PORT, &GPIO_InitStruct);
-
-	I2C_SCL(HIGH); 
-	I2C_SDA(HIGH); 
-}
-
-/**
-  * º¯Êı¹¦ÄÜ: CPU·¢ÆğI2C×ÜÏßÆô¶¯ĞÅºÅ
-  * ÊäÈë²ÎÊı: ÎŞ
-  * ·µ »Ø Öµ: ÎŞ
-  * Ëµ    Ã÷£ºÎŞ
-  */
-void I2C_Start(void)
-{
-	/* µ±SCL¸ßµçÆ½Ê±£¬SDA³öÏÖÒ»¸öÏÂÌøÑØ±íÊ¾I2C×ÜÏßÆô¶¯ĞÅºÅ */
-	SDA_OUT();
-	I2C_SDA(HIGH); 
-	I2C_SCL(HIGH); 
-	delay_us(4);
-	I2C_SDA(LOW); 
-	delay_us(4);
-	I2C_SCL(LOW); 
-}
-
-/**
-  * º¯Êı¹¦ÄÜ: CPU·¢ÆğI2C×ÜÏßÍ£Ö¹ĞÅºÅ
-  * ÊäÈë²ÎÊı: ÎŞ
-  * ·µ »Ø Öµ: ÎŞ
-  * Ëµ    Ã÷£ºÎŞ
-  */
-void I2C_Stop(void)
-{
-	/* µ±SCL¸ßµçÆ½Ê±£¬SDA³öÏÖÒ»¸öÉÏÌøÑØ±íÊ¾I2C×ÜÏßÍ£Ö¹ĞÅºÅ */
-	SDA_OUT();
-	I2C_SCL(LOW); 
-	I2C_SDA(LOW); 
-	delay_us(4);
-	I2C_SCL(HIGH); 	
-	I2C_SDA(HIGH); 
-	delay_us(4);
-}
-
-/**
-  * º¯Êı¹¦ÄÜ: CPU²úÉúÒ»¸öÊ±ÖÓ£¬²¢¶ÁÈ¡Æ÷¼şµÄACKÓ¦´ğĞÅºÅ
-  * ÊäÈë²ÎÊı: ÎŞ
-  * ·µ »Ø Öµ: ·µ»Ø0±íÊ¾ÕıÈ·Ó¦´ğ£¬1±íÊ¾ÎŞÆ÷¼şÏìÓ¦
-  * Ëµ    Ã÷£ºÎŞ
-  */
-uint8_t I2C_WaitAck(void)
-{
-  uint8_t ucErrTime=0;
-	SDA_IN(); 
-	I2C_SDA(HIGH); 	/* CPUÊÍ·ÅSDA×ÜÏß */
-	delay_us(4);
-	I2C_SCL(HIGH); 	/* CPUÇı¶¯SCL = 1, ´ËÊ±Æ÷¼ş»á·µ»ØACKÓ¦´ğ */
-	delay_us(4);
-	while (I2C_SDA_READ())	/* CPU¶ÁÈ¡SDA¿ÚÏß×´Ì¬ */
-	{
-		ucErrTime++;
-		if(ucErrTime>250)
-		{
-			I2C_Stop();
-			return 1;
-		}
-	}
-	
-	I2C_SCL(LOW); 
-	return 0;
-}
-
-/**
-  * º¯Êı¹¦ÄÜ: CPU²úÉúÒ»¸öACKĞÅºÅ
-  * ÊäÈë²ÎÊı: ÎŞ
-  * ·µ »Ø Öµ: ÎŞ
-  * Ëµ    Ã÷£ºÎŞ
-  */
-void I2C_Ack(void)
-{
-
-	I2C_SCL(LOW); 
-	SDA_OUT(); 
-	I2C_SDA(LOW); 	/* CPUÇı¶¯SDA = 0 */
-	delay_us(2);
-	I2C_SCL(HIGH); 	/* CPU²úÉú1¸öÊ±ÖÓ */
-	delay_us(2);
-	I2C_SCL(LOW); 
-}
-
-/**
-  * º¯Êı¹¦ÄÜ: CPU²úÉú1¸öNACKĞÅºÅ
-  * ÊäÈë²ÎÊı: ÎŞ
-  * ·µ »Ø Öµ: ÎŞ
-  * Ëµ    Ã÷£ºÎŞ
-  */
-void I2C_NAck(void)
-{
-	
-	I2C_SCL(LOW); 
-	SDA_OUT();
-	I2C_SDA(HIGH); 	/* CPUÇı¶¯SDA = 1 */
-	delay_us(2);
-	I2C_SCL(HIGH); 	/* CPU²úÉú1¸öÊ±ÖÓ */
-	delay_us(2);
-	I2C_SCL(LOW); 
-}
-
-/**
-  * º¯Êı¹¦ÄÜ: CPUÏòI2C×ÜÏßÉè±¸·¢ËÍ8bitÊı¾İ
-  * ÊäÈë²ÎÊı: Byte £º µÈ´ı·¢ËÍµÄ×Ö½Ú
-  * ·µ »Ø Öµ: ÎŞ
-  * Ëµ    Ã÷£ºÎŞ
-  */
-void I2C_SendByte(uint8_t Byte)
-{
-  uint8_t t;  
-      
-    SDA_OUT();                                                      //sda???  
-    I2C_SCL(LOW);                                                   //??????????  
-    for (t = 0; t < 8; t++)  
-    {  
-        I2C_SDA((Byte & 0x80) >> 7);  
-        Byte <<= 1;  
-        delay_us(2);  
-        I2C_SCL(HIGH);  
-        delay_us(2);  
-        I2C_SCL(LOW);  
-        delay_us(2);  
-    } 
-}
+float result_lx;
+uint8_t BUF[2];
+int result;
 
 
-/**
-  * º¯Êı¹¦ÄÜ: CPU´ÓI2C×ÜÏßÉè±¸¶ÁÈ¡8bitÊı¾İ
-  * ÊäÈë²ÎÊı: ÎŞ
-  * ·µ »Ø Öµ: ¶Áµ½µÄÊı¾İ
-  * Ëµ    Ã÷£ºÎŞ
-  */
-uint8_t I2C_ReadByte(uint8_t ack)
-{
-	uint8_t i;
-	uint8_t value;
-  SDA_IN();
-	/* ¶Áµ½µÚ1¸öbitÎªÊı¾İµÄbit7 */
-	value = 0;
-for (i = 0; i < 8; i++)  
-    {  
-        I2C_SCL(LOW);  
-        delay_us(2);  
-        I2C_SCL(HIGH);  
-        value <<= 1;  
-        if (I2C_SDA_READ() ) value++;  
-        delay_us(1);  
-    }  
-		if (!ack)
-	{
-        I2C_NAck();//·¢ËÍnACK
-	}
-    else
-	{
-        I2C_Ack(); //·¢ËÍACK  
-	}
-	return value;
-}
-
-
-/**
-  * º¯Êı¹¦ÄÜ: ¼ì²âI2C×ÜÏßÉè±¸£¬CPUÏò·¢ËÍÉè±¸µØÖ·£¬È»ºó¶ÁÈ¡Éè±¸Ó¦´ğÀ´ÅĞ¶Ï¸ÃÉè±¸ÊÇ·ñ´æÔÚ
-  * ÊäÈë²ÎÊı: _Address£ºÉè±¸µÄI2C×ÜÏßµØÖ·
-  * ·µ »Ø Öµ: ·µ»ØÖµ 0 ±íÊ¾ÕıÈ·£¬ ·µ»Ø1±íÊ¾Î´Ì½²âµ½
-  * Ëµ    Ã÷£ºÔÚ·ÃÎÊI2CÉè±¸Ç°£¬ÇëÏÈµ÷ÓÃ I2C_CheckDevice() ¼ì²âI2CÉè±¸ÊÇ·ñÕı³££¬¸Ãº¯Êı»áÅäÖÃGPIO
-  */
-uint8_t I2C_CheckDevice(uint8_t _Address)
-{
-	uint8_t ucAck;
-
-	I2C_InitGPIO();		/* ÅäÖÃGPIO */	
-	I2C_Start();		/* ·¢ËÍÆô¶¯ĞÅºÅ */
-	/* ·¢ËÍÉè±¸µØÖ·+¶ÁĞ´¿ØÖÆbit£¨0 = w£¬ 1 = r) bit7 ÏÈ´« */
-	I2C_SendByte(_Address | I2C_WR);
-	ucAck = I2C_WaitAck();	/* ¼ì²âÉè±¸µÄACKÓ¦´ğ */
-	I2C_Stop();			/* ·¢ËÍÍ£Ö¹ĞÅºÅ */
-	return ucAck;
-}
-
-void Cmd_Write_BH1750(uint8_t cmd)
-{
-    I2C_Start();                  //ÆğÊ¼ĞÅºÅ
-    I2C_SendByte(BH1750_Addr+0);   //·¢ËÍÉè±¸µØÖ·+Ğ´ĞÅºÅ
-	while(I2C_WaitAck());
-	delay_us(100);
-    I2C_SendByte(cmd);    //ÄÚ²¿¼Ä´æÆ÷µØÖ·
-	while(I2C_WaitAck());
-	delay_us(100);
-    I2C_Stop();                   //·¢ËÍÍ£Ö¹ĞÅºÅ
-	delay_ms(5);
-}
+/***************************************************************
+* å‡½æ•°åç§°: Init_BH1750
+* è¯´    æ˜: å†™å‘½ä»¤åˆå§‹åŒ–BH1750
+* å‚    æ•°: æ— 
+* è¿” å› å€¼: æ— 
+***************************************************************/
 void Init_BH1750(void)
 {
-	I2C_InitGPIO();	
-	Cmd_Write_BH1750(0x01);
+    uint8_t t_Data = 0x01;
+    HAL_I2C_Master_Transmit(&hi2c1,BH1750_Addr,&t_Data,1,0xff);
 }
+
+/***************************************************************
+* å‡½æ•°åç§°: Start_BH1750
+* è¯´    æ˜: å¯åŠ¨BH1750
+* å‚    æ•°: æ— 
+* è¿” å› å€¼: æ— 
+***************************************************************/
 void Start_BH1750(void)
 {
-	Cmd_Write_BH1750(BH1750_ON);	 //power on
-	Cmd_Write_BH1750(BH1750_CON);
+    uint8_t t_Data = 0x10;
+    HAL_I2C_Master_Transmit(&hi2c1,BH1750_Addr,&t_Data,1,0xff); 
 }
-void Read_BH1750(void)
-{   uint8_t i;	
-    I2C_Start();                          //ÆğÊ¼ĞÅºÅ
-    I2C_SendByte(BH1750_Addr+1);         //·¢ËÍÉè±¸µØÖ·+¶ÁĞÅºÅ
-	while(I2C_WaitAck());
-	for (i=0; i<3; i++)                      //¨¢?D??¨¢¨¨?6??¦Ì??¡¤¨ºy?Y¡ê?¡ä?¡ä¡é?DBUF
-    {     
-        if (i ==3)
-        {
-        BUF[i]=I2C_ReadByte(0); 
-                   
-        }
-        else
-        {	BUF[i]=I2C_ReadByte(1);  //·¢ËÍACK	
-         
-       }
-   }
-	
-	 //·¢ËÍNACK
 
-    I2C_Stop();                          //Í£Ö¹ĞÅºÅ
-    delay_ms(5);
-}
+
+
+/***************************************************************
+* å‡½æ•°åç§°: Convert_BH1750
+* è¯´    æ˜: æ•°å€¼è½¬æ¢
+* å‚    æ•°: æ— 
+* è¿” å› å€¼: å…‰å¼ºå€¼
+***************************************************************/
 float Convert_BH1750(void)
 {
 	Start_BH1750();
-	delay_ms(180);
-	Read_BH1750();
+	HAL_Delay(180);
+	HAL_I2C_Master_Receive(&hi2c1, BH1750_Addr+1,BUF,2,0xff); 
 	result=BUF[0];
-	result=(result<<8)+BUF[1];  //ºÏ³ÉÊı¾İ£¬¼´¹âÕÕÊı¾İ	
+	result=(result<<8)+BUF[1];  //åˆæˆæ•°æ®ï¼Œå³å…‰ç…§æ•°æ®	
 	result_lx=(float)(result/1.2);
   return result_lx;
 }
-
 

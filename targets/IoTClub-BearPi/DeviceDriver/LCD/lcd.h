@@ -1,37 +1,28 @@
+/********************************************************************************
+    * æ–‡ä»¶åç§° ï¼šlcd.h
+    * ä½œ     è€…ï¼šç‰©è”ç½‘ä¿±ä¹éƒ¨
+    * ç‰ˆ     æœ¬ï¼šV1.0
+    * ç¼–å†™æ—¥æœŸ ï¼š2018-4-1
+    * åŠŸ     èƒ½ï¼šLCDå±å¹•é©±åŠ¨
+*********************************************************************************
+    * è¯´    æ˜ ï¼šæœ¬ä¾‹ç¨‹é…å¥—ç‰©è”ç½‘ä¿±ä¹éƒ¨BearPiå¼€å‘æ¿ä½¿ç”¨
+    *
+    * æ·˜     å®ï¼šhttps://shop128001708.taobao.com/
+    * è®º     å›ï¼šbbs.iot-club.cn
+*********************************************************************************/
 #ifndef __LCD_H
 #define __LCD_H
 #include "stm32l4xx_hal.h"
-/*********************************************************************************
-			  ___   _     _____  _____  _   _  _____  _____  _   __
-			 / _ \ | |   |_   _||  ___|| \ | ||_   _||  ___|| | / /
-			/ /_\ \| |     | |  | |__  |  \| |  | |  | |__  | |/ /
-			|  _  || |     | |  |  __| | . ` |  | |  |  __| |    \
-			| | | || |_____| |_ | |___ | |\  |  | |  | |___ | |\  \
-			\_| |_/\_____/\___/ \____/ \_| \_/  \_/  \____/ \_| \_/
 
- *	******************************************************************************
- *	±¾³ÌĞòÖ»¹©Ñ§Ï°Ê¹ÓÃ£¬Î´¾­×÷ÕßĞí¿É£¬²»µÃÓÃÓÚÆäËüÈÎºÎÓÃÍ¾
- *	ALIENTEK Pandora STM32L475 IOT¿ª·¢°å
- *	LCD TFTÇı¶¯´úÂë
- *	ÕıµãÔ­×Ó@ALIENTEK
- *	¼¼ÊõÂÛÌ³:www.openedv.com
- *	´´½¨ÈÕÆÚ:2018/10/27
- *	°æ±¾£ºV1.0
- *	°æÈ¨ËùÓĞ£¬µÁ°æ±Ø¾¿¡£
- *	Copyright(C) ¹ãÖİÊĞĞÇÒíµç×Ó¿Æ¼¼ÓĞÏŞ¹«Ë¾ 2014-2024
- *	All rights reserved
- *	******************************************************************************
- *	³õÊ¼°æ±¾
- *	******************************************************************************/
 
-extern uint16_t	POINT_COLOR;		//Ä¬ÈÏ»­±ÊÑÕÉ«
-extern uint16_t	BACK_COLOR;		//Ä¬ÈÏ±³¾°ÑÕÉ«
+extern uint16_t	POINT_COLOR;		//Default brush color
+extern uint16_t	BACK_COLOR;		//Default background color
 
-//LCDµÄ¿íºÍ¸ß¶¨Òå
+//Width and height definitions of LCD
 #define LCD_Width 	240
 #define LCD_Height 	240
 
-//»­±ÊÑÕÉ«
+//Brush color
 #define WHITE         	 0xFFFF
 #define BLACK         	 0x0000	  
 #define BLUE         	 0x001F  
@@ -42,55 +33,47 @@ extern uint16_t	BACK_COLOR;		//Ä¬ÈÏ±³¾°ÑÕÉ«
 #define MAGENTA       	 0xF81F
 #define GREEN         	 0x07E0
 #define CYAN          	 0x7FFF
-#define YELLOW        	 0xFFE0
-#define BROWN 			 0XBC40 //×ØÉ«
-#define BRRED 			 0XFC07 //×ØºìÉ«
-#define GRAY  			 0X8430 //»ÒÉ«
-//GUIÑÕÉ«
-
-#define DARKBLUE      	 0X01CF	//ÉîÀ¶É«
-#define LIGHTBLUE      	 0X7D7C	//Ç³À¶É«  
-#define GRAYBLUE       	 0X5458 //»ÒÀ¶É«
-//ÒÔÉÏÈıÉ«ÎªPANELµÄÑÕÉ« 
- 
-#define LIGHTGREEN     	 0X841F //Ç³ÂÌÉ«
-//#define LIGHTGRAY        0XEF5B //Ç³»ÒÉ«(PANNEL)
-#define LGRAY 			 0XC618 //Ç³»ÒÉ«(PANNEL),´°Ìå±³¾°É«
-
-#define LGRAYBLUE        0XA651 //Ç³»ÒÀ¶É«(ÖĞ¼ä²ãÑÕÉ«)
-#define LBBLUE           0X2B12 //Ç³×ØÀ¶É«(Ñ¡ÔñÌõÄ¿µÄ·´É«)
+#define YELLOW        	 0xFFE0 //é»„è‰²
+#define BROWN 			 0XBC40 //æ£•è‰²
+#define BRRED 			 0XFC07 //æ£•çº¢è‰²
+#define GRAY  			 0X8430 //ç°è‰²
+#define DARKBLUE      	 0X01CF	//æ·±è“è‰²
+#define LIGHTBLUE      	 0X7D7C	//æµ…è“è‰²  
+#define GRAYBLUE       	 0X5458 //ç°è“è‰²
+#define LIGHTGREEN     	 0X841F //æµ…ç»¿è‰²
+#define LGRAY 			 0XC618 //æµ…ç°è‰²(PANNEL),çª—ä½“èƒŒæ™¯è‰²
+#define LGRAYBLUE        0XA651 //æµ…ç°è“è‰²(ä¸­é—´å±‚é¢œè‰²)
+#define LBBLUE           0X2B12 //æµ…æ£•è“è‰²(é€‰æ‹©æ¡ç›®çš„åè‰²)
 
 
 
 /*
-	LCD_PWR:	PB7
-	LCD_RST:	PB6
-	LCD_DC:		PB4
-	LCD_CS:		PD7
+	LCD_PWR:	PB15
+	LCD_RST:	PC7
+	LCD_DC:		PC6	
 */
 #define	LCD_PWR(n)		(n?HAL_GPIO_WritePin(GPIOB,GPIO_PIN_15,GPIO_PIN_SET):HAL_GPIO_WritePin(GPIOB,GPIO_PIN_15,GPIO_PIN_RESET))
 #define	LCD_RST(n)		(n?HAL_GPIO_WritePin(GPIOC,GPIO_PIN_7,GPIO_PIN_SET):HAL_GPIO_WritePin(GPIOC,GPIO_PIN_7,GPIO_PIN_RESET))
 #define	LCD_DC(n)		(n?HAL_GPIO_WritePin(GPIOC,GPIO_PIN_6,GPIO_PIN_SET):HAL_GPIO_WritePin(GPIOC,GPIO_PIN_6,GPIO_PIN_RESET))
 
 
-void LCD_Init(void);																	//³õÊ¼»¯
-void LCD_DisplayOn(void);																//¿ªÏÔÊ¾
-void LCD_DisplayOff(void);																//¹ØÏÔÊ¾
-void LCD_Write_HalfWord(const uint16_t da);													//Ğ´°ë¸ö×Ö½ÚÊı¾İµ½LCD
-void LCD_Address_Set(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);									//ÉèÖÃÊı¾İÏÔÊ¾ÇøÓò
-void LCD_Clear(uint16_t color);																//ÇåÆÁ
-void LCD_Fill(uint16_t x_start, uint16_t y_start, uint16_t x_end, uint16_t y_end, uint16_t color);				//Ìî³äµ¥É«
-void LCD_Draw_Point(uint16_t x, uint16_t y);														//»­µã
-void LCD_Draw_ColorPoint(uint16_t x, uint16_t y,uint16_t color);										//»­´øÑÕÉ«µã
-void LCD_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);										//»­Ïß
-void LCD_DrawRectangle(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);									//»­¾ØĞÎ
-void LCD_Draw_Circle(uint16_t x0, uint16_t y0, uint8_t r);												//»­Ô²
-void LCD_ShowChar(uint16_t x, uint16_t y, char chr, uint8_t size);										//ÏÔÊ¾Ò»¸ö×Ö·û
-void LCD_ShowNum(uint16_t x,uint16_t y,uint32_t num,uint8_t len,uint8_t size);									//ÏÔÊ¾Ò»¸öÊı×Ö
-void LCD_ShowxNum(uint16_t x,uint16_t y,uint32_t num,uint8_t len,uint8_t size,uint8_t mode);							//ÏÔÊ¾Êı×Ö
-void LCD_ShowString(uint16_t x,uint16_t y,uint16_t width,uint16_t height,uint8_t size,char *p);					//ÏÔÊ¾×Ö·û´®
-void LCD_Show_Image(uint16_t x, uint16_t y, uint16_t width, uint16_t height, const uint8_t *p);					//ÏÔÊ¾Í¼Æ¬
-void Display_ALIENTEK_LOGO(uint16_t x,uint16_t y);												//ÏÔÊ¾ALIENTEK LOGO
+void LCD_Init(void);																	//Init
+void LCD_DisplayOn(void);																//Open display
+void LCD_DisplayOff(void);																//Close display
+void LCD_Write_HalfWord(const uint16_t da);												//Write half a byte of data to LCD
+void LCD_Address_Set(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);				//Setting up the data display area
+void LCD_Clear(uint16_t color);															//Clean screen
+void LCD_Fill(uint16_t x_start, uint16_t y_start, uint16_t x_end, uint16_t y_end, uint16_t color);				//Filled monochrome
+void LCD_Draw_Point(uint16_t x, uint16_t y);														//Draw points
+void LCD_Draw_ColorPoint(uint16_t x, uint16_t y,uint16_t color);										//Painting with color dots
+void LCD_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);										//Draw line
+void LCD_DrawRectangle(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);									//Draw rectangle
+void LCD_Draw_Circle(uint16_t x0, uint16_t y0, uint8_t r);												//Circle drawing
+void LCD_ShowChar(uint16_t x, uint16_t y, char chr, uint8_t size);										//Display a character
+void LCD_ShowNum(uint16_t x,uint16_t y,uint32_t num,uint8_t len,uint8_t size);									//Display a number
+void LCD_ShowxNum(uint16_t x,uint16_t y,uint32_t num,uint8_t len,uint8_t size,uint8_t mode);							//Display number
+void LCD_ShowString(uint16_t x,uint16_t y,uint16_t width,uint16_t height,uint8_t size,char *p);					//display string
+void LCD_Show_Image(uint16_t x, uint16_t y, uint16_t width, uint16_t height, const uint8_t *p);					//display picture
 
 #endif
 

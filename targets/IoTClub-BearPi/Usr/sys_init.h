@@ -54,9 +54,12 @@
 #include <stdio.h>
 #include "stm32l4xx_hal.h"
 #include "stm32l4xx_it.h"
+#include "dwt.h"
 #include "delay.h"
 #include "adc.h"
 #include "i2c.h"
+#include "spi.h"
+#include "lcd.h"
 #include "usart.h"
 #include "gpio.h"
 #include "oled.h"

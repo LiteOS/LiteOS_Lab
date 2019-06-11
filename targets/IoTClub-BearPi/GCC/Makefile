@@ -177,6 +177,7 @@ DEVICEDRIVER_SRC =  \
         $(TOP_DIR)/targets/IoTClub-BearPi/DeviceDriver/BC35_95/NB_DRIVER.c  \
         $(TOP_DIR)/targets/IoTClub-BearPi/DeviceDriver/BH1750/BH1750.c      \
         $(TOP_DIR)/targets/IoTClub-BearPi/DeviceDriver/DHT11/DHT11_BUS.c    \
+        $(TOP_DIR)/targets/IoTClub-BearPi/DeviceDriver/LCD/lcd.c    \
         $(TOP_DIR)/targets/IoTClub-BearPi/DeviceDriver/OLED/oled.c
         C_SOURCES += $(DEVICEDRIVER_SRC)
 
@@ -260,6 +261,7 @@ DEVICEDRIV_INC = \
         -I $(TOP_DIR)/targets/IoTClub-BearPi/DeviceDriver/BC35_95        \
         -I $(TOP_DIR)/targets/IoTClub-BearPi/DeviceDriver/BH1750         \
         -I $(TOP_DIR)/targets/IoTClub-BearPi/DeviceDriver/DHT11          \
+        -I $(TOP_DIR)/targets/IoTClub-BearPi/DeviceDriver/LCD          \
         -I $(TOP_DIR)/targets/IoTClub-BearPi/DeviceDriver/OLED           \
         -I $(TOP_DIR)/targets/IoTClub-BearPi/Hardware                    \
         -I $(TOP_DIR)/targets/IoTClub-BearPi/Apps                        \
