@@ -38,6 +38,38 @@
 #if  cfg_oc_mqtt_enable
 
 static tag_oc_mqtt_ops *s_oc_mqtt = NULL;
+static tag_bs_mqtt_ops *s_bs_mqtt = NULL;
+
+
+/******************************************************
+ * BOOTSTRAP INSTALL INTERFACE
+ ******************************************************/
+int bs_mqtt_register(const tag_bs_mqtt_ops *opt)
+{
+    int ret = -1;
+
+    if(NULL != opt)
+    {
+        s_bs_mqtt = (tag_bs_mqtt_ops *) opt;
+
+        ret = 0;
+    }
+
+    return ret;
+}
+
+void* bs_mqtt_config(tag_bs_mqtt_config *param)
+{
+    void *ret = NULL;
+
+    if((NULL != s_bs_mqtt) &&(NULL != s_bs_mqtt->config))
+    {
+       ret = s_bs_mqtt->config(param);
+    }
+
+    return ret;
+}
+
 
 ///////////////////////OC AGENT INSTALL INTERFACE///////////////////////////////////////
 int oc_mqtt_register(const tag_oc_mqtt_ops *opt)

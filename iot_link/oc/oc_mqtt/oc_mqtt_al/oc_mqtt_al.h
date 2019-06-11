@@ -122,6 +122,39 @@ typedef struct
     fn_oc_mqtt_deconfig deconfig; ///< this function used for the deconfig
 }tag_oc_mqtt_ops;
 
+#if 1
+/*************************************************************************
+ *
+ *************************************************************************/
+typedef struct
+{
+    const char   *server;            ///< bs server address
+    const char   *port;              ///< bs server port
+    mqtt_al_security_para_t security;///< only support crt mode now
+    en_oc_mqtt_code_mode    code_mode;   ///< cdp encode mode:now only support the json mode
+    en_oc_mqtt_sign_type    sign_type;   ///< generate the passwd supported
+    const char*  deviceid;
+    const char*  devicepasswd;
+
+    oc_mqtt_msgdealer  msgdealer;///< when the agent receive any applciation data, please call this function
+}tag_bs_mqtt_config;
+
+
+/*************************************************************************
+ *** MQTT BOOTSTRAP INTERFACE
+ *************************************************************************/
+typedef void* (*fn_bs_mqtt_config)(tag_bs_mqtt_config *param);
+//typedef
+
+
+typedef struct
+{
+    const char         *name;     ///< this is the name for the ops
+    fn_bs_mqtt_config   config;   ///< this function used for the configuration
+
+}tag_bs_mqtt_ops;
+#endif
+
 
 #if cfg_oc_mqtt_enable
 /**
