@@ -4,10 +4,9 @@
 ################################################################################
 
 
-#uptils now, we only support the atiny_mqtt mode, you could add more implement as you wish
+bootstrap_src = ${wildcard $(iot_link_root)/oc/oc_mqtt/oc_mqtt_bootstrap/*.c} 
+C_SOURCES += $(bootstrap_src)
 
-ifeq ($(cfg_oc_mqtt_type),soft)
-	include $(iot_link_root)/oc/oc_mqtt/oc_mqtt_imp/atiny_mqtt/atiny_mqtt.mk
-	include $(iot_link_root)/oc/oc_mqtt/oc_mqtt_bootstrap/oc_mqtt_bootstrap.mk
-endif 
 
+bootstrap_inc = -I $(iot_link_root)/oc/oc_mqtt/oc_mqtt_bootstrap
+C_INCLUDES += $(bootstrap_inc)

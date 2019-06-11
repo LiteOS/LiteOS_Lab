@@ -30,7 +30,7 @@
 #cfg_oc_bs_enable  := no
 #cfg_loader_enable := yes
 ################################################################################# 
-#####################  OC MQTT CONFIURE TEMPLATE###############################
+######################  OC MQTT CONFIURE TEMPLATE###############################
 #cfg_os_type       := liteos
 #cfg_shell_enble   := yes
 #cfg_libc_enable   := yes
@@ -44,7 +44,7 @@
 #cfg_oc_lwm2m_type := none
 #cfg_oc_bs_enable  := no
 #cfg_loader_enable := no
-################################################################################
+#################################################################################
 #####################OC LWM2M CONFIURE TEMPLATE#################################
 cfg_os_type       := liteos
 cfg_shell_enble   := yes
@@ -59,6 +59,6 @@ cfg_oc_mqtt_type  := none
 cfg_oc_lwm2m_type := soft
 cfg_oc_bs_enable  := no
 cfg_loader_enable := no
-#################################################################################
+################################################################################
 
 include $(TOP_DIR)/iot_link/iot.mk

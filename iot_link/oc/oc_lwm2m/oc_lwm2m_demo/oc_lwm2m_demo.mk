@@ -4,7 +4,7 @@
 
 #two types for you to compile:oc_lwm2m_demo_dtls and oc_lwm2m_demo_nodtls
 
-cfg_oc_lwm2m_demo_type = oc_lwm2m_demo_dtls_bs
+cfg_oc_lwm2m_demo_type = oc_lwm2m_demo_nodtls
 cfg_oc_lwm2m_demo_defs =
 		
 oc_lwm2m_demo_inc = -I $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m_demo
