@@ -100,6 +100,7 @@ LDFLAGS = $(LIBS)
 
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf
+
 #######################################
 # build the application
 #######################################
@@ -111,7 +112,7 @@ OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES_S:.S=.o)))
 vpath %.S $(sort $(dir $(ASM_SOURCES_S)))
 
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
-	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
+	$(CC) -c $(CFLAGS) -Wa, $< -o $@
 
 $(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
 	$(AS) -c $(CFLAGS) $< -o $@

@@ -38,10 +38,12 @@
 #include <stdarg.h>
 #include <sota.h>
 
+#include <crc.h>
 #include <osal.h>
+#include <link_misc.h>
 
-#define VER_LEN      16
-#define SEND_BUF_LEN 128
+#define cn_ver_length      16
+#define cn_snd_buf_length  128
 
 
 #ifdef SOTA_DEBUG
@@ -63,7 +65,7 @@ typedef enum
     MSG_DOWNLOAD_STATE,
     MSG_EXC_UPDATE,
     MSG_NOTIFY_STATE = 24
-}msg_code_e;
+}en_msg_code;
 
 typedef enum
 {
@@ -71,7 +73,7 @@ typedef enum
     DOWNLOADING,
     UPDATING,
     UPDATED,
-}sota_state;
+}en_sota_state;
 
 typedef enum
 {
@@ -92,12 +94,6 @@ typedef enum
 
 typedef enum
 {
-    APPLICATION = 0,
-    BOOTLOADER = 1,
-} sota_run_mode_e;
-
-typedef enum
-{
     SOTA_OK = 0,
     SOTA_DOWNLOADING = 1,
     SOTA_UPDATING    = 2,
@@ -107,27 +103,10 @@ typedef enum
     SOTA_INVALID_PACKET     = 103,
     SOTA_UNEXPECT_PACKET    = 104,
     SOTA_WRITE_FLASH_FAILED = 105
-} sota_ret_e;
+} en_sota_ret;
 
 
 #pragma pack(1)
-typedef struct ota_pcp_head_t
-{
-    uint16_t  ori_id;
-    uint8_t   ver_num;
-    uint8_t   msg_code;
-    uint16_t  chk_code;
-    uint16_t  data_len;
-}ota_pcp_head_s;
-
-typedef struct ota_ver_notify
-{
-    int8_t   ver[VER_LEN];
-    uint16_t block_size;
-    uint16_t block_totalnum;
-    uint16_t ver_chk_code;
-}ota_ver_notify_t;
-
 
 
 typedef struct sota_update_info
@@ -138,41 +117,84 @@ typedef struct sota_update_info
     uint32_t block_totalnum;
     uint32_t block_tolen;
     uint32_t ver_chk_code;
-    char     ver[VER_LEN];
-    uint8_t  state;
-} sota_update_info_t;
+    char           ver[cn_ver_length];
+    en_sota_state  state;
+    uint32_t crc;
+} sota_upgrade_info_t;
+
+typedef struct
+{
+    uint16_t  ori_id;
+    uint8_t   ver_num;
+    uint8_t   msg_code;
+    uint16_t  chk_code;
+    uint16_t  data_len;
+}sota_pcp_head_t;
+
+typedef struct
+{
+    int8_t   ver[cn_ver_length];
+    uint16_t block_size;
+    uint16_t block_totalnum;
+    uint16_t ver_chk_code;
+}sota_notify_version_t;
+
+typedef struct
+{
+    uint8_t   ver[cn_ver_length];
+    uint16_t  blocknum;
+}sota_block_request_t;
+
+typedef struct
+{
+    uint8_t retcode;
+}sota_response_t;
+
 
 #pragma pack()
-
-static sota_update_info_t          s_sota_update_record;
 
 typedef int (*fn_sota_msg_send)(void *msg,int len);
 typedef struct
 {
-    sota_update_info_t  record;
-    fn_sota_msg_send    msg_send;
-
+    sota_upgrade_info_t  record;
+    fn_sota_msg_send     msg_send;
 }sota_cb_t;
 
+static sota_cb_t  s_sota_cb;
+
+#define cn_pcp_head           0xFFFE
+#define cn_block_head_size    3
 
 
+static int sota_flag_save()
+{
+    return 0;
+}
 
-#define PCP_HEAD 0xFFFE
-#define BLOCK_HEAD 3
+
+static int msg_send(void *msg, int len)
+{
+    int ret = -1;
+
+    if(NULL != s_sota_cb.msg_send)
+    {
+        ret = s_sota_cb.msg_send(msg,len);
+    }
+
+    return ret;
+}
 
 
-extern int ota_msg_send(void *msg, int len);
-
-static int sota_msg_send(msg_code_e msg_code, uint8_t *buf, int32_t len)
+static int sota_msg_send(en_msg_code msg_code, uint8_t *buf, int32_t len)
 {
     int32_t ret;
-    ota_pcp_head_s  *pcp;
+    sota_pcp_head_t  *pcp;
     uint8_t         *msg_buf;
     uint32_t         msg_len;
 
     ret = -1;
-    msg_len = len  + sizeof(ota_pcp_head_s);
-    if (msg_len>= SEND_BUF_LEN)
+    msg_len = len  + sizeof(sota_pcp_head_t);
+    if (msg_len>= cn_snd_buf_length)
     {
         SOTA_LOG("payload too long");
         return ret;
@@ -185,92 +207,85 @@ static int sota_msg_send(msg_code_e msg_code, uint8_t *buf, int32_t len)
         return ret;
     }
 
-    pcp->ori_id = htons_ota(PCP_HEAD);
+    pcp->ori_id = htons_ota(cn_pcp_head);
     pcp->ver_num =1;
     pcp->msg_code = msg_code;
     pcp->data_len = len;
-    memcpy(msg_buf+sizeof(ota_pcp_head_s),buf,len);
+    memcpy(msg_buf+sizeof(sota_pcp_head_t),buf,len);
+    ret = msg_send(msg_buf,msg_len);
 
-    ret = ota_msg_send(msg_buf,msg_len);
+    free(msg_buf);
 
     return ret;
 }
 
 static void sota_send_request_block(char *ver)
 {
-     char ver_ret[VER_LEN + 2] = {0};
-     char sbuf[64] = {0};
- 
-     if (g_flash_op.firmware_download_stage == BOOTLOADER
-        && g_flash_op.current_run_stage == APPLICATION)
-     {
-        return;
-     }
-        
-     memcpy(ver_ret, ver, VER_LEN);
-     ver_ret[VER_LEN] = (s_sota_update_record.block_num >> 8) & 0XFF;
-     ver_ret[VER_LEN + 1] = s_sota_update_record.block_num & 0XFF;
-     (void)ver_to_hex(ver_ret, (VER_LEN + 2), sbuf);
-     (void)sota_msg_send(MSG_GET_BLOCK, sbuf, (VER_LEN + 2) * 2);
+    sota_block_request_t request;
+    memcpy(request.ver,s_sota_cb.record.ver,cn_ver_length);
+    request.blocknum = htons(s_sota_cb.record.block_num);
+
+    sota_msg_send(MSG_GET_BLOCK, &request, sizeof(request));
 }
 
-static void sota_send_response_code(msg_code_e msg_code, response_code_e code)
+static void sota_send_response_code(en_msg_code msg_code, response_code_e code)
 {
-    char ret_buf[1];
-    char sbuf[2];
     
-    ret_buf[0] = code;
-    (void)ver_to_hex(ret_buf, 1, (char *)sbuf);
-    (void)sota_msg_send(msg_code, (char *)sbuf, 2);
+    sota_response_t  response;
+
+    response.retcode = code;
+
+    sota_msg_send(msg_code, &response, sizeof(response));
 }
 
-static void sota_reset_record_info(ota_ver_notify_t *notify)
+static void sota_reset_record_info(sota_notify_version_t *notify)
 {
-    s_sota_update_record.block_offset = 0;
-    s_sota_update_record.block_size = htons_ota(notify->block_size);
-    s_sota_update_record.block_totalnum = htons_ota(notify->block_totalnum);
-    s_sota_update_record.block_num = 0;
-    s_sota_update_record.block_tolen = 0;
-    s_sota_update_record.ver_chk_code = notify->ver_chk_code;
-    memcpy(s_sota_update_record.ver, notify->ver, VER_LEN);
-    s_sota_update_record.state = DOWNLOADING;
-    (void)flag_write(FLAG_APP, (void*)&s_sota_update_record, sizeof(sota_update_info_t));
+    s_sota_cb.record.block_offset = 0;
+    s_sota_cb.record.block_size = htons_ota(notify->block_size);
+    s_sota_cb.record.block_totalnum = htons_ota(notify->block_totalnum);
+    s_sota_cb.record.block_num = 0;
+    s_sota_cb.record.block_tolen = 0;
+    s_sota_cb.record.ver_chk_code = notify->ver_chk_code;
+    memcpy(s_sota_cb.record.ver, notify->ver, cn_ver_length);
+    s_sota_cb.record.state = DOWNLOADING;
+
+    sota_flag_save();
 }
 
-static int32_t sota_new_ver_process(const ota_pcp_head_s *head, const uint8_t *pbuf)
+static int32_t sota_new_ver_process(const sota_pcp_head_t *head, const uint8_t *pbuf)
 {
-    char ver[VER_LEN];
-    ota_ver_notify_t *notify = (ota_ver_notify_t *)pbuf;
+    char ver[cn_ver_length];
+    sota_notify_version_t *notify = (sota_notify_version_t *)pbuf;
     
-    (void)g_flash_op.get_ver(ver, VER_LEN);
-    if (strncmp(ver, (const char*)notify->ver, VER_LEN) == 0)
+    (void)g_flash_op.get_ver(ver, cn_ver_length);
+    if (strncmp(ver, (const char*)notify->ver, cn_ver_length) == 0)
     {
         SOTA_LOG("Already latest version %s", notify->ver);
         sota_send_response_code(MSG_NOTIFY_NEW_VER, DEV_LATEST_VER);
-        s_sota_update_record.state = IDLE;
+        s_sota_cb.record.state = IDLE;
         return SOTA_OK;
     }
 
     SOTA_LOG("Notify ver %s,%x, record ver:%s,%x", notify->ver, notify->ver_chk_code, 
-        s_sota_update_record.ver,s_sota_update_record.ver_chk_code);
-    if ((strncmp(s_sota_update_record.ver, (const char *)notify->ver, VER_LEN) == 0)
-        && (notify->ver_chk_code == s_sota_update_record.ver_chk_code))
+        s_sota_cb.record.ver,s_sota_cb.record.ver_chk_code);
+    if ((strncmp(s_sota_cb.record.ver, (const char *)notify->ver, cn_ver_length) == 0)
+        && (notify->ver_chk_code == s_sota_cb.record.ver_chk_code))
     {
-        SOTA_LOG("state %d, downloaded %d blocks", s_sota_update_record.state, s_sota_update_record.block_num);
-        if (s_sota_update_record.block_num < s_sota_update_record.block_totalnum
-            && s_sota_update_record.state == DOWNLOADING)
+        SOTA_LOG("state %d, downloaded %d blocks", s_sota_cb.record.state, s_sota_cb.record.block_num);
+        if (s_sota_cb.record.block_num < s_sota_cb.record.block_totalnum
+            && s_sota_cb.record.state == DOWNLOADING)
         {
             sota_send_request_block((char*)notify->ver);
             return SOTA_DOWNLOADING;
         }
-        else if (s_sota_update_record.block_num == s_sota_update_record.block_totalnum
-            && s_sota_update_record.state == UPDATING)
+        else if (s_sota_cb.record.block_num == s_sota_cb.record.block_totalnum
+            && s_sota_cb.record.state == UPDATING)
         {
             sota_send_response_code(MSG_DOWNLOAD_STATE, DEV_OK);
             return SOTA_UPDATING;
         }
-        else if (s_sota_update_record.block_num == s_sota_update_record.block_totalnum
-            && s_sota_update_record.state == UPDATED)
+        else if (s_sota_cb.record.block_num == s_sota_cb.record.block_totalnum
+            && s_sota_cb.record.state == UPDATED)
         {
             return SOTA_UPDATED;
         }
@@ -281,30 +296,30 @@ static int32_t sota_new_ver_process(const ota_pcp_head_s *head, const uint8_t *p
     return SOTA_DOWNLOADING;
 }
 
-static int32_t sota_data_block_process(const ota_pcp_head_s *head, const uint8_t *pbuf)
+static int32_t sota_data_block_process(const sota_pcp_head_t *head, const uint8_t *pbuf)
 {
     uint16_t block_seq = 0;
     int ret = SOTA_OK;
     
-    if (s_sota_update_record.state != DOWNLOADING)
+    if (s_sota_cb.record.state != DOWNLOADING)
     {
        return SOTA_UNEXPECT_PACKET;
     }
     
     if (*pbuf == UPDATE_TASK_EXIT)
     {
-        s_sota_update_record.state = IDLE;
+        s_sota_cb.record.state = IDLE;
         return SOTA_EXIT;
     }
 
     block_seq = ((*(pbuf + 1) << 8) & 0XFF00) | (*(pbuf + 2) & 0XFF);
-    if (s_sota_update_record.block_num != block_seq)
+    if (s_sota_cb.record.block_num != block_seq)
     {
-        SOTA_LOG("Download wrong,we need block %X, but rx %X:",(int)s_sota_update_record.block_num, (int)block_seq);
+        SOTA_LOG("Download wrong,we need block %X, but rx %X:",(int)s_sota_cb.record.block_num, (int)block_seq);
         return SOTA_UNEXPECT_PACKET;
     }
-    SOTA_LOG("off:%lx size:%x ",s_sota_update_record.block_offset,head->data_len);
-    ret = g_storage_device->write_software(g_storage_device, s_sota_update_record.block_offset,(const uint8_t *)(pbuf + BLOCK_HEAD), head->data_len);
+    SOTA_LOG("off:%lx size:%x ",s_sota_cb.record.block_offset,head->data_len);
+    ret = g_storage_device->write_software(g_storage_device, s_sota_cb.record.block_offset,(const uint8_t *)(pbuf + cn_block_head_size), head->data_len);
     if (ret != SOTA_OK)
     {
         SOTA_LOG("write software failed. ret:%d", ret);
@@ -312,20 +327,20 @@ static int32_t sota_data_block_process(const ota_pcp_head_s *head, const uint8_t
         return SOTA_WRITE_FLASH_FAILED;
     }
     
-    s_sota_update_record.block_offset += s_sota_update_record.block_size;
-    s_sota_update_record.block_tolen += head->data_len;
-    s_sota_update_record.block_num++;
+    s_sota_cb.record.block_offset += s_sota_cb.record.block_size;
+    s_sota_cb.record.block_tolen += head->data_len;
+    s_sota_cb.record.block_num++;
     
-    if ((s_sota_update_record.block_num) < s_sota_update_record.block_totalnum)
+    if ((s_sota_cb.record.block_num) < s_sota_cb.record.block_totalnum)
     {
-    	SOTA_LOG("Rx total %d bytes downloading\r\n", s_sota_update_record.block_tolen);
-    	sota_send_request_block(s_sota_update_record.ver);
+    	SOTA_LOG("Rx total %d bytes downloading\r\n", s_sota_cb.record.block_tolen);
+    	sota_send_request_block(s_sota_cb.record.ver);
         return SOTA_DOWNLOADING;
     } 
     else
     { 
-        SOTA_LOG("Rx total %d bytes, UPDATING...\r\n", s_sota_update_record.block_tolen);
-        ret = g_storage_device->write_software_end(g_storage_device, PACK_DOWNLOAD_OK, s_sota_update_record.block_tolen);
+        SOTA_LOG("Rx total %d bytes, UPDATING...\r\n", s_sota_cb.record.block_tolen);
+        ret = g_storage_device->write_software_end(g_storage_device, PACK_DOWNLOAD_OK, s_sota_cb.record.block_tolen);
         if (ret != SOTA_OK)
         {
             SOTA_LOG("write software end ret:%d", ret);
@@ -334,19 +349,19 @@ static int32_t sota_data_block_process(const ota_pcp_head_s *head, const uint8_t
         }
         else
         {
-            s_sota_update_record.state = UPDATING;
+            s_sota_cb.record.state = UPDATING;
             sota_send_response_code(MSG_DOWNLOAD_STATE, DEV_OK);
             return SOTA_UPDATING;
         }
     } 
 }
 
-static int32_t sota_update_exc_process(const ota_pcp_head_s *head, const uint8_t *pbuf)
+static int32_t sota_update_exc_process(const sota_pcp_head_t *head, const uint8_t *pbuf)
 {
     int ret = SOTA_OK;
 
     SOTA_LOG("Begin excute update");
-    if (s_sota_update_record.state != UPDATING)
+    if (s_sota_cb.record.state != UPDATING)
     {
         return SOTA_UNEXPECT_PACKET;
     }
@@ -360,8 +375,8 @@ static int32_t sota_update_exc_process(const ota_pcp_head_s *head, const uint8_t
     }
     else
     {
-        s_sota_update_record.state = UPDATED;
-       (void)flag_write(FLAG_APP, (void*)&s_sota_update_record, sizeof(sota_update_info_t));
+        s_sota_cb.record.state = UPDATED;
+       (void)flag_write(FLAG_APP, (void*)&s_sota_cb.record, sizeof(sota_upgrade_info_t));
         sota_send_response_code(MSG_EXC_UPDATE, DEV_OK);
         return SOTA_UPDATED;
     }
@@ -371,15 +386,15 @@ int32_t sota_process(void *arg, const int8_t *buf, int32_t buflen)
     char sbuf[64] = {0};
     const uint8_t *pbuf = NULL;
     int ret = SOTA_OK;
-    ota_pcp_head_s *phead;
+    sota_pcp_head_t *phead;
     unsigned char  msg_code;
 
-    phead =(ota_pcp_head_s *)buf;
+    phead =(sota_pcp_head_t *)buf;
     msg_code = phead->msg_code;
 
     if (phead->data_len > 0)
     {
-        pbuf = (uint8_t *)buf + VER_LEN/2;
+        pbuf = (uint8_t *)buf + cn_ver_length/2;
     }
 
     SOTA_LOG("process sota msg %d", msg_code);
@@ -388,16 +403,16 @@ int32_t sota_process(void *arg, const int8_t *buf, int32_t buflen)
     {
         case MSG_GET_VER:
         { 
-            char ver_ret[VER_LEN + 1] = {0};
-            (void)g_flash_op.get_ver(ver_ret+1, VER_LEN);
-            (void)ver_to_hex(ver_ret, (VER_LEN + 1), (char *)sbuf);
-            (void)sota_msg_send(MSG_GET_VER, (char *)sbuf, (VER_LEN + 1) * 2);
+            char ver_ret[cn_ver_length + 1] = {0};
+            (void)g_flash_op.get_ver(ver_ret+1, cn_ver_length);
+            (void)ver_to_hex(ver_ret, (cn_ver_length + 1), (char *)sbuf);
+            (void)sota_msg_send(MSG_GET_VER, (char *)sbuf, (cn_ver_length + 1) * 2);
             ret = SOTA_OK;
             break;
         }
         case MSG_NOTIFY_NEW_VER:
         {
-            if (phead->data_len > sizeof(ota_ver_notify_t))
+            if (phead->data_len > sizeof(sota_notify_version_t))
             {
                ret = sota_new_ver_process(phead, pbuf);
             }
@@ -436,13 +451,13 @@ int32_t sota_process(void *arg, const int8_t *buf, int32_t buflen)
 
 void sota_timeout_handler(void)
 {
-    if (s_sota_update_record.state == DOWNLOADING)
+    if (s_sota_cb.record.state == DOWNLOADING)
     {
-        SOTA_LOG("Download block %d over time", s_sota_update_record.block_num);
+        SOTA_LOG("Download block %d over time", s_sota_cb.record.block_num);
         sota_send_response_code(MSG_EXC_UPDATE, DOWNLOAD_TIME_OUT);
-        sota_send_request_block(s_sota_update_record.ver);
+        sota_send_request_block(s_sota_cb.record.ver);
     }
-    else if (s_sota_update_record.state == UPDATING)
+    else if (s_sota_cb.record.state == UPDATING)
     {
         SOTA_LOG("Download finish. excute over time");
         sota_send_response_code(MSG_EXC_UPDATE, DOWNLOAD_TIME_OUT);
@@ -454,22 +469,22 @@ static int sota_status_check(void)
 {
     upgrade_state_e state;
     char sbuf[64] = {0};
-    char tmpbuf[VER_LEN+1] = {0};
+    char tmpbuf[cn_ver_length+1] = {0};
 
-    memset(&s_sota_update_record, 0, sizeof(sota_update_info_t));
-    if (flag_read(FLAG_APP, (char*)&s_sota_update_record, sizeof(sota_update_info_t)))
+    memset(&s_sota_cb.record, 0, sizeof(sota_upgrade_info_t));
+    if (flag_read(FLAG_APP, (char*)&s_sota_cb.record, sizeof(sota_upgrade_info_t)))
     {
         SOTA_LOG("flag read err");
         return SOTA_FAILED;
     }
-    SOTA_LOG("state:%d flash ver:%s",s_sota_update_record.state, s_sota_update_record.ver);
+    SOTA_LOG("state:%d flash ver:%s",s_sota_cb.record.state, s_sota_cb.record.ver);
 
     if (g_flash_op.firmware_download_stage == BOOTLOADER
         && g_flash_op.current_run_stage == BOOTLOADER)
     {
-        if (s_sota_update_record.state == DOWNLOADING)
+        if (s_sota_cb.record.state == DOWNLOADING)
         {
-            sota_send_request_block(s_sota_update_record.ver);
+            sota_send_request_block(s_sota_cb.record.ver);
             return SOTA_DOWNLOADING;
         }
     }
@@ -479,15 +494,15 @@ static int sota_status_check(void)
         SOTA_LOG("upgrade result: %d", state);
         if (state == OTA_SUCCEED)
         {
-            SOTA_LOG("Update version %s success", s_sota_update_record.ver);
-            memcpy(tmpbuf + 1, s_sota_update_record.ver, VER_LEN);
-            (void)ver_to_hex(tmpbuf, VER_LEN+1, sbuf);
-            (void)sota_msg_send(MSG_NOTIFY_STATE, sbuf, (VER_LEN+1) * 2);
+            SOTA_LOG("Update version %s success", s_sota_cb.record.ver);
+            memcpy(tmpbuf + 1, s_sota_cb.record.ver, cn_ver_length);
+            (void)ver_to_hex(tmpbuf, cn_ver_length+1, sbuf);
+            (void)sota_msg_send(MSG_NOTIFY_STATE, sbuf, (cn_ver_length+1) * 2);
         }
     }
 
-    memset(&s_sota_update_record, 0, sizeof(sota_update_info_t));
-    (void)flag_write(FLAG_APP, (const void*)&s_sota_update_record, sizeof(sota_update_info_t));
+    memset(&s_sota_cb.record, 0, sizeof(sota_upgrade_info_t));
+    (void)flag_write(FLAG_APP, (const void*)&s_sota_cb.record, sizeof(sota_upgrade_info_t));
     return SOTA_OK;
 }
 

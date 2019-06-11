@@ -52,8 +52,6 @@ typedef struct
     uint32_t   crc;
 }ota_boot_flag_t;
 
-
-
 static ota_boot_flag_t s_ota_boot_flag;
 
 static int ota_boot_flag_save()

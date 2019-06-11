@@ -44,17 +44,18 @@
 #include <oc_lwm2m_al.h>
 
 
-#define cn_endpoint_id        "SDK_LWM2M_DTLS"
+//#define cn_endpoint_id        "987a0150-f855-4648-b771-fe0c7c7c1c2b"
+#define cn_endpoint_id        "coap_verify_code"
 #define cn_app_server         "119.3.184.255"
 #define cn_app_port           "5684"
+#define cn_psk_id             "coap_verify_code"
+unsigned char s_app_psk[] =   {0x87,0x65,0x43,0x21};
+
+
 
 #define cn_app_light           0
 #define cn_app_ledcmd          1
 #define cn_app_csq             2
-
-
-unsigned char s_app_psk[] = {0x01,0x02,0x03,0x04,0x05,0x06};
-
 #pragma pack(1)
 typedef struct
 {
@@ -140,19 +141,19 @@ static int app_report_task_entry()
 
     memset(&oc_param,0,sizeof(oc_param));
 
-    oc_param.app_server.address = cn_app_server;
-    oc_param.app_server.port = cn_app_port;
     oc_param.app_server.ep_id = cn_endpoint_id;
-    oc_param.app_server.psk = (char *)s_app_psk;
-    oc_param.app_server.psk_len = sizeof(s_app_psk);
-    oc_param.app_server.psk_id = cn_endpoint_id;
+//    oc_param.app_server.address = cn_app_server;
+//    oc_param.app_server.port = cn_app_port;
+//    oc_param.app_server.psk = (char *)s_app_psk;
+//    oc_param.app_server.psk_len = sizeof(s_app_psk);
+//    oc_param.app_server.psk_id = cn_psk_id;
 
     oc_param.boot_server.address = cn_app_server;
     oc_param.boot_server.port = cn_app_port;
     oc_param.boot_server.ep_id = cn_endpoint_id;
     oc_param.boot_server.psk = (char *)s_app_psk;
     oc_param.boot_server.psk_len = sizeof(s_app_psk);
-    oc_param.boot_server.psk_id = cn_endpoint_id;
+    oc_param.boot_server.psk_id = cn_psk_id;
 
     oc_param.boot_mode = en_oc_boot_strap_mode_client_initialize;
     oc_param.rcv_func = app_msg_deal;
