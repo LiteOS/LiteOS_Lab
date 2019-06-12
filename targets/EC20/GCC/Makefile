@@ -80,14 +80,6 @@ AT_INTERFACE_INC = \
 #######################################
 
 
-INCLUDE_INC = \
-        -I $(TOP_DIR)/include
-        C_INCLUDES += $(INCLUDE_INC)
-
-LWM2M_ATINY_INC = \
-        -I $(TOP_DIR)/components/connectivity/agent_tiny/atiny_lwm2m        
-        C_INCLUDES += $(LWM2M_ATINY_INC)
-
 # compile gcc flags
 ASFLAGS =  $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
