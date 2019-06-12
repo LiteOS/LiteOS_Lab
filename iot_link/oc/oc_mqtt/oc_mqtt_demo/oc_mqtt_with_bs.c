@@ -95,9 +95,7 @@ static void           *s_mqtt_handle;
 #define cn_app_rcv_buf_len 256
 static char            s_rcv_buffer[cn_app_rcv_buf_len];
 static int             s_rcv_datalen;
-static osal_semp_t     s_bs_rcv_sync;
 static osal_semp_t     s_oc_rcv_sync;
-static osal_semp_t     s_agent_sync;
 static void           *s_mqtt_handle;
 static char            iot_server_ip[16];
 static char            iot_server_port[4];
@@ -301,9 +299,7 @@ int oc_mqtt_demo_main()
 {
     void *ret;
     printf("demo main new\r\n");
-    osal_semp_create(&s_bs_rcv_sync,0,0);
-    osal_semp_create(&s_oc_rcv_sync,0,0);
-    osal_semp_create(&s_agent_sync,0,0);
+    osal_semp_create(&s_oc_rcv_sync,1,0);
 
 
     osal_task_create("ocmqtt_report",oc_mqtt_report_entry,ret,0x1000,NULL,10);
