@@ -62,13 +62,13 @@ PERIFLIB_SOURCES =
 ##########################LOAD THE SOURCES INCLUDES AND DEFINES#################
 include $(PROJECTBASE)/config.mk
 
-MAIN_SRC := ${wildcard $(TOP_DIR)/targets/EC20/Src/main.c}
+MAIN_SRC := ${wildcard $(TOP_DIR)/targets/EC20/Src/at_demo.c}
 MAIN_SRC += ${wildcard $(TOP_DIR)/targets/EC20/Src/at_interface_mqtt.c}
 C_SOURCES += $(MAIN_SRC)
 
-AT_INTERFACE_INC = \
+DEMO_INC = \
         -I $(TOP_DIR)/targets/EC20/Src/
-        C_INCLUDES += $(AT_INTERFACE_INC)
+        C_INCLUDES += $(DEMO_INC)
 
 ######################################
 # firmware library
