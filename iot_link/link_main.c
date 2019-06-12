@@ -38,15 +38,12 @@
  */
 //RTOS KERNEL
 #include <osal.h>
-#if cfg_liteos_enable
-#include <liteos_imp.h>
-#elif cfg_linux_enable
-#include <linux_imp.h>
-#elif cfg_macos_enable
-#include <macos_imp.h>
-#else
-#error("no os supplied yet");
-#endif
+//#if cfg_liteos_enable
+//#elif cfg_linux_enable
+//#elif cfg_macos_enable
+//#else
+//#error("no os supplied yet");
+//#endif
 
 
 #ifdef WITH_DTLS
@@ -68,13 +65,17 @@ int link_main(void *args)
     ///< install the RTOS kernel for the link
     osal_init();
 
-
 #if cfg_liteos_enable
+    #include <liteos_imp.h>
     osal_install_liteos();
 #elif cfg_linux_enable
+    #include <linux_imp.h>
     osal_install_linux();
 #elif  cfg_macos_enable
+    #include <macos_imp.h>
     osal_install_macos();
+#else
+    #error("no os supplied yet");
 #endif
 
 #if cfg_shell_enable
@@ -132,21 +133,25 @@ int link_main(void *args)
 
 #if cfg_oc_mqtt_enable
     #include <oc_mqtt_al.h>
-    #include <oc_mqtt_demo.h>
     oc_mqtt_init();
 
 #if cfg_atiny_mqtt_enable
     #include <atiny_mqtt.h>
     oc_mqtt_install_atiny_mqtt();
 #endif
-    //oc_mqtt_demo_main();
+
+#if cfg_oc_mqtt_demo_enable
+    #include <oc_mqtt_demo.h>
+    oc_mqtt_demo_main();
+
+#endif
+
 #endif
 
 ////////////////////////////  OC LWM2M && DEMOS     /////////////////////////////
 
 #if cfg_oc_lwm2m_enable
     #include <oc_lwm2m_al.h>
-    #include <oc_lwm2m_demo.h>
     oc_lwm2m_init();
 
 #if cfg_oc_lwm2m_agent_enable
@@ -154,11 +159,13 @@ int link_main(void *args)
     oc_lwm2m_install_agent();
 #endif
 
+#if cfg_oc_lwm2m_demo_enable
+    #include <oc_lwm2m_demo.h>
     oc_lwm2m_demo_main();
+#endif
 
 
 #endif
-
 
     return 0;
 }

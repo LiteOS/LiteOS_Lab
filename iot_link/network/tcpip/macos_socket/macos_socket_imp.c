@@ -91,7 +91,7 @@ static int __macos_accept(int fd, struct sockaddr *addr, socklen_t *addrlen)
     ret = accept(fd, addr, addrlen);
 
     memcpy(buf,addr,2);
-    family = buf[2];
+    family = buf[1];
     memcpy(addr,&family,2);
 
     return ret;
@@ -125,7 +125,7 @@ static int __macos_recvfrom(int fd, void *msg, int len, int flag, struct sockadd
     ret = recvfrom(fd, msg, len,flag,addr,addrlen);
 
     memcpy(buf,addr,2);
-    family = buf[2];
+    family = buf[1];
     memcpy(addr,&family,2);
 
     return ret;

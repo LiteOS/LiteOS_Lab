@@ -16,8 +16,9 @@
 #cfg_lwm2m_type    : wakaama none
 #cfg_oc_mqtt_type  : soft none
 #cfg_oc_lwm2m_type : soft bc35 none
-#cfg_oc_bs_enable  : yes no
 #cfg_loader_enable : yes no
+#cfg_oc_lwm2m_demo_type:none  oc_lwm2m_demo_dtls and oc_lwm2m_demo_nodtls oc_lwm2m_demo_bs_dtls
+#cfg_oc_mqtt_demo_type:none oc_mqtt_demo_static oc_mqtt_demo_bs
 
 ######################LOADER     CONFIURE TEMPLATE###############################
 #cfg_os_type       := liteos
@@ -31,8 +32,11 @@
 #cfg_lwm2m_type    := none
 #cfg_oc_mqtt_type  := none
 #cfg_oc_lwm2m_type := none
-#cfg_oc_bs_enable  := no
 #cfg_loader_enable := yes
+#cfg_oc_lwm2m_demo_type:= none
+#cfg_oc_mqtt_demo_type:= none
+
+
 ################################################################################# 
 ######################  OC MQTT CONFIURE TEMPLATE###############################
 #cfg_os_type       := liteos
@@ -46,8 +50,11 @@
 #cfg_lwm2m_type    := none
 #cfg_oc_mqtt_type  := soft
 #cfg_oc_lwm2m_type := none
-#cfg_oc_bs_enable  := no
 #cfg_loader_enable := no
+#cfg_oc_lwm2m_demo_type:= oc_mqtt_demo_static
+#cfg_oc_mqtt_demo_type:= oc_lwm2m_demo_dtls
+
+
 #################################################################################
 #####################OC LWM2M CONFIURE TEMPLATE#################################
 cfg_os_type       := liteos
@@ -61,8 +68,9 @@ cfg_mqtt_type     := none
 cfg_lwm2m_type    := wakaama
 cfg_oc_mqtt_type  := none
 cfg_oc_lwm2m_type := soft
-cfg_oc_bs_enable  := no
 cfg_loader_enable := no
+cfg_oc_lwm2m_demo_type:= oc_mqtt_demo_static
+cfg_oc_mqtt_demo_type:= oc_lwm2m_demo_dtls
 ################################################################################
 
 include $(TOP_DIR)/iot_link/iot.mk
