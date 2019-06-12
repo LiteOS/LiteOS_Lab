@@ -12,7 +12,7 @@ ifneq ($(cfg_oc_mqtt_type),none)
     OC_MQTT_AL_INC = -I $(iot_link_root)/oc/oc_mqtt/oc_mqtt_al
     C_INCLUDES += $(OC_MQTT_AL_INC)	
     
-    oc_mqtt_defs = -D cfg_oc_mqtt_enable=1    
+    oc_mqtt_defs = -D cfg_oc_mqtt_enable=1
     C_DEFS += $(oc_mqtt_defs)
     
     

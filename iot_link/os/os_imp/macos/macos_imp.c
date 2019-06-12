@@ -231,7 +231,6 @@ typedef struct
 
 static bool_t  __semp_create(osal_semp_t *semp,int limit,int initvalue)
 {
-    int ret = -1;
     time_t       timenow;
     macos_sem_t *macos_sem;
 

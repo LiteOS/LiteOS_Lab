@@ -1083,9 +1083,7 @@ static int bs_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
     int ret = -1;
     cJSON  *buf;
     cJSON  *address;
-    cJSON  *dnsFlag;
     char   *port;
-    char   *ip;
     printf("bs topic:%s qos:%d\n\r",msg->topic.data,msg->qos);
 
     if(msg->msg.len < cn_bs_rcv_buf_len)

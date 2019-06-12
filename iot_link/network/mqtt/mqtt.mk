@@ -7,7 +7,7 @@ ifneq ($(cfg_mqtt_type),none)
     mqtt_src  = ${wildcard $(iot_link_root)/network/mqtt/mqtt_al/*.c} 
     C_SOURCES += $(mqtt_src)	
     		
-    mqtt_inc = -I $(iot_link_root)/network/mqtt/mqtt_al	    
+    mqtt_inc = -I $(iot_link_root)/network/mqtt/mqtt_al
     C_INCLUDES += $(mqtt_inc)
     
     C_DEFS += -D cfg_mqtt_enable=1
