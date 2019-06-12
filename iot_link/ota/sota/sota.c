@@ -214,7 +214,7 @@ static int sota_msg_send(en_msg_code msg_code, uint8_t *buf, int32_t len)
     memcpy(msg_buf+sizeof(sota_pcp_head_t),buf,len);
     ret = msg_send(msg_buf,msg_len);
 
-    free(msg_buf);
+    osal_free(msg_buf);
 
     return ret;
 }
