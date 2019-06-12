@@ -1033,7 +1033,7 @@ static int __oc_bs_engine(void *args)
         if(0 != connect_server(cb))
         {
             conn_failed_cnt++;
-            printf("conn_failed_cnt:%d\r\n", conn_failed_cnt);
+            printf("bs server conn_failed_cnt:%d\r\n", conn_failed_cnt);
             continue;
         }
 
@@ -1123,7 +1123,7 @@ static int bs_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
 static void *__oc_config(tag_oc_mqtt_config *config)
 {
     tag_oc_mqtt_agent_cb *ret = NULL;
-    osal_semp_create(&s_agent_sync,0,0);
+    osal_semp_create(&s_agent_sync,1,0);
 
     ret = osal_zalloc(sizeof(tag_oc_mqtt_agent_cb));
     if(NULL == ret)
