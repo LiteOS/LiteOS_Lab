@@ -5,7 +5,7 @@
 
 #uptils now, we support the mqtt static mode and bs mode
 
-cfg_oc_mqtt_demo_type = oc_mqtt_demo_static
+cfg_oc_mqtt_demo_type = oc_mqtt_demo_bs
 oc_mqtt_demo_src =
 
 ifeq ($(cfg_oc_mqtt_demo_type),oc_mqtt_demo_static)

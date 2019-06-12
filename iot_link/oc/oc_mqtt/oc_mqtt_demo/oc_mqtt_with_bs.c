@@ -102,25 +102,6 @@ static void           *s_mqtt_handle;
 static char            iot_server_ip[16];
 static char            iot_server_port[4];
 
-static int bs_app_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
-{
-    int ret = -1;
-    printf("topic:%s qos:%d\n\r",msg->topic.data,msg->qos);
-
-    if(msg->msg.len < cn_app_rcv_buf_len)
-    {
-        memcpy(s_rcv_buffer,msg->msg.data,msg->msg.len );
-        s_rcv_buffer[msg->msg.len] = '\0'; ///< the json need it
-        s_rcv_datalen = msg->msg.len;
-
-        printf("msg:%s\n\r",s_rcv_buffer);
-
-        osal_semp_post(s_bs_rcv_sync);
-        ret = 0;
-
-    }
-    return ret;
-}
 
 static int app_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
 {
@@ -143,73 +124,10 @@ static int app_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
 }
 
 
-static int oc_mqtt_boot_entry( void *args)
-{
-    cJSON  *msg;
-    cJSON  *paras;
-    cJSON  *address;
-    cJSON  *dnsFlag;
-    char   *buf;
-    char   *port;
-    char   *ip;
-
-    while(1)
-    {
-        if(osal_semp_pend(s_bs_rcv_sync,cn_osal_timeout_forever))
-        {
-            msg = cJSON_Parse(s_rcv_buffer);
-            cJSON_Print(msg);
-
-            if(NULL != msg)
-            {
-                address = cJSON_GetObjectItem(msg,"address");
-                if(NULL != address)
-                {
-                    printf("address:%s\n\r", address->valuestring);
-                    port = strrchr(address->valuestring, ':');
-                    memcpy(iot_server_port, port, strlen(port));
-                    memcpy(iot_server_ip, address->valuestring, port - address->valuestring - 1);
-                }
-    
-                cJSON_Delete(msg);
-            }
-            osal_semp_post(s_agent_sync);
-            break;
-        }
-    }
-
-    return 0;
-}
 
 
-static int oc_mqtt_bs_entry(void *args)
-{
-    void *handle;
-    tag_bs_mqtt_config config;
 
 
-    config.server = BS_SERVER_IPV4;
-    config.port = BS_SERVER_PORT;
-    config.msgdealer = bs_app_msg_deal;
-    config.code_mode = en_oc_mqtt_code_mode_json;
-    config.sign_type = en_mqtt_sign_type_hmacsha256_check_time_no;
-    config.deviceid = DEMO_WITH_BOOTSTRAP_DEVICEID;
-    config.devicepasswd = DEMO_WITH_BOOTSTRAP_PASSWORD;
-
-    config.security.type = en_mqtt_al_security_cas;
-    config.security.u.cas.ca_crt.data = s_mqtt_ca_crt;
-    config.security.u.cas.ca_crt.len = sizeof(s_mqtt_ca_crt); ///< must including the end '\0'
-
-    handle = bs_mqtt_config(&config);
-    if(NULL == handle)
-    {
-        printf("config err\r\n");
-    }
-
-    s_mqtt_handle = handle;
-
-    return 0;
-}
 
 static int oc_mqtt_report_entry(void *args)
 {
@@ -223,14 +141,10 @@ static int oc_mqtt_report_entry(void *args)
 
     int times= 0;
 
-    //if(osal_semp_pend(s_agent_sync,cn_osal_timeout_forever))
-    while (osal_semp_pend(s_agent_sync,cn_osal_timeout_forever) == false)
-        continue;
     {
-        printf("delete bs task\r\n");
-        osal_task_kill(args);
-        config.server = iot_server_ip;
-        config.port = iot_server_port;
+        config.boot_mode = en_oc_boot_strap_mode_client_initialize;
+        config.server = BS_SERVER_IPV4;
+        config.port = BS_SERVER_PORT;
         config.msgdealer = app_msg_deal;
         config.code_mode = en_oc_mqtt_code_mode_json;
         config.sign_type = en_mqtt_sign_type_hmacsha256_check_time_no;
@@ -386,14 +300,11 @@ static int oc_mqtt_cmd_entry( void *args)
 int oc_mqtt_demo_main()
 {
     void *ret;
-    oc_mqtt_install_bootstrap();
+    printf("demo main new\r\n");
     osal_semp_create(&s_bs_rcv_sync,0,0);
     osal_semp_create(&s_oc_rcv_sync,0,0);
     osal_semp_create(&s_agent_sync,0,0);
 
-    osal_task_create("ocmqtt_bs", oc_mqtt_bs_entry, NULL, 0x1000, NULL, 10);
-
-    ret = osal_task_create("ocmqtt_boot", oc_mqtt_boot_entry, NULL, 0x1000, NULL, 10);
 
     osal_task_create("ocmqtt_report",oc_mqtt_report_entry,ret,0x1000,NULL,10);
 
