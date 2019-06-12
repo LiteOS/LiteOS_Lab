@@ -209,6 +209,7 @@ static int oc_mqtt_report_entry(void *args)
 
     int times= 0;
 
+    config.boot_mode = en_oc_boot_strap_mode_factory;
     config.server = DEFAULT_SERVER_IPV4;
     config.port = DEFAULT_SERVER_PORT;
     config.msgdealer = app_msg_deal;

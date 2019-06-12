@@ -88,9 +88,15 @@ typedef struct
     const char*  devicepasswd;
 }tag_oc_mqtt_device_static;
 
+typedef enum
+{
+    en_oc_boot_strap_mode_factory = 0,
+    en_oc_boot_strap_mode_client_initialize,
+}en_oc_boot_strap_mode_t;
 
 typedef struct
 {
+    en_oc_boot_strap_mode_t  boot_mode;
     const char   *server;            ///< cdp server address
     const char   *port;              ///< cdp server port
     mqtt_al_security_para_t security;///< only support crt mode now
@@ -105,6 +111,7 @@ typedef struct
     }device_info;
 
     oc_mqtt_msgdealer  msgdealer;///< when the agent receive any applciation data, please call this function
+    oc_mqtt_msgdealer  bsinfo_dealer;
 }tag_oc_mqtt_config;
 
 ///////////////////////////MQTT AGENT INTERFACE////////////////////////////////
@@ -121,40 +128,6 @@ typedef struct
     fn_oc_mqtt_report   report;   ///< this function used for the report data to the cdp
     fn_oc_mqtt_deconfig deconfig; ///< this function used for the deconfig
 }tag_oc_mqtt_ops;
-
-#if 1
-/*************************************************************************
- *
- *************************************************************************/
-typedef struct
-{
-    const char   *server;            ///< bs server address
-    const char   *port;              ///< bs server port
-    mqtt_al_security_para_t security;///< only support crt mode now
-    en_oc_mqtt_code_mode    code_mode;   ///< cdp encode mode:now only support the json mode
-    en_oc_mqtt_sign_type    sign_type;   ///< generate the passwd supported
-    const char*  deviceid;
-    const char*  devicepasswd;
-
-    oc_mqtt_msgdealer  msgdealer;///< when the agent receive any applciation data, please call this function
-}tag_bs_mqtt_config;
-
-
-/*************************************************************************
- *** MQTT BOOTSTRAP INTERFACE
- *************************************************************************/
-typedef void* (*fn_bs_mqtt_config)(tag_bs_mqtt_config *param);
-//typedef
-
-
-typedef struct
-{
-    const char         *name;     ///< this is the name for the ops
-    fn_bs_mqtt_config   config;   ///< this function used for the configuration
-
-}tag_bs_mqtt_ops;
-#endif
-
 
 #if cfg_oc_mqtt_enable
 /**
