@@ -67,3 +67,5 @@ cfg_oc_mqtt_demo_type:= oc_mqtt_demo_static
 #cfg_oc_lwm2m_demo_type:= oc_lwm2m_demo_nodtls
 #cfg_oc_mqtt_demo_type:= oc_mqtt_demo_static
 #################################################################################
+
+include $(TOP_DIR)/iot_link/iot.mk
