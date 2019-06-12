@@ -139,7 +139,7 @@ int link_main(void *args)
     #include <atiny_mqtt.h>
     oc_mqtt_install_atiny_mqtt();
 #endif
-    oc_mqtt_demo_main();
+    //oc_mqtt_demo_main();
 #endif
 
 ////////////////////////////  OC LWM2M && DEMOS     /////////////////////////////
