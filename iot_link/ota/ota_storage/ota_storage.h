@@ -69,7 +69,11 @@ typedef struct
 typedef struct
 {
     const char        *name;
-    int                pagesize;               ///< we will try our best to read and write in the transfer
+    int                boot_flag_page_size;
+    int                trans_flag_page_size;
+    int                run_img_page_size;
+    int                bak_img_page_size;
+    int                new_img_page_size;
     int                run_img_max_size;
     int                bak_img_max_size;
     int                new_img_max_size;

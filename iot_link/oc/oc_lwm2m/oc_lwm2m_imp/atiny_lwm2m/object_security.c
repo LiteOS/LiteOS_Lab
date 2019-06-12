@@ -195,6 +195,9 @@ static uint8_t prv_security_read(uint16_t instanceId,
 
 #ifdef LWM2M_BOOTSTRAP
 
+static const *s_bs_test_uri = "coap://49.4.85.232:5683";
+
+
 static uint8_t prv_security_write(uint16_t instanceId,
                                   int numData,
                                   lwm2m_data_t *dataArray,
@@ -217,11 +220,17 @@ static uint8_t prv_security_write(uint16_t instanceId,
         {
         case LWM2M_SECURITY_URI_ID:
             if (targetP->uri != NULL) lwm2m_free(targetP->uri);
-            targetP->uri = (char *)lwm2m_malloc(dataArray[i].value.asBuffer.length + 1);
+//            targetP->uri = (char *)lwm2m_malloc(dataArray[i].value.asBuffer.length + 1);
+//            if (targetP->uri != NULL)
+//            {
+//                memset(targetP->uri, 0, dataArray[i].value.asBuffer.length + 1);
+//                strncpy(targetP->uri, (char *)dataArray[i].value.asBuffer.buffer, dataArray[i].value.asBuffer.length);
+//                result = COAP_204_CHANGED;
+//            }
+            targetP->uri = (char *)lwm2m_malloc(strlen(s_bs_test_uri) + 1); ///--TODO, do the test
             if (targetP->uri != NULL)
             {
-                memset(targetP->uri, 0, dataArray[i].value.asBuffer.length + 1);
-                strncpy(targetP->uri, (char *)dataArray[i].value.asBuffer.buffer, dataArray[i].value.asBuffer.length);
+                strncpy(targetP->uri, (char *)s_bs_test_uri, strlen(s_bs_test_uri) + 1);
                 result = COAP_204_CHANGED;
             }
             else
@@ -247,6 +256,8 @@ static uint8_t prv_security_write(uint16_t instanceId,
 
             if (1 == lwm2m_data_decode_int(dataArray + i, &value))
             {
+                ///--TODO, do the test
+                value =3;
                 if (value >= 0 && value <= 3)
                 {
                     targetP->securityMode = value;
@@ -450,6 +461,8 @@ static uint8_t prv_security_create(uint16_t instanceId,
     }
     else
     {
+
+        targetP->shortID =  123;
         result = COAP_201_CREATED;
     }
 

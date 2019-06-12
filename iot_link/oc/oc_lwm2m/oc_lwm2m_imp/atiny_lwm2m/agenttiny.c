@@ -564,6 +564,11 @@ int atiny_bind(atiny_device_info_t *device_info, void *phandle)
         atiny_handle_reconnect(handle);
         (void)lwm2m_step(handle->lwm2m_context, (time_t *)&timeout);
         reboot_check();
+        if(0 == timeout)
+        {
+            timeout =1;
+        }
+
         (void)lwm2m_poll(handle, &timeout);
     }
 
