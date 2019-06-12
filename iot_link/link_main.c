@@ -143,6 +143,7 @@ int link_main(void *args)
 #if cfg_oc_mqtt_demo_enable
     #include <oc_mqtt_demo.h>
     oc_mqtt_demo_main();
+
 #endif
 
 #endif
