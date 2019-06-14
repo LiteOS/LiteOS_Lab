@@ -1155,8 +1155,11 @@ static void *__oc_config(tag_oc_mqtt_config *config)
             ret->config.server = "49.4.93.24";
             ret->config.port = "8883";
             ret->b_flag_stop = 0;
-            ret->config.device_info.s_device.deviceid = "653a8a63-7ec4-4b2b-99f9-911f5a665ce6";
-            ret->config.device_info.s_device.devicepasswd = "92d0f1a1f268acaedb0a";
+            if(config->boot_mode == en_oc_boot_strap_mode_client_initialize)
+            {
+                ret->config.device_info.s_device.deviceid = "653a8a63-7ec4-4b2b-99f9-911f5a665ce6";
+                ret->config.device_info.s_device.devicepasswd = "92d0f1a1f268acaedb0a";
+            }
             if(NULL == osal_task_create("oc_mqtt_agent",__oc_agent_engine,ret,0x1400,NULL,6))
             {
                 goto EXIT_ENGINE_CREATE;
