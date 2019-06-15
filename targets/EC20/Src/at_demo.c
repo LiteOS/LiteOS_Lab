@@ -122,7 +122,7 @@ int main(void)
 	
 #if cfg_oc_mqtt_enable
     #include <oc_mqtt_al.h>
-    #include <oc_mqtt_demo.h>
+    //#include <oc_mqtt_demo.h>
 		oc_mqtt_init();
 	
 #if cfg_atiny_mqtt_enable
@@ -130,29 +130,35 @@ int main(void)
 		oc_mqtt_install_atiny_mqtt();
 #endif
 		//oc_mqtt_demo_main();
-     hwoc_mqtt_connect(0,"49.4.93.24","8883","653a8a63-7ec4-4b2b-99f9-911f5a665ce6", "92d0f1a1f268acaedb0a");
+     hwoc_mqtt_connect(0,"49.4.93.24","8883","91630054-801a-4561-9151-5b0eae6241d4", "0d7046bd5594145ef6a4");
      printf("conned\r\n");
-	 tag_oc_mqtt_response response;
-	 tag_key_value_list   list;
-	 int err_int = 1;
-	 int mid_int = 1;
-	 char   *buf;
-	 list.item.name = "body_para";
-	 list.item.buf = "body_para";
-	 list.item.type = en_key_value_type_string;
-	 list.next = NULL;
-	 
-	 response.hasmore = 0;
-	 response.errcode = err_int;
-	 response.mid = mid_int;
-	 response.bodylst = &list;
-	 
-	 buf = cJSON_Print(oc_mqtt_json_fmt_response(&response));
+    tag_oc_mqtt_report  report;
+    tag_key_value_list   list;
+    int leftpower = 0;
+    int err_int = 1;
+    int mid_int = 1;
+    char   *buf;
 
     while(1)
     {
-        hwoc_mqtt_send(en_mqtt_al_qos_1, buf,strlen(buf));
-        osal_task_sleep(1000);
+        list.item.name = "batteryLevel";
+        list.item.buf = (char *)&leftpower;
+        list.item.len = sizeof(leftpower);
+        list.item.type = en_key_value_type_int;
+        list.next = NULL;
+
+        report.hasmore = en_oc_mqtt_has_more_no;
+        report.paralst= &list;
+        report.serviceid = "Battery";
+        report.eventtime = "20190508T112020Z";
+
+        buf = cJSON_Print(oc_mqtt_json_fmt_report(&report));
+
+        if(NULL != buf)
+        {
+            hwoc_mqtt_send(en_mqtt_al_qos_1, buf,strlen(buf));
+            osal_task_sleep(1000);
+        }
     }
 
 #endif
