@@ -115,7 +115,10 @@ static bool_t  __mutex_lock(osal_mutex_t mutex)
 static bool_t  __mutex_unlock(osal_mutex_t mutex)
 {
     if(!pthread_mutex_unlock((pthread_mutex_t *)mutex))
+    {
+        usleep(1000);
         return true;
+    }
 
     return false;
 }

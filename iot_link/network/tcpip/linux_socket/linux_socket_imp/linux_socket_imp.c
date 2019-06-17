@@ -61,9 +61,8 @@ static int __linux_setsockopt(int fd, int level, int option, const void *option_
             option = SO_RCVTIMEO;
 
             time_delay = option_value;
-            if((time_delay->tv_sec == 0)&&(time_delay->tv_usec = 0))
+            if((time_delay->tv_sec == 0)&&(time_delay->tv_usec == 0))
             {
-                printf("log:::::::timeout should be mapped:::::should set none zero\n\r");
                 time_delay->tv_usec = 1000;
             }
         }
