@@ -131,7 +131,27 @@ static int __macos_recvfrom(int fd, void *msg, int len, int flag, struct sockadd
     return ret;
 }
 
+///< map the level and option
+#include <sys/time.h>
+static int __macos_setsockopt(int fd, int level, int option, const void *option_value, int option_len)
+{
+    struct timeval *timedelay;
 
+    if((level == SOL_SOCKET))
+    {
+        if(option == SO_RCVTIMEO)
+        {
+            timedelay =option_value;
+            if((timedelay->tv_sec == 0) && (timedelay->tv_usec == 0))
+            {
+                printf("%s:log:::::::timeout should be mapped:::::modified it 1000 us\n\r",__FUNCTION__);
+                timedelay->tv_usec =1000;
+            }
+        }
+    }
+
+    return setsockopt(fd, level, option, option_value, option_len);
+}
 
 
 
@@ -146,7 +166,7 @@ static const tag_tcpip_ops s_tcpip_socket_ops =
    .sendto = (fn_sal_sendto)__macos_sendto,
    .recv = (fn_sal_recv)recv,
    .recvfrom = (fn_sal_recvfrom)__macos_recvfrom,
-   .setsockopt = (fn_sal_setsockopt)setsockopt,
+   .setsockopt = (fn_sal_setsockopt)__macos_setsockopt,
    .getsockopt = (fn_sal_getsockopt)getsockopt,
    .shutdown =(fn_sal_shutdown)shutdown,
    .closesocket =(fn_sal_closesocket)close,

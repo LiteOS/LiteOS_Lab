@@ -45,11 +45,13 @@
 #include <sys/socket.h>
 
 #include <sal_imp.h>   ///< register the lwip to sal
+#include <sys/time.h>
 #include <linux_socket_imp.h>
 
 ///< map the level and option
 static int __linux_setsockopt(int fd, int level, int option, const void *option_value, int option_len)
 {
+    struct timeval *time_delay;
 
     if(level == 0xffff)
     {
@@ -57,6 +59,13 @@ static int __linux_setsockopt(int fd, int level, int option, const void *option_
         if(option == 0x1006)
         {
             option = SO_RCVTIMEO;
+
+            time_delay = option_value;
+            if((time_delay->tv_sec == 0)&&(time_delay->tv_usec = 0))
+            {
+                printf("log:::::::timeout should be mapped:::::should set none zero\n\r");
+                time_delay->tv_usec = 1000;
+            }
         }
     }
 
