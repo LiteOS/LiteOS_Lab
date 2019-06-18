@@ -41,7 +41,10 @@ extern int link_main(void *args);
 int main(void)
 {
     link_main(NULL);
-    while(1);
+    while(1)
+    {
+        sleep(100);
+    }
     return 0;
 }
 
