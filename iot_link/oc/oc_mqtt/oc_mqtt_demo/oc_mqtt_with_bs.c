@@ -47,16 +47,10 @@
 /* brief : the oceanconnect platform only support the ca_crt up tills now*/
 /** the address product_id device_id password crt is only for the test  */
 
-//#define MQTT_DEMO_CONNECT_DYNAMIC
-//#define BS_SERVER_IPV4         "49.4.93.24"     ///<  server ip address
-//#define BS_SERVER_PORT         "8883"           ///<  server mqtt service port
-//#define DEMO_WITH_BOOTSTRAP_DEVICEID    "7886a5fd-fe90-40b6-9944-97e71def3d4c"
-//#define DEMO_WITH_BOOTSTRAP_PASSWORD    "851db9545882d0e25df9"
-
 #define BS_SERVER_IPV4         "119.3.184.255"     ///<  server ip address
 #define BS_SERVER_PORT         "8883"           ///<  server mqtt service port
-#define DEMO_WITH_BOOTSTRAP_DEVICEID    "987a0150-f855-4648-b771-fe0c7c7c1c2b"
-#define DEMO_WITH_BOOTSTRAP_PASSWORD    "012b919e4171447c88a3"
+#define DEMO_WITH_BOOTSTRAP_NODEID    "31415926"
+#define DEMO_WITH_BOOTSTRAP_PASSWORD    "9f825c0ed3e95ea3d459"
 
 
 static char s_mqtt_ca_crt[] =
@@ -144,7 +138,8 @@ static int oc_mqtt_report_entry(void *args)
         config.code_mode = en_oc_mqtt_code_mode_json;
         config.sign_type = en_mqtt_sign_type_hmacsha256_check_time_no;
         config.device_type = en_oc_mqtt_device_type_static;
-        config.device_info.s_device.deviceid = DEMO_WITH_BOOTSTRAP_DEVICEID;
+        config.auth_type = en_mqtt_auth_type_nodeid;
+        config.device_info.s_device.deviceid = DEMO_WITH_BOOTSTRAP_NODEID;
         config.device_info.s_device.devicepasswd = DEMO_WITH_BOOTSTRAP_PASSWORD;
 
         config.security.type = en_mqtt_al_security_cas;

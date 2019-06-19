@@ -156,7 +156,7 @@ typedef struct
 
 static osal_semp_t     s_agent_sync;
 static char            iot_server_ip[16];
-static char            iot_server_port[4];
+static char            iot_server_port[5];
 
 
 static int  secret_get_devceid_passwd(tag_oc_mqtt_agent_cb  *cb)
@@ -396,10 +396,21 @@ static int check_clone_config_params(tag_oc_mqtt_agent_cb *cb,tag_oc_mqtt_config
             goto EXIT_ERR;
         }
     }
+
+    if((en_oc_mqtt_device_type_static == config->device_type) &&\
+        (en_mqtt_auth_type_model == config->auth_type))
+    {
+        goto EXIT_ERR;
+    }
+
+    if((en_oc_mqtt_device_type_dynamic == config->device_type) &&\
+        (en_mqtt_auth_type_model != config->auth_type))
+    {
+        goto EXIT_ERR;
+    }
+
     memset(cb,0,sizeof(tag_oc_mqtt_agent_cb));
     cb->config = *config;
-    //if(config->boot_mode == en_oc_boot_strap_mode_factory)
-    //    cb->b_flag_bs_finished = 1;
 
     ret = 0;
     return ret;
@@ -471,7 +482,7 @@ static int gen_mqtt_para(tag_oc_mqtt_agent_cb *cb)
         if (cb->mqtt_client_id != NULL)
         {
             snprintf(cb->mqtt_client_id,len,cn_client_id_fmt_static,cb->config.device_info.s_device.deviceid,\
-                    0,cb->config.sign_type,time_value);
+                    cb->config.auth_type,cb->config.sign_type,time_value);
         }
         else
         {
@@ -546,7 +557,7 @@ static int gen_mqtt_para(tag_oc_mqtt_agent_cb *cb)
         if (cb->mqtt_client_id != NULL)
         {
             snprintf(cb->mqtt_client_id,len,cn_client_id_fmt_static,cb->get_device_id,\
-                    0,cb->config.sign_type,time_value);
+                    cb->config.auth_type,cb->config.sign_type,time_value);
         }
         else
         {
@@ -716,7 +727,7 @@ static int gen_bs_para(tag_oc_mqtt_agent_cb *cb)
     if (cb->mqtt_client_id != NULL)
     {
         snprintf(cb->mqtt_client_id,len,cn_client_id_fmt_static,cb->config.device_info.s_device.deviceid,\
-                0,cb->config.sign_type,time_value);
+                cb->config.auth_type,cb->config.sign_type,time_value);
     }
     else
     {
@@ -1083,6 +1094,7 @@ static int bs_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
     int ret = -1;
     cJSON  *buf;
     cJSON  *address;
+    cJSON  *dnsFlag;
     char   *port;
     printf("bs topic:%s qos:%d\n\r",msg->topic.data,msg->qos);
 
@@ -1099,12 +1111,27 @@ static int bs_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
         if(NULL != buf)
         {
             address = cJSON_GetObjectItem(buf,"address");
-            if(NULL != address)
+            dnsFlag = cJSON_GetObjectItem(buf,"dnsFlag");
+            if(NULL != dnsFlag && NULL != address)
             {
+                printf("dnsFlag:%d\n\r", dnsFlag->valueint);
                 printf("address:%s\n\r", address->valuestring);
-                port = strrchr(address->valuestring, ':');
-                memcpy(iot_server_port, port, strlen(port));
-                memcpy(iot_server_ip, address->valuestring, port - address->valuestring - 1);
+            }
+            else
+                return ret;
+
+            if(dnsFlag->valueint == 1)  //ip and port
+            {
+                if(NULL != address)
+                {
+                    port = strrchr(address->valuestring, ':');
+                    memcpy(iot_server_port, port+1, strlen(port)-1);
+                    memcpy(iot_server_ip, address->valuestring, port - address->valuestring);
+                }
+            }
+            else
+            {
+                // TODO
             }
 
             cJSON_Delete(buf);
@@ -1152,13 +1179,14 @@ static void *__oc_config(tag_oc_mqtt_config *config)
         if(osal_semp_pend(s_agent_sync,cn_osal_timeout_forever))
         {
             printf("create agent engine\r\n");
-            ret->config.server = "49.4.93.24";
-            ret->config.port = "8883";
-            ret->b_flag_stop = 0;
+            if(s_oc_agent_cb && s_oc_agent_cb->mqtt_handle)
+                mqtt_al_disconnect(s_oc_agent_cb->mqtt_handle);
+
             if(config->boot_mode == en_oc_boot_strap_mode_client_initialize)
             {
-                ret->config.device_info.s_device.deviceid = "653a8a63-7ec4-4b2b-99f9-911f5a665ce6";
-                ret->config.device_info.s_device.devicepasswd = "92d0f1a1f268acaedb0a";
+                ret->config.port = iot_server_port;
+                ret->config.server = iot_server_ip;
+                ret->b_flag_stop = 0;
             }
             if(NULL == osal_task_create("oc_mqtt_agent",__oc_agent_engine,ret,0x1400,NULL,6))
             {

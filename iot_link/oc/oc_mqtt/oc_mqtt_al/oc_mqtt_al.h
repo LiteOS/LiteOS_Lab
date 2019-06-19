@@ -62,6 +62,13 @@ typedef enum
     en_mqtt_sign_type_hmacsha256_check_time_yes   , //use HMACSHA256 to encode password and check current time
 }en_oc_mqtt_sign_type;
 
+typedef enum
+{
+    en_mqtt_auth_type_devid = 0,
+    en_mqtt_auth_type_model = 1,
+    en_mqtt_auth_type_nodeid = 2,
+}en_oc_mqtt_auth_type;
+
 
 /** @brief this is the message dealer module for the application*/
 typedef int (*oc_mqtt_msgdealer)(void *handle,mqtt_al_msgrcv_t *msg);
@@ -103,6 +110,7 @@ typedef struct
     en_oc_mqtt_code_mode    code_mode;   ///< cdp encode mode:now only support the json mode
     en_oc_mqtt_sign_type    sign_type;   ///< generate the passwd supported
     en_oc_mqtt_device_type  device_type;
+    en_oc_mqtt_auth_type    auth_type;
 
     union
     {

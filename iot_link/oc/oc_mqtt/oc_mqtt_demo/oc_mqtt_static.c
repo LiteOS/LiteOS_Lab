@@ -216,6 +216,7 @@ static int oc_mqtt_report_entry(void *args)
     config.code_mode = en_oc_mqtt_code_mode_json;
     config.sign_type = en_mqtt_sign_type_hmacsha256_check_time_no;
     config.device_type = en_oc_mqtt_device_type_static;
+    config.auth_type = en_mqtt_auth_type_devid;
     config.device_info.s_device.deviceid = AGENT_TINY_DEMO_DEVICEID;
     config.device_info.s_device.devicepasswd = AGENT_TINY_DEMO_PASSWORD;
 
