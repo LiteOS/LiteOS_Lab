@@ -157,7 +157,7 @@ mbedtls_ssl_context *dtls_ssl_new(dtls_establish_info_s *info, char plat_type)
         goto exit_fail;
     }
 
-    mbedtls_ssl_conf_authmode(conf, MBEDTLS_SSL_VERIFY_OPTIONAL);
+    mbedtls_ssl_conf_authmode(conf, MBEDTLS_SSL_VERIFY_REQUIRED);
     mbedtls_ssl_conf_rng(conf, mbedtls_ctr_drbg_random, ctr_drbg);
 
     if (info->udp_or_tcp == MBEDTLS_NET_PROTO_TCP)
@@ -194,7 +194,7 @@ mbedtls_ssl_context *dtls_ssl_new(dtls_establish_info_s *info, char plat_type)
     }
 #endif
 
-    mbedtls_ssl_conf_authmode(conf, MBEDTLS_SSL_VERIFY_NONE);  //TODO--test for no check the ca_rt--only for the debug
+    mbedtls_ssl_conf_authmode(conf, MBEDTLS_SSL_VERIFY_REQUIRED);  //TODO--test for no check the ca_rt--only for the debug
 
     if ((ret = mbedtls_ssl_setup(ssl, conf)) != 0)
     {

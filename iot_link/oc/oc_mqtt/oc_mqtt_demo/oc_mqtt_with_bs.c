@@ -83,6 +83,7 @@ static char s_mqtt_ca_crt[] =
 "rqnNVUgf2j9TOshCI6zuaxsA35wr\r\n"
 "-----END CERTIFICATE-----\r\n";
 
+
 static void           *s_mqtt_handle;
 
 //if your command is very fast,please use a queue here--TODO
