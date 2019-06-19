@@ -138,9 +138,11 @@ int main(void)
     int err_int = 1;
     int mid_int = 1;
     char   *buf;
+    int times= 0;
 
     while(1)
     {
+        leftpower = (leftpower + 7 )%100;
         list.item.name = "batteryLevel";
         list.item.buf = (char *)&leftpower;
         list.item.len = sizeof(leftpower);
@@ -158,6 +160,7 @@ int main(void)
         {
             hwoc_mqtt_send(en_mqtt_al_qos_1, buf,strlen(buf));
             osal_task_sleep(1000);
+            printf("times:%d power:%d\r\n",times++,leftpower);
         }
     }
 
