@@ -56,7 +56,7 @@ LITE_OS_SEC_BSS LOS_DL_LIST          g_stUnusedMuxList;
 
 
 /*****************************************************************************
- Funtion	     : osMuxInit,
+ Funtion         : osMuxInit,
  Description  : Initializes the mutex,
  Input        : None
  Output       : None
@@ -187,7 +187,7 @@ ErrHandler:
  Function     : LOS_MuxPend
  Description  : Specify the mutex P operation,
  Input        : uwMuxHandle ------ Mutex operation handleone,
- 		       uwTimeOut  ------- waiting time,
+                uwTimeOut  ------- waiting time,
  Output       : None
  Return       : LOS_OK on success ,or error code on failure
  *****************************************************************************/

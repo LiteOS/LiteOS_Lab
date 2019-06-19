@@ -430,13 +430,13 @@ LITE_OS_SEC_TEXT UINT32 LOS_RWWriteUnLock(UINT32 uwRWLockHandle)
         return LOS_ERRNO_RWLOCK_INVALID;
     }
 
-	if(--(pstRWLockPosted->ucWCount) > 0)
+    if(--(pstRWLockPosted->ucWCount) > 0)
     {
         LOS_IntRestore(uwIntSave);
         return LOS_OK;
     }
 
-	pstRWLockPosted->pstWOwner = NULL;
+    pstRWLockPosted->pstWOwner = NULL;
 
     if (!LOS_ListEmpty(&pstRWLockPosted->stWPendList))
     {

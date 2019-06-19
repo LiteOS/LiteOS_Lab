@@ -333,8 +333,8 @@ static int32_t sota_data_block_process(const sota_pcp_head_t *head, const uint8_
     
     if ((s_sota_cb.record.block_num) < s_sota_cb.record.block_totalnum)
     {
-    	SOTA_LOG("Rx total %d bytes downloading\r\n", s_sota_cb.record.block_tolen);
-    	sota_send_request_block(s_sota_cb.record.ver);
+        SOTA_LOG("Rx total %d bytes downloading\r\n", s_sota_cb.record.block_tolen);
+        sota_send_request_block(s_sota_cb.record.ver);
         return SOTA_DOWNLOADING;
     } 
     else
@@ -490,7 +490,7 @@ static int sota_status_check(void)
     }
     else
     {
-	    (void)flag_upgrade_get_result(&state);
+        (void)flag_upgrade_get_result(&state);
         SOTA_LOG("upgrade result: %d", state);
         if (state == OTA_SUCCEED)
         {

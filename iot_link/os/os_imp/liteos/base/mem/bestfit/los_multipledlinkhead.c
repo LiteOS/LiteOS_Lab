@@ -42,7 +42,7 @@
 LITE_OS_SEC_ALW_INLINE STATIC_INLINE UINT32 LOS_Log2(UINT32 uwSize)
 {
     IF_ELSE(0x80000000, \
-			BIT_NONE, \
+            BIT_NONE, \
             IF_ELSE(0x7fff0000, \
                     IF_ELSE(0x7f000000,\
                             IF_ELSE(0x70000000,\
