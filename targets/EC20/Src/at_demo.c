@@ -130,7 +130,7 @@ int main(void)
 		oc_mqtt_install_atiny_mqtt();
 #endif
 		//oc_mqtt_demo_main();
-     hwoc_mqtt_connect(0,"49.4.93.24","8883","91630054-801a-4561-9151-5b0eae6241d4", "0d7046bd5594145ef6a4");
+     hwoc_mqtt_connect(1,"119.3.184.255","8883","31415926", "9f825c0ed3e95ea3d459");
      printf("conned\r\n");
     tag_oc_mqtt_report  report;
     tag_key_value_list   list;
