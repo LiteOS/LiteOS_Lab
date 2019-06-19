@@ -43,7 +43,8 @@ int main(void)
     link_main(NULL);
     while(1)
     {
-        sleep(100);
+        usleep(100);
+        fflush(stdout); ///< make sure that printf could flush to the console of eclipse
     }
     return 0;
 }
