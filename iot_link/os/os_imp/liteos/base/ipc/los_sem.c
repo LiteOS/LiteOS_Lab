@@ -209,7 +209,7 @@ ErrHandler:
  Function     : LOS_SemPend
  Description : Specified semaphore P operation,
  Input          : uwSemHandle--------- semaphore operation handle,
- 		     uwTimeout   ---------- waitting time
+              uwTimeout   ---------- waitting time
  Output       : None
  Return       : LOS_OK on success or error code on failure
  *****************************************************************************/

@@ -204,20 +204,20 @@ void  sys_mbox_post(struct sys_mbox **mb, void *msg)   ///< check if it is empty
 
     if(osal_semp_pend(mbox->not_full,cn_osal_timeout_forever))
     {
-    	if(osal_mutex_lock(mbox->mutex))
-    	{
-    	    mbox->msgs[mbox->last] = msg;
+        if(osal_mutex_lock(mbox->mutex))
+        {
+            mbox->msgs[mbox->last] = msg;
 
-    	    mbox->last = (mbox->last + 1) % mbox->mbox_size;
+            mbox->last = (mbox->last + 1) % mbox->mbox_size;
 
-    	    if (mbox->first == mbox->last)
-    	    {
-    	        mbox->isFull = 1;
-    	    }
+            if (mbox->first == mbox->last)
+            {
+                mbox->isFull = 1;
+            }
 
-    		osal_mutex_unlock(mbox->mutex);
-        	osal_semp_post(mbox->not_empty);
-    	}
+            osal_mutex_unlock(mbox->mutex);
+            osal_semp_post(mbox->not_empty);
+        }
     }
 
     return;
@@ -238,7 +238,7 @@ void  sys_mbox_post(struct sys_mbox **mb, void *msg)   ///< check if it is empty
  *---------------------------------------------------------------------------*/
 err_t sys_mbox_trypost(struct sys_mbox **mb, void *msg)
 {
-	err_t ret = ERR_MEM;
+    err_t ret = ERR_MEM;
     struct sys_mbox *mbox;
     mbox = *mb;
     LWIP_DEBUGF(SYS_DEBUG, ("sys_mbox_post: mbox 0x%p msg 0x%p\n", (void *)mbox, (void *)msg));
@@ -246,21 +246,21 @@ err_t sys_mbox_trypost(struct sys_mbox **mb, void *msg)
 
     if(osal_semp_pend(mbox->not_full,0))
     {
-    	if(osal_mutex_lock(mbox->mutex))
-    	{
-    	    mbox->msgs[mbox->last] = msg;
+        if(osal_mutex_lock(mbox->mutex))
+        {
+            mbox->msgs[mbox->last] = msg;
 
-    	    mbox->last = (mbox->last + 1) % mbox->mbox_size;
+            mbox->last = (mbox->last + 1) % mbox->mbox_size;
 
-    	    if (mbox->first == mbox->last)
-    	    {
-    	        mbox->isFull = 1;
-    	    }
+            if (mbox->first == mbox->last)
+            {
+                mbox->isFull = 1;
+            }
 
-    		osal_mutex_unlock(mbox->mutex);
-        	osal_semp_post(mbox->not_empty);
-        	ret = ERR_OK;
-    	}
+            osal_mutex_unlock(mbox->mutex);
+            osal_semp_post(mbox->not_empty);
+            ret = ERR_OK;
+        }
     }
 
     return ret;
@@ -305,47 +305,47 @@ sys_arch_mbox_fetch(struct sys_mbox **mb, void **msg, u32_t timeout)
 
     if((NULL == mb) ||(NULL == *mb)||(NULL == msg))
     {
-    	return time_needed;
+        return time_needed;
     }
 
     if(timeout == 0)
     {
-    	pend_time = cn_osal_timeout_forever;
+        pend_time = cn_osal_timeout_forever;
     }
     else
     {
-    	pend_time = timeout;
+        pend_time = timeout;
     }
     time_start = osal_sys_time();
 
     time_needed = SYS_ARCH_TIMEOUT;
     if(osal_semp_pend(mbox->not_empty,pend_time))
     {
-    	if(osal_mutex_lock(mbox->mutex))
-    	{
+        if(osal_mutex_lock(mbox->mutex))
+        {
 
-	        *msg = mbox->msgs[mbox->first];
-    	    mbox->first = (mbox->first + 1) % mbox->mbox_size;
+            *msg = mbox->msgs[mbox->first];
+            mbox->first = (mbox->first + 1) % mbox->mbox_size;
 
-    	    if (mbox->first == mbox->last)
-    	    {
-    	        mbox->isEmpty = 1;
-    	    }
+            if (mbox->first == mbox->last)
+            {
+                mbox->isEmpty = 1;
+            }
 
-    	    if (mbox->isFull)
-    	    {
-    	        mbox->isFull = 0;
-    	    }
-    		osal_mutex_unlock(mbox->mutex);
-    		osal_semp_post(mbox->not_full);
+            if (mbox->isFull)
+            {
+                mbox->isFull = 0;
+            }
+            osal_mutex_unlock(mbox->mutex);
+            osal_semp_post(mbox->not_full);
             time_end = osal_sys_time();
 
             time_needed = time_end - time_start;
             if(time_needed == 0)
             {
-            	time_needed =1; ///< could not be zero, else the caller will think it failed
+                time_needed =1; ///< could not be zero, else the caller will think it failed
             }
-    	}
+        }
 
     }
 
@@ -417,9 +417,9 @@ u32_t sys_now(void)
 sys_thread_t  sys_thread_new(char *name, lwip_thread_fn function, void *arg, int stacksize, int prio)
 {
 
-	void *handle;
+    void *handle;
 
-	handle = osal_task_create(name,(int (*)(void *args))function,arg,stacksize,NULL,prio);
+    handle = osal_task_create(name,(int (*)(void *args))function,arg,stacksize,NULL,prio);
     return (sys_thread_t)handle;
 }
 
@@ -468,7 +468,7 @@ void assert_printf(char *msg, int line, char *file)
 err_t sys_sem_new(sys_sem_t *sem,  u8_t count)
 {
 
-	err_t ret = ERR_MEM;
+    err_t ret = ERR_MEM;
     if (NULL == sem)
     {
         return ERR_ARG;
@@ -478,7 +478,7 @@ err_t sys_sem_new(sys_sem_t *sem,  u8_t count)
 
     if(osal_semp_create(sem,1,count))
     {
-    	ret = ERR_OK;
+        ret = ERR_OK;
     }
     return ret;
 
@@ -523,27 +523,27 @@ u32_t sys_arch_sem_wait(sys_sem_t *sem, u32_t timeout)
 
     if(0 == timeout)
     {
-    	pend_time = cn_osal_timeout_forever;
+        pend_time = cn_osal_timeout_forever;
     }
     else
     {
-    	pend_time = timeout;
+        pend_time = timeout;
     }
 
     time_start = osal_sys_time();
     if(osal_semp_pend(*sem,pend_time))
     {
-    	time_end = osal_sys_time();
-    	ret = time_end - time_start;
+        time_end = osal_sys_time();
+        ret = time_end - time_start;
     }
     else
     {
-    	ret = SYS_ARCH_TIMEOUT;
+        ret = SYS_ARCH_TIMEOUT;
     }
 
     if(ret == 0)
     {
-    	ret = 1; ///< could not be zeror, if not, the caller think it failed
+        ret = 1; ///< could not be zeror, if not, the caller think it failed
     }
 
     return ret;
@@ -560,10 +560,10 @@ u32_t sys_arch_sem_wait(sys_sem_t *sem, u32_t timeout)
  *---------------------------------------------------------------------------*/
 void sys_sem_signal(sys_sem_t *sem)
 {
-	if(NULL != sem)
-	{
-		osal_semp_post(*sem);
-	}
+    if(NULL != sem)
+    {
+        osal_semp_post(*sem);
+    }
     return;
 }
 
@@ -579,10 +579,10 @@ void sys_sem_signal(sys_sem_t *sem)
 
 void sys_sem_free(sys_sem_t *sem)
 {
-	if(NULL != sem)
-	{
-		osal_semp_del(*sem);
-	}
+    if(NULL != sem)
+    {
+        osal_semp_del(*sem);
+    }
 
     return;
 }
@@ -598,21 +598,21 @@ void sys_sem_free(sys_sem_t *sem)
  */
 err_t sys_mutex_new(sys_mutex_t *mutex)
 {
-	err_t ret = ERR_ARG;
-	if(NULL == mutex)
-	{
-		return ret;
-	}
+    err_t ret = ERR_ARG;
+    if(NULL == mutex)
+    {
+        return ret;
+    }
 
-	if(osal_mutex_create(mutex))
-	{
-		ret = ERR_OK;
-	}
-	else
-	{
-		ret = ERR_MEM;
-	}
-	return ret;
+    if(osal_mutex_create(mutex))
+    {
+        ret = ERR_OK;
+    }
+    else
+    {
+        ret = ERR_MEM;
+    }
+    return ret;
 }
 /**
  * @ingroup sys_mutex
@@ -621,11 +621,11 @@ err_t sys_mutex_new(sys_mutex_t *mutex)
  */
 void sys_mutex_lock(sys_mutex_t *mutex)
 {
-	if(NULL != mutex)
-	{
-		osal_mutex_lock(*mutex);
-	}
-	return;
+    if(NULL != mutex)
+    {
+        osal_mutex_lock(*mutex);
+    }
+    return;
 }
 /**
  * @ingroup sys_mutex
@@ -634,11 +634,11 @@ void sys_mutex_lock(sys_mutex_t *mutex)
  */
 void sys_mutex_unlock(sys_mutex_t *mutex)
 {
-	if(NULL != mutex)
-	{
-		osal_mutex_unlock(*mutex);
-	}
-	return;
+    if(NULL != mutex)
+    {
+        osal_mutex_unlock(*mutex);
+    }
+    return;
 }
 /**
  * @ingroup sys_mutex
@@ -647,9 +647,9 @@ void sys_mutex_unlock(sys_mutex_t *mutex)
  */
 void sys_mutex_free(sys_mutex_t *mutex)
 {
-	if(NULL != mutex)
-	{
-		osal_mutex_del(*mutex);
-	}
-	return;
+    if(NULL != mutex)
+    {
+        osal_mutex_del(*mutex);
+    }
+    return;
 }

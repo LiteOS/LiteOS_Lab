@@ -236,7 +236,7 @@ tagImsi gAtcimi[]={\
     {"46003","ctnet"},\
     {"46005","ctnet"},\
     {"46011","ctlte"},\
-//		{"46020","cmnet"},  //not support the tietong
+//        {"46020","cmnet"},  //not support the tietong
 };
 #define CN_CIMI_SIZE  (sizeof(gAtcimi)/sizeof(tagImsi))
 

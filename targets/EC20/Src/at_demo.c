@@ -55,81 +55,81 @@
 
 int main(void)
 {
-		///< install the RTOS kernel for the link
-		osal_init();
-	
-	
+        ///< install the RTOS kernel for the link
+        osal_init();
+    
+    
 #if cfg_liteos_enable
-		osal_install_liteos();
+        osal_install_liteos();
 #elif cfg_linux_enable
-		osal_install_linux();
+        osal_install_linux();
 #elif  cfg_macos_enable
-		osal_install_macos();
+        osal_install_macos();
 #endif
-	
+    
 #if cfg_shell_enable
     #include <shell.h>
-		///< install the shell for the link
-		extern void shell_uart_init(int baud);
-		shell_uart_init(115200);
-		shell_init();
+        ///< install the shell for the link
+        extern void shell_uart_init(int baud);
+        shell_uart_init(115200);
+        shell_init();
 #endif
-	
-		///< install the cJSON, for the oc mqtt agent need the cJSON
+    
+        ///< install the cJSON, for the oc mqtt agent need the cJSON
 #if cfg_json_enable
     #include <cJSON.h>
-	
-		cJSON_Hooks  hook;
-		hook.free_fn = osal_free;
-		hook.malloc_fn = osal_malloc;
-		cJSON_InitHooks(&hook);
+    
+        cJSON_Hooks  hook;
+        hook.free_fn = osal_free;
+        hook.malloc_fn = osal_malloc;
+        cJSON_InitHooks(&hook);
 #endif
-		///< install the tcpip stack and net driver for the link
+        ///< install the tcpip stack and net driver for the link
 #if cfg_tcpip_enable
     #include <sal.h>
-		tcpipstack_init(10);
-	
+        tcpipstack_init(10);
+    
     #if cfg_lwip_enable
         #include <lwip_imp.h>
-			tcpipstack_install_lwip(netdriver_install);
+            tcpipstack_install_lwip(netdriver_install);
     #elif cfg_linux_socket_enable
         #include <linux_socket_imp.h>
-			tcpipstack_install_linux_socket();
+            tcpipstack_install_linux_socket();
     #elif cfg_macos_socket_enable
         #include <macos_socket_imp.h>
-			tcpipstack_install_macos_socket();
+            tcpipstack_install_macos_socket();
     #else
-	
+    
     #endif
-	
+    
 #endif
-	
+    
 #ifdef WITH_DTLS
-	
-		dtls_init();
+    
+        dtls_init();
 #endif
-	
-	//////////////////////////	MQTT PROTOCOL  /////////////////////////////////////
+    
+    //////////////////////////    MQTT PROTOCOL  /////////////////////////////////////
 #if cfg_mqtt_enable
     #include <mqtt_al.h>
     #include <paho_mqtt_port.h>
-	
-		mqtt_init();
-		mqtt_install_pahomqtt();
+    
+        mqtt_init();
+        mqtt_install_pahomqtt();
 #endif
-	
-	//////////////////////////	OC MQTT && DEMOS  //////////////////////////////////
-	
+    
+    //////////////////////////    OC MQTT && DEMOS  //////////////////////////////////
+    
 #if cfg_oc_mqtt_enable
     #include <oc_mqtt_al.h>
     //#include <oc_mqtt_demo.h>
-		oc_mqtt_init();
-	
+        oc_mqtt_init();
+    
 #if cfg_atiny_mqtt_enable
     #include <atiny_mqtt.h>
-		oc_mqtt_install_atiny_mqtt();
+        oc_mqtt_install_atiny_mqtt();
 #endif
-		//oc_mqtt_demo_main();
+        //oc_mqtt_demo_main();
      hwoc_mqtt_connect(1,"119.3.184.255","8883","31415926", "9f825c0ed3e95ea3d459");
      printf("conned\r\n");
     tag_oc_mqtt_report  report;
@@ -165,22 +165,22 @@ int main(void)
     }
 
 #endif
-	
-	////////////////////////////  OC LWM2M && DEMOS 	/////////////////////////////
-	
+    
+    ////////////////////////////  OC LWM2M && DEMOS     /////////////////////////////
+    
 #if cfg_oc_lwm2m_enable
     #include <oc_lwm2m_al.h>
     #include <oc_lwm2m_demo.h>
-		oc_lwm2m_init();
-	
+        oc_lwm2m_init();
+    
 #if cfg_oc_lwm2m_agent_enable
     #include <agent_lwm2m.h>
-		oc_lwm2m_install_agent();
+        oc_lwm2m_install_agent();
 #endif
-	
-		oc_lwm2m_demo_main();
-	
-	
+    
+        oc_lwm2m_demo_main();
+    
+    
 #endif
     while(1)
     {

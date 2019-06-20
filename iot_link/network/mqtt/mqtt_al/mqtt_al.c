@@ -49,8 +49,8 @@ extern "C" {
 
 typedef struct
 {
-	mqtt_al_op_t  *ops;
-	mqtt_al_op_t   mem;
+    mqtt_al_op_t  *ops;
+    mqtt_al_op_t   mem;
 }mqtt_al_op_cb_t;
 
 static mqtt_al_op_cb_t   s_mqtt_al_op_cb;
@@ -59,64 +59,64 @@ static mqtt_al_op_cb_t   s_mqtt_al_op_cb;
 /////////////////CREATE THE API FOR THE MQTT LIB////////////////////////////////
 int mqtt_al_install(mqtt_al_op_t *op)
 {
-	int ret = -1;
-	if((NULL != op)&&(NULL == s_mqtt_al_op_cb.ops))
-	{
-		s_mqtt_al_op_cb.mem  = *op;
-		s_mqtt_al_op_cb.ops = &s_mqtt_al_op_cb.mem;
+    int ret = -1;
+    if((NULL != op)&&(NULL == s_mqtt_al_op_cb.ops))
+    {
+        s_mqtt_al_op_cb.mem  = *op;
+        s_mqtt_al_op_cb.ops = &s_mqtt_al_op_cb.mem;
 
-		ret = 0;
-	}
+        ret = 0;
+    }
 
-	return ret;
+    return ret;
 }
 
 int mqtt_al_uninstall()
 {
-	int ret = -1;
-	if(NULL != s_mqtt_al_op_cb.ops)
-	{
-		s_mqtt_al_op_cb.ops = NULL;
+    int ret = -1;
+    if(NULL != s_mqtt_al_op_cb.ops)
+    {
+        s_mqtt_al_op_cb.ops = NULL;
 
-		ret = 0;
-	}
+        ret = 0;
+    }
 
-	return ret;
+    return ret;
 }
 
 //////////////////////////CREATE THE API FOR THE MQTT APPLICATopsN///////////////
 
 int mqtt_init()
 {
-	int ret = 0;
+    int ret = 0;
 
     //maybe need special code here
 
-	return ret;
+    return ret;
 }
 
 
 int  mqtt_al_deinit()
 {
 
-	int ret = 0;
+    int ret = 0;
 
-	//maybe need special code here
+    //maybe need special code here
 
-	return ret;
+    return ret;
 }
 
 void * mqtt_al_connect( mqtt_al_conpara_t *conpara)
 {
 
-	void *ret = NULL;
+    void *ret = NULL;
 
-	if((NULL != conpara) && (NULL != s_mqtt_al_op_cb.ops) && (NULL != s_mqtt_al_op_cb.ops->connect))
-	{
-		ret = s_mqtt_al_op_cb.ops->connect(conpara);
-	}
+    if((NULL != conpara) && (NULL != s_mqtt_al_op_cb.ops) && (NULL != s_mqtt_al_op_cb.ops->connect))
+    {
+        ret = s_mqtt_al_op_cb.ops->connect(conpara);
+    }
 
-	return ret;
+    return ret;
 
 }
 
@@ -124,30 +124,30 @@ void * mqtt_al_connect( mqtt_al_conpara_t *conpara)
 int mqtt_al_disconnect(void *handle)
 {
 
-	int ret = -1;
+    int ret = -1;
 
-	if((NULL != handle) && (NULL != s_mqtt_al_op_cb.ops) && (NULL != s_mqtt_al_op_cb.ops->disconnect))
-	{
-		ret = s_mqtt_al_op_cb.ops->disconnect(handle);
-	}
+    if((NULL != handle) && (NULL != s_mqtt_al_op_cb.ops) && (NULL != s_mqtt_al_op_cb.ops->disconnect))
+    {
+        ret = s_mqtt_al_op_cb.ops->disconnect(handle);
+    }
 
-	return ret;
+    return ret;
 
 }
 
 
-int	mqtt_al_publish(void *handle, mqtt_al_pubpara_t *pubpara)
+int    mqtt_al_publish(void *handle, mqtt_al_pubpara_t *pubpara)
 {
 
-	int ret = -1;
+    int ret = -1;
 
-	if((NULL != handle) && (NULL != pubpara) &&\
-	   (NULL != s_mqtt_al_op_cb.ops) && (NULL != s_mqtt_al_op_cb.ops->publish))
-	{
-		ret = s_mqtt_al_op_cb.ops->publish(handle,pubpara);
-	}
+    if((NULL != handle) && (NULL != pubpara) &&\
+       (NULL != s_mqtt_al_op_cb.ops) && (NULL != s_mqtt_al_op_cb.ops->publish))
+    {
+        ret = s_mqtt_al_op_cb.ops->publish(handle,pubpara);
+    }
 
-	return ret;
+    return ret;
 
 }
 
@@ -155,15 +155,15 @@ int	mqtt_al_publish(void *handle, mqtt_al_pubpara_t *pubpara)
 int mqtt_al_subscribe(void *handle, mqtt_al_subpara_t *subpara)
 {
 
-	int ret = -1;
+    int ret = -1;
 
-	if((NULL != handle) && (NULL != subpara) &&\
-	   (NULL != s_mqtt_al_op_cb.ops) && (NULL != s_mqtt_al_op_cb.ops->subscribe))
-	{
-		ret = s_mqtt_al_op_cb.ops->subscribe(handle,subpara);
-	}
+    if((NULL != handle) && (NULL != subpara) &&\
+       (NULL != s_mqtt_al_op_cb.ops) && (NULL != s_mqtt_al_op_cb.ops->subscribe))
+    {
+        ret = s_mqtt_al_op_cb.ops->subscribe(handle,subpara);
+    }
 
-	return ret;
+    return ret;
 
 }
 
@@ -171,29 +171,29 @@ int mqtt_al_subscribe(void *handle, mqtt_al_subpara_t *subpara)
 int mqtt_al_unsubscribe(void *handle, mqtt_al_unsubpara_t *unsubpara)
 {
 
-	int ret = -1;
+    int ret = -1;
 
-	if((NULL != handle) && (NULL != unsubpara) && \
-	    (NULL != s_mqtt_al_op_cb.ops) && (NULL != s_mqtt_al_op_cb.ops->unsubscribe))
-	{
-		ret = s_mqtt_al_op_cb.ops->unsubscribe(handle,unsubpara);
-	}
+    if((NULL != handle) && (NULL != unsubpara) && \
+        (NULL != s_mqtt_al_op_cb.ops) && (NULL != s_mqtt_al_op_cb.ops->unsubscribe))
+    {
+        ret = s_mqtt_al_op_cb.ops->unsubscribe(handle,unsubpara);
+    }
 
-	return ret;
+    return ret;
 
 }
 
 en_mqtt_al_connect_state mqtt_al_check_status(void *handle)
 {
 
-	int ret = en_mqtt_al_connect_err;
+    int ret = en_mqtt_al_connect_err;
 
-	if((NULL != handle) && (NULL != s_mqtt_al_op_cb.ops) && (NULL != s_mqtt_al_op_cb.ops->check_status))
-	{
-		ret = s_mqtt_al_op_cb.ops->check_status(handle);
-	}
+    if((NULL != handle) && (NULL != s_mqtt_al_op_cb.ops) && (NULL != s_mqtt_al_op_cb.ops->check_status))
+    {
+        ret = s_mqtt_al_op_cb.ops->check_status(handle);
+    }
 
-	return ret;
+    return ret;
 }
 
 

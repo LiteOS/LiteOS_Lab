@@ -48,8 +48,8 @@
 //#define MQTT_DEMO_CONNECT_DYNAMIC
 #define DEFAULT_SERVER_IPV4         "49.4.93.24"     ///<  server ip address
 #define DEFAULT_SERVER_PORT         "8883"           ///<  server mqtt service port
-#define AGENT_TINY_DEMO_DEVICEID    "653a8a63-7ec4-4b2b-99f9-911f5a665ce6"
-#define AGENT_TINY_DEMO_PASSWORD    "92d0f1a1f268acaedb0a"
+#define AGENT_TINY_DEMO_DEVICEID    "9e8f1614-ea97-49df-878c-37fe066aa238"
+#define AGENT_TINY_DEMO_PASSWORD    "3f4a3266825d1698598b"
 
 
 static char s_mqtt_ca_crt[] =
@@ -159,8 +159,16 @@ static int oc_mqtt_cmd_entry( void *args)
                 if(NULL != paras)
                 {
                     ioswitch = cJSON_GetObjectItem(paras,"ioswitch");
-                    printf("ioswitch:%d\n\r",ioswitch->valueint);
-                    err_int = 0;
+                    if(NULL != ioswitch)
+                    {
+                        printf("ioswitch:%d\n\r",ioswitch->valueint);
+                        err_int = en_oc_mqtt_err_code_ok;
+                    }
+                    else
+                    {
+                        printf("handle the json data as your specific profile\r\n");
+                        err_int = en_oc_mqtt_err_code_err;
+                    }
                 }
                 cJSON_Delete(msg);
 

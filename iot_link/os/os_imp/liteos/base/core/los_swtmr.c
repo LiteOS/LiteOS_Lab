@@ -510,7 +510,7 @@ LITE_OS_SEC_TEXT UINT32 osSwTmrGetNextTimeout(VOID)
     }
     else
     {
-        return	0xFFFFFFFF;
+        return    0xFFFFFFFF;
     }
 
     return uwSleepTime;

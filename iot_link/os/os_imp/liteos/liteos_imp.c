@@ -74,23 +74,23 @@ static void *__task_create(const char *name,int (*task_entry)(void *args),\
 
 static int __task_kill(void *task)
 {
-	int ret = -1;
-	UINT32 handle;
-	if(NULL != task)
-	{
-		handle = (UINT32) task;
-		if(LOS_OK == LOS_TaskDelete(handle))
-		{
-			ret = 0;
-		}
-	}
+    int ret = -1;
+    UINT32 handle;
+    if(NULL != task)
+    {
+        handle = (UINT32) task;
+        if(LOS_OK == LOS_TaskDelete(handle))
+        {
+            ret = 0;
+        }
+    }
 
-	return ret;
+    return ret;
 }
 
 static void __task_exit()
 {
-	while(1);  //not supported yet
+    while(1);  //not supported yet
 }
 
 ///< this is implement for the mutex
@@ -221,7 +221,7 @@ static void *__mem_malloc(int size)
 
 static void __mem_free(void *addr)
 {
-	LOS_MemFree(m_aucSysMem0,addr);
+    LOS_MemFree(m_aucSysMem0,addr);
 }
 
 ///< sys time
@@ -240,43 +240,43 @@ __attribute__((weak)) int liteos_reboot()
 
 static const tag_os_ops s_liteos_ops =
 {
-	.task_sleep = __task_sleep,
-	.task_create = __task_create,
-	.task_kill = __task_kill,
-	.task_exit = __task_exit,
+    .task_sleep = __task_sleep,
+    .task_create = __task_create,
+    .task_kill = __task_kill,
+    .task_exit = __task_exit,
 
-	.mutex_create = __mutex_create,
-	.mutex_lock = __mutex_lock,
-	.mutex_unlock = __mutex_unlock,
-	.mutex_del = __mutex_del,
+    .mutex_create = __mutex_create,
+    .mutex_lock = __mutex_lock,
+    .mutex_unlock = __mutex_unlock,
+    .mutex_del = __mutex_del,
 
-	.semp_create = __semp_create,
-	.semp_pend = __semp_pend,
-	.semp_post = __semp_post,
-	.semp_del = __semp_del,
+    .semp_create = __semp_create,
+    .semp_pend = __semp_pend,
+    .semp_post = __semp_post,
+    .semp_del = __semp_del,
 
-	.malloc = __mem_malloc,
-	.free = __mem_free,
+    .malloc = __mem_malloc,
+    .free = __mem_free,
 
-	.get_sys_time = __get_sys_time,
-	.reboot = liteos_reboot,
+    .get_sys_time = __get_sys_time,
+    .reboot = liteos_reboot,
 };
 
 
 
 static const tag_os s_link_liteos =
 {
-	.name = "LiteOS",
-	.ops = &s_liteos_ops,
+    .name = "LiteOS",
+    .ops = &s_liteos_ops,
 };
 
 int osal_install_liteos(void)
 {
-	int ret = -1;
+    int ret = -1;
 
-	ret = osal_install(&s_link_liteos);
+    ret = osal_install(&s_link_liteos);
 
-	return ret;
+    return ret;
 }
 
 

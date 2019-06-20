@@ -231,7 +231,7 @@ LITE_OS_SEC_TEXT VOID osInterrupt(VOID)
     osUpdateKernelTickCount(uwHwiIndex);
 #endif
 
-	uwHwiIndex = uwHwiIndex - OS_SYS_VECTOR_CNT + VECTOR_IDX_OFFSET;
+    uwHwiIndex = uwHwiIndex - OS_SYS_VECTOR_CNT + VECTOR_IDX_OFFSET;
 
     if (m_pstHwiSlaveForm[uwHwiIndex].pfnHandler != NULL)
     {
