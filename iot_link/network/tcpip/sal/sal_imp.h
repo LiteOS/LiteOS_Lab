@@ -8,7 +8,6 @@
 #ifndef __SAL_IMP_H
 #define __SAL_IMP_H
 
-
 /**
  * @brief: all the function model,please refer to the
  *       : you could declare and add more functions here
@@ -48,6 +47,9 @@ typedef int (*fn_sal_shutdown)(int sock, int how);
 
 typedef int (*fn_sal_closesocket)(int sock);
 
+typedef int (*fn_sal_gethostbyname)(const char *name);
+
+
 typedef struct
 {
     fn_sal_socket           socket;
@@ -65,6 +67,7 @@ typedef struct
     fn_sal_recvfrom         recvfrom;
     fn_sal_shutdown         shutdown;
     fn_sal_closesocket      closesocket;
+    fn_sal_gethostbyname    gethostbyname;
 }tag_tcpip_ops;
 
 

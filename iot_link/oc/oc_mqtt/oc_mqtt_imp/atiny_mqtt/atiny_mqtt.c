@@ -50,6 +50,7 @@
 #include <osal.h>
 #include <mqtt_al.h>
 #include <oc_mqtt_al.h>
+#include <sal.h>
 
 #include <cJSON.h>           //json mode
 #include "hmac.h"            //used to generate the user passwd
@@ -1092,10 +1093,11 @@ static int __oc_bs_engine(void *args)
 static int bs_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
 {
     int ret = -1;
-    cJSON  *buf;
-    cJSON  *address;
-    cJSON  *dnsFlag;
-    char   *port;
+    struct hostent* entry = NULL;
+    cJSON  *buf = NULL;
+    cJSON  *address = NULL;
+    cJSON  *dnsFlag = NULL;
+    char   *port = NULL;
     printf("bs topic:%s qos:%d\n\r",msg->topic.data,msg->qos);
 
     if(msg->msg.len < cn_bs_rcv_buf_len)
@@ -1131,7 +1133,17 @@ static int bs_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
             }
             else
             {
-                // TODO
+                if(NULL != address)
+                {
+                    port = strrchr(address->valuestring, ':');
+                    memcpy(iot_server_port, port+1, strlen(port)-1);
+                    entry = sal_gethostbyname(address->valuestring);
+                    if(entry && entry->h_addr_list[0])
+                    {
+                        inet_ntop(entry->h_addrtype, entry->h_addr_list[0], iot_server_ip, sizeof(iot_server_ip));
+                        printf("iot server ip:%s\r\n", iot_server_ip);
+                    }
+                }
             }
 
             cJSON_Delete(buf);
