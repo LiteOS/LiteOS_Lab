@@ -51,6 +51,9 @@ int sal_shutdown(int sockfd, int how);
 
 int sal_closesocket(int sockfd);
 
+struct hostent * sal_gethostbyname(const char *name);
+
+
 /**
  * @brief: if you want to use the tcpip abstract layer,like install the tcpip stack,
  *         or use the api as the application user, you must call this function first

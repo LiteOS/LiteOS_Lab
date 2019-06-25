@@ -493,6 +493,15 @@ int sal_closesocket(int sockfd)
     return ret;
 }
 
+struct hostent * sal_gethostbyname(const char *name)
+{
+    if((NULL != s_sal_cb.domain)&&(NULL != s_sal_cb.domain->ops) &&\
+       (NULL != s_sal_cb.domain->ops->gethostbyname))
+    {
+        return (struct hostent *)s_sal_cb.domain->ops->gethostbyname(name);
+    }
+}
+
 
 #endif
 

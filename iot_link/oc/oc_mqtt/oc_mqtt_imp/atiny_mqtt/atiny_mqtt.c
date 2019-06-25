@@ -45,17 +45,12 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
-#if cfg_lwip_enable
-    #include "lwip/netdb.h"
-#elif cfg_linux_socket_enable || cfg_macos_socket_enable
-    #include <netdb.h>
-#endif
-
 #include <link_misc.h>
 
 #include <osal.h>
 #include <mqtt_al.h>
 #include <oc_mqtt_al.h>
+#include <sal.h>
 
 #include <cJSON.h>           //json mode
 #include "hmac.h"            //used to generate the user passwd
@@ -1142,7 +1137,7 @@ static int bs_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
                 {
                     port = strrchr(address->valuestring, ':');
                     memcpy(iot_server_port, port+1, strlen(port)-1);
-                    entry = gethostbyname(address->valuestring);
+                    entry = sal_gethostbyname(address->valuestring);
                     if(entry && entry->h_addr_list[0])
                     {
                         inet_ntop(entry->h_addrtype, entry->h_addr_list[0], iot_server_ip, sizeof(iot_server_ip));
