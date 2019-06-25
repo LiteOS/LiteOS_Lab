@@ -107,15 +107,14 @@ static int app_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
 
 static int oc_mqtt_cmd_entry( void *args)
 {
-
-    cJSON  *msg;
-    cJSON  *mid;
-    cJSON  *ioswitch;
-    cJSON  *msgType;
-    cJSON  *paras;
-    cJSON  *serviceId;
-    cJSON  *cmd;
-    char   *buf;
+    cJSON  *msg = NULL;
+    cJSON  *mid = NULL;
+    cJSON  *ioswitch = NULL;
+    cJSON  *msgType = NULL;
+    cJSON  *paras = NULL;
+    cJSON  *serviceId = NULL;
+    cJSON  *cmd = NULL;
+    char   *buf = NULL;
 
     tag_oc_mqtt_response response;
     tag_key_value_list   list;
@@ -208,12 +207,12 @@ static int oc_mqtt_cmd_entry( void *args)
 static int oc_mqtt_report_entry(void *args)
 {
     int leftpower = 0;
-    void *handle;
+    void *handle = NULL;
     tag_oc_mqtt_report  report;
     tag_key_value_list  lst;
     tag_oc_mqtt_config config;
-    cJSON *root;
-    char  *buf;
+    cJSON *root = NULL;
+    char  *buf = NULL;
 
     int times= 0;
 
@@ -286,7 +285,4 @@ int oc_mqtt_demo_main()
 
 
     return 0;
-
 }
-
-
