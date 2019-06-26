@@ -806,6 +806,7 @@ static int connect_server(tag_oc_mqtt_agent_cb *cb)
 {
     mqtt_al_conpara_t conpara;
     int   ret = -1;
+    struct hostent* entry = NULL;
 
     //GENERATE THE DATA THE CLOUD PLATFORM NEED
     memset(&conpara,0,sizeof(conpara));
@@ -822,9 +823,21 @@ static int connect_server(tag_oc_mqtt_agent_cb *cb)
     conpara.cleansession = 1;
     conpara.keepalivetime = cn_mqtt_keepalive_interval_s;
     conpara.security = &cb->config.security;
-    conpara.serveraddr.data = (char *)cb->config.server;
+    if(cb->config.dnsFlag)
+        conpara.serveraddr.data = (char *)cb->config.server;
+    else
+    {
+        printf("debug:%s\r\n", cb->config.server);
+        entry = sal_gethostbyname(cb->config.server);
+        if(entry && entry->h_addr_list[0])
+        {
+            conpara.serveraddr.data = osal_malloc(sizeof(iot_server_ip));
+            inet_ntop(entry->h_addrtype, entry->h_addr_list[0], conpara.serveraddr.data, sizeof(iot_server_ip));
+            printf("ip:%s\n", conpara.serveraddr.data);
+        }
+    }
     conpara.serveraddr.len = strlen(conpara.serveraddr.data);
-    conpara.serverport = atoi (cb->config.port);
+    conpara.serverport = atoi(cb->config.port);
     conpara.timeout = 10000;
     conpara.version = en_mqtt_al_version_3_1_1;
     conpara.willmsg = NULL;
@@ -840,6 +853,7 @@ static int connect_server(tag_oc_mqtt_agent_cb *cb)
         }
         ret = 0;
     }
+	osal_free(conpara.serveraddr.data);
 
     return ret;
 }
@@ -1081,11 +1095,6 @@ static int __oc_bs_engine(void *args)
         cb->b_flag_rcv_snd = 0;
         cb->b_flag_stop = 1;
     }
-
-    ///< release all the resources
-    //s_bs_agent_cb = NULL;
-    //free_mqtt_para(cb);
-    //osal_free(cb);
 
     return ret;
 }

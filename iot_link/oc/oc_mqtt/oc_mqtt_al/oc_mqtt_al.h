@@ -104,6 +104,7 @@ typedef enum
 typedef struct
 {
     en_oc_boot_strap_mode_t  boot_mode;
+    unsigned char dnsFlag;           ///< dnsFlag = 0 domain name, dnsFlag = 1, ip address
     const char   *server;            ///< cdp server address
     const char   *port;              ///< cdp server port
     mqtt_al_security_para_t security;///< only support crt mode now
