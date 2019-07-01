@@ -47,7 +47,7 @@ cfg_oc_mqtt_type  := soft
 cfg_oc_lwm2m_type := none
 cfg_loader_enable := no
 cfg_oc_lwm2m_demo_type:= oc_lwm2m_demo_dtls
-cfg_oc_mqtt_demo_type:= oc_mqtt_demo_static
+cfg_oc_mqtt_demo_type:= oc_mqtt_demo_bs
 
 ################################################################################
 

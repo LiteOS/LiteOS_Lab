@@ -47,12 +47,14 @@
 /* brief : the oceanconnect platform only support the ca_crt up tills now*/
 /** the address product_id device_id password crt is only for the test  */
 
-#define BS_SERVER_IPV4         "119.3.184.255"     ///<  server ip address
+#define BS_SERVER_IPV4         "119.3.190.193"     ///<  server ip address
+#define BS_SERVER_DOMAIN         "iot-bs.cn-north-4.myhuaweicloud.com"
 #define BS_SERVER_PORT         "8883"           ///<  server mqtt service port
-#define DEMO_WITH_BOOTSTRAP_NODEID    "31415926"
-#define DEMO_WITH_BOOTSTRAP_PASSWORD    "9f825c0ed3e95ea3d459"
+#define DEMO_WITH_BOOTSTRAP_NODEID    "sdk_bh"  //"sdk_0030"
+#define DEMO_WITH_BOOTSTRAP_PASSWORD    "77dca653824757da0a96" //"e8775e734c48d20aa3ce"
 
 
+#if 0
 static char s_mqtt_ca_crt[] =
 "-----BEGIN CERTIFICATE-----\r\n"
 "MIIEwTCCAqmgAwIBAgIRdi8oqJITu4uSWV2C/dUS1swwDQYJKoZIhvcNAQELBQAw\r\n"
@@ -82,7 +84,32 @@ static char s_mqtt_ca_crt[] =
 "01cjcmp699kFIJ7ShCOmI95ZC9cociTnhTK6WScCweBH7eBxZwoQLi5ER3VkDs1r\r\n"
 "rqnNVUgf2j9TOshCI6zuaxsA35wr\r\n"
 "-----END CERTIFICATE-----\r\n";
-
+#else
+static char s_mqtt_ca_crt[] =
+"-----BEGIN CERTIFICATE-----\r\n"
+"MIID4DCCAsigAwIBAgIJAK97nNS67HRvMA0GCSqGSIb3DQEBCwUAMFMxCzAJBgNV\r\n"
+"BAYTAkNOMQswCQYDVQQIEwJHRDELMAkGA1UEBxMCU1oxDzANBgNVBAoTBkh1YXdl\r\n"
+"aTELMAkGA1UECxMCQ04xDDAKBgNVBAMTA0lPVDAeFw0xNjA1MDQxMjE3MjdaFw0y\r\n"
+"NjA1MDIxMjE3MjdaMFMxCzAJBgNVBAYTAkNOMQswCQYDVQQIEwJHRDELMAkGA1UE\r\n"
+"BxMCU1oxDzANBgNVBAoTBkh1YXdlaTELMAkGA1UECxMCQ04xDDAKBgNVBAMTA0lP\r\n"
+"VDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAJxM9fwkwvxeILpkvoAM\r\n"
+"Gdqq3x0G9o445F6Shg3I0xmmzu9Of8wYuW3c4jtQ/6zscuIGyWf06ke1z//AVZ/o\r\n"
+"dp8LkuFbBbDXR5swjUJ6z15b6yaYH614Ty/d6DrCM+RaU+FWmxmOon9W/VELu2BB\r\n"
+"NXDQHJBSbWrLNGnZA2erk4JSMp7RhHrZ0QaNtT4HhIczFYtQ2lYF+sQJpQMrjoRn\r\n"
+"dSV9WB872Ja4DgcISU1+wuWLmS/NKjIvOWW1upS79yu2I4Rxos2mFy9xxz311rGC\r\n"
+"Z3X65ejFNzCUrNgf6NEP1N7wB9hUu7u50aA+/56D7EgjeI0gpFytC+a4f6JCPVWI\r\n"
+"Lr0CAwEAAaOBtjCBszAdBgNVHQ4EFgQUcGqy59oawLEgMl21//7F5RyABpwwgYMG\r\n"
+"A1UdIwR8MHqAFHBqsufaGsCxIDJdtf/+xeUcgAacoVekVTBTMQswCQYDVQQGEwJD\r\n"
+"TjELMAkGA1UECBMCR0QxCzAJBgNVBAcTAlNaMQ8wDQYDVQQKEwZIdWF3ZWkxCzAJ\r\n"
+"BgNVBAsTAkNOMQwwCgYDVQQDEwNJT1SCCQCve5zUuux0bzAMBgNVHRMEBTADAQH/\r\n"
+"MA0GCSqGSIb3DQEBCwUAA4IBAQBgv2PQn66gRMbGJMSYS48GIFqpCo783TUTePNS\r\n"
+"tV8G1MIiQCpYNdk2wNw/iFjoLRkdx4va6jgceht5iX6SdjpoQF7y5qVDVrScQmsP\r\n"
+"U95IFcOkZJCNtOpUXdT+a3N+NlpxiScyIOtSrQnDFixWMCJQwEfg8j74qO96UvDA\r\n"
+"FuTCocOouER3ZZjQ8MEsMMquNEvMHJkMRX11L5Rxo1pc6J/EMWW5scK2rC0Hg91a\r\n"
+"Lod6aezh2K7KleC0V5ZlIuEvFoBc7bCwcBSAKA3BnQveJ8nEu9pbuBsVAjHOroVb\r\n"
+"8/bL5retJigmAN2GIyFv39TFXIySw+lW0wlp+iSPxO9s9J+t\r\n"
+"-----END CERTIFICATE-----\r\n";
+#endif
 
 static void           *s_mqtt_handle;
 
@@ -92,6 +119,7 @@ static char            s_rcv_buffer[cn_app_rcv_buf_len];
 static int             s_rcv_datalen;
 static osal_semp_t     s_oc_rcv_sync;
 static void           *s_mqtt_handle;
+static void           *s_report_handle;
 
 static int app_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
 {
@@ -125,7 +153,7 @@ static int oc_mqtt_report_entry(void *args)
     void *handle;
     tag_oc_mqtt_report  report;
     tag_key_value_list  lst;
-    tag_oc_mqtt_config config;
+    tag_oc_mqtt_config config = {0};
     cJSON *root = NULL;
     char  *buf = NULL;
 
@@ -221,7 +249,7 @@ static int oc_mqtt_cmd_entry( void *args)
                 serviceId = cJSON_GetObjectItem(msg,"serviceId");
                 if(NULL != serviceId)
                 {
-                    printf("msgType:%s\n\r",serviceId->valuestring);
+                    printf("serviceId:%s\n\r",serviceId->valuestring);
                 }
 
                 mid = cJSON_GetObjectItem(msg,"mid");
@@ -230,29 +258,40 @@ static int oc_mqtt_cmd_entry( void *args)
                     mid_int = mid->valueint;
                     printf("mid:%d\n\r",mid_int);
                 }
+
                 msgType = cJSON_GetObjectItem(msg,"msgType");
                 if(NULL != msgType)
                 {
                     printf("msgType:%s\n\r",msgType->valuestring);
-                    if(strncmp(msgType, "re-bootstrap", strlen(msgType)) == 0)
-                    {
-                        //Do the re-bootstrap
-                        oc_mqtt_demo_main();
-                        osal_task_exit();
-                    }
                 }
+
                 cmd =  cJSON_GetObjectItem(msg,"cmd");
                 if(NULL != cmd)
                 {
                     printf("cmd:%s\n\r",cmd->valuestring);
+                    if(strncmp(cmd->valuestring, "BootstrapRequestTrigger", strlen(cmd->valuestring)) == 0)
+                    {
+                        //Do the re-bootstrap
+                        osal_task_kill(s_report_handle);
+                        oc_mqtt_demo_main();
+                        osal_task_exit();
+                    }
                 }
 
                 paras = cJSON_GetObjectItem(msg,"paras");
                 if(NULL != paras)
                 {
-                    ioswitch = cJSON_GetObjectItem(paras,"cmd1");
-                    printf("cmd1:%d\n\r",ioswitch->valueint);
-                    err_int = 0;
+                    ioswitch = cJSON_GetObjectItem(paras,"ioswitch");
+                    if(NULL != ioswitch)
+                    {
+                        printf("ioswitch:%d\n\r",ioswitch->valueint);
+                        err_int = en_oc_mqtt_err_code_ok;
+                    }
+                    else
+                    {
+                        printf("handle the json data as your specific profile\r\n");
+                        err_int = en_oc_mqtt_err_code_err;
+                    }
                 }
                 cJSON_Delete(msg);
 
@@ -294,7 +333,7 @@ int oc_mqtt_demo_main()
     osal_semp_create(&s_oc_rcv_sync,1,0);
 
 
-    osal_task_create("ocmqtt_report",oc_mqtt_report_entry,NULL,0x1000,NULL,10);
+    s_report_handle = osal_task_create("ocmqtt_report",oc_mqtt_report_entry,NULL,0x1000,NULL,10);
 
     osal_task_create("ocmqtt_cmd",oc_mqtt_cmd_entry,NULL,0x1000,NULL,10);
 

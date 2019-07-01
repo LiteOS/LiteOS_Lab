@@ -500,6 +500,7 @@ struct hostent * sal_gethostbyname(const char *name)
     {
         return (struct hostent *)s_sal_cb.domain->ops->gethostbyname(name);
     }
+    return NULL;
 }
 
 

@@ -11,6 +11,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
+
 /**
  * @brief: all the structure and defines needed by the  applications should include
  *         this file;if you have the one yourself, please check whether they have the same value
@@ -80,7 +81,5 @@ struct hostent {
                            network byte order) for the host, terminated by a null pointer. */
 #define h_addr h_addr_list[0] /* for backward compatibility */
 };
-
-
 
 #endif /* __SAL_TYPES_H */

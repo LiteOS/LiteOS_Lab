@@ -134,7 +134,7 @@ static int oc_mqtt_cmd_entry( void *args)
                 serviceId = cJSON_GetObjectItem(msg,"serviceId");
                 if(NULL != serviceId)
                 {
-                    printf("msgType:%s\n\r",serviceId->valuestring);
+                    printf("serviceId:%s\n\r",serviceId->valuestring);
                 }
 
                 mid = cJSON_GetObjectItem(msg,"mid");
