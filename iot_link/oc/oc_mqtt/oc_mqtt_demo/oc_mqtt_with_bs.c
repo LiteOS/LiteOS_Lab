@@ -50,8 +50,8 @@
 #define BS_SERVER_IPV4         "119.3.190.193"     ///<  server ip address
 #define BS_SERVER_DOMAIN         "iot-bs.cn-north-4.myhuaweicloud.com"
 #define BS_SERVER_PORT         "8883"           ///<  server mqtt service port
-#define DEMO_WITH_BOOTSTRAP_NODEID    "sdk_0030"
-#define DEMO_WITH_BOOTSTRAP_PASSWORD    "e8775e734c48d20aa3ce"
+#define DEMO_WITH_BOOTSTRAP_NODEID    "sdk_bh"  //"sdk_0030"
+#define DEMO_WITH_BOOTSTRAP_PASSWORD    "77dca653824757da0a96" //"e8775e734c48d20aa3ce"
 
 
 #if 0
@@ -119,6 +119,7 @@ static char            s_rcv_buffer[cn_app_rcv_buf_len];
 static int             s_rcv_datalen;
 static osal_semp_t     s_oc_rcv_sync;
 static void           *s_mqtt_handle;
+static void           *s_report_handle;
 
 static int app_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
 {
@@ -152,7 +153,7 @@ static int oc_mqtt_report_entry(void *args)
     void *handle;
     tag_oc_mqtt_report  report;
     tag_key_value_list  lst;
-    tag_oc_mqtt_config config;
+    tag_oc_mqtt_config config = {0};
     cJSON *root = NULL;
     char  *buf = NULL;
 
@@ -248,7 +249,7 @@ static int oc_mqtt_cmd_entry( void *args)
                 serviceId = cJSON_GetObjectItem(msg,"serviceId");
                 if(NULL != serviceId)
                 {
-                    printf("msgType:%s\n\r",serviceId->valuestring);
+                    printf("serviceId:%s\n\r",serviceId->valuestring);
                 }
 
                 mid = cJSON_GetObjectItem(msg,"mid");
@@ -257,29 +258,41 @@ static int oc_mqtt_cmd_entry( void *args)
                     mid_int = mid->valueint;
                     printf("mid:%d\n\r",mid_int);
                 }
+
                 msgType = cJSON_GetObjectItem(msg,"msgType");
                 if(NULL != msgType)
                 {
                     printf("msgType:%s\n\r",msgType->valuestring);
-                    if(strncmp(msgType, "re-bootstrap", strlen(msgType)) == 0)
-                    {
-                        //Do the re-bootstrap
-                        oc_mqtt_demo_main();
-                        osal_task_exit();
-                    }
                 }
+
                 cmd =  cJSON_GetObjectItem(msg,"cmd");
                 if(NULL != cmd)
                 {
                     printf("cmd:%s\n\r",cmd->valuestring);
+                    if(strncmp(cmd->valuestring, "BootstrapRequestTrigger", strlen(cmd->valuestring)) == 0)
+                    {
+                        //Do the re-bootstrap
+                        osal_task_kill(s_report_handle);
+                        oc_mqtt_deconfig(s_mqtt_handle);
+                        oc_mqtt_demo_main();
+                        osal_task_exit();
+                    }
                 }
 
                 paras = cJSON_GetObjectItem(msg,"paras");
                 if(NULL != paras)
                 {
-                    ioswitch = cJSON_GetObjectItem(paras,"cmd1");
-                    printf("cmd1:%d\n\r",ioswitch->valueint);
-                    err_int = 0;
+                    ioswitch = cJSON_GetObjectItem(paras,"ioswitch");
+                    if(NULL != ioswitch)
+                    {
+                        printf("ioswitch:%d\n\r",ioswitch->valueint);
+                        err_int = en_oc_mqtt_err_code_ok;
+                    }
+                    else
+                    {
+                        printf("handle the json data as your specific profile\r\n");
+                        err_int = en_oc_mqtt_err_code_err;
+                    }
                 }
                 cJSON_Delete(msg);
 
@@ -321,7 +334,7 @@ int oc_mqtt_demo_main()
     osal_semp_create(&s_oc_rcv_sync,1,0);
 
 
-    osal_task_create("ocmqtt_report",oc_mqtt_report_entry,NULL,0x1000,NULL,10);
+    s_report_handle = osal_task_create("ocmqtt_report",oc_mqtt_report_entry,NULL,0x1000,NULL,10);
 
     osal_task_create("ocmqtt_cmd",oc_mqtt_cmd_entry,NULL,0x1000,NULL,10);
 
