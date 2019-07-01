@@ -823,17 +823,21 @@ static int connect_server(tag_oc_mqtt_agent_cb *cb)
     conpara.cleansession = 1;
     conpara.keepalivetime = cn_mqtt_keepalive_interval_s;
     conpara.security = &cb->config.security;
-    if(cb->config.dnsFlag)
-        conpara.serveraddr.data = (char *)cb->config.server;
-    else
+
+    while(NULL == entry)
     {
         printf("debug:%s\r\n", cb->config.server);
         entry = sal_gethostbyname(cb->config.server);
         if(entry && entry->h_addr_list[0])
         {
-            conpara.serveraddr.data = osal_malloc(sizeof(iot_server_ip));
-            inet_ntop(entry->h_addrtype, entry->h_addr_list[0], conpara.serveraddr.data, sizeof(iot_server_ip));
-            printf("ip:%s\n", conpara.serveraddr.data);
+            inet_ntop(entry->h_addrtype, entry->h_addr_list[0], iot_server_ip, sizeof(iot_server_ip));
+            printf("ip:%s\n", iot_server_ip);
+            conpara.serveraddr.data = iot_server_ip;
+        }
+        else
+        {
+            printf("LOG ############NO IP ---TRY AGAIN\n\r");
+            osal_task_sleep(1000);
         }
     }
     conpara.serveraddr.len = strlen(conpara.serveraddr.data);
@@ -853,7 +857,6 @@ static int connect_server(tag_oc_mqtt_agent_cb *cb)
         }
         ret = 0;
     }
-	osal_free(conpara.serveraddr.data);
 
     return ret;
 }
@@ -1105,8 +1108,10 @@ static int bs_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
     struct hostent* entry = NULL;
     cJSON  *buf = NULL;
     cJSON  *address = NULL;
-    cJSON  *dnsFlag = NULL;
     char   *port = NULL;
+    char   dnsbuf[64];
+
+    memset(dnsbuf,0,sizeof(dnsbuf));
     printf("bs topic:%s qos:%d\n\r",msg->topic.data,msg->qos);
 
     if(msg->msg.len < cn_bs_rcv_buf_len)
@@ -1122,36 +1127,33 @@ static int bs_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
         if(NULL != buf)
         {
             address = cJSON_GetObjectItem(buf,"address");
-            dnsFlag = cJSON_GetObjectItem(buf,"dnsFlag");
-            if(NULL != dnsFlag && NULL != address)
+            if(NULL != address)
             {
-                printf("dnsFlag:%d\n\r", dnsFlag->valueint);
                 printf("address:%s\n\r", address->valuestring);
             }
             else
                 return ret;
 
-            if(dnsFlag->valueint == 1)  //ip and port
+            if(NULL != address)
             {
-                if(NULL != address)
+                port = strrchr(address->valuestring, ':');
+                memcpy(iot_server_port, port+1, strlen(port)-1);
+                memcpy(dnsbuf, address->valuestring, port - address->valuestring);
+                printf("dns:%s len:%d\n\r",dnsbuf,strlen(dnsbuf));
+
+                entry = NULL;
+                while(NULL == entry)
                 {
-                    port = strrchr(address->valuestring, ':');
-                    memcpy(iot_server_port, port+1, strlen(port)-1);
-                    memcpy(iot_server_ip, address->valuestring, port - address->valuestring);
+                    entry = sal_gethostbyname(dnsbuf);
+
+                    osal_task_sleep(1000);
+                    printf("LOG:########## WAIT FOR THE DNS RESOVLED\n\r");
                 }
-            }
-            else
-            {
-                if(NULL != address)
+
+                if(entry && entry->h_addr_list[0])
                 {
-                    port = strrchr(address->valuestring, ':');
-                    memcpy(iot_server_port, port+1, strlen(port)-1);
-                    entry = sal_gethostbyname(address->valuestring);
-                    if(entry && entry->h_addr_list[0])
-                    {
-                        inet_ntop(entry->h_addrtype, entry->h_addr_list[0], iot_server_ip, sizeof(iot_server_ip));
-                        printf("iot server ip:%s\r\n", iot_server_ip);
-                    }
+                    inet_ntop(entry->h_addrtype, entry->h_addr_list[0], iot_server_ip, sizeof(iot_server_ip));
+                    printf("iot server ip:%s\r\n", iot_server_ip);
                 }
             }
 

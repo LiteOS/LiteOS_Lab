@@ -50,8 +50,8 @@
 #define BS_SERVER_IPV4         "119.3.190.193"     ///<  server ip address
 #define BS_SERVER_DOMAIN         "iot-bs.cn-north-4.myhuaweicloud.com"
 #define BS_SERVER_PORT         "8883"           ///<  server mqtt service port
-#define DEMO_WITH_BOOTSTRAP_NODEID    "31415926"
-#define DEMO_WITH_BOOTSTRAP_PASSWORD    "cce580c4e57e65be4f92"
+#define DEMO_WITH_BOOTSTRAP_NODEID    "sdk_0030"
+#define DEMO_WITH_BOOTSTRAP_PASSWORD    "e8775e734c48d20aa3ce"
 
 
 #if 0
@@ -160,8 +160,7 @@ static int oc_mqtt_report_entry(void *args)
 
     {
         config.boot_mode = en_oc_boot_strap_mode_client_initialize;
-        config.dnsFlag = 0;
-        config.server = BS_SERVER_DOMAIN;
+        config.server = BS_SERVER_IPV4;
         config.port = BS_SERVER_PORT;
         config.msgdealer = app_msg_deal;
         config.code_mode = en_oc_mqtt_code_mode_json;
