@@ -911,7 +911,7 @@ static void app_msg_dealer(void *arg,mqtt_al_msgrcv_t  *msg)
         return;
     }
     
-    if(s_oc_agent_cb->config.boot_mode == en_oc_boot_strap_mode_client_initialize)
+    if(s_oc_agent_cb->config.boot_status == en_oc_boot_strap_status_bs)
         s_oc_agent_cb->config.bsinfo_dealer(s_oc_agent_cb,msg);
     else
         s_oc_agent_cb->config.msgdealer(s_oc_agent_cb,msg);
@@ -1186,6 +1186,7 @@ static void *__oc_config(tag_oc_mqtt_config *config)
 
     if(config->boot_mode == en_oc_boot_strap_mode_client_initialize)
     {
+        ret->config.boot_status = en_oc_boot_strap_status_bs;
         ret->config.bsinfo_dealer = bs_msg_deal;
         if(NULL == osal_task_create("oc_mqtt_bs",__oc_bs_engine,ret,0x1400,NULL,6))
         {
@@ -1211,6 +1212,7 @@ static void *__oc_config(tag_oc_mqtt_config *config)
                 ret->config.server = iot_server_ip;
                 ret->b_flag_stop = 0;
             }
+            ret->config.boot_status = en_oc_boot_strap_status_hub;
             if(NULL == osal_task_create("oc_mqtt_agent",__oc_agent_engine,ret,0x1400,NULL,6))
             {
                 goto EXIT_ENGINE_CREATE;
