@@ -61,7 +61,7 @@
 
 #define KEY1_Pin GPIO_PIN_2
 #define KEY1_GPIO_Port GPIOB
-#define KEY2_EXTI_IRQn EXTI2_IRQn
+#define KEY1_EXTI_IRQn EXTI2_IRQn
 #define KEY2_Pin GPIO_PIN_3
 #define KEY2_GPIO_Port GPIOB
 #define KEY2_EXTI_IRQn EXTI3_IRQn

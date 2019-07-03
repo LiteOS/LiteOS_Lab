@@ -559,11 +559,11 @@ static bool_t boudica150_boot(const char *plmn, const char *apn, const char *ban
         {
             continue;
         }
-
-        if(false == boudica150_check_observe(16)) //TODO--maybe this only compatible with QUETEL MODULES
-        {
-            continue; //we should do the reboot for the nB
-        }
+///<  --TODO we should make sure that we should use the at+qregswt to set the registration mode
+//        if(false == boudica150_check_observe(16)) //TODO--maybe this only compatible with QUETEL MODULES
+//        {
+//            continue; //we should do the reboot for the nB
+//        }
 
         break;
     }
