@@ -157,7 +157,7 @@ typedef struct
 
 static osal_semp_t     s_agent_sync;
 static char            iot_server_ip[16];
-static char            iot_server_port[5];
+static char            iot_server_port[6];  ///< i think max is 65536, so string is at most 6 bytes
 
 
 static int  secret_get_devceid_passwd(tag_oc_mqtt_agent_cb  *cb)
