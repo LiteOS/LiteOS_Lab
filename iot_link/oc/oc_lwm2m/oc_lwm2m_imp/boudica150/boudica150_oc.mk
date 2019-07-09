@@ -1,8 +1,9 @@
 BOUDICA150_SOURCE = \
-		${wildcard $(TOP_DIR)/components/huawei_cdp/lwm2m/boudica150/*.c}
+		${wildcard $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m_imp/boudica150/*.c} 
 C_SOURCES += $(BOUDICA150_SOURCE)
         
 BOUDICA150_INC = \
-		-I $(TOP_DIR)/components/huawei_cdp/lwm2m/boudica150
+		-I $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m_imp/boudica150
 
 C_INCLUDES += $(BOUDICA150_INC)
+C_DEFS += -D cfg_oc_lwm2m_boudica150_enable=1

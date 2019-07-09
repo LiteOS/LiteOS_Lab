@@ -4,10 +4,16 @@
 # make sure driver module is enabled
 ################################################################################
 
-DRIVER_MODULE_SRC  = ${wildcard $(iot_link_root)/driver/*.c} 
-C_SOURCES += $(DRIVER_MODULE_SRC)	
+ifeq ($(cfg_driver_enable),yes)
+    DRIVER_MODULE_SRC  = ${wildcard $(iot_link_root)/driver/driver.c}    #no fs related source here
+    C_SOURCES += $(DRIVER_MODULE_SRC)	
 		
-DRIVER_MODULE_INC = -I $(iot_link_root)/driver
-C_INCLUDES += $(DRIVER_MODULE_INC)
+    DRIVER_MODULE_INC = -I $(iot_link_root)/driver
+    C_INCLUDES += $(DRIVER_MODULE_INC)
+    
+    DRIVER_MODULE_DEF = -D cfg_driver_enable=1
+    C_DEFS += $(DRIVER_MODULE_DEF)
+    
+endif
 
 

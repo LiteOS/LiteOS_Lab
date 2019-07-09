@@ -16,6 +16,12 @@ include $(iot_link_root)/os/os.mk
 #configure the shell for the iot_link
 include $(iot_link_root)/shell/shell.mk
 
+#configure the driver famework for the iot_link
+include $(iot_link_root)/driver/driver.mk
+
+#configure the AT famework for the iot_link
+include $(iot_link_root)/at/at.mk
+
 #configure the libc
 include $(iot_link_root)/libc/libc.mk
 

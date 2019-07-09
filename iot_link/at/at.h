@@ -41,13 +41,13 @@
 #include <osal.h>
 
 
-#define CFG_ATCLIENT_ENABLE  1
+#define cfg_at_enable  1
 
 typedef int (*fnoob)(char *data,int datalen);
 
-#if  CFG_ATCLIENT_ENABLE
+#if  cfg_at_enable
 
-
+#define CN_OBJECT_INVALID    0Xffffffff
 bool_t at_init(const char *devname);                       //install the at frame work,which binded to the device
 bool_t at_oobregister(fnoob func,const char *index);       //register a out of band data dealer
 int  at_command(char *cmd, int cmdlen,const char *index,\

@@ -460,7 +460,7 @@ parameters   :dev,returned by the los_dev_open function
               timeout:the waittime if no data current
 instruction  :how many data has been read to the buf
 *******************************************************************************/
-int   los_dev_read  (los_dev_t dev,unsigned int offset,u8_t *buf,int len,unsigned int timeout)
+int   los_dev_read  (los_dev_t dev,unsigned int offset,unsigned char *buf,int len,unsigned int timeout)
 {
     int ret = 0;
     struct dev_cb  *devcb;
@@ -495,7 +495,7 @@ parameters   :dev,returned by the los_dev_open function
               timeout:the waittime if no data current
 instruction  :how many data has been written to the device
 *******************************************************************************/
-int los_dev_write (los_dev_t dev,unsigned int offset,u8_t *buf,int len,unsigned int timeout)
+int los_dev_write (los_dev_t dev,unsigned int offset,unsigned char *buf,int len,unsigned int timeout)
 {
     int ret = 0;
     struct dev_cb  *devcb;

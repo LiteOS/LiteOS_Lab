@@ -39,7 +39,7 @@
 #include <at.h>
 #include <boudica150_oc.h>
 #include <oc_lwm2m_al.h>
-
+#include <osal.h>
 
 ///<  only support the bootstrap mode
 
@@ -71,6 +71,7 @@ typedef struct
 
 }boudica150_cb_t;
 static boudica150_cb_t   s_boudica150_oc_cb;
+int wireless_stats[4] = {0};
 
 //bc95 common at command
 static bool_t boudica150_atcmd(const char *cmd,const char *index)
@@ -237,7 +238,7 @@ static bool_t boudica150_reboot(void)
     boudica150_set_echo (0);
 
     boudica150_atcmd("AT+NRB\r","REBOOTING");
-    task_sleepms(10000); //wait for the module boot
+    osal_task_sleep(10000); //wait for the module boot
     //do the module reset
     boudica150_set_echo (0);
     boudica150_set_echo (0);
@@ -256,7 +257,7 @@ static bool_t boudica150_set_fun(int enable)  //unit second
 
     ret = boudica150_atcmd(cmd,"OK");
     //i think we should do some wait here
-    task_sleepms(2000);
+    osal_task_sleep(2000);
 
     return ret;
 }
@@ -468,7 +469,7 @@ static bool_t boudica150_check_observe(int time)  //unit second
             ret = true;
             break;
         }
-        task_sleepms(1000);
+        osal_task_sleep(1000);
     }
 
     return ret;
@@ -488,7 +489,7 @@ static bool_t boudica150_check_netattach(int time)  //unit second
             ret = true;
             break;
         }
-        task_sleepms(1000);
+        osal_task_sleep(1000);
     }
 
     return ret;
@@ -594,7 +595,6 @@ static void *boudica150_oc_config(oc_config_param_t *param)
                 s_boudica150_oc_cb.oc_param.app_server.address,s_boudica150_oc_cb.oc_param.app_server.port))
         {
             s_oc_handle = &s_boudica150_oc_cb;
-
             ret = s_oc_handle;
         }
     }
@@ -647,7 +647,58 @@ int boudica150_get_csq(int *value)
     return ret;
 }
 
+int *boudica150_check_nuestats(void)
+{
+    char cmd[64];
+    char resp[256];
+    char *str;
 
+    memset(cmd,0,64);
+    memset(resp,0,64);
+    snprintf(cmd,64,"AT+NUESTATS=CELL\r");
+
+    if (boudica150_atcmd_response(cmd,"NUESTATS:",resp,256) < 0)
+    {
+    	return NULL;
+    }
+    str = strstr(resp,"NUESTATS:");
+    if (str == NULL)
+    {
+    	return NULL;
+    }
+    int earfcn, physical_cellid, primary_cell, rsrp, rsrq, rssi, snr;  //for now only rsrp is needed, others for future use
+    sscanf(str,"NUESTATS:CELL,%d,%d,%d,%d,%d,%d,%d",&earfcn, &physical_cellid, &primary_cell, &rsrp, &rsrq, &rssi, &snr);
+    wireless_stats[0] = rsrp;
+
+    memset(cmd,0,64);
+    snprintf(cmd,64,"AT+NUESTATS\r");
+    if (boudica150_atcmd_response(cmd,"OK",resp,256) < 0)
+    {
+        return NULL;
+    }
+    str = strstr(resp,"ECL:");
+    if (str == NULL)
+    {
+    	return -1;
+    }
+    sscanf(str,"ECL:%d",&wireless_stats[1]);
+
+    str = strstr(resp,"SNR:");
+    if (str == NULL)
+    {
+        return -1;
+    }
+    sscanf(str,"SNR:%d",&wireless_stats[2]);
+
+    str = strstr(resp,"Cell ID:");
+    if (str == NULL)
+    {
+        return -1;
+    }
+    sscanf(str,"Cell ID:%d",&wireless_stats[3]);
+
+    return wireless_stats;
+}
 
 const oc_lwm2m_opt_t  g_boudica150_oc_opt = \
 {

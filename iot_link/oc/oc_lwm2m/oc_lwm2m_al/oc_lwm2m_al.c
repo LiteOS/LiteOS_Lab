@@ -151,7 +151,6 @@ int oc_lwm2m_deconfig(void *context)
     return ret;
 }
 
-
 ///////////////////////OC LWM2M AGENT INITIALIZE////////////////////////////////
 int oc_lwm2m_init()
 {
