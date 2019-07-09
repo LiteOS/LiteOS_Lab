@@ -47,11 +47,12 @@
 /* brief : the oceanconnect platform only support the ca_crt up tills now*/
 /** the address product_id device_id password crt is only for the test  */
 
+#define DEFAULT_LIFETIME            10
 #define BS_SERVER_IPV4         "119.3.190.193"     ///<  server ip address
 #define BS_SERVER_DOMAIN         "iot-bs.cn-north-4.myhuaweicloud.com"
 #define BS_SERVER_PORT         "8883"           ///<  server mqtt service port
-#define DEMO_WITH_BOOTSTRAP_NODEID    "sdk_bh"  //"sdk_0030"
-#define DEMO_WITH_BOOTSTRAP_PASSWORD    "77dca653824757da0a96" //"e8775e734c48d20aa3ce"
+#define DEMO_WITH_BOOTSTRAP_NODEID    "sdk_0040"//"sdk_bh"  //"sdk_0030"
+#define DEMO_WITH_BOOTSTRAP_PASSWORD    "f62fcf47d62c4ed18913"//"77dca653824757da0a96" //"e8775e734c48d20aa3ce"
 
 
 #if 0
@@ -161,6 +162,7 @@ static int oc_mqtt_report_entry(void *args)
 
     {
         config.boot_mode = en_oc_boot_strap_mode_client_initialize;
+        config.lifetime = DEFAULT_LIFETIME;
         config.server = BS_SERVER_IPV4;
         config.port = BS_SERVER_PORT;
         config.msgdealer = app_msg_deal;
@@ -214,7 +216,7 @@ static int oc_mqtt_report_entry(void *args)
                 cJSON_Delete(root);
             }
 
-            osal_task_sleep(5*1000); ///< do a sleep here
+            osal_task_sleep(20*1000); ///< do a sleep here
         }
     }
     return 0;

@@ -821,7 +821,7 @@ static int connect_server(tag_oc_mqtt_agent_cb *cb)
     conpara.passwd.len = strlen(conpara.passwd.data);
 
     conpara.cleansession = 1;
-    conpara.keepalivetime = cn_mqtt_keepalive_interval_s;
+    conpara.keepalivetime = cb->config.lifetime;
     conpara.security = &cb->config.security;
 
     while(NULL == entry)
