@@ -36,8 +36,8 @@
  *  2019-07-09 14:28  zhangqianfu  The first version
  *
  */
-#ifndef LITEOS_LAB_IOT_LINK_INC_ENDIAN_H_
-#define LITEOS_LAB_IOT_LINK_INC_ENDIAN_H_
+#ifndef LITEOS_LAB_IOT_LINK_INC_LINK_ENDIAN_H_
+#define LITEOS_LAB_IOT_LINK_INC_LINK_ENDIAN_H_
 
 
 //define the normal addres function
@@ -52,18 +52,30 @@
 #define htolel(value)  swapl(value)
 #define htobes(value)  (value)
 #define htobel(value)  (value)
-#else
 
+#else
 #define htoles(value)  (value)
 #define htolel(value)  (value)
 #define htobes(value)  swaps(value)
 #define htobel(value)  swapl(value)
 #endif
 
+#ifndef htons
 #define htons      htobes      //translate the host endian to network endian (2 Bytes)
+#endif
+
+#ifndef ntohs
 #define htonl      htobel      //translate the host endian to network endian (4 Bytes)
+#endif
+
+#ifndef ntohs
 #define ntohs      htobes      //translate the network endian to host endian (2 Bytes)
+#endif
+
+#ifndef ntohl
 #define ntohl      htobel      //translate the network endian to host endian (4 Bytes)
+#endif
 
 
-#endif /* LITEOS_LAB_IOT_LINK_INC_ENDIAN_H_ */
+
+#endif /* LITEOS_LAB_IOT_LINK_INC_LINK_ENDIAN_H_ */

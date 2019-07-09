@@ -8,9 +8,9 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <endian.h>
 #include <sal_define.h>
 #include <sal_types.h>
+#include <link_endian.h>
 
 /**
  *

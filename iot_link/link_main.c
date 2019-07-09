@@ -38,12 +38,6 @@
  */
 //RTOS KERNEL
 #include <osal.h>
-//#if cfg_liteos_enable
-//#elif cfg_linux_enable
-//#elif cfg_macos_enable
-//#else
-//#error("no os supplied yet");
-//#endif
 
 
 #ifdef WITH_DTLS
