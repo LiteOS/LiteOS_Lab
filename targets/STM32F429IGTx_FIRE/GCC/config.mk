@@ -34,38 +34,42 @@
 #################################################################################
  
 #####################  OC MQTT CONFIURE TEMPLATE################################
-cfg_os_type       := liteos
-cfg_shell_enble   := yes
-cfg_libc_enable   := yes
-cfg_cjson_enable  := yes
-cfg_tcpip_type    := lwip
-cfg_dtls_type     := mbedtls
-cfg_embedtls_mode := crt
-cfg_mqtt_type     := paho
-cfg_lwm2m_type    := none
-cfg_oc_mqtt_type  := soft
-cfg_oc_lwm2m_type := none
-cfg_loader_enable := no
-cfg_oc_lwm2m_demo_type:= oc_lwm2m_demo_dtls
-cfg_oc_mqtt_demo_type:= oc_mqtt_demo_static
+#cfg_os_type       := liteos
+#cfg_shell_enble   := yes
+#cfg_driver_enable := yes
+#cfg_at_enable     := yes
+#cfg_libc_enable   := yes
+#cfg_cjson_enable  := yes
+#cfg_tcpip_type    := 123
+#cfg_dtls_type     := mbedtls
+#cfg_embedtls_mode := crt
+#cfg_mqtt_type     := paho
+#cfg_lwm2m_type    := none
+#cfg_oc_mqtt_type  := soft
+#cfg_oc_lwm2m_type := none
+#cfg_loader_enable := no
+#cfg_oc_lwm2m_demo_type:= none
+#cfg_oc_mqtt_demo_type:= oc_mqtt_demo_static
 
 ################################################################################
 
 ######################OC LWM2M CONFIURE TEMPLATE#################################
-#cfg_os_type       := liteos
-#cfg_shell_enble   := yes
-#cfg_libc_enable   := yes
-#cfg_cjson_enable  := yes
-#cfg_tcpip_type    := lwip
-#cfg_dtls_type     := mbedtls
-#cfg_embedtls_mode := psk
-#cfg_mqtt_type     := none
-#cfg_lwm2m_type    := wakaama
-#cfg_oc_mqtt_type  := none
-#cfg_oc_lwm2m_type := soft
-#cfg_loader_enable := no
-#cfg_oc_lwm2m_demo_type:= oc_lwm2m_demo_nodtls
-#cfg_oc_mqtt_demo_type:= oc_mqtt_demo_static
+cfg_os_type       := liteos
+cfg_shell_enble   := yes
+cfg_driver_enable := yes
+cfg_at_enable     := yes
+cfg_libc_enable   := yes
+cfg_cjson_enable  := no
+cfg_tcpip_type    := none
+cfg_dtls_type     := none
+cfg_embedtls_mode := none
+cfg_mqtt_type     := none
+cfg_lwm2m_type    := none
+cfg_oc_mqtt_type  := none
+cfg_oc_lwm2m_type := bc35
+cfg_loader_enable := no
+cfg_oc_lwm2m_demo_type:= oc_lwm2m_demo_nodtls
+cfg_oc_mqtt_demo_type:= none
 #################################################################################
 
 include $(TOP_DIR)/iot_link/iot.mk

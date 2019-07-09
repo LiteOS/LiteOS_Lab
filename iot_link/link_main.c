@@ -86,6 +86,19 @@ int link_main(void *args)
     shell_init();
 #endif
 
+#if cfg_driver_enable
+    #include <driver.h>
+    ///< install the driver framework for the link
+    los_driv_init();
+#endif
+
+#if cfg_at_enable
+    #include <at.h>
+    ///< install the at framework for the link
+    uart_at_init(9600);
+    at_init("atdev_BC35G");
+#endif
+
     ///< install the cJSON, for the oc mqtt agent need the cJSON
 #if cfg_json_enable
     #include <cJSON.h>
@@ -109,6 +122,9 @@ int link_main(void *args)
     #elif cfg_macos_socket_enable
         #include <macos_socket_imp.h>
         tcpipstack_install_macos_socket();
+    #elif cfg_esp8266_enable
+        //#include <esp8266.h>
+        //tcpipstack_install_esp8266();
     #else
 
     #endif
@@ -157,6 +173,12 @@ int link_main(void *args)
 #if cfg_oc_lwm2m_agent_enable
     #include <agent_lwm2m.h>
     oc_lwm2m_install_agent();
+#endif
+
+#if cfg_oc_lwm2m_boudica150_enable
+    #include <boudica150_oc.h>
+    #define cn_app_bands    "5,8,20"
+    boudica150_init(NULL,NULL,cn_app_bands);
 #endif
 
 #if cfg_oc_lwm2m_demo_enable

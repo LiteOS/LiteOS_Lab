@@ -36,7 +36,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <driver.h>
-
+#include <sys/fcntl.h>
+#include <los_base.h>
 
 //these defines could be moved to the configuration of the at module
 #define cn_at_oob_len          6            //only allow 6 oob command monitor here,you could configure it more
@@ -79,9 +80,9 @@ struct at_cb
     struct at_cmd           cmd;      //the at command,only one command could be excuted
     struct at_oob           oob[cn_at_oob_len];        //storage the out of band dealer
     char                    rcvbuf[cn_at_resp_maxlen]; //used storage one frame,read from the at channel
-    u32_t                   passmode:1;                //if zero, then use the at mode,else use the pass mode,pass all the data to fnoob
-    u32_t                   rxdebugmode:2;             //receive debug mode
-    u32_t                   txdebugmode:2;             //send debug mode
+    unsigned int            passmode:1;                //if zero, then use the at mode,else use the pass mode,pass all the data to fnoob
+    unsigned int            rxdebugmode:2;             //receive debug mode
+    unsigned int            txdebugmode:2;             //send debug mode
 };
 static struct at_cb g_at_cb;   //this is the at controller here
 
@@ -148,7 +149,7 @@ static int __resp_rcv(char *buf,int buflen,int timeout)
 }
 
 //create a command
-static bool_t  __cmd_create(char *cmdbuf,int cmdlen,const char *index,char *respbuf,int respbuflen,u32_t timeout)
+static bool_t  __cmd_create(char *cmdbuf,int cmdlen,const char *index,char *respbuf,int respbuflen,unsigned int timeout)
 {
     bool_t  ret = false;
     struct at_cmd *cmd;
@@ -317,7 +318,7 @@ instruction  :only one command could be dealt at one time, for we use the sempho
               response data to the respbuf as much as the respbuflen permit
 *******************************************************************************/
 int  at_command(char *cmd,int cmdlen,const char *index,char *respbuf,\
-                int respbuflen,int timeout)
+		        int respbuflen,int timeout)
 {
     int ret = 0;
     if((NULL != cmd))//which means no response need
@@ -408,7 +409,7 @@ bool_t at_init(const char *devname)
         goto EXIT_CMDLOCK;
     }
 
-    if(-1 == task_create("at_rcv",__rcv_task_entry,0x800,NULL,NULL,10))
+    if(-1 == osal_task_create("at_rcv",__rcv_task_entry,0x800,NULL,NULL,10))
     {
         printf("%s:rcvtask create error\n\r",__FUNCTION__);
         goto EXIT_RCVTASK;
@@ -437,8 +438,10 @@ EXIT_PARA:
     return ret;
 }
 
+
 //////////////////////////////////DEBUG COMMAND FOLLOWING/////////////////////////////////////////
 #include <shell.h>
+#include <los_sys.ph>
 //use this shell command,you could input at command through the terminal
 static int shell_at(int argc, const char *argv[])
 {
@@ -462,7 +465,7 @@ static int shell_at(int argc, const char *argv[])
     
 
     memset(respbuf,0,CN_AT_SHELL_LEN);
-    snprintf((char *)cmdbuf,CN_AT_SHELL_LEN,"%s\r",argv[1]);
+    snprintf((char *)cmdbuf,CN_AT_SHELL_LEN,"%s\r\n",argv[1]);
 
     ret = at_command(cmdbuf,strlen((const char *)cmdbuf),index,respbuf,CN_AT_SHELL_LEN,LOSCFG_BASE_CORE_TICK_PER_SECOND); //one second
     if(ret > 0)

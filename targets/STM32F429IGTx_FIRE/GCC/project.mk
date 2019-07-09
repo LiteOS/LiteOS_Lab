@@ -31,6 +31,7 @@ USER_SRC =  \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/system_stm32f4xx.c \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/usart.c \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/uart_debug.c \
+        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/uart_at.c \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/eth.c \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/net_driver.c 
         C_SOURCES += $(USER_SRC)  

@@ -42,12 +42,12 @@
 
 #include <osal.h>
 
-//#define CFG_DRIVER_ENABLE  1  //for the test
+#define CFG_DRIVER_ENABLE  1  //for the test
 
 typedef void* los_driv_t ;//returned by the driver register
 typedef bool_t (*fn_devopen)  (void *pri,int flag);
-typedef int  (*fn_devread)  (void *pri,unsigned int offset,u8_t *buf,int len,unsigned int timeout);
-typedef int  (*fn_devwrite) (void *pri,unsigned int offset,u8_t *buf,int len,unsigned int timeout);
+typedef int  (*fn_devread)  (void *pri,unsigned int offset,unsigned char *buf,int len,unsigned int timeout);
+typedef int  (*fn_devwrite) (void *pri,unsigned int offset,unsigned char *buf,int len,unsigned int timeout);
 typedef void   (*fn_devclose) (void *pri);
 typedef bool_t (*fn_devioctl) (void *pri,unsigned int cmd, void *para,int len);
 typedef bool_t (*fn_devinit)  (void *pri);
@@ -81,8 +81,8 @@ bool_t     los_driv_event(los_driv_t driv,unsigned int event,void *para);
 
 //these interface by the application
 los_dev_t  los_dev_open  (const char *name,unsigned int flag);
-int      los_dev_read  (los_dev_t dev,unsigned int offset,u8_t *buf,int len,unsigned int timeout);
-int      los_dev_write (los_dev_t dev,unsigned int offset,u8_t *buf,int len,unsigned int timeout);
+int      los_dev_read  (los_dev_t dev,unsigned int offset,unsigned char *buf,int len,unsigned int timeout);
+int      los_dev_write (los_dev_t dev,unsigned int offset,unsigned char *buf,int len,unsigned int timeout);
 bool_t     los_dev_close (los_dev_t dev);
 bool_t     los_dev_ioctl (los_dev_t dev,unsigned int cmd,void *para,int paralen);
 off_t      los_dev_seek  (los_dev_t dev,off_t offset, int fromwhere);
