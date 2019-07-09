@@ -113,6 +113,7 @@ typedef struct
 {
     en_oc_boot_strap_mode_t  boot_mode;
     en_oc_boot_strap_status_t  boot_status;
+    unsigned short lifetime;
     const char   *server;            ///< cdp server address
     const char   *port;              ///< cdp server port
     mqtt_al_security_para_t security;///< only support crt mode now

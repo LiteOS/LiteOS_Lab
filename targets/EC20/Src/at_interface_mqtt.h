@@ -34,7 +34,7 @@
 #ifndef __AT_INTERFACE_MQTT_H
 #define __AT_INTERFACE_MQTT_H
 
-void *hwoc_mqtt_connect(int bsmode, const char *ip, const char *port,
+void *hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const char *port,
                               const char *deviceid, const char *devicepasswd);
 
 int hwoc_mqtt_send(int qos, uint8_t *payload, int len);
