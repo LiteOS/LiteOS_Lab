@@ -119,7 +119,8 @@ static void           *s_mqtt_handle;
 static char            s_rcv_buffer[cn_app_rcv_buf_len];
 static int             s_rcv_datalen;
 static osal_semp_t     s_oc_rcv_sync;
-static void           *s_mqtt_handle;
+static void           *s_mqtt_handle;
+
 static void           *s_report_handle;
 
 static int app_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)

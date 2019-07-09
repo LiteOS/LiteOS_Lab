@@ -43,6 +43,7 @@
 
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <netdb.h>
 
 #include <sal_imp.h>   ///< register the macos socket to sal
 #include <macos_socket_imp.h>
@@ -172,6 +173,7 @@ static const tag_tcpip_ops s_tcpip_socket_ops =
    .closesocket =(fn_sal_closesocket)close,
    .getpeername =(fn_sal_getpeername)getpeername,
    .getsockname = (fn_sal_getsockname)getsockname,
+   .gethostbyname = (fn_sal_gethostbyname)gethostbyname,
 };
 
 static const tag_tcpip_domain s_tcpip_socket =
