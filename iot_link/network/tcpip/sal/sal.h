@@ -8,9 +8,9 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <sal_config.h>
 #include <sal_define.h>
 #include <sal_types.h>
+#include <link_endian.h>
 
 /**
  *
@@ -63,30 +63,6 @@ struct hostent * sal_gethostbyname(const char *name);
  * */
 int tcpipstack_init( int socknum);
 
-
-
-//define the normal addres function
-#define swaps(value) ((((value)&((uint16_t)0xff00))>>8)|(((value)&((uint16_t)0x00ff))<<8))
-
-#define swapl(value)  ((((value)&((uint32_t)0xff000000))>>24)|(((value)&((uint32_t)0xff0000))>>8)|\
-                      (((value)&((uint32_t)0xff00))<<8)|(((value)&((uint32_t)0xff))<<24))
-
-#if(cn_host_endian_little)
-#define htoles(value)  (value)
-#define htolel(value)  (value)
-#define htobes(value)  swaps(value)
-#define htobel(value)  swapl(value)
-#else
-#define htoles(value)  swaps(value)
-#define htolel(value)  swapl(value)
-#define htobes(value)  (value)
-#define htobel(value)  (value)
-#endif
-
-#define htons      htobes      //translate the host endian to network endian (2 Bytes)
-#define htonl      htobel      //translate the host endian to network endian (4 Bytes)
-#define ntohs      htobes      //translate the network endian to host endian (2 Bytes)
-#define ntohl      htobel      //translate the network endian to host endian (4 Bytes)
 
 in_addr_t inet_addr(const char *addr);
 char *inet_ntoa(struct in_addr addr);
