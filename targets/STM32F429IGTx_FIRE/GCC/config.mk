@@ -1,99 +1,75 @@
-##########################################################################################################################
-# Cloud_STM32F429IGTx_FIRE GCC compiler config
-##########################################################################################################################
+##############################CONFIGURE INTRODUCTION############################
+#configure type      configure value
+#------------------:------------------
+#cfg_os_type       : linux macos liteos
+#cfg_shell_enble   : yes no
+#cfg_libc_enable   : yes no
+#cfg_cjson_enable  : yes no
+#cfg_tcpip_type    : lwip linux_socket macos_socket none
+#cfg_dtls_type     : mbedtls none
+#cfg_embedtls_mode : crt psk none
+#cfg_mqtt_type     : paho none
+#cfg_lwm2m_type    : wakaama none
+#cfg_oc_mqtt_type  : soft none
+#cfg_oc_lwm2m_type : soft bc35 none
+#cfg_loader_enable : yes no
+#cfg_oc_lwm2m_demo_type:none  oc_lwm2m_demo_dtls and oc_lwm2m_demo_nodtls oc_lwm2m_demo_bs_dtls
+#cfg_oc_mqtt_demo_type:none oc_mqtt_demo_static oc_mqtt_demo_bs
 
-# ------------------------------------------------
-# Generic Makefile (based on gcc)
-# ------------------------------------------------
-# compile option
+######################LOADER     CONFIURE TEMPLATE###############################
+#cfg_os_type       := liteos
+#cfg_shell_enble   := yes
+#cfg_libc_enable   := yes
+#cfg_cjson_enable  := no
+#cfg_tcpip_type    := none
+#cfg_dtls_type     := none
+#cfg_embedtls_mode := none
+#cfg_mqtt_type     := none
+#cfg_lwm2m_type    := none
+#cfg_oc_mqtt_type  := none
+#cfg_oc_lwm2m_type := none
+#cfg_loader_enable := yes
+#cfg_oc_lwm2m_demo_type:= none
+#cfg_oc_mqtt_demo_type:= none
+#################################################################################
+ 
+#####################  OC MQTT CONFIURE TEMPLATE################################
+#cfg_os_type       := liteos
+#cfg_shell_enble   := yes
+#cfg_driver_enable := yes
+#cfg_at_enable     := yes
+#cfg_libc_enable   := yes
+#cfg_cjson_enable  := yes
+#cfg_tcpip_type    := 123
+#cfg_dtls_type     := mbedtls
+#cfg_embedtls_mode := crt
+#cfg_mqtt_type     := paho
+#cfg_lwm2m_type    := none
+#cfg_oc_mqtt_type  := soft
+#cfg_oc_lwm2m_type := none
+#cfg_loader_enable := no
+#cfg_oc_lwm2m_demo_type:= none
+#cfg_oc_mqtt_demo_type:= oc_mqtt_demo_static
 
-#######################################
-# use USE_BOOTLOADER
-#######################################
-USE_BOOTLOADER  := no
+################################################################################
 
-#######################################
-# use Lwm2m protocol
-#######################################
-WITH_LWM2M  := no
+######################OC LWM2M CONFIURE TEMPLATE#################################
+cfg_os_type       := liteos
+cfg_shell_enble   := yes
+cfg_driver_enable := yes
+cfg_at_enable     := yes
+cfg_libc_enable   := yes
+cfg_cjson_enable  := no
+cfg_tcpip_type    := none
+cfg_dtls_type     := none
+cfg_embedtls_mode := none
+cfg_mqtt_type     := none
+cfg_lwm2m_type    := none
+cfg_oc_mqtt_type  := none
+cfg_oc_lwm2m_type := bc35
+cfg_loader_enable := no
+cfg_oc_lwm2m_demo_type:= oc_lwm2m_demo_nodtls
+cfg_oc_mqtt_demo_type:= none
+#################################################################################
 
-#######################################
-# use MQTT protocol
-#######################################
-WITH_MQTT  := yes
-
-
-#######################################
-# use ethernet
-#######################################
-WITH_LWIP  := yes
-
-#######################################
-# use usart AT command
-# (NB_NEUL95_NO_ATINY: nb without agenttiny)
-# (NB_NEUL95: nb with agenttiny)
-#######################################
-WITH_AT_FRAMEWORK := no
-ifeq ($(WITH_AT_FRAMEWORK), yes)
-#ESP8266   # SIM900A  # NB_NEUL95  #EMTC_BG36  # NB_NEUL95_NO_ATINY
-	NETWORK_TYPE := EMTC_BG36
-#ONLYONE  #ALL
-	AT_COMPILE_ALL := ALL
-endif
-
-#######################################
-# use mbedtls
-#######################################
-WITH_DTLS := yes
-
-#######################################
-# whether OTA Pack use checksum
-#######################################
-#SHA256_RSA2048   #SHA256  #NO_CHECKSUM
-OTA_PACK_CHECKSUM := NO_CHECKSUM
-
-#######################################
-# Firmware Over-The-Air
-#######################################
-USE_FOTA := no
-
-#######################################
-# Firmware Over-The-Air
-#######################################
-USE_SOTA := no
-
-#######################################
-# Lwm2m bootstrap program 
-#######################################
-LWM2M_BOOTSTRAP := no
-
-#######################################
-# Lwm2m bootstrap used 
-#######################################
-SUPPORT_DTLS_SRV := no
-
-#######################################
-# Lwm2m core log
-#######################################
-LWM2M_WITH_LOGS := no
-
-#######################################
-# Agenttiny log
-#######################################
-ATINY_DEBUG := yes
-
-#######################################
-# File System
-#######################################
-WITH_FILESYSTEM := no
-ifeq ($(WITH_FILESYSTEM), yes)
-#SPIFFS   #FATFS   #JFFS2
-	FILESYSTEM_TYPE := FATFS
-#ONLYONE  #ALL
-	IS_COMPILE_ALLFS := ALL
-endif
-
-#######################################
-# CMockery Test
-#######################################
-WITH_CMOCKERY_TEST := no
+include $(TOP_DIR)/iot_link/iot.mk
