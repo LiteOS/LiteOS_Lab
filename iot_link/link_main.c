@@ -70,6 +70,8 @@ int link_main(void *args)
     osal_install_liteos();
 #elif cfg_linux_enable
     #include <linux_imp.h>
+    #include <signal.h>
+    sigaction(SIGPIPE, &(struct sigaction){SIG_IGN}, NULL);
     osal_install_linux();
 #elif  cfg_macos_enable
     #include <macos_imp.h>

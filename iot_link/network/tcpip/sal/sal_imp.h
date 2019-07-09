@@ -47,7 +47,7 @@ typedef int (*fn_sal_shutdown)(int sock, int how);
 
 typedef int (*fn_sal_closesocket)(int sock);
 
-typedef int (*fn_sal_gethostbyname)(const char *name);
+typedef void * (*fn_sal_gethostbyname)(const char *name);
 
 
 typedef struct

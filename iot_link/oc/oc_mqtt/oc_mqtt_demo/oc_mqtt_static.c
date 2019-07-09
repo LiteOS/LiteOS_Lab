@@ -46,10 +46,11 @@
 /** the address product_id device_id password crt is only for the test  */
 
 //#define MQTT_DEMO_CONNECT_DYNAMIC
-#define DEFAULT_SERVER_IPV4         "49.4.93.24"     ///<  server ip address
+#define DEFAULT_LIFETIME            10
+#define DEFAULT_SERVER_IPV4         "119.3.248.253"     ///<  server ip address
 #define DEFAULT_SERVER_PORT         "8883"           ///<  server mqtt service port
-#define AGENT_TINY_DEMO_DEVICEID    "9e8f1614-ea97-49df-878c-37fe066aa238"
-#define AGENT_TINY_DEMO_PASSWORD    "3f4a3266825d1698598b"
+#define AGENT_TINY_DEMO_DEVICEID    "sdk_0030"
+#define AGENT_TINY_DEMO_PASSWORD    "e8775e734c48d20aa3ce"
 
 
 static char s_mqtt_ca_crt[] =
@@ -134,7 +135,7 @@ static int oc_mqtt_cmd_entry( void *args)
                 serviceId = cJSON_GetObjectItem(msg,"serviceId");
                 if(NULL != serviceId)
                 {
-                    printf("msgType:%s\n\r",serviceId->valuestring);
+                    printf("serviceId:%s\n\r",serviceId->valuestring);
                 }
 
                 mid = cJSON_GetObjectItem(msg,"mid");
@@ -217,13 +218,14 @@ static int oc_mqtt_report_entry(void *args)
     int times= 0;
 
     config.boot_mode = en_oc_boot_strap_mode_factory;
+    config.lifetime = DEFAULT_LIFETIME;
     config.server = DEFAULT_SERVER_IPV4;
     config.port = DEFAULT_SERVER_PORT;
     config.msgdealer = app_msg_deal;
     config.code_mode = en_oc_mqtt_code_mode_json;
     config.sign_type = en_mqtt_sign_type_hmacsha256_check_time_no;
     config.device_type = en_oc_mqtt_device_type_static;
-    config.auth_type = en_mqtt_auth_type_devid;
+    config.auth_type = en_mqtt_auth_type_nodeid;
     config.device_info.s_device.deviceid = AGENT_TINY_DEMO_DEVICEID;
     config.device_info.s_device.devicepasswd = AGENT_TINY_DEMO_PASSWORD;
 
@@ -270,7 +272,7 @@ static int oc_mqtt_report_entry(void *args)
             cJSON_Delete(root);
         }
 
-        osal_task_sleep(5*1000); ///< do a sleep here
+        osal_task_sleep(20*1000); ///< do a sleep here
     }
     return 0;
 }
