@@ -101,9 +101,19 @@ typedef enum
     en_oc_boot_strap_mode_client_initialize,
 }en_oc_boot_strap_mode_t;
 
+typedef enum
+{
+    en_oc_boot_strap_status_bs = 0,
+    en_oc_boot_strap_status_hub,
+    en_oc_boot_strap_status_max,
+}en_oc_boot_strap_status_t;
+
+
 typedef struct
 {
     en_oc_boot_strap_mode_t  boot_mode;
+    en_oc_boot_strap_status_t  boot_status;
+    unsigned short lifetime;
     const char   *server;            ///< cdp server address
     const char   *port;              ///< cdp server port
     mqtt_al_security_para_t security;///< only support crt mode now

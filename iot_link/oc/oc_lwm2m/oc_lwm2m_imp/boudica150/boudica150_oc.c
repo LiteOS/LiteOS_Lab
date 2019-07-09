@@ -594,7 +594,7 @@ static void *boudica150_oc_config(oc_config_param_t *param)
         if(boudica150_boot(s_boudica150_oc_cb.plmn,s_boudica150_oc_cb.apn,s_boudica150_oc_cb.bands,\
                 s_boudica150_oc_cb.oc_param.app_server.address,s_boudica150_oc_cb.oc_param.app_server.port))
         {
-        	s_oc_handle = &s_boudica150_oc_cb;
+            s_oc_handle = &s_boudica150_oc_cb;
             ret = s_oc_handle;
         }
     }
