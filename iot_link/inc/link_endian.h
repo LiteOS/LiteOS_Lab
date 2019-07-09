@@ -36,8 +36,8 @@
  *  2019-07-09 14:28  zhangqianfu  The first version
  *
  */
-#ifndef LITEOS_LAB_IOT_LINK_INC_ENDIAN_H_
-#define LITEOS_LAB_IOT_LINK_INC_ENDIAN_H_
+#ifndef LITEOS_LAB_IOT_LINK_INC_LINK_ENDIAN_H_
+#define LITEOS_LAB_IOT_LINK_INC_LINK_ENDIAN_H_
 
 
 //define the normal addres function
@@ -78,4 +78,4 @@
 
 
 
-#endif /* LITEOS_LAB_IOT_LINK_INC_ENDIAN_H_ */
+#endif /* LITEOS_LAB_IOT_LINK_INC_LINK_ENDIAN_H_ */
