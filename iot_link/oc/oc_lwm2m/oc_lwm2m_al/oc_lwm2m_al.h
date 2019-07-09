@@ -142,7 +142,6 @@ int oc_lwm2m_deconfig(void *context);
  */
 int oc_lwm2m_init();
 
-
 #else   //not configure the lwm2m agent
 
 #define oc_lwm2m_register(opt)                                              -1

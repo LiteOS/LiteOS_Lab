@@ -1,0 +1,197 @@
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccJQCYWf.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"errno.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.bss.g_task_reent,"aw",%nobits
+  18              		.align	2
+  21              	g_task_reent:
+  22 0000 00000000 		.space	64
+  22      00000000 
+  22      00000000 
+  22      00000000 
+  22      00000000 
+  23              		.section	.text.task_errno,"ax",%progbits
+  24              		.align	1
+  25              		.global	task_errno
+  26              		.syntax unified
+  27              		.thumb
+  28              		.thumb_func
+  29              		.fpu fpv4-sp-d16
+  31              	task_errno:
+  32              	.LFB133:
+  33              		.file 1 "E:/LiteOS/LiteOS_Lab/iot_link/libc/errno.c"
+   1:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** /*----------------------------------------------------------------------------
+   2:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * Copyright (c) <2013-2018>, <Huawei Technologies Co., Ltd>
+   3:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * All rights reserved.
+   4:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * are permitted provided that the following conditions are met:
+   6:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * conditions and the following disclaimer.
+   8:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * provided with the distribution.
+  11:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * permission.
+  14:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccJQCYWf.s 			page 2
+
+
+  24:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  *---------------------------------------------------------------------------*/
+  26:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** /*----------------------------------------------------------------------------
+  27:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * Notice of Export Control Law
+  28:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * ===============================================
+  29:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  * applicable export control laws and regulations.
+  33:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****  *---------------------------------------------------------------------------*/
+  34:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** 
+  35:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** /* Includes -----------------------------------------------------------------*/
+  36:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** 
+  37:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** #include "los_config.h"
+  38:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** #include "los_task.h"
+  39:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** #include "los_printf.h"
+  40:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** 
+  41:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** 
+  42:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** /* Typedefs -----------------------------------------------------------------*/
+  43:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** 
+  44:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** typedef struct TaskReent
+  45:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** {
+  46:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****     int errno;
+  47:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** } TaskReent;
+  48:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** 
+  49:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** 
+  50:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** /* Local variables ----------------------------------------------------------*/
+  51:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** 
+  52:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** static TaskReent g_task_reent[LOSCFG_BASE_CORE_TSK_LIMIT + 1];
+  53:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** 
+  54:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** 
+  55:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** /* Public functions ---------------------------------------------------------*/
+  56:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** 
+  57:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** int *task_errno(void)
+  58:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** {
+  34              		.loc 1 58 0
+  35              		.cfi_startproc
+  36              		@ args = 0, pretend = 0, frame = 8
+  37              		@ frame_needed = 1, uses_anonymous_args = 0
+  38 0000 80B5     		push	{r7, lr}
+  39              	.LCFI0:
+  40              		.cfi_def_cfa_offset 8
+  41              		.cfi_offset 7, -8
+  42              		.cfi_offset 14, -4
+  43 0002 82B0     		sub	sp, sp, #8
+  44              	.LCFI1:
+  45              		.cfi_def_cfa_offset 16
+  46 0004 00AF     		add	r7, sp, #0
+  47              	.LCFI2:
+  48              		.cfi_def_cfa_register 7
+  59:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****     UINT32 taskid = LOS_CurTaskIDGet();
+  49              		.loc 1 59 0
+  50 0006 FFF7FEFF 		bl	LOS_CurTaskIDGet
+  51 000a 7860     		str	r0, [r7, #4]
+  60:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** 
+  61:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****     if (taskid <= LOSCFG_BASE_CORE_TSK_LIMIT)
+  52              		.loc 1 61 0
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccJQCYWf.s 			page 3
+
+
+  53 000c 7B68     		ldr	r3, [r7, #4]
+  54 000e 0F2B     		cmp	r3, #15
+  55 0010 04D8     		bhi	.L2
+  62:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****     {
+  63:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****         return &g_task_reent[taskid].errno;
+  56              		.loc 1 63 0
+  57 0012 7B68     		ldr	r3, [r7, #4]
+  58 0014 9B00     		lsls	r3, r3, #2
+  59 0016 044A     		ldr	r2, .L4
+  60 0018 1344     		add	r3, r3, r2
+  61 001a 00E0     		b	.L3
+  62              	.L2:
+  64:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****     }
+  65:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****     else
+  66:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****     {
+  67:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****         PRINT_WARN("TaskID[%d] is invalid\n", taskid);
+  68:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****         return &g_task_reent[0].errno;
+  63              		.loc 1 68 0
+  64 001c 024B     		ldr	r3, .L4
+  65              	.L3:
+  69:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c ****     }
+  70:E:/LiteOS/LiteOS_Lab/iot_link/libc\errno.c **** }
+  66              		.loc 1 70 0
+  67 001e 1846     		mov	r0, r3
+  68 0020 0837     		adds	r7, r7, #8
+  69              	.LCFI3:
+  70              		.cfi_def_cfa_offset 8
+  71 0022 BD46     		mov	sp, r7
+  72              	.LCFI4:
+  73              		.cfi_def_cfa_register 13
+  74              		@ sp needed
+  75 0024 80BD     		pop	{r7, pc}
+  76              	.L5:
+  77 0026 00BF     		.align	2
+  78              	.L4:
+  79 0028 00000000 		.word	g_task_reent
+  80              		.cfi_endproc
+  81              	.LFE133:
+  83              		.text
+  84              	.Letext0:
+  85              		.file 2 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+  86              		.file 3 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+  87              		.file 4 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+  88              		.file 5 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+  89              		.file 6 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+  90              		.file 7 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_typedef.h"
+  91              		.file 8 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+  92              		.file 9 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/arch/arm/common/cmsis/core_cm4.h"
+  93              		.file 10 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/system_stm32l4xx.h"
+  94              		.file 11 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_list.h"
+  95              		.file 12 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_err.h"
+  96              		.file 13 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/arch/arm/arm-m/include/los_hwi.h"
+  97              		.file 14 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_tick.h"
+  98              		.file 15 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_event.h"
+  99              		.file 16 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_task.h"
+ 100              		.file 17 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/include/los_task.ph"
+ 101              		.file 18 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/main.h"
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccJQCYWf.s 			page 4
+
+
+ 102              		.file 19 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_config.h"
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccJQCYWf.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 errno.c
+C:\Users\user\AppData\Local\Temp\ccJQCYWf.s:18     .bss.g_task_reent:00000000 $d
+C:\Users\user\AppData\Local\Temp\ccJQCYWf.s:21     .bss.g_task_reent:00000000 g_task_reent
+C:\Users\user\AppData\Local\Temp\ccJQCYWf.s:24     .text.task_errno:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccJQCYWf.s:31     .text.task_errno:00000000 task_errno
+C:\Users\user\AppData\Local\Temp\ccJQCYWf.s:79     .text.task_errno:00000028 $d
+
+UNDEFINED SYMBOLS
+LOS_CurTaskIDGet

@@ -1,0 +1,477 @@
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccRarIC3.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"malloc.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.free,"ax",%progbits
+  18              		.align	1
+  19              		.weak	free
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	free:
+  26              	.LFB3:
+  27              		.file 1 "E:/LiteOS/LiteOS_Lab/iot_link/libc/malloc.c"
+   1:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** /************************************************************************
+   2:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * Copyright (c) <2013-2015>, <Huawei Technologies Co., Ltd>
+   3:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * All rights reserved.
+   4:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  *
+   5:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * Redistribution and use in source and binary forms, with or without
+   6:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * modification, are permitted provided that the following conditions
+   7:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * are met:
+   8:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * 1. Redistributions of source code must retain the above copyright
+   9:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  *    notice,this list of conditions and the following disclaimer.
+  10:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * 2. Redistributions in binary form must reproduce the above copyright
+  11:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  *    notice,this list of conditions and the following disclaimer in the
+  12:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  *    documentation and/or other materials provided with the distribution.
+  13:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * 3. Neither the name of the copyright holder nor the names of its
+  14:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  *    contributors may be used to endorse or promote products derived from
+  15:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  *    this software without specific prior written permission.
+  16:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  *
+  17:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  18:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  19:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  20:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+  21:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  22:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  23:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  24:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  25:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  26:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  27:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * POSSIBILITY OF SUCH DAMAGE.
+  28:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  ************************************************************************/
+  29:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** 
+  30:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** /************************************************************************
+  31:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * Notice of Export Control Law
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccRarIC3.s 			page 2
+
+
+  32:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * ===============================================
+  33:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations,
+  34:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * which might include those applicable to Huawei LiteOS of U.S. and the country
+  35:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * in which you are located.
+  36:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in
+  37:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  * compliance with such applicable export control laws and regulations.
+  38:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****  ************************************************************************/
+  39:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** #include <stdint.h>
+  40:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** #include <stddef.h>
+  41:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** #include <stdlib.h>
+  42:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** #include <osal.h>
+  43:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** 
+  44:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** #if defined(LOS_LIBC_MALLOC_ALIGN) && !defined(LOS_LIBC_MALLOC_ALIGN_SIZE)
+  45:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** #error "macro LOS_LIBC_MALLOC_ALIGN_SIZE undefined"
+  46:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** #endif
+  47:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** 
+  48:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** 
+  49:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** /*****************************************************************************
+  50:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Function         :      free
+  51:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Description      :      Deallocates the memory previously allocated by a call to calloc, malloc, or
+  52:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                 realloc. The argument ptr points to the space that was previously allocated.
+  53:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                 If ptr points to a memory block that was not allocated with calloc, malloc,
+  54:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                 or realloc, or is a space that has been deallocated, then the result is
+  55:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                 undefined.
+  56:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Input            :      [1] void *ptr, pointed to the memory need to free.
+  57:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Output           :      nothing.
+  58:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Return           :      No value is returned.
+  59:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** *****************************************************************************/
+  60:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** __attribute__((weak)) void free(void *ptr)
+  61:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** {
+  28              		.loc 1 61 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 8
+  31              		@ frame_needed = 1, uses_anonymous_args = 0
+  32 0000 80B5     		push	{r7, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 8
+  35              		.cfi_offset 7, -8
+  36              		.cfi_offset 14, -4
+  37 0002 82B0     		sub	sp, sp, #8
+  38              	.LCFI1:
+  39              		.cfi_def_cfa_offset 16
+  40 0004 00AF     		add	r7, sp, #0
+  41              	.LCFI2:
+  42              		.cfi_def_cfa_register 7
+  43 0006 7860     		str	r0, [r7, #4]
+  62:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****     osal_free(ptr);
+  44              		.loc 1 62 0
+  45 0008 7868     		ldr	r0, [r7, #4]
+  46 000a FFF7FEFF 		bl	osal_free
+  63:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****     return;
+  47              		.loc 1 63 0
+  48 000e 00BF     		nop
+  64:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** }
+  49              		.loc 1 64 0
+  50 0010 0837     		adds	r7, r7, #8
+  51              	.LCFI3:
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccRarIC3.s 			page 3
+
+
+  52              		.cfi_def_cfa_offset 8
+  53 0012 BD46     		mov	sp, r7
+  54              	.LCFI4:
+  55              		.cfi_def_cfa_register 13
+  56              		@ sp needed
+  57 0014 80BD     		pop	{r7, pc}
+  58              		.cfi_endproc
+  59              	.LFE3:
+  61              		.section	.text.malloc,"ax",%progbits
+  62              		.align	1
+  63              		.weak	malloc
+  64              		.syntax unified
+  65              		.thumb
+  66              		.thumb_func
+  67              		.fpu fpv4-sp-d16
+  69              	malloc:
+  70              	.LFB4:
+  65:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** 
+  66:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** 
+  67:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** /*****************************************************************************
+  68:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Function         :      malloc
+  69:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Description      :      Allocates the requested memory and returns a pointer to it. The requested
+  70:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                 size is size bytes. The value of the space is indeterminate.
+  71:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Input            :      [1] size_t size, spcified the size need to allocate.
+  72:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Output           :      nothing.
+  73:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Return           :      On success a pointer to the requested space is returned.
+  74:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                 On failure a null pointer is returned.
+  75:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** *****************************************************************************/
+  76:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** __attribute__((weak)) void *malloc(size_t size) /*lint !e31 !e10*/
+  77:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** {
+  71              		.loc 1 77 0
+  72              		.cfi_startproc
+  73              		@ args = 0, pretend = 0, frame = 8
+  74              		@ frame_needed = 1, uses_anonymous_args = 0
+  75 0000 80B5     		push	{r7, lr}
+  76              	.LCFI5:
+  77              		.cfi_def_cfa_offset 8
+  78              		.cfi_offset 7, -8
+  79              		.cfi_offset 14, -4
+  80 0002 82B0     		sub	sp, sp, #8
+  81              	.LCFI6:
+  82              		.cfi_def_cfa_offset 16
+  83 0004 00AF     		add	r7, sp, #0
+  84              	.LCFI7:
+  85              		.cfi_def_cfa_register 7
+  86 0006 7860     		str	r0, [r7, #4]
+  78:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****     return osal_malloc(size);
+  87              		.loc 1 78 0
+  88 0008 7B68     		ldr	r3, [r7, #4]
+  89 000a 1846     		mov	r0, r3
+  90 000c FFF7FEFF 		bl	osal_malloc
+  91 0010 0346     		mov	r3, r0
+  79:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** 
+  80:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** }
+  92              		.loc 1 80 0
+  93 0012 1846     		mov	r0, r3
+  94 0014 0837     		adds	r7, r7, #8
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccRarIC3.s 			page 4
+
+
+  95              	.LCFI8:
+  96              		.cfi_def_cfa_offset 8
+  97 0016 BD46     		mov	sp, r7
+  98              	.LCFI9:
+  99              		.cfi_def_cfa_register 13
+ 100              		@ sp needed
+ 101 0018 80BD     		pop	{r7, pc}
+ 102              		.cfi_endproc
+ 103              	.LFE4:
+ 105              		.section	.text.zalloc,"ax",%progbits
+ 106              		.align	1
+ 107              		.weak	zalloc
+ 108              		.syntax unified
+ 109              		.thumb
+ 110              		.thumb_func
+ 111              		.fpu fpv4-sp-d16
+ 113              	zalloc:
+ 114              	.LFB5:
+  81:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** 
+  82:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** 
+  83:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** __attribute__((weak)) void *zalloc(size_t size) /*lint !e10*/
+  84:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** {
+ 115              		.loc 1 84 0
+ 116              		.cfi_startproc
+ 117              		@ args = 0, pretend = 0, frame = 8
+ 118              		@ frame_needed = 1, uses_anonymous_args = 0
+ 119 0000 80B5     		push	{r7, lr}
+ 120              	.LCFI10:
+ 121              		.cfi_def_cfa_offset 8
+ 122              		.cfi_offset 7, -8
+ 123              		.cfi_offset 14, -4
+ 124 0002 82B0     		sub	sp, sp, #8
+ 125              	.LCFI11:
+ 126              		.cfi_def_cfa_offset 16
+ 127 0004 00AF     		add	r7, sp, #0
+ 128              	.LCFI12:
+ 129              		.cfi_def_cfa_register 7
+ 130 0006 7860     		str	r0, [r7, #4]
+  85:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****     return osal_zalloc(size);
+ 131              		.loc 1 85 0
+ 132 0008 7B68     		ldr	r3, [r7, #4]
+ 133 000a 1846     		mov	r0, r3
+ 134 000c FFF7FEFF 		bl	osal_zalloc
+ 135 0010 0346     		mov	r3, r0
+  86:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** 
+  87:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** }
+ 136              		.loc 1 87 0
+ 137 0012 1846     		mov	r0, r3
+ 138 0014 0837     		adds	r7, r7, #8
+ 139              	.LCFI13:
+ 140              		.cfi_def_cfa_offset 8
+ 141 0016 BD46     		mov	sp, r7
+ 142              	.LCFI14:
+ 143              		.cfi_def_cfa_register 13
+ 144              		@ sp needed
+ 145 0018 80BD     		pop	{r7, pc}
+ 146              		.cfi_endproc
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccRarIC3.s 			page 5
+
+
+ 147              	.LFE5:
+ 149              		.section	.text.calloc,"ax",%progbits
+ 150              		.align	1
+ 151              		.weak	calloc
+ 152              		.syntax unified
+ 153              		.thumb
+ 154              		.thumb_func
+ 155              		.fpu fpv4-sp-d16
+ 157              	calloc:
+ 158              	.LFB6:
+  88:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** 
+  89:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** 
+  90:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** /*****************************************************************************
+  91:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Function         :      calloc
+  92:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Description      :    Allocates the requested memory and returns a pointer to it. The requested
+  93:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                 size is nitems each size bytes long (total memory requested is nitems*size).
+  94:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                 The space is initialized to all zero bits.
+  95:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Input            :      [1] size_t nitems,
+  96:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                 [2] size_t size,
+  97:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Output           :      nothing.
+  98:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Return           :      On success a pointer to the requested space is returned.
+  99:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                 On failure a null pointer is returned.
+ 100:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** *****************************************************************************/
+ 101:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** __attribute__((weak)) void *calloc(size_t nitems, size_t size) /*lint !e578*/
+ 102:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** {
+ 159              		.loc 1 102 0
+ 160              		.cfi_startproc
+ 161              		@ args = 0, pretend = 0, frame = 8
+ 162              		@ frame_needed = 1, uses_anonymous_args = 0
+ 163 0000 80B5     		push	{r7, lr}
+ 164              	.LCFI15:
+ 165              		.cfi_def_cfa_offset 8
+ 166              		.cfi_offset 7, -8
+ 167              		.cfi_offset 14, -4
+ 168 0002 82B0     		sub	sp, sp, #8
+ 169              	.LCFI16:
+ 170              		.cfi_def_cfa_offset 16
+ 171 0004 00AF     		add	r7, sp, #0
+ 172              	.LCFI17:
+ 173              		.cfi_def_cfa_register 7
+ 174 0006 7860     		str	r0, [r7, #4]
+ 175 0008 3960     		str	r1, [r7]
+ 103:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****     return osal_calloc(nitems,size);
+ 176              		.loc 1 103 0
+ 177 000a 7B68     		ldr	r3, [r7, #4]
+ 178 000c 3A68     		ldr	r2, [r7]
+ 179 000e 1146     		mov	r1, r2
+ 180 0010 1846     		mov	r0, r3
+ 181 0012 FFF7FEFF 		bl	osal_calloc
+ 182 0016 0346     		mov	r3, r0
+ 104:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** }
+ 183              		.loc 1 104 0
+ 184 0018 1846     		mov	r0, r3
+ 185 001a 0837     		adds	r7, r7, #8
+ 186              	.LCFI18:
+ 187              		.cfi_def_cfa_offset 8
+ 188 001c BD46     		mov	sp, r7
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccRarIC3.s 			page 6
+
+
+ 189              	.LCFI19:
+ 190              		.cfi_def_cfa_register 13
+ 191              		@ sp needed
+ 192 001e 80BD     		pop	{r7, pc}
+ 193              		.cfi_endproc
+ 194              	.LFE6:
+ 196              		.section	.text.memalign,"ax",%progbits
+ 197              		.align	1
+ 198              		.weak	memalign
+ 199              		.syntax unified
+ 200              		.thumb
+ 201              		.thumb_func
+ 202              		.fpu fpv4-sp-d16
+ 204              	memalign:
+ 205              	.LFB7:
+ 105:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** 
+ 106:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** 
+ 107:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** /*****************************************************************************
+ 108:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Function         :      memalign
+ 109:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Description      :      allocates a block of size bytes whose address is a multiple of boundary.
+ 110:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                The boundary must be a power of two!
+ 111:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Input            :      [1] size_t size, spcified the size need to allocate.
+ 112:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                [2] size_t boundary, the returned memory address will be a multiple of boundary.
+ 113:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                This argument must be a power of two. This property is not checked by
+ 114:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                memalign, so misuse may result in random runtime errors.
+ 115:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Output           :      nothing.
+ 116:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Return           :      On success a pointer to the requested space is returned.
+ 117:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                On failure a null pointer is returned.
+ 118:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** *****************************************************************************/
+ 119:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** __attribute__((weak)) void *memalign (size_t boundary, size_t size)  /*lint !e18 !e578*/
+ 120:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** {
+ 206              		.loc 1 120 0
+ 207              		.cfi_startproc
+ 208              		@ args = 0, pretend = 0, frame = 8
+ 209              		@ frame_needed = 1, uses_anonymous_args = 0
+ 210 0000 80B5     		push	{r7, lr}
+ 211              	.LCFI20:
+ 212              		.cfi_def_cfa_offset 8
+ 213              		.cfi_offset 7, -8
+ 214              		.cfi_offset 14, -4
+ 215 0002 82B0     		sub	sp, sp, #8
+ 216              	.LCFI21:
+ 217              		.cfi_def_cfa_offset 16
+ 218 0004 00AF     		add	r7, sp, #0
+ 219              	.LCFI22:
+ 220              		.cfi_def_cfa_register 7
+ 221 0006 7860     		str	r0, [r7, #4]
+ 222 0008 3960     		str	r1, [r7]
+ 121:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****     return osal_malloc(size);
+ 223              		.loc 1 121 0
+ 224 000a 3B68     		ldr	r3, [r7]
+ 225 000c 1846     		mov	r0, r3
+ 226 000e FFF7FEFF 		bl	osal_malloc
+ 227 0012 0346     		mov	r3, r0
+ 122:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** }
+ 228              		.loc 1 122 0
+ 229 0014 1846     		mov	r0, r3
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccRarIC3.s 			page 7
+
+
+ 230 0016 0837     		adds	r7, r7, #8
+ 231              	.LCFI23:
+ 232              		.cfi_def_cfa_offset 8
+ 233 0018 BD46     		mov	sp, r7
+ 234              	.LCFI24:
+ 235              		.cfi_def_cfa_register 13
+ 236              		@ sp needed
+ 237 001a 80BD     		pop	{r7, pc}
+ 238              		.cfi_endproc
+ 239              	.LFE7:
+ 241              		.section	.text.realloc,"ax",%progbits
+ 242              		.align	1
+ 243              		.global	realloc
+ 244              		.syntax unified
+ 245              		.thumb
+ 246              		.thumb_func
+ 247              		.fpu fpv4-sp-d16
+ 249              	realloc:
+ 250              	.LFB8:
+ 123:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** 
+ 124:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** 
+ 125:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** /*****************************************************************************
+ 126:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Function         :      realloc
+ 127:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Description      :      Attempts to resize the memory block pointed to by ptr that was previously
+ 128:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                 allocated with a call to malloc or calloc. The contents pointed to by ptr are
+ 129:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                 unchanged. If the value of size is greater than the previous size of the
+ 130:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                 block, then the additional bytes have an undeterminate value. If the value
+ 131:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                 of size is less than the previous size of the block, then the difference of
+ 132:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                 bytes at the end of the block are freed. If ptr is null, then it behaves like
+ 133:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                 malloc. If ptr points to a memory block that was not allocated with calloc
+ 134:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                 or malloc, or is a space that has been deallocated, then the result is
+ 135:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                 undefined. If the new space cannot be allocated, then the contents pointed
+ 136:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                 to by ptr are unchanged. If size is zero, then the memory block is completely
+ 137:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                 freed.
+ 138:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Input            :      [1] void *ptr, pointed to the memory which need to remalloc.
+ 139:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                 [2] size_t size, specified the size to remalloc.
+ 140:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Output           :      nothing.
+ 141:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** Return           :      On success a pointer to the memory block is returned (which may be in a
+ 142:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                 different location as before).
+ 143:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****                On failure or if size is zero, a null pointer is returned.
+ 144:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** *****************************************************************************/
+ 145:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** void *realloc(void *ptr, size_t size)
+ 146:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** {
+ 251              		.loc 1 146 0
+ 252              		.cfi_startproc
+ 253              		@ args = 0, pretend = 0, frame = 8
+ 254              		@ frame_needed = 1, uses_anonymous_args = 0
+ 255 0000 80B5     		push	{r7, lr}
+ 256              	.LCFI25:
+ 257              		.cfi_def_cfa_offset 8
+ 258              		.cfi_offset 7, -8
+ 259              		.cfi_offset 14, -4
+ 260 0002 82B0     		sub	sp, sp, #8
+ 261              	.LCFI26:
+ 262              		.cfi_def_cfa_offset 16
+ 263 0004 00AF     		add	r7, sp, #0
+ 264              	.LCFI27:
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccRarIC3.s 			page 8
+
+
+ 265              		.cfi_def_cfa_register 7
+ 266 0006 7860     		str	r0, [r7, #4]
+ 267 0008 3960     		str	r1, [r7]
+ 147:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c ****     return osal_realloc(ptr,size);
+ 268              		.loc 1 147 0
+ 269 000a 3B68     		ldr	r3, [r7]
+ 270 000c 1946     		mov	r1, r3
+ 271 000e 7868     		ldr	r0, [r7, #4]
+ 272 0010 FFF7FEFF 		bl	osal_realloc
+ 273 0014 0346     		mov	r3, r0
+ 148:E:/LiteOS/LiteOS_Lab/iot_link/libc\malloc.c **** }
+ 274              		.loc 1 148 0
+ 275 0016 1846     		mov	r0, r3
+ 276 0018 0837     		adds	r7, r7, #8
+ 277              	.LCFI28:
+ 278              		.cfi_def_cfa_offset 8
+ 279 001a BD46     		mov	sp, r7
+ 280              	.LCFI29:
+ 281              		.cfi_def_cfa_register 13
+ 282              		@ sp needed
+ 283 001c 80BD     		pop	{r7, pc}
+ 284              		.cfi_endproc
+ 285              	.LFE8:
+ 287              		.text
+ 288              	.Letext0:
+ 289              		.file 2 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 290              		.file 3 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 291              		.file 4 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 292              		.file 5 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 293              		.file 6 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccRarIC3.s 			page 9
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 malloc.c
+C:\Users\user\AppData\Local\Temp\ccRarIC3.s:18     .text.free:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccRarIC3.s:25     .text.free:00000000 free
+C:\Users\user\AppData\Local\Temp\ccRarIC3.s:62     .text.malloc:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccRarIC3.s:69     .text.malloc:00000000 malloc
+C:\Users\user\AppData\Local\Temp\ccRarIC3.s:106    .text.zalloc:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccRarIC3.s:113    .text.zalloc:00000000 zalloc
+C:\Users\user\AppData\Local\Temp\ccRarIC3.s:150    .text.calloc:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccRarIC3.s:157    .text.calloc:00000000 calloc
+C:\Users\user\AppData\Local\Temp\ccRarIC3.s:197    .text.memalign:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccRarIC3.s:204    .text.memalign:00000000 memalign
+C:\Users\user\AppData\Local\Temp\ccRarIC3.s:242    .text.realloc:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccRarIC3.s:249    .text.realloc:00000000 realloc
+
+UNDEFINED SYMBOLS
+osal_free
+osal_malloc
+osal_zalloc
+osal_calloc
+osal_realloc

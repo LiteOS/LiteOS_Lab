@@ -1,0 +1,1167 @@
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc1XwOet.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"uart_at.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.comm	uart_at,120,4
+  18              		.section	.data.s_pUSART,"aw",%progbits
+  19              		.align	2
+  22              	s_pUSART:
+  23 0000 00800040 		.word	1073774592
+  24              		.section	.data.s_uwIRQn,"aw",%progbits
+  25              		.align	2
+  28              	s_uwIRQn:
+  29 0000 46000000 		.word	70
+  30              		.section	.bss.g_atio_cb,"aw",%nobits
+  31              		.align	2
+  34              	g_atio_cb:
+  35 0000 00000000 		.space	820
+  35      00000000 
+  35      00000000 
+  35      00000000 
+  35      00000000 
+  36              		.section	.text.atio_irq,"ax",%progbits
+  37              		.align	1
+  38              		.syntax unified
+  39              		.thumb
+  40              		.thumb_func
+  41              		.fpu fpv4-sp-d16
+  43              	atio_irq:
+  44              	.LFB133:
+  45              		.file 1 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src/uart_at.c"
+   1:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** /*----------------------------------------------------------------------------
+   2:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+   3:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * All rights reserved.
+   4:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * are permitted provided that the following conditions are met:
+   6:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * conditions and the following disclaimer.
+   8:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * provided with the distribution.
+  11:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * permission.
+  14:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc1XwOet.s 			page 2
+
+
+  16:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  *---------------------------------------------------------------------------*/
+  26:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** /*----------------------------------------------------------------------------
+  27:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * Notice of Export Control Law
+  28:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * ===============================================
+  29:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  * applicable export control laws and regulations.
+  33:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****  *---------------------------------------------------------------------------*/
+  34:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** 
+  35:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** #include "usart.h"
+  36:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** #include "stm32l4xx.h"
+  37:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** #include <stdint.h>
+  38:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** #include <stddef.h>
+  39:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** #include <osal.h>
+  40:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** #include <link_misc.h>
+  41:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** #include <driver.h>
+  42:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** #include "sys/fcntl.h"
+  43:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** 
+  44:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** UART_HandleTypeDef uart_at;
+  45:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** static USART_TypeDef*     s_pUSART = LPUART1;
+  46:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** static uint32_t           s_uwIRQn = LPUART1_IRQn;
+  47:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** 
+  48:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** #define CN_RCVBUF_LEN  256  //cache a frame
+  49:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** #define CN_RCVMEM_LEN  512  //use to cache more frames
+  50:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** 
+  51:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** struct atio_cb
+  52:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** {
+  53:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     unsigned short        w_next;    //the next position to be write
+  54:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     int                   rcvsync;   //if a frame has been written to the ring, then active it
+  55:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     tag_ring_buffer_t     rcvring;
+  56:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     unsigned char         rcvbuf[CN_RCVBUF_LEN];
+  57:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     unsigned char         rcvringmem[CN_RCVMEM_LEN];
+  58:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     //for the debug here
+  59:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     unsigned int          rframeover; //how many times the frame has been over the max length
+  60:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     unsigned int          rframedrop; //how many frame has been droped for memmory
+  61:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     unsigned int          sndlen;     //how many bytes has been sent
+  62:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     unsigned int          rcvlen;     //how many bytes has been received
+  63:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     unsigned int          sndframe;   //how many frame has been sent
+  64:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     unsigned int          rcvframe;   //how many frame has been received
+  65:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     unsigned int          rcvringrst; //how many times the receive ring has been reset
+  66:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** };
+  67:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** static struct atio_cb   g_atio_cb;
+  68:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** 
+  69:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** 
+  70:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** /*******************************************************************************
+  71:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** function     :use this function to deal the uart interrupt
+  72:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** parameters   :
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc1XwOet.s 			page 3
+
+
+  73:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** instruction  :we cached the data in the temp buffer,when the idle interrupt reached,
+  74:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****               then we write the data and the length to the ring if the ring has enough
+  75:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****               space
+  76:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** *******************************************************************************/
+  77:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** static void atio_irq(void)
+  78:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** {
+  46              		.loc 1 78 0
+  47              		.cfi_startproc
+  48              		@ args = 0, pretend = 0, frame = 8
+  49              		@ frame_needed = 1, uses_anonymous_args = 0
+  50 0000 80B5     		push	{r7, lr}
+  51              	.LCFI0:
+  52              		.cfi_def_cfa_offset 8
+  53              		.cfi_offset 7, -8
+  54              		.cfi_offset 14, -4
+  55 0002 82B0     		sub	sp, sp, #8
+  56              	.LCFI1:
+  57              		.cfi_def_cfa_offset 16
+  58 0004 00AF     		add	r7, sp, #0
+  59              	.LCFI2:
+  60              		.cfi_def_cfa_register 7
+  79:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     unsigned char  value;
+  80:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     unsigned short ringspace;
+  81:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     if(__HAL_UART_GET_FLAG(&uart_at, UART_FLAG_RXNE) != RESET)
+  61              		.loc 1 81 0
+  62 0006 384B     		ldr	r3, .L9
+  63 0008 1B68     		ldr	r3, [r3]
+  64 000a DB69     		ldr	r3, [r3, #28]
+  65 000c 03F02003 		and	r3, r3, #32
+  66 0010 202B     		cmp	r3, #32
+  67 0012 25D1     		bne	.L2
+  82:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     {
+  83:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****        value = (uint8_t)(uart_at.Instance->RDR & 0x00FF);
+  68              		.loc 1 83 0
+  69 0014 344B     		ldr	r3, .L9
+  70 0016 1B68     		ldr	r3, [r3]
+  71 0018 9B8C     		ldrh	r3, [r3, #36]	@ movhi
+  72 001a 9BB2     		uxth	r3, r3
+  73 001c FB71     		strb	r3, [r7, #7]
+  84:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****        g_atio_cb.rcvlen++;
+  74              		.loc 1 84 0
+  75 001e 334B     		ldr	r3, .L9+4
+  76 0020 D3F82433 		ldr	r3, [r3, #804]
+  77 0024 0133     		adds	r3, r3, #1
+  78 0026 314A     		ldr	r2, .L9+4
+  79 0028 C2F82433 		str	r3, [r2, #804]
+  85:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****        if(g_atio_cb.w_next < CN_RCVBUF_LEN)
+  80              		.loc 1 85 0
+  81 002c 2F4B     		ldr	r3, .L9+4
+  82 002e 1B88     		ldrh	r3, [r3]
+  83 0030 FF2B     		cmp	r3, #255
+  84 0032 0DD8     		bhi	.L3
+  86:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****        {
+  87:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****            g_atio_cb.rcvbuf[g_atio_cb.w_next] = value;
+  85              		.loc 1 87 0
+  86 0034 2D4B     		ldr	r3, .L9+4
+  87 0036 1B88     		ldrh	r3, [r3]
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc1XwOet.s 			page 4
+
+
+  88 0038 1A46     		mov	r2, r3
+  89 003a 2C4B     		ldr	r3, .L9+4
+  90 003c 1344     		add	r3, r3, r2
+  91 003e FA79     		ldrb	r2, [r7, #7]
+  92 0040 1A76     		strb	r2, [r3, #24]
+  88:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****            g_atio_cb.w_next++;
+  93              		.loc 1 88 0
+  94 0042 2A4B     		ldr	r3, .L9+4
+  95 0044 1B88     		ldrh	r3, [r3]
+  96 0046 0133     		adds	r3, r3, #1
+  97 0048 9AB2     		uxth	r2, r3
+  98 004a 284B     		ldr	r3, .L9+4
+  99 004c 1A80     		strh	r2, [r3]	@ movhi
+  89:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****        }
+  90:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****        else
+  91:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****        {
+  92:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****             g_atio_cb.rframeover++;
+  93:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****        }
+  94:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     }
+  95:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     else if (__HAL_UART_GET_FLAG(&uart_at,UART_FLAG_IDLE) != RESET)
+  96:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     {
+  97:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         __HAL_UART_CLEAR_IDLEFLAG(&uart_at);
+  98:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         ringspace = CN_RCVMEM_LEN - ring_datalen(&g_atio_cb.rcvring);
+  99:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         if(ringspace < g_atio_cb.w_next)  //not enough mem
+ 100:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         {
+ 101:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****             g_atio_cb.rframedrop++;
+ 102:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         }
+ 103:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         else
+ 104:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         {
+ 105:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****             //write data to the ring buffer:len+data format
+ 106:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****             ringspace = g_atio_cb.w_next;
+ 107:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****             ring_write(&g_atio_cb.rcvring,(unsigned char *)&ringspace,sizeof(ringspace));
+ 108:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****             ring_write(&g_atio_cb.rcvring,g_atio_cb.rcvbuf,ringspace);
+ 109:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****             osal_semp_post(g_atio_cb.rcvsync);
+ 110:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****             g_atio_cb.rcvframe++;
+ 111:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         }
+ 112:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         g_atio_cb.w_next=0; //write from the head
+ 113:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     }
+ 114:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** }
+ 100              		.loc 1 114 0
+ 101 004e 46E0     		b	.L8
+ 102              	.L3:
+  92:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****        }
+ 103              		.loc 1 92 0
+ 104 0050 264B     		ldr	r3, .L9+4
+ 105 0052 D3F81833 		ldr	r3, [r3, #792]
+ 106 0056 0133     		adds	r3, r3, #1
+ 107 0058 244A     		ldr	r2, .L9+4
+ 108 005a C2F81833 		str	r3, [r2, #792]
+ 109              		.loc 1 114 0
+ 110 005e 3EE0     		b	.L8
+ 111              	.L2:
+  95:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     {
+ 112              		.loc 1 95 0
+ 113 0060 214B     		ldr	r3, .L9
+ 114 0062 1B68     		ldr	r3, [r3]
+ 115 0064 DB69     		ldr	r3, [r3, #28]
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc1XwOet.s 			page 5
+
+
+ 116 0066 03F01003 		and	r3, r3, #16
+ 117 006a 102B     		cmp	r3, #16
+ 118 006c 37D1     		bne	.L8
+  97:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         ringspace = CN_RCVMEM_LEN - ring_datalen(&g_atio_cb.rcvring);
+ 119              		.loc 1 97 0
+ 120 006e 1E4B     		ldr	r3, .L9
+ 121 0070 1B68     		ldr	r3, [r3]
+ 122 0072 1022     		movs	r2, #16
+ 123 0074 1A62     		str	r2, [r3, #32]
+  98:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         if(ringspace < g_atio_cb.w_next)  //not enough mem
+ 124              		.loc 1 98 0
+ 125 0076 1E48     		ldr	r0, .L9+8
+ 126 0078 FFF7FEFF 		bl	ring_datalen
+ 127 007c 0346     		mov	r3, r0
+ 128 007e 9BB2     		uxth	r3, r3
+ 129 0080 C3F50073 		rsb	r3, r3, #512
+ 130 0084 9BB2     		uxth	r3, r3
+ 131 0086 BB80     		strh	r3, [r7, #4]	@ movhi
+  99:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         {
+ 132              		.loc 1 99 0
+ 133 0088 184B     		ldr	r3, .L9+4
+ 134 008a 1A88     		ldrh	r2, [r3]
+ 135 008c BB88     		ldrh	r3, [r7, #4]
+ 136 008e 9A42     		cmp	r2, r3
+ 137 0090 07D9     		bls	.L6
+ 101:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         }
+ 138              		.loc 1 101 0
+ 139 0092 164B     		ldr	r3, .L9+4
+ 140 0094 D3F81C33 		ldr	r3, [r3, #796]
+ 141 0098 0133     		adds	r3, r3, #1
+ 142 009a 144A     		ldr	r2, .L9+4
+ 143 009c C2F81C33 		str	r3, [r2, #796]
+ 144 00a0 1AE0     		b	.L7
+ 145              	.L6:
+ 106:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****             ring_write(&g_atio_cb.rcvring,(unsigned char *)&ringspace,sizeof(ringspace));
+ 146              		.loc 1 106 0
+ 147 00a2 124B     		ldr	r3, .L9+4
+ 148 00a4 1B88     		ldrh	r3, [r3]
+ 149 00a6 BB80     		strh	r3, [r7, #4]	@ movhi
+ 107:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****             ring_write(&g_atio_cb.rcvring,g_atio_cb.rcvbuf,ringspace);
+ 150              		.loc 1 107 0
+ 151 00a8 3B1D     		adds	r3, r7, #4
+ 152 00aa 0222     		movs	r2, #2
+ 153 00ac 1946     		mov	r1, r3
+ 154 00ae 1048     		ldr	r0, .L9+8
+ 155 00b0 FFF7FEFF 		bl	ring_write
+ 108:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****             osal_semp_post(g_atio_cb.rcvsync);
+ 156              		.loc 1 108 0
+ 157 00b4 BB88     		ldrh	r3, [r7, #4]
+ 158 00b6 1A46     		mov	r2, r3
+ 159 00b8 0E49     		ldr	r1, .L9+12
+ 160 00ba 0D48     		ldr	r0, .L9+8
+ 161 00bc FFF7FEFF 		bl	ring_write
+ 109:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****             g_atio_cb.rcvframe++;
+ 162              		.loc 1 109 0
+ 163 00c0 0A4B     		ldr	r3, .L9+4
+ 164 00c2 5B68     		ldr	r3, [r3, #4]
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc1XwOet.s 			page 6
+
+
+ 165 00c4 1846     		mov	r0, r3
+ 166 00c6 FFF7FEFF 		bl	osal_semp_post
+ 110:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         }
+ 167              		.loc 1 110 0
+ 168 00ca 084B     		ldr	r3, .L9+4
+ 169 00cc D3F82C33 		ldr	r3, [r3, #812]
+ 170 00d0 0133     		adds	r3, r3, #1
+ 171 00d2 064A     		ldr	r2, .L9+4
+ 172 00d4 C2F82C33 		str	r3, [r2, #812]
+ 173              	.L7:
+ 112:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     }
+ 174              		.loc 1 112 0
+ 175 00d8 044B     		ldr	r3, .L9+4
+ 176 00da 0022     		movs	r2, #0
+ 177 00dc 1A80     		strh	r2, [r3]	@ movhi
+ 178              	.L8:
+ 179              		.loc 1 114 0
+ 180 00de 00BF     		nop
+ 181 00e0 0837     		adds	r7, r7, #8
+ 182              	.LCFI3:
+ 183              		.cfi_def_cfa_offset 8
+ 184 00e2 BD46     		mov	sp, r7
+ 185              	.LCFI4:
+ 186              		.cfi_def_cfa_register 13
+ 187              		@ sp needed
+ 188 00e4 80BD     		pop	{r7, pc}
+ 189              	.L10:
+ 190 00e6 00BF     		.align	2
+ 191              	.L9:
+ 192 00e8 00000000 		.word	uart_at
+ 193 00ec 00000000 		.word	g_atio_cb
+ 194 00f0 08000000 		.word	g_atio_cb+8
+ 195 00f4 18000000 		.word	g_atio_cb+24
+ 196              		.cfi_endproc
+ 197              	.LFE133:
+ 199              		.section	.rodata
+ 200              		.align	2
+ 201              	.LC0:
+ 202 0000 25733A73 		.ascii	"%s:semp create error\012\015\000"
+ 202      656D7020 
+ 202      63726561 
+ 202      74652065 
+ 202      72726F72 
+ 203 0017 00       		.align	2
+ 204              	.LC1:
+ 205 0018 453A2F4C 		.ascii	"E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src/u"
+ 205      6974654F 
+ 205      532F4C69 
+ 205      74654F53 
+ 205      5F4C6162 
+ 206 004b 6172745F 		.ascii	"art_at.c\000"
+ 206      61742E63 
+ 206      00
+ 207              		.section	.text.uart_at_init,"ax",%progbits
+ 208              		.align	1
+ 209              		.global	uart_at_init
+ 210              		.syntax unified
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc1XwOet.s 			page 7
+
+
+ 211              		.thumb
+ 212              		.thumb_func
+ 213              		.fpu fpv4-sp-d16
+ 215              	uart_at_init:
+ 216              	.LFB134:
+ 115:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** 
+ 116:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** /*******************************************************************************
+ 117:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** function     :use this function to initialize the uart
+ 118:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** parameters   :
+ 119:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** instruction  :
+ 120:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** *******************************************************************************/
+ 121:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** bool_t uart_at_init(int baud)
+ 122:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** {
+ 217              		.loc 1 122 0
+ 218              		.cfi_startproc
+ 219              		@ args = 0, pretend = 0, frame = 8
+ 220              		@ frame_needed = 1, uses_anonymous_args = 0
+ 221 0000 80B5     		push	{r7, lr}
+ 222              	.LCFI5:
+ 223              		.cfi_def_cfa_offset 8
+ 224              		.cfi_offset 7, -8
+ 225              		.cfi_offset 14, -4
+ 226 0002 84B0     		sub	sp, sp, #16
+ 227              	.LCFI6:
+ 228              		.cfi_def_cfa_offset 24
+ 229 0004 02AF     		add	r7, sp, #8
+ 230              	.LCFI7:
+ 231              		.cfi_def_cfa 7, 16
+ 232 0006 7860     		str	r0, [r7, #4]
+ 123:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     //initialize the at controller
+ 124:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     memset(&g_atio_cb,0,sizeof(g_atio_cb));
+ 233              		.loc 1 124 0
+ 234 0008 4FF44D72 		mov	r2, #820
+ 235 000c 0021     		movs	r1, #0
+ 236 000e 3048     		ldr	r0, .L16
+ 237 0010 FFF7FEFF 		bl	memset
+ 125:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     if(false == osal_semp_create(&g_atio_cb.rcvsync,CN_RCVMEM_LEN,0))
+ 238              		.loc 1 125 0
+ 239 0014 0022     		movs	r2, #0
+ 240 0016 4FF40071 		mov	r1, #512
+ 241 001a 2E48     		ldr	r0, .L16+4
+ 242 001c FFF7FEFF 		bl	osal_semp_create
+ 243 0020 0346     		mov	r3, r0
+ 244 0022 002B     		cmp	r3, #0
+ 245 0024 06D1     		bne	.L12
+ 126:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     {
+ 127:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         printf("%s:semp create error\n\r",__FUNCTION__);
+ 246              		.loc 1 127 0
+ 247 0026 2C49     		ldr	r1, .L16+8
+ 248 0028 2C48     		ldr	r0, .L16+12
+ 249 002a FFF7FEFF 		bl	printf
+ 128:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         goto EXIT_SEMP;
+ 250              		.loc 1 128 0
+ 251 002e 00BF     		nop
+ 252              	.L13:
+ 129:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     }
+ 130:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     ring_init(&g_atio_cb.rcvring,g_atio_cb.rcvringmem,CN_RCVMEM_LEN,0,0);
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc1XwOet.s 			page 8
+
+
+ 131:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** 
+ 132:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     uart_at.Instance = s_pUSART;
+ 133:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     uart_at.Init.BaudRate = baud;
+ 134:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     uart_at.Init.WordLength = UART_WORDLENGTH_8B;
+ 135:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     uart_at.Init.StopBits = UART_STOPBITS_1;
+ 136:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     uart_at.Init.Parity = UART_PARITY_NONE;
+ 137:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     uart_at.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+ 138:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     uart_at.Init.Mode = UART_MODE_TX_RX;
+ 139:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     uart_at.Init.OverSampling = UART_OVERSAMPLING_16;
+ 140:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     if(HAL_UART_Init(&uart_at) != HAL_OK)
+ 141:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     {
+ 142:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         _Error_Handler(__FILE__, __LINE__);
+ 143:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     }
+ 144:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     __HAL_UART_CLEAR_FLAG(&uart_at,UART_FLAG_TC);
+ 145:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     LOS_HwiCreate(s_uwIRQn, 3, 0, atio_irq, 0);
+ 146:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     __HAL_UART_ENABLE_IT(&uart_at, UART_IT_IDLE);
+ 147:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     __HAL_UART_ENABLE_IT(&uart_at, UART_IT_RXNE);
+ 148:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     return true;
+ 149:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** 
+ 150:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** EXIT_SEMP:
+ 151:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     return false;
+ 253              		.loc 1 151 0
+ 254 0030 0023     		movs	r3, #0
+ 255 0032 49E0     		b	.L15
+ 256              	.L12:
+ 130:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** 
+ 257              		.loc 1 130 0
+ 258 0034 0023     		movs	r3, #0
+ 259 0036 0093     		str	r3, [sp]
+ 260 0038 0023     		movs	r3, #0
+ 261 003a 4FF40072 		mov	r2, #512
+ 262 003e 2849     		ldr	r1, .L16+16
+ 263 0040 2848     		ldr	r0, .L16+20
+ 264 0042 FFF7FEFF 		bl	ring_init
+ 132:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     uart_at.Init.BaudRate = baud;
+ 265              		.loc 1 132 0
+ 266 0046 284B     		ldr	r3, .L16+24
+ 267 0048 1B68     		ldr	r3, [r3]
+ 268 004a 284A     		ldr	r2, .L16+28
+ 269 004c 1360     		str	r3, [r2]
+ 133:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     uart_at.Init.WordLength = UART_WORDLENGTH_8B;
+ 270              		.loc 1 133 0
+ 271 004e 7B68     		ldr	r3, [r7, #4]
+ 272 0050 264A     		ldr	r2, .L16+28
+ 273 0052 5360     		str	r3, [r2, #4]
+ 134:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     uart_at.Init.StopBits = UART_STOPBITS_1;
+ 274              		.loc 1 134 0
+ 275 0054 254B     		ldr	r3, .L16+28
+ 276 0056 0022     		movs	r2, #0
+ 277 0058 9A60     		str	r2, [r3, #8]
+ 135:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     uart_at.Init.Parity = UART_PARITY_NONE;
+ 278              		.loc 1 135 0
+ 279 005a 244B     		ldr	r3, .L16+28
+ 280 005c 0022     		movs	r2, #0
+ 281 005e DA60     		str	r2, [r3, #12]
+ 136:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     uart_at.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+ 282              		.loc 1 136 0
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc1XwOet.s 			page 9
+
+
+ 283 0060 224B     		ldr	r3, .L16+28
+ 284 0062 0022     		movs	r2, #0
+ 285 0064 1A61     		str	r2, [r3, #16]
+ 137:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     uart_at.Init.Mode = UART_MODE_TX_RX;
+ 286              		.loc 1 137 0
+ 287 0066 214B     		ldr	r3, .L16+28
+ 288 0068 0022     		movs	r2, #0
+ 289 006a 9A61     		str	r2, [r3, #24]
+ 138:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     uart_at.Init.OverSampling = UART_OVERSAMPLING_16;
+ 290              		.loc 1 138 0
+ 291 006c 1F4B     		ldr	r3, .L16+28
+ 292 006e 0C22     		movs	r2, #12
+ 293 0070 5A61     		str	r2, [r3, #20]
+ 139:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     if(HAL_UART_Init(&uart_at) != HAL_OK)
+ 294              		.loc 1 139 0
+ 295 0072 1E4B     		ldr	r3, .L16+28
+ 296 0074 0022     		movs	r2, #0
+ 297 0076 DA61     		str	r2, [r3, #28]
+ 140:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     {
+ 298              		.loc 1 140 0
+ 299 0078 1C48     		ldr	r0, .L16+28
+ 300 007a FFF7FEFF 		bl	HAL_UART_Init
+ 301 007e 0346     		mov	r3, r0
+ 302 0080 002B     		cmp	r3, #0
+ 303 0082 03D0     		beq	.L14
+ 142:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     }
+ 304              		.loc 1 142 0
+ 305 0084 8E21     		movs	r1, #142
+ 306 0086 1A48     		ldr	r0, .L16+32
+ 307 0088 FFF7FEFF 		bl	_Error_Handler
+ 308              	.L14:
+ 144:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     LOS_HwiCreate(s_uwIRQn, 3, 0, atio_irq, 0);
+ 309              		.loc 1 144 0
+ 310 008c 174B     		ldr	r3, .L16+28
+ 311 008e 1B68     		ldr	r3, [r3]
+ 312 0090 4022     		movs	r2, #64
+ 313 0092 1A62     		str	r2, [r3, #32]
+ 145:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     __HAL_UART_ENABLE_IT(&uart_at, UART_IT_IDLE);
+ 314              		.loc 1 145 0
+ 315 0094 174B     		ldr	r3, .L16+36
+ 316 0096 1868     		ldr	r0, [r3]
+ 317 0098 0023     		movs	r3, #0
+ 318 009a 0093     		str	r3, [sp]
+ 319 009c 164B     		ldr	r3, .L16+40
+ 320 009e 0022     		movs	r2, #0
+ 321 00a0 0321     		movs	r1, #3
+ 322 00a2 FFF7FEFF 		bl	LOS_HwiCreate
+ 146:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     __HAL_UART_ENABLE_IT(&uart_at, UART_IT_RXNE);
+ 323              		.loc 1 146 0
+ 324 00a6 114B     		ldr	r3, .L16+28
+ 325 00a8 1B68     		ldr	r3, [r3]
+ 326 00aa 1A68     		ldr	r2, [r3]
+ 327 00ac 0F4B     		ldr	r3, .L16+28
+ 328 00ae 1B68     		ldr	r3, [r3]
+ 329 00b0 42F01002 		orr	r2, r2, #16
+ 330 00b4 1A60     		str	r2, [r3]
+ 147:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     return true;
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc1XwOet.s 			page 10
+
+
+ 331              		.loc 1 147 0
+ 332 00b6 0D4B     		ldr	r3, .L16+28
+ 333 00b8 1B68     		ldr	r3, [r3]
+ 334 00ba 1A68     		ldr	r2, [r3]
+ 335 00bc 0B4B     		ldr	r3, .L16+28
+ 336 00be 1B68     		ldr	r3, [r3]
+ 337 00c0 42F02002 		orr	r2, r2, #32
+ 338 00c4 1A60     		str	r2, [r3]
+ 148:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** 
+ 339              		.loc 1 148 0
+ 340 00c6 0123     		movs	r3, #1
+ 341              	.L15:
+ 152:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** }
+ 342              		.loc 1 152 0
+ 343 00c8 1846     		mov	r0, r3
+ 344 00ca 0837     		adds	r7, r7, #8
+ 345              	.LCFI8:
+ 346              		.cfi_def_cfa_offset 8
+ 347 00cc BD46     		mov	sp, r7
+ 348              	.LCFI9:
+ 349              		.cfi_def_cfa_register 13
+ 350              		@ sp needed
+ 351 00ce 80BD     		pop	{r7, pc}
+ 352              	.L17:
+ 353              		.align	2
+ 354              	.L16:
+ 355 00d0 00000000 		.word	g_atio_cb
+ 356 00d4 04000000 		.word	g_atio_cb+4
+ 357 00d8 00000000 		.word	__FUNCTION__.10176
+ 358 00dc 00000000 		.word	.LC0
+ 359 00e0 18010000 		.word	g_atio_cb+280
+ 360 00e4 08000000 		.word	g_atio_cb+8
+ 361 00e8 00000000 		.word	s_pUSART
+ 362 00ec 00000000 		.word	uart_at
+ 363 00f0 18000000 		.word	.LC1
+ 364 00f4 00000000 		.word	s_uwIRQn
+ 365 00f8 00000000 		.word	atio_irq
+ 366              		.cfi_endproc
+ 367              	.LFE134:
+ 369              		.section	.text.uartat_deinit,"ax",%progbits
+ 370              		.align	1
+ 371              		.global	uartat_deinit
+ 372              		.syntax unified
+ 373              		.thumb
+ 374              		.thumb_func
+ 375              		.fpu fpv4-sp-d16
+ 377              	uartat_deinit:
+ 378              	.LFB135:
+ 153:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** 
+ 154:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** void uartat_deinit(void)
+ 155:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** {
+ 379              		.loc 1 155 0
+ 380              		.cfi_startproc
+ 381              		@ args = 0, pretend = 0, frame = 0
+ 382              		@ frame_needed = 1, uses_anonymous_args = 0
+ 383              		@ link register save eliminated.
+ 384 0000 80B4     		push	{r7}
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc1XwOet.s 			page 11
+
+
+ 385              	.LCFI10:
+ 386              		.cfi_def_cfa_offset 4
+ 387              		.cfi_offset 7, -4
+ 388 0002 00AF     		add	r7, sp, #0
+ 389              	.LCFI11:
+ 390              		.cfi_def_cfa_register 7
+ 156:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     __HAL_UART_DISABLE(&uart_at);
+ 391              		.loc 1 156 0
+ 392 0004 0E4B     		ldr	r3, .L19
+ 393 0006 1B68     		ldr	r3, [r3]
+ 394 0008 1A68     		ldr	r2, [r3]
+ 395 000a 0D4B     		ldr	r3, .L19
+ 396 000c 1B68     		ldr	r3, [r3]
+ 397 000e 22F00102 		bic	r2, r2, #1
+ 398 0012 1A60     		str	r2, [r3]
+ 157:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     __HAL_UART_DISABLE_IT(&uart_at, UART_IT_IDLE);
+ 399              		.loc 1 157 0
+ 400 0014 0A4B     		ldr	r3, .L19
+ 401 0016 1B68     		ldr	r3, [r3]
+ 402 0018 1A68     		ldr	r2, [r3]
+ 403 001a 094B     		ldr	r3, .L19
+ 404 001c 1B68     		ldr	r3, [r3]
+ 405 001e 22F01002 		bic	r2, r2, #16
+ 406 0022 1A60     		str	r2, [r3]
+ 158:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     __HAL_UART_DISABLE_IT(&uart_at, UART_IT_RXNE);
+ 407              		.loc 1 158 0
+ 408 0024 064B     		ldr	r3, .L19
+ 409 0026 1B68     		ldr	r3, [r3]
+ 410 0028 1A68     		ldr	r2, [r3]
+ 411 002a 054B     		ldr	r3, .L19
+ 412 002c 1B68     		ldr	r3, [r3]
+ 413 002e 22F02002 		bic	r2, r2, #32
+ 414 0032 1A60     		str	r2, [r3]
+ 159:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** }
+ 415              		.loc 1 159 0
+ 416 0034 00BF     		nop
+ 417 0036 BD46     		mov	sp, r7
+ 418              	.LCFI12:
+ 419              		.cfi_def_cfa_register 13
+ 420              		@ sp needed
+ 421 0038 5DF8047B 		ldr	r7, [sp], #4
+ 422              	.LCFI13:
+ 423              		.cfi_restore 7
+ 424              		.cfi_def_cfa_offset 0
+ 425 003c 7047     		bx	lr
+ 426              	.L20:
+ 427 003e 00BF     		.align	2
+ 428              	.L19:
+ 429 0040 00000000 		.word	uart_at
+ 430              		.cfi_endproc
+ 431              	.LFE135:
+ 433              		.section	.text.uart_at_send,"ax",%progbits
+ 434              		.align	1
+ 435              		.global	uart_at_send
+ 436              		.syntax unified
+ 437              		.thumb
+ 438              		.thumb_func
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc1XwOet.s 			page 12
+
+
+ 439              		.fpu fpv4-sp-d16
+ 441              	uart_at_send:
+ 442              	.LFB136:
+ 160:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** 
+ 161:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** /*******************************************************************************
+ 162:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** function     :use this function to send a frame to the uart
+ 163:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** parameters   :
+ 164:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** instruction  :
+ 165:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** *******************************************************************************/
+ 166:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** int uart_at_send(unsigned char *buf, int len,unsigned int timeout)
+ 167:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** {
+ 443              		.loc 1 167 0
+ 444              		.cfi_startproc
+ 445              		@ args = 0, pretend = 0, frame = 16
+ 446              		@ frame_needed = 1, uses_anonymous_args = 0
+ 447 0000 80B5     		push	{r7, lr}
+ 448              	.LCFI14:
+ 449              		.cfi_def_cfa_offset 8
+ 450              		.cfi_offset 7, -8
+ 451              		.cfi_offset 14, -4
+ 452 0002 84B0     		sub	sp, sp, #16
+ 453              	.LCFI15:
+ 454              		.cfi_def_cfa_offset 24
+ 455 0004 00AF     		add	r7, sp, #0
+ 456              	.LCFI16:
+ 457              		.cfi_def_cfa_register 7
+ 458 0006 F860     		str	r0, [r7, #12]
+ 459 0008 B960     		str	r1, [r7, #8]
+ 460 000a 7A60     		str	r2, [r7, #4]
+ 168:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     HAL_UART_Transmit(&uart_at,buf,len,timeout);
+ 461              		.loc 1 168 0
+ 462 000c BB68     		ldr	r3, [r7, #8]
+ 463 000e 9AB2     		uxth	r2, r3
+ 464 0010 7B68     		ldr	r3, [r7, #4]
+ 465 0012 F968     		ldr	r1, [r7, #12]
+ 466 0014 0B48     		ldr	r0, .L23
+ 467 0016 FFF7FEFF 		bl	HAL_UART_Transmit
+ 169:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     g_atio_cb.sndlen += len;
+ 468              		.loc 1 169 0
+ 469 001a 0B4B     		ldr	r3, .L23+4
+ 470 001c D3F82023 		ldr	r2, [r3, #800]
+ 471 0020 BB68     		ldr	r3, [r7, #8]
+ 472 0022 1344     		add	r3, r3, r2
+ 473 0024 084A     		ldr	r2, .L23+4
+ 474 0026 C2F82033 		str	r3, [r2, #800]
+ 170:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     g_atio_cb.sndframe ++;
+ 475              		.loc 1 170 0
+ 476 002a 074B     		ldr	r3, .L23+4
+ 477 002c D3F82833 		ldr	r3, [r3, #808]
+ 478 0030 0133     		adds	r3, r3, #1
+ 479 0032 054A     		ldr	r2, .L23+4
+ 480 0034 C2F82833 		str	r3, [r2, #808]
+ 171:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** 
+ 172:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     return len;
+ 481              		.loc 1 172 0
+ 482 0038 BB68     		ldr	r3, [r7, #8]
+ 173:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** }
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc1XwOet.s 			page 13
+
+
+ 483              		.loc 1 173 0
+ 484 003a 1846     		mov	r0, r3
+ 485 003c 1037     		adds	r7, r7, #16
+ 486              	.LCFI17:
+ 487              		.cfi_def_cfa_offset 8
+ 488 003e BD46     		mov	sp, r7
+ 489              	.LCFI18:
+ 490              		.cfi_def_cfa_register 13
+ 491              		@ sp needed
+ 492 0040 80BD     		pop	{r7, pc}
+ 493              	.L24:
+ 494 0042 00BF     		.align	2
+ 495              	.L23:
+ 496 0044 00000000 		.word	uart_at
+ 497 0048 00000000 		.word	g_atio_cb
+ 498              		.cfi_endproc
+ 499              	.LFE136:
+ 501              		.section	.text.uart_at_receive,"ax",%progbits
+ 502              		.align	1
+ 503              		.global	uart_at_receive
+ 504              		.syntax unified
+ 505              		.thumb
+ 506              		.thumb_func
+ 507              		.fpu fpv4-sp-d16
+ 509              	uart_at_receive:
+ 510              	.LFB137:
+ 174:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** /*******************************************************************************
+ 175:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** function     :use this function to read a frame from the uart
+ 176:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** parameters   :
+ 177:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** instruction  :
+ 178:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** *******************************************************************************/
+ 179:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** int uart_at_receive(unsigned char *buf,int len,unsigned int timeout)
+ 180:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** {
+ 511              		.loc 1 180 0
+ 512              		.cfi_startproc
+ 513              		@ args = 0, pretend = 0, frame = 32
+ 514              		@ frame_needed = 1, uses_anonymous_args = 0
+ 515 0000 80B5     		push	{r7, lr}
+ 516              	.LCFI19:
+ 517              		.cfi_def_cfa_offset 8
+ 518              		.cfi_offset 7, -8
+ 519              		.cfi_offset 14, -4
+ 520 0002 88B0     		sub	sp, sp, #32
+ 521              	.LCFI20:
+ 522              		.cfi_def_cfa_offset 40
+ 523 0004 00AF     		add	r7, sp, #0
+ 524              	.LCFI21:
+ 525              		.cfi_def_cfa_register 7
+ 526 0006 F860     		str	r0, [r7, #12]
+ 527 0008 B960     		str	r1, [r7, #8]
+ 528 000a 7A60     		str	r2, [r7, #4]
+ 181:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     unsigned short cpylen;
+ 182:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     unsigned short framelen;
+ 183:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     unsigned short readlen;
+ 184:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     int32_t ret = 0;
+ 529              		.loc 1 184 0
+ 530 000c 0023     		movs	r3, #0
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc1XwOet.s 			page 14
+
+
+ 531 000e FB61     		str	r3, [r7, #28]
+ 185:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     unsigned int lock;
+ 186:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     if(osal_semp_pend(g_atio_cb.rcvsync,timeout))
+ 532              		.loc 1 186 0
+ 533 0010 2D4B     		ldr	r3, .L32
+ 534 0012 5B68     		ldr	r3, [r3, #4]
+ 535 0014 1A46     		mov	r2, r3
+ 536 0016 7B68     		ldr	r3, [r7, #4]
+ 537 0018 1946     		mov	r1, r3
+ 538 001a 1046     		mov	r0, r2
+ 539 001c FFF7FEFF 		bl	osal_semp_pend
+ 540 0020 0346     		mov	r3, r0
+ 541 0022 002B     		cmp	r3, #0
+ 542 0024 4AD0     		beq	.L26
+ 187:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     {
+ 188:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         lock = LOS_IntLock();
+ 543              		.loc 1 188 0
+ 544 0026 FFF7FEFF 		bl	LOS_IntLock
+ 545 002a B861     		str	r0, [r7, #24]
+ 189:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         readlen = sizeof(framelen);
+ 546              		.loc 1 189 0
+ 547 002c 0223     		movs	r3, #2
+ 548 002e FB82     		strh	r3, [r7, #22]	@ movhi
+ 190:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         cpylen = ring_read(&g_atio_cb.rcvring,(unsigned char *)&framelen,readlen);
+ 549              		.loc 1 190 0
+ 550 0030 FA8A     		ldrh	r2, [r7, #22]
+ 551 0032 07F11203 		add	r3, r7, #18
+ 552 0036 1946     		mov	r1, r3
+ 553 0038 2448     		ldr	r0, .L32+4
+ 554 003a FFF7FEFF 		bl	ring_read
+ 555 003e 0346     		mov	r3, r0
+ 556 0040 BB82     		strh	r3, [r7, #20]	@ movhi
+ 191:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         if(cpylen != readlen)
+ 557              		.loc 1 191 0
+ 558 0042 BA8A     		ldrh	r2, [r7, #20]
+ 559 0044 FB8A     		ldrh	r3, [r7, #22]
+ 560 0046 9A42     		cmp	r2, r3
+ 561 0048 0AD0     		beq	.L27
+ 192:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         {
+ 193:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****             ring_reset(&g_atio_cb.rcvring);  //bad ring format here
+ 562              		.loc 1 193 0
+ 563 004a 2048     		ldr	r0, .L32+4
+ 564 004c FFF7FEFF 		bl	ring_reset
+ 194:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****             g_atio_cb.rcvringrst++;
+ 565              		.loc 1 194 0
+ 566 0050 1D4B     		ldr	r3, .L32
+ 567 0052 D3F83033 		ldr	r3, [r3, #816]
+ 568 0056 0133     		adds	r3, r3, #1
+ 569 0058 1B4A     		ldr	r2, .L32
+ 570 005a C2F83033 		str	r3, [r2, #816]
+ 571 005e 2AE0     		b	.L28
+ 572              	.L27:
+ 195:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         }
+ 196:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         else
+ 197:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         {
+ 198:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****             if(framelen > len)
+ 573              		.loc 1 198 0
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc1XwOet.s 			page 15
+
+
+ 574 0060 7B8A     		ldrh	r3, [r7, #18]
+ 575 0062 1A46     		mov	r2, r3
+ 576 0064 BB68     		ldr	r3, [r7, #8]
+ 577 0066 9342     		cmp	r3, r2
+ 578 0068 0ADA     		bge	.L29
+ 199:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****             {
+ 200:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****                 ring_reset(&g_atio_cb.rcvring);  //bad ring format here
+ 579              		.loc 1 200 0
+ 580 006a 1848     		ldr	r0, .L32+4
+ 581 006c FFF7FEFF 		bl	ring_reset
+ 201:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****                 g_atio_cb.rcvringrst++;
+ 582              		.loc 1 201 0
+ 583 0070 154B     		ldr	r3, .L32
+ 584 0072 D3F83033 		ldr	r3, [r3, #816]
+ 585 0076 0133     		adds	r3, r3, #1
+ 586 0078 134A     		ldr	r2, .L32
+ 587 007a C2F83033 		str	r3, [r2, #816]
+ 588 007e 1AE0     		b	.L28
+ 589              	.L29:
+ 202:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****             }
+ 203:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****             else
+ 204:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****             {
+ 205:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****                 readlen = framelen;
+ 590              		.loc 1 205 0
+ 591 0080 7B8A     		ldrh	r3, [r7, #18]	@ movhi
+ 592 0082 FB82     		strh	r3, [r7, #22]	@ movhi
+ 206:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****                 cpylen = ring_read(&g_atio_cb.rcvring,buf,readlen);
+ 593              		.loc 1 206 0
+ 594 0084 FB8A     		ldrh	r3, [r7, #22]
+ 595 0086 1A46     		mov	r2, r3
+ 596 0088 F968     		ldr	r1, [r7, #12]
+ 597 008a 1048     		ldr	r0, .L32+4
+ 598 008c FFF7FEFF 		bl	ring_read
+ 599 0090 0346     		mov	r3, r0
+ 600 0092 BB82     		strh	r3, [r7, #20]	@ movhi
+ 207:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****                 if(cpylen != framelen)
+ 601              		.loc 1 207 0
+ 602 0094 7B8A     		ldrh	r3, [r7, #18]
+ 603 0096 BA8A     		ldrh	r2, [r7, #20]
+ 604 0098 9A42     		cmp	r2, r3
+ 605 009a 0AD0     		beq	.L30
+ 208:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****                 {
+ 209:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****                     ring_reset(&g_atio_cb.rcvring);  //bad ring format here
+ 606              		.loc 1 209 0
+ 607 009c 0B48     		ldr	r0, .L32+4
+ 608 009e FFF7FEFF 		bl	ring_reset
+ 210:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****                     g_atio_cb.rcvringrst++;
+ 609              		.loc 1 210 0
+ 610 00a2 094B     		ldr	r3, .L32
+ 611 00a4 D3F83033 		ldr	r3, [r3, #816]
+ 612 00a8 0133     		adds	r3, r3, #1
+ 613 00aa 074A     		ldr	r2, .L32
+ 614 00ac C2F83033 		str	r3, [r2, #816]
+ 615 00b0 01E0     		b	.L28
+ 616              	.L30:
+ 211:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****                 }
+ 212:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****                 else
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc1XwOet.s 			page 16
+
+
+ 213:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****                 {
+ 214:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****                     ret = cpylen;
+ 617              		.loc 1 214 0
+ 618 00b2 BB8A     		ldrh	r3, [r7, #20]
+ 619 00b4 FB61     		str	r3, [r7, #28]
+ 620              	.L28:
+ 215:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****                 }
+ 216:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****             }
+ 217:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         }
+ 218:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****         LOS_IntRestore(lock);
+ 621              		.loc 1 218 0
+ 622 00b6 B869     		ldr	r0, [r7, #24]
+ 623 00b8 FFF7FEFF 		bl	LOS_IntRestore
+ 624              	.L26:
+ 219:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     }
+ 220:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     return ret;
+ 625              		.loc 1 220 0
+ 626 00bc FB69     		ldr	r3, [r7, #28]
+ 221:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** }
+ 627              		.loc 1 221 0
+ 628 00be 1846     		mov	r0, r3
+ 629 00c0 2037     		adds	r7, r7, #32
+ 630              	.LCFI22:
+ 631              		.cfi_def_cfa_offset 8
+ 632 00c2 BD46     		mov	sp, r7
+ 633              	.LCFI23:
+ 634              		.cfi_def_cfa_register 13
+ 635              		@ sp needed
+ 636 00c4 80BD     		pop	{r7, pc}
+ 637              	.L33:
+ 638 00c6 00BF     		.align	2
+ 639              	.L32:
+ 640 00c8 00000000 		.word	g_atio_cb
+ 641 00cc 08000000 		.word	g_atio_cb+8
+ 642              		.cfi_endproc
+ 643              	.LFE137:
+ 645              		.section	.text.__at_read,"ax",%progbits
+ 646              		.align	1
+ 647              		.syntax unified
+ 648              		.thumb
+ 649              		.thumb_func
+ 650              		.fpu fpv4-sp-d16
+ 652              	__at_read:
+ 653              	.LFB138:
+ 222:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** 
+ 223:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** //make it as the at device here
+ 224:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** static int  __at_read  (void *pri,unsigned int offset,unsigned char *buf,int len,unsigned int timeo
+ 225:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** {
+ 654              		.loc 1 225 0
+ 655              		.cfi_startproc
+ 656              		@ args = 4, pretend = 0, frame = 16
+ 657              		@ frame_needed = 1, uses_anonymous_args = 0
+ 658 0000 80B5     		push	{r7, lr}
+ 659              	.LCFI24:
+ 660              		.cfi_def_cfa_offset 8
+ 661              		.cfi_offset 7, -8
+ 662              		.cfi_offset 14, -4
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc1XwOet.s 			page 17
+
+
+ 663 0002 84B0     		sub	sp, sp, #16
+ 664              	.LCFI25:
+ 665              		.cfi_def_cfa_offset 24
+ 666 0004 00AF     		add	r7, sp, #0
+ 667              	.LCFI26:
+ 668              		.cfi_def_cfa_register 7
+ 669 0006 F860     		str	r0, [r7, #12]
+ 670 0008 B960     		str	r1, [r7, #8]
+ 671 000a 7A60     		str	r2, [r7, #4]
+ 672 000c 3B60     		str	r3, [r7]
+ 226:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     return uart_at_receive(buf,len, timeout);
+ 673              		.loc 1 226 0
+ 674 000e BA69     		ldr	r2, [r7, #24]
+ 675 0010 3968     		ldr	r1, [r7]
+ 676 0012 7868     		ldr	r0, [r7, #4]
+ 677 0014 FFF7FEFF 		bl	uart_at_receive
+ 678 0018 0346     		mov	r3, r0
+ 227:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** 
+ 228:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** }
+ 679              		.loc 1 228 0
+ 680 001a 1846     		mov	r0, r3
+ 681 001c 1037     		adds	r7, r7, #16
+ 682              	.LCFI27:
+ 683              		.cfi_def_cfa_offset 8
+ 684 001e BD46     		mov	sp, r7
+ 685              	.LCFI28:
+ 686              		.cfi_def_cfa_register 13
+ 687              		@ sp needed
+ 688 0020 80BD     		pop	{r7, pc}
+ 689              		.cfi_endproc
+ 690              	.LFE138:
+ 692              		.section	.text.__at_write,"ax",%progbits
+ 693              		.align	1
+ 694              		.syntax unified
+ 695              		.thumb
+ 696              		.thumb_func
+ 697              		.fpu fpv4-sp-d16
+ 699              	__at_write:
+ 700              	.LFB139:
+ 229:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** static int  __at_write (void *pri,unsigned int offset,unsigned char *buf,int len,unsigned int timeo
+ 230:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** {
+ 701              		.loc 1 230 0
+ 702              		.cfi_startproc
+ 703              		@ args = 4, pretend = 0, frame = 16
+ 704              		@ frame_needed = 1, uses_anonymous_args = 0
+ 705 0000 80B5     		push	{r7, lr}
+ 706              	.LCFI29:
+ 707              		.cfi_def_cfa_offset 8
+ 708              		.cfi_offset 7, -8
+ 709              		.cfi_offset 14, -4
+ 710 0002 84B0     		sub	sp, sp, #16
+ 711              	.LCFI30:
+ 712              		.cfi_def_cfa_offset 24
+ 713 0004 00AF     		add	r7, sp, #0
+ 714              	.LCFI31:
+ 715              		.cfi_def_cfa_register 7
+ 716 0006 F860     		str	r0, [r7, #12]
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc1XwOet.s 			page 18
+
+
+ 717 0008 B960     		str	r1, [r7, #8]
+ 718 000a 7A60     		str	r2, [r7, #4]
+ 719 000c 3B60     		str	r3, [r7]
+ 231:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c ****     return uart_at_send(buf, len, timeout);
+ 720              		.loc 1 231 0
+ 721 000e BA69     		ldr	r2, [r7, #24]
+ 722 0010 3968     		ldr	r1, [r7]
+ 723 0012 7868     		ldr	r0, [r7, #4]
+ 724 0014 FFF7FEFF 		bl	uart_at_send
+ 725 0018 0346     		mov	r3, r0
+ 232:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** 
+ 233:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\uart_at.c **** }
+ 726              		.loc 1 233 0
+ 727 001a 1846     		mov	r0, r3
+ 728 001c 1037     		adds	r7, r7, #16
+ 729              	.LCFI32:
+ 730              		.cfi_def_cfa_offset 8
+ 731 001e BD46     		mov	sp, r7
+ 732              	.LCFI33:
+ 733              		.cfi_def_cfa_register 13
+ 734              		@ sp needed
+ 735 0020 80BD     		pop	{r7, pc}
+ 736              		.cfi_endproc
+ 737              	.LFE139:
+ 739              		.section	.rodata.s_at_op,"a",%progbits
+ 740              		.align	2
+ 743              	s_at_op:
+ 744 0000 00000000 		.space	4
+ 745 0004 00000000 		.word	__at_read
+ 746 0008 00000000 		.word	__at_write
+ 747 000c 00000000 		.space	20
+ 747      00000000 
+ 747      00000000 
+ 747      00000000 
+ 747      00000000 
+ 748              		.section	.rodata
+ 749              		.align	2
+ 750              	.LC2:
+ 751 0054 61746465 		.ascii	"atdev_BC35G\000"
+ 751      765F4243 
+ 751      33354700 
+ 752              		.section	osdriv,"a",%progbits
+ 753              		.align	2
+ 756              	uart_at_driv:
+ 757 0000 54000000 		.word	.LC2
+ 758 0004 00000000 		.word	s_at_op
+ 759 0008 00000000 		.word	0
+ 760 000c 02000000 		.word	2
+ 761              		.section	.rodata.__FUNCTION__.10176,"a",%progbits
+ 762              		.align	2
+ 765              	__FUNCTION__.10176:
+ 766 0000 75617274 		.ascii	"uart_at_init\000"
+ 766      5F61745F 
+ 766      696E6974 
+ 766      00
+ 767              		.text
+ 768              	.Letext0:
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc1XwOet.s 			page 19
+
+
+ 769              		.file 2 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 770              		.file 3 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 771              		.file 4 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 772              		.file 5 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 773              		.file 6 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 774              		.file 7 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_typedef.h"
+ 775              		.file 8 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 776              		.file 9 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 777              		.file 10 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/system_stm32l4xx.h"
+ 778              		.file 11 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/stm32l431xx.h"
+ 779              		.file 12 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/stm32l4xx.h"
+ 780              		.file 13 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_config.h"
+ 781              		.file 14 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_list.h"
+ 782              		.file 15 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_err.h"
+ 783              		.file 16 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 784              		.file 17 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_tick.h"
+ 785              		.file 18 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_event.h"
+ 786              		.file 19 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_task.h"
+ 787              		.file 20 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/include/los_task.ph"
+ 788              		.file 21 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/main.h"
+ 789              		.file 22 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.201807
+ 790              		.file 23 "E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h
+ 791              		.file 24 "E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_dma.h
+ 792              		.file 25 "E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.
+ 793              		.file 26 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/usart.h"
+ 794              		.file 27 "E:/LiteOS/LiteOS_Lab/iot_link/link_misc/link_misc.h"
+ 795              		.file 28 "E:/LiteOS/LiteOS_Lab/iot_link/driver/driver.h"
+ 796              		.file 29 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.201807
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc1XwOet.s 			page 20
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 uart_at.c
+                            *COM*:00000078 uart_at
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:19     .data.s_pUSART:00000000 $d
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:22     .data.s_pUSART:00000000 s_pUSART
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:25     .data.s_uwIRQn:00000000 $d
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:28     .data.s_uwIRQn:00000000 s_uwIRQn
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:31     .bss.g_atio_cb:00000000 $d
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:34     .bss.g_atio_cb:00000000 g_atio_cb
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:37     .text.atio_irq:00000000 $t
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:43     .text.atio_irq:00000000 atio_irq
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:192    .text.atio_irq:000000e8 $d
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:200    .rodata:00000000 $d
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:208    .text.uart_at_init:00000000 $t
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:215    .text.uart_at_init:00000000 uart_at_init
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:355    .text.uart_at_init:000000d0 $d
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:765    .rodata.__FUNCTION__.10176:00000000 __FUNCTION__.10176
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:370    .text.uartat_deinit:00000000 $t
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:377    .text.uartat_deinit:00000000 uartat_deinit
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:429    .text.uartat_deinit:00000040 $d
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:434    .text.uart_at_send:00000000 $t
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:441    .text.uart_at_send:00000000 uart_at_send
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:496    .text.uart_at_send:00000044 $d
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:502    .text.uart_at_receive:00000000 $t
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:509    .text.uart_at_receive:00000000 uart_at_receive
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:640    .text.uart_at_receive:000000c8 $d
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:646    .text.__at_read:00000000 $t
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:652    .text.__at_read:00000000 __at_read
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:693    .text.__at_write:00000000 $t
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:699    .text.__at_write:00000000 __at_write
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:740    .rodata.s_at_op:00000000 $d
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:743    .rodata.s_at_op:00000000 s_at_op
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:753    osdriv:00000000 $d
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:756    osdriv:00000000 uart_at_driv
+C:\Users\user\AppData\Local\Temp\cc1XwOet.s:762    .rodata.__FUNCTION__.10176:00000000 $d
+
+UNDEFINED SYMBOLS
+ring_datalen
+ring_write
+osal_semp_post
+memset
+osal_semp_create
+printf
+ring_init
+HAL_UART_Init
+_Error_Handler
+LOS_HwiCreate
+HAL_UART_Transmit
+osal_semp_pend
+LOS_IntLock
+ring_read
+ring_reset
+LOS_IntRestore

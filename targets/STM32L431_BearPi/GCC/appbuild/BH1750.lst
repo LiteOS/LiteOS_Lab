@@ -1,0 +1,355 @@
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccc4rzXq.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"BH1750.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.comm	result_lx,4,4
+  18              		.comm	BUF,2,4
+  19              		.comm	result,4,4
+  20              		.section	.text.Init_BH1750,"ax",%progbits
+  21              		.align	1
+  22              		.global	Init_BH1750
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  26              		.fpu fpv4-sp-d16
+  28              	Init_BH1750:
+  29              	.LFB133:
+  30              		.file 1 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750/BH1750.c"
+   1:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** /********************************************************************************
+   2:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c ****     * 文件名称 ：BH1750.c
+   3:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c ****     * 作     者：物联网俱乐部
+   4:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c ****     * 版     本：V1.0
+   5:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c ****     * 编写日期 ：2018-4-1
+   6:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c ****     * 功     能：光照强度扩展板驱动
+   7:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** *********************************************************************************
+   8:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c ****     * 说    明 ：本例程配套物联网俱乐部开发板使用
+   9:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c ****     *
+  10:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c ****     * 淘     宝：https://shop128001708.taobao.com/
+  11:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c ****     * 论     坛：bbs.iot-club.cn
+  12:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** *********************************************************************************/
+  13:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** 
+  14:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** #include "bh1750.h"
+  15:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** #include "stm32l4xx.h"
+  16:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** #include "i2c.h"
+  17:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** 
+  18:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** 
+  19:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** float result_lx;
+  20:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** uint8_t BUF[2];
+  21:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** int result;
+  22:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** 
+  23:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** 
+  24:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** /***************************************************************
+  25:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** * 函数名称: Init_BH1750
+  26:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** * 说    明: 写命令初始化BH1750
+  27:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** * 参    数: 无
+  28:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** * 返 回 值: 无
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccc4rzXq.s 			page 2
+
+
+  29:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** ***************************************************************/
+  30:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** void Init_BH1750(void)
+  31:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** {
+  31              		.loc 1 31 0
+  32              		.cfi_startproc
+  33              		@ args = 0, pretend = 0, frame = 8
+  34              		@ frame_needed = 1, uses_anonymous_args = 0
+  35 0000 80B5     		push	{r7, lr}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 8
+  38              		.cfi_offset 7, -8
+  39              		.cfi_offset 14, -4
+  40 0002 84B0     		sub	sp, sp, #16
+  41              	.LCFI1:
+  42              		.cfi_def_cfa_offset 24
+  43 0004 02AF     		add	r7, sp, #8
+  44              	.LCFI2:
+  45              		.cfi_def_cfa 7, 16
+  32:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c ****     uint8_t t_Data = 0x01;
+  46              		.loc 1 32 0
+  47 0006 0123     		movs	r3, #1
+  48 0008 FB71     		strb	r3, [r7, #7]
+  33:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c ****     HAL_I2C_Master_Transmit(&hi2c1,BH1750_Addr,&t_Data,1,0xff);
+  49              		.loc 1 33 0
+  50 000a FA1D     		adds	r2, r7, #7
+  51 000c FF23     		movs	r3, #255
+  52 000e 0093     		str	r3, [sp]
+  53 0010 0123     		movs	r3, #1
+  54 0012 4621     		movs	r1, #70
+  55 0014 0348     		ldr	r0, .L2
+  56 0016 FFF7FEFF 		bl	HAL_I2C_Master_Transmit
+  34:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** }
+  57              		.loc 1 34 0
+  58 001a 00BF     		nop
+  59 001c 0837     		adds	r7, r7, #8
+  60              	.LCFI3:
+  61              		.cfi_def_cfa_offset 8
+  62 001e BD46     		mov	sp, r7
+  63              	.LCFI4:
+  64              		.cfi_def_cfa_register 13
+  65              		@ sp needed
+  66 0020 80BD     		pop	{r7, pc}
+  67              	.L3:
+  68 0022 00BF     		.align	2
+  69              	.L2:
+  70 0024 00000000 		.word	hi2c1
+  71              		.cfi_endproc
+  72              	.LFE133:
+  74              		.section	.text.Start_BH1750,"ax",%progbits
+  75              		.align	1
+  76              		.global	Start_BH1750
+  77              		.syntax unified
+  78              		.thumb
+  79              		.thumb_func
+  80              		.fpu fpv4-sp-d16
+  82              	Start_BH1750:
+  83              	.LFB134:
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccc4rzXq.s 			page 3
+
+
+  35:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** 
+  36:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** /***************************************************************
+  37:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** * 函数名称: Start_BH1750
+  38:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** * 说    明: 启动BH1750
+  39:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** * 参    数: 无
+  40:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** * 返 回 值: 无
+  41:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** ***************************************************************/
+  42:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** void Start_BH1750(void)
+  43:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** {
+  84              		.loc 1 43 0
+  85              		.cfi_startproc
+  86              		@ args = 0, pretend = 0, frame = 8
+  87              		@ frame_needed = 1, uses_anonymous_args = 0
+  88 0000 80B5     		push	{r7, lr}
+  89              	.LCFI5:
+  90              		.cfi_def_cfa_offset 8
+  91              		.cfi_offset 7, -8
+  92              		.cfi_offset 14, -4
+  93 0002 84B0     		sub	sp, sp, #16
+  94              	.LCFI6:
+  95              		.cfi_def_cfa_offset 24
+  96 0004 02AF     		add	r7, sp, #8
+  97              	.LCFI7:
+  98              		.cfi_def_cfa 7, 16
+  44:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c ****     uint8_t t_Data = 0x10;
+  99              		.loc 1 44 0
+ 100 0006 1023     		movs	r3, #16
+ 101 0008 FB71     		strb	r3, [r7, #7]
+  45:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c ****     HAL_I2C_Master_Transmit(&hi2c1,BH1750_Addr,&t_Data,1,0xff); 
+ 102              		.loc 1 45 0
+ 103 000a FA1D     		adds	r2, r7, #7
+ 104 000c FF23     		movs	r3, #255
+ 105 000e 0093     		str	r3, [sp]
+ 106 0010 0123     		movs	r3, #1
+ 107 0012 4621     		movs	r1, #70
+ 108 0014 0348     		ldr	r0, .L5
+ 109 0016 FFF7FEFF 		bl	HAL_I2C_Master_Transmit
+  46:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** }
+ 110              		.loc 1 46 0
+ 111 001a 00BF     		nop
+ 112 001c 0837     		adds	r7, r7, #8
+ 113              	.LCFI8:
+ 114              		.cfi_def_cfa_offset 8
+ 115 001e BD46     		mov	sp, r7
+ 116              	.LCFI9:
+ 117              		.cfi_def_cfa_register 13
+ 118              		@ sp needed
+ 119 0020 80BD     		pop	{r7, pc}
+ 120              	.L6:
+ 121 0022 00BF     		.align	2
+ 122              	.L5:
+ 123 0024 00000000 		.word	hi2c1
+ 124              		.cfi_endproc
+ 125              	.LFE134:
+ 127              		.global	__aeabi_i2d
+ 128              		.global	__aeabi_ddiv
+ 129              		.global	__aeabi_d2f
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccc4rzXq.s 			page 4
+
+
+ 130              		.section	.text.Convert_BH1750,"ax",%progbits
+ 131              		.align	1
+ 132              		.global	Convert_BH1750
+ 133              		.syntax unified
+ 134              		.thumb
+ 135              		.thumb_func
+ 136              		.fpu fpv4-sp-d16
+ 138              	Convert_BH1750:
+ 139              	.LFB135:
+  47:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** 
+  48:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** 
+  49:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** 
+  50:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** /***************************************************************
+  51:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** * 函数名称: Convert_BH1750
+  52:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** * 说    明: 数值转换
+  53:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** * 参    数: 无
+  54:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** * 返 回 值: 光强值
+  55:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** ***************************************************************/
+  56:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** float Convert_BH1750(void)
+  57:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** {
+ 140              		.loc 1 57 0
+ 141              		.cfi_startproc
+ 142              		@ args = 0, pretend = 0, frame = 0
+ 143              		@ frame_needed = 1, uses_anonymous_args = 0
+ 144 0000 90B5     		push	{r4, r7, lr}
+ 145              	.LCFI10:
+ 146              		.cfi_def_cfa_offset 12
+ 147              		.cfi_offset 4, -12
+ 148              		.cfi_offset 7, -8
+ 149              		.cfi_offset 14, -4
+ 150 0002 83B0     		sub	sp, sp, #12
+ 151              	.LCFI11:
+ 152              		.cfi_def_cfa_offset 24
+ 153 0004 02AF     		add	r7, sp, #8
+ 154              	.LCFI12:
+ 155              		.cfi_def_cfa 7, 16
+  58:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** 	Start_BH1750();
+ 156              		.loc 1 58 0
+ 157 0006 FFF7FEFF 		bl	Start_BH1750
+  59:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** 	HAL_Delay(180);
+ 158              		.loc 1 59 0
+ 159 000a B420     		movs	r0, #180
+ 160 000c FFF7FEFF 		bl	HAL_Delay
+  60:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** 	HAL_I2C_Master_Receive(&hi2c1, BH1750_Addr+1,BUF,2,0xff); 
+ 161              		.loc 1 60 0
+ 162 0010 FF23     		movs	r3, #255
+ 163 0012 0093     		str	r3, [sp]
+ 164 0014 0223     		movs	r3, #2
+ 165 0016 174A     		ldr	r2, .L9
+ 166 0018 4721     		movs	r1, #71
+ 167 001a 1748     		ldr	r0, .L9+4
+ 168 001c FFF7FEFF 		bl	HAL_I2C_Master_Receive
+  61:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** 	result=BUF[0];
+ 169              		.loc 1 61 0
+ 170 0020 144B     		ldr	r3, .L9
+ 171 0022 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 172 0024 1A46     		mov	r2, r3
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccc4rzXq.s 			page 5
+
+
+ 173 0026 154B     		ldr	r3, .L9+8
+ 174 0028 1A60     		str	r2, [r3]
+  62:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** 	result=(result<<8)+BUF[1];  //合成数据，即光照数据	
+ 175              		.loc 1 62 0
+ 176 002a 144B     		ldr	r3, .L9+8
+ 177 002c 1B68     		ldr	r3, [r3]
+ 178 002e 1B02     		lsls	r3, r3, #8
+ 179 0030 104A     		ldr	r2, .L9
+ 180 0032 5278     		ldrb	r2, [r2, #1]	@ zero_extendqisi2
+ 181 0034 1344     		add	r3, r3, r2
+ 182 0036 114A     		ldr	r2, .L9+8
+ 183 0038 1360     		str	r3, [r2]
+  63:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** 	result_lx=(float)(result/1.2);
+ 184              		.loc 1 63 0
+ 185 003a 104B     		ldr	r3, .L9+8
+ 186 003c 1B68     		ldr	r3, [r3]
+ 187 003e 1846     		mov	r0, r3
+ 188 0040 FFF7FEFF 		bl	__aeabi_i2d
+ 189              	.LVL0:
+ 190 0044 4FF03332 		mov	r2, #858993459
+ 191 0048 0D4B     		ldr	r3, .L9+12
+ 192 004a FFF7FEFF 		bl	__aeabi_ddiv
+ 193              	.LVL1:
+ 194 004e 0346     		mov	r3, r0
+ 195 0050 0C46     		mov	r4, r1
+ 196 0052 1846     		mov	r0, r3
+ 197 0054 2146     		mov	r1, r4
+ 198 0056 FFF7FEFF 		bl	__aeabi_d2f
+ 199              	.LVL2:
+ 200 005a 0246     		mov	r2, r0	@ float
+ 201 005c 094B     		ldr	r3, .L9+16
+ 202 005e 1A60     		str	r2, [r3]	@ float
+  64:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c ****   return result_lx;
+ 203              		.loc 1 64 0
+ 204 0060 084B     		ldr	r3, .L9+16
+ 205 0062 1B68     		ldr	r3, [r3]	@ float
+ 206 0064 07EE903A 		vmov	s15, r3
+  65:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/BH1750\BH1750.c **** }
+ 207              		.loc 1 65 0
+ 208 0068 B0EE670A 		vmov.f32	s0, s15
+ 209 006c 0437     		adds	r7, r7, #4
+ 210              	.LCFI13:
+ 211              		.cfi_def_cfa_offset 12
+ 212 006e BD46     		mov	sp, r7
+ 213              	.LCFI14:
+ 214              		.cfi_def_cfa_register 13
+ 215              		@ sp needed
+ 216 0070 90BD     		pop	{r4, r7, pc}
+ 217              	.L10:
+ 218 0072 00BF     		.align	2
+ 219              	.L9:
+ 220 0074 00000000 		.word	BUF
+ 221 0078 00000000 		.word	hi2c1
+ 222 007c 00000000 		.word	result
+ 223 0080 3333F33F 		.word	1072902963
+ 224 0084 00000000 		.word	result_lx
+ 225              		.cfi_endproc
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccc4rzXq.s 			page 6
+
+
+ 226              	.LFE135:
+ 228              		.text
+ 229              	.Letext0:
+ 230              		.file 2 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 231              		.file 3 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 232              		.file 4 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 233              		.file 5 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 234              		.file 6 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 235              		.file 7 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_typedef.h"
+ 236              		.file 8 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 237              		.file 9 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 238              		.file 10 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/system_stm32l4xx.h"
+ 239              		.file 11 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/stm32l431xx.h"
+ 240              		.file 12 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_config.h"
+ 241              		.file 13 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_list.h"
+ 242              		.file 14 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_err.h"
+ 243              		.file 15 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 244              		.file 16 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_tick.h"
+ 245              		.file 17 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_event.h"
+ 246              		.file 18 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_task.h"
+ 247              		.file 19 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/include/los_task.ph"
+ 248              		.file 20 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/main.h"
+ 249              		.file 21 "E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h
+ 250              		.file 22 "E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_dma.h
+ 251              		.file 23 "E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_i2c.h
+ 252              		.file 24 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/i2c.h"
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccc4rzXq.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 BH1750.c
+                            *COM*:00000004 result_lx
+                            *COM*:00000002 BUF
+                            *COM*:00000004 result
+C:\Users\user\AppData\Local\Temp\ccc4rzXq.s:21     .text.Init_BH1750:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccc4rzXq.s:28     .text.Init_BH1750:00000000 Init_BH1750
+C:\Users\user\AppData\Local\Temp\ccc4rzXq.s:70     .text.Init_BH1750:00000024 $d
+C:\Users\user\AppData\Local\Temp\ccc4rzXq.s:75     .text.Start_BH1750:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccc4rzXq.s:82     .text.Start_BH1750:00000000 Start_BH1750
+C:\Users\user\AppData\Local\Temp\ccc4rzXq.s:123    .text.Start_BH1750:00000024 $d
+C:\Users\user\AppData\Local\Temp\ccc4rzXq.s:131    .text.Convert_BH1750:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccc4rzXq.s:138    .text.Convert_BH1750:00000000 Convert_BH1750
+C:\Users\user\AppData\Local\Temp\ccc4rzXq.s:220    .text.Convert_BH1750:00000074 $d
+
+UNDEFINED SYMBOLS
+HAL_I2C_Master_Transmit
+hi2c1
+__aeabi_i2d
+__aeabi_ddiv
+__aeabi_d2f
+HAL_Delay
+HAL_I2C_Master_Receive

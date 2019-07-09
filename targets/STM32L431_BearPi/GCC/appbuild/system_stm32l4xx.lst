@@ -1,0 +1,798 @@
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc8DXBG0.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"system_stm32l4xx.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	SystemCoreClock
+  18              		.section	.data.SystemCoreClock,"aw",%progbits
+  19              		.align	2
+  22              	SystemCoreClock:
+  23 0000 00093D00 		.word	4000000
+  24              		.global	AHBPrescTable
+  25              		.section	.rodata.AHBPrescTable,"a",%progbits
+  26              		.align	2
+  29              	AHBPrescTable:
+  30 0000 00       		.byte	0
+  31 0001 00       		.byte	0
+  32 0002 00       		.byte	0
+  33 0003 00       		.byte	0
+  34 0004 00       		.byte	0
+  35 0005 00       		.byte	0
+  36 0006 00       		.byte	0
+  37 0007 00       		.byte	0
+  38 0008 01       		.byte	1
+  39 0009 02       		.byte	2
+  40 000a 03       		.byte	3
+  41 000b 04       		.byte	4
+  42 000c 06       		.byte	6
+  43 000d 07       		.byte	7
+  44 000e 08       		.byte	8
+  45 000f 09       		.byte	9
+  46              		.global	APBPrescTable
+  47              		.section	.rodata.APBPrescTable,"a",%progbits
+  48              		.align	2
+  51              	APBPrescTable:
+  52 0000 00       		.byte	0
+  53 0001 00       		.byte	0
+  54 0002 00       		.byte	0
+  55 0003 00       		.byte	0
+  56 0004 01       		.byte	1
+  57 0005 02       		.byte	2
+  58 0006 03       		.byte	3
+  59 0007 04       		.byte	4
+  60              		.global	MSIRangeTable
+  61              		.section	.rodata.MSIRangeTable,"a",%progbits
+  62              		.align	2
+  65              	MSIRangeTable:
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc8DXBG0.s 			page 2
+
+
+  66 0000 A0860100 		.word	100000
+  67 0004 400D0300 		.word	200000
+  68 0008 801A0600 		.word	400000
+  69 000c 00350C00 		.word	800000
+  70 0010 40420F00 		.word	1000000
+  71 0014 80841E00 		.word	2000000
+  72 0018 00093D00 		.word	4000000
+  73 001c 00127A00 		.word	8000000
+  74 0020 0024F400 		.word	16000000
+  75 0024 00366E01 		.word	24000000
+  76 0028 0048E801 		.word	32000000
+  77 002c 006CDC02 		.word	48000000
+  78              		.section	.text.SystemInit,"ax",%progbits
+  79              		.align	1
+  80              		.global	SystemInit
+  81              		.syntax unified
+  82              		.thumb
+  83              		.thumb_func
+  84              		.fpu fpv4-sp-d16
+  86              	SystemInit:
+  87              	.LFB133:
+  88              		.file 1 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src/system_stm32l4xx.c"
+   1:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** /**
+   2:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   ******************************************************************************
+   3:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @file    system_stm32l4xx.c
+   4:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @author  MCD Application Team
+   5:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @brief   CMSIS Cortex-M4 Device Peripheral Access Layer System Source File
+   6:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *
+   7:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *   This file provides two functions and one global variable to be called from
+   8:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *   user application:
+   9:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *      - SystemInit(): This function is called at startup just after reset and
+  10:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *                      before branch to main program. This call is made inside
+  11:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *                      the "startup_stm32l4xx.s" file.
+  12:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *
+  13:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *      - SystemCoreClock variable: Contains the core clock (HCLK), it can be used
+  14:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *                                  by the user application to setup the SysTick
+  15:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *                                  timer or configure other parameters.
+  16:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *
+  17:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *      - SystemCoreClockUpdate(): Updates the variable SystemCoreClock and must
+  18:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *                                 be called whenever the core clock is changed
+  19:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *                                 during program execution.
+  20:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *
+  21:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *   After each device reset the MSI (4 MHz) is used as system clock source.
+  22:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *   Then SystemInit() function is called, in "startup_stm32l4xx.s" file, to
+  23:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *   configure the system clock before to branch to main program.
+  24:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *
+  25:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *   This file configures the system clock as follows:
+  26:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *=============================================================================
+  27:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  28:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *        System Clock source                    | MSI
+  29:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  30:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *        SYSCLK(Hz)                             | 4000000
+  31:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  32:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *        HCLK(Hz)                               | 4000000
+  33:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  34:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *        AHB Prescaler                          | 1
+  35:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc8DXBG0.s 			page 3
+
+
+  36:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *        APB1 Prescaler                         | 1
+  37:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  38:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *        APB2 Prescaler                         | 1
+  39:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  40:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *        PLL_M                                  | 1
+  41:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  42:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *        PLL_N                                  | 8
+  43:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  44:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *        PLL_P                                  | 7
+  45:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  46:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *        PLL_Q                                  | 2
+  47:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  48:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *        PLL_R                                  | 2
+  49:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  50:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *        PLLSAI1_P                              | NA
+  51:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  52:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *        PLLSAI1_Q                              | NA
+  53:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  54:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *        PLLSAI1_R                              | NA
+  55:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  56:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *        PLLSAI2_P                              | NA
+  57:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  58:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *        PLLSAI2_Q                              | NA
+  59:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  60:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *        PLLSAI2_R                              | NA
+  61:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  62:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *        Require 48MHz for USB OTG FS,          | Disabled
+  63:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *        SDIO and RNG clock                     |
+  64:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  65:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *=============================================================================
+  66:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   ******************************************************************************
+  67:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @attention
+  68:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *
+  69:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  70:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *
+  71:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  72:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * are permitted provided that the following conditions are met:
+  73:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  74:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *      this list of conditions and the following disclaimer.
+  75:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  76:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *      this list of conditions and the following disclaimer in the documentation
+  77:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *      and/or other materials provided with the distribution.
+  78:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  79:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *      may be used to endorse or promote products derived from this software
+  80:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *      without specific prior written permission.
+  81:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *
+  82:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  83:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  84:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  85:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  86:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  87:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  88:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  89:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  90:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  91:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  92:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc8DXBG0.s 			page 4
+
+
+  93:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   ******************************************************************************
+  94:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   */
+  95:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+  96:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** /** @addtogroup CMSIS
+  97:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @{
+  98:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   */
+  99:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 100:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** /** @addtogroup stm32l4xx_system
+ 101:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @{
+ 102:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   */
+ 103:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 104:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** /** @addtogroup STM32L4xx_System_Private_Includes
+ 105:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @{
+ 106:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   */
+ 107:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 108:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** #include "stm32l4xx.h"
+ 109:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 110:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** #if !defined  (HSE_VALUE)
+ 111:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   #define HSE_VALUE    8000000U  /*!< Value of the External oscillator in Hz */
+ 112:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** #endif /* HSE_VALUE */
+ 113:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 114:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** #if !defined  (MSI_VALUE)
+ 115:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   #define MSI_VALUE    4000000U  /*!< Value of the Internal oscillator in Hz*/
+ 116:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** #endif /* MSI_VALUE */
+ 117:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 118:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** #if !defined  (HSI_VALUE)
+ 119:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   #define HSI_VALUE    16000000U /*!< Value of the Internal oscillator in Hz*/
+ 120:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** #endif /* HSI_VALUE */
+ 121:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 122:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** /**
+ 123:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @}
+ 124:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   */
+ 125:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 126:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** /** @addtogroup STM32L4xx_System_Private_TypesDefinitions
+ 127:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @{
+ 128:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   */
+ 129:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 130:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** /**
+ 131:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @}
+ 132:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   */
+ 133:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 134:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** /** @addtogroup STM32L4xx_System_Private_Defines
+ 135:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @{
+ 136:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   */
+ 137:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 138:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** /************************* Miscellaneous Configuration ************************/
+ 139:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** /*!< Uncomment the following line if you need to relocate your vector Table in
+ 140:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****      Internal SRAM. */
+ 141:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** /* #define VECT_TAB_SRAM */
+ 142:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** #define VECT_TAB_OFFSET  0x10000 /*!< Vector Table base offset field.
+ 143:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****                                    This value must be a multiple of 0x200. */
+ 144:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** /******************************************************************************/
+ 145:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** /**
+ 146:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @}
+ 147:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   */
+ 148:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 149:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** /** @addtogroup STM32L4xx_System_Private_Macros
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc8DXBG0.s 			page 5
+
+
+ 150:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @{
+ 151:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   */
+ 152:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 153:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** /**
+ 154:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @}
+ 155:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   */
+ 156:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 157:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** /** @addtogroup STM32L4xx_System_Private_Variables
+ 158:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @{
+ 159:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   */
+ 160:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   /* The SystemCoreClock variable is updated in three ways:
+ 161:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****       1) by calling CMSIS function SystemCoreClockUpdate()
+ 162:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****       2) by calling HAL API function HAL_RCC_GetHCLKFreq()
+ 163:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****       3) each time HAL_RCC_ClockConfig() is called to configure the system clock frequency
+ 164:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****          Note: If you use this function to configure the system clock; then there
+ 165:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****                is no need to call the 2 first functions listed above, since SystemCoreClock
+ 166:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****                variable is updated automatically.
+ 167:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   */
+ 168:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   uint32_t SystemCoreClock = 4000000U;
+ 169:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 170:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   const uint8_t  AHBPrescTable[16] = {0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U, 6U, 7U, 8U, 9
+ 171:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   const uint8_t  APBPrescTable[8] =  {0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U};
+ 172:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   const uint32_t MSIRangeTable[12] = {100000U,   200000U,   400000U,   800000U,  1000000U,  2000000
+ 173:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****                                       4000000U, 8000000U, 16000000U, 24000000U, 32000000U, 48000000
+ 174:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** /**
+ 175:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @}
+ 176:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   */
+ 177:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 178:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** /** @addtogroup STM32L4xx_System_Private_FunctionPrototypes
+ 179:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @{
+ 180:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   */
+ 181:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 182:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** /**
+ 183:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @}
+ 184:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   */
+ 185:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 186:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** /** @addtogroup STM32L4xx_System_Private_Functions
+ 187:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @{
+ 188:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   */
+ 189:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 190:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** /**
+ 191:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @brief  Setup the microcontroller system.
+ 192:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @param  None
+ 193:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @retval None
+ 194:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   */
+ 195:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 196:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** void SystemInit(void)
+ 197:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** {
+  89              		.loc 1 197 0
+  90              		.cfi_startproc
+  91              		@ args = 0, pretend = 0, frame = 0
+  92              		@ frame_needed = 1, uses_anonymous_args = 0
+  93              		@ link register save eliminated.
+  94 0000 80B4     		push	{r7}
+  95              	.LCFI0:
+  96              		.cfi_def_cfa_offset 4
+  97              		.cfi_offset 7, -4
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc8DXBG0.s 			page 6
+
+
+  98 0002 00AF     		add	r7, sp, #0
+  99              	.LCFI1:
+ 100              		.cfi_def_cfa_register 7
+ 198:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   /* FPU settings ------------------------------------------------------------*/
+ 199:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   #if (__FPU_PRESENT == 1) && (__FPU_USED == 1)
+ 200:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****     SCB->CPACR |= ((3UL << 10*2)|(3UL << 11*2));  /* set CP10 and CP11 Full Access */
+ 101              		.loc 1 200 0
+ 102 0004 164B     		ldr	r3, .L2
+ 103 0006 D3F88830 		ldr	r3, [r3, #136]
+ 104 000a 154A     		ldr	r2, .L2
+ 105 000c 43F47003 		orr	r3, r3, #15728640
+ 106 0010 C2F88830 		str	r3, [r2, #136]
+ 201:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   #endif
+ 202:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 203:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   /* Reset the RCC clock configuration to the default reset state ------------*/
+ 204:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   /* Set MSION bit */
+ 205:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   RCC->CR |= RCC_CR_MSION;
+ 107              		.loc 1 205 0
+ 108 0014 134B     		ldr	r3, .L2+4
+ 109 0016 1B68     		ldr	r3, [r3]
+ 110 0018 124A     		ldr	r2, .L2+4
+ 111 001a 43F00103 		orr	r3, r3, #1
+ 112 001e 1360     		str	r3, [r2]
+ 206:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 207:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   /* Reset CFGR register */
+ 208:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   RCC->CFGR = 0x00000000U;
+ 113              		.loc 1 208 0
+ 114 0020 104B     		ldr	r3, .L2+4
+ 115 0022 0022     		movs	r2, #0
+ 116 0024 9A60     		str	r2, [r3, #8]
+ 209:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 210:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   /* Reset HSEON, CSSON , HSION, and PLLON bits */
+ 211:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   RCC->CR &= 0xEAF6FFFFU;
+ 117              		.loc 1 211 0
+ 118 0026 0F4B     		ldr	r3, .L2+4
+ 119 0028 1B68     		ldr	r3, [r3]
+ 120 002a 0E4A     		ldr	r2, .L2+4
+ 121 002c 23F0A853 		bic	r3, r3, #352321536
+ 122 0030 23F41023 		bic	r3, r3, #589824
+ 123 0034 1360     		str	r3, [r2]
+ 212:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 213:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   /* Reset PLLCFGR register */
+ 214:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   RCC->PLLCFGR = 0x00001000U;
+ 124              		.loc 1 214 0
+ 125 0036 0B4B     		ldr	r3, .L2+4
+ 126 0038 4FF48052 		mov	r2, #4096
+ 127 003c DA60     		str	r2, [r3, #12]
+ 215:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 216:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   /* Reset HSEBYP bit */
+ 217:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   RCC->CR &= 0xFFFBFFFFU;
+ 128              		.loc 1 217 0
+ 129 003e 094B     		ldr	r3, .L2+4
+ 130 0040 1B68     		ldr	r3, [r3]
+ 131 0042 084A     		ldr	r2, .L2+4
+ 132 0044 23F48023 		bic	r3, r3, #262144
+ 133 0048 1360     		str	r3, [r2]
+ 218:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc8DXBG0.s 			page 7
+
+
+ 219:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   /* Disable all interrupts */
+ 220:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   RCC->CIER = 0x00000000U;
+ 134              		.loc 1 220 0
+ 135 004a 064B     		ldr	r3, .L2+4
+ 136 004c 0022     		movs	r2, #0
+ 137 004e 9A61     		str	r2, [r3, #24]
+ 221:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 222:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   /* Configure the Vector Table location add offset address ------------------*/
+ 223:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** #ifdef VECT_TAB_SRAM
+ 224:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   SCB->VTOR = SRAM_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal SRAM */
+ 225:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** #else
+ 226:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   SCB->VTOR = FLASH_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal FLASH */
+ 138              		.loc 1 226 0
+ 139 0050 034B     		ldr	r3, .L2
+ 140 0052 054A     		ldr	r2, .L2+8
+ 141 0054 9A60     		str	r2, [r3, #8]
+ 227:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** #endif
+ 228:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** }
+ 142              		.loc 1 228 0
+ 143 0056 00BF     		nop
+ 144 0058 BD46     		mov	sp, r7
+ 145              	.LCFI2:
+ 146              		.cfi_def_cfa_register 13
+ 147              		@ sp needed
+ 148 005a 5DF8047B 		ldr	r7, [sp], #4
+ 149              	.LCFI3:
+ 150              		.cfi_restore 7
+ 151              		.cfi_def_cfa_offset 0
+ 152 005e 7047     		bx	lr
+ 153              	.L3:
+ 154              		.align	2
+ 155              	.L2:
+ 156 0060 00ED00E0 		.word	-536810240
+ 157 0064 00100240 		.word	1073876992
+ 158 0068 00000108 		.word	134283264
+ 159              		.cfi_endproc
+ 160              	.LFE133:
+ 162              		.section	.text.SystemCoreClockUpdate,"ax",%progbits
+ 163              		.align	1
+ 164              		.global	SystemCoreClockUpdate
+ 165              		.syntax unified
+ 166              		.thumb
+ 167              		.thumb_func
+ 168              		.fpu fpv4-sp-d16
+ 170              	SystemCoreClockUpdate:
+ 171              	.LFB134:
+ 229:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 230:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** /**
+ 231:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @brief  Update SystemCoreClock variable according to Clock Register Values.
+ 232:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *         The SystemCoreClock variable contains the core clock (HCLK), it can
+ 233:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *         be used by the user application to setup the SysTick timer or configure
+ 234:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *         other parameters.
+ 235:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *
+ 236:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @note   Each time the core clock (HCLK) changes, this function must be called
+ 237:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *         to update SystemCoreClock variable value. Otherwise, any configuration
+ 238:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *         based on this variable will be incorrect.
+ 239:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc8DXBG0.s 			page 8
+
+
+ 240:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @note   - The system frequency computed by this function is not the real
+ 241:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *           frequency in the chip. It is calculated based on the predefined
+ 242:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *           constant and the selected clock source:
+ 243:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *
+ 244:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *           - If SYSCLK source is MSI, SystemCoreClock will contain the MSI_VALUE(*)
+ 245:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *
+ 246:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *           - If SYSCLK source is HSI, SystemCoreClock will contain the HSI_VALUE(**)
+ 247:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *
+ 248:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *           - If SYSCLK source is HSE, SystemCoreClock will contain the HSE_VALUE(***)
+ 249:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *
+ 250:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *           - If SYSCLK source is PLL, SystemCoreClock will contain the HSE_VALUE(***)
+ 251:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *             or HSI_VALUE(*) or MSI_VALUE(*) multiplied/divided by the PLL factors.
+ 252:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *
+ 253:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *         (*) MSI_VALUE is a constant defined in stm32l4xx_hal.h file (default value
+ 254:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *             4 MHz) but the real value may vary depending on the variations
+ 255:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *             in voltage and temperature.
+ 256:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *
+ 257:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *         (**) HSI_VALUE is a constant defined in stm32l4xx_hal.h file (default value
+ 258:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *              16 MHz) but the real value may vary depending on the variations
+ 259:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *              in voltage and temperature.
+ 260:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *
+ 261:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *         (***) HSE_VALUE is a constant defined in stm32l4xx_hal.h file (default value
+ 262:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *              8 MHz), user has to ensure that HSE_VALUE is same as the real
+ 263:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *              frequency of the crystal used. Otherwise, this function may
+ 264:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *              have wrong result.
+ 265:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *
+ 266:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *         - The result of this function could be not correct when using fractional
+ 267:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *           value for HSE crystal.
+ 268:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   *
+ 269:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @param  None
+ 270:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   * @retval None
+ 271:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   */
+ 272:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** void SystemCoreClockUpdate(void)
+ 273:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** {
+ 172              		.loc 1 273 0
+ 173              		.cfi_startproc
+ 174              		@ args = 0, pretend = 0, frame = 24
+ 175              		@ frame_needed = 1, uses_anonymous_args = 0
+ 176              		@ link register save eliminated.
+ 177 0000 80B4     		push	{r7}
+ 178              	.LCFI4:
+ 179              		.cfi_def_cfa_offset 4
+ 180              		.cfi_offset 7, -4
+ 181 0002 87B0     		sub	sp, sp, #28
+ 182              	.LCFI5:
+ 183              		.cfi_def_cfa_offset 32
+ 184 0004 00AF     		add	r7, sp, #0
+ 185              	.LCFI6:
+ 186              		.cfi_def_cfa_register 7
+ 274:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   uint32_t tmp = 0U, msirange = 0U, pllvco = 0U, pllr = 2U, pllsource = 0U, pllm = 2U;
+ 187              		.loc 1 274 0
+ 188 0006 0023     		movs	r3, #0
+ 189 0008 FB60     		str	r3, [r7, #12]
+ 190 000a 0023     		movs	r3, #0
+ 191 000c 7B61     		str	r3, [r7, #20]
+ 192 000e 0023     		movs	r3, #0
+ 193 0010 3B61     		str	r3, [r7, #16]
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc8DXBG0.s 			page 9
+
+
+ 194 0012 0223     		movs	r3, #2
+ 195 0014 BB60     		str	r3, [r7, #8]
+ 196 0016 0023     		movs	r3, #0
+ 197 0018 7B60     		str	r3, [r7, #4]
+ 198 001a 0223     		movs	r3, #2
+ 199 001c 3B60     		str	r3, [r7]
+ 275:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 276:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   /* Get MSI Range frequency--------------------------------------------------*/
+ 277:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   if((RCC->CR & RCC_CR_MSIRGSEL) == RESET)
+ 200              		.loc 1 277 0
+ 201 001e 4F4B     		ldr	r3, .L19
+ 202 0020 1B68     		ldr	r3, [r3]
+ 203 0022 03F00803 		and	r3, r3, #8
+ 204 0026 002B     		cmp	r3, #0
+ 205 0028 07D1     		bne	.L5
+ 278:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   { /* MSISRANGE from RCC_CSR applies */
+ 279:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****     msirange = (RCC->CSR & RCC_CSR_MSISRANGE) >> 8U;
+ 206              		.loc 1 279 0
+ 207 002a 4C4B     		ldr	r3, .L19
+ 208 002c D3F89430 		ldr	r3, [r3, #148]
+ 209 0030 1B0A     		lsrs	r3, r3, #8
+ 210 0032 03F00F03 		and	r3, r3, #15
+ 211 0036 7B61     		str	r3, [r7, #20]
+ 212 0038 05E0     		b	.L6
+ 213              	.L5:
+ 280:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   }
+ 281:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   else
+ 282:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   { /* MSIRANGE from RCC_CR applies */
+ 283:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****     msirange = (RCC->CR & RCC_CR_MSIRANGE) >> 4U;
+ 214              		.loc 1 283 0
+ 215 003a 484B     		ldr	r3, .L19
+ 216 003c 1B68     		ldr	r3, [r3]
+ 217 003e 1B09     		lsrs	r3, r3, #4
+ 218 0040 03F00F03 		and	r3, r3, #15
+ 219 0044 7B61     		str	r3, [r7, #20]
+ 220              	.L6:
+ 284:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   }
+ 285:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   /*MSI frequency range in HZ*/
+ 286:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   msirange = MSIRangeTable[msirange];
+ 221              		.loc 1 286 0
+ 222 0046 464A     		ldr	r2, .L19+4
+ 223 0048 7B69     		ldr	r3, [r7, #20]
+ 224 004a 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 225 004e 7B61     		str	r3, [r7, #20]
+ 287:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 288:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   /* Get SYSCLK source -------------------------------------------------------*/
+ 289:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   switch (RCC->CFGR & RCC_CFGR_SWS)
+ 226              		.loc 1 289 0
+ 227 0050 424B     		ldr	r3, .L19
+ 228 0052 9B68     		ldr	r3, [r3, #8]
+ 229 0054 03F00C03 		and	r3, r3, #12
+ 230 0058 0C2B     		cmp	r3, #12
+ 231 005a 65D8     		bhi	.L7
+ 232 005c 01A2     		adr	r2, .L9
+ 233 005e 52F823F0 		ldr	pc, [r2, r3, lsl #2]
+ 234 0062 00BF     		.p2align 2
+ 235              	.L9:
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc8DXBG0.s 			page 10
+
+
+ 236 0064 99000000 		.word	.L8+1
+ 237 0068 29010000 		.word	.L7+1
+ 238 006c 29010000 		.word	.L7+1
+ 239 0070 29010000 		.word	.L7+1
+ 240 0074 A1000000 		.word	.L10+1
+ 241 0078 29010000 		.word	.L7+1
+ 242 007c 29010000 		.word	.L7+1
+ 243 0080 29010000 		.word	.L7+1
+ 244 0084 A9000000 		.word	.L11+1
+ 245 0088 29010000 		.word	.L7+1
+ 246 008c 29010000 		.word	.L7+1
+ 247 0090 29010000 		.word	.L7+1
+ 248 0094 B1000000 		.word	.L12+1
+ 249              		.p2align 1
+ 250              	.L8:
+ 290:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   {
+ 291:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****     case 0x00:  /* MSI used as system clock source */
+ 292:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****       SystemCoreClock = msirange;
+ 251              		.loc 1 292 0
+ 252 0098 324A     		ldr	r2, .L19+8
+ 253 009a 7B69     		ldr	r3, [r7, #20]
+ 254 009c 1360     		str	r3, [r2]
+ 293:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****       break;
+ 255              		.loc 1 293 0
+ 256 009e 47E0     		b	.L13
+ 257              	.L10:
+ 294:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 295:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****     case 0x04:  /* HSI used as system clock source */
+ 296:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****       SystemCoreClock = HSI_VALUE;
+ 258              		.loc 1 296 0
+ 259 00a0 304B     		ldr	r3, .L19+8
+ 260 00a2 314A     		ldr	r2, .L19+12
+ 261 00a4 1A60     		str	r2, [r3]
+ 297:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****       break;
+ 262              		.loc 1 297 0
+ 263 00a6 43E0     		b	.L13
+ 264              	.L11:
+ 298:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 299:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****     case 0x08:  /* HSE used as system clock source */
+ 300:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****       SystemCoreClock = HSE_VALUE;
+ 265              		.loc 1 300 0
+ 266 00a8 2E4B     		ldr	r3, .L19+8
+ 267 00aa 304A     		ldr	r2, .L19+16
+ 268 00ac 1A60     		str	r2, [r3]
+ 301:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****       break;
+ 269              		.loc 1 301 0
+ 270 00ae 3FE0     		b	.L13
+ 271              	.L12:
+ 302:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 303:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****     case 0x0C:  /* PLL used as system clock  source */
+ 304:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****       /* PLL_VCO = (HSE_VALUE or HSI_VALUE or MSI_VALUE/ PLLM) * PLLN
+ 305:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****          SYSCLK = PLL_VCO / PLLR
+ 306:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****          */
+ 307:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****       pllsource = (RCC->PLLCFGR & RCC_PLLCFGR_PLLSRC);
+ 272              		.loc 1 307 0
+ 273 00b0 2A4B     		ldr	r3, .L19
+ 274 00b2 DB68     		ldr	r3, [r3, #12]
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc8DXBG0.s 			page 11
+
+
+ 275 00b4 03F00303 		and	r3, r3, #3
+ 276 00b8 7B60     		str	r3, [r7, #4]
+ 308:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****       pllm = ((RCC->PLLCFGR & RCC_PLLCFGR_PLLM) >> 4U) + 1U ;
+ 277              		.loc 1 308 0
+ 278 00ba 284B     		ldr	r3, .L19
+ 279 00bc DB68     		ldr	r3, [r3, #12]
+ 280 00be 1B09     		lsrs	r3, r3, #4
+ 281 00c0 03F00703 		and	r3, r3, #7
+ 282 00c4 0133     		adds	r3, r3, #1
+ 283 00c6 3B60     		str	r3, [r7]
+ 309:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 310:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****       switch (pllsource)
+ 284              		.loc 1 310 0
+ 285 00c8 7B68     		ldr	r3, [r7, #4]
+ 286 00ca 022B     		cmp	r3, #2
+ 287 00cc 02D0     		beq	.L15
+ 288 00ce 032B     		cmp	r3, #3
+ 289 00d0 06D0     		beq	.L16
+ 290 00d2 0BE0     		b	.L18
+ 291              	.L15:
+ 311:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****       {
+ 312:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****         case 0x02:  /* HSI used as PLL clock source */
+ 313:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****           pllvco = (HSI_VALUE / pllm);
+ 292              		.loc 1 313 0
+ 293 00d4 244A     		ldr	r2, .L19+12
+ 294 00d6 3B68     		ldr	r3, [r7]
+ 295 00d8 B2FBF3F3 		udiv	r3, r2, r3
+ 296 00dc 3B61     		str	r3, [r7, #16]
+ 314:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****           break;
+ 297              		.loc 1 314 0
+ 298 00de 0BE0     		b	.L17
+ 299              	.L16:
+ 315:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 316:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****         case 0x03:  /* HSE used as PLL clock source */
+ 317:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****           pllvco = (HSE_VALUE / pllm);
+ 300              		.loc 1 317 0
+ 301 00e0 224A     		ldr	r2, .L19+16
+ 302 00e2 3B68     		ldr	r3, [r7]
+ 303 00e4 B2FBF3F3 		udiv	r3, r2, r3
+ 304 00e8 3B61     		str	r3, [r7, #16]
+ 318:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****           break;
+ 305              		.loc 1 318 0
+ 306 00ea 05E0     		b	.L17
+ 307              	.L18:
+ 319:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 320:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****         default:    /* MSI used as PLL clock source */
+ 321:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****           pllvco = (msirange / pllm);
+ 308              		.loc 1 321 0
+ 309 00ec 7A69     		ldr	r2, [r7, #20]
+ 310 00ee 3B68     		ldr	r3, [r7]
+ 311 00f0 B2FBF3F3 		udiv	r3, r2, r3
+ 312 00f4 3B61     		str	r3, [r7, #16]
+ 322:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****           break;
+ 313              		.loc 1 322 0
+ 314 00f6 00BF     		nop
+ 315              	.L17:
+ 323:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****       }
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc8DXBG0.s 			page 12
+
+
+ 324:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****       pllvco = pllvco * ((RCC->PLLCFGR & RCC_PLLCFGR_PLLN) >> 8U);
+ 316              		.loc 1 324 0
+ 317 00f8 184B     		ldr	r3, .L19
+ 318 00fa DB68     		ldr	r3, [r3, #12]
+ 319 00fc 1B0A     		lsrs	r3, r3, #8
+ 320 00fe 03F07F02 		and	r2, r3, #127
+ 321 0102 3B69     		ldr	r3, [r7, #16]
+ 322 0104 02FB03F3 		mul	r3, r2, r3
+ 323 0108 3B61     		str	r3, [r7, #16]
+ 325:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****       pllr = (((RCC->PLLCFGR & RCC_PLLCFGR_PLLR) >> 25U) + 1U) * 2U;
+ 324              		.loc 1 325 0
+ 325 010a 144B     		ldr	r3, .L19
+ 326 010c DB68     		ldr	r3, [r3, #12]
+ 327 010e 5B0E     		lsrs	r3, r3, #25
+ 328 0110 03F00303 		and	r3, r3, #3
+ 329 0114 0133     		adds	r3, r3, #1
+ 330 0116 5B00     		lsls	r3, r3, #1
+ 331 0118 BB60     		str	r3, [r7, #8]
+ 326:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****       SystemCoreClock = pllvco/pllr;
+ 332              		.loc 1 326 0
+ 333 011a 3A69     		ldr	r2, [r7, #16]
+ 334 011c BB68     		ldr	r3, [r7, #8]
+ 335 011e B2FBF3F3 		udiv	r3, r2, r3
+ 336 0122 104A     		ldr	r2, .L19+8
+ 337 0124 1360     		str	r3, [r2]
+ 327:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****       break;
+ 338              		.loc 1 327 0
+ 339 0126 03E0     		b	.L13
+ 340              	.L7:
+ 328:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** 
+ 329:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****     default:
+ 330:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****       SystemCoreClock = msirange;
+ 341              		.loc 1 330 0
+ 342 0128 0E4A     		ldr	r2, .L19+8
+ 343 012a 7B69     		ldr	r3, [r7, #20]
+ 344 012c 1360     		str	r3, [r2]
+ 331:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****       break;
+ 345              		.loc 1 331 0
+ 346 012e 00BF     		nop
+ 347              	.L13:
+ 332:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   }
+ 333:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   /* Compute HCLK clock frequency --------------------------------------------*/
+ 334:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   /* Get HCLK prescaler */
+ 335:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   tmp = AHBPrescTable[((RCC->CFGR & RCC_CFGR_HPRE) >> 4U)];
+ 348              		.loc 1 335 0
+ 349 0130 0A4B     		ldr	r3, .L19
+ 350 0132 9B68     		ldr	r3, [r3, #8]
+ 351 0134 1B09     		lsrs	r3, r3, #4
+ 352 0136 03F00F03 		and	r3, r3, #15
+ 353 013a 0D4A     		ldr	r2, .L19+20
+ 354 013c D35C     		ldrb	r3, [r2, r3]	@ zero_extendqisi2
+ 355 013e FB60     		str	r3, [r7, #12]
+ 336:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   /* HCLK clock frequency */
+ 337:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c ****   SystemCoreClock >>= tmp;
+ 356              		.loc 1 337 0
+ 357 0140 084B     		ldr	r3, .L19+8
+ 358 0142 1A68     		ldr	r2, [r3]
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc8DXBG0.s 			page 13
+
+
+ 359 0144 FB68     		ldr	r3, [r7, #12]
+ 360 0146 22FA03F3 		lsr	r3, r2, r3
+ 361 014a 064A     		ldr	r2, .L19+8
+ 362 014c 1360     		str	r3, [r2]
+ 338:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\system_stm32l4xx.c **** }
+ 363              		.loc 1 338 0
+ 364 014e 00BF     		nop
+ 365 0150 1C37     		adds	r7, r7, #28
+ 366              	.LCFI7:
+ 367              		.cfi_def_cfa_offset 4
+ 368 0152 BD46     		mov	sp, r7
+ 369              	.LCFI8:
+ 370              		.cfi_def_cfa_register 13
+ 371              		@ sp needed
+ 372 0154 5DF8047B 		ldr	r7, [sp], #4
+ 373              	.LCFI9:
+ 374              		.cfi_restore 7
+ 375              		.cfi_def_cfa_offset 0
+ 376 0158 7047     		bx	lr
+ 377              	.L20:
+ 378 015a 00BF     		.align	2
+ 379              	.L19:
+ 380 015c 00100240 		.word	1073876992
+ 381 0160 00000000 		.word	MSIRangeTable
+ 382 0164 00000000 		.word	SystemCoreClock
+ 383 0168 0024F400 		.word	16000000
+ 384 016c 00127A00 		.word	8000000
+ 385 0170 00000000 		.word	AHBPrescTable
+ 386              		.cfi_endproc
+ 387              	.LFE134:
+ 389              		.text
+ 390              	.Letext0:
+ 391              		.file 2 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 392              		.file 3 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 393              		.file 4 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 394              		.file 5 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/system_stm32l4xx.h"
+ 395              		.file 6 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/stm32l431xx.h"
+ 396              		.file 7 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 397              		.file 8 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 398              		.file 9 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 399              		.file 10 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.201807
+ 400              		.file 11 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_typedef.h"
+ 401              		.file 12 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_config.h"
+ 402              		.file 13 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_list.h"
+ 403              		.file 14 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_err.h"
+ 404              		.file 15 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 405              		.file 16 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_tick.h"
+ 406              		.file 17 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_event.h"
+ 407              		.file 18 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_task.h"
+ 408              		.file 19 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/include/los_task.ph"
+ 409              		.file 20 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/main.h"
+ 410              		.file 21 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/stm32l4xx.h"
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc8DXBG0.s 			page 14
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 system_stm32l4xx.c
+C:\Users\user\AppData\Local\Temp\cc8DXBG0.s:22     .data.SystemCoreClock:00000000 SystemCoreClock
+C:\Users\user\AppData\Local\Temp\cc8DXBG0.s:19     .data.SystemCoreClock:00000000 $d
+C:\Users\user\AppData\Local\Temp\cc8DXBG0.s:29     .rodata.AHBPrescTable:00000000 AHBPrescTable
+C:\Users\user\AppData\Local\Temp\cc8DXBG0.s:26     .rodata.AHBPrescTable:00000000 $d
+C:\Users\user\AppData\Local\Temp\cc8DXBG0.s:51     .rodata.APBPrescTable:00000000 APBPrescTable
+C:\Users\user\AppData\Local\Temp\cc8DXBG0.s:48     .rodata.APBPrescTable:00000000 $d
+C:\Users\user\AppData\Local\Temp\cc8DXBG0.s:65     .rodata.MSIRangeTable:00000000 MSIRangeTable
+C:\Users\user\AppData\Local\Temp\cc8DXBG0.s:62     .rodata.MSIRangeTable:00000000 $d
+C:\Users\user\AppData\Local\Temp\cc8DXBG0.s:79     .text.SystemInit:00000000 $t
+C:\Users\user\AppData\Local\Temp\cc8DXBG0.s:86     .text.SystemInit:00000000 SystemInit
+C:\Users\user\AppData\Local\Temp\cc8DXBG0.s:156    .text.SystemInit:00000060 $d
+C:\Users\user\AppData\Local\Temp\cc8DXBG0.s:163    .text.SystemCoreClockUpdate:00000000 $t
+C:\Users\user\AppData\Local\Temp\cc8DXBG0.s:170    .text.SystemCoreClockUpdate:00000000 SystemCoreClockUpdate
+C:\Users\user\AppData\Local\Temp\cc8DXBG0.s:236    .text.SystemCoreClockUpdate:00000064 $d
+C:\Users\user\AppData\Local\Temp\cc8DXBG0.s:249    .text.SystemCoreClockUpdate:00000098 $t
+C:\Users\user\AppData\Local\Temp\cc8DXBG0.s:380    .text.SystemCoreClockUpdate:0000015c $d
+
+NO UNDEFINED SYMBOLS

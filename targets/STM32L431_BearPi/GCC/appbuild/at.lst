@@ -1,0 +1,2554 @@
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"at.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.bss.g_at_cb,"aw",%nobits
+  18              		.align	2
+  21              	g_at_cb:
+  22 0000 00000000 		.space	868
+  22      00000000 
+  22      00000000 
+  22      00000000 
+  22      00000000 
+  23              		.section	.rodata
+  24              		.align	2
+  25              	.LC0:
+  26 0000 4154534E 		.ascii	"ATSND:%d Bytes:%s\012\015\000"
+  26      443A2564 
+  26      20427974 
+  26      65733A25 
+  26      730A0D00 
+  27              		.align	2
+  28              	.LC1:
+  29 0014 4154534E 		.ascii	"ATSND:%d Bytes:\000"
+  29      443A2564 
+  29      20427974 
+  29      65733A00 
+  30              		.align	2
+  31              	.LC2:
+  32 0024 25303278 		.ascii	"%02x \000"
+  32      2000
+  33 002a 0000     		.align	2
+  34              	.LC3:
+  35 002c 0A0D00   		.ascii	"\012\015\000"
+  36              		.section	.text.__cmd_send,"ax",%progbits
+  37              		.align	1
+  38              		.syntax unified
+  39              		.thumb
+  40              		.thumb_func
+  41              		.fpu fpv4-sp-d16
+  43              	__cmd_send:
+  44              	.LFB133:
+  45              		.file 1 "E:/LiteOS/LiteOS_Lab/iot_link/at/at.c"
+   1:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** /*----------------------------------------------------------------------------
+   2:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+   3:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * All rights reserved.
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 2
+
+
+   4:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * are permitted provided that the following conditions are met:
+   6:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * conditions and the following disclaimer.
+   8:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * provided with the distribution.
+  11:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * permission.
+  14:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  *---------------------------------------------------------------------------*/
+  26:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** /*----------------------------------------------------------------------------
+  27:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * Notice of Export Control Law
+  28:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * ===============================================
+  29:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  * applicable export control laws and regulations.
+  33:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  *---------------------------------------------------------------------------*/
+  34:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+  35:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** #include <at.h>
+  36:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** #include <stdlib.h>
+  37:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** #include <string.h>
+  38:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** #include <driver.h>
+  39:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** #include <sys/fcntl.h>
+  40:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** #include <los_base.h>
+  41:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+  42:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** //these defines could be moved to the configuration of the at module
+  43:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** #define cn_at_oob_len          6            //only allow 6 oob command monitor here,you could confi
+  44:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** #define cn_at_resp_maxlen      768           //PROSING THAT COULD GET THE MOST REPSLENGTH
+  45:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+  46:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** //at control block here
+  47:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** struct at_cmd
+  48:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** {
+  49:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     char       *cmd;               //pointed to the at command
+  50:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     int         cmdlen;            //how many bytes of the command for the command may not be strin
+  51:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     const char *index;             //used to check if the frame is the response of the command
+  52:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     char       *respbuf;           //which used to storage the response,supplied by the at command
+  53:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     int         respbuflen;        //index the response buffer length,supplied by the at command
+  54:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     int         respdatalen;       //index how many data in the response buffer, filled by the at e
+  55:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     osal_semp_t      respsync;     //binary semphore, activated by the at engine,if any response ma
+  56:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     osal_semp_t      cmdsync;      //used to make the at command sync, binary sempore, only one at 
+  57:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     osal_mutex_t     cmdlock;      //make the command list atomic
+  58:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** };//the member cmd and cmdlen not used yet,will be used for the debug
+  59:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+  60:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** struct at_oob
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 3
+
+
+  61:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** {
+  62:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     fnoob       func;     //the function that will deal the out of band data
+  63:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     const char *index;    //used to match the out of band data,only compared from the header
+  64:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** };
+  65:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+  66:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** typedef enum
+  67:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** {
+  68:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     en_at_debug_none = 0,
+  69:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     en_at_debug_ascii,
+  70:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     en_at_debug_hex,
+  71:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** }enRxTxDebugMode;        //FUNCTION USED TO CONTROL THE DEBUG MODE
+  72:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+  73:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+  74:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** struct at_cb
+  75:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** {
+  76:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     const char             *devname;  //we use the device frame work to do this
+  77:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     los_dev_t               devhandle;//the device handle used 
+  78:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+  79:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     fnoob                   funcpass; //the member function to deal the passby data
+  80:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     struct at_cmd           cmd;      //the at command,only one command could be excuted
+  81:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     struct at_oob           oob[cn_at_oob_len];        //storage the out of band dealer
+  82:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     char                    rcvbuf[cn_at_resp_maxlen]; //used storage one frame,read from the at ch
+  83:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     unsigned int            passmode:1;                //if zero, then use the at mode,else use the
+  84:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     unsigned int            rxdebugmode:2;             //receive debug mode
+  85:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     unsigned int            txdebugmode:2;             //send debug mode
+  86:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** };
+  87:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** static struct at_cb g_at_cb;   //this is the at controller here
+  88:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+  89:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** //this function used to send the data to the AT channel
+  90:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** static int __cmd_send(char *buf,int buflen,int timeout)
+  91:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** {
+  46              		.loc 1 91 0
+  47              		.cfi_startproc
+  48              		@ args = 0, pretend = 0, frame = 32
+  49              		@ frame_needed = 1, uses_anonymous_args = 0
+  50 0000 80B5     		push	{r7, lr}
+  51              	.LCFI0:
+  52              		.cfi_def_cfa_offset 8
+  53              		.cfi_offset 7, -8
+  54              		.cfi_offset 14, -4
+  55 0002 8AB0     		sub	sp, sp, #40
+  56              	.LCFI1:
+  57              		.cfi_def_cfa_offset 48
+  58 0004 02AF     		add	r7, sp, #8
+  59              	.LCFI2:
+  60              		.cfi_def_cfa 7, 40
+  61 0006 F860     		str	r0, [r7, #12]
+  62 0008 B960     		str	r1, [r7, #8]
+  63 000a 7A60     		str	r2, [r7, #4]
+  92:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     int i = 0;
+  64              		.loc 1 92 0
+  65 000c 0023     		movs	r3, #0
+  66 000e FB61     		str	r3, [r7, #28]
+  93:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     int ret = 0;
+  67              		.loc 1 93 0
+  68 0010 0023     		movs	r3, #0
+  69 0012 BB61     		str	r3, [r7, #24]
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 4
+
+
+  94:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     int debugmode;
+  95:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     ret = los_dev_write(g_at_cb.devhandle,0,buf,buflen,timeout);
+  70              		.loc 1 95 0
+  71 0014 1F4B     		ldr	r3, .L10
+  72 0016 5868     		ldr	r0, [r3, #4]
+  73 0018 7B68     		ldr	r3, [r7, #4]
+  74 001a 0093     		str	r3, [sp]
+  75 001c BB68     		ldr	r3, [r7, #8]
+  76 001e FA68     		ldr	r2, [r7, #12]
+  77 0020 0021     		movs	r1, #0
+  78 0022 FFF7FEFF 		bl	los_dev_write
+  79 0026 B861     		str	r0, [r7, #24]
+  96:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     if(ret > 0)
+  80              		.loc 1 96 0
+  81 0028 BB69     		ldr	r3, [r7, #24]
+  82 002a 002B     		cmp	r3, #0
+  83 002c 2CDD     		ble	.L9
+  97:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+  98:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         debugmode = g_at_cb.txdebugmode;
+  84              		.loc 1 98 0
+  85 002e 194B     		ldr	r3, .L10
+  86 0030 93F86033 		ldrb	r3, [r3, #864]
+  87 0034 C3F3C103 		ubfx	r3, r3, #3, #2
+  88 0038 DBB2     		uxtb	r3, r3
+  89 003a 7B61     		str	r3, [r7, #20]
+  99:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         switch (debugmode)
+  90              		.loc 1 99 0
+  91 003c 7B69     		ldr	r3, [r7, #20]
+  92 003e 012B     		cmp	r3, #1
+  93 0040 02D0     		beq	.L4
+  94 0042 022B     		cmp	r3, #2
+  95 0044 06D0     		beq	.L5
+ 100:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         {
+ 101:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             case en_at_debug_ascii:
+ 102:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 printf("ATSND:%d Bytes:%s\n\r",ret,(char *)buf);
+ 103:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 break;
+ 104:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             case en_at_debug_hex:
+ 105:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 printf("ATSND:%d Bytes:",ret);
+ 106:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 for(i =0;i<ret;i++)
+ 107:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 {
+ 108:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                     printf("%02x ",buf[i]);
+ 109:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 }
+ 110:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 printf("\n\r");
+ 111:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 break;
+ 112:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             default:
+ 113:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 break;
+  96              		.loc 1 113 0
+  97 0046 20E0     		b	.L2
+  98              	.L4:
+ 102:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 break;
+  99              		.loc 1 102 0
+ 100 0048 FA68     		ldr	r2, [r7, #12]
+ 101 004a B969     		ldr	r1, [r7, #24]
+ 102 004c 1248     		ldr	r0, .L10+4
+ 103 004e FFF7FEFF 		bl	printf
+ 103:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             case en_at_debug_hex:
+ 104              		.loc 1 103 0
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 5
+
+
+ 105 0052 1AE0     		b	.L2
+ 106              	.L5:
+ 105:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 for(i =0;i<ret;i++)
+ 107              		.loc 1 105 0
+ 108 0054 B969     		ldr	r1, [r7, #24]
+ 109 0056 1148     		ldr	r0, .L10+8
+ 110 0058 FFF7FEFF 		bl	printf
+ 106:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 {
+ 111              		.loc 1 106 0
+ 112 005c 0023     		movs	r3, #0
+ 113 005e FB61     		str	r3, [r7, #28]
+ 114 0060 0AE0     		b	.L6
+ 115              	.L7:
+ 108:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 }
+ 116              		.loc 1 108 0 discriminator 3
+ 117 0062 FB69     		ldr	r3, [r7, #28]
+ 118 0064 FA68     		ldr	r2, [r7, #12]
+ 119 0066 1344     		add	r3, r3, r2
+ 120 0068 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 121 006a 1946     		mov	r1, r3
+ 122 006c 0C48     		ldr	r0, .L10+12
+ 123 006e FFF7FEFF 		bl	printf
+ 106:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 {
+ 124              		.loc 1 106 0 discriminator 3
+ 125 0072 FB69     		ldr	r3, [r7, #28]
+ 126 0074 0133     		adds	r3, r3, #1
+ 127 0076 FB61     		str	r3, [r7, #28]
+ 128              	.L6:
+ 106:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 {
+ 129              		.loc 1 106 0 is_stmt 0 discriminator 1
+ 130 0078 FA69     		ldr	r2, [r7, #28]
+ 131 007a BB69     		ldr	r3, [r7, #24]
+ 132 007c 9A42     		cmp	r2, r3
+ 133 007e F0DB     		blt	.L7
+ 110:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 break;
+ 134              		.loc 1 110 0 is_stmt 1
+ 135 0080 0848     		ldr	r0, .L10+16
+ 136 0082 FFF7FEFF 		bl	printf
+ 111:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             default:
+ 137              		.loc 1 111 0
+ 138 0086 00E0     		b	.L2
+ 139              	.L9:
+ 114:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         }
+ 115:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }    
+ 140              		.loc 1 115 0
+ 141 0088 00BF     		nop
+ 142              	.L2:
+ 116:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     return ret;
+ 143              		.loc 1 116 0
+ 144 008a BB69     		ldr	r3, [r7, #24]
+ 117:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** }
+ 145              		.loc 1 117 0
+ 146 008c 1846     		mov	r0, r3
+ 147 008e 2037     		adds	r7, r7, #32
+ 148              	.LCFI3:
+ 149              		.cfi_def_cfa_offset 8
+ 150 0090 BD46     		mov	sp, r7
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 6
+
+
+ 151              	.LCFI4:
+ 152              		.cfi_def_cfa_register 13
+ 153              		@ sp needed
+ 154 0092 80BD     		pop	{r7, pc}
+ 155              	.L11:
+ 156              		.align	2
+ 157              	.L10:
+ 158 0094 00000000 		.word	g_at_cb
+ 159 0098 00000000 		.word	.LC0
+ 160 009c 14000000 		.word	.LC1
+ 161 00a0 24000000 		.word	.LC2
+ 162 00a4 2C000000 		.word	.LC3
+ 163              		.cfi_endproc
+ 164              	.LFE133:
+ 166              		.section	.rodata
+ 167 002f 00       		.align	2
+ 168              	.LC4:
+ 169 0030 41545243 		.ascii	"ATRCV:%d Bytes:%s\012\015\000"
+ 169      563A2564 
+ 169      20427974 
+ 169      65733A25 
+ 169      730A0D00 
+ 170              		.align	2
+ 171              	.LC5:
+ 172 0044 41545243 		.ascii	"ATRCV:%d Bytes:\000"
+ 172      563A2564 
+ 172      20427974 
+ 172      65733A00 
+ 173              		.section	.text.__resp_rcv,"ax",%progbits
+ 174              		.align	1
+ 175              		.syntax unified
+ 176              		.thumb
+ 177              		.thumb_func
+ 178              		.fpu fpv4-sp-d16
+ 180              	__resp_rcv:
+ 181              	.LFB134:
+ 118:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 119:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** //this function used to receive data from the AT channel
+ 120:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** static int __resp_rcv(char *buf,int buflen,int timeout)
+ 121:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** {
+ 182              		.loc 1 121 0
+ 183              		.cfi_startproc
+ 184              		@ args = 0, pretend = 0, frame = 32
+ 185              		@ frame_needed = 1, uses_anonymous_args = 0
+ 186 0000 80B5     		push	{r7, lr}
+ 187              	.LCFI5:
+ 188              		.cfi_def_cfa_offset 8
+ 189              		.cfi_offset 7, -8
+ 190              		.cfi_offset 14, -4
+ 191 0002 8AB0     		sub	sp, sp, #40
+ 192              	.LCFI6:
+ 193              		.cfi_def_cfa_offset 48
+ 194 0004 02AF     		add	r7, sp, #8
+ 195              	.LCFI7:
+ 196              		.cfi_def_cfa 7, 40
+ 197 0006 F860     		str	r0, [r7, #12]
+ 198 0008 B960     		str	r1, [r7, #8]
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 7
+
+
+ 199 000a 7A60     		str	r2, [r7, #4]
+ 122:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     int i = 0;
+ 200              		.loc 1 122 0
+ 201 000c 0023     		movs	r3, #0
+ 202 000e FB61     		str	r3, [r7, #28]
+ 123:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     int ret = 0;
+ 203              		.loc 1 123 0
+ 204 0010 0023     		movs	r3, #0
+ 205 0012 BB61     		str	r3, [r7, #24]
+ 124:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     int debugmode;
+ 125:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     
+ 126:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     ret = los_dev_read(g_at_cb.devhandle,0,buf,buflen,timeout);
+ 206              		.loc 1 126 0
+ 207 0014 1F4B     		ldr	r3, .L21
+ 208 0016 5868     		ldr	r0, [r3, #4]
+ 209 0018 7B68     		ldr	r3, [r7, #4]
+ 210 001a 0093     		str	r3, [sp]
+ 211 001c BB68     		ldr	r3, [r7, #8]
+ 212 001e FA68     		ldr	r2, [r7, #12]
+ 213 0020 0021     		movs	r1, #0
+ 214 0022 FFF7FEFF 		bl	los_dev_read
+ 215 0026 B861     		str	r0, [r7, #24]
+ 127:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     if(ret > 0)
+ 216              		.loc 1 127 0
+ 217 0028 BB69     		ldr	r3, [r7, #24]
+ 218 002a 002B     		cmp	r3, #0
+ 219 002c 2CDD     		ble	.L20
+ 128:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 129:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         debugmode = g_at_cb.rxdebugmode;
+ 220              		.loc 1 129 0
+ 221 002e 194B     		ldr	r3, .L21
+ 222 0030 93F86033 		ldrb	r3, [r3, #864]
+ 223 0034 C3F34103 		ubfx	r3, r3, #1, #2
+ 224 0038 DBB2     		uxtb	r3, r3
+ 225 003a 7B61     		str	r3, [r7, #20]
+ 130:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         switch (debugmode)
+ 226              		.loc 1 130 0
+ 227 003c 7B69     		ldr	r3, [r7, #20]
+ 228 003e 012B     		cmp	r3, #1
+ 229 0040 02D0     		beq	.L15
+ 230 0042 022B     		cmp	r3, #2
+ 231 0044 06D0     		beq	.L16
+ 131:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         {
+ 132:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             case en_at_debug_ascii:
+ 133:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 printf("ATRCV:%d Bytes:%s\n\r",ret,(char *)buf);
+ 134:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 break;
+ 135:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             case en_at_debug_hex:
+ 136:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 printf("ATRCV:%d Bytes:",ret);
+ 137:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 for(i =0;i<ret;i++)
+ 138:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 {
+ 139:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                     printf("%02x ",buf[i]);
+ 140:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 }
+ 141:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 printf("\n\r");
+ 142:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 break;
+ 143:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             default:
+ 144:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 break;
+ 232              		.loc 1 144 0
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 8
+
+
+ 233 0046 20E0     		b	.L13
+ 234              	.L15:
+ 133:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 break;
+ 235              		.loc 1 133 0
+ 236 0048 FA68     		ldr	r2, [r7, #12]
+ 237 004a B969     		ldr	r1, [r7, #24]
+ 238 004c 1248     		ldr	r0, .L21+4
+ 239 004e FFF7FEFF 		bl	printf
+ 134:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             case en_at_debug_hex:
+ 240              		.loc 1 134 0
+ 241 0052 1AE0     		b	.L13
+ 242              	.L16:
+ 136:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 for(i =0;i<ret;i++)
+ 243              		.loc 1 136 0
+ 244 0054 B969     		ldr	r1, [r7, #24]
+ 245 0056 1148     		ldr	r0, .L21+8
+ 246 0058 FFF7FEFF 		bl	printf
+ 137:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 {
+ 247              		.loc 1 137 0
+ 248 005c 0023     		movs	r3, #0
+ 249 005e FB61     		str	r3, [r7, #28]
+ 250 0060 0AE0     		b	.L17
+ 251              	.L18:
+ 139:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 }
+ 252              		.loc 1 139 0 discriminator 3
+ 253 0062 FB69     		ldr	r3, [r7, #28]
+ 254 0064 FA68     		ldr	r2, [r7, #12]
+ 255 0066 1344     		add	r3, r3, r2
+ 256 0068 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 257 006a 1946     		mov	r1, r3
+ 258 006c 0C48     		ldr	r0, .L21+12
+ 259 006e FFF7FEFF 		bl	printf
+ 137:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 {
+ 260              		.loc 1 137 0 discriminator 3
+ 261 0072 FB69     		ldr	r3, [r7, #28]
+ 262 0074 0133     		adds	r3, r3, #1
+ 263 0076 FB61     		str	r3, [r7, #28]
+ 264              	.L17:
+ 137:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 {
+ 265              		.loc 1 137 0 is_stmt 0 discriminator 1
+ 266 0078 FA69     		ldr	r2, [r7, #28]
+ 267 007a BB69     		ldr	r3, [r7, #24]
+ 268 007c 9A42     		cmp	r2, r3
+ 269 007e F0DB     		blt	.L18
+ 141:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 break;
+ 270              		.loc 1 141 0 is_stmt 1
+ 271 0080 0848     		ldr	r0, .L21+16
+ 272 0082 FFF7FEFF 		bl	printf
+ 142:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             default:
+ 273              		.loc 1 142 0
+ 274 0086 00E0     		b	.L13
+ 275              	.L20:
+ 145:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         }
+ 146:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }  
+ 276              		.loc 1 146 0
+ 277 0088 00BF     		nop
+ 278              	.L13:
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 9
+
+
+ 147:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****  
+ 148:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     return ret;
+ 279              		.loc 1 148 0
+ 280 008a BB69     		ldr	r3, [r7, #24]
+ 149:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** }
+ 281              		.loc 1 149 0
+ 282 008c 1846     		mov	r0, r3
+ 283 008e 2037     		adds	r7, r7, #32
+ 284              	.LCFI8:
+ 285              		.cfi_def_cfa_offset 8
+ 286 0090 BD46     		mov	sp, r7
+ 287              	.LCFI9:
+ 288              		.cfi_def_cfa_register 13
+ 289              		@ sp needed
+ 290 0092 80BD     		pop	{r7, pc}
+ 291              	.L22:
+ 292              		.align	2
+ 293              	.L21:
+ 294 0094 00000000 		.word	g_at_cb
+ 295 0098 30000000 		.word	.LC4
+ 296 009c 44000000 		.word	.LC5
+ 297 00a0 24000000 		.word	.LC2
+ 298 00a4 2C000000 		.word	.LC3
+ 299              		.cfi_endproc
+ 300              	.LFE134:
+ 302              		.section	.text.__cmd_create,"ax",%progbits
+ 303              		.align	1
+ 304              		.syntax unified
+ 305              		.thumb
+ 306              		.thumb_func
+ 307              		.fpu fpv4-sp-d16
+ 309              	__cmd_create:
+ 310              	.LFB135:
+ 150:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 151:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** //create a command
+ 152:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** static bool_t  __cmd_create(char *cmdbuf,int cmdlen,const char *index,char *respbuf,int respbuflen,
+ 153:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** {
+ 311              		.loc 1 153 0
+ 312              		.cfi_startproc
+ 313              		@ args = 8, pretend = 0, frame = 24
+ 314              		@ frame_needed = 1, uses_anonymous_args = 0
+ 315 0000 80B5     		push	{r7, lr}
+ 316              	.LCFI10:
+ 317              		.cfi_def_cfa_offset 8
+ 318              		.cfi_offset 7, -8
+ 319              		.cfi_offset 14, -4
+ 320 0002 86B0     		sub	sp, sp, #24
+ 321              	.LCFI11:
+ 322              		.cfi_def_cfa_offset 32
+ 323 0004 00AF     		add	r7, sp, #0
+ 324              	.LCFI12:
+ 325              		.cfi_def_cfa_register 7
+ 326 0006 F860     		str	r0, [r7, #12]
+ 327 0008 B960     		str	r1, [r7, #8]
+ 328 000a 7A60     		str	r2, [r7, #4]
+ 329 000c 3B60     		str	r3, [r7]
+ 154:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     bool_t  ret = false;
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 10
+
+
+ 330              		.loc 1 154 0
+ 331 000e 0023     		movs	r3, #0
+ 332 0010 7B61     		str	r3, [r7, #20]
+ 155:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     struct at_cmd *cmd;
+ 156:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 157:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     cmd = &g_at_cb.cmd;
+ 333              		.loc 1 157 0
+ 334 0012 1A4B     		ldr	r3, .L27
+ 335 0014 3B61     		str	r3, [r7, #16]
+ 158:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     if(osal_semp_pend(cmd->cmdsync,timeout))
+ 336              		.loc 1 158 0
+ 337 0016 3B69     		ldr	r3, [r7, #16]
+ 338 0018 DB69     		ldr	r3, [r3, #28]
+ 339 001a 7A6A     		ldr	r2, [r7, #36]
+ 340 001c 1146     		mov	r1, r2
+ 341 001e 1846     		mov	r0, r3
+ 342 0020 FFF7FEFF 		bl	osal_semp_pend
+ 343 0024 0346     		mov	r3, r0
+ 344 0026 002B     		cmp	r3, #0
+ 345 0028 23D0     		beq	.L24
+ 159:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 160:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         if(osal_mutex_lock(cmd->cmdlock))
+ 346              		.loc 1 160 0
+ 347 002a 3B69     		ldr	r3, [r7, #16]
+ 348 002c 1B6A     		ldr	r3, [r3, #32]
+ 349 002e 1846     		mov	r0, r3
+ 350 0030 FFF7FEFF 		bl	osal_mutex_lock
+ 351 0034 0346     		mov	r3, r0
+ 352 0036 002B     		cmp	r3, #0
+ 353 0038 19D0     		beq	.L25
+ 161:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         {
+ 162:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             cmd->cmd = cmdbuf;
+ 354              		.loc 1 162 0
+ 355 003a 3B69     		ldr	r3, [r7, #16]
+ 356 003c FA68     		ldr	r2, [r7, #12]
+ 357 003e 1A60     		str	r2, [r3]
+ 163:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             cmd->cmdlen = cmdlen;
+ 358              		.loc 1 163 0
+ 359 0040 3B69     		ldr	r3, [r7, #16]
+ 360 0042 BA68     		ldr	r2, [r7, #8]
+ 361 0044 5A60     		str	r2, [r3, #4]
+ 164:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             cmd->index = index;
+ 362              		.loc 1 164 0
+ 363 0046 3B69     		ldr	r3, [r7, #16]
+ 364 0048 7A68     		ldr	r2, [r7, #4]
+ 365 004a 9A60     		str	r2, [r3, #8]
+ 165:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             cmd->respbuf = respbuf;
+ 366              		.loc 1 165 0
+ 367 004c 3B69     		ldr	r3, [r7, #16]
+ 368 004e 3A68     		ldr	r2, [r7]
+ 369 0050 DA60     		str	r2, [r3, #12]
+ 166:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             cmd->respbuflen = respbuflen;
+ 370              		.loc 1 166 0
+ 371 0052 3B69     		ldr	r3, [r7, #16]
+ 372 0054 3A6A     		ldr	r2, [r7, #32]
+ 373 0056 1A61     		str	r2, [r3, #16]
+ 167:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             osal_semp_pend(cmd->respsync,0); //used to clear the sync
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 11
+
+
+ 374              		.loc 1 167 0
+ 375 0058 3B69     		ldr	r3, [r7, #16]
+ 376 005a 9B69     		ldr	r3, [r3, #24]
+ 377 005c 0021     		movs	r1, #0
+ 378 005e 1846     		mov	r0, r3
+ 379 0060 FFF7FEFF 		bl	osal_semp_pend
+ 168:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             osal_mutex_unlock(cmd->cmdlock);
+ 380              		.loc 1 168 0
+ 381 0064 3B69     		ldr	r3, [r7, #16]
+ 382 0066 1B6A     		ldr	r3, [r3, #32]
+ 383 0068 1846     		mov	r0, r3
+ 384 006a FFF7FEFF 		bl	osal_mutex_unlock
+ 385              	.L25:
+ 169:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         }
+ 170:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         ret = true;
+ 386              		.loc 1 170 0
+ 387 006e 0123     		movs	r3, #1
+ 388 0070 7B61     		str	r3, [r7, #20]
+ 389              	.L24:
+ 171:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 172:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     return ret;
+ 390              		.loc 1 172 0
+ 391 0072 7B69     		ldr	r3, [r7, #20]
+ 173:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** }
+ 392              		.loc 1 173 0
+ 393 0074 1846     		mov	r0, r3
+ 394 0076 1837     		adds	r7, r7, #24
+ 395              	.LCFI13:
+ 396              		.cfi_def_cfa_offset 8
+ 397 0078 BD46     		mov	sp, r7
+ 398              	.LCFI14:
+ 399              		.cfi_def_cfa_register 13
+ 400              		@ sp needed
+ 401 007a 80BD     		pop	{r7, pc}
+ 402              	.L28:
+ 403              		.align	2
+ 404              	.L27:
+ 405 007c 0C000000 		.word	g_at_cb+12
+ 406              		.cfi_endproc
+ 407              	.LFE135:
+ 409              		.section	.text.__cmd_clear,"ax",%progbits
+ 410              		.align	1
+ 411              		.syntax unified
+ 412              		.thumb
+ 413              		.thumb_func
+ 414              		.fpu fpv4-sp-d16
+ 416              	__cmd_clear:
+ 417              	.LFB136:
+ 174:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 175:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** //clear the at command here
+ 176:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** static bool_t __cmd_clear(void)
+ 177:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** {
+ 418              		.loc 1 177 0
+ 419              		.cfi_startproc
+ 420              		@ args = 0, pretend = 0, frame = 8
+ 421              		@ frame_needed = 1, uses_anonymous_args = 0
+ 422 0000 80B5     		push	{r7, lr}
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 12
+
+
+ 423              	.LCFI15:
+ 424              		.cfi_def_cfa_offset 8
+ 425              		.cfi_offset 7, -8
+ 426              		.cfi_offset 14, -4
+ 427 0002 82B0     		sub	sp, sp, #8
+ 428              	.LCFI16:
+ 429              		.cfi_def_cfa_offset 16
+ 430 0004 00AF     		add	r7, sp, #0
+ 431              	.LCFI17:
+ 432              		.cfi_def_cfa_register 7
+ 178:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****      struct at_cmd *cmd;
+ 179:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 180:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****      cmd = &g_at_cb.cmd;
+ 433              		.loc 1 180 0
+ 434 0006 154B     		ldr	r3, .L32
+ 435 0008 7B60     		str	r3, [r7, #4]
+ 181:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****      if(osal_mutex_lock(cmd->cmdlock))
+ 436              		.loc 1 181 0
+ 437 000a 7B68     		ldr	r3, [r7, #4]
+ 438 000c 1B6A     		ldr	r3, [r3, #32]
+ 439 000e 1846     		mov	r0, r3
+ 440 0010 FFF7FEFF 		bl	osal_mutex_lock
+ 441 0014 0346     		mov	r3, r0
+ 442 0016 002B     		cmp	r3, #0
+ 443 0018 16D0     		beq	.L30
+ 182:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****      {
+ 183:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         cmd->cmd = NULL;
+ 444              		.loc 1 183 0
+ 445 001a 7B68     		ldr	r3, [r7, #4]
+ 446 001c 0022     		movs	r2, #0
+ 447 001e 1A60     		str	r2, [r3]
+ 184:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         cmd->cmdlen = 0;
+ 448              		.loc 1 184 0
+ 449 0020 7B68     		ldr	r3, [r7, #4]
+ 450 0022 0022     		movs	r2, #0
+ 451 0024 5A60     		str	r2, [r3, #4]
+ 185:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         cmd->index = NULL;
+ 452              		.loc 1 185 0
+ 453 0026 7B68     		ldr	r3, [r7, #4]
+ 454 0028 0022     		movs	r2, #0
+ 455 002a 9A60     		str	r2, [r3, #8]
+ 186:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         cmd->respbuf = NULL;
+ 456              		.loc 1 186 0
+ 457 002c 7B68     		ldr	r3, [r7, #4]
+ 458 002e 0022     		movs	r2, #0
+ 459 0030 DA60     		str	r2, [r3, #12]
+ 187:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         cmd->respbuflen = 0;
+ 460              		.loc 1 187 0
+ 461 0032 7B68     		ldr	r3, [r7, #4]
+ 462 0034 0022     		movs	r2, #0
+ 463 0036 1A61     		str	r2, [r3, #16]
+ 188:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         cmd->respdatalen = 0;
+ 464              		.loc 1 188 0
+ 465 0038 7B68     		ldr	r3, [r7, #4]
+ 466 003a 0022     		movs	r2, #0
+ 467 003c 5A61     		str	r2, [r3, #20]
+ 189:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         osal_mutex_unlock(cmd->cmdlock);
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 13
+
+
+ 468              		.loc 1 189 0
+ 469 003e 7B68     		ldr	r3, [r7, #4]
+ 470 0040 1B6A     		ldr	r3, [r3, #32]
+ 471 0042 1846     		mov	r0, r3
+ 472 0044 FFF7FEFF 		bl	osal_mutex_unlock
+ 473              	.L30:
+ 190:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****      }
+ 191:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****      osal_semp_post(cmd->cmdsync);
+ 474              		.loc 1 191 0
+ 475 0048 7B68     		ldr	r3, [r7, #4]
+ 476 004a DB69     		ldr	r3, [r3, #28]
+ 477 004c 1846     		mov	r0, r3
+ 478 004e FFF7FEFF 		bl	osal_semp_post
+ 192:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****      return true;
+ 479              		.loc 1 192 0
+ 480 0052 0123     		movs	r3, #1
+ 193:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** }
+ 481              		.loc 1 193 0
+ 482 0054 1846     		mov	r0, r3
+ 483 0056 0837     		adds	r7, r7, #8
+ 484              	.LCFI18:
+ 485              		.cfi_def_cfa_offset 8
+ 486 0058 BD46     		mov	sp, r7
+ 487              	.LCFI19:
+ 488              		.cfi_def_cfa_register 13
+ 489              		@ sp needed
+ 490 005a 80BD     		pop	{r7, pc}
+ 491              	.L33:
+ 492              		.align	2
+ 493              	.L32:
+ 494 005c 0C000000 		.word	g_at_cb+12
+ 495              		.cfi_endproc
+ 496              	.LFE136:
+ 498              		.section	.text.__cmd_match,"ax",%progbits
+ 499              		.align	1
+ 500              		.syntax unified
+ 501              		.thumb
+ 502              		.thumb_func
+ 503              		.fpu fpv4-sp-d16
+ 505              	__cmd_match:
+ 506              	.LFB137:
+ 194:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 195:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** //check if the data received is the at command need
+ 196:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** static bool_t  __cmd_match(char *data,int len)
+ 197:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** {
+ 507              		.loc 1 197 0
+ 508              		.cfi_startproc
+ 509              		@ args = 0, pretend = 0, frame = 24
+ 510              		@ frame_needed = 1, uses_anonymous_args = 0
+ 511 0000 80B5     		push	{r7, lr}
+ 512              	.LCFI20:
+ 513              		.cfi_def_cfa_offset 8
+ 514              		.cfi_offset 7, -8
+ 515              		.cfi_offset 14, -4
+ 516 0002 86B0     		sub	sp, sp, #24
+ 517              	.LCFI21:
+ 518              		.cfi_def_cfa_offset 32
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 14
+
+
+ 519 0004 00AF     		add	r7, sp, #0
+ 520              	.LCFI22:
+ 521              		.cfi_def_cfa_register 7
+ 522 0006 7860     		str	r0, [r7, #4]
+ 523 0008 3960     		str	r1, [r7]
+ 198:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     bool_t ret = false;
+ 524              		.loc 1 198 0
+ 525 000a 0023     		movs	r3, #0
+ 526 000c 7B61     		str	r3, [r7, #20]
+ 199:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     int  cpylen;
+ 200:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     struct at_cmd *cmd = NULL;
+ 527              		.loc 1 200 0
+ 528 000e 0023     		movs	r3, #0
+ 529 0010 3B61     		str	r3, [r7, #16]
+ 201:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     
+ 202:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     cmd = &g_at_cb.cmd;
+ 530              		.loc 1 202 0
+ 531 0012 204B     		ldr	r3, .L40
+ 532 0014 3B61     		str	r3, [r7, #16]
+ 203:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     if(osal_mutex_lock(cmd->cmdlock))
+ 533              		.loc 1 203 0
+ 534 0016 3B69     		ldr	r3, [r7, #16]
+ 535 0018 1B6A     		ldr	r3, [r3, #32]
+ 536 001a 1846     		mov	r0, r3
+ 537 001c FFF7FEFF 		bl	osal_mutex_lock
+ 538 0020 0346     		mov	r3, r0
+ 539 0022 002B     		cmp	r3, #0
+ 540 0024 31D0     		beq	.L35
+ 204:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 205:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         if((NULL != cmd->index)&&(NULL != strstr((const char *)data,cmd->index)))
+ 541              		.loc 1 205 0
+ 542 0026 3B69     		ldr	r3, [r7, #16]
+ 543 0028 9B68     		ldr	r3, [r3, #8]
+ 544 002a 002B     		cmp	r3, #0
+ 545 002c 28D0     		beq	.L36
+ 546              		.loc 1 205 0 is_stmt 0 discriminator 1
+ 547 002e 3B69     		ldr	r3, [r7, #16]
+ 548 0030 9B68     		ldr	r3, [r3, #8]
+ 549 0032 1946     		mov	r1, r3
+ 550 0034 7868     		ldr	r0, [r7, #4]
+ 551 0036 FFF7FEFF 		bl	strstr
+ 552 003a 0346     		mov	r3, r0
+ 553 003c 002B     		cmp	r3, #0
+ 554 003e 1FD0     		beq	.L36
+ 206:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         {
+ 207:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             if(NULL != cmd->respbuf)
+ 555              		.loc 1 207 0 is_stmt 1
+ 556 0040 3B69     		ldr	r3, [r7, #16]
+ 557 0042 DB68     		ldr	r3, [r3, #12]
+ 558 0044 002B     		cmp	r3, #0
+ 559 0046 11D0     		beq	.L37
+ 208:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             {
+ 209:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 cpylen = len > cmd->respbuflen?cmd->respbuflen:len;
+ 560              		.loc 1 209 0
+ 561 0048 3B69     		ldr	r3, [r7, #16]
+ 562 004a 1B69     		ldr	r3, [r3, #16]
+ 563 004c 3A68     		ldr	r2, [r7]
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 15
+
+
+ 564 004e 9342     		cmp	r3, r2
+ 565 0050 A8BF     		it	ge
+ 566 0052 1346     		movge	r3, r2
+ 567 0054 FB60     		str	r3, [r7, #12]
+ 210:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 memcpy(cmd->respbuf,data,cpylen);
+ 568              		.loc 1 210 0
+ 569 0056 3B69     		ldr	r3, [r7, #16]
+ 570 0058 DB68     		ldr	r3, [r3, #12]
+ 571 005a FA68     		ldr	r2, [r7, #12]
+ 572 005c 7968     		ldr	r1, [r7, #4]
+ 573 005e 1846     		mov	r0, r3
+ 574 0060 FFF7FEFF 		bl	memcpy
+ 211:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 cmd->respdatalen = cpylen;
+ 575              		.loc 1 211 0
+ 576 0064 3B69     		ldr	r3, [r7, #16]
+ 577 0066 FA68     		ldr	r2, [r7, #12]
+ 578 0068 5A61     		str	r2, [r3, #20]
+ 579 006a 02E0     		b	.L38
+ 580              	.L37:
+ 212:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             }
+ 213:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             else
+ 214:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             {
+ 215:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 cmd->respdatalen = len; //tell the command that how many data has been get
+ 581              		.loc 1 215 0
+ 582 006c 3B69     		ldr	r3, [r7, #16]
+ 583 006e 3A68     		ldr	r2, [r7]
+ 584 0070 5A61     		str	r2, [r3, #20]
+ 585              	.L38:
+ 216:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             }
+ 217:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             osal_semp_post(cmd->respsync);
+ 586              		.loc 1 217 0
+ 587 0072 3B69     		ldr	r3, [r7, #16]
+ 588 0074 9B69     		ldr	r3, [r3, #24]
+ 589 0076 1846     		mov	r0, r3
+ 590 0078 FFF7FEFF 		bl	osal_semp_post
+ 218:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             ret = true;
+ 591              		.loc 1 218 0
+ 592 007c 0123     		movs	r3, #1
+ 593 007e 7B61     		str	r3, [r7, #20]
+ 594              	.L36:
+ 219:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         }
+ 220:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         osal_mutex_unlock(cmd->cmdlock);
+ 595              		.loc 1 220 0
+ 596 0080 3B69     		ldr	r3, [r7, #16]
+ 597 0082 1B6A     		ldr	r3, [r3, #32]
+ 598 0084 1846     		mov	r0, r3
+ 599 0086 FFF7FEFF 		bl	osal_mutex_unlock
+ 600              	.L35:
+ 221:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 222:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     return ret;
+ 601              		.loc 1 222 0
+ 602 008a 7B69     		ldr	r3, [r7, #20]
+ 223:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** }
+ 603              		.loc 1 223 0
+ 604 008c 1846     		mov	r0, r3
+ 605 008e 1837     		adds	r7, r7, #24
+ 606              	.LCFI23:
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 16
+
+
+ 607              		.cfi_def_cfa_offset 8
+ 608 0090 BD46     		mov	sp, r7
+ 609              	.LCFI24:
+ 610              		.cfi_def_cfa_register 13
+ 611              		@ sp needed
+ 612 0092 80BD     		pop	{r7, pc}
+ 613              	.L41:
+ 614              		.align	2
+ 615              	.L40:
+ 616 0094 0C000000 		.word	g_at_cb+12
+ 617              		.cfi_endproc
+ 618              	.LFE137:
+ 620              		.section	.text.__oob_match,"ax",%progbits
+ 621              		.align	1
+ 622              		.syntax unified
+ 623              		.thumb
+ 624              		.thumb_func
+ 625              		.fpu fpv4-sp-d16
+ 627              	__oob_match:
+ 628              	.LFB138:
+ 224:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 225:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** //check if any out of band method could deal the data
+ 226:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** static bool_t  __oob_match(char *data,int len)
+ 227:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** {
+ 629              		.loc 1 227 0
+ 630              		.cfi_startproc
+ 631              		@ args = 0, pretend = 0, frame = 24
+ 632              		@ frame_needed = 1, uses_anonymous_args = 0
+ 633 0000 90B5     		push	{r4, r7, lr}
+ 634              	.LCFI25:
+ 635              		.cfi_def_cfa_offset 12
+ 636              		.cfi_offset 4, -12
+ 637              		.cfi_offset 7, -8
+ 638              		.cfi_offset 14, -4
+ 639 0002 87B0     		sub	sp, sp, #28
+ 640              	.LCFI26:
+ 641              		.cfi_def_cfa_offset 40
+ 642 0004 00AF     		add	r7, sp, #0
+ 643              	.LCFI27:
+ 644              		.cfi_def_cfa_register 7
+ 645 0006 7860     		str	r0, [r7, #4]
+ 646 0008 3960     		str	r1, [r7]
+ 228:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     bool_t ret = false;
+ 647              		.loc 1 228 0
+ 648 000a 0023     		movs	r3, #0
+ 649 000c 7B61     		str	r3, [r7, #20]
+ 229:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     struct at_oob *oob;
+ 230:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     int i = 0;
+ 650              		.loc 1 230 0
+ 651 000e 0023     		movs	r3, #0
+ 652 0010 3B61     		str	r3, [r7, #16]
+ 231:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     for(i =0;i<cn_at_oob_len;i++)
+ 653              		.loc 1 231 0
+ 654 0012 0023     		movs	r3, #0
+ 655 0014 3B61     		str	r3, [r7, #16]
+ 656 0016 28E0     		b	.L43
+ 657              	.L46:
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 17
+
+
+ 232:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 233:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         oob = &g_at_cb.oob[i];
+ 658              		.loc 1 233 0
+ 659 0018 3B69     		ldr	r3, [r7, #16]
+ 660 001a 0633     		adds	r3, r3, #6
+ 661 001c DB00     		lsls	r3, r3, #3
+ 662 001e 174A     		ldr	r2, .L48
+ 663 0020 1344     		add	r3, r3, r2
+ 664 0022 FB60     		str	r3, [r7, #12]
+ 234:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         if((oob->func != NULL)&&(oob->index != NULL)&&\
+ 665              		.loc 1 234 0
+ 666 0024 FB68     		ldr	r3, [r7, #12]
+ 667 0026 1B68     		ldr	r3, [r3]
+ 668 0028 002B     		cmp	r3, #0
+ 669 002a 1BD0     		beq	.L44
+ 670              		.loc 1 234 0 is_stmt 0 discriminator 1
+ 671 002c FB68     		ldr	r3, [r7, #12]
+ 672 002e 5B68     		ldr	r3, [r3, #4]
+ 673 0030 002B     		cmp	r3, #0
+ 674 0032 17D0     		beq	.L44
+ 235:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             (0 == memcmp(oob->index,data,strlen(oob->index))))
+ 675              		.loc 1 235 0 is_stmt 1 discriminator 2
+ 676 0034 FB68     		ldr	r3, [r7, #12]
+ 677 0036 5C68     		ldr	r4, [r3, #4]
+ 678 0038 FB68     		ldr	r3, [r7, #12]
+ 679 003a 5B68     		ldr	r3, [r3, #4]
+ 680 003c 1846     		mov	r0, r3
+ 681 003e FFF7FEFF 		bl	strlen
+ 682 0042 0346     		mov	r3, r0
+ 683 0044 1A46     		mov	r2, r3
+ 684 0046 7968     		ldr	r1, [r7, #4]
+ 685 0048 2046     		mov	r0, r4
+ 686 004a FFF7FEFF 		bl	memcmp
+ 687 004e 0346     		mov	r3, r0
+ 234:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         if((oob->func != NULL)&&(oob->index != NULL)&&\
+ 688              		.loc 1 234 0 discriminator 2
+ 689 0050 002B     		cmp	r3, #0
+ 690 0052 07D1     		bne	.L44
+ 236:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         {
+ 237:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             oob->func(data,len);
+ 691              		.loc 1 237 0
+ 692 0054 FB68     		ldr	r3, [r7, #12]
+ 693 0056 1B68     		ldr	r3, [r3]
+ 694 0058 3968     		ldr	r1, [r7]
+ 695 005a 7868     		ldr	r0, [r7, #4]
+ 696 005c 9847     		blx	r3
+ 697              	.LVL0:
+ 238:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             ret = true;
+ 698              		.loc 1 238 0
+ 699 005e 0123     		movs	r3, #1
+ 700 0060 7B61     		str	r3, [r7, #20]
+ 239:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             break;
+ 701              		.loc 1 239 0
+ 702 0062 05E0     		b	.L45
+ 703              	.L44:
+ 231:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 704              		.loc 1 231 0 discriminator 2
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 18
+
+
+ 705 0064 3B69     		ldr	r3, [r7, #16]
+ 706 0066 0133     		adds	r3, r3, #1
+ 707 0068 3B61     		str	r3, [r7, #16]
+ 708              	.L43:
+ 231:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 709              		.loc 1 231 0 is_stmt 0 discriminator 1
+ 710 006a 3B69     		ldr	r3, [r7, #16]
+ 711 006c 052B     		cmp	r3, #5
+ 712 006e D3DD     		ble	.L46
+ 713              	.L45:
+ 240:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         }
+ 241:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 242:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     return ret;
+ 714              		.loc 1 242 0 is_stmt 1
+ 715 0070 7B69     		ldr	r3, [r7, #20]
+ 243:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** }
+ 716              		.loc 1 243 0
+ 717 0072 1846     		mov	r0, r3
+ 718 0074 1C37     		adds	r7, r7, #28
+ 719              	.LCFI28:
+ 720              		.cfi_def_cfa_offset 12
+ 721 0076 BD46     		mov	sp, r7
+ 722              	.LCFI29:
+ 723              		.cfi_def_cfa_register 13
+ 724              		@ sp needed
+ 725 0078 90BD     		pop	{r4, r7, pc}
+ 726              	.L49:
+ 727 007a 00BF     		.align	2
+ 728              	.L48:
+ 729 007c 00000000 		.word	g_at_cb
+ 730              		.cfi_endproc
+ 731              	.LFE138:
+ 733              		.section	.rodata
+ 734              		.align	2
+ 735              	.LC6:
+ 736 0054 25733A6F 		.ascii	"%s:open %s err\012\015\000"
+ 736      70656E20 
+ 736      25732065 
+ 736      72720A0D 
+ 736      00
+ 737              		.section	.text.__rcv_task_entry,"ax",%progbits
+ 738              		.align	1
+ 739              		.syntax unified
+ 740              		.thumb
+ 741              		.thumb_func
+ 742              		.fpu fpv4-sp-d16
+ 744              	__rcv_task_entry:
+ 745              	.LFB139:
+ 244:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 245:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** /*******************************************************************************
+ 246:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** function     :this is the  at receiver engine
+ 247:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** parameters   :
+ 248:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** instruction  :this task read the device continousely and blocked by the read function
+ 249:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****               if pass by mode, then pass it to the pass function;else will match the 
+ 250:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****               at command, if not then match the out of band
+ 251:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** *******************************************************************************/
+ 252:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** static int __rcv_task_entry(void *args)
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 19
+
+
+ 253:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** {
+ 746              		.loc 1 253 0
+ 747              		.cfi_startproc
+ 748              		@ args = 0, pretend = 0, frame = 16
+ 749              		@ frame_needed = 1, uses_anonymous_args = 0
+ 750 0000 80B5     		push	{r7, lr}
+ 751              	.LCFI30:
+ 752              		.cfi_def_cfa_offset 8
+ 753              		.cfi_offset 7, -8
+ 754              		.cfi_offset 14, -4
+ 755 0002 84B0     		sub	sp, sp, #16
+ 756              	.LCFI31:
+ 757              		.cfi_def_cfa_offset 24
+ 758 0004 00AF     		add	r7, sp, #0
+ 759              	.LCFI32:
+ 760              		.cfi_def_cfa_register 7
+ 761 0006 7860     		str	r0, [r7, #4]
+ 254:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     bool_t matchret;
+ 255:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     int  rcvlen;
+ 256:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     
+ 257:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     g_at_cb.devhandle = los_dev_open(g_at_cb.devname,O_RDWR);
+ 762              		.loc 1 257 0
+ 763 0008 244B     		ldr	r3, .L57
+ 764 000a 1B68     		ldr	r3, [r3]
+ 765 000c 0221     		movs	r1, #2
+ 766 000e 1846     		mov	r0, r3
+ 767 0010 FFF7FEFF 		bl	los_dev_open
+ 768 0014 0246     		mov	r2, r0
+ 769 0016 214B     		ldr	r3, .L57
+ 770 0018 5A60     		str	r2, [r3, #4]
+ 258:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     if(NULL == g_at_cb.devhandle)
+ 771              		.loc 1 258 0
+ 772 001a 204B     		ldr	r3, .L57
+ 773 001c 5B68     		ldr	r3, [r3, #4]
+ 774 001e 002B     		cmp	r3, #0
+ 775 0020 08D1     		bne	.L51
+ 259:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 260:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         printf("%s:open %s err\n\r",__FUNCTION__,g_at_cb.devname);
+ 776              		.loc 1 260 0
+ 777 0022 1E4B     		ldr	r3, .L57
+ 778 0024 1B68     		ldr	r3, [r3]
+ 779 0026 1A46     		mov	r2, r3
+ 780 0028 1D49     		ldr	r1, .L57+4
+ 781 002a 1E48     		ldr	r0, .L57+8
+ 782 002c FFF7FEFF 		bl	printf
+ 261:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         return 0;
+ 783              		.loc 1 261 0
+ 784 0030 0023     		movs	r3, #0
+ 785 0032 2FE0     		b	.L56
+ 786              	.L51:
+ 262:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 263:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     
+ 264:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     while(1)
+ 265:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 266:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         memset(g_at_cb.rcvbuf,0,cn_at_resp_maxlen);
+ 787              		.loc 1 266 0
+ 788 0034 4FF44072 		mov	r2, #768
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 20
+
+
+ 789 0038 0021     		movs	r1, #0
+ 790 003a 1B48     		ldr	r0, .L57+12
+ 791 003c FFF7FEFF 		bl	memset
+ 267:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         rcvlen = __resp_rcv(g_at_cb.rcvbuf,cn_at_resp_maxlen,LOS_WAIT_FOREVER);
+ 792              		.loc 1 267 0
+ 793 0040 4FF0FF32 		mov	r2, #-1
+ 794 0044 4FF44071 		mov	r1, #768
+ 795 0048 1748     		ldr	r0, .L57+12
+ 796 004a FFF7FEFF 		bl	__resp_rcv
+ 797 004e F860     		str	r0, [r7, #12]
+ 268:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         if(rcvlen > 0)
+ 798              		.loc 1 268 0
+ 799 0050 FB68     		ldr	r3, [r7, #12]
+ 800 0052 002B     		cmp	r3, #0
+ 801 0054 EEDD     		ble	.L51
+ 269:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         {
+ 270:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             if(0 == g_at_cb.passmode)
+ 802              		.loc 1 270 0
+ 803 0056 114B     		ldr	r3, .L57
+ 804 0058 93F86033 		ldrb	r3, [r3, #864]	@ zero_extendqisi2
+ 805 005c 03F00103 		and	r3, r3, #1
+ 806 0060 DBB2     		uxtb	r3, r3
+ 807 0062 002B     		cmp	r3, #0
+ 808 0064 0CD1     		bne	.L54
+ 271:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             {
+ 272:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 matchret = __cmd_match(g_at_cb.rcvbuf,rcvlen);
+ 809              		.loc 1 272 0
+ 810 0066 F968     		ldr	r1, [r7, #12]
+ 811 0068 0F48     		ldr	r0, .L57+12
+ 812 006a FFF7FEFF 		bl	__cmd_match
+ 813 006e B860     		str	r0, [r7, #8]
+ 273:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 if(false == matchret)
+ 814              		.loc 1 273 0
+ 815 0070 BB68     		ldr	r3, [r7, #8]
+ 816 0072 002B     		cmp	r3, #0
+ 817 0074 DED1     		bne	.L51
+ 274:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 {
+ 275:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                     __oob_match(g_at_cb.rcvbuf,rcvlen);
+ 818              		.loc 1 275 0
+ 819 0076 F968     		ldr	r1, [r7, #12]
+ 820 0078 0B48     		ldr	r0, .L57+12
+ 821 007a FFF7FEFF 		bl	__oob_match
+ 822 007e D9E7     		b	.L51
+ 823              	.L54:
+ 276:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 }
+ 277:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             }
+ 278:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             else
+ 279:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             {
+ 280:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 if(NULL != g_at_cb.funcpass)
+ 824              		.loc 1 280 0
+ 825 0080 064B     		ldr	r3, .L57
+ 826 0082 9B68     		ldr	r3, [r3, #8]
+ 827 0084 002B     		cmp	r3, #0
+ 828 0086 D5D0     		beq	.L51
+ 281:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 {
+ 282:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                     g_at_cb.funcpass(g_at_cb.rcvbuf,rcvlen);
+ 829              		.loc 1 282 0
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 21
+
+
+ 830 0088 044B     		ldr	r3, .L57
+ 831 008a 9B68     		ldr	r3, [r3, #8]
+ 832 008c F968     		ldr	r1, [r7, #12]
+ 833 008e 0648     		ldr	r0, .L57+12
+ 834 0090 9847     		blx	r3
+ 835              	.LVL1:
+ 266:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         rcvlen = __resp_rcv(g_at_cb.rcvbuf,cn_at_resp_maxlen,LOS_WAIT_FOREVER);
+ 836              		.loc 1 266 0
+ 837 0092 CFE7     		b	.L51
+ 838              	.L56:
+ 283:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 }
+ 284:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             }
+ 285:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         }
+ 286:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }    
+ 287:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** }
+ 839              		.loc 1 287 0 discriminator 1
+ 840 0094 1846     		mov	r0, r3
+ 841 0096 1037     		adds	r7, r7, #16
+ 842              	.LCFI33:
+ 843              		.cfi_def_cfa_offset 8
+ 844 0098 BD46     		mov	sp, r7
+ 845              	.LCFI34:
+ 846              		.cfi_def_cfa_register 13
+ 847              		@ sp needed
+ 848 009a 80BD     		pop	{r7, pc}
+ 849              	.L58:
+ 850              		.align	2
+ 851              	.L57:
+ 852 009c 00000000 		.word	g_at_cb
+ 853 00a0 00000000 		.word	__FUNCTION__.10664
+ 854 00a4 54000000 		.word	.LC6
+ 855 00a8 60000000 		.word	g_at_cb+96
+ 856              		.cfi_endproc
+ 857              	.LFE139:
+ 859              		.section	.text.at_workmode,"ax",%progbits
+ 860              		.align	1
+ 861              		.global	at_workmode
+ 862              		.syntax unified
+ 863              		.thumb
+ 864              		.thumb_func
+ 865              		.fpu fpv4-sp-d16
+ 867              	at_workmode:
+ 868              	.LFB140:
+ 288:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 289:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** /*******************************************************************************
+ 290:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** function     :use this function make the at frame work as a pass mode, like the ppp
+ 291:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** parameters   :passby:if true, then the at module will work in pass by mode, else at mode
+ 292:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****               func:if in bypass mode, then it will use this function to deal all the received data
+ 293:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** instruction  :
+ 294:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** *******************************************************************************/
+ 295:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** bool_t at_workmode(bool_t passby,fnoob func)
+ 296:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** {
+ 869              		.loc 1 296 0
+ 870              		.cfi_startproc
+ 871              		@ args = 0, pretend = 0, frame = 8
+ 872              		@ frame_needed = 1, uses_anonymous_args = 0
+ 873              		@ link register save eliminated.
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 22
+
+
+ 874 0000 80B4     		push	{r7}
+ 875              	.LCFI35:
+ 876              		.cfi_def_cfa_offset 4
+ 877              		.cfi_offset 7, -4
+ 878 0002 83B0     		sub	sp, sp, #12
+ 879              	.LCFI36:
+ 880              		.cfi_def_cfa_offset 16
+ 881 0004 00AF     		add	r7, sp, #0
+ 882              	.LCFI37:
+ 883              		.cfi_def_cfa_register 7
+ 884 0006 7860     		str	r0, [r7, #4]
+ 885 0008 3960     		str	r1, [r7]
+ 297:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     if(passby)
+ 886              		.loc 1 297 0
+ 887 000a 7B68     		ldr	r3, [r7, #4]
+ 888 000c 002B     		cmp	r3, #0
+ 889 000e 0AD0     		beq	.L60
+ 298:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 299:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         g_at_cb.passmode = 1;
+ 890              		.loc 1 299 0
+ 891 0010 0D4A     		ldr	r2, .L63
+ 892 0012 92F86033 		ldrb	r3, [r2, #864]
+ 893 0016 43F00103 		orr	r3, r3, #1
+ 894 001a 82F86033 		strb	r3, [r2, #864]
+ 300:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         g_at_cb.funcpass = func;
+ 895              		.loc 1 300 0
+ 896 001e 0A4A     		ldr	r2, .L63
+ 897 0020 3B68     		ldr	r3, [r7]
+ 898 0022 9360     		str	r3, [r2, #8]
+ 899 0024 09E0     		b	.L61
+ 900              	.L60:
+ 301:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 302:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     else
+ 303:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 304:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         g_at_cb.passmode = 0;
+ 901              		.loc 1 304 0
+ 902 0026 084A     		ldr	r2, .L63
+ 903 0028 92F86033 		ldrb	r3, [r2, #864]
+ 904 002c 6FF30003 		bfc	r3, #0, #1
+ 905 0030 82F86033 		strb	r3, [r2, #864]
+ 305:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         g_at_cb.funcpass = NULL;
+ 906              		.loc 1 305 0
+ 907 0034 044B     		ldr	r3, .L63
+ 908 0036 0022     		movs	r2, #0
+ 909 0038 9A60     		str	r2, [r3, #8]
+ 910              	.L61:
+ 306:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 307:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     
+ 308:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     return true;
+ 911              		.loc 1 308 0
+ 912 003a 0123     		movs	r3, #1
+ 309:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** }
+ 913              		.loc 1 309 0
+ 914 003c 1846     		mov	r0, r3
+ 915 003e 0C37     		adds	r7, r7, #12
+ 916              	.LCFI38:
+ 917              		.cfi_def_cfa_offset 4
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 23
+
+
+ 918 0040 BD46     		mov	sp, r7
+ 919              	.LCFI39:
+ 920              		.cfi_def_cfa_register 13
+ 921              		@ sp needed
+ 922 0042 5DF8047B 		ldr	r7, [sp], #4
+ 923              	.LCFI40:
+ 924              		.cfi_restore 7
+ 925              		.cfi_def_cfa_offset 0
+ 926 0046 7047     		bx	lr
+ 927              	.L64:
+ 928              		.align	2
+ 929              	.L63:
+ 930 0048 00000000 		.word	g_at_cb
+ 931              		.cfi_endproc
+ 932              	.LFE140:
+ 934              		.section	.text.at_command,"ax",%progbits
+ 935              		.align	1
+ 936              		.global	at_command
+ 937              		.syntax unified
+ 938              		.thumb
+ 939              		.thumb_func
+ 940              		.fpu fpv4-sp-d16
+ 942              	at_command:
+ 943              	.LFB141:
+ 310:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 311:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 312:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 313:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** /*******************************************************************************
+ 314:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** function     :this is our at command here,you could send any command as you wish
+ 315:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** parameters   :
+ 316:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** instruction  :only one command could be dealt at one time, for we use the semphore
+ 317:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****               here do the sync;if the respbuf is not NULL,then we will cpoy the 
+ 318:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****               response data to the respbuf as much as the respbuflen permit
+ 319:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** *******************************************************************************/
+ 320:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** int  at_command(char *cmd,int cmdlen,const char *index,char *respbuf,\
+ 321:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 		        int respbuflen,int timeout)
+ 322:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** {
+ 944              		.loc 1 322 0
+ 945              		.cfi_startproc
+ 946              		@ args = 8, pretend = 0, frame = 24
+ 947              		@ frame_needed = 1, uses_anonymous_args = 0
+ 948 0000 80B5     		push	{r7, lr}
+ 949              	.LCFI41:
+ 950              		.cfi_def_cfa_offset 8
+ 951              		.cfi_offset 7, -8
+ 952              		.cfi_offset 14, -4
+ 953 0002 88B0     		sub	sp, sp, #32
+ 954              	.LCFI42:
+ 955              		.cfi_def_cfa_offset 40
+ 956 0004 02AF     		add	r7, sp, #8
+ 957              	.LCFI43:
+ 958              		.cfi_def_cfa 7, 32
+ 959 0006 F860     		str	r0, [r7, #12]
+ 960 0008 B960     		str	r1, [r7, #8]
+ 961 000a 7A60     		str	r2, [r7, #4]
+ 962 000c 3B60     		str	r3, [r7]
+ 323:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     int ret = 0;
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 24
+
+
+ 963              		.loc 1 323 0
+ 964 000e 0023     		movs	r3, #0
+ 965 0010 7B61     		str	r3, [r7, #20]
+ 324:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     if((NULL != cmd))//which means no response need
+ 966              		.loc 1 324 0
+ 967 0012 FB68     		ldr	r3, [r7, #12]
+ 968 0014 002B     		cmp	r3, #0
+ 969 0016 29D0     		beq	.L66
+ 325:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 326:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         if(NULL != index)
+ 970              		.loc 1 326 0
+ 971 0018 7B68     		ldr	r3, [r7, #4]
+ 972 001a 002B     		cmp	r3, #0
+ 973 001c 20D0     		beq	.L67
+ 327:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         {
+ 328:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             if(__cmd_create(cmd,cmdlen,index,respbuf,respbuflen,timeout))
+ 974              		.loc 1 328 0
+ 975 001e 7B6A     		ldr	r3, [r7, #36]
+ 976 0020 0193     		str	r3, [sp, #4]
+ 977 0022 3B6A     		ldr	r3, [r7, #32]
+ 978 0024 0093     		str	r3, [sp]
+ 979 0026 3B68     		ldr	r3, [r7]
+ 980 0028 7A68     		ldr	r2, [r7, #4]
+ 981 002a B968     		ldr	r1, [r7, #8]
+ 982 002c F868     		ldr	r0, [r7, #12]
+ 983 002e FFF7FEFF 		bl	__cmd_create
+ 984 0032 0346     		mov	r3, r0
+ 985 0034 002B     		cmp	r3, #0
+ 986 0036 19D0     		beq	.L66
+ 329:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             {
+ 330:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 __cmd_send(cmd,cmdlen,timeout);
+ 987              		.loc 1 330 0
+ 988 0038 7A6A     		ldr	r2, [r7, #36]
+ 989 003a B968     		ldr	r1, [r7, #8]
+ 990 003c F868     		ldr	r0, [r7, #12]
+ 991 003e FFF7FEFF 		bl	__cmd_send
+ 331:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 if(osal_semp_pend(g_at_cb.cmd.respsync,timeout))
+ 992              		.loc 1 331 0
+ 993 0042 0D4B     		ldr	r3, .L71
+ 994 0044 5B6A     		ldr	r3, [r3, #36]
+ 995 0046 796A     		ldr	r1, [r7, #36]
+ 996 0048 1846     		mov	r0, r3
+ 997 004a FFF7FEFF 		bl	osal_semp_pend
+ 998 004e 0346     		mov	r3, r0
+ 999 0050 002B     		cmp	r3, #0
+ 1000 0052 02D0     		beq	.L69
+ 332:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 {
+ 333:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                     ret = g_at_cb.cmd.respdatalen;         
+ 1001              		.loc 1 333 0
+ 1002 0054 084B     		ldr	r3, .L71
+ 1003 0056 1B6A     		ldr	r3, [r3, #32]
+ 1004 0058 7B61     		str	r3, [r7, #20]
+ 1005              	.L69:
+ 334:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 }
+ 335:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****                 __cmd_clear();
+ 1006              		.loc 1 335 0
+ 1007 005a FFF7FEFF 		bl	__cmd_clear
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 25
+
+
+ 1008 005e 05E0     		b	.L66
+ 1009              	.L67:
+ 336:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             }
+ 337:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         }
+ 338:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         else
+ 339:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         {
+ 340:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             ret = __cmd_send(cmd,cmdlen,timeout);
+ 1010              		.loc 1 340 0
+ 1011 0060 7A6A     		ldr	r2, [r7, #36]
+ 1012 0062 B968     		ldr	r1, [r7, #8]
+ 1013 0064 F868     		ldr	r0, [r7, #12]
+ 1014 0066 FFF7FEFF 		bl	__cmd_send
+ 1015 006a 7861     		str	r0, [r7, #20]
+ 1016              	.L66:
+ 341:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         }
+ 342:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 343:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     return ret;
+ 1017              		.loc 1 343 0
+ 1018 006c 7B69     		ldr	r3, [r7, #20]
+ 344:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** }
+ 1019              		.loc 1 344 0
+ 1020 006e 1846     		mov	r0, r3
+ 1021 0070 1837     		adds	r7, r7, #24
+ 1022              	.LCFI44:
+ 1023              		.cfi_def_cfa_offset 8
+ 1024 0072 BD46     		mov	sp, r7
+ 1025              	.LCFI45:
+ 1026              		.cfi_def_cfa_register 13
+ 1027              		@ sp needed
+ 1028 0074 80BD     		pop	{r7, pc}
+ 1029              	.L72:
+ 1030 0076 00BF     		.align	2
+ 1031              	.L71:
+ 1032 0078 00000000 		.word	g_at_cb
+ 1033              		.cfi_endproc
+ 1034              	.LFE141:
+ 1036              		.section	.text.at_oobregister,"ax",%progbits
+ 1037              		.align	1
+ 1038              		.global	at_oobregister
+ 1039              		.syntax unified
+ 1040              		.thumb
+ 1041              		.thumb_func
+ 1042              		.fpu fpv4-sp-d16
+ 1044              	at_oobregister:
+ 1045              	.LFB142:
+ 345:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 346:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** /*******************************************************************************
+ 347:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** function     :you could use this function to register a method to deal the out of band data
+ 348:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** parameters   :
+ 349:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** instruction  :as you know, we only check the frame begin,using memcmp, so you must
+ 350:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****               write the header of the frame as the index
+ 351:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** *******************************************************************************/
+ 352:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** bool_t at_oobregister(fnoob func,const char *index)
+ 353:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** {
+ 1046              		.loc 1 353 0
+ 1047              		.cfi_startproc
+ 1048              		@ args = 0, pretend = 0, frame = 24
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 26
+
+
+ 1049              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1050              		@ link register save eliminated.
+ 1051 0000 80B4     		push	{r7}
+ 1052              	.LCFI46:
+ 1053              		.cfi_def_cfa_offset 4
+ 1054              		.cfi_offset 7, -4
+ 1055 0002 87B0     		sub	sp, sp, #28
+ 1056              	.LCFI47:
+ 1057              		.cfi_def_cfa_offset 32
+ 1058 0004 00AF     		add	r7, sp, #0
+ 1059              	.LCFI48:
+ 1060              		.cfi_def_cfa_register 7
+ 1061 0006 7860     		str	r0, [r7, #4]
+ 1062 0008 3960     		str	r1, [r7]
+ 354:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     bool_t ret = false;
+ 1063              		.loc 1 354 0
+ 1064 000a 0023     		movs	r3, #0
+ 1065 000c 7B61     		str	r3, [r7, #20]
+ 355:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     struct at_oob *oob;
+ 356:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     int i = 0;
+ 1066              		.loc 1 356 0
+ 1067 000e 0023     		movs	r3, #0
+ 1068 0010 3B61     		str	r3, [r7, #16]
+ 357:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 358:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     if((NULL == func)||(NULL == index))
+ 1069              		.loc 1 358 0
+ 1070 0012 7B68     		ldr	r3, [r7, #4]
+ 1071 0014 002B     		cmp	r3, #0
+ 1072 0016 02D0     		beq	.L74
+ 1073              		.loc 1 358 0 is_stmt 0 discriminator 1
+ 1074 0018 3B68     		ldr	r3, [r7]
+ 1075 001a 002B     		cmp	r3, #0
+ 1076 001c 01D1     		bne	.L75
+ 1077              	.L74:
+ 359:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 360:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         return ret;
+ 1078              		.loc 1 360 0 is_stmt 1
+ 1079 001e 7B69     		ldr	r3, [r7, #20]
+ 1080 0020 20E0     		b	.L76
+ 1081              	.L75:
+ 361:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 362:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 363:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     for(i =0;i<cn_at_oob_len;i++)
+ 1082              		.loc 1 363 0
+ 1083 0022 0023     		movs	r3, #0
+ 1084 0024 3B61     		str	r3, [r7, #16]
+ 1085 0026 19E0     		b	.L77
+ 1086              	.L80:
+ 364:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 365:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         oob = &g_at_cb.oob[i];
+ 1087              		.loc 1 365 0
+ 1088 0028 3B69     		ldr	r3, [r7, #16]
+ 1089 002a 0633     		adds	r3, r3, #6
+ 1090 002c DB00     		lsls	r3, r3, #3
+ 1091 002e 104A     		ldr	r2, .L81
+ 1092 0030 1344     		add	r3, r3, r2
+ 1093 0032 FB60     		str	r3, [r7, #12]
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 27
+
+
+ 366:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         if((oob->func == NULL)&&(oob->index == NULL))
+ 1094              		.loc 1 366 0
+ 1095 0034 FB68     		ldr	r3, [r7, #12]
+ 1096 0036 1B68     		ldr	r3, [r3]
+ 1097 0038 002B     		cmp	r3, #0
+ 1098 003a 0CD1     		bne	.L78
+ 1099              		.loc 1 366 0 is_stmt 0 discriminator 1
+ 1100 003c FB68     		ldr	r3, [r7, #12]
+ 1101 003e 5B68     		ldr	r3, [r3, #4]
+ 1102 0040 002B     		cmp	r3, #0
+ 1103 0042 08D1     		bne	.L78
+ 367:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         {
+ 368:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             oob->func = func;
+ 1104              		.loc 1 368 0 is_stmt 1
+ 1105 0044 FB68     		ldr	r3, [r7, #12]
+ 1106 0046 7A68     		ldr	r2, [r7, #4]
+ 1107 0048 1A60     		str	r2, [r3]
+ 369:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             oob->index = index;
+ 1108              		.loc 1 369 0
+ 1109 004a FB68     		ldr	r3, [r7, #12]
+ 1110 004c 3A68     		ldr	r2, [r7]
+ 1111 004e 5A60     		str	r2, [r3, #4]
+ 370:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             ret = true;
+ 1112              		.loc 1 370 0
+ 1113 0050 0123     		movs	r3, #1
+ 1114 0052 7B61     		str	r3, [r7, #20]
+ 371:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****             break;
+ 1115              		.loc 1 371 0
+ 1116 0054 05E0     		b	.L79
+ 1117              	.L78:
+ 363:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 1118              		.loc 1 363 0 discriminator 2
+ 1119 0056 3B69     		ldr	r3, [r7, #16]
+ 1120 0058 0133     		adds	r3, r3, #1
+ 1121 005a 3B61     		str	r3, [r7, #16]
+ 1122              	.L77:
+ 363:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 1123              		.loc 1 363 0 is_stmt 0 discriminator 1
+ 1124 005c 3B69     		ldr	r3, [r7, #16]
+ 1125 005e 052B     		cmp	r3, #5
+ 1126 0060 E2DD     		ble	.L80
+ 1127              	.L79:
+ 372:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         }
+ 373:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 374:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 375:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     return ret;
+ 1128              		.loc 1 375 0 is_stmt 1
+ 1129 0062 7B69     		ldr	r3, [r7, #20]
+ 1130              	.L76:
+ 376:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** }
+ 1131              		.loc 1 376 0
+ 1132 0064 1846     		mov	r0, r3
+ 1133 0066 1C37     		adds	r7, r7, #28
+ 1134              	.LCFI49:
+ 1135              		.cfi_def_cfa_offset 4
+ 1136 0068 BD46     		mov	sp, r7
+ 1137              	.LCFI50:
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 28
+
+
+ 1138              		.cfi_def_cfa_register 13
+ 1139              		@ sp needed
+ 1140 006a 5DF8047B 		ldr	r7, [sp], #4
+ 1141              	.LCFI51:
+ 1142              		.cfi_restore 7
+ 1143              		.cfi_def_cfa_offset 0
+ 1144 006e 7047     		bx	lr
+ 1145              	.L82:
+ 1146              		.align	2
+ 1147              	.L81:
+ 1148 0070 00000000 		.word	g_at_cb
+ 1149              		.cfi_endproc
+ 1150              	.LFE142:
+ 1152              		.section	.rodata
+ 1153 0065 000000   		.align	2
+ 1154              	.LC7:
+ 1155 0068 25733A70 		.ascii	"%s:parameters error\012\015\000"
+ 1155      6172616D 
+ 1155      65746572 
+ 1155      73206572 
+ 1155      726F720A 
+ 1156 007e 0000     		.align	2
+ 1157              	.LC8:
+ 1158 0080 25733A63 		.ascii	"%s:cmdsync error\012\015\000"
+ 1158      6D647379 
+ 1158      6E632065 
+ 1158      72726F72 
+ 1158      0A0D00
+ 1159 0093 00       		.align	2
+ 1160              	.LC9:
+ 1161 0094 25733A63 		.ascii	"%s:cmdlock error\012\015\000"
+ 1161      6D646C6F 
+ 1161      636B2065 
+ 1161      72726F72 
+ 1161      0A0D00
+ 1162 00a7 00       		.align	2
+ 1163              	.LC10:
+ 1164 00a8 61745F72 		.ascii	"at_rcv\000"
+ 1164      637600
+ 1165 00af 00       		.align	2
+ 1166              	.LC11:
+ 1167 00b0 25733A72 		.ascii	"%s:rcvtask create error\012\015\000"
+ 1167      63767461 
+ 1167      736B2063 
+ 1167      72656174 
+ 1167      65206572 
+ 1168              		.section	.text.at_init,"ax",%progbits
+ 1169              		.align	1
+ 1170              		.global	at_init
+ 1171              		.syntax unified
+ 1172              		.thumb
+ 1173              		.thumb_func
+ 1174              		.fpu fpv4-sp-d16
+ 1176              	at_init:
+ 1177              	.LFB143:
+ 377:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 378:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** /*******************************************************************************
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 29
+
+
+ 379:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** function     :this is the  at module initialize function
+ 380:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** parameters   :func_read:which will read a frame from the device
+ 381:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****               func_write:which will be used to write a frame to the device
+ 382:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** instruction  :if you want to use the at frame work, please call this function 
+ 383:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****               please supply the function read and write.the read function must be
+ 384:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****               a block function controlled by timeout
+ 385:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** *******************************************************************************/
+ 386:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** bool_t at_init(const char *devname)
+ 387:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** {
+ 1178              		.loc 1 387 0
+ 1179              		.cfi_startproc
+ 1180              		@ args = 0, pretend = 0, frame = 16
+ 1181              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1182 0000 80B5     		push	{r7, lr}
+ 1183              	.LCFI52:
+ 1184              		.cfi_def_cfa_offset 8
+ 1185              		.cfi_offset 7, -8
+ 1186              		.cfi_offset 14, -4
+ 1187 0002 86B0     		sub	sp, sp, #24
+ 1188              	.LCFI53:
+ 1189              		.cfi_def_cfa_offset 32
+ 1190 0004 02AF     		add	r7, sp, #8
+ 1191              	.LCFI54:
+ 1192              		.cfi_def_cfa 7, 24
+ 1193 0006 7860     		str	r0, [r7, #4]
+ 388:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     bool_t ret = false;
+ 1194              		.loc 1 388 0
+ 1195 0008 0023     		movs	r3, #0
+ 1196 000a FB60     		str	r3, [r7, #12]
+ 389:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     if(NULL == devname)
+ 1197              		.loc 1 389 0
+ 1198 000c 7B68     		ldr	r3, [r7, #4]
+ 1199 000e 002B     		cmp	r3, #0
+ 1200 0010 04D1     		bne	.L84
+ 390:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 391:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         printf("%s:parameters error\n\r",__FUNCTION__);
+ 1201              		.loc 1 391 0
+ 1202 0012 3B49     		ldr	r1, .L95
+ 1203 0014 3B48     		ldr	r0, .L95+4
+ 1204 0016 FFF7FEFF 		bl	printf
+ 392:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         goto EXIT_PARA;
+ 1205              		.loc 1 392 0
+ 1206 001a 6BE0     		b	.L94
+ 1207              	.L84:
+ 393:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 394:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     memset(&g_at_cb,0,sizeof(g_at_cb));
+ 1208              		.loc 1 394 0
+ 1209 001c 4FF45972 		mov	r2, #868
+ 1210 0020 0021     		movs	r1, #0
+ 1211 0022 3948     		ldr	r0, .L95+8
+ 1212 0024 FFF7FEFF 		bl	memset
+ 395:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 396:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     if(false == osal_semp_create(&g_at_cb.cmd.cmdsync,1,1))
+ 1213              		.loc 1 396 0
+ 1214 0028 0122     		movs	r2, #1
+ 1215 002a 0121     		movs	r1, #1
+ 1216 002c 3748     		ldr	r0, .L95+12
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 30
+
+
+ 1217 002e FFF7FEFF 		bl	osal_semp_create
+ 1218 0032 0346     		mov	r3, r0
+ 1219 0034 002B     		cmp	r3, #0
+ 1220 0036 04D1     		bne	.L86
+ 397:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 398:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         printf("%s:cmdsync error\n\r",__FUNCTION__);
+ 1221              		.loc 1 398 0
+ 1222 0038 3149     		ldr	r1, .L95
+ 1223 003a 3548     		ldr	r0, .L95+16
+ 1224 003c FFF7FEFF 		bl	printf
+ 399:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         goto EXIT_CMDSYNC;
+ 1225              		.loc 1 399 0
+ 1226 0040 58E0     		b	.L94
+ 1227              	.L86:
+ 400:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 401:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     if(false == osal_semp_create(&g_at_cb.cmd.respsync,1,0))
+ 1228              		.loc 1 401 0
+ 1229 0042 0022     		movs	r2, #0
+ 1230 0044 0121     		movs	r1, #1
+ 1231 0046 3348     		ldr	r0, .L95+20
+ 1232 0048 FFF7FEFF 		bl	osal_semp_create
+ 1233 004c 0346     		mov	r3, r0
+ 1234 004e 002B     		cmp	r3, #0
+ 1235 0050 04D1     		bne	.L87
+ 402:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 403:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         printf("%s:cmdsync error\n\r",__FUNCTION__);
+ 1236              		.loc 1 403 0
+ 1237 0052 2B49     		ldr	r1, .L95
+ 1238 0054 2E48     		ldr	r0, .L95+16
+ 1239 0056 FFF7FEFF 		bl	printf
+ 404:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         goto EXIT_RESPSYNC;
+ 1240              		.loc 1 404 0
+ 1241 005a 44E0     		b	.L88
+ 1242              	.L87:
+ 405:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 406:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     if(false == osal_mutex_create(&g_at_cb.cmd.cmdlock))
+ 1243              		.loc 1 406 0
+ 1244 005c 2E48     		ldr	r0, .L95+24
+ 1245 005e FFF7FEFF 		bl	osal_mutex_create
+ 1246 0062 0346     		mov	r3, r0
+ 1247 0064 002B     		cmp	r3, #0
+ 1248 0066 04D1     		bne	.L89
+ 407:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 408:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         printf("%s:cmdlock error\n\r",__FUNCTION__);
+ 1249              		.loc 1 408 0
+ 1250 0068 2549     		ldr	r1, .L95
+ 1251 006a 2C48     		ldr	r0, .L95+28
+ 1252 006c FFF7FEFF 		bl	printf
+ 409:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         goto EXIT_CMDLOCK;
+ 1253              		.loc 1 409 0
+ 1254 0070 32E0     		b	.L90
+ 1255              	.L89:
+ 410:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 411:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 412:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     if(-1 == osal_task_create("at_rcv",__rcv_task_entry,0x800,NULL,NULL,10))
+ 1256              		.loc 1 412 0
+ 1257 0072 0A23     		movs	r3, #10
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 31
+
+
+ 1258 0074 0193     		str	r3, [sp, #4]
+ 1259 0076 0023     		movs	r3, #0
+ 1260 0078 0093     		str	r3, [sp]
+ 1261 007a 0023     		movs	r3, #0
+ 1262 007c 4FF40062 		mov	r2, #2048
+ 1263 0080 2749     		ldr	r1, .L95+32
+ 1264 0082 2848     		ldr	r0, .L95+36
+ 1265 0084 FFF7FEFF 		bl	osal_task_create
+ 1266 0088 0346     		mov	r3, r0
+ 1267 008a B3F1FF3F 		cmp	r3, #-1
+ 1268 008e 0CD1     		bne	.L91
+ 413:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 414:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         printf("%s:rcvtask create error\n\r",__FUNCTION__);
+ 1269              		.loc 1 414 0
+ 1270 0090 1B49     		ldr	r1, .L95
+ 1271 0092 2548     		ldr	r0, .L95+40
+ 1272 0094 FFF7FEFF 		bl	printf
+ 415:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         goto EXIT_RCVTASK;
+ 1273              		.loc 1 415 0
+ 1274 0098 00BF     		nop
+ 1275              	.L92:
+ 416:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 417:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 418:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     g_at_cb.devname = devname;
+ 419:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     //for the debug
+ 420:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     g_at_cb.rxdebugmode = en_at_debug_ascii;
+ 421:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     g_at_cb.txdebugmode = en_at_debug_ascii;
+ 422:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****   
+ 423:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     ret = true;
+ 424:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     return ret;
+ 425:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 426:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 427:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** EXIT_RCVTASK:
+ 428:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     osal_mutex_del(&g_at_cb.cmd.cmdlock);
+ 1276              		.loc 1 428 0
+ 1277 009a 1F48     		ldr	r0, .L95+24
+ 1278 009c FFF7FEFF 		bl	osal_mutex_del
+ 429:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     g_at_cb.cmd.cmdlock = CN_OBJECT_INVALID;
+ 1279              		.loc 1 429 0
+ 1280 00a0 194B     		ldr	r3, .L95+8
+ 1281 00a2 4FF0FF32 		mov	r2, #-1
+ 1282 00a6 DA62     		str	r2, [r3, #44]
+ 1283 00a8 16E0     		b	.L90
+ 1284              	.L91:
+ 418:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     //for the debug
+ 1285              		.loc 1 418 0
+ 1286 00aa 174A     		ldr	r2, .L95+8
+ 1287 00ac 7B68     		ldr	r3, [r7, #4]
+ 1288 00ae 1360     		str	r3, [r2]
+ 420:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     g_at_cb.txdebugmode = en_at_debug_ascii;
+ 1289              		.loc 1 420 0
+ 1290 00b0 154A     		ldr	r2, .L95+8
+ 1291 00b2 92F86033 		ldrb	r3, [r2, #864]
+ 1292 00b6 0121     		movs	r1, #1
+ 1293 00b8 61F34203 		bfi	r3, r1, #1, #2
+ 1294 00bc 82F86033 		strb	r3, [r2, #864]
+ 421:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****   
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 32
+
+
+ 1295              		.loc 1 421 0
+ 1296 00c0 114A     		ldr	r2, .L95+8
+ 1297 00c2 92F86033 		ldrb	r3, [r2, #864]
+ 1298 00c6 0121     		movs	r1, #1
+ 1299 00c8 61F3C403 		bfi	r3, r1, #3, #2
+ 1300 00cc 82F86033 		strb	r3, [r2, #864]
+ 423:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     return ret;
+ 1301              		.loc 1 423 0
+ 1302 00d0 0123     		movs	r3, #1
+ 1303 00d2 FB60     		str	r3, [r7, #12]
+ 424:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 1304              		.loc 1 424 0
+ 1305 00d4 FB68     		ldr	r3, [r7, #12]
+ 1306 00d6 0EE0     		b	.L93
+ 1307              	.L90:
+ 430:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** EXIT_CMDLOCK:
+ 431:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     osal_semp_del(&g_at_cb.cmd.respsync);
+ 1308              		.loc 1 431 0
+ 1309 00d8 0E48     		ldr	r0, .L95+20
+ 1310 00da FFF7FEFF 		bl	osal_semp_del
+ 432:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     g_at_cb.cmd.respsync = CN_OBJECT_INVALID;    
+ 1311              		.loc 1 432 0
+ 1312 00de 0A4B     		ldr	r3, .L95+8
+ 1313 00e0 4FF0FF32 		mov	r2, #-1
+ 1314 00e4 5A62     		str	r2, [r3, #36]
+ 1315              	.L88:
+ 433:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** EXIT_RESPSYNC:
+ 434:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     osal_semp_del(&g_at_cb.cmd.cmdsync);
+ 1316              		.loc 1 434 0
+ 1317 00e6 0948     		ldr	r0, .L95+12
+ 1318 00e8 FFF7FEFF 		bl	osal_semp_del
+ 435:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     g_at_cb.cmd.cmdsync = CN_OBJECT_INVALID;
+ 1319              		.loc 1 435 0
+ 1320 00ec 064B     		ldr	r3, .L95+8
+ 1321 00ee 4FF0FF32 		mov	r2, #-1
+ 1322 00f2 9A62     		str	r2, [r3, #40]
+ 1323              	.L85:
+ 1324              	.L94:
+ 436:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** EXIT_CMDSYNC:
+ 437:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** EXIT_PARA:
+ 438:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     return ret;
+ 1325              		.loc 1 438 0
+ 1326 00f4 FB68     		ldr	r3, [r7, #12]
+ 1327              	.L93:
+ 439:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** }
+ 1328              		.loc 1 439 0
+ 1329 00f6 1846     		mov	r0, r3
+ 1330 00f8 1037     		adds	r7, r7, #16
+ 1331              	.LCFI55:
+ 1332              		.cfi_def_cfa_offset 8
+ 1333 00fa BD46     		mov	sp, r7
+ 1334              	.LCFI56:
+ 1335              		.cfi_def_cfa_register 13
+ 1336              		@ sp needed
+ 1337 00fc 80BD     		pop	{r7, pc}
+ 1338              	.L96:
+ 1339 00fe 00BF     		.align	2
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 33
+
+
+ 1340              	.L95:
+ 1341 0100 00000000 		.word	__FUNCTION__.10693
+ 1342 0104 68000000 		.word	.LC7
+ 1343 0108 00000000 		.word	g_at_cb
+ 1344 010c 28000000 		.word	g_at_cb+40
+ 1345 0110 80000000 		.word	.LC8
+ 1346 0114 24000000 		.word	g_at_cb+36
+ 1347 0118 2C000000 		.word	g_at_cb+44
+ 1348 011c 94000000 		.word	.LC9
+ 1349 0120 00000000 		.word	__rcv_task_entry
+ 1350 0124 A8000000 		.word	.LC10
+ 1351 0128 B0000000 		.word	.LC11
+ 1352              		.cfi_endproc
+ 1353              	.LFE143:
+ 1355              		.section	.rodata
+ 1356 00ca 0000     		.align	2
+ 1357              	.LC12:
+ 1358 00cc 70617261 		.ascii	"paras error\012\015\000"
+ 1358      73206572 
+ 1358      726F720A 
+ 1358      0D00
+ 1359 00da 0000     		.align	2
+ 1360              	.LC13:
+ 1361 00dc 25730D0A 		.ascii	"%s\015\012\000"
+ 1361      00
+ 1362 00e1 000000   		.align	2
+ 1363              	.LC14:
+ 1364 00e4 61747265 		.ascii	"atresponse:%d Bytes:%s\012\015\000"
+ 1364      73706F6E 
+ 1364      73653A25 
+ 1364      64204279 
+ 1364      7465733A 
+ 1365 00fd 000000   		.align	2
+ 1366              	.LC15:
+ 1367 0100 61747265 		.ascii	"atresponse:timeout or error\012\015\000"
+ 1367      73706F6E 
+ 1367      73653A74 
+ 1367      696D656F 
+ 1367      7574206F 
+ 1368              		.section	.text.shell_at,"ax",%progbits
+ 1369              		.align	1
+ 1370              		.syntax unified
+ 1371              		.thumb
+ 1372              		.thumb_func
+ 1373              		.fpu fpv4-sp-d16
+ 1375              	shell_at:
+ 1376              	.LFB146:
+ 440:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 441:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 442:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** //////////////////////////////////DEBUG COMMAND FOLLOWING/////////////////////////////////////////
+ 443:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** #include <shell.h>
+ 444:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** #include <los_sys.ph>
+ 445:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** //use this shell command,you could input at command through the terminal
+ 446:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** static int shell_at(int argc, const char *argv[])
+ 447:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** {
+ 1377              		.loc 1 447 0
+ 1378              		.cfi_startproc
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 34
+
+
+ 1379              		@ args = 0, pretend = 0, frame = 144
+ 1380              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1381 0000 80B5     		push	{r7, lr}
+ 1382              	.LCFI57:
+ 1383              		.cfi_def_cfa_offset 8
+ 1384              		.cfi_offset 7, -8
+ 1385              		.cfi_offset 14, -4
+ 1386 0002 A6B0     		sub	sp, sp, #152
+ 1387              	.LCFI58:
+ 1388              		.cfi_def_cfa_offset 160
+ 1389 0004 02AF     		add	r7, sp, #8
+ 1390              	.LCFI59:
+ 1391              		.cfi_def_cfa 7, 152
+ 1392 0006 7860     		str	r0, [r7, #4]
+ 1393 0008 3960     		str	r1, [r7]
+ 448:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     #define CN_AT_SHELL_LEN 64
+ 449:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****      
+ 450:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     char respbuf[CN_AT_SHELL_LEN];
+ 451:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     char cmdbuf[CN_AT_SHELL_LEN];
+ 452:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     
+ 453:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     const char *index =NULL ;
+ 1394              		.loc 1 453 0
+ 1395 000a 0023     		movs	r3, #0
+ 1396 000c C7F88C30 		str	r3, [r7, #140]
+ 454:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     int ret = -1;
+ 1397              		.loc 1 454 0
+ 1398 0010 4FF0FF33 		mov	r3, #-1
+ 1399 0014 C7F88830 		str	r3, [r7, #136]
+ 455:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 456:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     if((argc !=2)&&(argc != 3))
+ 1400              		.loc 1 456 0
+ 1401 0018 7B68     		ldr	r3, [r7, #4]
+ 1402 001a 022B     		cmp	r3, #2
+ 1403 001c 08D0     		beq	.L98
+ 1404              		.loc 1 456 0 is_stmt 0 discriminator 1
+ 1405 001e 7B68     		ldr	r3, [r7, #4]
+ 1406 0020 032B     		cmp	r3, #3
+ 1407 0022 05D0     		beq	.L98
+ 457:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 458:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         printf("paras error\n\r");
+ 1408              		.loc 1 458 0 is_stmt 1
+ 1409 0024 2448     		ldr	r0, .L104
+ 1410 0026 FFF7FEFF 		bl	printf
+ 459:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         return ret;
+ 1411              		.loc 1 459 0
+ 1412 002a D7F88830 		ldr	r3, [r7, #136]
+ 1413 002e 3FE0     		b	.L103
+ 1414              	.L98:
+ 460:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 461:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     if(argc == 3)
+ 1415              		.loc 1 461 0
+ 1416 0030 7B68     		ldr	r3, [r7, #4]
+ 1417 0032 032B     		cmp	r3, #3
+ 1418 0034 03D1     		bne	.L100
+ 462:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 463:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         index = argv[2];
+ 1419              		.loc 1 463 0
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 35
+
+
+ 1420 0036 3B68     		ldr	r3, [r7]
+ 1421 0038 9B68     		ldr	r3, [r3, #8]
+ 1422 003a C7F88C30 		str	r3, [r7, #140]
+ 1423              	.L100:
+ 464:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 465:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     
+ 466:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 467:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     memset(respbuf,0,CN_AT_SHELL_LEN);
+ 1424              		.loc 1 467 0
+ 1425 003e 07F14803 		add	r3, r7, #72
+ 1426 0042 4022     		movs	r2, #64
+ 1427 0044 0021     		movs	r1, #0
+ 1428 0046 1846     		mov	r0, r3
+ 1429 0048 FFF7FEFF 		bl	memset
+ 468:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     snprintf((char *)cmdbuf,CN_AT_SHELL_LEN,"%s\r\n",argv[1]);
+ 1430              		.loc 1 468 0
+ 1431 004c 3B68     		ldr	r3, [r7]
+ 1432 004e 0433     		adds	r3, r3, #4
+ 1433 0050 1B68     		ldr	r3, [r3]
+ 1434 0052 07F10800 		add	r0, r7, #8
+ 1435 0056 194A     		ldr	r2, .L104+4
+ 1436 0058 4021     		movs	r1, #64
+ 1437 005a FFF7FEFF 		bl	snprintf
+ 469:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 470:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     ret = at_command(cmdbuf,strlen((const char *)cmdbuf),index,respbuf,CN_AT_SHELL_LEN,LOSCFG_BASE_
+ 1438              		.loc 1 470 0
+ 1439 005e 07F10803 		add	r3, r7, #8
+ 1440 0062 1846     		mov	r0, r3
+ 1441 0064 FFF7FEFF 		bl	strlen
+ 1442 0068 0346     		mov	r3, r0
+ 1443 006a 1946     		mov	r1, r3
+ 1444 006c 07F14802 		add	r2, r7, #72
+ 1445 0070 07F10800 		add	r0, r7, #8
+ 1446 0074 4FF47A73 		mov	r3, #1000
+ 1447 0078 0193     		str	r3, [sp, #4]
+ 1448 007a 4023     		movs	r3, #64
+ 1449 007c 0093     		str	r3, [sp]
+ 1450 007e 1346     		mov	r3, r2
+ 1451 0080 D7F88C20 		ldr	r2, [r7, #140]
+ 1452 0084 FFF7FEFF 		bl	at_command
+ 1453 0088 C7F88800 		str	r0, [r7, #136]
+ 471:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     if(ret > 0)
+ 1454              		.loc 1 471 0
+ 1455 008c D7F88830 		ldr	r3, [r7, #136]
+ 1456 0090 002B     		cmp	r3, #0
+ 1457 0092 08DD     		ble	.L101
+ 472:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 473:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         printf("atresponse:%d Bytes:%s\n\r",ret,respbuf);
+ 1458              		.loc 1 473 0
+ 1459 0094 07F14803 		add	r3, r7, #72
+ 1460 0098 1A46     		mov	r2, r3
+ 1461 009a D7F88810 		ldr	r1, [r7, #136]
+ 1462 009e 0848     		ldr	r0, .L104+8
+ 1463 00a0 FFF7FEFF 		bl	printf
+ 1464 00a4 02E0     		b	.L102
+ 1465              	.L101:
+ 474:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 36
+
+
+ 475:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     else
+ 476:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 477:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         printf("atresponse:timeout or error\n\r");
+ 1466              		.loc 1 477 0
+ 1467 00a6 0748     		ldr	r0, .L104+12
+ 1468 00a8 FFF7FEFF 		bl	printf
+ 1469              	.L102:
+ 478:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 479:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     return ret;
+ 1470              		.loc 1 479 0
+ 1471 00ac D7F88830 		ldr	r3, [r7, #136]
+ 1472              	.L103:
+ 480:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** }
+ 1473              		.loc 1 480 0 discriminator 1
+ 1474 00b0 1846     		mov	r0, r3
+ 1475 00b2 9037     		adds	r7, r7, #144
+ 1476              	.LCFI60:
+ 1477              		.cfi_def_cfa_offset 8
+ 1478 00b4 BD46     		mov	sp, r7
+ 1479              	.LCFI61:
+ 1480              		.cfi_def_cfa_register 13
+ 1481              		@ sp needed
+ 1482 00b6 80BD     		pop	{r7, pc}
+ 1483              	.L105:
+ 1484              		.align	2
+ 1485              	.L104:
+ 1486 00b8 CC000000 		.word	.LC12
+ 1487 00bc DC000000 		.word	.LC13
+ 1488 00c0 E4000000 		.word	.LC14
+ 1489 00c4 00010000 		.word	.LC15
+ 1490              		.cfi_endproc
+ 1491              	.LFE146:
+ 1493              		.section	.rodata
+ 1494 011e 0000     		.align	2
+ 1495              	.LC16:
+ 1496 0120 6174636D 		.ascii	"atcmd\000"
+ 1496      6400
+ 1497 0126 0000     		.align	2
+ 1498              	.LC17:
+ 1499 0128 6174636D 		.ascii	"atcmd atcommand atrespindex\000"
+ 1499      64206174 
+ 1499      636F6D6D 
+ 1499      616E6420 
+ 1499      61747265 
+ 1500              		.section	oshell,"a",%progbits
+ 1501              		.align	2
+ 1504              	__oshell_shell_at:
+ 1505 0000 20010000 		.word	.LC16
+ 1506 0004 28010000 		.word	.LC17
+ 1507 0008 00000000 		.word	shell_at
+ 1508 000c 0000     		.short	0
+ 1509 000e 0400     		.short	4
+ 1510              		.section	.rodata
+ 1511              		.align	2
+ 1512              	.LC18:
+ 1513 0144 6E6F6E65 		.ascii	"none\000"
+ 1513      00
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 37
+
+
+ 1514 0149 000000   		.align	2
+ 1515              	.LC19:
+ 1516 014c 61736369 		.ascii	"ascii\000"
+ 1516      6900
+ 1517 0152 0000     		.align	2
+ 1518              	.LC20:
+ 1519 0154 68657800 		.ascii	"hex\000"
+ 1520              		.align	2
+ 1521              	.LC21:
+ 1522 0158 6D6F6465 		.ascii	"mode set error\012\015\000"
+ 1522      20736574 
+ 1522      20657272 
+ 1522      6F720A0D 
+ 1522      00
+ 1523 0169 000000   		.align	2
+ 1524              	.LC22:
+ 1525 016c 727800   		.ascii	"rx\000"
+ 1526 016f 00       		.align	2
+ 1527              	.LC23:
+ 1528 0170 747800   		.ascii	"tx\000"
+ 1529 0173 00       		.align	2
+ 1530              	.LC24:
+ 1531 0174 74797065 		.ascii	"type set error\012\015\000"
+ 1531      20736574 
+ 1531      20657272 
+ 1531      6F720A0D 
+ 1531      00
+ 1532              		.section	.text.shell_atdebug,"ax",%progbits
+ 1533              		.align	1
+ 1534              		.syntax unified
+ 1535              		.thumb
+ 1536              		.thumb_func
+ 1537              		.fpu fpv4-sp-d16
+ 1539              	shell_atdebug:
+ 1540              	.LFB147:
+ 481:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** OSSHELL_EXPORT_CMD(shell_at,"atcmd","atcmd atcommand atrespindex");
+ 482:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 483:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** //use this function to set the at command display mode:none/ascii/hex
+ 484:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** static int shell_atdebug(int argc,const char *argv[])
+ 485:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** {
+ 1541              		.loc 1 485 0
+ 1542              		.cfi_startproc
+ 1543              		@ args = 0, pretend = 0, frame = 16
+ 1544              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1545 0000 80B5     		push	{r7, lr}
+ 1546              	.LCFI62:
+ 1547              		.cfi_def_cfa_offset 8
+ 1548              		.cfi_offset 7, -8
+ 1549              		.cfi_offset 14, -4
+ 1550 0002 84B0     		sub	sp, sp, #16
+ 1551              	.LCFI63:
+ 1552              		.cfi_def_cfa_offset 24
+ 1553 0004 00AF     		add	r7, sp, #0
+ 1554              	.LCFI64:
+ 1555              		.cfi_def_cfa_register 7
+ 1556 0006 7860     		str	r0, [r7, #4]
+ 1557 0008 3960     		str	r1, [r7]
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 38
+
+
+ 486:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     int mode = en_at_debug_none;
+ 1558              		.loc 1 486 0
+ 1559 000a 0023     		movs	r3, #0
+ 1560 000c FB60     		str	r3, [r7, #12]
+ 487:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     if(argc != 3)
+ 1561              		.loc 1 487 0
+ 1562 000e 7B68     		ldr	r3, [r7, #4]
+ 1563 0010 032B     		cmp	r3, #3
+ 1564 0012 05D0     		beq	.L107
+ 488:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 489:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         printf("paras error\n\r");
+ 1565              		.loc 1 489 0
+ 1566 0014 3448     		ldr	r0, .L116
+ 1567 0016 FFF7FEFF 		bl	printf
+ 490:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         return -1;
+ 1568              		.loc 1 490 0
+ 1569 001a 4FF0FF33 		mov	r3, #-1
+ 1570 001e 5FE0     		b	.L108
+ 1571              	.L107:
+ 491:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 492:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 493:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     if(0 == strcmp(argv[2],"none"))
+ 1572              		.loc 1 493 0
+ 1573 0020 3B68     		ldr	r3, [r7]
+ 1574 0022 0833     		adds	r3, r3, #8
+ 1575 0024 1B68     		ldr	r3, [r3]
+ 1576 0026 3149     		ldr	r1, .L116+4
+ 1577 0028 1846     		mov	r0, r3
+ 1578 002a FFF7FEFF 		bl	strcmp
+ 1579 002e 0346     		mov	r3, r0
+ 1580 0030 002B     		cmp	r3, #0
+ 1581 0032 02D1     		bne	.L109
+ 494:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 495:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         mode = en_at_debug_none;
+ 1582              		.loc 1 495 0
+ 1583 0034 0023     		movs	r3, #0
+ 1584 0036 FB60     		str	r3, [r7, #12]
+ 1585 0038 1FE0     		b	.L110
+ 1586              	.L109:
+ 496:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 497:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     else if(0 == strcmp(argv[2],"ascii"))
+ 1587              		.loc 1 497 0
+ 1588 003a 3B68     		ldr	r3, [r7]
+ 1589 003c 0833     		adds	r3, r3, #8
+ 1590 003e 1B68     		ldr	r3, [r3]
+ 1591 0040 2B49     		ldr	r1, .L116+8
+ 1592 0042 1846     		mov	r0, r3
+ 1593 0044 FFF7FEFF 		bl	strcmp
+ 1594 0048 0346     		mov	r3, r0
+ 1595 004a 002B     		cmp	r3, #0
+ 1596 004c 02D1     		bne	.L111
+ 498:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 499:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         mode = en_at_debug_ascii;
+ 1597              		.loc 1 499 0
+ 1598 004e 0123     		movs	r3, #1
+ 1599 0050 FB60     		str	r3, [r7, #12]
+ 1600 0052 12E0     		b	.L110
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 39
+
+
+ 1601              	.L111:
+ 500:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 501:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     else if(0 == strcmp(argv[2],"hex"))
+ 1602              		.loc 1 501 0
+ 1603 0054 3B68     		ldr	r3, [r7]
+ 1604 0056 0833     		adds	r3, r3, #8
+ 1605 0058 1B68     		ldr	r3, [r3]
+ 1606 005a 2649     		ldr	r1, .L116+12
+ 1607 005c 1846     		mov	r0, r3
+ 1608 005e FFF7FEFF 		bl	strcmp
+ 1609 0062 0346     		mov	r3, r0
+ 1610 0064 002B     		cmp	r3, #0
+ 1611 0066 02D1     		bne	.L112
+ 502:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 503:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         mode = en_at_debug_hex;
+ 1612              		.loc 1 503 0
+ 1613 0068 0223     		movs	r3, #2
+ 1614 006a FB60     		str	r3, [r7, #12]
+ 1615 006c 05E0     		b	.L110
+ 1616              	.L112:
+ 504:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 505:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     else
+ 506:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 507:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         printf("mode set error\n\r");
+ 1617              		.loc 1 507 0
+ 1618 006e 2248     		ldr	r0, .L116+16
+ 1619 0070 FFF7FEFF 		bl	printf
+ 508:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         return -2;
+ 1620              		.loc 1 508 0
+ 1621 0074 6FF00103 		mvn	r3, #1
+ 1622 0078 32E0     		b	.L108
+ 1623              	.L110:
+ 509:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 510:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 511:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     if(0 == strcmp(argv[1],"rx"))
+ 1624              		.loc 1 511 0
+ 1625 007a 3B68     		ldr	r3, [r7]
+ 1626 007c 0433     		adds	r3, r3, #4
+ 1627 007e 1B68     		ldr	r3, [r3]
+ 1628 0080 1E49     		ldr	r1, .L116+20
+ 1629 0082 1846     		mov	r0, r3
+ 1630 0084 FFF7FEFF 		bl	strcmp
+ 1631 0088 0346     		mov	r3, r0
+ 1632 008a 002B     		cmp	r3, #0
+ 1633 008c 0BD1     		bne	.L113
+ 512:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 513:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         g_at_cb.rxdebugmode = mode;
+ 1634              		.loc 1 513 0
+ 1635 008e FB68     		ldr	r3, [r7, #12]
+ 1636 0090 03F00303 		and	r3, r3, #3
+ 1637 0094 D9B2     		uxtb	r1, r3
+ 1638 0096 1A4A     		ldr	r2, .L116+24
+ 1639 0098 92F86033 		ldrb	r3, [r2, #864]
+ 1640 009c 61F34203 		bfi	r3, r1, #1, #2
+ 1641 00a0 82F86033 		strb	r3, [r2, #864]
+ 1642 00a4 1BE0     		b	.L114
+ 1643              	.L113:
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 40
+
+
+ 514:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 515:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     else if(0 == strcmp(argv[1],"tx"))
+ 1644              		.loc 1 515 0
+ 1645 00a6 3B68     		ldr	r3, [r7]
+ 1646 00a8 0433     		adds	r3, r3, #4
+ 1647 00aa 1B68     		ldr	r3, [r3]
+ 1648 00ac 1549     		ldr	r1, .L116+28
+ 1649 00ae 1846     		mov	r0, r3
+ 1650 00b0 FFF7FEFF 		bl	strcmp
+ 1651 00b4 0346     		mov	r3, r0
+ 1652 00b6 002B     		cmp	r3, #0
+ 1653 00b8 0BD1     		bne	.L115
+ 516:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 517:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         g_at_cb.txdebugmode = mode;
+ 1654              		.loc 1 517 0
+ 1655 00ba FB68     		ldr	r3, [r7, #12]
+ 1656 00bc 03F00303 		and	r3, r3, #3
+ 1657 00c0 D9B2     		uxtb	r1, r3
+ 1658 00c2 0F4A     		ldr	r2, .L116+24
+ 1659 00c4 92F86033 		ldrb	r3, [r2, #864]
+ 1660 00c8 61F3C403 		bfi	r3, r1, #3, #2
+ 1661 00cc 82F86033 		strb	r3, [r2, #864]
+ 1662 00d0 05E0     		b	.L114
+ 1663              	.L115:
+ 518:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 519:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     else
+ 520:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     {
+ 521:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         printf("type set error\n\r");
+ 1664              		.loc 1 521 0
+ 1665 00d2 0D48     		ldr	r0, .L116+32
+ 1666 00d4 FFF7FEFF 		bl	printf
+ 522:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****         return -3;
+ 1667              		.loc 1 522 0
+ 1668 00d8 6FF00203 		mvn	r3, #2
+ 1669 00dc 00E0     		b	.L108
+ 1670              	.L114:
+ 523:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     }
+ 524:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** 
+ 525:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c ****     return 0;
+ 1671              		.loc 1 525 0
+ 1672 00de 0023     		movs	r3, #0
+ 1673              	.L108:
+ 526:E:/LiteOS/LiteOS_Lab/iot_link/at\at.c **** }
+ 1674              		.loc 1 526 0
+ 1675 00e0 1846     		mov	r0, r3
+ 1676 00e2 1037     		adds	r7, r7, #16
+ 1677              	.LCFI65:
+ 1678              		.cfi_def_cfa_offset 8
+ 1679 00e4 BD46     		mov	sp, r7
+ 1680              	.LCFI66:
+ 1681              		.cfi_def_cfa_register 13
+ 1682              		@ sp needed
+ 1683 00e6 80BD     		pop	{r7, pc}
+ 1684              	.L117:
+ 1685              		.align	2
+ 1686              	.L116:
+ 1687 00e8 CC000000 		.word	.LC12
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 41
+
+
+ 1688 00ec 44010000 		.word	.LC18
+ 1689 00f0 4C010000 		.word	.LC19
+ 1690 00f4 54010000 		.word	.LC20
+ 1691 00f8 58010000 		.word	.LC21
+ 1692 00fc 6C010000 		.word	.LC22
+ 1693 0100 00000000 		.word	g_at_cb
+ 1694 0104 70010000 		.word	.LC23
+ 1695 0108 74010000 		.word	.LC24
+ 1696              		.cfi_endproc
+ 1697              	.LFE147:
+ 1699              		.section	.rodata
+ 1700 0185 000000   		.align	2
+ 1701              	.LC25:
+ 1702 0188 61746465 		.ascii	"atdebug\000"
+ 1702      62756700 
+ 1703              		.align	2
+ 1704              	.LC26:
+ 1705 0190 61746465 		.ascii	"atdebug rx/tx none/ascii/hex\000"
+ 1705      62756720 
+ 1705      72782F74 
+ 1705      78206E6F 
+ 1705      6E652F61 
+ 1706              		.section	oshell
+ 1707              		.align	2
+ 1710              	__oshell_shell_atdebug:
+ 1711 0010 88010000 		.word	.LC25
+ 1712 0014 90010000 		.word	.LC26
+ 1713 0018 00000000 		.word	shell_atdebug
+ 1714 001c 0000     		.short	0
+ 1715 001e 0400     		.short	4
+ 1716              		.section	.rodata.__FUNCTION__.10664,"a",%progbits
+ 1717              		.align	2
+ 1720              	__FUNCTION__.10664:
+ 1721 0000 5F5F7263 		.ascii	"__rcv_task_entry\000"
+ 1721      765F7461 
+ 1721      736B5F65 
+ 1721      6E747279 
+ 1721      00
+ 1722              		.section	.rodata.__FUNCTION__.10693,"a",%progbits
+ 1723              		.align	2
+ 1726              	__FUNCTION__.10693:
+ 1727 0000 61745F69 		.ascii	"at_init\000"
+ 1727      6E697400 
+ 1728              		.text
+ 1729              	.Letext0:
+ 1730              		.file 2 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 1731              		.file 3 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 1732              		.file 4 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 1733              		.file 5 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 1734              		.file 6 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 1735              		.file 7 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 1736              		.file 8 "E:/LiteOS/LiteOS_Lab/iot_link/os/osal/osal_types.h"
+ 1737              		.file 9 "E:/LiteOS/LiteOS_Lab/iot_link/at/at.h"
+ 1738              		.file 10 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.201807
+ 1739              		.file 11 "E:/LiteOS/LiteOS_Lab/iot_link/driver/driver.h"
+ 1740              		.file 12 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.201807
+ 1741              		.file 13 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_typedef.h"
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 42
+
+
+ 1742              		.file 14 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 1743              		.file 15 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/system_stm32l4xx.h"
+ 1744              		.file 16 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 1745              		.file 17 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_list.h"
+ 1746              		.file 18 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_err.h"
+ 1747              		.file 19 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_tick.h"
+ 1748              		.file 20 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_event.h"
+ 1749              		.file 21 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_task.h"
+ 1750              		.file 22 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/include/los_task.ph"
+ 1751              		.file 23 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/main.h"
+ 1752              		.file 24 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_config.h"
+ 1753              		.file 25 "E:/LiteOS/LiteOS_Lab/iot_link/shell/shell.h"
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 43
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 at.c
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:18     .bss.g_at_cb:00000000 $d
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:21     .bss.g_at_cb:00000000 g_at_cb
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:24     .rodata:00000000 $d
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:37     .text.__cmd_send:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:43     .text.__cmd_send:00000000 __cmd_send
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:158    .text.__cmd_send:00000094 $d
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:174    .text.__resp_rcv:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:180    .text.__resp_rcv:00000000 __resp_rcv
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:294    .text.__resp_rcv:00000094 $d
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:303    .text.__cmd_create:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:309    .text.__cmd_create:00000000 __cmd_create
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:405    .text.__cmd_create:0000007c $d
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:410    .text.__cmd_clear:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:416    .text.__cmd_clear:00000000 __cmd_clear
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:494    .text.__cmd_clear:0000005c $d
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:499    .text.__cmd_match:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:505    .text.__cmd_match:00000000 __cmd_match
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:616    .text.__cmd_match:00000094 $d
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:621    .text.__oob_match:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:627    .text.__oob_match:00000000 __oob_match
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:729    .text.__oob_match:0000007c $d
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:738    .text.__rcv_task_entry:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:744    .text.__rcv_task_entry:00000000 __rcv_task_entry
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:852    .text.__rcv_task_entry:0000009c $d
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:1720   .rodata.__FUNCTION__.10664:00000000 __FUNCTION__.10664
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:860    .text.at_workmode:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:867    .text.at_workmode:00000000 at_workmode
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:930    .text.at_workmode:00000048 $d
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:935    .text.at_command:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:942    .text.at_command:00000000 at_command
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:1032   .text.at_command:00000078 $d
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:1037   .text.at_oobregister:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:1044   .text.at_oobregister:00000000 at_oobregister
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:1148   .text.at_oobregister:00000070 $d
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:1169   .text.at_init:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:1176   .text.at_init:00000000 at_init
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:1341   .text.at_init:00000100 $d
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:1726   .rodata.__FUNCTION__.10693:00000000 __FUNCTION__.10693
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:1369   .text.shell_at:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:1375   .text.shell_at:00000000 shell_at
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:1486   .text.shell_at:000000b8 $d
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:1501   oshell:00000000 $d
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:1504   oshell:00000000 __oshell_shell_at
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:1533   .text.shell_atdebug:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:1539   .text.shell_atdebug:00000000 shell_atdebug
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:1687   .text.shell_atdebug:000000e8 $d
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:1710   oshell:00000010 __oshell_shell_atdebug
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:1717   .rodata.__FUNCTION__.10664:00000000 $d
+C:\Users\user\AppData\Local\Temp\ccNuj8KS.s:1723   .rodata.__FUNCTION__.10693:00000000 $d
+
+UNDEFINED SYMBOLS
+los_dev_write
+printf
+los_dev_read
+osal_semp_pend
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccNuj8KS.s 			page 44
+
+
+osal_mutex_lock
+osal_mutex_unlock
+osal_semp_post
+strstr
+memcpy
+strlen
+memcmp
+los_dev_open
+memset
+osal_semp_create
+osal_mutex_create
+osal_task_create
+osal_mutex_del
+osal_semp_del
+snprintf
+strcmp

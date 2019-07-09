@@ -1,0 +1,388 @@
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccLGmb3b.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"hal_rng.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.comm	g_rng_handle,12,4
+  18              		.section	.text.hal_rng_config,"ax",%progbits
+  19              		.align	1
+  20              		.global	hal_rng_config
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	hal_rng_config:
+  27              	.LFB133:
+  28              		.file 1 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src/hal_rng.c"
+   1:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** /*----------------------------------------------------------------------------
+   2:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+   3:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * All rights reserved.
+   4:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * are permitted provided that the following conditions are met:
+   6:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * conditions and the following disclaimer.
+   8:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * provided with the distribution.
+  11:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * permission.
+  14:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  *---------------------------------------------------------------------------*/
+  26:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** /*----------------------------------------------------------------------------
+  27:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * Notice of Export Control Law
+  28:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * ===============================================
+  29:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccLGmb3b.s 			page 2
+
+
+  31:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  * applicable export control laws and regulations.
+  33:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****  *---------------------------------------------------------------------------*/
+  34:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** 
+  35:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** #include <string.h>
+  36:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** #include "hal_rng.h"
+  37:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** #include "stm32l4xx.h"
+  38:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** #include "stm32l4xx_hal_rng.h"
+  39:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** 
+  40:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** #ifdef HAL_RNG_MODULE_ENABLED
+  41:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** 
+  42:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** RNG_HandleTypeDef g_rng_handle;
+  43:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** 
+  44:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** void hal_rng_config(void)
+  45:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** {
+  29              		.loc 1 45 0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 8
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33 0000 80B5     		push	{r7, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 7, -8
+  37              		.cfi_offset 14, -4
+  38 0002 82B0     		sub	sp, sp, #8
+  39              	.LCFI1:
+  40              		.cfi_def_cfa_offset 16
+  41 0004 00AF     		add	r7, sp, #0
+  42              	.LCFI2:
+  43              		.cfi_def_cfa_register 7
+  44              	.LBB2:
+  46:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****     __HAL_RCC_RNG_CLK_ENABLE();
+  45              		.loc 1 46 0
+  46 0006 0B4B     		ldr	r3, .L2
+  47 0008 DB6C     		ldr	r3, [r3, #76]
+  48 000a 0A4A     		ldr	r2, .L2
+  49 000c 43F48023 		orr	r3, r3, #262144
+  50 0010 D364     		str	r3, [r2, #76]
+  51 0012 084B     		ldr	r3, .L2
+  52 0014 DB6C     		ldr	r3, [r3, #76]
+  53 0016 03F48023 		and	r3, r3, #262144
+  54 001a 7B60     		str	r3, [r7, #4]
+  55 001c 7B68     		ldr	r3, [r7, #4]
+  56              	.LBE2:
+  47:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****     g_rng_handle.Instance = RNG;
+  57              		.loc 1 47 0
+  58 001e 064B     		ldr	r3, .L2+4
+  59 0020 064A     		ldr	r2, .L2+8
+  60 0022 1A60     		str	r2, [r3]
+  48:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****     (void)HAL_RNG_Init(&g_rng_handle);
+  61              		.loc 1 48 0
+  62 0024 0448     		ldr	r0, .L2+4
+  63 0026 FFF7FEFF 		bl	HAL_RNG_Init
+  49:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** }
+  64              		.loc 1 49 0
+  65 002a 00BF     		nop
+  66 002c 0837     		adds	r7, r7, #8
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccLGmb3b.s 			page 3
+
+
+  67              	.LCFI3:
+  68              		.cfi_def_cfa_offset 8
+  69 002e BD46     		mov	sp, r7
+  70              	.LCFI4:
+  71              		.cfi_def_cfa_register 13
+  72              		@ sp needed
+  73 0030 80BD     		pop	{r7, pc}
+  74              	.L3:
+  75 0032 00BF     		.align	2
+  76              	.L2:
+  77 0034 00100240 		.word	1073876992
+  78 0038 00000000 		.word	g_rng_handle
+  79 003c 00080650 		.word	1342572544
+  80              		.cfi_endproc
+  81              	.LFE133:
+  83              		.section	.text.hal_rng_generate_number,"ax",%progbits
+  84              		.align	1
+  85              		.global	hal_rng_generate_number
+  86              		.syntax unified
+  87              		.thumb
+  88              		.thumb_func
+  89              		.fpu fpv4-sp-d16
+  91              	hal_rng_generate_number:
+  92              	.LFB134:
+  50:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** 
+  51:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** int hal_rng_generate_number()
+  52:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** {
+  93              		.loc 1 52 0
+  94              		.cfi_startproc
+  95              		@ args = 0, pretend = 0, frame = 8
+  96              		@ frame_needed = 1, uses_anonymous_args = 0
+  97 0000 80B5     		push	{r7, lr}
+  98              	.LCFI5:
+  99              		.cfi_def_cfa_offset 8
+ 100              		.cfi_offset 7, -8
+ 101              		.cfi_offset 14, -4
+ 102 0002 82B0     		sub	sp, sp, #8
+ 103              	.LCFI6:
+ 104              		.cfi_def_cfa_offset 16
+ 105 0004 00AF     		add	r7, sp, #0
+ 106              	.LCFI7:
+ 107              		.cfi_def_cfa_register 7
+  53:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****     uint32_t random_number;
+  54:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** 
+  55:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****     if (HAL_RNG_GenerateRandomNumber(&g_rng_handle, &random_number) != HAL_OK)
+ 108              		.loc 1 55 0
+ 109 0006 3B1D     		adds	r3, r7, #4
+ 110 0008 1946     		mov	r1, r3
+ 111 000a 0648     		ldr	r0, .L8
+ 112 000c FFF7FEFF 		bl	HAL_RNG_GenerateRandomNumber
+ 113 0010 0346     		mov	r3, r0
+ 114 0012 002B     		cmp	r3, #0
+ 115 0014 01D0     		beq	.L5
+  56:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****     {
+  57:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****         return 0U;
+ 116              		.loc 1 57 0
+ 117 0016 0023     		movs	r3, #0
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccLGmb3b.s 			page 4
+
+
+ 118 0018 00E0     		b	.L7
+ 119              	.L5:
+  58:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****     }
+  59:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** 
+  60:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****     return (int)random_number;
+ 120              		.loc 1 60 0
+ 121 001a 7B68     		ldr	r3, [r7, #4]
+ 122              	.L7:
+  61:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** }
+ 123              		.loc 1 61 0 discriminator 1
+ 124 001c 1846     		mov	r0, r3
+ 125 001e 0837     		adds	r7, r7, #8
+ 126              	.LCFI8:
+ 127              		.cfi_def_cfa_offset 8
+ 128 0020 BD46     		mov	sp, r7
+ 129              	.LCFI9:
+ 130              		.cfi_def_cfa_register 13
+ 131              		@ sp needed
+ 132 0022 80BD     		pop	{r7, pc}
+ 133              	.L9:
+ 134              		.align	2
+ 135              	.L8:
+ 136 0024 00000000 		.word	g_rng_handle
+ 137              		.cfi_endproc
+ 138              	.LFE134:
+ 140              		.section	.text.hal_rng_generate_buffer,"ax",%progbits
+ 141              		.align	1
+ 142              		.global	hal_rng_generate_buffer
+ 143              		.syntax unified
+ 144              		.thumb
+ 145              		.thumb_func
+ 146              		.fpu fpv4-sp-d16
+ 148              	hal_rng_generate_buffer:
+ 149              	.LFB135:
+  62:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** 
+  63:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** int hal_rng_generate_buffer(void* buf, size_t len)
+  64:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** {
+ 150              		.loc 1 64 0
+ 151              		.cfi_startproc
+ 152              		@ args = 0, pretend = 0, frame = 24
+ 153              		@ frame_needed = 1, uses_anonymous_args = 0
+ 154 0000 80B5     		push	{r7, lr}
+ 155              	.LCFI10:
+ 156              		.cfi_def_cfa_offset 8
+ 157              		.cfi_offset 7, -8
+ 158              		.cfi_offset 14, -4
+ 159 0002 86B0     		sub	sp, sp, #24
+ 160              	.LCFI11:
+ 161              		.cfi_def_cfa_offset 32
+ 162 0004 00AF     		add	r7, sp, #0
+ 163              	.LCFI12:
+ 164              		.cfi_def_cfa_register 7
+ 165 0006 7860     		str	r0, [r7, #4]
+ 166 0008 3960     		str	r1, [r7]
+  65:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****     size_t i;
+  66:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****     uint32_t random_number;
+  67:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****     uint8_t* pbuf;
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccLGmb3b.s 			page 5
+
+
+  68:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** 
+  69:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****     if (NULL == buf)
+ 167              		.loc 1 69 0
+ 168 000a 7B68     		ldr	r3, [r7, #4]
+ 169 000c 002B     		cmp	r3, #0
+ 170 000e 02D1     		bne	.L11
+  70:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****     {
+  71:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****         return -1;
+ 171              		.loc 1 71 0
+ 172 0010 4FF0FF33 		mov	r3, #-1
+ 173 0014 27E0     		b	.L16
+ 174              	.L11:
+  72:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****     }
+  73:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** 
+  74:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****     pbuf = (uint8_t*)buf;
+ 175              		.loc 1 74 0
+ 176 0016 7B68     		ldr	r3, [r7, #4]
+ 177 0018 3B61     		str	r3, [r7, #16]
+  75:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** 
+  76:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****     for (i = 0; i < len; i += sizeof(uint32_t))
+ 178              		.loc 1 76 0
+ 179 001a 0023     		movs	r3, #0
+ 180 001c 7B61     		str	r3, [r7, #20]
+ 181 001e 1DE0     		b	.L13
+ 182              	.L15:
+  77:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****     {
+  78:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****         if (HAL_RNG_GenerateRandomNumber(&g_rng_handle, &random_number) != HAL_OK)
+ 183              		.loc 1 78 0
+ 184 0020 07F10C03 		add	r3, r7, #12
+ 185 0024 1946     		mov	r1, r3
+ 186 0026 1248     		ldr	r0, .L17
+ 187 0028 FFF7FEFF 		bl	HAL_RNG_GenerateRandomNumber
+ 188 002c 0346     		mov	r3, r0
+ 189 002e 002B     		cmp	r3, #0
+ 190 0030 02D0     		beq	.L14
+  79:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****         {
+  80:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****             return -1;
+ 191              		.loc 1 80 0
+ 192 0032 4FF0FF33 		mov	r3, #-1
+ 193 0036 16E0     		b	.L16
+ 194              	.L14:
+  81:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****         }
+  82:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****         memcpy(pbuf + i, &random_number,
+ 195              		.loc 1 82 0 discriminator 2
+ 196 0038 3A69     		ldr	r2, [r7, #16]
+ 197 003a 7B69     		ldr	r3, [r7, #20]
+ 198 003c D018     		adds	r0, r2, r3
+  83:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****                sizeof(uint32_t) > len - i ? len - i : sizeof(uint32_t));
+ 199              		.loc 1 83 0 discriminator 2
+ 200 003e 3A68     		ldr	r2, [r7]
+ 201 0040 7B69     		ldr	r3, [r7, #20]
+ 202 0042 D31A     		subs	r3, r2, r3
+ 203 0044 042B     		cmp	r3, #4
+ 204 0046 28BF     		it	cs
+ 205 0048 0423     		movcs	r3, #4
+ 206 004a 1A46     		mov	r2, r3
+  82:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****                sizeof(uint32_t) > len - i ? len - i : sizeof(uint32_t));
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccLGmb3b.s 			page 6
+
+
+ 207              		.loc 1 82 0 discriminator 2
+ 208 004c 07F10C03 		add	r3, r7, #12
+ 209 0050 1946     		mov	r1, r3
+ 210 0052 FFF7FEFF 		bl	memcpy
+  76:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****     {
+ 211              		.loc 1 76 0 discriminator 2
+ 212 0056 7B69     		ldr	r3, [r7, #20]
+ 213 0058 0433     		adds	r3, r3, #4
+ 214 005a 7B61     		str	r3, [r7, #20]
+ 215              	.L13:
+  76:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****     {
+ 216              		.loc 1 76 0 is_stmt 0 discriminator 1
+ 217 005c 7A69     		ldr	r2, [r7, #20]
+ 218 005e 3B68     		ldr	r3, [r7]
+ 219 0060 9A42     		cmp	r2, r3
+ 220 0062 DDD3     		bcc	.L15
+  84:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****     }
+  85:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** 
+  86:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c ****     return 0;
+ 221              		.loc 1 86 0 is_stmt 1
+ 222 0064 0023     		movs	r3, #0
+ 223              	.L16:
+  87:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/Src\hal_rng.c **** }
+ 224              		.loc 1 87 0 discriminator 1
+ 225 0066 1846     		mov	r0, r3
+ 226 0068 1837     		adds	r7, r7, #24
+ 227              	.LCFI13:
+ 228              		.cfi_def_cfa_offset 8
+ 229 006a BD46     		mov	sp, r7
+ 230              	.LCFI14:
+ 231              		.cfi_def_cfa_register 13
+ 232              		@ sp needed
+ 233 006c 80BD     		pop	{r7, pc}
+ 234              	.L18:
+ 235 006e 00BF     		.align	2
+ 236              	.L17:
+ 237 0070 00000000 		.word	g_rng_handle
+ 238              		.cfi_endproc
+ 239              	.LFE135:
+ 241              		.text
+ 242              	.Letext0:
+ 243              		.file 2 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 244              		.file 3 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 245              		.file 4 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 246              		.file 5 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 247              		.file 6 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 248              		.file 7 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 249              		.file 8 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 250              		.file 9 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/system_stm32l4xx.h"
+ 251              		.file 10 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/stm32l431xx.h"
+ 252              		.file 11 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_typedef.h"
+ 253              		.file 12 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_config.h"
+ 254              		.file 13 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_list.h"
+ 255              		.file 14 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_err.h"
+ 256              		.file 15 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 257              		.file 16 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_tick.h"
+ 258              		.file 17 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_event.h"
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccLGmb3b.s 			page 7
+
+
+ 259              		.file 18 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_task.h"
+ 260              		.file 19 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/include/los_task.ph"
+ 261              		.file 20 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/main.h"
+ 262              		.file 21 "E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h
+ 263              		.file 22 "E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rng.h
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccLGmb3b.s 			page 8
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 hal_rng.c
+                            *COM*:0000000c g_rng_handle
+C:\Users\user\AppData\Local\Temp\ccLGmb3b.s:19     .text.hal_rng_config:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccLGmb3b.s:26     .text.hal_rng_config:00000000 hal_rng_config
+C:\Users\user\AppData\Local\Temp\ccLGmb3b.s:77     .text.hal_rng_config:00000034 $d
+C:\Users\user\AppData\Local\Temp\ccLGmb3b.s:84     .text.hal_rng_generate_number:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccLGmb3b.s:91     .text.hal_rng_generate_number:00000000 hal_rng_generate_number
+C:\Users\user\AppData\Local\Temp\ccLGmb3b.s:136    .text.hal_rng_generate_number:00000024 $d
+C:\Users\user\AppData\Local\Temp\ccLGmb3b.s:141    .text.hal_rng_generate_buffer:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccLGmb3b.s:148    .text.hal_rng_generate_buffer:00000000 hal_rng_generate_buffer
+C:\Users\user\AppData\Local\Temp\ccLGmb3b.s:237    .text.hal_rng_generate_buffer:00000070 $d
+
+UNDEFINED SYMBOLS
+HAL_RNG_Init
+HAL_RNG_GenerateRandomNumber
+memcpy

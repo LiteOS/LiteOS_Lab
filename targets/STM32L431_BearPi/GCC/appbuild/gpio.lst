@@ -1,0 +1,282 @@
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccBaVQgW.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"gpio.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.MX_GPIO_Init,"ax",%progbits
+  18              		.align	1
+  19              		.global	MX_GPIO_Init
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	MX_GPIO_Init:
+  26              	.LFB133:
+  27              		.file 1 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src/gpio.c"
+   1:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** /**
+   2:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   ******************************************************************************
+   3:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   * File Name          : gpio.c
+   4:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   * Description        : This file provides code for the configuration
+   5:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   *                      of all used GPIO pins.
+   6:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   ******************************************************************************
+   7:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   ** This notice applies to any and all portions of this file
+   8:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   * that are not between comment pairs USER CODE BEGIN and
+   9:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   * USER CODE END. Other portions of this file, whether 
+  10:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   * inserted by the user or by software development tools
+  11:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   * are owned by their respective copyright owners.
+  12:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   *
+  13:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   * COPYRIGHT(c) 2018 STMicroelectronics
+  14:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   *
+  15:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  16:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   * are permitted provided that the following conditions are met:
+  17:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  18:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   *      this list of conditions and the following disclaimer.
+  19:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  20:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   *      this list of conditions and the following disclaimer in the documentation
+  21:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   *      and/or other materials provided with the distribution.
+  22:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  23:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   *      may be used to endorse or promote products derived from this software
+  24:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   *      without specific prior written permission.
+  25:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   *
+  26:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  27:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  28:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  29:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  30:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  31:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccBaVQgW.s 			page 2
+
+
+  32:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  33:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  34:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  35:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  36:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   *
+  37:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   ******************************************************************************
+  38:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   */
+  39:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** 
+  40:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** /* Includes ------------------------------------------------------------------*/
+  41:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** #include "gpio.h"
+  42:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** /* USER CODE BEGIN 0 */
+  43:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** 
+  44:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** /* USER CODE END 0 */
+  45:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** 
+  46:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** /*----------------------------------------------------------------------------*/
+  47:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** /* Configure GPIO                                                             */
+  48:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** /*----------------------------------------------------------------------------*/
+  49:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** /* USER CODE BEGIN 1 */
+  50:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** 
+  51:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** /* USER CODE END 1 */
+  52:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** 
+  53:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** /** Configure pins as 
+  54:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****         * Analog 
+  55:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****         * Input 
+  56:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****         * Output
+  57:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****         * EVENT_OUT
+  58:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****         * EXTI
+  59:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** */
+  60:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** void MX_GPIO_Init(void)
+  61:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** {
+  28              		.loc 1 61 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 40
+  31              		@ frame_needed = 1, uses_anonymous_args = 0
+  32 0000 80B5     		push	{r7, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 8
+  35              		.cfi_offset 7, -8
+  36              		.cfi_offset 14, -4
+  37 0002 8AB0     		sub	sp, sp, #40
+  38              	.LCFI1:
+  39              		.cfi_def_cfa_offset 48
+  40 0004 00AF     		add	r7, sp, #0
+  41              	.LCFI2:
+  42              		.cfi_def_cfa_register 7
+  43              	.LBB2:
+  62:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** 
+  63:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   GPIO_InitTypeDef GPIO_InitStruct;
+  64:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** 
+  65:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   /* GPIO Ports Clock Enable */
+  66:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   __HAL_RCC_GPIOC_CLK_ENABLE();
+  44              		.loc 1 66 0
+  45 0006 2A4B     		ldr	r3, .L2
+  46 0008 DB6C     		ldr	r3, [r3, #76]
+  47 000a 294A     		ldr	r2, .L2
+  48 000c 43F00403 		orr	r3, r3, #4
+  49 0010 D364     		str	r3, [r2, #76]
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccBaVQgW.s 			page 3
+
+
+  50 0012 274B     		ldr	r3, .L2
+  51 0014 DB6C     		ldr	r3, [r3, #76]
+  52 0016 03F00403 		and	r3, r3, #4
+  53 001a 3B61     		str	r3, [r7, #16]
+  54 001c 3B69     		ldr	r3, [r7, #16]
+  55              	.LBE2:
+  56              	.LBB3:
+  67:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   __HAL_RCC_GPIOH_CLK_ENABLE();
+  57              		.loc 1 67 0
+  58 001e 244B     		ldr	r3, .L2
+  59 0020 DB6C     		ldr	r3, [r3, #76]
+  60 0022 234A     		ldr	r2, .L2
+  61 0024 43F08003 		orr	r3, r3, #128
+  62 0028 D364     		str	r3, [r2, #76]
+  63 002a 214B     		ldr	r3, .L2
+  64 002c DB6C     		ldr	r3, [r3, #76]
+  65 002e 03F08003 		and	r3, r3, #128
+  66 0032 FB60     		str	r3, [r7, #12]
+  67 0034 FB68     		ldr	r3, [r7, #12]
+  68              	.LBE3:
+  69              	.LBB4:
+  68:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   __HAL_RCC_GPIOA_CLK_ENABLE();
+  70              		.loc 1 68 0
+  71 0036 1E4B     		ldr	r3, .L2
+  72 0038 DB6C     		ldr	r3, [r3, #76]
+  73 003a 1D4A     		ldr	r2, .L2
+  74 003c 43F00103 		orr	r3, r3, #1
+  75 0040 D364     		str	r3, [r2, #76]
+  76 0042 1B4B     		ldr	r3, .L2
+  77 0044 DB6C     		ldr	r3, [r3, #76]
+  78 0046 03F00103 		and	r3, r3, #1
+  79 004a BB60     		str	r3, [r7, #8]
+  80 004c BB68     		ldr	r3, [r7, #8]
+  81              	.LBE4:
+  82              	.LBB5:
+  69:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   __HAL_RCC_GPIOB_CLK_ENABLE();
+  83              		.loc 1 69 0
+  84 004e 184B     		ldr	r3, .L2
+  85 0050 DB6C     		ldr	r3, [r3, #76]
+  86 0052 174A     		ldr	r2, .L2
+  87 0054 43F00203 		orr	r3, r3, #2
+  88 0058 D364     		str	r3, [r2, #76]
+  89 005a 154B     		ldr	r3, .L2
+  90 005c DB6C     		ldr	r3, [r3, #76]
+  91 005e 03F00203 		and	r3, r3, #2
+  92 0062 7B60     		str	r3, [r7, #4]
+  93 0064 7B68     		ldr	r3, [r7, #4]
+  94              	.LBE5:
+  70:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** 
+  71:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** 	/*Configure GPIO pin Output Level */
+  72:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   HAL_GPIO_WritePin(Light_GPIO_Port, Light_Pin, GPIO_PIN_RESET);
+  95              		.loc 1 72 0
+  96 0066 0022     		movs	r2, #0
+  97 0068 4FF40071 		mov	r1, #512
+  98 006c 1148     		ldr	r0, .L2+4
+  99 006e FFF7FEFF 		bl	HAL_GPIO_WritePin
+  73:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** 
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccBaVQgW.s 			page 4
+
+
+  74:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** 	/*Configure GPIO pin : PtPin */
+  75:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   GPIO_InitStruct.Pin = Light_Pin;
+ 100              		.loc 1 75 0
+ 101 0072 4FF40073 		mov	r3, #512
+ 102 0076 7B61     		str	r3, [r7, #20]
+  76:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 103              		.loc 1 76 0
+ 104 0078 0123     		movs	r3, #1
+ 105 007a BB61     		str	r3, [r7, #24]
+  77:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 106              		.loc 1 77 0
+ 107 007c 0023     		movs	r3, #0
+ 108 007e FB61     		str	r3, [r7, #28]
+  78:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 109              		.loc 1 78 0
+ 110 0080 0023     		movs	r3, #0
+ 111 0082 3B62     		str	r3, [r7, #32]
+  79:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   HAL_GPIO_Init(Light_GPIO_Port, &GPIO_InitStruct);
+ 112              		.loc 1 79 0
+ 113 0084 07F11403 		add	r3, r7, #20
+ 114 0088 1946     		mov	r1, r3
+ 115 008a 0A48     		ldr	r0, .L2+4
+ 116 008c FFF7FEFF 		bl	HAL_GPIO_Init
+  80:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** 	
+  81:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** 	GPIO_InitStruct.Pin = KEY1_Pin|KEY2_Pin;
+ 117              		.loc 1 81 0
+ 118 0090 0C23     		movs	r3, #12
+ 119 0092 7B61     		str	r3, [r7, #20]
+  82:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+ 120              		.loc 1 82 0
+ 121 0094 084B     		ldr	r3, .L2+8
+ 122 0096 BB61     		str	r3, [r7, #24]
+  83:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   GPIO_InitStruct.Pull = GPIO_PULLUP;
+ 123              		.loc 1 83 0
+ 124 0098 0123     		movs	r3, #1
+ 125 009a FB61     		str	r3, [r7, #28]
+  84:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c ****   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+ 126              		.loc 1 84 0
+ 127 009c 07F11403 		add	r3, r7, #20
+ 128 00a0 1946     		mov	r1, r3
+ 129 00a2 0448     		ldr	r0, .L2+4
+ 130 00a4 FFF7FEFF 		bl	HAL_GPIO_Init
+  85:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** 	
+  86:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\gpio.c **** }
+ 131              		.loc 1 86 0
+ 132 00a8 00BF     		nop
+ 133 00aa 2837     		adds	r7, r7, #40
+ 134              	.LCFI3:
+ 135              		.cfi_def_cfa_offset 8
+ 136 00ac BD46     		mov	sp, r7
+ 137              	.LCFI4:
+ 138              		.cfi_def_cfa_register 13
+ 139              		@ sp needed
+ 140 00ae 80BD     		pop	{r7, pc}
+ 141              	.L3:
+ 142              		.align	2
+ 143              	.L2:
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccBaVQgW.s 			page 5
+
+
+ 144 00b0 00100240 		.word	1073876992
+ 145 00b4 00040048 		.word	1207960576
+ 146 00b8 00002110 		.word	270598144
+ 147              		.cfi_endproc
+ 148              	.LFE133:
+ 150              		.text
+ 151              	.Letext0:
+ 152              		.file 2 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 153              		.file 3 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 154              		.file 4 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 155              		.file 5 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 156              		.file 6 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 157              		.file 7 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_typedef.h"
+ 158              		.file 8 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 159              		.file 9 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 160              		.file 10 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/system_stm32l4xx.h"
+ 161              		.file 11 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/stm32l431xx.h"
+ 162              		.file 12 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_config.h"
+ 163              		.file 13 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_list.h"
+ 164              		.file 14 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_err.h"
+ 165              		.file 15 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 166              		.file 16 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_tick.h"
+ 167              		.file 17 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_event.h"
+ 168              		.file 18 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_task.h"
+ 169              		.file 19 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/include/los_task.ph"
+ 170              		.file 20 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/main.h"
+ 171              		.file 21 "E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_gpio.
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccBaVQgW.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 gpio.c
+C:\Users\user\AppData\Local\Temp\ccBaVQgW.s:18     .text.MX_GPIO_Init:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccBaVQgW.s:25     .text.MX_GPIO_Init:00000000 MX_GPIO_Init
+C:\Users\user\AppData\Local\Temp\ccBaVQgW.s:144    .text.MX_GPIO_Init:000000b0 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_WritePin
+HAL_GPIO_Init

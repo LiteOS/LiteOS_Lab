@@ -1,0 +1,1148 @@
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccKzaB4J.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"los_memory.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.LOS_MemInit,"ax",%progbits
+  18              		.align	1
+  19              		.global	LOS_MemInit
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	LOS_MemInit:
+  26              	.LFB160:
+  27              		.file 1 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap/los_memory.c"
+   1:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** /*----------------------------------------------------------------------------
+   2:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * All rights reserved.
+   4:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * are permitted provided that the following conditions are met:
+   6:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * conditions and the following disclaimer.
+   8:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * provided with the distribution.
+  11:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * permission.
+  14:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  *---------------------------------------------------------------------------*/
+  26:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** /*----------------------------------------------------------------------------
+  27:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * Notice of Export Control Law
+  28:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * ===============================================
+  29:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccKzaB4J.s 			page 2
+
+
+  32:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  * applicable export control laws and regulations.
+  33:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  *---------------------------------------------------------------------------*/
+  34:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+  35:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** #include <los_config.h>
+  36:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+  37:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** #if (LOSCFG_HEAP_IMPROVED == YES)
+  38:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+  39:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** #include <string.h>
+  40:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+  41:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** #include <mem.h>
+  42:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** #include <heap.h>
+  43:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+  44:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** #ifdef LOSCFG_ENABLE_MPU
+  45:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** #include <los_task.ph>
+  46:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** #endif
+  47:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+  48:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** #include <stdbool.h>
+  49:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+  50:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** /*****************************************************************************
+  51:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Function : LOS_MemInit
+  52:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Description : Initialize Dynamic Memory pool
+  53:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Input       : pPool  --- Pointer to memory pool
+  54:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****                uwSize --- Size of memory in bytes to allocate
+  55:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Output      : None
+  56:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Return      : LOS_OK - Ok, LOS_NOK - Error
+  57:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** *****************************************************************************/
+  58:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** UINT32 LOS_MemInit (VOID *pPool, UINT32 uwSize)
+  59:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** {
+  28              		.loc 1 59 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 16
+  31              		@ frame_needed = 1, uses_anonymous_args = 0
+  32 0000 80B5     		push	{r7, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 8
+  35              		.cfi_offset 7, -8
+  36              		.cfi_offset 14, -4
+  37 0002 84B0     		sub	sp, sp, #16
+  38              	.LCFI1:
+  39              		.cfi_def_cfa_offset 24
+  40 0004 00AF     		add	r7, sp, #0
+  41              	.LCFI2:
+  42              		.cfi_def_cfa_register 7
+  43 0006 7860     		str	r0, [r7, #4]
+  44 0008 3960     		str	r1, [r7]
+  60:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     heap_t *                heap;
+  61:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+  62:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     uwSize -= (UINT32) pPool & ALLOC_ALIGN_MASK;
+  45              		.loc 1 62 0
+  46 000a 7B68     		ldr	r3, [r7, #4]
+  47 000c 03F00303 		and	r3, r3, #3
+  48 0010 3A68     		ldr	r2, [r7]
+  49 0012 D31A     		subs	r3, r2, r3
+  50 0014 3B60     		str	r3, [r7]
+  63:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     uwSize &= ~ALLOC_ALIGN_MASK;
+  51              		.loc 1 63 0
+  52 0016 3B68     		ldr	r3, [r7]
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccKzaB4J.s 			page 3
+
+
+  53 0018 23F00303 		bic	r3, r3, #3
+  54 001c 3B60     		str	r3, [r7]
+  64:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     pPool  = (char *) ((UINT32) pPool & ~ALLOC_ALIGN_MASK);
+  55              		.loc 1 64 0
+  56 001e 7B68     		ldr	r3, [r7, #4]
+  57 0020 23F00303 		bic	r3, r3, #3
+  58 0024 7B60     		str	r3, [r7, #4]
+  65:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+  66:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     if (pPool == NULL || uwSize <= sizeof(heap_t))
+  59              		.loc 1 66 0
+  60 0026 7B68     		ldr	r3, [r7, #4]
+  61 0028 002B     		cmp	r3, #0
+  62 002a 03D0     		beq	.L2
+  63              		.loc 1 66 0 is_stmt 0 discriminator 1
+  64 002c 3B68     		ldr	r3, [r7]
+  65 002e B3F50C7F 		cmp	r3, #560
+  66 0032 01D8     		bhi	.L3
+  67              	.L2:
+  67:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     {
+  68:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****         return LOS_NOK;
+  68              		.loc 1 68 0 is_stmt 1
+  69 0034 0123     		movs	r3, #1
+  70 0036 14E0     		b	.L4
+  71              	.L3:
+  69:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     }
+  70:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+  71:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     heap = (heap_t *) pPool;
+  72              		.loc 1 71 0
+  73 0038 7B68     		ldr	r3, [r7, #4]
+  74 003a FB60     		str	r3, [r7, #12]
+  72:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+  73:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     heap_init (heap);
+  75              		.loc 1 73 0
+  76 003c F868     		ldr	r0, [r7, #12]
+  77 003e FFF7FEFF 		bl	heap_init
+  74:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+  75:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     if (heap_add (heap, (char *) (heap + 1), uwSize - sizeof (heap_t)) != 0)
+  78              		.loc 1 75 0
+  79 0042 FB68     		ldr	r3, [r7, #12]
+  80 0044 03F50C71 		add	r1, r3, #560
+  81 0048 3B68     		ldr	r3, [r7]
+  82 004a A3F50C73 		sub	r3, r3, #560
+  83 004e 1A46     		mov	r2, r3
+  84 0050 F868     		ldr	r0, [r7, #12]
+  85 0052 FFF7FEFF 		bl	heap_add
+  86 0056 0346     		mov	r3, r0
+  87 0058 002B     		cmp	r3, #0
+  88 005a 01D0     		beq	.L5
+  76:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     {
+  77:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****         return LOS_NOK;
+  89              		.loc 1 77 0
+  90 005c 0123     		movs	r3, #1
+  91 005e 00E0     		b	.L4
+  92              	.L5:
+  78:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     }
+  79:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+  80:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     return LOS_OK;
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccKzaB4J.s 			page 4
+
+
+  93              		.loc 1 80 0
+  94 0060 0023     		movs	r3, #0
+  95              	.L4:
+  81:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** }
+  96              		.loc 1 81 0
+  97 0062 1846     		mov	r0, r3
+  98 0064 1037     		adds	r7, r7, #16
+  99              	.LCFI3:
+ 100              		.cfi_def_cfa_offset 8
+ 101 0066 BD46     		mov	sp, r7
+ 102              	.LCFI4:
+ 103              		.cfi_def_cfa_register 13
+ 104              		@ sp needed
+ 105 0068 80BD     		pop	{r7, pc}
+ 106              		.cfi_endproc
+ 107              	.LFE160:
+ 109              		.section	.text.osMemSystemInit,"ax",%progbits
+ 110              		.align	1
+ 111              		.global	osMemSystemInit
+ 112              		.syntax unified
+ 113              		.thumb
+ 114              		.thumb_func
+ 115              		.fpu fpv4-sp-d16
+ 117              	osMemSystemInit:
+ 118              	.LFB161:
+  82:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+  83:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** UINT32 osMemSystemInit(VOID)
+  84:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** {
+ 119              		.loc 1 84 0
+ 120              		.cfi_startproc
+ 121              		@ args = 0, pretend = 0, frame = 8
+ 122              		@ frame_needed = 1, uses_anonymous_args = 0
+ 123 0000 80B5     		push	{r7, lr}
+ 124              	.LCFI5:
+ 125              		.cfi_def_cfa_offset 8
+ 126              		.cfi_offset 7, -8
+ 127              		.cfi_offset 14, -4
+ 128 0002 82B0     		sub	sp, sp, #8
+ 129              	.LCFI6:
+ 130              		.cfi_def_cfa_offset 16
+ 131 0004 00AF     		add	r7, sp, #0
+ 132              	.LCFI7:
+ 133              		.cfi_def_cfa_register 7
+  85:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     UINT32                  uwRet;
+  86:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     const struct phys_mem * spm = system_phys_mem;
+ 134              		.loc 1 86 0
+ 135 0006 1A4B     		ldr	r3, .L11
+ 136 0008 7B60     		str	r3, [r7, #4]
+  87:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+  88:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     uwRet = LOS_MemInit((VOID *)spm->start, (UINT32)(spm->end - spm->start));
+ 137              		.loc 1 88 0
+ 138 000a 7B68     		ldr	r3, [r7, #4]
+ 139 000c 1B68     		ldr	r3, [r3]
+ 140 000e 1846     		mov	r0, r3
+ 141 0010 7B68     		ldr	r3, [r7, #4]
+ 142 0012 5A68     		ldr	r2, [r3, #4]
+ 143 0014 7B68     		ldr	r3, [r7, #4]
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccKzaB4J.s 			page 5
+
+
+ 144 0016 1B68     		ldr	r3, [r3]
+ 145 0018 D31A     		subs	r3, r2, r3
+ 146 001a 1946     		mov	r1, r3
+ 147 001c FFF7FEFF 		bl	LOS_MemInit
+ 148 0020 3860     		str	r0, [r7]
+  89:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+  90:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     if (uwRet != LOS_OK)
+ 149              		.loc 1 90 0
+ 150 0022 3B68     		ldr	r3, [r7]
+ 151 0024 002B     		cmp	r3, #0
+ 152 0026 01D0     		beq	.L7
+  91:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     {
+  92:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****         return uwRet;
+ 153              		.loc 1 92 0
+ 154 0028 3B68     		ldr	r3, [r7]
+ 155 002a 1DE0     		b	.L8
+ 156              	.L7:
+  93:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     }
+  94:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+  95:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     m_aucSysMem0 = (UINT8*) spm->start;
+ 157              		.loc 1 95 0
+ 158 002c 7B68     		ldr	r3, [r7, #4]
+ 159 002e 1B68     		ldr	r3, [r3]
+ 160 0030 1A46     		mov	r2, r3
+ 161 0032 104B     		ldr	r3, .L11+4
+ 162 0034 1A60     		str	r2, [r3]
+  96:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+  97:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     spm++;
+ 163              		.loc 1 97 0
+ 164 0036 7B68     		ldr	r3, [r7, #4]
+ 165 0038 0833     		adds	r3, r3, #8
+ 166 003a 7B60     		str	r3, [r7, #4]
+  98:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+  99:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     while (spm->end)
+ 167              		.loc 1 99 0
+ 168 003c 0FE0     		b	.L9
+ 169              	.L10:
+ 100:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     {
+ 101:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****         heap_add ((heap_t *) m_aucSysMem0, (char *) spm->start,
+ 170              		.loc 1 101 0
+ 171 003e 0D4B     		ldr	r3, .L11+4
+ 172 0040 1868     		ldr	r0, [r3]
+ 173 0042 7B68     		ldr	r3, [r7, #4]
+ 174 0044 1B68     		ldr	r3, [r3]
+ 175 0046 1946     		mov	r1, r3
+ 102:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****                   (size_t) spm->end - spm->start);
+ 176              		.loc 1 102 0
+ 177 0048 7B68     		ldr	r3, [r7, #4]
+ 178 004a 5A68     		ldr	r2, [r3, #4]
+ 179 004c 7B68     		ldr	r3, [r7, #4]
+ 180 004e 1B68     		ldr	r3, [r3]
+ 181 0050 D31A     		subs	r3, r2, r3
+ 101:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****                   (size_t) spm->end - spm->start);
+ 182              		.loc 1 101 0
+ 183 0052 1A46     		mov	r2, r3
+ 184 0054 FFF7FEFF 		bl	heap_add
+ 103:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccKzaB4J.s 			page 6
+
+
+ 104:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****         spm++;
+ 185              		.loc 1 104 0
+ 186 0058 7B68     		ldr	r3, [r7, #4]
+ 187 005a 0833     		adds	r3, r3, #8
+ 188 005c 7B60     		str	r3, [r7, #4]
+ 189              	.L9:
+  99:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     {
+ 190              		.loc 1 99 0
+ 191 005e 7B68     		ldr	r3, [r7, #4]
+ 192 0060 5B68     		ldr	r3, [r3, #4]
+ 193 0062 002B     		cmp	r3, #0
+ 194 0064 EBD1     		bne	.L10
+ 105:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     }
+ 106:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+ 107:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     return LOS_OK;
+ 195              		.loc 1 107 0
+ 196 0066 0023     		movs	r3, #0
+ 197              	.L8:
+ 108:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** }
+ 198              		.loc 1 108 0
+ 199 0068 1846     		mov	r0, r3
+ 200 006a 0837     		adds	r7, r7, #8
+ 201              	.LCFI8:
+ 202              		.cfi_def_cfa_offset 8
+ 203 006c BD46     		mov	sp, r7
+ 204              	.LCFI9:
+ 205              		.cfi_def_cfa_register 13
+ 206              		@ sp needed
+ 207 006e 80BD     		pop	{r7, pc}
+ 208              	.L12:
+ 209              		.align	2
+ 210              	.L11:
+ 211 0070 00000000 		.word	system_phys_mem
+ 212 0074 00000000 		.word	m_aucSysMem0
+ 213              		.cfi_endproc
+ 214              	.LFE161:
+ 216              		.section	.text.osHeapAllocAlign,"ax",%progbits
+ 217              		.align	1
+ 218              		.global	osHeapAllocAlign
+ 219              		.syntax unified
+ 220              		.thumb
+ 221              		.thumb_func
+ 222              		.fpu fpv4-sp-d16
+ 224              	osHeapAllocAlign:
+ 225              	.LFB162:
+ 109:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+ 110:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** /*****************************************************************************
+ 111:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Function : osHeapAllocAlign
+ 112:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Description : To alloc memory block from the heap memory poll with
+ 113:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Input       : VOID *pPool       --- Pointer to the manager,to distinguish heap
+ 114:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****                UINT32 uwSize     --- size of the heap memory pool
+ 115:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****                UINT32 uwBoundary --- boundary the heap needs align
+ 116:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Output      : None
+ 117:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Return      : NULL:error    other value:the address of the memory we alloced
+ 118:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** *****************************************************************************/
+ 119:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** LITE_OS_SEC_TEXT VOID* osHeapAllocAlign(VOID *pPool, UINT32 uwSize, UINT32 uwBoundary)
+ 120:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** {
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccKzaB4J.s 			page 7
+
+
+ 226              		.loc 1 120 0
+ 227              		.cfi_startproc
+ 228              		@ args = 0, pretend = 0, frame = 16
+ 229              		@ frame_needed = 1, uses_anonymous_args = 0
+ 230 0000 80B5     		push	{r7, lr}
+ 231              	.LCFI10:
+ 232              		.cfi_def_cfa_offset 8
+ 233              		.cfi_offset 7, -8
+ 234              		.cfi_offset 14, -4
+ 235 0002 84B0     		sub	sp, sp, #16
+ 236              	.LCFI11:
+ 237              		.cfi_def_cfa_offset 24
+ 238 0004 00AF     		add	r7, sp, #0
+ 239              	.LCFI12:
+ 240              		.cfi_def_cfa_register 7
+ 241 0006 F860     		str	r0, [r7, #12]
+ 242 0008 B960     		str	r1, [r7, #8]
+ 243 000a 7A60     		str	r2, [r7, #4]
+ 121:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     return heap_alloc_align ((heap_t *) pPool, uwBoundary, uwSize);
+ 244              		.loc 1 121 0
+ 245 000c BA68     		ldr	r2, [r7, #8]
+ 246 000e 7968     		ldr	r1, [r7, #4]
+ 247 0010 F868     		ldr	r0, [r7, #12]
+ 248 0012 FFF7FEFF 		bl	heap_alloc_align
+ 249 0016 0346     		mov	r3, r0
+ 122:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** }
+ 250              		.loc 1 122 0
+ 251 0018 1846     		mov	r0, r3
+ 252 001a 1037     		adds	r7, r7, #16
+ 253              	.LCFI13:
+ 254              		.cfi_def_cfa_offset 8
+ 255 001c BD46     		mov	sp, r7
+ 256              	.LCFI14:
+ 257              		.cfi_def_cfa_register 13
+ 258              		@ sp needed
+ 259 001e 80BD     		pop	{r7, pc}
+ 260              		.cfi_endproc
+ 261              	.LFE162:
+ 263              		.section	.text.osHeapAlloc,"ax",%progbits
+ 264              		.align	1
+ 265              		.global	osHeapAlloc
+ 266              		.syntax unified
+ 267              		.thumb
+ 268              		.thumb_func
+ 269              		.fpu fpv4-sp-d16
+ 271              	osHeapAlloc:
+ 272              	.LFB163:
+ 123:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+ 124:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** /*****************************************************************************
+ 125:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Function : osHeapAlloc
+ 126:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Description : To alloc memory block from the heap memory poll
+ 127:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Input       : VOID *pPool   --- Pointer to the manager,to distinguish heap
+ 128:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****                UINT32 uwSize --- size of the heap memory pool
+ 129:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Output      : None
+ 130:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Return      : NULL:error    other value:the address of the memory we alloced
+ 131:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** *****************************************************************************/
+ 132:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** VOID * osHeapAlloc (VOID * pPool, UINT32 uwSize)
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccKzaB4J.s 			page 8
+
+
+ 133:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** {
+ 273              		.loc 1 133 0
+ 274              		.cfi_startproc
+ 275              		@ args = 0, pretend = 0, frame = 8
+ 276              		@ frame_needed = 1, uses_anonymous_args = 0
+ 277 0000 80B5     		push	{r7, lr}
+ 278              	.LCFI15:
+ 279              		.cfi_def_cfa_offset 8
+ 280              		.cfi_offset 7, -8
+ 281              		.cfi_offset 14, -4
+ 282 0002 82B0     		sub	sp, sp, #8
+ 283              	.LCFI16:
+ 284              		.cfi_def_cfa_offset 16
+ 285 0004 00AF     		add	r7, sp, #0
+ 286              	.LCFI17:
+ 287              		.cfi_def_cfa_register 7
+ 288 0006 7860     		str	r0, [r7, #4]
+ 289 0008 3960     		str	r1, [r7]
+ 134:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     return heap_alloc ((heap_t *) pPool, uwSize);
+ 290              		.loc 1 134 0
+ 291 000a 3968     		ldr	r1, [r7]
+ 292 000c 7868     		ldr	r0, [r7, #4]
+ 293 000e FFF7FEFF 		bl	heap_alloc
+ 294 0012 0346     		mov	r3, r0
+ 135:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** }
+ 295              		.loc 1 135 0
+ 296 0014 1846     		mov	r0, r3
+ 297 0016 0837     		adds	r7, r7, #8
+ 298              	.LCFI18:
+ 299              		.cfi_def_cfa_offset 8
+ 300 0018 BD46     		mov	sp, r7
+ 301              	.LCFI19:
+ 302              		.cfi_def_cfa_register 13
+ 303              		@ sp needed
+ 304 001a 80BD     		pop	{r7, pc}
+ 305              		.cfi_endproc
+ 306              	.LFE163:
+ 308              		.section	.text.osHeapFree,"ax",%progbits
+ 309              		.align	1
+ 310              		.global	osHeapFree
+ 311              		.syntax unified
+ 312              		.thumb
+ 313              		.thumb_func
+ 314              		.fpu fpv4-sp-d16
+ 316              	osHeapFree:
+ 317              	.LFB164:
+ 136:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+ 137:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** /*****************************************************************************
+ 138:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Function : osHeapFree
+ 139:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Description : To free the  memory block from  heap memory poll
+ 140:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Input       : VOID* pPool --- Pointer to the manager,to distinguish heap
+ 141:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****                VOID* pPtr: --- the pointer of heap memory we want to free
+ 142:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Output      : None
+ 143:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Return      : 1:success 0:error
+ 144:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** *****************************************************************************/
+ 145:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** BOOL osHeapFree (VOID * pPool, VOID * pMem)
+ 146:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** {
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccKzaB4J.s 			page 9
+
+
+ 318              		.loc 1 146 0
+ 319              		.cfi_startproc
+ 320              		@ args = 0, pretend = 0, frame = 8
+ 321              		@ frame_needed = 1, uses_anonymous_args = 0
+ 322 0000 80B5     		push	{r7, lr}
+ 323              	.LCFI20:
+ 324              		.cfi_def_cfa_offset 8
+ 325              		.cfi_offset 7, -8
+ 326              		.cfi_offset 14, -4
+ 327 0002 82B0     		sub	sp, sp, #8
+ 328              	.LCFI21:
+ 329              		.cfi_def_cfa_offset 16
+ 330 0004 00AF     		add	r7, sp, #0
+ 331              	.LCFI22:
+ 332              		.cfi_def_cfa_register 7
+ 333 0006 7860     		str	r0, [r7, #4]
+ 334 0008 3960     		str	r1, [r7]
+ 147:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     if (heap_free ((heap_t *) pPool, pMem) != 0)
+ 335              		.loc 1 147 0
+ 336 000a 3968     		ldr	r1, [r7]
+ 337 000c 7868     		ldr	r0, [r7, #4]
+ 338 000e FFF7FEFF 		bl	heap_free
+ 339 0012 0346     		mov	r3, r0
+ 340 0014 002B     		cmp	r3, #0
+ 341 0016 01D0     		beq	.L18
+ 148:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     {
+ 149:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****         return FALSE;
+ 342              		.loc 1 149 0
+ 343 0018 0023     		movs	r3, #0
+ 344 001a 00E0     		b	.L19
+ 345              	.L18:
+ 150:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     }
+ 151:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+ 152:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     return TRUE;
+ 346              		.loc 1 152 0
+ 347 001c 0123     		movs	r3, #1
+ 348              	.L19:
+ 153:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** }
+ 349              		.loc 1 153 0
+ 350 001e 1846     		mov	r0, r3
+ 351 0020 0837     		adds	r7, r7, #8
+ 352              	.LCFI23:
+ 353              		.cfi_def_cfa_offset 8
+ 354 0022 BD46     		mov	sp, r7
+ 355              	.LCFI24:
+ 356              		.cfi_def_cfa_register 13
+ 357              		@ sp needed
+ 358 0024 80BD     		pop	{r7, pc}
+ 359              		.cfi_endproc
+ 360              	.LFE164:
+ 362              		.section	.text.osHeapRealloc,"ax",%progbits
+ 363              		.align	1
+ 364              		.global	osHeapRealloc
+ 365              		.syntax unified
+ 366              		.thumb
+ 367              		.thumb_func
+ 368              		.fpu fpv4-sp-d16
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccKzaB4J.s 			page 10
+
+
+ 370              	osHeapRealloc:
+ 371              	.LFB165:
+ 154:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+ 155:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** /*****************************************************************************
+ 156:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Function : osHeapRealloc
+ 157:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Description : realloc memory from heap memory pool
+ 158:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Input       : VOID* pPool --- Pointer to the manager,to distinguish heap
+ 159:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****                VOID* pPtr: --- the pointer of heap memory we want to free
+ 160:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Output      : None
+ 161:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Return      : Pointer to allocated memory node
+ 162:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** *****************************************************************************/
+ 163:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** VOID *osHeapRealloc(VOID * pPool, VOID *pPtr, UINT32 uwSize)
+ 164:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** {
+ 372              		.loc 1 164 0
+ 373              		.cfi_startproc
+ 374              		@ args = 0, pretend = 0, frame = 16
+ 375              		@ frame_needed = 1, uses_anonymous_args = 0
+ 376 0000 80B5     		push	{r7, lr}
+ 377              	.LCFI25:
+ 378              		.cfi_def_cfa_offset 8
+ 379              		.cfi_offset 7, -8
+ 380              		.cfi_offset 14, -4
+ 381 0002 84B0     		sub	sp, sp, #16
+ 382              	.LCFI26:
+ 383              		.cfi_def_cfa_offset 24
+ 384 0004 00AF     		add	r7, sp, #0
+ 385              	.LCFI27:
+ 386              		.cfi_def_cfa_register 7
+ 387 0006 F860     		str	r0, [r7, #12]
+ 388 0008 B960     		str	r1, [r7, #8]
+ 389 000a 7A60     		str	r2, [r7, #4]
+ 165:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     return heap_realloc ((heap_t *) pPool, pPtr, uwSize);
+ 390              		.loc 1 165 0
+ 391 000c 7A68     		ldr	r2, [r7, #4]
+ 392 000e B968     		ldr	r1, [r7, #8]
+ 393 0010 F868     		ldr	r0, [r7, #12]
+ 394 0012 FFF7FEFF 		bl	heap_realloc
+ 395 0016 0346     		mov	r3, r0
+ 166:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** }
+ 396              		.loc 1 166 0
+ 397 0018 1846     		mov	r0, r3
+ 398 001a 1037     		adds	r7, r7, #16
+ 399              	.LCFI28:
+ 400              		.cfi_def_cfa_offset 8
+ 401 001c BD46     		mov	sp, r7
+ 402              	.LCFI29:
+ 403              		.cfi_def_cfa_register 13
+ 404              		@ sp needed
+ 405 001e 80BD     		pop	{r7, pc}
+ 406              		.cfi_endproc
+ 407              	.LFE165:
+ 409              		.section	.text.LOS_MemAlloc,"ax",%progbits
+ 410              		.align	1
+ 411              		.global	LOS_MemAlloc
+ 412              		.syntax unified
+ 413              		.thumb
+ 414              		.thumb_func
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccKzaB4J.s 			page 11
+
+
+ 415              		.fpu fpv4-sp-d16
+ 417              	LOS_MemAlloc:
+ 418              	.LFB166:
+ 167:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+ 168:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** /*****************************************************************************
+ 169:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Function : LOS_MemAlloc
+ 170:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Description : Allocate Memory from Memory pool
+ 171:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Input       : pPool  --- Pointer to memory pool
+ 172:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****                uwSize --- Size of memory in bytes to allocate
+ 173:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Output      : None
+ 174:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Return      : Pointer to allocated memory
+ 175:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** *****************************************************************************/
+ 176:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** LITE_OS_SEC_TEXT VOID *LOS_MemAlloc (VOID *pPool, UINT32 uwSize)
+ 177:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** {
+ 419              		.loc 1 177 0
+ 420              		.cfi_startproc
+ 421              		@ args = 0, pretend = 0, frame = 16
+ 422              		@ frame_needed = 1, uses_anonymous_args = 0
+ 423 0000 80B5     		push	{r7, lr}
+ 424              	.LCFI30:
+ 425              		.cfi_def_cfa_offset 8
+ 426              		.cfi_offset 7, -8
+ 427              		.cfi_offset 14, -4
+ 428 0002 84B0     		sub	sp, sp, #16
+ 429              	.LCFI31:
+ 430              		.cfi_def_cfa_offset 24
+ 431 0004 00AF     		add	r7, sp, #0
+ 432              	.LCFI32:
+ 433              		.cfi_def_cfa_register 7
+ 434 0006 7860     		str	r0, [r7, #4]
+ 435 0008 3960     		str	r1, [r7]
+ 178:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     VOID *pRet = NULL;
+ 436              		.loc 1 178 0
+ 437 000a 0023     		movs	r3, #0
+ 438 000c FB60     		str	r3, [r7, #12]
+ 179:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+ 180:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     if (0 == uwSize)
+ 439              		.loc 1 180 0
+ 440 000e 3B68     		ldr	r3, [r7]
+ 441 0010 002B     		cmp	r3, #0
+ 442 0012 01D1     		bne	.L23
+ 181:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     {
+ 182:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****         return pRet;
+ 443              		.loc 1 182 0
+ 444 0014 FB68     		ldr	r3, [r7, #12]
+ 445 0016 12E0     		b	.L24
+ 446              	.L23:
+ 183:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     }
+ 184:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+ 185:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     if (NULL == pPool)
+ 447              		.loc 1 185 0
+ 448 0018 7B68     		ldr	r3, [r7, #4]
+ 449 001a 002B     		cmp	r3, #0
+ 450 001c 01D1     		bne	.L25
+ 186:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     {
+ 187:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** #if (LOSCFG_ENABLE_MPU == YES)
+ 188:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****         pPool = g_stLosTask.pstRunTask->pPool;
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccKzaB4J.s 			page 12
+
+
+ 189:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** #else
+ 190:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****         return pRet;
+ 451              		.loc 1 190 0
+ 452 001e FB68     		ldr	r3, [r7, #12]
+ 453 0020 0DE0     		b	.L24
+ 454              	.L25:
+ 191:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** #endif
+ 192:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     }
+ 193:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+ 194:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** #if (LOSCFG_KERNEL_MEM_SLAB == YES)
+ 195:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     pRet = osSlabMemAlloc(pPool, uwSize);
+ 455              		.loc 1 195 0
+ 456 0022 3968     		ldr	r1, [r7]
+ 457 0024 7868     		ldr	r0, [r7, #4]
+ 458 0026 FFF7FEFF 		bl	osSlabMemAlloc
+ 459 002a F860     		str	r0, [r7, #12]
+ 196:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     if(pRet == NULL)
+ 460              		.loc 1 196 0
+ 461 002c FB68     		ldr	r3, [r7, #12]
+ 462 002e 002B     		cmp	r3, #0
+ 463 0030 04D1     		bne	.L26
+ 197:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** #endif
+ 198:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****         pRet = osHeapAlloc((heap_t *) pPool, uwSize);
+ 464              		.loc 1 198 0
+ 465 0032 3968     		ldr	r1, [r7]
+ 466 0034 7868     		ldr	r0, [r7, #4]
+ 467 0036 FFF7FEFF 		bl	osHeapAlloc
+ 468 003a F860     		str	r0, [r7, #12]
+ 469              	.L26:
+ 199:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+ 200:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     return pRet;
+ 470              		.loc 1 200 0
+ 471 003c FB68     		ldr	r3, [r7, #12]
+ 472              	.L24:
+ 201:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** }
+ 473              		.loc 1 201 0
+ 474 003e 1846     		mov	r0, r3
+ 475 0040 1037     		adds	r7, r7, #16
+ 476              	.LCFI33:
+ 477              		.cfi_def_cfa_offset 8
+ 478 0042 BD46     		mov	sp, r7
+ 479              	.LCFI34:
+ 480              		.cfi_def_cfa_register 13
+ 481              		@ sp needed
+ 482 0044 80BD     		pop	{r7, pc}
+ 483              		.cfi_endproc
+ 484              	.LFE166:
+ 486              		.section	.text.LOS_MemAllocAlign,"ax",%progbits
+ 487              		.align	1
+ 488              		.global	LOS_MemAllocAlign
+ 489              		.syntax unified
+ 490              		.thumb
+ 491              		.thumb_func
+ 492              		.fpu fpv4-sp-d16
+ 494              	LOS_MemAllocAlign:
+ 495              	.LFB167:
+ 202:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccKzaB4J.s 			page 13
+
+
+ 203:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** /*****************************************************************************
+ 204:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Function : LOS_MemAllocAlign
+ 205:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Description : align size then allocate node from Memory pool
+ 206:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Input       : pPool      --- Pointer to memory pool
+ 207:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****                uwSize     --- Size of memory in bytes to allocate
+ 208:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****                uwBoundary --- align form
+ 209:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Output      : None
+ 210:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Return      : Pointer to allocated memory node
+ 211:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** *****************************************************************************/
+ 212:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** LITE_OS_SEC_TEXT VOID *LOS_MemAllocAlign(VOID *pPool, UINT32 uwSize, UINT32 uwBoundary)
+ 213:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** {
+ 496              		.loc 1 213 0
+ 497              		.cfi_startproc
+ 498              		@ args = 0, pretend = 0, frame = 16
+ 499              		@ frame_needed = 1, uses_anonymous_args = 0
+ 500 0000 80B5     		push	{r7, lr}
+ 501              	.LCFI35:
+ 502              		.cfi_def_cfa_offset 8
+ 503              		.cfi_offset 7, -8
+ 504              		.cfi_offset 14, -4
+ 505 0002 84B0     		sub	sp, sp, #16
+ 506              	.LCFI36:
+ 507              		.cfi_def_cfa_offset 24
+ 508 0004 00AF     		add	r7, sp, #0
+ 509              	.LCFI37:
+ 510              		.cfi_def_cfa_register 7
+ 511 0006 F860     		str	r0, [r7, #12]
+ 512 0008 B960     		str	r1, [r7, #8]
+ 513 000a 7A60     		str	r2, [r7, #4]
+ 214:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     return osHeapAllocAlign((heap_t *) pPool, uwSize, uwBoundary);
+ 514              		.loc 1 214 0
+ 515 000c 7A68     		ldr	r2, [r7, #4]
+ 516 000e B968     		ldr	r1, [r7, #8]
+ 517 0010 F868     		ldr	r0, [r7, #12]
+ 518 0012 FFF7FEFF 		bl	osHeapAllocAlign
+ 519 0016 0346     		mov	r3, r0
+ 215:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** }
+ 520              		.loc 1 215 0
+ 521 0018 1846     		mov	r0, r3
+ 522 001a 1037     		adds	r7, r7, #16
+ 523              	.LCFI38:
+ 524              		.cfi_def_cfa_offset 8
+ 525 001c BD46     		mov	sp, r7
+ 526              	.LCFI39:
+ 527              		.cfi_def_cfa_register 13
+ 528              		@ sp needed
+ 529 001e 80BD     		pop	{r7, pc}
+ 530              		.cfi_endproc
+ 531              	.LFE167:
+ 533              		.section	.text.LOS_MemRealloc,"ax",%progbits
+ 534              		.align	1
+ 535              		.global	LOS_MemRealloc
+ 536              		.syntax unified
+ 537              		.thumb
+ 538              		.thumb_func
+ 539              		.fpu fpv4-sp-d16
+ 541              	LOS_MemRealloc:
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccKzaB4J.s 			page 14
+
+
+ 542              	.LFB168:
+ 216:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+ 217:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** /*****************************************************************************
+ 218:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Function : LOS_MemRealloc
+ 219:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Description : realloc memory from Memory pool
+ 220:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Input       : pPool  --- Pointer to memory pool
+ 221:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****                pPtr   --- Pointer to memory
+ 222:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****                uwSize --- new size
+ 223:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Output      : None
+ 224:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Return      : Pointer to allocated memory node
+ 225:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** *****************************************************************************/
+ 226:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** LITE_OS_SEC_TEXT_MINOR VOID *LOS_MemRealloc(VOID *pPool, VOID *pPtr, UINT32 uwSize)
+ 227:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** {
+ 543              		.loc 1 227 0
+ 544              		.cfi_startproc
+ 545              		@ args = 0, pretend = 0, frame = 16
+ 546              		@ frame_needed = 1, uses_anonymous_args = 0
+ 547 0000 80B5     		push	{r7, lr}
+ 548              	.LCFI40:
+ 549              		.cfi_def_cfa_offset 8
+ 550              		.cfi_offset 7, -8
+ 551              		.cfi_offset 14, -4
+ 552 0002 84B0     		sub	sp, sp, #16
+ 553              	.LCFI41:
+ 554              		.cfi_def_cfa_offset 24
+ 555 0004 00AF     		add	r7, sp, #0
+ 556              	.LCFI42:
+ 557              		.cfi_def_cfa_register 7
+ 558 0006 F860     		str	r0, [r7, #12]
+ 559 0008 B960     		str	r1, [r7, #8]
+ 560 000a 7A60     		str	r2, [r7, #4]
+ 228:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     return osHeapRealloc((heap_t *) pPool, pPtr, uwSize);
+ 561              		.loc 1 228 0
+ 562 000c 7A68     		ldr	r2, [r7, #4]
+ 563 000e B968     		ldr	r1, [r7, #8]
+ 564 0010 F868     		ldr	r0, [r7, #12]
+ 565 0012 FFF7FEFF 		bl	osHeapRealloc
+ 566 0016 0346     		mov	r3, r0
+ 229:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** }
+ 567              		.loc 1 229 0
+ 568 0018 1846     		mov	r0, r3
+ 569 001a 1037     		adds	r7, r7, #16
+ 570              	.LCFI43:
+ 571              		.cfi_def_cfa_offset 8
+ 572 001c BD46     		mov	sp, r7
+ 573              	.LCFI44:
+ 574              		.cfi_def_cfa_register 13
+ 575              		@ sp needed
+ 576 001e 80BD     		pop	{r7, pc}
+ 577              		.cfi_endproc
+ 578              	.LFE168:
+ 580              		.section	.text.LOS_MemFree,"ax",%progbits
+ 581              		.align	1
+ 582              		.global	LOS_MemFree
+ 583              		.syntax unified
+ 584              		.thumb
+ 585              		.thumb_func
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccKzaB4J.s 			page 15
+
+
+ 586              		.fpu fpv4-sp-d16
+ 588              	LOS_MemFree:
+ 589              	.LFB169:
+ 230:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+ 231:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** /*****************************************************************************
+ 232:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Function : LOS_MemFree
+ 233:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Description : Free Memory and return it to Memory pool
+ 234:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Input       : pPool --- Pointer to memory pool
+ 235:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****                pMem  --- Pointer to memory to free
+ 236:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Output      : None
+ 237:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****  Return      : LOS_OK - OK, LOS_NOK - Error
+ 238:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** *****************************************************************************/
+ 239:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** LITE_OS_SEC_TEXT UINT32 LOS_MemFree (VOID *pPool, VOID *pMem)
+ 240:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** {
+ 590              		.loc 1 240 0
+ 591              		.cfi_startproc
+ 592              		@ args = 0, pretend = 0, frame = 16
+ 593              		@ frame_needed = 1, uses_anonymous_args = 0
+ 594 0000 80B5     		push	{r7, lr}
+ 595              	.LCFI45:
+ 596              		.cfi_def_cfa_offset 8
+ 597              		.cfi_offset 7, -8
+ 598              		.cfi_offset 14, -4
+ 599 0002 84B0     		sub	sp, sp, #16
+ 600              	.LCFI46:
+ 601              		.cfi_def_cfa_offset 24
+ 602 0004 00AF     		add	r7, sp, #0
+ 603              	.LCFI47:
+ 604              		.cfi_def_cfa_register 7
+ 605 0006 7860     		str	r0, [r7, #4]
+ 606 0008 3960     		str	r1, [r7]
+ 241:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     BOOL bRet = FALSE;
+ 607              		.loc 1 241 0
+ 608 000a 0023     		movs	r3, #0
+ 609 000c FB60     		str	r3, [r7, #12]
+ 242:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+ 243:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     if ((NULL == pPool) || (NULL == pMem))
+ 610              		.loc 1 243 0
+ 611 000e 7B68     		ldr	r3, [r7, #4]
+ 612 0010 002B     		cmp	r3, #0
+ 613 0012 02D0     		beq	.L32
+ 614              		.loc 1 243 0 is_stmt 0 discriminator 1
+ 615 0014 3B68     		ldr	r3, [r7]
+ 616 0016 002B     		cmp	r3, #0
+ 617 0018 01D1     		bne	.L33
+ 618              	.L32:
+ 244:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     {
+ 245:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****         return LOS_NOK;
+ 619              		.loc 1 245 0 is_stmt 1
+ 620 001a 0123     		movs	r3, #1
+ 621 001c 12E0     		b	.L34
+ 622              	.L33:
+ 246:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     }
+ 247:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+ 248:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** #if (LOSCFG_KERNEL_MEM_SLAB == YES)
+ 249:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     bRet = osSlabMemFree(pPool, pMem);
+ 623              		.loc 1 249 0
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccKzaB4J.s 			page 16
+
+
+ 624 001e 3968     		ldr	r1, [r7]
+ 625 0020 7868     		ldr	r0, [r7, #4]
+ 626 0022 FFF7FEFF 		bl	osSlabMemFree
+ 627 0026 F860     		str	r0, [r7, #12]
+ 250:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     if(bRet != TRUE)
+ 628              		.loc 1 250 0
+ 629 0028 FB68     		ldr	r3, [r7, #12]
+ 630 002a 012B     		cmp	r3, #1
+ 631 002c 04D0     		beq	.L35
+ 251:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** #endif
+ 252:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****         bRet = osHeapFree((heap_t *) pPool, pMem);
+ 632              		.loc 1 252 0
+ 633 002e 3968     		ldr	r1, [r7]
+ 634 0030 7868     		ldr	r0, [r7, #4]
+ 635 0032 FFF7FEFF 		bl	osHeapFree
+ 636 0036 F860     		str	r0, [r7, #12]
+ 637              	.L35:
+ 253:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+ 254:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     return (bRet == TRUE ? LOS_OK : LOS_NOK);
+ 638              		.loc 1 254 0
+ 639 0038 FB68     		ldr	r3, [r7, #12]
+ 640 003a 012B     		cmp	r3, #1
+ 641 003c 14BF     		ite	ne
+ 642 003e 0123     		movne	r3, #1
+ 643 0040 0023     		moveq	r3, #0
+ 644 0042 DBB2     		uxtb	r3, r3
+ 645              	.L34:
+ 255:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** }
+ 646              		.loc 1 255 0
+ 647 0044 1846     		mov	r0, r3
+ 648 0046 1037     		adds	r7, r7, #16
+ 649              	.LCFI48:
+ 650              		.cfi_def_cfa_offset 8
+ 651 0048 BD46     		mov	sp, r7
+ 652              	.LCFI49:
+ 653              		.cfi_def_cfa_register 13
+ 654              		@ sp needed
+ 655 004a 80BD     		pop	{r7, pc}
+ 656              		.cfi_endproc
+ 657              	.LFE169:
+ 659              		.section	.text.osSlabCtrlHdrGet,"ax",%progbits
+ 660              		.align	1
+ 661              		.global	osSlabCtrlHdrGet
+ 662              		.syntax unified
+ 663              		.thumb
+ 664              		.thumb_func
+ 665              		.fpu fpv4-sp-d16
+ 667              	osSlabCtrlHdrGet:
+ 668              	.LFB170:
+ 256:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+ 257:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** VOID * osSlabCtrlHdrGet (VOID * pPool)
+ 258:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** {
+ 669              		.loc 1 258 0
+ 670              		.cfi_startproc
+ 671              		@ args = 0, pretend = 0, frame = 8
+ 672              		@ frame_needed = 1, uses_anonymous_args = 0
+ 673              		@ link register save eliminated.
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccKzaB4J.s 			page 17
+
+
+ 674 0000 80B4     		push	{r7}
+ 675              	.LCFI50:
+ 676              		.cfi_def_cfa_offset 4
+ 677              		.cfi_offset 7, -4
+ 678 0002 83B0     		sub	sp, sp, #12
+ 679              	.LCFI51:
+ 680              		.cfi_def_cfa_offset 16
+ 681 0004 00AF     		add	r7, sp, #0
+ 682              	.LCFI52:
+ 683              		.cfi_def_cfa_register 7
+ 684 0006 7860     		str	r0, [r7, #4]
+ 259:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** #if (LOSCFG_KERNEL_MEM_SLAB == YES)
+ 260:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     return &((heap_t *)pPool)->stSlabCtrlHdr;
+ 685              		.loc 1 260 0
+ 686 0008 7B68     		ldr	r3, [r7, #4]
+ 687 000a 03F5F873 		add	r3, r3, #496
+ 261:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** #else
+ 262:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     return NULL;
+ 263:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** #endif
+ 264:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** }
+ 688              		.loc 1 264 0
+ 689 000e 1846     		mov	r0, r3
+ 690 0010 0C37     		adds	r7, r7, #12
+ 691              	.LCFI53:
+ 692              		.cfi_def_cfa_offset 4
+ 693 0012 BD46     		mov	sp, r7
+ 694              	.LCFI54:
+ 695              		.cfi_def_cfa_register 13
+ 696              		@ sp needed
+ 697 0014 5DF8047B 		ldr	r7, [sp], #4
+ 698              	.LCFI55:
+ 699              		.cfi_restore 7
+ 700              		.cfi_def_cfa_offset 0
+ 701 0018 7047     		bx	lr
+ 702              		.cfi_endproc
+ 703              	.LFE170:
+ 705              		.section	.text.LOS_MemInfo,"ax",%progbits
+ 706              		.align	1
+ 707              		.global	LOS_MemInfo
+ 708              		.syntax unified
+ 709              		.thumb
+ 710              		.thumb_func
+ 711              		.fpu fpv4-sp-d16
+ 713              	LOS_MemInfo:
+ 714              	.LFB171:
+ 265:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+ 266:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** VOID LOS_MemInfo (VOID * pPool, BOOL bShowDetail)
+ 267:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     {
+ 715              		.loc 1 267 0
+ 716              		.cfi_startproc
+ 717              		@ args = 0, pretend = 0, frame = 16
+ 718              		@ frame_needed = 1, uses_anonymous_args = 0
+ 719 0000 80B5     		push	{r7, lr}
+ 720              	.LCFI56:
+ 721              		.cfi_def_cfa_offset 8
+ 722              		.cfi_offset 7, -8
+ 723              		.cfi_offset 14, -4
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccKzaB4J.s 			page 18
+
+
+ 724 0002 84B0     		sub	sp, sp, #16
+ 725              	.LCFI57:
+ 726              		.cfi_def_cfa_offset 24
+ 727 0004 00AF     		add	r7, sp, #0
+ 728              	.LCFI58:
+ 729              		.cfi_def_cfa_register 7
+ 730 0006 7860     		str	r0, [r7, #4]
+ 731 0008 3960     		str	r1, [r7]
+ 268:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     heap_t * pHeap = pPool == NULL ? (heap_t *) m_aucSysMem0 : (heap_t *) pPool;
+ 732              		.loc 1 268 0
+ 733 000a 7B68     		ldr	r3, [r7, #4]
+ 734 000c 002B     		cmp	r3, #0
+ 735 000e 02D1     		bne	.L39
+ 736              		.loc 1 268 0 is_stmt 0 discriminator 1
+ 737 0010 094B     		ldr	r3, .L41
+ 738 0012 1B68     		ldr	r3, [r3]
+ 739 0014 00E0     		b	.L40
+ 740              	.L39:
+ 741              		.loc 1 268 0 discriminator 2
+ 742 0016 7B68     		ldr	r3, [r7, #4]
+ 743              	.L40:
+ 744              		.loc 1 268 0 discriminator 4
+ 745 0018 FB60     		str	r3, [r7, #12]
+ 269:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c **** 
+ 270:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     __dump_heap (pHeap, (bool)bShowDetail);
+ 746              		.loc 1 270 0 is_stmt 1 discriminator 4
+ 747 001a 3B68     		ldr	r3, [r7]
+ 748 001c 002B     		cmp	r3, #0
+ 749 001e 14BF     		ite	ne
+ 750 0020 0123     		movne	r3, #1
+ 751 0022 0023     		moveq	r3, #0
+ 752 0024 DBB2     		uxtb	r3, r3
+ 753 0026 1946     		mov	r1, r3
+ 754 0028 F868     		ldr	r0, [r7, #12]
+ 755 002a FFF7FEFF 		bl	__dump_heap
+ 271:E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/mem/heap\los_memory.c ****     }
+ 756              		.loc 1 271 0 discriminator 4
+ 757 002e 00BF     		nop
+ 758 0030 1037     		adds	r7, r7, #16
+ 759              	.LCFI59:
+ 760              		.cfi_def_cfa_offset 8
+ 761 0032 BD46     		mov	sp, r7
+ 762              	.LCFI60:
+ 763              		.cfi_def_cfa_register 13
+ 764              		@ sp needed
+ 765 0034 80BD     		pop	{r7, pc}
+ 766              	.L42:
+ 767 0036 00BF     		.align	2
+ 768              	.L41:
+ 769 0038 00000000 		.word	m_aucSysMem0
+ 770              		.cfi_endproc
+ 771              	.LFE171:
+ 773              		.text
+ 774              	.Letext0:
+ 775              		.file 2 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 776              		.file 3 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 777              		.file 4 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccKzaB4J.s 			page 19
+
+
+ 778              		.file 5 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 779              		.file 6 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 780              		.file 7 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_typedef.h"
+ 781              		.file 8 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 782              		.file 9 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 783              		.file 10 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/system_stm32l4xx.h"
+ 784              		.file 11 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_list.h"
+ 785              		.file 12 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_err.h"
+ 786              		.file 13 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 787              		.file 14 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_tick.h"
+ 788              		.file 15 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_event.h"
+ 789              		.file 16 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_task.h"
+ 790              		.file 17 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/include/los_task.ph"
+ 791              		.file 18 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/main.h"
+ 792              		.file 19 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_config.h"
+ 793              		.file 20 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/include/los_slab.ph"
+ 794              		.file 21 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/list.h"
+ 795              		.file 22 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/include/chunk.h"
+ 796              		.file 23 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/include/cm-tlsf.h"
+ 797              		.file 24 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/include/heap.h"
+ 798              		.file 25 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/include/mem.h"
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccKzaB4J.s 			page 20
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 los_memory.c
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:18     .text.LOS_MemInit:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:25     .text.LOS_MemInit:00000000 LOS_MemInit
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:110    .text.osMemSystemInit:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:117    .text.osMemSystemInit:00000000 osMemSystemInit
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:211    .text.osMemSystemInit:00000070 $d
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:217    .text.osHeapAllocAlign:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:224    .text.osHeapAllocAlign:00000000 osHeapAllocAlign
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:264    .text.osHeapAlloc:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:271    .text.osHeapAlloc:00000000 osHeapAlloc
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:309    .text.osHeapFree:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:316    .text.osHeapFree:00000000 osHeapFree
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:363    .text.osHeapRealloc:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:370    .text.osHeapRealloc:00000000 osHeapRealloc
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:410    .text.LOS_MemAlloc:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:417    .text.LOS_MemAlloc:00000000 LOS_MemAlloc
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:487    .text.LOS_MemAllocAlign:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:494    .text.LOS_MemAllocAlign:00000000 LOS_MemAllocAlign
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:534    .text.LOS_MemRealloc:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:541    .text.LOS_MemRealloc:00000000 LOS_MemRealloc
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:581    .text.LOS_MemFree:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:588    .text.LOS_MemFree:00000000 LOS_MemFree
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:660    .text.osSlabCtrlHdrGet:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:667    .text.osSlabCtrlHdrGet:00000000 osSlabCtrlHdrGet
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:706    .text.LOS_MemInfo:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:713    .text.LOS_MemInfo:00000000 LOS_MemInfo
+C:\Users\user\AppData\Local\Temp\ccKzaB4J.s:769    .text.LOS_MemInfo:00000038 $d
+
+UNDEFINED SYMBOLS
+heap_init
+heap_add
+system_phys_mem
+m_aucSysMem0
+heap_alloc_align
+heap_alloc
+heap_free
+heap_realloc
+osSlabMemAlloc
+osSlabMemFree
+__dump_heap

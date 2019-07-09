@@ -1,0 +1,968 @@
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc4EIDbc.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"oc_lwm2m_demo_nodtls.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.comm	ue_stats,4,4
+  18              		.section	.bss.s_rcv_buffer,"aw",%nobits
+  19              		.align	2
+  22              	s_rcv_buffer:
+  23 0000 00000000 		.space	512
+  23      00000000 
+  23      00000000 
+  23      00000000 
+  23      00000000 
+  24              		.section	.bss.s_rcv_datalen,"aw",%nobits
+  25              		.align	2
+  28              	s_rcv_datalen:
+  29 0000 00000000 		.space	4
+  30              		.section	.bss.s_rcv_sync,"aw",%nobits
+  31              		.align	2
+  34              	s_rcv_sync:
+  35 0000 00000000 		.space	4
+  36              		.section	.text.app_msg_deal,"ax",%progbits
+  37              		.align	1
+  38              		.syntax unified
+  39              		.thumb
+  40              		.thumb_func
+  41              		.fpu fpv4-sp-d16
+  43              	app_msg_deal:
+  44              	.LFB3:
+  45              		.file 1 "E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo/oc_lwm2m_demo_nodtls.c"
+   1:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** /*----------------------------------------------------------------------------
+   2:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * All rights reserved.
+   4:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * are permitted provided that the following conditions are met:
+   6:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * conditions and the following disclaimer.
+   8:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * provided with the distribution.
+  11:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * permission.
+  14:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc4EIDbc.s 			page 2
+
+
+  16:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  *---------------------------------------------------------------------------*/
+  26:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** /*----------------------------------------------------------------------------
+  27:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * Notice of Export Control Law
+  28:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * ===============================================
+  29:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  * applicable export control laws and regulations.
+  33:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  *---------------------------------------------------------------------------*/
+  34:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** /**
+  35:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  *  DATE                AUTHOR      INSTRUCTION
+  36:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  *  2019-05-14 17:21  zhangqianfu  The first version  
+  37:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  *
+  38:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****  */
+  39:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** #include <stdint.h>
+  40:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** #include <stddef.h>
+  41:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** #include <string.h>
+  42:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+  43:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** #include <osal.h>
+  44:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** #include <oc_lwm2m_al.h>
+  45:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** #include <boudica150_oc.h>
+  46:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+  47:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** #define cn_endpoint_id        "SDK_LWM2M_NODTLS"
+  48:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** #define cn_app_server         "49.4.85.232"
+  49:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** #define cn_app_port           "5683"
+  50:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+  51:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** #define cn_app_connectivity    0
+  52:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** #define cn_app_toggle          1
+  53:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** #define cn_app_light           2
+  54:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** #define cn_app_ledcmd          3
+  55:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+  56:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //#define KEY1_Pin GPIO_PIN_2
+  57:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //#define KEY1_GPIO_Port GPIOB
+  58:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //#define KEY2_EXTI_IRQn EXTI2_IRQn
+  59:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //#define KEY2_Pin GPIO_PIN_3
+  60:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //#define KEY2_GPIO_Port GPIOB
+  61:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //#define KEY2_EXTI_IRQn EXTI3_IRQn
+  62:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+  63:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** #pragma pack(1)
+  64:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** typedef struct
+  65:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** {
+  66:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     int8_t msgid;
+  67:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     int16_t rsrp;
+  68:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     int16_t ecl;
+  69:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     int16_t snr;
+  70:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     int32_t cellid;
+  71:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** }app_connectivity_t;
+  72:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc4EIDbc.s 			page 3
+
+
+  73:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** typedef struct
+  74:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** {
+  75:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     int8_t msgid;
+  76:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     int toggle;
+  77:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** }app_toggle_t;
+  78:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+  79:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** typedef struct
+  80:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** {
+  81:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     int8_t msgid;
+  82:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     int16_t intensity;
+  83:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** }app_light_intensity_t;
+  84:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+  85:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+  86:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** typedef struct
+  87:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** {
+  88:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     int8_t msgid;
+  89:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     int mid;
+  90:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     char led[3];
+  91:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** }app_led_cmd_t;
+  92:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+  93:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+  94:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** #pragma pack()
+  95:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+  96:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** int *ue_stats;
+  97:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+  98:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //{
+  99:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //	int ret;
+ 100:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //	switch(GPIO_Pin)
+ 101:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //	{
+ 102:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //		case KEY1_Pin:
+ 103:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //			key1 = true;
+ 104:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //			printf("proceed to get ue_status!\r\n");
+ 105:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //			break;
+ 106:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //		case KEY2_Pin:
+ 107:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //			key2 = true;
+ 108:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //			toggle = !toggle;
+ 109:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //			HAL_GPIO_TogglePin(Light_GPIO_Port,Light_Pin);
+ 110:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //			break;
+ 111:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //		default:
+ 112:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //			break;
+ 113:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //	}
+ 114:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //}
+ 115:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 116:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //if your command is very fast,please use a queue here--TODO
+ 117:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** #define cn_app_rcv_buf_len 128
+ 118:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** static int             s_rcv_buffer[cn_app_rcv_buf_len];
+ 119:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** static int             s_rcv_datalen;
+ 120:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** static osal_semp_t     s_rcv_sync;
+ 121:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 122:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** //use this function to push all the message to the buffer
+ 123:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** static int app_msg_deal(void *usr_data,char *msg, int len)
+ 124:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** {
+  46              		.loc 1 124 0
+  47              		.cfi_startproc
+  48              		@ args = 0, pretend = 0, frame = 24
+  49              		@ frame_needed = 1, uses_anonymous_args = 0
+  50 0000 80B5     		push	{r7, lr}
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc4EIDbc.s 			page 4
+
+
+  51              	.LCFI0:
+  52              		.cfi_def_cfa_offset 8
+  53              		.cfi_offset 7, -8
+  54              		.cfi_offset 14, -4
+  55 0002 86B0     		sub	sp, sp, #24
+  56              	.LCFI1:
+  57              		.cfi_def_cfa_offset 32
+  58 0004 00AF     		add	r7, sp, #0
+  59              	.LCFI2:
+  60              		.cfi_def_cfa_register 7
+  61 0006 F860     		str	r0, [r7, #12]
+  62 0008 B960     		str	r1, [r7, #8]
+  63 000a 7A60     		str	r2, [r7, #4]
+ 125:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     int ret = -1;
+  64              		.loc 1 125 0
+  65 000c 4FF0FF33 		mov	r3, #-1
+  66 0010 7B61     		str	r3, [r7, #20]
+ 126:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 127:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     if(len <= cn_app_rcv_buf_len)
+  67              		.loc 1 127 0
+  68 0012 7B68     		ldr	r3, [r7, #4]
+  69 0014 802B     		cmp	r3, #128
+  70 0016 0FDC     		bgt	.L2
+ 128:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     {
+ 129:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****         memcpy(s_rcv_buffer,msg,len);
+  71              		.loc 1 129 0
+  72 0018 7B68     		ldr	r3, [r7, #4]
+  73 001a 1A46     		mov	r2, r3
+  74 001c B968     		ldr	r1, [r7, #8]
+  75 001e 0948     		ldr	r0, .L4
+  76 0020 FFF7FEFF 		bl	memcpy
+ 130:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****         s_rcv_datalen = len;
+  77              		.loc 1 130 0
+  78 0024 084A     		ldr	r2, .L4+4
+  79 0026 7B68     		ldr	r3, [r7, #4]
+  80 0028 1360     		str	r3, [r2]
+ 131:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 132:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****         osal_semp_post(s_rcv_sync);
+  81              		.loc 1 132 0
+  82 002a 084B     		ldr	r3, .L4+8
+  83 002c 1B68     		ldr	r3, [r3]
+  84 002e 1846     		mov	r0, r3
+  85 0030 FFF7FEFF 		bl	osal_semp_post
+ 133:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 134:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****         ret = 0;
+  86              		.loc 1 134 0
+  87 0034 0023     		movs	r3, #0
+  88 0036 7B61     		str	r3, [r7, #20]
+  89              	.L2:
+ 135:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 136:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     }
+ 137:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     return ret;
+  90              		.loc 1 137 0
+  91 0038 7B69     		ldr	r3, [r7, #20]
+ 138:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** }
+  92              		.loc 1 138 0
+  93 003a 1846     		mov	r0, r3
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc4EIDbc.s 			page 5
+
+
+  94 003c 1837     		adds	r7, r7, #24
+  95              	.LCFI3:
+  96              		.cfi_def_cfa_offset 8
+  97 003e BD46     		mov	sp, r7
+  98              	.LCFI4:
+  99              		.cfi_def_cfa_register 13
+ 100              		@ sp needed
+ 101 0040 80BD     		pop	{r7, pc}
+ 102              	.L5:
+ 103 0042 00BF     		.align	2
+ 104              	.L4:
+ 105 0044 00000000 		.word	s_rcv_buffer
+ 106 0048 00000000 		.word	s_rcv_datalen
+ 107 004c 00000000 		.word	s_rcv_sync
+ 108              		.cfi_endproc
+ 109              	.LFE3:
+ 111              		.section	.rodata
+ 112              		.align	2
+ 113              	.LC0:
+ 114 0000 4C454443 		.ascii	"LEDCMD:msgid:%d msg:%s \012\015\000"
+ 114      4D443A6D 
+ 114      73676964 
+ 114      3A256420 
+ 114      6D73673A 
+ 115              		.section	.text.app_cmd_task_entry,"ax",%progbits
+ 116              		.align	1
+ 117              		.syntax unified
+ 118              		.thumb
+ 119              		.thumb_func
+ 120              		.fpu fpv4-sp-d16
+ 122              	app_cmd_task_entry:
+ 123              	.LFB4:
+ 139:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 140:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 141:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** static int app_cmd_task_entry()
+ 142:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** {
+ 124              		.loc 1 142 0
+ 125              		.cfi_startproc
+ 126              		@ args = 0, pretend = 0, frame = 16
+ 127              		@ frame_needed = 1, uses_anonymous_args = 0
+ 128 0000 80B5     		push	{r7, lr}
+ 129              	.LCFI5:
+ 130              		.cfi_def_cfa_offset 8
+ 131              		.cfi_offset 7, -8
+ 132              		.cfi_offset 14, -4
+ 133 0002 84B0     		sub	sp, sp, #16
+ 134              	.LCFI6:
+ 135              		.cfi_def_cfa_offset 24
+ 136 0004 00AF     		add	r7, sp, #0
+ 137              	.LCFI7:
+ 138              		.cfi_def_cfa_register 7
+ 143:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     int ret = -1;
+ 139              		.loc 1 143 0
+ 140 0006 4FF0FF33 		mov	r3, #-1
+ 141 000a FB60     		str	r3, [r7, #12]
+ 142              	.L10:
+ 144:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     int msgid;
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc4EIDbc.s 			page 6
+
+
+ 145:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     app_led_cmd_t *led_cmd;
+ 146:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 147:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     while(1)
+ 148:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     {
+ 149:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****         if(osal_semp_pend(s_rcv_sync,cn_osal_timeout_forever))
+ 143              		.loc 1 149 0
+ 144 000c 0F4B     		ldr	r3, .L12
+ 145 000e 1B68     		ldr	r3, [r3]
+ 146 0010 4FF0FF31 		mov	r1, #-1
+ 147 0014 1846     		mov	r0, r3
+ 148 0016 FFF7FEFF 		bl	osal_semp_pend
+ 149 001a 0346     		mov	r3, r0
+ 150 001c 002B     		cmp	r3, #0
+ 151 001e 13D0     		beq	.L11
+ 150:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****         {
+ 151:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****             msgid = s_rcv_buffer[0];
+ 152              		.loc 1 151 0
+ 153 0020 0B4B     		ldr	r3, .L12+4
+ 154 0022 1B68     		ldr	r3, [r3]
+ 155 0024 BB60     		str	r3, [r7, #8]
+ 152:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 153:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****             switch (msgid)
+ 156              		.loc 1 153 0
+ 157 0026 BB68     		ldr	r3, [r7, #8]
+ 158 0028 032B     		cmp	r3, #3
+ 159 002a 00D0     		beq	.L9
+ 154:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****             {
+ 155:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****                 case cn_app_ledcmd:
+ 156:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****                     led_cmd = (app_led_cmd_t *)s_rcv_buffer;
+ 157:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****                     printf("LEDCMD:msgid:%d msg:%s \n\r",led_cmd->msgid,led_cmd->led);
+ 158:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****                     //if you need response,do it here--TODO
+ 159:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****                     break;
+ 160:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****                 default:
+ 161:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****                     break;
+ 160              		.loc 1 161 0
+ 161 002c 0DE0     		b	.L7
+ 162              	.L9:
+ 156:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****                     printf("LEDCMD:msgid:%d msg:%s \n\r",led_cmd->msgid,led_cmd->led);
+ 163              		.loc 1 156 0
+ 164 002e 084B     		ldr	r3, .L12+4
+ 165 0030 7B60     		str	r3, [r7, #4]
+ 157:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****                     //if you need response,do it here--TODO
+ 166              		.loc 1 157 0
+ 167 0032 7B68     		ldr	r3, [r7, #4]
+ 168 0034 93F90030 		ldrsb	r3, [r3]
+ 169 0038 1946     		mov	r1, r3
+ 170 003a 7B68     		ldr	r3, [r7, #4]
+ 171 003c 0533     		adds	r3, r3, #5
+ 172 003e 1A46     		mov	r2, r3
+ 173 0040 0448     		ldr	r0, .L12+8
+ 174 0042 FFF7FEFF 		bl	printf
+ 159:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****                 default:
+ 175              		.loc 1 159 0
+ 176 0046 00E0     		b	.L7
+ 177              	.L11:
+ 162:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****             }
+ 163:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****         }
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc4EIDbc.s 			page 7
+
+
+ 178              		.loc 1 163 0
+ 179 0048 00BF     		nop
+ 180              	.L7:
+ 149:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****         {
+ 181              		.loc 1 149 0
+ 182 004a DFE7     		b	.L10
+ 183              	.L13:
+ 184              		.align	2
+ 185              	.L12:
+ 186 004c 00000000 		.word	s_rcv_sync
+ 187 0050 00000000 		.word	s_rcv_buffer
+ 188 0054 00000000 		.word	.LC0
+ 189              		.cfi_endproc
+ 190              	.LFE4:
+ 192              		.section	.text.get_netstats,"ax",%progbits
+ 193              		.align	1
+ 194              		.syntax unified
+ 195              		.thumb
+ 196              		.thumb_func
+ 197              		.fpu fpv4-sp-d16
+ 199              	get_netstats:
+ 200              	.LFB5:
+ 164:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     }
+ 165:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 166:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     return ret;
+ 167:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** }
+ 168:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 169:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** static void get_netstats()
+ 170:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** {
+ 201              		.loc 1 170 0
+ 202              		.cfi_startproc
+ 203              		@ args = 0, pretend = 0, frame = 0
+ 204              		@ frame_needed = 1, uses_anonymous_args = 0
+ 205 0000 80B5     		push	{r7, lr}
+ 206              	.LCFI8:
+ 207              		.cfi_def_cfa_offset 8
+ 208              		.cfi_offset 7, -8
+ 209              		.cfi_offset 14, -4
+ 210 0002 00AF     		add	r7, sp, #0
+ 211              	.LCFI9:
+ 212              		.cfi_def_cfa_register 7
+ 171:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 	ue_stats = boudica150_check_nuestats();
+ 213              		.loc 1 171 0
+ 214 0004 FFF7FEFF 		bl	boudica150_check_nuestats
+ 215 0008 0246     		mov	r2, r0
+ 216 000a 154B     		ldr	r3, .L18
+ 217 000c 1A60     		str	r2, [r3]
+ 172:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 	if (ue_stats[0] < -10) ue_stats[0] = ue_stats[0] / 10;
+ 218              		.loc 1 172 0
+ 219 000e 144B     		ldr	r3, .L18
+ 220 0010 1B68     		ldr	r3, [r3]
+ 221 0012 1B68     		ldr	r3, [r3]
+ 222 0014 13F10A0F 		cmn	r3, #10
+ 223 0018 0BDA     		bge	.L15
+ 224              		.loc 1 172 0 is_stmt 0 discriminator 1
+ 225 001a 114B     		ldr	r3, .L18
+ 226 001c 1B68     		ldr	r3, [r3]
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc4EIDbc.s 			page 8
+
+
+ 227 001e 1B68     		ldr	r3, [r3]
+ 228 0020 0F4A     		ldr	r2, .L18
+ 229 0022 1268     		ldr	r2, [r2]
+ 230 0024 0F49     		ldr	r1, .L18+4
+ 231 0026 81FB0301 		smull	r0, r1, r1, r3
+ 232 002a 8910     		asrs	r1, r1, #2
+ 233 002c DB17     		asrs	r3, r3, #31
+ 234 002e CB1A     		subs	r3, r1, r3
+ 235 0030 1360     		str	r3, [r2]
+ 236              	.L15:
+ 173:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 	if (ue_stats[2] > 10) ue_stats[2] = ue_stats[2] / 10;
+ 237              		.loc 1 173 0 is_stmt 1
+ 238 0032 0B4B     		ldr	r3, .L18
+ 239 0034 1B68     		ldr	r3, [r3]
+ 240 0036 0833     		adds	r3, r3, #8
+ 241 0038 1B68     		ldr	r3, [r3]
+ 242 003a 0A2B     		cmp	r3, #10
+ 243 003c 0DDD     		ble	.L17
+ 244              		.loc 1 173 0 is_stmt 0 discriminator 1
+ 245 003e 084B     		ldr	r3, .L18
+ 246 0040 1B68     		ldr	r3, [r3]
+ 247 0042 0833     		adds	r3, r3, #8
+ 248 0044 1B68     		ldr	r3, [r3]
+ 249 0046 064A     		ldr	r2, .L18
+ 250 0048 1268     		ldr	r2, [r2]
+ 251 004a 0832     		adds	r2, r2, #8
+ 252 004c 0549     		ldr	r1, .L18+4
+ 253 004e 81FB0301 		smull	r0, r1, r1, r3
+ 254 0052 8910     		asrs	r1, r1, #2
+ 255 0054 DB17     		asrs	r3, r3, #31
+ 256 0056 CB1A     		subs	r3, r1, r3
+ 257 0058 1360     		str	r3, [r2]
+ 258              	.L17:
+ 174:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 175:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** }
+ 259              		.loc 1 175 0 is_stmt 1
+ 260 005a 00BF     		nop
+ 261 005c 80BD     		pop	{r7, pc}
+ 262              	.L19:
+ 263 005e 00BF     		.align	2
+ 264              	.L18:
+ 265 0060 00000000 		.word	ue_stats
+ 266 0064 67666666 		.word	1717986919
+ 267              		.cfi_endproc
+ 268              	.LFE5:
+ 270              		.section	.text.swap32,"ax",%progbits
+ 271              		.align	1
+ 272              		.global	swap32
+ 273              		.syntax unified
+ 274              		.thumb
+ 275              		.thumb_func
+ 276              		.fpu fpv4-sp-d16
+ 278              	swap32:
+ 279              	.LFB6:
+ 176:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 177:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** int32_t swap32(int32_t value)
+ 178:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** {
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc4EIDbc.s 			page 9
+
+
+ 280              		.loc 1 178 0
+ 281              		.cfi_startproc
+ 282              		@ args = 0, pretend = 0, frame = 8
+ 283              		@ frame_needed = 1, uses_anonymous_args = 0
+ 284              		@ link register save eliminated.
+ 285 0000 80B4     		push	{r7}
+ 286              	.LCFI10:
+ 287              		.cfi_def_cfa_offset 4
+ 288              		.cfi_offset 7, -4
+ 289 0002 83B0     		sub	sp, sp, #12
+ 290              	.LCFI11:
+ 291              		.cfi_def_cfa_offset 16
+ 292 0004 00AF     		add	r7, sp, #0
+ 293              	.LCFI12:
+ 294              		.cfi_def_cfa_register 7
+ 295 0006 7860     		str	r0, [r7, #4]
+ 179:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****      return ((value & 0x000000FF) << 24) | ((value & 0x0000FF00) << 8) | ((value & 0x00FF0000) >> 8
+ 296              		.loc 1 179 0
+ 297 0008 7B68     		ldr	r3, [r7, #4]
+ 298 000a 1A06     		lsls	r2, r3, #24
+ 299 000c 7B68     		ldr	r3, [r7, #4]
+ 300 000e 1B02     		lsls	r3, r3, #8
+ 301 0010 03F47F03 		and	r3, r3, #16711680
+ 302 0014 1A43     		orrs	r2, r2, r3
+ 303 0016 7B68     		ldr	r3, [r7, #4]
+ 304 0018 1B12     		asrs	r3, r3, #8
+ 305 001a 03F47F43 		and	r3, r3, #65280
+ 306 001e 1343     		orrs	r3, r3, r2
+ 307 0020 1A46     		mov	r2, r3
+ 308 0022 7B68     		ldr	r3, [r7, #4]
+ 309 0024 1B0E     		lsrs	r3, r3, #24
+ 310 0026 1343     		orrs	r3, r3, r2
+ 180:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** }
+ 311              		.loc 1 180 0
+ 312 0028 1846     		mov	r0, r3
+ 313 002a 0C37     		adds	r7, r7, #12
+ 314              	.LCFI13:
+ 315              		.cfi_def_cfa_offset 4
+ 316 002c BD46     		mov	sp, r7
+ 317              	.LCFI14:
+ 318              		.cfi_def_cfa_register 13
+ 319              		@ sp needed
+ 320 002e 5DF8047B 		ldr	r7, [sp], #4
+ 321              	.LCFI15:
+ 322              		.cfi_restore 7
+ 323              		.cfi_def_cfa_offset 0
+ 324 0032 7047     		bx	lr
+ 325              		.cfi_endproc
+ 326              	.LFE6:
+ 328              		.section	.text.swap16,"ax",%progbits
+ 329              		.align	1
+ 330              		.global	swap16
+ 331              		.syntax unified
+ 332              		.thumb
+ 333              		.thumb_func
+ 334              		.fpu fpv4-sp-d16
+ 336              	swap16:
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc4EIDbc.s 			page 10
+
+
+ 337              	.LFB7:
+ 181:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 182:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** int32_t swap16(int16_t value)
+ 183:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** {
+ 338              		.loc 1 183 0
+ 339              		.cfi_startproc
+ 340              		@ args = 0, pretend = 0, frame = 8
+ 341              		@ frame_needed = 1, uses_anonymous_args = 0
+ 342              		@ link register save eliminated.
+ 343 0000 80B4     		push	{r7}
+ 344              	.LCFI16:
+ 345              		.cfi_def_cfa_offset 4
+ 346              		.cfi_offset 7, -4
+ 347 0002 83B0     		sub	sp, sp, #12
+ 348              	.LCFI17:
+ 349              		.cfi_def_cfa_offset 16
+ 350 0004 00AF     		add	r7, sp, #0
+ 351              	.LCFI18:
+ 352              		.cfi_def_cfa_register 7
+ 353 0006 0346     		mov	r3, r0
+ 354 0008 FB80     		strh	r3, [r7, #6]	@ movhi
+ 184:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****      return ((value & 0x00FF) << 8) | ((value & 0xFF00) >> 8);
+ 355              		.loc 1 184 0
+ 356 000a FB88     		ldrh	r3, [r7, #6]
+ 357 000c 1B02     		lsls	r3, r3, #8
+ 358 000e 9AB2     		uxth	r2, r3
+ 359 0010 B7F90630 		ldrsh	r3, [r7, #6]
+ 360 0014 1B12     		asrs	r3, r3, #8
+ 361 0016 DBB2     		uxtb	r3, r3
+ 362 0018 1343     		orrs	r3, r3, r2
+ 185:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** }
+ 363              		.loc 1 185 0
+ 364 001a 1846     		mov	r0, r3
+ 365 001c 0C37     		adds	r7, r7, #12
+ 366              	.LCFI19:
+ 367              		.cfi_def_cfa_offset 4
+ 368 001e BD46     		mov	sp, r7
+ 369              	.LCFI20:
+ 370              		.cfi_def_cfa_register 13
+ 371              		@ sp needed
+ 372 0020 5DF8047B 		ldr	r7, [sp], #4
+ 373              	.LCFI21:
+ 374              		.cfi_restore 7
+ 375              		.cfi_def_cfa_offset 0
+ 376 0024 7047     		bx	lr
+ 377              		.cfi_endproc
+ 378              	.LFE7:
+ 380              		.section	.rodata
+ 381 001a 0000     		.align	2
+ 382              	.LC1:
+ 383 001c 34392E34 		.ascii	"49.4.85.232\000"
+ 383      2E38352E 
+ 383      32333200 
+ 384              		.align	2
+ 385              	.LC2:
+ 386 0028 35363833 		.ascii	"5683\000"
+ 386      00
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc4EIDbc.s 			page 11
+
+
+ 387 002d 000000   		.align	2
+ 388              	.LC3:
+ 389 0030 53444B5F 		.ascii	"SDK_LWM2M_NODTLS\000"
+ 389      4C574D32 
+ 389      4D5F4E4F 
+ 389      44544C53 
+ 389      00
+ 390              		.section	.text.app_report_task_entry,"ax",%progbits
+ 391              		.align	1
+ 392              		.syntax unified
+ 393              		.thumb
+ 394              		.thumb_func
+ 395              		.fpu fpv4-sp-d16
+ 397              	app_report_task_entry:
+ 398              	.LFB8:
+ 186:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 187:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** static int app_report_task_entry()
+ 188:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** {
+ 399              		.loc 1 188 0
+ 400              		.cfi_startproc
+ 401              		@ args = 0, pretend = 0, frame = 88
+ 402              		@ frame_needed = 1, uses_anonymous_args = 0
+ 403 0000 80B5     		push	{r7, lr}
+ 404              	.LCFI22:
+ 405              		.cfi_def_cfa_offset 8
+ 406              		.cfi_offset 7, -8
+ 407              		.cfi_offset 14, -4
+ 408 0002 96B0     		sub	sp, sp, #88
+ 409              	.LCFI23:
+ 410              		.cfi_def_cfa_offset 96
+ 411 0004 00AF     		add	r7, sp, #0
+ 412              	.LCFI24:
+ 413              		.cfi_def_cfa_register 7
+ 189:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     int ret = -1;
+ 414              		.loc 1 189 0
+ 415 0006 4FF0FF33 		mov	r3, #-1
+ 416 000a 7B65     		str	r3, [r7, #84]
+ 190:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 191:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     oc_config_param_t      oc_param;
+ 192:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     app_light_intensity_t  light;
+ 193:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     app_connectivity_t     connectivity;
+ 194:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     void                   *context;
+ 195:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 196:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     memset(&oc_param,0,sizeof(oc_param));
+ 417              		.loc 1 196 0
+ 418 000c 07F11403 		add	r3, r7, #20
+ 419 0010 3C22     		movs	r2, #60
+ 420 0012 0021     		movs	r1, #0
+ 421 0014 1846     		mov	r0, r3
+ 422 0016 FFF7FEFF 		bl	memset
+ 197:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 198:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     oc_param.app_server.address = cn_app_server;
+ 423              		.loc 1 198 0
+ 424 001a 354B     		ldr	r3, .L28
+ 425 001c 7B63     		str	r3, [r7, #52]
+ 199:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     oc_param.app_server.port = cn_app_port;
+ 426              		.loc 1 199 0
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc4EIDbc.s 			page 12
+
+
+ 427 001e 354B     		ldr	r3, .L28+4
+ 428 0020 BB63     		str	r3, [r7, #56]
+ 200:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     oc_param.app_server.ep_id = cn_endpoint_id;
+ 429              		.loc 1 200 0
+ 430 0022 354B     		ldr	r3, .L28+8
+ 431 0024 3B63     		str	r3, [r7, #48]
+ 201:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
+ 432              		.loc 1 201 0
+ 433 0026 0023     		movs	r3, #0
+ 434 0028 3B75     		strb	r3, [r7, #20]
+ 202:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     oc_param.rcv_func = app_msg_deal;
+ 435              		.loc 1 202 0
+ 436 002a 344B     		ldr	r3, .L28+12
+ 437 002c BB64     		str	r3, [r7, #72]
+ 203:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 204:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     context = oc_lwm2m_config(&oc_param);
+ 438              		.loc 1 204 0
+ 439 002e 07F11403 		add	r3, r7, #20
+ 440 0032 1846     		mov	r0, r3
+ 441 0034 FFF7FEFF 		bl	oc_lwm2m_config
+ 442 0038 3865     		str	r0, [r7, #80]
+ 205:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 206:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     if(NULL != context)   //success ,so we could receive and send
+ 443              		.loc 1 206 0
+ 444 003a 3B6D     		ldr	r3, [r7, #80]
+ 445 003c 002B     		cmp	r3, #0
+ 446 003e 52D0     		beq	.L25
+ 447              	.L26:
+ 207:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     {
+ 208:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****         //install a dealer for the led message received
+ 209:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****         while(1) //--TODO ,you could add your own code here
+ 210:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****         {
+ 211:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****             light.msgid = cn_app_light;
+ 448              		.loc 1 211 0 discriminator 1
+ 449 0040 0223     		movs	r3, #2
+ 450 0042 3B74     		strb	r3, [r7, #16]
+ 212:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****             //memcpy(light.intensity,"12345",5);
+ 213:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****             light.intensity = swap16(12345);
+ 451              		.loc 1 213 0 discriminator 1
+ 452 0044 43F23900 		movw	r0, #12345
+ 453 0048 FFF7FEFF 		bl	swap16
+ 454 004c 0346     		mov	r3, r0
+ 455 004e 1BB2     		sxth	r3, r3
+ 456 0050 A7F81130 		strh	r3, [r7, #17]	@ unaligned
+ 214:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****             oc_lwm2m_report(context,(char *)&light,sizeof(light),1000); ///< report the light messa
+ 457              		.loc 1 214 0 discriminator 1
+ 458 0054 07F11001 		add	r1, r7, #16
+ 459 0058 4FF47A73 		mov	r3, #1000
+ 460 005c 0322     		movs	r2, #3
+ 461 005e 386D     		ldr	r0, [r7, #80]
+ 462 0060 FFF7FEFF 		bl	oc_lwm2m_report
+ 215:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****             osal_task_sleep(10*1000);
+ 463              		.loc 1 215 0 discriminator 1
+ 464 0064 42F21070 		movw	r0, #10000
+ 465 0068 FFF7FEFF 		bl	osal_task_sleep
+ 216:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 217:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****             connectivity.msgid = cn_app_connectivity;
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc4EIDbc.s 			page 13
+
+
+ 466              		.loc 1 217 0 discriminator 1
+ 467 006c 0023     		movs	r3, #0
+ 468 006e 3B71     		strb	r3, [r7, #4]
+ 218:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****             get_netstats();
+ 469              		.loc 1 218 0 discriminator 1
+ 470 0070 FFF7FEFF 		bl	get_netstats
+ 219:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****         	connectivity.rsrp = swap16(ue_stats[0] & 0x0000FFFF);
+ 471              		.loc 1 219 0 discriminator 1
+ 472 0074 224B     		ldr	r3, .L28+16
+ 473 0076 1B68     		ldr	r3, [r3]
+ 474 0078 1B68     		ldr	r3, [r3]
+ 475 007a 1BB2     		sxth	r3, r3
+ 476 007c 1846     		mov	r0, r3
+ 477 007e FFF7FEFF 		bl	swap16
+ 478 0082 0346     		mov	r3, r0
+ 479 0084 1BB2     		sxth	r3, r3
+ 480 0086 A7F80530 		strh	r3, [r7, #5]	@ unaligned
+ 220:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****         	connectivity.ecl = swap16(ue_stats[1] & 0x0000FFFF);
+ 481              		.loc 1 220 0 discriminator 1
+ 482 008a 1D4B     		ldr	r3, .L28+16
+ 483 008c 1B68     		ldr	r3, [r3]
+ 484 008e 0433     		adds	r3, r3, #4
+ 485 0090 1B68     		ldr	r3, [r3]
+ 486 0092 1BB2     		sxth	r3, r3
+ 487 0094 1846     		mov	r0, r3
+ 488 0096 FFF7FEFF 		bl	swap16
+ 489 009a 0346     		mov	r3, r0
+ 490 009c 1BB2     		sxth	r3, r3
+ 491 009e A7F80730 		strh	r3, [r7, #7]	@ unaligned
+ 221:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****         	connectivity.snr = swap16(ue_stats[2] & 0x0000FFFF);
+ 492              		.loc 1 221 0 discriminator 1
+ 493 00a2 174B     		ldr	r3, .L28+16
+ 494 00a4 1B68     		ldr	r3, [r3]
+ 495 00a6 0833     		adds	r3, r3, #8
+ 496 00a8 1B68     		ldr	r3, [r3]
+ 497 00aa 1BB2     		sxth	r3, r3
+ 498 00ac 1846     		mov	r0, r3
+ 499 00ae FFF7FEFF 		bl	swap16
+ 500 00b2 0346     		mov	r3, r0
+ 501 00b4 1BB2     		sxth	r3, r3
+ 502 00b6 A7F80930 		strh	r3, [r7, #9]	@ unaligned
+ 222:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****         	connectivity.cellid = swap32(ue_stats[3]);
+ 503              		.loc 1 222 0 discriminator 1
+ 504 00ba 114B     		ldr	r3, .L28+16
+ 505 00bc 1B68     		ldr	r3, [r3]
+ 506 00be 0C33     		adds	r3, r3, #12
+ 507 00c0 1B68     		ldr	r3, [r3]
+ 508 00c2 1846     		mov	r0, r3
+ 509 00c4 FFF7FEFF 		bl	swap32
+ 510 00c8 0346     		mov	r3, r0
+ 511 00ca C7F80B30 		str	r3, [r7, #11]	@ unaligned
+ 223:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****             oc_lwm2m_report(context,(char *)&connectivity,sizeof(connectivity),1000);    ///< repor
+ 512              		.loc 1 223 0 discriminator 1
+ 513 00ce 391D     		adds	r1, r7, #4
+ 514 00d0 4FF47A73 		mov	r3, #1000
+ 515 00d4 0B22     		movs	r2, #11
+ 516 00d6 386D     		ldr	r0, [r7, #80]
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc4EIDbc.s 			page 14
+
+
+ 517 00d8 FFF7FEFF 		bl	oc_lwm2m_report
+ 224:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****             osal_task_sleep(10*1000);
+ 518              		.loc 1 224 0 discriminator 1
+ 519 00dc 42F21070 		movw	r0, #10000
+ 520 00e0 FFF7FEFF 		bl	osal_task_sleep
+ 211:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****             //memcpy(light.intensity,"12345",5);
+ 521              		.loc 1 211 0 discriminator 1
+ 522 00e4 ACE7     		b	.L26
+ 523              	.L25:
+ 225:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****         }
+ 226:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     }
+ 227:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 228:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     return ret;
+ 524              		.loc 1 228 0
+ 525 00e6 7B6D     		ldr	r3, [r7, #84]
+ 229:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** }
+ 526              		.loc 1 229 0
+ 527 00e8 1846     		mov	r0, r3
+ 528 00ea 5837     		adds	r7, r7, #88
+ 529              	.LCFI25:
+ 530              		.cfi_def_cfa_offset 8
+ 531 00ec BD46     		mov	sp, r7
+ 532              	.LCFI26:
+ 533              		.cfi_def_cfa_register 13
+ 534              		@ sp needed
+ 535 00ee 80BD     		pop	{r7, pc}
+ 536              	.L29:
+ 537              		.align	2
+ 538              	.L28:
+ 539 00f0 1C000000 		.word	.LC1
+ 540 00f4 28000000 		.word	.LC2
+ 541 00f8 30000000 		.word	.LC3
+ 542 00fc 00000000 		.word	app_msg_deal
+ 543 0100 00000000 		.word	ue_stats
+ 544              		.cfi_endproc
+ 545              	.LFE8:
+ 547              		.section	.rodata
+ 548 0041 000000   		.align	2
+ 549              	.LC4:
+ 550 0044 6170705F 		.ascii	"app_report\000"
+ 550      7265706F 
+ 550      727400
+ 551 004f 00       		.align	2
+ 552              	.LC5:
+ 553 0050 6170705F 		.ascii	"app_command\000"
+ 553      636F6D6D 
+ 553      616E6400 
+ 554              		.section	.text.oc_lwm2m_demo_main,"ax",%progbits
+ 555              		.align	1
+ 556              		.global	oc_lwm2m_demo_main
+ 557              		.syntax unified
+ 558              		.thumb
+ 559              		.thumb_func
+ 560              		.fpu fpv4-sp-d16
+ 562              	oc_lwm2m_demo_main:
+ 563              	.LFB9:
+ 230:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc4EIDbc.s 			page 15
+
+
+ 231:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** int oc_lwm2m_demo_main()
+ 232:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** {
+ 564              		.loc 1 232 0
+ 565              		.cfi_startproc
+ 566              		@ args = 0, pretend = 0, frame = 0
+ 567              		@ frame_needed = 1, uses_anonymous_args = 0
+ 568 0000 80B5     		push	{r7, lr}
+ 569              	.LCFI27:
+ 570              		.cfi_def_cfa_offset 8
+ 571              		.cfi_offset 7, -8
+ 572              		.cfi_offset 14, -4
+ 573 0002 82B0     		sub	sp, sp, #8
+ 574              	.LCFI28:
+ 575              		.cfi_def_cfa_offset 16
+ 576 0004 02AF     		add	r7, sp, #8
+ 577              	.LCFI29:
+ 578              		.cfi_def_cfa 7, 8
+ 233:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     osal_semp_create(&s_rcv_sync,1,0);
+ 579              		.loc 1 233 0
+ 580 0006 0022     		movs	r2, #0
+ 581 0008 0121     		movs	r1, #1
+ 582 000a 0E48     		ldr	r0, .L32
+ 583 000c FFF7FEFF 		bl	osal_semp_create
+ 234:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     osal_task_create("app_report",app_report_task_entry,NULL,0x1000,NULL,2);
+ 584              		.loc 1 234 0
+ 585 0010 0223     		movs	r3, #2
+ 586 0012 0193     		str	r3, [sp, #4]
+ 587 0014 0023     		movs	r3, #0
+ 588 0016 0093     		str	r3, [sp]
+ 589 0018 4FF48053 		mov	r3, #4096
+ 590 001c 0022     		movs	r2, #0
+ 591 001e 0A49     		ldr	r1, .L32+4
+ 592 0020 0A48     		ldr	r0, .L32+8
+ 593 0022 FFF7FEFF 		bl	osal_task_create
+ 235:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     osal_task_create("app_command",app_cmd_task_entry,NULL,0x1000,NULL,3);
+ 594              		.loc 1 235 0
+ 595 0026 0323     		movs	r3, #3
+ 596 0028 0193     		str	r3, [sp, #4]
+ 597 002a 0023     		movs	r3, #0
+ 598 002c 0093     		str	r3, [sp]
+ 599 002e 4FF48053 		mov	r3, #4096
+ 600 0032 0022     		movs	r2, #0
+ 601 0034 0649     		ldr	r1, .L32+12
+ 602 0036 0748     		ldr	r0, .L32+16
+ 603 0038 FFF7FEFF 		bl	osal_task_create
+ 236:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** 
+ 237:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c ****     return 0;
+ 604              		.loc 1 237 0
+ 605 003c 0023     		movs	r3, #0
+ 238:E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_demo\oc_lwm2m_demo_nodtls.c **** }
+ 606              		.loc 1 238 0
+ 607 003e 1846     		mov	r0, r3
+ 608 0040 BD46     		mov	sp, r7
+ 609              	.LCFI30:
+ 610              		.cfi_def_cfa_register 13
+ 611              		@ sp needed
+ 612 0042 80BD     		pop	{r7, pc}
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc4EIDbc.s 			page 16
+
+
+ 613              	.L33:
+ 614              		.align	2
+ 615              	.L32:
+ 616 0044 00000000 		.word	s_rcv_sync
+ 617 0048 00000000 		.word	app_report_task_entry
+ 618 004c 44000000 		.word	.LC4
+ 619 0050 00000000 		.word	app_cmd_task_entry
+ 620 0054 50000000 		.word	.LC5
+ 621              		.cfi_endproc
+ 622              	.LFE9:
+ 624              		.text
+ 625              	.Letext0:
+ 626              		.file 2 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 627              		.file 3 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 628              		.file 4 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 629              		.file 5 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 630              		.file 6 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 631              		.file 7 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 632              		.file 8 "E:/LiteOS/LiteOS_Lab/iot_link/os/osal/osal_types.h"
+ 633              		.file 9 "E:/LiteOS/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al/oc_lwm2m_al.h"
+ARM GAS  C:\Users\user\AppData\Local\Temp\cc4EIDbc.s 			page 17
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 oc_lwm2m_demo_nodtls.c
+                            *COM*:00000004 ue_stats
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:19     .bss.s_rcv_buffer:00000000 $d
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:22     .bss.s_rcv_buffer:00000000 s_rcv_buffer
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:25     .bss.s_rcv_datalen:00000000 $d
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:28     .bss.s_rcv_datalen:00000000 s_rcv_datalen
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:31     .bss.s_rcv_sync:00000000 $d
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:34     .bss.s_rcv_sync:00000000 s_rcv_sync
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:37     .text.app_msg_deal:00000000 $t
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:43     .text.app_msg_deal:00000000 app_msg_deal
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:105    .text.app_msg_deal:00000044 $d
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:112    .rodata:00000000 $d
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:116    .text.app_cmd_task_entry:00000000 $t
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:122    .text.app_cmd_task_entry:00000000 app_cmd_task_entry
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:186    .text.app_cmd_task_entry:0000004c $d
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:193    .text.get_netstats:00000000 $t
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:199    .text.get_netstats:00000000 get_netstats
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:265    .text.get_netstats:00000060 $d
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:271    .text.swap32:00000000 $t
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:278    .text.swap32:00000000 swap32
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:329    .text.swap16:00000000 $t
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:336    .text.swap16:00000000 swap16
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:391    .text.app_report_task_entry:00000000 $t
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:397    .text.app_report_task_entry:00000000 app_report_task_entry
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:539    .text.app_report_task_entry:000000f0 $d
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:555    .text.oc_lwm2m_demo_main:00000000 $t
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:562    .text.oc_lwm2m_demo_main:00000000 oc_lwm2m_demo_main
+C:\Users\user\AppData\Local\Temp\cc4EIDbc.s:616    .text.oc_lwm2m_demo_main:00000044 $d
+
+UNDEFINED SYMBOLS
+memcpy
+osal_semp_post
+osal_semp_pend
+printf
+boudica150_check_nuestats
+memset
+oc_lwm2m_config
+oc_lwm2m_report
+osal_task_sleep
+osal_semp_create
+osal_task_create

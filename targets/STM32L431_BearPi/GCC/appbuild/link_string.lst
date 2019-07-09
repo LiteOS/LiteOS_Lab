@@ -1,0 +1,405 @@
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccsrvwtY.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"link_string.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.string_to_arg,"ax",%progbits
+  18              		.align	1
+  19              		.global	string_to_arg
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	string_to_arg:
+  26              	.LFB3:
+  27              		.file 1 "E:/LiteOS/LiteOS_Lab/iot_link/link_misc/link_string.c"
+   1:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** /*----------------------------------------------------------------------------
+   2:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * All rights reserved.
+   4:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * are permitted provided that the following conditions are met:
+   6:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * conditions and the following disclaimer.
+   8:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * provided with the distribution.
+  11:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * permission.
+  14:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  *---------------------------------------------------------------------------*/
+  26:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** /*----------------------------------------------------------------------------
+  27:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * Notice of Export Control Law
+  28:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * ===============================================
+  29:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccsrvwtY.s 			page 2
+
+
+  32:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  * applicable export control laws and regulations.
+  33:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  *---------------------------------------------------------------------------*/
+  34:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** /**
+  35:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  *  DATE                AUTHOR      INSTRUCTION
+  36:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  *  2019-04-29 09:50  zhangqianfu  The first version  
+  37:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  *
+  38:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****  */
+  39:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** 
+  40:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** #include <stdint.h>
+  41:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** #include <stddef.h>
+  42:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** #include <string.h>
+  43:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** 
+  44:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** #include <osal.h>
+  45:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** #include <link_misc.h>
+  46:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** 
+  47:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** //this function is used to format the char string to the argc mode
+  48:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** //this function will changed the original string, used it carefully
+  49:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** //return how many arguments has been
+  50:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** int string_to_arg(int *argc, const char *argv[],char *string)
+  51:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** {
+  28              		.loc 1 51 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 40
+  31              		@ frame_needed = 1, uses_anonymous_args = 0
+  32 0000 80B5     		push	{r7, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 8
+  35              		.cfi_offset 7, -8
+  36              		.cfi_offset 14, -4
+  37 0002 8AB0     		sub	sp, sp, #40
+  38              	.LCFI1:
+  39              		.cfi_def_cfa_offset 48
+  40 0004 00AF     		add	r7, sp, #0
+  41              	.LCFI2:
+  42              		.cfi_def_cfa_register 7
+  43 0006 F860     		str	r0, [r7, #12]
+  44 0008 B960     		str	r1, [r7, #8]
+  45 000a 7A60     		str	r2, [r7, #4]
+  52:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     int argvlen = 0;
+  46              		.loc 1 52 0
+  47 000c 0023     		movs	r3, #0
+  48 000e BB61     		str	r3, [r7, #24]
+  53:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     int paramnum = 0;
+  49              		.loc 1 53 0
+  50 0010 0023     		movs	r3, #0
+  51 0012 7B62     		str	r3, [r7, #36]
+  54:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     char *tmp = NULL;
+  52              		.loc 1 54 0
+  53 0014 0023     		movs	r3, #0
+  54 0016 3B62     		str	r3, [r7, #32]
+  55:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     char bak;
+  56:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     int len;
+  57:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** 
+  58:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     argvlen = *argc;
+  55              		.loc 1 58 0
+  56 0018 FB68     		ldr	r3, [r7, #12]
+  57 001a 1B68     		ldr	r3, [r3]
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccsrvwtY.s 			page 3
+
+
+  58 001c BB61     		str	r3, [r7, #24]
+  59:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     *argc = paramnum;
+  59              		.loc 1 59 0
+  60 001e FB68     		ldr	r3, [r7, #12]
+  61 0020 7A6A     		ldr	r2, [r7, #36]
+  62 0022 1A60     		str	r2, [r3]
+  60:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     if(NULL == string)
+  63              		.loc 1 60 0
+  64 0024 7B68     		ldr	r3, [r7, #4]
+  65 0026 002B     		cmp	r3, #0
+  66 0028 01D1     		bne	.L2
+  61:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     {
+  62:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****         return paramnum;
+  67              		.loc 1 62 0
+  68 002a 7B6A     		ldr	r3, [r7, #36]
+  69 002c 40E0     		b	.L3
+  70              	.L2:
+  63:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     }
+  64:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** 
+  65:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     //use the '\0' to replace the ' '
+  66:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     len = strlen(string);
+  71              		.loc 1 66 0
+  72 002e 7868     		ldr	r0, [r7, #4]
+  73 0030 FFF7FEFF 		bl	strlen
+  74 0034 0346     		mov	r3, r0
+  75 0036 7B61     		str	r3, [r7, #20]
+  67:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     tmp = string;
+  76              		.loc 1 67 0
+  77 0038 7B68     		ldr	r3, [r7, #4]
+  78 003a 3B62     		str	r3, [r7, #32]
+  68:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     while(tmp < (string + len))
+  79              		.loc 1 68 0
+  80 003c 09E0     		b	.L4
+  81              	.L6:
+  69:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     {
+  70:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****         if(*tmp == ' ')
+  82              		.loc 1 70 0
+  83 003e 3B6A     		ldr	r3, [r7, #32]
+  84 0040 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  85 0042 202B     		cmp	r3, #32
+  86 0044 02D1     		bne	.L5
+  71:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****         {
+  72:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****             *tmp = '\0';
+  87              		.loc 1 72 0
+  88 0046 3B6A     		ldr	r3, [r7, #32]
+  89 0048 0022     		movs	r2, #0
+  90 004a 1A70     		strb	r2, [r3]
+  91              	.L5:
+  73:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****         }
+  74:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****         tmp++;
+  92              		.loc 1 74 0
+  93 004c 3B6A     		ldr	r3, [r7, #32]
+  94 004e 0133     		adds	r3, r3, #1
+  95 0050 3B62     		str	r3, [r7, #32]
+  96              	.L4:
+  68:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     {
+  97              		.loc 1 68 0
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccsrvwtY.s 			page 4
+
+
+  98 0052 7B69     		ldr	r3, [r7, #20]
+  99 0054 7A68     		ldr	r2, [r7, #4]
+ 100 0056 1344     		add	r3, r3, r2
+ 101 0058 3A6A     		ldr	r2, [r7, #32]
+ 102 005a 9A42     		cmp	r2, r3
+ 103 005c EFD3     		bcc	.L6
+  75:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     }
+  76:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     bak = '\0';
+ 104              		.loc 1 76 0
+ 105 005e 0023     		movs	r3, #0
+ 106 0060 FB77     		strb	r3, [r7, #31]
+  77:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     tmp = string;
+ 107              		.loc 1 77 0
+ 108 0062 7B68     		ldr	r3, [r7, #4]
+ 109 0064 3B62     		str	r3, [r7, #32]
+  78:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     while(tmp < (string + len))
+ 110              		.loc 1 78 0
+ 111 0066 19E0     		b	.L7
+ 112              	.L9:
+  79:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     {
+  80:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****         if((*tmp != '\0')&&(bak =='\0'))
+ 113              		.loc 1 80 0
+ 114 0068 3B6A     		ldr	r3, [r7, #32]
+ 115 006a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 116 006c 002B     		cmp	r3, #0
+ 117 006e 0FD0     		beq	.L8
+ 118              		.loc 1 80 0 is_stmt 0 discriminator 1
+ 119 0070 FB7F     		ldrb	r3, [r7, #31]	@ zero_extendqisi2
+ 120 0072 002B     		cmp	r3, #0
+ 121 0074 0CD1     		bne	.L8
+  81:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****         {
+  82:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****             if(paramnum < argvlen)
+ 122              		.loc 1 82 0 is_stmt 1
+ 123 0076 7A6A     		ldr	r2, [r7, #36]
+ 124 0078 BB69     		ldr	r3, [r7, #24]
+ 125 007a 9A42     		cmp	r2, r3
+ 126 007c 08DA     		bge	.L8
+  83:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****             {
+  84:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****                 argv[paramnum] = tmp;
+ 127              		.loc 1 84 0
+ 128 007e 7B6A     		ldr	r3, [r7, #36]
+ 129 0080 9B00     		lsls	r3, r3, #2
+ 130 0082 BA68     		ldr	r2, [r7, #8]
+ 131 0084 1344     		add	r3, r3, r2
+ 132 0086 3A6A     		ldr	r2, [r7, #32]
+ 133 0088 1A60     		str	r2, [r3]
+  85:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****                 paramnum++;
+ 134              		.loc 1 85 0
+ 135 008a 7B6A     		ldr	r3, [r7, #36]
+ 136 008c 0133     		adds	r3, r3, #1
+ 137 008e 7B62     		str	r3, [r7, #36]
+ 138              	.L8:
+  86:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****             }
+  87:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****         }
+  88:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****         bak = *tmp;
+ 139              		.loc 1 88 0
+ 140 0090 3B6A     		ldr	r3, [r7, #32]
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccsrvwtY.s 			page 5
+
+
+ 141 0092 1B78     		ldrb	r3, [r3]
+ 142 0094 FB77     		strb	r3, [r7, #31]
+  89:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****         tmp++;
+ 143              		.loc 1 89 0
+ 144 0096 3B6A     		ldr	r3, [r7, #32]
+ 145 0098 0133     		adds	r3, r3, #1
+ 146 009a 3B62     		str	r3, [r7, #32]
+ 147              	.L7:
+  78:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     {
+ 148              		.loc 1 78 0
+ 149 009c 7B69     		ldr	r3, [r7, #20]
+ 150 009e 7A68     		ldr	r2, [r7, #4]
+ 151 00a0 1344     		add	r3, r3, r2
+ 152 00a2 3A6A     		ldr	r2, [r7, #32]
+ 153 00a4 9A42     		cmp	r2, r3
+ 154 00a6 DFD3     		bcc	.L9
+  90:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     }
+  91:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     *argc = paramnum;
+ 155              		.loc 1 91 0
+ 156 00a8 FB68     		ldr	r3, [r7, #12]
+ 157 00aa 7A6A     		ldr	r2, [r7, #36]
+ 158 00ac 1A60     		str	r2, [r3]
+  92:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** 
+  93:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     return paramnum;
+ 159              		.loc 1 93 0
+ 160 00ae 7B6A     		ldr	r3, [r7, #36]
+ 161              	.L3:
+  94:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** }
+ 162              		.loc 1 94 0
+ 163 00b0 1846     		mov	r0, r3
+ 164 00b2 2837     		adds	r7, r7, #40
+ 165              	.LCFI3:
+ 166              		.cfi_def_cfa_offset 8
+ 167 00b4 BD46     		mov	sp, r7
+ 168              	.LCFI4:
+ 169              		.cfi_def_cfa_register 13
+ 170              		@ sp needed
+ 171 00b6 80BD     		pop	{r7, pc}
+ 172              		.cfi_endproc
+ 173              	.LFE3:
+ 175              		.section	.text.osal_strdup,"ax",%progbits
+ 176              		.align	1
+ 177              		.global	osal_strdup
+ 178              		.syntax unified
+ 179              		.thumb
+ 180              		.thumb_func
+ 181              		.fpu fpv4-sp-d16
+ 183              	osal_strdup:
+ 184              	.LFB4:
+  95:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** 
+  96:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** 
+  97:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** char *osal_strdup(const char *ch)
+  98:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** {
+ 185              		.loc 1 98 0
+ 186              		.cfi_startproc
+ 187              		@ args = 0, pretend = 0, frame = 16
+ 188              		@ frame_needed = 1, uses_anonymous_args = 0
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccsrvwtY.s 			page 6
+
+
+ 189 0000 80B5     		push	{r7, lr}
+ 190              	.LCFI5:
+ 191              		.cfi_def_cfa_offset 8
+ 192              		.cfi_offset 7, -8
+ 193              		.cfi_offset 14, -4
+ 194 0002 84B0     		sub	sp, sp, #16
+ 195              	.LCFI6:
+ 196              		.cfi_def_cfa_offset 24
+ 197 0004 00AF     		add	r7, sp, #0
+ 198              	.LCFI7:
+ 199              		.cfi_def_cfa_register 7
+ 200 0006 7860     		str	r0, [r7, #4]
+  99:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     char *copy;
+ 100:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     size_t length;
+ 101:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** 
+ 102:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     if(NULL == ch)
+ 201              		.loc 1 102 0
+ 202 0008 7B68     		ldr	r3, [r7, #4]
+ 203 000a 002B     		cmp	r3, #0
+ 204 000c 01D1     		bne	.L11
+ 103:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****         return NULL;
+ 205              		.loc 1 103 0
+ 206 000e 0023     		movs	r3, #0
+ 207 0010 19E0     		b	.L12
+ 208              	.L11:
+ 104:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** 
+ 105:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     length = strlen(ch);
+ 209              		.loc 1 105 0
+ 210 0012 7868     		ldr	r0, [r7, #4]
+ 211 0014 FFF7FEFF 		bl	strlen
+ 212 0018 F860     		str	r0, [r7, #12]
+ 106:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     copy = (char *)osal_malloc(length + 1);
+ 213              		.loc 1 106 0
+ 214 001a FB68     		ldr	r3, [r7, #12]
+ 215 001c 0133     		adds	r3, r3, #1
+ 216 001e 1846     		mov	r0, r3
+ 217 0020 FFF7FEFF 		bl	osal_malloc
+ 218 0024 B860     		str	r0, [r7, #8]
+ 107:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     if(NULL == copy)
+ 219              		.loc 1 107 0
+ 220 0026 BB68     		ldr	r3, [r7, #8]
+ 221 0028 002B     		cmp	r3, #0
+ 222 002a 01D1     		bne	.L13
+ 108:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****         return NULL;
+ 223              		.loc 1 108 0
+ 224 002c 0023     		movs	r3, #0
+ 225 002e 0AE0     		b	.L12
+ 226              	.L13:
+ 109:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     strncpy(copy, ch, length);
+ 227              		.loc 1 109 0
+ 228 0030 FA68     		ldr	r2, [r7, #12]
+ 229 0032 7968     		ldr	r1, [r7, #4]
+ 230 0034 B868     		ldr	r0, [r7, #8]
+ 231 0036 FFF7FEFF 		bl	strncpy
+ 110:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     copy[length] = '\0';
+ 232              		.loc 1 110 0
+ 233 003a BA68     		ldr	r2, [r7, #8]
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccsrvwtY.s 			page 7
+
+
+ 234 003c FB68     		ldr	r3, [r7, #12]
+ 235 003e 1344     		add	r3, r3, r2
+ 236 0040 0022     		movs	r2, #0
+ 237 0042 1A70     		strb	r2, [r3]
+ 111:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** 
+ 112:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c ****     return copy;
+ 238              		.loc 1 112 0
+ 239 0044 BB68     		ldr	r3, [r7, #8]
+ 240              	.L12:
+ 113:E:/LiteOS/LiteOS_Lab/iot_link/link_misc\link_string.c **** }
+ 241              		.loc 1 113 0
+ 242 0046 1846     		mov	r0, r3
+ 243 0048 1037     		adds	r7, r7, #16
+ 244              	.LCFI8:
+ 245              		.cfi_def_cfa_offset 8
+ 246 004a BD46     		mov	sp, r7
+ 247              	.LCFI9:
+ 248              		.cfi_def_cfa_register 13
+ 249              		@ sp needed
+ 250 004c 80BD     		pop	{r7, pc}
+ 251              		.cfi_endproc
+ 252              	.LFE4:
+ 254              		.text
+ 255              	.Letext0:
+ 256              		.file 2 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 257              		.file 3 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 258              		.file 4 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 259              		.file 5 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccsrvwtY.s 			page 8
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 link_string.c
+C:\Users\user\AppData\Local\Temp\ccsrvwtY.s:18     .text.string_to_arg:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccsrvwtY.s:25     .text.string_to_arg:00000000 string_to_arg
+C:\Users\user\AppData\Local\Temp\ccsrvwtY.s:176    .text.osal_strdup:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccsrvwtY.s:183    .text.osal_strdup:00000000 osal_strdup
+
+UNDEFINED SYMBOLS
+strlen
+osal_malloc
+strncpy

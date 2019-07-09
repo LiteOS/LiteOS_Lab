@@ -1,0 +1,705 @@
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccpmyxOe.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"sys_init.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.HAL_GetTick,"ax",%progbits
+  18              		.align	1
+  19              		.global	HAL_GetTick
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	HAL_GetTick:
+  26              	.LFB133:
+  27              		.file 1 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src/sys_init.c"
+   1:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** /*----------------------------------------------------------------------------
+   2:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+   3:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * All rights reserved.
+   4:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * are permitted provided that the following conditions are met:
+   6:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * conditions and the following disclaimer.
+   8:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * provided with the distribution.
+  11:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * permission.
+  14:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  *---------------------------------------------------------------------------*/
+  26:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** /*----------------------------------------------------------------------------
+  27:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * Notice of Export Control Law
+  28:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * ===============================================
+  29:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccpmyxOe.s 			page 2
+
+
+  32:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * applicable export control laws and regulations.
+  33:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  *---------------------------------------------------------------------------*/
+  34:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+  35:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** #include "sys_init.h"
+  36:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+  37:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+  38:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** uint32_t HAL_GetTick(void)
+  39:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** {
+  28              		.loc 1 39 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 1, uses_anonymous_args = 0
+  32 0000 98B5     		push	{r3, r4, r7, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 16
+  35              		.cfi_offset 3, -16
+  36              		.cfi_offset 4, -12
+  37              		.cfi_offset 7, -8
+  38              		.cfi_offset 14, -4
+  39 0002 00AF     		add	r7, sp, #0
+  40              	.LCFI1:
+  41              		.cfi_def_cfa_register 7
+  40:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****     return (uint32_t)LOS_TickCountGet();
+  42              		.loc 1 40 0
+  43 0004 FFF7FEFF 		bl	LOS_TickCountGet
+  44 0008 0346     		mov	r3, r0
+  45 000a 0C46     		mov	r4, r1
+  41:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** }
+  46              		.loc 1 41 0
+  47 000c 1846     		mov	r0, r3
+  48 000e 98BD     		pop	{r3, r4, r7, pc}
+  49              		.cfi_endproc
+  50              	.LFE133:
+  52              		.section	.text._Error_Handler,"ax",%progbits
+  53              		.align	1
+  54              		.global	_Error_Handler
+  55              		.syntax unified
+  56              		.thumb
+  57              		.thumb_func
+  58              		.fpu fpv4-sp-d16
+  60              	_Error_Handler:
+  61              	.LFB134:
+  42:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+  43:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** /**
+  44:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   * @brief  This function is executed in case of error occurrence.
+  45:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   * @param  file: The file name as string.
+  46:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   * @param  line: The line in file as a number.
+  47:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   * @retval None
+  48:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   */
+  49:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** void _Error_Handler(char *file, int line)
+  50:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** {
+  62              		.loc 1 50 0
+  63              		.cfi_startproc
+  64              		@ args = 0, pretend = 0, frame = 8
+  65              		@ frame_needed = 1, uses_anonymous_args = 0
+  66              		@ link register save eliminated.
+  67 0000 80B4     		push	{r7}
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccpmyxOe.s 			page 3
+
+
+  68              	.LCFI2:
+  69              		.cfi_def_cfa_offset 4
+  70              		.cfi_offset 7, -4
+  71 0002 83B0     		sub	sp, sp, #12
+  72              	.LCFI3:
+  73              		.cfi_def_cfa_offset 16
+  74 0004 00AF     		add	r7, sp, #0
+  75              	.LCFI4:
+  76              		.cfi_def_cfa_register 7
+  77 0006 7860     		str	r0, [r7, #4]
+  78 0008 3960     		str	r1, [r7]
+  79              	.L4:
+  51:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   /* USER CODE BEGIN Error_Handler_Debug */
+  52:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   /* User can add his own implementation to report the HAL error return state */
+  53:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   while(1)
+  80              		.loc 1 53 0 discriminator 1
+  81 000a FEE7     		b	.L4
+  82              		.cfi_endproc
+  83              	.LFE134:
+  85              		.section	.rodata
+  86              		.align	2
+  87              	.LC0:
+  88 0000 453A2F4C 		.ascii	"E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src/s"
+  88      6974654F 
+  88      532F4C69 
+  88      74654F53 
+  88      5F4C6162 
+  89 0033 79735F69 		.ascii	"ys_init.c\000"
+  89      6E69742E 
+  89      6300
+  90              		.section	.text.SystemClock_Config,"ax",%progbits
+  91              		.align	1
+  92              		.global	SystemClock_Config
+  93              		.syntax unified
+  94              		.thumb
+  95              		.thumb_func
+  96              		.fpu fpv4-sp-d16
+  98              	SystemClock_Config:
+  99              	.LFB135:
+  54:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   {
+  55:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   }
+  56:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   /* USER CODE END Error_Handler_Debug */
+  57:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** }
+  58:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+  59:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+  60:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** /**
+  61:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   * @brief System Clock Configuration
+  62:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   * @retval None
+  63:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   */
+  64:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** void SystemClock_Config(void)
+  65:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** {
+ 100              		.loc 1 65 0
+ 101              		.cfi_startproc
+ 102              		@ args = 0, pretend = 0, frame = 184
+ 103              		@ frame_needed = 1, uses_anonymous_args = 0
+ 104 0000 80B5     		push	{r7, lr}
+ 105              	.LCFI5:
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccpmyxOe.s 			page 4
+
+
+ 106              		.cfi_def_cfa_offset 8
+ 107              		.cfi_offset 7, -8
+ 108              		.cfi_offset 14, -4
+ 109 0002 AEB0     		sub	sp, sp, #184
+ 110              	.LCFI6:
+ 111              		.cfi_def_cfa_offset 192
+ 112 0004 00AF     		add	r7, sp, #0
+ 113              	.LCFI7:
+ 114              		.cfi_def_cfa_register 7
+  66:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   RCC_OscInitTypeDef RCC_OscInitStruct;
+  67:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   RCC_ClkInitTypeDef RCC_ClkInitStruct;
+  68:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   RCC_PeriphCLKInitTypeDef PeriphClkInit;
+  69:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+  70:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****     /**Configure LSE Drive Capability 
+  71:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****     */
+  72:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   HAL_PWR_EnableBkUpAccess();
+ 115              		.loc 1 72 0
+ 116 0006 FFF7FEFF 		bl	HAL_PWR_EnableBkUpAccess
+  73:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+  74:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   __HAL_RCC_LSEDRIVE_CONFIG(RCC_LSEDRIVE_LOW);
+ 117              		.loc 1 74 0
+ 118 000a 4A4B     		ldr	r3, .L11
+ 119 000c D3F89030 		ldr	r3, [r3, #144]
+ 120 0010 484A     		ldr	r2, .L11
+ 121 0012 23F01803 		bic	r3, r3, #24
+ 122 0016 C2F89030 		str	r3, [r2, #144]
+  75:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+  76:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****     /**Initializes the CPU, AHB and APB busses clocks 
+  77:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****     */
+  78:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_LSE
+ 123              		.loc 1 78 0
+ 124 001a 1623     		movs	r3, #22
+ 125 001c 7B67     		str	r3, [r7, #116]
+  79:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****                               |RCC_OSCILLATORTYPE_MSI;
+  80:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   RCC_OscInitStruct.LSEState = RCC_LSE_ON;
+ 126              		.loc 1 80 0
+ 127 001e 0123     		movs	r3, #1
+ 128 0020 FB67     		str	r3, [r7, #124]
+  81:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+ 129              		.loc 1 81 0
+ 130 0022 4FF48073 		mov	r3, #256
+ 131 0026 C7F88030 		str	r3, [r7, #128]
+  82:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   RCC_OscInitStruct.HSICalibrationValue = 16;
+ 132              		.loc 1 82 0
+ 133 002a 1023     		movs	r3, #16
+ 134 002c C7F88430 		str	r3, [r7, #132]
+  83:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   RCC_OscInitStruct.MSIState = RCC_MSI_ON;
+ 135              		.loc 1 83 0
+ 136 0030 0123     		movs	r3, #1
+ 137 0032 C7F88C30 		str	r3, [r7, #140]
+  84:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   RCC_OscInitStruct.MSICalibrationValue = 0;
+ 138              		.loc 1 84 0
+ 139 0036 0023     		movs	r3, #0
+ 140 0038 C7F89030 		str	r3, [r7, #144]
+  85:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   RCC_OscInitStruct.MSIClockRange = RCC_MSIRANGE_6;
+ 141              		.loc 1 85 0
+ 142 003c 6023     		movs	r3, #96
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccpmyxOe.s 			page 5
+
+
+ 143 003e C7F89430 		str	r3, [r7, #148]
+  86:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+ 144              		.loc 1 86 0
+ 145 0042 0223     		movs	r3, #2
+ 146 0044 C7F89C30 		str	r3, [r7, #156]
+  87:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_MSI;
+ 147              		.loc 1 87 0
+ 148 0048 0123     		movs	r3, #1
+ 149 004a C7F8A030 		str	r3, [r7, #160]
+  88:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   RCC_OscInitStruct.PLL.PLLM = 1;
+ 150              		.loc 1 88 0
+ 151 004e 0123     		movs	r3, #1
+ 152 0050 C7F8A430 		str	r3, [r7, #164]
+  89:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   RCC_OscInitStruct.PLL.PLLN = 40;
+ 153              		.loc 1 89 0
+ 154 0054 2823     		movs	r3, #40
+ 155 0056 C7F8A830 		str	r3, [r7, #168]
+  90:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV7;
+ 156              		.loc 1 90 0
+ 157 005a 0723     		movs	r3, #7
+ 158 005c C7F8AC30 		str	r3, [r7, #172]
+  91:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
+ 159              		.loc 1 91 0
+ 160 0060 0223     		movs	r3, #2
+ 161 0062 C7F8B030 		str	r3, [r7, #176]
+  92:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
+ 162              		.loc 1 92 0
+ 163 0066 0223     		movs	r3, #2
+ 164 0068 C7F8B430 		str	r3, [r7, #180]
+  93:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+ 165              		.loc 1 93 0
+ 166 006c 07F17403 		add	r3, r7, #116
+ 167 0070 1846     		mov	r0, r3
+ 168 0072 FFF7FEFF 		bl	HAL_RCC_OscConfig
+ 169 0076 0346     		mov	r3, r0
+ 170 0078 002B     		cmp	r3, #0
+ 171 007a 03D0     		beq	.L6
+  94:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   {
+  95:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****     _Error_Handler(__FILE__, __LINE__);
+ 172              		.loc 1 95 0
+ 173 007c 5F21     		movs	r1, #95
+ 174 007e 2E48     		ldr	r0, .L11+4
+ 175 0080 FFF7FEFF 		bl	_Error_Handler
+ 176              	.L6:
+  96:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   }
+  97:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+  98:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****     /**Initializes the CPU, AHB and APB busses clocks 
+  99:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****     */
+ 100:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+ 177              		.loc 1 100 0
+ 178 0084 0F23     		movs	r3, #15
+ 179 0086 3B66     		str	r3, [r7, #96]
+ 101:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+ 102:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+ 180              		.loc 1 102 0
+ 181 0088 0323     		movs	r3, #3
+ 182 008a 7B66     		str	r3, [r7, #100]
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccpmyxOe.s 			page 6
+
+
+ 103:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+ 183              		.loc 1 103 0
+ 184 008c 0023     		movs	r3, #0
+ 185 008e BB66     		str	r3, [r7, #104]
+ 104:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+ 186              		.loc 1 104 0
+ 187 0090 0023     		movs	r3, #0
+ 188 0092 FB66     		str	r3, [r7, #108]
+ 105:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+ 189              		.loc 1 105 0
+ 190 0094 0023     		movs	r3, #0
+ 191 0096 3B67     		str	r3, [r7, #112]
+ 106:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+ 107:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
+ 192              		.loc 1 107 0
+ 193 0098 07F16003 		add	r3, r7, #96
+ 194 009c 0421     		movs	r1, #4
+ 195 009e 1846     		mov	r0, r3
+ 196 00a0 FFF7FEFF 		bl	HAL_RCC_ClockConfig
+ 197 00a4 0346     		mov	r3, r0
+ 198 00a6 002B     		cmp	r3, #0
+ 199 00a8 03D0     		beq	.L7
+ 108:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   {
+ 109:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****     _Error_Handler(__FILE__, __LINE__);
+ 200              		.loc 1 109 0
+ 201 00aa 6D21     		movs	r1, #109
+ 202 00ac 2248     		ldr	r0, .L11+4
+ 203 00ae FFF7FEFF 		bl	_Error_Handler
+ 204              	.L7:
+ 110:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   }
+ 111:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+ 112:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1|RCC_PERIPHCLK_USART2
+ 205              		.loc 1 112 0
+ 206 00b2 224B     		ldr	r3, .L11+8
+ 207 00b4 7B60     		str	r3, [r7, #4]
+ 113:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****                               |RCC_PERIPHCLK_USART3|RCC_PERIPHCLK_LPUART1
+ 114:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****                               |RCC_PERIPHCLK_I2C1|RCC_PERIPHCLK_I2C2
+ 115:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****                               |RCC_PERIPHCLK_I2C3|RCC_PERIPHCLK_SDMMC1
+ 116:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****                               |RCC_PERIPHCLK_ADC;
+ 117:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_PCLK2;
+ 208              		.loc 1 117 0
+ 209 00b6 0023     		movs	r3, #0
+ 210 00b8 7B62     		str	r3, [r7, #36]
+ 118:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_PCLK1;
+ 211              		.loc 1 118 0
+ 212 00ba 0023     		movs	r3, #0
+ 213 00bc BB62     		str	r3, [r7, #40]
+ 119:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   PeriphClkInit.Usart3ClockSelection = RCC_USART3CLKSOURCE_PCLK1;
+ 214              		.loc 1 119 0
+ 215 00be 0023     		movs	r3, #0
+ 216 00c0 FB62     		str	r3, [r7, #44]
+ 120:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   PeriphClkInit.Lpuart1ClockSelection = RCC_LPUART1CLKSOURCE_HSI;
+ 217              		.loc 1 120 0
+ 218 00c2 4FF40063 		mov	r3, #2048
+ 219 00c6 3B63     		str	r3, [r7, #48]
+ 121:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_PCLK1;
+ 220              		.loc 1 121 0
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccpmyxOe.s 			page 7
+
+
+ 221 00c8 0023     		movs	r3, #0
+ 222 00ca 7B63     		str	r3, [r7, #52]
+ 122:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   PeriphClkInit.I2c2ClockSelection = RCC_I2C2CLKSOURCE_PCLK1;
+ 223              		.loc 1 122 0
+ 224 00cc 0023     		movs	r3, #0
+ 225 00ce BB63     		str	r3, [r7, #56]
+ 123:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   PeriphClkInit.I2c3ClockSelection = RCC_I2C3CLKSOURCE_PCLK1;
+ 226              		.loc 1 123 0
+ 227 00d0 0023     		movs	r3, #0
+ 228 00d2 FB63     		str	r3, [r7, #60]
+ 124:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   PeriphClkInit.AdcClockSelection = RCC_ADCCLKSOURCE_PLLSAI1;
+ 229              		.loc 1 124 0
+ 230 00d4 4FF08053 		mov	r3, #268435456
+ 231 00d8 7B65     		str	r3, [r7, #84]
+ 125:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   PeriphClkInit.Sdmmc1ClockSelection = RCC_SDMMC1CLKSOURCE_PLLSAI1;
+ 232              		.loc 1 125 0
+ 233 00da 4FF08063 		mov	r3, #67108864
+ 234 00de FB64     		str	r3, [r7, #76]
+ 126:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   PeriphClkInit.PLLSAI1.PLLSAI1Source = RCC_PLLSOURCE_MSI;
+ 235              		.loc 1 126 0
+ 236 00e0 0123     		movs	r3, #1
+ 237 00e2 BB60     		str	r3, [r7, #8]
+ 127:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   PeriphClkInit.PLLSAI1.PLLSAI1M = 1;
+ 238              		.loc 1 127 0
+ 239 00e4 0123     		movs	r3, #1
+ 240 00e6 FB60     		str	r3, [r7, #12]
+ 128:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   PeriphClkInit.PLLSAI1.PLLSAI1N = 16;
+ 241              		.loc 1 128 0
+ 242 00e8 1023     		movs	r3, #16
+ 243 00ea 3B61     		str	r3, [r7, #16]
+ 129:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   PeriphClkInit.PLLSAI1.PLLSAI1P = RCC_PLLP_DIV7;
+ 244              		.loc 1 129 0
+ 245 00ec 0723     		movs	r3, #7
+ 246 00ee 7B61     		str	r3, [r7, #20]
+ 130:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   PeriphClkInit.PLLSAI1.PLLSAI1Q = RCC_PLLQ_DIV2;
+ 247              		.loc 1 130 0
+ 248 00f0 0223     		movs	r3, #2
+ 249 00f2 BB61     		str	r3, [r7, #24]
+ 131:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   PeriphClkInit.PLLSAI1.PLLSAI1R = RCC_PLLR_DIV2;
+ 250              		.loc 1 131 0
+ 251 00f4 0223     		movs	r3, #2
+ 252 00f6 FB61     		str	r3, [r7, #28]
+ 132:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   PeriphClkInit.PLLSAI1.PLLSAI1ClockOut = RCC_PLLSAI1_48M2CLK|RCC_PLLSAI1_ADC1CLK;
+ 253              		.loc 1 132 0
+ 254 00f8 4FF08873 		mov	r3, #17825792
+ 255 00fc 3B62     		str	r3, [r7, #32]
+ 133:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+ 256              		.loc 1 133 0
+ 257 00fe 3B1D     		adds	r3, r7, #4
+ 258 0100 1846     		mov	r0, r3
+ 259 0102 FFF7FEFF 		bl	HAL_RCCEx_PeriphCLKConfig
+ 260 0106 0346     		mov	r3, r0
+ 261 0108 002B     		cmp	r3, #0
+ 262 010a 03D0     		beq	.L8
+ 134:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   {
+ 135:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****     _Error_Handler(__FILE__, __LINE__);
+ 263              		.loc 1 135 0
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccpmyxOe.s 			page 8
+
+
+ 264 010c 8721     		movs	r1, #135
+ 265 010e 0A48     		ldr	r0, .L11+4
+ 266 0110 FFF7FEFF 		bl	_Error_Handler
+ 267              	.L8:
+ 136:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   }
+ 137:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+ 138:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****     /**Configure the main internal regulator output voltage 
+ 139:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****     */
+ 140:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1) != HAL_OK)
+ 268              		.loc 1 140 0
+ 269 0114 4FF40070 		mov	r0, #512
+ 270 0118 FFF7FEFF 		bl	HAL_PWREx_ControlVoltageScaling
+ 271 011c 0346     		mov	r3, r0
+ 272 011e 002B     		cmp	r3, #0
+ 273 0120 03D0     		beq	.L10
+ 141:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   {
+ 142:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****     _Error_Handler(__FILE__, __LINE__);
+ 274              		.loc 1 142 0
+ 275 0122 8E21     		movs	r1, #142
+ 276 0124 0448     		ldr	r0, .L11+4
+ 277 0126 FFF7FEFF 		bl	_Error_Handler
+ 278              	.L10:
+ 143:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   }
+ 144:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+ 145:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****     /**Configure the Systick interrupt time 
+ 146:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****     */
+ 147:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   //HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
+ 148:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+ 149:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****     /**Configure the Systick 
+ 150:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****     */
+ 151:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   //HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
+ 152:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+ 153:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****     /**Enable MSI Auto calibration 
+ 154:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****     */
+ 155:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   //HAL_RCCEx_EnableMSIPLLMode();
+ 156:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+ 157:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   /* SysTick_IRQn interrupt configuration */
+ 158:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   //HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+ 159:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** }
+ 279              		.loc 1 159 0
+ 280 012a 00BF     		nop
+ 281 012c B837     		adds	r7, r7, #184
+ 282              	.LCFI8:
+ 283              		.cfi_def_cfa_offset 8
+ 284 012e BD46     		mov	sp, r7
+ 285              	.LCFI9:
+ 286              		.cfi_def_cfa_register 13
+ 287              		@ sp needed
+ 288 0130 80BD     		pop	{r7, pc}
+ 289              	.L12:
+ 290 0132 00BF     		.align	2
+ 291              	.L11:
+ 292 0134 00100240 		.word	1073876992
+ 293 0138 00000000 		.word	.LC0
+ 294 013c E7410800 		.word	541159
+ 295              		.cfi_endproc
+ 296              	.LFE135:
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccpmyxOe.s 			page 9
+
+
+ 298              		.section	.text.atiny_usleep,"ax",%progbits
+ 299              		.align	1
+ 300              		.global	atiny_usleep
+ 301              		.syntax unified
+ 302              		.thumb
+ 303              		.thumb_func
+ 304              		.fpu fpv4-sp-d16
+ 306              	atiny_usleep:
+ 307              	.LFB136:
+ 160:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+ 161:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+ 162:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** #ifdef  USE_FULL_ASSERT
+ 163:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** /**
+ 164:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   * @brief  Reports the name of the source file and the source line number
+ 165:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   *         where the assert_param error has occurred.
+ 166:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   * @param  file: pointer to the source file name
+ 167:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   * @param  line: assert_param error line source number
+ 168:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   * @retval None
+ 169:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   */
+ 170:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** void assert_failed(uint8_t* file, uint32_t line)
+ 171:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** { 
+ 172:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   /* USER CODE BEGIN 6 */
+ 173:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   /* User can add his own implementation to report the file name and line number,
+ 174:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****      tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+ 175:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****   /* USER CODE END 6 */
+ 176:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** }
+ 177:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** #endif /* USE_FULL_ASSERT */
+ 178:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+ 179:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+ 180:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** /*
+ 181:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  * atiny_adapter user interface
+ 182:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****  */
+ 183:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** void atiny_usleep(unsigned long usec)
+ 184:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** {
+ 308              		.loc 1 184 0
+ 309              		.cfi_startproc
+ 310              		@ args = 0, pretend = 0, frame = 8
+ 311              		@ frame_needed = 1, uses_anonymous_args = 0
+ 312 0000 80B5     		push	{r7, lr}
+ 313              	.LCFI10:
+ 314              		.cfi_def_cfa_offset 8
+ 315              		.cfi_offset 7, -8
+ 316              		.cfi_offset 14, -4
+ 317 0002 82B0     		sub	sp, sp, #8
+ 318              	.LCFI11:
+ 319              		.cfi_def_cfa_offset 16
+ 320 0004 00AF     		add	r7, sp, #0
+ 321              	.LCFI12:
+ 322              		.cfi_def_cfa_register 7
+ 323 0006 7860     		str	r0, [r7, #4]
+ 185:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****     delayus((uint32_t)usec);
+ 324              		.loc 1 185 0
+ 325 0008 7868     		ldr	r0, [r7, #4]
+ 326 000a FFF7FEFF 		bl	delayus
+ 186:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** }
+ 327              		.loc 1 186 0
+ 328 000e 00BF     		nop
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccpmyxOe.s 			page 10
+
+
+ 329 0010 0837     		adds	r7, r7, #8
+ 330              	.LCFI13:
+ 331              		.cfi_def_cfa_offset 8
+ 332 0012 BD46     		mov	sp, r7
+ 333              	.LCFI14:
+ 334              		.cfi_def_cfa_register 13
+ 335              		@ sp needed
+ 336 0014 80BD     		pop	{r7, pc}
+ 337              		.cfi_endproc
+ 338              	.LFE136:
+ 340              		.section	.text.atiny_random,"ax",%progbits
+ 341              		.align	1
+ 342              		.global	atiny_random
+ 343              		.syntax unified
+ 344              		.thumb
+ 345              		.thumb_func
+ 346              		.fpu fpv4-sp-d16
+ 348              	atiny_random:
+ 349              	.LFB137:
+ 187:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+ 188:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** int atiny_random(void *output, size_t len)
+ 189:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** {
+ 350              		.loc 1 189 0
+ 351              		.cfi_startproc
+ 352              		@ args = 0, pretend = 0, frame = 8
+ 353              		@ frame_needed = 1, uses_anonymous_args = 0
+ 354 0000 80B5     		push	{r7, lr}
+ 355              	.LCFI15:
+ 356              		.cfi_def_cfa_offset 8
+ 357              		.cfi_offset 7, -8
+ 358              		.cfi_offset 14, -4
+ 359 0002 82B0     		sub	sp, sp, #8
+ 360              	.LCFI16:
+ 361              		.cfi_def_cfa_offset 16
+ 362 0004 00AF     		add	r7, sp, #0
+ 363              	.LCFI17:
+ 364              		.cfi_def_cfa_register 7
+ 365 0006 7860     		str	r0, [r7, #4]
+ 366 0008 3960     		str	r1, [r7]
+ 190:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****     return hal_rng_generate_buffer(output, len);
+ 367              		.loc 1 190 0
+ 368 000a 3968     		ldr	r1, [r7]
+ 369 000c 7868     		ldr	r0, [r7, #4]
+ 370 000e FFF7FEFF 		bl	hal_rng_generate_buffer
+ 371 0012 0346     		mov	r3, r0
+ 191:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** }
+ 372              		.loc 1 191 0
+ 373 0014 1846     		mov	r0, r3
+ 374 0016 0837     		adds	r7, r7, #8
+ 375              	.LCFI18:
+ 376              		.cfi_def_cfa_offset 8
+ 377 0018 BD46     		mov	sp, r7
+ 378              	.LCFI19:
+ 379              		.cfi_def_cfa_register 13
+ 380              		@ sp needed
+ 381 001a 80BD     		pop	{r7, pc}
+ 382              		.cfi_endproc
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccpmyxOe.s 			page 11
+
+
+ 383              	.LFE137:
+ 385              		.section	.text.atiny_reboot,"ax",%progbits
+ 386              		.align	1
+ 387              		.global	atiny_reboot
+ 388              		.syntax unified
+ 389              		.thumb
+ 390              		.thumb_func
+ 391              		.fpu fpv4-sp-d16
+ 393              	atiny_reboot:
+ 394              	.LFB138:
+ 192:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** 
+ 193:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** void atiny_reboot(void)
+ 194:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** {
+ 395              		.loc 1 194 0
+ 396              		.cfi_startproc
+ 397              		@ args = 0, pretend = 0, frame = 0
+ 398              		@ frame_needed = 1, uses_anonymous_args = 0
+ 399 0000 80B5     		push	{r7, lr}
+ 400              	.LCFI20:
+ 401              		.cfi_def_cfa_offset 8
+ 402              		.cfi_offset 7, -8
+ 403              		.cfi_offset 14, -4
+ 404 0002 00AF     		add	r7, sp, #0
+ 405              	.LCFI21:
+ 406              		.cfi_def_cfa_register 7
+ 195:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c ****     HAL_NVIC_SystemReset();
+ 407              		.loc 1 195 0
+ 408 0004 FFF7FEFF 		bl	HAL_NVIC_SystemReset
+ 196:E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Src\sys_init.c **** }
+ 409              		.loc 1 196 0
+ 410 0008 00BF     		nop
+ 411 000a 80BD     		pop	{r7, pc}
+ 412              		.cfi_endproc
+ 413              	.LFE138:
+ 415              		.text
+ 416              	.Letext0:
+ 417              		.file 2 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 418              		.file 3 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 419              		.file 4 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 420              		.file 5 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 421              		.file 6 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 422              		.file 7 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_typedef.h"
+ 423              		.file 8 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 424              		.file 9 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 425              		.file 10 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/system_stm32l4xx.h"
+ 426              		.file 11 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/stm32l431xx.h"
+ 427              		.file 12 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 428              		.file 13 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_list.h"
+ 429              		.file 14 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_err.h"
+ 430              		.file 15 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_tick.h"
+ 431              		.file 16 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_event.h"
+ 432              		.file 17 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_task.h"
+ 433              		.file 18 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/include/los_task.ph"
+ 434              		.file 19 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/main.h"
+ 435              		.file 20 "E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h
+ 436              		.file 21 "E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h
+ 437              		.file 22 "E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc_e
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccpmyxOe.s 			page 12
+
+
+ 438              		.file 23 "E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_dma.h
+ 439              		.file 24 "E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_i2c.h
+ 440              		.file 25 "E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi.h
+ 441              		.file 26 "E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.
+ 442              		.file 27 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_config.h"
+ 443              		.file 28 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_memory.h"
+ 444              		.file 29 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/include/los_queue.ph"
+ 445              		.file 30 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.201807
+ 446              		.file 31 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/usart.h"
+ 447              		.file 32 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/i2c.h"
+ 448              		.file 33 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/spi.h"
+ 449              		.file 34 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Hardware/LCD/lcd.h"
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccpmyxOe.s 			page 13
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 sys_init.c
+C:\Users\user\AppData\Local\Temp\ccpmyxOe.s:18     .text.HAL_GetTick:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccpmyxOe.s:25     .text.HAL_GetTick:00000000 HAL_GetTick
+C:\Users\user\AppData\Local\Temp\ccpmyxOe.s:53     .text._Error_Handler:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccpmyxOe.s:60     .text._Error_Handler:00000000 _Error_Handler
+C:\Users\user\AppData\Local\Temp\ccpmyxOe.s:86     .rodata:00000000 $d
+C:\Users\user\AppData\Local\Temp\ccpmyxOe.s:91     .text.SystemClock_Config:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccpmyxOe.s:98     .text.SystemClock_Config:00000000 SystemClock_Config
+C:\Users\user\AppData\Local\Temp\ccpmyxOe.s:292    .text.SystemClock_Config:00000134 $d
+C:\Users\user\AppData\Local\Temp\ccpmyxOe.s:299    .text.atiny_usleep:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccpmyxOe.s:306    .text.atiny_usleep:00000000 atiny_usleep
+C:\Users\user\AppData\Local\Temp\ccpmyxOe.s:341    .text.atiny_random:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccpmyxOe.s:348    .text.atiny_random:00000000 atiny_random
+C:\Users\user\AppData\Local\Temp\ccpmyxOe.s:386    .text.atiny_reboot:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccpmyxOe.s:393    .text.atiny_reboot:00000000 atiny_reboot
+
+UNDEFINED SYMBOLS
+LOS_TickCountGet
+HAL_PWR_EnableBkUpAccess
+HAL_RCC_OscConfig
+HAL_RCC_ClockConfig
+HAL_RCCEx_PeriphCLKConfig
+HAL_PWREx_ControlVoltageScaling
+delayus
+hal_rng_generate_buffer
+HAL_NVIC_SystemReset

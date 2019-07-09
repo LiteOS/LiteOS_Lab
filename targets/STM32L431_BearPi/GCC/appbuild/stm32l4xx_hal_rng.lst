@@ -1,0 +1,1518 @@
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stm32l4xx_hal_rng.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.HAL_RNG_Init,"ax",%progbits
+  18              		.align	1
+  19              		.global	HAL_RNG_Init
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	HAL_RNG_Init:
+  26              	.LFB133:
+  27              		.file 1 "E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rng.c"
+   1:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /**
+   2:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   ******************************************************************************
+   3:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @file    stm32l4xx_hal_rng.c
+   4:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @author  MCD Application Team
+   5:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @brief   RNG HAL module driver.
+   6:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *          This file provides firmware functions to manage the following 
+   7:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *          functionalities of the Random Number Generator (RNG) peripheral:
+   8:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *           + Initialization/de-initialization functions
+   9:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *           + Peripheral Control functions 
+  10:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *           + Peripheral State functions
+  11:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *         
+  12:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   @verbatim
+  13:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   ==============================================================================
+  14:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****                      ##### How to use this driver #####
+  15:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   ==============================================================================
+  16:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   [..]
+  17:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****       The RNG HAL driver can be used as follows:
+  18:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+  19:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****       (#) Enable the RNG controller clock using __HAL_RCC_RNG_CLK_ENABLE() macro 
+  20:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****           in HAL_RNG_MspInit().
+  21:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****       (#) Activate the RNG peripheral using HAL_RNG_Init() function.
+  22:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****       (#) Wait until the 32-bit Random Number Generator contains a valid 
+  23:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****           random data using (polling/interrupt) mode.   
+  24:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****       (#) Get the 32 bit random number using HAL_RNG_GenerateRandomNumber() function.
+  25:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   
+  26:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   @endverbatim
+  27:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   ******************************************************************************
+  28:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @attention
+  29:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *
+  30:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  31:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 2
+
+
+  32:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  33:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * are permitted provided that the following conditions are met:
+  34:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  35:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *      this list of conditions and the following disclaimer.
+  36:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  37:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *      this list of conditions and the following disclaimer in the documentation
+  38:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *      and/or other materials provided with the distribution.
+  39:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  40:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *      may be used to endorse or promote products derived from this software
+  41:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *      without specific prior written permission.
+  42:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *
+  43:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  44:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  45:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  46:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  47:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  48:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  49:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  50:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  51:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  52:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  53:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *
+  54:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   ******************************************************************************
+  55:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */ 
+  56:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+  57:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /* Includes ------------------------------------------------------------------*/
+  58:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** #include "stm32l4xx_hal.h"
+  59:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+  60:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /** @addtogroup STM32L4xx_HAL_Driver
+  61:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @{
+  62:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */
+  63:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+  64:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /** @defgroup RNG RNG
+  65:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @brief RNG HAL module driver.
+  66:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @{
+  67:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */
+  68:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+  69:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** #ifdef HAL_RNG_MODULE_ENABLED
+  70:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+  71:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+  72:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+  73:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /* Private types -------------------------------------------------------------*/
+  74:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /* Private defines -----------------------------------------------------------*/
+  75:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /** @defgroup RNG_Private_Constants RNG_Private_Constants
+  76:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @{
+  77:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */
+  78:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** #define RNG_TIMEOUT_VALUE     2
+  79:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /**
+  80:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @}
+  81:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */ 
+  82:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+  83:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /* Private macros ------------------------------------------------------------*/
+  84:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /* Private variables ---------------------------------------------------------*/
+  85:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /* Private function prototypes -----------------------------------------------*/
+  86:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /* Private functions ---------------------------------------------------------*/
+  87:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /* Exported functions --------------------------------------------------------*/
+  88:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 3
+
+
+  89:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /** @addtogroup RNG_Exported_Functions
+  90:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @{
+  91:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */
+  92:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+  93:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /** @addtogroup RNG_Exported_Functions_Group1
+  94:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****  *  @brief   Initialization and de-initialization functions
+  95:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****  *
+  96:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** @verbatim
+  97:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****  ===============================================================================
+  98:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****           ##### Initialization and de-initialization functions #####
+  99:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****  ===============================================================================
+ 100:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     [..]  This section provides functions allowing to:
+ 101:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****       (+) Initialize the RNG according to the specified parameters 
+ 102:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****           in the RNG_InitTypeDef and create the associated handle
+ 103:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****       (+) DeInitialize the RNG peripheral
+ 104:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****       (+) Initialize the RNG MSP (MCU Specific Package)
+ 105:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****       (+) DeInitialize the RNG MSP 
+ 106:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****  
+ 107:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** @endverbatim
+ 108:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @{
+ 109:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */
+ 110:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 111:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /**
+ 112:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @brief  Initialize the RNG peripheral and initialize the associated handle.
+ 113:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @param  hrng: pointer to a RNG_HandleTypeDef structure.
+ 114:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @retval HAL status
+ 115:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */
+ 116:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** HAL_StatusTypeDef HAL_RNG_Init(RNG_HandleTypeDef *hrng)
+ 117:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** { 
+  28              		.loc 1 117 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 8
+  31              		@ frame_needed = 1, uses_anonymous_args = 0
+  32 0000 80B5     		push	{r7, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 8
+  35              		.cfi_offset 7, -8
+  36              		.cfi_offset 14, -4
+  37 0002 82B0     		sub	sp, sp, #8
+  38              	.LCFI1:
+  39              		.cfi_def_cfa_offset 16
+  40 0004 00AF     		add	r7, sp, #0
+  41              	.LCFI2:
+  42              		.cfi_def_cfa_register 7
+  43 0006 7860     		str	r0, [r7, #4]
+ 118:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Check the RNG handle allocation */
+ 119:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   if(hrng == NULL)
+  44              		.loc 1 119 0
+  45 0008 7B68     		ldr	r3, [r7, #4]
+  46 000a 002B     		cmp	r3, #0
+  47 000c 01D1     		bne	.L2
+ 120:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   {
+ 121:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     return HAL_ERROR;
+  48              		.loc 1 121 0
+  49 000e 0123     		movs	r3, #1
+  50 0010 19E0     		b	.L3
+  51              	.L2:
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 4
+
+
+ 122:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   }
+ 123:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 124:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   assert_param(IS_RNG_ALL_INSTANCE(hrng->Instance));
+ 125:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** #if defined(RNG_CR_CED)
+ 126:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   assert_param(IS_RNG_CED(hrng->Init.ClockErrorDetection));
+ 127:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** #endif /* defined(RNG_CR_CED) */
+ 128:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 129:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   if(hrng->State == HAL_RNG_STATE_RESET)
+  52              		.loc 1 129 0
+  53 0012 7B68     		ldr	r3, [r7, #4]
+  54 0014 5B79     		ldrb	r3, [r3, #5]
+  55 0016 DBB2     		uxtb	r3, r3
+  56 0018 002B     		cmp	r3, #0
+  57 001a 05D1     		bne	.L4
+ 130:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   {  
+ 131:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     /* Allocate lock resource and initialize it */
+ 132:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     hrng->Lock = HAL_UNLOCKED;
+  58              		.loc 1 132 0
+  59 001c 7B68     		ldr	r3, [r7, #4]
+  60 001e 0022     		movs	r2, #0
+  61 0020 1A71     		strb	r2, [r3, #4]
+ 133:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 134:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     /* Init the low level hardware */
+ 135:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     HAL_RNG_MspInit(hrng);
+  62              		.loc 1 135 0
+  63 0022 7868     		ldr	r0, [r7, #4]
+  64 0024 FFF7FEFF 		bl	HAL_RNG_MspInit
+  65              	.L4:
+ 136:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   }
+ 137:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 138:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Change RNG peripheral state */
+ 139:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   hrng->State = HAL_RNG_STATE_BUSY;
+  66              		.loc 1 139 0
+  67 0028 7B68     		ldr	r3, [r7, #4]
+  68 002a 0222     		movs	r2, #2
+  69 002c 5A71     		strb	r2, [r3, #5]
+ 140:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 141:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** #if defined(RNG_CR_CED)
+ 142:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Clock Error Detection configuration */
+ 143:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   MODIFY_REG(hrng->Instance->CR, RNG_CR_CED, hrng->Init.ClockErrorDetection);
+ 144:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** #endif /* defined(RNG_CR_CED) */
+ 145:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 146:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Enable the RNG Peripheral */
+ 147:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   __HAL_RNG_ENABLE(hrng);
+  70              		.loc 1 147 0
+  71 002e 7B68     		ldr	r3, [r7, #4]
+  72 0030 1B68     		ldr	r3, [r3]
+  73 0032 1A68     		ldr	r2, [r3]
+  74 0034 7B68     		ldr	r3, [r7, #4]
+  75 0036 1B68     		ldr	r3, [r3]
+  76 0038 42F00402 		orr	r2, r2, #4
+  77 003c 1A60     		str	r2, [r3]
+ 148:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 149:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Initialize the RNG state */
+ 150:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   hrng->State = HAL_RNG_STATE_READY;
+  78              		.loc 1 150 0
+  79 003e 7B68     		ldr	r3, [r7, #4]
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 5
+
+
+  80 0040 0122     		movs	r2, #1
+  81 0042 5A71     		strb	r2, [r3, #5]
+ 151:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   
+ 152:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Return function status */
+ 153:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   return HAL_OK;
+  82              		.loc 1 153 0
+  83 0044 0023     		movs	r3, #0
+  84              	.L3:
+ 154:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** }
+  85              		.loc 1 154 0
+  86 0046 1846     		mov	r0, r3
+  87 0048 0837     		adds	r7, r7, #8
+  88              	.LCFI3:
+  89              		.cfi_def_cfa_offset 8
+  90 004a BD46     		mov	sp, r7
+  91              	.LCFI4:
+  92              		.cfi_def_cfa_register 13
+  93              		@ sp needed
+  94 004c 80BD     		pop	{r7, pc}
+  95              		.cfi_endproc
+  96              	.LFE133:
+  98              		.section	.text.HAL_RNG_DeInit,"ax",%progbits
+  99              		.align	1
+ 100              		.global	HAL_RNG_DeInit
+ 101              		.syntax unified
+ 102              		.thumb
+ 103              		.thumb_func
+ 104              		.fpu fpv4-sp-d16
+ 106              	HAL_RNG_DeInit:
+ 107              	.LFB134:
+ 155:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 156:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /**
+ 157:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @brief  DeInitialize the RNG peripheral. 
+ 158:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @param  hrng: pointer to a RNG_HandleTypeDef structure.
+ 159:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @retval HAL status
+ 160:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */
+ 161:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** HAL_StatusTypeDef HAL_RNG_DeInit(RNG_HandleTypeDef *hrng)
+ 162:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** { 
+ 108              		.loc 1 162 0
+ 109              		.cfi_startproc
+ 110              		@ args = 0, pretend = 0, frame = 8
+ 111              		@ frame_needed = 1, uses_anonymous_args = 0
+ 112 0000 80B5     		push	{r7, lr}
+ 113              	.LCFI5:
+ 114              		.cfi_def_cfa_offset 8
+ 115              		.cfi_offset 7, -8
+ 116              		.cfi_offset 14, -4
+ 117 0002 82B0     		sub	sp, sp, #8
+ 118              	.LCFI6:
+ 119              		.cfi_def_cfa_offset 16
+ 120 0004 00AF     		add	r7, sp, #0
+ 121              	.LCFI7:
+ 122              		.cfi_def_cfa_register 7
+ 123 0006 7860     		str	r0, [r7, #4]
+ 163:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Check the RNG handle allocation */
+ 164:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   if(hrng == NULL)
+ 124              		.loc 1 164 0
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 6
+
+
+ 125 0008 7B68     		ldr	r3, [r7, #4]
+ 126 000a 002B     		cmp	r3, #0
+ 127 000c 01D1     		bne	.L6
+ 165:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   {
+ 166:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     return HAL_ERROR;
+ 128              		.loc 1 166 0
+ 129 000e 0123     		movs	r3, #1
+ 130 0010 19E0     		b	.L7
+ 131              	.L6:
+ 167:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   }
+ 168:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   
+ 169:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** #if defined(RNG_CR_CED)
+ 170:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Clear Clock Error Detection bit */
+ 171:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   CLEAR_BIT(hrng->Instance->CR, RNG_CR_CED);
+ 172:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** #endif /* defined(RNG_CR_CED) */
+ 173:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 174:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Disable the RNG Peripheral */
+ 175:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   CLEAR_BIT(hrng->Instance->CR, RNG_CR_IE | RNG_CR_RNGEN);
+ 132              		.loc 1 175 0
+ 133 0012 7B68     		ldr	r3, [r7, #4]
+ 134 0014 1B68     		ldr	r3, [r3]
+ 135 0016 1A68     		ldr	r2, [r3]
+ 136 0018 7B68     		ldr	r3, [r7, #4]
+ 137 001a 1B68     		ldr	r3, [r3]
+ 138 001c 22F00C02 		bic	r2, r2, #12
+ 139 0020 1A60     		str	r2, [r3]
+ 176:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 177:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Clear RNG interrupt status flags */
+ 178:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   CLEAR_BIT(hrng->Instance->SR, RNG_SR_CEIS | RNG_SR_SEIS);
+ 140              		.loc 1 178 0
+ 141 0022 7B68     		ldr	r3, [r7, #4]
+ 142 0024 1B68     		ldr	r3, [r3]
+ 143 0026 5A68     		ldr	r2, [r3, #4]
+ 144 0028 7B68     		ldr	r3, [r7, #4]
+ 145 002a 1B68     		ldr	r3, [r3]
+ 146 002c 22F06002 		bic	r2, r2, #96
+ 147 0030 5A60     		str	r2, [r3, #4]
+ 179:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 180:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* DeInit the low level hardware */
+ 181:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   HAL_RNG_MspDeInit(hrng);
+ 148              		.loc 1 181 0
+ 149 0032 7868     		ldr	r0, [r7, #4]
+ 150 0034 FFF7FEFF 		bl	HAL_RNG_MspDeInit
+ 182:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 183:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Update the RNG state */
+ 184:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   hrng->State = HAL_RNG_STATE_RESET; 
+ 151              		.loc 1 184 0
+ 152 0038 7B68     		ldr	r3, [r7, #4]
+ 153 003a 0022     		movs	r2, #0
+ 154 003c 5A71     		strb	r2, [r3, #5]
+ 185:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 186:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Release Lock */
+ 187:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   __HAL_UNLOCK(hrng);
+ 155              		.loc 1 187 0
+ 156 003e 7B68     		ldr	r3, [r7, #4]
+ 157 0040 0022     		movs	r2, #0
+ 158 0042 1A71     		strb	r2, [r3, #4]
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 7
+
+
+ 188:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 189:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Return the function status */
+ 190:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   return HAL_OK;
+ 159              		.loc 1 190 0
+ 160 0044 0023     		movs	r3, #0
+ 161              	.L7:
+ 191:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** }
+ 162              		.loc 1 191 0
+ 163 0046 1846     		mov	r0, r3
+ 164 0048 0837     		adds	r7, r7, #8
+ 165              	.LCFI8:
+ 166              		.cfi_def_cfa_offset 8
+ 167 004a BD46     		mov	sp, r7
+ 168              	.LCFI9:
+ 169              		.cfi_def_cfa_register 13
+ 170              		@ sp needed
+ 171 004c 80BD     		pop	{r7, pc}
+ 172              		.cfi_endproc
+ 173              	.LFE134:
+ 175              		.section	.text.HAL_RNG_MspInit,"ax",%progbits
+ 176              		.align	1
+ 177              		.weak	HAL_RNG_MspInit
+ 178              		.syntax unified
+ 179              		.thumb
+ 180              		.thumb_func
+ 181              		.fpu fpv4-sp-d16
+ 183              	HAL_RNG_MspInit:
+ 184              	.LFB135:
+ 192:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 193:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /**
+ 194:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @brief  Initialize the RNG MSP.
+ 195:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @param  hrng: pointer to a RNG_HandleTypeDef structure.
+ 196:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @retval None
+ 197:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */
+ 198:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** __weak void HAL_RNG_MspInit(RNG_HandleTypeDef *hrng)
+ 199:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** {
+ 185              		.loc 1 199 0
+ 186              		.cfi_startproc
+ 187              		@ args = 0, pretend = 0, frame = 8
+ 188              		@ frame_needed = 1, uses_anonymous_args = 0
+ 189              		@ link register save eliminated.
+ 190 0000 80B4     		push	{r7}
+ 191              	.LCFI10:
+ 192              		.cfi_def_cfa_offset 4
+ 193              		.cfi_offset 7, -4
+ 194 0002 83B0     		sub	sp, sp, #12
+ 195              	.LCFI11:
+ 196              		.cfi_def_cfa_offset 16
+ 197 0004 00AF     		add	r7, sp, #0
+ 198              	.LCFI12:
+ 199              		.cfi_def_cfa_register 7
+ 200 0006 7860     		str	r0, [r7, #4]
+ 200:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Prevent unused argument(s) compilation warning */
+ 201:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   UNUSED(hrng);
+ 202:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 203:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* NOTE : This function should not be modified. When the callback is needed,
+ 204:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****             function HAL_RNG_MspInit must be implemented in the user file.
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 8
+
+
+ 205:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****    */
+ 206:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** }
+ 201              		.loc 1 206 0
+ 202 0008 00BF     		nop
+ 203 000a 0C37     		adds	r7, r7, #12
+ 204              	.LCFI13:
+ 205              		.cfi_def_cfa_offset 4
+ 206 000c BD46     		mov	sp, r7
+ 207              	.LCFI14:
+ 208              		.cfi_def_cfa_register 13
+ 209              		@ sp needed
+ 210 000e 5DF8047B 		ldr	r7, [sp], #4
+ 211              	.LCFI15:
+ 212              		.cfi_restore 7
+ 213              		.cfi_def_cfa_offset 0
+ 214 0012 7047     		bx	lr
+ 215              		.cfi_endproc
+ 216              	.LFE135:
+ 218              		.section	.text.HAL_RNG_MspDeInit,"ax",%progbits
+ 219              		.align	1
+ 220              		.weak	HAL_RNG_MspDeInit
+ 221              		.syntax unified
+ 222              		.thumb
+ 223              		.thumb_func
+ 224              		.fpu fpv4-sp-d16
+ 226              	HAL_RNG_MspDeInit:
+ 227              	.LFB136:
+ 207:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 208:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /**
+ 209:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @brief  DeInitialize the RNG MSP.
+ 210:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @param  hrng: pointer to a RNG_HandleTypeDef structure.
+ 211:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @retval None
+ 212:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */
+ 213:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** __weak void HAL_RNG_MspDeInit(RNG_HandleTypeDef *hrng)
+ 214:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** {
+ 228              		.loc 1 214 0
+ 229              		.cfi_startproc
+ 230              		@ args = 0, pretend = 0, frame = 8
+ 231              		@ frame_needed = 1, uses_anonymous_args = 0
+ 232              		@ link register save eliminated.
+ 233 0000 80B4     		push	{r7}
+ 234              	.LCFI16:
+ 235              		.cfi_def_cfa_offset 4
+ 236              		.cfi_offset 7, -4
+ 237 0002 83B0     		sub	sp, sp, #12
+ 238              	.LCFI17:
+ 239              		.cfi_def_cfa_offset 16
+ 240 0004 00AF     		add	r7, sp, #0
+ 241              	.LCFI18:
+ 242              		.cfi_def_cfa_register 7
+ 243 0006 7860     		str	r0, [r7, #4]
+ 215:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Prevent unused argument(s) compilation warning */
+ 216:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   UNUSED(hrng);
+ 217:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 218:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* NOTE : This function should not be modified. When the callback is needed,
+ 219:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****             function HAL_RNG_MspDeInit must be implemented in the user file.
+ 220:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****    */
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 9
+
+
+ 221:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** }
+ 244              		.loc 1 221 0
+ 245 0008 00BF     		nop
+ 246 000a 0C37     		adds	r7, r7, #12
+ 247              	.LCFI19:
+ 248              		.cfi_def_cfa_offset 4
+ 249 000c BD46     		mov	sp, r7
+ 250              	.LCFI20:
+ 251              		.cfi_def_cfa_register 13
+ 252              		@ sp needed
+ 253 000e 5DF8047B 		ldr	r7, [sp], #4
+ 254              	.LCFI21:
+ 255              		.cfi_restore 7
+ 256              		.cfi_def_cfa_offset 0
+ 257 0012 7047     		bx	lr
+ 258              		.cfi_endproc
+ 259              	.LFE136:
+ 261              		.section	.text.HAL_RNG_GenerateRandomNumber,"ax",%progbits
+ 262              		.align	1
+ 263              		.global	HAL_RNG_GenerateRandomNumber
+ 264              		.syntax unified
+ 265              		.thumb
+ 266              		.thumb_func
+ 267              		.fpu fpv4-sp-d16
+ 269              	HAL_RNG_GenerateRandomNumber:
+ 270              	.LFB137:
+ 222:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 223:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /**
+ 224:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @}
+ 225:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */
+ 226:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 227:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /** @addtogroup RNG_Exported_Functions_Group2
+ 228:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****  *  @brief    Management functions. 
+ 229:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****  *
+ 230:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** @verbatim   
+ 231:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****  ===============================================================================
+ 232:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****                       ##### Peripheral Control functions #####
+ 233:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****  ===============================================================================  
+ 234:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     [..]  This section provides functions allowing to:
+ 235:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****       (+) Get the 32 bit Random number
+ 236:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****       (+) Get the 32 bit Random number with interrupt enabled
+ 237:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****       (+) Handle RNG interrupt request 
+ 238:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 239:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** @endverbatim
+ 240:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @{
+ 241:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */
+ 242:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 243:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /**
+ 244:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @brief  Generate a 32-bit random number.
+ 245:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @note   Each time the random number data is read the RNG_FLAG_DRDY flag 
+ 246:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *         is automatically cleared.
+ 247:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @param  hrng: pointer to a RNG_HandleTypeDef structure.
+ 248:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @param  random32bit: pointer to generated random number variable if successful.
+ 249:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @retval HAL status
+ 250:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */
+ 251:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 252:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** HAL_StatusTypeDef HAL_RNG_GenerateRandomNumber(RNG_HandleTypeDef *hrng, uint32_t *random32bit)
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 10
+
+
+ 253:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** {
+ 271              		.loc 1 253 0
+ 272              		.cfi_startproc
+ 273              		@ args = 0, pretend = 0, frame = 16
+ 274              		@ frame_needed = 1, uses_anonymous_args = 0
+ 275 0000 80B5     		push	{r7, lr}
+ 276              	.LCFI22:
+ 277              		.cfi_def_cfa_offset 8
+ 278              		.cfi_offset 7, -8
+ 279              		.cfi_offset 14, -4
+ 280 0002 84B0     		sub	sp, sp, #16
+ 281              	.LCFI23:
+ 282              		.cfi_def_cfa_offset 24
+ 283 0004 00AF     		add	r7, sp, #0
+ 284              	.LCFI24:
+ 285              		.cfi_def_cfa_register 7
+ 286 0006 7860     		str	r0, [r7, #4]
+ 287 0008 3960     		str	r1, [r7]
+ 254:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   uint32_t tickstart = 0;    
+ 288              		.loc 1 254 0
+ 289 000a 0023     		movs	r3, #0
+ 290 000c BB60     		str	r3, [r7, #8]
+ 255:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 291              		.loc 1 255 0
+ 292 000e 0023     		movs	r3, #0
+ 293 0010 FB73     		strb	r3, [r7, #15]
+ 256:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 257:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Process Locked */
+ 258:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   __HAL_LOCK(hrng); 
+ 294              		.loc 1 258 0
+ 295 0012 7B68     		ldr	r3, [r7, #4]
+ 296 0014 1B79     		ldrb	r3, [r3, #4]	@ zero_extendqisi2
+ 297 0016 012B     		cmp	r3, #1
+ 298 0018 01D1     		bne	.L11
+ 299              		.loc 1 258 0 is_stmt 0 discriminator 1
+ 300 001a 0223     		movs	r3, #2
+ 301 001c 37E0     		b	.L12
+ 302              	.L11:
+ 303              		.loc 1 258 0 discriminator 2
+ 304 001e 7B68     		ldr	r3, [r7, #4]
+ 305 0020 0122     		movs	r2, #1
+ 306 0022 1A71     		strb	r2, [r3, #4]
+ 259:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   
+ 260:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Check RNS peripheral state */
+ 261:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   if(hrng->State == HAL_RNG_STATE_READY)
+ 307              		.loc 1 261 0 is_stmt 1 discriminator 2
+ 308 0024 7B68     		ldr	r3, [r7, #4]
+ 309 0026 5B79     		ldrb	r3, [r3, #5]
+ 310 0028 DBB2     		uxtb	r3, r3
+ 311 002a 012B     		cmp	r3, #1
+ 312 002c 29D1     		bne	.L13
+ 262:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   {
+ 263:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     /* Change RNG peripheral state */  
+ 264:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     hrng->State = HAL_RNG_STATE_BUSY;  
+ 313              		.loc 1 264 0
+ 314 002e 7B68     		ldr	r3, [r7, #4]
+ 315 0030 0222     		movs	r2, #2
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 11
+
+
+ 316 0032 5A71     		strb	r2, [r3, #5]
+ 265:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 266:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     /* Get tick */
+ 267:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     tickstart = HAL_GetTick();
+ 317              		.loc 1 267 0
+ 318 0034 FFF7FEFF 		bl	HAL_GetTick
+ 319 0038 B860     		str	r0, [r7, #8]
+ 268:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   
+ 269:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     /* Check if data register contains valid random data */
+ 270:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     while(__HAL_RNG_GET_FLAG(hrng, RNG_FLAG_DRDY) == RESET)
+ 320              		.loc 1 270 0
+ 321 003a 0EE0     		b	.L14
+ 322              	.L15:
+ 271:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     {
+ 272:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****       if((HAL_GetTick() - tickstart ) > RNG_TIMEOUT_VALUE)
+ 323              		.loc 1 272 0
+ 324 003c FFF7FEFF 		bl	HAL_GetTick
+ 325 0040 0246     		mov	r2, r0
+ 326 0042 BB68     		ldr	r3, [r7, #8]
+ 327 0044 D31A     		subs	r3, r2, r3
+ 328 0046 022B     		cmp	r3, #2
+ 329 0048 07D9     		bls	.L14
+ 273:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****       {    
+ 274:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****         hrng->State = HAL_RNG_STATE_ERROR;
+ 330              		.loc 1 274 0
+ 331 004a 7B68     		ldr	r3, [r7, #4]
+ 332 004c 0422     		movs	r2, #4
+ 333 004e 5A71     		strb	r2, [r3, #5]
+ 275:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 276:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****         /* Process Unlocked */
+ 277:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****         __HAL_UNLOCK(hrng);
+ 334              		.loc 1 277 0
+ 335 0050 7B68     		ldr	r3, [r7, #4]
+ 336 0052 0022     		movs	r2, #0
+ 337 0054 1A71     		strb	r2, [r3, #4]
+ 278:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****       
+ 279:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****         return HAL_TIMEOUT;
+ 338              		.loc 1 279 0
+ 339 0056 0323     		movs	r3, #3
+ 340 0058 19E0     		b	.L12
+ 341              	.L14:
+ 270:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     {
+ 342              		.loc 1 270 0
+ 343 005a 7B68     		ldr	r3, [r7, #4]
+ 344 005c 1B68     		ldr	r3, [r3]
+ 345 005e 5B68     		ldr	r3, [r3, #4]
+ 346 0060 03F00103 		and	r3, r3, #1
+ 347 0064 012B     		cmp	r3, #1
+ 348 0066 E9D1     		bne	.L15
+ 280:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****       } 
+ 281:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     }
+ 282:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   
+ 283:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     /* Get a 32bit Random number */
+ 284:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     hrng->RandomNumber = hrng->Instance->DR;
+ 349              		.loc 1 284 0
+ 350 0068 7B68     		ldr	r3, [r7, #4]
+ 351 006a 1B68     		ldr	r3, [r3]
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 12
+
+
+ 352 006c 9A68     		ldr	r2, [r3, #8]
+ 353 006e 7B68     		ldr	r3, [r7, #4]
+ 354 0070 9A60     		str	r2, [r3, #8]
+ 285:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     *random32bit = hrng->RandomNumber;
+ 355              		.loc 1 285 0
+ 356 0072 7B68     		ldr	r3, [r7, #4]
+ 357 0074 9A68     		ldr	r2, [r3, #8]
+ 358 0076 3B68     		ldr	r3, [r7]
+ 359 0078 1A60     		str	r2, [r3]
+ 286:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   
+ 287:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     hrng->State = HAL_RNG_STATE_READY;
+ 360              		.loc 1 287 0
+ 361 007a 7B68     		ldr	r3, [r7, #4]
+ 362 007c 0122     		movs	r2, #1
+ 363 007e 5A71     		strb	r2, [r3, #5]
+ 364 0080 01E0     		b	.L16
+ 365              	.L13:
+ 288:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   }
+ 289:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   else
+ 290:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   {
+ 291:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     status = HAL_ERROR;
+ 366              		.loc 1 291 0
+ 367 0082 0123     		movs	r3, #1
+ 368 0084 FB73     		strb	r3, [r7, #15]
+ 369              	.L16:
+ 292:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   }
+ 293:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   
+ 294:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Process Unlocked */
+ 295:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   __HAL_UNLOCK(hrng);
+ 370              		.loc 1 295 0
+ 371 0086 7B68     		ldr	r3, [r7, #4]
+ 372 0088 0022     		movs	r2, #0
+ 373 008a 1A71     		strb	r2, [r3, #4]
+ 296:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 297:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   return status;
+ 374              		.loc 1 297 0
+ 375 008c FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 376              	.L12:
+ 298:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** }
+ 377              		.loc 1 298 0
+ 378 008e 1846     		mov	r0, r3
+ 379 0090 1037     		adds	r7, r7, #16
+ 380              	.LCFI25:
+ 381              		.cfi_def_cfa_offset 8
+ 382 0092 BD46     		mov	sp, r7
+ 383              	.LCFI26:
+ 384              		.cfi_def_cfa_register 13
+ 385              		@ sp needed
+ 386 0094 80BD     		pop	{r7, pc}
+ 387              		.cfi_endproc
+ 388              	.LFE137:
+ 390              		.section	.text.HAL_RNG_GenerateRandomNumber_IT,"ax",%progbits
+ 391              		.align	1
+ 392              		.global	HAL_RNG_GenerateRandomNumber_IT
+ 393              		.syntax unified
+ 394              		.thumb
+ 395              		.thumb_func
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 13
+
+
+ 396              		.fpu fpv4-sp-d16
+ 398              	HAL_RNG_GenerateRandomNumber_IT:
+ 399              	.LFB138:
+ 299:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 300:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /**
+ 301:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @brief  Generate a 32-bit random number in interrupt mode.
+ 302:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @param  hrng: pointer to a RNG_HandleTypeDef structure.
+ 303:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @retval HAL status
+ 304:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */
+ 305:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** HAL_StatusTypeDef HAL_RNG_GenerateRandomNumber_IT(RNG_HandleTypeDef *hrng)
+ 306:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** {
+ 400              		.loc 1 306 0
+ 401              		.cfi_startproc
+ 402              		@ args = 0, pretend = 0, frame = 16
+ 403              		@ frame_needed = 1, uses_anonymous_args = 0
+ 404              		@ link register save eliminated.
+ 405 0000 80B4     		push	{r7}
+ 406              	.LCFI27:
+ 407              		.cfi_def_cfa_offset 4
+ 408              		.cfi_offset 7, -4
+ 409 0002 85B0     		sub	sp, sp, #20
+ 410              	.LCFI28:
+ 411              		.cfi_def_cfa_offset 24
+ 412 0004 00AF     		add	r7, sp, #0
+ 413              	.LCFI29:
+ 414              		.cfi_def_cfa_register 7
+ 415 0006 7860     		str	r0, [r7, #4]
+ 307:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 416              		.loc 1 307 0
+ 417 0008 0023     		movs	r3, #0
+ 418 000a FB73     		strb	r3, [r7, #15]
+ 308:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   
+ 309:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Process Locked */
+ 310:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   __HAL_LOCK(hrng);
+ 419              		.loc 1 310 0
+ 420 000c 7B68     		ldr	r3, [r7, #4]
+ 421 000e 1B79     		ldrb	r3, [r3, #4]	@ zero_extendqisi2
+ 422 0010 012B     		cmp	r3, #1
+ 423 0012 01D1     		bne	.L18
+ 424              		.loc 1 310 0 is_stmt 0 discriminator 1
+ 425 0014 0223     		movs	r3, #2
+ 426 0016 1CE0     		b	.L19
+ 427              	.L18:
+ 428              		.loc 1 310 0 discriminator 2
+ 429 0018 7B68     		ldr	r3, [r7, #4]
+ 430 001a 0122     		movs	r2, #1
+ 431 001c 1A71     		strb	r2, [r3, #4]
+ 311:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   
+ 312:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Check RNG peripheral state */
+ 313:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   if(hrng->State == HAL_RNG_STATE_READY)
+ 432              		.loc 1 313 0 is_stmt 1 discriminator 2
+ 433 001e 7B68     		ldr	r3, [r7, #4]
+ 434 0020 5B79     		ldrb	r3, [r3, #5]
+ 435 0022 DBB2     		uxtb	r3, r3
+ 436 0024 012B     		cmp	r3, #1
+ 437 0026 0ED1     		bne	.L20
+ 314:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   {
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 14
+
+
+ 315:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     /* Change RNG peripheral state */  
+ 316:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     hrng->State = HAL_RNG_STATE_BUSY;  
+ 438              		.loc 1 316 0
+ 439 0028 7B68     		ldr	r3, [r7, #4]
+ 440 002a 0222     		movs	r2, #2
+ 441 002c 5A71     		strb	r2, [r3, #5]
+ 317:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   
+ 318:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     /* Process Unlocked */
+ 319:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     __HAL_UNLOCK(hrng);
+ 442              		.loc 1 319 0
+ 443 002e 7B68     		ldr	r3, [r7, #4]
+ 444 0030 0022     		movs	r2, #0
+ 445 0032 1A71     		strb	r2, [r3, #4]
+ 320:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     
+ 321:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     /* Enable the RNG Interrupts: Data Ready, Clock error, Seed error */ 
+ 322:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     __HAL_RNG_ENABLE_IT(hrng);
+ 446              		.loc 1 322 0
+ 447 0034 7B68     		ldr	r3, [r7, #4]
+ 448 0036 1B68     		ldr	r3, [r3]
+ 449 0038 1A68     		ldr	r2, [r3]
+ 450 003a 7B68     		ldr	r3, [r7, #4]
+ 451 003c 1B68     		ldr	r3, [r3]
+ 452 003e 42F00802 		orr	r2, r2, #8
+ 453 0042 1A60     		str	r2, [r3]
+ 454 0044 04E0     		b	.L21
+ 455              	.L20:
+ 323:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   }
+ 324:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   else
+ 325:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   {
+ 326:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     /* Process Unlocked */
+ 327:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     __HAL_UNLOCK(hrng);
+ 456              		.loc 1 327 0
+ 457 0046 7B68     		ldr	r3, [r7, #4]
+ 458 0048 0022     		movs	r2, #0
+ 459 004a 1A71     		strb	r2, [r3, #4]
+ 328:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     
+ 329:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     status = HAL_ERROR;
+ 460              		.loc 1 329 0
+ 461 004c 0123     		movs	r3, #1
+ 462 004e FB73     		strb	r3, [r7, #15]
+ 463              	.L21:
+ 330:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   }
+ 331:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   
+ 332:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   return status;
+ 464              		.loc 1 332 0
+ 465 0050 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+ 466              	.L19:
+ 333:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** }
+ 467              		.loc 1 333 0
+ 468 0052 1846     		mov	r0, r3
+ 469 0054 1437     		adds	r7, r7, #20
+ 470              	.LCFI30:
+ 471              		.cfi_def_cfa_offset 4
+ 472 0056 BD46     		mov	sp, r7
+ 473              	.LCFI31:
+ 474              		.cfi_def_cfa_register 13
+ 475              		@ sp needed
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 15
+
+
+ 476 0058 5DF8047B 		ldr	r7, [sp], #4
+ 477              	.LCFI32:
+ 478              		.cfi_restore 7
+ 479              		.cfi_def_cfa_offset 0
+ 480 005c 7047     		bx	lr
+ 481              		.cfi_endproc
+ 482              	.LFE138:
+ 484              		.section	.text.HAL_RNG_IRQHandler,"ax",%progbits
+ 485              		.align	1
+ 486              		.global	HAL_RNG_IRQHandler
+ 487              		.syntax unified
+ 488              		.thumb
+ 489              		.thumb_func
+ 490              		.fpu fpv4-sp-d16
+ 492              	HAL_RNG_IRQHandler:
+ 493              	.LFB139:
+ 334:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 335:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /**
+ 336:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @brief  Handle RNG interrupt request.
+ 337:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @note   In the case of a clock error, the RNG is no more able to generate 
+ 338:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *         random numbers because the PLL48CLK clock is not correct. User has 
+ 339:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *         to check that the clock controller is correctly configured to provide
+ 340:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *         the RNG clock and clear the CEIS bit using __HAL_RNG_CLEAR_IT(). 
+ 341:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *         The clock error has no impact on the previously generated 
+ 342:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *         random numbers, and the RNG_DR register contents can be used.
+ 343:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @note   In the case of a seed error, the generation of random numbers is 
+ 344:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *         interrupted as long as the SECS bit is '1'. If a number is 
+ 345:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *         available in the RNG_DR register, it must not be used because it may 
+ 346:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *         not have enough entropy. In this case, it is recommended to clear the 
+ 347:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *         SEIS bit using __HAL_RNG_CLEAR_IT(), then disable and enable 
+ 348:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *         the RNG peripheral to reinitialize and restart the RNG.
+ 349:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @note   User-written HAL_RNG_ErrorCallback() API is called once whether SEIS
+ 350:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *         or CEIS are set.  
+ 351:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @param  hrng: pointer to a RNG_HandleTypeDef structure.
+ 352:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @retval None
+ 353:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 354:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */
+ 355:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** void HAL_RNG_IRQHandler(RNG_HandleTypeDef *hrng)
+ 356:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** {
+ 494              		.loc 1 356 0
+ 495              		.cfi_startproc
+ 496              		@ args = 0, pretend = 0, frame = 8
+ 497              		@ frame_needed = 1, uses_anonymous_args = 0
+ 498 0000 80B5     		push	{r7, lr}
+ 499              	.LCFI33:
+ 500              		.cfi_def_cfa_offset 8
+ 501              		.cfi_offset 7, -8
+ 502              		.cfi_offset 14, -4
+ 503 0002 82B0     		sub	sp, sp, #8
+ 504              	.LCFI34:
+ 505              		.cfi_def_cfa_offset 16
+ 506 0004 00AF     		add	r7, sp, #0
+ 507              	.LCFI35:
+ 508              		.cfi_def_cfa_register 7
+ 509 0006 7860     		str	r0, [r7, #4]
+ 357:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* RNG clock error interrupt occurred */
+ 358:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   if((__HAL_RNG_GET_IT(hrng, RNG_IT_CEI) != RESET) ||  (__HAL_RNG_GET_IT(hrng, RNG_IT_SEI) != RESET
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 16
+
+
+ 510              		.loc 1 358 0
+ 511 0008 7B68     		ldr	r3, [r7, #4]
+ 512 000a 1B68     		ldr	r3, [r3]
+ 513 000c 5B68     		ldr	r3, [r3, #4]
+ 514 000e 03F02003 		and	r3, r3, #32
+ 515 0012 202B     		cmp	r3, #32
+ 516 0014 06D0     		beq	.L23
+ 517              		.loc 1 358 0 is_stmt 0 discriminator 1
+ 518 0016 7B68     		ldr	r3, [r7, #4]
+ 519 0018 1B68     		ldr	r3, [r3]
+ 520 001a 5B68     		ldr	r3, [r3, #4]
+ 521 001c 03F04003 		and	r3, r3, #64
+ 522 0020 402B     		cmp	r3, #64
+ 523 0022 0AD1     		bne	.L24
+ 524              	.L23:
+ 359:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   { 
+ 360:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     /* Change RNG peripheral state */
+ 361:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     hrng->State = HAL_RNG_STATE_ERROR;
+ 525              		.loc 1 361 0 is_stmt 1
+ 526 0024 7B68     		ldr	r3, [r7, #4]
+ 527 0026 0422     		movs	r2, #4
+ 528 0028 5A71     		strb	r2, [r3, #5]
+ 362:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   
+ 363:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     HAL_RNG_ErrorCallback(hrng);
+ 529              		.loc 1 363 0
+ 530 002a 7868     		ldr	r0, [r7, #4]
+ 531 002c FFF7FEFF 		bl	HAL_RNG_ErrorCallback
+ 364:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     
+ 365:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     /* Clear the clock error flag */
+ 366:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     __HAL_RNG_CLEAR_IT(hrng, RNG_IT_CEI|RNG_IT_SEI);
+ 532              		.loc 1 366 0
+ 533 0030 7B68     		ldr	r3, [r7, #4]
+ 534 0032 1B68     		ldr	r3, [r3]
+ 535 0034 6FF06002 		mvn	r2, #96
+ 536 0038 5A60     		str	r2, [r3, #4]
+ 537              	.L24:
+ 367:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     
+ 368:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   }
+ 369:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   
+ 370:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Check RNG data ready interrupt occurred */    
+ 371:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   if(__HAL_RNG_GET_IT(hrng, RNG_IT_DRDY) != RESET)
+ 538              		.loc 1 371 0
+ 539 003a 7B68     		ldr	r3, [r7, #4]
+ 540 003c 1B68     		ldr	r3, [r3]
+ 541 003e 5B68     		ldr	r3, [r3, #4]
+ 542 0040 03F00103 		and	r3, r3, #1
+ 543 0044 012B     		cmp	r3, #1
+ 544 0046 1AD1     		bne	.L26
+ 372:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   {
+ 373:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     /* Generate random number once, so disable the IT */
+ 374:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     __HAL_RNG_DISABLE_IT(hrng);
+ 545              		.loc 1 374 0
+ 546 0048 7B68     		ldr	r3, [r7, #4]
+ 547 004a 1B68     		ldr	r3, [r3]
+ 548 004c 1A68     		ldr	r2, [r3]
+ 549 004e 7B68     		ldr	r3, [r7, #4]
+ 550 0050 1B68     		ldr	r3, [r3]
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 17
+
+
+ 551 0052 22F00802 		bic	r2, r2, #8
+ 552 0056 1A60     		str	r2, [r3]
+ 375:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     
+ 376:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     /* Get the 32bit Random number (DRDY flag automatically cleared) */ 
+ 377:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     hrng->RandomNumber = hrng->Instance->DR;
+ 553              		.loc 1 377 0
+ 554 0058 7B68     		ldr	r3, [r7, #4]
+ 555 005a 1B68     		ldr	r3, [r3]
+ 556 005c 9A68     		ldr	r2, [r3, #8]
+ 557 005e 7B68     		ldr	r3, [r7, #4]
+ 558 0060 9A60     		str	r2, [r3, #8]
+ 378:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     
+ 379:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     if(hrng->State != HAL_RNG_STATE_ERROR)
+ 559              		.loc 1 379 0
+ 560 0062 7B68     		ldr	r3, [r7, #4]
+ 561 0064 5B79     		ldrb	r3, [r3, #5]
+ 562 0066 DBB2     		uxtb	r3, r3
+ 563 0068 042B     		cmp	r3, #4
+ 564 006a 08D0     		beq	.L26
+ 380:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     {
+ 381:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****       /* Change RNG peripheral state */
+ 382:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****       hrng->State = HAL_RNG_STATE_READY; 
+ 565              		.loc 1 382 0
+ 566 006c 7B68     		ldr	r3, [r7, #4]
+ 567 006e 0122     		movs	r2, #1
+ 568 0070 5A71     		strb	r2, [r3, #5]
+ 383:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****       
+ 384:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****       /* Data Ready callback */ 
+ 385:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****       HAL_RNG_ReadyDataCallback(hrng, hrng->RandomNumber);
+ 569              		.loc 1 385 0
+ 570 0072 7B68     		ldr	r3, [r7, #4]
+ 571 0074 9B68     		ldr	r3, [r3, #8]
+ 572 0076 1946     		mov	r1, r3
+ 573 0078 7868     		ldr	r0, [r7, #4]
+ 574 007a FFF7FEFF 		bl	HAL_RNG_ReadyDataCallback
+ 575              	.L26:
+ 386:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     } 
+ 387:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   }
+ 388:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** } 
+ 576              		.loc 1 388 0
+ 577 007e 00BF     		nop
+ 578 0080 0837     		adds	r7, r7, #8
+ 579              	.LCFI36:
+ 580              		.cfi_def_cfa_offset 8
+ 581 0082 BD46     		mov	sp, r7
+ 582              	.LCFI37:
+ 583              		.cfi_def_cfa_register 13
+ 584              		@ sp needed
+ 585 0084 80BD     		pop	{r7, pc}
+ 586              		.cfi_endproc
+ 587              	.LFE139:
+ 589              		.section	.text.HAL_RNG_GetRandomNumber,"ax",%progbits
+ 590              		.align	1
+ 591              		.global	HAL_RNG_GetRandomNumber
+ 592              		.syntax unified
+ 593              		.thumb
+ 594              		.thumb_func
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 18
+
+
+ 595              		.fpu fpv4-sp-d16
+ 597              	HAL_RNG_GetRandomNumber:
+ 598              	.LFB140:
+ 389:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 390:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /**
+ 391:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @brief  Return generated random number in polling mode (Obsolete).
+ 392:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @note   Use HAL_RNG_GenerateRandomNumber() API instead.
+ 393:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @param  hrng: pointer to a RNG_HandleTypeDef structure that contains
+ 394:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   *                the configuration information for RNG.
+ 395:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @retval random value
+ 396:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */
+ 397:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** uint32_t HAL_RNG_GetRandomNumber(RNG_HandleTypeDef *hrng)
+ 398:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** {
+ 599              		.loc 1 398 0
+ 600              		.cfi_startproc
+ 601              		@ args = 0, pretend = 0, frame = 8
+ 602              		@ frame_needed = 1, uses_anonymous_args = 0
+ 603 0000 80B5     		push	{r7, lr}
+ 604              	.LCFI38:
+ 605              		.cfi_def_cfa_offset 8
+ 606              		.cfi_offset 7, -8
+ 607              		.cfi_offset 14, -4
+ 608 0002 82B0     		sub	sp, sp, #8
+ 609              	.LCFI39:
+ 610              		.cfi_def_cfa_offset 16
+ 611 0004 00AF     		add	r7, sp, #0
+ 612              	.LCFI40:
+ 613              		.cfi_def_cfa_register 7
+ 614 0006 7860     		str	r0, [r7, #4]
+ 399:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   if(HAL_RNG_GenerateRandomNumber(hrng, &(hrng->RandomNumber)) == HAL_OK)
+ 615              		.loc 1 399 0
+ 616 0008 7B68     		ldr	r3, [r7, #4]
+ 617 000a 0833     		adds	r3, r3, #8
+ 618 000c 1946     		mov	r1, r3
+ 619 000e 7868     		ldr	r0, [r7, #4]
+ 620 0010 FFF7FEFF 		bl	HAL_RNG_GenerateRandomNumber
+ 621 0014 0346     		mov	r3, r0
+ 622 0016 002B     		cmp	r3, #0
+ 623 0018 02D1     		bne	.L28
+ 400:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   {
+ 401:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     return hrng->RandomNumber; 
+ 624              		.loc 1 401 0
+ 625 001a 7B68     		ldr	r3, [r7, #4]
+ 626 001c 9B68     		ldr	r3, [r3, #8]
+ 627 001e 00E0     		b	.L29
+ 628              	.L28:
+ 402:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   }
+ 403:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   else
+ 404:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   {
+ 405:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     return 0;
+ 629              		.loc 1 405 0
+ 630 0020 0023     		movs	r3, #0
+ 631              	.L29:
+ 406:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   }
+ 407:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** }
+ 632              		.loc 1 407 0
+ 633 0022 1846     		mov	r0, r3
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 19
+
+
+ 634 0024 0837     		adds	r7, r7, #8
+ 635              	.LCFI41:
+ 636              		.cfi_def_cfa_offset 8
+ 637 0026 BD46     		mov	sp, r7
+ 638              	.LCFI42:
+ 639              		.cfi_def_cfa_register 13
+ 640              		@ sp needed
+ 641 0028 80BD     		pop	{r7, pc}
+ 642              		.cfi_endproc
+ 643              	.LFE140:
+ 645              		.section	.text.HAL_RNG_GetRandomNumber_IT,"ax",%progbits
+ 646              		.align	1
+ 647              		.global	HAL_RNG_GetRandomNumber_IT
+ 648              		.syntax unified
+ 649              		.thumb
+ 650              		.thumb_func
+ 651              		.fpu fpv4-sp-d16
+ 653              	HAL_RNG_GetRandomNumber_IT:
+ 654              	.LFB141:
+ 408:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 409:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 410:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /**
+ 411:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @brief  Return a 32-bit random number with interrupt enabled (Obsolete).
+ 412:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @note   Use HAL_RNG_GenerateRandomNumber_IT() API instead.
+ 413:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @param  hrng: RNG handle
+ 414:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @retval 32-bit random number
+ 415:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */
+ 416:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** uint32_t HAL_RNG_GetRandomNumber_IT(RNG_HandleTypeDef *hrng)
+ 417:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** {
+ 655              		.loc 1 417 0
+ 656              		.cfi_startproc
+ 657              		@ args = 0, pretend = 0, frame = 16
+ 658              		@ frame_needed = 1, uses_anonymous_args = 0
+ 659              		@ link register save eliminated.
+ 660 0000 80B4     		push	{r7}
+ 661              	.LCFI43:
+ 662              		.cfi_def_cfa_offset 4
+ 663              		.cfi_offset 7, -4
+ 664 0002 85B0     		sub	sp, sp, #20
+ 665              	.LCFI44:
+ 666              		.cfi_def_cfa_offset 24
+ 667 0004 00AF     		add	r7, sp, #0
+ 668              	.LCFI45:
+ 669              		.cfi_def_cfa_register 7
+ 670 0006 7860     		str	r0, [r7, #4]
+ 418:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   uint32_t random32bit = 0;
+ 671              		.loc 1 418 0
+ 672 0008 0023     		movs	r3, #0
+ 673 000a FB60     		str	r3, [r7, #12]
+ 419:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   
+ 420:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Process locked */
+ 421:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   __HAL_LOCK(hrng);
+ 674              		.loc 1 421 0
+ 675 000c 7B68     		ldr	r3, [r7, #4]
+ 676 000e 1B79     		ldrb	r3, [r3, #4]	@ zero_extendqisi2
+ 677 0010 012B     		cmp	r3, #1
+ 678 0012 01D1     		bne	.L31
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 20
+
+
+ 679              		.loc 1 421 0 is_stmt 0 discriminator 1
+ 680 0014 0223     		movs	r3, #2
+ 681 0016 12E0     		b	.L32
+ 682              	.L31:
+ 683              		.loc 1 421 0 discriminator 2
+ 684 0018 7B68     		ldr	r3, [r7, #4]
+ 685 001a 0122     		movs	r2, #1
+ 686 001c 1A71     		strb	r2, [r3, #4]
+ 422:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   
+ 423:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Change RNG peripheral state */  
+ 424:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   hrng->State = HAL_RNG_STATE_BUSY;  
+ 687              		.loc 1 424 0 is_stmt 1 discriminator 2
+ 688 001e 7B68     		ldr	r3, [r7, #4]
+ 689 0020 0222     		movs	r2, #2
+ 690 0022 5A71     		strb	r2, [r3, #5]
+ 425:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   
+ 426:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Get a 32bit Random number */ 
+ 427:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   random32bit = hrng->Instance->DR;
+ 691              		.loc 1 427 0 discriminator 2
+ 692 0024 7B68     		ldr	r3, [r7, #4]
+ 693 0026 1B68     		ldr	r3, [r3]
+ 694 0028 9B68     		ldr	r3, [r3, #8]
+ 695 002a FB60     		str	r3, [r7, #12]
+ 428:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   
+ 429:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Enable the RNG Interrupts: Data Ready, Clock error, Seed error */ 
+ 430:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   __HAL_RNG_ENABLE_IT(hrng); 
+ 696              		.loc 1 430 0 discriminator 2
+ 697 002c 7B68     		ldr	r3, [r7, #4]
+ 698 002e 1B68     		ldr	r3, [r3]
+ 699 0030 1A68     		ldr	r2, [r3]
+ 700 0032 7B68     		ldr	r3, [r7, #4]
+ 701 0034 1B68     		ldr	r3, [r3]
+ 702 0036 42F00802 		orr	r2, r2, #8
+ 703 003a 1A60     		str	r2, [r3]
+ 431:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   
+ 432:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Return the 32 bit random number */   
+ 433:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   return random32bit;
+ 704              		.loc 1 433 0 discriminator 2
+ 705 003c FB68     		ldr	r3, [r7, #12]
+ 706              	.L32:
+ 434:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** }
+ 707              		.loc 1 434 0
+ 708 003e 1846     		mov	r0, r3
+ 709 0040 1437     		adds	r7, r7, #20
+ 710              	.LCFI46:
+ 711              		.cfi_def_cfa_offset 4
+ 712 0042 BD46     		mov	sp, r7
+ 713              	.LCFI47:
+ 714              		.cfi_def_cfa_register 13
+ 715              		@ sp needed
+ 716 0044 5DF8047B 		ldr	r7, [sp], #4
+ 717              	.LCFI48:
+ 718              		.cfi_restore 7
+ 719              		.cfi_def_cfa_offset 0
+ 720 0048 7047     		bx	lr
+ 721              		.cfi_endproc
+ 722              	.LFE141:
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 21
+
+
+ 724              		.section	.text.HAL_RNG_ReadLastRandomNumber,"ax",%progbits
+ 725              		.align	1
+ 726              		.global	HAL_RNG_ReadLastRandomNumber
+ 727              		.syntax unified
+ 728              		.thumb
+ 729              		.thumb_func
+ 730              		.fpu fpv4-sp-d16
+ 732              	HAL_RNG_ReadLastRandomNumber:
+ 733              	.LFB142:
+ 435:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 436:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 437:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 438:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /**
+ 439:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @brief  Read latest generated random number. 
+ 440:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @param  hrng: pointer to a RNG_HandleTypeDef structure.
+ 441:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @retval random value
+ 442:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */
+ 443:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** uint32_t HAL_RNG_ReadLastRandomNumber(RNG_HandleTypeDef *hrng)
+ 444:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** {
+ 734              		.loc 1 444 0
+ 735              		.cfi_startproc
+ 736              		@ args = 0, pretend = 0, frame = 8
+ 737              		@ frame_needed = 1, uses_anonymous_args = 0
+ 738              		@ link register save eliminated.
+ 739 0000 80B4     		push	{r7}
+ 740              	.LCFI49:
+ 741              		.cfi_def_cfa_offset 4
+ 742              		.cfi_offset 7, -4
+ 743 0002 83B0     		sub	sp, sp, #12
+ 744              	.LCFI50:
+ 745              		.cfi_def_cfa_offset 16
+ 746 0004 00AF     		add	r7, sp, #0
+ 747              	.LCFI51:
+ 748              		.cfi_def_cfa_register 7
+ 749 0006 7860     		str	r0, [r7, #4]
+ 445:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   return(hrng->RandomNumber);
+ 750              		.loc 1 445 0
+ 751 0008 7B68     		ldr	r3, [r7, #4]
+ 752 000a 9B68     		ldr	r3, [r3, #8]
+ 446:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** }
+ 753              		.loc 1 446 0
+ 754 000c 1846     		mov	r0, r3
+ 755 000e 0C37     		adds	r7, r7, #12
+ 756              	.LCFI52:
+ 757              		.cfi_def_cfa_offset 4
+ 758 0010 BD46     		mov	sp, r7
+ 759              	.LCFI53:
+ 760              		.cfi_def_cfa_register 13
+ 761              		@ sp needed
+ 762 0012 5DF8047B 		ldr	r7, [sp], #4
+ 763              	.LCFI54:
+ 764              		.cfi_restore 7
+ 765              		.cfi_def_cfa_offset 0
+ 766 0016 7047     		bx	lr
+ 767              		.cfi_endproc
+ 768              	.LFE142:
+ 770              		.section	.text.HAL_RNG_ReadyDataCallback,"ax",%progbits
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 22
+
+
+ 771              		.align	1
+ 772              		.weak	HAL_RNG_ReadyDataCallback
+ 773              		.syntax unified
+ 774              		.thumb
+ 775              		.thumb_func
+ 776              		.fpu fpv4-sp-d16
+ 778              	HAL_RNG_ReadyDataCallback:
+ 779              	.LFB143:
+ 447:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 448:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /**
+ 449:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @brief  Data Ready callback in non-blocking mode. 
+ 450:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @param  hrng: pointer to a RNG_HandleTypeDef structure.
+ 451:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @param  random32bit: generated random value
+ 452:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @retval None
+ 453:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */
+ 454:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** __weak void HAL_RNG_ReadyDataCallback(RNG_HandleTypeDef *hrng, uint32_t random32bit)
+ 455:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** {
+ 780              		.loc 1 455 0
+ 781              		.cfi_startproc
+ 782              		@ args = 0, pretend = 0, frame = 8
+ 783              		@ frame_needed = 1, uses_anonymous_args = 0
+ 784              		@ link register save eliminated.
+ 785 0000 80B4     		push	{r7}
+ 786              	.LCFI55:
+ 787              		.cfi_def_cfa_offset 4
+ 788              		.cfi_offset 7, -4
+ 789 0002 83B0     		sub	sp, sp, #12
+ 790              	.LCFI56:
+ 791              		.cfi_def_cfa_offset 16
+ 792 0004 00AF     		add	r7, sp, #0
+ 793              	.LCFI57:
+ 794              		.cfi_def_cfa_register 7
+ 795 0006 7860     		str	r0, [r7, #4]
+ 796 0008 3960     		str	r1, [r7]
+ 456:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Prevent unused argument(s) compilation warning */
+ 457:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   UNUSED(hrng);
+ 458:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   UNUSED(random32bit);
+ 459:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 460:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* NOTE : This function should not be modified. When the callback is needed,
+ 461:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****             function HAL_RNG_ReadyDataCallback must be implemented in the user file.
+ 462:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****    */
+ 463:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** }
+ 797              		.loc 1 463 0
+ 798 000a 00BF     		nop
+ 799 000c 0C37     		adds	r7, r7, #12
+ 800              	.LCFI58:
+ 801              		.cfi_def_cfa_offset 4
+ 802 000e BD46     		mov	sp, r7
+ 803              	.LCFI59:
+ 804              		.cfi_def_cfa_register 13
+ 805              		@ sp needed
+ 806 0010 5DF8047B 		ldr	r7, [sp], #4
+ 807              	.LCFI60:
+ 808              		.cfi_restore 7
+ 809              		.cfi_def_cfa_offset 0
+ 810 0014 7047     		bx	lr
+ 811              		.cfi_endproc
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 23
+
+
+ 812              	.LFE143:
+ 814              		.section	.text.HAL_RNG_ErrorCallback,"ax",%progbits
+ 815              		.align	1
+ 816              		.weak	HAL_RNG_ErrorCallback
+ 817              		.syntax unified
+ 818              		.thumb
+ 819              		.thumb_func
+ 820              		.fpu fpv4-sp-d16
+ 822              	HAL_RNG_ErrorCallback:
+ 823              	.LFB144:
+ 464:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 465:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /**
+ 466:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @brief  RNG error callback.
+ 467:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @param  hrng: pointer to a RNG_HandleTypeDef structure.
+ 468:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @retval None
+ 469:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */
+ 470:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** __weak void HAL_RNG_ErrorCallback(RNG_HandleTypeDef *hrng)
+ 471:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** {
+ 824              		.loc 1 471 0
+ 825              		.cfi_startproc
+ 826              		@ args = 0, pretend = 0, frame = 8
+ 827              		@ frame_needed = 1, uses_anonymous_args = 0
+ 828              		@ link register save eliminated.
+ 829 0000 80B4     		push	{r7}
+ 830              	.LCFI61:
+ 831              		.cfi_def_cfa_offset 4
+ 832              		.cfi_offset 7, -4
+ 833 0002 83B0     		sub	sp, sp, #12
+ 834              	.LCFI62:
+ 835              		.cfi_def_cfa_offset 16
+ 836 0004 00AF     		add	r7, sp, #0
+ 837              	.LCFI63:
+ 838              		.cfi_def_cfa_register 7
+ 839 0006 7860     		str	r0, [r7, #4]
+ 472:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Prevent unused argument(s) compilation warning */
+ 473:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   UNUSED(hrng);
+ 474:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 475:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* NOTE : This function should not be modified. When the callback is needed,
+ 476:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****             function HAL_RNG_ErrorCallback must be implemented in the user file.
+ 477:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****    */
+ 478:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** }
+ 840              		.loc 1 478 0
+ 841 0008 00BF     		nop
+ 842 000a 0C37     		adds	r7, r7, #12
+ 843              	.LCFI64:
+ 844              		.cfi_def_cfa_offset 4
+ 845 000c BD46     		mov	sp, r7
+ 846              	.LCFI65:
+ 847              		.cfi_def_cfa_register 13
+ 848              		@ sp needed
+ 849 000e 5DF8047B 		ldr	r7, [sp], #4
+ 850              	.LCFI66:
+ 851              		.cfi_restore 7
+ 852              		.cfi_def_cfa_offset 0
+ 853 0012 7047     		bx	lr
+ 854              		.cfi_endproc
+ 855              	.LFE144:
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 24
+
+
+ 857              		.section	.text.HAL_RNG_GetState,"ax",%progbits
+ 858              		.align	1
+ 859              		.global	HAL_RNG_GetState
+ 860              		.syntax unified
+ 861              		.thumb
+ 862              		.thumb_func
+ 863              		.fpu fpv4-sp-d16
+ 865              	HAL_RNG_GetState:
+ 866              	.LFB145:
+ 479:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****  
+ 480:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /**
+ 481:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @}
+ 482:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */
+ 483:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 484:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /** @addtogroup RNG_Exported_Functions_Group3
+ 485:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****  *  @brief    Peripheral State functions. 
+ 486:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****  *
+ 487:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** @verbatim   
+ 488:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****  ===============================================================================
+ 489:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****                       ##### Peripheral State functions #####
+ 490:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****  ===============================================================================  
+ 491:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     [..]
+ 492:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****     This subsection permits to get in run-time the status of the peripheral.
+ 493:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 494:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** @endverbatim
+ 495:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @{
+ 496:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */
+ 497:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** 
+ 498:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** /**
+ 499:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @brief  Return the RNG handle state.
+ 500:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @param  hrng: pointer to a RNG_HandleTypeDef structure.
+ 501:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   * @retval HAL state
+ 502:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   */
+ 503:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** HAL_RNG_StateTypeDef HAL_RNG_GetState(RNG_HandleTypeDef *hrng)
+ 504:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** {
+ 867              		.loc 1 504 0
+ 868              		.cfi_startproc
+ 869              		@ args = 0, pretend = 0, frame = 8
+ 870              		@ frame_needed = 1, uses_anonymous_args = 0
+ 871              		@ link register save eliminated.
+ 872 0000 80B4     		push	{r7}
+ 873              	.LCFI67:
+ 874              		.cfi_def_cfa_offset 4
+ 875              		.cfi_offset 7, -4
+ 876 0002 83B0     		sub	sp, sp, #12
+ 877              	.LCFI68:
+ 878              		.cfi_def_cfa_offset 16
+ 879 0004 00AF     		add	r7, sp, #0
+ 880              	.LCFI69:
+ 881              		.cfi_def_cfa_register 7
+ 882 0006 7860     		str	r0, [r7, #4]
+ 505:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   /* Return RNG handle state */
+ 506:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c ****   return hrng->State;
+ 883              		.loc 1 506 0
+ 884 0008 7B68     		ldr	r3, [r7, #4]
+ 885 000a 5B79     		ldrb	r3, [r3, #5]
+ 886 000c DBB2     		uxtb	r3, r3
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 25
+
+
+ 507:E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src\stm32l4xx_hal_rng.c **** }
+ 887              		.loc 1 507 0
+ 888 000e 1846     		mov	r0, r3
+ 889 0010 0C37     		adds	r7, r7, #12
+ 890              	.LCFI70:
+ 891              		.cfi_def_cfa_offset 4
+ 892 0012 BD46     		mov	sp, r7
+ 893              	.LCFI71:
+ 894              		.cfi_def_cfa_register 13
+ 895              		@ sp needed
+ 896 0014 5DF8047B 		ldr	r7, [sp], #4
+ 897              	.LCFI72:
+ 898              		.cfi_restore 7
+ 899              		.cfi_def_cfa_offset 0
+ 900 0018 7047     		bx	lr
+ 901              		.cfi_endproc
+ 902              	.LFE145:
+ 904              		.text
+ 905              	.Letext0:
+ 906              		.file 2 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 907              		.file 3 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 908              		.file 4 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 909              		.file 5 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 910              		.file 6 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 911              		.file 7 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_typedef.h"
+ 912              		.file 8 "e:\\ac6\\systemworkbench\\plugins\\fr.ac6.mcu.externaltools.arm-none.win32_1.16.0.2018071
+ 913              		.file 9 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 914              		.file 10 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/system_stm32l4xx.h"
+ 915              		.file 11 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/stm32l431xx.h"
+ 916              		.file 12 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_config.h"
+ 917              		.file 13 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_list.h"
+ 918              		.file 14 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_err.h"
+ 919              		.file 15 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 920              		.file 16 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_tick.h"
+ 921              		.file 17 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_event.h"
+ 922              		.file 18 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/include/los_task.h"
+ 923              		.file 19 "E:/LiteOS/LiteOS_Lab/iot_link/os/os_imp/liteos/base/include/los_task.ph"
+ 924              		.file 20 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/main.h"
+ 925              		.file 21 "E:/LiteOS/LiteOS_Lab/targets/STM32L431_BearPi/Inc/stm32l4xx.h"
+ 926              		.file 22 "E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h
+ 927              		.file 23 "E:/LiteOS/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rng.h
+ARM GAS  C:\Users\user\AppData\Local\Temp\ccM4EAoO.s 			page 26
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32l4xx_hal_rng.c
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:18     .text.HAL_RNG_Init:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:25     .text.HAL_RNG_Init:00000000 HAL_RNG_Init
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:183    .text.HAL_RNG_MspInit:00000000 HAL_RNG_MspInit
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:99     .text.HAL_RNG_DeInit:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:106    .text.HAL_RNG_DeInit:00000000 HAL_RNG_DeInit
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:226    .text.HAL_RNG_MspDeInit:00000000 HAL_RNG_MspDeInit
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:176    .text.HAL_RNG_MspInit:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:219    .text.HAL_RNG_MspDeInit:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:262    .text.HAL_RNG_GenerateRandomNumber:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:269    .text.HAL_RNG_GenerateRandomNumber:00000000 HAL_RNG_GenerateRandomNumber
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:391    .text.HAL_RNG_GenerateRandomNumber_IT:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:398    .text.HAL_RNG_GenerateRandomNumber_IT:00000000 HAL_RNG_GenerateRandomNumber_IT
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:485    .text.HAL_RNG_IRQHandler:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:492    .text.HAL_RNG_IRQHandler:00000000 HAL_RNG_IRQHandler
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:822    .text.HAL_RNG_ErrorCallback:00000000 HAL_RNG_ErrorCallback
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:778    .text.HAL_RNG_ReadyDataCallback:00000000 HAL_RNG_ReadyDataCallback
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:590    .text.HAL_RNG_GetRandomNumber:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:597    .text.HAL_RNG_GetRandomNumber:00000000 HAL_RNG_GetRandomNumber
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:646    .text.HAL_RNG_GetRandomNumber_IT:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:653    .text.HAL_RNG_GetRandomNumber_IT:00000000 HAL_RNG_GetRandomNumber_IT
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:725    .text.HAL_RNG_ReadLastRandomNumber:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:732    .text.HAL_RNG_ReadLastRandomNumber:00000000 HAL_RNG_ReadLastRandomNumber
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:771    .text.HAL_RNG_ReadyDataCallback:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:815    .text.HAL_RNG_ErrorCallback:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:858    .text.HAL_RNG_GetState:00000000 $t
+C:\Users\user\AppData\Local\Temp\ccM4EAoO.s:865    .text.HAL_RNG_GetState:00000000 HAL_RNG_GetState
+
+UNDEFINED SYMBOLS
+HAL_GetTick
