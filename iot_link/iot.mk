@@ -4,6 +4,9 @@
 
 iot_link_root = $(TOP_DIR)/iot_link
 
+#configure the common includes
+include $(iot_link_root)/inc/inc.mk
+
 #configure the misc
 include $(iot_link_root)/link_misc/link_misc.mk
 
