@@ -44,11 +44,12 @@
 #include <oc_lwm2m_al.h>
 
 #include <boudica150_oc.h>
-#include <BH1750.h>
-#include <lcd.h>
+#include "lcd.h"
+#include "bh1750.h"
 
 #include <gpio.h>
 #include <stm32l4xx_it.h>
+
 
 #define cn_endpoint_id        "SDK_LWM2M_NODTLS"
 #define cn_app_server         "49.4.85.232"
