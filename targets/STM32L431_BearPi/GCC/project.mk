@@ -55,9 +55,9 @@ HAL_DRIVER_INC = \
         -I $(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/Legacy
         C_INCLUDES += $(HAL_DRIVER_INC)        
 HARDWARE_INC = \
-        -I $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/Inc \
-        -I $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/BH1750 \
-        -I $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/LCD
+        -I ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/Inc} \
+        -I ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/BH1750} \
+        -I ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/LCD}
         C_INCLUDES += $(HARDWARE_INC)
 
 USER_INC = \
