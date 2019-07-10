@@ -45,8 +45,8 @@
 
 #include <boudica150_oc.h>
 
-#include "../../../../targets/STM32L431_BearPi/Hardware/BH1750/bh1750.h"
-#include "../../../../targets/STM32L431_BearPi/Hardware/LCD/lcd.h"
+#include "bh1750.h"
+#include "lcd.h"
 
 #include <gpio.h>
 #include <stm32l4xx_it.h>
