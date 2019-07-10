@@ -196,7 +196,7 @@ __weak void SysTick_Handler(void)
 /**
 * @brief This function handles EXTI line2 interrupt.
 */
-void EXTI2_IRQHandler(void)
+void Key1_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI2_IRQn 0 */
 
@@ -210,7 +210,7 @@ void EXTI2_IRQHandler(void)
 /**
 * @brief This function handles EXTI line3 interrupt.
 */
-void EXTI3_IRQHandler(void)
+void Key2_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI3_IRQn 0 */
 

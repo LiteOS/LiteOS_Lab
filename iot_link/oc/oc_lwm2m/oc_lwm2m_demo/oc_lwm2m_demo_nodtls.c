@@ -42,23 +42,23 @@
 
 #include <osal.h>
 #include <oc_lwm2m_al.h>
+
 #include <boudica150_oc.h>
+#include <BH1750.h>
+#include <lcd.h>
+
+#include <gpio.h>
+#include <stm32l4xx_it.h>
 
 #define cn_endpoint_id        "SDK_LWM2M_NODTLS"
 #define cn_app_server         "49.4.85.232"
 #define cn_app_port           "5683"
 
 #define cn_app_connectivity    0
-#define cn_app_toggle          1
+#define cn_app_lightstats      1
 #define cn_app_light           2
 #define cn_app_ledcmd          3
-
-//#define KEY1_Pin GPIO_PIN_2
-//#define KEY1_GPIO_Port GPIOB
-//#define KEY2_EXTI_IRQn EXTI2_IRQn
-//#define KEY2_Pin GPIO_PIN_3
-//#define KEY2_GPIO_Port GPIOB
-//#define KEY2_EXTI_IRQn EXTI3_IRQn
+#define cn_app_cmdreply        4
 
 #pragma pack(1)
 typedef struct
@@ -73,7 +73,7 @@ typedef struct
 typedef struct
 {
     int8_t msgid;
-    int toggle;
+    int16_t tog;
 }app_toggle_t;
 
 typedef struct
@@ -86,38 +86,83 @@ typedef struct
 typedef struct
 {
     int8_t msgid;
-    int mid;
+    uint16_t mid;
     char led[3];
 }app_led_cmd_t;
 
+typedef struct
+{
+    int8_t msgid;
+    uint16_t mid;
+    int8_t errorcode;
+    char curstats[3];
+}app_cmdreply_t;
 
 #pragma pack()
 
+void *context;
 int *ue_stats;
-//void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-//{
-//	int ret;
-//	switch(GPIO_Pin)
-//	{
-//		case KEY1_Pin:
-//			key1 = true;
-//			printf("proceed to get ue_status!\r\n");
-//			break;
-//		case KEY2_Pin:
-//			key2 = true;
-//			toggle = !toggle;
-//			HAL_GPIO_TogglePin(Light_GPIO_Port,Light_Pin);
-//			break;
-//		default:
-//			break;
-//	}
-//}
+int8_t key1 = 0, key2 = 0;
+int16_t toggle = 0;
+int16_t lux;
+int8_t qr_code = 1;
+extern const unsigned char gImage_Huawei_IoT_QR_Code[114720];
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	int ret;
+	switch(GPIO_Pin)
+	{
+		case KEY1_Pin:
+			key1 = 1;
+			printf("proceed to get ue_status!\r\n");
+			break;
+		case KEY2_Pin:
+			key2 = 1;
+			printf("toggle LED and report!\r\n");
+			toggle = !toggle;
+			HAL_GPIO_TogglePin(Light_GPIO_Port,Light_Pin);
+			break;
+		default:
+			break;
+	}
+}
 
 //if your command is very fast,please use a queue here--TODO
 #define cn_app_rcv_buf_len 128
 static int             s_rcv_buffer[cn_app_rcv_buf_len];
 static int             s_rcv_datalen;
 static osal_semp_t     s_rcv_sync;
+
+uint32_t swap32(uint32_t value)
+{
+     return ((value & 0x000000FF) << 24) | ((value & 0x0000FF00) << 8) | ((value & 0x00FF0000) >> 8) | ((value & 0xFF000000) >> 24);
+}
+
+uint16_t swap16(uint16_t value)
+{
+     return ((value & 0x00FF) << 8) | ((value & 0xFF00) >> 8);
+}
+
+static void timer1_callback(int arg)
+{
+	qr_code = !qr_code;
+	LCD_Clear(WHITE);
+	if (qr_code == 1)
+		LCD_Show_Image(0,0,240,239,gImage_Huawei_IoT_QR_Code);
+	else
+	{
+		POINT_COLOR = RED;
+		LCD_ShowString(40, 10, 200, 16, 24, "IoTCluB BearPi");
+		LCD_ShowString(15, 50, 210, 16, 24, "LiteOS NB-IoT Demo");
+		LCD_ShowString(10, 100, 200, 16, 16, "NCDP_IP:");
+		LCD_ShowString(80, 100, 200, 16, 16, cn_app_server);
+		LCD_ShowString(10, 150, 200, 16, 16, "NCDP_PORT:");
+		LCD_ShowString(100, 150, 200, 16, 16, cn_app_port);
+		LCD_ShowString(10, 200, 200, 16, 16, "BH1750 Value is:");
+		LCD_ShowNum(140, 200, lux, 5, 16);
+	}
+}
 
 //use this function to push all the message to the buffer
 static int app_msg_deal(void *usr_data,char *msg, int len)
@@ -126,6 +171,11 @@ static int app_msg_deal(void *usr_data,char *msg, int len)
 
     if(len <= cn_app_rcv_buf_len)
     {
+    	if (msg[0] == 0xaa && msg[1] == 0xaa)
+    	{
+    		printf("OC respond message received! \n\r");
+    		return ret;
+    	}
         memcpy(s_rcv_buffer,msg,len);
         s_rcv_datalen = len;
 
@@ -141,22 +191,63 @@ static int app_msg_deal(void *usr_data,char *msg, int len)
 static int app_cmd_task_entry()
 {
     int ret = -1;
-    int msgid;
     app_led_cmd_t *led_cmd;
+    app_cmdreply_t replymsg;
+    int8_t msgid;
 
     while(1)
     {
         if(osal_semp_pend(s_rcv_sync,cn_osal_timeout_forever))
         {
-            msgid = s_rcv_buffer[0];
-
+            msgid = s_rcv_buffer[0] & 0x000000FF;
             switch (msgid)
             {
                 case cn_app_ledcmd:
                     led_cmd = (app_led_cmd_t *)s_rcv_buffer;
-                    printf("LEDCMD:msgid:%d msg:%s \n\r",led_cmd->msgid,led_cmd->led);
-                    //if you need response,do it here--TODO
-                    break;
+                    printf("LEDCMD:msgid:%d mid:%d msg:%s \n\r",led_cmd->msgid,swap16(led_cmd->mid),led_cmd->led);
+                    //add command action--TODO
+                    if (led_cmd->led[0] == 'O' && led_cmd->led[1] == 'N')
+                    {
+                    	if (toggle != 1)
+                        {
+                            toggle = 1;
+                            key2 = true;
+                        }
+                    	HAL_GPIO_WritePin(Light_GPIO_Port,Light_Pin,GPIO_PIN_SET);
+
+                    	//if you need response message,do it here--TODO
+                    	replymsg.msgid = cn_app_cmdreply;
+                    	replymsg.mid = led_cmd->mid;
+                    	printf("reply mid is %d. \n\r",swap16(replymsg.mid));
+                    	replymsg.errorcode = 0;
+                		replymsg.curstats[0] = 'O';
+                		replymsg.curstats[1] = 'N';
+                		replymsg.curstats[2] = ' ';
+                		oc_lwm2m_report(context,(char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
+                    }
+
+                    else if (led_cmd->led[0] == 'O' && led_cmd->led[1] == 'F' && led_cmd->led[2] == 'F')
+                    {
+                    	if (toggle != 0)
+                        {
+                            toggle = 0;
+                            key2 = true;
+                        }
+                    	HAL_GPIO_WritePin(Light_GPIO_Port,Light_Pin,GPIO_PIN_RESET);
+
+                    	//if you need response message,do it here--TODO
+                    	replymsg.msgid = cn_app_cmdreply;
+                    	replymsg.mid = led_cmd->mid;
+                    	printf("reply mid is %d. \n\r",swap16(replymsg.mid));
+                    	replymsg.errorcode = 0;
+                		replymsg.curstats[0] = 'O';
+                		replymsg.curstats[1] = 'F';
+                		replymsg.curstats[2] = 'F';
+                		oc_lwm2m_report(context,(char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
+                    }
+
+                    else
+                    	break;
                 default:
                     break;
             }
@@ -174,16 +265,6 @@ static void get_netstats()
 
 }
 
-int32_t swap32(int32_t value)
-{
-     return ((value & 0x000000FF) << 24) | ((value & 0x0000FF00) << 8) | ((value & 0x00FF0000) >> 8) | ((value & 0xFF000000) >> 24);
-}
-
-int32_t swap16(int16_t value)
-{
-     return ((value & 0x00FF) << 8) | ((value & 0xFF00) >> 8);
-}
-
 static int app_report_task_entry()
 {
     int ret = -1;
@@ -191,7 +272,7 @@ static int app_report_task_entry()
     oc_config_param_t      oc_param;
     app_light_intensity_t  light;
     app_connectivity_t     connectivity;
-    void                   *context;
+    app_toggle_t           light_status;
 
     memset(&oc_param,0,sizeof(oc_param));
 
@@ -208,32 +289,66 @@ static int app_report_task_entry()
         //install a dealer for the led message received
         while(1) //--TODO ,you could add your own code here
         {
-            light.msgid = cn_app_light;
-            //memcpy(light.intensity,"12345",5);
-            light.intensity = swap16(12345);
-            oc_lwm2m_report(context,(char *)&light,sizeof(light),1000); ///< report the light message
-            osal_task_sleep(10*1000);
+            if (key1 == 1)
+            {
+            	key1 = 0;
+                connectivity.msgid = cn_app_connectivity;
+                get_netstats();
+        	    connectivity.rsrp = swap16(ue_stats[0] & 0x0000FFFF);
+        	    connectivity.ecl = swap16(ue_stats[1] & 0x0000FFFF);
+        	    connectivity.snr = swap16(ue_stats[2] & 0x0000FFFF);
+        	    connectivity.cellid = swap32(ue_stats[3]);
+                oc_lwm2m_report(context,(char *)&connectivity,sizeof(connectivity),1000);    ///< report ue status message
+            }
 
-            connectivity.msgid = cn_app_connectivity;
-            get_netstats();
-        	connectivity.rsrp = swap16(ue_stats[0] & 0x0000FFFF);
-        	connectivity.ecl = swap16(ue_stats[1] & 0x0000FFFF);
-        	connectivity.snr = swap16(ue_stats[2] & 0x0000FFFF);
-        	connectivity.cellid = swap32(ue_stats[3]);
-            oc_lwm2m_report(context,(char *)&connectivity,sizeof(connectivity),1000);    ///< report the light message
-            osal_task_sleep(10*1000);
+            if (key2 == 1)
+            {
+            	key2 = 0;
+            	light_status.msgid = cn_app_lightstats;
+            	light_status.tog = swap16(toggle);
+            	oc_lwm2m_report(context,(char *)&light_status,sizeof(light_status),1000);    ///< report toggle message
+            }
+
+            light.msgid = cn_app_light;
+            light.intensity = swap16(lux);
+            oc_lwm2m_report(context,(char *)&light,sizeof(light),1000); ///< report the light message
+            osal_task_sleep(2*1000);
         }
     }
 
     return ret;
 }
 
+static int app_collect_task_entry()
+{
+    Init_BH1750();
+    while (1)
+    {
+        lux=(int)Convert_BH1750();
+        printf("\r\n******************************BH1750 Value is  %d\r\n",lux);
+        if (qr_code == 0)
+        {
+            LCD_ShowString(10, 200, 200, 16, 16, "BH1750 Value is:");
+            LCD_ShowNum(140, 200, lux, 5, 16);
+        }
+        osal_task_sleep(2*1000);
+    }
+}
+
 int oc_lwm2m_demo_main()
 {
     osal_semp_create(&s_rcv_sync,1,0);
+
+    osal_task_create("app_collect",app_collect_task_entry,NULL,0x400,NULL,3);
     osal_task_create("app_report",app_report_task_entry,NULL,0x1000,NULL,2);
     osal_task_create("app_command",app_cmd_task_entry,NULL,0x1000,NULL,3);
 
+    osal_int_connect(KEY1_EXTI_IRQn, 2,0,Key1_IRQHandler,NULL);
+    osal_int_connect(KEY2_EXTI_IRQn, 3,0,Key2_IRQHandler,NULL);
+
+	int16_t swtmr1;
+	osal_swtmr_create(8000,SWTMR_MODE_PERIOD,timer1_callback,&swtmr1,1);
+	osal_swtmr_start(swtmr1);
     return 0;
 }
 
