@@ -1,4 +1,4 @@
-#include "bh1750.h"
+#include "BH1750.h"
 
 #include "stm32l4xx.h"
 #include "i2c.h"
