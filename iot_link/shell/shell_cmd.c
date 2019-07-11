@@ -46,7 +46,7 @@
 
 /**************************************FILE INCLIUDES**************************/
 
-#if cfg_shell_enable
+#if CONFIG_SHELL_ENABLE
 
 #include <stdint.h>
 #include <stddef.h>

@@ -227,7 +227,7 @@ typedef struct
 
 }mqtt_al_op_t;
 
-#if cfg_mqtt_enable
+#if CONFIG_MQTT_ENABLE
 //////////////////////API USED FOR THE MQTT APPLICAITON/////////////////////////
 
 /**

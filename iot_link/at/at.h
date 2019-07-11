@@ -41,11 +41,11 @@
 #include <osal.h>
 
 
-#define cfg_at_enable  1
+#define CONFIG_AT_ENABLE  1
 
 typedef int (*fnoob)(char *data,int datalen);
 
-#if  cfg_at_enable
+#if  CONFIG_AT_ENABLE
 
 #define CN_OBJECT_INVALID    0Xffffffff
 bool_t at_init(const char *devname);                       //install the at frame work,which binded to the device

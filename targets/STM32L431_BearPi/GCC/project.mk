@@ -37,7 +37,6 @@ USER_SRC =  \
         $(TOP_DIR)/targets/STM32L431_BearPi/Src/usart.c \
         $(TOP_DIR)/targets/STM32L431_BearPi/Src/uart_debug.c \
         $(TOP_DIR)/targets/STM32L431_BearPi/Src/uart_at.c \
-        $(TOP_DIR)/targets/STM32L431_BearPi/Src/eth.c \
         $(TOP_DIR)/targets/STM32L431_BearPi/Src/dwt.c \
         $(TOP_DIR)/targets/STM32L431_BearPi/Src/i2c.c \
         $(TOP_DIR)/targets/STM32L431_BearPi/Src/spi.c \
