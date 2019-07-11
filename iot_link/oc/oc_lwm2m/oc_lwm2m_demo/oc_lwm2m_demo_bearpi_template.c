@@ -42,6 +42,7 @@
 
 #include <osal.h>
 #include <oc_lwm2m_al.h>
+#include <link_endian.h>
 
 #include <boudica150_oc.h>
 #include "BH1750.h"
@@ -134,16 +135,6 @@ static int             s_rcv_buffer[cn_app_rcv_buf_len];
 static int             s_rcv_datalen;
 static osal_semp_t     s_rcv_sync;
 
-uint32_t swap32(uint32_t value)
-{
-     return ((value & 0x000000FF) << 24) | ((value & 0x0000FF00) << 8) | ((value & 0x00FF0000) >> 8) | ((value & 0xFF000000) >> 24);
-}
-
-uint16_t swap16(uint16_t value)
-{
-     return ((value & 0x00FF) << 8) | ((value & 0xFF00) >> 8);
-}
-
 static void timer1_callback(int arg)
 {
 	qr_code = !qr_code;
@@ -204,7 +195,7 @@ static int app_cmd_task_entry()
             {
                 case cn_app_ledcmd:
                     led_cmd = (app_led_cmd_t *)s_rcv_buffer;
-                    printf("LEDCMD:msgid:%d mid:%d msg:%s \n\r",led_cmd->msgid,swap16(led_cmd->mid),led_cmd->led);
+                    printf("LEDCMD:msgid:%d mid:%d msg:%s \n\r",led_cmd->msgid,ntohs(led_cmd->mid),led_cmd->led);
                     //add command action--TODO
                     if (led_cmd->led[0] == 'O' && led_cmd->led[1] == 'N')
                     {
@@ -218,7 +209,7 @@ static int app_cmd_task_entry()
                     	//if you need response message,do it here--TODO
                     	replymsg.msgid = cn_app_cmdreply;
                     	replymsg.mid = led_cmd->mid;
-                    	printf("reply mid is %d. \n\r",swap16(replymsg.mid));
+                    	printf("reply mid is %d. \n\r",ntohs(replymsg.mid));
                     	replymsg.errorcode = 0;
                 		replymsg.curstats[0] = 'O';
                 		replymsg.curstats[1] = 'N';
@@ -238,7 +229,7 @@ static int app_cmd_task_entry()
                     	//if you need response message,do it here--TODO
                     	replymsg.msgid = cn_app_cmdreply;
                     	replymsg.mid = led_cmd->mid;
-                    	printf("reply mid is %d. \n\r",swap16(replymsg.mid));
+                    	printf("reply mid is %d. \n\r",ntohs(replymsg.mid));
                     	replymsg.errorcode = 0;
                 		replymsg.curstats[0] = 'O';
                 		replymsg.curstats[1] = 'F';
@@ -294,10 +285,10 @@ static int app_report_task_entry()
             	key1 = 0;
                 connectivity.msgid = cn_app_connectivity;
                 get_netstats();
-        	    connectivity.rsrp = swap16(ue_stats[0] & 0x0000FFFF);
-        	    connectivity.ecl = swap16(ue_stats[1] & 0x0000FFFF);
-        	    connectivity.snr = swap16(ue_stats[2] & 0x0000FFFF);
-        	    connectivity.cellid = swap32(ue_stats[3]);
+        	    connectivity.rsrp = htons(ue_stats[0] & 0x0000FFFF);
+        	    connectivity.ecl = htons(ue_stats[1] & 0x0000FFFF);
+        	    connectivity.snr = htons(ue_stats[2] & 0x0000FFFF);
+        	    connectivity.cellid = htonl(ue_stats[3]);
                 oc_lwm2m_report(context,(char *)&connectivity,sizeof(connectivity),1000);    ///< report ue status message
             }
 
@@ -305,12 +296,12 @@ static int app_report_task_entry()
             {
             	key2 = 0;
             	light_status.msgid = cn_app_lightstats;
-            	light_status.tog = swap16(toggle);
+            	light_status.tog = htons(toggle);
             	oc_lwm2m_report(context,(char *)&light_status,sizeof(light_status),1000);    ///< report toggle message
             }
 
             light.msgid = cn_app_light;
-            light.intensity = swap16(lux);
+            light.intensity = htons(lux);
             oc_lwm2m_report(context,(char *)&light,sizeof(light),1000); ///< report the light message
             osal_task_sleep(2*1000);
         }
