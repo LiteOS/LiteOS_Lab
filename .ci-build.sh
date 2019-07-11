@@ -18,7 +18,7 @@ function gcc_build ()
 {
     echo "building $1 with default config"
 
-    do_build "make -C $1 "
+    do_build "make -j2 -C $1 > /dev/null"
 
     config="$1/config_demos"
 
@@ -32,7 +32,7 @@ function gcc_build ()
                 make clean -C $1
                 echo "building $1 with config = $f"
 
-                do_build "make -C $1 CONFIG_FILE=$f "
+                do_build "make -j2 -C $1 CONFIG_FILE=$f > /dev/null"
             fi
         done
     fi
