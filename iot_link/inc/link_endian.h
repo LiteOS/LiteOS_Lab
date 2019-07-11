@@ -64,7 +64,7 @@
 #define htons      htobes      //translate the host endian to network endian (2 Bytes)
 #endif
 
-#ifndef ntohs
+#ifndef htonl
 #define htonl      htobel      //translate the host endian to network endian (4 Bytes)
 #endif
 
