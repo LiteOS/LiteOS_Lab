@@ -41,7 +41,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l4xx_hal.h"
-#include "main.h"
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
@@ -56,10 +55,13 @@ void SVC_Handler(void);
 void DebugMon_Handler(void);
 void PendSV_Handler(void);
 void SysTick_Handler(void);
-void EXTI2_IRQHandler(void);
-void EXTI3_IRQHandler(void);
+void Key1_IRQHandler(void);
+void Key2_IRQHandler(void);
 void USART1_IRQHandler(void);
 void USART2_IRQHandler(void);
+
+#define KEY1_EXTI_IRQn EXTI2_IRQn
+#define KEY2_EXTI_IRQn EXTI3_IRQn
 
 #ifdef __cplusplus
 }

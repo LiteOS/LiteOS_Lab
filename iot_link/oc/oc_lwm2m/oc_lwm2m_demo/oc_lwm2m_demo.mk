@@ -25,6 +25,11 @@ else ifeq ($(cfg_oc_lwm2m_demo_type), oc_lwm2m_demo_nodtls)
 	oc_lwm2m_demo_inc = -I $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m_demo
 	oc_lwm2m_demo_defs = -D cfg_oc_lwm2m_demo_enable=1
 	
+else ifeq ($(cfg_oc_lwm2m_demo_type), oc_lwm2m_demo_bearpi_template)	
+	oc_lwm2m_demo_src  = ${wildcard $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m_demo/oc_lwm2m_demo_bearpi_template.c}
+	oc_lwm2m_demo_inc = -I $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m_demo
+	oc_lwm2m_demo_defs = -D cfg_oc_lwm2m_demo_enable=1
+	
 endif
 		 
 C_SOURCES += $(oc_lwm2m_demo_src)

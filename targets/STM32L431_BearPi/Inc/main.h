@@ -51,24 +51,11 @@
 #include "los_event.ph"
 #include "los_event.h"
 
-#include <stdbool.h>
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
 
 /* Private define ------------------------------------------------------------*/
-
-#define LED_Pin GPIO_PIN_13
-#define LED_GPIO_Port GPIOC
-#define Light_Pin GPIO_PIN_9
-#define Light_GPIO_Port GPIOB
-
-#define KEY1_Pin GPIO_PIN_2
-#define KEY1_GPIO_Port GPIOB
-#define KEY1_EXTI_IRQn EXTI2_IRQn
-#define KEY2_Pin GPIO_PIN_3
-#define KEY2_GPIO_Port GPIOB
-#define KEY2_EXTI_IRQn EXTI3_IRQn
 
 /* ########################## Assert Selection ############################## */
 /**
@@ -78,58 +65,6 @@
 /* #define USE_FULL_ASSERT    1U */
 
 /* USER CODE BEGIN Private defines */
-
-typedef struct
-{
-
-	char net_nmgr[30];
-
-}msg_sys_type;
-
-extern msg_sys_type bc95_net_data;
-
-
-/*illumination intensity message*/
-
-typedef struct
-{
-
-  char Lux[5];
-}msg_for_BH1750;
-extern msg_for_BH1750 BH1750_send;
-
-typedef struct
-{
-
-  char rsrp[4];
-	char ecl[4];
-	char snr[4];
-	char cellid[8];
-}msg_for_key1;
-extern msg_for_key1 key1_send;
-
-typedef struct
-{
-  char tog[5];
-}msg_for_key2;
-extern msg_for_key2 key2_send;
-
-typedef enum
-{
-	app_msgid_counter,
-	app_msgid_toggle,
-	app_msgid_lux,
-	app_msgid_cmd,
-	app_msgid_resp,
-	app_msgid_end
-}app_msgid;
-
-
-extern app_msgid mid;
-extern uint8_t toggle;
-extern bool key1, key2;
-extern char s_resp_buf[14];
-extern uint32_t reply_sem;
 
 /* USER CODE END Private defines */
 

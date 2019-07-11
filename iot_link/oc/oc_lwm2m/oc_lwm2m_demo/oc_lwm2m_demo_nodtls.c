@@ -53,13 +53,6 @@
 #define cn_app_light           2
 #define cn_app_ledcmd          3
 
-//#define KEY1_Pin GPIO_PIN_2
-//#define KEY1_GPIO_Port GPIOB
-//#define KEY2_EXTI_IRQn EXTI2_IRQn
-//#define KEY2_Pin GPIO_PIN_3
-//#define KEY2_GPIO_Port GPIOB
-//#define KEY2_EXTI_IRQn EXTI3_IRQn
-
 #pragma pack(1)
 typedef struct
 {
@@ -94,24 +87,6 @@ typedef struct
 #pragma pack()
 
 int *ue_stats;
-//void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-//{
-//	int ret;
-//	switch(GPIO_Pin)
-//	{
-//		case KEY1_Pin:
-//			key1 = true;
-//			printf("proceed to get ue_status!\r\n");
-//			break;
-//		case KEY2_Pin:
-//			key2 = true;
-//			toggle = !toggle;
-//			HAL_GPIO_TogglePin(Light_GPIO_Port,Light_Pin);
-//			break;
-//		default:
-//			break;
-//	}
-//}
 
 //if your command is very fast,please use a queue here--TODO
 #define cn_app_rcv_buf_len 128
