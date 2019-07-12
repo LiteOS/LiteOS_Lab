@@ -36,7 +36,7 @@
  *  2019-05-14 17:22  zhangqianfu  The first version
  *
  */
-#if cfg_shell_enable
+#if CONFIG_SHELL_ENABLE
 
 #include <shell.h>
 #include <los_memory.h>
