@@ -30,5 +30,13 @@ typedef struct
     unsigned long long dead_time;
 }osal_loop_timer_t;
 
+typedef void (*handle)(int arg);
+
+enum swtmr_type
+{
+    SWTMR_MODE_ONCE,                 /**< One-off software timer */
+    SWTMR_MODE_PERIOD,               /**< Periodic software timer */
+    SWTMR_MODE_NO_SELFDELETE,        /**< One-off software timer, but not self-delete */
+};
 
 #endif /* __OSAL_TYPES_H */

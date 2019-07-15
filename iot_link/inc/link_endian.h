@@ -33,74 +33,49 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-14 17:22  zhangqianfu  The first version
+ *  2019-07-09 14:28  zhangqianfu  The first version
  *
  */
+#ifndef LITEOS_LAB_IOT_LINK_INC_LINK_ENDIAN_H_
+#define LITEOS_LAB_IOT_LINK_INC_LINK_ENDIAN_H_
 
-#ifndef __OSSHELL_H
-#define __OSSHELL_H
 
-#if CONFIG_SHELL_ENABLE
+//define the normal addres function
+#define swaps(value) ((((value)&((uint16_t)0xff00))>>8)|(((value)&((uint16_t)0x00ff))<<8))
 
-#include <stdint.h>
-#include <stddef.h>
-//this is a shell module designed for the os
-//this is a shell type,maybe a command or the data variables
-enum en_os_shell_type
-{
-	EN_OSSHELL_CMD = 0,
-	EN_OSSHELL_VAR,       //up till now, we only support 4 bytes
-	EN_OSSHELL_LAST,
-};
+#define swapl(value)  ((((value)&((uint32_t)0xff000000))>>24)|(((value)&((uint32_t)0xff0000))>>8)|\
+                      (((value)&((uint32_t)0xff00))<<8)|(((value)&((uint32_t)0xff))<<24))
 
-#define BUILD_VAR_NAME(A,B)         A##B
-#define  MAX_TAB_MATCHES			16
-struct shell_tab_matches
-{
-	const char *matches[MAX_TAB_MATCHES];
-	unsigned short len;
-};
+#if cfg_endian_big
 
-//this is the shell function module.the register function must have the same type
-//uptils now, we don't care the return value
-typedef int (*fn_shell_cmdentry)(int argc, const char *argv[]);
-struct shell_item_t
-{
-	const char     *name;   //point to the shell name string
-	const char     *help;   //point to the shell description string
-	void           *addr;   //point to the shell function or the shell data
-	unsigned short  type;   //used to  point the shell type:command or a data
-	unsigned short  len;    //used to  point the shell command or data length
-};
-//this define will create  a shell command with the specified cmdname
-#define OSSHELL_EXPORT_CMD(cmdentry,cmdname,cmdhelp)      \
-    static const struct shell_item_t BUILD_VAR_NAME(__oshell_,cmdentry) __attribute__((used,section("oshell")))= \
-    {                           \
-        .name=cmdname,    \
-        .help=cmdhelp,    \
-        .addr=(void *)&cmdentry,              \
-		.type=EN_OSSHELL_CMD,           \
-		.len = sizeof(void *),             \
-    }
-//this define will create  a create a shell data with the specified name
-#define OSSHELL_EXPORT_VAR(var,varname,varhelp)      \
-    static const struct shell_item_t BUILD_VAR_NAME(__oshell_,var) __attribute__((used,section("oshell")))= \
-    {                           \
-        .name=varname,    \
-        .help=varhelp,    \
-        .addr=(void *)&var,              \
-		.type=EN_OSSHELL_VAR,                   \
-		.len =sizeof(var),               \
-    }
-    
-void shell_init(void);
+#define htoles(value)  swaps(value)
+#define htolel(value)  swapl(value)
+#define htobes(value)  (value)
+#define htobel(value)  (value)
+
 #else
+#define htoles(value)  (value)
+#define htolel(value)  (value)
+#define htobes(value)  swaps(value)
+#define htobel(value)  swapl(value)
+#endif
 
-#define OSSHELL_EXPORT_CMD(cmdentry,cmdname,cmdhelp)
-#define OSSHELL_EXPORT_VAR(var,varname,varhelp)
-#define shell_init()
+#ifndef htons
+#define htons      htobes      //translate the host endian to network endian (2 Bytes)
+#endif
 
-#endif   //end for the shell_config
+#ifndef htonl
+#define htonl      htobel      //translate the host endian to network endian (4 Bytes)
+#endif
+
+#ifndef ntohs
+#define ntohs      htobes      //translate the network endian to host endian (2 Bytes)
+#endif
+
+#ifndef ntohl
+#define ntohl      htobel      //translate the network endian to host endian (4 Bytes)
+#endif
 
 
-#endif /* __OSSHELL_H */
+
+#endif /* LITEOS_LAB_IOT_LINK_INC_LINK_ENDIAN_H_ */

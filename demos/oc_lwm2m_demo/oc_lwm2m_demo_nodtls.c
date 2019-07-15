@@ -42,7 +42,7 @@
 
 #include <osal.h>
 #include <oc_lwm2m_al.h>
-#include <boudica150_oc.h>
+#include <link_endian.h>
 
 #define cn_endpoint_id        "SDK_LWM2M_NODTLS"
 #define cn_app_server         "49.4.85.232"
@@ -52,13 +52,6 @@
 #define cn_app_toggle          1
 #define cn_app_light           2
 #define cn_app_ledcmd          3
-
-//#define KEY1_Pin GPIO_PIN_2
-//#define KEY1_GPIO_Port GPIOB
-//#define KEY2_EXTI_IRQn EXTI2_IRQn
-//#define KEY2_Pin GPIO_PIN_3
-//#define KEY2_GPIO_Port GPIOB
-//#define KEY2_EXTI_IRQn EXTI3_IRQn
 
 #pragma pack(1)
 typedef struct
@@ -92,26 +85,6 @@ typedef struct
 
 
 #pragma pack()
-
-int *ue_stats;
-//void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-//{
-//	int ret;
-//	switch(GPIO_Pin)
-//	{
-//		case KEY1_Pin:
-//			key1 = true;
-//			printf("proceed to get ue_status!\r\n");
-//			break;
-//		case KEY2_Pin:
-//			key2 = true;
-//			toggle = !toggle;
-//			HAL_GPIO_TogglePin(Light_GPIO_Port,Light_Pin);
-//			break;
-//		default:
-//			break;
-//	}
-//}
 
 //if your command is very fast,please use a queue here--TODO
 #define cn_app_rcv_buf_len 128
@@ -166,24 +139,6 @@ static int app_cmd_task_entry()
     return ret;
 }
 
-static void get_netstats()
-{
-	ue_stats = boudica150_check_nuestats();
-	if (ue_stats[0] < -10) ue_stats[0] = ue_stats[0] / 10;
-	if (ue_stats[2] > 10) ue_stats[2] = ue_stats[2] / 10;
-
-}
-
-int32_t swap32(int32_t value)
-{
-     return ((value & 0x000000FF) << 24) | ((value & 0x0000FF00) << 8) | ((value & 0x00FF0000) >> 8) | ((value & 0xFF000000) >> 24);
-}
-
-int32_t swap16(int16_t value)
-{
-     return ((value & 0x00FF) << 8) | ((value & 0xFF00) >> 8);
-}
-
 static int app_report_task_entry()
 {
     int ret = -1;
@@ -209,17 +164,15 @@ static int app_report_task_entry()
         while(1) //--TODO ,you could add your own code here
         {
             light.msgid = cn_app_light;
-            //memcpy(light.intensity,"12345",5);
-            light.intensity = swap16(12345);
+            light.intensity = htons(12345);
             oc_lwm2m_report(context,(char *)&light,sizeof(light),1000); ///< report the light message
             osal_task_sleep(10*1000);
 
             connectivity.msgid = cn_app_connectivity;
-            get_netstats();
-        	connectivity.rsrp = swap16(ue_stats[0] & 0x0000FFFF);
-        	connectivity.ecl = swap16(ue_stats[1] & 0x0000FFFF);
-        	connectivity.snr = swap16(ue_stats[2] & 0x0000FFFF);
-        	connectivity.cellid = swap32(ue_stats[3]);
+        	connectivity.rsrp = htons(-85);
+        	connectivity.ecl = htons(0);
+        	connectivity.snr = htons(20);
+        	connectivity.cellid = htonl(225003854);
             oc_lwm2m_report(context,(char *)&connectivity,sizeof(connectivity),1000);    ///< report the light message
             osal_task_sleep(10*1000);
         }

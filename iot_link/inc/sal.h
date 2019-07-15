@@ -10,6 +10,7 @@
 
 #include <sal_define.h>
 #include <sal_types.h>
+#include <link_endian.h>
 
 /**
  *

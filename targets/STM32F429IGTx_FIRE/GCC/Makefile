@@ -68,7 +68,7 @@ include $(PROJECTBASE)/project.mk
 PERIFLIB_PATH =
 # Build path
 cfg_seperate_load_mode = no
-ifeq ($(cfg_loader_enable),yes)
+ifeq ($(CONFIG_LOADER_ENABLE),yes)
 	BUILD_DIR = loaderbuild
 	C_DEFS += -D cn_app_bin_addr=0x08010004
 else
@@ -79,7 +79,7 @@ endif
 # LDFLAGS
 ################################################################################
 ifeq ($(cfg_seperate_load_mode),yes)
-	ifeq ($(cfg_loader_enable),yes)
+	ifeq ($(CONFIG_LOADER_ENABLE),yes)
 		LD_FILE = os_loader.ld
 	else
 		LD_FILE = os_app.ld

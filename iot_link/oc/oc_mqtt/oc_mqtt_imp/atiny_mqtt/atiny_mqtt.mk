@@ -11,7 +11,7 @@ C_SOURCES += $(atiny_mqtt_src)
 atiny_mqtt_inc = -I $(iot_link_root)/oc/oc_mqtt/oc_mqtt_imp/atiny_mqtt
 C_INCLUDES += $(atiny_mqtt_inc)
 
-atiny_mqtt_defs = -D cfg_atiny_mqtt_enable=1    
+atiny_mqtt_defs = -D CONFIG_ATINY_MQTT_ENABLE=1    
 C_DEFS += $(atiny_mqtt_defs)
 
 LDFLAGS += -u _printf_float

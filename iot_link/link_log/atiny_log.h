@@ -85,7 +85,7 @@ void atiny_set_log_level(atiny_log_e level);
  */
 atiny_log_e atiny_get_log_level(void);
 
-#if cfg_link_debug_enable
+#if CONFIG_LINK_DEBUG_ENABLE
 const char* atiny_get_log_level_name(atiny_log_e log_level);
 
 #define ATINY_LOG(level, fmt, ...) \

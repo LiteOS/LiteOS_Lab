@@ -36,9 +36,9 @@
 #ifndef __BOUDICA150_OC_H
 #define __BOUDICA150_OC_H
 
-#define cfg_oc_lwm2m_boudica150_enable  1 //only for test
+#define CONFIG_OC_LWM2M_BOUDICA150_ENABLE  1 //only for test
 
-#if  cfg_oc_lwm2m_boudica150_enable
+#if  CONFIG_OC_LWM2M_BOUDICA150_ENABLE
 
 /**
  *@brief this function should be called after oc_lwm2m_agent_init
