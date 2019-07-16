@@ -53,6 +53,7 @@
 
 ######################OC LWM2M CONFIURE TEMPLATE#################################
 cfg_os_type       := liteos
+cfg_arch_cpu_type := armv7-m
 cfg_shell_enble   := yes
 cfg_driver_enable := yes
 cfg_at_enable     := yes

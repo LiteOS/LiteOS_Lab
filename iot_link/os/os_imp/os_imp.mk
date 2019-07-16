@@ -13,8 +13,3 @@ else ifeq ($(cfg_os_type), macos)
 else
 	
 endif
-
-
-
-
-
