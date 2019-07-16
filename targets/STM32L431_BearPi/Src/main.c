@@ -40,15 +40,6 @@
 #include "los_typedef.h"
 #include "los_sys.h"
 
-msg_for_BH1750      BH1750_send;
-msg_for_key1      key1_send;
-msg_for_key2      key2_send;
-app_msgid mid;
-uint8_t toggle = 0;
-bool key1 = false, key2 = false;
-char s_resp_buf[14] = {0};
-uint32_t reply_sem;
-
 #if defined (__CC_ARM)
 extern char Image$$RW_IRAM1$$ZI$$Limit [];
 extern char Image$$ARM_LIB_STACKHEAP$$Base [];
@@ -116,8 +107,6 @@ int main(void)
     UINT32 uwRet = LOS_OK;
     HardWare_Init();
     uwRet = LOS_KernelInit();
-	LOS_HwiCreate(EXTI2_IRQn, 2,0,EXTI2_IRQHandler,NULL);
-	LOS_HwiCreate(EXTI3_IRQn, 3,0,EXTI3_IRQHandler,NULL);
     if (uwRet != LOS_OK)
     {
         return LOS_NOK;

@@ -35,7 +35,7 @@
 #include <oc_mqtt_al.h>
 
 
-#if  cfg_oc_mqtt_enable
+#if  CONFIG_OC_MQTT_ENABLE
 
 static tag_oc_mqtt_ops *s_oc_mqtt = NULL;
 

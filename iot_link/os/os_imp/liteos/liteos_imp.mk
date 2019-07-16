@@ -92,4 +92,4 @@ liteos_kernel_inc = \
 #C_INCLUDES += $(liteos_imp_inc)
 
 
-C_DEFS += -D cfg_liteos_enable=1
+C_DEFS += -D CONFIG_LITEOS_ENABLE=1

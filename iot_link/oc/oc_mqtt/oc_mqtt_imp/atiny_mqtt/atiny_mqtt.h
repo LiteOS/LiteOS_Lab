@@ -37,7 +37,7 @@
  *
  */
 
-#if cfg_atiny_mqtt_enable
+#if CONFIG_ATINY_MQTT_ENABLE
 
 /**
  *

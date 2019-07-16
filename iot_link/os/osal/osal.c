@@ -326,7 +326,34 @@ int osal_reboot()  ///< maybe we should never come back
     return ret;
 }
 
+int osal_swtmr_create(int interval, int mode, handle callback, int *swtmrid, int arg)
+{
+	int ret = -1;
+	if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->swtmr_create))
+    {
+		ret = s_os_cb->ops->swtmr_create(interval,mode,callback,swtmrid,arg);
+    }
+	return ret;
+}
 
+int osal_swtmr_start(int swtmrid)
+{
+	int ret = -1;
+	if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->swtmr_start))
+    {
+        ret = s_os_cb->ops->swtmr_start(swtmrid);
+    }
+	return ret;
+}
+
+int osal_int_connect(int intnum, int prio, int mode, handle callback, int arg)
+{
+	int ret = -1;
+	if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->int_connect))
+    {
+        ret = s_os_cb->ops->int_connect(intnum, prio, mode, callback, arg);
+    }
+}
 
 int osal_init(void)
 {

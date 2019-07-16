@@ -26,12 +26,12 @@ ifeq ($(USE_MBEDTLS_AES_ROM_TABLES), yes)
 endif
       
         
-ifeq ($(cfg_embedtls_mode), crt)
+ifeq ($(CONFIG_EMBEDTLS_MODE), crt)
     C_DEFS += -D MBEDTLS_CONFIG_FILE=\"los_mbedtls_config_cert.h\"
     C_INCLUDES += $(MBEDTLS_INC)
     C_SOURCES += $(MBEDTLS_SRC)
     C_DEFS += $(MBEDTLS_DEF)
-else ifeq ($(cfg_embedtls_mode), psk)
+else ifeq ($(CONFIG_EMBEDTLS_MODE), psk)
     C_DEFS += -D MBEDTLS_CONFIG_FILE=\"los_mbedtls_config.h\"
     C_INCLUDES += $(MBEDTLS_INC)
     C_SOURCES += $(MBEDTLS_SRC)
