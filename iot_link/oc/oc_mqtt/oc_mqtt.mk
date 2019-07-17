@@ -4,7 +4,7 @@
 ################################################################################
 #NEXT TIME WE SHOULD MOVE THE JSON OUT
 
-ifneq ($(CONFIG_OC_MQTT_TYPE),none)
+ifneq ($(CONFIG_OC_MQTT_TYPE),"none")
 
     OC_MQTT_AL_SRC  = ${wildcard $(iot_link_root)/oc/oc_mqtt/oc_mqtt_al/*.c}
     C_SOURCES += $(OC_MQTT_AL_SRC)	

@@ -2,7 +2,7 @@
 # this is used for compile the mqtt lib
 ################################################################################
 
-ifneq ($(CONFIG_MQTT_TYPE),none)
+ifneq ($(CONFIG_MQTT_TYPE),"none")
 
     mqtt_src  = ${wildcard $(iot_link_root)/network/mqtt/mqtt_al/*.c} 
     C_SOURCES += $(mqtt_src)	

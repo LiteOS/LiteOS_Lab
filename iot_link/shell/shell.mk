@@ -2,7 +2,7 @@
 # this is used for compile the shell module
 ################################################################################
 
-ifeq ($(CONFIG_SHELL_ENABLE),yes)
+ifeq ($(CONFIG_SHELL_ENABLE),y)
     shell_src  = ${wildcard $(iot_link_root)/shell/*.c} 
     C_SOURCES += $(shell_src)	
     		
