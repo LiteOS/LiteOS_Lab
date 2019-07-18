@@ -4,7 +4,7 @@
 # make sure driver module is enabled
 ################################################################################
 
-ifeq ($(CONFIG_CJSON_ENABLE),yes)
+ifeq ($(CONFIG_CJSON_ENABLE),y)
 
     CJSON_MODULE_SRC  = ${wildcard $(iot_link_root)/cJSON/*.c} 
     C_SOURCES += $(CJSON_MODULE_SRC)	

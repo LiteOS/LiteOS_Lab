@@ -4,7 +4,7 @@
 # make sure driver module is enabled
 ################################################################################
 
-ifeq ($(CONFIG_AT_ENABLE),yes)
+ifeq ($(CONFIG_AT_ENABLE),y)
     AT_MODULE_SRC = ${wildcard $(iot_link_root)/at/*.c} 
     C_SOURCES += $(AT_MODULE_SRC)
 		

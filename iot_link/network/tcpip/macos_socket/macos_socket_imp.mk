@@ -1,8 +1,8 @@
 ################################################################################
-# this is used for compile the linux socket
+# this is used for compile the macos socket
 ################################################################################
 
-#configure the linux socket itself
+#configure the macos socket itself
 LINUX_SOCKET_IMP_SOURCE  = ${wildcard $(TOP_DIR)/iot_link/network/tcpip/macos_socket/*.c}
 C_SOURCES += $(LINUX_SOCKET_IMP_SOURCE)
 		
