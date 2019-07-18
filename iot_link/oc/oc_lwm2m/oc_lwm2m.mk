@@ -2,7 +2,7 @@
 # this is used for compile the oc lwm2m agent
 ################################################################################
 
-ifneq ($(CONFIG_OC_LWM2M_TYPE),none)
+ifneq ($(CONFIG_OC_LWM2M_TYPE),"none")
 
     OC_LWM2M_AL_SOURCE  = ${wildcard $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m_al/*.c} 
     C_SOURCES += $(OC_LWM2M_AL_SOURCE)	
