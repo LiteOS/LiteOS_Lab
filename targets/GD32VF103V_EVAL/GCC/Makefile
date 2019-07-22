@@ -54,6 +54,7 @@ OBJDUMP    = $(RISCV_OBJDUMP)
 AR         = $(RISCV_AR)
 AS         = $(RISCV_AS)
 SZ         = $(RISCV_SIZE)
+BIN        = $(RISCV_OBJCOPY) -O binary -S
 
 
 PROJECTBASE = $(abspath $(CURDIR))
@@ -90,22 +91,6 @@ CFLAGS =
 ##########################LOAD THE SOURCES INCLUDES AND DEFINES#################
 include $(PROJECTBASE)/config.mk
 include $(PROJECTBASE)/project.mk
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ######################################
 # firmware library
 ######################################
@@ -185,7 +170,7 @@ all:
 	@echo "JUST FOR CI"
 	@echo "To build the elf, make GD"
 
-GD: $(BUILD_DIR)/$(TARGET).elf
+GD: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).bin
 
 #######################################
 # build the application
@@ -209,6 +194,9 @@ $(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 	$(SZ) $@
+
+$(BUILD_DIR)/$(TARGET).bin: $(BUILD_DIR)/$(TARGET).elf
+	$(BIN) $< $@
 
 
 $(BUILD_DIR):

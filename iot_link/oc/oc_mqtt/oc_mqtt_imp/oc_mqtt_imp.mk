@@ -8,5 +8,7 @@
 
 ifeq ($(cfg_oc_mqtt_type),soft)
 	include $(iot_link_root)/oc/oc_mqtt/oc_mqtt_imp/atiny_mqtt/atiny_mqtt.mk
+else ifeq ($(cfg_oc_mqtt_type),ec20)
+	include $(iot_link_root)/oc/oc_mqtt/oc_mqtt_imp/ec20_cefag/ec20_oc.mk
 endif 
 

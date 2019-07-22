@@ -56,21 +56,21 @@
 ######################OC LWM2M CONFIURE TEMPLATE#################################
 cfg_os_type       := liteos
 cfg_arch_cpu_type := riscv32
-cfg_shell_enble   := yes
+cfg_shell_enble   := no
 cfg_driver_enable := yes
-cfg_at_enable     := no
-cfg_libc_enable   := no
-cfg_cjson_enable  := no
+cfg_at_enable     := yes
+cfg_libc_enable   := yes
+cfg_cjson_enable  := yes
 cfg_tcpip_type    := none
 cfg_dtls_type     := none
 cfg_embedtls_mode := none
-cfg_mqtt_type     := none
+cfg_mqtt_type     := ec20
 cfg_lwm2m_type    := none
-cfg_oc_mqtt_type  := none
+cfg_oc_mqtt_type  := ec20
 cfg_oc_lwm2m_type := none
 cfg_loader_enable := no
 cfg_oc_lwm2m_demo_type:= no
-cfg_oc_mqtt_demo_type:= none
+cfg_oc_mqtt_demo_type:= oc_mqtt_demo_bs
 #################################################################################
 
 include $(TOP_DIR)/iot_link/iot.mk

@@ -121,6 +121,9 @@ extern UINT32 LOS_SysTickCurrCycleGet(VOID);
 
 extern VOID LOS_SysTickReload(UINT32 uwCyclesPerTick);
 
+extern UINT64 osKernelGetTickCount (void);
+
+
 #endif
 
 #ifdef __cplusplus

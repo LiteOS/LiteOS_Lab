@@ -171,6 +171,27 @@ LITE_OS_SEC_TEXT_MINOR VOID LOS_GetCpuCycle(UINT32 *puwCntHi, UINT32 *puwCntLo)
 
     return;
 }
+
+UINT64 osKernelGetTickCount (void)
+{
+    UINT64 ticks;
+    UINTPTR uvIntSave;
+
+    if(OS_INT_ACTIVE)
+    {
+        ticks = 0U;
+    }
+    else
+    {
+        uvIntSave = LOS_IntLock();
+        ticks = g_ullTickCount;
+        LOS_IntRestore(uvIntSave);
+    }
+
+    return ticks;
+}
+
+
 #ifdef __cplusplus
 #if __cplusplus
 }

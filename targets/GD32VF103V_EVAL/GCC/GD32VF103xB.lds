@@ -145,6 +145,10 @@ SECTIONS
     *(.srodata.cst4)
     *(.srodata.cst2)
     *(.srodata .srodata.*)
+    . = ALIGN(4);
+    __osdriv_start = .;
+    KEEP (*(osdriv))
+    __osdriv_end = .;
   } >ram AT>flash 
 
   . = ALIGN(4);

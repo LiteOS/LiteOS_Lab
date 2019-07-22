@@ -111,7 +111,7 @@ extern "C" {
  * @ingroup los_config
  * Maximum supported number of tasks except the idle task rather than the number of usable tasks
  */
-#define LOSCFG_BASE_CORE_TSK_LIMIT                          4              // max num task
+#define LOSCFG_BASE_CORE_TSK_LIMIT                          10              // max num task
 
 /**
  * @ingroup los_config
@@ -188,7 +188,7 @@ extern "C" {
  * @ingroup los_config
  * Maximum supported number of semaphores
  */
-#define LOSCFG_BASE_IPC_SEM_LIMIT                           2              // the max sem-numb
+#define LOSCFG_BASE_IPC_SEM_LIMIT                           8              // the max sem-numb
 
 
 /*=============================================================================
@@ -205,7 +205,7 @@ extern "C" {
  * @ingroup los_config
  * Maximum supported number of mutexes
  */
-#define LOSCFG_BASE_IPC_MUX_LIMIT                           2              // the max mutex-num
+#define LOSCFG_BASE_IPC_MUX_LIMIT                           10              // the max mutex-num
 
 
 /*=============================================================================
@@ -222,7 +222,7 @@ extern "C" {
  * @ingroup los_config
  * Maximum supported number of queues rather than the number of usable queues
  */
-#define LOSCFG_BASE_IPC_QUEUE_LIMIT                         2              //the max queue-numb
+#define LOSCFG_BASE_IPC_QUEUE_LIMIT                         6              //the max queue-numb
 
 
 /*=============================================================================
@@ -249,7 +249,7 @@ extern "C" {
  * @ingroup los_config
  * Maximum supported number of software timers rather than the number of usable software timers
  */
-#define LOSCFG_BASE_CORE_SWTMR_LIMIT                        2             // the max SWTMR numb
+#define LOSCFG_BASE_CORE_SWTMR_LIMIT                        6             // the max SWTMR numb
 
 /**
  * @ingroup los_config
