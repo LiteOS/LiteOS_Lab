@@ -2,7 +2,8 @@
 # this is used for compile the mqtt lib
 ################################################################################
 
-ifeq ($(cfg_mqtt_type),ec20)
+ifeq ($(cfg_mqtt_type), $(filter $(cfg_mqtt_type), ec20 none))
+
 
     mqtt_src  = ${wildcard $(iot_link_root)/network/mqtt/mqtt_al/*.c}
     C_SOURCES += $(mqtt_src)
