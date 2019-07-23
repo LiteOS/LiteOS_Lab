@@ -55,7 +55,8 @@
 
 ######################OC LWM2M CONFIURE TEMPLATE#################################
 CONFIG_OS_TYPE       := "liteos"
-CONFIG_SHELL_ENABLE   := y
+CONFIG_ARCH_CPU_TYPE := "armv7-m"
+CONFIG_SHELL_ENABLE  := y
 CONFIG_DRIVER_ENABLE := y
 CONFIG_AT_ENABLE     := y
 CONFIG_LIBC_ENABLE   := y
