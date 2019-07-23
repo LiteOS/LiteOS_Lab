@@ -63,7 +63,7 @@ static void* ec20_oc_config(tag_oc_mqtt_config *param)
     memset(cmd,0,128);
     //snprintf(cmd,128,"AT+CGDCONT=%s\r",apn);
 
-    ec20_atcmd("at+HWOCMQTTCONNECT=1,30,\"iot-bs.cn-north-4.myhuaweicloud.com\",\"8883\",\"sdk_0040\",\"f62fcf47d62c4ed18913\"","OK");
+    ec20_atcmd("aat+HWOCMQTTCONNECT=1,30,\"iot-bs.cn-north-4.myhuaweicloud.com\",\"8883\",\"sdk_0040\",\"f62fcf47d62c4ed18913\"","OK");
 
 }
 

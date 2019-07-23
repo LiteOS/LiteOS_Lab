@@ -167,7 +167,15 @@ int uart_at_send(unsigned char *buf, int len,unsigned int timeout)
 {
     int i = 0;
     while(i++ < len)
+    {
+        printf("0x%x ", buf[i]);
         usart_data_transmit(uart_at,buf[i]);
+
+        while (usart_flag_get(uart_at, USART_FLAG_TBE)== RESET){}
+
+        /* wait for completion of USART transmission */
+        while(RESET == usart_flag_get(uart_at, USART_FLAG_TC)){}
+    }
 
     g_atio_cb.sndlen += len;
     g_atio_cb.sndframe ++;
