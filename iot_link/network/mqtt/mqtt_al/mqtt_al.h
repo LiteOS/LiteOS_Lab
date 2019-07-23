@@ -337,7 +337,7 @@ int mqtt_al_uninstall();
 
 #define mqtt_al_init()                         -1          ///< function compatible
 #define mqtt_al_deinit()                       -1 		   ///< function compatible
-#define mqtt_al_connect(handle, para)          NULL        ///< function compatible
+#define mqtt_al_connect(para)                   NULL        ///< function compatible
 #define mqtt_al_disconnect(handle)             -1          ///< function compatible
 #define mqtt_al_publish(handle, msg)           -1          ///< function compatible
 #define mqtt_al_subscribe(handle, subpara)     -1          ///< function compatible
