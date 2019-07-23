@@ -1,7 +1,7 @@
 ################################################################################
 # this is used for compile the file system
 ################################################################################
-ifeq ($(WITH_FILESYSTEM), yes)
+ifeq ($(WITH_FILESYSTEM), y)
 FS_SRC = \
         ${wildcard $(TOP_DIR)/components/fs/vfs/*.c}
         C_SOURCES += $(FS_SRC)
@@ -32,14 +32,14 @@ else ifeq ($(FILESYSTEM_TYPE), FATFS)
         C_SOURCES += $(FS_FATFS_SRC)
         C_SOURCES += $(TOP_DIR)/demos/fs/fatfs_demo.c
 endif
-ifeq ($(WITH_CMOCKERY_TEST), yes)
+ifeq ($(WITH_CMOCKERY_TEST), y)
 CMOCKERY_TEST_FS_SRC = \
         ${wildcard $(TOP_DIR)/tests/test_suit/fs_test.c}
         C_SOURCES += $(CMOCKERY_TEST_FS_SRC)
 endif
 endif
 
-ifeq ($(WITH_FILESYSTEM), yes)
+ifeq ($(WITH_FILESYSTEM), y)
 FS_SPIFFS_INC = \
         -I $(TOP_DIR)/components/fs/spiffs/spiffs_git/src \
         -I $(TOP_DIR)/components/fs/spiffs/spiffs_git/src/default

@@ -59,22 +59,22 @@ int link_main(void *args)
     ///< install the RTOS kernel for the link
     osal_init();
 
-#if cfg_liteos_enable
+#if CONFIG_LITEOS_ENABLE
     #include <liteos_imp.h>
     osal_install_liteos();
-#elif cfg_linux_enable
+#elif CONFIG_LINUX_ENABLE
     #include <linux_imp.h>
     #include <signal.h>
     sigaction(SIGPIPE, &(struct sigaction){SIG_IGN}, NULL);
     osal_install_linux();
-#elif  cfg_macos_enable
+#elif  CONFIG_MACOS_ENABLE
     #include <macos_imp.h>
     osal_install_macos();
 #else
     #error("no os supplied yet");
 #endif
 
-#if cfg_shell_enable
+#if CONFIG_SHELL_ENABLE
     #include <shell.h>
     ///< install the shell for the link
     extern void shell_uart_init(int baud);
@@ -82,13 +82,13 @@ int link_main(void *args)
     shell_init();
 #endif
 
-#if cfg_driver_enable
+#if CONFIG_DRIVER_ENABLE
     #include <driver.h>
     ///< install the driver framework for the link
     los_driv_init();
 #endif
 
-#if cfg_at_enable
+#if CONFIG_AT_ENABLE
     #include <at.h>
     ///< install the at framework for the link
     //uart_at_init(9600);
@@ -98,7 +98,7 @@ int link_main(void *args)
 #endif
 
     ///< install the cJSON, for the oc mqtt agent need the cJSON
-#if cfg_json_enable
+#if CONFIG_JSON_ENABLE
     #include <cJSON.h>
 
     cJSON_Hooks  hook;
@@ -107,20 +107,20 @@ int link_main(void *args)
     cJSON_InitHooks(&hook);
 #endif
     ///< install the tcpip stack and net driver for the link
-#if cfg_tcpip_enable
+#if CONFIG_TCPIP_ENABLE
     #include <sal.h>
     tcpipstack_init(10);
 
-    #if cfg_lwip_enable
+    #if CONFIG_LWIP_ENABLE
         #include <lwip_imp.h>
         tcpipstack_install_lwip(netdriver_install);
-    #elif cfg_linux_socket_enable
+    #elif CONFIG_LINUX_SOCKET_ENABLE
         #include <linux_socket_imp.h>
         tcpipstack_install_linux_socket();
-    #elif cfg_macos_socket_enable
+    #elif CONFIG_MACOS_SOCKET_ENABLE
         #include <macos_socket_imp.h>
         tcpipstack_install_macos_socket();
-    #elif cfg_esp8266_enable
+    #elif CONFIG_ESP8266_ENABLE
         //#include <esp8266.h>
         //tcpipstack_install_esp8266();
     #else
@@ -135,7 +135,7 @@ int link_main(void *args)
 #endif
 
 //////////////////////////  MQTT PROTOCOL  /////////////////////////////////////
-#if cfg_mqtt_enable
+#if CONFIG_MQTT_ENABLE
     #include <mqtt_al.h>
     #include <paho_mqtt_port.h>
 
@@ -145,46 +145,45 @@ int link_main(void *args)
 
 //////////////////////////  OC MQTT && DEMOS  //////////////////////////////////
 
-#if cfg_oc_mqtt_enable
+#if CONFIG_OC_MQTT_ENABLE
     #include <oc_mqtt_al.h>
     oc_mqtt_init();
 
-#if cfg_atiny_mqtt_enable
+#if CONFIG_ATINY_MQTT_ENABLE
     #include <atiny_mqtt.h>
     oc_mqtt_install_atiny_mqtt();
 #endif
 
 #if cfg_oc_mqtt_ec20_enable
     #include <ec20_oc.h>
-	ec20_init();
+	  ec20_init();
 #endif
 
 #if cfg_oc_mqtt_demo_enable
     #include <oc_mqtt_demo.h>
     oc_mqtt_demo_main();
-
 #endif
 
 #endif
 
 ////////////////////////////  OC LWM2M && DEMOS     /////////////////////////////
 
-#if cfg_oc_lwm2m_enable
+#if CONFIG_OC_LWM2M_ENABLE
     #include <oc_lwm2m_al.h>
     oc_lwm2m_init();
 
-#if cfg_oc_lwm2m_agent_enable
+#if CONFIG_OC_LWM2M_AGENT_ENABLE
     #include <agent_lwm2m.h>
     oc_lwm2m_install_agent();
 #endif
 
-#if cfg_oc_lwm2m_boudica150_enable
+#if CONFIG_OC_LWM2M_BOUDICA150_ENABLE
     #include <boudica150_oc.h>
     #define cn_app_bands    "5,8,20"
     boudica150_init(NULL,NULL,cn_app_bands);
 #endif
 
-#if cfg_oc_lwm2m_demo_enable
+#if CONFIG_OC_LWM2M_DEMO_ENABLE
     #include <oc_lwm2m_demo.h>
     oc_lwm2m_demo_main();
 #endif

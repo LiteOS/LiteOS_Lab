@@ -1,71 +1,71 @@
 ##############################CONFIGURE INTRODUCTION############################
 #configure type      configure value
 #------------------:------------------
-#cfg_os_type       : linux macos liteos
-#cfg_shell_enble   : yes no
-#cfg_libc_enable   : yes no
-#cfg_cjson_enable  : yes no
-#cfg_tcpip_type    : lwip linux_socket macos_socket none
-#cfg_dtls_type     : mbedtls none
-#cfg_embedtls_mode : crt psk none
-#cfg_mqtt_type     : paho none
-#cfg_lwm2m_type    : wakaama none
-#cfg_oc_mqtt_type  : soft none
-#cfg_oc_lwm2m_type : soft bc35 none
-#cfg_loader_enable : yes no
-#cfg_oc_lwm2m_demo_type:none  oc_lwm2m_demo_dtls and oc_lwm2m_demo_nodtls oc_lwm2m_demo_bs_dtls
-#cfg_oc_mqtt_demo_type:none oc_mqtt_demo_static oc_mqtt_demo_bs
+#CONFIG_OS_TYPE       : "linux" "macos" "liteos"
+#CONFIG_SHELL_ENABLE   : y n
+#CONFIG_LIBC_ENABLE   : y n
+#CONFIG_CJSON_ENABLE  : y n
+#CONFIG_TCPIP_TYPE    : "lwip" "linux_socket" "macos_socket" "none"
+#CONFIG_DTLS_TYPE     : "mbedtls" "none"
+#CONFIG_EMBEDTLS_MODE : "crt" "psk" "none"
+#CONFIG_MQTT_TYPE     : "paho" "none"
+#CONFIG_LWM2M_TYPE    : "wakaama" "none"
+#CONFIG_OC_MQTT_TYPE  : "soft" "none"
+#CONFIG_OC_LWM2M_TYPE : "soft" "boudica150" "none"
+#CONFIG_LOADER_ENABLE : y n
+#CONFIG_OC_LWM2M_DEMO_TYPE:"none"  "oc_lwm2m_demo_dtls" and "oc_lwm2m_demo_nodtls" "oc_lwm2m_demo_bs_dtls"
+#CONFIG_OC_MQTT_DEMO_TYPE:"none" "oc_mqtt_demo_static" "oc_mqtt_demo_bs"
 
 ######################LOADER     CONFIURE TEMPLATE###############################
-#cfg_os_type       := linux
-#cfg_shell_enble   := yes
-#cfg_libc_enable   := yes
-#cfg_cjson_enable  := no
-#cfg_tcpip_type    := none
-#cfg_dtls_type     := none
-#cfg_embedtls_mode := none
-#cfg_mqtt_type     := none
-#cfg_lwm2m_type    := none
-#cfg_oc_mqtt_type  := none
-#cfg_oc_lwm2m_type := none
-#cfg_loader_enable := yes
-#cfg_oc_lwm2m_demo_type:= none
-#cfg_oc_mqtt_demo_type:= none
+#CONFIG_OS_TYPE       := "linux"
+#CONFIG_SHELL_ENABLE   := y
+#CONFIG_LIBC_ENABLE   := y
+#CONFIG_CJSON_ENABLE  := n
+#CONFIG_TCPIP_TYPE    := "none"
+#CONFIG_DTLS_TYPE     := "none"
+#CONFIG_EMBEDTLS_MODE := "none"
+#CONFIG_MQTT_TYPE     := "none"
+#CONFIG_LWM2M_TYPE    := "none"
+#CONFIG_OC_MQTT_TYPE  := "none"
+#CONFIG_OC_LWM2M_TYPE := "none"
+#CONFIG_LOADER_ENABLE := y
+#CONFIG_OC_LWM2M_DEMO_TYPE:= "none"
+#CONFIG_OC_MQTT_DEMO_TYPE:= "none"
 #################################################################################
  
 #####################  OC MQTT CONFIURE TEMPLATE################################
-cfg_os_type       := linux
-cfg_shell_enble   := no
-cfg_libc_enable   := no
-cfg_cjson_enable  := yes
-cfg_tcpip_type    := linux_socket
-cfg_dtls_type     := mbedtls
-cfg_embedtls_mode := crt
-cfg_mqtt_type     := paho
-cfg_lwm2m_type    := none
-cfg_oc_mqtt_type  := soft
-cfg_oc_lwm2m_type := none
-cfg_loader_enable := no
-cfg_oc_lwm2m_demo_type:= none
-cfg_oc_mqtt_demo_type:= none
+CONFIG_OS_TYPE       := "linux"
+CONFIG_SHELL_ENABLE   := n
+CONFIG_LIBC_ENABLE   := n
+CONFIG_CJSON_ENABLE  := y
+CONFIG_TCPIP_TYPE    := "linux_socket"
+CONFIG_DTLS_TYPE     := "mbedtls"
+CONFIG_EMBEDTLS_MODE := "crt"
+CONFIG_MQTT_TYPE     := "paho"
+CONFIG_LWM2M_TYPE    := "none"
+CONFIG_OC_MQTT_TYPE  := "soft"
+CONFIG_OC_LWM2M_TYPE := "none"
+CONFIG_LOADER_ENABLE := n
+CONFIG_OC_LWM2M_DEMO_TYPE:= "none"
+CONFIG_OC_MQTT_DEMO_TYPE:= "none"
 
 ################################################################################
 
 ######################OC LWM2M CONFIURE TEMPLATE#################################
-#cfg_os_type       := linux
-#cfg_shell_enble   := no
-#cfg_libc_enable   := no
-#cfg_cjson_enable  := yes
-#cfg_tcpip_type    := linux_socket
-#cfg_dtls_type     := mbedtls
-#cfg_embedtls_mode := psk
-#cfg_mqtt_type     := none
-#cfg_lwm2m_type    := wakaama
-#cfg_oc_mqtt_type  := none
-#cfg_oc_lwm2m_type := soft
-#cfg_loader_enable := no
-#cfg_oc_lwm2m_demo_type:= oc_lwm2m_demo_nodtls
-#cfg_oc_mqtt_demo_type:= oc_mqtt_demo_static
+#CONFIG_OS_TYPE       := "linux"
+#CONFIG_SHELL_ENABLE   := n
+#CONFIG_LIBC_ENABLE   := n
+#CONFIG_CJSON_ENABLE  := y
+#CONFIG_TCPIP_TYPE    := "linux_socket"
+#CONFIG_DTLS_TYPE     := "mbedtls"
+#CONFIG_EMBEDTLS_MODE := "psk"
+#CONFIG_MQTT_TYPE     := "none"
+#CONFIG_LWM2M_TYPE    := "wakaama"
+#CONFIG_OC_MQTT_TYPE  := "none"
+#CONFIG_OC_LWM2M_TYPE := "soft"
+#CONFIG_LOADER_ENABLE := n
+#CONFIG_OC_LWM2M_DEMO_TYPE:= "oc_lwm2m_demo_nodtls"
+#CONFIG_OC_MQTT_DEMO_TYPE:= "oc_mqtt_demo_static"
 #################################################################################
 
 include $(TOP_DIR)/iot_link/iot.mk

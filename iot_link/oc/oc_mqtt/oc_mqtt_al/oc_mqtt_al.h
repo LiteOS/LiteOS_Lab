@@ -147,7 +147,7 @@ typedef struct
     fn_oc_mqtt_deconfig deconfig; ///< this function used for the deconfig
 }tag_oc_mqtt_ops;
 
-#if cfg_oc_mqtt_enable
+#if CONFIG_OC_MQTT_ENABLE
 /**
  *@brief the mqtt agent should use this function to register the method for the application
  *

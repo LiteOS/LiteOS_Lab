@@ -71,6 +71,7 @@ typedef struct
 
 }boudica150_cb_t;
 static boudica150_cb_t   s_boudica150_oc_cb;
+static osal_mutex_t s_report_mutex;
 int wireless_stats[4] = {0};
 
 //bc95 common at command
@@ -131,11 +132,14 @@ static int boudica150_oc_report(void *handle,unsigned char *buf,int len, int tim
     {
         return ret;
     }
+    osal_mutex_lock(s_report_mutex);
     memset(s_boudica150_oc_cb.sndbuf, 0, cn_boudica150_cachelen);
     snprintf((char *)s_boudica150_oc_cb.sndbuf,cn_boudica150_cachelen,"%s%d,",cmd,len);
     ret = byte_to_hexstr((unsigned char *)buf, len, (char *)&s_boudica150_oc_cb.sndbuf[strlen((char *)s_boudica150_oc_cb.sndbuf)]);
     s_boudica150_oc_cb.sndbuf[strlen((char *)s_boudica150_oc_cb.sndbuf)]='\r';
+
     ret = at_command((unsigned char *)s_boudica150_oc_cb.sndbuf,strlen((char *)s_boudica150_oc_cb.sndbuf),index,NULL,0,timeout);
+    osal_mutex_unlock(s_report_mutex);
     if(ret > 0)
     {
         ret = 0;
@@ -533,7 +537,7 @@ static bool_t boudica150_set_autoconnect(int enable)
 //use this function to set the band,which corresponding with YUNYINGSHANG AND MOZU
 static bool_t boudica150_boot(const char *plmn, const char *apn, const char *bands,const char *server,const char *port)
 {
-    memset(&s_boudica150_oc_cb,0,sizeof(s_boudica150_oc_cb));
+    //memset(&s_boudica150_oc_cb,0,sizeof(s_boudica150_oc_cb));
     at_oobregister(urc_qlwevtind,cn_urc_qlwevtind);
     at_oobregister(boudica150_rcvdeal,cn_boudica150_rcvindex);
 
@@ -715,6 +719,8 @@ int boudica150_init(const char *plmn, const char *apn, const char *bands)
     s_boudica150_oc_cb.plmn = plmn;
     s_boudica150_oc_cb.apn = apn;
     s_boudica150_oc_cb.bands = bands;
+
+    osal_mutex_create(&s_report_mutex);
 
     ret = oc_lwm2m_register("boudica150",&g_boudica150_oc_opt);
 

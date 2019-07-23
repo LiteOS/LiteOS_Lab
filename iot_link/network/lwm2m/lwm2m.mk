@@ -1,7 +1,7 @@
 ################################################################################
 # this is used for compile the dtls
 ################################################################################
-ifneq ($(cfg_lwm2m_type),none)
+ifneq ($(CONFIG_LWM2M_TYPE),"none")
 
     LWM2M_MODULE_SOURCE  = ${wildcard $(iot_link_root)/network/lwm2m/lwm2m_al/*.c}
     C_SOURCES += $(LWM2M_MODULE_SOURCE)

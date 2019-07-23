@@ -6,30 +6,30 @@
 #######################################
 # use ethernet
 #######################################
-WITH_LWIP  := yes
+WITH_LWIP  := y
 
 #######################################
 # IPv4
 #######################################
-WITH_IPV4 := yes
+WITH_IPV4 := y
 
 #######################################
 # IPv6
 #######################################
-WITH_IPV6 := no
+WITH_IPV6 := n
 
 #######################################
 # If Use TCP, when use lwm2m,not need tcp
 #######################################
-USE_LWIP_TCP := yes
+USE_LWIP_TCP := y
 
-ifeq ($(WITH_IPV4), no)
+ifeq ($(WITH_IPV4), n)
 C_DEFS += -DLWIP_IPV4=0
 else
 C_DEFS += -DLWIP_IPV4=1
 endif
 
-ifeq ($(WITH_IPV6), yes)
+ifeq ($(WITH_IPV6), y)
 C_DEFS += -DLWIP_IPV6=1
 else
 C_DEFS += -DLWIP_IPV6=0
@@ -63,7 +63,7 @@ C_DEFS += \
     -DLWIP_DEBUG \
     -D LWIP_TIMEVAL_PRIVATE=0 
 
-    ifeq ($(USE_LWIP_TCP), yes)
+    ifeq ($(USE_LWIP_TCP), y)
         C_DEFS += -DLWIP_TCP=1
     else
         C_DEFS += -DLWIP_TCP=0
@@ -75,4 +75,4 @@ C_SOURCES += $(LWIP_IMP_SOURCE)
 LWIP_IMP_INC = -I $(TOP_DIR)/iot_link/network/tcpip/lwip/lwip_imp
 C_INCLUDES += $(LWIP_IMP_INC)
 
-C_DEFS += -D cfg_lwip_enable=1
+C_DEFS += -D CONFIG_LWIP_ENABLE=1

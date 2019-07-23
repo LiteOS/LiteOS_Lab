@@ -10,7 +10,7 @@
 #include <sal.h>
 #include <sal_imp.h>
 
-#if cfg_tcpip_enable
+#if CONFIG_TCPIP_ENABLE
 
 typedef struct
 {

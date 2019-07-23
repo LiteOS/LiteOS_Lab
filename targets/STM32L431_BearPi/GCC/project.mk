@@ -37,12 +37,12 @@ USER_SRC =  \
         $(TOP_DIR)/targets/STM32L431_BearPi/Src/usart.c \
         $(TOP_DIR)/targets/STM32L431_BearPi/Src/uart_debug.c \
         $(TOP_DIR)/targets/STM32L431_BearPi/Src/uart_at.c \
-        $(TOP_DIR)/targets/STM32L431_BearPi/Src/eth.c \
         $(TOP_DIR)/targets/STM32L431_BearPi/Src/dwt.c \
         $(TOP_DIR)/targets/STM32L431_BearPi/Src/i2c.c \
         $(TOP_DIR)/targets/STM32L431_BearPi/Src/spi.c \
         $(TOP_DIR)/targets/STM32L431_BearPi/Src/gpio.c \
-        $(TOP_DIR)/targets/STM32L431_BearPi/Src/net_driver.c 
+        $(TOP_DIR)/targets/STM32L431_BearPi/Src/net_driver.c \
+        $(TOP_DIR)/targets/STM32L431_BearPi/Src/Huawei_IoT_QR_Code.c
         C_SOURCES += $(USER_SRC)  
         
  OS_CONFIG_INC = \
@@ -54,9 +54,9 @@ HAL_DRIVER_INC = \
         -I $(TOP_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/Legacy
         C_INCLUDES += $(HAL_DRIVER_INC)        
 HARDWARE_INC = \
-        -I $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/Inc \
-        -I $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/BH1750 \
-        -I $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/LCD
+        -I ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/Inc} \
+        -I ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/BH1750} \
+        -I ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/LCD}
         C_INCLUDES += $(HARDWARE_INC)
 
 USER_INC = \

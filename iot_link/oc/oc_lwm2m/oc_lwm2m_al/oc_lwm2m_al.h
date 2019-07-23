@@ -89,7 +89,7 @@ typedef struct
 }oc_lwm2m_opt_t;
 
 
-#if cfg_oc_lwm2m_enable
+#if CONFIG_OC_LWM2M_ENABLE
 /**
  *@brief the lwm2m agent should use this function to register the method for the application
  *
