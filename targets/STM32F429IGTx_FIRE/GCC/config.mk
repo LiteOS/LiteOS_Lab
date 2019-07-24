@@ -18,6 +18,7 @@
 
 ######################LOADER     CONFIURE TEMPLATE###############################
 #CONFIG_OS_TYPE       = "liteos"
+#CONFIG_ARCH_CPU_TYPE := "armv7-m"
 #CONFIG_SHELL_ENABLE   = y
 #CONFIG_LIBC_ENABLE   = y
 #CONFIG_CJSON_ENABLE  = n
@@ -34,27 +35,29 @@
 #################################################################################
  
 #####################  OC MQTT CONFIURE TEMPLATE################################
-#CONFIG_OS_TYPE       = "liteos"
-#CONFIG_SHELL_ENABLE   = y
-#CONFIG_DRIVER_ENABLE = y
-#CONFIG_AT_ENABLE     = y
-#CONFIG_LIBC_ENABLE   = y
-#CONFIG_CJSON_ENABLE  = y
-#CONFIG_TCPIP_TYPE    = "lwip"
-#CONFIG_DTLS_TYPE     = "mbedtls"
-#CONFIG_EMBEDTLS_MODE = "crt"
-#CONFIG_MQTT_TYPE     = "paho"
-#CONFIG_LWM2M_TYPE    = "none"
-#CONFIG_OC_MQTT_TYPE  = "soft"
-#CONFIG_OC_LWM2M_TYPE = "none"
-#CONFIG_LOADER_ENABLE = n
-#CONFIG_OC_LWM2M_DEMO_TYPE= "none"
-#CONFIG_OC_MQTT_DEMO_TYPE= "oc_mqtt_demo_static"
+#CONFIG_OS_TYPE       := "liteos"
+#CONFIG_ARCH_CPU_TYPE := "armv7-m"
+#CONFIG_SHELL_ENABLE   := y
+#CONFIG_DRIVER_ENABLE := y
+#CONFIG_AT_ENABLE     := y
+#CONFIG_LIBC_ENABLE   := y
+#CONFIG_CJSON_ENABLE  := y
+#CONFIG_TCPIP_TYPE    := "lwip"
+#CONFIG_DTLS_TYPE     := "mbedtls"
+#CONFIG_EMBEDTLS_MODE := "crt"
+#CONFIG_MQTT_TYPE     := "paho"
+#CONFIG_LWM2M_TYPE    := "none"
+#CONFIG_OC_MQTT_TYPE  := "soft"
+#CONFIG_OC_LWM2M_TYPE := "none"
+#CONFIG_LOADER_ENABLE := n
+#CONFIG_OC_LWM2M_DEMO_TYPE:= "none"
+#CONFIG_OC_MQTT_DEMO_TYPE:= "oc_mqtt_demo_static"
 
 ################################################################################
 
 ######################OC LWM2M CONFIURE TEMPLATE#################################
 #CONFIG_OS_TYPE       = "liteos"
+#CONFIG_ARCH_CPU_TYPE := "armv7-m"
 #CONFIG_SHELL_ENABLE   = y
 #CONFIG_DRIVER_ENABLE = y
 #CONFIG_AT_ENABLE     = y
@@ -74,6 +77,7 @@
 
 ###################### CONFIURE TEMPLATE#################################
 CONFIG_OS_TYPE       = "liteos"
+CONFIG_ARCH_CPU_TYPE := "armv7-m"
 CONFIG_SHELL_ENABLE   = y
 CONFIG_DRIVER_ENABLE = n
 CONFIG_AT_ENABLE     = n
