@@ -2,7 +2,7 @@
 # this is used for compile the iotlink
 ################################################################################
 
-iot_link_root = $(TOP_DIR)/iot_link
+iot_link_root = $(SDK_DIR)/iot_link
 
 #configure the common includes
 include $(iot_link_root)/inc/inc.mk
