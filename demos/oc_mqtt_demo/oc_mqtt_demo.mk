@@ -12,16 +12,16 @@ ifeq ($(CONFIG_OC_MQTT_DEMO_TYPE), "none")
 	
 else ifeq ($(CONFIG_OC_MQTT_DEMO_TYPE),"oc_mqtt_demo_static")
 
-	oc_mqtt_demo_src = ${wildcard $(TOP_DIR)/demos/oc_mqtt_demo/oc_mqtt_static.c}
-	oc_mqtt_demo_inc = -I $(TOP_DIR)/demos/oc_mqtt_demo
+	oc_mqtt_demo_src = ${wildcard $(SDK_DIR)/demos/oc_mqtt_demo/oc_mqtt_demo_static/oc_mqtt_static.c}
+	oc_mqtt_demo_inc = -I $(SDK_DIR)/demos/oc_mqtt_demo
 	oc_mqtt_demo_def = -D CONFIG_OC_MQTT_DEMO_ENABLE=1
 	
 else ifeq ($(CONFIG_OC_MQTT_DEMO_TYPE),"oc_mqtt_demo_bs")
 
-	oc_mqtt_demo_src = ${wildcard $(TOP_DIR)/demos/oc_mqtt_demo/oc_mqtt_with_bs.c}
-	oc_mqtt_demo_inc = -I $(TOP_DIR)/demos/oc_mqtt_demo
+	oc_mqtt_demo_src = ${wildcard $(SDK_DIR)/demos/oc_mqtt_demo/oc_mqtt_demo_bs/oc_mqtt_with_bs.c}
+	oc_mqtt_demo_inc = -I $(SDK_DIR)/demos/oc_mqtt_demo
 	oc_mqtt_demo_def = -D CONFIG_OC_MQTT_DEMO_ENABLE=1
-	
+
 endif
 
 C_SOURCES += $(oc_mqtt_demo_src)

@@ -2,11 +2,16 @@
 # this is used for compile the mqtt lib
 ################################################################################
 
-ifneq ($(CONFIG_MQTT_TYPE),"none")
+ifeq ($(CONFIG_MQTT_TYPE), $(filter $(CONFIG_MQTT_TYPE), "ec20" "none"))
+    mqtt_inc = -I $(iot_link_root)/network/mqtt/mqtt_al
+    C_INCLUDES += $(mqtt_inc)
 
-    mqtt_src  = ${wildcard $(iot_link_root)/network/mqtt/mqtt_al/*.c} 
-    C_SOURCES += $(mqtt_src)	
-    		
+else
+
+
+    mqtt_src  = ${wildcard $(iot_link_root)/network/mqtt/mqtt_al/*.c}
+    C_SOURCES += $(mqtt_src)
+
     mqtt_inc = -I $(iot_link_root)/network/mqtt/mqtt_al
     C_INCLUDES += $(mqtt_inc)
     
