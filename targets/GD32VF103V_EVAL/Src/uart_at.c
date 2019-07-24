@@ -166,10 +166,11 @@ instruction  :
 int uart_at_send(unsigned char *buf, int len,unsigned int timeout)
 {
     int i = 0;
-    while(i++ < len)
+    while(i < len)
     {
         printf("0x%x ", buf[i]);
         usart_data_transmit(uart_at,buf[i]);
+        i++;
 
         while (usart_flag_get(uart_at, USART_FLAG_TBE)== RESET){}
 

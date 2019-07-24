@@ -31,22 +31,15 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2019-07-23 10:00    yuhengP   The first version  
+ *
+ */
+#ifndef LITEOS_LAB_IOT_LINK_HELLO_WORLD_DEMO_HELLO_WORLD_DEMO_H_
+#define LITEOS_LAB_IOT_LINK_HELLO_WORLD_DEMO_HELLO_WORLD_DEMO_H_
+
+int hello_world_main();
 
 
-#ifndef __EC20_OC_H__
-#define __EC20_OC_H__
-
-
-#define CONFIG_OC_MQTT_EC20_ENABLE  1 //only for test
-
-#if  CONFIG_OC_MQTT_EC20_ENABLE
-
-
-int ec20_init(void);
-
-
-
-#endif
-
-
-#endif /* __BOUDICA150_OC_H */
+#endif /* LITEOS_LAB_IOT_LINK_HELLO_WORLD_DEMO_HELLO_WORLD_DEMO_H_ */

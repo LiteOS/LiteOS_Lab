@@ -234,6 +234,18 @@ static bool_t boudica150_set_echo(int enable)
     return ret;
 }
 
+static bool_t boudica150_set_regmode(int mode)
+{
+    bool_t ret ;
+    char cmd[64];
+    memset(cmd,0,64);
+    snprintf(cmd,64,"AT+QREGSWT=%d\r",mode);
+
+    ret = boudica150_atcmd(cmd,"OK");
+
+    return ret;
+}
+
 //use this function to do the module reboot
 static bool_t boudica150_reboot(void)
 {
@@ -549,6 +561,8 @@ static bool_t boudica150_boot(const char *plmn, const char *apn, const char *ban
         boudica150_reboot();
 
         boudica150_set_echo (0);
+
+        boudica150_set_regmode(1);
 
         boudica150_set_cmee(1);
 

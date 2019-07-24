@@ -327,7 +327,7 @@ int  at_command(char *cmd,int cmdlen,const char *index,char *respbuf,\
         {
             if(__cmd_create(cmd,cmdlen,index,respbuf,respbuflen,timeout))
             {
-                __cmd_send(cmd,cmdlen,timeout);
+                ret = __cmd_send(cmd,cmdlen,timeout);
                 if(osal_semp_pend(g_at_cb.cmd.respsync,timeout))
                 {
                     ret = g_at_cb.cmd.respdatalen;         

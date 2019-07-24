@@ -50,7 +50,7 @@ CONFIG_OC_MQTT_TYPE  := "ec20"
 CONFIG_OC_LWM2M_TYPE := "none"
 CONFIG_LOADER_ENABLE := n
 CONFIG_OC_LWM2M_DEMO_TYPE:= "none"
-CONFIG_OC_MQTT_DEMO_TYPE:= "oc_mqtt_demo_bs"
+CONFIG_OC_MQTT_DEMO_TYPE:= "none" #"oc_mqtt_demo_bs"
 
 ################################################################################
 
@@ -73,4 +73,4 @@ CONFIG_OC_MQTT_DEMO_TYPE:= "oc_mqtt_demo_bs"
 #CONFIG_OC_MQTT_DEMO_TYPE:= "none"
 #################################################################################
 
-include $(TOP_DIR)/iot_link/iot.mk
+CONFIG_USER_DEMO  = "oc_oceanlink_demo"
