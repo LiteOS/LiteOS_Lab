@@ -189,9 +189,18 @@ int link_main(void *args)
     oc_lwm2m_demo_main();
 #endif
 
+#if CONFIG_OC_LWM2M_CLOUD_MAP_ENABLE
+    #include <oc_cloud_map_demo.h>
+    oc_cloud_map_main();
+#endif
 
 #endif
 
+#if CONFIG_HELLO_WORLD_ENABLE
+    #include <helloworld.h>
+    hello_world_main();
+
+#endif
     return 0;
 }
 

@@ -103,7 +103,8 @@ typedef struct
 
 void *context;
 int *ue_stats;
-int8_t key1 = 0, key2 = 0;
+int8_t key1 = 0;
+int8_t key2 = 0;
 int16_t toggle = 0;
 int16_t lux;
 int8_t qr_code = 1;

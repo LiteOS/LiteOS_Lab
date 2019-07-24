@@ -21,6 +21,6 @@ ifneq ($(CONFIG_OC_MQTT_TYPE),"none")
     
     
     #with mqtt demo
-    include $(TOP_DIR)/demos/oc_mqtt_demo/oc_mqtt_demo.mk
+    include $(SDK_DIR)/demos/oc_mqtt_demo/oc_mqtt_demo.mk
 
 endif

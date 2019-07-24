@@ -17,6 +17,6 @@ ifneq ($(CONFIG_OC_LWM2M_TYPE),"none")
     include $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m_imp/oc_lwm2m_imp.mk
     
     #we should choose one of the oc lwm2m demo if you want to do some  display
-    include $(TOP_DIR)/demos/oc_lwm2m_demo/oc_lwm2m_demo.mk
+    include $(SDK_DIR)/demos/oc_lwm2m_demo/oc_lwm2m_demo.mk
 
 endif
