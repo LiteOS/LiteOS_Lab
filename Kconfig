@@ -1,8 +1,6 @@
 mainmenu "Huawei IoT Stack Configuration"
 	
-	config OC_DEMO
-		bool "OC Integration Demo"
-		if OC_DEMO
+	menu "OC Integration Demo"
 		choice OC_LWM2M_DEMO
 			optional
 			prompt "OC LWM2M Demo"
@@ -29,9 +27,9 @@ mainmenu "Huawei IoT Stack Configuration"
 				select DTLS
 				select SHELL_ENABLE
 		endchoice
-		endif
+	endmenu
 	
-	source ""
+	source "targets/Kconfig"
 	
 	menu "OC Cloud"
 		config OC_MQTT
@@ -146,11 +144,25 @@ mainmenu "Huawei IoT Stack Configuration"
 			select LIBC_ENABLE
 	endchoice
 	
+	choice CPU_ARCH
+		optional
+		prompt "CPU Architecture"
+		config ARMV7_M
+			bool "armv7-m"
+		config RISCV32
+			bool "riscv32"
+	endchoice
+	
 	config OS_TYPE
 		string
 		default "liteos" if OS_LiteOS
 		default "linux" if OS_Linux
 		default "macos" if OS_MacOS
+		
+	config ARCH_CPU_TYPE
+		string
+		default "armv7-m" if ARMV7_M
+		default "riscv32" if RISCV32
 		
 	config TCPIP_TYPE
 		string

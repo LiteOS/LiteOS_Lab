@@ -18,12 +18,14 @@
 
 #this is for IoT Studio automatic generating kconfig compatibility
 CONFIG_OS_LiteOS=y
+CONFIG_ARMV7_M=y
 CONFIG_OC_LWM2M=y
 CONFIG_BOUDICA150=y
 CONFIG_Demo_Streetlight=y
 #
 
 CONFIG_OS_TYPE       = "liteos"
+CONFIG_ARCH_CPU_TYPE = "armv7-m"
 CONFIG_SHELL_ENABLE   = y
 CONFIG_DRIVER_ENABLE = y
 CONFIG_AT_ENABLE     = y

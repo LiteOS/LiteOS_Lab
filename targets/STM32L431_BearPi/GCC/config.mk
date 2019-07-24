@@ -36,7 +36,7 @@
  
 #####################  OC MQTT CONFIURE TEMPLATE################################
 #CONFIG_OS_TYPE       = "liteos"
-#CONFIG_ARCH_CPU_TYPE := "armv7-m"
+#CONFIG_ARCH_CPU_TYPE = "armv7-m"
 #CONFIG_SHELL_ENABLE   = y
 #CONFIG_DRIVER_ENABLE = n
 #CONFIG_AT_ENABLE     = n
