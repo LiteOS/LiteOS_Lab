@@ -39,6 +39,8 @@
 
 #define cn_ec20_cmd_timeout  (2*1000)
 
+static void  *s_oc_handle = NULL;
+
 
 static bool_t ec20_atcmd(const char *cmd,const char *index)
 {
@@ -57,27 +59,54 @@ static bool_t ec20_atcmd(const char *cmd,const char *index)
 
 static void* ec20_oc_config(tag_oc_mqtt_config *param)
 {
-    char cmd[128];
-    char resp[64];
+    int ret = 0;
+    char cmd[256];
 
-    memset(cmd,0,128);
-    //snprintf(cmd,128,"AT+CGDCONT=%s\r",apn);
-
-    ec20_atcmd("aat+HWOCMQTTCONNECT=1,30,\"iot-bs.cn-north-4.myhuaweicloud.com\",\"8883\",\"sdk_0040\",\"f62fcf47d62c4ed18913\"","OK");
-
+    if(NULL != param)
+    {
+        memset(cmd,0,256);
+        snprintf(cmd,256,"at+HWOCMQTTCONNECT=%d,%d,\"%s\",\"%s\",\"%s\",\"%s\"\r", param->boot_mode, param->lifetime, param->server, param->port, param->device_info.s_device.deviceid, param->device_info.s_device.devicepasswd);
+        printf("cmd:%s\r\n", cmd);
+        //ec20_atcmd("at+HWOCMQTTCONNECT=1,30,\"iot-bs.cn-north-4.myhuaweicloud.com\",\"8883\",\"sdk_0040\",\"f62fcf47d62c4ed18913\"","OK");
+        ret = ec20_atcmd(cmd,"OK");
+        if(ret)
+            s_oc_handle = 0xffffffff;
+    }
+    return s_oc_handle;
 }
 
 
 static int ec20_oc_deconfig(void *handle)
 {
-
+    s_oc_handle = NULL;
+    return 0;
 }
 
 static int ec20_oc_report(void *handle,char *msg,int len,en_mqtt_al_qos_t qos)
 {
+    int ret = -1;
 
+    char cmd[256];
 
+    memset(cmd,0,256);
+    snprintf(cmd,256,"AT+HWOCMQTTSEND=%d,%d,\"%s\"\r", qos, len, msg);
 
+    //ec20_atcmd("at+HWOCMQTTCONNECT=1,30,\"iot-bs.cn-north-4.myhuaweicloud.com\",\"8883\",\"sdk_0040\",\"f62fcf47d62c4ed18913\"","OK");
+    //ec20_atcmd("AT+HWOCMQTTSEND=0,116,\"{\"msgType\":\"deviceReq\",\"hasMore\":0,\"data\":[{\"serviceId\":\"LED\",\"serviceData\":{\"LED1\":1,\"LED2\":1,\"LED3\":1,\"LED4\":1}}]}\"","OK");
+    printf("cmd:%s\r\n", cmd);
+
+    ret = ec20_atcmd(cmd,"OK");
+
+    if(ret > 0)
+    {
+        ret = 0;
+    }
+    else
+    {
+        ret = -1;
+    }
+
+    return ret;
 }
 
 
