@@ -31,7 +31,7 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-
+#include <string.h>
 #include "usart.h"
 #include "stm32f4xx.h"
 #include <stdint.h>
@@ -51,7 +51,7 @@ static uint32_t           s_uwIRQn = USART3_IRQn;
 struct atio_cb
 {
     unsigned short        w_next;    //the next position to be write
-    int                   rcvsync;   //if a frame has been written to the ring, then active it
+    osal_semp_t           rcvsync;   //if a frame has been written to the ring, then active it
     tag_ring_buffer_t     rcvring;
     unsigned char         rcvbuf[CN_RCVBUF_LEN];
     unsigned char         rcvringmem[CN_RCVMEM_LEN];
