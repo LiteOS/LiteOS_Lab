@@ -226,6 +226,8 @@ static void __mem_free(void *addr)
 
 ///< sys time
 #include <los_sys.ph>
+
+extern UINT64 osKernelGetTickCount (void);
 static unsigned long long __get_sys_time()
 {
     return osKernelGetTickCount() * (OS_SYS_MS_PER_SECOND / LOSCFG_BASE_CORE_TICK_PER_SECOND);

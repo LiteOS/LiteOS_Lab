@@ -56,6 +56,10 @@
 #include <shell.h>
 #include  <link_misc.h>
 
+
+typedef int (*fn_shell_cmdentry)(int argc, const char *argv[]);
+
+
 /**************************************FILE DEFINES****************************/
 #define cn_shell_args       16     //at most could support 16 parameters for command
 #define cn_shell_ver_major  1
