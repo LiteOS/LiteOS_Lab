@@ -409,7 +409,7 @@ bool_t at_init(const char *devname)
         goto EXIT_CMDLOCK;
     }
 
-    if(-1 == osal_task_create("at_rcv",__rcv_task_entry,0x800,NULL,NULL,10))
+    if(NULL == osal_task_create("at_rcv",__rcv_task_entry,NULL,0x800,NULL,10))
     {
         printf("%s:rcvtask create error\n\r",__FUNCTION__);
         goto EXIT_RCVTASK;

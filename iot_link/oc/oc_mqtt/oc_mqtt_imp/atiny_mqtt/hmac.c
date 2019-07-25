@@ -35,6 +35,7 @@
 
 #ifdef WITH_DTLS
 
+#include <string.h>
 #include "mbedtls/md.h"
 #include "mbedtls/ssl.h"
 #include "mbedtls/entropy.h"

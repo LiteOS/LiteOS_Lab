@@ -158,7 +158,7 @@ static const tag_tcpip_ops s_tcpip_lwip_ops =
    .closesocket =(fn_sal_closesocket) lwip_close,
    .getpeername =(fn_sal_getpeername)lwip_getpeername,
    .getsockname = (fn_sal_getsockname)lwip_getsockname,
-   .gethostbyname =(fn_sal_getsockname)lwip_gethostbyname,
+   .gethostbyname =(fn_sal_gethostbyname)lwip_gethostbyname,
 };
 
 static const tag_tcpip_domain s_tcpip_lwip =

@@ -604,7 +604,7 @@ HAL_StatusTypeDef FLASH_WaitForLastOperation(uint32_t Timeout)
 #endif /* FLASH_SR_RDERR */
   {
       
-      printf("ERR:0X%08x\n\r",__HAL_FLASH_GET_FLAG((FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR | FLASH_FLAG_PGAERR | \
+      printf("ERR:0X%08x\n\r",(unsigned int)__HAL_FLASH_GET_FLAG((FLASH_FLAG_OPERR | FLASH_FLAG_WRPERR | FLASH_FLAG_PGAERR | \
                            FLASH_FLAG_PGPERR | FLASH_FLAG_PGSERR | FLASH_FLAG_RDERR)));
     /*Save the error code*/
     FLASH_SetErrorCode();

@@ -52,7 +52,7 @@
 #CONFIG_LOADER_ENABLE = n
 #CONFIG_OC_LWM2M_DEMO_TYPE= "none"
 #CONFIG_OC_MQTT_DEMO_TYPE= "oc_mqtt_demo_static"
-
+#
 ################################################################################
 
 ######################OC LWM2M CONFIURE TEMPLATE#################################
@@ -94,5 +94,3 @@ CONFIG_LOADER_ENABLE = n
 CONFIG_OC_LWM2M_DEMO_TYPE= "none"
 CONFIG_OC_MQTT_DEMO_TYPE= "none"
 #################################################################################
-
-CONFIG_USER_DEMO  = "hello_world_demo"
