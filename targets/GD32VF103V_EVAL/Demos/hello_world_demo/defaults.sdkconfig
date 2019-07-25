@@ -17,9 +17,6 @@
 #CONFIG_OC_MQTT_DEMO_TYPE:"none" "oc_mqtt_demo_static" "oc_mqtt_demo_bs"
 
 #this is for IoT Studio automatic generating kconfig compatibility
-CONFIG_OS_LiteOS=y
-CONFIG_ARMV7_M=y
-CONFIG_Demo_Helloworld=y
 #
 
 CONFIG_OS_TYPE       = "liteos"
