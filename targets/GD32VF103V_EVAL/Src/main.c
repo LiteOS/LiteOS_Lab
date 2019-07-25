@@ -11,6 +11,9 @@
 
 #include "mem.h"
 
+#include "osal.h"
+#include "oc_mqtt_al.h"
+
 #if defined (__CC_ARM)
 extern char __heap_start__ [];
 #elif defined (__GNUC__)
@@ -282,7 +285,19 @@ LITE_OS_SEC_TEXT VOID lcd_handle(VOID)
 {
     UINT8 count=0;
     UINT8 button_id=0;
+    UINT32 led1_switch = 0;
+    UINT32 led2_switch = 0;
+    UINT32 led3_switch = 0;
+    UINT32 led4_switch = 0;
     UINT16 num[4]={0,0,0,0}; /* store the touch point number on four buttons */
+
+    tag_oc_mqtt_report  report;
+    tag_key_value_list  lst1;
+    tag_key_value_list  lst2;
+    tag_key_value_list  lst3;
+    tag_key_value_list  lst4;
+    cJSON *root = NULL;
+    char  *buf = NULL;
 
     while(1){
         /* get the position of touch on LCD screen */
@@ -297,6 +312,69 @@ LITE_OS_SEC_TEXT VOID lcd_handle(VOID)
             change_picture(button_id);
             num[0]=num[1]=num[2]=num[3]=0;
             count=0;
+
+			if(button_id == 0)
+				led1_switch = 1;
+			else
+				led1_switch = 0;
+            lst1.item.name = "LED1";
+            lst1.item.buf = (char *)&led1_switch;
+            lst1.item.len = sizeof(led1_switch);
+            lst1.item.type = en_key_value_type_int;
+            lst1.next = &lst2;
+
+
+			
+			if(button_id == 1)
+				led2_switch = 1;
+			else
+				led2_switch = 0;
+            lst2.item.name = "LED2";
+            lst2.item.buf = (char *)&led2_switch;
+            lst2.item.len = sizeof(led2_switch);
+            lst2.item.type = en_key_value_type_int;
+            lst2.next = &lst3;
+
+			
+			if(button_id == 2)
+				led3_switch = 1;
+			else
+				led3_switch = 0;
+            lst3.item.name = "LED3";
+            lst3.item.buf = (char *)&led3_switch;
+            lst3.item.len = sizeof(led3_switch);
+            lst3.item.type = en_key_value_type_int;
+            lst3.next = &lst4;
+
+			
+			if(button_id == 3)
+				led4_switch = 1;
+			else
+				led4_switch = 0;
+            lst4.item.name = "LED4";
+            lst4.item.buf = (char *)&led4_switch;
+            lst4.item.len = sizeof(led4_switch);
+            lst4.item.type = en_key_value_type_int;
+            lst4.next = NULL;
+
+            report.hasmore = en_oc_mqtt_has_more_no;
+            report.paralst= &lst1;
+            report.serviceid = "LED";
+            report.eventtime = "20190508T112020Z";
+
+            root = oc_mqtt_json_fmt_report(&report);
+            if(NULL != root)
+            {
+                buf = cJSON_Print(root);
+                printf("buf:%s %d\n\n", buf, strlen(buf));
+                if(NULL != buf)
+                {
+                    if(0 == oc_mqtt_report(0xff,buf,strlen(buf),en_mqtt_al_qos_1));
+                    osal_free(buf);
+                }
+
+                cJSON_Delete(root);
+            }
         }
         LOS_TaskDelay(10);
     }
@@ -371,7 +449,7 @@ static int lcd_demo()
     task_init_param.usTaskPrio = 2;
     task_init_param.pcName =(char *) "link_main";
     task_init_param.pfnTaskEntry = (TSK_ENTRY_FUNC)lcd_handle;
-    task_init_param.uwStackSize = 0x600;
+    task_init_param.uwStackSize = 0x1200;
     uwRet = LOS_TaskCreate(&handle, &task_init_param);
     if(LOS_OK == uwRet){
         ret = 0;
