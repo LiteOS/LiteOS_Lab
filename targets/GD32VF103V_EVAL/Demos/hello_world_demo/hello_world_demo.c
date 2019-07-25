@@ -31,22 +31,28 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2019-07-23 10:00    yuhengP    The first version  
+ *
+ */
+#include <stdint.h>
+#include <stddef.h>
+#include <string.h>
 
+#include <osal.h>
 
-#ifndef __EC20_OC_H__
-#define __EC20_OC_H__
+static int app_hello_world_entry()
+{
+    while (1)
+    {
+        printf("Hello World! This is LiteOS!\r\n");
+        osal_task_sleep(4*1000);
+    }
+}
 
-
-#define CONFIG_OC_MQTT_EC20_ENABLE  1 //only for test
-
-#if  CONFIG_OC_MQTT_EC20_ENABLE
-
-
-int ec20_init(void);
-
-
-
-#endif
-
-
-#endif /* __BOUDICA150_OC_H */
+int hello_world_main()
+{
+    osal_task_create("helloworld",app_hello_world_entry,NULL,0x400,NULL,2);
+    return 0;
+}
