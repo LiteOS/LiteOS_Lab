@@ -133,6 +133,8 @@ mainmenu "Huawei IoT Stack Configuration"
 		bool "libc"
 	config CJSON_ENABLE
 		bool "cJSON"
+    config STIMER_ENABLE
+        bool "stimer"   
 	endmenu
 	
 	choice OS

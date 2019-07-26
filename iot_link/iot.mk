@@ -19,6 +19,9 @@ include $(iot_link_root)/os/os.mk
 #configure the shell for the iot_link
 include $(iot_link_root)/shell/shell.mk
 
+#configure the soft timer for the iot_link
+include $(iot_link_root)/stimer/stimer.mk
+
 #configure the driver famework for the iot_link
 include $(iot_link_root)/driver/driver.mk
 
