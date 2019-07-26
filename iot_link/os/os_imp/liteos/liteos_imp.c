@@ -239,34 +239,6 @@ __attribute__((weak)) int liteos_reboot()
     return 0;
 }
 
-//software timer
-#include <los_swtmr.h>
-static int __swtmr_create(int interval, int mode, handle callback, int *swtmrid, int arg)
-{
-	extern UINT32 LOS_SwtmrCreate(UINT32 uwInterval, UINT8 ucMode, SWTMR_PROC_FUNC pfnHandler, UINT16 *pusSwTmrID, UINT32 uwArg
-#if (LOSCFG_BASE_CORE_SWTMR_ALIGN == YES)
-	                               , UINT8 ucRouses, UINT8 ucSensitive
-#endif
-	                               );
-
-#if (LOSCFG_BASE_CORE_SWTMR_ALIGN == YES)
-    int rouses = OS_SWTMR_ROUSES_ALLOW;
-    int sensitive = OS_SWTMR_ALIGN_SENSITIVE;
-#endif
-
-
-    return LOS_SwtmrCreate(interval, mode, callback, swtmrid, arg
-#if (LOSCFG_BASE_CORE_SWTMR_ALIGN == YES)
-                          , rouses, sensitive
-#endif
-                          );
-}
-
-static int __swtmr_start(int swtmrid)
-{
-	extern UINT32 LOS_SwtmrStart(UINT16 usSwTmrID);
-	return LOS_SwtmrStart(swtmrid);
-}
 
 //interrupt
 #include <los_hwi.h>
@@ -303,9 +275,6 @@ static const tag_os_ops s_liteos_ops =
 
     .get_sys_time = __get_sys_time,
     .reboot = liteos_reboot,
-
-	.swtmr_create = __swtmr_create,
-	.swtmr_start = __swtmr_start,
 
 	.int_connect = __int_connect,
 };
