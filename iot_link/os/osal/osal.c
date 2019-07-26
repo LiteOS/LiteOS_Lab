@@ -353,6 +353,8 @@ int osal_int_connect(int intnum, int prio, int mode, handle callback, int arg)
     {
         ret = s_os_cb->ops->int_connect(intnum, prio, mode, callback, arg);
     }
+
+	return ret;
 }
 
 int osal_init(void)

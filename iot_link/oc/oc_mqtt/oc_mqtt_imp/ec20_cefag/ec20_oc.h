@@ -37,9 +37,9 @@
 #define __EC20_OC_H__
 
 
-#define cfg_oc_mqtt_ec20_enable  1 //only for test
+#define CONFIG_OC_MQTT_EC20_ENABLE  1 //only for test
 
-#if  cfg_oc_mqtt_ec20_enable
+#if  CONFIG_OC_MQTT_EC20_ENABLE
 
 
 int ec20_init(void);

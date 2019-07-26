@@ -327,7 +327,7 @@ int  at_command(char *cmd,int cmdlen,const char *index,char *respbuf,\
         {
             if(__cmd_create(cmd,cmdlen,index,respbuf,respbuflen,timeout))
             {
-                __cmd_send(cmd,cmdlen,timeout);
+                ret = __cmd_send(cmd,cmdlen,timeout);
                 if(osal_semp_pend(g_at_cb.cmd.respsync,timeout))
                 {
                     ret = g_at_cb.cmd.respdatalen;         
@@ -409,7 +409,7 @@ bool_t at_init(const char *devname)
         goto EXIT_CMDLOCK;
     }
 
-    if(-1 == osal_task_create("at_rcv",__rcv_task_entry,0x800,NULL,NULL,10))
+    if(NULL == osal_task_create("at_rcv",__rcv_task_entry,NULL,0x800,NULL,10))
     {
         printf("%s:rcvtask create error\n\r",__FUNCTION__);
         goto EXIT_RCVTASK;

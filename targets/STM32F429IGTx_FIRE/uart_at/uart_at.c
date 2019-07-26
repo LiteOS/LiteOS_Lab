@@ -31,9 +31,9 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-
+#include <string.h>
 #include "usart.h"
-#include "stm32l4xx.h"
+#include "stm32f4xx.h"
 #include <stdint.h>
 #include <stddef.h>
 #include <osal.h>
@@ -42,8 +42,8 @@
 #include "sys/fcntl.h"
 
 UART_HandleTypeDef uart_at;
-static USART_TypeDef*     s_pUSART = LPUART1;
-static uint32_t           s_uwIRQn = LPUART1_IRQn;
+static USART_TypeDef*     s_pUSART = USART3;
+static uint32_t           s_uwIRQn = USART3_IRQn;
 
 #define CN_RCVBUF_LEN  256  //cache a frame
 #define CN_RCVMEM_LEN  512  //use to cache more frames
@@ -51,7 +51,7 @@ static uint32_t           s_uwIRQn = LPUART1_IRQn;
 struct atio_cb
 {
     unsigned short        w_next;    //the next position to be write
-    int                   rcvsync;   //if a frame has been written to the ring, then active it
+    osal_semp_t           rcvsync;   //if a frame has been written to the ring, then active it
     tag_ring_buffer_t     rcvring;
     unsigned char         rcvbuf[CN_RCVBUF_LEN];
     unsigned char         rcvringmem[CN_RCVMEM_LEN];
@@ -80,7 +80,7 @@ static void atio_irq(void)
     unsigned short ringspace;
     if(__HAL_UART_GET_FLAG(&uart_at, UART_FLAG_RXNE) != RESET)
     {
-       value = (uint8_t)(uart_at.Instance->RDR & 0x00FF);
+       value = (uint8_t)(uart_at.Instance->DR & 0x00FF);
        g_atio_cb.rcvlen++;
        if(g_atio_cb.w_next < CN_RCVBUF_LEN)
        {

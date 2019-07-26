@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -31,94 +31,28 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-#include "hmac.h"
-
-#ifdef WITH_DTLS
-
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2019-07-23 10:00    yuhengP    The first version  
+ *
+ */
+#include <stdint.h>
+#include <stddef.h>
 #include <string.h>
-#include "mbedtls/md.h"
-#include "mbedtls/ssl.h"
-#include "mbedtls/entropy.h"
-#include "mbedtls/ctr_drbg.h"
-#include "mbedtls/platform.h"
 
-#include "mbedtls/md_internal.h"
-#include "dtls_interface.h"
+#include <osal.h>
 
-typedef struct _mbedtls_hmac_t
+static int app_hello_world_entry()
 {
-    const unsigned char *secret;
-    const unsigned char *input;
-    unsigned char *digest;
-    size_t secret_len;
-    size_t input_len;
-    size_t digest_len;
-    mbedtls_md_type_t hmac_type;
-}mbedtls_hmac_t;
-
-int mbedtls_hmac_calc(mbedtls_hmac_t *hmac_info)
-{
-    int ret;
-
-    mbedtls_md_context_t mbedtls_md_ctx;
-    const mbedtls_md_info_t *md_info;
-
-    if (hmac_info == NULL || hmac_info->secret == NULL || hmac_info->input == NULL
-        || hmac_info->secret_len <= 0 || hmac_info->input_len <= 0 || hmac_info->digest_len <= 0)
+    while (1)
     {
-        return MBEDTLS_ERR_MD_BAD_INPUT_DATA;
+        printf("Hello World! This is LiteOS!\r\n");
+        osal_task_sleep(4*1000);
     }
-
-    md_info = mbedtls_md_info_from_type(hmac_info->hmac_type);
-    if (md_info == NULL || md_info->size > hmac_info->digest_len)
-    {
-        return MBEDTLS_ERR_MD_BAD_INPUT_DATA;
-    }
-
-    mbedtls_md_init(&mbedtls_md_ctx);
-    memset(hmac_info->digest, 0x00, hmac_info->digest_len);
-
-    ret = mbedtls_md_setup(&mbedtls_md_ctx, md_info, 1);
-    if (ret != 0)
-    {
-        printf("mbedtls_md_setup() returned -0x%04x\n", -ret);
-        goto exit;
-    }
-
-    (void)mbedtls_md_hmac_starts(&mbedtls_md_ctx, hmac_info->secret, hmac_info->secret_len);
-    (void)mbedtls_md_hmac_update(&mbedtls_md_ctx, hmac_info->input, hmac_info->input_len);
-    (void)mbedtls_md_hmac_finish(&mbedtls_md_ctx, hmac_info->digest);
-
-    exit:
-    mbedtls_md_free(&mbedtls_md_ctx);
-
-    return ret;
 }
 
-int hmac_generate_passwd(char *content, int contentlen,char *key,int keylen, unsigned char *buf,int buflen)
+int hello_world_main()
 {
-    int ret = -1;
-    mbedtls_hmac_t hmac;
-    hmac.secret = (uint8_t *)key;
-    hmac.secret_len = keylen;
-    hmac.input = (unsigned char *)content;
-    hmac.input_len = contentlen;
-    hmac.digest =(unsigned char *) buf;
-    hmac.digest_len = buflen;
-    hmac.hmac_type = MBEDTLS_MD_SHA256;
-
-    ret = mbedtls_hmac_calc(&hmac);
-
-    return ret;
+    osal_task_create("helloworld",app_hello_world_entry,NULL,0x400,NULL,2);
+    return 0;
 }
-
-#else
-int hmac_generate_passwd(char *content, int contentlen,char *key,int keylen, unsigned char *buf,int buflen)
-{
-    return -1;
-}
-
-
-#endif
-
-

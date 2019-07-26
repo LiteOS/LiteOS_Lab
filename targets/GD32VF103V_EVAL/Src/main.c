@@ -11,6 +11,8 @@
 
 #include "mem.h"
 
+#include "osal.h"
+
 #if defined (__CC_ARM)
 extern char __heap_start__ [];
 #elif defined (__GNUC__)
@@ -44,8 +46,9 @@ UINT16 b2=100;
 UINT16 b3=200;
 UINT16 device_code;
 UINT8 error_string[]="Please press the button!";
-extern UINT16 touch_ad_x,touch_ad_y;
 char_format_struct char_format;
+#define  SFLASH_ID                     0xC84015
+
 
 /*!
 	\brief		find the position of max value in array
@@ -278,29 +281,9 @@ static int link_test()
     return ret;
 }
 
-LITE_OS_SEC_TEXT VOID lcd_handle(VOID)
-{
-    UINT8 count=0;
-    UINT8 button_id=0;
-    UINT16 num[4]={0,0,0,0}; /* store the touch point number on four buttons */
+#ifndef CONFIG_HELLO_WORLD_ENABLE
 
-    while(1){
-        /* get the position of touch on LCD screen */
-        if(SUCCESS == touch_scan()){
-            count++;
-            get_touch_area(touch_coordinate_x_get(touch_ad_x),(LCD_Y - touch_coordinate_y_get(touch_ad_y)),num);
-        }
-        /*  generate response to the touch(turn on LED and change picture )*/
-        if(count==20){
-            button_id = find_max(num);
-            turn_on_led(button_id);
-            change_picture(button_id);
-            num[0]=num[1]=num[2]=num[3]=0;
-            count=0;
-        }
-        LOS_TaskDelay(10);
-    }
-}
+extern VOID lcd_handle(VOID);
 
 static int lcd_demo()
 {
@@ -321,8 +304,11 @@ static int lcd_demo()
     /* configure the EXMC access mode */
     exmc_lcd_init();
 
-    /* configure the GPIO of SPI touch panel */
-    touch_panel_gpio_configure();
+    /* configure SPI0 GPIO and parameter */
+    spi_flash_init();
+    if(SFLASH_ID != spi_flash_read_id()){
+        while(1);
+    }
 
     delay_1ms(50);  
 
@@ -339,6 +325,11 @@ static int lcd_demo()
     /* if you don't want to draw the picture, you should modify the macro on
        the line 422th of picture.c file and comment the next line */
     //lcd_picture_draw(40,200,40+160-1,200+87-1,(UINT16 *)(picture + BMP_HEADSIZE));
+    lcd_picture_draw_ex(40,200,40+160-1,200+87-1,0);
+
+    /* configure the GPIO of SPI touch panel */
+    touch_panel_gpio_configure();
+
 
     /* draw a rectangle */
     lcd_rectangle_draw(10,10,230,310,LCD_COLOR_BLUE);
@@ -371,7 +362,7 @@ static int lcd_demo()
     task_init_param.usTaskPrio = 2;
     task_init_param.pcName =(char *) "link_main";
     task_init_param.pfnTaskEntry = (TSK_ENTRY_FUNC)lcd_handle;
-    task_init_param.uwStackSize = 0x600;
+    task_init_param.uwStackSize = 0x1200;
     uwRet = LOS_TaskCreate(&handle, &task_init_param);
     if(LOS_OK == uwRet){
         ret = 0;
@@ -380,6 +371,7 @@ static int lcd_demo()
 
 
 }
+#endif
 
 int main() {
     /* configure EVAL_COM0 */
@@ -397,7 +389,9 @@ int main() {
     }
     //LOS_MemInfo(1);
     //LOS_BoadExampleEntry();
+#ifndef CONFIG_HELLO_WORLD_ENABLE
     lcd_demo();
+#endif
     link_test();
 
     (void)LOS_Start();

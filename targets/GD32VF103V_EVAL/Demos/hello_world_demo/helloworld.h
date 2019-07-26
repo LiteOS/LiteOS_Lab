@@ -33,14 +33,13 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-09 16:22  zhangqianfu  The first version  
+ *  2019-07-23 10:00    yuhengP   The first version  
  *
  */
-#ifndef LITEOS_LAB_IOT_LINK_NETWORK_TCPIP_SAL_SAL_CONFIG_H_
-#define LITEOS_LAB_IOT_LINK_NETWORK_TCPIP_SAL_SAL_CONFIG_H_
+#ifndef LITEOS_LAB_IOT_LINK_HELLO_WORLD_DEMO_HELLO_WORLD_DEMO_H_
+#define LITEOS_LAB_IOT_LINK_HELLO_WORLD_DEMO_HELLO_WORLD_DEMO_H_
+
+int hello_world_main();
 
 
-#define cn_host_endian_little   1 ///< 1 means little endian while others means big endian
-
-
-#endif /* LITEOS_LAB_IOT_LINK_NETWORK_TCPIP_SAL_SAL_CONFIG_H_ */
+#endif /* LITEOS_LAB_IOT_LINK_HELLO_WORLD_DEMO_HELLO_WORLD_DEMO_H_ */

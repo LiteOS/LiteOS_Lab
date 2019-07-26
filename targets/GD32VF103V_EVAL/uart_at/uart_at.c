@@ -32,8 +32,9 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#include "usart.h"
-#include "stm32f4xx.h"
+//#include "usart.h"
+#include "gd32vf103.h"
+#include "gd32v103v_eval.h"
 #include <stdint.h>
 #include <stddef.h>
 #include <osal.h>
@@ -41,9 +42,9 @@
 #include <driver.h>
 #include "sys/fcntl.h"
 
-UART_HandleTypeDef uart_at;
-static USART_TypeDef*     s_pUSART = USART3;
-static uint32_t           s_uwIRQn = USART3_IRQn;
+uint32_t uart_at;
+static uint32_t           s_pUSART = EVAL_COM1;
+static uint32_t           s_uwIRQn = USART1_IRQn;
 
 #define CN_RCVBUF_LEN  256  //cache a frame
 #define CN_RCVMEM_LEN  512  //use to cache more frames
@@ -78,9 +79,9 @@ static void atio_irq(void)
 {
     unsigned char  value;
     unsigned short ringspace;
-    if(__HAL_UART_GET_FLAG(&uart_at, UART_FLAG_RXNE) != RESET)
+    if(usart_flag_get(uart_at, USART_FLAG_RBNE) != RESET)
     {
-       value = (uint8_t)(uart_at.Instance->DR & 0x00FF);
+       value = (uint8_t)(usart_data_receive(uart_at) & 0x00FF);
        g_atio_cb.rcvlen++;
        if(g_atio_cb.w_next < CN_RCVBUF_LEN)
        {
@@ -92,9 +93,12 @@ static void atio_irq(void)
             g_atio_cb.rframeover++;
        }
     }
-    else if (__HAL_UART_GET_FLAG(&uart_at,UART_FLAG_IDLE) != RESET)
+    else if (usart_flag_get(uart_at,USART_FLAG_IDLEF) != RESET)
     {
-        __HAL_UART_CLEAR_IDLEFLAG(&uart_at);
+        //__HAL_UART_CLEAR_IDLEFLAG(&uart_at);
+        //TODO clear IDLE flag
+        usart_flag_get(uart_at,USART_FLAG_IDLEF);
+        usart_data_receive(uart_at);
         ringspace = CN_RCVMEM_LEN - ring_datalen(&g_atio_cb.rcvring);
         if(ringspace < g_atio_cb.w_next)  //not enough mem
         {
@@ -113,6 +117,11 @@ static void atio_irq(void)
     }
 }
 
+void USART1_IRQHandler(void)
+{
+    atio_irq();
+}
+
 /*******************************************************************************
 function     :use this function to initialize the uart
 parameters   :
@@ -129,22 +138,15 @@ bool_t uart_at_init(int baud)
     }
     ring_init(&g_atio_cb.rcvring,g_atio_cb.rcvringmem,CN_RCVMEM_LEN,0,0);
 
-    uart_at.Instance = s_pUSART;
-    uart_at.Init.BaudRate = baud;
-    uart_at.Init.WordLength = UART_WORDLENGTH_8B;
-    uart_at.Init.StopBits = UART_STOPBITS_1;
-    uart_at.Init.Parity = UART_PARITY_NONE;
-    uart_at.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-    uart_at.Init.Mode = UART_MODE_TX_RX;
-    uart_at.Init.OverSampling = UART_OVERSAMPLING_16;
-    if(HAL_UART_Init(&uart_at) != HAL_OK)
+    uart_at = s_pUSART;
+    gd_eval_com_init(uart_at);
     {
-        _Error_Handler(__FILE__, __LINE__);
+        //_Error_Handler(__FILE__, __LINE__);
     }
-    __HAL_UART_CLEAR_FLAG(&uart_at,UART_FLAG_TC);
-    LOS_HwiCreate(s_uwIRQn, 3, 0, atio_irq, 0);
-    __HAL_UART_ENABLE_IT(&uart_at, UART_IT_IDLE);
-    __HAL_UART_ENABLE_IT(&uart_at, UART_IT_RXNE);
+    usart_flag_clear(uart_at, USART_FLAG_TC);
+    //LOS_HwiCreate(s_uwIRQn, 3, 0, atio_irq, 0);
+    usart_interrupt_enable(uart_at,USART_INT_IDLE);
+    usart_interrupt_enable(uart_at,USART_INT_RBNE);
     return true;
 
 EXIT_SEMP:
@@ -153,9 +155,7 @@ EXIT_SEMP:
 
 void uartat_deinit(void)
 {
-    __HAL_UART_DISABLE(&uart_at);
-    __HAL_UART_DISABLE_IT(&uart_at, UART_IT_IDLE);
-    __HAL_UART_DISABLE_IT(&uart_at, UART_IT_RXNE);
+    usart_deinit(uart_at);
 }
 
 /*******************************************************************************
@@ -165,7 +165,19 @@ instruction  :
 *******************************************************************************/
 int uart_at_send(unsigned char *buf, int len,unsigned int timeout)
 {
-    HAL_UART_Transmit(&uart_at,buf,len,timeout);
+    int i = 0;
+    while(i < len)
+    {
+        printf("0x%x ", buf[i]);
+        usart_data_transmit(uart_at,buf[i]);
+        i++;
+
+        while (usart_flag_get(uart_at, USART_FLAG_TBE)== RESET){}
+
+        /* wait for completion of USART transmission */
+        while(RESET == usart_flag_get(uart_at, USART_FLAG_TC)){}
+    }
+
     g_atio_cb.sndlen += len;
     g_atio_cb.sndframe ++;
 
@@ -239,6 +251,4 @@ static const los_driv_op_t s_at_op = {
     .write = __at_write,
 };
 
-OSDRIV_EXPORT(uart_at_driv,"atdev_BC35G",(los_driv_op_t *)&s_at_op,NULL,O_RDWR);
-
-
+OSDRIV_EXPORT(uart_at_driv,"atdev_EC20CEFAG",(los_driv_op_t *)&s_at_op,NULL,O_RDWR);
