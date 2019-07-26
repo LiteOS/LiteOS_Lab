@@ -39,6 +39,8 @@
 
 #include <osal.h>
 #include <oc_mqtt_al.h>
+#include <los_typedef.h>
+#include "touch_panel.h"
 
 #define CFG_OC_MQTT_WITH_BOOTSTRAP_EN 1
 
@@ -123,6 +125,9 @@ static void           *s_mqtt_handle;
 
 static void           *s_report_handle;
 
+extern UINT16 touch_ad_x,touch_ad_y;
+
+
 static int app_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
 {
     int ret = -1;
@@ -144,6 +149,104 @@ static int app_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
 }
 
 
+VOID lcd_handle(VOID)
+{
+    UINT8 count=0;
+    UINT8 button_id=0;
+    UINT32 led1_switch = 0;
+    UINT32 led2_switch = 0;
+    UINT32 led3_switch = 0;
+    UINT32 led4_switch = 0;
+    UINT16 num[4]={0,0,0,0}; /* store the touch point number on four buttons */
+
+    tag_oc_mqtt_report  report;
+    tag_key_value_list  lst1;
+    tag_key_value_list  lst2;
+    tag_key_value_list  lst3;
+    tag_key_value_list  lst4;
+    cJSON *root = NULL;
+    char  *buf = NULL;
+
+    while(1){
+        /* get the position of touch on LCD screen */
+        if(SUCCESS == touch_scan()){
+            count++;
+            get_touch_area(touch_coordinate_x_get(touch_ad_x),(LCD_Y - touch_coordinate_y_get(touch_ad_y)),num);
+        }
+        /*  generate response to the touch(turn on LED and change picture )*/
+        if(count==20){
+            button_id = find_max(num);
+            turn_on_led(button_id);
+            change_picture(button_id);
+            num[0]=num[1]=num[2]=num[3]=0;
+            count=0;
+
+			if(button_id == 0)
+				led1_switch = 1;
+			else
+				led1_switch = 0;
+            lst1.item.name = "LED1";
+            lst1.item.buf = (char *)&led1_switch;
+            lst1.item.len = sizeof(led1_switch);
+            lst1.item.type = en_key_value_type_int;
+            lst1.next = &lst2;
+
+
+			
+			if(button_id == 1)
+				led2_switch = 1;
+			else
+				led2_switch = 0;
+            lst2.item.name = "LED2";
+            lst2.item.buf = (char *)&led2_switch;
+            lst2.item.len = sizeof(led2_switch);
+            lst2.item.type = en_key_value_type_int;
+            lst2.next = &lst3;
+
+			
+			if(button_id == 2)
+				led3_switch = 1;
+			else
+				led3_switch = 0;
+            lst3.item.name = "LED3";
+            lst3.item.buf = (char *)&led3_switch;
+            lst3.item.len = sizeof(led3_switch);
+            lst3.item.type = en_key_value_type_int;
+            lst3.next = &lst4;
+
+			
+			if(button_id == 3)
+				led4_switch = 1;
+			else
+				led4_switch = 0;
+            lst4.item.name = "LED4";
+            lst4.item.buf = (char *)&led4_switch;
+            lst4.item.len = sizeof(led4_switch);
+            lst4.item.type = en_key_value_type_int;
+            lst4.next = NULL;
+
+            report.hasmore = en_oc_mqtt_has_more_no;
+            report.paralst= &lst1;
+            report.serviceid = "LED";
+            //report.eventtime = "20190508T112020Z";
+
+            root = oc_mqtt_json_fmt_report(&report);
+            if(NULL != root)
+            {
+                buf = cJSON_Print(root);
+                printf("buf:%s %d\n\n", buf, strlen(buf));
+                if(NULL != buf)
+                {
+                    if(0 == oc_mqtt_report(0xff,buf,strlen(buf),en_mqtt_al_qos_1));
+                    osal_free(buf);
+                }
+
+                cJSON_Delete(root);
+            }
+        }
+        LOS_TaskDelay(10);
+    }
+}
 
 
 

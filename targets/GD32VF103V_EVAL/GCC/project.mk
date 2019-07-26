@@ -7,6 +7,7 @@ HAL_DRIVER_SRC =  \
         $(SDK_DIR)/drivers/third_party/GigaDevice/GD32VF103_standard_peripheral/Source/gd32vf103_timer.c  \
         $(SDK_DIR)/drivers/third_party/GigaDevice/GD32VF103_standard_peripheral/Source/gd32vf103_usart.c  \
         $(SDK_DIR)/drivers/third_party/GigaDevice/GD32VF103_standard_peripheral/Source/gd32vf103_rcu.c    \
+        $(SDK_DIR)/drivers/third_party/GigaDevice/GD32VF103_standard_peripheral/Source/gd32vf103_spi.c    \
         $(SDK_DIR)/drivers/third_party/GigaDevice/n22/drivers/n22_func.c
         C_SOURCES += $(HAL_DRIVER_SRC)
 
@@ -43,10 +44,10 @@ USER_SRC =  \
         $(SDK_DIR)/targets/GD32VF103V_EVAL/Src/gd32v103v_eval.c \
         $(SDK_DIR)/targets/GD32VF103V_EVAL/Src/gd32v103v_lcd_eval.c \
         $(SDK_DIR)/targets/GD32VF103V_EVAL/Src/picture.c \
+        $(SDK_DIR)/targets/GD32VF103V_EVAL/Src/lcd_font.c \
         $(SDK_DIR)/targets/GD32VF103V_EVAL/Src/systick.c \
         $(SDK_DIR)/targets/GD32VF103V_EVAL/Src/touch_panel.c \
-        $(SDK_DIR)/targets/GD32VF103V_EVAL/Src/lcd_font.c \
-        $(SDK_DIR)/targets/GD32VF103V_EVAL/Src/uart_at.c \
+        $(SDK_DIR)/targets/GD32VF103V_EVAL/Src/gd25qxx.c \
         $(SDK_DIR)/targets/GD32VF103V_EVAL/Src/main.c
         C_SOURCES += $(USER_SRC)
         
@@ -64,6 +65,12 @@ HAL_DRIVER_INC = \
         -I $(SDK_DIR)/drivers/third_party/GigaDevice/GD32VF103_standard_peripheral/Include \
         -I $(SDK_DIR)/drivers/third_party/GigaDevice/n22/drivers
         C_INCLUDES += $(HAL_DRIVER_INC)
+
+ifeq ($(CONFIG_AT_ENABLE),y)
+    UART_AT_SRC = $(TOP_DIR)/targets/GD32VF103V_EVAL/uart_at/uart_at.c
+    C_SOURCES += $(UART_AT_SRC)
+endif
+
         
 RISCV_ASM_INC = \
         -I $(SDK_DIR)/drivers/third_party/GigaDevice/n22/drivers

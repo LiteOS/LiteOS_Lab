@@ -462,6 +462,63 @@ void lcd_picture_draw(uint16_t start_x,uint16_t start_y,uint16_t end_x,uint16_t 
     }
 }
 
+extern void spi_flash_buffer_read(uint8_t* pbuffer,uint32_t read_addr,uint16_t num_byte_to_read);
+
+void lcd_picture_draw_ex(uint16_t start_x,uint16_t start_y,uint16_t end_x,uint16_t end_y,uint32_t addr)
+{
+    uint32_t i, j, total;
+    uint16_t x,y;
+    uint8_t temp_buf[1024];
+//    uint8_t cnt;
+    uint16_t remain;
+
+    x = start_x;
+    y = start_y;
+
+    total = (end_x - start_x + 1) * (end_y - start_y + 1) * 2;
+    remain = total - (total/1024)*1024;
+//    if(total%1024 != 0){
+//        cnt = total/1024 + 1;
+//    }else{
+//        cnt = total/1024;
+//    }
+
+    for(i=0; i<total/1024; ++i){
+        spi_flash_buffer_read(temp_buf, addr + 1024*i, 1024);
+        for(j=0; j<1024;){
+            lcd_point_set(x,y,(uint16_t)((temp_buf[j+1]<<8) | temp_buf[j]));
+            j += 2;
+            ++x;
+            if(x > end_x){
+                y++;
+                x = start_x;
+            }
+        }
+    }
+
+    spi_flash_buffer_read(temp_buf, addr + 1024*i, remain);
+    for(j=0; j<remain; ++j){
+        lcd_point_set(x,y,(uint16_t)((temp_buf[j+1]<<8) | temp_buf[j]));
+        j += 2;
+        ++x;
+        if(x > end_x){
+            y++;
+            x = start_x;
+        }
+    }
+
+//    for(i = 0; i < total; i ++){
+//        /* set point according to the specified position and color */
+//        lcd_point_set(x,y,*picturepointer++);
+//        x++;
+//        if(x > end_x){
+//            y++;
+//            x = start_x;
+//        }
+//    }
+}
+
+
 /*!
     \brief      display a char on LCD screen according to the specified position
     \param[in]  x: the start position of row-coordinate
