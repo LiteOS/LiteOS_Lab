@@ -36,7 +36,7 @@
  *  2019-05-14 09:36  zhangqianfu  The first version  
  *
  */
-
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <driver.h>

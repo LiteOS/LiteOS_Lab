@@ -41,6 +41,8 @@
 #include <osal.h>
 #include <link_misc.h>
 
+#include <los_hwi.h>
+
 
 #define CN_RCV_RING_BUFLEN  128
 

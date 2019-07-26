@@ -45,7 +45,7 @@ USER_SRC =  \
         C_SOURCES += $(USER_SRC)  
         
 ifeq ($(CONFIG_AT_ENABLE),y)
-    UART_AT_SRC = $(TOP_DIR)/targets/STM32L431_BearPi/AT_framework/uart_at.c
+    UART_AT_SRC = $(TOP_DIR)/targets/STM32L431_BearPi/uart_at/uart_at.c
     C_SOURCES += $(UART_AT_SRC)
 endif
 

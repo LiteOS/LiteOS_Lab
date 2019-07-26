@@ -63,7 +63,6 @@ struct shell_tab_matches
 
 //this is the shell function module.the register function must have the same type
 //uptils now, we don't care the return value
-typedef int (*fn_shell_cmdentry)(int argc, const char *argv[]);
 struct shell_item_t
 {
 	const char     *name;   //point to the shell name string
