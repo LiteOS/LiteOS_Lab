@@ -150,8 +150,7 @@ int osal_printf(const char *format, ...);
  * */
 int osal_reboot(void);
 
-int osal_swtmr_create(int interval, int mode, handle callback, int *swtmrid, int arg);
-int osal_swtmr_start(int swtmrid);
+
 
 int osal_int_connect(int intnum, int prio, int mode, handle callback, int arg);
 
