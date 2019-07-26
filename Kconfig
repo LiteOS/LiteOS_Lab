@@ -206,6 +206,7 @@ mainmenu "Huawei IoT Stack Configuration"
 	config OC_MQTT_TYPE
 		string
 		default "soft" if ATINY_MQTT
+		default "ec20" if EC20
 		default "none"
 		
 	config OC_LWM2M_DEMO_TYPE

@@ -91,10 +91,15 @@ int link_main(void *args)
 #if CONFIG_AT_ENABLE
     #include <at.h>
     ///< install the at framework for the link
-    //uart_at_init(9600);
-    //at_init("atdev_BC35G");
-    uart_at_init(115200);
-    at_init("atdev_EC20CEFAG");
+    #if CONFIG_OC_LWM2M_BOUDICA150_ENABLE
+        uart_at_init(9600);
+        at_init("atdev_BC35G");
+    #endif
+    #if CONFIG_OC_MQTT_EC20_ENABLE
+        uart_at_init(115200);
+        at_init("atdev_EC20CEFAG");
+    #endif
+
 #endif
 
     ///< install the cJSON, for the oc mqtt agent need the cJSON
