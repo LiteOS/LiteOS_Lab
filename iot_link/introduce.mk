@@ -7,6 +7,7 @@
 #------------------:------------------
 #CONFIG_OS_TYPE       : "linux" "macos" "liteos"
 #CONFIG_SHELL_ENABLE   : y n
+#CONFIG_STIMER_ENABLE  :y n
 #CONFIG_LIBC_ENABLE   : y n
 #CONFIG_CJSON_ENABLE  : y n
 #CONFIG_TCPIP_TYPE    : "lwip" "linux_socket" "macos_socket" "none"

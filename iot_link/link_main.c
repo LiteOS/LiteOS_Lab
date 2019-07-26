@@ -74,6 +74,12 @@ int link_main(void *args)
     #error("no os supplied yet");
 #endif
 
+#if CONFIG_STIMER_ENABLE
+    #include <stimer.h>
+    stimer_init();
+#endif
+
+
 #if CONFIG_SHELL_ENABLE
     #include <shell.h>
     ///< install the shell for the link
