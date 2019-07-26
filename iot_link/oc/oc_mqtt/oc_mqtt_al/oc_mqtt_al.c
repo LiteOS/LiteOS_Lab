@@ -197,7 +197,7 @@ cJSON *oc_mqtt_json_fmt_report(tag_oc_mqtt_report  *report)
     tmp = cJSON_CreateString(report->eventtime);
     if(NULL == tmp)
     {
-        goto EXIT_CJSON_ERR;
+        //goto EXIT_CJSON_ERR;
     }
     cJSON_AddItemToObject(service,cn_service_time_name,tmp);
 

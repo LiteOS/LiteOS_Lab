@@ -50,7 +50,7 @@ CONFIG_OC_MQTT_TYPE  := "ec20"
 CONFIG_OC_LWM2M_TYPE := "none"
 CONFIG_LOADER_ENABLE := n
 CONFIG_OC_LWM2M_DEMO_TYPE:= "none"
-CONFIG_OC_MQTT_DEMO_TYPE:= "none" #"oc_mqtt_demo_bs"
+CONFIG_OC_MQTT_DEMO_TYPE:= "none"
 
 ################################################################################
 
