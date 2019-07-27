@@ -426,13 +426,13 @@ bool_t at_init(const char *devname)
 
 EXIT_RCVTASK:
     osal_mutex_del(&g_at_cb.cmd.cmdlock);
-    g_at_cb.cmd.cmdlock = CN_OBJECT_INVALID;
+    g_at_cb.cmd.cmdlock = (osal_mutex_t)CN_OBJECT_INVALID;
 EXIT_CMDLOCK:
     osal_semp_del(&g_at_cb.cmd.respsync);
-    g_at_cb.cmd.respsync = CN_OBJECT_INVALID;    
+    g_at_cb.cmd.respsync = (osal_mutex_t)CN_OBJECT_INVALID;
 EXIT_RESPSYNC:
     osal_semp_del(&g_at_cb.cmd.cmdsync);
-    g_at_cb.cmd.cmdsync = CN_OBJECT_INVALID;
+    g_at_cb.cmd.cmdsync = (osal_mutex_t)CN_OBJECT_INVALID;
 EXIT_CMDSYNC:
 EXIT_PARA:
     return ret;
