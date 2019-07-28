@@ -32,6 +32,7 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
+#include <string.h>
 #include <at.h>
 #include <ec20_oc.h>
 #include <oc_mqtt_al.h>
