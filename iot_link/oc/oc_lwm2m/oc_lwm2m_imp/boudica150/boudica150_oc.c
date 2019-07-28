@@ -35,7 +35,7 @@
 ///< you must config the at module ,for the NB modules need the at
 
 
-
+#include <string.h>
 #include <at.h>
 #include <boudica150_oc.h>
 #include <oc_lwm2m_al.h>
@@ -94,7 +94,7 @@ static bool_t boudica150_atcmd(const char *cmd,const char *index)
 static bool_t boudica150_atcmd_response(const char *cmd,const char *index,char *buf, int len)
 {
     int ret = 0;
-    ret = at_command((unsigned char *)cmd,strlen(cmd),index,(unsigned char *)buf,len,cn_boudica150_cmd_timeout);
+    ret = at_command((unsigned char *)cmd,strlen(cmd),index,(char *)buf,len,cn_boudica150_cmd_timeout);
     if(ret > 0)
     {
         return true;
@@ -215,7 +215,7 @@ static int boudica150_rcvdeal(unsigned char *data,int len)
     if(NULL != s_boudica150_oc_cb.oc_param.rcv_func)
     {
         s_boudica150_oc_cb.oc_param.rcv_func(s_boudica150_oc_cb.oc_param.usr_data,\
-                                             s_boudica150_oc_cb.rcvbuf,datalen);
+                                             (char *)s_boudica150_oc_cb.rcvbuf,datalen);
     }
 
     return len;
@@ -550,8 +550,8 @@ static bool_t boudica150_set_autoconnect(int enable)
 static bool_t boudica150_boot(const char *plmn, const char *apn, const char *bands,const char *server,const char *port)
 {
     //memset(&s_boudica150_oc_cb,0,sizeof(s_boudica150_oc_cb));
-    at_oobregister(urc_qlwevtind,cn_urc_qlwevtind);
-    at_oobregister(boudica150_rcvdeal,cn_boudica150_rcvindex);
+    at_oobregister((fnoob)urc_qlwevtind,cn_urc_qlwevtind);
+    at_oobregister((fnoob)boudica150_rcvdeal,cn_boudica150_rcvindex);
 
     while(1)
     {
@@ -665,7 +665,7 @@ int boudica150_get_csq(int *value)
     return ret;
 }
 
-int *boudica150_check_nuestats(void)
+int* boudica150_check_nuestats(void)
 {
     char cmd[64];
     char resp[256];
@@ -697,21 +697,21 @@ int *boudica150_check_nuestats(void)
     str = strstr(resp,"ECL:");
     if (str == NULL)
     {
-    	return -1;
+    	return NULL;
     }
     sscanf(str,"ECL:%d",&wireless_stats[1]);
 
     str = strstr(resp,"SNR:");
     if (str == NULL)
     {
-        return -1;
+        return NULL;
     }
     sscanf(str,"SNR:%d",&wireless_stats[2]);
 
     str = strstr(resp,"Cell ID:");
     if (str == NULL)
     {
-        return -1;
+        return NULL;
     }
     sscanf(str,"Cell ID:%d",&wireless_stats[3]);
 
@@ -722,7 +722,7 @@ const oc_lwm2m_opt_t  g_boudica150_oc_opt = \
 {
     .config = boudica150_oc_config,
     .deconfig = boudica150_oc_deconfig,
-    .report = boudica150_oc_report,
+    .report = (fn_oc_lwm2m_report)boudica150_oc_report,
 };
 
 

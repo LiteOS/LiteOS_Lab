@@ -111,7 +111,7 @@ int32_t       stimer_delete(stimer_t timer);
  * @return:0 success while -1 or others failed
  *
  * */
-int32_t       stimer_ioctl(stimer_t timer,uint32_t opt, void *arg);
+int32_t       stimer_ioctl(stimer_t timer,en_stimer_opt_t opt, void *arg);
 
 
 #else
