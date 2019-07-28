@@ -77,6 +77,7 @@ static void LCD_Gpio_Init(void)
  *
  * @return  void
  */
+extern uint8_t SPI2_WriteByte(uint8_t *TxData,uint16_t size);
 static void LCD_SPI_Send(uint8_t *data, uint16_t size)
 {
     SPI2_WriteByte(data, size);
@@ -435,12 +436,14 @@ void LCD_Draw_Circle(uint16_t x0, uint16_t y0, uint8_t r)
  *
  * @return  void
  */
-void LCD_ShowChar(uint16_t x, uint16_t y, char chr, uint8_t size)
+void LCD_ShowChar(uint16_t x, uint16_t y, char msg, uint8_t size)
 {
-    uint8_t temp, t1, t;
+    unsigned char temp, t1, t,chr;
     uint8_t csize;		//得到字体一个字符对应点阵集所占的字节数
     uint16_t colortemp;
     uint8_t sta;
+
+    chr = (unsigned char)msg;
 
     chr = chr - ' '; //得到偏移后的值（ASCII字库是从空格开始取模，所以-' '就是对应字符的字库）
 

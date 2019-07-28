@@ -39,6 +39,8 @@
 #include <sys/fcntl.h>
 #include <los_base.h>
 
+#if CONFIG_AT_ENABLE
+
 //these defines could be moved to the configuration of the at module
 #define cn_at_oob_len          6            //only allow 6 oob command monitor here,you could configure it more
 #define cn_at_resp_maxlen      768           //PROSING THAT COULD GET THE MOST REPSLENGTH
@@ -87,25 +89,27 @@ struct at_cb
 static struct at_cb g_at_cb;   //this is the at controller here
 
 //this function used to send the data to the AT channel
-static int __cmd_send(char *buf,int buflen,int timeout)
+static int __cmd_send(void *buf,size_t buflen,uint32_t timeout)
 {
     int i = 0;
     int ret = 0;
     int debugmode;
+    uint8_t *msg;
     ret = los_dev_write(g_at_cb.devhandle,0,buf,buflen,timeout);
     if(ret > 0)
     {
+        msg = (uint8_t *)buf;
         debugmode = g_at_cb.txdebugmode;
         switch (debugmode)
         {
             case en_at_debug_ascii:
-                printf("ATSND:%d Bytes:%s\n\r",ret,(char *)buf);
+                printf("ATSND:%d Bytes:%s\n\r",ret,(char *)msg);
                 break;
             case en_at_debug_hex:
                 printf("ATSND:%d Bytes:",ret);
                 for(i =0;i<ret;i++)
                 {
-                    printf("%02x ",buf[i]);
+                    printf("%02x ",(unsigned int)msg[i]);
                 }
                 printf("\n\r");
                 break;
@@ -123,7 +127,7 @@ static int __resp_rcv(char *buf,int buflen,int timeout)
     int ret = 0;
     int debugmode;
     
-    ret = los_dev_read(g_at_cb.devhandle,0,buf,buflen,timeout);
+    ret = los_dev_read(g_at_cb.devhandle,0,(unsigned char *)buf,buflen,timeout);
     if(ret > 0)
     {
         debugmode = g_at_cb.rxdebugmode;
@@ -149,7 +153,7 @@ static int __resp_rcv(char *buf,int buflen,int timeout)
 }
 
 //create a command
-static bool_t  __cmd_create(char *cmdbuf,int cmdlen,const char *index,char *respbuf,int respbuflen,unsigned int timeout)
+static bool_t  __cmd_create(void *cmdbuf,size_t cmdlen,const char *index,void *respbuf,size_t respbuflen,unsigned int timeout)
 {
     bool_t  ret = false;
     struct at_cmd *cmd;
@@ -317,7 +321,7 @@ instruction  :only one command could be dealt at one time, for we use the sempho
               here do the sync;if the respbuf is not NULL,then we will cpoy the 
               response data to the respbuf as much as the respbuflen permit
 *******************************************************************************/
-int  at_command(char *cmd,int cmdlen,const char *index,char *respbuf,\
+int  at_command(unsigned char *cmd,int cmdlen,const char *index,char *respbuf,\
 		        int respbuflen,int timeout)
 {
     int ret = 0;
@@ -426,13 +430,13 @@ bool_t at_init(const char *devname)
 
 EXIT_RCVTASK:
     osal_mutex_del(&g_at_cb.cmd.cmdlock);
-    g_at_cb.cmd.cmdlock = (osal_mutex_t)CN_OBJECT_INVALID;
+    g_at_cb.cmd.cmdlock = cn_mutex_invalid;
 EXIT_CMDLOCK:
     osal_semp_del(&g_at_cb.cmd.respsync);
-    g_at_cb.cmd.respsync = (osal_mutex_t)CN_OBJECT_INVALID;
+    g_at_cb.cmd.respsync = cn_semp_invalid;
 EXIT_RESPSYNC:
     osal_semp_del(&g_at_cb.cmd.cmdsync);
-    g_at_cb.cmd.cmdsync = (osal_mutex_t)CN_OBJECT_INVALID;
+    g_at_cb.cmd.cmdsync = cn_semp_invalid;
 EXIT_CMDSYNC:
 EXIT_PARA:
     return ret;
@@ -448,7 +452,7 @@ static int shell_at(int argc, const char *argv[])
     #define CN_AT_SHELL_LEN 64
      
     char respbuf[CN_AT_SHELL_LEN];
-    char cmdbuf[CN_AT_SHELL_LEN];
+    unsigned char cmdbuf[CN_AT_SHELL_LEN];
     
     const char *index =NULL ;
     int ret = -1;
@@ -526,6 +530,6 @@ static int shell_atdebug(int argc,const char *argv[])
 }
 OSSHELL_EXPORT_CMD(shell_atdebug,"atdebug","atdebug rx/tx none/ascii/hex");
 
-
+#endif
 
 

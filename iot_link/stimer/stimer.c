@@ -190,7 +190,7 @@ static void  timer_scan(void)
 }
 
 ///< this is the soft timer main engine
-static int32_t __timer_entry(void *args)
+static int __timer_entry(void *args)
 {
     uint32_t wait_time;
     int64_t cur_time;
@@ -322,7 +322,7 @@ int32_t stimer_delete(stimer_t timer)
     return ret;
 }
 
-int32_t stimer_ioctl(stimer_t timer,uint32_t opt, void *arg)
+int32_t stimer_ioctl(stimer_t timer,en_stimer_opt_t opt, void *arg)
 {
     int32_t ret = -1;
 
@@ -389,7 +389,7 @@ int32_t stimer_ioctl(stimer_t timer,uint32_t opt, void *arg)
 #include <shell.h>
 static int32_t stimer_print(int32_t argc, const char *argv[])
 {
-    int32_t       timer_number = 0;
+    int       timer_number = 0;
     stimer_item_t  *item = NULL;
 
     if(true == osal_mutex_lock(s_stimer_cb.mutex))
@@ -401,9 +401,9 @@ static int32_t stimer_print(int32_t argc, const char *argv[])
         while(NULL != item)
         {
             printf("%-8d %08x %08x %08x %-5s %-5s %x\n\r",\
-                    timer_number++,item->cycle,(uint32_t)item->handler,(uint32_t)item->args,\
+                    timer_number++,(unsigned int)item->cycle,(unsigned int)item->handler,(unsigned int)item->args,\
                     item->flag&cn_stimer_flag_start?"Yes":"No",item->flag&cn_stimer_flag_once?"Yes":"No",\
-                    item->dead_time);
+                    (unsigned int)item->dead_time);
             item = item->nxt;
         }
         printf("Total:%d Soft timers\n\r",timer_number);
