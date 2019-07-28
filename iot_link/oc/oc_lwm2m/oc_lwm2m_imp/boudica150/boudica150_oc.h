@@ -65,7 +65,7 @@ int *boudica150_check_nuestats(void);
 
 #define boudica150_init(plmn,apn,bands)    -1
 #define boudica150_get_csq(value)          -1
-#define boudica150_check_nuestats(void)    -1
+#define boudica150_check_nuestats(void)    NULL
 #endif
 
 

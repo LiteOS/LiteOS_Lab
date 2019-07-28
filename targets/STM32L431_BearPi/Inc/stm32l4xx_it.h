@@ -55,8 +55,8 @@ void SVC_Handler(void);
 void DebugMon_Handler(void);
 void PendSV_Handler(void);
 void SysTick_Handler(void);
-void Key1_IRQHandler(void);
-void Key2_IRQHandler(void);
+void Key1_IRQHandler(void *args);
+void Key2_IRQHandler(void *args);
 void USART1_IRQHandler(void);
 void USART2_IRQHandler(void);
 

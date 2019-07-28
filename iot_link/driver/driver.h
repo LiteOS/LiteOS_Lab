@@ -100,10 +100,10 @@ typedef struct
 #define OSDRIV_EXPORT(varname,drivname,operate,pridata,flagmask)      \
     static const os_driv_para_t varname __attribute__((used,section("osdriv")))= \
     {                           \
-        .name   = drivname,    \
+        .name   = drivname,     \
         .op     = operate,      \
-        .pri    = pridata,  \
-        .flag   = flagmask,    \
+        .pri    = pridata,      \
+        .flag   = flagmask,     \
     }
 
 

@@ -1,7 +1,7 @@
 /*
  * osal_types.h
  *
- *  Created on: 2019Äê4ÔÂ26ÈÕ
+ *  Created on: 2019ï¿½ï¿½4ï¿½ï¿½26ï¿½ï¿½
  *      Author: zhangqf
  */
 
@@ -30,7 +30,7 @@ typedef struct
     unsigned long long dead_time;
 }osal_loop_timer_t;
 
-typedef void (*handle)(int arg);
+typedef void (*fn_interrupt_handle)(void* arg);
 
 enum swtmr_type
 {
