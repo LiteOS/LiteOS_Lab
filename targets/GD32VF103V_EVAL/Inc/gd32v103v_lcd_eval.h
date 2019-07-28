@@ -231,6 +231,7 @@ void lcd_rectangle_draw(uint16_t start_x,uint16_t start_y,uint16_t end_x,uint16_
 void lcd_rectangle_fill(uint16_t start_x,uint16_t start_y,uint16_t end_x,uint16_t end_y,uint16_t color);
 /* draw a picture on LCD screen according to the specified position */
 void lcd_picture_draw(uint16_t start_x,uint16_t start_y,uint16_t end_x,uint16_t end_y,uint16_t *pic);
+void lcd_picture_draw_ex(uint16_t start_x,uint16_t start_y,uint16_t end_x,uint16_t end_y,uint32_t addr);
 /* display a char on LCD screen according to the specified position */
 void lcd_char_display(uint16_t x,uint16_t y,uint8_t c,char_format_struct c_format);
 
