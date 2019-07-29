@@ -41,8 +41,6 @@
 #include <osal.h>
 
 
-#define CONFIG_AT_ENABLE   1
-
 typedef int (*fn_at_oob)(void *args,void *data,size_t datalen);
 
 #if  CONFIG_AT_ENABLE
@@ -79,7 +77,7 @@ int at_oobregister(const char *name,const void *index,size_t len,fn_at_oob func,
  * */
 
 int at_command(const void *cmd, size_t cmdlen,const char *index,\
-                void *respbuf,size_t respbuflen,uint32_t timeout); //send at command and receive response
+                void *respbuf,size_t respbuflen,uint32_t timeout);
 
 #else
 
