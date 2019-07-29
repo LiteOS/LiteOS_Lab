@@ -41,22 +41,51 @@
 #include <osal.h>
 
 
-typedef int (*fnoob)(char *data,int datalen);
+#define CONFIG_AT_ENABLE   1
+
+typedef int (*fn_at_oob)(void *args,void *data,size_t datalen);
 
 #if  CONFIG_AT_ENABLE
 
-bool_t at_init(const char *devname);                       //install the at frame work,which binded to the device
-bool_t at_oobregister(fnoob func,const char *index);       //register a out of band data dealer
-int  at_command(unsigned char *cmd, int cmdlen,const char *index,\
-                char *respbuf,int respbuflen,int timeout); //send at command and receive response
-bool_t at_workmode(bool_t passby,fnoob func);              //use to set the at module work as the passer by
+/**
+ * @brief: use this function to do the at client framwork initialized
+ *
+ * @return:0 success while -1 failed
+ * */
+int at_init(const char *devname);
+
+/**
+ * @brief:use this function to register a function that monitor the URC message
+ * @param[in]:name, which used for the at framework debug
+ * @param[in]:inxdex, used for match the out of band data
+ * @param[in]:length, index length, this is match length
+ * @param[in]:func, supply the function that will execute when the index is matched
+ * @paarm[in]:args, supply for the registered function
+ *
+ * @return:0 success while -1 failed
+ * */
+int at_oobregister(const char *name,const void *index,size_t len,fn_at_oob func,void *args);
+
+/**
+ * @brief:use this function to register a function that monitor the URC message
+ * @param[in]:cmd, the command to send
+ * @param[in]:cmdlen, the command length
+ * @param[in]:index, the command index, if you don't need the response, set it to NULL; this must be a string
+ * @param[in]:respbuf, if you need the response, you should supply the buffer
+ * @param[in]:respbuflen,the respbuf length
+ * @param[in]:timeout, the time you may wait for the response;and the unit is ms
+ *
+ * @return:0 success while -1 failed
+ * */
+
+int at_command(const void *cmd, size_t cmdlen,const char *index,\
+                void *respbuf,size_t respbuflen,uint32_t timeout); //send at command and receive response
 
 #else
 
-#define at_init(name)                  false
-#define at_oobregister(x,y)            false
-#define at_command(a,b,c,d,e,f)        0   
-#define at_workmode(x,y)               false
+#define at_init(devname)                                               -1
+#define at_oobregister(name,index,lenc,func,args)                      -1
+#define at_command(cmd,cmdlen,index,respbuf,respbuflen,timeout)        -1
 
 #endif
 
