@@ -48,7 +48,7 @@
 /** the address product_id device_id password crt is only for the test  */
 
 #define DEFAULT_LIFETIME            10
-#define BS_SERVER_IPV4         "119.3.190.193"     ///<  server ip address
+#define BS_SERVER_IPV4         "119.3.251.30"     ///<  server ip address
 #define BS_SERVER_DOMAIN         "iot-bs.cn-north-4.myhuaweicloud.com"
 #define BS_SERVER_PORT         "8883"           ///<  server mqtt service port
 #define DEMO_WITH_BOOTSTRAP_NODEID    "sdk_0040"//"sdk_bh"  //"sdk_0030"
@@ -164,7 +164,7 @@ static int oc_mqtt_report_entry(void *args)
     {
         config.boot_mode = en_oc_boot_strap_mode_client_initialize;
         config.lifetime = DEFAULT_LIFETIME;
-        config.server = BS_SERVER_IPV4;
+        config.server = BS_SERVER_DOMAIN;
         config.port = BS_SERVER_PORT;
         config.msgdealer = app_msg_deal;
         config.code_mode = en_oc_mqtt_code_mode_json;
