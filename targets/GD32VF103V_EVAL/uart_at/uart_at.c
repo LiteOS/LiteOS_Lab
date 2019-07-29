@@ -37,10 +37,12 @@
 #include "gd32v103v_eval.h"
 #include <stdint.h>
 #include <stddef.h>
+#include <string.h>
 #include <osal.h>
 #include <link_misc.h>
 #include <driver.h>
 #include "sys/fcntl.h"
+#include "los_hwi.h"
 
 uint32_t uart_at;
 static uint32_t           s_pUSART = EVAL_COM1;
@@ -52,7 +54,7 @@ static uint32_t           s_uwIRQn = USART1_IRQn;
 struct atio_cb
 {
     unsigned short        w_next;    //the next position to be write
-    int                   rcvsync;   //if a frame has been written to the ring, then active it
+    osal_semp_t           rcvsync;   //if a frame has been written to the ring, then active it
     tag_ring_buffer_t     rcvring;
     unsigned char         rcvbuf[CN_RCVBUF_LEN];
     unsigned char         rcvringmem[CN_RCVMEM_LEN];
