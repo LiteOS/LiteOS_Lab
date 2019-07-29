@@ -32,6 +32,7 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
+#include <string.h>
 #include <at.h>
 #include <ec20_oc.h>
 #include <oc_mqtt_al.h>
@@ -46,7 +47,7 @@ static bool_t ec20_atcmd(const char *cmd,const char *index)
 {
     int ret = 0;
     ret = at_command((unsigned char *)cmd,strlen(cmd),index,NULL,0,cn_ec20_cmd_timeout);
-    if(ret > 0)
+    if(ret >= 0)
     {
         return true;
     }
