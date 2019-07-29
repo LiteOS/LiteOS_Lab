@@ -165,9 +165,9 @@ function     :use this function to send a frame to the uart
 parameters   :
 instruction  :
 *******************************************************************************/
-int uart_at_send(unsigned char *buf, int len,unsigned int timeout)
+static ssize_t uart_at_send(const char  *buf, size_t len,uint32_t timeout)
 {
-    HAL_UART_Transmit(&uart_at,buf,len,timeout);
+    HAL_UART_Transmit(&uart_at,(unsigned char *)buf,len,timeout);
     g_atio_cb.sndlen += len;
     g_atio_cb.sndframe ++;
 
@@ -178,7 +178,7 @@ function     :use this function to read a frame from the uart
 parameters   :
 instruction  :
 *******************************************************************************/
-int uart_at_receive(unsigned char *buf,int len,unsigned int timeout)
+static ssize_t uart_at_receive(void *buf,size_t len,uint32_t timeout)
 {
     unsigned short cpylen;
     unsigned short framelen;
@@ -205,7 +205,7 @@ int uart_at_receive(unsigned char *buf,int len,unsigned int timeout)
             else
             {
                 readlen = framelen;
-                cpylen = ring_read(&g_atio_cb.rcvring,buf,readlen);
+                cpylen = ring_read(&g_atio_cb.rcvring,(unsigned char *)buf,readlen);
                 if(cpylen != framelen)
                 {
                     ring_reset(&g_atio_cb.rcvring);  //bad ring format here
@@ -223,12 +223,12 @@ int uart_at_receive(unsigned char *buf,int len,unsigned int timeout)
 }
 
 //make it as the at device here
-static int  __at_read  (void *pri,unsigned int offset,unsigned char *buf,int len,unsigned int timeout)
+static ssize_t  __at_read  (void *pri,size_t offset,void *buf,size_t len, uint32_t timeout)
 {
     return uart_at_receive(buf,len, timeout);
 
 }
-static int  __at_write (void *pri,unsigned int offset,unsigned char *buf,int len,unsigned int timeout)
+static ssize_t  __at_write (void *pri, size_t offset,const void *buf,size_t len,uint32_t timeout)
 {
     return uart_at_send(buf, len, timeout);
 

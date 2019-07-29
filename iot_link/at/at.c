@@ -92,10 +92,10 @@ static at_cb_t g_at_cb;   //this is the at controller here
 static int __cmd_send(const void *buf,size_t buflen,uint32_t timeout)
 {
     int i = 0;
-    int ret = 0;
+    ssize_t ret = 0;
     int debugmode;
     uint8_t *msg;
-    ret = los_dev_write(g_at_cb.devhandle,0,(unsigned char *)buf,buflen,timeout);
+    ret = los_dev_write(g_at_cb.devhandle,0,buf,buflen,timeout);
     if(ret > 0)
     {
         msg = (uint8_t *)buf;
@@ -116,19 +116,24 @@ static int __cmd_send(const void *buf,size_t buflen,uint32_t timeout)
             default:
                 break;
         }
-    }    
+        ret = 0;
+    }
+    else
+    {
+        ret = -1;
+    }
     return ret;
 }
 
 //this function used to receive data from the AT channel
-static int __resp_rcv(void *buf,int buflen,uint32_t timeout)
+static int __resp_rcv(void *buf,size_t buflen,uint32_t timeout)
 {
     int i = 0;
-    int ret = 0;
+    ssize_t ret = 0;
     int debugmode;
     uint8_t *msg;
 
-    ret = los_dev_read(g_at_cb.devhandle,0,(unsigned char *)buf,buflen,timeout);
+    ret = los_dev_read(g_at_cb.devhandle,0,buf,buflen,timeout);
     if(ret > 0)
     {
         msg = buf;

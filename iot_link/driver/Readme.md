@@ -15,8 +15,8 @@
 ```
 typedef void* los_driv_t ;//returned by the driver register
 typedef bool_t (*fn_devopen)  (void *pri,s32_t flag);
-typedef s32_t  (*fn_devread)  (void *pri,u32_t offset,u8_t *buf,s32_t len,u32_t timeout);
-typedef s32_t  (*fn_devwrite) (void *pri,u32_t offset,u8_t *buf,s32_t len,u32_t timeout);
+typedef ssize_t (*fn_devread)  (void *pri,size_t offset,void *buf,size_t len,uint32_t timeout);
+typedef ssize_t (*fn_devwrite) (void *pri,size_t offset,const void *buf,size_t len,uint32_t timeout);
 typedef void   (*fn_devclose) (void *pri);
 typedef bool_t (*fn_devioctl) (void *pri,u32_t cmd, void *para,s32_t len);
 typedef bool_t (*fn_devinit)  (void *pri);
@@ -79,8 +79,8 @@ OSDRIV_EXPORT(varname,drivname,operate,pridata,flagmask)
 //these interface by the application
 typedef void* los_dev_t ;                   //this type is returned by the dev open
 los_dev_t  los_dev_open  (const char *name,u32_t flag);
-s32_t      los_dev_read  (los_dev_t dev,u32_t offset,u8_t *buf,s32_t len,u32_t timeout);
-s32_t      los_dev_write (los_dev_t dev,u32_t offset,u8_t *buf,s32_t len,u32_t timeout);
+ssize_t    los_dev_read  (los_dev_t dev,size_t offset,void *buf,size_t len,uint32_t timeout);
+ssize_t    los_dev_write (los_dev_t dev,size_t offset,const void *buf,size_t len, uint32_t timeout);
 bool_t     los_dev_close (los_dev_t dev);
 bool_t     los_dev_ioctl (los_dev_t dev,u32_t cmd,void *para,s32_t paralen);
 off_t      los_dev_seek  (los_dev_t dev,off_t offset, int fromwhere);
@@ -90,7 +90,6 @@ off_t      los_dev_seek  (los_dev_t dev,off_t offset, int fromwhere);
 
 #### 重要的配置选项
 
-1. 如果使能驱动框架，则需要在target_config.h中配置LOSCFG_ENABLE_DRIVER
-2. 如果使能设备文件系统，则需要在target_config.h中配置LOSCFG_ENABLE_DEVFS，设备文件系统本身依赖VFS；同时如果需要通过设备文件系统操作设备，则需要配置驱动框架
-3. 包含路径：驱动的注册和使用需要包含los_dev.h，需要在编译器的PATH中添加component/driver目录
+1. 如果使能驱动框架，则需要添加driver目录，并且在编译中定义CONFIG_DRIVER_ENABLE=1
+3. 包含路径：驱动的注册和使用需要包含driver.h
 
