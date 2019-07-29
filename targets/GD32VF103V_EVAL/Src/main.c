@@ -223,7 +223,7 @@ static int lcd_demo()
     memset (&task_init_param, 0, sizeof (TSK_INIT_PARAM_S));
     task_init_param.uwArg = (unsigned int)NULL;
     task_init_param.usTaskPrio = 2;
-    task_init_param.pcName =(char *) "link_main";
+    task_init_param.pcName =(char *) "lcd_handle";
     task_init_param.pfnTaskEntry = (TSK_ENTRY_FUNC)lcd_handle;
     task_init_param.uwStackSize = 0x1200;
     uwRet = LOS_TaskCreate(&handle, &task_init_param);
