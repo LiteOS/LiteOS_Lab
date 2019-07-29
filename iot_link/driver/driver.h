@@ -42,12 +42,11 @@
 
 #include <osal.h>
 
-#define CFG_DRIVER_ENABLE  1  //for the test
 
 typedef void* los_driv_t ;//returned by the driver register
 typedef bool_t (*fn_devopen)  (void *pri,int flag);
-typedef int  (*fn_devread)  (void *pri,unsigned int offset,unsigned char *buf,int len,unsigned int timeout);
-typedef int  (*fn_devwrite) (void *pri,unsigned int offset,unsigned char *buf,int len,unsigned int timeout);
+typedef ssize_t (*fn_devread)  (void *pri,size_t offset,void *buf,size_t len,uint32_t timeout);
+typedef ssize_t (*fn_devwrite) (void *pri,size_t offset,const void *buf,size_t len,uint32_t timeout);
 typedef void   (*fn_devclose) (void *pri);
 typedef bool_t (*fn_devioctl) (void *pri,unsigned int cmd, void *para,int len);
 typedef bool_t (*fn_devinit)  (void *pri);
@@ -69,11 +68,20 @@ typedef struct
 //attention that whether the device support multi read and write depend on the device itself
 typedef void* los_dev_t ;                   //this type is returned by the dev open
 
-#if CFG_DRIVER_ENABLE
+//we also supply a macro to add a driver staticly ,which means
+typedef struct
+{
+    const char            *name;      //device driver name
+    los_driv_op_t         *op;        //device operate functions
+    void                  *pri;       //private data,will be passed to op functions
+    uint32_t               flag;      //flags, like O_RDONLY O_WRONLY O_RDWR
+}os_driv_para_t;
+
+#if CONFIG_DRIVER_ENABLE
 //device module init entry
 bool_t  los_driv_init(void);
 //these interface called by the bsp develop
-los_driv_t los_driv_register(const char *name, const los_driv_op_t *op,void *pri,unsigned int flagmask);
+los_driv_t los_driv_register(os_driv_para_t *para);
 bool_t     los_driv_unregister(const char *name) ;
 bool_t     los_driv_event(los_driv_t driv,unsigned int event,void *para);
 //attention that the device dirver could use this function to send some event to the application,
@@ -81,21 +89,14 @@ bool_t     los_driv_event(los_driv_t driv,unsigned int event,void *para);
 
 //these interface by the application
 los_dev_t  los_dev_open  (const char *name,unsigned int flag);
-int      los_dev_read  (los_dev_t dev,unsigned int offset,unsigned char *buf,int len,unsigned int timeout);
-int      los_dev_write (los_dev_t dev,unsigned int offset,unsigned char *buf,int len,unsigned int timeout);
+ssize_t    los_dev_read  (los_dev_t dev,size_t offset,void *buf,size_t len,uint32_t timeout);
+ssize_t    los_dev_write (los_dev_t dev,size_t offset,const void *buf,size_t len, uint32_t timeout);
 bool_t     los_dev_close (los_dev_t dev);
 bool_t     los_dev_ioctl (los_dev_t dev,unsigned int cmd,void *para,int paralen);
 off_t      los_dev_seek  (los_dev_t dev,off_t offset, int fromwhere);
 //attention that the cmd and para used in ioctl must compatible with the driver development
 
-//we also supply a macro to add a driver staticly ,which means
-typedef struct
-{
-    const char            *name;      //device driver name
-    los_driv_op_t         *op;        //device operate functions
-    void                  *pri;       //private data,will be passed to op functions
-    unsigned int           flag;      //flags, like O_RDONLY O_WRONLY O_RDWR
-}os_driv_para_t;
+
 
 #define OSDRIV_EXPORT(varname,drivname,operate,pridata,flagmask)      \
     static const os_driv_para_t varname __attribute__((used,section("osdriv")))= \

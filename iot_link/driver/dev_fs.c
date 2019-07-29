@@ -80,7 +80,7 @@ static ssize_t devfs_read (struct file *file, char *buf, size_t len)
     los_dev_t dev;
 
     dev = file->f_data;
-    ret = los_dev_read (dev,file->f_offset,(u8_t *)buf,len,cn_devfs_timeout);
+    ret = los_dev_read (dev,file->f_offset,(void *)buf,len,cn_devfs_timeout);
     if(ret > 0)
     {
         file->f_offset += ret;
@@ -97,7 +97,7 @@ static ssize_t devfs_write (struct file *file, const char *buf, size_t len)
     los_dev_t dev;
 
     dev = file->f_data;
-    ret = los_dev_write (dev,file->f_offset,(u8_t *)buf,len,cn_devfs_timeout);
+    ret = los_dev_write (dev,file->f_offset,(const void *)buf,len,cn_devfs_timeout);
     if(ret > 0)
     {
         file->f_offset += ret;

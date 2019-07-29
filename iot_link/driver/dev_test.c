@@ -43,6 +43,8 @@
 #include <driver.h>
 #include <sys/fcntl.h>
 
+#include <osal.h>
+
 //this file implement some demo to test the device module
 #define cn_testdriv_buf_len 256
 
@@ -168,10 +170,10 @@ static int __driv_open(int argc,const char *argv[]) //dirvopen drivname flag
 OSSHELL_EXPORT_CMD(__driv_open,"drivopen","drivopen name flag");
 
 
-static int __driv_write(int argc,const char *argv[]) //drivewrite string timeout
+static ssize_t __driv_write(int argc,const char *argv[]) //drivewrite string timeout
 {
-    int ret;
-    unsigned int timeout = 0;
+    ssize_t ret;
+    uint32_t timeout = 0;
 
     if(argc != 3)
     {
@@ -180,7 +182,7 @@ static int __driv_write(int argc,const char *argv[]) //drivewrite string timeout
     }
 
     timeout = strtoul(argv[2],NULL,0);
-    ret = los_dev_write(s_shell_opendev,0,(unsigned char *)argv[1],strlen(argv[1]),timeout);
+    ret = los_dev_write(s_shell_opendev,0,(const void *)argv[1],strlen(argv[1]),timeout);
     printf("write:%d bytes\n\r",ret);
 
     return 0;
@@ -189,12 +191,12 @@ static int __driv_write(int argc,const char *argv[]) //drivewrite string timeout
 OSSHELL_EXPORT_CMD(__driv_write,"drivwrite","drivwrite string timeout");
 
 
-static int __driv_read(int argc,const char *argv[]) //driveread len timeout
+static ssize_t __driv_read(int argc,const char *argv[]) //driveread len timeout
 {
-    int ret;
-    unsigned int timeout = 0;
-    int len ;
-    unsigned char *buf;
+    ssize_t ret;
+    uint32_t timeout = 0;
+    size_t len ;
+    void *buf;
 
     if(argc != 3)
     {
@@ -205,10 +207,10 @@ static int __driv_read(int argc,const char *argv[]) //driveread len timeout
     len = strtoul(argv[1],NULL,0);
     timeout = strtoul(argv[2],NULL,0);
 
-    buf = malloc(len);
+    buf = osal_malloc(len);
     ret = los_dev_read(s_shell_opendev,0,buf,len,timeout);
     printf("read:%d bytes\n\r",ret);
-    free(buf);
+    osal_free(buf);
     return 0;
 }
 

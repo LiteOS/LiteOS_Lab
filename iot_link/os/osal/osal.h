@@ -78,11 +78,11 @@ bool_t  osal_semp_del(osal_semp_t  semp);
  *@brief: the memory method that the os must supplied for the link
  *
  **/
-void *osal_malloc(int size);
+void *osal_malloc(size_t size);
 void  osal_free(void *addr);
-void *osal_zalloc(int size);
-void *osal_realloc(void *ptr,int newsize);
-void *osal_calloc(int n, int size);
+void *osal_zalloc(size_t size);
+void *osal_realloc(void *ptr,size_t newsize);
+void *osal_calloc(size_t n, size_t size);
 
 
 /**
