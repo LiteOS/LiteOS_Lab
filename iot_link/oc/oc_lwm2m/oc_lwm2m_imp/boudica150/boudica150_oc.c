@@ -79,7 +79,7 @@ static bool_t boudica150_atcmd(const char *cmd,const char *index)
 {
     int ret = 0;
     ret = at_command((unsigned char *)cmd,strlen(cmd),index,NULL,0,cn_boudica150_cmd_timeout);
-    if(ret > 0)
+    if(ret >= 0)
     {
         return true;
     }
@@ -95,7 +95,7 @@ static bool_t boudica150_atcmd_response(const char *cmd,const char *index,char *
 {
     int ret = 0;
     ret = at_command((unsigned char *)cmd,strlen(cmd),index,(char *)buf,len,cn_boudica150_cmd_timeout);
-    if(ret > 0)
+    if(ret >= 0)
     {
         return true;
     }
@@ -140,7 +140,7 @@ static int boudica150_oc_report(void *handle,unsigned char *buf,int len, int tim
 
     ret = at_command((unsigned char *)s_boudica150_oc_cb.sndbuf,strlen((char *)s_boudica150_oc_cb.sndbuf),index,NULL,0,timeout);
     osal_mutex_unlock(s_report_mutex);
-    if(ret > 0)
+    if(ret >= 0)
     {
         ret = 0;
     }
@@ -173,12 +173,14 @@ static int hexstr_to_byte(const char *bufin, int len, char *bufout)
     return 0;
 }
 
-static int boudica150_rcvdeal(unsigned char *data,int len)
+static int boudica150_rcvdeal(void *args,void *msg,size_t len)
 {
     int ret = 0;
     int datalen;
-
+    char *data;
     char  *str;
+
+    data = msg;
     if(len <strlen(cn_boudica150_rcvindex))
     {
         printf("%s:invalid frame:%d byte:%s\n\r",__FUNCTION__,len,(char *)data);
@@ -451,11 +453,14 @@ static bool_t boudica150_set_nnmi(int enable)  //unit second
 
 
 //wait for the lwm2m observe
-static int urc_qlwevtind(unsigned char *data,int len)
+static int urc_qlwevtind(void *args,void *msg,size_t len)
 {
 
+    char *data;
     int index_str;
     int ind;
+
+    data = msg;
     index_str = strlen(cn_urc_qlwevtind);
 
     if(len > index_str)
@@ -550,8 +555,8 @@ static bool_t boudica150_set_autoconnect(int enable)
 static bool_t boudica150_boot(const char *plmn, const char *apn, const char *bands,const char *server,const char *port)
 {
     //memset(&s_boudica150_oc_cb,0,sizeof(s_boudica150_oc_cb));
-    at_oobregister((fnoob)urc_qlwevtind,cn_urc_qlwevtind);
-    at_oobregister((fnoob)boudica150_rcvdeal,cn_boudica150_rcvindex);
+    at_oobregister("qlwevind",cn_urc_qlwevtind,strlen(cn_urc_qlwevtind),urc_qlwevtind,NULL);
+    at_oobregister("boudica150rcv",cn_boudica150_rcvindex,strlen(cn_boudica150_rcvindex),boudica150_rcvdeal,NULL);
 
     while(1)
     {
