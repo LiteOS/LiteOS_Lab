@@ -11,6 +11,7 @@ choice Demo
 		select OC_LWM2M
 		select SHELL_ENABLE
 		select BOUDICA150
+		select STIMER_ENABLE
 endchoice
 
 config USER_DEMO

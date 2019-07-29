@@ -23,7 +23,7 @@ OPT = -msmall-data-limit=8 -mno-save-restore -fmessage-length=0 -Os -g
 #######################################
 # binaries
 #######################################
-CROSS_COMPILE = riscv64-unknown-elf
+CROSS_COMPILE = riscv-none-embed
 ifeq ($(RISCV_PATH),)
 RISCV_GCC     := $(CROSS_COMPILE)-gcc
 RISCV_GXX     := $(CROSS_COMPILE)-g++

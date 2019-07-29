@@ -40,7 +40,11 @@
 #include <osal.h>
 #include <oc_mqtt_al.h>
 #include <los_typedef.h>
+#include "picture.h"
 #include "touch_panel.h"
+#include "gd32v103v_eval.h"
+#include "gd32v103v_lcd_eval.h"
+
 
 #define CFG_OC_MQTT_WITH_BOOTSTRAP_EN 1
 
@@ -50,7 +54,7 @@
 /** the address product_id device_id password crt is only for the test  */
 
 #define DEFAULT_LIFETIME            10
-#define BS_SERVER_IPV4         "119.3.190.193"     ///<  server ip address
+#define BS_SERVER_IPV4         "119.3.251.30"     ///<  server ip address
 #define BS_SERVER_DOMAIN         "iot-bs.cn-north-4.myhuaweicloud.com"
 #define BS_SERVER_PORT         "8883"           ///<  server mqtt service port
 #define DEMO_WITH_BOOTSTRAP_NODEID    "sdk_GD"   //"sdk_0040"//"sdk_bh"  //"sdk_0030"
@@ -126,7 +130,19 @@ static void           *s_mqtt_handle;
 static void           *s_report_handle;
 
 extern UINT16 touch_ad_x,touch_ad_y;
+static UINT16 a1=20;
+static UINT16 a2=120;
+static UINT16 a3=220;
+static UINT16 b1=10;
+static UINT16 b2=100;
+static UINT16 b3=200;
+static UINT16 device_code;
+static UINT8 error_string[]="Please press the button!";
+char_format_struct char_format;
 
+
+
+int oc_oceanlink_demo();
 
 static int app_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
 {
@@ -146,6 +162,137 @@ static int app_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
 
     }
     return ret;
+}
+
+/*!
+    \brief		find the position of max value in array
+    \param[in]	none
+    \param[out] none
+    \retval 	the position of max value in num_array array
+*/
+UINT8 find_max(UINT16* num_array)
+{
+    int id;
+    id=0;
+    if(num_array[id]<num_array[1]){
+        id=1;
+    }
+    if(num_array[id]<num_array[2]){
+        id=2;
+    }
+    if(num_array[id]<num_array[3]){
+        id=3;
+    }
+    if(num_array[id]==0){
+        id=4;
+    }
+    return id;
+}
+
+/*!
+	\brief		get the touch area
+	\param[in]	x: the row-coordinate
+	\param[in]	y: the column-coordinate
+	\param[out] num_array: touch area array pointer
+	\retval 	none
+*/
+void get_touch_area(UINT16 x,UINT16 y,UINT16 *num_array)
+{
+    if((x<a1+70)&&(x>a1+30)&&(y>b1+30)&&(y<b1+70)){
+        num_array[0]++;
+    }else if((x<a2+70)&&(x>a2+30)&&(y>b1+30)&&(y<b1+70)){
+        num_array[1]++;
+    }else if((x<a1+70)&&(x>a1+30)&&(y>b2+30)&&(y<b2+70)){
+        num_array[2]++;
+    }else if((x<a2+70)&&(x>a2+30)&&(y>b2+30)&&(y<b2+70)){
+        num_array[3]++;
+    }
+}
+
+/*!
+	\brief		change the picture of LED
+	\param[in]	button_id: the id of button you just pressed
+	\param[out] none
+	\retval 	none
+*/
+void change_picture(UINT8 button_id)
+{
+    UINT8 len_s;
+    UINT8 *str;
+    UINT16 i;
+
+    /* draw picture on LCD screen */
+    lcd_picture_draw(a1+30,b1+40,a1+30+40-1,b1+40+40-1,(UINT16 *)(image_off + BMP_HEADSIZE));
+    lcd_picture_draw(a2+30,b1+40,a2+30+40-1,b1+40+40-1,(UINT16 *)(image_off + BMP_HEADSIZE));
+    lcd_picture_draw(a1+30,b2+40,a1+30+40-1,b2+40+40-1,(UINT16 *)(image_off + BMP_HEADSIZE));
+    lcd_picture_draw(a2+30,b2+40,a2+30+40-1,b2+40+40-1,(UINT16 *)(image_off + BMP_HEADSIZE));
+    /* draw character on LCD screen */
+    len_s=sizeof(error_string)-1;
+    str = error_string;
+
+    char_format.char_color = LCD_COLOR_WHITE;
+    for (i = 0; i < len_s; i++){
+        lcd_char_display((30+8*i), 190, *str++, char_format);
+    }
+
+    switch(button_id){
+        case 0:
+            lcd_picture_draw(a1+30,b1+40,a1+30+40-1,b1+40+40-1,(UINT16 *)(image_on + BMP_HEADSIZE));
+            break;
+        case 1:
+            lcd_picture_draw(a2+30,b1+40,a2+30+40-1,b1+40+40-1,(UINT16 *)(image_on + BMP_HEADSIZE));
+            break;
+        case 2:
+            lcd_picture_draw(a1+30,b2+40,a1+30+40-1,b2+40+40-1,(UINT16 *)(image_on + BMP_HEADSIZE));
+            break;
+        case 3:
+            lcd_picture_draw(a2+30,b2+40,a2+30+40-1,b2+40+40-1,(UINT16 *)(image_on + BMP_HEADSIZE));
+            break;
+        default:
+            str = error_string;
+            char_format.char_color = LCD_COLOR_RED;
+            for (i = 0; i < len_s; i++){
+                lcd_char_display((30+8*i), 190, *str++, char_format);
+            }
+            break;
+    }
+}
+
+/*!
+    \brief		turn on the LED according the pressed button
+    \param[in]	button_id: the id of button you just pressed
+    \param[out] none
+    \retval 	none
+*/
+void turn_on_led(UINT8 button_id)
+{
+    /* firstly,turn off all the LEDs */
+    gd_eval_led_off(LED1);
+    gd_eval_led_off(LED2);
+    gd_eval_led_off(LED3);
+    gd_eval_led_off(LED4);
+
+    switch(button_id){
+        case 0:
+            gd_eval_led_on(LED1);  /*!< turn on LED2 only */
+            break;
+        case 1:
+            gd_eval_led_on(LED2);  /*!< turn on LED3 only */
+            break;
+        case 2:
+            gd_eval_led_on(LED3);  /*!< turn on LED4 only */
+            break;
+        case 3:
+            gd_eval_led_on(LED4);  /*!< turn on LED5 only */
+            break;
+        default:
+            /* turn on all the LEDs */
+            gd_eval_led_on(LED1);
+            gd_eval_led_on(LED2);
+            gd_eval_led_on(LED3);
+            gd_eval_led_on(LED4);
+            break;
+    }
 }
 
 
@@ -181,44 +328,40 @@ VOID lcd_handle(VOID)
             num[0]=num[1]=num[2]=num[3]=0;
             count=0;
 
-			if(button_id == 0)
-				led1_switch = 1;
-			else
-				led1_switch = 0;
+            if(button_id == 0)
+                led1_switch = 1;
+            else
+                led1_switch = 0;
             lst1.item.name = "LED1";
             lst1.item.buf = (char *)&led1_switch;
             lst1.item.len = sizeof(led1_switch);
             lst1.item.type = en_key_value_type_int;
             lst1.next = &lst2;
 
-
-			
-			if(button_id == 1)
-				led2_switch = 1;
-			else
-				led2_switch = 0;
+            if(button_id == 1)
+                led2_switch = 1;
+            else
+                led2_switch = 0;
             lst2.item.name = "LED2";
             lst2.item.buf = (char *)&led2_switch;
             lst2.item.len = sizeof(led2_switch);
             lst2.item.type = en_key_value_type_int;
             lst2.next = &lst3;
 
-			
-			if(button_id == 2)
-				led3_switch = 1;
-			else
-				led3_switch = 0;
+            if(button_id == 2)
+                led3_switch = 1;
+            else
+                led3_switch = 0;
             lst3.item.name = "LED3";
             lst3.item.buf = (char *)&led3_switch;
             lst3.item.len = sizeof(led3_switch);
             lst3.item.type = en_key_value_type_int;
             lst3.next = &lst4;
 
-			
-			if(button_id == 3)
-				led4_switch = 1;
-			else
-				led4_switch = 0;
+            if(button_id == 3)
+                led4_switch = 1;
+            else
+                led4_switch = 0;
             lst4.item.name = "LED4";
             lst4.item.buf = (char *)&led4_switch;
             lst4.item.len = sizeof(led4_switch);
@@ -237,14 +380,14 @@ VOID lcd_handle(VOID)
                 printf("buf:%s %d\n\n", buf, strlen(buf));
                 if(NULL != buf)
                 {
-                    if(0 == oc_mqtt_report(0xff,buf,strlen(buf),en_mqtt_al_qos_1));
+                    if(0 == oc_mqtt_report((void *)0xff,buf,strlen(buf),en_mqtt_al_qos_1));
                     osal_free(buf);
                 }
 
                 cJSON_Delete(root);
             }
         }
-        LOS_TaskDelay(10);
+        osal_task_sleep(10);
     }
 }
 

@@ -112,7 +112,6 @@ extern const unsigned char gImage_Huawei_IoT_QR_Code[114720];
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	int ret;
 	switch(GPIO_Pin)
 	{
 		case KEY1_Pin:
@@ -136,7 +135,7 @@ static int             s_rcv_buffer[cn_app_rcv_buf_len];
 static int             s_rcv_datalen;
 static osal_semp_t     s_rcv_sync;
 
-static void timer1_callback(int arg)
+static void timer1_callback(void *arg)
 {
 	qr_code = !qr_code;
 	LCD_Clear(WHITE);
@@ -325,7 +324,12 @@ static int app_collect_task_entry()
         }
         osal_task_sleep(2*1000);
     }
+
+    return 0;
 }
+
+
+#include <stimer.h>
 
 int oc_lwm2m_demo_main()
 {
@@ -338,9 +342,8 @@ int oc_lwm2m_demo_main()
     osal_int_connect(KEY1_EXTI_IRQn, 2,0,Key1_IRQHandler,NULL);
     osal_int_connect(KEY2_EXTI_IRQn, 3,0,Key2_IRQHandler,NULL);
 
-	int16_t swtmr1;
-	osal_swtmr_create(8000,SWTMR_MODE_PERIOD,timer1_callback,&swtmr1,1);
-	osal_swtmr_start(swtmr1);
+    stimer_create("lcdtimer",timer1_callback,NULL,8*1000,cn_stimer_flag_start);
+
     return 0;
 }
 

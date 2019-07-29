@@ -44,11 +44,7 @@ typedef struct
     ///< reboot
     int (*reboot)(void); ///< never come back only if failed
 
-
-    int (*swtmr_create)(int interval, int mode, handle callback, int *swtmrid, int arg);
-    int (*swtmr_start)(int swtmrid);
-
-    int (*int_connect)(int intnum, int prio, int mode, handle callback, int arg);
+    int (*int_connect)(int intnum, int prio, int mode, fn_interrupt_handle callback,void *arg);
 
 }tag_os_ops;
 
