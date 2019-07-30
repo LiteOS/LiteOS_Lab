@@ -40,21 +40,10 @@ const struct phys_mem system_phys_mem [] =
         { 0, 0 }
     };
 
-static UINT16 a1=20;
-static UINT16 a2=120;
-static UINT16 a3=220;
-static UINT16 b1=10;
-static UINT16 b2=100;
-static UINT16 b3=200;
-static UINT16 device_code;
-//UINT8 error_string[]="Please press the button!";
-char_format_struct char_format;
-#define  SFLASH_ID                     0xC84015
-
-
-
-
+extern int lcd_demo();
 static UINT32 g_TaskID1, g_TaskID2, g_TaskID3;
+
+
 LITE_OS_SEC_TEXT VOID TEST1(VOID)
 {
     while (1)
@@ -144,97 +133,6 @@ static int link_test()
     return ret;
 }
 
-#ifndef CONFIG_HELLO_WORLD_ENABLE
-
-extern VOID lcd_handle(VOID);
-
-static int lcd_demo()
-{
-    int ret = -1;
-    UINT32 uwRet = LOS_OK;
-    UINT32  handle;
-    TSK_INIT_PARAM_S task_init_param;
-
-    UINT16 i;
-    UINT8 led_string[4][4]={"LED1","LED2","LED3","LED4"} ;
-    
-    /* initialize LEDs */
-    gd_eval_led_init(LED1);
-    gd_eval_led_init(LED2);
-    gd_eval_led_init(LED3);
-    gd_eval_led_init(LED4);
-    
-    /* configure the EXMC access mode */
-    exmc_lcd_init();
-
-    /* configure SPI0 GPIO and parameter */
-    spi_flash_init();
-    if(SFLASH_ID != spi_flash_read_id()){
-        while(1);
-    }
-
-    delay_1ms(50);  
-
-    /* read the LCD controller device code:(0x8989) */
-    device_code = lcd_register_read(0x0000);
-
-    /* initialize the LCD */
-    lcd_init();
-
-    /* clear the LCD screen */
-    lcd_clear(LCD_COLOR_WHITE);
-
-    /* draw the picture of Gigadevice logo */
-    /* if you don't want to draw the picture, you should modify the macro on
-       the line 422th of picture.c file and comment the next line */
-    //lcd_picture_draw(40,200,40+160-1,200+87-1,(UINT16 *)(picture + BMP_HEADSIZE));
-    lcd_picture_draw_ex(40,200,40+160-1,200+87-1,0);
-
-    /* configure the GPIO of SPI touch panel */
-    touch_panel_gpio_configure();
-
-
-    /* draw a rectangle */
-    lcd_rectangle_draw(10,10,230,310,LCD_COLOR_BLUE);
-
-    /* configure char format */
-    char_format.char_color = LCD_COLOR_BLUE;
-    char_format.bk_color = LCD_COLOR_WHITE;
-    char_format.direction = CHAR_DIRECTION_VERTICAL;
-    char_format.font = CHAR_FONT_8_16;
-    
-    /* draw character on LCD screen */
-    for (i = 0; i < 4; i++){
-        lcd_char_display((a1+35+8*i), b1+20, *(led_string[0]+i), char_format);
-        lcd_char_display((a2+35+8*i), b1+20, *(led_string[1]+i), char_format);
-        lcd_char_display((a1+35+8*i), b2+20, *(led_string[2]+i), char_format);
-        lcd_char_display((a2+35+8*i), b2+20, *(led_string[3]+i), char_format);
-    }
-    
-    /* draw picture of button on LCD screen */
-    lcd_picture_draw(a1+30,b1+40,a1+30+40-1,b1+40+40-1,(UINT16 *)(image_off + BMP_HEADSIZE));
-    lcd_picture_draw(a2+30,b1+40,a2+30+40-1,b1+40+40-1,(UINT16 *)(image_off + BMP_HEADSIZE));
-    lcd_picture_draw(a1+30,b2+40,a1+30+40-1,b2+40+40-1,(UINT16 *)(image_off + BMP_HEADSIZE));
-    lcd_picture_draw(a2+30,b2+40,a2+30+40-1,b2+40+40-1,(UINT16 *)(image_off + BMP_HEADSIZE));
-
-
-
-
-    memset (&task_init_param, 0, sizeof (TSK_INIT_PARAM_S));
-    task_init_param.uwArg = (unsigned int)NULL;
-    task_init_param.usTaskPrio = 2;
-    task_init_param.pcName =(char *) "lcd_handle";
-    task_init_param.pfnTaskEntry = (TSK_ENTRY_FUNC)lcd_handle;
-    task_init_param.uwStackSize = 0x1200;
-    uwRet = LOS_TaskCreate(&handle, &task_init_param);
-    if(LOS_OK == uwRet){
-        ret = 0;
-    }
-    return ret;
-
-
-}
-#endif
 
 int main() {
     /* configure EVAL_COM0 */
@@ -252,10 +150,8 @@ int main() {
     }
     //LOS_MemInfo(1);
     //LOS_BoadExampleEntry();
-#ifndef CONFIG_HELLO_WORLD_ENABLE
-    lcd_demo();
-#endif
     link_test();
+    lcd_demo();
 
     (void)LOS_Start();
     return 0;

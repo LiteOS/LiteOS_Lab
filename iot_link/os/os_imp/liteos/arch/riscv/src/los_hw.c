@@ -37,6 +37,9 @@
 #include "los_hw.h"
 #include "los_sys.ph"
 #include "los_priqueue.ph"
+#include "los_memory.h"
+#include "los_printf.h"
+#include <string.h>
 
 
 #ifdef __cplusplus
