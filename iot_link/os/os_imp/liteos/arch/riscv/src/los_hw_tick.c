@@ -50,6 +50,14 @@ extern "C" {
 
 LITE_OS_SEC_BSS UINT32  g_uwCyclesPerTick;
 
+void eclic_mtip_handler(void)
+{
+    *(UINT64 *)(TMR_CTRL_ADDR + TMR_MTIME) = 0;
+    /* vPortSetupTimerInterrupt() uses LPIT0 to generate the tick interrupt. */
+    osTickHandler();
+}
+
+
 /*lint -save -e40 -e10 -e26 -e1013*/
 /*****************************************************************************
 Function   : LOS_TickHandler

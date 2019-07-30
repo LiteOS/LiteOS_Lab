@@ -33,7 +33,7 @@
  *---------------------------------------------------------------------------*/
 
 #include "los_hwi.h"
-
+#include "gd32vf103_eclic.h"
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -44,9 +44,6 @@ extern "C" {
 /*lint -save -e40 -e522 -e533*/
 
 extern void LOS_TickHandler(void);
-extern void LosAdapIrpEnable(unsigned int irqnum, unsigned short prior);
-extern void LosAdapIrqDisable(unsigned int irqnum);
-extern void LosAdapIntInit(void);
 extern void SysTick_Handler(void);
 /*lint -restore*/
 UINT32  g_vuwIntCount = 0;
@@ -141,8 +138,6 @@ LITE_OS_SEC_TEXT_INIT VOID osHwiInit()
     {
         m_pstHwiForm[uwIndex] = osHwiDefaultHandler;
     }
-    //LosAdapIntInit();
-
 }
 
 /*****************************************************************************
@@ -185,7 +180,7 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_HwiCreate( HWI_HANDLE_T  uwHwiNum,
 
     osSetVector(uwHwiNum, pfnHandler);
 
-    //LosAdapIrpEnable(uwHwiNum, usHwiPrio);
+    eclic_irq_enable(uwHwiNum, 1, usHwiPrio);
 
     LOS_IntRestore(uvIntSave);
 
@@ -209,7 +204,7 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_HwiDelete(HWI_HANDLE_T uwHwiNum)
         return OS_ERRNO_HWI_NUM_INVALID;
     }
 
-    LosAdapIrqDisable(uwHwiNum);
+    eclic_irq_disable(uwHwiNum);
 
     uwIntSave = LOS_IntLock();
 
