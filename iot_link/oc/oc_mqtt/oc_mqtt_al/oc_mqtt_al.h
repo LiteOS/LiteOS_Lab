@@ -101,18 +101,11 @@ typedef enum
     en_oc_boot_strap_mode_client_initialize,
 }en_oc_boot_strap_mode_t;
 
-typedef enum
-{
-    en_oc_boot_strap_status_bs = 0,
-    en_oc_boot_strap_status_hub,
-    en_oc_boot_strap_status_max,
-}en_oc_boot_strap_status_t;
 
 
 typedef struct
 {
     en_oc_boot_strap_mode_t  boot_mode;
-    en_oc_boot_strap_status_t  boot_status;
     unsigned short lifetime;
     const char   *server;            ///< cdp server address
     const char   *port;              ///< cdp server port
@@ -128,8 +121,8 @@ typedef struct
         tag_oc_mqtt_device_static  s_device;
     }device_info;
 
-    oc_mqtt_msgdealer  msgdealer;///< when the agent receive any applciation data, please call this function
-    oc_mqtt_msgdealer  bsinfo_dealer;
+    oc_mqtt_msgdealer  msgdealer;      ///< when the agent receive any applciation data, please call this function
+    int                config_ret;     ///< when handle is NULL,please refer this member for the reason
 }tag_oc_mqtt_config;
 
 ///////////////////////////MQTT AGENT INTERFACE////////////////////////////////

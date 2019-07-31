@@ -449,6 +449,7 @@ static void * __connect(mqtt_al_conpara_t *conparam)
     cb = osal_malloc(sizeof(paho_mqtt_cb_t));
     if(NULL == cb)
     {
+        conparam->conret = cn_mqtt_al_con_code_err_unkown;
         goto EXIT_CB_MEM_ERR;
     }
 
@@ -471,6 +472,8 @@ static void * __connect(mqtt_al_conpara_t *conparam)
     }
     if(0 != __io_connect(n,conparam->serveraddr.data,conparam->serverport))
     {
+        conparam->conret = cn_mqtt_al_con_code_err_network;
+
         goto EXIT_NET_CONNECT_ERR;
     }
     //then do the mqtt config
@@ -478,6 +481,7 @@ static void * __connect(mqtt_al_conpara_t *conparam)
     cb->sndbuf = osal_malloc(cn_mqtt_sndbuf_size) ;
     if((NULL == cb->rcvbuf) || (NULL == cb->sndbuf))
     {
+        conparam->conret = cn_mqtt_al_con_code_err_unkown;
         goto EIXT_BUF_MEM_ERR;
     }
     c = &cb->client;
