@@ -168,13 +168,11 @@ instruction  :
 static ssize_t uart_at_send(const char *buf, size_t len,uint32_t timeout)
 {
     int i = 0;
-    uint8_t *msg;
-    msg = buf;
 
     while(i < len)
     {
-        printf("0x%x ", msg[i]);
-        usart_data_transmit(uart_at,msg[i]);
+        printf("0x%x ", buf[i]);
+        usart_data_transmit(uart_at,buf[i]);
         i++;
 
         while (usart_flag_get(uart_at, USART_FLAG_TBE)== RESET){}
