@@ -37,7 +37,6 @@
  *
  */
 
-
 #include <stdint.h>
 #include <stddef.h>
 #include <string.h>
@@ -45,10 +44,9 @@
 #include <osal.h>
 #include <oc_lwm2m_al.h>
 
-#define cn_endpoint_id        "lwm2m_002"
-#define cn_app_server         "49.4.85.232"
-#define cn_app_port           "5684"
-const unsigned char  s_app_psk[]={0x01,0x02,0x03,0x04,0x05,0x06};
+#define cn_endpoint_id        "lwm2m_001"
+#define cn_app_server         "119.3.251.30"
+#define cn_app_port           "5683"
 
 #define cn_app_connectivity    0
 #define cn_app_lightstats      1
@@ -203,14 +201,14 @@ static int app_report_task_entry()
 
     memset(&oc_param,0,sizeof(oc_param));
 
-    oc_param.app_server.address = cn_app_server;
-    oc_param.app_server.port = cn_app_port;
     oc_param.app_server.ep_id = cn_endpoint_id;
-    oc_param.app_server.psk = (char *)s_app_psk;
-    oc_param.app_server.psk_len = sizeof(s_app_psk);
-    oc_param.app_server.psk_id = cn_endpoint_id;
 
-    oc_param.boot_mode = en_oc_boot_strap_mode_factory;
+
+    oc_param.boot_server.address = cn_app_server;
+    oc_param.boot_server.port = cn_app_port;
+    oc_param.boot_server.ep_id = cn_endpoint_id;
+
+    oc_param.boot_mode = en_oc_boot_strap_mode_client_initialize;
     oc_param.rcv_func = app_msg_deal;
 
     s_lwm2m_handle = oc_lwm2m_config(&oc_param);
@@ -220,13 +218,15 @@ static int app_report_task_entry()
         //install a dealer for the led message received
         while(1) //--TODO ,you could add your own code here
         {
+
+            osal_task_sleep(10*1000);
+
             lux++;
             lux= lux%10000;
 
             light.msgid = cn_app_light;
             light.intensity = htons(lux);
             oc_lwm2m_report(s_lwm2m_handle,(char *)&light,sizeof(light),1000); ///< report the light message
-            osal_task_sleep(10*1000);
         }
     }
 
@@ -245,8 +245,6 @@ int oc_lwm2m_demo_main()
 
     return 0;
 }
-
-
 
 
 

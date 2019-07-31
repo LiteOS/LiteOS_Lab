@@ -213,7 +213,7 @@ static int app_report_task_entry()
         //install a dealer for the led message received
         while(1) //--TODO ,you could add your own code here
         {
-
+            lux++;
             lux= lux%10000;
 
             light.msgid = cn_app_light;

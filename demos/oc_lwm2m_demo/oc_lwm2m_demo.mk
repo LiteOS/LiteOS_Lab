@@ -23,6 +23,11 @@ else ifeq ($(CONFIG_OC_LWM2M_DEMO_TYPE), "oc_lwm2m_demo_nodtls")
 	oc_lwm2m_demo_src  = ${wildcard $(TOP_DIR)/demos/oc_lwm2m_demo/oc_lwm2m_demo_nodtls/oc_lwm2m_demo_nodtls.c}
 	oc_lwm2m_demo_inc = -I $(TOP_DIR)/demos/oc_lwm2m_demo
 	oc_lwm2m_demo_defs = -D CONFIG_OC_LWM2M_DEMO_ENABLE=1
+
+else ifeq ($(CONFIG_OC_LWM2M_DEMO_TYPE), "oc_lwm2m_demo_nodtls_bs")	
+	oc_lwm2m_demo_src  = ${wildcard $(TOP_DIR)/demos/oc_lwm2m_demo/oc_lwm2m_demo_nodtls_bs/oc_lwm2m_demo_nodtls_bs.c}
+	oc_lwm2m_demo_inc = -I $(TOP_DIR)/demos/oc_lwm2m_demo
+	oc_lwm2m_demo_defs = -D LWM2M_BOOTSTRAP=1 -D CONFIG_OC_LWM2M_DEMO_ENABLE=1	
 	
 endif
 		 

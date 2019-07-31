@@ -220,23 +220,23 @@ static uint8_t prv_security_write(uint16_t instanceId,
         {
         case LWM2M_SECURITY_URI_ID:
             if (targetP->uri != NULL) lwm2m_free(targetP->uri);
-//            targetP->uri = (char *)lwm2m_malloc(dataArray[i].value.asBuffer.length + 1);
-//            if (targetP->uri != NULL)
-//            {
-//                memset(targetP->uri, 0, dataArray[i].value.asBuffer.length + 1);
-//                strncpy(targetP->uri, (char *)dataArray[i].value.asBuffer.buffer, dataArray[i].value.asBuffer.length);
-//                result = COAP_204_CHANGED;
-//            }
-            targetP->uri = (char *)lwm2m_malloc(strlen(s_bs_test_uri) + 1); ///--TODO, do the test
+            targetP->uri = (char *)lwm2m_malloc(dataArray[i].value.asBuffer.length + 1);
             if (targetP->uri != NULL)
             {
-                strncpy(targetP->uri, (char *)s_bs_test_uri, strlen(s_bs_test_uri) + 1);
+                memset(targetP->uri, 0, dataArray[i].value.asBuffer.length + 1);
+                strncpy(targetP->uri, (char *)dataArray[i].value.asBuffer.buffer, dataArray[i].value.asBuffer.length);
                 result = COAP_204_CHANGED;
             }
-            else
-            {
-                result = COAP_500_INTERNAL_SERVER_ERROR;
-            }
+//            targetP->uri = (char *)lwm2m_malloc(strlen(s_bs_test_uri) + 1); ///--TODO, do the test
+//            if (targetP->uri != NULL)
+//            {
+//                strncpy(targetP->uri, (char *)s_bs_test_uri, strlen(s_bs_test_uri) + 1);
+//                result = COAP_204_CHANGED;
+//            }
+//            else
+//            {
+//                result = COAP_500_INTERNAL_SERVER_ERROR;
+//            }
             break;
 
         case LWM2M_SECURITY_BOOTSTRAP_ID:

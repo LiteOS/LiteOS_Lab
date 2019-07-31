@@ -45,12 +45,12 @@
 /* brief : the oceanconnect platform only support the ca_crt up tills now*/
 /** the address product_id device_id password crt is only for the test  */
 
-//#define MQTT_DEMO_CONNECT_DYNAMIC
 #define DEFAULT_LIFETIME            10
-#define DEFAULT_SERVER_IPV4         "119.3.248.253"     ///<  server ip address
+#define DEFAULT_SERVER_IPV4         "49.4.93.24"     ///<  server ip address
 #define DEFAULT_SERVER_PORT         "8883"           ///<  server mqtt service port
-#define AGENT_TINY_DEMO_DEVICEID    "sdk_0030"
-#define AGENT_TINY_DEMO_PASSWORD    "e8775e734c48d20aa3ce"
+#define CN_MQTT_EP_NOTEID           "mqtt_sdk01"
+#define CN_MQTT_EP_DEVICEID         "6e4a90d5-8e31-48c0-920a-d03c6e91d923"
+#define CN_MQTT_EP_PASSWD           "c18f10422c93548e6fef"
 
 
 static char s_mqtt_ca_crt[] =
@@ -226,8 +226,8 @@ static int oc_mqtt_report_entry(void *args)
     config.sign_type = en_mqtt_sign_type_hmacsha256_check_time_no;
     config.device_type = en_oc_mqtt_device_type_static;
     config.auth_type = en_mqtt_auth_type_nodeid;
-    config.device_info.s_device.deviceid = AGENT_TINY_DEMO_DEVICEID;
-    config.device_info.s_device.devicepasswd = AGENT_TINY_DEMO_PASSWORD;
+    config.device_info.s_device.deviceid = CN_MQTT_EP_NOTEID;
+    config.device_info.s_device.devicepasswd = CN_MQTT_EP_PASSWD;
 
     config.security.type = en_mqtt_al_security_cas;
     config.security.u.cas.ca_crt.data = s_mqtt_ca_crt;
@@ -254,7 +254,7 @@ static int oc_mqtt_report_entry(void *args)
         report.hasmore = en_oc_mqtt_has_more_no;
         report.paralst= &lst;
         report.serviceid = "Battery";
-        report.eventtime = "20190508T112020Z";
+        report.eventtime = NULL;
 
         root = oc_mqtt_json_fmt_report(&report);
         if(NULL != root)
