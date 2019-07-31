@@ -21,6 +21,6 @@ endchoice
 config USER_DEMO
 	string
 	default "hello_world_demo" if Demo_Helloworld
-	default "oc_develop_template" if Demo_Develop
-	default "oc_oceanlink_template" if Demo_Oceanlink
+	default "oc_develop_demo" if Demo_Develop
+	default "oc_oceanlink_demo" if Demo_Oceanlink
 	default "none"
