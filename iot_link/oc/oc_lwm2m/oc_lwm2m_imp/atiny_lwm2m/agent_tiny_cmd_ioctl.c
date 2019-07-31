@@ -251,9 +251,13 @@ int atiny_get_link_utilization(int *utilization)
     return ATINY_OK;
 }
 
+extern int lwm2m_agent_receive(char *msg, int len);
+
+
 int atiny_write_app_write(void *user_data, int len)
 {
     (void)printf("write num19 object success\r\n");
+    lwm2m_agent_receive(user_data,len);
     return ATINY_OK;
 }
 
