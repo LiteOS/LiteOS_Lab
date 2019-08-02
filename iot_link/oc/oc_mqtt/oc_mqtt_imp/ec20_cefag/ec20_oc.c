@@ -71,7 +71,7 @@ static void* ec20_oc_config(tag_oc_mqtt_config *param)
         //ec20_atcmd("at+HWOCMQTTCONNECT=1,30,\"iot-bs.cn-north-4.myhuaweicloud.com\",\"8883\",\"sdk_0040\",\"f62fcf47d62c4ed18913\"","OK");
         ret = ec20_atcmd(cmd,"OK");
         if(ret)
-            s_oc_handle = 0xffffffff;
+            s_oc_handle = (void *)0xffffffff;
     }
     return s_oc_handle;
 }

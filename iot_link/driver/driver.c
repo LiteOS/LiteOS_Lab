@@ -41,7 +41,7 @@
 #include <stdlib.h>
 #include <driver.h>
 
-#if CFG_DRIVER_ENABLE
+#if CONFIG_DRIVER_ENABLE
 
 #include <sys/fcntl.h>
 #include <sys/types.h>
@@ -70,10 +70,10 @@ struct driv_cb
     unsigned int           drivstatus;       //show the state here like init or something like this
     los_dev_t              devlst;           //the open list,support the multi open
     //following member used for the debug
-    unsigned int            total_write;            //how many data has been sent
-    unsigned int            total_read;             //how many data has received
-    unsigned int            opencounter;            //reference counter
-    unsigned int            errno;                  //the last errno has happend
+    size_t            total_write;            //how many data has been sent
+    size_t            total_read;             //how many data has received
+    size_t            opencounter;            //reference counter
+    unsigned int      errno;                  //the last errno has happend
 };
 typedef struct
 {
@@ -106,17 +106,17 @@ function     :bsp developer use this function to add a device to the system
 parameters   :
 instruction  :NULL if failed else return the device handle
 *******************************************************************************/
-los_driv_t los_driv_register(const char *name, const los_driv_op_t *op,\
-                             void *pri,unsigned int flagmask)
+
+los_driv_t los_driv_register(os_driv_para_t *para)
 {
     struct driv_cb  *driv = NULL;
 
-    if((NULL == name)||(NULL == op))
+    if((NULL == para->name)||(NULL == para->op))
     {
         goto EXIT_PARAS;
     }
 
-    driv = malloc(sizeof(struct driv_cb));
+    driv = osal_malloc(sizeof(struct driv_cb));
     if(NULL == driv)
     {
         goto EXIT_MALLOC;
@@ -124,10 +124,10 @@ los_driv_t los_driv_register(const char *name, const los_driv_op_t *op,\
     memset(driv,0,sizeof(struct driv_cb));
 
     //do the member initialize
-    driv->name = name;
-    driv->op = op;
-    driv->pri = pri;
-    driv->flagmask = flagmask;
+    driv->name = para->name;
+    driv->op = para->op;
+    driv->pri = para->pri;
+    driv->flagmask = para->flag;
 
     //add it to the device list if no device with the same name exsit
     if(false == osal_mutex_lock(s_los_driv_module.lock))
@@ -135,7 +135,7 @@ los_driv_t los_driv_register(const char *name, const los_driv_op_t *op,\
         goto EXIT_MUTEX;
     }
 
-    if(NULL != __driv_match(name))
+    if(NULL != __driv_match(para->name))
     {
         goto EXIT_EXISTED;
     }
@@ -152,7 +152,7 @@ los_driv_t los_driv_register(const char *name, const los_driv_op_t *op,\
 EXIT_EXISTED:
     osal_mutex_unlock(s_los_driv_module.lock);
 EXIT_MUTEX:
-    free(driv);
+    osal_free(driv);
     driv = NULL;
 EXIT_MALLOC:
 EXIT_PARAS:
@@ -198,7 +198,7 @@ bool_t los_driv_unregister(const char *name)
                 pre->nxt = tmp->nxt;
             }
 
-            free(tmp);
+            osal_free(tmp);
             ret = true;
 
             s_los_driv_module.drivnum--;
@@ -246,7 +246,7 @@ static void osdriv_load_static(void){
 #endif
     for(i =0;i<num;i++)
     {
-        los_driv_register(para->name,para->op,para->pri,para->flag);
+        los_driv_register(para);
         para++;
     }
 
@@ -303,7 +303,7 @@ los_dev_t  los_dev_open  (const char *name,unsigned int flag)
         goto EXIT_PARAERR;
     }
 
-    dev = malloc(sizeof(struct dev_cb));
+    dev = osal_malloc(sizeof(struct dev_cb));
     if (NULL == dev)
     {
         goto EXIT_MEMERR;
@@ -367,7 +367,7 @@ EXIT_EXCLERR:
 EXIT_DRIVERR:
     osal_mutex_unlock(s_los_driv_module.lock);
 EXIT_MUTEXERR:
-    free(dev);
+    osal_free(dev);
     dev = NULL;
 EXIT_MEMERR:
 EXIT_PARAERR:
@@ -436,7 +436,7 @@ bool_t  los_dev_close  (los_dev_t dev)
         driv->drivstatus &= (~cn_driv_status_initialized);
     }
 
-    free(dev);
+    osal_free(dev);
     driv->opencounter--;
 
     osal_mutex_unlock(s_los_driv_module.lock);
@@ -460,9 +460,9 @@ parameters   :dev,returned by the los_dev_open function
               timeout:the waittime if no data current
 instruction  :how many data has been read to the buf
 *******************************************************************************/
-int   los_dev_read  (los_dev_t dev,unsigned int offset,unsigned char *buf,int len,unsigned int timeout)
+ssize_t   los_dev_read  (los_dev_t dev,size_t offset, void *buf,size_t len,uint32_t timeout)
 {
-    int ret = 0;
+    ssize_t ret = 0;
     struct dev_cb  *devcb;
     struct driv_cb *drivcb;
 
@@ -495,9 +495,9 @@ parameters   :dev,returned by the los_dev_open function
               timeout:the waittime if no data current
 instruction  :how many data has been written to the device
 *******************************************************************************/
-int los_dev_write (los_dev_t dev,unsigned int offset,unsigned char *buf,int len,unsigned int timeout)
+ssize_t los_dev_write (los_dev_t dev,size_t offset,const void *buf,size_t len, uint32_t timeout)
 {
-    int ret = 0;
+    ssize_t ret = 0;
     struct dev_cb  *devcb;
     struct driv_cb *drivcb;
 

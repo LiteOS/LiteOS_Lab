@@ -45,7 +45,6 @@ mainmenu "Huawei IoT Stack Configuration"
 					select DTLS
 				config EC20
 					bool "ec20"
-					select MQTT
 					select AT_ENABLE
 					select CJSON_ENABLE
 			endchoice

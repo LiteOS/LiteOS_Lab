@@ -38,6 +38,7 @@
  */
 
 //include the file which implement the function
+#include  <string.h>
 #include  <osal_imp.h>
 
 ///< this is implement for the task

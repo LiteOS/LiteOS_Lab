@@ -172,11 +172,13 @@ int link_main(void *args)
 #endif
 
 #ifdef CONFIG_OC_DEVELOP_ENABLE
+    extern int oc_develop_demo();
     oc_develop_demo();
 #endif
 
 
 #ifdef CONFIG_OC_OCEANLINK_ENABLE
+    extern int oc_oceanlink_demo();
     oc_oceanlink_demo();
 #endif
 
