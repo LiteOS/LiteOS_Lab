@@ -159,6 +159,8 @@ typedef struct
     char         *mqtt_passwd;
     char         *mqtt_subtopic;
     char         *mqtt_pubtopic;
+    char         *server;
+    char         *port;
 
     ///< we have two mode, bs mode or dmp mode
     oc_dmp_mqtt_cb_t   dmp;
@@ -169,6 +171,8 @@ typedef struct
     en_oc_agent_mqtt_status_t     constatus;
     int                           conerr;   ///< same the mqtt_al defines
     int                           runstop;  ///< this is the api command do it
+    int                           bsrunstop; ///< used for the bs run
+    int                           dmprunstop;///< used for the dmp run
 
 }oc_agent_mqtt_cb_t;   ///< i think we may only got one mqtt
 static oc_agent_mqtt_cb_t *s_oc_agent_mqtt_cb;
@@ -1133,12 +1137,13 @@ static int bs_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
     return ret;
 }
 
+///< 0 success -1 failed
 static int __oc_agent_bs_state(oc_agent_mqtt_cb_t  *cb)
 {
     int conn_failed_cnt = 0;
     int ret = -1;
 
-    while(cb->runstop)
+    while((cb->runstop) && (cb->bsrunstop))
     {
         if(conn_failed_cnt > 0)
         {
@@ -1199,15 +1204,21 @@ static int __oc_agent_bs_state(oc_agent_mqtt_cb_t  *cb)
         }
 
         cb->b_flag_rcv_snd = 0;
-        cb->b_flag_stop = 1;
-
         ///< here we wait until the
-        while(mqtt_al_check_status(cb->mqtt_handle))
+        while(1)
         {
 
-        }
+            if(cb->constatus != en_oc_agent_mqtt_status_bs_connected)
+            {
+                break;
+            }
+            if(en_mqtt_al_connect_ok != mqtt_al_check_status(cb->mqtt_handle))
+            {
 
-        cb->constatus = en_oc_agent_mqtt_status_bs_success;
+            }
+
+            osal_task_sleep(1000);
+        };
 
         break;
     }
