@@ -237,6 +237,7 @@ static int oc_mqtt_report_entry(void *args)
     if(NULL == handle)
     {
         printf("config err\r\n");
+        return -1;
     }
 
     s_mqtt_handle = handle;

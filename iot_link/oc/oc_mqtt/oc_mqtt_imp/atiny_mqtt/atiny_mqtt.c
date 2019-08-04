@@ -57,57 +57,35 @@
 #include <atiny_mqtt.h>
 
 #define VARIABLE_SIZE (4 + 1)
-#define cn_cmd_topic_fmt               "/huawei/v1/devices/%s/command/%s"
-#define cn_data_topic_fmt              "/huawei/v1/devices/%s/data/%s"
-#define cn_secret_notify_topic_fmt     "/huawei/v1/products/%s/sn/%s/secretNotify"
-#define cn_secret_ack_topic_fmt        "/huawei/v1/products/%s/sn/%s/secretACK"
+#define CN_DMP_DATA_COMMAND_FMT             "/huawei/v1/devices/%s/command/%s"
+#define CN_DMP_DATA_REPORT_FMT              "/huawei/v1/devices/%s/data/%s"
 
-#define cn_bs_request_topic_fmt        "/huawei/v1/devices/%s/iodpsData"
-#define cn_bs_message_topic_fmt        "/huawei/v1/devices/%s/iodpsCommand"
+#define cn_secret_notify_topic_fmt          "/huawei/v1/products/%s/sn/%s/secretNotify"
+#define cn_secret_ack_topic_fmt             "/huawei/v1/products/%s/sn/%s/secretACK"
 
+#define CN_BS_DATA_REPORT_FMT               "/huawei/v1/devices/%s/iodpsData"
+#define CN_BS_DATA_COMMAND_FMT              "/huawei/v1/devices/%s/iodpsCommand"
 
-#ifndef cn_mqtt_keepalive_interval_s
-#define cn_mqtt_keepalive_interval_s (100)
-#endif
-
-/* the unit is milisecond */
-#ifndef cn_mqtt_write_for_secret_timeout
-#define cn_mqtt_write_for_secret_timeout (30 * 1000)
-#endif
-
-/* MQTT retry connection delay interval. The delay inteval is
-(cn_mqtt_conn_failed_base_delay << MIN(coutinious_fail_count, cn_mqtt_conn_failed_max_times)) */
-#ifndef cn_mqtt_conn_failed_max_times
-#define cn_mqtt_conn_failed_max_times  6
-#endif
 
 /*The unit is millisecond*/
-#ifndef cn_mqtt_conn_failed_base_delay
-#define cn_mqtt_conn_failed_base_delay 1000
-#endif
+#define CN_CON_BACKOFF_TIME     (1000)   ///< UNIT:ms
+#define CN_CON_BACKOFF_MAXTIMES  6       ///< WHEN WAIT OR GET ADDRESS ,WE COULD TRY MAX TIMES
 
-#define MQTT_TIME_BUF_LEN 11
+#define CN_STRING_MAXLEN    127
+#define IS_VALID_STRING(name) (strnlen((name), CN_STRING_MAXLEN + 1) <= CN_STRING_MAXLEN)
+#define CN_BS_RCV_BUFLENTH 256
 
-
-#define cn_string_max_len  127
-
-#define is_valid_string(name) (strnlen((name), cn_string_max_len + 1) <= cn_string_max_len)
-
-#define cn_bs_rcv_buf_len 256
-static char            s_rcv_buffer[cn_bs_rcv_buf_len];
-static int             s_rcv_datalen;
 
 typedef enum
 {
-    en_oc_agent_mqtt_status_idle = 0,     ///< not config yet;
-    en_oc_agent_mqtt_status_config,       ///< has been configured, have not connected yet
-    en_oc_agent_mqtt_status_bs_connecting,///< doing the connecting
-    en_oc_agent_mqtt_status_bs_connected, ///< has connected to the bs server
-    en_oc_agent_mqtt_status_bs_success,   ///< has get the address
-    en_oc_agent_mqtt_status_bs_failed,    ///< has get the address
+    en_oc_agent_mqtt_status_idle = 0,       ///< not config yet;
+    en_oc_agent_mqtt_status_config,         ///< has been configured, have not connected yet
+    en_oc_agent_mqtt_status_bs_connecting,  ///< doing the connecting
+    en_oc_agent_mqtt_status_bs_connected,   ///< has connected to the bs server
+    en_oc_agent_mqtt_status_bs_success,     ///< has get the address
+    en_oc_agent_mqtt_status_bs_failed,      ///< has get the address
     en_oc_agent_mqtt_status_dmp_connecting, ///< doing the connnecting
     en_oc_agent_mqtt_status_dmp_connected,  ///< has connected to the dmp server
-    en_oc_agent_mqtt_status_dmp_ended,      ///< has connected to the dmp server
 }en_oc_agent_mqtt_status_t;
 
 typedef enum
@@ -134,8 +112,9 @@ typedef struct
 
 typedef struct
 {
-    oc_mqtt_t   mqtt;
-    char        rcv_buf[cn_bs_rcv_buf_len];
+    char         dmp_ip[16];
+    char         dmp_port[6];  ///< i think max is 65536, so string is at most 6 bytes
+    char        rcv_buf[CN_BS_RCV_BUFLENTH];
     int         rcv_len;
 }oc_bs_mqtt_cb_t; ///< when we used
 
@@ -149,7 +128,6 @@ typedef struct
     unsigned int        b_flag_connect_dynamic:1; ///< this bit to be set when dynamic and not get secret yet
     unsigned int        b_flag_rcv_snd:1;         ///< this bit to be set when could receive and send
     unsigned int        b_flag_stop:1;            ///< this bit to be set when stop the engine
-    //unsigned int        b_flag_bs_finished:1;     ///< this bit to be set when bootstrap is finished
     char               *get_device_id;            ///< when dynamic mode,this is received from the server
     char               *get_device_passwd;        ///< when dynamic mode,this is received from the server
     ///< the following used for the mqtt connect
@@ -159,21 +137,13 @@ typedef struct
     char         *mqtt_passwd;
     char         *mqtt_subtopic;
     char         *mqtt_pubtopic;
-    char         *server;
-    char         *port;
-
+    char         server_address[16];
+    char         server_port[6];
     ///< we have two mode, bs mode or dmp mode
-    oc_dmp_mqtt_cb_t   dmp;
-    oc_bs_mqtt_cb_t    bs;
     ///< we have the agent engine
     void              *engine;  ///< it is a task here
     ///< reflect the connect status
     en_oc_agent_mqtt_status_t     constatus;
-    int                           conerr;   ///< same the mqtt_al defines
-    int                           runstop;  ///< this is the api command do it
-    int                           bsrunstop; ///< used for the bs run
-    int                           dmprunstop;///< used for the dmp run
-
 }oc_agent_mqtt_cb_t;   ///< i think we may only got one mqtt
 static oc_agent_mqtt_cb_t *s_oc_agent_mqtt_cb;
 
@@ -204,202 +174,6 @@ typedef struct
 #define cn_secret_index_device_pass_name    "secret"
 
 #define cn_check_time_value                 "2018111517"
-
-static osal_semp_t     s_agent_sync;
-static char            iot_server_ip[16];
-static char            iot_server_port[6];  ///< i think max is 65536, so string is at most 6 bytes
-
-
-static int  secret_get_devceid_passwd(oc_agent_mqtt_cb_t  *cb)
-{
-    int ret = -1;
-
-    cJSON *root = NULL;
-    cJSON *tmp;
-    char  *buf;
-    int    len;
-    tag_oc_secret_rom  rom;
-
-    memset(&rom,0,sizeof(rom));
-
-    cb->config.device_info.d_device.read_secret(0,(char *)&rom, sizeof(rom));
-
-    if(rom.magic != cn_secret_magic)
-    {
-        goto ERR_MAGIC;
-    }
-
-    len = rom.length;
-    buf = osal_malloc(len);
-    if(NULL == buf)
-    {
-        goto ERR_BUF_MALLOC;
-    }
-
-    cb->config.device_info.d_device.read_secret(sizeof(rom),buf,len);
-    root = cJSON_Parse(buf);
-    if(NULL == root)
-    {
-        goto EXIT_JSON_PARSE;
-    }
-
-    tmp = cJSON_GetObjectItem(root, cn_secret_index_product_id_name);
-    if((NULL == tmp) || (!cJSON_IsString(tmp))||\
-       (0 != strcmp(cb->config.device_info.d_device.productid,tmp->valuestring)))
-    {
-        goto EXIT_PRODUCT_ID_ERR;
-    }
-
-    tmp = cJSON_GetObjectItem(root, cn_secret_index_product_pass_name);
-    if((NULL == tmp) || (!cJSON_IsString(tmp))||\
-       (0 != strcmp(cb->config.device_info.d_device.productpasswd,tmp->valuestring)))
-    {
-        goto EXIT_PRODUCT_PASS_ERR;
-    }
-
-    tmp = cJSON_GetObjectItem(root, cn_secret_index_note_id_name);
-    if((NULL == tmp) || (!cJSON_IsString(tmp))||\
-       (0 != strcmp(cb->config.device_info.d_device.notetid,tmp->valuestring)))
-    {
-        goto EXIT_NOTEID_ERR;
-    }
-
-    ///< ok now, we get it
-    tmp = cJSON_GetObjectItem(root, cn_secret_index_device_id_name);
-    if((NULL == tmp) || (!cJSON_IsString(tmp)))
-    {
-        goto EXIT_JSON_DEVICE_ID_ERR;
-    }
-    cb->get_device_id = osal_strdup(tmp->valuestring);
-    if(NULL == cb->get_device_id)
-    {
-        goto EXIT_COPY_DEVICE_ID_ERR;
-    }
-
-    tmp = cJSON_GetObjectItem(root, cn_secret_index_device_pass_name);
-    if((NULL == tmp) || (!cJSON_IsString(tmp)))
-    {
-        goto EXIT_JSON_DEVICE_PASS_ERR;
-    }
-    cb->get_device_passwd = osal_strdup(tmp->valuestring);
-    if(NULL == cb->get_device_passwd)
-    {
-        goto EXIT_COPY_DEVICE_PASS_ERR;
-    }
-    cb->b_flag_get_passswd =1;
-
-    //release the resouce
-    osal_free(buf);
-    cJSON_Delete(root);
-
-    ret = 0;
-    return ret;
-
-EXIT_COPY_DEVICE_PASS_ERR:
-EXIT_JSON_DEVICE_PASS_ERR:
-    osal_free(cb->get_device_id);
-    cb->get_device_id = NULL;
-EXIT_COPY_DEVICE_ID_ERR:
-EXIT_JSON_DEVICE_ID_ERR:
-EXIT_NOTEID_ERR:
-EXIT_PRODUCT_PASS_ERR:
-EXIT_PRODUCT_ID_ERR:
-EXIT_JSON_PARSE:
-    osal_free(buf);
-ERR_BUF_MALLOC:
-ERR_MAGIC:
-    return ret;
-}
-
-
-static int  secret_save_devceid_passwd(oc_agent_mqtt_cb_t  *cb)
-{
-    int ret = -1;
-
-    cJSON *root;
-    cJSON *tmp;
-    char  *jsonbuf;
-    char  *buf;
-    int    len;
-    tag_oc_secret_rom rom;
-
-    root = cJSON_CreateObject();
-    if(NULL == root)
-    {
-        goto EXIT_JSON_ROOT;
-    }
-
-    tmp = cJSON_CreateString(cb->config.device_info.d_device.productid);
-    if(NULL == tmp)
-    {
-        goto EXIT_JSON_TMP;
-    }
-    cJSON_AddItemToObject(root,cn_secret_index_product_id_name,tmp);
-
-    tmp = cJSON_CreateString(cb->config.device_info.d_device.productpasswd);
-    if(NULL == tmp)
-    {
-        goto EXIT_JSON_TMP;
-    }
-    cJSON_AddItemToObject(root,cn_secret_index_product_pass_name,tmp);
-
-    tmp = cJSON_CreateString(cb->config.device_info.d_device.notetid);
-    if(NULL == tmp)
-    {
-        goto EXIT_JSON_TMP;
-    }
-    cJSON_AddItemToObject(root,cn_secret_index_note_id_name,tmp);
-
-    tmp = cJSON_CreateString(cb->get_device_id);
-    if(NULL == tmp)
-    {
-        goto EXIT_JSON_TMP;
-    }
-    cJSON_AddItemToObject(root,cn_secret_index_device_id_name,tmp);
-
-    tmp = cJSON_CreateString(cb->get_device_passwd);
-    if(NULL == tmp)
-    {
-        goto EXIT_JSON_TMP;
-    }
-    cJSON_AddItemToObject(root,cn_secret_index_device_pass_name,tmp);
-
-    jsonbuf = cJSON_Print(root);
-    if(NULL== jsonbuf)
-    {
-        goto EXIT_JSON_BUF;
-    }
-
-    len = strlen(jsonbuf);
-    buf = osal_malloc(len + sizeof(rom));
-    if(NULL == buf)
-    {
-        goto EXIT_SECRET_BUF;
-    }
-    rom.magic = cn_secret_magic;
-    rom.length = len;
-    hmac_generate_passwd(jsonbuf,len,(char *)&rom.magic,sizeof(rom.magic),(char *)rom.hmac,sizeof(rom.hmac));
-    memcpy(buf,&rom,sizeof(rom));
-    memcpy(buf+ sizeof(rom),jsonbuf,len);
-    cb->config.device_info.d_device.write_secret(0,buf,len +sizeof(rom));
-
-    osal_free(jsonbuf);
-    osal_free(buf);
-    cJSON_Delete(root);
-    ret = 0;
-    return ret;
-
-
-EXIT_SECRET_BUF:
-    osal_free(jsonbuf);
-EXIT_JSON_BUF:
-EXIT_JSON_TMP:
-    cJSON_Delete(root);
-EXIT_JSON_ROOT:
-    return ret;
-}
-
-
 ///< check the config parameters
 static int check_clone_config_params(oc_agent_mqtt_cb_t *cb,tag_oc_mqtt_config *config)
 {
@@ -479,6 +253,13 @@ static const char *s_codec_mode[en_oc_mqtt_code_mode_max] = {"binary", "json"};
 
 static int free_mqtt_para(oc_agent_mqtt_cb_t *cb)
 {
+    if(NULL != cb->mqtt_handle)
+    {
+        mqtt_al_disconnect(cb->mqtt_handle);
+        cb->mqtt_handle = NULL;
+    }
+
+
     if(NULL != cb->mqtt_client_id)
     {
         osal_free(cb->mqtt_client_id);
@@ -567,13 +348,13 @@ static int gen_dmp_para(oc_agent_mqtt_cb_t *cb)
             goto EXIT_MALLOC;
         }
 
-        len = strnlen(cb->config.device_info.s_device.deviceid, cn_string_max_len) +\
-                strnlen(s_codec_mode[cb->config.code_mode], cn_string_max_len) +\
-                strlen(cn_cmd_topic_fmt) + 1;
+        len = strnlen(cb->config.device_info.s_device.deviceid, CN_STRING_MAXLEN) +\
+                strnlen(s_codec_mode[cb->config.code_mode], CN_STRING_MAXLEN) +\
+                strlen(CN_DMP_DATA_COMMAND_FMT) + 1;
         cb->mqtt_subtopic = osal_malloc(len);
         if(NULL != cb->mqtt_subtopic)
         {
-            snprintf(cb->mqtt_subtopic, len, cn_cmd_topic_fmt, \
+            snprintf(cb->mqtt_subtopic, len, CN_DMP_DATA_COMMAND_FMT, \
                     cb->config.device_info.s_device.deviceid, s_codec_mode[cb->config.code_mode]);
         }
         else
@@ -582,13 +363,13 @@ static int gen_dmp_para(oc_agent_mqtt_cb_t *cb)
         }
 
 
-        len = strnlen(cb->config.device_info.s_device.deviceid, cn_string_max_len) +\
-                strnlen(s_codec_mode[cb->config.code_mode], cn_string_max_len) +\
-                strlen(cn_data_topic_fmt) + 1;
+        len = strnlen(cb->config.device_info.s_device.deviceid, CN_STRING_MAXLEN) +\
+                strnlen(s_codec_mode[cb->config.code_mode], CN_STRING_MAXLEN) +\
+                strlen(CN_DMP_DATA_REPORT_FMT) + 1;
         cb->mqtt_pubtopic = osal_malloc(len);
         if(NULL != cb->mqtt_pubtopic)
         {
-            snprintf(cb->mqtt_pubtopic, len, cn_data_topic_fmt, \
+            snprintf(cb->mqtt_pubtopic, len, CN_DMP_DATA_REPORT_FMT, \
                     cb->config.device_info.s_device.deviceid, s_codec_mode[cb->config.code_mode]);
         }
         else
@@ -596,163 +377,15 @@ static int gen_dmp_para(oc_agent_mqtt_cb_t *cb)
             goto EXIT_MALLOC;
         }
 
+        ret = 0;
+
     }
-    else if(cb->b_flag_get_passswd)   ///< dynatic,but get the device id and passwd
+    else
     {
-
-        len = strlen(cb->get_device_id)  + \
-              strlen(time_value) + strlen(cn_client_id_fmt_static) + 1;
-        cb->mqtt_client_id = osal_malloc(len);
-        if (cb->mqtt_client_id != NULL)
-        {
-            snprintf(cb->mqtt_client_id,len,cn_client_id_fmt_static,cb->get_device_id,\
-                    cb->config.auth_type,cb->config.sign_type,time_value);
-        }
-        else
-        {
-            goto EXIT_MALLOC;
-        }
-
-        len = strlen(cb->get_device_id) +1;
-        cb->mqtt_user = osal_malloc(len);
-        if (cb->mqtt_user != NULL)
-        {
-            memcpy(cb->mqtt_user,cb->get_device_id,len);
-        }
-        else
-        {
-            goto EXIT_MALLOC;
-        }
-
-        len = sizeof(hmac) * 2 + 1;
-        passwd = cb->get_device_passwd;
-        cb->mqtt_passwd = osal_malloc(len);
-        if(NULL != cb->mqtt_passwd)
-        {
-            hmac_generate_passwd(passwd,strlen(passwd),time_value,strlen(time_value),hmac,sizeof(hmac));
-
-            for(i = 0; i < sizeof(hmac); i++)
-            {
-                snprintf(cb->mqtt_passwd + i * 2, 3, "%02x", hmac[i]);
-            }
-        }
-        else
-        {
-            goto EXIT_MALLOC;
-        }
-
-        len = strnlen(cb->get_device_id, cn_string_max_len) +\
-                strnlen(s_codec_mode[cb->config.code_mode], cn_string_max_len) +\
-                strlen(cn_cmd_topic_fmt) + 1;
-        cb->mqtt_subtopic = osal_malloc(len);
-        if(NULL != cb->mqtt_subtopic)
-        {
-            snprintf(cb->mqtt_subtopic, len, cn_cmd_topic_fmt, \
-                    cb->get_device_id, s_codec_mode[cb->config.code_mode]);
-        }
-        else
-        {
-            goto EXIT_MALLOC;
-        }
-
-
-        len = strnlen(cb->get_device_id, cn_string_max_len) +\
-                strnlen(s_codec_mode[cb->config.code_mode], cn_string_max_len) +\
-                strlen(cn_data_topic_fmt) + 1;
-        cb->mqtt_pubtopic = osal_malloc(len);
-        if(NULL != cb->mqtt_pubtopic)
-        {
-            snprintf(cb->mqtt_pubtopic, len, cn_data_topic_fmt, \
-                    cb->get_device_id, s_codec_mode[cb->config.code_mode]);
-        }
-        else
-        {
-            goto EXIT_MALLOC;
-        }
-
-
-    }
-    else   ///< dynamic mode, have not get the device id and passwd yet
-    {
-
-        len = strlen(cb->config.device_info.d_device.productid) + strlen (cb->config.device_info.d_device.notetid) +\
-                strlen(time_value) +strlen(cn_client_id_fmt_dynamic) + 1;
-        cb->mqtt_client_id = osal_malloc(len);
-        if (cb->mqtt_client_id != NULL)
-        {
-            snprintf(cb->mqtt_client_id,len,cn_client_id_fmt_dynamic,\
-                    cb->config.device_info.d_device.productid,\
-                    cb->config.device_info.d_device.notetid,
-                    1,cb->config.sign_type,time_value);
-        }
-        else
-        {
-            goto EXIT_MALLOC;
-        }
-
-        len = strlen(cb->config.device_info.d_device.productid) +1;
-        cb->mqtt_user = osal_malloc(len);
-        if (cb->mqtt_user != NULL)
-        {
-            memcpy(cb->mqtt_user,cb->config.device_info.d_device.productid,len);
-        }
-        else
-        {
-            goto EXIT_MALLOC;
-        }
-
-        len = sizeof(hmac) * 2 + 1;
-        passwd = (char *) cb->config.device_info.d_device.productpasswd;
-        cb->mqtt_passwd = osal_malloc(len);
-        if(NULL != cb->mqtt_passwd)
-        {
-            hmac_generate_passwd(passwd,strlen(passwd),time_value,strlen(time_value),hmac,sizeof(hmac));
-
-            for(i = 0; i < sizeof(hmac); i++)
-            {
-                snprintf(cb->mqtt_passwd + i * 2, 3, "%02x", hmac[i]);
-            }
-        }
-        else
-        {
-            goto EXIT_MALLOC;
-        }
-
-        len = strnlen(cb->config.device_info.d_device.productid, cn_string_max_len) +\
-              strnlen(cb->config.device_info.d_device.notetid, cn_string_max_len) +\
-              strlen(cn_secret_notify_topic_fmt) + 1;
-        cb->mqtt_subtopic = osal_malloc(len);
-        if(NULL != cb->mqtt_subtopic)
-        {
-            snprintf(cb->mqtt_subtopic, len, cn_secret_notify_topic_fmt, \
-                    cb->config.device_info.d_device.productid, \
-                    cb->config.device_info.d_device.notetid);
-        }
-        else
-        {
-            goto EXIT_MALLOC;
-        }
-
-        len = strnlen(cb->config.device_info.d_device.productid, cn_string_max_len) +\
-              strnlen(cb->config.device_info.d_device.notetid, cn_string_max_len) +\
-              strlen(cn_secret_ack_topic_fmt) + 1;
-        cb->mqtt_pubtopic = osal_malloc(len);
-        if(NULL != cb->mqtt_pubtopic)
-        {
-            snprintf(cb->mqtt_pubtopic, len, cn_secret_ack_topic_fmt, \
-                    cb->config.device_info.d_device.productid, \
-                    cb->config.device_info.d_device.notetid);
-        }
-        else
-        {
-            goto EXIT_MALLOC;
-        }
-
+        ret = -1;
     }
 
-    ret = 0;
     return ret;
-
 
 EXIT_MALLOC:
     free_mqtt_para(cb);
@@ -813,12 +446,12 @@ static int gen_bs_para(oc_agent_mqtt_cb_t *cb)
         goto EXIT_MALLOC;
     }
 
-    len = strnlen(cb->config.device_info.s_device.deviceid, cn_string_max_len) +\
-            strlen(cn_bs_message_topic_fmt) + 1;
+    len = strnlen(cb->config.device_info.s_device.deviceid, CN_STRING_MAXLEN) +\
+            strlen(CN_BS_DATA_COMMAND_FMT) + 1;
     cb->mqtt_subtopic = osal_malloc(len);
     if(NULL != cb->mqtt_subtopic)
     {
-        snprintf(cb->mqtt_subtopic, len, cn_bs_message_topic_fmt, \
+        snprintf(cb->mqtt_subtopic, len, CN_BS_DATA_COMMAND_FMT, \
                 cb->config.device_info.s_device.deviceid);
     }
     else
@@ -827,12 +460,12 @@ static int gen_bs_para(oc_agent_mqtt_cb_t *cb)
     }
 
 
-    len = strnlen(cb->config.device_info.s_device.deviceid, cn_string_max_len) +\
-            strlen(cn_bs_request_topic_fmt) + 1;
+    len = strnlen(cb->config.device_info.s_device.deviceid, CN_STRING_MAXLEN) +\
+            strlen(CN_BS_DATA_REPORT_FMT) + 1;
     cb->mqtt_pubtopic = osal_malloc(len);
     if(NULL != cb->mqtt_pubtopic)
     {
-        snprintf(cb->mqtt_pubtopic, len, cn_bs_request_topic_fmt, \
+        snprintf(cb->mqtt_pubtopic, len, CN_BS_DATA_REPORT_FMT, \
                 cb->config.device_info.s_device.deviceid);
     }
     else
@@ -909,45 +542,6 @@ static int connect_server(oc_agent_mqtt_cb_t *cb)
 
 
 
-static void secret_msg_dealer(void *arg,mqtt_al_msgrcv_t  *msg)
-{
-    cJSON  *root;
-    cJSON  *device_id;
-    cJSON  *passwd;
-    //for we must add the '/0' to the end to make sure the json parse correct
-    char  *buf;
-    if ((msg == NULL) || ( msg->msg.data == NULL))
-    {
-        return;
-    }
-    buf = osal_malloc(msg->msg.len + 1);
-    if(NULL == buf)
-    {
-        return;
-    }
-    memcpy(buf,msg->msg.data,msg->msg.len);
-    buf[msg->msg.len] = '\0';
-
-    root = cJSON_Parse(buf);
-    if(NULL != root)
-    {
-        device_id = cJSON_GetObjectItem(root,cn_secret_index_device_id_name);
-        passwd = cJSON_GetObjectItem(root,cn_secret_index_device_pass_name);
-
-        if((NULL != device_id) &&(cJSON_IsString(device_id))&&\
-                (NULL != passwd) &&(cJSON_IsString(passwd)))
-        {
-            s_oc_agent_mqtt_cb->get_device_id = osal_strdup(device_id->valuestring);
-            s_oc_agent_mqtt_cb->get_device_passwd = osal_strdup(passwd->valuestring);
-            secret_save_devceid_passwd(s_oc_agent_mqtt_cb);
-            s_oc_agent_mqtt_cb->b_flag_get_passswd= 1;
-            s_oc_agent_mqtt_cb->b_flag_update =1;
-        }
-        cJSON_Delete(root);
-    }
-    osal_free(buf);
-}
-
 static void app_msg_dealer(void *arg,mqtt_al_msgrcv_t  *msg)
 {
     //for we must add the '/0' to the end to make sure the json parse correct
@@ -1008,13 +602,13 @@ static int __oc_agent_engine(oc_agent_mqtt_cb_t  *cb)
 
         if(conn_failed_cnt > 0)
         {
-            osal_task_sleep(cn_mqtt_conn_failed_base_delay << conn_failed_cnt);
+            osal_task_sleep(CN_CON_BACKOFF_TIME << conn_failed_cnt);
         }
 
         free_mqtt_para(cb);
         if(-1 == gen_dmp_para(cb))
         {
-            osal_task_sleep(cn_mqtt_conn_failed_base_delay << conn_failed_cnt);
+            osal_task_sleep(CN_CON_BACKOFF_TIME << conn_failed_cnt);
             continue; ///< generate all the parameters needed by the ocean connect server
         }
 
@@ -1084,7 +678,7 @@ static int bs_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
     memset(dnsbuf,0,sizeof(dnsbuf));
     printf("bs topic:%s qos:%d\n\r",msg->topic.data,msg->qos);
 
-    if(msg->msg.len < cn_bs_rcv_buf_len)
+    if(msg->msg.len < CN_BS_RCV_BUFLENTH)
     {
         memcpy(s_rcv_buffer,msg->msg.data,msg->msg.len );
         s_rcv_buffer[msg->msg.len] = '\0'; ///< the json need it
@@ -1147,7 +741,7 @@ static int __oc_agent_bs_state(oc_agent_mqtt_cb_t  *cb)
     {
         if(conn_failed_cnt > 0)
         {
-            osal_task_sleep(cn_mqtt_conn_failed_base_delay << conn_failed_cnt);
+            osal_task_sleep(CN_CON_BACKOFF_TIME << conn_failed_cnt);
         }
         free_mqtt_para(cb);
 
@@ -1234,7 +828,7 @@ static int __oc_agent_dmp_state(oc_agent_mqtt_cb_t  *cb)
     {
         if(conn_failed_cnt > 0)
         {
-            osal_task_sleep(cn_mqtt_conn_failed_base_delay << conn_failed_cnt);
+            osal_task_sleep(CN_CON_BACKOFF_TIME << conn_failed_cnt);
         }
         free_mqtt_para(cb);
 
@@ -1318,43 +912,11 @@ static int __oc_agent_mqtt_engine(void  *arg)
         }
         else
         {
-            osal_task_sleep(1000);   ///< wait until if any connect request start
+            osal_task_sleep(1000);   ///< wait until if any connect request
         }
 
     }
     return 0;
-
-    while(1)
-    {
-        if(osal_semp_pend(s_agent_sync,cn_osal_timeout_forever))
-        {
-            printf("create agent engine\r\n");
-            if(s_oc_agent_mqtt_cb && s_oc_agent_mqtt_cb->mqtt_handle)
-                mqtt_al_disconnect(s_oc_agent_mqtt_cb->mqtt_handle);
-
-            if(config->boot_mode == en_oc_boot_strap_mode_client_initialize)
-            {
-                ret->config.port = iot_server_port;
-                ret->config.server = iot_server_ip;
-                ret->b_flag_stop = 0;
-            }
-            ret->config.boot_status = en_oc_boot_strap_status_hub;
-            if(NULL == osal_task_create("oc_mqtt_agent",__oc_agent_engine,ret,0x1400,NULL,6))
-            {
-                goto EXIT_ENGINE_CREATE;
-            }
-            break;
-        }
-    }
-    return ret;
-
-
-EXIT_ENGINE_CREATE:
-EXIT_CHECK_CLONE:
-    osal_free(ret);
-    ret = NULL;
-EXIT_CB_MEM:
-    return ret;
 }
 
 static void *__oc_config(tag_oc_mqtt_config *config)
@@ -1374,37 +936,6 @@ static void *__oc_config(tag_oc_mqtt_config *config)
 
     }
 
-
-    while(1)
-    {
-        if(osal_semp_pend(s_agent_sync,cn_osal_timeout_forever))
-        {
-            printf("create agent engine\r\n");
-            if(s_oc_agent_mqtt_cb && s_oc_agent_mqtt_cb->mqtt_handle)
-                mqtt_al_disconnect(s_oc_agent_mqtt_cb->mqtt_handle);
-
-            if(config->boot_mode == en_oc_boot_strap_mode_client_initialize)
-            {
-                ret->config.port = iot_server_port;
-                ret->config.server = iot_server_ip;
-                ret->b_flag_stop = 0;
-            }
-            ret->config.boot_status = en_oc_boot_strap_status_hub;
-            if(NULL == osal_task_create("oc_mqtt_agent",__oc_agent_engine,ret,0x1400,NULL,6))
-            {
-                goto EXIT_ENGINE_CREATE;
-            }
-            break;
-        }
-    }
-    return ret;
-
-
-EXIT_ENGINE_CREATE:
-EXIT_CHECK_CLONE:
-    osal_free(ret);
-    ret = NULL;
-EXIT_CB_MEM:
     return ret;
 }
 static int __oc_report(void *handle,char *msg, int msg_len,en_mqtt_al_qos_t qos)
@@ -1459,11 +990,6 @@ static int __oc_deconfig(void *handle)
     return ret;
 }
 
-
-
-
-
-
 static const tag_oc_mqtt_ops s_oc_agent_mqtt_ops= \
 {
     .config = __oc_config,
@@ -1485,7 +1011,6 @@ int oc_mqtt_install_atiny_mqtt()
 
     memset(cb,0,sizeof(oc_agent_mqtt_cb_t));
     cb->constatus = en_oc_agent_mqtt_status_idle;
-    cb->conerr = cn_mqtt_al_con_code_err_unkown;
 
     cb->engine = osal_task_create("oc_mqtt_agent",__oc_agent_mqtt_engine,cb,0x1400,NULL,10);
     if(NULL == cb->engine)
@@ -1507,8 +1032,8 @@ EXIT_REGISTER:
     cb->engine = NULL;
 
 EXIT_TASK:
-        osal_free(cb);
-        cb = NULL;
+    osal_free(cb);
+    cb = NULL;
 
 EXIT_MALLOC:
     return ret;
