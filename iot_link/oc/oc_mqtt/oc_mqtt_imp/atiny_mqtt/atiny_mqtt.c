@@ -795,13 +795,14 @@ static void *__oc_config(tag_oc_mqtt_config *config)
     s_oc_agent_mqtt_cb->b_flag_run = 1;
 
     ///< here we run wait until we connected to the server
-    while((try_times < CN_CON_BACKOFF_MAXTIMES) )
+    while((++try_times <= CN_CON_BACKOFF_MAXTIMES) )
     {
         osal_task_sleep(CN_CON_BACKOFF_TIME << try_times);  ///< do back off retreat
 
         if(s_oc_agent_mqtt_cb->b_flag_dmp_connected)
         {
             ret = s_oc_agent_mqtt_cb;
+            break;
         }
     }
 
