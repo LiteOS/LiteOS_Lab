@@ -24,7 +24,7 @@ extern char __los_heap_addr_end__ [];
 #error "fix me"
 #endif
 
-extern VOID LOS_MemInfo (bool bShowDetail);
+extern VOID LOS_MemInfo (VOID * pPool, bool bShowDetail);
 extern int link_main(void *args);
 
 
@@ -148,10 +148,12 @@ int main() {
     {
         return LOS_NOK;
     }
-    //LOS_MemInfo(1);
+    //LOS_MemInfo(NULL,1);
     //LOS_BoadExampleEntry();
     link_test();
+#ifndef CONFIG_HELLO_WORLD_ENABLE
     lcd_demo();
+#endif
 
     (void)LOS_Start();
     return 0;
