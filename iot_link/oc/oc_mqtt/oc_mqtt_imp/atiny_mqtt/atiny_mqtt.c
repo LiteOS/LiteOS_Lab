@@ -73,105 +73,44 @@
 
 #define CN_STRING_MAXLEN    127
 #define IS_VALID_STRING(name) (strnlen((name), CN_STRING_MAXLEN + 1) <= CN_STRING_MAXLEN)
-#define CN_BS_RCV_BUFLENTH 256
 
-
-typedef enum
-{
-    en_oc_agent_mqtt_status_idle = 0,       ///< not config yet;
-    en_oc_agent_mqtt_status_config,         ///< has been configured, have not connected yet
-    en_oc_agent_mqtt_status_bs_connecting,  ///< doing the connecting
-    en_oc_agent_mqtt_status_bs_connected,   ///< has connected to the bs server
-    en_oc_agent_mqtt_status_bs_success,     ///< has get the address
-    en_oc_agent_mqtt_status_bs_failed,      ///< has get the address
-    en_oc_agent_mqtt_status_dmp_connecting, ///< doing the connnecting
-    en_oc_agent_mqtt_status_dmp_connected,  ///< has connected to the dmp server
-}en_oc_agent_mqtt_status_t;
-
-typedef enum
-{
-    en_oc_boot_strap_status_bs = 0,
-    en_oc_boot_strap_status_hub,
-    en_oc_boot_strap_status_max,
-}en_oc_boot_strap_status_t;
+///< NOW WE ONLY SUPPORT IPV4,THE LENGTH IS 16, NEXT TIME WE SUPPORT IPV6, AND MODIFY IT HERE--TODO
+#define CN_SEVRER_IP_LEN   16
+#define CN_SEVRER_PROT_LEN 6
 
 typedef struct
 {
-    void         *mqtt_handle;
-    char         *mqtt_client_id;
-    char         *mqtt_user;
-    char         *mqtt_passwd;
-    char         *mqtt_subtopic;
-    char         *mqtt_pubtopic;
-}oc_mqtt_t;
-
-typedef struct
-{
-    oc_mqtt_t  mqtt;
-}oc_dmp_mqtt_cb_t; ///< when we used
-
-typedef struct
-{
-    char         dmp_ip[16];
-    char         dmp_port[6];  ///< i think max is 65536, so string is at most 6 bytes
-    char        rcv_buf[CN_BS_RCV_BUFLENTH];
-    int         rcv_len;
+    char       *dmp_address;  ///< we get from the bs server
+    char       *dmp_port;     ///< we get from the bs server
 }oc_bs_mqtt_cb_t; ///< when we used
 
 typedef struct
 {
     tag_oc_mqtt_config  config;
-    en_oc_boot_strap_status_t boot_status;
+    oc_bs_mqtt_cb_t     bs_cb;
+    unsigned int        b_flag_run:1;             ///< set when we begin if any configure start
+    unsigned int        b_flag_stop:1;            ///< set when the engine really stoped
+    unsigned int        b_flag_bs_run:1;          ///< set by the configure if we client initialized
+    unsigned int        b_flag_bs_getaddr:1;      ///< set by the bs message dealer
+    unsigned int        b_flag_dmp_run:1;         ///< which means we are in the keep stage, we will try all the time
+    unsigned int        b_flag_dmp_connected:1;   ///< which means we have connected to the server,could only set once
 
-    unsigned int        b_flag_update:1;          ///< when get device id and passwd should set it
-    unsigned int        b_flag_get_passswd:1;     ///< this bit to be set when dynamic and received secret
-    unsigned int        b_flag_connect_dynamic:1; ///< this bit to be set when dynamic and not get secret yet
-    unsigned int        b_flag_rcv_snd:1;         ///< this bit to be set when could receive and send
-    unsigned int        b_flag_stop:1;            ///< this bit to be set when stop the engine
-    char               *get_device_id;            ///< when dynamic mode,this is received from the server
-    char               *get_device_passwd;        ///< when dynamic mode,this is received from the server
     ///< the following used for the mqtt connect
     void         *mqtt_handle;
-    char         *mqtt_client_id;
+    char         *mqtt_clientid;
     char         *mqtt_user;
     char         *mqtt_passwd;
     char         *mqtt_subtopic;
     char         *mqtt_pubtopic;
-    char         server_address[16];
-    char         server_port[6];
-    ///< we have two mode, bs mode or dmp mode
+    const char   *server_address;    ///< it maybe used as dmp or bs server ip address
+    const char   *server_port;       ///< it maybe used as dmp or bs server port address
+    fn_msg_dealer msg_dealer;        ///< call this function to deal with the message
     ///< we have the agent engine
-    void              *engine;  ///< it is a task here
-    ///< reflect the connect status
-    en_oc_agent_mqtt_status_t     constatus;
+    void        *engine;  ///< it is a task here
 }oc_agent_mqtt_cb_t;   ///< i think we may only got one mqtt
 static oc_agent_mqtt_cb_t *s_oc_agent_mqtt_cb;
 
-/**
- * @brief: this is used to storage the dynamic message to the rom
- *
- * the fomat is following:
- *
- * 4Byte    4Byte  32Byte   JsonString
- *
- * Magic    Length  hmac    JsonString(the string length is Length)
- *
- * */
 
-#define cn_secret_magic  0xaa55aa55
-typedef struct
-{
-    uint32_t magic;
-    uint32_t length;
-    uint8_t  hmac[32];
-}tag_oc_secret_rom;
-
-#define cn_secret_index_product_id_name     "productid"
-#define cn_secret_index_product_pass_name   "productname"
-#define cn_secret_index_note_id_name        "noteid"
-#define cn_secret_index_time_name           "time"
-#define cn_secret_index_device_id_name      "deviceid"
-#define cn_secret_index_device_pass_name    "secret"
 
 #define cn_check_time_value                 "2018111517"
 ///< check the config parameters
@@ -234,7 +173,8 @@ static int check_clone_config_params(oc_agent_mqtt_cb_t *cb,tag_oc_mqtt_config *
         goto EXIT_ERR;
     }
 
-    cb->config = *config;
+    memcpy(&cb->config,config,sizeof(tag_oc_mqtt_config));
+
     ret = 0;
     return ret;
 
@@ -244,13 +184,11 @@ EXIT_ERR:
 }
 
 
-#define cn_client_id_fmt_static     "%s_%d_%d_%s"      ///<  deviceid  connect_type check_time time
-#define cn_client_id_fmt_dynamic    "%s_%s_%d_%d_%s"   ///<  deviceid  noteid connect_type check_time time
+#define CN_OC_MQTT_CLIENTID_STATIC_FMT     "%s_%d_%d_%s"      ///<  deviceid  connect_type check_time time
+#define CN_OC_MQTT_CLIENTID_DYNAMIC_FMT    "%s_%s_%d_%d_%s"   ///<  deviceid  noteid connect_type check_time time
 
 static const char *s_codec_mode[en_oc_mqtt_code_mode_max] = {"binary", "json"};
 ///< generate the client_id user passwd for the mqtt need
-
-
 static int free_mqtt_para(oc_agent_mqtt_cb_t *cb)
 {
     if(NULL != cb->mqtt_handle)
@@ -258,12 +196,10 @@ static int free_mqtt_para(oc_agent_mqtt_cb_t *cb)
         mqtt_al_disconnect(cb->mqtt_handle);
         cb->mqtt_handle = NULL;
     }
-
-
-    if(NULL != cb->mqtt_client_id)
+    if(NULL != cb->mqtt_clientid)
     {
-        osal_free(cb->mqtt_client_id);
-        cb->mqtt_client_id = NULL;
+        osal_free(cb->mqtt_clientid);
+        cb->mqtt_clientid = NULL;
     }
 
     if(NULL != cb->mqtt_user)
@@ -290,10 +226,27 @@ static int free_mqtt_para(oc_agent_mqtt_cb_t *cb)
         cb->mqtt_pubtopic = NULL;
     }
 
+    cb->server_address = NULL;
+    cb->server_port = NULL;
+
+
     return 0;
 }
 
-static int gen_dmp_para(oc_agent_mqtt_cb_t *cb)
+static void __deal_dmp_msg(void *arg,mqtt_al_msgrcv_t  *msg)
+{
+    //for we must add the '/0' to the end to make sure the json parse correct
+    if ((msg == NULL) || ( msg->msg.data == NULL) || (NULL == s_oc_agent_mqtt_cb->config.msgdealer))
+    {
+        return;
+    }
+
+    s_oc_agent_mqtt_cb->config.msgdealer(s_oc_agent_mqtt_cb,msg);
+
+    return;
+}
+
+static int __generate_dmp_para(oc_agent_mqtt_cb_t *cb)
 {
     int ret = -1;
     int len;
@@ -304,14 +257,16 @@ static int gen_dmp_para(oc_agent_mqtt_cb_t *cb)
 
     time_value = cn_check_time_value;
 
+    free_mqtt_para(cb);  ///< try to free all the resource we have built
+
     if(cb->config.device_type == en_oc_mqtt_device_type_static)   ///< static device mode
     {
         len = strlen(cb->config.device_info.s_device.deviceid)  + \
-              strlen(time_value) + strlen(cn_client_id_fmt_static) + 1;
-        cb->mqtt_client_id = osal_malloc(len);
-        if (cb->mqtt_client_id != NULL)
+              strlen(time_value) + strlen(CN_OC_MQTT_CLIENTID_STATIC_FMT) + 1;
+        cb->mqtt_clientid = osal_malloc(len);
+        if (cb->mqtt_clientid != NULL)
         {
-            snprintf(cb->mqtt_client_id,len,cn_client_id_fmt_static,cb->config.device_info.s_device.deviceid,\
+            snprintf(cb->mqtt_clientid,len,CN_OC_MQTT_CLIENTID_STATIC_FMT,cb->config.device_info.s_device.deviceid,\
                     cb->config.auth_type,cb->config.sign_type,time_value);
         }
         else
@@ -377,6 +332,18 @@ static int gen_dmp_para(oc_agent_mqtt_cb_t *cb)
             goto EXIT_MALLOC;
         }
 
+        if(cb->config.boot_mode == en_oc_boot_strap_mode_client_initialize)
+        {
+            cb->server_address = cb->bs_cb.dmp_address;
+            cb->server_port = cb->bs_cb.dmp_port;
+        }
+        else
+        {
+            cb->server_address = cb->config.server;
+            cb->server_port = cb->config.port;
+        }
+
+        cb->msg_dealer = __deal_dmp_msg;
         ret = 0;
 
     }
@@ -392,7 +359,91 @@ EXIT_MALLOC:
     return ret;
 }
 
-static int gen_bs_para(oc_agent_mqtt_cb_t *cb)
+
+static void __deal_bs_msg(void *handle,mqtt_al_msgrcv_t *msg)
+{
+    cJSON  *root = NULL;
+    cJSON  *addr_item = NULL;
+    char   *port = NULL;
+    int     port_len;
+    int     server_len;
+    char   *server = NULL;
+
+    char   *json_buf;
+
+    printf("bs topic:%s qos:%d\n\r",msg->topic.data,msg->qos);
+
+    json_buf = osal_malloc(msg->msg.len + 1);
+    if(NULL == json_buf)
+    {
+        return;
+    }
+
+    memcpy(json_buf,msg->msg.data,msg->msg.len);
+    json_buf[msg->msg.len] = '\0';
+
+    printf("msg:%s\n\r",json_buf);
+    root = cJSON_Parse(json_buf);
+    if(NULL != root)
+    {
+        addr_item = cJSON_GetObjectItem(root,"address");
+        if(NULL != addr_item)
+        {
+            printf("address:%s\n\r", addr_item->valuestring);
+            port = strrchr(addr_item->valuestring, ':');
+            if(NULL != port)
+            {
+                server = addr_item->valuestring;
+                server_len = port - addr_item->valuestring;
+                port++;
+                port_len = strlen(port);
+                if(NULL != s_oc_agent_mqtt_cb->bs_cb.dmp_port)
+                {
+                    osal_free (s_oc_agent_mqtt_cb->bs_cb.dmp_port);
+                    s_oc_agent_mqtt_cb->bs_cb.dmp_port = NULL;
+                }
+
+                if(NULL != s_oc_agent_mqtt_cb->bs_cb.dmp_address)
+                {
+                    osal_free (s_oc_agent_mqtt_cb->bs_cb.dmp_address);
+                    s_oc_agent_mqtt_cb->bs_cb.dmp_address = NULL;
+                }
+
+
+                s_oc_agent_mqtt_cb->bs_cb.dmp_address = osal_malloc(server_len +1);
+                s_oc_agent_mqtt_cb->bs_cb.dmp_port = osal_malloc(port_len + 1);
+
+                if((NULL != s_oc_agent_mqtt_cb->bs_cb.dmp_address) && \
+                   (NULL != s_oc_agent_mqtt_cb->bs_cb.dmp_port))
+                {
+
+                    memcpy(s_oc_agent_mqtt_cb->bs_cb.dmp_port, port, port_len);
+                    memcpy(s_oc_agent_mqtt_cb->bs_cb.dmp_address, server, server_len);
+                    s_oc_agent_mqtt_cb->bs_cb.dmp_port[port_len] = '\0';
+                    s_oc_agent_mqtt_cb->bs_cb.dmp_address[server_len] = '\0';
+
+                    ///< set the flag to make the flag
+                    s_oc_agent_mqtt_cb->b_flag_bs_getaddr = 1;
+                    s_oc_agent_mqtt_cb->b_flag_bs_run = 0; ///< we could stop it now
+
+                }
+                else
+                {
+                    osal_free (s_oc_agent_mqtt_cb->bs_cb.dmp_address);
+                    s_oc_agent_mqtt_cb->bs_cb.dmp_address = NULL;
+                    osal_free (s_oc_agent_mqtt_cb->bs_cb.dmp_port);
+                    s_oc_agent_mqtt_cb->bs_cb.dmp_port = NULL;
+                }
+            }
+        }
+        cJSON_Delete(root);
+    }
+    osal_free(json_buf);
+
+    return;
+}
+
+static int __generate_bs_para(oc_agent_mqtt_cb_t *cb)
 {
     int ret = -1;
     int len;
@@ -402,13 +453,14 @@ static int gen_bs_para(oc_agent_mqtt_cb_t *cb)
     char  *passwd;
 
     time_value = cn_check_time_value;
+    free_mqtt_para(cb);
 
     len = strlen(cb->config.device_info.s_device.deviceid)  + \
-          strlen(time_value) + strlen(cn_client_id_fmt_static) + 1;
-    cb->mqtt_client_id = osal_malloc(len);
-    if (cb->mqtt_client_id != NULL)
+          strlen(time_value) + strlen(CN_OC_MQTT_CLIENTID_STATIC_FMT) + 1;
+    cb->mqtt_clientid = osal_malloc(len);
+    if (cb->mqtt_clientid != NULL)
     {
-        snprintf(cb->mqtt_client_id,len,cn_client_id_fmt_static,cb->config.device_info.s_device.deviceid,\
+        snprintf(cb->mqtt_clientid,len,CN_OC_MQTT_CLIENTID_STATIC_FMT,cb->config.device_info.s_device.deviceid,\
                 cb->config.auth_type,cb->config.sign_type,time_value);
     }
     else
@@ -473,6 +525,9 @@ static int gen_bs_para(oc_agent_mqtt_cb_t *cb)
         goto EXIT_MALLOC;
     }
 
+    cb->server_address = cb->config.server;
+    cb->server_port = cb->config.port;
+    cb->msg_dealer = __deal_bs_msg;
 
     return 0;
 
@@ -483,15 +538,19 @@ EXIT_MALLOC:
 }
 
 ///< return the reason code defined by the mqtt_al.h
-static int connect_server(oc_agent_mqtt_cb_t *cb)
+static int __oc_mqtt_connect_server(oc_agent_mqtt_cb_t *cb)
 {
     mqtt_al_conpara_t conpara;
+
     struct hostent* entry = NULL;
 
+    char  server_ip[CN_SEVRER_IP_LEN];
+
+    memset(server_ip,0,sizeof(server_ip));
     //GENERATE THE DATA THE CLOUD PLATFORM NEED
     memset(&conpara,0,sizeof(conpara));
 
-    conpara.clientid.data = cb->mqtt_client_id;
+    conpara.clientid.data = cb->mqtt_clientid;
     conpara.clientid.len = strlen(conpara.clientid.data);
 
     conpara.user.data =  cb->mqtt_user;
@@ -504,15 +563,15 @@ static int connect_server(oc_agent_mqtt_cb_t *cb)
     conpara.keepalivetime = cb->config.lifetime;
     conpara.security = &cb->config.security;
 
+    ///< --TODO, next version we try the dns resoleved by the mqtt_al,not try here, and do backoff time retry
     while(NULL == entry)
     {
-        printf("debug:%s\r\n", cb->config.server);
-        entry = sal_gethostbyname(cb->config.server);
+        entry = sal_gethostbyname(cb->server_address);
         if(entry && entry->h_addr_list[0])
         {
-            inet_ntop(entry->h_addrtype, entry->h_addr_list[0], iot_server_ip, sizeof(iot_server_ip));
-            printf("ip:%s\n", iot_server_ip);
-            conpara.serveraddr.data = iot_server_ip;
+            inet_ntop(entry->h_addrtype, entry->h_addr_list[0],server_ip, CN_SEVRER_IP_LEN);
+            conpara.serveraddr.data = server_ip;
+            conpara.serveraddr.len = strlen(conpara.serveraddr.data);
         }
         else
         {
@@ -520,8 +579,10 @@ static int connect_server(oc_agent_mqtt_cb_t *cb)
             osal_task_sleep(1000);
         }
     }
-    conpara.serveraddr.len = strlen(conpara.serveraddr.data);
-    conpara.serverport = atoi(cb->config.port);
+
+    printf("OC_MQTT_DNS:IP:%s  PORT:%s\r\n", server_ip,cb->server_port);
+
+    conpara.serverport = atoi(cb->server_port);
     conpara.timeout = 10000;
     conpara.version = en_mqtt_al_version_3_1_1;
     conpara.willmsg = NULL;
@@ -529,33 +590,8 @@ static int connect_server(oc_agent_mqtt_cb_t *cb)
             conpara.clientid.data,conpara.user.data,conpara.passwd.data);
 
     cb->mqtt_handle = mqtt_al_connect(&conpara);
-    if(NULL != cb->mqtt_handle)
-    {
-        if(cb->b_flag_get_passswd || (cb->config.device_type == en_oc_mqtt_device_type_static))
-        {
-            cb->b_flag_rcv_snd =1;
-        }
-    }
-
     return conpara.conret;
 }
-
-
-
-static void app_msg_dealer(void *arg,mqtt_al_msgrcv_t  *msg)
-{
-    //for we must add the '/0' to the end to make sure the json parse correct
-    if ((msg == NULL) || ( msg->msg.data == NULL))
-    {
-        return;
-    }
-    
-    if(s_oc_agent_mqtt_cb->config.boot_status == en_oc_boot_strap_status_bs)
-        s_oc_agent_mqtt_cb->config.bsinfo_dealer(s_oc_agent_mqtt_cb,msg);
-    else
-        s_oc_agent_mqtt_cb->config.msgdealer(s_oc_agent_mqtt_cb,msg);
-}
-
 
 static int subscribe_topic(oc_agent_mqtt_cb_t *cb)
 {
@@ -564,16 +600,7 @@ static int subscribe_topic(oc_agent_mqtt_cb_t *cb)
 
     memset(&subpara,0,sizeof(subpara));
 
-    if((cb->config.device_type == en_oc_mqtt_device_type_static)||\
-       (cb->b_flag_get_passswd))
-    {
-        subpara.dealer = app_msg_dealer;
-    }
-    else
-    {
-        subpara.dealer = secret_msg_dealer;
-    }
-
+    subpara.dealer = cb->msg_dealer;
     subpara.arg = cb;
     subpara.qos = en_mqtt_al_qos_1;
     subpara.topic.data = cb->mqtt_subtopic ;
@@ -584,287 +611,94 @@ static int subscribe_topic(oc_agent_mqtt_cb_t *cb)
     return ret;
 }
 
-
-
-static int __oc_agent_engine(oc_agent_mqtt_cb_t  *cb)
+///< this function used for the ocean mqtt dmp keep alive stage
+///< we will try all the time
+static int __oc_agent_mqtt_dmp_alive_stage(oc_agent_mqtt_cb_t  *cb)
 {
     int conn_failed_cnt = 0;
-    osal_loop_timer_t  timer;
     int ret = -1;
 
-    if(cb->config.device_type == en_oc_mqtt_device_type_dynamic)
+    cb->b_flag_dmp_connected = 0;
+    ///< b_flag_dmp_run set by the bs or by the static config or by the bs mode
+    while(cb->b_flag_dmp_run && cb->b_flag_run)
     {
-        secret_get_devceid_passwd(cb);
-    }
-
-    while(cb->b_flag_stop == 0)
-    {
-
-        if(conn_failed_cnt > 0)
+        osal_task_sleep(CN_CON_BACKOFF_TIME << conn_failed_cnt);
+        if(-1 == __generate_dmp_para(cb))
         {
-            osal_task_sleep(CN_CON_BACKOFF_TIME << conn_failed_cnt);
-        }
-
-        free_mqtt_para(cb);
-        if(-1 == gen_dmp_para(cb))
-        {
-            osal_task_sleep(CN_CON_BACKOFF_TIME << conn_failed_cnt);
+            conn_failed_cnt = conn_failed_cnt >= CN_CON_BACKOFF_MAXTIMES?CN_CON_BACKOFF_MAXTIMES:(conn_failed_cnt+1);
             continue; ///< generate all the parameters needed by the ocean connect server
         }
 
-        if(cn_mqtt_al_con_code_ok != connect_server(cb))
+        if(cn_mqtt_al_con_code_ok != __oc_mqtt_connect_server(cb))
         {
-            conn_failed_cnt++;
-            continue;
+            conn_failed_cnt = conn_failed_cnt >= CN_CON_BACKOFF_MAXTIMES?CN_CON_BACKOFF_MAXTIMES:(conn_failed_cnt+1);
+            continue; ///< generate all the parameters needed by the ocean connect server
         }
 
         ret = subscribe_topic(cb);
         if(ret == -1)
         {
             mqtt_al_disconnect(cb->mqtt_handle);
-            free_mqtt_para(cb);
-            cb->b_flag_rcv_snd = 0;
+            cb->mqtt_handle = NULL;
+            conn_failed_cnt = conn_failed_cnt >= CN_CON_BACKOFF_MAXTIMES?CN_CON_BACKOFF_MAXTIMES:(conn_failed_cnt+1);
+            continue; ///< generate all the parameters needed by the ocean connect server
         }
-
-        s_oc_agent_mqtt_cb = cb;
-
-        if((cb->config.device_type == en_oc_mqtt_device_type_dynamic)&&\
-                (cb->b_flag_get_passswd == 0))
+        cb->b_flag_dmp_connected = 1;
+        conn_failed_cnt = 0;
+        ///< we begin to loop to monitor the mqtt status or the api command
+        while((en_mqtt_al_connect_ok == mqtt_al_check_status(cb->mqtt_handle)) &&\
+                cb->b_flag_dmp_run && cb->b_flag_run)
         {
-            osal_loop_timer_init(&timer);
-            osal_loop_timer_count_down(&timer, cn_mqtt_write_for_secret_timeout);
-        }
-        do{
-            if (cb->b_flag_update)
-            {
-                cb->b_flag_update = 0;
-                break;
-            }
-            if((cb->config.device_type == en_oc_mqtt_device_type_dynamic)&&\
-                    (cb->b_flag_get_passswd == 0) &&(osal_loop_timer_expired(&timer)))
-            {
-                break;
-            }
-
-            osal_task_sleep(100);
-        }while(en_mqtt_al_connect_ok == mqtt_al_check_status(cb->mqtt_handle));
-
-        mqtt_al_disconnect(cb->mqtt_handle);
-        free_mqtt_para(cb);
-        cb->b_flag_rcv_snd = 0;
-    }
-
-    ///< release all the resources
-    s_oc_agent_mqtt_cb = NULL;
-    free_mqtt_para(cb);
-    osal_free(cb->get_device_id);
-    osal_free(cb->get_device_passwd);
-    osal_free(cb);
-
-    return ret;
-}
-
-
-
-static int bs_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
-{
-    int ret = -1;
-    struct hostent* entry = NULL;
-    cJSON  *buf = NULL;
-    cJSON  *address = NULL;
-    char   *port = NULL;
-    char   dnsbuf[64];
-
-    memset(dnsbuf,0,sizeof(dnsbuf));
-    printf("bs topic:%s qos:%d\n\r",msg->topic.data,msg->qos);
-
-    if(msg->msg.len < CN_BS_RCV_BUFLENTH)
-    {
-        memcpy(s_rcv_buffer,msg->msg.data,msg->msg.len );
-        s_rcv_buffer[msg->msg.len] = '\0'; ///< the json need it
-        s_rcv_datalen = msg->msg.len;
-
-        printf("msg:%s\n\r",s_rcv_buffer);
-        buf = cJSON_Parse(s_rcv_buffer);
-        cJSON_Print(buf);
-
-        if(NULL != buf)
-        {
-            address = cJSON_GetObjectItem(buf,"address");
-            if(NULL != address)
-            {
-                printf("address:%s\n\r", address->valuestring);
-            }
-            else
-                return ret;
-
-            if(NULL != address)
-            {
-                port = strrchr(address->valuestring, ':');
-                memcpy(iot_server_port, port+1, strlen(port)-1);
-                memcpy(dnsbuf, address->valuestring, port - address->valuestring);
-                printf("dns:%s len:%d\n\r",dnsbuf,strlen(dnsbuf));
-
-                entry = NULL;
-                while(NULL == entry)
-                {
-                    entry = sal_gethostbyname(dnsbuf);
-
-                    osal_task_sleep(1000);
-                    printf("LOG:########## WAIT FOR THE DNS RESOVLED\n\r");
-                }
-
-                if(entry && entry->h_addr_list[0])
-                {
-                    inet_ntop(entry->h_addrtype, entry->h_addr_list[0], iot_server_ip, sizeof(iot_server_ip));
-                    printf("iot server ip:%s\r\n", iot_server_ip);
-                }
-            }
-
-            cJSON_Delete(buf);
-        }
-
-        osal_semp_post(s_agent_sync);
-        ret = 0;
-
-    }
-    return ret;
-}
-
-///< 0 success -1 failed
-static int __oc_agent_bs_state(oc_agent_mqtt_cb_t  *cb)
-{
-    int conn_failed_cnt = 0;
-    int ret = -1;
-
-    while((cb->runstop) && (cb->bsrunstop))
-    {
-        if(conn_failed_cnt > 0)
-        {
-            osal_task_sleep(CN_CON_BACKOFF_TIME << conn_failed_cnt);
-        }
-        free_mqtt_para(cb);
-
-        ret = gen_bs_para(cb);
-        if(-1 == ret)
-        {
-            break;
-        }
-
-        cb->constatus = en_oc_agent_mqtt_status_bs_connecting;
-        ret = connect_server(cb);
-        if(ret == cn_mqtt_al_con_code_err_network)
-        {
-            conn_failed_cnt++;
-            printf("bs server conn_failed_cnt:%d\r\n", conn_failed_cnt);
-            continue;
-        }
-        else if(ret  != cn_mqtt_al_con_code_ok)
-        {
-            cb->constatus = en_oc_agent_mqtt_status_bs_failed;
-            break;
-        }
-        else
-        {
-            cb->constatus = en_oc_agent_mqtt_status_bs_connected;
-
-        }
-        ret = subscribe_topic(cb);
-        if(ret == -1)
-        {
-            mqtt_al_disconnect(cb->mqtt_handle);
-            free_mqtt_para(cb);
-            cb->b_flag_rcv_snd = 0;
-            continue;
-        }
-
-        mqtt_al_pubpara_t pubpara;
-        memset(&pubpara, 0, sizeof(pubpara));
-        pubpara.qos = 1;
-        pubpara.retain = 0;
-        pubpara.timeout = 1000;
-        pubpara.topic.data = cb->mqtt_pubtopic;
-        pubpara.topic.len =strlen(cb->mqtt_pubtopic);
-        pubpara.msg.data = '\0';
-        pubpara.msg.len = 0;
-
-        ret = mqtt_al_publish(cb->mqtt_handle, &pubpara);
-        if(ret == -1)
-        {
-            mqtt_al_disconnect(cb->mqtt_handle);
-            free_mqtt_para(cb);
-            cb->b_flag_rcv_snd = 0;
-            continue;
-        }
-
-        cb->b_flag_rcv_snd = 0;
-        ///< here we wait until the
-        while(1)
-        {
-
-            if(cb->constatus != en_oc_agent_mqtt_status_bs_connected)
-            {
-                break;
-            }
-            if(en_mqtt_al_connect_ok != mqtt_al_check_status(cb->mqtt_handle))
-            {
-
-            }
-
             osal_task_sleep(1000);
-        };
+        }
+        mqtt_al_disconnect(cb->mqtt_handle);
+        cb->mqtt_handle = NULL;
 
-        break;
+        cb->b_flag_dmp_connected = 0;
     }
-
+    ///< release all the resources
+    free_mqtt_para(cb);
     return ret;
 }
-static int __oc_agent_dmp_state(oc_agent_mqtt_cb_t  *cb)
+
+
+
+///< this function used for the ocean mqtt dmp keep alive stage
+///< we will try all the time
+static int __oc_agent_mqtt_bs_alive_stage(oc_agent_mqtt_cb_t  *cb)
 {
     int conn_failed_cnt = 0;
     int ret = -1;
 
-    while(cb->runstop)
+    cb->b_flag_bs_getaddr = 0;  ///< clear the flag
+
+    ///< b_flag_dmp_run set by the bs or by the static config or by the bs mode
+    while(cb->b_flag_bs_run && cb->b_flag_run)
     {
-        if(conn_failed_cnt > 0)
+        osal_task_sleep(CN_CON_BACKOFF_TIME << conn_failed_cnt);
+        if(-1 == __generate_bs_para(cb))
         {
-            osal_task_sleep(CN_CON_BACKOFF_TIME << conn_failed_cnt);
-        }
-        free_mqtt_para(cb);
-
-        ret = gen_dmp_para(cb);
-        if(-1 == ret)
-        {
-            break;
+            conn_failed_cnt = conn_failed_cnt >= CN_CON_BACKOFF_MAXTIMES?CN_CON_BACKOFF_MAXTIMES:(conn_failed_cnt+1);
+            continue; ///< generate all the parameters needed by the ocean connect server
         }
 
-        cb->constatus = en_oc_agent_mqtt_status_dmp_connecting;
-        ret = connect_server(cb);
-        if(ret == cn_mqtt_al_con_code_err_network)
+        if(cn_mqtt_al_con_code_ok != __oc_mqtt_connect_server(cb))
         {
-            conn_failed_cnt++;
-            printf("bs server conn_failed_cnt:%d\r\n", conn_failed_cnt);
-            continue;
+            conn_failed_cnt = conn_failed_cnt >= CN_CON_BACKOFF_MAXTIMES?CN_CON_BACKOFF_MAXTIMES:(conn_failed_cnt+1);
+            continue; ///< generate all the parameters needed by the ocean connect server
         }
-        else if(ret  != cn_mqtt_al_con_code_ok)
-        {
-            cb->constatus = en_oc_agent_mqtt_status_bs_failed;
-            break;
-        }
-        else
-        {
-            cb->constatus = en_oc_agent_mqtt_status_bs_connected;
 
-        }
         ret = subscribe_topic(cb);
         if(ret == -1)
         {
             mqtt_al_disconnect(cb->mqtt_handle);
-            free_mqtt_para(cb);
-            cb->b_flag_rcv_snd = 0;
-            continue;
+            cb->mqtt_handle = NULL;
+
+            conn_failed_cnt = conn_failed_cnt >= CN_CON_BACKOFF_MAXTIMES?CN_CON_BACKOFF_MAXTIMES:(conn_failed_cnt+1);
+            continue; ///< generate all the parameters needed by the ocean connect server
         }
 
+        ///< pub the mqtt request
         mqtt_al_pubpara_t pubpara;
         memset(&pubpara, 0, sizeof(pubpara));
         pubpara.qos = 1;
@@ -879,18 +713,25 @@ static int __oc_agent_dmp_state(oc_agent_mqtt_cb_t  *cb)
         if(ret == -1)
         {
             mqtt_al_disconnect(cb->mqtt_handle);
-            free_mqtt_para(cb);
-            cb->b_flag_rcv_snd = 0;
-            continue;
+            cb->mqtt_handle = NULL;
+
+            conn_failed_cnt = conn_failed_cnt >= CN_CON_BACKOFF_MAXTIMES?CN_CON_BACKOFF_MAXTIMES:(conn_failed_cnt+1);
+            continue; ///< generate all the parameters needed by the ocean connect server
         }
 
-        cb->b_flag_rcv_snd = 0;
-        cb->b_flag_stop = 1;
-        cb->constatus = en_oc_agent_mqtt_status_bs_success;
+        conn_failed_cnt = 0;
+        ///< we begin to loop to monitor the mqtt status or the api command
+        while((en_mqtt_al_connect_ok == mqtt_al_check_status(cb->mqtt_handle)) &&\
+                cb->b_flag_bs_run && cb->b_flag_run)
+        {
+            osal_task_sleep(1000);
+        }
+        mqtt_al_disconnect(cb->mqtt_handle);
+        cb->mqtt_handle = NULL;
 
-        break;
     }
-
+    ///< release all the resources
+    free_mqtt_para(cb);
     return ret;
 }
 
@@ -899,16 +740,21 @@ static int __oc_agent_mqtt_engine(void  *arg)
 {
     oc_agent_mqtt_cb_t  *cb;
 
+    printf("%s:engine start\n\r",__FUNCTION__);
+
     cb = arg;
     while(1)
     {
-        if(cb->runstop)
+        if(cb->b_flag_run)
         {
             if(cb->config.boot_mode == en_oc_boot_strap_mode_client_initialize)
             {
-                __oc_agent_bs_state();
+                cb->b_flag_bs_run = 1;
+                __oc_agent_mqtt_bs_alive_stage(cb);
             }
-            __oc_agent_dmp_state();
+            cb->b_flag_dmp_run = 1;
+            __oc_agent_mqtt_dmp_alive_stage(cb);
+            cb->b_flag_stop =1;    ///< if we reach here, which means we need to
         }
         else
         {
@@ -916,28 +762,54 @@ static int __oc_agent_mqtt_engine(void  *arg)
         }
 
     }
+
+    printf("%s:engine start\n\r",__FUNCTION__);
+
     return 0;
 }
 
+///< the api call this function to configure the engine and wait for it connected and keepalive
 static void *__oc_config(tag_oc_mqtt_config *config)
 {
     oc_agent_mqtt_cb_t *ret = NULL;
-    config->config_ret = cn_mqtt_al_con_code_err_unkown;
+    int try_times = 0;
 
-    if(0 != check_clone_config_params(ret,config))
+    ///< check if we have initialized
+    if(NULL == s_oc_agent_mqtt_cb)
     {
-        goto EXIT_CHECK_CLONE;
+        return ret;
     }
 
-    if(config->boot_mode == en_oc_boot_strap_mode_client_initialize)
+    ///< check if we have already configured and not de_configured yet
+    if(s_oc_agent_mqtt_cb->b_flag_run)
     {
-        ret->config.boot_status = en_oc_boot_strap_status_bs;
-        ret->config.bsinfo_dealer = bs_msg_deal;
+        return ret;
+    }
 
+    if(0 != check_clone_config_params(s_oc_agent_mqtt_cb,config))
+    {
+        return ret;
+    }
+
+    s_oc_agent_mqtt_cb->b_flag_stop = 0;
+    s_oc_agent_mqtt_cb->b_flag_run = 1;
+
+    ///< here we run wait until we connected to the server
+    while((try_times < CN_CON_BACKOFF_MAXTIMES) )
+    {
+        osal_task_sleep(CN_CON_BACKOFF_TIME << try_times);  ///< do back off retreat
+
+        if(s_oc_agent_mqtt_cb->b_flag_dmp_connected)
+        {
+            ret = s_oc_agent_mqtt_cb;
+        }
     }
 
     return ret;
 }
+
+
+///< the api call this function to send message to the dmp server
 static int __oc_report(void *handle,char *msg, int msg_len,en_mqtt_al_qos_t qos)
 {
     int ret = -1;
@@ -946,16 +818,13 @@ static int __oc_report(void *handle,char *msg, int msg_len,en_mqtt_al_qos_t qos)
 
     oc_agent_mqtt_cb_t *cb = handle;
 
-    if ((cb == NULL) || (qos >= en_mqtt_al_qos_err))
-    {
-        return ret;
-    }
-    if (msg == NULL || msg_len <= 0)
+    if ((cb == NULL) || (cb != s_oc_agent_mqtt_cb)|| (qos >= en_mqtt_al_qos_err)||\
+        (msg == NULL) || (msg_len <= 0))
     {
         return ret;
     }
 
-    if (!(cb->b_flag_rcv_snd &&(en_mqtt_al_connect_ok == mqtt_al_check_status(cb->mqtt_handle))))
+    if (!(cb->b_flag_dmp_connected &&(en_mqtt_al_connect_ok == mqtt_al_check_status(cb->mqtt_handle))))
     {
         return ret;
     }
@@ -981,9 +850,14 @@ static int __oc_deconfig(void *handle)
     int ret =-1;
     oc_agent_mqtt_cb_t *cb = handle;
 
-    if(NULL != cb)
+    if((NULL != cb ) && (cb == s_oc_agent_mqtt_cb) && (cb->b_flag_run))
     {
-        cb->b_flag_stop =1;
+        cb->b_flag_run = 0;
+        ///< wait until we really have stop it
+        while(cb->b_flag_stop == 0)  ///< this will be set when we really stop it
+        {
+            osal_task_sleep(CN_CON_BACKOFF_TIME);
+        }
         ret = 0;
     }
 
@@ -993,7 +867,7 @@ static int __oc_deconfig(void *handle)
 static const tag_oc_mqtt_ops s_oc_agent_mqtt_ops= \
 {
     .config = __oc_config,
-    .deconfig =__oc_deconfig,
+    .deconfig = __oc_deconfig,
     .report = __oc_report,
 };
 
@@ -1008,10 +882,9 @@ int oc_mqtt_install_atiny_mqtt()
     {
         goto EXIT_MALLOC;
     }
-
     memset(cb,0,sizeof(oc_agent_mqtt_cb_t));
-    cb->constatus = en_oc_agent_mqtt_status_idle;
 
+    cb->b_flag_run = 0;
     cb->engine = osal_task_create("oc_mqtt_agent",__oc_agent_mqtt_engine,cb,0x1400,NULL,10);
     if(NULL == cb->engine)
     {

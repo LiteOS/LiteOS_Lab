@@ -122,7 +122,6 @@ typedef struct
     }device_info;
 
     oc_mqtt_msgdealer  msgdealer;      ///< when the agent receive any applciation data, please call this function
-    int                config_ret;     ///< when handle is NULL,please refer this member for the reason
 }tag_oc_mqtt_config;
 
 ///////////////////////////MQTT AGENT INTERFACE////////////////////////////////
