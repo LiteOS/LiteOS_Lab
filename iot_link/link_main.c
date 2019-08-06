@@ -216,8 +216,8 @@ int link_main(void *args)
 #if CONFIG_HELLO_WORLD_ENABLE
     #include <helloworld.h>
     hello_world_main();
-
 #endif
+
     return 0;
 }
 

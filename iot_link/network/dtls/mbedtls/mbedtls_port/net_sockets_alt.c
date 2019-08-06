@@ -44,16 +44,23 @@ void mbedtls_net_init(mbedtls_net_context *ctx)
     ctx->fd = -1;
 }
 
-///< suppose it to be ipv4 and ip dot host
+///< resovled the host name
 void *mbedtls_net_connect(const char *host, const char *port, int proto)
 {
-    mbedtls_net_context *ret;
+    mbedtls_net_context *ret = NULL;
     struct sockaddr_in addr;
 
-    ret = osal_zalloc(sizeof(mbedtls_net_context));
+    ///< first we try use the gethostbyname to get the ip address, the host maybe a domain name
+    struct hostent* entry = NULL;
+    entry = sal_gethostbyname(host);
+    if( !(entry && entry->h_addr_list[0] && (entry->h_addrtype == AF_INET)))
+    {
+       goto EXIT_GETIP;
+    }
+    ret = osal_malloc(sizeof(mbedtls_net_context));
     if(NULL == ret)
     {
-        return ret;
+        goto EXIT_MALLOC;
     }
 
     ret->fd = -1;
@@ -68,28 +75,32 @@ void *mbedtls_net_connect(const char *host, const char *port, int proto)
     }
     else
     {
-        ret->fd = -1;
     }
 
     if(ret->fd == -1)
     {
-        osal_free(ret);
-        ret = NULL;
-        return ret;
+        goto EXIT_SOCKET;
     }
 
     memset(&addr,0,sizeof(addr));
     addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = inet_addr(host);
+    memcpy(&addr.sin_addr.s_addr,entry->h_addr_list[0],sizeof(addr.sin_addr.s_addr));
     addr.sin_port = htons(atoi(port));
 
     if(-1 == sal_connect(ret->fd,(struct sockaddr *)&addr,sizeof(addr)))
     {
-        sal_closesocket(ret->fd);
-        osal_free(ret);
-        ret = NULL;
+        goto EXIT_CONNECT;
     }
+    return ret;
 
+EXIT_CONNECT:
+    sal_closesocket(ret->fd);
+    ret->fd = -1;
+EXIT_SOCKET:
+    osal_free(ret);
+EXIT_MALLOC:
+EXIT_GETIP:
+    ret = NULL;
     return ret;
 }
 
