@@ -44,55 +44,7 @@ void mbedtls_net_init(mbedtls_net_context *ctx)
     ctx->fd = -1;
 }
 
-///< suppose it to be ipv4 and ip dot host
-//void *mbedtls_net_connect(const char *host, const char *port, int proto)
-//{
-//    mbedtls_net_context *ret;
-//    struct sockaddr_in addr;
-//
-//    ret = osal_zalloc(sizeof(mbedtls_net_context));
-//    if(NULL == ret)
-//    {
-//        return ret;
-//    }
-//
-//    ret->fd = -1;
-//
-//    if(proto == MBEDTLS_NET_PROTO_TCP)
-//    {
-//        ret->fd = sal_socket(AF_INET,SOCK_STREAM,0);
-//    }
-//    else if(proto == MBEDTLS_NET_PROTO_UDP)
-//    {
-//        ret->fd = sal_socket(AF_INET,SOCK_DGRAM,0);
-//    }
-//    else
-//    {
-//        ret->fd = -1;
-//    }
-//
-//    if(ret->fd == -1)
-//    {
-//        osal_free(ret);
-//        ret = NULL;
-//        return ret;
-//    }
-//
-//    memset(&addr,0,sizeof(addr));
-//    addr.sin_family = AF_INET;
-//    addr.sin_addr.s_addr = inet_addr(host);
-//    addr.sin_port = htons(atoi(port));
-//
-//    if(-1 == sal_connect(ret->fd,(struct sockaddr *)&addr,sizeof(addr)))
-//    {
-//        sal_closesocket(ret->fd);
-//        osal_free(ret);
-//        ret = NULL;
-//    }
-//
-//    return ret;
-//}
-
+///< resovled the host name
 void *mbedtls_net_connect(const char *host, const char *port, int proto)
 {
     mbedtls_net_context *ret = NULL;

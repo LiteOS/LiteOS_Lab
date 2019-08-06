@@ -216,8 +216,11 @@ int link_main(void *args)
 #if CONFIG_HELLO_WORLD_ENABLE
     #include <helloworld.h>
     hello_world_main();
-
 #endif
+
+//    extern int oc_mqtt_demo_main();
+//    oc_mqtt_demo_main();
+
     return 0;
 }
 

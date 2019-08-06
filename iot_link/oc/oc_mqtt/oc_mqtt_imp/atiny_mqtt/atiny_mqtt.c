@@ -235,9 +235,52 @@ static int free_mqtt_para(oc_agent_mqtt_cb_t *cb)
 
 static void __deal_dmp_msg(void *arg,mqtt_al_msgrcv_t  *msg)
 {
+    cJSON  *root = NULL;
+    cJSON  *cmd_item = NULL;
+    cJSON  *serviceid_item = NULL;
+    char   *json_buf;
+    int     reboot_servceid_match = 0;
+    int     reboot_cmd_match = 0;
+    int     mqtt_rebootstrap = 0;
+
     //for we must add the '/0' to the end to make sure the json parse correct
     if ((msg == NULL) || ( msg->msg.data == NULL) || (NULL == s_oc_agent_mqtt_cb->config.msgdealer))
     {
+        return;
+    }
+
+    json_buf = osal_malloc(msg->msg.len + 1);
+    if(NULL != json_buf)
+    {
+        memcpy(json_buf,msg->msg.data,msg->msg.len);
+        json_buf[msg->msg.len] = '\0';
+        root = cJSON_Parse(json_buf);
+        if(NULL != root)
+        {
+            cmd_item = cJSON_GetObjectItem(root,"cmd");
+            if((NULL != cmd_item) && (strncmp(cmd_item->valuestring, "BootstrapRequestTrigger", strlen(cmd_item->valuestring)) == 0))
+            {
+                reboot_cmd_match =1;
+            }
+            serviceid_item = cJSON_GetObjectItem(root,"serviceid");
+            if((NULL != serviceid_item) && (strncmp(serviceid_item->valuestring, "IOTHUB.BS", strlen(serviceid_item->valuestring)) == 0))
+            {
+                reboot_servceid_match = 1;
+            }
+            if(reboot_cmd_match && reboot_servceid_match)
+            {
+                mqtt_rebootstrap = 1;
+            }
+
+            cJSON_Delete(root);
+        }
+        osal_free(json_buf);
+    }
+
+    if(mqtt_rebootstrap) ///< we reboot it now
+    {
+        printf("THIS IS THE OC MQTT REBOOTSTRAP COMMAND\n\r");
+        s_oc_agent_mqtt_cb->b_flag_dmp_run = 0;
         return;
     }
 
@@ -727,6 +770,8 @@ static int __oc_agent_mqtt_engine(void  *arg)
     {
         if(cb->b_flag_run)
         {
+            cb->b_flag_stop =0;    ///< if we reach here, which means we need to
+
             if(cb->config.boot_mode == en_oc_boot_strap_mode_client_initialize)
             {
                 cb->b_flag_bs_run = 1;
@@ -866,7 +911,7 @@ int oc_mqtt_install_atiny_mqtt()
     memset(cb,0,sizeof(oc_agent_mqtt_cb_t));
 
     cb->b_flag_run = 0;
-    cb->engine = osal_task_create("oc_mqtt_agent",__oc_agent_mqtt_engine,cb,0x1400,NULL,10);
+    cb->engine = osal_task_create("oc_mqtt_agent",__oc_agent_mqtt_engine,cb,0x1800,NULL,10);
     if(NULL == cb->engine)
     {
         goto EXIT_TASK;
