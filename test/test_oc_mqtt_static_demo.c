@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -31,6 +31,12 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2019-08-05 17:38  zhangqianfu  The first version
+ *
+ */
+
 #include <stdint.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -39,6 +45,9 @@
 
 #include <osal.h>
 #include <oc_mqtt_al.h>
+
+
+#include <shell.h>
 
 
 
@@ -205,17 +214,52 @@ static int oc_mqtt_cmd_entry( void *args)
 
 
 
-static int oc_mqtt_report_entry(void *args)
+static int at_oc_report(int argc,const char *argv[])
 {
-    int leftpower = 0;
-    void *handle = NULL;
+    int ret = -1;
     tag_oc_mqtt_report  report;
     tag_key_value_list  lst;
-    tag_oc_mqtt_config config;
     cJSON *root = NULL;
     char  *buf = NULL;
+    static int leftpower = 0;
 
-    int times= 0;
+    leftpower = (leftpower + 7 )%100;
+
+    lst.item.name = "batteryLevel";
+    lst.item.buf = (char *)&leftpower;
+    lst.item.len = sizeof(leftpower);
+    lst.item.type = en_key_value_type_int;
+    lst.next = NULL;
+
+    report.hasmore = en_oc_mqtt_has_more_no;
+    report.paralst= &lst;
+    report.serviceid = "Battery";
+    report.eventtime = NULL;
+
+    root = oc_mqtt_json_fmt_report(&report);
+    if(NULL != root)
+    {
+        buf = cJSON_Print(root);
+        if(NULL != buf)
+        {
+            ret = oc_mqtt_report(s_mqtt_handle,buf,strlen(buf),en_mqtt_al_qos_1);
+            osal_free(buf);
+        }
+
+        cJSON_Delete(root);
+    }
+
+    return ret;
+}
+OSSHELL_EXPORT_CMD(at_oc_report,"report","report");
+
+
+
+static int at_oc_connect(int argc,const char *argv[])
+{
+    void *handle = NULL;
+
+    tag_oc_mqtt_config config;
 
     config.boot_mode = en_oc_boot_strap_mode_factory;
     config.lifetime = DEFAULT_LIFETIME;
@@ -245,51 +289,241 @@ static int oc_mqtt_report_entry(void *args)
     }
 
     s_mqtt_handle = handle;
-    leftpower =33;
-    while(1)  //do the loop here
-    {
-        leftpower = (leftpower + 7 )%100;
 
-        lst.item.name = "batteryLevel";
-        lst.item.buf = (char *)&leftpower;
-        lst.item.len = sizeof(leftpower);
-        lst.item.type = en_key_value_type_int;
-        lst.next = NULL;
-
-        report.hasmore = en_oc_mqtt_has_more_no;
-        report.paralst= &lst;
-        report.serviceid = "Battery";
-        report.eventtime = NULL;
-
-        root = oc_mqtt_json_fmt_report(&report);
-        if(NULL != root)
-        {
-            buf = cJSON_Print(root);
-            if(NULL != buf)
-            {
-                if(0 == oc_mqtt_report(handle,buf,strlen(buf),en_mqtt_al_qos_1))
-                {
-                    printf("times:%d power:%d\r\n",times++,leftpower);
-                }
-                osal_free(buf);
-            }
-
-            cJSON_Delete(root);
-        }
-
-        osal_task_sleep(20*1000); ///< do a sleep here
-    }
     return 0;
 }
+OSSHELL_EXPORT_CMD(at_oc_connect,"connect","connect");
+
+
+
+static int at_oc_disconnect()
+{
+    int ret = 0;
+    ret =oc_mqtt_deconfig(s_mqtt_handle);
+    if(0 == ret)
+    {
+        s_mqtt_handle = NULL;
+        printf("deconfig success\r\n");
+
+    }
+    else
+    {
+        printf("deconfig failed\r\n");
+    }
+    return ret;
+}
+OSSHELL_EXPORT_CMD(at_oc_disconnect,"disconnect","disconnect");
+
+///< all the demo,return 0 success while -1 failed
+
+///< demo1: connect it normally
+static int oc_mqtt_demo1()
+{
+    int ret = 0;
+
+    at_oc_disconnect(0,NULL); ///< make sure we disconnected;
+    printf("ENTER TESTDEMO 1:CONNECT WHILE NOT CONNECTED YET\n\r");
+    ret = at_oc_connect(0,NULL);
+    at_oc_disconnect(0,NULL);
+    if(0 == ret)
+    {
+        printf("EXIT TESTDEMO 1:PASS\n\r");
+    }
+    else
+    {
+        printf("EXIT TESTDEMO 1:FAILED ************\n\r");
+    }
+    return ret;
+}
+
+///< demo2: disconnect it normally
+static int oc_mqtt_demo2()
+{
+    int ret = 0;
+
+    at_oc_connect(0,NULL); ///< make sure we connected;
+    printf("ENTER TESTDEMO 2:DISCONNECTED NORMALLY\n\r");
+    ret = at_oc_disconnect(0,NULL);
+    if(0 == ret)
+    {
+        printf("EXIT TESTDEMO 2:PASS\n\r");
+    }
+    else
+    {
+        printf("EXIT TESTDEMO 2:FAILED ************\n\r");
+    }
+
+    return ret;
+}
+
+///< demo3: connect report disconnect
+static int oc_mqtt_demo3()
+{
+    int ret = 0;
+
+    at_oc_disconnect(0,NULL); ///< make sure we connected;
+    printf("ENTER TESTDEMO 3:CONNECT->REPORT->DISCONNECTED\n\r");
+    ret = at_oc_connect(0,NULL);
+    if(0 == ret)
+    {
+        printf("CONNECT:SUCCESS\n\r");
+    }
+    else
+    {
+        printf("CONNECT:FAILED\n\r");
+        goto DEMO_EXIT;
+    }
+
+    ret = at_oc_report(0,NULL);
+    if(0 == ret)
+    {
+        printf("REPORT:SUCCESS\n\r");
+    }
+    else
+    {
+        printf("REPORT:FAILED\n\r");
+        goto DEMO_EXIT;
+    }
+
+    ret = at_oc_disconnect(0,NULL);
+    if(0 == ret)
+    {
+        printf("DISCONNECT:SUCCESS\n\r");
+    }
+    else
+    {
+        printf("DISCONNECT:FAILED\n\r");
+        goto DEMO_EXIT;
+    }
+
+DEMO_EXIT:
+    if(0 == ret)
+    {
+        printf("EXIT TESTDEMO 3:PASS\n\r");
+    }
+    else
+    {
+        printf("EXIT TESTDEMO 3:FAILED ************\n\r");
+    }
+    return ret;
+}
+
+
+///< demo4: disconnect it while it is not connected yet
+static int oc_mqtt_demo4()
+{
+    int ret = 0;
+
+    at_oc_disconnect(0,NULL); ///< make sure we disconnected;
+    printf("ENTER TESTDEMO 4:DISCONNECTED WHILE NOT CONNECTED YET\n\r");
+    ret = at_oc_disconnect(0,NULL);
+    if(0 != ret)
+    {
+        printf("EXIT TESTDEMO 4:PASS\n\r");
+    }
+    else
+    {
+        printf("EXIT TESTDEMO 4:FAILED ************\n\r");
+    }
+    return ret;
+}
+
+///< demo5: report while it is not connected yet
+static int oc_mqtt_demo5()
+{
+    int ret = 0;
+
+    at_oc_disconnect(0,NULL); ///< make sure we disconnected;
+    printf("ENTER TESTDEMO 5:REPORT WHILE NOT CONNECTED YET\n\r");
+    ret = at_oc_report(0,NULL);
+    if(0 != ret)
+    {
+        printf("EXIT TESTDEMO 5:PASS\n\r");
+    }
+    else
+    {
+        printf("EXIT TESTDEMO 5:FAILED ************\n\r");
+    }
+    return ret;
+}
+
+///< demo6: REPORT 1000 TIMES
+static int oc_mqtt_demo6()
+{
+    int success_times = 0;
+    int test_times = 0;
+    int ret = 0;
+
+    at_oc_disconnect(0,NULL); ///< make sure we connected;
+    printf("ENTER TESTDEMO 6:CONNECT->REPORT 100 TIMES(QOS=1)->DISCONNECTED\n\r");
+    ret = at_oc_connect(0,NULL);
+    if(0 == ret)
+    {
+        printf("CONNECT:SUCCESS\n\r");
+    }
+    else
+    {
+        printf("CONNECT:FAILED\n\r");
+        goto DEMO_EXIT;
+    }
+    printf("REPORT:000/100");
+    while(++test_times  <= 100)
+    {
+        ret = at_oc_report(0,NULL);
+        if(0 == ret)
+        {
+            success_times++;
+        }
+        printf("\b\b\b\b\b\b\b%3d/100",test_times);
+        osal_task_sleep(1000);
+    }
+    ret = at_oc_disconnect(0,NULL);
+    if(0 == ret)
+    {
+        printf("DISCONNECT:SUCCESS\n\r");
+    }
+    else
+    {
+        printf("DISCONNECT:FAILED\n\r");
+        goto DEMO_EXIT;
+    }
+
+DEMO_EXIT:
+    printf("EXIT TESTDEMO 6:REPORT SUCCESS:%03d/100\n\r",success_times);
+
+    return ret;
+}
+
+static int oc_mqtt_static_test_entry(void *args)
+{
+    int ret = 0;
+    oc_mqtt_demo1();
+    oc_mqtt_demo2();
+    oc_mqtt_demo3();
+    oc_mqtt_demo4();
+    oc_mqtt_demo5();
+    ret = oc_mqtt_demo6();
+
+    if(ret == 0)
+    {
+        printf("OC MQTT STATTIC TEST SUCCESS------------------\n\r");
+
+    }
+    else
+    {
+        printf("OC MQTT STATTIC TEST FAILED ++++++++++++++++++++\n\r");
+    }
+
+    return ret;
+
+}
+
+
 
 int oc_mqtt_demo_main()
 {
     osal_semp_create(&s_rcv_sync,1,0);
-
-    osal_task_create("ocmqtt_report",oc_mqtt_report_entry,NULL,0x1000,NULL,10);
-
     osal_task_create("ocmqtt_cmd",oc_mqtt_cmd_entry,NULL,0x1000,NULL,10);
-
-
+    osal_task_create("ocmqtt_demotest",oc_mqtt_static_test_entry,NULL,0x1000,NULL,10);
     return 0;
 }

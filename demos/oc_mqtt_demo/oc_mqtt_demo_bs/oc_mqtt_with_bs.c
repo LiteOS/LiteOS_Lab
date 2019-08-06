@@ -48,11 +48,10 @@
 /** the address product_id device_id password crt is only for the test  */
 
 #define DEFAULT_LIFETIME            10
-#define BS_SERVER_IPV4         "119.3.251.30"     ///<  server ip address
-#define BS_SERVER_DOMAIN         "iot-bs.cn-north-4.myhuaweicloud.com"
-#define BS_SERVER_PORT         "8883"           ///<  server mqtt service port
-#define DEMO_WITH_BOOTSTRAP_NODEID    "sdk_0040"//"sdk_bh"  //"sdk_0030"
-#define DEMO_WITH_BOOTSTRAP_PASSWORD    "f62fcf47d62c4ed18913"//"77dca653824757da0a96" //"e8775e734c48d20aa3ce"
+#define BS_SERVER_DOMAIN            "iot-bs.cn-north-4.myhuaweicloud.com"
+#define BS_SERVER_PORT              "8883"           ///<  server mqtt service port
+#define DEMO_WITH_BOOTSTRAP_NODEID  "sdk_0040"//"sdk_bh"  //"sdk_0030"
+#define DEMO_WITH_BOOTSTRAP_PASSWORD "f62fcf47d62c4ed18913"//"77dca653824757da0a96" //"e8775e734c48d20aa3ce"
 
 
 #if 0
@@ -112,7 +111,6 @@ static char s_mqtt_ca_crt[] =
 "-----END CERTIFICATE-----\r\n";
 #endif
 
-static void           *s_mqtt_handle;
 
 //if your command is very fast,please use a queue here--TODO
 #define cn_app_rcv_buf_len 256
@@ -121,7 +119,6 @@ static int             s_rcv_datalen;
 static osal_semp_t     s_oc_rcv_sync;
 static void           *s_mqtt_handle;
 
-static void           *s_report_handle;
 
 static int app_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
 {
@@ -142,11 +139,6 @@ static int app_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
     }
     return ret;
 }
-
-
-
-
-
 
 
 static int oc_mqtt_report_entry(void *args)
@@ -190,7 +182,7 @@ static int oc_mqtt_report_entry(void *args)
         {
             leftpower = (leftpower + 7 )%100;
 
-            lst.item.name = "batteryLevel";
+            lst.item.name = "batteryVoltage";
             lst.item.buf = (char *)&leftpower;
             lst.item.len = sizeof(leftpower);
             lst.item.type = en_key_value_type_int;
@@ -198,8 +190,8 @@ static int oc_mqtt_report_entry(void *args)
 
             report.hasmore = en_oc_mqtt_has_more_no;
             report.paralst= &lst;
-            report.serviceid = "Battery";
-            report.eventtime = "20190508T112020Z";
+            report.serviceid = "DeviceStatus";
+            report.eventtime = NULL;
 
             root = oc_mqtt_json_fmt_report(&report);
             if(NULL != root)
@@ -272,14 +264,6 @@ static int oc_mqtt_cmd_entry( void *args)
                 if(NULL != cmd)
                 {
                     printf("cmd:%s\n\r",cmd->valuestring);
-                    if(strncmp(cmd->valuestring, "BootstrapRequestTrigger", strlen(cmd->valuestring)) == 0)
-                    {
-                        //Do the re-bootstrap
-                        osal_task_kill(s_report_handle);
-                        oc_mqtt_deconfig(s_mqtt_handle);
-                        oc_mqtt_demo_main();
-                        osal_task_exit();
-                    }
                 }
 
                 paras = cJSON_GetObjectItem(msg,"paras");
