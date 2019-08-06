@@ -218,9 +218,6 @@ int link_main(void *args)
     hello_world_main();
 #endif
 
-//    extern int oc_mqtt_demo_main();
-//    oc_mqtt_demo_main();
-
     return 0;
 }
 
