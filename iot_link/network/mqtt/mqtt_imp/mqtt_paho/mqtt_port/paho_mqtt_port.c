@@ -278,8 +278,16 @@ static int __socket_connect(Network *n, char *host, int port)
     int ret = -1;
     int fd = -1;
     struct sockaddr_in addr;
-    fd = sal_socket(AF_INET,SOCK_STREAM,0);
 
+    ///< first we try use the gethostbyname to get the ip address, the host maybe a domain name
+    struct hostent* entry = NULL;
+    entry = sal_gethostbyname(host);
+    if( !(entry && entry->h_addr_list[0] && (entry->h_addrtype == AF_INET)))
+    {
+       return ret;
+    }
+
+    fd = sal_socket(AF_INET,SOCK_STREAM,0);
     if(fd == -1)
     {
         return ret;
@@ -288,7 +296,7 @@ static int __socket_connect(Network *n, char *host, int port)
 
     memset(&addr,0,sizeof(addr));
     addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = inet_addr(host);
+    memcpy(&addr.sin_addr.s_addr,entry->h_addr_list[0],sizeof(addr.sin_addr.s_addr));
     addr.sin_port = htons(port);
 
     if(-1 == sal_connect(fd,(struct sockaddr *)&addr,sizeof(addr)))

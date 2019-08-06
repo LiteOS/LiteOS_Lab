@@ -542,11 +542,6 @@ static int __oc_mqtt_connect_server(oc_agent_mqtt_cb_t *cb)
 {
     mqtt_al_conpara_t conpara;
 
-    struct hostent* entry = NULL;
-
-    char  server_ip[CN_SEVRER_IP_LEN];
-
-    memset(server_ip,0,sizeof(server_ip));
     //GENERATE THE DATA THE CLOUD PLATFORM NEED
     memset(&conpara,0,sizeof(conpara));
 
@@ -563,29 +558,14 @@ static int __oc_mqtt_connect_server(oc_agent_mqtt_cb_t *cb)
     conpara.keepalivetime = cb->config.lifetime;
     conpara.security = &cb->config.security;
 
-    ///< --TODO, next version we try the dns resoleved by the mqtt_al,not try here, and do backoff time retry
-    while(NULL == entry)
-    {
-        entry = sal_gethostbyname(cb->server_address);
-        if(entry && entry->h_addr_list[0])
-        {
-            inet_ntop(entry->h_addrtype, entry->h_addr_list[0],server_ip, CN_SEVRER_IP_LEN);
-            conpara.serveraddr.data = server_ip;
-            conpara.serveraddr.len = strlen(conpara.serveraddr.data);
-        }
-        else
-        {
-            printf("LOG ############NO IP ---TRY AGAIN\n\r");
-            osal_task_sleep(1000);
-        }
-    }
-
-    printf("OC_MQTT_DNS:IP:%s  PORT:%s\r\n", server_ip,cb->server_port);
-
+    conpara.serveraddr.data = (char *)cb->server_address;
+    conpara.serveraddr.len = strlen(conpara.serveraddr.data);
     conpara.serverport = atoi(cb->server_port);
     conpara.timeout = 10000;
     conpara.version = en_mqtt_al_version_3_1_1;
     conpara.willmsg = NULL;
+    printf("SERVER:%s \r\n PORT:%d \r\n",\
+            conpara.serveraddr.data,conpara.serverport);
     printf("CLIENTID:%s \r\n USER:%s \r\n PASSWD:%s \r\n",\
             conpara.clientid.data,conpara.user.data,conpara.passwd.data);
 
@@ -795,9 +775,9 @@ static void *__oc_config(tag_oc_mqtt_config *config)
     s_oc_agent_mqtt_cb->b_flag_run = 1;
 
     ///< here we run wait until we connected to the server
-    while((++try_times <= CN_CON_BACKOFF_MAXTIMES) )
+    while((++try_times <= 30) )  ///< we could wait max 30 seconds
     {
-        osal_task_sleep(CN_CON_BACKOFF_TIME << try_times);  ///< do back off retreat
+        osal_task_sleep(CN_CON_BACKOFF_TIME);  ///< do back off retreat
 
         if(s_oc_agent_mqtt_cb->b_flag_dmp_connected)
         {
