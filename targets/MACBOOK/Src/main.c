@@ -33,7 +33,7 @@
  *---------------------------------------------------------------------------*/
 #include <stdio.h>
 #include <pthread.h>
-
+#include <osal.h>
 
 extern int link_main(void *args);
 
@@ -43,7 +43,7 @@ int main(void)
     link_main(NULL);
     while(1)
     {
-        usleep(100);
+        osal_task_sleep(1);
         fflush(stdout); ///< make sure that printf could flush to the console of eclipse
     }
     return 0;
