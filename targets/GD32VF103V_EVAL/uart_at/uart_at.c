@@ -146,7 +146,7 @@ bool_t uart_at_init(int baud)
         //_Error_Handler(__FILE__, __LINE__);
     }
     usart_flag_clear(uart_at, USART_FLAG_TC);
-    //LOS_HwiCreate(s_uwIRQn, 3, 0, atio_irq, 0);
+    LOS_HwiCreate(s_uwIRQn, 3, 0, atio_irq, 0);
     usart_interrupt_enable(uart_at,USART_INT_IDLE);
     usart_interrupt_enable(uart_at,USART_INT_RBNE);
     return true;
@@ -171,7 +171,7 @@ static ssize_t uart_at_send(const char *buf, size_t len,uint32_t timeout)
 
     while(i < len)
     {
-        printf("0x%x ", buf[i]);
+        //printf("0x%x ", buf[i]);  //used for debug
         usart_data_transmit(uart_at,buf[i]);
         i++;
 

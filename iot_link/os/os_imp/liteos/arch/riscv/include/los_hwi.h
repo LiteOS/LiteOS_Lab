@@ -112,43 +112,38 @@ extern UINT32  g_vuwIntCount;
  * @ingroup los_hwi
  * Lowest priority of a hardware interrupt.
  */
-#define  OS_HWI_PRIO_LOWEST         15
+#define  OS_HWI_PRIO_LOWEST         7
 
-/**
- * @ingroup los_hwi
- * Maximum number of hardware support for hardware interrupt.
- */
-#define OS_HWI_MAX_NUM              60
 
 /**
  * @ingroup los_hwi
  * Maximum interrupt number.
  */
-#define OS_HWI_MAX                  ((OS_HWI_MAX_NUM) - 1)
+#define OS_HWI_MAX                  86
 
 /**
  * @ingroup los_hwi
  * Minimum interrupt number.
  */
-#define OS_HWI_MIN                  0
+#define OS_HWI_MIN                  19
 
 /**
  * @ingroup los_hwi
  * Count of M4 system interrupt vector.
  */
-#define OS_M4_SYS_VECTOR_CNT        16
+#define OS_RV_SYS_VECTOR_CNT        19
 
 /**
  * @ingroup los_hwi
  * Count of M4 IRQ interrupt vector.
  */
-#define OS_M4_IRQ_VECTOR_CNT        240
+#define OS_RV_IRQ_VECTOR_CNT        68
 
 /**
  * @ingroup los_hwi
  * Count of M4 interrupt vector.
  */
-#define OS_M4_VECTOR_CNT            (OS_M4_SYS_VECTOR_CNT + OS_M4_IRQ_VECTOR_CNT)
+#define OS_RV_VECTOR_CNT            (OS_RV_SYS_VECTOR_CNT + OS_RV_IRQ_VECTOR_CNT)
 
 /**
  * @ingroup los_hwi
@@ -230,207 +225,48 @@ extern UINT32  g_vuwIntCount;
  */
 #define OS_ERRNO_HWI_FASTMODE_ALREADY_CREATED               LOS_ERRNO_OS_ERROR(LOS_MOD_HWI, 0x07)
 
-/**
- * @ingroup los_hwi
- * AIRCR register priority group parameter .
- */
-#define OS_NVIC_AIRCR_PRIGROUP      7
 
-/**
- * @ingroup los_hwi
- * Boot interrupt vector table.
- */
-extern UINT32 _BootVectors[];
 
-/**
- * @ingroup los_hwi
- * SysTick control and status register.
- */
-#define OS_SYSTICK_CONTROL_REG      0xE000E010
 
-/**
- * @ingroup los_hw
- * SysTick reload value register.
- */
-#define OS_SYSTICK_RELOAD_REG       0xE000E014
 
-/**
- * @ingroup los_hwi
- * interrupt pending register.
- */
-#define OS_NVIC_SETPEND_BASE        0xE000E200
 
-/**
- * @ingroup los_hwi
- * interrupt active register.
- */
-#define OS_NVIC_INT_ACT_BASE        0xE000E300
+#if (OS_HWI_WITH_ARG == YES)
+typedef VOID (* HWI_PROC_FUNC)(VOID *pParm);
+#else
+typedef VOID (* HWI_PROC_FUNC)(VOID);
+#endif
 
-/**
- * @ingroup los_hw
- * SysTick current value register.
- */
-#define OS_SYSTICK_CURRENT_REG      0xE000E018
+typedef struct
+{
+    HWI_PROC_FUNC pfnHandler;
+#if (OS_HWI_WITH_ARG == YES)
+    VOID*         pParm;
+#endif
+} HWI_HANDLER_T;
 
-/**
- * @ingroup los_hwi
- * Interrupt Priority-Level Registers.
- */
-#define OS_NVIC_PRI_BASE            0xE000E400
 
-/**
- * @ingroup los_hwi
- * Interrupt enable register for 0-31.
- */
-#define OS_NVIC_SETENA_BASE         0xE000E100
-
-/**
- * @ingroup los_hwi
- * Interrupt disable register for 0-31.
- */
-#define OS_NVIC_CLRENA_BASE         0xE000E180
-
-/**
- * @ingroup los_hwi
- * Interrupt control and status register.
- */
-#define OS_NVIC_INT_CTRL            0xE000ED04
-
-/**
- * @ingroup los_hwi
- * Vector table offset register.
- */
-#define OS_NVIC_VTOR                0xE000ED08
-
-/**
- * @ingroup los_hwi
- * Application interrupt and reset control register
- */
-#define OS_NVIC_AIRCR               0xE000ED0C
-
-/**
- * @ingroup los_hwi
- * System exception priority register.
- */
-#define OS_NVIC_EXCPRI_BASE         0xE000ED18
-
-/**
- * @ingroup los_hwi
- * Interrupt enable register ,uwHwiNum Set 1
- */
-#define nvicSetIRQ(uwHwiNum)   \
-    do { \
-         *(volatile UINT32 *)(OS_NVIC_SETENA_BASE + ((uwHwiNum >> 5) << 2)) = 1 << ((uwHwiNum) & 0x1F);  \
-       } while (0)
-
-/**
- * @ingroup los_hwi
- * Interrupt enable register ,uwHwiNum Clear 0
- */
-#define nvicClrIRQ(uwHwiNum)   \
-    do { \
-         *(volatile UINT32 *)(OS_NVIC_CLRENA_BASE + ((uwHwiNum >> 5) << 2)) = 1 << ((uwHwiNum) & 0x1F);  \
-       } while (0)
-
-/**
- * @ingroup los_hwi
- * Interrupt Priority-Level Registers ,uwHwiNum Set ucPri.
- */
-#define nvicSetIrqPRI(uwHwiNum, ucPri) \
-    do { \
-         *(volatile UINT8 *)(OS_NVIC_PRI_BASE + (uwHwiNum)) = (UINT8)(0x80 | (ucPri));    \
-       } while (0)
-
-/**
- * @ingroup los_hwi
- * System exception priority register ,uwExcNum Set ucPri.
- */
-#define nvicSetExcPRI(uwExcNum, ucPri) \
-    do { \
-         *(volatile UINT8 *)(OS_NVIC_EXCPRI_BASE + ((uwExcNum) - 4)) = (UINT8)(ucPri);    \
-       } while (0)
-
-/**
- * @ingroup los_hwi
- * Interrupt No. 1 :reset.
- */
-#define OS_EXC_RESET           1
-
-/**
- * @ingroup los_hwi
- * Interrupt No. 2 :Non-Maskable Interrupt.
- */
-#define OS_EXC_NMI             2
-
-/**
- * @ingroup los_hwi
- * Interrupt No. 3 :(hard)fault.
- */
-#define OS_EXC_HARD_FAULT      3
-
-/**
- * @ingroup los_hwi
- * Interrupt No. 4 :MemManage fault.
- */
-#define OS_EXC_MPU_FAULT       4
-
-/**
- * @ingroup los_hwi
- * Interrupt No. 5 :Bus fault.
- */
-#define OS_EXC_BUS_FAULT       5
-
-/**
- * @ingroup los_hwi
- * Interrupt No. 6 :Usage fault.
- */
-#define OS_EXC_USAGE_FAULT     6
-
-/**
- * @ingroup los_hwi
- * Interrupt No. 11 :SVCall.
- */
-#define OS_EXC_SVC_CALL        11
-
-/**
- * @ingroup los_hwi
- * Interrupt No. 12 :Debug monitor.
- */
-#define OS_EXC_DBG_MONITOR     12
-
-/**
- * @ingroup los_hwi
- * Interrupt No. 14 :PendSV.
- */
-#define OS_EXC_PEND_SV         14
-
-/**
- * @ingroup los_hwi
- * Interrupt No. 15 :SysTick.
- */
-#define OS_EXC_SYS_TICK        15
-
-/**
- * @ingroup los_hwi
- * hardware interrupt form mapping handling function array.
- */
-extern HWI_PROC_FUNC m_pstHwiForm[OS_M4_VECTOR_CNT];
 
 /**
  * @ingroup los_hwi
  * hardware interrupt Slave form mapping handling function array.
  */
-extern HWI_PROC_FUNC m_pstHwiSlaveForm[OS_M4_VECTOR_CNT];
+extern HWI_HANDLER_T m_pstHwiSlaveForm[OS_RV_IRQ_VECTOR_CNT];
 
 extern VOID Reset_Handler(VOID);
+
+#ifndef OS_HWI_WITH_ARG
+#define OS_HWI_WITH_ARG             NO
+#endif
+
+
+
 
 /**
  * @ingroup los_hwi
  * Set interrupt vector table.
  */
 #define osSetVector(uwNum, pfnVector)       \
-    m_pstHwiForm[uwNum + OS_M4_SYS_VECTOR_CNT] = osInterrupt;\
-    m_pstHwiSlaveForm[uwNum + OS_M4_SYS_VECTOR_CNT] = pfnVector;
+    m_pstHwiSlaveForm[uwNum - OS_RV_SYS_VECTOR_CNT].pfnHandler = pfnVector;
 
 
 /**

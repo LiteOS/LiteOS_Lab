@@ -80,103 +80,103 @@ vector_base:
     .word     eclic_msip_handler
     .word     0
     .word     0
-    .word  	  0
-    .word  	  eclic_mtip_handler
-    .word  	  0
-    .word  	  0
-    .word  	  0
-    .word  	  0
-    .word  	  0
-    .word  	  0
-    .word  	  0
-    .word 	  0
-    .word  	  0
-    .word  	  eclic_bwei_handler
-    .word  	  eclic_pmovi_handler
-    .word  	  WWDGT_IRQHandler
-	.word     LVD_IRQHandler
-	.word     TAMPER_IRQHandler
-	.word     RTC_IRQHandler
-	.word     FMC_IRQHandler
-	.word     RCU_IRQHandler
-	.word     EXTI0_IRQHandler
-	.word     EXTI1_IRQHandler
-	.word     EXTI2_IRQHandler
-	.word     EXTI3_IRQHandler
-	.word     EXTI4_IRQHandler
-	.word     DMA0_Channel0_IRQHandler
-	.word     DMA0_Channel1_IRQHandler
-	.word     DMA0_Channel2_IRQHandler
-	.word     DMA0_Channel3_IRQHandler
-	.word     DMA0_Channel4_IRQHandler
-	.word     DMA0_Channel5_IRQHandler
-	.word     DMA0_Channel6_IRQHandler
-	.word     ADC0_1_IRQHandler
-	.word     CAN0_TX_IRQHandler
-	.word     CAN0_RX0_IRQHandler
-	.word     CAN0_RX1_IRQHandler
-	.word     CAN0_EWMC_IRQHandler
-	.word     EXTI5_9_IRQHandler
-	.word     TIMER0_BRK_IRQHandler
-	.word     TIMER0_UP_IRQHandler
-	.word     TIMER0_TRG_CMT_IRQHandler
-	.word     TIMER0_Channel_IRQHandler
-	.word     TIMER1_IRQHandler
-	.word     TIMER2_IRQHandler
-	.word     TIMER3_IRQHandler
-	.word     I2C0_EV_IRQHandler
-	.word     I2C0_ER_IRQHandler
-	.word     I2C1_EV_IRQHandler
-	.word     I2C1_ER_IRQHandler
-	.word     SPI0_IRQHandler
-	.word     SPI1_IRQHandler
-	.word     USART0_IRQHandler
-	.word     USART1_IRQHandler
-	.word     USART2_IRQHandler
-	.word     EXTI10_15_IRQHandler
-	.word     RTC_Alarm_IRQHandler
-	.word     USBFS_WKUP_IRQHandler
+    .word     0
+    .word     eclic_mtip_handler
     .word     0
     .word     0
     .word     0
     .word     0
-	.word     0
-	.word     EXMC_IRQHandler
-	.word     0
-	.word     TIMER4_IRQHandler
-	.word     SPI2_IRQHandler
-	.word     UART3_IRQHandler
-	.word     UART4_IRQHandler
-	.word     TIMER5_IRQHandler
-	.word     TIMER6_IRQHandler
-	.word     DMA1_Channel0_IRQHandler
-	.word     DMA1_Channel1_IRQHandler
-	.word     DMA1_Channel2_IRQHandler
-	.word     DMA1_Channel3_IRQHandler
-	.word     DMA1_Channel4_IRQHandler
     .word     0
     .word     0
-	.word     CAN1_TX_IRQHandler
-	.word     CAN1_RX0_IRQHandler
-	.word     CAN1_RX1_IRQHandler
-	.word     CAN1_EWMC_IRQHandler
-	.word     USBFS_IRQHandler
+    .word     0
+    .word     0
+    .word     0
+    .word     eclic_bwei_handler
+    .word     eclic_pmovi_handler
+    .word     osInterrupt#WWDGT_IRQHandler
+    .word     osInterrupt#LVD_IRQHandler
+    .word     osInterrupt#TAMPER_IRQHandler
+    .word     osInterrupt#RTC_IRQHandler
+    .word     osInterrupt#FMC_IRQHandler
+    .word     osInterrupt#RCU_IRQHandler
+    .word     osInterrupt#EXTI0_IRQHandler
+    .word     osInterrupt#EXTI1_IRQHandler
+    .word     osInterrupt#EXTI2_IRQHandler
+    .word     osInterrupt#EXTI3_IRQHandler
+    .word     osInterrupt#EXTI4_IRQHandler
+    .word     osInterrupt#DMA0_Channel0_IRQHandler
+    .word     osInterrupt#DMA0_Channel1_IRQHandler
+    .word     osInterrupt#DMA0_Channel2_IRQHandler
+    .word     osInterrupt#DMA0_Channel3_IRQHandler
+    .word     osInterrupt#DMA0_Channel4_IRQHandler
+    .word     osInterrupt#DMA0_Channel5_IRQHandler
+    .word     osInterrupt#DMA0_Channel6_IRQHandler
+    .word     osInterrupt#ADC0_1_IRQHandler
+    .word     osInterrupt#CAN0_TX_IRQHandler
+    .word     osInterrupt#CAN0_RX0_IRQHandler
+    .word     osInterrupt#CAN0_RX1_IRQHandler
+    .word     osInterrupt#CAN0_EWMC_IRQHandler
+    .word     osInterrupt#EXTI5_9_IRQHandler
+    .word     osInterrupt#TIMER0_BRK_IRQHandler
+    .word     osInterrupt#TIMER0_UP_IRQHandler
+    .word     osInterrupt#TIMER0_TRG_CMT_IRQHandler
+    .word     osInterrupt#TIMER0_Channel_IRQHandler
+    .word     osInterrupt#TIMER1_IRQHandler
+    .word     osInterrupt#TIMER2_IRQHandler
+    .word     osInterrupt#TIMER3_IRQHandler
+    .word     osInterrupt#I2C0_EV_IRQHandler
+    .word     osInterrupt#I2C0_ER_IRQHandler
+    .word     osInterrupt#I2C1_EV_IRQHandler
+    .word     osInterrupt#I2C1_ER_IRQHandler
+    .word     osInterrupt#SPI0_IRQHandler
+    .word     osInterrupt#SPI1_IRQHandler
+    .word     osInterrupt#USART0_IRQHandler
+    .word     osInterrupt#USART1_IRQHandler
+    .word     osInterrupt#USART2_IRQHandler
+    .word     osInterrupt#EXTI10_15_IRQHandler
+    .word     osInterrupt#RTC_Alarm_IRQHandler
+    .word     osInterrupt#USBFS_WKUP_IRQHandler
+    .word     0
+    .word     0
+    .word     0
+    .word     0
+    .word     0
+    .word     osInterrupt#EXMC_IRQHandler
+    .word     0
+    .word     osInterrupt#TIMER4_IRQHandler
+    .word     osInterrupt#SPI2_IRQHandler
+    .word     osInterrupt#UART3_IRQHandler
+    .word     osInterrupt#UART4_IRQHandler
+    .word     osInterrupt#TIMER5_IRQHandler
+    .word     osInterrupt#TIMER6_IRQHandler
+    .word     osInterrupt#DMA1_Channel0_IRQHandler
+    .word     osInterrupt#DMA1_Channel1_IRQHandler
+    .word     osInterrupt#DMA1_Channel2_IRQHandler
+    .word     osInterrupt#DMA1_Channel3_IRQHandler
+    .word     osInterrupt#DMA1_Channel4_IRQHandler
+    .word     0
+    .word     0
+    .word     osInterrupt#CAN1_TX_IRQHandler
+    .word     osInterrupt#CAN1_RX0_IRQHandler
+    .word     osInterrupt#CAN1_RX1_IRQHandler
+    .word     osInterrupt#CAN1_EWMC_IRQHandler
+    .word     osInterrupt#USBFS_IRQHandler
 
-	.globl _start
-	.type _start,@function
+    .globl    _start
+    .type     _start,@function
 
 _start:
 
-	/* Jump to logical address first to ensure correct operation of RAM region  */
+    /* Jump to logical address first to ensure correct operation of RAM region  */
     la		a0,	_start
     li		a1,	1
-	slli	a1,	a1, 29
+    slli	a1,	a1, 29
     bleu	a1, a0, _start0800
     srli	a1,	a1, 2
     bleu	a1, a0, _start0800
     la		a0,	_start0800
     add		a0, a0, a1
-	jr      a0
+    jr          a0
 
 _start0800:
 
@@ -184,11 +184,11 @@ _start0800:
     li t0, 0x200
     csrs CSR_MMISC_CTL, t0
 
-	/* Intial the mtvt*/
+    /* Intial the mtvt*/
     la t0, vector_base
     csrw CSR_MTVT, t0
 
-	/* Intial the mtvt2 and enable it*/
+    /* Intial the mtvt2 and enable it*/
     la t0, irq_entry
     csrw CSR_MIRQ_ENTRY, t0
     csrs CSR_MIRQ_ENTRY, 0x1
@@ -198,50 +198,50 @@ _start0800:
     csrw CSR_MTVEC, t0
 
 #ifdef __riscv_flen
-	/* Enable FPU */
-	li t0, MSTATUS_FS
-	csrs mstatus, t0
-	csrw fcsr, x0
+    /* Enable FPU */
+    li t0, MSTATUS_FS
+    csrs mstatus, t0
+    csrw fcsr, x0
 #endif
 
 .option push
 .option norelax
-	la gp, __global_pointer$
+    la gp, __global_pointer$
 .option pop
-	la sp, _sp
+    la sp, _sp
 
-	/* Load data section */
-	la a0, _data_lma
-	la a1, _data
-	la a2, _edata
-	bgeu a1, a2, 2f
+    /* Load data section */
+    la a0, _data_lma
+    la a1, _data
+    la a2, _edata
+    bgeu a1, a2, 2f
 1:
-	lw t0, (a0)
-	sw t0, (a1)
-	addi a0, a0, 4
-	addi a1, a1, 4
-	bltu a1, a2, 1b
+    lw t0, (a0)
+    sw t0, (a1)
+    addi a0, a0, 4
+    addi a1, a1, 4
+    bltu a1, a2, 1b
 2:
-	/* Clear bss section */
-	la a0, __bss_start
-	la a1, _end
-	bgeu a0, a1, 2f
+    /* Clear bss section */
+    la a0, __bss_start
+    la a1, _end
+    bgeu a0, a1, 2f
 1:
-	sw zero, (a0)
-	addi a0, a0, 4
-	bltu a0, a1, 1b
+    sw zero, (a0)
+    addi a0, a0, 4
+    bltu a0, a1, 1b
 2:
-	/* Call global constructors */
-	la a0, __libc_fini_array
-	call atexit
-	call __libc_init_array
+    /* Call global constructors */
+    la a0, __libc_fini_array
+    call atexit
+    call __libc_init_array
 
 
-	/* argc = argv = 0 */
-	li a0, 0
-	li a1, 0
-	call main
-	tail exit
+    /* argc = argv = 0 */
+    li a0, 0
+    li a1, 0
+    call main
+    tail exit
 
 1:
-	j 1b
+    j 1b
