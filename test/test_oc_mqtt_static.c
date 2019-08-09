@@ -520,7 +520,7 @@ static int oc_mqtt_static_test_entry(void *args)
 
 
 
-int oc_mqtt_demo_main()
+int test_oc_mqtt_static()
 {
     osal_semp_create(&s_rcv_sync,1,0);
     osal_task_create("ocmqtt_cmd",oc_mqtt_cmd_entry,NULL,0x1000,NULL,10);

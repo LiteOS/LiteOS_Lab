@@ -177,6 +177,8 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_SemDelete(UINT32 uwSemHandle)
     SEM_CB_S    *pstSemDeleted;
     UINT32      uwErrNo;
     UINT32      uwErrLine;
+    LOS_TASK_CB *pstResumedTask;
+
 
     if (uwSemHandle >= (UINT32)LOSCFG_BASE_IPC_SEM_LIMIT)
     {
@@ -191,15 +193,29 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_SemDelete(UINT32 uwSemHandle)
         OS_GOTO_ERR_HANDLER(LOS_ERRNO_SEM_INVALID);
     }
 
+#if 0
     if (!LOS_ListEmpty(&pstSemDeleted->stSemList))
     {
         LOS_IntRestore(uwIntSave);
         OS_GOTO_ERR_HANDLER(LOS_ERRNO_SEM_PENDED);
     }
+#else
+    while (!LOS_ListEmpty(&pstSemDeleted->stSemList))
+    {
+        pstResumedTask = OS_TCB_FROM_PENDLIST(LOS_DL_LIST_FIRST(&(pstSemDeleted->stSemList)));
+        pstResumedTask->pTaskSem = NULL;
+        osTaskWake(pstResumedTask, OS_TASK_STATUS_PEND);
+
+        pstResumedTask->usTaskStatus |= OS_TASK_STATUS_TIMEOUT;
+    }
+#endif
 
     LOS_ListAdd(&g_stUnusedSemList, &pstSemDeleted->stSemList);
     pstSemDeleted->usSemStat = OS_SEM_UNUSED;
     LOS_IntRestore(uwIntSave);
+#if 1
+    LOS_Schedule();
+#endif
     return LOS_OK;
 ErrHandler:
     OS_RETURN_ERROR_P2(uwErrLine, uwErrNo);
