@@ -50,11 +50,8 @@ UINT32  g_vuwIntCount = 0;
 #ifdef LOS_LOCATION_VECTOR_IAR
 #pragma  location = ".vector"
 #endif
-LITE_OS_SEC_VEC HWI_PROC_FUNC m_pstHwiForm[OS_M4_VECTOR_CNT] =
-{
 
-};
-HWI_PROC_FUNC m_pstHwiSlaveForm[OS_M4_VECTOR_CNT] = {0};
+HWI_HANDLER_T m_pstHwiSlaveForm[OS_RV_IRQ_VECTOR_CNT] = {0};
 
 /*****************************************************************************
  Function    : osIntNumGet
@@ -102,9 +99,17 @@ LITE_OS_SEC_TEXT VOID  osInterrupt(VOID)
 
     uwHwiIndex = osIntNumGet();
 
-    if (m_pstHwiSlaveForm[uwHwiIndex] !=0)
+    if (m_pstHwiSlaveForm[uwHwiIndex - OS_RV_SYS_VECTOR_CNT].pfnHandler != NULL)
     {
-        m_pstHwiSlaveForm[uwHwiIndex]();
+#if (OS_HWI_WITH_ARG == YES)
+        m_pstHwiSlaveForm[uwHwiIndex- OS_RV_SYS_VECTOR_CNT].pfnHandler(m_pstHwiSlaveForm[uwHwiIndex- OS_RV_SYS_VECTOR_CNT].pParm);
+#else
+        m_pstHwiSlaveForm[uwHwiIndex- OS_RV_SYS_VECTOR_CNT].pfnHandler();
+#endif
+    }
+	else
+    {
+        osHwiDefaultHandler();
     }
 
     uwIntSave = LOS_IntLock();
@@ -112,17 +117,6 @@ LITE_OS_SEC_TEXT VOID  osInterrupt(VOID)
     LOS_IntRestore(uwIntSave);
 }
 
-/*****************************************************************************
- Function    : osHwiInit
- Description : initialization of the hardware interrupt
- Input       : None
- Output      : None
- Return      : OS_SUCCESS
- *****************************************************************************/
-LITE_OS_SEC_TEXT_INIT unsigned int osGetVectorAddr(void)
-{
-    return (UINT32)m_pstHwiForm;
-}
 
 /*****************************************************************************
  Function    : osHwiInit
@@ -134,9 +128,9 @@ LITE_OS_SEC_TEXT_INIT unsigned int osGetVectorAddr(void)
 LITE_OS_SEC_TEXT_INIT VOID osHwiInit()
 {
     UINT32 uwIndex;
-    for(uwIndex = OS_M4_SYS_VECTOR_CNT; uwIndex < OS_M4_VECTOR_CNT; uwIndex++)
+    for(uwIndex = OS_RV_SYS_VECTOR_CNT; uwIndex < OS_RV_VECTOR_CNT; uwIndex++)
     {
-        m_pstHwiForm[uwIndex] = osHwiDefaultHandler;
+        m_pstHwiSlaveForm[uwIndex - OS_RV_SYS_VECTOR_CNT].pfnHandler = osHwiDefaultHandler;
     }
 }
 
@@ -163,13 +157,9 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_HwiCreate( HWI_HANDLE_T  uwHwiNum,
     {
         return OS_ERRNO_HWI_PROC_FUNC_NULL;
     }
-    if (uwHwiNum >= OS_M4_IRQ_VECTOR_CNT)
+    if (uwHwiNum >= OS_RV_IRQ_VECTOR_CNT)
     {
         return OS_ERRNO_HWI_NUM_INVALID;
-    }
-    if (m_pstHwiForm[uwHwiNum + OS_M4_SYS_VECTOR_CNT] != osHwiDefaultHandler)
-    {
-        return OS_ERRNO_HWI_ALREADY_CREATED;
     }
     if (usHwiPrio > OS_HWI_PRIO_LOWEST)
     {
@@ -179,6 +169,10 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_HwiCreate( HWI_HANDLE_T  uwHwiNum,
     uvIntSave = LOS_IntLock();
 
     osSetVector(uwHwiNum, pfnHandler);
+
+#if (OS_HWI_WITH_ARG == YES)
+     m_pstHwiSlaveForm[uwHwiNum - OS_RV_SYS_VECTOR_CNT].pParm = (VOID*)uwArg;
+#endif
 
     eclic_irq_enable(uwHwiNum, 1, usHwiPrio);
 
@@ -199,7 +193,7 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_HwiDelete(HWI_HANDLE_T uwHwiNum)
 {
     UINT32 uwIntSave;
 
-    if (uwHwiNum >= OS_M4_IRQ_VECTOR_CNT)
+    if (uwHwiNum >= OS_RV_IRQ_VECTOR_CNT)
     {
         return OS_ERRNO_HWI_NUM_INVALID;
     }
@@ -208,7 +202,7 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_HwiDelete(HWI_HANDLE_T uwHwiNum)
 
     uwIntSave = LOS_IntLock();
 
-    m_pstHwiForm[uwHwiNum + OS_M4_SYS_VECTOR_CNT] = (HWI_PROC_FUNC)osHwiDefaultHandler;
+    m_pstHwiSlaveForm[uwHwiNum - OS_RV_SYS_VECTOR_CNT].pfnHandler = (HWI_PROC_FUNC)osHwiDefaultHandler;
 
     LOS_IntRestore(uwIntSave);
 

@@ -202,8 +202,9 @@ LOS_StartToRun:
     jalr    x0, t6, 0
 
 LOS_IntNumGet:
-    #li  t0, PLIC_CLAIM_REG
-    #lw  t0, 0x0(t0)
+    csrr a0, mcause
+    li   t0, 0xfff
+    and  a0, a0, t0//mcause.EXCCODE   [11:0]
     ret
 
 osDisableIRQ:

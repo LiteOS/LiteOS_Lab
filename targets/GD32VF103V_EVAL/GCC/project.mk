@@ -42,13 +42,7 @@ TARGET_LIB_SRC = \
 
 USER_SRC =  \
         $(SDK_DIR)/targets/GD32VF103V_EVAL/Src/gd32v103v_eval.c \
-        $(SDK_DIR)/targets/GD32VF103V_EVAL/Src/gd32v103v_lcd_eval.c \
-        $(SDK_DIR)/targets/GD32VF103V_EVAL/Src/picture.c \
-        $(SDK_DIR)/targets/GD32VF103V_EVAL/Src/lcd_font.c \
         $(SDK_DIR)/targets/GD32VF103V_EVAL/Src/systick.c \
-        $(SDK_DIR)/targets/GD32VF103V_EVAL/Src/touch_panel.c \
-        $(SDK_DIR)/targets/GD32VF103V_EVAL/Src/gd25qxx.c \
-        $(SDK_DIR)/targets/GD32VF103V_EVAL/Src/lcd_demo.c \
         $(SDK_DIR)/targets/GD32VF103V_EVAL/Src/main.c
         C_SOURCES += $(USER_SRC)
         
