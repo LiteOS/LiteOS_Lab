@@ -243,8 +243,7 @@ static int  __oob_match(void *data,size_t len)
     {
         oob = &g_at_cb.oob[i];
         if((oob->func != NULL)&&(oob->index != NULL)&&\
-            //(0 == memcmp(oob->index,data,oob->len)))
-        	  (0 != strstr(data,oob->index)))
+            (0 == memcmp(oob->index,data,oob->len)))
         {
             oob->func(oob->args,data,len);
             ret = 0;

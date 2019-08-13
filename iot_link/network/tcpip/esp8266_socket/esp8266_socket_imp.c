@@ -103,6 +103,60 @@ static bool_t esp8266_atcmd_response(const char *cmd,const char *index,char *buf
     }
 }
 
+static int esp8266_rcvdeal(void *args,void *msg,size_t len)
+{
+    int ret = 0;
+    int fd;
+    unsigned short datalen;
+    char *data;
+    char  *str;
+    unsigned short ringspace;
+
+    data = msg;
+    if(len <strlen(cn_esp8266_rcvindex))
+    {
+        printf("%s:invalid frame:%d byte:%s\n\r",__FUNCTION__,len,(char *)data);
+        return ret;
+    }
+    //now deal the data
+    str = strstr((char *)data,",");
+    if(NULL == str)
+    {
+        printf("%s:format error\n\r",__FUNCTION__);
+        return ret; //format error
+    }
+    str++;
+
+    //TODO: mux = 1
+    fd = 0;
+
+    datalen = 0;
+    for (; *str <= '9' && *str >= '0' ;str++)
+    {
+        datalen = (datalen * 10 + (*str - '0'));
+    }
+    str++;
+
+    //now this is data payload
+    if(datalen > (cn_esp8266_cachelen - ring_datalen(&s_esp8266_sock_cb.esp8266_rcvring)))
+    {
+    	return 0;
+    }
+
+    if(s_esp8266_sock_cb.type == SOCK_DGRAM)
+    {
+    	ret = ring_write(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)&datalen,sizeof(datalen));
+        ret = ring_write(&s_esp8266_sock_cb.esp8266_rcvring,str,datalen);
+    }
+    else if (s_esp8266_sock_cb.type == SOCK_STREAM)
+    {
+        ret = ring_write(&s_esp8266_sock_cb.esp8266_rcvring,str,datalen);
+    }
+
+    return ret;
+
+}
+
 static int esp8266_socket(int domain, int type, int protocol)
 {
 	s_esp8266_sock_cb.domain = domain;
@@ -169,25 +223,33 @@ static int __esp8266_connect(int fd, const struct sockaddr *addr, int addrlen)
 static int esp8266_send(int fd, const void *buf, int len, int flags)
 {
 	char cmd[64];
-	char resp[8];
+	char resp[1024];
     int ret = -1;
-
 
     if(NULL != buf)
     {
         memset(cmd,0,64);
-        memset(resp,0,8);
+        memset(resp,0,1024);
 
         snprintf(cmd,64,"AT+CIPSEND=%d\r\n",len); //TODO:mux = 1
 
-        if(esp8266_atcmd_response(cmd,">",resp,8))
+        if(esp8266_atcmd(cmd,">"))
         {
-        	//char send_buf[len];
-        	//memcpy(send_buf,buf,len);
-
-        	ret = at_message(buf,len,cn_esp8266_cmd_timeout);
+        	ret = at_command((unsigned char *)buf,len,"SEND OK",(char *)resp,1024,cn_esp8266_cmd_timeout);
+        	printf("ret = %d\r\n",ret);
+        	char *str;
+        	str = strstr(resp,cn_esp8266_rcvindex);  //in some cases, +IPD is not at the beginning of one frame. process here
+        	if(NULL != str)
+        	{
+        		void *args;
+        		esp8266_rcvdeal(args,str,1024);
+        	}
 
         }
+    }
+    if(ret > 0)
+    {
+    	ret = len;
     }
     return ret;
 }
@@ -364,61 +426,6 @@ int tcpipstack_install_esp8266_socket(void)
     }
 
     return 0;
-}
-
-//
-static int esp8266_rcvdeal(void *args,void *msg,size_t len)
-{
-    int ret = 0;
-    int fd;
-    unsigned short datalen;
-    char *data;
-    char  *str;
-    unsigned short ringspace;
-
-    data = msg;
-    if(len <strlen(cn_esp8266_rcvindex))
-    {
-        printf("%s:invalid frame:%d byte:%s\n\r",__FUNCTION__,len,(char *)data);
-        return ret;
-    }
-    //now deal the data
-    str = strstr((char *)data,",");
-    if(NULL == str)
-    {
-        printf("%s:format error\n\r",__FUNCTION__);
-        return ret; //format error
-    }
-    str++;
-
-    //TODO: mux = 1
-    fd = 0;
-
-    datalen = 0;
-    for (; *str <= '9' && *str >= '0' ;str++)
-    {
-        datalen = (datalen * 10 + (*str - '0'));
-    }
-    str++;
-
-    //now this is data payload
-    if(datalen > (cn_esp8266_cachelen - ring_datalen(&s_esp8266_sock_cb.esp8266_rcvring)))
-    {
-    	return 0;
-    }
-
-    if(s_esp8266_sock_cb.type == SOCK_DGRAM)
-    {
-    	ret = ring_write(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)&datalen,sizeof(datalen));
-        ret = ring_write(&s_esp8266_sock_cb.esp8266_rcvring,str,datalen);
-    }
-    else if (s_esp8266_sock_cb.type == SOCK_STREAM)
-    {
-        ret = ring_write(&s_esp8266_sock_cb.esp8266_rcvring,str,datalen);
-    }
-
-    return ret;
-
 }
 
 static bool_t esp8266_reset(void)
