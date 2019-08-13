@@ -42,7 +42,7 @@ CONFIG_DRIVER_ENABLE = y
 CONFIG_AT_ENABLE     = y
 CONFIG_LIBC_ENABLE   = y
 CONFIG_CJSON_ENABLE  = y
-CONFIG_TCPIP_TYPE    = "lwip"
+CONFIG_TCPIP_TYPE    = "esp8266_socket"
 CONFIG_DTLS_TYPE     = "mbedtls"
 CONFIG_EMBEDTLS_MODE = "crt"
 CONFIG_MQTT_TYPE     = "paho"
@@ -52,7 +52,6 @@ CONFIG_OC_LWM2M_TYPE = "none"
 CONFIG_LOADER_ENABLE = n
 CONFIG_OC_LWM2M_DEMO_TYPE= "none"
 CONFIG_OC_MQTT_DEMO_TYPE= "oc_mqtt_demo_static"
-
 ###############################################################################
 
 ######################OC LWM2M CONFIURE TEMPLATE#################################
@@ -63,13 +62,13 @@ CONFIG_OC_MQTT_DEMO_TYPE= "oc_mqtt_demo_static"
 #CONFIG_AT_ENABLE     = y
 #CONFIG_LIBC_ENABLE   = y
 #CONFIG_CJSON_ENABLE  = n
-#CONFIG_TCPIP_TYPE    = "none"
+#CONFIG_TCPIP_TYPE    = "esp8266_socket"
 #CONFIG_DTLS_TYPE     = "none"
 #CONFIG_EMBEDTLS_MODE = "none"
 #CONFIG_MQTT_TYPE     = "none"
-#CONFIG_LWM2M_TYPE    = "none"
+#CONFIG_LWM2M_TYPE    = "wakaama"
 #CONFIG_OC_MQTT_TYPE  = "none"
-#CONFIG_OC_LWM2M_TYPE = "boudica150"
+#CONFIG_OC_LWM2M_TYPE = "soft"
 #CONFIG_LOADER_ENABLE = n
 #CONFIG_OC_LWM2M_DEMO_TYPE= "oc_lwm2m_demo_nodtls"
 #CONFIG_OC_MQTT_DEMO_TYPE= "none"
@@ -94,3 +93,5 @@ CONFIG_OC_MQTT_DEMO_TYPE= "oc_mqtt_demo_static"
 #CONFIG_OC_LWM2M_DEMO_TYPE= "none"
 #CONFIG_OC_MQTT_DEMO_TYPE= "none"
 ##################################################################################
+
+CONFIG_USER_DEMO  = "none"

@@ -390,7 +390,6 @@ int cycle(MQTTClient* c, Timer* timer)
     Timer send_timer;
 
     int packet_type = readPacket(c, timer);     /* read the socket, see what work is due */
-
     switch (packet_type)
     {
     default:

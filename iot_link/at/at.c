@@ -43,8 +43,8 @@
 
 //these defines could be moved to the configuration of the at module
 #define cn_at_oob_tab_len          6            //only allow 6 oob command monitor here,you could configure it more
-#define cn_at_resp_maxlen         768           //PROSING THAT COULD GET THE MOST REPSLENGTH
-
+//#define cn_at_resp_maxlen         768           //PROSING THAT COULD GET THE MOST REPSLENGTH
+#define cn_at_resp_maxlen         2048           //PROSING THAT COULD GET THE MOST REPSLENGTH
 //at control block here
 typedef struct
 {
@@ -243,7 +243,8 @@ static int  __oob_match(void *data,size_t len)
     {
         oob = &g_at_cb.oob[i];
         if((oob->func != NULL)&&(oob->index != NULL)&&\
-            (0 == memcmp(oob->index,data,oob->len)))
+            //(0 == memcmp(oob->index,data,oob->len)))
+        	  (0 != strstr(data,oob->index)))
         {
             oob->func(oob->args,data,len);
             ret = 0;
@@ -283,6 +284,7 @@ static int __rcv_task_entry(void *args)
             {
                 __oob_match(g_at_cb.rcvbuf,rcvlen);
             }
+
         }
     }    
 }
@@ -330,6 +332,41 @@ int  at_command(const void *cmd,size_t cmdlen,const char *index,void *respbuf,\
     return ret;
 }
 
+int at_message(const void *buf,size_t buflen,uint32_t timeout)
+{
+	int i;
+    ssize_t ret = 0;
+    int debugmode;
+    uint8_t *msg;
+    ret = los_dev_write(g_at_cb.devhandle,0,buf,buflen,timeout);
+    if(ret > 0)
+    {
+        msg = (uint8_t *)buf;
+        debugmode = g_at_cb.txdebugmode;
+        switch (debugmode)
+        {
+            case en_at_debug_ascii:
+                printf("ATSND:%d Bytes:%s\n\r",ret,(char *)msg);
+                break;
+            case en_at_debug_hex:
+                printf("ATSND:%d Bytes:",ret);
+                for(i=0;i<ret;i++)
+                {
+                    printf("%02x ",(unsigned int)msg[i]);
+                }
+                printf("\n\r");
+                break;
+            default:
+                break;
+        }
+
+    }
+    else
+    {
+        ret = -1;
+    }
+    return ret;
+}
 /*******************************************************************************
 function     :you could use this function to register a method to deal the out of band data
 parameters   :

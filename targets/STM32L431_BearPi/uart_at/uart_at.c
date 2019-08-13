@@ -40,7 +40,7 @@
 #include <link_misc.h>
 #include <driver.h>
 #include "sys/fcntl.h"
-
+#include <iot_link_config.h>
 
 
 UART_HandleTypeDef uart_at;
@@ -241,6 +241,6 @@ static const los_driv_op_t s_at_op = {
     .write = __at_write,
 };
 
-OSDRIV_EXPORT(uart_at_driv,"atdev_BC35G",(los_driv_op_t *)&s_at_op,NULL,O_RDWR);
+OSDRIV_EXPORT(uart_at_driv,CONFIG_AT_DEVICENAME,(los_driv_op_t *)&s_at_op,NULL,O_RDWR);
 
 

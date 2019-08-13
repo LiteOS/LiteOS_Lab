@@ -1,5 +1,4 @@
 #include "BH1750.h"
-
 #include "stm32l4xx.h"
 #include "i2c.h"
 
@@ -24,10 +23,10 @@ float Convert_BH1750(void)
 {
 	Start_BH1750();
 	HAL_Delay(180);
-	HAL_I2C_Master_Receive(&hi2c1, BH1750_Addr+1,BUF,2,0xff); 
+	HAL_I2C_Master_Receive(&hi2c1, BH1750_Addr+1,BUF,2,0xff);
 	result=BUF[0];
 	result=(result<<8)+BUF[1];
 	result_lx=(float)(result/1.2);
-  return result_lx;
+    return result_lx;
 }
 

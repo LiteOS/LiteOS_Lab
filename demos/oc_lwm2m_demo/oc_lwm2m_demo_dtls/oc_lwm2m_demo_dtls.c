@@ -44,6 +44,7 @@
 
 #include <osal.h>
 #include <oc_lwm2m_al.h>
+#include <link_endian.h>
 
 #define cn_endpoint_id        "lwm2m_002"
 #define cn_app_server         "49.4.85.232"

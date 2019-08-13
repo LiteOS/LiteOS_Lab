@@ -18,8 +18,8 @@ ifneq ($(CONFIG_TCPIP_TYPE),"none")
     	include $(iot_link_root)/network/tcpip/linux_socket/linux_socket_imp.mk
     else ifeq ($(CONFIG_TCPIP_TYPE), "macos_socket")
     	include $(iot_link_root)/network/tcpip/macos_socket/macos_socket_imp.mk
-    else ifeq ($(CONFIG_TCPIP_TYPE), "at_esp8266")
-    	include $(iot_link_root)/network/tcpip/at_device/wifi_esp8266/esp8266_imp.mk	
+    else ifeq ($(CONFIG_TCPIP_TYPE), "esp8266_socket")
+    	include $(iot_link_root)/network/tcpip/esp8266_socket/esp8266_socket_imp.mk	
     else
     	
     endif
