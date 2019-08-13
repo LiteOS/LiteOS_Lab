@@ -48,13 +48,9 @@
 #define DEFAULT_LIFETIME            10
 #define DEFAULT_SERVER_IPV4         "49.4.93.24"     ///<  server ip address
 #define DEFAULT_SERVER_PORT         "8883"           ///<  server mqtt service port
-#define CN_MQTT_EP_NOTEID           "mqtt_sdk_test"
-#define CN_MQTT_EP_DEVICEID         "ce843aab-2ffe-4fe0-a894-9cab720f384a"
-#define CN_MQTT_EP_PASSWD           "350de12522773e7af539"
-
-//#define CN_MQTT_EP_NOTEID           "mqtt_sdk01"
-//#define CN_MQTT_EP_DEVICEID         "6e4a90d5-8e31-48c0-920a-d03c6e91d923"
-//#define CN_MQTT_EP_PASSWD           "c18f10422c93548e6fef"
+#define CN_MQTT_EP_NOTEID           "mqtt_sdk01"
+#define CN_MQTT_EP_DEVICEID         "6e4a90d5-8e31-48c0-920a-d03c6e91d923"
+#define CN_MQTT_EP_PASSWD           "c18f10422c93548e6fef"
 
 
 static char s_mqtt_ca_crt[] =

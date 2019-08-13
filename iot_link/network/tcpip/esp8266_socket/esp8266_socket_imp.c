@@ -290,16 +290,18 @@ static struct hostent *esp8266_gethostbyname(const char *name)
 {
 	char cmd[64];
 	char resp[64];
+
 	char *str;
 	struct in_addr *serv_ip;
 	int ret = -1;
+	int cpylen;
 	struct hostent *hptr = (struct hostent *)osal_malloc(sizeof(struct hostent));
 	hptr->h_addr_list = (char **)osal_malloc(sizeof(char *) * 1);
 	hptr->h_addr_list[0] = (char *)osal_malloc(sizeof(char) * 4);
 
 	hptr->h_addrtype = AF_INET;
 	memset(cmd,0,64);
-	snprintf(cmd,64,"AT+CIPDOMAIN=%s\r\n",name);
+	snprintf(cmd,64,"AT+CIPDOMAIN=\"%s\"\r\n",name);
 	if(false == esp8266_atcmd_response(cmd,"+CIPDOMAIN",resp,64))
 	{
 		//name is ip address already
@@ -308,7 +310,12 @@ static struct hostent *esp8266_gethostbyname(const char *name)
 	}
 	str = strstr(resp,":");
 	str++;
-	sscanf(str,"%d.%d.%d.%d",hptr->h_addr_list[0][0],hptr->h_addr_list[0][1],hptr->h_addr_list[0][2],hptr->h_addr_list[0][3]);
+	cpylen = strstr(str,"\r\n") - str;
+
+	char ipaddr[cpylen];
+	memset(ipaddr,0,cpylen);
+	memcpy(ipaddr,str,cpylen);
+	sscanf(ipaddr,"%d.%d.%d.%d",&hptr->h_addr_list[0][0],&hptr->h_addr_list[0][1],&hptr->h_addr_list[0][2],&hptr->h_addr_list[0][3]);
 
     return hptr;
 }
