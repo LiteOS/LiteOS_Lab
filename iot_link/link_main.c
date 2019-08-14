@@ -126,9 +126,10 @@ int link_main(void *args)
     #elif CONFIG_MACOS_SOCKET_ENABLE
         #include <macos_socket_imp.h>
         tcpipstack_install_macos_socket();
-    #elif CONFIG_ESP8266_ENABLE
-        //#include <esp8266.h>
-        //tcpipstack_install_esp8266();
+    #elif CONFIG_ESP8266_SOCKET_ENABLE
+        #include <esp8266_socket_imp.h>
+        tcpipstack_install_esp8266_socket();
+        esp8266_boot();
     #else
 
     #endif

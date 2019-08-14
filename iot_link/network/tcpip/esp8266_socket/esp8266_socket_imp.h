@@ -33,13 +33,29 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-07-27 14:49  zhangqianfu  The first version
+ *  2019-05-23 15:09    yuhengP     The first version
  *
  */
-#ifndef LITEOS_LAB_TARGETS_STM32F429IGTX_FIRE_OS_CONFIG_IOT_LINK_CONFIG_H_
-#define LITEOS_LAB_TARGETS_STM32F429IGTX_FIRE_OS_CONFIG_IOT_LINK_CONFIG_H_
+#ifndef _LINUX_SOCKET_IMP_H_
+#define _LINUX_SOCKET_IMP_H_
 
-#define CONFIG_AT_DEVICENAME    "atdev_esp8266"
-#define CONFIG_AT_BAUDRATE      115200
 
-#endif /* LITEOS_LAB_TARGETS_STM32F429IGTX_FIRE_OS_CONFIG_IOT_LINK_CONFIG_H_ */
+#define WIFI_SSID     "TP-LINK_IOT_LINK"
+#define WIFI_PASSWD   "iotlink_2019"
+
+typedef enum
+{
+    STA = 1,
+    AP,
+    STA_AP,
+}enum_net_mode;
+/**
+ * @brief: the user should supply a function to install the network driver
+ *
+ * @return:0 success while -1 failed
+ * */
+int tcpipstack_install_esp8266_socket(void);
+int esp8266_boot(void);
+
+
+#endif /* _LINUX_SOCKET_IMP_H_ */
