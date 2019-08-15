@@ -195,7 +195,7 @@ static uint8_t prv_security_read(uint16_t instanceId,
 
 #ifdef LWM2M_BOOTSTRAP
 
-static const *s_bs_test_uri = "coap://49.4.85.232:5683";
+//static const *s_bs_test_uri = "coap://49.4.85.232:5683";
 
 
 static uint8_t prv_security_write(uint16_t instanceId,
@@ -233,10 +233,10 @@ static uint8_t prv_security_write(uint16_t instanceId,
 //                strncpy(targetP->uri, (char *)s_bs_test_uri, strlen(s_bs_test_uri) + 1);
 //                result = COAP_204_CHANGED;
 //            }
-//            else
-//            {
-//                result = COAP_500_INTERNAL_SERVER_ERROR;
-//            }
+            else
+            {
+                result = COAP_500_INTERNAL_SERVER_ERROR;
+            }
             break;
 
         case LWM2M_SECURITY_BOOTSTRAP_ID:
@@ -256,8 +256,6 @@ static uint8_t prv_security_write(uint16_t instanceId,
 
             if (1 == lwm2m_data_decode_int(dataArray + i, &value))
             {
-                ///--TODO, do the test
-                value =3;
                 if (value >= 0 && value <= 3)
                 {
                     targetP->securityMode = value;
