@@ -63,41 +63,6 @@ struct hostent * sal_gethostbyname(const char *name);
  * */
 int tcpipstack_init( int socknum);
 
-//define the normal addres function
-#define swaps(value) ((((value)&((uint16_t)0xff00))>>8)|(((value)&((uint16_t)0x00ff))<<8))
-
-#define swapl(value)  ((((value)&((uint32_t)0xff000000))>>24)|(((value)&((uint32_t)0xff0000))>>8)|\
-                      (((value)&((uint32_t)0xff00))<<8)|(((value)&((uint32_t)0xff))<<24))
-
-#if cfg_endian_big
-
-#define htoles(value)  swaps(value)
-#define htolel(value)  swapl(value)
-#define htobes(value)  (value)
-#define htobel(value)  (value)
-
-#else
-#define htoles(value)  (value)
-#define htolel(value)  (value)
-#define htobes(value)  swaps(value)
-#define htobel(value)  swapl(value)
-#endif
-
-#ifndef htons
-#define htons      htobes      //translate the host endian to network endian (2 Bytes)
-#endif
-
-#ifndef ntohs
-#define htonl      htobel      //translate the host endian to network endian (4 Bytes)
-#endif
-
-#ifndef ntohs
-#define ntohs      htobes      //translate the network endian to host endian (2 Bytes)
-#endif
-
-#ifndef ntohl
-#define ntohl      htobel      //translate the network endian to host endian (4 Bytes)
-#endif
 
 in_addr_t inet_addr(const char *addr);
 char *inet_ntoa(struct in_addr addr);

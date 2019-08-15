@@ -235,6 +235,12 @@ static void *__socket_connect(char *host, char *port,int is_server)
     con_net_conext_t *ret =  NULL;
     int fd = -1;
     struct sockaddr_in addr;
+    struct hostent* entry = NULL;
+    entry = sal_gethostbyname(host);
+    if( !(entry && entry->h_addr_list[0] && (entry->h_addrtype == AF_INET)))
+    {
+       goto EXIT_GETIP;
+    }
 
     ret = osal_malloc(sizeof(con_net_conext_t));
     if(NULL == ret)
@@ -248,24 +254,20 @@ static void *__socket_connect(char *host, char *port,int is_server)
         goto EXIT_SOCKET;
     }
 
+    memset(&addr,0,sizeof(addr));
+    addr.sin_family = AF_INET;
+    memcpy(&addr.sin_addr.s_addr,entry->h_addr_list[0],sizeof(addr.sin_addr.s_addr));
+    addr.sin_port = htons(atoi(port));
+
     if(is_server)
     {
-        memset(&addr,0,sizeof(addr));
-        addr.sin_family = AF_INET;
-        addr.sin_addr.s_addr = inet_addr(host);
-        addr.sin_port = htons(atoi(port));
         if(-1 == sal_bind(fd,(struct sockaddr *)&addr,sizeof(addr)))
         {
             goto EXIT_BIND;
         }
-
     }
     else
     {
-        memset(&addr,0,sizeof(addr));
-        addr.sin_family = AF_INET;
-        addr.sin_addr.s_addr = inet_addr(host);
-        addr.sin_port = htons(atoi(port));
         if(-1 == sal_connect(fd,(struct sockaddr *)&addr,sizeof(addr)))
         {
             goto EXIT_CONNECT;
@@ -282,6 +284,7 @@ EXIT_SOCKET:
     osal_free(ret);
     ret = NULL;
 EXIT_MEM:
+EXIT_GETIP:
     return ret;
 }
 
