@@ -658,7 +658,7 @@ int atiny_data_change(void *phandle, const char *data_type)
     memset((void *)&uri, 0, sizeof(uri));
     handle = (handle_data_t *)phandle;
 
-    if (handle->lwm2m_context->state != STATE_READY)
+    if ((handle->lwm2m_context == NULL) || (handle->lwm2m_context->state != STATE_READY))
     {
         ATINY_LOG(LOG_INFO, "not registered");
         return ATINY_CLIENT_UNREGISTERED;
