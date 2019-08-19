@@ -1,5 +1,5 @@
 ##########################################################################################################################
-# EC20 GCC compiler Makefile
+# N720 GCC compiler Makefile
 ##########################################################################################################################
 
 # ------------------------------------------------
@@ -18,21 +18,22 @@ DEBUG = 1
 # optimization
 OPT = -O0 -g
 
-
+GCC_VERSION=4.9.2
 #######################################
 # binaries
 #######################################
-PREFIX    =
-CC        = $(PREFIX)gcc
-AS        = $(PREFIX)gcc -x assembler-with-cpp
-OBJCOPY   = $(PREFIX)objcopy
-OBJDUMP   = $(PREFIX)objdump
-AR        = $(PREFIX)ar
-SZ        = $(PREFIX)size
-LD        = $(PREFIX)ld
-HEX       = $(OBJCOPY) -O ihex
-BIN       = $(OBJCOPY) -O binary -S
-
+ifeq ($(CC), )
+	PREFIX    = 
+    CC        = $(PREFIX)gcc
+    AS        = $(PREFIX)gcc -x assembler-with-cpp
+    OBJCOPY   = $(PREFIX)objcopy
+    OBJDUMP   = $(PREFIX)objdump
+    AR        = $(PREFIX)ar
+    SZ        = $(PREFIX)size
+    LD        = $(PREFIX)ld
+    HEX       = $(OBJCOPY) -O ihex
+    BIN       = $(OBJCOPY) -O binary -S
+endif
 
 PROJECTBASE = $(abspath $(CURDIR))
 TOP_DIR     = $(abspath $(PROJECTBASE)/../../..)
@@ -66,17 +67,18 @@ PERIFLIB_SOURCES =
 ##########################LOAD THE SOURCES INCLUDES AND DEFINES#################
 include $(PROJECTBASE)/config.mk
 
-MAIN_SRC := ${wildcard $(TOP_DIR)/targets/EC20/Src/main.c}
-MAIN_SRC += ${wildcard $(TOP_DIR)/targets/EC20/Src/at_interface_mqtt.c}
+MAIN_SRC := ${wildcard $(TOP_DIR)/targets/N720/Src/main.c}
+MAIN_SRC += ${wildcard $(TOP_DIR)/targets/N720/Src/at_interface_mqtt.c}
 C_SOURCES += $(MAIN_SRC)
 
 AT_INTERFACE_INC = \
-        -I $(TOP_DIR)/targets/EC20/Src/
+        -I $(TOP_DIR)/targets/N720/Src/
         C_INCLUDES += $(AT_INTERFACE_INC)
 
 ######################################
 # firmware library
 ######################################
+
 
 
 #######################################
@@ -88,6 +90,9 @@ AT_INTERFACE_INC = \
 ASFLAGS =  $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
 CFLAGS =  $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
+
+LOCAL_CFLAGS = -march=armv7-a -mfpu=neon -g
+
 
 ifeq ($(DEBUG), 1)
 CFLAGS += -g -gdwarf-2
@@ -105,6 +110,7 @@ CFLAGS += -Wno-missing-braces
 
 # libraries
 LIBS = -lc -lm -lpthread
+#LIBS = 
 LDFLAGS = $(LIBS)
 
 # default action: build all
@@ -128,7 +134,6 @@ $(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
-	$(SZ) $@
 	
 $(BUILD_DIR):
 	mkdir $@

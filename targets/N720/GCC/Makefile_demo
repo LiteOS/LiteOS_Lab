@@ -1,5 +1,5 @@
 ##########################################################################################################################
-# EC20 GCC compiler Makefile
+# STM32F429IGTx_FIRE GCC compiler Makefile
 ##########################################################################################################################
 
 # ------------------------------------------------
@@ -37,10 +37,6 @@ BIN       = $(OBJCOPY) -O binary -S
 PROJECTBASE = $(abspath $(CURDIR))
 TOP_DIR     = $(abspath $(PROJECTBASE)/../../..)
 
-#this is for IoT Studio automatic generating kconfig compatibility
-ifndef SDK_DIR
-    SDK_DIR=$(abspath $(PROJECTBASE)/../../..)
-endif
 
 #######################################
 # paths
@@ -66,13 +62,13 @@ PERIFLIB_SOURCES =
 ##########################LOAD THE SOURCES INCLUDES AND DEFINES#################
 include $(PROJECTBASE)/config.mk
 
-MAIN_SRC := ${wildcard $(TOP_DIR)/targets/EC20/Src/main.c}
+MAIN_SRC := ${wildcard $(TOP_DIR)/targets/EC20/Src/at_demo.c}
 MAIN_SRC += ${wildcard $(TOP_DIR)/targets/EC20/Src/at_interface_mqtt.c}
 C_SOURCES += $(MAIN_SRC)
 
-AT_INTERFACE_INC = \
+DEMO_INC = \
         -I $(TOP_DIR)/targets/EC20/Src/
-        C_INCLUDES += $(AT_INTERFACE_INC)
+        C_INCLUDES += $(DEMO_INC)
 
 ######################################
 # firmware library
@@ -83,6 +79,14 @@ AT_INTERFACE_INC = \
 # CFLAGS
 #######################################
 
+
+INCLUDE_INC = \
+        -I $(TOP_DIR)/include
+        C_INCLUDES += $(INCLUDE_INC)
+
+LWM2M_ATINY_INC = \
+        -I $(TOP_DIR)/components/connectivity/agent_tiny/atiny_lwm2m        
+        C_INCLUDES += $(LWM2M_ATINY_INC)
 
 # compile gcc flags
 ASFLAGS =  $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
