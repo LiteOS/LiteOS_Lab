@@ -203,6 +203,7 @@ void turn_on_led(UINT8 button_id)
 }
 
 
+UINT16 num[4]={0,0,0,0}; /* store the touch point number on four buttons */
 
 
 VOID lcd_handle(VOID)
@@ -213,7 +214,6 @@ VOID lcd_handle(VOID)
     UINT32 led2_switch = 0;
     UINT32 led3_switch = 0;
     UINT32 led4_switch = 0;
-    UINT16 num[4]={0,0,0,0}; /* store the touch point number on four buttons */
 
     tag_oc_mqtt_report  report;
     tag_key_value_list  lst1;
