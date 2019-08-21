@@ -78,7 +78,7 @@ VOID LOS_Schedule(VOID)
     /* In case that running is not highest then reschedule */
     if (g_stLosTask.pstRunTask != g_stLosTask.pstNewTask)
     {
-        if ((!g_usLosTaskLock))
+        if ((!g_usLosTaskLock) && !OS_INT_ACTIVE)
         {
             (VOID)LOS_IntRestore(uvIntSave);
 

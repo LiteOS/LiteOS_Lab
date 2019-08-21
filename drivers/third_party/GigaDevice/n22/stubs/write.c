@@ -42,5 +42,10 @@ int _put_char(int ch)
     while (usart_flag_get(USART0, USART_FLAG_TBE)== RESET){
     }
 
+
+    /* wait for completion of USART transmission */
+    while(RESET == usart_flag_get(USART0, USART_FLAG_TC)){}
+
+
     return ch;
 }

@@ -73,4 +73,4 @@ CONFIG_OC_MQTT_DEMO_TYPE:= "none"
 #CONFIG_OC_MQTT_DEMO_TYPE:= "none"
 #################################################################################
 
-CONFIG_USER_DEMO  = "oc_develop_demo"
+CONFIG_USER_DEMO  = "oc_oceanlink_demo"
