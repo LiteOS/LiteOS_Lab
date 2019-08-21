@@ -35,12 +35,18 @@
 #ifndef __LIST_H__
 #define __LIST_H__
 
+#ifdef __cplusplus
+#if __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+#endif /* __cplusplus */
+
 /* double list */
 
 typedef struct dlist
-    {
+{
     struct dlist * prev, * next;
-    } dlist_t;
+} dlist_t;
 
 /* macros */
 
@@ -61,9 +67,9 @@ typedef struct dlist
 /* list operations */
 
 static inline void dlist_init (dlist_t * head)
-    {
+{
     head->prev = head->next = head;
-    }
+}
 
 /**
  * __dlist_add_at - insert a new entry between two known consecutive entries
@@ -72,13 +78,13 @@ static inline void dlist_init (dlist_t * head)
  * the prev/next entries already!
  */
 
-static inline void __dlist_add_at (dlist_t * prev, dlist_t * next, dlist_t * new)
-    {
-    new->prev  = prev;
-    new->next  = next;
-    prev->next = new;
-    next->prev = new;
-    }
+static inline void __dlist_add_at (dlist_t * prev, dlist_t * next, dlist_t * node)
+{
+    node->prev  = prev;
+    node->next  = next;
+    prev->next = node;
+    next->prev = node;
+}
 
 /**
  * dlist_add - add a new entry at the front of the list
@@ -89,10 +95,10 @@ static inline void __dlist_add_at (dlist_t * prev, dlist_t * next, dlist_t * new
  * This is good for implementing stacks
  */
 
-static inline void dlist_add (dlist_t * head, dlist_t * new)
-    {
-    __dlist_add_at (head, head->next, new);
-    }
+static inline void dlist_add (dlist_t * head, dlist_t * node)
+{
+    __dlist_add_at (head, head->next, node);
+}
 
 /**
  * dlist_add_tail - add a new entry at the tail of the list
@@ -103,10 +109,10 @@ static inline void dlist_add (dlist_t * head, dlist_t * new)
  * This is useful for implementing queues
  */
 
-static inline void dlist_add_tail (dlist_t * head, dlist_t * new)
-    {
-    __dlist_add_at (head->prev, head, new);
-    }
+static inline void dlist_add_tail (dlist_t * head, dlist_t * node)
+{
+    __dlist_add_at (head->prev, head, node);
+}
 
 /**
  * dlist_del - deletes entry from list.
@@ -116,10 +122,10 @@ static inline void dlist_add_tail (dlist_t * head, dlist_t * new)
  */
 
 static inline void dlist_del (dlist_t * node)
-    {
+{
     node->prev->next = node->next;
     node->next->prev = node->prev;
-    }
+}
 
 /**
  * dlist_empty - check if a list is empty
@@ -127,9 +133,9 @@ static inline void dlist_del (dlist_t * node)
  */
 
 static inline int dlist_empty (dlist_t * head)
-    {
+{
     return head->prev == head;
-    }
+}
 
 /**
  * __dlist_foreach - iterate over a list
@@ -191,6 +197,12 @@ static inline int dlist_empty (dlist_t * head)
 
 #define dlist_foreach_safe_backward(pos, n, head)           \
     __dlist_foreach_safe (pos, n, head, prev)
+
+#ifdef __cplusplus
+#if __cplusplus
+}
+#endif /* __cplusplus */
+#endif /* __cplusplus */
 
 #endif /* __LIST_H__ */
 
