@@ -124,6 +124,8 @@ void USART1_IRQHandler(void)
     atio_irq();
 }
 
+
+
 /*******************************************************************************
 function     :use this function to initialize the uart
 parameters   :
@@ -142,9 +144,7 @@ bool_t uart_at_init(int baud)
 
     uart_at = s_pUSART;
     gd_eval_com_init(uart_at);
-    {
-        //_Error_Handler(__FILE__, __LINE__);
-    }
+
     usart_flag_clear(uart_at, USART_FLAG_TC);
     LOS_HwiCreate(s_uwIRQn, 3, 0, atio_irq, 0);
     usart_interrupt_enable(uart_at,USART_INT_IDLE);
