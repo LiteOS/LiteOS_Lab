@@ -1,0 +1,27 @@
+###############################################################################
+# common config file of Makefile
+###############################################################################
+
+CONFIG_FOR32 = y
+
+CONFIG_GCOV_ENABLE = y
+CONFIG_VALGRIND_ENABLE = y
+
+	
+# compile gcc flags
+ifeq ($(CONFIG_FOR32), y)
+CFLAGS += -m32 -march=i386 -mtune=i386
+endif
+
+CFLAGS += -g
+
+# config gcov
+ifeq ($(CONFIG_GCOV_ENABLE), y)
+GCOV_FALGS = -fprofile-arcs -ftest-coverage -lgcov
+CFLAGS += $(GCOV_FALGS)
+endif
+
+# config valgrind
+ifeq ($(CONFIG_VALGRIND_ENABLE), y)
+VALGRIND_FLAGS = --tool=memcheck --leak-check=full --show-reachable=yes --trace-children=yes --smc-check=all
+endif
