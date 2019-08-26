@@ -41,6 +41,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <string.h>
+#include <link_endian.h>
 
 #include <osal.h>
 #include <oc_lwm2m_al.h>
