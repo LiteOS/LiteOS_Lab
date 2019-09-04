@@ -136,91 +136,10 @@ static bool_t  __mutex_del(osal_mutex_t mutex)
 
 
 ///< this is implement for the semp
-//semp of the os
+///< semp of the os
 #include <errno.h>
 
-//static bool_t  __semp_create(osal_semp_t *semp,int limit,int initvalue)
-//{
-//    int ret = -1;
-//
-//    sem_t *s;
-//    s = malloc(sizeof(sem_t));
-//
-//    ret = sem_init(s, 1, initvalue);
-//    if(ret == 0)
-//    {
-//        *semp = s;
-//        return true;
-//    }
-//    else
-//    {
-//        free(s);
-//        if(errno == EINVAL)
-//        {
-//            printf("%s:invalid value \n\r",__FUNCTION__);
-//        }
-//        else if(errno == ENOSYS)
-//        {
-//            printf("%s:no share semp yet \n\r",__FUNCTION__);
-//        }
-//        else
-//        {
-//            printf("%s:unknown reason:%d\n\r",__FUNCTION__,errno);
-//        }
-//
-//        return false;
-//    }
-//}
-//
-//static bool_t  __semp_del(osal_semp_t semp)
-//{
-//    if(sem_destroy((sem_t *)semp))
-//        return false;
-//    else
-//        return true;
-////}
-//
-//static bool_t  __semp_pend(osal_semp_t semp,int timeout)
-//{
-//    bool_t ret = false;
-//
-//    if(timeout == cn_osal_timeout_forever)
-//    {
-//        if(0 == sem_wait((sem_t *)semp))
-//        {
-//            ret = true;
-//        }
-//    }
-//    else
-//    {
-//        while(timeout >0)
-//        {
-//            timeout--;
-//            usleep(1000);
-//            if(0 == sem_trywait((sem_t *)semp))
-//            {
-//                ret = true;
-//                break;
-//            }
-//        }
-//    }
-//
-//    return ret;
-//}
-//
-//static bool_t  __semp_post(osal_semp_t semp)
-//{
-//    if(sem_post((sem_t *)semp))
-//    {
-//        return false;
-//    }
-//    else
-//    {
-//        return true;
-//    }
-//}
 ///< for the macos could not use the unnamed sem,so we use time as the name for semaphore
-
 typedef struct
 {
     sem_t *sem;
@@ -242,11 +161,8 @@ static bool_t  __semp_create(osal_semp_t *semp,int limit,int initvalue)
     if(NULL != macos_sem)
     {
         time(&timenow);
-        macos_sem->time = ctime(&timenow);
-        printf("%s:%s\n\r",__FUNCTION__,macos_sem->time);
+        macos_sem->time = strdup(ctime(&timenow));
         macos_sem->sem = sem_open(macos_sem->time,O_CREAT, S_IRUSR | S_IWUSR, initvalue);
-
-        printf("%s:address:0x%08x\n\r",__FUNCTION__,(unsigned int)macos_sem->sem);
 
         if(NULL == macos_sem->sem)
         {
