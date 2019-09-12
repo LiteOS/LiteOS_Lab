@@ -307,8 +307,7 @@ static int __esp8266_recvfrom(int fd, void *msg, int len, int flags, struct sock
 static int __esp8266_setsockopt(int fd, int level, int option, const void *option_value, int option_len)
 {
 	//TODO:MUX=1
-	struct timeval *timedelay = (struct timeval *)osal_malloc(sizeof(struct timeval));
-	timedelay = (struct timeval *)option_value;
+	struct timeval *timedelay = (struct timeval *)option_value;
 	s_esp8266_sock_cb.timeout = (timedelay->tv_sec * 1000) + (timedelay->tv_usec / 1000);
     return 0;
 }
