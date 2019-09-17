@@ -503,6 +503,23 @@ struct hostent * sal_gethostbyname(const char *name)
     return NULL;
 }
 
+int sal_select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout)
+{
+    int ret = -1;
+    tag_sock_cb *sockcb;
+
+    sockcb = __sal_sockcb_getcb(nfds-1);
+    if(NULL != sockcb)
+    {
+        if((NULL != sockcb->ops)&&(NULL != sockcb->ops->select))
+        {
+            ret = sockcb->ops->select(sockcb->sock+1, readfds, writefds, exceptfds, timeout);
+        }
+    }
+
+    return ret;
+}
+
 
 #endif
 

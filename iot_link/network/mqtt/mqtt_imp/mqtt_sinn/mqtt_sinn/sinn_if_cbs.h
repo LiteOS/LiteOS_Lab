@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -32,22 +32,22 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 /**
- *  DATE                AUTHOR      INSTRUCTION
- *  2019-04-28 11:05  zhangqianfu  The first version
- *  2019-05-23 09:53  huerjia      The second version
+ *	DATE				AUTHOR		INSTRUCTION
+ *	2019-08-28 15:01	huerjia 	The first version:
+ *
+ *
  */
-#ifndef _LINUX_IMP_H_
-#define _LINUX_IMP_H_
 
-/**
- *
- * @brief: use this function to supply the operation function for the link
- *
- * @return:0 success while -1 failed
- *
- * */
+#ifndef __SINN_IF_CBS_H__
+#define __SINN_IF_CBS_H__
 
-int osal_install_linux(void);
+#include "sinn_client.h"
 
+void sinn_dispatch_event(sinn_connection_t *nc, sinn_event_handler event_handler, void *user_data, int event, void *event_data);
+void sinn_nc_connect_cb(sinn_connection_t *nc);
+void sinn_nc_can_write_cb(sinn_connection_t *nc);
+void sinn_nc_can_read_cb(sinn_connection_t *nc);
+int sinn_nc_poll_cb(sinn_connection_t *nc);
+void sinn_mgr_handle_conn(sinn_connection_t *nc);
 
-#endif /* _LINUX_IMP_H_ */
+#endif /* __SINN_IF_CBS_H__ */

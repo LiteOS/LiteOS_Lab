@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -31,23 +31,10 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-/**
- *  DATE                AUTHOR      INSTRUCTION
- *  2019-04-28 11:05  zhangqianfu  The first version
- *  2019-05-23 09:53  huerjia      The second version
- */
-#ifndef _LINUX_IMP_H_
-#define _LINUX_IMP_H_
 
-/**
- *
- * @brief: use this function to supply the operation function for the link
- *
- * @return:0 success while -1 failed
- *
- * */
+#ifndef __SINN_NOSEC_SOCKET_H__
+#define __SINN_NOSEC_SOCKET_H__
 
-int osal_install_linux(void);
+#include "sinn_client.h"
 
-
-#endif /* _LINUX_IMP_H_ */
+#endif /* __SINN_NOSEC_SOCKET_H__ */

@@ -44,6 +44,7 @@
 ///< this is implement for the task
 #include <los_task.ph>
 #include <los_task.h>
+#include <los_queue.h>
 static void __task_sleep(int ms)
 {
     LOS_TaskDelay(ms);//which tick is ms
@@ -204,6 +205,65 @@ static bool_t  __semp_del(osal_semp_t semp)
     }
 }
 
+static bool_t __queue_create(osal_queue_t *queue,int len,int msgsize)
+{
+    if(LOS_OK == LOS_QueueCreate(NULL, len, queue, 0, msgsize))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+static bool_t __queue_send(osal_queue_t queue, void *pbuf, unsigned int bufsize, unsigned int timeout)
+{
+    if(timeout == cn_osal_timeout_forever)
+    {
+        timeout = LOS_WAIT_FOREVER;
+    }
+
+    if(LOS_OK == LOS_QueueWrite(queue, pbuf, bufsize, timeout))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+static bool_t __queue_recv(osal_queue_t queue, void *pbuf, unsigned int bufsize, unsigned int timeout)
+{
+    if(timeout == cn_osal_timeout_forever)
+    {
+        timeout = LOS_WAIT_FOREVER;
+    }
+
+    if(LOS_OK == LOS_QueueRead(queue, pbuf, bufsize, timeout))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+static bool_t __queue_del(osal_queue_t queue)
+{
+    if(LOS_OK == LOS_QueueDelete(queue))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
 ///< this implement for the memory management
 #include <los_memory.h>
 
@@ -214,7 +274,8 @@ static void *__mem_malloc(int size)
 
     if(size > 0)
     {
-         ret = LOS_MemAlloc(m_aucSysMem0,size);
+        ret = LOS_MemAlloc(m_aucSysMem0,size);
+        memset(ret, 0, size);
     }
 
     return ret;

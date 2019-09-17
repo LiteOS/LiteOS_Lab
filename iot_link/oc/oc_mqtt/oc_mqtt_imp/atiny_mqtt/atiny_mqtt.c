@@ -299,7 +299,6 @@ static int __generate_dmp_para(oc_agent_mqtt_cb_t *cb)
     char  *passwd;
 
     time_value = cn_check_time_value;
-
     free_mqtt_para(cb);  ///< try to free all the resource we have built
 
     if(cb->config.device_type == en_oc_mqtt_device_type_static)   ///< static device mode
@@ -607,6 +606,7 @@ static int __oc_mqtt_connect_server(oc_agent_mqtt_cb_t *cb)
     conpara.timeout = 10000;
     conpara.version = en_mqtt_al_version_3_1_1;
     conpara.willmsg = NULL;
+
     printf("SERVER:%s \r\n PORT:%d \r\n",\
             conpara.serveraddr.data,conpara.serverport);
     printf("CLIENTID:%s \r\n USER:%s \r\n PASSWD:%s \r\n",\
@@ -657,7 +657,6 @@ static int __oc_agent_mqtt_dmp_alive_stage(oc_agent_mqtt_cb_t  *cb)
             conn_failed_cnt = conn_failed_cnt >= CN_CON_BACKOFF_MAXTIMES?CN_CON_BACKOFF_MAXTIMES:(conn_failed_cnt+1);
             continue; ///< generate all the parameters needed by the ocean connect server
         }
-
         ret = subscribe_topic(cb);
         if(ret == -1)
         {

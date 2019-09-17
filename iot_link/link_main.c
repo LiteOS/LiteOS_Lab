@@ -79,7 +79,6 @@ int link_main(void *args)
     stimer_init();
 #endif
 
-
 #if CONFIG_SHELL_ENABLE
     #include <shell.h>
     ///< install the shell for the link
@@ -144,10 +143,14 @@ int link_main(void *args)
 //////////////////////////  MQTT PROTOCOL  /////////////////////////////////////
 #if CONFIG_MQTT_ENABLE
     #include <mqtt_al.h>
-    #include <paho_mqtt_port.h>
-
     mqtt_init();
+#if CONFIG_MQTT_PAHO_ENABLE
+    #include <paho_mqtt_port.h>
     mqtt_install_pahomqtt();
+#elif CONFIG_MQTT_SINN_ENABLE
+    #include <mqtt_sinn_port.h>
+    mqtt_install_sinnmqtt();
+#endif
 #endif
 
 //////////////////////////  OC MQTT && DEMOS  //////////////////////////////////
@@ -163,7 +166,7 @@ int link_main(void *args)
 
 #if CONFIG_OC_MQTT_EC20_ENABLE
     #include <ec20_oc.h>
-	ec20_init();
+    ec20_init();
 #endif
 
 #if CONFIG_OC_MQTT_DEMO_ENABLE

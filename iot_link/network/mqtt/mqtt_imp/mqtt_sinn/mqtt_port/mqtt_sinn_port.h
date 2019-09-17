@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -31,23 +31,15 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
+
+#ifndef __MQTT_SINN_PORT_H__
+#define __MQTT_SINN_PORT_H__
 /**
- *  DATE                AUTHOR      INSTRUCTION
- *  2019-04-28 11:05  zhangqianfu  The first version
- *  2019-05-23 09:53  huerjia      The second version
+ * @brief   : this function for install the sinn mqtt to the mqtt_al, must be call only once
+ *
  */
-#ifndef _LINUX_IMP_H_
-#define _LINUX_IMP_H_
 
-/**
- *
- * @brief: use this function to supply the operation function for the link
- *
- * @return:0 success while -1 failed
- *
- * */
-
-int osal_install_linux(void);
+int mqtt_install_sinnmqtt();
 
 
-#endif /* _LINUX_IMP_H_ */
+#endif /* __MQTT_SINN_PORT_H__ */

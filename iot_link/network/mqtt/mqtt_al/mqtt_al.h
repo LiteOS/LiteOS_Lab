@@ -135,7 +135,7 @@ typedef struct
 	int                            cleansession; ///< 1 clean the session while 0 not
 	mqtt_al_willmsg_t             *willmsg;      ///< mqtt connect will message
 	unsigned short                 keepalivetime;///< keep alive time
-	int                            conret;       ///< mqtt connect code, return by server
+	char                           conret;       ///< mqtt connect code, return by server
 	int                            timeout;      ///< how much time will be blocked
 }mqtt_al_conpara_t;
 
@@ -170,7 +170,7 @@ typedef struct
 	en_mqtt_al_qos_t       qos;       ///< qos requested
 	fn_msg_dealer          dealer;    ///< message dealer:used to deal the received message
 	void                  *arg;       ///< used for the message dealer
-	int                    subret;    ///< subscribe result code
+	char                   subret;    ///< subscribe result code
 	int                    timeout;   ///< how much time will be blocked
 }mqtt_al_subpara_t;
 

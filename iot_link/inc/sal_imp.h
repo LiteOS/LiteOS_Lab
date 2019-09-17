@@ -49,6 +49,8 @@ typedef int (*fn_sal_closesocket)(int sock);
 
 typedef void * (*fn_sal_gethostbyname)(const char *name);
 
+typedef int (*fn_sal_select)(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout);
+
 
 typedef struct
 {
@@ -68,6 +70,7 @@ typedef struct
     fn_sal_shutdown         shutdown;
     fn_sal_closesocket      closesocket;
     fn_sal_gethostbyname    gethostbyname;
+    fn_sal_select           select;
 }tag_tcpip_ops;
 
 

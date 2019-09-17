@@ -16,7 +16,7 @@ TARGET = Huawei_LiteOS
 # debug build?
 DEBUG = 1
 # optimization
-OPT = -O0 -g
+OPT = -O0 -g -rdynamic
 
 
 #######################################
@@ -82,7 +82,7 @@ C_SOURCES += $(MAIN_SRC)
 # compile gcc flags
 ASFLAGS =  $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
-CFLAGS =  $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
+CFLAGS =  $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections -m32
 
 ifeq ($(DEBUG), 1)
 CFLAGS += -g -gdwarf-2
@@ -99,8 +99,8 @@ CFLAGS += -Wno-missing-braces
 #######################################
 
 # libraries
-LIBS = -lc -lm -lpthread
-LDFLAGS = $(LIBS)
+LIBS = -lc -lm -lpthread -lrt
+LDFLAGS = $(LIBS) -m32
 
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf
