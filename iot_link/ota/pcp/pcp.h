@@ -33,40 +33,16 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-30 14:19  zhangqianfu  The first version
+ *  2019-09-19 16:49  zhangqianfu  The first version
  *
  */
-#ifndef LITEOS_LAB_IOT_LINK_OTA_BOOT_FLAG_BOOT_FLAG_H_
-#define LITEOS_LAB_IOT_LINK_OTA_BOOT_FLAG_BOOT_FLAG_H_
+#ifndef LITEOS_LAB_IOT_LINK_OTA_PCP_PCP_H_
+#define LITEOS_LAB_IOT_LINK_OTA_PCP_PCP_H_
 
-typedef enum
-{
-    en_ota_upgrade_type_none = 0,
-    en_ota_upgrade_type_full,
-    en_ota_upgrade_type_diff,
-}en_ota_upgrade_type;
+///< take care that this module depends on the ota module
 
-typedef enum
-{
-    en_ota_upgrade_state_idle = 0,    ///< which means could be upgrade
-    en_ota_upgrade_state_trigerring,  ///< which means has been triggered and need upgrade
-    en_ota_upgrade_state_success,     ///< which means upgrade success
-    en_ota_upgrade_state_failed,      ///< which means upgrade failed
-}en_ota_upgrade_state;
-
-int ota_boot_flag_trigger(en_ota_upgrade_type,int img_size);  ///< trans protocol use this to set to trigger state
-
-///< the loader use this to set the success of failed
-int ota_boot_flag_set_status(en_ota_upgrade_state state,int runimg_size, int bakimg_size,int newimg_size);
-
-///< the  protocols use this to get the upgrade status
-int ota_boot_flag_get_status(en_ota_upgrade_state *state);
-
-///< the loader use this function to get the upgrade information
-int ota_boot_flag_get(en_ota_upgrade_type *type,en_ota_upgrade_state *state,\
-                     int *newimg_size,int *runimg_size, int *bakimg_size);
-
-int ota_boot_flag_init();
+int pcp_msg_push(void *msg, int len);
+int ota_pcp_init(int (*fn_pcp_send_msg)(void *msg,int len));
 
 
-#endif /* LITEOS_LAB_IOT_LINK_OTA_BOOT_FLAG_BOOT_FLAG_H_ */
+#endif /* LITEOS_LAB_IOT_LINK_OTA_PCP_PCP_H_ */

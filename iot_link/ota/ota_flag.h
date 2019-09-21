@@ -33,63 +33,72 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-30 11:18  zhangqianfu  The first version
+ *  2019-09-18 12:09  zhangqianfu  The first version
  *
  */
+#ifndef LITEOS_LAB_IOT_LINK_OTA_OTA_FLAG_H_
+#define LITEOS_LAB_IOT_LINK_OTA_OTA_FLAG_H_
 
 #include <stdint.h>
 #include <stddef.h>
-#include <ota_storage.h>
 
-const ota_storage_device *s_ota_storage_device = NULL;
+#define CN_OTA_VERSION_LEN   32
 
-int ota_storage_init()
+typedef enum
 {
-    return 0; ///< uptils now, we should do nothing here
-}
+    EN_OTA_STATUS_IDLE = 0,
+    EN_OTA_STATUS_DOWNLOADING,
+    EN_OTA_STATUS_DOWNLOADED,
+    EN_OTA_STATUS_UPGRADING,
+    EN_OTA_STATUS_UPGRADED,
+}en_ota_status_t;
 
-int ota_storage_install(const ota_storage_device *device)
+
+#pragma pack(1)
+typedef struct
 {
-    if((NULL != s_ota_storage_device) &&\
-            (NULL != device->name) && (0 != device->name) &&\
-            (NULL != device->opt.read) && (NULL != device->opt.write))
-    {
-        s_ota_storage_device = device;
-        return 0;
-    }
-    else
-    {
-        return -1;
-    }
+    uint8_t  ver[CN_OTA_VERSION_LEN];
+    uint32_t ver_code;
+    uint32_t file_size;   ///< the new bin file size
+    uint32_t blk_size;    ///< the new bin block size
+    uint32_t blk_num;     ///< the new bin block num
+    uint32_t blk_cur;
+    uint32_t file_off;    ///< the current offet to write
+    uint32_t cur_state;   ///< defined by en_ota_status_t
+    uint32_t ret_upgrade; ///< the upgrade,filled by the loader
+    uint32_t crc;         ///< all the ota information computed
+}ota_flag_t;
+#pragma pack()
 
-}
 
-int ota_read_msg(en_ota_storage_msg_type type,void *msg,int len, int offset)
+typedef struct
 {
-    int ret =-1;
+    int (*flag_read) (ota_flag_t *flag);                ///< call this function will
+    int (*flag_write) (ota_flag_t *flag);
+    int (*bin_write) (int offset, void *msg, int len);  ///< call this function will write the new bin to the storage
+    int (*bin_read) (int offset, void *buf, int len);   ///< call this function will read the new bin from the storage
+    ///< call this function will read the new bin from the storage
+}ota_storage_opt_t;
 
-    if(NULL != s_ota_storage_device)
-    {
-        ret = s_ota_storage_device->opt.read(type,msg,len,offset);
-    }
-
-    return ret;
-}
-
-int ota_write_msg(en_ota_storage_msg_type type,void *msg,int len, int offset)
+typedef struct
 {
-    int ret = -1;
-
-    if(NULL != s_ota_storage_device)
-    {
-        ret = s_ota_storage_device->opt.write(type,msg, len,offset);
-    }
-
-    return ret;
-}
-
-int ota_img_back_up();  ///< we use this function to do the back up moving
-
-int ota_img_roll_back(); ///< we use this function to do the roll back moving
+    const char        *name;
+    ota_storage_opt_t  opt;
+}ota_storage_t;
 
 
+int  ota_storage_install(const ota_storage_t *device);
+int  ota_storage_uninstall(const ota_storage_t *device);
+int ota_storage_bin_read(int offset, void *buf, int len);
+int ota_storage_bin_write(int offset, void *msg, int len);
+int ota_storage_flag_read(ota_flag_t *flag);
+int ota_storage_flag_write(ota_flag_t *flag);
+
+
+
+
+
+
+
+
+#endif /* LITEOS_LAB_IOT_LINK_OTA_OTA_FLAG_H_ */
