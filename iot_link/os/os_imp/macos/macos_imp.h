@@ -47,7 +47,7 @@
  *
  * */
 
-int osal_install_linux(void);
+int osal_install_macos(void);
 
 
 #endif /* _LINUX_IMP_H_ */
