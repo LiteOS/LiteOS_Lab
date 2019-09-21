@@ -33,12 +33,84 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-30 16:06  zhangqianfu  The first version
+ *  2019-09-18 15:39  zhangqianfu  The first version
  *
  */
-#ifndef LITEOS_LAB_IOT_LINK_OTA_SOTA_SOTA_H_
-#define LITEOS_LAB_IOT_LINK_OTA_SOTA_SOTA_H_
+#include <stdint.h>
+#include <stddef.h>
+#include <ota_flag.h>
+
+static const ota_storage_t *s_ota_storage = NULL;
+
+int  ota_storage_install(const ota_storage_t *device)
+{
+    int ret = -1;
+    if((NULL == s_ota_storage) &&\
+       (NULL != device->name))
+    {
+        s_ota_storage = device;
+        ret = 0;
+    }
+
+    return ret;
+}
+
+int  ota_storage_uninstall(const ota_storage_t *device)
+{
+
+    s_ota_storage = NULL;
+
+    return 0;
+}
+
+
+int ota_storage_bin_read(int offset, void *buf, int len)
+{
+    int ret = -1;
+
+    if((NULL != s_ota_storage) && (NULL != s_ota_storage->opt.bin_read))
+    {
+        ret = s_ota_storage->opt.bin_read(offset,buf,len);
+    }
+
+    return ret;
+}
+
+int ota_storage_bin_write(int offset, void *msg, int len)
+{
+    int ret = -1;
+
+    if((NULL != s_ota_storage) && (NULL != s_ota_storage->opt.bin_write))
+    {
+        ret = s_ota_storage->opt.bin_write(offset,msg,len);
+    }
+
+    return ret;
+}
 
 
 
-#endif /* LITEOS_LAB_IOT_LINK_OTA_SOTA_SOTA_H_ */
+int ota_storage_flag_read(ota_flag_t *flag)
+{
+    int ret = -1;
+
+    if((NULL != s_ota_storage) && (NULL != s_ota_storage->opt.flag_read))
+    {
+        ret = s_ota_storage->opt.flag_read(flag);
+    }
+
+    return ret;
+}
+
+int ota_storage_flag_write(ota_flag_t *flag)
+{
+    int ret = -1;
+
+    if((NULL != s_ota_storage) && (NULL != s_ota_storage->opt.flag_write))
+    {
+        ret = s_ota_storage->opt.flag_write(flag);
+    }
+
+    return ret;
+}
+

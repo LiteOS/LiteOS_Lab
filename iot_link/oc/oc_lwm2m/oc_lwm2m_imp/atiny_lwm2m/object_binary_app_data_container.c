@@ -382,6 +382,8 @@ static uint8_t prv_exec(uint16_t instanceId,
     case 0:
     {
         ATINY_LOG(LOG_INFO, "no in prv_exec+++++++++++++++++++++++++++");
+        (void)atiny_cmd_ioctl(ATINY_WRITE_APP_DATA, (char *)buffer,length);
+
         return COAP_204_CHANGED;
     }
     case 1:

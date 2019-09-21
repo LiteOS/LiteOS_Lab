@@ -54,6 +54,9 @@ include $(iot_link_root)/oc/oc_mqtt/oc_mqtt.mk
 include $(iot_link_root)/network/lwm2m/lwm2m.mk
 include $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m.mk
 
+#configure the ota	
+include $(iot_link_root)/ota/ota.mk
+
 #configure the loader	
 include $(iot_link_root)/loader/loader.mk
 
