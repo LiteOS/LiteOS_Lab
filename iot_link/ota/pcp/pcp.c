@@ -40,18 +40,17 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdarg.h>
-#include <link_endian.h>
 
+#include <link_endian.h>
+#include <link_misc.h>
 #include <crc.h>
 #include <osal.h>
-#include <link_misc.h>
-#include <ota_flag.h>
 #include <pcp.h>
+#include <ota_flag.h>
 
 
 #define CN_VER_LEN      16
 #define CN_SND_BUF_LEN  128
-
 
 typedef enum
 {
@@ -88,7 +87,7 @@ typedef struct
     uint8_t   msg_code;
     uint16_t  chk_code;
     uint16_t  data_len;
-}sota_pcp_head_t;
+}pcp_head_t;
 
 typedef struct
 {
@@ -102,25 +101,25 @@ typedef struct
     uint16_t block_size;
     uint16_t block_totalnum;
     uint16_t ver_chk_code;
-}pcp_notify_newversion_t;
+}pcp_notify_version_t;
 
 typedef struct
 {
     uint8_t   ver[CN_VER_LEN];
     uint16_t  blocknum;
-}pcp_block_request_t;
+}pcp_request_block_t;
 
 typedef struct
 {
     uint8_t    retcode;
     uint16_t   block_num;
-}pcp_block_response_t;
+}pcp_response_block_t;
 
 
 typedef struct
 {
     uint8_t retcode;
-}pcp_response_t;
+}pcp_response_code_t;
 
 
 typedef struct
@@ -139,7 +138,7 @@ typedef struct
 {
     ota_flag_t record;                         ///< this will do the continue work when the power recover
     int (*fn_pcp_send_msg)(void *msg,int len); ///< use this function to send the message
-    unsigned long long timer_deadline;         ///< this is the deadline if we need to resend
+    unsigned long long timer_deadline;         ///< this is the deadline if we do the resend
     queue_t    *msg_queue;
 }pcp_cb_t;
 
@@ -147,8 +146,10 @@ static pcp_cb_t  s_pcp_cb;        ///< this is the pcp controller block here
 #define CN_PCP_HEADFLAG           0xFFFE
 
 
-static void pcp_msg_print(const char *index,uint8_t *buf, int32_t len)
+static void pcp_msg_print(const char *index,void *msg, int len)
 {
+    uint8_t *buf;
+    buf = msg;
     int i = 0;
     printf("%s:",index);
     for(i =0;i<len;i ++)
@@ -157,15 +158,18 @@ static void pcp_msg_print(const char *index,uint8_t *buf, int32_t len)
     }
     printf("\n\r");
 }
+
 static int pcp_save_flag()
 {
+    int ret;
     s_pcp_cb.record.crc = calc_crc32(0,&s_pcp_cb.record,sizeof(s_pcp_cb.record) - sizeof(s_pcp_cb.record.crc));
-    ota_storage_flag_write(&s_pcp_cb.record);
-    return 0;
+    ret = ota_storage_flag_write(&s_pcp_cb.record);
+    return ret;
 }
 
-static void pcp_save_newversion(pcp_notify_newversion_t *newversion)
+static int pcp_save_newversion(pcp_notify_version_t *newversion)
 {
+    int ret;
     s_pcp_cb.record.file_off = 0;
     s_pcp_cb.record.file_size = 0;
     s_pcp_cb.record.blk_cur = 0;
@@ -176,36 +180,36 @@ static void pcp_save_newversion(pcp_notify_newversion_t *newversion)
     memcpy(s_pcp_cb.record.ver, newversion->ver, CN_VER_LEN);
     s_pcp_cb.record.cur_state = EN_OTA_STATUS_DOWNLOADING;
 
-    pcp_save_flag();
+    ret = pcp_save_flag();
 
-    return;
+    return ret;
 }
 
 ///< use this function to write the message to the flash,and update the info
-///< first we cache it, if the receive buffer is full or this is the last block, we flush it into the flash
-static int32_t pcp_save_newblock(uint8_t *msg,int32_t len)
+static int pcp_save_newblock(void *msg,int len)
 {
+    int ret = -1;
     if(0 == ota_storage_bin_write(s_pcp_cb.record.file_off,msg,len))
     {
         s_pcp_cb.record.blk_cur ++;
         s_pcp_cb.record.file_off += len;
-        pcp_save_flag();
+        ret = pcp_save_flag();
     }
 
-    return 0;
+    return ret;
 }
 
 
 ///< use this function to send the message to the server
-static int32_t pcp_send_msg(en_pcp_msg_code_t msg_code, void *msg, int len)
+static int pcp_send_msg(en_pcp_msg_code_t msg_code, void *msg, int len)
 {
-    int32_t ret;
-    sota_pcp_head_t *pcp;
+    int ret;
+    pcp_head_t *pcp;
     uint8_t         *msg_buf;
     int              msg_len;
 
     ret = -1;
-    msg_len = len  + sizeof(sota_pcp_head_t);
+    msg_len = len  + sizeof(pcp_head_t);
     if (msg_len>= CN_SND_BUF_LEN)
     {
         return ret;
@@ -217,16 +221,16 @@ static int32_t pcp_send_msg(en_pcp_msg_code_t msg_code, void *msg, int len)
         return ret;
     }
 
-    pcp = (sota_pcp_head_t *)msg_buf;
+    pcp = (pcp_head_t *)msg_buf;
 
     pcp->ori_id = htons(CN_PCP_HEADFLAG);
     pcp->ver_num =1;
     pcp->msg_code = msg_code;
     pcp->data_len = htons(len);
     pcp->chk_code = 0;
-    memcpy(msg_buf+sizeof(sota_pcp_head_t),msg,len);
+    memcpy(msg_buf+sizeof(pcp_head_t),msg,len);
     ///< should check the crc here
-    pcp->chk_code = calc_crc16(0,msg_buf,len +sizeof(sota_pcp_head_t));
+    pcp->chk_code = calc_crc16(0,msg_buf,len +sizeof(pcp_head_t));
     pcp->chk_code = htons(pcp->chk_code);
 
     pcp_msg_print("PCP SND MSG:",msg_buf,msg_len);
@@ -250,7 +254,7 @@ static int32_t pcp_send_msg(en_pcp_msg_code_t msg_code, void *msg, int len)
 static void pcp_send_response_code(en_pcp_msg_code_t msg_code, en_pcp_response_code_t code)
 {
 
-    pcp_response_t  response;
+    pcp_response_code_t  response;
 
     response.retcode = code;
 
@@ -259,7 +263,7 @@ static void pcp_send_response_code(en_pcp_msg_code_t msg_code, en_pcp_response_c
 
 static void pcp_request_block()
 {
-    pcp_block_request_t request;
+    pcp_request_block_t request;
     memcpy(request.ver,s_pcp_cb.record.ver,CN_VER_LEN);
     request.blocknum = htons(s_pcp_cb.record.blk_cur);
     pcp_send_msg(EN_PCP_MSG_GETBLOCK, &request, sizeof(request));
@@ -273,7 +277,7 @@ static void pcp_report_downloadstate()
 }
 
 ///< this function used to deal the get version message
-static void pcp_command_getversion(const sota_pcp_head_t *head, const uint8_t *pbuf)
+static void pcp_cmd_getversion(const pcp_head_t *head, const uint8_t *pbuf)
 {
     pcp_response_version_t  version;
     version.ret = 0;
@@ -284,12 +288,12 @@ static void pcp_command_getversion(const sota_pcp_head_t *head, const uint8_t *p
 }
 
 ///< this function used to deal the notify the newversion message
-static void pcp_command_notifyversion(const sota_pcp_head_t *head, const uint8_t *pbuf)
+static void pcp_cmd_notifyversion(const pcp_head_t *head, const uint8_t *pbuf)
 {
 
-    pcp_notify_newversion_t notify;  ///< make sure that the unaligned occurred
+    pcp_notify_version_t notify;  ///< make sure that the unaligned occurred
 
-    if(head->data_len < sizeof(pcp_notify_newversion_t))
+    if(head->data_len < sizeof(pcp_notify_version_t))
     {
         return ;
     }
@@ -320,9 +324,9 @@ static void pcp_command_notifyversion(const sota_pcp_head_t *head, const uint8_t
     }
 }
 ///< this function used to deal with the block message
-static void pcp_command_notifyblock(const sota_pcp_head_t *head, const uint8_t *pbuf)
+static void pcp_cmd_notifyblock(const pcp_head_t *head, const uint8_t *pbuf)
 {
-    pcp_block_response_t response;
+    pcp_response_block_t response;
 
     if (s_pcp_cb.record.cur_state != EN_OTA_STATUS_DOWNLOADING)
     {
@@ -371,12 +375,12 @@ static void pcp_command_notifyblock(const sota_pcp_head_t *head, const uint8_t *
     }
 }
 
-static void pcp_cmd_response_downloadstatus(const sota_pcp_head_t *head, const uint8_t *pbuf)
+static void pcp_response_downloadstatus(const pcp_head_t *head, const uint8_t *pbuf)
 {
     return;
 }
 
-static void pcp_cmd_response_upgradestatus(const sota_pcp_head_t *head, const uint8_t *pbuf)
+static void pcp_response_upgradestatus(const pcp_head_t *head, const uint8_t *pbuf)
 {
     s_pcp_cb.record.cur_state = EN_OTA_STATUS_IDLE;
     pcp_save_flag();
@@ -385,7 +389,7 @@ static void pcp_cmd_response_upgradestatus(const sota_pcp_head_t *head, const ui
 
 
 ///< this function used to deal with the upgrade message
-static void pcp_command_upgrade(const sota_pcp_head_t *head, const uint8_t *pbuf)
+static void pcp_cmd_upgrade(const pcp_head_t *head, const uint8_t *pbuf)
 {
 
     if (s_pcp_cb.record.cur_state != EN_OTA_STATUS_DOWNLOADED)
@@ -402,7 +406,7 @@ static void pcp_command_upgrade(const sota_pcp_head_t *head, const uint8_t *pbuf
 static void pcp_handle_msg(uint8_t *msg, int msglen)
 {
 
-    sota_pcp_head_t pcp_head;                ///< the buffer maybe not aligned, so we should copy it
+    pcp_head_t      pcp_head;                ///< the buffer maybe not aligned, so we should copy it
     uint8_t        *pcp_data = NULL;
 
     if(msglen < sizeof(pcp_head))
@@ -423,26 +427,26 @@ static void pcp_handle_msg(uint8_t *msg, int msglen)
     switch (pcp_head.msg_code)
     {
         case EN_PCP_MSG_GETVER:  ///< the server want to get the terminal version
-            pcp_command_getversion(&pcp_head, pcp_data);
+            pcp_cmd_getversion(&pcp_head, pcp_data);
             break;
 
         case EN_PCP_MSG_NOTIFYNEWVER:
-             pcp_command_notifyversion(&pcp_head, pcp_data);
+             pcp_cmd_notifyversion(&pcp_head, pcp_data);
             break;
 
         case EN_PCP_MSG_GETBLOCK:
-            pcp_command_notifyblock(&pcp_head, pcp_data);
+            pcp_cmd_notifyblock(&pcp_head, pcp_data);
             break;
         case EN_PCP_MSG_REPORTDOWNLOADSTATE:   ///< this is the response message
-            pcp_cmd_response_downloadstatus(&pcp_head, pcp_data);
+            pcp_response_downloadstatus(&pcp_head, pcp_data);
             break;
 
         case EN_PCP_MSG_EXCUTEUPDATE:    ///< received the upgrade command, report the result when finish the upgrading
-            pcp_command_upgrade(&pcp_head, pcp_data);
+            pcp_cmd_upgrade(&pcp_head, pcp_data);
             ///< we should do the reboot
             osal_task_sleep(5000);
 //            osal_reboot();
-            ///< todo , think we upgrade sucess--DO THESIMULATE
+            ///< todo , think we upgrade success--DO THESIMULATE
             ///////////////////////////////////////////////////////////////////
             s_pcp_cb.record.cur_state = EN_OTA_STATUS_UPGRADED;
             s_pcp_cb.record.ret_upgrade = EN_PCP_RESPONSE_CODE_OK;
@@ -451,7 +455,7 @@ static void pcp_handle_msg(uint8_t *msg, int msglen)
 
             break;
         case EN_PCP_MSG_NOTIFYSTATE:
-             pcp_cmd_response_upgradestatus(&pcp_head,pcp_data);
+             pcp_response_upgradestatus(&pcp_head,pcp_data);
              break;
 
 
@@ -520,7 +524,7 @@ int pcp_msg_push(void *msg, int len)
 }
 
 ///< for the software not implement yet, we now use a task as the soft timer
-static int __pcp_entry(void *args)
+static int pcp_entry(void *args)
 {
     uint32_t crc;
     int      time_wait;
@@ -591,7 +595,7 @@ int ota_pcp_init(int (*fn_pcp_send_msg)(void *msg,int len))
         return ret;
     }
 
-    osal_task_create("pcp_main",__pcp_entry,NULL,0x800,NULL,10);
+    osal_task_create("pcp_main",pcp_entry,NULL,0x800,NULL,10);
 
     return 0;
 }
