@@ -99,7 +99,7 @@ typedef struct
 
 //if your command is very fast,please use a queue here--TODO
 #define cn_app_rcv_buf_len 128
-static int             s_rcv_buffer[cn_app_rcv_buf_len];
+static int8_t          s_rcv_buffer[cn_app_rcv_buf_len];
 static int             s_rcv_datalen;
 static osal_semp_t     s_rcv_sync;
 
@@ -137,7 +137,7 @@ static int app_cmd_task_entry()
     {
         if(osal_semp_pend(s_rcv_sync,cn_osal_timeout_forever))
         {
-            msgid = s_rcv_buffer[0] & 0x000000FF;
+            msgid = s_rcv_buffer[0];
             switch (msgid)
             {
                 case cn_app_ledcmd:

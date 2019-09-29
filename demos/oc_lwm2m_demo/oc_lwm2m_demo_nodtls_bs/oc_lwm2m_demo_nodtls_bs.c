@@ -44,6 +44,7 @@
 #include <link_endian.h>
 #include <osal.h>
 #include <oc_lwm2m_al.h>
+#include <queue.h>
 
 #define cn_endpoint_id        "lwm2m_001"
 #define cn_app_server         "119.3.251.30"
@@ -97,32 +98,41 @@ typedef struct
 
 
 
-
 //if your command is very fast,please use a queue here--TODO
-#define cn_app_rcv_buf_len 128
-static int             s_rcv_buffer[cn_app_rcv_buf_len];
-static int             s_rcv_datalen;
-static osal_semp_t     s_rcv_sync;
+static void    *s_lwm2m_context = NULL;    ///< this is used when we want to send some message to the platform
+static queue_t *s_queue_msgrcv = NULL;     ///< this is used to cached the message
+static int32_t  s_lwm2m_reconnect = 0;
 
-static void           *s_lwm2m_context = NULL;
-
+typedef struct
+{
+    int32_t msg_type;
+    int32_t msg_len;
+    void   *msg_content;
+}oc_bs_msg_t;
 
 
 //use this function to push all the message to the buffer
 static int app_msg_deal(void *usr_data,en_oc_lwm2m_msg_t type,void *msg, int len)
 {
     int ret = -1;
+    int msg_len;
 
-    if(len <= cn_app_rcv_buf_len)
+    oc_bs_msg_t *bs_msg;
+
+    msg_len  = len + sizeof(oc_bs_msg_t);
+    bs_msg = osal_malloc(msg_len);
+    if(NULL != bs_msg)
     {
+        bs_msg->msg_type = type;
+        bs_msg->msg_len = len;
+        bs_msg->msg_content = (char *)bs_msg + sizeof(oc_bs_msg_t);
+        memcpy(bs_msg->msg_content,msg,len);
 
-        memcpy(s_rcv_buffer,msg,len);
-        s_rcv_datalen = len;
-
-        osal_semp_post(s_rcv_sync);
-
-        ret = 0;
-
+        ret = queue_push(s_queue_msgrcv,bs_msg,100);
+        if( 0 != ret)
+        {
+            osal_free(bs_msg);
+        }
     }
     return ret;
 }
@@ -134,53 +144,67 @@ static int app_cmd_task_entry()
     app_led_cmd_t *led_cmd;
     app_cmdreply_t replymsg;
     int8_t msgid;
+    oc_bs_msg_t *bs_msg;
 
     while(1)
     {
-        if(osal_semp_pend(s_rcv_sync,cn_osal_timeout_forever))
+        bs_msg = NULL;
+        queue_pop(s_queue_msgrcv,(void **)&bs_msg,cn_osal_timeout_forever);
+        if(bs_msg != NULL)
         {
-            msgid = s_rcv_buffer[0] & 0x000000FF;
-            switch (msgid)
+            if(bs_msg->msg_type == EN_OC_LWM2M_MSG_SERVERREBS)  ///< do the reboot strap function
             {
-                case cn_app_ledcmd:
-                    led_cmd = (app_led_cmd_t *)s_rcv_buffer;
-                    printf("LEDCMD:msgid:%d mid:%d msg:%s \n\r",led_cmd->msgid,ntohs(led_cmd->mid),led_cmd->led);
-                    //add command action--TODO
-                    if (led_cmd->led[0] == 'O' && led_cmd->led[1] == 'N')
-                    {
-                        //if you need response message,do it here--TODO
-                        replymsg.msgid = cn_app_cmdreply;
-                        replymsg.mid = led_cmd->mid;
-                        printf("reply mid is %d. \n\r",ntohs(replymsg.mid));
-                        replymsg.errorcode = 0;
-                        replymsg.curstats[0] = 'O';
-                        replymsg.curstats[1] = 'N';
-                        replymsg.curstats[2] = ' ';
-                        oc_lwm2m_report(s_lwm2m_context,(char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
-                    }
-
-                    else if (led_cmd->led[0] == 'O' && led_cmd->led[1] == 'F' && led_cmd->led[2] == 'F')
-                    {
-
-                        //if you need response message,do it here--TODO
-                        replymsg.msgid = cn_app_cmdreply;
-                        replymsg.mid = led_cmd->mid;
-                        printf("reply mid is %d. \n\r",ntohs(replymsg.mid));
-                        replymsg.errorcode = 0;
-                        replymsg.curstats[0] = 'O';
-                        replymsg.curstats[1] = 'F';
-                        replymsg.curstats[2] = 'F';
-                        oc_lwm2m_report(s_lwm2m_context,(char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
-                    }
-                    else
-                    {
-
-                    }
-                    break;
-                default:
-                    break;
+                s_lwm2m_reconnect = 1;
             }
+            else
+            {
+                msgid = *(int8_t *)bs_msg->msg_content;
+                switch (msgid)
+                {
+                    case cn_app_ledcmd:
+                        led_cmd = bs_msg->msg_content;
+                        printf("LEDCMD:msgid:%d mid:%d msg:%s \n\r",led_cmd->msgid,ntohs(led_cmd->mid),led_cmd->led);
+                        //add command action--TODO
+                        if (led_cmd->led[0] == 'O' && led_cmd->led[1] == 'N')
+                        {
+                            //if you need response message,do it here--TODO
+                            replymsg.msgid = cn_app_cmdreply;
+                            replymsg.mid = led_cmd->mid;
+                            printf("reply mid is %d. \n\r",ntohs(replymsg.mid));
+                            replymsg.errorcode = 0;
+                            replymsg.curstats[0] = 'O';
+                            replymsg.curstats[1] = 'N';
+                            replymsg.curstats[2] = ' ';
+                            oc_lwm2m_report(s_lwm2m_context,(char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
+                        }
+
+                        else if (led_cmd->led[0] == 'O' && led_cmd->led[1] == 'F' && led_cmd->led[2] == 'F')
+                        {
+
+                            //if you need response message,do it here--TODO
+                            replymsg.msgid = cn_app_cmdreply;
+                            replymsg.mid = led_cmd->mid;
+                            printf("reply mid is %d. \n\r",ntohs(replymsg.mid));
+                            replymsg.errorcode = 0;
+                            replymsg.curstats[0] = 'O';
+                            replymsg.curstats[1] = 'F';
+                            replymsg.curstats[2] = 'F';
+                            oc_lwm2m_report(s_lwm2m_context,(char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
+                        }
+                        else
+                        {
+
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+
+            osal_free(bs_msg);
         }
+
     }
 
     return ret;
@@ -208,16 +232,25 @@ static int app_report_task_entry()
     oc_param.boot_mode = en_oc_boot_strap_mode_client_initialize;
     oc_param.rcv_func = app_msg_deal;
 
-    s_lwm2m_context = oc_lwm2m_config(&oc_param);
-
-    if(NULL != s_lwm2m_context)   //success ,so we could receive and send
+    while(1) //--TODO ,you could add your own code here
     {
-        //install a dealer for the led message received
-        while(1) //--TODO ,you could add your own code here
+        if(NULL == s_lwm2m_context)
         {
+            s_lwm2m_context = oc_lwm2m_config(&oc_param);
+        }
+        else if(s_lwm2m_reconnect)
+        {
+            s_lwm2m_reconnect = 0;
 
-            osal_task_sleep(10*1000);
+            oc_lwm2m_deconfig(s_lwm2m_context);
 
+            s_lwm2m_context = NULL;
+
+            s_lwm2m_context = oc_lwm2m_config(&oc_param);
+
+        }
+        else
+        {
             lux++;
             lux= lux%10000;
 
@@ -225,6 +258,9 @@ static int app_report_task_entry()
             light.intensity = htons(lux);
             oc_lwm2m_report(s_lwm2m_context,(char *)&light,sizeof(light),1000); ///< report the light message
         }
+
+        osal_task_sleep(10*1000);
+
     }
 
     return ret;
@@ -235,9 +271,12 @@ static int app_report_task_entry()
 
 int oc_lwm2m_demo_main()
 {
-    osal_semp_create(&s_rcv_sync,1,0);
+    printf("welcome to the application:OTA_NODTLS:%s:%s\r\n",__DATE__,__TIME__);
+
+    s_queue_msgrcv = queue_create("ota_nodtls_rcvmsg",10,1);
 
     osal_task_create("app_report",app_report_task_entry,NULL,0x1000,NULL,2);
+
     osal_task_create("app_command",app_cmd_task_entry,NULL,0x1000,NULL,3);
 
     return 0;
