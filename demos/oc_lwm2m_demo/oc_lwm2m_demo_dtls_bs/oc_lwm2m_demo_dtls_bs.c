@@ -109,17 +109,12 @@ static void           *s_lwm2m_handle = NULL;
 
 
 //use this function to push all the message to the buffer
-static int app_msg_deal(void *usr_data,char *msg, int len)
+static int app_msg_deal(void *usr_data,en_oc_lwm2m_msg_t type,void *msg, int len)
 {
     int ret = -1;
 
     if(len <= cn_app_rcv_buf_len)
     {
-        if (msg[0] == 0xaa && msg[1] == 0xaa)
-        {
-            printf("OC respond message received! \n\r");
-            return ret;
-        }
         memcpy(s_rcv_buffer,msg,len);
         s_rcv_datalen = len;
 
