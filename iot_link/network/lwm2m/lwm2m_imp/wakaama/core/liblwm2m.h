@@ -251,6 +251,7 @@ bool lwm2m_session_is_equal(void* session1, void* session2, void* userData);
 #define LWM2M_SERVER_STORING_ID     6
 #define LWM2M_SERVER_BINDING_ID     7
 #define LWM2M_SERVER_UPDATE_ID      8
+#define LWM2M_SERVER_BSTRIGGER      9
 
 #define LWM2M_SECURITY_MODE_PRE_SHARED_KEY  0
 #define LWM2M_SECURITY_MODE_RAW_PUBLIC_KEY  1
@@ -266,8 +267,6 @@ bool lwm2m_session_is_equal(void* session1, void* session2, void* userData);
 #define CLIENT_INITIATED_BS_DELAY_BASE 0
 #define FACTORY_BS_DELAY_INTERVAL 10
 #define CLIENT_INITIATED_BS_DELAY_INTERVAL 10
-
-
 
 /*
  * Utility functions for sorted linked list

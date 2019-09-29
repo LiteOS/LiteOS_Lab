@@ -268,6 +268,13 @@ int atiny_app_execute(void *msg, int len)
     return ATINY_OK;
 }
 
+int atiny_server_bootrigger(void *msg, int len)
+{
+    (void)printf("SERVER TRIGGERE BOOTSTRAP\r\n");
+    lwm2m_agent_receive(EN_OC_LWM2M_MSG_SERVERREBS,msg,len);
+    return ATINY_OK;
+}
+
 int atiny_update_psk(char *psk_id, int len)
 {
     //memcpy_s(g_psk_value,psk_id,len,16);
@@ -470,12 +477,10 @@ int atiny_cmd_ioctl(atiny_cmd_e cmd, char *arg, int len)
     }
 #endif
 
-#if defined(WITH_AT_FRAMEWORK) && defined(USE_NB_NEUL95)
     case ATINY_TRIGER_SERVER_INITIATED_BS:
-        nb_reattach();
+        atiny_server_bootrigger(arg,len);
         result = ATINY_OK;
         break;
-#endif
 
     default:
         break;
