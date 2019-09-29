@@ -102,9 +102,6 @@ static int ota_bin_read(int offset ,void *buf,int len)
     return 0;
 }
 
-
-
-
 static ota_storage_t  s_ota_storage_device =
 {
       .name = "ota_storage",
@@ -127,10 +124,8 @@ static int ota_msg_send(void *msg,int len)
     return ret;
 }
 
-
-
 //use this function to push all the message to the buffer
-static int app_msg_deal(void *usr_data,char *msg, int len)
+static int app_msg_deal(void *usr_data,en_oc_lwm2m_msg_t type,void *msg, int len)
 {
     int ret = -1;
 
@@ -145,6 +140,7 @@ static int app_msg_deal(void *usr_data,char *msg, int len)
         memcpy(buf + sizeof(buflen),msg,len);
 
         ret = queue_push(s_queue_msgrcv,buf,10);
+
         if(ret != 0)
         {
             osal_free(buf);
@@ -161,9 +157,9 @@ static int app_cmd_task_entry()
 {
     int ret = -1;
 
-    uint8_t *msg;
-    uint8_t *buf;
-    uint32_t msglen;
+    uint8_t *msg = NULL;
+    uint8_t *buf = NULL;
+    uint32_t msglen = 0;
 
     while(1)
     {
@@ -186,13 +182,9 @@ static int app_cmd_task_entry()
 
             osal_free(buf);
         }
-
     }
-
     return ret;
 }
-
-
 
 static int app_report_task_entry()
 {
@@ -217,7 +209,6 @@ static int app_report_task_entry()
     if(NULL != context)   //success ,so we could receive and send
     {
         s_lwm2m_context = context;
-        //install a dealer for the led message received
         while(1) //--TODO ,you could add your own code here
         {
             if(s_report_switch)
@@ -240,11 +231,11 @@ static int app_report_task_entry()
 int oc_lwm2m_demo_main()
 {
 
-    printf("welcome to the application:lwm2m ota:%s:%s\r\n",__DATE__,__TIME__);
+    printf("welcome to the application:OTA_NODTLS:%s:%s\r\n",__DATE__,__TIME__);
 
     ota_storage_install(&s_ota_storage_device);
 
-    s_queue_msgrcv = queue_create("otamsg",10,1);
+    s_queue_msgrcv = queue_create("ota_nodtls_rcvmsg",10,1);
 
     ota_pcp_init(ota_msg_send);
 

@@ -216,7 +216,7 @@ static int boudica150_rcvdeal(void *args,void *msg,size_t len)
 
     if(NULL != s_boudica150_oc_cb.oc_param.rcv_func)
     {
-        s_boudica150_oc_cb.oc_param.rcv_func(s_boudica150_oc_cb.oc_param.usr_data,\
+        s_boudica150_oc_cb.oc_param.rcv_func(s_boudica150_oc_cb.oc_param.usr_data,EN_OC_LWM2M_MSG_APPWRITE,\
                                              (char *)s_boudica150_oc_cb.rcvbuf,datalen);
     }
 

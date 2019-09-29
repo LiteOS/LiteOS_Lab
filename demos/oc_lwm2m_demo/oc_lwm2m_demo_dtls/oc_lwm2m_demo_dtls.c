@@ -111,7 +111,7 @@ static void           *s_lwm2m_handle = NULL;
 
 
 //use this function to push all the message to the buffer
-static int app_msg_deal(void *usr_data,char *msg, int len)
+static int app_msg_deal(void *usr_data,en_oc_lwm2m_msg_t type,char *msg, int len)
 {
     int ret = -1;
 
