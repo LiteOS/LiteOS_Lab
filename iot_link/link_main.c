@@ -79,7 +79,6 @@ int link_main(void *args)
     stimer_init();
 #endif
 
-
 #if CONFIG_SHELL_ENABLE
     #include <shell.h>
     ///< install the shell for the link
@@ -126,9 +125,10 @@ int link_main(void *args)
     #elif CONFIG_MACOS_SOCKET_ENABLE
         #include <macos_socket_imp.h>
         tcpipstack_install_macos_socket();
-    #elif CONFIG_ESP8266_ENABLE
-        //#include <esp8266.h>
-        //tcpipstack_install_esp8266();
+    #elif CONFIG_ESP8266_SOCKET_ENABLE
+        #include <esp8266_socket_imp.h>
+        tcpipstack_install_esp8266_socket();
+        esp8266_boot();
     #else
 
     #endif
@@ -143,10 +143,14 @@ int link_main(void *args)
 //////////////////////////  MQTT PROTOCOL  /////////////////////////////////////
 #if CONFIG_MQTT_ENABLE
     #include <mqtt_al.h>
-    #include <paho_mqtt_port.h>
-
     mqtt_init();
+#if CONFIG_MQTT_PAHO_ENABLE
+    #include <paho_mqtt_port.h>
     mqtt_install_pahomqtt();
+#elif CONFIG_MQTT_SINN_ENABLE
+    #include <mqtt_sinn_port.h>
+    mqtt_install_sinnmqtt();
+#endif
 #endif
 
 //////////////////////////  OC MQTT && DEMOS  //////////////////////////////////
@@ -162,7 +166,7 @@ int link_main(void *args)
 
 #if CONFIG_OC_MQTT_EC20_ENABLE
     #include <ec20_oc.h>
-	ec20_init();
+    ec20_init();
 #endif
 
 #if CONFIG_OC_MQTT_DEMO_ENABLE

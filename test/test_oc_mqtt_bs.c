@@ -54,7 +54,7 @@
 /* brief : the oceanconnect platform only support the ca_crt up tills now*/
 /** the address product_id device_id password crt is only for the test  */
 
-#define DEFAULT_LIFETIME            10
+#define DEFAULT_LIFETIME            200
 #define BS_SERVER_DOMAIN            "119.3.251.30"
 #define BS_SERVER_PORT              "8883"           ///<  server mqtt service port
 #define DEMO_WITH_BOOTSTRAP_NODEID  "mqtt_sdk03"//"sdk_bh"  //"sdk_0030"
@@ -506,7 +506,6 @@ static int oc_mqtt_static_test_entry(void *args)
     if(ret == 0)
     {
         printf("OC MQTT STATTIC TEST SUCCESS------------------\n\r");
-
     }
     else
     {
@@ -514,12 +513,11 @@ static int oc_mqtt_static_test_entry(void *args)
     }
 
     return ret;
-
 }
 
 
 
-int oc_mqtt_demo_main()
+int test_oc_mqtt_demo_bs()
 {
     osal_semp_create(&s_rcv_sync,1,0);
     osal_task_create("ocmqtt_cmd",oc_mqtt_cmd_entry,NULL,0x1000,NULL,10);

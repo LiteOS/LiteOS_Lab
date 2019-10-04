@@ -34,7 +34,7 @@
 /**
  *  DATE                AUTHOR      INSTRUCTION
  *  2019-04-28 11:05  zhangqianfu  The first version
- *  2019-05023 09:53  huerjia      The second version
+ *  2019-05-23 09:53  huerjia      The second version
  */
 #ifndef _LINUX_IMP_H_
 #define _LINUX_IMP_H_
