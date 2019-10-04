@@ -16,78 +16,6 @@
   csrc CSR_MSTATUS, MSTATUS_MIE  
 .endm
 
-.macro push_reg
-    addi sp, sp, -32*4
-
-    sw x1, 0 * 4(sp)
-    sw x2, 1 * 4(sp)
-    sw x3, 2 * 4(sp)
-    sw x4, 3 * 4(sp)
-    sw x5, 4 * 4(sp)
-    sw x6, 5 * 4(sp)
-    sw x7, 6 * 4(sp)
-    sw x8, 7 * 4(sp)
-    sw x9, 8 * 4(sp)
-    sw x10, 9 * 4(sp)
-    sw x11, 10 * 4(sp)
-    sw x12, 11 * 4(sp)
-    sw x13, 12 * 4(sp)
-    sw x14, 13 * 4(sp)
-    sw x15, 14 * 4(sp)
-    sw x16, 15 * 4(sp)
-    sw x17, 16 * 4(sp)
-    sw x18, 17 * 4(sp)
-    sw x19, 18 * 4(sp)
-    sw x20, 19 * 4(sp)
-    sw x21, 20 * 4(sp)
-    sw x22, 21 * 4(sp)
-    sw x23, 22 * 4(sp)
-    sw x24, 23 * 4(sp)
-    sw x25, 24 * 4(sp)
-    sw x26, 25 * 4(sp)
-    sw x27, 26 * 4(sp)
-    sw x28, 27 * 4(sp)
-    sw x29, 28 * 4(sp)
-    sw x30, 29 * 4(sp)
-    sw x31, 30 * 4(sp)
-
-.endm
-
-.macro pop_reg
-
-    lw x1, 0 * 4(sp)
-
-    lw x5, 4 * 4(sp)
-    lw x6, 5 * 4(sp)
-    lw x7, 6 * 4(sp)
-    lw x8, 7 * 4(sp)
-    lw x9, 8 * 4(sp)
-    lw x10, 9 * 4(sp)
-    lw x11, 10 * 4(sp)
-    lw x12, 11 * 4(sp)
-    lw x13, 12 * 4(sp)
-    lw x14, 13 * 4(sp)
-    lw x15, 14 * 4(sp)
-    lw x16, 15 * 4(sp)
-    lw x17, 16 * 4(sp)
-    lw x18, 17 * 4(sp)
-    lw x19, 18 * 4(sp)
-    lw x20, 19 * 4(sp)
-    lw x21, 20 * 4(sp)
-    lw x22, 21 * 4(sp)
-    lw x23, 22 * 4(sp)
-    lw x24, 23 * 4(sp)
-    lw x25, 24 * 4(sp)
-    lw x26, 25 * 4(sp)
-    lw x27, 26 * 4(sp)
-    lw x28, 27 * 4(sp)
-    lw x29, 28 * 4(sp)
-    lw x30, 29 * 4(sp)
-    lw x31, 30 * 4(sp)
-
-    addi sp, sp, 35*4
-
-.endm
 
 ###############################################
 ###############################################
@@ -252,11 +180,11 @@
 #
 .macro SAVE_EPC_STATUS
   csrr x5, CSR_MEPC  
-  STORE x5,  32*REGBYTES(sp)
+  STORE x5,  16*REGBYTES(sp)
   csrr x5, CSR_MSTATUS  
-  STORE x5,  33*REGBYTES(sp)
+  STORE x5,  17*REGBYTES(sp)
   csrr x5, CSR_MSUBM  
-  STORE x5,  34*REGBYTES(sp)
+  STORE x5,  18*REGBYTES(sp)
 .endm
 
 ###############################################
@@ -264,11 +192,11 @@
 # Restore the mepc and mstatus
 #
 .macro RESTORE_EPC_STATUS
-  LOAD x5,  32*REGBYTES(sp)
+  LOAD x5,  16*REGBYTES(sp)
   csrw CSR_MEPC, x5  
-  LOAD x5,  33*REGBYTES(sp)
+  LOAD x5,  17*REGBYTES(sp)
   csrw CSR_MSTATUS, x5  
-  LOAD x5,  34*REGBYTES(sp)
+  LOAD x5,  18*REGBYTES(sp)
   csrw CSR_MSUBM, x5  
 .endm
 
@@ -318,6 +246,7 @@ trap_entry:
 .weak irq_entry
 irq_entry: // -------------> This label will be set to MTVT2 register
   // Allocate the stack space
+  
 
   SAVE_CONTEXT// Save 16 regs
 
@@ -327,18 +256,7 @@ irq_entry: // -------------> This label will be set to MTVT2 register
   csrrwi  x0, CSR_PUSHMEPC, 18
   //------This special CSR read operation, which is actually use Msubm as operand to directly store it to memory
   csrrwi  x0, CSR_PUSHMSUBM, 19
-
-
-  la t0, g_int_cnt
-  lw t1, 0(t0)
-  addi t1, t1, 1
-  sw t1, 0(t0)
-  li t2, 1
-  bgtu t1,t2,service_loop
-
-  csrw mscratch, sp
-  la sp, __irq_stack_top
-
+ 
 service_loop:
   //------This special CSR read/write operation, which is actually Claim the CLIC to find its pending highest
   // ID, if the ID is not 0, then automatically enable the mstatus.MIE, and jump to its vector-entry-label, and
@@ -347,43 +265,20 @@ service_loop:
   
   //RESTORE_CONTEXT_EXCPT_X5
 
-  la t0, g_int_cnt
-  lw t1, 0(t0)
-  addi t1, t1, -1
-  sw t1, 0(t0)
-  bnez t1, _rfi
-
-  csrr sp, mscratch
-
-  DISABLE_MIE # Disable interrupts
+  #---- Critical section with interrupts disabled -----------------------
+  DISABLE_MIE # Disable interrupts 
 
   LOAD x5,  19*REGBYTES(sp)
-  csrw CSR_MSUBM, x5
+  csrw CSR_MSUBM, x5  
   LOAD x5,  18*REGBYTES(sp)
-  csrw CSR_MEPC, x5
+  csrw CSR_MEPC, x5  
   LOAD x5,  17*REGBYTES(sp)
-  csrw CSR_MCAUSE, x5
+  csrw CSR_MCAUSE, x5  
 
-
-  la t0, g_usLosTaskLock
-  lw t1, 0(t0)
-  bnez t1, _rfi
-
-  la      t0, g_stLosTask
-  lw      t1, 0x4(t0)
-  lw      t2, 0x0(t0)
-  beq  t1, t2, _rfi
 
   RESTORE_CONTEXT
 
-  push_reg
-  csrr t0, mepc
-  sw t0, 31*4(sp)
-  csrw mscratch, sp
-  j TaskSwitch
-
-_rfi:
-  RESTORE_CONTEXT
+  
   // Return to regular code
   mret
 

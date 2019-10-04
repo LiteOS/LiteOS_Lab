@@ -66,6 +66,7 @@ void exti_deinit(void)
       \arg        EXTI_TRIG_RISING: rising edge trigger
       \arg        EXTI_TRIG_FALLING: falling edge trigger
       \arg        EXTI_TRIG_BOTH: rising edge and falling edge trigger
+      \arg        EXTI_TRIG_NONE: without rising edge or falling edge trigger
     \param[out] none
     \retval     none
  */
@@ -103,6 +104,7 @@ void exti_init(exti_line_enum linex, exti_mode_enum mode, exti_trig_type_enum tr
         EXTI_RTEN |= (uint32_t) linex;
         EXTI_FTEN |= (uint32_t) linex;
         break;
+    case EXTI_TRIG_NONE:
     default:
         break;
     }

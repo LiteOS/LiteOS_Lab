@@ -40,7 +40,7 @@
 #include "los_hwi.h"
 
 #include "gd32vf103.h"
-#include "n22_tmr.h"
+#include "n200_timer.h"
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -52,7 +52,7 @@ LITE_OS_SEC_BSS UINT32  g_uwCyclesPerTick;
 
 void eclic_mtip_handler(void)
 {
-    *(UINT64 *)(TMR_CTRL_ADDR + TMR_MTIME) = 0;
+    *(UINT64 *)(TIMER_CTRL_ADDR + TIMER_MTIME) = 0;
 
     osTickHandler();
 }
@@ -94,33 +94,14 @@ LITE_OS_SEC_TEXT_INIT UINT32 osTickStart(VOID)
 {
     UINT32 uwRet;
 
-//    if ((0 == OS_SYS_CLOCK)
-//        || (0 == LOSCFG_BASE_CORE_TICK_PER_SECOND)
-//        || (LOSCFG_BASE_CORE_TICK_PER_SECOND > OS_SYS_CLOCK))
-//    {
-//        return LOS_ERRNO_TICK_CFG_INVALID;
-//    }
-//
-//#if (LOSCFG_PLATFORM_HWI == YES)
-//#if (OS_HWI_WITH_ARG == YES)
-//    osSetVector(SysTick_IRQn, (HWI_PROC_FUNC)osTickHandler, NULL);
-//#else
-//    osSetVector(SysTick_IRQn, osTickHandler);
-//#endif
-//#endif
-
     g_uwCyclesPerTick = OS_SYS_CLOCK / LOSCFG_BASE_CORE_TICK_PER_SECOND;
     g_ullTickCount = 0;
 
-//    uwRet = SysTick_Config(OS_SYS_CLOCK/LOSCFG_BASE_CORE_TICK_PER_SECOND);
-//    if (uwRet == 1)
-//    {
-//        return LOS_ERRNO_TICK_PER_SEC_TOO_SMALL;
-//    }
-    *(UINT64 *)(TMR_CTRL_ADDR + TMR_MTIMECMP) = OS_SYS_CLOCK / LOSCFG_BASE_CORE_TICK_PER_SECOND / 4;
+    *(UINT64 *)(TIMER_CTRL_ADDR + TIMER_MTIMECMP) = OS_SYS_CLOCK / LOSCFG_BASE_CORE_TICK_PER_SECOND / 4;
 
-    *(UINT64 *)(TMR_CTRL_ADDR + TMR_MTIME) = 0;
-    eclic_irq_enable(CLIC_INT_TMR, 0, 0);
+    *(UINT64 *)(TIMER_CTRL_ADDR + TIMER_MTIME) = 0;
+    eclic_irq_enable(CLIC_INT_TMR, 1, 1);
+    LOS_HwiCreate(CLIC_INT_TMR, 3, 0, eclic_mtip_handler, 0);
 
     g_bSysTickStart = TRUE;
 

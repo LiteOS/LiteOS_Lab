@@ -22,6 +22,7 @@
 #define MSTATUS32_SD        0x80000000
 #define MSTATUS64_SD        0x8000000000000000
 
+
 #define SSTATUS_UIE         0x00000001
 #define SSTATUS_SIE         0x00000002
 #define SSTATUS_UPIE        0x00000010
@@ -175,6 +176,17 @@
 
 #ifdef __GNUC__
 
+#define read_fpu(reg) ({ unsigned long __tmp; \
+  asm volatile ("fmv.x.w %0, " #reg : "=r"(__tmp)); \
+  __tmp; })
+
+#define write_fpu(reg, val) ({ \
+  if (__builtin_constant_p(val) && (unsigned long)(val) < 32) \
+    asm volatile ("fmv.w.x " #reg ", %0" :: "i"(val)); \
+  else \
+    asm volatile ("fmv.w.x " #reg ", %0" :: "r"(val)); })
+    
+
 #define read_csr(reg) ({ unsigned long __tmp; \
   asm volatile ("csrr %0, " #reg : "=r"(__tmp)); \
   __tmp; })
@@ -209,6 +221,11 @@
 #define rdtime() read_csr(time)
 #define rdcycle() read_csr(cycle)
 #define rdinstret() read_csr(instret)
+
+
+
+
+
 
 #endif
 
@@ -871,22 +888,26 @@
 #define CSR_MHPMCOUNTER30H 0xb9e
 #define CSR_MHPMCOUNTER31H 0xb9f
 
+
 #define CSR_MTVT               0x307
 #define CSR_MNXTI              0x345
 
+#define CSR_MCOUNTINHIBIT      0x320
+
 #define CSR_MNVEC              0x7C3
 
-#define CSR_MIRQ_ENTRY           0x7EC
-#define CSR_MINTSEL_JAL          0x7ED
-#define CSR_PUSHMCAUSE           0x7EE
-#define CSR_PUSHMEPC             0x7EF
-#define CSR_PUSHMXSTATUS         0x7EB
+#define CSR_MTVT2             0x7EC
+#define CSR_JALMNXTI          0x7ED
+#define CSR_PUSHMCAUSE        0x7EE
+#define CSR_PUSHMEPC          0x7EF
+#define CSR_PUSHMSUBM         0x7EB
+
 #define CSR_WFE            0x810
 #define CSR_SLEEPVALUE     0x811
 #define CSR_TXEVT          0x812
 
 #define CSR_MMISC_CTL      0x7d0
-#define CSR_MXSTATUS       0x7c4
+#define CSR_MSUBM          0x7c4
 
 
 #define CAUSE_MISALIGNED_FETCH 0x0
@@ -1113,25 +1134,29 @@ DECLARE_INSN(custom0_rs1, MATCH_CUSTOM0_RS1, MASK_CUSTOM0_RS1)
 DECLARE_INSN(custom0_rs1_rs2, MATCH_CUSTOM0_RS1_RS2, MASK_CUSTOM0_RS1_RS2)
 DECLARE_INSN(custom0_rd, MATCH_CUSTOM0_RD, MASK_CUSTOM0_RD)
 DECLARE_INSN(custom0_rd_rs1, MATCH_CUSTOM0_RD_RS1, MASK_CUSTOM0_RD_RS1)
-DECLARE_INSN(custom0_rd_rs1_rs2, MATCH_CUSTOM0_RD_RS1_RS2, MASK_CUSTOM0_RD_RS1_RS2)
+DECLARE_INSN(custom0_rd_rs1_rs2, MATCH_CUSTOM0_RD_RS1_RS2, 
+MASK_CUSTOM0_RD_RS1_RS2)
 DECLARE_INSN(custom1, MATCH_CUSTOM1, MASK_CUSTOM1)
 DECLARE_INSN(custom1_rs1, MATCH_CUSTOM1_RS1, MASK_CUSTOM1_RS1)
 DECLARE_INSN(custom1_rs1_rs2, MATCH_CUSTOM1_RS1_RS2, MASK_CUSTOM1_RS1_RS2)
 DECLARE_INSN(custom1_rd, MATCH_CUSTOM1_RD, MASK_CUSTOM1_RD)
 DECLARE_INSN(custom1_rd_rs1, MATCH_CUSTOM1_RD_RS1, MASK_CUSTOM1_RD_RS1)
-DECLARE_INSN(custom1_rd_rs1_rs2, MATCH_CUSTOM1_RD_RS1_RS2, MASK_CUSTOM1_RD_RS1_RS2)
+DECLARE_INSN(custom1_rd_rs1_rs2, MATCH_CUSTOM1_RD_RS1_RS2, 
+MASK_CUSTOM1_RD_RS1_RS2)
 DECLARE_INSN(custom2, MATCH_CUSTOM2, MASK_CUSTOM2)
 DECLARE_INSN(custom2_rs1, MATCH_CUSTOM2_RS1, MASK_CUSTOM2_RS1)
 DECLARE_INSN(custom2_rs1_rs2, MATCH_CUSTOM2_RS1_RS2, MASK_CUSTOM2_RS1_RS2)
 DECLARE_INSN(custom2_rd, MATCH_CUSTOM2_RD, MASK_CUSTOM2_RD)
 DECLARE_INSN(custom2_rd_rs1, MATCH_CUSTOM2_RD_RS1, MASK_CUSTOM2_RD_RS1)
-DECLARE_INSN(custom2_rd_rs1_rs2, MATCH_CUSTOM2_RD_RS1_RS2, MASK_CUSTOM2_RD_RS1_RS2)
+DECLARE_INSN(custom2_rd_rs1_rs2, MATCH_CUSTOM2_RD_RS1_RS2, 
+MASK_CUSTOM2_RD_RS1_RS2)
 DECLARE_INSN(custom3, MATCH_CUSTOM3, MASK_CUSTOM3)
 DECLARE_INSN(custom3_rs1, MATCH_CUSTOM3_RS1, MASK_CUSTOM3_RS1)
 DECLARE_INSN(custom3_rs1_rs2, MATCH_CUSTOM3_RS1_RS2, MASK_CUSTOM3_RS1_RS2)
 DECLARE_INSN(custom3_rd, MATCH_CUSTOM3_RD, MASK_CUSTOM3_RD)
 DECLARE_INSN(custom3_rd_rs1, MATCH_CUSTOM3_RD_RS1, MASK_CUSTOM3_RD_RS1)
-DECLARE_INSN(custom3_rd_rs1_rs2, MATCH_CUSTOM3_RD_RS1_RS2, MASK_CUSTOM3_RD_RS1_RS2)
+DECLARE_INSN(custom3_rd_rs1_rs2, MATCH_CUSTOM3_RD_RS1_RS2, 
+MASK_CUSTOM3_RD_RS1_RS2)
 #endif
 #ifdef DECLARE_CSR
 DECLARE_CSR(fflags, CSR_FFLAGS)
@@ -1340,3 +1365,4 @@ DECLARE_CAUSE("supervisor_ecall", CAUSE_SUPERVISOR_ECALL)
 DECLARE_CAUSE("hypervisor_ecall", CAUSE_HYPERVISOR_ECALL)
 DECLARE_CAUSE("machine_ecall", CAUSE_MACHINE_ECALL)
 #endif
+

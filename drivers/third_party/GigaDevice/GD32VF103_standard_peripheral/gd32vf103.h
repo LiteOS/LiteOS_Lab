@@ -54,8 +54,18 @@ OF SUCH DAMAGE.
  #define     __O     volatile             /*!< Defines 'write only' permissions                */
  #define     __IO    volatile             /*!< Defines 'read / write' permissions              */
 
-
-#define HXTAL_VALUE    ((uint32_t)8000000) /*!< value of the external oscillator in Hz */
+ /* define value of high speed crystal oscillator (HXTAL) in Hz */
+ #if !defined  HXTAL_VALUE  
+   #ifdef GD32VF103R_START
+   #define HXTAL_VALUE    ((uint32_t)25000000) /*!< value of the external oscillator in Hz */
+   #define HXTAL_VALUE_8M  HXTAL_VALUE
+   #elif defined(GD32VF103V_EVAL) || defined(GD32VF103C_START)
+   #define HXTAL_VALUE    ((uint32_t)8000000) /*!< value of the external oscillator in Hz */
+   #define HXTAL_VALUE_25M  HXTAL_VALUE
+   #else
+   #error "Please select the target board type used in your application (in gd32vf103.h file)"
+   #endif
+ #endif /* high speed crystal oscillator value */
 
 /* define startup timeout value of high speed crystal oscillator (HXTAL) */
 #if !defined  (HXTAL_STARTUP_TIMEOUT)

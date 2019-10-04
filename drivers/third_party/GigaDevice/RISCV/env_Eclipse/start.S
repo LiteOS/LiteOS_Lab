@@ -1,11 +1,9 @@
 // See LICENSE for license details.
 
-// See LICENSE for license details.
-
 #include "riscv_encoding.h"
 
-	.section .init
-
+		.section .init
+	
     .weak  eclic_msip_handler
     .weak  eclic_mtip_handler
     .weak  eclic_bwei_handler
@@ -70,7 +68,6 @@
     .weak  CAN1_RX1_IRQHandler
     .weak  CAN1_EWMC_IRQHandler
     .weak  USBFS_IRQHandler
-
 
 vector_base:
     j _start
@@ -167,6 +164,7 @@ vector_base:
 
 _start:
 
+	csrc CSR_MSTATUS, MSTATUS_MIE
 	/* Jump to logical address first to ensure correct operation of RAM region  */
     la		a0,	_start
     li		a1,	1
@@ -190,8 +188,8 @@ _start0800:
 
 	/* Intial the mtvt2 and enable it*/
     la t0, irq_entry
-    csrw CSR_MIRQ_ENTRY, t0
-    csrs CSR_MIRQ_ENTRY, 0x1
+    csrw CSR_MTVT2, t0
+    csrs CSR_MTVT2, 0x1
 
     /* Intial the CSR MTVEC for the Trap ane NMI base addr*/
     la t0, trap_entry
@@ -231,6 +229,8 @@ _start0800:
 	addi a0, a0, 4
 	bltu a0, a1, 1b
 2:
+	/*enable mcycle_minstret*/
+    csrci CSR_MCOUNTINHIBIT, 0x5
 	/* Call global constructors */
 	la a0, __libc_fini_array
 	call atexit
@@ -245,3 +245,14 @@ _start0800:
 
 1:
 	j 1b
+	
+	.global disable_mcycle_minstret
+disable_mcycle_minstret:
+        csrsi CSR_MCOUNTINHIBIT, 0x5
+	ret
+
+	.global enable_mcycle_minstret
+enable_mcycle_minstret:
+        csrci CSR_MCOUNTINHIBIT, 0x5
+	ret
+

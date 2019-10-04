@@ -4,8 +4,9 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "riscv_encoding.h"
-#include "n22_func.h"
+#include "n200_func.h"
 
+extern uint32_t disable_mcycle_minstret();
 void _init()
 {
 	SystemInit();
@@ -13,7 +14,7 @@ void _init()
 	//ECLIC init
 	eclic_init(ECLIC_NUM_INTERRUPTS);
 	eclic_mode_enable();
-	set_csr(mstatus, MSTATUS_MIE);
+	set_csr(mstatus, MSTATUS_MIE);//baikal
 
 	//printf("After ECLIC mode enabled, the mtvec value is %x \n\n\r", read_csr(mtvec));
 
@@ -23,6 +24,10 @@ void _init()
 	//  //    * So if switch to user-mode and still want to continue, then you must configure PMP first
 	//pmp_open_all_space();
 	//switch_m2u_mode();
+	
+    /* Before enter into main, add the cycle/instret disable by default to save power,
+    only use them when needed to measure the cycle/instret */
+	disable_mcycle_minstret();
 }
 
 void _fini()
