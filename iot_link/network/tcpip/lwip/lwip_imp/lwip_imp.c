@@ -60,6 +60,9 @@ static int __lwip_bind(int fd, struct sockaddr *addr, int addrlen)
 
     ret = lwip_bind(fd,addr,addrlen);
 
+    memcpy(addr,&family,2);  ///< recover the addr--we should not modify the user's information
+
+
     return ret;
 }
 
