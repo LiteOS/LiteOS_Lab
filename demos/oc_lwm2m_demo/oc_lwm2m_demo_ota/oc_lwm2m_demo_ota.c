@@ -173,14 +173,14 @@ static int app_cmd_task_entry()
             if((0xFF == msg[0]) && (0xFE == msg[1]) && (0x01 == msg[2]))
             {
                 s_report_switch = 0;
-                pcp_msg_push(msg,msglen);
+                pcp_msg_push(msg,msglen);  ///< push the message to the ota queue
             }
             else
             {
                 printf("RCVMSG:%d \n\r",(int)msglen);
+                osal_free(buf);
             }
 
-            osal_free(buf);
         }
     }
     return ret;

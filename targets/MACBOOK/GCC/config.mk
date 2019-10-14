@@ -51,7 +51,24 @@
 #
 #################################################################################
 
-#####################OC LWM2M CONFIURE TEMPLATE#################################
+######################OC LWM2M CONFIURE TEMPLATE#################################
+#CONFIG_OS_TYPE       := "macos"
+#CONFIG_SHELL_ENABLE  := n
+#CONFIG_LIBC_ENABLE   := n
+#CONFIG_CJSON_ENABLE  := y
+#CONFIG_TCPIP_TYPE    := "macos_socket"
+#CONFIG_DTLS_TYPE     := "mbedtls"
+#CONFIG_EMBEDTLS_MODE := "psk"
+#CONFIG_MQTT_TYPE     := "none"
+#CONFIG_LWM2M_TYPE    := "wakaama"
+#CONFIG_OC_MQTT_TYPE  := "none"
+#CONFIG_OC_LWM2M_TYPE := "soft"
+#CONFIG_LOADER_ENABLE := n
+#CONFIG_OC_LWM2M_DEMO_TYPE:= "oc_lwm2m_demo_nodtls"
+#CONFIG_OC_MQTT_DEMO_TYPE:= "none"
+#################################################################################
+
+#####################OC LWM2M OTA CONFIURE TEMPLATE#################################
 CONFIG_OS_TYPE       := "macos"
 CONFIG_SHELL_ENABLE  := n
 CONFIG_LIBC_ENABLE   := n
@@ -64,8 +81,11 @@ CONFIG_LWM2M_TYPE    := "wakaama"
 CONFIG_OC_MQTT_TYPE  := "none"
 CONFIG_OC_LWM2M_TYPE := "soft"
 CONFIG_LOADER_ENABLE := n
-CONFIG_OC_LWM2M_DEMO_TYPE:= "oc_lwm2m_demo_nodtls"
+CONFIG_OC_LWM2M_DEMO_TYPE:= "oc_lwm2m_demo_ota"
 CONFIG_OC_MQTT_DEMO_TYPE:= "none"
+CONFIG_OTA_ENABLE := y
+CONFIG_PCP_ENABLE := y
+
 ################################################################################
 
 
