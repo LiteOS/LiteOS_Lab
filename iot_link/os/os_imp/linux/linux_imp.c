@@ -157,17 +157,40 @@ static bool_t  __semp_pend(osal_semp_t semp,int timeout)
 {
     struct timespec ts;
 
-    clock_gettime(CLOCK_REALTIME, &ts);
-
-    ts.tv_sec += (timeout / 1000);
-    ts.tv_nsec += ((timeout % 1000) * 1000);
-    if(sem_timedwait((sem_t *)semp, &ts))
+    if(timeout == cn_osal_timeout_forever)
     {
-        return false;
+        ///< wait until we get the semaphore
+        while(1)
+        {
+            clock_gettime(CLOCK_REALTIME, &ts);
+
+            ts.tv_sec += 10;
+            ts.tv_nsec += 0;
+            if(0 == sem_timedwait((sem_t *)semp, &ts))
+            {
+                return true;
+            }
+        }
+    }
+    else if(timeout >= 0)
+    {
+        clock_gettime(CLOCK_REALTIME, &ts);
+
+        ts.tv_sec += (timeout / 1000);
+        ts.tv_nsec += ((timeout % 1000) * 1000);
+        if(sem_timedwait((sem_t *)semp, &ts))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
     else
     {
-        return true;
+        ///< this is a overflow time, i think
+        return false;
     }
 }
 
