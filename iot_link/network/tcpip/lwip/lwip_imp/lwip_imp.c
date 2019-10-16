@@ -60,6 +60,9 @@ static int __lwip_bind(int fd, struct sockaddr *addr, int addrlen)
 
     ret = lwip_bind(fd,addr,addrlen);
 
+    memcpy(addr,&family,2);  ///< recover the addr--we should not modify the user's information
+
+
     return ret;
 }
 
@@ -108,7 +111,7 @@ static int __lwip_sendto(int fd, void *msg, int len, int flag, struct sockaddr *
     memcpy(addr,buf,2);
 
     ret = lwip_sendto(fd,msg,len,flag,addr,addrlen);
-    memcpy(addr,&family,2);
+    memcpy(addr,&family,2);  ///< recover the addr--we should not modify the user's information
 
     return ret;
 }
@@ -198,9 +201,3 @@ int tcpipstack_install_lwip(fn_lwip_netdriver driver)
 
     return 0;
 }
-
-
-
-
-
-
