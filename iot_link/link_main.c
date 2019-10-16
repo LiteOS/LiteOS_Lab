@@ -214,6 +214,31 @@ int link_main(void *args)
 
 #endif
 
+//////////////////////////  MQTT PROTOCOL  /////////////////////////////////////
+#if CONFIG_COAP_ENABLE
+    #include <litecoap_port.h>
+    coap_install_loscoap();
+#endif
+
+////////////////////////////  OC COAP && DEMOS     /////////////////////////////
+#if CONFIG_OC_COAP_ENABLE
+	#include <oc_coap_al.h>
+    oc_coap_init();
+
+#if CONFIG_ATINY_COAP_ENABLE
+	#include <atiny_coap.h>
+    oc_coap_install_agent();
+#endif
+
+#if CONFIG_OC_COAP_DEMO_ENABLE
+	#include <oc_coap_demo.h>
+    oc_coap_demo_main();
+#endif
+#endif
+
+
+
+
 #if CONFIG_HELLO_WORLD_ENABLE
     #include <helloworld.h>
     hello_world_main();

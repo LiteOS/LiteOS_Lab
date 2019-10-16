@@ -55,6 +55,30 @@ CONFIG_OC_MQTT_DEMO_TYPE= "oc_mqtt_demo_static"
 
 ###############################################################################
 
+####################  OC COAP CONFIURE TEMPLATE################################
+#CONFIG_OS_TYPE       = "liteos"
+#CONFIG_ARCH_CPU_TYPE = "armv7-m"
+#CONFIG_SHELL_ENABLE   = y
+#CONFIG_DRIVER_ENABLE = n
+#CONFIG_AT_ENABLE     = n
+#CONFIG_LIBC_ENABLE   = y
+#CONFIG_CJSON_ENABLE  = n
+#CONFIG_TCPIP_TYPE    = "lwip"
+#CONFIG_DTLS_TYPE     = "mbedtls"
+#CONFIG_EMBEDTLS_MODE = "psk"
+#CONFIG_MQTT_TYPE     = "none"
+#CONFIG_LWM2M_TYPE    = "none"
+#CONFIG_COAP_TYPE     = "litecoap"
+#CONFIG_OC_MQTT_TYPE  = "none"
+#CONFIG_OC_LWM2M_TYPE = "none"
+#CONFIG_OC_COAP_TYPE  = "soft"
+#CONFIG_LOADER_ENABLE = n
+#CONFIG_OC_LWM2M_DEMO_TYPE= "none"
+#CONFIG_OC_MQTT_DEMO_TYPE= "none"
+#CONFIG_OC_COAP_DEMO_TYPE= "oc_coap_demo_dtls"
+
+###############################################################################
+
 ######################OC LWM2M CONFIURE TEMPLATE#################################
 #CONFIG_OS_TYPE       = "liteos"
 #CONFIG_ARCH_CPU_TYPE = "armv7-m"
