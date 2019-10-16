@@ -63,6 +63,8 @@ static int __macos_bind(int fd, struct sockaddr *addr, int addrlen)
     memcpy(addr,buf,2);
 
     ret = bind(fd,addr,addrlen);
+    memcpy(addr,&family,2);  ///< recover the addr--we should not modify the user's information
+
 
     return ret;
 }
@@ -112,6 +114,9 @@ static int __macos_sendto(int fd, void *msg, int len, int flag, struct sockaddr 
     memcpy(addr,buf,2);
 
     ret = sendto(fd,msg,len,flag,addr,addrlen);
+
+    memcpy(addr,&family,2);  ///< recover the addr--we should not modify the user's information
+
 
     return ret;
 }

@@ -12,7 +12,10 @@ ifeq ($(CONFIG_OTA_ENABLE),y)
     C_INCLUDES += $(OTA_MODULE_INC)
     
     C_DEFS += -D CONFIG_OTA_ENABLE=1
-	include $(iot_link_root)/ota/pcp/pcp.mk
+    
+    ifeq ($(CONFIG_PCP_ENABLE), y)
+		include $(iot_link_root)/ota/pcp/pcp.mk
+	endif
 		
 endif	
 	
