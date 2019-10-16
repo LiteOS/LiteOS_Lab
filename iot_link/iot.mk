@@ -54,6 +54,10 @@ include $(iot_link_root)/oc/oc_mqtt/oc_mqtt.mk
 include $(iot_link_root)/network/lwm2m/lwm2m.mk
 include $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m.mk
 
+#configure the coap
+include $(iot_link_root)/network/coap/coap.mk
+include $(iot_link_root)/oc/oc_coap/oc_coap.mk
+
 #configure the ota	
 include $(iot_link_root)/ota/ota.mk
 

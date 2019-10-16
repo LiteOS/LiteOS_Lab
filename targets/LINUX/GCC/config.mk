@@ -35,7 +35,7 @@
  
 #####################  OC MQTT CONFIURE TEMPLATE################################
 CONFIG_OS_TYPE       := "linux"
-CONFIG_SHELL_ENABLE   := n
+CONFIG_SHELL_ENABLE  := n
 CONFIG_LIBC_ENABLE   := n
 CONFIG_CJSON_ENABLE  := y
 CONFIG_TCPIP_TYPE    := "linux_socket"
@@ -43,11 +43,14 @@ CONFIG_DTLS_TYPE     := "mbedtls"
 CONFIG_EMBEDTLS_MODE := "crt"
 CONFIG_MQTT_TYPE     := "paho"
 CONFIG_LWM2M_TYPE    := "none"
+CONFIG_COAP_TYPE     := "none"
 CONFIG_OC_MQTT_TYPE  := "soft"
 CONFIG_OC_LWM2M_TYPE := "none"
+CONFIG_OC_COAP_TYPE  := "none"
 CONFIG_LOADER_ENABLE := n
 CONFIG_OC_LWM2M_DEMO_TYPE:= "oc_lwm2m_demo_dtls"
 CONFIG_OC_MQTT_DEMO_TYPE:= "oc_mqtt_demo_bs"
+CONFIG_OC_COAP_DEMO_TYPE := "none"
 
 ################################################################################
 

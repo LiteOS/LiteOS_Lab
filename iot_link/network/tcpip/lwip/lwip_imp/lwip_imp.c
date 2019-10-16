@@ -201,9 +201,3 @@ int tcpipstack_install_lwip(fn_lwip_netdriver driver)
 
     return 0;
 }
-
-
-
-
-
-
