@@ -69,6 +69,8 @@ CONFIG_LOADER_ENABLE := n
 CONFIG_OC_LWM2M_DEMO_TYPE:= "oc_lwm2m_demo_nodtls"
 CONFIG_OC_MQTT_DEMO_TYPE:= "none"
 CONFIG_OC_COAP_DEMO_TYPE:= "none"
+CONFIG_OTA_ENABLE := y
+CONFIG_PCP_ENABLE := y
 ################################################################################
 
 
