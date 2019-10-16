@@ -160,19 +160,16 @@ static bool_t  __semp_pend(osal_semp_t semp,int timeout)
     if(timeout == cn_osal_timeout_forever)
     {
         ///< wait until we get the semaphore
-        while(1)
+        if(0 == sem_wait((sem_t *)semp))
         {
-            clock_gettime(CLOCK_REALTIME, &ts);
-
-            ts.tv_sec += 10;
-            ts.tv_nsec += 0;
-            if(0 == sem_timedwait((sem_t *)semp, &ts))
-            {
-                return true;
-            }
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
-    else if(timeout >= 0)
+    else if(timeout > 0)
     {
         clock_gettime(CLOCK_REALTIME, &ts);
 
@@ -185,6 +182,18 @@ static bool_t  __semp_pend(osal_semp_t semp,int timeout)
         else
         {
             return true;
+        }
+    }
+    else if(timeout == 0)
+    {
+        ///< try to wait the semaphore
+        if(0 == sem_trywait((sem_t *)semp))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
     else
