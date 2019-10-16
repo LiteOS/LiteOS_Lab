@@ -46,11 +46,14 @@ CONFIG_DTLS_TYPE     := "none"
 CONFIG_EMBEDTLS_MODE := "none"
 CONFIG_MQTT_TYPE     := "none"
 CONFIG_LWM2M_TYPE    := "none"
+CONFIG_COAP_TYPE     := "none"
 CONFIG_OC_MQTT_TYPE  := "ec20"
 CONFIG_OC_LWM2M_TYPE := "none"
+CONFIG_OC_COAP_TYPE := "none"
 CONFIG_LOADER_ENABLE := n
 CONFIG_OC_LWM2M_DEMO_TYPE:= "none"
 CONFIG_OC_MQTT_DEMO_TYPE:= "none"
+CONFIG_OC_COAP_DEMO_TYPE:= "none"
 
 ################################################################################
 

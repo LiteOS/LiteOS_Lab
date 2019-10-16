@@ -322,7 +322,7 @@
 
 ///< defines the address
 #define INADDR_NONE  0
-
+#define INADDR_ANY   ((unsigned long)0x00000000UL)  /* 0.0.0.0 */
 
 
 
