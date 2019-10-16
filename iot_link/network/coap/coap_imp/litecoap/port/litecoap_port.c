@@ -398,11 +398,11 @@ static int __recv(coap_al_rcvpara_t *rcvparam)
     return ret;
 }
 
-int coap_install_loscoap()
+int coap_install_litecoap()
 {
     int ret = -1;
 
-    coap_al_op_t loscoap_op =
+    coap_al_op_t litecoap_op =
     {
     	.init = __init,
 		.deinit = __deinit,
@@ -412,7 +412,7 @@ int coap_install_loscoap()
         .recv = __recv,
     };
 
-    ret = coap_al_install(&loscoap_op);
+    ret = coap_al_install(&litecoap_op);
 
     return ret;
 }

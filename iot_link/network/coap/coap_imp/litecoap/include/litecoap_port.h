@@ -32,14 +32,14 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef LOSCOAP_PORT_H
-#define LOSCOAP_PORT_H
+#ifndef LITECOAP_PORT_H
+#define LITECOAP_PORT_H
 /**
  * @brief   : this function for install the paho mqtt to the mqtt_al, must be call only once
  *
  */
 
-int coap_install_loscoap();
+int coap_install_litecoap();
 
 
 #endif /* PAHO_MQTT_PORT_H */
