@@ -1,4 +1,41 @@
-
+/*----------------------------------------------------------------------------
+ * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 1. Redistributions of source code must retain the above copyright notice, this list of
+ * conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+ * of conditions and the following disclaimer in the documentation and/or other materials
+ * provided with the distribution.
+ * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+ * to endorse or promote products derived from this software without specific prior written
+ * permission.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *---------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------
+ * Notice of Export Control Law
+ * ===============================================
+ * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+ * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+ * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+ * applicable export control laws and regulations.
+ *---------------------------------------------------------------------------*/
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2019-07-26 18:04  zhangqianfu  The first version
+ *
+ */
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -294,25 +331,7 @@ int osal_loop_timer_left(osal_loop_timer_t *timer)
 }
 
 
-#include <stdarg.h>
-#define LOG_BUF_SIZE  256  ///< you could modify it
 
-int osal_printf(const char *format, ...)
-{
-    int ret;
-    char str_buf[LOG_BUF_SIZE] = {0};
-    va_list list;
-
-    memset(str_buf, 0, LOG_BUF_SIZE);
-    va_start(list, format);
-    ret = vsnprintf(str_buf, LOG_BUF_SIZE, format, list);
-    va_end(list);
-
-    printf("%s", str_buf);
-
-    return ret;
-
-}
 
 int osal_reboot()  ///< maybe we should never come back
 {

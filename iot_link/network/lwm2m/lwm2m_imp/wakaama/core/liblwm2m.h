@@ -102,6 +102,7 @@ extern "C" {
 
 #include "er-coap-13/er-coap-13.h"
 #include <osal.h>
+#include <atiny_log.h>
 
 #ifdef LWM2M_SERVER_MODE
 #ifndef LWM2M_SUPPORT_JSON
@@ -153,7 +154,7 @@ void lwm2m_delay(uint32_t second);
 //#define LWM2M_WITH_LOGS
 #ifdef LWM2M_WITH_LOGS
 // Same usage as C89 printf()
-#define lwm2m_printf osal_printf
+#define lwm2m_printf atiny_printf
 #endif
 
 // communication layer
