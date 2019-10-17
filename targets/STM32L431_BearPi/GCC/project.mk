@@ -70,7 +70,6 @@ USER_INC = \
 # C defines
 C_DEFS +=  -D USE_HAL_DRIVER -D STM32L431xx -D NDEBUG
 
-include $(SDK_DIR)/iot_link/iot.mk
 include $(TOP_DIR)/targets/STM32L431_BearPi/Demos/user_demo.mk
 
                  

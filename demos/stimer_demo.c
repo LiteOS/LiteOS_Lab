@@ -33,31 +33,34 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-07-23 10:00    yuhengP    The first version  
+ *  2019-07-26 09:38  zhangqianfu  The first version
  *
  */
-#include <stdint.h>
+
 #include <stddef.h>
-#include <string.h>
+#include <stdint.h>
+#include <stdio.h>
 
-#include <osal.h>
+#include <stimer.h>
 
-static int app_hello_world_entry()
+static void stimer_handler(void *args)
 {
-    while (1)
-    {
-        printf("Hello World! This is LiteOS!\r\n");
-        osal_task_sleep(4*1000);
-    }
+    const char *timer_name = args;
+
+    printf("timer:%s triggered ---systime:%d\n\r",timer_name,(uint32_t)osal_sys_time());
+
+    return;
 }
+
 
 int standard_app_demo_main()
 {
-    osal_task_create("helloworld",app_hello_world_entry,NULL,0x400,NULL,2);
+    stimer_create("stimer1",stimer_handler,"stimer1",1*1000,cn_stimer_flag_start);
+    stimer_create("stimer2",stimer_handler,"stimer2",2*1000,cn_stimer_flag_start);
+    stimer_create("stimer3",stimer_handler,"stimer3",3*1000,cn_stimer_flag_start);
+    stimer_create("stimer4",stimer_handler,"stimer4",4*1000,cn_stimer_flag_start);
+    stimer_create("stimer5",stimer_handler,"stimer5",5*1000,cn_stimer_flag_start);
+    stimer_create("stimer6",stimer_handler,"stimer6",6*1000,cn_stimer_flag_start|cn_stimer_flag_once);
+
     return 0;
 }
-
-
-
-
-
