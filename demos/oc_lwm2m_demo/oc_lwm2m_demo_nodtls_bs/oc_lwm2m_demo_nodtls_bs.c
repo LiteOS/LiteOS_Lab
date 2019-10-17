@@ -46,8 +46,10 @@
 #include <oc_lwm2m_al.h>
 #include <queue.h>
 
-#define cn_endpoint_id        "lwm2m_001"
+
+//#define cn_app_server         "iot-bs.cn-north-4.myhuaweicloud.com"
 #define cn_app_server         "119.3.251.30"
+#define cn_endpoint_id        "lwm2m_001"
 #define cn_app_port           "5683"
 
 #define cn_app_connectivity    0
