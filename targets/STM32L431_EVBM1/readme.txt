@@ -1,0 +1,4 @@
+///< this is the mini project for the EVBM1.
+///< ONLY SUPPORT VERY LITTLE DEVICE:
+///< UART1:AS THE PRINT INTERFACE
+///< UART2:AS THE AT INTERFACE

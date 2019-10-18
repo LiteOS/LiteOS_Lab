@@ -363,6 +363,7 @@ exit_fail:
 }
 void dtls_ssl_destroy(mbedtls_ssl_context *ssl)
 {
+    int ret = 0;
     mbedtls_ssl_config           *conf = NULL;
     mbedtls_ctr_drbg_context     *ctr_drbg = NULL;
     mbedtls_entropy_context      *entropy = NULL;
@@ -383,6 +384,11 @@ void dtls_ssl_destroy(mbedtls_ssl_context *ssl)
 #if defined(MBEDTLS_X509_CRT_PARSE_C)
     cacert     = (mbedtls_x509_crt *)conf->ca_chain;
 #endif
+
+    do ret = mbedtls_ssl_close_notify( ssl );
+    while( ret == MBEDTLS_ERR_SSL_WANT_WRITE );
+    ret = 0;
+
 
     if (conf)
     {

@@ -372,6 +372,10 @@ static uint8_t prv_server_write(uint16_t instanceId,
         case LWM2M_SERVER_UPDATE_ID:
             result = COAP_405_METHOD_NOT_ALLOWED;
             break;
+        case LWM2M_SERVER_BSTRIGGER:
+            atiny_cmd_ioctl(ATINY_TRIGER_SERVER_INITIATED_BS,NULL,0);
+            result = COAP_204_CHANGED;
+            break;
 
         default:
             return COAP_404_NOT_FOUND;
@@ -397,15 +401,19 @@ static uint8_t prv_server_execute(uint16_t instanceId,
 
     switch (resourceId)
     {
-    case LWM2M_SERVER_DISABLE_ID:
-        // executed in core, if COAP_204_CHANGED is returned
-        if (0 < targetP->disableTimeout) return COAP_204_CHANGED;
-        else return COAP_405_METHOD_NOT_ALLOWED;
-    case LWM2M_SERVER_UPDATE_ID:
-        // executed in core, if COAP_204_CHANGED is returned
-        return COAP_204_CHANGED;
-    default:
-        return COAP_405_METHOD_NOT_ALLOWED;
+        case LWM2M_SERVER_DISABLE_ID:
+            // executed in core, if COAP_204_CHANGED is returned
+            if (0 < targetP->disableTimeout) return COAP_204_CHANGED;
+            else return COAP_405_METHOD_NOT_ALLOWED;
+        case LWM2M_SERVER_UPDATE_ID:
+            // executed in core, if COAP_204_CHANGED is returned
+            return COAP_204_CHANGED;
+        case LWM2M_SERVER_BSTRIGGER:
+            atiny_cmd_ioctl(ATINY_TRIGER_SERVER_INITIATED_BS,NULL,0);
+            return COAP_204_CHANGED;
+            break;
+        default:
+            return COAP_405_METHOD_NOT_ALLOWED;
     }
 }
 

@@ -96,6 +96,7 @@ typedef enum
     ATINY_GET_LINK_QUALITY,
     ATINY_GET_LINK_UTILIZATION,
     ATINY_WRITE_APP_DATA,
+    ATINY_EXECUTE_APP_DATA,
     ATINY_UPDATE_PSK,
     ATINY_GET_LATITUDE,
     ATINY_GET_LONGITUDE,
@@ -207,6 +208,7 @@ typedef struct
     atiny_server_param_t   server_params;
     //both iot_server and bs_server have psk & pskID, index 0 for iot_server, and index 1 for bs_server
     atiny_security_param_t security_params[2];
+    void      *userData;
 } atiny_param_t;
 
 typedef struct

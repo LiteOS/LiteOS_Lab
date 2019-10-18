@@ -104,7 +104,7 @@ CFLAGS += -Wno-missing-braces
 #######################################
 
 # libraries
-LIBS = -lc -lm -lpthread
+LIBS = -lc -lm -lpthread -lrt
 LDFLAGS = $(LIBS)
 
 # default action: build all

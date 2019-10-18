@@ -41,10 +41,8 @@
 #include <string.h>
 #include <unistd.h>
 
-//#include <sys/types.h>
-//#include <sys/socket.h>
-//#include <netdb.h>
 
+#include <sal.h>
 #include <sal_imp.h>
 #include <sal_define.h>
 #include <sal_types.h>
@@ -74,6 +72,14 @@ typedef struct
 }esp8266_sock_cb_t;
 
 static esp8266_sock_cb_t s_esp8266_sock_cb;
+
+
+typedef enum
+{
+    STA = 1,
+    AP,
+    STA_AP,
+}enum_net_mode;
 
 //esp8266 common at command
 static bool_t esp8266_atcmd(const char *cmd,const char *index)
@@ -108,11 +114,9 @@ static bool_t esp8266_atcmd_response(const char *cmd,const char *index,char *buf
 static int esp8266_rcvdeal(void *args,void *msg,size_t len)
 {
     int ret = 0;
-    int fd;
     unsigned short datalen;
     char *data;
     char  *str;
-    unsigned short ringspace;
 
     data = msg;
     if(len <strlen(cn_esp8266_rcvindex))
@@ -130,7 +134,6 @@ static int esp8266_rcvdeal(void *args,void *msg,size_t len)
     str++;
 
     //TODO: mux = 1
-    fd = 0;
 
     datalen = 0;
     for (; *str <= '9' && *str >= '0' ;str++)
@@ -148,11 +151,11 @@ static int esp8266_rcvdeal(void *args,void *msg,size_t len)
     if(s_esp8266_sock_cb.type == SOCK_DGRAM)
     {
     	ret = ring_write(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)&datalen,sizeof(datalen));
-        ret = ring_write(&s_esp8266_sock_cb.esp8266_rcvring,str,datalen);
+        ret = ring_write(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)str,datalen);
     }
     else if (s_esp8266_sock_cb.type == SOCK_STREAM)
     {
-        ret = ring_write(&s_esp8266_sock_cb.esp8266_rcvring,str,datalen);
+        ret = ring_write(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)str,datalen);
     }
 
     return ret;
@@ -198,7 +201,7 @@ static int __esp8266_connect(int fd, const struct sockaddr *addr, int addrlen)
         memset(cmd,0,64);
         //memset(remote_ip,0,16);
 
-        const struct sockaddr_in *serv_addr = (const struct sockaddr *)addr;
+        const struct sockaddr_in *serv_addr = (const struct sockaddr_in *)addr;
         uint16_t remote_port = ntohs(serv_addr->sin_port);
         struct in_addr remote_ip_int = serv_addr->sin_addr;
         remote_ip = inet_ntoa(remote_ip_int);
@@ -242,8 +245,7 @@ static int esp8266_send(int fd, const void *buf, int len, int flags)
         	str = strstr(s_esp8266_sock_cb.oob_resp,cn_esp8266_rcvindex);  //in some cases, +IPD is not at the beginning of one frame. process here
         	if(NULL != str)
         	{
-        		void *args;
-        		esp8266_rcvdeal(args,str,1024);
+        		esp8266_rcvdeal(NULL,str,1024);
         	}
 
         }
@@ -262,33 +264,34 @@ static int __esp8266_sendto(int fd, const void *msg, int len, int flags, struct 
 static int esp8266_recv(int fd,void *buf,size_t len,int flags)
 {
 	int ret = -1;
-	osal_loop_timer_t sock_timer;
+	unsigned int timeout = 0;
 
-	osal_loop_timer_init(&sock_timer);
-	osal_loop_timer_count_downms(&sock_timer,s_esp8266_sock_cb.timeout);
-
-    while (0 == osal_loop_timer_expired(&sock_timer))
-    {
-    	if(s_esp8266_sock_cb.type == SOCK_DGRAM)
-    	{
-    		unsigned short framelen = 0;
-    		ret = ring_read(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)&framelen,sizeof(framelen));
-    		ret = ring_read(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)buf,framelen);
-    		if(ret > 0)
-    		{
-    			break;
-    		}
-    	}
-    	else if (s_esp8266_sock_cb.type == SOCK_STREAM)
-    	{
-    		ret = ring_read(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)buf,len);
-    		if(ret > 0)
-    		{
-    		    break;
-    		}
-    	}
-    	osal_task_sleep(1);
-    }
+	timeout = s_esp8266_sock_cb.timeout;
+	do{
+        if(s_esp8266_sock_cb.type == SOCK_DGRAM)
+        {
+            unsigned short framelen = 0;
+            ret = ring_read(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)&framelen,sizeof(framelen));
+            ret = ring_read(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)buf,framelen);
+            if(ret > 0)
+            {
+                break;
+            }
+        }
+        else if (s_esp8266_sock_cb.type == SOCK_STREAM)
+        {
+            ret = ring_read(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)buf,len);
+            if(ret > 0)
+            {
+                break;
+            }
+        }
+        if(timeout > 0)
+        {
+            osal_task_sleep(1);
+            timeout--;
+        }
+	}while(timeout > 0);
 
 
 	if(0 == ret)
@@ -348,38 +351,81 @@ static int esp8266_getpeername(int fd, struct sockaddr *addr,socklen_t *addrlen)
     return 0;
 }
 
+///< here we must make sure that the hostent returned by gethostbyname won't be freeed, and
+///< this data structure must be a static one, so we set it as a local global one
+
+static struct hostent s_esp8266_hostent;
+static uint8_t        s_esp8266_ipv4_addr[4];
+static char          *s_esp8266_ipv4_lst[2];    ///< must be 2 or more because it terminated by NULL
 static struct hostent *esp8266_gethostbyname(const char *name)
 {
 	char cmd[64];
 	char resp[64];
 
 	char *str;
-	struct in_addr *serv_ip;
-	int ret = -1;
-	int cpylen;
-	struct hostent *hptr = (struct hostent *)osal_malloc(sizeof(struct hostent));
-	hptr->h_addr_list = (char **)osal_malloc(sizeof(char *) * 1);
-	hptr->h_addr_list[0] = (char *)osal_malloc(sizeof(char) * 4);
+	int ipv4[4];
+	int fmt_num;
 
-	hptr->h_addrtype = AF_INET;
+	struct hostent *hptr = NULL;
+
 	memset(cmd,0,64);
 	snprintf(cmd,64,"AT+CIPDOMAIN=\"%s\"\r\n",name);
 	if(false == esp8266_atcmd_response(cmd,"+CIPDOMAIN",resp,64))
 	{
-		//name is ip address already
-		sscanf(name,"%d.%d.%d.%d",&hptr->h_addr_list[0][0],&hptr->h_addr_list[0][1],&hptr->h_addr_list[0][2],&hptr->h_addr_list[0][3]);
-		return hptr;
+	    hptr = &s_esp8266_hostent;
+	    memset(hptr,0,sizeof(struct hostent));
+	    ///< we could not resolve it by the at device, so we check if your address if dot point
+        fmt_num = sscanf(name,"%d.%d.%d.%d",&ipv4[0],&ipv4[1],&ipv4[2],&ipv4[3]);
+        if(fmt_num > 0)
+        {
+            hptr->h_addrtype = AF_INET;
+            hptr->h_length = 4;
+            s_esp8266_ipv4_addr[0] = ipv4[0];
+            s_esp8266_ipv4_addr[1] = ipv4[1];
+            s_esp8266_ipv4_addr[2] = ipv4[2];
+            s_esp8266_ipv4_addr[3] = ipv4[3];
+
+            s_esp8266_ipv4_lst[0] = (char *)&s_esp8266_ipv4_addr[0];
+            s_esp8266_ipv4_lst[1] = NULL;
+
+            hptr->h_addr_list = &s_esp8266_ipv4_lst[0];
+            return hptr;
+
+        }
+        else
+        {
+            return NULL;
+        }
 	}
-	str = strstr(resp,":");
-	str++;
-	cpylen = strstr(str,"\r\n") - str;
+	else  ///< decode it by the response
+	{
+	    str = strstr(resp,":");
+	    str++;
 
-	char ipaddr[cpylen];
-	memset(ipaddr,0,cpylen);
-	memcpy(ipaddr,str,cpylen);
-	sscanf(ipaddr,"%d.%d.%d.%d",&hptr->h_addr_list[0][0],&hptr->h_addr_list[0][1],&hptr->h_addr_list[0][2],&hptr->h_addr_list[0][3]);
+        hptr = &s_esp8266_hostent;
+        memset(hptr,0,sizeof(struct hostent));
+        ///< we could not resolve it by the at device, so we check if your address if dot point
+        fmt_num = sscanf(str,"%d.%d.%d.%d",&ipv4[0],&ipv4[1],&ipv4[2],&ipv4[3]);
+        if(fmt_num > 0)
+        {
+            hptr->h_addrtype = AF_INET;
+            hptr->h_length = 4;
+            s_esp8266_ipv4_addr[0] = ipv4[0];
+            s_esp8266_ipv4_addr[1] = ipv4[1];
+            s_esp8266_ipv4_addr[2] = ipv4[2];
+            s_esp8266_ipv4_addr[3] = ipv4[3];
 
-    return hptr;
+            s_esp8266_ipv4_lst[0] = (char *)&s_esp8266_ipv4_addr[0];
+            s_esp8266_ipv4_lst[1] = NULL;
+
+            hptr->h_addr_list = &s_esp8266_ipv4_lst[0];
+            return hptr;
+        }
+        else
+        {
+            return NULL;
+        }
+	}
 }
 
 static const tag_tcpip_ops s_tcpip_socket_ops =

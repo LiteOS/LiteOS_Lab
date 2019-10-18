@@ -43,11 +43,14 @@ CONFIG_DTLS_TYPE     := "mbedtls"
 CONFIG_EMBEDTLS_MODE := "crt"
 CONFIG_MQTT_TYPE     := "paho"
 CONFIG_LWM2M_TYPE    := "none"
+CONFIG_COAP_TYPE     := "none"
 CONFIG_OC_MQTT_TYPE  := "soft"
 CONFIG_OC_LWM2M_TYPE := "none"
+CONFIG_OC_COAP_TYPE  := "none"
 CONFIG_LOADER_ENABLE := n
 CONFIG_OC_LWM2M_DEMO_TYPE:= "none"
 CONFIG_OC_MQTT_DEMO_TYPE:= "oc_mqtt_demo_static"
+CONFIG_OC_COAP_DEMO_TYPE:= "none"
 
 ################################################################################
 

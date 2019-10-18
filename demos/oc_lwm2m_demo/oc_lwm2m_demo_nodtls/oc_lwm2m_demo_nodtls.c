@@ -99,7 +99,7 @@ typedef struct
 
 //if your command is very fast,please use a queue here--TODO
 #define cn_app_rcv_buf_len 128
-static int             s_rcv_buffer[cn_app_rcv_buf_len];
+static int8_t          s_rcv_buffer[cn_app_rcv_buf_len];
 static int             s_rcv_datalen;
 static osal_semp_t     s_rcv_sync;
 
@@ -108,17 +108,12 @@ static void           *s_lwm2m_handle = NULL;
 
 
 //use this function to push all the message to the buffer
-static int app_msg_deal(void *usr_data,char *msg, int len)
+static int app_msg_deal(void *usr_data,en_oc_lwm2m_msg_t type, void *msg, int len)
 {
     int ret = -1;
 
     if(len <= cn_app_rcv_buf_len)
     {
-        if (msg[0] == 0xaa && msg[1] == 0xaa)
-        {
-            printf("OC respond message received! \n\r");
-            return ret;
-        }
         memcpy(s_rcv_buffer,msg,len);
         s_rcv_datalen = len;
 
@@ -142,7 +137,7 @@ static int app_cmd_task_entry()
     {
         if(osal_semp_pend(s_rcv_sync,cn_osal_timeout_forever))
         {
-            msgid = s_rcv_buffer[0] & 0x000000FF;
+            msgid = s_rcv_buffer[0];
             switch (msgid)
             {
                 case cn_app_ledcmd:

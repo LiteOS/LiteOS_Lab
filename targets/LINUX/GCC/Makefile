@@ -82,7 +82,7 @@ C_SOURCES += $(MAIN_SRC)
 # compile gcc flags
 ASFLAGS =  $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
-CFLAGS =  $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections -m32
+CFLAGS =  $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
 ifeq ($(DEBUG), 1)
 CFLAGS += -g -gdwarf-2
@@ -100,7 +100,7 @@ CFLAGS += -Wno-missing-braces
 
 # libraries
 LIBS = -lc -lm -lpthread -lrt
-LDFLAGS = $(LIBS) -m32
+LDFLAGS = $(LIBS)
 
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf

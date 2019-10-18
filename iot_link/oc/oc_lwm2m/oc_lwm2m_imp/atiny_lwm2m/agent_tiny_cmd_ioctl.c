@@ -251,13 +251,27 @@ int atiny_get_link_utilization(int *utilization)
     return ATINY_OK;
 }
 
-extern int lwm2m_agent_receive(char *msg, int len);
+#include <oc_lwm2m_al.h>
+extern int lwm2m_agent_receive(en_oc_lwm2m_msg_t type,char *msg, int len);
 
-
-int atiny_write_app_write(void *user_data, int len)
+int atiny_app_write(void *msg, int len)
 {
     (void)printf("write num19 object success\r\n");
-    lwm2m_agent_receive(user_data,len);
+    lwm2m_agent_receive(EN_OC_LWM2M_MSG_APPWRITE,msg,len);
+    return ATINY_OK;
+}
+
+int atiny_app_execute(void *msg, int len)
+{
+    (void)printf("EXCUTE num19 object success\r\n");
+    lwm2m_agent_receive(EN_OC_LWM2M_MSG_APPEXECUTE,msg,len);
+    return ATINY_OK;
+}
+
+int atiny_server_bootrigger(void *msg, int len)
+{
+    (void)printf("SERVER TRIGGERE BOOTSTRAP\r\n");
+    lwm2m_agent_receive(EN_OC_LWM2M_MSG_SERVERREBS,msg,len);
     return ATINY_OK;
 }
 
@@ -421,7 +435,10 @@ int atiny_cmd_ioctl(atiny_cmd_e cmd, char *arg, int len)
         result = atiny_get_link_utilization((int *)arg);
         break;
     case ATINY_WRITE_APP_DATA:
-        result = atiny_write_app_write((int *)arg, len);
+        result = atiny_app_write((int *)arg, len);
+        break;
+    case ATINY_EXECUTE_APP_DATA:
+        result = atiny_app_execute((int *)arg, len);
         break;
     case ATINY_UPDATE_PSK:
         result = atiny_update_psk(arg, len);
@@ -460,12 +477,10 @@ int atiny_cmd_ioctl(atiny_cmd_e cmd, char *arg, int len)
     }
 #endif
 
-#if defined(WITH_AT_FRAMEWORK) && defined(USE_NB_NEUL95)
     case ATINY_TRIGER_SERVER_INITIATED_BS:
-        nb_reattach();
+        atiny_server_bootrigger(arg,len);
         result = ATINY_OK;
         break;
-#endif
 
     default:
         break;

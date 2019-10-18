@@ -22,6 +22,9 @@ include $(iot_link_root)/shell/shell.mk
 #configure the soft timer for the iot_link
 include $(iot_link_root)/stimer/stimer.mk
 
+#configure the queue
+include $(iot_link_root)/queue/queue.mk
+
 #configure the driver famework for the iot_link
 include $(iot_link_root)/driver/driver.mk
 
@@ -33,6 +36,9 @@ include $(iot_link_root)/libc/libc.mk
 
 #configure the cJSON 
 include $(iot_link_root)/cJSON/cJSON.mk 
+
+#configure th crc
+include $(iot_link_root)/crc/crc.mk 
 
 #configure the sal for the iot_link
 include $(iot_link_root)/network/tcpip/tcpip.mk
@@ -47,6 +53,13 @@ include $(iot_link_root)/oc/oc_mqtt/oc_mqtt.mk
 #configure the lwm2m
 include $(iot_link_root)/network/lwm2m/lwm2m.mk
 include $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m.mk
+
+#configure the coap
+include $(iot_link_root)/network/coap/coap.mk
+include $(iot_link_root)/oc/oc_coap/oc_coap.mk
+
+#configure the ota	
+include $(iot_link_root)/ota/ota.mk
 
 #configure the loader	
 include $(iot_link_root)/loader/loader.mk

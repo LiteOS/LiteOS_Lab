@@ -144,8 +144,11 @@ int oc_lwm2m_deconfig(void *context)
 
     if((NULL != oc_lwm2m) &&(NULL != oc_lwm2m->ops) && (NULL != oc_lwm2m->ops->deconfig))
     {
-        oc_lwm2m->ops->deconfig(oc_lwm2m->handle); ///<  should check if deconfigure error
-        osal_free(oc_lwm2m);
+        ret = oc_lwm2m->ops->deconfig(oc_lwm2m->handle); ///<  should check if deconfigure error
+        if(ret == 0)
+        {
+            osal_free(oc_lwm2m);
+        }
     }
 
     return ret;

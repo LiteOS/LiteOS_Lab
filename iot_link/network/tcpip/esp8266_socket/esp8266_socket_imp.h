@@ -43,14 +43,9 @@
 #define WIFI_SSID     "TP-LINK_IOT_LINK"
 #define WIFI_PASSWD   "iotlink_2019"
 
-typedef enum
-{
-    STA = 1,
-    AP,
-    STA_AP,
-}enum_net_mode;
+
 /**
- * @brief: the user should supply a function to install the network driver
+ * @brief: the user use this function to the system as if it is tcpip stack
  *
  * @return:0 success while -1 failed
  * */

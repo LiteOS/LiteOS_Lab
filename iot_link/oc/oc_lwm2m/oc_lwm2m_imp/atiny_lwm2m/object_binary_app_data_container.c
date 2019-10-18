@@ -381,7 +381,7 @@ static uint8_t prv_exec(uint16_t instanceId,
     {
     case 0:
     {
-        ATINY_LOG(LOG_INFO, "no in prv_exec+++++++++++++++++++++++++++");
+        (void)atiny_cmd_ioctl(ATINY_EXECUTE_APP_DATA, (char *)buffer,length);
         return COAP_204_CHANGED;
     }
     case 1:
@@ -472,6 +472,7 @@ lwm2m_object_t *get_binary_app_data_object(atiny_param_t *atiny_params)
         appObj->executeFunc = prv_exec;
         appObj->createFunc = prv_create;
         appObj->deleteFunc = prv_delete;
+        appObj->userData = atiny_params->userData;
     }
 
     return appObj;
@@ -493,11 +494,12 @@ void free_binary_app_data_object(lwm2m_object_t *object)
 {
     free_binary_app_data_object_rpt(object);
     LWM2M_LIST_FREE(object->instanceList);
-    if (object->userData != NULL)
-    {
-        lwm2m_free(object->userData);
-        object->userData = NULL;
-    }
+///< for this memory is not allocated by us ,we should not take care about it
+//    if (object->userData != NULL)
+//    {
+//        lwm2m_free(object->userData);
+//        object->userData = NULL;
+//    }
     lwm2m_free(object);
 }
 
