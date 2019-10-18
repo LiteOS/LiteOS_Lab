@@ -98,7 +98,7 @@ CONFIG_DTLS_TYPE     := "mbedtls_psk"
 
 #CONFIG_MQTT_ENABLE, we build a mqtt abstraction, which shield the difference of 
 #the implement of mqtt. 
-#CONFIG_MQTT_TYPE could be "paho_mqtt" "none"
+#CONFIG_MQTT_TYPE could be "paho_mqtt" "lite_mqtt" "none"
 CONFIG_MQTT_ENABLE   := n
 CONFIG_MQTT_TYPE     := "paho_mqtt"
 

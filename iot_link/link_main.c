@@ -158,6 +158,7 @@ int link_main(void *args)
     #include <mqtt_sinn_port.h>
     mqtt_install_sinnmqtt();
 #endif
+
 #endif
 
 
