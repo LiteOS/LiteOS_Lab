@@ -15,5 +15,5 @@ mqtt_paho_inc = \
 
 C_INCLUDES += $(mqtt_paho_inc)
 
-mqtt_paho_defs = -D MQTTCLIENT_PLATFORM_HEADER=paho_osdepends.h
+mqtt_paho_defs = -D MQTTCLIENT_PLATFORM_HEADER=paho_osdepends.h -D CONFIG_MQTT_PAHO_ENABLE=1
 C_DEFS += $(mqtt_paho_defs)

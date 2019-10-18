@@ -12,6 +12,10 @@ ifeq ($(CONFIG_MQTT_ENABLE), y)
     
     ifeq ($(CONFIG_MQTT_TYPE), "paho_mqtt")
     	include $(iot_link_root)/network/mqtt/paho_mqtt/paho_mqtt.mk
+    else ifeq ($(CONFIG_MQTT_TYPE), "lite_mqtt")
+    	include $(iot_link_root)/network/mqtt/lite_mqtt/lite_mqtt.mk
+    else
+    	#you could add your mqtt here   	
     endif
        
 endif
