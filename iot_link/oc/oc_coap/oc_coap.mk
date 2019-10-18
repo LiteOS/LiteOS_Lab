@@ -1,10 +1,8 @@
 ################################################################################
-# this is used for compile the OC_MQTT
-# please add the corresponding file to C_SOURCES C_INCLUDES C_DEFS
+# this is used for compile the OC_COAP
 ################################################################################
-#NEXT TIME WE SHOULD MOVE THE JSON OUT
 
-ifneq ($(CONFIG_OC_COAP_TYPE),"none")
+ifeq ($(CONFIG_OC_COAP_ENABLE), y)
 
     OC_COAP_AL_SRC  = ${wildcard $(iot_link_root)/oc/oc_coap/oc_coap_al/*.c}
     C_SOURCES += $(OC_COAP_AL_SRC)	
@@ -15,12 +13,8 @@ ifneq ($(CONFIG_OC_COAP_TYPE),"none")
     oc_coap_defs = -D CONFIG_OC_COAP_ENABLE=1
     C_DEFS += $(oc_coap_defs)
     
-    
-    #you must choose one of the oc coap implement
-    include $(iot_link_root)/oc/oc_coap/oc_coap_imp/oc_coap_imp.mk
-    
-    
-    #with coap demo
-    include $(SDK_DIR)/demos/oc_coap_demo/oc_coap_demo.mk
+    ifeq ($(CONFIG_OC_COAP_TYPE), "soft")    
+		include $(iot_link_root)/oc/oc_coap/atiny_coap/atiny_coap.mk
+    endif
 
 endif

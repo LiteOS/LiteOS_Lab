@@ -4,7 +4,7 @@
 ################################################################################
 #NEXT TIME WE SHOULD MOVE THE JSON OUT
 
-ifneq ($(CONFIG_OC_MQTT_TYPE),"none")
+ifeq ($(CONFIG_OC_MQTT_ENABLE), y)
 
     OC_MQTT_AL_SRC  = ${wildcard $(iot_link_root)/oc/oc_mqtt/oc_mqtt_al/*.c}
     C_SOURCES += $(OC_MQTT_AL_SRC)	
@@ -15,12 +15,10 @@ ifneq ($(CONFIG_OC_MQTT_TYPE),"none")
     oc_mqtt_defs = -D CONFIG_OC_MQTT_ENABLE=1
     C_DEFS += $(oc_mqtt_defs)
     
-    
-    #you must choose one of the oc mqtt implement
-    include $(iot_link_root)/oc/oc_mqtt/oc_mqtt_imp/oc_mqtt_imp.mk
-    
-    
-    #with mqtt demo
-    include $(SDK_DIR)/demos/oc_mqtt_demo/oc_mqtt_demo.mk
+    ifeq ($(CONFIG_OC_MQTT_TYPE),"soft")
+		include $(iot_link_root)/oc/oc_mqtt/atiny_mqtt/atiny_mqtt.mk
+    else ifeq ($(CONFIG_OC_MQTT_TYPE),"ec20")
+    	include $(iot_link_root)/oc/oc_mqtt/ec20_oc/ec20_oc.mk
+    endif 
 
 endif
