@@ -40,6 +40,7 @@
     .globl  LOS_IntRestore
     .globl  LOS_StartToRun
     .globl  osTaskSchedule
+    .globl  TaskSwitch
     .globl  Software_IRQHandler
     .globl  LOS_IntNumGet
     .globl  osDisableIRQ

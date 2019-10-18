@@ -38,12 +38,16 @@
  */
 #include  <osal_imp.h>
 
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <time.h>
 #include <pthread.h>
 #include <semaphore.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <mqueue.h>
 
 typedef void *(*pthread_entry) (void *);
 
@@ -226,13 +230,92 @@ static bool_t  __semp_del(osal_semp_t semp)
     }
 }
 
+
+static char queuename[10] = "/queue";
+static bool_t __queue_create(osal_queue_t *queue,int len,int msgsize)
+{
+    struct mq_attr attr;
+    static unsigned int queueid = 0;
+    (void)len;
+    (void)msgsize;
+
+    attr.mq_flags = 0;
+    attr.mq_maxmsg = 8;
+    attr.mq_msgsize = 8;
+    attr.mq_curmsgs = 0;
+
+    snprintf(queuename, sizeof(queuename)/sizeof(char), "/queue%d", queueid);
+    *queue = (osal_queue_t)mq_open( queuename, O_RDWR | O_CREAT, 0644, &attr);
+    queueid++;
+    if((mqd_t)*queue == -1)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+static bool_t __queue_send(osal_queue_t queue, void *pbuf, unsigned int bufsize, unsigned int timeout)
+{
+    struct timespec ts;
+
+    clock_gettime(CLOCK_REALTIME, &ts);
+
+    ts.tv_sec += (timeout / 1000);
+    ts.tv_nsec += ((timeout % 1000) * 1000);
+
+    if(mq_timedsend((mqd_t)queue, pbuf, bufsize, 0, &ts))
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+static bool_t __queue_recv(osal_queue_t queue, void *pbuf, unsigned int bufsize, unsigned int timeout)
+{
+    struct timespec ts;
+
+    clock_gettime(CLOCK_REALTIME, &ts);
+
+    ts.tv_sec += (timeout / 1000);
+    ts.tv_nsec += ((timeout % 1000) * 1000);
+
+    if(-1 == mq_timedreceive((mqd_t)queue, pbuf, bufsize, NULL, &ts))
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+static bool_t __queue_del(osal_queue_t queue)
+{
+    if(mq_close((mqd_t)queue))
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+
 static void *__mem_malloc(int size)
 {
     void *ret = NULL;
 
     if(size > 0)
     {
-         ret = malloc(size);
+        ret = malloc(size);
+        memset(ret, 0, size);
     }
 
     return ret;
@@ -251,7 +334,7 @@ static unsigned long long __get_sys_time()
 
     gettimeofday(&tv, NULL);
 
-    return (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
+    return ((unsigned long long)tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 }
 
 
@@ -271,6 +354,11 @@ static const tag_os_ops s_linux_ops =
     .semp_pend = __semp_pend,
     .semp_post = __semp_post,
     .semp_del = __semp_del,
+
+    .queue_create = __queue_create,
+    .queue_send = __queue_send,
+    .queue_recv = __queue_recv,
+    .queue_del = __queue_del,
 
     .malloc = __mem_malloc,
     .free = __mem_free,

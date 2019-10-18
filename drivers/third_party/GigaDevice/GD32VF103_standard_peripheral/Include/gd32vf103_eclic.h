@@ -47,6 +47,10 @@ OF SUCH DAMAGE.
 #define __SEV           eclic_send_event
 
 /* function declarations */
+/* enable the global interrupt */
+void eclic_global_interrupt_enable(void);
+/* disable the global interrupt */
+void eclic_global_interrupt_disable(void);
 /* set the priority group */
 void eclic_priority_group_set(uint32_t prigroup);
 /* enable the interrupt request */

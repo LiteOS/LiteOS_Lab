@@ -78,7 +78,7 @@ void LOS_BoadExampleEntry(void)
 
     (VOID)memset((void *)(&stTaskInitParam), 0, sizeof(TSK_INIT_PARAM_S));
     stTaskInitParam.pfnTaskEntry = (TSK_ENTRY_FUNC)TEST1;
-    stTaskInitParam.uwStackSize = 0x130;
+    stTaskInitParam.uwStackSize = 0x500;
     stTaskInitParam.pcName = "Test1";
     stTaskInitParam.usTaskPrio = 2;
     uwRet = LOS_TaskCreate(&g_TaskID1, &stTaskInitParam);
@@ -89,7 +89,7 @@ void LOS_BoadExampleEntry(void)
 
     (VOID)memset((void *)(&stTaskInitParam), 0, sizeof(TSK_INIT_PARAM_S));
     stTaskInitParam.pfnTaskEntry = (TSK_ENTRY_FUNC)TEST2;
-    stTaskInitParam.uwStackSize = 0x130;
+    stTaskInitParam.uwStackSize = 0x500;
     stTaskInitParam.pcName = "Test2";
     stTaskInitParam.usTaskPrio = 2;
     uwRet = LOS_TaskCreate(&g_TaskID2, &stTaskInitParam);
@@ -100,7 +100,7 @@ void LOS_BoadExampleEntry(void)
 
     (VOID)memset((void *)(&stTaskInitParam), 0, sizeof(TSK_INIT_PARAM_S));
     stTaskInitParam.pfnTaskEntry = (TSK_ENTRY_FUNC)TEST3;
-    stTaskInitParam.uwStackSize = 0x130;
+    stTaskInitParam.uwStackSize = 0x500;
     stTaskInitParam.pcName = "Test3";
     stTaskInitParam.usTaskPrio = 2;
     uwRet = LOS_TaskCreate(&g_TaskID3, &stTaskInitParam);

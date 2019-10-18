@@ -166,5 +166,3 @@ CONFIG_DEMO_TYPE   := "oc_lwm2m_demo"
 
 #########################STANDARD DEMO END######################################
 include $(TOP_DIR)/iot_link/iot.mk
-
-

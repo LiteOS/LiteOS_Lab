@@ -16,7 +16,7 @@ TARGET = Huawei_LiteOS
 # debug build?
 DEBUG = 1
 # optimization
-OPT = -O0 -g
+OPT = -O0 -g -rdynamic
 
 
 #######################################
@@ -99,7 +99,7 @@ CFLAGS += -Wno-missing-braces
 #######################################
 
 # libraries
-LIBS = -lc -lm -lpthread
+LIBS = -lc -lm -lpthread -lrt
 LDFLAGS = $(LIBS)
 
 # default action: build all

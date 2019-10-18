@@ -179,7 +179,7 @@ static int oc_mqtt_report_entry(void *args)
     {
         config.boot_mode = en_oc_boot_strap_mode_client_initialize;
         config.lifetime = DEFAULT_LIFETIME;
-        config.server = BS_SERVER_IPV4;
+        config.server = BS_SERVER_DOMAIN;
         config.port = BS_SERVER_PORT;
         config.msgdealer = app_msg_deal;
         config.code_mode = en_oc_mqtt_code_mode_json;

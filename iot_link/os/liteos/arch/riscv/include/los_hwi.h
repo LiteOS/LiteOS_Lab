@@ -266,7 +266,7 @@ extern VOID Reset_Handler(VOID);
  * Set interrupt vector table.
  */
 #define osSetVector(uwNum, pfnVector)       \
-    m_pstHwiSlaveForm[uwNum - OS_RV_SYS_VECTOR_CNT].pfnHandler = pfnVector;
+    m_pstHwiSlaveForm[uwNum].pfnHandler = pfnVector;
 
 
 /**

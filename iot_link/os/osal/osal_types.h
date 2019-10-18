@@ -23,6 +23,10 @@ typedef void*  osal_mutex_t;
 typedef void*  osal_semp_t;
 #define cn_semp_invalid   ((osal_semp_t)0xFFFFFFFF)
 
+typedef void* osal_queue_t;
+#define cn_queue_invalid   ((osal_queue_t)0xFFFFFFFF)
+
+
 #define cn_osal_timeout_forever  0xFFFFFFFF
 
 typedef struct

@@ -47,6 +47,8 @@ extern void LOS_TickHandler(void);
 extern void SysTick_Handler(void);
 /*lint -restore*/
 UINT32  g_vuwIntCount = 0;
+UINT32 g_int_cnt = 0;
+
 #ifdef LOS_LOCATION_VECTOR_IAR
 #pragma  location = ".vector"
 #endif
@@ -99,12 +101,12 @@ LITE_OS_SEC_TEXT VOID  osInterrupt(VOID)
 
     uwHwiIndex = osIntNumGet();
 
-    if (m_pstHwiSlaveForm[uwHwiIndex - OS_RV_SYS_VECTOR_CNT].pfnHandler != NULL)
+    if (m_pstHwiSlaveForm[uwHwiIndex].pfnHandler != NULL)
     {
 #if (OS_HWI_WITH_ARG == YES)
-        m_pstHwiSlaveForm[uwHwiIndex- OS_RV_SYS_VECTOR_CNT].pfnHandler(m_pstHwiSlaveForm[uwHwiIndex- OS_RV_SYS_VECTOR_CNT].pParm);
+        m_pstHwiSlaveForm[uwHwiIndex].pfnHandler(m_pstHwiSlaveForm[uwHwiIndex- OS_RV_SYS_VECTOR_CNT].pParm);
 #else
-        m_pstHwiSlaveForm[uwHwiIndex- OS_RV_SYS_VECTOR_CNT].pfnHandler();
+        m_pstHwiSlaveForm[uwHwiIndex].pfnHandler();
 #endif
     }
 	else
@@ -128,9 +130,9 @@ LITE_OS_SEC_TEXT VOID  osInterrupt(VOID)
 LITE_OS_SEC_TEXT_INIT VOID osHwiInit()
 {
     UINT32 uwIndex;
-    for(uwIndex = OS_RV_SYS_VECTOR_CNT; uwIndex < OS_RV_VECTOR_CNT; uwIndex++)
+    for(uwIndex = 0; uwIndex < OS_RV_VECTOR_CNT; uwIndex++)
     {
-        m_pstHwiSlaveForm[uwIndex - OS_RV_SYS_VECTOR_CNT].pfnHandler = osHwiDefaultHandler;
+        m_pstHwiSlaveForm[uwIndex].pfnHandler = osHwiDefaultHandler;
     }
 }
 
@@ -171,7 +173,7 @@ LITE_OS_SEC_TEXT_INIT UINT32 LOS_HwiCreate( HWI_HANDLE_T  uwHwiNum,
     osSetVector(uwHwiNum, pfnHandler);
 
 #if (OS_HWI_WITH_ARG == YES)
-     m_pstHwiSlaveForm[uwHwiNum - OS_RV_SYS_VECTOR_CNT].pParm = (VOID*)uwArg;
+     m_pstHwiSlaveForm[uwHwiNum].pParm = (VOID*)uwArg;
 #endif
 
     eclic_irq_enable(uwHwiNum, 1, usHwiPrio);
