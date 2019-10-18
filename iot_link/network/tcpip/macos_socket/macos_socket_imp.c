@@ -43,6 +43,7 @@
 
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/select.h>
 #include <netdb.h>
 
 #include <sal_imp.h>   ///< register the macos socket to sal
@@ -179,6 +180,8 @@ static const tag_tcpip_ops s_tcpip_socket_ops =
    .getpeername =(fn_sal_getpeername)getpeername,
    .getsockname = (fn_sal_getsockname)getsockname,
    .gethostbyname = (fn_sal_gethostbyname)gethostbyname,
+   .select = (fn_sal_select)select,
+
 };
 
 static const tag_tcpip_domain s_tcpip_socket =

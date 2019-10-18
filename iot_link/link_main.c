@@ -39,6 +39,10 @@
 //RTOS KERNEL
 #include <osal.h>
 
+#if CONFIG_MACOS_ENABLE
+    #include <sys/select.h>
+#endif
+
 
 #ifdef WITH_DTLS
 #include <dtls_interface.h>
