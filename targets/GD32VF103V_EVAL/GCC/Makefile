@@ -129,7 +129,7 @@ RISCV_LDFLAGS += -nostartfiles -Xlinker --gc-sections -Wl,-Map,"GD32V103V_EVAL.m
 ASFLAGS = -march=rv32imac -mabi=ilp32 -mcmodel=medlow -ffunction-sections -fdata-sections $(OPT) -O0 $(AS_INCLUDES) -x assembler-with-cpp
 
 CFLAGS = $(RISCV_CFLAGS) $(C_DEFS)
-LDFLAGS = $(RISCV_LDFLAGS) $(C_DEFS)
+LDFLAGS = $(RISCV_LDFLAGS)
 
 ifeq ($(DEBUG), 1)
 CFLAGS += -g

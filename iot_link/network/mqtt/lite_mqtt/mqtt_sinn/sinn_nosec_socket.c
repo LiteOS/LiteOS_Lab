@@ -81,6 +81,8 @@ static void __sinn_sock_discon(sinn_connection_t *nc)
     rc = sal_closesocket(nc->sock_fd);
     if(rc < 0)
         printf("sock %d rc %d \r\n",  nc->sock_fd, rc);
+
+    nc->sock_fd = -1;
 }
 
 

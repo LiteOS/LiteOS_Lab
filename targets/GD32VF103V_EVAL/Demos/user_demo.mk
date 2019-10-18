@@ -5,7 +5,7 @@
 #if you have defined multiple demos by yourself, modify this file to compile the chosen demo.
 
 #example for hello world	 
-ifeq ($(CONFIG_USER_DEMO), "hello_world_demo")	
+ifeq ($(CONFIG_DEMO_TYPE), "hello_world_demo")	
 	user_demo_src  = ${wildcard $(TOP_DIR)/targets/GD32VF103V_EVAL/Demos/hello_world_demo/*.c}
 	user_demo_inc = -I $(TOP_DIR)/targets/GD32VF103V_EVAL/Demos/hello_world_demo
 	user_demo_defs = -D CONFIG_HELLO_WORLD_ENABLE=1
@@ -13,7 +13,7 @@ ifeq ($(CONFIG_USER_DEMO), "hello_world_demo")
 endif
 
 #example for oceanlink
-ifeq ($(CONFIG_USER_DEMO), "oc_oceanlink_demo")	
+ifeq ($(CONFIG_DEMO_TYPE), "oc_oceanlink_demo")	
 	user_demo_src  = ${wildcard $(TOP_DIR)/targets/GD32VF103V_EVAL/Demos/oc_oceanlink_demo/*.c}
 	user_demo_src  += $(TOP_DIR)/targets/GD32VF103V_EVAL/Src/gd32v103v_lcd_eval.c \
                           $(TOP_DIR)/targets/GD32VF103V_EVAL/Src/picture.c \
@@ -27,7 +27,7 @@ ifeq ($(CONFIG_USER_DEMO), "oc_oceanlink_demo")
 endif
 
 #example for oc develop
-ifeq ($(CONFIG_USER_DEMO), "oc_develop_demo")	
+ifeq ($(CONFIG_DEMO_TYPE), "oc_develop_demo")	
 	user_demo_src  = ${wildcard $(TOP_DIR)/targets/GD32VF103V_EVAL/Demos/oc_develop_demo/*.c}
 	user_demo_src  += $(TOP_DIR)/targets/GD32VF103V_EVAL/Src/gd32v103v_lcd_eval.c \
                           $(TOP_DIR)/targets/GD32VF103V_EVAL/Src/picture.c \

@@ -100,7 +100,7 @@ CONFIG_DTLS_TYPE     := "mbedtls_cert"
 #the implement of mqtt. 
 #CONFIG_MQTT_TYPE could be "paho_mqtt" "none"
 CONFIG_MQTT_ENABLE   := y
-CONFIG_MQTT_TYPE     := "paho_mqtt"
+CONFIG_MQTT_TYPE     := "lite_mqtt"
 
 #CONFIG_LWM2M_ENABLE, we build a lwm2m abstraction, which shield the difference of 
 #the implement of lwm2m. 

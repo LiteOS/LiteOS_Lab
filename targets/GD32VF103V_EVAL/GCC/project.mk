@@ -82,5 +82,4 @@ ASM_SOURCES_S += $(SDK_DIR)/targets/GD32VF103V_EVAL/GCC/start.S \
 C_DEFS += -D NDEBUG -DUSE_STDPERIPH_DRIVER -DGD32VF103V_EVAL
 
 
-include $(SDK_DIR)/iot_link/iot.mk
 include $(SDK_DIR)/targets/GD32VF103V_EVAL/Demos/user_demo.mk                
