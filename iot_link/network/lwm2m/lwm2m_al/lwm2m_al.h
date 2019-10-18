@@ -33,31 +33,12 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-07-23 10:00    yuhengP    The first version  
+ *  2019-10-17 19:50  zhangqianfu  The first version
  *
  */
-#include <stdint.h>
-#include <stddef.h>
-#include <string.h>
-
-#include <osal.h>
-
-static int app_hello_world_entry()
-{
-    while (1)
-    {
-        printf("Hello World! This is LiteOS!\r\n");
-        osal_task_sleep(4*1000);
-    }
-}
-
-int standard_app_demo_main()
-{
-    osal_task_create("helloworld",app_hello_world_entry,NULL,0x400,NULL,2);
-    return 0;
-}
+#ifndef LITEOS_LAB_IOT_LINK_NETWORK_LWM2M_LWM2M_AL_LWM2M_AL_H_
+#define LITEOS_LAB_IOT_LINK_NETWORK_LWM2M_LWM2M_AL_LWM2M_AL_H_
 
 
 
-
-
+#endif /* LITEOS_LAB_IOT_LINK_NETWORK_LWM2M_LWM2M_AL_LWM2M_AL_H_ */
