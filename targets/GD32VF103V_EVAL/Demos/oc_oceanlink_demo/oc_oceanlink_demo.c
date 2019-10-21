@@ -313,7 +313,7 @@ static int oc_mqtt_cmd_entry( void *args)
                         //Do the re-bootstrap
                         osal_task_kill(s_report_handle);
                         oc_mqtt_deconfig(s_mqtt_handle);
-                        oc_oceanlink_demo();
+                        standard_app_demo_main();
                         osal_task_exit();
                     }
                 }
@@ -367,7 +367,7 @@ static int oc_mqtt_cmd_entry( void *args)
 }
 
 
-int oc_oceanlink_demo()
+int standard_app_demo_main()
 {
     printf("bs demo main\r\n");
     osal_semp_create(&s_oc_rcv_sync,1,0);

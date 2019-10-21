@@ -67,14 +67,18 @@ void sinn_nc_can_write_cb(sinn_connection_t *nc)
     const unsigned char *buf = nc->send_buf.data;
     size_t len = nc->send_buf.len;
 
+    if(nc->sock_fd == -1)
+        return;
+
     nc->flags &= ~SINN_FG_CAN_WR;
     if (len > 0)
         rc = nc->mgr->interface->ifuncs->if_send(nc, buf, len);
 
     if (rc < 0)
     {
-        printf("sinn write error\r\n");
-        nc->flags |= SINN_FG_RECONNECT;
+        perror("sinn write error\r\n");
+        nc->flags &= ~SINN_FG_CAN_WR;
+        return;
     }
     else if (rc > 0)
     {
@@ -97,14 +101,17 @@ void sinn_nc_can_read_cb(sinn_connection_t *nc)
     size_t len = nc->recv_buf.size - nc->recv_buf.len;
     nc->flags &= ~SINN_FG_CAN_RD;
 
+    if(nc->sock_fd == -1)
+        return;
+
     if (len > 0)
         rc = nc->mgr->interface->ifuncs->if_recv(nc, buf, len);
 
     if (rc < 0)
     {
-        printf("read error\r\n");
-        perror("~~~");
-        nc->flags |= SINN_FG_RECONNECT;
+        perror("read error");
+        nc->flags &= ~SINN_FG_CAN_RD;
+        return;
     }
     else if (rc == 0)
     {
@@ -126,7 +133,7 @@ int sinn_nc_poll_cb(sinn_connection_t *nc)
     if (nc->flags & SINN_FG_RECONNECT)
     {
         printf("reconnect ~~~~~~\r\n");
-        nc->flags &= ~SINN_FG_CONNECTING;
+        nc->flags &= ~SINN_FG_RECONNECT;
         sinn_dispatch_event(nc, NULL, NULL, SINN_EV_RECONN, &now);
         return 1;
     }

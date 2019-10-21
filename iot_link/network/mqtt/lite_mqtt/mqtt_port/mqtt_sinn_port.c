@@ -283,10 +283,10 @@ static int __disconnect(void *handle)
 
     //mqtt disconnect
     sinn_mqtt_disconnect(cb->mgr->nc);
-    //net disconnect
-    cb->mgr->interface->ifuncs->if_discon(cb->mgr->nc);
     //kill the thread
     osal_task_kill(cb->task);
+    //net disconnect
+    cb->mgr->interface->ifuncs->if_discon(cb->mgr->nc);
     //deinit the mqtt
     //free the memory
     sinn_destory(cb->mgr->nc);
