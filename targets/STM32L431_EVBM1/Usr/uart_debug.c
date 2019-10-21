@@ -50,8 +50,8 @@ static int                s_uart_init = 0;
 ///<use the uart1 as the debug port
 UART_HandleTypeDef uart_debug;
 static tag_ring_buffer_t  s_uartdebug_rcv_ring;
-static uint8_t     s_uartdebug_rcv_ringmem[CN_RCV_RING_BUFLEN];
-static UINT32      s_uartdebug_rcv_sync;
+static uint8_t            s_uartdebug_rcv_ringmem[CN_RCV_RING_BUFLEN];
+static UINT32             s_uartdebug_rcv_sync;
 static void uart_debug_irq(void)
 {
     unsigned char value;

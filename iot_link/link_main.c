@@ -85,9 +85,6 @@ int link_main(void *args)
 
 #if CONFIG_SHELL_ENABLE
     #include <shell.h>
-    ///< install the shell for the link
-    extern void shell_uart_init(int baud);
-    shell_uart_init(115200);
     shell_init();
 #endif
 
