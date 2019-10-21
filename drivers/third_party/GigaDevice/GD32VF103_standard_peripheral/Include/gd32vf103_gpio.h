@@ -217,7 +217,6 @@ OF SUCH DAMAGE.
 #define AFIO_EC_EOE                BIT(7)                    /*!< event output enable */
 
 /* AFIO_PCF0 */
-/* memory map and bit definitions for GD32F10X_CL devices */
 #define AFIO_PCF0_SPI0_REMAP             BIT(0)              /*!< SPI0 remapping */
 #define AFIO_PCF0_I2C0_REMAP             BIT(1)              /*!< I2C0 remapping */
 #define AFIO_PCF0_USART0_REMAP           BIT(2)              /*!< USART0 remapping */
@@ -372,9 +371,8 @@ typedef FlagStatus bit_status;
 #define GPIO_PD01_REMAP                  ((uint32_t)0x00008000U)   /*!< PD01 remapping */
 #define GPIO_TIMER4CH3_IREMAP            ((uint32_t)0x00200001U)   /*!< TIMER4 channel3 internal remapping */
 #define GPIO_CAN1_REMAP                  ((uint32_t)0x00200040U)   /*!< CAN1 remapping */
-#define GPIO_SWJ_NONJTRST_REMAP          ((uint32_t)0x00300100U)   /*!< full SWJ(JTAG-DP + SW-DP),but without NJTRST */
-#define GPIO_SWJ_SWDPENABLE_REMAP        ((uint32_t)0x00300200U)   /*!< JTAG-DP disabled */
-#define GPIO_SWJ_DISABLE_REMAP           ((uint32_t)0x00300400U)   /*!< JTAG-DP disabled */
+#define GPIO_SWJ_NONJTRST_REMAP          ((uint32_t)0x00300100U)   /*!< JTAG-DP,but without NJTRST */
+#define GPIO_SWJ_DISABLE_REMAP           ((uint32_t)0x00300200U)   /*!< JTAG-DP disabled */
 #define GPIO_SPI2_REMAP                  ((uint32_t)0x00201100U)   /*!< SPI2 remapping */
 #define GPIO_TIMER1ITI1_REMAP            ((uint32_t)0x00202000U)   /*!< TIMER1 internal trigger 1 remapping */
 #define GPIO_EXMC_NADV_REMAP             ((uint32_t)0x80000400U)   /*!< EXMC_NADV connect/disconnect */

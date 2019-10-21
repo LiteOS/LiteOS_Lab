@@ -32,6 +32,12 @@ typedef struct
     bool_t (*semp_post)(osal_semp_t semp);
     bool_t (*semp_del)(osal_semp_t semp);
 
+    ///< queue function needed
+    bool_t (*queue_create)(osal_queue_t *queue,int len,int msgsize);
+    bool_t (*queue_send)(osal_queue_t queue, void *pbuf, unsigned int bufsize, unsigned int timeout);
+    bool_t (*queue_recv)(osal_queue_t queue, void *pbuf, unsigned int bufsize, unsigned int timeout);
+    bool_t (*queue_del)(osal_queue_t queue);
+
     ///< memory function needed
     void *(*malloc)(int size);
     void  (*free)(void *addr);

@@ -317,7 +317,7 @@ static int oc_mqtt_report_entry(void *args)
     return 0;
 }
 
-int oc_develop_demo()
+int standard_app_demo_main()
 {
     osal_semp_create(&s_rcv_sync,1,0);
 

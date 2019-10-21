@@ -61,7 +61,7 @@ static int __linux_setsockopt(int fd, int level, int option, const void *option_
         {
             option = SO_RCVTIMEO;
 
-            time_delay = option_value;
+            time_delay = (struct timeval *)option_value;
             if((time_delay->tv_sec == 0)&&(time_delay->tv_usec == 0))
             {
                 printf("%s:log:::::::timeout should be mapped:::::modified it 1000 us\n\r",__FUNCTION__);
@@ -76,22 +76,23 @@ static int __linux_setsockopt(int fd, int level, int option, const void *option_
 
 static const tag_tcpip_ops s_tcpip_socket_ops =
 {
-   .socket = (fn_sal_socket)socket,
-   .bind = (fn_sal_bind)bind,
-   .listen = (fn_sal_listen)listen,
-   .connect = (fn_sal_connect)connect,
-   .accept = (fn_sal_accept)accept,
-   .send = (fn_sal_send)send,
-   .sendto = (fn_sal_sendto)sendto,
-   .recv = (fn_sal_recv)recv,
-   .recvfrom = (fn_sal_recvfrom)recvfrom,
-   .setsockopt = (fn_sal_setsockopt)__linux_setsockopt,
-   .getsockopt = (fn_sal_getsockopt)getsockopt,
-   .shutdown =(fn_sal_shutdown)shutdown,
-   .closesocket =(fn_sal_closesocket)close,
-   .getpeername =(fn_sal_getpeername)getpeername,
-   .getsockname = (fn_sal_getsockname)getsockname,
-   .gethostbyname = (fn_sal_gethostbyname)gethostbyname,
+    .socket = (fn_sal_socket)socket,
+    .bind = (fn_sal_bind)bind,
+    .listen = (fn_sal_listen)listen,
+    .connect = (fn_sal_connect)connect,
+    .accept = (fn_sal_accept)accept,
+    .send = (fn_sal_send)send,
+    .sendto = (fn_sal_sendto)sendto,
+    .recv = (fn_sal_recv)recv,
+    .recvfrom = (fn_sal_recvfrom)recvfrom,
+    .setsockopt = (fn_sal_setsockopt)__linux_setsockopt,
+    .getsockopt = (fn_sal_getsockopt)getsockopt,
+    .shutdown =(fn_sal_shutdown)shutdown,
+    .closesocket =(fn_sal_closesocket)close,
+    .getpeername =(fn_sal_getpeername)getpeername,
+    .getsockname = (fn_sal_getsockname)getsockname,
+    .gethostbyname = (fn_sal_gethostbyname)gethostbyname,
+    .select = (fn_sal_select)select,
 };
 
 static const tag_tcpip_domain s_tcpip_socket =

@@ -8,7 +8,7 @@ HAL_DRIVER_SRC =  \
         $(SDK_DIR)/drivers/third_party/GigaDevice/GD32VF103_standard_peripheral/Source/gd32vf103_usart.c  \
         $(SDK_DIR)/drivers/third_party/GigaDevice/GD32VF103_standard_peripheral/Source/gd32vf103_rcu.c    \
         $(SDK_DIR)/drivers/third_party/GigaDevice/GD32VF103_standard_peripheral/Source/gd32vf103_spi.c    \
-        $(SDK_DIR)/drivers/third_party/GigaDevice/n22/drivers/n22_func.c
+        $(SDK_DIR)/drivers/third_party/GigaDevice/RISCV/drivers/n200_func.c
         C_SOURCES += $(HAL_DRIVER_SRC)
 
 #        $(SDK_DIR)/drivers/third_party/GigaDevice/GD32VF103_standard_peripheral/Source/gd32vf103_i2c.c    \
@@ -32,8 +32,8 @@ TARGET_LIB_SRC = \
         $(SDK_DIR)/targets/GD32VF103V_EVAL/Lib/fstat.c      \
         $(SDK_DIR)/targets/GD32VF103V_EVAL/Lib/isatty.c     \
         $(SDK_DIR)/targets/GD32VF103V_EVAL/Lib/lseek.c      \
-        $(SDK_DIR)/targets/GD32VF103V_EVAL/Lib/read.c       \
         $(SDK_DIR)/targets/GD32VF103V_EVAL/Lib/sbrk.c       \
+        $(SDK_DIR)/targets/GD32VF103V_EVAL/Lib/read.c       \
         $(SDK_DIR)/targets/GD32VF103V_EVAL/Lib/write.c      \
         $(SDK_DIR)/targets/GD32VF103V_EVAL/Lib/write_hex.c
         C_SOURCES += $(TARGET_LIB_SRC)
@@ -58,7 +58,7 @@ OS_CONFIG_INC = \
 HAL_DRIVER_INC = \
         -I $(SDK_DIR)/drivers/third_party/GigaDevice/GD32VF103_standard_peripheral \
         -I $(SDK_DIR)/drivers/third_party/GigaDevice/GD32VF103_standard_peripheral/Include \
-        -I $(SDK_DIR)/drivers/third_party/GigaDevice/n22/drivers
+        -I $(SDK_DIR)/drivers/third_party/GigaDevice/RISCV/drivers
         C_INCLUDES += $(HAL_DRIVER_INC)
 
 ifeq ($(CONFIG_AT_ENABLE),y)
@@ -68,7 +68,7 @@ endif
 
         
 RISCV_ASM_INC = \
-        -I $(SDK_DIR)/drivers/third_party/GigaDevice/n22/drivers
+        -I $(SDK_DIR)/drivers/third_party/GigaDevice/RISCV/drivers
         AS_INCLUDES += $(RISCV_ASM_INC)
 
 USER_INC = \
@@ -79,8 +79,7 @@ ASM_SOURCES_S += $(SDK_DIR)/targets/GD32VF103V_EVAL/GCC/start.S \
                  $(SDK_DIR)/targets/GD32VF103V_EVAL/GCC/entry.S
         
 # C defines
-C_DEFS += -D NDEBUG -DUSE_STDPERIPH_DRIVER -DGD32V103V_EVAL
+C_DEFS += -D NDEBUG -DUSE_STDPERIPH_DRIVER -DGD32VF103V_EVAL
 
 
-include $(SDK_DIR)/iot_link/iot.mk
 include $(SDK_DIR)/targets/GD32VF103V_EVAL/Demos/user_demo.mk                

@@ -2,7 +2,7 @@
     \file  gd32vf103_libopt.h
     \brief library optional for gd32vf103
 
-    \version 2019-6-5, V1.0.0, demo for GD32VF103
+    \version 2019-6-5, V1.0.0, firmware for GD32VF103
 */
 
 /*
@@ -56,6 +56,6 @@ OF SUCH DAMAGE.
 #include "gd32vf103_timer.h"
 #include "gd32vf103_usart.h"
 #include "gd32vf103_wwdgt.h"
-#include "n22_func.h"
+#include "n200_func.h"
 
 #endif /* GD32VF103_LIBOPT_H */

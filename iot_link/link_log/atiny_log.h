@@ -70,6 +70,14 @@ typedef enum
 void atiny_set_log_level(atiny_log_e level);
 
 /**
+ * @brief: you could use this as the main printf for your own log
+ *
+ *       :the input parameters is just as the printf does, and this function should be deserted
+ *       :this function should not use as advised
+ * */
+int atiny_printf(const char *format, ...);
+
+/**
  *@ingroup agenttiny
  *@brief get log level.
  *
@@ -93,7 +101,7 @@ const char* atiny_get_log_level_name(atiny_log_e log_level);
     { \
         if ((level) >= atiny_get_log_level()) \
         { \
-            (void)osal_printf("[%s][%u][%s:%d] " fmt "\r\n", \
+            (void)atiny_printf("[%s][%u][%s:%d] " fmt "\r\n", \
             atiny_get_log_level_name((level)), (uint32_t)osal_sys_time(), __FUNCTION__, __LINE__, ##__VA_ARGS__); \
         } \
     } while (0)

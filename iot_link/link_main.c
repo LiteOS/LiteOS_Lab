@@ -39,6 +39,10 @@
 //RTOS KERNEL
 #include <osal.h>
 
+#if CONFIG_MACOS_ENABLE
+    #include <sys/select.h>
+#endif
+
 
 #ifdef WITH_DTLS
 #include <dtls_interface.h>
@@ -67,18 +71,17 @@ int link_main(void *args)
     #include <signal.h>
     sigaction(SIGPIPE, &(struct sigaction){SIG_IGN}, NULL);
     osal_install_linux();
-#elif  CONFIG_MACOS_ENABLE
+#elif CONFIG_MACOS_ENABLE
     #include <macos_imp.h>
     osal_install_macos();
 #else
-    #error("no os supplied yet");
+    #error("you should add your own os here");
 #endif
 
 #if CONFIG_STIMER_ENABLE
     #include <stimer.h>
     stimer_init();
 #endif
-
 
 #if CONFIG_SHELL_ENABLE
     #include <shell.h>
@@ -88,12 +91,16 @@ int link_main(void *args)
     shell_init();
 #endif
 
+
+///< install the driver framework
 #if CONFIG_DRIVER_ENABLE
     #include <driver.h>
     ///< install the driver framework for the link
     los_driv_init();
 #endif
 
+
+///< install the at framework
 #if CONFIG_AT_ENABLE
     #include <at.h>
     #include <iot_link_config.h>
@@ -103,7 +110,7 @@ int link_main(void *args)
     at_init(CONFIG_AT_DEVICENAME);
 #endif
 
-    ///< install the cJSON, for the oc mqtt agent need the cJSON
+///< install the cJSON, for the oc mqtt agent need the cJSON
 #if CONFIG_JSON_ENABLE
     #include <cJSON.h>
 
@@ -112,7 +119,10 @@ int link_main(void *args)
     hook.malloc_fn = osal_malloc;
     cJSON_InitHooks(&hook);
 #endif
-    ///< install the tcpip stack and net driver for the link
+
+
+//////////////////////////  TCPIP PROTOCOL  /////////////////////////////////////
+
 #if CONFIG_TCPIP_ENABLE
     #include <sal.h>
     tcpipstack_init(10);
@@ -136,112 +146,89 @@ int link_main(void *args)
 
 #endif
 
+//////////////////////////  DTLS PROTOCOL  /////////////////////////////////////
 #ifdef WITH_DTLS
-
     dtls_init();
 #endif
 
 //////////////////////////  MQTT PROTOCOL  /////////////////////////////////////
 #if CONFIG_MQTT_ENABLE
     #include <mqtt_al.h>
-    #include <paho_mqtt_port.h>
-
     mqtt_init();
+#if CONFIG_MQTT_PAHO_ENABLE
+    #include <paho_mqtt_port.h>
     mqtt_install_pahomqtt();
+#elif CONFIG_MQTT_SINN_ENABLE
+    #include <mqtt_sinn_port.h>
+    mqtt_install_sinnmqtt();
 #endif
 
-//////////////////////////  OC MQTT && DEMOS  //////////////////////////////////
+#endif
+
+
+    //////////////////////////  COAP PROTOCOL  /////////////////////////////////
+    #if CONFIG_COAP_ENABLE
+        #include <litecoap_port.h>
+        coap_install_litecoap();
+    #endif
+
+//////////////////////////  OC MQTT  //////////////////////////////////
 
 #if CONFIG_OC_MQTT_ENABLE
     #include <oc_mqtt_al.h>
     oc_mqtt_init();
 
-#if CONFIG_ATINY_MQTT_ENABLE
-    #include <atiny_mqtt.h>
-    oc_mqtt_install_atiny_mqtt();
-#endif
+    #if CONFIG_ATINY_MQTT_ENABLE
+        #include <atiny_mqtt.h>
+        oc_mqtt_install_atiny_mqtt();
+    #endif
 
-#if CONFIG_OC_MQTT_EC20_ENABLE
-    #include <ec20_oc.h>
-	ec20_init();
-#endif
+    #if CONFIG_OC_MQTT_EC20_ENABLE
+        #include <ec20_oc.h>
+        ec20_init();
+    #endif
 
-#if CONFIG_OC_MQTT_DEMO_ENABLE
-    #include <oc_mqtt_demo.h>
-    oc_mqtt_demo_main();
 
 #endif
 
-#ifdef CONFIG_OC_DEVELOP_ENABLE
-    extern int oc_develop_demo();
-    oc_develop_demo();
-#endif
-
-
-#ifdef CONFIG_OC_OCEANLINK_ENABLE
-    extern int oc_oceanlink_demo();
-    oc_oceanlink_demo();
-#endif
-
-#endif
-
-////////////////////////////  OC LWM2M && DEMOS     /////////////////////////////
+////////////////////////////  OC LWM2M ///////     /////////////////////////////
 
 #if CONFIG_OC_LWM2M_ENABLE
     #include <oc_lwm2m_al.h>
     oc_lwm2m_init();
 
-#if CONFIG_OC_LWM2M_AGENT_ENABLE
-    #include <agent_lwm2m.h>
-    oc_lwm2m_install_agent();
-#endif
+    #if CONFIG_OC_LWM2M_AGENT_ENABLE
+        #include <agent_lwm2m.h>
+        oc_lwm2m_install_agent();
+    #endif
 
-#if CONFIG_OC_LWM2M_BOUDICA150_ENABLE
-    #include <boudica150_oc.h>
-    #define cn_app_bands    "5,8,20"
-    boudica150_init(NULL,NULL,cn_app_bands);
-#endif
-
-#if CONFIG_OC_LWM2M_DEMO_ENABLE
-    #include <oc_lwm2m_demo.h>
-    oc_lwm2m_demo_main();
-#endif
-
-#if CONFIG_OC_LWM2M_CLOUD_MAP_ENABLE
-    #include <oc_cloud_map_demo.h>
-    oc_cloud_map_main();
-#endif
+    #if CONFIG_OC_LWM2M_BOUDICA150_ENABLE
+        #include <boudica150_oc.h>
+        #define cn_app_bands    "5,8,20"
+        boudica150_init(NULL,NULL,cn_app_bands);
+    #endif
 
 #endif
 
-//////////////////////////  COAP PROTOCOL  /////////////////////////////////////
-#if CONFIG_COAP_ENABLE
-    #include <litecoap_port.h>
-    coap_install_litecoap();
-#endif
 
-////////////////////////////  OC COAP && DEMOS     /////////////////////////////
+
+////////////////////////////  OC COAP ////////     /////////////////////////////
 #if CONFIG_OC_COAP_ENABLE
 	#include <oc_coap_al.h>
     oc_coap_init();
 
-#if CONFIG_ATINY_COAP_ENABLE
-	#include <atiny_coap.h>
-    oc_coap_install_agent();
-#endif
+    #if CONFIG_ATINY_COAP_ENABLE
+        #include <atiny_coap.h>
+        oc_coap_install_agent();
+    #endif
 
-#if CONFIG_OC_COAP_DEMO_ENABLE
-	#include <oc_coap_demo.h>
-    oc_coap_demo_main();
-#endif
 #endif
 
 
 
-
-#if CONFIG_HELLO_WORLD_ENABLE
-    #include <helloworld.h>
-    hello_world_main();
+#if CONFIG_DEMOS_ENABLE
+    extern int standard_app_demo_main();
+    standard_app_demo_main();
 #endif
 
     return 0;

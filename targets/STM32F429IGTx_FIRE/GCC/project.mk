@@ -59,7 +59,5 @@ USER_INC = \
 # C defines
 C_DEFS +=  -D USE_HAL_DRIVER -D STM32F429xx -D NDEBUG
 
-include $(SDK_DIR)/iot_link/iot.mk
-include $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Demos/user_demo.mk
 
                  

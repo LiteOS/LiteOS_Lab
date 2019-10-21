@@ -209,7 +209,8 @@ typedef enum {
 typedef enum {
     EXTI_TRIG_RISING = 0,                                     /*!< EXTI rising edge trigger */
     EXTI_TRIG_FALLING,                                        /*!< EXTI falling edge trigger */
-    EXTI_TRIG_BOTH                                            /*!< EXTI rising edge and falling edge trigger */
+    EXTI_TRIG_BOTH,                                           /*!< EXTI rising edge and falling edge trigger */
+    EXTI_TRIG_NONE                                            /*!< without rising edge or falling edge trigger */
 } exti_trig_type_enum;
 
 /* function declarations */

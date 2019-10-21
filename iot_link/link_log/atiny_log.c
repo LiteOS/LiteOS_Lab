@@ -32,6 +32,8 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
+#include <string.h>
+
 #include <atiny_log.h>
 
 static atiny_log_e g_atiny_log_level = LOG_ERR;
@@ -44,6 +46,26 @@ static const char *g_log_names[] =
     "ERR",
     "FATAL",
 };
+
+#include <stdarg.h>
+#define LOG_BUF_SIZE  256  ///< you could modify it
+
+int atiny_printf(const char *format, ...)
+{
+    int ret;
+    char str_buf[LOG_BUF_SIZE] = {0};
+    va_list list;
+
+    memset(str_buf, 0, LOG_BUF_SIZE);
+    va_start(list, format);
+    ret = vsnprintf(str_buf, LOG_BUF_SIZE, format, list);
+    va_end(list);
+
+    printf("%s", str_buf);
+
+    return ret;
+
+}
 
 void atiny_set_log_level(atiny_log_e level)
 {

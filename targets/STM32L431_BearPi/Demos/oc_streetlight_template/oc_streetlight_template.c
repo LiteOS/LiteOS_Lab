@@ -331,7 +331,7 @@ static int app_collect_task_entry()
 
 #include <stimer.h>
 
-int oc_lwm2m_demo_main()
+int standard_app_demo_main()
 {
     osal_semp_create(&s_rcv_sync,1,0);
 

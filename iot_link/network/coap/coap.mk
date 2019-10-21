@@ -1,7 +1,7 @@
 ################################################################################
 # this is used for compile the coap
 ################################################################################
-ifneq ($(CONFIG_COAP_TYPE),"none")
+ifeq ($(CONFIG_COAP_ENABLE), y)
 
     COAP_MODULE_SOURCE  = ${wildcard $(iot_link_root)/network/coap/coap_al/*.c}
     C_SOURCES += $(COAP_MODULE_SOURCE)
@@ -11,7 +11,10 @@ ifneq ($(CONFIG_COAP_TYPE),"none")
     
     C_DEFS += -D CONFIG_COAP_ENABLE=1
     
-    #you should configure the coap implement method
-    include $(iot_link_root)/network/coap/coap_imp/coap_imp.mk
-
+    ifeq ($(CONFIG_COAP_TYPE), "lite_coap")
+    
+        include $(iot_link_root)/network/coap/lite_coap/lite_coap.mk    
+    endif
+    
+   
 endif

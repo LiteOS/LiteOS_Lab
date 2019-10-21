@@ -18,6 +18,7 @@ MEMORY
 SECTIONS
 {
   __stack_size = DEFINED(__stack_size) ? __stack_size : 2K;
+  __irq_stack_size = DEFINED(__irq_stack_size) ? __irq_stack_size : 2K;
   __heap_size = DEFINED(__heap_size) ? __heap_size : 0xc00;
 
   .init           :
@@ -173,9 +174,12 @@ SECTIONS
 
   .stack : ALIGN(0x10)
   {
-    PROVIDE( _heap_end = . ); 
-    . = __stack_size;  
+    . += __stack_size;  
     PROVIDE( _sp = . ); 
+    . = ALIGN(0x10);
+    PROVIDE( __irq_stack_bottom = . );
+    . += __irq_stack_size;
+    PROVIDE( __irq_stack_top = . );
   } >ram AT>ram 
   
   .heap : ALIGN(0x10)
