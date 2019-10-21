@@ -42,6 +42,7 @@
 #include <link_misc.h>
 
 #include <los_hwi.h>
+#include <los_sem.h>
 
 
 #define CN_RCV_RING_BUFLEN  128
@@ -55,7 +56,7 @@ static bool_t s_uart_init = false;
 UART_HandleTypeDef uart_debug;
 static tag_ring_buffer_t  s_uartdebug_rcv_ring;
 static unsigned char      s_uartdebug_rcv_ringmem[CN_RCV_RING_BUFLEN];
-static osal_semp_t        s_uartdebug_rcv_sync;
+static UINT32        s_uartdebug_rcv_sync;
 static void uart_debug_irq(void)
 {
     unsigned char value;
@@ -63,7 +64,7 @@ static void uart_debug_irq(void)
     {
         value = (uint8_t)(uart_debug.Instance->DR & 0x00FF);
         ring_write(&s_uartdebug_rcv_ring,&value,1);
-        osal_semp_post(s_uartdebug_rcv_sync);
+        LOS_SemPost(s_uartdebug_rcv_sync);
     }
     else if (__HAL_UART_GET_FLAG(&uart_debug,UART_FLAG_IDLE) != RESET)
     {
@@ -89,7 +90,8 @@ void shell_uart_init(int baud)
     __HAL_UART_ENABLE_IT(&uart_debug, UART_IT_RXNE);
     
     //create the receive buffer and receive sync
-    osal_semp_create(&s_uartdebug_rcv_sync,CN_RCV_RING_BUFLEN,0);
+    extern UINT32 osSemCreate (UINT16 usCount, UINT16 usMaxCount, UINT32 *puwSemHandle);
+    osSemCreate(0,CN_RCV_RING_BUFLEN,(UINT32 *)&s_uartdebug_rcv_sync);
     ring_init(&s_uartdebug_rcv_ring,s_uartdebug_rcv_ringmem,CN_RCV_RING_BUFLEN,0,0);
     s_uart_init = true;
 
@@ -108,7 +110,7 @@ int fgetc(FILE *f){
     unsigned char  value;
     do
     {
-        if(osal_semp_pend(s_uartdebug_rcv_sync,LOS_WAIT_FOREVER))
+        if(LOS_OK == LOS_SemPend(s_uartdebug_rcv_sync,LOS_WAIT_FOREVER))
         {
             ret = ring_read(&s_uartdebug_rcv_ring,&value,1);
         }
@@ -133,7 +135,7 @@ __attribute__((used)) int _read(int fd, char *ptr, int len)
     unsigned char  value;
     do
     {
-        if(osal_semp_pend(s_uartdebug_rcv_sync,cn_osal_timeout_forever))
+        if(LOS_OK == LOS_SemPend(s_uartdebug_rcv_sync,LOS_WAIT_FOREVER))
         {
             ret = ring_read(&s_uartdebug_rcv_ring,&value,1);
         }
