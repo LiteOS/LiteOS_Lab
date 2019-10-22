@@ -71,10 +71,12 @@ static oc_coap_imp_agent_t  *s_oc_coap_agent = NULL;
 #define ATINY_MAX_SEND_RETRY 500
 #define ATINY_MAX_TOKEN_LEN 8
 
+#define ATINY_MAX_EPID_LEN 50
+
 /* atiny local resources */
-static unsigned char   atiny_res[3]={'t'};
-static unsigned char   atiny_res1[3]={'r'};
-static unsigned char   atiny_res2[50]="ep=";
+unsigned char atiny_res[3]={'t'};
+unsigned char atiny_res1[3]={'r'};
+unsigned char atiny_res2[ATINY_MAX_EPID_LEN] = "ep=";
 
 static int atiny_state = ATINY_STAT_INIT;
 extern int g_bind_finsh = 0;
