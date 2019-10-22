@@ -384,11 +384,11 @@ void sys_init(void)
  * Outputs:
  *      sys_prot_t              -- Previous protection level (not used here)
  *---------------------------------------------------------------------------*/
-sys_prot_t sys_arch_protect(void)
-{
-    LOS_TaskLock();
-    return 0;
-}
+//sys_prot_t sys_arch_protect(void)
+//{
+//    LOS_TaskLock();
+//    return 0;
+//}
 
 
 /*---------------------------------------------------------------------------*
@@ -402,12 +402,12 @@ sys_prot_t sys_arch_protect(void)
  * Inputs:
  *      sys_prot_t              -- Previous protection level (not used here)
  *---------------------------------------------------------------------------*/
-void
-sys_arch_unprotect(sys_prot_t pval)
-{
-    LWIP_UNUSED_ARG(pval);
-    LOS_TaskUnlock();
-}
+//void
+//sys_arch_unprotect(sys_prot_t pval)
+//{
+//    LWIP_UNUSED_ARG(pval);
+//    LOS_TaskUnlock();
+//}
 
 u32_t sys_now(void)
 {

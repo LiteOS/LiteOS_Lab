@@ -105,6 +105,9 @@ int main(void)
         return LOS_NOK;
     }
 
+    extern void shell_uart_init(int baud);
+    shell_uart_init(115200);
+
     link_test();
 
     (void)LOS_Start();
