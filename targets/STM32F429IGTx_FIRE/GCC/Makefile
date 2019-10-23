@@ -33,6 +33,7 @@ SZ        = $(PREFIX)size
 LD        = $(PREFIX)ld
 HEX       = $(OBJCOPY) -O ihex
 BIN       = $(OBJCOPY) -O binary -S
+DIS	  = $(OBJDUMP) -D 
 
 
 PROJECTBASE = $(abspath $(CURDIR))
@@ -71,9 +72,9 @@ include $(PROJECTBASE)/project.mk
 PERIFLIB_PATH =
 # Build path
 cfg_seperate_load_mode = no
-ifeq ($(CONFIG_LOADER_ENABLE),yes)
+ifeq ($(CONFIG_LOADER_ENABLE),y)
 	BUILD_DIR = loaderbuild
-	C_DEFS += -D cn_app_bin_addr=0x08010004
+	C_DEFS += -D cn_app_bin_addr=0x08020004
 else
 	BUILD_DIR = appbuild
 endif
@@ -82,7 +83,7 @@ endif
 # LDFLAGS
 ################################################################################
 ifeq ($(cfg_seperate_load_mode),yes)
-	ifeq ($(CONFIG_LOADER_ENABLE),yes)
+	ifeq ($(CONFIG_LOADER_ENABLE),y)
 		LD_FILE = os_loader.ld
 	else
 		LD_FILE = os_app.ld
@@ -138,7 +139,7 @@ LDFLAGS += $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(B
 
 
 # default action: build all
-all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
+all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin $(BUILD_DIR)/$(TARGET).dis
 #all:
 #	@echo $(C_SOURCES)
 
@@ -168,6 +169,8 @@ $(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 
 $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
 	$(BIN) $< $@
+$(BUILD_DIR)/%.dis: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
+	$(DIS) $^ > $@
 
 $(BUILD_DIR):
 	mkdir $@
