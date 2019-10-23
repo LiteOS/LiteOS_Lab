@@ -104,7 +104,7 @@ CONFIG_MQTT_TYPE     := "paho_mqtt"
 
 #CONFIG_LWM2M_ENABLE, we build a lwm2m abstraction, which shield the difference of 
 #the implement of lwm2m. 
-#CONFIG_LWM2M_TYPE could be "wakaama_lwm2m" "none"
+#CONFIG_LWM2M_TYPE could be "wakaama_lwm2m" "wakaama_raw" "none"
 CONFIG_LWM2M_ENABLE   := y
 CONFIG_LWM2M_TYPE     := "wakaama_lwm2m"
 
@@ -131,7 +131,7 @@ CONFIG_OC_MQTT_TYPE   := "soft"
 
 #CONFIG_OC_LWM2M_ENABLE, we build a oc lwm2m abstraction for huawei OceanConnect service,
 #which shield the difference of the implement of oc lwm2m. 
-#CONFIG_OC_MQTT_TYPE could be "soft" "boudica150_oc" "none"
+#CONFIG_OC_LWM2M_TYPE could be "soft" "boudica150_oc" "atiny_lwm2m_raw" "none"
 CONFIG_OC_LWM2M_ENABLE := y
 CONFIG_OC_LWM2M_TYPE   := "soft"
 
