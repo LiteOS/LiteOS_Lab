@@ -383,6 +383,7 @@ static void pcp_response_downloadstatus(const pcp_head_t *head, const uint8_t *p
 static void pcp_response_upgradestatus(const pcp_head_t *head, const uint8_t *pbuf)
 {
     s_pcp_cb.record.cur_state = EN_OTA_STATUS_IDLE;
+    s_pcp_cb.record.ret_upgrade = EN_PCP_RESPONSE_CODE_OK;
     pcp_save_flag();
     return;
 }
@@ -397,6 +398,7 @@ static void pcp_cmd_upgrade(const pcp_head_t *head, const uint8_t *pbuf)
         return;
     }
     s_pcp_cb.record.cur_state = EN_OTA_STATUS_UPGRADING;
+    pcp_save_flag();
 
     pcp_send_response_code(EN_PCP_MSG_EXCUTEUPDATE, EN_PCP_RESPONSE_CODE_OK);
 }
@@ -445,7 +447,9 @@ static void pcp_handle_msg(uint8_t *msg, int msglen)
             pcp_cmd_upgrade(&pcp_head, pcp_data);
             ///< we should do the reboot
             osal_task_sleep(5000);
-//            osal_reboot();
+	    printf("downloaded, goto loader!!!\n");
+            osal_reboot();
+	    while(1);   /* never come back */
             ///< todo , think we upgrade success--DO THESIMULATE
             ///////////////////////////////////////////////////////////////////
             s_pcp_cb.record.cur_state = EN_OTA_STATUS_UPGRADED;
