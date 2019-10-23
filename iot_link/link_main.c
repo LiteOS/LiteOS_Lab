@@ -188,6 +188,11 @@ int link_main(void *args)
 
 #endif
 
+#if CONFIG_AUTOTEST
+    #include <test_case.h>
+    autotest_start();	
+#endif
+
 ////////////////////////////  OC LWM2M ///////     /////////////////////////////
 
 #if CONFIG_OC_LWM2M_ENABLE
