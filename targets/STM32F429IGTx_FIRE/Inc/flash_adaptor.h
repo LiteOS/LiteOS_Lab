@@ -52,7 +52,8 @@ void flash_adaptor_init(void);
 int flash_adaptor_write(uint32_t offset, const uint8_t *buffer, uint32_t len);
 int flash_adaptor_write_mqtt_info(const void *buffer, uint32_t len);
 int flash_adaptor_read_mqtt_info(void *buffer, uint32_t len);
-
+int flash_spi2inner(uint32_t src, uint32_t dst, uint32_t len, uint8_t *cache, uint32_t cache_len);
+int flash_inner2spi(uint32_t src, uint32_t dst, uint32_t len, uint8_t * cache, uint32_t cache_len);
 
 
 #if defined(__cplusplus)

@@ -88,6 +88,20 @@ int link_main(void *args)
     shell_init();
 #endif
 
+    /* add loader code here */
+#if CONFIG_OTA_ENABLE
+    extern void hal_init_ota(void);
+    hal_init_ota();
+#endif
+
+#if CONFIG_LOADER_ENABLE
+    printf("loader main!\n");
+    extern int ota_detection();
+    ota_detection();
+    loader_main();
+    return;
+#endif
+    /* add loader code here end */
 
 ///< install the driver framework
 #if CONFIG_DRIVER_ENABLE

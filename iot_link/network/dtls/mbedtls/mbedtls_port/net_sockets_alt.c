@@ -45,41 +45,41 @@ void mbedtls_net_init(mbedtls_net_context *ctx)
 }
 
 ///< resovled the host name
-void *mbedtls_net_connect(const char *host, const char *port, int proto)
+int mbedtls_net_connect(mbedtls_net_context *ctx, const char *host, const char *port, int proto)
 {
-    mbedtls_net_context *ret = NULL;
+    int ret = MBEDTLS_ERR_NET_SOCKET_FAILED;
     struct sockaddr_in addr;
+
+    if(NULL == ctx)
+    {
+        return ret;
+    }
 
     ///< first we try use the gethostbyname to get the ip address, the host maybe a domain name
     struct hostent* entry = NULL;
     entry = sal_gethostbyname(host);
     if( !(entry && entry->h_addr_list[0] && (entry->h_addrtype == AF_INET)))
     {
-       goto EXIT_GETIP;
-    }
-    ret = osal_malloc(sizeof(mbedtls_net_context));
-    if(NULL == ret)
-    {
-        goto EXIT_MALLOC;
+        return MBEDTLS_ERR_NET_UNKNOWN_HOST;
     }
 
-    ret->fd = -1;
+    ctx->fd = -1;
 
     if(proto == MBEDTLS_NET_PROTO_TCP)
     {
-        ret->fd = sal_socket(AF_INET,SOCK_STREAM,0);
+        ctx->fd = sal_socket(AF_INET,SOCK_STREAM,0);
     }
     else if(proto == MBEDTLS_NET_PROTO_UDP)
     {
-        ret->fd = sal_socket(AF_INET,SOCK_DGRAM,0);
+        ctx->fd = sal_socket(AF_INET,SOCK_DGRAM,0);
     }
     else
     {
     }
 
-    if(ret->fd == -1)
+    if(ctx->fd == -1)
     {
-        goto EXIT_SOCKET;
+        return ret;
     }
 
     memset(&addr,0,sizeof(addr));
@@ -87,21 +87,13 @@ void *mbedtls_net_connect(const char *host, const char *port, int proto)
     memcpy(&addr.sin_addr.s_addr,entry->h_addr_list[0],sizeof(addr.sin_addr.s_addr));
     addr.sin_port = htons(atoi(port));
 
-    if(-1 == sal_connect(ret->fd,(struct sockaddr *)&addr,sizeof(addr)))
+    if(-1 == sal_connect(ctx->fd,(struct sockaddr *)&addr,sizeof(addr)))
     {
-        goto EXIT_CONNECT;
+        sal_closesocket(ctx->fd);
+        ctx->fd = -1;
+        return MBEDTLS_ERR_NET_CONNECT_FAILED;
     }
-    return ret;
-
-EXIT_CONNECT:
-    sal_closesocket(ret->fd);
-    ret->fd = -1;
-EXIT_SOCKET:
-    osal_free(ret);
-EXIT_MALLOC:
-EXIT_GETIP:
-    ret = NULL;
-    return ret;
+    return 0;
 }
 
 void mbedtls_net_usleep(unsigned long usec)

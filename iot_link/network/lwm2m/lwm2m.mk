@@ -11,6 +11,8 @@ ifeq ($(CONFIG_LWM2M_ENABLE), y)
     
  	ifeq ($(CONFIG_LWM2M_TYPE),"wakaama_lwm2m")
     	include $(iot_link_root)/network/lwm2m/wakaama_lwm2m/wakaama.mk
+ 	else ifeq ($(CONFIG_LWM2M_TYPE),"wakaama_raw")
+    	include $(iot_link_root)/network/lwm2m/wakaama_raw/wakaama.mk
     else
     	#you could extend the lwm2m support implement
 	endif
