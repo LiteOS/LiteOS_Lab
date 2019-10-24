@@ -61,8 +61,29 @@ def test_mqtt_al_sub():
     assert(result.test_id == mqtt_testid.TEST_MQTT_AL_SUBSCRIBLE)
     assert(result.ret_code == 0)
 
+def test_north_device():
 
+    deviceManagement = DeviceManagement()
+    deviceId = "64e20563-4939-4c44-924f-b439b8dae1fd"
+    # get accessToken at first
+    result = Authentication().getAuthToken(Constant().clientInfo())
+    print(Constant().clientInfo())
+    authOutDTO = AuthOutDTO()
+    authOutDTO.setAccessToken(json.loads(result)['accessToken'])
+    accessToken = authOutDTO.getAccessToken()
+
+    # register a new device
+
+    # query device status
+    dq = deviceManagement.queryDeviceStatus(deviceId, None, accessToken)
+    print("====== query device status ======")
+    print("result:", dq + "\n")
+
+    # query device shadow
+    dq = deviceManagement.queryDeviceShadow(deviceId, None, accessToken)
+    print("====== query device shadow ======")
+    print("result:", dq + "\n")
 if __name__ == '__main__':
     print("hello world")
-    test_mqtt_al_init()
+    test_north_device()
 
