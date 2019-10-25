@@ -35,7 +35,6 @@
 #include <oc_mqtt_al.h>
 
 
-#if  CONFIG_OC_MQTT_ENABLE
 
 static tag_oc_mqtt_ops *s_oc_mqtt = NULL;
 
@@ -305,7 +304,4 @@ int oc_mqtt_init()
 {
     return 0;
 }
-
-
-#endif
 

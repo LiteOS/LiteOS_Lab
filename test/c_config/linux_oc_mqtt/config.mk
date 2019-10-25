@@ -126,7 +126,7 @@ CONFIG_OC_COAP_TYPE   := "soft"
 #CONFIG_OC_MQTT_ENABLE, we build a oc mqtt abstraction for huawei OceanConnect service,
 #which shield the difference of the implement of oc mqtt. 
 #CONFIG_OC_MQTT_TYPE could be "soft" "ec20_oc" "none"
-CONFIG_OC_MQTT_ENABLE := n
+CONFIG_OC_MQTT_ENABLE := y
 CONFIG_OC_MQTT_TYPE   := "soft"
 
 #CONFIG_OC_LWM2M_ENABLE, we build a oc lwm2m abstraction for huawei OceanConnect service,
@@ -166,4 +166,8 @@ CONFIG_DEMO_TYPE   := "none"
 
 #########################STANDARD DEMO END######################################
 include $(TOP_DIR)/iot_link/iot.mk
+TEST_CONFIG_OC_LWM2M_ENABLE := n
+TEST_CONFIG_LWM2M_AL_ENABLE := n
+TEST_CONFIG_OC_MQTT_ENABLE := y
+TEST_CONFIG_MQTT_AL_ENABLE := n
 include $(TOP_DIR)/test/c_dependcy/test.mk
