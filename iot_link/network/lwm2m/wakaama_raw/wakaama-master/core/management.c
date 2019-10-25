@@ -212,7 +212,7 @@ uint8_t dm_handleRequest(lwm2m_context_t * contextP,
     }
     else
     {
-        format = (dm_isUriOpaqueHandle(uriP) ? LWM2M_CONTENT_OPAQUE : LWM2M_CONTENT_TLV);
+        format = LWM2M_CONTENT_TLV;
     }
 
     if (uriP->objectId == LWM2M_SECURITY_OBJECT_ID)

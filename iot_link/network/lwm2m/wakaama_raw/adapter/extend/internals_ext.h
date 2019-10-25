@@ -105,22 +105,7 @@ static inline int dm_isUriOpaqueHandle(const lwm2m_uri_t * uriP)
 }
 
 // defined in liblwm2m_ext.c
-bool lwm2m_isBoostrpEnable(const lwm2m_context_t *contextP);
-void lwm2m_initBsCtrlStat(lwm2m_context_t *contextP, lwm2m_bootstrap_type_e bs_type);
-void lwm2m_setBsCtrlStat(lwm2m_context_t *contextP, lwm2m_client_state_t state);
-void lwm2m_delayBsRetry(lwm2m_context_t *contextP);
-lwm2m_client_state_t lwm2m_getBsCtrlStat(const lwm2m_context_t *contextP);
-
 void lwm2m_reset_register(lwm2m_context_t *context);
-
-
-#define SET_BS_LATER(contextP, newState) \
-do{\
-    lwm2m_setBsCtrlStat(contextP, newState);\
-    contextP->state = lwm2m_getBsCtrlStat(contextP);\
-    lwm2m_delayBsRetry(contextP);\
-}while(0)
-
 
 #ifdef __cplusplus
 #if __cplusplus

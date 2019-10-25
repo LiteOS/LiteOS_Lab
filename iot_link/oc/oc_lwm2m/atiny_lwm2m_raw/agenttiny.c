@@ -228,13 +228,6 @@ int atiny_init_objects(atiny_param_t *atiny_params, const atiny_device_info_t *d
         return ATINY_MALLOC_FAILED;
     }
 
-    if (false == osal_mutex_create(&lwm2m_context->observe_mutex))
-    {
-        ATINY_LOG(LOG_FATAL, "osal_mutex_create fail");
-        lwm2m_free(lwm2m_context);
-        return ATINY_RESOURCE_NOT_ENOUGH;
-    }
-
     pdata->lwm2mH = lwm2m_context;
 
     handle->lwm2m_context = lwm2m_context;
@@ -280,8 +273,8 @@ int atiny_init_objects(atiny_param_t *atiny_params, const atiny_device_info_t *d
         return ATINY_MALLOC_FAILED;
     }
 
-    handle->obj_array[OBJ_FIRMWARE_INDEX] = get_object_firmware(atiny_params);
 #ifdef CONFIG_FEATURE_FOTA
+    handle->obj_array[OBJ_FIRMWARE_INDEX] = get_object_firmware(atiny_params);
     if (NULL == handle->obj_array[OBJ_FIRMWARE_INDEX])
     {
         ATINY_LOG(LOG_FATAL, "Failed to create firmware object");
@@ -381,10 +374,12 @@ void atiny_destroy(void *handle)
         free_object_conn_m(handle_data->obj_array[OBJ_CONNECT_INDEX]);
     }
 
+#ifdef CONFIG_FEATURE_FOTA
     if (handle_data->obj_array[OBJ_FIRMWARE_INDEX] != NULL)
     {
         free_object_firmware(handle_data->obj_array[OBJ_FIRMWARE_INDEX]);
     }
+#endif
 
     if (handle_data->obj_array[OBJ_LOCATION_INDEX] != NULL)
     {
@@ -399,10 +394,6 @@ void atiny_destroy(void *handle)
 
     if (handle_data->lwm2m_context != NULL)
     {
-        if (handle_data->lwm2m_context->observe_mutex != cn_mutex_invalid)
-        {
-            osal_mutex_del(handle_data->lwm2m_context->observe_mutex);
-        }
         lwm2m_close(handle_data->lwm2m_context);
     }
     osal_semp_post(handle_data->quit_sem);
@@ -662,9 +653,7 @@ int atiny_data_change(void *phandle, const char *data_type)
 
     (void)lwm2m_stringToUri(data_type, strlen(data_type), &uri);
 
-    osal_mutex_lock(handle->lwm2m_context->observe_mutex);
     lwm2m_resource_value_changed(handle->lwm2m_context, &uri);
-    osal_mutex_unlock(handle->lwm2m_context->observe_mutex);
 
     return ATINY_OK;
 }
