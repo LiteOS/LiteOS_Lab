@@ -131,12 +131,12 @@ static int check_clone_config_params(oc_agent_mqtt_cb_t *cb,tag_oc_mqtt_config *
         goto EXIT_ERR;
     }
 
-    if(en_oc_mqtt_code_mode_json != config->code_mode )
+    if(en_oc_mqtt_code_mode_json != config->code_mode)
     {
         goto EXIT_ERR;
     }
 
-    if(en_mqtt_sign_type_hmacsha256_check_time_no != config->sign_type )
+    if(en_mqtt_sign_type_hmacsha256_check_time_no != config->sign_type)
     {
         goto EXIT_ERR;
     }
@@ -169,6 +169,11 @@ static int check_clone_config_params(oc_agent_mqtt_cb_t *cb,tag_oc_mqtt_config *
 
     if((en_oc_mqtt_device_type_dynamic == config->device_type) &&\
         (en_mqtt_auth_type_model != config->auth_type))
+    {
+        goto EXIT_ERR;
+    }
+	
+    if(NULL == config->msgdealer)
     {
         goto EXIT_ERR;
     }
