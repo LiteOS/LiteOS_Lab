@@ -1,0 +1,82 @@
+#
+# Copyright (c) [2019] Huawei Technologies Co.,Ltd.All rights reserved.
+#
+# LiteOS NOVA is licensed under the Mulan PSL v1.
+# You can use this software according to the terms and conditions of the Mulan PSL v1.
+# You may obtain a copy of Mulan PSL v1 at:
+#
+# 	http://license.coscl.org.cn/MulanPSL
+#
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
+# FIT FOR A PARTICULAR PURPOSE.
+# See the Mulan PSL v1 for more details.
+#
+
+config LINK_TYPE
+    string "Linkage type, ROM or RAM"
+    default "rom"
+
+config ROM_START
+    hex "rom start adddress"
+    default 0x00000000
+
+config ROM_SIZE
+    hex "rom size"
+    default 0x00000000
+
+config RAM_START
+    hex "ram start adddress"
+    default 0x00000000
+
+config RAM_SIZE
+    hex "ram size"
+    default 0x00000000
+
+config EXTRA_RAM0
+    bool "Enable extra ram region 0."
+    default n
+
+config EXTRA_RAM0_START
+    hex "Extra RAM0 start."
+    default 0x00000000
+
+config EXTRA_RAM0_SIZE
+    hex "Extra RAM0 size."
+    default 0x00000000
+
+config EXTRA_RAM1
+    bool "Enable extra ram region 1."
+    default n
+
+config EXTRA_RAM1_START
+    hex "Extra RAM1 start."
+    default 0x00000000
+
+config EXTRA_RAM1_SIZE
+    hex "Extra RAM1 size."
+    default 0x00000000
+
+config EXTRA_RAM2
+    bool "Enable extra ram region 2."
+    default n
+
+config EXTRA_RAM2_START
+    hex "Extra RAM2 start."
+    default 0x00000000
+
+config EXTRA_RAM2_SIZE
+    hex "Extra RAM2 size."
+    default 0x00000000
+
+config MAIN_TASK_PRIO
+    int "The priority of the main task."
+    default 20
+
+config MAIN_TASK_OPTIONS
+    int "The options of the main task."
+    default 0
+
+config MAIN_TASK_STACK_SIZE
+    hex "The stack size of the main task."
+    default 0x800

@@ -74,6 +74,9 @@ int link_main(void *args)
 #elif CONFIG_MACOS_ENABLE
     #include <macos_imp.h>
     osal_install_macos();
+#elif CONFIG_NOVAOS_ENABLE
+    #include <novaos_imp.h>
+    osal_install_novaos();
 #else
     #error("you should add your own os here");
 #endif

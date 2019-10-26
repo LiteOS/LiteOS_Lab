@@ -1,0 +1,6 @@
+#!/usr/bin/env python3
+
+from python import libkeil
+
+if __name__ == "__main__":
+    libkeil.main ()

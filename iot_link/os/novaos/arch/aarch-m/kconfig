@@ -1,0 +1,232 @@
+#
+# Copyright (c) [2019] Huawei Technologies Co.,Ltd.All rights reserved.
+#
+# LiteOS NOVA is licensed under the Mulan PSL v1.
+# You can use this software according to the terms and conditions of the Mulan PSL v1.
+# You may obtain a copy of Mulan PSL v1 at:
+#
+# 	http://license.coscl.org.cn/MulanPSL
+#
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
+# FIT FOR A PARTICULAR PURPOSE.
+# See the Mulan PSL v1 for more details.
+#
+
+config AARCH_M_BASELINE
+    def_bool n
+    select AARCH_M
+
+config AARCH_M_MAINLINE
+    def_bool n
+    select AARCH_M
+    select AARCH_M_CBNZ_CBZ
+    select AARCH_M_EXCLUSIVE
+    select HAS_SYSTICK
+
+config CORTEX_M0
+    def_bool n
+    select AARCH_M_BASELINE
+
+config CORTEX_M0_PLUS
+    def_bool n
+    select AARCH_M_BASELINE
+
+config CORTEX_M1
+    def_bool n
+    select AARCH_M_BASELINE
+
+config CORTEX_M23
+    def_bool n
+    select AARCH_M_BASELINE
+
+config CORTEX_M3
+    def_bool n
+    select AARCH_M_MAINLINE
+
+config CORTEX_M4
+    def_bool n
+    select AARCH_M_MAINLINE
+
+config CORTEX_M4F
+    def_bool n
+    select CORTEX_M4
+    select HAS_FPU
+
+config CORTEX_M7
+    def_bool n
+    select AARCH_M_MAINLINE
+
+config CORTEX_M7F
+    def_bool n
+    select CORTEX_M7
+    select HAS_FPU
+
+config CORTEX_M33
+    def_bool n
+    select AARCH_M_MAINLINE
+
+config CORTEX_M35P
+    def_bool n
+    select AARCH_M_MAINLINE
+
+if AARCH_M
+
+config HAS_VTOR
+    bool
+    default y if AARCH_M_MAINLINE || CORTEX_M0_PLUS
+    default n
+
+config AARCH_M_CBNZ_CBZ
+    def_bool n
+
+config AARCH_M_EXCLUSIVE
+    def_bool n
+
+# for now, all baseline core has 2 nvic prio bits including m0, m0+, m23
+# for now, all mainline core has 4 nvic prio bits including m3, m4, m7, m3x
+config NVIC_PRIO_BITS
+    int
+    default 2 if AARCH_M_BASELINE
+    default 4 if AARCH_M_MAINLINE
+
+config HAS_SYSTICK
+    def_bool n
+
+config SYSTICK
+    bool "Enable SysTick timer."
+    depends on HAS_SYSTICK
+    default y
+
+config HAS_MPU
+    def_bool n
+    depends on AARCH_M_MAINLINE || CORTEX_M0_PLUS
+
+config MPU
+    bool "Enable MPU support."
+    depends on HAS_MPU
+    select TASK_TLS
+    select SWITCH_HOOK
+    default n
+
+config HAS_FPU
+    def_bool n
+    depends on AARCH_M_MAINLINE
+
+config FPU
+    bool "Enable FPU support."
+    depends on HAS_FPU
+    default n
+
+config SVC
+    bool "Enable SVCall support."
+    select SYSCALL
+    default y if MPU
+    default n
+
+config WFI
+    bool "Use WFI in idle task."
+    default y if TICKLESS
+    default n
+
+config TRACE
+    bool "Enable trace support."
+    depends on KPRINTF
+    default y
+
+# tools supported by aarch-m
+
+config GNUC
+    def_bool y
+
+choice IDE_TYPE
+    prompt "Please select the build tool used."
+    default NOIDE
+
+config NOIDE
+    bool "no IDE support"
+
+config KEIL
+    bool "KEIL project"
+    select IDE
+
+config SESA
+    bool "enable SEGGER Embedded Studio for ARM"
+    select IDE
+endchoice
+
+config IDE_EXT
+    string
+    depends on !NOIDE
+    default "uvprojx"   if KEIL
+    default "emProject" if SESA
+
+config IDE_NAME
+    string
+    depends on !NOIDE
+    default "keil" if KEIL
+    default "sesa" if SESA
+
+menu "KEIL configuation"
+
+config KEIL_DEVICE
+    string "Device name in KEIL project."
+    default ""
+
+config KEIL_VENDOR
+    string "Vendor name in KEIL project."
+    default ""
+
+config KEIL_CPU
+    string "CPU information in KEIL project."
+    default ""
+
+config KEIL_TARGET_DLL_NAME
+    string "Target DLL name in KEIL project."
+    default ""
+
+config KEIL_TARGET_DLL_ARG
+    string "Target DLL arguments in KEIL project."
+    default ""
+    def_string "-MPU"
+
+config KEIL_TARGET_DLG_DLL_NAME
+    string "Target dialogue DLL name in KEIL project."
+    default ""
+
+config KEIL_TARGET_DLG_DLL_ARG
+    string "Target dialogue DLL arguments in KEIL project."
+    default ""
+
+endmenu
+
+menu "SESA configuation"
+
+config SESA_ARCH
+    string "Arch feild in KEIL project."
+    default ""
+config SESA_CORE
+    string "Core feild in KEIL project."
+    default ""
+config SESA_ENDIAN
+    string "Endian feild in KEIL project."
+    default ""
+config SESA_FP_ABI
+    string "FP ABI feild in KEIL project."
+    default ""
+config SESA_FPU
+    string "FPU feild in KEIL project."
+    default ""
+config SESA_DEVICE
+    string "Device feild in KEIL project."
+    default ""
+config SESA_INTERFACE
+    string "Debug interface in KEIL project."
+    default ""
+config SESA_SIMU_MEM_PARA
+    string "Simulator memory parameter feild in KEIL project."
+    default ""
+
+endmenu
+
+endif

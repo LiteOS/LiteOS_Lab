@@ -50,7 +50,7 @@
 ################################################################################
 ########################OS SERVICE START########################################
 
-#CONFIG_OS_TYPE , could be: "linux" "macos" "liteos", and you could select one
+#CONFIG_OS_TYPE , could be: "linux" "macos" "liteos" "novaos", and you must select one of them
 CONFIG_OS_TYPE := "liteos"
 
 #CONFIG_ARCH_CPU_TYPE,could be "armv7-m" "armv6-m" "riscv32" "x86" "x86-64"
