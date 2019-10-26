@@ -40,7 +40,6 @@ USER_SRC =  \
         $(TOP_DIR)/targets/STM32L431_BearPi/Src/i2c.c \
         $(TOP_DIR)/targets/STM32L431_BearPi/Src/spi.c \
         $(TOP_DIR)/targets/STM32L431_BearPi/Src/gpio.c \
-        $(TOP_DIR)/targets/STM32L431_BearPi/Src/net_driver.c \
         $(TOP_DIR)/targets/STM32L431_BearPi/Src/Huawei_IoT_QR_Code.c
         C_SOURCES += $(USER_SRC)  
         

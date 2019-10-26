@@ -43,7 +43,7 @@
 #include <link_misc.h>
 
 
-int ring_init(tag_ring_buffer_t *ring,unsigned char *buf, int buflen,int offset,int datalen)
+int ring_buffer_init(tag_ring_buffer_t *ring,unsigned char *buf, int buflen,int offset,int datalen)
 {
     int ret = -1;
     if((NULL == ring))
@@ -59,7 +59,7 @@ int ring_init(tag_ring_buffer_t *ring,unsigned char *buf, int buflen,int offset,
 }
 
 
-int ring_write(tag_ring_buffer_t *ring,unsigned char *buf, int len)
+int ring_buffer_write(tag_ring_buffer_t *ring,unsigned char *buf, int len)
 {
     int ret = -1;
     int cpylen;  //the current time we should move
@@ -113,7 +113,7 @@ int ring_write(tag_ring_buffer_t *ring,unsigned char *buf, int len)
 }
 
 
-int ring_read(tag_ring_buffer_t *ring,unsigned char *buf, int len)
+int ring_buffer_read(tag_ring_buffer_t *ring,unsigned char *buf, int len)
 {
     int ret = -1;
     int cpylen;  //the current time we should move
@@ -159,7 +159,7 @@ int ring_read(tag_ring_buffer_t *ring,unsigned char *buf, int len)
 }
 
 
-int ring_datalen(tag_ring_buffer_t *ring)
+int ring_buffer_datalen(tag_ring_buffer_t *ring)
 {
     int ret = -1;
     if(NULL != ring)
@@ -169,7 +169,7 @@ int ring_datalen(tag_ring_buffer_t *ring)
     return ret;
 }
 
-int ring_freespace(tag_ring_buffer_t *ring)
+int ring_buffer_freespace(tag_ring_buffer_t *ring)
 {
     int ret = -1;
     if(NULL != ring)
@@ -179,7 +179,7 @@ int ring_freespace(tag_ring_buffer_t *ring)
     return ret;
 }
 
-int ring_reset(tag_ring_buffer_t *ring)
+int ring_buffer_reset(tag_ring_buffer_t *ring)
 {
     int ret = -1;
     if(NULL != ring)
@@ -191,7 +191,7 @@ int ring_reset(tag_ring_buffer_t *ring)
     return ret;
 }
 
-int ring_deinit(tag_ring_buffer_t *ring)
+int ring_buffer_deinit(tag_ring_buffer_t *ring)
 {
     int ret = -1;
     if(NULL != ring)

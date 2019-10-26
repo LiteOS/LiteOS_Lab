@@ -191,14 +191,7 @@ int tcpipstack_install_lwip(fn_lwip_netdriver driver)
 
     ret = tcpip_sal_install(&s_tcpip_lwip);
 
-    if(0 == ret)
-    {
-        printf("sal:install lwip success\r\n");
-    }
-    else
-    {
-        printf("sal:install lwip failed\r\n");
-    }
+    printf("%s:install ret:%d\n\r",__FUNCTION__,ret);
 
     return 0;
 }
