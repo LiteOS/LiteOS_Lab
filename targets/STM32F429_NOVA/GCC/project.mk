@@ -1,4 +1,4 @@
-USER_SRC = ${wildcard $(SDK_DIR)/targets/STM32F429_NOVA/SRC/*.c}
+USER_SRC = ${wildcard $(SDK_DIR)/targets/STM32F429_NOVA/Src/*.c}
 C_SOURCES += $(USER_SRC)
 
 USER_INC = -I $(SDK_DIR)/targets/STM32F429_NOVA/INC  \
