@@ -1,0 +1,107 @@
+#
+# Copyright (c) [2019] Huawei Technologies Co.,Ltd.All rights reserved.
+#
+# LiteOS NOVA is licensed under the Mulan PSL v1.
+# You can use this software according to the terms and conditions of the Mulan PSL v1.
+# You may obtain a copy of Mulan PSL v1 at:
+#
+# 	http://license.coscl.org.cn/MulanPSL
+#
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
+# FIT FOR A PARTICULAR PURPOSE.
+# See the Mulan PSL v1 for more details.
+#
+
+config NRF
+    def_bool n
+
+if NRF
+
+#
+# and vendor specified drivers
+#
+
+# nordic UART
+
+config NRF_UART
+    def_bool n
+
+# nordic UART#2
+
+config NRF_UART0
+    bool "Enable nordic UART#0."
+    default n
+    select NRF_UART
+
+config NRF_UART0_TX_PIN
+    int "nordic UART#0 tx pin number"
+    depends on NRF_UART0
+
+config NRF_UART0_RX_PIN
+    int "nordic UART#0 rx pin number"
+    depends on NRF_UART0
+
+config NRF_UART0_REGBASE
+    hex "nordic UART#0 register base"
+    depends on NRF_UART0
+
+config NRF_UART0_IRQN
+    int "nordic UART#0 IRQ number"
+    depends on NRF_UART0
+
+# nordic UART#1
+
+config NRF_UART1
+    bool "Enable nordic UART#1."
+    default n
+    select NRF_UART
+
+config NRF_UART1_TX_PIN
+    int "nordic UART#1 tx pin number"
+    depends on NRF_UART1
+
+config NRF_UART1_RX_PIN
+    int "nordic UART#1 rx pin number"
+    depends on NRF_UART1
+
+config NRF_UART1_REGBASE
+    hex "nordic UART#1 register base"
+    depends on NRF_UART1
+
+config NRF_UART1_IRQN
+    int "nordic UART#1 IRQ number"
+    depends on NRF_UART1
+
+# nordic RTC
+
+config NRF_RTC
+    def_bool n
+
+config NRF_RTC0
+    bool "Enable nordic RTC#0."
+    default n
+    select NRF_RTC
+
+config NRF_RTC0_REGBASE
+    hex "nordic RTC#0 register base"
+    depends on NRF_RTC0
+
+config NRF_RTC0_IRQN
+    int "nordic RTC#0 IRQ number"
+    depends on NRF_RTC0
+
+config NRF_RTC1
+    bool "Enable nordic RTC#1."
+    default n
+    select NRF_RTC
+
+config NRF_RTC1_REGBASE
+    hex "nordic RTC#1 register base"
+    depends on NRF_RTC1
+
+config NRF_RTC1_IRQN
+    int "nordic RTC#1 IRQ number"
+    depends on NRF_RTC1
+
+endif

@@ -1,0 +1,1 @@
+dir-$(CONFIG_BEARPI) += *

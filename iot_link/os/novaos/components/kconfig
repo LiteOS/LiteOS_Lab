@@ -1,0 +1,91 @@
+#
+# Copyright (c) [2019] Huawei Technologies Co.,Ltd.All rights reserved.
+#
+# LiteOS NOVA is licensed under the Mulan PSL v1.
+# You can use this software according to the terms and conditions of the Mulan PSL v1.
+# You may obtain a copy of Mulan PSL v1 at:
+#
+# 	http://license.coscl.org.cn/MulanPSL
+#
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
+# FIT FOR A PARTICULAR PURPOSE.
+# See the Mulan PSL v1 for more details.
+#
+
+menu "LiteOS NOVA components configuration"
+
+config CMDER
+    bool "cmder shell"
+    default y
+
+config CMDER_UART
+    bool "cmder shell over uart"
+    depends on CMDER
+    depends on HAL_UART
+    default y
+
+config CMDER_UART_NAME
+    string "the uart device name used by cmder"
+    depends on CMDER_UART
+    default "uart0"
+
+config CMDER_UART_HIS_CMD_BUFF_SIZE
+    int "the uart history commder buffer size"
+    depends on CMDER_UART
+    default 256
+
+config CMDER_UART_HIS_IDX_BUFF_SIZE
+    int "the uart history index buffer size"
+    depends on CMDER_UART
+    default 64
+
+config CMDER_UART_STACK_SIZE
+    hex "the uart cmder task stack size"
+    depends on CMDER_UART
+    default 0x1000
+
+config CMDER_TOP
+    bool "Enable the command of \"top\"."
+    depends on CMDER
+    select PROFILE
+    default n
+
+config VFS
+    bool "enable virtual filesystem switch support"
+    default n
+
+config DEVFS
+    bool "enable device filesystem"
+    default n
+    select VFS
+
+config MAX_FILE_NAME_LEN
+    int "max file name length"
+    default 16
+    depends on VFS
+
+config MAX_NR_FILES
+    int "max file can be opened"
+    default 32
+    depends on VFS
+
+config KPRINTF
+    bool "add kprintf"
+    default y
+    depends on HAL_UART
+
+config KPRINTF_UART_NAME
+    string "the uart device name used by kprintf"
+    depends on KPRINTF
+    default CMDER_UART_NAME if CMDER_UART
+    default "uart0"
+
+config LWIP
+    bool "Enable LWIP support."
+    default n
+    select IPC_MQ
+
+orsource "*/kconfig"
+
+endmenu

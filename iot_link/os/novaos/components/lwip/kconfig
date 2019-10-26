@@ -1,0 +1,83 @@
+#
+# Copyright (c) [2019] Huawei Technologies Co.,Ltd.All rights reserved.
+#
+# LiteOS NOVA is licensed under the Mulan PSL v1.
+# You can use this software according to the terms and conditions of the Mulan PSL v1.
+# You may obtain a copy of Mulan PSL v1 at:
+#
+#      http://license.coscl.org.cn/MulanPSL
+#
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
+# FIT FOR A PARTICULAR PURPOSE.
+# See the Mulan PSL v1 for more details.
+#
+
+if LWIP
+
+config HARDWARE_CHECKSUM
+    def_bool n
+
+#
+# LWIP TCPIP task attributes
+#
+
+config TCPIP_TASK_NAME
+    string "The name of the lwip task."
+    default "lwip"
+
+config TCPIP_TASK_STACK_SIZE
+    hex "The stack size of the lwip task."
+    default 0x500
+
+config TCPIP_TASK_PRIO
+    int "The task priority of the lwip task."
+    range 0 31
+    default 1
+
+#
+# LWIP TCPIP MBOX attribute
+#
+
+config TCPIP_MBOX_SIZE
+    int "The size of mail box."
+    default 16
+
+#
+# LWIP feature selections
+#
+
+config PPP_SUPPORT
+    bool "Enable PPP support."
+    depends on NOT_SUPPORTED
+    default n
+
+config IPV6
+    bool "Enable IPV6 support."
+    depends on NOT_SUPPORTED
+    default n
+
+config MTU_VALUE
+    int "The MTU value."
+    range 64 1500
+    default 1500
+
+#
+# adapter settings
+#
+
+config ETHIF_TASK_NAME
+    string "ethif input task name."
+    default "ethif"
+
+config ETHIF_TASK_PRIO
+    int "ethif input task priority."
+    range 0 31
+    default 2
+
+config ETHIF_TASK_STACK_SIZE
+    hex "ethif input task stack size."
+    default 0x1000
+
+endif
+
