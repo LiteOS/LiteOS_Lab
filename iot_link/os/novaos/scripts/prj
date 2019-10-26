@@ -1,0 +1,6 @@
+#!/usr/bin/env python3
+
+from python import libproj
+
+if __name__ == "__main__":
+    libproj.main ()

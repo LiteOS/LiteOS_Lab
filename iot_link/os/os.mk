@@ -15,8 +15,8 @@ else ifeq ($(CONFIG_OS_TYPE), "linux")
 	include $(iot_link_root)/os/linux/linux_imp.mk
 else ifeq ($(CONFIG_OS_TYPE), "macos")
 	include $(iot_link_root)/os/macos/macos_imp.mk	
-else
-	
+else ifeq ($(CONFIG_OS_TYPE), "novaos")
+	include $(iot_link_root)/os/novaos/novaos_imp.mk		
 endif
 
 

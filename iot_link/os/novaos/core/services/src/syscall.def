@@ -1,0 +1,97 @@
+/*
+ * Copyright (c) [2019] Huawei Technologies Co.,Ltd.All rights reserved.
+ *
+ * LiteOS NOVA is licensed under the Mulan PSL v1.
+ * You can use this software according to the terms and conditions of the Mulan PSL v1.
+ * You may obtain a copy of Mulan PSL v1 at:
+ *
+ * 	http://license.coscl.org.cn/MulanPSL
+ *
+ * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
+ * FIT FOR A PARTICULAR PURPOSE.
+ * See the Mulan PSL v1 for more details.
+ */
+
+# SYSCALL_MODULE module_name module id
+
+SYSCALL_MODULE 2
+    task_create
+    task_delete
+    task_exit
+    task_resume
+    task_suspend
+    task_spawn
+    task_delay
+    task_lock
+    task_unlock
+    task_status_get
+    task_prio_get
+    task_prio_set
+
+SYSCALL_MODULE 3
+    mutex_create
+    mutex_open
+    mutex_destroy
+    mutex_timedlock
+    mutex_lock
+    mutex_trylock
+    mutex_unlock
+
+SYSCALL_MODULE 4
+    sem_create
+    sem_open
+    sem_destroy
+    sem_timedwait
+    sem_wait
+    sem_trywait
+    sem_post
+    sem_getvalue
+
+SYSCALL_MODULE 5
+    event_create
+    event_open
+    event_destroy
+    event_timedrecv
+    event_recv
+    event_tryrecv
+    event_send
+
+SYSCALL_MODULE 15
+    mq_create
+    mq_open
+    mq_delete
+    mq_timedsend
+    mq_send
+    mq_trysend
+    mq_timedrecv
+    mq_recv
+    mq_tryrecv
+
+SYSCALL_MODULE 16
+    heap_create
+    heap_add
+    heap_alloc
+    heap_alloc_align
+    heap_free
+    heap_realloc
+    heap_stat_get
+
+SYSCALL_MODULE 18
+    mempool_create
+    mempool_destroy
+    mempool_alloc
+    mempool_free
+
+SYSCALL_MODULE 19
+    mem_try
+
+SYSCALL_MODULE 25
+    errno_get
+
+SYSCALL_MODULE 27
+    kprintf
+
+SYSCALL_MODULE 65
+    mpu_task_spawn
+    mpu_region_add
