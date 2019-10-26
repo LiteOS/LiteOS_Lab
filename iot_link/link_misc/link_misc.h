@@ -52,7 +52,7 @@
  * @return:how many parameters in the string
  *
  * */
-int string_to_arg(int *argc, const char *argv[],char *string);
+int string_buffer_to_arg(int *argc, const char *argv[],char *string);
 
 /**
  *
@@ -100,7 +100,7 @@ typedef struct
  * */
 
 
-int ring_init(tag_ring_buffer_t *ring,unsigned char *buf, int buflen,int offset,int datalen);
+int ring_buffer_init(tag_ring_buffer_t *ring,unsigned char *buf, int buflen,int offset,int datalen);
 
 
 
@@ -116,7 +116,7 @@ int ring_init(tag_ring_buffer_t *ring,unsigned char *buf, int buflen,int offset,
  * @return: how many bytes has been written while -1 means failed
  *
  * */
-int ring_write(tag_ring_buffer_t *ring,unsigned char *buf, int len);
+int ring_buffer_write(tag_ring_buffer_t *ring,unsigned char *buf, int len);
 
 /**
  * @brief:use this function to read data from the ring buffer
@@ -131,7 +131,7 @@ int ring_write(tag_ring_buffer_t *ring,unsigned char *buf, int len);
  *
  * */
 
-int ring_read(tag_ring_buffer_t *ring,unsigned char *buf, int len);
+int ring_buffer_read(tag_ring_buffer_t *ring,unsigned char *buf, int len);
 
 /**
  * @brief:use this function check out how many data in the ring buffer
@@ -141,7 +141,7 @@ int ring_read(tag_ring_buffer_t *ring,unsigned char *buf, int len);
  * @return: how many data bytes while -1 failed
  *
  * */
-int ring_datalen(tag_ring_buffer_t *ring);
+int ring_buffer_datalen(tag_ring_buffer_t *ring);
 
 /**
  * @brief:use this function check out how many free space in the ring buffer
@@ -151,7 +151,7 @@ int ring_datalen(tag_ring_buffer_t *ring);
  * @return: how many free space  bytes while -1 failed
  *
  * */
-int ring_freespace(tag_ring_buffer_t *ring);
+int ring_buffer_freespace(tag_ring_buffer_t *ring);
 
 /**
  * @brief:use this function to reset the ring buffer
@@ -161,7 +161,7 @@ int ring_freespace(tag_ring_buffer_t *ring);
  * @return: 0 success while -1 failed
  *
  * */
-int ring_reset(tag_ring_buffer_t *ring);
+int ring_buffer_reset(tag_ring_buffer_t *ring);
 
 /**
  * @brief:use this function to deinit the ring buffer
@@ -171,7 +171,7 @@ int ring_reset(tag_ring_buffer_t *ring);
  * @return: 0 success while -1 failed
  *
  * */
-int ring_deinit(tag_ring_buffer_t *ring);
+int ring_buffer_deinit(tag_ring_buffer_t *ring);
 
 
 ///< random
@@ -185,6 +185,20 @@ int ring_deinit(tag_ring_buffer_t *ring);
  *
  * */
 int link_random(void* output, int len);
+
+
+/**
+ * @brief: use this function to translate the string to argv mode
+ *
+ * @param[in]:string , the string to translate
+ * @param[inout]:argc, the sizeof argv and how many prarameters has been splited
+ * @param[inout]:argv, used to storage the parameters splited
+ *
+ * @retrun:how many parameters geted
+ *
+ * */
+int string_to_arg(int *argc, const char *argv[],char *string);
+
 
 
 
