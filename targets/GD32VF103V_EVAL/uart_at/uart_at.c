@@ -101,7 +101,7 @@ static void atio_irq(void)
         //TODO clear IDLE flag
         usart_flag_get(uart_at,USART_FLAG_IDLEF);
         usart_data_receive(uart_at);
-        ringspace = CN_RCVMEM_LEN - ring_datalen(&g_atio_cb.rcvring);
+        ringspace = CN_RCVMEM_LEN - ring_buffer_datalen(&g_atio_cb.rcvring);
         if(ringspace < g_atio_cb.w_next)  //not enough mem
         {
             g_atio_cb.rframedrop++;
@@ -110,8 +110,8 @@ static void atio_irq(void)
         {
             //write data to the ring buffer:len+data format
             ringspace = g_atio_cb.w_next;
-            ring_write(&g_atio_cb.rcvring,(unsigned char *)&ringspace,sizeof(ringspace));
-            ring_write(&g_atio_cb.rcvring,g_atio_cb.rcvbuf,ringspace);
+            ring_buffer_write(&g_atio_cb.rcvring,(unsigned char *)&ringspace,sizeof(ringspace));
+            ring_buffer_write(&g_atio_cb.rcvring,g_atio_cb.rcvbuf,ringspace);
             osal_semp_post(g_atio_cb.rcvsync);
             g_atio_cb.rcvframe++;
         }
@@ -140,7 +140,7 @@ bool_t uart_at_init(int baud)
         printf("%s:semp create error\n\r",__FUNCTION__);
         goto EXIT_SEMP;
     }
-    ring_init(&g_atio_cb.rcvring,g_atio_cb.rcvringmem,CN_RCVMEM_LEN,0,0);
+    ring_buffer_init(&g_atio_cb.rcvring,g_atio_cb.rcvringmem,CN_RCVMEM_LEN,0,0);
 
     uart_at = s_pUSART;
     gd_eval_com_init(uart_at);
@@ -202,26 +202,26 @@ static ssize_t uart_at_receive(void *buf,size_t len, uint32_t timeout)
     {
         lock = LOS_IntLock();
         readlen = sizeof(framelen);
-        cpylen = ring_read(&g_atio_cb.rcvring,(unsigned char *)&framelen,readlen);
+        cpylen = ring_buffer_read(&g_atio_cb.rcvring,(unsigned char *)&framelen,readlen);
         if(cpylen != readlen)
         {
-            ring_reset(&g_atio_cb.rcvring);  //bad ring format here
+            ring_buffer_reset(&g_atio_cb.rcvring);  //bad ring format here
             g_atio_cb.rcvringrst++;
         }
         else
         {
             if(framelen > len)
             {
-                ring_reset(&g_atio_cb.rcvring);  //bad ring format here
+                ring_buffer_reset(&g_atio_cb.rcvring);  //bad ring format here
                 g_atio_cb.rcvringrst++;
             }
             else
             {
                 readlen = framelen;
-                cpylen = ring_read(&g_atio_cb.rcvring,(unsigned char *)buf,readlen);
+                cpylen = ring_buffer_read(&g_atio_cb.rcvring,(unsigned char *)buf,readlen);
                 if(cpylen != framelen)
                 {
-                    ring_reset(&g_atio_cb.rcvring);  //bad ring format here
+                    ring_buffer_reset(&g_atio_cb.rcvring);  //bad ring format here
                     g_atio_cb.rcvringrst++;
                 }
                 else
