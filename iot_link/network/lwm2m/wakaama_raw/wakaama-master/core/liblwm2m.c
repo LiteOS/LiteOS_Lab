@@ -171,7 +171,6 @@ static void prv_deleteBootstrapServerList(lwm2m_context_t * context)
 
 static void prv_deleteObservedList(lwm2m_context_t * contextP)
 {
-    osal_mutex_lock(contextP->observe_mutex);
     while (NULL != contextP->observedList)
     {
         lwm2m_observed_t * targetP;
@@ -190,7 +189,6 @@ static void prv_deleteObservedList(lwm2m_context_t * contextP)
 
         lwm2m_free(targetP);
     }
-    osal_mutex_unlock(contextP->observe_mutex);
 }
 #endif
 
@@ -291,7 +289,7 @@ static int prv_refreshServerList(lwm2m_context_t * contextP)
 
     return object_getServers(contextP, false);
 }
-//result = lwm2m_configure(lwm2mH, name, NULL, NULL, OBJ_COUNT, objArray)
+
 int lwm2m_configure(lwm2m_context_t * contextP,
                     const char * endpointName,
                     const char * msisdn,
@@ -302,7 +300,7 @@ int lwm2m_configure(lwm2m_context_t * contextP,
     int i;
     uint8_t found;
 
-    //LOG_ARG("endpointName: \"%s\", msisdn: \"%s\", altPath: \"%s\", numObject: %d", endpointName, msisdn, altPath, numObject);
+    LOG_ARG("endpointName: \"%s\", msisdn: \"%s\", altPath: \"%s\", numObject: %d", (endpointName != NULL)?endpointName:"", (msisdn != NULL)?msisdn:"", (altPath != NULL)?altPath:"", numObject);
     // This API can be called only once for now
     if (contextP->endpointName != NULL || contextP->objectList != NULL) return COAP_400_BAD_REQUEST;
 
@@ -312,8 +310,6 @@ int lwm2m_configure(lwm2m_context_t * contextP,
     found = 0;
     for (i = 0 ; i < numObject ; i++)
     {
-        if(objectList[i] == NULL) // happens when undef CONFIG_FEATURE_FOTA
-            continue;
         if (objectList[i]->objID == LWM2M_SECURITY_OBJECT_ID) found |= 0x01;
         if (objectList[i]->objID == LWM2M_SERVER_OBJECT_ID) found |= 0x02;
         if (objectList[i]->objID == LWM2M_DEVICE_OBJECT_ID) found |= 0x04;
@@ -356,8 +352,6 @@ int lwm2m_configure(lwm2m_context_t * contextP,
 
     for (i = 0; i < numObject; i++)
     {
-        if(objectList[i] == NULL) // happens when undef CONFIG_FEATURE_FOTA
-            continue;
         objectList[i]->next = NULL;
         contextP->objectList = (lwm2m_object_t *)LWM2M_LIST_ADD(contextP->objectList, objectList[i]);
     }
@@ -414,8 +408,7 @@ int lwm2m_reconnect(lwm2m_context_t *context)
     lwm2m_reset_register(context);
     prv_deleteObservedList(context);
     prv_deleteTransactionList(context);
-    lwm2m_setBsCtrlStat(context, STATE_REGISTER_REQUIRED);
-    context->state = lwm2m_getBsCtrlStat(context);
+    context->state = (context->serverList != NULL) ?  STATE_REGISTER_REQUIRED : STATE_BOOTSTRAP_REQUIRED;;
     lwm2m_notify_even(MODULE_LWM2M, STATE_REG_FAILED, NULL, 0);
     return COAP_NO_ERROR;
 }
@@ -428,12 +421,10 @@ int lwm2m_step(lwm2m_context_t * contextP,
 {
     time_t tv_sec;
     int result;
-    lwm2m_client_state_t state;
-    int ret = 0;
 
     LOG_ARG("timeoutP: %" PRId64, *timeoutP);
     tv_sec = lwm2m_gettime();
-    //if (tv_sec < 0) return COAP_500_INTERNAL_SERVER_ERROR;
+    if (tv_sec < 0) return COAP_500_INTERNAL_SERVER_ERROR;
 
 #ifdef LWM2M_CLIENT_MODE
     LOG_ARG("State: %s", STR_STATE(contextP->state));
@@ -443,21 +434,18 @@ next_step:
     switch (contextP->state)
     {
     case STATE_INITIAL:
-        if (0 != prv_refreshServerList(contextP))
+        if (0 != prv_refreshServerList(contextP)) return COAP_503_SERVICE_UNAVAILABLE;
+        if (contextP->serverList != NULL)
         {
-            LOG("prv_refreshServerList fail");
-            return COAP_503_SERVICE_UNAVAILABLE;
+            contextP->state = STATE_REGISTER_REQUIRED;
         }
-
-        state = ((!lwm2m_isBoostrpEnable(contextP))
-                 || ((contextP->serverList != NULL) && contextP->regist_first_flag)
-                 ?  STATE_REGISTER_REQUIRED : STATE_BOOTSTRAP_REQUIRED);
-
-        contextP->regist_first_flag = true;
-
-        SET_BS_LATER(contextP, state);
+        else
+        {
+            // Bootstrapping
+            contextP->state = STATE_BOOTSTRAP_REQUIRED;
+        }
         goto next_step;
-    //break;
+        break;
 
     case STATE_BOOTSTRAP_REQUIRED:
 #ifdef LWM2M_BOOTSTRAP
@@ -466,15 +454,13 @@ next_step:
             bootstrap_start(contextP);
             contextP->state = STATE_BOOTSTRAPPING;
             bootstrap_step(contextP, tv_sec, timeoutP);
-            break;
         }
         else
 #endif
         {
-            SET_BS_LATER(contextP, STATE_BOOTSTRAP_REQUIRED);
-            ret = COAP_503_SERVICE_UNAVAILABLE;
-            break;
+            return COAP_503_SERVICE_UNAVAILABLE;
         }
+        break;
 
 #ifdef LWM2M_BOOTSTRAP
     case STATE_BOOTSTRAPPING:
@@ -482,14 +468,11 @@ next_step:
         {
         case STATE_BS_FINISHED:
             contextP->state = STATE_INITIAL;
-            lwm2m_setBsCtrlStat(contextP, STATE_INITIAL);
             goto next_step;
             break;
 
         case STATE_BS_FAILED:
-            SET_BS_LATER(contextP, STATE_BOOTSTRAP_REQUIRED);
-            ret = COAP_503_SERVICE_UNAVAILABLE;
-            break;
+            return COAP_503_SERVICE_UNAVAILABLE;
 
         default:
             // keep on waiting
@@ -500,13 +483,7 @@ next_step:
 #endif
     case STATE_REGISTER_REQUIRED:
         result = registration_start(contextP);
-        LOG_ARG("[bootstrap_tag]: ---the return value result = %d of registration_start-----", result);
-        if (COAP_NO_ERROR != result)
-        {
-            SET_BS_LATER(contextP, STATE_REGISTER_REQUIRED);
-            ret = result;
-            break;
-        }
+        if (COAP_NO_ERROR != result) return result;
         contextP->state = STATE_REGISTERING;
         break;
 
@@ -516,17 +493,12 @@ next_step:
         {
         case STATE_REGISTERED:
             contextP->state = STATE_READY;
-            lwm2m_notify_even(MODULE_LWM2M, STATE_REGISTERED, NULL, 0);
-            lwm2m_setBsCtrlStat(contextP, STATE_INITIAL);
             break;
 
         case STATE_REG_FAILED:
             // TODO avoid infinite loop by checking the bootstrap info is different
-            //contextP->state = STATE_BOOTSTRAP_REQUIRED;
-
-            lwm2m_notify_even(MODULE_LWM2M,STATE_REG_FAILED, NULL, 0);
-            SET_BS_LATER(contextP, STATE_REGISTER_REQUIRED);
-
+            contextP->state = STATE_BOOTSTRAP_REQUIRED;
+            goto next_step;
             break;
 
         case STATE_REG_PENDING:
@@ -541,11 +513,9 @@ next_step:
         if (registration_getStatus(contextP) == STATE_REG_FAILED)
         {
             // TODO avoid infinite loop by checking the bootstrap info is different
-            //contextP->state = STATE_BOOTSTRAP_REQUIRED;
-            contextP->state = STATE_REGISTER_REQUIRED;
-            lwm2m_setBsCtrlStat(contextP, STATE_REGISTER_REQUIRED);
+            contextP->state = STATE_BOOTSTRAP_REQUIRED;
             goto next_step;
-            //            break;
+            break;
         }
         break;
 
@@ -564,5 +534,5 @@ next_step:
 #ifdef LWM2M_CLIENT_MODE
     LOG_ARG("Final state: %s", STR_STATE(contextP->state));
 #endif
-    return ret;
+    return 0;
 }

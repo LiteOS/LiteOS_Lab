@@ -32,7 +32,7 @@
 static void prv_handleResponse(lwm2m_server_t * bootstrapServer,
                                coap_packet_t * message)
 {
-    if ((COAP_204_CHANGED == message->code)||(COAP_201_CREATED == message->code))
+    if (COAP_204_CHANGED == message->code)
     {
         LOG("Received ACK/2.04, Bootstrap pending, waiting for DEL/PUT from BS server...");
         bootstrapServer->status = STATE_BS_PENDING;
@@ -180,7 +180,6 @@ void bootstrap_step(lwm2m_context_t * contextP,
             }
             break;
 
-
         case STATE_BS_INITIATED:
             // waiting
             break;
@@ -221,7 +220,6 @@ void bootstrap_step(lwm2m_context_t * contextP,
             break;
         }
         LOG_ARG("Finalal status: %s", STR_STATUS(targetP->status));
-
         targetP = targetP->next;
     }
 }

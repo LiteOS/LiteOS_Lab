@@ -372,9 +372,6 @@ static uint8_t prv_server_write(uint16_t instanceId,
         case LWM2M_SERVER_UPDATE_ID:
             result = COAP_405_METHOD_NOT_ALLOWED;
             break;
-        case LWM2M_SERVER_BSTRIGGER:
-            result = COAP_204_CHANGED;
-            break;
 
         default:
             return COAP_404_NOT_FOUND;
@@ -407,9 +404,6 @@ static uint8_t prv_server_execute(uint16_t instanceId,
         case LWM2M_SERVER_UPDATE_ID:
             // executed in core, if COAP_204_CHANGED is returned
             return COAP_204_CHANGED;
-        case LWM2M_SERVER_BSTRIGGER:
-            return COAP_204_CHANGED;
-            break;
         default:
             return COAP_405_METHOD_NOT_ALLOWED;
     }
