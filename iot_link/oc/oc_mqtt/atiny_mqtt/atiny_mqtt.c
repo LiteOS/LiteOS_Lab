@@ -288,8 +288,11 @@ static void __deal_dmp_msg(void *arg,mqtt_al_msgrcv_t  *msg)
         s_oc_agent_mqtt_cb->b_flag_dmp_run = 0;
         return;
     }
-
-    s_oc_agent_mqtt_cb->config.msgdealer(s_oc_agent_mqtt_cb,msg);
+	
+    if(NULL != s_oc_agent_mqtt_cb->config.msgdealer)
+    {
+        s_oc_agent_mqtt_cb->config.msgdealer(s_oc_agent_mqtt_cb,msg);
+    }
 
     return;
 }
