@@ -173,10 +173,6 @@ static int check_clone_config_params(oc_agent_mqtt_cb_t *cb,tag_oc_mqtt_config *
         goto EXIT_ERR;
     }
 	
-    if(NULL == config->msgdealer)
-    {
-        goto EXIT_ERR;
-    }
 
     memcpy(&cb->config,config,sizeof(tag_oc_mqtt_config));
 
