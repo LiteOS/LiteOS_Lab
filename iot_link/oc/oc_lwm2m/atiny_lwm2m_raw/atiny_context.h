@@ -58,7 +58,7 @@ extern "C" {
  *Structure of agentiny hanle.
 
  */
- 
+
  enum
 {
     OBJ_SECURITY_INDEX = 0,
@@ -66,12 +66,14 @@ extern "C" {
     OBJ_ACCESS_CONTROL_INDEX,
     OBJ_DEVICE_INDEX,
     OBJ_CONNECT_INDEX,
+#ifdef CONFIG_FEATURE_FOTA
     OBJ_FIRMWARE_INDEX,
+#endif
     OBJ_LOCATION_INDEX,
     OBJ_APP_INDEX,
     OBJ_MAX_NUM,
 };
- 
+
 typedef struct
 {
     lwm2m_context_t  *lwm2m_context;

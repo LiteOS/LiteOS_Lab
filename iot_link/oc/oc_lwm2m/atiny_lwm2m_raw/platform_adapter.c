@@ -52,6 +52,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <string.h>
+#include <stdarg.h>
 
 #include <osal.h>
 #include <link_misc.h>
@@ -97,5 +98,16 @@ int lwm2m_rand(void *output, size_t len)
 void lwm2m_delay(uint32_t second)
 {
     osal_task_sleep(second*1000);
+}
+
+void lwm2m_printf(const char * format, ...)
+{
+    va_list ap;
+
+    va_start(ap, format);
+
+    vfprintf(stderr, format, ap);
+
+    va_end(ap);
 }
 

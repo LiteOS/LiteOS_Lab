@@ -161,10 +161,8 @@ static lwm2m_watcher_t * prv_getWatcher(lwm2m_context_t * contextP,
         allocatedObserver = true;
         memset(observedP, 0, sizeof(lwm2m_observed_t));
         memcpy(&(observedP->uri), uriP, sizeof(lwm2m_uri_t));
-        osal_mutex_lock(contextP->observe_mutex);
         observedP->next = contextP->observedList;
         contextP->observedList = observedP;
-        osal_mutex_unlock(contextP->observe_mutex);
     }
 
     watcherP = prv_findWatcher(observedP, serverP);
@@ -182,10 +180,8 @@ static lwm2m_watcher_t * prv_getWatcher(lwm2m_context_t * contextP,
         memset(watcherP, 0, sizeof(lwm2m_watcher_t));
         watcherP->active = false;
         watcherP->server = serverP;
-        osal_mutex_lock(contextP->observe_mutex);
         watcherP->next = observedP->watcherList;
         observedP->watcherList = watcherP;
-        osal_mutex_unlock(contextP->observe_mutex);
     }
 
     return watcherP;
@@ -307,7 +303,6 @@ void observe_cancel(lwm2m_context_t * contextP,
         }
         if (targetP != NULL)
         {
-            osal_mutex_lock(contextP->observe_mutex);
             lwm2m_notify_even(MODULE_URI, OBSERVE_UNSUBSCRIBE, (char *) & (observedP->uri), sizeof(observedP->uri));
             if (targetP->parameters != NULL) lwm2m_free(targetP->parameters);
             lwm2m_free(targetP);
@@ -316,7 +311,6 @@ void observe_cancel(lwm2m_context_t * contextP,
                 prv_unlinkObserved(contextP, observedP);
                 lwm2m_free(observedP);
             }
-            osal_mutex_unlock(contextP->observe_mutex);
             return;
         }
     }
@@ -339,7 +333,6 @@ void observe_clear(lwm2m_context_t * contextP,
             lwm2m_observed_t * nextP;
             lwm2m_watcher_t * watcherP;
 
-            osal_mutex_lock(contextP->observe_mutex);
             nextP = observedP->next;
 
             for (watcherP = observedP->watcherList; watcherP != NULL; watcherP = watcherP->next)
@@ -352,7 +345,6 @@ void observe_clear(lwm2m_context_t * contextP,
             lwm2m_free(observedP);
 
             observedP = nextP;
-            osal_mutex_unlock(contextP->observe_mutex);
         }
         else
         {
@@ -381,7 +373,7 @@ uint8_t observe_setParameters(lwm2m_context_t * contextP,
     watcherP = prv_getWatcher(contextP, uriP, serverP);
     if (watcherP == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
 
-    // Check rule “lt” value + 2*”stp” values < “gt” value
+    // Check rule "lt" value + 2*"stp" values < "gt" value
     if ((((attrP->toSet | (watcherP->parameters?watcherP->parameters->toSet:0)) & ~attrP->toClear) & ATTR_FLAG_NUMERIC) == ATTR_FLAG_NUMERIC)
     {
         float gt;
@@ -787,9 +779,7 @@ void observe_step(lwm2m_context_t * contextP,
                     {
                         (void)observe_send_transaction(contextP, &cfg, watcherP, buffer, length);
                     }
-                    osal_mutex_lock(contextP->observe_mutex);
                     watcherP->update = false;
-                    osal_mutex_unlock(contextP->observe_mutex);
                 }
 
                 // Store this value

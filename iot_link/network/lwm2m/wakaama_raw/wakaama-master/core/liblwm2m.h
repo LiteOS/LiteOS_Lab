@@ -143,7 +143,7 @@ time_t lwm2m_gettime(void);
 
 #ifdef LWM2M_WITH_LOGS
 // Same usage as C89 printf()
-#define lwm2m_printf atiny_printf
+void lwm2m_printf(const char * format, ...);
 #endif
 
 // communication layer
@@ -152,7 +152,6 @@ time_t lwm2m_gettime(void);
 // secObjInstID: ID of the Securty Object instance to open a connection to
 // userData: parameter to lwm2m_init()
 void *lwm2m_connect_server(uint16_t secObjInstID, void *userData);
-
 
 // Close a session created by lwm2m_connect_server()
 // sessionH: session handle identifying the peer (opaque to the core)
@@ -236,22 +235,12 @@ bool lwm2m_session_is_equal(void * session1, void * session2, void * userData);
 #define LWM2M_SERVER_STORING_ID     6
 #define LWM2M_SERVER_BINDING_ID     7
 #define LWM2M_SERVER_UPDATE_ID      8
-#define LWM2M_SERVER_BSTRIGGER      9
 
 #define LWM2M_SECURITY_MODE_PRE_SHARED_KEY  0
 #define LWM2M_SECURITY_MODE_RAW_PUBLIC_KEY  1
 #define LWM2M_SECURITY_MODE_CERTIFICATE     2
 #define LWM2M_SECURITY_MODE_NONE            3
 
-#define LWM2M_TRIGER_SERVER_MODE_INITIATED_TIME 60
-
-
-#define MAX_FACTORY_BS_RETRY_CNT 3
-#define MAX_CLIENT_INITIATED_BS_RETRY_CNT 3
-#define FACTORY_BS_DELAY_BASE 0
-#define CLIENT_INITIATED_BS_DELAY_BASE 0
-#define FACTORY_BS_DELAY_INTERVAL 10
-#define CLIENT_INITIATED_BS_DELAY_INTERVAL 10
 
 /*
  * Utility functions for sorted linked list
@@ -696,8 +685,6 @@ typedef struct _lwm2m_context_t
 {
 #ifdef LWM2M_CLIENT_MODE
     lwm2m_client_state_t state;
-    //char*                bs_server_uri;   //    coaps://     coap://malloc memory
-    bool                 regist_first_flag;  //when serverlist and bootstrapServerList are all exist, we use regist or bootstrap.
     char *               endpointName;
     char *               msisdn;
     char *               altPath;
@@ -705,8 +692,6 @@ typedef struct _lwm2m_context_t
     lwm2m_server_t *     serverList;
     lwm2m_object_t *     objectList;
     lwm2m_observed_t *   observedList;
-    void*                observe_mutex;
-    lwm2m_bs_control_t    bsCtrl;
 #endif
 #ifdef LWM2M_SERVER_MODE
     lwm2m_client_t *        clientList;

@@ -205,12 +205,13 @@ static void print_indent(FILE * stream,
     for ( i = 0 ; i < num ; i++)
         fprintf(stream, "    ");
 }
-#ifdef ATING_DEBUG
+
 void output_buffer(FILE * stream,
                    uint8_t * buffer,
                    int length,
                    int indent)
 {
+#ifdef ATING_DEBUG
     int i;
 
     if (length == 0) fprintf(stream, "\n");
@@ -250,15 +251,9 @@ void output_buffer(FILE * stream,
         fprintf(stream, "\n");
         i += 16;
     }
-}
-#else
-void output_buffer(FILE *stream,
-                   uint8_t *buffer,
-                   int length,
-                   int indent)
-{
-}
 #endif
+}
+
 void output_tlv(FILE * stream,
                 uint8_t * buffer,
                 size_t buffer_len,
