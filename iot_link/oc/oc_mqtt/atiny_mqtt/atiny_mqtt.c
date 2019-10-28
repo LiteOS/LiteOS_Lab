@@ -131,12 +131,12 @@ static int check_clone_config_params(oc_agent_mqtt_cb_t *cb,tag_oc_mqtt_config *
         goto EXIT_ERR;
     }
 
-    if(en_oc_mqtt_code_mode_json != config->code_mode )
+    if(en_oc_mqtt_code_mode_json != config->code_mode)
     {
         goto EXIT_ERR;
     }
 
-    if(en_mqtt_sign_type_hmacsha256_check_time_no != config->sign_type )
+    if(en_mqtt_sign_type_hmacsha256_check_time_no != config->sign_type)
     {
         goto EXIT_ERR;
     }
@@ -283,8 +283,11 @@ static void __deal_dmp_msg(void *arg,mqtt_al_msgrcv_t  *msg)
         s_oc_agent_mqtt_cb->b_flag_dmp_run = 0;
         return;
     }
-
-    s_oc_agent_mqtt_cb->config.msgdealer(s_oc_agent_mqtt_cb,msg);
+	
+    if(NULL != s_oc_agent_mqtt_cb->config.msgdealer)
+    {
+        s_oc_agent_mqtt_cb->config.msgdealer(s_oc_agent_mqtt_cb,msg);
+    }
 
     return;
 }
