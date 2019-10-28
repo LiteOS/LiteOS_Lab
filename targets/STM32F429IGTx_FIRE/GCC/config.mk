@@ -158,7 +158,7 @@ CONFIG_PCP_ENABLE      := n
 #1, if you use the oc mqtt, then the tls must support cert mode
 #2，if you use the oc lwm2m with encode mode,then the dtls must support psk mode
 
-#CONFIG_DEMO_TYPE could be "oc_coap_demo" "oc_dtls_coap_demo" "oc_dtls_lwm2m_bs_demo" "oc_dtls_lwm2m_demo"
+#CONFIG_DEMO_TYPE could be "oc_coap_demo" "oc_dtls_coap_demo" "oc_dtls_lwm2m_bs_demo" "oc_dtls_lwm2m_demo" "oc_dtls_lwm2m_ota_demo"
 #"oc_lwm2m_bs_demo"  "oc_lwm2m_demo" "oc_lwm2m_ota_demo" "oc_tls_mqtt_bs_demo" "oc_tls_mqtt_demo"  "stimer_demo"
 
 CONFIG_DEMO_ENABLE := y
