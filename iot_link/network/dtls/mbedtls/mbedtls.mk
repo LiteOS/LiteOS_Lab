@@ -39,19 +39,6 @@ else ifeq ($(CONFIG_DTLS_TYPE), "mbedtls_psk")
 else
 	C_DEFS += -D NO_DTLS  
 endif      
-        
-#ifeq ($(CONFIG_DTLS_TYPE), "mbedtls_cert")
-#    C_DEFS += -D MBEDTLS_CONFIG_FILE=\"los_mbedtls_config_cert.h\"
-#    C_INCLUDES += $(MBEDTLS_INC)
-#    C_SOURCES += $(MBEDTLS_SRC)
-#    C_DEFS += $(MBEDTLS_DEF) -D CFG_MBEDTLS_MODE=CRT
-#else ifeq ($(CONFIG_EMBEDTLS_MODE), "mbedtls_psk")
-#    C_DEFS += -D MBEDTLS_CONFIG_FILE=\"los_mbedtls_config.h\"
-#    C_INCLUDES += $(MBEDTLS_INC)
-#    C_SOURCES += $(MBEDTLS_SRC)
-#    C_DEFS += $(MBEDTLS_DEF) -D CFG_MBEDTLS_MODE=PSK
-#else
-#	C_DEFS += -D NO_DTLS    
-#endif
+
 
 
