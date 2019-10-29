@@ -35,12 +35,12 @@
 #ifndef _ATINY_COAP_H
 #define _ATINY_COAP_H
 
-#include <stdlib.h>
+//#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-#include "coap_core.h"
-#include "litecoap.h"
+//#include "coap_core.h"
+//#include "litecoap.h"
 
 #define ATINY_OK               0
 #define ATINY_ERR             -1

@@ -36,7 +36,7 @@
  *  2019-10-12 13:14   YuHeng-P  The first version
  *
  */
- 
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -45,7 +45,7 @@
 #include <osal.h>
 #include <coap_al.h>
 #include <oc_coap_al.h>
-#include <litecoap_port.h>
+//#include <litecoap_port.h>
 
 typedef struct
 {
@@ -181,7 +181,7 @@ static int atiny_get_curstate(void *res)
  Return      : atiny_state @ atiny current state
  *****************************************************************************/
 static int atiny_set_errstate(int *state)
-{   
+{
     if (NULL != state)
     {
         *state = ATINY_STAT_ERR;
@@ -197,7 +197,7 @@ static int atiny_set_errstate(int *state)
  Return      : ATINY_OK @ set ok.
  *****************************************************************************/
 static int atiny_set_state(int state)
-{   
+{
     if ((state >= ATINY_STAT_INIT) && (state < ATINY_STAT_MAX))
     {
         atiny_state = state;
@@ -224,10 +224,10 @@ int __agent_coap_task_entry(void *args)
 	void *msg = NULL;
 	int ret  = 0;
     int startrcvmsg = 0;
-    
+
     unsigned long long bindstarttm;
     unsigned long long curtm;
-    
+
     get_coap_al_para();
 
     while(1)
@@ -378,7 +378,7 @@ int __agent_report(void *handle, char *buf, int len)
     {
         return ATINY_ERR;
     }
-    
+
     while(atiny_get_curstate(NULL) != ATINY_STAT_IDLE)
     {
         ret++;
