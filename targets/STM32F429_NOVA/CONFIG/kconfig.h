@@ -13,6 +13,7 @@
 #define CONFIG_SYSTICK 1
 #define CONFIG_HAS_MPU 1
 #define CONFIG_HAS_FPU 1
+#define CONFIG_FPU     1
 #define CONFIG_WFI 1
 #define CONFIG_TRACE 1
 #define CONFIG_GNUC 1
