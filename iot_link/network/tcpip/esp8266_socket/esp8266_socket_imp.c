@@ -143,19 +143,19 @@ static int esp8266_rcvdeal(void *args,void *msg,size_t len)
     str++;
 
     //now this is data payload
-    if(datalen > (cn_esp8266_cachelen - ring_datalen(&s_esp8266_sock_cb.esp8266_rcvring)))
+    if(datalen > (cn_esp8266_cachelen - ring_buffer_datalen(&s_esp8266_sock_cb.esp8266_rcvring)))
     {
     	return 0;
     }
 
     if(s_esp8266_sock_cb.type == SOCK_DGRAM)
     {
-    	ret = ring_write(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)&datalen,sizeof(datalen));
-        ret = ring_write(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)str,datalen);
+    	ret = ring_buffer_write(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)&datalen,sizeof(datalen));
+        ret = ring_buffer_write(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)str,datalen);
     }
     else if (s_esp8266_sock_cb.type == SOCK_STREAM)
     {
-        ret = ring_write(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)str,datalen);
+        ret = ring_buffer_write(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)str,datalen);
     }
 
     return ret;
@@ -271,8 +271,8 @@ static int esp8266_recv(int fd,void *buf,size_t len,int flags)
         if(s_esp8266_sock_cb.type == SOCK_DGRAM)
         {
             unsigned short framelen = 0;
-            ret = ring_read(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)&framelen,sizeof(framelen));
-            ret = ring_read(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)buf,framelen);
+            ret = ring_buffer_read(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)&framelen,sizeof(framelen));
+            ret = ring_buffer_read(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)buf,framelen);
             if(ret > 0)
             {
                 break;
@@ -280,7 +280,7 @@ static int esp8266_recv(int fd,void *buf,size_t len,int flags)
         }
         else if (s_esp8266_sock_cb.type == SOCK_STREAM)
         {
-            ret = ring_read(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)buf,len);
+            ret = ring_buffer_read(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)buf,len);
             if(ret > 0)
             {
                 break;
@@ -519,7 +519,7 @@ static bool_t esp8266_set_mux(int mux)
 int esp8266_boot(void)
 {
     at_oobregister("esp8266rcv",cn_esp8266_rcvindex,strlen(cn_esp8266_rcvindex),esp8266_rcvdeal,NULL);
-    ring_init(&s_esp8266_sock_cb.esp8266_rcvring,s_esp8266_sock_cb.esp8266_rcvbuf,cn_esp8266_cachelen,0,0);
+    ring_buffer_init(&s_esp8266_sock_cb.esp8266_rcvring,s_esp8266_sock_cb.esp8266_rcvbuf,cn_esp8266_cachelen,0,0);
 
 
     esp8266_reset();

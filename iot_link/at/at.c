@@ -37,7 +37,6 @@
 #include <string.h>
 #include <driver.h>
 #include <sys/fcntl.h>
-#include <los_base.h>
 
 #if CONFIG_AT_ENABLE
 
@@ -275,7 +274,7 @@ static int __rcv_task_entry(void *args)
     while(1)
     {
         memset(g_at_cb.rcvbuf,0,cn_at_resp_maxlen);
-        rcvlen = __resp_rcv(g_at_cb.rcvbuf,cn_at_resp_maxlen,LOS_WAIT_FOREVER);
+        rcvlen = __resp_rcv(g_at_cb.rcvbuf,cn_at_resp_maxlen,cn_osal_timeout_forever);
         if(rcvlen > 0)
         {
             matchret = __cmd_match(g_at_cb.rcvbuf,rcvlen);
@@ -382,6 +381,8 @@ int at_init(const char *devname)
         goto EXIT_PARA;
     }
     memset(&g_at_cb,0,sizeof(g_at_cb));
+    g_at_cb.devname = devname;
+
 
     if(false == osal_semp_create(&g_at_cb.cmd.cmdsync,1,1))
     {
@@ -405,7 +406,6 @@ int at_init(const char *devname)
         goto EXIT_RCVTASK;
     }
 
-    g_at_cb.devname = devname;
     //for the debug
     g_at_cb.rxdebugmode = en_at_debug_ascii;
     g_at_cb.txdebugmode = en_at_debug_ascii;
@@ -431,7 +431,6 @@ EXIT_PARA:
 
 //////////////////////////////////DEBUG COMMAND FOLLOWING/////////////////////////////////////////
 #include <shell.h>
-#include <los_sys.ph>
 //use this shell command,you could input at command through the terminal
 static int shell_at(int argc, const char *argv[])
 {
@@ -457,7 +456,7 @@ static int shell_at(int argc, const char *argv[])
     memset(respbuf,0,CN_AT_SHELL_LEN);
     snprintf((char *)cmdbuf,CN_AT_SHELL_LEN,"%s\r\n",argv[1]);
 
-    ret = at_command(cmdbuf,strlen((const char *)cmdbuf),index,respbuf,CN_AT_SHELL_LEN,LOSCFG_BASE_CORE_TICK_PER_SECOND); //one second
+    ret = at_command(cmdbuf,strlen((const char *)cmdbuf),index,respbuf,CN_AT_SHELL_LEN,1000); //one second
     if(ret == 0)
     {
         printf("atresponse:%d Bytes:%s\n\r",ret,respbuf);

@@ -1,0 +1,115 @@
+#
+# Copyright (c) [2019] Huawei Technologies Co.,Ltd.All rights reserved.
+#
+# LiteOS NOVA is licensed under the Mulan PSL v1.
+# You can use this software according to the terms and conditions of the Mulan PSL v1.
+# You may obtain a copy of Mulan PSL v1 at:
+#
+# 	http://license.coscl.org.cn/MulanPSL
+#
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
+# FIT FOR A PARTICULAR PURPOSE.
+# See the Mulan PSL v1 for more details.
+#
+
+menu "LiteOS NOVA heap configurations"
+
+config MMU
+    def_bool n
+
+config HEAP_DEBUG
+    bool "Enable heap debug support."
+    default n
+
+choice
+    prompt "Select Dynamic Storage Allocation algorithm"
+    default BESTFIT
+config BESTFIT
+    bool "bestfit algorithm"
+config TLSF
+    bool "Two-Level Segregate Fit (TLSF) algorithm"
+endchoice
+
+if TLSF
+
+choice
+    prompt "max size of the memory blocks managed by the TLSF heap"
+    default MAX_TLSF_BLOCK_001M
+
+config MAX_TLSF_BLOCK_008K
+    bool "max size of 8KB"
+config MAX_TLSF_BLOCK_016K
+    bool "max size of 16KB"
+config MAX_TLSF_BLOCK_032K
+    bool "max size of 32KB"
+config MAX_TLSF_BLOCK_064K
+    bool "max size of 64KB"
+config MAX_TLSF_BLOCK_128K
+    bool "max size of 128KB"
+config MAX_TLSF_BLOCK_256K
+    bool "max size of 256KB"
+config MAX_TLSF_BLOCK_512K
+    bool "max size of 512KB"
+config MAX_TLSF_BLOCK_001M
+    bool "max size of 1MB"
+config MAX_TLSF_BLOCK_002M
+    bool "max size of 2MB"
+config MAX_TLSF_BLOCK_004M
+    bool "max size of 4MB"
+config MAX_TLSF_BLOCK_008M
+    bool "max size of 8MB"
+config MAX_TLSF_BLOCK_016M
+    bool "max size of 16MB"
+config MAX_TLSF_BLOCK_032M
+    bool "max size of 32MB"
+config MAX_TLSF_BLOCK_064M
+    bool "max size of 64MB"
+config MAX_TLSF_BLOCK_128M
+    bool "max size of 128MB"
+config MAX_TLSF_BLOCK_256M
+    bool "max size of 256MB"
+config MAX_TLSF_BLOCK_512M
+    bool "max size of 512MB"
+config MAX_TLSF_BLOCK_001G
+    bool "max size of 1GB"
+config MAX_TLSF_BLOCK_002G
+    bool "max size of 2GB"
+endchoice
+
+config FL_IDX_MAX
+    int
+    default 13 if MAX_TLSF_BLOCK_008K
+    default 14 if MAX_TLSF_BLOCK_016K
+    default 15 if MAX_TLSF_BLOCK_032K
+    default 16 if MAX_TLSF_BLOCK_064K
+    default 17 if MAX_TLSF_BLOCK_128K
+    default 18 if MAX_TLSF_BLOCK_256K
+    default 19 if MAX_TLSF_BLOCK_512K
+    default 20 if MAX_TLSF_BLOCK_001M
+    default 21 if MAX_TLSF_BLOCK_002M
+    default 22 if MAX_TLSF_BLOCK_004M
+    default 23 if MAX_TLSF_BLOCK_008M
+    default 24 if MAX_TLSF_BLOCK_016M
+    default 25 if MAX_TLSF_BLOCK_032M
+    default 26 if MAX_TLSF_BLOCK_064M
+    default 27 if MAX_TLSF_BLOCK_128M
+    default 28 if MAX_TLSF_BLOCK_256M
+    default 29 if MAX_TLSF_BLOCK_512M
+    default 30 if MAX_TLSF_BLOCK_001G
+    default 31 if MAX_TLSF_BLOCK_002G
+
+endif       # end if TLSF
+
+config MEM_STATISTICS
+    bool "memory statistics enable"
+    default y
+
+config PAGE_POOL
+    def_bool n
+
+config MEMPOOL
+    bool "Enable memory pool support."
+    default y
+
+endmenu     # end menu of heap

@@ -1,0 +1,220 @@
+#
+# Copyright (c) [2019] Huawei Technologies Co.,Ltd.All rights reserved.
+#
+# LiteOS NOVA is licensed under the Mulan PSL v1.
+# You can use this software according to the terms and conditions of the Mulan PSL v1.
+# You may obtain a copy of Mulan PSL v1 at:
+#
+# 	http://license.coscl.org.cn/MulanPSL
+#
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
+# FIT FOR A PARTICULAR PURPOSE.
+# See the Mulan PSL v1 for more details.
+#
+
+menu "LiteOS NOVA kernel configuration"
+
+#
+# critical settings
+#
+
+choice
+    prompt "Please select the number of slots in critical job."
+    default NR_CRITICAL_JOB_Q_SLOTS_32
+config NR_CRITICAL_JOB_Q_SLOTS_8
+    bool "8"
+config NR_CRITICAL_JOB_Q_SLOTS_16
+    bool "16"
+config NR_CRITICAL_JOB_Q_SLOTS_32
+    bool "32"
+config NR_CRITICAL_JOB_Q_SLOTS_64
+    bool "64"
+endchoice
+
+config NR_CRITICAL_JOB_Q_SLOTS
+    int
+    default  8 if NR_CRITICAL_JOB_Q_SLOTS_8
+    default 16 if NR_CRITICAL_JOB_Q_SLOTS_16
+    default 32 if NR_CRITICAL_JOB_Q_SLOTS_32
+    default 64 if NR_CRITICAL_JOB_Q_SLOTS_64
+
+config CRITICAL_STACK_SIZE
+    hex "The size of critical job stack."
+    default 0x800
+
+config CRITICAL_STACK_CHECK
+    bool "Enable critical stack overflow check."
+    default y
+
+#
+# event settings
+#
+
+config IPC_EVENT
+    bool "Enable the IPC event."
+    default y
+
+#
+# message queue settings
+#
+
+config IPC_MQ
+    bool "Enable the IPC message queue."
+    default y
+
+#
+# task settings
+#
+
+config TASK_PRIO_64
+    bool "Enable 64 task priorities support."
+
+#
+# task hook support
+#
+
+config TASK_HOOK
+    def_bool n
+
+#
+# task create hook support
+#
+
+config TASK_CREATE_HOOK
+    bool  "Task create hook support."
+    select TASK_HOOK
+    default n
+
+#
+# number of task create hook table slots
+#
+
+config NR_TASK_CREATE_HOOK_SLOTS
+    int "The number of task create hook table slots."
+    range 1 4
+    default 4
+    depends on TASK_CREATE_HOOK
+
+#
+# task delete hook support
+#
+
+config TASK_DELETE_HOOK
+    bool  "Task delete hook support."
+    select TASK_HOOK
+    default n
+
+#
+# number of task delete hook table slots
+#
+
+config NR_TASK_DELETE_HOOK_SLOTS
+    int "The number of task delete hook table slots."
+    range 1 4
+    default 4
+    depends on TASK_DELETE_HOOK
+
+#
+# task settings
+#
+
+config TASK_SWITCH_HOOK
+    bool "Enable task switch hook."
+    select TASK_HOOK
+    default y
+
+#
+# number of task switch hook table slots
+#
+
+config NR_TASK_SWITCH_HOOK_SLOTS
+    int "The number of task switch hook table slots."
+    range 1 4
+    depends on TASK_SWITCH_HOOK
+    default 4
+
+#
+# task local storage support
+#
+
+config TASK_TLS
+    bool "Task local storage support."
+    default n
+
+#
+# number of TLS (task local storage) slots
+#
+
+config NR_TLS_SLOTS
+    int "The number of TLS (task local storage) slots."
+    range 1 8
+    default 4
+    depends on TASK_TLS
+
+#
+# tick settings
+#
+
+choice
+    prompt "Please select the number of slots in the tick queue array. The tick queue is divided to reduce the insertion time. The divided queue is held in an array."
+    default NR_TICK_Q_SLOTS_16
+config NR_TICK_Q_SLOTS_8
+    bool "8"
+config NR_TICK_Q_SLOTS_16
+    bool "16"
+config NR_TICK_Q_SLOTS_32
+    bool "32"
+config NR_TICK_Q_SLOTS_64
+    bool "64"
+endchoice
+
+config NR_TICK_Q_SLOTS_ORDER
+    int
+    default 3 if NR_TICK_Q_SLOTS_8
+    default 4 if NR_TICK_Q_SLOTS_16
+    default 5 if NR_TICK_Q_SLOTS_32
+    default 6 if NR_TICK_Q_SLOTS_64
+
+config TICK_TIMER_NAME
+    string "the system tick timer name"
+    default ""
+
+config SYS_TICK_HZ
+    int "the system tick frequent"
+    range 10 10000
+    default 50
+
+config NR_RR_SLICING_TICKS
+    int "The time slice size used in the round-robin scheduling."
+    range 1 SYS_TICK_HZ
+    default 5
+
+config TICKLESS
+    bool "Enable tickless support."
+    default n
+
+config TICK_DEBUG
+    def_bool y
+
+#
+# software timer settings
+#
+
+config SOFT_TIMER
+    bool "Enable the software timer support."
+    default y
+
+#
+# deferred job settings
+#
+
+config DEFERRED_STACK_SIZE
+    hex "The stack size of the deferred task."
+    default 0x800
+
+config DEFERRED_NAME
+    string "The task name of the deferred task."
+    default "defer"
+
+endmenu

@@ -50,7 +50,7 @@
 ################################################################################
 ########################OS SERVICE START########################################
 
-#CONFIG_OS_TYPE , could be: "linux" "macos" "liteos", and you could select one
+#CONFIG_OS_TYPE , could be: "linux" "macos" "liteos" "novaos", and you must select one of them
 CONFIG_OS_TYPE := "liteos"
 
 #CONFIG_ARCH_CPU_TYPE,could be "armv7-m" "armv6-m" "riscv32" "x86" "x86-64"
@@ -91,7 +91,7 @@ CONFIG_TCPIP_ENABLE := y
 CONFIG_TCPIP_TYPE := "lwip_socket"
 
 #CONFIG_DTLS_ENABLE , we supply a DTLS AL (building),you could choose yes or no
-#CONFIG_DTLS_TYPE, could be "mbeddtls_psk" "mbedtls_cert" "none"
+#CONFIG_DTLS_TYPE, could be "mbedtls_psk" "mbedtls_cert" "none"
 
 CONFIG_DTLS_ENABLE   := y
 CONFIG_DTLS_TYPE     := "mbedtls_psk"
@@ -104,7 +104,7 @@ CONFIG_MQTT_TYPE     := "paho_mqtt"
 
 #CONFIG_LWM2M_ENABLE, we build a lwm2m abstraction, which shield the difference of 
 #the implement of lwm2m. 
-#CONFIG_LWM2M_TYPE could be "wakaama_lwm2m" "none"
+#CONFIG_LWM2M_TYPE could be "wakaama_lwm2m" "wakaama_raw" "none"
 CONFIG_LWM2M_ENABLE   := y
 CONFIG_LWM2M_TYPE     := "wakaama_lwm2m"
 
@@ -131,7 +131,7 @@ CONFIG_OC_MQTT_TYPE   := "soft"
 
 #CONFIG_OC_LWM2M_ENABLE, we build a oc lwm2m abstraction for huawei OceanConnect service,
 #which shield the difference of the implement of oc lwm2m. 
-#CONFIG_OC_MQTT_TYPE could be "soft" "boudica150_oc" "none"
+#CONFIG_OC_LWM2M_TYPE could be "soft" "boudica150_oc" "atiny_lwm2m_raw" "none"
 CONFIG_OC_LWM2M_ENABLE := y
 CONFIG_OC_LWM2M_TYPE   := "soft"
 

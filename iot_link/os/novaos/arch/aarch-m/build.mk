@@ -1,0 +1,10 @@
+src-prefix            := src/
+src-$(CONFIG_GNUC)    += context.c cpu.c exception.c handlers.c nvic.c vectors.c
+src-$(CONFIG_SESA)    += sesa/*.c
+src-$(CONFIG_SYSTICK) += systick.c
+src-$(CONFIG_SVC)     += svc.c
+src-$(CONFIG_MPU)     += mpu.c
+src-$(CONFIG_TRACE)   += trace.c
+usr-y                 += user.c
+usr-$(CONFIG_SESA)    += sesa/*.c
+inc-g-y               += h/ h/cmsis/

@@ -74,6 +74,9 @@ int link_main(void *args)
 #elif CONFIG_MACOS_ENABLE
     #include <macos_imp.h>
     osal_install_macos();
+#elif CONFIG_NOVAOS_ENABLE
+    #include <novaos_imp.h>
+    osal_install_novaos();
 #else
     #error("you should add your own os here");
 #endif
@@ -88,6 +91,20 @@ int link_main(void *args)
     shell_init();
 #endif
 
+    /* add loader code here */
+#if CONFIG_OTA_ENABLE
+    extern void hal_init_ota(void);
+    hal_init_ota();
+#endif
+
+#if CONFIG_LOADER_ENABLE
+    printf("loader main!\n");
+    extern int ota_detection();
+    ota_detection();
+    loader_main();
+    return;
+#endif
+    /* add loader code here end */
 
 ///< install the driver framework
 #if CONFIG_DRIVER_ENABLE
@@ -226,6 +243,11 @@ int link_main(void *args)
 #if CONFIG_DEMOS_ENABLE
     extern int standard_app_demo_main();
     standard_app_demo_main();
+#endif
+
+#if CONFIG_AUTO_TEST
+    #include <test_case.h>
+    autotest_start();
 #endif
 
     return 0;

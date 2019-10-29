@@ -68,6 +68,14 @@ include $(iot_link_root)/ota/ota.mk
 #configure the loader	
 include $(iot_link_root)/loader/loader.mk
 
+ifeq ($(CONFIG_LOADER_ENABLE), y)
+#configure the upgrade patch
+include $(iot_link_root)/upgrade_patch/upgrade_patch.mk
+
+#configure the compress algo
+include $(iot_link_root)/compression_algo/compression_algo.mk
+endif
+
 iot_link_src  = ${wildcard $(iot_link_root)/*.c} 
 C_SOURCES += $(iot_link_src)	
 		
