@@ -5,7 +5,7 @@
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
  * You may obtain a copy of Mulan PSL v1 at:
  *
- * 	http://license.coscl.org.cn/MulanPSL
+ *  http://license.coscl.org.cn/MulanPSL
  *
  * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
@@ -169,7 +169,8 @@ __naked void pendsv_handler (void)
 "       ldr     lr, [r1, #%c2]      @ load regset->exc_return                \n"
 "       tst     lr, 0x10                                                     \n"
 "       bne     0f                                                           \n"
-"       vldm    r3, {d8-d15}                                                 \n"
+"       add     r2, r1, #%c3                                                 \n"
+"       vldm    r2, {d8-d15}                                                 \n"
 "0:                                                                          \n"
 #endif
 #ifdef  CONFIG_AARCH_M_EXCLUSIVE

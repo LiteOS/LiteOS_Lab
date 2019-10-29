@@ -94,18 +94,18 @@ CONFIG_TCPIP_TYPE := "lwip_socket"
 #CONFIG_DTLS_TYPE, could be "mbedtls_psk" "mbedtls_cert" "none"
 
 CONFIG_DTLS_ENABLE   := y
-CONFIG_DTLS_TYPE     := "mbedtls_psk"
+CONFIG_DTLS_TYPE     := "mbedtls_cert"
 
 #CONFIG_MQTT_ENABLE, we build a mqtt abstraction, which shield the difference of 
 #the implement of mqtt. 
 #CONFIG_MQTT_TYPE could be "paho_mqtt" "none"
-CONFIG_MQTT_ENABLE   := n
+CONFIG_MQTT_ENABLE   := y
 CONFIG_MQTT_TYPE     := "paho_mqtt"
 
 #CONFIG_LWM2M_ENABLE, we build a lwm2m abstraction, which shield the difference of 
 #the implement of lwm2m. 
 #CONFIG_LWM2M_TYPE could be "wakaama_lwm2m" "none"
-CONFIG_LWM2M_ENABLE   := y
+CONFIG_LWM2M_ENABLE   := n
 CONFIG_LWM2M_TYPE     := "wakaama_lwm2m"
 
 #CONFIG_COAP_ENABLE, we build a coap abstraction, which shield the difference of 
@@ -126,13 +126,13 @@ CONFIG_OC_COAP_TYPE   := "soft"
 #CONFIG_OC_MQTT_ENABLE, we build a oc mqtt abstraction for huawei OceanConnect service,
 #which shield the difference of the implement of oc mqtt. 
 #CONFIG_OC_MQTT_TYPE could be "soft" "ec20_oc" "none"
-CONFIG_OC_MQTT_ENABLE := n
+CONFIG_OC_MQTT_ENABLE := y
 CONFIG_OC_MQTT_TYPE   := "soft"
 
 #CONFIG_OC_LWM2M_ENABLE, we build a oc lwm2m abstraction for huawei OceanConnect service,
 #which shield the difference of the implement of oc lwm2m. 
 #CONFIG_OC_MQTT_TYPE could be "soft" "boudica150_oc" "none"
-CONFIG_OC_LWM2M_ENABLE := y
+CONFIG_OC_LWM2M_ENABLE := n
 CONFIG_OC_LWM2M_TYPE   := "soft"
 
 ########################OC SERVICE END##########################################
@@ -162,7 +162,7 @@ CONFIG_PCP_ENABLE      := n
 #"oc_lwm2m_bs_demo"  "oc_lwm2m_demo" "oc_lwm2m_ota_demo" "oc_tls_mqtt_bs_demo" "oc_tls_mqtt_demo"  "stimer_demo"
 
 CONFIG_DEMO_ENABLE := y
-CONFIG_DEMO_TYPE   := "oc_lwm2m_demo"
+CONFIG_DEMO_TYPE   := "oc_tls_mqtt_demo"
 
 #########################STANDARD DEMO END######################################
 include $(TOP_DIR)/iot_link/iot.mk
