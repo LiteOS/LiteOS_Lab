@@ -42,7 +42,7 @@
 
 //these defines could be moved to the configuration of the at module
 #define cn_at_oob_tab_len         6            //only allow 6 oob command monitor here,you could configure it more
-#define cn_at_resp_maxlen         1024           //PROSING THAT COULD GET THE MOST REPSLENGTH
+#define cn_at_resp_maxlen         2048           //PROSING THAT COULD GET THE MOST REPSLENGTH
 
 //at control block here
 typedef struct
@@ -208,7 +208,7 @@ static int  __cmd_match(void *data,size_t len)
     int  ret = -1;
     int  cpylen;
     at_cmd_item *cmd = NULL;
-    
+
     cmd = &g_at_cb.cmd;
     if(osal_mutex_lock(cmd->cmdlock))
     {
@@ -244,8 +244,7 @@ static int  __oob_match(void *data,size_t len)
         if((oob->func != NULL)&&(oob->index != NULL)&&\
             (0 == memcmp(oob->index,data,oob->len)))
         {
-            oob->func(oob->args,data,len);
-            ret = 0;
+            ret = oob->func(oob->args,data,len);
             break;
         }
     }
@@ -262,28 +261,36 @@ instruction  :this task read the device continousely and blocked by the read fun
 static int __rcv_task_entry(void *args)
 {
     bool_t matchret;
-    int  rcvlen;
-    
+    int oobret;
+    int  rcvlen = 0;
+
     g_at_cb.devhandle = los_dev_open(g_at_cb.devname,O_RDWR);
     if(NULL == g_at_cb.devhandle)
     {
         printf("%s:open %s err\n\r",__FUNCTION__,g_at_cb.devname);
         return 0;
     }
-    
+
     while(1)
     {
-        memset(g_at_cb.rcvbuf,0,cn_at_resp_maxlen);
-        rcvlen = __resp_rcv(g_at_cb.rcvbuf,cn_at_resp_maxlen,cn_osal_timeout_forever);
+        if(rcvlen == 0)
+            memset(g_at_cb.rcvbuf,0,cn_at_resp_maxlen);
+        rcvlen += __resp_rcv(g_at_cb.rcvbuf+ rcvlen,cn_at_resp_maxlen,cn_osal_timeout_forever);
         if(rcvlen > 0)
         {
             matchret = __cmd_match(g_at_cb.rcvbuf,rcvlen);
             if(0 != matchret)
             {
-                __oob_match(g_at_cb.rcvbuf,rcvlen);
+                oobret = __oob_match(g_at_cb.rcvbuf,rcvlen);
+                if(oobret != -1)
+                {
+                    rcvlen = 0;
+                }
             }
+            else
+                rcvlen = 0;
         }
-    }    
+    }
 }
 
 
@@ -409,7 +416,7 @@ int at_init(const char *devname)
     //for the debug
     g_at_cb.rxdebugmode = en_at_debug_ascii;
     g_at_cb.txdebugmode = en_at_debug_ascii;
-  
+
     ret = 0;
     return ret;
 
