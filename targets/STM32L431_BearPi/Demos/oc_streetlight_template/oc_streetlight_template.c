@@ -156,8 +156,10 @@ static void timer1_callback(void *arg)
 }
 
 //use this function to push all the message to the buffer
-static int app_msg_deal(void *usr_data,char *msg, int len)
+static int app_msg_deal(void *usr_data, en_oc_lwm2m_msg_t type, void *data, int len)
 {
+    unsigned char *msg;
+    msg = data;
     int ret = -1;
 
     if(len <= cn_app_rcv_buf_len)
@@ -331,7 +333,7 @@ static int app_collect_task_entry()
 
 #include <stimer.h>
 
-int oc_lwm2m_demo_main()
+int standard_app_demo_main()
 {
     osal_semp_create(&s_rcv_sync,1,0);
 

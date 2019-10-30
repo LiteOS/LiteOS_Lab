@@ -1,0 +1,311 @@
+#
+# Copyright (c) [2019] Huawei Technologies Co.,Ltd.All rights reserved.
+#
+# LiteOS NOVA is licensed under the Mulan PSL v1.
+# You can use this software according to the terms and conditions of the Mulan PSL v1.
+# You may obtain a copy of Mulan PSL v1 at:
+#
+# 	http://license.coscl.org.cn/MulanPSL
+#
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
+# FIT FOR A PARTICULAR PURPOSE.
+# See the Mulan PSL v1 for more details.
+#
+
+config STM32
+    def_bool n
+
+if STM32
+
+config STM32_HAL_H
+    string "STM32 HAL header file name (stm32l4xx_hal.h, stm32f4xx_hal.h etc.)"
+    default ""
+
+config STM32_DMA
+    def_bool n
+
+config STM32_RCC
+    def_bool y
+
+config STM32_GPIO
+    def_bool y
+
+#
+# STM32 UART
+#
+
+config STM32_UART
+    def_bool n
+    select STM32_DMA
+    select HAL_UART
+
+config STM32_UART_USING_DR
+    bool "Specific if the UARTs are recieving/sending data by using the <DR> register."
+    default n
+
+# STM32 UART1
+
+config STM32_UART1
+    bool "Enable STM32 UART#1."
+    default n
+    select STM32_UART
+
+if STM32_UART1
+
+config STM32_UART1_BAUDRATE
+    int "STM32 UART1 baudrate."
+    default 115200
+
+config STM32_UART1_TX_GPIOX
+    int "STM32 UART1 TX PIN GPIO BASE, (0-GPIOA, 1-GPIOB, ...)."
+    default 0
+
+config STM32_UART1_TX_PIN
+    int "STM32 UART1 TX PIN."
+    default 9
+
+config STM32_UART1_RX_GPIOX
+    int "STM32 UART1 RX PIN GPIO BASE, (0-GPIOA, 1-GPIOB, ...)."
+    default 0
+
+config STM32_UART1_RX_PIN
+    int "STM32 UART1 RX PIN."
+    default 10
+
+config STM32_UART1_AF
+    int "STM32 UART1 alternate function mapping"
+    default 7
+
+endif
+
+# STM32 UART2
+
+config STM32_UART2
+    bool "Enable STM32 UART#2."
+    default n
+    select STM32_UART
+
+if STM32_UART2
+
+config STM32_UART2_BAUDRATE
+    int "STM32 UART2 baudrate."
+    default 115200
+
+config STM32_UART2_TX_GPIOX
+    int "STM32 UART2 TX PIN GPIO BASE, (0-GPIOA, 1-GPIOB, ...)."
+    default 0
+
+config STM32_UART2_TX_PIN
+    int "STM32 UART2 TX PIN."
+    default 2
+
+config STM32_UART2_RX_GPIOX
+    int "STM32 UART2 RX PIN GPIO BASE, (0-GPIOA, 1-GPIOB, ...)."
+    default 0
+
+config STM32_UART2_RX_PIN
+    int "STM32 UART2 RX PIN."
+    default 3
+
+config STM32_UART2_AF
+    int "STM32 UART2 alternate function mapping"
+    default 7
+
+endif
+
+# STM32 UART3
+
+config STM32_UART3
+    bool "Enable STM32 UART#3."
+    default n
+    select STM32_UART
+
+if STM32_UART3
+
+config STM32_UART3_BAUDRATE
+    int "STM32 UART3 baudrate."
+    default 115200
+
+config STM32_UART3_TX_GPIOX
+    int "STM32 UART3 TX PIN GPIO BASE, (0-GPIOA, 1-GPIOB, ...)."
+    default 2
+
+config STM32_UART3_TX_PIN
+    int "STM32 UART3 TX PIN."
+    default 4
+
+config STM32_UART3_RX_GPIOX
+    int "STM32 UART3 RX PIN GPIO BASE, (0-GPIOA, 1-GPIOB, ...)."
+    default 2
+
+config STM32_UART3_RX_PIN
+    int "STM32 UART3 RX PIN."
+    default 5
+
+config STM32_UART3_AF
+    int "STM32 UART3 alternate function mapping"
+    default 7
+
+endif
+
+# STM32 LPUART1
+
+config STM32_LPUART1
+    bool "Enable STM32 LPUART#1."
+    default n
+    select STM32_UART
+
+if STM32_LPUART1
+
+config STM32_LPUART1_BAUDRATE
+    int "STM32 LPUART1 baudrate."
+    default 9600
+
+config STM32_LPUART1_TX_GPIOX
+    int "STM32 LPUART1_ TX PIN GPIO BASE, (0-GPIOA, 1-GPIOB, ...)."
+    default 2
+
+config STM32_LPUART1_TX_PIN
+    int "STM32 LPUART1 TX PIN."
+    default 0
+
+config STM32_LPUART1_RX_GPIOX
+    int "STM32 LPUART1 RX PIN GPIO BASE, (0-GPIOA, 1-GPIOB, ...)."
+    default 2
+
+config STM32_LPUART1_RX_PIN
+    int "STM32 LPUART1 RX PIN."
+    default 1
+
+config STM32_LPUART1_AF
+    int "STM32 LPUART1 alternate function mapping"
+    default 8
+
+endif
+
+#
+# STM32 I2C
+#
+
+config STM32_I2C
+    def_bool n
+    select HAL_I2C
+
+# STM32_I2C1
+
+config STM32_I2C1
+    bool "STM32 I2C#1."
+    default n
+    select STM32_I2C
+
+if STM32_I2C1
+
+config STM32_I2C1_SCL_GPIOX
+    int "STM32 I2C1 SCL PIN GPIO BASE, (0-GPIOA, 1-GPIOB, ...)."
+    default 1
+
+config STM32_I2C1_SCL_PIN
+    int "STM32 I2C1 SCL PIN."
+    default 6
+
+config STM32_I2C1_SDA_GPIOX
+    int "STM32 I2C1 SCL PIN GPIO BASE, (0-GPIOA, 1-GPIOB, ...)."
+    default 1
+
+config STM32_I2C1_SDA_PIN
+    int "STM32 I2C1 SDA PIN."
+    default 7
+
+config STM32_I2C1_AF
+    int "STM32 I2C1 alternate function mapping"
+    default 4
+
+endif
+
+# STM32_I2C2
+
+config STM32_I2C2
+    bool "STM32 I2C#2."
+    default n
+    select STM32_I2C
+
+if STM32_I2C2
+
+config STM32_I2C2_SCL_GPIOX
+    int "STM32 I2C2 SCL PIN GPIO BASE, (0-GPIOA, 1-GPIOB, ...)."
+    default 1
+
+config STM32_I2C2_SCL_PIN
+    int "STM32 I2C2 SCL PIN."
+    default 10
+
+config STM32_I2C2_SDA_GPIOX
+    int "STM32 I2C2 SCL PIN GPIO BASE, (0-GPIOA, 1-GPIOB, ...)."
+    default 1
+
+config STM32_I2C2_SDA_PIN
+    int "STM32 I2C2 SDA PIN."
+    default 14
+
+config STM32_I2C2_AF
+    int "STM32 I2C2 alternate function mapping"
+    default 4
+
+endif
+
+# STM32_I2C3
+
+config STM32_I2C3
+    bool "STM32 I2C#3."
+    default n
+    select STM32_I2C
+
+if STM32_I2C3
+
+config STM32_I2C3_SCL_GPIOX
+    int "STM32 I2C3 SCL PIN GPIO BASE, (0-GPIOA, 1-GPIOB, ...)."
+    default 0
+
+config STM32_I2C3_SCL_PIN
+    int "STM32 I2C3 SCL PIN."
+    default 7
+
+config STM32_I2C3_SDA_GPIOX
+    int "STM32 I2C3 SCL PIN GPIO BASE, (0-GPIOA, 1-GPIOB, ...)."
+    default 1
+
+config STM32_I2C3_SDA_PIN
+    int "STM32 I2C3 SDA PIN."
+    default 4
+
+config STM32_I2C3_AF
+    int "STM32 I2C3 alternate function mapping"
+    default 4
+
+endif
+
+#
+# STM32 ETH
+#
+
+config STM32_ETH
+    def_bool n
+
+config STM32_ETH1
+    bool "STM32 ETH#1"
+    select STM32_ETH
+    select LWIP
+    select HARDWARE_CHECKSUM
+    default n
+
+config STM32_ETH1_MAC
+    string "STM32 ETH#1 mac address."
+    depends on STM32_ETH1
+    default "00:80:e1:01:02:03"
+
+# STM32_ETH1
+
+endif
+
+orsource "*/kconfig"

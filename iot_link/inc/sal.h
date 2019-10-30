@@ -7,6 +7,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/select.h>
 
 #include <sal_define.h>
 #include <sal_types.h>
@@ -50,6 +51,9 @@ int sal_sendto(int sockfd, const void *dataptr, size_t size, int flags,
 int sal_shutdown(int sockfd, int how);
 
 int sal_closesocket(int sockfd);
+
+int sal_select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout);
+
 
 struct hostent * sal_gethostbyname(const char *name);
 

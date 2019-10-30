@@ -139,7 +139,6 @@ typedef struct
     fn_oc_mqtt_deconfig deconfig; ///< this function used for the deconfig
 }tag_oc_mqtt_ops;
 
-#if CONFIG_OC_MQTT_ENABLE
 /**
  *@brief the mqtt agent should use this function to register the method for the application
  *
@@ -316,20 +315,5 @@ int oc_mqtt_deconfig(void *handle);
  *@return 0 success while <0 failed
  */
 int oc_mqtt_init();
-
-
-#else   //not configure the lwm2m agent
-
-#define oc_mqtt_register(opt)                                              -1
-
-#define oc_mqtt_config(param)                                              NULL
-#define oc_mqtt_deconfig(handle)                                           -1
-#define oc_mqtt_json_fmt_report(report)                                    NULL
-#define oc_mqtt_json_fmt_response(response)                                NULL
-
-#define oc_mqtt_report(handle,report)                                      -1
-#define oc_mqtt_init()                                                     -1
-
-#endif
 
 #endif /* __OC_MQTT_AL_H */

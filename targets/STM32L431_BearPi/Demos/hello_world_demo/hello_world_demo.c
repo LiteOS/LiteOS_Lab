@@ -51,7 +51,7 @@ static int app_hello_world_entry()
     }
 }
 
-int hello_world_main()
+int standard_app_demo_main()
 {
     osal_task_create("helloworld",app_hello_world_entry,NULL,0x400,NULL,2);
     return 0;

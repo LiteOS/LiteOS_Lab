@@ -1,0 +1,73 @@
+#
+# Copyright (c) [2019] Huawei Technologies Co.,Ltd.All rights reserved.
+#
+# LiteOS NOVA is licensed under the Mulan PSL v1.
+# You can use this software according to the terms and conditions of the Mulan PSL v1.
+# You may obtain a copy of Mulan PSL v1 at:
+#
+# 	http://license.coscl.org.cn/MulanPSL
+#
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
+# FIT FOR A PARTICULAR PURPOSE.
+# See the Mulan PSL v1 for more details.
+#
+
+import sys, os, re
+
+stub_prolog = '''\
+// *************************************************************
+// *** created by project maintenance tool, do not edit it!
+// *************************************************************
+// *** NOTE: all stubs in this file are defined as 'void name (void)' as they
+// *** are all naked routines this file is used for supply stub symbols only
+
+#include <kconfig.h>
+'''
+
+stub_template = '''
+__attribute__ ((naked)) void %s (void)
+    {
+    __asm__ __volatile__
+        (
+"       .syntax unified                                                      \\n"
+"                                                                            \\n"
+#ifdef CONFIG_AARCH_M_BASELINE
+"       push    {r0, r1}                                                     \\n"
+"       ldr     r0, =%%%s                                                    \\n"
+"       mov     r12, r0                                                      \\n"
+"       pop     {r0, r1}                                                     \\n"
+#else
+"       ldr     r12, =%%%s                                                   \\n"
+#endif
+"       svc     #0                                                           \\n"
+"       @ will not return here                                               \\n"
+        : : "i" ((%s << 8) | %d)
+        );
+    }
+'''
+
+def main ():
+    mid = -1
+    rid = 0
+
+    stub = open('syscall_stub.c','w')
+    stub.write (stub_prolog)
+
+    for line in open (sys.argv [1]):
+        match = re.match ("SYSCALL_MODULE (.*)", line)
+        if match:
+            mid = match.groups () [0]
+            rid = 0
+            continue
+        match = re.match ("    (.*)", line)
+        if match:
+            # use two "c0 " and "%%%s" in template to keep both this file and
+            # the stub file good alignment
+            stub.write (stub_template % (match.groups () [0], "c0 ", "c0 ", mid, rid))
+            rid = rid + 1
+
+    stub.close ()
+
+if __name__ == "__main__":
+    main ()

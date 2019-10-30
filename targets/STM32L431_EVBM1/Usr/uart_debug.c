@@ -36,29 +36,32 @@
 #include "stm32l4xx_hal.h"
 #include "stm32l431xx.h"
 
+#include <osal.h>
 #include <link_misc.h>
 
-#define CN_RCV_RING_BUFLEN  128
-
+#include <los_hwi.h>
 #include <los_sem.h>
 #include <los_base.h>
 
+#define CN_RCV_RING_BUFLEN  128
+
 static USART_TypeDef*     s_pUSART = USART1;
 static uint32_t           s_uwIRQn = USART1_IRQn;
-static int                s_uart_init = 0;
 
-///<use the uart1 as the debug port
+static bool_t s_uart_init = false;
+
+/* USART1 init function */
 UART_HandleTypeDef uart_debug;
 static tag_ring_buffer_t  s_uartdebug_rcv_ring;
-static uint8_t     s_uartdebug_rcv_ringmem[CN_RCV_RING_BUFLEN];
-static UINT32      s_uartdebug_rcv_sync;
+static unsigned char      s_uartdebug_rcv_ringmem[CN_RCV_RING_BUFLEN];
+static UINT32        s_uartdebug_rcv_sync;
 static void uart_debug_irq(void)
 {
     unsigned char value;
     if(__HAL_UART_GET_FLAG(&uart_debug, UART_FLAG_RXNE) != RESET)
     {
         value = (uint8_t)(uart_debug.Instance->RDR & 0x00FF);
-        ring_write(&s_uartdebug_rcv_ring,&value,1);
+        ring_buffer_write(&s_uartdebug_rcv_ring,&value,1);
         LOS_SemPost(s_uartdebug_rcv_sync);
     }
     else if (__HAL_UART_GET_FLAG(&uart_debug,UART_FLAG_IDLE) != RESET)
@@ -83,12 +86,12 @@ void shell_uart_init(int baud)
     LOS_HwiCreate(s_uwIRQn, 3, 0, uart_debug_irq, 0);
     //__HAL_UART_ENABLE_IT(&uart_debug, UART_IT_IDLE);
     __HAL_UART_ENABLE_IT(&uart_debug, UART_IT_RXNE);
-
+    
     //create the receive buffer and receive sync
     extern UINT32 osSemCreate (UINT16 usCount, UINT16 usMaxCount, UINT32 *puwSemHandle);
-    osSemCreate(0,CN_RCV_RING_BUFLEN,&s_uartdebug_rcv_sync);
-    ring_init(&s_uartdebug_rcv_ring,s_uartdebug_rcv_ringmem,CN_RCV_RING_BUFLEN,0,0);
-    s_uart_init = 1;
+    osSemCreate(0,CN_RCV_RING_BUFLEN,(UINT32 *)&s_uartdebug_rcv_sync);
+    ring_buffer_init(&s_uartdebug_rcv_ring,s_uartdebug_rcv_ringmem,CN_RCV_RING_BUFLEN,0,0);
+    s_uart_init = true;
 
 }
 
@@ -105,9 +108,9 @@ int fgetc(FILE *f){
     unsigned char  value;
     do
     {
-        if(osal_semp_pend(s_uartdebug_rcv_sync,LOS_WAIT_FOREVER))
+        if(LOS_OK == LOS_SemPend(s_uartdebug_rcv_sync,LOS_WAIT_FOREVER))
         {
-            ret = ring_read(&s_uartdebug_rcv_ring,&value,1);
+            ret = ring_buffer_read(&s_uartdebug_rcv_ring,&value,1);
         }
     }while(ret <=0);
     ret = value;
@@ -132,7 +135,7 @@ __attribute__((used)) int _read(int fd, char *ptr, int len)
     {
         if(LOS_OK == LOS_SemPend(s_uartdebug_rcv_sync,LOS_WAIT_FOREVER))
         {
-            ret = ring_read(&s_uartdebug_rcv_ring,&value,1);
+            ret = ring_buffer_read(&s_uartdebug_rcv_ring,&value,1);
         }
     }while(ret <=0);
     *(unsigned char *)ptr = value;

@@ -329,9 +329,8 @@ uint16_t gpio_output_port_get(uint32_t gpio_periph)
       \arg        GPIO_PD01_REMAP: PD01 remapping
       \arg        GPIO_TIMER4CH3_IREMAP: TIMER4 channel3 internal remapping
       \arg        GPIO_CAN1_REMAP: CAN1 remapping
-      \arg        GPIO_SWJ_NONJTRST_REMAP: full SWJ(JTAG-DP),but without NJTRST
-      \arg        GPIO_SWJ_SWDPENABLE_REMAP: JTAG-DP disabled and SW-DP enabled
-      \arg        GPIO_SWJ_DISABLE_REMAP: JTAG-DP disabled and SW-DP disabled
+      \arg        GPIO_SWJ_NONJTRST_REMAP: JTAG-DP,but without NJTRST
+      \arg        GPIO_SWJ_DISABLE_REMAP: JTAG-DP disabled
       \arg        GPIO_SPI2_REMAP: SPI2 remapping
       \arg        GPIO_TIMER1ITI1_REMAP: TIMER1 internal trigger 1 remapping
       \arg        GPIO_EXMC_NADV_REMAP: EXMC_NADV connect/disconnect

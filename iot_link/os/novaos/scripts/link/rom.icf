@@ -1,0 +1,126 @@
+//
+// Copyright (c) [2019] Huawei Technologies Co.,Ltd.All rights reserved.
+//
+// LiteOS NOVA is licensed under the Mulan PSL v1.
+// You can use this software according to the terms and conditions of the Mulan PSL v1.
+// You may obtain a copy of Mulan PSL v1 at:
+//
+// 	http://license.coscl.org.cn/MulanPSL
+//
+// THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
+// FIT FOR A PARTICULAR PURPOSE.
+// See the Mulan PSL v1 for more details.
+//
+
+//
+// Block definitions
+//
+
+define block ctors           { section .ctors, section .ctors.*, block with alphabetical order { init_array } };
+define block dtors           { section .dtors, section .dtors.*, block with reverse alphabetical order { fini_array } };
+define block exidx           { section .ARM.exidx, section .ARM.exidx.* };
+define block tbss            { section .tbss,  section .tbss.*  };
+define block tdata           { section .tdata, section .tdata.* };
+define block tls             { block tbss, block tdata };
+define block tdata_load      { copy of block tdata };
+
+//                           
+// kernel sections           
+//                           
+
+define block vectors         { section .vectors };
+define block init_cpu        { section .init_cpu };
+define block init_board      { section .init_board };
+define block init_prekernel  { section .init_prekernel };
+define block init_kernel     { section .init_kernel };
+define block init_postkernel { section .init_postkernel };
+define block init_hal        { section .init_hal };
+define block init_bus        { section .init_bus };
+define block init_driver     { section .init_driver };
+define block init_postdriver { section .init_postdriver };
+define block init_user       { section .init_user };
+define block cmder           { section .cmder };
+
+//
+// Explicit initialization settings for sections
+//
+
+do not initialize            { section .non_init, section .non_init.* };
+initialize by copy           { section .data, section .data.* };
+
+//
+// kept sections
+//
+
+keep                         { section .vectors,
+                               section .stack,
+                               section .init_cpu,
+                               section .init_board,
+                               section .init_prekernel,
+                               section .init_kernel,
+                               section .init_postkernel,
+                               section .init_hal,
+                               section .init_bus,
+                               section .init_driver,
+                               section .init_postdriver,
+                               section .init_user,
+                               section .cmder };
+
+//
+// ROM Placement
+//
+
+place at start of FLASH
+    {
+    block vectors,                                      // Vector table section
+    };
+
+place in FLASH with minimum size order
+    {
+    section .init, section .init.*,                     // Init code section
+    section .text, section .text.*,                     // Code section
+    section .rodata, section .rodata.*,                 // Read-only data section
+    section .segger.*,                                  // Auto-generated initialization
+    block exidx,                                        // ARM exception unwinding block
+    block ctors,                                        // Constructors block
+    block dtors,                                        // Destructors block
+    block init_cpu,
+    block init_board,
+    block init_prekernel,
+    block init_kernel,
+    block init_postkernel,
+    block init_hal,
+    block init_bus,
+    block init_driver,
+    block init_postdriver,
+    block init_user,
+    block cmder,
+    };
+
+place in FLASH
+    {
+    block tdata_load                                    // Thread-local-storage load image
+    };
+
+//
+// RAM Placement
+//
+
+place in RAM                                            // Special sections
+    {
+    section .non_init, section .non_init.*,             // No initialization section
+    block tls                                           // Thread-local-storage block
+    };
+
+place in RAM with auto order                            // Initialized sections
+    {
+    section .data, section .data.*,                     // Initialized data section
+    block bss  { section .bss, section .bss.* }         // Static data section
+    };
+
+place in RAM
+    {
+    block stack with alignment = 8 { section .stack }   // Stack reserved block at the end
+    };
+

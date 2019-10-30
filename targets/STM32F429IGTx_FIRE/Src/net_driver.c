@@ -34,7 +34,7 @@
 
 #include "sys_init.h"
 
-#ifdef WITH_LWIP
+#ifdef CONFIG_WITH_LWIP
 
 #include "lwip/netif.h"
 #if defined ( __CC_ARM )  /* MDK ARM Compiler */
@@ -112,7 +112,7 @@ static void net_init(void)
     lwip_impl_register();
 
 
-    (void)ethernetif_api_register(&g_eth_api);/*×¢²áÌØ¶¨Íø¿¨µÄAPI*/
+    (void)ethernetif_api_register(&g_eth_api);
     /* add the network interface (IPv4/IPv6) without RTOS */
 #if LWIP_IPV4 && LWIP_IPV6
     (void)netif_add(&gnetif, &ipaddr, &netmask, &gw, NULL, ethernetif_init, tcpip_input);//lint !e546
@@ -163,6 +163,8 @@ static void net_init(void)
         netif_set_down(&gnetif);
     }
 }
+
+#include <los_hwi.h>
 
 static void hieth_hw_init(void)
 {

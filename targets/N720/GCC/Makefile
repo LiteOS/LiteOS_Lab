@@ -109,7 +109,7 @@ CFLAGS += -Wno-missing-braces
 #######################################
 
 # libraries
-LIBS = -lc -lm -lpthread
+LIBS = -lc -lm -lpthread -lrt
 #LIBS = 
 LDFLAGS = $(LIBS)
 

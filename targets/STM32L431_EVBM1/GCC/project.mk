@@ -37,6 +37,4 @@ C_INCLUDES += $(USER_INC)
 # C defines
 C_DEFS +=  -D USE_HAL_DRIVER -D STM32L431xx -D NDEBUG
 
-include $(SDK_DIR)/iot_link/iot.mk
-
                  

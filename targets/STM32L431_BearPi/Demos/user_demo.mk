@@ -4,8 +4,9 @@
 
 #if you have defined multiple demos by yourself, modify this file to compile the chosen demo.
 
-
 #example for lwm2m
+CONFIG_USER_DEMO := "oc_streetlight_template"
+
 ifeq ($(CONFIG_USER_DEMO), "oc_streetlight_template")	
 	user_demo_src  = ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Demos/oc_streetlight_template/*.c}
 	user_demo_inc = -I $(TOP_DIR)/targets/STM32L431_BearPi/Demos/oc_streetlight_template

@@ -270,22 +270,22 @@ int dtls_shakehand(mbedtls_ssl_context *ssl, const dtls_shakehand_info_s *info)
 
     MBEDTLS_LOG("connecting to server");
 
-    if (MBEDTLS_SSL_IS_CLIENT == info->client_or_server)
-    {
-        server_fd = mbedtls_net_connect(info->u.c.host, info->u.c.port, info->udp_or_tcp);
-    }
-    else
-    {
-        //server_fd = (mbedtls_net_context*)atiny_net_bind(NULL, info->u.s.local_port, MBEDTLS_NET_PROTO_UDP);
-        server_fd = osal_malloc(sizeof(mbedtls_net_context));
-        ///< --TODO ,not implement yet
-    }
-
+    server_fd = (mbedtls_net_context *)osal_malloc(sizeof(mbedtls_net_context));
     if (server_fd == NULL)
     {
         MBEDTLS_LOG("connect failed! mode %d", info->client_or_server);
         ret = MBEDTLS_ERR_NET_CONNECT_FAILED;
         goto exit_fail;
+    }
+
+    if (MBEDTLS_SSL_IS_CLIENT == info->client_or_server)
+    {
+        ret = mbedtls_net_connect(server_fd, info->u.c.host, info->u.c.port, info->udp_or_tcp);
+    }
+    else
+    {
+        //server_fd = (mbedtls_net_context*)atiny_net_bind(NULL, info->u.s.local_port, MBEDTLS_NET_PROTO_UDP);
+        ///< --TODO ,not implement yet
     }
 
     mbedtls_ssl_set_bio(ssl, server_fd,

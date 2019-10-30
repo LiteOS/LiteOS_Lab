@@ -39,6 +39,28 @@ OF SUCH DAMAGE.
 #define REG_DBGMCU2EN     ((uint32_t)0xE004200C)
 
 /*!
+    \brief      enable the global interrupt
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void eclic_global_interrupt_enable(void){
+    /* set machine interrupt enable bit */
+    set_csr(mstatus, MSTATUS_MIE);
+}
+
+/*!
+    \brief      disable the global interrupt
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void eclic_global_interrupt_disable(void){
+    /* clear machine interrupt enable bit */
+    clear_csr(mstatus, MSTATUS_MIE);
+}
+
+/*!
     \brief      set the priority group
     \param[in]  prigroup: specify the priority group
       \arg        ECLIC_PRIGROUP_LEVEL0_PRIO4
@@ -56,15 +78,15 @@ void eclic_priority_group_set(uint32_t prigroup) {
 /*!
     \brief      enable the interrupt request
     \param[in]  source: interrupt request, detailed in IRQn_Type
-    \param[in]  level: the level needed to set (maximum is 16)
-    \param[in]  priority: the priority needed to set (maximum is 16)
+    \param[in]  level: the level needed to set (maximum is 15, refer to the priority group)
+    \param[in]  priority: the priority needed to set (maximum is 15, refer to the priority group)
     \param[out] none
     \retval     none
 */
-void eclic_irq_enable(uint32_t source, uint8_t level, uint8_t priority) {
+void eclic_irq_enable(uint32_t source, uint8_t lvl_abs, uint8_t priority) {
     eclic_enable_interrupt(source);
-    eclic_set_int_level(source, level);
-    eclic_set_int_priority(source, priority);
+    eclic_set_irq_lvl_abs(source, lvl_abs);
+    eclic_set_irq_priority(source, priority);
 }
 
 /*!

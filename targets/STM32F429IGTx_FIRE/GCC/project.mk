@@ -32,7 +32,14 @@ USER_SRC =  \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/usart.c \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/uart_debug.c \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/eth.c \
-        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/net_driver.c 
+        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/net_driver.c \
+	$(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/flash_adaptor.c
+ifeq ($(CONFIG_OTA_ENABLE),y)
+USER_SRC += $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/ota_adaptor.c
+endif
+ifeq ($(CONFIG_LOADER_ENABLE),y)
+USER_SRC += $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/loader_main2.c
+endif
         C_SOURCES += $(USER_SRC)  
 
 ifeq ($(CONFIG_AT_ENABLE),y)
@@ -59,7 +66,5 @@ USER_INC = \
 # C defines
 C_DEFS +=  -D USE_HAL_DRIVER -D STM32F429xx -D NDEBUG
 
-include $(SDK_DIR)/iot_link/iot.mk
-include $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Demos/user_demo.mk
 
                  

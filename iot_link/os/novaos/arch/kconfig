@@ -1,0 +1,53 @@
+#
+# Copyright (c) [2019] Huawei Technologies Co.,Ltd.All rights reserved.
+#
+# LiteOS NOVA is licensed under the Mulan PSL v1.
+# You can use this software according to the terms and conditions of the Mulan PSL v1.
+# You may obtain a copy of Mulan PSL v1 at:
+#
+# 	http://license.coscl.org.cn/MulanPSL
+#
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
+# FIT FOR A PARTICULAR PURPOSE.
+# See the Mulan PSL v1 for more details.
+#
+
+### all hiden, selected by BSP
+
+config ARCH
+    string
+    default "aarch_m"  if AARCH_M
+    default "aarch_32" if AARCH_32
+
+config AARCH_M
+    def_bool n
+
+config AARCH_32
+    def_bool n
+
+menu "arch configuration"
+
+config USER_APP
+    bool "user application project"
+    default n
+
+# IDE is defined for all arches, the IDE select logic is defined in sub-arches,
+# usually a kconfig selection
+config IDE
+    bool
+    default n
+
+rsource "*/kconfig"
+
+config SYSTEM_CORE_CLOCK
+    int "the system core clock frequence"
+
+config NR_IRQS
+    int "the number of IRQS"
+    default 32
+
+config IRQ_STACK_SIZE
+    hex "the size of irq stack"
+    default 0x800
+endmenu
