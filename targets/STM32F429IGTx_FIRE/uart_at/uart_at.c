@@ -48,8 +48,8 @@ UART_HandleTypeDef uart_at;
 static USART_TypeDef*     s_pUSART = USART3;
 static uint32_t           s_uwIRQn = USART3_IRQn;
 
-#define CN_RCVBUF_LEN  1024  //cache a frame
-#define CN_RCVMEM_LEN  1024  //use to cache more frames
+#define CN_RCVBUF_LEN  2048  //cache a frame
+#define CN_RCVMEM_LEN  2048  //use to cache more frames
 
 struct atio_cb
 {

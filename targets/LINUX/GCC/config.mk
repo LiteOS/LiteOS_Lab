@@ -91,7 +91,7 @@ CONFIG_TCPIP_ENABLE := y
 CONFIG_TCPIP_TYPE := "linux_socket"
 
 #CONFIG_DTLS_ENABLE , we supply a DTLS AL (building),you could choose yes or no
-#CONFIG_DTLS_TYPE, could be "mbeddtls_psk" "mbedtls_cert" "none"
+#CONFIG_DTLS_TYPE, could be "mbedtls_psk" "mbedtls_cert" "none"
 
 CONFIG_DTLS_ENABLE   := y
 CONFIG_DTLS_TYPE     := "mbedtls_cert"
@@ -110,7 +110,7 @@ CONFIG_LWM2M_TYPE     := "wakaama_lwm2m"
 
 #CONFIG_COAP_ENABLE, we build a coap abstraction, which shield the difference of 
 #the implement of coap. 
-#CONFIG_COAP_TYPE could be "lite_coap" "none"
+#CONFIG_COAP_TYPE could be "lite_coap" "libcoap" "none"
 CONFIG_COAP_ENABLE   := n
 CONFIG_COAP_TYPE     := "lite_coap"
 ########################NETWORK SERVICE END#####################################

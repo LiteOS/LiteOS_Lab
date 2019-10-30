@@ -34,7 +34,7 @@
 
 #include "sys_init.h"
 
-#ifdef WITH_LWIP
+#ifdef CONFIG_WITH_LWIP
 
 #include "lwip/netif.h"
 #if defined ( __CC_ARM )  /* MDK ARM Compiler */

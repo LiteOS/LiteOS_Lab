@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#ifdef WITH_LWIP
+#ifdef CONFIG_WITH_LWIP
 #include <sal.h>
 #include "lwip/errno.h"
 #else

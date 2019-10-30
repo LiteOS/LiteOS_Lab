@@ -12,8 +12,11 @@ ifeq ($(CONFIG_COAP_ENABLE), y)
     C_DEFS += -D CONFIG_COAP_ENABLE=1
     
     ifeq ($(CONFIG_COAP_TYPE), "lite_coap")
-    
-        include $(iot_link_root)/network/coap/lite_coap/lite_coap.mk    
+        C_DEFS += -D CONFIG_LITE_COAP_ENABLE=1
+        include $(iot_link_root)/network/coap/lite_coap/lite_coap.mk
+    else ifeq ($(CONFIG_COAP_TYPE), "libcoap")
+        C_DEFS += -D CONFIG_LIBCOAP_ENABLE=1
+        include $(iot_link_root)/network/coap/libcoap/libcoap.mk
     endif
     
    
