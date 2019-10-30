@@ -86,9 +86,9 @@ CONFIG_CJSON_ENABLE := y
 #you could build your own application based on the sal, which shielding the defference of 
 #variouse tcpip function.what's more, you could add your own tcpip stack to the sdk.
 #and if this option is enabled, then you select  one type for your program, we now
-#CONFIG_TCPIP_TYPE could be:"lwip_socket" "linux_socket" "macos_socket" "esp8266_socket" "none"
+#CONFIG_TCPIP_TYPE could be:"lwip_socket" "linux_socket" "macos_socket" "esp8266_socket" "rtk8710_socket" "none"
 CONFIG_TCPIP_ENABLE := y
-CONFIG_TCPIP_TYPE := "lwip_socket"
+CONFIG_TCPIP_TYPE := "esp8266_socket"
 
 #CONFIG_DTLS_ENABLE , we supply a DTLS AL (building),you could choose yes or no
 #CONFIG_DTLS_TYPE, could be "mbedtls_psk" "mbedtls_cert" "none"
@@ -100,7 +100,7 @@ CONFIG_DTLS_TYPE     := "mbedtls_cert"
 #the implement of mqtt. 
 #CONFIG_MQTT_TYPE could be "paho_mqtt" "none"
 CONFIG_MQTT_ENABLE   := y
-CONFIG_MQTT_TYPE     := "lite_mqtt"
+CONFIG_MQTT_TYPE     := "paho_mqtt"
 
 #CONFIG_LWM2M_ENABLE, we build a lwm2m abstraction, which shield the difference of 
 #the implement of lwm2m. 
@@ -162,7 +162,7 @@ CONFIG_PCP_ENABLE      := n
 #"oc_lwm2m_bs_demo"  "oc_lwm2m_demo" "oc_lwm2m_ota_demo" "oc_tls_mqtt_bs_demo" "oc_tls_mqtt_demo"  "stimer_demo"
 
 CONFIG_DEMO_ENABLE := y
-CONFIG_DEMO_TYPE   := "oc_tls_mqtt_bs_demo"
+CONFIG_DEMO_TYPE   := "oc_tls_mqtt_demo"
 
 #########################STANDARD DEMO END######################################
 include $(TOP_DIR)/iot_link/iot.mk
