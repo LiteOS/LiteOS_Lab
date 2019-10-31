@@ -11,6 +11,7 @@ udpCliSock = 0
 class resultFromDest(object):
     test_id = 0
     ret_code = -1
+    data = ''
 
 
 def ts_call_single(*args):
@@ -35,10 +36,13 @@ def ts_call_single(*args):
         print(result)
         str_utf8 = result.decode('utf-8')
         print(str_utf8)
-        list = str_utf8.split(':')
+        list = str_utf8.split(',|')
         retResult = resultFromDest()
         retResult.test_id = int(list[0])
         retResult.ret_code = int(list[1])
+        if(retResult.ret_code == 1):
+            retResult.data = list[2]
+
         print(retResult)
         return retResult
     except:
