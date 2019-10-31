@@ -64,6 +64,8 @@ typedef struct
     int domain;
     int type;
     int protocol;
+    uint16_t remote_port;
+    char remote_ip[20];
 
     tag_ring_buffer_t rtk8710_rcvring;
     unsigned char rtk8710_rcvbuf[cn_rtk8710_cachelen];
@@ -106,10 +108,10 @@ static bool_t rtk8710_atcmd_response(const char *cmd,const char *index,char *buf
     }
 }
 
+
 static int rtk8710_rcvdeal(void *args,void *msg,size_t len)
 {
     int ret = -1;
-    int fd;
     unsigned short datalen;
     char *data;
     char  *str;
@@ -119,11 +121,17 @@ static int rtk8710_rcvdeal(void *args,void *msg,size_t len)
 
 
     data = msg;
-    if(len <strlen(cn_rtk8710_rcvindex))
+    if(len <strlen(cn_rtk8710_rcvindex) || len > cn_rtk8710_cachelen)
     {
         printf("%s:invalid frame:%d byte:%s\n\r",__FUNCTION__,len,(char *)data);
         return ret;
     }
+
+    //if(strstr((char *)data, "CLOSED") != NULL)
+    //{
+    //    (void)rtk8710_boot();
+    //    return ret;
+    //}
     //now deal the data
     str = strstr((char *)data,",");
     if(NULL == str)
@@ -157,17 +165,15 @@ static int rtk8710_rcvdeal(void *args,void *msg,size_t len)
     }
     str++;
 
-    //TODO: mux = 1
-    fd = 0;
-
     datalen = 0;
     for (; *str <= '9' && *str >= '0' ;str++)
     {
         datalen = (datalen * 10 + (*str - '0'));
     }
-	//printf("datalen:%d~~~~~~\r\n", datalen);
-	if(len < datalen)
-		return ret;
+    //printf("datalen:%d~~~~~~\r\n", datalen);
+    //printf("@@@@:%d\r\n", str-data);
+    if(datalen + (str-data) + 1 + strlen("\r\n") > len)
+        return ret;
     str = strstr((char *)str,",");
     if(NULL == str)
     {
@@ -201,12 +207,14 @@ static int rtk8710_rcvdeal(void *args,void *msg,size_t len)
 
 static int rtk8710_socket(int domain, int type, int protocol)
 {
-	s_rtk8710_sock_cb.domain = domain;
-	s_rtk8710_sock_cb.type = type;
-	s_rtk8710_sock_cb.protocol = protocol;
-	s_rtk8710_sock_cb.sockfd = 0;
+    s_rtk8710_sock_cb.domain = domain;
+    s_rtk8710_sock_cb.type = type;
+    s_rtk8710_sock_cb.protocol = protocol;
+    s_rtk8710_sock_cb.sockfd = 0;
+    s_rtk8710_sock_cb.remote_port = 0;
+    memset(s_rtk8710_sock_cb.remote_ip,0,sizeof(s_rtk8710_sock_cb.remote_ip));
 
-	return s_rtk8710_sock_cb.sockfd;
+    return s_rtk8710_sock_cb.sockfd;
 }
 
 static int __rtk8710_bind(int fd, const struct sockaddr *addr, int addrlen)
@@ -241,18 +249,18 @@ static int __rtk8710_connect(int fd, void *addr, int addrlen)
     {
         
         memset(cmd,0,64);
-        //memset(remote_ip,0,16);
 
         
         serv_addr = (struct sockaddr_in *)addr;
         uint16_t remote_port = ntohs(serv_addr->sin_port);
         struct in_addr remote_ip_int = serv_addr->sin_addr;
         remote_ip = inet_ntoa(remote_ip_int);
+        memcpy(s_rtk8710_sock_cb.remote_ip, remote_ip, strlen(remote_ip));
+        s_rtk8710_sock_cb.remote_port = remote_port;
 
-        //TODO: mux = 1
         if(s_rtk8710_sock_cb.type == SOCK_DGRAM)
         {
-            snprintf(cmd,64,"AT+NWKCUDP=\"CLIENT\",0,\"%s\",%d\r\n",remote_ip,remote_port);
+            snprintf(cmd,64,"AT+NWKCUDP=CLIENT,%s,%d,1\r\n",remote_ip,remote_port);
         }
         else if(s_rtk8710_sock_cb.type == SOCK_STREAM)
         {
@@ -260,9 +268,19 @@ static int __rtk8710_connect(int fd, void *addr, int addrlen)
         }
         else return ret;
 
-        if(rtk8710_atcmd_response(cmd,"[NWKCTCP_ID]",resp,64))
+        if(s_rtk8710_sock_cb.type == SOCK_DGRAM)
         {
-            ret = 0;
+            if(rtk8710_atcmd_response(cmd,"[NWKCUDP_ID]",resp,64))
+            {
+                ret = 0;
+            }
+        }
+        else if(s_rtk8710_sock_cb.type == SOCK_STREAM)
+        {
+            if(rtk8710_atcmd_response(cmd,"[NWKCTCP_ID]",resp,64))
+            {
+                ret = 0;
+            }
         }
 
         str = resp;
@@ -285,28 +303,26 @@ static int rtk8710_send(int fd, const void *buf, int len, int flags)
         memset(cmd,0,64);
         memset(s_rtk8710_sock_cb.oob_resp,0,1024);
 
-        snprintf(cmd,64,"AT+NWKTCPSEND=%d,%d,",s_rtk8710_sock_cb.sockfd,len); //TODO:mux = 1
-        //for (i = 0; i < len; i++)
-        //        printf("%02x ", *((unsigned char *)buf + i));
-        if(rtk8710_atcmd(cmd,NULL))
+        if(s_rtk8710_sock_cb.type == SOCK_DGRAM)
         {
-            ret = at_command((unsigned char *)buf,len,NULL,NULL,0,cn_rtk8710_cmd_timeout);
-            ret = rtk8710_atcmd_response("\r\n","[NWKTCPSEND]OK\r\n",rsp,64);
-            //printf("ret = %d\r\n",ret);
-			/*
-            ret = at_command("\r\n",2,"[NWKTCPSEND]OK",(char *)s_rtk8710_sock_cb.oob_resp,1024,cn_rtk8710_cmd_timeout);
-            printf("ret = %d\r\n",ret);
-            char *str;
-            str = strstr(s_rtk8710_sock_cb.oob_resp,cn_rtk8710_rcvindex);  //in some cases, RSP is not at the beginning of one frame. process here
-            if(NULL != str)
+            snprintf(cmd,64,"AT+NWKUDPSEND=%d,%s,%d,%d,",s_rtk8710_sock_cb.sockfd,
+                     s_rtk8710_sock_cb.remote_ip,s_rtk8710_sock_cb.remote_port,len); //TODO:mux = 1
+            if(rtk8710_atcmd(cmd,NULL))
             {
-                void *args;
-                printf("send deal@@@@@@\r\n");
-                rtk8710_rcvdeal(args,str,1024);
+                ret = at_command((unsigned char *)buf,len,NULL,NULL,0,cn_rtk8710_cmd_timeout);
+                ret = rtk8710_atcmd_response("\r\n","[NWKUDPSEND]OK\r\n",rsp,64);
             }
-            */
-
         }
+        else if(s_rtk8710_sock_cb.type == SOCK_STREAM)
+        {
+            snprintf(cmd,64,"AT+NWKTCPSEND=%d,%d,",s_rtk8710_sock_cb.sockfd,len); //TODO:mux = 1
+            if(rtk8710_atcmd(cmd,NULL))
+            {
+                ret = at_command((unsigned char *)buf,len,NULL,NULL,0,cn_rtk8710_cmd_timeout);
+                ret = rtk8710_atcmd_response("\r\n","[NWKTCPSEND]OK\r\n",rsp,64);
+            }
+        }
+        else return ret;
     }
     if(ret > 0)
     {
@@ -385,7 +401,7 @@ static int rtk8710_close(int fd)
     char cmd[64];
     int ret = -1;
     memset(cmd,0,64);
-    snprintf(cmd,64,"AT+NWKCLOSE=%d\r\n",fd);//TODO: MUX = 1;
+    snprintf(cmd,64,"AT+NWKCLOSE=%d\r\n",s_rtk8710_sock_cb.sockfd);//TODO: MUX = 1;
     if(rtk8710_atcmd(cmd,"[NWKCLOSE]OK"))
     {
         ret = 0;
@@ -429,7 +445,7 @@ static struct hostent *rtk8710_gethostbyname(const char *name)
     memset(hptr,0,sizeof(struct hostent));
 
 	memset(cmd,0,64);
-	snprintf(cmd,64,"AT+NWKDNS=\"%s\"\r\n",name);
+	snprintf(cmd,64,"AT+NWKDNS=%s\r\n",name);
 	if(false == rtk8710_atcmd_response(cmd,"\r\n",resp,64))
 	{
 		//name is ip address already
