@@ -88,7 +88,7 @@ CONFIG_CJSON_ENABLE := y
 #and if this option is enabled, then you select  one type for your program, we now
 #CONFIG_TCPIP_TYPE could be:"lwip_socket" "linux_socket" "macos_socket" "esp8266_socket" "rtk8710_socket" "none"
 CONFIG_TCPIP_ENABLE := y
-CONFIG_TCPIP_TYPE := "esp8266_socket"
+CONFIG_TCPIP_TYPE := "rtk8710_socket"
 
 #CONFIG_DTLS_ENABLE , we supply a DTLS AL (building),you could choose yes or no
 #CONFIG_DTLS_TYPE, could be "mbedtls_psk" "mbedtls_cert" "none"
