@@ -29,7 +29,7 @@ Agent Tiny SDK是Huawei Agent Tiny软件开发工具包（Software Development K
 快速构建IoT产品。端云互通组件可以采用MQTT、CoAP和LwM2W协议接入物联网平台。
 
 **IOT SDK 架构图**
-![](./meta/IoT_LinK/lwm2m/iot-architecture.png )
+![](./meta/IoT_Link/lwm2m/iot-architecture.png )
 
 <h1 id="3">3、接入物联网平台流程 </h1>
 
@@ -59,14 +59,14 @@ Agent Tiny SDK是Huawei Agent Tiny软件开发工具包（Software Development K
 的具体项目中，在<span class="menucascade" id="ZH-CN_TOPIC_0187644975__menucascade46887184244">“<span class="uicontrol" id="ZH-CN_TOPIC_0187644975__uicontrol1768871812247">应用</span>
  &gt; <span class="uicontrol" id="ZH-CN_TOPIC_0187644975__uicontrol8749162652420">对接信息</span>”</span>页面查看
 <span class="wintitle" id="ZH-CN_TOPIC_0187644975__wintitle1717816578243">“设备接入信息”</span>和<span class="wintitle" id="ZH-CN_TOPIC_0187644975__wintitle1549261152518">“应用接入信息”</span>。</p>
- <p id="ZH-CN_TOPIC_0187644975__p396214214311"><span><img id="" src="./meta/IoT_LinK/lwm2m/13.png" ></span></p> </td> 
+ <p id="ZH-CN_TOPIC_0187644975__p396214214311"><span><img id="" src="./meta/IoT_Link/lwm2m/13.png" ></span></p> </td> 
 </tr> 
 <tr id="ZH-CN_TOPIC_0187644975__row6123755113111">
 <td class="cellrowborder" valign="top" width="23.5%" headers="mcps1.3.1.3.1.3.1.1 "><p id="ZH-CN_TOPIC_0187644975__p1954231433214">设备管理服务（商用环境）</p> </td> 
 <td class="cellrowborder" valign="top" width="76.5%" headers="mcps1.3.1.3.1.3.1.2 "><p id="ZH-CN_TOPIC_0187644975__p354121418324">在物联网平台的
 <a href="https://console.huaweicloud.com/iotOceanLink/?region=cn-north-4#/iotdmp/spMenu/deviceAccess" target="_blank" rel="noopener noreferrer">管理控制台</a>
 ，选择设备接入，在<span class="wintitle" id="ZH-CN_TOPIC_0187644975__wintitle1149533404613">“设备和应用接入信息”</span>下可查看设备和应用的接入地址信息。
-</p> <p id="ZH-CN_TOPIC_0187644975__p16401113174917"><span><img id="" src="./meta/IoT_LinK/lwm2m/conect-address.png" ></span></p> </td> 
+</p> <p id="ZH-CN_TOPIC_0187644975__p16401113174917"><span><img id="" src="./meta/IoT_Link/lwm2m/conect-address.png" ></span></p> </td> 
 </tr> 
 </tbody>
 </table>
@@ -74,10 +74,10 @@ Agent Tiny SDK是Huawei Agent Tiny软件开发工具包（Software Development K
 设备接入云端可分为直连接入和BS引导接入，如下示意图
 
 **图 1**  直连接入物联网平台示意图
-![](./meta/IoT_LinK/lwm2m/direct_connect_mode.png)
+![](./meta/IoT_Link/lwm2m/direct_connect_mode.png)
 
 **图 2**  BS引导接入物联网平台示意图
-![](./meta/IoT_LinK/lwm2m/BS_connect_mode.png)
+![](./meta/IoT_Link/lwm2m/BS_connect_mode.png)
 
 
 <h1 id="4">4、直连接入实例</h1>
@@ -91,10 +91,10 @@ Agent Tiny SDK是Huawei Agent Tiny软件开发工具包（Software Development K
 
 1.  STM32F429IG\_FIRE开发板外设
 
-![](./meta/IoT_LinK/lwm2m/zh-cn_image_0125701190.png)
+![](./meta/IoT_Link/lwm2m/zh-cn_image_0125701190.png)
 
 **图 1** 直连模式下整体配置流程
-![](./meta/IoT_LinK/lwm2m/direct-connect.jpg)
+![](./meta/IoT_Link/lwm2m/direct-connect.jpg)
 
 
 <h4 id="4.1">4.1、平台侧开发 </h4>
@@ -122,20 +122,20 @@ Agent Tiny SDK是Huawei Agent Tiny软件开发工具包（Software Development K
 2.  进入开发者中心，在我的项目中点击“新建项目”。
 
 **图 1**  新建项目<a name="fig43098736"></a>  
-![](./meta/IoT_LinK/lwm2m/create-application.png "创建应用")
+![](./meta/IoT_Link/lwm2m/create-application.png "创建应用")
 
 3.  在新弹出窗口中，配置项目信息，点击“确定”。
 
 配置示例如下图，点击“确定”后，IoT平台会返回项目对应的应用ID和应用密钥，请妥善保存应用密钥，以便于应用服务器接入平台时使用。如果遗忘密钥，需要通过“对接信息”-\>"重置密钥”进行重置。
 
 **图 2**  配置项目<a name="fig46257266"></a>  
-![](./meta/IoT_LinK/lwm2m/configuration-app.png "配置项目")
+![](./meta/IoT_Link/lwm2m/configuration-app.png "配置项目")
 
 >![](./public_sys-resources/icon-note.gif) **说明：**   
 >如上配置仅为参考举例，具体配置请以现网需求为准。  
 
 **图 3**  项目创建成功<a name="fig24567157"></a>  
-![](./meta/IoT_LinK/lwm2m/create-success.png "项目创建成功")
+![](./meta/IoT_Link/lwm2m/create-success.png "项目创建成功")
 
 
 <h5 id="产品开发.md">3、产品开发</h5>
@@ -187,7 +187,7 @@ Agent Tiny SDK是Huawei Agent Tiny软件开发工具包（Software Development K
 IoT平台提供了产品的Profile模板库，开发者可以根据自己需要，选择合适的模板直接使用。如果在模板库中未找到需要的Profile，再自己定义，示例如下。
 
 **图 1**  创建Profile文件<a name="fig8361117"></a>  
-![](./meta/IoT_LinK/lwm2m/Profile-create.png "创建Profile文件")
+![](./meta/IoT_Link/lwm2m/Profile-create.png "创建Profile文件")
 
 >![](./public_sys-resources/icon-note.gif) **说明：**   
 >如上配置仅为参考举例，具体配置请以现网需求为准。  
@@ -197,14 +197,14 @@ IoT平台提供了产品的Profile模板库，开发者可以根据自己需要�
 可参考“产品开发”-\>“添加”-\>“基于系统模板创建”中的产品进行配置。例如新建一个名为LightControl的服务，包含一种属性light（灯亮LUX数）和一种命令（设置灯亮on或者灭off）
 
 **图 2**  新建LightControl服务<a name="fig41058489"></a>  
-![](./meta/IoT_LinK/lwm2m/profile-LightControl.png "新建LightControl服务")
+![](./meta/IoT_Link/lwm2m/profile-LightControl.png "新建LightControl服务")
 
 4.  （可选）开发者中心提供了Profile文件的导出功能。
 
 选择“产品开发”-\>选择已创建的产品-\>点击右上角“导出Profile”，可以对线上开发的Profile文件进行导出。
 
 **图 3**  导出Profile文件<a name="fig53067697"></a>  
-![](./meta/IoT_LinK/lwm2m/Profile-output.png "导出Profile文件")
+![](./meta/IoT_Link/lwm2m/Profile-output.png "导出Profile文件")
 
 
 <h5 id="开发编解码插件.md">4、开发编解码插件</h5>
@@ -214,24 +214,24 @@ IoT设备和IoT平台之间采用LwM2M协议通信，LwM2M消息的数据为应�
 1.  选择“产品开发”-\>选择已创建的产品-\>选择“编解码插件开发”，选择“在线编解码插件编辑器”。
 
 **图 1**  创建插件<a name="fig27941066"></a>  
-![](./meta/IoT_LinK/lwm2m/codec1.png "创建插件")
+![](./meta/IoT_Link/lwm2m/codec1.png "创建插件")
 
 2.  点击“新增消息”，配置二进制码流和Profile属性/命令/命令响应的映射关系。
 
 **图 2**  开发插件（新增数据上报消息）<a name="fig51445036"></a>  
-![](./meta/IoT_LinK/lwm2m/codec2.png "开发插件（新建数据上报消息）")
+![](./meta/IoT_Link/lwm2m/codec2.png "开发插件（新建数据上报消息）")
 
 **图 3**  开发插件（添加字段）<a name="fig40408868"></a>  
-![](./meta/IoT_LinK/lwm2m/codec3-1.png "开发插件（添加字段）")
+![](./meta/IoT_Link/lwm2m/codec3-1.png "开发插件（添加字段）")
 
 **图 4**  开发插件（添加字段）<a name="fig40408868"></a>  
-![](./meta/IoT_LinK/lwm2m/codec3-2.png "开发插件（添加字段）")
+![](./meta/IoT_Link/lwm2m/codec3-2.png "开发插件（添加字段）")
 
 **图 5**  开发插件（新建命令下发消息）<a name="fig4851111218718"></a>  
-![](./meta/IoT_LinK/lwm2m/codec4.png "开发插件（新建命令下发消息）")
+![](./meta/IoT_Link/lwm2m/codec4.png "开发插件（新建命令下发消息）")
 
 **图 6**  开发插件（添加字段）<a name="fig12652191383"></a>  
-![](./meta/IoT_LinK/lwm2m/codec5.png "开发插件（添加字段")
+![](./meta/IoT_Link/lwm2m/codec5.png "开发插件（添加字段")
 
 编解码插件的开发，即定义：
 
@@ -239,17 +239,17 @@ IoT设备和IoT平台之间采用LwM2M协议通信，LwM2M消息的数据为应�
 -   Profile文件定义的命令在平台下发的二进制码流中的位置，以便于平台对下发命令进行编码。
 
 **图 7**  二进制码流和Profile文件的映射关系<a name="fig18601706"></a>  
-![](./meta/IoT_LinK/lwm2m/codec6.png "二进制码流和Profile文件的映射关系")
+![](./meta/IoT_Link/lwm2m/codec6.png "二进制码流和Profile文件的映射关系")
 
 3.  点击右上角“部署”。
 
 点击部署后，需要先“保存”插件，之后才开始部署。部署需要等待时间小于60s。
 
 **图 8**  保存插件<a name="fig36784309"></a>  
-![](./meta/IoT_LinK/lwm2m/codec7.png "保存插件")
+![](./meta/IoT_Link/lwm2m/codec7.png "保存插件")
 
 **图 9**  部署插件<a name="fig18380518"></a>  
-![](./meta/IoT_LinK/lwm2m/codec8.png "部署插件")
+![](./meta/IoT_Link/lwm2m/codec8.png "部署插件")
 
 4.  （可选）开发者中心提供了编解码插件的下载功能。
 
@@ -263,12 +263,12 @@ IoT设备和IoT平台之间采用LwM2M协议通信，LwM2M消息的数据为应�
 1.  选择“设备管理”-\>“添加真实设备”-\>选择已创建的产品-\>输入设备名称和设备标识，并根据业务需求选择是否加密设备。最后点击“确定”。
 
 **图 1**  注册设备信息<a name="fig094004411363"></a>  
-![](./meta/IoT_LinK/lwm2m/register-device1.png "注册设备信息")
+![](./meta/IoT_Link/lwm2m/register-device1.png "注册设备信息")
 
 添加设备后，IoT平台会返回设备ID和PSK码，请妥善保存。新添加的设备状态为“离线”。
 
 **图 2**  注册设备<a name="fig86891238143614"></a>  
-![](./meta/IoT_LinK/lwm2m/register-device2.png "注册设备")
+![](./meta/IoT_Link/lwm2m/register-device2.png "注册设备")
 
 <h4 id="4.2">4.2、设备侧开发 </h4>
 
@@ -411,7 +411,7 @@ config.mk位于 LiteOS-iot\_link/targets/STM32F429IGTx_FIRE/GCC。
 登录IoT平台开发者中心，选择“设备管理”，在设备列表中查看对应设备的状态。如果状态为“在线”，则表示设备已经成功接入IoT平台。
 
 **图 1**  查看设备状态<a name="fig17343259182620"></a>  
-![](./meta/IoT_LinK/lwm2m/check-hardware-status.jpg "查看设备状态")
+![](./meta/IoT_Link/lwm2m/check-hardware-status.jpg "查看设备状态")
 
 <h4 id="4.3">4.3、调测 </h4>
 
@@ -471,10 +471,10 @@ oc\_dtls\_lwm2m\_demo.c位于 LiteOS-iot\_link/demos。
 登录IoT平台的开发者中心，在“设备管理”界面的设备列表中，选择上报数据的设备，查看“历史数据”，验证设备数据上报的情况。
 
 **图 1**  使用端云互通组件的IoT设备数据上报业务流程<a name="fig179076307444"></a>  
-![](./meta/IoT_LinK/lwm2m/data-upload1.png "使用端云互通组件的IoT设备数据上报业务流程")
+![](./meta/IoT_Link/lwm2m/data-upload1.png "使用端云互通组件的IoT设备数据上报业务流程")
 
 **图 2**  查看数据上报结果<a name="fig13872847174416"></a>  
-![](./meta/IoT_LinK/lwm2m/data-upload2.jpg "查看数据上报结果")
+![](./meta/IoT_Link/lwm2m/data-upload2.jpg "查看数据上报结果")
 
 
 <h5 id="命令下发.md">命令下发</h5>
@@ -484,12 +484,12 @@ oc\_dtls\_lwm2m\_demo.c位于 LiteOS-iot\_link/demos。
 -   **立即下发：** IoT平台立即发送收到的命令，如果设备不在线或者设备没收到指令则下发失败。立即下发适合对命令实时性有要求的场景，比如路灯开关灯，燃气表开关阀。使用立即下发时，应用服务器需要自己保证命令下发的时机。
 
 **图 1**  命令立即下发流程<a name="fig47270993"></a>  
-![](./meta/IoT_LinK/lwm2m/command-issued1.png "命令立即下发流程")
+![](./meta/IoT_Link/lwm2m/command-issued1.png "命令立即下发流程")
 
 -   **缓存下发：** 平台收到命令后放入队列。在设备上线的时候，平台依次下发命令队列中的命令。缓存下发适合对命令实时性要求不高的场景，比如配置水表的参数。缓存下发平台根据设备的省电模式进行不同处理。
 
 **图 2**  命令缓存下发流程<a name="fig33707270"></a>  
-![](./meta/IoT_LinK/lwm2m/command-issued2.png "命令缓存下发流程")
+![](./meta/IoT_Link/lwm2m/command-issued2.png "命令缓存下发流程")
 
 应用服务器向IoT平台下发命令时，携带参数expireTime（简称TTL，表示最大缓存时间）。如果不带expireTime，则默认expireTime为48小时。
 
@@ -503,12 +503,12 @@ expireTime\>0：命令缓存下发。
 2.  在“设备管理”界面的设备列表中，点击接收命令的设备，点击“调试产品”。在弹出应用模拟器界面中选择“命令发送”，配置下发给设备的命令参数。
 
 **图 3**  命令下发<a name="fig35602328"></a>  
-![](./meta/IoT_LinK/lwm2m/command-issued3.png "命令下发")
+![](./meta/IoT_Link/lwm2m/command-issued3.png "命令下发")
 
 3.  在“设备管理”界面的设备列表中，点击接收命令的设备-\>“历史命令”，查看“状态”栏的显示。
 
 **图 4**  命令下发状态<a name="fig29598981"></a>  
-![](./meta/IoT_LinK/lwm2m/command-issued4.png "命令下发状态")
+![](./meta/IoT_Link/lwm2m/command-issued4.png "命令下发状态")
 
 状态说明如下：
 
@@ -526,7 +526,7 @@ expireTime\>0：命令缓存下发。
 <h3 id="（参考）LINUX设备平台接入实例.md">（参考）LINUX设备平台接入实例</h3>
 
 **图 1** 引导模式整体配置流程图
-![](./meta/IoT_LinK/lwm2m/bs-connect.jpg )
+![](./meta/IoT_Link/lwm2m/bs-connect.jpg )
 
 <h4 id="5.1">5.1、平台侧开发 </h4>
 
@@ -549,18 +549,18 @@ BS引导模式平台侧开发包括：产品导入，设备导入，配置发放
 2.  进入设备发放服务，点击“从产品中心导入”。
 
 **图 1**  产品导入<a name="fig43098736"></a>  
-![](./meta/IoT_LinK/lwm2m/product-import-001.jpg "产品导入")
+![](./meta/IoT_Link/lwm2m/product-import-001.jpg "产品导入")
 
 3.  在新弹出界面中，产品名称输入“EVB”,协议类型选择“LwM2M”，点击“搜索”，在搜索结果列表中选择产品点击“导入”。
 
 **图 2**  选择产品<a name="fig46257266"></a>  
-![](./meta/IoT_LinK/lwm2m/product-import-002.jpg "选择产品")
+![](./meta/IoT_Link/lwm2m/product-import-002.jpg "选择产品")
 
 >![](./public_sys-resources/icon-note.gif) **说明：**   
 >如上产品选择仅为参考举例，具体配置请以实际产品模型为准。  
 
 **图 3**  产品导入成功<a name="fig24567157"></a>  
-![](./meta/IoT_LinK/lwm2m/product-import-003.jpg "产品导入成功")
+![](./meta/IoT_Link/lwm2m/product-import-003.jpg "产品导入成功")
 
 
 <h5 id="设备导入.md"> 3 设备导入</h5>
@@ -571,12 +571,12 @@ BS引导模式平台侧开发包括：产品导入，设备导入，配置发放
 2.  进入设备发放服务页面，选择“设备导入”，点击页面右上角“单个导入”。
 
 **图 1**  设备导入<a name="fig8361117"></a>  
-![](./meta/IoT_LinK/lwm2m/product-import-004.jpg "设备导入")
+![](./meta/IoT_Link/lwm2m/product-import-004.jpg "设备导入")
 
 3.  在配置设备基本信息界面中，产品信息选择上一步导入的产品、设置好设置设备标识码、设备名称、访问方式选择“IP”，点击“确认导入”
 
 **图 2**  配置设备基本信息<a name="fig41058489"></a>  
-![](./meta/IoT_LinK/lwm2m/product-import-005.jpg "配置设备基本信息")
+![](./meta/IoT_Link/lwm2m/product-import-005.jpg "配置设备基本信息")
 
 >![](./public_sys-resources/icon-note.gif) **说明：**   
 >如上配置仅为参考举例，具体配置请以现网需求为准。  
@@ -588,12 +588,12 @@ BS引导模式平台侧开发包括：产品导入，设备导入，配置发放
 1.  在设备发放服务页面选择“发放策略”，点击“设备名称筛选”，添加实例。
 
 **图 1**  添加实例<a name="fig27941066"></a>  
-![](./meta/IoT_LinK/lwm2m/product-import-006.jpg "添加实例")
+![](./meta/IoT_Link/lwm2m/product-import-006.jpg "添加实例")
 
 2.  在添加实例配置框内填写关键字，关键字为设备导入中的设备名称、选择发放区域、点击“确定”。
 
 **图 2**  配置发放策略<a name="fig51445036"></a>  
-![](./meta/IoT_LinK/lwm2m/product-import-007.jpg "配置发放策略")
+![](./meta/IoT_Link/lwm2m/product-import-007.jpg "配置发放策略")
 
 <h5 id="发放设备.md"> 5 发放设备</h5>
 
@@ -602,10 +602,10 @@ BS引导模式平台侧开发包括：产品导入，设备导入，配置发放
 1.  选择“设备仓库”，在设备列表选择要发放的设备，点击“发放设备”，弹出对话框点击“确定”，点击“立即启动”。
 
 **图 1**  发放设备<a name="fig094004411363"></a>  
-![](./meta/IoT_LinK/lwm2m/product-import-008.jpg "发放设备")
+![](./meta/IoT_Link/lwm2m/product-import-008.jpg "发放设备")
 
 **图 2**  立即启动<a name="fig86891238143614"></a>  
-![](./meta/IoT_LinK/lwm2m/product-import-009.jpg "立即启动")
+![](./meta/IoT_Link/lwm2m/product-import-009.jpg "立即启动")
 
 <h4 id="5.2">5.2、设备侧开发 </h4>
 
@@ -624,7 +624,7 @@ BS引导模式设备侧开发包括: 配置Demo中对接云端设备的信息、
 1.  将组件代码源文件复制到Ubuntu用户目录下
 
 **图 1**  复制组件代码源文件到用户目录<a name="fig86891238143614"></a>  
-![](./meta/IoT_LinK/lwm2m/LinuxDir.PNG "立即启动")
+![](./meta/IoT_Link/lwm2m/LinuxDir.PNG "立即启动")
 
 2.  在Demo源文件中设置云平台IP以及设备EP Name。
 
@@ -698,13 +698,13 @@ config.mk位于 LiteOS-iot\_link/targets/LINUX/GCC。
 进入到LiteOS-iot\_link/targets/LINUX/GCC目录下执行“make”命令,编译成功后会在当前文件夹下生成"build"目录，输入“./build/Huawei_LiteOS.elf”运行。
 
 **图 1**  执行“make”命令<a name="fig86891238143614"></a>  
-![](./meta/IoT_LinK/lwm2m/make.png "编译成功")
+![](./meta/IoT_Link/lwm2m/make.png "编译成功")
 
 **图 2**  运行程序<a name="fig86891238143614"></a>  
-![](./meta/IoT_LinK/lwm2m/Start.png "运行成功")
+![](./meta/IoT_Link/lwm2m/Start.png "运行成功")
 
 **图 3**  接入云平台<a name="fig86891238143614"></a>  
-![](./meta/IoT_LinK/lwm2m/connect.png "接入云平台")
+![](./meta/IoT_Link/lwm2m/connect.png "接入云平台")
 
 
 5.  查看设备状态。
@@ -712,7 +712,7 @@ config.mk位于 LiteOS-iot\_link/targets/LINUX/GCC。
 登录IoT平台进入设备管理服务，选择“所有设备”，在设备列表中查看对应设备的状态。如果状态为“在线”，则表示设备已经成功接入IoT平台。
 
 **图 1**  查看设备状态<a name="fig17343259182620"></a>  
-![](./meta/IoT_LinK/lwm2m/check-hardware-status-bs-nodtls.jpg "查看设备状态")
+![](./meta/IoT_Link/lwm2m/check-hardware-status-bs-nodtls.jpg "查看设备状态")
 
 <h4 id="5.3">5.3、调测 </h4>
 
@@ -788,4 +788,4 @@ oc\_lwm2m\_bs\_demo.c位于 LiteOS-iot\_link/demos。
 登录IoT平台进入设备管理服务，选择“所有设备”，在设备列表中，点击上报数据的设备，查看设备信息”，验证设备数据上报的情况。
 
 **图 1**  查看数据上报结果<a name="fig13872847174416"></a>  
-![](./meta/IoT_LinK/lwm2m/data-upload-bs-nodtls.jpg "查看数据上报结果")
+![](./meta/IoT_Link/lwm2m/data-upload-bs-nodtls.jpg "查看数据上报结果")
