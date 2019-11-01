@@ -15,9 +15,31 @@
 
 #include <heap.h>
 
+#include <stdlib.h>
+
 void * malloc (size_t size)
     {
     return heap_alloc (kernel_heap, size);
+    }
+
+void * calloc (size_t size, size_t len)
+    {
+    size_t s = size * len;
+    void * ptr;
+
+    if (s < size || s < len)
+        {
+        return NULL;
+        }
+
+    ptr = malloc (s);
+
+    if (ptr != NULL)
+        {
+        memset (ptr, 0, s);
+        }
+
+    return ptr;
     }
 
 void * realloc (void * ptr, size_t size)
@@ -34,4 +56,28 @@ void * memalign (size_t alignment,  size_t size)
     {
     return heap_alloc_align (kernel_heap, alignment, size);
     }
+
+#ifdef __NEWLIB__
+
+void * _malloc_r (struct _reent * ptr, size_t size)
+    {
+    return malloc (size);
+    }
+
+void * _realloc_r (struct _reent * ptr, void * old, size_t newlen)
+    {
+    return realloc (old, newlen);
+    }
+
+void * _calloc_r (struct _reent * ptr, size_t size, size_t len)
+    {
+    return calloc (size, len);
+    }
+
+void _free_r (struct _reent * ptr, void * addr)
+    {
+    free(addr);
+    }
+
+#endif
 
