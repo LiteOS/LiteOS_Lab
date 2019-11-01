@@ -24,7 +24,7 @@ extern char __stack_end__ [];
 
 const struct phys_mem system_phys_mem [] =
     {
-        { __stack_end__ + 0x400, (char *) (CONFIG_RAM_START + CONFIG_RAM_SIZE), },  ///< reserved 1kb for the libc used
+        { __stack_end__, (char *) (CONFIG_RAM_START + CONFIG_RAM_SIZE), },
 #ifdef  CONFIG_EXTRA_RAM0
         { (char *) CONFIG_EXTRA_RAM0_START, (char *) (CONFIG_EXTRA_RAM0_START + CONFIG_EXTRA_RAM0_SIZE) },
 #endif

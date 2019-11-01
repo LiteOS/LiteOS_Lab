@@ -232,11 +232,6 @@ void task_switch_hook (task_id old, task_id new)
 
     BUG_ON (task_stack_overflow (old), "task (%p:%s) stack overflow\n", old, old->name);
 
-    if((new->regset.sp == 0x20002830))// && (*((unsigned int *)0x20002504)) > 0x20000000 )
-    {
-        WARN("!!!!");
-    }
-
     do
         {
         if (__task_switch_hooks [idx] == NULL)

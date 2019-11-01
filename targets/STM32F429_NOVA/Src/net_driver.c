@@ -34,7 +34,7 @@
 
 //#include "sys_init.h"
 
-#ifdef WITH_LWIP
+#ifdef CONFIG_LWIP_ENABLE
 
 #include <stm32f4xx.h>
 

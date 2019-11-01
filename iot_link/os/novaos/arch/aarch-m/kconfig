@@ -116,7 +116,7 @@ config HAS_FPU
 config FPU
     bool "Enable FPU support."
     depends on HAS_FPU
-    default n
+    default y
 
 config SVC
     bool "Enable SVCall support."
