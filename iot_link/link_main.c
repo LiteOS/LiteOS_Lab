@@ -154,6 +154,10 @@ int link_main(void *args)
         #include <esp8266_socket_imp.h>
         tcpipstack_install_esp8266_socket();
         esp8266_boot();
+#elif CONFIG_RTK8710_SOCKET_ENABLE
+        #include <rtk8710_socket_imp.h>
+        tcpipstack_install_rtk8710_socket();
+        rtk8710_boot();
     #else
 
     #endif
@@ -180,11 +184,14 @@ int link_main(void *args)
 #endif
 
 
-    //////////////////////////  COAP PROTOCOL  /////////////////////////////////
-    #if CONFIG_COAP_ENABLE
-        #include <litecoap_port.h>
-        coap_install_litecoap();
-    #endif
+//////////////////////////  COAP PROTOCOL  /////////////////////////////////
+#if CONFIG_LITE_COAP_ENABLE
+    #include <litecoap_port.h>
+    coap_install_litecoap();
+#elif CONFIG_LIBCOAP_ENABLE
+    #include <libcoap_port.h>
+    coap_install_libcoap();
+#endif
 
 //////////////////////////  OC MQTT  //////////////////////////////////
 

@@ -9,7 +9,7 @@
 
 #define LOCAL_PORT  5999
 
-#define RECV_BUFFER_LEN 512
+
 
 test_sort ts_sort_flist[] = {
     NULL,
@@ -17,8 +17,8 @@ test_sort ts_sort_flist[] = {
     ts_sort_oc_mqtt_al,
 };
 
-static char g_acRecvBuf[RECV_BUFFER_LEN];
-static char g_tempBuf[RECV_BUFFER_LEN];
+char g_acRecvBuf[TS_RECV_BUFFER_LEN];
+static char g_acSendBuf[TS_RECV_BUFFER_LEN+128];
 
 int g_apitestfin = 0;
 
@@ -68,26 +68,29 @@ int test_main_entry(void *paras)
            break;
         }
         printf("recve msg: %s,%d\n",g_acRecvBuf,recv_len);
-        memcpy(g_tempBuf, g_acRecvBuf, recv_len);
+        memcpy(g_acSendBuf, g_acRecvBuf, recv_len);
 
-        pchTmp      = g_tempBuf;
+        pchTmp      = g_acSendBuf;
         pchStrTmpIn = NULL;
         pchTmp      = strtok_r(pchTmp, "|", &pchStrTmpIn);
         test_id     = atoi(pchTmp);
         prot_id     = test_id >> 16;
         entry_id    = test_id & 0xFFFF;
 
-        printf("prot_id:%d, entry_id: %d\n",prot_id,entry_id);
+        printf("$$$$$$$$$$,test case will run ,prot_id:%x, entry_id: %x\n",prot_id,entry_id);
 
         result = ts_sort_flist[prot_id](entry_id, g_acRecvBuf, recv_len);
-        memset(g_acRecvBuf,0,sizeof(g_acRecvBuf));
-        snprintf(g_acRecvBuf,sizeof(g_acRecvBuf),"%d:%d:goodluck",test_id,result);
-        printf("====***:%s\n",g_acRecvBuf);
-        send_len = sal_sendto(server_fd, g_acRecvBuf, strlen(g_acRecvBuf), 0, (struct sockaddr *)&cli_addr, addr_len);
+        memset(g_acSendBuf,0,sizeof(g_acSendBuf));
+        if(result != TS_OK_HAS_DATA)
+            snprintf(g_acSendBuf,sizeof(g_acSendBuf),"%d,|%d,|",test_id,result);
+        else
+            snprintf(g_acSendBuf,sizeof(g_acSendBuf),"%d,|%d,|%s",test_id,result,g_acRecvBuf);
+        
+        printf("send ==++==***:%s\n",g_acSendBuf);
+        send_len = sal_sendto(server_fd, g_acSendBuf, strlen(g_acSendBuf), 0, (struct sockaddr *)&cli_addr, addr_len);
         if (send_len < 0)
         {
-            printf("error(%d) occur while send!!!\n",send_len);     
-            continue;
+            printf("error(%d) occur while send!!!\n",send_len);
         }
     }
 
@@ -98,10 +101,7 @@ int test_main_entry(void *paras)
 void autotest_start(void)
 {
     osal_task_create("test_main",test_main_entry,NULL,0x1000,NULL,10);
-    /*wait oc register api test over*/
-    do {
-        osal_task_sleep(500);
-    } while(g_apitestfin==0);
+    
 }
 
 

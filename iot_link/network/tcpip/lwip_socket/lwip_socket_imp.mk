@@ -59,7 +59,7 @@ LWIP_PORT_SRC = \
 
 
 C_DEFS += \
-    -DWITH_LWIP \
+    -DCONFIG_WITH_LWIP \
     -DLWIP_DEBUG \
     -D LWIP_TIMEVAL_PRIVATE=0 
 
