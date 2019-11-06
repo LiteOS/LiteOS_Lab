@@ -8,12 +8,11 @@ SDK提供端云协同能力，集成了MQTT、LwM2M、CoAP、mbedtls、LwIP 全�
 
 ## SDK接入云平台开发指南
 
-* [SDK接入华为云平台](https://github.com/SuYai/OceanConnectHelp)
-  * [SDK开发指南](./doc/Huawei_IoT_Link_SDK_Developer_Guide.md)
+* [SDK开发指南](./doc/Huawei_IoT_Link_SDK_Developer_Guide.md)
 
 通过SDK中的端云互通组件，可以简单快速地实现与华为 OceanConnect IoT平台安全可靠连接，可以大大减少开发周期，快速构建IoT产品。
 
-* [SDK端云互通组件CoAP/LwM2M开发指南](./doc/Huawei_IoT_Link_SDK_Coap_LwM2M_Developer_Guide_zh.md)
+* [SDK端云互通组件LwM2M开发指南](./doc/Huawei_IoT_Link_SDK_LwM2M_Developer_Guide_zh.md)
 * [SDK端云互通组件MQTT开发指南](./doc/Huawei_IoT_Link_SDK_MQTT_Developer_Guide.md)
 
 ## 开源协议
