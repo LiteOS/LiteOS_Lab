@@ -1,52 +1,19 @@
-/*----------------------------------------------------------------------------
- * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
- * All rights reserved.
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- * 1. Redistributions of source code must retain the above copyright notice, this list of
- * conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright notice, this list
- * of conditions and the following disclaimer in the documentation and/or other materials
- * provided with the distribution.
- * 3. Neither the name of the copyright holder nor the names of its contributors may be used
- * to endorse or promote products derived from this software without specific prior written
- * permission.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
- * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
- * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
- * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
- * Notice of Export Control Law
- * ===============================================
- * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
- * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
- * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
- * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
-
 /*******************************************************************************
  *
  * Copyright (c) 2013, 2014, 2015 Intel Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * are made available under the terms of the Eclipse Public License v2.0
  * and Eclipse Distribution License v1.0 which accompany this distribution.
  *
  * The Eclipse Public License is available at
- *    http://www.eclipse.org/legal/epl-v10.html
+ *    http://www.eclipse.org/legal/epl-v20.html
  * The Eclipse Distribution License is available at
  *    http://www.eclipse.org/org/documents/edl-v10.php.
  *
  * Contributors:
  *    David Navarro, Intel Corporation - initial API and implementation
  *    Fabien Fleutot - Please refer to git log
+ *    Scott Bertin, AMETEK, Inc. - Please refer to git log
  *    
  *******************************************************************************/
 
@@ -207,7 +174,7 @@ static void print_indent(FILE * stream,
 }
 
 void output_buffer(FILE * stream,
-                   uint8_t * buffer,
+                   const uint8_t * buffer,
                    int length,
                    int indent)
 {
@@ -304,7 +271,7 @@ void output_tlv(FILE * stream,
             uint8_t tmp;
 
             print_indent(stream, indent+2);
-            fprintf(stream, "data (%ld bytes):\r\n", dataLen);
+            fprintf(stream, "data (%u bytes):\r\n", dataLen);
             output_buffer(stream, (uint8_t*)buffer + length + dataIndex, dataLen, indent+2);
 
             tmp = buffer[length + dataIndex + dataLen];
@@ -359,6 +326,16 @@ void output_data(FILE * stream,
 
     case LWM2M_CONTENT_JSON:
         fprintf(stream, "application/vnd.oma.lwm2m+json:\r\n");
+        print_indent(stream, indent);
+        for (i = 0 ; i < dataLength ; i++)
+        {
+            fprintf(stream, "%c", data[i]);
+        }
+        fprintf(stream, "\n");
+        break;
+
+    case LWM2M_CONTENT_SENML_JSON:
+        fprintf(stream, "application/senml+json:\r\n");
         print_indent(stream, indent);
         for (i = 0 ; i < dataLength ; i++)
         {
@@ -422,6 +399,11 @@ void dump_tlv(FILE * stream,
             print_indent(stream, indent + 1);
             fprintf(stream, "\"%.*s\"\r\n", (int)dataP[i].value.asBuffer.length, dataP[i].value.asBuffer.buffer);
             break;
+        case LWM2M_TYPE_CORE_LINK:
+            fprintf(stream, "LWM2M_TYPE_CORE_LINK\r\n");
+            print_indent(stream, indent + 1);
+            fprintf(stream, "\"%.*s\"\r\n", (int)dataP[i].value.asBuffer.length, dataP[i].value.asBuffer.buffer);
+            break;
         case LWM2M_TYPE_OPAQUE:
             fprintf(stream, "LWM2M_TYPE_OPAQUE\r\n");
             output_buffer(stream, dataP[i].value.asBuffer.buffer, dataP[i].value.asBuffer.length, indent + 1);
@@ -430,6 +412,12 @@ void dump_tlv(FILE * stream,
             fprintf(stream, "LWM2M_TYPE_INTEGER: ");
             print_indent(stream, indent + 1);
             fprintf(stream, "%" PRId64, dataP[i].value.asInteger);
+            fprintf(stream, "\r\n");
+            break;
+        case LWM2M_TYPE_UNSIGNED_INTEGER:
+            fprintf(stream, "LWM2M_TYPE_UNSIGNED_INTEGER: ");
+            print_indent(stream, indent + 1);
+            fprintf(stream, "%" PRIu64, dataP[i].value.asUnsigned);
             fprintf(stream, "\r\n");
             break;
         case LWM2M_TYPE_FLOAT:
@@ -483,126 +471,4 @@ void print_status(FILE * stream,
                   uint8_t status)
 {
     fprintf(stream, "%d.%02d (%s)", (status&0xE0)>>5, status&0x1F, prv_status_to_string(status));
-}
-
-/**********************************************************
-* Base64 decoding function
-*
-* WARNING: Bugged for input strings with length < 4
-*
-*/
-
-#define PRV_B64_PADDING '='
-
-static uint8_t prv_b64Revert(uint8_t value)
-{
-    if (value >= 'A' && value <= 'Z')
-    {
-        return (value - 'A');
-    }
-    if (value >= 'a' && value <= 'z')
-    {
-        return (26 + value - 'a');
-    }
-    if (value >= '0' && value <= '9')
-    {
-        return (52 + value - '0');
-    }
-    switch (value)
-    {
-    case '+':
-        return 62;
-    case '/':
-        return 63;
-    default:
-        return 0;
-    }
-}
-
-static void prv_decodeBlock(uint8_t input[4],
-                            uint8_t output[3])
-{
-    uint8_t tmp[4];
-    int i;
-
-    memset(output, 0, 3);
-
-    for (i = 0; i < 4; i++)
-    {
-        tmp[i] = prv_b64Revert(input[i]);
-    }
-
-    output[0] = (tmp[0] << 2) | (tmp[1] >> 4);
-    output[1] = (tmp[1] << 4) | (tmp[2] >> 2);
-    output[2] = (tmp[2] << 6) | tmp[3];
-}
-
-size_t base64_decode(uint8_t * dataP,
-                     size_t dataLen,
-                     uint8_t ** bufferP)
-{
-    size_t data_index;
-    size_t result_index;
-    size_t result_len;
-    
-    if (dataLen % 4) return 0;
-    
-    result_len = (dataLen >> 2) * 3;
-    *bufferP = (uint8_t *)lwm2m_malloc(result_len);
-    if (NULL == *bufferP) return 0;
-    memset(*bufferP, 0, result_len);
-    
-    // remove padding
-    while (dataP[dataLen - 1] == PRV_B64_PADDING)
-    {
-        dataLen--;
-    }
-    
-    data_index = 0;
-    result_index = 0;
-    while (data_index < dataLen)
-    {
-        prv_decodeBlock(dataP + data_index, *bufferP + result_index);
-        data_index += 4;
-        result_index += 3;
-    }
-    switch (data_index - dataLen)
-    {
-    case 0:
-        break;
-    case 2:
-    {
-        uint8_t tmp[2];
-
-        tmp[0] = prv_b64Revert(dataP[dataLen - 2]);
-        tmp[1] = prv_b64Revert(dataP[dataLen - 1]);
-
-        *bufferP[result_index - 3] = (tmp[0] << 2) | (tmp[1] >> 4);
-        *bufferP[result_index - 2] = (tmp[1] << 4);
-        result_len -= 2;
-    }
-    break;
-    case 3:
-    {
-        uint8_t tmp[3];
-
-        tmp[0] = prv_b64Revert(dataP[dataLen - 3]);
-        tmp[1] = prv_b64Revert(dataP[dataLen - 2]);
-        tmp[2] = prv_b64Revert(dataP[dataLen - 1]);
-
-        *bufferP[result_index - 3] = (tmp[0] << 2) | (tmp[1] >> 4);
-        *bufferP[result_index - 2] = (tmp[1] << 4) | (tmp[2] >> 2);
-        *bufferP[result_index - 1] = (tmp[2] << 6);
-        result_len -= 1;
-    }
-    break;
-    default:
-        // error
-        lwm2m_free(*bufferP);
-        *bufferP = NULL;
-        result_len = 0;
-        break;
-    }
-
-    return result_len;
 }

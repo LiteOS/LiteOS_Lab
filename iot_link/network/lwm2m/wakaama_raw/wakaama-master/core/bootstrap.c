@@ -2,11 +2,11 @@
  *
  * Copyright (c) 2015 Sierra Wireless and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * are made available under the terms of the Eclipse Public License v2.0
  * and Eclipse Distribution License v1.0 which accompany this distribution.
  *
  * The Eclipse Public License is available at
- *    http://www.eclipse.org/legal/epl-v10.html
+ *    http://www.eclipse.org/legal/epl-v20.html
  * The Eclipse Distribution License is available at
  *    http://www.eclipse.org/org/documents/edl-v10.php.
  *
@@ -44,11 +44,14 @@ static void prv_handleResponse(lwm2m_server_t * bootstrapServer,
     }
 }
 
-static void prv_handleBootstrapReply(lwm2m_transaction_t * transaction,
+static void prv_handleBootstrapReply(lwm2m_context_t * contextP,
+                                     lwm2m_transaction_t * transaction,
                                      void * message)
 {
     lwm2m_server_t * bootstrapServer = (lwm2m_server_t *)transaction->userData;
     coap_packet_t * coapMessage = (coap_packet_t *)message;
+
+    (void)contextP; /* unused */
 
     LOG("Entering");
 
@@ -219,7 +222,7 @@ void bootstrap_step(lwm2m_context_t * contextP,
         default:
             break;
         }
-        LOG_ARG("Finalal status: %s", STR_STATUS(targetP->status));
+        LOG_ARG("Final status: %s", STR_STATUS(targetP->status));
         targetP = targetP->next;
     }
 }
@@ -550,8 +553,7 @@ uint8_t bootstrap_handleDeleteAll(lwm2m_context_t * contextP,
     {
         lwm2m_uri_t uri;
 
-        memset(&uri, 0, sizeof(lwm2m_uri_t));
-        uri.flag = LWM2M_URI_FLAG_OBJECT_ID;
+        LWM2M_URI_RESET(&uri);
         uri.objectId = objectP->objID;
 
         if (objectP->objID == LWM2M_SECURITY_OBJECT_ID)
@@ -568,7 +570,6 @@ uint8_t bootstrap_handleDeleteAll(lwm2m_context_t * contextP,
                 }
                 else
                 {
-                    uri.flag = LWM2M_URI_FLAG_OBJECT_ID | LWM2M_URI_FLAG_INSTANCE_ID;
                     uri.instanceId = instanceP->id;
                     result = object_delete(contextP, &uri);
                     instanceP = objectP->instanceList;
@@ -641,13 +642,16 @@ void lwm2m_set_bootstrap_callback(lwm2m_context_t * contextP,
     contextP->bootstrapUserData = userData;
 }
 
-static void prv_resultCallback(lwm2m_transaction_t * transacP,
+static void prv_resultCallback(lwm2m_context_t * contextP,
+                               lwm2m_transaction_t * transacP,
                                void * message)
 {
     bs_data_t * dataP = (bs_data_t *)transacP->userData;
     lwm2m_uri_t * uriP;
 
-    if (dataP->isUri == true)
+    (void)contextP; /* unused */
+
+    if (LWM2M_URI_IS_SET_OBJECT(&dataP->uri))
     {
         uriP = &dataP->uri;
     }
@@ -696,11 +700,10 @@ int lwm2m_bootstrap_delete(lwm2m_context_t * contextP,
     }
     if (uriP == NULL)
     {
-        dataP->isUri = false;
+        LWM2M_URI_RESET(&dataP->uri);
     }
     else
     {
-        dataP->isUri = true;
         memcpy(&dataP->uri, uriP, sizeof(lwm2m_uri_t));
     }
     dataP->callback = contextP->bootstrapCallback;
@@ -744,7 +747,6 @@ int lwm2m_bootstrap_write(lwm2m_context_t * contextP,
         transaction_free(transaction);
         return COAP_500_INTERNAL_SERVER_ERROR;
     }
-    dataP->isUri = true;
     memcpy(&dataP->uri, uriP, sizeof(lwm2m_uri_t));
     dataP->callback = contextP->bootstrapCallback;
     dataP->userData = contextP->bootstrapUserData;
@@ -775,7 +777,7 @@ int lwm2m_bootstrap_finish(lwm2m_context_t * contextP,
         transaction_free(transaction);
         return COAP_500_INTERNAL_SERVER_ERROR;
     }
-    dataP->isUri = false;
+    LWM2M_URI_RESET(&dataP->uri);
     dataP->callback = contextP->bootstrapCallback;
     dataP->userData = contextP->bootstrapUserData;
 

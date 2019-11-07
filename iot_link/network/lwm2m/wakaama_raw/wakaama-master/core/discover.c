@@ -2,16 +2,17 @@
 *
 * Copyright (c) 2015 Intel Corporation and others.
 * All rights reserved. This program and the accompanying materials
-* are made available under the terms of the Eclipse Public License v1.0
+* are made available under the terms of the Eclipse Public License v2.0
 * and Eclipse Distribution License v1.0 which accompany this distribution.
 *
 * The Eclipse Public License is available at
-*    http://www.eclipse.org/legal/epl-v10.html
+*    http://www.eclipse.org/legal/epl-v20.html
 * The Eclipse Distribution License is available at
 *    http://www.eclipse.org/org/documents/edl-v10.php.
 *
 * Contributors:
 *    David Navarro, Intel Corporation - initial API and implementation
+*    Scott Bertin, AMETEK, Inc. - Please refer to git log
 *
 *******************************************************************************/
 
@@ -174,9 +175,11 @@ static int prv_serializeLinkData(lwm2m_context_t * contextP,
     case LWM2M_TYPE_STRING:
     case LWM2M_TYPE_OPAQUE:
     case LWM2M_TYPE_INTEGER:
+    case LWM2M_TYPE_UNSIGNED_INTEGER:
     case LWM2M_TYPE_FLOAT:
     case LWM2M_TYPE_BOOLEAN:
     case LWM2M_TYPE_OBJECT_LINK:
+    case LWM2M_TYPE_CORE_LINK:
     case LWM2M_TYPE_MULTIPLE_RESOURCE:
         if (bufferLen < LINK_ITEM_START_SIZE) return -1;
         memcpy(buffer + head, LINK_ITEM_START, LINK_ITEM_START_SIZE);
@@ -222,7 +225,6 @@ static int prv_serializeLinkData(lwm2m_context_t * contextP,
         {
             memcpy(&uri, parentUriP, sizeof(lwm2m_uri_t));
             uri.resourceId = tlvP->id;
-            uri.flag |= LWM2M_URI_FLAG_RESOURCE_ID;
             res = prv_serializeAttributes(contextP, &uri, serverP, objectParamP, buffer, head - 1, bufferLen);
             if (res < 0) return -1;    // careful, 0 is valid
             if (res > 0) head += res;
@@ -256,7 +258,6 @@ static int prv_serializeLinkData(lwm2m_context_t * contextP,
 
         memcpy(&uri, parentUriP, sizeof(lwm2m_uri_t));
         uri.instanceId = tlvP->id;
-        uri.flag |= LWM2M_URI_FLAG_INSTANCE_ID;
 
         head = 0;
         PRV_CONCAT_STR(buffer, bufferLen, head, LINK_ITEM_START, LINK_ITEM_START_SIZE);
@@ -300,6 +301,7 @@ int discover_serialize(lwm2m_context_t * contextP,
     size_t head;
     int res;
     lwm2m_uri_t parentUri;
+    lwm2m_uri_t baseUri;
     lwm2m_attributes_t * paramP;
     lwm2m_attributes_t mergedParam;
 
@@ -307,9 +309,8 @@ int discover_serialize(lwm2m_context_t * contextP,
     LOG_URI(uriP);
 
     head = 0;
-    memset(&parentUri, 0, sizeof(lwm2m_uri_t));
+    LWM2M_URI_RESET(&parentUri);
     parentUri.objectId = uriP->objectId;
-    parentUri.flag = LWM2M_URI_FLAG_OBJECT_ID;
 
     if (LWM2M_URI_IS_SET_RESOURCE(uriP))
     {
@@ -317,16 +318,15 @@ int discover_serialize(lwm2m_context_t * contextP,
         lwm2m_attributes_t * objParamP;
         lwm2m_attributes_t * instParamP;
 
-        memset(&parentUri, 0, sizeof(lwm2m_uri_t));
+        LWM2M_URI_RESET(&parentUri);
+        LWM2M_URI_RESET(&tempUri);
         tempUri.objectId = uriP->objectId;
-        tempUri.flag = LWM2M_URI_FLAG_OBJECT_ID;
 
         // get object level attributes
         objParamP = prv_findAttributes(contextP, &tempUri, serverP);
         
         // get object instance level attributes
         tempUri.instanceId = uriP->instanceId;
-        tempUri.flag = LWM2M_URI_FLAG_INSTANCE_ID;
         instParamP = prv_findAttributes(contextP, &tempUri, serverP);
 
         if (objParamP != NULL)
@@ -368,7 +368,9 @@ int discover_serialize(lwm2m_context_t * contextP,
         {
             paramP = instParamP;
         }
-        uriP->flag &= ~LWM2M_URI_FLAG_RESOURCE_ID;
+        memcpy(&baseUri, uriP, sizeof(baseUri));
+        baseUri.resourceId = LWM2M_MAX_ID;
+        uriP = &baseUri;
     }
     else
     {
@@ -387,7 +389,6 @@ int discover_serialize(lwm2m_context_t * contextP,
             head += res;
             PRV_CONCAT_STR(bufferLink, PRV_LINK_BUFFER_SIZE, head, LINK_ITEM_END, LINK_ITEM_END_SIZE);
             parentUri.instanceId = uriP->instanceId;
-            parentUri.flag = LWM2M_URI_FLAG_INSTANCE_ID;
             if (serverP != NULL)
             {
                 res = prv_serializeAttributes(contextP, &parentUri, serverP, NULL, bufferLink, head - 1, PRV_LINK_BUFFER_SIZE);
@@ -419,7 +420,6 @@ int discover_serialize(lwm2m_context_t * contextP,
 
     baseUriLen = uri_toString(uriP, baseUriStr, URI_MAX_STRING_LEN, NULL);
     if (baseUriLen < 0) return -1;
-    baseUriLen -= 1;
 
     for (index = 0; index < size && head < PRV_LINK_BUFFER_SIZE; index++)
     {

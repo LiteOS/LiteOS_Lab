@@ -210,7 +210,7 @@ uint8_t lwm2m_send_notify(lwm2m_context_t *contextP, lwm2m_observe_info_t *obser
     uri.objectId = LWM2M_FIRMWARE_UPDATE_OBJECT_ID;
     uri.instanceId = 0;
     uri.resourceId = RES_M_STATE;
-    uri.flag = (LWM2M_URI_FLAG_OBJECT_ID | LWM2M_URI_FLAG_INSTANCE_ID | LWM2M_URI_FLAG_RESOURCE_ID);
+    // uri.flag = (LWM2M_URI_FLAG_OBJECT_ID | LWM2M_URI_FLAG_INSTANCE_ID | LWM2M_URI_FLAG_RESOURCE_ID);
 
     format = (lwm2m_media_type_t)observe_info->format;
     memset(&data, 0, sizeof(data));

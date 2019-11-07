@@ -36,11 +36,11 @@
  *
  * Copyright (c) 2013, 2014 Intel Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * are made available under the terms of the Eclipse Public License v2.0
  * and Eclipse Distribution License v1.0 which accompany this distribution.
  *
  * The Eclipse Public License is available at
- *    http://www.eclipse.org/legal/epl-v10.html
+ *    http://www.eclipse.org/legal/epl-v20.html
  * The Eclipse Distribution License is available at
  *    http://www.eclipse.org/org/documents/edl-v10.php.
  *
@@ -50,7 +50,7 @@
  *    Simon Bernard - Please refer to git log
  *    Toby Jaffey - Please refer to git log
  *    Pascal Rieux - Please refer to git log
- *
+ *    
  *******************************************************************************/
 
 /*
@@ -202,7 +202,7 @@ void prv_deleteTransactionList(lwm2m_context_t * context)
         context->transactionList = context->transactionList->next;
         if (transaction->callback != NULL)
         {
-            transaction->callback(transaction, NULL);
+            transaction->callback(context, transaction, NULL);
         }
         transaction_free(transaction);
     }
@@ -420,7 +420,6 @@ int lwm2m_step(lwm2m_context_t * contextP,
                time_t * timeoutP)
 {
     time_t tv_sec;
-    int result;
 
     LOG_ARG("timeoutP: %" PRId64, *timeoutP);
     tv_sec = lwm2m_gettime();
@@ -482,10 +481,12 @@ next_step:
         break;
 #endif
     case STATE_REGISTER_REQUIRED:
-        result = registration_start(contextP);
+    {
+        int result = registration_start(contextP, true);
         if (COAP_NO_ERROR != result) return result;
         contextP->state = STATE_REGISTERING;
-        break;
+    }
+    break;
 
     case STATE_REGISTERING:
     {
