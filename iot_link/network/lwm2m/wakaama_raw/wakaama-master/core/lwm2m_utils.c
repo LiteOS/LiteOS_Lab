@@ -2,17 +2,18 @@
  *
  * Copyright (c) 2013, 2014 Intel Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * are made available under the terms of the Eclipse Public License v2.0
  * and Eclipse Distribution License v1.0 which accompany this distribution.
  *
  * The Eclipse Public License is available at
- *    http://www.eclipse.org/legal/epl-v10.html
+ *    http://www.eclipse.org/legal/epl-v20.html
  * The Eclipse Distribution License is available at
  *    http://www.eclipse.org/org/documents/edl-v10.php.
  *
  * Contributors:
  *    David Navarro, Intel Corporation - initial API and implementation
  *    Toby Jaffey - Please refer to git log
+ *    Scott Bertin, AMETEK, Inc. - Please refer to git log
  *    
  *******************************************************************************/
 
@@ -53,7 +54,7 @@
 #include <float.h>
 
 
-int utils_textToInt(uint8_t * buffer,
+int utils_textToInt(const uint8_t * buffer,
                     int length,
                     int64_t * dataP)
 {
@@ -84,7 +85,7 @@ int utils_textToInt(uint8_t * buffer,
         i++;
     }
 
-    if (result > INT64_MAX) return 0;
+    if (result > INT64_MAX + (uint64_t)(sign == -1 ? 1 : 0)) return 0;
 
     if (sign == -1)
     {
@@ -98,7 +99,36 @@ int utils_textToInt(uint8_t * buffer,
     return 1;
 }
 
-int utils_textToFloat(uint8_t * buffer,
+int utils_textToUInt(const uint8_t * buffer,
+                     int length,
+                     uint64_t * dataP)
+{
+    uint64_t result = 0;
+    int i = 0;
+
+    if (0 == length) return 0;
+
+    while (i < length)
+    {
+        if ('0' <= buffer[i] && buffer[i] <= '9')
+        {
+            if (result > (UINT64_MAX / 10)) return 0;
+            result *= 10;
+            result += buffer[i] - '0';
+        }
+        else
+        {
+            return 0;
+        }
+        i++;
+    }
+
+    *dataP = result;
+
+    return 1;
+}
+
+int utils_textToFloat(const uint8_t * buffer,
                       int length,
                       double * dataP)
 {
@@ -162,23 +192,63 @@ int utils_textToFloat(uint8_t * buffer,
     return 1;
 }
 
+int utils_textToObjLink(const uint8_t * buffer,
+                        int length,
+                        uint16_t * objectId,
+                        uint16_t * objectInstanceId)
+{
+    uint64_t object;
+    uint64_t instance;
+    int sep = 0;
+    while (sep < length
+        && buffer[sep] != ':')
+    {
+        sep++;
+    }
+    if (sep == 0 || sep == length) return 0;
+    if (!utils_textToUInt(buffer, sep, &object)) return 0;
+    if (!utils_textToUInt(buffer + sep + 1,
+                          length - sep - 1,
+                          &instance)) return 0;
+    if (object > LWM2M_MAX_ID || instance > LWM2M_MAX_ID) return 0;
+
+    *objectId = (uint16_t)object;
+    *objectInstanceId = (uint16_t)instance;
+    return 1;
+}
+
 size_t utils_intToText(int64_t data,
                        uint8_t * string,
                        size_t length)
 {
-    int index;
-    bool minus;
     size_t result;
 
     if (data < 0)
     {
-        minus = true;
-        data = 0 - data;
+        if (length == 0) return 0;
+        string[0] = '-';
+        result = utils_uintToText((uint64_t)(0-data), string + 1, length - 1);
+        if(result != 0)
+        {
+            result += 1;
+        }
     }
     else
     {
-        minus = false;
+        result = utils_uintToText((uint64_t)data, string, length);
     }
+
+    return result;
+}
+
+size_t utils_uintToText(uint64_t data,
+                        uint8_t * string,
+                        size_t length)
+{
+    int index;
+    size_t result;
+
+    if (length == 0) return 0;
 
     index = length - 1;
     do
@@ -190,21 +260,14 @@ size_t utils_intToText(int64_t data,
 
     if (data > 0) return 0;
 
-    if (minus == true)
-    {
-        if (index == 0) return 0;
-        string[index] = '-';
-    }
-    else
-    {
         index++;
-    }
 
     result = length - index;
 
     if (result < length)
     {
         memmove(string, string + index, result);
+        string[result] = '\0';
     }
 
     return result;
@@ -274,9 +337,56 @@ size_t utils_floatToText(double data,
     return intLength + decLength;
 }
 
+size_t utils_objLinkToText(uint16_t objectId,
+                           uint16_t objectInstanceId,
+                           uint8_t * string,
+                           size_t length)
+{
+    size_t head;
+    size_t res = utils_uintToText(objectId, string, length);
+    if (!res) return 0;
+    head = res;
+
+    if (length - head < 1) return 0;
+    string[head++] = ':';
+
+    res = utils_uintToText(objectInstanceId, string + head, length - head);
+    if (!res) return 0;
+
+    return head + res;
+}
+
+lwm2m_version_t utils_stringToVersion(uint8_t * buffer,
+                                      size_t length)
+{
+    if (length == 0) return VERSION_MISSING;
+    if (length != 3) return VERSION_UNRECOGNIZED;
+    if (buffer[1] != '.') return VERSION_UNRECOGNIZED;
+
+    switch (buffer[0])
+    {
+    case '1':
+        switch (buffer[2])
+        {
+        case '0':
+            return VERSION_1_0;
+        case '1':
+            return VERSION_1_1;
+        default:
+            break;
+        }
+        break;
+    default:
+        break;
+    }
+
+    return VERSION_UNRECOGNIZED;
+}
+
 lwm2m_binding_t utils_stringToBinding(uint8_t * buffer,
                                       size_t length)
 {
+#ifdef LWM2M_VERSION_1_0
     if (length == 0) return BINDING_UNKNOWN;
 
     switch (buffer[0])
@@ -329,31 +439,74 @@ lwm2m_binding_t utils_stringToBinding(uint8_t * buffer,
     }
 
     return BINDING_UNKNOWN;
+#else
+    size_t i;
+    lwm2m_binding_t binding = BINDING_UNKNOWN;
+    for (i = 0; i < length; i++)
+    {
+        switch (buffer[i])
+        {
+        case 'N':
+            binding |= BINDING_N;
+            break;
+        case 'Q':
+            binding |= BINDING_Q;
+            break;
+        case 'S':
+            binding |= BINDING_S;
+            break;
+        case 'T':
+            binding |= BINDING_T;
+            break;
+        case 'U':
+            binding |= BINDING_U;
+            break;
+        default:
+            return BINDING_UNKNOWN;
+        }
+    }
+    return binding;
+#endif
 }
 
 lwm2m_media_type_t utils_convertMediaType(coap_content_type_t type)
 {
+    lwm2m_media_type_t result = LWM2M_CONTENT_TEXT;
     // Here we just check the content type is a valid value for LWM2M
     switch((uint16_t)type)
     {
     case TEXT_PLAIN:
-        return LWM2M_CONTENT_TEXT;
+        break;
     case APPLICATION_OCTET_STREAM:
-        return LWM2M_CONTENT_OPAQUE;
+        result = LWM2M_CONTENT_OPAQUE;
+        break;
+#ifdef LWM2M_OLD_CONTENT_FORMAT_SUPPORT
     case LWM2M_CONTENT_TLV_OLD:
-        return LWM2M_CONTENT_TLV_OLD;
+        result = LWM2M_CONTENT_TLV_OLD;
+        break;
+#endif
     case LWM2M_CONTENT_TLV:
-        return LWM2M_CONTENT_TLV;
+        result = LWM2M_CONTENT_TLV;
+        break;
+#ifdef LWM2M_OLD_CONTENT_FORMAT_SUPPORT
     case LWM2M_CONTENT_JSON_OLD:
-        return LWM2M_CONTENT_JSON_OLD;
+        result = LWM2M_CONTENT_JSON_OLD;
+        break;
+#endif
     case LWM2M_CONTENT_JSON:
-        return LWM2M_CONTENT_JSON;
+        result = LWM2M_CONTENT_JSON;
+        break;
+    case LWM2M_CONTENT_SENML_JSON:
+        result = LWM2M_CONTENT_SENML_JSON;
+        break;
     case APPLICATION_LINK_FORMAT:
-        return LWM2M_CONTENT_LINK;
+        result = LWM2M_CONTENT_LINK;
+        break;
 
     default:
-        return LWM2M_CONTENT_TEXT;
+        break;
     }
+    return result;
 }
 
 #ifdef LWM2M_CLIENT_MODE
@@ -474,7 +627,7 @@ static char b64Alphabet[64] =
     'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'
 };
 
-static void prv_encodeBlock(uint8_t input[3],
+static void prv_encodeBlock(const uint8_t input[3],
                             uint8_t output[4])
 {
     output[0] = b64Alphabet[input[0] >> 2];
@@ -493,7 +646,7 @@ size_t utils_base64GetSize(size_t dataLen)
     return result_len;
 }
 
-size_t utils_base64Encode(uint8_t * dataP,
+size_t utils_base64Encode(const uint8_t * dataP,
                           size_t dataLen, 
                           uint8_t * bufferP,
                           size_t bufferLen)
@@ -536,6 +689,100 @@ size_t utils_base64Encode(uint8_t * dataP,
     }
 
     return result_len;
+}
+
+size_t utils_base64GetDecodedSize(const char * dataP, size_t dataLen)
+{
+    size_t result;
+
+    result = 3 * (dataLen / 4);
+    switch (dataLen % 4)
+    {
+    case 0:
+        if (result > 0)
+        {
+            /* Account for any padding */
+            if (dataP[dataLen - 2] == PRV_B64_PADDING)
+                result -= 2;
+            else if (dataP[dataLen - 1] == PRV_B64_PADDING)
+                result -= 1;
+        }
+        break;
+    case 2:
+        result += 1;
+        break;
+    case 3:
+        result += 2;
+        break;
+    default:
+        /* Should never happen */
+        break;
+    }
+
+    return result;
+}
+
+static uint8_t prv_base64Value(char digit)
+{
+    uint8_t result = 0xFF;
+    if (digit >= 'A' && digit <= 'Z') result = digit - 'A';
+    else if (digit >= 'a' && digit <= 'z') result = digit - 'a' + 26;
+    else if (digit >= '0' && digit <= '9') result = digit - '0' + 52;
+    else if (digit == '+') result = 62;
+    else if (digit == '/') result = 63;
+    return result;
+}
+
+size_t utils_base64Decode(const char * dataP, size_t dataLen, uint8_t * bufferP, size_t bufferLen)
+{
+    size_t dataIndex;
+    size_t bufferIndex;
+    size_t decodedSize = utils_base64GetDecodedSize(dataP, dataLen);
+
+    if(decodedSize > bufferLen) return 0;
+
+    dataIndex = 0;
+    bufferIndex = 0;
+    while (dataIndex < dataLen)
+    {
+        uint8_t v1, v2, v3, v4;
+        if (dataLen - dataIndex < 2) return 0;
+        v1 = prv_base64Value(dataP[dataIndex++]);
+        if (v1 >= 64) return 0;
+        v2 = prv_base64Value(dataP[dataIndex++]);
+        if (v2 >= 64) return 0;
+        bufferP[bufferIndex++] = (v1 << 2) + (v2 >> 4);
+        if (dataIndex < dataLen)
+        {
+            if (dataP[dataIndex] != PRV_B64_PADDING)
+            {
+                v3 = prv_base64Value(dataP[dataIndex++]);
+                if (v3 >= 64) return 0;
+                bufferP[bufferIndex++] = (v2 << 4) + (v3 >> 2);
+                if (dataIndex < dataLen)
+                {
+                    if (dataP[dataIndex] != PRV_B64_PADDING)
+                    {
+                        v4 = prv_base64Value(dataP[dataIndex++]);
+                        if (v4 >= 64) return 0;
+                        bufferP[bufferIndex++] = (v2 << 6) + v4;
+                    }
+                    else
+                    {
+                        if (bufferIndex != decodedSize) return 0;
+                        dataIndex++;
+                    }
+                }
+            }
+            else
+            {
+                if (bufferIndex != decodedSize) return 0;
+                dataIndex+=2;
+            }
+        }
+    }
+
+    return decodedSize;
 }
 
 lwm2m_data_type_t utils_depthToDatatype(uri_depth_t depth)

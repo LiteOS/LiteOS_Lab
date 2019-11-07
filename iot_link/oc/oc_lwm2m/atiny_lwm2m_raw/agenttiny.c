@@ -49,7 +49,7 @@
 int g_reboot = 0;
 
 
-void observe_handle_ack(lwm2m_transaction_t *transacP, void *message);
+void observe_handle_ack(lwm2m_context_t *contextP, lwm2m_transaction_t *transacP, void *message);
 static int atiny_check_bootstrap_init_param(atiny_param_t *atiny_params);
 
 static handle_data_t g_atiny_handle;
@@ -658,7 +658,7 @@ int atiny_data_change(void *phandle, const char *data_type)
     return ATINY_OK;
 }
 
-void observe_handle_ack(lwm2m_transaction_t *transacP, void *message)
+void observe_handle_ack(lwm2m_context_t *contextP, lwm2m_transaction_t *transacP, void *message)
 {
     atiny_ack_callback ack_callback = (atiny_ack_callback)transacP->cfg.callback;
     if (transacP->ack_received)
