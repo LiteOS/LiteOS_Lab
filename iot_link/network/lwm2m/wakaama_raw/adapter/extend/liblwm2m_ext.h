@@ -151,11 +151,12 @@ typedef struct
 //      struct _lwm2m_context_t
 //      struct _lwm2m_transaction_
 //      void (*lwm2m_transaction_callback_t)(...)
-typedef struct _lwm2m_context_t lwm2m_context_t;
+typedef struct _lwm2m_context_ lwm2m_context_t;
 
 typedef struct _lwm2m_transaction_ lwm2m_transaction_t;
 
-typedef void (*lwm2m_transaction_callback_t) (lwm2m_transaction_t * transacP, void * message);
+// typedef void (*lwm2m_transaction_callback_t) (lwm2m_transaction_t * transacP, void * message);
+typedef void (*lwm2m_transaction_callback_t) (lwm2m_context_t * contextP, lwm2m_transaction_t * transacP, void * message);
 
 void lwm2m_register_observe_ack_call_back(lwm2m_transaction_callback_t callback);
 typedef void(*lwm2m_event_handler_t)(module_type_t type, int code, const char* arg, int arg_len);
