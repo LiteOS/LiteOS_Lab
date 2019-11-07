@@ -52,7 +52,7 @@
 #include <link_endian.h>
 #include <osal.h>
 
-#define cn_esp8266_cmd_timeout   (5*1000)
+#define cn_esp8266_cmd_timeout   (6*1000)
 #define cn_esp8266_rcvindex      "\r\n+IPD"
 #define cn_esp8266_cachelen      (1024 * 2)
 
@@ -69,6 +69,8 @@ typedef struct
     unsigned int timeout;
 
     char oob_resp[1024];
+
+    int isconnect;
 }esp8266_sock_cb_t;
 
 static esp8266_sock_cb_t s_esp8266_sock_cb;
@@ -219,6 +221,7 @@ static int __esp8266_connect(int fd, const struct sockaddr *addr, int addrlen)
 
         if(esp8266_atcmd(cmd,"OK"))
         {
+        	s_esp8266_sock_cb.isconnect = 1;
         	ret = 0;
         }
     }
@@ -258,6 +261,10 @@ static int esp8266_send(int fd, const void *buf, int len, int flags)
 }
 static int __esp8266_sendto(int fd, const void *msg, int len, int flags, struct sockaddr *addr, int addrlen)
 {
+	if (!s_esp8266_sock_cb.isconnect)
+	{
+		__esp8266_connect(fd,addr,addrlen);
+	}
     return esp8266_send(fd,msg,len,flags);
 }
 
@@ -329,6 +336,7 @@ static int esp8266_close(int fd)
 	snprintf(cmd,64,"AT+CIPCLOSE\r\n");//TODO: MUX = 1;
 	if(esp8266_atcmd(cmd,"OK"))
 	{
+		s_esp8266_sock_cb.isconnect = 0;
     	ret = 0;
     }
 	return ret;
