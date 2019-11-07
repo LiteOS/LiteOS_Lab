@@ -1,8 +1,11 @@
 #ifndef __TEST_CASE_H
 #define __TEST_CASE_H
 
-#define TS_OK                 0
+#define TS_OK_HAS_DATA         1
+#define TS_OK                  0
 #define TS_FAILED             -1
+
+#define TS_RECV_BUFFER_LEN 512
 
 
 #define TEST_SORT_OC_LWM2M_AL  0

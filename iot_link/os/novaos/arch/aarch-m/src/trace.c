@@ -354,7 +354,7 @@ static bool __parse_t1 (uint16_t instr, struct trace_ctx * trctx)
      */
 
     if ((__bits (instr, 15, 8) == 0x46) &&
-        (__bits (instr,  7, 7) == 0)    &&
+        (__bits (instr,  7, 7) == 1)    &&
         (__bits (instr,  2, 0) == 5))
         {
         trctx->pc = NULL;

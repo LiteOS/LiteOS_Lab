@@ -84,7 +84,7 @@ $(outdir)/$(target).bin : $(outdir)/$(target).elf
 
 $(outdir)/$(target).elf : $(objs) $(ld_script)
 	$(CC) $(filter %.o, $^) $(cflags-arch) $(lflags) -o $@
-	$(SIZE) $<
+	$(SIZE) $@
 
 $(outdir)/%.o : %.c
 	$(strip $(CC) $(cflags-common) $(cflags-global) $(cflags-$<) -I$(proj) $(inc-global) $(inc-$(abspath $<)) $< -c -o $@)
@@ -143,7 +143,6 @@ dir-prefix = src
 endif
 
 $(ini) :
-	@echo "hello"
 	$(file >  $@,[global])
 	$(file >> $@,flags = $(strip $(filter -D%, $(cflags-common) $(cflags-global))))
 	$(file >> $@,inc   = $(strip $(inc-global)))

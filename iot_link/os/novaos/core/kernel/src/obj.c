@@ -465,6 +465,7 @@ int obj_destroy (class_id class, obj_id obj)
         mutex_lock (&class->lock);
         dlist_add (&class->objs, &obj->node);
         obj->magic = (uintptr_t) obj;
+        atomic_uint_inc (&obj->open_cnt);
         mutex_unlock (&class->lock);
 
         return -1;
