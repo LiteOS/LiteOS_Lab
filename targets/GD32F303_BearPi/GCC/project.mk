@@ -54,7 +54,7 @@ HAL_DRIVER_INC = \
         -I $(SDK_DIR)/drivers/third_party/GigaDevice/GD32F30x_standard_peripheral/Include 
         C_INCLUDES += $(HAL_DRIVER_INC)        
 HARDWARE_INC = \
-        -I ${wildcard $(TOP_DIR)/targets/GD32F303_BearPi/Hardware/Inc}
+        -I $(TOP_DIR)/targets/GD32F303_BearPi/Hardware/Inc
         C_INCLUDES += $(HARDWARE_INC)
 
 USER_INC = \
