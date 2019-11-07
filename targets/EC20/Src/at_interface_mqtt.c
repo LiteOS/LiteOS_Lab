@@ -63,32 +63,16 @@ static char s_mqtt_ca_crt[] =
 
 
 
-#define cn_app_rcv_buf_len 256
-static char            s_rcv_buffer[cn_app_rcv_buf_len];
-static int             s_rcv_datalen;
-static int             s_rcv_qos;
 static void           *s_mqtt_handle;
-
 
 //use this function to push all the message to the buffer
 static int app_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
 {
     int ret = -1;
-    printf("topic:%s qos:%d\n\r",msg->topic.data,msg->qos);
+    printf("qos:%d datalen:%d \n\r",msg->qos,msg->msg.len);
 
-    if(msg->msg.len < cn_app_rcv_buf_len)
-    {
-        memcpy(s_rcv_buffer,msg->msg.data,msg->msg.len );
-        s_rcv_buffer[msg->msg.len] = '\0'; ///< the json need it
-        s_rcv_datalen = msg->msg.len;
-        s_rcv_qos = msg->qos;
+    hwoc_mqtt_received(msg->qos, (uint8_t *)msg->msg.data,msg->msg.len);
 
-        printf("msg:%s\n\r",s_rcv_buffer);
-        hwoc_mqtt_received(s_rcv_qos, s_rcv_buffer, s_rcv_datalen);
-
-        ret = 0;
-
-    }
     return ret;
 }
 
@@ -127,7 +111,7 @@ void *hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, con
 
 int hwoc_mqtt_send(int qos, uint8_t *payload, int len)
 {
-    return oc_mqtt_report(s_mqtt_handle, payload, len, qos);
+    return oc_mqtt_report(s_mqtt_handle, (char *)payload, len, qos);
 }
 
 void hwoc_mqtt_received(int qos, uint8_t *payload, int len)
@@ -138,6 +122,15 @@ void hwoc_mqtt_received(int qos, uint8_t *payload, int len)
 
 int hwoc_mqtt_disconnect()
 {
-    oc_mqtt_deconfig(s_mqtt_handle);
-    s_mqtt_handle = NULL;
+    if(0 == oc_mqtt_deconfig(s_mqtt_handle))
+    {
+        s_mqtt_handle = NULL;
+
+        return 0;
+    }
+    else
+    {
+        return -1;
+    }
+
 }

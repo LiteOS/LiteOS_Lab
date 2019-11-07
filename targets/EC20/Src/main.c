@@ -40,10 +40,11 @@ extern int link_main(void *args);
 
 int main(void)
 {
+    printf("HELLO NEW WORLD\n\r");
     link_main(NULL);
     while(1)
     {
-        sleep(100); ///< should hung the process
+        sleep(1); ///< should hung the process
     }
     return 0;
 }
