@@ -22,17 +22,18 @@ OPT = -O0 -g
 #######################################
 # binaries
 #######################################
-PREFIX    =
-CC        = $(PREFIX)gcc
-AS        = $(PREFIX)gcc -x assembler-with-cpp
-OBJCOPY   = $(PREFIX)objcopy
-OBJDUMP   = $(PREFIX)objdump
-AR        = $(PREFIX)ar
-SZ        = $(PREFIX)size
-LD        = $(PREFIX)ld
-HEX       = $(OBJCOPY) -O ihex
-BIN       = $(OBJCOPY) -O binary -S
-
+ifeq ($(CC), )
+	PREFIX    = 
+    CC        = $(PREFIX)gcc
+    AS        = $(PREFIX)gcc -x assembler-with-cpp
+    OBJCOPY   = $(PREFIX)objcopy
+    OBJDUMP   = $(PREFIX)objdump
+    AR        = $(PREFIX)ar
+    SZ        = $(PREFIX)size
+    LD        = $(PREFIX)ld
+    HEX       = $(OBJCOPY) -O ihex
+    BIN       = $(OBJCOPY) -O binary -S
+endif
 
 PROJECTBASE = $(abspath $(CURDIR))
 TOP_DIR     = $(abspath $(PROJECTBASE)/../../..)
@@ -66,8 +67,7 @@ PERIFLIB_SOURCES =
 ##########################LOAD THE SOURCES INCLUDES AND DEFINES#################
 include $(PROJECTBASE)/config.mk
 
-MAIN_SRC := ${wildcard $(TOP_DIR)/targets/EC20/Src/main.c}
-MAIN_SRC += ${wildcard $(TOP_DIR)/targets/EC20/Src/at_interface_mqtt.c}
+MAIN_SRC := ${wildcard $(TOP_DIR)/targets/EC20/Src/*.c}
 C_SOURCES += $(MAIN_SRC)
 
 AT_INTERFACE_INC = \
@@ -77,6 +77,7 @@ AT_INTERFACE_INC = \
 ######################################
 # firmware library
 ######################################
+
 
 
 #######################################
@@ -128,7 +129,6 @@ $(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
-	$(SZ) $@
 	
 $(BUILD_DIR):
 	mkdir $@

@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -31,160 +31,49 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-#include <stdio.h>
-#include <pthread.h>
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2019-11-06 18:09  zhangqianfu  The first version
+ *
+ */
+
+
+/* brief : the oceanconnect platform only support the ca_crt up tills now*/
+/** the address product_id device_id password crt is only for the test  */
+
+#define DEFAULT_LIFETIME            10
+#define DEFAULT_SERVER_IPV4         "49.4.93.24"     ///<  server ip address
+#define DEFAULT_SERVER_PORT         "8883"           ///<  server mqtt service port
+#define CN_MQTT_EP_NOTEID           "mqtt_sdk01"
+#define CN_MQTT_EP_PASSWD           "c18f10422c93548e6fef"
+
+#define CN_MQTT_EP_MSG              "{HELLO NEW WORLD}"
+
 #include <osal.h>
-#if CONFIG_LITEOS_ENABLE
-#include <liteos_imp.h>
-#elif CONFIG_LINUX_ENABLE
-#include <linux_imp.h>
-#elif CONFIG_MACOS_ENABLE
-#include <macos_imp.h>
-#else
-#error("no os supplied yet");
-#endif
-
-
-#ifdef WITH_DTLS
-#include <dtls_interface.h>
-
-#endif
 
 #include <at_interface_mqtt.h>
 
-
-int main(void)
+int standard_app_demo_main()
 {
-        ///< install the RTOS kernel for the link
-        osal_init();
-    
-    
-#if CONFIG_LITEOS_ENABLE
-        osal_install_liteos();
-#elif CONFIG_LINUX_ENABLE
-        osal_install_linux();
-#elif  CONFIG_MACOS_ENABLE
-        osal_install_macos();
-#endif
-    
-#if CONFIG_SHELL_ENABLE
-    #include <shell.h>
-        ///< install the shell for the link
-        extern void shell_uart_init(int baud);
-        shell_uart_init(115200);
-        shell_init();
-#endif
-    
-        ///< install the cJSON, for the oc mqtt agent need the cJSON
-#if CONFIG_JSON_ENABLE
-    #include <cJSON.h>
-    
-        cJSON_Hooks  hook;
-        hook.free_fn = osal_free;
-        hook.malloc_fn = osal_malloc;
-        cJSON_InitHooks(&hook);
-#endif
-        ///< install the tcpip stack and net driver for the link
-#if CONFIG_TCPIP_ENABLE
-    #include <sal.h>
-        tcpipstack_init(10);
-    
-    #if CONFIG_LWIP_ENABLE
-        #include <lwip_imp.h>
-            tcpipstack_install_lwip(netdriver_install);
-    #elif CONFIG_LINUX_SOCKET_ENABLE
-        #include <linux_socket_imp.h>
-            tcpipstack_install_linux_socket();
-    #elif CONFIG_MACOS_SOCKET_ENABLE
-        #include <macos_socket_imp.h>
-            tcpipstack_install_macos_socket();
-    #else
-    
-    #endif
-    
-#endif
-    
-#ifdef WITH_DTLS
-    
-        dtls_init();
-#endif
-    
-    //////////////////////////    MQTT PROTOCOL  /////////////////////////////////////
-#if CONFIG_MQTT_ENABLE
-    #include <mqtt_al.h>
-    #include <paho_mqtt_port.h>
-    
-        mqtt_init();
-        mqtt_install_pahomqtt();
-#endif
-    
-    //////////////////////////    OC MQTT && DEMOS  //////////////////////////////////
-    
-#if CONFIG_OC_MQTT_ENABLE
-    #include <oc_mqtt_al.h>
-    //#include <oc_mqtt_demo.h>
-        oc_mqtt_init();
-    
-#if CONFIG_ATINY_MQTT_ENABLE
-    #include <atiny_mqtt.h>
-        oc_mqtt_install_atiny_mqtt();
-#endif
-        //oc_mqtt_demo_main();
-     hwoc_mqtt_connect(1,"119.3.184.255","8883","31415926", "9f825c0ed3e95ea3d459");
-     printf("conned\r\n");
-    tag_oc_mqtt_report  report;
-    tag_key_value_list   list;
-    int leftpower = 0;
-    int err_int = 1;
-    int mid_int = 1;
-    char   *buf;
-    int times= 0;
+    void *handle;
+
+    handle = hwoc_mqtt_connect(0,DEFAULT_LIFETIME,DEFAULT_SERVER_IPV4,DEFAULT_SERVER_PORT,CN_MQTT_EP_NOTEID,CN_MQTT_EP_PASSWD);
+
+    if(NULL == handle)
+    {
+        printf("connect failed\n\r");
+
+        return -1;
+    }
 
     while(1)
     {
-        leftpower = (leftpower + 7 )%100;
-        list.item.name = "batteryLevel";
-        list.item.buf = (char *)&leftpower;
-        list.item.len = sizeof(leftpower);
-        list.item.type = en_key_value_type_int;
-        list.next = NULL;
-
-        report.hasmore = en_oc_mqtt_has_more_no;
-        report.paralst= &list;
-        report.serviceid = "Battery";
-        report.eventtime = "20190508T112020Z";
-
-        buf = cJSON_Print(oc_mqtt_json_fmt_report(&report));
-
-        if(NULL != buf)
-        {
-            hwoc_mqtt_send(en_mqtt_al_qos_1, buf,strlen(buf));
-            osal_task_sleep(1000);
-            printf("times:%d power:%d\r\n",times++,leftpower);
-        }
+        hwoc_mqtt_send(0,CN_MQTT_EP_MSG,strlen(CN_MQTT_EP_MSG));
+        osal_task_sleep(10000);
     }
 
-#endif
-    
-    ////////////////////////////  OC LWM2M && DEMOS     /////////////////////////////
-    
-#if CONFIG_OC_LWM2M_ENABLE
-    #include <oc_lwm2m_al.h>
-    #include <oc_lwm2m_demo.h>
-        oc_lwm2m_init();
-    
-#if CONFIG_OC_LWM2M_AGENT_ENABLE
-    #include <agent_lwm2m.h>
-        oc_lwm2m_install_agent();
-#endif
-    
-        oc_lwm2m_demo_main();
-    
-    
-#endif
-    while(1)
-    {
-        sleep(100); ///< should hung the process
-    }
+    hwoc_mqtt_disconnect();
+
     return 0;
+
 }
