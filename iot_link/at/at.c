@@ -276,6 +276,10 @@ static int __rcv_task_entry(void *args)
         if(rcvlen == 0)
             memset(g_at_cb.rcvbuf,0,cn_at_resp_maxlen);
         rcvlen += __resp_rcv(g_at_cb.rcvbuf+ rcvlen,cn_at_resp_maxlen,cn_osal_timeout_forever);
+
+        if (rcvlen != strlen(g_at_cb.rcvbuf))  //which means 0 is presented
+        	rcvlen = 0;
+
         if(rcvlen > 0)
         {
             matchret = __cmd_match(g_at_cb.rcvbuf,rcvlen);
