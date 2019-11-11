@@ -860,9 +860,13 @@ static void *__oc_config(tag_oc_mqtt_config *config)
         s_oc_agent_mqtt_cb->b_flag_dmp_run = 0;
         s_oc_agent_mqtt_cb->b_flag_stop =1;
         s_oc_agent_mqtt_cb->b_flag_run = 0;
+        printf("*******we should quit now*************\n\r");
+        osal_task_sleep(4*CN_CON_BACKOFF_TIME);  ///< do back off retreat
     }
-    osal_task_sleep(4*CN_CON_BACKOFF_TIME);  ///< do back off retreat
-    printf("*******we should quit now*************\n\r");
+    else
+    {
+        printf("*******connect success*************\n\r");
+    }
 
     return ret;
 }
