@@ -12,10 +12,11 @@
 #define TEST_SORT_LWM2M_AL     1
 #define TEST_SORT_OC_MQTT_AL   2
 #define TEST_SORT_MQTT_AL      3
-#define TEST_PROT_MAX          4
+#define TEST_SORT_MAX          4
 
-/*lwm2m*/
-#define TEST_LWM2M_REGISTER  ((TEST_PROT_LWM2M << 16) | 0)
+/*oc lwm2m*/
+/*lwm2m al*/
+
 
 /*oc mqtt*/
 #define TEST_OC_MQTT_INIT             ((TEST_SORT_OC_MQTT_AL << 16) | 0)
@@ -26,6 +27,9 @@
 #define TEST_OC_MQTT_REPORT           ((TEST_SORT_OC_MQTT_AL << 16) | 5)
 #define TEST_OC_MQTT_DECONFIG         ((TEST_SORT_OC_MQTT_AL << 16) | 6)
 #define TEST_OC_MQTT_DEINIT           ((TEST_SORT_OC_MQTT_AL << 16) | 7)
+#define TEST_OC_MQTT_GETVALUE         ((TEST_SORT_OC_MQTT_AL << 16) | 8)
+#define TEST_OC_MQTT_INVALID          ((TEST_SORT_OC_MQTT_AL << 16) | 9)
+
 
 /*mqtt al*/
 #define TEST_MQTT_AL_INIT             ((TEST_SORT_MQTT_AL << 16) | 0)
