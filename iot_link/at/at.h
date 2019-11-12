@@ -79,11 +79,14 @@ int at_oobregister(const char *name,const void *index,size_t len,fn_at_oob func,
 int at_command(const void *cmd, size_t cmdlen,const char *index,\
                 void *respbuf,size_t respbuflen,uint32_t timeout);
 
+int at_streammode_set(int mode);
+
 #else
 
 #define at_init(devname)                                               -1
 #define at_oobregister(name,index,lenc,func,args)                      -1
 #define at_command(cmd,cmdlen,index,respbuf,respbuflen,timeout)        -1
+#define at_streammode_set(mode)                                        -1
 
 #endif
 

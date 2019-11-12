@@ -165,6 +165,6 @@ CONFIG_DEMO_ENABLE := y
 CONFIG_DEMO_TYPE   := "none"
 
 #########################STANDARD DEMO END######################################
-include $(TOP_DIR)/iot_link/iot.mk
+
 
 
