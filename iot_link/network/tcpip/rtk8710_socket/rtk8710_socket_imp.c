@@ -73,6 +73,8 @@ typedef struct
     unsigned int timeout;
 
     char oob_resp[1024];
+
+    int isconnect;
 }rtk8710_sock_cb_t;
 
 static rtk8710_sock_cb_t s_rtk8710_sock_cb;
@@ -288,6 +290,7 @@ static int __rtk8710_connect(int fd, void *addr, int addrlen)
         str++;
 
         s_rtk8710_sock_cb.sockfd = atoi(str);
+        s_rtk8710_sock_cb.isconnect = 1;
     }
     return ret;
 }
@@ -332,6 +335,10 @@ static int rtk8710_send(int fd, const void *buf, int len, int flags)
 }
 static int __rtk8710_sendto(int fd, const void *msg, int len, int flags, struct sockaddr *addr, int addrlen)
 {
+	if (!s_rtk8710_sock_cb.isconnect)
+	{
+		__rtk8710_connect(fd,addr,addrlen);
+	}
     return rtk8710_send(fd,msg,len,flags);
 }
 
@@ -405,6 +412,7 @@ static int rtk8710_close(int fd)
     if(rtk8710_atcmd(cmd,"[NWKCLOSE]OK"))
     {
         ret = 0;
+        s_rtk8710_sock_cb.isconnect = 0;
     }
     return ret;
 }
@@ -547,7 +555,7 @@ static bool_t rtk8710_joinap(char *ssid, char *passwd)
     if(rtk8710_atcmd(cmd,"[WLSTAPARAM]OK"))
     {
         snprintf(cmd,64,"AT+WLSETUP\r\n");
-        return rtk8710_atcmd(cmd,"[WLSETUP]OK\r\n");
+        return rtk8710_atcmd(cmd,"[WLSETUP]OK");
     }
 }
 
@@ -564,6 +572,7 @@ static bool_t rtk8710_ver()
 int rtk8710_boot(void)
 {
     at_oobregister("rtk8710rcv",cn_rtk8710_rcvindex,strlen(cn_rtk8710_rcvindex),rtk8710_rcvdeal,NULL);
+    at_streammode_set(1);
     ring_buffer_init(&s_rtk8710_sock_cb.rtk8710_rcvring,s_rtk8710_sock_cb.rtk8710_rcvbuf,cn_rtk8710_cachelen,0,0);
 
     rtk8710_reset();

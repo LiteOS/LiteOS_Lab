@@ -655,6 +655,12 @@ static int __oc_agent_mqtt_dmp_alive_stage(oc_agent_mqtt_cb_t  *cb)
             continue; ///< generate all the parameters needed by the ocean connect server
         }
 
+        if(NULL != cb->mqtt_handle)
+        {
+            mqtt_al_disconnect(cb->mqtt_handle);
+            cb->mqtt_handle = NULL;
+        }
+
         if(cn_mqtt_al_con_code_ok != __oc_mqtt_connect_server(cb))
         {
             conn_failed_cnt = conn_failed_cnt >= CN_CON_BACKOFF_MAXTIMES?CN_CON_BACKOFF_MAXTIMES:(conn_failed_cnt+1);
@@ -706,6 +712,12 @@ static int __oc_agent_mqtt_bs_alive_stage(oc_agent_mqtt_cb_t  *cb)
             conn_failed_cnt = conn_failed_cnt >= CN_CON_BACKOFF_MAXTIMES?CN_CON_BACKOFF_MAXTIMES:(conn_failed_cnt+1);
             continue; ///< generate all the parameters needed by the ocean connect server
         }
+        if(NULL != cb->mqtt_handle)
+        {
+            mqtt_al_disconnect(cb->mqtt_handle);
+            cb->mqtt_handle = NULL;
+        }
+
 
         if(cn_mqtt_al_con_code_ok != __oc_mqtt_connect_server(cb))
         {
@@ -770,6 +782,7 @@ static int __oc_agent_mqtt_engine(void  *arg)
     cb = arg;
     while(1)
     {
+
         if(cb->b_flag_run)
         {
             cb->b_flag_stop =0;    ///< if we reach here, which means we need to
@@ -781,16 +794,22 @@ static int __oc_agent_mqtt_engine(void  *arg)
             }
             cb->b_flag_dmp_run = 1;
             __oc_agent_mqtt_dmp_alive_stage(cb);
-            cb->b_flag_stop =1;    ///< if we reach here, which means we need to
+            cb->b_flag_stop =1;
+
+            ///< if we reach here, which means we need to try to
+            printf("we need to do get the host addr again\n\r");
         }
         else
         {
             osal_task_sleep(1000);   ///< wait until if any connect request
+
+            printf("oc mqtt is pending now\n\r");
+
         }
 
     }
 
-    printf("%s:engine start\n\r",__FUNCTION__);
+    printf("%s:engine quit\n\r",__FUNCTION__);
 
     return 0;
 }
@@ -831,6 +850,22 @@ static void *__oc_config(tag_oc_mqtt_config *config)
             ret = s_oc_agent_mqtt_cb;
             break;
         }
+    }
+
+    if(NULL == ret)
+    {
+        s_oc_agent_mqtt_cb->b_flag_bs_getaddr = 0;
+        s_oc_agent_mqtt_cb->b_flag_bs_run =0;
+        s_oc_agent_mqtt_cb->b_flag_dmp_connected = 0;
+        s_oc_agent_mqtt_cb->b_flag_dmp_run = 0;
+        s_oc_agent_mqtt_cb->b_flag_stop =1;
+        s_oc_agent_mqtt_cb->b_flag_run = 0;
+        printf("*******we should quit now*************\n\r");
+        osal_task_sleep(4*CN_CON_BACKOFF_TIME);  ///< do back off retreat
+    }
+    else
+    {
+        printf("*******connect success*************\n\r");
     }
 
     return ret;

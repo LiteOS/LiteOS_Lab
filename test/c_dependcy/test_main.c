@@ -78,15 +78,19 @@ int test_main_entry(void *paras)
         entry_id    = test_id & 0xFFFF;
 
         printf("$$$$$$$$$$,test case will run ,prot_id:%x, entry_id: %x\n",prot_id,entry_id);
+        result = TS_FAILED;
+        if(prot_id < TEST_SORT_MAX)
+        {
+            result = ts_sort_flist[prot_id](entry_id, g_acRecvBuf, recv_len);
+        }
 
-        result = ts_sort_flist[prot_id](entry_id, g_acRecvBuf, recv_len);
         memset(g_acSendBuf,0,sizeof(g_acSendBuf));
         if(result != TS_OK_HAS_DATA)
             snprintf(g_acSendBuf,sizeof(g_acSendBuf),"%d,|%d,|",test_id,result);
         else
             snprintf(g_acSendBuf,sizeof(g_acSendBuf),"%d,|%d,|%s",test_id,result,g_acRecvBuf);
         
-        printf("send ==++==***:%s\n",g_acSendBuf);
+        printf("testcase result is %d, send ==++==***:%s\n",result, g_acSendBuf);
         send_len = sal_sendto(server_fd, g_acSendBuf, strlen(g_acSendBuf), 0, (struct sockaddr *)&cli_addr, addr_len);
         if (send_len < 0)
         {

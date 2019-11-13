@@ -42,7 +42,7 @@
 
 //these defines could be moved to the configuration of the at module
 #define cn_at_oob_tab_len         6            //only allow 6 oob command monitor here,you could configure it more
-#define cn_at_resp_maxlen         2048           //PROSING THAT COULD GET THE MOST REPSLENGTH
+#define cn_at_resp_maxlen         1024           //PROSING THAT COULD GET THE MOST REPSLENGTH
 
 //at control block here
 typedef struct
@@ -84,6 +84,8 @@ typedef struct
     char                    rcvbuf[cn_at_resp_maxlen];     //used storage one frame,read from the at channel
     unsigned int            rxdebugmode:2;                 //receive debug mode
     unsigned int            txdebugmode:2;                 //send debug mode
+
+    int                     streammode;
 }at_cb_t;
 static at_cb_t g_at_cb;   //this is the at controller here
 
@@ -273,27 +275,54 @@ static int __rcv_task_entry(void *args)
 
     while(1)
     {
-        if(rcvlen == 0)
-            memset(g_at_cb.rcvbuf,0,cn_at_resp_maxlen);
-        rcvlen += __resp_rcv(g_at_cb.rcvbuf+ rcvlen,cn_at_resp_maxlen,cn_osal_timeout_forever);
-        if(rcvlen > 0)
-        {
-            matchret = __cmd_match(g_at_cb.rcvbuf,rcvlen);
-            if(0 != matchret)
-            {
-                oobret = __oob_match(g_at_cb.rcvbuf,rcvlen);
-                if(oobret != -1)
+    	if (1 == g_at_cb.streammode)  //in stream mode, we need to save previous frames in buffer
+    	{
+    		if(rcvlen == 0)
+    		    memset(g_at_cb.rcvbuf,0,cn_at_resp_maxlen);
+    		    rcvlen += __resp_rcv(g_at_cb.rcvbuf+ rcvlen,cn_at_resp_maxlen,cn_osal_timeout_forever);
+
+    		    if(rcvlen > 0)
+    		    {
+    		        matchret = __cmd_match(g_at_cb.rcvbuf,rcvlen);
+    		        if(0 != matchret)
+    		        {
+    	                oobret = __oob_match(g_at_cb.rcvbuf,rcvlen);
+   		                if(oobret != -1)
+   		                {
+   		                    rcvlen = 0;
+   		                }
+    		        }
+    		            else
+    		                rcvlen = 0;
+ 		        }
+    	}
+    	else
+    	{
+    		memset(g_at_cb.rcvbuf,0,cn_at_resp_maxlen);
+    		rcvlen = __resp_rcv(g_at_cb.rcvbuf,cn_at_resp_maxlen,cn_osal_timeout_forever);
+    		if(rcvlen > 0)
+	        {
+                matchret = __cmd_match(g_at_cb.rcvbuf,rcvlen);
+                if(0 != matchret)
                 {
-                    rcvlen = 0;
+                    __oob_match(g_at_cb.rcvbuf,rcvlen);
                 }
-            }
-            else
-                rcvlen = 0;
+    	    }
+
         }
     }
 }
 
-
+/*******************************************************************************
+function     :you could use this function to to enable or disable at stream mode.
+parameters   :mode:1 for stream mode, 0 for dgram mode.
+instruction  :If stream mode is enabled, we can process data from multiple frames.
+			  mode equals 0 by default.
+*******************************************************************************/
+int at_streammode_set(int mode)
+{
+	g_at_cb.streammode = mode;
+}
 
 
 /*******************************************************************************
