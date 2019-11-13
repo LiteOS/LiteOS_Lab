@@ -45,7 +45,7 @@
 #include <link_endian.h>
 
 #include <boudica150_oc.h>
-#include "BH1750.h"
+#include "E53_SC1.h"
 #include "lcd.h"
 
 #include <gpio.h>
@@ -109,6 +109,7 @@ int16_t toggle = 0;
 int16_t lux;
 int8_t qr_code = 1;
 extern const unsigned char gImage_Huawei_IoT_QR_Code[114720];
+E53_SC1_Data_TypeDef E53_SC1_Data;
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
@@ -303,7 +304,7 @@ static int app_report_task_entry()
             }
 
             light.msgid = cn_app_light;
-            light.intensity = htons(lux);
+            light.intensity = htons((int)E53_SC1_Data.Lux);
             oc_lwm2m_report(context,(char *)&light,sizeof(light),1000); ///< report the light message
             osal_task_sleep(2*1000);
         }
@@ -314,15 +315,15 @@ static int app_report_task_entry()
 
 static int app_collect_task_entry()
 {
-    Init_BH1750();
+    Init_E53_SC1();
     while (1)
     {
-        lux=(int)Convert_BH1750();
-        printf("\r\n******************************BH1750 Value is  %d\r\n",lux);
+        E53_SC1_Read_Data();
+        printf("\r\n******************************BH1750 Value is  %d\r\n",(int)E53_SC1_Data.Lux);
         if (qr_code == 0)
         {
             LCD_ShowString(10, 200, 200, 16, 16, "BH1750 Value is:");
-            LCD_ShowNum(140, 200, lux, 5, 16);
+            LCD_ShowNum(140, 200, (int)E53_SC1_Data.Lux, 5, 16);
         }
         osal_task_sleep(2*1000);
     }

@@ -59,6 +59,7 @@ void Key1_IRQHandler(void *args);
 void Key2_IRQHandler(void *args);
 void USART1_IRQHandler(void);
 void USART2_IRQHandler(void);
+void USART3_IRQHandler(void);
 
 #define KEY1_EXTI_IRQn EXTI2_IRQn
 #define KEY2_EXTI_IRQn EXTI3_IRQn
