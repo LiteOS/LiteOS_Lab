@@ -46,7 +46,7 @@ static int app_hello_world_entry()
 {
     while (1)
     {
-        printf("Hello World! This is Bearpi!\r\n");
+        printf("Welcome to BearPi! This is osal_mem_demo test\r\n");
         osal_task_sleep(4*1000);
     }
 }

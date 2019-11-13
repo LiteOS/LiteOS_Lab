@@ -66,4 +66,5 @@ ifeq ($(CONFIG_DEMO_TYPE), "none")
 	C_INCLUDES += $(user_demo_inc)
 	C_SOURCES += $(user_hardware_src)
 	C_INCLUDES += $(user_hardware_inc)
+	C_DEFS += $(user_demo_defs)
 endif

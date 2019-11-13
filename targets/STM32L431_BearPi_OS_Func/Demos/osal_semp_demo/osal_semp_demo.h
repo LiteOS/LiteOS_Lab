@@ -33,31 +33,13 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-07-23 10:00    yuhengP    The first version  
+ *  2019-07-23 10:00    yuhengP   The first version  
  *
  */
-#include <stdint.h>
-#include <stddef.h>
-#include <string.h>
+#ifndef LITEOS_LAB_IOT_LINK_HELLO_WORLD_DEMO_HELLO_WORLD_DEMO_H_
+#define LITEOS_LAB_IOT_LINK_HELLO_WORLD_DEMO_HELLO_WORLD_DEMO_H_
 
-#include <osal.h>
-
-static int app_hello_world_entry()
-{
-    while (1)
-    {
-        printf("Hello World! This is Bearpi!\r\n");
-        osal_task_sleep(4*1000);
-    }
-}
-
-int standard_app_demo_main()
-{
-    osal_task_create("helloworld",app_hello_world_entry,NULL,0x400,NULL,2);
-    return 0;
-}
+int hello_world_main();
 
 
-
-
-
+#endif /* LITEOS_LAB_IOT_LINK_HELLO_WORLD_DEMO_HELLO_WORLD_DEMO_H_ */

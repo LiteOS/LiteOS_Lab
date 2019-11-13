@@ -40,4 +40,4 @@ CONFIG_LOADER_ENABLE = n
 CONFIG_OC_LWM2M_DEMO_TYPE= "none"
 CONFIG_OC_MQTT_DEMO_TYPE= "none"
 
-CONFIG_USER_DEMO  = "hello_world_demo"
+CONFIG_USER_DEMO  = "osal_task_demo"
