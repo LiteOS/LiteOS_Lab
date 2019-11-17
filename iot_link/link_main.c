@@ -36,6 +36,8 @@
  *  2019-04-28 15:00  zhangqianfu  The first version  
  *
  */
+
+#include <link_version.h>
 //RTOS KERNEL
 #include <osal.h>
 
@@ -50,6 +52,20 @@
 #endif
 
 
+
+#define  CN_LINK_VERSION_MAJOR      1
+#define  CN_LINK_VERSION_MINOR      1
+#define  CN_LINK_VERSION_FEATURE    0
+
+
+static char s_link_mainversion[64];
+const char *linkmain_version()
+{
+    snprintf(s_link_mainversion,64,"V%d.%d.%d AT %s ON %s",CN_LINK_VERSION_MAJOR,\
+            CN_LINK_VERSION_MINOR,CN_LINK_VERSION_FEATURE,__TIME__,__DATE__);
+    return s_link_mainversion;
+}
+
 extern int netdriver_install();
 __attribute__((weak)) int netdriver_install()
 {
@@ -60,9 +76,9 @@ __attribute__((weak)) int netdriver_install()
 
 int link_main(void *args)
 {
+    printf("linkmain:%s \n\r",linkmain_version());
     ///< install the RTOS kernel for the link
     osal_init();
-
 #if CONFIG_LITEOS_ENABLE
     #include <liteos_imp.h>
     osal_install_liteos();
