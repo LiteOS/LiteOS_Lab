@@ -33,25 +33,12 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-05 19:16  zhangqianfu  The first version  
+ *  2019-11-17 12:09  zhangqianfu  The first version  
  *
  */
+#ifndef LITEOS_LAB_IOT_LINK_INC_LINK_VERSION_H_
+#define LITEOS_LAB_IOT_LINK_INC_LINK_VERSION_H_
 
-#if CONFIG_ATINY_MQTT_ENABLE
+const char *linkmain_version();
 
-/**
- *
- * @brief: use this function to install the oc_mqtt_agent to oc_mqtt_al
- *
- * @return: 0 success while -1 failed
- * */
-int oc_mqtt_install_atiny_mqtt();
-
-
-
-#else
-
-#define oc_mqtt_agent()    -1
-
-
-#endif
+#endif /* LITEOS_LAB_IOT_LINK_INC_LINK_VERSION_H_ */

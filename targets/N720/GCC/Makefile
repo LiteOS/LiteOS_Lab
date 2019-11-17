@@ -67,8 +67,7 @@ PERIFLIB_SOURCES =
 ##########################LOAD THE SOURCES INCLUDES AND DEFINES#################
 include $(PROJECTBASE)/config.mk
 
-MAIN_SRC := ${wildcard $(TOP_DIR)/targets/N720/Src/main.c}
-MAIN_SRC += ${wildcard $(TOP_DIR)/targets/N720/Src/at_interface_mqtt.c}
+MAIN_SRC := ${wildcard $(TOP_DIR)/targets/N720/Src/*.c}
 C_SOURCES += $(MAIN_SRC)
 
 AT_INTERFACE_INC = \

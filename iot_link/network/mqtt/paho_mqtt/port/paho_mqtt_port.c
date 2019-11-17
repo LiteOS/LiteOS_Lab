@@ -195,12 +195,12 @@ static int __socket_read(void *ctx, unsigned char *buf, int len, int timeout)
 
     struct timeval timedelay;
 
-    if((NULL == ctx)||(NULL== buf))
+    if(NULL== buf)
     {
         return ret;
     }
 
-    fd = (int)ctx;
+    fd = (int)ctx;  ///< socket could be zero
 
     timedelay.tv_sec = timeout/1000;
     timedelay.tv_usec = (timeout%1000)*1000;
@@ -237,12 +237,12 @@ static int __socket_write(void *ctx, unsigned char *buf, int len, int timeout)
 
     struct timeval timedelay;
 
-    if((NULL == ctx)||(NULL== buf))
+    if(NULL== buf)
     {
         return ret;
     }
 
-    fd = (int)ctx;
+    fd = (int)ctx;  ///< THE SOCKET COULD BE ZERO
 
     timedelay.tv_sec = timeout/1000;
     timedelay.tv_usec = (timeout%1000)*1000;
@@ -618,7 +618,7 @@ static int __disconnect(void *handle)
 static void general_dealer(MessageData *data)
 {
     mqtt_al_msgrcv_t   msg;
-    fn_msg_dealer      dealer;
+    fn_mqtt_al_msg_dealer  dealer;
     msg.dup = data->message->dup;
     msg.qos = data->message->qos;
     msg.retain = data->message->retained;
