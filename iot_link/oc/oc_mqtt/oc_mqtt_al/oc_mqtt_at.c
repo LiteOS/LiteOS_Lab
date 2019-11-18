@@ -39,12 +39,23 @@
 #include <oc_mqtt_al.h>
 
 ///< when receive any information from hw, then it call this function,THIS IS A URC imformation
-///< ATCOMMAND:    +HWMQTTRECEIVED:1,0,"HELLOTOPC",2,0010
-void __attribute__((weak)) hwoc_mqtt_received(int qos,int dup,const char *topic,uint8_t *payload, int len)
+///< ATCOMMAND:    +HWMQTTRECVPUB:1,0,"HELLOTOPC",2,0010
+void __attribute__((weak)) hwoc_mqtt_recvpub(int qos,int dup,const char *topic,uint8_t *payload, int len)
 {
     ///< PLEASE USE THE AT PIPE TO OUTPUT THE INFORMATION
     return;
 }
+
+///< when receive any information from hw, then it call this function,THIS IS A URC imformation
+///< received the default topic message
+///< ATCOMMAND:    +HWMQTTRECEIVED:1,2,0010
+void __attribute__((weak)) hwoc_mqtt_received(int qos,uint8_t *payload, int len)
+{
+    ///< PLEASE USE THE AT PIPE TO OUTPUT THE INFORMATION
+    return;
+}
+
+
 //use this function to push all the message to the buffer
 static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
 {
@@ -64,8 +75,21 @@ static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
 
 ///< when the at pipe want to send some message to the hw,then it call this function,
 ///< if the topic is NULL, then it will send to the default topic
+///< ATCOMMAND:    AT+HWOCMQTTSEND=1,3,001020
+///< ATRESPONSE:   +SEND OK when success
+///<               +SEND ERR:code
+///<               code:reference to en_oc_mqtt_err_code_t defines
+
+int hwoc_mqtt_send(int qos,int len,uint8_t *payload)
+{
+    return oc_mqtt_publish(NULL,payload, len, qos);
+}
+
+///< when the at pipe want to send some message to the hw,then it call this function,
+///< if the topic is NULL, then it will send to the default topic
 ///< ATCOMMAND:    AT+HWOCMQTTPUBLISH=1,"PUBTOPIC",3,001020
-///< ATRESPONSE:   +HWOCMQTTPUBLISH:code
+///< ATRESPONSE:   +PUBLISH OK when success
+//                 +PUBLISH ERR:code when success
 ///<               code:reference to en_oc_mqtt_err_code_t defines
 
 int hwoc_mqtt_publish(int qos,const char *topic,int len,uint8_t *payload)
@@ -73,10 +97,10 @@ int hwoc_mqtt_publish(int qos,const char *topic,int len,uint8_t *payload)
     return oc_mqtt_publish((char *)topic,payload, len, qos);
 }
 
-
 ///< when you want to connect to the hw,then call this function
 ///< ATCOMMAND:    AT+HWOCMQTTCONNECT=1,10,"192.168.1.20","8883","DEVEID","DEVEPASSWD"
-///< ATRESPONSE:   +HWOCMQTTCONNECT:code
+///< ATRESPONSE:   +CONNECTED OK when success
+///<               +CONNECTED ERR:code
 ///<               code:reference to en_oc_mqtt_err_code_t defines
 
 int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const char *port,
@@ -111,7 +135,8 @@ int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const
 
 ///< WHEN YOU WANT TO DISCONNECT FROM THE HW,THEN YOU CALL THIS FUNCTION
 ///< ATCOMMAND:    AT+HWOCMQTTDISCONNECT
-///< ATRESPONSE:   +HWOCMQTTDISCONNECT:code
+///< ATRESPONSE:   +DISCONNECT OK  when succes
+///                +DISCONNECT ERR:code  when succes
 ///<               code:reference to en_oc_mqtt_err_code_t defines
 
 int hwoc_mqtt_disconnect()

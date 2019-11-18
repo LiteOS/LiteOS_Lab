@@ -189,7 +189,7 @@ int link_main(void *args)
 //////////////////////////  MQTT PROTOCOL  /////////////////////////////////////
 #if CONFIG_MQTT_ENABLE
     #include <mqtt_al.h>
-    mqtt_init();
+    mqtt_al_init();
 #if CONFIG_MQTT_PAHO_ENABLE
     #include <paho_mqtt_port.h>
     mqtt_install_pahomqtt();

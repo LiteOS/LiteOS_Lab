@@ -239,7 +239,7 @@ typedef struct
  * @return 0 success while -1 failed
  *
  */
-int mqtt_init();
+int mqtt_al_init();
 
 /**
  * @brief     :when you don't want to use the mqtt service ,please call this function
