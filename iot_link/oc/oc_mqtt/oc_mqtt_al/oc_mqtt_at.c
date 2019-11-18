@@ -60,15 +60,23 @@ void __attribute__((weak)) hwoc_mqtt_received(int qos,uint8_t *payload, int len)
 static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
 {
     int ret = -1;
-
     char *topic;
-    topic = osal_malloc(msg->topic.len +1);
-    if(NULL != topic)
+
+    if((NULL != msg->topic.data) && (msg->topic.len > 0))
     {
-        memcpy(topic, msg->topic.data,msg->topic.len);
-        topic[msg->topic.len] = '\0';
-        hwoc_mqtt_received(msg->qos,msg->dup,topic,(uint8_t *)msg->msg.data,msg->msg.len);
+        topic = osal_malloc(msg->topic.len +1);
+        if(NULL != topic)
+        {
+            memcpy(topic, msg->topic.data,msg->topic.len);
+            topic[msg->topic.len] = '\0';
+            hwoc_mqtt_recvpub(msg->qos,msg->dup,topic,(uint8_t *)msg->msg.data,msg->msg.len);
+        }
     }
+    else
+    {
+        hwoc_mqtt_received(msg->qos,(uint8_t *)msg->msg.data,msg->msg.len);
+    }
+
     return ret;
 }
 
@@ -90,12 +98,7 @@ int hwoc_mqtt_send(int qos,int len,uint8_t *payload)
 ///< ATCOMMAND:    AT+HWOCMQTTPUBLISH=1,"PUBTOPIC",3,001020
 ///< ATRESPONSE:   +PUBLISH OK when success
 //                 +PUBLISH ERR:code when success
-///<               code:reference to en_oc_mqtt_err_code_t defines
 
-int hwoc_mqtt_publish(int qos,const char *topic,int len,uint8_t *payload)
-{
-    return oc_mqtt_publish((char *)topic,payload, len, qos);
-}
 
 ///< when you want to connect to the hw,then call this function
 ///< ATCOMMAND:    AT+HWOCMQTTCONNECT=1,10,"192.168.1.20","8883","DEVEID","DEVEPASSWD"
