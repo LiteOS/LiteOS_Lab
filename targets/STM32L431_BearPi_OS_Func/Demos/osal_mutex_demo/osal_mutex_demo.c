@@ -32,32 +32,67 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 /**
- *  DATE                AUTHOR      INSTRUCTION
- *  2019-07-23 10:00    yuhengP    The first version  
+ *  DATE          AUTHOR         INSTRUCTION
+ *  2019-11-16    mculover666    The first version  
  *
  */
-#include <stdint.h>
-#include <stddef.h>
-#include <string.h>
 
 #include <osal.h>
 
-static int app_hello_world_entry()
+#define USER_TASK1_PRI  12
+#define USER_TASK2_PRI  11
+
+uint32_t public_value = 0;
+
+osal_mutex_t public_value_mutex;
+
+static int user_task1_entry()
+{
+    while(1)
+    {
+        if(true == osal_mutex_lock(public_value_mutex))
+        {
+            printf("\r\ntask1: lock a mutex.\r\n");
+            public_value += 10;
+            printf("task1: public_value = %ld.\r\n", public_value);
+            printf("task1: unlock a mutex.\r\n\r\n");
+            osal_mutex_unlock(public_value_mutex);
+            if(public_value > 100)
+                break;
+            
+        }
+    }
+
+    return 0;
+}
+static int user_task2_entry()
 {
     while (1)
     {
-        printf("Hello World! This is LiteOS!\r\n");
-        osal_task_sleep(4*1000);
+       if(true == osal_mutex_lock(public_value_mutex))
+        {
+            printf("\r\ntask2: lock a mutex.\r\n");
+            public_value += 5; 
+            printf("task2: public_value = %ld.\r\n", public_value);
+            printf("task2: unlock a mutex.\r\n\r\n");
+            osal_mutex_unlock(public_value_mutex);
+            
+            if(public_value > 90)
+                break;
+
+            osal_task_sleep(10);
+        }
     }
+
+    return 0;
 }
 
 int standard_app_demo_main()
 {
-    osal_task_create("helloworld",app_hello_world_entry,NULL,0x400,NULL,2);
+
+    osal_mutex_create(&public_value_mutex);
+    osal_task_create("user_task1",user_task1_entry,NULL,0x400,NULL,USER_TASK1_PRI);
+    osal_task_create("user_task2",user_task2_entry,NULL,0x400,NULL,USER_TASK2_PRI);
+
     return 0;
 }
-
-
-
-
-

@@ -36,28 +36,40 @@
  *  2019-07-23 10:00    yuhengP    The first version  
  *
  */
-#include <stdint.h>
-#include <stddef.h>
-#include <string.h>
-
 #include <osal.h>
 
-static int app_hello_world_entry()
+#define USER_TASK1_PRI  12
+#define USER_TASK2_PRI  11
+
+osal_semp_t sync_semp;
+
+
+static int user_task1_entry()
+{
+    while(1)
+    {
+        printf("task 1 post a semp!\r\n");
+        osal_semp_post(sync_semp);
+        osal_task_sleep(2*1000);
+    }
+}
+static int user_task2_entry()
 {
     while (1)
     {
-        printf("Hello World! This is LiteOS!\r\n");
-        osal_task_sleep(4*1000);
+        printf("task2 is waiting for a semp...\r\n");
+        osal_semp_pend(sync_semp, cn_osal_timeout_forever);
+        printf("task 2 access a semp!\r\n");
     }
 }
 
 int standard_app_demo_main()
 {
-    osal_task_create("helloworld",app_hello_world_entry,NULL,0x400,NULL,2);
+
+    osal_semp_create(&sync_semp, 1 ,0 );
+    printf("sync_semp semp create success.\r\n");
+    osal_task_create("user_task1",user_task1_entry,NULL,0x400,NULL,USER_TASK1_PRI);
+    osal_task_create("user_task2",user_task2_entry,NULL,0x400,NULL,USER_TASK2_PRI);
+
     return 0;
 }
-
-
-
-
-

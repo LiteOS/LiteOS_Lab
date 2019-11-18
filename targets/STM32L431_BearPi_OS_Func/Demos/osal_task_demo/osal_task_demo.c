@@ -32,32 +32,45 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 /**
- *  DATE                AUTHOR      INSTRUCTION
- *  2019-07-23 10:00    yuhengP    The first version  
+ *  DATE          AUTHOR         INSTRUCTION
+ *  2019-11-16    mculover666    The first version  
  *
  */
-#include <stdint.h>
-#include <stddef.h>
-#include <string.h>
-
 #include <osal.h>
 
-static int app_hello_world_entry()
+#define USER_TASK1_PRI  12
+#define USER_TASK2_PRI  11
+
+uint32_t user_task1_id = 0;
+uint32_t user_task2_id = 0;
+
+static int user_task1_entry()
+{
+    int n = 0;
+
+    for(n = 0; n < 5; n++)
+    {
+        printf("task1: my task id is %ld, n = %d!\r\n", user_task1_id, n++);
+        osal_task_sleep(2*1000);
+    
+    }
+
+    printf("user task 1 exit!\r\n");
+    return 0;
+}
+static int user_task2_entry()
 {
     while (1)
     {
-        printf("Hello World! This is LiteOS!\r\n");
-        osal_task_sleep(4*1000);
+        printf("task 2: my task id is %ld!\r\n", user_task2_id);
+        osal_task_sleep(2*1000);
     }
 }
 
 int standard_app_demo_main()
 {
-    osal_task_create("helloworld",app_hello_world_entry,NULL,0x400,NULL,2);
+    user_task1_id = osal_task_create("user_task1",user_task1_entry,NULL,0x400,NULL,USER_TASK1_PRI);
+    user_task2_id = osal_task_create("user_task2",user_task2_entry,NULL,0x400,NULL,USER_TASK2_PRI);
+
     return 0;
 }
-
-
-
-
-

@@ -32,32 +32,42 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 /**
- *  DATE                AUTHOR      INSTRUCTION
- *  2019-07-23 10:00    yuhengP    The first version  
+ *  DATE          AUTHOR         INSTRUCTION
+ *  2019-11-16    mculover666    The first version  
  *
  */
-#include <stdint.h>
-#include <stddef.h>
-#include <string.h>
-
 #include <osal.h>
 
-static int app_hello_world_entry()
+static int mem_access_task_entry()
 {
+    uint32_t i = 0;
+    size_t mem_size;
+    uint8_t* mem_ptr = NULL;
+
     while (1)
     {
-        printf("Welcome to BearPi! This is osal_mem_demo test\r\n");
-        osal_task_sleep(4*1000);
+        mem_size = 1 << i++;
+        mem_ptr = osal_malloc(mem_size);
+        if(mem_ptr != NULL)
+        {
+            printf("access %d bytes memory success!\r\n", mem_size);
+            osal_free(mem_ptr);
+            mem_ptr = NULL;
+            printf("free memory success!\r\n");
+           
+        }
+        else
+        {
+            printf("BearPi: access %d bytes memory failed!\r\n", mem_size);
+            return 0;
+        }
     }
 }
 
 int standard_app_demo_main()
 {
-    osal_task_create("helloworld",app_hello_world_entry,NULL,0x400,NULL,2);
+    osal_task_create("mem_access_task",mem_access_task_entry,NULL,0x400,NULL,11);
     return 0;
 }
-
-
-
 
 
