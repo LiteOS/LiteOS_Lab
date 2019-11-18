@@ -76,7 +76,6 @@ __attribute__((weak)) int netdriver_install()
 
 int link_main(void *args)
 {
-    printf("linkmain:%s \n\r",linkmain_version());
     ///< install the RTOS kernel for the link
     osal_init();
 #if CONFIG_LITEOS_ENABLE
@@ -96,6 +95,8 @@ int link_main(void *args)
 #else
     #error("you should add your own os here");
 #endif
+    printf("linkmain:%s \n\r",linkmain_version());
+
 
 #if CONFIG_STIMER_ENABLE
     #include <stimer.h>
