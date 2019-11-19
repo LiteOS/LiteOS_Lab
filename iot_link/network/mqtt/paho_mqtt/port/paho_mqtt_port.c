@@ -618,7 +618,7 @@ static int __disconnect(void *handle)
 static void general_dealer(MessageData *data)
 {
     mqtt_al_msgrcv_t   msg;
-    fn_msg_dealer      dealer;
+    fn_mqtt_al_msg_dealer  dealer;
     msg.dup = data->message->dup;
     msg.qos = data->message->qos;
     msg.retain = data->message->retained;

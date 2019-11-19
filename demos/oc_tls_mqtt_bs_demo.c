@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2016-2019>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -35,293 +35,237 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
-#include <pthread.h>
+#include <queue.h>
 
 #include <osal.h>
 #include <oc_mqtt_al.h>
-
+#include <oc_mqtt_assistant.h>
 
 /* brief : the oceanconnect platform only support the ca_crt up tills now*/
 /** the address product_id device_id password crt is only for the test  */
 
 #define DEFAULT_LIFETIME            10
-//#define BS_SERVER_ADDRESS            "iot-bs.cn-north-4.myhuaweicloud.com"
-#define BS_SERVER_ADDRESS           "119.3.251.30"
-#define BS_SERVER_PORT              "8883"           ///<  server mqtt service port
-#define DEMO_WITH_BOOTSTRAP_NODEID  "mqtt_sdk03"
-#define DEMO_WITH_BOOTSTRAP_PASSWORD "f62fcf47d62c4ed18913"//"77dca653824757da0a96" //"e8775e734c48d20aa3ce"
+#define DEFAULT_SERVER_IPV4         "119.3.251.30"     ///<  server ip address
+//#define DEFAULT_SERVER_IPV4       "iot-bs.cn-north-4.myhuaweicloud.com"
+#define DEFAULT_SERVER_PORT         "8883"             ///<  server mqtt service port
+#define CN_MQTT_EP_NOTEID           "mqtt_sdk03"
+#define CN_MQTT_EP_PASSWD           "f62fcf47d62c4ed18913"
 
-
-#if 0
-static char s_mqtt_ca_crt[] =
-"-----BEGIN CERTIFICATE-----\r\n"
-"MIIEwTCCAqmgAwIBAgIRdi8oqJITu4uSWV2C/dUS1swwDQYJKoZIhvcNAQELBQAw\r\n"
-"PDELMAkGA1UEBhMCQ04xDzANBgNVBAoTBkh1YXdlaTEcMBoGA1UEAxMTSHVhd2Vp\r\n"
-"IEVxdWlwbWVudCBDQTAeFw0xNzAyMTYwNjM0MzVaFw00MTEwMDgwNjM0MzVaME0x\r\n"
-"CzAJBgNVBAYTAkNOMQ8wDQYDVQQKEwZIdWF3ZWkxLTArBgNVBAMTJEh1YXdlaSBD\r\n"
-"bG91ZCBDb3JlIE5ldHdvcmsgUHJvZHVjdCBDQTCCASIwDQYJKoZIhvcNAQEBBQAD\r\n"
-"ggEPADCCAQoCggEBAKQQz5uvp3lmtK9uzeje7cZUF8RlRKavEQj9EQk45ly9a/Kr\r\n"
-"07TlGIhaZv7j+N9ZV1jTiwA0+XWlni1anjy01qsBQ22eIzX3HQ3fTMjPfk67SFhS\r\n"
-"aHdzkJwO66/Nojnaum84HfUTBuXfgiBNH4C2Bc9YBongLktwunqMGvMWEKj4YqjN\r\n"
-"bjjZQ1G1Qnhk15qpEWI9YUv0I5X94oT5idEMIH+V+2hcW/6GmztoOgCekW3GPHGl\r\n"
-"UJLt3cSaDkp1b5IchnGpwocZLJMd+V3emcLhbjXewIY3meUIkXMrqJ12L3ltkRVp\r\n"
-"nHElgmpvp3dBjUrBiITLakrGq8P/Ta7OO5kf9JUCAwEAAaOBrDCBqTAfBgNVHSME\r\n"
-"GDAWgBQq+BBZJ4A1H6d8ujufKuRKqpuS6jBGBgNVHSAEPzA9MDsGBFUdIAAwMzAx\r\n"
-"BggrBgEFBQcCARYlaHR0cDovL3N1cHBvcnQuaHVhd2VpLmNvbS9zdXBwb3J0L3Br\r\n"
-"aTAPBgNVHRMECDAGAQH/AgEAMA4GA1UdDwEB/wQEAwIBBjAdBgNVHQ4EFgQU9CcR\r\n"
-"7wi0DatgF91OjC2HvAn0bG4wDQYJKoZIhvcNAQELBQADggIBADli3WJezyDe4qVl\r\n"
-"jSpF3kxRvBPf6hPhf81WT/A3lo5f7rTOEkRqTB515i5p8Xv8QgP8WTcMu22K5oZt\r\n"
-"6iV4PpWCaEVaHgAYeI8sjjWqI498nKWrJ1kaJkdOxB3omVa2Fet7xDCL6MR2jDZq\r\n"
-"dtZGF2XCIiNuZhvTYOTvKTfuzN5/gi/z8GD8xP95V4vX3sB2jqgleMTirFdeA+RB\r\n"
-"HDbS55MSIfA2jeXJt0IHoB5FKshcCPNLIW/s0O7lbSH62o4d+5PeVV8tbMESQ6Ve\r\n"
-"NSRt22+n6Z2Z6n/ZMfM2jSziEZNIyPXQtywltkcrhRIbxWoB0IEr0Ci+7FVr9CRu\r\n"
-"ZlcpliSKemrxiLo5EkoznWwxfUP11i473lUVljloJRglYWh6uo9Ci5Cu001occ4L\r\n"
-"9qs13MTtpC96LouOyrqBUOlUmJvitqCrHSfqOowyi8B0pxH/+m+Q8+fP9cBztw22\r\n"
-"JId8bth5j0OUbNDoY7DnjQLCI0bEZt4RSpQN1c6xf90gHutM62qoGI6NKlb2IH+r\r\n"
-"Yfun6P4jYTN9vMnaDfxBH7ofz4q9nj27UBkX9ebqM8kS+RijnUUy8L2N6KsUpp2R\r\n"
-"01cjcmp699kFIJ7ShCOmI95ZC9cociTnhTK6WScCweBH7eBxZwoQLi5ER3VkDs1r\r\n"
-"rqnNVUgf2j9TOshCI6zuaxsA35wr\r\n"
-"-----END CERTIFICATE-----\r\n";
-#else
-static char s_mqtt_ca_crt[] =
-"-----BEGIN CERTIFICATE-----\r\n"
-"MIID4DCCAsigAwIBAgIJAK97nNS67HRvMA0GCSqGSIb3DQEBCwUAMFMxCzAJBgNV\r\n"
-"BAYTAkNOMQswCQYDVQQIEwJHRDELMAkGA1UEBxMCU1oxDzANBgNVBAoTBkh1YXdl\r\n"
-"aTELMAkGA1UECxMCQ04xDDAKBgNVBAMTA0lPVDAeFw0xNjA1MDQxMjE3MjdaFw0y\r\n"
-"NjA1MDIxMjE3MjdaMFMxCzAJBgNVBAYTAkNOMQswCQYDVQQIEwJHRDELMAkGA1UE\r\n"
-"BxMCU1oxDzANBgNVBAoTBkh1YXdlaTELMAkGA1UECxMCQ04xDDAKBgNVBAMTA0lP\r\n"
-"VDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAJxM9fwkwvxeILpkvoAM\r\n"
-"Gdqq3x0G9o445F6Shg3I0xmmzu9Of8wYuW3c4jtQ/6zscuIGyWf06ke1z//AVZ/o\r\n"
-"dp8LkuFbBbDXR5swjUJ6z15b6yaYH614Ty/d6DrCM+RaU+FWmxmOon9W/VELu2BB\r\n"
-"NXDQHJBSbWrLNGnZA2erk4JSMp7RhHrZ0QaNtT4HhIczFYtQ2lYF+sQJpQMrjoRn\r\n"
-"dSV9WB872Ja4DgcISU1+wuWLmS/NKjIvOWW1upS79yu2I4Rxos2mFy9xxz311rGC\r\n"
-"Z3X65ejFNzCUrNgf6NEP1N7wB9hUu7u50aA+/56D7EgjeI0gpFytC+a4f6JCPVWI\r\n"
-"Lr0CAwEAAaOBtjCBszAdBgNVHQ4EFgQUcGqy59oawLEgMl21//7F5RyABpwwgYMG\r\n"
-"A1UdIwR8MHqAFHBqsufaGsCxIDJdtf/+xeUcgAacoVekVTBTMQswCQYDVQQGEwJD\r\n"
-"TjELMAkGA1UECBMCR0QxCzAJBgNVBAcTAlNaMQ8wDQYDVQQKEwZIdWF3ZWkxCzAJ\r\n"
-"BgNVBAsTAkNOMQwwCgYDVQQDEwNJT1SCCQCve5zUuux0bzAMBgNVHRMEBTADAQH/\r\n"
-"MA0GCSqGSIb3DQEBCwUAA4IBAQBgv2PQn66gRMbGJMSYS48GIFqpCo783TUTePNS\r\n"
-"tV8G1MIiQCpYNdk2wNw/iFjoLRkdx4va6jgceht5iX6SdjpoQF7y5qVDVrScQmsP\r\n"
-"U95IFcOkZJCNtOpUXdT+a3N+NlpxiScyIOtSrQnDFixWMCJQwEfg8j74qO96UvDA\r\n"
-"FuTCocOouER3ZZjQ8MEsMMquNEvMHJkMRX11L5Rxo1pc6J/EMWW5scK2rC0Hg91a\r\n"
-"Lod6aezh2K7KleC0V5ZlIuEvFoBc7bCwcBSAKA3BnQveJ8nEu9pbuBsVAjHOroVb\r\n"
-"8/bL5retJigmAN2GIyFv39TFXIySw+lW0wlp+iSPxO9s9J+t\r\n"
-"-----END CERTIFICATE-----\r\n";
-#endif
 
 
 //if your command is very fast,please use a queue here--TODO
-#define cn_app_rcv_buf_len 256
-static char            s_rcv_buffer[cn_app_rcv_buf_len];
-static int             s_rcv_datalen;
-static osal_semp_t     s_oc_rcv_sync;
-static void           *s_mqtt_handle;
+static queue_t *s_queue_rcvmsg = NULL;   ///< this is used to cached the message
 
+typedef struct
+{
+    int        qos;
+    int        dup;
+    int        retain;
+    int        msg_len;
+    char      *topic;
+    uint8_t   *msg;
+    uint8_t   *buf;
+}demo_msg_t;
 
-static int app_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
+//use this function to push all the message to the buffer
+static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
 {
     int ret = -1;
-    printf("topic:%s qos:%d\n\r",msg->topic.data,msg->qos);
+    uint8_t  *buf;
+    uint32_t  buflen;
+    demo_msg_t *demo_msg;
 
-    if(msg->msg.len < cn_app_rcv_buf_len)
+    buflen =msg->msg.len + msg->topic.len + sizeof(demo_msg_t) + 1 +1;
+    buf = osal_malloc(buflen);
+    if(NULL != buf)
     {
-        memcpy(s_rcv_buffer,msg->msg.data,msg->msg.len );
-        s_rcv_buffer[msg->msg.len] = '\0'; ///< the json need it
-        s_rcv_datalen = msg->msg.len;
+        ///< copy the message and push it to the queue
+        demo_msg = (demo_msg_t *)buf;
+        demo_msg->buf = buf + sizeof(demo_msg_t);
+        demo_msg->dup = msg->dup;
+        demo_msg->qos = msg->qos;
+        demo_msg->retain = msg->retain;
 
-        printf("msg:%s\n\r",s_rcv_buffer);
+        demo_msg->topic = (char *) demo_msg->buf;
+        buf = (uint8_t *)demo_msg->topic;
+        memcpy(buf,msg->topic.data,msg->topic.len);
+        buf[msg->topic.len] = '\0';
 
-        osal_semp_post(s_oc_rcv_sync);
-        ret = 0;
+        demo_msg->msg = demo_msg->buf + msg->topic.len +1;
+        demo_msg->msg_len = msg->msg.len;
+        buf = demo_msg->msg;
+        memcpy(buf,msg->msg.data,msg->msg.len);
+        buf[msg->msg.len] = '\0';
 
+        printf("RCVMSG:qos:%d dup:%d retain:%d topic:%s msg:len:%d payload:%s\n\r",\
+                demo_msg->qos,demo_msg->dup,demo_msg->retain,\
+                demo_msg->topic,demo_msg->msg_len,demo_msg->msg);
+
+        ret = queue_push(s_queue_rcvmsg,demo_msg,10);
+        if(ret != 0)
+        {
+            osal_free(demo_msg);
+        }
     }
+
     return ret;
 }
 
 
-static int oc_mqtt_report_entry(void *args)
+static int  oc_cmd_normal(demo_msg_t *demo_msg)
 {
-    int leftpower = 0;
-    void *handle;
-    tag_oc_mqtt_report  report;
-    tag_key_value_list  lst;
-    tag_oc_mqtt_config config = {0};
-    cJSON *root = NULL;
-    char  *buf = NULL;
 
-    int times= 0;
+    int ret = 0;
+    char   *buf = NULL;  ///< used for the mqtt
 
-    {
-        config.boot_mode = en_oc_boot_strap_mode_client_initialize;
-        config.lifetime = DEFAULT_LIFETIME;
-        config.server = BS_SERVER_ADDRESS;
-        config.port = BS_SERVER_PORT;
-        config.msgdealer = app_msg_deal;
-        config.code_mode = en_oc_mqtt_code_mode_json;
-        config.sign_type = en_mqtt_sign_type_hmacsha256_check_time_no;
-        config.device_type = en_oc_mqtt_device_type_static;
-        config.auth_type = en_mqtt_auth_type_nodeid;
-        config.device_info.s_device.deviceid = DEMO_WITH_BOOTSTRAP_NODEID;
-        config.device_info.s_device.devicepasswd = DEMO_WITH_BOOTSTRAP_PASSWORD;
-
-        config.security.type = en_mqtt_al_security_cas;
-        config.security.u.cas.ca_crt.data = s_mqtt_ca_crt;
-        config.security.u.cas.ca_crt.len = sizeof(s_mqtt_ca_crt); ///< must including the end '\0'
-
-        handle = oc_mqtt_config(&config);
-        if(NULL == handle)
-        {
-            printf("config err\r\n");
-        }
-
-        s_mqtt_handle = handle;
-        leftpower =33;
-        while(1)  //do the loop here
-        {
-            leftpower = (leftpower + 7 )%100;
-
-            lst.item.name = "batteryVoltage";
-            lst.item.buf = (char *)&leftpower;
-            lst.item.len = sizeof(leftpower);
-            lst.item.type = en_key_value_type_int;
-            lst.next = NULL;
-
-            report.hasmore = en_oc_mqtt_has_more_no;
-            report.paralst= &lst;
-            report.serviceid = "DeviceStatus";
-            report.eventtime = NULL;
-
-            root = oc_mqtt_json_fmt_report(&report);
-            if(NULL != root)
-            {
-                buf = cJSON_Print(root);
-                if(NULL != buf)
-                {
-                    if(0 == oc_mqtt_report(handle,buf,strlen(buf),en_mqtt_al_qos_1))
-                    {
-                        printf("times:%d power:%d\r\n",times++,leftpower);
-                    }
-                    osal_free(buf);
-                }
-
-                cJSON_Delete(root);
-            }
-
-            osal_task_sleep(20*1000); ///< do a sleep here
-        }
-    }
-    return 0;
-}
-
-static int oc_mqtt_cmd_entry( void *args)
-{
-    cJSON  *msg = NULL;
-    cJSON  *mid = NULL;
-    cJSON  *ioswitch = NULL;
-    cJSON  *msgType = NULL;
-    cJSON  *paras = NULL;
-    cJSON  *serviceId = NULL;
-    cJSON  *cmd = NULL;
-    char   *buf = NULL;
-
+    cJSON               *mid_json;
+    cJSON               *cmd_json;
+    cJSON               *response_msg;
     tag_oc_mqtt_response response;
     tag_key_value_list   list;
+    int mid_int = 0;
+    int err_int = 0;
+    //////////////HANDLE YOUR MESSAGE HERE WITH YOUR DEVICE PROFILE///////////
+    cmd_json = cJSON_Parse((const char *)demo_msg->msg);
+    mid_json = cJSON_GetObjectItem(cmd_json,"mid");
+    if(NULL != mid_json)
+    {
+        mid_int = mid_json->valueint;
+    }
+    cJSON_Delete(cmd_json);
+    //////////////DO THE RESPONSE FOR THE COMMAND/////////////////////////////
+    list.item.name = "body_para";
+    list.item.buf = "body_para";
+    list.item.type = en_key_value_type_string;
+    list.next = NULL;
 
-    int mid_int;
-    int err_int;
+    response.hasmore = 0;
+    response.errcode = err_int;
+    response.mid = mid_int;
+    response.bodylst = &list;
+
+    response_msg = oc_mqtt_json_fmt_response(&response);
+    if(NULL != response_msg)
+    {
+        buf = cJSON_PrintUnformatted(response_msg);
+        if(NULL != buf)
+        {
+            ret = oc_mqtt_report((uint8_t *)buf,strlen(buf),en_mqtt_al_qos_1);
+            printf("%s:RESPONSE:mid:%d err_int:%d retcode:%d \r\n",__FUNCTION__,\
+                    mid_int,err_int,ret);
+
+            osal_free(buf);
+        }
+        cJSON_Delete(response_msg);
+    }
+
+    return 0;
+}
+
+
+static int  oc_report_normal(void)
+{
+    int ret = 0;
+    cJSON *root = NULL;
+    char  *buf = NULL;
+    tag_oc_mqtt_report  report;
+    tag_key_value_list  lst;
+    static int leftpower = 1;
+    static int times = 1;
+
+
+    leftpower = (leftpower + 7 )%100;
+
+    lst.item.name = "batteryLevel";
+    lst.item.buf = (char *)&leftpower;
+    lst.item.len = sizeof(leftpower);
+    lst.item.type = en_key_value_type_int;
+    lst.next = NULL;
+
+    report.hasmore = en_oc_mqtt_has_more_no;
+    report.paralst= &lst;
+    report.serviceid = "Battery";
+    report.eventtime = NULL;
+
+    root = oc_mqtt_json_fmt_report(&report);
+    if(NULL != root)
+    {
+        buf = cJSON_PrintUnformatted(root);
+        if(NULL != buf)
+        {
+            ret = oc_mqtt_report((uint8_t *)buf,strlen(buf),en_mqtt_al_qos_1);
+            printf("%s:REPORT:times:%d:power:%d retcode:%d \r\n",__FUNCTION__,times++,leftpower,ret);
+            osal_free(buf);
+        }
+
+        cJSON_Delete(root);
+    }
+
+    return 0;
+}
+
+
+static int task_rcvmsg_entry( void *args)
+{
+
+    demo_msg_t *demo_msg;
+
     while(1)
     {
-        if(osal_semp_pend(s_oc_rcv_sync,cn_osal_timeout_forever))
+        demo_msg = NULL;
+        queue_pop(s_queue_rcvmsg,(void **)&demo_msg,cn_osal_timeout_forever);
+
+        if(NULL != demo_msg)
         {
-            err_int = 1;
-            mid_int = 1;
-            msg = cJSON_Parse(s_rcv_buffer);
-
-            if(NULL != msg)
-            {
-                serviceId = cJSON_GetObjectItem(msg,"serviceId");
-                if(NULL != serviceId)
-                {
-                    printf("serviceId:%s\n\r",serviceId->valuestring);
-                }
-
-                mid = cJSON_GetObjectItem(msg,"mid");
-                if(NULL != mid)
-                {
-                    mid_int = mid->valueint;
-                    printf("mid:%d\n\r",mid_int);
-                }
-
-                msgType = cJSON_GetObjectItem(msg,"msgType");
-                if(NULL != msgType)
-                {
-                    printf("msgType:%s\n\r",msgType->valuestring);
-                }
-
-                cmd =  cJSON_GetObjectItem(msg,"cmd");
-                if(NULL != cmd)
-                {
-                    printf("cmd:%s\n\r",cmd->valuestring);
-                }
-
-                paras = cJSON_GetObjectItem(msg,"paras");
-                if(NULL != paras)
-                {
-                    ioswitch = cJSON_GetObjectItem(paras,"ioswitch");
-                    if(NULL != ioswitch)
-                    {
-                        printf("ioswitch:%d\n\r",ioswitch->valueint);
-                        err_int = en_oc_mqtt_err_code_ok;
-                    }
-                    else
-                    {
-                        printf("handle the json data as your specific profile\r\n");
-                        err_int = en_oc_mqtt_err_code_err;
-                    }
-                }
-                cJSON_Delete(msg);
-
-                list.item.name = "body_para";
-                list.item.buf = "body_para";
-                list.item.type = en_key_value_type_string;
-                list.next = NULL;
-
-                response.hasmore = 0;
-                response.errcode = err_int;
-                response.mid = mid_int;
-                response.bodylst = &list;
-
-                msg = oc_mqtt_json_fmt_response(&response);
-                if(NULL != msg)
-                {
-                    buf = cJSON_Print(msg);
-                    if(NULL != buf)
-                    {
-                        if(0 == oc_mqtt_report(s_mqtt_handle,buf,strlen(buf),en_mqtt_al_qos_1))
-                        {
-                            printf("SNDMSG:%s\n\r",buf);
-                        }
-                        osal_free(buf);
-                    }
-                    cJSON_Delete(msg);
-                }
-            }
+            oc_cmd_normal(demo_msg);  ///< this is the old model
+            osal_free(demo_msg);
         }
     }
 
     return 0;
 }
 
+static int task_reportmsg_entry(void *args)
+{
+    int ret;
+    oc_mqtt_config_t config;
+
+    config.boot_mode = en_oc_mqtt_mode_bs_static_nodeid_hmacsha256_notimecheck_json;
+    config.device_mode = 0;
+    config.msg_deal = app_msg_deal;
+    config.msg_deal_arg = NULL;
+    config.lifetime = DEFAULT_LIFETIME;
+    config.server_addr = DEFAULT_SERVER_IPV4;
+    config.server_port = DEFAULT_SERVER_PORT;
+    config.id = CN_MQTT_EP_NOTEID;
+    config.pwd= CN_MQTT_EP_PASSWD;
+
+    config.sec_type = en_mqtt_al_security_cas;
+
+
+    ret = oc_mqtt_config(&config);
+    if((ret != en_oc_mqtt_err_ok))
+    {
+        printf("config:err :code:%d\r\n",ret);
+        return -1;
+    }
+
+    while(1)  //do the loop here
+    {
+        oc_report_normal();
+        osal_task_sleep(1000);
+    }
+    return 0;
+}
 
 int standard_app_demo_main()
 {
-    printf("bs demo main\r\n");
-    osal_semp_create(&s_oc_rcv_sync,1,0);
+    s_queue_rcvmsg = queue_create("queue_rcvmsg",2,1);
 
+    osal_task_create("task_reportmsg",task_reportmsg_entry,NULL,0x1000,NULL,8);
 
-    osal_task_create("ocmqtt_report",oc_mqtt_report_entry,NULL,0x1000,NULL,10);
+    osal_task_create("task_rcvmsg",task_rcvmsg_entry,NULL,0x1000,NULL,8);
 
-    osal_task_create("ocmqtt_cmd",oc_mqtt_cmd_entry,NULL,0x1000,NULL,10);
 
     return 0;
 }

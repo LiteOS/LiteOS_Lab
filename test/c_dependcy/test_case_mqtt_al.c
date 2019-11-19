@@ -202,7 +202,7 @@ static int ts_mqtt_al_init(char *message, int len)
 
     printf("160--g_mqtt_ep_deviceid is %s\n",g_mqtt_ep_deviceid);
     
-    return mqtt_init();
+    return mqtt_al_init();
 }
 
 static int ts_mqtt_al_install(char *message, int len)
@@ -420,7 +420,7 @@ static void at_dmp_msg_dealer(void *arg,mqtt_al_msgrcv_t  *msg)
 
 static int ts_mqtt_al_subscrible(char *message, int len)
 {
-    /*½¨Á¢Á¬½Ó*/
+    /*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
     ts_mqtt_al_connect();
     int ret = -1;
     mqtt_al_subpara_t   subpara;

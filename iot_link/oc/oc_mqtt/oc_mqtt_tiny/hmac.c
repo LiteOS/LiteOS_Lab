@@ -112,13 +112,6 @@ int hmac_generate_passwd(char *content, int contentlen,char *key,int keylen, uns
     return ret;
 }
 
-#else
-int hmac_generate_passwd(char *content, int contentlen,char *key,int keylen, unsigned char *buf,int buflen)
-{
-    return -1;
-}
-
-
 #endif
 
 

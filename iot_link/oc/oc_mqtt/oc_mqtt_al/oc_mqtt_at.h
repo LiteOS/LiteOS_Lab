@@ -33,25 +33,21 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-05 19:16  zhangqianfu  The first version  
+ *  2019-11-19 15:44  zhangqianfu  The first version
  *
  */
-
-#if CONFIG_ATINY_MQTT_ENABLE
-
-/**
- *
- * @brief: use this function to install the oc_mqtt_agent to oc_mqtt_al
- *
- * @return: 0 success while -1 failed
- * */
-int oc_mqtt_install_atiny_mqtt();
+#ifndef LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_AL_OC_MQTT_AT_H_
+#define LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_AL_OC_MQTT_AT_H_
 
 
+char *hwoc_mqtt_version();
+int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const char *port,
+                               const char *deviceid, const char *devicepasswd);
+int  hwoc_mqtt_disconnect();
+int  hwoc_mqtt_publish(int qos,char *topic,uint8_t *payload,int len);
+int  hwoc_mqtt_send(int qos,uint8_t *payload,int len);
+void hwoc_mqtt_recvpub(int qos,int dup,const char *topic,uint8_t *payload, int len);
+void hwoc_mqtt_received(int qos,uint8_t *payload, int len);
 
-#else
 
-#define oc_mqtt_agent()    -1
-
-
-#endif
+#endif /* LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_AL_OC_MQTT_AT_H_ */

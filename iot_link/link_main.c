@@ -54,8 +54,8 @@
 
 
 #define  CN_LINK_VERSION_MAJOR      1
-#define  CN_LINK_VERSION_MINOR      1
-#define  CN_LINK_VERSION_FEATURE    0
+#define  CN_LINK_VERSION_MINOR      2
+#define  CN_LINK_VERSION_FEATURE    1
 
 
 static char s_link_mainversion[64];
@@ -74,9 +74,18 @@ __attribute__((weak)) int netdriver_install()
     return -1;
 }
 
+
+static int s_link_start = 0;
+
 int link_main(void *args)
 {
     ///< install the RTOS kernel for the link
+    if(s_link_start)
+    {
+       return -1;
+    }
+    s_link_start =1;
+
     osal_init();
 #if CONFIG_LITEOS_ENABLE
     #include <liteos_imp.h>
@@ -94,6 +103,7 @@ int link_main(void *args)
     osal_install_novaos();
 #else
     #error("you should add your own os here");
+
 #endif
     printf("linkmain:%s \n\r",linkmain_version());
 
@@ -189,7 +199,7 @@ int link_main(void *args)
 //////////////////////////  MQTT PROTOCOL  /////////////////////////////////////
 #if CONFIG_MQTT_ENABLE
     #include <mqtt_al.h>
-    mqtt_init();
+    mqtt_al_init();
 #if CONFIG_MQTT_PAHO_ENABLE
     #include <paho_mqtt_port.h>
     mqtt_install_pahomqtt();
@@ -221,6 +231,13 @@ int link_main(void *args)
         oc_mqtt_install_atiny_mqtt();
     #endif
 
+
+    #if CONFIG_OC_MQTT_TINY_ENABLE
+        #include <oc_mqtt_tiny.h>
+        oc_mqtt_tiny_install();
+    #endif
+
+
     #if CONFIG_OC_MQTT_EC20_ENABLE
         #include <ec20_oc.h>
         ec20_init();
@@ -248,8 +265,6 @@ int link_main(void *args)
 
 #endif
 
-
-
 ////////////////////////////  OC COAP ////////     /////////////////////////////
 #if CONFIG_OC_COAP_ENABLE
 	#include <oc_coap_al.h>
@@ -261,8 +276,6 @@ int link_main(void *args)
     #endif
 
 #endif
-
-
 
 #if CONFIG_DEMOS_ENABLE
     extern int standard_app_demo_main();
