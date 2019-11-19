@@ -31,113 +31,23 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-
-#include <oc_mqtt_al.h>
-
-static oc_mqtt_t *s_oc_mqtt = NULL;
-///////////////////////OC AGENT INSTALL INTERFACE///////////////////////////////
-int oc_mqtt_register(const oc_mqtt_t *opt)
-{
-    int ret = en_oc_mqtt_err_system;
-
-    if(NULL != opt)
-    {
-        s_oc_mqtt = (oc_mqtt_t *) opt;
-        ret = en_oc_mqtt_err_ok;
-    }
-
-    return ret;
-}
-
-//////////////////////////APPLICATION INTERFACE/////////////////////////////////
-int oc_mqtt_config(oc_mqtt_config_t *param)
-{
-    int ret = en_oc_mqtt_err_system ;
-    if((NULL != s_oc_mqtt) &&(NULL != s_oc_mqtt->op.config))
-    {
-       ret = s_oc_mqtt->op.config(param);
-    }
-
-    return ret;
-}
-
-int oc_mqtt_deconfig()
-{
-    int ret = en_oc_mqtt_err_system;
-
-    if((NULL != s_oc_mqtt) \
-       &&(NULL != s_oc_mqtt->op.config))
-    {
-       ret = s_oc_mqtt->op.deconfig();
-    }
-
-    return ret;
-}
-
-int oc_mqtt_publish(char  *topic,uint8_t *msg,int msg_len,int qos)
-{
-    int ret = en_oc_mqtt_err_system;
-
-    if((NULL != s_oc_mqtt) &&(NULL != s_oc_mqtt->op.publish))
-    {
-       ret = s_oc_mqtt->op.publish(topic,msg,msg_len,qos);
-    }
-
-    return ret;
-}
-
-int oc_mqtt_report(uint8_t *msg, int len, int qos)
-{
-    int ret = en_oc_mqtt_err_system;
-
-    ret = oc_mqtt_publish(NULL,msg,len,qos);
-
-    return ret;
-}
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2019-11-19 15:44  zhangqianfu  The first version
+ *
+ */
+#ifndef LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_AL_OC_MQTT_AT_H_
+#define LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_AL_OC_MQTT_AT_H_
 
 
-
-///////////////////////OC LWM2M AGENT INITIALIZE////////////////////////////////
-int oc_mqtt_init()
-{
-    return 0;
-}
-
-
-static const char *s_oc_mqtt_err_tab[en_oc_mqtt_err_last] =
-{
-    "success",
-    "parameter_err",
-    "network_err",
-    "version_err",
-    "clientid_err",
-    "server_err",
-    "userpwd_err",
-    "clientauth_err",
-    "subscribe_err",
-    "publish_err",
-    "reconfigure_err",
-    "nonconfigure_err",
-    "mqttconnect_err",
-    "bsaddrtimeout_err",
-    "sysmemory_err",
-    "system_err",
-};
-
-const char *oc_mqtt_err(int code)
-{
-    const char *ret = NULL;
-    if((code >= en_oc_mqtt_err_last) || (code < 0))
-    {
-        ret =  "UNKNOWN";
-    }
-    else
-    {
-        ret = s_oc_mqtt_err_tab[code];
-    }
-    return ret;
-}
+char *hwoc_mqtt_version();
+int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const char *port,
+                               const char *deviceid, const char *devicepasswd);
+int  hwoc_mqtt_disconnect();
+int  hwoc_mqtt_publish(int qos,char *topic,uint8_t *payload,int len);
+int  hwoc_mqtt_send(int qos,uint8_t *payload,int len);
+void hwoc_mqtt_recvpub(int qos,int dup,const char *topic,uint8_t *payload, int len);
+void hwoc_mqtt_received(int qos,uint8_t *payload, int len);
 
 
-
-
+#endif /* LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_AL_OC_MQTT_AT_H_ */

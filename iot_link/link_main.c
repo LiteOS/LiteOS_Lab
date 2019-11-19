@@ -74,9 +74,18 @@ __attribute__((weak)) int netdriver_install()
     return -1;
 }
 
+
+static int s_link_start = 0;
+
 int link_main(void *args)
 {
     ///< install the RTOS kernel for the link
+    if(s_link_start)
+    {
+       return -1;
+    }
+    s_link_start =1;
+
     osal_init();
 #if CONFIG_LITEOS_ENABLE
     #include <liteos_imp.h>
@@ -94,6 +103,7 @@ int link_main(void *args)
     osal_install_novaos();
 #else
     #error("you should add your own os here");
+
 #endif
     printf("linkmain:%s \n\r",linkmain_version());
 

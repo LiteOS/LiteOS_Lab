@@ -88,7 +88,7 @@ typedef struct
     en_mqtt_al_security_t   sec_type;      ///< only support crt mode now
     char                              *id;
     char                              *pwd;
-    int                                device_mode;    ///< gateway or not, not used yet
+//    int                                device_mode;  ///< gateway or not, not used yet
     fn_oc_mqtt_msg_deal                msg_deal;       ///< when the agent receive any applciation data, please call this function
     void                              *msg_deal_arg;   ///< call back for the fn_oc_mqtt_msg_deal
 
@@ -184,6 +184,14 @@ int oc_mqtt_publish(char *topic,uint8_t *msg,int msg_len,int qos);
  *@return 0 success while <0 failed
  */
 int oc_mqtt_init();
+
+/**
+ *@brief use this function to get the errcode for the oc mqtt
+ *
+ *@return the  reason  corresponding to the code
+ */
+const char *oc_mqtt_err(int code);
+
 
 
 

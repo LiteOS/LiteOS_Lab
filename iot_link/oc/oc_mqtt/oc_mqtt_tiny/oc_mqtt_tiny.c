@@ -190,6 +190,8 @@ static void hub_msg_default_deal(void *arg,mqtt_al_msgrcv_t  *msg)
     char   *json_buf;
     int     re_bootstrap = 0;
 
+    mqtt_al_msgrcv_t normal_msg;
+
     //for we must add the '/0' to the end to make sure the json parse correct
     if ((msg == NULL) || ( msg->msg.data == NULL) ||(msg->msg.len == 0))
     {
@@ -215,13 +217,30 @@ static void hub_msg_default_deal(void *arg,mqtt_al_msgrcv_t  *msg)
             }
             cJSON_Delete(root);
         }
+
         osal_free(json_buf);
     }
-
     if((0 == re_bootstrap)&&(NULL != s_oc_mqtt_tiny_cb->config.msg_deal))
     {
-        s_oc_mqtt_tiny_cb->config.msg_deal(s_oc_mqtt_tiny_cb->config.msg_deal_arg,msg);
+        normal_msg.dup = msg->dup;
+        normal_msg.qos = msg->qos;
+        normal_msg.retain = msg->retain;
+        normal_msg.msg = msg->msg;
+        if((NULL != msg->topic.data) && (NULL != s_oc_mqtt_tiny_cb->mqtt_para.default_sub_topic) \
+                && (0 == memcmp(s_oc_mqtt_tiny_cb->mqtt_para.default_sub_topic,msg->topic.data,msg->topic.len)))
+        {
+            normal_msg.topic.data = NULL;
+            normal_msg.topic.len = 0;
+        }
+        else
+        {
+            normal_msg.topic = msg->topic;
+        }
+
+        s_oc_mqtt_tiny_cb->config.msg_deal(s_oc_mqtt_tiny_cb->config.msg_deal_arg,&normal_msg);
     }
+
+
     return;
 }
 
@@ -345,6 +364,9 @@ static int config_parameter_release(oc_mqtt_tiny_cb_t *cb)
     osal_free(cb->bs_cb.hubserver_port);
 
     memset(&cb->config,0,sizeof(oc_mqtt_config_t));
+
+    memset(&cb->bs_cb,0,sizeof(oc_bs_mqtt_cb_t));
+
     cb->flag.bits.bit_daemon_status = en_daemon_status_idle;
 
     return en_oc_mqtt_err_ok;
@@ -383,7 +405,6 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
     }
 
     cb->config.boot_mode  = config->boot_mode;
-    cb->config.device_mode = config->device_mode;
     cb->config.id = osal_strdup(config->id);
     cb->config.pwd= osal_strdup(config->pwd);
     cb->config.lifetime = config->lifetime;
@@ -544,19 +565,19 @@ static int dmp_connect(oc_mqtt_tiny_cb_t *cb)
     {
         ret = en_oc_mqtt_err_ok;
     }
-    else if(1 == conpara.conret)
+    else if(2 == conpara.conret)
     {
         ret = en_oc_mqtt_err_conclientid;
     }
-    else if(1 == conpara.conret)
+    else if(3 == conpara.conret)
     {
         ret = en_oc_mqtt_err_conserver;
     }
-    else if(1 == conpara.conret)
+    else if(4 == conpara.conret)
     {
         ret = en_oc_mqtt_err_conuserpwd;
     }
-    else if(1 == conpara.conret)
+    else if(5 == conpara.conret)
     {
         ret = en_oc_mqtt_err_conclient;
     }
@@ -767,15 +788,17 @@ static int daemon_entry(void *arg)
                         {
                             cb->flag.bits.bit_daemon_status = en_daemon_status_dmp_connecting;  ///< now we step in connecting status
                             ret = hub_step(cb);
-                            if(en_oc_mqtt_err_ok == ret)
-                            {
-                                cb->flag.bits.bit_daemon_status = en_daemon_status_hub_keep;    ///< now we step in keep status
-                            }
-                            else  ///< clean all the status
-                            {
-                                oc_mqtt_para_release(cb);
-                                config_parameter_release(cb);
-                            }
+                        }
+
+                        if(ret == en_oc_mqtt_err_ok)
+                        {
+                            cb->flag.bits.bit_daemon_status = en_daemon_status_hub_keep;    ///< now we step in keep status
+                        }
+                        else
+                        {
+                            cb->flag.bits.bit_daemon_status = en_daemon_status_idle;
+                            oc_mqtt_para_release(cb);
+                            config_parameter_release(cb);
                         }
                     }
                     daemon_cmd->retcode = ret;

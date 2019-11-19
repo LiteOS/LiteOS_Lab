@@ -39,10 +39,14 @@
 #include <osal.h>
 #include <oc_mqtt_al.h>
 
+extern int link_main(void *args);
+
+
 ///< when receive any information from hw, then it call this function,THIS IS A URC imformation
 ///< ATCOMMAND:    +HWMQTTRECVPUB:1,0,"HELLOTOPC",2,0010
 void __attribute__((weak)) hwoc_mqtt_recvpub(int qos,int dup,const char *topic,uint8_t *payload, int len)
 {
+    printf("%s:specified topic message\n\r",__FUNCTION__);
     ///< PLEASE USE THE AT PIPE TO OUTPUT THE INFORMATION
     return;
 }
@@ -52,6 +56,7 @@ void __attribute__((weak)) hwoc_mqtt_recvpub(int qos,int dup,const char *topic,u
 ///< ATCOMMAND:    +HWMQTTRECEIVED:1,2,0010
 void __attribute__((weak)) hwoc_mqtt_received(int qos,uint8_t *payload, int len)
 {
+    printf("%s:default topic message\n\r",__FUNCTION__);
     ///< PLEASE USE THE AT PIPE TO OUTPUT THE INFORMATION
     return;
 }
@@ -63,6 +68,8 @@ static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
     int ret = -1;
     char *topic;
 
+    printf("%s:qos:%d dup:%d topiclen:%d msglen:%d\n\r",__FUNCTION__,msg->qos,msg->dup,\
+            msg->topic.len,msg->msg.len);
     if((NULL != msg->topic.data) && (msg->topic.len > 0))
     {
         topic = osal_malloc(msg->topic.len +1);
@@ -89,8 +96,9 @@ static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
 ///<               +SEND ERR:code
 ///<               code:reference to en_oc_mqtt_err_code_t defines
 
-int hwoc_mqtt_send(int qos,int len,uint8_t *payload)
+int hwoc_mqtt_send(int qos,uint8_t *payload,int len)
 {
+    link_main(NULL);
     return oc_mqtt_publish(NULL,payload, len, qos);
 }
 
@@ -98,7 +106,13 @@ int hwoc_mqtt_send(int qos,int len,uint8_t *payload)
 ///< if the topic is NULL, then it will send to the default topic
 ///< ATCOMMAND:    AT+HWOCMQTTPUBLISH=1,"PUBTOPIC",3,001020
 ///< ATRESPONSE:   +PUBLISH OK when success
-//                 +PUBLISH ERR:code when success
+//<                +PUBLISH ERR:code
+///<               code:reference to en_oc_mqtt_err_code_t defines
+int hwoc_mqtt_publish(int qos,char *topic,uint8_t *payload,int len)
+{
+    link_main(NULL);
+    return oc_mqtt_publish(topic,payload, len, qos);
+}
 
 
 ///< when you want to connect to the hw,then call this function
@@ -113,6 +127,7 @@ int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const
     int ret;
     oc_mqtt_config_t config;
 
+    link_main(NULL);
     if(bsmode)
     {
         config.boot_mode = en_oc_mqtt_mode_bs_static_nodeid_hmacsha256_notimecheck_json;
@@ -147,7 +162,26 @@ int hwoc_mqtt_disconnect()
 {
     int ret = -1;
 
+    link_main(NULL);
     ret = oc_mqtt_deconfig();
 
     return ret;
 }
+
+
+///< WHEN YOU WANT TO KNOW WHICH VERSION YOU USE
+///< ATCOMMAND: AT+HWOCMQTTVERSION
+///< ATRESPONSE: +HWOCMQTTVERSION:vx.x.x AT XXXXXX ON XXXXX
+
+char *hwoc_mqtt_version()
+{
+    extern char *linkmain_version();
+
+    return linkmain_version();
+}
+
+
+
+
+
+
