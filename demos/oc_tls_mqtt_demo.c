@@ -231,7 +231,7 @@ static int task_reportmsg_entry(void *args)
     oc_mqtt_config_t config;
 
     config.boot_mode = en_oc_mqtt_mode_nobs_static_nodeid_hmacsha256_notimecheck_json;
-    config.device_mode = 0;
+//    config.device_mode = 0;
     config.msg_deal = app_msg_deal;
     config.msg_deal_arg = NULL;
     config.lifetime = DEFAULT_LIFETIME;
