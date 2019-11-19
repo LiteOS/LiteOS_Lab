@@ -44,3 +44,4 @@ CONFIG_OC_LWM2M_DEMO_TYPE= "none"
 CONFIG_OC_MQTT_DEMO_TYPE= "none"
 
 CONFIG_USER_DEMO  = "oc_streetlight_template"
+CONFIG_DEMO_ENABLE = y
