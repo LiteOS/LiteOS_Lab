@@ -40,6 +40,9 @@
 #define LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_AL_OC_MQTT_AT_H_
 
 
+#include <stdint.h>
+#include <stddef.h>
+
 char *hwoc_mqtt_version();
 int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const char *port,
                                const char *deviceid, const char *devicepasswd);
