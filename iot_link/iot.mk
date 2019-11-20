@@ -84,5 +84,3 @@ C_INCLUDES += $(iot_link_inc)
 
 include $(SDK_DIR)/demos/demos.mk
 
-
-
