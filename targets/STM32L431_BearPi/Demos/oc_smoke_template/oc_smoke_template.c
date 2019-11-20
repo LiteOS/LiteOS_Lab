@@ -121,8 +121,6 @@ static void timer1_callback(void *arg)
 		LCD_ShowString(80, 100, 200, 16, 16, cn_app_server);
 		LCD_ShowString(10, 150, 200, 16, 16, "NCDP_PORT:");
 		LCD_ShowString(100, 150, 200, 16, 16, cn_app_port);
-		LCD_ShowString(10, 200, 200, 16, 16, "BH1750 Value is:");
-		//LCD_ShowNum(140, 200, lux, 5, 16);
 	}
 }
 
