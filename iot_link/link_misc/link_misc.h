@@ -199,6 +199,22 @@ int link_random(void* output, int len);
  * */
 int string_to_arg(int *argc, const char *argv[],char *string);
 
+/**
+ * @brief: use this function to add the string list to one string
+ *
+ * @param[in]:str[] the array to add, end with NULL
+ *
+ * @retrun:the str added, NULL if failed
+ *
+ * */
+
+char *osal_strcat(char *str[]);
+
+int hexstr2byte(const char *bufin, int len, char *bufout);
+
+int byte2hexstr(uint8_t *bufin, int len, char *bufout);
+
+
 
 
 

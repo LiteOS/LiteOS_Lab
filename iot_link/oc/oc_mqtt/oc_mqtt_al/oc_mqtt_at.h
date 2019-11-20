@@ -33,47 +33,24 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-11-06 18:09  zhangqianfu  The first version
+ *  2019-11-19 15:44  zhangqianfu  The first version
  *
  */
+#ifndef LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_AL_OC_MQTT_AT_H_
+#define LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_AL_OC_MQTT_AT_H_
 
 
-/* brief : the oceanconnect platform only support the ca_crt up tills now*/
-/** the address product_id device_id password crt is only for the test  */
+#include <stdint.h>
+#include <stddef.h>
 
-#define DEFAULT_LIFETIME            10
-#define DEFAULT_SERVER_IPV4         "49.4.93.24"     ///<  server ip address
-#define DEFAULT_SERVER_PORT         "8883"           ///<  server mqtt service port
-#define CN_MQTT_EP_NOTEID           "mqtt_sdk01"
-#define CN_MQTT_EP_PASSWD           "c18f10422c93548e6fef"
+char *hwoc_mqtt_version();
+int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const char *port,
+                               const char *deviceid, const char *devicepasswd);
+int  hwoc_mqtt_disconnect();
+int  hwoc_mqtt_publish(int qos,char *topic,uint8_t *payload,int len);
+int  hwoc_mqtt_send(int qos,uint8_t *payload,int len);
+void hwoc_mqtt_recvpub(int qos,int dup,const char *topic,uint8_t *payload, int len);
+void hwoc_mqtt_received(int qos,uint8_t *payload, int len);
 
-#define CN_MQTT_EP_MSG              "{HELLO NEW WORLD}"
 
-#include <osal.h>
-
-#include <at_interface_mqtt.h>
-
-int standard_app_demo_main()
-{
-    void *handle;
-
-    handle = hwoc_mqtt_connect(0,DEFAULT_LIFETIME,DEFAULT_SERVER_IPV4,DEFAULT_SERVER_PORT,CN_MQTT_EP_NOTEID,CN_MQTT_EP_PASSWD);
-
-    if(NULL == handle)
-    {
-        printf("connect failed\n\r");
-
-        return -1;
-    }
-
-    while(1)
-    {
-        hwoc_mqtt_send(0,CN_MQTT_EP_MSG,strlen(CN_MQTT_EP_MSG));
-        osal_task_sleep(10000);
-    }
-
-    hwoc_mqtt_disconnect();
-
-    return 0;
-
-}
+#endif /* LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_AL_OC_MQTT_AT_H_ */
