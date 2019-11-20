@@ -567,23 +567,23 @@ static bool_t boudica150_boot(const char *plmn, const char *apn, const char *ban
 
         boudica150_set_echo (0);
 
-        // boudica150_set_regmode(1);
+        boudica150_set_regmode(1);
 
-        // boudica150_set_cmee(1);
+        boudica150_set_cmee(1);
 
-        // boudica150_set_autoconnect( 1);     //cgatt and cfun must be called if autoconnect is false
+        boudica150_set_autoconnect( 1);     //cgatt and cfun must be called if autoconnect is false
 
-        // boudica150_set_bands(bands);
+        boudica150_set_bands(bands);
 
-        // boudica150_set_fun(1);
+        boudica150_set_fun(1);
 
-        // boudica150_set_plmn(plmn);
+        boudica150_set_plmn(plmn);
 
-        // boudica150_set_apn(apn);
+        boudica150_set_apn(apn);
 
-        // boudica150_set_cdp(server,port);
+        boudica150_set_cdp(server,port);
 
-        // boudica150_set_cgatt(1);
+        boudica150_set_cgatt(1);
 
         boudica150_set_nnmi(1);
 
