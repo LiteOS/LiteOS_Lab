@@ -505,7 +505,7 @@ static bool_t boudica150_check_netattach(int time)  //unit second
 
     for(times =0;times <time;times++ )
     {
-        if(boudica150_atcmd("AT+CGATT?\r", "+CGATT:1"))
+        if(boudica150_atcmd("AT+CGATT?\r", "CGATT:1"))
         {
             ret = true;
             break;
