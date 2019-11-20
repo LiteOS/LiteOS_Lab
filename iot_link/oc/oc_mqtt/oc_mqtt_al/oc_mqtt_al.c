@@ -95,6 +95,17 @@ int oc_mqtt_report(uint8_t *msg, int len, int qos)
     return ret;
 }
 
+int oc_mqtt_subscribe(char *topic,int qos)
+{
+    int ret = en_oc_mqtt_err_system;
+
+    if((NULL != s_oc_mqtt) &&(NULL != s_oc_mqtt->op.subscribe))
+    {
+       ret = s_oc_mqtt->op.subscribe(topic,qos);
+    }
+
+    return ret;
+}
 
 
 ///////////////////////OC LWM2M AGENT INITIALIZE////////////////////////////////
