@@ -99,6 +99,7 @@ typedef struct
 typedef  int (*fn_oc_mqtt_config)(oc_mqtt_config_t *param);
 typedef  int (*fn_oc_mqtt_deconfig)(void);
 typedef  int (*fn_oc_mqtt_publish)(char *topic,uint8_t *msg,int msg_len,int qos);
+typedef  int (*fn_oc_mqtt_subscribe)(char *topic, int qos);
 
 
 /**
@@ -107,9 +108,10 @@ typedef  int (*fn_oc_mqtt_publish)(char *topic,uint8_t *msg,int msg_len,int qos)
 
 typedef struct
 {
-    fn_oc_mqtt_config   config;   ///< this function used for the configuration
-    fn_oc_mqtt_deconfig deconfig; ///< this function used for the deconfig
-    fn_oc_mqtt_publish  publish;  ///< this function added by the new device profile
+    fn_oc_mqtt_config      config;   ///< this function used for the configuration
+    fn_oc_mqtt_deconfig    deconfig; ///< this function used for the deconfig
+    fn_oc_mqtt_publish     publish;  ///< this function added by the new device profile
+    fn_oc_mqtt_subscribe   subscribe;///< this function make the tiny extended
 }oc_mqtt_op_t;
 
 typedef struct
@@ -145,8 +147,6 @@ int oc_mqtt_config(oc_mqtt_config_t *param);
 /**
  * @brief the application use this function to send message to the default topic(old interface)
  *
- * @introduce: this interface should be discarded
- *
  * @param[in] msg:the message to send
  *
  * @param[in] msg_len:the message length
@@ -177,6 +177,17 @@ int oc_mqtt_deconfig(void);
  * @return code: define by en_oc_mqtt_err_code while 0 means success
  */
 int oc_mqtt_publish(char *topic,uint8_t *msg,int msg_len,int qos);
+
+/**
+ * @brief the application use this function to publish message to specified topic
+ *
+ * @param[in] topic: the destination topic
+ *
+ * @param[in] qos:the topic qos
+ *
+ * @return code: define by en_oc_mqtt_err_code while 0 means success
+ */
+int oc_mqtt_subscribe(char *topic,int qos);
 
 /**
  *@brief this is the oc mqtt  initialize function,must be called first
