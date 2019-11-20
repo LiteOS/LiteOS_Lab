@@ -433,10 +433,10 @@ static  int __loop_entry(void *arg)
         {
             MQTTYield(&cb->client,1000);
         }
-        else
-        {
-            osal_task_sleep(1);///< when disconnect, this has been killed
-        }
+        ///< for some operation system ,the task could not be awake when release,so do some wait to give up the cpu
+
+        osal_task_sleep(1);///< when disconnect, this has been killed
+
     }
     return 0;
 }

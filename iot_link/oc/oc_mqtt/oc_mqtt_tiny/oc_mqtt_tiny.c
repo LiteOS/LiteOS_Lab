@@ -97,8 +97,7 @@ static const char s_oc_mqtt_ca_crt[] =
 
 /*The unit is millisecond*/
 #define CN_CON_BACKOFF_TIME     (1000)   ///< UNIT:ms
-#define CN_CON_BACKOFF_MAXTIMES  10      ///< WHEN WAIT OR GET ADDRESS ,WE COULD TRY MAX TIMES
-#define CN_CON_WAIT_TIMES        30      ///< WHEN CONNECT
+#define CN_CON_BACKOFF_MAXTIMES  20      ///< WHEN WAIT OR GET ADDRESS ,WE COULD TRY MAX TIMES
 #define CN_HMAC_LEN              32
 
 
@@ -692,7 +691,7 @@ static int hub_step(oc_mqtt_tiny_cb_t  *cb)
 
 EXIT_ERR:
     oc_mqtt_para_release(cb);
-    printf("%s:err exit\n\r",__FUNCTION__);
+    printf("%s:err:%d n\r",__FUNCTION__,ret);
     return ret;
 
 }
@@ -748,7 +747,7 @@ static int bs_step(oc_mqtt_tiny_cb_t  *cb)
 EXIT_ERR:
     oc_mqtt_para_release(cb);
 
-    printf("%s:%s exit\n\r",__FUNCTION__,ret == en_oc_mqtt_err_ok?"ok":"err");
+    printf("%s:exit ret:%d\n\r",__FUNCTION__,ret);
 
     return ret;
 
