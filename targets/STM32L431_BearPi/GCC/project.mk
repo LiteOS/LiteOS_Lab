@@ -10,19 +10,21 @@ HAL_DRIVER_SRC =  \
         $(SDK_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c \
         $(SDK_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.c \
         $(SDK_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c \
+        $(SDK_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c \
         $(SDK_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c \
         $(SDK_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim.c \
         $(SDK_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_spi.c \
         $(SDK_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_i2c.c \
         $(SDK_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_i2c_ex.c \
-        $(SDK_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_iwdg.c
+        $(SDK_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_iwdg.c \
+        $(SDK_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_adc.c
         C_SOURCES += $(HAL_DRIVER_SRC)
 
 HARDWARE_SRC =  \
         ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/Src/*.c} \
-        ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/BH1750/*.c} \
         ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/LCD/*.c}
         C_SOURCES += $(HARDWARE_SRC)
+
 HAL_DRIVER_SRC_NO_BOOTLOADER =  \
         $(SDK_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma.c \
         $(SDK_DIR)/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma_ex.c \
@@ -58,7 +60,6 @@ HAL_DRIVER_INC = \
         C_INCLUDES += $(HAL_DRIVER_INC)        
 HARDWARE_INC = \
         -I ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/Inc} \
-        -I ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/BH1750} \
         -I ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/LCD}
         C_INCLUDES += $(HARDWARE_INC)
 
