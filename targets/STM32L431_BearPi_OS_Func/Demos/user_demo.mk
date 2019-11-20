@@ -4,10 +4,10 @@
 
 #if you have defined multiple demos by yourself, modify this file to compile the chosen demo.
 
-#example for lwm2m
+#example for LiteOS func
 
 ifeq ($(CONFIG_DEMO_TYPE), "none")	
-	CONFIG_USER_DEMO := "osal_semp_demo"
+	CONFIG_USER_DEMO := "hello_world_demo"
 
 	#example for hello world	 
 	ifeq ($(CONFIG_USER_DEMO), "hello_world_demo")	
@@ -39,11 +39,6 @@ ifeq ($(CONFIG_DEMO_TYPE), "none")
 		user_demo_defs = -D CONFIG_HELLO_WORLD_ENABLE=1
 	endif
 
-	#example for osal_timer_demo	 
-	ifeq ($(CONFIG_USER_DEMO), "osal_timer_demo")	
-		user_demo_src  = ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Demos/osal_timer_demo/*.c}
-		user_demo_defs = -D CONFIG_HELLO_WORLD_ENABLE=1
-	endif
 	
 	C_SOURCES += $(user_demo_src)
 	C_INCLUDES += $(user_demo_inc)

@@ -213,7 +213,7 @@ void Init_GPS_POW(void)
 ***************************************************************/
 void GPS_Init(void)
 {
-	MX_USART3_UART_Init();   //初始化串口
+	MX_USART3_UART_Init();   //初始化串口 PC4 PC5 波特率9600
 	LOS_HwiCreate(USART3_IRQn, 7,0,USART3_IRQHandler,NULL);	//创建中断
 	HAL_UART_Transmit(&huart3, "$CCMSG,GGA,1,0,*19\r\n", 20, 200);
 	HAL_UART_Transmit(&huart3, "$CCMSG,GSA,1,0,*0D\r\n", 20, 200);
@@ -355,10 +355,8 @@ void E53_ST1_Read_Data(void)
 {	
 	HAL_UART_Receive_IT(&huart3,gps_uart,1000);
 	NMEA_BDS_GPRMC_Analysis(&gpsmsg,(uint8_t*)gps_uart);	//分析字符串
-	// E53_ST1_Data.Longitude=(float)((float)gpsmsg.longitude_bd/100000);	
-	// E53_ST1_Data.Latitude=(float)((float)gpsmsg.latitude_bd/100000);   
-  E53_ST1_Data.Longitude=112.55555;	
-	E53_ST1_Data.Latitude=13.55555;   
+	E53_ST1_Data.Longitude=(float)((float)gpsmsg.longitude_bd/100000);	
+	E53_ST1_Data.Latitude=(float)((float)gpsmsg.latitude_bd/100000);   
 }
 
 /***************************************************************

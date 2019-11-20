@@ -106,24 +106,6 @@ int8_t qr_code = 1;
 extern const unsigned char gImage_Huawei_IoT_QR_Code[114720];
 E53_IA1_Data_TypeDef E53_IA1_Data;
 
-// void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-// {
-// 	switch(GPIO_Pin)
-// 	{
-// 		case KEY1_Pin:
-// 			key1 = 1;
-// 			printf("proceed to get ue_status!\r\n");
-// 			break;
-// 		case KEY2_Pin:
-// 			key2 = 1;
-// 			printf("toggle LED and report!\r\n");
-// 			toggle = !toggle;
-// 			HAL_GPIO_TogglePin(Light_GPIO_Port,Light_Pin);
-// 			break;
-// 		default:
-// 			break;
-// 	}
-// }
 
 //if your command is very fast,please use a queue here--TODO
 #define cn_app_rcv_buf_len 128
@@ -212,7 +194,7 @@ static int app_cmd_task_entry()
                         Response_Agriculture_Control_Light.messageId = cn_app_response_Agriculture_Control_Light;
                     	Response_Agriculture_Control_Light.mid = Agriculture_Control_Light->mid;
                         Response_Agriculture_Control_Light.errcode = 0;
-                		Response_Agriculture_Control_Light.Light_State = 1;
+                		Response_Agriculture_Control_Light.Light_State = 0;
                         oc_lwm2m_report(context,(char *)&Response_Agriculture_Control_Light,sizeof(Response_Agriculture_Control_Light),1000);    ///< report cmd reply message	
                     }
                     /********** code area end  **********/
@@ -275,9 +257,9 @@ static int app_report_task_entry()
         while(1) //--TODO ,you could add your own code here
         {
             Agriculture.messageId = cn_app_Agriculture;
-            Agriculture.Temperature = 0x1;
-            Agriculture.Humidity = 0x1;
-            Agriculture.Luminance = htons(2);
+            Agriculture.Temperature = (int8_t)E53_IA1_Data.Temperature;
+            Agriculture.Humidity = (int8_t)E53_IA1_Data.Humidity;
+            Agriculture.Luminance = htons((uint16_t)E53_IA1_Data.Lux);
             oc_lwm2m_report(context, (char *)&Agriculture, sizeof(Agriculture), 1000);
             osal_task_sleep(2*1000);
         }

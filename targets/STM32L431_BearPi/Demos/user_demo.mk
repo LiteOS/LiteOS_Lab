@@ -7,7 +7,7 @@
 #example for lwm2m
 
 ifeq ($(CONFIG_DEMO_TYPE), "none")	
-	CONFIG_USER_DEMO := "oc_agriculture_template"
+	CONFIG_USER_DEMO := "oc_track_template"
 
 	#example for oc_streetlight_template
 	ifeq ($(CONFIG_USER_DEMO), "oc_streetlight_template")	

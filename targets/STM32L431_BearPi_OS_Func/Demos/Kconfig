@@ -18,12 +18,6 @@ choice Demo
 	config Osal_Mutex_Demo
 		bool "Osal Mutex"
 		select SHELL_ENABLE
-	config Osal_Queue_Demo
-		bool "Osal Queue"
-		select SHELL_ENABLE
-	config Osal_Timer_Demo
-		bool "Osal Timer"
-		select SHELL_ENABLE
 
 endchoice
 
@@ -34,5 +28,4 @@ config USER_DEMO
 	default "osal_mem_demo" if Osal_Men_Demo
 	default "osal_semp_demo" if Osal_Semp_Demo	
 	default "osal_mutex_demo" if Osal_Mutex_Demo
-	default "osal_timer_demo" if Osal_Timer_Demo	
 	default "none"

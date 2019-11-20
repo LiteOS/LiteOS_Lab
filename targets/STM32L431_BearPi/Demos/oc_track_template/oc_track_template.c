@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+        /*----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -45,7 +45,7 @@
 #include <link_endian.h>
 
 #include <boudica150_oc.h>
-#include "BH1750.h"
+#include "E53_ST1.h"
 #include "lcd.h"
 
 #include <gpio.h>
@@ -55,79 +55,51 @@
 #define cn_app_server         "49.4.85.232"
 #define cn_app_port           "5683"
 
-#define cn_app_connectivity    0
-#define cn_app_lightstats      1
-#define cn_app_light           2
-#define cn_app_ledcmd          3
-#define cn_app_cmdreply        4
+typedef unsigned char int8u;
+typedef char int8s;
+typedef unsigned short int16u;
+typedef short int16s;
+typedef unsigned char int24u;
+typedef char int24s;
+typedef int int32s;
+typedef char string;
+typedef char array;
+typedef char varstring;
+typedef char variant;
+
+#define cn_app_Track 0x5
+#define cn_app_response_Track_Control_Beep 0x7
+#define cn_app_Track_Control_Beep 0x6
 
 #pragma pack(1)
 typedef struct
 {
-    int8_t msgid;
-    int16_t rsrp;
-    int16_t ecl;
-    int16_t snr;
-    int32_t cellid;
-}app_connectivity_t;
+    int8u messageId;
+    string Longitude[9];
+    string Latitude[8];
+} tag_app_Track;
 
 typedef struct
 {
-    int8_t msgid;
-    int16_t tog;
-}app_toggle_t;
+    int8u messageId;
+    int16u mid;
+    int8u errcode;
+    int8u Beep_State;
+} tag_app_Response_Track_Control_Beep;
 
 typedef struct
 {
-    int8_t msgid;
-    int16_t intensity;
-}app_light_intensity_t;
-
-
-typedef struct
-{
-    int8_t msgid;
-    uint16_t mid;
-    char led[3];
-}app_led_cmd_t;
-
-typedef struct
-{
-    int8_t msgid;
-    uint16_t mid;
-    int8_t errorcode;
-    char curstats[3];
-}app_cmdreply_t;
-
+    int8u messageId;
+    int16u mid;
+    string Beep[3];
+} tag_app_Track_Control_Beep;
 #pragma pack()
 
 void *context;
-int *ue_stats;
-int8_t key1 = 0;
-int8_t key2 = 0;
-int16_t toggle = 0;
-int16_t lux;
 int8_t qr_code = 1;
 extern const unsigned char gImage_Huawei_IoT_QR_Code[114720];
+E53_ST1_Data_TypeDef E53_ST1_Data;
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-	switch(GPIO_Pin)
-	{
-		case KEY1_Pin:
-			key1 = 1;
-			printf("proceed to get ue_status!\r\n");
-			break;
-		case KEY2_Pin:
-			key2 = 1;
-			printf("toggle LED and report!\r\n");
-			toggle = !toggle;
-			HAL_GPIO_TogglePin(Light_GPIO_Port,Light_Pin);
-			break;
-		default:
-			break;
-	}
-}
 
 //if your command is very fast,please use a queue here--TODO
 #define cn_app_rcv_buf_len 128
@@ -151,7 +123,7 @@ static void timer1_callback(void *arg)
 		LCD_ShowString(10, 150, 200, 16, 16, "NCDP_PORT:");
 		LCD_ShowString(100, 150, 200, 16, 16, cn_app_port);
 		LCD_ShowString(10, 200, 200, 16, 16, "BH1750 Value is:");
-		LCD_ShowNum(140, 200, lux, 5, 16);
+		//LCD_ShowNum(140, 200, lux, 5, 16);
 	}
 }
 
@@ -184,8 +156,8 @@ static int app_msg_deal(void *usr_data, en_oc_lwm2m_msg_t type, void *data, int 
 static int app_cmd_task_entry()
 {
     int ret = -1;
-    app_led_cmd_t *led_cmd;
-    app_cmdreply_t replymsg;
+    tag_app_Response_Track_Control_Beep Response_Track_Control_Beep;
+    tag_app_Track_Control_Beep *Track_Control_Beep;
     int8_t msgid;
 
     while(1)
@@ -195,52 +167,30 @@ static int app_cmd_task_entry()
             msgid = s_rcv_buffer[0] & 0x000000FF;
             switch (msgid)
             {
-                case cn_app_ledcmd:
-                    led_cmd = (app_led_cmd_t *)s_rcv_buffer;
-                    printf("LEDCMD:msgid:%d mid:%d msg:%s \n\r",led_cmd->msgid,ntohs(led_cmd->mid),led_cmd->led);
-                    //add command action--TODO
-                    if (led_cmd->led[0] == 'O' && led_cmd->led[1] == 'N')
-                    {
-                    	if (toggle != 1)
-                        {
-                            toggle = 1;
-                            key2 = true;
-                        }
-                    	HAL_GPIO_WritePin(Light_GPIO_Port,Light_Pin,GPIO_PIN_SET);
-
-                    	//if you need response message,do it here--TODO
-                    	replymsg.msgid = cn_app_cmdreply;
-                    	replymsg.mid = led_cmd->mid;
-                    	printf("reply mid is %d. \n\r",ntohs(replymsg.mid));
-                    	replymsg.errorcode = 0;
-                		replymsg.curstats[0] = 'O';
-                		replymsg.curstats[1] = 'N';
-                		replymsg.curstats[2] = ' ';
-                		oc_lwm2m_report(context,(char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
+                 case cn_app_Track_Control_Beep:
+                    Track_Control_Beep = (tag_app_Track_Control_Beep *)s_rcv_buffer;
+                    printf("Track_Control_Beep:msgid:%d mid:%d", Track_Control_Beep->messageId, ntohs(Track_Control_Beep->mid));
+                    /********** code area for cmd from IoT cloud  **********/
+                    if (Track_Control_Beep->Beep[0] == 'O' && Track_Control_Beep->Beep[1] == 'N')
+                    {	
+                        E53_ST1_Beep_StatusSet(ON);				
+                        Response_Track_Control_Beep.messageId = cn_app_response_Track_Control_Beep;
+                    	Response_Track_Control_Beep.mid = Track_Control_Beep->mid;
+                        Response_Track_Control_Beep.errcode = 0;
+                		Response_Track_Control_Beep.Beep_State = 1;
+                        oc_lwm2m_report(context,(char *)&Response_Track_Control_Beep,sizeof(Response_Track_Control_Beep),1000);    ///< report cmd reply message	
                     }
-
-                    else if (led_cmd->led[0] == 'O' && led_cmd->led[1] == 'F' && led_cmd->led[2] == 'F')
-                    {
-                    	if (toggle != 0)
-                        {
-                            toggle = 0;
-                            key2 = true;
-                        }
-                    	HAL_GPIO_WritePin(Light_GPIO_Port,Light_Pin,GPIO_PIN_RESET);
-
-                    	//if you need response message,do it here--TODO
-                    	replymsg.msgid = cn_app_cmdreply;
-                    	replymsg.mid = led_cmd->mid;
-                    	printf("reply mid is %d. \n\r",ntohs(replymsg.mid));
-                    	replymsg.errorcode = 0;
-                		replymsg.curstats[0] = 'O';
-                		replymsg.curstats[1] = 'F';
-                		replymsg.curstats[2] = 'F';
-                		oc_lwm2m_report(context,(char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
+                    if (Track_Control_Beep->Beep[0] == 'O' && Track_Control_Beep->Beep[1] == 'F' && Track_Control_Beep->Beep[2] == 'F')
+                    {	
+                        E53_ST1_Beep_StatusSet(OFF);					
+                        Response_Track_Control_Beep.messageId = cn_app_response_Track_Control_Beep;
+                    	Response_Track_Control_Beep.mid = Track_Control_Beep->mid;
+                        Response_Track_Control_Beep.errcode = 0;
+                		Response_Track_Control_Beep.Beep_State = 0;
+                        oc_lwm2m_report(context,(char *)&Response_Track_Control_Beep,sizeof(Response_Track_Control_Beep),1000);    ///< report cmd reply message		
                     }
-
-                    else
-                    	break;
+                    /********** code area end  **********/
+                    break;
                 default:
                     break;
             }
@@ -250,22 +200,12 @@ static int app_cmd_task_entry()
     return ret;
 }
 
-static void get_netstats()
-{
-	ue_stats = boudica150_check_nuestats();
-	if (ue_stats[0] < -10) ue_stats[0] = ue_stats[0] / 10;
-	if (ue_stats[2] > 10) ue_stats[2] = ue_stats[2] / 10;
-
-}
-
 static int app_report_task_entry()
 {
     int ret = -1;
 
     oc_config_param_t      oc_param;
-    app_light_intensity_t  light;
-    app_connectivity_t     connectivity;
-    app_toggle_t           light_status;
+    tag_app_Track Track;
 
     memset(&oc_param,0,sizeof(oc_param));
 
@@ -281,30 +221,14 @@ static int app_report_task_entry()
     {
         //install a dealer for the led message received
         while(1) //--TODO ,you could add your own code here
-        {
-            if (key1 == 1)
-            {
-            	key1 = 0;
-                connectivity.msgid = cn_app_connectivity;
-                get_netstats();
-        	    connectivity.rsrp = htons(ue_stats[0] & 0x0000FFFF);
-        	    connectivity.ecl = htons(ue_stats[1] & 0x0000FFFF);
-        	    connectivity.snr = htons(ue_stats[2] & 0x0000FFFF);
-        	    connectivity.cellid = htonl(ue_stats[3]);
-                oc_lwm2m_report(context,(char *)&connectivity,sizeof(connectivity),1000);    ///< report ue status message
+        {		
+            if(E53_ST1_Data.Latitude!=0&&E53_ST1_Data.Longitude!=0)
+		    {
+                Track.messageId = cn_app_Track;
+                sprintf(Track.Longitude , "%.5f", E53_ST1_Data.Longitude);
+                sprintf(Track.Latitude , "%.5f", E53_ST1_Data.Latitude);
+                oc_lwm2m_report(context, (char *)&Track, sizeof(Track), 1000);               
             }
-
-            if (key2 == 1)
-            {
-            	key2 = 0;
-            	light_status.msgid = cn_app_lightstats;
-            	light_status.tog = htons(toggle);
-            	oc_lwm2m_report(context,(char *)&light_status,sizeof(light_status),1000);    ///< report toggle message
-            }
-
-            light.msgid = cn_app_light;
-            light.intensity = htons(lux);
-            oc_lwm2m_report(context,(char *)&light,sizeof(light),1000); ///< report the light message
             osal_task_sleep(2*1000);
         }
     }
@@ -314,15 +238,16 @@ static int app_report_task_entry()
 
 static int app_collect_task_entry()
 {
-    Init_BH1750();
+    Init_E53_ST1();	
     while (1)
     {
-        lux=(int)Convert_BH1750();
-        printf("\r\n******************************BH1750 Value is  %d\r\n",lux);
+        E53_ST1_Read_Data();
+        printf("\r\n******************************Longitude Value is  %.5f\r\n", E53_ST1_Data.Longitude);
+		printf("\r\n******************************Latitude Value is  %.5f\r\n", E53_ST1_Data.Latitude);
         if (qr_code == 0)
         {
-            LCD_ShowString(10, 200, 200, 16, 16, "BH1750 Value is:");
-            LCD_ShowNum(140, 200, lux, 5, 16);
+            // LCD_ShowString(10, 200, 200, 16, 16, "BH1750 Value is:");
+            // LCD_ShowNum(140, 200, lux, 5, 16);
         }
         osal_task_sleep(2*1000);
     }
@@ -341,8 +266,6 @@ int standard_app_demo_main()
     osal_task_create("app_report",app_report_task_entry,NULL,0x1000,NULL,2);
     osal_task_create("app_command",app_cmd_task_entry,NULL,0x1000,NULL,3);
 
-    osal_int_connect(KEY1_EXTI_IRQn, 2,0,Key1_IRQHandler,NULL);
-    osal_int_connect(KEY2_EXTI_IRQn, 3,0,Key2_IRQHandler,NULL);
 
     stimer_create("lcdtimer",timer1_callback,NULL,8*1000,cn_stimer_flag_start);
 

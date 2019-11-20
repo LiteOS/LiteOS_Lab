@@ -51,16 +51,16 @@ void Start_BH1750(void)
 ***************************************************************/
 float Convert_BH1750(void)
 {
-	float result_lx;
-	uint8_t BUF[2];
-	int result;
-	Start_BH1750();
-	HAL_Delay(180);
-	HAL_I2C_Master_Receive(&hi2c1, BH1750_Addr+1,BUF,2,0xff); 
-	result=BUF[0];
-	result=(result<<8)+BUF[1];  //Synthetic Digital Illumination Intensity Data
-	result_lx=(float)(result/1.2);
-  return result_lx;
+    float result_lx;
+    uint8_t BUF[2];
+    int result;
+    Start_BH1750();
+    HAL_Delay(180);
+    HAL_I2C_Master_Receive(&hi2c1, BH1750_Addr+1,BUF,2,0xff); 
+    result=BUF[0];
+    result=(result<<8)+BUF[1];  //Synthetic Digital Illumination Intensity Data
+    result_lx=(float)(result/1.2);
+    return result_lx;
 }
 
 /***************************************************************
@@ -71,7 +71,7 @@ float Convert_BH1750(void)
 ***************************************************************/
 void SHT30_reset(void)
 {
-		uint8_t SHT3X_Resetcommand_Buffer[2]={0x30,0xA2}; //soft reset  
+    uint8_t SHT3X_Resetcommand_Buffer[2]={0x30,0xA2}; //soft reset  
     HAL_I2C_Master_Transmit(&hi2c1,SHT30_Addr<<1,SHT3X_Resetcommand_Buffer,2,0x10);
     HAL_Delay(15);
 	
@@ -85,8 +85,8 @@ void SHT30_reset(void)
 ***************************************************************/
 void Init_SHT30(void)
 {
-		uint8_t SHT3X_Modecommand_Buffer[2]={0x22,0x36}; //periodic mode commands 
-		HAL_I2C_Master_Transmit(&hi2c1,SHT30_Addr<<1,SHT3X_Modecommand_Buffer,2,0x10); //send periodic mode commands
+    uint8_t SHT3X_Modecommand_Buffer[2]={0x22,0x36}; //periodic mode commands 
+    HAL_I2C_Master_Transmit(&hi2c1,SHT30_Addr<<1,SHT3X_Modecommand_Buffer,2,0x10); //send periodic mode commands
 	
 }
 
@@ -169,20 +169,20 @@ float SHT3x_CalcRH(unsigned short u16sRH)
 ***************************************************************/
 void Init_Motor(void)
 {
-  GPIO_InitTypeDef GPIO_InitStruct;
+    GPIO_InitTypeDef GPIO_InitStruct;
 
-  /* GPIO Ports Clock Enable */
-  IA1_Motor_GPIO_CLK_ENABLE();
+    /* GPIO Ports Clock Enable */
+    IA1_Motor_GPIO_CLK_ENABLE();
 
-	 /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(IA1_Motor_GPIO_Port, IA1_Motor_Pin, GPIO_PIN_RESET);
-	
-	 /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = IA1_Motor_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(IA1_Motor_GPIO_Port, &GPIO_InitStruct);
+    /*Configure GPIO pin Output Level */
+    HAL_GPIO_WritePin(IA1_Motor_GPIO_Port, IA1_Motor_Pin, GPIO_PIN_RESET);
+
+    /*Configure GPIO pin : PtPin */
+    GPIO_InitStruct.Pin = IA1_Motor_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(IA1_Motor_GPIO_Port, &GPIO_InitStruct);
 }
 
 /***************************************************************
@@ -193,20 +193,20 @@ void Init_Motor(void)
 ***************************************************************/
 void Init_Light(void)
 {
-  GPIO_InitTypeDef GPIO_InitStruct;
+    GPIO_InitTypeDef GPIO_InitStruct;
 
-  /* GPIO Ports Clock Enable */
-  IA1_Light_GPIO_CLK_ENABLE();
+    /* GPIO Ports Clock Enable */
+    IA1_Light_GPIO_CLK_ENABLE();
 
 	 /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(IA1_Light_GPIO_Port, IA1_Light_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(IA1_Light_GPIO_Port, IA1_Light_Pin, GPIO_PIN_RESET);
 	
-	 /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = IA1_Light_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(IA1_Light_GPIO_Port, &GPIO_InitStruct);
+    /*Configure GPIO pin : PtPin */
+    GPIO_InitStruct.Pin = IA1_Light_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(IA1_Light_GPIO_Port, &GPIO_InitStruct);
 }
 /***************************************************************
 * 函数名称: Init_E53_IA1
@@ -218,9 +218,9 @@ void Init_E53_IA1(void)
 {
    	MX_I2C1_Init();
     Init_BH1750();
-		Init_SHT30();
-		Init_Motor();
-		Init_Light();
+    Init_SHT30();
+    Init_Motor();
+    Init_Light();
 }
 
 /***************************************************************
@@ -233,37 +233,37 @@ void E53_IA1_Read_Data(void)
 {
 	
     char  data[3];    //data array for checksum verification
-		unsigned char addr = 0;
+    unsigned char addr = 0;
     unsigned short tmp = 0;
     float t = 0;
-		uint16_t dat;
-		uint8_t SHT3X_Fetchcommand_Bbuffer[2]={0xE0,0x00};								//read the measurement results
-		uint8_t SHT3X_Data_Buffer[6]; 																		//byte 0,1 is temperature byte 4,5 is humidity
-		
-		E53_IA1_Data.Lux=Convert_BH1750();																								//Read bh1750 sensor data 
-		
-		HAL_I2C_Master_Transmit(&hi2c1,SHT30_Addr<<1,SHT3X_Fetchcommand_Bbuffer,2,0x10); //Read sht30 sensor data 
-		HAL_I2C_Master_Receive(&hi2c1,(SHT30_Addr<<1)+1,SHT3X_Data_Buffer,6,0x10); 
-		
-		//    /* check tem */
+    uint16_t dat;
+    uint8_t SHT3X_Fetchcommand_Bbuffer[2]={0xE0,0x00};								//read the measurement results
+    uint8_t SHT3X_Data_Buffer[6]; 																		//byte 0,1 is temperature byte 4,5 is humidity
+    
+    E53_IA1_Data.Lux=Convert_BH1750();																								//Read bh1750 sensor data 
+    
+    HAL_I2C_Master_Transmit(&hi2c1,SHT30_Addr<<1,SHT3X_Fetchcommand_Bbuffer,2,0x10); //Read sht30 sensor data 
+    HAL_I2C_Master_Receive(&hi2c1,(SHT30_Addr<<1)+1,SHT3X_Data_Buffer,6,0x10); 
+    
+    //    /* check tem */
     data[0] = SHT3X_Data_Buffer[0];
     data[1] = SHT3X_Data_Buffer[1];
     data[2] = SHT3X_Data_Buffer[2];
-	
-		tmp=SHT3x_CheckCrc(data, 2, data[2]);
-		if( !tmp ) /* value is ture */
+
+    tmp=SHT3x_CheckCrc(data, 2, data[2]);
+    if( !tmp ) /* value is ture */
     {
         dat = ((uint16_t)data[0] << 8) | data[1];
         E53_IA1_Data.Temperature = SHT3x_CalcTemperatureC( dat );    
     }
-		
-		//    /* check humidity */
-		data[0] = SHT3X_Data_Buffer[3];
+    
+    //    /* check humidity */
+    data[0] = SHT3X_Data_Buffer[3];
     data[1] = SHT3X_Data_Buffer[4];
     data[2] = SHT3X_Data_Buffer[5];
-	
-		tmp=SHT3x_CheckCrc(data, 2, data[2]);
-		if( !tmp ) /* value is ture */
+
+    tmp=SHT3x_CheckCrc(data, 2, data[2]);
+    if( !tmp ) /* value is ture */
     {
         dat = ((uint16_t)data[0] << 8) | data[1];
         E53_IA1_Data.Humidity = SHT3x_CalcRH( dat );    
