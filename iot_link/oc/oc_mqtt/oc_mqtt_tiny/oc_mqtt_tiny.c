@@ -47,6 +47,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <link_misc.h>
+#include <time.h>
 
 #include <queue.h>
 #include <osal.h>
@@ -56,9 +57,6 @@
 
 #include <cJSON.h>           //json mode
 #include "hmac.h"            //used to generate the user passwd
-
-
-
 
 ////CRT FOR THE OC
 static const char s_oc_mqtt_ca_crt[] =
@@ -88,8 +86,7 @@ static const char s_oc_mqtt_ca_crt[] =
 
 
 ///< devices normal data report and receive topic format
-#define CN_OC_MQTT_SALT_TIME                "2018111517"
-#define CN_CLIENT_ID_FMT                    "%s_2_0_2018111517"
+#define CN_CLIENT_ID_FMT                    "%s_2_0_%s"
 #define CN_OC_HUB_CMD_TOPIC_FMT             "/huawei/v1/devices/%s/command/json"
 #define CN_OC_HUB_REPORT_TOPIC_FMT          "/huawei/v1/devices/%s/data/json"
 #define CN_OC_BS_REPORT_TOPIC_FMT           "/huawei/v1/devices/%s/iodpsData"
@@ -135,6 +132,7 @@ typedef enum
     en_daemon_status_hub_keep,
 }en_daemon_status_t;
 
+
 typedef struct
 {
     oc_mqtt_config_t        config;
@@ -155,8 +153,7 @@ typedef struct
     oc_bs_mqtt_cb_t     bs_cb;
     void               *task_daemon;            ///< oc mqtt lite daemon task
     queue_t            *task_daemon_cmd_queue;  ///< oc mqtt lite daemon task command queue
-    int64_t             keep_deadtime;          ///<
-
+    char                salt_time[16];          ///< salt time for the connect
 }oc_mqtt_tiny_cb_t;   ///< i think we may only got one mqtt
 static oc_mqtt_tiny_cb_t *s_oc_mqtt_tiny_cb;
 
@@ -317,6 +314,21 @@ static char *topic_fmt(char *fmt, char *arg)
     return ret;
 }
 
+static char *clientid_fmt(char *fmt, char *id, char *salt_time)
+{
+    char *ret = NULL;
+    int len =  0;
+
+    len = strlen(fmt) + strlen(id) + strlen(salt_time) + 1;
+
+    ret = osal_malloc(len);
+    if(NULL != ret)
+    {
+        snprintf(ret,len,fmt,id,salt_time);
+    }
+
+    return ret;
+}
 
 ///< return the command code for the operation
 static int daemon_cmd_post(en_oc_mqtt_daemon_cmd cmd, void *arg)
@@ -374,6 +386,7 @@ static int config_parameter_release(oc_mqtt_tiny_cb_t *cb)
 static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config)
 {
     int ret = en_oc_mqtt_err_parafmt;
+
 
     switch (config->boot_mode)
     {
@@ -446,9 +459,18 @@ static int oc_mqtt_para_gernerate(oc_mqtt_tiny_cb_t *cb)
     int ret = en_oc_mqtt_err_ok;;
     uint8_t hmac[CN_HMAC_LEN];
 
+    struct tm *date;
+    time_t time_now;
+
+    time_now = osal_sys_time()/1000;
+    date = gmtime(&time_now);
+
+    snprintf(cb->salt_time,11,"%04d%02d%02d%02d",date->tm_year+1900,\
+            date->tm_mon,date->tm_mday,date->tm_hour);
+
     oc_mqtt_para_release(cb);         ///< try to free all the resource we have built
 
-    cb->mqtt_para.mqtt_clientid = topic_fmt(CN_CLIENT_ID_FMT,cb->config.id);
+    cb->mqtt_para.mqtt_clientid = clientid_fmt(CN_CLIENT_ID_FMT,cb->config.id,cb->salt_time);
     if(NULL == cb->mqtt_para.mqtt_clientid)
     {
         goto EXIT_MEM;
@@ -461,7 +483,7 @@ static int oc_mqtt_para_gernerate(oc_mqtt_tiny_cb_t *cb)
     }
 
     hmac_generate_passwd(cb->config.pwd,strlen(cb->config.pwd),\
-            CN_OC_MQTT_SALT_TIME,strlen(CN_OC_MQTT_SALT_TIME),hmac,sizeof(hmac));
+            cb->salt_time,strlen(cb->salt_time),hmac,sizeof(hmac));
     cb->mqtt_para.mqtt_passwd = osal_malloc(CN_HMAC_LEN*2+1);
     if(NULL != cb->mqtt_para.mqtt_passwd)
     {
