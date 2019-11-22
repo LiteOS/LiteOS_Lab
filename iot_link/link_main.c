@@ -66,13 +66,7 @@ const char *linkmain_version()
     return s_link_mainversion;
 }
 
-extern int netdriver_install();
-__attribute__((weak)) int netdriver_install()
-{
-    printf("please remember to supply a netdriver---- please\n\r");
 
-    return -1;
-}
 
 
 static int s_link_start = 0;
@@ -170,7 +164,7 @@ int link_main(void *args)
 
     #if CONFIG_LWIP_ENABLE
         #include <lwip_imp.h>
-        tcpipstack_install_lwip(netdriver_install);
+        tcpipstack_install_lwip();
     #elif CONFIG_LINUX_SOCKET_ENABLE
         #include <linux_socket_imp.h>
         tcpipstack_install_linux_socket();

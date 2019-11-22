@@ -40,13 +40,12 @@
 #define LITEOS_LAB_IOT_LINK_NETWORK_TCPIP_LWIP_LWIP_IMP_H_
 
 /**
- * @brief: the user should supply a function to install the network driver
+ * @brief: the user should implement the net driver
  *
  * @return:0 success while -1 failed
  * */
-typedef int (*fn_lwip_netdriver)(void);
 
-int tcpipstack_install_lwip(fn_lwip_netdriver driver);
+int tcpipstack_install_lwip(void);
 
 
 #endif /* LITEOS_LAB_IOT_LINK_NETWORK_TCPIP_LWIP_LWIP_IMP_H_ */
