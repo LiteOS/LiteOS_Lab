@@ -19,7 +19,7 @@
 #this is for IoT Studio automatic generating kconfig compatibility
 CONFIG_OS_LiteOS=y
 CONFIG_ARMV7_M=y
-CONFIG_Demo_Helloworld=y
+CONFIG_Osal_Semp_Demo=y
 #
 
 CONFIG_OS_TYPE       = "liteos"
