@@ -7,6 +7,7 @@ from requests.adapters import HTTPAdapter
 from requests import RequestException, ReadTimeout
 from test_adapter import ts_call_single
 from test_adapter import resource_release
+from test_adapter import setDestHost
 from const import mqtt_device_info
 from const import mqtt_testid
 from iotlink_north_invoke import iotlink_north_invoke
@@ -43,7 +44,9 @@ SEC_TYPE         = 2
 
 
 
-def test_linux_oc_mqtt_init():
+def test_stm32f429_oc_mqtt_init():
+    setDestHost('192.168.1.115')
+
     fname = sys._getframe().f_code.co_name
     result = ts_call_single(mqtt_testid.TEST_OC_MQTT_INIT, fname)
     assert (result)
@@ -51,14 +54,14 @@ def test_linux_oc_mqtt_init():
     assert (result.test_id == mqtt_testid.TEST_OC_MQTT_INIT)
     assert (result.ret_code == 0)
 
-def test_linux_oc_mqtt_register():
+def test_stm32f429_oc_mqtt_register():
     fname = sys._getframe().f_code.co_name
     result = ts_call_single(mqtt_testid.TEST_OC_MQTT_REGISTER, fname)
     assert(result)
     assert(result.test_id == mqtt_testid.TEST_OC_MQTT_REGISTER)
     assert(result.ret_code == 0)
 
-def test_linux_oc_mqtt_config_invalid():
+def test_stm32f429_oc_mqtt_config_invalid():
     fname = sys._getframe().f_code.co_name
     #invalid server ip
     result = ts_call_single(mqtt_testid.TEST_OC_MQTT_CONFIG, fname,
@@ -113,7 +116,7 @@ def test_linux_oc_mqtt_config_invalid():
 
 
 
-def test_linux_oc_mqtt_config_static():
+def test_stm32f429_oc_mqtt_config_static():
     fname = sys._getframe().f_code.co_name
     result = ts_call_single(mqtt_testid.TEST_OC_MQTT_CONFIG, fname,
                             BOOTSTRAP_MODE, LIFE_TIME,
@@ -128,7 +131,7 @@ def test_linux_oc_mqtt_config_static():
     status = ninvoke.oc_mqtt_get_device_shadowstatus(mqtt_device_info.MQTT_DEVICEID)
     assert(status == "ONLINE")
 
-def test_linux_oc_mqtt_json_fmt_req_static():
+def test_stm32f429_oc_mqtt_json_fmt_req_static():
     fname = sys._getframe().f_code.co_name
     #must send 4 items here
     result = ts_call_single(mqtt_testid.TEST_OC_MQTT_JSON_FMT_REQ, fname,
@@ -186,7 +189,7 @@ def test_linux_oc_mqtt_json_fmt_req_static():
     assert (data.get("serviceData").get("LED4") == 78)
 
 
-def test_linux_oc_mqtt_json_fmt_res_static():
+def test_stm32f429_oc_mqtt_json_fmt_res_static():
     fname = sys._getframe().f_code.co_name
     # must send 1 items here
     result = ts_call_single(mqtt_testid.TEST_OC_MQTT_JSON_FMT_RES, fname,
@@ -216,14 +219,14 @@ def test_linux_oc_mqtt_json_fmt_res_static():
     assert (json.loads(result.data).get("body").get("body_para") == "body_para")
 
 
-def test_linux_oc_mqtt_publish_static():
+def test_stm32f429_oc_mqtt_publish_static():
     fname = sys._getframe().f_code.co_name
     result = ts_call_single(mqtt_testid.TEST_OC_MQTT_PUBLISH, fname)
     assert (result)
     assert (result.test_id == mqtt_testid.TEST_OC_MQTT_PUBLISH)
     assert (result.ret_code == 0)
 
-def test_linux_oc_mqtt_sendcmd_static():
+def test_stm32f429_oc_mqtt_sendcmd_static():
     ninvoke = iotlink_north_invoke()
     # Service ID : Battery
     # Method : cmd
@@ -247,7 +250,7 @@ def test_linux_oc_mqtt_sendcmd_static():
 
 
 
-def test_linux_oc_mqtt_deconfig_static():
+def test_stm32f429_oc_mqtt_deconfig_static():
     fname = sys._getframe().f_code.co_name
     result = ts_call_single(mqtt_testid.TEST_OC_MQTT_DECONFIG, fname)
     assert (result)
@@ -261,7 +264,7 @@ def test_linux_oc_mqtt_deconfig_static():
     print(status)
 
 
-def test_linux_oc_mqtt_config_bs():
+def test_stm32f429_oc_mqtt_config_bs():
     fname = sys._getframe().f_code.co_name
     result = ts_call_single(mqtt_testid.TEST_OC_MQTT_CONFIG, fname,
                             en_oc_boot_strap_mode_client_initialize, LIFE_TIME,
@@ -274,7 +277,7 @@ def test_linux_oc_mqtt_config_bs():
     time.sleep(2)
     # oc_mqtt_device_status_jduge_b(mqtt_device_info.BS_MQTT_DEVICEID, "ONLINE")
 
-def test_linux_oc_mqtt_json_fmt_req_bs():
+def test_stm32f429_oc_mqtt_json_fmt_req_bs():
     fname = sys._getframe().f_code.co_name
     #must send 4 items here
     result = ts_call_single(mqtt_testid.TEST_OC_MQTT_JSON_FMT_REQ, fname,
@@ -332,7 +335,7 @@ def test_linux_oc_mqtt_json_fmt_req_bs():
     assert (data.get("serviceData").get("LED4") == 78)
 
 
-def test_linux_oc_mqtt_json_fmt_res_bs():
+def test_stm32f429_oc_mqtt_json_fmt_res_bs():
     fname = sys._getframe().f_code.co_name
     # must send 1 items here
     result = ts_call_single(mqtt_testid.TEST_OC_MQTT_JSON_FMT_RES, fname,
@@ -362,14 +365,14 @@ def test_linux_oc_mqtt_json_fmt_res_bs():
     assert (json.loads(result.data).get("body").get("body_para") == "body_para")
 
 
-def test_linux_oc_mqtt_publish_bs():
+def test_stm32f429_oc_mqtt_publish_bs():
     fname = sys._getframe().f_code.co_name
     result = ts_call_single(mqtt_testid.TEST_OC_MQTT_PUBLISH, fname)
     assert (result)
     assert (result.test_id == mqtt_testid.TEST_OC_MQTT_PUBLISH)
     assert (result.ret_code == 0)
 
-def test_linux_oc_mqtt_deconfig_bs():
+def test_stm32f429_oc_mqtt_deconfig_bs():
     fname = sys._getframe().f_code.co_name
     result = ts_call_single(mqtt_testid.TEST_OC_MQTT_DECONFIG, fname)
     assert (result)
@@ -380,7 +383,7 @@ def test_linux_oc_mqtt_deconfig_bs():
 
 
 
-def test_linux_oc_mqtt_deinit():
+def test_stm32f429_oc_mqtt_deinit():
     fname = sys._getframe().f_code.co_name
     result = ts_call_single(mqtt_testid.TEST_OC_MQTT_DEINIT, fname)
     assert (result)
@@ -392,18 +395,18 @@ def test_linux_oc_mqtt_deinit():
 
 if __name__ == '__main__':
     print("hello world")
-    test_linux_oc_mqtt_init()
-    test_linux_oc_mqtt_register()
-    # test_linux_oc_mqtt_config_invalid()
-    test_linux_oc_mqtt_config_static()
-    # test_linux_oc_mqtt_json_fmt_req_static()
-    # test_linux_oc_mqtt_json_fmt_res_static()
-    # test_linux_oc_mqtt_report_static()
-    test_linux_oc_mqtt_sendcmd_static()
-    test_linux_oc_mqtt_deconfig_static()
-    # test_linux_oc_mqtt_config_bs()
-    # test_linux_oc_mqtt_json_fmt_req_bs()
-    # test_linux_oc_mqtt_json_fmt_res_bs()
-    # test_linux_oc_mqtt_report_bs()
-    # test_linux_oc_mqtt_deconfig_bs()
-    test_linux_oc_mqtt_deinit()
+    test_stm32f429_oc_mqtt_init()
+    test_stm32f429_oc_mqtt_register()
+    # test_stm32f429_oc_mqtt_config_invalid()
+    test_stm32f429_oc_mqtt_config_static()
+    # test_stm32f429_oc_mqtt_json_fmt_req_static()
+    # test_stm32f429_oc_mqtt_json_fmt_res_static()
+    # test_stm32f429_oc_mqtt_report_static()
+    test_stm32f429_oc_mqtt_sendcmd_static()
+    test_stm32f429_oc_mqtt_deconfig_static()
+    # test_stm32f429_oc_mqtt_config_bs()
+    # test_stm32f429_oc_mqtt_json_fmt_req_bs()
+    # test_stm32f429_oc_mqtt_json_fmt_res_bs()
+    # test_stm32f429_oc_mqtt_report_bs()
+    # test_stm32f429_oc_mqtt_deconfig_bs()
+    test_stm32f429_oc_mqtt_deinit()
