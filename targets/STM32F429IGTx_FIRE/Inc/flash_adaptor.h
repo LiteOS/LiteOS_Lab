@@ -47,13 +47,28 @@
 #if defined(__cplusplus)
 extern "C" {
 #endif
+enum en_sotrage_dev {
+  INNER_FLASH = 0,
+  SPI_FLASH,
+};
+
+enum en_partition {
+  PART_LOADER,
+  PART_APP,
+  PART_OTA_FLAG1,
+  PART_OTA_FLAG2,
+  PART_RESERVED_INFO,
+  PART_OTA_IMG_DOWNLOAD,
+  PART_OTA_IMG_BACKUP,
+  PART_OTA_DIFF_UPGTADE,
+};
 
 void flash_adaptor_init(void);
 int flash_adaptor_write(uint32_t offset, const uint8_t *buffer, uint32_t len);
 int flash_adaptor_write_mqtt_info(const void *buffer, uint32_t len);
 int flash_adaptor_read_mqtt_info(void *buffer, uint32_t len);
-int flash_spi2inner(uint32_t src, uint32_t dst, uint32_t len, uint8_t *cache, uint32_t cache_len);
-int flash_inner2spi(uint32_t src, uint32_t dst, uint32_t len, uint8_t * cache, uint32_t cache_len);
+int app_image_restore(uint32_t src, uint32_t dst, uint32_t data_len, uint32_t head_len,uint8_t *cache, uint32_t cache_len);
+int app_image_backup(uint32_t src, uint32_t dst, uint32_t len, uint8_t * cache, uint32_t cache_len);
 
 
 #if defined(__cplusplus)

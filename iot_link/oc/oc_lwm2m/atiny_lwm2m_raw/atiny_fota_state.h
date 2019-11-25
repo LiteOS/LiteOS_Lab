@@ -52,10 +52,8 @@
 #ifndef ATINY_FOTA_STATE_H_
 #define ATINY_FOTA_STATE_H_
 #include "atiny_fota_manager.h"
-#include "log/atiny_log.h"
 #include "object_comm.h"
-#include "flag_manager.h"
-#include "upgrade_flag.h"
+#include "ota_flag.h"
 
 
 

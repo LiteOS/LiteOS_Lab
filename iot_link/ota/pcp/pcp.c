@@ -398,6 +398,7 @@ static void pcp_cmd_upgrade(const pcp_head_t *head, const uint8_t *pbuf)
         return;
     }
     s_pcp_cb.record.cur_state = EN_OTA_STATUS_UPGRADING;
+    s_pcp_cb.record.updater = UPDATER_SOTA;
     pcp_save_flag();
 
     pcp_send_response_code(EN_PCP_MSG_EXCUTEUPDATE, EN_PCP_RESPONSE_CODE_OK);
@@ -492,7 +493,9 @@ static void pcp_handle_timeout(void)
             upgrade_ret.retcode = s_pcp_cb.record.ret_upgrade;
             memcpy(upgrade_ret.ver,s_pcp_cb.record.ver,CN_VER_LEN);
             ///< tell the server the result
-            pcp_send_msg(EN_PCP_MSG_NOTIFYSTATE,&upgrade_ret,sizeof(upgrade_ret));
+	    if (s_pcp_cb.record.updater == UPDATER_SOTA) {
+	      pcp_send_msg(EN_PCP_MSG_NOTIFYSTATE,&upgrade_ret,sizeof(upgrade_ret));
+	    }
             break;
         default:
             break;

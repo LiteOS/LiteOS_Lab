@@ -31,29 +31,34 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-
-/**@defgroup atiny_adapter Agenttiny Adapter
- * @ingroup agent
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2019-09-16 18:48  zhangqianfu  The first version
+ *
  */
 
-#ifndef OTA_PORT_H
-#define OTA_PORT_H
-//#include "package.h"
-#include "ota_api.h"
+#ifndef SOTRAGE_SOTRAGE_H
+#define SOTRAGE_SOTRAGE_H
 
+#include <stdint.h>
+#include <stddef.h>
 
+typedef struct {
+  int id;
+  char *name;
+  uint32_t size;
 
-#if defined(__cplusplus)
-extern "C" {
-#endif
+  void (*init)();
+  int (*read)(void *buf, int32_t len, uint32_t offset);
+  int (*write)(const uint8_t *buf, int32_t len, uint32_t offset);
+  int (*erase)(uint32_t offset, int32_t len);
+  int (*erase_write)(const void *buf, int32_t len, uint32_t offset);
+}storage_device;
 
-void hal_init_ota(void);
-void hal_get_ota_opt(ota_opt_s *opt);
-
-#if defined(__cplusplus)
-}
-#endif
-
-#endif //OTA_PORT_H
-
-
+int storage_dev_install(storage_device *dev, uint32_t max_num);
+int storage_dev_uninstall();
+int storage_device_erase(int dev_id, uint32_t addr, uint32_t len);
+int storage_device_erase_write(int dev_id, uint8_t *buf, uint32_t len, uint32_t addr);
+int storage_device_write(int dev_id, uint8_t *buf, uint32_t len, uint32_t addr);
+int storage_device_read(int dev_id, uint8_t *buf, uint32_t len, uint32_t addr);
+#endif /* SOTRAGE_SOTRAGE_H */

@@ -31,29 +31,28 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-
-/**@defgroup atiny_adapter Agenttiny Adapter
- * @ingroup agent
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2019-09-16 18:48  zhangqianfu  The first version
+ *
  */
+#include "storage.h"
 
-#ifndef OTA_PORT_H
-#define OTA_PORT_H
-//#include "package.h"
-#include "ota_api.h"
+#ifndef STORAGE_PARTITION_H
+#define STORAGE_PARTITION_H
 
+typedef struct _partition {
+  uint8_t dev_id;
+  char *name;
+  uint32_t start_addr;
+  uint32_t size;
+}storage_partition;
 
+int storage_partition_read(int part_id, uint8_t *buf, uint32_t len, uint32_t offset);
 
-#if defined(__cplusplus)
-extern "C" {
-#endif
+int storage_partition_write(int part_id, uint8_t *buf, uint32_t len, uint32_t offset);
 
-void hal_init_ota(void);
-void hal_get_ota_opt(ota_opt_s *opt);
+int storage_partition_erase_write(int part_id, uint8_t *buf, uint32_t len, uint32_t offset);
 
-#if defined(__cplusplus)
-}
-#endif
-
-#endif //OTA_PORT_H
-
-
+int storage_partition_erase(int part_id, uint32_t offset, uint32_t len);
+#endif /* STORAGE_PARTITION_H */
