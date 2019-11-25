@@ -46,7 +46,7 @@
 
 #include "er-coap-13.h"
 
-#include "liblwm2m.h" /* for lwm2m_malloc() and lwm2m_free() */
+#include "../liblwm2m.h" /* for lwm2m_malloc() and lwm2m_free() */
 
 #define DEBUG 0
 #if DEBUG
@@ -703,6 +703,7 @@ coap_parse_message(void *packet, uint8_t *data, uint16_t data_len)
     if (current_option + option_length > data + data_len)
     {
         PRINTF("OPTION %u (delta %u, len %u) has invalid length.\n", option_number, option_delta, option_length);
+        coap_free_header(coap_pkt);
         return BAD_REQUEST_4_00;
     }
     else
@@ -835,6 +836,7 @@ coap_parse_message(void *packet, uint8_t *data, uint16_t data_len)
         if (option_number & 1)
         {
           coap_error_message = "Unsupported critical option";
+          coap_free_header(coap_pkt);
           return BAD_OPTION_4_02;
         }
     }
@@ -853,6 +855,10 @@ coap_parse_message(void *packet, uint8_t *data, uint16_t data_len)
 int
 coap_get_query_variable(void *packet, const char *name, const char **output)
 {
+    /* unused parameters */
+    (void)packet;
+    (void)name;
+    (void)output;
 /*
   coap_packet_t *const coap_pkt = (coap_packet_t *) packet;
 
@@ -1020,7 +1026,7 @@ coap_set_header_if_none_match(void *packet)
 }
 /*-----------------------------------------------------------------------------------*/
 int
-coap_get_header_token(void *packet, const uint8_t **token)
+coap_get_header_token(void *packet, uint8_t **token)
 {
   coap_packet_t *const coap_pkt = (coap_packet_t *) packet;
 

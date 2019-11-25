@@ -1,3 +1,41 @@
+/*----------------------------------------------------------------------------
+ * Copyright (c) <2019>, <Huawei Technologies Co., Ltd>
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ * 1. Redistributions of source code must retain the above copyright notice, this list of
+ * conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+ * of conditions and the following disclaimer in the documentation and/or other materials
+ * provided with the distribution.
+ * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+ * to endorse or promote products derived from this software without specific prior written
+ * permission.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *---------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------
+ * Notice of Export Control Law
+ * ===============================================
+ * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+ * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+ * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+ * applicable export control laws and regulations.
+ *---------------------------------------------------------------------------*/
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2019-11-13       xuliqun  The first version  
+ *
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -40,6 +78,8 @@ static char s_mqtt_ca_crt[] =
 void *g_mqtt_al_handle = NULL;
 #define DEFAULT_LIFETIME            10  ///<  server mqtt service port
 
+static int g_ioswitch = -1;
+
 typedef struct oc_mqtt_paras_s{
     char *id;
     char *passwd;
@@ -58,15 +98,6 @@ typedef struct oc_mqtt_paras_s{
 
 oc_mqtt_paras g_mqtt_paras = {0};
 
-#define TEST_OC_MQTT_INIT             ((TEST_SORT_OC_MQTT_AL << 16) | 0)
-#define TEST_OC_MQTT_REGISTER         ((TEST_SORT_OC_MQTT_AL << 16) | 1)
-#define TEST_OC_MQTT_CONFIG           ((TEST_SORT_OC_MQTT_AL << 16) | 2)
-#define TEST_OC_MQTT_JSON_FMT_REQ     ((TEST_SORT_OC_MQTT_AL << 16) | 3)
-#define TEST_OC_MQTT_JSON_FMT_RES     ((TEST_SORT_OC_MQTT_AL << 16) | 4)
-#define TEST_OC_MQTT_REPORT           ((TEST_SORT_OC_MQTT_AL << 16) | 5)
-#define TEST_OC_MQTT_DECONFIG         ((TEST_SORT_OC_MQTT_AL << 16) | 6)
-#define TEST_OC_MQTT_DEINIT           ((TEST_SORT_OC_MQTT_AL << 16) | 7)
-
 extern char g_acRecvBuf[TS_RECV_BUFFER_LEN+128];
 /*OC MQTT*/
 static int ts_oc_mqtt_init(char *message, int len);
@@ -77,6 +108,8 @@ static int ts_oc_mqtt_json_fmt_res(char *message, int len);
 static int ts_oc_mqtt_report(char *message, int len);
 static int ts_oc_mqtt_deconfig(char *message, int len);
 static int ts_oc_mqtt_deinit(char *message, int len);
+static int ts_oc_mqtt_getvalue(char *message, int len);
+
 
 test_entry ts_oc_mqtt_entry_flist[]= {
     ts_oc_mqtt_init,
@@ -87,11 +120,12 @@ test_entry ts_oc_mqtt_entry_flist[]= {
     ts_oc_mqtt_report,
     ts_oc_mqtt_deconfig,
     ts_oc_mqtt_deinit,
+    ts_oc_mqtt_getvalue,
 };
 
 int ts_sort_oc_mqtt_al(int entry_id, char *message, int len)
 {
-    if(entry_id > 7)
+    if(entry_id >= TEST_OC_MQTT_INVALID)
     {
         printf("invalid entry_id(%d)\n",entry_id);
         return TS_FAILED;
@@ -188,6 +222,7 @@ static int pp_oc_mqtt_cmd_entry(void *args)
                     if(NULL != ioswitch)
                     {
                         printf("ioswitch:%d\n\r",ioswitch->valueint);
+                        g_ioswitch = ioswitch->valueint;
                         err_int = en_oc_mqtt_err_code_ok;
                     }
                     else
@@ -288,8 +323,53 @@ static int pp_oc_report_test(void *handle,char *msg, int msg_len,en_mqtt_al_qos_
 
 int ts_oc_mqtt_init(char *message, int len)
 {
+    osal_semp_create(&s_rcv_sync,1,0);
+    task_handle = osal_task_create("at_ocmqtt_cmd",pp_oc_mqtt_cmd_entry,NULL,0x1000,NULL,10);
+    return oc_mqtt_init();
+}
+
+/*ts_oc_mqtt_config must be before ts_oc_mqtt_config*/
+static int ts_oc_mqtt_register(char *message, int len)
+{
+    int ret = 0;
+    int retCode;  
+    tag_oc_mqtt_ops s_oc_mqtt_ops=
+    {
+        .config = pp_oc_config_test,
+        .deconfig = pp_oc_deconfig_test,
+        .report = pp_oc_report_test,
+    };
+    retCode = oc_mqtt_register(&s_oc_mqtt_ops);
+    ret -= (!(retCode == 0));
+    /*register again, will sucess*/
+    retCode = oc_mqtt_register(&s_oc_mqtt_ops);
+    ret -= (!(retCode == 0));
+
+    retCode = oc_mqtt_register(NULL);
+    ret -= (!(retCode == -1));
+
+    //install atiny mqtt
+    #include <atiny_mqtt.h>
+    oc_mqtt_install_atiny_mqtt();
+
+    osal_task_sleep(500);
+    
+    
+
+    printf("exit from %s\n", __FUNCTION__);
+    
+    return ret;
+}
+
+static int ts_oc_mqtt_config(char *message, int len)
+{
+
+    tag_oc_mqtt_config config;
+
     char *pchTmp, *pchStrTmpIn;
     oc_mqtt_paras *pparas = &g_mqtt_paras;
+    void *handle = NULL;
+
     
     printf("[%s] g_tempbuf is %s\n", __FUNCTION__, message);
     pchTmp      = message;
@@ -328,9 +408,19 @@ int ts_oc_mqtt_init(char *message, int len)
     {
         osal_free(pparas->server_ip4);
     }
-    pparas->server_ip4 = osal_malloc(strlen(pchTmp)+1);
-    memcpy(pparas->server_ip4, pchTmp, strlen(pchTmp));
-    pparas->server_ip4[strlen(pchTmp)] = '\0';
+    if((!memcmp(pchTmp, "NULL", strlen(pchTmp))) ||
+        (!memcmp(pchTmp, "null", strlen(pchTmp))))
+    {
+        pparas->server_ip4 = NULL;
+    }
+    else
+    {
+        pparas->server_ip4 = osal_malloc(strlen(pchTmp)+1);
+        memcpy(pparas->server_ip4, pchTmp, strlen(pchTmp));
+        pparas->server_ip4[strlen(pchTmp)] = '\0';
+    }
+    
+    
 
     pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
     printf("168--oc server port is %s\n",pchTmp);
@@ -338,9 +428,18 @@ int ts_oc_mqtt_init(char *message, int len)
     {
         osal_free(pparas->server_port);
     }
-    pparas->server_port = osal_malloc(strlen(pchTmp)+1);
-    memcpy(pparas->server_port, pchTmp, strlen(pchTmp));
-    pparas->server_port[strlen(pchTmp)] = '\0';
+    if((!memcmp(pchTmp, "NULL", strlen(pchTmp))) ||
+        (!memcmp(pchTmp, "null", strlen(pchTmp))))
+    {
+        pparas->server_port = NULL;
+    }
+    else
+    {
+        pparas->server_port = osal_malloc(strlen(pchTmp)+1);
+        memcpy(pparas->server_port, pchTmp, strlen(pchTmp));
+        pparas->server_port[strlen(pchTmp)] = '\0';
+    }
+    
 
     pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
     printf("168--callback name is %s\n",pchTmp);
@@ -392,49 +491,6 @@ int ts_oc_mqtt_init(char *message, int len)
     pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
     pparas->ca_is_valid = atoi(pchTmp);
     printf("165--ca_is_valid is %d\n",pparas->ca_is_valid);
-
-    osal_semp_create(&s_rcv_sync,1,0);
-    task_handle = osal_task_create("at_ocmqtt_cmd",pp_oc_mqtt_cmd_entry,NULL,0x1000,NULL,10);
-    return oc_mqtt_init();
-}
-
-/*ts_oc_mqtt_config must be before ts_oc_mqtt_config*/
-static int ts_oc_mqtt_register(char *message, int len)
-{
-    int ret = 0;
-    int retCode;  
-    tag_oc_mqtt_ops s_oc_mqtt_ops=
-    {
-        .config = pp_oc_config_test,
-        .deconfig = pp_oc_deconfig_test,
-        .report = pp_oc_report_test,
-    };
-    retCode = oc_mqtt_register(&s_oc_mqtt_ops);
-    ret -= (!(retCode == 0));
-    /*register again, will sucess*/
-    retCode = oc_mqtt_register(&s_oc_mqtt_ops);
-    ret -= (!(retCode == 0));
-
-    retCode = oc_mqtt_register(NULL);
-    ret -= (!(retCode == -1));
-
-    printf("exit from %s\n", __FUNCTION__);
-    
-    return ret;
-}
-
-static int ts_oc_mqtt_config(char *message, int len)
-{
-
-    tag_oc_mqtt_config config;
-
-    oc_mqtt_paras *pparas = &g_mqtt_paras;
-    void *handle = NULL;
-
-    #include <atiny_mqtt.h>
-    oc_mqtt_install_atiny_mqtt();
-
-    osal_task_sleep(1000);
 
     config.boot_mode = pparas->boot_mode;
     config.lifetime = pparas->life_time;
@@ -864,24 +920,6 @@ static int ts_oc_mqtt_report(char *message, int len)
     }
     
     
-    retCode = ts_oc_mqtt_deconfig(NULL, 0);
-    ret -= (!(retCode == 0));
-    if(0 == retCode)
-    {
-        printf("DISCONNECT:SUCCESS\n\r");
-    }
-    else
-    {
-        printf("DISCONNECT:FAILED\n\r");
-        goto DEMO_EXIT;
-    }
-
-    retCode = pp_oc_report();
-    ret -= (!(retCode == -1));
-    
-    retCode = ts_oc_mqtt_config(NULL,0);
-    ret -= (!(retCode == 0));
-    
     
 DEMO_EXIT:
     if(0 == ret)
@@ -899,6 +937,7 @@ static int ts_oc_mqtt_deconfig(char *message, int len)
 {
     int ret = 0;
     int retCode = 0;
+    oc_mqtt_paras *pparas = &g_mqtt_paras;
     
     retCode = oc_mqtt_deconfig(s_mqtt_handle);
     ret -= (!(retCode == 0));
@@ -918,23 +957,6 @@ static int ts_oc_mqtt_deconfig(char *message, int len)
     ret -= (!(retCode == -1));
     
     printf("exit from %s, ret is %d, retcode is %d\n", __FUNCTION__, ret, retCode);
-
-    return ret;
-}
-static int ts_oc_mqtt_deinit(char *message, int len)
-{
-    s_cmd_entry_live = 0;
-    oc_mqtt_paras *pparas = &g_mqtt_paras;
-    
-    if(s_rcv_sync && task_handle) 
-    {
-        osal_semp_post(s_rcv_sync);
-        osal_task_sleep(3000);
-        osal_task_kill(task_handle);
-        osal_semp_del(s_rcv_sync);
-        
-    }
-
     if(pparas->id != NULL) 
     {
         osal_free(pparas->id);
@@ -961,9 +983,35 @@ static int ts_oc_mqtt_deinit(char *message, int len)
         osal_free(pparas->cbname);
         pparas->cbname = NULL;
     }
+    return ret;
+}
+static int ts_oc_mqtt_deinit(char *message, int len)
+{
+    s_cmd_entry_live = 0;
+    
+    osal_task_sleep(500);
+    if(s_rcv_sync && task_handle) 
+    {
+        osal_semp_post(s_rcv_sync);
+        osal_task_sleep(3000);
+        osal_task_kill(task_handle);
+        osal_semp_del(s_rcv_sync);
+        
+    }
+
+    
     
     printf("resource released!");
     return TS_OK;
+}
+
+static int ts_oc_mqtt_getvalue(char *message, int len)
+{
+    printf("[ts_oc_mqtt_getvalue]g_ioswitch is %d \n", g_ioswitch);
+    memset(message, 0, 32);/*32 is more large than one int32*/
+    snprintf(message,len,"%d",g_ioswitch);
+    
+    return TS_OK_HAS_DATA;
 }
 
 

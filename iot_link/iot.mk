@@ -82,6 +82,6 @@ C_SOURCES += $(iot_link_src)
 iot_link_inc = -I $(iot_link_root)
 C_INCLUDES += $(iot_link_inc)
 
-include $(TOP_DIR)/demos/demos.mk
+include $(SDK_DIR)/demos/demos.mk
 
 

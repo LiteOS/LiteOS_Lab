@@ -174,19 +174,24 @@ static const tag_tcpip_domain s_tcpip_lwip =
 };
 
 
-int tcpipstack_install_lwip(fn_lwip_netdriver driver)
+extern int netdriver_install();
+__attribute__((weak)) int netdriver_install()
+{
+    printf("please remember to supply a netdriver---- please\n\r");
+
+    return -1;
+}
+
+int tcpipstack_install_lwip(void)
 {
     int ret = -1;
     /* Initilialize the LwIP stack with RTOS */
     tcpip_init(NULL, NULL);
 
-    if(NULL != driver)
+    ret = netdriver_install();
+    if(ret != 0)
     {
-        ret = driver();
-        if(ret != 0)
-        {
-            return ret;
-        }
+        return ret;
     }
 
     ret = tcpip_sal_install(&s_tcpip_lwip);

@@ -49,7 +49,7 @@
 #define MAX_PACKET_ID 65535 /* according to the MQTT specification - do not change! */
 
 #if !defined(MAX_MESSAGE_HANDLERS)
-#define MAX_MESSAGE_HANDLERS 5 /* redefinable - how many subscriptions do you want? */
+#define MAX_MESSAGE_HANDLERS 10/* redefinable - how many subscriptions do you want? */
 #endif
 
 enum QoS { QOS0, QOS1, QOS2, SUBFAIL=0x80 };
@@ -201,7 +201,7 @@ DLLExport int MQTTSubscribeWithResults(MQTTClient* client, const char* topicFilt
  *  @param topicFilter - the topic filter to subscribe to
  *  @param message - the message to send
  *  @param data - suback granted QoS returned
- *  @param arg  - which used for the messageHandler£¬
+ *  @param arg  - which used for the messageHandler
  *  @return success code
  */
 DLLExport int MQTTSubscribeWithResultsArgs(MQTTClient* client, const char* topicFilter, enum QoS, messageHandler, MQTTSubackData* data,void *args);
