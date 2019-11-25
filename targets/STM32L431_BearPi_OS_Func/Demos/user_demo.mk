@@ -7,7 +7,6 @@
 #example for LiteOS func
 
 ifeq ($(CONFIG_DEMO_TYPE), "none")	
-	CONFIG_USER_DEMO := "hello_world_demo"
 
 	#example for hello world	 
 	ifeq ($(CONFIG_USER_DEMO), "hello_world_demo")	
