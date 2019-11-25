@@ -111,3 +111,86 @@ char *osal_strdup(const char *ch)
 
     return copy;
 }
+
+char *osal_strcat(char *str[])
+{
+    char *ret = NULL;
+    int str_tnum = 0;
+    int str_tlen = 0;
+    int str_off = 0;
+    int i = 0;
+
+    if(NULL == str)
+    {
+        return ret;
+    }
+
+    while(NULL != str[i])
+    {
+        str_tlen += strlen(str[i]);
+    }
+
+    ret = osal_malloc(str_tlen);
+
+    if(NULL != ret)
+    {
+        for(i =0;i< str_tnum;i++)
+        {
+
+            memcpy(ret + str_off,str[i],strlen(str[i]));
+            str_off += strlen(str[i]);
+        }
+        ret[str_off] = '\0';
+    }
+
+    return ret;
+}
+
+
+int hexstr2byte(const char *bufin, int len, char *bufout)
+{
+    int i = 0;
+    unsigned char tmp2 = 0x0;
+    unsigned int tmp = 0;
+    if (NULL == bufin || len <= 0 || NULL == bufout)
+    {
+        return -1;
+    }
+    for(i = 0; i < len; i = i+2)
+    {
+        tmp2 =  bufin[i];
+        tmp2 =  tmp2 <= '9'?tmp2-0x30:tmp2-0x37;
+        tmp =  bufin[i+1];
+        tmp =  tmp <= '9'?tmp-0x30:tmp-0x37;
+        bufout[i/2] =(tmp2<<4)|(tmp&0x0F);
+    }
+    return 0;
+}
+
+
+//make a byte to 2 ascii hex
+int byte2hexstr(uint8_t *bufin, int len, char *bufout)
+{
+    int i = 0;
+    uint8_t tmp_l = 0x0;
+    uint8_t tmp_h = 0;
+    if ((NULL == bufin )|| (len <= 0 )||( NULL == bufout))
+    {
+        return -1;
+    }
+    for(i = 0; i < len; i++)
+    {
+        tmp_h = (bufin[i]>>4)&0X0F;
+        tmp_l = bufin[i] &0x0F;
+        bufout[2*i] = (tmp_h > 9)? (tmp_h - 10 + 'a'):(tmp_h +'0');
+        bufout[2*i + 1] = (tmp_l > 9)? (tmp_l - 10 + 'a'):(tmp_l +'0');
+    }
+    bufout[2*len] = '\0';
+
+    return 0;
+
+}
+
+
+
+

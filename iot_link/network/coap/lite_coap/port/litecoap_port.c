@@ -51,7 +51,7 @@
 #include "litecoap.h"
 #include "litecoap_err.h"
 
-extern int g_bind_finsh;
+int g_bind_finsh;
 
 static fn_cmd_dealer cmd_func = NULL;
 

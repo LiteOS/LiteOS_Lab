@@ -161,14 +161,14 @@ typedef struct
 }mqtt_al_msgrcv_t;
 
 /** @brief  defines the mqtt received message dealer, called by mqtt engine*/
-typedef void (*fn_msg_dealer)(void *arg,mqtt_al_msgrcv_t *msg);
+typedef void (*fn_mqtt_al_msg_dealer)(void *arg,mqtt_al_msgrcv_t *msg);
 
 /** @brief defines the mqtt subscribe parameter*/
 typedef struct
 {
 	mqtt_al_string_t       topic;     ///< topic will be subscribe
 	en_mqtt_al_qos_t       qos;       ///< qos requested
-	fn_msg_dealer          dealer;    ///< message dealer:used to deal the received message
+	fn_mqtt_al_msg_dealer  dealer;    ///< message dealer:used to deal the received message
 	void                  *arg;       ///< used for the message dealer
 	char                   subret;    ///< subscribe result code
 	int                    timeout;   ///< how much time will be blocked
@@ -231,7 +231,6 @@ typedef struct
 }mqtt_al_op_t;
 
 
-#if CONFIG_MQTT_ENABLE
 //////////////////////API USED FOR THE MQTT APPLICAITON/////////////////////////
 
 /**
@@ -240,7 +239,7 @@ typedef struct
  * @return 0 success while -1 failed
  *
  */
-int mqtt_init();
+int mqtt_al_init();
 
 /**
  * @brief     :when you don't want to use the mqtt service ,please call this function
@@ -336,21 +335,6 @@ int mqtt_al_install(mqtt_al_op_t *op);
  *
  */
 int mqtt_al_uninstall();
-
-#else
-
-#define mqtt_al_init()                         -1          ///< function compatible
-#define mqtt_al_deinit()                       -1 		   ///< function compatible
-#define mqtt_al_connect(para)                   NULL        ///< function compatible
-#define mqtt_al_disconnect(handle)             -1          ///< function compatible
-#define mqtt_al_publish(handle, msg)           -1          ///< function compatible
-#define mqtt_al_subscribe(handle, subpara)     -1          ///< function compatible
-#define mqtt_al_unsubscribe(handle,unsubpara)  -1          ///< function compatible
-#define mqtt_al_check_status(handle)           en_mqtt_al_connect_err ///< function compatible
-#define mqtt_al_install(opt)                   -1          ///< function compatible
-#define mqtt_al_uninstall()                    -1          ///< function compatible
-
-#endif
 
 
 

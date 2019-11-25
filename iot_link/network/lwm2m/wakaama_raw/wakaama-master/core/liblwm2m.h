@@ -36,11 +36,11 @@
  *
  * Copyright (c) 2013, 2014 Intel Corporation and others.
  * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
+ * are made available under the terms of the Eclipse Public License v2.0
  * and Eclipse Distribution License v1.0 which accompany this distribution.
  *
  * The Eclipse Public License is available at
- *    http://www.eclipse.org/legal/epl-v10.html
+ *    http://www.eclipse.org/legal/epl-v20.html
  * The Eclipse Distribution License is available at
  *    http://www.eclipse.org/org/documents/edl-v10.php.
  *
@@ -53,6 +53,7 @@
  *    Bosch Software Innovations GmbH - Please refer to git log
  *    Pascal Rieux - Please refer to git log
  *    Ville Skyttä - Please refer to git log
+ *    Scott Bertin, AMETEK, Inc. - Please refer to git log
  *
  *******************************************************************************/
 
@@ -104,6 +105,19 @@ extern "C" {
 #ifndef LWM2M_SUPPORT_JSON
 #define LWM2M_SUPPORT_JSON
 #endif
+#ifndef LWM2M_VERSION_1_0
+#ifndef LWM2M_SUPPORT_SENML_JSON
+#define LWM2M_SUPPORT_SENML_JSON
+#endif
+#endif
+#endif
+
+#ifdef LWM2M_BOOTSTRAP_SERVER_MODE
+#ifndef LWM2M_VERSION_1_0
+#ifndef LWM2M_SUPPORT_SENML_JSON
+#define LWM2M_SUPPORT_SENML_JSON
+#endif
+#endif
 #endif
 
 #if defined(LWM2M_BOOTSTRAP) && defined(LWM2M_BOOTSTRAP_SERVER_MODE)
@@ -151,8 +165,7 @@ void lwm2m_printf(const char * format, ...);
 // Returns a session handle that MUST uniquely identify a peer.
 // secObjInstID: ID of the Securty Object instance to open a connection to
 // userData: parameter to lwm2m_init()
-void *lwm2m_connect_server(uint16_t secObjInstID, void *userData);
-
+void * lwm2m_connect_server(uint16_t secObjInstID, void * userData);
 // Close a session created by lwm2m_connect_server()
 // sessionH: session handle identifying the peer (opaque to the core)
 // userData: parameter to lwm2m_init()
@@ -205,6 +218,7 @@ bool lwm2m_session_is_equal(void * session1, void * session2, void * userData);
 #define LWM2M_FIRMWARE_UPDATE_OBJECT_ID     5
 #define LWM2M_LOCATION_OBJECT_ID            6
 #define LWM2M_CONN_STATS_OBJECT_ID          7
+#define LWM2M_OSCORE_OBJECT_ID             21
 
 /*
  * Resource IDs for the LWM2M Security Object
@@ -226,15 +240,30 @@ bool lwm2m_session_is_equal(void * session1, void * session2, void * userData);
 /*
  * Resource IDs for the LWM2M Server Object
  */
-#define LWM2M_SERVER_SHORT_ID_ID    0
-#define LWM2M_SERVER_LIFETIME_ID    1
-#define LWM2M_SERVER_MIN_PERIOD_ID  2
-#define LWM2M_SERVER_MAX_PERIOD_ID  3
-#define LWM2M_SERVER_DISABLE_ID     4
-#define LWM2M_SERVER_TIMEOUT_ID     5
-#define LWM2M_SERVER_STORING_ID     6
-#define LWM2M_SERVER_BINDING_ID     7
-#define LWM2M_SERVER_UPDATE_ID      8
+#define LWM2M_SERVER_SHORT_ID_ID              0
+#define LWM2M_SERVER_LIFETIME_ID              1
+#define LWM2M_SERVER_MIN_PERIOD_ID            2
+#define LWM2M_SERVER_MAX_PERIOD_ID            3
+#define LWM2M_SERVER_DISABLE_ID               4
+#define LWM2M_SERVER_TIMEOUT_ID               5
+#define LWM2M_SERVER_STORING_ID               6
+#define LWM2M_SERVER_BINDING_ID               7
+#define LWM2M_SERVER_UPDATE_ID                8
+#define LWM2M_SERVER_BOOTSTRAP_ID             9
+#define LWM2M_SERVER_APN_ID                  10
+#define LWM2M_SERVER_TLS_ALERT_CODE_ID       11
+#define LWM2M_SERVER_LAST_BOOTSTRAP_ID       12
+#define LWM2M_SERVER_REG_ORDER_ID            13
+#define LWM2M_SERVER_INITIAL_REG_DELAY_ID    14
+#define LWM2M_SERVER_REG_FAIL_BLOCK_ID       15
+#define LWM2M_SERVER_REG_FAIL_BOOTSTRAP_ID   16
+#define LWM2M_SERVER_COMM_RETRY_COUNT_ID     17
+#define LWM2M_SERVER_COMM_RETRY_TIMER_ID     18
+#define LWM2M_SERVER_SEQ_DELAY_TIMER_ID      19
+#define LWM2M_SERVER_SEQ_RETRY_COUNT_ID      20
+#define LWM2M_SERVER_TRIGGER_ID              21
+#define LWM2M_SERVER_PREFERRED_TRANSPORT_ID  22
+#define LWM2M_SERVER_MUTE_SEND_ID            23
 
 #define LWM2M_SECURITY_MODE_PRE_SHARED_KEY  0
 #define LWM2M_SECURITY_MODE_RAW_PUBLIC_KEY  1
@@ -280,21 +309,24 @@ void lwm2m_list_free(lwm2m_list_t * head);
 
 #define LWM2M_MAX_ID   ((uint16_t)0xFFFF)
 
-#define LWM2M_URI_FLAG_OBJECT_ID    (uint8_t)0x04
-#define LWM2M_URI_FLAG_INSTANCE_ID  (uint8_t)0x02
-#define LWM2M_URI_FLAG_RESOURCE_ID  (uint8_t)0x01
-
-#define LWM2M_URI_IS_SET_INSTANCE(uri) (((uri)->flag & LWM2M_URI_FLAG_INSTANCE_ID) != 0)
-#define LWM2M_URI_IS_SET_RESOURCE(uri) (((uri)->flag & LWM2M_URI_FLAG_RESOURCE_ID) != 0)
+#define LWM2M_URI_IS_SET_OBJECT(uri) ((uri)->objectId != LWM2M_MAX_ID)
+#define LWM2M_URI_IS_SET_INSTANCE(uri) ((uri)->instanceId != LWM2M_MAX_ID)
+#define LWM2M_URI_IS_SET_RESOURCE(uri) ((uri)->resourceId != LWM2M_MAX_ID)
+#ifndef LWM2M_VERSION_1_0
+#define LWM2M_URI_IS_SET_RESOURCE_INSTANCE(uri) ((uri)->resourceInstanceId != LWM2M_MAX_ID)
+#endif
 
 typedef struct
 {
-    uint8_t     flag;           // indicates which segments are set
     uint16_t    objectId;
     uint16_t    instanceId;
     uint16_t    resourceId;
+#ifndef LWM2M_VERSION_1_0
+    uint16_t    resourceInstanceId;
+#endif
 } lwm2m_uri_t;
 
+#define LWM2M_URI_RESET(uri) memset((uri), 0xFF, sizeof(lwm2m_uri_t))
 
 #define LWM2M_STRING_ID_MAX_LEN 6
 
@@ -308,8 +340,9 @@ int lwm2m_stringToUri(const char * buffer, size_t buffer_len, lwm2m_uri_t * uriP
  * The lwm2m_data_t is used to store LWM2M resource values in a hierarchical way.
  * Depending on the type the value is different:
  * - LWM2M_TYPE_OBJECT, LWM2M_TYPE_OBJECT_INSTANCE, LWM2M_TYPE_MULTIPLE_RESOURCE: value.asChildren
- * - LWM2M_TYPE_STRING, LWM2M_TYPE_OPAQUE: value.asBuffer
+ * - LWM2M_TYPE_STRING, LWM2M_TYPE_OPAQUE, LWM2M_TYPE_CORE_LINK: value.asBuffer
  * - LWM2M_TYPE_INTEGER, LWM2M_TYPE_TIME: value.asInteger
+ * - LWM2M_TYPE_UNSIGNED_INTEGER: value.asUnsigned
  * - LWM2M_TYPE_FLOAT: value.asFloat
  * - LWM2M_TYPE_BOOLEAN: value.asBoolean
  *
@@ -326,10 +359,12 @@ typedef enum
     LWM2M_TYPE_STRING,
     LWM2M_TYPE_OPAQUE,
     LWM2M_TYPE_INTEGER,
+    LWM2M_TYPE_UNSIGNED_INTEGER,
     LWM2M_TYPE_FLOAT,
     LWM2M_TYPE_BOOLEAN,
 
-    LWM2M_TYPE_OBJECT_LINK
+    LWM2M_TYPE_OBJECT_LINK,
+    LWM2M_TYPE_CORE_LINK
 } lwm2m_data_type_t;
 
 typedef struct _lwm2m_data_t lwm2m_data_t;
@@ -342,6 +377,7 @@ struct _lwm2m_data_t
     {
         bool        asBoolean;
         int64_t     asInteger;
+        uint64_t    asUnsigned;
         double      asFloat;
         struct
         {
@@ -363,30 +399,34 @@ struct _lwm2m_data_t
 
 typedef enum
 {
-    LWM2M_CONTENT_TEXT      = 0,        // Also used as undefined
-    LWM2M_CONTENT_LINK      = 40,
-    LWM2M_CONTENT_OPAQUE    = 42,
-    LWM2M_CONTENT_TLV_OLD   = 1542,     // Keep old value for backward-compatibility
-    LWM2M_CONTENT_TLV       = 11542,
-    LWM2M_CONTENT_JSON_OLD  = 1543,     // Keep old value for backward-compatibility
-    LWM2M_CONTENT_JSON      = 11543
+    LWM2M_CONTENT_TEXT       = 0,        // Also used as undefined
+    LWM2M_CONTENT_LINK       = 40,
+    LWM2M_CONTENT_OPAQUE     = 42,
+    LWM2M_CONTENT_TLV_OLD    = 1542,     // Keep old value for backward-compatibility
+    LWM2M_CONTENT_TLV        = 11542,
+    LWM2M_CONTENT_JSON_OLD   = 1543,     // Keep old value for backward-compatibility
+    LWM2M_CONTENT_JSON       = 11543,
+    LWM2M_CONTENT_SENML_JSON = 110
 } lwm2m_media_type_t;
 
 lwm2m_data_t * lwm2m_data_new(int size);
-int lwm2m_data_parse(lwm2m_uri_t * uriP, uint8_t * buffer, size_t bufferLen, lwm2m_media_type_t format, lwm2m_data_t ** dataP);
+int lwm2m_data_parse(lwm2m_uri_t * uriP, const uint8_t * buffer, size_t bufferLen, lwm2m_media_type_t format, lwm2m_data_t ** dataP);
 int lwm2m_data_serialize(lwm2m_uri_t * uriP, int size, lwm2m_data_t * dataP, lwm2m_media_type_t * formatP, uint8_t ** bufferP);
 void lwm2m_data_free(int size, lwm2m_data_t * dataP);
 
 void lwm2m_data_encode_string(const char * string, lwm2m_data_t * dataP);
 void lwm2m_data_encode_nstring(const char * string, size_t length, lwm2m_data_t * dataP);
-void lwm2m_data_encode_opaque(uint8_t * buffer, size_t length, lwm2m_data_t * dataP);
+void lwm2m_data_encode_opaque(const uint8_t * buffer, size_t length, lwm2m_data_t * dataP);
 void lwm2m_data_encode_int(int64_t value, lwm2m_data_t * dataP);
 int lwm2m_data_decode_int(const lwm2m_data_t * dataP, int64_t * valueP);
+void lwm2m_data_encode_uint(uint64_t value, lwm2m_data_t * dataP);
+int lwm2m_data_decode_uint(const lwm2m_data_t * dataP, uint64_t * valueP);
 void lwm2m_data_encode_float(double value, lwm2m_data_t * dataP);
 int lwm2m_data_decode_float(const lwm2m_data_t * dataP, double * valueP);
 void lwm2m_data_encode_bool(bool value, lwm2m_data_t * dataP);
 int lwm2m_data_decode_bool(const lwm2m_data_t * dataP, bool * valueP);
 void lwm2m_data_encode_objlink(uint16_t objectId, uint16_t objectInstanceId, lwm2m_data_t * dataP);
+void lwm2m_data_encode_corelink(const char * corelink, lwm2m_data_t * dataP);
 void lwm2m_data_encode_instances(lwm2m_data_t * subDataP, size_t count, lwm2m_data_t * dataP);
 void lwm2m_data_include(lwm2m_data_t * subDataP, size_t count, lwm2m_data_t * dataP);
 
@@ -453,6 +493,7 @@ struct _lwm2m_object_t
 typedef enum
 {
     STATE_DEREGISTERED = 0,        // not registered or boostrap not started
+    STATE_REG_HOLD_OFF,            // initial registration delay or delay between retries
     STATE_REG_PENDING,             // registration pending
     STATE_REGISTERED,              // successfully registered
     STATE_REG_FAILED,              // last registration failed
@@ -471,14 +512,24 @@ typedef enum
 
 typedef enum
 {
-    BINDING_UNKNOWN = 0,
-    BINDING_U,   // UDP
-    BINDING_UQ,  // UDP queue mode
-    BINDING_S,   // SMS
-    BINDING_SQ,  // SMS queue mode
-    BINDING_US,  // UDP plus SMS
-    BINDING_UQS  // UDP queue mode plus SMS
-} lwm2m_binding_t;
+    VERSION_MISSING = 0,  // Version number not in registration.
+    VERSION_UNRECOGNIZED, // Version number in registration not recognized.
+    VERSION_1_0,          // LWM2M version 1.0
+    VERSION_1_1,          // LWM2M version 1.1
+} lwm2m_version_t;
+
+#define BINDING_UNKNOWN 0x01
+#define BINDING_U       0x02 // UDP
+#define BINDING_T       0x04 // TCP
+#define BINDING_S       0x08 // SMS
+#define BINDING_N       0x10 // Non-IP
+#define BINDING_Q       0x20 // queue mode
+/* Legacy bindings */
+#define BINDING_UQ (BINDING_U|BINDING_Q) // UDP queue mode
+#define BINDING_SQ (BINDING_S|BINDING_Q) // SMS queue mode
+#define BINDING_US (BINDING_U|BINDING_S) // UDP plus SMS
+#define BINDING_UQS (BINDING_U|BINDING_Q|BINDING_S) // UDP queue mode plus SMS
+typedef uint8_t lwm2m_binding_t;
 
 /*
  * LWM2M block1 data
@@ -501,15 +552,21 @@ typedef struct _lwm2m_server_
     uint16_t                secObjInstID; // matches lwm2m_list_t::id
     uint16_t                shortID;      // servers short ID, may be 0 for bootstrap server
     time_t                  lifetime;     // lifetime of the registration in sec or 0 if default value (86400 sec), also used as hold off time for bootstrap servers
-    time_t                  registration; // date of the last registration in sec or end of client hold off time for bootstrap servers
+    time_t                  registration; // date of the last registration in sec or end of client hold off time for bootstrap servers or end of hold off time for registration holds.
     lwm2m_binding_t         binding;      // client connection mode with this server
     void *                  sessionH;
     lwm2m_status_t          status;
     char *                  location;
     bool                    dirty;
     lwm2m_block1_data_t *   block1Data;   // buffer to handle block1 data, should be replace by a list to support several block1 transfer by server.
+#ifndef LWM2M_VERSION_1_0
+    uint16_t                servObjInstID;// Server object instance ID if not a bootstrap server.
+    uint8_t                 attempt;      // Current registration attempt
+    uint8_t                 sequence;     // Current registration sequence
+#endif
 } lwm2m_server_t;
 
+typedef struct _lwm2m_context_ lwm2m_context_t;
 
 /*
  * LWM2M result callback
@@ -521,7 +578,8 @@ typedef void (*lwm2m_result_callback_t) (uint16_t clientID, lwm2m_uri_t * uriP, 
 /*
  * LWM2M Observations
  *
- * Used to store observation of remote clients resources.
+ * Used to store latest user operation on the observation of remote clients resources.
+ * Any node in the observation list means observation was established with client already.
  * status STATE_REG_PENDING means the observe request was sent to the client but not yet answered.
  * status STATE_REGISTERED means the client acknowledged the observe request.
  * status STATE_DEREG_PENDING means the user canceled the request before the client answered it.
@@ -533,7 +591,7 @@ typedef struct _lwm2m_observation_
     uint16_t                     id;    // matches lwm2m_list_t::id
     struct _lwm2m_client_ * clientP;
     lwm2m_uri_t             uri;
-    lwm2m_status_t          status;
+    lwm2m_status_t          status;     // latest user operation
     lwm2m_result_callback_t callback;
     void *                  userData;
 } lwm2m_observation_t;
@@ -582,15 +640,17 @@ typedef struct _lwm2m_client_
     struct _lwm2m_client_ * next;       // matches lwm2m_list_t::next
     uint16_t                internalID; // matches lwm2m_list_t::id
     char *                  name;
+    lwm2m_version_t         version;
     lwm2m_binding_t         binding;
     char *                  msisdn;
     char *                  altPath;
-    bool                    supportJSON;
+    lwm2m_media_type_t      format;
     uint32_t                lifetime;
     time_t                  endOfLife;
     void *                  sessionH;
     lwm2m_client_object_t * objectList;
     lwm2m_observation_t *   observationList;
+    uint16_t                observationId;
 } lwm2m_client_t;
 
 
@@ -602,7 +662,7 @@ typedef struct _lwm2m_client_
 
 typedef struct _lwm2m_transaction_ lwm2m_transaction_t;
 
-typedef void (*lwm2m_transaction_callback_t) (lwm2m_transaction_t * transacP, void * message);
+// typedef void (*lwm2m_transaction_callback_t) (lwm2m_context_t * contextP, lwm2m_transaction_t * transacP, void * message);
 
 struct _lwm2m_transaction_
 {
@@ -641,6 +701,7 @@ typedef struct _lwm2m_watcher_
     union
     {
         int64_t asInteger;
+        uint64_t asUnsigned;
         double  asFloat;
     } lastValue;
 } lwm2m_watcher_t;
@@ -681,7 +742,7 @@ typedef enum
 typedef int (*lwm2m_bootstrap_callback_t) (void * sessionH, uint8_t status, lwm2m_uri_t * uriP, char * name, void * userData);
 #endif
 
-typedef struct _lwm2m_context_t
+struct _lwm2m_context_
 {
 #ifdef LWM2M_CLIENT_MODE
     lwm2m_client_state_t state;
@@ -705,8 +766,9 @@ typedef struct _lwm2m_context_t
     uint16_t                nextMID;
     lwm2m_transaction_t *   transactionList;
     void *                  userData;
-} lwm2m_context_t;
+};
 
+// typedef struct _lwm2m_context_ lwm2m_context_t;
 
 // initialize a liblwm2m context.
 lwm2m_context_t * lwm2m_init(void * userData);

@@ -40,274 +40,154 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <mqtt_al.h>
+#include <oc_mqtt_assistant.h>   ///< use  this function to build some data structure for the user
 
-#include <cJSON.h>
 
-typedef enum
-{
-    en_oc_mqtt_device_type_dynamic = 0,
-    en_oc_mqtt_device_type_static,
-}en_oc_mqtt_device_type;
-
-typedef enum
-{
-    en_oc_mqtt_code_mode_binary = 0,   ///< the report and command is binary mode
-    en_oc_mqtt_code_mode_json,         ///< the report and command is json mode
-    en_oc_mqtt_code_mode_max,
-}en_oc_mqtt_code_mode;
+///< the mode for the huawei OceanConnect  mode
+///< bs: if bs then the connection will first connect the bootstrap server then the hub server
+///< static:means we connect the server use the generated id and pwd when create device on the platform
+///< nodeid:means we connect use the nodeid and pwd generated
 
 typedef enum
 {
-    en_mqtt_sign_type_hmacsha256_check_time_no = 0, //use HMACSHA256 to encode password but no check current time
-    en_mqtt_sign_type_hmacsha256_check_time_yes   , //use HMACSHA256 to encode password and check current time
-}en_oc_mqtt_sign_type;
+    en_oc_mqtt_mode_bs_static_nodeid_hmacsha256_notimecheck_json =0,
+    en_oc_mqtt_mode_nobs_static_nodeid_hmacsha256_notimecheck_json,
+    en_oc_mqtt_mode_last,
+}en_oc_mqtt_mode;
 
 typedef enum
 {
-    en_mqtt_auth_type_devid = 0,
-    en_mqtt_auth_type_model = 1,
-    en_mqtt_auth_type_nodeid = 2,
-}en_oc_mqtt_auth_type;
-
+    en_oc_mqtt_err_ok          = 0,      ///< this means the status ok
+    en_oc_mqtt_err_parafmt,              ///< this means the parameter err format
+    en_oc_mqtt_err_network,              ///< this means the network wrong status
+    en_oc_mqtt_err_conversion,           ///< this means the mqtt version err
+    en_oc_mqtt_err_conclientid,          ///< this means the client id is err
+    en_oc_mqtt_err_conserver,            ///< this means the server refused the service for some reason(likely the id and pwd)
+    en_oc_mqtt_err_conuserpwd,           ///< bad user name or passwd
+    en_oc_mqtt_err_conclient,            ///< the client id /user/pwd is right, but does not allowed
+    en_oc_mqtt_err_subscribe,            ///< this means subscribe the topic failed
+    en_oc_mqtt_err_publish,              ///< this means subscribe the topic failed
+    en_oc_mqtt_err_configured,           ///< this means we has configured, please deconfigured it and then do configure again
+    en_oc_mqtt_err_noconfigured,         ///< this means we have not configure it yet,so could not connect
+    en_oc_mqtt_err_noconected,           ///< this means the connection has not been built, so you could not send data
+    en_oc_mqtt_err_gethubaddrtimeout,    ///< this means get the hub address timeout
+    en_oc_mqtt_err_sysmem,               ///< this means the system memory is not enough
+    en_oc_mqtt_err_system,               ///< this means that the system porting may have some problem,maybe not install yet
+    en_oc_mqtt_err_last,
+}en_oc_mqtt_err_code_t;
 
 /** @brief this is the message dealer module for the application*/
-typedef int (*oc_mqtt_msgdealer)(void *handle,mqtt_al_msgrcv_t *msg);
-
-/**
- * @brief: you must supply a media (nonvolatile,like the rom flash) for the dynamic mode
- *         and the media maybe 2kilo Bytes
- * */
-typedef int (*secret_read) (int offset,char *buf,int len);
-typedef int (*secret_write)(int offset,char *buf, int len);
+typedef int (*fn_oc_mqtt_msg_deal)(void *arg,mqtt_al_msgrcv_t *msg);
 
 typedef struct
 {
-    const char*  productid;
-    const char*  productpasswd;
-    const char*  notetid;
-    secret_read  read_secret;
-    secret_write write_secret;
-}tag_oc_mqtt_device_dynamic;
+    en_oc_mqtt_mode  boot_mode;     ///< if bs mode, then the server and port must be the bs server's
+    uint8_t          lifetime;      ///< the keep alive time, used for the mqtt protocol
+    char            *server_addr;   ///< server address:domain name or ip address
+    char            *server_port;   ///< server port:
+    en_mqtt_al_security_t   sec_type;      ///< only support crt mode now
+    char                              *id;
+    char                              *pwd;
+//    int                                device_mode;  ///< gateway or not, not used yet
+    fn_oc_mqtt_msg_deal                msg_deal;       ///< when the agent receive any applciation data, please call this function
+    void                              *msg_deal_arg;   ///< call back for the fn_oc_mqtt_msg_deal
 
-typedef struct
-{
-    const char*  deviceid;
-    const char*  devicepasswd;
-}tag_oc_mqtt_device_static;
+}oc_mqtt_config_t;
 
-typedef enum
-{
-    en_oc_boot_strap_mode_factory = 0,
-    en_oc_boot_strap_mode_client_initialize,
-}en_oc_boot_strap_mode_t;
+///////////////////////////MQTT AGENT INTERFACE//////////////////////////////////
+///< the returned code defines by en_oc_mqtt_err_code
+typedef  int (*fn_oc_mqtt_config)(oc_mqtt_config_t *param);
+typedef  int (*fn_oc_mqtt_deconfig)(void);
+typedef  int (*fn_oc_mqtt_publish)(char *topic,uint8_t *msg,int msg_len,int qos);
+typedef  int (*fn_oc_mqtt_subscribe)(char *topic, int qos);
 
 
-
-typedef struct
-{
-    en_oc_boot_strap_mode_t  boot_mode;
-    unsigned short lifetime;
-    const char   *server;            ///< cdp server address
-    const char   *port;              ///< cdp server port
-    mqtt_al_security_para_t security;///< only support crt mode now
-    en_oc_mqtt_code_mode    code_mode;   ///< cdp encode mode:now only support the json mode
-    en_oc_mqtt_sign_type    sign_type;   ///< generate the passwd supported
-    en_oc_mqtt_device_type  device_type;
-    en_oc_mqtt_auth_type    auth_type;
-
-    union
-    {
-        tag_oc_mqtt_device_dynamic d_device;
-        tag_oc_mqtt_device_static  s_device;
-    }device_info;
-
-    oc_mqtt_msgdealer  msgdealer;      ///< when the agent receive any applciation data, please call this function
-}tag_oc_mqtt_config;
-
-///////////////////////////MQTT AGENT INTERFACE////////////////////////////////
-typedef void* (*fn_oc_mqtt_config)(tag_oc_mqtt_config *param);                        ///< return the handle here
-typedef int (*fn_oc_mqtt_deconfig)(void *handle);                                     ///< use the handle as the params
-typedef int (*fn_oc_mqtt_report)(void *handle,char *msg,int len,en_mqtt_al_qos_t qos);    ///< use the handle and report params
 /**
  * @brief this data structure defines the mqtt agent implement
  */
+
+typedef struct
+{
+    fn_oc_mqtt_config      config;   ///< this function used for the configuration
+    fn_oc_mqtt_deconfig    deconfig; ///< this function used for the deconfig
+    fn_oc_mqtt_publish     publish;  ///< this function added by the new device profile
+    fn_oc_mqtt_subscribe   subscribe;///< this function make the tiny extended
+}oc_mqtt_op_t;
+
 typedef struct
 {
     const char         *name;     ///< this is the name for the ops
-    fn_oc_mqtt_config   config;   ///< this function used for the configuration
-    fn_oc_mqtt_report   report;   ///< this function used for the report data to the cdp
-    fn_oc_mqtt_deconfig deconfig; ///< this function used for the deconfig
-}tag_oc_mqtt_ops;
+    oc_mqtt_op_t        op;
+}oc_mqtt_t;
 
 /**
  *@brief the mqtt agent should use this function to register the method for the application
  *
  *@param[in] opt, the operation method implement by the mqtt agent developer
+ *
  *@return 0 success while -1 failed
  */
-int oc_mqtt_register(const tag_oc_mqtt_ops *opt);
+int oc_mqtt_register(const oc_mqtt_t *opt);
 
+int oc_mqtt_unregister(const char *name);
 
-//////////////////////////APPLICATION INTERFACE/////////////////////////////////
-
-/* msg type, json name, its value is string*/
-#define cn_msg_type_name "msgType"
-/* msg type report data, json value */
-#define cn_msg_type_device_req    "deviceReq"   ///< device report
-#define cn_msg_type_cloud_req     "cloudReq"    ///< cloud command
-#define cn_msg_type_device_resp   "deviceRsp"   ///< device response to the command
-
-/* more data, json name, its value is int, 0 for no more data, 1 for more data */
-#define cn_has_more_name "hasMore"
-typedef enum
-{
-    en_oc_mqtt_has_more_no = 0,
-    en_oc_mqtt_has_more_yes =1,
-}en_oc_mqtt_has_more;
-
-
-/* ServiceData array, json name, its value is ServiceData array */
-#define cn_data_name "data"
-
-/* ServiceData */
-/* service id, json name, its value is string */
-#define cn_service_id_name   "serviceId"
-
-/* service data, json name, its value is an object defined in profile for the device */
-#define cn_service_data_name "serviceData"
-
-/* service data, json name, its value is string, format yyyyMMddTHHmmssZ such as 20161219T114920Z */
-#define cn_service_time_name  "eventTime"
-
-
-#define cn_cmd_name       "cmd"
-#define cn_paras_name     "paras"
-#define cn_mid_name       "mid"
-
-#define cn_err_code_name  "errcode"
-typedef enum
-{
-    en_oc_mqtt_err_code_ok = 0,
-    en_oc_mqtt_err_code_err =1,
-}en_oc_mqtt_err_code;
-
-#define cn_body_name      "body"
-
-/* deviceReq data msg jason format example to server
-the message can be decoded in json or binary.
-{
-        "msgType":      "deviceReq",
-        "hasMore":      0,
-        "data": [{
-                        "serviceId":    "serviceIdValue",
-                        "serviceData": {
-                                "defineData": "defineValue"
-                        },
-                        "eventTime":    "20161219T114920Z"
-                }]
-}
-*/
-/*
-cloudReq data msg jason format example from server
-{
-    "msgType":"cloudReq",
-    "serviceId":"serviceIdValue",
-    "paras":{
-        "paraName":"paraValue"
-    },
-    "cmd":"cmdValue",
-    "hasMore":0,
-    "mid":0
-}
-*/
-/*
-deviceRsp data msg jason format example to server
-{
-    "msgType":  "deviceRsp",
-    "mid":  0,
-    "errcode":  0,
-    "hasMore":  0,
-    "body": {
-        "bodyParaName": "bodyParaValue"
-    }
-}
-*/
-typedef enum
-{
-    en_key_value_type_int = 0,
-    en_key_value_type_string,
-    en_key_value_type_array,
-}en_value_type;
-
-typedef struct
-{
-    char           *name;    ///< key name
-    char           *buf;     ///< used to storage the key value
-    int             len;     ///< how long the key value
-    en_value_type   type;    ///< the value type
-}tag_key_value;
-
-typedef struct
-{
-    void            *next;
-    tag_key_value    item;
-}tag_key_value_list;
-
-/**
- *
- * @brief:this data structure used for the message send and message receive
- *
- * */
-typedef struct
-{
-    char                  *serviceid;
-    tag_key_value_list    *paralst;
-    char                  *eventtime;
-    en_oc_mqtt_has_more    hasmore;
-}tag_oc_mqtt_report;
-
-///< use this function to format the message to json mode
-cJSON *oc_mqtt_json_fmt_report(tag_oc_mqtt_report  *report);
-
-/**
- * @brief: this data structure used for the command response
- *         when you receive a command, you should do the response
- * */
-typedef struct
-{
-
-    int                     mid;     ///< should get from the command message
-    en_oc_mqtt_err_code     errcode; ///< error code
-    en_oc_mqtt_has_more     hasmore; ///< has more or not
-    tag_key_value_list     *bodylst; ///< response body
-}tag_oc_mqtt_response;
-///< use this function to format the response message to json mode
-cJSON *oc_mqtt_json_fmt_response(tag_oc_mqtt_response *response);
+/////////////////////////THE APPLICATION USER DEVELOPER INTERFACE//////////////
+///< return code defines by en_oc_mqtt_err_code
 
 /**
  * @brief the application use this function to configure the lwm2m agent
- * @param[in] param, refer to tag_oc_mqtt_config
- * @return oc mqtt handle else NULL failed
- */
-void *oc_mqtt_config(tag_oc_mqtt_config *param);
-/**
- * @brief the application use this function to send the message to the cdp
- * @param[in] hanlde:the mqtt handle returned by oc_mqtt_config
- * @param[in] report:the message to report
  *
- * @return 0 success while <0 failed
+ * @param[in] param, refer to oc_mqtt_config_t
+ *
+ * @return code: define by en_oc_mqtt_err_code while 0 means success
  */
-int oc_mqtt_report(void *handle,char *msg,int len, en_mqtt_al_qos_t qos);
+int oc_mqtt_config(oc_mqtt_config_t *param);
+
 
 /**
- *@brief: the application use this function to deconfigure the lwm2m agent
+ * @brief the application use this function to send message to the default topic(old interface)
  *
- *@param[in] handle: returned by oc_mqtt_config
+ * @param[in] msg:the message to send
  *
- * return 0 success while <0 failed
+ * @param[in] msg_len:the message length
+ *
+ * @param[in] qos: defines as the mqtt does
+ *
+ * @return code: define by en_oc_mqtt_err_code while 0 means success
+ */
+int oc_mqtt_report(uint8_t *msg,int len, int qos);
+
+/**
+ *@brief: the application use this function to deconfigure the mqtt agent
+ *
+ * @return code: define by en_oc_mqtt_err_code while 0 means success
  */
 
-int oc_mqtt_deconfig(void *handle);
+int oc_mqtt_deconfig(void);
+
+/**
+ * @brief the application use this function to publish message to specified topic
+ *
+ * @param[in] topic: the destination topic
+ *
+ * @param[in] msg:the message to send
+ *
+ * @param[in] msg_len:the message length
+ *
+ * @return code: define by en_oc_mqtt_err_code while 0 means success
+ */
+int oc_mqtt_publish(char *topic,uint8_t *msg,int msg_len,int qos);
+
+/**
+ * @brief the application use this function to publish message to specified topic
+ *
+ * @param[in] topic: the destination topic
+ *
+ * @param[in] qos:the topic qos
+ *
+ * @return code: define by en_oc_mqtt_err_code while 0 means success
+ */
+int oc_mqtt_subscribe(char *topic,int qos);
 
 /**
  *@brief this is the oc mqtt  initialize function,must be called first
@@ -315,5 +195,15 @@ int oc_mqtt_deconfig(void *handle);
  *@return 0 success while <0 failed
  */
 int oc_mqtt_init();
+
+/**
+ *@brief use this function to get the errcode for the oc mqtt
+ *
+ *@return the  reason  corresponding to the code
+ */
+const char *oc_mqtt_err(int code);
+
+
+
 
 #endif /* __OC_MQTT_AL_H */

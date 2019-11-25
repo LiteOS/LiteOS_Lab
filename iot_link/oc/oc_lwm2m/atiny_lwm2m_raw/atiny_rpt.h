@@ -41,8 +41,8 @@
 extern "C" {
 #endif
 
-#define URI_FORMAT "uri(flag:0x%x, objId:%d, instId:%d, resId:%d)"
-#define URI_LOG_PARAM(uri) (uri)->flag, (uri)->objectId, (uri)->instanceId, (uri)->resourceId
+#define URI_FORMAT "uri(objId:%d, instId:%d, resId:%d)"
+#define URI_LOG_PARAM(uri) (uri)->objectId, (uri)->instanceId, (uri)->resourceId
 
 ATINY_INLINE void get_instance_uri(uint16_t object_id, uint16_t instance_id, lwm2m_uri_t* uri)
 {
@@ -50,7 +50,7 @@ ATINY_INLINE void get_instance_uri(uint16_t object_id, uint16_t instance_id, lwm
     {
         return;
     }
-    uri->flag = LWM2M_URI_FLAG_OBJECT_ID | LWM2M_URI_FLAG_INSTANCE_ID;
+    // uri->flag = LWM2M_URI_FLAG_OBJECT_ID | LWM2M_URI_FLAG_INSTANCE_ID;
     uri->objectId = object_id;
     uri->instanceId = instance_id;
     uri->resourceId = 0;
@@ -62,7 +62,7 @@ ATINY_INLINE void get_resource_uri(uint16_t object_id, uint16_t instance_id, uin
     {
         return;
     }
-    uri->flag = LWM2M_URI_FLAG_OBJECT_ID | LWM2M_URI_FLAG_INSTANCE_ID | LWM2M_URI_FLAG_RESOURCE_ID;
+    // uri->flag = LWM2M_URI_FLAG_OBJECT_ID | LWM2M_URI_FLAG_INSTANCE_ID | LWM2M_URI_FLAG_RESOURCE_ID;
     uri->objectId = object_id;
     uri->instanceId = instance_id;
     uri->resourceId = resource_id;

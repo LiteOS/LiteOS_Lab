@@ -176,7 +176,6 @@ void arch_exc_handler (exc_info_t * context)
 
     BUG_ON (task_suspend (current) != 0, "Kernel task crash!");
 
-
 #ifdef CONFIG_TRACE
 #ifdef CONFIG_AARCH_M_MAINLINE
 

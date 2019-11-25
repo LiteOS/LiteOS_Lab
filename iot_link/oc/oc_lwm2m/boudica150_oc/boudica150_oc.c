@@ -571,7 +571,7 @@ static bool_t boudica150_boot(const char *plmn, const char *apn, const char *ban
 
         boudica150_set_cmee(1);
 
-        boudica150_set_autoconnect( 0);     //cgatt and cfun must be called if autoconnect is false
+        boudica150_set_autoconnect(0);     //cgatt and cfun must be called if autoconnect is false
 
         boudica150_set_bands(bands);
 

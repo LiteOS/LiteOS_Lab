@@ -560,7 +560,7 @@ void heap_free (heap_t * heap, char * mem)
     obj_unprotect (&heap->obj);
     }
 
-char * __realloc (heap_t * heap, char * ptr, size_t size)
+static char * __realloc (heap_t * heap, char * ptr, size_t size)
     {
     char    * mem;
     size_t    usable_size;
@@ -730,18 +730,24 @@ static int __heap_destroy (obj_id obj)
 
     while (block)
         {
+
+        /* get the first chunk and skip the first ACH */
+
         chunk_t * chunk = __get_next_chunk ((chunk_t *) (block + 1));
 
         do
             {
+
+            /* reach last one */
+
+            if (unlikely (chunk->size == (sizeof (ach_t) | 1)))
+                {
+                break;
+                }
+
             if (unlikely (!__is_free (chunk)))
                 {
                 return -1;
-                }
-
-            if (chunk->size == (sizeof (ach_t) | 1))
-                {
-                break;
                 }
 
             chunk = __get_next_chunk (chunk);
