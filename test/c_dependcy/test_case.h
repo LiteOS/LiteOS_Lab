@@ -65,7 +65,7 @@
 #define TEST_OC_MQTT_CONFIG           ((TEST_SORT_OC_MQTT_AL << 16) | 2)
 #define TEST_OC_MQTT_JSON_FMT_REQ     ((TEST_SORT_OC_MQTT_AL << 16) | 3)
 #define TEST_OC_MQTT_JSON_FMT_RES     ((TEST_SORT_OC_MQTT_AL << 16) | 4)
-#define TEST_OC_MQTT_REPORT           ((TEST_SORT_OC_MQTT_AL << 16) | 5)
+#define TEST_OC_MQTT_PUBLISH          ((TEST_SORT_OC_MQTT_AL << 16) | 5)
 #define TEST_OC_MQTT_DECONFIG         ((TEST_SORT_OC_MQTT_AL << 16) | 6)
 #define TEST_OC_MQTT_DEINIT           ((TEST_SORT_OC_MQTT_AL << 16) | 7)
 #define TEST_OC_MQTT_GETVALUE         ((TEST_SORT_OC_MQTT_AL << 16) | 8)

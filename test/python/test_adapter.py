@@ -2,6 +2,7 @@ import sys
 from socket import *
 S_HOST = '192.168.1.168'
 D_HOST = '192.168.1.100'
+# D_HOST = '192.168.1.115'
 S_PORT = 62556
 D_PORT = 5999  # 端口号
 BUFFSIZE = 1024*8  # 接收消息的缓冲大小
@@ -13,6 +14,15 @@ class resultFromDest(object):
     ret_code = -1
     data = ''
 
+def setSourceHost(src):
+    global S_HOST
+    S_HOST = src
+
+def setDestHost(dest):
+    global D_HOST
+    print("come here setDestHost")
+    D_HOST = dest
+    print(D_HOST)
 
 def ts_call_single(*args):
     global udpCliSock
@@ -25,10 +35,11 @@ def ts_call_single(*args):
         # udpCliSock.bind((S_HOST,S_PORT))
     else:
         print("api_call now,udpCliSock")
-        udpCliSock.settimeout(10)
+        udpCliSock.settimeout(30)
     cmd_str = ''
     for arg in args:
         cmd_str += str(arg)+'|'
+    print("dest host:", D_HOST)
     print("API CALL:", cmd_str)
     udpCliSock.sendto(bytes(cmd_str, 'utf-8'),  (D_HOST, D_PORT))  # 客户端发送消息
     try:

@@ -51,24 +51,24 @@
 ########################OS SERVICE START########################################
 
 #CONFIG_OS_TYPE , could be: "linux" "macos" "liteos", and you could select one
-CONFIG_OS_TYPE := "linux"
+CONFIG_OS_TYPE := "liteos"
 
 #CONFIG_ARCH_CPU_TYPE,could be "armv7-m" "armv6-m" "riscv32" "x86" "x86-64"
-CONFIG_ARCH_CPU_TYPE := "x86-64"
+CONFIG_ARCH_CPU_TYPE := "armv7-m"
 
 #CONFIG_SHELL_ENABLE , we supply a simple shell on the liteos,which depends the liteos,support: y n
-CONFIG_SHELL_ENABLE := n
+CONFIG_SHELL_ENABLE := y
 
 #CONFIG_STIMER_ENABLE , we supply a simple softtimer on the osal,you could choose yes or no
 CONFIG_STIMER_ENABLE := y
 
 #CONFIG_DRIVER_ENABLE , we supply a easy and simple driver framework for the sdk
 #this option based on the liteos, so you must choose liteos
-CONFIG_DRIVER_ENABLE := n
+CONFIG_DRIVER_ENABLE := y
 
 #CONFIG_DRIVER_ENABLE , we supply a easy and simple at framework for the sdk
 #this option based on the driver framework, so you must choose CONFIG_DRIVER_ENABLE
-CONFIG_AT_ENABLE     := n
+CONFIG_AT_ENABLE     := y
 ########################OS SERVICE END##########################################
 
 
@@ -86,9 +86,9 @@ CONFIG_CJSON_ENABLE := y
 #you could build your own application based on the sal, which shielding the defference of 
 #variouse tcpip function.what's more, you could add your own tcpip stack to the sdk.
 #and if this option is enabled, then you select  one type for your program, we now
-#CONFIG_TCPIP_TYPE could be:"lwip_socket" "linux_socket" "macos_socket" "esp8266_socket" "none"
+#CONFIG_TCPIP_TYPE could be:"lwip_socket" "linux_socket" "macos_socket" "esp8266_socket" "rtk8710_socket" "none"
 CONFIG_TCPIP_ENABLE := y
-CONFIG_TCPIP_TYPE := "linux_socket"
+CONFIG_TCPIP_TYPE := "lwip_socket"
 
 #CONFIG_DTLS_ENABLE , we supply a DTLS AL (building),you could choose yes or no
 #CONFIG_DTLS_TYPE, could be "mbedtls_psk" "mbedtls_cert" "none"
@@ -100,17 +100,17 @@ CONFIG_DTLS_TYPE     := "mbedtls_cert"
 #the implement of mqtt. 
 #CONFIG_MQTT_TYPE could be "paho_mqtt" "none"
 CONFIG_MQTT_ENABLE   := y
-CONFIG_MQTT_TYPE     := "lite_mqtt"
+CONFIG_MQTT_TYPE     := "paho_mqtt"
 
 #CONFIG_LWM2M_ENABLE, we build a lwm2m abstraction, which shield the difference of 
 #the implement of lwm2m. 
-#CONFIG_LWM2M_TYPE could be "wakaama_lwm2m" "none"
+#CONFIG_LWM2M_TYPE could be "wakaama_lwm2m" "wakaama_raw" "none"
 CONFIG_LWM2M_ENABLE   := n
 CONFIG_LWM2M_TYPE     := "wakaama_lwm2m"
 
 #CONFIG_COAP_ENABLE, we build a coap abstraction, which shield the difference of 
 #the implement of coap. 
-#CONFIG_COAP_TYPE could be "lite_coap" "none"
+#CONFIG_COAP_TYPE could be "lite_coap" "libcoap" "none"
 CONFIG_COAP_ENABLE   := n
 CONFIG_COAP_TYPE     := "lite_coap"
 ########################NETWORK SERVICE END#####################################
@@ -131,7 +131,7 @@ CONFIG_OC_MQTT_TYPE   := "soft"
 
 #CONFIG_OC_LWM2M_ENABLE, we build a oc lwm2m abstraction for huawei OceanConnect service,
 #which shield the difference of the implement of oc lwm2m. 
-#CONFIG_OC_MQTT_TYPE could be "soft" "boudica150_oc" "none"
+#CONFIG_OC_MQTT_TYPE could be "soft" "boudica150_oc" "atiny_lwm2m_raw" "none"
 CONFIG_OC_LWM2M_ENABLE := n
 CONFIG_OC_LWM2M_TYPE   := "soft"
 
@@ -158,7 +158,7 @@ CONFIG_PCP_ENABLE      := n
 #1, if you use the oc mqtt, then the tls must support cert mode
 #2，if you use the oc lwm2m with encode mode,then the dtls must support psk mode
 
-#CONFIG_DEMO_TYPE could be "oc_coap_demo" "oc_dtls_coap_demo" "oc_dtls_lwm2m_bs_demo" "oc_dtls_lwm2m_demo"
+#CONFIG_DEMO_TYPE could be "oc_coap_demo" "oc_dtls_coap_demo" "oc_dtls_lwm2m_bs_demo" "oc_dtls_lwm2m_demo" "oc_dtls_lwm2m_ota_demo"
 #"oc_lwm2m_bs_demo"  "oc_lwm2m_demo" "oc_lwm2m_ota_demo" "oc_tls_mqtt_bs_demo" "oc_tls_mqtt_demo"  "stimer_demo"
 
 CONFIG_DEMO_ENABLE := n
