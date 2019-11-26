@@ -1,0 +1,16 @@
+{
+    "specVersion": "1.0",
+    "fileName": "diff.exe",
+    "packageType": "softwarePackage",
+    "version": "V1.0.10",
+    "deviceType": "lwm2m01",
+    "manufacturerName": "sdk_test_mqtt_factory",
+    "model": "01",
+    "protocolType": "LWM2M",
+    "description": "",
+    "versionCheckCode": "",
+    "deviceShard": "",
+    "platform": "",
+    "supportSourceVersionList": [],
+    "date": "2019-11-21"
+}
