@@ -46,6 +46,7 @@
 
 #include <boudica150_oc.h>
 #include "E53_SC1.h"
+#include "E53_SC1_Infrared.h"
 #include "lcd.h"
 
 #include <gpio.h>
@@ -125,6 +126,11 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 			toggle = !toggle;
 			HAL_GPIO_TogglePin(SC1_Light_GPIO_Port,SC1_Light_Pin);
 			break;
+		case SC1_Infrared_Pin:
+			printf("Ifrared message!\r\n");
+			HAL_GPIO_TogglePin(SC1_Light_GPIO_Port,SC1_Light_Pin);
+			break;
+
 		default:
 			break;
 	}
@@ -315,6 +321,7 @@ static int app_report_task_entry()
 static int app_collect_task_entry()
 {
     Init_E53_SC1();
+    Init_E53_SC1_Infrared();
     while (1)
     {
         E53_SC1_Read_Data();
@@ -343,6 +350,7 @@ int standard_app_demo_main()
 
     osal_int_connect(KEY1_EXTI_IRQn, 2,0,Key1_IRQHandler,NULL);
     osal_int_connect(KEY2_EXTI_IRQn, 3,0,Key2_IRQHandler,NULL);
+    osal_int_connect(Infrared_EXTI_IRQn, 4,0,Infrared_IRQHandler,NULL);
 
     stimer_create("lcdtimer",timer1_callback,NULL,8*1000,cn_stimer_flag_start);
 

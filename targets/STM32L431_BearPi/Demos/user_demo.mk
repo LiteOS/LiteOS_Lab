@@ -18,12 +18,14 @@ ifeq ($(CONFIG_DEMO_TYPE), "none")
 		
 	endif
 
-	#example for oc_streetlight_template
+	#example for oc_streetlight_infrared_template
 	ifeq ($(CONFIG_USER_DEMO), "oc_streetlight_infrared_template")	
 		user_demo_src  = ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Demos/oc_streetlight_infrared_template/*.c}
 		user_demo_inc = -I $(TOP_DIR)/targets/STM32L431_BearPi/Demos/oc_streetlight_infrared_template
 		user_hardware_src = ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/E53_SC1/*.c} 
 		user_hardware_inc = -I ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/E53_SC1}
+		user_hardware_src += ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/E53_SC1_Infrared/*.c} 
+		user_hardware_inc += -I ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/E53_SC1_Infrared}
 		user_demo_defs = -D oc_streetlight_infrared_template=1
 		
 	endif
