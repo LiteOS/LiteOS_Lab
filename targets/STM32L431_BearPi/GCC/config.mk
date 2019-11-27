@@ -170,7 +170,7 @@ CONFIG_DEMO_TYPE   := "none"
 
 #CONFIG_USER_DEMO could be "oc_streetlight_template" "oc_agriculture_template" "oc_track_template" "oc_smoke_template"
 
-CONFIG_USER_DEMO := "oc_agriculture_template"
+CONFIG_USER_DEMO := "oc_streetlight_template"
 
 #########################BearPi-IoT OC DEMO END######################################
 
