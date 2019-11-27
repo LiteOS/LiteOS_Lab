@@ -123,7 +123,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 			key2 = 1;
 			printf("toggle LED and report!\r\n");
 			toggle = !toggle;
-			HAL_GPIO_TogglePin(Light_GPIO_Port,Light_Pin);
+			HAL_GPIO_TogglePin(SC1_Light_GPIO_Port,SC1_Light_Pin);
 			break;
 		default:
 			break;
@@ -205,7 +205,7 @@ static int app_cmd_task_entry()
                             toggle = 1;
                             key2 = true;
                         }
-                    	HAL_GPIO_WritePin(Light_GPIO_Port,Light_Pin,GPIO_PIN_SET);
+                    	HAL_GPIO_WritePin(SC1_Light_GPIO_Port,SC1_Light_Pin,GPIO_PIN_SET);
 
                     	//if you need response message,do it here--TODO
                     	replymsg.msgid = cn_app_cmdreply;
@@ -225,7 +225,7 @@ static int app_cmd_task_entry()
                             toggle = 0;
                             key2 = true;
                         }
-                    	HAL_GPIO_WritePin(Light_GPIO_Port,Light_Pin,GPIO_PIN_RESET);
+                    	HAL_GPIO_WritePin(SC1_Light_GPIO_Port,SC1_Light_Pin,GPIO_PIN_RESET);
 
                     	//if you need response message,do it here--TODO
                     	replymsg.msgid = cn_app_cmdreply;
