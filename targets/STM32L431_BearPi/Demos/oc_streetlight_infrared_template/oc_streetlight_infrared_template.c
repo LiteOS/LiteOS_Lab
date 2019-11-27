@@ -330,7 +330,7 @@ static int app_collect_task_entry()
     return 0;
 }
 
-
+///< add my own demo main function
 #include <stimer.h>
 
 int standard_app_demo_main()
