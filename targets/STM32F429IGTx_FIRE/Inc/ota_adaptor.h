@@ -65,9 +65,8 @@ typedef enum {
 #pragma pack(1)
 typedef struct {
 	uint8_t pack_type;
-	uint32_t pack_len;
-	uint8_t reserved[27];
-}ota_pack_info;
+	uint8_t reserved[31];
+}ota_binary_info;
 #pragma pack()
 
 void hal_init_ota(void);

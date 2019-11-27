@@ -32,28 +32,55 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-/**@defgroup atiny_adapter Agenttiny Adapter
+/**@defgroup agent AgentTiny
+ * @defgroup agenttiny Agenttiny Definition
  * @ingroup agent
  */
+#ifndef OTA_API_H
+#define OTA_API_H
 
-#ifndef OTA_PORT_H
-#define OTA_PORT_H
-//#include "package.h"
-#include "ota_api.h"
+#include <stdbool.h>
+#include <stdint.h>
 
 
-
-#if defined(__cplusplus)
+#ifdef __cplusplus
 extern "C" {
 #endif
 
-void hal_init_ota(void);
-void hal_get_ota_opt(ota_opt_s *opt);
 
-#if defined(__cplusplus)
+typedef enum
+{
+    OTA_FULL_SOFTWARE,
+    OTA_DIFF_SOFTWARE,
+    OTA_UPDATE_INFO
+} ota_flash_type_e;
+
+
+typedef struct
+{
+    const char *rsa_N; /* RSA public key N, should valid all the time */
+    const char *rsa_E; /* RSA public key E, should valid all the time */
+}ota_key_s;
+
+typedef enum
+{
+    OTA_DOWNLOAD_SUCCESS,
+    OTA_DOWNLOAD_FAIL
+} ota_download_result_e;
+
+
+typedef struct
+{
+    int (*read_flash)(ota_flash_type_e type, void *buf, int32_t len, uint32_t location);
+    int (*write_flash)(ota_flash_type_e type, const void *buf, int32_t len, uint32_t location);
+    uint32_t flash_block_size;
+    ota_key_s key;
+}ota_opt_s;
+
+
+#ifdef __cplusplus
 }
 #endif
 
-#endif //OTA_PORT_H
-
+#endif
 

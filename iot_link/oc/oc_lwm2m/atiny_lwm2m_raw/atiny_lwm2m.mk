@@ -1,6 +1,7 @@
 OC_LWM2M_AGENT_SRC = \
         ${wildcard $(iot_link_root)/oc/oc_lwm2m/atiny_lwm2m_raw/*.c}
 
+USE_FOTA = y
 ifeq ($(USE_FOTA), y)
         C_SOURCES += $(OC_LWM2M_AGENT_SRC)
 else
@@ -13,4 +14,4 @@ endif
 
 OC_LWM2M_ATINY_INC = -I $(iot_link_root)/oc/oc_lwm2m/atiny_lwm2m_raw        
 C_INCLUDES += $(OC_LWM2M_ATINY_INC)
-C_DEFS += -D CONFIG_OC_LWM2M_AGENT_ENABLE=1
+C_DEFS += -D CONFIG_OC_LWM2M_AGENT_ENABLE=1 -D CONFIG_FEATURE_FOTA
