@@ -7,15 +7,14 @@
 #example for lwm2m
 
 ifeq ($(CONFIG_DEMO_TYPE), "none")	
-	CONFIG_USER_DEMO := "oc_track_template"
-
+	
 	#example for oc_streetlight_template
 	ifeq ($(CONFIG_USER_DEMO), "oc_streetlight_template")	
 		user_demo_src  = ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Demos/oc_streetlight_template/*.c}
 		user_demo_inc = -I $(TOP_DIR)/targets/STM32L431_BearPi/Demos/oc_streetlight_template
 		user_hardware_src = ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/E53_SC1/*.c} 
 		user_hardware_inc = -I ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/E53_SC1}
-		user_demo_defs = -D CONFIG_OC_LWM2M_DEMO_ENABLE=1
+		user_demo_defs = -D CONFIG_OC_STREELIGHT_DEMO_ENABLE=1
 		
 	endif
 
@@ -25,7 +24,7 @@ ifeq ($(CONFIG_DEMO_TYPE), "none")
 		user_demo_inc = -I $(TOP_DIR)/targets/STM32L431_BearPi/Demos/oc_agriculture_template
 		user_hardware_src = ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/E53_IA1/*.c} 
 		user_hardware_inc = -I ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/E53_IA1}
-		user_demo_defs = -D CONFIG_OC_LWM2M_DEMO_ENABLE=1
+		user_demo_defs = -D CONFIG_OC_ARRICULTURE_DEMO_ENABLE=1
 		
 	endif
 
@@ -35,7 +34,7 @@ ifeq ($(CONFIG_DEMO_TYPE), "none")
 		user_demo_inc = -I $(TOP_DIR)/targets/STM32L431_BearPi/Demos/oc_track_template
 		user_hardware_src = ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/E53_ST1/*.c} 
 		user_hardware_inc = -I ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/E53_ST1}
-		user_demo_defs = -D CONFIG_OC_LWM2M_DEMO_ENABLE=1
+		user_demo_defs = -D CONFIG_OC_TRACK_DEMO_ENABLE=1
 		
 	endif
 
@@ -45,7 +44,7 @@ ifeq ($(CONFIG_DEMO_TYPE), "none")
 		user_demo_inc = -I $(TOP_DIR)/targets/STM32L431_BearPi/Demos/oc_smoke_template
 		user_hardware_src = ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/E53_SF1/*.c} 
 		user_hardware_inc = -I ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/E53_SF1}
-		user_demo_defs = -D CONFIG_OC_LWM2M_DEMO_ENABLE=1
+		user_demo_defs = -D CONFIG_OC_SMOKE_DEMO_ENABLE=1
 	endif
 
 	#example for hello world	 

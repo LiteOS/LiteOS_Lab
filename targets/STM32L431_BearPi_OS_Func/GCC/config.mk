@@ -166,5 +166,11 @@ CONFIG_DEMO_TYPE   := "none"
 
 #########################STANDARD DEMO END######################################
 
+########################BearPi-IoT OSAL DEMO START#####################################
 
+#CONFIG_USER_DEMO could be "hello_world_demo" "osal_task_demo" "osal_mem_demo" "osal_semp_demo" "osal_mutex_demo"
+
+CONFIG_USER_DEMO := "hello_world_demo"
+
+#########################BearPi-IoT OSAL DEMO END######################################
 
