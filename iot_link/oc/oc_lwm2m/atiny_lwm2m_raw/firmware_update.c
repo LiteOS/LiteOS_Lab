@@ -286,7 +286,7 @@ int start_firmware_download(lwm2m_context_t *contextP, char *uri,
     int uri_len;
     lwm2m_server_t *server;
 
-    if(!contextP || !uri || *uri == '\0') //SJN || !storage_device_p)
+    if(!contextP || !uri || *uri == '\0') //|| !storage_device_p)
     {
         ATINY_LOG(LOG_ERR, "invalid params");
         return -1;

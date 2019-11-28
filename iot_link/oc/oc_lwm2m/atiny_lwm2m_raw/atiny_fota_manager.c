@@ -266,7 +266,7 @@ static int atiny_fota_manager_flag_write(const void* buf, int32_t len)
 int atiny_fota_manager_set_storage_device(atiny_fota_manager_s *thi)
 {
     int ret;
-//TODO SJN    flag_op_s flag_op;
+//    flag_op_s flag_op;
 //    pack_params_s pack_param;
 
     ASSERT_THIS(return ATINY_ARG_INVALID);

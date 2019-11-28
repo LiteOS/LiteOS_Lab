@@ -14,13 +14,21 @@ int ota_pack_man_software_write_end(pack_storage_device_api_s *this, pack_downlo
 {
   (void)this;
   ota_flag_t flag;
+  int ret = OK;
+
   ota_storage_flag_read(&flag);
   flag.updater = UPDATER_FOTA;
   flag.file_size = len;
   flag.cur_state = (result == PACK_DOWNLOAD_OK ? EN_OTA_STATUS_UPGRADING : EN_OTA_STATUS_IDLE);
+
+  if (ota_pack_get_signature_verify_result(256, len) != 0) {
+	ret = ERR;
+  	flag.cur_state = EN_OTA_STATUS_IDLE;
+  }
+
   flag.crc = calc_crc32(0, &flag, sizeof(flag) - sizeof(flag.crc));
   ota_storage_flag_write(&flag);
-  return OK;
+  return ret;
 }
 
 int ota_pack_man_active_software(pack_storage_device_api_s *thi)

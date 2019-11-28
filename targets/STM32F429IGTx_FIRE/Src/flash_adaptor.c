@@ -195,28 +195,4 @@ void flash_adaptor_init(void)
     storage_dev_install(s_storage_dev, sizeof(s_storage_dev)/ sizeof(storage_device));
     storage_partition_init(s_storage_part, sizeof(s_storage_part)/ sizeof(storage_partition));
 }
-/*
-int flash_adaptor_write_mqtt_info(const void *buffer, uint32_t len)
-{
-    if(len > MQTT_INFO_SIZE)
-    {
-        HAL_OTA_LOG("err offset len %lu",  len);
-        return ERR;
-    }
-
-    return flash_adaptor_write(MQTT_INFO_ADDR, (const uint8_t *)buffer, len);
-}
-
-int flash_adaptor_read_mqtt_info(void *buffer, uint32_t len)
-{
-    if(len > MQTT_INFO_SIZE)
-    {
-        HAL_OTA_LOG("err offset len %lu",  len);
-        return ERR;
-    }
-     return hal_spi_flash_read(buffer, len, MQTT_INFO_ADDR);
-}
-*/
-
-
  

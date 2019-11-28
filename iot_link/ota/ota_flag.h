@@ -48,6 +48,9 @@
 #define UPDATER_FOTA  ('F' << 24 | UPDATER_OTA)
 #define UPDATER_SOTA  ('S' << 24 | UPDATER_OTA)
 
+#define OTA_HASH_LEN      (32)
+#define OTA_SIGNATURE_LEN (256)
+
 typedef enum
 {
     EN_OTA_STATUS_IDLE = 0,
@@ -70,9 +73,9 @@ typedef struct
     uint32_t file_off;    ///< the current offet to write
     uint32_t cur_state;   ///< defined by en_ota_status_t
     uint32_t ret_upgrade; ///< the upgrade,filled by the loader
-    uint32_t crc;         ///< all the ota information computed
-
     uint32_t updater;     ///< fota or sota
+
+    uint32_t crc;         ///< all the ota information computed
 }ota_flag_t;
 #pragma pack()
 

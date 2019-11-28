@@ -69,6 +69,8 @@ typedef struct {
 }ota_binary_info;
 #pragma pack()
 
+#define OTA_BINARY_OFFSET (OTA_SIGNATURE_LEN + sizeof(ota_binary_info))
+
 void hal_init_ota(void);
 void ota_update_upgrade_result(ota_flag_t *flag, uint32_t result);
 EN_PACKAGE_TYPE get_upgrade_type();   /* 0: full upgrade, 1: diff upgrade */

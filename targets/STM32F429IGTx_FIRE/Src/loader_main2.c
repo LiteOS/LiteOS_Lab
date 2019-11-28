@@ -47,13 +47,14 @@
 #include "flash_adaptor.h"
 #include "libHDiffPatch/HPatch/patch.h"
 #include "decompress_plugin_demo.h"
+#include "partition.h"
 
 static hpatch_BOOL _read_storage_partition_stream(const hpatch_TStreamInput *stream, hpatch_StreamPos_t read_pos,
 				      uint8_t * data, uint8_t * data_end)
 {
   const uint32_t part = (const uint32_t)stream->streamImport;
   if ((read_pos + data_end - data) <= stream->streamSize) {
-    if (part == PART_OTA_IMG_DOWNLOAD) read_pos += sizeof(ota_binary_info);  //ota bin head
+    if (part == PART_OTA_IMG_DOWNLOAD) read_pos += OTA_BINARY_OFFSET;
     int ret = storage_partition_read(part, data, data_end - data, read_pos);
   return hpatch_TRUE;
   } else {
@@ -144,9 +145,10 @@ int ota_detection()
       ota_update_upgrade_result(&ota_flag, UPGRADE_RESULT_MEMEXHAUSTED);
       return 0;
     }
-    //tell upgrade with full patch or diff patch  
+
     ota_storage_bin_read(0, cache, CACHE_SIZE);
 
+/*  tell full upgrade or patch upgrade by diff info, no need this code
     if (get_package_type(cache, ota_flag.file_size) == PACKAGE_TYPE_FULL) {
       printf("upgrage full patch!\n");
 //      app_image_backup(PART_APP, PART_OTA_IMG_BACKUP, OTA_IMAGE_BCK_SIZE, cache, CACHE_SIZE);
@@ -155,11 +157,11 @@ int ota_detection()
       patch_ret = UPGRADE_RESULT_SUCC;
       goto EXIT;
     }
-
+*/
     // diff upgrade
     // read diff head, get compress type and file size
     printf("upgrage diff patch!\n");
-    ret = getCompressedDiffInfo_mem(&diff_info, cache + sizeof(ota_binary_info), cache + CACHE_SIZE);
+    ret = getCompressedDiffInfo_mem(&diff_info, cache + OTA_BINARY_OFFSET, cache + CACHE_SIZE);
     if(ret != hpatch_TRUE) {
       printf("get diff info failed!\n");
       patch_ret = UPGRADE_RESULT_INNERERROR;
@@ -173,7 +175,7 @@ int ota_detection()
     hpatch_TStreamInput origin_img_stream;
     hpatch_TStreamOutput upgrade_img_stream;
 
-    downloadimg_as_hStreamInput(&download_img_stream, PART_OTA_IMG_DOWNLOAD, ota_flag.file_size - sizeof(ota_binary_info));
+    downloadimg_as_hStreamInput(&download_img_stream, PART_OTA_IMG_DOWNLOAD, ota_flag.file_size - OTA_BINARY_OFFSET);
     originimg_as_hStreamInput(&origin_img_stream, PART_APP, diff_info.oldDataSize);
     upgradeimg_as_hStreamOutput(&upgrade_img_stream, PART_OTA_DIFF_UPGTADE, diff_info.newDataSize);
 

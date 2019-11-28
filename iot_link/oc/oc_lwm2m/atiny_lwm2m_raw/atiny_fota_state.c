@@ -169,7 +169,6 @@ static int atiny_fota_idle_state_report_result(atiny_fota_state_s *thi)
 
 
     ASSERT_THIS(return ATINY_ARG_INVALID);
-    ATINY_LOG(LOG_ERR, "SJN          idle_stat->report_flag = %d\n", idle_stat->report_flag);
     if(!idle_stat->report_flag)
     {
         return ATINY_OK;
