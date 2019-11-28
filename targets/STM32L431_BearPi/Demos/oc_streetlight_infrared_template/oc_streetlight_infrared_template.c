@@ -45,7 +45,6 @@
 #include <link_endian.h>
 
 #include <boudica150_oc.h>
-#include "E53_SC1.h"
 #include "E53_SC1_Infrared.h"
 #include "lcd.h"
 
@@ -61,6 +60,46 @@
 #define cn_app_light           2
 #define cn_app_ledcmd          3
 #define cn_app_cmdreply        4
+
+#define Interrupt_enable        1
+#define Interrupt_disenable     0
+#define E53_SC1_Infrared_start_delay_time 120 //人体红外启动延迟时间，单位S
+#define E53_SC1_Infrared_light_time 10 //人体红外触发后亮灯时间，单位S
+#define Infrared_Lux_set 50
+
+#define set_light 				1
+#define reset_light 			0
+int8_t light_state_from_IOTcloud = reset_light;
+int8_t light_state_from_Infrared = reset_light;
+
+
+static int set_light_entry()
+{
+	if(light_state_from_IOTcloud == set_light)
+	{
+		HAL_GPIO_WritePin(SC1_Light_GPIO_Port,SC1_Light_Pin,GPIO_PIN_SET);
+		//set light
+	}
+	else
+	{
+		if(light_state_from_Infrared == set_light)
+		{
+			if( (int)E53_SC1_Data.Lux <= Infrared_Lux_set)
+			{
+				HAL_GPIO_WritePin(SC1_Light_GPIO_Port,SC1_Light_Pin,GPIO_PIN_SET);
+			//set light
+			}
+		}
+		else
+		{
+			HAL_GPIO_WritePin(SC1_Light_GPIO_Port,SC1_Light_Pin,GPIO_PIN_RESET);
+			//reset light
+		}
+	}
+
+	return 0;
+}
+
 
 #pragma pack(1)
 typedef struct
@@ -106,6 +145,7 @@ void *context;
 int *ue_stats;
 int8_t key1 = 0;
 int8_t key2 = 0;
+int8_t Infrared_signal = 0;
 int16_t toggle = 0;
 int16_t lux;
 int8_t qr_code = 1;
@@ -127,6 +167,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 			HAL_GPIO_TogglePin(SC1_Light_GPIO_Port,SC1_Light_Pin);
 			break;
 		case SC1_Infrared_Pin:
+			Infrared_signal = 1;
 			printf("Ifrared message!\r\n");
 			HAL_GPIO_TogglePin(SC1_Light_GPIO_Port,SC1_Light_Pin);
 			break;
@@ -211,7 +252,8 @@ static int app_cmd_task_entry()
                             toggle = 1;
                             key2 = true;
                         }
-                    	HAL_GPIO_WritePin(SC1_Light_GPIO_Port,SC1_Light_Pin,GPIO_PIN_SET);
+                    	light_state_from_IOTcloud = set_light;
+                    	set_light_entry();
 
                     	//if you need response message,do it here--TODO
                     	replymsg.msgid = cn_app_cmdreply;
@@ -231,7 +273,9 @@ static int app_cmd_task_entry()
                             toggle = 0;
                             key2 = true;
                         }
-                    	HAL_GPIO_WritePin(SC1_Light_GPIO_Port,SC1_Light_Pin,GPIO_PIN_RESET);
+
+                    	light_state_from_IOTcloud = reset_light;
+                    	set_light_entry();
 
                     	//if you need response message,do it here--TODO
                     	replymsg.msgid = cn_app_cmdreply;
@@ -318,10 +362,64 @@ static int app_report_task_entry()
     return ret;
 }
 
+static int E53_SC1_Infrared_EnableInterrupt()
+{
+    osal_int_connect(Infrared_EXTI_IRQn, 4,0,Infrared_IRQHandler,NULL);
+    return 0;
+}
+
+static int app_infrared_task_entry()
+{
+	int interrupt_delay_time = E53_SC1_Infrared_start_delay_time;
+	int Light_time = -1;
+	int E53_SC1_Infrared_Interrupt_state = Interrupt_disenable;
+    Init_E53_SC1_Infrared();
+
+    while (1)
+    {
+        if(E53_SC1_Infrared_Interrupt_state == Interrupt_disenable)
+        {
+        	if(interrupt_delay_time <= 0)
+        	{
+        		E53_SC1_Infrared_EnableInterrupt();
+        		E53_SC1_Infrared_Interrupt_state = Interrupt_enable;
+        		printf("LGS Infrared interrupt start.\r\n");
+        	}
+        	interrupt_delay_time--;
+        }
+
+        if(Infrared_signal == 1)
+        {
+        	Light_time = E53_SC1_Infrared_light_time;
+        	light_state_from_Infrared = set_light;
+        	set_light_entry();
+        	//HAL_GPIO_WritePin(SC1_Light_GPIO_Port,SC1_Light_Pin,GPIO_PIN_SET);
+        	Infrared_signal = 0;
+        }
+
+        if(Light_time == 0)
+        {
+        	Light_time = -1;
+        	light_state_from_Infrared = reset_light;
+        	set_light_entry();
+        }
+
+        if(Light_time > 0)
+        {
+        	Light_time--;
+        }
+
+
+        osal_task_sleep(1000);
+    }
+
+    return 0;
+}
+
 static int app_collect_task_entry()
 {
     Init_E53_SC1();
-    Init_E53_SC1_Infrared();
+
     while (1)
     {
         E53_SC1_Read_Data();
@@ -331,6 +429,7 @@ static int app_collect_task_entry()
             LCD_ShowString(10, 200, 200, 16, 16, "BH1750 Value is:");
             LCD_ShowNum(140, 200, (int)E53_SC1_Data.Lux, 5, 16);
         }
+
         osal_task_sleep(2*1000);
     }
 
@@ -347,10 +446,10 @@ int standard_app_demo_main()
     osal_task_create("app_collect",app_collect_task_entry,NULL,0x400,NULL,3);
     osal_task_create("app_report",app_report_task_entry,NULL,0x1000,NULL,2);
     osal_task_create("app_command",app_cmd_task_entry,NULL,0x1000,NULL,3);
+    osal_task_create("app_infrared_command",app_infrared_task_entry,NULL,0x1000,NULL,3);
 
     osal_int_connect(KEY1_EXTI_IRQn, 2,0,Key1_IRQHandler,NULL);
     osal_int_connect(KEY2_EXTI_IRQn, 3,0,Key2_IRQHandler,NULL);
-    osal_int_connect(Infrared_EXTI_IRQn, 4,0,Infrared_IRQHandler,NULL);
 
     stimer_create("lcdtimer",timer1_callback,NULL,8*1000,cn_stimer_flag_start);
 
