@@ -150,9 +150,7 @@ https://github.com/LiteOS/LiteOS_Lab/tree/iot_link/tool/ota_package_tool/ota_pac
 
 如果制作全量升级包，选择“全量”，只需要提供软件新版本。
 
-如果需要在软件包中附上签名信息，选择“签名”，必须导入签名用私钥；
-
-如果不需要在软件包中附上签名信息，选择“不签名”。
+必须导入签名用私钥；
 
 ![](./meta/ota_package_tool/ota_image_007.png)
 
@@ -197,9 +195,7 @@ https://github.com/LiteOS/LiteOS_Lab/tree/iot_link/tool/ota_package_tool/ota_pac
 
 如果制作全量升级包，选择“全量”，只需要提供软件新版本。
 
-如果需要在固件包中附上签名信息，选择“签名”，必须导入签名用私钥；
-
-如果不需要在固件包中附上签名信息，选择“不签名”。
+必须导入签名用私钥；
 
 ![](./meta/ota_package_tool/ota_image_013.png)
 
@@ -215,7 +211,6 @@ https://github.com/LiteOS/LiteOS_Lab/tree/iot_link/tool/ota_package_tool/ota_pac
 单击[导入签名用私钥]，在弹出的对话框中签名用的私钥文件
 
 ![](./meta/ota_package_tool/ota_image_009.png)
-
 
 单击[生成软件包]，在弹出的对话话框中输入要保存的固件包名称
 
