@@ -63,9 +63,9 @@
 
 #define Interrupt_enable        1
 #define Interrupt_disenable     0
-#define E53_SC1_Infrared_start_delay_time 120 //人体红外启动延迟时间，单位S
+#define E53_SC1_Infrared_start_delay_time 60 //人体红外启动延迟时间，单位S
 #define E53_SC1_Infrared_light_time 10 //人体红外触发后亮灯时间，单位S
-#define Infrared_Lux_set 50
+#define Infrared_Lux_set 50 //人体红外触发，判断是否亮灯的环境光线阀值
 
 #define set_light 				1
 #define reset_light 			0
@@ -86,6 +86,7 @@ static int set_light_entry()
 		{
 			if( (int)E53_SC1_Data.Lux <= Infrared_Lux_set)
 			{
+
 				HAL_GPIO_WritePin(SC1_Light_GPIO_Port,SC1_Light_Pin,GPIO_PIN_SET);
 			//set light
 			}
@@ -354,7 +355,7 @@ static int app_report_task_entry()
             light.msgid = cn_app_light;
             light.intensity = htons((int)E53_SC1_Data.Lux);
             oc_lwm2m_report(context,(char *)&light,sizeof(light),1000); ///< report the light message
-            printf("LGS Light:%u.\r\n",(int)E53_SC1_Data.Lux);
+            printf("Infrared Light:%u.\r\n",(int)E53_SC1_Data.Lux);
             osal_task_sleep(2*1000);
         }
     }
@@ -383,9 +384,11 @@ static int app_infrared_task_entry()
         	{
         		E53_SC1_Infrared_EnableInterrupt();
         		E53_SC1_Infrared_Interrupt_state = Interrupt_enable;
-        		printf("LGS Infrared interrupt start.\r\n");
+        		printf("Infrared interrupt start.\r\n");
         	}
         	interrupt_delay_time--;
+        	printf("Infrared delay time: %d S.\r\n",interrupt_delay_time);
+
         }
 
         if(Infrared_signal == 1)
@@ -407,6 +410,7 @@ static int app_infrared_task_entry()
         if(Light_time > 0)
         {
         	Light_time--;
+        	printf("Infrared Light time: %d S.\r\n",Light_time);
         }
 
 
