@@ -30,4 +30,6 @@ typedef struct
 
 pack_storage_device_api_s *pack_get_device(void);
 
+int ota_pack_get_signature_verify_result(int sign_len, int file_len);
+
 #endif /* OTA_MANAGER_H */
