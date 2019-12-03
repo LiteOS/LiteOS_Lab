@@ -76,6 +76,9 @@ include $(iot_link_root)/upgrade_patch/upgrade_patch.mk
 include $(iot_link_root)/compression_algo/compression_algo.mk
 endif
 
+#configure storage
+include $(iot_link_root)/storage/storage.mk
+
 iot_link_src  = ${wildcard $(iot_link_root)/*.c} 
 C_SOURCES += $(iot_link_src)	
 		

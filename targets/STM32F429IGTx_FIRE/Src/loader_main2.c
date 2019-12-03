@@ -47,59 +47,51 @@
 #include "flash_adaptor.h"
 #include "libHDiffPatch/HPatch/patch.h"
 #include "decompress_plugin_demo.h"
+#include "partition.h"
 
-static hpatch_BOOL _read_spi_flash_stream(const hpatch_TStreamInput *stream, hpatch_StreamPos_t read_pos,
+static hpatch_BOOL _read_storage_partition_stream(const hpatch_TStreamInput *stream, hpatch_StreamPos_t read_pos,
 				      uint8_t * data, uint8_t * data_end)
 {
-  const uint32_t location = (const uint32_t)stream->streamImport;
+  const uint32_t part = (const uint32_t)stream->streamImport;
   if ((read_pos + data_end - data) <= stream->streamSize) {
-    int ret = hal_spi_flash_read(data, data_end - data, location + read_pos);
+    if (part == PART_OTA_IMG_DOWNLOAD) read_pos += OTA_BINARY_OFFSET;
+    int ret = storage_partition_read(part, data, data_end - data, read_pos);
   return hpatch_TRUE;
   } else {
     return hpatch_FALSE;
   }
 }
-void downloadimg_as_hStreamInput(hpatch_TStreamInput *stream, uint32_t location, uint32_t len)
+void downloadimg_as_hStreamInput(hpatch_TStreamInput *stream, uint32_t part, uint32_t len)
 {
-  stream->streamImport = (void*)location;
+  stream->streamImport = (void*)part;
   stream->streamSize = len;
-  stream->read = _read_spi_flash_stream;
+  stream->read = _read_storage_partition_stream;
 }
 
-static hpatch_BOOL _write_spi_flash_stream(const hpatch_TStreamOutput *stream, hpatch_StreamPos_t write_pos,
+static hpatch_BOOL _write_storage_partition_stream(const hpatch_TStreamOutput *stream, hpatch_StreamPos_t write_pos,
 					   const uint8_t *data, const uint8_t *data_end)
 {
-  const uint32_t location = (const uint32_t)stream->streamImport;
+  const uint32_t part = (const uint32_t)stream->streamImport;
   if (write_pos + (data_end - data) <= stream->streamSize) {
-    flash_adaptor_write(location + write_pos, data, data_end - data);
+    storage_partition_write(part, data, data_end - data, write_pos);
     return hpatch_TRUE;
   } else {
     return hpatch_FALSE;
   }
 }
-void upgradeimg_as_hStreamOutput(hpatch_TStreamOutput *stream, uint32_t location, uint32_t len)
+void upgradeimg_as_hStreamOutput(hpatch_TStreamOutput *stream, uint32_t part, uint32_t len)
 {
-  stream->streamImport = (void*)location;
+  stream->streamImport = (void*)part;
   stream->streamSize = len;
-  stream->read_writed = _read_spi_flash_stream;
-  stream->write = _write_spi_flash_stream;
+  stream->read_writed = _read_storage_partition_stream;
+  stream->write = _write_storage_partition_stream;
 }
-static hpatch_BOOL _read_builtin_flash_stream(const hpatch_TStreamInput *stream, hpatch_StreamPos_t read_pos,
-					      uint8_t *data, uint8_t *data_end)
+
+void originimg_as_hStreamInput(hpatch_TStreamInput *stream, uint32_t part, uint32_t len)
 {
-  const uint32_t location = (const uint32_t)stream->streamImport;
-  if ((read_pos + data_end - data) <= stream->streamSize) {
- hal_flash_read(data, data_end - data, location + read_pos);
-    return hpatch_TRUE;
-  } else {
-    return hpatch_FALSE;
-  }
-}
-void originimg_as_hStreamInput(hpatch_TStreamInput *stream, uint32_t location, uint32_t len)
-{
-  stream->streamImport = (void *)location;
+  stream->streamImport = (void *)part;
   stream->streamSize = len;
-  stream->read = _read_builtin_flash_stream;
+  stream->read = _read_storage_partition_stream;
 }
 
 hpatch_BOOL getDecompressPlugin(const hpatch_compressedDiffInfo* diffInfo,
@@ -134,8 +126,6 @@ int ota_detection()
   ota_flag_t ota_flag;
   int32_t ret;
   int32_t patch_ret = UPGRADE_RESULT_SUCC;
-  uint32_t old_img_size = OTA_IMAGE_BCK_SIZE;
-  uint32_t new_img_size = OTA_IMAGE_DOWNLOAD_SIZE;
   ota_storage_flag_read(&ota_flag);
   hpatch_compressedDiffInfo diff_info;
   hpatch_TDecompress*  decompress_plugin = 0;
@@ -145,6 +135,7 @@ int ota_detection()
   printf("ota.state = %ld\n", ota_flag.cur_state);
   printf("ota.file size = %ld\n", ota_flag.file_size);
   printf("ota.ret_upgrade = %ld\n", ota_flag.ret_upgrade);
+  printf("ota.updater = %lx\n", ota_flag.updater);
 
   //if state is not EN_OTA_STATUS_UPGRADING, jump to app
   if (ota_flag.cur_state == EN_OTA_STATUS_UPGRADING) {
@@ -154,39 +145,39 @@ int ota_detection()
       ota_update_upgrade_result(&ota_flag, UPGRADE_RESULT_MEMEXHAUSTED);
       return 0;
     }
-    //tell upgrade with full patch or diff patch  
+
     ota_storage_bin_read(0, cache, CACHE_SIZE);
+
+/*  tell full upgrade or patch upgrade by diff info, no need this code
     if (get_package_type(cache, ota_flag.file_size) == PACKAGE_TYPE_FULL) {
-      printf("upgrage for full patch!\n");
-      flash_inner2spi(OTA_DEFAULT_IMAGE_ADDR, OTA_IMAGE_BCK_ADDR, old_img_size, cache, CACHE_SIZE);
-      flash_spi2inner(OTA_IMAGE_DOWNLOAD_ADDR + sizeof(ota_pack_info), OTA_DEFAULT_IMAGE_ADDR, \
-        ota_flag.file_size - sizeof(ota_pack_info), cache, CACHE_SIZE);
+      printf("upgrage full patch!\n");
+//      app_image_backup(PART_APP, PART_OTA_IMG_BACKUP, OTA_IMAGE_BCK_SIZE, cache, CACHE_SIZE);
+      app_image_restore(PART_OTA_IMG_DOWNLOAD, PART_APP, \
+        ota_flag.file_size, sizeof(ota_binary_info), cache, CACHE_SIZE);
       patch_ret = UPGRADE_RESULT_SUCC;
       goto EXIT;
     }
-
+*/
     // diff upgrade
     // read diff head, get compress type and file size
-    printf("upgrage for diff patch!\n");
-    ret = getCompressedDiffInfo_mem(&diff_info, cache + sizeof(ota_pack_info), cache + CACHE_SIZE);
+    printf("upgrage diff patch!\n");
+    ret = getCompressedDiffInfo_mem(&diff_info, cache + OTA_BINARY_OFFSET, cache + CACHE_SIZE);
     if(ret != hpatch_TRUE) {
       printf("get diff info failed!\n");
       patch_ret = UPGRADE_RESULT_INNERERROR;
       goto EXIT;
     }
+    printf("new img size:%ld, old img size:%ld\n", diff_info.newDataSize, diff_info.oldDataSize);
 
     getDecompressPlugin(&diff_info, &decompress_plugin);
-    old_img_size = diff_info.oldDataSize;
-    new_img_size = diff_info.newDataSize;  
-    printf("new img size:%ld, old img size:%ld\n", new_img_size, old_img_size);
 
     hpatch_TStreamInput download_img_stream;
     hpatch_TStreamInput origin_img_stream;
     hpatch_TStreamOutput upgrade_img_stream;
 
-    downloadimg_as_hStreamInput(&download_img_stream, OTA_IMAGE_DOWNLOAD_ADDR + sizeof(ota_pack_info), ota_flag.file_size - sizeof(ota_pack_info));
-    originimg_as_hStreamInput(&origin_img_stream, OTA_DEFAULT_IMAGE_ADDR, old_img_size);
-    upgradeimg_as_hStreamOutput(&upgrade_img_stream, OTA_IMAGE_DIFF_UPGRADE_ADDR, new_img_size);
+    downloadimg_as_hStreamInput(&download_img_stream, PART_OTA_IMG_DOWNLOAD, ota_flag.file_size - OTA_BINARY_OFFSET);
+    originimg_as_hStreamInput(&origin_img_stream, PART_APP, diff_info.oldDataSize);
+    upgradeimg_as_hStreamOutput(&upgrade_img_stream, PART_OTA_DIFF_UPGTADE, diff_info.newDataSize);
 
     ret = patch_decompress_with_cache(&upgrade_img_stream, &origin_img_stream, &download_img_stream,
 						decompress_plugin, cache, cache + CACHE_SIZE);
@@ -198,8 +189,8 @@ int ota_detection()
     }
 
     //write upgraded img to origin image
-//TODO    flash_inner2spi(OTA_DEFAULT_IMAGE_ADDR, OTA_IMAGE_BCK_ADDR, old_img_size, cache, CACHE_SIZE); //backup old
-    flash_spi2inner(OTA_IMAGE_DIFF_UPGRADE_ADDR, OTA_DEFAULT_IMAGE_ADDR, new_img_size, cache, CACHE_SIZE); // resore new
+//      app_image_backup(PART_APP, PART_OTA_IMG_BACKUP, diff_info.oldDataSize, cache, CACHE_SIZE);
+    app_image_restore(PART_OTA_DIFF_UPGTADE, PART_APP, diff_info.newDataSize, 0, cache, CACHE_SIZE); // resore new
 EXIT:
     //save upgrade result
     ota_update_upgrade_result(&ota_flag, patch_ret);

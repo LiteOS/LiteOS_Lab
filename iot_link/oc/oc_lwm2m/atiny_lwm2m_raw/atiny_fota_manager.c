@@ -36,7 +36,7 @@
 #include "atiny_fota_state.h"
 #include <string.h>
 #include "firmware_update.h"
-#include "ota/package.h"
+//#include "ota/package.h"
 
 struct atiny_fota_manager_tag_s
 {
@@ -266,8 +266,8 @@ static int atiny_fota_manager_flag_write(const void* buf, int32_t len)
 int atiny_fota_manager_set_storage_device(atiny_fota_manager_s *thi)
 {
     int ret;
-    flag_op_s flag_op;
-    pack_params_s pack_param;
+//    flag_op_s flag_op;
+//    pack_params_s pack_param;
 
     ASSERT_THIS(return ATINY_ARG_INVALID);
 
@@ -278,26 +278,26 @@ int atiny_fota_manager_set_storage_device(atiny_fota_manager_s *thi)
         return ret;
     }
 
-    flag_op.func_flag_read = atiny_fota_manager_flag_read;
-    flag_op.func_flag_write = atiny_fota_manager_flag_write;
-    (void)flag_init(&flag_op);
-    ret = flag_upgrade_init();
-    if (ret != ATINY_OK)
-    {
-        ATINY_LOG(LOG_FATAL, "flag_upgrade_init fail");
-        return ret;
-    }
+//    flag_op.func_flag_read = atiny_fota_manager_flag_read;
+//    flag_op.func_flag_write = atiny_fota_manager_flag_write;
+//    (void)flag_init(&flag_op);
+//    ret = flag_upgrade_init();
+//    if (ret != ATINY_OK)
+//    {
+//        ATINY_LOG(LOG_FATAL, "flag_upgrade_init fail");
+//        return ret;
+//    }
 
-    memcpy(&pack_param.ota_opt, &thi->ota_opt, sizeof(pack_param.ota_opt));
-    pack_param.malloc = osal_malloc;
-    pack_param.free = osal_free;
-    pack_param.printf = printf;
-    ret = pack_init_device(&pack_param);
-    if (ret != ATINY_OK)
-    {
-        ATINY_LOG(LOG_FATAL, "pack_init_device fail");
-        return ret;
-    }
+//    memcpy(&pack_param.ota_opt, &thi->ota_opt, sizeof(pack_param.ota_opt));
+//    pack_param.malloc = osal_malloc;
+//    pack_param.free = osal_free;
+//    pack_param.printf = printf;
+//    ret = pack_init_device(&pack_param);
+//    if (ret != ATINY_OK)
+//    {
+//        ATINY_LOG(LOG_FATAL, "pack_init_device fail");
+//        return ret;
+//    }
 
     thi->device = pack_get_device();
     return atiny_fota_idle_state_int_report_result(&thi->idle_state);
