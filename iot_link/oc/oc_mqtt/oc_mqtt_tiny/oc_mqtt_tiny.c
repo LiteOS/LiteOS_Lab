@@ -362,17 +362,23 @@ static int daemon_cmd_post(en_oc_mqtt_daemon_cmd cmd, void *arg)
 static int config_parameter_release(oc_mqtt_tiny_cb_t *cb)
 {
 
-    osal_free(cb->config.id);
+    if(cb->config.id != NULL)
+        osal_free(cb->config.id);
 
-    osal_free(cb->config.pwd);
+    if(cb->config.pwd != NULL)
+        osal_free(cb->config.pwd);
 
-    osal_free(cb->config.server_addr);
+    if(cb->config.server_addr != NULL)
+        osal_free(cb->config.server_addr);
 
-    osal_free(cb->config.server_port);
+    if(cb->config.server_port != NULL)
+        osal_free(cb->config.server_port);
 
-    osal_free(cb->bs_cb.hubserver_addr);
+    if(cb->bs_cb.hubserver_addr != NULL)
+        osal_free(cb->bs_cb.hubserver_addr);
 
-    osal_free(cb->bs_cb.hubserver_port);
+    if(cb->bs_cb.hubserver_port != NULL)
+        osal_free(cb->bs_cb.hubserver_port);
 
     memset(&cb->config,0,sizeof(oc_mqtt_config_t));
 
@@ -416,6 +422,14 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
             break;
     }
 
+    if((NULL == cb->config.id) || (NULL == cb->config.pwd) ||\
+       (NULL == cb->config.server_addr) || (NULL == cb->config.server_port))
+    {
+        config_parameter_release(cb);
+        ret = en_oc_mqtt_err_sysmem;
+        return ret;
+    }
+
     cb->config.boot_mode  = config->boot_mode;
     cb->config.id = osal_strdup(config->id);
     cb->config.pwd= osal_strdup(config->pwd);
@@ -424,15 +438,6 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
     cb->config.msg_deal_arg = config->msg_deal_arg;
     cb->config.server_addr = osal_strdup(config->server_addr);
     cb->config.server_port = osal_strdup(config->server_port);
-
-
-    if((NULL == cb->config.id) || (NULL == cb->config.pwd) ||\
-       (NULL == cb->config.server_addr) || (NULL == cb->config.server_port))
-    {
-        config_parameter_release(cb);
-        ret = en_oc_mqtt_err_sysmem;
-        return ret;
-    }
 
     ret = en_oc_mqtt_err_ok;
     return ret;
