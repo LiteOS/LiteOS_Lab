@@ -345,6 +345,10 @@ static int __subscribe(void *handle,mqtt_al_subpara_t *para)
             ret = -1;
             goto exit;
         }
+        else
+        {
+            ret = 0;
+        }
     }
     else
     {
