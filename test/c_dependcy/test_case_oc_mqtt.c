@@ -592,21 +592,38 @@ static int ts_oc_mqtt_config(char *message, int len)
     {
         osal_free(pparas->id);
     }
-    pparas->id = osal_malloc(strlen(pchTmp)+1);
-    memcpy(pparas->id, pchTmp, strlen(pchTmp));
-    pparas->id[strlen(pchTmp)] = '\0';
-    printf("120--id is %s\n",pparas->id);
+    if((!memcmp(pchTmp, "NULL", strlen(pchTmp))) ||
+        (!memcmp(pchTmp, "null", strlen(pchTmp))))
+    {
+        pparas->id = NULL;
+    }
+    else
+    {
+        pparas->id = osal_malloc(strlen(pchTmp)+1);
+        memcpy(pparas->id, pchTmp, strlen(pchTmp));
+        pparas->id[strlen(pchTmp)] = '\0';
+        printf("120--id is %s\n",pparas->id);
+    }
     
     pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
     if(pparas->passwd != NULL) 
     {
         osal_free(pparas->passwd);
     }
-    pparas->passwd = osal_malloc(strlen(pchTmp)+1);
-    memcpy(pparas->passwd, pchTmp, strlen(pchTmp));
-    pparas->passwd[strlen(pchTmp)] = '\0';
+    if((!memcmp(pchTmp, "NULL", strlen(pchTmp))) ||
+        (!memcmp(pchTmp, "null", strlen(pchTmp))))
+    {
+        pparas->passwd = NULL;
+    }
+    else
+    {
+        pparas->passwd = osal_malloc(strlen(pchTmp)+1);
+        memcpy(pparas->passwd, pchTmp, strlen(pchTmp));
+        pparas->passwd[strlen(pchTmp)] = '\0';
+        printf("140--passwd is %s\n",pparas->passwd);
+    }
 
-    printf("140--passwd is %s\n",pparas->passwd);
+    
 
     pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
     
@@ -614,11 +631,18 @@ static int ts_oc_mqtt_config(char *message, int len)
     {
         osal_free(pparas->cbname);
     }
-    pparas->cbname = osal_malloc(strlen(pchTmp)+1);
-    memcpy(pparas->cbname, pchTmp, strlen(pchTmp));
-    pparas->cbname[strlen(pchTmp)] = '\0';
-    printf("125--cbname is %s\n",pparas->cbname);
-
+    if((!memcmp(pchTmp, "NULL", strlen(pchTmp))) ||
+        (!memcmp(pchTmp, "null", strlen(pchTmp))))
+    {
+        pparas->cbname = NULL;
+    }
+    else
+    {
+        pparas->cbname = osal_malloc(strlen(pchTmp)+1);
+        memcpy(pparas->cbname, pchTmp, strlen(pchTmp));
+        pparas->cbname[strlen(pchTmp)] = '\0';
+        printf("125--cbname is %s\n",pparas->cbname);
+    }
     
 
     config.boot_mode    = pparas->boot_mode;

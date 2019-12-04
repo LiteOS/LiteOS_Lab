@@ -422,14 +422,6 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
             break;
     }
 
-    if((NULL == cb->config.id) || (NULL == cb->config.pwd) ||\
-       (NULL == cb->config.server_addr) || (NULL == cb->config.server_port))
-    {
-        config_parameter_release(cb);
-        ret = en_oc_mqtt_err_sysmem;
-        return ret;
-    }
-
     cb->config.boot_mode  = config->boot_mode;
     cb->config.id = osal_strdup(config->id);
     cb->config.pwd= osal_strdup(config->pwd);
@@ -438,6 +430,14 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
     cb->config.msg_deal_arg = config->msg_deal_arg;
     cb->config.server_addr = osal_strdup(config->server_addr);
     cb->config.server_port = osal_strdup(config->server_port);
+
+    if((NULL == cb->config.id) || (NULL == cb->config.pwd) ||\
+       (NULL == cb->config.server_addr) || (NULL == cb->config.server_port))
+    {
+        config_parameter_release(cb);
+        ret = en_oc_mqtt_err_sysmem;
+        return ret;
+    }
 
     ret = en_oc_mqtt_err_ok;
     return ret;
@@ -902,6 +902,11 @@ static int tiny_config(oc_mqtt_config_t *config)
     int ret = en_oc_mqtt_err_parafmt;
     if(NULL != config)
     {
+        if((NULL == config->id) || (NULL == config->pwd) ||\
+            (NULL == config->server_addr) || (NULL == config->server_port))
+        {
+            return ret;
+        }
         ret = daemon_cmd_post(en_oc_mqtt_daemon_cmd_connect,config);
     }
     return ret;
