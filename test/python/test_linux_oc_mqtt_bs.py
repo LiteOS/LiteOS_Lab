@@ -59,98 +59,20 @@ def test_linux_oc_mqtt_register():
     assert(result.ret_code == 0)
 
 
-# typedef enum
-# {
-#     en_oc_mqtt_err_ok          = 0,      ///< this means the status ok
-#     en_oc_mqtt_err_parafmt,              ///< this means the parameter err format
-#     en_oc_mqtt_err_network,              ///< this means the network wrong status
-#     en_oc_mqtt_err_conversion,           ///< this means the mqtt version err
-#     en_oc_mqtt_err_conclientid,          ///< this means the client id is err
-#     en_oc_mqtt_err_conserver,            ///< this means the server refused the service for some reason(likely the id and pwd)
-#     en_oc_mqtt_err_conuserpwd,           ///< bad user name or passwd
-#     en_oc_mqtt_err_conclient,            ///< the client id /user/pwd is right, but does not allowed
-#     en_oc_mqtt_err_subscribe,            ///< this means subscribe the topic failed
-#     en_oc_mqtt_err_publish,              ///< this means subscribe the topic failed
-#     en_oc_mqtt_err_configured,           ///< this means we has configured, please deconfigured it and then do configure again
-#     en_oc_mqtt_err_noconfigured,         ///< this means we have not configure it yet,so could not connect
-#     en_oc_mqtt_err_noconected,           ///< this means the connection has not been built, so you could not send data
-#     en_oc_mqtt_err_gethubaddrtimeout,    ///< this means get the hub address timeout
-#     en_oc_mqtt_err_sysmem,               ///< this means the system memory is not enough
-#     en_oc_mqtt_err_system,               ///< this means that the system porting may have some problem,maybe not install yet
-#     en_oc_mqtt_err_last,
-# }en_oc_mqtt_err_code_t;
-
-def test_linux_oc_mqtt_config_invalid():
-    fname = sys._getframe().f_code.co_name
-    #invalid server ip
-    result = ts_call_single(mqtt_testid.TEST_OC_MQTT_CONFIG, fname,
-                            BOOTSTRAP_MODE, LIFE_TIME,
-                            INVALID_SERVER_IP4, SERVER_PORT, SEC_TYPE,
-                            mqtt_device_info.MQTT_EP_USER, mqtt_device_info.MQTT_EP_PASSWD,
-                            CB_NAME)
-    assert(result)
-    assert(result.test_id == mqtt_testid.TEST_OC_MQTT_CONFIG)
-    assert(result.ret_code == 1) #en_oc_mqtt_err_parafmt
-
-    # invalid server port
-    result = ts_call_single(mqtt_testid.TEST_OC_MQTT_CONFIG, fname,
-                            BOOTSTRAP_MODE, LIFE_TIME,
-                            SERVER_IP4, INVALID_SERVER_PORT, SEC_TYPE,
-                            mqtt_device_info.MQTT_EP_USER, mqtt_device_info.MQTT_EP_PASSWD,
-                            CB_NAME)
-    assert (result)
-    assert (result.test_id == mqtt_testid.TEST_OC_MQTT_CONFIG)
-    assert (result.ret_code == 1)  #en_oc_mqtt_err_parafmt
-
-    # invalid security type
-    result = ts_call_single(mqtt_testid.TEST_OC_MQTT_CONFIG, fname,
-                            BOOTSTRAP_MODE, LIFE_TIME,
-                            SERVER_IP4, SERVER_PORT, SEC_TYPE+55,
-                            mqtt_device_info.MQTT_EP_USER, mqtt_device_info.MQTT_EP_PASSWD,
-                            CB_NAME)
-    assert (result)
-    assert (result.test_id == mqtt_testid.TEST_OC_MQTT_CONFIG)
-    assert (result.ret_code == 1) #en_oc_mqtt_err_parafmt
-
-
-    # invalid ep name
-    result = ts_call_single(mqtt_testid.TEST_OC_MQTT_CONFIG, fname,
-                            BOOTSTRAP_MODE, LIFE_TIME,
-                            SERVER_IP4, SERVER_PORT, SEC_TYPE,
-                            "NULL", mqtt_device_info.MQTT_EP_PASSWD,
-                            CB_NAME)
-    assert (result)
-    assert (result.test_id == mqtt_testid.TEST_OC_MQTT_CONFIG)
-    assert (result.ret_code == 1) #en_oc_mqtt_err_parafmt
-
-    # invalid passwd
-    result = ts_call_single(mqtt_testid.TEST_OC_MQTT_CONFIG, fname,
-                            BOOTSTRAP_MODE, LIFE_TIME,
-                            SERVER_IP4, SERVER_PORT, SEC_TYPE,
-                            mqtt_device_info.MQTT_EP_USER, "NULL",
-                            CB_NAME)
-    assert (result)
-    assert (result.test_id == mqtt_testid.TEST_OC_MQTT_CONFIG)
-    assert (result.ret_code == 1) #en_oc_mqtt_err_parafmt
-
-
-
-def test_linux_oc_mqtt_config_static():
+def test_linux_oc_mqtt_config_bs():
     fname = sys._getframe().f_code.co_name
     result = ts_call_single(mqtt_testid.TEST_OC_MQTT_CONFIG, fname,
-                            BOOTSTRAP_MODE, LIFE_TIME,
-                            SERVER_IP4, SERVER_PORT, SEC_TYPE,
-                            mqtt_device_info.MQTT_EP_USER, mqtt_device_info.MQTT_EP_PASSWD,
+                            en_oc_boot_strap_mode_client_initialize, LIFE_TIME,
+                            BS_SERVER_IP4, BS_SERVER_PORT, SEC_TYPE,
+                            mqtt_device_info.BS_MQTT_EP_USER, mqtt_device_info.BS_MQTT_EP_PASSWD,
                             CB_NAME)
     assert(result)
     assert(result.test_id == mqtt_testid.TEST_OC_MQTT_CONFIG)
     assert(result.ret_code == 0)
     time.sleep(2)
-    ninvoke = iotlink_north_invoke()
-    status = ninvoke.oc_mqtt_get_device_shadowstatus(mqtt_device_info.MQTT_DEVICEID)
-    assert(status == "ONLINE")
+    # oc_mqtt_device_status_jduge_b(mqtt_device_info.BS_MQTT_DEVICEID, "ONLINE")
 
-def test_linux_oc_mqtt_json_fmt_req_static():
+def test_linux_oc_mqtt_json_fmt_req_bs():
     fname = sys._getframe().f_code.co_name
     #must send 4 items here
     result = ts_call_single(mqtt_testid.TEST_OC_MQTT_JSON_FMT_REQ, fname,
@@ -208,7 +130,7 @@ def test_linux_oc_mqtt_json_fmt_req_static():
     assert (data.get("serviceData").get("LED4") == 78)
 
 
-def test_linux_oc_mqtt_json_fmt_res_static():
+def test_linux_oc_mqtt_json_fmt_res_bs():
     fname = sys._getframe().f_code.co_name
     # must send 1 items here
     result = ts_call_single(mqtt_testid.TEST_OC_MQTT_JSON_FMT_RES, fname,
@@ -238,49 +160,23 @@ def test_linux_oc_mqtt_json_fmt_res_static():
     assert (json.loads(result.data).get("body").get("body_para") == "body_para")
 
 
-def test_linux_oc_mqtt_publish_static():
+def test_linux_oc_mqtt_publish_bs():
     fname = sys._getframe().f_code.co_name
     result = ts_call_single(mqtt_testid.TEST_OC_MQTT_PUBLISH, fname)
     assert (result)
     assert (result.test_id == mqtt_testid.TEST_OC_MQTT_PUBLISH)
     assert (result.ret_code == 0)
 
-def test_linux_oc_mqtt_sendcmd_static():
-    ninvoke = iotlink_north_invoke()
-    # Service ID : Battery
-    # Method : cmd
-    # Paras: ioswitch
-    # there no ack needed, so use "NOACK", otherwise "ACK"
-    import random
-    ioswitch = random.randint(5, 99)
-    print("ioswitch is:", ioswitch)
-    payloadParam = {
-        'ioswitch': ioswitch
-    }
-    ninvoke.oc_mqtt_device_cmd_send(mqtt_device_info.MQTT_DEVICEID, "Battery", "NOACK", "cmd", payloadParam)
-    #here, wait cmd finish
-    time.sleep(3)
-    fname = sys._getframe().f_code.co_name
-    result = ts_call_single(mqtt_testid.TEST_OC_MQTT_GETVALUE, fname)
-    assert(int(result.data) == ioswitch)
-    print(result)
-    print(mqtt_testid.TEST_OC_MQTT_GETVALUE)
-    print(result.data)
-
-
-
-def test_linux_oc_mqtt_deconfig_static():
+def test_linux_oc_mqtt_deconfig_bs():
     fname = sys._getframe().f_code.co_name
     result = ts_call_single(mqtt_testid.TEST_OC_MQTT_DECONFIG, fname)
     assert (result)
     assert (result.test_id == mqtt_testid.TEST_OC_MQTT_DECONFIG)
     assert (result.ret_code == 0)
-    # time.sleep(15)
+    time.sleep(15)
+    # oc_mqtt_device_status_jduge_b(mqtt_device_info.BS_MQTT_DEVICEID, "OFFLINE")
 
-    ninvoke = iotlink_north_invoke()
-    status = ninvoke.oc_mqtt_get_device_shadowstatus(mqtt_device_info.MQTT_DEVICEID)
-    # assert (status == "OFFLINE")
-    print(status)
+
 
 def test_linux_oc_mqtt_deinit():
     fname = sys._getframe().f_code.co_name
@@ -296,11 +192,9 @@ if __name__ == '__main__':
     print("hello world")
     test_linux_oc_mqtt_init()
     test_linux_oc_mqtt_register()
-    test_linux_oc_mqtt_config_invalid()
-    test_linux_oc_mqtt_config_static()
-    test_linux_oc_mqtt_json_fmt_req_static()
-    test_linux_oc_mqtt_json_fmt_res_static()
-    test_linux_oc_mqtt_publish_static()
-    test_linux_oc_mqtt_sendcmd_static()
-    test_linux_oc_mqtt_deconfig_static()
+    test_linux_oc_mqtt_config_bs()
+    test_linux_oc_mqtt_json_fmt_req_bs()
+    test_linux_oc_mqtt_json_fmt_res_bs()
+    test_linux_oc_mqtt_report_bs()
+    test_linux_oc_mqtt_deconfig_bs()
     test_linux_oc_mqtt_deinit()
