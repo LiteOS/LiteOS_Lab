@@ -44,7 +44,7 @@
 /* brief : the oceanconnect platform only support the ca_crt up tills now*/
 /** the address product_id device_id password crt is only for the test  */
 
-#define DEFAULT_LIFETIME            10
+#define DEFAULT_LIFETIME            60                 ///< the platform need more
 #define DEFAULT_SERVER_IPV4         "119.3.251.30"     ///<  server ip address
 //#define DEFAULT_SERVER_IPV4       "iot-bs.cn-north-4.myhuaweicloud.com"
 #define DEFAULT_SERVER_PORT         "8883"             ///<  server mqtt service port
