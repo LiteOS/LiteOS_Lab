@@ -99,7 +99,7 @@ int test_main_entry(void *paras)
 
     for(;;)
     {
-        
+        memset(g_acRecvBuf, 0, sizeof(g_acRecvBuf));
         recv_len = sal_recvfrom(server_fd, g_acRecvBuf, sizeof(g_acRecvBuf), 0, (struct sockaddr *)&cli_addr, &addr_len);
         if (recv_len < 0)
         {

@@ -47,6 +47,10 @@
 
 #include "test_case.h"
 
+//install atiny mqtt
+#include <oc_mqtt_tiny.h>
+
+
 static char s_mqtt_ca_crt[] =
 "-----BEGIN CERTIFICATE-----\r\n"
 "MIID4DCCAsigAwIBAgIJAK97nNS67HRvMA0GCSqGSIb3DQEBCwUAMFMxCzAJBgNV\r\n"
@@ -133,13 +137,8 @@ int ts_sort_oc_mqtt_al(int entry_id, char *message, int len)
 
 /*--------------oc mqtt test---------------------------*/
 
-//#define cn_app_rcv_buf_len 256
-//static char            s_rcv_buffer[cn_app_rcv_buf_len];
-//static int             s_rcv_datalen;
-static queue_t *s_queue_rcvmsg = NULL;   ///< this is used to cached the message
-
-static int            s_cmd_entry_live = 1;
-static void           *task_handle = NULL;
+static queue_t *s_queue_rcvmsg = NULL;
+static void    *task_handle = NULL;
 
 typedef struct
 {
@@ -214,30 +213,6 @@ static int  pp_oc_cmd_normal(demo_msg_t *demo_msg)
     cmd_json = cJSON_Parse((const char *)demo_msg->msg);   
     if(NULL != cmd_json)
     {
-#if 0
-        serviceId = cJSON_GetObjectItem(msg,"serviceId");
-        if(NULL != serviceId)
-        {
-            printf("serviceId:%s\n\r",serviceId->valuestring);
-        }
-
-        mid = cJSON_GetObjectItem(msg,"mid");
-        if(NULL != mid)
-        {
-            mid_int = mid->valueint;
-            printf("mid:%d\n\r",mid_int);
-        }
-        msgType = cJSON_GetObjectItem(msg,"msgType");
-        if(NULL != msgType)
-        {
-            printf("msgType:%s\n\r",msgType->valuestring);
-        }
-        cmd =  cJSON_GetObjectItem(msg,"cmd");
-        if(NULL != cmd)
-        {
-            printf("cmd:%s\n\r",cmd->valuestring);
-        }
-#endif
         paras = cJSON_GetObjectItem(cmd_json,"paras");
         if(NULL != paras)
         {
@@ -278,7 +253,7 @@ static int  pp_oc_cmd_normal(demo_msg_t *demo_msg)
         buf = cJSON_PrintUnformatted(response_msg);
         if(NULL != buf)
         {
-            ret = oc_mqtt_report((uint8_t *)buf,strlen(buf),en_mqtt_al_qos_1);
+            ret = oc_mqtt_publish(NULL, (uint8_t *)buf,strlen(buf),en_mqtt_al_qos_1);
             printf("%s:RESPONSE:mid:%d err_int:%d retcode:%d \r\n",__FUNCTION__,\
                     mid_int,err_int,ret);
 
@@ -309,108 +284,7 @@ static int task_rcvmsg_entry( void *args)
 
     return 0;
 }
-#if 0
-static int pp_oc_mqtt_cmd_entry(void *args)
-{
-    cJSON  *msg = NULL;
-    cJSON  *mid = NULL;
-    cJSON  *ioswitch = NULL;
-    cJSON  *msgType = NULL;
-    cJSON  *paras = NULL;
-    cJSON  *serviceId = NULL;
-    cJSON  *cmd = NULL;
-    char   *buf = NULL;
 
-    tag_oc_mqtt_response response;
-    tag_key_value_list   list;
-
-    int mid_int;
-    int err_int;
-
-    printf("pp_oc_mqtt_cmd_entry start now !!\n");
-    while(s_cmd_entry_live)
-    {
-        if(osal_semp_pend(s_rcv_sync,cn_osal_timeout_forever))
-        {
-            err_int = 1;
-            mid_int = 1;
-            printf("[pp_oc_mqtt_cmd_entry:]recv msg is %s !!\n", s_rcv_buffer);
-            msg = cJSON_Parse(s_rcv_buffer);
-            
-            if(NULL != msg)
-            {
-                serviceId = cJSON_GetObjectItem(msg,"serviceId");
-                if(NULL != serviceId)
-                {
-                    printf("serviceId:%s\n\r",serviceId->valuestring);
-                }
-
-                mid = cJSON_GetObjectItem(msg,"mid");
-                if(NULL != mid)
-                {
-                    mid_int = mid->valueint;
-                    printf("mid:%d\n\r",mid_int);
-                }
-                msgType = cJSON_GetObjectItem(msg,"msgType");
-                if(NULL != msgType)
-                {
-                    printf("msgType:%s\n\r",msgType->valuestring);
-                }
-                cmd =  cJSON_GetObjectItem(msg,"cmd");
-                if(NULL != cmd)
-                {
-                    printf("cmd:%s\n\r",cmd->valuestring);
-                }
-
-                paras = cJSON_GetObjectItem(msg,"paras");
-                if(NULL != paras)
-                {
-                    ioswitch = cJSON_GetObjectItem(paras,"ioswitch");
-                    if(NULL != ioswitch)
-                    {
-                        printf("ioswitch:%d\n\r",ioswitch->valueint);
-                        g_ioswitch = ioswitch->valueint;
-                        err_int = en_oc_mqtt_err_code_ok;
-                    }
-                    else
-                    {
-                        printf("handle the json data as your specific profile\r\n");
-                        err_int = en_oc_mqtt_err_code_err;
-                    }
-                }
-                cJSON_Delete(msg);
-
-                list.item.name = "body_para";
-                list.item.buf = "body_para";
-                list.item.type = en_key_value_type_string;
-                list.next = NULL;
-
-                response.hasmore = 0;
-                response.errcode = err_int;
-                response.mid = mid_int;
-                response.bodylst = &list;
-
-                msg = oc_mqtt_json_fmt_response(&response);
-                if(NULL != msg)
-                {
-                    buf = cJSON_Print(msg);
-                    if(NULL != buf)
-                    {
-                        if(0 == oc_mqtt_report(s_mqtt_handle,buf,strlen(buf),en_mqtt_al_qos_1))
-                        {
-                           // printf("SNDMSG:%s\n\r",buf);
-                        }
-                        osal_free(buf);
-                    }
-                    cJSON_Delete(msg);
-                }
-            }
-        }
-    }
-
-    return 0;
-}
-#endif
 
 static int pp_oc_report(void)
 {
@@ -505,8 +379,7 @@ static int ts_oc_mqtt_register(char *message, int len)
     retCode = oc_mqtt_register(NULL);
     ret -= (!(retCode == en_oc_mqtt_err_system));
 
-    //install atiny mqtt
-    #include <oc_mqtt_tiny.h>
+    
     oc_mqtt_tiny_install();
 
     osal_task_sleep(500);
@@ -660,7 +533,7 @@ static int ts_oc_mqtt_config(char *message, int len)
     
 
     retcode = oc_mqtt_config(&config);
-    
+    printf("[call oc_mqtt_config] retcode is %d\n",retcode);
     return retcode;
 }
 
@@ -1104,18 +977,15 @@ static int ts_oc_mqtt_deconfig(char *message, int len)
 }
 static int ts_oc_mqtt_deinit(char *message, int len)
 {
-    s_cmd_entry_live = 0;
     osal_task_sleep(500);
     if(s_queue_rcvmsg && task_handle) 
     {
-        queue_delete(s_queue_rcvmsg);
-        osal_task_sleep(3000);
         osal_task_kill(task_handle);
-        
-        
+        osal_task_sleep(500);
+        queue_delete(s_queue_rcvmsg);
     }
 
-    
+    oc_mqtt_tiny_uninstall();
     
     printf("resource released!");
     return TS_OK;
@@ -1129,6 +999,5 @@ static int ts_oc_mqtt_getvalue(char *message, int len)
     
     return TS_OK_HAS_DATA;
 }
-
 
 

@@ -40,6 +40,8 @@
 #define LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_TINY_OC_MQTT_TINY_H_
 
 int oc_mqtt_tiny_install();
+void oc_mqtt_tiny_uninstall(void);
+
 
 
 #endif /* LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_TINY_OC_MQTT_TINY_H_ */

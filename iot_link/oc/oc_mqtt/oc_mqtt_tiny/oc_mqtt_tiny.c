@@ -1017,3 +1017,25 @@ EXIT_QUEUE:
 EXIT_MALLOC:
     return ret;
 }
+
+void oc_mqtt_tiny_uninstall(void)
+{
+    oc_mqtt_tiny_cb_t *cb = s_oc_mqtt_tiny_cb;
+    if(!cb)
+        return;
+    if(cb->task_daemon)
+    {
+        osal_task_kill(cb->task_daemon);
+        osal_task_sleep(500);
+    }
+
+    if(cb->task_daemon_cmd_queue)
+    {
+        queue_delete(cb->task_daemon_cmd_queue);
+    }
+
+    osal_free(cb);
+    
+    s_oc_mqtt_tiny_cb = NULL;
+}
+
