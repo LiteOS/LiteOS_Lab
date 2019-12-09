@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2016-2019>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -31,102 +31,43 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2019-07-23 10:00    yuhengP    The first version  
+ *
+ */
+#include <stdint.h>
+#include <stddef.h>
+#include <string.h>
 
-#include "gd32f30x.h"
-#include "BearPi-IoT_gd32f303.h"
+#include <osal.h>
+
+#include "E53_SC1.h"
 #include "systick.h"
-#include <stdio.h>
+E53_SC1_Data_TypeDef E53_SC1_Data;
 
-#include "los_base.h"
-#include "los_task.ph"
-#include "los_typedef.h"
-#include "los_sys.h"
-#include "los_memory.h"
-#include "mem.h"
-UINT32  g_TskHandle;
-
-#if defined (__CC_ARM)
-extern char Image$$RW_IRAM1$$ZI$$Limit [];
-extern char Image$$ARM_LIB_STACKHEAP$$Base [];
-#elif defined (__GNUC__)
-extern char __los_heap_addr_start__ [];
-extern char __los_heap_addr_end__ [];
-#else
-#error "fix me"
-#endif
-
-const struct phys_mem system_phys_mem [] =
+static int app_hello_world_entry()
+{
+    printf("Hello World! This is LieOS!\r\n");
+    Init_E53_SC1();
+    printf("Hello World! This is LieOS2!\r\n");
+    gpio_bit_set(SC1_Light_GPIO_Port, SC1_Light_Pin);
+    while (1)
     {
-#if defined (__CC_ARM)
-        { Image$$RW_IRAM1$$ZI$$Limit, Image$$ARM_LIB_STACKHEAP$$Base },
-#elif defined (__GNUC__)
-        {(unsigned long) __los_heap_addr_start__,(unsigned long) __los_heap_addr_end__ },
-#else
-#error "fix me"
-#endif
-        { 0, 0 }
-    };
-
-/*!
-    \brief      main function
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
-void HardWare_Init(void)
-{
-    /* configure systick */
-    systick_config();
-	
-	/* initialize the LED */
-    gd_eval_led_init(LED);
-
-    // /* enable the F1 key GPIO clock */
-    // gd_eval_key_init(F1_KEY, KEY_MODE_EXTI);
-
-    // /* enable the F2 key GPIO clock */
-    // gd_eval_key_init(F2_KEY, KEY_MODE_EXTI);
-    
-    
-}
-extern int link_main(void *args);
-static int link_test()
-{
-    int ret = -1;
-    UINT32 uwRet = LOS_OK;
-    UINT32  handle;
-    TSK_INIT_PARAM_S task_init_param;
-
-    memset (&task_init_param, 0, sizeof (TSK_INIT_PARAM_S));
-    task_init_param.uwArg = (unsigned int)NULL;
-    task_init_param.usTaskPrio = 2;
-    task_init_param.pcName =(char *) "link_main";
-    task_init_param.pfnTaskEntry = (TSK_ENTRY_FUNC)link_main;
-    task_init_param.uwStackSize = 0x1000;
-    uwRet = LOS_TaskCreate(&handle, &task_init_param);
-    if(LOS_OK == uwRet){
-        ret = 0;
+        E53_SC1_Read_Data();
+        printf("Hello World! This is LieOS3!\r\n");
+        printf("\r\n******************************BH1750 Value is  %d\r\n",(int)E53_SC1_Data.Lux);
+        osal_task_sleep(2*1000);
     }
-    return ret;
 }
 
-int main(void)
+int standard_app_demo_main()
 {
-    UINT32 uwRet = LOS_OK;
-
-    HardWare_Init();
-
-    uwRet = LOS_KernelInit();
-	if (uwRet != LOS_OK)
-	{
-		 return LOS_NOK;
-	}
-
-	extern void shell_uart_init(int baud);
-	shell_uart_init(115200);
-
-	link_test();
-
-	LOS_Start();
-
+    osal_task_create("helloworld",app_hello_world_entry,NULL,0x400,NULL,2);
+    return 0;
 }
+
+
+
+
+

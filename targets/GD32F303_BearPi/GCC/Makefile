@@ -134,7 +134,7 @@ LIBS += -lhwpatch
 endif
 LIBDIR  += -L$(PROJECTBASE)/../Lib
 LDFLAGS += $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
-
+LDFLAGS += -u _printf_float
 
 
 # default action: build all

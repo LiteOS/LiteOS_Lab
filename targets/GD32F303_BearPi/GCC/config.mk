@@ -87,7 +87,7 @@ CONFIG_CJSON_ENABLE := n
 #variouse tcpip function.what's more, you could add your own tcpip stack to the sdk.
 #and if this option is enabled, then you select  one type for your program, we now
 #CONFIG_TCPIP_TYPE could be:"lwip_socket" "linux_socket" "macos_socket" "esp8266_socket" "none"
-CONFIG_TCPIP_ENABLE := y
+CONFIG_TCPIP_ENABLE := n
 CONFIG_TCPIP_TYPE := "esp8266_socket"
 
 #CONFIG_DTLS_ENABLE , we supply a DTLS AL (building),you could choose yes or no
@@ -111,7 +111,7 @@ CONFIG_LWM2M_TYPE     := "wakaama_lwm2m"
 #CONFIG_COAP_ENABLE, we build a coap abstraction, which shield the difference of 
 #the implement of coap. 
 #CONFIG_COAP_TYPE could be "lite_coap" "none"
-CONFIG_COAP_ENABLE   := y
+CONFIG_COAP_ENABLE   := n
 CONFIG_COAP_TYPE     := "lite_coap"
 ########################NETWORK SERVICE END#####################################
 
@@ -120,7 +120,7 @@ CONFIG_COAP_TYPE     := "lite_coap"
 #CONFIG_OC_COAP_ENABLE, we build a oc coap abstraction for huawei OceanConnect service,
 #which shield the difference of the implement of oc coap. 
 #CONFIG_OC_MQTT_TYPE could be "soft" "none"
-CONFIG_OC_COAP_ENABLE := y
+CONFIG_OC_COAP_ENABLE := n
 CONFIG_OC_COAP_TYPE   := "soft"
 
 #CONFIG_OC_MQTT_ENABLE, we build a oc mqtt abstraction for huawei OceanConnect service,
@@ -132,7 +132,7 @@ CONFIG_OC_MQTT_TYPE   := "soft"
 #CONFIG_OC_LWM2M_ENABLE, we build a oc lwm2m abstraction for huawei OceanConnect service,
 #which shield the difference of the implement of oc lwm2m. 
 #CONFIG_OC_MQTT_TYPE could be "soft" "boudica150_oc" "none"
-CONFIG_OC_LWM2M_ENABLE := n
+CONFIG_OC_LWM2M_ENABLE := y
 CONFIG_OC_LWM2M_TYPE   := "boudica150_oc"
 
 ########################OC SERVICE END##########################################
@@ -162,9 +162,18 @@ CONFIG_PCP_ENABLE      := n
 #"oc_lwm2m_bs_demo"  "oc_lwm2m_demo" "oc_lwm2m_ota_demo" "oc_tls_mqtt_bs_demo" "oc_tls_mqtt_demo"  "stimer_demo"
 
 CONFIG_DEMO_ENABLE := y
-CONFIG_DEMO_TYPE   := "oc_coap_demo"
+CONFIG_DEMO_TYPE   := "none"
 
 #########################STANDARD DEMO END######################################
-include $(TOP_DIR)/iot_link/iot.mk
+
+########################BearPi-IoT OC DEMO START#####################################
+
+#CONFIG_USER_DEMO could be "oc_streetlight_template" "oc_agriculture_template" "oc_track_template" "oc_smoke_template"
+
+CONFIG_USER_DEMO := "oc_track_template"
+
+#########################BearPi-IoT OC DEMO END######################################
+
+include $(SDK_DIR)/iot_link/iot.mk
 
 

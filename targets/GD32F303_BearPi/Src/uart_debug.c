@@ -93,7 +93,9 @@ void shell_uart_init(int baud)
 #if defined ( __CC_ARM ) || defined ( __ICCARM__ )  /* KEIL and IAR: printf will call fputc to print */
 int fputc(int ch, FILE *f)
 {
-    HAL_UART_Transmit(&uart_debug, (uint8_t *)&ch, 1, 0xFFFF);
+    usart_data_transmit(EVAL_COM0, (uint8_t)ch);
+    while (RESET == usart_flag_get(EVAL_COM0, USART_FLAG_TBE))
+        ;
     return ch;
 }
 int fgetc(FILE *f){

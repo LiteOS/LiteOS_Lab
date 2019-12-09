@@ -26,16 +26,16 @@ HAL_DRIVER_SRC =  \
         C_SOURCES += $(HAL_DRIVER_SRC)
 
 HARDWARE_SRC =  \
-        ${wildcard $(TOP_DIR)/targets/GD32F303_BearPi/Hardware/Src/*.c} 
-
+        ${wildcard $(TOP_DIR)/targets/GD32F303_BearPi/Hardware/LCD/*.c} 
         C_SOURCES += $(HARDWARE_SRC)
         
 USER_SRC =  \
-		$(TOP_DIR)/targets/GD32F303_BearPi/Src/write.c \
+        $(TOP_DIR)/targets/GD32F303_BearPi/Src/write.c \
         $(TOP_DIR)/targets/GD32F303_BearPi/Src/main.c \
         $(TOP_DIR)/targets/GD32F303_BearPi/Src/system_gd32f30x.c \
         $(TOP_DIR)/targets/GD32F303_BearPi/Src/gd32f30x_it.c \
         $(TOP_DIR)/targets/GD32F303_BearPi/Src/systick.c \
+        $(TOP_DIR)/targets/GD32F303_BearPi/Src/i2c.c \
         $(TOP_DIR)/targets/GD32F303_BearPi/Src/BearPi-IoT_gd32f303.c \
         $(TOP_DIR)/targets/GD32F303_BearPi/Src/uart_debug.c \
         $(TOP_DIR)/targets/GD32F303_BearPi/Src/Huawei_IoT_QR_Code.c
@@ -54,7 +54,7 @@ HAL_DRIVER_INC = \
         -I $(SDK_DIR)/drivers/third_party/GigaDevice/GD32F30x_standard_peripheral/Include 
         C_INCLUDES += $(HAL_DRIVER_INC)        
 HARDWARE_INC = \
-        -I $(TOP_DIR)/targets/GD32F303_BearPi/Hardware/Inc
+        -I $(TOP_DIR)/targets/GD32F303_BearPi/Hardware/LCD
         C_INCLUDES += $(HARDWARE_INC)
 
 USER_INC = \

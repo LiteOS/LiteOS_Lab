@@ -179,6 +179,10 @@ void gd_eval_com_init(uint32_t com, uint32_t baud)
         com_id = 0U;
     }else if(EVAL_COM1 == com){
         com_id = 1U;
+    }else if(EVAL_COM2 == com){
+        com_id = 2U;
+    }else if(EVAL_COM3 == com){
+        com_id = 3U;
     }
     
     /* enable GPIO clock */

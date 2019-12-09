@@ -1,7 +1,7 @@
 /*!
-    \file  gd32f30x_it.h
-    \brief the header file of the ISR
-
+    \file  i2c.h
+    \brief the header file of I2C
+    
     \version 2019-10-30, V1.0.0, demo for BearPi-IoT_GD32F30x
 */
 
@@ -34,35 +34,18 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#ifndef GD32F30X_IT_H
-#define GD32F30X_IT_H
+#ifndef I2C_H
+#define I2C_H
 
 #include "gd32f30x.h"
 
+#define I2C0_SPEED              400000
+#define I2C0_SLAVE_ADDRESS7     0xA0
+#define I2C_PAGE_SIZE           8
 
-/* function declarations */
-/* this function handles NMI exception */
-void NMI_Handler(void);
-/* this function handles HardFault exception */
-void HardFault_Handler(void);
-/* this function handles MemManage exception */
-void MemManage_Handler(void);
-/* this function handles BusFault exception */
-void BusFault_Handler(void);
-/* this function handles UsageFault exception */
-void UsageFault_Handler(void);
-/* this function handles SVC exception */
-void SVC_Handler(void);
-/* this function handles DebugMon exception */
-void DebugMon_Handler(void);
-/* this function handles PendSV exception */
-void PendSV_Handler(void);
-/* this function handles SysTick exception */
-void SysTick_Handler(void);
+/* configure the GPIO ports */
+void gpio_config(void);
+/* configure the I2C1 interfaces */
+void i2c_config(void);
 
-void EXTI0_IRQHandler(void);
-void EXTI1_IRQHandler(void);
-void UART3_IRQHandler(void);
-void USART0_IRQHandler(void);
-
-#endif /* GD32F30X_IT_H */
+#endif  /* I2C_H */

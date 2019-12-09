@@ -1,7 +1,7 @@
 /*!
-    \file  gd32f30x_it.h
-    \brief the header file of the ISR
-
+    \file  i2c.c
+    \brief I2C configuration file
+    
     \version 2019-10-30, V1.0.0, demo for BearPi-IoT_GD32F30x
 */
 
@@ -34,35 +34,44 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-#ifndef GD32F30X_IT_H
-#define GD32F30X_IT_H
-
 #include "gd32f30x.h"
+#include "i2c.h"
+#include <stdio.h>
 
+/*!
+    \brief      configure the GPIO ports
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void gpio_config(void)
+{
+    /* enable GPIOC clock */
+    rcu_periph_clock_enable(RCU_GPIOB);
+    /* enable I2C0 clock */
+    rcu_periph_clock_enable(RCU_I2C0);
 
-/* function declarations */
-/* this function handles NMI exception */
-void NMI_Handler(void);
-/* this function handles HardFault exception */
-void HardFault_Handler(void);
-/* this function handles MemManage exception */
-void MemManage_Handler(void);
-/* this function handles BusFault exception */
-void BusFault_Handler(void);
-/* this function handles UsageFault exception */
-void UsageFault_Handler(void);
-/* this function handles SVC exception */
-void SVC_Handler(void);
-/* this function handles DebugMon exception */
-void DebugMon_Handler(void);
-/* this function handles PendSV exception */
-void PendSV_Handler(void);
-/* this function handles SysTick exception */
-void SysTick_Handler(void);
+    /* connect PB6 to I2C0_SCL */
+    /* connect PB7 to I2C0_SDA */
+    gpio_init(GPIOB, GPIO_MODE_AF_OD, GPIO_OSPEED_50MHZ, GPIO_PIN_6 | GPIO_PIN_7);
+}
 
-void EXTI0_IRQHandler(void);
-void EXTI1_IRQHandler(void);
-void UART3_IRQHandler(void);
-void USART0_IRQHandler(void);
-
-#endif /* GD32F30X_IT_H */
+/*!
+    \brief      configure the I2C0 interfaces
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void i2c_config(void)
+{
+    /* enable I2C clock */
+    rcu_periph_clock_enable(RCU_I2C0);
+    /* configure I2C clock */
+    i2c_clock_config(I2C0,I2C0_SPEED,I2C_DTCY_2);
+    /* configure I2C address */
+    i2c_mode_addr_config(I2C0,I2C_I2CMODE_ENABLE,I2C_ADDFORMAT_7BITS,I2C0_SLAVE_ADDRESS7);
+    /* enable I2C0 */
+    i2c_enable(I2C0);
+    /* enable acknowledge */
+    i2c_ack_config(I2C0,I2C_ACK_ENABLE);
+}

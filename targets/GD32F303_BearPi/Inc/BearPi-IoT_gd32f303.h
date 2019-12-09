@@ -64,7 +64,7 @@ typedef enum
 } keymode_typedef_enum;
 
 /* eval board low layer led */
-#define LEDn                             4U
+#define LEDn                             1U
 
 #define LED_PIN                         GPIO_PIN_13
 #define LED_GPIO_PORT                   GPIOC
@@ -72,7 +72,7 @@ typedef enum
   
 
 
-#define COMn                             2U
+#define COMn                             4U
 
 #define EVAL_COM0                        USART0
 #define EVAL_COM0_CLK                    RCU_USART0
@@ -88,7 +88,21 @@ typedef enum
 #define EVAL_COM1_GPIO_PORT              GPIOA
 #define EVAL_COM1_GPIO_CLK               RCU_GPIOA
 
-#define KEYn                             3U
+#define EVAL_COM2                        USART2
+#define EVAL_COM2_CLK                    RCU_USART2
+#define EVAL_COM2_TX_PIN                 GPIO_PIN_10
+#define EVAL_COM2_RX_PIN                 GPIO_PIN_11
+#define EVAL_COM2_GPIO_PORT              GPIOB
+#define EVAL_COM2_GPIO_CLK               RCU_GPIOB
+
+#define EVAL_COM3                        UART3
+#define EVAL_COM3_CLK                    RCU_UART3
+#define EVAL_COM3_TX_PIN                 GPIO_PIN_10
+#define EVAL_COM3_RX_PIN                 GPIO_PIN_11
+#define EVAL_COM3_GPIO_PORT              GPIOC
+#define EVAL_COM3_GPIO_CLK               RCU_GPIOC
+
+#define KEYn                             2U
 
 /* F1 push-button */
 #define F1_KEY_PIN                   GPIO_PIN_1
