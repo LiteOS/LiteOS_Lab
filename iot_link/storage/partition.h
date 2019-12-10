@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -31,22 +31,28 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-#include <stdio.h>
-#include <pthread.h>
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2019-09-16 18:48  zhangqianfu  The first version
+ *
+ */
+#include "storage.h"
 
+#ifndef STORAGE_PARTITION_H
+#define STORAGE_PARTITION_H
 
-extern int link_main(void *args);
+typedef struct _partition {
+  uint8_t dev_id;
+  char *name;
+  uint32_t start_addr;
+  uint32_t size;
+}storage_partition;
 
+int storage_partition_read(int part_id, uint8_t *buf, uint32_t len, uint32_t offset);
 
-int main(void)
-{
-    printf("HELLO NEW WORLD\n\r");
-    link_main(NULL);
-    while(1)
-    {
-        sleep(1); ///< should hung the process
-    }
-    return 0;
-}
+int storage_partition_write(int part_id, uint8_t *buf, uint32_t len, uint32_t offset);
 
+int storage_partition_erase_write(int part_id, uint8_t *buf, uint32_t len, uint32_t offset);
 
+int storage_partition_erase(int part_id, uint32_t offset, uint32_t len);
+#endif /* STORAGE_PARTITION_H */

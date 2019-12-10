@@ -1,5 +1,5 @@
 ##########################################################################################################################
-# STM32F429IGTx_FIRE GCC compiler Makefile
+# EC20 GCC compiler Makefile
 ##########################################################################################################################
 
 # ------------------------------------------------
@@ -22,21 +22,26 @@ OPT = -O0 -g
 #######################################
 # binaries
 #######################################
-PREFIX    =
-CC        = $(PREFIX)gcc
-AS        = $(PREFIX)gcc -x assembler-with-cpp
-OBJCOPY   = $(PREFIX)objcopy
-OBJDUMP   = $(PREFIX)objdump
-AR        = $(PREFIX)ar
-SZ        = $(PREFIX)size
-LD        = $(PREFIX)ld
-HEX       = $(OBJCOPY) -O ihex
-BIN       = $(OBJCOPY) -O binary -S
-
+ifeq ($(CC), )
+	PREFIX    = 
+    CC        = $(PREFIX)gcc
+    AS        = $(PREFIX)gcc -x assembler-with-cpp
+    OBJCOPY   = $(PREFIX)objcopy
+    OBJDUMP   = $(PREFIX)objdump
+    AR        = $(PREFIX)ar
+    SZ        = $(PREFIX)size
+    LD        = $(PREFIX)ld
+    HEX       = $(OBJCOPY) -O ihex
+    BIN       = $(OBJCOPY) -O binary -S
+endif
 
 PROJECTBASE = $(abspath $(CURDIR))
 TOP_DIR     = $(abspath $(PROJECTBASE)/../../..)
 
+#this is for IoT Studio automatic generating kconfig compatibility
+ifndef SDK_DIR
+    SDK_DIR=$(abspath $(PROJECTBASE)/../../..)
+endif
 
 #######################################
 # paths
@@ -62,32 +67,21 @@ PERIFLIB_SOURCES =
 ##########################LOAD THE SOURCES INCLUDES AND DEFINES#################
 include $(PROJECTBASE)/config.mk
 
-MAIN_SRC := ${wildcard $(TOP_DIR)/targets/EC20/Src/at_demo.c}
-MAIN_SRC += ${wildcard $(TOP_DIR)/targets/EC20/Src/at_interface_mqtt.c}
+MAIN_SRC := ${wildcard ../Src/*.c}
 C_SOURCES += $(MAIN_SRC)
 
-DEMO_INC = \
-        -I $(TOP_DIR)/targets/EC20/Src/
-        C_INCLUDES += $(DEMO_INC)
+AT_INTERFACE_INC = -I ../Src/
+C_INCLUDES += $(AT_INTERFACE_INC)
 
 ######################################
 # firmware library
 ######################################
 
 
+
 #######################################
 # CFLAGS
 #######################################
-
-
-INCLUDE_INC = \
-        -I $(TOP_DIR)/include
-        C_INCLUDES += $(INCLUDE_INC)
-
-LWM2M_ATINY_INC = \
-        -I $(TOP_DIR)/components/connectivity/agent_tiny/atiny_lwm2m        
-        C_INCLUDES += $(LWM2M_ATINY_INC)
-
 # compile gcc flags
 ASFLAGS =  $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
@@ -108,7 +102,7 @@ CFLAGS += -Wno-missing-braces
 #######################################
 
 # libraries
-LIBS = -lc -lm -lpthread
+LIBS = -lc -lm -lpthread -lrt
 LDFLAGS = $(LIBS)
 
 # default action: build all
@@ -132,7 +126,6 @@ $(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
-	$(SZ) $@
 	
 $(BUILD_DIR):
 	mkdir $@

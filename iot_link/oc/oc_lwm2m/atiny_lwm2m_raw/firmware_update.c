@@ -34,7 +34,8 @@
 
 #include "internals.h"
 #include <agenttiny.h>
-#include "ota/package.h"
+//#include "ota/package.h"
+#include "ota_manager.h"
 #include "firmware_update.h"
 #include <atiny_log.h>
 
@@ -61,11 +62,11 @@ static fw_update_record_t g_fw_update_record = {0};
 static firmware_update_notify g_firmware_update_notify = NULL;
 static void *g_firmware_update_notify_param = NULL;
 
-static void firmware_download_reply(lwm2m_transaction_t *transacP,
+static void firmware_download_reply(lwm2m_context_t *contextP, lwm2m_transaction_t *transacP,
                                     void *message)
 {
     coap_packet_t *packet = (coap_packet_t *)message;
-    lwm2m_context_t *contextP = (lwm2m_context_t *)(transacP->userData);
+    //    lwm2m_context_t *contextP = (lwm2m_context_t *)(transacP->userData);
     lwm2m_transaction_t *transaction;
     uint32_t len = 0;
     uint32_t block_num = 0;
@@ -121,7 +122,7 @@ static void firmware_download_reply(lwm2m_transaction_t *transacP,
             goto failed_exit;
         }
         ret = coap_set_header_uri_path(transaction->message, g_ota_uri);
-        if(ret < 0 || NULL == transaction->message->uri_path)
+        if(ret < 0 || NULL == ((coap_packet_t*)transaction->message)->uri_path)
         {
             transaction_free(transaction);
             goto failed_exit;
@@ -285,7 +286,7 @@ int start_firmware_download(lwm2m_context_t *contextP, char *uri,
     int uri_len;
     lwm2m_server_t *server;
 
-    if(!contextP || !uri || *uri == '\0' || !storage_device_p)
+    if(!contextP || !uri || *uri == '\0') //|| !storage_device_p)
     {
         ATINY_LOG(LOG_ERR, "invalid params");
         return -1;
@@ -329,7 +330,7 @@ int start_firmware_download(lwm2m_context_t *contextP, char *uri,
         return -1;
     }
     ret = coap_set_header_uri_path(transaction->message, g_ota_uri);
-    if(ret < 0 || NULL == transaction->message->uri_path)
+    if(ret < 0 || NULL == ((coap_packet_t*)transaction->message)->uri_path)
     {
         transaction_free(transaction);
         return -1;

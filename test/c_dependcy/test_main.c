@@ -82,11 +82,12 @@ int test_main_entry(void *paras)
         return -1;
     }
 
-    printf("come into test_main_entry \n");
-    entry = sal_gethostbyname("192.168.1.100");
+    printf("udp server bind 5999 \n");
+
+
     memset(&ser_addr, 0, sizeof(ser_addr));
     ser_addr.sin_family = AF_INET;
-    memcpy(&ser_addr.sin_addr.s_addr,entry->h_addr_list[0],sizeof(ser_addr.sin_addr.s_addr));
+    ser_addr.sin_addr.s_addr = htonl(INADDR_ANY);
     ser_addr.sin_port = htons(LOCAL_PORT);
     ret = sal_bind(server_fd, (struct sockaddr*)&ser_addr, sizeof(ser_addr));
     if(ret < 0){
@@ -98,7 +99,7 @@ int test_main_entry(void *paras)
 
     for(;;)
     {
-        
+        memset(g_acRecvBuf, 0, sizeof(g_acRecvBuf));
         recv_len = sal_recvfrom(server_fd, g_acRecvBuf, sizeof(g_acRecvBuf), 0, (struct sockaddr *)&cli_addr, &addr_len);
         if (recv_len < 0)
         {

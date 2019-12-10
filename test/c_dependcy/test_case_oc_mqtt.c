@@ -41,10 +41,15 @@
 #include <stdlib.h>
 #include <sal.h>
 #include <osal.h>
+#include <queue.h>
 #include <oc_mqtt_al.h>
 #include <mqtt_al.h>
 
 #include "test_case.h"
+
+//install atiny mqtt
+#include <oc_mqtt_tiny.h>
+
 
 static char s_mqtt_ca_crt[] =
 "-----BEGIN CERTIFICATE-----\r\n"
@@ -81,18 +86,14 @@ void *g_mqtt_al_handle = NULL;
 static int g_ioswitch = -1;
 
 typedef struct oc_mqtt_paras_s{
-    char *id;
-    char *passwd;
+    en_oc_mqtt_mode  boot_mode;
+    unsigned short life_time;
     char *server_ip4;
     char *server_port;
-    char *cbname;
-    en_oc_boot_strap_mode_t  boot_mode;
-    unsigned short life_time; 
-    unsigned short code_mode;
-    unsigned short sign_type;
-    unsigned short device_type;
-    unsigned short auth_type; 
     unsigned short sec_type;
+    char *id;
+    char *passwd;
+    char *cbname;
     unsigned short ca_is_valid;
 }oc_mqtt_paras;
 
@@ -105,7 +106,7 @@ static int ts_oc_mqtt_register(char *message, int len);
 static int ts_oc_mqtt_config(char *message, int len);
 static int ts_oc_mqtt_json_fmt_req(char *message, int len);
 static int ts_oc_mqtt_json_fmt_res(char *message, int len);
-static int ts_oc_mqtt_report(char *message, int len);
+static int ts_oc_mqtt_publish(char *message, int len);
 static int ts_oc_mqtt_deconfig(char *message, int len);
 static int ts_oc_mqtt_deinit(char *message, int len);
 static int ts_oc_mqtt_getvalue(char *message, int len);
@@ -117,7 +118,7 @@ test_entry ts_oc_mqtt_entry_flist[]= {
     ts_oc_mqtt_config,
     ts_oc_mqtt_json_fmt_req,
     ts_oc_mqtt_json_fmt_res,
-    ts_oc_mqtt_report,
+    ts_oc_mqtt_publish,
     ts_oc_mqtt_deconfig,
     ts_oc_mqtt_deinit,
     ts_oc_mqtt_getvalue,
@@ -136,133 +137,154 @@ int ts_sort_oc_mqtt_al(int entry_id, char *message, int len)
 
 /*--------------oc mqtt test---------------------------*/
 
-#define cn_app_rcv_buf_len 256
-static char            s_rcv_buffer[cn_app_rcv_buf_len];
-static int             s_rcv_datalen;
-static osal_semp_t     s_rcv_sync;
-static void           *s_mqtt_handle;
-static int            s_cmd_entry_live = 1;
-static void           *task_handle = NULL;
-static int pp_oc_app_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
+static queue_t *s_queue_rcvmsg = NULL;
+static void    *task_handle = NULL;
+
+typedef struct
+{
+    int        qos;
+    int        dup;
+    int        retain;
+    int        msg_len;
+    char      *topic;
+    uint8_t   *msg;
+    uint8_t   *buf;
+}demo_msg_t;
+
+static int pp_oc_app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
 {
     int ret = -1;
-    printf("topic:%s qos:%d\n\r",msg->topic.data,msg->qos);
+    uint8_t  *buf;
+    uint32_t  buflen;
+    demo_msg_t *demo_msg;
 
-    if(msg->msg.len < cn_app_rcv_buf_len)
+    buflen =msg->msg.len + msg->topic.len + sizeof(demo_msg_t) + 1 +1;
+    buf = osal_malloc(buflen);
+    if(NULL != buf)
     {
-        memcpy(s_rcv_buffer,msg->msg.data,msg->msg.len );
-        s_rcv_buffer[msg->msg.len] = '\0'; ///< the json need it
-        s_rcv_datalen = msg->msg.len;
+        ///< copy the message and push it to the queue
+        demo_msg = (demo_msg_t *)buf;
+        demo_msg->buf = buf + sizeof(demo_msg_t);
+        demo_msg->dup = msg->dup;
+        demo_msg->qos = msg->qos;
+        demo_msg->retain = msg->retain;
 
-        printf("msg:%s\n\r",s_rcv_buffer);
+        demo_msg->topic = (char *) demo_msg->buf;
+        buf = (uint8_t *)demo_msg->topic;
+        memcpy(buf,msg->topic.data,msg->topic.len);
+        buf[msg->topic.len] = '\0';
 
-        osal_semp_post(s_rcv_sync);
-        ret = 0;
+        demo_msg->msg = demo_msg->buf + msg->topic.len +1;
+        demo_msg->msg_len = msg->msg.len;
+        buf = demo_msg->msg;
+        memcpy(buf,msg->msg.data,msg->msg.len);
+        buf[msg->msg.len] = '\0';
 
+        printf("RCVMSG:qos:%d dup:%d retain:%d topic:%s msg:len:%d payload:%s\n\r",\
+                demo_msg->qos,demo_msg->dup,demo_msg->retain,\
+                demo_msg->topic,demo_msg->msg_len,demo_msg->msg);
+
+        ret = queue_push(s_queue_rcvmsg,demo_msg,10);
+        if(ret != 0)
+        {
+            osal_free(demo_msg);
+        }
     }
+
     return ret;
 }
 
-static int pp_oc_mqtt_cmd_entry(void *args)
+static int  pp_oc_cmd_normal(demo_msg_t *demo_msg)
 {
-    cJSON  *msg = NULL;
-    cJSON  *mid = NULL;
-    cJSON  *ioswitch = NULL;
-    cJSON  *msgType = NULL;
-    cJSON  *paras = NULL;
-    cJSON  *serviceId = NULL;
-    cJSON  *cmd = NULL;
-    char   *buf = NULL;
 
+    int ret = 0;
+    char   *buf = NULL;  ///< used for the mqtt
+
+    cJSON               *mid_json;
+    cJSON               *cmd_json;
+    cJSON  *ioswitch = NULL;
+    cJSON  *paras = NULL;
+    cJSON               *response_msg;
     tag_oc_mqtt_response response;
     tag_key_value_list   list;
-
-    int mid_int;
-    int err_int;
-
-    printf("pp_oc_mqtt_cmd_entry start now !!\n");
-    while(s_cmd_entry_live)
+    int mid_int = 0;
+    int err_int = 0;
+    //////////////HANDLE YOUR MESSAGE HERE WITH YOUR DEVICE PROFILE///////////
+    cmd_json = cJSON_Parse((const char *)demo_msg->msg);   
+    if(NULL != cmd_json)
     {
-        if(osal_semp_pend(s_rcv_sync,cn_osal_timeout_forever))
+        paras = cJSON_GetObjectItem(cmd_json,"paras");
+        if(NULL != paras)
         {
-            err_int = 1;
-            mid_int = 1;
-            printf("[pp_oc_mqtt_cmd_entry:]recv msg is %s !!\n", s_rcv_buffer);
-            msg = cJSON_Parse(s_rcv_buffer);
-            
-            if(NULL != msg)
+            ioswitch = cJSON_GetObjectItem(paras,"ioswitch");
+            if(NULL != ioswitch)
             {
-                serviceId = cJSON_GetObjectItem(msg,"serviceId");
-                if(NULL != serviceId)
-                {
-                    printf("serviceId:%s\n\r",serviceId->valuestring);
-                }
-
-                mid = cJSON_GetObjectItem(msg,"mid");
-                if(NULL != mid)
-                {
-                    mid_int = mid->valueint;
-                    printf("mid:%d\n\r",mid_int);
-                }
-                msgType = cJSON_GetObjectItem(msg,"msgType");
-                if(NULL != msgType)
-                {
-                    printf("msgType:%s\n\r",msgType->valuestring);
-                }
-                cmd =  cJSON_GetObjectItem(msg,"cmd");
-                if(NULL != cmd)
-                {
-                    printf("cmd:%s\n\r",cmd->valuestring);
-                }
-
-                paras = cJSON_GetObjectItem(msg,"paras");
-                if(NULL != paras)
-                {
-                    ioswitch = cJSON_GetObjectItem(paras,"ioswitch");
-                    if(NULL != ioswitch)
-                    {
-                        printf("ioswitch:%d\n\r",ioswitch->valueint);
-                        g_ioswitch = ioswitch->valueint;
-                        err_int = en_oc_mqtt_err_code_ok;
-                    }
-                    else
-                    {
-                        printf("handle the json data as your specific profile\r\n");
-                        err_int = en_oc_mqtt_err_code_err;
-                    }
-                }
-                cJSON_Delete(msg);
-
-                list.item.name = "body_para";
-                list.item.buf = "body_para";
-                list.item.type = en_key_value_type_string;
-                list.next = NULL;
-
-                response.hasmore = 0;
-                response.errcode = err_int;
-                response.mid = mid_int;
-                response.bodylst = &list;
-
-                msg = oc_mqtt_json_fmt_response(&response);
-                if(NULL != msg)
-                {
-                    buf = cJSON_Print(msg);
-                    if(NULL != buf)
-                    {
-                        if(0 == oc_mqtt_report(s_mqtt_handle,buf,strlen(buf),en_mqtt_al_qos_1))
-                        {
-                           // printf("SNDMSG:%s\n\r",buf);
-                        }
-                        osal_free(buf);
-                    }
-                    cJSON_Delete(msg);
-                }
+                printf("last ioswitch is %d, newer ioswitch:%d\n\r",g_ioswitch, ioswitch->valueint);
+                g_ioswitch = ioswitch->valueint;
             }
+            else
+            {
+                printf("handle the json data as your specific profile\r\n");
+                err_int = en_oc_mqtt_err_parafmt;
+            }
+        }
+    }
+    
+    mid_json = cJSON_GetObjectItem(cmd_json,"mid");
+    if(NULL != mid_json)
+    {
+        mid_int = mid_json->valueint;
+    }
+    cJSON_Delete(cmd_json);
+    //////////////DO THE RESPONSE FOR THE COMMAND/////////////////////////////
+    list.item.name = "body_para";
+    list.item.buf = "body_para";
+    list.item.type = en_key_value_type_string;
+    list.next = NULL;
+
+    response.hasmore = 0;
+    response.errcode = err_int;
+    response.mid = mid_int;
+    response.bodylst = &list;
+
+    response_msg = oc_mqtt_json_fmt_response(&response);
+    if(NULL != response_msg)
+    {
+        buf = cJSON_PrintUnformatted(response_msg);
+        if(NULL != buf)
+        {
+            ret = oc_mqtt_publish(NULL, (uint8_t *)buf,strlen(buf),en_mqtt_al_qos_1);
+            printf("%s:RESPONSE:mid:%d err_int:%d retcode:%d \r\n",__FUNCTION__,\
+                    mid_int,err_int,ret);
+
+            osal_free(buf);
+        }
+        cJSON_Delete(response_msg);
+    }
+
+    return 0;
+}
+
+static int task_rcvmsg_entry( void *args)
+{
+
+    demo_msg_t *demo_msg;
+
+    while(1)
+    {
+        demo_msg = NULL;
+        queue_pop(s_queue_rcvmsg,(void **)&demo_msg,cn_osal_timeout_forever);
+
+        if(NULL != demo_msg)
+        {
+            pp_oc_cmd_normal(demo_msg);  ///< this is the old model
+            osal_free(demo_msg);
         }
     }
 
     return 0;
 }
+
 
 static int pp_oc_report(void)
 {
@@ -292,7 +314,7 @@ static int pp_oc_report(void)
         buf = cJSON_Print(root);
         if(NULL != buf)
         {
-            ret = oc_mqtt_report(s_mqtt_handle,buf,strlen(buf),en_mqtt_al_qos_1);
+            ret = oc_mqtt_publish(NULL,buf,strlen(buf),en_mqtt_al_qos_1);
             osal_free(buf);
         }
 
@@ -303,19 +325,20 @@ static int pp_oc_report(void)
 }
 
 
-static void *pp_oc_config_test(tag_oc_mqtt_config *config)
+
+static int pp_oc_config_test(oc_mqtt_config_t *config)
 {
     printf("this is at_oc_config\n");
-    return NULL;
+    return 0;
 }
 
-static int pp_oc_deconfig_test(void *handle)
+static int pp_oc_deconfig_test()
 {
     printf("this is at_oc_deconfig\n");
     return 0;
 }
 
-static int pp_oc_report_test(void *handle,char *msg, int msg_len,en_mqtt_al_qos_t qos)
+static int pp_oc_publish_test(char *topic,uint8_t *msg,int msg_len,int qos)
 {
     printf("this is at_oc_report_test\n");
     return 0;
@@ -323,37 +346,43 @@ static int pp_oc_report_test(void *handle,char *msg, int msg_len,en_mqtt_al_qos_
 
 int ts_oc_mqtt_init(char *message, int len)
 {
-    osal_semp_create(&s_rcv_sync,1,0);
-    task_handle = osal_task_create("at_ocmqtt_cmd",pp_oc_mqtt_cmd_entry,NULL,0x1000,NULL,10);
+    s_queue_rcvmsg = queue_create("queue_rcvmsg",2,1);
+    task_handle = osal_task_create("task_rcvmsg",task_rcvmsg_entry,NULL,0x1000,NULL,8);
+    
     return oc_mqtt_init();
 }
 
 /*ts_oc_mqtt_config must be before ts_oc_mqtt_config*/
-static int ts_oc_mqtt_register(char *message, int len)
+static oc_mqtt_t s_oc_mqtt_ops_test = \
 {
-    int ret = 0;
-    int retCode;  
-    tag_oc_mqtt_ops s_oc_mqtt_ops=
+    .name = "oc_mqtt_tiny",
+    .op =
     {
         .config = pp_oc_config_test,
         .deconfig = pp_oc_deconfig_test,
-        .report = pp_oc_report_test,
-    };
-    retCode = oc_mqtt_register(&s_oc_mqtt_ops);
-    ret -= (!(retCode == 0));
+        .publish = pp_oc_publish_test,
+    },
+};
+
+static int ts_oc_mqtt_register(char *message, int len)
+{
+    int ret = 0;
+    int retCode;
+    
+    
+    retCode = oc_mqtt_register(&s_oc_mqtt_ops_test);
+    ret -= (!(retCode == en_oc_mqtt_err_ok));
     /*register again, will sucess*/
-    retCode = oc_mqtt_register(&s_oc_mqtt_ops);
-    ret -= (!(retCode == 0));
+    retCode = oc_mqtt_register(&s_oc_mqtt_ops_test);
+    ret -= (!(retCode == en_oc_mqtt_err_ok));
 
     retCode = oc_mqtt_register(NULL);
-    ret -= (!(retCode == -1));
+    ret -= (!(retCode == en_oc_mqtt_err_system));
 
-    //install atiny mqtt
-    #include <atiny_mqtt.h>
-    oc_mqtt_install_atiny_mqtt();
+    
+    oc_mqtt_tiny_install();
 
     osal_task_sleep(500);
-    
     
 
     printf("exit from %s\n", __FUNCTION__);
@@ -364,11 +393,12 @@ static int ts_oc_mqtt_register(char *message, int len)
 static int ts_oc_mqtt_config(char *message, int len)
 {
 
-    tag_oc_mqtt_config config;
+    oc_mqtt_config_t config;
 
     char *pchTmp, *pchStrTmpIn;
     oc_mqtt_paras *pparas = &g_mqtt_paras;
-    void *handle = NULL;
+    int retcode;
+    
 
     
     printf("[%s] g_tempbuf is %s\n", __FUNCTION__, message);
@@ -379,28 +409,15 @@ static int ts_oc_mqtt_config(char *message, int len)
     printf("[%s]id is %d\n",__FUNCTION__,atoi(pchTmp));
     pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
     printf("[%s]call name is %s\n",__FUNCTION__,pchTmp);
-    
-    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
-    printf("[%s]ep name is %s\n", __FUNCTION__, pchTmp);
-    if(pparas->id != NULL) 
-    {
-        osal_free(pparas->id);
-    }
-    pparas->id = osal_malloc(strlen(pchTmp)+1);
-    memcpy(pparas->id, pchTmp, strlen(pchTmp));
-    pparas->id[strlen(pchTmp)] = '\0';
-    printf("120--id is %s\n",pparas->id);
-    
-    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
-    if(pparas->passwd != NULL) 
-    {
-        osal_free(pparas->passwd);
-    }
-    pparas->passwd = osal_malloc(strlen(pchTmp)+1);
-    memcpy(pparas->passwd, pchTmp, strlen(pchTmp));
-    pparas->passwd[strlen(pchTmp)] = '\0';
 
-    printf("140--passwd is %s\n",pparas->passwd);
+
+    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
+    pparas->boot_mode = atoi(pchTmp);
+    printf("165--boot_mode is %d\n",pparas->boot_mode);
+
+    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
+    pparas->life_time = atoi(pchTmp);
+    printf("165--life_time is %d\n",pparas->life_time);
 
     pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
     printf("168--oc server ipv4 is %s\n",pchTmp);
@@ -419,8 +436,6 @@ static int ts_oc_mqtt_config(char *message, int len)
         memcpy(pparas->server_ip4, pchTmp, strlen(pchTmp));
         pparas->server_ip4[strlen(pchTmp)] = '\0';
     }
-    
-    
 
     pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
     printf("168--oc server port is %s\n",pchTmp);
@@ -439,10 +454,52 @@ static int ts_oc_mqtt_config(char *message, int len)
         memcpy(pparas->server_port, pchTmp, strlen(pchTmp));
         pparas->server_port[strlen(pchTmp)] = '\0';
     }
+    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
+    pparas->sec_type = atoi(pchTmp);
+    printf("165--sec_type is %d\n",pparas->sec_type);
+    
+    
+    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
+    printf("[%s]ep name is %s\n", __FUNCTION__, pchTmp);
+    if(pparas->id != NULL) 
+    {
+        osal_free(pparas->id);
+    }
+    if((!memcmp(pchTmp, "NULL", strlen(pchTmp))) ||
+        (!memcmp(pchTmp, "null", strlen(pchTmp))))
+    {
+        pparas->id = NULL;
+    }
+    else
+    {
+        pparas->id = osal_malloc(strlen(pchTmp)+1);
+        memcpy(pparas->id, pchTmp, strlen(pchTmp));
+        pparas->id[strlen(pchTmp)] = '\0';
+        printf("120--id is %s\n",pparas->id);
+    }
+    
+    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
+    if(pparas->passwd != NULL) 
+    {
+        osal_free(pparas->passwd);
+    }
+    if((!memcmp(pchTmp, "NULL", strlen(pchTmp))) ||
+        (!memcmp(pchTmp, "null", strlen(pchTmp))))
+    {
+        pparas->passwd = NULL;
+    }
+    else
+    {
+        pparas->passwd = osal_malloc(strlen(pchTmp)+1);
+        memcpy(pparas->passwd, pchTmp, strlen(pchTmp));
+        pparas->passwd[strlen(pchTmp)] = '\0';
+        printf("140--passwd is %s\n",pparas->passwd);
+    }
+
     
 
     pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
-    printf("168--callback name is %s\n",pchTmp);
+    
     if(pparas->cbname != NULL) 
     {
         osal_free(pparas->cbname);
@@ -457,79 +514,27 @@ static int ts_oc_mqtt_config(char *message, int len)
         pparas->cbname = osal_malloc(strlen(pchTmp)+1);
         memcpy(pparas->cbname, pchTmp, strlen(pchTmp));
         pparas->cbname[strlen(pchTmp)] = '\0';
+        printf("125--cbname is %s\n",pparas->cbname);
     }
+    
 
-    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
-    pparas->boot_mode = atoi(pchTmp);
-    printf("165--boot_mode is %d\n",pparas->boot_mode);
-
-    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
-    pparas->life_time = atoi(pchTmp);
-    printf("165--life_time is %d\n",pparas->life_time);
-
-    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
-    pparas->code_mode = atoi(pchTmp);
-    printf("165--code_mode is %d\n",pparas->code_mode);
-
-    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
-    pparas->sign_type = atoi(pchTmp);
-    printf("165--sign_type is %d\n",pparas->sign_type);
-
-    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
-    pparas->device_type = atoi(pchTmp);
-    printf("165--device_type is %d\n",pparas->device_type);
-
-    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
-    pparas->auth_type = atoi(pchTmp);
-    printf("165--auth_type is %d\n",pparas->auth_type);
-
-    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
-    pparas->sec_type = atoi(pchTmp);
-    printf("165--sec_type is %d\n",pparas->sec_type);
-
-
-    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
-    pparas->ca_is_valid = atoi(pchTmp);
-    printf("165--ca_is_valid is %d\n",pparas->ca_is_valid);
-
-    config.boot_mode = pparas->boot_mode;
-    config.lifetime = pparas->life_time;
-    config.server = pparas->server_ip4;
-    config.port = pparas->server_port;
-    config.msgdealer = (pparas->cbname ? pp_oc_app_msg_deal : NULL);
+    config.boot_mode    = pparas->boot_mode;
+    config.lifetime     = pparas->life_time;
+    config.server_addr  = pparas->server_ip4;
+    config.server_port  = pparas->server_port;
+    config.sec_type     = pparas->sec_type;
+    config.id           = pparas->id;
+    config.pwd          = pparas->passwd;
+    
+    config.msg_deal     = (pparas->cbname ? pp_oc_app_msg_deal : NULL);
+    config.msg_deal_arg = NULL;
+    
     if(pparas->cbname)printf("[ts_oc_mqtt_config]pparas->cbname is %s\n",pparas->cbname);
-    printf("[ts_oc_mqtt_config]config.msgdealer is %p\n", config.msgdealer);
-    config.code_mode = pparas->code_mode;
-    config.sign_type = pparas->sign_type;
-    config.device_type = pparas->device_type;
-    config.auth_type = pparas->auth_type;
-    config.device_info.s_device.deviceid = pparas->id;
-    config.device_info.s_device.devicepasswd = pparas->passwd;
+    
 
-    config.security.type = pparas->sec_type;
-    if(pparas->ca_is_valid){
-        config.security.u.cas.ca_crt.data = s_mqtt_ca_crt;
-        config.security.u.cas.ca_crt.len = sizeof(s_mqtt_ca_crt); ///< must including the end '\0'
-    }
-    else
-    {
-        config.security.u.cas.ca_crt.data = NULL;
-        config.security.u.cas.ca_crt.len = 0; ///< must including the end '\0'
-    }
-
-    handle = oc_mqtt_config(&config);
-    if(NULL == handle)
-    {
-        printf("config err \r\n");
-        return -1;
-    }
-    else
-    {
-        printf("config success\r\n");
-    }
-
-    s_mqtt_handle = handle;
-    return 0;
+    retcode = oc_mqtt_config(&config);
+    printf("[call oc_mqtt_config] retcode is %d\n",retcode);
+    return retcode;
 }
 
 static int ts_oc_mqtt_json_fmt_req(char *message, int len)
@@ -791,7 +796,7 @@ static int ts_oc_mqtt_json_fmt_res(char *message, int len)
 
     /*errorcode*/
     pchTmp      = strtok_r(NULL, "|", &pchStrTmpIn);
-    en_oc_mqtt_err_code errCode = (en_oc_mqtt_err_code)atoi(pchTmp);
+    int errCode = (int)atoi(pchTmp);
     /*mid*/
     pchTmp      = strtok_r(NULL, "|", &pchStrTmpIn);
     int mid = (int)atoi(pchTmp);
@@ -891,7 +896,7 @@ static int ts_oc_mqtt_json_fmt_res(char *message, int len)
 
 
 
-static int ts_oc_mqtt_report(char *message, int len)
+static int ts_oc_mqtt_publish(char *message, int len)
 {
     int ret = 0;
     int retCode = 0;
@@ -935,28 +940,13 @@ DEMO_EXIT:
 
 static int ts_oc_mqtt_deconfig(char *message, int len)
 {
-    int ret = 0;
     int retCode = 0;
     oc_mqtt_paras *pparas = &g_mqtt_paras;
     
-    retCode = oc_mqtt_deconfig(s_mqtt_handle);
-    ret -= (!(retCode == 0));
+    retCode = oc_mqtt_deconfig();
     
-    if(0 == retCode)
-    {
-        s_mqtt_handle = NULL;
-        printf("deconfig success\r\n");
-
-    }
-    else
-    {
-        printf("deconfig failed\r\n");
-    }
-
-    retCode = oc_mqtt_deconfig(s_mqtt_handle);
-    ret -= (!(retCode == -1));
     
-    printf("exit from %s, ret is %d, retcode is %d\n", __FUNCTION__, ret, retCode);
+    printf("exit from %s, retcode is %d\n", __FUNCTION__, retCode);
     if(pparas->id != NULL) 
     {
         osal_free(pparas->id);
@@ -983,23 +973,19 @@ static int ts_oc_mqtt_deconfig(char *message, int len)
         osal_free(pparas->cbname);
         pparas->cbname = NULL;
     }
-    return ret;
+    return retCode;
 }
 static int ts_oc_mqtt_deinit(char *message, int len)
 {
-    s_cmd_entry_live = 0;
-    
     osal_task_sleep(500);
-    if(s_rcv_sync && task_handle) 
+    if(s_queue_rcvmsg && task_handle) 
     {
-        osal_semp_post(s_rcv_sync);
-        osal_task_sleep(3000);
         osal_task_kill(task_handle);
-        osal_semp_del(s_rcv_sync);
-        
+        osal_task_sleep(500);
+        queue_delete(s_queue_rcvmsg);
     }
 
-    
+    oc_mqtt_tiny_uninstall();
     
     printf("resource released!");
     return TS_OK;
@@ -1013,6 +999,5 @@ static int ts_oc_mqtt_getvalue(char *message, int len)
     
     return TS_OK_HAS_DATA;
 }
-
 
 

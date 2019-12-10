@@ -398,6 +398,7 @@ static void pcp_cmd_upgrade(const pcp_head_t *head, const uint8_t *pbuf)
         return;
     }
     s_pcp_cb.record.cur_state = EN_OTA_STATUS_UPGRADING;
+    s_pcp_cb.record.updater = UPDATER_SOTA;
     pcp_save_flag();
 
     pcp_send_response_code(EN_PCP_MSG_EXCUTEUPDATE, EN_PCP_RESPONSE_CODE_OK);
@@ -445,7 +446,16 @@ static void pcp_handle_msg(uint8_t *msg, int msglen)
 
         case EN_PCP_MSG_EXCUTEUPDATE:    ///< received the upgrade command, report the result when finish the upgrading
             pcp_cmd_upgrade(&pcp_head, pcp_data);
-            ///< we should do the reboot
+
+            //ota binary signature check
+            	if (ota_pack_get_signature_verify_result(OTA_SIGNATURE_LEN, s_pcp_cb.record.file_size) != 0) {
+              s_pcp_cb.record.cur_state = EN_OTA_STATUS_UPGRADED;
+              s_pcp_cb.record.ret_upgrade = EN_PCP_RESPONSE_CODE_FIRMWARENOTMATH;
+              pcp_save_flag();
+              break;
+            }
+
+	    ///< we should do the reboot
             osal_task_sleep(5000);
 	    printf("downloaded, goto loader!!!\n");
             osal_reboot();
@@ -492,7 +502,9 @@ static void pcp_handle_timeout(void)
             upgrade_ret.retcode = s_pcp_cb.record.ret_upgrade;
             memcpy(upgrade_ret.ver,s_pcp_cb.record.ver,CN_VER_LEN);
             ///< tell the server the result
-            pcp_send_msg(EN_PCP_MSG_NOTIFYSTATE,&upgrade_ret,sizeof(upgrade_ret));
+	    if (s_pcp_cb.record.updater == UPDATER_SOTA) {
+	      pcp_send_msg(EN_PCP_MSG_NOTIFYSTATE,&upgrade_ret,sizeof(upgrade_ret));
+	    }
             break;
         default:
             break;
@@ -599,7 +611,7 @@ int ota_pcp_init(int (*fn_pcp_send_msg)(void *msg,int len))
         return ret;
     }
 
-    osal_task_create("pcp_main",pcp_entry,NULL,0x800,NULL,10);
+    osal_task_create("pcp_main",pcp_entry,NULL,0x1000,NULL,10);
 
     return 0;
 }

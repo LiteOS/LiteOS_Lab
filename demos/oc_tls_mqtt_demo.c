@@ -44,7 +44,7 @@
 /* brief : the oceanconnect platform only support the ca_crt up tills now*/
 /** the address product_id device_id password crt is only for the test  */
 
-#define DEFAULT_LIFETIME            10
+#define DEFAULT_LIFETIME            60               ///< the platform need more
 #define DEFAULT_SERVER_IPV4         "49.4.93.24"     ///<  server ip address
 #define DEFAULT_SERVER_PORT         "8883"           ///<  server mqtt service port
 #define CN_MQTT_EP_NOTEID           "mqtt_sdk01"

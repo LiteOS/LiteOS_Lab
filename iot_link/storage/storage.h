@@ -33,12 +33,32 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-07-27 14:52  zhangqianfu  The first version
+ *  2019-09-16 18:48  zhangqianfu  The first version
  *
  */
-#ifndef LITEOS_LAB_TARGETS_EC20_SRC_IOT_LINK_CONFIG_H_
-#define LITEOS_LAB_TARGETS_EC20_SRC_IOT_LINK_CONFIG_H_
 
+#ifndef SOTRAGE_SOTRAGE_H
+#define SOTRAGE_SOTRAGE_H
 
+#include <stdint.h>
+#include <stddef.h>
 
-#endif /* LITEOS_LAB_TARGETS_EC20_SRC_IOT_LINK_CONFIG_H_ */
+typedef struct {
+  int id;
+  char *name;
+  uint32_t size;
+
+  void (*init)();
+  int (*read)(void *buf, int32_t len, uint32_t offset);
+  int (*write)(const uint8_t *buf, int32_t len, uint32_t offset);
+  int (*erase)(uint32_t offset, int32_t len);
+  int (*erase_write)(const void *buf, int32_t len, uint32_t offset);
+}storage_device;
+
+int storage_dev_install(storage_device *dev, uint32_t max_num);
+int storage_dev_uninstall();
+int storage_device_erase(int dev_id, uint32_t addr, uint32_t len);
+int storage_device_erase_write(int dev_id, uint8_t *buf, uint32_t len, uint32_t addr);
+int storage_device_write(int dev_id, uint8_t *buf, uint32_t len, uint32_t addr);
+int storage_device_read(int dev_id, uint8_t *buf, uint32_t len, uint32_t addr);
+#endif /* SOTRAGE_SOTRAGE_H */
