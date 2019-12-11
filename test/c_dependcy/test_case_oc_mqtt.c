@@ -80,7 +80,7 @@ static char s_mqtt_ca_crt[] =
 #define DEFAULT_SERVER_PORT         "8883"           ///<  server mqtt service port
 #define CN_OC_MQTT_CLIENTID_STATIC_FMT     "%s_%d_%d_%s"
 #define cn_check_time_value                 "2018111517"
-void *g_mqtt_al_handle = NULL;
+static void *g_mqtt_al_handle = NULL;
 #define DEFAULT_LIFETIME            10  ///<  server mqtt service port
 
 static int g_ioswitch = -1;
