@@ -20,7 +20,7 @@ from com.huawei.iotplatform.client.dto.RegDirectDeviceOutDTO import RegDirectDev
 
 def test_mqtt_al_init():
     fname = sys._getframe().f_code.co_name
-    result = ts_call_single(mqtt_testid.TEST_MQTT_AL_INIT, fname, mqtt_device_info.MQTT_EP_USER, mqtt_device_info.MQTT_EP_PASSWD, mqtt_device_info.MQTT_DEVICEID)
+    result = ts_call_single(mqtt_testid.TEST_MQTT_AL_INIT, fname,  "192.168.1.103", "8883", "test", "test123", "YES", "CAVALID")
     print(result)
     assert (result)
     assert (result.test_id == mqtt_testid.TEST_MQTT_AL_INIT)
@@ -56,34 +56,43 @@ def test_mqtt_al_disconnect():
 
 def test_mqtt_al_sub():
     fname = sys._getframe().f_code.co_name
-    result = ts_call_single(mqtt_testid.TEST_MQTT_AL_SUBSCRIBLE, fname)
+    result = ts_call_single(mqtt_testid.TEST_MQTT_AL_SUBSCRIBLE, fname, "test")
     assert(result)
     assert(result.test_id == mqtt_testid.TEST_MQTT_AL_SUBSCRIBLE)
     assert(result.ret_code == 0)
 
-def test_north_device():
 
-    deviceManagement = DeviceManagement()
-    deviceId = "64e20563-4939-4c44-924f-b439b8dae1fd"
-    # get accessToken at first
-    result = Authentication().getAuthToken(Constant().clientInfo())
-    print(Constant().clientInfo())
-    authOutDTO = AuthOutDTO()
-    authOutDTO.setAccessToken(json.loads(result)['accessToken'])
-    accessToken = authOutDTO.getAccessToken()
+def test_mqtt_al_unsub():
+    fname = sys._getframe().f_code.co_name
+    result = ts_call_single(mqtt_testid.TEST_MQTT_AL_UNSUBSCRIBLE, fname, "test")
+    assert(result)
+    assert(result.test_id == mqtt_testid.TEST_MQTT_AL_UNSUBSCRIBLE)
+    assert(result.ret_code == 0)
 
-    # register a new device
+def test_mqtt_al_pub():
+    fname = sys._getframe().f_code.co_name
+    result = ts_call_single(mqtt_testid.TEST_MQTT_AL_PBULISH, fname, "test22", "hello world")
+    assert (result)
+    assert (result.test_id == mqtt_testid.TEST_MQTT_AL_PBULISH)
+    assert (result.ret_code == 0)
 
-    # query device status
-    dq = deviceManagement.queryDeviceStatus(deviceId, None, accessToken)
-    print("====== query device status ======")
-    print("result:", dq + "\n")
+def test_mqtt_al_checkstatus():
+    fname = sys._getframe().f_code.co_name
+    result = ts_call_single(mqtt_testid.TEST_MQTT_AL_CHECKSTATUS, fname)
+    assert (result)
+    assert (result.test_id == mqtt_testid.TEST_MQTT_AL_CHECKSTATUS)
+    assert (result.ret_code == 0)
 
-    # query device shadow
-    dq = deviceManagement.queryDeviceShadow(deviceId, None, accessToken)
-    print("====== query device shadow ======")
-    print("result:", dq + "\n")
 if __name__ == '__main__':
     print("hello world")
-    test_north_device()
+    test_mqtt_al_init()
+    test_mqtt_al_install()
+    test_mqtt_al_connect()
+    test_mqtt_al_sub()
+    test_mqtt_al_unsub()
+    test_mqtt_al_pub()
+    test_mqtt_al_checkstatus()
+    test_mqtt_al_disconnect()
+    test_mqtt_al_uninstall()
+
 

@@ -47,6 +47,7 @@
 #include "test_case.h"
 
 static char s_mqtt_ca_crt[] =
+#if 0
 "-----BEGIN CERTIFICATE-----\r\n"
 "MIID4DCCAsigAwIBAgIJAK97nNS67HRvMA0GCSqGSIb3DQEBCwUAMFMxCzAJBgNV\r\n"
 "BAYTAkNOMQswCQYDVQQIEwJHRDELMAkGA1UEBxMCU1oxDzANBgNVBAoTBkh1YXdl\r\n"
@@ -70,12 +71,38 @@ static char s_mqtt_ca_crt[] =
 "Lod6aezh2K7KleC0V5ZlIuEvFoBc7bCwcBSAKA3BnQveJ8nEu9pbuBsVAjHOroVb\r\n"
 "8/bL5retJigmAN2GIyFv39TFXIySw+lW0wlp+iSPxO9s9J+t\r\n"
 "-----END CERTIFICATE-----\r\n";
+#endif
+"-----BEGIN CERTIFICATE-----\r\n"
+"MIIDpDCCAowCCQCe+yNczGt4yDANBgkqhkiG9w0BAQsFADCBkzELMAkGA1UEBhMC\r\n"
+"Y24xEDAOBgNVBAgMB2ppYW5nc3UxEDAOBgNVBAcMB25hbmppbmcxEDAOBgNVBAoM\r\n"
+"B2hvcGVydW4xETAPBgNVBAsMCHl1aHVhdGFpMRYwFAYDVQQDDA0xOTIuMTY4LjEu\r\n"
+"MTAzMSMwIQYJKoZIhvcNAQkBFhR4dV9saXF1bkBob3BlcnVuLmNvbTAeFw0xOTEy\r\n"
+"MTEwMjU1MDNaFw0yMDAzMjAwMjU1MDNaMIGTMQswCQYDVQQGEwJjbjEQMA4GA1UE\r\n"
+"CAwHamlhbmdzdTEQMA4GA1UEBwwHbmFuamluZzEQMA4GA1UECgwHaG9wZXJ1bjER\r\n"
+"MA8GA1UECwwIeXVodWF0YWkxFjAUBgNVBAMMDTE5Mi4xNjguMS4xMDMxIzAhBgkq\r\n"
+"hkiG9w0BCQEWFHh1X2xpcXVuQGhvcGVydW4uY29tMIIBIjANBgkqhkiG9w0BAQEF\r\n"
+"AAOCAQ8AMIIBCgKCAQEA1l2V0Nf69DwLicsVaY/QgIrFhn/kerjnWQN1pvt6FpzC\r\n"
+"TUel6dZUFS6aoA6TZzSQQ/qqymcZt6X4PSCEzWJ2msiFzXKB87hHkvqgVfsdA/9F\r\n"
+"qpqZjavpSYId9dwSGRgkymWj9zZ+DA3BkPv5JwogV3QbGG++RQldZXfvhlbRQedq\r\n"
+"CTffmvvx08zs/yi9MkN8MimXkiz6QpGZojbDG2aWfLsmpmhQZXmtx6ucJ5jN8Dn3\r\n"
+"EBj/VFnMmoUuIr3PbnN9cIC0oofsIztPEgXjXe3JH1cOAFkQUrlw+RPJsu/v1+RE\r\n"
+"Y3Tg/0SfJuIrEQiuHsLd0q3TGs5KzaQYPQtFgQf3BwIDAQABMA0GCSqGSIb3DQEB\r\n"
+"CwUAA4IBAQA4N0L9iz1FRXno78pwMyBiORzkBgJfDtphmZJ9exsgnF4P9WeisQPo\r\n"
+"HYEDBGuDbxk+1wEWdQ1qlLr+OcQ+mXm3Wm2OayG5dKbrA/WnhGVR/38GG6MQQDZO\r\n"
+"6ghrN8Jm6w8koDIhYT8wG9gbRDtGdxGsYbbwW76sTkOFCq8JjYM3iH7rlWowamaG\r\n"
+"shkb3d/TvgWZ5WIbDhuw2GVU0+Tmq4Rq2LSHDFR07GF2kRWM0vdik/I7nYMB4+O7\r\n"
+"WnhRK8uDhlIL9BefI7nrF8Z3E5jFU6YpVb9W53+Z86D7AnGlt6jqIqFjsRfAKGjf\r\n"
+"OQHIVpyGfDqi4kIiKB1wPhw6PLHnCSO7\r\n"
+"-----END CERTIFICATE-----\r\n";
 
-#define DEFAULT_SERVER_IPV4         "49.4.93.24"     ///<  server ip address
-#define DEFAULT_SERVER_PORT         "8883"           ///<  server mqtt service port
+
+
+//#define DEFAULT_SERVER_IPV4         "49.4.93.24"     ///<  server ip address
+//#define DEFAULT_SERVER_IPV4         "192.168.1.103"     ///<  server ip address
+//#define DEFAULT_SERVER_PORT         "8883"           ///<  server mqtt service port
 #define CN_OC_MQTT_CLIENTID_STATIC_FMT     "%s_%d_%d_%s"
 #define cn_check_time_value                 "2018111517"
-void *g_mqtt_al_handle = NULL;
+static void *g_mqtt_al_handle = NULL;
 
 typedef struct mqtt_al_paras_s{
     char *client;
@@ -83,24 +110,13 @@ typedef struct mqtt_al_paras_s{
     char *clientdata;
     char *server_ip4;
     char *server_port;
-    char *cbname;
-    unsigned short life_time;
-    unsigned short version;
-    unsigned short sec_valid;
-    /*below maybe not used*/
-    char *will_topic;
-    char *will_msg;
-    unsigned short will_qos_v;
-    int will_retain;  
+    char *cavalid;
+    char *subtopic;
+    char *pubtopic;
+    char *pubmsg;
 }mqtt_al_paras;
 
 static mqtt_al_paras  g_mqtt_al_paras = {0};
-
-char *g_mqtt_ep_noteid = NULL;
-char *g_mqtt_ep_deviceid = NULL;
-char *g_mqtt_ep_passwd = NULL;
-char *g_mqtt_clientdata = NULL;
-
 
 
 /*MQTT AL*/
@@ -123,6 +139,7 @@ test_entry ts_mqtt_al_entry_flist[]= {
     ts_mqtt_al_connect,
     ts_mqtt_al_disconnect,
     ts_mqtt_al_subscrible,
+    ts_mqtt_al_unsubscrible,
     ts_mqtt_al_publish,
     ts_mqtt_al_checkstatus,
     ts_mqtt_al_deinit,
@@ -144,7 +161,7 @@ static int ts_mqtt_al_init(char *message, int len)
     char *pchTmp, *pchStrTmpIn;
     mqtt_al_paras *pparas = &g_mqtt_al_paras;
     
-    printf("[%s] g_tempbuf is %s\n", __FUNCTION__, message);
+    printf("[%s] message is %s\n", __FUNCTION__, message);
     pchTmp      = message;
     pchStrTmpIn = NULL;
     
@@ -152,28 +169,85 @@ static int ts_mqtt_al_init(char *message, int len)
     printf("[%s]id is %d\n",__FUNCTION__,atoi(pchTmp));
     pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
     printf("[%s]call name is %s\n",__FUNCTION__,pchTmp);
+
+
+    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
+    printf("[%s]server ip is %s\n", __FUNCTION__, pchTmp);
+    if(pparas->server_ip4 != NULL) 
+    {
+        osal_free(pparas->server_ip4);
+    }
+    if((!memcmp(pchTmp, "NULL", strlen(pchTmp))) ||
+        (!memcmp(pchTmp, "null", strlen(pchTmp))))
+    {
+        pparas->server_ip4 = NULL;
+    }
+    else
+    {
+        pparas->server_ip4 = osal_malloc(strlen(pchTmp)+1);
+        memcpy(pparas->server_ip4, pchTmp, strlen(pchTmp));
+        pparas->server_ip4[strlen(pchTmp)] = '\0';
+        printf("[%s]server ip is %s\n", __FUNCTION__, pparas->server_ip4);
+    }
+    
+
+    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
+    
+    if(pparas->server_port != NULL) 
+    {
+        osal_free(pparas->server_port);
+    }
+    if((!memcmp(pchTmp, "NULL", strlen(pchTmp))) ||
+        (!memcmp(pchTmp, "null", strlen(pchTmp))))
+    {
+        pparas->server_port = NULL;
+    }
+    else
+    {
+        pparas->server_port = osal_malloc(strlen(pchTmp)+1);
+        memcpy(pparas->server_port, pchTmp, strlen(pchTmp));
+        pparas->server_port[strlen(pchTmp)] = '\0';
+        printf("[%s]server port is %s\n", __FUNCTION__, pparas->server_port);
+    }
+    
     
     pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
-    printf("[%s]ep name is %s\n", __FUNCTION__, pchTmp);
+    
     if(pparas->client != NULL) 
     {
         osal_free(pparas->client);
     }
-    pparas->client = osal_malloc(strlen(pchTmp)+1);
-    memcpy(pparas->client, pchTmp, strlen(pchTmp));
-    pparas->client[strlen(pchTmp)] = '\0';
-    printf("120--g_mqtt_ep_noteid is %s\n",pparas->client);
+    if((!memcmp(pchTmp, "NULL", strlen(pchTmp))) ||
+        (!memcmp(pchTmp, "null", strlen(pchTmp))))
+    {
+        pparas->client = NULL;
+    }
+    else
+    {
+        pparas->client = osal_malloc(strlen(pchTmp)+1);
+        memcpy(pparas->client, pchTmp, strlen(pchTmp));
+        pparas->client[strlen(pchTmp)] = '\0';
+        printf("[%s]ep name is %s\n", __FUNCTION__, pparas->client);
+    }
     
     pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
     if(pparas->passwd != NULL) 
     {
         osal_free(pparas->passwd);
     }
-    pparas->passwd = osal_malloc(strlen(pchTmp)+1);
-    memcpy(pparas->passwd, pchTmp, strlen(pchTmp));
-    pparas->passwd[strlen(pchTmp)] = '\0';
+    if((!memcmp(pchTmp, "NULL", strlen(pchTmp))) ||
+        (!memcmp(pchTmp, "null", strlen(pchTmp))))
+    {
+        pparas->passwd = NULL;
+    }
+    else
+    {
+        pparas->passwd = osal_malloc(strlen(pchTmp)+1);
+        memcpy(pparas->passwd, pchTmp, strlen(pchTmp));
+        pparas->passwd[strlen(pchTmp)] = '\0';
 
-    printf("140--g_mqtt_ep_passwd is %s\n",pparas->passwd);
+        printf("[%s]ep passwd is %s\n", __FUNCTION__, pparas->passwd);
+    }
     
     pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
     if(pparas->clientdata != NULL)
@@ -187,20 +261,37 @@ static int ts_mqtt_al_init(char *message, int len)
     }
     else
     {
-        pparas->clientdata = osal_malloc(strlen(pchTmp)+1);
-        memcpy(pparas->clientdata, pchTmp, strlen(pchTmp));
-        pparas->clientdata[strlen(pchTmp)] = '\0';
-    }
-    if(g_mqtt_ep_deviceid != NULL) 
-    {
-        osal_free(g_mqtt_ep_deviceid);
-        g_mqtt_ep_deviceid = NULL;
-    }
-    g_mqtt_ep_deviceid = osal_malloc(strlen(pchTmp)+1);
-    memcpy(g_mqtt_ep_deviceid, pchTmp, strlen(pchTmp));
-    g_mqtt_ep_deviceid[strlen(pchTmp)] = '\0';
+        int tlen = strlen(pparas->client) +
+            strlen(cn_check_time_value) + strlen(CN_OC_MQTT_CLIENTID_STATIC_FMT) + 1;
+    
+        pparas->clientdata = osal_malloc(tlen);
+    
+        snprintf(pparas->clientdata, tlen, CN_OC_MQTT_CLIENTID_STATIC_FMT, pparas->client,\
+            2/*en_mqtt_auth_type_nodeid*/, 0/*en_mqtt_sign_type_hmacsha256_check_time_no*/, cn_check_time_value);
 
-    printf("160--g_mqtt_ep_deviceid is %s\n",g_mqtt_ep_deviceid);
+        printf("[%s]clientdata is %s\n", __FUNCTION__, pparas->clientdata);
+    }
+    
+    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
+    if(pparas->cavalid != NULL)
+    {
+        osal_free(pparas->cavalid);
+    }
+    if((!memcmp(pchTmp, "NULL", strlen(pchTmp))) ||
+        (!memcmp(pchTmp, "null", strlen(pchTmp))))
+    {
+        pparas->cavalid = NULL;
+    }
+    else
+    {
+        pparas->cavalid = osal_malloc(strlen(pchTmp)+1);
+        memcpy(pparas->cavalid, pchTmp, strlen(pchTmp));
+        pparas->cavalid[strlen(pchTmp)] = '\0';
+
+        printf("140--cavalid is %s\n",pparas->cavalid);
+    }
+
+    
     
     return mqtt_al_init();
 }
@@ -254,43 +345,41 @@ static int ts_mqtt_al_uninstall(char *message, int len)
     retCode = mqtt_al_uninstall();
     ret -= (!(retCode == -1));
 
-#if CONFIG_MQTT_PAHO_ENABLE
-    #include <paho_mqtt_port.h>
-    mqtt_install_pahomqtt();
-#elif CONFIG_MQTT_SINN_ENABLE
-    #include <mqtt_sinn_port.h>
-    mqtt_install_sinnmqtt();
-#endif
-
     return ret;
     
 }
-static int at_mqtt_al_connect(char *clientdata, char *ep, char *passwd, char *ca, en_mqtt_al_security_t type, char *serverip)
+
+
+static int ts_mqtt_al_connect(char *message, int len)
 {
     mqtt_al_conpara_t conpara;
     mqtt_al_security_para_t security;
 
+    int tlen;
+    en_mqtt_al_connect_state state;
+    mqtt_al_paras *pparas = &g_mqtt_al_paras;
+    
     memset(&conpara,0,sizeof(conpara));
     
-    conpara.clientid.data = clientdata;
+    conpara.clientid.data = pparas->clientdata;
     conpara.clientid.len = strlen(conpara.clientid.data);
 
-    conpara.user.data =  ep;
+    conpara.user.data =  pparas->client;
     conpara.user.len = strlen(conpara.user.data);
 
-    conpara.passwd.data = passwd;
+    conpara.passwd.data = pparas->passwd;
     conpara.passwd.len = strlen(conpara.passwd.data);
 
     conpara.cleansession = 1;
     conpara.keepalivetime = 10;
-    security.type = type;
-    security.u.cas.ca_crt.data = ca;
-    security.u.cas.ca_crt.len = (strlen(ca)+1); ///< must including the end '\0'
+    security.type = en_mqtt_al_security_cas;
+    security.u.cas.ca_crt.data = s_mqtt_ca_crt;
+    security.u.cas.ca_crt.len = (strlen(security.u.cas.ca_crt.data)+1); ///< must including the end '\0'
     conpara.security = &security;
 
-    conpara.serveraddr.data = serverip;
+    conpara.serveraddr.data = pparas->server_ip4;
     conpara.serveraddr.len = strlen(conpara.serveraddr.data);
-    conpara.serverport = atoi(DEFAULT_SERVER_PORT);
+    conpara.serverport = atoi(pparas->server_port);
     conpara.timeout = 10000;
     conpara.version = en_mqtt_al_version_3_1_1;
     conpara.willmsg = NULL;
@@ -301,42 +390,8 @@ static int at_mqtt_al_connect(char *clientdata, char *ep, char *passwd, char *ca
             conpara.clientid.data,conpara.user.data,conpara.passwd.data);
 
     g_mqtt_al_handle = mqtt_al_connect(&conpara);
+    printf("conpara.conret is %d\n", conpara.conret);
     return conpara.conret;
-    
-}
-
-
-static int ts_mqtt_al_connect(char *message, int len)
-{
-    int ret = 0;
-    int retCode;
-    int tlen;
-    en_mqtt_al_connect_state state;
-    
-    tlen = strlen(g_mqtt_ep_noteid) +
-        strlen(cn_check_time_value) + strlen(CN_OC_MQTT_CLIENTID_STATIC_FMT) + 1;
-    
-    if(g_mqtt_clientdata)
-        osal_free(g_mqtt_clientdata);
-    g_mqtt_clientdata = osal_malloc(tlen);
-    if(g_mqtt_clientdata == NULL)
-    {
-        return TS_FAILED;
-    }
-    
-    snprintf(g_mqtt_clientdata, tlen, CN_OC_MQTT_CLIENTID_STATIC_FMT, g_mqtt_ep_noteid,\
-        2/*en_mqtt_auth_type_nodeid*/, 0/*en_mqtt_sign_type_hmacsha256_check_time_no*/, cn_check_time_value);
-    retCode = at_mqtt_al_connect(g_mqtt_clientdata, g_mqtt_ep_noteid, g_mqtt_ep_passwd, 
-        s_mqtt_ca_crt, en_mqtt_al_security_cas, DEFAULT_SERVER_IPV4);
-    ret -= (!(retCode == cn_mqtt_al_con_code_ok));
-
-    
-    state = mqtt_al_check_status(g_mqtt_al_handle);
-
-    ret -= (!(state == en_mqtt_al_connect_ok));
-    
-    return ret;
-    
 }
 
 static int ts_mqtt_al_disconnect(char *message, int len)
@@ -360,92 +415,156 @@ static int ts_mqtt_al_disconnect(char *message, int len)
     
     return ret;
 }
-
-static void at_dmp_msg_dealer(void *arg,mqtt_al_msgrcv_t  *msg)
+static void test_msg_default_deal(void *arg, mqtt_al_msgrcv_t  *msg)
 {
-    cJSON  *root = NULL;
-    cJSON  *cmd_item = NULL;
-    cJSON  *serviceid_item = NULL;
-    char   *json_buf;
-    int     reboot_servceid_match = 0;
-    int     reboot_cmd_match = 0;
-    int     mqtt_rebootstrap = 0;
-
-    //for we must add the '/0' to the end to make sure the json parse correct
-    if ((msg == NULL) || ( msg->msg.data == NULL))
-    {
-        return;
-    }
-
-    json_buf = osal_malloc(msg->msg.len + 1);
-    if(NULL != json_buf)
-    {
-        memcpy(json_buf,msg->msg.data,msg->msg.len);
-        json_buf[msg->msg.len] = '\0';
-        root = cJSON_Parse(json_buf);
-        if(NULL != root)
-        {
-            cmd_item = cJSON_GetObjectItem(root,"cmd");
-            if((NULL != cmd_item) && (strncmp(cmd_item->valuestring, "BootstrapRequestTrigger", strlen(cmd_item->valuestring)) == 0))
-            {
-                reboot_cmd_match =1;
-            }
-            serviceid_item = cJSON_GetObjectItem(root,"serviceid");
-            if((NULL != serviceid_item) && (strncmp(serviceid_item->valuestring, "IOTHUB.BS", strlen(serviceid_item->valuestring)) == 0))
-            {
-                reboot_servceid_match = 1;
-            }
-            if(reboot_cmd_match && reboot_servceid_match)
-            {
-                mqtt_rebootstrap = 1;
-            }
-
-            cJSON_Delete(root);
-        }
-        osal_free(json_buf);
-    }
-
-    if(mqtt_rebootstrap) ///< we reboot it now
-    {
-        printf("THIS IS THE OC MQTT REBOOTSTRAP COMMAND\n\r");
-        s_oc_agent_mqtt_cb->b_flag_dmp_run = 0;
-        return;
-    }
-
-    s_oc_agent_mqtt_cb->config.msgdealer(s_oc_agent_mqtt_cb,msg);
-
-    return;
+    printf("come into %s, topic is %s\n", __FUNCTION__, msg->topic.data);
 }
-
 
 static int ts_mqtt_al_subscrible(char *message, int len)
 {
-    /*��������*/
-    ts_mqtt_al_connect();
+    
     int ret = -1;
     mqtt_al_subpara_t   subpara;
+    char *pchTmp, *pchStrTmpIn;
+    mqtt_al_paras *pparas = &g_mqtt_al_paras;
+
+    printf("[%s] message is %s\n", __FUNCTION__, message);
+    pchTmp      = message;
+    pchStrTmpIn = NULL;
+    
+    pchTmp = strtok_r(pchTmp, "|", &pchStrTmpIn);
+    printf("[%s]id is %d\n",__FUNCTION__,atoi(pchTmp));
+    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
+    printf("[%s]call name is %s\n",__FUNCTION__,pchTmp);
+
+
+    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
+    
+    if(pparas->subtopic != NULL) 
+    {
+        osal_free(pparas->subtopic);
+    }
+    else
+    {
+        pparas->subtopic = osal_malloc(strlen(pchTmp)+1);
+        memcpy(pparas->subtopic, pchTmp, strlen(pchTmp));
+        pparas->subtopic[strlen(pchTmp)] = '\0';
+        printf("[%s]sub topic is %s\n", __FUNCTION__, pparas->subtopic);
+    }
 
     memset(&subpara,0,sizeof(subpara));
+    memset(&subpara,0,sizeof(subpara));
 
-    subpara.dealer = cb->msg_dealer;
-    subpara.arg = cb;
+    subpara.dealer = test_msg_default_deal;
+    subpara.arg = NULL;
     subpara.qos = en_mqtt_al_qos_1;
-    subpara.topic.data = cb->mqtt_subtopic ;
-    subpara.topic.len = strlen(cb->mqtt_subtopic);
-
-    ret = mqtt_al_subscribe(cb->mqtt_handle,&subpara);
+    subpara.topic.data = pparas->subtopic;
+    subpara.topic.len = strlen(subpara.topic.data);
     
-    return TS_OK;
+    ret = mqtt_al_subscribe(g_mqtt_al_handle,&subpara);
+    
+    return ret;
 }
 
 static int ts_mqtt_al_unsubscrible(char *message, int len)
 {
-    return TS_OK;
+    char *pchTmp, *pchStrTmpIn;
+    char *unsubtopic;
+
+    mqtt_al_unsubpara_t unsub;
+    int ret;
+
+    printf("[%s] message is %s\n", __FUNCTION__, message);
+    pchTmp      = message;
+    pchStrTmpIn = NULL;
+    
+    pchTmp = strtok_r(pchTmp, "|", &pchStrTmpIn);
+    printf("[%s]id is %d\n",__FUNCTION__,atoi(pchTmp));
+    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
+    printf("[%s]call name is %s\n",__FUNCTION__,pchTmp);
+
+
+    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
+    
+    unsubtopic = pchTmp;
+
+    unsub.topic.data = unsubtopic;
+    unsub.topic.len  = strlen(unsub.topic.data);
+    
+    ret = mqtt_al_unsubscribe(g_mqtt_al_handle,&unsub);
+    
+    return ret;
 }
 
 static int ts_mqtt_al_publish(char *message, int len)
 {
-    return TS_OK;
+    mqtt_al_pubpara_t pubpara;
+    int ret;
+
+    char *pchTmp, *pchStrTmpIn;
+    mqtt_al_paras *pparas = &g_mqtt_al_paras;
+
+    printf("[%s] message is %s\n", __FUNCTION__, message);
+    pchTmp      = message;
+    pchStrTmpIn = NULL;
+    
+    pchTmp = strtok_r(pchTmp, "|", &pchStrTmpIn);
+    printf("[%s]id is %d\n",__FUNCTION__,atoi(pchTmp));
+    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
+    printf("[%s]call name is %s\n",__FUNCTION__,pchTmp);
+
+
+    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
+    
+    if(pparas->pubtopic != NULL) 
+    {
+        osal_free(pparas->pubtopic);
+    }
+    if((!memcmp(pchTmp, "NULL", strlen(pchTmp))) ||
+        (!memcmp(pchTmp, "null", strlen(pchTmp))))
+    {
+        pparas->pubtopic = NULL;
+    }
+    else
+    {
+        pparas->pubtopic = osal_malloc(strlen(pchTmp)+1);
+        memcpy(pparas->pubtopic, pchTmp, strlen(pchTmp));
+        pparas->pubtopic[strlen(pchTmp)] = '\0';
+        printf("[%s]pub topic is %s\n", __FUNCTION__, pparas->pubtopic);
+    }
+    
+    pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
+
+    if(pparas->pubmsg != NULL) 
+    {
+        osal_free(pparas->pubmsg);
+    }
+    else
+    {
+        pparas->pubmsg = osal_malloc(strlen(pchTmp)+1);
+        memcpy(pparas->pubmsg, pchTmp, strlen(pchTmp));
+        pparas->pubmsg[strlen(pchTmp)] = '\0';
+        printf("[%s]pub msg is %s\n", __FUNCTION__, pparas->pubmsg);
+    }
+    
+
+    ///< pub the mqtt request
+    memset(&pubpara, 0, sizeof(pubpara));
+    pubpara.qos = en_mqtt_al_qos_1;
+    pubpara.retain = 0;
+    pubpara.timeout = 1000;
+
+
+    pubpara.topic.data = pparas->pubtopic;
+    pubpara.topic.len =strlen(pubpara.topic.data);
+    pubpara.msg.data = (char *)pparas->pubmsg;
+    pubpara.msg.len = strlen(pparas->pubmsg);
+
+    printf("oc_mqtt_publish:topic:%s  qos:%d msglen:%d\n\r",pubpara.topic.data,pubpara.qos,pubpara.msg.len);
+
+    ret = mqtt_al_publish(g_mqtt_al_handle, &pubpara);
+    
+    return ret;
 }
 
 static int ts_mqtt_al_checkstatus(char *message, int len)
@@ -454,28 +573,40 @@ static int ts_mqtt_al_checkstatus(char *message, int len)
     en_mqtt_al_connect_state state;
     
     state = mqtt_al_check_status(g_mqtt_al_handle);
-
-    ret -= (!(state != en_mqtt_al_connect_ok));
-
     
-    
-    return TS_OK;
+    return (int)state;
 }
 
 
 static int ts_mqtt_al_deinit(char *message, int len)
 {
-
-    if(g_mqtt_ep_noteid)
-        osal_free(g_mqtt_ep_noteid);
-    if(g_mqtt_ep_passwd)
-        osal_free(g_mqtt_ep_passwd);
-
-    if(g_mqtt_ep_deviceid)
-        osal_free(g_mqtt_ep_deviceid);
+    mqtt_al_paras *pparas = &g_mqtt_al_paras;
     
-    if(g_mqtt_clientdata)
-        osal_free(g_mqtt_clientdata);
+    if(pparas->client)
+        osal_free(pparas->client);
+    if(pparas->clientdata)
+        osal_free(pparas->clientdata);
+
+    if(pparas->cavalid)
+        osal_free(pparas->cavalid);
+    
+    if(pparas->passwd)
+        osal_free(pparas->passwd);
+
+    if(pparas->server_ip4)
+        osal_free(pparas->server_ip4);
+
+    if(pparas->server_port)
+        osal_free(pparas->server_port);
+
+    if(pparas->subtopic)
+        osal_free(pparas->subtopic);
+
+    if(pparas->pubtopic)
+        osal_free(pparas->pubtopic);
+
+    if(pparas->pubmsg)
+        osal_free(pparas->pubmsg);
 
     return TS_OK;
 }

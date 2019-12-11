@@ -53,6 +53,7 @@ test_sort ts_sort_flist[] = {
     NULL,
     NULL,
     ts_sort_oc_mqtt_al,
+    ts_sort_mqtt_al,
 };
 
 char g_acRecvBuf[TS_RECV_BUFFER_LEN];
