@@ -46,6 +46,7 @@
 
 #include <boudica150_oc.h>
 #include "E53_SC1.h"
+#include "BearPi-IoT_gd32f303.h"
 #include "lcd.h"
 
 #include <gd32f30x_it.h>
@@ -102,12 +103,11 @@ typedef struct
 
 void *context;
 int *ue_stats;
-extern int8_t key1;
-extern int8_t key2; 
-extern int16_t toggle;
+int8_t key1;
+int8_t key2; 
+int16_t toggle;
 int16_t lux;
-int8_t qr_code = 1;
-extern const unsigned char gImage_Huawei_IoT_QR_Code[114720];
+
 E53_SC1_Data_TypeDef E53_SC1_Data;
 
 
@@ -117,23 +117,27 @@ static int             s_rcv_buffer[cn_app_rcv_buf_len];
 static int             s_rcv_datalen;
 static osal_semp_t     s_rcv_sync;
 
-static void timer1_callback(void *arg)
+
+void EXTI1_IRQHandler(void)
 {
-	qr_code = !qr_code;
-	LCD_Clear(WHITE);
-	if (qr_code == 1)
-		LCD_Show_Image(0,0,240,239,gImage_Huawei_IoT_QR_Code);
-	else
-	{
-		POINT_COLOR = RED;
-		LCD_ShowString(40, 10, 200, 16, 24, "IoTCluB BearPi");
-		LCD_ShowString(15, 50, 210, 16, 24, "LiteOS NB-IoT Demo");
-		LCD_ShowString(10, 100, 200, 16, 16, "NCDP_IP:");
-		LCD_ShowString(80, 100, 200, 16, 16, cn_app_server);
-		LCD_ShowString(10, 150, 200, 16, 16, "NCDP_PORT:");
-		LCD_ShowString(100, 150, 200, 16, 16, cn_app_port);
-	}
+    if(RESET != exti_interrupt_flag_get(EXTI_1)){
+        key1 = 1;
+        printf("proceed to get ue_status!\r\n");
+        exti_interrupt_flag_clear(EXTI_1);
+    }
 }
+
+void EXTI0_IRQHandler(void)
+{
+    if(RESET != exti_interrupt_flag_get(EXTI_0)){
+        key2 = 1;
+        printf("toggle LED and report!\r\n");
+        toggle = !toggle;
+        gpio_bit_write(SC1_Light_GPIO_Port, SC1_Light_Pin,(bit_status)(1-gpio_input_bit_get(SC1_Light_GPIO_Port, SC1_Light_Pin)));
+        exti_interrupt_flag_clear(EXTI_0);
+    }
+}
+
 
 //use this function to push all the message to the buffer
 static int app_msg_deal(void *usr_data, en_oc_lwm2m_msg_t type, void *data, int len)
@@ -299,22 +303,43 @@ static int app_collect_task_entry()
     {
         E53_SC1_Read_Data();
         printf("\r\n******************************BH1750 Value is  %d\r\n",(int)E53_SC1_Data.Lux);
-        if (qr_code == 0)
-        {
-            LCD_ShowString(10, 200, 200, 16, 16, "BH1750 Value is:");
-            LCD_ShowNum(140, 200, (int)E53_SC1_Data.Lux, 5, 16);
-        }
+
+        LCD_ShowString(20, 170, 200, 16, 16, "SC1 Lux is:");
+        LCD_ShowNum(100, 170, (int)E53_SC1_Data.Lux, 5, 16);
+
         osal_task_sleep(2*1000);
     }
 
     return 0;
 }
 
+void HardWare_Init(void)
+{
+    /* configure systick */
+    systick_config();
+	
+    LCD_Init();					
+	LCD_Clear(BLACK);		   	
+	POINT_COLOR = GREEN;			
+	LCD_ShowString(10, 50, 240, 24, 24, "Welcome to BearPi!");
+	LCD_ShowString(20, 90, 240, 16, 16, "BearPi IoT Develop Board");
+	LCD_ShowString(20, 130, 240, 16, 16, "Powerd by Huawei LiteOS!");
+    
+
+    /* enable the F1 key GPIO clock */
+    gd_eval_key_init(F1_KEY, KEY_MODE_EXTI);
+
+    /* enable the F2 key GPIO clock */
+    gd_eval_key_init(F2_KEY, KEY_MODE_EXTI);    
+    
+}
 
 #include <stimer.h>
 
 int standard_app_demo_main()
 {
+    HardWare_Init();
+    
     osal_semp_create(&s_rcv_sync,1,0);
 
     osal_task_create("app_collect",app_collect_task_entry,NULL,0x400,NULL,3);
@@ -324,7 +349,6 @@ int standard_app_demo_main()
     osal_int_connect(EXTI0_IRQn, 2,0,EXTI0_IRQHandler,NULL);
     osal_int_connect(EXTI1_IRQn, 3,0,EXTI1_IRQHandler,NULL);
 
-    stimer_create("lcdtimer",timer1_callback,NULL,8*1000,cn_stimer_flag_start);
 
     return 0;
 }

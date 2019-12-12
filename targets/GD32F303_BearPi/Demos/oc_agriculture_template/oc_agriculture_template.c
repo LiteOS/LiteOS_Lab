@@ -44,8 +44,9 @@
 #include <oc_lwm2m_al.h>
 #include <link_endian.h>
 
-// #include <boudica150_oc.h>
+#include <boudica150_oc.h>
 #include "E53_IA1.h"
+#include "BearPi-IoT_gd32f303.h"
 #include "lcd.h"
 
 
@@ -100,7 +101,6 @@ typedef struct
 #pragma pack()
 
 void *context;
-int8_t qr_code = 1;
 extern const unsigned char gImage_Huawei_IoT_QR_Code[114720];
 E53_IA1_Data_TypeDef E53_IA1_Data;
 
@@ -111,23 +111,6 @@ static int             s_rcv_buffer[cn_app_rcv_buf_len];
 static int             s_rcv_datalen;
 static osal_semp_t     s_rcv_sync;
 
-static void timer1_callback(void *arg)
-{
-	qr_code = !qr_code;
-	LCD_Clear(WHITE);
-	if (qr_code == 1)
-		LCD_Show_Image(0,0,240,239,gImage_Huawei_IoT_QR_Code);
-	else
-	{
-		POINT_COLOR = RED;
-		LCD_ShowString(40, 10, 200, 16, 24, "IoTCluB BearPi");
-		LCD_ShowString(15, 50, 210, 16, 24, "LiteOS NB-IoT Demo");
-		LCD_ShowString(10, 100, 200, 16, 16, "NCDP_IP:");
-		LCD_ShowString(80, 100, 200, 16, 16, cn_app_server);
-		LCD_ShowString(10, 150, 200, 16, 16, "NCDP_PORT:");
-		LCD_ShowString(100, 150, 200, 16, 16, cn_app_port);
-	}
-}
 
 //use this function to push all the message to the buffer
 static int app_msg_deal(void *usr_data, en_oc_lwm2m_msg_t type, void *data, int len)
@@ -273,29 +256,41 @@ static int app_collect_task_entry()
         printf("\r\n******************************Lux Value is  %d\r\n", (int)E53_IA1_Data.Lux);
 		printf("\r\n******************************Humidity is  %d\r\n", (int)E53_IA1_Data.Humidity);
 		printf("\r\n******************************Temperature is  %d\r\n", (int)E53_IA1_Data.Temperature);
-        if (qr_code == 0)
-        {
-            // LCD_ShowString(10, 200, 200, 16, 16, "BH1750 Value is:");
-            // LCD_ShowNum(140, 200, lux, 5, 16);
-        }
+        LCD_ShowString(20, 130, 200, 16, 16, "IA1 Lux is:");
+        LCD_ShowNum(120, 130, (int)E53_IA1_Data.Lux, 5, 16);
+        LCD_ShowString(20, 170, 200, 16, 16, "IA1 Temp is:");
+        LCD_ShowNum(120, 170, (int)E53_IA1_Data.Temperature, 2, 16);
+        LCD_ShowString(20, 210, 200, 16, 16, "IA1 Hum is:");
+        LCD_ShowNum(120, 210, (int)E53_IA1_Data.Humidity, 2, 16);
         osal_task_sleep(2*1000);
     }
 
     return 0;
 }
 
+void HardWare_Init(void)
+{
+    systick_config();
+	
+    LCD_Init();					
+	LCD_Clear(BLACK);		   	
+	POINT_COLOR = GREEN;			
+	LCD_ShowString(10, 10, 240, 24, 24, "Welcome to BearPi!");
+	LCD_ShowString(20, 50, 240, 16, 16, "BearPi IoT Develop Board");
+	LCD_ShowString(20, 90, 240, 16, 16, "Powerd by Huawei LiteOS!");
+    
+}
 
-#include <stimer.h>
 
 int standard_app_demo_main()
 {
+    HardWare_Init();
+
     osal_semp_create(&s_rcv_sync,1,0);
 
     osal_task_create("app_collect",app_collect_task_entry,NULL,0x400,NULL,3);
     osal_task_create("app_report",app_report_task_entry,NULL,0x1000,NULL,2);
     osal_task_create("app_command",app_cmd_task_entry,NULL,0x1000,NULL,3);
-
-    stimer_create("lcdtimer",timer1_callback,NULL,8*1000,cn_stimer_flag_start);
 
     return 0;
 }

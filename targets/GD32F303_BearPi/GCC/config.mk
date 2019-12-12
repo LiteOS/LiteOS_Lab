@@ -57,10 +57,10 @@ CONFIG_OS_TYPE := "liteos"
 CONFIG_ARCH_CPU_TYPE := "armv7-m"
 
 #CONFIG_SHELL_ENABLE , we supply a simple shell on the liteos,which depends the liteos,support: y n
-CONFIG_SHELL_ENABLE := y
+CONFIG_SHELL_ENABLE :=y
 
 #CONFIG_STIMER_ENABLE , we supply a simple softtimer on the osal,you could choose yes or no
-CONFIG_STIMER_ENABLE := n
+CONFIG_STIMER_ENABLE := y
 
 #CONFIG_DRIVER_ENABLE , we supply a easy and simple driver framework for the sdk
 #this option based on the liteos, so you must choose liteos
@@ -170,7 +170,7 @@ CONFIG_DEMO_TYPE   := "none"
 
 #CONFIG_USER_DEMO could be "oc_streetlight_template" "oc_agriculture_template" "oc_track_template" "oc_smoke_template"
 
-CONFIG_USER_DEMO := "oc_track_template"
+CONFIG_USER_DEMO := "oc_agriculture_template"
 
 #########################BearPi-IoT OC DEMO END######################################
 

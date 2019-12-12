@@ -3,12 +3,12 @@
     * 作     者：物联网俱乐部
     * 版     本：V1.0
     * 编写日期 ：2019-5-31
-    * 功     能：E53_CS1扩展板驱动
+    * 功     能：E53_SC1扩展板驱动
 *********************************************************************************
-    * 说    明 ：本例程配套物联网俱乐部开发板使用
+    * 说    明 ：本例程配套小熊派-IoT(GD)开发板使用
     *
-    * 淘     宝：https://shop128001708.taobao.com/
-    * 论     坛：bbs.iot-club.cn
+    * 淘     宝：https://shop336827451.taobao.com/
+    * 论     坛：https://bbs.huaweicloud.com/forum/forum-734-1.html
 *********************************************************************************/
 
 #include "E53_SC1.h"
@@ -123,6 +123,11 @@ void BH1750_I2C_Master_Receive(uint8_t slaveAddr, uint8_t* pBuffer, uint8_t NumB
 void Init_BH1750(void)
 {
 	uint8_t t_Data = 0x01;
+  /* configure GPIO */
+  gpio_config();
+  /* configure I2C */
+  i2c_config();
+
 	BH1750_I2C_Master_Transmit(BH1750_Addr,&t_Data,1);
 }
 
@@ -151,10 +156,6 @@ void Init_Light(void)
 
 void Init_E53_SC1(void)
 {
-  /* configure GPIO */
-  gpio_config();
-  /* configure I2C */
-  i2c_config();
 	Init_Light();
 	Init_BH1750();
 }
@@ -176,8 +177,8 @@ void E53_SC1_Read_Data(void)
     
 }
 /***************************************************************
-* 函数名称: E53_SF1_LED_StatusSet
-* 说    明: E53_SF1开发板上的LED灯的亮灭控制
+* 函数名称: E53_SC1_LED_StatusSet
+* 说    明: E53_SC1开发板上的LED灯的亮灭控制
 * 参    数: status,LED灯的状态
 *									OFF,关灯
 *									ON,开灯

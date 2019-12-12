@@ -1,15 +1,15 @@
 /********************************************************************************
- * 文件名称 ：E53_ST1.c
- * 作     者：物联网俱乐部
- * 版     本：V1.0
- * 编写日期 ：2019-5-27
- * 功     能：E53_ST1扩展板驱动
- *********************************************************************************
- * 说    明 ：本例程配套物联网俱乐部开发板使用
- *
- * 淘     宝：https://shop128001708.taobao.com/
- * 论     坛：bbs.iot-club.cn
- *********************************************************************************/
+    * 文件名称 ：E53_ST1.h
+    * 作     者：物联网俱乐部
+    * 版     本：V1.0
+    * 编写日期 ：2019-5-31
+    * 功     能：E53_ST1扩展板驱动
+*********************************************************************************
+    * 说    明 ：本例程配套小熊派-IoT(GD)开发板使用
+    *
+    * 淘     宝：https://shop336827451.taobao.com/
+    * 论     坛：https://bbs.huaweicloud.com/forum/forum-734-1.html
+*********************************************************************************/
 
 #include "E53_ST1.h"
 #include "gd32f30x.h"
@@ -132,18 +132,23 @@ void Init_GPS_POW(void)
  ***************************************************************/
 void GPS_Init(void)
 {
-    // gd_eval_com_init(EVAL_COM3, 9600);
-    // usart_flag_clear(EVAL_COM3,USART_FLAG_TC);
-    // // nvic_irq_enable(UART3_IRQn, 0, 0);
-    // LOS_HwiCreate(UART3_IRQn, 7,0,UART3_IRQHandler,NULL);	//创建中断
-    //     /* enable USART0 receive interrupt */
-    // usart_interrupt_enable(UART3, USART_INT_RBNE);
-
-    gd_eval_com_init(EVAL_COM0, 115200);
-    // nvic_irq_enable(USART0_IRQn, 0, 0);
-    LOS_HwiCreate(USART0_IRQn, 7,0,USART0_IRQHandler,NULL);	//创建中断
+    gd_eval_com_init(EVAL_COM3, 115200);
+    usart_flag_clear(EVAL_COM3,USART_FLAG_TC);
+    usart_interrupt_enable(UART3, USART_INT_RBNE);
+    usart_interrupt_enable(UART3, USART_INT_IDLE);
+    // nvic_irq_enable(UART3_IRQn, 0, 0);
+    LOS_HwiCreate(UART3_IRQn, 7,0,UART3_IRQHandler,NULL);	//创建中断
         /* enable USART0 receive interrupt */
-    usart_interrupt_enable(USART0, USART_INT_RBNE);
+
+
+    // gd_eval_com_init(EVAL_COM2, 115200);
+    // usart_flag_clear(EVAL_COM0,USART_FLAG_TC);
+    //         /* enable USART0 receive interrupt */
+    // usart_interrupt_enable(USART0, USART_INT_RBNE);
+    // // usart_interrupt_enable(USART0, USART_INT_IDLE);
+    // //nvic_irq_enable(USART0_IRQn, 0, 0);
+    // // LOS_HwiCreate(USART0_IRQn, 7,0,USART0_IRQHandler,NULL);	//创建中断
+
 }
 
 /***************************************************************
@@ -298,7 +303,7 @@ void NMEA_BDS_GPRMC_Analysis(gps_msg *gpsmsg, uint8_t *buf)
 void E53_ST1_Read_Data(void)
 {
     // HAL_UART_Receive_IT(&huart3,gps_uart,1000);
-    printf("GPS data:%s",&rx_buffer);
+
     NMEA_BDS_GPRMC_Analysis(&gpsmsg, (uint8_t *)rx_buffer); //分析字符串
     E53_ST1_Data.Longitude = (float)((float)gpsmsg.longitude_bd / 100000);
     E53_ST1_Data.Latitude = (float)((float)gpsmsg.latitude_bd / 100000);

@@ -33,7 +33,6 @@
  *---------------------------------------------------------------------------*/
 
 #include "gd32f30x.h"
-#include "BearPi-IoT_gd32f303.h"
 #include "systick.h"
 #include <stdio.h>
 
@@ -67,28 +66,7 @@ const struct phys_mem system_phys_mem [] =
         { 0, 0 }
     };
 
-/*!
-    \brief      main function
-    \param[in]  none
-    \param[out] none
-    \retval     none
-*/
-void HardWare_Init(void)
-{
-    /* configure systick */
-    systick_config();
-	
-	/* initialize the LED */
-    gd_eval_led_init(LED);
 
-    // /* enable the F1 key GPIO clock */
-    // gd_eval_key_init(F1_KEY, KEY_MODE_EXTI);
-
-    // /* enable the F2 key GPIO clock */
-    // gd_eval_key_init(F2_KEY, KEY_MODE_EXTI);
-    
-    
-}
 extern int link_main(void *args);
 static int link_test()
 {
@@ -114,7 +92,6 @@ int main(void)
 {
     UINT32 uwRet = LOS_OK;
 
-    HardWare_Init();
 
     uwRet = LOS_KernelInit();
 	if (uwRet != LOS_OK)

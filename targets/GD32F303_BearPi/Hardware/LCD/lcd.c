@@ -48,7 +48,7 @@ OF SUCH DAMAGE.
 static uint8_t lcd_buf[LCD_Buf_Size];
 
 uint16_t POINT_COLOR = BLACK; //画笔颜色	默认为黑色
-uint16_t BACK_COLOR = WHITE;  //背景颜色	默认为白色
+uint16_t BACK_COLOR = BLACK;  //背景颜色	默认为白色
 
 /**
  * @brief	LCD控制接口初始化
@@ -88,9 +88,9 @@ static void LCD_Gpio_Init(void)
     spi_enable(SPI0);
 
     LCD_RST(1);
-    delay_1ms(100);
+    osal_task_sleep(100);
     LCD_RST(0);
-    delay_1ms(100);
+    osal_task_sleep(100);
     LCD_RST(1);
 }
 
@@ -734,14 +734,14 @@ void LCD_Init(void)
     LCD_Gpio_Init(); //硬件接口初始化
     LCD_PWR(0);
     LCD_RST(0);
-    delay_1ms(120);
+    osal_task_sleep(120);
     LCD_RST(1);
 
-    delay_1ms(120);
+    osal_task_sleep(120);
     /* Sleep Out */
     LCD_Write_Cmd(0x11);
     /* wait for power stability */
-    delay_1ms(120);
+    osal_task_sleep(120);
 
     /* Memory Data Access Control */
     LCD_Write_Cmd(0x36);
@@ -833,8 +833,8 @@ void LCD_Init(void)
 
     LCD_Address_Set(0, 0, LCD_Width - 1, LCD_Height - 1);
 
-    LCD_Clear(WHITE);
+    LCD_Clear(BLACK);
     /* Display on */
     LCD_PWR(1);
-    delay_1ms(200);
+    osal_task_sleep(200);
 }

@@ -36,14 +36,7 @@ OF SUCH DAMAGE.
 
 #include "gd32f30x_it.h"
 #include "systick.h"
-// #include "E53_SC1.h"
 
-
-extern uint8_t   rx_buffer[];
-extern volatile uint16_t   rx_counter;
-int8_t key1 = 0;
-int8_t key2 = 0;
-int16_t toggle = 0;
 
 /*!
     \brief      this function handles NMI exception
@@ -147,63 +140,6 @@ __attribute__((weak)) void SysTick_Handler(void)
 {
     delay_decrement();
 }
-// /*!
-//     \brief      this function handles external lines 1 interrupt request
-//     \param[in]  none
-//     \param[out] none
-//     \retval     none
-// */
-// void EXTI1_IRQHandler(void)
-// {
-//     if(RESET != exti_interrupt_flag_get(EXTI_1)){
-//         key1 = 1;
-//         printf("proceed to get ue_status!\r\n");
-//         exti_interrupt_flag_clear(EXTI_1);
-//     }
-// }
 
-// /*!
-//     \brief      this function handles external lines 0 interrupt request
-//     \param[in]  none
-//     \param[out] none
-//     \retval     none
-// */
-// void EXTI0_IRQHandler(void)
-// {
-//     if(RESET != exti_interrupt_flag_get(EXTI_0)){
-//         key2 = 1;
-//         printf("toggle LED and report!\r\n");
-//         toggle = !toggle;
-//         // gpio_bit_write(SC1_Light_GPIO_Port, SC1_Light_Pin, (bit_status)(1 - gpio_input_bit_get(SC1_Light_GPIO_Port, SC1_Light_Pin)));
-//         exti_interrupt_flag_clear(EXTI_0);
-//     }
-// }
 
-void UART3_IRQHandler(void)
-{
-    printf("this is uart3_irq\r\n");
-    if(RESET != usart_interrupt_flag_get(UART3, USART_INT_FLAG_RBNE)){
-        /* read one byte from the receive data register */
-        rx_buffer[rx_counter++] = (uint8_t)usart_data_receive(UART3);
-        if(rx_counter >= 1000)
-        {
-            /* disable the USART0 receive interrupt */
-            usart_interrupt_disable(UART3, USART_INT_RBNE);
-        }
-    }
-       
-}
-void USART0_IRQHandler(void)
-{
-    printf("this is uart1_irq\r\n");
-    if(RESET != usart_interrupt_flag_get(USART0, USART_INT_FLAG_RBNE)){
-        /* read one byte from the receive data register */
-        rx_buffer[rx_counter++] = (uint8_t)usart_data_receive(USART0);
-                if(rx_counter >= 1000)
-        {
-            /* disable the USART0 receive interrupt */
-            usart_interrupt_disable(USART0, USART_INT_RBNE);
-        }
-    }
-       
-}
+

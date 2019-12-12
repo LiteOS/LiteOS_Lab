@@ -41,14 +41,14 @@ OF SUCH DAMAGE.
 /* private variables */
 static uint32_t GPIO_PORT[LEDn] = {LED_GPIO_PORT};
 static uint32_t GPIO_PIN[LEDn] = {LED_PIN};
-
-static rcu_periph_enum COM_CLK[COMn] = {EVAL_COM0_CLK, EVAL_COM1_CLK};
-static uint32_t COM_TX_PIN[COMn] = {EVAL_COM0_TX_PIN, EVAL_COM1_TX_PIN};
-static uint32_t COM_RX_PIN[COMn] = {EVAL_COM0_RX_PIN, EVAL_COM1_RX_PIN};
-static uint32_t COM_GPIO_PORT[COMn] = {EVAL_COM0_GPIO_PORT, EVAL_COM1_GPIO_PORT};
-static rcu_periph_enum COM_GPIO_CLK[COMn] = {EVAL_COM0_GPIO_CLK, EVAL_COM1_GPIO_CLK};
-
 static rcu_periph_enum GPIO_CLK[LEDn] = {LED_GPIO_CLK};
+
+static rcu_periph_enum COM_CLK[COMn] = {EVAL_COM0_CLK, EVAL_COM1_CLK, EVAL_COM2_CLK, EVAL_COM3_CLK};
+static uint32_t COM_TX_PIN[COMn] = {EVAL_COM0_TX_PIN, EVAL_COM1_TX_PIN, EVAL_COM2_TX_PIN, EVAL_COM3_TX_PIN};
+static uint32_t COM_RX_PIN[COMn] = {EVAL_COM0_RX_PIN, EVAL_COM1_RX_PIN, EVAL_COM2_RX_PIN, EVAL_COM3_RX_PIN};
+static uint32_t COM_GPIO_PORT[COMn] = {EVAL_COM0_GPIO_PORT, EVAL_COM1_GPIO_PORT, EVAL_COM2_GPIO_PORT, EVAL_COM3_GPIO_PORT};
+static rcu_periph_enum COM_GPIO_CLK[COMn] = {EVAL_COM0_GPIO_CLK, EVAL_COM1_GPIO_CLK,EVAL_COM2_GPIO_CLK, EVAL_COM3_GPIO_CLK};
+
 
 static uint32_t KEY_PORT[KEYn] = {F1_KEY_GPIO_PORT, 
                                   F2_KEY_GPIO_PORT};
@@ -81,7 +81,7 @@ void  gd_eval_led_init (led_typedef_enum lednum)
     GPIO_BC(GPIO_PORT[lednum]) = GPIO_PIN[lednum];
 }
 
-/*!
+/*!s
     \brief      turn on selected led
     \param[in]  lednum: specify the led to be turned on
       \arg        LED
