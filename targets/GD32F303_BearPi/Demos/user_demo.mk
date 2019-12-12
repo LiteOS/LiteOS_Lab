@@ -9,12 +9,21 @@
 ifeq ($(CONFIG_DEMO_TYPE), "none")	
 	
 	#example for oc_streetlight_template
-	ifeq ($(CONFIG_USER_DEMO), "oc_streetlight_template")	
-		user_demo_src  = ${wildcard $(TOP_DIR)/targets/GD32F303_BearPi/Demos/oc_streetlight_template/*.c}
-		user_demo_inc = -I $(TOP_DIR)/targets/GD32F303_BearPi/Demos/oc_streetlight_template
-		user_hardware_src = ${wildcard $(TOP_DIR)/targets/GD32F303_BearPi/Hardware/E53_SC1/*.c} 
-		user_hardware_inc = -I ${wildcard $(TOP_DIR)/targets/GD32F303_BearPi/Hardware/E53_SC1}
-		user_demo_defs = -D CONFIG_OC_STREELIGHT_DEMO_ENABLE=1
+	ifeq ($(CONFIG_USER_DEMO), "oc_streetlight_template")
+
+		ifeq ($(CONFIG_OC_LWM2M_TYPE), "boudica150_oc")
+			user_demo_src  = ${wildcard $(TOP_DIR)/targets/GD32F303_BearPi/Demos/oc_streetlight_template/oc_streetlight_template.c}
+			user_demo_inc = -I $(TOP_DIR)/targets/GD32F303_BearPi/Demos/oc_streetlight_template
+		endif
+
+		ifeq ($(CONFIG_OC_LWM2M_TYPE), "soft")
+			user_demo_src  = ${wildcard $(TOP_DIR)/targets/GD32F303_BearPi/Demos/oc_streetlight_template/oc_streetlight_template_Agent.c}
+			user_demo_inc = -I $(TOP_DIR)/targets/GD32F303_BearPi/Demos/oc_streetlight_template
+		endif
+		
+			user_hardware_src = ${wildcard $(TOP_DIR)/targets/GD32F303_BearPi/Hardware/E53_SC1/*.c} 
+			user_hardware_inc = -I ${wildcard $(TOP_DIR)/targets/GD32F303_BearPi/Hardware/E53_SC1}
+			user_demo_defs = -D CONFIG_OC_STREELIGHT_DEMO_ENABLE=1
 		
 	endif
 

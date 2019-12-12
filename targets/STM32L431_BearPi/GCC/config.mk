@@ -88,7 +88,7 @@ CONFIG_CJSON_ENABLE := y
 #and if this option is enabled, then you select  one type for your program, we now
 #CONFIG_TCPIP_TYPE could be:"lwip_socket" "linux_socket" "macos_socket" "esp8266_socket" "none"
 CONFIG_TCPIP_ENABLE := n
-CONFIG_TCPIP_TYPE := "lwip_socket"
+CONFIG_TCPIP_TYPE := "esp8266_socket"
 
 #CONFIG_DTLS_ENABLE , we supply a DTLS AL (building),you could choose yes or no
 #CONFIG_DTLS_TYPE, could be "mbedtls_psk" "mbedtls_cert" "none"
@@ -170,7 +170,7 @@ CONFIG_DEMO_TYPE   := "none"
 
 #CONFIG_USER_DEMO could be "oc_streetlight_template" "oc_agriculture_template" "oc_track_template" "oc_smoke_template"
 
-CONFIG_USER_DEMO := "oc_agriculture_template"
+CONFIG_USER_DEMO := "oc_streetlight_template"
 
 #########################BearPi-IoT OC DEMO END######################################
 

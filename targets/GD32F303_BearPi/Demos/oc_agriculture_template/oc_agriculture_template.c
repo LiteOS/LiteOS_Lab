@@ -44,7 +44,6 @@
 #include <oc_lwm2m_al.h>
 #include <link_endian.h>
 
-#include <boudica150_oc.h>
 #include "E53_IA1.h"
 #include "BearPi-IoT_gd32f303.h"
 #include "lcd.h"
