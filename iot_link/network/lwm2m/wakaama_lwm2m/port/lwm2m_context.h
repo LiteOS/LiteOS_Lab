@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -32,32 +32,45 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-/**@defgroup agent AgentTiny
- * @defgroup agenttiny Agenttiny Definition
- * @ingroup agent
- */
-#ifndef LIB_LWM2M_API_H
-#define LIB_LWM2M_API_H
+#ifndef _LWM2M_CONTEXT_H
+#define _LWM2M_CONTEXT_H
+#include "liblwm2m.h"
+#include <lwm2m_common.h>
+#include "object_comm.h"
 
-#include <stdbool.h>
-#include <stdint.h>
+#include <osal.h>
+
+#define SERVER_URI_MAX_LEN      (64)
+#define MAX_PACKET_SIZE         (1024)
+#define SERVER_ID               (123)
+#define BIND_TIMEOUT            (10)
+
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif /* __cplusplus */
 
-//bootstrap at least have one mode, we have three mode.
-typedef enum
+
+/**
+
+ *@ingroup handle_data_t
+
+ *Structure of agentiny hanle.
+
+ */
+
+typedef struct
 {
-    BOOTSTRAP_FACTORY = 0,
-    BOOTSTRAP_CLIENT_INITIATED,
-    BOOTSTRAP_SEQUENCE
-} lwm2m_bootstrap_type_e;
-
+    lwm2m_context_t  *lwm2m_context;
+    client_data_t     client_data;
+    int lwm2m_quit;
+    int reconnect_flag;
+    osal_semp_t quit_sem;
+    int reboot_flag;
+} handle_data_t;
 
 #ifdef __cplusplus
 }
-#endif
+#endif /* __cplusplus */
 
-#endif
-
+#endif /* _ATINY_INNER_H */

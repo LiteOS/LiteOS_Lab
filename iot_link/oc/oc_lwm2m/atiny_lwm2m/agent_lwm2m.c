@@ -33,16 +33,75 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-21 16:25  zhangqianfu  The first version  
+ *  2019-05-21 16:25  zhangqianfu  The first version
  *
  */
 
 #include <osal.h>
+#include <lwm2m_al.h>
 #include <oc_lwm2m_al.h>
-#include <agenttiny.h>
+#include <atiny_log.h>
+#include <string.h>
 
+typedef enum
+{
+    ATINY_OK                   = 0,
+    ATINY_ARG_INVALID          = -1,
+    ATINY_BUF_OVERFLOW         = -2,
+    ATINY_MSG_CONGEST          = -3,
+    ATINY_MALLOC_FAILED        = -4,
+    ATINY_RESOURCE_NOT_FOUND   = -5,
+    ATINY_RESOURCE_NOT_ENOUGH  = -6,
+    ATINY_CLIENT_UNREGISTERED  = -7,
+    ATINY_SOCKET_CREATE_FAILED = -8,
+    ATINY_ERR                  = -9
+} atiny_error_e;
 
 ///< uptils now, we don't support the multi handle mode
+
+typedef enum
+{
+    ATINY_BOOTSTRAP_FACTORY = 0,
+    ATINY_BOOTSTRAP_CLIENT_INITIATED,
+    ATINY_BOOTSTRAP_SEQUENCE
+} atiny_bootstrap_type_e;
+
+typedef struct
+{
+    char* binding;               /* support U and UQ bind mode */
+    int   life_time;             /* required option */
+    unsigned int  storing_cnt;   /* storing count */
+
+    atiny_bootstrap_type_e  bootstrap_mode; /* bootstrap mode  */
+    int   hold_off_time; /* bootstrap hold off time for server initiated bootstrap */
+} atiny_server_param_t;
+
+typedef struct
+{
+    char* server_ip;
+    char* server_port;
+
+    char* psk_id;
+    char* psk;
+    unsigned short psk_len;
+
+} atiny_security_param_t;
+
+typedef struct
+{
+
+    atiny_server_param_t   server_params;
+    //both iot_server and bs_server have psk & pskID, index 0 for iot_server, and index 1 for bs_server
+    atiny_security_param_t security_params[2];
+    void      *userData;
+} atiny_param_t;
+
+typedef struct
+{
+    char* endpoint_name;
+    char* manufacturer;
+    char* dev_type;
+} atiny_device_info_t;
 
 typedef struct
 {
@@ -51,44 +110,546 @@ typedef struct
     oc_config_param_t   config_para;
     void               *agent_handle;
     void               *task_handle;
-}oc_lwm2m_imp_agent_t;
+} oc_lwm2m_imp_agent_t;
 
 static oc_lwm2m_imp_agent_t  *s_oc_lwm2m_agent = NULL;
 
-int lwm2m_agent_receive(en_oc_lwm2m_msg_t type,char *msg, int len)
+#define SERVER_ID                           (123)
+#define BINARY_APP_DATA_OBJECT_ID           19
+#define BINARY_APP_DATA_OBJECT_INSTANCE_NUM 2
+#define BINARY_APP_DATA_RES_ID              0
+#define MSG_NEED_CONFIRMED                  1
+
+typedef struct object_uri_list_t
+{
+    struct object_uri_list_t *next;
+    uint16_t object_id;
+} object_uri_list;
+
+static object_uri_list* uri_list;
+
+static int lwm2m_agent_receive(int type, char *msg, int len)
 {
     if((NULL != s_oc_lwm2m_agent) && (NULL != s_oc_lwm2m_agent->config_para.rcv_func))
     {
-        s_oc_lwm2m_agent->config_para.rcv_func(s_oc_lwm2m_agent->config_para.usr_data,type,msg,len);
+        s_oc_lwm2m_agent->config_para.rcv_func(s_oc_lwm2m_agent->config_para.usr_data,(en_oc_lwm2m_msg_t)type,msg,len);
     }
 
     return 0;
 }
 
-
-
-static int __agent_task_entry(void *args)
+/*
+ * modify date:   2018-06-20
+ * description: in order to check the params for the bootstrap, expecialy for the mode and the ip/port
+ * return:
+ *              success: ATINY_OK
+ *              fail:    ATINY_ARG_INVALID
+ *
+ */
+static int atiny_check_bootstrap_init_param(atiny_param_t *atiny_params)
 {
-    oc_lwm2m_imp_agent_t  *ret = NULL;
-    ret = args;
-
-    atiny_bind(&ret->device_info, ret->agent_handle);
-
-    while(1)
+    if(NULL == atiny_params)
     {
-        osal_task_sleep(1000);
+        return ATINY_ARG_INVALID;
+    }
+
+    if(ATINY_BOOTSTRAP_FACTORY == atiny_params->server_params.bootstrap_mode)
+    {
+        if((NULL == atiny_params->security_params[0].server_ip) || (NULL == atiny_params->security_params[0].server_port))
+        {
+            ATINY_LOG(LOG_FATAL, "[bootstrap_tag]: BOOTSTRAP_FACTORY mode's params is wrong, should have iot server ip/port");
+            return ATINY_ARG_INVALID;
+        }
+    }
+
+    else if(ATINY_BOOTSTRAP_CLIENT_INITIATED == atiny_params->server_params.bootstrap_mode)
+    {
+        if((NULL == atiny_params->security_params[1].server_ip) || (NULL == atiny_params->security_params[1].server_port))
+        {
+            ATINY_LOG(LOG_FATAL, "[bootstrap_tag]: BOOTSTRAP_CLIENT_INITIATED mode's params is wrong, should have bootstrap server ip/port");
+            return ATINY_ARG_INVALID;
+        }
+    }
+
+    else if(ATINY_BOOTSTRAP_SEQUENCE == atiny_params->server_params.bootstrap_mode)
+    {
+        return ATINY_OK;
+    }
+
+    else
+    {
+        //it is ok? if the mode value is not 0,1,2, we all set it to 2 ?
+        ATINY_LOG(LOG_FATAL, "[bootstrap_tag]: BOOTSTRAP only have three mode, should been :0,1,2");
+        return ATINY_ARG_INVALID;
+    }
+
+
+    return ATINY_OK;
+}
+
+#ifdef LWM2M_BOOTSTRAP
+static int atiny_check_psk_init_param(atiny_param_t *atiny_params)
+{
+    int i = 0;
+    int psk_id_len = 0;
+    int psk_len = 0;
+    const int PSK_ID_LIMIT_LEN = 128;
+    const int PSK_LIMIT_LEN = 64;
+    int total_element = 0;
+
+    if(NULL == atiny_params)
+    {
+        return ATINY_ARG_INVALID;
+    }
+
+    //security_params have 2 element, we have 2 pair psk.
+    total_element = (sizeof(atiny_params->security_params)) / (sizeof(atiny_params->security_params[0]));
+
+    for(i = 0; i < total_element; i++)
+    {
+        //if there are null, we could run not in security mode
+        if((atiny_params->security_params[i].psk_id != NULL) && (atiny_params->security_params[i].psk != NULL))
+        {
+            psk_id_len = strlen(atiny_params->security_params[i].psk_id);
+            psk_len = strlen(atiny_params->security_params[i].psk);
+
+            //the limit of the len, please read RFC4279  or OMA-TS-LightweightM2M E.1.1
+            if((psk_id_len > PSK_ID_LIMIT_LEN) || (psk_len > PSK_LIMIT_LEN))
+            {
+                ATINY_LOG(LOG_FATAL, "[bootstrap_tag]: psk_id len over 128 or psk len over 64");
+                return ATINY_ARG_INVALID;
+            }
+        }
+    }
+
+    return ATINY_OK;
+}
+#endif
+
+static int atiny_check_parameter(atiny_param_t* atiny_params,
+                                 const atiny_device_info_t *device_info)
+{
+    if((NULL == atiny_params) || (NULL == device_info))
+    {
+        ATINY_LOG(LOG_FATAL, "Parameter null");
+        return ATINY_ARG_INVALID;
+    }
+
+    if(NULL == device_info->endpoint_name)
+    {
+        ATINY_LOG(LOG_FATAL, "Endpoint name null");
+        return ATINY_ARG_INVALID;
+    }
+
+    if(NULL == device_info->manufacturer)
+    {
+        ATINY_LOG(LOG_FATAL, "Manufacturer name null");
+        return ATINY_ARG_INVALID;
+    }
+
+    if(ATINY_OK != atiny_check_bootstrap_init_param(atiny_params))
+    {
+        ATINY_LOG(LOG_FATAL, "[bootstrap_tag]: BOOTSTRAP's params are wrong");
+        return ATINY_ARG_INVALID;
+    }
+
+#ifdef LWM2M_BOOTSTRAP
+
+    if(ATINY_OK != atiny_check_psk_init_param(atiny_params))
+    {
+        ATINY_LOG(LOG_FATAL, "[bootstrap_tag]: psk params are wrong");
+        return ATINY_ARG_INVALID;
+    }
+
+#endif
+
+    return ATINY_OK;
+}
+
+static void uri_list_add(object_uri_list **head, object_uri_list *list)
+{
+    object_uri_list *temp;
+
+    if(NULL == *head)
+    {
+        *head = list;
+        (*head)->next = NULL;
+    }
+
+    else
+    {
+        temp = *head;
+
+        while(temp)
+        {
+            if(NULL == temp->next)
+            {
+                temp->next = list;
+                list->next = NULL;
+            }
+
+            temp = temp->next;
+        }
+    }
+}
+
+
+static int agent_add_security_object(atiny_param_t *lwm2m_params)
+{
+    uint16_t instance_id = 0;
+    const uint8_t INS_IOT_SERVER_FLAG = 0x01;
+    const uint8_t INS_BS_SERVER_FLAG = 0x02;
+    uint8_t  ins_flag = 0x00;
+    uint8_t total_ins = 1;
+    uint8_t security_params_index = 0;
+    int i;
+
+    object_uri_list *security_list = NULL;
+
+    lwm2m_al_sec_obj_param_t security_object_param;
+
+    if (NULL == lwm2m_params) {
+        return ATINY_ARG_INVALID;
+    }
+
+    security_object_param.server_id = SERVER_ID;
+    security_object_param.hold_off_time = lwm2m_params->server_params.hold_off_time;
+
+    switch(lwm2m_params->server_params.bootstrap_mode)
+    {
+        case ATINY_BOOTSTRAP_FACTORY:
+            ins_flag |= INS_IOT_SERVER_FLAG;
+            total_ins = 1;
+            break;
+
+        case ATINY_BOOTSTRAP_SEQUENCE:
+            if((lwm2m_params->security_params[0].server_ip != NULL) && (lwm2m_params->security_params[0].server_port != NULL))
+            {
+                ins_flag |= INS_IOT_SERVER_FLAG;
+                ins_flag |= INS_BS_SERVER_FLAG;
+
+                total_ins = 2;
+            }
+
+            else
+            {
+                ins_flag |= INS_BS_SERVER_FLAG;
+                total_ins = 1;
+            }
+
+            break;
+
+        case ATINY_BOOTSTRAP_CLIENT_INITIATED:
+            ins_flag |= INS_BS_SERVER_FLAG;
+            total_ins = 1;
+            break;
+
+        default:
+            return -1;
+    }
+
+    //at most, have two instance. in fact
+    for(i = 0; i < total_ins; i++)
+    {
+        if((ins_flag & INS_IOT_SERVER_FLAG) && (ins_flag & INS_BS_SERVER_FLAG))
+        {
+            instance_id = i;
+            security_object_param.is_bootstrap = ((i == 0) ? (false) : (true));
+            security_params_index = i;
+        }
+
+        else
+        {
+            if(ins_flag & INS_IOT_SERVER_FLAG)
+            {
+                instance_id = 0;
+                security_object_param.is_bootstrap = false;
+                security_params_index = 0;
+            }
+
+            else  //if(ins_flag & INS_BS_SERVER_FLAG)  //even if not set INS_BS_SERVER_FLAG, still run in a certain process.
+            {
+                instance_id = 1;
+                security_object_param.is_bootstrap = true;
+                security_params_index = 1;
+            }
+        }
+
+        security_object_param.server_ip = lwm2m_params->security_params[security_params_index].server_ip;
+        security_object_param.server_port = lwm2m_params->security_params[security_params_index].server_port;
+        security_object_param.psk_id = lwm2m_params->security_params[security_params_index].psk_id;
+        security_object_param.psk = lwm2m_params->security_params[security_params_index].psk;
+        security_object_param.psk_len = lwm2m_params->security_params[security_params_index].psk_len;
+
+        if(lwm2m_al_add_object(OBJ_SECURITY_ID, instance_id, 0, &security_object_param) != 0)
+        {
+            lwm2m_al_delete_object(OBJ_SECURITY_ID);
+            return -1;
+        }
+    }//end for loop
+
+    security_list = osal_malloc(sizeof(object_uri_list));
+    if (NULL == security_list) {
+        lwm2m_al_delete_object(OBJ_SECURITY_ID);
+        return ATINY_MALLOC_FAILED;
+    }
+
+    security_list->object_id = OBJ_SECURITY_ID;
+    uri_list_add(&uri_list, security_list);
+
+    return 0;
+}
+
+static int agent_add_server_object(atiny_param_t *lwm2m_params)
+{
+    uint16_t instance_id = 0;
+    lwm2m_al_srv_obj_param_t server_object_param;
+    object_uri_list *server_list = NULL;
+
+    if (NULL == lwm2m_params) {
+        return ATINY_ARG_INVALID;
+    }
+
+    server_object_param.server_id = SERVER_ID;
+    server_object_param.binding = lwm2m_params->server_params.binding;
+    server_object_param.life_time = lwm2m_params->server_params.life_time;
+    server_object_param.storing_cnt = lwm2m_params->server_params.storing_cnt;
+
+
+    if(lwm2m_al_add_object(OBJ_SERVER_ID, instance_id, 0, &server_object_param) != 0)
+    {
+        return -1;
+    }
+
+    server_list = osal_malloc(sizeof(object_uri_list));
+    if (NULL == server_list) {
+        lwm2m_al_delete_object(OBJ_SERVER_ID);
+        return ATINY_MALLOC_FAILED;
+    }
+
+    server_list->object_id = OBJ_SERVER_ID;
+    uri_list_add(&uri_list, server_list);
+    return 0;
+}
+
+static int agent_add_acc_ctrl_object(void)
+{
+    uint16_t instance_id = 0;
+    object_uri_list *acc_ctrl_list = NULL;
+
+    if(lwm2m_al_add_object(OBJ_ACCESS_CONTROL_ID, instance_id, 0, NULL) != 0)
+    {
+        return -1;
+    }
+
+    acc_ctrl_list = osal_malloc(sizeof(object_uri_list));
+    if (NULL == acc_ctrl_list) {
+        lwm2m_al_delete_object(OBJ_ACCESS_CONTROL_ID);
+        return ATINY_MALLOC_FAILED;
+    }
+
+    acc_ctrl_list->object_id = OBJ_ACCESS_CONTROL_ID;
+    uri_list_add(&uri_list, acc_ctrl_list);
+    return 0;
+}
+
+static int agent_add_device_object(void)
+{
+    uint16_t instance_id = 0;
+    object_uri_list *device_list = NULL;
+
+    if(lwm2m_al_add_object(OBJ_DEVICE_ID, instance_id, 0, NULL) != 0)
+    {
+        return -1;
+    }
+
+    device_list = osal_malloc(sizeof(object_uri_list));
+    if (NULL == device_list) {
+        lwm2m_al_delete_object(OBJ_DEVICE_ID);
+        return ATINY_MALLOC_FAILED;
+    }
+
+    device_list->object_id = OBJ_DEVICE_ID;
+    uri_list_add(&uri_list, device_list);
+    return 0;
+}
+
+static int agent_add_conn_m_object(void)
+{
+    uint16_t instance_id = 0;
+    object_uri_list *conn_m_list = NULL;
+
+    if(lwm2m_al_add_object(OBJ_CONNECTIVITY_MONITORING_ID, instance_id, 0, NULL) !=0)
+    {
+        return -1;
+    }
+
+    conn_m_list = osal_malloc(sizeof(object_uri_list));
+    if (NULL == conn_m_list) {
+        lwm2m_al_delete_object(OBJ_CONNECTIVITY_MONITORING_ID);
+        return ATINY_MALLOC_FAILED;
+    }
+
+    conn_m_list->object_id = OBJ_CONNECTIVITY_MONITORING_ID;
+    uri_list_add(&uri_list, conn_m_list);
+    return 0;
+}
+
+static int agent_add_firmware_object(void)
+{
+#ifdef CONFIG_FEATURE_FOTA
+    uint16_t instance_id = 0;
+    object_uri_list *firmware_list = NULL;
+
+    if(lwm2m_al_add_object(OBJ_FIRMWARE_UPDATE_ID, instance_id, 0, NULL) != 0)
+    {
+        return -1;
+    }
+
+    firmware_list = osal_malloc(sizeof(object_uri_list));
+    if (NULL == firmware_list) {
+        lwm2m_al_delete_object(OBJ_FIRMWARE_UPDATE_ID);
+        return ATINY_MALLOC_FAILED;
+    }
+
+    firmware_list->object_id = OBJ_FIRMWARE_UPDATE_ID;
+    uri_list_add(&uri_list, firmware_list);
+#endif
+
+    return 0;
+}
+
+static int agent_add_location_object(void)
+{
+    uint16_t instance_id = 0;
+    object_uri_list *location_list = NULL;
+
+    if(lwm2m_al_add_object(OBJ_LOCATION_ID, instance_id, 0, NULL) != 0)
+    {
+        return -1;
+    }
+
+    location_list = osal_malloc(sizeof(object_uri_list));
+    if (NULL == location_list) {
+        lwm2m_al_delete_object(OBJ_LOCATION_ID);
+        return ATINY_MALLOC_FAILED;
+    }
+
+    location_list->object_id = OBJ_LOCATION_ID;
+    uri_list_add(&uri_list, location_list);
+    return 0;
+}
+
+static int agent_add_binary_app_data_object(unsigned int *storing_cnt)
+{
+    uint16_t instance_id = 0;
+    int i;
+    object_uri_list *binary_app_list = NULL;
+
+    if (NULL == storing_cnt) {
+        return ATINY_ARG_INVALID;
+    }
+
+    // /19/0/0, /19/1/0
+    for(i = 0; i < BINARY_APP_DATA_OBJECT_INSTANCE_NUM; ++i)
+    {
+        instance_id = i;
+
+        if(lwm2m_al_add_object(BINARY_APP_DATA_OBJECT_ID, instance_id, 0, storing_cnt))
+        {
+            return -1;
+        }
+    }
+
+    binary_app_list = osal_malloc(sizeof(object_uri_list));
+    if (NULL == binary_app_list) {
+        lwm2m_al_delete_object(BINARY_APP_DATA_OBJECT_ID);
+        return ATINY_MALLOC_FAILED;
+    }
+
+    binary_app_list->object_id = BINARY_APP_DATA_OBJECT_ID;
+    uri_list_add(&uri_list, binary_app_list);
+    return 0;
+}
+
+static int agent_add_objects(atiny_param_t *lwm2m_params)
+{
+    if(agent_add_security_object(lwm2m_params) != 0)
+    {
+        return -1;
+    }
+
+    if(agent_add_server_object(lwm2m_params) != 0)
+    {
+        return -1;
+    }
+
+    if(agent_add_acc_ctrl_object() != 0)
+    {
+        return -1;
+    }
+
+    if(agent_add_device_object() != 0)
+    {
+        return -1;
+    }
+
+    if(agent_add_conn_m_object() != 0)
+    {
+        return -1;
+    }
+
+    if(agent_add_firmware_object() != 0)
+    {
+        return -1;
+    }
+
+    if(agent_add_location_object() != 0)
+    {
+        return -1;
+    }
+
+    if(agent_add_binary_app_data_object(&(lwm2m_params->server_params.storing_cnt)) != 0)
+    {
+        return -1;
     }
 
     return 0;
 }
 
+static int agent_delete_object(void)
+{
+    object_uri_list *temp = uri_list;
+    object_uri_list *node = NULL;
+
+    while(temp != NULL)
+    {
+        node = temp;
+        temp = temp->next;
+
+        if(lwm2m_al_delete_object(node->object_id) != 0)
+        {
+            osal_free(node);
+            return ATINY_ERR;
+        }
+
+        osal_free(node);
+    }
+
+    uri_list = NULL;
+    return 0;
+}
 
 static void *__agent_config(oc_config_param_t *param)
 {
-
     oc_lwm2m_imp_agent_t  *ret = NULL;
 
     if(NULL != s_oc_lwm2m_agent)
+    {
+        return ret;
+    }
+
+    if(NULL == param)
     {
         return ret;
     }
@@ -101,6 +662,7 @@ static void *__agent_config(oc_config_param_t *param)
     }
 
     ret->config_para = *param;
+
     ///< initialize the param that agent tiny need
     atiny_param_t *atiny_params;
     atiny_security_param_t  *iot_security_param = NULL;
@@ -108,7 +670,6 @@ static void *__agent_config(oc_config_param_t *param)
 
     atiny_device_info_t *device_info = &ret->device_info;
     device_info->endpoint_name = ret->config_para.app_server.ep_id;
-    device_info->manufacturer = "Lwm2mFota";
     device_info->dev_type = "Lwm2mFota";
     device_info->manufacturer = "Agent_Tiny";
 
@@ -125,21 +686,19 @@ static void *__agent_config(oc_config_param_t *param)
     iot_security_param = &(atiny_params->security_params[0]);
     bs_security_param = &(atiny_params->security_params[1]);
 
-
     iot_security_param->server_ip = ret->config_para.app_server.address;
     iot_security_param->server_port = ret->config_para.app_server.port;
-    iot_security_param->psk_Id = ret->config_para.app_server.psk_id;
+    iot_security_param->psk_id = ret->config_para.app_server.psk_id;
     iot_security_param->psk = ret->config_para.app_server.psk;
     iot_security_param->psk_len = ret->config_para.app_server.psk_len;
 
     bs_security_param->server_ip = ret->config_para.boot_server.address;
     bs_security_param->server_port = ret->config_para.boot_server.port;
-    bs_security_param->psk_Id = ret->config_para.boot_server.psk_id;
+    bs_security_param->psk_id = ret->config_para.boot_server.psk_id;
     bs_security_param->psk = ret->config_para.boot_server.psk;
     bs_security_param->psk_len = ret->config_para.boot_server.psk_len;
 
-
-    if(ATINY_OK != atiny_init(atiny_params, &ret->agent_handle))
+    if(ATINY_OK != atiny_check_parameter(atiny_params, device_info))
     {
         osal_free(ret);
         ret = NULL;
@@ -147,12 +706,28 @@ static void *__agent_config(oc_config_param_t *param)
         return ret;
     }
 
-    ///< create the task to do the instance
+    //TODO: add objects
+    lwm2m_al_init_param_t init_param;
+    init_param.endpoint_name =  device_info->endpoint_name;
+    init_param.dealer = lwm2m_agent_receive;
+    init_param.bootstrap_type = (int)(param->boot_mode);
 
-    ret->task_handle = osal_task_create("agent_lwm2m",__agent_task_entry,ret,0x1000,NULL,10);
-    if(NULL == ret->task_handle)
+    if(ATINY_OK != lwm2m_al_config(&init_param))
     {
-        atiny_deinit(ret->agent_handle);
+        osal_free(ret);
+        ret = NULL;
+        return ret;
+    }
+
+    if(agent_add_objects(atiny_params) != 0)
+    {
+        osal_free(ret);
+        ret = NULL;
+        return ret;
+    }
+
+    if(ATINY_OK != lwm2m_al_connect())
+    {
         osal_free(ret);
         ret = NULL;
         return ret;
@@ -172,9 +747,9 @@ static int __agent_deconfig(void *handle)
         return -1;
     }
 
-    atiny_deinit(ret->agent_handle);
-
-    osal_task_kill(ret->task_handle);
+    lwm2m_al_disconnect();
+    agent_delete_object();
+    lwm2m_al_deconfig();
 
     osal_free(ret);
 
@@ -183,32 +758,32 @@ static int __agent_deconfig(void *handle)
     return 0;
 }
 
-void ack_callback(atiny_report_type_e type, int cookie, data_send_status_e status)
+static int __agent_report(void *handle, char *msg, int len, int timeout, en_oc_report_type_e report_type)
 {
-    printf("type:%d cookie:%d status:%d\n", type, cookie, status);
-}
+    lwm2m_al_send_param_t send_param;
+    send_param.data = (uint8_t *)msg;
+    send_param.length = len;
+    send_param.mode = MSG_NEED_CONFIRMED;
 
-static int __agent_report(void *handle, char *msg, int len, int timeout)
-{
-
-    oc_lwm2m_imp_agent_t  *agent = handle;
-    data_report_t report_data;
-
-    report_data.buf = (uint8_t *)msg;
-    report_data.callback = ack_callback;
-    report_data.cookie = 0;
-    report_data.len = len;
-    report_data.type = APP_DATA;
-
-    if(ATINY_OK  != atiny_data_report(agent->task_handle, &report_data))
+    if(report_type == OC_APP_DATA)
     {
-        return -1;
+        send_param.object_id = OBJ_APP_DATA_ID;
+        send_param.object_instance_id = 0;
+        send_param.resource_id = BINARY_APP_DATA_RES_ID;
     }
-    else
+#ifdef CONFIG_FEATURE_FOTA
+    else if(report_type == OC_FIRMWARE_UPDATE_STATE)
     {
-        return 0;
+        send_param.object_id = OBJ_FIRMWARE_UPDATE_ID;
+        send_param.object_instance_id = 0;
+        send_param.resource_id = 3;
+    }
+#endif
+    else {
+        return ATINY_ERR;
     }
 
+    return lwm2m_al_send(&send_param);
 }
 
 const oc_lwm2m_opt_t  s_oc_lwm2m_agent_opt = \
@@ -222,7 +797,8 @@ int oc_lwm2m_install_agent()
 {
     int ret = -1;
 
-    ret = oc_lwm2m_register("oc_lwm2m_agent",&s_oc_lwm2m_agent_opt);
+    ret = oc_lwm2m_register("oc_lwm2m_agent", &s_oc_lwm2m_agent_opt);
 
     return ret;
 }
+

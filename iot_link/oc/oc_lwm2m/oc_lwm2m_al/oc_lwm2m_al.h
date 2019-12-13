@@ -33,7 +33,7 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-14 17:22  zhangqianfu  The first version  
+ *  2019-05-14 17:22  zhangqianfu  The first version
  *
  */
 #ifndef LITEOS_LAB_IOT_LINK_OC_OC_LWM2M_OC_LWM2M_AL_OC_LWM2M_AL_H_
@@ -70,9 +70,14 @@ typedef enum
     EN_OC_LWM2M_MSG_SERVERREBS,    ///<we  have received the rebootstrap command from the platform
 }en_oc_lwm2m_msg_t;
 
+typedef enum
+{
+    OC_FIRMWARE_UPDATE_STATE = 0,
+    OC_APP_DATA
+} en_oc_report_type_e;
+
 /** @brief this is the message dealer module for the application*/
 typedef int (*fn_oc_lwm2m_msg_deal)(void *usr_data, en_oc_lwm2m_msg_t type, void *msg, int len);
-
 
 /** @brief this is the agent configuration */
 typedef struct
@@ -85,7 +90,7 @@ typedef struct
 }oc_config_param_t;
 
 ///////////////////////////LWM2M AGENT INTERFACE////////////////////////////////
-typedef int (*fn_oc_lwm2m_report)(void *handle, char *buf, int len, int timeout);
+typedef int (*fn_oc_lwm2m_report)(void *handle, char *buf, int len, int timeout, en_oc_report_type_e report_type);
 typedef void* (*fn_oc_lwm2m_config)(oc_config_param_t *param);
 typedef int   (*fn_oc_lwm2m_deconfig)(void *handle);
 /**
@@ -99,7 +104,6 @@ typedef struct
 }oc_lwm2m_opt_t;
 
 
-#if CONFIG_OC_LWM2M_ENABLE
 /**
  *@brief the lwm2m agent should use this function to register the method for the application
  *
@@ -133,7 +137,7 @@ void* oc_lwm2m_config(oc_config_param_t *param);
  *
  * @return 0 success while <0 failed
  */
-int oc_lwm2m_report(void *context,char *buf, int len,int timeout);
+int oc_lwm2m_report(void *context,char *buf, int len,int timeout, en_oc_report_type_e report_type);
 
 /**
  *@brief: the application use this function to deconfigure the lwm2m agent
@@ -151,16 +155,5 @@ int oc_lwm2m_deconfig(void *context);
  *@return 0 success while <0 failed
  */
 int oc_lwm2m_init();
-
-#else   //not configure the lwm2m agent
-
-#define oc_lwm2m_register(opt)                                              -1
-#define oc_lwm2m_msg_push(msg,len)                                          -1
-#define oc_lwm2m_report(buf,len,timeout)                                    -1
-#define oc_lwm2m_config(param)                                              -1
-#define oc_lwm2m_init                                                       -1
-#define oc_lwm2m_deconfig                                                   -1
-
-#endif
 
 #endif /* LITEOS_LAB_IOT_LINK_OC_OC_LWM2M_OC_LWM2M_AL_OC_LWM2M_AL_H_ */

@@ -93,7 +93,7 @@ int oc_lwm2m_unregister(const char *name)
 
 
 //////////////////////////APPLICATION INTERFACE/////////////////////////////////
-int oc_lwm2m_report(void *context,char  *buf, int len,int timeout)
+int oc_lwm2m_report(void *context,char  *buf, int len,int timeout, en_oc_report_type_e report_type)
 {
     int ret = -1;
     oc_lwm2m_context_t  *oc_lwm2m;
@@ -101,7 +101,7 @@ int oc_lwm2m_report(void *context,char  *buf, int len,int timeout)
 
     if((NULL != oc_lwm2m) &&(NULL != oc_lwm2m->ops) &&(NULL != oc_lwm2m->ops->report))
     {
-       ret = oc_lwm2m->ops->report(oc_lwm2m->handle,buf,len,timeout);
+       ret = oc_lwm2m->ops->report(oc_lwm2m->handle,buf,len,timeout, report_type);
     }
 
     return ret;

@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2019>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -31,33 +31,20 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-
-/**@defgroup agent AgentTiny
- * @defgroup agenttiny Agenttiny Definition
- * @ingroup agent
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2019-11-13          zhuzongru   define interface
+ *
  */
-#ifndef LIB_LWM2M_API_H
-#define LIB_LWM2M_API_H
+#ifndef WAKAAMA_PORT_H_
+#define WAKAAMA_PORT_H_
 
-#include <stdbool.h>
-#include <stdint.h>
+/**
+ * @brief   : this function for install wakaama to the lwm2m_al, must be call only once
+ *
+ */
+int lwm2m_install(void);
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#endif /* LWM2M_PORT_H_ */
 
-//bootstrap at least have one mode, we have three mode.
-typedef enum
-{
-    BOOTSTRAP_FACTORY = 0,
-    BOOTSTRAP_CLIENT_INITIATED,
-    BOOTSTRAP_SEQUENCE
-} lwm2m_bootstrap_type_e;
-
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif
 
