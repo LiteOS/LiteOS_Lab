@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -32,21 +32,60 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
+#include "hal_rng.h"
 
-#ifndef __EC20_OC_H__
-#define __EC20_OC_H__
+#include <string.h>
 
+#include "stm32f4xx.h"
+#include "stm32f4xx_hal_rng.h"
 
-#define CONFIG_OC_MQTT_EC20_ENABLE  1 //only for test
+#ifdef HAL_RNG_MODULE_ENABLED
 
-#if  CONFIG_OC_MQTT_EC20_ENABLE
+RNG_HandleTypeDef g_rng_handle;
 
+void hal_rng_config(void)
+{
+    __HAL_RCC_RNG_CLK_ENABLE();
+    g_rng_handle.Instance = RNG;
+    (void)HAL_RNG_Init(&g_rng_handle);
+}
 
-int ec20_init(void);
+int hal_rng_generate_number()
+{
+    uint32_t random_number;
 
+    if (HAL_RNG_GenerateRandomNumber(&g_rng_handle, &random_number) != HAL_OK)
+    {
+        return 0U;
+    }
 
+    return (int)random_number;
+}
 
-#endif
+int hal_rng_generate_buffer(void* buf, size_t len)
+{
+    size_t i;
+    uint32_t random_number;
+    uint8_t* pbuf;
 
+    if (NULL == buf)
+    {
+        return -1;
+    }
 
-#endif /* __BOUDICA150_OC_H */
+    pbuf = (uint8_t*)buf;
+
+    for (i = 0; i < len; i += sizeof(uint32_t))
+    {
+        if (HAL_RNG_GenerateRandomNumber(&g_rng_handle, &random_number) != HAL_OK)
+        {
+            return -1;
+        }
+        memcpy(pbuf + i, &random_number,
+               sizeof(uint32_t) > len - i ? len - i : sizeof(uint32_t));
+    }
+
+    return 0;
+}
+
+#endif /* HAL_RNG_MODULE_ENABLED */

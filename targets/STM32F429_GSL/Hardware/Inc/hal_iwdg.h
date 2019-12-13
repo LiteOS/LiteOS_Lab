@@ -32,55 +32,56 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef __AT_H
-#define __AT_H
+ /**@defgroup hal_iwdg Watch Dog
+ * @ingroup hal
+ */
+
+#ifndef _HAL_IWDG_H_
+#define _HAL_IWDG_H_
 
 #include <stdint.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <osal.h>
 
-
-typedef int (*fn_at_oob)(void *args,void *data,size_t datalen);
-
-
-/**
- * @brief: use this function to do the at client framwork initialized
- *
- * @return:0 success while -1 failed
- * */
-int at_init(const char *devname);
-
-/**
- * @brief:use this function to register a function that monitor the URC message
- * @param[in]:name, which used for the at framework debug
- * @param[in]:inxdex, used for match the out of band data
- * @param[in]:length, index length, this is match length
- * @param[in]:func, supply the function that will execute when the index is matched
- * @paarm[in]:args, supply for the registered function
- *
- * @return:0 success while -1 failed
- * */
-int at_oobregister(const char *name,const void *index,size_t len,fn_at_oob func,void *args);
-
-/**
- * @brief:use this function to register a function that monitor the URC message
- * @param[in]:cmd, the command to send
- * @param[in]:cmdlen, the command length
- * @param[in]:index, the command index, if you don't need the response, set it to NULL; this must be a string
- * @param[in]:respbuf, if you need the response, you should supply the buffer
- * @param[in]:respbuflen,the respbuf length
- * @param[in]:timeout, the time you may wait for the response;and the unit is ms
- *
- * @return:0 success while -1 failed
- * */
-
-int at_command(const void *cmd, size_t cmdlen,const char *index,\
-                void *respbuf,size_t respbuflen,uint32_t timeout);
-
-int at_streammode_set(int mode);
-
-
-
-
+#if defined(__cplusplus)
+extern "C" {
 #endif
+
+/**
+ *@ingroup hal_iwdg
+ *@brief config the watch dog.
+ *
+ *@par Description:
+ *This API is used to config the watch dog. The time interval of feeding dog is prvscaler*reload/40.
+ *@attention none.
+ *
+ *@param prvscaler      [IN] select the prescaler of the IWDG.
+                             This parameter can be a value of @ref IWDG_Prescaler
+ *@param reload         [IN] specifies the IWDG down-counter reload value.
+                             This parameter must be a number between Min_Data = 0 and Max_Data = 0x0FFF
+ *
+ *@retval #int          0 if succeed or -1 if failed.
+ *@par Dependency: none.
+ *@see none.
+ */
+int hal_iwdg_config(uint8_t prvscaler, uint16_t reload);
+
+/**
+ *@ingroup hal_iwdg
+ *@brief feed the watch dog.
+ *
+ *@par Description:
+ *This API is used to feed the watch dog.
+ *@attention none.
+ *
+ *@param none.
+ *
+ *@retval none.
+ *@par Dependency: none.
+ *@see none.
+ */
+void hal_iwdg_feed(void);
+
+#if defined(__cplusplus)
+}
+#endif
+
+#endif  /* _HAL_IWDG_H_ */

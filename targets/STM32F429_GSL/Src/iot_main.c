@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -31,56 +31,10 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-
-#ifndef __AT_H
-#define __AT_H
-
-#include <stdint.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <osal.h>
-
-
-typedef int (*fn_at_oob)(void *args,void *data,size_t datalen);
-
-
 /**
- * @brief: use this function to do the at client framwork initialized
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2019-12-13 10:19  zhangqianfu  The first version  
  *
- * @return:0 success while -1 failed
- * */
-int at_init(const char *devname);
-
-/**
- * @brief:use this function to register a function that monitor the URC message
- * @param[in]:name, which used for the at framework debug
- * @param[in]:inxdex, used for match the out of band data
- * @param[in]:length, index length, this is match length
- * @param[in]:func, supply the function that will execute when the index is matched
- * @paarm[in]:args, supply for the registered function
- *
- * @return:0 success while -1 failed
- * */
-int at_oobregister(const char *name,const void *index,size_t len,fn_at_oob func,void *args);
-
-/**
- * @brief:use this function to register a function that monitor the URC message
- * @param[in]:cmd, the command to send
- * @param[in]:cmdlen, the command length
- * @param[in]:index, the command index, if you don't need the response, set it to NULL; this must be a string
- * @param[in]:respbuf, if you need the response, you should supply the buffer
- * @param[in]:respbuflen,the respbuf length
- * @param[in]:timeout, the time you may wait for the response;and the unit is ms
- *
- * @return:0 success while -1 failed
- * */
-
-int at_command(const void *cmd, size_t cmdlen,const char *index,\
-                void *respbuf,size_t respbuflen,uint32_t timeout);
-
-int at_streammode_set(int mode);
+ */
 
 
-
-
-#endif

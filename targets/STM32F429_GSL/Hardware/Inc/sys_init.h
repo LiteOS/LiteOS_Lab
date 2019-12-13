@@ -32,55 +32,45 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef __AT_H
-#define __AT_H
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __SYS_H_
+#define __SYS_H_
 
-#include <stdint.h>
+/* Includes ------------------------------------------------------------------*/
+
+/* Includes LiteOS------------------------------------------------------------------*/
+
+#include "los_base.h"
+#include "los_config.h"
+#include "los_sys.h"
+#include "los_typedef.h"
+#include "los_task.ph"
+
+//#include "stdlib.h"
+//#include "string.h"
+//#include <stdio.h>
+//#include "hal_rng.h"
+//#include "usart.h"
+//#include "dwt.h"
+
+
 #include <stddef.h>
-#include <stdio.h>
-#include <osal.h>
+#include <stdint.h>
+#include <stdlib.h>
 
 
-typedef int (*fn_at_oob)(void *args,void *data,size_t datalen);
-
-
-/**
- * @brief: use this function to do the at client framwork initialized
- *
- * @return:0 success while -1 failed
- * */
-int at_init(const char *devname);
-
-/**
- * @brief:use this function to register a function that monitor the URC message
- * @param[in]:name, which used for the at framework debug
- * @param[in]:inxdex, used for match the out of band data
- * @param[in]:length, index length, this is match length
- * @param[in]:func, supply the function that will execute when the index is matched
- * @paarm[in]:args, supply for the registered function
- *
- * @return:0 success while -1 failed
- * */
-int at_oobregister(const char *name,const void *index,size_t len,fn_at_oob func,void *args);
-
-/**
- * @brief:use this function to register a function that monitor the URC message
- * @param[in]:cmd, the command to send
- * @param[in]:cmdlen, the command length
- * @param[in]:index, the command index, if you don't need the response, set it to NULL; this must be a string
- * @param[in]:respbuf, if you need the response, you should supply the buffer
- * @param[in]:respbuflen,the respbuf length
- * @param[in]:timeout, the time you may wait for the response;and the unit is ms
- *
- * @return:0 success while -1 failed
- * */
-
-int at_command(const void *cmd, size_t cmdlen,const char *index,\
-                void *respbuf,size_t respbuflen,uint32_t timeout);
-
-int at_streammode_set(int mode);
-
-
-
-
+#ifdef __cplusplus
+ extern "C" {
 #endif
+
+uint32_t HAL_GetTick(void);
+void SystemClock_Config(void);
+void _Error_Handler(char *, int);
+
+#define Error_Handler() _Error_Handler(__FILE__, __LINE__)
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* __SYS_H_ */
+

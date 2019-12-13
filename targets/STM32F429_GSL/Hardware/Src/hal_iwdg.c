@@ -32,55 +32,31 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef __AT_H
-#define __AT_H
+#include "hal_iwdg.h"
 
-#include <stdint.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <osal.h>
+#include "stm32f4xx.h"
+#include "stm32f4xx_hal_iwdg.h"
 
+#ifdef HAL_IWDG_MODULE_ENABLED
 
-typedef int (*fn_at_oob)(void *args,void *data,size_t datalen);
+IWDG_HandleTypeDef g_iwdg_handle;
 
+int hal_iwdg_config(uint8_t prvscaler, uint16_t reload)
+{
+    g_iwdg_handle.Instance = IWDG;
+    g_iwdg_handle.Init.Prescaler = prvscaler;
+    g_iwdg_handle.Init.Reload = reload;
 
-/**
- * @brief: use this function to do the at client framwork initialized
- *
- * @return:0 success while -1 failed
- * */
-int at_init(const char *devname);
+    if (HAL_IWDG_Init(&g_iwdg_handle) != HAL_OK)
+    {
+        return -1;
+    }
+    return 0;
+}
 
-/**
- * @brief:use this function to register a function that monitor the URC message
- * @param[in]:name, which used for the at framework debug
- * @param[in]:inxdex, used for match the out of band data
- * @param[in]:length, index length, this is match length
- * @param[in]:func, supply the function that will execute when the index is matched
- * @paarm[in]:args, supply for the registered function
- *
- * @return:0 success while -1 failed
- * */
-int at_oobregister(const char *name,const void *index,size_t len,fn_at_oob func,void *args);
+void hal_iwdg_feed(void)
+{
+    (void)HAL_IWDG_Refresh(&g_iwdg_handle);
+}
 
-/**
- * @brief:use this function to register a function that monitor the URC message
- * @param[in]:cmd, the command to send
- * @param[in]:cmdlen, the command length
- * @param[in]:index, the command index, if you don't need the response, set it to NULL; this must be a string
- * @param[in]:respbuf, if you need the response, you should supply the buffer
- * @param[in]:respbuflen,the respbuf length
- * @param[in]:timeout, the time you may wait for the response;and the unit is ms
- *
- * @return:0 success while -1 failed
- * */
-
-int at_command(const void *cmd, size_t cmdlen,const char *index,\
-                void *respbuf,size_t respbuflen,uint32_t timeout);
-
-int at_streammode_set(int mode);
-
-
-
-
-#endif
+#endif /* HAL_IWDG_MODULE_ENABLED */
