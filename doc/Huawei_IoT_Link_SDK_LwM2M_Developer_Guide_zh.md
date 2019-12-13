@@ -455,7 +455,7 @@ oc\_lwm2m\_demo\_dtls.c中的函数app\_report\_task\_entry如下：
             		lux= lux%10000;
             		light.msgid = cn_app_light;
             		light.intensity = htons(lux);
-            		oc_lwm2m_report(s_lwm2m_handle,(char *)&light,sizeof(light),1000); ///< report the light message
+            		oc_lwm2m_report(s_lwm2m_handle,(char *)&light,sizeof(light),1000,OC_APP_DATA); ///< report the light message
             		osal_task_sleep(10*1000);
         		}
     		}
@@ -770,7 +770,7 @@ oc\_lwm2m\_bs\_demo.c中的函数app\_data\_report如下：
 
             		light.msgid = cn_app_light;
             		light.intensity = htons(lux);
-            		oc_lwm2m_report(s_lwm2m_context,(char *)&light,sizeof(light),1000); ///< report the light message
+            		oc_lwm2m_report(s_lwm2m_context,(char *)&light,sizeof(light),1000,OC_APP_DATA); ///< report the light message
         		}
 
         		osal_task_sleep(10*1000);
