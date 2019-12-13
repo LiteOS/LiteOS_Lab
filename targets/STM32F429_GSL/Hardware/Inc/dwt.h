@@ -32,55 +32,23 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef __AT_H
-#define __AT_H
+#ifndef __DWT_H_
+#define __DWT_H_
+#include "../../STM32F429_GSL/Inc/stm32f4xx.h"
+#include "los_hwi.h"
+#define  DWT_CR      *(volatile uint32_t *)0xE0001000
 
-#include <stdint.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <osal.h>
+#define  DWT_CYCCNT  *(volatile uint32_t *)0xE0001004
 
+#define  DEM_CR      *(volatile uint32_t *)0xE000EDFC
 
-typedef int (*fn_at_oob)(void *args,void *data,size_t datalen);
+#define  DEM_CR_TRCENA                   (1 << 24)
 
+#define  DWT_CR_CYCCNTENA                (1 <<  0)
 
-/**
- * @brief: use this function to do the at client framwork initialized
- *
- * @return:0 success while -1 failed
- * */
-int at_init(const char *devname);
+#define delayms(msec)         delayus(msec*1000)
 
-/**
- * @brief:use this function to register a function that monitor the URC message
- * @param[in]:name, which used for the at framework debug
- * @param[in]:inxdex, used for match the out of band data
- * @param[in]:length, index length, this is match length
- * @param[in]:func, supply the function that will execute when the index is matched
- * @paarm[in]:args, supply for the registered function
- *
- * @return:0 success while -1 failed
- * */
-int at_oobregister(const char *name,const void *index,size_t len,fn_at_oob func,void *args);
-
-/**
- * @brief:use this function to register a function that monitor the URC message
- * @param[in]:cmd, the command to send
- * @param[in]:cmdlen, the command length
- * @param[in]:index, the command index, if you don't need the response, set it to NULL; this must be a string
- * @param[in]:respbuf, if you need the response, you should supply the buffer
- * @param[in]:respbuflen,the respbuf length
- * @param[in]:timeout, the time you may wait for the response;and the unit is ms
- *
- * @return:0 success while -1 failed
- * */
-
-int at_command(const void *cmd, size_t cmdlen,const char *index,\
-                void *respbuf,size_t respbuflen,uint32_t timeout);
-
-int at_streammode_set(int mode);
-
-
-
-
+void dwt_delay_init(uint32_t clk);
+void delayus(uint32_t usec);
+void delay10ms(__IO uint32_t nTime);
 #endif

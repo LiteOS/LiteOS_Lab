@@ -17,9 +17,8 @@ ifeq ($(CONFIG_OC_MQTT_ENABLE), y)
     
     ifeq ($(CONFIG_OC_MQTT_TYPE),"soft")
 		include $(iot_link_root)/oc/oc_mqtt/oc_mqtt_tiny/oc_mqtt_tiny.mk
-#   for we have not make the ec20 adapter to the new mqtt struct, so we diable it first and then enable it
-#    else ifeq ($(CONFIG_OC_MQTT_TYPE),"ec20")
-#    	include $(iot_link_root)/oc/oc_mqtt/ec20_oc/ec20_oc.mk
+    else ifeq ($(CONFIG_OC_MQTT_TYPE),"ec2x_oc")
+    	include $(iot_link_root)/oc/oc_mqtt/ec2x_oc/ec2x_oc.mk
     endif 
 
 endif

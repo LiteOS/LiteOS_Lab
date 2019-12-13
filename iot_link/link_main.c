@@ -232,9 +232,9 @@ int link_main(void *args)
     #endif
 
 
-    #if CONFIG_OC_MQTT_EC20_ENABLE
-        #include <ec20_oc.h>
-        ec20_init();
+    #if CONFIG_OC_MQTT_EC2X_ENABLE
+        #include <ec2x_oc.h>
+        ec2x_oc_init();
     #endif
 
 

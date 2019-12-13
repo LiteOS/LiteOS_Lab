@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -32,55 +32,23 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef __AT_H
-#define __AT_H
 
-#include <stdint.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <osal.h>
+#ifndef __EC2X_OC_H
+#define __EC2X_OC_H
 
 
-typedef int (*fn_at_oob)(void *args,void *data,size_t datalen);
+///< THE BASIC FUNCTION FOR THE EC2X
+///< RETURN:0 SUCCESS WHILE -1 FAILED
+///< USE THIS FUCNTION TO GET THE TIME, THE FORMAT IS:
+///< 2019/12/13/,10:17:31 GTM+8
+int ec2x_get_time(char *timebuffer);
+int ec2x_get_csq(int *csq);
+int ec2x_get_rssi(int *rssi);
+int ec2x_get_operator(char *buf, int len);
 
-
-/**
- * @brief: use this function to do the at client framwork initialized
- *
- * @return:0 success while -1 failed
- * */
-int at_init(const char *devname);
-
-/**
- * @brief:use this function to register a function that monitor the URC message
- * @param[in]:name, which used for the at framework debug
- * @param[in]:inxdex, used for match the out of band data
- * @param[in]:length, index length, this is match length
- * @param[in]:func, supply the function that will execute when the index is matched
- * @paarm[in]:args, supply for the registered function
- *
- * @return:0 success while -1 failed
- * */
-int at_oobregister(const char *name,const void *index,size_t len,fn_at_oob func,void *args);
-
-/**
- * @brief:use this function to register a function that monitor the URC message
- * @param[in]:cmd, the command to send
- * @param[in]:cmdlen, the command length
- * @param[in]:index, the command index, if you don't need the response, set it to NULL; this must be a string
- * @param[in]:respbuf, if you need the response, you should supply the buffer
- * @param[in]:respbuflen,the respbuf length
- * @param[in]:timeout, the time you may wait for the response;and the unit is ms
- *
- * @return:0 success while -1 failed
- * */
-
-int at_command(const void *cmd, size_t cmdlen,const char *index,\
-                void *respbuf,size_t respbuflen,uint32_t timeout);
-
-int at_streammode_set(int mode);
+///< register the ec2x oc mqtt function to the system
+int ec2x_oc_init(void);
 
 
 
-
-#endif
+#endif /* __BOUDICA150_OC_H */

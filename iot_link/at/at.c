@@ -278,23 +278,27 @@ static int __rcv_task_entry(void *args)
     	if (1 == g_at_cb.streammode)  //in stream mode, we need to save previous frames in buffer
     	{
     		if(rcvlen == 0)
-    		    memset(g_at_cb.rcvbuf,0,cn_at_resp_maxlen);
-    		    rcvlen += __resp_rcv(g_at_cb.rcvbuf+ rcvlen,cn_at_resp_maxlen,cn_osal_timeout_forever);
+    		{
+                memset(g_at_cb.rcvbuf,0,cn_at_resp_maxlen);
+    		}
+            rcvlen += __resp_rcv(g_at_cb.rcvbuf+ rcvlen,cn_at_resp_maxlen,cn_osal_timeout_forever);
 
-    		    if(rcvlen > 0)
-    		    {
-    		        matchret = __cmd_match(g_at_cb.rcvbuf,rcvlen);
-    		        if(0 != matchret)
-    		        {
-    	                oobret = __oob_match(g_at_cb.rcvbuf,rcvlen);
-   		                if(oobret != -1)
-   		                {
-   		                    rcvlen = 0;
-   		                }
-    		        }
-    		            else
-    		                rcvlen = 0;
- 		        }
+            if(rcvlen > 0)
+            {
+                matchret = __cmd_match(g_at_cb.rcvbuf,rcvlen);
+                if(0 != matchret)
+                {
+                    oobret = __oob_match(g_at_cb.rcvbuf,rcvlen);
+                    if(oobret != -1)
+                    {
+                        rcvlen = 0;
+                    }
+                }
+                else
+                {
+                    rcvlen = 0;
+                }
+            }
     	}
     	else
     	{
@@ -322,6 +326,7 @@ instruction  :If stream mode is enabled, we can process data from multiple frame
 int at_streammode_set(int mode)
 {
 	g_at_cb.streammode = mode;
+	return 0;
 }
 
 

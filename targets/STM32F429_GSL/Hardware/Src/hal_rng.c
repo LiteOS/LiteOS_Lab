@@ -32,55 +32,60 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef __AT_H
-#define __AT_H
+#include "hal_rng.h"
 
-#include <stdint.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <osal.h>
+#include <string.h>
 
+#include "stm32f4xx.h"
+#include "stm32f4xx_hal_rng.h"
 
-typedef int (*fn_at_oob)(void *args,void *data,size_t datalen);
+#ifdef HAL_RNG_MODULE_ENABLED
 
+RNG_HandleTypeDef g_rng_handle;
 
-/**
- * @brief: use this function to do the at client framwork initialized
- *
- * @return:0 success while -1 failed
- * */
-int at_init(const char *devname);
+void hal_rng_config(void)
+{
+    __HAL_RCC_RNG_CLK_ENABLE();
+    g_rng_handle.Instance = RNG;
+    (void)HAL_RNG_Init(&g_rng_handle);
+}
 
-/**
- * @brief:use this function to register a function that monitor the URC message
- * @param[in]:name, which used for the at framework debug
- * @param[in]:inxdex, used for match the out of band data
- * @param[in]:length, index length, this is match length
- * @param[in]:func, supply the function that will execute when the index is matched
- * @paarm[in]:args, supply for the registered function
- *
- * @return:0 success while -1 failed
- * */
-int at_oobregister(const char *name,const void *index,size_t len,fn_at_oob func,void *args);
+int hal_rng_generate_number()
+{
+    uint32_t random_number;
 
-/**
- * @brief:use this function to register a function that monitor the URC message
- * @param[in]:cmd, the command to send
- * @param[in]:cmdlen, the command length
- * @param[in]:index, the command index, if you don't need the response, set it to NULL; this must be a string
- * @param[in]:respbuf, if you need the response, you should supply the buffer
- * @param[in]:respbuflen,the respbuf length
- * @param[in]:timeout, the time you may wait for the response;and the unit is ms
- *
- * @return:0 success while -1 failed
- * */
+    if (HAL_RNG_GenerateRandomNumber(&g_rng_handle, &random_number) != HAL_OK)
+    {
+        return 0U;
+    }
 
-int at_command(const void *cmd, size_t cmdlen,const char *index,\
-                void *respbuf,size_t respbuflen,uint32_t timeout);
+    return (int)random_number;
+}
 
-int at_streammode_set(int mode);
+int hal_rng_generate_buffer(void* buf, size_t len)
+{
+    size_t i;
+    uint32_t random_number;
+    uint8_t* pbuf;
 
+    if (NULL == buf)
+    {
+        return -1;
+    }
 
+    pbuf = (uint8_t*)buf;
 
+    for (i = 0; i < len; i += sizeof(uint32_t))
+    {
+        if (HAL_RNG_GenerateRandomNumber(&g_rng_handle, &random_number) != HAL_OK)
+        {
+            return -1;
+        }
+        memcpy(pbuf + i, &random_number,
+               sizeof(uint32_t) > len - i ? len - i : sizeof(uint32_t));
+    }
 
-#endif
+    return 0;
+}
+
+#endif /* HAL_RNG_MODULE_ENABLED */

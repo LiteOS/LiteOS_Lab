@@ -1,6 +1,8 @@
 #include "partition.h"
 #include "storage.h"
 
+#include <stdio.h>
+
 static const storage_partition *s_partition = NULL;
 static int max_part_num = 0;
 int storage_partition_init(storage_partition *part, int32_t max_num)
