@@ -112,6 +112,7 @@ typedef struct mqtt_al_paras_s{
     char *server_port;
     char *cavalid;
     char *subtopic;
+    char *unsubtopic;
     char *pubtopic;
     char *pubmsg;
 }mqtt_al_paras;
@@ -375,7 +376,8 @@ static int ts_mqtt_al_connect(char *message, int len)
     security.type = en_mqtt_al_security_cas;
     security.u.cas.ca_crt.data = s_mqtt_ca_crt;
     security.u.cas.ca_crt.len = (strlen(security.u.cas.ca_crt.data)+1); ///< must including the end '\0'
-    conpara.security = &security;
+ 
+    conpara.security = pparas->cavalid == NULL ? NULL : &security;
 
     conpara.serveraddr.data = pparas->server_ip4;
     conpara.serveraddr.len = strlen(conpara.serveraddr.data);
@@ -444,6 +446,11 @@ static int ts_mqtt_al_subscrible(char *message, int len)
     {
         osal_free(pparas->subtopic);
     }
+    if((!memcmp(pchTmp, "NULL", strlen(pchTmp))) ||
+        (!memcmp(pchTmp, "null", strlen(pchTmp))))
+    {
+        pparas->subtopic = NULL;
+    }
     else
     {
         pparas->subtopic = osal_malloc(strlen(pchTmp)+1);
@@ -473,6 +480,7 @@ static int ts_mqtt_al_unsubscrible(char *message, int len)
 
     mqtt_al_unsubpara_t unsub;
     int ret;
+    mqtt_al_paras *pparas = &g_mqtt_al_paras;
 
     printf("[%s] message is %s\n", __FUNCTION__, message);
     pchTmp      = message;
@@ -486,9 +494,24 @@ static int ts_mqtt_al_unsubscrible(char *message, int len)
 
     pchTmp = strtok_r(NULL, "|", &pchStrTmpIn);
     
-    unsubtopic = pchTmp;
+    if(pparas->unsubtopic != NULL) 
+    {
+        osal_free(pparas->unsubtopic);
+    }
+    if((!memcmp(pchTmp, "NULL", strlen(pchTmp))) ||
+        (!memcmp(pchTmp, "null", strlen(pchTmp))))
+    {
+        pparas->unsubtopic = NULL;
+    }
+    else
+    {
+        pparas->unsubtopic = osal_malloc(strlen(pchTmp)+1);
+        memcpy(pparas->unsubtopic, pchTmp, strlen(pchTmp));
+        pparas->unsubtopic[strlen(pchTmp)] = '\0';
+        printf("[%s]unsub topic is %s\n", __FUNCTION__, pparas->unsubtopic);
+    }
 
-    unsub.topic.data = unsubtopic;
+    unsub.topic.data = pparas->unsubtopic;
     unsub.topic.len  = strlen(unsub.topic.data);
     
     ret = mqtt_al_unsubscribe(g_mqtt_al_handle,&unsub);
@@ -538,6 +561,11 @@ static int ts_mqtt_al_publish(char *message, int len)
     if(pparas->pubmsg != NULL) 
     {
         osal_free(pparas->pubmsg);
+    }
+    if((!memcmp(pchTmp, "NULL", strlen(pchTmp))) ||
+        (!memcmp(pchTmp, "null", strlen(pchTmp))))
+    {
+        pparas->pubmsg = NULL;
     }
     else
     {
@@ -601,6 +629,9 @@ static int ts_mqtt_al_deinit(char *message, int len)
 
     if(pparas->subtopic)
         osal_free(pparas->subtopic);
+    
+    if(pparas->unsubtopic)
+        osal_free(pparas->unsubtopic);
 
     if(pparas->pubtopic)
         osal_free(pparas->pubtopic);

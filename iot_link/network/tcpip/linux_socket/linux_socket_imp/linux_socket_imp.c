@@ -68,6 +68,17 @@ static int __linux_setsockopt(int fd, int level, int option, const void *option_
                 time_delay->tv_usec = 1000;
             }
         }
+        if(option == 0x1005)
+        {
+            option = SO_SNDTIMEO;
+
+            time_delay = (struct timeval *)option_value;
+            if((time_delay->tv_sec == 0)&&(time_delay->tv_usec == 0))
+            {
+                printf("%s:log:::::::timeout should be mapped:::::modified it 1000 us\n\r",__FUNCTION__);
+                time_delay->tv_usec = 1000;
+            }
+        }
     }
 
     return setsockopt(fd, level, option, option_value, option_len);
