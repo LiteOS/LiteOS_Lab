@@ -436,10 +436,25 @@ int config_access_control_object(lwm2m_object_t *obj)
     }
 
     // Init callbacks, empty instanceList!
-    obj->readFunc    = prv_read;
-    obj->writeFunc   = prv_write;
-    obj->createFunc  = prv_create;
-    obj->deleteFunc  = prv_delete;
+    if (obj->readFunc == NULL)
+    {
+        obj->readFunc = prv_read;
+    }
+
+    if (obj->writeFunc == NULL)
+    {
+        obj->writeFunc = prv_write;
+    }
+
+    if (obj->createFunc == NULL)
+    {
+        obj->createFunc = prv_create;
+    }
+
+    if (obj->deleteFunc == NULL)
+    {
+        obj->deleteFunc = prv_delete;
+    }
 
     return LWM2M_OK;
 }

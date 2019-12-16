@@ -598,7 +598,7 @@ int config_security_object(lwm2m_object_t *obj, int object_instance_id, void *pa
     }
 
     instance->uri = (char *)lwm2m_strdup(serverUri);
-    if (NULL == instance->uri)
+    if (instance->uri == NULL)
     {
         lwm2m_free(instance);
         return LWM2M_MALLOC_FAILED;
@@ -636,12 +636,26 @@ int config_security_object(lwm2m_object_t *obj, int object_instance_id, void *pa
     //10? is suitable? it could be changed by the bs server. for lwm2m_server_t member lifetime.
     instance->clientHoldOffTime = sec_param->hold_off_time;
 
-    obj->readFunc = prv_security_read;
+    if (obj->readFunc == NULL)
+    {
+        obj->readFunc = prv_security_read;
+    }
 
 #ifdef LWM2M_BOOTSTRAP
-    obj->writeFunc = prv_security_write;
-    obj->createFunc = prv_security_create;
-    obj->deleteFunc = prv_security_delete;
+    if (obj->writeFunc == NULL)
+    {
+        obj->writeFunc = prv_security_write;
+    }
+
+    if (obj->createFunc == NULL)
+    {
+        obj->createFunc = prv_security_create;
+    }
+
+    if (obj->deleteFunc == NULL)
+    {
+        obj->deleteFunc = prv_security_delete;
+    }
 #endif
 
     // After instance id is initialized

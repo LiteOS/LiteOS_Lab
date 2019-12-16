@@ -81,6 +81,49 @@ int lwm2m_receive(int type, char *msg, int len)
     return 0;
 }
 
+static int lwm2m_check_mandatory_objects(lwm2m_object_t *object_list)
+{
+    lwm2m_object_t *obj = NULL;
+    int object_num = 0;
+    uint8_t found = 0;
+
+    if(object_list == NULL)
+    {
+        return LWM2M_ARG_INVALID;
+    }
+
+    obj = object_list;
+
+    while(obj != NULL)
+    {
+        object_num++;
+
+        if(obj->objID == OBJ_SECURITY_ID)
+        {
+            found |= 0x01;
+        }
+
+        else if(obj->objID == OBJ_SERVER_ID)
+        {
+            found |= 0x02;
+        }
+
+        else if(obj->objID == OBJ_DEVICE_ID)
+        {
+            found |= 0x04;
+        }
+
+        obj = obj->next;
+    }
+
+    if((object_num < 3) || (found != 0x07))
+    {
+        return LWM2M_COAP_400_BAD_REQUEST;
+    }
+
+    return LWM2M_OK;
+}
+
 /*
  * add date:     2018-06-05
  * description:  get bootstrap info from atiny_params which from user, set bs_sequence_state and bs_server_uri for
@@ -213,12 +256,14 @@ static int lwm2m_poll(handle_data_t *phandle, uint32_t timeout)
     int numBytes;
     connection_t *connP;
     lwm2m_context_t *contextP = NULL;
-    uint8_t recv_buffer[MAX_PACKET_SIZE];
+    uint8_t *recv_buffer = NULL;
 
-    if(phandle == NULL)
+    if((phandle == NULL) || (phandle->recv_buffer == NULL))
     {
         return LWM2M_ARG_INVALID;
     }
+
+    recv_buffer = phandle->recv_buffer;
 
     contextP = phandle->lwm2m_context;
 
@@ -227,7 +272,7 @@ static int lwm2m_poll(handle_data_t *phandle, uint32_t timeout)
 
     while(connP != NULL)
     {
-        numBytes = lwm2m_buffer_recv(connP, recv_buffer, sizeof(recv_buffer), timeout);
+        numBytes = lwm2m_buffer_recv(connP, recv_buffer, MAX_PACKET_SIZE, timeout);
 
         if(numBytes <= 0)
         {
@@ -453,6 +498,21 @@ static int __config(lwm2m_al_init_param_t *init_param)
     (void)lwm2m_fota_manager_set_lwm2m_context(lwm2m_fota_manager_get_instance(), g_lwm2m_handle.lwm2m_context);
 #endif
 
+    g_lwm2m_handle.recv_buffer = (uint8_t *)lwm2m_malloc(MAX_PACKET_SIZE);
+
+    if(g_lwm2m_handle.recv_buffer == NULL)
+    {
+        ATINY_LOG(LOG_FATAL, "memory not enough");
+
+        lwm2m_free(lwm2m_context->endpointName);
+        lwm2m_free(lwm2m_context);
+
+        osal_mutex_del(g_data_mutex);
+        osal_semp_del(g_lwm2m_handle.quit_sem);
+
+        return LWM2M_MALLOC_FAILED;
+    }
+
     g_lwm2m_handle.client_data.lwm2mH = lwm2m_context;
     g_lwm2m_handle.lwm2m_context = lwm2m_context;
     ATINY_LOG(LOG_INFO, "result %d", result);
@@ -590,12 +650,106 @@ int __add_object(int object_id, int object_instance_id, uint16_t resource_id, vo
 
 int __delete_object(int object_id)
 {
-    return lwm2m_remove_object(g_lwm2m_handle.lwm2m_context, object_id);
+    lwm2m_object_t *obj = NULL;
+
+    lwm2m_context_t  *lwm2m_context = NULL;
+
+    LOG_ARG("ID: %d", object_id);
+
+    if(g_lwm2m_handle.lwm2m_context == NULL)
+    {
+        return LWM2M_NULL_POINTER;
+    }
+
+    lwm2m_context = g_lwm2m_handle.lwm2m_context;
+
+    lwm2m_context->objectList = (lwm2m_object_t *)LWM2M_LIST_RM(lwm2m_context->objectList, object_id, &obj);
+
+    if(obj == NULL)
+    {
+        return LWM2M_RESOURCE_NOT_FOUND;
+    }
+
+    switch(object_id)
+    {
+        case OBJ_SECURITY_ID:
+        {
+            clean_security_object(obj);
+            break;
+        }
+
+        case OBJ_SERVER_ID:
+        {
+            clean_server_object(obj);
+            break;
+        }
+
+        case OBJ_ACCESS_CONTROL_ID:
+        {
+            acl_ctrl_free_object(obj);
+            break;
+        }
+
+        case OBJ_DEVICE_ID:
+        {
+            free_object_device(obj);
+            break;
+        }
+
+        case OBJ_CONNECTIVITY_MONITORING_ID:
+        {
+            free_object_conn_m(obj);
+            break;
+        }
+
+#ifdef CONFIG_FEATURE_FOTA
+
+        case OBJ_FIRMWARE_UPDATE_ID:
+        {
+            free_object_firmware(obj);
+            break;
+        }
+
+#endif
+
+        case OBJ_LOCATION_ID:
+        {
+            free_object_location(obj);
+            break;
+        }
+
+        case OBJ_APP_DATA_ID:
+        {
+            free_binary_app_data_object(obj);
+            break;
+        }
+
+        default:
+        {
+            break;
+        }
+    }
+
+    return LWM2M_OK;
 }
 
 static int __connect(void)
 {
     int result = LWM2M_OK;
+
+    if(g_lwm2m_handle.lwm2m_context == NULL)
+    {
+        return LWM2M_NULL_POINTER;
+    }
+
+    /* check mandatory objects */
+    result = lwm2m_check_mandatory_objects(g_lwm2m_handle.lwm2m_context->objectList);
+
+    if(result != LWM2M_OK)
+    {
+        return result;
+    }
+
     g_lwm2m_handle.lwm2m_quit = 0;
 
     /* create the task for internal data process */

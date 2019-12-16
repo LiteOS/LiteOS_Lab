@@ -58,7 +58,9 @@ typedef enum
     LWM2M_ERR                  = -9,
     LWM2M_OBJECT_INSTANCE_EXISTED = -10,
     LWM2M_SUPPORT_SINGLE_INSTANCE_ONLY = -11,
-    LWM2M_NOT_SUPPORTED = -12
+    LWM2M_NOT_SUPPORTED = -12,
+    LWM2M_NULL_POINTER = -13,
+    LWM2M_COAP_400_BAD_REQUEST = -14
 } lwm2m_errorcode_e;
 
 typedef enum
@@ -68,10 +70,8 @@ typedef enum
     OBJ_ACCESS_CONTROL_ID,
     OBJ_DEVICE_ID,
     OBJ_CONNECTIVITY_MONITORING_ID,
-#ifdef CONFIG_FEATURE_FOTA
     OBJ_FIRMWARE_UPDATE_ID,
-#endif
-    OBJ_LOCATION_ID = 6,
+    OBJ_LOCATION_ID,
     OBJ_CONNECTIVITY_STATISTICS_ID,
     OBJ_APP_DATA_ID = 19
 } lwm2m_object_id_e;
@@ -149,7 +149,7 @@ typedef struct
  *
  *@param[in] init_param  refer to the data of lwm2m_al_init_param_t
  *
- * @return 0 success while -1 failed
+ * @return 0 success,otherwise it's a special error code if failed
  */
 int lwm2m_al_config(lwm2m_al_init_param_t *init_param);
 
@@ -158,7 +158,7 @@ int lwm2m_al_config(lwm2m_al_init_param_t *init_param);
  *
  *@param[in] void
  *
- * @return 0 success while -1 failed
+ * @return 0 success,otherwise it's a special error code if failed
  */
 int lwm2m_al_deconfig(void);
 
@@ -167,7 +167,7 @@ int lwm2m_al_deconfig(void);
  *
  *@param[in] op  refer to the data  lwm2m_al_op_t
  *
- * @return 0 success while -1 failed
+ * @return 0 success,otherwise it's a special error code if failed
  */
 int lwm2m_al_add_object(int object_id, int object_instance_id, uint16_t resource_id, void *param);
 
@@ -176,7 +176,7 @@ int lwm2m_al_add_object(int object_id, int object_instance_id, uint16_t resource
  *
  *@param[in] object_id
  *
- * @return 0 success while -1 failed
+ * @return 0 success,otherwise it's a special error code if failed
  */
 int lwm2m_al_delete_object(int object_id);
 
@@ -185,7 +185,7 @@ int lwm2m_al_delete_object(int object_id);
  *
  *@param[in] void
  *
- * @return 0 success while -1 failed
+ * @return 0 success,otherwise it's a special error code if failed
  */
 int lwm2m_al_connect(void);
 
@@ -194,7 +194,7 @@ int lwm2m_al_connect(void);
  *
  *@param[in] void
  *
- * @return 0 success while -1 failed
+ * @return 0 success,otherwise it's a special error code if failed
  */
 int lwm2m_al_disconnect(void);
 
@@ -203,7 +203,7 @@ int lwm2m_al_disconnect(void);
  *
  *@param[in] send_param refer to the data of lwm2m_al_send_param_t
  *
- * @return 0 success while -1 failed
+ * @return 0 success,otherwise it's a special error code if failed
  */
 int lwm2m_al_send(lwm2m_al_send_param_t *send_param);
 
@@ -212,7 +212,7 @@ int lwm2m_al_send(lwm2m_al_send_param_t *send_param);
  *
  *@param[in] void
  *
- * @return 0 success while -1 failed
+ * @return 0 success,otherwise it's a special error code if failed
  */
 int lwm2m_al_receive(void);
 
@@ -221,7 +221,7 @@ int lwm2m_al_receive(void);
  *
  *@param[in] op  refer to the data of lwm2m_al_op_t
  *
- * @return 0 success while -1 failed
+ * @return 0 success,otherwise it's a special error code if failed
  */
 int lwm2m_al_install(lwm2m_al_op_t *op);
 
@@ -230,7 +230,7 @@ int lwm2m_al_install(lwm2m_al_op_t *op);
  *
  *@param[in] void
  *
- * @return 0 success while -1 failed
+ * @return 0 success,otherwise it's a special error code if failed
  */
 int lwm2m_al_uninstall(void);
 

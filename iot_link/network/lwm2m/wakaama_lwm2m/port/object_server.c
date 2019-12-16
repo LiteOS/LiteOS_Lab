@@ -519,7 +519,7 @@ int config_server_object(lwm2m_object_t *obj, int object_instance_id, void *para
 
     // Manually create an hardcoded server
     instance = (server_instance_t *)lwm2m_malloc(sizeof(server_instance_t));
-    if (NULL == instance)
+    if (instance == NULL)
     {
         return LWM2M_MALLOC_FAILED;
     }
@@ -548,12 +548,35 @@ int config_server_object(lwm2m_object_t *obj, int object_instance_id, void *para
         return LWM2M_MALLOC_FAILED;
     }
 
-    obj->readFunc = prv_server_read;
-    obj->discoverFunc = prv_server_discover;
-    obj->writeFunc = prv_server_write;
-    obj->createFunc = prv_server_create;
-    obj->deleteFunc = prv_server_delete;
-    obj->executeFunc = prv_server_execute;
+    if (obj->readFunc == NULL)
+    {
+        obj->readFunc = prv_server_read;
+    }
+
+    if (obj->discoverFunc == NULL)
+    {
+        obj->discoverFunc = prv_server_discover;
+    }
+
+    if (obj->writeFunc == NULL)
+    {
+        obj->writeFunc = prv_server_write;
+    }
+
+    if (obj->executeFunc == NULL)
+    {
+        obj->executeFunc = prv_server_execute;
+    }
+
+    if (obj->createFunc == NULL)
+    {
+        obj->createFunc = prv_server_create;
+    }
+
+    if (obj->deleteFunc == NULL)
+    {
+        obj->deleteFunc = prv_server_delete;
+    }
 
     obj->instanceList = LWM2M_LIST_ADD(obj->instanceList, instance);
 

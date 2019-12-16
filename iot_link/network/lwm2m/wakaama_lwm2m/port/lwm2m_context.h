@@ -67,6 +67,7 @@ typedef struct
     int reconnect_flag;
     osal_semp_t quit_sem;
     int reboot_flag;
+    uint8_t *recv_buffer;
 } handle_data_t;
 
 #ifdef __cplusplus

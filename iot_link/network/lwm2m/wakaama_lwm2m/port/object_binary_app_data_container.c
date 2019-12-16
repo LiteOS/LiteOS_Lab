@@ -430,7 +430,7 @@ int config_app_data_object(lwm2m_object_t *obj, int object_instance_id, uint16_t
     int ret = LWM2M_OK;
 
     instance = (plat_instance_t *)lwm2m_malloc(sizeof(plat_instance_t));
-    if (NULL == instance)
+    if (instance == NULL)
     {
         return LWM2M_MALLOC_FAILED;
     }
@@ -455,13 +455,35 @@ int config_app_data_object(lwm2m_object_t *obj, int object_instance_id, uint16_t
      * - The other one (deleteFunc) delete an instance by removing it from the instance list (and freeing the memory
      *   allocated to it)
      */
-    obj->readFunc = prv_read;
-    obj->discoverFunc = prv_discover;
-    obj->writeFunc = prv_write;
-    obj->executeFunc = prv_exec;
-    obj->createFunc = prv_create;
-    obj->deleteFunc = prv_delete;
-    // obj->userData = atiny_params->userData;
+    if (obj->readFunc == NULL)
+    {
+        obj->readFunc = prv_read;
+    }
+
+    if (obj->discoverFunc == NULL)
+    {
+        obj->discoverFunc = prv_discover;
+    }
+
+    if (obj->writeFunc == NULL)
+    {
+        obj->writeFunc = prv_write;
+    }
+
+    if (obj->executeFunc == NULL)
+    {
+        obj->executeFunc = prv_exec;
+    }
+
+    if (obj->createFunc == NULL)
+    {
+        obj->createFunc = prv_create;
+    }
+
+    if (obj->deleteFunc == NULL)
+    {
+        obj->deleteFunc = prv_delete;
+    }
 
     obj->instanceList = LWM2M_LIST_ADD(obj->instanceList, instance);
 
