@@ -314,6 +314,13 @@ void lwm2m_destroy(void *handle)
     osal_semp_del(handle_data->quit_sem);
     handle_data->quit_sem = cn_semp_invalid;
 
+    /* release receive data buffer */
+    if(handle_data->recv_buffer != NULL)
+    {
+        lwm2m_free(handle_data->recv_buffer);
+        handle_data->recv_buffer = NULL;
+    }
+
     osal_mutex_del(g_data_mutex);
 }
 
