@@ -308,7 +308,7 @@ static const tag_os_ops s_macos_ops =
 
 static const tag_os s_link_macos =
 {
-    .name = "Linux",
+    .name = "macos",
     .ops = &s_macos_ops,
 };
 
