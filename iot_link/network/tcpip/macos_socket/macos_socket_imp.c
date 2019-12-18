@@ -47,7 +47,6 @@
 #include <netdb.h>
 
 #include <sal_imp.h>   ///< register the macos socket to sal
-#include <macos_socket_imp.h>
 
 
 ///< struct sockaddr and struct sockaddr_in is quit different from the normal defines, so must translate it here
@@ -192,11 +191,11 @@ static const tag_tcpip_domain s_tcpip_socket =
 };
 
 
-int tcpipstack_install_macos_socket(void)
+int link_tcpip_imp_init(void)
 {
     int ret = -1;
 
-    ret = tcpip_sal_install(&s_tcpip_socket);
+    ret = link_sal_install(&s_tcpip_socket);
 
     if(0 == ret)
     {
@@ -207,7 +206,7 @@ int tcpipstack_install_macos_socket(void)
         printf("sal:install socket failed\r\n");
     }
 
-    return 0;
+    return ret;
 }
 
 

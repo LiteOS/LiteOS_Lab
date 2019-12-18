@@ -67,10 +67,7 @@ const char *linkmain_version()
 }
 
 
-
-
 static int s_link_start = 0;
-
 int link_main(void *args)
 {
     ///< install the RTOS kernel for the link
@@ -82,7 +79,6 @@ int link_main(void *args)
 
     osal_init();
     printf("linkmain:%s \n\r",linkmain_version());
-
 
 #if CONFIG_STIMER_ENABLE
     #include <stimer.h>
@@ -142,29 +138,7 @@ int link_main(void *args)
 
 #if CONFIG_TCPIP_ENABLE
     #include <sal.h>
-    tcpipstack_init(10);
-
-    #if CONFIG_LWIP_ENABLE
-        #include <lwip_imp.h>
-        tcpipstack_install_lwip();
-    #elif CONFIG_LINUX_SOCKET_ENABLE
-        #include <linux_socket_imp.h>
-        tcpipstack_install_linux_socket();
-    #elif CONFIG_MACOS_SOCKET_ENABLE
-        #include <macos_socket_imp.h>
-        tcpipstack_install_macos_socket();
-    #elif CONFIG_ESP8266_SOCKET_ENABLE
-        #include <esp8266_socket_imp.h>
-        tcpipstack_install_esp8266_socket();
-        esp8266_boot();
-#elif CONFIG_RTK8710_SOCKET_ENABLE
-        #include <rtk8710_socket_imp.h>
-        tcpipstack_install_rtk8710_socket();
-        rtk8710_boot();
-    #else
-
-    #endif
-
+    link_tcpip_init();
 #endif
 
 //////////////////////////  DTLS PROTOCOL  /////////////////////////////////////

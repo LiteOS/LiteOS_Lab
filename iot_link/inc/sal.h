@@ -61,12 +61,10 @@ struct hostent * sal_gethostbyname(const char *name);
 /**
  * @brief: if you want to use the tcpip abstract layer,like install the tcpip stack,
  *         or use the api as the application user, you must call this function first
- * @param[in]:socknum, how many socket the application could use mostly
  *
  * @return:0 success while -1 failed
  * */
-int tcpipstack_init( int socknum);
-
+int link_tcpip_init( void);
 
 in_addr_t inet_addr(const char *addr);
 char *inet_ntoa(struct in_addr addr);
