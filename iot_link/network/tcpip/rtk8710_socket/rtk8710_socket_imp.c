@@ -57,6 +57,16 @@
 #define cn_rtk8710_rcvindex      "RSP"
 #define cn_rtk8710_cachelen      (1024 * 2)
 
+#define WIFI_SSID     "TP-LINK_IOT_LINK"
+#define WIFI_PASSWD   "iotlink_2019"
+
+typedef enum
+{
+    STA = 1,
+    AP,
+    STA_AP,
+}enum_net_mode;
+
 typedef struct
 {
     int sockfd;

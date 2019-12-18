@@ -51,6 +51,10 @@
 #include <link_endian.h>
 #include <osal.h>
 
+
+#define WIFI_SSID     "TP-LINK_IOT_LINK"
+#define WIFI_PASSWD   "iotlink_2019"
+
 #define cn_esp8266_cmd_timeout   (6*1000)
 #define cn_esp8266_rcvindex      "\r\n+IPD"
 #define cn_esp8266_cachelen      (1024 * 2)
