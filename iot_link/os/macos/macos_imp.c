@@ -312,7 +312,7 @@ static const tag_os s_link_macos =
     .ops = &s_macos_ops,
 };
 
-int osal_install_macos(void)
+int os_imp_install(void)
 {
     int ret = -1;
 

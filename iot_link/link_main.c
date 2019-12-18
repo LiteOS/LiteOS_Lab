@@ -81,24 +81,6 @@ int link_main(void *args)
     s_link_start =1;
 
     osal_init();
-#if CONFIG_LITEOS_ENABLE
-    #include <liteos_imp.h>
-    osal_install_liteos();
-#elif CONFIG_LINUX_ENABLE
-    #include <linux_imp.h>
-    #include <signal.h>
-    sigaction(SIGPIPE, &(struct sigaction){SIG_IGN}, NULL);
-    osal_install_linux();
-#elif CONFIG_MACOS_ENABLE
-    #include <macos_imp.h>
-    osal_install_macos();
-#elif CONFIG_NOVAOS_ENABLE
-    #include <novaos_imp.h>
-    osal_install_novaos();
-#else
-    #error("you should add your own os here");
-
-#endif
     printf("linkmain:%s \n\r",linkmain_version());
 
 
