@@ -46,7 +46,6 @@
 #include <sal_imp.h>
 #include <sal_define.h>
 #include <sal_types.h>
-#include <esp8266_socket_imp.h>
 #include <at.h>
 #include <link_misc.h>
 #include <link_endian.h>
@@ -464,23 +463,6 @@ static const tag_tcpip_domain s_tcpip_socket =
 };
 
 
-int tcpipstack_install_esp8266_socket(void)
-{
-    int ret = -1;
-
-    ret = tcpip_sal_install(&s_tcpip_socket);
-
-    if(0 == ret)
-    {
-        printf("sal:install socket success\r\n");
-    }
-    else
-    {
-        printf("sal:install socket failed\r\n");
-    }
-
-    return 0;
-}
 
 static bool_t esp8266_reset(void)
 {
@@ -524,8 +506,10 @@ static bool_t esp8266_set_mux(int mux)
     return esp8266_atcmd(cmd,"OK");
 }
 
-int esp8266_boot(void)
+int link_tcpip_imp_init(void)
 {
+    int ret = -1;
+
     at_oobregister("esp8266rcv",cn_esp8266_rcvindex,strlen(cn_esp8266_rcvindex),esp8266_rcvdeal,NULL);
     ring_buffer_init(&s_esp8266_sock_cb.esp8266_rcvring,s_esp8266_sock_cb.esp8266_rcvbuf,cn_esp8266_cachelen,0,0);
 
@@ -541,8 +525,18 @@ int esp8266_boot(void)
         printf("connect ap failed, repeat...\r\n");
     }
    //reach here means everything is ok, we can go now
+    ret = link_sal_install(&s_tcpip_socket);
 
-    return 0;
+    if(0 == ret)
+    {
+        printf("sal:install socket success\r\n");
+    }
+    else
+    {
+        printf("sal:install socket failed\r\n");
+    }
+
+    return ret;
 }
 
 

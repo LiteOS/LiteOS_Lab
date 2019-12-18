@@ -47,7 +47,6 @@
 
 #include <sal_imp.h>   ///< register the lwip to sal
 #include <sys/time.h>
-#include <linux_socket_imp.h>
 
 ///< map the level and option
 static int __linux_setsockopt(int fd, int level, int option, const void *option_value, int option_len)
@@ -103,11 +102,11 @@ static const tag_tcpip_domain s_tcpip_socket =
 };
 
 
-int tcpipstack_install_linux_socket(void)
+int link_tcpip_imp_init(void)
 {
     int ret = -1;
 
-    ret = tcpip_sal_install(&s_tcpip_socket);
+    ret = link_sal_install(&s_tcpip_socket);
 
     if(0 == ret)
     {
@@ -118,7 +117,7 @@ int tcpipstack_install_linux_socket(void)
         printf("sal:install socket failed\r\n");
     }
 
-    return 0;
+    return ret;
 }
 
 
