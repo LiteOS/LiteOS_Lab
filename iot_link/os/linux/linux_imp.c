@@ -373,7 +373,7 @@ static const tag_os s_link_linux =
     .ops = &s_linux_ops,
 };
 
-int os_imp_install(void)
+int os_imp_init(void)
 {
     int ret = -1;
 
