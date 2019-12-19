@@ -410,7 +410,7 @@ int osal_int_connect(int intnum, int prio, int mode, fn_interrupt_handle callbac
 int osal_init(void)
 {
     int ret = -1;
-    ret = os_imp_install();
+    ret = os_imp_init();
     return ret;
 }
 

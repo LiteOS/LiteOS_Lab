@@ -55,6 +55,10 @@ osal的api接口声明在<osal.h>中，使用相关的接口需要包含该头�
 
 ​		您需要在您的系统初始化完毕之后，调用osal_install接口将您的系统注册进SDK即可。使用该接口需要包含<osal_imp.h>，相关的宏定义在<osal_type.h>中。详情参考该头文件。
 
+​		如果需要适配第三方的操作系统，务必实现os_imp_init函数，开发者可以在该函数中调用osal_install将自己的操作系统的接口注册进osal中。而link_main则会调用osal_init函数，在在osal_init函数中调用os_imp_init。基本的调用关系如下：
+
+​      link_main --->  osal_init ---->os_imp_init
+
 
 
 

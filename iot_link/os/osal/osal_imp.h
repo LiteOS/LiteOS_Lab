@@ -63,7 +63,7 @@ typedef struct
 
 int osal_install(const tag_os *os); //install the os to the link layer
 
-int os_imp_install(void);   ///< this function must be implement by the developer, which will
+int os_imp_init(void);   ///< this function must be implement by the developer, which will
                             ///< call osal_install to install your own operation system
 
 
