@@ -50,6 +50,7 @@
 #include "SHT30.h"
 #include "Actuators.h"
 #include "lcd.h"
+#include "i2c.h"
 
 #include <gpio.h>
 #include <stm32l4xx_it.h>
@@ -117,15 +118,6 @@ static int             s_rcv_buffer[cn_app_rcv_buf_len];
 static int             s_rcv_datalen;
 static osal_semp_t     s_rcv_sync;
 
-static int app_led_task_entry()
-{
-   while(1)
-   {
-        Led_blink();
-   }
-        
-    return 0;  
-}
 
 static void timer1_callback(void *arg)
 {
@@ -295,7 +287,12 @@ static int app_report_task_entry()
 
 static int app_collect_task_entry()
 {
-    Init_BS_IA_DEMO();	
+    MX_I2C1_Init();
+    MX_I2C2_Init();
+    Init_BH1750();
+    Init_SHT30();
+    Init_Motor();
+    Init_Light();	
     while (1)
     {
         IotBox_Lux_Read_Data();
