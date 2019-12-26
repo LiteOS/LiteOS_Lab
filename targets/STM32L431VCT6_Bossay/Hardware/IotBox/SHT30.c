@@ -57,7 +57,7 @@ uint8_t SHT3x_CheckCrc(char data[], char nbrOfBytes, char checksum)
 	
     char crc = 0xFF;
     char bit = 0;
-    char byteCtr ;
+    int byteCtr ;
 	
     //calculates 8-Bit checksum with given polynomial
     for(byteCtr = 0; byteCtr < nbrOfBytes; ++byteCtr)
