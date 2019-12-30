@@ -53,10 +53,34 @@
 #define TEST_SORT_LWM2M_AL     1
 #define TEST_SORT_OC_MQTT_AL   2
 #define TEST_SORT_MQTT_AL      3
-#define TEST_SORT_MAX          4
+#define TEST_SORT_OC_COAP_AL   4
+#define TEST_SORT_COAP_AL      5
+#define TEST_SORT_MAX          6
 
 /*oc lwm2m*/
+#define TEST_OC_LWM2M_INIT            ((TEST_SORT_OC_LWM2M_AL << 16) | 0)
+#define TEST_OC_LWM2M_REGISTER        ((TEST_SORT_OC_LWM2M_AL << 16) | 1)
+#define TEST_OC_LWM2M_CONFIG          ((TEST_SORT_OC_LWM2M_AL << 16) | 2)
+#define TEST_OC_LWM2M_REPORT          ((TEST_SORT_OC_LWM2M_AL << 16) | 3)
+#define TEST_OC_LWM2M_UNREGISTER      ((TEST_SORT_OC_LWM2M_AL << 16) | 4)
+#define TEST_OC_LWM2M_DECONFIG        ((TEST_SORT_OC_LWM2M_AL << 16) | 5)
+#define TEST_OC_LWM2M_DEINIT          ((TEST_SORT_OC_LWM2M_AL << 16) | 6)
+#define TEST_OC_LWM2M_DEREGISTER      ((TEST_SORT_OC_LWM2M_AL << 16) | 7)
+#define TEST_OC_LWM2M_INVALID         ((TEST_SORT_OC_LWM2M_AL << 16) | 8) 
+
 /*lwm2m al*/
+#define TEST_LWM2M_AL_INSTALL         ((TEST_SORT_LWM2M_AL<<16) | 0)
+#define TEST_LWM2M_AL_CONNETC         ((TEST_SORT_LWM2M_AL<<16) | 1)
+#define TEST_LWM2M_AL_CONFIG          ((TEST_SORT_LWM2M_AL<<16) | 2)
+#define TEST_LWM2M_AL_ADD_OBJECT      ((TEST_SORT_LWM2M_AL<<16) | 3)
+#define TEST_LWM2M_AL_SEND            ((TEST_SORT_LWM2M_AL<<16) | 4)
+#define TEST_LWM2M_AL_RECEIVE         ((TEST_SORT_LWM2M_AL<<16) | 5)
+#define TEST_LWM2M_AL_DELETE_OBJECT   ((TEST_SORT_LWM2M_AL<<16) | 6)
+#define TEST_LWM2M_AL_DISCONNECT      ((TEST_SORT_LWM2M_AL<<16) | 7)
+#define TEST_LWM2M_AL_DECONFIG        ((TEST_SORT_LWM2M_AL<<16) | 8)
+#define TEST_LWM2M_AL_UNINSTALL       ((TEST_SORT_LWM2M_AL<<16) | 9)
+#define TEST_LWM2M_AL_INVALID         ((TEST_SORT_LWM2M_AL<<16) | 10)
+
 
 
 /*oc mqtt*/
@@ -84,8 +108,27 @@
 #define TEST_MQTT_AL_PUBLISH          ((TEST_SORT_MQTT_AL << 16) | 8)
 #define TEST_MQTT_AL_CHECKSTATUS      ((TEST_SORT_MQTT_AL << 16) | 9)
 
+/*oc coap*/
+#define TEST_OC_COAP_INIT             ((TEST_SORT_OC_COAP_AL << 16) | 0)
+#define TEST_OC_COAP_REGISTER         ((TEST_SORT_OC_COAP_AL << 16) | 1)
+#define TEST_OC_COAP_CONFIG           ((TEST_SORT_OC_COAP_AL << 16) | 2)
+#define TEST_OC_COAP_REPORT           ((TEST_SORT_OC_COAP_AL << 16) | 3)
+#define TEST_OC_COAP_GETVALUE         ((TEST_SORT_OC_COAP_AL << 16) | 4)
+#define TEST_OC_COAP_DECONFIG         ((TEST_SORT_OC_COAP_AL << 16) | 5)
+#define TEST_OC_COAP_DEINIT           ((TEST_SORT_OC_COAP_AL << 16) | 6)
 
 
+/*coap al*/
+/*
+#define TEST_COAP_AL_INIT             ((TEST_SORT_COAP_AL << 16) | 0)
+#define TEST_COAP_AL_DEINIT           ((TEST_SORT_COAP_AL << 16) | 1)
+#define TEST_COAP_AL_ADD_OPTION       ((TEST_SORT_COAP_AL << 16) | 2)
+#define TEST_COAP_AL_NEW_REQUEST      ((TEST_SORT_COAP_AL << 16) | 3)
+#define TEST_COAP_AL_SEND             ((TEST_SORT_COAP_AL << 16) | 4)
+#define TEST_COAP_AL_RECV             ((TEST_SORT_COAP_AL << 16) | 5)
+#define TEST_COAP_AL_INSTALL          ((TEST_SORT_COAP_AL << 16) | 6)
+#define TEST_COAP_AL_UNINSTALL        ((TEST_SORT_COAP_AL << 16) | 7)
+*/
 
 
 typedef int (*test_sort)(int entry_id, char *message, int len);
@@ -100,7 +143,9 @@ int ts_sort_lwm2m_al(int entry_id, char *message, int len);
 int ts_sort_oc_mqtt_al(int entry_id, char *message, int len);
 
 int ts_sort_mqtt_al(int entry_id, char *message, int len);
-
-
+/*oc coap al*/
+int ts_sort_oc_coap_al(int entry_id, char *message, int len);
+/*coap al*/
+int ts_sort_coap_al(int entry_id, char *message, int len);
 #endif
 
