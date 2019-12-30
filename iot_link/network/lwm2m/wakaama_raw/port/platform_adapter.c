@@ -63,7 +63,6 @@
 void *lwm2m_malloc(size_t s)
 {
     return osal_malloc(s);
-
 }
 
 void lwm2m_free(void *p)
@@ -87,7 +86,7 @@ int lwm2m_strncmp(const char *s1,
 
 unsigned int lwm2m_gettime(void)
 {
-    return (uint32_t)(osal_sys_time()/1000);
+    return (uint32_t)(osal_sys_time() / 1000);
 }
 
 int lwm2m_rand(void *output, size_t len)
@@ -97,17 +96,14 @@ int lwm2m_rand(void *output, size_t len)
 
 void lwm2m_delay(uint32_t second)
 {
-    osal_task_sleep(second*1000);
+    osal_task_sleep(second * 1000);
 }
 
-void lwm2m_printf(const char * format, ...)
+void lwm2m_printf(const char *format, ...)
 {
     va_list ap;
-
     va_start(ap, format);
-
     vfprintf(stderr, format, ap);
-
     va_end(ap);
 }
 

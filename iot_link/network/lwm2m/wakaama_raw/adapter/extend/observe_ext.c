@@ -51,13 +51,14 @@ int observe_send_transaction(lwm2m_context_t *contextP, lwm2m_data_cfg_t  *cfg, 
 {
     lwm2m_transaction_t *transaction;
     int ret;
-
     transaction = transaction_new(watcherP->server->sessionH, COAP_205_CONTENT, NULL, NULL, watcherP->lastMid, watcherP->tokenLen, watcherP->token);
-    if(NULL == transaction)
+
+    if (NULL == transaction)
     {
         LOG("transaction_new null");
         return COAP_500_INTERNAL_SERVER_ERROR;
     }
+
     transaction->cfg.callback = cfg->callback;
     transaction->cfg.cookie = cfg->cookie;
     transaction->cfg.type = cfg->type;
@@ -86,24 +87,27 @@ void observe_app_step(lwm2m_context_t *contextP,
 
     while (COAP_205_CONTENT == object_readData(contextP, &targetP->uri, &size, &dataP, &cfg, 0))
     {
-
         for (watcherP = targetP->watcherList ; watcherP != NULL ; watcherP = watcherP->next)
         {
             int res;
-            if (buffer == NULL)
+
+            if (NULL == buffer)
             {
                 res = lwm2m_data_serialize(&targetP->uri, size, dataP, &(watcherP->format), &buffer);
+
                 if (res < 0)
                 {
-                    if (dataP != NULL)
+                    if (NULL != dataP)
                     {
                         lwm2m_data_free(size, dataP);
                         dataP = NULL;
                     }
-                    if (buffer != NULL)
+
+                    if (NULL != buffer)
                     {
                         lwm2m_free(buffer);
                     }
+
                     break;
                 }
                 else
@@ -112,12 +116,12 @@ void observe_app_step(lwm2m_context_t *contextP,
                 }
             }
 
-            if (watcherP->active == true)
+            if (true == watcherP->active)
             {
                 watcherP->lastTime = currentTime;
                 watcherP->lastMid = contextP->nextMID++;
 
-                if (cfg.callback == NULL)
+                if (NULL == cfg.callback)
                 {
                     coap_packet_t message[1];
                     coap_init_message(message, COAP_TYPE_NON, COAP_205_CONTENT, 0);
@@ -136,19 +140,20 @@ void observe_app_step(lwm2m_context_t *contextP,
             }
         }
 
-        if (dataP != NULL)
+        if (NULL != dataP)
         {
             lwm2m_data_free(size, dataP);
             dataP = NULL;
         }
-        if (buffer != NULL)
+
+        if (NULL != buffer)
         {
             lwm2m_free(buffer);
             buffer = NULL;
         }
     }
 
-    if (dataP != NULL)
+    if (NULL != dataP)
     {
         lwm2m_data_free(size, dataP);
     }
@@ -158,21 +163,22 @@ uint8_t lwm2m_get_observe_info(lwm2m_context_t *contextP, lwm2m_observe_info_t *
     lwm2m_observed_t *targetP;
     lwm2m_watcher_t *watcherP;
 
-    if((NULL == observe_info) || (NULL == contextP))
+    if ((NULL == observe_info) || (NULL == contextP))
     {
         LOG("null pointer\n");
         return COAP_500_INTERNAL_SERVER_ERROR;
     }
 
-    for (targetP = contextP->observedList ; targetP != NULL ; targetP = targetP->next)
+    for (targetP = contextP->observedList ; NULL != targetP; targetP = targetP->next)
     {
-        if((!LWM2M_URI_IS_SET_RESOURCE(&targetP->uri))
-                || (targetP->uri.objectId != LWM2M_FIRMWARE_UPDATE_OBJECT_ID)
-                || (targetP->uri.instanceId != 0)
-                || (targetP->uri.resourceId != RES_M_STATE))
+        if ((!LWM2M_URI_IS_SET_RESOURCE(&targetP->uri))
+            || (LWM2M_FIRMWARE_UPDATE_OBJECT_ID != targetP->uri.objectId)
+            || (0 != targetP->uri.instanceId)
+            || (RES_M_STATE != targetP->uri.resourceId))
         {
             continue;
         }
+
         watcherP = targetP->watcherList;
         observe_info->counter = watcherP->counter;
         memcpy(observe_info->token, watcherP->token, sizeof(observe_info->token));
@@ -180,6 +186,7 @@ uint8_t lwm2m_get_observe_info(lwm2m_context_t *contextP, lwm2m_observe_info_t *
         observe_info->format = watcherP->format;
         return COAP_NO_ERROR;
     }
+
     return COAP_500_INTERNAL_SERVER_ERROR;
 }
 
@@ -193,15 +200,15 @@ uint8_t lwm2m_send_notify(lwm2m_context_t *contextP, lwm2m_observe_info_t *obser
     lwm2m_server_t *server;
     lwm2m_watcher_t watcherP;
 
-
-    if((NULL == observe_info) || (NULL == contextP) || (NULL == cfg))
+    if ((NULL == observe_info) || (NULL == contextP) || (NULL == cfg))
     {
         LOG("null pointer\n");
         return COAP_500_INTERNAL_SERVER_ERROR;
     }
 
     server = registration_get_registered_server(contextP);
-    if(NULL == server)
+
+    if (NULL == server)
     {
         LOG("registration_get_registered_server fail\n");
         return COAP_500_INTERNAL_SERVER_ERROR;
@@ -214,20 +221,21 @@ uint8_t lwm2m_send_notify(lwm2m_context_t *contextP, lwm2m_observe_info_t *obser
     uri.resourceInstanceId = LWM2M_MAX_ID;
 #endif
     // uri.flag = (LWM2M_URI_FLAG_OBJECT_ID | LWM2M_URI_FLAG_INSTANCE_ID | LWM2M_URI_FLAG_RESOURCE_ID);
-
     format = (lwm2m_media_type_t)observe_info->format;
     memset(&data, 0, sizeof(data));
     data.id = uri.resourceId;
-
     lwm2m_data_encode_int(firmware_update_state, &data);
     res = lwm2m_data_serialize(&uri, 1, &data, &format, &buffer);
+
     if (res < 0)
     {
         LOG("lwm2m_data_serialize fail\n");
-        if (buffer != NULL)
+
+        if (NULL != buffer)
         {
             lwm2m_free(buffer);
         }
+
         return COAP_500_INTERNAL_SERVER_ERROR;
     }
 
@@ -238,7 +246,6 @@ uint8_t lwm2m_send_notify(lwm2m_context_t *contextP, lwm2m_observe_info_t *obser
     watcherP.format = format;
     watcherP.counter = observe_info->counter;
     watcherP.server = server;
-
     return (uint8_t)observe_send_transaction(contextP, cfg, &watcherP, buffer, res);
 }
 

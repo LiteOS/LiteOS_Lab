@@ -51,97 +51,101 @@ typedef struct
 static lwm2m_al_op_cb_t s_lwm2m_al_op_cb;
 
 /////////////////CREATE THE API FOR THE LWM2M LIB////////////////////////////////
-int lwm2m_al_config(lwm2m_al_init_param_t *init_param)
+int lwm2m_al_config(void **handle, lwm2m_al_init_param_t *init_param)
 {
     int ret = LWM2M_ERR;
 
-    if((NULL != init_param) && (NULL != s_lwm2m_al_op_cb.ops) && (NULL != s_lwm2m_al_op_cb.ops->config))
+    if ((NULL != handle)
+        && (NULL != init_param)
+        && (NULL != s_lwm2m_al_op_cb.ops)
+        && (NULL != s_lwm2m_al_op_cb.ops->config))
     {
-        ret = s_lwm2m_al_op_cb.ops->config(init_param);
+        ret = s_lwm2m_al_op_cb.ops->config(handle, init_param);
     }
 
     return ret;
 }
 
-int lwm2m_al_deconfig(void)
+int lwm2m_al_deconfig(void *handle)
 {
     int ret = LWM2M_ERR;
 
-    if((NULL != s_lwm2m_al_op_cb.ops) && (NULL != s_lwm2m_al_op_cb.ops->deconfig))
+    if ((NULL != handle)
+        && (NULL != s_lwm2m_al_op_cb.ops)
+        && (NULL != s_lwm2m_al_op_cb.ops->deconfig))
     {
-        ret = s_lwm2m_al_op_cb.ops->deconfig();
+        ret = s_lwm2m_al_op_cb.ops->deconfig(handle);
     }
 
     return ret;
 }
 
-int lwm2m_al_add_object(int object_id, int object_instance_id, uint16_t resource_id, void *param)
+int lwm2m_al_add_object(void *handle, int object_id, int object_instance_id, int resource_id, void *param)
 {
     int ret = LWM2M_ERR;
 
-    if((NULL != s_lwm2m_al_op_cb.ops) && (NULL != s_lwm2m_al_op_cb.ops->add_object))
+    if ((NULL != handle)
+        && (NULL != s_lwm2m_al_op_cb.ops)
+        && (NULL != s_lwm2m_al_op_cb.ops->add_object))
     {
-        ret = s_lwm2m_al_op_cb.ops->add_object(object_id, object_instance_id, resource_id, param);
+        ret = s_lwm2m_al_op_cb.ops->add_object(handle, object_id, object_instance_id, resource_id, param);
     }
 
     return ret;
 }
 
-int lwm2m_al_delete_object(int object_id)
+int lwm2m_al_delete_object(void *handle, int object_id)
 {
     int ret = LWM2M_ERR;
 
-    if((NULL != s_lwm2m_al_op_cb.ops) && (NULL != s_lwm2m_al_op_cb.ops->delete_object))
+    if ((NULL != handle)
+        && (NULL != s_lwm2m_al_op_cb.ops)
+        && (NULL != s_lwm2m_al_op_cb.ops->delete_object))
     {
-        ret = s_lwm2m_al_op_cb.ops->delete_object(object_id);
+        ret = s_lwm2m_al_op_cb.ops->delete_object(handle, object_id);
     }
 
     return ret;
 }
 
-int lwm2m_al_connect(void)
+int lwm2m_al_connect(void *handle)
 {
     int ret = LWM2M_ERR;
 
-    if((NULL != s_lwm2m_al_op_cb.ops) && (NULL != s_lwm2m_al_op_cb.ops->connect))
+    if ((NULL != handle)
+        && (NULL != s_lwm2m_al_op_cb.ops)
+        && (NULL != s_lwm2m_al_op_cb.ops->connect))
     {
-        ret = s_lwm2m_al_op_cb.ops->connect();
+        ret = s_lwm2m_al_op_cb.ops->connect(handle);
     }
 
     return ret;
 }
 
-int  lwm2m_al_disconnect(void)
+int  lwm2m_al_disconnect(void *handle)
 {
     int ret = LWM2M_ERR;
 
-    if((NULL != s_lwm2m_al_op_cb.ops) && (NULL != s_lwm2m_al_op_cb.ops->disconnect))
+    if ((NULL != handle)
+        && (NULL != s_lwm2m_al_op_cb.ops)
+        && (NULL != s_lwm2m_al_op_cb.ops->disconnect))
     {
-        ret = s_lwm2m_al_op_cb.ops->disconnect();
+        ret = s_lwm2m_al_op_cb.ops->disconnect(handle);
     }
 
     return ret;
 }
 
-int  lwm2m_al_send(lwm2m_al_send_param_t *send_param)
+int  lwm2m_al_send(void *handle, lwm2m_al_send_param_t *send_param)
 {
     int ret = LWM2M_ERR;
 
-    if((NULL != send_param) && (NULL != s_lwm2m_al_op_cb.ops) && (NULL != s_lwm2m_al_op_cb.ops->send))
+    if ((NULL != handle)
+        && (NULL != send_param)
+        && (NULL != s_lwm2m_al_op_cb.ops)
+        && (NULL != s_lwm2m_al_op_cb.ops->send))
     {
-        ret = s_lwm2m_al_op_cb.ops->send(send_param);
-    }
-
-    return ret;
-}
-
-int  lwm2m_al_receive(void)
-{
-    int ret = LWM2M_ERR;
-
-    if((NULL != s_lwm2m_al_op_cb.ops) && (NULL != s_lwm2m_al_op_cb.ops->recv))
-    {
-        ret = s_lwm2m_al_op_cb.ops->recv();
+        ret = s_lwm2m_al_op_cb.ops->send(handle, send_param);
     }
 
     return ret;
@@ -151,11 +155,10 @@ int lwm2m_al_install(lwm2m_al_op_t *op)
 {
     int ret = LWM2M_ERR;
 
-    if((NULL != op)&&(NULL == s_lwm2m_al_op_cb.ops))
+    if ((NULL != op) && (NULL == s_lwm2m_al_op_cb.ops))
     {
         s_lwm2m_al_op_cb.mem  = *op;
         s_lwm2m_al_op_cb.ops = &s_lwm2m_al_op_cb.mem;
-
         ret = 0;
     }
 
@@ -166,10 +169,9 @@ int lwm2m_al_uninstall(void)
 {
     int ret = LWM2M_ERR;
 
-    if(NULL != s_lwm2m_al_op_cb.ops)
+    if (NULL != s_lwm2m_al_op_cb.ops)
     {
         s_lwm2m_al_op_cb.ops = NULL;
-
         ret = 0;
     }
 

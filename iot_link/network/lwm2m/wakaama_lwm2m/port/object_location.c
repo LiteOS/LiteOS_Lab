@@ -106,79 +106,93 @@ static uint8_t prv_res2tlv(lwm2m_data_t *dataP)
 
     switch (dataP->id)     // location resourceId
     {
-    case RES_M_LATITUDE:
-        if (lwm2m_cmd_ioctl(LWM2M_GET_LATITUDE, (char *)&get_value, sizeof(float)) == LWM2M_OK)
-        {
-            lwm2m_data_encode_float(get_value, dataP);
-        }
-        else
-        {
-            ret = COAP_400_BAD_REQUEST;
-        }
-        break;
-    case RES_M_LONGITUDE:
-        if (lwm2m_cmd_ioctl(LWM2M_GET_LONGITUDE, (char *)&get_value, sizeof(float)) == LWM2M_OK)
-        {
-            lwm2m_data_encode_float(get_value, dataP);
-        }
-        else
-        {
-            ret = COAP_400_BAD_REQUEST;
-        }
-        break;
-    case RES_O_ALTITUDE:
-        if (lwm2m_cmd_ioctl(LWM2M_GET_ALTITUDE, (char *)&get_value, sizeof(float)) == LWM2M_OK)
-        {
-            lwm2m_data_encode_float(get_value, dataP);
-        }
-        else
-        {
-            ret = COAP_400_BAD_REQUEST;
-        }
-        break;
-    case RES_O_RADIUS:
-        if (lwm2m_cmd_ioctl(LWM2M_GET_RADIUS, (char *)&get_value, sizeof(float)) == LWM2M_OK)
-        {
-            lwm2m_data_encode_float(get_value, dataP);
-        }
-        else
-        {
-            ret = COAP_400_BAD_REQUEST;
-        }
-        break;
-    case RES_O_VELOCITY:
-        if (lwm2m_cmd_ioctl(LWM2M_GET_VELOCITY, (char *)&velocity, sizeof(velocity)) == LWM2M_OK)
-        {
-            lwm2m_data_encode_opaque(velocity.opaque, velocity.length, dataP);
-        }
-        else
-        {
-            ret = COAP_400_BAD_REQUEST;
-        }
-        break;
-    case RES_M_TIMESTAMP:
-        if (lwm2m_cmd_ioctl(LWM2M_GET_TIMESTAMP, (char *)&timestamp, sizeof(uint64_t)) == LWM2M_OK)
-        {
-            lwm2m_data_encode_float(timestamp, dataP);
-        }
-        else
-        {
-            ret = COAP_400_BAD_REQUEST;
-        }
-        break;
-    case RES_O_SPEED:
-        if (lwm2m_cmd_ioctl(LWM2M_GET_SPEED, (char *)&get_value, sizeof(float)) == LWM2M_OK)
-        {
-            lwm2m_data_encode_float(get_value, dataP);
-        }
-        else
-        {
-            ret = COAP_400_BAD_REQUEST;
-        }
-        break;
-    default:
-        ret = COAP_404_NOT_FOUND;
-        break;
+        case RES_M_LATITUDE:
+            if (LWM2M_OK == lwm2m_cmd_ioctl(LWM2M_GET_LATITUDE, (char *)&get_value, sizeof(float)))
+            {
+                lwm2m_data_encode_float(get_value, dataP);
+            }
+            else
+            {
+                ret = COAP_400_BAD_REQUEST;
+            }
+
+            break;
+
+        case RES_M_LONGITUDE:
+            if (LWM2M_OK == lwm2m_cmd_ioctl(LWM2M_GET_LONGITUDE, (char *)&get_value, sizeof(float)))
+            {
+                lwm2m_data_encode_float(get_value, dataP);
+            }
+            else
+            {
+                ret = COAP_400_BAD_REQUEST;
+            }
+
+            break;
+
+        case RES_O_ALTITUDE:
+            if (LWM2M_OK == lwm2m_cmd_ioctl(LWM2M_GET_ALTITUDE, (char *)&get_value, sizeof(float)))
+            {
+                lwm2m_data_encode_float(get_value, dataP);
+            }
+            else
+            {
+                ret = COAP_400_BAD_REQUEST;
+            }
+
+            break;
+
+        case RES_O_RADIUS:
+            if (LWM2M_OK == lwm2m_cmd_ioctl(LWM2M_GET_RADIUS, (char *)&get_value, sizeof(float)))
+            {
+                lwm2m_data_encode_float(get_value, dataP);
+            }
+            else
+            {
+                ret = COAP_400_BAD_REQUEST;
+            }
+
+            break;
+
+        case RES_O_VELOCITY:
+            if (LWM2M_OK == lwm2m_cmd_ioctl(LWM2M_GET_VELOCITY, (char *)&velocity, sizeof(velocity)))
+            {
+                lwm2m_data_encode_opaque(velocity.opaque, velocity.length, dataP);
+            }
+            else
+            {
+                ret = COAP_400_BAD_REQUEST;
+            }
+
+            break;
+
+        case RES_M_TIMESTAMP:
+            if (LWM2M_OK == lwm2m_cmd_ioctl(LWM2M_GET_TIMESTAMP, (char *)&timestamp, sizeof(uint64_t)))
+            {
+                lwm2m_data_encode_float(timestamp, dataP);
+            }
+            else
+            {
+                ret = COAP_400_BAD_REQUEST;
+            }
+
+            break;
+
+        case RES_O_SPEED:
+            if (LWM2M_OK == lwm2m_cmd_ioctl(LWM2M_GET_SPEED, (char *)&get_value, sizeof(float)))
+            {
+                lwm2m_data_encode_float(get_value, dataP);
+            }
+            else
+            {
+                ret = COAP_400_BAD_REQUEST;
+            }
+
+            break;
+
+        default:
+            ret = COAP_404_NOT_FOUND;
+            break;
     }
 
     return ret;
@@ -207,9 +221,9 @@ static uint8_t prv_location_read(uint16_t objInstId,
     uint8_t result = COAP_500_INTERNAL_SERVER_ERROR;
 
     // defined as single instance object!
-    if (objInstId != 0) return COAP_404_NOT_FOUND;
+    if (0 != objInstId) return COAP_404_NOT_FOUND;
 
-    if (*numDataP == 0)     // full object, readable resources!
+    if (0 == *numDataP)     // full object, readable resources!
     {
         uint16_t readResIds[] =
         {
@@ -221,10 +235,10 @@ static uint8_t prv_location_read(uint16_t objInstId,
             RES_M_TIMESTAMP,
             RES_O_SPEED
         }; // readable resources!
-
         *numDataP  = sizeof(readResIds) / sizeof(uint16_t);
         *tlvArrayP = lwm2m_data_new(*numDataP);
-        if (*tlvArrayP == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
+
+        if (NULL == *tlvArrayP) return COAP_500_INTERNAL_SERVER_ERROR;
 
         // init readable resource id's
         for (i = 0 ; i < *numDataP ; i++)
@@ -235,8 +249,9 @@ static uint8_t prv_location_read(uint16_t objInstId,
 
     for (i = 0 ; i < *numDataP ; i++)
     {
-        result = prv_res2tlv ((*tlvArrayP) + i);
-        if (result != COAP_205_CONTENT) break;
+        result = prv_res2tlv((*tlvArrayP) + i);
+
+        if (COAP_205_CONTENT != result) break;
     }
 
     return result;
@@ -251,30 +266,28 @@ void display_location_object(lwm2m_object_t *object)
     float radius = 0.0f;
     float speed = 0.0f;
     uint64_t timestamp = 0U;
-
     (void)lwm2m_cmd_ioctl(LWM2M_GET_LATITUDE, &latitude, sizeof(float));
     (void)lwm2m_cmd_ioctl(LWM2M_GET_LONGITUDE, &longitude, sizeof(float));
     (void)lwm2m_cmd_ioctl(LWM2M_GET_ALTITUDE, &altitude, sizeof(float));
     (void)lwm2m_cmd_ioctl(LWM2M_GET_RADIUS, &radius, sizeof(float));
     (void)lwm2m_cmd_ioctl(LWM2M_GET_SPEED, &speed, sizeof(float));
     (void)lwm2m_cmd_ioctl(LWM2M_GET_TIMESTAMP, &timestamp, sizeof(uint64_t));
-
     fprintf(stdout, "  /%u: Location object:\r\n", object->objID);
     fprintf(stdout, "    latitude: %.6f, longitude: %.6f, altitude: %.6f, radius: %.6f, timestamp: %lu, speed: %.6f\r\n",
             latitude, longitude, altitude, radius, timestamp, speed);
-
 #endif
 }
 
-int config_location_object(lwm2m_object_t *obj, int object_instance_id)
+int add_location_object_instance(lwm2m_object_t *obj, int object_instance_id)
 {
-    if (obj == NULL)
+    if (NULL == obj)
     {
         return LWM2M_ARG_INVALID;
     }
 
     // and its unique instance
     obj->instanceList = (lwm2m_list_t *)lwm2m_malloc(sizeof(lwm2m_list_t));
+
     if (NULL == obj->instanceList)
     {
         return LWM2M_MALLOC_FAILED;
@@ -282,13 +295,21 @@ int config_location_object(lwm2m_object_t *obj, int object_instance_id)
 
     memset(obj->instanceList, 0, sizeof(lwm2m_list_t));
     obj->instanceList->id = object_instance_id;
+    return LWM2M_OK;
+}
+
+int config_location_object(lwm2m_object_t *obj, void *param)
+{
+    if (NULL == obj)
+    {
+        return LWM2M_ARG_INVALID;
+    }
 
     // And the private function that will access the object.
     // Those function will be called when a read query is made by the server.
     // In fact the library don't need to know the resources of the object, only the server does.
     //
-    obj->readFunc    = prv_location_read;
-
+    obj->readFunc = prv_location_read;
     return LWM2M_OK;
 }
 

@@ -40,21 +40,21 @@
 
 struct lwm2m_fota_manager_tag_s
 {
-    char *pkg_uri;
-    lwm2m_fota_state_e state;
-    lwm2m_update_result_e update_result;
-    lwm2m_fota_idle_state_s idle_state;
-    lwm2m_fota_downloading_state_s downloading_state;
-    lwm2m_fota_downloaded_state_s downloaded_state;
-    lwm2m_fota_updating_state_s updating_state;
-    lwm2m_fota_state_s *current;
-    pack_storage_device_api_s *device;
-    lwm2m_context_t  *lwm2m_context;
-    uint32_t cookie;
-    bool wait_ack_flag;
-    lwm2m_fota_state_e rpt_state;
-    ota_opt_s ota_opt;
-    bool init_flag;
+    char                           *pkg_uri;
+    lwm2m_fota_state_e              state;
+    lwm2m_update_result_e           update_result;
+    lwm2m_fota_idle_state_s         idle_state;
+    lwm2m_fota_downloading_state_s  downloading_state;
+    lwm2m_fota_downloaded_state_s   downloaded_state;
+    lwm2m_fota_updating_state_s     updating_state;
+    lwm2m_fota_state_s             *current;
+    pack_storage_device_api_s      *device;
+    lwm2m_context_t                *lwm2m_context;
+    uint32_t                        cookie;
+    bool                            wait_ack_flag;
+    lwm2m_fota_state_e              rpt_state;
+    ota_opt_s                       ota_opt;
+    bool                            init_flag;
 };
 
 #define PULL_ONLY 0
@@ -97,32 +97,35 @@ int lwm2m_fota_manager_get_deliver_method(const lwm2m_fota_manager_s *thi)
 }
 int lwm2m_fota_manager_start_download(lwm2m_fota_manager_s *thi, const char *uri, uint32_t len)
 {
-
     ASSERT_THIS(return LWM2M_ARG_INVALID);
-    if(thi->state != thi->rpt_state)
+
+    if (thi->state != thi->rpt_state)
     {
         ATINY_LOG(LOG_ERR, "start download busy state %u rpt state %u",
                   thi->state, thi->rpt_state);
         return LWM2M_ERR;
     }
 
-    if(NULL == thi->current || uri == NULL)
+    if ((NULL == thi->current) || (NULL == uri))
     {
         ATINY_LOG(LOG_ERR, "null pointer");
         return LWM2M_ERR;
     }
 
-    if(thi->pkg_uri)
+    if (thi->pkg_uri)
     {
         osal_free(thi->pkg_uri);
         thi->pkg_uri = NULL;
     }
+
     thi->pkg_uri = osal_malloc(len + 1);
-    if(NULL == thi->pkg_uri)
+
+    if (NULL == thi->pkg_uri)
     {
         ATINY_LOG(LOG_ERR, "lwm2m_strdup fail");
         return LWM2M_ERR;
     }
+
     memcpy(thi->pkg_uri, uri, len);
     thi->pkg_uri[len] = '\0';
     ATINY_LOG(LOG_INFO, "start download");
@@ -132,14 +135,14 @@ int lwm2m_fota_manager_execute_update(lwm2m_fota_manager_s *thi)
 {
     ASSERT_THIS(return LWM2M_ARG_INVALID);
 
-    if(thi->state != thi->rpt_state)
+    if (thi->state != thi->rpt_state)
     {
         ATINY_LOG(LOG_ERR, "execute update busy state %u rpt state %u",
                   thi->state, thi->rpt_state);
         return LWM2M_ERR;
     }
 
-    if(NULL == thi->current)
+    if (NULL == thi->current)
     {
         ATINY_LOG(LOG_ERR, "current null pointer");
         return LWM2M_ERR;
@@ -153,14 +156,14 @@ int lwm2m_fota_manager_finish_download(lwm2m_fota_manager_s *thi, int result)
 {
     ASSERT_THIS(return LWM2M_ARG_INVALID);
 
-    if(thi->state != thi->rpt_state)
+    if (thi->state != thi->rpt_state)
     {
         ATINY_LOG(LOG_ERR, "finish download busy state %u rpt state %u",
                   thi->state, thi->rpt_state);
         return LWM2M_ERR;
     }
 
-    if(NULL == thi->current)
+    if (NULL == thi->current)
     {
         ATINY_LOG(LOG_ERR, "current null pointer");
         return LWM2M_ERR;
@@ -173,7 +176,7 @@ int lwm2m_fota_manager_repot_result(lwm2m_fota_manager_s *thi)
 {
     ASSERT_THIS(return LWM2M_ARG_INVALID);
 
-    if(NULL == thi->current)
+    if (NULL == thi->current)
     {
         ATINY_LOG(LOG_ERR, "current null pointer");
         return LWM2M_ERR;
@@ -187,14 +190,15 @@ int lwm2m_fota_manager_set_state(lwm2m_fota_manager_s *thi, lwm2m_fota_state_e s
 {
     ASSERT_THIS(return LWM2M_ARG_INVALID);
 
-    if(state > LWM2M_FOTA_UPDATING)
+    if (state > LWM2M_FOTA_UPDATING)
     {
         ATINY_LOG(LOG_ERR, "invalid download state %d", state);
         return LWM2M_ARG_INVALID;
     }
 
     ATINY_LOG(LOG_INFO, "download stat from %d to %d", thi->state, state);
-    if(thi->state != state)
+
+    if (thi->state != state)
     {
         /*lint -e614 */
         lwm2m_fota_state_s *states[LWM2M_FOTA_UPDATING + 1];
@@ -207,6 +211,7 @@ int lwm2m_fota_manager_set_state(lwm2m_fota_manager_s *thi, lwm2m_fota_state_e s
         thi->wait_ack_flag = false;
         /*lint +e614 */
     }
+
     thi->rpt_state = state;
     lwm2m_event_notify(LWM2M_FOTA_STATE, (const char *)&thi->state, sizeof(thi->state));
     return LWM2M_OK;
@@ -217,7 +222,6 @@ int lwm2m_fota_manager_rpt_state(lwm2m_fota_manager_s *thi, lwm2m_fota_state_e r
     lwm2m_uri_t uri;
     const char *uri_str = "/5/0/3";
     ASSERT_THIS(return LWM2M_ARG_INVALID);
-
     lwm2m_fota_manager_save_rpt_state(thi, rpt_state);
     memset((void *)&uri, 0, sizeof(uri));
     (void)lwm2m_stringToUri(uri_str, strlen(uri_str), &uri);
@@ -227,9 +231,7 @@ int lwm2m_fota_manager_rpt_state(lwm2m_fota_manager_s *thi, lwm2m_fota_state_e r
 
 void lwm2m_fota_manager_save_rpt_state(lwm2m_fota_manager_s *thi, lwm2m_fota_state_e rpt_state)
 {
-
     ASSERT_THIS(return);
-
     ATINY_LOG(LOG_INFO, "rpt download state %d", rpt_state);
     thi->rpt_state = rpt_state;
     thi->wait_ack_flag = true;
@@ -237,27 +239,30 @@ void lwm2m_fota_manager_save_rpt_state(lwm2m_fota_manager_s *thi, lwm2m_fota_sta
 }
 
 
-static int lwm2m_fota_manager_flag_read(void* buf, int32_t len)
+static int lwm2m_fota_manager_flag_read(void *buf, int32_t len)
 {
     int (*read_flash)(ota_flash_type_e type, void *buf, int32_t len, uint32_t location) =
-                lwm2m_fota_manager_get_instance()->ota_opt.read_flash;
+        lwm2m_fota_manager_get_instance()->ota_opt.read_flash;
+
     if (read_flash)
     {
         return read_flash(OTA_UPDATE_INFO, buf, len, 0);
     }
+
     ATINY_LOG(LOG_ERR, "write_flash null");
     return -1;
 }
 
-static int lwm2m_fota_manager_flag_write(const void* buf, int32_t len)
+static int lwm2m_fota_manager_flag_write(const void *buf, int32_t len)
 {
     int (*write_flash)(ota_flash_type_e type, const void *buf, int32_t len, uint32_t location) =
-                lwm2m_fota_manager_get_instance()->ota_opt.write_flash;
+        lwm2m_fota_manager_get_instance()->ota_opt.write_flash;
 
     if (write_flash)
     {
         return write_flash(OTA_UPDATE_INFO, buf, len, 0);
     }
+
     ATINY_LOG(LOG_ERR, "write_flash null");
     return -1;
 }
@@ -266,39 +271,36 @@ static int lwm2m_fota_manager_flag_write(const void* buf, int32_t len)
 int lwm2m_fota_manager_set_storage_device(lwm2m_fota_manager_s *thi)
 {
     int ret;
-//    flag_op_s flag_op;
-//    pack_params_s pack_param;
-
+    //    flag_op_s flag_op;
+    //    pack_params_s pack_param;
     ASSERT_THIS(return LWM2M_ARG_INVALID);
+    ret = lwm2m_cmd_ioctl(LWM2M_GET_OTA_OPT, (char *)&thi->ota_opt, sizeof(thi->ota_opt));
 
-    ret = lwm2m_cmd_ioctl(LWM2M_GET_OTA_OPT, (char * )&thi->ota_opt, sizeof(thi->ota_opt));
-    if (ret != LWM2M_OK)
+    if (LWM2M_OK != ret)
     {
         ATINY_LOG(LOG_FATAL, "lwm2m_cmd_ioctl fail");
         return ret;
     }
 
-//    flag_op.func_flag_read = atiny_fota_manager_flag_read;
-//    flag_op.func_flag_write = atiny_fota_manager_flag_write;
-//    (void)flag_init(&flag_op);
-//    ret = flag_upgrade_init();
-//    if (ret != ATINY_OK)
-//    {
-//        ATINY_LOG(LOG_FATAL, "flag_upgrade_init fail");
-//        return ret;
-//    }
-
-//    memcpy(&pack_param.ota_opt, &thi->ota_opt, sizeof(pack_param.ota_opt));
-//    pack_param.malloc = osal_malloc;
-//    pack_param.free = osal_free;
-//    pack_param.printf = printf;
-//    ret = pack_init_device(&pack_param);
-//    if (ret != ATINY_OK)
-//    {
-//        ATINY_LOG(LOG_FATAL, "pack_init_device fail");
-//        return ret;
-//    }
-
+    //    flag_op.func_flag_read = atiny_fota_manager_flag_read;
+    //    flag_op.func_flag_write = atiny_fota_manager_flag_write;
+    //    (void)flag_init(&flag_op);
+    //    ret = flag_upgrade_init();
+    //    if (ret != ATINY_OK)
+    //    {
+    //        ATINY_LOG(LOG_FATAL, "flag_upgrade_init fail");
+    //        return ret;
+    //    }
+    //    memcpy(&pack_param.ota_opt, &thi->ota_opt, sizeof(pack_param.ota_opt));
+    //    pack_param.malloc = osal_malloc;
+    //    pack_param.free = osal_free;
+    //    pack_param.printf = printf;
+    //    ret = pack_init_device(&pack_param);
+    //    if (ret != ATINY_OK)
+    //    {
+    //        ATINY_LOG(LOG_FATAL, "pack_init_device fail");
+    //        return ret;
+    //    }
     thi->device = pack_get_device();
     return lwm2m_fota_idle_state_int_report_result(&thi->idle_state);
 }
@@ -312,7 +314,7 @@ pack_storage_device_api_s *lwm2m_fota_manager_get_storage_device(lwm2m_fota_mana
 
 void lwm2m_fota_manager_update_notify(firmware_update_rst_e rst, void *param)
 {
-    lwm2m_fota_manager_s *thi = ( lwm2m_fota_manager_s *)param;
+    lwm2m_fota_manager_s *thi = (lwm2m_fota_manager_s *)param;
     (void)lwm2m_fota_manager_finish_download(thi, rst);
 }
 void lwm2m_fota_manager_init(lwm2m_fota_manager_s *thi)
@@ -332,10 +334,11 @@ void lwm2m_fota_manager_destroy(lwm2m_fota_manager_s *thi)
 {
     ASSERT_THIS(return);
 
-    if(thi->pkg_uri)
+    if (thi->pkg_uri)
     {
         osal_free(thi->pkg_uri);
     }
+
     /*lint -e668 */
     memset(thi, 0, sizeof(*thi));
     /*lint +e668 */
@@ -357,7 +360,7 @@ static int lwm2m_fota_manager_rcv_notify_ack(lwm2m_fota_manager_s *thi, data_sen
 {
     ASSERT_THIS(return LWM2M_ARG_INVALID);
 
-    if(NULL == thi->current)
+    if (NULL == thi->current)
     {
         ATINY_LOG(LOG_ERR, "current null pointer");
         return LWM2M_ERR;
@@ -368,21 +371,22 @@ static int lwm2m_fota_manager_rcv_notify_ack(lwm2m_fota_manager_s *thi, data_sen
 
 static void lwm2m_fota_manager_notify_ack_callback(lwm2m_report_type_e type, int cookie, data_send_status_e status)
 {
-    ATINY_LOG(LOG_INFO, "download state ack type %d rev cookie %u expect cookie %u status %d, rpt stat %d", type,  (uint32_t)cookie, lwm2m_fota_manager_get_instance()->cookie,  status,
+    ATINY_LOG(LOG_INFO, "download state ack type %d rev cookie %u expect cookie %u status %d, rpt stat %d", type, (uint32_t)cookie, lwm2m_fota_manager_get_instance()->cookie,  status,
               lwm2m_fota_manager_get_instance()->rpt_state);
-    if((lwm2m_fota_manager_get_instance()->wait_ack_flag) && lwm2m_fota_manager_get_instance()->cookie == cookie)
+
+    if ((lwm2m_fota_manager_get_instance()->wait_ack_flag) && lwm2m_fota_manager_get_instance()->cookie == cookie)
     {
         (void)lwm2m_fota_manager_rcv_notify_ack(lwm2m_fota_manager_get_instance(), status);
         lwm2m_fota_manager_get_instance()->wait_ack_flag = false;
     }
-
 }
 
 
 void lwm2m_fota_manager_get_data_cfg(const lwm2m_fota_manager_s *thi, lwm2m_data_cfg_t *data_cfg)
 {
     ASSERT_THIS(return);
-    if(NULL == data_cfg)
+
+    if (NULL == data_cfg)
     {
         ATINY_LOG(LOG_ERR, "current null pointer");
         return;
@@ -400,7 +404,8 @@ static lwm2m_fota_manager_s g_fota_manager;
 lwm2m_fota_manager_s *lwm2m_fota_manager_get_instance(void)
 {
     lwm2m_fota_manager_s *manager = &g_fota_manager;
-    if(manager->init_flag)
+
+    if (manager->init_flag)
     {
         return manager;
     }

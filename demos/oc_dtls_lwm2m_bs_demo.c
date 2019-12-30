@@ -155,7 +155,7 @@ static int app_cmd_task_entry()
                         replymsg.curstats[0] = 'O';
                         replymsg.curstats[1] = 'N';
                         replymsg.curstats[2] = ' ';
-                        oc_lwm2m_report(s_lwm2m_handle,(char *)&replymsg,sizeof(replymsg),1000, OC_APP_DATA);    ///< report cmd reply message
+                        oc_lwm2m_report(s_lwm2m_handle,(char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
                     }
 
                     else if (led_cmd->led[0] == 'O' && led_cmd->led[1] == 'F' && led_cmd->led[2] == 'F')
@@ -169,7 +169,7 @@ static int app_cmd_task_entry()
                         replymsg.curstats[0] = 'O';
                         replymsg.curstats[1] = 'F';
                         replymsg.curstats[2] = 'F';
-                        oc_lwm2m_report(s_lwm2m_handle,(char *)&replymsg,sizeof(replymsg),1000, OC_APP_DATA);    ///< report cmd reply message
+                        oc_lwm2m_report(s_lwm2m_handle,(char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
                     }
                     else
                     {
@@ -212,7 +212,11 @@ static int app_report_task_entry()
     oc_param.boot_mode = en_oc_boot_strap_mode_client_initialize;
     oc_param.rcv_func = app_msg_deal;
 
-    s_lwm2m_handle = oc_lwm2m_config(&oc_param);
+    ret = oc_lwm2m_config(&s_lwm2m_handle, &oc_param);
+    if (0 != ret)
+    {
+        return ret;
+    }
 
     if(NULL != s_lwm2m_handle)   //success ,so we could receive and send
     {
@@ -225,7 +229,7 @@ static int app_report_task_entry()
 
             light.msgid = cn_app_light;
             light.intensity = htons(lux);
-            oc_lwm2m_report(s_lwm2m_handle,(char *)&light,sizeof(light),1000, OC_APP_DATA); ///< report the light message
+            oc_lwm2m_report(s_lwm2m_handle,(char *)&light,sizeof(light),1000); ///< report the light message
             osal_task_sleep(10*1000);
         }
     }

@@ -40,7 +40,7 @@ typedef enum firmware_update_rst
     FIRMWARE_UPDATE_RST_SUCCESS = 0,
     FIRMWARE_UPDATE_RST_FAILED,
     FIRMWARE_UPDATE_RST_MAX
-}firmware_update_rst_e;
+} firmware_update_rst_e;
 
 typedef void (*firmware_update_notify)(firmware_update_rst_e rst, void *param);
 

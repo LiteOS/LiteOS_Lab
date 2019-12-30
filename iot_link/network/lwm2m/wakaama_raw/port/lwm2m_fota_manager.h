@@ -95,10 +95,10 @@ struct lwm2m_fota_manager_tag_s;
 typedef struct lwm2m_fota_manager_tag_s lwm2m_fota_manager_s;
 
 #ifdef __cplusplus
-    extern "C" {
+extern "C" {
 #endif
 
-char * lwm2m_fota_manager_get_pkg_uri(const lwm2m_fota_manager_s *thi);
+char *lwm2m_fota_manager_get_pkg_uri(const lwm2m_fota_manager_s *thi);
 int lwm2m_fota_manager_get_state(const lwm2m_fota_manager_s *thi);
 int lwm2m_fota_manager_get_update_result(const lwm2m_fota_manager_s *thi);
 void lwm2m_fota_manager_set_update_result(lwm2m_fota_manager_s *thi, lwm2m_update_result_e result);
@@ -109,8 +109,8 @@ int lwm2m_fota_manager_repot_result(lwm2m_fota_manager_s *thi);
 int lwm2m_fota_manager_set_state(lwm2m_fota_manager_s *thi, lwm2m_fota_state_e state);
 int lwm2m_fota_manager_set_storage_device(lwm2m_fota_manager_s *thi);
 pack_storage_device_api_s *lwm2m_fota_manager_get_storage_device(lwm2m_fota_manager_s *thi);
-int lwm2m_fota_manager_set_lwm2m_context(lwm2m_fota_manager_s *thi, lwm2m_context_t*  lwm2m_context);
-lwm2m_context_t* lwm2m_fota_manager_get_lwm2m_context(lwm2m_fota_manager_s *thi);
+int lwm2m_fota_manager_set_lwm2m_context(lwm2m_fota_manager_s *thi, lwm2m_context_t  *lwm2m_context);
+lwm2m_context_t *lwm2m_fota_manager_get_lwm2m_context(lwm2m_fota_manager_s *thi);
 void lwm2m_fota_manager_get_data_cfg(const lwm2m_fota_manager_s *thi, lwm2m_data_cfg_t *data_cfg);
 
 void lwm2m_fota_manager_destroy(lwm2m_fota_manager_s *thi);
@@ -122,7 +122,7 @@ lwm2m_fota_state_e lwm2m_fota_manager_get_rpt_state(const lwm2m_fota_manager_s *
 
 
 
-lwm2m_fota_manager_s * lwm2m_fota_manager_get_instance(void);
+lwm2m_fota_manager_s *lwm2m_fota_manager_get_instance(void);
 
 #ifdef __cplusplus
 }

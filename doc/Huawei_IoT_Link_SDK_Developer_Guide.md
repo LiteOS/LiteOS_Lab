@@ -475,7 +475,7 @@ OC AL提供的基于LwM2M协议端云互通API如下：
 |int oc_lwm2m_unregister(const char *name);|取消注册|
 |int oc_lwm2m_init();|OC LwM2M初始化|
 |void* oc_lwm2m_config(oc_config_param_t *param);|设置华为OC LwM2M协议连接参数，等待连接建立并保持，如果连接成功，返回非空句柄。|
-|int oc_lwm2m_report(void *context,char *buf, int len,int timeout, en_oc_report_type_e report_type);|发送LwM2M数据到华为OC|
+|int oc_lwm2m_report(void *context,char *buf, int len,int timeout);|发送LwM2M数据到华为OC|
 |int oc_lwm2m_deconfig(void *context);|断开连接|
 
 #### 5.1.2.3 OC-CoAP

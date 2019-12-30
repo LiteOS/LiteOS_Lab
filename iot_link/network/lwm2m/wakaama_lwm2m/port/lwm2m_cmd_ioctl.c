@@ -34,16 +34,19 @@
 
 #include "lwm2m_common.h"
 #ifdef CONFIG_FEATURE_FOTA
-#include "ota/ota_api.h"
-#include "ota_port.h"
+    #include "ota/ota_api.h"
+    #include "ota_port.h"
 #endif
 
 #include <osal.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
+#include <stdarg.h>
+
 
 #define LWM2M_POWER_VOLTAGE     3800
 #define LWM2M_BATTERY_LEVEL     90
@@ -68,9 +71,37 @@ typedef enum
     EN_LWM2M_MSG_APPDISCOVER,
     EN_LWM2M_MSG_APPEXECUTE,
     EN_LWM2M_MSG_SERVERREBS,    ///<we  have received the rebootstrap command from the platform
-}en_lwm2m_msg_t;
+} en_lwm2m_msg_t;
 
-extern int lwm2m_receive(int type,char *msg, int len);
+fn_lwm2m_msg_deal s_default_dealer = NULL;
+
+int lwm2m_cmd_register_dealer(fn_lwm2m_msg_deal dealer)
+{
+    s_default_dealer = dealer;
+    return 0;
+}
+
+static int lwm2m_cmd_default(char *msg, int len, va_list valist)
+{
+    int op = va_arg(valist, int);
+    const char *uri = va_arg(valist, const char *);
+
+    if (NULL == uri)
+    {
+        return -1;
+    }
+
+    if (s_default_dealer)
+    {
+        return s_default_dealer(op, uri, msg, len);
+    }
+    else
+    {
+        printf("op: %d, uri: %s\n", op, uri);
+    }
+
+    return 0;
+}
 
 int lwm2m_get_manufacturer(char *manu, int len)
 {
@@ -137,9 +168,8 @@ int lwm2m_get_baterry_level(int *voltage)
 int lwm2m_get_memory_free(int *voltage)
 {
     int tmp;
-//    (void)atiny_random(&tmp, sizeof(tmp));
+    //    (void)atiny_random(&tmp, sizeof(tmp));
     link_random(&tmp, sizeof(tmp));
-
     tmp %= 30;
     *voltage = LWM2M_MEMORY_FREE + tmp;
     return LWM2M_OK;
@@ -178,10 +208,11 @@ static char g_UTC_offset[UTC_OFFSET_MAX_LEN] = "+01:00";
 
 int lwm2m_get_UTC_offset(char *offset, int len)
 {
-    if(len > strlen(g_UTC_offset) + 1)
+    if (len > strlen(g_UTC_offset) + 1)
     {
         (void)snprintf(offset, len, g_UTC_offset);
     }
+
     return LWM2M_OK;
 }
 
@@ -196,10 +227,11 @@ static char g_timezone[TIMEZONE_MAXLEN] = "Europe/Berlin";
 
 int lwm2m_get_timezone(char *timezone, int len)
 {
-    if(len > strlen(g_timezone) + 1)
+    if (len > strlen(g_timezone) + 1)
     {
         (void)snprintf(timezone, len, g_timezone);
     }
+
     return LWM2M_OK;
 }
 
@@ -264,6 +296,7 @@ int lwm2m_get_link_utilization(int *utilization)
     return LWM2M_OK;
 }
 
+/*
 int lwm2m_app_write(void *msg, int len)
 {
     (void)printf("write num19 object success\r\n");
@@ -283,7 +316,7 @@ int lwm2m_server_bootrigger(void *msg, int len)
     (void)printf("SERVER TRIGGERE BOOTSTRAP\r\n");
     lwm2m_receive(EN_LWM2M_MSG_SERVERREBS,msg,len);
     return LWM2M_OK;
-}
+}*/
 
 int lwm2m_update_psk(char *psk_id, int len)
 {
@@ -342,14 +375,12 @@ void location_get_velocity(lwm2m_velocity_s *velocity,
 {
     uint8_t tmp[VELOCITY_OCTETS];
     int copy_len;
-
     tmp[0] = HORIZONTAL_VELOCITY_WITH_UNCERTAINTY << 4;
     tmp[0] |= (bearing & 0x100) >> 8;
     tmp[1] = (bearing & 0xff);
     tmp[2] = horizontal_speed >> 8;
     tmp[3] = horizontal_speed & 0xff;
     tmp[4] = speed_uncertainty;
-
     copy_len = MAX_VELOCITY_LEN > sizeof(tmp) ? sizeof(tmp) : MAX_VELOCITY_LEN;
     memcpy(velocity->opaque, tmp, copy_len);
     velocity->length = copy_len;
@@ -361,140 +392,182 @@ int lwm2m_get_velocity(lwm2m_velocity_s *velocity)
     return LWM2M_OK;
 }
 
-int lwm2m_cmd_ioctl(lwm2m_cmd_e cmd, char *arg, int len)
+int lwm2m_cmd_ioctl(lwm2m_cmd_e cmd, char *arg, int len, ...)
 {
     int result = LWM2M_OK;
-    switch(cmd)
-    {
-    case LWM2M_GET_MANUFACTURER:
-        result = lwm2m_get_manufacturer(arg, len);
-        break;
-    case LWM2M_GET_MODEL_NUMBER:
-        result = lwm2m_get_model_number(arg, len);
-        break;
-    case LWM2M_GET_SERIAL_NUMBER:
-        result = lwm2m_get_serial_number(arg, len);
-        break;
-    case LWM2M_GET_FIRMWARE_VER:
-        result = lwm2m_get_firmware_ver(arg, len);
-        break;
-    case LWM2M_DO_DEV_REBOOT:
-        result = lwm2m_do_dev_reboot();
-        break;
-    case LWM2M_DO_FACTORY_RESET:
-        result = lwm2m_do_factory_reset();
-        break;
-    case LWM2M_GET_POWER_SOURCE:
-        result = lwm2m_get_power_source((int *)arg);
-        break;
-    case LWM2M_GET_SOURCE_VOLTAGE:
-        result = lwm2m_get_source_voltage((int *)arg);
-        break;
-    case LWM2M_GET_POWER_CURRENT:
-        result = lwm2m_get_power_current((int *)arg);
-        break;
-    case LWM2M_GET_BATERRY_LEVEL:
-        result = lwm2m_get_baterry_level((int *)arg);
-        break;
-    case LWM2M_GET_MEMORY_FREE:
-        result = lwm2m_get_memory_free((int *)arg);
-        break;
-    case LWM2M_GET_DEV_ERR:
-        result = lwm2m_get_dev_err((int *)arg);
-        break;
-    case LWM2M_DO_RESET_DEV_ERR:
-        result = lwm2m_do_reset_dev_err();
-        break;
-    case LWM2M_GET_CURRENT_TIME:
-        result = lwm2m_get_current_time((int64_t *)arg);
-        break;
-    case LWM2M_SET_CURRENT_TIME:
-        result = lwm2m_set_current_time((const int64_t *)arg);
-        break;
-    case LWM2M_GET_UTC_OFFSET:
-        result = lwm2m_get_UTC_offset(arg, len);
-        break;
-    case LWM2M_SET_UTC_OFFSET:
-        result = lwm2m_set_UTC_offset(arg, len);
-        break;
-    case LWM2M_GET_TIMEZONE:
-        result = lwm2m_get_timezone(arg, len);
-        break;
-    case LWM2M_SET_TIMEZONE:
-        result = lwm2m_set_timezone(arg, len);
-        break;
-    case LWM2M_GET_BINDING_MODES:
-        result = lwm2m_get_bind_mode(arg, len);
-        break;
-    case LWM2M_GET_FIRMWARE_STATE:
-        result = lwm2m_get_firmware_state((int *)arg);
-        break;
-    case LWM2M_GET_NETWORK_BEARER:
-        result = lwm2m_get_network_bearer((int *)arg);
-        break;
-    case LWM2M_GET_SIGNAL_STRENGTH:
-        result = lwm2m_get_signal_strength((int *)arg);
-        break;
-    case LWM2M_GET_CELL_ID:
-        result = lwm2m_get_cell_id((long *)arg);
-        break;
-    case LWM2M_GET_LINK_QUALITY:
-        result = lwm2m_get_link_quality((int *)arg);
-        break;
-    case LWM2M_GET_LINK_UTILIZATION:
-        result = lwm2m_get_link_utilization((int *)arg);
-        break;
-    case LWM2M_WRITE_APP_DATA:
-        result = lwm2m_app_write((int *)arg, len);
-        break;
-    case LWM2M_EXECUTE_APP_DATA:
-        result = lwm2m_app_execute((int *)arg, len);
-        break;
-    case LWM2M_UPDATE_PSK:
-        result = lwm2m_update_psk(arg, len);
-        break;
-    case LWM2M_GET_LATITUDE:
-        result = lwm2m_get_latitude((float *)arg);
-        break;
-    case LWM2M_GET_LONGITUDE:
-        result = lwm2m_get_longitude((float *)arg);
-        break;
-    case LWM2M_GET_ALTITUDE:
-        result = lwm2m_get_altitude((float *)arg);
-        break;
-    case LWM2M_GET_RADIUS:
-        result = lwm2m_get_radius((float *)arg);
-        break;
-    case LWM2M_GET_SPEED:
-        result = lwm2m_get_speed((float *)arg);
-        break;
-    case LWM2M_GET_TIMESTAMP:
-        result = lwm2m_get_timestamp((uint64_t *)arg);
-        break;
-    case LWM2M_GET_VELOCITY:
-        result = lwm2m_get_velocity((lwm2m_velocity_s *)arg);
-        break;
+    va_list valist;
 
+    switch (cmd)
+    {
+        case LWM2M_GET_MANUFACTURER:
+            result = lwm2m_get_manufacturer(arg, len);
+            break;
+
+        case LWM2M_GET_MODEL_NUMBER:
+            result = lwm2m_get_model_number(arg, len);
+            break;
+
+        case LWM2M_GET_SERIAL_NUMBER:
+            result = lwm2m_get_serial_number(arg, len);
+            break;
+
+        case LWM2M_GET_FIRMWARE_VER:
+            result = lwm2m_get_firmware_ver(arg, len);
+            break;
+
+        case LWM2M_DO_DEV_REBOOT:
+            result = lwm2m_do_dev_reboot();
+            break;
+
+        case LWM2M_DO_FACTORY_RESET:
+            result = lwm2m_do_factory_reset();
+            break;
+
+        case LWM2M_GET_POWER_SOURCE:
+            result = lwm2m_get_power_source((int *)arg);
+            break;
+
+        case LWM2M_GET_SOURCE_VOLTAGE:
+            result = lwm2m_get_source_voltage((int *)arg);
+            break;
+
+        case LWM2M_GET_POWER_CURRENT:
+            result = lwm2m_get_power_current((int *)arg);
+            break;
+
+        case LWM2M_GET_BATERRY_LEVEL:
+            result = lwm2m_get_baterry_level((int *)arg);
+            break;
+
+        case LWM2M_GET_MEMORY_FREE:
+            result = lwm2m_get_memory_free((int *)arg);
+            break;
+
+        case LWM2M_GET_DEV_ERR:
+            result = lwm2m_get_dev_err((int *)arg);
+            break;
+
+        case LWM2M_DO_RESET_DEV_ERR:
+            result = lwm2m_do_reset_dev_err();
+            break;
+
+        case LWM2M_GET_CURRENT_TIME:
+            result = lwm2m_get_current_time((int64_t *)arg);
+            break;
+
+        case LWM2M_SET_CURRENT_TIME:
+            result = lwm2m_set_current_time((const int64_t *)arg);
+            break;
+
+        case LWM2M_GET_UTC_OFFSET:
+            result = lwm2m_get_UTC_offset(arg, len);
+            break;
+
+        case LWM2M_SET_UTC_OFFSET:
+            result = lwm2m_set_UTC_offset(arg, len);
+            break;
+
+        case LWM2M_GET_TIMEZONE:
+            result = lwm2m_get_timezone(arg, len);
+            break;
+
+        case LWM2M_SET_TIMEZONE:
+            result = lwm2m_set_timezone(arg, len);
+            break;
+
+        case LWM2M_GET_BINDING_MODES:
+            result = lwm2m_get_bind_mode(arg, len);
+            break;
+
+        case LWM2M_GET_FIRMWARE_STATE:
+            result = lwm2m_get_firmware_state((int *)arg);
+            break;
+
+        case LWM2M_GET_NETWORK_BEARER:
+            result = lwm2m_get_network_bearer((int *)arg);
+            break;
+
+        case LWM2M_GET_SIGNAL_STRENGTH:
+            result = lwm2m_get_signal_strength((int *)arg);
+            break;
+
+        case LWM2M_GET_CELL_ID:
+            result = lwm2m_get_cell_id((long *)arg);
+            break;
+
+        case LWM2M_GET_LINK_QUALITY:
+            result = lwm2m_get_link_quality((int *)arg);
+            break;
+
+        case LWM2M_GET_LINK_UTILIZATION:
+            result = lwm2m_get_link_utilization((int *)arg);
+            break;
+
+        /*
+        case LWM2M_WRITE_APP_DATA:
+            result = lwm2m_app_write((int *)arg, len);
+            break;
+        case LWM2M_EXECUTE_APP_DATA:
+            result = lwm2m_app_execute((int *)arg, len);
+            break;
+        */
+        case LWM2M_UPDATE_PSK:
+            result = lwm2m_update_psk(arg, len);
+            break;
+
+        case LWM2M_GET_LATITUDE:
+            result = lwm2m_get_latitude((float *)arg);
+            break;
+
+        case LWM2M_GET_LONGITUDE:
+            result = lwm2m_get_longitude((float *)arg);
+            break;
+
+        case LWM2M_GET_ALTITUDE:
+            result = lwm2m_get_altitude((float *)arg);
+            break;
+
+        case LWM2M_GET_RADIUS:
+            result = lwm2m_get_radius((float *)arg);
+            break;
+
+        case LWM2M_GET_SPEED:
+            result = lwm2m_get_speed((float *)arg);
+            break;
+
+        case LWM2M_GET_TIMESTAMP:
+            result = lwm2m_get_timestamp((uint64_t *)arg);
+            break;
+
+        case LWM2M_GET_VELOCITY:
+            result = lwm2m_get_velocity((lwm2m_velocity_s *)arg);
+            break;
 #ifdef CONFIG_FEATURE_FOTA
-    case LWM2M_GET_OTA_OPT:
-    {
-        ota_opt_s *opt = (ota_opt_s *)arg;
-        hal_get_ota_opt(opt);
-        opt->key.rsa_N = "C94BECB7BCBFF459B9A71F12C3CC0603B11F0D3A366A226FD3E73D453F96EFBBCD4DFED6D9F77FD78C3AB1805E1BD3858131ACB5303F61AF524F43971B4D429CB847905E68935C1748D0096C1A09DD539CE74857F9FDF0B0EA61574C5D76BD9A67681AC6A9DB1BB22F17120B1DBF3E32633DCE34F5446F52DD7335671AC3A1F21DC557FA4CE9A4E0E3E99FED33A0BAA1C6F6EE53EDD742284D6582B51E4BF019787B8C33C2F2A095BEED11D6FE68611BD00825AF97DB985C62C3AE0DC69BD7D0118E6D620B52AFD514AD5BFA8BAB998332213D7DBF5C98DC86CB8D4F98A416802B892B8D6BEE5D55B7E688334B281E4BEDDB11BD7B374355C5919BA5A9A1C91F";
-        opt->key.rsa_E = "10001";
-        result = LWM2M_OK;
-        break;
-    }
+
+        case LWM2M_GET_OTA_OPT:
+        {
+            ota_opt_s *opt = (ota_opt_s *)arg;
+            hal_get_ota_opt(opt);
+            opt->key.rsa_N = "C94BECB7BCBFF459B9A71F12C3CC0603B11F0D3A366A226FD3E73D453F96EFBBCD4DFED6D9F77FD78C3AB1805E1BD3858131ACB5303F61AF524F43971B4D429CB847905E68935C1748D0096C1A09DD539CE74857F9FDF0B0EA61574C5D76BD9A67681AC6A9DB1BB22F17120B1DBF3E32633DCE34F5446F52DD7335671AC3A1F21DC557FA4CE9A4E0E3E99FED33A0BAA1C6F6EE53EDD742284D6582B51E4BF019787B8C33C2F2A095BEED11D6FE68611BD00825AF97DB985C62C3AE0DC69BD7D0118E6D620B52AFD514AD5BFA8BAB998332213D7DBF5C98DC86CB8D4F98A416802B892B8D6BEE5D55B7E688334B281E4BEDDB11BD7B374355C5919BA5A9A1C91F";
+            opt->key.rsa_E = "10001";
+            result = LWM2M_OK;
+            break;
+        }
+
 #endif
+        /*
+        case LWM2M_CMD_TRIGER_SERVER_INITIATED_BS:
+            lwm2m_server_bootrigger(arg, len);
+            result = LWM2M_OK;
+            break;*/
 
-    case LWM2M_TRIGER_SERVER_INITIATED_BS:
-        lwm2m_server_bootrigger(arg,len);
-        result = LWM2M_OK;
-        break;
-
-    default:
-        break;
+        default:
+            va_start(valist, len);
+            result = lwm2m_cmd_default(arg, len, valist);
+            va_end(valist);
+            break;
     }
+
     return result;
 }
 

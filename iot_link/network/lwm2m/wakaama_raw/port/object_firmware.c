@@ -99,107 +99,115 @@ static uint8_t prv_firmware_read(uint16_t instanceId,
     uint8_t result;
 
     // this is a single instance object
-    if (instanceId != 0)
+    if (0 != instanceId)
     {
         return COAP_404_NOT_FOUND;
     }
 
     // is the server asking for the full object ?
-    if (*numDataP == 0)
+    if (0 == *numDataP)
     {
         uint16_t resources[] = {RES_M_PACKAGE_URI, RES_M_STATE,
                                 RES_M_UPDATE_RESULT, RES_O_FIRMWARE_UPDATE_DELIVER_METHOD
                                };
         *dataArrayP = lwm2m_data_new(array_size(resources));
-        if (*dataArrayP == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
+
+        if (NULL == *dataArrayP) return COAP_500_INTERNAL_SERVER_ERROR;
+
         *numDataP = array_size(resources);
-        for(i = 0 ; i < array_size(resources); ++i)
+
+        for (i = 0 ; i < array_size(resources); ++i)
         {
             (*dataArrayP)[i].id = resources[i];
         }
     }
 
     i = 0;
+
     do
     {
         switch ((*dataArrayP)[i].id)
         {
-        case RES_M_PACKAGE:
-            result = COAP_405_METHOD_NOT_ALLOWED;
-            break;
-        case RES_M_PACKAGE_URI:
-        {
-#ifdef CONFIG_FEATURE_FOTA
-            const char *pkg_uri;
-            pkg_uri = lwm2m_fota_manager_get_pkg_uri(lwm2m_fota_manager_get_instance());
-            if(pkg_uri == NULL)
+            case RES_M_PACKAGE:
+                result = COAP_405_METHOD_NOT_ALLOWED;
+                break;
+
+            case RES_M_PACKAGE_URI:
             {
-                pkg_uri = "";
+#ifdef CONFIG_FEATURE_FOTA
+                const char *pkg_uri;
+                pkg_uri = lwm2m_fota_manager_get_pkg_uri(lwm2m_fota_manager_get_instance());
+
+                if (NULL == pkg_uri)
+                {
+                    pkg_uri = "";
+                }
+
+                lwm2m_data_encode_nstring(pkg_uri, strlen(pkg_uri) + 1, *dataArrayP + i);
+                result = COAP_205_CONTENT;
+#else
+                result = COAP_405_METHOD_NOT_ALLOWED;
+#endif
+                break;
             }
-            lwm2m_data_encode_nstring(pkg_uri, strlen(pkg_uri) + 1, *dataArrayP + i);
-            result = COAP_205_CONTENT;
-#else
-            result = COAP_405_METHOD_NOT_ALLOWED;
-#endif
-            break;
-        }
 
-        case RES_M_UPDATE:
-            result = COAP_405_METHOD_NOT_ALLOWED;
-            break;
+            case RES_M_UPDATE:
+                result = COAP_405_METHOD_NOT_ALLOWED;
+                break;
 
-        case RES_M_STATE:
-            // firmware update state (int)
-        {
+            case RES_M_STATE:
+                // firmware update state (int)
+            {
 #ifdef CONFIG_FEATURE_FOTA
-            int state = lwm2m_fota_manager_get_rpt_state(lwm2m_fota_manager_get_instance());
-            lwm2m_data_encode_int(state, *dataArrayP + i);
-            result = COAP_205_CONTENT;
+                int state = lwm2m_fota_manager_get_rpt_state(lwm2m_fota_manager_get_instance());
+                lwm2m_data_encode_int(state, *dataArrayP + i);
+                result = COAP_205_CONTENT;
 #else
-            result = COAP_405_METHOD_NOT_ALLOWED;
+                result = COAP_405_METHOD_NOT_ALLOWED;
 #endif
-            break;
-        }
+                break;
+            }
 
-        case RES_M_UPDATE_RESULT:
-        {
+            case RES_M_UPDATE_RESULT:
+            {
 #ifdef CONFIG_FEATURE_FOTA
-            int updateresult = lwm2m_fota_manager_get_update_result(lwm2m_fota_manager_get_instance());
-            lwm2m_data_encode_int(updateresult, *dataArrayP + i);
-            result = COAP_205_CONTENT;
+                int updateresult = lwm2m_fota_manager_get_update_result(lwm2m_fota_manager_get_instance());
+                lwm2m_data_encode_int(updateresult, *dataArrayP + i);
+                result = COAP_205_CONTENT;
 #else
-            result = COAP_405_METHOD_NOT_ALLOWED;
+                result = COAP_405_METHOD_NOT_ALLOWED;
 #endif
-            break;
-        }
+                break;
+            }
 
-        case RES_O_FIRMWARE_UPDATE_DELIVER_METHOD:
-        {
+            case RES_O_FIRMWARE_UPDATE_DELIVER_METHOD:
+            {
 #ifdef CONFIG_FEATURE_FOTA
-            int method = lwm2m_fota_manager_get_deliver_method(lwm2m_fota_manager_get_instance());
-            lwm2m_data_encode_int(method, *dataArrayP + i);
-            result = COAP_205_CONTENT;
+                int method = lwm2m_fota_manager_get_deliver_method(lwm2m_fota_manager_get_instance());
+                lwm2m_data_encode_int(method, *dataArrayP + i);
+                result = COAP_205_CONTENT;
 #else
-            result = COAP_405_METHOD_NOT_ALLOWED;
+                result = COAP_405_METHOD_NOT_ALLOWED;
 #endif
+            }
+            break;
 
-        }
-        break;
-        default:
-            result = COAP_404_NOT_FOUND;
+            default:
+                result = COAP_404_NOT_FOUND;
         }
 
         i++;
     }
-    while (i < *numDataP && result == COAP_205_CONTENT);
+    while ((i < *numDataP) && (COAP_205_CONTENT == result));
 
 #ifdef CONFIG_FEATURE_FOTA
-    if(dataCfg && (1 == *numDataP) && (RES_M_STATE == (*dataArrayP)[0].id))
+
+    if (dataCfg && (1 == *numDataP) && (RES_M_STATE == (*dataArrayP)[0].id))
     {
         lwm2m_fota_manager_get_data_cfg(lwm2m_fota_manager_get_instance(), dataCfg);
     }
-#endif
 
+#endif
     return result;
 }
 
@@ -212,7 +220,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
     uint8_t result;
 
     // this is a single instance object
-    if (instanceId != 0)
+    if (0 != instanceId)
     {
         return COAP_404_NOT_FOUND;
     }
@@ -223,35 +231,35 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
     {
         switch (dataArray[i].id)
         {
-
-        case RES_M_PACKAGE_URI:
-            // URL for download the firmware
-        {
-            int ret;
-            if(dataArray[i].type != LWM2M_TYPE_STRING || NULL == dataArray[i].value.asBuffer.buffer)
+            case RES_M_PACKAGE_URI:
+                // URL for download the firmware
             {
-                ATINY_LOG(LOG_ERR, "type ERR %d", dataArray[i].type);
-                result = COAP_400_BAD_REQUEST;
+                int ret;
+
+                if ((LWM2M_TYPE_STRING != dataArray[i].type) || (NULL == dataArray[i].value.asBuffer.buffer))
+                {
+                    ATINY_LOG(LOG_ERR, "type ERR %d", dataArray[i].type);
+                    result = COAP_400_BAD_REQUEST;
+                    break;
+                }
+
+#ifdef CONFIG_FEATURE_FOTA
+                ret = lwm2m_fota_manager_start_download(lwm2m_fota_manager_get_instance(), \
+                                                        (const char *)(dataArray[i].value.asBuffer.buffer), dataArray[i].value.asBuffer.length);
+#else
+                ret = LWM2M_ERR;
+#endif
+                result = (LWM2M_OK == ret ? COAP_204_CHANGED : COAP_405_METHOD_NOT_ALLOWED);
                 break;
             }
-#ifdef CONFIG_FEATURE_FOTA
 
-            ret = lwm2m_fota_manager_start_download(lwm2m_fota_manager_get_instance(), \
-                                                    (const char *)(dataArray[i].value.asBuffer.buffer), dataArray[i].value.asBuffer.length);
-#else
-            ret = LWM2M_ERR;
-#endif
-            result = (LWM2M_OK == ret ? COAP_204_CHANGED : COAP_405_METHOD_NOT_ALLOWED);
-            break;
-        }
-
-        default:
-            result = COAP_405_METHOD_NOT_ALLOWED;
+            default:
+                result = COAP_405_METHOD_NOT_ALLOWED;
         }
 
         i++;
     }
-    while (i < numData && result == COAP_204_CHANGED);
+    while ((i < numData) && (COAP_204_CHANGED == result));
 
     return result;
 }
@@ -262,50 +270,49 @@ static uint8_t prv_firmware_execute(uint16_t instanceId,
                                     int length,
                                     lwm2m_object_t *objectP)
 {
-
     // this is a single instance object
-    if (instanceId != 0)
+    if (0 != instanceId)
     {
         return COAP_404_NOT_FOUND;
     }
 
-    if (length != 0) return COAP_400_BAD_REQUEST;
+    if (0 != length) return COAP_400_BAD_REQUEST;
 
     // for execute callback, resId is always set.
     switch (resourceId)
     {
-    case RES_M_UPDATE:
-    {
+        case RES_M_UPDATE:
+        {
 #ifdef CONFIG_FEATURE_FOTA
-        int ret = lwm2m_fota_manager_execute_update(lwm2m_fota_manager_get_instance());
+            int ret = lwm2m_fota_manager_execute_update(lwm2m_fota_manager_get_instance());
 #else
-        int ret = LWM2M_ERR;
+            int ret = LWM2M_ERR;
 #endif
-        if (LWM2M_OK == ret)
-        {
-            return COAP_204_CHANGED;
-        }
-        else
-        {
-            // firmware update already running
+
+            if (LWM2M_OK == ret)
+            {
+                return COAP_204_CHANGED;
+            }
+            else
+            {
+                // firmware update already running
 #ifdef CONFIG_FEATURE_FOTA
-            return COAP_400_BAD_REQUEST;
+                return COAP_400_BAD_REQUEST;
 #else
+                return COAP_405_METHOD_NOT_ALLOWED;
+#endif
+            }
+        }
+
+        default:
             return COAP_405_METHOD_NOT_ALLOWED;
-#endif
-        }
     }
-    default:
-        return COAP_405_METHOD_NOT_ALLOWED;
-    }
-
-
 }
 
 
-int config_firmware_update_object(lwm2m_object_t *obj, int object_instance_id)
+int add_firmware_update_object_instance(lwm2m_object_t *obj, int object_instance_id)
 {
-    if (obj == NULL)
+    if (NULL == obj)
     {
         return LWM2M_ARG_INVALID;
     }
@@ -315,13 +322,23 @@ int config_firmware_update_object(lwm2m_object_t *obj, int object_instance_id)
      *
      */
     obj->instanceList = (lwm2m_list_t *)lwm2m_malloc(sizeof(lwm2m_list_t));
-    if (NULL != obj->instanceList)
+
+    if (NULL == obj->instanceList)
     {
         return LWM2M_MALLOC_FAILED;
     }
 
     memset(obj->instanceList, 0, sizeof(lwm2m_list_t));
     obj->instanceList->id = object_instance_id;
+    return LWM2M_OK;
+}
+
+int config_firmware_update_object(lwm2m_object_t *obj, void *param)
+{
+    if (NULL == obj)
+    {
+        return LWM2M_ARG_INVALID;
+    }
 
     /*
      * And the private function that will access the object.
@@ -332,11 +349,9 @@ int config_firmware_update_object(lwm2m_object_t *obj, int object_instance_id)
     obj->writeFunc   = prv_firmware_write;
     obj->executeFunc = prv_firmware_execute;
     obj->userData    = NULL;
-
     /*
      * Also some user data can be stored in the object with a private structure containing the needed variables
      */
-
     return LWM2M_OK;
 }
 
@@ -347,11 +362,13 @@ void free_object_firmware(lwm2m_object_t *objectP)
         lwm2m_free(objectP->userData);
         objectP->userData = NULL;
     }
+
     if (NULL != objectP->instanceList)
     {
         lwm2m_free(objectP->instanceList);
         objectP->instanceList = NULL;
     }
+
     lwm2m_free(objectP);
 }
 

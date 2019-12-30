@@ -51,7 +51,7 @@ typedef struct
     char *psk_id;                 ///< server encode by psk, if not set NULL here
     char *psk;
     int   psk_len;
-}oc_server_t;
+} oc_server_t;
 
 
 typedef enum
@@ -59,7 +59,7 @@ typedef enum
     en_oc_boot_strap_mode_factory = 0,
     en_oc_boot_strap_mode_client_initialize,
     en_oc_boot_strap_mode_sequence,
-}en_oc_boot_strap_mode_t;
+} en_oc_boot_strap_mode_t;
 
 
 typedef enum
@@ -68,13 +68,7 @@ typedef enum
     EN_OC_LWM2M_MSG_APPDISCOVER,
     EN_OC_LWM2M_MSG_APPEXECUTE,
     EN_OC_LWM2M_MSG_SERVERREBS,    ///<we  have received the rebootstrap command from the platform
-}en_oc_lwm2m_msg_t;
-
-typedef enum
-{
-    OC_FIRMWARE_UPDATE_STATE = 0,
-    OC_APP_DATA
-} en_oc_report_type_e;
+} en_oc_lwm2m_msg_t;
 
 /** @brief this is the message dealer module for the application*/
 typedef int (*fn_oc_lwm2m_msg_deal)(void *usr_data, en_oc_lwm2m_msg_t type, void *msg, int len);
@@ -87,12 +81,12 @@ typedef struct
     oc_server_t              app_server;      ///< if factory or smart boot, must be set here
     fn_oc_lwm2m_msg_deal     rcv_func;        ///< receive function caller here
     void                    *usr_data;        ///< used for the user
-}oc_config_param_t;
+} oc_config_param_t;
 
 ///////////////////////////LWM2M AGENT INTERFACE////////////////////////////////
-typedef int (*fn_oc_lwm2m_report)(void *handle, char *buf, int len, int timeout, en_oc_report_type_e report_type);
-typedef void* (*fn_oc_lwm2m_config)(oc_config_param_t *param);
-typedef int   (*fn_oc_lwm2m_deconfig)(void *handle);
+typedef int (*fn_oc_lwm2m_report)(void *handle, char *buf, int len, int timeout);
+typedef int (*fn_oc_lwm2m_config)(void **handle, oc_config_param_t *param);
+typedef int (*fn_oc_lwm2m_deconfig)(void *handle);
 /**
  * @brief this data structure defines the lwm2m agent implement
  */
@@ -101,7 +95,7 @@ typedef struct
     fn_oc_lwm2m_config   config;   ///< this function used for the configuration
     fn_oc_lwm2m_report   report;   ///< this function used for the report data to the cdp
     fn_oc_lwm2m_deconfig deconfig; ///< this function used for the deconfig
-}oc_lwm2m_opt_t;
+} oc_lwm2m_opt_t;
 
 
 /**
@@ -111,7 +105,7 @@ typedef struct
  *@param[in] opt, the operation method implement by the lwm2m agent developer
  *@return 0 success while <0 failed
  */
-int oc_lwm2m_register(const char *name,const oc_lwm2m_opt_t *opt);
+int oc_lwm2m_register(const char *name, const oc_lwm2m_opt_t *opt);
 
 /**
  *@brief the lwm2m agent should use this function to unregister the method for the application
@@ -127,7 +121,7 @@ int oc_lwm2m_unregister(const char *name);
  * @param[in] param, refer to oc_config_param_t
  * @return  the context, while NULL means failed
  */
-void* oc_lwm2m_config(oc_config_param_t *param);
+int oc_lwm2m_config(void **handle, oc_config_param_t *param);
 /**
  * @brief the application use this function to send the message to the cdp
  * @param[in] hanlde, returned by the config
@@ -137,7 +131,7 @@ void* oc_lwm2m_config(oc_config_param_t *param);
  *
  * @return 0 success while <0 failed
  */
-int oc_lwm2m_report(void *context,char *buf, int len,int timeout, en_oc_report_type_e report_type);
+int oc_lwm2m_report(void *context, char *buf, int len, int timeout);
 
 /**
  *@brief: the application use this function to deconfigure the lwm2m agent

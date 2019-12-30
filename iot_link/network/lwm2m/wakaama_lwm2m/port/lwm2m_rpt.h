@@ -45,24 +45,26 @@ extern "C" {
 #define URI_FORMAT "uri(flag:0x%x, objId:%d, instId:%d, resId:%d)"
 #define URI_LOG_PARAM(uri) (uri)->flag, (uri)->objectId, (uri)->instanceId, (uri)->resourceId
 
-LWM2M_INLINE void get_instance_uri(uint16_t object_id, uint16_t instance_id, lwm2m_uri_t* uri)
+LWM2M_INLINE void get_instance_uri(uint16_t object_id, uint16_t instance_id, lwm2m_uri_t *uri)
 {
-    if (uri == NULL)
+    if (NULL == uri)
     {
         return;
     }
+
     uri->flag = LWM2M_URI_FLAG_OBJECT_ID | LWM2M_URI_FLAG_INSTANCE_ID;
     uri->objectId = object_id;
     uri->instanceId = instance_id;
     uri->resourceId = 0;
 }
 
-LWM2M_INLINE void get_resource_uri(uint16_t object_id, uint16_t instance_id, uint16_t resource_id, lwm2m_uri_t* uri)
+LWM2M_INLINE void get_resource_uri(uint16_t object_id, uint16_t instance_id, uint16_t resource_id, lwm2m_uri_t *uri)
 {
-    if (uri == NULL)
+    if (NULL == uri)
     {
         return;
     }
+
     uri->flag = LWM2M_URI_FLAG_OBJECT_ID | LWM2M_URI_FLAG_INSTANCE_ID | LWM2M_URI_FLAG_RESOURCE_ID;
     uri->objectId = object_id;
     uri->instanceId = instance_id;
@@ -70,19 +72,19 @@ LWM2M_INLINE void get_resource_uri(uint16_t object_id, uint16_t instance_id, uin
 }
 
 struct _lwm2m_rpt_list_t;
-typedef struct _lwm2m_rpt_list_t* rpt_list_t;
+typedef struct _lwm2m_rpt_list_t *rpt_list_t;
 
 int lwm2m_init_rpt(void);
-int lwm2m_add_rpt_uri(const lwm2m_uri_t* uri,  rpt_list_t* list);
-int lwm2m_rm_rpt_uri(const lwm2m_uri_t* uri);
+int lwm2m_add_rpt_uri(const lwm2m_uri_t *uri,  rpt_list_t *list);
+int lwm2m_rm_rpt_uri(const lwm2m_uri_t *uri);
 
-int lwm2m_dequeue_rpt_data(rpt_list_t rpt_list,  data_report_t* data);
-int lwm2m_queue_rpt_data(const lwm2m_uri_t* uri, const data_report_t* data);
-int lwm2m_clear_rpt_data(const lwm2m_uri_t* uri, int result);
+int lwm2m_dequeue_rpt_data(rpt_list_t rpt_list,  data_report_t *data);
+int lwm2m_queue_rpt_data(const lwm2m_uri_t *uri, const data_report_t *data);
+int lwm2m_clear_rpt_data(const lwm2m_uri_t *uri, int result);
 
-int lwm2m_step_rpt(lwm2m_context_t* context);
+int lwm2m_step_rpt(lwm2m_context_t *context);
 void lwm2m_destroy_rpt(void);
-int lwm2m_set_max_rpt_cnt(const lwm2m_uri_t* uri, uint32_t max_rpt_cnt);
+int lwm2m_set_max_rpt_cnt(const lwm2m_uri_t *uri, uint32_t max_rpt_cnt);
 
 #ifdef __cplusplus
 }

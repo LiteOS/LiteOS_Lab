@@ -175,7 +175,7 @@ static int app_cmd_task_entry()
                     	Response_Smoke_Control_Beep.mid = Smoke_Control_Beep->mid;
                         Response_Smoke_Control_Beep.errcode = 0;
                 		Response_Smoke_Control_Beep.Beep_State = 1;
-                        oc_lwm2m_report(context,(char *)&Response_Smoke_Control_Beep,sizeof(Response_Smoke_Control_Beep),1000, OC_APP_DATA);    ///< report cmd reply message
+                        oc_lwm2m_report(context,(char *)&Response_Smoke_Control_Beep,sizeof(Response_Smoke_Control_Beep),1000);    ///< report cmd reply message
                     }
                     if (Smoke_Control_Beep->Beep[0] == 'O' && Smoke_Control_Beep->Beep[1] == 'F' && Smoke_Control_Beep->Beep[2] == 'F')
                     {
@@ -184,7 +184,7 @@ static int app_cmd_task_entry()
                     	Response_Smoke_Control_Beep.mid = Smoke_Control_Beep->mid;
                         Response_Smoke_Control_Beep.errcode = 0;
                 		Response_Smoke_Control_Beep.Beep_State = 0;
-                        oc_lwm2m_report(context,(char *)&Response_Smoke_Control_Beep,sizeof(Response_Smoke_Control_Beep),1000, OC_APP_DATA);    ///< report cmd reply message
+                        oc_lwm2m_report(context,(char *)&Response_Smoke_Control_Beep,sizeof(Response_Smoke_Control_Beep),1000);    ///< report cmd reply message
                     }
                     /********** code area end  **********/
                     break;
@@ -212,7 +212,12 @@ static int app_report_task_entry()
     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
     oc_param.rcv_func = app_msg_deal;
 
-    context = oc_lwm2m_config(&oc_param);
+    // context = oc_lwm2m_config(&oc_param);
+    ret = oc_lwm2m_config(&context, &oc_param);
+    if (0 != ret)
+    {
+    	return ret;
+    }
 
     if(NULL != context)   //success ,so we could receive and send
     {
@@ -221,7 +226,7 @@ static int app_report_task_entry()
         {
             Smoke.messageId = cn_app_Smoke;
             Smoke.Smoke_Value = htons((int)E53_SF1_Data.Smoke_Value);
-            oc_lwm2m_report(context, (char *)&Smoke, sizeof(Smoke), 1000, OC_APP_DATA);
+            oc_lwm2m_report(context, (char *)&Smoke, sizeof(Smoke), 1000);
             osal_task_sleep(2*1000);
         }
     }

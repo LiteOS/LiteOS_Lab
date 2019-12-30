@@ -82,10 +82,10 @@ LWM2M_INLINE void lwm2m_list_add_ex(lwm2m_dl_list *list, lwm2m_dl_list *node)
 
 LWM2M_INLINE void lwm2m_list_insert_tail(lwm2m_dl_list *list, lwm2m_dl_list *node)
 {
-	lwm2m_list_add_ex(list->prev, node);
+    lwm2m_list_add_ex(list->prev, node);
 }
 
-LWM2M_INLINE lwm2m_dl_list * lwm2m_list_get_head(lwm2m_dl_list *header)
+LWM2M_INLINE lwm2m_dl_list *lwm2m_list_get_head(lwm2m_dl_list *header)
 {
     return header->next;
 }

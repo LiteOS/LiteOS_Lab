@@ -60,14 +60,14 @@
 
 
 // after 40sec of inactivity we rehandshake
-#define DTLS_NAT_TIMEOUT 40
+#define DTLS_NAT_TIMEOUT                        40
 
-#define LWM2M_IS_CLIENT                   0
-#define LWM2M_IS_SERVER                   1
+#define LWM2M_IS_CLIENT                         0
+#define LWM2M_IS_SERVER                         1
 
 /* timeout for udp client shakehand,the unit is second */
 #ifndef DTLS_UDP_CLIENT_SHAKEHAND_TIMEOUT
-#define DTLS_UDP_CLIENT_SHAKEHAND_TIMEOUT 60
+    #define DTLS_UDP_CLIENT_SHAKEHAND_TIMEOUT   60
 #endif
 
 typedef enum
@@ -79,25 +79,25 @@ typedef enum
 
 typedef struct _connection_t
 {
-    struct _connection_t*   next;
-    void* net_context;
-    lwm2m_object_t* securityObj;
-    int securityInstId;
-    uint16_t dtls_flag;
-    uint16_t bootstrap_flag;
-    lwm2m_context_t* lwm2mH;
-    uint16_t errs[CONNECTION_ERR_MAX];
+    struct _connection_t   *next;
+    void                   *net_context;
+    lwm2m_object_t         *securityObj;
+    int                     securityInstId;
+    uint16_t                dtls_flag;
+    uint16_t                bootstrap_flag;
+    lwm2m_context_t        *lwm2mH;
+    uint16_t                errs[CONNECTION_ERR_MAX];
 } connection_t;
 
-typedef void (*lwm2m_connection_err_notify_t)(lwm2m_context_t* context, connection_err_e err_type, bool boostrap_flag);
+typedef void (*lwm2m_connection_err_notify_t)(lwm2m_context_t *context, connection_err_e err_type, bool boostrap_flag);
 
 
-int lwm2m_buffer_recv(void* sessionH, uint8_t* buffer, size_t length, uint32_t timeout);
+int lwm2m_buffer_recv(void *sessionH, uint8_t *buffer, size_t length, uint32_t timeout);
 void lwm2m_register_connection_err_notify(lwm2m_connection_err_notify_t nofiy);
 
 
 #ifdef LWM2M_BOOTSTRAP
-bool lwm2m_is_sec_obj_uri_valid(uint16_t secObjInstID, void *userData);
+    bool lwm2m_is_sec_obj_uri_valid(uint16_t secObjInstID, void *userData);
 #endif
 
 #endif

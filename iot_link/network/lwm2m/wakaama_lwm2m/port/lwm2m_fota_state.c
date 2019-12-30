@@ -41,7 +41,6 @@
 static int lwm2m_fota_state_default_handle(struct lwm2m_fota_state_tag_s *thi)
 {
     ASSERT_THIS(return LWM2M_ERR);
-
     ATINY_LOG(LOG_ERR, "err state handle state %d", thi->manager ?
               lwm2m_fota_manager_get_state(thi->manager) : -1);
     return LWM2M_ERR;
@@ -62,10 +61,7 @@ void lwm2m_fota_state_init(lwm2m_fota_state_s *thi, lwm2m_fota_manager_s *manage
 static int lwm2m_fota_start_download(lwm2m_fota_state_s *thi, const char *uri)
 {
     ASSERT_THIS(return LWM2M_ARG_INVALID);
-
     lwm2m_fota_manager_set_update_result(thi->manager, LWM2M_FIRMWARE_UPDATE_NULL);
-
-
     return lwm2m_fota_manager_rpt_state(thi->manager, LWM2M_FOTA_DOWNLOADING);
 }
 
@@ -74,7 +70,7 @@ static int lwm2m_fota_idle_state_recv_notify_ack(lwm2m_fota_state_s *thi, data_s
     int ret;
     lwm2m_fota_state_e rpt_state;
 
-    if(SENT_SUCCESS != status)
+    if (SENT_SUCCESS != status)
     {
         ATINY_LOG(LOG_ERR, "idle state notify fail %d", status);
         lwm2m_fota_manager_set_update_result(thi->manager, LWM2M_FIRMWARE_UPDATE_FAIL);
@@ -84,13 +80,13 @@ static int lwm2m_fota_idle_state_recv_notify_ack(lwm2m_fota_state_s *thi, data_s
     rpt_state = lwm2m_fota_manager_get_rpt_state(thi->manager) ;
 
     //idle and downloaded rpt ack
-    if((LWM2M_FOTA_IDLE == rpt_state) || (LWM2M_FOTA_DOWNLOADED == rpt_state))
+    if ((LWM2M_FOTA_IDLE == rpt_state) || (LWM2M_FOTA_DOWNLOADED == rpt_state))
     {
         return lwm2m_fota_manager_set_state(thi->manager, rpt_state);
     }
 
     //updating rpt ack
-    if(LWM2M_FOTA_UPDATING == rpt_state)
+    if (LWM2M_FOTA_UPDATING == rpt_state)
     {
         ATINY_LOG(LOG_ERR, "idle state recv updaing state ack");
         return LWM2M_ERR;
@@ -100,28 +96,28 @@ static int lwm2m_fota_idle_state_recv_notify_ack(lwm2m_fota_state_s *thi, data_s
     //TODO, return then proper result
     ret = start_firmware_download(lwm2m_fota_manager_get_lwm2m_context(thi->manager), lwm2m_fota_manager_get_pkg_uri(thi->manager),
                                   lwm2m_fota_manager_get_storage_device(thi->manager));
-    if(ret  == LWM2M_OK)
+
+    if (LWM2M_OK  == ret)
     {
         return lwm2m_fota_manager_set_state(thi->manager, LWM2M_FOTA_DOWNLOADING);
-
     }
+
     ATINY_LOG(LOG_ERR, "start_firmware_download fail %d", ret);
     lwm2m_fota_manager_set_update_result(thi->manager, LWM2M_FIRMWARE_UPDATE_FAIL);
     return lwm2m_fota_manager_rpt_state(thi->manager, LWM2M_FOTA_IDLE);
-
 }
 
 static int lwm2m_fota_idle_state_get_result(void)
 {
-   upgrade_state_e state;
+    upgrade_state_e state;
 
-   if(flag_upgrade_get_result(&state) != LWM2M_OK)
-   {
+    if (LWM2M_OK != flag_upgrade_get_result(&state))
+    {
         ATINY_LOG(LOG_ERR, "ota_check_update_state fail");
         return LWM2M_ERR;
-   }
+    }
 
-   return (OTA_SUCCEED == state) ? LWM2M_OK : LWM2M_ERR;
+    return (OTA_SUCCEED == state) ? LWM2M_OK : LWM2M_ERR;
 }
 
 int lwm2m_fota_idle_state_int_report_result(lwm2m_fota_idle_state_s *thi)
@@ -129,24 +125,24 @@ int lwm2m_fota_idle_state_int_report_result(lwm2m_fota_idle_state_s *thi)
     lwm2m_observe_info_t observe_info;
     int ret = LWM2M_ERR;
     int result = LWM2M_ERR;
-
     ASSERT_THIS(return LWM2M_ARG_INVALID);
-
     thi->report_flag = false;
     memset(&observe_info, 0, sizeof(lwm2m_observe_info_t));
-    if(flag_read(FLAG_APP, &observe_info, sizeof(observe_info)) != LWM2M_OK)
+
+    if (ota_pack_observe_info_read(&observe_info, sizeof(observe_info)) != LWM2M_OK)
     {
         ATINY_LOG(LOG_ERR, "flag_write fail");
         goto EXIT;
     }
 
-    if(0 == observe_info.tokenLen)
+    if (0 == observe_info.tokenLen)
     {
         return LWM2M_OK;
     }
 
     ret = lwm2m_fota_idle_state_get_result();
-    if(ret != LWM2M_OK)
+
+    if (LWM2M_OK != ret)
     {
         ATINY_LOG(LOG_ERR, "get_software_result fail");
     }
@@ -158,10 +154,12 @@ int lwm2m_fota_idle_state_int_report_result(lwm2m_fota_idle_state_s *thi)
     ATINY_LOG(LOG_INFO, "need to rpt result %d", ret);
 EXIT:
     memset(&observe_info, 0, sizeof(observe_info));
-    if(flag_write(FLAG_APP, &observe_info, sizeof(observe_info)) != LWM2M_OK)
+
+    if (LWM2M_OK != flag_write(FLAG_APP, &observe_info, sizeof(observe_info)))
     {
         ATINY_LOG(LOG_ERR, "flag_write fail");
     }
+
     return result;
 }
 
@@ -171,17 +169,14 @@ static int lwm2m_fota_idle_state_report_result(lwm2m_fota_state_s *thi)
     lwm2m_fota_idle_state_s *idle_stat = (lwm2m_fota_idle_state_s *)thi;
     int state;
     lwm2m_data_cfg_t dataCfg = {0};
-
-
     ASSERT_THIS(return LWM2M_ARG_INVALID);
 
-    if(!idle_stat->report_flag)
+    if (!idle_stat->report_flag)
     {
         return LWM2M_OK;
     }
 
     idle_stat->report_flag = false;
-
     state = ((LWM2M_OK == idle_stat->report_result) ?  LWM2M_FOTA_IDLE : LWM2M_FOTA_DOWNLOADED);
     lwm2m_fota_manager_set_update_result(thi->manager, (LWM2M_OK == idle_stat->report_result) ? LWM2M_FIRMWARE_UPDATE_SUCCESS : LWM2M_FIRMWARE_UPDATE_FAIL);
     lwm2m_fota_manager_save_rpt_state(thi->manager, state);
@@ -204,7 +199,8 @@ void lwm2m_fota_idle_state_init(lwm2m_fota_idle_state_s *thi, lwm2m_fota_manager
 static int lwm2m_fota_downloading_state_finish_download(lwm2m_fota_state_s *thi, int result)
 {
     ASSERT_THIS(return LWM2M_ARG_INVALID);
-    if(LWM2M_OK != result)
+
+    if (LWM2M_OK != result)
     {
         lwm2m_fota_manager_set_update_result(thi->manager, LWM2M_FIRMWARE_UPDATE_FAIL);
     }
@@ -217,7 +213,7 @@ static int lwm2m_fota_downloading_state_recv_notify_ack(lwm2m_fota_state_s *thi,
 {
     lwm2m_fota_state_e rpt_state;
 
-    if(SENT_SUCCESS != status)
+    if (SENT_SUCCESS != status)
     {
         ATINY_LOG(LOG_ERR, "downloading state notify ack fail %d", status);
         lwm2m_fota_manager_set_update_result(thi->manager, LWM2M_FIRMWARE_UPDATE_FAIL);
@@ -225,7 +221,8 @@ static int lwm2m_fota_downloading_state_recv_notify_ack(lwm2m_fota_state_s *thi,
     }
 
     rpt_state = lwm2m_fota_manager_get_rpt_state(thi->manager);
-    if((LWM2M_FOTA_IDLE == rpt_state) || (LWM2M_FOTA_DOWNLOADED == rpt_state))
+
+    if ((LWM2M_FOTA_IDLE == rpt_state) || (LWM2M_FOTA_DOWNLOADED == rpt_state))
     {
         return lwm2m_fota_manager_set_state(thi->manager, rpt_state);
     }
@@ -245,10 +242,9 @@ void lwm2m_fota_downloading_state_init(lwm2m_fota_downloading_state_s *thi, lwm2
 static int lwm2m_fota_downloaded_state_execute_update(lwm2m_fota_state_s *thi)
 {
     lwm2m_fota_state_e rpt_state = LWM2M_FOTA_UPDATING;
-
     ASSERT_THIS(return LWM2M_ARG_INVALID);
 
-    if(lwm2m_fota_manager_get_update_result(thi->manager) != LWM2M_FIRMWARE_UPDATE_NULL)
+    if (lwm2m_fota_manager_get_update_result(thi->manager) != LWM2M_FIRMWARE_UPDATE_NULL)
     {
         rpt_state = LWM2M_FOTA_IDLE;
         lwm2m_fota_manager_set_update_result(thi->manager, LWM2M_FIRMWARE_UPDATE_FAIL);
@@ -264,9 +260,9 @@ static int lwm2m_fota_downloaded_state_recv_notify_ack(lwm2m_fota_state_s *thi, 
     lwm2m_fota_state_e rpt_state;
     lwm2m_observe_info_t observe_info;
     pack_storage_device_api_s *device;
-
     ASSERT_THIS(return LWM2M_ARG_INVALID);
-    if(SENT_SUCCESS != status)
+
+    if (SENT_SUCCESS != status)
     {
         ATINY_LOG(LOG_ERR, "downloaded state notify fail %d", status);
         lwm2m_fota_manager_set_update_result(thi->manager, LWM2M_FIRMWARE_UPDATE_FAIL);
@@ -274,16 +270,18 @@ static int lwm2m_fota_downloaded_state_recv_notify_ack(lwm2m_fota_state_s *thi, 
     }
 
     rpt_state = lwm2m_fota_manager_get_rpt_state(thi->manager);
+
     //rpt downloading state ack
-    if(LWM2M_FOTA_DOWNLOADING == rpt_state)
+    if (LWM2M_FOTA_DOWNLOADING == rpt_state)
     {
         ret = start_firmware_download(lwm2m_fota_manager_get_lwm2m_context(thi->manager), lwm2m_fota_manager_get_pkg_uri(thi->manager),
                                       lwm2m_fota_manager_get_storage_device(thi->manager));
-        if(ret  == LWM2M_OK)
+
+        if (LWM2M_OK  == ret)
         {
             return lwm2m_fota_manager_set_state(thi->manager, LWM2M_FOTA_DOWNLOADING);
-
         }
+
         ATINY_LOG(LOG_ERR, "start_firmware_download fail %d", ret);
         lwm2m_fota_manager_set_update_result(thi->manager, LWM2M_FIRMWARE_UPDATE_FAIL);
         (void)lwm2m_fota_manager_rpt_state(thi->manager, LWM2M_FOTA_IDLE);
@@ -291,33 +289,34 @@ static int lwm2m_fota_downloaded_state_recv_notify_ack(lwm2m_fota_state_s *thi, 
     }
 
     //rpt idle state ack
-    if(LWM2M_FOTA_IDLE == rpt_state)
+    if (LWM2M_FOTA_IDLE == rpt_state)
     {
         return lwm2m_fota_manager_set_state(thi->manager, rpt_state);
     }
 
     //rpt downloaded state ack
-    if(LWM2M_FOTA_DOWNLOADED == rpt_state)
+    if (LWM2M_FOTA_DOWNLOADED == rpt_state)
     {
         return LWM2M_OK;
     }
 
     //rpt updating state ack
-    if(lwm2m_get_observe_info(lwm2m_fota_manager_get_lwm2m_context(thi->manager), &observe_info) != COAP_NO_ERROR
-            || 0 == observe_info.tokenLen)
+    if ((COAP_NO_ERROR != lwm2m_get_observe_info(lwm2m_fota_manager_get_lwm2m_context(thi->manager), &observe_info))
+        || (0 == observe_info.tokenLen))
     {
         ATINY_LOG(LOG_ERR, "lwm2m_get_observe_info fail");
         goto EXIT_DOWNLOADED;
     }
 
     device = lwm2m_fota_manager_get_storage_device(thi->manager);
-    if((NULL == device) || (NULL == device->active_software) || (device->active_software(device) != LWM2M_OK))
+
+    if ((NULL == device) || (NULL == device->active_software) || (LWM2M_OK != device->active_software(device)))
     {
         ATINY_LOG(LOG_ERR, "active_software fail");
         goto EXIT_DOWNLOADED;
     }
 
-    if(flag_write(FLAG_APP, &observe_info, sizeof(observe_info)) != LWM2M_OK)
+    if (LWM2M_OK != flag_write(FLAG_APP, &observe_info, sizeof(observe_info)))
     {
         ATINY_LOG(LOG_ERR, "flag_write fail");
         goto EXIT_DOWNLOADED;
@@ -325,9 +324,7 @@ static int lwm2m_fota_downloaded_state_recv_notify_ack(lwm2m_fota_state_s *thi, 
 
     lwm2m_set_reboot_flag();
     return lwm2m_fota_manager_set_state(thi->manager, LWM2M_FOTA_UPDATING);
-
 EXIT_DOWNLOADED:
-
     lwm2m_fota_manager_set_update_result(thi->manager, LWM2M_FIRMWARE_UPDATE_FAIL);
     (void)lwm2m_fota_manager_rpt_state(thi->manager, LWM2M_FOTA_DOWNLOADED);
     return LWM2M_ERR;

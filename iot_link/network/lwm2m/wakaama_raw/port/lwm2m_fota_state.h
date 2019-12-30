@@ -78,13 +78,13 @@
 
 typedef struct lwm2m_fota_state_tag_s
 {
-    int (*start_download)(struct lwm2m_fota_state_tag_s * thi, const char *uri);
-    int (*execute_update)(struct lwm2m_fota_state_tag_s * thi);
-    int (*finish_download)(struct lwm2m_fota_state_tag_s * thi, int result);
+    int (*start_download)(struct lwm2m_fota_state_tag_s *thi, const char *uri);
+    int (*execute_update)(struct lwm2m_fota_state_tag_s *thi);
+    int (*finish_download)(struct lwm2m_fota_state_tag_s *thi, int result);
     int (*repot_result)(struct lwm2m_fota_state_tag_s *thi);
     int (*recv_notify_ack)(struct lwm2m_fota_state_tag_s *thi, data_send_status_e status);
     lwm2m_fota_manager_s *manager;
-}lwm2m_fota_state_s;
+} lwm2m_fota_state_s;
 
 typedef struct
 {
@@ -92,12 +92,12 @@ typedef struct
     lwm2m_observe_info_t observe_info;
     int report_result;
     bool report_flag;
-}lwm2m_fota_idle_state_s;
+} lwm2m_fota_idle_state_s;
 
 typedef struct lwm2m_fota_downloading_state_tag_s
 {
     lwm2m_fota_state_s interface;
-}lwm2m_fota_downloading_state_s;
+} lwm2m_fota_downloading_state_s;
 
 typedef lwm2m_fota_downloading_state_s lwm2m_fota_downloaded_state_s;
 typedef lwm2m_fota_downloading_state_s lwm2m_fota_updating_state_s;
@@ -111,7 +111,7 @@ extern "C" {
 void lwm2m_fota_state_init(lwm2m_fota_state_s *thi, lwm2m_fota_manager_s *manager);
 
 void lwm2m_fota_idle_state_init(lwm2m_fota_idle_state_s *thi, lwm2m_fota_manager_s *manager);
-int lwm2m_fota_idle_state_int_report_result(lwm2m_fota_idle_state_s * thi);
+int lwm2m_fota_idle_state_int_report_result(lwm2m_fota_idle_state_s *thi);
 
 
 

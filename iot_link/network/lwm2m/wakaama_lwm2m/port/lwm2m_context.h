@@ -61,13 +61,14 @@ extern "C" {
 
 typedef struct
 {
-    lwm2m_context_t  *lwm2m_context;
-    client_data_t     client_data;
-    int lwm2m_quit;
-    int reconnect_flag;
-    osal_semp_t quit_sem;
-    int reboot_flag;
-    uint8_t *recv_buffer;
+    lwm2m_context_t    *lwm2m_context;
+    client_data_t       client_data;
+    int                 lwm2m_quit;
+    int                 reconnect_flag;
+    osal_semp_t         quit_sem;
+    int                 reboot_flag;
+    uint8_t            *recv_buffer;
+    void               *task_handle;
 } handle_data_t;
 
 #ifdef __cplusplus

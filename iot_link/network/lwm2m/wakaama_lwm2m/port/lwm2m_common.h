@@ -42,7 +42,7 @@
 #include <stdint.h>
 #include <atiny_log.h>
 #ifdef CONFIG_FEATURE_FOTA
-#include "ota/ota_api.h"
+    #include "ota/ota_api.h"
 #endif
 #include "liblwm2m_api.h"
 #include <liblwm2m.h>
@@ -53,12 +53,12 @@
 extern "C" {
 #endif
 
-#define MAX_REPORT_DATA_LEN      1024
-#define MAX_BUFFER_REPORT_CNT    8
-#define MAX_SEND_ERR_NUM 10
-#define MAX_RECV_ERR_NUM 10
+#define MAX_REPORT_DATA_LEN         1024
+#define MAX_BUFFER_REPORT_CNT       8
+#define MAX_SEND_ERR_NUM            10
+#define MAX_RECV_ERR_NUM            10
 
-#define MAX_VELOCITY_LEN 16
+#define MAX_VELOCITY_LEN            16
 
 #define DEVICE_AVL_POWER_SOURCES    "/3/0/6"
 #define DEVICE_POWER_SOURCE_VOLTAGE "/3/0/7"
@@ -107,7 +107,8 @@ typedef enum
     LWM2M_GET_TIMESTAMP,
     LWM2M_GET_VELOCITY,
     LWM2M_GET_OTA_OPT,
-    LWM2M_TRIGER_SERVER_INITIATED_BS
+    LWM2M_CMD_TRIGER_SERVER_INITIATED_BS,
+    LWM2M_CMD_MAX
 } lwm2m_cmd_e;
 
 typedef enum
@@ -122,7 +123,7 @@ typedef enum
 typedef struct
 {
     uint8_t opaque[MAX_VELOCITY_LEN];
-    int length;
+    int     length;
 } lwm2m_velocity_s;
 
 typedef enum
@@ -142,54 +143,54 @@ typedef enum
     APP_DATA
 } lwm2m_report_type_e;
 
-typedef void (*lwm2m_ack_callback) (lwm2m_report_type_e type, int cookie, data_send_status_e status);
+typedef void (*lwm2m_ack_callback)(lwm2m_report_type_e type, int cookie, data_send_status_e status);
 
 typedef struct _data_report_t
 {
     lwm2m_report_type_e type;     /* data type to report */
-    int cookie;
-    int len;                      /* length of buf variable */
-    uint8_t* buf;                 /* data buffer */
-    lwm2m_ack_callback callback;  /* report ack callback */
+    int                 cookie;
+    int                 len;      /* length of buf variable */
+    uint8_t            *buf;      /* data buffer */
+    lwm2m_ack_callback  callback; /* report ack callback */
 } data_report_t;
 
 typedef lwm2m_bootstrap_type_e   lwm2m_bootstrap_type_e;
 
 typedef struct
 {
-    char* binding;               /*目前支持U或者UQ*/
-    int   life_time;             /*必选，默认50000,如过短，则频繁发送update报文，如过长，在线状态更新时间长*/
-    unsigned int  storing_cnt;   /*storing为true时，lwm2m缓存区总字节个数*/
-
+    char                   *binding;        /*目前支持U或者UQ*/
+    int                     life_time;      /*必选，默认50000,如过短，则频繁发送update报文，如过长，在线状态更新时间长*/
+    unsigned int            storing_cnt;    /*storing为true时，lwm2m缓存区总字节个数*/
     lwm2m_bootstrap_type_e  bootstrap_mode; /* bootstrap mode  */
-    int   hold_off_time; /* bootstrap hold off time for server initiated bootstrap */
+    int                     hold_off_time;  /* bootstrap hold off time for server initiated bootstrap */
 } lwm2m_server_param_t;
 
 typedef struct
 {
-    char* server_ip;
-    char* server_port;
-
-    char* psk_Id;
-    char* psk;
-    unsigned short psk_len;
+    char           *server_ip;
+    char           *server_port;
+    char           *psk_Id;
+    char           *psk;
+    unsigned short  psk_len;
 
 } lwm2m_security_param_t;
 
 typedef struct
 {
 
-    lwm2m_server_param_t   server_params;
+    lwm2m_server_param_t    server_params;
+
     //both iot_server and bs_server have psk & pskID, index 0 for iot_server, and index 1 for bs_server
-    lwm2m_security_param_t security_params[2];
-    void      *userData;
+    lwm2m_security_param_t  security_params[2];
+
+    void                   *userData;
 } lwm2m_param_t;
 
 typedef struct
 {
-    char* endpoint_name;
-    char* manufacturer;
-    char* dev_type;
+    char *endpoint_name;
+    char *manufacturer;
+    char *dev_type;
 } lwm2m_device_info_t;
 
 /**
@@ -211,7 +212,9 @@ typedef struct
  *@par Dependency: none.
  *@see none.
  */
-int lwm2m_cmd_ioctl(lwm2m_cmd_e cmd, char* arg, int len);
+int lwm2m_cmd_ioctl(lwm2m_cmd_e cmd, char *arg, int len, ...);
+
+int lwm2m_cmd_register_dealer(fn_lwm2m_msg_deal dealer);
 
 /**
  *@ingroup agenttiny
@@ -229,7 +232,7 @@ int lwm2m_cmd_ioctl(lwm2m_cmd_e cmd, char* arg, int len);
  *@par Dependency: none.
  *@see none.
  */
-void lwm2m_event_notify(lwm2m_event_e event, const char* arg, int len);
+void lwm2m_event_notify(lwm2m_event_e event, const char *arg, int len);
 
 /**
  *@ingroup agenttiny
@@ -245,16 +248,25 @@ void lwm2m_event_notify(lwm2m_event_e event, const char* arg, int len);
  *@par Dependency: none.
  *@see atiny_init | atiny_deinit.
  */
-int lwm2m_reconnect_ex(void* phandle);
+int lwm2m_reconnect_ex(void *phandle);
 
-int config_security_object(lwm2m_object_t *obj, int object_instance_id, void *param);
-int config_server_object(lwm2m_object_t *obj, int object_instance_id, void *param);
-int config_access_control_object(lwm2m_object_t *obj);
-int config_device_object(lwm2m_object_t *obj, int object_instance_id);
-int config_connectivity_monitoring_object(lwm2m_object_t *obj, int object_instance_id);
-int config_firmware_update_object(lwm2m_object_t *obj, int object_instance_id);
-int config_location_object(lwm2m_object_t *obj, int object_instance_id);
-int config_app_data_object(lwm2m_object_t *obj, int object_instance_id, uint16_t resource_id, void *param);
+int add_security_object_instance(lwm2m_object_t *obj, int object_instance_id, void *param);
+int add_server_object_instance(lwm2m_object_t *obj, int object_instance_id, void *param);
+int add_access_control_object_instance(lwm2m_object_t *obj);
+int add_device_object_instance(lwm2m_object_t *obj, int object_instance_id);
+int add_connectivity_monitoring_object_instance(lwm2m_object_t *obj, int object_instance_id);
+int add_firmware_update_object_instance(lwm2m_object_t *obj, int object_instance_id);
+int add_location_object_instance(lwm2m_object_t *obj, int object_instance_id);
+int add_app_data_object_instance(lwm2m_object_t *obj, int object_instance_id, uint16_t resource_id, void *param);
+
+int config_security_object(lwm2m_object_t *obj, void *param);
+int config_server_object(lwm2m_object_t *obj, void *param);
+int config_access_control_object(lwm2m_object_t *obj, void *param);
+int config_device_object(lwm2m_object_t *obj, void *param);
+int config_connectivity_monitoring_object(lwm2m_object_t *obj, void *param);
+int config_firmware_update_object(lwm2m_object_t *obj, void *param);
+int config_location_object(lwm2m_object_t *obj, void *param);
+int config_app_data_object(lwm2m_object_t *obj, void *param);
 
 #ifdef __cplusplus
 }

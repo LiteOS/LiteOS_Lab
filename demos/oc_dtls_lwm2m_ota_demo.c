@@ -121,7 +121,7 @@ static queue_t *s_queue_msgrcv = NULL;   ///< this is used to cached the message
 static int ota_msg_send(void *msg,int len)
 {
     int ret;
-    ret = oc_lwm2m_report(s_lwm2m_context,(char *)msg,len,1000, OC_APP_DATA);
+    ret = oc_lwm2m_report(s_lwm2m_context,(char *)msg,len,1000);
     return ret;
 }
 
@@ -208,7 +208,11 @@ static int app_report_task_entry()
     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
     oc_param.rcv_func = app_msg_deal;
 
-    context = oc_lwm2m_config(&oc_param);
+    ret = oc_lwm2m_config(&context, &oc_param);
+    if (0 != ret)
+    {
+        return ret;
+    }
 
     if(NULL != context)   //success ,so we could receive and send
     {
@@ -222,7 +226,7 @@ static int app_report_task_entry()
 
                 light.msgid = cn_app_light;
                 light.intensity = htons(lux);
-                oc_lwm2m_report(s_lwm2m_context,(char *)&light,sizeof(light),1000, OC_APP_DATA); ///< report the light message
+                oc_lwm2m_report(s_lwm2m_context,(char *)&light,sizeof(light),1000); ///< report the light message
             }
 
             osal_task_sleep(10*1000);

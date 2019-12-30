@@ -123,7 +123,7 @@ static int byte_to_hexstr(const unsigned char *bufin, int len, char *bufout)
 }
 
 
-static int boudica150_oc_report(void *handle,unsigned char *buf,int len, int timeout, en_oc_report_type_e report_type)
+static int boudica150_oc_report(void *handle,unsigned char *buf,int len, int timeout)
 {
     int ret = -1;
     const char *cmd = "AT+NMGS=";

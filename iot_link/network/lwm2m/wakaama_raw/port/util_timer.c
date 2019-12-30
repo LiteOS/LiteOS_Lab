@@ -64,6 +64,7 @@ void timer_step(util_timer_t *timer)
     }
 
     current = lwm2m_gettime();
+
     if (current < timer->expireTime)
     {
         return;

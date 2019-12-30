@@ -55,12 +55,12 @@ extern "C" {
 // time uint is second, and max value 0xffffffff is hundreds of years.so ignore the turn to 0 problem
 typedef struct
 {
-    time_t expireTime;
-    time_t interval;
-    void(*callback)(void *param);
-    void *param;
-    bool startFlag;
-}util_timer_t;
+    time_t  expireTime;
+    time_t  interval;
+    void    (*callback)(void *param);
+    void   *param;
+    bool    startFlag;
+} util_timer_t;
 
 void timer_init(util_timer_t *timer, time_t interval, void(*callback)(void *param), void *param);
 void timer_start(util_timer_t *timer);
