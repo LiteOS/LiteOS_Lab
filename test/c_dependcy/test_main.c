@@ -50,10 +50,12 @@
 
 
 test_sort ts_sort_flist[] = {
-    NULL,
-    NULL,
+    ts_sort_oc_lwm2m_al,
+    NULL,//ts_sort_lwm2m_al
     ts_sort_oc_mqtt_al,
-    ts_sort_mqtt_al,
+	ts_sort_mqtt_al,
+	ts_sort_oc_coap_al,
+	NULL,//ts_sort_coap_al
 };
 
 char g_acRecvBuf[TS_RECV_BUFFER_LEN];

@@ -1,6 +1,6 @@
 import sys
 from socket import *
-S_HOST = '192.168.1.168'
+S_HOST = '192.168.1.132'
 D_HOST = '192.168.1.100'
 # D_HOST = '192.168.1.115'
 S_PORT = 62556
