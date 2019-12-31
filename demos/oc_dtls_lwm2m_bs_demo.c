@@ -33,7 +33,7 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-14 17:21  zhangqianfu  The first version  
+ *  2019-05-14 17:21  zhangqianfu  The first version
  *
  */
 
@@ -212,7 +212,11 @@ static int app_report_task_entry()
     oc_param.boot_mode = en_oc_boot_strap_mode_client_initialize;
     oc_param.rcv_func = app_msg_deal;
 
-    s_lwm2m_handle = oc_lwm2m_config(&oc_param);
+    ret = oc_lwm2m_config(&s_lwm2m_handle, &oc_param);
+    if (0 != ret)
+    {
+        return ret;
+    }
 
     if(NULL != s_lwm2m_handle)   //success ,so we could receive and send
     {

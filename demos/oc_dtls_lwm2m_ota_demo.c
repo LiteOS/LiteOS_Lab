@@ -208,7 +208,11 @@ static int app_report_task_entry()
     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
     oc_param.rcv_func = app_msg_deal;
 
-    context = oc_lwm2m_config(&oc_param);
+    ret = oc_lwm2m_config(&context, &oc_param);
+    if (0 != ret)
+    {
+        return ret;
+    }
 
     if(NULL != context)   //success ,so we could receive and send
     {

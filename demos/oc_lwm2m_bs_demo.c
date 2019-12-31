@@ -33,7 +33,7 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-14 17:21  zhangqianfu  The first version  
+ *  2019-05-14 17:21  zhangqianfu  The first version
  *
  */
 
@@ -238,7 +238,12 @@ static int app_report_task_entry()
     {
         if(NULL == s_lwm2m_context)
         {
-            s_lwm2m_context = oc_lwm2m_config(&oc_param);
+            ret = oc_lwm2m_config(&s_lwm2m_context, &oc_param);
+
+            if (0 != ret)
+            {
+                printf("call oc_lwm2m_config error, return %d\r\n", ret);
+            }
         }
         else if(s_lwm2m_reconnect)
         {
@@ -248,8 +253,12 @@ static int app_report_task_entry()
 
             s_lwm2m_context = NULL;
 
-            s_lwm2m_context = oc_lwm2m_config(&oc_param);
+            ret = oc_lwm2m_config(&s_lwm2m_context, &oc_param);
 
+            if (0 != ret)
+            {
+                printf("call oc_lwm2m_config error, return %d\r\n", ret);
+            }
         }
         else
         {

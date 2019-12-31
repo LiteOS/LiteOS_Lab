@@ -33,7 +33,7 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-14 17:21  zhangqianfu  The first version  
+ *  2019-05-14 17:21  zhangqianfu  The first version
  *
  */
 #include <stdint.h>
@@ -169,22 +169,22 @@ static int app_cmd_task_entry()
                     printf("Smoke_Control_Beep:msgid:%d mid:%d", Smoke_Control_Beep->messageId, ntohs(Smoke_Control_Beep->mid));
                     /********** code area for cmd from IoT cloud  **********/
                     if (Smoke_Control_Beep->Beep[0] == 'O' && Smoke_Control_Beep->Beep[1] == 'N')
-                    {	
-                        E53_SF1_Beep_StatusSet(ON);				
+                    {
+                        E53_SF1_Beep_StatusSet(ON);
                         Response_Smoke_Control_Beep.messageId = cn_app_response_Smoke_Control_Beep;
                     	Response_Smoke_Control_Beep.mid = Smoke_Control_Beep->mid;
                         Response_Smoke_Control_Beep.errcode = 0;
                 		Response_Smoke_Control_Beep.Beep_State = 1;
-                        oc_lwm2m_report(context,(char *)&Response_Smoke_Control_Beep,sizeof(Response_Smoke_Control_Beep),1000);    ///< report cmd reply message	
+                        oc_lwm2m_report(context,(char *)&Response_Smoke_Control_Beep,sizeof(Response_Smoke_Control_Beep),1000);    ///< report cmd reply message
                     }
                     if (Smoke_Control_Beep->Beep[0] == 'O' && Smoke_Control_Beep->Beep[1] == 'F' && Smoke_Control_Beep->Beep[2] == 'F')
-                    {	
-                        E53_SF1_Beep_StatusSet(OFF); 				
+                    {
+                        E53_SF1_Beep_StatusSet(OFF);
                         Response_Smoke_Control_Beep.messageId = cn_app_response_Smoke_Control_Beep;
                     	Response_Smoke_Control_Beep.mid = Smoke_Control_Beep->mid;
                         Response_Smoke_Control_Beep.errcode = 0;
                 		Response_Smoke_Control_Beep.Beep_State = 0;
-                        oc_lwm2m_report(context,(char *)&Response_Smoke_Control_Beep,sizeof(Response_Smoke_Control_Beep),1000);    ///< report cmd reply message	
+                        oc_lwm2m_report(context,(char *)&Response_Smoke_Control_Beep,sizeof(Response_Smoke_Control_Beep),1000);    ///< report cmd reply message
                     }
                     /********** code area end  **********/
                     break;
@@ -212,7 +212,12 @@ static int app_report_task_entry()
     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
     oc_param.rcv_func = app_msg_deal;
 
-    context = oc_lwm2m_config(&oc_param);
+    // context = oc_lwm2m_config(&oc_param);
+    ret = oc_lwm2m_config(&context, &oc_param);
+    if (0 != ret)
+    {
+    	return ret;
+    }
 
     if(NULL != context)   //success ,so we could receive and send
     {
@@ -231,7 +236,7 @@ static int app_report_task_entry()
 
 static int app_collect_task_entry()
 {
-    Init_E53_SF1();	
+    Init_E53_SF1();
     while (1)
     {
         E53_SF1_Read_Data();

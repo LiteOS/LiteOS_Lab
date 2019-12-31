@@ -33,7 +33,7 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-14 17:21  zhangqianfu  The first version  
+ *  2019-05-14 17:21  zhangqianfu  The first version
  *
  */
 #include <stdint.h>
@@ -178,22 +178,22 @@ static int app_cmd_task_entry()
                     printf("Agriculture_Control_Light:msgid:%d mid:%d", Agriculture_Control_Light->messageId, ntohs(Agriculture_Control_Light->mid));
                     /********** code area for cmd from IoT cloud  **********/
                     if (Agriculture_Control_Light->Light[0] == 'O' && Agriculture_Control_Light->Light[1] == 'N')
-                    {	
-                        HAL_GPIO_WritePin(IA1_Light_GPIO_Port, IA1_Light_Pin, GPIO_PIN_SET);  				
+                    {
+                        HAL_GPIO_WritePin(IA1_Light_GPIO_Port, IA1_Light_Pin, GPIO_PIN_SET);
                         Response_Agriculture_Control_Light.messageId = cn_app_response_Agriculture_Control_Light;
                     	Response_Agriculture_Control_Light.mid = Agriculture_Control_Light->mid;
                         Response_Agriculture_Control_Light.errcode = 0;
                 		Response_Agriculture_Control_Light.Light_State = 1;
-                        oc_lwm2m_report(context,(char *)&Response_Agriculture_Control_Light,sizeof(Response_Agriculture_Control_Light),1000);    ///< report cmd reply message	
+                        oc_lwm2m_report(context,(char *)&Response_Agriculture_Control_Light,sizeof(Response_Agriculture_Control_Light),1000);    ///< report cmd reply message
                     }
                     if (Agriculture_Control_Light->Light[0] == 'O' && Agriculture_Control_Light->Light[1] == 'F' && Agriculture_Control_Light->Light[2] == 'F')
-                    {	
-                        HAL_GPIO_WritePin(IA1_Light_GPIO_Port, IA1_Light_Pin, GPIO_PIN_RESET); 
+                    {
+                        HAL_GPIO_WritePin(IA1_Light_GPIO_Port, IA1_Light_Pin, GPIO_PIN_RESET);
                         Response_Agriculture_Control_Light.messageId = cn_app_response_Agriculture_Control_Light;
                     	Response_Agriculture_Control_Light.mid = Agriculture_Control_Light->mid;
                         Response_Agriculture_Control_Light.errcode = 0;
                 		Response_Agriculture_Control_Light.Light_State = 0;
-                        oc_lwm2m_report(context,(char *)&Response_Agriculture_Control_Light,sizeof(Response_Agriculture_Control_Light),1000);    ///< report cmd reply message	
+                        oc_lwm2m_report(context,(char *)&Response_Agriculture_Control_Light,sizeof(Response_Agriculture_Control_Light),1000);    ///< report cmd reply message
                     }
                     /********** code area end  **********/
                     break;
@@ -202,22 +202,22 @@ static int app_cmd_task_entry()
                     printf("Agriculture_Control_Motor:msgid:%d mid:%d", Agriculture_Control_Motor->messageId, ntohs(Agriculture_Control_Motor->mid));
                     /********** code area for cmd from IoT cloud  **********/
                     if (Agriculture_Control_Motor->Motor[0] == 'O' && Agriculture_Control_Motor->Motor[1] == 'N')
-                    {	
-                        HAL_GPIO_WritePin(IA1_Motor_GPIO_Port, IA1_Motor_Pin, GPIO_PIN_SET); 
+                    {
+                        HAL_GPIO_WritePin(IA1_Motor_GPIO_Port, IA1_Motor_Pin, GPIO_PIN_SET);
                         Response_Agriculture_Control_Motor.messageId = cn_app_response_Agriculture_Control_Motor;
                     	Response_Agriculture_Control_Motor.mid = Agriculture_Control_Motor->mid;
                         Response_Agriculture_Control_Motor.errcode = 0;
                 		Response_Agriculture_Control_Motor.Motor_State = 1;
-                        oc_lwm2m_report(context,(char *)&Response_Agriculture_Control_Motor,sizeof(Response_Agriculture_Control_Motor),1000);    ///< report cmd reply message	
+                        oc_lwm2m_report(context,(char *)&Response_Agriculture_Control_Motor,sizeof(Response_Agriculture_Control_Motor),1000);    ///< report cmd reply message
                     }
                     if (Agriculture_Control_Motor->Motor[0] == 'O' && Agriculture_Control_Motor->Motor[1] == 'F' && Agriculture_Control_Motor->Motor[2] == 'F')
-                    {	
-                        HAL_GPIO_WritePin(IA1_Motor_GPIO_Port, IA1_Motor_Pin, GPIO_PIN_RESET); 
+                    {
+                        HAL_GPIO_WritePin(IA1_Motor_GPIO_Port, IA1_Motor_Pin, GPIO_PIN_RESET);
                         Response_Agriculture_Control_Motor.messageId = cn_app_response_Agriculture_Control_Motor;
                     	Response_Agriculture_Control_Motor.mid = Agriculture_Control_Motor->mid;
                         Response_Agriculture_Control_Motor.errcode = 0;
                 		Response_Agriculture_Control_Motor.Motor_State = 0;
-                        oc_lwm2m_report(context,(char *)&Response_Agriculture_Control_Motor,sizeof(Response_Agriculture_Control_Motor),1000);    ///< report cmd reply message	
+                        oc_lwm2m_report(context,(char *)&Response_Agriculture_Control_Motor,sizeof(Response_Agriculture_Control_Motor),1000);    ///< report cmd reply message
                     }
                     /********** code area end  **********/
                     break;
@@ -247,7 +247,12 @@ static int app_report_task_entry()
     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
     oc_param.rcv_func = app_msg_deal;
 
-    context = oc_lwm2m_config(&oc_param);
+    // context = oc_lwm2m_config(&oc_param);
+    ret = oc_lwm2m_config(&context, &oc_param);
+    if (0 != ret)
+    {
+    	return ret;
+    }
 
     if(NULL != context)   //success ,so we could receive and send
     {
@@ -268,7 +273,7 @@ static int app_report_task_entry()
 
 static int app_collect_task_entry()
 {
-    Init_E53_IA1();	
+    Init_E53_IA1();
     while (1)
     {
         E53_IA1_Read_Data();

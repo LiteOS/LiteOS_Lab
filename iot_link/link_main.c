@@ -33,7 +33,7 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-04-28 15:00  zhangqianfu  The first version  
+ *  2019-04-28 15:00  zhangqianfu  The first version
  *
  */
 
@@ -168,6 +168,12 @@ int link_main(void *args)
 #elif CONFIG_LIBCOAP_ENABLE
     #include <libcoap_port.h>
     coap_install_libcoap();
+#endif
+
+//////////////////////////  LWM2M PROTOCOL  /////////////////////////////////
+#if CONFIG_WAKAAMA_ENABLE
+    #include <lwm2m_port.h>
+    lwm2m_install();
 #endif
 
 //////////////////////////  OC MQTT  //////////////////////////////////
