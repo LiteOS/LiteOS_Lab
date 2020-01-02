@@ -50,7 +50,7 @@ int  hwoc_mqtt_disconnect();
 int  hwoc_mqtt_publish(int qos,char *topic,uint8_t *payload,int len);
 int  hwoc_mqtt_send(int qos,uint8_t *payload,int len);
 void hwoc_mqtt_recvpub(int qos,int dup,const char *topic,uint8_t *payload, int len);
-void hwoc_mqtt_received(int qos,uint8_t *payload, int len);
+void hwoc_mqtt_received(int qos,int dup,uint8_t *payload, int len);
 
 
 #endif /* LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_AL_OC_MQTT_AT_H_ */

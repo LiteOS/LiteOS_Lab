@@ -54,7 +54,7 @@ void __attribute__((weak)) hwoc_mqtt_recvpub(int qos,int dup,const char *topic,u
 ///< when receive any information from hw, then it call this function,THIS IS A URC imformation
 ///< received the default topic message
 ///< ATCOMMAND:    +HWMQTTRECEIVED:1,2,0010
-void __attribute__((weak)) hwoc_mqtt_received(int qos,uint8_t *payload, int len)
+void __attribute__((weak)) hwoc_mqtt_received(int qos,int dup,uint8_t *payload, int len)
 {
     printf("%s:default topic message\n\r",__FUNCTION__);
     ///< PLEASE USE THE AT PIPE TO OUTPUT THE INFORMATION
@@ -82,7 +82,7 @@ static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
     }
     else
     {
-        hwoc_mqtt_received(msg->qos,(uint8_t *)msg->msg.data,msg->msg.len);
+        hwoc_mqtt_received(msg->qos,msg->dup,(uint8_t *)msg->msg.data,msg->msg.len);
     }
 
     return ret;
