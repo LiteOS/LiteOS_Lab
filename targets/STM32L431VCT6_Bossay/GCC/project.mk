@@ -61,6 +61,7 @@ HAL_DRIVER_INC = \
         C_INCLUDES += $(HAL_DRIVER_INC)        
 HARDWARE_INC = \
         -I ${wildcard $(TOP_DIR)/targets/STM32L431VCT6_Bossay/Hardware/Inc} \
+        -I ${wildcard $(TOP_DIR)/targets/STM32L431VCT6_Bossay/Hardware/IotBox} \
         -I ${wildcard $(TOP_DIR)/targets/STM32L431VCT6_Bossay/Hardware/LCD}
         C_INCLUDES += $(HARDWARE_INC)
 

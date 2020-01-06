@@ -162,7 +162,7 @@ CONFIG_PCP_ENABLE      := n
 #"oc_lwm2m_bs_demo"  "oc_lwm2m_demo" "oc_lwm2m_ota_demo" "oc_tls_mqtt_bs_demo" "oc_tls_mqtt_demo"  "stimer_demo"
 
 CONFIG_DEMO_ENABLE := y
-CONFIG_DEMO_TYPE   := "none"
+CONFIG_DEMO_TYPE   := "stimer_demo"
 
 #########################STANDARD DEMO END######################################
 
