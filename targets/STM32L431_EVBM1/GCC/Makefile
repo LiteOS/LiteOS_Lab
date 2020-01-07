@@ -69,7 +69,7 @@ include $(PROJECTBASE)/project.mk
 ################################################################################
 
 OBJ_DIRS :=
-TARGET_DIR:= $(PROJECTBASE)/tmp
+TARGET_DIR:= $(PROJECTBASE)/build
 
 ################################################################################
 # LDFLAGS
@@ -144,14 +144,14 @@ $(OBJ_DIRS):
 	-mkdir -p $@
 
 #compile the c file to the object, as you know we has map the .c to the .o	
-$(C_OBJ):%.o:
-	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(@:%.o=%.lst) $(@:$(TARGET_DIR)/%.o=$(TOP_DIR)/%.c)  -o $@
+$(C_OBJ):$(TARGET_DIR)/%.o:$(TOP_DIR)/%.c
+	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(@:%.o=%.lst) $<  -o $@
 
 #compile the s fike to the object, as you know we has map the .S to the .o
-$(S_OBJ):%.o:
-	$(AS) -c $(CFLAGS) $(@:$(TARGET_DIR)/%.o=$(TOP_DIR)/%.S)  -o $@
+$(S_OBJ):$(TARGET_DIR)/%.o:$(TOP_DIR)/%.S
+	$(AS) -c $(CFLAGS) $< -o $@
 		
-
+ 
 ################################################################################
 # clean up
 ################################################################################
