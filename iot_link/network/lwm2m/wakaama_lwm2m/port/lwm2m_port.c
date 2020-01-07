@@ -868,7 +868,7 @@ static int __connect(void *handle)
 
     hd->lwm2m_quit = 0;
     /* create the task for internal data process */
-    hd->task_handle = osal_task_create("lwm2m_run", __lwm2m_task_entry, handle, 0x1000, NULL, 10);
+    hd->task_handle = osal_task_create("lwm2m_run", __lwm2m_task_entry, handle, 0x2000, NULL, 10);
 
     if (NULL == hd->task_handle)
     {
