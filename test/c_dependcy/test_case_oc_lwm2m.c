@@ -98,7 +98,6 @@ static oc_lwm2m_paras g_lwm2m_paras = {0};
 static int8_t          s_rcv_buffer[cn_app_rcv_buf_len];
 static int             s_rcv_datalen;
 static osal_semp_t     s_rcv_sync;
-static void           *s_lwm2m_handle = NULL;
 static queue_t        *s_queue_rcvmsg = NULL;   ///< this is used to cached the message
 static void           *recv_task_handle = NULL;
 static void           *send_task_handle = NULL;  
@@ -232,20 +231,14 @@ static int app_report_task_entry()
     app_light_intensity_t  light;	
 
     printf("Calling app_report_task_entry(), start to report data.\n");
-    if(NULL != s_lwm2m_handle)   //success ,so we could receive and send
-    {
-        //install a dealer for the led message received
-        //while(1)
-        //{
-            lux++;
-            lux= lux%10000;
+    //
+    lux++;
+    lux= lux%10000;
 
-            light.msgid = cn_app_light;
-            light.intensity = htons(lux);
-            oc_lwm2m_report(s_lwm2m_handle,(char *)&light,sizeof(light),1000, OC_APP_DATA); ///< report the light message
-            osal_task_sleep(10*1000);
-        //}
-    }
+    light.msgid = cn_app_light;
+    light.intensity = htons(lux);
+    oc_lwm2m_report((char *)&light,sizeof(light),1000, OC_APP_DATA); ///< report the light message
+    osal_task_sleep(10*1000);
 
     return 0;
 }
@@ -433,8 +426,7 @@ static int ts_oc_lwm2m_config(char *message, int len)
     oc_param.boot_mode = pparas->boot_mode;
     oc_param.rcv_func = (pparas->cb_name ? app_msg_deal : NULL);
 
-	s_lwm2m_handle = oc_lwm2m_config(&oc_param);
-    if (NULL != s_lwm2m_handle)
+    if (0 != oc_lwm2m_config(&oc_param))
     {
         osal_semp_create(&s_rcv_sync,1,0);
         recv_task_handle = osal_task_create("app_command",app_cmd_task_entry,NULL,0x1000,NULL,3);

@@ -105,7 +105,6 @@ typedef struct
 } tag_app_Agriculture_Control_Motor;
 #pragma pack()
 
-void *context;
 int8_t qr_code = 1;
 const unsigned char gImage_Huawei_IoT_QR_Code[114720];
 unsigned char gImage_Bossaylogo[45128];
@@ -203,7 +202,7 @@ static int app_cmd_task_entry()
                     	Response_Agriculture_Control_Light.mid = Agriculture_Control_Light->mid;
                         Response_Agriculture_Control_Light.errcode = 0;
                 		Response_Agriculture_Control_Light.Light_State = 1;
-                        oc_lwm2m_report(context,(char *)&Response_Agriculture_Control_Light,sizeof(Response_Agriculture_Control_Light),1000);    ///< report cmd reply message	
+                        oc_lwm2m_report((char *)&Response_Agriculture_Control_Light,sizeof(Response_Agriculture_Control_Light),1000);    ///< report cmd reply message
                     }
                     if (Agriculture_Control_Light->Light[0] == 'O' && Agriculture_Control_Light->Light[1] == 'F' && Agriculture_Control_Light->Light[2] == 'F')
                     {	
@@ -212,7 +211,7 @@ static int app_cmd_task_entry()
                     	Response_Agriculture_Control_Light.mid = Agriculture_Control_Light->mid;
                         Response_Agriculture_Control_Light.errcode = 0;
                 		Response_Agriculture_Control_Light.Light_State = 0;
-                        oc_lwm2m_report(context,(char *)&Response_Agriculture_Control_Light,sizeof(Response_Agriculture_Control_Light),1000);    ///< report cmd reply message	
+                        oc_lwm2m_report((char *)&Response_Agriculture_Control_Light,sizeof(Response_Agriculture_Control_Light),1000);    ///< report cmd reply message
                     }
                     /********** code area end  **********/
                     break;
@@ -227,7 +226,7 @@ static int app_cmd_task_entry()
                     	Response_Agriculture_Control_Motor.mid = Agriculture_Control_Motor->mid;
                         Response_Agriculture_Control_Motor.errcode = 0;
                 		Response_Agriculture_Control_Motor.Motor_State = 1;
-                        oc_lwm2m_report(context,(char *)&Response_Agriculture_Control_Motor,sizeof(Response_Agriculture_Control_Motor),1000);    ///< report cmd reply message	
+                        oc_lwm2m_report((char *)&Response_Agriculture_Control_Motor,sizeof(Response_Agriculture_Control_Motor),1000);    ///< report cmd reply message
                     }
                     if (Agriculture_Control_Motor->Motor[0] == 'O' && Agriculture_Control_Motor->Motor[1] == 'F' && Agriculture_Control_Motor->Motor[2] == 'F')
                     {	
@@ -236,7 +235,7 @@ static int app_cmd_task_entry()
                     	Response_Agriculture_Control_Motor.mid = Agriculture_Control_Motor->mid;
                         Response_Agriculture_Control_Motor.errcode = 0;
                 		Response_Agriculture_Control_Motor.Motor_State = 0;
-                        oc_lwm2m_report(context,(char *)&Response_Agriculture_Control_Motor,sizeof(Response_Agriculture_Control_Motor),1000);    ///< report cmd reply message	
+                        oc_lwm2m_report((char *)&Response_Agriculture_Control_Motor,sizeof(Response_Agriculture_Control_Motor),1000);    ///< report cmd reply message
                     }
                     /********** code area end  **********/
                     break;
@@ -266,9 +265,9 @@ static int app_report_task_entry()
     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
     oc_param.rcv_func = app_msg_deal;
 
-    context = oc_lwm2m_config(&oc_param);
+    ret = oc_lwm2m_config(&oc_param);
 
-    if(NULL != context)   //success ,so we could receive and send
+    if(0 == ret)   //success ,so we could receive and send
     {
         //install a dealer for the led message received
         while(1) //--TODO ,you could add your own code here
@@ -277,7 +276,7 @@ static int app_report_task_entry()
             Agriculture.Temperature = (int8_t)IotBox_HT_Data.Temperature;
             Agriculture.Humidity = (int8_t)IotBox_HT_Data.Humidity;
             Agriculture.Luminance = htons((uint16_t)IotBox_Lux_Data.Lux);
-            oc_lwm2m_report(context, (char *)&Agriculture, sizeof(Agriculture), 1000);
+            oc_lwm2m_report( (char *)&Agriculture, sizeof(Agriculture), 1000);
             osal_task_sleep(2*1000);
         }
     }

@@ -83,10 +83,26 @@ typedef struct
     void                    *usr_data;        ///< used for the user
 } oc_config_param_t;
 
+
+typedef enum
+{
+    en_oc_lwm2m_err_ok          = 0,      ///< this means the status ok
+    en_oc_lwm2m_err_parafmt,              ///< this means the parameter err format
+    en_oc_lwm2m_err_network,              ///< this means the network wrong status
+    en_oc_lwm2m_err_conserver,            ///< this means the server refused the service for some reason(likely the id and pwd)
+    en_oc_lwm2m_err_noconfigured,         ///< this means we have not configure it yet,so could not connect
+    en_oc_lwm2m_err_configured,           ///< this means we has configured it, so could not reconfigure it
+    en_oc_lwm2m_err_noconected,           ///< this means the connection has not been built, so you could not send data
+    en_oc_lwm2m_err_gethubaddrtimeout,    ///< this means get the hub address timeout
+    en_oc_lwm2m_err_sysmem,               ///< this means the system memory is not enough
+    en_oc_lwm2m_err_system,               ///< this means that the system porting may have some problem,maybe not install yet
+    en_oc_lwm2m_err_last,
+}en_oc_lwm2m_err_code_t;
+
 ///////////////////////////LWM2M AGENT INTERFACE////////////////////////////////
-typedef int (*fn_oc_lwm2m_report)(void *handle, char *buf, int len, int timeout);
-typedef int (*fn_oc_lwm2m_config)(void **handle, oc_config_param_t *param);
-typedef int (*fn_oc_lwm2m_deconfig)(void *handle);
+typedef int (*fn_oc_lwm2m_report)(char *buf, int len, int timeout);
+typedef int (*fn_oc_lwm2m_config)(oc_config_param_t *param);
+typedef int (*fn_oc_lwm2m_deconfig)(void);
 /**
  * @brief this data structure defines the lwm2m agent implement
  */
@@ -119,29 +135,26 @@ int oc_lwm2m_unregister(const char *name);
 /**
  * @brief the application use this function to configure the lwm2m agent
  * @param[in] param, refer to oc_config_param_t
- * @return  the context, while NULL means failed
+ * @return 0 success while others the error code described as en_oc_lwm2m_err_code_t
  */
-int oc_lwm2m_config(void **handle, oc_config_param_t *param);
+int oc_lwm2m_config(oc_config_param_t *param);
+
 /**
  * @brief the application use this function to send the message to the cdp
- * @param[in] hanlde, returned by the config
  * @param[in] buf the message to send
  * @param[in] len the message length
  * @param[in] timeout block time
- *
- * @return 0 success while <0 failed
+ * @return 0 success while others the error code described as en_oc_lwm2m_err_code_t
  */
-int oc_lwm2m_report(void *context, char *buf, int len, int timeout);
+int oc_lwm2m_report(char *buf, int len, int timeout);
 
 /**
  *@brief: the application use this function to deconfigure the lwm2m agent
  *
- *@param[in] context, returned by the config
- *
- * return 0 success while <0 failed
+ * @return 0 success while others the error code described as en_oc_lwm2m_err_code_t
  */
 
-int oc_lwm2m_deconfig(void *context);
+int oc_lwm2m_deconfig(void);
 
 /**
  *@brief this is the oc lwm2m agent initialize function,must be called first
