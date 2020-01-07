@@ -91,7 +91,7 @@ CONFIG_TCPIP_ENABLE := y
 CONFIG_TCPIP_TYPE := "lwip_socket"
 
 #CONFIG_DTLS_ENABLE , we supply a DTLS AL (building),you could choose yes or no
-#CONFIG_DTLS_TYPE, could be "mbedtls_psk" "mbedtls_cert" "none"
+#CONFIG_DTLS_TYPE, could be "mbedtls_psk" "mbedtls_cert" "mbedtls_psk_cert" "none"
 
 CONFIG_DTLS_ENABLE   := y
 CONFIG_DTLS_TYPE     := "mbedtls_psk"

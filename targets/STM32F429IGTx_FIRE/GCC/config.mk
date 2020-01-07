@@ -33,10 +33,10 @@
 # *---------------------------------------------------------------------------*/
 #/**
 # *  DATE                AUTHOR      INSTRUCTION
-# *  2019-04-28 15:00  zhangqianfu  The first version  
+# *  2019-04-28 15:00  zhangqianfu  The first version
 # *
 # */
-### this is the template to tell you how to configure the iot_link, maybe 
+### this is the template to tell you how to configure the iot_link, maybe
 ### not good enough, please give some advice if any idea
 ################################################################################
 ###
@@ -83,7 +83,7 @@ CONFIG_CJSON_ENABLE := y
 ########################NETWORK SERVICE START###################################
 
 #CONFIG_TCPIP_ENABLE , we build a sal for the tcpip functions, and you could choose yes or no
-#you could build your own application based on the sal, which shielding the defference of 
+#you could build your own application based on the sal, which shielding the defference of
 #variouse tcpip function.what's more, you could add your own tcpip stack to the sdk.
 #and if this option is enabled, then you select  one type for your program, we now
 #CONFIG_TCPIP_TYPE could be:"lwip_socket" "linux_socket" "macos_socket" "esp8266_socket" "rtk8710_socket" "none"
@@ -91,25 +91,25 @@ CONFIG_TCPIP_ENABLE := y
 CONFIG_TCPIP_TYPE := "lwip_socket"
 
 #CONFIG_DTLS_ENABLE , we supply a DTLS AL (building),you could choose yes or no
-#CONFIG_DTLS_TYPE, could be "mbedtls_psk" "mbedtls_cert" "none"
+#CONFIG_DTLS_TYPE, could be "mbedtls_psk" "mbedtls_cert" "mbedtls_psk_cert" "none"
 
 CONFIG_DTLS_ENABLE   := y
 CONFIG_DTLS_TYPE     := "mbedtls_cert"
 
-#CONFIG_MQTT_ENABLE, we build a mqtt abstraction, which shield the difference of 
-#the implement of mqtt. 
+#CONFIG_MQTT_ENABLE, we build a mqtt abstraction, which shield the difference of
+#the implement of mqtt.
 #CONFIG_MQTT_TYPE could be "paho_mqtt" "none"
 CONFIG_MQTT_ENABLE   := y
 CONFIG_MQTT_TYPE     := "paho_mqtt"
 
-#CONFIG_LWM2M_ENABLE, we build a lwm2m abstraction, which shield the difference of 
-#the implement of lwm2m. 
+#CONFIG_LWM2M_ENABLE, we build a lwm2m abstraction, which shield the difference of
+#the implement of lwm2m.
 #CONFIG_LWM2M_TYPE could be "wakaama_lwm2m" "wakaama_raw" "none"
 CONFIG_LWM2M_ENABLE   := n
 CONFIG_LWM2M_TYPE     := "wakaama_lwm2m"
 
-#CONFIG_COAP_ENABLE, we build a coap abstraction, which shield the difference of 
-#the implement of coap. 
+#CONFIG_COAP_ENABLE, we build a coap abstraction, which shield the difference of
+#the implement of coap.
 #CONFIG_COAP_TYPE could be "lite_coap" "libcoap" "none"
 CONFIG_COAP_ENABLE   := n
 CONFIG_COAP_TYPE     := "lite_coap"
@@ -118,19 +118,19 @@ CONFIG_COAP_TYPE     := "lite_coap"
 
 ########################OC SERVICE START########################################
 #CONFIG_OC_COAP_ENABLE, we build a oc coap abstraction for huawei OceanConnect service,
-#which shield the difference of the implement of oc coap. 
+#which shield the difference of the implement of oc coap.
 #CONFIG_OC_MQTT_TYPE could be "soft" "none"
 CONFIG_OC_COAP_ENABLE := n
 CONFIG_OC_COAP_TYPE   := "soft"
 
 #CONFIG_OC_MQTT_ENABLE, we build a oc mqtt abstraction for huawei OceanConnect service,
-#which shield the difference of the implement of oc mqtt. 
+#which shield the difference of the implement of oc mqtt.
 #CONFIG_OC_MQTT_TYPE could be "soft" "ec20_oc" "none"
 CONFIG_OC_MQTT_ENABLE := y
 CONFIG_OC_MQTT_TYPE   := "soft"
 
 #CONFIG_OC_LWM2M_ENABLE, we build a oc lwm2m abstraction for huawei OceanConnect service,
-#which shield the difference of the implement of oc lwm2m. 
+#which shield the difference of the implement of oc lwm2m.
 #CONFIG_OC_MQTT_TYPE could be "soft" "boudica150_oc" "none"
 CONFIG_OC_LWM2M_ENABLE := n
 CONFIG_OC_LWM2M_TYPE   := "soft"
@@ -149,7 +149,7 @@ CONFIG_PCP_ENABLE      := n
 ########################OTA SERVICE END#########################################
 
 ########################STANDARD DEMO START#####################################
-#we create many standard demos, which maybe hardware independent,may help you to 
+#we create many standard demos, which maybe hardware independent,may help you to
 #create your own service,if the CONFIG_DEMO_ENABLE is enable and CONFIG_DEMO_TYPE
 #is "none", then you should build a demo has the same name standard_app_demo_main.if you want
 #to build a specified differnt name for your own demo, please make CONFIG_DEMO_ENABLE
