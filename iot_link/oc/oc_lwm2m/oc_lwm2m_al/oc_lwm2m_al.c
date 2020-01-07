@@ -53,13 +53,6 @@ typedef struct
 } oc_lwm2m_t;
 static oc_lwm2m_t  s_oc_lwm2m_ops;
 
-typedef struct
-{
-    void                    *handle;
-    const oc_lwm2m_opt_t    *ops;
-    oc_config_param_t        param;
-} oc_lwm2m_context_t;
-
 
 int oc_lwm2m_register(const char *name, const oc_lwm2m_opt_t *opt)
 {
@@ -94,40 +87,32 @@ int oc_lwm2m_unregister(const char *name)
 
 
 //////////////////////////APPLICATION INTERFACE/////////////////////////////////
-int oc_lwm2m_report(void *context, char  *buf, int len, int timeout)
+int oc_lwm2m_report(char  *buf, int len, int timeout)
 {
-    int ret = -1;
-    oc_lwm2m_context_t  *oc_lwm2m;
-    oc_lwm2m = context;
+    int ret = en_oc_lwm2m_err_system;
 
-    if ((NULL != oc_lwm2m) && (NULL != oc_lwm2m->ops) && (NULL != oc_lwm2m->ops->report))
+    if ((NULL != s_oc_lwm2m_ops.opt) && (NULL != s_oc_lwm2m_ops.opt->report))
     {
-        ret = oc_lwm2m->ops->report(oc_lwm2m->handle, buf, len, timeout);
+        ret = s_oc_lwm2m_ops.opt->report(buf, len, timeout);
     }
 
     return ret;
 }
 
 
-int oc_lwm2m_config(void **handle, oc_config_param_t *param)
+int oc_lwm2m_config( oc_config_param_t *param)
 {
-    int ret = -1;
-    oc_lwm2m_context_t  *oc_lwm2m;
+    int ret = en_oc_lwm2m_err_system;
 
     if ((NULL != s_oc_lwm2m_ops.opt) && (NULL != s_oc_lwm2m_ops.opt->config))
     {
-        oc_lwm2m = osal_zalloc(sizeof(oc_lwm2m_context_t));
-
-        if (NULL != oc_lwm2m)
+        if(NULL != param)
         {
-            oc_lwm2m->param = *param;
-            oc_lwm2m->ops = s_oc_lwm2m_ops.opt;
-            ret = s_oc_lwm2m_ops.opt->config(&(oc_lwm2m->handle), param);
-
-            if (0 == ret)
-            {
-                *handle = oc_lwm2m;
-            }
+            ret = s_oc_lwm2m_ops.opt->config(param);
+        }
+        else
+        {
+            ret = en_oc_lwm2m_err_parafmt;
         }
     }
 
@@ -135,20 +120,13 @@ int oc_lwm2m_config(void **handle, oc_config_param_t *param)
 }
 
 
-int oc_lwm2m_deconfig(void *context)
+int oc_lwm2m_deconfig(void)
 {
-    int ret = -1;
-    oc_lwm2m_context_t  *oc_lwm2m;
-    oc_lwm2m = context;
+    int ret = en_oc_lwm2m_err_system;
 
-    if ((NULL != oc_lwm2m) && (NULL != oc_lwm2m->ops) && (NULL != oc_lwm2m->ops->deconfig))
+    if ((NULL != s_oc_lwm2m_ops.opt) && (NULL != s_oc_lwm2m_ops.opt->deconfig))
     {
-        ret = oc_lwm2m->ops->deconfig(oc_lwm2m->handle); ///<  should check if deconfigure error
-
-        if (0 == ret)
-        {
-            osal_free(oc_lwm2m);
-        }
+        ret = s_oc_lwm2m_ops.opt->deconfig();
     }
 
     return ret;
