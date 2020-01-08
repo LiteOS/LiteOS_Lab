@@ -119,7 +119,7 @@ CONFIG_COAP_TYPE     := "lite_coap"
 ########################OC SERVICE START########################################
 #CONFIG_OC_COAP_ENABLE, we build a oc coap abstraction for huawei OceanConnect service,
 #which shield the difference of the implement of oc coap. 
-#CONFIG_OC_MQTT_TYPE could be "soft" "none"
+#CONFIG_OC_COAP_TYPE could be "soft" "none"
 CONFIG_OC_COAP_ENABLE := n
 CONFIG_OC_COAP_TYPE   := "soft"
 
@@ -131,7 +131,7 @@ CONFIG_OC_MQTT_TYPE   := "soft"
 
 #CONFIG_OC_LWM2M_ENABLE, we build a oc lwm2m abstraction for huawei OceanConnect service,
 #which shield the difference of the implement of oc lwm2m. 
-#CONFIG_OC_MQTT_TYPE could be "soft" "boudica150_oc" "none"
+#CONFIG_OC_LWM2M_TYPE could be "soft" "boudica150_oc" "none"
 CONFIG_OC_LWM2M_ENABLE := y
 CONFIG_OC_LWM2M_TYPE   := "boudica150_oc"
 
@@ -170,7 +170,7 @@ CONFIG_DEMO_TYPE   := "none"
 
 #CONFIG_USER_DEMO could be "oc_streetlight_template" "oc_agriculture_template" "oc_track_template" "oc_smoke_template"
 
-CONFIG_USER_DEMO := "oc_streetlight_template"
+CONFIG_USER_DEMO := "oc_manhole_cover_template"
 
 #########################BearPi-IoT OC DEMO END######################################
 

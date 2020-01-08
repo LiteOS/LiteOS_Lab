@@ -1,6 +1,6 @@
 /********************************************************************************
     * 文件名称 ：E53_ST1.h
-    * 作     者：物联网俱乐部
+    * 作     者：小熊派开源社区
     * 版     本：V1.0
     * 编写日期 ：2019-5-31
     * 功     能：E53_ST1扩展板驱动
@@ -79,6 +79,58 @@ void timer_config(void)
     timer_enable(TIMER3);
 }
 
+/*!
+    \brief      configure USART DMA
+    \param[in]  none
+    \param[out] none
+    \retval     none
+*/
+void usart_dma_config(void)
+{
+    dma_parameter_struct dma_init_struct;
+    /* enable DMA1 */
+    rcu_periph_clock_enable(RCU_DMA1);
+    /* deinitialize DMA channel2(USART3 rx) */
+    dma_deinit(DMA1, DMA_CH2);
+    dma_init_struct.direction = DMA_PERIPHERAL_TO_MEMORY;
+    dma_init_struct.memory_addr = (uint32_t)rx_buffer;
+    dma_init_struct.memory_inc = DMA_MEMORY_INCREASE_ENABLE;
+    dma_init_struct.memory_width = DMA_MEMORY_WIDTH_8BIT;
+    dma_init_struct.number = 2000;
+    dma_init_struct.periph_addr = 0x40004C04;
+    dma_init_struct.periph_inc = DMA_PERIPH_INCREASE_DISABLE;
+    dma_init_struct.periph_width = DMA_PERIPHERAL_WIDTH_8BIT;
+    dma_init_struct.priority = DMA_PRIORITY_ULTRA_HIGH;
+    
+
+    dma_init(DMA1, DMA_CH2, &dma_init_struct);
+    /* configure DMA mode */
+    dma_circulation_disable(DMA1, DMA_CH2);
+    dma_memory_to_memory_disable(DMA1, DMA_CH2);
+
+    /* enable USART3 DMA channel transmission and reception */
+    dma_channel_enable(DMA1, DMA_CH2);
+    usart_dma_receive_config(UART3, USART_DENR_ENABLE);
+	
+}
+
+void UART3_IRQHandler(void)
+{
+    if(RESET != usart_interrupt_flag_get(UART3, USART_INT_FLAG_IDLE))
+    {
+        dma_channel_disable(DMA1, DMA_CH2);
+        usart_data_receive(UART3);
+        DMA_CHCNT(DMA1, DMA_CH2) = (2000& DMA_CHANNEL_CNT_MASK);     
+        NMEA_BDS_GPRMC_Analysis(&gpsmsg, (uint8_t *)rx_buffer); //分析字符串
+        E53_ST1_Data.Longitude = (float)((float)gpsmsg.longitude_bd / 100000);
+        E53_ST1_Data.Latitude = (float)((float)gpsmsg.latitude_bd / 100000);
+        dma_channel_enable(DMA1, DMA_CH2);
+        usart_interrupt_flag_clear(UART3, USART_INT_FLAG_IDLE);
+        usart_interrupt_disable(UART3, USART_INT_IDLE);
+    }
+          
+}
+
 /***************************************************************
  * 函数名称: Init_Beep
  * 说    明: 初始化E53_ST1的蜂鸣器
@@ -132,23 +184,11 @@ void Init_GPS_POW(void)
  ***************************************************************/
 void GPS_Init(void)
 {
-    gd_eval_com_init(EVAL_COM3, 115200);
-    usart_flag_clear(EVAL_COM3,USART_FLAG_TC);
-    usart_interrupt_enable(UART3, USART_INT_RBNE);
-    usart_interrupt_enable(UART3, USART_INT_IDLE);
-    // nvic_irq_enable(UART3_IRQn, 0, 0);
-    LOS_HwiCreate(UART3_IRQn, 7,0,UART3_IRQHandler,NULL);	//创建中断
-        /* enable USART0 receive interrupt */
-
-
-    // gd_eval_com_init(EVAL_COM2, 115200);
-    // usart_flag_clear(EVAL_COM0,USART_FLAG_TC);
-    //         /* enable USART0 receive interrupt */
-    // usart_interrupt_enable(USART0, USART_INT_RBNE);
-    // // usart_interrupt_enable(USART0, USART_INT_IDLE);
-    // //nvic_irq_enable(USART0_IRQn, 0, 0);
-    // // LOS_HwiCreate(USART0_IRQn, 7,0,USART0_IRQHandler,NULL);	//创建中断
-
+    gd_eval_com_init(EVAL_COM3, 9600);
+    LOS_HwiCreate(UART3_IRQn, 3, 0, UART3_IRQHandler, 0);
+    
+    /* configure USART DMA */
+    usart_dma_config();
 }
 
 /***************************************************************
@@ -302,11 +342,7 @@ void NMEA_BDS_GPRMC_Analysis(gps_msg *gpsmsg, uint8_t *buf)
  ***************************************************************/
 void E53_ST1_Read_Data(void)
 {
-    // HAL_UART_Receive_IT(&huart3,gps_uart,1000);
-
-    NMEA_BDS_GPRMC_Analysis(&gpsmsg, (uint8_t *)rx_buffer); //分析字符串
-    E53_ST1_Data.Longitude = (float)((float)gpsmsg.longitude_bd / 100000);
-    E53_ST1_Data.Latitude = (float)((float)gpsmsg.latitude_bd / 100000);
+    usart_interrupt_enable(UART3, USART_INT_IDLE);
 }
 
 /***************************************************************

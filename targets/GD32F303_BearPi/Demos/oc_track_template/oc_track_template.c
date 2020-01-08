@@ -44,7 +44,6 @@
 #include <oc_lwm2m_al.h>
 #include <link_endian.h>
 
-#include <boudica150_oc.h>
 #include "E53_ST1.h"
 #include "lcd.h"
 
@@ -106,34 +105,6 @@ static int             s_rcv_datalen;
 static osal_semp_t     s_rcv_sync;
 
 
-void UART3_IRQHandler(void)
-{
-
-    unsigned char value;
-    printf("this is uart3_irq\r\n");
-    if(usart_interrupt_flag_get(UART3, USART_INT_FLAG_RBNE) != RESET)
-    {
-        usart_interrupt_flag_clear(UART3, USART_INT_FLAG_RBNE);
-        rx_buffer[rx_counter++] = (uint8_t) usart_data_receive(UART3);
-        printf("GPS data1:%c\r\n",rx_buffer[0]);
-        printf("GPS data2:%c\r\n",rx_buffer[1]);
-        printf("GPS data3:%c\r\n",rx_buffer[3]);
-        	// usart_interrupt_disable(USART0, USART_INT_RBNE);
-        if(rx_counter >= 10)
-        {
-            /* disable the USART0 receive interrupt */
-            usart_interrupt_disable(UART3, USART_INT_RBNE);
-        }
-    }
-    else if (usart_interrupt_flag_get(UART3,USART_INT_FLAG_IDLE) != RESET)
-    {
-        usart_interrupt_flag_clear(UART3,USART_INT_FLAG_IDLE);
-        usart_flag_clear(UART3,USART_FLAG_IDLE);
-        usart_interrupt_disable(UART3, USART_INT_IDLE);
-        rx_counter=0;        
-    }
-       
-}
 
 static void timer1_callback(void *arg)
 {

@@ -50,7 +50,7 @@
 
 #include <gd32f30x_it.h>
 
-#define cn_endpoint_id        "lwm2m_1212"
+#define cn_endpoint_id        "BearPi-IoT"
 #define cn_app_server         "49.4.85.232"
 #define cn_app_port           "5683"
 

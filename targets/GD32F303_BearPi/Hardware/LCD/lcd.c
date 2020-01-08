@@ -208,6 +208,7 @@ void LCD_DisplayOff(void) { LCD_PWR(0); }
 void LCD_Clear(uint16_t color)
 {
     int i, j;
+    LCD_Address_Set(0, 0, LCD_Width - 1, LCD_Height - 1);
     for (i = 0; i < 240; i++)
     {
         for (j = 0; j < 240; j++)

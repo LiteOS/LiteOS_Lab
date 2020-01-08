@@ -174,6 +174,5 @@ CONFIG_USER_DEMO := "oc_agriculture_template"
 
 #########################BearPi-IoT OC DEMO END######################################
 
-include $(TOP_DIR)/iot_link/iot.mk
 
 

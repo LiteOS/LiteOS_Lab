@@ -34,6 +34,13 @@ choice Demo
 		select AT_ENABLE
 		select BOUDICA150
 		select STIMER_ENABLE
+	config Demo_Cover
+		bool "OC Cover"
+		select OC_LWM2M
+		select SHELL_ENABLE
+		select AT_ENABLE
+		select BOUDICA150
+		select STIMER_ENABLE
 	config Demo_OC_Cloud_Map
 		bool "OC Cloud Map"
 		select OC_LWM2M
@@ -50,5 +57,6 @@ config USER_DEMO
 	default "oc_agriculture_template" if Demo_Agriculture
 	default "oc_track_template" if Demo_Track
 	default "oc_smoke_template" if Demo_Smoke
+	default "oc_manhole_cover_template" if Demo_Cover
 	default "oc_cloud_map_demo" if Demo_OC_Cloud_Map
 	default "none"
