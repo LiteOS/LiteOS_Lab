@@ -232,6 +232,8 @@ void GT911_Scan(void)
 //				}
 //			}
 			
+			printf("touch:x:%d y:%d s:%d\n\r",Dev_Now.X[0],Dev_Now.Y[0],Dev_Now.S[0]);
+
 			if((Dev_Now.TouchCount > 0) &&(NULL != s_fn_touch_hook))
 			{
 			    s_fn_touch_hook(Dev_Now.X[0],Dev_Now.Y[0]);

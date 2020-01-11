@@ -188,8 +188,9 @@ int byte2hexstr(uint8_t *bufin, int len, char *bufout)
     bufout[2*len] = '\0';
 
     return 0;
-
 }
+
+
 
 
 

@@ -55,6 +55,74 @@
 #define CN_PAIN_H  800
 
 
+typedef struct
+{
+   int x;
+   int y;
+   int w;
+   int h;
+   fn_touch_hook  hook;
+}ui_touch_t;
+
+#define CN_TOUCH_HOOK_NUM   4
+static ui_touch_t  s_ui_touch[CN_TOUCH_HOOK_NUM];
+
+///< do the touch filter here
+static int ui_touch(int x_t,int y_t)
+{
+    int i = 0;
+    int y;
+    int x;
+    static unsigned long long time_last = 0;
+    unsigned long long time_now = 0;
+
+    ///< do the change
+    x= CN_PAIN_W - y_t;
+    y= x_t;
+
+    time_now = osal_sys_time();
+    if((time_now - time_last) <= 500)
+    {
+        printf("FILTER TOUCH:X_T:%d Y_T:%d X:%d Y:%d %d \n\r",x_t,y_t,x,y,(int)time_now);
+        time_last = time_now;
+        return 0;
+    }
+    time_last = time_now;
+    printf("TOUCH:X_T:%d Y_T:%d X:%d Y:%d  %d \n\r",x_t,y_t,x,y,(int)time_now);
+
+    ///< find the match one and execute
+    for(i = 0;i< CN_TOUCH_HOOK_NUM;i++)
+    {
+        if((NULL != s_ui_touch[i].hook) && \
+           (x> s_ui_touch[i].x) && (x < (s_ui_touch[i].x + s_ui_touch[i].w))&&\
+           (y> s_ui_touch[i].y) && (y < (s_ui_touch[i].y + s_ui_touch[i].h)))
+        {
+            s_ui_touch[i].hook(x,y);
+        }
+    }
+
+    return 0;
+}
+
+static int ui_touch_register(ui_touch_t *touch)
+{
+    int i = 0;
+    int ret = -1;
+    for(i = 0;i< CN_TOUCH_HOOK_NUM;i++)
+    {
+        if(NULL == s_ui_touch[i].hook)
+        {
+            s_ui_touch[i] = *touch;
+            ret = 0;
+            break;
+        }
+    }
+
+    return ret;
+}
+
+
+
 static void ui_clean_window(int x, int y, int w,int h)
 {
 
@@ -73,7 +141,7 @@ static void ui_clean_window(int x, int y, int w,int h)
 #define CN_UI_TIME_Y_S   650
 #define CN_UI_TIME_W     460
 #define CN_UI_TIME_H     50
-#define CN_UI_TIME_FRESH (1000*10)
+#define CN_UI_TIME_FRESH (1000*20)
 
 
 static int ui_time_entry(void *arg)
@@ -124,7 +192,7 @@ static int ui_time_entry(void *arg)
 #define CN_UI_SIM_T_W      400
 #define CN_UI_SIM_T_H      50
 
-#define CN_UI_SIGNAL_FRESH   (5*1000)   ///< this fresh could be more frequency,we fresh it until it changed
+#define CN_UI_SIGNAL_FRESH   (20*1000)   ///< this fresh could be more frequency,we fresh it until it changed
 
 
 
@@ -192,7 +260,7 @@ static int ui_signal_entry(void *arg)
         {
             if(rssi != rssi_bak)  ///<fresh the different data
             {
-                snprintf(rssi_str,32,"RSSI:%d dbm",rssi);
+                snprintf(rssi_str,32,"RSSI:%ddbm",rssi);
                 ui_clean_window(CN_UI_RSSI_X_S,CN_UI_RSSI_Y_S,CN_UI_RSSI_W,CN_UI_RSSI_H);
                 Paint_DrawString_EN(CN_UI_RSSI_X_S, CN_UI_RSSI_Y_S, rssi_str, &Font24, WHITE, BLACK);
                 rssi_bak = rssi;
@@ -206,7 +274,7 @@ static int ui_signal_entry(void *arg)
 
 
         ///< rssi fresh
-        if(0 == ec2x_get_operator(oprt_str+5,26))
+        if(0 == ec2x_get_operator(oprt_str,26))
         {
             if(0 != strcmp(oprt_str,oprt_str_bak))  ///<fresh the different data
             {
@@ -229,224 +297,282 @@ static int ui_signal_entry(void *arg)
 }
 
 ///< here we need the touch support
-#define CN_UI_ICCID_FRESH   (10*1000)
-#define CN_ICCID_NUM         4
-typedef struct
-{
-    int    type;
-    int    inuse;
-    char   id[22];
-}iccid_card_t;
-
 
 typedef struct
 {
-    int           card_num;
-    iccid_card_t  iccid[CN_ICCID_NUM];
-}iccid_cb_t;
+    int         iccid_get:1;
+    int         eid_get:1;
+    int         iccid_change:1;
+    int         iccid_select:3;
+    eid_t       eid;
+    iccid_tab_t tab;
+}ui_iccid_cb_t;
+static ui_iccid_cb_t  s_ui_iccid_cb;
 
+///< VIEW FOR THE ICCID UI
+/*****************************************
+ -----------------------------------------  LINE S_1
+ EID:XXXX                                   LINE EID
+ -----------------------------------------  LINE S_2
+ T:Type S:Seed B:Bussiness  I:inuse         LINE DESCRIPTION
+ -----------------------------------------  LINE S_3
+ No   ICCID         T       I               LINE TABLE
+ -----------------------------------------  LINE S_4
+ 0    xxxxxx        S       FULLFIL         LINE I_0
+ 1    xxxxxx        B       EMPTY           LINE_I_1
+ 2    xxxxxx        B       EMPTY           LINE_I_2
+ 3
+ -----------------------------------------  LINE S_5
+******************************************/
 
-static iccid_cb_t  s_iccid_cb =
+#define CN_ICCID_ITEM_MAX  4
+#define CN_ICCID_STR_MAXEN 64
+
+#define CN_ICCID_LINE_H   10
+#define CN_ICCID_FONT_H   40
+
+#define CN_ICCID_BASE_Y           280
+#define CN_ICCID_LINE_S_1_Y       (CN_ICCID_BASE_Y)
+#define CN_ICCID_LINE_EID_Y       (CN_ICCID_LINE_S_1_Y + CN_ICCID_LINE_H)
+#define CN_ICCID_LINE_S_2_Y       (CN_ICCID_LINE_EID_Y + CN_ICCID_FONT_H + 10)
+#define CN_ICCID_LINE_D_Y         (CN_ICCID_LINE_S_2_Y + CN_ICCID_LINE_H)
+#define CN_ICCID_LINE_S_3_Y       (CN_ICCID_LINE_D_Y + CN_ICCID_FONT_H)
+#define CN_ICCID_LINE_T_Y         (CN_ICCID_LINE_S_3_Y + CN_ICCID_LINE_H)
+#define CN_ICCID_LINE_S_4_Y       (CN_ICCID_LINE_T_Y + CN_ICCID_FONT_H)
+#define CN_ICCID_lINE_I_0_Y       (CN_ICCID_LINE_S_4_Y + CN_ICCID_LINE_H)
+#define CN_ICCID_lINE_I_1_Y       (CN_ICCID_lINE_I_0_Y + CN_ICCID_FONT_H)
+#define CN_ICCID_lINE_I_2_Y       (CN_ICCID_lINE_I_1_Y + CN_ICCID_FONT_H)
+#define CN_ICCID_lINE_I_3_Y       (CN_ICCID_lINE_I_2_Y + CN_ICCID_FONT_H)
+#define CN_ICCID_lINE_S_5_Y       (CN_ICCID_lINE_I_3_Y + CN_ICCID_FONT_H)
+#define CN_ICCID_END_Y            (CN_ICCID_lINE_S_5_Y)
+
+#define CN_ICCID_BASE_X           (10)
+#define CN_ICCID_END_X            (470)
+#define CN_ICCID_STATUS_X         (450)
+#define CN_UI_ICCID_FRESH         (1*1000)
+
+///< status:0 empty 1 fill blue 2 fill gray
+typedef enum
 {
-    .card_num =4,
-    .iccid[0] = {
-      .type = 1,
-      .inuse =0,
-      .id = "89860317422046189700",
-    },
-    .iccid[1] = {
-      .type = 2,
-      .inuse =0,
-      .id = "89860317422046189701",
-    },
-    .iccid[2] = {
-      .type = 2,
-      .inuse =0,
-      .id = "89860317422046189702",
-    },
-    .iccid[3] = {
-      .type = 2,
-      .inuse =1,
-      .id = "89860317422046189703",
-    },
-};
+    en_draw_status_empty = 0,
+    en_draw_status_fillblue,
+    en_draw_status_gray,
+}en_draw_status_t;
 
-
-#define CN_UI_ICCID_X_S    10
-#define CN_UI_ICCID_Y_S    350
-#define CN_UI_ICCID_W      470
-#define CN_UI_ICCID_H      300
-#define CN_UI_ICCID_HLINE  50
-
-
-static  int iccid_get()
+static int draw_status(int x,int y,int status)
 {
-
-    return 0;
-}
-
-///< simualtor it
-static  int iccid_enable(int card)
-{
-    int i ;
-    printf("%s:enable the %d card\n\r",__FUNCTION__,card);
-
-    for(i= 0;i< s_iccid_cb.card_num;i++)
+    switch(status)
     {
-        if(i == card)
-        {
-            s_iccid_cb.iccid[i].inuse = 1;
-        }
-        else
-        {
-            s_iccid_cb.iccid[i].inuse = 0;
-
-        }
-    }
-    return 0;
-}
-static  int iccid_draw()
-{
-    int i = 0;
-    char str[64];
-
-    ui_clean_window(CN_UI_ICCID_X_S,CN_UI_ICCID_Y_S,CN_UI_ICCID_W,CN_UI_ICCID_H);
-
-    sprintf(str,"%2s %-19s %-2s %-2s","No","ICCID","T","E");
-    Paint_DrawString_EN(CN_UI_ICCID_X_S, CN_UI_ICCID_Y_S, str, &Font24, WHITE, BLACK);
-
-    for(i = 0;i<s_iccid_cb.card_num;i++)
-    {
-        sprintf(str,"%d %-20s %d",i,s_iccid_cb.iccid[i].id,\
-                 s_iccid_cb.iccid[i].type);
-
-        if(s_iccid_cb.iccid[i].inuse)
-        {
-            Paint_DrawCircle(CN_UI_ICCID_X_S+CN_UI_ICCID_W -30,CN_UI_ICCID_Y_S + CN_UI_ICCID_HLINE*(i+1)+8,\
-                    15,LIGHTBLUE,DRAW_FILL_FULL,DOT_PIXEL_2X2);
-        }
-        else
-        {
-            Paint_DrawCircle(CN_UI_ICCID_X_S+CN_UI_ICCID_W -30,CN_UI_ICCID_Y_S + CN_UI_ICCID_HLINE*(i+1)+8,\
-                    15,LIGHTBLUE,DRAW_FILL_FULL,DOT_PIXEL_2X2);
-            Paint_DrawCircle(CN_UI_ICCID_X_S+CN_UI_ICCID_W -30,CN_UI_ICCID_Y_S + CN_UI_ICCID_HLINE*(i+1)+8,\
-                    13,WHITE,DRAW_FILL_FULL,DOT_PIXEL_2X2);
-        }
-        Paint_DrawString_EN(CN_UI_ICCID_X_S, CN_UI_ICCID_Y_S + CN_UI_ICCID_HLINE*(i+1) ,\
-                str, &Font24, WHITE, BLACK);
+        case en_draw_status_empty:
+            Paint_DrawCircle(x,y,15,LIGHTBLUE,DRAW_FILL_FULL,DOT_PIXEL_2X2);
+            Paint_DrawCircle(x,y,13,WHITE,DRAW_FILL_FULL,DOT_PIXEL_2X2);
+            break;
+        case en_draw_status_fillblue:
+            Paint_DrawCircle(x,y,15,LIGHTBLUE,DRAW_FILL_FULL,DOT_PIXEL_2X2);
+            break;
+        case en_draw_status_gray:
+            Paint_DrawCircle(x,y,15,GRAY,DRAW_FILL_FULL,DOT_PIXEL_2X2);
+            break;
+        default:
+            break;
     }
 
     return 0;
 }
+static int iccid_disablestatus()
+{
+    int i  = 0;
+    for(i = 0;i<s_ui_iccid_cb.tab.num;i++)
+    {
+        draw_status(CN_ICCID_STATUS_X,CN_ICCID_lINE_I_0_Y+CN_ICCID_FONT_H*i +8,en_draw_status_gray);
+    }
+
+    return 0;
+}
+
 
 static  int iccid_fresh()
 {
-    iccid_cb_t iccid_bak;
-    int i = 0;
-    char str[64];
+    int ret = 0;
+    int i   = 0;
+    static int times = 0;
+    char str[CN_ICCID_STR_MAXEN];
 
-    for(i = 0;i<s_iccid_cb.card_num;i++)
+    times ++;
+
+    if((0 == s_ui_iccid_cb.iccid_get) ||(times > 5))
     {
-
-
-        if(s_iccid_cb.iccid[i].inuse)
+        ret = ec2x_geticcidtab(&s_ui_iccid_cb.tab);
+        if(ret == 0)
         {
-            Paint_DrawCircle(CN_UI_ICCID_X_S+CN_UI_ICCID_W -30,CN_UI_ICCID_Y_S + CN_UI_ICCID_HLINE*(i+1)+8,\
-                    15,LIGHTBLUE,DRAW_FILL_FULL,DOT_PIXEL_2X2);
+            s_ui_iccid_cb.iccid_get = 1;
+            times = 0;
+        }
+    }
+
+
+    for(i = 0;i<s_ui_iccid_cb.tab.num;i++)
+    {
+        if(s_ui_iccid_cb.tab.iccid[i].status)
+        {
+            draw_status(CN_ICCID_STATUS_X,CN_ICCID_lINE_I_0_Y +CN_ICCID_FONT_H*i +8 ,en_draw_status_fillblue);
         }
         else
         {
-            Paint_DrawCircle(CN_UI_ICCID_X_S+CN_UI_ICCID_W -30,CN_UI_ICCID_Y_S + CN_UI_ICCID_HLINE*(i+1)+8,\
-                    15,LIGHTBLUE,DRAW_FILL_FULL,DOT_PIXEL_2X2);
-            Paint_DrawCircle(CN_UI_ICCID_X_S+CN_UI_ICCID_W -30,CN_UI_ICCID_Y_S + CN_UI_ICCID_HLINE*(i+1)+8,\
-                    13,WHITE,DRAW_FILL_FULL,DOT_PIXEL_2X2);
+            draw_status(CN_ICCID_STATUS_X,CN_ICCID_lINE_I_0_Y+CN_ICCID_FONT_H*i +8,en_draw_status_empty);
         }
 
-        if(0 != strncmp(s_iccid_cb.iccid[i].id,iccid_bak.iccid[i].id,22))
-        {
-            strcpy(iccid_bak.iccid[i].id,s_iccid_cb.iccid[i].id);
-            sprintf(str,"%d %-20s %d",i,s_iccid_cb.iccid[i].id,\
-                     s_iccid_cb.iccid[i].type);
-            Paint_DrawString_EN(CN_UI_ICCID_X_S, CN_UI_ICCID_Y_S + CN_UI_ICCID_HLINE*(i+1) ,\
-                    str, &Font24, WHITE, BLACK);
-        }
-
+        sprintf(str,"%d %-20s %c",i,s_ui_iccid_cb.tab.iccid[i].id,\
+                (s_ui_iccid_cb.tab.iccid[i].type==1)?'S':'B');
+        Paint_DrawString_EN(CN_ICCID_BASE_X, CN_ICCID_lINE_I_0_Y + CN_ICCID_FONT_H*i ,\
+                str, &Font24, WHITE, BLACK);
     }
+
+    if(i < s_ui_iccid_cb.tab.num)
+    {
+        ui_clean_window(CN_ICCID_BASE_X,CN_ICCID_lINE_I_0_Y+ i*CN_ICCID_FONT_H,\
+                        CN_ICCID_END_X-CN_ICCID_BASE_X,CN_ICCID_END_Y-CN_ICCID_lINE_I_0_Y -i*CN_ICCID_FONT_H);
+    }
+
+
+
+    if(0 == s_ui_iccid_cb.eid_get)
+    {
+        ret = ec2x_geteid(&s_ui_iccid_cb.eid);
+        if(0 == ret)
+        {
+            snprintf(str,CN_ICCID_STR_MAXEN,"EID:%s",s_ui_iccid_cb.eid.id);
+            Paint_DrawString_EN(CN_ICCID_BASE_X, CN_ICCID_LINE_EID_Y, str, &Font24, WHITE, BLACK);
+            s_ui_iccid_cb.eid_get =1;
+        }
+    }
+
+
 
     return 0;
 }
-
-
 
 ///< THE TOUCH X Y NOT THE SAME AS THE PAIN:ROTATE 270
-static int ui_iccid_touch(int x_t,int y_t)
+static int ui_iccid_touch(int x,int y)
 {
     int card = 0;
-    int y;
 
-     y= x_t;
+    card = (y - CN_ICCID_lINE_I_0_Y)/CN_ICCID_FONT_H;
 
-    if((y >= (CN_UI_ICCID_Y_S + 24)) && (y <= (CN_UI_ICCID_Y_S + 24 + CN_UI_ICCID_HLINE*CN_ICCID_NUM)))
+
+    if(card < CN_ICCID_MAX_NUM)
     {
-        card = (y - CN_UI_ICCID_Y_S -24 )/CN_UI_ICCID_HLINE;
-
-        printf("touch line:%d \n\r",card);
-
-
-        if(card < CN_ICCID_NUM)
-        {
-            iccid_enable(card);
-            iccid_get();
-            iccid_fresh();
-        }
-    }
-    else
-    {
-
+        printf("CARD SELECT:%d \n\r",card);
+        s_ui_iccid_cb.iccid_change =1;
+        s_ui_iccid_cb.iccid_select = card;
     }
 
     return 0;
 }
-
 
 
 static int ui_iccid_entry(void *arg)
 {
 
-    Paint_DrawLine(10,300,470,300,GRAY,LINE_STYLE_DOTTED,DOT_PIXEL_3X3);
-    Paint_DrawString_EN(10, 310, "ICCIDLIST", &Font24, WHITE, BLACK);
-    Paint_DrawLine(10,340,470,340,GRAY,LINE_STYLE_DOTTED,DOT_PIXEL_3X3);
+    ui_touch_t touch;
+    char str[CN_ICCID_STR_MAXEN];
+    ui_clean_window(CN_ICCID_BASE_X,CN_ICCID_BASE_Y,\
+                    CN_ICCID_END_X-CN_ICCID_BASE_X,CN_ICCID_END_Y-CN_ICCID_BASE_Y);
 
-    iccid_draw();
+    Paint_DrawLine(CN_ICCID_BASE_X,CN_ICCID_LINE_S_1_Y,CN_ICCID_END_X,CN_ICCID_LINE_S_1_Y,\
+            GRAY,LINE_STYLE_DOTTED,DOT_PIXEL_3X3);
 
-    GT911_InstallHook(ui_iccid_touch);
+    Paint_DrawString_EN(CN_ICCID_BASE_X, CN_ICCID_LINE_EID_Y, "EID:", &Font24, WHITE, BLACK);
+
+    Paint_DrawLine(CN_ICCID_BASE_X,CN_ICCID_LINE_S_2_Y,CN_ICCID_END_X,CN_ICCID_LINE_S_2_Y,\
+            GRAY,LINE_STYLE_DOTTED,DOT_PIXEL_3X3);
+
+    Paint_DrawString_EN(CN_ICCID_BASE_X, CN_ICCID_LINE_D_Y,\
+                        "T:Type S:Seed B:Bussiness", &Font24, WHITE, BLACK);
+
+    Paint_DrawLine(CN_ICCID_BASE_X,CN_ICCID_LINE_S_3_Y,CN_ICCID_END_X,CN_ICCID_LINE_S_3_Y,\
+             GRAY,LINE_STYLE_DOTTED,DOT_PIXEL_3X3);
+
+    sprintf(str,"%2s %-19s %-2s %-2s","No","ICCID","T","E");
+    Paint_DrawString_EN(CN_ICCID_BASE_X, CN_ICCID_LINE_T_Y, str, &Font24, WHITE, BLACK);
+
+    Paint_DrawLine(CN_ICCID_BASE_X,CN_ICCID_LINE_S_4_Y,CN_ICCID_END_X,CN_ICCID_LINE_S_4_Y,\
+              GRAY,LINE_STYLE_DOTTED,DOT_PIXEL_3X3);
+
+    Paint_DrawLine(CN_ICCID_BASE_X,CN_ICCID_lINE_S_5_Y,CN_ICCID_END_X,CN_ICCID_lINE_S_5_Y,\
+              GRAY,LINE_STYLE_DOTTED,DOT_PIXEL_3X3);
+
+    touch.x = CN_ICCID_STATUS_X-10;
+    touch.w = CN_PAIN_W - CN_ICCID_STATUS_X +10;
+    touch.y = CN_ICCID_lINE_I_0_Y;
+    touch.h = CN_ICCID_lINE_S_5_Y - CN_ICCID_lINE_I_0_Y;
+    touch.hook = ui_iccid_touch;
+    ui_touch_register(&touch);
+
     while(1)
     {
         osal_task_sleep(CN_UI_ICCID_FRESH);
+        if(s_ui_iccid_cb.iccid_change)
+        {
+            if((s_ui_iccid_cb.iccid_select <s_ui_iccid_cb.tab.num) &&\
+               ((s_ui_iccid_cb.tab.iccid[s_ui_iccid_cb.iccid_select].status == 0)||\
+                (s_ui_iccid_cb.tab.iccid[s_ui_iccid_cb.iccid_select].type == 1)))
+            {
+                extern int iot_reconnect();
+                iot_reconnect();
+
+                iccid_disablestatus();
+                ec2x_eniccid(&s_ui_iccid_cb.tab.iccid[s_ui_iccid_cb.iccid_select]);
+            }
+            s_ui_iccid_cb.iccid_change = 0;
+            s_ui_iccid_cb.iccid_get = 0;
+        }
+
+        iccid_fresh();
     }
     return 0;
 }
 
-#define CN_UI_IOT_FRESH  (5*1000)
+
+
+#define CN_UI_IOT_FRESH  (1*1000)
+extern int iot_status();
+
 static int ui_iot_entry(void *arg)
 {
-
+    int cur_status = 0;
     Paint_DrawImage(g_img_disconnected ,290, 130, 140, 140);
 
     while(1)
     {
         osal_task_sleep(CN_UI_IOT_FRESH);
+        cur_status = iot_status();
+
+        if(cur_status == 1)
+        {
+            Paint_DrawImage(g_img_connected ,290, 130, 140, 140);
+        }
+        else
+        {
+            Paint_DrawImage(g_img_disconnected ,290, 130, 140, 140);
+        }
+
     }
     return 0;
-
-
 }
 
-
+typedef enum
+{
+    en_app_main_status_initialize = 0,  ///< waiting for the module
+    en_app_main_status_seed,            ///< this is the seed card
+    en_app_main_status_business,        ///< this is the business card
+    en_app_main_status_changing,        ///< this is the changge status
+}en_app_main_status_t;
 
 int standard_app_demo_main()
 {
     printf("HC demo main\r\n");
+    ec2x_ver_t ver;
 
     BSP_LCD_Init();
     void GT911_Init(void);
@@ -459,15 +585,27 @@ int standard_app_demo_main()
     Paint_DrawImage(g_img_oc, 0, 0, 480, 114);
     Paint_DrawLine(10,120,470,120,GRAY,LINE_STYLE_SOLID,DOT_PIXEL_3X3);
 
-
     Paint_DrawImage(g_img_huawei_logo, 250, 700, 100, 100);
     Paint_DrawImage(g_img_hold_logo, 370, 700, 100, 100);
 
+    ///< wait until the ec20 done
+    Paint_DrawString_EN(20, 450 , "WAIT MODULE READY...", &Font24, WHITE, BLACK);
+    while(0 != ec2x_getmqttversion(&ver))
+    {
+        osal_task_sleep(2 *1000);
+    }
+    Paint_DrawString_EN(20, 490 , "MODULE READY NOW!", &Font24, WHITE, BLACK);
+    ec2x_echoset(0);
 
     osal_task_create("ui_time",ui_time_entry,NULL,0x600,NULL,10);
     osal_task_create("ui_signal",ui_signal_entry,NULL,0x600,NULL,10);
     osal_task_create("ui_iccid",ui_iccid_entry,NULL,0x600,NULL,10);
     osal_task_create("ui_iot",ui_iot_entry,NULL,0x600,NULL,10);
+
+    extern int iot_dmeo_main();
+    iot_dmeo_main();
+
+    GT911_InstallHook(ui_touch);
 
 
 
