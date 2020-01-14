@@ -33,7 +33,7 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-28 09:48  zhangqianfu  The first version  
+ *  2019-05-28 09:48  zhangqianfu  The first version
  *
  */
 
@@ -114,7 +114,7 @@ hpatch_BOOL getDecompressPlugin(const hpatch_compressedDiffInfo* diffInfo,
         printf("hpatchz run with decompress plugin: \"%s\" (need decompress %d)\n",
                diffInfo->compressType,diffInfo->compressedCount);
     }
-  } 
+  }
 
   *out_decompressPlugin=decompressPlugin;
   return hpatch_TRUE;
@@ -189,8 +189,32 @@ int ota_detection()
     }
 
     //write upgraded img to origin image
-//      app_image_backup(PART_APP, PART_OTA_IMG_BACKUP, diff_info.oldDataSize, cache, CACHE_SIZE);
-    app_image_restore(PART_OTA_DIFF_UPGTADE, PART_APP, diff_info.newDataSize, 0, cache, CACHE_SIZE); // resore new
+    printf("backup the old image!\n");
+    ret = app_image_backup(PART_APP, PART_OTA_IMG_BACKUP, diff_info.oldDataSize, cache, CACHE_SIZE);
+    if (ret != 0)
+    {
+        printf("backup the old image falied\n");
+        patch_ret = UPGRADE_RESULT_INNERERROR;
+        goto EXIT;
+    }
+
+    printf("upgrade image!\n");
+    ret = app_image_restore(PART_OTA_DIFF_UPGTADE, PART_APP, diff_info.newDataSize, 0, cache, CACHE_SIZE); // restore new
+
+    if (ret == 0)
+    {
+        goto EXIT;
+    }
+
+    // restore origin image
+    printf("restore the old image!\n");
+    ret = app_image_restore(PART_OTA_IMG_BACKUP, PART_APP, diff_info.oldDataSize, 0, cache, CACHE_SIZE);
+    if (ret != 0)
+    {
+        printf("restore the old falied\n");
+        patch_ret = UPGRADE_RESULT_INNERERROR;
+    }
+
 EXIT:
     //save upgrade result
     ota_update_upgrade_result(&ota_flag, patch_ret);
