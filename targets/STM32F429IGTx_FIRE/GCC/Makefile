@@ -71,7 +71,7 @@ include $(PROJECTBASE)/project.mk
 # firmware library path
 PERIFLIB_PATH =
 # Build path
-cfg_seperate_load_mode = no
+
 ifeq ($(CONFIG_LOADER_ENABLE),y)
 	BUILD_DIR = loaderbuild
 	C_DEFS += -D cn_app_bin_addr=0x08020004
@@ -82,7 +82,7 @@ endif
 ################################################################################
 # LDFLAGS
 ################################################################################
-ifeq ($(cfg_seperate_load_mode),yes)
+ifeq ($(CONFIG_SEPERATE_LOAD_MODE),y)
 	ifeq ($(CONFIG_LOADER_ENABLE),y)
 		LD_FILE = os_loader.ld
 	else

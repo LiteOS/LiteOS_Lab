@@ -40,8 +40,7 @@ C_INCLUDES += $(WAKAMA_ADAPTER_INC)
 # add port compile support
 WAKAAMA_PORT_SRC = ${wildcard $(WAKAAMA_DIR)/port/*.c}
 
-USE_FOTA = n
-ifeq ($(USE_FOTA), y)
+ifeq ($(CONFIG_FOTA_ENABLE), y)
     C_SOURCES += $(WAKAAMA_PORT_SRC)
     C_DEFS += -D CONFIG_FEATURE_FOTA
 else
