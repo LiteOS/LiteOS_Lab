@@ -36,5 +36,249 @@
  *  2019-12-13 10:19  zhangqianfu  The first version  
  *
  */
+#include <stdint.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <string.h>
+#include <queue.h>
+
+#include <osal.h>
+#include <oc_mqtt_al.h>
+#include <oc_mqtt_assistant.h>
+
+/* brief : the oceanconnect platform only support the ca_crt up tills now*/
+/** the address product_id device_id password crt is only for the test  */
+
+#define DEFAULT_LIFETIME            60                 ///< the platform need more
+#define DEFAULT_SERVER_IPV4         "119.3.251.30"     ///<  server ip address
+#define DEFAULT_SERVER_PORT         "8883"             ///<  server mqtt service port
+#define CN_MQTT_EP_NOTEID           "mqtt_sdk81"
+#define CN_MQTT_EP_PASSWD           "f62fcf47d62c4ed18913"
+
+//if your command is very fast,please use a queue here--TODO
+static queue_t *s_queue_rcvmsg = NULL;   ///< this is used to cached the message
+
+typedef struct
+{
+    int        qos;
+    int        dup;
+    int        retain;
+    int        msg_len;
+    char      *topic;
+    uint8_t   *msg;
+    uint8_t   *buf;
+}demo_msg_t;
+
+//use this function to push all the message to the buffer
+static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
+{
+    int ret = -1;
+    uint8_t  *buf;
+    uint32_t  buflen;
+    demo_msg_t *demo_msg;
+
+    buflen =msg->msg.len + msg->topic.len + sizeof(demo_msg_t) + 1 +1;
+    buf = osal_malloc(buflen);
+    if(NULL != buf)
+    {
+        ///< copy the message and push it to the queue
+        demo_msg = (demo_msg_t *)buf;
+        demo_msg->buf = buf + sizeof(demo_msg_t);
+        demo_msg->dup = msg->dup;
+        demo_msg->qos = msg->qos;
+        demo_msg->retain = msg->retain;
+
+        demo_msg->topic = (char *) demo_msg->buf;
+        buf = (uint8_t *)demo_msg->topic;
+        memcpy(buf,msg->topic.data,msg->topic.len);
+        buf[msg->topic.len] = '\0';
+
+        demo_msg->msg = demo_msg->buf + msg->topic.len +1;
+        demo_msg->msg_len = msg->msg.len;
+        buf = demo_msg->msg;
+        memcpy(buf,msg->msg.data,msg->msg.len);
+        buf[msg->msg.len] = '\0';
+
+        printf("RCVMSG:qos:%d dup:%d retain:%d topic:%s msg:len:%d payload:%s\n\r",\
+                demo_msg->qos,demo_msg->dup,demo_msg->retain,\
+                demo_msg->topic,demo_msg->msg_len,demo_msg->msg);
+
+        ret = queue_push(s_queue_rcvmsg,demo_msg,10);
+        if(ret != 0)
+        {
+            osal_free(demo_msg);
+        }
+    }
+
+    return ret;
+}
+
+
+static int  oc_cmd_normal(demo_msg_t *demo_msg)
+{
+
+    int ret = 0;
+    char   *buf = NULL;  ///< used for the mqtt
+
+    cJSON               *mid_json;
+    cJSON               *cmd_json;
+    cJSON               *response_msg;
+    tag_oc_mqtt_response response;
+    tag_key_value_list   list;
+    int mid_int = 0;
+    int err_int = 0;
+    //////////////HANDLE YOUR MESSAGE HERE WITH YOUR DEVICE PROFILE///////////
+    cmd_json = cJSON_Parse((const char *)demo_msg->msg);
+    mid_json = cJSON_GetObjectItem(cmd_json,"mid");
+    if(NULL != mid_json)
+    {
+        mid_int = mid_json->valueint;
+    }
+    cJSON_Delete(cmd_json);
+    //////////////DO THE RESPONSE FOR THE COMMAND/////////////////////////////
+    list.item.name = "body_para";
+    list.item.buf = "body_para";
+    list.item.type = en_key_value_type_string;
+    list.next = NULL;
+
+    response.hasmore = 0;
+    response.errcode = err_int;
+    response.mid = mid_int;
+    response.bodylst = &list;
+
+    response_msg = oc_mqtt_json_fmt_response(&response);
+    if(NULL != response_msg)
+    {
+        buf = cJSON_PrintUnformatted(response_msg);
+        if(NULL != buf)
+        {
+            ret = oc_mqtt_report((uint8_t *)buf,strlen(buf),en_mqtt_al_qos_1);
+            printf("%s:RESPONSE:mid:%d err_int:%d retcode:%d \r\n",__FUNCTION__,\
+                    mid_int,err_int,ret);
+
+            osal_free(buf);
+        }
+        cJSON_Delete(response_msg);
+    }
+
+    return 0;
+}
+
+
+static int  oc_report_normal(void)
+{
+    int ret = -1;
+    cJSON *root = NULL;
+    char  *buf = NULL;
+    tag_oc_mqtt_report  report;
+    tag_key_value_list  lst;
+    static int leftpower = 1;
+    static int times = 1;
+
+
+    leftpower = (leftpower + 7 )%100;
+
+    lst.item.name = "radioValue";
+    lst.item.buf = (char *)&leftpower;
+    lst.item.len = sizeof(leftpower);
+    lst.item.type = en_key_value_type_int;
+    lst.next = NULL;
+
+    report.hasmore = en_oc_mqtt_has_more_no;
+    report.paralst= &lst;
+    report.serviceid = "DeviceStatus";
+    report.eventtime = NULL;
+
+    root = oc_mqtt_json_fmt_report(&report);
+    if(NULL != root)
+    {
+        buf = cJSON_PrintUnformatted(root);
+        if(NULL != buf)
+        {
+            ret = oc_mqtt_report((uint8_t *)buf,strlen(buf),en_mqtt_al_qos_1);
+            printf("%s:REPORT:times:%d:power:%d retcode:%d \r\n",__FUNCTION__,times++,leftpower,ret);
+            osal_free(buf);
+        }
+
+        cJSON_Delete(root);
+    }
+
+    return ret;
+}
+
+
+static int task_rcvmsg_entry( void *args)
+{
+
+    demo_msg_t *demo_msg;
+
+    while(1)
+    {
+        demo_msg = NULL;
+        queue_pop(s_queue_rcvmsg,(void **)&demo_msg,cn_osal_timeout_forever);
+
+        if(NULL != demo_msg)
+        {
+            oc_cmd_normal(demo_msg);  ///< this is the old model
+            osal_free(demo_msg);
+        }
+    }
+
+    return 0;
+}
+
+
+
+int iot_init()
+{
+    s_queue_rcvmsg = queue_create("queue_rcvmsg",2,1);
+    osal_task_create("task_rcvmsg",task_rcvmsg_entry,NULL,0x1000,NULL,8);
+    return 0;
+}
+
+int iot_connect()
+{
+    int ret = -1;
+
+    oc_mqtt_config_t config;
+
+    config.boot_mode = en_oc_mqtt_mode_bs_static_nodeid_hmacsha256_notimecheck_json;
+    config.msg_deal = app_msg_deal;
+    config.msg_deal_arg = NULL;
+    config.lifetime = DEFAULT_LIFETIME;
+    config.server_addr = DEFAULT_SERVER_IPV4;
+    config.server_port = DEFAULT_SERVER_PORT;
+    config.id = CN_MQTT_EP_NOTEID;
+    config.pwd= CN_MQTT_EP_PASSWD;
+    config.sec_type = en_mqtt_al_security_cas;
+
+    ret = oc_mqtt_config(&config);
+
+    if(((ret == en_oc_mqtt_err_ok))|| (ret== en_oc_mqtt_err_configured))
+    {
+        ret = 0;
+    }
+    return ret;
+}
+
+int iot_send()
+{
+    int ret = -1;
+
+    ret =oc_report_normal();
+
+    return ret;
+}
+
+int iot_disconnect()
+{
+    int ret = -1;
+
+    ret = oc_mqtt_deconfig();
+
+    return ret;
+}
+
+
 
 
