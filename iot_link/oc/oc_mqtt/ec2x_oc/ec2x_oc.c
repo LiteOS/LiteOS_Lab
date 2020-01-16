@@ -136,7 +136,7 @@ int ec2x_getfirmver(ec2x_ver_t *ver)
 
 
 //+QSPN: "CHINA MOBILE","CMCC","CMCC",0,"46000"
-int ec2x_get_operator(char *buf, int len)
+int ec2x_get_operator(char *buf)
 {
     int ret = -1;
     char resp[128];
@@ -160,7 +160,7 @@ int ec2x_get_operator(char *buf, int len)
             {
                 str_e--;
                 *str_e = '\0';
-                strncpy(buf,str_s,len);
+                strcpy(buf,str_s);
                 ret = 0;
             }
         }
@@ -582,7 +582,7 @@ int ec2x_eniccid(iccid_t *iccid)
     char  cmd[64];
     char  resp[64];
 
-    if((NULL  == iccid) || (iccid->status == 1))
+    if(NULL  == iccid)
     {
         return ret;
     }

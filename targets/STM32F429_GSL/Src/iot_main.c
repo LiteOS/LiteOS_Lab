@@ -227,12 +227,19 @@ static int task_rcvmsg_entry( void *args)
     return 0;
 }
 
-static int s_iot_link_ok = 0;
-static int s_iot_reconnect = 0;
-static int task_reportmsg_entry(void *args)
+
+
+int iot_init()
 {
-    int ret;
-    uint32_t times = 0;
+    s_queue_rcvmsg = queue_create("queue_rcvmsg",2,1);
+    osal_task_create("task_rcvmsg",task_rcvmsg_entry,NULL,0x1000,NULL,8);
+    return 0;
+}
+
+int iot_connect()
+{
+    int ret = -1;
+
     oc_mqtt_config_t config;
 
     config.boot_mode = en_oc_mqtt_mode_bs_static_nodeid_hmacsha256_notimecheck_json;
@@ -245,65 +252,33 @@ static int task_reportmsg_entry(void *args)
     config.pwd= CN_MQTT_EP_PASSWD;
     config.sec_type = en_mqtt_al_security_cas;
 
+    ret = oc_mqtt_config(&config);
 
-    oc_mqtt_deconfig(); ///< make sure it is not configured yet
-
-    while(1)  //do the loop here
+    if(((ret == en_oc_mqtt_err_ok))|| (ret== en_oc_mqtt_err_configured))
     {
-        ret = oc_mqtt_config(&config);
-        if(((ret == en_oc_mqtt_err_ok))|| (ret== en_oc_mqtt_err_configured))
-        {
-            times = 0;
-            s_iot_link_ok = 1;
-            while(0 ==s_iot_reconnect)
-            {
-                times ++;
-                if(0 == times%20)
-                {
-                    ret = oc_report_normal();
-                    if(ret != en_oc_mqtt_err_ok)
-                    {
-                        break;
-                    }
-                }
-
-                osal_task_sleep(1*1000);
-            }
-
-            s_iot_reconnect = 0;
-            oc_mqtt_deconfig();
-            s_iot_link_ok = 0;
-        }
-
-        osal_task_sleep(5*1000);
+        ret = 0;
     }
-    return 0;
+    return ret;
 }
 
-
-int iot_status()
+int iot_send()
 {
-    return s_iot_link_ok;
+    int ret = -1;
+
+    ret =oc_report_normal();
+
+    return ret;
 }
 
-int iot_reconnect()
+int iot_disconnect()
 {
-    s_iot_reconnect = 1;
+    int ret = -1;
 
-    return 0;
+    ret = oc_mqtt_deconfig();
+
+    return ret;
 }
 
-int iot_dmeo_main()
-{
-    s_queue_rcvmsg = queue_create("queue_rcvmsg",2,1);
-
-    osal_task_create("task_reportmsg",task_reportmsg_entry,NULL,0x1000,NULL,8);
-
-    osal_task_create("task_rcvmsg",task_rcvmsg_entry,NULL,0x1000,NULL,8);
-
-
-    return 0;
-}
 
 
 
