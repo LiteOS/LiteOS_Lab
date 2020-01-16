@@ -113,7 +113,6 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$@"
 # excluded unnecessary warnings
 CFLAGS += -Wno-missing-braces
 
-
 # libraries
 LIBS += -lc -lm -lnosys
 ifeq ($(USE_OTA), yes)
@@ -121,8 +120,7 @@ LIBS += -lhwpatch
 endif
 LIBDIR  += -L$(PROJECTBASE)/../Lib
 LDFLAGS += $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
-#LDFLAGS += -u _printf_float
-
+LDFLAGS += -u _printf_float
 
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
