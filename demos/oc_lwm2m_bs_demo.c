@@ -101,9 +101,11 @@ typedef struct
 
 
 //if your command is very fast,please use a queue here--TODO
-static void    *s_lwm2m_context = NULL;    ///< this is used when we want to send some message to the platform
 static queue_t *s_queue_msgrcv = NULL;     ///< this is used to cached the message
 static int32_t  s_lwm2m_reconnect = 0;
+
+// use this var to replace s_lwm2m_context
+static int32_t  s_is_lwm2m_configed = 0;
 
 typedef struct
 {
@@ -236,13 +238,17 @@ static int app_report_task_entry()
 
     while(1) //--TODO ,you could add your own code here
     {
-        if(NULL == s_lwm2m_context)
+        if(0 == s_is_lwm2m_configed)
         {
             ret = oc_lwm2m_config(&oc_param);
 
             if (0 != ret)
             {
                 printf("call oc_lwm2m_config error, return %d\r\n", ret);
+            }
+            else
+            {
+                s_is_lwm2m_configed = 1;
             }
         }
         else if(s_lwm2m_reconnect)
@@ -251,11 +257,17 @@ static int app_report_task_entry()
 
             oc_lwm2m_deconfig();
 
+            s_is_lwm2m_configed = 0;
+
             ret = oc_lwm2m_config(&oc_param);
 
             if (0 != ret)
             {
                 printf("call oc_lwm2m_config error, return %d\r\n", ret);
+            }
+            else
+            {
+                s_is_lwm2m_configed = 1;
             }
         }
         else
