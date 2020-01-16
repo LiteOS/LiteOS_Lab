@@ -65,6 +65,31 @@ static osal_mutex_t g_data_mutex = cn_mutex_invalid;
 
 static int __disconnect(void *handle);
 
+static int generate_new_object_instance_id(lwm2m_list_t* instance_list)
+{
+    int id = 0;
+    lwm2m_list_t *head = instance_list;
+
+    if (NULL == instance_list)
+    {
+        return id;
+    }
+
+    while (NULL != head)
+    {
+        if (id < head->id)
+        {
+            break;
+        }
+
+        id++;
+
+        head = head->next;
+    }
+
+    return id;
+}
+
 static int config_object(lwm2m_object_t *obj, void *param)
 {
     int ret = LWM2M_ERR;
@@ -137,7 +162,11 @@ static int config_object(lwm2m_object_t *obj, void *param)
     return ret;
 }
 
-int add_object_instance(lwm2m_object_t *obj, int object_instance_id, uint16_t resource_id, void *param)
+static int add_object_instance(lwm2m_object_t *obj,
+                               lwm2m_list_t *obj_instance,
+                               int object_instance_id,
+                               uint16_t resource_id,
+                               void *param)
 {
     int ret = LWM2M_ERR;
 
@@ -196,7 +225,7 @@ int add_object_instance(lwm2m_object_t *obj, int object_instance_id, uint16_t re
 
         case OBJ_APP_DATA_ID:
         {
-            ret = add_app_data_object_instance(obj, object_instance_id, resource_id, param);
+            ret = add_app_data_object_instance(obj, obj_instance, object_instance_id, resource_id, param);
             break;
         }
 
@@ -687,6 +716,7 @@ int __add_object(void *handle, int object_id, int object_instance_id, int resour
     lwm2m_object_t *obj = NULL;
     lwm2m_list_t *obj_instance = NULL;
     handle_data_t *hd = NULL;
+    int obj_ins_id = object_instance_id;
 
     if (NULL == handle)
     {
@@ -695,8 +725,10 @@ int __add_object(void *handle, int object_id, int object_instance_id, int resour
     }
 
     hd = (handle_data_t *)handle;
+
     /* find object */
     LOG_ARG("ID: %d", object_id);
+
     obj = (lwm2m_object_t *)LWM2M_LIST_FIND(hd->lwm2m_context->objectList, object_id);
 
     if (NULL == obj)
@@ -710,8 +742,10 @@ int __add_object(void *handle, int object_id, int object_instance_id, int resour
         }
 
         memset(obj, 0, sizeof(lwm2m_object_t));
+
         /* set object id */
         obj->objID = object_id;
+
         /* object config */
         config_object(obj, param);
 
@@ -725,28 +759,50 @@ int __add_object(void *handle, int object_id, int object_instance_id, int resour
     }
 
     /* find object instance */
-    obj_instance = (lwm2m_list_t *)LWM2M_LIST_FIND(obj->instanceList, object_instance_id);
-
-    if (NULL != obj_instance)
+    if (-1 == obj_ins_id)
     {
-        return LWM2M_OBJECT_INSTANCE_EXISTED;
+        /* -1: find an available one */
+        obj_ins_id = generate_new_object_instance_id(obj->instanceList);
+        printf("obj_ins_id: %d\n", obj_ins_id);
+    }
+    else
+    {
+        printf("obj_ins_id: %d\n", obj_ins_id);
+        obj_instance = (lwm2m_list_t *)LWM2M_LIST_FIND(obj->instanceList, obj_ins_id);
     }
 
-    /* check if single instance:
-        device,
-        connectivity monitoring,
-        firmware update,
-        location,
-        connectivity statistics
+    /* check if following objects are single instance:
+       device,
+       connectivity monitoring,
+       firmware update,
+       location,
+       connectivity statistics
+
+       condition: above object and obj instance list in not NULL and obj instance id is not found
       */
     if ((object_id >= OBJ_DEVICE_ID)
         && (object_id <= OBJ_CONNECTIVITY_STATISTICS_ID)
-        && (obj->instanceList != NULL))
+        && (NULL != obj->instanceList)
+        && (NULL == obj_instance))
     {
+        printf("standard object_id %d only supports single instance!\n", object_id);
         return LWM2M_SUPPORT_SINGLE_INSTANCE_ONLY;
     }
 
-    return add_object_instance(obj, object_instance_id, resource_id, param);
+    /* found these objects' instance, return
+        OBJ_SECURITY_ID,
+        OBJ_SERVER_ID,
+        OBJ_ACCESS_CONTROL_ID,
+        */
+    if ((object_id >= OBJ_SECURITY_ID)
+        && (object_id <= OBJ_ACCESS_CONTROL_ID)
+        && (NULL != obj_instance))
+    {
+        printf("standard object_uri %d/%d/%d does not add resource!\n", object_id, obj_ins_id, resource_id);
+        return LWM2M_OBJECT_INSTANCE_EXISTED;
+    }
+
+    return add_object_instance(obj, obj_instance, obj_ins_id, resource_id, param);
 }
 
 int __delete_object(void *handle, int object_id)

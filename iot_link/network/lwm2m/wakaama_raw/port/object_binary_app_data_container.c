@@ -51,14 +51,12 @@
 #include "lwm2m_uri.h"
 
 #define MAX_RES_NUM                         32
-#define MAX_STRURI_LEN                      20
 
 #define PRV_TLV_BUFFER_SIZE                 64
 
 #define MIN_SAVE_CNT                        1
 #define BINARY_APP_DATA_OBJECT_INSTANCE_NUM 2
 
-#define URI_FMT                             "/%u/%u/%u"
 #define OPAR_NUM                            5
 
 
@@ -561,23 +559,48 @@ void display_binary_app_data_object(lwm2m_object_t *object)
 #endif
 }
 
-int add_app_data_object_instance(lwm2m_object_t *obj, int object_instance_id, uint16_t resource_id, void *param)
+int add_app_data_object_instance(lwm2m_object_t *obj,
+                                 void *obj_instance,
+                                 int object_instance_id,
+                                 uint16_t resource_id,
+                                 void *param)
 {
     plat_instance_t *instance = NULL;
     uint32_t  *storing_cnt = (uint32_t *)param;
+    uint32_t flag = 1;
 
     if ((NULL == obj) || (NULL == param))
     {
         return LWM2M_ARG_INVALID;
     }
 
-    if (resource_id >= MAX_RES_NUM)
+    if ((resource_id < 0) || (resource_id >= MAX_RES_NUM))
     {
+        printf("invalid resource id %d\n", resource_id);
         return LWM2M_ERRNO_NORES;
     }
 
     lwm2m_uri_t uri;
     int ret = LWM2M_OK;
+
+    if (NULL != obj_instance)
+    {
+        instance = (plat_instance_t *)obj_instance;
+
+        // update resource information
+        /* set resoure id for object instnace */
+        flag = (1 << resource_id);
+
+        if (instance->resourceMap & flag)
+        {
+            return LWM2M_ERRNO_REPEAT;
+        }
+
+        instance->resourceMap |= (1 << resource_id);
+
+        return ret;
+    }
+
     instance = (plat_instance_t *)lwm2m_malloc(sizeof(plat_instance_t));
 
     if (NULL == instance)
@@ -600,7 +623,7 @@ int add_app_data_object_instance(lwm2m_object_t *obj, int object_instance_id, ui
     (void)lwm2m_set_max_rpt_cnt(&uri, MAX(MIN_SAVE_CNT, *storing_cnt));
     instance->shortID = object_instance_id;
     /* set resoure id for object instnace */
-    uint32_t flag = 1 << resource_id;
+    flag = 1 << resource_id;
 
     if (instance->resourceMap & flag)
     {

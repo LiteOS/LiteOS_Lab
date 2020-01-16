@@ -257,7 +257,7 @@ int add_device_object_instance(lwm2m_object_t *obj, int object_instance_id);
 int add_connectivity_monitoring_object_instance(lwm2m_object_t *obj, int object_instance_id);
 int add_firmware_update_object_instance(lwm2m_object_t *obj, int object_instance_id);
 int add_location_object_instance(lwm2m_object_t *obj, int object_instance_id);
-int add_app_data_object_instance(lwm2m_object_t *obj, int object_instance_id, uint16_t resource_id, void *param);
+int add_app_data_object_instance(lwm2m_object_t *obj, void *obj_instance, int object_instance_id, uint16_t resource_id, void *param);
 
 int config_security_object(lwm2m_object_t *obj, void *param);
 int config_server_object(lwm2m_object_t *obj, void *param);
