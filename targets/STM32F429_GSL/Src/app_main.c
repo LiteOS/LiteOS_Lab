@@ -856,6 +856,8 @@ static int deal_modulecheck(int counter)
 
     ec2x_echoset(0);
 
+    ec2x_hwsimset(1);
+
     ret = ec2x_getmqttversion(&ver);
     if(0 == ret)
     {
@@ -1044,14 +1046,6 @@ int standard_app_demo_main()
     int status = en_app_status_moduledetect;
     unsigned int loop_counter = 1;
     printf("HC demo main\r\n");
-
-//    double value = 1.23456789;
-//    while(1)
-//    {
-//        printf("value:%1.15g \n\r",value);
-//        value += 1.0;
-//        osal_task_sleep(1000*10);
-//    }
 
     osal_semp_create(&s_app_main_cb.card_select_sync,1,0);
 

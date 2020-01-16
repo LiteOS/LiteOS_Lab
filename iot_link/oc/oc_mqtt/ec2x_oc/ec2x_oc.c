@@ -670,6 +670,22 @@ int ec2x_echoset(int mode)
     return ret;
 }
 
+int ec2x_hwsimset(int mode)
+{
+
+    int ret = -1;
+    char  cmd[64];
+    snprintf(cmd,64,"AT+HWSIM=%s\r\n",mode?"enable":"disable");
+
+    ret = ec2x_atcmd_response(cmd,"+HWSIM ",NULL,0,CN_EC2X_CMD_TIME_BASE);
+
+
+    return ret;
+
+
+}
+
+
 
 
 #include <shell.h>

@@ -83,11 +83,6 @@ int ec2x_eniccid(iccid_t *iccid);
 int ec2x_geteid(eid_t *eid);
 int ec2x_getmqttversion(ec2x_ver_t *ver);
 int ec2x_echoset(int mode);
-
-
-
-
-
-
+int ec2x_hwsimset(int mode);
 
 #endif /* __BOUDICA150_OC_H */
