@@ -137,6 +137,17 @@ CONFIG_OC_LWM2M_TYPE   := "soft"
 
 ########################OC SERVICE END##########################################
 
+
+
+########################LOADER APP SERVICE START#######################################
+#If you want to compile loader image and APP image, you should enable CONFIG_SEPERATE_LOAD_MODE 
+#to seperate FLASH areas. If you want to compile loader image, you should enable CONFIG_LOADER_ENABLE.
+#otherwise compile APP image.
+CONFIG_SEPERATE_LOAD_MODE :=n
+CONFIG_LOADER_ENABLE :=n
+
+########################LOADER APP SERVICE END##########################################
+
 ########################OTA SERVICE START#######################################
 #if you want to use the ota, then please enable it
 #warning:
@@ -145,6 +156,7 @@ CONFIG_OC_LWM2M_TYPE   := "soft"
 
 CONFIG_OTA_ENABLE      := n
 CONFIG_PCP_ENABLE      := n
+CONFIG_FOTA_ENABLE     := n
 
 ########################OTA SERVICE END#########################################
 

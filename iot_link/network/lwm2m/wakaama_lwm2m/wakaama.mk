@@ -20,7 +20,7 @@ WAKAMA_LWM2MINC = \
 
 WAKAAMA_PORT_SRC = ${wildcard $(iot_link_root)/network/lwm2m/wakaama_lwm2m/port/*.c}
 
-ifeq ($(USE_FOTA), y)
+ifeq ($(CONFIG_FOTA_ENABLE), y)
     C_SOURCES += $(WAKAAMA_PORT_SRC)
     C_DEFS += -D CONFIG_FEATURE_FOTA
 else
