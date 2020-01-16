@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2016-2019>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -31,112 +31,85 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-/**
- *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-14 17:22  zhangqianfu  The first version
- *
- */
+#ifndef USIP_H_
+#define USIP_H_
 
 #include <stdint.h>
 #include <stddef.h>
+#include "los_sem.h"
 
-#include <string.h>
+#define USIP_IS_MCU  1 // 1 MCU  0 WIFI
+#define USIP_LOG
 
-#include <stdlib.h>
-#include <osal.h>
-#include <oc_lwm2m_al.h>
-
-typedef struct
-{
-    const char            *name;    ///< lwm2m implement name
-    const oc_lwm2m_opt_t  *opt;     ///< lwm2m implement method
-} oc_lwm2m_t;
-static oc_lwm2m_t  s_oc_lwm2m_ops;
+#if USIP_IS_MCU
+#define USIP_MCU
+#else
+#define USIP_WIFI
+#endif
 
 
-int oc_lwm2m_register(const char *name, const oc_lwm2m_opt_t *opt)
-{
-    int ret = -1;
+#ifdef USIP_LOG
+#ifdef USIP_MCU
+#define USIP_PRINTF printf
+#else
+#define USIP_PRINTF DBG_8195A
+#endif
+#endif
 
-    if (NULL == s_oc_lwm2m_ops.opt)
-    {
-        s_oc_lwm2m_ops.name = name;
-        s_oc_lwm2m_ops.opt =  opt;
-        ret = 0;
-    }
+#define END     0xC0 //frame end
+#define ESC     0xDB //frame escape
+#define ESC_END 0xDC //transposed frame END
+#define ESC_ESC 0xDD //transposed Frame Escape
 
-    return ret;
-}
-
-int oc_lwm2m_unregister(const char *name)
-{
-    int ret = -1;
-
-    if ((NULL != name) && (NULL != s_oc_lwm2m_ops.name))
-    {
-        if (0 == strcmp(name, s_oc_lwm2m_ops.name))
-        {
-            s_oc_lwm2m_ops.opt = NULL;   ///< also think about clear all the ops in the context,
-            s_oc_lwm2m_ops.name = NULL;
-            ret = 0;
-        }
-    }
-
-    return ret;
-}
+#define USIP_FRM_MAX_LEN      128  //HEAD+PKGNUM+SEQ+CMD+TLVS+CRC8+END <= 128
+#define USIP_FRM_DATA_MAX_LEN (USIP_FRM_MAX_LEN - 2)  //PKGNUM+SEQ+CMD+TLVS+CRC8
+#define USIP_FRM_CMD_AND_TLVS_MAX_LEN (USIP_FRM_DATA_MAX_LEN - 3) //CMD+TLVS
 
 
-//////////////////////////APPLICATION INTERFACE/////////////////////////////////
-int oc_lwm2m_report(char  *buf, int len, int timeout)
-{
-    int ret = en_oc_lwm2m_err_system;
+#define USIP_CRC_TABLE_LEN 256 //CRC8 table length
 
-    if ((NULL != s_oc_lwm2m_ops.opt) && (NULL != s_oc_lwm2m_ops.opt->report))
-    {
-        ret = s_oc_lwm2m_ops.opt->report(buf, len, timeout);
-    }
+#define USIP_UART_RCV_BUFF    2048 //USIP uart receive buffer length
+#define USIP_UART_SKB_NUM   USIP_UART_RCV_BUFF/USIP_FRM_MAX_LEN
 
-    return ret;
-}
+#define USIP_EA_BIT 0X80
+#define USIP_EA_VALID_BITS 7
 
+#define USIP_WAIT_ACK_TIMEOUT 50 //milliseconds
+#define USIP_MAX_ARQ_TIMES  3 //Retransmission
 
-int oc_lwm2m_config( oc_config_param_t *param)
-{
-    int ret = en_oc_lwm2m_err_system;
+//PKGNUM
+#define USIP_PKGNUM_MAX      0X7F
 
-    if ((NULL != s_oc_lwm2m_ops.opt) && (NULL != s_oc_lwm2m_ops.opt->config))
-    {
-        if(NULL != param)
-        {
-            ret = s_oc_lwm2m_ops.opt->config(param);
-        }
-        else
-        {
-            ret = en_oc_lwm2m_err_parafmt;
-        }
-    }
+//SEQ
+#define USIP_SEQ_MAX 0X7F
+#define USIP_SEQ_MIN 0X00
 
-    return ret;
-}
+//CMD
+#define USIP_CMD_DEV_REG  0X01  //devreg
+#define USIP_CMD_SESS_MNGR  0X02  // online
+#define USIP_CMD_FILE_MNGR  0X03  //update
+#define USIP_CMD_DEV_REG_RSP  0X04  //devreg response
+#define USIP_CMD_SESS_MNGR_RSP  0X05  // online response
+#define USIP_CMD_FILE_MNGR_RSP  0X06  //update response
 
+#define USIP_CMD_DATA_REPORT 0X07
+#define USIP_CMD_DATA_REPORT_RSP 0X08
 
-int oc_lwm2m_deconfig(void)
-{
-    int ret = en_oc_lwm2m_err_system;
+//tag
+#define USIP_TLV_TAG_ACK       0x00  //ack
+//put JSON data to val of one tlv. tag only suport one byte now
+#define USIP_TLV_TAG_RST       0X01  //request
+#define USIP_TLV_TAG_RSPT       0X02  //response of request
+#define USIP_TLV_TAG_LEN       1
 
-    if ((NULL != s_oc_lwm2m_ops.opt) && (NULL != s_oc_lwm2m_ops.opt->deconfig))
-    {
-        ret = s_oc_lwm2m_ops.opt->deconfig();
-    }
+#define USIP_OK  0X00
+#define USIP_ERROR  0XFF
 
-    return ret;
-}
+typedef void (*cmd_process_callback)(unsigned short cmd, unsigned char* data, unsigned short len);
 
-///////////////////////OC LWM2M AGENT INITIALIZE////////////////////////////////
-int oc_lwm2m_init()
-{
-    int ret = -1;
-    ret = 0;   ///< uptils now, we should do nothing here
-    return ret;
-}
-
+UINT32 usip_init();
+void receive_one_byte(unsigned char data);// receive one byte through UART serial port
+int usip_send_data(unsigned short cmd,unsigned char* data, unsigned short len);
+void register_cmd_process_callback(cmd_process_callback cmd_process);
+int usip_rec_task_entry();
+#endif /* USIP_H_ */

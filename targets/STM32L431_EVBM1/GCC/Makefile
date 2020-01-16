@@ -1,5 +1,5 @@
 ################################################################################
-# STM32F429IGTx_FIRE GCC compiler Makefile
+# STM32L431 GCC compiler Makefile
 ################################################################################
 # ------------------------------------------------
 # Generic Makefile (based on gcc)
@@ -68,7 +68,8 @@ include $(PROJECTBASE)/project.mk
 # paths
 ################################################################################
 
-BUILD_DIR = appbuild
+OBJ_DIRS :=
+TARGET_DIR:= $(PROJECTBASE)/build
 
 ################################################################################
 # LDFLAGS
@@ -115,55 +116,47 @@ ifeq ($(USE_OTA), yes)
 LIBS += -lhwpatch
 endif
 LIBDIR  += -L$(PROJECTBASE)/../Lib
-LDFLAGS += $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
+
+LDFLAGS += $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(TARGET_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
 
 
+############HERE WE GET THE C_OBJECT S_OBJECT AND THE PATH #####################
+
+C_OBJ := $(C_SOURCES:$(TOP_DIR)/%.c=$(TARGET_DIR)/%.o)
+OBJ_DIRS +=  $(dir $(C_OBJ))
+S_OBJ := $(ASM_SOURCES_S:$(TOP_DIR)/%.S=$(TARGET_DIR)/%.o)
+OBJ_DIRS +=  $(dir $(S_OBJ))
+OBJ_DIRS := $(sort $(OBJ_DIRS))
+
+##################DO THE BUILDING NOW###########################################
 # default action: build all
-all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin
-#all:
-#	$(C_DEFS)
+all:$(TARGET_DIR)/$(TARGET).elf
+	-$(HEX) $< $(TARGET_DIR)/$(TARGET).hex
+	-$(BIN) $< $(TARGET_DIR)/$(TARGET).hex	
 
-################################################################################
-# build the application
-################################################################################
-# list of objects
-OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(C_SOURCES:.c=.o)))
-vpath %.c $(sort $(dir $(C_SOURCES)))
-# list of ASM program objects
-OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES_S:.S=.o)))
-vpath %.S $(sort $(dir $(ASM_SOURCES_S)))
-
-$(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
-	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
-#	$(CC) -E $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< > $@.i
-
-$(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
-	$(AS) -c $(CFLAGS) $< -o $@
-
-$(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
-	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+$(TARGET_DIR)/$(TARGET).elf:$(OBJ_DIRS) $(C_OBJ) $(S_OBJ)
+	$(CC) $(C_OBJ) $(S_OBJ) $(LDFLAGS) -o $@
 	$(SZ) $@
+		
+#create the necessary path for the object
+$(OBJ_DIRS):
+	-mkdir -p $@
 
-$(BUILD_DIR)/%.hex: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
-	$(HEX) $< $@
+#compile the c file to the object, as you know we has map the .c to the .o	
+$(C_OBJ):$(TARGET_DIR)/%.o:$(TOP_DIR)/%.c
+	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(@:%.o=%.lst) $<  -o $@
 
-$(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf | $(BUILD_DIR)
-	$(BIN) $< $@
-
-$(BUILD_DIR):
-	mkdir $@
-
+#compile the s fike to the object, as you know we has map the .S to the .o
+$(S_OBJ):$(TARGET_DIR)/%.o:$(TOP_DIR)/%.S
+	$(AS) -c $(CFLAGS) $< -o $@
+		
+ 
 ################################################################################
 # clean up
 ################################################################################
 clean:
-	-rm -fR .dep $(BUILD_DIR)
+	-rm -fR .dep $(TARGET_DIR)
 
-################################################################################
-# dependencies
-################################################################################
-#-include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
--include $(wildcard $(BUILD_DIR)/*.d)
 
 # *** EOF ***

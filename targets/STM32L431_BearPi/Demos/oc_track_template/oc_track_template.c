@@ -95,7 +95,6 @@ typedef struct
 } tag_app_Track_Control_Beep;
 #pragma pack()
 
-void *context;
 int8_t qr_code = 1;
 extern const unsigned char gImage_Huawei_IoT_QR_Code[114720];
 E53_ST1_Data_TypeDef E53_ST1_Data;
@@ -176,7 +175,7 @@ static int app_cmd_task_entry()
                     	Response_Track_Control_Beep.mid = Track_Control_Beep->mid;
                         Response_Track_Control_Beep.errcode = 0;
                 		Response_Track_Control_Beep.Beep_State = 1;
-                        oc_lwm2m_report(context,(char *)&Response_Track_Control_Beep,sizeof(Response_Track_Control_Beep),1000);    ///< report cmd reply message
+                        oc_lwm2m_report((char *)&Response_Track_Control_Beep,sizeof(Response_Track_Control_Beep),1000);    ///< report cmd reply message
                     }
                     if (Track_Control_Beep->Beep[0] == 'O' && Track_Control_Beep->Beep[1] == 'F' && Track_Control_Beep->Beep[2] == 'F')
                     {
@@ -185,7 +184,7 @@ static int app_cmd_task_entry()
                     	Response_Track_Control_Beep.mid = Track_Control_Beep->mid;
                         Response_Track_Control_Beep.errcode = 0;
                 		Response_Track_Control_Beep.Beep_State = 0;
-                        oc_lwm2m_report(context,(char *)&Response_Track_Control_Beep,sizeof(Response_Track_Control_Beep),1000);    ///< report cmd reply message
+                        oc_lwm2m_report((char *)&Response_Track_Control_Beep,sizeof(Response_Track_Control_Beep),1000);    ///< report cmd reply message
                     }
                     /********** code area end  **********/
                     break;
@@ -214,26 +213,21 @@ static int app_report_task_entry()
     oc_param.rcv_func = app_msg_deal;
 
     // context = oc_lwm2m_config(&oc_param);
-    ret = oc_lwm2m_config(&context, &oc_param);
+    ret = oc_lwm2m_config(& &oc_param);
     if (0 != ret)
     {
     	return ret;
     }
-
-    if(NULL != context)   //success ,so we could receive and send
+    while(1) //--TODO ,you could add your own code here
     {
-        //install a dealer for the led message received
-        while(1) //--TODO ,you could add your own code here
+        if(E53_ST1_Data.Latitude!=0&&E53_ST1_Data.Longitude!=0)
         {
-            if(E53_ST1_Data.Latitude!=0&&E53_ST1_Data.Longitude!=0)
-		    {
-                Track.messageId = cn_app_Track;
-                sprintf(Track.Longitude , "%.5f", E53_ST1_Data.Longitude);
-                sprintf(Track.Latitude , "%.5f", E53_ST1_Data.Latitude);
-                oc_lwm2m_report(context, (char *)&Track, sizeof(Track), 1000);
-            }
-            osal_task_sleep(2*1000);
+            Track.messageId = cn_app_Track;
+            sprintf(Track.Longitude , "%.5f", E53_ST1_Data.Longitude);
+            sprintf(Track.Latitude , "%.5f", E53_ST1_Data.Latitude);
+            oc_lwm2m_report( (char *)&Track, sizeof(Track), 1000);
         }
+        osal_task_sleep(2*1000);
     }
 
     return ret;

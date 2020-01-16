@@ -72,6 +72,8 @@ typedef struct
 }boudica150_cb_t;
 static boudica150_cb_t   s_boudica150_oc_cb;
 static osal_mutex_t s_report_mutex;
+static void  *s_oc_handle = NULL;
+
 int wireless_stats[4] = {0};
 
 //bc95 common at command
@@ -123,13 +125,20 @@ static int byte_to_hexstr(const unsigned char *bufin, int len, char *bufout)
 }
 
 
-static int boudica150_oc_report(void *handle,unsigned char *buf,int len, int timeout)
+static int boudica150_oc_report(unsigned char *buf,int len, int timeout)
 {
-    int ret = -1;
+    int ret = en_oc_lwm2m_err_noconfigured;
     const char *cmd = "AT+NMGS=";
     const char *index = "OK";
+
+    if(NULL == s_oc_handle)
+    {
+        return ret;
+    }
+
     if ((NULL == buf) || (len >= cn_boudica150_cachelen/2 )||(false == s_boudica150_oc_cb.sndenable))
     {
+        ret = en_oc_lwm2m_err_parafmt;
         return ret;
     }
     osal_mutex_lock(s_report_mutex);
@@ -142,11 +151,11 @@ static int boudica150_oc_report(void *handle,unsigned char *buf,int len, int tim
     osal_mutex_unlock(s_report_mutex);
     if(ret >= 0)
     {
-        ret = 0;
+        ret = en_oc_lwm2m_err_ok;
     }
     else
     {
-        ret = -1;
+        ret = en_oc_lwm2m_err_network;
     }
 
     return ret;
@@ -605,12 +614,18 @@ static bool_t boudica150_boot(const char *plmn, const char *apn, const char *ban
     return true;
 }
 
-static void  *s_oc_handle = NULL;
 
-static void *boudica150_oc_config(oc_config_param_t *param)
+static int boudica150_oc_config(oc_config_param_t *param)
 {
-    void *ret = NULL;
-    if((NULL != param) && (NULL == s_oc_handle))
+    int ret = en_oc_lwm2m_err_configured;
+
+    if(NULL == param)
+    {
+        ret = en_oc_lwm2m_err_parafmt;
+        return ret;
+    }
+
+    if(NULL == s_oc_handle)
     {
         s_boudica150_oc_cb.oc_param = *param;
 
@@ -618,17 +633,27 @@ static void *boudica150_oc_config(oc_config_param_t *param)
                 s_boudica150_oc_cb.oc_param.app_server.address,s_boudica150_oc_cb.oc_param.app_server.port))
         {
             s_oc_handle = &s_boudica150_oc_cb;
-            ret = s_oc_handle;
+            ret = en_oc_lwm2m_err_ok;
+        }
+        else
+        {
+            ret = en_oc_lwm2m_err_network;
         }
     }
 
     return ret;
 }
 
-static int boudica150_oc_deconfig(void *handle)
+static int boudica150_oc_deconfig(void)
 {
-    s_oc_handle = NULL;
-    return 0;
+    int ret = en_oc_lwm2m_err_noconfigured;
+
+    if(NULL != s_oc_handle)
+    {
+        s_oc_handle = NULL;
+        ret = en_oc_lwm2m_err_ok;
+    }
+    return ret;
 }
 
 

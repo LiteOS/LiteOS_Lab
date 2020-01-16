@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2016-2019>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -31,112 +31,61 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-/**
- *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-14 17:22  zhangqianfu  The first version
- *
- */
+#include "usart.h"
+#include "stm32f4xx.h"
+#include <los_hwi.h>
 
-#include <stdint.h>
-#include <stddef.h>
+#include "usip.h"
+#include "usip_uart.h"
 
-#include <string.h>
+static USART_TypeDef*     s_pUSART = USART1;
+static uint32_t           s_uwIRQn = USART1_IRQn;
 
-#include <stdlib.h>
-#include <osal.h>
-#include <oc_lwm2m_al.h>
+UART_HandleTypeDef usip_uart_handle;
 
-typedef struct
+static UINT32 g_send_timeout = 0;
+// deal uart interrupt
+void usip_uart_irq(void)
 {
-    const char            *name;    ///< lwm2m implement name
-    const oc_lwm2m_opt_t  *opt;     ///< lwm2m implement method
-} oc_lwm2m_t;
-static oc_lwm2m_t  s_oc_lwm2m_ops;
-
-
-int oc_lwm2m_register(const char *name, const oc_lwm2m_opt_t *opt)
-{
-    int ret = -1;
-
-    if (NULL == s_oc_lwm2m_ops.opt)
+    uint8_t data;
+    if(__HAL_UART_GET_FLAG(&usip_uart_handle, UART_FLAG_RXNE) != RESET)   //receive Data register not empty interrupt.
     {
-        s_oc_lwm2m_ops.name = name;
-        s_oc_lwm2m_ops.opt =  opt;
-        ret = 0;
+        data = (uint8_t)(usip_uart_handle.Instance->DR & 0x00FF);
+        receive_one_byte(data);
     }
-
-    return ret;
 }
 
-int oc_lwm2m_unregister(const char *name)
+void usip_uart_init()
 {
-    int ret = -1;
-
-    if ((NULL != name) && (NULL != s_oc_lwm2m_ops.name))
+    //initialize the usip_uart
+    usip_uart_handle.Instance = s_pUSART;
+    usip_uart_handle.Init.BaudRate = 115200;
+    usip_uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
+    usip_uart_handle.Init.StopBits = UART_STOPBITS_1;
+    usip_uart_handle.Init.Parity = UART_PARITY_NONE;
+    usip_uart_handle.Init.Mode = UART_MODE_TX_RX;
+    usip_uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+    usip_uart_handle.Init.OverSampling = UART_OVERSAMPLING_16;
+    if (HAL_UART_Init(&usip_uart_handle) != HAL_OK)
     {
-        if (0 == strcmp(name, s_oc_lwm2m_ops.name))
-        {
-            s_oc_lwm2m_ops.opt = NULL;   ///< also think about clear all the ops in the context,
-            s_oc_lwm2m_ops.name = NULL;
-            ret = 0;
-        }
+        _Error_Handler(__FILE__, __LINE__);
     }
 
-    return ret;
+    //create a hardware interrupt to deal usip_uart_irq
+    LOS_HwiCreate(s_uwIRQn, 3, 0, usip_uart_irq, 0);
+
+    __HAL_UART_CLEAR_FLAG(&usip_uart_handle,UART_FLAG_TC);
+
+    //enable usip_uart UART_IT_RXNE interrupt
+    __HAL_UART_ENABLE_IT(&usip_uart_handle,UART_IT_RXNE);//Receive Data register not empty interrupt
+
+    __HAL_UART_ENABLE(&usip_uart_handle);
+
+    g_send_timeout = LOS_MS2Tick(USIP_WAIT_ACK_TIMEOUT);
 }
 
-
-//////////////////////////APPLICATION INTERFACE/////////////////////////////////
-int oc_lwm2m_report(char  *buf, int len, int timeout)
+void send_one_byte(unsigned char data)
 {
-    int ret = en_oc_lwm2m_err_system;
-
-    if ((NULL != s_oc_lwm2m_ops.opt) && (NULL != s_oc_lwm2m_ops.opt->report))
-    {
-        ret = s_oc_lwm2m_ops.opt->report(buf, len, timeout);
-    }
-
-    return ret;
-}
-
-
-int oc_lwm2m_config( oc_config_param_t *param)
-{
-    int ret = en_oc_lwm2m_err_system;
-
-    if ((NULL != s_oc_lwm2m_ops.opt) && (NULL != s_oc_lwm2m_ops.opt->config))
-    {
-        if(NULL != param)
-        {
-            ret = s_oc_lwm2m_ops.opt->config(param);
-        }
-        else
-        {
-            ret = en_oc_lwm2m_err_parafmt;
-        }
-    }
-
-    return ret;
-}
-
-
-int oc_lwm2m_deconfig(void)
-{
-    int ret = en_oc_lwm2m_err_system;
-
-    if ((NULL != s_oc_lwm2m_ops.opt) && (NULL != s_oc_lwm2m_ops.opt->deconfig))
-    {
-        ret = s_oc_lwm2m_ops.opt->deconfig();
-    }
-
-    return ret;
-}
-
-///////////////////////OC LWM2M AGENT INITIALIZE////////////////////////////////
-int oc_lwm2m_init()
-{
-    int ret = -1;
-    ret = 0;   ///< uptils now, we should do nothing here
-    return ret;
+    HAL_UART_Transmit(&usip_uart_handle,&data,1,g_send_timeout);
 }
 
