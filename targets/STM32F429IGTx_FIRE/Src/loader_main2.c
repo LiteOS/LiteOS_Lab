@@ -169,6 +169,13 @@ int ota_detection()
     }
     printf("new img size:%ld, old img size:%ld\n", diff_info.newDataSize, diff_info.oldDataSize);
 
+    if ((diff_info.newDataSize >= OTA_IMAGE_DIFF_UPGRADE_SIZE)
+        || (diff_info.oldDataSize >= OTA_IMAGE_BCK_SIZE)) {
+        printf("upgrade failed, space is not enough!\n");
+        patch_ret = UPGRADE_RESULT_INNERERROR;
+        goto EXIT;
+    }
+
     getDecompressPlugin(&diff_info, &decompress_plugin);
 
     hpatch_TStreamInput download_img_stream;
@@ -200,7 +207,6 @@ int ota_detection()
 
     printf("upgrade image!\n");
     ret = app_image_restore(PART_OTA_DIFF_UPGTADE, PART_APP, diff_info.newDataSize, 0, cache, CACHE_SIZE); // restore new
-
     if (ret == 0)
     {
         goto EXIT;
