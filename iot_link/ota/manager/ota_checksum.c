@@ -2,6 +2,8 @@
 #include "mbedtls/md.h"
 #include "stdint.h"
 #include "ota_flag.h"
+#include <string.h>
+#include <osal.h>
 
 struct input_stream {
   int start;
@@ -75,6 +77,10 @@ static int ota_pack_read_stream(uint8_t *buf, int32_t buf_len)
     read_len = buf_len;
   } else {
     read_len = calc_stream.end - calc_stream.start;
+  }
+
+  if (read_len < 0) {
+    return read_len;
   }
 
   ota_storage_bin_read(calc_stream.start, buf, read_len);
