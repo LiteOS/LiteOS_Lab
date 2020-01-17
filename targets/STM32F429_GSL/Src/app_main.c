@@ -61,6 +61,8 @@ static char *machine_status(unsigned int status);
 #define CN_UI_LINE_H            10
 #define CN_UI_STRLINE_LENMAX    64
 
+///< THE UI VIEW FOR THIS DEMO
+
 /**************************************************
 
 ----------------------------------------------------
@@ -68,25 +70,28 @@ HUA WEI GSL DEMO
 
 ---------------------------------------------------
 
-***************************************************/
+CSQPICTURE                        IOTPICTURE
+RSSI:
+OPERATORE:
 
+EID:XXXX                                   LINE EID
+-----------------------------------------  LINE S_1
+T:Type S:Seed B:Bussiness  I:inuse         LINE DESCRIPTION
+-----------------------------------------  LINE S_2
+No   ICCID         T       I               LINE TABLE
+-----------------------------------------  LINE S_3
+0    xxxxxx        S       FULLFIL         LINE I_0
+1    xxxxxx        B       EMPTY           LINE_I_1
+2    xxxxxx        B       EMPTY           LINE_I_2
+3
 
+-----------------------------------------  LINE
+TIME FRESH
 
-
-///< VIEW FOR THE ICCID UI
-/*****************************************
- -----------------------------------------  LINE S_1
- EID:XXXX                                   LINE EID
- -----------------------------------------  LINE S_2
- T:Type S:Seed B:Bussiness  I:inuse         LINE DESCRIPTION
- -----------------------------------------  LINE S_3
- No   ICCID         T       I               LINE TABLE
- -----------------------------------------  LINE S_4
- 0    xxxxxx        S       FULLFIL         LINE I_0
- 1    xxxxxx        B       EMPTY           LINE_I_1
- 2    xxxxxx        B       EMPTY           LINE_I_2
- 3
- -----------------------------------------  LINE S_5
+-----------------------------------------
+MS   :
+CGATT:                HWLOGO   HOLDLOG
+CGREG:
 ******************************************/
 
 #define CN_UI_CSQ_IMG_X_S        10
@@ -136,8 +141,9 @@ typedef struct
 {
     queue_t *draw_cmd_queue;           ///< queue used for the draw task
 
+    ec2x_ver_t  ver;
+
     char     time_now[CN_UI_STRLINE_LENMAX]; ///< storage the time now
-    char     time_bak[CN_UI_STRLINE_LENMAX]; ///< storage the time drew last time
 
     int      csq_now;                     ///< the csq we get now
     int      csq_bak;                     ///< the csq we drew last time
@@ -148,6 +154,10 @@ typedef struct
     char     operator_now[CN_UI_STRLINE_LENMAX] ;///< the operator now
     char     operator_bak[CN_UI_STRLINE_LENMAX] ;///< the operator we drew last time
 
+    int      cgatt_value;
+    int      cgreg_n;
+    int      cgreg_state;
+
     int      status_changecard:1;
     int      status_bussiness:1;
     int      status_iotconnected:1;
@@ -155,6 +165,9 @@ typedef struct
     int      status_freshiccid:1;            ///< we need fresh the iccid
     int      status_moduleredy:1;            ///< we have detect the module
     int      status_gettime:1;               ///< we have get the time
+    int      status_simready:1;              ///< we check if the sim is ready or not
+    int      status_cgregready:1;            ///< cgatt ready
+    int      status_cgattready:1;            ///< cgreg ready
 
     eid_t       eid;                         ///< the eid we get
     iccid_tab_t iccid_tab;
@@ -264,26 +277,13 @@ static void ui_clean_window(int x, int y, int w,int h)
 
 
 
-typedef enum
-{
-    en_app_main_status_initialize = 0,  ///< waiting for the module
-    en_app_main_status_seed,            ///< this is the seed card
-    en_app_main_status_business,        ///< this is the business card
-    en_app_main_status_changing,        ///< this is the changge status
-}en_app_main_status_t;
-
-
 static int draw_cmd_push(int cmd)
 {
     int ret = 0;
 
     ret = queue_push( s_app_main_cb.draw_cmd_queue,(void *)cmd,2*1000);
 
-    if(0 == ret)
-    {
-        printf("PUSH DRAW COMMAND %d success\n\r",cmd);
-    }
-    else
+    if(0 != ret)
     {
         printf("PUSH DRAW COMMAND %d failed\n\r",cmd);
     }
@@ -300,6 +300,8 @@ typedef enum
     en_app_cmd_draw_iccid,
     en_app_cmd_draw_time,
     en_app_cmd_draw_machinestatus,
+    en_app_cmd_draw_cpin,
+    en_app_cmd_draw_network,
     en_app_cmd_draw_last,
 }en_app_cmd_t;
 
@@ -323,49 +325,35 @@ static int draw_theme(int fresh)
     return 0;
 }
 
+
+#define CN_UI_CSQ_CLASS_MAX    6
+static const unsigned char *s_csq_img_array[CN_UI_CSQ_CLASS_MAX] = \
+{
+    g_img_csq_0,
+    g_img_csq_1,
+    g_img_csq_2,
+    g_img_csq_3,
+    g_img_csq_4,
+    g_img_csq_5,
+};
+
 static int draw_csq(int fresh)
 {
+    int class_l = 0;
     if(0 == fresh)
     {
-        Paint_DrawImage(g_img_csq_0 ,CN_UI_CSQ_IMG_X_S, CN_UI_CSQ_IMG_Y_S, CN_UI_CSQ_IMG_W, CN_UI_CSQ_IMG_H);
+        Paint_DrawImage(s_csq_img_array[class_l] ,CN_UI_CSQ_IMG_X_S, CN_UI_CSQ_IMG_Y_S, CN_UI_CSQ_IMG_W, CN_UI_CSQ_IMG_H);
     }
     else if(s_app_main_cb.csq_now != s_app_main_cb.csq_bak)
     {
-        switch((s_app_main_cb.csq_now +6)/7)
-        {
-            case 0:
-                Paint_DrawImage(g_img_csq_0 ,CN_UI_CSQ_IMG_X_S, CN_UI_CSQ_IMG_Y_S, CN_UI_CSQ_IMG_W, CN_UI_CSQ_IMG_H);
-                break;
-            case 1:
-                Paint_DrawImage(g_img_csq_1 ,CN_UI_CSQ_IMG_X_S, CN_UI_CSQ_IMG_Y_S, CN_UI_CSQ_IMG_W, CN_UI_CSQ_IMG_H);
-                break;
-            case 2:
-                Paint_DrawImage(g_img_csq_2 ,CN_UI_CSQ_IMG_X_S, CN_UI_CSQ_IMG_Y_S, CN_UI_CSQ_IMG_W, CN_UI_CSQ_IMG_H);
-                break;
-            case 3:
-                Paint_DrawImage(g_img_csq_3 ,CN_UI_CSQ_IMG_X_S, CN_UI_CSQ_IMG_Y_S, CN_UI_CSQ_IMG_W, CN_UI_CSQ_IMG_H);
-                break;
-            case 4:
-                Paint_DrawImage(g_img_csq_4 ,CN_UI_CSQ_IMG_X_S, CN_UI_CSQ_IMG_Y_S, CN_UI_CSQ_IMG_W, CN_UI_CSQ_IMG_H);
-                break;
-            case 5:
-                Paint_DrawImage(g_img_csq_5 ,CN_UI_CSQ_IMG_X_S, CN_UI_CSQ_IMG_Y_S, CN_UI_CSQ_IMG_W, CN_UI_CSQ_IMG_H);
-                break;
-            default:
-                Paint_DrawImage(g_img_csq_0 ,CN_UI_CSQ_IMG_X_S, CN_UI_CSQ_IMG_Y_S, CN_UI_CSQ_IMG_W, CN_UI_CSQ_IMG_H);
-                break;
-        }
-
-
+        class_l = (s_app_main_cb.csq_now >31)?0:((s_app_main_cb.csq_now +CN_UI_CSQ_CLASS_MAX)/(CN_UI_CSQ_CLASS_MAX +1));
+        Paint_DrawImage(s_csq_img_array[class_l] ,CN_UI_CSQ_IMG_X_S, CN_UI_CSQ_IMG_Y_S, CN_UI_CSQ_IMG_W, CN_UI_CSQ_IMG_H);
         s_app_main_cb.csq_now = s_app_main_cb.csq_bak;
-    }
-    else
-    {
-
     }
 
     return 0;
 }
+
 
 static int draw_rssi(int fresh)
 {
@@ -384,11 +372,6 @@ static int draw_rssi(int fresh)
         Paint_DrawString_EN(CN_UI_RSSI_X_S, CN_UI_RSSI_Y_S, draw_str, &Font24, WHITE, BLACK);
         s_app_main_cb.rssi_bak = s_app_main_cb.rssi_now;
     }
-    else
-    {
-
-    }
-
     return 0;
 }
 
@@ -411,12 +394,8 @@ static int draw_operator(int fresh)
         ui_clean_window(CN_UI_OPRT_X_S,CN_UI_OPRT_Y_S,CN_UI_OPRT_W,CN_UI_OPRT_H);
         Paint_DrawString_EN(CN_UI_OPRT_X_S, CN_UI_OPRT_Y_S, draw_str, &Font24, WHITE, BLACK);
 
-        memset(s_app_main_cb.operator_bak,0,sizeof(s_app_main_cb.time_bak));
+        memset(s_app_main_cb.operator_bak,0,sizeof(s_app_main_cb.operator_bak));
         strcpy(s_app_main_cb.operator_bak,s_app_main_cb.operator_now);
-    }
-    else
-    {
-
     }
 
     return 0;
@@ -460,23 +439,23 @@ static int draw_eid(int fresh)
 ///< status:0 empty 1 fill blue 2 fill gray
 typedef enum
 {
-    en_draw_iccid_status_empty = 0,
-    en_draw_iccid_status_fillblue,
-    en_draw_iccid_status_gray,
+    en_iccid_status_inactive = 0,
+    en_iccid_status_active,
+    en_iccid_status_changing,
 }en_draw_iccid_status_t;
 
 static int draw_iccid_status(int x,int y,int status)
 {
     switch(status)
     {
-        case en_draw_iccid_status_empty:
+        case en_iccid_status_inactive:
             Paint_DrawCircle(x,y,15,LIGHTBLUE,DRAW_FILL_FULL,DOT_PIXEL_2X2);
             Paint_DrawCircle(x,y,13,WHITE,DRAW_FILL_FULL,DOT_PIXEL_2X2);
             break;
-        case en_draw_iccid_status_fillblue:
+        case en_iccid_status_active:
             Paint_DrawCircle(x,y,15,LIGHTBLUE,DRAW_FILL_FULL,DOT_PIXEL_2X2);
             break;
-        case en_draw_iccid_status_gray:
+        case en_iccid_status_changing:
             Paint_DrawCircle(x,y,15,GRAY,DRAW_FILL_FULL,DOT_PIXEL_2X2);
             break;
         default:
@@ -524,7 +503,7 @@ static int draw_iccid(int fresh)
 
             if(s_app_main_cb.status_changecard)
             {
-                status = en_draw_iccid_status_gray;
+                status = en_iccid_status_changing;
             }
             else
             {
@@ -603,22 +582,42 @@ static  int draw_logo(int fresh)
 #define CN_UI_MACHINESTATUS_Y   (CN_UI_LOGO_IMG1_Y)
 #define CN_UI_MACHINESTATUS_W   240
 #define CN_UI_MACHINESTATUS_H   CN_UI_FONT_H
+#define CN_UI_MACHINESTATUS_END_Y  (CN_UI_MACHINESTATUS_Y + CN_UI_MACHINESTATUS_H)
 
-static int draw_modulestatus(int fresh)
+
+static int draw_machinestatus(int fresh)
 {
+    char draw_str[CN_UI_STRLINE_LENMAX] = {0};
+    snprintf(draw_str,CN_UI_STRLINE_LENMAX,"MS:%s",machine_status(s_app_main_cb.machine_status));
 
-    static int status_drew = -1;
-
-    if(s_app_main_cb.machine_status != status_drew)
-    {
-        status_drew = s_app_main_cb.machine_status;
-
-        ui_clean_window(CN_UI_MACHINESTATUS_X,CN_UI_MACHINESTATUS_Y,CN_UI_MACHINESTATUS_W,CN_UI_MACHINESTATUS_H);
-        Paint_DrawString_EN(CN_UI_MACHINESTATUS_X, CN_UI_MACHINESTATUS_Y, machine_status(status_drew), &Font24, WHITE, BLACK);
-    }
+    ui_clean_window(CN_UI_MACHINESTATUS_X,CN_UI_MACHINESTATUS_Y,CN_UI_MACHINESTATUS_W,CN_UI_MACHINESTATUS_H);
+    Paint_DrawString_EN(CN_UI_MACHINESTATUS_X, CN_UI_MACHINESTATUS_Y,draw_str, &Font24, WHITE, BLACK);
 
     return 0;
 }
+
+#define CN_UI_NETWORKING_BASE_X   10
+#define CN_UI_NETWORKING_BASE_Y   CN_UI_MACHINESTATUS_END_Y
+#define CN_UI_NETWORKING_CGATT_Y  (CN_UI_MACHINESTATUS_END_Y)
+#define CN_UI_NETWORKING_CGREG_Y  (CN_UI_NETWORKING_CGATT_Y + CN_UI_FONT_H)
+#define CN_UI_NETWORKING_W        240
+#define CN_UI_NETWORKING_H        (CN_UI_FONT_H *2)
+#define CN_UI_NETWORKING_END_Y    (CN_UI_NETWORKING_BASE_Y + CN_UI_NETWORKING_H)
+
+static int draw_networking(int fresh)
+{
+    char draw_str[CN_UI_STRLINE_LENMAX] = {0};
+    ui_clean_window(CN_UI_NETWORKING_BASE_X,CN_UI_NETWORKING_BASE_Y,CN_UI_NETWORKING_W,CN_UI_NETWORKING_H);
+
+    snprintf(draw_str,CN_UI_STRLINE_LENMAX,"CGATT:%d",s_app_main_cb.cgatt_value);
+    Paint_DrawString_EN(CN_UI_NETWORKING_BASE_X, CN_UI_NETWORKING_CGATT_Y, draw_str, &Font24, WHITE, BLACK);
+
+    snprintf(draw_str,CN_UI_STRLINE_LENMAX,"CGREG:%d,%d",s_app_main_cb.cgreg_n,s_app_main_cb.cgreg_state);
+    Paint_DrawString_EN(CN_UI_NETWORKING_BASE_X, CN_UI_NETWORKING_CGREG_Y, draw_str, &Font24, WHITE, BLACK);
+
+    return 0;
+}
+
 
 ///< this is the draw task for the ui
 static int draw_entry(void *para)
@@ -686,7 +685,10 @@ static int draw_entry(void *para)
                     draw_time(1);
                     break;
                 case en_app_cmd_draw_machinestatus:
-                    draw_modulestatus(1);
+                    draw_machinestatus(1);
+                    break;
+                case en_app_cmd_draw_network:
+                    draw_networking(1);
                     break;
 
                 default:
@@ -703,17 +705,17 @@ static int draw_entry(void *para)
 /******************************************************************************
  *
  * machine status flow
- *                       ------------------------------------------------
+ *                       -------------------------------------------------
  *                       |                                                |
  *                       |                                                |
  *                       V                                                |
- * moduledetect ----->checkcard----------                                 |
+ *moduledetect----->checkcard-------------                                |
  *                  ^     ^              |                                |
  *                  |     |              |                                |
  *                  |  seedonly----------|                                |
  *                  |     ^              |                                |
  *                  |     |              |                                |
- *                  |     |              ------------->netmode----------->iotmode
+ *                  |     |              ------------->netdetect-------->iotmode
  *                  |     |              |                                |
  *                  |     |              |                                |
  *                  |     |              v                                |
@@ -740,7 +742,7 @@ static int draw_entry(void *para)
  *
  * seedmode: get the iccid, if changed, goto the correspongding mode;
  *
- * netmode:  now we goto iotmode directly
+ * netdetect:check the network,if ok goto the iot, else stay here
  *
  * iotmode:  here we connect to the dmp,if success we goto the idle, else turn back to card check
  *
@@ -755,10 +757,10 @@ static int draw_entry(void *para)
 typedef enum
 {
     en_app_status_moduledetect = 0,
-    en_app_status_cardcheck,
+    en_app_status_carddetect,
     en_app_status_seedonly,
     en_app_status_seedmode,
-    en_app_status_netcheck,
+    en_app_status_netdetect,
     en_app_status_iotconnect,
     en_app_status_idle,
     en_app_status_cardchange,
@@ -767,14 +769,14 @@ typedef enum
 
 const char *s_machine_status[] =
 {
-  "MODULECHECK",
-  "CARDCHECK",
-  "SEEDONLY",
-  "SEEDMODE",
-  "NETCHECK",
-  "IOTCONNECT",
-  "IDLE",
-  "CARDCHANGE"
+    "MODULEDETECT",
+    "CARDDETECT",
+    "SEEDONLY",
+    "SEEDMODE",
+    "NETDETECT",
+    "IOTCONNECT",
+    "IDLE",
+    "CARDCHANGE"
 };
 
 static char *machine_status(unsigned int status)
@@ -793,7 +795,7 @@ static char *machine_status(unsigned int status)
 #define CN_FRESH_MAGIC_OPER    5
 #define CN_FRESH_MAGIC_IOT     10
 #define CN_FRESH_MAGIC_ICCID   10
-#define CN_FRESH_MAGIC_TIME    20
+#define CN_FRESH_MAGIC_TIME    5
 static int deal_commonfresh(int counter)
 {
     int ret = -1;
@@ -846,11 +848,12 @@ static int deal_commonfresh(int counter)
     return ret;
 }
 
-static int deal_modulecheck(int counter)
+
+///< check if any module inserted
+static int deal_moduledetect(int counter)
 {
     int ret = -1;
 
-    ec2x_ver_t ver;
 
     int status = en_app_status_moduledetect;
 
@@ -858,21 +861,35 @@ static int deal_modulecheck(int counter)
 
     ec2x_hwsimset(1);
 
-    ret = ec2x_getmqttversion(&ver);
+    ret = ec2x_getmqttversion(&s_app_main_cb.ver);
     if(0 == ret)
     {
-        status = en_app_status_cardcheck;
+        status = en_app_status_carddetect;
     }
 
     return status;
 }
 
+
 static int deal_cardcheck(int counter)
 {
     int ret = -1;
-    int status = en_app_status_cardcheck;
+    int status = en_app_status_carddetect;
 
     deal_commonfresh(counter);
+
+    s_app_main_cb.status_simready = 0;
+    ret = ec2x_cpin();
+    if(0 == ret)
+    {
+        s_app_main_cb.status_simready = 1;
+        draw_cmd_push(en_app_cmd_draw_cpin);
+    }
+    else
+    {
+        draw_cmd_push(en_app_cmd_draw_cpin);
+        return status;
+    }
 
     ///< get the iccid
     ret = ec2x_geticcidtab(&s_app_main_cb.iccid_tab);
@@ -889,7 +906,7 @@ static int deal_cardcheck(int counter)
         }
         else
         {
-            status = en_app_status_netcheck;
+            status = en_app_status_netdetect;
         }
     }
     return status;
@@ -917,18 +934,18 @@ static int deal_seedonly(int counter)
         }
         else
         {
-            status = en_app_status_netcheck;
+            status = en_app_status_netdetect;
         }
     }
     else
     {
-        status = en_app_status_cardcheck;
+        status = en_app_status_carddetect;
     }
     if((0 == counter%10) && (1 == s_app_main_cb.iccid_tab.num )&&(1 == s_app_main_cb.iccid_tab.iccid[0].status))
     {
         ec2x_eniccid(&s_app_main_cb.iccid_tab.iccid[0]);
         osal_task_sleep(10*1000);
-        status = en_app_status_cardcheck;
+        status = en_app_status_carddetect;
 
     }
     return status;
@@ -957,23 +974,57 @@ static int deal_seedmode(int counter)
         }
         else
         {
-            status = en_app_status_netcheck;
+            status = en_app_status_netdetect;
         }
     }
     else
     {
-        status = en_app_status_cardcheck;
+        status = en_app_status_carddetect;
     }
     return status;
 }
 
 
-static int deal_netcheck(int counter)
+static int deal_netdetect(int counter)
 {
-    int status = en_app_status_netcheck;
+    int ret = -1;
+    int status = en_app_status_netdetect;
 
     deal_commonfresh(counter);
-    status = en_app_status_iotconnect;
+
+    s_app_main_cb.cgatt_value = 0;
+    s_app_main_cb.status_cgattready = 0;
+
+    ret = ec2x_cgatt(&s_app_main_cb.cgatt_value);
+    if(0 == ret )
+    {
+        if( s_app_main_cb.cgatt_value)
+        {
+            s_app_main_cb.status_cgattready = 1;
+        }
+    }
+
+    s_app_main_cb.cgreg_n = 0;
+    s_app_main_cb.cgreg_state = 0;
+    s_app_main_cb.status_cgregready = 0;
+
+    ret = ec2x_cgreg(&s_app_main_cb.cgreg_n,&s_app_main_cb.cgreg_state);
+    if(0 == ret )
+    {
+        if((5 ==  s_app_main_cb.cgreg_state) ||(1 ==  s_app_main_cb.cgreg_state))
+        {
+            s_app_main_cb.status_cgregready = 1;
+        }
+    }
+
+    draw_cmd_push(en_app_cmd_draw_network);
+
+    if(s_app_main_cb.status_cgattready && s_app_main_cb.status_cgregready )
+    {
+        status = en_app_status_iotconnect;
+    }
+
+
     return status;
 }
 
@@ -996,7 +1047,7 @@ static int deal_iotconnect(unsigned int counter)
     }
     else
     {
-        status = en_app_status_cardcheck;
+        status = en_app_status_carddetect;
         osal_task_sleep(30*1000);
 
     }
@@ -1022,7 +1073,7 @@ static int deal_idle(unsigned int counter)
             s_app_main_cb.status_iotconnected = 0;
             draw_cmd_push(en_app_cmd_draw_dmp);
 
-            status = en_app_status_cardcheck;
+            status = en_app_status_carddetect;
         }
 
     }
@@ -1031,7 +1082,7 @@ static int deal_idle(unsigned int counter)
         ret = ec2x_geticcidtab(&s_app_main_cb.iccid_tab);
         if((0 == ret) && (s_app_main_cb.iccid_tab.num <=1))
         {
-            status = en_app_status_cardcheck;
+            status = en_app_status_carddetect;
         }
         draw_cmd_push(en_app_cmd_draw_iccid);
     }
@@ -1064,12 +1115,13 @@ int standard_app_demo_main()
             if((s_app_main_cb.card_select < s_app_main_cb.iccid_tab.num) && \
                ((s_app_main_cb.machine_status == en_app_status_idle) || \
                 (s_app_main_cb.machine_status == en_app_status_seedmode) || \
-                (s_app_main_cb.machine_status == en_app_status_netcheck) ))
+                (s_app_main_cb.machine_status == en_app_status_netdetect) ))
             {
                 s_app_main_cb.status_changecard = 1;
                 draw_cmd_push(en_app_cmd_draw_iccid);
 
                 status = en_app_status_cardchange ;
+                s_app_main_cb.machine_status = status;
                 draw_cmd_push(en_app_cmd_draw_machinestatus);
 
                 if(s_app_main_cb.status_iotconnected)
@@ -1089,9 +1141,9 @@ int standard_app_demo_main()
         switch (status)
         {
             case  en_app_status_moduledetect:
-                status = deal_modulecheck(loop_counter);
+                status = deal_moduledetect(loop_counter);
                 break;
-            case en_app_status_cardcheck:
+            case en_app_status_carddetect:
                 status = deal_cardcheck(loop_counter);
                 break;
             case en_app_status_seedmode:
@@ -1100,8 +1152,8 @@ int standard_app_demo_main()
             case en_app_status_seedonly:
                 status = deal_seedonly(loop_counter);
                 break;
-            case  en_app_status_netcheck:
-                status = deal_netcheck(loop_counter);
+            case  en_app_status_netdetect:
+                status = deal_netdetect(loop_counter);
                 break;
             case  en_app_status_iotconnect:
                 status = deal_iotconnect(loop_counter);
@@ -1112,7 +1164,7 @@ int standard_app_demo_main()
 
             case en_app_status_cardchange:
                 s_app_main_cb.status_changecard = 0;
-                status = en_app_status_cardcheck;
+                status = en_app_status_carddetect;
                 break;
 
             default:

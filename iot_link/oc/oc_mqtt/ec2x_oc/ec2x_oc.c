@@ -678,92 +678,60 @@ int ec2x_hwsimset(int mode)
     snprintf(cmd,64,"AT+HWSIM=%s\r\n",mode?"enable":"disable");
 
     ret = ec2x_atcmd_response(cmd,"+HWSIM ",NULL,0,CN_EC2X_CMD_TIME_BASE);
-
-
-    return ret;
-
-
-}
-
-
-
-
-#include <shell.h>
-static iccid_tab_t s_iccid_tab;
-
-static int shell_iccidlist(int argc,const char *argv[])
-{
-    int ret = -1;
-    int i = 0;
-
-    memset(&s_iccid_tab,0,sizeof(s_iccid_tab));
-    ret = ec2x_geticcidtab(&s_iccid_tab);
-    if(0 == ret)
-    {
-        printf("GET ICCID OK:NUM:%d\n\r",s_iccid_tab.num);
-        for(i = 0;i<s_iccid_tab.num;i++)
-        {
-            printf("NUM:%d:TYPE:%d STATUS:%d ID:%s\n\r",i,\
-                    s_iccid_tab.iccid[i].type,s_iccid_tab.iccid[i].status,s_iccid_tab.iccid[i].id);
-        }
-    }
-    else
-    {
-        printf("GET ICCID ERR\n\r");
-    }
-
     return ret;
 }
 
-OSSHELL_EXPORT_CMD(shell_iccidlist,"iccidlist","iccidlist");
-
-
-static int shell_iccidenable(int argc,const char *argv[])
+int ec2x_cpin(void)
 {
     int ret = -1;
-    int i = 0;
+    char  cmd[64];
+    snprintf(cmd,64,"AT+CPIN?\r\n");
 
-    if(argc != 2)
-    {
-        return ret;
-    }
-
-    i = strtol(argv[1],NULL,0);
-
-    if(i >= s_iccid_tab.num)
-    {
-        return ret;
-    }
-
-    ret = ec2x_eniccid(&s_iccid_tab.iccid[i]);
-
+    ret = ec2x_atcmd_response(cmd,"+CPIN: READY",NULL,0,CN_EC2X_CMD_TIME_BASE);
     return ret;
 }
 
-OSSHELL_EXPORT_CMD(shell_iccidenable,"icciden","icciden number");
-
-static int shell_eid(int argc,const char *argv[])
+int ec2x_cgatt(int *cgatt)
 {
     int ret = -1;
-    eid_t eid;
+    char  cmd[64];
+    char  resp[64];
+    char *str;
 
+    snprintf(cmd,64,"AT+CGATT?\r\n");
 
-    memset(&eid,0,sizeof(eid));
-    ret = ec2x_geteid(&eid);
+    ret = ec2x_atcmd_response(cmd,"+CGATT: ",resp,64,CN_EC2X_CMD_TIME_BASE);
 
     if(0 == ret)
     {
-        printf("EID OK:%s\n\r",eid.id);
-    }
-    else
-    {
-        printf("EID ERR \n\r");
-    }
 
+        str = strstr(resp,"+CGATT: ");
+        sscanf(str,"+CGATT: %d",cgatt);
+    }
     return ret;
 }
 
-OSSHELL_EXPORT_CMD(shell_eid,"eid","eid");
+
+///<+CGREG: 0,5
+int ec2x_cgreg(int *n,int *status)
+{
+    int ret = -1;
+    char  cmd[64];
+    char  resp[64];
+    char *str;
+
+    snprintf(cmd,64,"AT+CGREG?\r\n");
+    ret = ec2x_atcmd_response(cmd,"+CGREG: ",resp,64,CN_EC2X_CMD_TIME_BASE);
+
+    if(0 == ret)
+    {
+        str = strstr(resp,"+CGREG: ");
+        sscanf(str,"+CGREG: %d,%d",n,status);
+    }
+    return ret;
+}
+
+
 
 
 
