@@ -191,7 +191,6 @@ static int app_report_task_entry()
 
     oc_config_param_t      oc_param;
     app_light_intensity_t  light;
-    void                  *context;
     int                    lux = 0;
 
     memset(&oc_param,0,sizeof(oc_param));
@@ -203,12 +202,11 @@ static int app_report_task_entry()
     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
     oc_param.rcv_func = app_msg_deal;
 
-    ret = oc_lwm2m_config(&context, &oc_param);
+    ret = oc_lwm2m_config(&oc_param);
     if (0 != ret)
     {
         return ret;
     }
-
 
     while(1) //--TODO ,you could add your own code here
     {
