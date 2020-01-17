@@ -84,5 +84,8 @@ int ec2x_geteid(eid_t *eid);
 int ec2x_getmqttversion(ec2x_ver_t *ver);
 int ec2x_echoset(int mode);
 int ec2x_hwsimset(int mode);
+int ec2x_cpin(void);
+int ec2x_cgatt(int *cgatt);
+int ec2x_cgreg(int *n,int *status);
 
 #endif /* __BOUDICA150_OC_H */
