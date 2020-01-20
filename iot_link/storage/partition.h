@@ -48,6 +48,8 @@ typedef struct _partition {
   uint32_t size;
 }storage_partition;
 
+int storage_partition_init(storage_partition *part, int32_t max_num);
+
 int storage_partition_read(int part_id, uint8_t *buf, uint32_t len, uint32_t offset);
 
 int storage_partition_write(int part_id, uint8_t *buf, uint32_t len, uint32_t offset);

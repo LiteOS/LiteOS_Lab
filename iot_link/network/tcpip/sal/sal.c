@@ -75,7 +75,6 @@ EXIT_MEM_ERR:
 
 EXIT_MUTEX_ERR:
 EXIT_INIT_ERR:
-EXIT_PARA_ERR:
     return ret;
 
 }

@@ -79,7 +79,7 @@ unsigned char atiny_res1[3]={'r'};
 unsigned char atiny_res2[ATINY_MAX_EPID_LEN] = "ep=";
 
 static int atiny_state = ATINY_STAT_INIT;
-extern int g_bind_finsh = 0;
+int g_bind_finsh = 0;
 static void *ctx = NULL;
 static int atiny_err_code = 0;
 static char atiny_stop_flag = 0;
@@ -247,7 +247,7 @@ int __agent_coap_task_entry(void *args)
             	memset(initpara,0,sizeof(coap_al_initpara_t));
             	initpara->address = tmp->config_para.app_server.address;
             	initpara->port = atoi(tmp->config_para.app_server.port);
-            	initpara->dealer = tmp->config_para.rcv_func;
+            	initpara->dealer = (fn_cmd_dealer)tmp->config_para.rcv_func;
             	initpara->psk = (const unsigned char *)tmp->security_params[0].psk;
             	initpara->psklen = tmp->security_params[0].psk_len;
             	initpara->pskid = (const unsigned char *)tmp->security_params[0].psk_Id;

@@ -38,7 +38,9 @@
  */
 #include <stdint.h>
 #include <stddef.h>
+#include <string.h>
 #include <ota_flag.h>
+#include <crc.h>
 
 static const ota_storage_t *s_ota_storage = NULL;
 
