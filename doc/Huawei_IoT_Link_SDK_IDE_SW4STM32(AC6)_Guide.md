@@ -5,12 +5,9 @@
 <!-- TOC -->
 
 - [1 环境准备](#1)
-    - [1.1 安装GCC 编译器](#1.1)
-    - [1.2 安装jdk 运行环境](#1.2)
-    - [1.3 安装make 工具](#1.3)
-    - [1.4 安装Jlink 驱动程序](#1.4)
-    - [1.5 安装Eclipse IDE 环境](#1.5)
-    - [1.6 安装AC6](#1.6)
+    - [1.1 安装jdk 运行环境](#1.1)
+    - [1.2 安装Jlink 驱动程序](#1.2)
+    - [1.3 安装AC6](#1.3)
 - [2 获取LiteOS最新源码](#2) 
 - [3 工程创建与配置](#3)
     - [3.1 创建工程](#3.1)
@@ -21,33 +18,15 @@
 <h1 id="1">1.环境准备</h1>
 参考网址：https://github.com/LiteOS/LiteOS_Lab/blob/iot_link/doc/Huawei_IoT_Link_SDK_IDE_Eclipse_Guide.md
 
-<h2 id="1.1">1.1 安装GCC 编译器</h2>
-首先需要安装GCC编译器” GNU Arm Embedded Toolchain”，安装完毕务必将添加环境变量“Add path to environment variable”勾选上。 
-
-下载地址: https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads
-
-<h2 id="1.2">1.2 安装jdk 运行环境</h2>
+<h2 id="1.1">1.1 安装jdk 运行环境</h2>
 安装好jdk后，新建环境变量，并添加path路径。安装后可以windows+R，输入cmd进入terminal，输入java -version，查看版本以及安装成功与否。
 
 下载地址： http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
 
-<h2 id="1.3">1.3 安装make 工具</h2>
-Make 工具用于build 工程，使用Makefile 编译工程。也可根据需要自行安装所需版本。
-
-版本：gnu-mcu-eclipse-build-tools-2.9-20170629-1013-win64-setup.exe
-
-下载地址: https://github.com/gnu-mcu-eclipse/windows-build-tools/releases/tag/v2.9-20170629-1013
-
-<h2 id="1.4">1.4 安装Jlink 驱动程序</h2>
+<h2 id="1.2">1.2 安装Jlink 驱动程序</h2>
 版本：JLink_Windows_V632e.exe  下载地址如下：https://www.segger.com/downloads/jlink/#JLinkSoftwareAndDocumentationPack 
 
-<h2 id="1.5">1.5 安装Eclipse IDE 环境</h2>
-
-下载地址: https://github.com/gnu-mcu-eclipse/org.eclipse.epp.packages/releases
-
-将下载的eclipse 直接解压即可完成安装。解压后，打开eclipse 目录，如图双击eclipse.exe 即可运行IDE 环境,建议将该应用程序创建桌面快捷方式，这样方便后续直接在桌面打开IDE环境。
-
-<h2 id="1.6">1.6 安装AC6环境</h2>
+<h2 id="1.3">1.3 安装AC6环境</h2>
 下载最新版本v2.9，即可直接官网https://www.ac6-tools.com/downloads/SW4STM32/install_sw4stm32_win_32bits-v2.9.exe
 
 <h1 id="2">2.获取LiteOS源码</h1>
