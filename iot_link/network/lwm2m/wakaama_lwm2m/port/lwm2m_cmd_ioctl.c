@@ -210,7 +210,7 @@ int lwm2m_get_UTC_offset(char *offset, int len)
 {
     if (len > strlen(g_UTC_offset) + 1)
     {
-        (void)snprintf(offset, len, g_UTC_offset);
+        (void)snprintf(offset, len, "%s", g_UTC_offset);
     }
 
     return LWM2M_OK;
@@ -218,7 +218,7 @@ int lwm2m_get_UTC_offset(char *offset, int len)
 
 int lwm2m_set_UTC_offset(const char *offset, int len)
 {
-    (void)snprintf(g_UTC_offset, len + 1, offset);
+    (void)snprintf(g_UTC_offset, len + 1, "%s", offset);
     return LWM2M_OK;
 }
 
@@ -229,7 +229,7 @@ int lwm2m_get_timezone(char *timezone, int len)
 {
     if (len > strlen(g_timezone) + 1)
     {
-        (void)snprintf(timezone, len, g_timezone);
+        (void)snprintf(timezone, len, "%s", g_timezone);
     }
 
     return LWM2M_OK;
@@ -237,7 +237,7 @@ int lwm2m_get_timezone(char *timezone, int len)
 
 int lwm2m_set_timezone(const char *timezone, int len)
 {
-    (void)snprintf(g_timezone, len + 1, timezone);
+    (void)snprintf(g_timezone, len + 1, "%s", timezone);
     return LWM2M_OK;
 }
 

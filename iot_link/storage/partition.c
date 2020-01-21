@@ -27,7 +27,7 @@ int storage_partition_deinit()
 
 int storage_partition_read(int part_id, uint8_t *buf, uint32_t len, uint32_t offset)
 {
-  storage_partition *sp;
+  const storage_partition *sp;
 
   if (part_id >= max_part_num || buf == NULL)
     return -1;
@@ -43,7 +43,7 @@ int storage_partition_read(int part_id, uint8_t *buf, uint32_t len, uint32_t off
 
 int storage_partition_write(int part_id, uint8_t *buf, uint32_t len, uint32_t offset)
 {
-  storage_partition *sp;
+  const storage_partition *sp;
 
   if (part_id >= max_part_num || buf == NULL)
     return -1;
@@ -59,7 +59,7 @@ int storage_partition_write(int part_id, uint8_t *buf, uint32_t len, uint32_t of
 
 int storage_partition_erase_write(int part_id, uint8_t *buf, uint32_t len, uint32_t offset)
 {
-  storage_partition *sp;
+  const storage_partition *sp;
 
   if (part_id >= max_part_num || buf == NULL)
     return -1;
@@ -74,7 +74,7 @@ int storage_partition_erase_write(int part_id, uint8_t *buf, uint32_t len, uint3
 
 int storage_partition_erase(int part_id, uint32_t offset, uint32_t len)
 {
-  storage_partition *sp;
+  const storage_partition *sp;
 
   if (part_id >= max_part_num)
     return -1;

@@ -51,7 +51,7 @@
 #include "litecoap.h"
 #include "litecoap_err.h"
 
-int g_bind_finsh;
+extern int g_bind_finsh;
 
 static fn_cmd_dealer cmd_func = NULL;
 
@@ -150,7 +150,7 @@ int dtls_setup(coap_al_initpara_t *initparam, int client_or_server)
     if (MBEDTLS_SSL_IS_CLIENT == client_or_server)
     {
         info.u.c.host = initparam->address;
-        char *tmp;
+        char *tmp = NULL;
         itoa(initparam->port, tmp, 10);
         info.u.c.port = tmp;
         info.timeout = DTLS_UDP_CLIENT_SHAKEHAND_TIMEOUT;

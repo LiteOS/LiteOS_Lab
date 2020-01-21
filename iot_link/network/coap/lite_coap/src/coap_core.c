@@ -1102,7 +1102,7 @@ int litecoap_add_resource(coap_context_t *ctx, coap_res_t *res)
  *****************************************************************************/
 int litecoap_option_check_critical(coap_msg_t *msg)
 {
-    unsigned short option;
+    unsigned short option = 0;
     
     /* note: this func is for the future, now we don't use it */
     switch(option)

@@ -104,10 +104,10 @@ static int __cmd_send(const void *buf,size_t buflen,uint32_t timeout)
         switch (debugmode)
         {
             case en_at_debug_ascii:
-                printf("ATSND:%d Bytes:%s\n\r",ret,(char *)msg);
+                printf("ATSND:%d Bytes:%s\n\r",(int)ret,(char *)msg);
                 break;
             case en_at_debug_hex:
-                printf("ATSND:%d Bytes:",ret);
+                printf("ATSND:%d Bytes:",(int)ret);
                 for(i =0;i<ret;i++)
                 {
                     printf("%02x ",(unsigned int)msg[i]);
@@ -142,10 +142,10 @@ static int __resp_rcv(void *buf,size_t buflen,uint32_t timeout)
         switch (debugmode)
         {
             case en_at_debug_ascii:
-                printf("ATRCV:%d Bytes:%s\n\r",ret,(char *)buf);
+                printf("ATRCV:%d Bytes:%s\n\r",(int)ret,(char *)buf);
                 break;
             case en_at_debug_hex:
-                printf("ATRCV:%d Bytes:",ret);
+                printf("ATRCV:%d Bytes:",(int)ret);
                 for(i =0;i<ret;i++)
                 {
                     printf("%02x ",msg[i]);
