@@ -118,6 +118,17 @@ int link_main(void *args)
     #include <at.h>
     #include <iot_link_config.h>
     extern bool_t uart_at_init(int baud);
+
+
+    #ifndef CONFIG_AT_BAUDRATE
+    #define CONFIG_AT_BAUDRATE  9600
+    #endif
+
+    #ifndef CONFIG_AT_DEVICENAME
+    #define CONFIG_AT_DEVICENAME  "atdev"
+    #endif
+
+
     ///< install the at framework for the link
     uart_at_init(CONFIG_AT_BAUDRATE);
     at_init(CONFIG_AT_DEVICENAME);
