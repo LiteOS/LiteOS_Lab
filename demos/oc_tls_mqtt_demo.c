@@ -263,7 +263,7 @@ int standard_app_demo_main()
 
     osal_task_create("task_reportmsg",task_reportmsg_entry,NULL,0x1000,NULL,8);
 
-    osal_task_create("task_rcvmsg",task_rcvmsg_entry,NULL,0x1000,NULL,8);
+    osal_task_create("task_rcvmsg",task_rcvmsg_entry,NULL,0x800,NULL,8);
 
 
     return 0;
