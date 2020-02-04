@@ -41,17 +41,37 @@
 #include <oc_mqtt_al.h>
 #include <oc_mqtt_assistant.h>
 
-/* brief : the oceanconnect platform only support the ca_crt up tills now*/
-/** the address product_id device_id password crt is only for the test  */
+///< ANYWAY, YOU COULD CONFIG IT TO THE ONE MODE,ALL THE INFORMATION IS JUST FOR THE TEST
+#if CONFIG_OC_MQTT_DEMO_BS
+
+///< the device bootstrap center
+
+#define CN_SERVER_IPV4         "119.3.251.30"
+#define CN_SERVER_PORT         "8883"
+#define CN_EP_NODEID           "mqtt_sdk03"
+#define CN_EP_PASSWD           "f62fcf47d62c4ed18913"
+#define CN_DEMO_MODE            en_oc_mqtt_mode_bs_static_nodeid_hmacsha256_notimecheck_json
+
+#else
+
+///< the iot device access center
+//#define CN_SERVER_IPV4         "119.3.248.253"
+//#define CN_SERVER_PORT         "8883"
+//#define CN_EP_NODEID           "mqtt_sdk03"
+//#define CN_EP_PASSWD           "f62fcf47d62c4ed18913"
+
+///< the iot develop center
+#define CN_SERVER_IPV4         "49.4.93.24"
+#define CN_SERVER_PORT         "8883"
+#define CN_EP_NODEID           "mqtt_sdk01"
+#define CN_EP_PASSWD           "c18f10422c93548e6fef"
+
+
+#define CN_DEMO_MODE            en_oc_mqtt_mode_nobs_static_nodeid_hmacsha256_notimecheck_json
+
+#endif
 
 #define DEFAULT_LIFETIME            60                 ///< the platform need more
-#define DEFAULT_SERVER_IPV4         "119.3.251.30"     ///<  server ip address
-//#define DEFAULT_SERVER_IPV4       "iot-bs.cn-north-4.myhuaweicloud.com"
-#define DEFAULT_SERVER_PORT         "8883"             ///<  server mqtt service port
-#define CN_MQTT_EP_NOTEID           "mqtt_sdk03"
-#define CN_MQTT_EP_PASSWD           "f62fcf47d62c4ed18913"
-
-
 
 //if your command is very fast,please use a queue here--TODO
 static queue_t *s_queue_rcvmsg = NULL;   ///< this is used to cached the message
@@ -170,21 +190,21 @@ static int  oc_report_normal(void)
     char  *buf = NULL;
     tag_oc_mqtt_report  report;
     tag_key_value_list  lst;
-    static int leftpower = 1;
+    static int value = 1;
     static int times = 1;
 
 
-    leftpower = (leftpower + 7 )%100;
+    value = (value + 7 )%100;
 
-    lst.item.name = "batteryLevel";
-    lst.item.buf = (char *)&leftpower;
-    lst.item.len = sizeof(leftpower);
+    lst.item.name = "radioValue";
+    lst.item.buf = (char *)&value;
+    lst.item.len = sizeof(value);
     lst.item.type = en_key_value_type_int;
     lst.next = NULL;
 
     report.hasmore = en_oc_mqtt_has_more_no;
     report.paralst= &lst;
-    report.serviceid = "Battery";
+    report.serviceid = "DeviceStatus";
     report.eventtime = NULL;
 
     root = oc_mqtt_json_fmt_report(&report);
@@ -194,7 +214,7 @@ static int  oc_report_normal(void)
         if(NULL != buf)
         {
             ret = oc_mqtt_report((uint8_t *)buf,strlen(buf),en_mqtt_al_qos_1);
-            printf("%s:REPORT:times:%d:power:%d retcode:%d \r\n",__FUNCTION__,times++,leftpower,ret);
+            printf("%s:REPORT:times:%d:value:%d retcode:%d \r\n",__FUNCTION__,times++,value,ret);
             osal_free(buf);
         }
 
@@ -229,17 +249,14 @@ static int task_reportmsg_entry(void *args)
 {
     int ret;
     oc_mqtt_config_t config;
-
-    config.boot_mode = en_oc_mqtt_mode_bs_static_nodeid_hmacsha256_notimecheck_json;
-//    config.device_mode = 0;
+    config.boot_mode = CN_DEMO_MODE;
     config.msg_deal = app_msg_deal;
     config.msg_deal_arg = NULL;
     config.lifetime = DEFAULT_LIFETIME;
-    config.server_addr = DEFAULT_SERVER_IPV4;
-    config.server_port = DEFAULT_SERVER_PORT;
-    config.id = CN_MQTT_EP_NOTEID;
-    config.pwd= CN_MQTT_EP_PASSWD;
-
+    config.server_addr = CN_SERVER_IPV4;
+    config.server_port = CN_SERVER_PORT;
+    config.id = CN_EP_NODEID;
+    config.pwd= CN_EP_PASSWD;
     config.sec_type = en_mqtt_al_security_cas;
 
 
@@ -262,10 +279,9 @@ int standard_app_demo_main()
 {
     s_queue_rcvmsg = queue_create("queue_rcvmsg",2,1);
 
-    osal_task_create("task_reportmsg",task_reportmsg_entry,NULL,0x1000,NULL,8);
+    osal_task_create("demo_reportmsg",task_reportmsg_entry,NULL,0x800,NULL,8);
 
-    osal_task_create("task_rcvmsg",task_rcvmsg_entry,NULL,0x1000,NULL,8);
-
+    osal_task_create("demo_rcvmsg",task_rcvmsg_entry,NULL,0x800,NULL,8);
 
     return 0;
 }
