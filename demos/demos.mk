@@ -48,6 +48,8 @@ STANDARD_DEMOS_SOURCE :=
 
 ifeq ($(CONFIG_DEMO_ENABLE), y)
 
+	C_DEFS += -D CONFIG_DEMOS_ENABLE=1 -D CONFIG_DEMOS_TYPE=$(CONFIG_DEMO_TYPE)
+	
     ifeq ($(CONFIG_DEMO_TYPE), "oc_coap_demo")
     	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_coap_demo.c	
     else ifeq ($(CONFIG_DEMO_TYPE), "oc_dtls_coap_demo")
@@ -65,9 +67,10 @@ ifeq ($(CONFIG_DEMO_ENABLE), y)
    	else ifeq ($(CONFIG_DEMO_TYPE), "oc_lwm2m_ota_demo")
     	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_lwm2m_ota_demo.c	 	    
     else ifeq ($(CONFIG_DEMO_TYPE), "oc_tls_mqtt_bs_demo")
-    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_tls_mqtt_bs_demo.c	    
+    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_mqtt_demo.c
+    	C_DEFS += -D CONFIG_OC_MQTT_DEMO_BS	    
     else ifeq ($(CONFIG_DEMO_TYPE), "oc_tls_mqtt_demo")
-    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_tls_mqtt_demo.c	
+    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_mqtt_demo.c	
    	else ifeq ($(CONFIG_DEMO_TYPE), "stimer_demo")
     	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/stimer_demo.c	
     else ifeq ($(CONFIG_DEMO_TYPE), "oc_dtls_lwm2m_ota_demo")
@@ -75,8 +78,7 @@ ifeq ($(CONFIG_DEMO_ENABLE), y)
     else
  		#maybe you want to add your own demos
     endif
-
-    C_DEFS += -D CONFIG_DEMOS_ENABLE=1 -D CONFIG_DEMOS_TYPE=$(CONFIG_DEMO_TYPE)
+    
     C_SOURCES += $(STANDARD_DEMOS_SOURCE) 
     
 endif
