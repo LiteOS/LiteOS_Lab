@@ -42,7 +42,9 @@
 #include <oc_mqtt_assistant.h>
 
 ///< ANYWAY, YOU COULD CONFIG IT TO THE ONE MODE,ALL THE INFORMATION IS JUST FOR THE TEST
-#if CONFIG_OC_MQTT_DEMO_BS    ///< DEVELOP CENTER
+#if CONFIG_OC_MQTT_DEMO_BS
+
+///< the device bootstrap center
 
 #define CN_SERVER_IPV4         "119.3.251.30"
 #define CN_SERVER_PORT         "8883"
@@ -52,15 +54,19 @@
 
 #else
 
-#define CN_SERVER_IPV4         "119.3.248.253"
-#define CN_SERVER_PORT         "8883"
-#define CN_EP_NODEID           "mqtt_sdk03"
-#define CN_EP_PASSWD           "f62fcf47d62c4ed18913"
-
-//#define CN_SERVER_IPV4         "49.4.93.24"
+///< the iot device access center
+//#define CN_SERVER_IPV4         "119.3.248.253"
 //#define CN_SERVER_PORT         "8883"
-//#define CN_EP_NODEID           "mqtt_sdk01"
-//#define CN_EP_PASSWD           "c18f10422c93548e6fef"
+//#define CN_EP_NODEID           "mqtt_sdk03"
+//#define CN_EP_PASSWD           "f62fcf47d62c4ed18913"
+
+///< the iot develop center
+#define CN_SERVER_IPV4         "49.4.93.24"
+#define CN_SERVER_PORT         "8883"
+#define CN_EP_NODEID           "mqtt_sdk01"
+#define CN_EP_PASSWD           "c18f10422c93548e6fef"
+
+
 #define CN_DEMO_MODE            en_oc_mqtt_mode_nobs_static_nodeid_hmacsha256_notimecheck_json
 
 #endif
