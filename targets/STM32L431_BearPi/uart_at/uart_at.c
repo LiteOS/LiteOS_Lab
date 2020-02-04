@@ -47,8 +47,15 @@ UART_HandleTypeDef uart_at;
 static USART_TypeDef*     s_pUSART = LPUART1;
 static uint32_t           s_uwIRQn = LPUART1_IRQn;
 
-#define CN_RCVBUF_LEN  1024  //cache a frame
-#define CN_RCVMEM_LEN  1024  //use to cache more frames
+#ifndef CONFIG_AT_RECVMAXLEN
+#define CONFIG_AT_RECVMAXLEN   1024
+#endif
+
+
+#define CN_RCVBUF_LEN  CONFIG_AT_RECVMAXLEN  //cache a frame
+#define CN_RCVMEM_LEN  CONFIG_AT_RECVMAXLEN  //use to cache more frames
+
+
 
 struct atio_cb
 {
@@ -113,6 +120,15 @@ static void atio_irq(void)
         }
         g_atio_cb.w_next=0; //write from the head
     }
+    else ///< clear the flags
+    {
+        __HAL_UART_CLEAR_PEFLAG(&uart_at);
+        __HAL_UART_CLEAR_FEFLAG(&uart_at);
+        __HAL_UART_CLEAR_NEFLAG(&uart_at);
+        __HAL_UART_CLEAR_OREFLAG(&uart_at);
+    }
+
+
 }
 
 /*******************************************************************************

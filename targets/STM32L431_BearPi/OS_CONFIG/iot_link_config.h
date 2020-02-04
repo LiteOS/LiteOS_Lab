@@ -42,7 +42,6 @@
 
 ///< config the at module
 #define CONFIG_AT_DEVICENAME    "atdev"
-#define CONFIG_AT_BAUDRATE      9600
 #define CONFIG_AT_RECVMAXLEN    (2*1024)
 #define CONFIG_AT_OOBTABLEN     4
 
