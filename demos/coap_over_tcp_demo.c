@@ -45,7 +45,7 @@
 #include <link_endian.h>
 
 #define cn_endpoint_id        "coap_001"
-#define cn_app_server         "49.4.85.232"
+#define cn_app_server         "127.0.0.1"
 #define cn_app_port           "5683"
 
 #define cn_app_connectivity    0
@@ -232,6 +232,3 @@ int standard_app_demo_main()
 
     return 0;
 }
-
-
-

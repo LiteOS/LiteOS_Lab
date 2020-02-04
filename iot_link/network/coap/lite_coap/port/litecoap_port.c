@@ -150,8 +150,9 @@ int dtls_setup(coap_al_initpara_t *initparam, int client_or_server)
     if (MBEDTLS_SSL_IS_CLIENT == client_or_server)
     {
         info.u.c.host = initparam->address;
-        char *tmp;
-        itoa(initparam->port, tmp, 10);
+        static char tmp[6];
+        //itoa(initparam->port, tmp, 10);
+        sprintf(tmp, "%d", initparam->port);
         info.u.c.port = tmp;
         info.timeout = DTLS_UDP_CLIENT_SHAKEHAND_TIMEOUT;
     }
@@ -293,7 +294,7 @@ static int __init(coap_al_initpara_t *initparam)
     dtls_setup(initparam, LITECOAP_IS_CLIENT);
 #endif
 
-    remoteser = litecoap_new_resource(initparam->address, initparam->port, initparam->ssl);
+    remoteser = litecoap_new_resource(initparam->address, initparam->port, initparam->ssl, initparam->proto);
     if(NULL == remoteser)
     {
     	printf("litecoap_new_resource failed!\r\n");
@@ -306,6 +307,11 @@ static int __init(coap_al_initpara_t *initparam)
     	printf("litecoap_malloc_context failed!\r\n");
     	return ret;
     }
+
+    ctx->max_retransmit = COAP_DEFAULT_MAX_RETRANSMIT;
+    ctx->ack_random_factor = COAP_DEFAULT_ACK_RANDOM_FACTOR;
+    ctx->ack_timeout = COAP_DEFAULT_ACK_TIMEOUT;
+    ctx->proto = initparam->proto;
 
     initparam->ctx = (void *)ctx;
 
@@ -362,8 +368,9 @@ void* __request(coap_al_reqpara_t *reqparam)
 
 	if (litecoap_add_token(msg, g_tok, g_tok_len) < 0)
 	{
-	    litecoap_delete_msg(msg);
+	    litecoap_free_option(reqparam->optlst);
 		reqparam->optlst = NULL;
+		litecoap_delete_msg(msg);
 	    msg = NULL;
 	}
 	ret = (void *)msg;
@@ -377,11 +384,13 @@ static int __send(coap_al_sndpara_t *sndparam)
 
     if (NULL != sndparam->msg)
     {
-    	ret = litecoap_send(sndparam->handle, sndparam->msg);
+        ret = litecoap_send(sndparam->handle, sndparam->msg);
     }
     else
     {
-    	ret = litecoap_send(sndparam->handle, ((coap_context_t *)(sndparam->handle))->sndque->msg);
+        if (sndparam->handle && ((coap_context_t *)(sndparam->handle))->sndque
+            && ((coap_context_t *)(sndparam->handle))->sndque->msg)
+            ret = litecoap_send(sndparam->handle, ((coap_context_t *)(sndparam->handle))->sndque->msg);
     }
 
     return ret;
