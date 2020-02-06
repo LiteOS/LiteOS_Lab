@@ -48,6 +48,11 @@
 #define cn_app_server         "127.0.0.1"
 #define cn_app_port           "5683"
 
+unsigned char libcoap_res[]=".well-known";
+unsigned char libcoap_res1[]="core";
+static void *ctx = NULL;
+
+
 #define cn_app_connectivity    0
 #define cn_app_lightstats      1
 #define cn_app_light           2
@@ -94,6 +99,11 @@ typedef struct
 
 #pragma pack()
 
+static coap_al_initpara_t *initpara = NULL;
+static coap_al_optpara_t *optpara = NULL;
+static coap_al_reqpara_t *reqpara = NULL;
+static coap_al_sndpara_t *sndpara = NULL;
+static coap_al_rcvpara_t *rcvpara = NULL;
 
 
 
@@ -126,63 +136,7 @@ static int app_msg_deal(void *msg, int len)
 }
 
 
-static int app_cmd_task_entry()
-{
-    int ret = -1;
-    app_led_cmd_t *led_cmd;
-    app_cmdreply_t replymsg;
-    int8_t msgid;
 
-    while(1)
-    {
-        if(osal_semp_pend(s_rcv_sync,cn_osal_timeout_forever))
-        {
-            msgid = s_rcv_buffer[0];
-            switch (msgid)
-            {
-                case cn_app_ledcmd:
-                    led_cmd = (app_led_cmd_t *)s_rcv_buffer;
-                    printf("LEDCMD:msgid:%d mid:%d msg:%s \n\r",led_cmd->msgid,ntohs(led_cmd->mid),led_cmd->led);
-                    //add command action--TODO
-                    if (led_cmd->led[0] == 'O' && led_cmd->led[1] == 'N')
-                    {
-                        //if you need response message,do it here--TODO
-                        replymsg.msgid = cn_app_cmdreply;
-                        replymsg.mid = led_cmd->mid;
-                        printf("reply mid is %d. \n\r",ntohs(replymsg.mid));
-                        replymsg.errorcode = 0;
-                        replymsg.curstats[0] = 'O';
-                        replymsg.curstats[1] = 'N';
-                        replymsg.curstats[2] = ' ';
-                        oc_coap_report(s_coap_handle,(char *)&replymsg,sizeof(replymsg));    ///< report cmd reply message
-                    }
-
-                    else if (led_cmd->led[0] == 'O' && led_cmd->led[1] == 'F' && led_cmd->led[2] == 'F')
-                    {
-
-                        //if you need response message,do it here--TODO
-                        replymsg.msgid = cn_app_cmdreply;
-                        replymsg.mid = led_cmd->mid;
-                        printf("reply mid is %d. \n\r",ntohs(replymsg.mid));
-                        replymsg.errorcode = 0;
-                        replymsg.curstats[0] = 'O';
-                        replymsg.curstats[1] = 'F';
-                        replymsg.curstats[2] = 'F';
-                        oc_coap_report(s_coap_handle,(char *)&replymsg,sizeof(replymsg));    ///< report cmd reply message
-                    }
-                    else
-                    {
-
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    return ret;
-}
 
 
 
@@ -190,19 +144,106 @@ static int app_report_task_entry()
 {
     int ret = -1;
     int lux = 0;
+    void *opts = NULL;
+    void *msg = NULL;
 
-    oc_config_param_t      oc_param;
+    initpara = (coap_al_initpara_t *)osal_malloc(sizeof(coap_al_initpara_t));
+    optpara = (coap_al_optpara_t *)osal_malloc(sizeof(coap_al_optpara_t));
+    reqpara = (coap_al_reqpara_t *)osal_malloc(sizeof(coap_al_reqpara_t));
+    sndpara = (coap_al_sndpara_t *)osal_malloc(sizeof(coap_al_sndpara_t));
+    rcvpara = (coap_al_rcvpara_t *)osal_malloc(sizeof(coap_al_rcvpara_t));
+
+
+
     app_light_intensity_t  light;
 
-    memset(&oc_param,0,sizeof(oc_param));
+    memset(initpara,0,sizeof(coap_al_initpara_t));
+    initpara->address = cn_app_server;
+    initpara->port = atoi(cn_app_port);
+    initpara->dealer = app_msg_deal;
+    initpara->psk = NULL;
+    initpara->psklen = 0;
+    initpara->pskid = NULL;
+    initpara->proto = COAP_PROTO_TCP;
+    coap_al_init(initpara);
+    ctx = initpara->ctx;
 
-    oc_param.app_server.address = cn_app_server;
-    oc_param.app_server.port = cn_app_port;
-    oc_param.app_server.ep_id = cn_endpoint_id;
-    oc_param.boot_mode = en_oc_boot_strap_mode_factory;
-    oc_param.rcv_func = app_msg_deal;
+#if 0
+    //send CSM
+    char csm_data[] = {0x80, 0x01, 0x00};
+    memset(optpara,0,sizeof(coap_al_optpara_t));
+    optpara->head = opts;
+    optpara->opt_num = 2;
+    optpara->data = csm_data;
+    optpara->len = 3;
+    opts = coap_al_add_option(optpara);
+    
+    memset(reqpara,0,sizeof(coap_al_reqpara_t));
+    reqpara->ctx = ctx;
+    reqpara->msgtype = COAP_AL_MESSAGE_CON;
+    reqpara->code = (7<<5) | 1;
+    reqpara->optlst = opts;
 
-    s_coap_handle = oc_coap_config(&oc_param);
+    msg = coap_al_new_request(reqpara);
+    memset(sndpara,0,sizeof(coap_al_sndpara_t));
+    sndpara->handle = ctx;
+    sndpara->msg = msg;
+    printf("!~~~~~~~~~~\r\n");
+    ret = coap_al_send(sndpara);
+    printf("!~~~~~~~~~~ret:%d\r\n", ret);
+
+    memset(rcvpara,0,sizeof(coap_al_rcvpara_t));
+    rcvpara->ctx = ctx;
+    ret = coap_al_recv(rcvpara);
+
+    //if (ret < 0)
+    {
+        //atiny_set_errcode(ATINY_ERR_CODE_NETWORK);
+        osal_task_sleep(100);
+    }
+#endif
+
+    opts = NULL;
+    memset(optpara,0,sizeof(coap_al_optpara_t));
+    optpara->head = opts;
+    optpara->opt_num = COAP_AL_OPTION_URI_PATH;
+    optpara->data = (char *)libcoap_res;
+    optpara->len = strlen(libcoap_res);
+    opts = coap_al_add_option(optpara);
+
+    optpara->head = opts;
+    optpara->opt_num = COAP_AL_OPTION_URI_PATH;
+    optpara->data = (char *)libcoap_res1;
+    optpara->len = strlen(libcoap_res1);
+    opts = coap_al_add_option(optpara);
+
+    memset(reqpara,0,sizeof(coap_al_reqpara_t));
+    reqpara->ctx = ctx;
+    reqpara->msgtype = COAP_AL_MESSAGE_CON;
+    reqpara->code = COAP_AL_REQUEST_GET;
+    reqpara->optlst = opts;
+
+    msg = coap_al_new_request(reqpara);
+    memset(sndpara,0,sizeof(coap_al_sndpara_t));
+    sndpara->handle = ctx;
+    sndpara->msg = msg;
+    printf("~~~~~~~~~~\r\n");
+    ret = coap_al_send(sndpara);
+    printf("~~~~~~~~~~ret:%d\r\n", ret);
+
+    while (1)
+    {
+        memset(rcvpara,0,sizeof(coap_al_rcvpara_t));
+        rcvpara->ctx = ctx;
+        ret = coap_al_recv(rcvpara);
+
+        if (ret < 0)
+        {
+            //atiny_set_errcode(ATINY_ERR_CODE_NETWORK);
+            osal_task_sleep(100);
+        }
+    }
+
 
     if(NULL != s_coap_handle)   //success ,so we could receive and send
     {
@@ -228,7 +269,6 @@ int standard_app_demo_main()
     osal_semp_create(&s_rcv_sync,1,0);
 
     osal_task_create("app_report",app_report_task_entry,NULL,0x1000,NULL,2);
-    osal_task_create("app_command",app_cmd_task_entry,NULL,0x1000,NULL,3);
 
     return 0;
 }

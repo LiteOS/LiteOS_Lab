@@ -51,7 +51,7 @@
 
 #include "osal.h"
 
-extern int g_bind_finsh;
+int g_bind_finsh;
 
 static coap_session_t *g_session = NULL;
 

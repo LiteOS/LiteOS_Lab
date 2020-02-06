@@ -120,6 +120,8 @@ typedef struct _coap_point_t {
 #define LITECOAP_RESP_503      COAP_RESP_CODE(503)  /* 5.03 Service Unavailable */
 #define LITECOAP_RESP_504      COAP_RESP_CODE(504)  /* 5.04 Gateway Timeout */
 
+#define LITECOAP_RESP_701      COAP_RESP_CODE(701)  /* 7.01 SIGNALING CSM */
+
 #define LITECOAP_IS_CLIENT                   0
 #define LITECOAP_IS_SERVER                   1     //not supported yet
 

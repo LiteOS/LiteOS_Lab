@@ -207,12 +207,6 @@ void *litecoap_new_resource(char *ipaddr, unsigned short port, void *ssl, coap_p
         return NULL;
     }
 
-    memset(&localaddr, 0, sizeof(localaddr));
-    localaddr.sin_family = AF_INET;
-    localaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    localaddr.sin_port = htons(5000);
-    sal_bind(tmp->fd, (struct sockaddr *)&localaddr, sizeof(localaddr));
-
     tmp->remoteAddr.sin_addr.s_addr = inet_addr((const char *)ipaddr);
     tmp->remoteAddr.sin_port = htons(port);
     tmp->remoteAddr.sin_family = AF_INET;

@@ -540,7 +540,9 @@ int litecoap_build_byte_stream(coap_context_t *ctx, coap_msg_t *msg)
             tmp = tmp->next;
         }
 
-        offset += msg->payloadlen + 1;
+        if ((msg->payload != NULL) && (msg->payloadlen > 0)) {
+            offset += msg->payloadlen + 1;
+        }
         if (offset < 13) {
             header_size = 2;
             ctx->sndbuf.buf[0] = (((unsigned char)offset << 4) | (msg->head.tkl));
@@ -715,6 +717,9 @@ int litecoap_add_token(coap_msg_t *msg, char *tok, int tklen)
 {
     if ((msg == NULL) || (tklen < 0) || (tklen > COAP_MAX_TOKEN_LEN)) {
         return LITECOAP_PARAM_NULL;
+    }
+    if (tklen == 0) {
+        return LITECOAP_OK;
     }
     if (msg->tok != NULL) {
         return LITECOAP_TOKEN_LEN_ERR;
@@ -1452,7 +1457,6 @@ printf("litecoap_read  \r\n");
 
     ret = litecoap_parse_opts_payload(msg, (const unsigned char *)ctx->rcvbuf.buf, len);
     if (ret < 0) {
-        printf("3\r\n");
         litecoap_delete_msg(msg);
         return LITECOAP_OPTION_ERR;
     }
@@ -1498,7 +1502,7 @@ int litecoap_send(coap_context_t *ctx, coap_msg_t *msg)
     /* fixed me: need translate msg to bytes stream, and then send it. */
     slen = litecoap_build_byte_stream(ctx, msg);
     if (slen > ctx->sndbuf.len) {
-        if (msg->head.t == COAP_MESSAGE_CON) {
+        if (msg->head.t == COAP_MESSAGE_CON && (ctx->proto == COAP_PROTO_UDP || ctx->proto == COAP_PROTO_DTLS)) {
             litecoap_remove_resndqueue(ctx, msg);
         } else {
             litecoap_delete_msg(msg);
