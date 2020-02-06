@@ -55,6 +55,13 @@ extern "C" {
 #define COAP_AL_REQUEST_PUT       3
 #define COAP_AL_REQUEST_DELETE    4
 
+#define COAP_PROTO_NONE         0
+#define COAP_PROTO_UDP          1
+#define COAP_PROTO_DTLS         2
+#define COAP_PROTO_TCP          3
+#define COAP_PROTO_TLS          4
+
+
 #define COAP_AL_OPTION_IF_MATCH        1 /* C, opaque, 0-8 B, (none) */
 #define COAP_AL_OPTION_URI_HOST        3 /* C, String, 1-255 B, destination address */
 #define COAP_AL_OPTION_ETAG            4 /* E, opaque, 1-8 B, (none) */
@@ -108,6 +115,7 @@ typedef struct
     const unsigned char*    pskid;
 
     void*                   ssl;
+    unsigned char           proto;
 
 }coap_al_initpara_t;
 
