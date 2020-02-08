@@ -97,8 +97,8 @@ void *context;
 int8_t qr_code = 1;
 const unsigned char gImage_Huawei_IoT_QR_Code[114720];
 const unsigned char gImage_Bossaylogo[45128];
-IotBox_Lux_Data_TypeDef IotBox_Lux_Data;
-IotBox_HT_Data_TypeDef IotBox_HT_Data;
+IoTBox_Lux_Data_TypeDef IoTBox_Lux_Data;
+IoTBox_HT_Data_TypeDef IoTBox_HT_Data;
 
 //if your command is very fast,please use a queue here--TODO
 #define cn_app_rcv_buf_len 128
@@ -120,11 +120,11 @@ static void timer1_callback(void *arg)
         LCD_Show_Image(0,0,240,93,gImage_Bossaylogo);
         LCD_ShowString(180, 110, 200, 16, 16, "IA Demo");
         LCD_ShowString(10, 180, 200, 16, 16, "Lux Value is:");
-		LCD_ShowNum(140,180,(int)IotBox_Lux_Data.Lux,5,16);
+		LCD_ShowNum(140,180,(int)IoTBox_Lux_Data.Lux,5,16);
 		LCD_ShowString(10, 200, 200, 16, 16, "Humidity is:");
-		LCD_ShowNum(140,200,(int)IotBox_HT_Data.Humidity,5,16);
+		LCD_ShowNum(140,200,(int)IoTBox_HT_Data.Humidity,5,16);
 		LCD_ShowString(10, 220, 200, 16, 16, "Temperature is:");
-		LCD_ShowNum(140,220,(int)IotBox_HT_Data.Temperature,5,16);
+		LCD_ShowNum(140,220,(int)IoTBox_HT_Data.Temperature,5,16);
 
 	}
 }
@@ -135,12 +135,12 @@ static int app_collect_task_entry()
     Test_Board_DEMO();	
     while (1)
     {
-        IotBox_Lux_Read_Data();
-        IotBox_Hum_Temp_Read_Data();
+        IoTBox_Lux_Read_Data();
+        IoTBox_Hum_Temp_Read_Data();
 
-        printf("\r\n******************************Lux Value is  %d\r\n", (int)IotBox_Lux_Data.Lux);
-		printf("\r\n******************************Humidity is  %d\r\n", (int)IotBox_HT_Data.Humidity);
-		printf("\r\n******************************Temperature is  %d\r\n", (int)IotBox_HT_Data.Temperature);
+        printf("\r\n******************************Lux Value is  %d\r\n", (int)IoTBox_Lux_Data.Lux);
+		printf("\r\n******************************Humidity is  %d\r\n", (int)IoTBox_HT_Data.Humidity);
+		printf("\r\n******************************Temperature is  %d\r\n", (int)IoTBox_HT_Data.Temperature);
         if (qr_code == 0)
         {
             // LCD_ShowString(10, 200, 200, 16, 16, "BH1750 Value is:");

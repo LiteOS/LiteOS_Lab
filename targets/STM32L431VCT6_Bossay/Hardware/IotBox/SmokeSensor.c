@@ -3,7 +3,7 @@
 * 作 者：Bossay IoT 开发组
 * 版 本：V1.0
 * 编写日期 ：2019-11-01
-* 功 能：IotBox 烟感驱动
+* 功 能：IoTBox 烟感驱动
 *********************************************************************************
 * 说 明 ：本案例配套Bossay IoT Box开发板使用
 * 网 站 ：edu.ibossay.com
@@ -98,14 +98,14 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
 }
 
 /***************************************************************
-* 函数名称: IotBox_Smoke_Read_Data
+* 函数名称: IoTBox_Smoke_Read_Data
 * 说    明: 获取烟雾传感器的数据
 * 参    数: 无
 * 返 回 值: 无
 ***************************************************************/
-void IotBox_Smoke_Read_Data(void)
+void IoTBox_Smoke_Read_Data(void)
 {
 	HAL_ADC_Start(&hadc1);	
 	HAL_ADC_PollForConversion(&hadc1, 50);
-	IotBox_Smoke_Data.Smoke_Value = HAL_ADC_GetValue(&hadc1);
+	IoTBox_Smoke_Data.Smoke_Value = HAL_ADC_GetValue(&hadc1);
 }

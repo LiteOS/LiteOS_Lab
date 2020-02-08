@@ -50,7 +50,6 @@
 #include "SHT30.h"
 #include "Actuators.h"
 #include "lcd.h"
-#include "i2c.h"
 
 #include <gpio.h>
 #include <stm32l4xx_it.h>
@@ -105,18 +104,18 @@ typedef struct
 } tag_app_Agriculture_Control_Motor;
 #pragma pack()
 
+void *context;
 int8_t qr_code = 1;
 const unsigned char gImage_Huawei_IoT_QR_Code[114720];
 unsigned char gImage_Bossaylogo[45128];
-IotBox_Lux_Data_TypeDef IotBox_Lux_Data;
-IotBox_HT_Data_TypeDef IotBox_HT_Data;
+IoTBox_Lux_Data_TypeDef IoTBox_Lux_Data;
+IoTBox_HT_Data_TypeDef IoTBox_HT_Data;
 
 //if your command is very fast,please use a queue here--TODO
 #define cn_app_rcv_buf_len 128
 static int             s_rcv_buffer[cn_app_rcv_buf_len];
 static int             s_rcv_datalen;
 static osal_semp_t     s_rcv_sync;
-
 
 static void timer1_callback(void *arg)
 {
@@ -140,11 +139,11 @@ static void timer1_callback(void *arg)
 		LCD_ShowString(10, 150, 200, 16, 16, "NCDP_PORT:");
 		LCD_ShowString(100, 150, 200, 16, 16, cn_app_port);
         LCD_ShowString(10, 180, 200, 16, 16, "Lux Value is:");
-		LCD_ShowNum(140,180,(int)IotBox_Lux_Data.Lux,5,16);
+		LCD_ShowNum(140,180,(int)IoTBox_Lux_Data.Lux,5,16);
 		LCD_ShowString(10, 200, 200, 16, 16, "Humidity is:");
-		LCD_ShowNum(140,200,(int)IotBox_HT_Data.Humidity,5,16);
+		LCD_ShowNum(140,200,(int)IoTBox_HT_Data.Humidity,5,16);
 		LCD_ShowString(10, 220, 200, 16, 16, "Temperature is:");
-		LCD_ShowNum(140,220,(int)IotBox_HT_Data.Temperature,5,16);
+		LCD_ShowNum(140,220,(int)IoTBox_HT_Data.Temperature,5,16);
 
 	}
 }
@@ -202,7 +201,7 @@ static int app_cmd_task_entry()
                     	Response_Agriculture_Control_Light.mid = Agriculture_Control_Light->mid;
                         Response_Agriculture_Control_Light.errcode = 0;
                 		Response_Agriculture_Control_Light.Light_State = 1;
-                        oc_lwm2m_report((char *)&Response_Agriculture_Control_Light,sizeof(Response_Agriculture_Control_Light),1000);    ///< report cmd reply message
+                        oc_lwm2m_report(context,(char *)&Response_Agriculture_Control_Light,sizeof(Response_Agriculture_Control_Light),1000);    ///< report cmd reply message	
                     }
                     if (Agriculture_Control_Light->Light[0] == 'O' && Agriculture_Control_Light->Light[1] == 'F' && Agriculture_Control_Light->Light[2] == 'F')
                     {	
@@ -211,7 +210,7 @@ static int app_cmd_task_entry()
                     	Response_Agriculture_Control_Light.mid = Agriculture_Control_Light->mid;
                         Response_Agriculture_Control_Light.errcode = 0;
                 		Response_Agriculture_Control_Light.Light_State = 0;
-                        oc_lwm2m_report((char *)&Response_Agriculture_Control_Light,sizeof(Response_Agriculture_Control_Light),1000);    ///< report cmd reply message
+                        oc_lwm2m_report(context,(char *)&Response_Agriculture_Control_Light,sizeof(Response_Agriculture_Control_Light),1000);    ///< report cmd reply message	
                     }
                     /********** code area end  **********/
                     break;
@@ -226,7 +225,7 @@ static int app_cmd_task_entry()
                     	Response_Agriculture_Control_Motor.mid = Agriculture_Control_Motor->mid;
                         Response_Agriculture_Control_Motor.errcode = 0;
                 		Response_Agriculture_Control_Motor.Motor_State = 1;
-                        oc_lwm2m_report((char *)&Response_Agriculture_Control_Motor,sizeof(Response_Agriculture_Control_Motor),1000);    ///< report cmd reply message
+                        oc_lwm2m_report(context,(char *)&Response_Agriculture_Control_Motor,sizeof(Response_Agriculture_Control_Motor),1000);    ///< report cmd reply message	
                     }
                     if (Agriculture_Control_Motor->Motor[0] == 'O' && Agriculture_Control_Motor->Motor[1] == 'F' && Agriculture_Control_Motor->Motor[2] == 'F')
                     {	
@@ -235,7 +234,7 @@ static int app_cmd_task_entry()
                     	Response_Agriculture_Control_Motor.mid = Agriculture_Control_Motor->mid;
                         Response_Agriculture_Control_Motor.errcode = 0;
                 		Response_Agriculture_Control_Motor.Motor_State = 0;
-                        oc_lwm2m_report((char *)&Response_Agriculture_Control_Motor,sizeof(Response_Agriculture_Control_Motor),1000);    ///< report cmd reply message
+                        oc_lwm2m_report(context,(char *)&Response_Agriculture_Control_Motor,sizeof(Response_Agriculture_Control_Motor),1000);    ///< report cmd reply message	
                     }
                     /********** code area end  **********/
                     break;
@@ -265,18 +264,18 @@ static int app_report_task_entry()
     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
     oc_param.rcv_func = app_msg_deal;
 
-    ret = oc_lwm2m_config(&oc_param);
+    context = oc_lwm2m_config(&oc_param);
 
-    if(0 == ret)   //success ,so we could receive and send
+    if(NULL != context)   //success ,so we could receive and send
     {
         //install a dealer for the led message received
         while(1) //--TODO ,you could add your own code here
         {
             Agriculture.messageId = cn_app_Agriculture;
-            Agriculture.Temperature = (int8_t)IotBox_HT_Data.Temperature;
-            Agriculture.Humidity = (int8_t)IotBox_HT_Data.Humidity;
-            Agriculture.Luminance = htons((uint16_t)IotBox_Lux_Data.Lux);
-            oc_lwm2m_report( (char *)&Agriculture, sizeof(Agriculture), 1000);
+            Agriculture.Temperature = (int8_t)IoTBox_HT_Data.Temperature;
+            Agriculture.Humidity = (int8_t)IoTBox_HT_Data.Humidity;
+            Agriculture.Luminance = htons((uint16_t)IoTBox_Lux_Data.Lux);
+            oc_lwm2m_report(context, (char *)&Agriculture, sizeof(Agriculture), 1000);
             osal_task_sleep(2*1000);
         }
     }
@@ -286,20 +285,15 @@ static int app_report_task_entry()
 
 static int app_collect_task_entry()
 {
-    MX_I2C1_Init();
-    MX_I2C2_Init();
-    Init_BH1750();
-    Init_SHT30();
-    Init_Motor();
-    Init_Light();	
+    Init_BS_IA_DEMO();	
     while (1)
     {
-        IotBox_Lux_Read_Data();
-        IotBox_Hum_Temp_Read_Data();
+        IoTBox_Lux_Read_Data();
+        IoTBox_Hum_Temp_Read_Data();
 
-        printf("\r\n******************************Lux Value is  %d\r\n", (int)IotBox_Lux_Data.Lux);
-		printf("\r\n******************************Humidity is  %d\r\n", (int)IotBox_HT_Data.Humidity);
-		printf("\r\n******************************Temperature is  %d\r\n", (int)IotBox_HT_Data.Temperature);
+        printf("\r\n******************************Lux Value is  %d\r\n", (int)IoTBox_Lux_Data.Lux);
+		printf("\r\n******************************Humidity is  %d\r\n", (int)IoTBox_HT_Data.Humidity);
+		printf("\r\n******************************Temperature is  %d\r\n", (int)IoTBox_HT_Data.Temperature);
         if (qr_code == 0)
         {
             // LCD_ShowString(10, 200, 200, 16, 16, "BH1750 Value is:");

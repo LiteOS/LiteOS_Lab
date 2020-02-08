@@ -3,7 +3,7 @@
 * 作 者：Bossay IoT 开发组
 * 版 本：V1.0
 * 编写日期 ：2019-11-01
-* 功 能：IotBox 扬声器驱动
+* 功 能：IoTBox 扬声器驱动
 *********************************************************************************
 * 说 明 ：本案例配套Bossay IoT Box开发板使用
 * 网 站 ：edu.ibossay.com
@@ -30,7 +30,7 @@ typedef enum
 void Init_Beep(void);
 void MX_TIM1_Init(void);
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
-void IotBox_Beep_StatusSet(Actuators_Status_ENUM status);
+void IoTBox_Beep_StatusSet(Actuators_Status_ENUM status);
 
 #endif
 

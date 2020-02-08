@@ -3,7 +3,7 @@
 * 作 者：Bossay IoT 开发组
 * 版 本：V1.0
 * 编写日期 ：2019-11-01
-* 功 能：IotBox GPS驱动
+* 功 能：IoTBox GPS驱动
 *********************************************************************************
 * 说 明 ：本案例配套Bossay IoT Box开发板使用
 * 网 站 ：edu.ibossay.com
@@ -32,20 +32,20 @@ typedef struct
 {
 		float    Longitude;				//经度
 		float    Latitude;        //纬度
-} IotBox_GPS_Data_TypeDef;
+} IoTBox_GPS_Data_TypeDef;
 
 typedef struct
 {
 		char    Longitude[9];				//经度
 		char    Latitude[8];        //纬度
-} IotBox_GPS_Data_Send_TypeDef;
+} IoTBox_GPS_Data_Send_TypeDef;
 
-extern IotBox_GPS_Data_TypeDef IotBox_GPS_Data;
-extern IotBox_GPS_Data_Send_TypeDef IotBox_GPS_Data_Send;
+extern IoTBox_GPS_Data_TypeDef IoTBox_GPS_Data;
+extern IoTBox_GPS_Data_Send_TypeDef IoTBox_GPS_Data_Send;
 
 void Init_GPS_PWR();	
 void GPS_Init();
-void IotBox_GPS_Read_Data(void);
+void IoTBox_GPS_Read_Data(void);
 
 #endif
 

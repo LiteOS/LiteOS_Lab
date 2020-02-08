@@ -3,7 +3,7 @@
 * 作 者：Bossay IoT 开发组
 * 版 本：V1.0
 * 编写日期 ：2019-11-01
-* 功 能：IotBox 扬声器驱动
+* 功 能：IoTBox 扬声器驱动
 *********************************************************************************
 * 说 明 ：本案例配套Bossay IoT Box开发板使用
 * 网 站 ：edu.ibossay.com
@@ -19,7 +19,7 @@ TIM_HandleTypeDef htim1;
 
 /***************************************************************
 * 函数名称: Init_Beep
-* 说    明: 初始化IotBox的蜂鸣器
+* 说    明: 初始化IoTBox的蜂鸣器
 * 参    数: 无
 * 返 回 值: 无
 ***************************************************************/
@@ -156,14 +156,14 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim)
 
 
 /***************************************************************
-* 函数名称: IotBox_Beep_StatusSet
-* 说    明: IotBox蜂鸣器报警与否
+* 函数名称: IoTBox_Beep_StatusSet
+* 说    明: IoTBox蜂鸣器报警与否
 * 参    数: status,ENUM枚举的数据
 *									OFF,蜂鸣器
 *									ON,开蜂鸣器
 * 返 回 值: 无
 ***************************************************************/
-void IotBox_Beep_StatusSet(Actuators_Status_ENUM status)
+void IoTBox_Beep_StatusSet(Actuators_Status_ENUM status)
 {
 	if(status == ON)
 		HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
@@ -173,12 +173,12 @@ void IotBox_Beep_StatusSet(Actuators_Status_ENUM status)
 
 
 /***************************************************************
-* 函数名称: IotBox_Beep_duration
-* 说    明: IotBox蜂鸣器报警时间
+* 函数名称: IoTBox_Beep_duration
+* 说    明: IoTBox蜂鸣器报警时间
 * 参    数: duration 报警维持时间
 * 返 回 值: 无
 ***************************************************************/
-void IotBox_Beep_duration(int duration)
+void IoTBox_Beep_duration(int duration)
 {
   printf("beep!!\r\n");
   printf("duration is %d!\r\n",duration);

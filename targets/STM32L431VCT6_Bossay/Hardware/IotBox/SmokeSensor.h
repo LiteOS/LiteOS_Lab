@@ -3,7 +3,7 @@
 * 作 者：Bossay IoT 开发组
 * 版 本：V1.0
 * 编写日期 ：2019-11-01
-* 功 能：IotBox 烟感驱动
+* 功 能：IoTBox 烟感驱动
 *********************************************************************************
 * 说 明 ：本案例配套Bossay IoT Box开发板使用
 * 网 站 ：edu.ibossay.com
@@ -18,16 +18,16 @@
 typedef struct
 {
 	int Smoke_Value;
-} IotBox_Smoke_Data_TypeDef;
+} IoTBox_Smoke_Data_TypeDef;
 
-extern IotBox_Smoke_Data_TypeDef IotBox_Smoke_Data;
+extern IoTBox_Smoke_Data_TypeDef IoTBox_Smoke_Data;
 extern ADC_HandleTypeDef hadc1;
-void IotBox_Smoke_Read_Data(void);
+void IoTBox_Smoke_Read_Data(void);
 
 
-extern IotBox_Smoke_Data_TypeDef IotBox_Smoke_Data;
+extern IoTBox_Smoke_Data_TypeDef IoTBox_Smoke_Data;
 extern ADC_HandleTypeDef hadc1;
-void IotBox_Smoke_Read_Data(void);
+void IoTBox_Smoke_Read_Data(void);
 
 
 #endif

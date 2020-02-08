@@ -57,10 +57,6 @@ static int app_hello_world_entry()
     while (1)
     {
         printf("Hello World! This is LiteOS!\r\n");
-        //IotBox_Light_StatusSet(OFF);
-        //IotBox_Motor_StatusSet(ON);
-        //Led_blink();
-        //IotBox_Beep_StatusSet(OFF);
         
         HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
         HAL_Delay(100);
@@ -89,8 +85,7 @@ static int app_hello_world_entry()
 int standard_app_demo_main()
 {
     
-    //IotBox_Light_StatusSet(ON);
-    //IotBox_Beep_StatusSet(ON);
+
     osal_task_create("helloworld",app_hello_world_entry,NULL,0x400,NULL,2);
     return 0;
 }
