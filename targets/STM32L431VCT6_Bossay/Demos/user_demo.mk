@@ -67,11 +67,6 @@ ifeq ($(CONFIG_DEMO_TYPE), "none")
 	ifeq ($(CONFIG_USER_DEMO), "hello_world_demo")	
 		user_demo_src  = ${wildcard $(TOP_DIR)/targets/STM32L431VCT6_Bossay/Demos/hello_world_demo/*.c}
 		user_demo_inc = -I $(TOP_DIR)/targets/STM32L431VCT6_Bossay/Demos/hello_world_demo
-		user_hardware_src = ${wildcard $(TOP_DIR)/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/LED.c \
-		$(TOP_DIR)/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/BEEP.c \
-		$(TOP_DIR)/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/LIGHT.c \
-		$(TOP_DIR)/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/MOTOR.c} 
-		user_hardware_inc = -I ${wildcard $(TOP_DIR)/targets/STM32L431VCT6_Bossay/Hardware/IoTBox}
 		user_demo_defs = -D CONFIG_HELLO_WORLD_ENABLE=1
 	endif
 
@@ -80,16 +75,6 @@ ifeq ($(CONFIG_DEMO_TYPE), "none")
 		user_demo_src  = ${wildcard $(TOP_DIR)/targets/STM32L431VCT6_Bossay/Demos/oc_cloud_map_demo/*.c}
 		user_demo_inc = -I $(TOP_DIR)/targets/STM32L431VCT6_Bossay/Demos/oc_cloud_map_demo
 		user_demo_defs = -D CONFIG_OC_LWM2M_CLOUD_MAP_ENABLE=1
-	endif
-
-	#example for Test Board
-	ifeq ($(CONFIG_USER_DEMO), "Test_board_demo")	
-		user_demo_src  = ${wildcard $(TOP_DIR)/targets/STM32L431VCT6_Bossay/Demos/Test_board_demo/*.c}
-		user_demo_inc = -I $(TOP_DIR)/targets/STM32L431VCT6_Bossay/Demos/Test_board_demo
-		user_hardware_src = ${wildcard $(TOP_DIR)/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/TestBoard.c} 
-		user_hardware_inc = -I ${wildcard $(TOP_DIR)/targets/STM32L431VCT6_Bossay/Hardware/IoTBox}
-		user_demo_defs = -D CONFIG_OC_LWM2M_DEMO_ENABLE=1
-		
 	endif
 
 	C_SOURCES += $(user_demo_src)
