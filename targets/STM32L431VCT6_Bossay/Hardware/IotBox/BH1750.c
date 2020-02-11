@@ -3,7 +3,7 @@
 * 作 者：Bossay IoT 开发组
 * 版 本：V1.0
 * 编写日期 ：2019-11-01
-* 功 能：IotBox 光感驱动
+* 功 能：IoTBox 光感驱动
 *********************************************************************************
 * 说 明 ：本案例配套Bossay IoT Box开发板使用
 * 网 站 ：edu.ibossay.com
@@ -62,12 +62,12 @@ float Convert_BH1750(void)
 }
 
 /***************************************************************
-* 函数名称: IotBox_Lux_Read_Data
+* 函数名称: IoTBox_Lux_Read_Data
 * 说    明: 测量光照强度、温度、湿度
 * 参    数: 无
 * 返 回 值: 无
 ***************************************************************/
-void IotBox_Lux_Read_Data(void)
+void IoTBox_Lux_Read_Data(void)
 {	
-    IotBox_Lux_Data.Lux=Convert_BH1750();													//Read bh1750 sensor data  
+    IoTBox_Lux_Data.Lux=Convert_BH1750();													//Read bh1750 sensor data  
 }

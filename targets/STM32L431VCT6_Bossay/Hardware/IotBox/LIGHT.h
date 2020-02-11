@@ -3,7 +3,7 @@
 * 作 者：Bossay IoT 开发组
 * 版 本：V1.0
 * 编写日期 ：2019-11-01
-* 功 能：IotBox LIGHT驱动
+* 功 能：IoTBox LIGHT驱动
 *********************************************************************************
 * 说 明 ：本案例配套Bossay IoT Box开发板使用
 * 网 站 ：edu.ibossay.com
@@ -27,7 +27,7 @@ static enum
 
 
 void Init_Light(void);
-void IotBox_Light_StatusSet(Light_Status_ENUM Light_status);
+void IoTBox_Light_StatusSet(Light_Status_ENUM Light_status);
 void Light_blink(void);
 
 #endif

@@ -3,7 +3,7 @@
 * 作 者：Bossay IoT 开发组
 * 版 本：V1.0
 * 编写日期 ：2019-11-01
-* 功 能：IotBox 执行单元驱动
+* 功 能：IoTBox 执行单元驱动
 *********************************************************************************
 * 说 明 ：本案例配套Bossay IoT Box开发板使用
 * 网 站 ：edu.ibossay.com
@@ -31,18 +31,18 @@ Actuators_Status_ENUM;
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void Init_Beep(void);
 void MX_TIM1_Init(void);
-void IotBox_Beep_StatusSet(Actuators_Status_ENUM status);
-void IotBox_Beep_duration(int duration);
+void IoTBox_Beep_StatusSet(Actuators_Status_ENUM status);
+void IoTBox_Beep_duration(int duration);
 
 void Init_LED(void);
-void IotBox_LED_StatusSet(Actuators_Status_ENUM status);
+void IoTBox_LED_StatusSet(Actuators_Status_ENUM status);
 void Led_blink(void);
 
 void Init_Light(void);
-void IotBox_Light_StatusSet(Actuators_Status_ENUM Light_status);
+void IoTBox_Light_StatusSet(Actuators_Status_ENUM Light_status);
 void Light_blink(void);
 
 void Init_Motor(void);
-void IotBox_Motor_StatusSet(Actuators_Status_ENUM Motor_status);
+void IoTBox_Motor_StatusSet(Actuators_Status_ENUM Motor_status);
 
 #endif

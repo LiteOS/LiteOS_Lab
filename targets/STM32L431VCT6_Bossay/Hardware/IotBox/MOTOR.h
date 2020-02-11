@@ -3,13 +3,12 @@
 * 作 者：Bossay IoT 开发组
 * 版 本：V1.0
 * 编写日期 ：2019-11-01
-* 功 能：IotBox 马达驱动
+* 功 能：IoTBox 马达驱动
 *********************************************************************************
 * 说 明 ：本案例配套Bossay IoT Box开发板使用
 * 网 站 ：edu.ibossay.com
 * 电 话 ：4006916913 
-*********************************************************************************/
-#ifndef __MOTOR_H__
+******************************************************IoTBox
 #define __MOTOR_H__
 /* 包含头文件 ----------------------------------------------------------------*/
 #include "stm32l4xx_hal.h"
@@ -25,7 +24,7 @@ static enum
 }Motor_Status_ENUM;
 
 void Init_Motor(void);
-void IotBox_Motor_StatusSet(Motor_Status_ENUM Motor_status);
+void IoTBox_Motor_StatusSet(Motor_Status_ENUM Motor_status);
 
 
 #endif

@@ -3,7 +3,7 @@
 * 作 者：Bossay IoT 开发组
 * 版 本：V1.0
 * 编写日期 ：2019-11-01
-* 功 能：IotBox 光感驱动
+* 功 能：IoTBox 光感驱动
 *********************************************************************************
 * 说 明 ：本案例配套Bossay IoT Box开发板使用
 * 网 站 ：edu.ibossay.com
@@ -29,11 +29,11 @@
 typedef struct
 {							
 	float    Lux;       //光强
-}IotBox_Lux_Data_TypeDef;
+}IoTBox_Lux_Data_TypeDef;
 
-extern IotBox_Lux_Data_TypeDef IotBox_Lux_Data;
+extern IoTBox_Lux_Data_TypeDef IoTBox_Lux_Data;
 void Init_BH1750(void);
-void IotBox_Lux_Read_Data(void);
+void IoTBox_Lux_Read_Data(void);
 
 
 #endif
