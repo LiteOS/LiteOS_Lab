@@ -45,7 +45,6 @@
 #include <osal.h>
 #include <coap_al.h>
 #include <oc_coap_al.h>
-//#include <litecoap_port.h>
 
 typedef struct
 {
@@ -251,7 +250,8 @@ int __agent_coap_task_entry(void *args)
             	initpara->psk = (const unsigned char *)tmp->security_params[0].psk;
             	initpara->psklen = tmp->security_params[0].psk_len;
             	initpara->pskid = (const unsigned char *)tmp->security_params[0].psk_Id;
-            	coap_al_init(initpara);
+                initpara->proto = COAP_PROTO_UDP;
+                coap_al_init(initpara);
 
             	ctx = initpara->ctx;
                 atiny_set_nextstate(&atiny_state);

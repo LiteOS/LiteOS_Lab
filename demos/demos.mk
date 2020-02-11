@@ -51,28 +51,28 @@ ifeq ($(CONFIG_DEMO_ENABLE), y)
 	C_DEFS += -D CONFIG_DEMOS_ENABLE=1 -D CONFIG_DEMOS_TYPE=$(CONFIG_DEMO_TYPE)
 	
     ifeq ($(CONFIG_DEMO_TYPE), "oc_coap_demo")
-    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_coap_demo.c	
+    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_coap_demo.c
     else ifeq ($(CONFIG_DEMO_TYPE), "oc_dtls_coap_demo")
-    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_dtls_coap_demo.c	
+    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_dtls_coap_demo.c
     else ifeq ($(CONFIG_DEMO_TYPE), "oc_dtls_lwm2m_bs_demo")
-    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_dtls_lwm2m_bs_demo.c	
+    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_dtls_lwm2m_bs_demo.c
     	C_DEFS += -D LWM2M_BOOTSTRAP=1
    	else ifeq ($(CONFIG_DEMO_TYPE), "oc_dtls_lwm2m_demo")
-    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_dtls_lwm2m_demo.c	    
+    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_dtls_lwm2m_demo.c
    	else ifeq ($(CONFIG_DEMO_TYPE), "oc_lwm2m_bs_demo")
     	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_lwm2m_bs_demo.c
     	C_DEFS += -D LWM2M_BOOTSTRAP=1
     else ifeq ($(CONFIG_DEMO_TYPE), "oc_lwm2m_demo")
     	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_lwm2m_demo.c
    	else ifeq ($(CONFIG_DEMO_TYPE), "oc_lwm2m_ota_demo")
-    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_lwm2m_ota_demo.c	 	    
+    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_lwm2m_ota_demo.c
     else ifeq ($(CONFIG_DEMO_TYPE), "oc_tls_mqtt_bs_demo")
     	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_mqtt_demo.c
     	C_DEFS += -D CONFIG_OC_MQTT_DEMO_BS	    
     else ifeq ($(CONFIG_DEMO_TYPE), "oc_tls_mqtt_demo")
     	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_mqtt_demo.c	
-   	else ifeq ($(CONFIG_DEMO_TYPE), "stimer_demo")
-    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/stimer_demo.c	
+    else ifeq ($(CONFIG_DEMO_TYPE), "stimer_demo")
+    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/stimer_demo.c
     else ifeq ($(CONFIG_DEMO_TYPE), "oc_dtls_lwm2m_ota_demo")
         STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_dtls_lwm2m_ota_demo.c
     else

@@ -51,7 +51,7 @@
 
 #include "osal.h"
 
-extern int g_bind_finsh;
+int g_bind_finsh;
 
 static coap_session_t *g_session = NULL;
 
@@ -683,7 +683,7 @@ static coap_session_t *get_session(coap_context_t *ctx, coap_al_initpara_t *init
     server.addr.sin.sin_port = htons(initparam->port);
     server.addr.sin.sin_family = AF_INET;
 
-    session = coap_new_client_session(ctx, NULL, &server, COAP_PROTO_UDP);
+    session = coap_new_client_session(ctx, NULL, &server, initparam->proto);
 
     return session;
 }
