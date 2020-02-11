@@ -125,9 +125,15 @@ CONFIG_OC_COAP_TYPE   := "soft"
 
 #CONFIG_OC_MQTT_ENABLE, we build a oc mqtt abstraction for huawei OceanConnect service,
 #which shield the difference of the implement of oc mqtt. 
-#CONFIG_OC_MQTT_TYPE could be "soft" "ec20_oc" "none"
+#CONFIG_OC_MQTT_TYPE could be "soft" "ec2x_oc"  "none"
+#CONFIG_OC_MQTT_VERSION could be "V5"  "V1",use this to select the used interface
+#CONFIG_OCMQTT_DEMO_ENABLE could be y or n, use this to enable the oc mqtt demo
+#CONFIG_OCMQTT_DEMO_BSENABLE could be y or n, use this to enable the bootstrap or not
 CONFIG_OC_MQTT_ENABLE := y
 CONFIG_OC_MQTT_TYPE   := "ec2x_oc"
+CONFIG_OC_MQTT_VERSION := "V1"
+CONFIG_OC_MQTTDEMO_ENABLE := n
+CONFIG_OC_MQTTDEMO_BSENABLE := y
 
 #CONFIG_OC_LWM2M_ENABLE, we build a oc lwm2m abstraction for huawei OceanConnect service,
 #which shield the difference of the implement of oc lwm2m. 
@@ -159,10 +165,10 @@ CONFIG_PCP_ENABLE      := n
 #2，if you use the oc lwm2m with encode mode,then the dtls must support psk mode
 
 #CONFIG_DEMO_TYPE could be "oc_coap_demo" "oc_dtls_coap_demo" "oc_dtls_lwm2m_bs_demo" "oc_dtls_lwm2m_demo" "oc_dtls_lwm2m_ota_demo"
-#"oc_lwm2m_bs_demo"  "oc_lwm2m_demo" "oc_lwm2m_ota_demo" "oc_tls_mqtt_bs_demo" "oc_tls_mqtt_demo"  "stimer_demo"
+#"oc_lwm2m_bs_demo"  "oc_lwm2m_demo" "oc_lwm2m_ota_demo" "stimer_demo"
 
-CONFIG_DEMO_ENABLE := y
-CONFIG_DEMO_TYPE   := "none"
+CONFIG_DEMO_ENABLE := n
+CONFIG_DEMO_TYPE   := ""
 
 #########################STANDARD DEMO END######################################
 include $(TOP_DIR)/iot_link/iot.mk
