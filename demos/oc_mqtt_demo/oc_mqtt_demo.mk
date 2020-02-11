@@ -38,48 +38,18 @@
 # */
 
 ################################################################################
-# this is used for configure which demo you will use
+# this is used for configure which oc mqtt demo you want to use
 ################################################################################
-
-#CONFIG_DEMO_TYPE could be "oc_coap_demo" "oc_dtls_coap_demo" "oc_dtls_lwm2m_bs_demo" "oc_dtls_lwm2m_demo"
-#"oc_lwm2m_bs_demo"  "oc_lwm2m_demo" "oc_lwm2m_ota_demo" "stimer_demo"
-
-STANDARD_DEMOS_SOURCE :=
-
-ifeq ($(CONFIG_DEMO_ENABLE), y)
-	C_DEFS += -D CONFIG_DEMOS_ENABLE=1
-	
-    ifeq ($(CONFIG_OC_MQTTDEMO_ENABLE), y)
-    	include $(TOP_DIR)/demos/oc_mqtt_demo/oc_mqtt_demo.mk    	
-    endif
-		
-    ifeq ($(CONFIG_DEMO_TYPE), "oc_coap_demo")
-    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_coap_demo.c
-    else ifeq ($(CONFIG_DEMO_TYPE), "oc_dtls_coap_demo")
-    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_dtls_coap_demo.c
-    else ifeq ($(CONFIG_DEMO_TYPE), "oc_dtls_lwm2m_bs_demo")
-    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_dtls_lwm2m_bs_demo.c
-    	C_DEFS += -D LWM2M_BOOTSTRAP=1
-   	else ifeq ($(CONFIG_DEMO_TYPE), "oc_dtls_lwm2m_demo")
-    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_dtls_lwm2m_demo.c
-   	else ifeq ($(CONFIG_DEMO_TYPE), "oc_lwm2m_bs_demo")
-    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_lwm2m_bs_demo.c
-    	C_DEFS += -D LWM2M_BOOTSTRAP=1
-    else ifeq ($(CONFIG_DEMO_TYPE), "oc_lwm2m_demo")
-    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_lwm2m_demo.c
-   	else ifeq ($(CONFIG_DEMO_TYPE), "oc_lwm2m_ota_demo")
-    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_lwm2m_ota_demo.c
-  	else ifeq ($(CONFIG_DEMO_TYPE), "stimer_demo")
-    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/stimer_demo.c
-    else ifeq ($(CONFIG_DEMO_TYPE), "oc_dtls_lwm2m_ota_demo")
-        STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_dtls_lwm2m_ota_demo.c
-    else
- 		#maybe you want to add your own demos
-    endif
-    
-    C_SOURCES += $(STANDARD_DEMOS_SOURCE) 
-    
+ifeq ($(CONFIG_OC_MQTT_VERSION),"V5")
+	C_SOURCES  += $(TOP_DIR)/demos/oc_mqtt_demo/oc_mqtt_v5_demo.c
+else
+	C_SOURCES  += $(TOP_DIR)/demos/oc_mqtt_demo/oc_mqtt_demo.c
 endif
+
+ifeq ($(CONFIG_OC_MQTTDEMO_BSENABLE),y)
+	C_DEFS += -D CONFIG_OC_MQTT_DEMO_BS=1	
+endif
+
 
 
 
