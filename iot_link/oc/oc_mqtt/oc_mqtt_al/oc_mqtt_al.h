@@ -40,7 +40,6 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <mqtt_al.h>
-#include <oc_mqtt_assistant.h>   ///< use  this function to build some data structure for the user
 
 
 ///< the mode for the huawei OceanConnect  mode
