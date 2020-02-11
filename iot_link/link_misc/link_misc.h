@@ -39,6 +39,9 @@
 #ifndef LITEOS_LAB_IOT_LINK_LINK_MISC_LINK_MISC_H_
 #define LITEOS_LAB_IOT_LINK_LINK_MISC_LINK_MISC_H_
 
+#include <stdint.h>
+#include <stddef.h>
+
 /**
  * @brief:use this function to make a string to argc and args mode
  *

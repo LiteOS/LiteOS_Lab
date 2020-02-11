@@ -126,8 +126,10 @@ CONFIG_OC_COAP_TYPE   := "soft"
 #CONFIG_OC_MQTT_ENABLE, we build a oc mqtt abstraction for huawei OceanConnect service,
 #which shield the difference of the implement of oc mqtt. 
 #CONFIG_OC_MQTT_TYPE could be "soft" "ec2x_oc"  "none"
+#CONFIG_OC_MQTT_VERSION could be "V5"  "V1"
 CONFIG_OC_MQTT_ENABLE := n
 CONFIG_OC_MQTT_TYPE   := "soft"
+CONFIG_OC_MQTT_VERSION:= "V5"
 
 #CONFIG_OC_LWM2M_ENABLE, we build a oc lwm2m abstraction for huawei OceanConnect service,
 #which shield the difference of the implement of oc lwm2m. 
