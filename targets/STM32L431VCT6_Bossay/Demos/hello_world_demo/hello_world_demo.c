@@ -57,28 +57,7 @@ static int app_hello_world_entry()
     while (1)
     {
         printf("Hello World! This is LiteOS!\r\n");
-        
-        HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
-        HAL_Delay(100);
-        HAL_TIM_PWM_Stop(&htim1,TIM_CHANNEL_1);	
-        if(HAL_GPIO_ReadPin(KEY1_GPIO_Port,KEY1_Pin)==GPIO_PIN_RESET)// Press KEY1
-		{
-				HAL_Delay(10);// delay 10ms
-				if(HAL_GPIO_ReadPin(KEY1_GPIO_Port,KEY1_Pin)==GPIO_PIN_RESET)//��ѯ����KEY1�͵�ƽ
-				{
-					HAL_GPIO_WritePin(LED_GPIO_Port,LED_Pin,GPIO_PIN_SET);//��
-				 }
-		}
-		if(HAL_GPIO_ReadPin(KEY2_GPIO_Port,KEY2_Pin)==GPIO_PIN_RESET)//��ѯ����KEY2�͵�ƽ
-		{
-				 HAL_Delay(10);//����
-				 if(HAL_GPIO_ReadPin(KEY2_GPIO_Port,KEY2_Pin)==GPIO_PIN_RESET)//��ѯ����KEY2�͵�ƽ
-				{
-					HAL_GPIO_WritePin(LED_GPIO_Port,LED_Pin,GPIO_PIN_RESET);//��
-				}
-		}
-        HAL_Delay(20000);
-	}
+    }
     return (1);
 }
 
