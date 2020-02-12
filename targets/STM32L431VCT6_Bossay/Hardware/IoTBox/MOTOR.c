@@ -3,7 +3,7 @@
 * 作 者：Bossay IoT 开发组
 * 版 本：V1.0
 * 编写日期 ：2019-11-01
-* 功 能：IotBox 马达驱动
+* 功 能：IoTBox 马达驱动
 *********************************************************************************
 * 说 明 ：本案例配套Bossay IoT Box开发板使用
 * 网 站 ：edu.ibossay.com
@@ -18,7 +18,7 @@
 
 /***************************************************************
 * 函数名称: Init_Motor
-* 说    明: 初始化IotBox的马达
+* 说    明: 初始化IoTBox的马达
 * 参    数: 无
 * 返 回 值: 无
 ***************************************************************/
@@ -42,14 +42,14 @@ void Init_Motor(void)
 
 
 /***************************************************************
-* 函数名称: IotBox_Motor_StatusSet
-* 说    明: IotBox开发板上的MOTOR的亮灭控制
+* 函数名称: IoTBox_Motor_StatusSet
+* 说    明: IoTBox开发板上的MOTOR的开关控制
 * 参    数: status,MOTOR的状态
 *									OFF,马达通电
 *									ON,关闭马达
 * 返 回 值: 无
 ***************************************************************/
-void IotBox_Motor_StatusSet(Actuators_Status_ENUM status)
+void IoTBox_Motor_StatusSet(Actuators_Status_ENUM status)
 {
 	HAL_GPIO_WritePin(MOTOR_GPIO_Port, MOTOR_Pin, status != ON ? GPIO_PIN_RESET : GPIO_PIN_SET );	
 }

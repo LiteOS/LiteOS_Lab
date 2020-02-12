@@ -3,7 +3,7 @@
 * 作 者：Bossay IoT 开发组
 * 版 本：V1.0
 * 编写日期 ：2019-11-01
-* 功 能：IotBox GPS驱动
+* 功 能：IoTBox GPS驱动
 *********************************************************************************
 * 说 明 ：本案例配套Bossay IoT Box开发板使用
 * 网 站 ：edu.ibossay.com
@@ -20,7 +20,7 @@ gps_msg             gpsmsg;
 static unsigned char gps_uart[1000];
 /***************************************************************
 * 函数名称: Init_GPS_PWR
-* 说    明: 初始化IotBox的GPS使能引脚
+* 说    明: 初始化IoTBox的GPS使能引脚
 * 参    数: 无
 * 返 回 值: 无
 ***************************************************************/
@@ -168,15 +168,15 @@ void NMEA_BDS_GPRMC_Analysis(gps_msg *gpsmsg,uint8_t *buf)
 }
 
 /***************************************************************
-* 函数名称: IotBox_GPS_Read_Data
+* 函数名称: IoTBox_GPS_Read_Data
 * 说    明: 获取GPS经纬度信息
 * 参    数: 无
 * 返 回 值: 无
 ***************************************************************/
-void IotBox_GPS_Read_Data(void)
+void IoTBox_GPS_Read_Data(void)
 {	
 	HAL_UART_Receive_IT(&huart3,gps_uart,1000);
 	NMEA_BDS_GPRMC_Analysis(&gpsmsg,(uint8_t*)gps_uart);	//分析字符串
-	IotBox_GPS_Data.Longitude=(float)((float)gpsmsg.longitude_bd/100000);	
-	IotBox_GPS_Data.Latitude=(float)((float)gpsmsg.latitude_bd/100000);   
+	IoTBox_GPS_Data.Longitude=(float)((float)gpsmsg.longitude_bd/100000);	
+	IoTBox_GPS_Data.Latitude=(float)((float)gpsmsg.latitude_bd/100000);   
 }

@@ -103,6 +103,7 @@ typedef struct
 
 #pragma pack()
 
+//void *context;
 int *ue_stats;
 int8_t key1 = 0;
 int8_t key2 = 0;
@@ -111,7 +112,7 @@ int16_t lux;
 int8_t qr_code = 1;
 //const unsigned char gImage_Huawei_IoT_QR_Code[114720];
 const unsigned char gImage_Bossaylogo[45128];
-IotBox_Lux_Data_TypeDef IotBox_Lux_Data;
+IoTBox_Lux_Data_TypeDef IoTBox_Lux_Data;
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
@@ -147,7 +148,7 @@ static void timer1_callback(void *arg)
 	//else
 	//{
 		POINT_COLOR = RED;
-		//LCD_ShowString(40, 10, 200, 16, 24, "Bossay IotBox");
+		//LCD_ShowString(40, 10, 200, 16, 24, "Bossay IoTBox");
         LCD_Show_Image(0,0,240,93,gImage_Bossaylogo);
 		LCD_ShowString(15, 130, 210, 16, 24, "BS_SC Demo");
 		LCD_ShowString(10, 160, 200, 16, 16, "NCDP_IP:");
@@ -279,8 +280,10 @@ static int app_report_task_entry()
 
     ret = oc_lwm2m_config(&oc_param);
 
-    if(ret == 0)   //success ,so we could receive and send
+    if (0 != ret)
     {
+        return ret;
+    }
         //install a dealer for the led message received
         while(1) //--TODO ,you could add your own code here
         {
@@ -305,10 +308,9 @@ static int app_report_task_entry()
             }
 
             light.msgid = cn_app_light;
-            light.intensity = htons((int)IotBox_Lux_Data.Lux);
+            light.intensity = htons((int)IoTBox_Lux_Data.Lux);
             oc_lwm2m_report((char *)&light,sizeof(light),1000); ///< report the light message
             osal_task_sleep(2*1000);
-        }
     }
 
     return ret;
@@ -319,12 +321,12 @@ static int app_collect_task_entry()
     Init_BS_SC_DEMO();
     while (1)
     {
-        IotBox_Lux_Read_Data();
-        printf("\r\n******************************BH1750 Value is  %d\r\n",(int)IotBox_Lux_Data.Lux);
+        IoTBox_Lux_Read_Data();
+        printf("\r\n******************************BH1750 Value is  %d\r\n",(int)IoTBox_Lux_Data.Lux);
         if (qr_code == 0)
         {
             LCD_ShowString(10, 220, 200, 16, 16, "BH1750 Value is:");
-            LCD_ShowNum(140, 220, (int)IotBox_Lux_Data.Lux, 5, 16);
+            LCD_ShowNum(140, 220, (int)IoTBox_Lux_Data.Lux, 5, 16);
         }
         osal_task_sleep(2*1000);
     }

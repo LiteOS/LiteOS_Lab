@@ -96,10 +96,11 @@ typedef struct
 } tag_app_Smoke_Control_Beep;
 #pragma pack()
 
+//void *context;
 int8_t qr_code = 1;
 const unsigned char gImage_Huawei_IoT_QR_Code[114720];
 const unsigned char gImage_Bossaylogo[45128];
-IotBox_Smoke_Data_TypeDef IotBox_Smoke_Data;
+IoTBox_Smoke_Data_TypeDef IoTBox_Smoke_Data;
 
 
 //if your command is very fast,please use a queue here--TODO
@@ -119,7 +120,7 @@ static void timer1_callback(void *arg)
 		POINT_COLOR = RED;
             
         LCD_Show_Image(0,0,240,93,gImage_Bossaylogo);	
-		//LCD_ShowString(40, 10, 200, 16, 24, "Bossay IotBox!");
+		//LCD_ShowString(40, 10, 200, 16, 24, "Bossay IoTBox!");
 		LCD_ShowString(80, 130, 210, 16, 24, "BS_SF Demo");
 		LCD_ShowString(10, 180, 200, 16, 16, "NCDP_IP:");
 		LCD_ShowString(80, 180, 200, 16, 16, cn_app_server);
@@ -174,21 +175,21 @@ static int app_cmd_task_entry()
                     /********** code area for cmd from IoT cloud  **********/
                     if (Smoke_Control_Beep->Beep[0] == 'O' && Smoke_Control_Beep->Beep[1] == 'N')
                     {	
-                        IotBox_Beep_StatusSet(ON);				
+                        IoTBox_Beep_StatusSet(ON);				
                         Response_Smoke_Control_Beep.messageId = cn_app_response_Smoke_Control_Beep;
                     	Response_Smoke_Control_Beep.mid = Smoke_Control_Beep->mid;
                         Response_Smoke_Control_Beep.errcode = 0;
                 		Response_Smoke_Control_Beep.Beep_State = 1;
-                        oc_lwm2m_report((char *)&Response_Smoke_Control_Beep,sizeof(Response_Smoke_Control_Beep),1000);    ///< report cmd reply message
+                        oc_lwm2m_report((char *)&Response_Smoke_Control_Beep,sizeof(Response_Smoke_Control_Beep),1000);    ///< report cmd reply message	
                     }
                     if (Smoke_Control_Beep->Beep[0] == 'O' && Smoke_Control_Beep->Beep[1] == 'F' && Smoke_Control_Beep->Beep[2] == 'F')
                     {	
-                        IotBox_Beep_StatusSet(OFF); 				
+                        IoTBox_Beep_StatusSet(OFF); 				
                         Response_Smoke_Control_Beep.messageId = cn_app_response_Smoke_Control_Beep;
                     	Response_Smoke_Control_Beep.mid = Smoke_Control_Beep->mid;
                         Response_Smoke_Control_Beep.errcode = 0;
                 		Response_Smoke_Control_Beep.Beep_State = 0;
-                        oc_lwm2m_report((char *)&Response_Smoke_Control_Beep,sizeof(Response_Smoke_Control_Beep),1000);    ///< report cmd reply message
+                        oc_lwm2m_report((char *)&Response_Smoke_Control_Beep,sizeof(Response_Smoke_Control_Beep),1000);    ///< report cmd reply message	
                     }
                     /********** code area end  **********/
                     break;
@@ -216,19 +217,21 @@ static int app_report_task_entry()
     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
     oc_param.rcv_func = app_msg_deal;
 
-     ret = oc_lwm2m_config(&oc_param);
+    ret = oc_lwm2m_config(&oc_param);
 
-    if(0 == ret)   //success ,so we could receive and send
+    if (0 != ret)
     {
+        return ret;
+    }
+
         //install a dealer for the led message received
         while(1) //--TODO ,you could add your own code here
         {
             Smoke.messageId = cn_app_Smoke;
-            Smoke.Smoke_Value = htons((int)IotBox_Smoke_Data.Smoke_Value);
+            Smoke.Smoke_Value = htons((int)IoTBox_Smoke_Data.Smoke_Value);
             oc_lwm2m_report( (char *)&Smoke, sizeof(Smoke), 1000);
             osal_task_sleep(2*1000);
         }
-    }
 
     return ret;
 }
@@ -238,8 +241,8 @@ static int app_collect_task_entry()
     Init_BS_SF_DEMO();	
     while (1)
     {
-        IotBox_Smoke_Read_Data();
-        printf("\r\n******************************Smoke Value is  %d\r\n", (int)IotBox_Smoke_Data.Smoke_Value);
+        IoTBox_Smoke_Read_Data();
+        printf("\r\n******************************Smoke Value is  %d\r\n", (int)IoTBox_Smoke_Data.Smoke_Value);
         if (qr_code == 0)
         {
             // LCD_ShowString(10, 200, 200, 16, 16, "");

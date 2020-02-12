@@ -162,9 +162,16 @@ CONFIG_PCP_ENABLE      := n
 #"oc_lwm2m_bs_demo"  "oc_lwm2m_demo" "oc_lwm2m_ota_demo" "oc_tls_mqtt_bs_demo" "oc_tls_mqtt_demo"  "stimer_demo"
 
 CONFIG_DEMO_ENABLE := y
-CONFIG_DEMO_TYPE   := "stimer_demo"
+CONFIG_DEMO_TYPE   := "none"
 
 #########################STANDARD DEMO END######################################
+########################Bossay OC DEMO START#####################################
+
+#CONFIG_USER_DEMO could be "oc_streetlight_template" "oc_streetlight_infrared_template" "oc_agriculture_template" "oc_track_template" "oc_smoke_template"
+
+CONFIG_USER_DEMO := "hello_world_demo"
+
+#########################Bossay OC DEMO END######################################
 
 
 

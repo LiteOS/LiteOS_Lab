@@ -3,7 +3,7 @@
 * 作 者：Bossay IoT 开发组
 * 版 本：V1.0
 * 编写日期 ：2019-11-01
-* 功 能：IotBox 温湿度传感器驱动
+* 功 能：IoTBox 温湿度传感器驱动
 *********************************************************************************
 * 说 明 ：本案例配套Bossay IoT Box开发板使用
 * 网 站 ：edu.ibossay.com
@@ -116,12 +116,12 @@ float SHT3x_CalcRH(unsigned short u16sRH)
 }
 
 /***************************************************************
-* 函数名称: IotBox_Hum_Temp_Read_Data
+* 函数名称: IoTBox_Hum_Temp_Read_Data
 * 说    明: 测量温度、湿度
 * 参    数: 无
 * 返 回 值: 无
 ***************************************************************/
-void IotBox_Hum_Temp_Read_Data(void)
+void IoTBox_Hum_Temp_Read_Data(void)
 {
 	
     char  data[3];    //data array for checksum verification
@@ -143,7 +143,7 @@ void IotBox_Hum_Temp_Read_Data(void)
     if( !tmp ) /* value is ture */
     {
         dat = ((uint16_t)data[0] << 8) | data[1];
-        IotBox_HT_Data.Temperature = SHT3x_CalcTemperatureC( dat );    
+        IoTBox_HT_Data.Temperature = SHT3x_CalcTemperatureC( dat );    
     }
     
     //    /* check humidity */
@@ -155,7 +155,7 @@ void IotBox_Hum_Temp_Read_Data(void)
     if( !tmp ) /* value is ture */
     {
         dat = ((uint16_t)data[0] << 8) | data[1];
-        IotBox_HT_Data.Humidity = SHT3x_CalcRH( dat );    
+        IoTBox_HT_Data.Humidity = SHT3x_CalcRH( dat );    
     }
     
 }

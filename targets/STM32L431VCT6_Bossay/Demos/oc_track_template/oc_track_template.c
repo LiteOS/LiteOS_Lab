@@ -97,11 +97,11 @@ typedef struct
 } tag_app_Track_Control_Beep;
 #pragma pack()
 
-void *context;
+//void *context;
 int8_t qr_code = 1;
 extern const unsigned char gImage_Huawei_IoT_QR_Code[114720];
 extern const unsigned char gImage_Bossaylogo[45128];
-IotBox_GPS_Data_TypeDef IotBox_GPS_Data;
+IoTBox_GPS_Data_TypeDef IoTBox_GPS_Data;
 
 
 //if your command is very fast,please use a queue here--TODO
@@ -119,7 +119,7 @@ static void timer1_callback(void *arg)
 	else
 	{
 		POINT_COLOR = RED;
-		//LCD_ShowString(40, 10, 200, 16, 24, "Bossay IotBox");
+		//LCD_ShowString(40, 10, 200, 16, 24, "Bossay IoTBox");
 		//LCD_ShowString(15, 50, 210, 16, 24, "LiteOS NB-IoT Demo");
         LCD_Show_Image(0,0,240,93,gImage_Bossaylogo);
 		LCD_ShowString(10, 130, 200, 16, 16, "NCDP_IP:");
@@ -175,21 +175,21 @@ static int app_cmd_task_entry()
                     /********** code area for cmd from IoT cloud  **********/
                     if (Track_Control_Beep->Beep[0] == 'O' && Track_Control_Beep->Beep[1] == 'N')
                     {	
-                        IotBox_Beep_StatusSet(ON);				
+                        IoTBox_Beep_StatusSet(ON);				
                         Response_Track_Control_Beep.messageId = cn_app_response_Track_Control_Beep;
                     	Response_Track_Control_Beep.mid = Track_Control_Beep->mid;
                         Response_Track_Control_Beep.errcode = 0;
                 		Response_Track_Control_Beep.Beep_State = 1;
-                        oc_lwm2m_report((char *)&Response_Track_Control_Beep,sizeof(Response_Track_Control_Beep),1000);    ///< report cmd reply message
+                        oc_lwm2m_report((char *)&Response_Track_Control_Beep,sizeof(Response_Track_Control_Beep),1000);    ///< report cmd reply message	
                     }
                     if (Track_Control_Beep->Beep[0] == 'O' && Track_Control_Beep->Beep[1] == 'F' && Track_Control_Beep->Beep[2] == 'F')
                     {	
-                        IotBox_Beep_StatusSet(OFF);					
+                        IoTBox_Beep_StatusSet(OFF);					
                         Response_Track_Control_Beep.messageId = cn_app_response_Track_Control_Beep;
                     	Response_Track_Control_Beep.mid = Track_Control_Beep->mid;
                         Response_Track_Control_Beep.errcode = 0;
                 		Response_Track_Control_Beep.Beep_State = 0;
-                        oc_lwm2m_report((char *)&Response_Track_Control_Beep,sizeof(Response_Track_Control_Beep),1000);    ///< report cmd reply message
+                        oc_lwm2m_report((char *)&Response_Track_Control_Beep,sizeof(Response_Track_Control_Beep),1000);    ///< report cmd reply message		
                     }
                     /********** code area end  **********/
                     break;
@@ -219,21 +219,22 @@ static int app_report_task_entry()
 
     ret = oc_lwm2m_config(&oc_param);
 
-    if(ret == 0)   //success ,so we could receive and send
+    if (0 != ret)
     {
+        return ret;
+    }
         //install a dealer for the led message received
         while(1) //--TODO ,you could add your own code here
         {		
-            if(IotBox_GPS_Data.Latitude!=0&&IotBox_GPS_Data.Longitude!=0)
+            if(IoTBox_GPS_Data.Latitude!=0&&IoTBox_GPS_Data.Longitude!=0)
 		    {
                 Track.messageId = cn_app_Track;
-                sprintf(Track.Longitude , "%.5f", IotBox_GPS_Data.Longitude);
-                sprintf(Track.Latitude , "%.5f", IotBox_GPS_Data.Latitude);
-                oc_lwm2m_report( (char *)&Track, sizeof(Track), 1000);
+                sprintf(Track.Longitude , "%.5f", IoTBox_GPS_Data.Longitude);
+                sprintf(Track.Latitude , "%.5f", IoTBox_GPS_Data.Latitude);
+                oc_lwm2m_report( (char *)&Track, sizeof(Track), 1000);               
             }
             osal_task_sleep(2*1000);
         }
-    }
 
     return ret;
 }
@@ -243,9 +244,9 @@ static int app_collect_task_entry()
     Init_BS_ST_DEMO();	
     while (1)
     {
-        IotBox_GPS_Read_Data();
-        printf("\r\n******************************Longitude Value is  %.5f\r\n", IotBox_GPS_Data.Longitude);
-		printf("\r\n******************************Latitude Value is  %.5f\r\n", IotBox_GPS_Data.Latitude);
+        IoTBox_GPS_Read_Data();
+        printf("\r\n******************************Longitude Value is  %.5f\r\n", IoTBox_GPS_Data.Longitude);
+		printf("\r\n******************************Latitude Value is  %.5f\r\n", IoTBox_GPS_Data.Latitude);
         if (qr_code == 0)
         {
             // LCD_ShowString(10, 200, 200, 16, 16, "BH1750 Value is:");

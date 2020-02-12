@@ -47,7 +47,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l4xx_hal.h"
 /* Private defines -----------------------------------------------------------*/
-/* IotBox IO宏定义 */
+/* IoTBox IO宏定义 */
 #define LORA_RESET_Pin GPIO_PIN_2
 #define LORA_RESET_GPIO_Port GPIOE
 #define LORA_DIO_3_Pin GPIO_PIN_3

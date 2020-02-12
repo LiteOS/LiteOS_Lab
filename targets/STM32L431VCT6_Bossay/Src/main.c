@@ -43,11 +43,6 @@
 #include "osal.h"
 
 
-///////////////////////////////////////////////////////////////////
-///<--- TODO make sure that the defaut GCC project must be right!
-//////////////////////////////////////////////////////////////////
-
-
 #if defined (__CC_ARM)
 extern char Image$$RW_IRAM1$$ZI$$Limit [];
 extern char Image$$ARM_LIB_STACKHEAP$$Base [];
@@ -79,20 +74,14 @@ VOID HardWare_Init(VOID)
 	MX_I2C1_Init();
     MX_I2C2_Init();
 	dwt_delay_init(SystemCoreClock);
-	LCD_Init();	
-//  Init_Beep();
-//	MX_TIM1_Init();
-    //IotBox_Beep_duration(100);
-//    IotBox_Beep_StatusSet(ON);
-		
+	LCD_Init();		
 	LCD_Clear(WHITE);		   	
 	POINT_COLOR = RED;
     LCD_Show_Image(0,0,240,93,gImage_Bossaylogo);			
 	//LCD_ShowString(10, 50, 240, 24, 24, "Welcome to Bossay!");
 	//LCD_ShowString(20, 90, 240, 16, 16, "IoT Deveoper Box");
 	LCD_ShowString(20, 130, 240, 16, 16, "Powered by Huawei LiteOS!");
-	LCD_ShowString(2, 170, 240, 16, 16, "System intializing......");
-//	IotBox_Beep_StatusSet(OFF);
+	LCD_ShowString(2, 170, 240, 16, 16, "System intializing......");;	
 }
 
 void delay_us(uint32_t nus)
@@ -149,10 +138,6 @@ int main(void)
 {
     UINT32 uwRet = LOS_OK;
     HardWare_Init();
-//    HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
-//    //HAL_Delay(100);
-//    //delay_ms(1);
-//    HAL_TIM_PWM_Stop(&htim1,TIM_CHANNEL_1);
     uwRet = LOS_KernelInit();
     if (uwRet != LOS_OK)
     {
