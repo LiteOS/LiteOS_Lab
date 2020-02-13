@@ -33,10 +33,10 @@
 # *---------------------------------------------------------------------------*/
 #/**
 # *  DATE                AUTHOR      INSTRUCTION
-# *  2019-04-28 15:00  zhangqianfu  The first version  
+# *  2019-04-28 15:00  zhangqianfu  The first version
 # *
 # */
-### this is the template to tell you how to configure the iot_link, maybe 
+### this is the template to tell you how to configure the iot_link, maybe
 ### not good enough, please give some advice if any idea
 ################################################################################
 ###
@@ -83,7 +83,7 @@ CONFIG_CJSON_ENABLE := y
 ########################NETWORK SERVICE START###################################
 
 #CONFIG_TCPIP_ENABLE , we build a sal for the tcpip functions, and you could choose yes or no
-#you could build your own application based on the sal, which shielding the defference of 
+#you could build your own application based on the sal, which shielding the defference of
 #variouse tcpip function.what's more, you could add your own tcpip stack to the sdk.
 #and if this option is enabled, then you select  one type for your program, we now
 #CONFIG_TCPIP_TYPE could be:"lwip_socket" "linux_socket" "macos_socket" "esp8266_socket" "rtk8710_socket" "none"
@@ -91,25 +91,25 @@ CONFIG_TCPIP_ENABLE := y
 CONFIG_TCPIP_TYPE := "lwip_socket"
 
 #CONFIG_DTLS_ENABLE , we supply a DTLS AL (building),you could choose yes or no
-#CONFIG_DTLS_TYPE, could be "mbedtls_psk" "mbedtls_cert" "none"
+#CONFIG_DTLS_TYPE, could be "mbedtls_psk" "mbedtls_cert" "mbedtls_psk_cert" "none"
 
 CONFIG_DTLS_ENABLE   := y
 CONFIG_DTLS_TYPE     := "mbedtls_cert"
 
-#CONFIG_MQTT_ENABLE, we build a mqtt abstraction, which shield the difference of 
-#the implement of mqtt. 
+#CONFIG_MQTT_ENABLE, we build a mqtt abstraction, which shield the difference of
+#the implement of mqtt.
 #CONFIG_MQTT_TYPE could be "paho_mqtt" "none"
 CONFIG_MQTT_ENABLE   := y
 CONFIG_MQTT_TYPE     := "paho_mqtt"
 
-#CONFIG_LWM2M_ENABLE, we build a lwm2m abstraction, which shield the difference of 
-#the implement of lwm2m. 
+#CONFIG_LWM2M_ENABLE, we build a lwm2m abstraction, which shield the difference of
+#the implement of lwm2m.
 #CONFIG_LWM2M_TYPE could be "wakaama_lwm2m" "wakaama_raw" "none"
 CONFIG_LWM2M_ENABLE   := n
 CONFIG_LWM2M_TYPE     := "wakaama_lwm2m"
 
-#CONFIG_COAP_ENABLE, we build a coap abstraction, which shield the difference of 
-#the implement of coap. 
+#CONFIG_COAP_ENABLE, we build a coap abstraction, which shield the difference of
+#the implement of coap.
 #CONFIG_COAP_TYPE could be "lite_coap" "libcoap" "none"
 CONFIG_COAP_ENABLE   := n
 CONFIG_COAP_TYPE     := "lite_coap"
@@ -118,24 +118,41 @@ CONFIG_COAP_TYPE     := "lite_coap"
 
 ########################OC SERVICE START########################################
 #CONFIG_OC_COAP_ENABLE, we build a oc coap abstraction for huawei OceanConnect service,
-#which shield the difference of the implement of oc coap. 
+#which shield the difference of the implement of oc coap.
 #CONFIG_OC_MQTT_TYPE could be "soft" "none"
 CONFIG_OC_COAP_ENABLE := n
 CONFIG_OC_COAP_TYPE   := "soft"
 
 #CONFIG_OC_MQTT_ENABLE, we build a oc mqtt abstraction for huawei OceanConnect service,
 #which shield the difference of the implement of oc mqtt. 
-#CONFIG_OC_MQTT_TYPE could be "soft" "ec20_oc" "none"
+#CONFIG_OC_MQTT_TYPE could be "soft" "ec2x_oc"  "none"
+#CONFIG_OC_MQTT_VERSION could be "V5"  "V1",use this to select the used interface
+#CONFIG_OCMQTT_DEMO_ENABLE could be y or n, use this to enable the oc mqtt demo
+#CONFIG_OCMQTT_DEMO_BSENABLE could be y or n, use this to enable the bootstrap or not
 CONFIG_OC_MQTT_ENABLE := y
 CONFIG_OC_MQTT_TYPE   := "soft"
+CONFIG_OC_MQTT_VERSION := "V1"
+CONFIG_OC_MQTTDEMO_ENABLE := y
+CONFIG_OC_MQTTDEMO_BSENABLE := y
 
 #CONFIG_OC_LWM2M_ENABLE, we build a oc lwm2m abstraction for huawei OceanConnect service,
-#which shield the difference of the implement of oc lwm2m. 
-#CONFIG_OC_MQTT_TYPE could be "soft" "boudica150_oc" "atiny_lwm2m_raw" "none"
+#which shield the difference of the implement of oc lwm2m.
+#CONFIG_OC_MQTT_TYPE could be "soft" "boudica150_oc" "none"
 CONFIG_OC_LWM2M_ENABLE := n
 CONFIG_OC_LWM2M_TYPE   := "soft"
 
 ########################OC SERVICE END##########################################
+
+
+
+########################LOADER APP SERVICE START#######################################
+#If you want to compile loader image and APP image, you should enable CONFIG_SEPERATE_LOAD_MODE 
+#to seperate FLASH areas. If you want to compile loader image, you should enable CONFIG_LOADER_ENABLE.
+#otherwise compile APP image.
+CONFIG_SEPERATE_LOAD_MODE :=n
+CONFIG_LOADER_ENABLE :=n
+
+########################LOADER APP SERVICE END##########################################
 
 ########################OTA SERVICE START#######################################
 #if you want to use the ota, then please enable it
@@ -145,11 +162,12 @@ CONFIG_OC_LWM2M_TYPE   := "soft"
 
 CONFIG_OTA_ENABLE      := n
 CONFIG_PCP_ENABLE      := n
+CONFIG_FOTA_ENABLE     := n
 
 ########################OTA SERVICE END#########################################
 
 ########################STANDARD DEMO START#####################################
-#we create many standard demos, which maybe hardware independent,may help you to 
+#we create many standard demos, which maybe hardware independent,may help you to
 #create your own service,if the CONFIG_DEMO_ENABLE is enable and CONFIG_DEMO_TYPE
 #is "none", then you should build a demo has the same name standard_app_demo_main.if you want
 #to build a specified differnt name for your own demo, please make CONFIG_DEMO_ENABLE
@@ -159,10 +177,10 @@ CONFIG_PCP_ENABLE      := n
 #2，if you use the oc lwm2m with encode mode,then the dtls must support psk mode
 
 #CONFIG_DEMO_TYPE could be "oc_coap_demo" "oc_dtls_coap_demo" "oc_dtls_lwm2m_bs_demo" "oc_dtls_lwm2m_demo" "oc_dtls_lwm2m_ota_demo"
-#"oc_lwm2m_bs_demo"  "oc_lwm2m_demo" "oc_lwm2m_ota_demo" "oc_tls_mqtt_bs_demo" "oc_tls_mqtt_demo"  "stimer_demo"
+#"oc_lwm2m_bs_demo"  "oc_lwm2m_demo" "oc_lwm2m_ota_demo"  "stimer_demo"
 
 CONFIG_DEMO_ENABLE := y
-CONFIG_DEMO_TYPE   := "oc_tls_mqtt_demo"
+CONFIG_DEMO_TYPE   := ""
 
 #########################STANDARD DEMO END######################################
 include $(TOP_DIR)/iot_link/iot.mk

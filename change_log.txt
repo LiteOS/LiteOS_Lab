@@ -1,0 +1,3 @@
+v1.3.1:
+    1,将os的实现接口归一化，清除link_main的os组件相关的编译宏
+    2,将tcpip的实现接口归一化，清除link_main的tcpip组件的编译宏开关

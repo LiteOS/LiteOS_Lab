@@ -291,7 +291,7 @@ static const tag_os s_link_liteos =
     .ops = &s_liteos_ops,
 };
 
-int osal_install_liteos(void)
+int os_imp_init(void)
 {
     int ret = -1;
 

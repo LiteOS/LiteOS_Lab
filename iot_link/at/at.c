@@ -37,12 +37,16 @@
 #include <string.h>
 #include <driver.h>
 #include <sys/fcntl.h>
+#include <iot_link_config.h>
+//these defines could be reconfigured at the iot_link_config.h
 
-#if CONFIG_AT_ENABLE
+#ifndef CONFIG_AT_OOBTABLEN
+#define CONFIG_AT_OOBTABLEN              6              //only allow 6 oob command monitor here,you could configure it more
+#endif
 
-//these defines could be moved to the configuration of the at module
-#define cn_at_oob_tab_len         6            //only allow 6 oob command monitor here,you could configure it more
-#define cn_at_resp_maxlen         1024           //PROSING THAT COULD GET THE MOST REPSLENGTH
+#ifndef CONFIG_AT_RECVMAXLEN
+#define CONFIG_AT_RECVMAXLEN             1024           //PROSING THAT COULD GET THE MOST REPSLENGTH
+#endif
 
 //at control block here
 typedef struct
@@ -80,8 +84,8 @@ typedef struct
     los_dev_t               devhandle;//the device handle used 
 
     at_cmd_item             cmd;      //the at command,only one command could be excuted
-    at_oob_item             oob[cn_at_oob_tab_len];        //storage the out of band dealer
-    char                    rcvbuf[cn_at_resp_maxlen];     //used storage one frame,read from the at channel
+    at_oob_item             oob[CONFIG_AT_OOBTABLEN];        //storage the out of band dealer
+    char                    rcvbuf[CONFIG_AT_RECVMAXLEN];     //used storage one frame,read from the at channel
     unsigned int            rxdebugmode:2;                 //receive debug mode
     unsigned int            txdebugmode:2;                 //send debug mode
 
@@ -104,10 +108,10 @@ static int __cmd_send(const void *buf,size_t buflen,uint32_t timeout)
         switch (debugmode)
         {
             case en_at_debug_ascii:
-                printf("ATSND:%d Bytes:%s\n\r",ret,(char *)msg);
+                printf("ATSND:%d Bytes:%s\n\r",(int)ret,(char *)msg);
                 break;
             case en_at_debug_hex:
-                printf("ATSND:%d Bytes:",ret);
+                printf("ATSND:%d Bytes:",(int)ret);
                 for(i =0;i<ret;i++)
                 {
                     printf("%02x ",(unsigned int)msg[i]);
@@ -142,10 +146,10 @@ static int __resp_rcv(void *buf,size_t buflen,uint32_t timeout)
         switch (debugmode)
         {
             case en_at_debug_ascii:
-                printf("ATRCV:%d Bytes:%s\n\r",ret,(char *)buf);
+                printf("ATRCV:%d Bytes:%s\n\r",(int)ret,(char *)buf);
                 break;
             case en_at_debug_hex:
-                printf("ATRCV:%d Bytes:",ret);
+                printf("ATRCV:%d Bytes:",(int)ret);
                 for(i =0;i<ret;i++)
                 {
                     printf("%02x ",msg[i]);
@@ -240,7 +244,7 @@ static int  __oob_match(void *data,size_t len)
     int ret = -1;
     at_oob_item *oob;
     int i = 0;
-    for(i =0;i<cn_at_oob_tab_len;i++)
+    for(i =0;i<CONFIG_AT_OOBTABLEN;i++)
     {
         oob = &g_at_cb.oob[i];
         if((oob->func != NULL)&&(oob->index != NULL)&&\
@@ -278,28 +282,32 @@ static int __rcv_task_entry(void *args)
     	if (1 == g_at_cb.streammode)  //in stream mode, we need to save previous frames in buffer
     	{
     		if(rcvlen == 0)
-    		    memset(g_at_cb.rcvbuf,0,cn_at_resp_maxlen);
-    		    rcvlen += __resp_rcv(g_at_cb.rcvbuf+ rcvlen,cn_at_resp_maxlen,cn_osal_timeout_forever);
+    		{
+                memset(g_at_cb.rcvbuf,0,CONFIG_AT_RECVMAXLEN);
+    		}
+            rcvlen += __resp_rcv(g_at_cb.rcvbuf+ rcvlen,CONFIG_AT_RECVMAXLEN,cn_osal_timeout_forever);
 
-    		    if(rcvlen > 0)
-    		    {
-    		        matchret = __cmd_match(g_at_cb.rcvbuf,rcvlen);
-    		        if(0 != matchret)
-    		        {
-    	                oobret = __oob_match(g_at_cb.rcvbuf,rcvlen);
-   		                if(oobret != -1)
-   		                {
-   		                    rcvlen = 0;
-   		                }
-    		        }
-    		            else
-    		                rcvlen = 0;
- 		        }
+            if(rcvlen > 0)
+            {
+                matchret = __cmd_match(g_at_cb.rcvbuf,rcvlen);
+                if(0 != matchret)
+                {
+                    oobret = __oob_match(g_at_cb.rcvbuf,rcvlen);
+                    if(oobret != -1)
+                    {
+                        rcvlen = 0;
+                    }
+                }
+                else
+                {
+                    rcvlen = 0;
+                }
+            }
     	}
     	else
     	{
-    		memset(g_at_cb.rcvbuf,0,cn_at_resp_maxlen);
-    		rcvlen = __resp_rcv(g_at_cb.rcvbuf,cn_at_resp_maxlen,cn_osal_timeout_forever);
+    		memset(g_at_cb.rcvbuf,0,CONFIG_AT_RECVMAXLEN);
+    		rcvlen = __resp_rcv(g_at_cb.rcvbuf,CONFIG_AT_RECVMAXLEN,cn_osal_timeout_forever);
     		if(rcvlen > 0)
 	        {
                 matchret = __cmd_match(g_at_cb.rcvbuf,rcvlen);
@@ -322,6 +330,7 @@ instruction  :If stream mode is enabled, we can process data from multiple frame
 int at_streammode_set(int mode)
 {
 	g_at_cb.streammode = mode;
+	return 0;
 }
 
 
@@ -382,7 +391,7 @@ int at_oobregister(const char *name,const void *index,size_t len,fn_at_oob func,
         return ret;
     }
 
-    for(i =0;i<cn_at_oob_tab_len;i++)
+    for(i =0;i<CONFIG_AT_OOBTABLEN;i++)
     {
         oob = &g_at_cb.oob[i];
         if((oob->func == NULL)&&(oob->index == NULL))
@@ -551,6 +560,5 @@ static int shell_atdebug(int argc,const char *argv[])
 }
 OSSHELL_EXPORT_CMD(shell_atdebug,"atdebug","atdebug rx/tx none/ascii/hex");
 
-#endif
 
 

@@ -85,7 +85,6 @@ typedef struct
     fn_oc_coap_deconfig deconfig; ///< this function used for the deconfig
 }oc_coap_opt_t;
 
-#if CONFIG_OC_COAP_ENABLE
 /**
  *@brief the mqtt agent should use this function to register the method for the application
  *
@@ -129,15 +128,5 @@ int oc_coap_deconfig(void *handle);
  */
 int oc_coap_init();
 
-
-#else   //not configure the coap agent
-
-#define oc_coap_register(opt)                                              -1
-#define oc_coap_config(param)                                              NULL
-#define oc_coap_deconfig(handle)                                           -1
-#define oc_coap_report(handle,report,len)                                  -1
-#define oc_coap_init()                                                     -1
-
-#endif
 
 #endif /* __OC_COAP_AL_H */

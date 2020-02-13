@@ -47,6 +47,7 @@
 #include <osal.h>
 #include <pcp.h>
 #include <ota_flag.h>
+#include <ota_manager.h>
 
 
 #define CN_VER_LEN      16
@@ -448,7 +449,7 @@ static void pcp_handle_msg(uint8_t *msg, int msglen)
             pcp_cmd_upgrade(&pcp_head, pcp_data);
 
             //ota binary signature check
-            	if (ota_pack_get_signature_verify_result(OTA_SIGNATURE_LEN, s_pcp_cb.record.file_size) != 0) {
+            if (ota_pack_get_signature_verify_result(OTA_SIGNATURE_LEN, s_pcp_cb.record.file_size) != 0) {
               s_pcp_cb.record.cur_state = EN_OTA_STATUS_UPGRADED;
               s_pcp_cb.record.ret_upgrade = EN_PCP_RESPONSE_CODE_FIRMWARENOTMATH;
               pcp_save_flag();

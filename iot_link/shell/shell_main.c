@@ -55,7 +55,6 @@ this file implement the shell for the system.the following instruction you must 
 /**************************************FILE INCLIUDES**************************/
 
 
-#if CONFIG_SHELL_ENABLE
 
 
 #include <stdint.h>
@@ -85,7 +84,10 @@ this file implement the shell for the system.the following instruction you must 
 #define CN_CMDLEN_MAX  64  //THE COMMAND MAXLENGTH COULD CACHED
 #define CN_CMD_CACHE   4   //THE COMMAND CACHED DEPTH
 //DEFINES FOR THE SHELL SERVER TASK STACK SIZE
-#define CN_SHELL_STACKSIZE  0x1400//FOR ALL THE SHELL COMMAND WILL BE EXECUTED IN THE TASK CONTEXT
+
+#ifndef  CONFIG_SHELL_TASKSTACK
+#define  CONFIG_SHELL_TASKSTACK   0x400
+#endif
 
 
 /**************************************FILE DATA STRUCTURE*********************/
@@ -489,10 +491,9 @@ void shell_init()
     shell_cmd_init();
 
     osal_task_create("shell_server",shell_server_entry,NULL,\
-                      CN_SHELL_STACKSIZE+CN_CMD_CACHE*CN_CMDLEN_MAX,NULL,10);
+                      CONFIG_SHELL_TASKSTACK+CN_CMD_CACHE*CN_CMDLEN_MAX,NULL,10);
 }
 
-#endif
 
 
 

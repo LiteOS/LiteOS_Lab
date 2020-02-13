@@ -3,11 +3,13 @@
 #include "ota_manager.h"
 #include "flash_adaptor.h"
 #include "common.h"
+#include "crc.h"
+#include "partition.h"
 
-int ota_pack_man_software_write(pack_storage_device_api_s *this, uint32_t offset, uint8_t *buf, uint32_t len)
+int ota_pack_man_software_write(pack_storage_device_api_s *this, uint32_t offset, const uint8_t *buf, uint32_t len)
 {
   (void)this;
-  return ota_storage_bin_write(offset, buf, len);
+  return ota_storage_bin_write(offset, (void *)buf, len);
 }
 
 int ota_pack_man_software_write_end(pack_storage_device_api_s *this, pack_download_result_e result, uint32_t len)

@@ -137,7 +137,7 @@ static struct shell_item_t *shell_cmd_match(const char *name)
             break;
         }
     }
-    if(NULL == item){
+    if(NULL == ret){
         for(i = 0;i <gs_shell_cb.d_num;i++){
             item = &(gs_shell_cb.d[i]);
             if(0 == strcmp(name,item->name)){
