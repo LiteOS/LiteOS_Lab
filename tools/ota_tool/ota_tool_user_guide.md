@@ -95,7 +95,10 @@ ota_tool采用私钥签名，公钥验签模式。公钥私钥必须成对使用
 
 ![](./meta/ota_tool/ota_image_013.png)
 
+loader侧验签用公钥参考public.c
+
 ![](./meta/ota_tool/ota_image_014.png)
+
 
 <h2 id="3.2">3.2 签名</h2>
 
