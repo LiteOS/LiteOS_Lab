@@ -40,11 +40,12 @@ void registration_reset(lwm2m_context_t *contextP,
                         lwm2m_server_t *serverP)
 {
     //registration_deregister(contextP, serverP);
-    if (serverP->sessionH != NULL)
+    if (NULL != serverP->sessionH)
     {
         lwm2m_close_connection(serverP->sessionH, contextP->userData);
         serverP->sessionH = NULL;
     }
+
     serverP->status = STATE_DEREGISTERED;
 }
 
@@ -52,22 +53,24 @@ lwm2m_server_t *registration_get_registered_server(lwm2m_context_t *contextP)
 {
     lwm2m_server_t *targetP;
 
-    if(NULL == contextP)
+    if (NULL == contextP)
     {
         LOG("null pointer");
         return NULL;
     }
 
     targetP = contextP->serverList;
-    while (targetP != NULL)
+
+    while (NULL != targetP)
     {
         if ((STATE_REGISTERED == targetP->status)
-                || (STATE_REG_UPDATE_PENDING == targetP->status)
-                || (STATE_REG_UPDATE_NEEDED == targetP->status)
-                || (STATE_REG_FULL_UPDATE_NEEDED == targetP->status))
+            || (STATE_REG_UPDATE_PENDING == targetP->status)
+            || (STATE_REG_UPDATE_NEEDED == targetP->status)
+            || (STATE_REG_FULL_UPDATE_NEEDED == targetP->status))
         {
             return targetP;
         }
+
         targetP = targetP->next;
     }
 

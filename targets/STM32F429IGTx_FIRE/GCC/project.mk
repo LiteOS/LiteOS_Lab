@@ -35,7 +35,8 @@ USER_SRC =  \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/net_driver.c \
 	$(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/flash_adaptor.c
 ifeq ($(CONFIG_OTA_ENABLE),y)
-USER_SRC += $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/ota_adaptor.c
+USER_SRC += $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/ota_adaptor.c \
+		$(TOP_DIR)/targets/STM32F429GTx_FIRE/Src/ota_port.c
 endif
 ifeq ($(CONFIG_LOADER_ENABLE),y)
 USER_SRC += $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/loader_main2.c

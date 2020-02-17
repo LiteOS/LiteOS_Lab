@@ -280,7 +280,7 @@ static const tag_os s_link_novaos =
     .ops = &s_novaos_ops,
 };
 
-int osal_install_novaos(void)
+int os_imp_init(void)
 {
     int ret = -1;
 

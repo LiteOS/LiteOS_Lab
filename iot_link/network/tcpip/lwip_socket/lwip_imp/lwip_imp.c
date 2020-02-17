@@ -43,7 +43,6 @@
 
 #include <string.h>
 #include <sal_imp.h>   ///< register the lwip to sal
-#include <lwip_imp.h>
 
 ///< struct sockaddr and struct sockaddr_in is quit different from the normal defines, so must translate it here
 ///< something which seems very foolish i think
@@ -174,24 +173,29 @@ static const tag_tcpip_domain s_tcpip_lwip =
 };
 
 
-int tcpipstack_install_lwip(fn_lwip_netdriver driver)
+extern int netdriver_install();
+__attribute__((weak)) int netdriver_install()
+{
+    printf("please remember to supply a netdriver---- please\n\r");
+
+    return -1;
+}
+
+int link_tcpip_imp_init(void)
 {
     int ret = -1;
     /* Initilialize the LwIP stack with RTOS */
     tcpip_init(NULL, NULL);
 
-    if(NULL != driver)
+    ret = netdriver_install();
+    if(ret != 0)
     {
-        ret = driver();
-        if(ret != 0)
-        {
-            return ret;
-        }
+        return ret;
     }
 
-    ret = tcpip_sal_install(&s_tcpip_lwip);
+    ret = link_sal_install(&s_tcpip_lwip);
 
     printf("%s:install ret:%d\n\r",__FUNCTION__,ret);
 
-    return 0;
+    return ret;
 }

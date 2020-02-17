@@ -433,10 +433,10 @@ static  int __loop_entry(void *arg)
         {
             MQTTYield(&cb->client,1000);
         }
-        else
-        {
-            osal_task_sleep(1);///< when disconnect, this has been killed
-        }
+        ///< for some operation system ,the task could not be awake when release,so do some wait to give up the cpu
+
+        osal_task_sleep(1);///< when disconnect, this has been killed
+
     }
     return 0;
 }
@@ -618,7 +618,7 @@ static int __disconnect(void *handle)
 static void general_dealer(MessageData *data)
 {
     mqtt_al_msgrcv_t   msg;
-    fn_msg_dealer      dealer;
+    fn_mqtt_al_msg_dealer  dealer;
     msg.dup = data->message->dup;
     msg.qos = data->message->qos;
     msg.retain = data->message->retained;

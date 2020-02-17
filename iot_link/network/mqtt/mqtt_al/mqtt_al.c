@@ -86,7 +86,7 @@ int mqtt_al_uninstall()
 
 //////////////////////////CREATE THE API FOR THE MQTT APPLICATopsN///////////////
 
-int mqtt_init()
+int mqtt_al_init()
 {
     int ret = 0;
 

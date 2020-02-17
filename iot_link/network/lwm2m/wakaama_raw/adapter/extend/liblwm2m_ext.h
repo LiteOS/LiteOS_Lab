@@ -46,7 +46,7 @@
 
 #ifdef __cplusplus
 #if __cplusplus
-extern "C"{
+extern "C" {
 #endif
 #endif /* __cplusplus */
 
@@ -65,24 +65,24 @@ void lwm2m_delay(uint32_t second);
  */
 #define LWM2M_TRIGER_SERVER_MODE_INITIATED_TIME 60
 
-#define MAX_FACTORY_BS_RETRY_CNT 3
-#define MAX_CLIENT_INITIATED_BS_RETRY_CNT 3
-#define FACTORY_BS_DELAY_BASE 0
-#define CLIENT_INITIATED_BS_DELAY_BASE 0
-#define FACTORY_BS_DELAY_INTERVAL 10
-#define CLIENT_INITIATED_BS_DELAY_INTERVAL 10
+#define MAX_FACTORY_BS_RETRY_CNT                3
+#define MAX_CLIENT_INITIATED_BS_RETRY_CNT       3
+#define FACTORY_BS_DELAY_BASE                   0
+#define CLIENT_INITIATED_BS_DELAY_BASE          0
+#define FACTORY_BS_DELAY_INTERVAL               10
+#define CLIENT_INITIATED_BS_DELAY_INTERVAL      10
 
 /*
  * The lwm2m_data
  */
 
-typedef void (*lwm2m_data_process) (void*);
+typedef void (*lwm2m_data_process)(void *);
 
 typedef struct _lwm2m_data_cfg_t
 {
-    int type;
-    int cookie;
-    lwm2m_data_process callback;
+    int                 type;
+    int                 cookie;
+    lwm2m_data_process  callback;
 } lwm2m_data_cfg_t;
 
 // in liblwm2m.h
@@ -99,7 +99,7 @@ typedef enum
     MODULE_LWM2M,
     MODULE_NET,
     MODULE_URI,
-}module_type_t;
+} module_type_t;
 
 enum
 {
@@ -141,10 +141,10 @@ factory bootstrap is used security object to register.
 */
 typedef struct
 {
-    lwm2m_bootstrap_type_e bsType;
-    int state;     // -> lwm2m_client_state_t
-    uint32_t cnt;
-}lwm2m_bs_control_t;
+    lwm2m_bootstrap_type_e  bsType;
+    int                     state;     // -> lwm2m_client_state_t
+    uint32_t                cnt;
+} lwm2m_bs_control_t;
 
 
 // in liblwm2m.h
@@ -156,25 +156,25 @@ typedef struct _lwm2m_context_ lwm2m_context_t;
 typedef struct _lwm2m_transaction_ lwm2m_transaction_t;
 
 // typedef void (*lwm2m_transaction_callback_t) (lwm2m_transaction_t * transacP, void * message);
-typedef void (*lwm2m_transaction_callback_t) (lwm2m_context_t * contextP, lwm2m_transaction_t * transacP, void * message);
+typedef void (*lwm2m_transaction_callback_t)(lwm2m_context_t *contextP, lwm2m_transaction_t *transacP, void *message);
 
 void lwm2m_register_observe_ack_call_back(lwm2m_transaction_callback_t callback);
-typedef void(*lwm2m_event_handler_t)(module_type_t type, int code, const char* arg, int arg_len);
+typedef void(*lwm2m_event_handler_t)(module_type_t type, int code, const char *arg, int arg_len);
 void lwm2m_register_event_handler(lwm2m_event_handler_t callback);
-void lwm2m_notify_even(module_type_t type, int code, const char* arg, int arg_len);
-int lwm2m_reconnect(lwm2m_context_t * context);
+void lwm2m_notify_even(module_type_t type, int code, const char *arg, int arg_len);
+int lwm2m_reconnect(lwm2m_context_t *context);
 
 
 typedef struct
 {
-    uint32_t format;
-    uint8_t token[8];
-    uint32_t tokenLen;
-    uint32_t counter;
-}lwm2m_observe_info_t;
+    uint32_t    format;
+    uint8_t     token[8];
+    uint32_t    tokenLen;
+    uint32_t    counter;
+} lwm2m_observe_info_t;
 
-uint8_t lwm2m_get_observe_info(lwm2m_context_t * contextP, lwm2m_observe_info_t *observe_info);
-uint8_t lwm2m_send_notify(lwm2m_context_t * contextP, lwm2m_observe_info_t *observe_info, int firmware_update_state, lwm2m_data_cfg_t  *cfg);
+uint8_t lwm2m_get_observe_info(lwm2m_context_t *contextP, lwm2m_observe_info_t *observe_info);
+uint8_t lwm2m_send_notify(lwm2m_context_t *contextP, lwm2m_observe_info_t *observe_info, int firmware_update_state, lwm2m_data_cfg_t  *cfg);
 
 int lwm2m_initBootStrap(lwm2m_context_t *contextP, lwm2m_bootstrap_type_e bsType);
 

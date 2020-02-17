@@ -33,7 +33,7 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-23 11:31  zhangqianfu  The first version  
+ *  2019-05-23 11:31  zhangqianfu  The first version
  *
  */
 #ifndef LITEOS_LAB_IOT_LINK_OC_OC_LWM2M_OC_LWM2M_IMP_ATINY_LWM2M_AGENT_LWM2M_H_

@@ -32,16 +32,29 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#include "flash_adaptor.h"
-#include "hal_spi_flash.h"
 #include <string.h>
 #include <stdlib.h>
 #include <osal.h>
 #include <board.h>
 #include "common.h"
+#include "hal_flash.h"
+#include "hal_spi_flash.h"
+#include "partition.h"
+#include "flash_adaptor.h"
 
 #define FLASH_BLOCK_SIZE 0x1000
 #define FLASH_BLOCK_MASK 0xfff
+
+static storage_partition s_storage_part[] = {
+  {INNER_FLASH, "loader", 0x08000000, 0x00020000},
+  {INNER_FLASH, "app", OTA_DEFAULT_IMAGE_ADDR, 0x000E0000},
+  {SPI_FLASH, "ota_flag1", OTA_FLAG_ADDR1, 0x00004000},
+  {SPI_FLASH, "ota_flag2", OTA_FLAG_ADDR2, 0x00004000},
+  {SPI_FLASH, "reserved_info", RESERVED_INFO_ADDR, RESERVED_INFO_SIZE},
+  {SPI_FLASH, "ota_download", OTA_IMAGE_DOWNLOAD_ADDR, OTA_IMAGE_DOWNLOAD_SIZE},
+  {SPI_FLASH, "ota_backup", OTA_IMAGE_BCK_ADDR, OTA_IMAGE_BCK_SIZE},
+  {SPI_FLASH, "ota_diff_uprade", OTA_IMAGE_DIFF_UPGRADE_ADDR, OTA_IMAGE_DIFF_UPGRADE_SIZE}
+};
 
 int flash_adaptor_write(uint32_t offset, const uint8_t *buffer, uint32_t len)
 {
@@ -55,7 +68,7 @@ int flash_adaptor_write(uint32_t offset, const uint8_t *buffer, uint32_t len)
         return ERR;
     }
 
-    if (len == FLASH_BLOCK_SIZE && (offset & FLASH_BLOCK_MASK == 0))
+    if (len == FLASH_BLOCK_SIZE && ((offset & FLASH_BLOCK_MASK) == 0))
     {
         ret = hal_spi_flash_erase_write(buffer, FLASH_BLOCK_SIZE, offset);
         if(ret != OK)
@@ -95,22 +108,22 @@ EXIT:
     return ret;
 }
 
-int flash_spi2inner(uint32_t src, uint32_t dst, uint32_t len, uint8_t *cache, uint32_t cache_len)
+int app_image_restore(uint32_t src, uint32_t dst, uint32_t data_len, uint32_t head_len, uint8_t *cache, uint32_t cache_len)
 {
-  int rest_len = len;
+  int rest_len = data_len - head_len;
   int blk_size = 0;
   int off = 0;
 
   if (cache == NULL || cache_len == 0)
     return -1;
 
-  hal_flash_erase(dst, len);
+  storage_partition_erase(dst, 0, rest_len);
 
   while(rest_len > 0) {
     blk_size = rest_len > cache_len ? cache_len : rest_len;
 
-    if (hal_spi_flash_read(cache, blk_size, src + off) ||
-      hal_flash_write(cache, blk_size, &dst))
+    if (storage_partition_read(src, cache, blk_size, off + head_len) ||
+      storage_partition_write(dst, cache, blk_size, off))
       return -1;
     
     off += blk_size;
@@ -119,7 +132,7 @@ int flash_spi2inner(uint32_t src, uint32_t dst, uint32_t len, uint8_t *cache, ui
   return 0;
 }
 
-int flash_inner2spi(uint32_t src, uint32_t dst, uint32_t len, uint8_t * cache, uint32_t cache_len)
+int app_image_backup(uint32_t src, uint32_t dst, uint32_t len, uint8_t * cache, uint32_t cache_len)
 {
   int rest_len = len;
   int blk_size = 0;
@@ -128,10 +141,12 @@ int flash_inner2spi(uint32_t src, uint32_t dst, uint32_t len, uint8_t * cache, u
   if (cache == NULL || cache_len == 0)
     return -1;
 
+  storage_partition_erase(dst, 0, rest_len);
+
   while(rest_len > 0) {
     blk_size = rest_len > cache_len ? cache_len : rest_len;
-    if (hal_flash_read(cache, blk_size, src + off) ||
-	       flash_adaptor_write(dst + off, cache, blk_size)) {
+    if (storage_partition_read(src, cache, blk_size, off) ||
+	       storage_partition_write(dst, cache, blk_size, off)) {
       return -1;
     }
     off += blk_size;
@@ -140,32 +155,44 @@ int flash_inner2spi(uint32_t src, uint32_t dst, uint32_t len, uint8_t * cache, u
   return 0;
 }
 
+static int hal_spi_flash_write_wrapper(const uint8_t *buf, int32_t len, uint32_t offset)
+{
+    return flash_adaptor_write(offset, buf, len);
+}
+
+static int hal_flash_write_wrapper(const uint8_t *buf, int32_t len, uint32_t offset)
+{
+    return hal_flash_write(buf, len, &offset);
+}
+
+static storage_device s_storage_dev[] = {
+    {
+     INNER_FLASH,
+     "inner_flash",
+     1024 * 1024,
+     NULL,
+     hal_flash_read,
+     hal_flash_write_wrapper,
+     hal_flash_erase,
+     hal_flash_erase_write
+    },
+    {
+     SPI_FLASH,
+     "spi_flash",
+     256 * 1024 * 1024,
+     hal_spi_flash_config,
+     hal_spi_flash_read,
+     hal_spi_flash_write_wrapper,
+     hal_spi_flash_erase,
+     hal_spi_flash_erase_write,
+   }
+};
+
 void flash_adaptor_init(void)
 {
     hal_spi_flash_config();
+
+    storage_dev_install(s_storage_dev, sizeof(s_storage_dev)/ sizeof(storage_device));
+    storage_partition_init(s_storage_part, sizeof(s_storage_part)/ sizeof(storage_partition));
 }
-
-int flash_adaptor_write_mqtt_info(const void *buffer, uint32_t len)
-{
-    if(len > MQTT_INFO_SIZE)
-    {
-        HAL_OTA_LOG("err offset len %lu",  len);
-        return ERR;
-    }
-
-    return flash_adaptor_write(MQTT_INFO_ADDR, (const uint8_t *)buffer, len);
-}
-
-int flash_adaptor_read_mqtt_info(void *buffer, uint32_t len)
-{
-    if(len > MQTT_INFO_SIZE)
-    {
-        HAL_OTA_LOG("err offset len %lu",  len);
-        return ERR;
-    }
-     return hal_spi_flash_read(buffer, len, MQTT_INFO_ADDR);
-}
-
-
-
  

@@ -34,269 +34,78 @@
 
 #include <oc_mqtt_al.h>
 
-
-
-static tag_oc_mqtt_ops *s_oc_mqtt = NULL;
-
-
-///////////////////////OC AGENT INSTALL INTERFACE///////////////////////////////////////
-int oc_mqtt_register(const tag_oc_mqtt_ops *opt)
+static oc_mqtt_t *s_oc_mqtt = NULL;
+///////////////////////OC AGENT INSTALL INTERFACE///////////////////////////////
+int oc_mqtt_register(const oc_mqtt_t *opt)
 {
-    int ret = -1;
+    int ret = en_oc_mqtt_err_system;
 
     if(NULL != opt)
     {
-        s_oc_mqtt = (tag_oc_mqtt_ops *) opt;
-
-        ret = 0;
+        s_oc_mqtt = (oc_mqtt_t *) opt;
+        ret = en_oc_mqtt_err_ok;
     }
 
     return ret;
 }
 
 //////////////////////////APPLICATION INTERFACE/////////////////////////////////
-void* oc_mqtt_config(tag_oc_mqtt_config *param)
+int oc_mqtt_config(oc_mqtt_config_t *param)
 {
-    void *ret = NULL;
-
-    if((NULL != s_oc_mqtt) &&(NULL != s_oc_mqtt->config))
+    int ret = en_oc_mqtt_err_system ;
+    if((NULL != s_oc_mqtt) &&(NULL != s_oc_mqtt->op.config))
     {
-       ret = s_oc_mqtt->config(param);
+       ret = s_oc_mqtt->op.config(param);
     }
 
     return ret;
 }
 
-int oc_mqtt_deconfig(void *handle)
+int oc_mqtt_deconfig()
 {
-    int ret = -1;
+    int ret = en_oc_mqtt_err_system;
 
-    if((NULL != handle)&&(NULL != s_oc_mqtt) \
-       &&(NULL != s_oc_mqtt->deconfig))
+    if((NULL != s_oc_mqtt) \
+       &&(NULL != s_oc_mqtt->op.config))
     {
-       ret = s_oc_mqtt->deconfig(handle);
+       ret = s_oc_mqtt->op.deconfig();
     }
 
     return ret;
 }
 
-int oc_mqtt_report(void *handle, char *msg, int len, en_mqtt_al_qos_t qos)
+int oc_mqtt_publish(char  *topic,uint8_t *msg,int msg_len,int qos)
 {
-    int ret = -1;
+    int ret = en_oc_mqtt_err_system;
 
-    if((NULL != handle)&&(NULL!= msg)&&\
-       (NULL != s_oc_mqtt) &&(NULL != s_oc_mqtt->report))
+    if((NULL != s_oc_mqtt) &&(NULL != s_oc_mqtt->op.publish))
     {
-       ret = s_oc_mqtt->report(handle,msg,len,qos);
+       ret = s_oc_mqtt->op.publish(topic,msg,msg_len,qos);
     }
 
     return ret;
 }
 
-
-///< format the report data to json string mode
-static cJSON  *json_fmt_value(tag_key_value  *disc)
+int oc_mqtt_report(uint8_t *msg, int len, int qos)
 {
-    cJSON  *ret = NULL;
-    switch (disc->type)
-    {
-        case en_key_value_type_int:
-            ret = cJSON_CreateNumber((double)(*(int *)disc->buf));
-            break;
-        case en_key_value_type_string:
-            ret = cJSON_CreateString((const char *)disc->buf);
-            break;
-        default:
-            break;
-    }
+    int ret = en_oc_mqtt_err_system;
+
+    ret = oc_mqtt_publish(NULL,msg,len,qos);
 
     return ret;
 }
 
-cJSON *oc_mqtt_json_fmt_report(tag_oc_mqtt_report  *report)
+int oc_mqtt_subscribe(char *topic,int qos)
 {
-    cJSON  *ret = NULL;
-    cJSON  *service_data =  NULL;
-    cJSON  *data_array = NULL;
-    cJSON  *service = NULL;
-    cJSON  *root;
-    cJSON  *tmp;
+    int ret = en_oc_mqtt_err_system;
 
-    tag_key_value_list  *kvlst;
-
-    ///< create the root object
-    root = cJSON_CreateObject();
-    if(NULL == root)
+    if((NULL != s_oc_mqtt) &&(NULL != s_oc_mqtt->op.subscribe))
     {
-        goto EXIT_CJSON_ERR;
-    }
-    ///< create the msg type object and add it to the root
-    tmp = cJSON_CreateString(cn_msg_type_device_req);
-    if(NULL == tmp)
-    {
-        goto EXIT_CJSON_ERR;
-    }
-    cJSON_AddItemToObject(root,cn_msg_type_name,tmp);
-    ///< create the has more item and add it to the root
-    tmp = cJSON_CreateNumber((double)report->hasmore);
-    if(NULL == tmp)
-    {
-        goto EXIT_CJSON_ERR;
-    }
-    cJSON_AddItemToObject(root,cn_has_more_name,tmp);
-    ///< create the data array and add it to the root
-    data_array = cJSON_CreateArray();
-    if(NULL == data_array)
-    {
-        goto EXIT_CJSON_ERR;
-    }
-    cJSON_AddItemToObject(root,cn_data_name,data_array);
-
-    ///< create the service and add it to the data_array
-    service = cJSON_CreateObject();
-    if(NULL == service)
-    {
-        goto EXIT_CJSON_ERR;
-    }
-    cJSON_AddItemToArray(data_array,service);
-
-    ///< create the service id and add to the service
-    tmp = cJSON_CreateString(report->serviceid);
-    if(NULL == tmp)
-    {
-        goto EXIT_CJSON_ERR;
-    }
-    cJSON_AddItemToObject(service,cn_service_id_name,tmp);
-
-    ///< create the service_data object and add it  to the service
-    service_data = cJSON_CreateObject();
-    if(NULL == tmp)
-    {
-        goto EXIT_CJSON_ERR;
-    }
-    cJSON_AddItemToObject(service,cn_service_data_name,service_data);
-
-    ///< loop the report data and make the corresponding k-v object,then add it to the service_data
-    kvlst = report->paralst;
-    while(NULL != kvlst)
-    {
-        ///< fmt the value to a json object
-        tmp = json_fmt_value(&kvlst->item);
-        if(NULL == tmp)
-        {
-            goto EXIT_CJSON_ERR;
-        }
-        ///< add the object to the serice data
-        cJSON_AddItemToObject(service_data,kvlst->item.name,tmp);
-
-        kvlst= kvlst->next;
-    }
-
-    ///< create the time service_data object and add it to the service
-    if(NULL != report->eventtime)
-    {
-        tmp = cJSON_CreateString(report->eventtime);
-        if(NULL == tmp)
-        {
-            goto EXIT_CJSON_ERR;
-        }
-        cJSON_AddItemToObject(service,cn_service_time_name,tmp);
-    }
-
-    ret = root;
-    return ret;
-
-
-EXIT_CJSON_ERR:
-    if(root)
-    {
-        cJSON_Delete(root);
+       ret = s_oc_mqtt->op.subscribe(topic,qos);
     }
 
     return ret;
 }
-
-cJSON *oc_mqtt_json_fmt_response(tag_oc_mqtt_response  *response)
-{
-    cJSON  *ret = NULL;
-    cJSON  *body =  NULL;
-    cJSON  *root;
-    cJSON  *tmp;
-
-    tag_key_value_list  *kvlst;
-
-    ///< create the root object
-    root = cJSON_CreateObject();
-    if(NULL == root)
-    {
-        goto EXIT_CJSON_ERR;
-    }
-    ///< create the msg type object and add it to the root
-    tmp = cJSON_CreateString(cn_msg_type_device_resp);
-    if(NULL == tmp)
-    {
-        goto EXIT_CJSON_ERR;
-    }
-    cJSON_AddItemToObject(root,cn_msg_type_name,tmp);
-    ///< create the mid item and add it to the root
-    tmp = cJSON_CreateNumber((double)response->mid);
-    if(NULL == tmp)
-    {
-        goto EXIT_CJSON_ERR;
-    }
-    cJSON_AddItemToObject(root,cn_mid_name,tmp);
-    ///< create the err code item and add it to the root
-    tmp = cJSON_CreateNumber((double)response->errcode);
-    if(NULL == tmp)
-    {
-        goto EXIT_CJSON_ERR;
-    }
-    cJSON_AddItemToObject(root,cn_err_code_name,tmp);
-    ///< create the has more item and add it to the root
-    tmp = cJSON_CreateNumber((double)response->hasmore);
-    if(NULL == tmp)
-    {
-        goto EXIT_CJSON_ERR;
-    }
-    cJSON_AddItemToObject(root,cn_has_more_name,tmp);
-
-    ///< create the body object and add it to root
-    body = cJSON_CreateObject();
-    if(NULL == body)
-    {
-        goto EXIT_CJSON_ERR;
-    }
-    cJSON_AddItemToObject(root,cn_body_name,body);
-
-    ///< create the body paras object and add it to body
-    kvlst = response->bodylst;
-
-    while(NULL != kvlst)
-    {
-        ///< fmt the value to a json object
-        tmp = json_fmt_value(&kvlst->item);
-        if(NULL == tmp)
-        {
-            goto EXIT_CJSON_ERR;
-        }
-        ///< add the object to the serice data
-        cJSON_AddItemToObject(body,kvlst->item.name,tmp);
-
-        kvlst= kvlst->next;
-    }
-
-    ret = root;
-    return ret;
-
-EXIT_CJSON_ERR:
-    if(root)
-    {
-        cJSON_Delete(root);
-    }
-
-    return ret;
-}
-
 
 
 ///////////////////////OC LWM2M AGENT INITIALIZE////////////////////////////////
@@ -304,4 +113,42 @@ int oc_mqtt_init()
 {
     return 0;
 }
+
+
+static const char *s_oc_mqtt_err_tab[en_oc_mqtt_err_last] =
+{
+    "success",
+    "parameter_err",
+    "network_err",
+    "version_err",
+    "clientid_err",
+    "server_err",
+    "userpwd_err",
+    "clientauth_err",
+    "subscribe_err",
+    "publish_err",
+    "reconfigure_err",
+    "nonconfigure_err",
+    "mqttconnect_err",
+    "bsaddrtimeout_err",
+    "sysmemory_err",
+    "system_err",
+};
+
+const char *oc_mqtt_err(int code)
+{
+    const char *ret = NULL;
+    if((code >= en_oc_mqtt_err_last) || (code < 0))
+    {
+        ret =  "UNKNOWN";
+    }
+    else
+    {
+        ret = s_oc_mqtt_err_tab[code];
+    }
+    return ret;
+}
+
+
+
 

@@ -290,8 +290,9 @@ LITE_OS_SEC_TEXT_INIT VOID *osTskStackAlloc (TSK_INIT_PARAM_S *pstInitParam)
     UINT32 alloc;
 
     /* TSK_CONTEXT_S will take space in stack, reserve space for it */
+    pstInitParam->uwStackSize += ALIGN(sizeof (TSK_CONTEXT_S) , LOSCFG_STACK_POINT_ALIGN_SIZE);
 
-    pstInitParam->uwStackSize += sizeof (TSK_CONTEXT_S);
+
 
 #if (LOSCFG_ENABLE_MPU == YES)
     if (pstInitParam->pRegions != NULL)
@@ -336,6 +337,8 @@ LITE_OS_SEC_TEXT_INIT VOID *osTskStackAlloc (TSK_INIT_PARAM_S *pstInitParam)
     {
         alloc = pstInitParam->uwStackSize;
     }
+
+
 
     return LOS_MemAllocAlign(OS_TASK_STACK_ADDR, alloc, align);
 }

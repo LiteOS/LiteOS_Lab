@@ -16,8 +16,6 @@ ifeq ($(CONFIG_OC_LWM2M_ENABLE), y)
     
     ifeq ($(CONFIG_OC_LWM2M_TYPE),"soft")
     	include $(iot_link_root)/oc/oc_lwm2m/atiny_lwm2m/atiny_lwm2m.mk
-    else ifeq ($(CONFIG_OC_LWM2M_TYPE),"atiny_lwm2m_raw")
-    	include $(iot_link_root)/oc/oc_lwm2m/atiny_lwm2m_raw/atiny_lwm2m.mk
     else ifeq ($(CONFIG_OC_LWM2M_TYPE),"boudica150_oc")
     	include $(iot_link_root)/oc/oc_lwm2m/boudica150_oc/boudica150_oc.mk
     else

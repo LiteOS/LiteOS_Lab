@@ -378,7 +378,7 @@ void dtls_ssl_destroy(mbedtls_ssl_context *ssl)
         return;
     }
 
-    conf       = ssl->conf;
+    conf       = (mbedtls_ssl_config *)ssl->conf;
     server_fd  = (mbedtls_net_context *)ssl->p_bio;
     timer      = (mbedtls_timing_delay_context *)ssl->p_timer;
 #if defined(MBEDTLS_X509_CRT_PARSE_C)
@@ -467,7 +467,7 @@ int dtls_read(mbedtls_ssl_context *ssl, unsigned char *buf, size_t len, uint32_t
     int ret;
 
 
-    mbedtls_ssl_conf_read_timeout(ssl->conf, timeout);
+    mbedtls_ssl_conf_read_timeout((mbedtls_ssl_config *)ssl->conf, timeout);
 
     ret = mbedtls_ssl_read(ssl, buf, len);
 

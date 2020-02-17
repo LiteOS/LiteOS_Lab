@@ -111,7 +111,7 @@ LITE_OS_SEC_TEXT_INIT VOID *osTskStackAlloc (TSK_INIT_PARAM_S *pstInitParam)
 
     /* TSK_CONTEXT_S will take space in stack, reserve space for it */
 
-    pstInitParam->uwStackSize += sizeof (TSK_CONTEXT_S);
+    pstInitParam->uwStackSize += ALIGN(sizeof (TSK_CONTEXT_S) , LOSCFG_STACK_POINT_ALIGN_SIZE);
 
     alloc = pstInitParam->uwStackSize;
 

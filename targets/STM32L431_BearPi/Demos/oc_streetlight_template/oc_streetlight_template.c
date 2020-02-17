@@ -33,7 +33,7 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-14 17:21  zhangqianfu  The first version  
+ *  2019-05-14 17:21  zhangqianfu  The first version
  *
  */
 #include <stdint.h>
@@ -45,7 +45,7 @@
 #include <link_endian.h>
 
 #include <boudica150_oc.h>
-#include "BH1750.h"
+#include "E53_SC1.h"
 #include "lcd.h"
 
 #include <gpio.h>
@@ -101,7 +101,6 @@ typedef struct
 
 #pragma pack()
 
-void *context;
 int *ue_stats;
 int8_t key1 = 0;
 int8_t key2 = 0;
@@ -109,6 +108,7 @@ int16_t toggle = 0;
 int16_t lux;
 int8_t qr_code = 1;
 extern const unsigned char gImage_Huawei_IoT_QR_Code[114720];
+E53_SC1_Data_TypeDef E53_SC1_Data;
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
@@ -122,7 +122,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 			key2 = 1;
 			printf("toggle LED and report!\r\n");
 			toggle = !toggle;
-			HAL_GPIO_TogglePin(Light_GPIO_Port,Light_Pin);
+			HAL_GPIO_TogglePin(SC1_Light_GPIO_Port,SC1_Light_Pin);
 			break;
 		default:
 			break;
@@ -150,8 +150,6 @@ static void timer1_callback(void *arg)
 		LCD_ShowString(80, 100, 200, 16, 16, cn_app_server);
 		LCD_ShowString(10, 150, 200, 16, 16, "NCDP_PORT:");
 		LCD_ShowString(100, 150, 200, 16, 16, cn_app_port);
-		LCD_ShowString(10, 200, 200, 16, 16, "BH1750 Value is:");
-		LCD_ShowNum(140, 200, lux, 5, 16);
 	}
 }
 
@@ -206,7 +204,7 @@ static int app_cmd_task_entry()
                             toggle = 1;
                             key2 = true;
                         }
-                    	HAL_GPIO_WritePin(Light_GPIO_Port,Light_Pin,GPIO_PIN_SET);
+                    	HAL_GPIO_WritePin(SC1_Light_GPIO_Port,SC1_Light_Pin,GPIO_PIN_SET);
 
                     	//if you need response message,do it here--TODO
                     	replymsg.msgid = cn_app_cmdreply;
@@ -216,7 +214,7 @@ static int app_cmd_task_entry()
                 		replymsg.curstats[0] = 'O';
                 		replymsg.curstats[1] = 'N';
                 		replymsg.curstats[2] = ' ';
-                		oc_lwm2m_report(context,(char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
+                		oc_lwm2m_report((char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
                     }
 
                     else if (led_cmd->led[0] == 'O' && led_cmd->led[1] == 'F' && led_cmd->led[2] == 'F')
@@ -226,7 +224,7 @@ static int app_cmd_task_entry()
                             toggle = 0;
                             key2 = true;
                         }
-                    	HAL_GPIO_WritePin(Light_GPIO_Port,Light_Pin,GPIO_PIN_RESET);
+                    	HAL_GPIO_WritePin(SC1_Light_GPIO_Port,SC1_Light_Pin,GPIO_PIN_RESET);
 
                     	//if you need response message,do it here--TODO
                     	replymsg.msgid = cn_app_cmdreply;
@@ -236,7 +234,7 @@ static int app_cmd_task_entry()
                 		replymsg.curstats[0] = 'O';
                 		replymsg.curstats[1] = 'F';
                 		replymsg.curstats[2] = 'F';
-                		oc_lwm2m_report(context,(char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
+                		oc_lwm2m_report((char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
                     }
 
                     else
@@ -275,7 +273,12 @@ static int app_report_task_entry()
     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
     oc_param.rcv_func = app_msg_deal;
 
-    context = oc_lwm2m_config(&oc_param);
+    // context = oc_lwm2m_config(&oc_param);
+    ret = oc_lwm2m_config(&oc_param);
+    if (0 != ret)
+    {
+    	return ret;
+    }
 
     if(NULL != context)   //success ,so we could receive and send
     {
@@ -291,7 +294,7 @@ static int app_report_task_entry()
         	    connectivity.ecl = htons(ue_stats[1] & 0x0000FFFF);
         	    connectivity.snr = htons(ue_stats[2] & 0x0000FFFF);
         	    connectivity.cellid = htonl(ue_stats[3]);
-                oc_lwm2m_report(context,(char *)&connectivity,sizeof(connectivity),1000);    ///< report ue status message
+                oc_lwm2m_report((char *)&connectivity,sizeof(connectivity),1000);    ///< report ue status message
             }
 
             if (key2 == 1)
@@ -299,12 +302,12 @@ static int app_report_task_entry()
             	key2 = 0;
             	light_status.msgid = cn_app_lightstats;
             	light_status.tog = htons(toggle);
-            	oc_lwm2m_report(context,(char *)&light_status,sizeof(light_status),1000);    ///< report toggle message
+            	oc_lwm2m_report((char *)&light_status,sizeof(light_status),1000);    ///< report toggle message
             }
 
             light.msgid = cn_app_light;
-            light.intensity = htons(lux);
-            oc_lwm2m_report(context,(char *)&light,sizeof(light),1000); ///< report the light message
+            light.intensity = htons((int)E53_SC1_Data.Lux);
+            oc_lwm2m_report((char *)&light,sizeof(light),1000); ///< report the light message
             osal_task_sleep(2*1000);
         }
     }
@@ -314,15 +317,15 @@ static int app_report_task_entry()
 
 static int app_collect_task_entry()
 {
-    Init_BH1750();
+    Init_E53_SC1();
     while (1)
     {
-        lux=(int)Convert_BH1750();
-        printf("\r\n******************************BH1750 Value is  %d\r\n",lux);
+        E53_SC1_Read_Data();
+        printf("\r\n******************************BH1750 Value is  %d\r\n",(int)E53_SC1_Data.Lux);
         if (qr_code == 0)
         {
             LCD_ShowString(10, 200, 200, 16, 16, "BH1750 Value is:");
-            LCD_ShowNum(140, 200, lux, 5, 16);
+            LCD_ShowNum(140, 200, (int)E53_SC1_Data.Lux, 5, 16);
         }
         osal_task_sleep(2*1000);
     }

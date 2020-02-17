@@ -114,14 +114,13 @@ static ota_storage_t  s_ota_storage_device =
       }
 };
 
-static void    *s_lwm2m_context = NULL;    ///< this is used when we want to send some message to the platform
 static queue_t *s_queue_msgrcv = NULL;   ///< this is used to cached the message
 
 
 static int ota_msg_send(void *msg,int len)
 {
     int ret;
-    ret = oc_lwm2m_report(s_lwm2m_context,(char *)msg,len,1000);
+    ret = oc_lwm2m_report((char *)msg,len,1000);
     return ret;
 }
 
@@ -208,25 +207,25 @@ static int app_report_task_entry()
     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
     oc_param.rcv_func = app_msg_deal;
 
-    context = oc_lwm2m_config(&oc_param);
-
-    if(NULL != context)   //success ,so we could receive and send
+    ret = oc_lwm2m_config( &oc_param);
+    if (0 != ret)
     {
-        s_lwm2m_context = context;
-        while(1) //--TODO ,you could add your own code here
+        return ret;
+    }
+
+    while(1) //--TODO ,you could add your own code here
+    {
+        if(s_report_switch)
         {
-            if(s_report_switch)
-            {
-                lux++;
-                lux= lux%10000;
+            lux++;
+            lux= lux%10000;
 
-                light.msgid = cn_app_light;
-                light.intensity = htons(lux);
-                oc_lwm2m_report(s_lwm2m_context,(char *)&light,sizeof(light),1000); ///< report the light message
-            }
-
-            osal_task_sleep(10*1000);
+            light.msgid = cn_app_light;
+            light.intensity = htons(lux);
+            oc_lwm2m_report((char *)&light,sizeof(light),1000); ///< report the light message
         }
+
+        osal_task_sleep(10*1000);
     }
 
     return ret;

@@ -323,7 +323,7 @@ static const tag_os s_link_ucos =
     .ops = &s_ucos_ops,
 };
 
-int osal_install_ucos(void)
+int os_imp_init(void)
 {
     int ret = -1;
 
