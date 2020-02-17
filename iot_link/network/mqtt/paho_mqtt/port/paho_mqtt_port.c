@@ -127,6 +127,8 @@ static int __tls_connect(Network *n, char *addr, int port)
     char port_buf[PORT_BUF_LEN];
 
     memset(&shakehand_info, 0, sizeof(dtls_shakehand_info_s));
+    memset(&establish_info, 0, sizeof(dtls_establish_info_s));
+
 
     if (n->arg.type == en_mqtt_al_security_psk)
     {
