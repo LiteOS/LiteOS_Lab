@@ -131,7 +131,7 @@ typedef struct
 	en_mqtt_al_verison             version;      ///< mqtt version will be used
 	mqtt_al_string_t               clientid;     ///< mqtt connect client identifier
 	mqtt_al_string_t               user;         ///< mqtt connect user
-	mqtt_al_string_t               passwd;       ///< mqtt connect passwd
+	mqtt_al_string_t               passwd;       ///< mqtt connect pwd
 	int                            cleansession; ///< 1 clean the session while 0 not
 	mqtt_al_willmsg_t             *willmsg;      ///< mqtt connect will message
 	unsigned short                 keepalivetime;///< keep alive time
@@ -192,7 +192,7 @@ typedef enum
 #define cn_mqtt_al_con_code_err_version       1   ///< server not support the version
 #define cn_mqtt_al_con_code_err_clientID      2   ///< client identifier is error
 #define cn_mqtt_al_con_code_err_netrefuse     3   ///< server service not ready yet
-#define cn_mqtt_al_con_code_err_u_p           4   ///< bad user name or password
+#define cn_mqtt_al_con_code_err_u_p           4   ///< bad user name or pwd
 #define cn_mqtt_al_con_code_err_auth          5   ///< the client is not authorized
 #define cn_mqtt_al_con_code_err_unkown        -1  ///< unknown reason
 #define cn_mqtt_al_con_code_err_network      0x80 ///< network reason,you could try once more

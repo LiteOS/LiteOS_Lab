@@ -298,7 +298,7 @@ static void bs_msg_default_deal(void *arg,mqtt_al_msgrcv_t *msg)
    return;
 }
 
-static char *topic_fmt(char *fmt, char *arg)
+static char *topic_fmt(const char *fmt, const char *arg)
 {
     char *ret = NULL;
     int len =  0;
@@ -314,7 +314,7 @@ static char *topic_fmt(char *fmt, char *arg)
     return ret;
 }
 
-static char *clientid_fmt(char *fmt, char *id, char *salt_time)
+static char *clientid_fmt(const char *fmt, const char *id, const char *salt_time)
 {
     char *ret = NULL;
     int len =  0;
@@ -462,7 +462,7 @@ static int oc_mqtt_para_release(oc_mqtt_tiny_cb_t *cb)
 static int oc_mqtt_para_gernerate(oc_mqtt_tiny_cb_t *cb)
 {
     int ret = en_oc_mqtt_err_ok;;
-    uint8_t hmac[CN_HMAC_LEN];
+    uint8_t hmac[CN_HMAC_LEN] = {0};
 
     struct tm *date;
     time_t time_now;

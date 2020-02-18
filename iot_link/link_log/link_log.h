@@ -71,7 +71,7 @@ typedef enum
  *
  * @return: the current output mask log, defined by en_link_log_level_t
  * */
-int link_log_level_get(void);
+en_link_log_level_t link_log_level_get(void);
 
 /**
  * @brief: use this function to get the debug level name
@@ -80,7 +80,7 @@ int link_log_level_get(void);
  *
  * @return: the mapped level name
  * */
-const char *link_log_level_name(int level);
+const char *link_log_level_name(en_link_log_level_t level);
 
 /**
  * @brief:use this function to set the current output log
@@ -89,7 +89,7 @@ const char *link_log_level_name(int level);
  *
  * @return: 0 success while -1 failed
  * */
-int link_log_level_set(int level);
+int link_log_level_set(en_link_log_level_t level);
 
 #ifndef CFG_LINK_DEBUG_ENABLE
 #define CFG_LINK_DEBUG_ENABLE 1  ///< default the debug is on

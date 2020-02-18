@@ -401,7 +401,7 @@ static int32_t stimer_print(int32_t argc, const char *argv[])
         while(NULL != item)
         {
             printf("%-8d %08x %08x %08x %-5s %-5s %x\n\r",\
-                    timer_number++,(unsigned int)item->cycle,(unsigned int)item->handler,(unsigned int)item->args,\
+                    timer_number++,(unsigned int)item->cycle,(unsigned int)item->handler,(unsigned int)(uintptr_t)item->args,\
                     item->flag&cn_stimer_flag_start?"Yes":"No",item->flag&cn_stimer_flag_once?"Yes":"No",\
                     (unsigned int)item->dead_time);
             item = item->nxt;

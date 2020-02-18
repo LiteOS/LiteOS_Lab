@@ -158,10 +158,10 @@ int hexstr2byte(const char *bufin, int len, char *bufout)
     }
     for(i = 0; i < len; i = i+2)
     {
-        tmp2 =  bufin[i];
-        tmp2 =  tmp2 <= '9'?tmp2-0x30:tmp2-0x37;
-        tmp =  bufin[i+1];
-        tmp =  tmp <= '9'?tmp-0x30:tmp-0x37;
+        tmp2 =  (unsigned char )bufin[i];
+        tmp2 =  tmp2 <= '9'?(unsigned char)(unsigned int)(tmp2-0x30):(unsigned char)(unsigned int)(tmp2-0x37);
+        tmp =  (unsigned int)bufin[i+1];
+        tmp =  tmp <= '9'?(unsigned int)(tmp-0x30):(unsigned int)(tmp-0x37);
         bufout[i/2] =(tmp2<<4)|(tmp&0x0F);
     }
     return 0;

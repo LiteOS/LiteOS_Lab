@@ -44,7 +44,7 @@
 
 uint32_t calc_crc32(uint32_t origin, const void *buf, int32_t len);
 
-int32_t calc_crc16(int32_t reg_init, const unsigned char *massage, int len);
+uint16_t calc_crc16(uint16_t reg_init, const unsigned char *massage, int len);
 
 
 #endif /* LITEOS_LAB_IOT_LINK_CRC_CRC_H_ */

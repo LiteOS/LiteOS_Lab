@@ -61,8 +61,8 @@ static void *__task_create(const char *name,int (*task_entry)(void *args),\
 
     memset (&task_init_param, 0, sizeof (TSK_INIT_PARAM_S));
 
-    task_init_param.uwArg = (unsigned int)args;
-    task_init_param.usTaskPrio = prior;
+    task_init_param.uwArg = (unsigned int)(uintptr_t)args;
+    task_init_param.usTaskPrio = (unsigned short)prior;
     task_init_param.pcName =(char *) name;
     task_init_param.pfnTaskEntry = (TSK_ENTRY_FUNC)task_entry;
     task_init_param.uwStackSize = stack_size;
@@ -70,7 +70,7 @@ static void *__task_create(const char *name,int (*task_entry)(void *args),\
     if(LOS_OK != uwRet){
         return ret;
     }
-    ret = (void *)handle;
+    ret = (void *)(uintptr_t)handle;
     return ret;
 }
 
@@ -80,7 +80,7 @@ static int __task_kill(void *task)
     UINT32 handle;
     if(NULL != task)
     {
-        handle = (UINT32) task;
+        handle = (UINT32) (uintptr_t)task;
         if(LOS_OK == LOS_TaskDelete(handle))
         {
             ret = 0;
@@ -112,7 +112,7 @@ static bool_t  __mutex_create(osal_mutex_t *mutex)
 //lock the mutex
 static bool_t  __mutex_lock(osal_mutex_t mutex)
 {
-    if(LOS_OK == LOS_MuxPend((UINT32)mutex,LOS_WAIT_FOREVER))
+    if(LOS_OK == LOS_MuxPend((UINT32)(uintptr_t)mutex,LOS_WAIT_FOREVER))
     {
         return true;
     }
@@ -125,7 +125,7 @@ static bool_t  __mutex_lock(osal_mutex_t mutex)
 //unlock the mutex
 static bool_t  __mutex_unlock(osal_mutex_t mutex)
 {
-    if(LOS_OK == LOS_MuxPost((UINT32)mutex))
+    if(LOS_OK == LOS_MuxPost((UINT32)(uintptr_t)mutex))
     {
         return true;
     }
@@ -137,7 +137,7 @@ static bool_t  __mutex_unlock(osal_mutex_t mutex)
 //delete the mutex
 static bool_t  __mutex_del(osal_mutex_t mutex)
 {
-    if(LOS_OK == LOS_MuxDelete((UINT32)mutex))
+    if(LOS_OK == LOS_MuxDelete((UINT32)(uintptr_t)mutex))
     {
         return true;
     }
@@ -172,7 +172,7 @@ static bool_t  __semp_pend(osal_semp_t semp,int timeout)
         timeout = LOS_WAIT_FOREVER;
     }
 
-    if(LOS_OK == LOS_SemPend((UINT32)semp,(UINT32)timeout))
+    if(LOS_OK == LOS_SemPend((UINT32)(uintptr_t)semp,(UINT32)timeout))
     {
         return true;
     }
@@ -183,7 +183,7 @@ static bool_t  __semp_pend(osal_semp_t semp,int timeout)
 }
 static bool_t  __semp_post(osal_semp_t semp)
 {
-    if(LOS_OK == LOS_SemPost((UINT32)semp))
+    if(LOS_OK == LOS_SemPost((UINT32)(uintptr_t)semp))
     {
         return true;
     }
@@ -195,7 +195,7 @@ static bool_t  __semp_post(osal_semp_t semp)
 
 static bool_t  __semp_del(osal_semp_t semp)
 {
-    if(LOS_OK == LOS_SemDelete((UINT32)semp))
+    if(LOS_OK == LOS_SemDelete((UINT32)(uintptr_t)semp))
     {
         return true;
     }
@@ -217,7 +217,10 @@ static void *__mem_malloc(int size)
     if(size > 0)
     {
         ret = LOS_MemAlloc(m_aucSysMem0,size);
-        memset(ret, 0, size);
+        if(NULL != ret)
+        {
+            memset(ret, 0, size);
+        }
     }
 
     return ret;
@@ -254,7 +257,7 @@ static int __int_connect(int intnum, int prio, int mode, fn_interrupt_handle cal
 	                            HWI_PROC_FUNC pfnHandler, \
 	                            HWI_ARG_T     uwArg \
 	                            );
-	return LOS_HwiCreate((HWI_HANDLE_T)intnum, (HWI_PRIOR_T)prio,(HWI_MODE_T) mode, (HWI_PROC_FUNC)callback, (HWI_ARG_T)arg);
+	return LOS_HwiCreate((HWI_HANDLE_T)intnum, (HWI_PRIOR_T)prio,(HWI_MODE_T) mode, (HWI_PROC_FUNC)callback, (HWI_ARG_T)(uintptr_t)arg);
 }
 
 static const tag_os_ops s_liteos_ops =
