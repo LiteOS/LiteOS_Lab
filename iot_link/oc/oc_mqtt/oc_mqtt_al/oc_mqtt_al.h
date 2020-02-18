@@ -62,7 +62,7 @@ typedef enum
     en_oc_mqtt_err_conversion,           ///< this means the mqtt version err
     en_oc_mqtt_err_conclientid,          ///< this means the client id is err
     en_oc_mqtt_err_conserver,            ///< this means the server refused the service for some reason(likely the id and pwd)
-    en_oc_mqtt_err_conuserpwd,           ///< bad user name or passwd
+    en_oc_mqtt_err_conuserpwd,           ///< bad user name or pwd
     en_oc_mqtt_err_conclient,            ///< the client id /user/pwd is right, but does not allowed
     en_oc_mqtt_err_subscribe,            ///< this means subscribe the topic failed
     en_oc_mqtt_err_publish,              ///< this means subscribe the topic failed

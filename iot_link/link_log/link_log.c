@@ -58,7 +58,7 @@ static const char *s_link_log_names[EN_LINK_LOG_LEVEL_MAX] =
     "FATAL"
 };
 
-int link_log_level_set(int level)
+int link_log_level_set(en_link_log_level_t level)
 {
     int ret = -1;
     if(level < EN_LINK_LOG_LEVEL_MAX )
@@ -69,12 +69,12 @@ int link_log_level_set(int level)
     return ret;
 }
 
-int link_log_level_get(void)
+en_link_log_level_t link_log_level_get(void)
 {
     return s_link_log_level;
 }
 
-const char *link_log_level_name(int log_level)
+const char *link_log_level_name(en_link_log_level_t log_level)
 {
     if (log_level >= EN_LINK_LOG_LEVEL_MAX)
     {

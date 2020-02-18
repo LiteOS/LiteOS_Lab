@@ -275,7 +275,7 @@ static void __socket_disconnect(void *ctx)
     sal_closesocket((int)ctx);
     return;
 }
-static int __socket_connect(Network *n, char *host, int port)
+static int __socket_connect(Network *n, const char *host, int port)
 {
     int ret = -1;
     int fd = -1;
@@ -299,7 +299,7 @@ static int __socket_connect(Network *n, char *host, int port)
     memset(&addr,0,sizeof(addr));
     addr.sin_family = AF_INET;
     memcpy(&addr.sin_addr.s_addr,entry->h_addr_list[0],sizeof(addr.sin_addr.s_addr));
-    addr.sin_port = htons(port);
+    addr.sin_port = htons(((uint16_t)port));
 
     if(-1 == sal_connect(fd,(struct sockaddr *)&addr,sizeof(addr)))
     {
@@ -454,7 +454,7 @@ static void * __connect(mqtt_al_conpara_t *conparam)
     paho_mqtt_cb_t   *cb = NULL;
 
     MQTTPacket_connectData option = MQTTPacket_connectData_initializer;
-    MQTTConnackData conack;
+    MQTTConnackData conack = {0};
     //malloc a handle
     cb = osal_malloc(sizeof(paho_mqtt_cb_t));
     if(NULL == cb)
@@ -515,14 +515,14 @@ static void * __connect(mqtt_al_conpara_t *conparam)
 
     option.keepAliveInterval = conparam->keepalivetime;
 
-    option.cleansession = conparam->cleansession;
+    option.cleansession = (unsigned char)conparam->cleansession;
 
     if(NULL != conparam->willmsg)
     {
 
         option.willFlag = 1;
         option.will.qos = conparam->willmsg->qos;
-        option.will.retained = conparam->willmsg->retain;
+        option.will.retained = (unsigned char )conparam->willmsg->retain;
 
         option.will.topicName.lenstring.len = conparam->willmsg->topic.len;
         option.will.topicName.lenstring.data = conparam->willmsg->topic.data;
@@ -712,7 +712,7 @@ static int __publish(void *handle, mqtt_al_pubpara_t *para)
     c = &cb->client;
 
     memset(&msg,0,sizeof(msg));
-    msg.retained = para->retain;
+    msg.retained = (unsigned char )para->retain;
     msg.qos = QOS0 + para->qos;
     msg.payload = para->msg.data;
     msg.payloadlen = para->msg.len;
@@ -726,7 +726,7 @@ static int __publish(void *handle, mqtt_al_pubpara_t *para)
 
 static en_mqtt_al_connect_state __check_status(void *handle)
 {
-    int ret = en_mqtt_al_connect_err;
+    en_mqtt_al_connect_state ret = en_mqtt_al_connect_err;
     MQTTClient       *c = NULL;
     paho_mqtt_cb_t   *cb = NULL;
 

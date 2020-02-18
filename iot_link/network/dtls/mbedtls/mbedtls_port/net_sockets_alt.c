@@ -85,7 +85,7 @@ int mbedtls_net_connect(mbedtls_net_context *ctx, const char *host, const char *
     memset(&addr,0,sizeof(addr));
     addr.sin_family = AF_INET;
     memcpy(&addr.sin_addr.s_addr,entry->h_addr_list[0],sizeof(addr.sin_addr.s_addr));
-    addr.sin_port = htons(atoi(port));
+    addr.sin_port = htons(((uint16_t)atoi(port)));
 
     if(-1 == sal_connect(ctx->fd,(struct sockaddr *)&addr,sizeof(addr)))
     {
@@ -220,7 +220,7 @@ int mbedtls_net_accept( mbedtls_net_context *bind_ctx,
     struct sockaddr_in  client_addr;
     int addrlen;
 
-    if((NULL == bind_ctx) && (NULL == client_ctx) )
+    if((NULL == bind_ctx) || (NULL == client_ctx) )
     {
         return ret;
     }
@@ -234,15 +234,18 @@ int mbedtls_net_accept( mbedtls_net_context *bind_ctx,
     {
         ret = MBEDTLS_ERR_NET_ACCEPT_FAILED;
     }
+    else
+    {
+        ret = 0;
+    }
 
-    if( NULL != client_ip)
+
+    if( (0 == ret) && (NULL != client_ip))
     {
         *ip_len = sizeof(client_addr.sin_addr)>buf_size?buf_size:sizeof(client_addr.sin_addr);
 
         memcpy(client_ip,&client_addr.sin_addr,*ip_len);
     }
-
-    ret = 0;
 
     return ret;
 }
