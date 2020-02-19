@@ -134,6 +134,12 @@ int link_main(void *args)
     at_init(CONFIG_AT_DEVICENAME);
 #endif
 
+///< initialize the service
+#if CONFIG_SERVICE_ENABLE
+    void service_init (void);
+    service_init ();
+#endif
+
 ///< install the cJSON, for the oc mqtt agent need the cJSON
 #if CONFIG_JSON_ENABLE
     #include <cJSON.h>
@@ -145,7 +151,7 @@ int link_main(void *args)
 #endif
 
 
-//////////////////////////  TCPIP PROTOCOL  /////////////////////////////////////
+//////////////////////////  TCPIP PROTOCOL  ////////////////////////////////////
 
 #if CONFIG_TCPIP_ENABLE
     #include <sal.h>
