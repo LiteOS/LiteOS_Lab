@@ -271,7 +271,7 @@ static int task_reportmsg_entry(void *args)
     while(1)  //do the loop here
     {
         oc_report_normal();
-        osal_task_sleep(1000);
+        osal_task_sleep(10*1000);
     }
     return 0;
 }

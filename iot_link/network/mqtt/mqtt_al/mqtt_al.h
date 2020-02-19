@@ -36,8 +36,7 @@
 #define MQTT_AL_H
 
 #include <stdint.h>
-
-
+#include <dtls_al.h>
 
 #if defined(__cplusplus)
 extern "C" {
@@ -50,50 +49,50 @@ typedef struct
 	int   len;       ///< buffer data length
 }mqtt_al_string_t;   //used to represent any type string (maybe not ascii)
 
-/** @brief  this enum all the transport encode we support now*/
-typedef enum
-{
-	en_mqtt_al_security_none = 0,    ///< no encode
-	en_mqtt_al_security_psk,         ///< use the psk mode in transport layer
-	en_mqtt_al_security_cas,	     ///< use the ca mode in transport layer,only check the server
-	en_mqtt_al_security_cacs,	     ///< use the ca mode in transport layer,both check the server and client
-	en_mqtt_al_security_end,         ///< the end for the mqtt
-}en_mqtt_al_security_t;
-
-/** @brief this data defines for the psk mode*/
-typedef struct
-{
-	mqtt_al_string_t  psk_id;   ///< the psk id
-	mqtt_al_string_t  psk_key;  ///< the psk key
-}mqtt_al_security_psk_t;
-
-/** @brief this data defines for the cas mode:only check the server  */
-typedef struct
-{
-    mqtt_al_string_t  ca_crt;  ///<  the ca crt
-}mqtt_al_security_cas_t;
-
-
-/** @brief this data defines for the cacs mode:both check the server and client */
-typedef struct
-{
-	mqtt_al_string_t ca_s_crt;     ///< the server crt
-	mqtt_al_string_t ca_c_crt;     ///< the client crt
-	mqtt_al_string_t ca_c_key;     ///< the client ca key
-	mqtt_al_string_t ca_host;      ///< for peer certificate, maybe they need this
-}mqtt_al_security_cacs_t;
-
-/** @brief this data defines for the encode parameter for the connect */
-typedef struct
-{
-	en_mqtt_al_security_t type;         ///< which security type of the data
-    union
-    {
-		mqtt_al_security_psk_t   psk;   ///< psk data  if the type is en_mqtt_security_psk
-		mqtt_al_security_cas_t   cas;   ///< cas data  if the type is en_mqtt_security_cas
-		mqtt_al_security_cacs_t  cacs;  ///< cacs data if the type is en_mqtt_security_cacs
-    }u;
-}mqtt_al_security_para_t;
+///** @brief  this enum all the transport encode we support now*/
+//typedef enum
+//{
+//	en_mqtt_al_security_none = 0,    ///< no encode
+//	en_mqtt_al_security_psk,         ///< use the psk mode in transport layer
+//	en_mqtt_al_security_cas,	     ///< use the ca mode in transport layer,only check the server
+//	en_mqtt_al_security_cacs,	     ///< use the ca mode in transport layer,both check the server and client
+//	en_mqtt_al_security_end,         ///< the end for the mqtt
+//}en_mqtt_al_security_t;
+//
+///** @brief this data defines for the psk mode*/
+//typedef struct
+//{
+//	mqtt_al_string_t  psk_id;   ///< the psk id
+//	mqtt_al_string_t  psk_key;  ///< the psk key
+//}mqtt_al_security_psk_t;
+//
+///** @brief this data defines for the cas mode:only check the server  */
+//typedef struct
+//{
+//    mqtt_al_string_t  ca_crt;  ///<  the ca crt
+//}mqtt_al_security_cas_t;
+//
+//
+///** @brief this data defines for the cacs mode:both check the server and client */
+//typedef struct
+//{
+//	mqtt_al_string_t ca_s_crt;     ///< the server crt
+//	mqtt_al_string_t ca_c_crt;     ///< the client crt
+//	mqtt_al_string_t ca_c_key;     ///< the client ca key
+//	mqtt_al_string_t ca_host;      ///< for peer certificate, maybe they need this
+//}mqtt_al_security_cacs_t;
+//
+///** @brief this data defines for the encode parameter for the connect */
+//typedef struct
+//{
+//	en_mqtt_al_security_t type;         ///< which security type of the data
+//    union
+//    {
+//		mqtt_al_security_psk_t   psk;   ///< psk data  if the type is en_mqtt_security_psk
+//		mqtt_al_security_cas_t   cas;   ///< cas data  if the type is en_mqtt_security_cas
+//		mqtt_al_security_cacs_t  cacs;  ///< cacs data if the type is en_mqtt_security_cacs
+//    }u;
+//}mqtt_al_security_para_t;
 
 /** @brief enum all the qos supported for the application */
 typedef enum
@@ -127,7 +126,7 @@ typedef struct
 {
 	mqtt_al_string_t               serveraddr;   ///< mqtt server:support domain name and dot format
 	int                            serverport;   ///< mqtt server port
-	mqtt_al_security_para_t       *security;     ///< if NULL,will use en_mqtt_security_none
+	dtls_al_security_t            *security;     ///< if NULL,will use en_mqtt_security_none
 	en_mqtt_al_verison             version;      ///< mqtt version will be used
 	mqtt_al_string_t               clientid;     ///< mqtt connect client identifier
 	mqtt_al_string_t               user;         ///< mqtt connect user

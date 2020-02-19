@@ -145,9 +145,9 @@ int link_main(void *args)
 #endif
 
 //////////////////////////  DTLS PROTOCOL  /////////////////////////////////////
-#ifdef CONFIG_DTLS_ENABLE
+#if CONFIG_DTLS_ENABLE
     #include <dtls_al.h>
-    dtls_imp_init();
+    dtls_al_init();
 #endif
 
 //////////////////////////  MQTT PROTOCOL  /////////////////////////////////////
