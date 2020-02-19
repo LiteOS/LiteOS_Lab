@@ -159,7 +159,7 @@ int oc_mqtt_profile_connect(oc_mqtt_profile_connect_t *payload)
     config.lifetime = payload->life_time;
     config.msg_deal = app_msg_deal;
     config.msg_deal_arg = NULL;
-    config.sec_type = en_mqtt_al_security_cas;
+    config.sec_type = EN_DTLS_AL_SECURITY_TYPE_CERT;
 
     if(payload->boostrap)
     {

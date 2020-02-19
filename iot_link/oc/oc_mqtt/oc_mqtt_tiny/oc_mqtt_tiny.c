@@ -136,7 +136,7 @@ typedef enum
 typedef struct
 {
     oc_mqtt_config_t        config;
-    mqtt_al_security_para_t security;
+    dtls_al_security_t      security;
     oc_mqtt_para_t          mqtt_para;
     union{
 
@@ -407,19 +407,11 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
             break;
     }
 
-    switch (config->sec_type)
+    cb->security.type = config->sec_type;
+    if(config->sec_type == EN_DTLS_AL_SECURITY_TYPE_CERT)
     {
-        case en_mqtt_al_security_none:
-            cb->security.type = en_mqtt_al_security_none;
-            break;
-        case en_mqtt_al_security_cas:
-            cb->security.type = en_mqtt_al_security_cas;
-            cb->security.u.cas.ca_crt.data = (char *)s_oc_mqtt_ca_crt;
-            cb->security.u.cas.ca_crt.len = sizeof(s_oc_mqtt_ca_crt) ;
-            break;
-        default:
-            return ret;
-            break;
+        cb->security.u.cert.server_ca  = (uint8_t  *)s_oc_mqtt_ca_crt;
+        cb->security.u.cert.server_ca_len = sizeof(s_oc_mqtt_ca_crt) ;
     }
 
     cb->config.boot_mode  = config->boot_mode;

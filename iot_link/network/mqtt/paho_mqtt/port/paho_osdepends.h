@@ -43,6 +43,8 @@
 
 #include  <osal.h>
 #include  <mqtt_al.h>
+#include  <dtls_al.h>
+
 
 #define MQTT_TASK 1
 
@@ -72,7 +74,7 @@ int ThreadStart(Thread *thread, void (*fn)(void *), void *arg);
 typedef struct Network
 {
     void *ctx;                      ///< if it is tls, then it is tls context, else it is socket fd
-    mqtt_al_security_para_t arg;
+    dtls_al_security_t  arg;
     int (*mqttread) (struct Network*, unsigned char*, int, int);
     int (*mqttwrite) (struct Network*, unsigned char*, int, int);
 } Network;

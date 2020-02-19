@@ -80,14 +80,13 @@ typedef int (*fn_oc_mqtt_msg_deal)(void *arg,mqtt_al_msgrcv_t *msg);
 
 typedef struct
 {
-    en_oc_mqtt_mode  boot_mode;     ///< if bs mode, then the server and port must be the bs server's
-    uint8_t          lifetime;      ///< the keep alive time, used for the mqtt protocol
-    char            *server_addr;   ///< server address:domain name or ip address
-    char            *server_port;   ///< server port:
-    en_mqtt_al_security_t   sec_type;      ///< only support crt mode now
+    en_oc_mqtt_mode  boot_mode;            ///< if bs mode, then the server and port must be the bs server's
+    uint8_t          lifetime;             ///< the keep alive time, used for the mqtt protocol
+    char            *server_addr;          ///< server address:domain name or ip address
+    char            *server_port;          ///< server port:
+    en_dtls_al_security_type_t   sec_type; ///< only support crt mode now
     char                              *id;
     char                              *pwd;
-//    int                                device_mode;  ///< gateway or not, not used yet
     fn_oc_mqtt_msg_deal                msg_deal;       ///< when the agent receive any applciation data, please call this function
     void                              *msg_deal_arg;   ///< call back for the fn_oc_mqtt_msg_deal
 

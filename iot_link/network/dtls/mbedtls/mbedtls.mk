@@ -4,7 +4,7 @@
 #only support the "crt" mode and "psk" mode
 
 
-USE_MBEDTLS_DEBUG_C := y
+USE_MBEDTLS_DEBUG_C := n
 USE_MBEDTLS_AES_ROM_TABLES := y
 
 MBEDTLS_INC = \
