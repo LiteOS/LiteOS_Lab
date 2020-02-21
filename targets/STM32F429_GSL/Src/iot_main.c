@@ -250,7 +250,7 @@ int iot_connect()
     config.server_port = DEFAULT_SERVER_PORT;
     config.id = CN_MQTT_EP_NOTEID;
     config.pwd= CN_MQTT_EP_PASSWD;
-    config.sec_type = EN_DTLS_AL_SECURITY_TYPE_CERT;
+    config.sec_type = en_mqtt_al_security_cas;
 
     ret = oc_mqtt_config(&config);
 

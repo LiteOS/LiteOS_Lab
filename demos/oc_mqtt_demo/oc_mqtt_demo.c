@@ -249,6 +249,9 @@ static int task_reportmsg_entry(void *args)
 {
     int ret;
     oc_mqtt_config_t config;
+
+    memset( &config, 0, sizeof(connect_para));
+
     config.boot_mode = CN_DEMO_MODE;
     config.msg_deal = app_msg_deal;
     config.msg_deal_arg = NULL;
@@ -257,7 +260,7 @@ static int task_reportmsg_entry(void *args)
     config.server_port = CN_SERVER_PORT;
     config.id = CN_EP_NODEID;
     config.pwd= CN_EP_PASSWD;
-    config.sec_type = EN_DTLS_AL_SECURITY_TYPE_CERT;
+    config.security.type = EN_DTLS_AL_SECURITY_TYPE_CERT;
 
 
     ret = oc_mqtt_config(&config);

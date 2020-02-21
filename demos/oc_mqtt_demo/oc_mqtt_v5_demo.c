@@ -65,13 +65,14 @@
 #define CN_SERVER_PORT         "8883"
 #define CN_EP_DEVICEID         "54f107da-f251-436c-af4c-624f33b7d7b6"
 #define CN_EP_PASSWD           "f62fcf47d62c4ed18913"
+//#define CN_EP_DEVICEID         "5d0c76788a48f95ac41bcb9c_sdk1002"
+
 
 /////< the iot develop center
 //#define CN_SERVER_IPV4         "49.4.93.24"
 //#define CN_SERVER_PORT         "8883"
 //#define CN_EP_DEVICEID         "mqtt_sdk01"
 //#define CN_EP_PASSWD           "c18f10422c93548e6fef"
-
 #endif
 
 #define CN_LIFE_TIME            60                 ///< the platform need more
@@ -79,6 +80,60 @@
 //if your command is very fast,please use a queue here--TODO
 static queue_t                   *s_queue_rcvmsg = NULL;   ///< this is used to cached the message
 static oc_mqtt_profile_service_t  s_device_service;
+
+#ifndef CONFIG_OC_MQTT_DEMO_BS
+///< two way mqtt mode
+static const char s_client_ca[] = \
+"-----BEGIN CERTIFICATE-----\r\n"
+"MIICuDCCAaACCQDAnCoP3W+otTANBgkqhkiG9w0BAQsFADAdMQswCQYDVQQGEwJD\r\n"
+"QTEOMAwGA1UEAwwFTVkgQ0EwHhcNMjAwMjE3MTEyNTA2WhcNMjEwMjExMTEyNTA2\r\n"
+"WjAfMQswCQYDVQQGEwJDTjEQMA4GA1UEAwwHQ0xJRU5UMjCCASIwDQYJKoZIhvcN\r\n"
+"AQEBBQADggEPADCCAQoCggEBALKOOfeq1QQnwLNsMboqr47ClO24sTd6oLiSjGYe\r\n"
+"zb7IECnjiEg+sILEH5avi6uKdCR8QZHskIWdQbNqi2h0E01MTxuneTCnFaAdYh2z\r\n"
+"B8n4IUsGr1gyCayfKCQG8ElDElBkB2JMce/IEuxJvnFdhXy6c9zhj8iU+fusD9hm\r\n"
+"jvx34zd6Sn2uRl8wdI89pVwkESKyx6J5za/dBWCS0hxvOtDEY2gJA9av8BNYjTxQ\r\n"
+"tRlwnxGzgaza8aA9LMbnRmv1bML98w4NgNHkVGUtw1eQso0unHnyEF1WhqEu0pLk\r\n"
+"BJQbdO4s4ajQ1rOr7niVnCT99KtzJuWm3oymNdDT6BHsnn0CAwEAATANBgkqhkiG\r\n"
+"9w0BAQsFAAOCAQEAPayFtS8du8D+mPdRU96vFqVpDx6oksGhrUIO+3GZ4ruuHjtf\r\n"
+"A764y6zD1/LxQVw15xN44G+AqUwEi/BZszQ+5rSitwqoZFciKMblaqd0ZJSG6G2d\r\n"
+"Cqyl87cTL6Tlgpa5cBka4ksaMs2OVU9x1aaNnejrTbX2PvZO7o/pVVimQE8Yh+1J\r\n"
+"k2D26hg9UoWN4Z3/9LdGC3y4dsmtuQS+Cye61ZfHtT3/XjTRjl9/c+xKtVsQpE6g\r\n"
+"dpaGVxWpFUCpGe4POrNHjOOAXaFiCHP7o9Kab1UnxuFVKHCtNT9wdJ7v8puCliwB\r\n"
+"t40h9oegMyUYL/VG+14wOYgEPuCeGqqilht+4w==\r\n"
+"-----END CERTIFICATE-----\r\n";
+static const char s_client_pk[]= \
+"-----BEGIN PRIVATE KEY-----\r\n"
+"MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCyjjn3qtUEJ8Cz\r\n"
+"bDG6Kq+OwpTtuLE3eqC4koxmHs2+yBAp44hIPrCCxB+Wr4urinQkfEGR7JCFnUGz\r\n"
+"aotodBNNTE8bp3kwpxWgHWIdswfJ+CFLBq9YMgmsnygkBvBJQxJQZAdiTHHvyBLs\r\n"
+"Sb5xXYV8unPc4Y/IlPn7rA/YZo78d+M3ekp9rkZfMHSPPaVcJBEisseiec2v3QVg\r\n"
+"ktIcbzrQxGNoCQPWr/ATWI08ULUZcJ8Rs4Gs2vGgPSzG50Zr9WzC/fMODYDR5FRl\r\n"
+"LcNXkLKNLpx58hBdVoahLtKS5ASUG3TuLOGo0Nazq+54lZwk/fSrcyblpt6MpjXQ\r\n"
+"0+gR7J59AgMBAAECggEAFbjx2myhD6laazmdbx2kUATiI22Vub8kcG/7vqy+sRgb\r\n"
+"x0zUFp3x0WbUxPtETbFBYfLv8zXJe0ffZ1lt7l44vu2qrh2Yw89/9QO+HQjbyLl0\r\n"
+"K3F7wYoM3UBbnM5vSypqvvb8YvwT3G0FyFNMZPRQuhTg5Z1XZbqiEvki0Fvhx1sG\r\n"
+"bksCKK85dPaH/7kXxMTPZ67/2Z3TlwUERo1YSPRnrQXGnDowudLqQjn8ptiPfO39\r\n"
+"bIMQhM/HI1bTw4F5EevL7sS4rcnhpmQNU6ZeINPvYuel+hP36uPwTHMm1hkZbMgP\r\n"
+"a69Yk8/meENffl9fQ+T8woYMGgKq0DM+O5ip7QzrLQKBgQDdvwI/9npuwpYkdjWT\r\n"
+"tLj5BKFNINjn+TjyvN1QQmOhXqzTy1y9HVm7EYh1l0H5PY/WgYadBWNYabgNSIe0\r\n"
+"vxl7tdDxDX4DBQqDIIEY45sPa3glq6flCgtPzkZxcYTvZpqmdX8/iMYGXHpdOMdm\r\n"
+"S8jngobFDEgLxFS1lLLs+LtTTwKBgQDOIz08d2zMRX5AW0SkQ+VbdwcO7G5qlTJV\r\n"
+"42Rf51Dmr0as/bX5eIWAAfcsEi/kG2e5Ozupe4BVZXarw7AL1bzE4mLvfcwZEUiJ\r\n"
+"Qj56H6QTOiVm/DTZdBz415z60zjCui+59luev6txZBL51ZhoifzfdAfxd8ztucV+\r\n"
+"mj3kytIucwKBgBSdporl0norsyPOrap+2dek+44dKK1geU/wCS9mDLc7AxxpwsR+\r\n"
+"TxJaTfKIzoRqmc3amvZMQvE8WvU5Mgy225qpy7QtifKj7FdGlVoIBymG11PBQsnD\r\n"
+"hku0JM51PGO5iVVChUMV5zs+K84w8jDriNElTHxTaPtXFH0RRxVLBrd3AoGAIYX1\r\n"
+"lXnOhcHfcFPna9dm22MWEMU+h7LPxsv+LOKPc5SZp9Ry3alN/K1VJyOmCjCyw5rw\r\n"
+"bvWYv0qK7BAc9y/BTTuL32rT4FfBNiFBy9aNdlsEbiUh6yNI+ucFrnzfRDvHOzTn\r\n"
+"XX/KP9yIgXzNFmMqbqSODiTvfNGzXo1y91xMpiUCgYAfO+Xb5msOMABiBNGD85qr\r\n"
+"C+0xpuWoPe4pB5ccgniv1zhPlUJ+8l1vWz/ZWnH/6oVxGGrq5xLtoBgFWM4uSseI\r\n"
+"Je0fSqZp0XAbaFI7wkEV/uP6VMjjFT5TfJz4idgI+EaE72va2jbFBgg1MyfR3gx4\r\n"
+"deaXc4ZpE64iV+eAtZ8VVQ==\r\n"
+"-----END PRIVATE KEY-----\r\n";
+static const char *s_client_pk_pwd = "123456";
+
+#endif
+
 
 //use this function to push all the message to the buffer
 static int app_msg_deal(oc_mqtt_profile_msgrcv_t *msg)
@@ -253,6 +308,8 @@ static int task_reportmsg_entry(void *args)
     int ret;
     oc_mqtt_profile_connect_t  connect_para;
 
+    memset( &connect_para, 0, sizeof(connect_para));
+
     connect_para.boostrap =      CN_BOOT_MODE;
     connect_para.device_id =     CN_EP_DEVICEID;
     connect_para.device_passwd = CN_EP_PASSWD;
@@ -260,6 +317,17 @@ static int task_reportmsg_entry(void *args)
     connect_para.sevver_port =   CN_SERVER_PORT;
     connect_para.life_time =     CN_LIFE_TIME;
     connect_para.rcvfunc =       app_msg_deal;
+
+    connect_para.security.type = EN_DTLS_AL_SECURITY_TYPE_CERT;
+
+#ifndef CONFIG_OC_MQTT_DEMO_BS
+    connect_para.security.u.cert.client_ca = (uint8_t *)s_client_ca;
+    connect_para.security.u.cert.client_ca_len = sizeof(s_client_ca);
+    connect_para.security.u.cert.client_pk = (uint8_t *)s_client_pk;
+    connect_para.security.u.cert.client_pk_len = sizeof(s_client_pk);
+    connect_para.security.u.cert.client_pk_pwd = (uint8_t *)s_client_pk_pwd;
+    connect_para.security.u.cert.client_pk_pwd_len = strlen(s_client_pk_pwd);
+#endif
 
     ret = oc_mqtt_profile_connect(&connect_para);
     if((ret != en_oc_mqtt_err_ok))

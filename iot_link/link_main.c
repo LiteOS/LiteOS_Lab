@@ -145,7 +145,7 @@ int link_main(void *args)
 #endif
 
 //////////////////////////  DTLS PROTOCOL  /////////////////////////////////////
-#if CONFIG_DTLS_ENABLE
+#ifdef CONFIG_DTLS_ENABLE
     #include <dtls_al.h>
     dtls_al_init();
 #endif

@@ -145,8 +145,8 @@ typedef enum
 
 typedef struct
 {
+    char                   *config_mem;   ///< used to storage the configuration information
     oc_mqtt_config_t        config;
-    dtls_al_security_t      security;
     oc_mqtt_para_t          mqtt_para;
     union{
 
@@ -302,17 +302,17 @@ static void bs_msg_default_deal(void *arg,mqtt_al_msgrcv_t *msg)
    return;
 }
 
-static char *topic_fmt(char *fmt, char *arg)
+static char *topic_fmt(char *fmt, char *id)
 {
     char *ret = NULL;
     int len =  0;
 
-    len = strlen(fmt) + strlen(arg) + 1;
+    len = strlen(fmt) + strlen(id) + 1;
 
     ret = osal_malloc(len);
     if(NULL != ret)
     {
-        snprintf(ret,len,fmt,arg);
+        snprintf(ret,len,fmt,id);
     }
 
     return ret;
@@ -365,24 +365,20 @@ static int daemon_cmd_post(en_oc_mqtt_daemon_cmd cmd, void *arg)
 ///< release the config parameters
 static int config_parameter_release(oc_mqtt_tiny_cb_t *cb)
 {
+    if( NULL != cb->config_mem )
+    {
+        osal_free(cb->config_mem);
+        cb->config_mem = NULL;
+    }
 
-    if(cb->config.id != NULL)
-        osal_free(cb->config.id);
-
-    if(cb->config.pwd != NULL)
-        osal_free(cb->config.pwd);
-
-    if(cb->config.server_addr != NULL)
-        osal_free(cb->config.server_addr);
-
-    if(cb->config.server_port != NULL)
-        osal_free(cb->config.server_port);
-
-    if(cb->bs_cb.hubserver_addr != NULL)
+    if( cb->bs_cb.hubserver_addr != NULL )
+    {
         osal_free(cb->bs_cb.hubserver_addr);
-
-    if(cb->bs_cb.hubserver_port != NULL)
+    }
+    if( cb->bs_cb.hubserver_port != NULL )
+    {
         osal_free(cb->bs_cb.hubserver_port);
+    }
 
     int i = 0;
     for(i = 0;i < CN_NEW_TOPIC_NUM;i++)
@@ -406,44 +402,135 @@ static int config_parameter_release(oc_mqtt_tiny_cb_t *cb)
 static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config)
 {
     int ret = en_oc_mqtt_err_parafmt;
+    int mem_len = 0;
+    char *mem_buf = NULL;
 
-
-    switch (config->boot_mode)
+    if(config->security.type == EN_DTLS_AL_SECURITY_TYPE_CERT)
     {
-        case en_oc_mqtt_mode_bs_static_nodeid_hmacsha256_notimecheck_json:
-            cb->flag.bits.bit_bs_enable = 1;
-            break;
-        case en_oc_mqtt_mode_nobs_static_nodeid_hmacsha256_notimecheck_json:
-            cb->flag.bits.bit_bs_enable = 0;
-            break;
-        default:
-            return ret;
-            break;
+        mem_len += config->security.u.cert.server_ca_len + config->security.u.cert.client_ca_len +\
+                   config->security.u.cert.client_pk_len + config->security.u.cert.client_pk_pwd_len;
+        if(NULL != config->security.u.cert.server_name)
+        {
+            mem_len += strlen(config->security.u.cert.server_name) + 1;
+        }
+    }
+    else if(config->security.type == EN_DTLS_AL_SECURITY_TYPE_PSK)
+    {
+        mem_len += config->security.u.psk.psk_id_len + config->security.u.psk.psk_key_len;
     }
 
-    cb->security.type = config->sec_type;
-    if(config->sec_type == EN_DTLS_AL_SECURITY_TYPE_CERT)
+    mem_len += strlen(config->id) +1;
+    if( NULL != config->pwd )                              ///PWD could be NULL
     {
-        cb->security.u.cert.server_ca  = (uint8_t  *)s_oc_mqtt_ca_crt;
-        cb->security.u.cert.server_ca_len = sizeof(s_oc_mqtt_ca_crt) ;
+        mem_len += strlen(config->pwd) + 1;
+    }
+    mem_len += strlen(config->server_addr) + 1;
+    mem_len += strlen(config->server_port) + 1;
+    ////< now we
+    mem_buf = osal_malloc(mem_len);
+    if( NULL == mem_buf )
+    {
+        return ret;
     }
 
+    /// now we copy the parameter
+    memset( &cb->config, 0 ,sizeof(cb->config) );
+
+    if( config->boot_mode == en_oc_mqtt_mode_bs_static_nodeid_hmacsha256_notimecheck_json )
+    {
+        cb->flag.bits.bit_bs_enable = 1;
+    }
+    else
+    {
+        cb->flag.bits.bit_bs_enable = 0;
+    }
     cb->config.boot_mode  = config->boot_mode;
-    cb->config.id = osal_strdup(config->id);
-    cb->config.pwd= osal_strdup(config->pwd);
     cb->config.lifetime = config->lifetime;
     cb->config.msg_deal = config->msg_deal;
     cb->config.msg_deal_arg = config->msg_deal_arg;
-    cb->config.server_addr = osal_strdup(config->server_addr);
-    cb->config.server_port = osal_strdup(config->server_port);
 
-    if((NULL == cb->config.id) || (NULL == cb->config.pwd) ||\
-       (NULL == cb->config.server_addr) || (NULL == cb->config.server_port))
+    cb->config.id = mem_buf;
+    strcpy( mem_buf,config->id );
+    mem_buf += strlen(config->id) + 1;
+
+    if ( NULL != config->pwd )
     {
-        config_parameter_release(cb);
-        ret = en_oc_mqtt_err_sysmem;
-        return ret;
+        cb->config.pwd = mem_buf;
+        strcpy( mem_buf, config->pwd );
+        mem_buf += strlen( config->pwd ) + 1;
     }
+    else
+    {
+        cb->config.pwd = NULL;
+    }
+
+    cb->config.server_addr = mem_buf;
+    strcpy( mem_buf,config->server_addr );
+    mem_buf += strlen(config->server_addr) + 1;
+
+    cb->config.server_port = mem_buf;
+    strcpy( mem_buf,config->server_port );
+    mem_buf += strlen(config->server_port) + 1;
+
+    cb->config.security.type = config->security.type;
+    if(config->security.type == EN_DTLS_AL_SECURITY_TYPE_CERT)
+    {
+        if ( 0 != config->security.u.cert.server_ca_len)
+        {
+            cb->config.security.u.cert.server_ca_len = config->security.u.cert.server_ca_len;
+            cb->config.security.u.cert.server_ca = (uint8_t *)mem_buf;
+            memcpy( mem_buf, config->security.u.cert.server_ca, config->security.u.cert.server_ca_len );
+            mem_buf += config->security.u.cert.server_ca_len;
+        }
+        else
+        {
+            cb->config.security.u.cert.server_ca  =  (uint8_t *) s_oc_mqtt_ca_crt;
+            cb->config.security.u.cert.server_ca_len = sizeof( s_oc_mqtt_ca_crt );
+        }
+
+        if ( 0 != config->security.u.cert.client_ca_len)
+        {
+            cb->config.security.u.cert.client_ca_len =  config->security.u.cert.client_ca_len;
+            cb->config.security.u.cert.client_ca = (uint8_t *)mem_buf;
+            memcpy( mem_buf, config->security.u.cert.client_ca, config->security.u.cert.client_ca_len );
+            mem_buf += config->security.u.cert.client_ca_len;
+        }
+
+        if ( 0 != config->security.u.cert.client_pk_len)
+        {
+            cb->config.security.u.cert.client_pk_len =  config->security.u.cert.client_pk_len;
+            cb->config.security.u.cert.client_pk = (uint8_t *)mem_buf;
+            memcpy( mem_buf, config->security.u.cert.client_pk, config->security.u.cert.client_pk_len );
+            mem_buf += config->security.u.cert.client_pk_len;
+        }
+
+        if ( 0 != config->security.u.cert.client_pk_pwd_len)
+        {
+            cb->config.security.u.cert.client_pk_pwd_len = config->security.u.cert.client_pk_pwd_len ;
+            cb->config.security.u.cert.client_pk_pwd = (uint8_t *)mem_buf;
+            memcpy( mem_buf, config->security.u.cert.client_pk_pwd, config->security.u.cert.client_pk_pwd_len );
+            mem_buf += config->security.u.cert.client_pk_pwd_len;
+        }
+    }
+    else if(config->security.type == EN_DTLS_AL_SECURITY_TYPE_PSK)
+    {
+        if ( 0 != config->security.u.psk.psk_id_len)
+        {
+            cb->config.security.u.psk.psk_id_len = config->security.u.psk.psk_id_len ;
+            cb->config.security.u.psk.psk_id = (uint8_t *)mem_buf;
+            memcpy( mem_buf, config->security.u.psk.psk_id, config->security.u.psk.psk_id_len );
+            mem_buf += config->security.u.psk.psk_id_len;
+        }
+
+        if ( 0 != config->security.u.psk.psk_key_len)
+        {
+            cb->config.security.u.psk.psk_key_len = config->security.u.psk.psk_key_len;
+            cb->config.security.u.psk.psk_key = (uint8_t *)mem_buf;
+            memcpy( mem_buf, config->security.u.psk.psk_key, config->security.u.psk.psk_key_len );
+            mem_buf += config->security.u.psk.psk_id_len;
+        }
+    }
+
 
     int i = 0;
     for(i = 0;i < CN_NEW_TOPIC_NUM;i++)
@@ -593,7 +680,7 @@ static int dmp_connect(oc_mqtt_tiny_cb_t *cb)
 
     conpara.cleansession = 1;
     conpara.keepalivetime = cb->config.lifetime;
-    conpara.security = &cb->security;
+    conpara.security = &cb->config.security;
 
     conpara.serveraddr.data = (char *)cb->mqtt_para.server_addr;
     conpara.serveraddr.len = strlen(conpara.serveraddr.data);

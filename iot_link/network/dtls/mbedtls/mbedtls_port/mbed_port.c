@@ -37,428 +37,80 @@
  *
  */
 
-#if !defined(MBEDTLS_CONFIG_FILE)
-#include "los_mbedtls_config.h"
-#else
-#include MBEDTLS_CONFIG_FILE
-#endif
-
-#if defined(MBEDTLS_PLATFORM_C)
-#include "mbedtls/platform.h"
-#else
-#include <stdio.h>
-#define mbedtls_printf     printf
-#endif
-
-#include "mbedtls/net_sockets.h"
-#include "mbedtls/ssl.h"
-#include "mbedtls/entropy.h"
-#include "mbedtls/ctr_drbg.h"
-#include "mbedtls/error.h"
-#include "mbedtls/timing.h"
-
-
-#include <sal.h>
+#include <string.h>
 #include <osal.h>
 #include <dtls_al.h>
-
-#define MBEDTLS_DEBUG
-
-#ifdef MBEDTLS_DEBUG
-#define MBEDTLS_LOG(fmt, ...) \
-    do \
-    { \
-        (void)printf("[MBEDTLS][%s:%d] " fmt "\r\n", \
-        __FUNCTION__, __LINE__, ##__VA_ARGS__); \
-    } while (0)
-#else
-#define MBEDTLS_LOG(fmt, ...) ((void)0)
-#endif
-
-
-#ifndef CFG_TLS_SHAKEHAND_TIMEOUT_DEFAULT
-#define CFG_TLS_SHAKEHAND_TIMEOUT_DEFAULT 1000
-#endif
-
-#define CN_MBED_PERS                 "ssl_client"
-
-typedef struct
-{
-    mbedtls_ssl_context              *ssl;
-    mbedtls_ssl_config               *conf;
-    mbedtls_entropy_context          *entropy;
-    mbedtls_ctr_drbg_context         *ctr_drbg;
-    mbedtls_timing_delay_context     *timer;
-    mbedtls_net_context              *netio;
-#if defined(MBEDTLS_X509_CRT_PARSE_C)
-    mbedtls_x509_crt                 *ca_cert;
-    mbedtls_x509_crt                 *client_ca;
-    mbedtls_pk_context               *client_pk;
-#endif
-    int                               client_server;
-    int                               tcp_udp;
-}mbed_cb_t;
-
-#if defined(MBEDTLS_DEBUG_C)
-static void my_debug( void *ctx, int level,
-                      const char *file, int line,
-                      const char *str )
-{
-    const char *p, *basename;
-
-    /* Extract basename from file */
-    for( p = basename = file; *p != '\0'; p++ )
-        if( *p == '/' || *p == '\\' )
-            basename = p + 1;
-
-    printf("%s:%04d: |%d| %s", basename, line, level, str );
-}
-#endif
-
+#include <dtls_interface.h>
 
 en_dtls_al_err_t mbed_new(dtls_al_para_t *para, void **handle)
 {
 
     en_dtls_al_err_t ret = EN_DTLS_AL_ERR_PARA;
-    mbed_cb_t  *cb;
+    mbedtls_ssl_context  *ssl;
+    dtls_establish_info_s einfo;
+    char  plat_type;
 
-    if((NULL == para) || (NULL == handle))
-    {
-        return ret;
-    }
-    cb = mbedtls_calloc(1, sizeof(mbed_cb_t));
-    if(NULL == cb)
-    {
-        ret = EN_DTLS_AL_ERR_SYSMEM;
-        return ret;
-    }
-    cb->client_server = para->isclient? MBEDTLS_SSL_IS_CLIENT:MBEDTLS_SSL_IS_SERVER;
-    cb->tcp_udp = para->istcp ? MBEDTLS_SSL_TRANSPORT_STREAM:MBEDTLS_SSL_TRANSPORT_DATAGRAM;
-
-    cb->ssl = mbedtls_calloc(1, sizeof(mbedtls_ssl_context));
-    cb->conf = mbedtls_calloc(1, sizeof(mbedtls_ssl_config));
-    cb->entropy = mbedtls_calloc(1, sizeof(mbedtls_entropy_context));
-    cb->ctr_drbg = mbedtls_calloc(1, sizeof(mbedtls_ctr_drbg_context));
-
-    if ((NULL == cb->ssl) || (NULL == cb->conf) || (NULL == cb->entropy) || (NULL == cb->ctr_drbg))
-    {
-        ret = EN_DTLS_AL_ERR_SYSMEM;
-        goto EXIT_FAIL;
-    }
-    mbedtls_ssl_init(cb->ssl);
-    mbedtls_ssl_config_init(cb->conf);
-    mbedtls_ctr_drbg_init(cb->ctr_drbg);
-    mbedtls_entropy_init(cb->entropy);
-
-    if ((mbedtls_ctr_drbg_seed(cb->ctr_drbg, mbedtls_entropy_func, cb->entropy,
-                               (const unsigned char *)CN_MBED_PERS,strlen(CN_MBED_PERS))) != 0)
-    {
-        ret = EN_DTLS_AL_ERR_SYS;
-        MBEDTLS_LOG("mbedtls_ctr_drbg_seed failed: -0x%x", -ret);
-        goto EXIT_FAIL;
-    }
-    mbedtls_ssl_conf_rng(cb->conf, mbedtls_ctr_drbg_random, cb->ctr_drbg);
-
-#if defined(MBEDTLS_DEBUG_C)
-    mbedtls_debug_set_threshold(10);
-    mbedtls_ssl_conf_dbg (cb->conf,my_debug,NULL);
-#endif
-
-#if defined(MBEDTLS_X509_CRT_PARSE_C)
     if(para->security.type == EN_DTLS_AL_SECURITY_TYPE_CERT)
     {
-        if(NULL == para->security.u.cert.server_ca)
-        {
-            ret = EN_DTLS_AL_ERR_PARA;
-            goto EXIT_FAIL;
-        }
+        einfo.psk_or_cert = VERIFY_WITH_CERT;
 
-        cb->ca_cert = mbedtls_calloc(1, sizeof(mbedtls_x509_crt));
-        if(NULL == cb->ca_cert)
-        {
-            ret = EN_DTLS_AL_ERR_SYSMEM;
-            goto EXIT_FAIL;
-        }
-        mbedtls_x509_crt_init(cb->ca_cert);
-        ret = mbedtls_x509_crt_parse(cb->ca_cert, para->security.u.cert.server_ca,  para->security.u.cert.server_ca_len);
-        if(ret < 0)
-        {
-            MBEDTLS_LOG("mbedtls_x509_crt_parse failed -0x%x", -ret);
-            goto EXIT_FAIL;
-        }
-        mbedtls_ssl_conf_ca_chain(cb->conf, cb->ca_cert, NULL);
-
-        if((NULL != para->security.u.cert.client_ca) && (NULL != para->security.u.cert.client_pk)) /// we'd better to make the client ca and key
-        {
-            cb->client_ca    = mbedtls_calloc(1, sizeof(mbedtls_x509_crt));
-            cb->client_pk    = mbedtls_calloc(1, sizeof(mbedtls_pk_context));
-            if((NULL == cb->client_ca) || (NULL == cb->client_pk))
-            {
-                goto EXIT_FAIL;
-            }
-            mbedtls_x509_crt_init(cb->ca_cert);
-            mbedtls_pk_init(cb->client_pk);
-
-            if(mbedtls_x509_crt_parse(cb->client_ca,para->security.u.cert.client_ca,para->security.u.cert.client_ca_len)  !=0)
-            {
-                ret = EN_DTLS_AL_ERR_CLIENTCERTPARSE;
-                goto EXIT_FAIL;
-            }
-
-            if(mbedtls_pk_parse_key(cb->client_pk,para->security.u.cert.client_pk,para->security.u.cert.client_pk_len,\
-                    para->security.u.cert.client_pk_pwd,para->security.u.cert.client_pk_pwd_len) < 0)
-            {
-                ret = EN_DTLS_AL_ERR_CLIENTCERTPARSE;
-                goto EXIT_FAIL;
-            }
-
-            if(mbedtls_ssl_conf_own_cert( cb->conf, cb->client_ca, cb->client_pk ) != 0)
-            {
-                ret = EN_DTLS_AL_ERR_SYSMEM;
-                goto EXIT_FAIL;
-            }
-        }
-    }
-
-#endif
-
-#if defined(MBEDTLS_KEY_EXCHANGE__SOME__PSK_ENABLED)
-    if (para->security.type == EN_DTLS_AL_SECURITY_TYPE_PSK)
-    {
-        if (mbedtls_ssl_conf_psk(cb->conf,para->security.u.psk.psk_key,para->security.u.psk.psk_key_len,\
-                para->security.u.psk.psk_id,para->security.u.psk.psk_id_len) != 0)
-        {
-            ret = EN_DTLS_AL_ERR_SYSMEM;
-            MBEDTLS_LOG("mbedtls_ssl_conf_psk failed: -0x%x", -ret);
-            goto EXIT_FAIL;
-        }
-    }
-#endif
-
-    if (cb->tcp_udp ==  MBEDTLS_SSL_TRANSPORT_STREAM)
-    {
-        mbedtls_ssl_conf_read_timeout(cb->conf, CFG_TLS_SHAKEHAND_TIMEOUT_DEFAULT);
+        einfo.v.c.ca_cert = para->security.u.cert.server_ca;
+        einfo.v.c.cert_len = para->security.u.cert.server_ca_len;
+        einfo.v.c.client_ca = para->security.u.cert.client_ca;
+        einfo.v.c.client_ca_len = para->security.u.cert.client_ca_len;
+        einfo.v.c.client_pk = para->security.u.cert.client_pk;
+        einfo.v.c.client_pk_len = para->security.u.cert.client_pk_len;
+        einfo.v.c.client_pk_pwd = para->security.u.cert.client_pk_pwd;
+        einfo.v.c.client_pk_pwd_len = para->security.u.cert.client_pk_pwd_len;
     }
     else
     {
-        cb->timer = mbedtls_calloc(1, sizeof(mbedtls_timing_delay_context));
-        if (NULL == cb->timer)
-        {
-            goto EXIT_FAIL;
-        }
-        mbedtls_ssl_set_timer_cb(cb->ssl, cb->timer, mbedtls_timing_set_delay,mbedtls_timing_get_delay);
+        einfo.psk_or_cert  = VERIFY_WITH_PSK;
+        einfo.v.p.psk = para->security.u.psk.psk_key;
+        einfo.v.p.psk_len = para->security.u.psk.psk_key_len;
+        einfo.v.p.psk_identity = para->security.u.psk.psk_id;
     }
 
-    if (mbedtls_ssl_config_defaults(cb->conf,cb->client_server,cb->tcp_udp, MBEDTLS_SSL_PRESET_DEFAULT) != 0)
+    if(para->istcp)
     {
-        MBEDTLS_LOG("mbedtls_ssl_config_defaults failed: -0x%x", -ret);
-        ret = EN_DTLS_AL_ERR_SYSMEM;
-        goto EXIT_FAIL;
+        einfo.udp_or_tcp = MBEDTLS_NET_PROTO_TCP;
     }
-
-    mbedtls_ssl_conf_authmode(cb->conf, MBEDTLS_SSL_VERIFY_REQUIRED);
-
-    MBEDTLS_LOG("setting up the SSL structure");
-    if (mbedtls_ssl_setup(cb->ssl, cb->conf) != 0)
+    else
     {
-        MBEDTLS_LOG("mbedtls_ssl_setup failed: -0x%x", -ret);
-        ret = EN_DTLS_AL_ERR_SYSMEM;
-        goto EXIT_FAIL;
+        einfo.udp_or_tcp = MBEDTLS_NET_PROTO_UDP;
     }
-    MBEDTLS_LOG("set SSL structure succeed");
-    ret = EN_DTLS_AL_ERR_OK;
-    *handle = cb;
-    return ret;
 
-EXIT_FAIL:
 
-    if (cb->conf)
+    if(para->isclient)
     {
-        mbedtls_ssl_config_free(cb->conf);
-        mbedtls_free(cb->conf);
+        plat_type = MBEDTLS_SSL_IS_CLIENT;
     }
-
-    if (cb->ctr_drbg)
+    else
     {
-        mbedtls_ctr_drbg_free(cb->ctr_drbg);
-        mbedtls_free(cb->ctr_drbg);
+        plat_type = MBEDTLS_SSL_IS_SERVER;
     }
 
-    if (cb->entropy)
+    ssl = dtls_ssl_new(&einfo, plat_type);
+
+    if(NULL != ssl)
     {
-        mbedtls_entropy_free(cb->entropy);
-        mbedtls_free(cb->entropy);
+        *handle = ssl;
+        ret = EN_DTLS_AL_ERR_OK;
     }
 
-    if (cb->timer)
-    {
-        mbedtls_free(cb->timer);
-    }
-
-#if defined(MBEDTLS_X509_CRT_PARSE_C)
-    if (cb->ca_cert)
-    {
-        mbedtls_x509_crt_free(cb->ca_cert);
-        mbedtls_free(cb->ca_cert);
-    }
-
-    if(cb->client_ca)
-    {
-        mbedtls_x509_crt_free(cb->client_ca);
-        mbedtls_free(cb->client_ca);
-    }
-
-    if(cb->client_pk)
-    {
-        mbedtls_pk_free(cb->client_pk);
-        mbedtls_free(cb->client_pk);
-    }
-#endif
-
-    if (cb->ssl)
-    {
-        mbedtls_ssl_free(cb->ssl);
-        mbedtls_free(cb->ssl);
-    }
-    mbedtls_free(cb);
-    return ret;
-}
-
-int mbed_connect(void *handle,const char *server_ip, const char *server_port,int timeout)
-{
-    int ret =-1;
-    uint64_t max_value;
-    uint64_t change_value;
-    mbed_cb_t  *cb;
-
-    if(NULL == handle)
-    {
-        return ret;
-    }
-
-    cb = handle;
-    cb->netio =  (mbedtls_net_context *)mbedtls_calloc(1,sizeof(mbedtls_net_context));
-    if(NULL == cb->netio)
-    {
-        return ret;
-    }
-
-    if(0 != mbedtls_net_connect(cb->netio, server_ip, server_port, cb->tcp_udp))
-    {
-        goto EXIT_FAIL;
-    }
-    mbedtls_ssl_set_bio(cb->ssl, cb->netio,mbedtls_net_send, mbedtls_net_recv, mbedtls_net_recv_timeout);
-
-    MBEDTLS_LOG("performing the SSL/TLS handshake");
-
-    max_value = ( cb->tcp_udp == MBEDTLS_NET_PROTO_UDP) ?(osal_sys_time() + timeout) :  50;
-
-    do{
-        ret = mbedtls_ssl_handshake(cb->ssl);
-
-        if (cb->tcp_udp == MBEDTLS_NET_PROTO_TCP)
-        {
-            change_value++;
-        }
-        else
-        {
-            change_value = osal_sys_time();
-        }
-    }while ((ret == MBEDTLS_ERR_SSL_WANT_READ ||ret == MBEDTLS_ERR_SSL_WANT_WRITE ||\
-            (ret == MBEDTLS_ERR_SSL_TIMEOUT && cb->tcp_udp == MBEDTLS_NET_PROTO_TCP)) &&\
-            (change_value < max_value));
-
-    if(ret != 0)
-    {
-        goto EXIT_FAIL;
-    }
-
-    return ret;
-
-
-EXIT_FAIL:
-    if (NULL != cb->netio)
-    {
-        mbedtls_net_free(cb->netio);
-        cb->netio = NULL;
-        cb->ssl->p_bio = NULL;
-    }
     return ret;
 }
 
 
 en_dtls_al_err_t mbed_destroy(void *handle)
 {
-    en_dtls_al_err_t ret = EN_DTLS_AL_ERR_PARA;
-
-    mbed_cb_t  *cb;
-
-    cb = handle;
-
-    if((NULL == cb)|| (NULL == cb->ssl))
+    int ret = EN_DTLS_AL_ERR_PARA;
+    if(NULL != handle)
     {
-        return ret;
+        dtls_ssl_destroy(handle);
+        ret = EN_DTLS_AL_ERR_OK;
     }
-
-    do{
-
-        ret = mbedtls_ssl_close_notify( cb->ssl );
-
-    }while( ret == MBEDTLS_ERR_SSL_WANT_WRITE );
-
-    if (cb->netio)
-    {
-        mbedtls_net_free(cb->netio);
-    }
-
-    if (cb->conf)
-    {
-        mbedtls_ssl_config_free(cb->conf);
-        mbedtls_free(cb->conf);
-        cb->ssl->conf = NULL; //  need by mbedtls_debug_print_msg(), see mbedtls_ssl_free(ssl)
-    }
-
-    if (cb->ctr_drbg)
-    {
-        mbedtls_ctr_drbg_free(cb->ctr_drbg);
-        mbedtls_free(cb->ctr_drbg);
-    }
-
-    if (cb->entropy)
-    {
-        mbedtls_entropy_free(cb->entropy);
-        mbedtls_free(cb->entropy);
-    }
-
-    if (cb->timer)
-    {
-        mbedtls_free(cb->timer);
-    }
-
-#if defined(MBEDTLS_X509_CRT_PARSE_C)
-    if (cb->ca_cert)
-    {
-        mbedtls_x509_crt_free(cb->ca_cert);
-        mbedtls_free(cb->ca_cert);
-    }
-    if( cb->client_ca )
-    {
-        mbedtls_x509_crt_free( cb->client_ca);
-        mbedtls_free( cb->client_ca );
-    }
-
-    if( cb->client_pk )
-    {
-        mbedtls_pk_free( cb->client_pk );
-        mbedtls_free( cb->client_pk );
-    }
-#endif
-
-    mbedtls_ssl_free( cb->ssl );
-    mbedtls_free( cb->ssl );
-    mbedtls_free( cb );
-
-    return EN_DTLS_AL_ERR_OK;
+    return ret;
 }
 
 
@@ -467,26 +119,9 @@ en_dtls_al_err_t mbed_destroy(void *handle)
 int mbed_write(void *handle, uint8_t *buf, size_t len,int timeout)
 {
 
-    int ret  = 0;
+    int ret;
 
-    mbed_cb_t  *cb;
-
-    cb = handle;
-    if( ( NULL == cb ) || ( NULL == cb->ssl ) )
-    {
-        return ret;
-    }
-
-    ret = mbedtls_ssl_write( cb->ssl, (unsigned char *) buf, len);
-
-    if ((ret == MBEDTLS_ERR_SSL_WANT_WRITE) ||(ret == MBEDTLS_ERR_SSL_TIMEOUT))
-    {
-        ret =  -1;
-    }
-    else if (ret <= 0)
-    {
-        ret = 0;
-    }
+    ret = dtls_write(handle, buf,len);
 
     return ret;
 }
@@ -494,29 +129,33 @@ int mbed_write(void *handle, uint8_t *buf, size_t len,int timeout)
 
 int mbed_read( void *handle, unsigned char *buf, size_t len, int timeout)
 {
+    int ret;
 
-    int ret  = 0;
+    ret = dtls_write(handle, buf,len);
 
-    mbed_cb_t  *cb;
+    return ret;
+}
 
-    cb = handle;
-    if( ( NULL == cb ) || ( NULL == cb->ssl )  || (NULL == cb->conf))
-    {
-        return ret;
-    }
+int dtls_shakehand(mbedtls_ssl_context *ssl, const dtls_shakehand_info_s *info);
 
-    mbedtls_ssl_conf_read_timeout( cb->conf, timeout );
 
-    ret = mbedtls_ssl_read( cb->ssl, buf, len);
+int mbed_connect(void *handle,const char *server_ip, const char *server_port,int timeout)
+{
+    int ret = -1;
+    dtls_shakehand_info_s  sinfo;
 
-    if ((ret == MBEDTLS_ERR_SSL_WANT_READ) ||(ret == MBEDTLS_ERR_SSL_TIMEOUT))
-    {
-        ret = -1;
-    }
-    else if (ret <= 0)
-    {
-        ret = 0;
-    }
+
+    memset(&sinfo, 0, sizeof(sinfo));
+
+
+    sinfo.u.c.host = server_ip;
+    sinfo.u.c.port = server_port;
+
+    sinfo.client_or_server = MBEDTLS_SSL_IS_CLIENT;
+    sinfo.udp_or_tcp = MBEDTLS_NET_PROTO_TCP;
+    sinfo.timeout = timeout;
+
+    ret = dtls_shakehand( handle,&sinfo);
 
     return ret;
 }

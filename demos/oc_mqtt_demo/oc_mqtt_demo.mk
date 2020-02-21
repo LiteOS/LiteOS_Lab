@@ -40,15 +40,18 @@
 ################################################################################
 # this is used for configure which oc mqtt demo you want to use
 ################################################################################
-ifeq ($(CONFIG_OC_MQTT_VERSION),"V5")
-	C_SOURCES  += $(TOP_DIR)/demos/oc_mqtt_demo/oc_mqtt_v5_demo.c
-else
-	C_SOURCES  += $(TOP_DIR)/demos/oc_mqtt_demo/oc_mqtt_demo.c
-endif
-
-ifeq ($(CONFIG_OC_MQTTDEMO_BSENABLE),y)
-	C_DEFS += -D CONFIG_OC_MQTT_DEMO_BS=1	
-endif
+ifeq ($(CONFIG_OC_MQTT_ENABLE),y)
+    ifeq ($(CONFIG_OC_MQTT_VERSION),"V5")
+    	C_SOURCES  += $(TOP_DIR)/demos/oc_mqtt_demo/oc_mqtt_v5_demo.c
+    else
+    	C_SOURCES  += $(TOP_DIR)/demos/oc_mqtt_demo/oc_mqtt_demo.c
+    endif
+    
+    ifeq ($(CONFIG_OC_MQTTDEMO_BSENABLE),y)
+    	C_DEFS += -D CONFIG_OC_MQTT_DEMO_BS=1	
+    endif
+endif    
+    
 
 
 

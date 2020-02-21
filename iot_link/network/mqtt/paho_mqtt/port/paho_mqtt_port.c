@@ -33,18 +33,21 @@
  *---------------------------------------------------------------------------*/
 #include "MQTTClient.h"
 
+#ifdef WITH_DTLS
+#include "dtls_interface.h"
+#endif
+
 #include <time.h>
 #include <sal.h>
 #include <mqtt_al.h>
 #include <paho_mqtt_port.h>
-#include <paho_osdepends.h>
 
-#define CN_MQTT_CONNECT_TIMEOUT_MS         ( 10 * 1000 )
-#define CN_MQTT_CMD_TIMEOUT_MS             ( 10 * 1000 )
-#define CN_MQTT_EVENTS_HANDLE_CYCLE_MS     ( 1*1000 )
-#define CN_MQTT_KEEPALIVE_INTERVAL_S       ( 100 )
-#define CN_MQTT_SNDBUF_SIZE                ( 1024 * 2 )
-#define CN_MQTT_RCVBUF_SIZE                ( 1024 * 2 )
+#define CN_MQTT_CONNECT_TIMEOUT_MS  (10 *1000)
+#define cn_mqtt_cmd_timeout_ms (10 * 1000)
+#define cn_mqtt_events_handle_period_ms (1*1000)
+#define cn_mqtt_keepalive_interval_s (100)
+#define cn_mqtt_sndbuf_size (1024 * 2)
+#define cn_mqtt_rcvbuf_size (1024 * 2)
 
 typedef struct
 {
@@ -56,19 +59,19 @@ typedef struct
 }paho_mqtt_cb_t;
 
 ///< waring: the paho mqtt has the opposite return code with normal socket read and write
-#ifdef CONFIG_DTLS_ENABLE
+#ifdef WITH_DTLS
 
-static int __tls_read(void *handle, unsigned char *buffer, int len, int timeout)
+static int __tls_read(mbedtls_ssl_context *ssl, unsigned char *buffer, int len, int timeout)
 {
     int ret= -1;
     int rcvlen = -1;
 
-    if( ( NULL == handle ) || ( NULL == buffer ))
+    if(NULL == ssl || NULL == buffer)
     {
         return -1;
     }
 
-    rcvlen = dtls_al_read(handle,buffer,len, timeout);
+    rcvlen = dtls_read(ssl,buffer,len, timeout);
 
     if(rcvlen == 0)
     {
@@ -85,23 +88,23 @@ static int __tls_read(void *handle, unsigned char *buffer, int len, int timeout)
 
     return ret;
 }
-static int __tls_write( void *handle, unsigned char *buffer, int len, int timeout)
+static int __tls_write(mbedtls_ssl_context *ssl, unsigned char *buffer, int len, int timeout)
 {
     int ret= -1;
     int sndlen = -1;
 
-    if( (NULL == handle) || (NULL == buffer) )
+    if(NULL == ssl || NULL == buffer)
     {
         return -1;
     }
 
-    sndlen = dtls_al_write(handle,buffer,len, timeout);
+    sndlen = dtls_write(ssl,buffer,len);
 
-    if( sndlen == 0 )
+    if(sndlen == 0)
     {
         ret = -1;
     }
-    else if( sndlen < 0 )
+    else if(sndlen < 0)
     {
         ret = 0;
     }
@@ -114,9 +117,11 @@ static int __tls_write( void *handle, unsigned char *buffer, int len, int timeou
 }
 
 #define PORT_BUF_LEN 16
+
+#include <dtls_al.h>
+
 static int __tls_connect(Network *n, char *addr, int port)
-{
-    int ret = -1;
+{    int ret = -1;
 
     void *handle = NULL;
 
@@ -126,9 +131,10 @@ static int __tls_connect(Network *n, char *addr, int port)
 
     memset( &para,0, sizeof(para));
 
-    para.security = n->arg;
+    para.security.type = EN_DTLS_AL_SECURITY_TYPE_CERT;
     para.istcp = 1;
     para.isclient = 1;
+    para.security = n->arg;
 
     if(EN_DTLS_AL_ERR_OK != dtls_al_new(&para,&handle))
     {
@@ -146,14 +152,14 @@ static int __tls_connect(Network *n, char *addr, int port)
 
     n->ctx = handle;
     return ret;
-}
 
+}
 
 static void __tls_disconnect(void *ctx)
 {
     if(NULL != ctx)
     {
-        dtls_al_destory(ctx);
+        dtls_ssl_destroy(ctx);
     }
 
     return;
@@ -287,6 +293,9 @@ static int __socket_connect(Network *n, const char *host, int port)
 
     return ret;
 }
+
+
+
 
 static int __io_read(Network *n, unsigned char *buffer, int len, int timeout_ms)
 {
@@ -439,16 +448,16 @@ static void * __connect(mqtt_al_conpara_t *conparam)
         goto EXIT_NET_CONNECT_ERR;
     }
     //then do the mqtt config
-    cb->rcvbuf = osal_malloc(CN_MQTT_RCVBUF_SIZE) ;
-    cb->sndbuf = osal_malloc(CN_MQTT_SNDBUF_SIZE) ;
+    cb->rcvbuf = osal_malloc(cn_mqtt_rcvbuf_size) ;
+    cb->sndbuf = osal_malloc(cn_mqtt_sndbuf_size) ;
     if((NULL == cb->rcvbuf) || (NULL == cb->sndbuf))
     {
         conparam->conret = cn_mqtt_al_con_code_err_unkown;
         goto EIXT_BUF_MEM_ERR;
     }
     c = &cb->client;
-    if(MQTT_SUCCESS != MQTTClientInit(c, n, CN_MQTT_CMD_TIMEOUT_MS,\
-            cb->sndbuf, CN_MQTT_SNDBUF_SIZE, cb->rcvbuf, CN_MQTT_RCVBUF_SIZE))
+    if(MQTT_SUCCESS != MQTTClientInit(c, n, cn_mqtt_cmd_timeout_ms,\
+            cb->sndbuf, cn_mqtt_sndbuf_size, cb->rcvbuf, cn_mqtt_rcvbuf_size))
     {
         goto EXIT_MQTT_INIT;
     }
