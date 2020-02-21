@@ -242,6 +242,8 @@ int iot_connect()
 
     oc_mqtt_config_t config;
 
+    memset(&config, 0, sizeof(config));
+
     config.boot_mode = en_oc_mqtt_mode_bs_static_nodeid_hmacsha256_notimecheck_json;
     config.msg_deal = app_msg_deal;
     config.msg_deal_arg = NULL;
@@ -250,7 +252,7 @@ int iot_connect()
     config.server_port = DEFAULT_SERVER_PORT;
     config.id = CN_MQTT_EP_NOTEID;
     config.pwd= CN_MQTT_EP_PASSWD;
-    config.sec_type = en_mqtt_al_security_cas;
+    config.security.type = EN_DTLS_AL_SECURITY_TYPE_CERT;
 
     ret = oc_mqtt_config(&config);
 
