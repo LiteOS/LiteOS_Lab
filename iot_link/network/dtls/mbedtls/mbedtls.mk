@@ -15,7 +15,7 @@ MBEDTLS_SRC = \
         ${wildcard $(TOP_DIR)/iot_link/network/dtls/mbedtls/mbedtls-2.16.2/library/*.c} \
         ${wildcard $(TOP_DIR)/iot_link/network/dtls/mbedtls/mbedtls_port/*.c}
 
-MBEDTLS_DEF = -D WITH_DTLS
+MBEDTLS_DEF = -D WITH_DTLS -D MBEDTLS_GENPRIME
 
 ifeq ($(USE_MBEDTLS_DEBUG_C), y)
     MBEDTLS_DEF += -D MBEDTLS_DEBUG_C
