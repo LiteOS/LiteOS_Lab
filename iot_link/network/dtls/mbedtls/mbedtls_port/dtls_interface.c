@@ -75,8 +75,6 @@
 #endif
 
 
-
-
 mbedtls_ssl_context *dtls_ssl_new(dtls_establish_info_s *info, char plat_type)
 {
     int ret;
@@ -93,8 +91,6 @@ mbedtls_ssl_context *dtls_ssl_new(dtls_establish_info_s *info, char plat_type)
 
     const char *pers = "ssl_client";
     int transport;
-
-
     ssl       = mbedtls_calloc(1, sizeof(mbedtls_ssl_context));
     conf      = mbedtls_calloc(1, sizeof(mbedtls_ssl_config));
     entropy   = mbedtls_calloc(1, sizeof(mbedtls_entropy_context));
@@ -301,7 +297,7 @@ exit_fail:
 
 static inline uint32_t dtls_gettime()
 {
-    return (uint32_t)(osal_sys_time() / 1000);
+    return (uint32_t)(osal_sys_time() );
 }
 
 int dtls_shakehand(mbedtls_ssl_context *ssl, const dtls_shakehand_info_s *info)

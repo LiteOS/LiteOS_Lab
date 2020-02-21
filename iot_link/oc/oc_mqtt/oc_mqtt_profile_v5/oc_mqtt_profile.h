@@ -78,7 +78,6 @@ typedef enum
 }en_oc_profile_data_t;
 
 
-
 typedef struct
 {
     void                 *nxt;   ///< ponit to the next key
@@ -115,6 +114,8 @@ typedef struct
     char             *sevver_port;
     char             *device_id;
     char             *device_passwd;
+    dtls_al_security_t security;
+
     fn_oc_mqtt_profile_rcvdeal   rcvfunc;
 }oc_mqtt_profile_connect_t;
 

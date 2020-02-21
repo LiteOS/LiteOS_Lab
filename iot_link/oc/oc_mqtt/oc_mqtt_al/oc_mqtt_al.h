@@ -84,7 +84,10 @@ typedef struct
     uint8_t          lifetime;             ///< the keep alive time, used for the mqtt protocol
     char            *server_addr;          ///< server address:domain name or ip address
     char            *server_port;          ///< server port:
-    en_dtls_al_security_type_t   sec_type; ///< only support crt mode now
+    ///< define for the tls
+    dtls_al_security_t  security;          ///< used for the transport
+
+    ///< define for the mqtt
     char                              *id;
     char                              *pwd;
     fn_oc_mqtt_msg_deal                msg_deal;       ///< when the agent receive any applciation data, please call this function

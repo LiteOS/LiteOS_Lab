@@ -37,9 +37,8 @@
  *
  *
  *   *
- *  1, only support CRT tls mode
- *  2, the data encode only support the json mode
- *  3, the passwd only support the no check time mode
+ *  1, the data encode only support the json mode
+ *  2, the passwd only support the no check time mode
  *
  */
 #include <stdint.h>
@@ -136,7 +135,6 @@ typedef enum
 typedef struct
 {
     oc_mqtt_config_t        config;
-    dtls_al_security_t      security;
     oc_mqtt_para_t          mqtt_para;
     union{
 
@@ -407,11 +405,11 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
             break;
     }
 
-    cb->security.type = config->sec_type;
-    if(config->sec_type == EN_DTLS_AL_SECURITY_TYPE_CERT)
+    cb->config.security.type = config->security.type;
+    if(config->security.type == EN_DTLS_AL_SECURITY_TYPE_CERT)
     {
-        cb->security.u.cert.server_ca  = (uint8_t  *)s_oc_mqtt_ca_crt;
-        cb->security.u.cert.server_ca_len = sizeof(s_oc_mqtt_ca_crt) ;
+        cb->config.security.u.cert.server_ca  = (uint8_t  *)s_oc_mqtt_ca_crt;
+        cb->config.security.u.cert.server_ca_len = sizeof(s_oc_mqtt_ca_crt) ;
     }
 
     cb->config.boot_mode  = config->boot_mode;
@@ -565,7 +563,7 @@ static int dmp_connect(oc_mqtt_tiny_cb_t *cb)
 
     conpara.cleansession = 1;
     conpara.keepalivetime = cb->config.lifetime;
-    conpara.security = &cb->security;
+    conpara.security = &cb->config.security;
 
     conpara.serveraddr.data = (char *)cb->mqtt_para.server_addr;
     conpara.serveraddr.len = strlen(conpara.serveraddr.data);
