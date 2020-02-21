@@ -42,6 +42,23 @@
 #include <dtls_al.h>
 #include <dtls_interface.h>
 
+
+#if defined(MBEDTLS_DEBUG_C)
+static void mbed_port_debug( void *ctx, int level,
+                      const char *file, int line,
+                      const char *str )
+{
+    const char *p, *basename;
+
+    /* Extract basename from file */
+    for( p = basename = file; *p != '\0'; p++ )
+        if( *p == '/' || *p == '\\' )
+            basename = p + 1;
+
+    printf("%s:%04d: |%d| %s", basename, line, level, str );
+}
+#endif
+
 en_dtls_al_err_t mbed_new(dtls_al_para_t *para, void **handle)
 {
 
@@ -96,6 +113,11 @@ en_dtls_al_err_t mbed_new(dtls_al_para_t *para, void **handle)
     {
         *handle = ssl;
         ret = EN_DTLS_AL_ERR_OK;
+
+        #if defined(MBEDTLS_DEBUG_C)
+            mbedtls_debug_set_threshold(10);
+            mbedtls_ssl_conf_dbg (ssl->conf,mbed_port_debug,NULL);
+        #endif
     }
 
     return ret;
