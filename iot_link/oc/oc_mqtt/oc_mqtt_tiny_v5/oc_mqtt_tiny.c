@@ -694,29 +694,32 @@ static int dmp_connect(oc_mqtt_tiny_cb_t *cb)
     printf("oc_mqtt_connect:user:%s passwd:%s \n\r",cb->mqtt_para.mqtt_user,cb->mqtt_para.mqtt_passwd);
     cb->mqtt_para.mqtt_handle = mqtt_al_connect(&conpara);
 
-    if(0 == conpara.conret)
+    if(NULL != cb->mqtt_para.mqtt_handle)
     {
         ret = en_oc_mqtt_err_ok;
     }
-    else if(2 == conpara.conret)
-    {
-        ret = en_oc_mqtt_err_conclientid;
-    }
-    else if(3 == conpara.conret)
-    {
-        ret = en_oc_mqtt_err_conserver;
-    }
-    else if(4 == conpara.conret)
-    {
-        ret = en_oc_mqtt_err_conuserpwd;
-    }
-    else if(5 == conpara.conret)
-    {
-        ret = en_oc_mqtt_err_conclient;
-    }
     else
     {
-        ret = en_oc_mqtt_err_network;
+        if(cn_mqtt_al_con_code_err_clientID == conpara.conret)
+        {
+            ret = en_oc_mqtt_err_conclientid;
+        }
+        else if(cn_mqtt_al_con_code_err_netrefuse == conpara.conret)
+        {
+            ret = en_oc_mqtt_err_conserver;
+        }
+        else if(cn_mqtt_al_con_code_err_u_p == conpara.conret)
+        {
+            ret = en_oc_mqtt_err_conuserpwd;
+        }
+        else if(cn_mqtt_al_con_code_err_auth == conpara.conret)
+        {
+            ret = en_oc_mqtt_err_conclient;
+        }
+        else
+        {
+            ret = en_oc_mqtt_err_network;
+        }
     }
 
     printf("oc_mqtt_connect:recode:%d :%s\n\r",ret,ret==en_oc_mqtt_err_ok?"SUCCESS":"FAILED");
