@@ -33,10 +33,6 @@
  *---------------------------------------------------------------------------*/
 #include "MQTTClient.h"
 
-#ifdef WITH_DTLS
-#include "dtls_interface.h"
-#endif
-
 #include <time.h>
 #include <sal.h>
 #include <mqtt_al.h>
@@ -59,9 +55,9 @@ typedef struct
 }paho_mqtt_cb_t;
 
 ///< waring: the paho mqtt has the opposite return code with normal socket read and write
-#ifdef WITH_DTLS
+#ifdef CONFIG_DTLS_ENABLE
 
-static int __tls_read(mbedtls_ssl_context *ssl, unsigned char *buffer, int len, int timeout)
+static int __tls_read(void *ssl, unsigned char *buffer, int len, int timeout)
 {
     int ret= -1;
     int rcvlen = -1;
@@ -88,7 +84,7 @@ static int __tls_read(mbedtls_ssl_context *ssl, unsigned char *buffer, int len, 
 
     return ret;
 }
-static int __tls_write(mbedtls_ssl_context *ssl, unsigned char *buffer, int len, int timeout)
+static int __tls_write(void *ssl, unsigned char *buffer, int len, int timeout)
 {
     int ret= -1;
     int sndlen = -1;
@@ -117,9 +113,6 @@ static int __tls_write(mbedtls_ssl_context *ssl, unsigned char *buffer, int len,
 }
 
 #define PORT_BUF_LEN 16
-
-#include <dtls_al.h>
-
 static int __tls_connect(Network *n, char *addr, int port)
 {    int ret = -1;
 
