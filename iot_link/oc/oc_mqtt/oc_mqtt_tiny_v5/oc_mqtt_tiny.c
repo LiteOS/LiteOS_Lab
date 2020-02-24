@@ -99,6 +99,8 @@ static const char s_oc_mqtt_ca_crt[] =
 #define CN_HMAC_LEN              32
 #define CN_STRING_MAXLEN         127
 
+#define CN_OC_MQTT_TIMEOUT      (10*1000)
+
 const char *s_new_topic_fmt[]=
 {
     "$oc/devices/%s/sys/commands/#",
@@ -142,6 +144,13 @@ typedef enum
     en_daemon_status_hub_keep,
 }en_daemon_status_t;
 
+typedef struct
+{
+    void  *nxt;
+    char  *topic;
+    int    qos;
+}tiny_topic_sub_t;
+
 
 typedef struct
 {
@@ -165,14 +174,17 @@ typedef struct
     queue_t            *task_daemon_cmd_queue;      ///< oc mqtt lite daemon task command queue
     char                salt_time[16];              ///< salt time for the connect
     char               *hub_sub_topic[CN_NEW_TOPIC_NUM];
+    tiny_topic_sub_t   *subscribe_lst;
 }oc_mqtt_tiny_cb_t;   ///< i think we may only got one mqtt
 static oc_mqtt_tiny_cb_t *s_oc_mqtt_tiny_cb;
 
 typedef enum
 {
     en_oc_mqtt_daemon_cmd_connect = 0,
-    en_oc_mqtt_daemon_cmd_send,           ///< when api need to send message, then it post this command
-    en_oc_mqtt_daemon_cmd_publish,        ///< when api need to publish message, then it post this command
+    en_oc_mqtt_daemon_cmd_send,           ///< when api need send message, then it post this command
+    en_oc_mqtt_daemon_cmd_publish,        ///< when api need publish message, then it post this command
+    en_oc_mqtt_daemon_cmd_subscribe,      ///< when api need subscribe a topic, then it post this command
+    en_oc_mqtt_daemon_cmd_unsubscribe,    ///< when api need un-subscribe a topic,then it post this command
     en_oc_mqtt_daemon_cmd_disconnect,     ///< when api need to stop the connect, then it post this command
     en_oc_mqtt_daemon_cmd_bsgetaddr,      ///< the bs callback post this command to the daemon when get the address
     en_oc_mqtt_daemon_cmd_rebootstrap,    ///< the hub callback post this command to the daemon when get the rebootstrap command
@@ -365,6 +377,9 @@ static int daemon_cmd_post(en_oc_mqtt_daemon_cmd cmd, void *arg)
 ///< release the config parameters
 static int config_parameter_release(oc_mqtt_tiny_cb_t *cb)
 {
+    tiny_topic_sub_t  *sub_topic;
+    tiny_topic_sub_t  *sub_topic_nxt;
+
     if( NULL != cb->config_mem )
     {
         osal_free(cb->config_mem);
@@ -395,6 +410,17 @@ static int config_parameter_release(oc_mqtt_tiny_cb_t *cb)
     memset(&cb->bs_cb,0,sizeof(oc_bs_mqtt_cb_t));
 
     cb->flag.bits.bit_daemon_status = en_daemon_status_idle;
+
+    sub_topic = cb->subscribe_lst;
+    cb->subscribe_lst = NULL;
+
+    while( NULL != sub_topic)
+    {
+        sub_topic_nxt = sub_topic->nxt;
+        osal_free ( sub_topic );
+
+        sub_topic = sub_topic_nxt;
+    }
 
     return en_oc_mqtt_err_ok;
 }
@@ -775,6 +801,7 @@ static int dmp_subscribe(oc_mqtt_tiny_cb_t *cb)
             subpara.qos = en_mqtt_al_qos_1;
             subpara.topic.data = cb->hub_sub_topic[i] ;
             subpara.topic.len = strlen(subpara.topic.data );
+            subpara.timeout = CN_OC_MQTT_TIMEOUT;
 
             printf("oc_mqtt_subscribe:topic:%s\n\r",subpara.topic.data);
 
@@ -788,6 +815,28 @@ static int dmp_subscribe(oc_mqtt_tiny_cb_t *cb)
             }
         }
 
+        ///< subscribe the user topic
+        tiny_topic_sub_t  *topic_sub;
+        topic_sub = cb->subscribe_lst;
+        while(NULL != topic_sub)
+        {
+            subpara.arg = cb;
+            subpara.qos = en_mqtt_al_qos_1;
+            subpara.topic.data = topic_sub->topic ;
+            subpara.topic.len = strlen(subpara.topic.data );
+            subpara.timeout = CN_OC_MQTT_TIMEOUT;
+
+            printf("oc_mqtt_subscribe:topic:%s\n\r",subpara.topic.data);
+
+            ret = mqtt_al_subscribe(cb->mqtt_para.mqtt_handle,&subpara);
+
+            printf("oc_mqtt_subscribe:retcode:%d:%s\n\r",ret,oc_mqtt_err(ret));
+            if(0 != ret)
+            {
+                 ret = en_oc_mqtt_err_subscribe;
+                 break;
+            }
+        }
     }
 
     return ret;
@@ -915,6 +964,127 @@ EXIT_ERR:
 }
 
 
+///< this function deal with api subscribe
+static int deal_api_subscribe( oc_mqtt_tiny_cb_t  *cb, oc_mqtt_daemon_cmd_t *cmd)
+{
+    int ret = en_oc_mqtt_err_noconfigured;
+    tiny_topic_sub_t  *topic_sub;
+    mqtt_al_subpara_t *subpara;
+
+    subpara = cmd->arg;
+
+    if(en_daemon_status_idle == cb->flag.bits.bit_daemon_status)
+    {
+        ret = en_oc_mqtt_err_noconfigured;
+    }
+    else if((en_daemon_status_hub_keep == cb->flag.bits.bit_daemon_status) &&\
+            (en_mqtt_al_connect_ok == mqtt_al_check_status(cb->mqtt_para.mqtt_handle)))
+    {
+
+        topic_sub = osal_malloc( sizeof( tiny_topic_sub_t ) + subpara->topic.len + 1 );
+        if ( NULL != topic_sub)
+        {
+
+            subpara->arg = cb;
+            subpara->dealer = hub_msg_default_deal;
+            subpara->timeout = CN_OC_MQTT_TIMEOUT;
+            if( 0  == mqtt_al_subscribe( cb->mqtt_para.mqtt_handle, subpara) )
+            {
+                ///< initialize the subtopic add it to the subscribe list
+                topic_sub->qos = subpara->qos;
+                topic_sub->topic = (char *)topic_sub + sizeof(tiny_topic_sub_t);
+                strcpy(topic_sub->topic, subpara->topic.data);
+                topic_sub->nxt = cb->subscribe_lst;
+                cb->subscribe_lst = topic_sub;
+            }
+            else
+            {
+                osal_free ( topic_sub );
+                ret = en_oc_mqtt_err_subscribe;
+            }
+        }
+        else
+        {
+            ret = en_oc_mqtt_err_sysmem;
+        }
+    }
+    else
+    {
+        ret = en_oc_mqtt_err_noconected;
+    }
+
+    cmd->retcode = ret;
+
+    return ret;
+
+}
+
+///< unsubscribe the specified topic
+static int deal_api_unsubscribe( oc_mqtt_tiny_cb_t  *cb, oc_mqtt_daemon_cmd_t *cmd)
+{
+    int ret = en_oc_mqtt_err_noconfigured;
+    tiny_topic_sub_t  *topic_sub;
+    tiny_topic_sub_t  *topic_sub_nxt;
+    mqtt_al_unsubpara_t *unsubpara;
+
+    unsubpara = cmd->arg;
+
+    if(en_daemon_status_idle == cb->flag.bits.bit_daemon_status)
+    {
+        ret = en_oc_mqtt_err_noconfigured;
+    }
+    else if((en_daemon_status_hub_keep == cb->flag.bits.bit_daemon_status) &&\
+            (en_mqtt_al_connect_ok == mqtt_al_check_status(cb->mqtt_para.mqtt_handle)))
+    {
+
+        if( 0  == mqtt_al_unsubscribe( cb->mqtt_para.mqtt_handle, unsubpara) )
+        {
+            ///< remove the topic from the subscribe list;
+            topic_sub = cb->subscribe_lst;
+            if(NULL != topic_sub)
+            {
+                if  ( 0 == strcmp( unsubpara->topic.data, topic_sub->topic ))
+                {
+                    cb->subscribe_lst = topic_sub->nxt;
+                    osal_free(topic_sub);
+                }
+                else
+                {
+                    topic_sub_nxt = topic_sub->nxt;
+                    while( NULL != topic_sub_nxt )
+                    {
+                        if ( 0 == strcmp( unsubpara->topic.data, topic_sub_nxt->topic))
+                        {
+                            topic_sub->nxt = topic_sub_nxt->nxt;
+                            osal_free(topic_sub_nxt);
+                            break;
+                        }
+                        else
+                        {
+                            topic_sub = topic_sub_nxt;
+                            topic_sub_nxt = topic_sub_nxt->nxt;
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            ret = en_oc_mqtt_err_unsubscribe;
+        }
+    }
+    else
+    {
+        ret = en_oc_mqtt_err_noconected;
+    }
+
+    cmd->retcode = ret;
+
+    return ret;
+
+}
+
+
 ///< this is the daemon task entry
 static int daemon_entry(void *arg)
 {
@@ -995,6 +1165,16 @@ static int daemon_entry(void *arg)
                     }
                     printf("daemon:publish exit\n\r");
                     break;
+                case en_oc_mqtt_daemon_cmd_subscribe:
+                    printf("daemon:subscribe enter\n\r");
+                    deal_api_subscribe( cb, daemon_cmd );
+                    printf("daemon:subscribe exit\n\r");
+                    break;
+                case en_oc_mqtt_daemon_cmd_unsubscribe:
+                    printf("daemon:unsubscribe enter\n\r");
+                    deal_api_unsubscribe( cb, daemon_cmd );
+                    printf("daemon:unsubscribe exit\n\r");
+                    break;
 
                 default:
                     break;
@@ -1074,10 +1254,55 @@ static int tiny_publish(char *topic,uint8_t *payload, int len,int qos )
 
     ret = daemon_cmd_post(en_oc_mqtt_daemon_cmd_publish,&pubpara);
 
-
     return ret;
 }
 
+///< use this function to subscribe a topic
+static int tiny_subscribe(char *topic, int qos)
+{
+    ///< use this function to subscribe a topic
+    mqtt_al_subpara_t  subpara;
+
+    int  ret = en_oc_mqtt_err_parafmt;
+
+    if(qos >= en_mqtt_al_qos_err)
+    {
+        return ret;
+    }
+    if(NULL == s_oc_mqtt_tiny_cb)
+    {
+        ret = en_oc_mqtt_err_system;
+    }
+
+    ///< pub the mqtt request
+    memset(&subpara, 0, sizeof(subpara));
+    subpara.qos = qos;
+    subpara.topic.data = topic;
+    subpara.topic.len = strlen(topic);
+
+    ret = daemon_cmd_post(en_oc_mqtt_daemon_cmd_subscribe,&subpara);
+
+    return ret;
+}
+///< use this function to unsubscribe a topic
+static en_oc_mqtt_err_code_t tiny_unsubscribe(char *topic)
+{
+    ///< use this function to subscribe a topic
+    mqtt_al_unsubpara_t  unsubpara;
+
+    en_oc_mqtt_err_code_t  ret = en_oc_mqtt_err_parafmt;
+    if(NULL == s_oc_mqtt_tiny_cb)
+    {
+        ret = en_oc_mqtt_err_system;
+    }
+    ///< pub the mqtt request
+    memset(&unsubpara, 0, sizeof(unsubpara));
+    unsubpara.topic.data = topic;
+    unsubpara.topic.len = strlen(topic);
+    ret = daemon_cmd_post(en_oc_mqtt_daemon_cmd_unsubscribe,&unsubpara);
+
+    return ret;
+}
 
 ///< use this function to deconfig it
 static int tiny_deconfig()
@@ -1089,6 +1314,8 @@ static int tiny_deconfig()
     return ret;
 }
 
+
+
 static const oc_mqtt_t s_oc_mqtt_lite = \
 {
     .name = "oc_mqtt_tiny",
@@ -1097,6 +1324,8 @@ static const oc_mqtt_t s_oc_mqtt_lite = \
         .config = tiny_config,
         .deconfig = tiny_deconfig,
         .publish = tiny_publish,
+        .subscribe = tiny_subscribe,
+        .unsubscribe = tiny_unsubscribe,
     },
 };
 
@@ -1114,7 +1343,7 @@ int oc_mqtt_tiny_install()
     }
     memset(cb,0,sizeof(oc_mqtt_tiny_cb_t));
 
-    cb->task_daemon_cmd_queue = queue_create("oc_mqtt_tiny_cmd_queue",10,1);
+    cb->task_daemon_cmd_queue = queue_create("daemon_cmd_queue",10,1);
     if(NULL == cb->task_daemon_cmd_queue)
     {
         goto EXIT_QUEUE;

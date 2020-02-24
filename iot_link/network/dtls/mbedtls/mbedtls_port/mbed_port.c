@@ -153,7 +153,7 @@ int mbed_read( void *handle, unsigned char *buf, size_t len, int timeout)
 {
     int ret;
 
-    ret = dtls_write(handle, buf,len);
+    ret = dtls_read(handle, buf,len,timeout);
 
     return ret;
 }

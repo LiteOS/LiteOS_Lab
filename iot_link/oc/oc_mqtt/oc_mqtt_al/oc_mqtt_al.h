@@ -65,8 +65,8 @@ typedef enum
     en_oc_mqtt_err_conuserpwd,           ///< bad user name or pwd
     en_oc_mqtt_err_conclient,            ///< the client id /user/pwd is right, but does not allowed
     en_oc_mqtt_err_subscribe,            ///< this means subscribe the topic failed
-    en_oc_mqtt_err_publish,              ///< this means publish the topic failed
     en_oc_mqtt_err_unsubscribe,          ///< this means un-subscribe failed
+    en_oc_mqtt_err_publish,              ///< this means publish the topic failed
     en_oc_mqtt_err_configured,           ///< this means we has configured, please deconfigured it and then do configure again
     en_oc_mqtt_err_noconfigured,         ///< this means we have not configure it yet,so could not connect
     en_oc_mqtt_err_noconected,           ///< this means the connection has not been built, so you could not send data
@@ -103,7 +103,6 @@ typedef  int (*fn_oc_mqtt_deconfig)(void);
 typedef  int (*fn_oc_mqtt_publish)(char *topic,uint8_t *msg,int msg_len,int qos);
 typedef  int (*fn_oc_mqtt_subscribe)(char *topic, int qos);
 typedef  en_oc_mqtt_err_code_t (*fn_oc_mqtt_unsubscribe)(char *topic);
-
 
 
 /**

@@ -336,6 +336,14 @@ static int task_reportmsg_entry(void *args)
         return -1;
     }
 
+    char *topic;
+    topic = "user/demo_topic";
+    ret = oc_mqtt_subscribe(topic, 0);
+    printf("subscribe:topic:%d ret:%d",topic,ret);
+
+    ret = oc_mqtt_unsubscribe(topic);
+    printf("unsubscribe:topic:%d ret:%d",topic,ret);
+
     while(1)  //do the loop here
     {
         oc_report_normal();
