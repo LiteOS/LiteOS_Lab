@@ -627,7 +627,10 @@ static int __subscribe(void *handle,mqtt_al_subpara_t *para)
             general_dealer,&ack,para->dealer))
     {
         para->subret = ack.grantedQoS;
-        ret = 0;
+        if((ack.grantedQoS == QOS0)|| (ack.grantedQoS == QOS1 ) || (ack.grantedQoS == QOS2 ) )
+        {
+            ret = 0;
+        }
     }
 
     return ret;
