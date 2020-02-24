@@ -64,7 +64,6 @@ struct service
     struct message *head;
     struct message *tail;
     int           (*handler) (void *);
-    bool_t          exit;
     int             stack_size;
     int             prio;
 };
@@ -237,11 +236,6 @@ static int __service_entry (void *arg)
     {
         if (osal_semp_pend (service->sem, cn_osal_timeout_forever))
         {
-            if (service->exit)
-            {
-                return 0;
-            }
-
             if (osal_mutex_lock (__services_lock))
             {
                 message       = service->head;
@@ -384,8 +378,7 @@ service_id service_create (const char * name, int (* handler) (void *),
     service->head       = NULL;
     service->tail       = NULL;
     service->name       = name;
-    service->task       = task;
-    service->exit       = false;
+    service->task       = NULL;
     service->stack_size = stack_size;
     service->prio       = prio;
 
