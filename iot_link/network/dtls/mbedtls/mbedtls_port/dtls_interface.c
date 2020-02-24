@@ -460,7 +460,7 @@ void dtls_ssl_destroy(mbedtls_ssl_context *ssl)
 #endif
     }
 
-    if (server_fd)
+    if (NULL != server_fd)
     {
         mbedtls_net_free(server_fd);
     }

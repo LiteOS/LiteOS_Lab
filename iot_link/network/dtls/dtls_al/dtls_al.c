@@ -88,7 +88,7 @@ int  dtls_al_read(void *handle, uint8_t *buf, size_t len, int timeout)
     return ret;
 }
 
-en_dtls_al_err_t   dtls_al_destory(void *handle)
+en_dtls_al_err_t   dtls_al_destroy(void *handle)
 {
     en_dtls_al_err_t ret = EN_DTLS_AL_ERR_NOCONFIG;
     if( (NULL != s_dtls_al) && (NULL != s_dtls_al->io.io_destroy))

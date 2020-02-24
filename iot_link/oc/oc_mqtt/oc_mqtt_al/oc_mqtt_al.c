@@ -108,6 +108,18 @@ int oc_mqtt_subscribe(char *topic,int qos)
 }
 
 
+en_oc_mqtt_err_code_t oc_mqtt_unsubscribe(char *topic)
+{
+    int ret = en_oc_mqtt_err_system;
+
+    if((NULL != s_oc_mqtt) &&(NULL != s_oc_mqtt->op.unsubscribe))
+    {
+       ret = s_oc_mqtt->op.unsubscribe(topic);
+    }
+
+    return ret;
+}
+
 ///////////////////////OC LWM2M AGENT INITIALIZE////////////////////////////////
 int oc_mqtt_init()
 {
