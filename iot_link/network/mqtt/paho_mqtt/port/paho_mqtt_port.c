@@ -67,7 +67,7 @@ static int __tls_read(void *ssl, unsigned char *buffer, int len, int timeout)
         return -1;
     }
 
-    rcvlen = dtls_read(ssl,buffer,len, timeout);
+    rcvlen = dtls_al_read(ssl,buffer,len, timeout);
 
     if(rcvlen == 0)
     {
@@ -94,7 +94,7 @@ static int __tls_write(void *ssl, unsigned char *buffer, int len, int timeout)
         return -1;
     }
 
-    sndlen = dtls_write(ssl,buffer,len);
+    sndlen = dtls_al_write(ssl,buffer,len,timeout);
 
     if(sndlen == 0)
     {
@@ -137,10 +137,16 @@ static int __tls_connect(Network *n, char *addr, int port)
     snprintf(port_buf, PORT_BUF_LEN, "%d", port);
 
     ret = dtls_al_connect( handle, addr, port_buf, CN_MQTT_CONNECT_TIMEOUT_MS);
-    if (ret != 0)
+    if (ret != EN_DTLS_AL_ERR_OK)
     {
-        dtls_al_destory(handle);
+        dtls_al_destroy(handle);
+
+        ret = -1;
         return ret;
+    }
+    else
+    {
+        ret = 0;
     }
 
     n->ctx = handle;
@@ -152,7 +158,7 @@ static void __tls_disconnect(void *ctx)
 {
     if(NULL != ctx)
     {
-        dtls_ssl_destroy(ctx);
+        dtls_al_destroy(ctx);
     }
 
     return;
