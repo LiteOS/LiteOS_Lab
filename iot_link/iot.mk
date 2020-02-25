@@ -25,6 +25,9 @@ include $(iot_link_root)/stimer/stimer.mk
 #configure the queue
 include $(iot_link_root)/queue/queue.mk
 
+#configure the service
+include $(iot_link_root)/service/service.mk
+
 #configure the driver famework for the iot_link
 include $(iot_link_root)/driver/driver.mk
 
