@@ -74,6 +74,9 @@ CONFIG_AT_ENABLE     := y
 
 ########################INDEPENDENT SERVICE START#################################
 
+#CONFIG_SERVICE_ENABLE, the service module
+CONFIG_SERVICE_ENABLE := y
+
 #CONFIG_CJSON_ENABLE , we port the cJSON based on the osal,you could choose yes or no
 CONFIG_CJSON_ENABLE := n
 
@@ -163,7 +166,7 @@ CONFIG_PCP_ENABLE      := n
 #disable.
 #warning:
 #1, if you use the oc mqtt, then the tls must support cert mode
-#2ï¼Œif you use the oc lwm2m with encode mode,then the dtls must support psk mode
+#2£¬if you use the oc lwm2m with encode mode,then the dtls must support psk mode
 
 #CONFIG_DEMO_TYPE could be "oc_coap_demo" "oc_dtls_coap_demo" "oc_dtls_lwm2m_bs_demo" "oc_dtls_lwm2m_demo"
 #"oc_lwm2m_bs_demo"  "oc_lwm2m_demo" "oc_lwm2m_ota_demo" "stimer_demo"
@@ -173,5 +176,4 @@ CONFIG_DEMO_TYPE   := "oc_coap_demo"
 
 #########################STANDARD DEMO END######################################
 include $(TOP_DIR)/iot_link/iot.mk
-
 
