@@ -18,7 +18,7 @@ function gcc_build ()
 {
     echo "building $1 with default config"
 
-    do_build "make -j2 -C $1 > /dev/null"
+    do_build "make -j2 -C $1"
 
     config="$1/config_demos"
 
