@@ -31,6 +31,9 @@ include $(iot_link_root)/driver/driver.mk
 #configure the AT famework for the iot_link
 include $(iot_link_root)/at/at.mk
 
+#configure the service
+include $(iot_link_root)/service/service.mk
+
 #configure the cJSON 
 include $(iot_link_root)/cJSON/cJSON.mk 
 

@@ -73,6 +73,10 @@ ifeq ($(CONFIG_DEMO_ENABLE), y)
     	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/stimer_demo.c
     else ifeq ($(CONFIG_DEMO_TYPE), "oc_dtls_lwm2m_ota_demo")
         STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_dtls_lwm2m_ota_demo.c
+    else ifeq ($(CONFIG_DEMO_TYPE), "oc_lwm2m_service_demo")
+    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_lwm2m_service_demo.c
+    else ifeq ($(CONFIG_DEMO_TYPE), "oc_coap_service_demo")
+    	STANDARD_DEMOS_SOURCE  := $(TOP_DIR)/demos/oc_coap_service_demo.c
     else
  		#maybe you want to add your own demos
     endif

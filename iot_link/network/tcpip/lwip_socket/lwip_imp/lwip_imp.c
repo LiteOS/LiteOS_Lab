@@ -77,7 +77,7 @@ static int __lwip_connect(int fd, struct sockaddr *addr, int addrlen)
     memcpy(addr,buf,2);
 
     ret = lwip_connect(fd,addr,addrlen);
-
+    memcpy(addr,&family,2);  ///< recover the addr--we should not modify the user's information
     return ret;
 }
 

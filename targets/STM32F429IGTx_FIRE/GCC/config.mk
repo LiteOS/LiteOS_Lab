@@ -74,6 +74,10 @@ CONFIG_AT_ENABLE     := y
 
 ########################INDEPENDENT SERVICE START#################################
 
+#CONFIG_SERVICE_ENABLE, the service module
+CONFIG_SERVICE_ENABLE := y
+CONFIG_SERVICE_TYPE := "oceanconnect"
+
 #CONFIG_CJSON_ENABLE , we port the cJSON based on the osal,you could choose yes or no
 CONFIG_CJSON_ENABLE := y
 
@@ -176,8 +180,8 @@ CONFIG_FOTA_ENABLE     := n
 #1, if you use the oc mqtt, then the tls must support cert mode
 #2，if you use the oc lwm2m with encode mode,then the dtls must support psk mode
 
-#CONFIG_DEMO_TYPE could be "oc_coap_demo" "oc_dtls_coap_demo" "oc_dtls_lwm2m_bs_demo" "oc_dtls_lwm2m_demo" "oc_dtls_lwm2m_ota_demo"
-#"oc_lwm2m_bs_demo"  "oc_lwm2m_demo" "oc_lwm2m_ota_demo"  "stimer_demo"
+#CONFIG_DEMO_TYPE could be "oc_coap_demo" "oc_coap_service_demo" "oc_dtls_coap_demo" "oc_dtls_lwm2m_bs_demo" "oc_dtls_lwm2m_demo" "oc_dtls_lwm2m_ota_demo"
+#"oc_lwm2m_bs_demo"  "oc_lwm2m_demo" "oc_lwm2m_service_demo" "oc_lwm2m_ota_demo"  "stimer_demo"
 
 CONFIG_DEMO_ENABLE := y
 CONFIG_DEMO_TYPE   := ""
