@@ -32,7 +32,7 @@ function gcc_build ()
                 make clean -C $1
                 echo "building $1 with config = $f"
 
-                do_build "make -j2 -C $1 CONFIG_FILE=$f > /dev/null"
+                do_build "make -j2 -C $1 CONFIG_FILE=$f "
             fi
         done
     fi
