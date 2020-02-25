@@ -44,6 +44,11 @@
 #include <oc_coap_al.h>
 #include <link_endian.h>
 
+#if CONFIG_OCEAN_SERVICE_ENABLE
+    #include <oc_service.h>
+    static service_id svc;
+#endif
+
 #define cn_endpoint_id        "coap_001"
 #define cn_app_server         "49.4.85.232"
 #define cn_app_port           "5683"
@@ -154,7 +159,16 @@ static int app_cmd_task_entry()
                         replymsg.curstats[0] = 'O';
                         replymsg.curstats[1] = 'N';
                         replymsg.curstats[2] = ' ';
+
+#if CONFIG_OCEAN_SERVICE_ENABLE
+                        oc_message msg;
+                        msg.buf = &replymsg;
+                        msg.len = sizeof(replymsg);
+                        msg.type = oc_report;
+                        service_send(svc, &msg);
+#else
                         oc_coap_report(s_coap_handle,(char *)&replymsg,sizeof(replymsg));    ///< report cmd reply message
+#endif
                     }
 
                     else if (led_cmd->led[0] == 'O' && led_cmd->led[1] == 'F' && led_cmd->led[2] == 'F')
@@ -168,7 +182,16 @@ static int app_cmd_task_entry()
                         replymsg.curstats[0] = 'O';
                         replymsg.curstats[1] = 'F';
                         replymsg.curstats[2] = 'F';
+
+#if CONFIG_OCEAN_SERVICE_ENABLE
+                        oc_message msg;
+                        msg.buf = &replymsg;
+                        msg.len = sizeof(replymsg);
+                        msg.type = oc_report;
+                        service_send(svc, &msg);
+#else
                         oc_coap_report(s_coap_handle,(char *)&replymsg,sizeof(replymsg));    ///< report cmd reply message
+#endif
                     }
                     else
                     {
@@ -202,7 +225,14 @@ static int app_report_task_entry()
     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
     oc_param.rcv_func = app_msg_deal;
 
+#if CONFIG_OCEAN_SERVICE_ENABLE
+    oc_message msg;
+    msg.buf = &oc_param;
+    msg.type = oc_config;
+    service_send(svc, &msg);
+#else
     s_coap_handle = oc_coap_config(&oc_param);
+#endif
 
     if(NULL != s_coap_handle)   //success ,so we could receive and send
     {
@@ -215,8 +245,17 @@ static int app_report_task_entry()
 
             light.msgid = cn_app_light;
             light.intensity = htons(lux);
+
+#if CONFIG_OCEAN_SERVICE_ENABLE
+            msg.buf = &light;
+            msg.len = sizeof(light);
+            msg.type = oc_report;
+            service_send(svc, &msg);
+#else
             oc_coap_report(s_coap_handle,(char *)&light,sizeof(light)); ///< report the light message
-            osal_task_sleep(60*1000);
+#endif
+
+            osal_task_sleep(10*1000);
         }
     }
 
@@ -226,6 +265,11 @@ static int app_report_task_entry()
 int standard_app_demo_main()
 {
     osal_semp_create(&s_rcv_sync,1,0);
+
+#if CONFIG_OCEAN_SERVICE_ENABLE
+    oc_service_init("oc coap service");
+    svc = service_open("oc coap service");
+#endif
 
     osal_task_create("app_report",app_report_task_entry,NULL,0x1000,NULL,2);
     osal_task_create("app_command",app_cmd_task_entry,NULL,0x1000,NULL,3);

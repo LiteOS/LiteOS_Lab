@@ -41,6 +41,11 @@
 #include <oc_mqtt_al.h>
 #include <oc_mqtt_assistant.h>
 
+#if CONFIG_OCEAN_SERVICE_ENABLE
+    #include <oc_service.h>
+    static service_id svc;
+#endif
+
 ///< ANYWAY, YOU COULD CONFIG IT TO THE ONE MODE,ALL THE INFORMATION IS JUST FOR THE TEST
 #if CONFIG_OC_MQTT_DEMO_BS
 
@@ -170,7 +175,16 @@ static int  oc_cmd_normal(demo_msg_t *demo_msg)
         buf = cJSON_PrintUnformatted(response_msg);
         if(NULL != buf)
         {
+#if CONFIG_OCEAN_SERVICE_ENABLE
+        	oc_message msg;
+            msg.buf = buf;
+            msg.len = strlen(buf);
+            msg.type = oc_report;
+            service_send(svc, &msg);
+#else
             ret = oc_mqtt_report((uint8_t *)buf,strlen(buf),en_mqtt_al_qos_1);
+#endif
+
             printf("%s:RESPONSE:mid:%d err_int:%d retcode:%d \r\n",__FUNCTION__,\
                     mid_int,err_int,ret);
 
@@ -213,7 +227,16 @@ static int  oc_report_normal(void)
         buf = cJSON_PrintUnformatted(root);
         if(NULL != buf)
         {
+#if CONFIG_OCEAN_SERVICE_ENABLE
+        	oc_message msg;
+            msg.buf = buf;
+            msg.len = strlen(buf);
+            msg.type = oc_report;
+            service_send(svc, &msg);
+#else
             ret = oc_mqtt_report((uint8_t *)buf,strlen(buf),en_mqtt_al_qos_1);
+#endif
+
             printf("%s:REPORT:times:%d:value:%d retcode:%d \r\n",__FUNCTION__,times++,value,ret);
             osal_free(buf);
         }
@@ -262,8 +285,16 @@ static int task_reportmsg_entry(void *args)
     config.pwd= CN_EP_PASSWD;
     config.security.type = EN_DTLS_AL_SECURITY_TYPE_CERT;
 
-
+#if CONFIG_OCEAN_SERVICE_ENABLE
+    oc_message msg;
+    msg.buf = &config;
+    msg.type = oc_config;
+    service_send(svc, &msg);
+#else
     ret = oc_mqtt_config(&config);
+#endif
+
+
     if((ret != en_oc_mqtt_err_ok))
     {
         printf("config:err :code:%d\r\n",ret);
@@ -281,6 +312,11 @@ static int task_reportmsg_entry(void *args)
 int standard_app_demo_main()
 {
     s_queue_rcvmsg = queue_create("queue_rcvmsg",2,1);
+
+#if CONFIG_OCEAN_SERVICE_ENABLE
+    oc_service_init("oc mqtt service");
+    svc = service_open("oc mqtt service");
+#endif
 
     osal_task_create("demo_reportmsg",task_reportmsg_entry,NULL,0x800,NULL,8);
 

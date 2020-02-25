@@ -42,8 +42,6 @@
 ################################################################################
 ifeq ($(CONFIG_OC_MQTT_VERSION),"V5")
 	C_SOURCES  += $(TOP_DIR)/demos/oc_mqtt_demo/oc_mqtt_v5_demo.c
-else ifeq ($(CONFIG_SERVICE_TYPE),"oceanconnect")
-    C_SOURCES  += $(TOP_DIR)/demos/oc_mqtt_demo/oc_mqtt_service_demo.c
 else
 	C_SOURCES  += $(TOP_DIR)/demos/oc_mqtt_demo/oc_mqtt_demo.c
 endif

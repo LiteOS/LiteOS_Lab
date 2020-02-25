@@ -15,3 +15,4 @@ ifeq ($(CONFIG_OC_LWM2M_ENABLE),y)
     
 endif
 C_INCLUDES += -I $(iot_link_root)/service/oc_service/
+C_DEFS     += -D CONFIG_OCEAN_SERVICE_ENABLE=1
