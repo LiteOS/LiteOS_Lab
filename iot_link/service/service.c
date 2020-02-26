@@ -53,6 +53,7 @@ struct message
 {
     struct message *next;
     void           *buff;
+    void          (*pfn) (void *, int);
 };
 
 struct service
@@ -66,6 +67,7 @@ struct service
     int           (*handler) (void *);
     int             stack_size;
     int             prio;
+    int             open_count;
 };
 
 /* locals */
@@ -154,6 +156,7 @@ service_id service_open (const char *name)
             if (strcmp (itr->name, name) == 0)
             {
                 service = itr;
+                service->open_count++;
                 break;
             }
 
@@ -167,14 +170,46 @@ service_id service_open (const char *name)
 }
 
 /**
- * service_send - send message to a service
+ * service_close - close a service
  * @sid: the service id
- * @msg: the message address
  *
  * return: the true on success, false on fail
  */
 
-bool_t service_send (service_id sid, void *msg)
+bool_t service_close (service_id sid)
+{
+    struct service *service = (struct service *) sid;
+
+    if (service == NULL)
+    {
+        return false;
+    }
+
+    if (!osal_mutex_lock (__services_lock))
+    {
+        return false;
+    }
+
+    if (service->open_count > 0)
+    {
+        service->open_count--;
+    }
+
+    (void) osal_mutex_unlock (__services_lock);
+
+    return true;
+}
+
+/**
+ * service_send - send message to a service
+ * @sid: the service id
+ * @msg: the message address
+ * @pfn: the callback after the message is handled
+ *
+ * return: the true on success, false on fail
+ */
+
+bool_t service_send (service_id sid, void *msg, void (*pfn) (void *, int))
 {
     struct service *service = (struct service *) sid;
     struct message *message;
@@ -193,6 +228,7 @@ bool_t service_send (service_id sid, void *msg)
     }
 
     message->buff = msg;
+    message->pfn  = pfn;
     message->next = NULL;
 
     if (!osal_mutex_lock (__services_lock))
@@ -231,6 +267,7 @@ static int __service_entry (void *arg)
 {
     struct service *service = (struct service *) arg;
     struct message *message;
+    int             ret;
 
     while (1)
     {
@@ -243,12 +280,19 @@ static int __service_entry (void *arg)
 
                 (void) osal_mutex_unlock (__services_lock);
 
-                service->handler (message->buff);
+                ret = service->handler (message->buff);
+
+                if (message->pfn != NULL)
+                {
+                    message->pfn (message->buff, ret);
+                }
 
                 __put_message (message);
             }
         }
     }
+
+    return 0;
 }
 
 /**
@@ -317,6 +361,12 @@ bool_t service_stop (service_id sid)
         return false;
     }
 
+    if (service->open_count != 0)
+    {
+        (void) osal_mutex_unlock (__services_lock);
+        return false;
+    }
+
     if (service->task != NULL)
     {
         osal_task_kill (service->task);
@@ -360,7 +410,6 @@ service_id service_create (const char * name, int (* handler) (void *),
                            int stack_size, int prio)
 {
     struct service *service;
-    void           *task;
 
     service = (struct service *) osal_malloc (sizeof (struct service));
 
@@ -381,6 +430,7 @@ service_id service_create (const char * name, int (* handler) (void *),
     service->task       = NULL;
     service->stack_size = stack_size;
     service->prio       = prio;
+    service->open_count = 0;
 
     if (!service_start ((service_id) service))
         {
@@ -389,7 +439,7 @@ service_id service_create (const char * name, int (* handler) (void *),
 
     if (!osal_mutex_lock (__services_lock))
         {
-        goto err_free_task;
+        goto err_stop_service;
         }
 
     service->next = __services;
@@ -400,8 +450,8 @@ service_id service_create (const char * name, int (* handler) (void *),
 
     return (service_id) service;
 
-err_free_task:
-    osal_task_kill (task);
+err_stop_service:
+    service_stop ((service_id) service);
 err_free_sem:
     osal_semp_del (service->sem);
 err_free_service:
@@ -420,62 +470,3 @@ bool_t service_init (void)
 {
     return osal_mutex_create (&__services_lock);
 }
-
-#if 1
-#include <stdbool.h>
-
-#include <stdio.h>
-
-static volatile bool __exit = false;
-
-static int __servcie_sender (void * arg)
-    {
-    service_id sid = service_open ("test");
-    int        msg = 0;
-
-    (void) arg;
-
-    if (sid == INVALID_SID)
-    {
-        printf ("Fail to open service!\n");
-
-        return -1;
-    }
-
-    while (!__exit)
-        {
-        service_send (sid, (void *) &msg);
-        osal_task_sleep (1000);
-        msg++;
-        }
-
-    return 0;
-    }
-
-static int __test_service_handler (void * arg)
-{
-    printf ("in service handler, we got: %d\n\r", *((int *) arg));
-
-    return 0;
-}
-
-int test_service (void)
-{
-    if (service_create ("test", __test_service_handler, 0x1000, 10) == INVALID_SID)
-    {
-        printf ("Fail to create service!\n");
-
-        return -1;
-    }
-
-    if (osal_task_create ("sender", __servcie_sender, 0, 0x1000, NULL, 30) == NULL)
-    {
-        printf ("Fail to create sender!\n");
-
-        return -1;
-    }
-
-    return 0;
-}
-
-#endif
