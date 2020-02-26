@@ -44,7 +44,32 @@
 #include <oc_lwm2m_al.h>
 #include <link_endian.h>
 
-#define cn_endpoint_id        "lwm2m_001"
+#if CONFIG_OCEAN_SERVICE_ENABLE
+#include <oc_service.h>
+static service_id svc;
+static oc_message msg;
+static int config_ret;
+static int report_ret;
+void config_callback(void* msg, int ret)
+{
+	if (0 == ret)
+	{
+		config_ret = en_config_ok;
+	}
+	else
+	{
+		config_ret = en_config_err;
+	}
+	return;
+}
+void report_callback(void* msg, int ret)
+{
+	report_ret = ret;
+	return;
+}
+#endif
+
+#define cn_endpoint_id        "lwm2m_service_test"//"lwm2m_001"
 #define cn_app_server         "49.4.85.232"
 #define cn_app_port           "5683"
 
@@ -151,7 +176,15 @@ static int app_cmd_task_entry()
                         replymsg.curstats[0] = 'O';
                         replymsg.curstats[1] = 'N';
                         replymsg.curstats[2] = ' ';
-                        oc_lwm2m_report((char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
+
+#if CONFIG_OCEAN_SERVICE_ENABLE
+                        msg.buf = &replymsg;
+                        msg.len = sizeof(replymsg);
+                        msg.type = en_oc_service_report;
+                        service_send(svc, &msg, report_callback);
+#else
+                        oc_lwm2m_report((char *)&replymsg,sizeof(replymsg),1000);  ///< report cmd reply message
+#endif
                     }
 
                     else if (led_cmd->led[0] == 'O' && led_cmd->led[1] == 'F' && led_cmd->led[2] == 'F')
@@ -165,7 +198,15 @@ static int app_cmd_task_entry()
                         replymsg.curstats[0] = 'O';
                         replymsg.curstats[1] = 'F';
                         replymsg.curstats[2] = 'F';
-                        oc_lwm2m_report((char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
+
+#if CONFIG_OCEAN_SERVICE_ENABLE
+                        msg.buf = &replymsg;
+                        msg.len = sizeof(replymsg);
+                        msg.type = en_oc_service_report;
+                        service_send(svc, &msg, report_callback);
+#else
+                        oc_lwm2m_report((char *)&replymsg,sizeof(replymsg),1000);  ///< report cmd reply message
+#endif
                     }
                     else
                     {
@@ -198,12 +239,29 @@ static int app_report_task_entry()
     oc_param.app_server.ep_id = cn_endpoint_id;
     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
     oc_param.rcv_func = app_msg_deal;
-
+#if CONFIG_OCEAN_SERVICE_ENABLE
+    msg.buf = &oc_param;
+    msg.type = en_oc_service_config;
+    service_send(svc, &msg, config_callback);
+    while (1)
+    {
+        if (config_ret == en_config_ok)
+        {
+        	break;
+        }
+        else
+        {
+            printf("configurating...\r\n");
+            osal_task_sleep(10);
+        }
+    }
+#else
     ret = oc_lwm2m_config(&oc_param);
     if (0 != ret)
     {
         return ret;
     }
+#endif
 
     //install a dealer for the led message received
     while(1) //--TODO ,you could add your own code here
@@ -213,7 +271,16 @@ static int app_report_task_entry()
 
         light.msgid = cn_app_light;
         light.intensity = htons(lux);
+
+#if CONFIG_OCEAN_SERVICE_ENABLE
+
+        msg.buf = &light;
+        msg.len = sizeof(light);
+        msg.type = en_oc_service_report;
+        service_send(svc, &msg, report_callback);
+#else
         oc_lwm2m_report((char *)&light,sizeof(light),1000); ///< report the light message
+#endif
         osal_task_sleep(10*1000);
     }
     return ret;
@@ -226,6 +293,10 @@ int standard_app_demo_main()
 {
     osal_semp_create(&s_rcv_sync,1,0);
 
+#if CONFIG_OCEAN_SERVICE_ENABLE
+    oc_service_init("oc lwm2m service");
+    svc = service_open("oc lwm2m service");
+#endif
     osal_task_create("app_report",app_report_task_entry,NULL,0x1000,NULL,2);
     osal_task_create("app_command",app_cmd_task_entry,NULL,0x1000,NULL,3);
 
