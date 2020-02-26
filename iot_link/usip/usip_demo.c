@@ -73,7 +73,7 @@
   "\"fileType\": \"ctlLogic\",\r\n"  \
   "\"fileSize\": \"30000\",\r\n"  \
   "\"fileDirectory\": \"\",\r\n"  \
-  "\"checkSum\": \"23fwedfd��\",  \r\n"  \
+  "\"checkSum\": \"23fwedfd...\",  \r\n"  \
   "}\r\n"
 
 extern unsigned short g_received_devreg_result;
