@@ -337,12 +337,15 @@ static int task_reportmsg_entry(void *args)
     }
 
     char *topic;
-    topic = "user/demo_topic";
+    topic = "$oc/devices/54f107da-f251-436c-af4c-624f33b7d7b6/user/demo_sub";
     ret = oc_mqtt_subscribe(topic, 0);
-    printf("subscribe:topic:%d ret:%d",topic,ret);
+    printf("usersubscribe:topic:%s ret:%d \r\n",topic,ret);
+
+    ret = oc_mqtt_publish(topic,topic,strlen(topic),1);
+    printf("userpublish:ret:%d\r\n",ret);
 
     ret = oc_mqtt_unsubscribe(topic);
-    printf("unsubscribe:topic:%d ret:%d",topic,ret);
+    printf("unsubscribe:topic:%s ret:%d \r\n",topic,ret);
 
     while(1)  //do the loop here
     {
