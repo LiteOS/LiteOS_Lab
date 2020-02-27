@@ -73,6 +73,32 @@
 
 #define DEFAULT_LIFETIME            60                 ///< the platform need more
 
+#if CONFIG_OCEAN_SERVICE_ENABLE
+#include <oc_service.h>
+static service_id svc;
+static oc_message msg;
+static int config_ret;
+static int report_ret;
+void config_callback(void* msg, int ret)
+{
+	if (0 == ret)
+	{
+		config_ret = en_config_ok;
+	}
+	else
+	{
+		config_ret = en_config_err;
+	}
+	return;
+}
+void report_callback(void* msg, int ret)
+{
+	report_ret = ret;
+	return;
+}
+#endif
+
+
 //if your command is very fast,please use a queue here--TODO
 static queue_t *s_queue_rcvmsg = NULL;   ///< this is used to cached the message
 
@@ -170,9 +196,17 @@ static int  oc_cmd_normal(demo_msg_t *demo_msg)
         buf = cJSON_PrintUnformatted(response_msg);
         if(NULL != buf)
         {
+#if CONFIG_OCEAN_SERVICE_ENABLE
+
+            msg.buf = buf;
+            msg.len = strlen(buf);
+            msg.type = en_oc_service_report;
+            service_send(svc, &msg, report_callback);
+            printf("%s:RESPONSE:mid:%d err_int:%d retcode:%d \r\n",__FUNCTION__, mid_int,err_int,report_ret);
+#else
             ret = oc_mqtt_report((uint8_t *)buf,strlen(buf),en_mqtt_al_qos_1);
-            printf("%s:RESPONSE:mid:%d err_int:%d retcode:%d \r\n",__FUNCTION__,\
-                    mid_int,err_int,ret);
+            printf("%s:RESPONSE:mid:%d err_int:%d retcode:%d \r\n",__FUNCTION__, mid_int,err_int,ret);
+#endif
 
             osal_free(buf);
         }
@@ -213,8 +247,18 @@ static int  oc_report_normal(void)
         buf = cJSON_PrintUnformatted(root);
         if(NULL != buf)
         {
+#if CONFIG_OCEAN_SERVICE_ENABLE
+
+            msg.buf = buf;
+            msg.len = strlen(buf);
+            msg.type = en_oc_service_report;
+            service_send(svc, &msg, report_callback);
+            printf("%s:REPORT:times:%d:value:%d retcode:%d \r\n",__FUNCTION__,times++,value,report_ret);
+#else
             ret = oc_mqtt_report((uint8_t *)buf,strlen(buf),en_mqtt_al_qos_1);
+
             printf("%s:REPORT:times:%d:value:%d retcode:%d \r\n",__FUNCTION__,times++,value,ret);
+#endif
             osal_free(buf);
         }
 
@@ -262,13 +306,36 @@ static int task_reportmsg_entry(void *args)
     config.pwd= CN_EP_PASSWD;
     config.security.type = EN_DTLS_AL_SECURITY_TYPE_CERT;
 
+#if CONFIG_OCEAN_SERVICE_ENABLE
 
+    msg.buf = &config;
+    msg.type = en_oc_service_config;
+    service_send(svc, &msg, config_callback);
+    while (1)
+    {
+        if (config_ret == en_config_ok)
+        {
+        	break;
+
+        }
+        else
+        {
+            printf("configurating...\r\n");
+            osal_task_sleep(10);
+        }
+
+    }
+#else
     ret = oc_mqtt_config(&config);
+
+
+
     if((ret != en_oc_mqtt_err_ok))
     {
         printf("config:err :code:%d\r\n",ret);
         return -1;
     }
+#endif
 
     while(1)  //do the loop here
     {
@@ -281,6 +348,11 @@ static int task_reportmsg_entry(void *args)
 int standard_app_demo_main()
 {
     s_queue_rcvmsg = queue_create("queue_rcvmsg",2,1);
+
+#if CONFIG_OCEAN_SERVICE_ENABLE
+    oc_service_init("oc mqtt service");
+    svc = service_open("oc mqtt service");
+#endif
 
     osal_task_create("demo_reportmsg",task_reportmsg_entry,NULL,0x800,NULL,8);
 
