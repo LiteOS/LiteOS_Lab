@@ -341,7 +341,7 @@ static int task_reportmsg_entry(void *args)
     ret = oc_mqtt_subscribe(topic, 0);
     printf("usersubscribe:topic:%s ret:%d \r\n",topic,ret);
 
-    ret = oc_mqtt_publish(topic,topic,strlen(topic),1);
+    ret = oc_mqtt_publish(topic,(uint8_t *) "hello world",strlen("hello world"),1);
     printf("userpublish:ret:%d\r\n",ret);
 
     ret = oc_mqtt_unsubscribe(topic);

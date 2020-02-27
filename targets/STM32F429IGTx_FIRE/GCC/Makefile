@@ -151,7 +151,7 @@ OBJ_DIRS := $(sort $(OBJ_DIRS))
 # default action: build all
 all:$(TARGET_DIR)/$(TARGET).elf
 	-$(HEX) $< $(TARGET_DIR)/$(TARGET).hex
-	-$(BIN) $< $(TARGET_DIR)/$(TARGET).hex	
+	-$(BIN) $< $(TARGET_DIR)/$(TARGET).bin	
 
 $(TARGET_DIR)/$(TARGET).elf:$(OBJ_DIRS) $(C_OBJ) $(S_OBJ)
 	$(CC) $(C_OBJ) $(S_OBJ) $(LDFLAGS) -o $@
