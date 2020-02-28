@@ -996,6 +996,8 @@ static int deal_api_subscribe( oc_mqtt_tiny_cb_t  *cb, oc_mqtt_daemon_cmd_t *cmd
                 strcpy(topic_sub->topic, subpara->topic.data);
                 topic_sub->nxt = cb->subscribe_lst;
                 cb->subscribe_lst = topic_sub;
+
+                ret = en_oc_mqtt_err_ok;
             }
             else
             {
@@ -1067,6 +1069,7 @@ static int deal_api_unsubscribe( oc_mqtt_tiny_cb_t  *cb, oc_mqtt_daemon_cmd_t *c
                     }
                 }
             }
+            ret = en_oc_mqtt_err_ok;
         }
         else
         {
