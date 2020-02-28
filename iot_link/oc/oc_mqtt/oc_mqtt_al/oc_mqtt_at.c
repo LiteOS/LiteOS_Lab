@@ -41,6 +41,10 @@
 
 extern int link_main(void *args);
 
+static char *s_server_ca = NULL; ///< used to storage the server ca
+static char *s_client_ca = NULL; ///< used to storage the client ca
+static char *s_client_pk = NULL; ///< used to storage the client pk
+static char *s_client_pk_pwd = NULL;///< used to strorage the pwd for the pk
 
 ///< when receive any information from hw, then it call this function,THIS IS A URC imformation
 ///< ATCOMMAND:    +HWMQTTRECVPUB:1,0,"HELLOTOPC",2,0010
@@ -116,7 +120,7 @@ int hwoc_mqtt_publish(int qos,char *topic,uint8_t *payload,int len)
 
 
 ///< when you want to connect to the hw,then call this function
-///< ATCOMMAND:    AT+HWOCMQTTCONNECT=1,10,"192.168.1.20","8883","DEVEID","DEVEPASSWD"
+///< ATCOMMAND:    AT+HWOCMQTTCONNECT=1,10,"192.168.1.20","8883","DEVICEID","DEVICEPWD"
 ///< ATRESPONSE:   +CONNECTED OK when success
 ///<               +CONNECTED ERR:code
 ///<               code:reference to en_oc_mqtt_err_code_t defines
@@ -137,6 +141,7 @@ int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const
         config.boot_mode = en_oc_mqtt_mode_nobs_static_nodeid_hmacsha256_notimecheck_json;
     }
 
+    memset(&config,0,sizeof(config));
     config.server_addr = (char *)ip;
     config.server_port =(char *) port;
     config.lifetime = lifetime;
@@ -144,10 +149,30 @@ int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const
     config.msg_deal_arg = NULL;
     config.id = (char *)deviceid;
     config.pwd = (char *)devicepasswd;
+
     config.security.type = EN_DTLS_AL_SECURITY_TYPE_CERT;
+    if( NULL != s_server_ca)
+    {
+        config.security.u.cert.server_ca  = (uint8_t *)s_server_ca;
+        config.security.u.cert.server_ca_len = strlen(s_server_ca) +1;///< must include the '\0'
+    }
+
+    if(( NULL != s_client_ca ) && ((NULL != s_client_pk)))
+    {
+        config.security.u.cert.client_ca  = (uint8_t *)s_client_ca;
+        config.security.u.cert.server_ca_len = strlen(s_client_ca) +1;///< must include the '\0'
+
+        config.security.u.cert.client_pk = (uint8_t *)s_client_pk;
+        config.security.u.cert.client_pk_len = strlen(s_client_pk) +1;
+
+        config.security.u.cert.client_pk_pwd = (uint8_t *)s_client_pk_pwd;
+        if(NULL != s_client_pk_pwd)
+        {
+            config.security.u.cert.client_pk_pwd_len = strlen(s_client_pk_pwd);
+        }
+    }
 
     ret = oc_mqtt_config(&config);
-
 
     return ret;
 }
@@ -169,16 +194,151 @@ int hwoc_mqtt_disconnect()
 }
 
 
+
+///< WHEN YOU WANT TO SUBSCRIBE A SELFTOPIC
+///< ATCOMMAND:    AT+HWOCMQTTSUBSCRIBE=qos,topic
+///<               AT+HWOCMQTTSUBSCRIBE=0,"$oc/devices/54f107da-f251-436c-af4c-624f33b7d7b6/user/demo_sub"
+///< ATRESPONSE:   +SUBSCRIBE OK  when succes
+///                +SUBSCRIBE ERR:code  when failed
+///<               code:reference to en_oc_mqtt_err_code_t defines
+int hwoc_mqtt_subscribe(char *topic, int qos)
+{
+    int ret = -1;
+
+    link_main(NULL);
+    ret = oc_mqtt_subscribe(topic, qos);
+
+    return ret;
+}
+
+
+///< WHEN YOU WANT TO UNSUBSCRIBE A SELFTOPIC
+///< ATCOMMAND:    AT+HWOCMQTTUNSUBSCRIBE=topic
+///<               AT+HWOCMQTTUNSUBSCRIBE="$oc/devices/54f107da-f251-436c-af4c-624f33b7d7b6/user/demo_sub"
+///< ATRESPONSE:   +UNSUBSCRIBE OK  when succes
+///                +UNSUBSCRIBE ERR:code  when failed
+///<               code:reference to en_oc_mqtt_err_code_t defines
+int hwoc_mqtt_unsubscribe(char *topic)
+{
+    int ret = -1;
+
+    link_main(NULL);
+    ret = oc_mqtt_unsubscribe(topic);
+
+    return ret;
+}
+
 ///< WHEN YOU WANT TO KNOW WHICH VERSION YOU USE
 ///< ATCOMMAND: AT+HWOCMQTTVERSION
 ///< ATRESPONSE: +HWOCMQTTVERSION:vx.x.x AT XXXXXX ON XXXXX
-
 char *hwoc_mqtt_version()
 {
     extern char *linkmain_version();
 
     return linkmain_version();
 }
+
+
+///< IF YOU WANT TO SET THE SERVER CA
+///< ATCOMMAND: AT+HWOCMQTTSERVERCA = "nnnds=="  and  "" means clear it
+///< ATRESPONSE: +HWOCMQTTSERVERCA OK
+///<             +HWOCMQTTSERVERCA ERR:CODE
+int hwoc_mqtt_serverca(char *server_ca)
+{
+    int ret = en_oc_mqtt_err_ok;
+    link_main(NULL);
+
+    if(NULL != s_server_ca)
+    {
+        osal_free(s_server_ca);
+        s_server_ca = NULL;
+    }
+
+    if(NULL != server_ca)
+    {
+
+        s_server_ca = osal_strdup(server_ca);
+        if( NULL == s_server_ca)
+        {
+            ret = en_oc_mqtt_err_sysmem;
+        }
+    }
+    return ret;
+}
+
+///< IF YOU WANT TO SET THE CLIENT CA
+///< ATCOMMAND: AT+HWOCMQTTCLIENTCA = "nnnds=="  and  "" means clear it
+///< ATRESPONSE:  +HWOCMQTTCLIENTCA OK
+///<              +HWOCMQTTCLIENTCA ERR:CODE
+
+int hwoc_mqtt_clientca(char *client_ca)
+{
+    int ret = en_oc_mqtt_err_ok;
+    link_main(NULL);
+
+    if(NULL != s_client_ca)
+    {
+        osal_free(s_client_ca);
+        s_client_ca = NULL;
+    }
+
+    if(NULL != client_ca)
+    {
+        s_client_ca = osal_strdup(client_ca);
+        if(NULL == s_client_ca)
+        {
+            ret = en_oc_mqtt_err_sysmem;
+        }
+    }
+
+    return ret;
+}
+
+
+///< IF YOU WANT TO SET THE CLIENT PK and pwd
+///< ATCOMMAND: AT+HWOCMQTTCLIENTPK = "nnnds==","pwd"  and  "" means clear it
+///< ATRESPONSE:  +HWOCMQTTCLIENTPK OK
+///<              +HWOCMQTTCLIENTPK ERR:CODE
+
+int hwoc_mqtt_clientpk(char *client_pk, char *client_pk_pwd)
+{
+    int ret = en_oc_mqtt_err_ok;
+    link_main(NULL);
+
+    if(NULL != s_client_pk)
+    {
+        osal_free(s_client_pk);
+        s_client_pk = NULL;
+    }
+
+    if(NULL == s_client_pk_pwd)
+    {
+        osal_free(s_client_pk_pwd);
+        s_client_pk_pwd = NULL;
+    }
+    else
+    {
+        s_client_pk = osal_strdup(client_pk);
+        if(NULL == s_client_pk)
+        {
+            ret = en_oc_mqtt_err_sysmem;
+        }
+
+        if(NULL != client_pk_pwd)
+        {
+            s_client_pk_pwd = osal_strdup(client_pk_pwd);
+            if(NULL == s_client_pk_pwd)
+            {
+                ret = en_oc_mqtt_err_sysmem;
+            }
+        }
+    }
+
+    return ret;
+}
+
+
+
 
 
 
