@@ -74,6 +74,10 @@ CONFIG_AT_ENABLE     := n
 
 ########################INDEPENDENT SERVICE START#################################
 
+#CONFIG_SERVICE_ENABLE, the service module
+CONFIG_SERVICE_ENABLE := y
+CONFIG_SERVICE_TYPE   := "oceanconnect"
+
 #CONFIG_CJSON_ENABLE , we port the cJSON based on the osal,you could choose yes or no
 CONFIG_CJSON_ENABLE := y
 
