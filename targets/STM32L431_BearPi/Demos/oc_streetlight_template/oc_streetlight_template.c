@@ -33,7 +33,7 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-14 17:21  zhangqianfu  The first version  
+ *  2019-05-14 17:21  zhangqianfu  The first version
  *
  */
 #include <stdint.h>
@@ -101,7 +101,6 @@ typedef struct
 
 #pragma pack()
 
-void *context;
 int *ue_stats;
 int8_t key1 = 0;
 int8_t key2 = 0;
@@ -215,7 +214,7 @@ static int app_cmd_task_entry()
                 		replymsg.curstats[0] = 'O';
                 		replymsg.curstats[1] = 'N';
                 		replymsg.curstats[2] = ' ';
-                		oc_lwm2m_report(context,(char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
+                		oc_lwm2m_report((char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
                     }
 
                     else if (led_cmd->led[0] == 'O' && led_cmd->led[1] == 'F' && led_cmd->led[2] == 'F')
@@ -235,7 +234,7 @@ static int app_cmd_task_entry()
                 		replymsg.curstats[0] = 'O';
                 		replymsg.curstats[1] = 'F';
                 		replymsg.curstats[2] = 'F';
-                		oc_lwm2m_report(context,(char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
+                		oc_lwm2m_report((char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
                     }
 
                     else
@@ -274,10 +273,12 @@ static int app_report_task_entry()
     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
     oc_param.rcv_func = app_msg_deal;
 
-    context = oc_lwm2m_config(&oc_param);
-
-    if(NULL != context)   //success ,so we could receive and send
+    // context = oc_lwm2m_config(&oc_param);
+    ret = oc_lwm2m_config(&oc_param);
+    if (0 != ret)
     {
+    	return ret;
+    }
         //install a dealer for the led message received
         while(1) //--TODO ,you could add your own code here
         {
@@ -290,7 +291,7 @@ static int app_report_task_entry()
         	    connectivity.ecl = htons(ue_stats[1] & 0x0000FFFF);
         	    connectivity.snr = htons(ue_stats[2] & 0x0000FFFF);
         	    connectivity.cellid = htonl(ue_stats[3]);
-                oc_lwm2m_report(context,(char *)&connectivity,sizeof(connectivity),1000);    ///< report ue status message
+                oc_lwm2m_report((char *)&connectivity,sizeof(connectivity),1000);    ///< report ue status message
             }
 
             if (key2 == 1)
@@ -298,15 +299,14 @@ static int app_report_task_entry()
             	key2 = 0;
             	light_status.msgid = cn_app_lightstats;
             	light_status.tog = htons(toggle);
-            	oc_lwm2m_report(context,(char *)&light_status,sizeof(light_status),1000);    ///< report toggle message
+            	oc_lwm2m_report((char *)&light_status,sizeof(light_status),1000);    ///< report toggle message
             }
 
             light.msgid = cn_app_light;
             light.intensity = htons((int)E53_SC1_Data.Lux);
-            oc_lwm2m_report(context,(char *)&light,sizeof(light),1000); ///< report the light message
+            oc_lwm2m_report((char *)&light,sizeof(light),1000); ///< report the light message
             osal_task_sleep(2*1000);
         }
-    }
 
     return ret;
 }

@@ -474,9 +474,9 @@ OC AL提供的基于LwM2M协议端云互通API如下：
 |int oc_lwm2m_register(const char *name,const oc_lwm2m_opt_t *opt);|将已经实现的config/report/deconfig注册到OC LwM2M中，注册成功返回0，失败返回-1|
 |int oc_lwm2m_unregister(const char *name);|取消注册|
 |int oc_lwm2m_init();|OC LwM2M初始化|
-|void* oc_lwm2m_config(oc_config_param_t *param);|设置华为OC LwM2M协议连接参数，等待连接建立并保持，如果连接成功，返回非空句柄。|
-|int oc_lwm2m_report(void *context,char *buf, int len,int timeout);|发送LwM2M数据到华为OC|
-|int oc_lwm2m_deconfig(void *context);|断开连接|
+|int oc_lwm2m_config(oc_config_param_t *param);|设置华为OC LwM2M协议连接参数，等待连接建立并保持;返回0成功 否则错误代码|
+|int oc_lwm2m_report(char *buf, int len,int timeout);|发送LwM2M数据到华为OC|
+|int oc_lwm2m_deconfig(void );|断开连接|
 
 #### 5.1.2.3 OC-CoAP
 OC AL提供的基于CoAP协议抽象层接口代码目录为：…\iot_link\oc\oc_coap，具体如下：
@@ -515,18 +515,18 @@ OC AL提供的基于CoAP协议端云互通API如下：
 
     typedef struct
     {
-	   ///< connect to the server
-	   void* (* connect)   (mqtt_al_conpara_t *param);
-	   ///< disconnect from the server
-	   int    (* disconnect)(void *handle );
-	   ///< publish a message to the server
-	   int	   (* publish)    (void *handle, mqtt_al_pubpara_t *msg);
-	   ///< subscribe a topic to the server
-	   int    (* subscribe)   (void *handle, mqtt_al_subpara_t *subpara);
-	   ///< unsubscribe a topic to the server
-	   int    (* unsubscribe) (void *handle, mqtt_al_unsubpara_t *unsubpara);
-	   ///< check the mqtt engine status
-	   en_mqtt_al_connect_state (* check_status) (void *handle);
+       ///< connect to the server
+       void* (* connect)   (mqtt_al_conpara_t *param);
+       ///< disconnect from the server
+       int    (* disconnect)(void *handle );
+       ///< publish a message to the server
+       int	   (* publish)    (void *handle, mqtt_al_pubpara_t *msg);
+       ///< subscribe a topic to the server
+       int    (* subscribe)   (void *handle, mqtt_al_subpara_t *subpara);
+       ///< unsubscribe a topic to the server
+       int    (* unsubscribe) (void *handle, mqtt_al_unsubpara_t *unsubpara);
+       ///< check the mqtt engine status
+       en_mqtt_al_connect_state (* check_status) (void *handle);
     }mqtt_al_op_t;
     int mqtt_al_install(mqtt_al_op_t *op);
 
@@ -556,18 +556,18 @@ OC AL提供的基于CoAP协议端云互通API如下：
 
     typedef struct
     {
-	   ///< coap init, prepare context, session, etc
-	   int    (* init)     (coap_al_initpara_t *initparam);
-	   ///< coap deinit
-	   int    (* deinit)   (void *handle);
-	   ///< coap add option
-	   void*  (* add_opt)  (coap_al_optpara_t *optparam);
-	   ///< new coap request
-	   void*  (* request)  (coap_al_reqpara_t *reqparam);
-	   ///< send a request to server
-	   int	   (* send)     (coap_al_sndpara_t *sndparam);
-	   ///< recv and handle response from server
-	   int    (* recv)     (coap_al_rcvpara_t *rcvparam);
+       ///< coap init, prepare context, session, etc
+       int    (* init)     (coap_al_initpara_t *initparam);
+       ///< coap deinit
+       int    (* deinit)   (void *handle);
+       ///< coap add option
+       void*  (* add_opt)  (coap_al_optpara_t *optparam);
+       ///< new coap request
+       void*  (* request)  (coap_al_reqpara_t *reqparam);
+       ///< send a request to server
+       int	   (* send)     (coap_al_sndpara_t *sndparam);
+       ///< recv and handle response from server
+       int    (* recv)     (coap_al_rcvpara_t *rcvparam);
     }coap_al_op_t;
     int coap_al_install(coap_al_op_t *op);
 

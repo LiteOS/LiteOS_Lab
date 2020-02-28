@@ -91,10 +91,12 @@ LDSCRIPT = $(PROJECTBASE)/$(LD_FILE)
 CPU = -mcpu=cortex-m4
 # fpu
 FPU = -mfpu=fpv4-sp-d16
+#FPU = -mabi=aapcs
 # float-abi
 FLOAT-ABI = -mfloat-abi=hard
+#FLOAT-ABI = -mfloat-abi=soft
 # mcu
-MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)
+MCU = $(CPU) -mthumb $(FPU) $(FLOAT-ABI)  
 
 # compile gcc flags
 ASFLAGS += $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
@@ -111,7 +113,6 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$@"
 # excluded unnecessary warnings
 CFLAGS += -Wno-missing-braces
 
-
 # libraries
 LIBS += -lc -lm -lnosys
 ifeq ($(USE_OTA), yes)
@@ -120,7 +121,6 @@ endif
 LIBDIR  += -L$(PROJECTBASE)/../Lib
 LDFLAGS += $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 LDFLAGS += -u _printf_float
-
 
 # default action: build all
 all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex $(BUILD_DIR)/$(TARGET).bin

@@ -46,7 +46,7 @@
 
 #ifdef __cplusplus
 #if __cplusplus
-    extern "C"{
+extern "C" {
 #endif
 #endif /* __cplusplus */
 
@@ -63,7 +63,7 @@
 #define LOG_ARG(FMT, ...) (void)lwm2m_printf("[%d][%s:%d] " FMT "\r\n", (uint32_t)lwm2m_gettime(), __func__ , __LINE__ , __VA_ARGS__)
 #define LOG_URI(URI)                                                                \
 {                                                                                   \
-    if ((URI) == NULL) (void)lwm2m_printf("[%s:%d] NULL\r\n", __func__ , __LINE__);     \
+    if (NULL == (URI)) (void)lwm2m_printf("[%s:%d] NULL\r\n", __func__ , __LINE__);     \
     else                                                                            \
     {                                                                               \
         (void)lwm2m_printf("[%s:%d] /%d", __func__ , __LINE__ , (URI)->objectId);       \
@@ -79,8 +79,8 @@
 
 
 // defined in registration_ext.c
-void registration_reset(lwm2m_context_t * contextP, lwm2m_server_t * serverP);
-lwm2m_server_t * registration_get_registered_server(lwm2m_context_t * contextP);
+void registration_reset(lwm2m_context_t *contextP, lwm2m_server_t *serverP);
+lwm2m_server_t *registration_get_registered_server(lwm2m_context_t *contextP);
 
 
 // defined in bootstrap_ext.c
@@ -99,7 +99,7 @@ void observe_app_step(lwm2m_context_t *contextP,
                       time_t *timeoutP);
 #endif // LWM2M_CLIENT_MODE
 
-static inline int dm_isUriOpaqueHandle(const lwm2m_uri_t * uriP)
+static inline int dm_isUriOpaqueHandle(const lwm2m_uri_t *uriP)
 {
     return (19 == uriP->objectId);
 }

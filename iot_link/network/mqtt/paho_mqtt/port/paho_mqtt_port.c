@@ -33,15 +33,12 @@
  *---------------------------------------------------------------------------*/
 #include "MQTTClient.h"
 
-#ifdef WITH_DTLS
-#include "dtls_interface.h"
-#endif
-
 #include <time.h>
 #include <sal.h>
 #include <mqtt_al.h>
 #include <paho_mqtt_port.h>
 
+#define CN_MQTT_CONNECT_TIMEOUT_MS  (10 *1000)
 #define cn_mqtt_cmd_timeout_ms (10 * 1000)
 #define cn_mqtt_events_handle_period_ms (1*1000)
 #define cn_mqtt_keepalive_interval_s (100)
@@ -51,18 +48,16 @@
 typedef struct
 {
     Network        network;
-    MQTTClient       client;
+    MQTTClient     client;
     void          *task;    //create a task for this client
     void          *rcvbuf;  //for the mqtt engine used
     void          *sndbuf;
 }paho_mqtt_cb_t;
 
 ///< waring: the paho mqtt has the opposite return code with normal socket read and write
+#ifdef CONFIG_DTLS_ENABLE
 
-
-#ifdef WITH_DTLS
-
-static int __tls_read(mbedtls_ssl_context *ssl, unsigned char *buffer, int len, int timeout)
+static int __tls_read(void *ssl, unsigned char *buffer, int len, int timeout)
 {
     int ret= -1;
     int rcvlen = -1;
@@ -72,7 +67,7 @@ static int __tls_read(mbedtls_ssl_context *ssl, unsigned char *buffer, int len, 
         return -1;
     }
 
-    rcvlen = dtls_read(ssl,buffer,len, timeout);
+    rcvlen = dtls_al_read(ssl,buffer,len, timeout);
 
     if(rcvlen == 0)
     {
@@ -89,7 +84,7 @@ static int __tls_read(mbedtls_ssl_context *ssl, unsigned char *buffer, int len, 
 
     return ret;
 }
-static int __tls_write(mbedtls_ssl_context *ssl, unsigned char *buffer, int len, int timeout)
+static int __tls_write(void *ssl, unsigned char *buffer, int len, int timeout)
 {
     int ret= -1;
     int sndlen = -1;
@@ -99,7 +94,7 @@ static int __tls_write(mbedtls_ssl_context *ssl, unsigned char *buffer, int len,
         return -1;
     }
 
-    sndlen = dtls_write(ssl,buffer,len);
+    sndlen = dtls_al_write(ssl,buffer,len,timeout);
 
     if(sndlen == 0)
     {
@@ -119,65 +114,51 @@ static int __tls_write(mbedtls_ssl_context *ssl, unsigned char *buffer, int len,
 
 #define PORT_BUF_LEN 16
 static int __tls_connect(Network *n, char *addr, int port)
-{
-    int ret;
-    mbedtls_ssl_context *ssl;
-    dtls_shakehand_info_s shakehand_info;
-    dtls_establish_info_s establish_info;
+{    int ret = -1;
+
+    void *handle = NULL;
+
+    dtls_al_para_t para;
+
     char port_buf[PORT_BUF_LEN];
 
-    memset(&shakehand_info, 0, sizeof(dtls_shakehand_info_s));
+    memset( &para,0, sizeof(para));
 
-    if (n->arg.type == en_mqtt_al_security_psk)
+    para.security.type = EN_DTLS_AL_SECURITY_TYPE_CERT;
+    para.istcp = 1;
+    para.isclient = 1;
+    para.security = n->arg;
+
+    if(EN_DTLS_AL_ERR_OK != dtls_al_new(&para,&handle))
     {
-        establish_info.psk_or_cert = VERIFY_WITH_PSK;
-        establish_info.v.p.psk =(const unsigned char *) n->arg.u.psk.psk_key.data;
-        establish_info.v.p.psk_len = n->arg.u.psk.psk_key.len;
-        establish_info.v.p.psk_identity = (unsigned char *)n->arg.u.psk.psk_id.data;
-
-        shakehand_info.psk_or_cert = VERIFY_WITH_PSK;
-
-
-    }
-    else if(n->arg.type == en_mqtt_al_security_cas)
-    {
-        establish_info.psk_or_cert = VERIFY_WITH_CERT;
-        establish_info.v.c.ca_cert = (const unsigned char *)n->arg.u.cas.ca_crt.data;
-        establish_info.v.c.cert_len = n->arg.u.cas.ca_crt.len;
-        shakehand_info.psk_or_cert = VERIFY_WITH_CERT;
-    }
-    establish_info.udp_or_tcp = MBEDTLS_NET_PROTO_TCP;
-
-    ssl = (void *)dtls_ssl_new(&establish_info, MBEDTLS_SSL_IS_CLIENT);
-    if (NULL == ssl)
-    {
-        goto exit;
+        return ret;
     }
 
-    shakehand_info.client_or_server = MBEDTLS_SSL_IS_CLIENT;
-    shakehand_info.udp_or_tcp = MBEDTLS_NET_PROTO_TCP;
-    shakehand_info.u.c.host = addr;
     snprintf(port_buf, PORT_BUF_LEN, "%d", port);
-    shakehand_info.u.c.port = port_buf;
 
-    ret = dtls_shakehand(ssl, &shakehand_info);
-    if (ret != 0)
+    ret = dtls_al_connect( handle, addr, port_buf, CN_MQTT_CONNECT_TIMEOUT_MS);
+    if (ret != EN_DTLS_AL_ERR_OK)
     {
-        goto exit;
+        dtls_al_destroy(handle);
+
+        ret = -1;
+        return ret;
+    }
+    else
+    {
+        ret = 0;
     }
 
-    n->ctx = ssl;
-    return 0;
-exit:
-    dtls_ssl_destroy(ssl);
-    return -1;
+    n->ctx = handle;
+    return ret;
+
 }
 
 static void __tls_disconnect(void *ctx)
 {
     if(NULL != ctx)
     {
-        dtls_ssl_destroy(ctx);
+        dtls_al_destroy(ctx);
     }
 
     return;
@@ -273,7 +254,7 @@ static void __socket_disconnect(void *ctx)
     sal_closesocket((int)ctx);
     return;
 }
-static int __socket_connect(Network *n, char *host, int port)
+static int __socket_connect(Network *n, const char *host, int port)
 {
     int ret = -1;
     int fd = -1;
@@ -297,7 +278,7 @@ static int __socket_connect(Network *n, char *host, int port)
     memset(&addr,0,sizeof(addr));
     addr.sin_family = AF_INET;
     memcpy(&addr.sin_addr.s_addr,entry->h_addr_list[0],sizeof(addr.sin_addr.s_addr));
-    addr.sin_port = htons(port);
+    addr.sin_port = htons(((uint16_t)port));
 
     if(-1 == sal_connect(fd,(struct sockaddr *)&addr,sizeof(addr)))
     {
@@ -312,6 +293,9 @@ static int __socket_connect(Network *n, char *host, int port)
     return ret;
 }
 
+
+
+
 static int __io_read(Network *n, unsigned char *buffer, int len, int timeout_ms)
 {
     int ret = -1;
@@ -321,22 +305,17 @@ static int __io_read(Network *n, unsigned char *buffer, int len, int timeout_ms)
         return ret;
     }
 
-    switch(n->arg.type)
+    if(n->arg.type == EN_DTLS_AL_SECURITY_TYPE_NONE)
     {
-        case en_mqtt_al_security_none :
-            ret = __socket_read(n->ctx, buffer, len, timeout_ms);
-            break;
-#ifdef WITH_DTLS
-        case en_mqtt_al_security_psk:
-        case en_mqtt_al_security_cas:
-            ret = __tls_read(n->ctx, buffer, len, timeout_ms);
-            break;
-        case en_mqtt_al_security_cacs:
-            break;    // TODO -- NOT IMPLEMENT YET
-#endif
-        default :
-            break;
+        ret = __socket_read(n->ctx, buffer, len, timeout_ms);
     }
+#if CONFIG_DTLS_ENABLE
+    else
+    {
+        ret = __tls_read(n->ctx, buffer, len, timeout_ms);
+    }
+#endif
+
     return ret;
 }
 
@@ -349,23 +328,16 @@ static int __io_write(Network *n, unsigned char *buffer, int len, int timeout_ms
         return -1;
     }
 
-    switch(n->arg.type)
+    if(n->arg.type == EN_DTLS_AL_SECURITY_TYPE_NONE)
     {
-    case en_mqtt_al_security_none :
         ret = __socket_write(n->ctx, buffer, len, timeout_ms);
-        break;
-#ifdef WITH_DTLS
-    case en_mqtt_al_security_psk:
-    case en_mqtt_al_security_cas:
-        ret = __tls_write(n->ctx, buffer, len,timeout_ms);
-        break;
-    case en_mqtt_al_security_cacs:
-        break;    // TODO -- NOT IMPLEMENT YET
-#endif
-    default :
-        break;
     }
-
+#if CONFIG_DTLS_ENABLE
+    else
+    {
+        ret = __tls_write(n->ctx, buffer, len,timeout_ms);
+    }
+#endif
     return ret;
 }
 
@@ -378,23 +350,16 @@ static int __io_connect(Network *n, char *addr, int port)
         return -1;
     }
 
-    switch(n->arg.type)
+    if(n->arg.type == EN_DTLS_AL_SECURITY_TYPE_NONE)
     {
-    case en_mqtt_al_security_none :
         ret = __socket_connect(n, addr, port);
-        break;
-#ifdef WITH_DTLS
-    case en_mqtt_al_security_psk:
-    case en_mqtt_al_security_cas:
-        ret = __tls_connect(n, addr, port);
-        break;
-    case en_mqtt_al_security_cacs:
-        break ;   //not implement yet
-#endif
-    default :
-        break;
     }
-
+#if CONFIG_DTLS_ENABLE
+    else
+    {
+        ret = __tls_connect(n, addr, port);
+    }
+#endif
     return ret;
 }
 
@@ -402,20 +367,17 @@ static int __io_connect(Network *n, char *addr, int port)
 
 static void __io_disconnect(Network *n)
 {
-    switch(n->arg.type)
+
+    if(n->arg.type == EN_DTLS_AL_SECURITY_TYPE_NONE)
     {
-        case en_mqtt_al_security_none :
-            __socket_disconnect(n->ctx);
-            break;
-    #ifdef WITH_DTLS
-        case en_mqtt_al_security_psk:
-        case en_mqtt_al_security_cas:
-            __tls_disconnect(n->ctx);
-            break;
-    #endif
-        default :
-            break;
+        __socket_disconnect(n->ctx);
     }
+#if CONFIG_DTLS_ENABLE
+    else
+    {
+        __tls_disconnect(n->ctx);
+    }
+#endif
 
     n->ctx = NULL;
 
@@ -452,7 +414,7 @@ static void * __connect(mqtt_al_conpara_t *conparam)
     paho_mqtt_cb_t   *cb = NULL;
 
     MQTTPacket_connectData option = MQTTPacket_connectData_initializer;
-    MQTTConnackData conack;
+    MQTTConnackData conack = {0};
     //malloc a handle
     cb = osal_malloc(sizeof(paho_mqtt_cb_t));
     if(NULL == cb)
@@ -472,7 +434,7 @@ static void * __connect(mqtt_al_conpara_t *conparam)
 
     if(NULL == conparam->security)
     {
-        n->arg.type = en_mqtt_al_security_none;
+        n->arg.type = EN_DTLS_AL_SECURITY_TYPE_NONE;
     }
     else
     {
@@ -513,14 +475,14 @@ static void * __connect(mqtt_al_conpara_t *conparam)
 
     option.keepAliveInterval = conparam->keepalivetime;
 
-    option.cleansession = conparam->cleansession;
+    option.cleansession = (unsigned char)conparam->cleansession;
 
     if(NULL != conparam->willmsg)
     {
 
         option.willFlag = 1;
         option.will.qos = conparam->willmsg->qos;
-        option.will.retained = conparam->willmsg->retain;
+        option.will.retained = (unsigned char )conparam->willmsg->retain;
 
         option.will.topicName.lenstring.len = conparam->willmsg->topic.len;
         option.will.topicName.lenstring.data = conparam->willmsg->topic.data;
@@ -665,7 +627,10 @@ static int __subscribe(void *handle,mqtt_al_subpara_t *para)
             general_dealer,&ack,para->dealer))
     {
         para->subret = ack.grantedQoS;
-        ret = 0;
+        if((ack.grantedQoS == QOS0)|| (ack.grantedQoS == QOS1 ) || (ack.grantedQoS == QOS2 ) )
+        {
+            ret = 0;
+        }
     }
 
     return ret;
@@ -710,7 +675,7 @@ static int __publish(void *handle, mqtt_al_pubpara_t *para)
     c = &cb->client;
 
     memset(&msg,0,sizeof(msg));
-    msg.retained = para->retain;
+    msg.retained = (unsigned char )para->retain;
     msg.qos = QOS0 + para->qos;
     msg.payload = para->msg.data;
     msg.payloadlen = para->msg.len;
@@ -724,7 +689,7 @@ static int __publish(void *handle, mqtt_al_pubpara_t *para)
 
 static en_mqtt_al_connect_state __check_status(void *handle)
 {
-    int ret = en_mqtt_al_connect_err;
+    en_mqtt_al_connect_state ret = en_mqtt_al_connect_err;
     MQTTClient       *c = NULL;
     paho_mqtt_cb_t   *cb = NULL;
 

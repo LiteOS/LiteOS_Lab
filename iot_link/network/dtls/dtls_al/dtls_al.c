@@ -36,3 +36,107 @@
  *  2019-10-17 19:50  zhangqianfu  The first version
  *
  */
+
+
+#include <stddef.h>
+#include <stdint.h>
+#include <string.h>
+#include <stdio.h>
+#include <dtls_al.h>
+
+
+static const dtls_al_t  *s_dtls_al;
+
+en_dtls_al_err_t dtls_al_new(dtls_al_para_t *para,void **handle)
+{
+    en_dtls_al_err_t ret = EN_DTLS_AL_ERR_NOCONFIG;
+    if( (NULL != s_dtls_al) && (NULL != s_dtls_al->io.io_new) )
+    {
+        ret = s_dtls_al->io.io_new(para, handle);
+    }
+    return ret;
+}
+
+
+int   dtls_al_connect(void *handle,const char *server_ip, const char *server_port, int timeout)
+{
+    int ret = -1;
+    if( (NULL != s_dtls_al) && (NULL != s_dtls_al->io.io_connect))
+    {
+        ret = s_dtls_al->io.io_connect(handle, server_ip,server_port, timeout);
+    }
+    return ret;
+}
+
+int   dtls_al_write(void *handle, uint8_t *msg, size_t len, int timeout)
+{
+    int ret = 0;
+    if( (NULL != s_dtls_al) && (NULL != s_dtls_al->io.io_write))
+    {
+        ret = s_dtls_al->io.io_write(handle, msg, len, timeout );
+    }
+    return ret;
+}
+
+int  dtls_al_read(void *handle, uint8_t *buf, size_t len, int timeout)
+{
+    int ret = 0;
+    if( (NULL != s_dtls_al) && (NULL != s_dtls_al->io.io_read))
+    {
+        ret = s_dtls_al->io.io_read(handle, buf, len, timeout );
+    }
+    return ret;
+}
+
+en_dtls_al_err_t   dtls_al_destroy(void *handle)
+{
+    en_dtls_al_err_t ret = EN_DTLS_AL_ERR_NOCONFIG;
+    if( (NULL != s_dtls_al) && (NULL != s_dtls_al->io.io_destroy))
+    {
+        ret = s_dtls_al->io.io_destroy( handle );
+    }
+    return ret;
+}
+
+
+int dtls_al_install(const dtls_al_t *dtls)
+{
+    int ret = -1;
+    if (NULL == s_dtls_al )
+    {
+        s_dtls_al = dtls;
+        ret = 0;
+    }
+
+    return ret;
+}
+
+int dtls_al_uninstall(const char*name)
+{
+    int ret = -1;
+
+    if((NULL != s_dtls_al) && (0 == strcmp(name,s_dtls_al->name)))
+    {
+        s_dtls_al = NULL;
+    }
+
+    return ret;
+}
+
+__attribute__((weak))  int dtls_imp_init(void)
+{
+    printf("%s:###please implement this function by yourself####\n\r",__FUNCTION__);
+    return -1;
+}
+
+int dtls_al_init(void)
+{
+
+    int ret = -1;
+
+    ret = dtls_imp_init();
+
+    return ret;
+}
+
+

@@ -142,9 +142,9 @@ int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const
     config.lifetime = lifetime;
     config.msg_deal = app_msg_deal;
     config.msg_deal_arg = NULL;
-    config.sec_type = en_mqtt_al_security_cas;
     config.id = (char *)deviceid;
     config.pwd = (char *)devicepasswd;
+    config.security.type = EN_DTLS_AL_SECURITY_TYPE_CERT;
 
     ret = oc_mqtt_config(&config);
 

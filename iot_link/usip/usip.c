@@ -275,7 +275,7 @@ UINT32 usip_init()
     if (ret != LOS_OK)
     {
 #ifdef USIP_LOG
-        USIP_PRINTF("====LOS_BinarySemCreate g_usipio_cb.usip_uart_rx_sema failed��error��0x%X\n",ret);
+        USIP_PRINTF("====LOS_BinarySemCreate g_usipio_cb.usip_uart_rx_sema failed!error:0x%X\n",ret);
 #endif
         return ret;
     }
@@ -284,7 +284,7 @@ UINT32 usip_init()
     if (ret != LOS_OK)
     {
 #ifdef USIP_LOG
-        USIP_PRINTF("====LOS_BinarySemCreate g_usipio_cb.usip_uart_hw_sem failed��error��0x%X\n",ret);
+        USIP_PRINTF("====LOS_BinarySemCreate g_usipio_cb.usip_uart_hw_sem failed!error:0x%X\n",ret);
 #endif
     	return ret;
     }
@@ -488,9 +488,9 @@ int usip_send_tlv(unsigned char pkg_num,unsigned char seq,unsigned short cmd,usi
 int usip_send_data(unsigned short cmd,unsigned char* data, unsigned short len)
 {
 #ifdef USIP_LOG
-    USIP_PRINTF("====usip_send_data cmd��%d\r\n",cmd);
-    USIP_PRINTF("====usip_send_data data��%s\r\n",data);
-    USIP_PRINTF("====usip_send_data len��%d\r\n",len);
+    USIP_PRINTF("====usip_send_data cmd:%d\r\n",cmd);
+    USIP_PRINTF("====usip_send_data data:%s\r\n",data);
+    USIP_PRINTF("====usip_send_data len:%d\r\n",len);
 #endif
 
     unsigned short ret = USIP_OK;
@@ -523,12 +523,12 @@ int usip_send_data(unsigned short cmd,unsigned char* data, unsigned short len)
         if(usip_send_tlv(package_num,seq,cmd,tlv) != USIP_OK)
         {
 #ifdef USIP_LOG
-        USIP_PRINTF("====usip_send_tlv failed��\r\n");
+        USIP_PRINTF("====usip_send_tlv failed!\r\n");
 #endif
             return USIP_ERROR;
         }
 #ifdef USIP_LOG
-        USIP_PRINTF("====usip_send_data package_num��%d\r\n",package_num);
+        USIP_PRINTF("====usip_send_data package_num:%d\r\n",package_num);
 #endif
         package_num++;
         tmp_data += tlv_val_max_len;
@@ -542,7 +542,7 @@ int usip_send_data(unsigned short cmd,unsigned char* data, unsigned short len)
         return USIP_ERROR;
     }
 #ifdef USIP_LOG
-    USIP_PRINTF("====usip_send_data package_num��%d\r\n",package_num);
+    USIP_PRINTF("====usip_send_data package_num:%d\r\n",package_num);
 #endif
     return USIP_OK;
 }

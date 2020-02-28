@@ -40,7 +40,6 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <mqtt_al.h>
-#include <oc_mqtt_assistant.h>   ///< use  this function to build some data structure for the user
 
 
 ///< the mode for the huawei OceanConnect  mode
@@ -63,10 +62,11 @@ typedef enum
     en_oc_mqtt_err_conversion,           ///< this means the mqtt version err
     en_oc_mqtt_err_conclientid,          ///< this means the client id is err
     en_oc_mqtt_err_conserver,            ///< this means the server refused the service for some reason(likely the id and pwd)
-    en_oc_mqtt_err_conuserpwd,           ///< bad user name or passwd
+    en_oc_mqtt_err_conuserpwd,           ///< bad user name or pwd
     en_oc_mqtt_err_conclient,            ///< the client id /user/pwd is right, but does not allowed
     en_oc_mqtt_err_subscribe,            ///< this means subscribe the topic failed
-    en_oc_mqtt_err_publish,              ///< this means subscribe the topic failed
+    en_oc_mqtt_err_unsubscribe,          ///< this means un-subscribe failed
+    en_oc_mqtt_err_publish,              ///< this means publish the topic failed
     en_oc_mqtt_err_configured,           ///< this means we has configured, please deconfigured it and then do configure again
     en_oc_mqtt_err_noconfigured,         ///< this means we have not configure it yet,so could not connect
     en_oc_mqtt_err_noconected,           ///< this means the connection has not been built, so you could not send data
@@ -81,14 +81,16 @@ typedef int (*fn_oc_mqtt_msg_deal)(void *arg,mqtt_al_msgrcv_t *msg);
 
 typedef struct
 {
-    en_oc_mqtt_mode  boot_mode;     ///< if bs mode, then the server and port must be the bs server's
-    uint8_t          lifetime;      ///< the keep alive time, used for the mqtt protocol
-    char            *server_addr;   ///< server address:domain name or ip address
-    char            *server_port;   ///< server port:
-    en_mqtt_al_security_t   sec_type;      ///< only support crt mode now
+    en_oc_mqtt_mode  boot_mode;            ///< if bs mode, then the server and port must be the bs server's
+    uint8_t          lifetime;             ///< the keep alive time, used for the mqtt protocol
+    char            *server_addr;          ///< server address:domain name or ip address
+    char            *server_port;          ///< server port:
+    ///< define for the tls
+    dtls_al_security_t  security;          ///< used for the transport
+
+    ///< define for the mqtt
     char                              *id;
     char                              *pwd;
-//    int                                device_mode;  ///< gateway or not, not used yet
     fn_oc_mqtt_msg_deal                msg_deal;       ///< when the agent receive any applciation data, please call this function
     void                              *msg_deal_arg;   ///< call back for the fn_oc_mqtt_msg_deal
 
@@ -100,6 +102,7 @@ typedef  int (*fn_oc_mqtt_config)(oc_mqtt_config_t *param);
 typedef  int (*fn_oc_mqtt_deconfig)(void);
 typedef  int (*fn_oc_mqtt_publish)(char *topic,uint8_t *msg,int msg_len,int qos);
 typedef  int (*fn_oc_mqtt_subscribe)(char *topic, int qos);
+typedef  en_oc_mqtt_err_code_t (*fn_oc_mqtt_unsubscribe)(char *topic);
 
 
 /**
@@ -108,10 +111,11 @@ typedef  int (*fn_oc_mqtt_subscribe)(char *topic, int qos);
 
 typedef struct
 {
-    fn_oc_mqtt_config      config;   ///< this function used for the configuration
-    fn_oc_mqtt_deconfig    deconfig; ///< this function used for the deconfig
-    fn_oc_mqtt_publish     publish;  ///< this function added by the new device profile
-    fn_oc_mqtt_subscribe   subscribe;///< this function make the tiny extended
+    fn_oc_mqtt_config      config;       ///< this function used for the configuration
+    fn_oc_mqtt_deconfig    deconfig;     ///< this function used for the deconfig
+    fn_oc_mqtt_publish     publish;      ///< this function added by the new device profile
+    fn_oc_mqtt_subscribe   subscribe;    ///< this function make the tiny extended
+    fn_oc_mqtt_unsubscribe unsubscribe;  ///< this function make the tiny extended
 }oc_mqtt_op_t;
 
 typedef struct
@@ -179,7 +183,7 @@ int oc_mqtt_deconfig(void);
 int oc_mqtt_publish(char *topic,uint8_t *msg,int msg_len,int qos);
 
 /**
- * @brief the application use this function to publish message to specified topic
+ * @brief the application use this function to subscribe the specified topic
  *
  * @param[in] topic: the destination topic
  *
@@ -187,7 +191,22 @@ int oc_mqtt_publish(char *topic,uint8_t *msg,int msg_len,int qos);
  *
  * @return code: define by en_oc_mqtt_err_code while 0 means success
  */
-int oc_mqtt_subscribe(char *topic,int qos);
+ int oc_mqtt_subscribe(char *topic,int qos);
+
+/**
+ * @brief the application use this function to unsubscribe the specified topic
+ *
+ * @param[in] topic: the destination topic
+ *
+ * @param[in] qos:the topic qos
+ *
+ * @return code: define by en_oc_mqtt_err_code while 0 means success
+ *
+ * @note: you should make the topic specified by your self
+ */
+ en_oc_mqtt_err_code_t oc_mqtt_unsubscribe(char *topic);
+
+
 
 /**
  *@brief this is the oc mqtt  initialize function,must be called first

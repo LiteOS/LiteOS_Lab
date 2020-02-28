@@ -90,14 +90,14 @@ static int __lwip_accept(int fd, struct sockaddr *addr, socklen_t *addrlen)
     ret = lwip_accept(fd, addr, addrlen);
 
     memcpy(buf,addr,2);
-    family = buf[2];
+    family = buf[1];
     memcpy(addr,&family,2);
 
     return ret;
 }
 
 
-static int __lwip_sendto(int fd, void *msg, int len, int flag, struct sockaddr *addr, int addrlen)
+static int __lwip_sendto(int fd, const void *msg, int len, int flag, struct sockaddr *addr, int addrlen)
 {
 
     int ret;
@@ -178,7 +178,7 @@ __attribute__((weak)) int netdriver_install()
 {
     printf("please remember to supply a netdriver---- please\n\r");
 
-    return -1;
+    return 0;
 }
 
 int link_tcpip_imp_init(void)

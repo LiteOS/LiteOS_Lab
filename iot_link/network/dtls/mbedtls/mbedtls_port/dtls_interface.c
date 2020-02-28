@@ -55,6 +55,7 @@
 
 #include "dtls_interface.h"
 #include "mbedtls/net_sockets.h"
+#include "mbedtls/ssl_internal.h"
 
 #include <sal.h>
 #include <osal.h>
@@ -74,7 +75,6 @@
 #endif
 
 
-
 mbedtls_ssl_context *dtls_ssl_new(dtls_establish_info_s *info, char plat_type)
 {
     int ret;
@@ -85,10 +85,12 @@ mbedtls_ssl_context *dtls_ssl_new(dtls_establish_info_s *info, char plat_type)
     mbedtls_timing_delay_context *timer = NULL;
 #if defined(MBEDTLS_X509_CRT_PARSE_C)
     mbedtls_x509_crt *cacert;
+    mbedtls_x509_crt *client_ca = NULL;
+    mbedtls_pk_context *client_pk = NULL;
 #endif
 
     const char *pers = "ssl_client";
-
+    int transport;
     ssl       = mbedtls_calloc(1, sizeof(mbedtls_ssl_context));
     conf      = mbedtls_calloc(1, sizeof(mbedtls_ssl_config));
     entropy   = mbedtls_calloc(1, sizeof(mbedtls_entropy_context));
@@ -108,10 +110,30 @@ mbedtls_ssl_context *dtls_ssl_new(dtls_establish_info_s *info, char plat_type)
         goto exit_fail;
     }
 
+#if defined(MBEDTLS_X509_CRT_PARSE_C)
+    if(NULL != info->v.c.client_ca) /// we'd better to make the client ca and key
+    {
+        client_ca    = mbedtls_calloc(1, sizeof(mbedtls_x509_crt));
+        client_pk    = mbedtls_calloc(1, sizeof(mbedtls_pk_context));
+        if((NULL == client_ca) || (NULL == client_pk))
+        {
+            goto exit_fail;
+        }
+        mbedtls_x509_crt_init(cacert);
+        mbedtls_pk_init(client_pk);
+    }
+#endif
+
     if (info->udp_or_tcp == MBEDTLS_NET_PROTO_UDP)
     {
+        transport = MBEDTLS_SSL_TRANSPORT_DATAGRAM;
         timer = mbedtls_calloc(1, sizeof(mbedtls_timing_delay_context));
-        if (NULL == timer) goto exit_fail;
+        if (NULL == timer)
+            goto exit_fail;
+    }
+    else
+    {
+        transport = MBEDTLS_SSL_TRANSPORT_STREAM;
     }
 
     mbedtls_ssl_init(ssl);
@@ -136,21 +158,7 @@ mbedtls_ssl_context *dtls_ssl_new(dtls_establish_info_s *info, char plat_type)
 
     MBEDTLS_LOG("setting up the SSL structure");
 
-    if (info->udp_or_tcp == MBEDTLS_NET_PROTO_UDP)
-    {
-        ret = mbedtls_ssl_config_defaults(conf,
-                                          plat_type,
-                                          MBEDTLS_SSL_TRANSPORT_DATAGRAM,
-                                          MBEDTLS_SSL_PRESET_DEFAULT);
-    }
-    else
-    {
-        ret = mbedtls_ssl_config_defaults(conf,
-                                          plat_type,
-                                          MBEDTLS_SSL_TRANSPORT_STREAM,
-                                          MBEDTLS_SSL_PRESET_DEFAULT);
-    }
-
+    ret = mbedtls_ssl_config_defaults(conf,plat_type,transport,MBEDTLS_SSL_PRESET_DEFAULT);
     if (ret != 0)
     {
         MBEDTLS_LOG("mbedtls_ssl_config_defaults failed: -0x%x", -ret);
@@ -191,6 +199,28 @@ mbedtls_ssl_context *dtls_ssl_new(dtls_establish_info_s *info, char plat_type)
         }
         mbedtls_ssl_conf_authmode(conf, MBEDTLS_SSL_VERIFY_REQUIRED);
         mbedtls_ssl_conf_ca_chain(conf, cacert, NULL);
+
+        if(NULL != info->v.c.client_ca) ///< setup the client key and ca
+        {
+            ret = mbedtls_x509_crt_parse(client_ca,info->v.c.client_ca,info->v.c.client_ca_len);
+            if(ret <0)
+            {
+                goto exit_fail;
+            }
+
+            ret = mbedtls_pk_parse_key(client_pk,info->v.c.client_pk,info->v.c.client_pk_len,\
+                                       info->v.c.client_pk_pwd,info->v.c.client_pk_pwd_len);
+            if(ret < 0)
+            {
+                goto exit_fail;
+            }
+
+            ret = mbedtls_ssl_conf_own_cert( conf, client_ca, client_pk );
+            if(ret != 0)
+            {
+                goto exit_fail;
+            }
+        }
     }
 #endif
 
@@ -243,6 +273,18 @@ exit_fail:
         mbedtls_x509_crt_free(cacert);
         mbedtls_free(cacert);
     }
+
+    if(client_ca)
+    {
+        mbedtls_x509_crt_free(client_ca);
+        mbedtls_free(client_ca);
+    }
+
+    if(client_pk)
+    {
+        mbedtls_pk_free(client_pk);
+        mbedtls_free(client_pk);
+    }
 #endif
 
     if (ssl)
@@ -255,7 +297,7 @@ exit_fail:
 
 static inline uint32_t dtls_gettime()
 {
-    return (uint32_t)(osal_sys_time() / 1000);
+    return (uint32_t)(osal_sys_time() );
 }
 
 int dtls_shakehand(mbedtls_ssl_context *ssl, const dtls_shakehand_info_s *info)
@@ -281,6 +323,11 @@ int dtls_shakehand(mbedtls_ssl_context *ssl, const dtls_shakehand_info_s *info)
     if (MBEDTLS_SSL_IS_CLIENT == info->client_or_server)
     {
         ret = mbedtls_net_connect(server_fd, info->u.c.host, info->u.c.port, info->udp_or_tcp);
+        if( 0 != ret)
+        {
+            ret = MBEDTLS_ERR_NET_CONNECT_FAILED;
+            goto exit_fail;
+        }
     }
     else
     {
@@ -371,6 +418,9 @@ void dtls_ssl_destroy(mbedtls_ssl_context *ssl)
     mbedtls_timing_delay_context *timer = NULL;
 #if defined(MBEDTLS_X509_CRT_PARSE_C)
     mbedtls_x509_crt             *cacert = NULL;
+    mbedtls_x509_crt             *client_ca = NULL;
+    mbedtls_pk_context           *client_pk = NULL;
+    mbedtls_ssl_key_cert         *key_cert = NULL;
 #endif
 
     if (ssl == NULL)
@@ -381,31 +431,41 @@ void dtls_ssl_destroy(mbedtls_ssl_context *ssl)
     conf       = (mbedtls_ssl_config *)ssl->conf;
     server_fd  = (mbedtls_net_context *)ssl->p_bio;
     timer      = (mbedtls_timing_delay_context *)ssl->p_timer;
-#if defined(MBEDTLS_X509_CRT_PARSE_C)
-    cacert     = (mbedtls_x509_crt *)conf->ca_chain;
-#endif
+
 
     do ret = mbedtls_ssl_close_notify( ssl );
     while( ret == MBEDTLS_ERR_SSL_WANT_WRITE );
     ret = 0;
 
 
-    if (conf)
+    if (NULL != conf)
     {
         ctr_drbg   = conf->p_rng;
 
-        if (ctr_drbg)
+        if (NULL !=ctr_drbg)
         {
             entropy =  ctr_drbg->p_entropy;
         }
+
+#if defined(MBEDTLS_X509_CRT_PARSE_C)
+        cacert     = (mbedtls_x509_crt *)conf->ca_chain;
+
+        key_cert   = conf->key_cert;
+        if(NULL != key_cert)
+        {
+            client_ca = (mbedtls_x509_crt *) key_cert->cert;
+            client_pk = key_cert->key;
+        }
+
+#endif
     }
 
-    if (server_fd)
+    if (NULL != server_fd)
     {
         mbedtls_net_free(server_fd);
     }
 
-    if (conf)
+    if (NULL != conf)
     {
         mbedtls_ssl_config_free(conf);
         mbedtls_free(conf);
@@ -435,6 +495,18 @@ void dtls_ssl_destroy(mbedtls_ssl_context *ssl)
         mbedtls_x509_crt_free(cacert);
         mbedtls_free(cacert);
     }
+    if( client_ca )
+    {
+        mbedtls_x509_crt_free(client_ca);
+        mbedtls_free(client_ca);
+    }
+
+    if( client_pk )
+    {
+        mbedtls_pk_free(client_pk);
+        mbedtls_free(client_pk);
+    }
+
 #endif
 
     mbedtls_ssl_free(ssl);

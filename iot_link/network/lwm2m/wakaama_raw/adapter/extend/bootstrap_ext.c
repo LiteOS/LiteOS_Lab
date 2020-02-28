@@ -39,20 +39,20 @@
 
 void prv_resetBootstrapServer(lwm2m_server_t *serverP, void *userData)
 {
-     if (serverP->sessionH != NULL)
-     {
-         lwm2m_close_connection(serverP->sessionH, userData);
-         serverP->sessionH = NULL;
-     }
-     free_block1_buffer(serverP->block1Data);
-     serverP->block1Data = NULL;
+    if (NULL != serverP->sessionH)
+    {
+        lwm2m_close_connection(serverP->sessionH, userData);
+        serverP->sessionH = NULL;
+    }
+
+    free_block1_buffer(serverP->block1Data);
+    serverP->block1Data = NULL;
 }
 
 
 void bootstrap_createBsConnection(lwm2m_context_t *contextP, lwm2m_server_t *targetP)
 {
     prv_resetBootstrapServer(targetP, contextP->userData);
-
     targetP->sessionH = lwm2m_connect_server(targetP->secObjInstID, contextP->userData);
 }
 
@@ -60,14 +60,15 @@ void bootstrap_createBsConnection(lwm2m_context_t *contextP, lwm2m_server_t *tar
 bool bootstrap_isBsServerIpValid(const lwm2m_context_t *contextP)
 {
     lwm2m_server_t *targetP;
-
     targetP = contextP->bootstrapServerList;
-    while (targetP != NULL)
+
+    while (NULL != targetP)
     {
-        if(lwm2m_is_sec_obj_uri_valid(targetP->secObjInstID, contextP->userData))
+        if (lwm2m_is_sec_obj_uri_valid(targetP->secObjInstID, contextP->userData))
         {
             return true;
         }
+
         targetP = targetP->next;
     }
 

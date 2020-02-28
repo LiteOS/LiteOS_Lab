@@ -72,7 +72,7 @@ int at_oobregister(const char *name,const void *index,size_t len,fn_at_oob func,
  * @param[in]:respbuflen,the respbuf length
  * @param[in]:timeout, the time you may wait for the response;and the unit is ms
  *
- * @return:0 success while -1 failed
+ * @return:>=0 success (return the received data length) while -1 failed
  * */
 
 int at_command(const void *cmd, size_t cmdlen,const char *index,\

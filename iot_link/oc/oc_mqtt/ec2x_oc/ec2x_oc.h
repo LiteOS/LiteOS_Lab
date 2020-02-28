@@ -44,11 +44,48 @@
 int ec2x_get_time(char *timebuffer);
 int ec2x_get_csq(int *csq);
 int ec2x_get_rssi(int *rssi);
-int ec2x_get_operator(char *buf, int len);
+int ec2x_get_operator(char *buf);
 
 ///< register the ec2x oc mqtt function to the system
 int ec2x_oc_init(void);
 
 
+///< iccid list
+#define CN_ICCID_MAX_LEN  24
+#define CN_ICCID_MAX_NUM  6
+#define CN_ICCID_COPS_LEN 12
+#define CN_EID_MAX_LEN    34
+typedef struct
+{
+    int   type;
+    int   status;
+    char  id[CN_ICCID_MAX_LEN];
+}iccid_t;
+
+typedef struct
+{
+    int         num;
+    iccid_t  iccid[CN_ICCID_MAX_NUM];
+}iccid_tab_t;
+
+typedef struct
+{
+    char id[CN_EID_MAX_LEN];
+}eid_t;
+
+#define CN_EC2X_VERSION_LEN_MAX    64
+typedef struct
+{
+    char ver[CN_EC2X_VERSION_LEN_MAX];
+}ec2x_ver_t;
+int ec2x_geticcidtab(iccid_tab_t  *tab);
+int ec2x_eniccid(iccid_t *iccid);
+int ec2x_geteid(eid_t *eid);
+int ec2x_getmqttversion(ec2x_ver_t *ver);
+int ec2x_echoset(int mode);
+int ec2x_hwsimset(int mode);
+int ec2x_cpin(void);
+int ec2x_cgatt(int *cgatt);
+int ec2x_cgreg(int *n,int *status);
 
 #endif /* __BOUDICA150_OC_H */

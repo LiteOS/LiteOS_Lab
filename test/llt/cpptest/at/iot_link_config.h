@@ -1,0 +1,2 @@
+#define CONFIG_AT_DEVICENAME    "atdev_esp8266"
+#define CONFIG_AT_BAUDRATE      115200

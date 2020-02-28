@@ -33,7 +33,7 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-04-28 15:00  zhangqianfu  The first version  
+ *  2019-04-28 15:00  zhangqianfu  The first version
  *
  */
 
@@ -44,13 +44,6 @@
 #if CONFIG_MACOS_ENABLE
     #include <sys/select.h>
 #endif
-
-
-#ifdef WITH_DTLS
-#include <dtls_interface.h>
-
-#endif
-
 
 
 #define  CN_LINK_VERSION_MAJOR      1
@@ -118,6 +111,16 @@ int link_main(void *args)
     #include <at.h>
     #include <iot_link_config.h>
     extern bool_t uart_at_init(int baud);
+
+
+    #ifndef CONFIG_AT_BAUDRATE
+    #define CONFIG_AT_BAUDRATE  9600
+    #endif
+
+    #ifndef CONFIG_AT_DEVICENAME
+    #define CONFIG_AT_DEVICENAME  "atdev"
+    #endif
+
     ///< install the at framework for the link
     uart_at_init(CONFIG_AT_BAUDRATE);
     at_init(CONFIG_AT_DEVICENAME);
@@ -142,8 +145,9 @@ int link_main(void *args)
 #endif
 
 //////////////////////////  DTLS PROTOCOL  /////////////////////////////////////
-#ifdef WITH_DTLS
-    dtls_init();
+#ifdef CONFIG_DTLS_ENABLE
+    #include <dtls_al.h>
+    dtls_al_init();
 #endif
 
 //////////////////////////  MQTT PROTOCOL  /////////////////////////////////////
@@ -168,6 +172,12 @@ int link_main(void *args)
 #elif CONFIG_LIBCOAP_ENABLE
     #include <libcoap_port.h>
     coap_install_libcoap();
+#endif
+
+//////////////////////////  LWM2M PROTOCOL  /////////////////////////////////
+#if CONFIG_WAKAAMA_ENABLE
+    #include <lwm2m_port.h>
+    lwm2m_install();
 #endif
 
 //////////////////////////  OC MQTT  //////////////////////////////////
