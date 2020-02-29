@@ -475,6 +475,8 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
     cb->config.msg_deal = config->msg_deal;
     cb->config.msg_deal_arg = config->msg_deal_arg;
 
+    cb->config_mem = mem_buf; ///< this is the membuf
+
     cb->config.id = mem_buf;
     strcpy( mem_buf,config->id );
     mem_buf += strlen(config->id) + 1;

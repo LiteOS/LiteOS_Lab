@@ -162,7 +162,7 @@ int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const
     if(( NULL != s_client_ca ) && ((NULL != s_client_pk)))
     {
         config.security.u.cert.client_ca  = (uint8_t *)s_client_ca;
-        config.security.u.cert.server_ca_len = strlen(s_client_ca) +1;///< must include the '\0'
+        config.security.u.cert.client_ca_len = strlen(s_client_ca) +1;///< must include the '\0'
 
         config.security.u.cert.client_pk = (uint8_t *)s_client_pk;
         config.security.u.cert.client_pk_len = strlen(s_client_pk) +1;
@@ -203,7 +203,7 @@ int hwoc_mqtt_disconnect()
 ///< ATRESPONSE:   +SUBSCRIBE OK  when succes
 ///                +SUBSCRIBE ERR:code  when failed
 ///<               code:reference to en_oc_mqtt_err_code_t defines
-int hwoc_mqtt_subscribe(char *topic, int qos)
+int hwoc_mqtt_subscribe(int qos,char *topic)
 {
     int ret = -1;
 
@@ -313,17 +313,19 @@ int hwoc_mqtt_clientpk(char *client_pk, char *client_pk_pwd)
         s_client_pk = NULL;
     }
 
-    if(NULL == s_client_pk_pwd)
+    if(NULL != s_client_pk_pwd)
     {
         osal_free(s_client_pk_pwd);
         s_client_pk_pwd = NULL;
     }
-    else
+
+    if( NULL != client_pk)
     {
         s_client_pk = osal_strdup(client_pk);
         if(NULL == s_client_pk)
         {
             ret = en_oc_mqtt_err_sysmem;
+            return ret;
         }
 
         if(NULL != client_pk_pwd)
@@ -331,7 +333,11 @@ int hwoc_mqtt_clientpk(char *client_pk, char *client_pk_pwd)
             s_client_pk_pwd = osal_strdup(client_pk_pwd);
             if(NULL == s_client_pk_pwd)
             {
+                osal_free(s_client_pk);
+                s_client_pk = NULL;
+
                 ret = en_oc_mqtt_err_sysmem;
+                return ret;
             }
         }
     }

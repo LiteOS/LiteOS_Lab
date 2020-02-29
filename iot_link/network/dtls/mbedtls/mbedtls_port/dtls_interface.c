@@ -119,7 +119,7 @@ mbedtls_ssl_context *dtls_ssl_new(dtls_establish_info_s *info, char plat_type)
         {
             goto exit_fail;
         }
-        mbedtls_x509_crt_init(cacert);
+        mbedtls_x509_crt_init(client_ca);
         mbedtls_pk_init(client_pk);
     }
 #endif

@@ -53,7 +53,7 @@ void hwoc_mqtt_recvpub(int qos,int dup,const char *topic,uint8_t *payload, int l
 void hwoc_mqtt_received(int qos,uint8_t *payload, int len);
 
 ///< at command extended for v5 version
-int hwoc_mqtt_subscribe(char *topic, int qos);
+int hwoc_mqtt_subscribe(int qos,char *topic);
 int hwoc_mqtt_unsubscribe(char *topic);
 int hwoc_mqtt_clientca(char *client_ca);
 int hwoc_mqtt_serverca(char *server_ca);
