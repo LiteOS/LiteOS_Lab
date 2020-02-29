@@ -46,9 +46,9 @@
 #endif
 
 
-#define  CN_LINK_VERSION_MAJOR      1
-#define  CN_LINK_VERSION_MINOR      3
-#define  CN_LINK_VERSION_FEATURE    1
+#define  CN_LINK_VERSION_MAJOR      2
+#define  CN_LINK_VERSION_MINOR      0
+#define  CN_LINK_VERSION_FEATURE    0
 
 
 static char s_link_mainversion[64];

@@ -108,7 +108,6 @@ const char *s_new_topic_fmt[]=
     "$oc/devices/%s/sys/properties/get/#",
     "$oc/devices/%s/sys/shadow/get/response/#",
     "$oc/devices/%s/sys/events/down",
-    "/huawei/v1/devices/%s/command/json",  ///< the bootstrap need this topic to do the reboot
 };
 #define CN_NEW_TOPIC_NUM     (sizeof(s_new_topic_fmt)/sizeof(const char *))
 
