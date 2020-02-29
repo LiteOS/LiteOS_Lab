@@ -39,6 +39,8 @@
 #include <osal.h>
 #include <oc_mqtt_al.h>
 
+
+
 extern int link_main(void *args);
 
 static char *s_server_ca = NULL; ///< used to storage the server ca
@@ -132,6 +134,8 @@ int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const
     oc_mqtt_config_t config;
 
     link_main(NULL);
+    memset(&config,0,sizeof(config));
+
     if(bsmode)
     {
         config.boot_mode = en_oc_mqtt_mode_bs_static_nodeid_hmacsha256_notimecheck_json;
@@ -140,8 +144,6 @@ int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const
     {
         config.boot_mode = en_oc_mqtt_mode_nobs_static_nodeid_hmacsha256_notimecheck_json;
     }
-
-    memset(&config,0,sizeof(config));
     config.server_addr = (char *)ip;
     config.server_port =(char *) port;
     config.lifetime = lifetime;
