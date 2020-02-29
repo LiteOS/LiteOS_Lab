@@ -50,6 +50,9 @@ ifeq ($(CONFIG_OC_MQTT_ENABLE),y)
     ifeq ($(CONFIG_OC_MQTTDEMO_BSENABLE),y)
     	C_DEFS += -D CONFIG_OC_MQTT_DEMO_BS=1	
     endif
+    C_DEFS += -D CONFIG_OCMQTTDEMOS_ENABLE=1
+    
+    
 endif    
     
 

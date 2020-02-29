@@ -52,5 +52,12 @@ int  hwoc_mqtt_send(int qos,uint8_t *payload,int len);
 void hwoc_mqtt_recvpub(int qos,int dup,const char *topic,uint8_t *payload, int len);
 void hwoc_mqtt_received(int qos,uint8_t *payload, int len);
 
+///< at command extended for v5 version
+int hwoc_mqtt_subscribe(int qos,char *topic);
+int hwoc_mqtt_unsubscribe(char *topic);
+int hwoc_mqtt_clientca(char *client_ca);
+int hwoc_mqtt_serverca(char *server_ca);
+int hwoc_mqtt_clientpk(char *client_pk, char *client_pk_pwd);
+
 
 #endif /* LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_AL_OC_MQTT_AT_H_ */

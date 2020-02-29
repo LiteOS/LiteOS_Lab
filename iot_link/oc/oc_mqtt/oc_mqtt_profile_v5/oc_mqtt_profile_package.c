@@ -127,7 +127,7 @@ char *oc_mqtt_profile_package_msgup(oc_mqtt_profile_msgup_t *payload)
     cJSON_AddItemToObjectCS(root,CN_OC_MQTT_PROFILE_MSGUP_KEY_MSGCONTENT,msg_conntent);
 
     ///< OK, now we make it to a buffer
-    ret = cJSON_Print(root);
+    ret = cJSON_PrintUnformatted(root);
     cJSON_Delete(root);
     return ret;
 
@@ -303,7 +303,7 @@ char *oc_mqtt_profile_package_propertyreport(oc_mqtt_profile_service_t *payload)
     cJSON_AddItemToObjectCS(root,CN_OC_MQTT_PROFILE_SERVICES_KEY,services);
 
     ///< OK, now we make it to a buffer
-    ret = cJSON_Print(root);
+    ret = cJSON_PrintUnformatted(root);
     cJSON_Delete(root);
     return ret;
 
@@ -373,7 +373,7 @@ char *oc_mqtt_profile_package_gwpropertyreport(oc_mqtt_profile_device_t *payload
     }
 
     ///< OK, now we make it to a buffer
-    ret = cJSON_Print(root);
+    ret = cJSON_PrintUnformatted(root);
     cJSON_Delete(root);
     return ret;
 
@@ -426,7 +426,7 @@ char *oc_mqtt_profile_package_propertysetresp(oc_mqtt_profile_propertysetresp_t 
 
     }
     ///< OK, now we make it to a buffer
-    ret = cJSON_Print(root);
+    ret = cJSON_PrintUnformatted(root);
     cJSON_Delete(root);
     return ret;
 
@@ -462,7 +462,7 @@ char *oc_mqtt_profile_package_propertygetresp(oc_mqtt_profile_propertygetresp_t 
     cJSON_AddItemToObjectCS(root,CN_OC_MQTT_PROFILE_SERVICES_KEY,services);
 
     ///< OK, now we make it to a buffer
-    ret = cJSON_Print(root);
+    ret = cJSON_PrintUnformatted(root);
     cJSON_Delete(root);
     return ret;
 
@@ -523,7 +523,7 @@ char *oc_mqtt_profile_package_cmdresp(oc_mqtt_profile_cmdresp_t *payload)
     }
 
     ///< OK, now we make it to a buffer
-    ret = cJSON_Print(root);
+    ret = cJSON_PrintUnformatted(root);
     cJSON_Delete(root);
     return ret;
 
