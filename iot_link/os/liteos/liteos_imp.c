@@ -205,6 +205,36 @@ static bool_t  __semp_del(osal_semp_t semp)
     }
 }
 
+static bool_t  __queue_create(osal_queue_t *queue,int len,int msgsize)
+{
+    return LOS_QueueCreate(NULL, len, (UINT32 *) queue, 0, msgsize) == LOS_OK;
+}
+
+static bool_t  __queue_send(osal_queue_t queue, void *pbuf, unsigned int bufsize, unsigned int timeout)
+{
+    if (timeout == cn_osal_timeout_forever)
+    {
+        timeout = LOS_WAIT_FOREVER;
+    }
+
+    return LOS_QueueWriteCopy((UINT32)(uintptr_t)queue, pbuf, bufsize, timeout) == LOS_OK;
+}
+
+static bool_t  __queue_recv(osal_queue_t queue, void *pbuf, unsigned int bufsize, unsigned int timeout)
+{
+    if (timeout == cn_osal_timeout_forever)
+    {
+        timeout = LOS_WAIT_FOREVER;
+    }
+
+    return LOS_QueueReadCopy((UINT32)(uintptr_t)queue, pbuf, &bufsize, timeout) == LOS_OK;
+}
+
+static bool_t  __queue_del(osal_queue_t queue)
+{
+    return LOS_QueueDelete((UINT32)(uintptr_t)queue) == LOS_OK;
+}
+
 
 ///< this implement for the memory management
 #include <los_memory.h>
@@ -276,6 +306,11 @@ static const tag_os_ops s_liteos_ops =
     .semp_pend = __semp_pend,
     .semp_post = __semp_post,
     .semp_del = __semp_del,
+
+    .queue_create = __queue_create,
+    .queue_send = __queue_send,
+    .queue_recv = __queue_recv,
+    .queue_del = __queue_del,
 
     .malloc = __mem_malloc,
     .free = __mem_free,
