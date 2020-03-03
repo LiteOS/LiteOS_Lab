@@ -42,7 +42,7 @@
 
 /* macros */
 
-#define LOcATION_TASK_NAME                      "location"
+#define LOCATION_TASK_NAME                      "location"
 #define LOCATION_TASK_STACK_SIZE                0x1000
 #define LOCATION_TASK_PRIO                      10
 
@@ -149,7 +149,7 @@ bool_t location_service_start (void)
         ret = __location_device_start ();
 
         if (ret) {
-            __location_task_id = osal_task_create (LOcATION_TASK_NAME,
+            __location_task_id = osal_task_create (LOCATION_TASK_NAME,
                                                    __location_task, NULL,
                                                    LOCATION_TASK_STACK_SIZE,
                                                    NULL, LOCATION_TASK_PRIO);
