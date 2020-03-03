@@ -47,8 +47,7 @@ typedef uintptr_t               service_id;
 
 /* externs */
 
-extern service_id service_create  (const char *name, int (*handler) (void *),
-                                   int stack_size, int prio);
+extern service_id service_create  (const char *name, int (*handler) (void *), int prio);
 extern service_id service_open    (const char *name);
 extern bool_t     service_close   (service_id sid);
 extern bool_t     service_send    (service_id sid, void *msg, void (*pfn) (void *, int));
