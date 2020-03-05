@@ -99,7 +99,7 @@ static int __oc_service_handler (void * arg)
 
 int oc_service_init (const char* name)
 {
-	if (service_create (name, __oc_service_handler, 6) == INVALID_SID)
+	if (service_create (SERVICE_DOMAIN_SYSTEM, name, __oc_service_handler, 6) == INVALID_SID)
 	{
 	    printf ("Fail to create oc service!\n");
 
