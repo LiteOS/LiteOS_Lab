@@ -46,58 +46,58 @@
 
 #define NR_GROW_MESSAGES            16
 #define NR_MAX_MSGS                 65535
+#define SERVICE_TASK_NAME           "service"
+#define SERVICE_TASK_PRIO           1
+#define SERVICE_TASK_STACK_SIZE     0x1000
 
 /* typedefs */
 
-struct message
-{
+struct message {
     struct message *next;
+    struct service *service;
     void           *buff;
     void          (*pfn) (void *, int);
 };
 
-struct service
-{
+struct service {
     const char     *name;
     struct service *next;
-    void           *task;
-    osal_semp_t     sem;
-    struct message *head;
-    struct message *tail;
     int           (*handler) (void *);
-    int             stack_size;
     int             prio;
     int             open_count;
+    bool_t          running;
 };
 
 /* locals */
 
-static struct service *__services = NULL;
-static struct message *__messages = NULL;
-static osal_mutex_t    __services_lock;
+static struct service   *__services     = NULL;
+static struct message   *__message_pool = NULL;
+static struct message   *__message_heads [32];
+static struct message   *__message_tails [32];
+static osal_mutex_t      __services_lock;
+static osal_semp_t       __services_sem;
+static volatile uint32_t __services_bitmap = 0;
+static void             *__services_task;
 
 static void __msg_grow (void)
 {
     int i;
 
-    if (__messages != NULL)
-    {
+    if (__message_pool != NULL) {
         return;
     }
 
-    __messages = (struct message *) osal_malloc (NR_GROW_MESSAGES * sizeof (struct message));
+    __message_pool = (struct message *) osal_malloc (NR_GROW_MESSAGES * sizeof (struct message));
 
-    if (__messages == NULL)
-    {
+    if (__message_pool == NULL) {
         return;
     }
 
-    for (i = 0; i < NR_GROW_MESSAGES - 1; i++)
-    {
-        __messages [i].next = __messages + i + 1;
+    for (i = 0; i < NR_GROW_MESSAGES - 1; i++) {
+        __message_pool [i].next = __message_pool + i + 1;
     }
 
-    __messages [i].next = NULL;
+    __message_pool [i].next = NULL;
 }
 
 static struct message *__get_message (void)
@@ -108,10 +108,9 @@ static struct message *__get_message (void)
     {
         __msg_grow ();
 
-        if (__messages != NULL)
-        {
-            message    = __messages;
-            __messages = __messages->next;
+        if (__message_pool != NULL) {
+            message        = __message_pool;
+            __message_pool = __message_pool->next;
         }
 
         (void) osal_mutex_unlock (__services_lock);
@@ -122,15 +121,12 @@ static struct message *__get_message (void)
 
 static void __put_message (struct message *message)
 {
-    if (osal_mutex_lock (__services_lock))
-    {
-        message->next = __messages;
-        __messages    = message;
+    if (osal_mutex_lock (__services_lock)) {
+        message->next  = __message_pool;
+        __message_pool = message;
 
         (void) osal_mutex_unlock (__services_lock);
-    }
-    else
-    {
+    } else {
         // we should never be here
     }
 }
@@ -147,14 +143,11 @@ service_id service_open (const char *name)
     struct service *service = NULL;
     struct service *itr;
 
-    if (osal_mutex_lock (__services_lock))
-    {
+    if (osal_mutex_lock (__services_lock)) {
         itr = __services;
 
-        while (itr != NULL)
-        {
-            if (strcmp (itr->name, name) == 0)
-            {
+        while (itr != NULL) {
+            if (strcmp (itr->name, name) == 0) {
                 service = itr;
                 service->open_count++;
                 break;
@@ -180,18 +173,15 @@ bool_t service_close (service_id sid)
 {
     struct service *service = (struct service *) sid;
 
-    if (service == NULL)
-    {
+    if (service == NULL) {
         return false;
     }
 
-    if (!osal_mutex_lock (__services_lock))
-    {
+    if (!osal_mutex_lock (__services_lock)) {
         return false;
     }
 
-    if (service->open_count > 0)
-    {
+    if (service->open_count > 0) {
         service->open_count--;
     }
 
@@ -213,86 +203,131 @@ bool_t service_send (service_id sid, void *msg, void (*pfn) (void *, int))
 {
     struct service *service = (struct service *) sid;
     struct message *message;
-    bool_t          ret = false;
 
-    if (service == NULL)
-    {
-        return ret;
+    if (service == NULL) {
+        return false;
+    }
+
+    if (service->prio >= 32) {
+        return false;
     }
 
     message = __get_message ();
 
-    if (message == NULL)
-    {
-        return ret;
+    if (message == NULL) {
+        return false;
     }
 
-    message->buff = msg;
-    message->pfn  = pfn;
-    message->next = NULL;
+    message->buff    = msg;
+    message->pfn     = pfn;
+    message->next    = NULL;
+    message->service = service;
 
-    if (!osal_mutex_lock (__services_lock))
-    {
+    if (!osal_mutex_lock (__services_lock)) {
         __put_message (message);
 
-        return ret;
+        return false;
     }
 
-    if (service->task != NULL)
-    {
-        if (service->head == NULL)
-        {
-            service->head = message;
-            service->tail = message;
-        }
-        else
-        {
-            service->tail->next = message;
+    if (__message_heads [service->prio] == NULL) {
+        __message_heads [service->prio] = message;
+        __message_tails [service->prio] = message;
+    } else {
+        __message_tails [service->prio]->next = message;
+        __message_tails [service->prio] = message;
+    }
+
+    __services_bitmap |= 1 << service->prio;
+
+    (void) osal_mutex_unlock (__services_lock);
+
+    (void) osal_semp_post (__services_sem);
+
+    return true;
+}
+
+// x will never be 0
+static int __find_first_bit (uint32_t x)
+{
+    int n = 1;
+
+    if ((x & 0x0000ffff) == 0) {n = n +16; x = x >> 16;}
+    if ((x & 0x000000ff) == 0) {n = n + 8; x = x >>  8;}
+    if ((x & 0x0000000f) == 0) {n = n + 4; x = x >>  4;}
+    if ((x & 0x00000003) == 0) {n = n + 2; x = x >>  2;}
+
+    return n - (x & 1);
+}
+
+// process a highest priority service every time
+static void __service_process (void)
+{
+    struct service *service;
+    struct message *message;
+    int             ret;
+    int             i = __find_first_bit (__services_bitmap);
+
+    while (!osal_mutex_lock (__services_lock)) {
+        printf ("Fail to get __services_lock, retry!\n\r");
+    }
+
+    message = __message_heads [i];
+
+    if (message != NULL) {
+        if (message->service->running) {
+            service = message->service;
+
+            ret = service->handler (message->buff);
+
+            if (message->pfn != NULL) {
+                message->pfn (message->buff, ret);
+            }
         }
 
-        ret = osal_semp_post (service->sem);
+        __message_heads [i] = message->next;
+    } else {
+        __services_bitmap &= ~(1 << i);
     }
 
     (void) osal_mutex_unlock (__services_lock);
 
-    if (ret == false)
-    {
+    if (message != NULL) {
         __put_message (message);
     }
-
-    return ret;
 }
 
 static int __service_entry (void *arg)
 {
-    struct service *service = (struct service *) arg;
-    struct message *message;
-    int             ret;
+    while (1) {
+        while (!osal_semp_pend (__services_sem, cn_osal_timeout_forever)) {
+            printf ("Fail to pend __services_sem, retry!\n\r");
+        }
 
-    while (1)
-    {
-        if (osal_semp_pend (service->sem, cn_osal_timeout_forever))
-        {
-            if (osal_mutex_lock (__services_lock))
-            {
-                message       = service->head;
-                service->head = service->head->next;
-
-                (void) osal_mutex_unlock (__services_lock);
-
-                ret = service->handler (message->buff);
-
-                if (message->pfn != NULL)
-                {
-                    message->pfn (message->buff, ret);
-                }
-
-                __put_message (message);
-            }
+        while (__services_bitmap != 0) {
+            __service_process ();
         }
     }
 
     return 0;
+}
+
+static bool_t __service_run (service_id sid, bool_t running)
+{
+    struct service *service = (struct service *) sid;
+
+    if (service == NULL) {
+        return false;
+    }
+
+    if (!osal_mutex_lock (__services_lock)) {
+        return false;
+    }
+
+    service->running = running;
+
+    (void) osal_mutex_unlock (__services_lock);
+
+    return true;
 }
 
 /**
@@ -304,40 +339,7 @@ static int __service_entry (void *arg)
 
 bool_t service_start (service_id sid)
 {
-    struct service *service = (struct service *) sid;
-
-    if (service == NULL)
-    {
-        return false;
-    }
-
-    if (!osal_mutex_lock (__services_lock))
-    {
-        return false;
-    }
-
-    if (service->task != NULL)
-    {
-        goto exit;
-    }
-
-    if (!osal_semp_create (&service->sem, NR_MAX_MSGS, 0))
-    {
-        goto exit;
-    }
-    
-    service->task = osal_task_create (service->name, __service_entry,
-                                      (void *) service, service->stack_size,
-                                      NULL, service->prio);
-    if (service->task == NULL)
-    {
-        (void) osal_semp_del (service->sem);
-    }
-
-exit:
-    (void) osal_mutex_unlock (__services_lock);
-
-    return service->task != NULL;
+    return __service_run (sid, true);
 }
 
 /**
@@ -349,34 +351,7 @@ exit:
 
 bool_t service_stop (service_id sid)
 {
-    struct service *service = (struct service *) sid;
-
-    if (service == NULL)
-    {
-        return false;
-    }
-
-    if (!osal_mutex_lock (__services_lock))
-    {
-        return false;
-    }
-
-    if (service->open_count != 0)
-    {
-        (void) osal_mutex_unlock (__services_lock);
-        return false;
-    }
-
-    if (service->task != NULL)
-    {
-        osal_task_kill (service->task);
-        osal_semp_del (service->sem);
-        service->task = NULL;
-    }
-
-    (void) osal_mutex_unlock (__services_lock);
-
-    return true;
+    return __service_run (sid, false);
 }
 
 /**
@@ -406,41 +381,25 @@ bool_t service_restart (service_id sid)
  * return: valid service id on success, invalid service id otherwise
  */
 
-service_id service_create (const char * name, int (* handler) (void *),
-                           int stack_size, int prio)
+service_id service_create (const char * name, int (* handler) (void *), int prio)
 {
     struct service *service;
 
     service = (struct service *) osal_malloc (sizeof (struct service));
 
-    if (service == NULL)
-    {
+    if (service == NULL) {
         goto err;
     }
 
-    if (!osal_semp_create (&service->sem, NR_MAX_MSGS, 0))
-    {
-        goto err_free_service;
-    }
-
     service->handler    = handler;
-    service->head       = NULL;
-    service->tail       = NULL;
     service->name       = name;
-    service->task       = NULL;
-    service->stack_size = stack_size;
     service->prio       = prio;
     service->open_count = 0;
+    service->running    = true;
 
-    if (!service_start ((service_id) service))
-        {
-        goto err_free_sem;
-        }
-
-    if (!osal_mutex_lock (__services_lock))
-        {
-        goto err_stop_service;
-        }
+    if (!osal_mutex_lock (__services_lock)) {
+        goto err_free_service;
+    }
 
     service->next = __services;
 
@@ -450,10 +409,6 @@ service_id service_create (const char * name, int (* handler) (void *),
 
     return (service_id) service;
 
-err_stop_service:
-    service_stop ((service_id) service);
-err_free_sem:
-    osal_semp_del (service->sem);
 err_free_service:
     osal_free (service);
 err:
@@ -468,5 +423,27 @@ err:
 
 bool_t service_init (void)
 {
-    return osal_mutex_create (&__services_lock);
+    if (!osal_semp_create (&__services_sem, NR_MAX_MSGS, 0)) {
+        return false;
+    }
+
+    if (!osal_mutex_create (&__services_lock)) {
+        goto err_free_sem;
+    }
+
+    __services_task = osal_task_create (SERVICE_TASK_NAME, __service_entry, 0,
+                                        SERVICE_TASK_STACK_SIZE, NULL,
+                                        SERVICE_TASK_PRIO);
+
+    if (__services_task == NULL) {
+        goto err_free_mutex;
+    }
+
+    return true;
+
+err_free_mutex:
+    osal_mutex_del (__services_lock);
+err_free_sem:
+    osal_semp_del (__services_sem);
+    return false;
 }
