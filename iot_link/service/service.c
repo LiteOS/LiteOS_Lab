@@ -66,6 +66,9 @@ struct service {
     int             prio;
     int             open_count;
     bool_t          running;
+    uint64_t        recieved;
+    uint64_t        dropped;
+    uint64_t        handled;
 };
 
 /* locals */
@@ -104,8 +107,7 @@ static struct message *__get_message (void)
 {
     struct message *message = NULL;
 
-    if (osal_mutex_lock (__services_lock))
-    {
+    if (osal_mutex_lock (__services_lock)) {
         __msg_grow ();
 
         if (__message_pool != NULL) {
@@ -229,19 +231,25 @@ bool_t service_send (service_id sid, void *msg, void (*pfn) (void *, int))
         return false;
     }
 
-    if (__message_heads [service->prio] == NULL) {
-        __message_heads [service->prio] = message;
-        __message_tails [service->prio] = message;
+    if (service->running) {
+        if (__message_heads [service->prio] == NULL) {
+            __message_heads [service->prio] = message;
+            __message_tails [service->prio] = message;
+        } else {
+            __message_tails [service->prio]->next = message;
+            __message_tails [service->prio] = message;
+        }
+
+        service->recieved++;
+
+        __services_bitmap |= 1 << service->prio;
+
+        (void) osal_semp_post (__services_sem);
     } else {
-        __message_tails [service->prio]->next = message;
-        __message_tails [service->prio] = message;
+        service->dropped++;
     }
 
-    __services_bitmap |= 1 << service->prio;
-
     (void) osal_mutex_unlock (__services_lock);
-
-    (void) osal_semp_post (__services_sem);
 
     return true;
 }
@@ -251,10 +259,10 @@ static int __find_first_bit (uint32_t x)
 {
     int n = 1;
 
-    if ((x & 0x0000ffff) == 0) {n = n +16; x = x >> 16;}
-    if ((x & 0x000000ff) == 0) {n = n + 8; x = x >>  8;}
-    if ((x & 0x0000000f) == 0) {n = n + 4; x = x >>  4;}
-    if ((x & 0x00000003) == 0) {n = n + 2; x = x >>  2;}
+    if ((x & 0x0000ffff) == 0) { n = n + 16; x = x >> 16; }
+    if ((x & 0x000000ff) == 0) { n = n +  8; x = x >>  8; }
+    if ((x & 0x0000000f) == 0) { n = n +  4; x = x >>  4; }
+    if ((x & 0x00000003) == 0) { n = n +  2; x = x >>  2; }
 
     return n - (x & 1);
 }
@@ -282,6 +290,10 @@ static void __service_process (void)
             if (message->pfn != NULL) {
                 message->pfn (message->buff, ret);
             }
+
+            service->handled++;
+        } else {
+            service->dropped++;
         }
 
         __message_heads [i] = message->next;
@@ -396,6 +408,9 @@ service_id service_create (const char * name, int (* handler) (void *), int prio
     service->prio       = prio;
     service->open_count = 0;
     service->running    = true;
+    service->recieved   = 0;
+    service->handled    = 0;
+    service->dropped    = 0;
 
     if (!osal_mutex_lock (__services_lock)) {
         goto err_free_service;
