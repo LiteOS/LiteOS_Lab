@@ -290,6 +290,16 @@ static int __int_connect(int intnum, int prio, int mode, fn_interrupt_handle cal
 	return LOS_HwiCreate((HWI_HANDLE_T)intnum, (HWI_PRIOR_T)prio,(HWI_MODE_T) mode, (HWI_PROC_FUNC)callback, (HWI_ARG_T)(uintptr_t)arg);
 }
 
+static int __int_lock (void)
+{
+    return (int) LOS_IntLock ();
+}
+
+static int __int_restore (int flags)
+{
+    LOS_IntRestore ((UINTPTR) flags);
+}
+
 static const tag_os_ops s_liteos_ops =
 {
     .task_sleep = __task_sleep,
@@ -318,7 +328,9 @@ static const tag_os_ops s_liteos_ops =
     .get_sys_time = __get_sys_time,
     .reboot = liteos_reboot,
 
-	.int_connect = __int_connect,
+    .int_connect = __int_connect,
+    .int_lock = __int_lock,
+    .int_restore = __int_restore
 };
 
 
