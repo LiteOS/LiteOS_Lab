@@ -94,7 +94,7 @@ static int __cncs_service_handler(void *arg)
 
 int cncs_service_init(const char *name)
 {
-	if (service_create(name, __cncs_service_handler, 6) == INVALID_SID)
+	if (service_create(SERVICE_DOMAIN_SYSTEM, name, __cncs_service_handler, 6) == INVALID_SID)
 	{
 	    printf("Fail to create cncs service! \n");
 	    return -1;

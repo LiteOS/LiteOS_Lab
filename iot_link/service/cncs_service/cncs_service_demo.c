@@ -65,14 +65,14 @@ int service_cncs_demo_main()
     {
         return -1;
     }
-    svid = service_open("cncs service");
+    svid = service_open(SERVICE_DOMAIN_SYSTEM, "cncs service");
     if (!svid) 
     {
         printf("cncs service open failed!\n");
         return -1;
     }
-    msg.buf = &((void *)para);
-    msg.len = sizeof(cncs_para_t):
+    msg.buf = (void *)&para;
+    msg.len = sizeof(cncs_para_t);
     memset(msg.buf, 0, msg.len);
 
     // service demo 
