@@ -39,8 +39,8 @@
 
 /* macros */
 
-#define LOCATION_STATE_INVALID          1
-#define LOCATION_STATE_VALID            2
+#define LOCATION_CMD_UPDATE_STATUS      0
+#define LOCATION_CMD_UPDATE_POSITION    1
 
 /* typedefs */
 
@@ -49,11 +49,17 @@ struct location {
     int y;
 };
 
-extern bool_t location_service_start           (void);
-extern bool_t location_service_stop            (void);
-extern bool_t location_service_listen_state    (void (*callback) (uintptr_t, int),
-                                                uintptr_t arg);
-extern bool_t location_service_listen_position (void (*callback) (uintptr_t, struct location *),
-                                                uintptr_t arg);
+struct location_msg {
+    unsigned int        cmd;
+    bool_t              using;
+    union {
+        int             status;
+        struct location location;
+    };
+};
+
+extern int    location_service_init            (void);
+extern bool_t location_service_listen_position (void (*callback) (uintptr_t, struct location *), uintptr_t arg);
+extern bool_t location_service_listen_state    (void (*callback) (uintptr_t, int), uintptr_t arg);
 
 #endif  /* __LOCATION_H__ */
