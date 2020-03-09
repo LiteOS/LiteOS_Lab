@@ -37,38 +37,81 @@
 #include <litecoap.h>
 #include <litecoap_err.h>
 
+/*****************************************************************************
+ Function    : litecoap_parse_header_size
+ Description : parse coap header info and store it
+ Input       : buf @ coap message buf
+               proto @ coap over protocol (UDP or TCP)
+ Return      : coap header size
+ *****************************************************************************/
+static size_t litecoap_parse_header_size(const unsigned char *buf, coap_proto_t proto)
+{
+    size_t header_size = 0;
+    if (buf == NULL) {
+        return 0;
+    }
+
+    if (proto == COAP_PROTO_TCP || proto == COAP_PROTO_TLS) {
+        unsigned char len = *buf >> 4;
+        if (len < 13) {
+            header_size = 2;
+        } else if (len == 13) {
+            header_size = 3;
+        } else if (len == 14) {
+            header_size = 4;
+        } else {
+            header_size = 6;
+        }
+
+    } else if (proto == COAP_PROTO_UDP || proto == COAP_PROTO_DTLS) {
+        header_size = 4;
+    }
+
+    return header_size;
+}
 
 /*****************************************************************************
  Function    : litecoap_parse_header
  Description : parse coap header info and store it
  Input       : buf @ coap message buf
                buflen @ coap message buf length
+               proto @ coap over protocol (UDP or TCP)
  Output      : msg @ coap message pointer
  Return      : LITECOAP_OK means parse success, other value failed.
  *****************************************************************************/
-int litecoap_parse_header(coap_msg_t *msg, const unsigned char *buf, int buflen)
+static int litecoap_parse_header(coap_msg_t *msg, const unsigned char *buf, int buflen, coap_proto_t proto)
 {
+    size_t header_size;
     if ((NULL == msg) || (NULL == buf))
     {
         return LITECOAP_PARAM_NULL;
     }
-    if (buflen < COAP_HEADER_SIZE)
+
+    header_size = litecoap_parse_header_size(buf, proto);
+    if (buflen < header_size)
     {
         return LITECOAP_BUF_LEN_TOO_SMALL;
     }
-    
-    msg->head.ver = (buf[0] & COAP_HEADER_VER_MASK) >> 6;
-    if (msg->head.ver != COAP_VERSION)
-    {
-        return LITECOAP_VER_ERR;
+
+    if (proto == COAP_PROTO_UDP || proto == COAP_PROTO_DTLS) {
+        msg->head.ver = (buf[0] & COAP_HEADER_VER_MASK) >> 6;
+        if (msg->head.ver != COAP_VERSION) {
+            return LITECOAP_VER_ERR;
+        }
+        
+        msg->head.t = (buf[0] & 0x30) >> 4;
+        msg->head.tkl = buf[0] & 0x0F;
+        msg->head.code = buf[1];
+        msg->head.msgid[0] = buf[2];
+        msg->head.msgid[1] = buf[3];
+    } else if (proto == COAP_PROTO_TCP || proto == COAP_PROTO_TLS) {
+        msg->head.t = COAP_MESSAGE_CON;
+        msg->head.tkl = buf[0] & 0x0F;
+        msg->head.code = buf[header_size - 1];
+        msg->head.msgid[0] = 0;
+        msg->head.msgid[1] = 0;
     }
-    
-    msg->head.t = (buf[0] & 0x30) >> 4;
-    msg->head.tkl = buf[0] & 0x0F;
-    msg->head.code = buf[1];
-    msg->head.msgid[0] = buf[2];
-    msg->head.msgid[1] = buf[3];
-    
+
     return LITECOAP_OK;
 }
 
@@ -82,46 +125,34 @@ int litecoap_parse_header(coap_msg_t *msg, const unsigned char *buf, int buflen)
  *****************************************************************************/
 int litecoap_parse_token(coap_msg_t *msg, unsigned char *buf, int buflen)
 {
-    if ((NULL == msg) || (NULL == buf))
-    {
+    if ((msg == NULL) || (buf == NULL)) {
         return LITECOAP_PARAM_NULL;
     }
-    if (msg->head.tkl == 0)
-    {
+    if (msg->head.tkl == 0) {
         msg->tok = NULL;
         return LITECOAP_OK;
-    }
-    else if (msg->head.tkl <= COAP_MAX_TOKEN_LEN)
-    {
-        if (4U + msg->head.tkl > buflen)
-        {
+    } else if (msg->head.tkl <= COAP_MAX_TOKEN_LEN) {
+        if (4U + msg->head.tkl > buflen) {
             /* tok bigger than packet */
             return LITECOAP_BUF_LEN_TOO_SMALL;
         }
-        if (NULL == msg->tok)
-        {
+        if (msg->tok == NULL) {
             msg->tok = (coap_token_t *)litecoap_malloc(sizeof(coap_token_t));
-            if (NULL == msg->tok)
-            {
+            if (msg->tok == NULL) {
                 return LITECOAP_MALLOC_FAILED;
             }
             memset(msg->tok, 0, sizeof(coap_token_t));
         }
         msg->tok->token = (unsigned char *)litecoap_malloc(msg->head.tkl);
-        if (NULL != msg->tok->token)
-        {
+        if (msg->tok->token != NULL) {
             memcpy(msg->tok->token, buf+4, msg->head.tkl);  /* skip header */
             msg->tok->tklen = msg->head.tkl;
-        }
-        else
-        {
+        } else {
             litecoap_free(msg->tok);
             msg->tok = NULL;
         }
         return LITECOAP_OK;
-    }
-    else
-    {
+    } else {
         /* invalid size */
         return LITECOAP_TOKEN_LEN_ERR;
     }
@@ -146,7 +177,7 @@ int litecoap_parse_one_option(coap_msg_t *msg, unsigned short *sumdelta,
     coap_option_t *newopt = NULL;
     coap_option_t *tmpopt = NULL;
     
-    if ((NULL == msg) || (NULL == sumdelta) || (NULL == buf))
+    if ((msg == NULL) || (sumdelta == NULL) || (buf == NULL))
     {
         return LITECOAP_PARAM_NULL;
     }
@@ -179,7 +210,7 @@ int litecoap_parse_one_option(coap_msg_t *msg, unsigned short *sumdelta,
         delta = ((p[1] << 8) | p[2]) + 269;
         p += 2;
     }
-    else if (delta == 0x000f)
+    else if (delta == 0x000F)
     {
         return LITECOAP_OPTION_DELTA_ERR;
     }
@@ -215,7 +246,7 @@ int litecoap_parse_one_option(coap_msg_t *msg, unsigned short *sumdelta,
     }
 
     newopt = (coap_option_t *)litecoap_malloc(sizeof(coap_option_t));
-    if (NULL == newopt)
+    if (newopt == NULL)
     {
         return LITECOAP_MALLOC_FAILED;
     }
@@ -225,7 +256,7 @@ int litecoap_parse_one_option(coap_msg_t *msg, unsigned short *sumdelta,
     if (len > 0)
     {
         newopt->value = (unsigned char *)litecoap_malloc(len);
-        if (NULL != newopt->value)
+        if (newopt->value != NULL)
         {
             newopt->optlen = len;
             memcpy(newopt->value, p+1, len);
@@ -273,50 +304,99 @@ int litecoap_parse_opts_payload(coap_msg_t *msg, const unsigned char *buf,
     const unsigned char *p = NULL;
     const unsigned char *end = buf + buflen;
     int ret;
-    
-    if ((NULL == msg) || (NULL == buf) || (buflen <= 4))
-    {
+    if ((msg == NULL) || (buf == NULL) || (buflen < 4)) {
         return LITECOAP_PARAM_NULL;
     }
-    
+
     p = buf + 4 + msg->head.tkl;
-    
-    if (p > end)
-    {
+
+    if (p > end) {
         return LITECOAP_OPTION_OVERRUN_ERR;
     }
-    
-    while((p < end) && (*p != 0xFF))
-    {
+
+    while((p < end) && (*p != 0xFF)) {
         ret = litecoap_parse_one_option(msg, &sumdelta, &p, end-p);
-        if (0 != ret)
-        {
+        if (0 != ret) {
             return ret;
         }
     }
-    
-    if ((p+1 < end) && (*p == 0xFF))  /* payload marker */
-    {
+
+    if ((p+1 < end) && (*p == 0xFF))  /* payload marker */ {
         msg->payloadlen = end-(p+1);
         msg->payload = (unsigned char *)litecoap_malloc(msg->payloadlen);
-        if (NULL != msg->payload)
-        {
+        if (msg->payload != NULL) {
             memcpy(msg->payload, (unsigned char *)p + 1, msg->payloadlen);
-        }
-        else
-        {
+        } else {
             msg->payloadlen = 0;
         }
-    }
-    else
-    {
+    } else {
         msg->payload = NULL;
         msg->payloadlen = 0;
     }
     msg->payloadmarker = 0xFF;
-    
+
     return LITECOAP_OK;
 }
+
+static int litecoap_option_len(coap_option_t *opt, int lastoptval, int *len)
+{
+    int delta = 0;
+    int delta_ex = 0;
+    int optlen = 0;
+    int optlen_ex = 0;
+    unsigned char tmp;
+    int sumlen = 0;
+
+    if ((opt == NULL) || (len == NULL)) {
+        return LITECOAP_PARAM_NULL;
+    }
+
+    if (opt->optnum < lastoptval) {
+        return LITECOAP_OPTION_POSTION_ERR;
+    }
+
+    delta = opt->optnum - lastoptval;
+    if (delta < 13) {
+        delta = opt->optnum - lastoptval;
+        delta_ex = 0;
+    } else if (delta < 269) {
+        delta_ex = delta - 13;
+        delta = 13;
+    } else if (delta >= 269) {
+        delta_ex = delta - 269 - 14;
+        delta = 14;
+    }
+
+    optlen = opt->optlen;
+    if (optlen < 13) {
+        optlen = opt->optlen;
+        optlen_ex = 0;
+    } else if (optlen < 269) {
+        optlen_ex = optlen - 13;
+        optlen = 13;
+    } else if (optlen >= 269) {
+        optlen_ex = optlen - 269 -14;
+        optlen = 14;
+    }
+
+    sumlen = 1;
+    if (delta == 13) {
+        sumlen++;
+    }
+    if (delta == 14) {
+        sumlen += 2;
+    }
+    if (optlen == 13) {
+        sumlen++;
+    }
+    if (optlen == 14) {
+        sumlen += 2;
+    }
+
+    *len = sumlen + opt->optlen;
+    return LITECOAP_OK;
+}
+
 
 /*****************************************************************************
  Function    : litecoap_encode_option
@@ -337,7 +417,7 @@ static int litecoap_encode_option(coap_option_t *opt, int lastoptval,
     unsigned char tmp;
     int sumlen = 0;
     
-    if ((NULL == opt) || (NULL == outbuf) || (NULL == len))
+    if ((opt == NULL) || (outbuf == NULL) || (len == NULL))
     {
         return LITECOAP_PARAM_NULL;
     }
@@ -424,72 +504,105 @@ static int litecoap_encode_option(coap_option_t *opt, int lastoptval,
 int litecoap_build_byte_stream(coap_context_t *ctx, coap_msg_t *msg)
 {
     int len = 0;
-    int offset = 0;
+    size_t offset = 0;
+    size_t header_size = 0;
     coap_option_t *tmp = NULL;
     int sumdelta = 0;
     int msglen = 0;
-    
-    if ((NULL == ctx) || (NULL == msg))
+    if ((ctx == NULL) || (msg == NULL))
     {
         return LITECOAP_PARAM_NULL;
     }
     
-    if (NULL == ctx->sndbuf.buf)
+    if (ctx->sndbuf.buf == NULL)
     {
         return LITECOAP_CONTEX_BUF_NULL;
     }
     tmp = msg->option;
-    while(NULL != tmp)
-    {
-        len += 1 + 4 + tmp->optlen;
-        tmp = tmp->next;
+
+    if (ctx->proto == COAP_PROTO_UDP || ctx->proto == COAP_PROTO_DTLS) {
+        header_size = 4;
+        ctx->sndbuf.buf[0] = ((msg->head.ver & 0x03) << 6);
+        ctx->sndbuf.buf[0] |= ((msg->head.t & 0x03) << 4);
+        ctx->sndbuf.buf[0] |= (msg->head.tkl & 0x0F);
+        ctx->sndbuf.buf[1] = msg->head.code;
+        ctx->sndbuf.buf[2] = msg->head.msgid[0];
+        ctx->sndbuf.buf[3] = msg->head.msgid[1];
+    } else if (ctx->proto == COAP_PROTO_TCP || ctx->proto == COAP_PROTO_TLS) {
+        while (tmp != NULL) {
+            //litecoap_encode_option(tmp, sumdelta, ctx->sndbuf.buf + offset, &len);
+            litecoap_option_len(tmp, sumdelta, &len);
+            offset = offset + len;
+            len = 0;
+            sumdelta = tmp->optnum;
+            tmp = tmp->next;
+        }
+
+        if ((msg->payload != NULL) && (msg->payloadlen > 0)) {
+            offset += msg->payloadlen + 1;
+        }
+        if (offset < 13) {
+            header_size = 2;
+            ctx->sndbuf.buf[0] = (((unsigned char)offset << 4) | (msg->head.tkl));
+            ctx->sndbuf.buf[1] = msg->head.code;
+        } else if (offset < 269) {
+            header_size = 3;
+            ctx->sndbuf.buf[0] = ((13 << 4) | (msg->head.tkl));
+            ctx->sndbuf.buf[1] = offset - 13;
+            ctx->sndbuf.buf[2] = msg->head.code;
+        } else if (offset < 65805) {
+            header_size = 4;
+            ctx->sndbuf.buf[0] = ((14 << 4) | msg->head.tkl);
+            ctx->sndbuf.buf[1] = (unsigned char)((offset - 269) >> 8);
+            ctx->sndbuf.buf[2] = (unsigned char)(offset - 269);
+            ctx->sndbuf.buf[3] = msg->head.code;
+        } else {
+            header_size = 6;
+            ctx->sndbuf.buf[0] = (15 << 4) | msg->head.tkl;
+            ctx->sndbuf.buf[1] = (unsigned char)((offset - 65805) >> 24);
+            ctx->sndbuf.buf[2] = (unsigned char)((offset - 65805) >> 16);
+            ctx->sndbuf.buf[3] = (unsigned char)((offset - 65805) >> 8);
+            ctx->sndbuf.buf[4] = (unsigned char)((offset - 65805));
+            ctx->sndbuf.buf[5] = msg->head.code;
+        }
     }
-    
-    if (NULL != msg->tok)
-    {
-        len += msg->tok->tklen + msg->payloadlen + 4 + 1;
+
+    len = 0;
+    len += offset;
+    len += header_size;
+    if (msg->head.tkl > 0 && msg->tok != NULL) {
+        len += msg->tok->tklen;
     }
-    else
-    {
-        len += msg->payloadlen + 4 + 1;
-    }
-    
-    if (len > ctx->sndbuf.len)
-    {
+
+    msglen = len;
+    if (msglen > ctx->sndbuf.len) {
         return LITECOAP_SND_LEN_TOO_BIG;
     }
-    
-    ctx->sndbuf.buf[0] = ((msg->head.ver & 0x03) << 6);
-    ctx->sndbuf.buf[0] |= ((msg->head.t & 0x03) << 4);
-    ctx->sndbuf.buf[0] |= (msg->head.tkl & 0x0F);
-    ctx->sndbuf.buf[1] = msg->head.code;
-    ctx->sndbuf.buf[2] = msg->head.msgid[0];
-    ctx->sndbuf.buf[3] = msg->head.msgid[1];
-    offset = 4;
-    if ((msg->head.tkl > 0) && (NULL != msg->tok))
-    {
+
+    offset = header_size;
+
+    if (msg->head.tkl > 0 && msg->tok != NULL) {
         memcpy(ctx->sndbuf.buf + offset, msg->tok->token, msg->tok->tklen);
         offset += msg->tok->tklen;
     }
-    
-    len = 0;
+
     tmp = msg->option;
-    while (NULL != tmp)
-    {
+    sumdelta = 0;
+    while (tmp != NULL) {
         litecoap_encode_option(tmp, sumdelta, ctx->sndbuf.buf + offset, &len);
         offset = offset + len;
         len = 0;
         sumdelta = tmp->optnum;
         tmp = tmp->next;
     }
-    msglen = msglen + offset;
+    msglen = offset;
+
     if (NULL != msg->payload)
     {
-        ctx->sndbuf.buf[offset] = msg->payloadmarker;
-        memcpy(ctx->sndbuf.buf + offset + 1, msg->payload, msg->payloadlen);
+        ctx->sndbuf.buf[offset++] = msg->payloadmarker;
+        memcpy(ctx->sndbuf.buf + offset, msg->payload, msg->payloadlen);
         msglen = msglen + msg->payloadlen + 1;
     }
-    
     return msglen;
 }
 
@@ -511,22 +624,19 @@ coap_option_t * litecoap_add_option_to_list(coap_option_t *head,
     coap_option_t *tmp = NULL;
     coap_option_t *next = NULL;
     coap_option_t *newopt = NULL;
-    if ((NULL == value) || (0 == len))
-    {
+    if ((value == NULL) || (len == 0)) {
         return NULL;
     }
     
     newopt = (coap_option_t *)litecoap_malloc(sizeof(coap_option_t));
-    if (NULL == newopt)
-    {
+    if (newopt == NULL) {
         return head;
     }
     memset(newopt, 0, sizeof(coap_option_t));
     newopt->optnum = option;
     newopt->optlen = len;
     newopt->value = (unsigned char *)litecoap_malloc(len);
-    if(NULL == newopt->value)
-    {
+    if(newopt->value == NULL) {
         litecoap_free(newopt);
         return head;
     }
@@ -537,27 +647,21 @@ coap_option_t * litecoap_add_option_to_list(coap_option_t *head,
     
     /* note that head just a pointer, point to the fisrt node of options */
     tmp = head;
-    if (NULL == head)
-    {
+    if (head == NULL) {
         return newopt;
     }
-    if (tmp->optnum > option)
-    {
+    if (tmp->optnum > option) {
         /* option number is the smallest in the list */
         newopt->next = head;
         return newopt;
     }
     next = tmp->next;
-    while ((NULL != tmp) && (NULL != next))
-    {
-        if (tmp->optnum <= option && next->optnum > option)
-        {
+    while ((tmp != NULL) && (next != NULL)) {
+        if (tmp->optnum <= option && next->optnum > option) {
             tmp->next = newopt;
             newopt->next = next;
             break;
-        }
-        else
-        {
+        } else {
             tmp = tmp->next;
             next = tmp->next;
         }
@@ -579,18 +683,15 @@ int litecoap_free_option(coap_option_t *head)
 {
     coap_option_t *tmp = NULL;
     coap_option_t *next = NULL;
-    
-    if (NULL == head)
-    {
+
+    if (head == NULL) {
         return LITECOAP_PARAM_NULL;
     }
     
     tmp = head;
-    while (NULL != tmp)
-    {
+    while (tmp != NULL) {
         next = tmp->next;
-        if (tmp->value)
-        {
+        if (tmp->value) {
             litecoap_free(tmp->value);
             tmp->value = NULL;
         }
@@ -610,26 +711,24 @@ int litecoap_free_option(coap_option_t *head)
  *****************************************************************************/
 int litecoap_add_token(coap_msg_t *msg, char *tok, int tklen)
 {
-    if ((NULL == msg) || (tklen < 0) || (tklen > COAP_MAX_TOKEN_LEN))
-    {
+    if ((msg == NULL) || (tklen < 0) || (tklen > COAP_MAX_TOKEN_LEN)) {
         return LITECOAP_PARAM_NULL;
     }
-    if (NULL != msg->tok)
-    {
-        while(1);
+    if (tklen == 0) {
+        return LITECOAP_OK;
     }
-    if (NULL == msg->tok)
-    {
+    if (msg->tok != NULL) {
+        return LITECOAP_TOKEN_LEN_ERR;
+    }
+    if (msg->tok == NULL) {
         msg->tok = (coap_token_t *)litecoap_malloc(sizeof(coap_token_t));
-        if (NULL ==  msg->tok)
-        {
+        if (msg->tok == NULL) {
             return LITECOAP_MALLOC_FAILED;
         }
         memset(msg->tok, 0, sizeof(coap_token_t));
     }
     msg->tok->token = (unsigned char *)litecoap_malloc(tklen);
-    if (NULL == msg->tok->token)
-    {
+    if (msg->tok->token == NULL) {
         litecoap_free(msg->tok);
         msg->tok = NULL;
         return LITECOAP_MALLOC_FAILED;
@@ -650,8 +749,7 @@ int litecoap_add_token(coap_msg_t *msg, char *tok, int tklen)
  *****************************************************************************/
 int litecoap_add_option(coap_msg_t *msg, coap_option_t *opts)
 {
-    if ((NULL == msg) || (NULL == opts))
-    {
+    if ((msg == NULL) || (opts == NULL)) {
         return LITECOAP_PARAM_NULL;
     }
 
@@ -669,19 +767,15 @@ int litecoap_add_option(coap_msg_t *msg, coap_option_t *opts)
  *****************************************************************************/
 int litecoap_add_paylaod(coap_msg_t *msg, char *payload, int len)
 {
-    if ((NULL == msg) || (NULL == payload) || (0 == len))
-    {
+    if ((msg == NULL) || (payload == NULL) || (len == 0)) {
         return LITECOAP_PARAM_NULL;
     }
     msg->payload = (unsigned char *)litecoap_malloc(len);
-    if (NULL != msg->payload)
-    {
+    if (msg->payload != NULL) {
         memcpy(msg->payload, payload, len);
         msg->payloadlen = len;
         msg->payloadmarker = 0xff;
-    }
-    else
-    {
+    } else {
         msg->payload = NULL;
         msg->payloadlen = 0;
         return LITECOAP_MALLOC_FAILED;
@@ -711,23 +805,20 @@ coap_msg_t *litecoap_new_msg(coap_context_t *ctx,
 {
     coap_msg_t *msg = NULL;
 
-    if (NULL == ctx)
-    {
+    if (ctx == NULL) {
         return NULL;
     }
-    
-    if (msgtype > COAP_MESSAGE_RST)
-    {
+
+    if (msgtype > COAP_MESSAGE_RST) {
         return NULL;
     }
-    
+
     msg = (coap_msg_t *)litecoap_malloc(sizeof(coap_msg_t));
-    if (NULL == msg)
-    {
+    if (msg == NULL) {
         return NULL;
     }
     memset(msg, 0, sizeof(coap_msg_t));
-    
+
     msg->head.t = msgtype;
     msg->head.ver = 1;
     ctx->msgid++;
@@ -735,17 +826,13 @@ coap_msg_t *litecoap_new_msg(coap_context_t *ctx,
     msg->head.msgid[1] = (unsigned char)((ctx->msgid&0xff00)>>8);
     msg->head.code = code;
     msg->option = optlist;
-    if (NULL != payload)
-    {
+    if (payload != NULL) {
         msg->payloadmarker = 0xff;
         msg->payload = (unsigned char *)litecoap_malloc(payloadlen);
-        if (NULL != msg->payload)
-        {
+        if (msg->payload != NULL) {
             memcpy(msg->payload, payload, payloadlen);
             msg->payloadlen = payloadlen;
-        }
-        else
-        {
+        } else {
             litecoap_delete_msg(msg);
             msg = NULL;
         }
@@ -764,35 +851,31 @@ int litecoap_delete_msg(coap_msg_t *msg)
 {
     coap_option_t *tmp = NULL;
     coap_option_t *next = NULL;
-    if (NULL == msg)
-    {
+    if (msg == NULL) {
         return LITECOAP_PARAM_NULL;
     }
-    
-    if (msg->tok)
-    {
+
+    if (msg->tok) {
         litecoap_free(msg->tok->token);
         msg->tok->token = NULL;
         litecoap_free(msg->tok);
         msg->tok = NULL;
     }
-    
+
     tmp = msg->option;
-    while (NULL != tmp)
-    {
+    while (tmp != NULL) {
         next = tmp->next;
         litecoap_free(tmp->value);
         tmp->value = NULL;
         litecoap_free(tmp);
         tmp = next;
     }
-    if (NULL != msg->payload)
-    {
+    if (msg->payload != NULL) {
         litecoap_free(msg->payload);
     }
     msg->payload = NULL;
     litecoap_free(msg);
-    
+
     return LITECOAP_OK;
 }
 
@@ -811,18 +894,16 @@ int litecoap_send_back(coap_context_t *ctx, coap_msg_t *rcvmsg,
 {
     coap_msg_t *newmsg = NULL;
     int datalen = 0;
-    
-    if ((NULL == ctx) || (NULL == rcvmsg))
-    {
+
+    if ((ctx == NULL) || (rcvmsg == NULL)) {
         return LITECOAP_PARAM_NULL;
     }
     newmsg = (coap_msg_t *)litecoap_malloc(sizeof(coap_msg_t));
-    if (NULL == newmsg)
-    {
+    if (newmsg == NULL) {
         return LITECOAP_MALLOC_FAILED;
     }
     memset(newmsg, 0, sizeof(coap_msg_t));
-    
+
     newmsg->head.t = type;
     newmsg->head.ver = 1;
     newmsg->head.msgid[0] = rcvmsg->head.msgid[0];
@@ -833,8 +914,7 @@ int litecoap_send_back(coap_context_t *ctx, coap_msg_t *rcvmsg,
     newmsg->payloadlen = 0;
     
     datalen = litecoap_build_byte_stream(ctx, newmsg);
-    if (datalen < 0)
-    {
+    if (datalen < 0) {
         litecoap_free(newmsg);
         newmsg = NULL;
         return LITECOAP_ENCODE_PKG_SIZE_ERR;
@@ -885,8 +965,7 @@ int litecoap_send_ack(coap_context_t *ctx, coap_msg_t *rcvmsg)
  *****************************************************************************/
 int litecoap_register_handler(coap_context_t *ctx, msghandler func)
 {
-    if (NULL == ctx)
-    {
+    if (ctx == NULL) {
         return LITECOAP_PARAM_NULL;
     }
     ctx->response_handler = func;
@@ -904,22 +983,56 @@ int litecoap_register_handler(coap_context_t *ctx, msghandler func)
 int litecoap_addto_resndqueue(coap_context_t *ctx, coap_msg_t *msg)
 {
     send_queue_t *tmp = NULL;
-    if (NULL == ctx || NULL == msg)
-    {
+    send_queue_t *s, *t;
+    unsigned long long now;
+    if (ctx == NULL || msg == NULL) {
         return LITECOAP_PARAM_NULL;
     }
-    
+
+
     tmp = (send_queue_t *)litecoap_malloc(sizeof(send_queue_t));
-    if (NULL == tmp)
-    {
+    if (tmp == NULL) {
         return LITECOAP_MALLOC_FAILED;
     }
     memset(tmp, 0, sizeof(send_queue_t));
-    
+
     tmp->msg = msg;
-    tmp->next = ctx->resndque;
-    ctx->resndque = tmp;
-    
+    now = litecoap_time();
+
+    if (ctx->resndque == NULL) {
+        ctx->base_time = now;
+        ctx->resndque = tmp;
+        tmp->timeout = (ctx->ack_timeout.integer * 1000 + ctx->ack_timeout.decimals)
+                        * (2 << ctx->max_retransmit - 1)
+                        * (ctx->ack_random_factor.integer * 1000 + ctx->ack_random_factor.decimals)
+                        / 1000;
+        tmp->time = tmp->timeout;
+        return LITECOAP_OK;
+    } else {
+        tmp->time = (now - ctx->base_time) + tmp->timeout;
+    }
+
+    s= ctx->resndque;
+    if (s->time > tmp->time) {
+        tmp->next = s;
+        ctx->resndque = tmp;
+        s->time -= tmp->time;
+        return LITECOAP_OK;
+    }
+
+    do {
+        tmp->time -= s->time;
+        t = s;
+        s = s->next;
+    } while (s && s->time <= tmp->time);
+
+    if (s) {
+        s->time -= tmp->time;
+    }
+
+    tmp->next = s;
+    t->next = tmp;
+
     return LITECOAP_OK;
 }
 
@@ -935,22 +1048,20 @@ int litecoap_addto_resndqueue(coap_context_t *ctx, coap_msg_t *msg)
 int litecoap_addto_sndqueue(coap_context_t *ctx, coap_msg_t *msg)
 {
     send_queue_t *tmp = NULL;
-    if ((NULL == ctx) || (NULL == msg))
-    {
+    if ((ctx == NULL) || (msg == NULL)) {
         return LITECOAP_PARAM_NULL;
     }
-    
+
     tmp = (send_queue_t *)litecoap_malloc(sizeof(send_queue_t));
-    if (NULL == tmp)
-    {
+    if (tmp == NULL) {
         return LITECOAP_MALLOC_FAILED;
     }
     memset(tmp, 0, sizeof(send_queue_t));
-    
+
     tmp->msg = msg;
     tmp->next = ctx->sndque;
     ctx->sndque = tmp;
-    
+
     return LITECOAP_OK;
 }
 
@@ -967,23 +1078,23 @@ int litecoap_remove_resndqueue(coap_context_t *ctx, coap_msg_t *rcvmsg)
 {
     send_queue_t *tmp = NULL;
     send_queue_t *before = NULL;
-    if ((NULL == ctx) || (NULL == rcvmsg))
-    {
+    unsigned long long time = 0;
+    if ((ctx == NULL) || (rcvmsg == NULL)) {
         return LITECOAP_PARAM_NULL;
     }
-    
+
     tmp = ctx->resndque;
-    while (NULL != tmp)
-    {
-        if (memcmp(rcvmsg->head.msgid, tmp->msg->head.msgid, 2) == 0)
-        {
-            if (NULL == before)
-            {
+    while (tmp != NULL) {
+        if (memcmp(rcvmsg->head.msgid, tmp->msg->head.msgid, 2) == 0) {
+            if (before == NULL) {
                 ctx->resndque = tmp->next;
-            }
-            else
-            {
+            } else {
                 before->next = tmp->next;
+                time = tmp->time;
+                while (before->next != NULL) {
+                    before->time += time;
+                    before = before->next;
+                }
             }
             litecoap_delete_msg(tmp->msg);
             litecoap_free(tmp);
@@ -1007,14 +1118,12 @@ int litecoap_discard_resndqueue(coap_context_t *ctx)
 {
     send_queue_t *tmp = NULL;
     send_queue_t *next = NULL;
-    if (NULL == ctx)
-    {
+    if (ctx == NULL) {
         return LITECOAP_PARAM_NULL;
     }
     
     tmp = ctx->resndque;
-    while (NULL != tmp)
-    {
+    while (tmp != NULL) {
         next = tmp->next;
         litecoap_delete_msg(tmp->msg);
         tmp->msg = NULL;
@@ -1038,27 +1147,19 @@ int litecoap_remove_sndqueue(coap_context_t *ctx, coap_msg_t *msg)
     send_queue_t *tmp = NULL;
     send_queue_t *before = NULL;
     
-    if ((NULL == ctx) || (NULL == msg))
-    {
+    if ((ctx == NULL) || (msg == NULL)) {
         return LITECOAP_PARAM_NULL;
     }
-    
+
     tmp = ctx->sndque;
-    while (NULL != tmp)
-    {
-        if (NULL != tmp->msg)
-        {
-            if (tmp->msg == msg)
-            {
-                if (NULL == before)
-                {
+    while (tmp != NULL) {
+        if (tmp->msg != NULL) {
+            if (tmp->msg == msg) {
+                if (before == NULL) {
                     ctx->sndque = tmp->next;
-                }
-                else
-                {
+                } else {
                     before->next = tmp->next;
                 }
-                
                 tmp->msg = NULL;
                 tmp->next = NULL;
                 litecoap_free(tmp);
@@ -1083,11 +1184,10 @@ int litecoap_remove_sndqueue(coap_context_t *ctx, coap_msg_t *msg)
  *****************************************************************************/
 int litecoap_add_resource(coap_context_t *ctx, coap_res_t *res)
 {
-    if (NULL == ctx)
-    {
+    if (ctx == NULL) {
         return LITECOAP_PARAM_NULL;
     }
-    
+
     ctx->res = res;
     return LITECOAP_OK;
 }
@@ -1102,7 +1202,7 @@ int litecoap_add_resource(coap_context_t *ctx, coap_res_t *res)
  *****************************************************************************/
 int litecoap_option_check_critical(coap_msg_t *msg)
 {
-    unsigned short option;
+    unsigned short option = 0;
     
     /* note: this func is for the future, now we don't use it */
     switch(option)
@@ -1131,22 +1231,16 @@ static coap_option_t *litecoap_find_opts(coap_msg_t *rcvmsg,
     coap_option_t *first = NULL;
     coap_option_t *tmp = NULL;
     *count = 0;
-    
+
     tmp = rcvmsg->option;
-    for (i = 0; i < rcvmsg->optcnt; i++)
-    {
-        if (tmp->optnum == num)
-        {
-            if (NULL == first)
-            {
+    for (i = 0; i < rcvmsg->optcnt; i++) {
+        if (tmp->optnum == num) {
+            if (first == NULL) {
                 first = tmp;
             }
             (*count)++;
-        }
-        else
-        {
-            if (NULL != first)
-            {
+        } else {
+            if (first != NULL) {
                 break;
             }
         }
@@ -1170,48 +1264,43 @@ int litecoap_handle_request(coap_context_t *ctx, coap_msg_t *rcvmsg)
     coap_option_t *tmp = NULL;
     coap_option_t *opthead = NULL;
     coap_msg_t *respmsg = NULL;
-    char contype[2] = {0xff,0xff};
+    //char contype[2] = {0xff,0xff};
     int i = 0;
     int ret = 0;
     unsigned char pathcnt = 0;
     int findres = 0;
-    
-    if ((NULL == ctx) || (NULL == rcvmsg))
-    {
+
+    if ((ctx == NULL) || (rcvmsg == NULL)) {
         return LITECOAP_PARAM_NULL;
     }
+    if (rcvmsg->head.code >= 32 || rcvmsg->head.code == 0) {
+        return LITECOAP_OK;
+    }
     res = ctx->res;
-    while (NULL != res->handler)
-    {
+    while (res->handler != NULL) {
         /* find if the res is in the ctx->res */
-        if (res->method != rcvmsg->head.code)
-        {
+        if (res->method != rcvmsg->head.code) {
             res++;
             continue;
         }
         opthead = litecoap_find_opts(rcvmsg,
                                      COAP_OPTION_URI_PATH, 
                                      &pathcnt);
-        if ((NULL != opthead) 
-            && (pathcnt == res->path->count))
-        {
+        if ((opthead != NULL) 
+            && (pathcnt == res->path->count)) {
             tmp = opthead;
-            for (i = 0; i < pathcnt; i++)
-            {
-                if (tmp->optlen != strlen(res->path->elems[i]))
-                {
+            for (i = 0; i < pathcnt; i++) {
+                if (tmp->optlen != strlen(res->path->elems[i])) {
                     tmp = tmp->next;
                     break;
                 }
-                if (0 != memcmp(res->path->elems[i], tmp->value, tmp->optlen))
-                {
+                if (0 != memcmp(res->path->elems[i], tmp->value, tmp->optlen)) {
                     tmp = tmp->next;
                     break;
                 }
                 tmp = tmp->next;
             }
-            if (i == pathcnt)
-            {
+            if (i == pathcnt) {
                 findres = 1;
                 break;
             }
@@ -1219,30 +1308,24 @@ int litecoap_handle_request(coap_context_t *ctx, coap_msg_t *rcvmsg)
         res++;
     }
     opthead = NULL;
-    if (findres)
-    {
-        if (rcvmsg->head.t == COAP_MESSAGE_CON)
-        {
+    if (findres) {
+        if (rcvmsg->head.t == COAP_MESSAGE_CON) {
             respmsg = litecoap_new_msg(ctx,COAP_MESSAGE_ACK,
                                        COAP_RESP_CODE(204),
                                        NULL,NULL, 0);
-        }
-        else
-        {
+        } else if (rcvmsg->head.t != COAP_MESSAGE_NON){
             respmsg = litecoap_new_msg(ctx,COAP_MESSAGE_NON,
                                        COAP_RESP_CODE(204),
                                        NULL,NULL, 0);
         }
-        
-        if (NULL == respmsg)
-        {
+
+        if (respmsg == NULL) {
             return LITECOAP_PARAM_NULL;
         }
-        
+
         ret = litecoap_add_token(respmsg, (char *)rcvmsg->tok->token,
                                  rcvmsg->tok->tklen);
-        if (ret != LITECOAP_OK)
-        {
+        if (ret != LITECOAP_OK) {
             litecoap_delete_msg(respmsg);
             return LITECOAP_NG;
         }
@@ -1250,33 +1333,28 @@ int litecoap_handle_request(coap_context_t *ctx, coap_msg_t *rcvmsg)
         /* match the option, so deliver msg to resource handler function */
         res->handler(rcvmsg, respmsg);
         litecoap_send(ctx, respmsg);
-    }
-    else
-    {
-        opthead = litecoap_add_option_to_list(opthead,
-                                              COAP_OPTION_CONTENT_FORMAT, 
-                                              contype, 2);
-        if (rcvmsg->head.t == COAP_MESSAGE_CON)
-        {
+    } else {
+        //opthead = litecoap_add_option_to_list(opthead,
+        //                                      COAP_OPTION_CONTENT_FORMAT, 
+        //                                      contype, 2);
+        if (rcvmsg->head.t == COAP_MESSAGE_CON) {
             respmsg = litecoap_new_msg(ctx, COAP_MESSAGE_ACK,
                                        COAP_RESP_CODE(404), 
                                        opthead, NULL, 0);
-        }
-        else
-        {
+        } else {
             respmsg = litecoap_new_msg(ctx,COAP_MESSAGE_NON,
                                        COAP_RESP_CODE(404), 
                                        opthead, NULL, 0);
         }
-        
-        if (NULL == respmsg)
-        {
+
+        if (respmsg == NULL) {
             return LITECOAP_PARAM_NULL;
         }
-        ret = litecoap_add_token(respmsg, (char *)rcvmsg->tok->token,
+        if (respmsg && rcvmsg && rcvmsg->tok && rcvmsg->tok->token) {
+            ret = litecoap_add_token(respmsg, (char *)rcvmsg->tok->token,
                                  rcvmsg->tok->tklen);
-        if (ret != LITECOAP_OK)
-        {
+        }
+        if (ret != LITECOAP_OK) {
             litecoap_delete_msg(respmsg);
             return LITECOAP_NG;
         }
@@ -1311,8 +1389,7 @@ int litecoap_handle_msg(coap_context_t *ctx, coap_msg_t *msg)
             break;
     }
 
-    if (NULL != ctx->response_handler)
-    {
+    if (ctx->response_handler != NULL) {
         ctx->response_handler(ctx, msg);
     }
     litecoap_handle_request(ctx, msg);
@@ -1332,50 +1409,44 @@ int litecoap_read(coap_context_t *ctx)
     coap_msg_t *msg = NULL;
     int len = 0;
     int ret = 0;
-    
-    if (NULL == ctx)
-    {
+    send_queue_t *node = NULL;
+    unsigned long long now;
+
+    if (ctx == NULL) {
         return LITECOAP_PARAM_NULL;
     }
     len = ctx->netops->network_read( ctx->udpio, 
                                      (char *)ctx->rcvbuf.buf, 
                                      ctx->rcvbuf.len);
-    if (len == 0)
-    {
+    if (len == 0) {
         return LITECOAP_OK;
     }
-    if (len < 0)
-    {
+    if (len < 0) {
         return LITECOAP_SOCKET_NETWORK_ERR;
     }
-
     /* 
         fixed me: need parse data and then handle coap message 
         need malloc coap msg buffers, deal with it and then free, it
     */
     msg = (coap_msg_t *)litecoap_malloc(sizeof(coap_msg_t));
-    if (NULL == msg)
-    {
+    if (msg == NULL) {
         return LITECOAP_MALLOC_FAILED;
     }
     memset(msg, 0, sizeof(coap_msg_t));
     
-    ret = litecoap_parse_header(msg, (const unsigned char *)ctx->rcvbuf.buf, len);
-    if (ret < 0)
-    {
+    ret = litecoap_parse_header(msg, (const unsigned char *)ctx->rcvbuf.buf, len, ctx->proto);
+    if (ret < 0) {
         litecoap_delete_msg(msg);
         return LITECOAP_HEADER_ERR;
     }
     ret = litecoap_parse_token(msg, (unsigned char *)ctx->rcvbuf.buf, len);
-    if (ret < 0)
-    {
+    if (ret < 0) {
         litecoap_delete_msg(msg);
         return LITECOAP_TOKEN_ERR;
     }
 
     ret = litecoap_parse_opts_payload(msg, (const unsigned char *)ctx->rcvbuf.buf, len);
-    if (ret < 0)
-    {
+    if (ret < 0) {
         litecoap_delete_msg(msg);
         return LITECOAP_OPTION_ERR;
     }
@@ -1386,7 +1457,15 @@ int litecoap_read(coap_context_t *ctx)
     */
     litecoap_handle_msg(ctx, msg);
     litecoap_delete_msg(msg);
-    
+
+    now = litecoap_time();
+    node = ctx->resndque;
+    while (node && node->time <= (now - ctx->base_time)) {
+        litecoap_retransmit(ctx, node);
+        node = node->next;
+        ctx->resndque = node;
+    }
+
     return LITECOAP_OK;
 }
 
@@ -1403,46 +1482,60 @@ int litecoap_send(coap_context_t *ctx, coap_msg_t *msg)
     int slen = 0;
     int n = 0;
     int retry = 0;
-    if ((NULL == ctx) || (NULL == msg))
-    {
+    if ((ctx == NULL) || (msg == NULL)) {
         return LITECOAP_PARAM_NULL;
     }
-    if (msg->head.t == COAP_MESSAGE_CON)
-    {
+    if (msg->head.t == COAP_MESSAGE_CON && (ctx->proto == COAP_PROTO_UDP || ctx->proto == COAP_PROTO_DTLS)) {
         litecoap_addto_resndqueue(ctx, msg);
     }
     /* fixed me: need translate msg to bytes stream, and then send it. */
     slen = litecoap_build_byte_stream(ctx, msg);
-    if (slen > ctx->sndbuf.len)
-    {
-        if (msg->head.t == COAP_MESSAGE_CON)
-        {
+    if (slen > ctx->sndbuf.len) {
+        if (msg->head.t == COAP_MESSAGE_CON && (ctx->proto == COAP_PROTO_UDP || ctx->proto == COAP_PROTO_DTLS)) {
             litecoap_remove_resndqueue(ctx, msg);
-        }
-        else
-        {
+        } else {
             litecoap_delete_msg(msg);
         }
         /* message is too long for ctx buf */
         return LITECOAP_SND_LEN_TOO_BIG;
     }
-    do
-    {
+    do {
         n = ctx->netops->network_send(ctx->udpio, (char *)ctx->sndbuf.buf, slen);
-        if (n != slen)
-        {
+        if (n != slen) {
             retry++;
             litecoap_delay(5);
         }
-        if (retry == 10)
-        {
+        if (retry == 10) {
             break;
         }
     } while(n != slen);
     /* delete msg that do not need stored for retransmit */
-    if (msg->head.t != COAP_MESSAGE_CON)
-    {
+    if (msg->head.t != COAP_MESSAGE_CON) {
         litecoap_delete_msg(msg);
     }
     return n;
+}
+
+int litecoap_retransmit(coap_context_t *ctx, send_queue_t *node) {
+    unsigned long long now;
+    if (ctx == NULL || node == NULL) {
+        return LITECOAP_PARAM_NULL;
+    }
+
+    if (node->retransmit_cnt < ctx->max_retransmit) {
+        now = litecoap_time();
+        node->retransmit_cnt++;
+        if (ctx->resndque == NULL) {
+            node->time = node->timeout << node->retransmit_cnt;
+            ctx->base_time = now;
+        } else {
+            node->time = (now - ctx->base_time) + (node->timeout << node->retransmit_cnt);
+        }
+
+        litecoap_addto_resndqueue(ctx, node->msg);
+        litecoap_send(ctx, node->msg);
+        litecoap_free(node);
+    }
+
+    return LITECOAP_OK;
 }

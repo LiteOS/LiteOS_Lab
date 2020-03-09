@@ -56,6 +56,17 @@
 #define COAP_REQUEST_PUT       3
 #define COAP_REQUEST_DELETE    4
 
+/* CoAP timeout*/
+
+typedef struct _coap_point_t {
+    unsigned short integer;
+    unsigned short decimals;
+} coap_point_t;
+
+#define COAP_DEFAULT_ACK_TIMEOUT                ((coap_point_t){2, 0})
+#define COAP_DEFAULT_ACK_RANDOM_FACTOR          ((coap_point_t){1, 500})
+#define COAP_DEFAULT_MAX_RETRANSMIT             4
+
 /* CoAP option types (be sure to update check_critical when adding options */
 
 #define COAP_OPTION_IF_MATCH        1 /* C, opaque, 0-8 B, (none) */
@@ -108,6 +119,8 @@
 #define LITECOAP_RESP_501      COAP_RESP_CODE(501)  /* 5.01 Not Implemented */
 #define LITECOAP_RESP_503      COAP_RESP_CODE(503)  /* 5.03 Service Unavailable */
 #define LITECOAP_RESP_504      COAP_RESP_CODE(504)  /* 5.04 Gateway Timeout */
+
+#define LITECOAP_RESP_701      COAP_RESP_CODE(701)  /* 7.01 SIGNALING CSM */
 
 #define LITECOAP_IS_CLIENT                   0
 #define LITECOAP_IS_SERVER                   1     //not supported yet
@@ -185,8 +198,8 @@ typedef struct _coap_msg_t
 
 typedef struct _coap_rwbuf_t
 {
-	unsigned char *buf;
-	int len;	
+    unsigned char *buf;
+    int len;
 }coap_rwbuf_t;
 
 #define LITECOAP_MAX_SEGMENTS 2
@@ -229,25 +242,42 @@ struct udp_ops
 	send_func network_send;
 };
 
+typedef unsigned char coap_proto_t;
+
+#define COAP_PROTO_NONE                0
+#define COAP_PROTO_UDP                 1
+#define COAP_PROTO_DTLS                2
+#define COAP_PROTO_TCP                 3
+#define COAP_PROTO_TLS                 4
+
 typedef struct _coap_send_queue_t
 {
+    unsigned long long timeout;                // the random timeout
+    unsigned long long time;                   // when to send msg for the next time
     coap_msg_t *msg;
     struct _coap_send_queue_t *next;
-}send_queue_t;
+    unsigned char retransmit_cnt;        // retransmission counter
+} send_queue_t;
 
 struct _coap_context_t;
 typedef int (*msghandler)(struct _coap_context_t *ctx, coap_msg_t *msg);
 typedef struct _coap_context_t
 {
-	void *udpio;            /* this is used to save remote server info , like address 、 port 、 socket fd etc... */
-	unsigned short msgid;   /* The last message id that was used is stored in this field, fist value usually a random value */
-	coap_rwbuf_t sndbuf;    /* to give real buf to store input package and output package data */
-	coap_rwbuf_t rcvbuf;    /* to give real buf to store input package and output package data */
-	struct udp_ops *netops;
-	msghandler response_handler;    /* message deal callback function */
+    coap_proto_t proto;
+    void *udpio;            /* this is used to save remote server info , like address 、 port 、 socket fd etc... */
+    unsigned short msgid;   /* The last message id that was used is stored in this field, fist value usually a random value */
+    coap_rwbuf_t sndbuf;    /* to give real buf to store input package and output package data */
+    coap_rwbuf_t rcvbuf;    /* to give real buf to store input package and output package data */
+    struct udp_ops *netops;
+    msghandler response_handler;    /* message deal callback function */
     send_queue_t *resndque;
     send_queue_t *sndque;
     coap_res_t *res;
+
+    unsigned char max_retransmit;
+    coap_point_t ack_timeout;
+    coap_point_t ack_random_factor;
+    unsigned long long base_time;
 }coap_context_t;
 
 #endif

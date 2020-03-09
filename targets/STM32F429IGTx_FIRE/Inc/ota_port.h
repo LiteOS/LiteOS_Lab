@@ -38,8 +38,8 @@
 
 #ifndef OTA_PORT_H
 #define OTA_PORT_H
-#include "ota/package.h"
-#include "ota/ota_api.h"
+//#include "package.h"
+#include "ota_api.h"
 
 
 

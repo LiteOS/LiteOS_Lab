@@ -50,27 +50,21 @@ typedef struct
 {
     const char            *name;    ///< lwm2m implement name
     const oc_lwm2m_opt_t  *opt;     ///< lwm2m implement method
-}oc_lwm2m_t;
+} oc_lwm2m_t;
 static oc_lwm2m_t  s_oc_lwm2m_ops;
 
-typedef struct
-{
-    void                    *handle;
-    const oc_lwm2m_opt_t    *ops;
-    oc_config_param_t        param;
-}oc_lwm2m_context_t;
 
-
-int oc_lwm2m_register(const char *name,const oc_lwm2m_opt_t *opt)
+int oc_lwm2m_register(const char *name, const oc_lwm2m_opt_t *opt)
 {
     int ret = -1;
 
-    if(NULL == s_oc_lwm2m_ops.opt)
+    if (NULL == s_oc_lwm2m_ops.opt)
     {
         s_oc_lwm2m_ops.name = name;
         s_oc_lwm2m_ops.opt =  opt;
         ret = 0;
     }
+
     return ret;
 }
 
@@ -78,9 +72,9 @@ int oc_lwm2m_unregister(const char *name)
 {
     int ret = -1;
 
-    if((NULL != name) && (NULL != s_oc_lwm2m_ops.name))
+    if ((NULL != name) && (NULL != s_oc_lwm2m_ops.name))
     {
-        if(0 == strcmp(name,s_oc_lwm2m_ops.name))
+        if (0 == strcmp(name, s_oc_lwm2m_ops.name))
         {
             s_oc_lwm2m_ops.opt = NULL;   ///< also think about clear all the ops in the context,
             s_oc_lwm2m_ops.name = NULL;
@@ -93,42 +87,32 @@ int oc_lwm2m_unregister(const char *name)
 
 
 //////////////////////////APPLICATION INTERFACE/////////////////////////////////
-int oc_lwm2m_report(void *context,char  *buf, int len,int timeout)
+int oc_lwm2m_report(char  *buf, int len, int timeout)
 {
-    int ret = -1;
-    oc_lwm2m_context_t  *oc_lwm2m;
-    oc_lwm2m = context;
+    int ret = en_oc_lwm2m_err_system;
 
-    if((NULL != oc_lwm2m) &&(NULL != oc_lwm2m->ops) &&(NULL != oc_lwm2m->ops->report))
+    if ((NULL != s_oc_lwm2m_ops.opt) && (NULL != s_oc_lwm2m_ops.opt->report))
     {
-       ret = oc_lwm2m->ops->report(oc_lwm2m->handle,buf,len,timeout);
+        ret = s_oc_lwm2m_ops.opt->report(buf, len, timeout);
     }
 
     return ret;
 }
 
 
-void *oc_lwm2m_config(oc_config_param_t *param)
+int oc_lwm2m_config( oc_config_param_t *param)
 {
-    void *ret = NULL;
-    oc_lwm2m_context_t  *oc_lwm2m;
+    int ret = en_oc_lwm2m_err_system;
 
-    if((NULL != s_oc_lwm2m_ops.opt) &&(NULL != s_oc_lwm2m_ops.opt->config))
+    if ((NULL != s_oc_lwm2m_ops.opt) && (NULL != s_oc_lwm2m_ops.opt->config))
     {
-        oc_lwm2m = osal_zalloc(sizeof(oc_lwm2m_context_t));
-        if(NULL != oc_lwm2m)
+        if(NULL != param)
         {
-            oc_lwm2m->param = *param;
-            oc_lwm2m->ops = s_oc_lwm2m_ops.opt;
-            oc_lwm2m->handle = s_oc_lwm2m_ops.opt->config(param);
-            if(NULL == oc_lwm2m->handle)
-            {
-                osal_free(oc_lwm2m);
-            }
-            else
-            {
-                ret = oc_lwm2m;
-            }
+            ret = s_oc_lwm2m_ops.opt->config(param);
+        }
+        else
+        {
+            ret = en_oc_lwm2m_err_parafmt;
         }
     }
 
@@ -136,19 +120,13 @@ void *oc_lwm2m_config(oc_config_param_t *param)
 }
 
 
-int oc_lwm2m_deconfig(void *context)
+int oc_lwm2m_deconfig(void)
 {
-    int ret = -1;
-    oc_lwm2m_context_t  *oc_lwm2m;
-    oc_lwm2m = context;
+    int ret = en_oc_lwm2m_err_system;
 
-    if((NULL != oc_lwm2m) &&(NULL != oc_lwm2m->ops) && (NULL != oc_lwm2m->ops->deconfig))
+    if ((NULL != s_oc_lwm2m_ops.opt) && (NULL != s_oc_lwm2m_ops.opt->deconfig))
     {
-        ret = oc_lwm2m->ops->deconfig(oc_lwm2m->handle); ///<  should check if deconfigure error
-        if(ret == 0)
-        {
-            osal_free(oc_lwm2m);
-        }
+        ret = s_oc_lwm2m_ops.opt->deconfig();
     }
 
     return ret;
@@ -158,9 +136,7 @@ int oc_lwm2m_deconfig(void *context)
 int oc_lwm2m_init()
 {
     int ret = -1;
-
     ret = 0;   ///< uptils now, we should do nothing here
-
     return ret;
 }
 

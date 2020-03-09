@@ -43,7 +43,6 @@
 
 typedef int (*fn_at_oob)(void *args,void *data,size_t datalen);
 
-#if  CONFIG_AT_ENABLE
 
 /**
  * @brief: use this function to do the at client framwork initialized
@@ -73,7 +72,7 @@ int at_oobregister(const char *name,const void *index,size_t len,fn_at_oob func,
  * @param[in]:respbuflen,the respbuf length
  * @param[in]:timeout, the time you may wait for the response;and the unit is ms
  *
- * @return:0 success while -1 failed
+ * @return:>=0 success (return the received data length) while -1 failed
  * */
 
 int at_command(const void *cmd, size_t cmdlen,const char *index,\
@@ -81,14 +80,7 @@ int at_command(const void *cmd, size_t cmdlen,const char *index,\
 
 int at_streammode_set(int mode);
 
-#else
 
-#define at_init(devname)                                               -1
-#define at_oobregister(name,index,lenc,func,args)                      -1
-#define at_command(cmd,cmdlen,index,respbuf,respbuflen,timeout)        -1
-#define at_streammode_set(mode)                                        -1
-
-#endif
 
 
 #endif

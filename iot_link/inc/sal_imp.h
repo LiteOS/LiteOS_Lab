@@ -1,7 +1,7 @@
 /*
  * sal_imp.h
  *
- *  Created on: 2019Äê4ÔÂ26ÈÕ
+ *  Created on: 2019ï¿½ï¿½4ï¿½ï¿½26ï¿½ï¿½
  *      Author: zhangqf
  */
 
@@ -90,7 +90,8 @@ typedef struct
  *             not changed after the installation
  * @return: 0 success while -1 failed
  * */
-int tcpip_sal_install(const tag_tcpip_domain *domain);
+int link_sal_install(const tag_tcpip_domain *domain);
+int link_tcpip_imp_init(void); ///< the developer implement the function
 
 
 #endif /* __SAL_IMP_H */

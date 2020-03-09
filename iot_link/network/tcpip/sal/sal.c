@@ -1,7 +1,7 @@
 /*
  * sal.c
  *
- *  Created on: 2019Äê4ÔÂ26ÈÕ
+ *  Created on: 2019ï¿½ï¿½4ï¿½ï¿½26ï¿½ï¿½
  *      Author: zhangqf
  */
 
@@ -10,7 +10,9 @@
 #include <sal.h>
 #include <sal_imp.h>
 
-#if CONFIG_TCPIP_ENABLE
+
+#define CN_LINK_SOCKET_NUM 10
+
 
 typedef struct
 {
@@ -29,14 +31,18 @@ typedef struct
 
 static tag_sal_cb   s_sal_cb;
 
-int tcpipstack_init( int socknum)
+
+__attribute__((weak))  int link_tcpip_imp_init(void)
+{
+    printf("%s:###please implement this function by yourself####\n\r",__FUNCTION__);
+    return -1;
+}
+
+
+
+int link_tcpip_init(void)
 {
     int ret = -1;
-
-    if(socknum <= 0)
-    {
-        goto EXIT_PARA_ERR;
-    }
 
     if(NULL != s_sal_cb.sock_cb_tab)
     {
@@ -48,17 +54,17 @@ int tcpipstack_init( int socknum)
         goto EXIT_MUTEX_ERR;
     }
 
-    s_sal_cb.sock_cb_tab = osal_malloc(socknum*sizeof(void *));
+    s_sal_cb.sock_cb_tab = osal_malloc(CN_LINK_SOCKET_NUM*sizeof(void *));
     if(NULL == s_sal_cb.sock_cb_tab)
     {
         goto EXIT_MEM_ERR;
     }
 
-    memset(s_sal_cb.sock_cb_tab,0,socknum*sizeof(void *));
-    s_sal_cb.sock_cb_num = socknum;
+    memset(s_sal_cb.sock_cb_tab,0,CN_LINK_SOCKET_NUM*sizeof(void *));
+    s_sal_cb.sock_cb_num = CN_LINK_SOCKET_NUM;
     s_sal_cb.domain = NULL;
 
-    ret = 0;
+    ret = link_tcpip_imp_init();
 
     return ret;
 
@@ -69,12 +75,11 @@ EXIT_MEM_ERR:
 
 EXIT_MUTEX_ERR:
 EXIT_INIT_ERR:
-EXIT_PARA_ERR:
     return ret;
 
 }
 
-int tcpip_sal_install(const tag_tcpip_domain *domain)
+int link_sal_install(const tag_tcpip_domain *domain)
 {
     int ret = -1;
 
@@ -519,8 +524,5 @@ int sal_select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, s
 
     return ret;
 }
-
-
-#endif
 
 

@@ -38,7 +38,9 @@
  */
 #include <stdint.h>
 #include <stddef.h>
+#include <string.h>
 #include <ota_flag.h>
+#include <crc.h>
 
 static const ota_storage_t *s_ota_storage = NULL;
 
@@ -114,3 +116,11 @@ int ota_storage_flag_write(ota_flag_t *flag)
     return ret;
 }
 
+void ota_storage_flag_init()
+{
+    ota_flag_t  flag;
+    memset(&flag, 0, sizeof(flag));
+
+    flag.crc = calc_crc32(0,&flag,sizeof(flag) - sizeof(flag.crc));
+    ota_storage_flag_write(&flag);
+}

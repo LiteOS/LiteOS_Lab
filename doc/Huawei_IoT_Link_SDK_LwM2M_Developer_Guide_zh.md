@@ -1,7 +1,6 @@
 # 端云互通组件-LwM2M开发指南
 
 <h1 id="00">目 录</h1>
-
 <!-- TOC -->
 
 - [1、 前言](#1)
@@ -19,11 +18,9 @@
 <!-- /TOC -->
 
 <h1 id="1">1 前言 </h1>
-
 本文档主要通过实例讲述如何通过Agent Tiny SDK的端云互通组件，使用LwM2M协议快速接入华为物联网平台。
 
 <h1 id="2">2、Agent Tiny SDK简介 </h1>
-
 Agent Tiny是部署在具备广域网能力、对功耗/存储/计算资源有苛刻限制的终端设备上的轻量级互联互通中间件，您只需调用API接口，便可实现设备快速接入到物联网平台以及数据上报和命令接收等功能。
 Agent Tiny SDK是Huawei Agent Tiny软件开发工具包（Software Development Kit），通过Agent Tiny SDK端云互通组件，简单快速地实现与华为物联网平台安全可靠连接，可以大大减少开发周期，
 快速构建IoT产品。端云互通组件可以采用MQTT、CoAP和LwM2W协议接入物联网平台。
@@ -32,7 +29,6 @@ Agent Tiny SDK是Huawei Agent Tiny软件开发工具包（Software Development K
 ![](./meta/IoT_Link/lwm2m/iot-architecture.png )
 
 <h1 id="3">3、接入物联网平台流程 </h1>
-
 本章分别从 IoT 平台侧和端侧阐述通过端云互通组件接入物联网平台的开发流程，旨在帮助开发者在 IoT 设备上集成端云互通组件，进行IoT应用开发和调测。
 端云互通组件接入华为 OceanConnect IoT 云平台默认采用的是以太网方式（即以太网口驱动+LwIP网络协议栈+LwM2M协议+Agent Tiny SDK 对接云平台），
 同时也支持WIFI、GSM、NB-IoT等无线方式。OceanConnect 即华为IoT联接管理平台（IoT Connection Management Platform）是面向运营商和企业/行业领域的统一开放云平台，
@@ -81,9 +77,7 @@ Agent Tiny SDK是Huawei Agent Tiny软件开发工具包（Software Development K
 
 
 <h1 id="4">4、直连接入实例</h1>
-
 <h3 id="（参考）端云互通组件以太网接入实例.md">（参考）端云互通组件以太网接入实例</h3>
-
 -   硬件设备：野火STM32F429开发板，调试下载器（J-Link、ST-Link等）、网线、路由器、USB转串口线。
 
 >![](./public_sys-resources/icon-note.gif) **说明：**   
@@ -98,7 +92,6 @@ Agent Tiny SDK是Huawei Agent Tiny软件开发工具包（Software Development K
 
 
 <h4 id="4.1">4.1、平台侧开发 </h4>
-
 使用“开发中心”完成平台侧的开发。开发中心是基于设备管理服务提供的一站式开发工具，帮助开发者快速开发产品（Profile、编解码插件）
 ，并进行自动化测试，生成测试报告。平台侧配置流程包括：新建项目，新建产品、开发profile，开发编解码插件，注册设备。
 
@@ -108,7 +101,6 @@ Agent Tiny SDK是Huawei Agent Tiny软件开发工具包（Software Development K
 -   [开发中心](https://iot-dev.huaweicloud.com)的访问账号/密码，需要向OceanConnect IoT平台申请
 
 <h5 id="新建项目.md">2、新建项目</h5>
-
 
 项目是物联网平台提供物联网应用和设备的调测空间，可以根据场景的不同创建不同项目空间分别调测。
 在基于开发中心进行物联网开发时，需要根据行业属性创建独立的项目，并在该项目空间内开发物联网产品和应用。
@@ -139,7 +131,6 @@ Agent Tiny SDK是Huawei Agent Tiny软件开发工具包（Software Development K
 
 
 <h5 id="产品开发.md">3、产品开发</h5>
-
 在物联网平台中，某一类具有相同能力或特征的设备的合集被称为一款产品。产品包含Profile（产品模型）、编解码插件、测试报告等资源，
 其中产品信息被记录在Profile中。产品的Profile文件用来描述设备类型和设备服务能力。它定义了设备具备的服务能力，每个服务具备的属性、
 命令以及命令参数。
@@ -208,7 +199,6 @@ IoT平台提供了产品的Profile模板库，开发者可以根据自己需要�
 
 
 <h5 id="开发编解码插件.md">4、开发编解码插件</h5>
-
 IoT设备和IoT平台之间采用LwM2M协议通信，LwM2M消息的数据为应用层数据，应用层数据的格式由设备厂商自行定义。由于IoT设备对省电要求较高，所以应用层数据一般采用二进制格式。IoT平台在对应用层数据进行协议解析时，会转换成统一的json格式，以方便应用服务器使用。要实现二进制消息与json格式消息的转换，IoT平台需要使用编解码插件。
 
 1.  选择“产品开发”-\>选择已创建的产品-\>选择“编解码插件开发”，选择“在线编解码插件编辑器”。
@@ -257,7 +247,6 @@ IoT设备和IoT平台之间采用LwM2M协议通信，LwM2M消息的数据为应�
 
 
 <h5 id="添加设备.md">5、添加真实&虚拟设备</h5>
-
 平台通过接入真实&虚拟的设备，对开发的应用和设备进行在线调测，并进行统一的设备管理。
 
 1.  选择“设备管理”-\>“添加真实设备”-\>选择已创建的产品-\>输入设备名称和设备标识，并根据业务需求选择是否加密设备。最后点击“确定”。
@@ -271,7 +260,6 @@ IoT设备和IoT平台之间采用LwM2M协议通信，LwM2M消息的数据为应�
 ![](./meta/IoT_Link/lwm2m/register-device2.png "注册设备")
 
 <h4 id="4.2">4.2、设备侧开发 </h4>
-
 直连模式设备侧开发包括: 配置Demo中对接云端设备的信息、编译、运行SDK、数据上报任务与命令下发调测。
 
 <h5 id="">设备侧开发环境准备</h5>
@@ -283,30 +271,29 @@ IoT设备和IoT平台之间采用LwM2M协议通信，LwM2M消息的数据为应�
 
 
 <h5 id="接入IoT平台.md">配置Demo中对接云端设备的信息</h5>
-
 1.  开发板的网口通过网线连接到路由器。
 2.  设置本地IP。
 
 在net\_driver.c中修改device接入的局域网的IP地址值。目前demo程序采用的是静态IP地址的方式，如果需要使用DHCP方式，请在main.c中顶部头文件包含之后定义USE\_DHCP宏即可。
 
 	```
-
+	
 		void net_init(void) 
 		{
 		 	/* IP addresses initialization */ 
-         	IP_ADDRESS[0] = 192; 
-         	IP_ADDRESS[1] = 168; 
-         	IP_ADDRESS[2] = 0; 
-         	IP_ADDRESS[3] = 115; 
-         	NETMASK_ADDRESS[0] = 255; 
-         	NETMASK_ADDRESS[1] = 255; 
-         	NETMASK_ADDRESS[2] = 255; 
-         	NETMASK_ADDRESS[3] = 0; 
-         	GATEWAY_ADDRESS[0] = 192; 
-         	GATEWAY_ADDRESS[1] = 168; 
-         	GATEWAY_ADDRESS[2] = 0; 
-         	GATEWAY_ADDRESS[3] = 1;
-     	}
+	     	IP_ADDRESS[0] = 192; 
+	     	IP_ADDRESS[1] = 168; 
+	     	IP_ADDRESS[2] = 0; 
+	     	IP_ADDRESS[3] = 115; 
+	     	NETMASK_ADDRESS[0] = 255; 
+	     	NETMASK_ADDRESS[1] = 255; 
+	     	NETMASK_ADDRESS[2] = 255; 
+	     	NETMASK_ADDRESS[3] = 0; 
+	     	GATEWAY_ADDRESS[0] = 192; 
+	     	GATEWAY_ADDRESS[1] = 168; 
+	     	GATEWAY_ADDRESS[2] = 0; 
+	     	GATEWAY_ADDRESS[3] = 1;
+	 	}
 	```
 
 接口net\_init\(\)的作用是完成lwip协议相关的初始化。net\_driver.c位于 LiteOS-iot\_link/targets/STM32F429IGTx\_FIRE/Src。
@@ -316,16 +303,16 @@ IoT设备和IoT平台之间采用LwM2M协议通信，LwM2M消息的数据为应�
 在eth.c中将MAC\_ADDR0\~MAC\_ADDR5修改成真实的mac地址值保证不重复。
 
 	```
-
+	
 		static int8_t eth_init(struct netif* netif) 
-    	{
+		{
 			HAL_StatusTypeDef hal_eth_init_status; 
-        	MACAddr[0] = 0x00; 
-        	MACAddr[1] = 0x80; 
-        	MACAddr[2] = 0xE1; 
-        	MACAddr[3] = 0x00; 
-        	MACAddr[4] = 0x00; 
-        	MACAddr[5] = 0x00;
+	    	MACAddr[0] = 0x00; 
+	    	MACAddr[1] = 0x80; 
+	    	MACAddr[2] = 0xE1; 
+	    	MACAddr[3] = 0x00; 
+	    	MACAddr[4] = 0x00; 
+	    	MACAddr[5] = 0x00;
 		} 
 	```
 
@@ -342,7 +329,7 @@ IoT设备和IoT平台之间采用LwM2M协议通信，LwM2M消息的数据为应�
 		/**/#define cn_app_server         "49.4.85.232"
 		/**/#define cn_app_port           "5684"
 		const unsigned char  s_app_psk[]={0xd6,0x69,0x42,0x7e,0x2d,0xd4,0x38,0xf1,0xd5,0xb5,0xed,0x32,0x96,0x29,0xe6,0x20};
-
+	
 	```
 
 oc\_dtls\_lwm2m\_demo.c位于 LiteOS-iot\_link/demos。
@@ -356,55 +343,55 @@ config.mk位于 LiteOS-iot\_link/targets/STM32F429IGTx_FIRE/GCC。
 	```
 	
 		CONFIG_OS_TYPE := "liteos"
-
+	
 		CONFIG_ARCH_CPU_TYPE := "armv7-m"
 
 
 		CONFIG_SHELL_ENABLE := y
-
+	
 		CONFIG_STIMER_ENABLE := y
-
+	
 		CONFIG_DRIVER_ENABLE := y
-
+	
 		CONFIG_AT_ENABLE     := y
-
+	
 		CONFIG_CJSON_ENABLE := y
-
+	
 		CONFIG_TCPIP_ENABLE := y
 		CONFIG_TCPIP_TYPE := "lwip_socket"
-
+	
 		CONFIG_DTLS_ENABLE   := y
 		CONFIG_DTLS_TYPE     := "mbedtls_psk"
-
+	
 		CONFIG_MQTT_ENABLE   := n
 		CONFIG_MQTT_TYPE     := "lite_mqtt"
-
+	
 		CONFIG_LWM2M_ENABLE   := y
 		CONFIG_LWM2M_TYPE     := "wakaama_lwm2m"
-
+	
 		CONFIG_COAP_ENABLE   := n
 		CONFIG_COAP_TYPE     := "lite_coap"
-
+	
 		CONFIG_OC_COAP_ENABLE := n
 		CONFIG_OC_COAP_TYPE   := "soft"
-
+	
 		CONFIG_OC_MQTT_ENABLE := n
 		CONFIG_OC_MQTT_TYPE   := "soft"
-
+	
 		CONFIG_OC_LWM2M_ENABLE := y
 		CONFIG_OC_LWM2M_TYPE   := "soft"
-
+	
 		CONFIG_OTA_ENABLE      := n
 		CONFIG_PCP_ENABLE      := n
 
 
 		CONFIG_DEMO_ENABLE := y
-
+	
 		CONFIG_DEMO_TYPE   := "oc_dtls_lwm2m_demo"
-
+	
 		include $(TOP_DIR)/iot_link/iot.mk
 	```
-	
+
 
 6.  查看设备状态。
 
@@ -414,9 +401,7 @@ config.mk位于 LiteOS-iot\_link/targets/STM32F429IGTx_FIRE/GCC。
 ![](./meta/IoT_Link/lwm2m/check-hardware-status.jpg "查看设备状态")
 
 <h4 id="4.3">4.3、调测 </h4>
-
 <h5 id="数据上报.md">数据上报</h5>
-
 对于开发者来说，只需在app\_report\_task\_entry\(\)中将其传递给数据上报结构体 light 即可。具体调测过程如下：
 
 1.  设备侧执行app\_report\_task\_entry函数，使设备上报数据。
@@ -424,43 +409,43 @@ config.mk位于 LiteOS-iot\_link/targets/STM32F429IGTx_FIRE/GCC。
 oc\_lwm2m\_demo\_dtls.c中的函数app\_report\_task\_entry如下：
 
 	```
-
+	
 		static int app_report_task_entry()
 		{
-    		int ret = -1;
-    		int lux = 0;
-    		oc_config_param_t      oc_param;
-    		app_light_intensity_t  light;
-
-    		memset(&oc_param,0,sizeof(oc_param));
-
-    		oc_param.app_server.address = cn_app_server;
-    		oc_param.app_server.port = cn_app_port;
-    		oc_param.app_server.ep_id = cn_endpoint_id;
-    		oc_param.app_server.psk = (char *)s_app_psk;
-    		oc_param.app_server.psk_len = sizeof(s_app_psk);
-    		oc_param.app_server.psk_id = cn_endpoint_id;
-
-    		oc_param.boot_mode = en_oc_boot_strap_mode_factory;
-    		oc_param.rcv_func = app_msg_deal;
-
-    		s_lwm2m_handle = oc_lwm2m_config(&oc_param);
-
-    		if(NULL != s_lwm2m_handle)   //success ,so we could receive and send
-    		{
-        		//install a dealer for the led message received
-        		while(1) //--TODO ,you could add your own code here
-        		{
-            		lux++;
-            		lux= lux%10000;
-            		light.msgid = cn_app_light;
-            		light.intensity = htons(lux);
-            		oc_lwm2m_report(s_lwm2m_handle,(char *)&light,sizeof(light),1000); ///< report the light message
-            		osal_task_sleep(10*1000);
-        		}
-    		}
-
-    		return ret;
+			int ret = -1;
+			int lux = 0;
+			oc_config_param_t      oc_param;
+			app_light_intensity_t  light;
+	
+			memset(&oc_param,0,sizeof(oc_param));
+	
+			oc_param.app_server.address = cn_app_server;
+			oc_param.app_server.port = cn_app_port;
+			oc_param.app_server.ep_id = cn_endpoint_id;
+			oc_param.app_server.psk = (char *)s_app_psk;
+			oc_param.app_server.psk_len = sizeof(s_app_psk);
+			oc_param.app_server.psk_id = cn_endpoint_id;
+	
+			oc_param.boot_mode = en_oc_boot_strap_mode_factory;
+			oc_param.rcv_func = app_msg_deal;
+	
+			ret = oc_lwm2m_config(&oc_param);
+	
+			if(ret == 0)   //success ,so we could receive and send
+			{
+	    		//install a dealer for the led message received
+	    		while(1) //--TODO ,you could add your own code here
+	    		{
+	        		lux++;
+	        		lux= lux%10000;
+	        		light.msgid = cn_app_light;
+	        		light.intensity = htons(lux);
+	        		oc_lwm2m_report((char *)&light,sizeof(light),1000); ///< report the light message
+	        		osal_task_sleep(10*1000);
+	    		}
+			}
+	
+			return ret;
 		}
 	```
 
@@ -478,7 +463,6 @@ oc\_dtls\_lwm2m\_demo.c位于 LiteOS-iot\_link/demos。
 
 
 <h5 id="命令下发.md">命令下发</h5>
-
 命令下发一般分为两种形式：立即下发和缓存下发。
 
 -   **立即下发：** IoT平台立即发送收到的命令，如果设备不在线或者设备没收到指令则下发失败。立即下发适合对命令实时性有要求的场景，比如路灯开关灯，燃气表开关阀。使用立即下发时，应用服务器需要自己保证命令下发的时机。
@@ -522,24 +506,19 @@ expireTime\>0：命令缓存下发。
 -   **已送达：** 表示IoT平台已经将命令下发给设备，且收到设备返回的ACK消息。
 
 <h1 id="5">5、经 BS 接入实例 </h1>
-
 <h3 id="（参考）LINUX设备平台接入实例.md">（参考）LINUX设备平台接入实例</h3>
-
 **图 1** 引导模式整体配置流程图
 ![](./meta/IoT_Link/lwm2m/bs-connect.jpg )
 
 <h4 id="5.1">5.1、平台侧开发 </h4>
-
 BS引导模式平台侧开发包括：产品导入，设备导入，配置发放策略，发放设备。
 
 <h5 id="环境准备.md"> 1 环境准备</h5>
-
 在开发之前，需要提前获取如下信息：
 
 -   [物联网平台](https://console.huaweicloud.com/iotOceanLink/?region=cn-north-4#/iotdmp/spMenu/iodps)的访问账号/密码，需要向OceanConnect IoT平台申请
 
 <h5 id="产品导入.md"> 2 产品导入</h5>
-
 产品导入用于导入用户已开发和定义的产品模型。产品模型是指接入平台的设备的类型，产品信息包括产品名称、厂商、协议等信息。
 
 如果使用设备接入和设备管理服务，需要提前在开发中心完成产品模型定义并发布到产品中心，选择“从产品中心导入”。
@@ -564,7 +543,6 @@ BS引导模式平台侧开发包括：产品导入，设备导入，配置发放
 
 
 <h5 id="设备导入.md"> 3 设备导入</h5>
-
 设备导入用于将设备基本信息导入设备发放平台中，用于后续发放至不同的物联网平台，支持批量导入和单个导入。设备导入成功后，可在设备仓库中查看设备的详细信息。
 
 1.  登录IoT平台的开发者中心。
@@ -582,7 +560,6 @@ BS引导模式平台侧开发包括：产品导入，设备导入，配置发放
 >如上配置仅为参考举例，具体配置请以现网需求为准。  
 
 <h5 id="配置发放策略.md"> 4 配置发放策略</h5>
-
 发放策略用于控制设备按照指定策略或规则发放至不同的物联网平台。当前支持按照设备名称中的关键字设置发放示例，最多可添加20个发放实例。
 
 1.  在设备发放服务页面选择“发放策略”，点击“设备名称筛选”，添加实例。
@@ -596,7 +573,6 @@ BS引导模式平台侧开发包括：产品导入，设备导入，配置发放
 ![](./meta/IoT_Link/lwm2m/product-import-007.jpg "配置发放策略")
 
 <h5 id="发放设备.md"> 5 发放设备</h5>
-
 发放设备会将设备发放到指定站点的物联网平台（设备接入），对于首次发放的设备，设备上电后会自动引导设备接入指定的物联网平台。
 
 1.  选择“设备仓库”，在设备列表选择要发放的设备，点击“发放设备”，弹出对话框点击“确定”，点击“立即启动”。
@@ -608,11 +584,9 @@ BS引导模式平台侧开发包括：产品导入，设备导入，配置发放
 ![](./meta/IoT_Link/lwm2m/product-import-009.jpg "立即启动")
 
 <h4 id="5.2">5.2、设备侧开发 </h4>
-
 BS引导模式设备侧开发包括: 配置Demo中对接云端设备的信息、编译、运行SDK、数据上报功能调测。
 
 <h5 id="">设备侧开发环境准备</h5>
-
 在开发之前，需要提前进行如下操作：
 
 - 在虚拟机中搭建好Ubuntu操作系统
@@ -620,7 +594,6 @@ BS引导模式设备侧开发包括: 配置Demo中对接云端设备的信息、
 
 
 <h5 id="接入IoT平台.md">配置Demo中对接云端设备的信息</h5>
-
 1.  将组件代码源文件复制到Ubuntu用户目录下
 
 **图 1**  复制组件代码源文件到用户目录<a name="fig86891238143614"></a>  
@@ -633,7 +606,7 @@ oc\_lwm2m\_bs\_demo.c位于 LiteOS-iot\_link/demos。
 这些参数将作为入参传入oc\_lwm2m\_config\(\)以对LiteOS端云互通组件进行初始化。EP Name就是在云平台上注册设备时开发者设定的验证码，必须保证是唯一的；oc\_lwm2m\_bs\_demo.c中示例如下：
 
 	```
-
+	
 		//#define cn_app_server         "iot-bs.cn-north-4.myhuaweicloud.com"
 		\#define cn_app_server         "119.3.251.30"
 		\#define cn_endpoint_id        "test_lwm2m10"
@@ -647,50 +620,50 @@ config.mk位于 LiteOS-iot\_link/targets/LINUX/GCC。
 参考如下配置：
 
 	```
-
+	
 		CONFIG_OS_TYPE := "linux"
-
+	
 		CONFIG_ARCH_CPU_TYPE := "x86-64"
-
+	
 		CONFIG_SHELL_ENABLE := n
-
+	
 		CONFIG_STIMER_ENABLE := y
-
+	
 		CONFIG_DRIVER_ENABLE := n
-
+	
 		CONFIG_AT_ENABLE     := n
 		CONFIG_CJSON_ENABLE := y
-
+	
 		CONFIG_TCPIP_ENABLE := y
 		CONFIG_TCPIP_TYPE := "linux_socket"
-
+	
 		CONFIG_DTLS_ENABLE   := n
 		CONFIG_DTLS_TYPE     := "mbedtls_psk"
-
+	
 		CONFIG_MQTT_ENABLE   := n
 		CONFIG_MQTT_TYPE     := "lite_mqtt"
-
+	
 		CONFIG_LWM2M_ENABLE   := y
 		CONFIG_LWM2M_TYPE     := "wakaama_lwm2m"
-
+	
 		CONFIG_COAP_ENABLE   := n
 		CONFIG_COAP_TYPE     := "lite_coap"
-
+	
 		CONFIG_OC_COAP_ENABLE := n
 		CONFIG_OC_COAP_TYPE   := "soft"
-
+	
 		CONFIG_OC_MQTT_ENABLE := n
 		CONFIG_OC_MQTT_TYPE   := "soft"
-
+	
 		CONFIG_OC_LWM2M_ENABLE := y
 		CONFIG_OC_LWM2M_TYPE   := "soft"
-
+	
 		CONFIG_OTA_ENABLE      := n
 		CONFIG_PCP_ENABLE      := n
-
+	
 		CONFIG_DEMO_ENABLE := y
 		CONFIG_DEMO_TYPE   := "oc_lwm2m_bs_demo"
-
+	
 		include $(TOP_DIR)/iot_link/iot.mk
 	```
 4. 编译并运行。
@@ -715,9 +688,7 @@ config.mk位于 LiteOS-iot\_link/targets/LINUX/GCC。
 ![](./meta/IoT_Link/lwm2m/check-hardware-status-bs-nodtls.jpg "查看设备状态")
 
 <h4 id="5.3">5.3、调测 </h4>
-
 <h5 id="数据上报.md">数据上报</h5>
-
 对于开发者来说，只需在app\_report\_task\_entry\(\)中将其传递给数据上报结构体 light 即可。具体调测过程如下：
 
 1.  设备侧执行app\_report\_task\_entry函数，使设备上报数据。
@@ -725,61 +696,60 @@ config.mk位于 LiteOS-iot\_link/targets/LINUX/GCC。
 oc\_lwm2m\_bs\_demo.c中的函数app\_data\_report如下：
 
 	```
-
+	
 		static int app_report_task_entry()
 		{
-    		int ret = -1;
-    		int lux = 0;
-
-    		oc_config_param_t      oc_param;
-    		app_light_intensity_t  light;
-
-    		memset(&oc_param,0,sizeof(oc_param));
-
-    		oc_param.app_server.ep_id = cn_endpoint_id;
+			int ret = -1;
+			int lux = 0;
+	
+			oc_config_param_t      oc_param;
+			app_light_intensity_t  light;
+	
+			memset(&oc_param,0,sizeof(oc_param));
+	
+			oc_param.app_server.ep_id = cn_endpoint_id;
 
 
     		oc_param.boot_server.address = cn_app_server;
     		oc_param.boot_server.port = cn_app_port;
     		oc_param.boot_server.ep_id = cn_endpoint_id;
-
+    
     		oc_param.boot_mode = en_oc_boot_strap_mode_client_initialize;
     		oc_param.rcv_func = app_msg_deal;
-
+    
     		while(1) //--TODO ,you could add your own code here
     		{
         		if(NULL == s_lwm2m_context)
         		{
-            		s_lwm2m_context = oc_lwm2m_config(&oc_param);
+            		oc_lwm2m_config(&oc_param);
         		}
         		else if(s_lwm2m_reconnect)
         		{
             		s_lwm2m_reconnect = 0;
-
-            		oc_lwm2m_deconfig(s_lwm2m_context);
-
-            		s_lwm2m_context = NULL;
-
-            		s_lwm2m_context = oc_lwm2m_config(&oc_param);
-
+    
+            		oc_lwm2m_deconfig();
+    
+    
+            		oc_lwm2m_config(&oc_param);
+    
         		}
         		else
         		{
             		lux++;
             		lux= lux%10000;
-
+    
             		light.msgid = cn_app_light;
             		light.intensity = htons(lux);
-            		oc_lwm2m_report(s_lwm2m_context,(char *)&light,sizeof(light),1000); ///< report the light message
+            		oc_lwm2m_report((char *)&light,sizeof(light),1000); ///< report the light message
         		}
-
+    
         		osal_task_sleep(10*1000);
-
+    
     		}
-
+    
     		return ret;
-		}
-	```
+    	}
+    ```
 
 oc\_lwm2m\_bs\_demo.c位于 LiteOS-iot\_link/demos。
 

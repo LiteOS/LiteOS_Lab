@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2019>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -34,5 +34,147 @@
 /**
  *  DATE                AUTHOR      INSTRUCTION
  *  2019-10-17 19:49  zhangqianfu  The first version
+ *  2019-12-06 19:50  zhuzongru    define interface
  *
  */
+
+#include "lwm2m_al.h"
+
+#include <stddef.h>
+
+typedef struct
+{
+    lwm2m_al_op_t  *ops;
+    lwm2m_al_op_t   mem;
+} lwm2m_al_op_cb_t;
+
+static lwm2m_al_op_cb_t s_lwm2m_al_op_cb;
+
+/////////////////CREATE THE API FOR THE LWM2M LIB////////////////////////////////
+int lwm2m_al_config(void **handle, lwm2m_al_init_param_t *init_param)
+{
+    int ret = LWM2M_ERR;
+
+    if ((NULL != handle)
+        && (NULL != init_param)
+        && (NULL != s_lwm2m_al_op_cb.ops)
+        && (NULL != s_lwm2m_al_op_cb.ops->config))
+    {
+        ret = s_lwm2m_al_op_cb.ops->config(handle, init_param);
+    }
+
+    return ret;
+}
+
+int lwm2m_al_deconfig(void *handle)
+{
+    int ret = LWM2M_ERR;
+
+    if ((NULL != handle)
+        && (NULL != s_lwm2m_al_op_cb.ops)
+        && (NULL != s_lwm2m_al_op_cb.ops->deconfig))
+    {
+        ret = s_lwm2m_al_op_cb.ops->deconfig(handle);
+    }
+
+    return ret;
+}
+
+int lwm2m_al_add_object(void *handle, int object_id, int object_instance_id, int resource_id, void *param)
+{
+    int ret = LWM2M_ERR;
+
+    if ((NULL != handle)
+        && (NULL != s_lwm2m_al_op_cb.ops)
+        && (NULL != s_lwm2m_al_op_cb.ops->add_object))
+    {
+        ret = s_lwm2m_al_op_cb.ops->add_object(handle, object_id, object_instance_id, resource_id, param);
+    }
+
+    return ret;
+}
+
+int lwm2m_al_delete_object(void *handle, int object_id)
+{
+    int ret = LWM2M_ERR;
+
+    if ((NULL != handle)
+        && (NULL != s_lwm2m_al_op_cb.ops)
+        && (NULL != s_lwm2m_al_op_cb.ops->delete_object))
+    {
+        ret = s_lwm2m_al_op_cb.ops->delete_object(handle, object_id);
+    }
+
+    return ret;
+}
+
+int lwm2m_al_connect(void *handle)
+{
+    int ret = LWM2M_ERR;
+
+    if ((NULL != handle)
+        && (NULL != s_lwm2m_al_op_cb.ops)
+        && (NULL != s_lwm2m_al_op_cb.ops->connect))
+    {
+        ret = s_lwm2m_al_op_cb.ops->connect(handle);
+    }
+
+    return ret;
+}
+
+int  lwm2m_al_disconnect(void *handle)
+{
+    int ret = LWM2M_ERR;
+
+    if ((NULL != handle)
+        && (NULL != s_lwm2m_al_op_cb.ops)
+        && (NULL != s_lwm2m_al_op_cb.ops->disconnect))
+    {
+        ret = s_lwm2m_al_op_cb.ops->disconnect(handle);
+    }
+
+    return ret;
+}
+
+int  lwm2m_al_send(void *handle, lwm2m_al_send_param_t *send_param)
+{
+    int ret = LWM2M_ERR;
+
+    if ((NULL != handle)
+        && (NULL != send_param)
+        && (NULL != s_lwm2m_al_op_cb.ops)
+        && (NULL != s_lwm2m_al_op_cb.ops->send))
+    {
+        ret = s_lwm2m_al_op_cb.ops->send(handle, send_param);
+    }
+
+    return ret;
+}
+
+int lwm2m_al_install(lwm2m_al_op_t *op)
+{
+    int ret = LWM2M_ERR;
+
+    if ((NULL != op) && (NULL == s_lwm2m_al_op_cb.ops))
+    {
+        s_lwm2m_al_op_cb.mem  = *op;
+        s_lwm2m_al_op_cb.ops = &s_lwm2m_al_op_cb.mem;
+        ret = 0;
+    }
+
+    return ret;
+}
+
+int lwm2m_al_uninstall(void)
+{
+    int ret = LWM2M_ERR;
+
+    if (NULL != s_lwm2m_al_op_cb.ops)
+    {
+        s_lwm2m_al_op_cb.ops = NULL;
+        ret = 0;
+    }
+
+    return ret;
+}
+

@@ -125,9 +125,15 @@ CONFIG_OC_COAP_TYPE   := "soft"
 
 #CONFIG_OC_MQTT_ENABLE, we build a oc mqtt abstraction for huawei OceanConnect service,
 #which shield the difference of the implement of oc mqtt. 
-#CONFIG_OC_MQTT_TYPE could be "soft" "ec20_oc" "none"
+#CONFIG_OC_MQTT_TYPE could be "soft" "ec2x_oc"  "none"
+#CONFIG_OC_MQTT_VERSION could be "V5"  "V1",use this to select the used interface
+#CONFIG_OCMQTT_DEMO_ENABLE could be y or n, use this to enable the oc mqtt demo
+#CONFIG_OCMQTT_DEMO_BSENABLE could be y or n, use this to enable the bootstrap or not
 CONFIG_OC_MQTT_ENABLE := n
 CONFIG_OC_MQTT_TYPE   := "soft"
+CONFIG_OC_MQTT_VERSION := "V1"
+CONFIG_OC_MQTTDEMO_ENABLE := n
+CONFIG_OC_MQTTDEMO_BSENABLE := y
 
 #CONFIG_OC_LWM2M_ENABLE, we build a oc lwm2m abstraction for huawei OceanConnect service,
 #which shield the difference of the implement of oc lwm2m. 
@@ -168,7 +174,11 @@ CONFIG_DEMO_TYPE   := "none"
 
 ########################BearPi-IoT OC DEMO START#####################################
 
-#CONFIG_USER_DEMO could be "oc_streetlight_template" "oc_agriculture_template" "oc_track_template" "oc_smoke_template" "oc_manhole_cover_template" "oc_infrared_template"
+<<<<<<< HEAD
+#CONFIG_USER_DEMO could be "oc_streetlight_template" "oc_agriculture_template" "oc_track_template" "oc_smoke_template"
+=======
+#CONFIG_USER_DEMO could be "oc_streetlight_template" "oc_streetlight_infrared_template" "oc_agriculture_template" "oc_track_template" "oc_smoke_template"
+>>>>>>> 538573c21f24ce151e03e6d355ce1d0063aac6ea
 
 CONFIG_USER_DEMO := "oc_manhole_cover_template"
 

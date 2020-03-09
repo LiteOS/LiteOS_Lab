@@ -407,8 +407,17 @@ int osal_int_connect(int intnum, int prio, int mode, fn_interrupt_handle callbac
 	return ret;
 }
 
+
+__attribute__((weak))  int os_imp_init(void)
+{
+    printf("%s:###please implement this function by yourself####\n\r",__FUNCTION__);
+    return -1;
+}
+
 int osal_init(void)
 {
-    return 0;
+    int ret = -1;
+    ret = os_imp_init();
+    return ret;
 }
 

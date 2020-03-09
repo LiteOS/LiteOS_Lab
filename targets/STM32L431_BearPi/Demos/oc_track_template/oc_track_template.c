@@ -33,7 +33,7 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-14 17:21  zhangqianfu  The first version  
+ *  2019-05-14 17:21  zhangqianfu  The first version
  *
  */
 #include <stdint.h>
@@ -95,7 +95,6 @@ typedef struct
 } tag_app_Track_Control_Beep;
 #pragma pack()
 
-void *context;
 int8_t qr_code = 1;
 extern const unsigned char gImage_Huawei_IoT_QR_Code[114720];
 E53_ST1_Data_TypeDef E53_ST1_Data;
@@ -170,22 +169,22 @@ static int app_cmd_task_entry()
                     printf("Track_Control_Beep:msgid:%d mid:%d", Track_Control_Beep->messageId, ntohs(Track_Control_Beep->mid));
                     /********** code area for cmd from IoT cloud  **********/
                     if (Track_Control_Beep->Beep[0] == 'O' && Track_Control_Beep->Beep[1] == 'N')
-                    {	
-                        E53_ST1_Beep_StatusSet(ON);				
+                    {
+                        E53_ST1_Beep_StatusSet(ON);
                         Response_Track_Control_Beep.messageId = cn_app_response_Track_Control_Beep;
                     	Response_Track_Control_Beep.mid = Track_Control_Beep->mid;
                         Response_Track_Control_Beep.errcode = 0;
                 		Response_Track_Control_Beep.Beep_State = 1;
-                        oc_lwm2m_report(context,(char *)&Response_Track_Control_Beep,sizeof(Response_Track_Control_Beep),1000);    ///< report cmd reply message	
+                        oc_lwm2m_report((char *)&Response_Track_Control_Beep,sizeof(Response_Track_Control_Beep),1000);    ///< report cmd reply message
                     }
                     if (Track_Control_Beep->Beep[0] == 'O' && Track_Control_Beep->Beep[1] == 'F' && Track_Control_Beep->Beep[2] == 'F')
-                    {	
-                        E53_ST1_Beep_StatusSet(OFF);					
+                    {
+                        E53_ST1_Beep_StatusSet(OFF);
                         Response_Track_Control_Beep.messageId = cn_app_response_Track_Control_Beep;
                     	Response_Track_Control_Beep.mid = Track_Control_Beep->mid;
                         Response_Track_Control_Beep.errcode = 0;
                 		Response_Track_Control_Beep.Beep_State = 0;
-                        oc_lwm2m_report(context,(char *)&Response_Track_Control_Beep,sizeof(Response_Track_Control_Beep),1000);    ///< report cmd reply message		
+                        oc_lwm2m_report((char *)&Response_Track_Control_Beep,sizeof(Response_Track_Control_Beep),1000);    ///< report cmd reply message
                     }
                     /********** code area end  **********/
                     break;
@@ -213,22 +212,22 @@ static int app_report_task_entry()
     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
     oc_param.rcv_func = app_msg_deal;
 
-    context = oc_lwm2m_config(&oc_param);
-
-    if(NULL != context)   //success ,so we could receive and send
+    // context = oc_lwm2m_config(&oc_param);
+    ret = oc_lwm2m_config(& &oc_param);
+    if (0 != ret)
     {
-        //install a dealer for the led message received
-        while(1) //--TODO ,you could add your own code here
-        {		
-            if(E53_ST1_Data.Latitude!=0&&E53_ST1_Data.Longitude!=0)
-		    {
-                Track.messageId = cn_app_Track;
-                sprintf(Track.Longitude , "%.5f", E53_ST1_Data.Longitude);
-                sprintf(Track.Latitude , "%.5f", E53_ST1_Data.Latitude);
-                oc_lwm2m_report(context, (char *)&Track, sizeof(Track), 1000);               
-            }
-            osal_task_sleep(2*1000);
+    	return ret;
+    }
+    while(1) //--TODO ,you could add your own code here
+    {
+        if(E53_ST1_Data.Latitude!=0&&E53_ST1_Data.Longitude!=0)
+        {
+            Track.messageId = cn_app_Track;
+            sprintf(Track.Longitude , "%.5f", E53_ST1_Data.Longitude);
+            sprintf(Track.Latitude , "%.5f", E53_ST1_Data.Latitude);
+            oc_lwm2m_report( (char *)&Track, sizeof(Track), 1000);
         }
+        osal_task_sleep(2*1000);
     }
 
     return ret;
@@ -236,7 +235,7 @@ static int app_report_task_entry()
 
 static int app_collect_task_entry()
 {
-    Init_E53_ST1();	
+    Init_E53_ST1();
     while (1)
     {
         E53_ST1_Read_Data();

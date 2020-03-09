@@ -303,8 +303,8 @@ static int __disconnect(void *handle)
 
 static void general_dealer(sinn_mqtt_msg_t *data)
 {
-    mqtt_al_msgrcv_t   msg;
-    fn_msg_dealer      dealer;
+    mqtt_al_msgrcv_t           msg;
+    fn_mqtt_al_msg_dealer      dealer;
     msg.dup = data->dup;
     msg.qos = data->qos;
     msg.retain = data->retained;
@@ -313,7 +313,7 @@ static void general_dealer(sinn_mqtt_msg_t *data)
     msg.topic.data = data->topic;
     msg.topic.len = data->topiclen;
 
-    if (NULL != data->arg)
+    if (NULL != data->arg)
     {
         dealer = data->arg;
         dealer(NULL,&msg);  ///<   the args not implement yet
@@ -344,6 +344,10 @@ static int __subscribe(void *handle,mqtt_al_subpara_t *para)
         {
             ret = -1;
             goto exit;
+        }
+        else
+        {
+            ret = 0;
         }
     }
     else

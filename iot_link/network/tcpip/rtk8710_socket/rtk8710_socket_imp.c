@@ -48,7 +48,6 @@
 #include <sal_imp.h>
 #include <sal_define.h>
 #include <sal_types.h>
-#include <rtk8710_socket_imp.h>
 #include <at.h>
 #include <link_misc.h>
 #include <link_endian.h>
@@ -57,6 +56,16 @@
 #define cn_rtk8710_cmd_timeout   (5*1000)
 #define cn_rtk8710_rcvindex      "RSP"
 #define cn_rtk8710_cachelen      (1024 * 2)
+
+#define WIFI_SSID     "TP-LINK_IOT_LINK"
+#define WIFI_PASSWD   "iotlink_2019"
+
+typedef enum
+{
+    STA = 1,
+    AP,
+    STA_AP,
+}enum_net_mode;
 
 typedef struct
 {
@@ -514,24 +523,6 @@ static const tag_tcpip_domain s_tcpip_socket =
 };
 
 
-int tcpipstack_install_rtk8710_socket(void)
-{
-    int ret = -1;
-
-    ret = tcpip_sal_install(&s_tcpip_socket);
-
-    if(0 == ret)
-    {
-        printf("sal:install socket success\r\n");
-    }
-    else
-    {
-        printf("sal:install socket failed\r\n");
-    }
-
-    return 0;
-}
-
 static bool_t rtk8710_reset(void)
 {
     return rtk8710_atcmd("AT+RST\r\n","[RST]OK");
@@ -569,8 +560,10 @@ static bool_t rtk8710_ver()
 }
 
 
-int rtk8710_boot(void)
+int link_tcpip_imp_init(void)
 {
+    int ret = -1;
+
     at_oobregister("rtk8710rcv",cn_rtk8710_rcvindex,strlen(cn_rtk8710_rcvindex),rtk8710_rcvdeal,NULL);
     at_streammode_set(1);
     ring_buffer_init(&s_rtk8710_sock_cb.rtk8710_rcvring,s_rtk8710_sock_cb.rtk8710_rcvbuf,cn_rtk8710_cachelen,0,0);
@@ -585,5 +578,16 @@ int rtk8710_boot(void)
     }
     //reach here means everything is ok, we can go now
 
-    return 0;
+    ret = link_sal_install(&s_tcpip_socket);
+
+    if(0 == ret)
+    {
+        printf("sal:install socket success\r\n");
+    }
+    else
+    {
+        printf("sal:install socket failed\r\n");
+    }
+
+    return ret;
 }

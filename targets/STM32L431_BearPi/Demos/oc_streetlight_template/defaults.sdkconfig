@@ -46,3 +46,4 @@ CONFIG_DEMO_ENABLE= y
 CONFIG_DEMO_TYPE= "none"
 
 CONFIG_USER_DEMO  = "oc_streetlight_template"
+CONFIG_DEMO_ENABLE = y
