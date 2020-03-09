@@ -17,14 +17,15 @@
 <!-- /TOC -->
 
 <h1 id="1">1.前言</h1>
-  本文档主要通过实例讲述如何通过Agent Tiny SDK的端云互通组件，使用MQTT协议快速接入华为物联网平台。
+  本文档主要通过实例讲述如何通过IoT Device SDK Tiny的端云互通组件，使用MQTT协议快速接入华为物联网平台。
 
-<h1 id="2">2.SDK简介</h1>
-Agent Tiny是部署在具备广域网能力、对功耗/存储/计算资源有苛刻限制的终端设备上的轻量级互联互通中间件，您只需调用API接口，便可实现设备快速接入到物联网平台以及数据上报和命令接收等功能。
+<h1 id="2">2.IoT Device SDK Tiny简介</h1>
 
-Agent Tiny SDK是Huawei Agent Tiny软件开发工具包（Software Development Kit），通过Agent Tiny SDK端云互通组件，简单快速地实现与华为物联网平台安全可靠连接，可以大大减少开发周期，快速构建IoT产品。端云互通组件可以采用MQTT、CoAP和LWM2W协议接入物联网平台。
+IoT Device SDK Tiny是部署在具备广域网能力、对功耗/存储/计算资源有苛刻限制的终端设备上的轻量级互联互通中间件，您只需调用API接口，便可实现设备快速接入到物联网平台以及数据上报和命令接收等功能。
 
-**Agent Tiny SDK的全景图**
+IoT Device SDK Tiny是Huawei软件开发工具包（Software Development Kit），通过IoT Device SDK Tiny端云互通组件，简单快速地实现与华为物联网平台安全可靠连接，可以大大减少开发周期，快速构建IoT产品。端云互通组件可以采用MQTT、CoAP和LWM2W协议接入物联网平台。
+
+**IoT Device SDK Tiny的全景图**
 
 ![](./meta/IoT_Link/mqtt/iot-architecture.png)
 

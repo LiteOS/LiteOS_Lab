@@ -4,7 +4,7 @@
 <!-- TOC -->
 
 - [1、 前言](#1)
-- [2、 Agent Tiny SDK简介](#2)
+- [2、 IoT Device SDK Tiny简介](#2)
 - [3、 接入物联网平台流程](#3)
 - [4、 直连接入实例](#4)
 	-  [4.1、 平台侧开发](#4.1)
@@ -18,11 +18,11 @@
 <!-- /TOC -->
 
 <h1 id="1">1 前言 </h1>
-本文档主要通过实例讲述如何通过Agent Tiny SDK的端云互通组件，使用LwM2M协议快速接入华为物联网平台。
+本文档主要通过实例讲述如何通过IoT Device SDK Tiny的端云互通组件，使用LwM2M协议快速接入华为物联网平台。
 
-<h1 id="2">2、Agent Tiny SDK简介 </h1>
-Agent Tiny是部署在具备广域网能力、对功耗/存储/计算资源有苛刻限制的终端设备上的轻量级互联互通中间件，您只需调用API接口，便可实现设备快速接入到物联网平台以及数据上报和命令接收等功能。
-Agent Tiny SDK是Huawei Agent Tiny软件开发工具包（Software Development Kit），通过Agent Tiny SDK端云互通组件，简单快速地实现与华为物联网平台安全可靠连接，可以大大减少开发周期，
+<h1 id="2">2、IoT Device SDK Tiny简介 </h1>
+IoT Device SDK Tiny是部署在具备广域网能力、对功耗/存储/计算资源有苛刻限制的终端设备上的轻量级互联互通中间件，您只需调用API接口，便可实现设备快速接入到物联网平台以及数据上报和命令接收等功能。
+IoT Device SDK Tiny是Huawei Agent Tiny软件开发工具包（Software Development Kit），通过IoT Device SDK Tiny端云互通组件，简单快速地实现与华为物联网平台安全可靠连接，可以大大减少开发周期，
 快速构建IoT产品。端云互通组件可以采用MQTT、CoAP和LwM2W协议接入物联网平台。
 
 **IOT SDK 架构图**
@@ -30,7 +30,7 @@ Agent Tiny SDK是Huawei Agent Tiny软件开发工具包（Software Development K
 
 <h1 id="3">3、接入物联网平台流程 </h1>
 本章分别从 IoT 平台侧和端侧阐述通过端云互通组件接入物联网平台的开发流程，旨在帮助开发者在 IoT 设备上集成端云互通组件，进行IoT应用开发和调测。
-端云互通组件接入华为 OceanConnect IoT 云平台默认采用的是以太网方式（即以太网口驱动+LwIP网络协议栈+LwM2M协议+Agent Tiny SDK 对接云平台），
+端云互通组件接入华为 OceanConnect IoT 云平台默认采用的是以太网方式（即以太网口驱动+LwIP网络协议栈+LwM2M协议+IoT Device SDK Tiny 对接云平台），
 同时也支持WIFI、GSM、NB-IoT等无线方式。OceanConnect 即华为IoT联接管理平台（IoT Connection Management Platform）是面向运营商和企业/行业领域的统一开放云平台，
 支持SIM和非SIM场景的各种联接和联接管理。通过开放的APIs，向上集成各种行业应用，向下接入各种传感器、终端和网关，帮助运营商和企业/行业客户实现多种行业终端的快速接入，
 多种行业应用的快速集成。华为IoT联接管理平台提供安全可控的全联接管理，使能行业革新，构建IoT生态（本章中提到的IoT平台指OceanConnect）。
@@ -101,7 +101,6 @@ Agent Tiny SDK是Huawei Agent Tiny软件开发工具包（Software Development K
 -   [开发中心](https://iot-dev.huaweicloud.com)的访问账号/密码，需要向OceanConnect IoT平台申请
 
 <h5 id="新建项目.md">2、新建项目</h5>
-
 项目是物联网平台提供物联网应用和设备的调测空间，可以根据场景的不同创建不同项目空间分别调测。
 在基于开发中心进行物联网开发时，需要根据行业属性创建独立的项目，并在该项目空间内开发物联网产品和应用。
 
@@ -728,8 +727,9 @@ oc\_lwm2m\_bs\_demo.c中的函数app\_data\_report如下：
             		s_lwm2m_reconnect = 0;
     
             		oc_lwm2m_deconfig();
-    
-    
+
+
+​    
             		oc_lwm2m_config(&oc_param);
     
         		}
