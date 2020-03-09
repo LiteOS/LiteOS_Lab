@@ -33,7 +33,7 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-14 17:22  zhangqianfu  The first version  
+ *  2019-05-14 17:22  zhangqianfu  The first version
  *
  */
 #ifndef LITEOS_LAB_IOT_LINK_OC_OC_LWM2M_OC_LWM2M_AL_OC_LWM2M_AL_H_
@@ -51,7 +51,7 @@ typedef struct
     char *psk_id;                 ///< server encode by psk, if not set NULL here
     char *psk;
     int   psk_len;
-}oc_server_t;
+} oc_server_t;
 
 
 typedef enum
@@ -59,7 +59,7 @@ typedef enum
     en_oc_boot_strap_mode_factory = 0,
     en_oc_boot_strap_mode_client_initialize,
     en_oc_boot_strap_mode_sequence,
-}en_oc_boot_strap_mode_t;
+} en_oc_boot_strap_mode_t;
 
 
 typedef enum
@@ -68,11 +68,10 @@ typedef enum
     EN_OC_LWM2M_MSG_APPDISCOVER,
     EN_OC_LWM2M_MSG_APPEXECUTE,
     EN_OC_LWM2M_MSG_SERVERREBS,    ///<we  have received the rebootstrap command from the platform
-}en_oc_lwm2m_msg_t;
+} en_oc_lwm2m_msg_t;
 
 /** @brief this is the message dealer module for the application*/
 typedef int (*fn_oc_lwm2m_msg_deal)(void *usr_data, en_oc_lwm2m_msg_t type, void *msg, int len);
-
 
 /** @brief this is the agent configuration */
 typedef struct
@@ -82,12 +81,28 @@ typedef struct
     oc_server_t              app_server;      ///< if factory or smart boot, must be set here
     fn_oc_lwm2m_msg_deal     rcv_func;        ///< receive function caller here
     void                    *usr_data;        ///< used for the user
-}oc_config_param_t;
+} oc_config_param_t;
+
+
+typedef enum
+{
+    en_oc_lwm2m_err_ok          = 0,      ///< this means the status ok
+    en_oc_lwm2m_err_parafmt,              ///< this means the parameter err format
+    en_oc_lwm2m_err_network,              ///< this means the network wrong status
+    en_oc_lwm2m_err_conserver,            ///< this means the server refused the service for some reason(likely the id and pwd)
+    en_oc_lwm2m_err_noconfigured,         ///< this means we have not configure it yet,so could not connect
+    en_oc_lwm2m_err_configured,           ///< this means we has configured it, so could not reconfigure it
+    en_oc_lwm2m_err_noconected,           ///< this means the connection has not been built, so you could not send data
+    en_oc_lwm2m_err_gethubaddrtimeout,    ///< this means get the hub address timeout
+    en_oc_lwm2m_err_sysmem,               ///< this means the system memory is not enough
+    en_oc_lwm2m_err_system,               ///< this means that the system porting may have some problem,maybe not install yet
+    en_oc_lwm2m_err_last,
+}en_oc_lwm2m_err_code_t;
 
 ///////////////////////////LWM2M AGENT INTERFACE////////////////////////////////
-typedef int (*fn_oc_lwm2m_report)(void *handle, char *buf, int len, int timeout);
-typedef void* (*fn_oc_lwm2m_config)(oc_config_param_t *param);
-typedef int   (*fn_oc_lwm2m_deconfig)(void *handle);
+typedef int (*fn_oc_lwm2m_report)(char *buf, int len, int timeout);
+typedef int (*fn_oc_lwm2m_config)(oc_config_param_t *param);
+typedef int (*fn_oc_lwm2m_deconfig)(void);
 /**
  * @brief this data structure defines the lwm2m agent implement
  */
@@ -96,10 +111,9 @@ typedef struct
     fn_oc_lwm2m_config   config;   ///< this function used for the configuration
     fn_oc_lwm2m_report   report;   ///< this function used for the report data to the cdp
     fn_oc_lwm2m_deconfig deconfig; ///< this function used for the deconfig
-}oc_lwm2m_opt_t;
+} oc_lwm2m_opt_t;
 
 
-#if CONFIG_OC_LWM2M_ENABLE
 /**
  *@brief the lwm2m agent should use this function to register the method for the application
  *
@@ -107,7 +121,7 @@ typedef struct
  *@param[in] opt, the operation method implement by the lwm2m agent developer
  *@return 0 success while <0 failed
  */
-int oc_lwm2m_register(const char *name,const oc_lwm2m_opt_t *opt);
+int oc_lwm2m_register(const char *name, const oc_lwm2m_opt_t *opt);
 
 /**
  *@brief the lwm2m agent should use this function to unregister the method for the application
@@ -121,29 +135,26 @@ int oc_lwm2m_unregister(const char *name);
 /**
  * @brief the application use this function to configure the lwm2m agent
  * @param[in] param, refer to oc_config_param_t
- * @return  the context, while NULL means failed
+ * @return 0 success while others the error code described as en_oc_lwm2m_err_code_t
  */
-void* oc_lwm2m_config(oc_config_param_t *param);
+int oc_lwm2m_config(oc_config_param_t *param);
+
 /**
  * @brief the application use this function to send the message to the cdp
- * @param[in] hanlde, returned by the config
  * @param[in] buf the message to send
  * @param[in] len the message length
  * @param[in] timeout block time
- *
- * @return 0 success while <0 failed
+ * @return 0 success while others the error code described as en_oc_lwm2m_err_code_t
  */
-int oc_lwm2m_report(void *context,char *buf, int len,int timeout);
+int oc_lwm2m_report(char *buf, int len, int timeout);
 
 /**
  *@brief: the application use this function to deconfigure the lwm2m agent
  *
- *@param[in] context, returned by the config
- *
- * return 0 success while <0 failed
+ * @return 0 success while others the error code described as en_oc_lwm2m_err_code_t
  */
 
-int oc_lwm2m_deconfig(void *context);
+int oc_lwm2m_deconfig(void);
 
 /**
  *@brief this is the oc lwm2m agent initialize function,must be called first
@@ -151,16 +162,5 @@ int oc_lwm2m_deconfig(void *context);
  *@return 0 success while <0 failed
  */
 int oc_lwm2m_init();
-
-#else   //not configure the lwm2m agent
-
-#define oc_lwm2m_register(opt)                                              -1
-#define oc_lwm2m_msg_push(msg,len)                                          -1
-#define oc_lwm2m_report(buf,len,timeout)                                    -1
-#define oc_lwm2m_config(param)                                              -1
-#define oc_lwm2m_init                                                       -1
-#define oc_lwm2m_deconfig                                                   -1
-
-#endif
 
 #endif /* LITEOS_LAB_IOT_LINK_OC_OC_LWM2M_OC_LWM2M_AL_OC_LWM2M_AL_H_ */

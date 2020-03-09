@@ -240,7 +240,7 @@ static void osdriv_load_static(void){
     extern unsigned int __osdriv_start;
     extern unsigned int __osdriv_end;
     para = (os_driv_para_t *)&__osdriv_start;
-    num = ((unsigned int )&__osdriv_end - (unsigned int)&__osdriv_start)/sizeof(os_driv_para_t);
+    num = ((unsigned int )(uintptr_t)&__osdriv_end - (unsigned int)(uintptr_t)&__osdriv_start)/sizeof(os_driv_para_t);
 #else
     #error("unknown compiler here");
 #endif
@@ -322,7 +322,7 @@ los_dev_t  los_dev_open  (const char *name,unsigned int flag)
         goto EXIT_DRIVERR;
     }
     //WE DON'T CARE TOO MUCH ABOUT THE RD AND WR FLAG,MAY BE TODO IT IN THE NEXT VERSION HERE
-    if((O_EXCL & driv->flagmask) && (NULL != driv->devlst))
+    if((O_EXCL & (unsigned int )driv->flagmask) && (NULL != driv->devlst))
     {
         goto EXIT_EXCLERR;
     }
@@ -469,7 +469,7 @@ ssize_t   los_dev_read  (los_dev_t dev,size_t offset, void *buf,size_t len,uint3
     if((NULL != dev)&&(NULL != buf)&&(0 != len))
     {
         devcb = dev;
-        if((0 == (devcb->openflag & O_WRONLY)))
+        if((0 == ((uint32_t)devcb->openflag & O_WRONLY)))
         {
             drivcb = devcb->driv;
             if((NULL != drivcb->op)&&(NULL != drivcb->op->read))
@@ -504,7 +504,7 @@ ssize_t los_dev_write (los_dev_t dev,size_t offset,const void *buf,size_t len, u
     if((NULL != dev) && (NULL != buf) && (len != 0))
     {
         devcb = dev;
-        if((devcb->openflag & O_WRONLY) || (devcb->openflag & O_RDWR))
+        if((((uint32_t)devcb->openflag) & O_WRONLY) || (((uint32_t)devcb->openflag) & O_RDWR))
         {
             drivcb = devcb->driv;
             if((NULL != drivcb->op)&&(NULL != drivcb->op->write))

@@ -129,6 +129,24 @@ err_t sys_mbox_new(struct sys_mbox **mb, int size)
 
 err_handler:
 
+
+
+    if (NULL != mbox && mbox->mutex != cn_mutex_invalid)
+    {
+        (void)osal_mutex_del(mbox->mutex);
+    }
+
+    if (NULL != mbox && mbox->not_empty != cn_semp_invalid)
+    {
+        (void)osal_semp_del(mbox->not_empty);
+    }
+
+    if (NULL != mbox && mbox->not_full != cn_semp_invalid)
+    {
+        osal_semp_del(mbox->not_full);
+        (void)osal_semp_del(mbox->not_full);
+    }
+
     if (mbox != NULL)
     {
         if (mbox->msgs != NULL)
@@ -137,22 +155,6 @@ err_handler:
         }
 
         osal_free(mbox);
-    }
-
-    if (mbox->mutex != cn_mutex_invalid)
-    {
-        (void)osal_mutex_del(mbox->mutex);
-    }
-
-    if (mbox->not_empty != cn_semp_invalid)
-    {
-        (void)osal_semp_del(mbox->not_empty);
-    }
-
-    if (mbox->not_full != cn_semp_invalid)
-    {
-        osal_semp_del(mbox->not_full);
-        (void)osal_semp_del(mbox->not_full);
     }
 
     return ERR_MEM;
@@ -300,13 +302,15 @@ sys_arch_mbox_fetch(struct sys_mbox **mb, void **msg, u32_t timeout)
     unsigned long long time_end;
     int pend_time ;
 
-    mbox = *mb;
-    LWIP_DEBUGF(SYS_DEBUG, ("sys_arch_mbox_fetch: mbox 0x%p msg 0x%p\n", (void *)mbox, (void *)msg));
+
 
     if((NULL == mb) ||(NULL == *mb)||(NULL == msg))
     {
         return time_needed;
     }
+
+    mbox = *mb;
+    LWIP_DEBUGF(SYS_DEBUG, ("sys_arch_mbox_fetch: mbox 0x%p msg 0x%p\n", (void *)mbox, (void *)msg));
 
     if(timeout == 0)
     {
@@ -420,7 +424,7 @@ sys_thread_t  sys_thread_new(char *name, lwip_thread_fn function, void *arg, int
     void *handle;
 
     handle = osal_task_create(name,(int (*)(void *args))function,arg,stacksize,NULL,prio);
-    return (sys_thread_t)handle;
+    return (sys_thread_t)(uintptr_t)handle;
 }
 
 #ifdef LWIP_DEBUG
@@ -474,7 +478,7 @@ err_t sys_sem_new(sys_sem_t *sem,  u8_t count)
         return ERR_ARG;
     }
 
-    LWIP_ASSERT("in sys_sem_new count exceeds the limit", (count < 0xFF));
+    LWIP_ASSERT("in sys_sem_new count exceeds the limit", (count != 0xFF));
 
     if(osal_semp_create(sem,1,count))
     {

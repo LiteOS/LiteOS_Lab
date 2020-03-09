@@ -62,6 +62,10 @@ SECTIONS
   .text :
   {
     . = ALIGN(4);
+    g_iot_link_text_start = .;
+     *iot_link/*.o (.text .text.* .rodata .rodata.*)     
+    g_iot_link_text_end = .;
+    
     *(.text)           /* .text sections (code) */
     *(.text*)          /* .text* sections (code) */
     *(.glue_7)         /* glue arm to thumb code */
@@ -87,7 +91,7 @@ SECTIONS
     __osdriv_start = .;
     KEEP (*(osdriv))
     __osdriv_end = .;
-    
+       
     . = ALIGN(4);   
     *(.rodata)         /* .rodata sections (constants, strings, etc.) */
     *(.rodata*)        /* .rodata* sections (constants, strings, etc.) */

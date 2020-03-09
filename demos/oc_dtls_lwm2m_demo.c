@@ -33,7 +33,7 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-14 17:21  zhangqianfu  The first version  
+ *  2019-05-14 17:21  zhangqianfu  The first version
  *
  */
 
@@ -106,8 +106,6 @@ static int8_t          s_rcv_buffer[cn_app_rcv_buf_len];
 static int             s_rcv_datalen;
 static osal_semp_t     s_rcv_sync;
 
-static void           *s_lwm2m_handle = NULL;
-
 //use this function to push all the message to the buffer
 static int app_msg_deal(void *usr_data,en_oc_lwm2m_msg_t type,char *msg, int len)
 {
@@ -160,7 +158,7 @@ static int app_cmd_task_entry()
                         replymsg.curstats[0] = 'O';
                         replymsg.curstats[1] = 'N';
                         replymsg.curstats[2] = ' ';
-                        oc_lwm2m_report(s_lwm2m_handle,(char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
+                        oc_lwm2m_report((char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
                     }
 
                     else if (led_cmd->led[0] == 'O' && led_cmd->led[1] == 'F' && led_cmd->led[2] == 'F')
@@ -174,7 +172,7 @@ static int app_cmd_task_entry()
                         replymsg.curstats[0] = 'O';
                         replymsg.curstats[1] = 'F';
                         replymsg.curstats[2] = 'F';
-                        oc_lwm2m_report(s_lwm2m_handle,(char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
+                        oc_lwm2m_report((char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
                     }
                     else
                     {
@@ -212,23 +210,22 @@ static int app_report_task_entry()
     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
     oc_param.rcv_func = app_msg_deal;
 
-    s_lwm2m_handle = oc_lwm2m_config(&oc_param);
-
-    if(NULL != s_lwm2m_handle)   //success ,so we could receive and send
+    ret = oc_lwm2m_config( &oc_param);
+    if (0 != ret)
     {
-        //install a dealer for the led message received
-        while(1) //--TODO ,you could add your own code here
-        {
-            lux++;
-            lux= lux%10000;
-
-            light.msgid = cn_app_light;
-            light.intensity = htons(lux);
-            oc_lwm2m_report(s_lwm2m_handle,(char *)&light,sizeof(light),1000); ///< report the light message
-            osal_task_sleep(10*1000);
-        }
+        return ret;
     }
+    //install a dealer for the led message received
+    while(1) //--TODO ,you could add your own code here
+    {
+        lux++;
+        lux= lux%10000;
 
+        light.msgid = cn_app_light;
+        light.intensity = htons(lux);
+        oc_lwm2m_report((char *)&light,sizeof(light),1000); ///< report the light message
+        osal_task_sleep(10*1000);
+    }
     return ret;
 }
 

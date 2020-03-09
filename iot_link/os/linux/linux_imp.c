@@ -48,6 +48,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <mqueue.h>
+#include <signal.h>
 
 typedef void *(*pthread_entry) (void *);
 
@@ -372,11 +373,12 @@ static const tag_os s_link_linux =
     .ops = &s_linux_ops,
 };
 
-int osal_install_linux(void)
+int os_imp_init(void)
 {
     int ret = -1;
 
     ret = osal_install(&s_link_linux);
+    sigaction(SIGPIPE, &(struct sigaction){SIG_IGN}, NULL);
 
     return ret;
 }

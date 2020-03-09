@@ -175,7 +175,7 @@ static int litecoap_check_validip(char *ipaddr)
  Output      : None
  Return      : tmp @ socket resource's pointer
  *****************************************************************************/
-void *litecoap_new_resource(char *ipaddr, unsigned short port, void *ssl)
+void *litecoap_new_resource(char *ipaddr, unsigned short port, void *ssl, coap_proto_t proto)
 {
     int ret = 0;
     struct udp_res_t *tmp = NULL;
@@ -196,22 +196,22 @@ void *litecoap_new_resource(char *ipaddr, unsigned short port, void *ssl)
         return NULL;
     }
     memset(tmp, 0, sizeof(struct udp_res_t));
-    tmp->fd = sal_socket(AF_INET, SOCK_DGRAM, 0);
+    if (proto == COAP_PROTO_UDP) {
+        tmp->fd = sal_socket(AF_INET, SOCK_DGRAM, 0);
+    } else {
+        tmp->fd = sal_socket(AF_INET, SOCK_STREAM, 0);
+    }
     if (tmp->fd < 0)
     {
-    	osal_free(tmp);
+        osal_free(tmp);
         return NULL;
     }
-    
-	memset(&localaddr, 0, sizeof(localaddr));
-	localaddr.sin_family = AF_INET;
-	localaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	localaddr.sin_port = htons(5000);
-	sal_bind(tmp->fd, (struct sockaddr *)&localaddr, sizeof(localaddr));
-    
+
     tmp->remoteAddr.sin_addr.s_addr = inet_addr((const char *)ipaddr);
     tmp->remoteAddr.sin_port = htons(port);
     tmp->remoteAddr.sin_family = AF_INET;
+
+    sal_connect(tmp->fd, &tmp->remoteAddr, sizeof(tmp->remoteAddr));
 
     tmp->ssl = ssl;
 
@@ -382,7 +382,7 @@ int litecoap_sal_send(void *handle, char *buf, int size)
         return LITECOAP_SOCKET_HANDLER_ERR;
     }
 #ifdef WITH_DTLS
-    n = dtls_write((mbedtls_ssl_context *)(res->ssl), buf, size);
+    n = dtls_write((mbedtls_ssl_context *)(res->ssl), (unsigned char *)buf, size);
 #else
 	n = sal_sendto(res->fd,
 			buf,
@@ -434,7 +434,7 @@ int litecoap_sal_read(void *handle, char *buf, int size)
     fromLen=sizeof(fromAddr);
 
 #ifdef WITH_DTLS
-    n = dtls_read((mbedtls_ssl_context *)(res->ssl), buf, size, 1000);
+    n = dtls_read((mbedtls_ssl_context *)(res->ssl), (unsigned char *)buf, size, 1000);
 #else
     n = sal_recvfrom( res->fd,
                 buf, size, 
@@ -456,4 +456,9 @@ int litecoap_delay(unsigned int ms)
 {
     osal_task_sleep(ms);
     return LITECOAP_OK;
+}
+
+unsigned long long litecoap_time()
+{
+    return osal_sys_time();
 }

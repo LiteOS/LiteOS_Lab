@@ -494,6 +494,7 @@ next_step:
         {
         case STATE_REGISTERED:
             contextP->state = STATE_READY;
+            lwm2m_notify_even(MODULE_LWM2M, STATE_REGISTERED, NULL, 0);
             break;
 
         case STATE_REG_FAILED:

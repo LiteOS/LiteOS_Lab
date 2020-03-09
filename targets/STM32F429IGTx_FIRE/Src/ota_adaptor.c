@@ -32,42 +32,44 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 #include "ota_adaptor.h"
-#include "ota_flag.h"
+#include "partition.h"
+#include "flash_adaptor.h"
+#include "common.h"
 
 static int ota_flag_read(ota_flag_t *flag)
 {
   if (flag != NULL) {
     printf("SPI FLAG R\n");
-    return hal_spi_flash_read((void *)flag, sizeof(ota_flag_t), OTA_FLAG_ADDR1);
+    return storage_partition_read(PART_OTA_FLAG1, (void *)flag, sizeof(ota_flag_t), 0);
   }
-  return -1;
+  return ERR;
 }
 
 static int ota_flag_write(ota_flag_t *flag)
 {
   if (flag != NULL) {
     printf("SPI FLAG W:state %d\n", flag->cur_state);
-    return flash_adaptor_write(OTA_FLAG_ADDR1, (void *)flag, sizeof(ota_flag_t));
+    return storage_partition_write(PART_OTA_FLAG1, (void *)flag, sizeof(ota_flag_t), 0);
   }
-  return -1;
+  return ERR;
 }
 
 static int ota_bin_read(uint32_t offset, void *buf, int len)
 {
   if (buf != NULL) {
     printf("SPI BIN R: %08d %08d\n", offset, len);
-    return hal_spi_flash_read(buf, len, offset + OTA_IMAGE_DOWNLOAD_ADDR);
+    return storage_partition_read(PART_OTA_IMG_DOWNLOAD, buf, len, offset);
   }
-  return -1;
+  return ERR;
 }
 
 static int ota_bin_write(uint32_t offset, void *buf, int len)
 {
   if (buf != NULL) {
     printf("SPI BIN W: %08d %08d\n", offset, len);
-    return flash_adaptor_write(offset + OTA_IMAGE_DOWNLOAD_ADDR, buf, len);
+    return storage_partition_write(PART_OTA_IMG_DOWNLOAD, buf, len, offset);
   }
-  return -1;
+  return ERR;
 }
 
 static ota_storage_t  prv_ota_flag_s =
@@ -84,11 +86,11 @@ static ota_storage_t  prv_ota_flag_s =
 /* 0: full upgrade, 1: diff upgrade */
 EN_PACKAGE_TYPE get_package_type(const uint8_t *data, uint32_t len)
 {
-  ota_pack_info *info;
-  if (data == NULL ||len <= sizeof(ota_pack_info))
-    return -1;
+  ota_binary_info *info;
+  if (data == NULL ||len <= sizeof(ota_binary_info))
+    return ERR;
 
-  info = (ota_pack_info *)data;
+  info = (ota_binary_info *)data;
   return info->pack_type;
 }
 

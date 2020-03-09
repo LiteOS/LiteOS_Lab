@@ -51,7 +51,7 @@
 #include "litecoap.h"
 #include "litecoap_err.h"
 
-int g_bind_finsh;
+extern int g_bind_finsh;
 
 static fn_cmd_dealer cmd_func = NULL;
 
@@ -150,8 +150,9 @@ int dtls_setup(coap_al_initpara_t *initparam, int client_or_server)
     if (MBEDTLS_SSL_IS_CLIENT == client_or_server)
     {
         info.u.c.host = initparam->address;
-        char *tmp;
-        itoa(initparam->port, tmp, 10);
+        static char tmp[6];
+        //itoa(initparam->port, tmp, 10);
+        sprintf(tmp, "%d", initparam->port);
         info.u.c.port = tmp;
         info.timeout = DTLS_UDP_CLIENT_SHAKEHAND_TIMEOUT;
     }
@@ -293,7 +294,7 @@ static int __init(coap_al_initpara_t *initparam)
     dtls_setup(initparam, LITECOAP_IS_CLIENT);
 #endif
 
-    remoteser = litecoap_new_resource(initparam->address, initparam->port, initparam->ssl);
+    remoteser = litecoap_new_resource(initparam->address, initparam->port, initparam->ssl, initparam->proto);
     if(NULL == remoteser)
     {
     	printf("litecoap_new_resource failed!\r\n");
@@ -306,6 +307,11 @@ static int __init(coap_al_initpara_t *initparam)
     	printf("litecoap_malloc_context failed!\r\n");
     	return ret;
     }
+
+    ctx->max_retransmit = COAP_DEFAULT_MAX_RETRANSMIT;
+    ctx->ack_random_factor = COAP_DEFAULT_ACK_RANDOM_FACTOR;
+    ctx->ack_timeout = COAP_DEFAULT_ACK_TIMEOUT;
+    ctx->proto = initparam->proto;
 
     initparam->ctx = (void *)ctx;
 
@@ -320,6 +326,17 @@ static int __init(coap_al_initpara_t *initparam)
     litecoap_add_resource(ctx, g_oclink_res);
 
     cmd_func = initparam->dealer;
+
+    if (initparam->proto == COAP_PROTO_TCP) {
+        //send CSM
+        void *opts = NULL;
+        void *msg = NULL;
+        char csm_data[] = {0x80, 0x01, 0x00};
+        opts = litecoap_add_option_to_list(opts, 2, csm_data, 3);
+        msg = litecoap_new_msg(ctx,COAP_AL_MESSAGE_CON, LITECOAP_RESP_701, opts, NULL, 0);
+        litecoap_send(ctx, msg);
+        litecoap_read(ctx);
+    }
 
     return 0;
 }
@@ -352,19 +369,18 @@ void* __request(coap_al_reqpara_t *reqparam)
 {
 	void* ret = NULL;
 	coap_msg_t *msg = NULL;
-
 	msg = litecoap_new_msg(reqparam->ctx,reqparam->msgtype, reqparam->code, reqparam->optlst, reqparam->payload, reqparam->len);
 
-	if (LITECOAP_RESP_205 != reqparam->code)
+	if (reqparam->code != LITECOAP_RESP_205 && reqparam->code != LITECOAP_RESP_701)
 	{
 		g_tok_len = litecoap_generate_token((unsigned char *)g_tok);
 	}
 
 	if (litecoap_add_token(msg, g_tok, g_tok_len) < 0)
 	{
-		litecoap_free_option(reqparam->optlst);
+	    litecoap_free_option(reqparam->optlst);
 		reqparam->optlst = NULL;
-	    litecoap_delete_msg(msg);
+		litecoap_delete_msg(msg);
 	    msg = NULL;
 	}
 	ret = (void *)msg;
@@ -378,11 +394,13 @@ static int __send(coap_al_sndpara_t *sndparam)
 
     if (NULL != sndparam->msg)
     {
-    	ret = litecoap_send(sndparam->handle, sndparam->msg);
+        ret = litecoap_send(sndparam->handle, sndparam->msg);
     }
     else
     {
-    	ret = litecoap_send(sndparam->handle, ((coap_context_t *)(sndparam->handle))->sndque->msg);
+        if (sndparam->handle && ((coap_context_t *)(sndparam->handle))->sndque
+            && ((coap_context_t *)(sndparam->handle))->sndque->msg)
+            ret = litecoap_send(sndparam->handle, ((coap_context_t *)(sndparam->handle))->sndque->msg);
     }
 
     return ret;

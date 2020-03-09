@@ -216,7 +216,7 @@ static int app_report_task_entry()
             light.msgid = cn_app_light;
             light.intensity = htons(lux);
             oc_coap_report(s_coap_handle,(char *)&light,sizeof(light)); ///< report the light message
-            osal_task_sleep(10*1000);
+            osal_task_sleep(60*1000);
         }
     }
 

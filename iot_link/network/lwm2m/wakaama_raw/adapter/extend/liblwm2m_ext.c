@@ -44,7 +44,7 @@ void lwm2m_register_event_handler(lwm2m_event_handler_t callback)
 
 void lwm2m_notify_even(module_type_t type, int code, const char *arg, int arg_len)
 {
-    if(event_handler != NULL)
+    if (NULL != event_handler)
     {
         event_handler(type, code, arg, arg_len);
     }
@@ -53,8 +53,8 @@ void lwm2m_notify_even(module_type_t type, int code, const char *arg, int arg_le
 void lwm2m_reset_register(lwm2m_context_t *context)
 {
     lwm2m_server_t *server = context->serverList;
-
     LOG("Entering");
+
     while (NULL != server)
     {
         registration_reset(context, server);

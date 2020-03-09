@@ -46,15 +46,24 @@
 #include <sal_imp.h>
 #include <sal_define.h>
 #include <sal_types.h>
-#include <esp8266_socket_imp.h>
 #include <at.h>
 #include <link_misc.h>
 #include <link_endian.h>
 #include <osal.h>
+#include <iot_link_config.h>
 
-#define cn_esp8266_cmd_timeout   (6*1000)
-#define cn_esp8266_rcvindex      "\r\n+IPD"
-#define cn_esp8266_cachelen      (1024 * 2)
+///<anyway ,you should change it to the same as your hot point
+#ifndef CONFIG_WIFI_SSID
+#define CONFIG_WIFI_SSID         "TP-LINK_IOT_LINK"
+#define CONFIG_WIFI_PASSWD       "iotlink_2019"
+#endif
+
+#define WIFI_SSID                 CONFIG_WIFI_SSID
+#define WIFI_PASSWD               CONFIG_WIFI_PASSWD
+
+#define CN_ESP8266_CMDTIMEOUT    (6*1000)
+#define CN_ESP8266_RCVINDEX      "\r\n+IPD"
+#define CN_ESP8266_CACHELEN      (1800)
 
 typedef struct
 {
@@ -63,14 +72,12 @@ typedef struct
     int type;
     int protocol;
 
-    tag_ring_buffer_t esp8266_rcvring;
-    unsigned char esp8266_rcvbuf[cn_esp8266_cachelen];
-
-    unsigned int timeout;
-
-    char oob_resp[1024];
-
     int isconnect;
+    unsigned int timeout;
+    tag_ring_buffer_t esp8266_rcvring;
+
+    char oob_resp[CN_ESP8266_CACHELEN];
+    unsigned char esp8266_rcvbuf[CN_ESP8266_CACHELEN];
 }esp8266_sock_cb_t;
 
 static esp8266_sock_cb_t s_esp8266_sock_cb;
@@ -87,7 +94,7 @@ typedef enum
 static bool_t esp8266_atcmd(const char *cmd,const char *index)
 {
     int ret = 0;
-    ret = at_command((unsigned char *)cmd,strlen(cmd),index,NULL,0,cn_esp8266_cmd_timeout);
+    ret = at_command((unsigned char *)cmd,strlen(cmd),index,NULL,0,CN_ESP8266_CMDTIMEOUT);
     if(ret >= 0)
     {
         return true;
@@ -102,7 +109,7 @@ static bool_t esp8266_atcmd(const char *cmd,const char *index)
 static bool_t esp8266_atcmd_response(const char *cmd,const char *index,char *buf, int len)
 {
     int ret = 0;
-    ret = at_command((unsigned char *)cmd,strlen(cmd),index,(char *)buf,len,cn_esp8266_cmd_timeout);
+    ret = at_command((unsigned char *)cmd,strlen(cmd),index,(char *)buf,len,CN_ESP8266_CMDTIMEOUT);
     if(ret >= 0)
     {
         return true;
@@ -119,9 +126,11 @@ static int esp8266_rcvdeal(void *args,void *msg,size_t len)
     unsigned short datalen;
     char *data;
     char  *str;
+    char  *data_nxt;
 
     data = msg;
-    if(len <strlen(cn_esp8266_rcvindex))
+
+    if(len <strlen(CN_ESP8266_RCVINDEX))
     {
         printf("%s:invalid frame:%d byte:%s\n\r",__FUNCTION__,len,(char *)data);
         return ret;
@@ -144,8 +153,10 @@ static int esp8266_rcvdeal(void *args,void *msg,size_t len)
     }
     str++;
 
+    data_nxt = str + datalen;
+
     //now this is data payload
-    if(datalen > (cn_esp8266_cachelen - ring_buffer_datalen(&s_esp8266_sock_cb.esp8266_rcvring)))
+    if(datalen > (CN_ESP8266_CACHELEN - ring_buffer_datalen(&s_esp8266_sock_cb.esp8266_rcvring)))
     {
     	return 0;
     }
@@ -160,6 +171,47 @@ static int esp8266_rcvdeal(void *args,void *msg,size_t len)
         ret = ring_buffer_write(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)str,datalen);
     }
 
+
+    if(data_nxt < (data + len))
+    {
+        msg =data_nxt;
+        data = msg;
+        //now deal the data
+        str = strstr((char *)data,",");
+        if(NULL == str)
+        {
+            return ret; //format error
+        }
+        str++;
+
+        //TODO: mux = 1
+
+        datalen = 0;
+        for (; *str <= '9' && *str >= '0' ;str++)
+        {
+            datalen = (datalen * 10 + (*str - '0'));
+        }
+        str++;
+
+        data_nxt = str + datalen;
+
+        //now this is data payload
+        if(datalen > (CN_ESP8266_CACHELEN - ring_buffer_datalen(&s_esp8266_sock_cb.esp8266_rcvring)))
+        {
+            return 0;
+        }
+
+        if(s_esp8266_sock_cb.type == SOCK_DGRAM)
+        {
+            ret = ring_buffer_write(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)&datalen,sizeof(datalen));
+            ret = ring_buffer_write(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)str,datalen);
+        }
+        else if (s_esp8266_sock_cb.type == SOCK_STREAM)
+        {
+            ret = ring_buffer_write(&s_esp8266_sock_cb.esp8266_rcvring,(unsigned char *)str,datalen);
+        }
+
+    }
     return ret;
 
 }
@@ -242,15 +294,13 @@ static int esp8266_send(int fd, const void *buf, int len, int flags)
 
         if(esp8266_atcmd(cmd,">"))
         {
-        	ret = at_command((unsigned char *)buf,len,"SEND OK",(char *)s_esp8266_sock_cb.oob_resp,1024,cn_esp8266_cmd_timeout);
-        	printf("ret = %d\r\n",ret);
+        	ret = at_command((unsigned char *)buf,len,"SEND OK",(char *)s_esp8266_sock_cb.oob_resp,1024,CN_ESP8266_CMDTIMEOUT);
         	char *str;
-        	str = strstr(s_esp8266_sock_cb.oob_resp,cn_esp8266_rcvindex);  //in some cases, +IPD is not at the beginning of one frame. process here
+        	str = strstr(s_esp8266_sock_cb.oob_resp,CN_ESP8266_RCVINDEX);  //in some cases, +IPD is not at the beginning of one frame. process here
         	if(NULL != str)
         	{
-        		esp8266_rcvdeal(NULL,str,1024);
+        		esp8266_rcvdeal(NULL,str,(char *)s_esp8266_sock_cb.oob_resp + ret - str);
         	}
-
         }
     }
     if(ret > 0)
@@ -464,23 +514,6 @@ static const tag_tcpip_domain s_tcpip_socket =
 };
 
 
-int tcpipstack_install_esp8266_socket(void)
-{
-    int ret = -1;
-
-    ret = tcpip_sal_install(&s_tcpip_socket);
-
-    if(0 == ret)
-    {
-        printf("sal:install socket success\r\n");
-    }
-    else
-    {
-        printf("sal:install socket failed\r\n");
-    }
-
-    return 0;
-}
 
 static bool_t esp8266_reset(void)
 {
@@ -524,10 +557,12 @@ static bool_t esp8266_set_mux(int mux)
     return esp8266_atcmd(cmd,"OK");
 }
 
-int esp8266_boot(void)
+int link_tcpip_imp_init(void)
 {
-    at_oobregister("esp8266rcv",cn_esp8266_rcvindex,strlen(cn_esp8266_rcvindex),esp8266_rcvdeal,NULL);
-    ring_buffer_init(&s_esp8266_sock_cb.esp8266_rcvring,s_esp8266_sock_cb.esp8266_rcvbuf,cn_esp8266_cachelen,0,0);
+    int ret = -1;
+
+    at_oobregister("esp8266rcv",CN_ESP8266_RCVINDEX,strlen(CN_ESP8266_RCVINDEX),esp8266_rcvdeal,NULL);
+    ring_buffer_init(&s_esp8266_sock_cb.esp8266_rcvring,s_esp8266_sock_cb.esp8266_rcvbuf,CN_ESP8266_CACHELEN,0,0);
 
 
     esp8266_reset();
@@ -541,8 +576,18 @@ int esp8266_boot(void)
         printf("connect ap failed, repeat...\r\n");
     }
    //reach here means everything is ok, we can go now
+    ret = link_sal_install(&s_tcpip_socket);
 
-    return 0;
+    if(0 == ret)
+    {
+        printf("sal:install socket success\r\n");
+    }
+    else
+    {
+        printf("sal:install socket failed\r\n");
+    }
+
+    return ret;
 }
 
 

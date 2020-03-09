@@ -128,6 +128,16 @@ typedef struct
         {
             const unsigned char *ca_cert;
             uint32_t cert_len;
+
+            const unsigned char *client_ca;
+            uint32_t             client_ca_len;
+
+            const unsigned char *client_pk;
+            uint32_t             client_pk_len;
+
+            const unsigned char *client_pk_pwd;
+            uint32_t             client_pk_pwd_len;
+
         }c;
     }v;
     verify_type_e psk_or_cert;

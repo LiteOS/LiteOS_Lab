@@ -33,7 +33,6 @@ C_SOURCES += $(LIBCOAP_SRC)
 
 
 LIBCOAP_INC = \
-		-I $(LIBCOAP_BASE_DIR) \
 		-I $(LIBCOAP_BASE_DIR)/include \
 		-I $(LIBCOAP_BASE_DIR)/include/coap2 \
 		-I $(LIBCOAP_ADAPTER_DIR)/port \

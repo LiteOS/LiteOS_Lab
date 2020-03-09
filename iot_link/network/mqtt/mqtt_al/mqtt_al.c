@@ -86,7 +86,7 @@ int mqtt_al_uninstall()
 
 //////////////////////////CREATE THE API FOR THE MQTT APPLICATopsN///////////////
 
-int mqtt_init()
+int mqtt_al_init()
 {
     int ret = 0;
 
@@ -186,7 +186,7 @@ int mqtt_al_unsubscribe(void *handle, mqtt_al_unsubpara_t *unsubpara)
 en_mqtt_al_connect_state mqtt_al_check_status(void *handle)
 {
 
-    int ret = en_mqtt_al_connect_err;
+    en_mqtt_al_connect_state ret = en_mqtt_al_connect_err;
 
     if((NULL != handle) && (NULL != s_mqtt_al_op_cb.ops) && (NULL != s_mqtt_al_op_cb.ops->check_status))
     {
