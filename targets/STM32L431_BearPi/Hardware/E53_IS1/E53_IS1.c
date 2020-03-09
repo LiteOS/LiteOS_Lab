@@ -17,28 +17,20 @@
 
 TIM_HandleTypeDef htim16;
 
-/***************************************************************
-* 函数名称: Init_LED
-* 说    明: 初始化E53_IS1的LED灯
-* 参    数: 无
-* 返 回 值: 无
-***************************************************************/
-void Init_LED(void)
+void Infrared_Init(void)
 {
+
   GPIO_InitTypeDef GPIO_InitStruct;
 
   /* GPIO Ports Clock Enable */
-  IS1_LED_GPIO_CLK_ENABLE();
 
-	 /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(IS1_LED_GPIO_Port, IS1_LED_Pin, GPIO_PIN_SET);
+  IS1_IN_GPIO_CLK_ENABLE();
 	
-	 /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = IS1_LED_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(IS1_LED_GPIO_Port, &GPIO_InitStruct);
+	GPIO_InitStruct.Pin = IS1_IN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  HAL_GPIO_Init(IS1_IN_GPIO_Port, &GPIO_InitStruct);
+	
 }
 
 /***************************************************************
@@ -185,20 +177,8 @@ void Init_Beep(void)
 void Init_E53_IS1(void)
 {
 	Init_Beep();
-	Init_LED();
+  Infrared_Init();
 	MX_TIM16_Init();	
-}
-/***************************************************************
-* 函数名称: E53_IS1_LED_StatusSet
-* 说    明: E53_IS1开发板上的LED灯的亮灭控制
-* 参    数: status,LED灯的状态
-*									OFF,关灯
-*									ON,开灯
-* 返 回 值: 无
-***************************************************************/
-void E53_IS1_LED_StatusSet(E53_IS1_Status_ENUM status)
-{
-	HAL_GPIO_WritePin(IS1_LED_GPIO_Port, IS1_LED_Pin, status != ON ? GPIO_PIN_RESET : GPIO_PIN_SET );	
 }
 
 /***************************************************************

@@ -21,10 +21,9 @@
 #define IS1_Beep_Pin GPIO_PIN_8
 #define IS1_Beep_GPIO_Port GPIOB
 #define IS1_Beep_GPIO_CLK_ENABLE() __HAL_RCC_GPIOB_CLK_ENABLE()
-#define IS1_LED_Pin GPIO_PIN_13
-#define IS1_LED_GPIO_Port GPIOC
-#define IS1_LED_GPIO_CLK_ENABLE() __HAL_RCC_GPIOC_CLK_ENABLE()
-
+#define IS1_IN_Pin GPIO_PIN_9
+#define IS1_IN_GPIO_Port GPIOB
+#define IS1_IN_GPIO_CLK_ENABLE() __HAL_RCC_GPIOB_CLK_ENABLE()
 
 /***************************************************************
 * 名		称: GasStatus_ENUM
@@ -40,7 +39,6 @@ extern TIM_HandleTypeDef htim16;
 
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void Init_E53_IS1(void);
-void E53_IS1_LED_StatusSet(E53_IS1_Status_ENUM status);
 void E53_IS1_Beep_StatusSet(E53_IS1_Status_ENUM status);
 
 #endif

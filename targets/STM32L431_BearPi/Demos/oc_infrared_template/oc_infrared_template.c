@@ -148,20 +148,22 @@ static int app_report_task_entry()
     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
     oc_param.rcv_func = app_msg_deal;
 
-    context = oc_lwm2m_config(&oc_param);
-
-    if(NULL != context)   //success ,so we could receive and send
+    ret = oc_lwm2m_config( &oc_param);
+    if (0 != ret)
     {
-        //install a dealer for the led message received
-        while(1) //--TODO ,you could add your own code here
-        {
-            infrared.messageId = cn_app_infrared;
-            oc_lwm2m_report(context, (char *)&infrared, sizeof(infrared), 1000);
-            osal_task_sleep(2*100);
-        }
+    	return ret;
     }
 
-    return ret;
+    //install a dealer for the led message received
+    while(1) //--TODO ,you could add your own code here
+    {
+        infrared.messageId = cn_app_infrared;
+        oc_lwm2m_report((char *)&infrared, sizeof(infrared), 1000);
+        osal_task_sleep(2*1000);
+    }
+
+
+    return 0;
 }
 
 static int app_collect_task_entry()
@@ -173,7 +175,6 @@ static int app_collect_task_entry()
         {
             
             E53_IS1_Beep_StatusSet(ON);
-            E53_IS1_LED_StatusSet(ON);
             infrared.Status[0] = 'H';
             infrared.Status[1] = 'a';
             infrared.Status[2] = 'v';
@@ -183,7 +184,6 @@ static int app_collect_task_entry()
         else
         {
             E53_IS1_Beep_StatusSet(OFF);
-            E53_IS1_LED_StatusSet(OFF);
             infrared.Status[0] = ' ';
             infrared.Status[1] = ' ';
             infrared.Status[2] = 'N';
@@ -194,7 +194,7 @@ static int app_collect_task_entry()
            // LCD_ShowString(10, 200, 200, 16, 16, "BH1750 Value is:");
            // LCD_ShowNum(140, 200, lux, 5, 16);
         }
-       osal_task_sleep(2*100);
+       osal_task_sleep(2*10);
     }
     return 0;
 }

@@ -152,21 +152,21 @@ static int app_report_task_entry()
     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
     oc_param.rcv_func = app_msg_deal;
 
-    context = oc_lwm2m_config(&oc_param);
-
-    if(NULL != context)   //success ,so we could receive and send
+    ret = oc_lwm2m_config( &oc_param);
+    if (0 != ret)
     {
-        //install a dealer for the led message received
-        while(1) //--TODO ,you could add your own code here
-        {
-            Manhole_Cover.messageId = cn_app_Manhole_Cover;
-            Manhole_Cover.Temperature = (int)E53_SC2_Data.Temperature;
-            Manhole_Cover.Accel_x = (int)E53_SC2_Data.Accel[0];
-            Manhole_Cover.Accel_y = (int)E53_SC2_Data.Accel[1];
-            Manhole_Cover.Accel_z = (int)E53_SC2_Data.Accel[2];
-            oc_lwm2m_report(context, (char *)&Manhole_Cover, sizeof(Manhole_Cover), 1000);
-            osal_task_sleep(2*1000);
-        }
+    	return ret;
+    }
+    //install a dealer for the led message received
+    while(1) //--TODO ,you could add your own code here
+    {
+        Manhole_Cover.messageId = cn_app_Manhole_Cover;
+        Manhole_Cover.Temperature = (int)E53_SC2_Data.Temperature;
+        Manhole_Cover.Accel_x = (int)E53_SC2_Data.Accel[0];
+        Manhole_Cover.Accel_y = (int)E53_SC2_Data.Accel[1];
+        Manhole_Cover.Accel_z = (int)E53_SC2_Data.Accel[2];
+        oc_lwm2m_report((char *)&Manhole_Cover, sizeof(Manhole_Cover), 1000);
+        osal_task_sleep(2*1000);
     }
 
     return ret;

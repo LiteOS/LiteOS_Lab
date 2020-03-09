@@ -174,13 +174,12 @@ CONFIG_DEMO_TYPE   := "none"
 
 ########################BearPi-IoT OC DEMO START#####################################
 
-<<<<<<< HEAD
-#CONFIG_USER_DEMO could be "oc_streetlight_template" "oc_agriculture_template" "oc_track_template" "oc_smoke_template"
-=======
-#CONFIG_USER_DEMO could be "oc_streetlight_template" "oc_streetlight_infrared_template" "oc_agriculture_template" "oc_track_template" "oc_smoke_template"
->>>>>>> 538573c21f24ce151e03e6d355ce1d0063aac6ea
 
-CONFIG_USER_DEMO := "oc_manhole_cover_template"
+#CONFIG_USER_DEMO could be "oc_streetlight_template" "oc_streetlight_infrared_template" "oc_agriculture_template" "oc_track_template" "oc_smoke_template"
+ #                           "oc_manhole_cover_template" "oc_infrared_template"
+
+
+CONFIG_USER_DEMO := "oc_infrared_template"
 
 #########################BearPi-IoT OC DEMO END######################################
 
