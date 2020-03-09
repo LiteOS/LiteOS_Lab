@@ -67,17 +67,18 @@ typedef char array;
 typedef char varstring;
 typedef char variant;
 
-#define cn_app_cover 0xd
+#define cn_app_Manhole_Cover 0x0
 
 #pragma pack(1)
 typedef struct
 {
-    int8_t messageId;
-    int8_t Temperature;
-    int8_t Accel_x;
-    int8_t Accel_z;
-    int8_t Accel_y;
-} tag_app_cover;
+    int8u messageId;
+    int8u Temperature;
+    int8u Accel_x;
+    int8u Accel_y;
+    int8u Accel_z;
+    string Status[5];
+} tag_app_Manhole_Cover;
 
 
 #pragma pack()
@@ -86,6 +87,7 @@ void *context;
 int8_t qr_code = 1;
 extern const unsigned char gImage_Huawei_IoT_QR_Code[114720];
 E53_SC2_Data_TypeDef E53_SC2_Data;
+tag_app_Manhole_Cover Manhole_Cover;
 
 
 //if your command is very fast,please use a queue here--TODO
@@ -141,8 +143,7 @@ static int app_report_task_entry()
     int ret = -1;
 
     oc_config_param_t      oc_param;
-    tag_app_cover cover;
-
+    
     memset(&oc_param,0,sizeof(oc_param));
 
     oc_param.app_server.address = cn_app_server;
@@ -158,12 +159,12 @@ static int app_report_task_entry()
         //install a dealer for the led message received
         while(1) //--TODO ,you could add your own code here
         {
-            cover.messageId = cn_app_cover;
-            cover.Temperature = (int)E53_SC2_Data.Temperature;
-            cover.Accel_x = (int)E53_SC2_Data.Accel[0];
-            cover.Accel_y = (int)E53_SC2_Data.Accel[1];
-            cover.Accel_z = (int)E53_SC2_Data.Accel[2];
-            oc_lwm2m_report(context, (char *)&cover, sizeof(cover), 1000);
+            Manhole_Cover.messageId = cn_app_Manhole_Cover;
+            Manhole_Cover.Temperature = (int)E53_SC2_Data.Temperature;
+            Manhole_Cover.Accel_x = (int)E53_SC2_Data.Accel[0];
+            Manhole_Cover.Accel_y = (int)E53_SC2_Data.Accel[1];
+            Manhole_Cover.Accel_z = (int)E53_SC2_Data.Accel[2];
+            oc_lwm2m_report(context, (char *)&Manhole_Cover, sizeof(Manhole_Cover), 1000);
             osal_task_sleep(2*1000);
         }
     }
@@ -194,17 +195,27 @@ static int app_collect_task_entry()
             {
                 HAL_GPIO_WritePin(GPIOB,GPIO_PIN_8,GPIO_PIN_SET);
                 HAL_GPIO_WritePin(GPIOB,GPIO_PIN_9,GPIO_PIN_RESET);
+                Manhole_Cover.Status[0] = ' ';
+                Manhole_Cover.Status[1] = 'T';
+                Manhole_Cover.Status[2] = 'i';
+                Manhole_Cover.Status[3] = 'l';
+                Manhole_Cover.Status[4] = 't';
+
             }
             else
             {
                 HAL_GPIO_WritePin(GPIOB,GPIO_PIN_8,GPIO_PIN_RESET);
                 HAL_GPIO_WritePin(GPIOB,GPIO_PIN_9,GPIO_PIN_SET);
+                Manhole_Cover.Status[0] = 'L';
+                Manhole_Cover.Status[1] = 'e';
+                Manhole_Cover.Status[2] = 'v';
+                Manhole_Cover.Status[3] = 'e';
+                Manhole_Cover.Status[4] = 'l';
             }
         }
         if (qr_code == 0)
         {
-           // LCD_ShowString(10, 200, 200, 16, 16, "BH1750 Value is:");
-           // LCD_ShowNum(140, 200, lux, 5, 16);
+
         }
         osal_task_sleep(2*1000);
     }
