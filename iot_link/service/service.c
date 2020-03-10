@@ -47,17 +47,17 @@
 #define NR_GROW_MESSAGES                    32
 #define NR_MAX_MSGS                         65535
 
-#define DEVICE_SERVICE_TASK_NAME            SERVICE_DOMAIN_DEVICE
-#define DEVICE_SERVICE_TASK_PRIO            2
-#define DEVICE_SERVICE_TASK_STACK_SIZE      0x1000
+#define CORE_SERVICE_TASK_NAME              SERVICE_DOMAIN_CORE
+#define CORE_SERVICE_TASK_PRIO              2
+#define CORE_SERVICE_TASK_STACK_SIZE        0x1000
 
 #define SYSTEM_SERVICE_TASK_NAME            SERVICE_DOMAIN_SYSTEM
 #define SYSTEM_SERVICE_TASK_PRIO            5
 #define SYSTEM_SERVICE_TASK_STACK_SIZE      0x1000
 
-#define USER_SERVICE_TASK_NAME              SERVICE_DOMAIN_USER
-#define USER_SERVICE_TASK_PRIO              10
-#define USER_SERVICE_TASK_STACK_SIZE        0x1000
+#define APP_SERVICE_TASK_NAME               SERVICE_DOMAIN_APP
+#define APP_SERVICE_TASK_PRIO               10
+#define APP_SERVICE_TASK_STACK_SIZE         0x1000
 
 /* typedefs */
 
@@ -160,7 +160,7 @@ static void __put_message (struct service_manager *manager, struct message *mess
 
 static struct service_manager *__get_domain (const char * domain)
 {
-    if (strcmp (domain, SERVICE_DOMAIN_DEVICE) == 0) {
+    if (strcmp (domain, SERVICE_DOMAIN_CORE) == 0) {
         return &__service_manager_device;
     }
 
@@ -168,7 +168,7 @@ static struct service_manager *__get_domain (const char * domain)
         return &__service_manager_system;
     }
 
-    if (strcmp (domain, SERVICE_DOMAIN_USER) == 0) {
+    if (strcmp (domain, SERVICE_DOMAIN_APP) == 0) {
         return &__service_manager_user;
     }
 
@@ -600,8 +600,8 @@ static void __service_unlock (struct service_manager *manager, int flag)
 
 bool_t service_init (void)
 {
-    if (!__service_manager_init (&__service_manager_device, DEVICE_SERVICE_TASK_NAME,
-                                 DEVICE_SERVICE_TASK_STACK_SIZE, DEVICE_SERVICE_TASK_PRIO,
+    if (!__service_manager_init (&__service_manager_device, CORE_SERVICE_TASK_NAME,
+                                 CORE_SERVICE_TASK_STACK_SIZE, CORE_SERVICE_TASK_PRIO,
                                  __device_service_lock, __device_service_unlock)) {
         return false;
     }
@@ -613,8 +613,8 @@ bool_t service_init (void)
         return false;
     }
 
-    if (!__service_manager_init (&__service_manager_user, USER_SERVICE_TASK_NAME,
-                                 USER_SERVICE_TASK_STACK_SIZE, USER_SERVICE_TASK_PRIO,
+    if (!__service_manager_init (&__service_manager_user, APP_SERVICE_TASK_NAME,
+                                 APP_SERVICE_TASK_STACK_SIZE, APP_SERVICE_TASK_PRIO,
                                  __service_lock, __service_unlock)) {
         __service_manager_deinit (&__service_manager_device);
         __service_manager_deinit (&__service_manager_system);

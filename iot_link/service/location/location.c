@@ -121,7 +121,7 @@ int location_service_init (void)
         return -1;
     }
 
-    __location_sid = service_create (SERVICE_DOMAIN_DEVICE, LOCATION_SERVICE_NAME,
+    __location_sid = service_create (SERVICE_DOMAIN_CORE, LOCATION_SERVICE_NAME,
                                      __location_service_handler, LOCATION_SERVICE_PRIO);
 
     if (__location_sid == INVALID_SID) {
@@ -244,7 +244,7 @@ static int fake_ldev_task (void * arg)
         return -1;
     }
 
-    __location_sid_open = service_open (SERVICE_DOMAIN_DEVICE, LOCATION_SERVICE_NAME);
+    __location_sid_open = service_open (SERVICE_DOMAIN_CORE, LOCATION_SERVICE_NAME);
 
     if (__location_sid_open == INVALID_SID) {
         return -1;

@@ -39,9 +39,9 @@
 
 /* macros */
 
-#define SERVICE_DOMAIN_DEVICE            "device"
-#define SERVICE_DOMAIN_SYSTEM            "system"
-#define SERVICE_DOMAIN_USER              "user"
+#define SERVICE_DOMAIN_CORE             "core"
+#define SERVICE_DOMAIN_SYSTEM           "system"
+#define SERVICE_DOMAIN_APP              "app"
 
 #define INVALID_SID             ((service_id) NULL)
 
