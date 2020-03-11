@@ -32,34 +32,49 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef __LOCATION_H__
-#define __LOCATION_H__
+#ifndef __CNCS_SERVICE_H__
+#define __CNCS_SERVICE_H__
 
-#include <osal.h>
+#include <stdint.h>
+#include "service.h"
 
 /* macros */
 
-#define LOCATION_CMD_UPDATE_STATUS      0
-#define LOCATION_CMD_UPDATE_POSITION    1
-
 /* typedefs */
+#pragma pack(1)
+typedef struct 
+{
+    int8_t SNR;
+    int16_t RSRP;
+    int8_t ECL;
+    int32_t CELLID;
+    int16_t PCI;
+    char IMSI[15];
+    char IMEI[15];
+}cncs_para_t;
+#pragma pack()
 
-struct location {
-    int x;
-    int y;
-};
+typedef enum 
+{
+    CNCS_CMD_SNR = 0,  // command get snr
+    CNCS_CMD_RSRP,     // command get rsrp
+    CNCS_CMD_ECL,      // command get ecl  
+    CNCS_CMD_CELLID,   // command get cellid         
+    CNCS_CMD_PCI,      // command get pci          
+    CNCS_CMD_IMSI,     // command get imsi              
+    CNCS_CMD_IMEI,     // command get imei       
+}cncs_cmd_e;
 
-struct location_msg {
-    unsigned int        cmd;
-    bool_t              using;
-    union {
-        int             status;
-        struct location location;
-    };
-};
+typedef struct
+{
+    void *buf;
+    int   len;
+    cncs_cmd_e   cmd;
+}cncs_msg_t;
 
-extern int    location_service_init            (void);
-extern bool_t location_service_listen_position (void (*callback) (uintptr_t, struct location *), uintptr_t arg);
-extern bool_t location_service_listen_state    (void (*callback) (uintptr_t, int), uintptr_t arg);
+/* externs */
 
-#endif  /* __LOCATION_H__ */
+extern int cncs_service_init(const char *name);
+
+
+#endif /* __CNCS_SERVICE_H__ */

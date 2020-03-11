@@ -38,13 +38,14 @@
 
 #include <osal.h>
 
+#include <service.h>
+
 #include "location.h"
 
 /* macros */
 
-#define LOcATION_TASK_NAME                      "location"
-#define LOCATION_TASK_STACK_SIZE                0x1000
-#define LOCATION_TASK_PRIO                      10
+#define LOCATION_SERVICE_NAME           "location"
+#define LOCATION_SERVICE_PRIO           31
 
 /* typedefs */
 
@@ -60,21 +61,15 @@ struct location_callback {
 
 /* locals */
 
-static bool_t     (*__location_device_start) (void) = NULL;
-static bool_t     (*__location_device_stop)  (void) = NULL;
-static osal_mutex_t __location_lock;
-
-static void        *__location_task_id = NULL;
-static osal_semp_t  __location_sem;
-
-static osal_queue_t __location_pos_queue;
-static osal_queue_t __location_stt_queue;
+static service_id                __location_sid;
 
 static struct location_callback *__stt_change_notify_head = NULL;
 static struct location_callback *__stt_change_notify_tail = NULL;
 
 static struct location_callback *__pos_change_notify_head = NULL;
 static struct location_callback *__pos_change_notify_tail = NULL;
+
+static osal_mutex_t              __location_lock;
 
 static void __notify_pos (struct location * location)
 {
@@ -96,107 +91,44 @@ static void __notify_stt (int status)
     }
 }
 
-static int __location_task (void * arg)
+static int __location_service_handler (void *arg)
 {
-    struct location location;
-    int             status;
-    bool            stop;
+    struct location_msg *msg = (struct location_msg *) arg;
 
-    while (1) {
-        if (!osal_semp_pend (__location_sem, cn_osal_timeout_forever)) {
-            continue;
-        }
-
-        do {
-            stop = true;
-
-            if (osal_queue_recv (__location_pos_queue, &location,
-                                 sizeof (struct location), 0)) {
-                __notify_pos (&location);
-                stop = false;
-            }
-
-            if (osal_queue_recv (__location_stt_queue, &status,
-                                 sizeof (int), 0)) {
-                __notify_stt (status);
-                stop = false;
-            }
-        } while (!stop);
+    switch (msg->cmd) {
+        case LOCATION_CMD_UPDATE_STATUS:
+            __notify_stt (msg->status);
+            break;
+        case LOCATION_CMD_UPDATE_POSITION:
+            __notify_pos (&msg->location);
+            break;
+        default:
+            return -1;
     }
 
     return 0;
 }
 
-/**
- * location_service_start - start the location service
- *
- * return: the true on success, false on fail
- */
-
-bool_t location_service_start (void)
+int location_service_init (void)
 {
-    bool_t ret = false;
+    static bool_t inited = false;
 
-    if (__location_device_start == NULL) {
-        return ret;
+    if (inited) {
+        return 0;
     }
 
-    if (!osal_mutex_lock (__location_lock)) {
-        return ret;
+    if (!osal_mutex_create (&__location_lock)) {
+        return -1;
     }
 
-    if (__location_task_id == NULL) {
-        ret = __location_device_start ();
+    __location_sid = service_create (SERVICE_DOMAIN_CORE, LOCATION_SERVICE_NAME,
+                                     __location_service_handler, LOCATION_SERVICE_PRIO);
 
-        if (ret) {
-            __location_task_id = osal_task_create (LOcATION_TASK_NAME,
-                                                   __location_task, NULL,
-                                                   LOCATION_TASK_STACK_SIZE,
-                                                   NULL, LOCATION_TASK_PRIO);
-
-            ret = __location_task_id != NULL;
-
-            if (!ret && __location_device_stop != NULL) {
-                (void) __location_device_stop ();
-            }
-        }
+    if (__location_sid == INVALID_SID) {
+        osal_mutex_del (__location_lock);
     }
 
-    (void) osal_mutex_unlock (__location_lock);
-
-    return ret;
-}
-
-/**
- * location_service_stop - stop the location service
- *
- * return: the true on success, false on fail
- */
-
-bool_t location_service_stop (void)
-{
-    bool_t ret = false;
-
-    if (__location_device_stop == NULL) {
-        return ret;
-    }
-
-    if (!osal_mutex_lock (__location_lock)) {
-        return ret;
-    }
-
-    if (__location_task_id != NULL) {
-        ret = __location_device_stop ();
-
-        if (ret) {
-            (void) osal_task_kill (__location_task_id);
-            __location_task_id = NULL;
-        }
-    }
-
-    (void) osal_mutex_unlock (__location_lock);
-
-    return ret;
+    return 0;
 }
 
 bool_t __location_service_listen (uintptr_t callback_pfn, uintptr_t arg,
@@ -244,8 +176,7 @@ bool_t __location_service_listen (uintptr_t callback_pfn, uintptr_t arg,
  * return: the true on success, false on fail
  */
 
-bool_t location_service_listen_state (void (*callback) (uintptr_t, int),
-                                      uintptr_t arg)
+bool_t location_service_listen_state (void (*callback) (uintptr_t, int), uintptr_t arg)
 {
     return __location_service_listen ((uintptr_t) callback, arg,
                                       &__stt_change_notify_head,
@@ -267,79 +198,74 @@ bool_t location_service_listen_position (void (*callback) (uintptr_t, struct loc
                                       &__pos_change_notify_tail);
 }
 
-void location_update_status (int status)
-{
-    osal_queue_send (__location_stt_queue, &status, sizeof (int), 0);
-    osal_semp_post (__location_sem);
-}
-
-void location_update_location (struct location * location)
-{
-    osal_queue_send (__location_pos_queue, location, sizeof (struct location), 0);
-    osal_semp_post (__location_sem);
-}
-
-/**
- * location_service_register - register device to the service
- * @start: routine to start the location device
- * @stop:  routine to stop the location device
- *
- * return: the true on success, false on fail
- */
-
-bool_t location_service_config (bool_t (*start) (void), bool_t (*stop) (void))
-{
-    if (__location_device_start != NULL || start == NULL) {
-        return false;
-    }
-
-    if (!osal_mutex_create (&__location_lock)) {
-        return false;
-    }
-
-    if (!osal_semp_create (&__location_sem, 65535, 0)) {
-        goto err_del_mutex;
-    }
-
-    if (!osal_queue_create (&__location_pos_queue, 128, sizeof (struct location))) {
-        goto err_del_sem;
-    }
-
-    if (!osal_queue_create (&__location_stt_queue, 128, sizeof (int))) {
-        goto err_del_queue;
-    }
-
-    __location_device_start = start;
-    __location_device_stop  = stop;
-
-    return true;
-
-err_del_queue:
-    (void) osal_queue_del (__location_pos_queue);
-err_del_sem:
-    (void) osal_semp_del (__location_sem);
-err_del_mutex:
-    (void) osal_mutex_del (__location_lock);
-    return false;
-}
-
+// simple test code use a task to fake the location device
 #if 1
 static void * fake_location_device_task = NULL;
+
+static struct location_msg       __location_msg_stt;
+static bool_t                    __location_msg_stt_using = false;
+static struct location_msg       __location_msg_pos;
+static bool_t                    __location_msg_pos_using = false;
+static service_id                __location_sid_open;
+
+static void __location_callback (void *arg, int status)
+{
+    struct location_msg *msg = (struct location_msg *) arg;
+    int                  flags;
+
+    if (osal_int_lock (&flags)) {
+        if (msg->cmd == LOCATION_CMD_UPDATE_POSITION) {
+            __location_msg_pos_using = false;
+        } else {
+            __location_msg_stt_using = false;
+        }
+
+        (void) osal_int_restore (flags);
+    }
+}
+
+static void __send_msg (struct location_msg *msg, bool_t *using)
+{
+    if (*using) {
+        return;
+    }
+
+    *using = true;
+
+    service_send (__location_sid_open, (void *) msg, __location_callback);
+}
 
 static int fake_ldev_task (void * arg)
 {
     int             step = 0;
-    int             status = 0;
-    struct location location = {0, 0};
+
+    if (location_service_init () != 0) {
+        printf ("fail to start location service!\n\r");
+        return -1;
+    }
+
+    __location_sid_open = service_open (SERVICE_DOMAIN_CORE, LOCATION_SERVICE_NAME);
+
+    if (__location_sid_open == INVALID_SID) {
+        return -1;
+    }
+
+    __location_msg_stt.cmd        = LOCATION_CMD_UPDATE_STATUS;
+    __location_msg_stt.status     = 0;
+
+    __location_msg_pos.cmd        = LOCATION_CMD_UPDATE_POSITION;
+    __location_msg_pos.location.x = 0;
+    __location_msg_pos.location.y = 0;
 
     while (1) {
         if (step & 1) {
-            location_update_status (status--);
+            __location_msg_stt.status--;
+            __send_msg (&__location_msg_stt, &__location_msg_stt_using);
         } else {
-            location_update_location (&location);
-            location.x++;
-            location.y++;
-            location.y++;
+            __location_msg_pos.location.x++;
+            __location_msg_pos.location.y++;
+            __location_msg_pos.location.y++;
+            __send_msg (&__location_msg_pos, &__location_msg_pos_using);
         }
 
         osal_task_sleep (1000);
@@ -360,23 +286,7 @@ static void __usr_stt_callback (uintptr_t arg, int status)
     printf ("new status: %d\n\r", status);
 }
 
-static int location_user_task (void * arg)
-{
-    if (!location_service_start ()) {
-        printf ("Fail to start service!\n");
-        return -1;
-    }
-
-    location_service_listen_position (__usr_pos_callback, 0);
-
-    location_service_listen_state (__usr_stt_callback, 0);
-
-    printf ("listening...\n\r");
-
-    return 0;
-}
-
-static bool_t __fake_ldev_start (void)
+void location_test (void)
 {
     fake_location_device_task = osal_task_create ("ldev", fake_ldev_task,
                                                   NULL, 0x800, NULL, 5);
@@ -387,23 +297,10 @@ static bool_t __fake_ldev_start (void)
         printf ("Fake location device started!\n");
     }
 
-    return fake_location_device_task != NULL;
-}
+    location_service_listen_position (__usr_pos_callback, 0);
 
-static bool_t __fake_ldev_stop (void)
-{
-    if (fake_location_device_task != NULL) {
-        osal_task_kill (fake_location_device_task);
-        fake_location_device_task = NULL;
-    }
+    location_service_listen_state (__usr_stt_callback, 0);
 
-    return true;
-}
-
-void location_test (void)
-{
-    location_service_config (__fake_ldev_start, __fake_ldev_stop);
-
-    osal_task_create ("ldev", location_user_task, NULL, 0x800, NULL, 5);
+    printf ("listening...\n\r");
 }
 #endif

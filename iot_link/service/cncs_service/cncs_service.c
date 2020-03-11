@@ -3,7 +3,6 @@
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 1. Redistributions of source code must retain the above copyright notice, this list of
  * conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
  * of conditions and the following disclaimer in the documentation and/or other materials
@@ -32,34 +31,74 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef __LOCATION_H__
-#define __LOCATION_H__
+#include <stddef.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
 
 #include <osal.h>
+/* service */
+#include "cncs_service.h"
 
 /* macros */
 
-#define LOCATION_CMD_UPDATE_STATUS      0
-#define LOCATION_CMD_UPDATE_POSITION    1
 
 /* typedefs */
 
-struct location {
-    int x;
-    int y;
-};
 
-struct location_msg {
-    unsigned int        cmd;
-    bool_t              using;
-    union {
-        int             status;
-        struct location location;
-    };
-};
+/* locals */
 
-extern int    location_service_init            (void);
-extern bool_t location_service_listen_position (void (*callback) (uintptr_t, struct location *), uintptr_t arg);
-extern bool_t location_service_listen_state    (void (*callback) (uintptr_t, int), uintptr_t arg);
+static int __cncs_service_handler(void *arg)
+{
+    cncs_msg_t *msg = (cncs_msg_t *)arg;
+    printf("cncs receive message command is %d\r\n", msg->cmd);
+    int ret;
+    switch (msg->cmd)
+    {
+        case CNCS_CMD_SNR:
+            printf("please report network para SNR\r\n");
+            // umip_al_module(msg);
+            break;
+        case CNCS_CMD_RSRP:
+            printf("please report network para RSRP\r\n");
+            // umip_al_module(msg);
+            break;
+        case CNCS_CMD_ECL:
+            printf("please report network para ECL\r\n");
+            // umip_al_module(msg);
+            break;
+        case CNCS_CMD_CELLID:
+            printf("please report network para CELLID\r\n");
+            // umip_al_module(msg);
+            break;
+        case CNCS_CMD_PCI:
+            printf("please report network para PCI\r\n");
+            // umip_al_module(msg);
+            break;
+        case CNCS_CMD_IMSI:
+            printf("please report network para IMSI\r\n");
+            // umip_al_module(msg);
+            break;
+        case CNCS_CMD_IMEI:
+            printf("please report network para IMEI\r\n");
+            // umip_al_module(msg);
+            break;
 
-#endif  /* __LOCATION_H__ */
+        default:
+            break;
+    }
+
+    return ret;
+}
+
+int cncs_service_init(const char *name)
+{
+	if (service_create(SERVICE_DOMAIN_SYSTEM, name, __cncs_service_handler, 6) == INVALID_SID)
+	{
+	    printf("Fail to create cncs service! \n");
+	    return -1;
+	}
+
+	return 0;
+}

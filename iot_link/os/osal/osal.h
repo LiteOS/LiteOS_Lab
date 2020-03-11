@@ -195,6 +195,13 @@ int osal_reboot(void);
 
 int osal_int_connect(int intnum, int prio, int mode, fn_interrupt_handle callback, void *arg);
 
+
+bool_t osal_int_lock (int *flags);
+
+
+bool_t osal_int_restore (int flags);
+
+
 /**
  * @brief:use this function to initialize the os abstract layer
  *

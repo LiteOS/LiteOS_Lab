@@ -32,34 +32,102 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef __LOCATION_H__
-#define __LOCATION_H__
+#if CONFIG_CNCS_SERVICE_ENABLE
 
+#include <stddef.h>
 #include <osal.h>
+#include "cncs_service.h"
 
-/* macros */
+static service_id svid; // cncs service ID
+cncs_para_t para; // cncs para
+cncs_msg_t msg = {NULL, 0, 0};
 
-#define LOCATION_CMD_UPDATE_STATUS      0
-#define LOCATION_CMD_UPDATE_POSITION    1
+void cncs_callback(void *msg, int ret)
+{
+	if (0 == ret)
+	{
+		printf("service ok, cncs para data is updated!\n");
+        // here add code to deal with cncs para data
+	}
+	else
+	{
+		printf("sorry, something is wrong!\n");
+        // here add code to deal with wrong situation
+	}
+	return;
+}
 
-/* typedefs */
+int service_cncs_demo_main()
+{
+    int cmd_list = 0;
+    // init and open service
+    if (!cncs_service_init("cncs service")) 
+    {
+        return -1;
+    }
+    svid = service_open(SERVICE_DOMAIN_SYSTEM, "cncs service");
+    if (!svid) 
+    {
+        printf("cncs service open failed!\n");
+        return -1;
+    }
+    msg.buf = (void *)&para;
+    msg.len = sizeof(cncs_para_t);
+    memset(msg.buf, 0, msg.len);
 
-struct location {
-    int x;
-    int y;
-};
+    // service demo 
+    while (1)
+    {
+        switch (cmd_list)
+        {
+        case CNCS_CMD_SNR:
+            msg.cmd = CNCS_CMD_SNR;
+            service_send(svid, &msg, cncs_callback);
+            break;
+        case CNCS_CMD_RSRP:
+            msg.cmd = CNCS_CMD_RSRP;
+            service_send(svid, &msg, cncs_callback);
+            break;
+        case CNCS_CMD_ECL:
+            msg.cmd = CNCS_CMD_ECL;
+            service_send(svid, &msg, cncs_callback);
+            break;
+        case CNCS_CMD_CELLID:
+            msg.cmd = CNCS_CMD_CELLID;
+            service_send(svid, &msg, cncs_callback);
+            break;
+        case CNCS_CMD_PCI:
+            msg.cmd = CNCS_CMD_PCI;
+            service_send(svid, &msg, cncs_callback);
+            break;
+        case CNCS_CMD_IMSI:
+            msg.cmd = CNCS_CMD_IMSI;
+            service_send(svid, &msg, cncs_callback);
+            break;
+        case CNCS_CMD_IMEI:
+            msg.cmd = CNCS_CMD_IMEI;
+            service_send(svid, &msg, cncs_callback);
+            break;
+        
+        default:
+            break;
+        }
 
-struct location_msg {
-    unsigned int        cmd;
-    bool_t              using;
-    union {
-        int             status;
-        struct location location;
-    };
-};
+        osal_task_sleep(1000);
+        if (cmd_list++ > 10)
+        {
+            break;
+        }        
+    }
+    
+    // when exit, close service 
+    if (!service_close(svid)) 
+    {
+        printf("cncs service close failed!\n");
+        return -1;
+    }
 
-extern int    location_service_init            (void);
-extern bool_t location_service_listen_position (void (*callback) (uintptr_t, struct location *), uintptr_t arg);
-extern bool_t location_service_listen_state    (void (*callback) (uintptr_t, int), uintptr_t arg);
+    return 0;
+} /* service_cncs_demo_main */
 
-#endif  /* __LOCATION_H__ */
+#endif

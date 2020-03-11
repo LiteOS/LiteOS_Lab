@@ -408,6 +408,35 @@ int osal_int_connect(int intnum, int prio, int mode, fn_interrupt_handle callbac
 }
 
 
+
+bool_t osal_int_lock(int *flags)
+{
+    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->int_lock))
+    {
+        *flags = s_os_cb->ops->int_lock();
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
+bool_t osal_int_restore(int flags)
+{
+    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->int_restore))
+    {
+        s_os_cb->ops->int_restore(flags);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
 __attribute__((weak))  int os_imp_init(void)
 {
     printf("%s:###please implement this function by yourself####\n\r",__FUNCTION__);

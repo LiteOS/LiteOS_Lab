@@ -52,6 +52,9 @@ typedef struct
 
     int (*int_connect)(int intnum, int prio, int mode, fn_interrupt_handle callback,void *arg);
 
+    int (*int_lock)(void);
+    void (*int_restore)(int flags);
+
 }tag_os_ops;
 
 
