@@ -181,6 +181,7 @@ static int app_cmd_task_entry()
                         msg.buf = &replymsg;
                         msg.len = sizeof(replymsg);
                         msg.type = en_oc_service_report;
+                        msg.protocol = en_oc_proto_lwm2m;
                         service_send(svc, &msg, report_callback);
 #else
                         oc_lwm2m_report((char *)&replymsg,sizeof(replymsg),1000);  ///< report cmd reply message
@@ -203,6 +204,7 @@ static int app_cmd_task_entry()
                         msg.buf = &replymsg;
                         msg.len = sizeof(replymsg);
                         msg.type = en_oc_service_report;
+                        msg.protocol = en_oc_proto_lwm2m;
                         service_send(svc, &msg, report_callback);
 #else
                         oc_lwm2m_report((char *)&replymsg,sizeof(replymsg),1000);  ///< report cmd reply message
@@ -242,6 +244,7 @@ static int app_report_task_entry()
 #if CONFIG_OCEAN_SERVICE_ENABLE
     msg.buf = &oc_param;
     msg.type = en_oc_service_config;
+    msg.protocol = en_oc_proto_lwm2m;
     service_send(svc, &msg, config_callback);
     while (1)
     {
@@ -277,6 +280,7 @@ static int app_report_task_entry()
         msg.buf = &light;
         msg.len = sizeof(light);
         msg.type = en_oc_service_report;
+        msg.protocol = en_oc_proto_lwm2m;
         service_send(svc, &msg, report_callback);
 #else
         oc_lwm2m_report((char *)&light,sizeof(light),1000); ///< report the light message
@@ -295,7 +299,7 @@ int standard_app_demo_main()
 
 #if CONFIG_OCEAN_SERVICE_ENABLE
     oc_service_init("oc lwm2m service");
-    svc = service_open("oc lwm2m service");
+    svc = service_open(SERVICE_DOMAIN_SYSTEM, "oc lwm2m service");
 #endif
     osal_task_create("app_report",app_report_task_entry,NULL,0x1000,NULL,2);
     osal_task_create("app_command",app_cmd_task_entry,NULL,0x1000,NULL,3);

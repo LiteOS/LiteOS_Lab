@@ -192,7 +192,7 @@ static int app_report_task_entry()
     int ret = -1;
     int lux = 0;
 
-    oc_config_param_t      oc_param;
+    oc_coap_cfg_t      oc_param;
     app_light_intensity_t  light;
 
     memset(&oc_param,0,sizeof(oc_param));

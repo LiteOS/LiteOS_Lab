@@ -231,7 +231,7 @@ static int pp_oc_report()
     return retCode;
 }
 
-static int pp_oc_config_test(oc_config_param_t *param)
+static int pp_oc_config_test(oc_coap_cfg_t *param)
 {
     printf("this is coap at_oc_config\n");
     return 0;
@@ -298,7 +298,7 @@ static int ts_oc_coap_register(char *message, int len)
 static int ts_oc_coap_config(char *message, int len)
 {
     int retcode = -1;
-    oc_config_param_t      oc_param;
+    oc_coap_cfg_t      oc_param;
     memset(&oc_param,0,sizeof(oc_param));
     char *pchTmp, *pchStrTmpIn;
     oc_coap_paras  *pparas =&g_coap_param;// use to store usr data

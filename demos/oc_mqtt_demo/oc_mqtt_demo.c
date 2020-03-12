@@ -201,6 +201,7 @@ static int  oc_cmd_normal(demo_msg_t *demo_msg)
             msg.buf = buf;
             msg.len = strlen(buf);
             msg.type = en_oc_service_report;
+            msg.protocol = en_oc_proto_mqtt;
             service_send(svc, &msg, report_callback);
             printf("%s:RESPONSE:mid:%d err_int:%d retcode:%d \r\n",__FUNCTION__, mid_int,err_int,report_ret);
 #else
@@ -252,6 +253,7 @@ static int  oc_report_normal(void)
             msg.buf = buf;
             msg.len = strlen(buf);
             msg.type = en_oc_service_report;
+            msg.protocol = en_oc_proto_mqtt;
             service_send(svc, &msg, report_callback);
             printf("%s:REPORT:times:%d:value:%d retcode:%d \r\n",__FUNCTION__,times++,value,report_ret);
 #else
@@ -310,6 +312,7 @@ static int task_reportmsg_entry(void *args)
 
     msg.buf = &config;
     msg.type = en_oc_service_config;
+    msg.protocol = en_oc_proto_mqtt;
     service_send(svc, &msg, config_callback);
     while (1)
     {
@@ -351,7 +354,7 @@ int standard_app_demo_main()
 
 #if CONFIG_OCEAN_SERVICE_ENABLE
     oc_service_init("oc mqtt service");
-    svc = service_open("oc mqtt service");
+    svc = service_open(SERVICE_DOMAIN_SYSTEM, "oc mqtt service");
 #endif
 
     osal_task_create("demo_reportmsg",task_reportmsg_entry,NULL,0x800,NULL,8);

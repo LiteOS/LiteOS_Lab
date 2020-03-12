@@ -10,7 +10,7 @@ ifeq ($(CONFIG_SERVICE_ENABLE),y)
 	C_DEFS     += -D CONFIG_SERVICE_ENABLE=1
 
 	## oc service	
-	ifeq ($(CONFIG_SERVICE_TYPE),"oceanconnect")
+	ifeq ($(CONFIG_SERVICE_TYPE_OC),y)
 	    include $(iot_link_root)/service/oc_service/oc_service.mk
 	endif
 

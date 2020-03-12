@@ -9,6 +9,8 @@ ifeq ($(CONFIG_LWM2M_ENABLE), y)
     LWM2M_MODULE_INC = -I $(iot_link_root)/network/lwm2m/lwm2m_al
     C_INCLUDES += $(LWM2M_MODULE_INC)
     
+    C_DEFS += -D CONFIG_LWM2M_ENABLE=1
+    
     ifeq ($(CONFIG_LWM2M_TYPE),"wakaama_lwm2m")
         C_DEFS += -D CONFIG_WAKAAMA_ENABLE=1
         include $(iot_link_root)/network/lwm2m/wakaama_lwm2m/wakaama.mk

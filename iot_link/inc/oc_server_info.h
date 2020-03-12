@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2020>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -32,84 +32,28 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
+
+#ifndef __OC_SERVER_INFO_H
+#define __OC_SERVER_INFO_H
+
 #include <stddef.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <stdint.h>
-#include <string.h>
 
-#include <osal.h>
-#include <oc_coap_al.h>
-//
-#include "oc_service.h"
-
-/* macros */
-
-
-/* typedefs */
-
-
-/* locals */
-
-static void *s_coap_service_handle = NULL;
-
-static int __oc_service_handler (void * arg)
+typedef enum
 {
-    oc_message* msg = (oc_message*) arg;
-    //printf("message is %s\r\n", msg->buf);
-    int ret = -1;
-    switch (msg->type)
-    {
-        case en_oc_service_config:
-        {
-        	printf("this is oc_config service!\r\n");
+    en_oc_boot_strap_mode_factory = 0,
+    en_oc_boot_strap_mode_client_initialize,
+    en_oc_boot_strap_mode_sequence,
+}en_oc_boot_strap_mode_t;
 
-        	oc_config_param_t* config = (oc_config_param_t *)(msg->buf);
-        	s_coap_service_handle = oc_coap_config(config);
-        	if(NULL == s_coap_service_handle)
-        	{
-        	    printf("config err\r\n");
-        	}
-        	else
-        	{
-        		ret = 0;
-        	}
-        }
-        break;
-        case en_oc_service_report:
-        {
-            printf("this is oc_report service!\r\n");
-
-            char* data = (char *)(msg->buf);
-            ret = oc_coap_report(s_coap_service_handle, (char *)data, msg->len);
-
-            if((ret != 0))
-            {
-                printf("report:err :code:%d\r\n",ret);
-            }
-        }
-        break;
-        case en_oc_service_deconfig:
-        {
-            printf("this is oc_deconfig service!\r\n");
-            ret = oc_coap_deconfig(s_coap_service_handle);
-        }
-        break;
-        default:
-        	break;
-    }
-
-    return ret;
-}
-
-int oc_service_init (const char* name)
+typedef struct
 {
-	if (service_create (name, __oc_service_handler, 0x1000, 6) == INVALID_SID)
-	{
-	    printf ("Fail to create oc service!\n");
+    char *ep_id;                  ///< endpoint identifier, which could be recognized by the server
+    char *address;                ///< server address,maybe domain name
+    char *port;                   ///< server port
+    char *psk_id;                 ///< server encode by psk, if not set NULL here
+    char *psk;
+    int   psk_len;
+}oc_server_t;
 
-	    return -1;
-	}
-
-	return 0;
-}
+#endif /* __OC_SERVER_INFO_H */

@@ -231,7 +231,7 @@ typedef struct
 
 
 //////////////////////API USED FOR THE MQTT APPLICAITON/////////////////////////
-
+#if CONFIG_MQTT_ENABLE
 /**
  * @brief maybe the mqtt lib need do some initialize
  *
@@ -334,7 +334,18 @@ int mqtt_al_install(mqtt_al_op_t *op);
  *
  */
 int mqtt_al_uninstall();
-
+#else
+#define   mqtt_al_init()                        -1
+#define   mqtt_al_deinit()                      -1
+#define   mqtt_al_connect(conparam)             NULL
+#define   mqtt_al_disconnect(handle)            -1
+#define   mqtt_al_publish(handle,pubpara)       -1
+#define   mqtt_al_subscribe(handle,subpara)     -1
+#define   mqtt_al_unsubscribe(handle,unsubpara) -1
+#define   mqtt_al_check_status(handle)          en_mqtt_al_connect_err
+#define   mqtt_al_install(op)                   -1
+#define   mqtt_al_uninstall()                   -1
+#endif
 
 
 #if defined(__cplusplus)
