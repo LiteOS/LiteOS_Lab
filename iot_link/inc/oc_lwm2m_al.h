@@ -42,25 +42,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
-
-typedef struct
-{
-    char *ep_id;                  ///< endpoint identifier, which could be recognized by the server
-    char *address;                ///< server address,maybe domain name
-    char *port;                   ///< server port
-    char *psk_id;                 ///< server encode by psk, if not set NULL here
-    char *psk;
-    int   psk_len;
-} oc_server_t;
-
-
-typedef enum
-{
-    en_oc_boot_strap_mode_factory = 0,
-    en_oc_boot_strap_mode_client_initialize,
-    en_oc_boot_strap_mode_sequence,
-} en_oc_boot_strap_mode_t;
-
+#include <oc_server_info.h>
 
 typedef enum
 {
@@ -114,6 +96,7 @@ typedef struct
 } oc_lwm2m_opt_t;
 
 
+#if CONFIG_OC_LWM2M_ENABLE
 /**
  *@brief the lwm2m agent should use this function to register the method for the application
  *
@@ -163,4 +146,14 @@ int oc_lwm2m_deconfig(void);
  */
 int oc_lwm2m_init();
 
+#else
+
+#define   oc_lwm2m_register(name,opt)        -1
+#define   oc_lwm2m_unregister(name)          -1
+#define   oc_lwm2m_config(param)             en_oc_lwm2m_err_last
+#define   oc_lwm2m_report(buf,len,timeout)   en_oc_lwm2m_err_last
+#define   oc_lwm2m_deconfig()                en_oc_lwm2m_err_last
+#define   oc_lwm2m_init()                    -1
+
+#endif
 #endif /* LITEOS_LAB_IOT_LINK_OC_OC_LWM2M_OC_LWM2M_AL_OC_LWM2M_AL_H_ */

@@ -43,15 +43,17 @@
 /* typedefs */
 
 enum oc_message_type{en_oc_service_config = 0x0, en_oc_service_report, en_oc_service_deconfig};
+enum oc_message_protocol{en_oc_proto_coap = 0x0, en_oc_proto_lwm2m, en_oc_proto_mqtt};
 enum oc_config_status{en_config_err = 0x0, en_config_ok};
 typedef struct
 {
     void* buf;
     int   len;
     int   type;
+    int   protocol;
 }oc_message;
 
 /* externs */
-extern int     oc_service_init   (const char* name);
+extern int oc_service_init(const char* name);
 
 #endif /* __0C_SERVICE_H__ */

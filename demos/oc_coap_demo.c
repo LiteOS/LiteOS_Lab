@@ -183,6 +183,7 @@ static int app_cmd_task_entry()
                         msg.buf = &replymsg;
                         msg.len = sizeof(replymsg);
                         msg.type = en_oc_service_report;
+                        msg.protocol = en_oc_proto_coap;
                         service_send(svc, &msg, report_callback);
 #else
                         oc_coap_report(s_coap_handle,(char *)&replymsg,sizeof(replymsg));    ///< report cmd reply message
@@ -204,6 +205,7 @@ static int app_cmd_task_entry()
                         msg.buf = &replymsg;
                         msg.len = sizeof(replymsg);
                         msg.type = en_oc_service_report;
+                        msg.protocol = en_oc_proto_coap;
                         service_send(svc, &msg, report_callback);
 #else
                         oc_coap_report(s_coap_handle,(char *)&replymsg,sizeof(replymsg));    ///< report cmd reply message
@@ -230,7 +232,7 @@ static int app_report_task_entry()
     int ret = -1;
     int lux = 0;
 
-    oc_config_param_t      oc_param;
+    oc_coap_cfg_t      oc_param;
     app_light_intensity_t  light;
 
     memset(&oc_param,0,sizeof(oc_param));
@@ -244,6 +246,7 @@ static int app_report_task_entry()
 #if CONFIG_OCEAN_SERVICE_ENABLE
     msg.buf = &oc_param;
     msg.type = en_oc_service_config;
+    msg.protocol = en_oc_proto_coap;
     service_send(svc, &msg, config_callback);
     while (1)
     {
@@ -280,6 +283,7 @@ static int app_report_task_entry()
         msg.buf = &light;
         msg.len = sizeof(light);
         msg.type = en_oc_service_report;
+        msg.protocol = en_oc_proto_coap;
         service_send(svc, &msg, report_callback);
 #else
         oc_coap_report(s_coap_handle,(char *)&light,sizeof(light)); ///< report the light message
@@ -296,7 +300,7 @@ int standard_app_demo_main()
 
 #if CONFIG_OCEAN_SERVICE_ENABLE
     oc_service_init("oc coap service");
-    svc = service_open("oc coap service");
+    svc = service_open(SERVICE_DOMAIN_SYSTEM, "oc coap service");
 #endif
 
     osal_task_create("app_report",app_report_task_entry,NULL,0x1000,NULL,8);

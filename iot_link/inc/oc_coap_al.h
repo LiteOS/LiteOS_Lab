@@ -40,26 +40,10 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <coap_al.h>
+#include <oc_server_info.h>
 
 /** @brief this is the message dealer module for the application*/
 typedef int (*fn_oc_coap_msg_deal)(void *msg, int len);
-
-typedef enum
-{
-    en_oc_boot_strap_mode_factory = 0,
-    en_oc_boot_strap_mode_client_initialize,
-    en_oc_boot_strap_mode_sequence,
-}en_oc_boot_strap_mode_t;
-
-typedef struct
-{
-    char *ep_id;                  ///< endpoint identifier, which could be recognized by the server
-    char *address;                ///< server address,maybe domain name
-    char *port;                   ///< server port
-    char *psk_id;                 ///< server encode by psk, if not set NULL here
-    char *psk;
-    int   psk_len;
-}oc_server_t;
 
 /** @brief this is the agent configuration */
 typedef struct
@@ -69,10 +53,10 @@ typedef struct
     oc_server_t              app_server;      ///< if factory or smart boot, must be set here
     fn_oc_coap_msg_deal      rcv_func;        ///< receive function caller here
     void                    *usr_data;        ///< used for the user
-}oc_config_param_t;
+}oc_coap_cfg_t;
 
 ///////////////////////////MQTT AGENT INTERFACE////////////////////////////////
-typedef void* (*fn_oc_coap_config)(oc_config_param_t *param);                        ///< return the handle here
+typedef void* (*fn_oc_coap_config)(oc_coap_cfg_t *param);                        ///< return the handle here
 typedef int (*fn_oc_coap_deconfig)(void *handle);                                    ///< use the handle as the params
 typedef int (*fn_oc_coap_report)(void *handle,char *msg,int len);                    ///< use the handle and report params
 /**
@@ -84,6 +68,8 @@ typedef struct
     fn_oc_coap_report   report;   ///< this function used for the report data to the cdp
     fn_oc_coap_deconfig deconfig; ///< this function used for the deconfig
 }oc_coap_opt_t;
+
+#if CONFIG_OC_COAP_ENABLE
 
 /**
  *@brief the mqtt agent should use this function to register the method for the application
@@ -101,7 +87,7 @@ int oc_coap_register(const char *name,const oc_coap_opt_t *opt);
  * @param[in] param, refer to tag_oc_coap_config
  * @return oc coap handle else NULL failed
  */
-void *oc_coap_config(oc_config_param_t *param);
+void *oc_coap_config(oc_coap_cfg_t *param);
 /**
  * @brief the application use this function to send the message to the cdp
  * @param[in] hanlde:the coap handle returned by oc_coap_config
@@ -127,6 +113,17 @@ int oc_coap_deconfig(void *handle);
  *@return 0 success while <0 failed
  */
 int oc_coap_init();
+
+#else
+
+#define   oc_coap_register(name,opt)       -1
+#define   oc_coap_config(param)            NULL
+#define   oc_coap_report(handle,msg,len)   -1
+#define   oc_coap_deconfig(handle)         -1
+#define   oc_coap_init()                   -1
+
+#endif
+
 
 
 #endif /* __OC_COAP_AL_H */

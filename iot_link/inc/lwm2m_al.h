@@ -166,7 +166,7 @@ typedef struct
     int                 resource_id;
     void               *data;
     int                 length;
-    int                 mode;           /* mode: 0-nonconfirmable；1-confirmable */
+    int                 mode;           /* mode: 0-nonconfirmable;1-confirmable */
 } lwm2m_al_send_param_t;
 
 /* opertate interface */
@@ -194,6 +194,7 @@ typedef struct
     int (*send)(void *handle, lwm2m_al_send_param_t *send_param);
 } lwm2m_al_op_t;
 
+#if CONFIG_LWM2M_ENABLE
 /**
  * @brief     : the lwm2m service should call this function to init necessary parameters
  *
@@ -274,6 +275,19 @@ int lwm2m_al_install(lwm2m_al_op_t *op);
  * @return 0 success,otherwise it's a special error code if failed
  */
 int lwm2m_al_uninstall(void);
+
+#else
+
+#define lwm2m_al_config(handle,init_param)                                          LWM2M_ERR
+#define lwm2m_al_deconfig(handle)                                                   LWM2M_ERR
+#define lwm2m_al_add_object(handle,object_id,object_instance_id,resource_id,param)  LWM2M_ERR
+#define lwm2m_al_delete_object(handle,object_id)                                    LWM2M_ERR
+#define lwm2m_al_connect(handle)                                                    LWM2M_ERR
+#define lwm2m_al_disconnect(handle)                                                 LWM2M_ERR
+#define lwm2m_al_send(handle,send_param)                                            LWM2M_ERR
+#define lwm2m_al_install(op)                                                        LWM2M_ERR
+#define lwm2m_al_uninstall(void)                                                    LWM2M_ERR
+#endif
 
 #endif /* LITEOS_LAB_IOT_LINK_NETWORK_LWM2M_LWM2M_AL_LWM2M_AL_H_ */
 

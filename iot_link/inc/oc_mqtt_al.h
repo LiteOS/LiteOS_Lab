@@ -131,6 +131,7 @@ typedef struct
  *
  *@return 0 success while -1 failed
  */
+#if CONFIG_OC_MQTT_ENABLE
 int oc_mqtt_register(const oc_mqtt_t *opt);
 
 int oc_mqtt_unregister(const char *name);
@@ -222,6 +223,18 @@ int oc_mqtt_init();
  */
 const char *oc_mqtt_err(int code);
 
+#else
+#define   oc_mqtt_register(opt)                    -1
+#define   oc_mqtt_unregister(name)                 -1
+#define   oc_mqtt_config(param)                    en_oc_mqtt_err_last
+#define   oc_mqtt_report(msg,len,qos)              en_oc_mqtt_err_last
+#define   oc_mqtt_deconfig()                       en_oc_mqtt_err_last
+#define   oc_mqtt_publish(topic,msg,msg_len,qos)   en_oc_mqtt_err_last
+#define   oc_mqtt_subscribe(topic,qos)             en_oc_mqtt_err_last
+#define   oc_mqtt_unsubscribe(topic)               en_oc_mqtt_err_last
+#define   oc_mqtt_init()                           -1
+#define   oc_mqtt_err(code)                        NULL
+#endif
 
 
 
