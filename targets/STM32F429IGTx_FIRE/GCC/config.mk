@@ -74,6 +74,8 @@ CONFIG_AT_ENABLE     := y
 
 ########################INDEPENDENT SERVICE START#################################
 
+CONFIG_CRYPTO_ENABLE := n
+
 #CONFIG_SERVICE_ENABLE, the service module
 CONFIG_SERVICE_ENABLE := y
 CONFIG_SERVICE_TYPE_OC := y

@@ -25,6 +25,9 @@ include $(iot_link_root)/stimer/stimer.mk
 #configure the queue
 include $(iot_link_root)/queue/queue.mk
 
+#configure the crypto
+include $(iot_link_root)/crypto/crypto.mk
+
 #configure the service
 include $(iot_link_root)/service/service.mk
 
