@@ -46,6 +46,7 @@
 
 #define NR_GROW_MESSAGES                    32
 #define NR_MAX_MSGS                         65535
+#define NR_SERVICES_PER_DOMAIN              32
 
 #define CORE_SERVICE_TASK_NAME              SERVICE_DOMAIN_CORE
 #define CORE_SERVICE_TASK_PRIO              2
@@ -84,8 +85,8 @@ struct service {
 struct service_manager {
     struct service         *services;
     struct message         *message_pool;
-    struct message         *message_heads [32];
-    struct message         *message_tails [32];
+    struct message         *message_heads [NR_SERVICES_PER_DOMAIN];
+    struct message         *message_tails [NR_SERVICES_PER_DOMAIN];
     osal_mutex_t            services_lock;
     osal_semp_t             services_sem;
     volatile uint32_t       services_bitmap;
@@ -99,9 +100,9 @@ struct service_manager {
 
 /* locals */
 
-static struct service_manager __service_manager_device;
+static struct service_manager __service_manager_core;
 static struct service_manager __service_manager_system;
-static struct service_manager __service_manager_user;
+static struct service_manager __service_manager_apps;
 
 static void __msg_grow (struct service_manager *manager)
 {
@@ -161,7 +162,7 @@ static void __put_message (struct service_manager *manager, struct message *mess
 static struct service_manager *__get_domain (const char * domain)
 {
     if (strcmp (domain, SERVICE_DOMAIN_CORE) == 0) {
-        return &__service_manager_device;
+        return &__service_manager_core;
     }
 
     if (strcmp (domain, SERVICE_DOMAIN_SYSTEM) == 0) {
@@ -169,7 +170,7 @@ static struct service_manager *__get_domain (const char * domain)
     }
 
     if (strcmp (domain, SERVICE_DOMAIN_APP) == 0) {
-        return &__service_manager_user;
+        return &__service_manager_apps;
     }
 
     return NULL;
@@ -271,7 +272,7 @@ bool_t service_send (service_id sid, void *msg, void (*pfn) (void *, int))
         return false;
     }
 
-    if (service->prio >= 32) {
+    if (service->prio >= NR_SERVICES_PER_DOMAIN) {
         return false;
     }
 
@@ -491,7 +492,7 @@ service_id service_create (const char * domain, const char * name, int (* handle
         return INVALID_SID;
     }
 
-    if (prio >= 32) {
+    if (prio >= NR_SERVICES_PER_DOMAIN) {
         return INVALID_SID;
     }
 
@@ -538,7 +539,7 @@ static bool_t __service_manager_init (struct service_manager * manager,
         return false;
     }
 
-    if (manager != &__service_manager_device) {
+    if (manager != &__service_manager_core) {
         if (!osal_mutex_create (&manager->services_lock)) {
             goto err_free_sem;
         }
@@ -600,7 +601,7 @@ static void __service_unlock (struct service_manager *manager, int flag)
 
 bool_t service_init (void)
 {
-    if (!__service_manager_init (&__service_manager_device, CORE_SERVICE_TASK_NAME,
+    if (!__service_manager_init (&__service_manager_core, CORE_SERVICE_TASK_NAME,
                                  CORE_SERVICE_TASK_STACK_SIZE, CORE_SERVICE_TASK_PRIO,
                                  __device_service_lock, __device_service_unlock)) {
         return false;
@@ -609,14 +610,14 @@ bool_t service_init (void)
     if (!__service_manager_init (&__service_manager_system, SYSTEM_SERVICE_TASK_NAME,
                                  SYSTEM_SERVICE_TASK_STACK_SIZE, SYSTEM_SERVICE_TASK_PRIO,
                                  __service_lock, __service_unlock)) {
-        __service_manager_deinit (&__service_manager_device);
+        __service_manager_deinit (&__service_manager_core);
         return false;
     }
 
-    if (!__service_manager_init (&__service_manager_user, APP_SERVICE_TASK_NAME,
+    if (!__service_manager_init (&__service_manager_apps, APP_SERVICE_TASK_NAME,
                                  APP_SERVICE_TASK_STACK_SIZE, APP_SERVICE_TASK_PRIO,
                                  __service_lock, __service_unlock)) {
-        __service_manager_deinit (&__service_manager_device);
+        __service_manager_deinit (&__service_manager_core);
         __service_manager_deinit (&__service_manager_system);
         return false;
     }
