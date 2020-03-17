@@ -62,7 +62,7 @@ static void *__task_create(const char *name,int (*task_entry)(void *args),\
 
     if((stack_size > 0) && (NULL == stack))
     {
-        ret = task_spawn(name,prior, 0,stack_size + 0x1000,task_entry,(uintptr_t)args);
+        ret = task_spawn(name,prior, 0,stack_size ,task_entry,(uintptr_t)args);
     }
 
     return ret;
