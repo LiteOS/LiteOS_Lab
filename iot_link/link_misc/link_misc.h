@@ -71,6 +71,26 @@ char *osal_strdup(const char *ch);
 
 
 
+/**
+ *
+ *                       dataoff
+ * ring buffer map:       |  ----datalen-------
+ *                        | /                   \
+ *                        |/                     \
+ *   ----------------------------------------------------------
+ *   |     empty space    |//////valid data///////|           |
+ *   ----------------------------------------------------------
+ *   | \                                                      /
+ *   |  \                                                    /
+ *   |   \                                                  /
+ *   |     ---------------buflen--------------------------
+ *  buf
+ *
+ *  attention that do dump read or write means no data will really write or read,
+ *  it only changed the dataoff or datalen, and you make sure that the dump read
+ *  or write length  is legal
+ *
+ * */
 
 /**
  * @brief: this is the ring buffer data structure, implement as the common function
@@ -84,6 +104,7 @@ typedef struct
     int              dataoff;  ///< which means the valid data offset in the buffer
 }tag_ring_buffer_t;
 
+typedef tag_ring_buffer_t  ring_buffer_t;
 
 /**
  * @brief:use this function to make a new ring handle
@@ -135,6 +156,16 @@ int ring_buffer_write(tag_ring_buffer_t *ring,unsigned char *buf, int len);
  * */
 
 int ring_buffer_read(tag_ring_buffer_t *ring,unsigned char *buf, int len);
+
+#define ring_buffer_buf(x)          (x->buf)
+#define ring_buffer_buflen(x)       (x->buflen)
+#define ring_buffer_data(x)         (x->buf + x->dataoff)
+//#define ring_buffer_datalen(x)      (x->datalen)
+//#define ring_buffer_freespace(x)    (x->buflen - x->datalen)
+
+#define ring_buffer_dataoff(x)      (x->dataoff)
+#define ring_buffer_dumpread(x,y)   do{x->dataoff = (x->dataoff + y)%x->buflen; x->datalen -= y;}while(0)
+#define ring_buffer_dumpwrite(x,y)  do{x->datalen += y;)while(0)
 
 /**
  * @brief:use this function check out how many data in the ring buffer
