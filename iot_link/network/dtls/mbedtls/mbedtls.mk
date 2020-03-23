@@ -17,7 +17,7 @@ MBEDTLS_SRC = \
 
 MBEDTLS_DEF = -D WITH_DTLS
 
-ifeq ($(USE_MBEDTLS_DEBUG_C), y)
+ifeq ($(USE_MBEDTLS_DEBUG_C), y) 
     MBEDTLS_DEF += -D MBEDTLS_DEBUG_C
 endif
 
