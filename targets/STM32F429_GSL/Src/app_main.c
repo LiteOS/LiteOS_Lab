@@ -1038,6 +1038,7 @@ static int deal_iotconnect(unsigned int counter)
 
     deal_commonfresh(counter);
 
+    iot_disconnect();
     ret = iot_connect();
     if(0 == ret)
     {
