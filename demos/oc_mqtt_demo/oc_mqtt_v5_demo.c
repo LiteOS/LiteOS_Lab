@@ -46,67 +46,63 @@
 #include <oc_mqtt_al.h>
 #include <oc_mqtt_profile.h>
 
-///< ANYWAY, YOU COULD CONFIG IT TO THE ONE MODE,ALL THE INFORMATION IS JUST FOR THE TEST
-#if CONFIG_OC_MQTT_DEMO_BS
 
-///< the device bootstrap center
-#define CN_SERVER_IPV4         "119.3.251.30"
-#define CN_SERVER_PORT         "8883"
-#define CN_EP_DEVICEID         "54f107da-f251-436c-af4c-624f33b7d7b6"
-#define CN_EP_PASSWD           "f62fcf47d62c4ed18913"
-#define CN_BOOT_MODE           1
+#define CN_CONNECTMODE_TLS   0
+
+///< --TODO, the tls with ECHDE will requires more compute ability, and the mcu uptils now will be timeout,
+///<         and i think the platform will make the timeout much longer and fix this problem
+
+///< 1.设备接入服务重新更新了证书以及加密套件，椭圆加密算法算法需要大算力去链接服务器，因此对月MCU而言，请选择非加密方案
+///< 2.设备发放平台目前本身在和设备接入做对接，还不ready.
+
+//#define CN_SERVER_IPV4       "iot-mqtts.cn-north-4.myhuaweicloud.com"
+#define CN_SERVER_IPV4       "121.36.42.100"
+
+#if  CN_CONNECTMODE_TLS
+
+#define CN_SERVER_PORT       "8883"
+#define CN_SECURITY_TYPE     EN_DTLS_AL_SECURITY_TYPE_CERT
 
 #else
 
-#define CN_BOOT_MODE              0
+#define CN_SERVER_PORT       "1883"
+#define CN_SECURITY_TYPE     EN_DTLS_AL_SECURITY_TYPE_NONE
 
-///< the iot device access center
-#define CN_SERVER_IPV4         "119.3.248.253"
-#define CN_SERVER_PORT         "8883"
+#endif
+///< server key
+static const char s_server_ca[] =
+" -----BEGIN CERTIFICATE-----\r\n"
+"MIIDrzCCApegAwIBAgIQCDvgVpBCRrGhdWrJWZHHSjANBgkqhkiG9w0BAQUFADBh\r\n"
+"MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3\r\n"
+"d3cuZGlnaWNlcnQuY29tMSAwHgYDVQQDExdEaWdpQ2VydCBHbG9iYWwgUm9vdCBD\r\n"
+"QTAeFw0wNjExMTAwMDAwMDBaFw0zMTExMTAwMDAwMDBaMGExCzAJBgNVBAYTAlVT\r\n"
+"MRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5j\r\n"
+"b20xIDAeBgNVBAMTF0RpZ2lDZXJ0IEdsb2JhbCBSb290IENBMIIBIjANBgkqhkiG\r\n"
+"9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4jvhEXLeqKTTo1eqUKKPC3eQyaKl7hLOllsB\r\n"
+"CSDMAZOnTjC3U/dDxGkAV53ijSLdhwZAAIEJzs4bg7/fzTtxRuLWZscFs3YnFo97\r\n"
+"nh6Vfe63SKMI2tavegw5BmV/Sl0fvBf4q77uKNd0f3p4mVmFaG5cIzJLv07A6Fpt\r\n"
+"43C/dxC//AH2hdmoRBBYMql1GNXRor5H4idq9Joz+EkIYIvUX7Q6hL+hqkpMfT7P\r\n"
+"T19sdl6gSzeRntwi5m3OFBqOasv+zbMUZBfHWymeMr/y7vrTC0LUq7dBMtoM1O/4\r\n"
+"gdW7jVg/tRvoSSiicNoxBN33shbyTApOB6jtSj1etX+jkMOvJwIDAQABo2MwYTAO\r\n"
+"BgNVHQ8BAf8EBAMCAYYwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUA95QNVbR\r\n"
+"TLtm8KPiGxvDl7I90VUwHwYDVR0jBBgwFoAUA95QNVbRTLtm8KPiGxvDl7I90VUw\r\n"
+"DQYJKoZIhvcNAQEFBQADggEBAMucN6pIExIK+t1EnE9SsPTfrgT1eXkIoyQY/Esr\r\n"
+"hMAtudXH/vTBH1jLuG2cenTnmCmrEbXjcKChzUyImZOMkXDiqw8cvpOp/2PV5Adg\r\n"
+"06O/nVsJ8dWO41P0jmP6P6fbtGbfYmbW0W5BjfIttep3Sp+dWOIrWcBAI+0tKIJF\r\n"
+"PnlUkiaY4IBIqDfv8NZ5YBberOgOzW6sRBc4L0na4UU+Krk2U886UAb3LujEV0ls\r\n"
+"YSEY1QSteDwsOoBrp+uvFRTp2InBuThs4pFsiv9kuXclVzDAGySj4dzp30d8tbQk\r\n"
+"CAUw7C29C79Fv1C5qfPrmAESrciIxpg0X40KPMbp1ZWVbd4=\r\n"
+"-----END CERTIFICATE-----\r\n";
+
 #define CN_EP_DEVICEID         "54f107da-f251-436c-af4c-624f33b7d7b6"
 #define CN_EP_PASSWD           "f62fcf47d62c4ed18913"
-//#define CN_EP_DEVICEID         "5d0c76788a48f95ac41bcb9c_sdk1002"
-
-
-/////< the iot develop center
-//#define CN_SERVER_IPV4         "49.4.93.24"
-//#define CN_SERVER_PORT         "8883"
-//#define CN_EP_DEVICEID         "mqtt_sdk01"
-//#define CN_EP_PASSWD           "c18f10422c93548e6fef"
-#endif
-
-#define CN_LIFE_TIME            60                 ///< the platform need more
-
+#define CN_BOOT_MODE            0
+#define CN_LIFE_TIME            60                         ///< the platform need more
 //if your command is very fast,please use a queue here--TODO
 static queue_t                   *s_queue_rcvmsg = NULL;   ///< this is used to cached the message
 static oc_mqtt_profile_service_t  s_device_service;
 
 #ifndef CONFIG_OC_MQTT_DEMO_BS
-///< server key
-static const char s_server_ca[] =
-"-----BEGIN CERTIFICATE-----\r\n"
-"MIID4DCCAsigAwIBAgIJAK97nNS67HRvMA0GCSqGSIb3DQEBCwUAMFMxCzAJBgNV\r\n"
-"BAYTAkNOMQswCQYDVQQIEwJHRDELMAkGA1UEBxMCU1oxDzANBgNVBAoTBkh1YXdl\r\n"
-"aTELMAkGA1UECxMCQ04xDDAKBgNVBAMTA0lPVDAeFw0xNjA1MDQxMjE3MjdaFw0y\r\n"
-"NjA1MDIxMjE3MjdaMFMxCzAJBgNVBAYTAkNOMQswCQYDVQQIEwJHRDELMAkGA1UE\r\n"
-"BxMCU1oxDzANBgNVBAoTBkh1YXdlaTELMAkGA1UECxMCQ04xDDAKBgNVBAMTA0lP\r\n"
-"VDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAJxM9fwkwvxeILpkvoAM\r\n"
-"Gdqq3x0G9o445F6Shg3I0xmmzu9Of8wYuW3c4jtQ/6zscuIGyWf06ke1z//AVZ/o\r\n"
-"dp8LkuFbBbDXR5swjUJ6z15b6yaYH614Ty/d6DrCM+RaU+FWmxmOon9W/VELu2BB\r\n"
-"NXDQHJBSbWrLNGnZA2erk4JSMp7RhHrZ0QaNtT4HhIczFYtQ2lYF+sQJpQMrjoRn\r\n"
-"dSV9WB872Ja4DgcISU1+wuWLmS/NKjIvOWW1upS79yu2I4Rxos2mFy9xxz311rGC\r\n"
-"Z3X65ejFNzCUrNgf6NEP1N7wB9hUu7u50aA+/56D7EgjeI0gpFytC+a4f6JCPVWI\r\n"
-"Lr0CAwEAAaOBtjCBszAdBgNVHQ4EFgQUcGqy59oawLEgMl21//7F5RyABpwwgYMG\r\n"
-"A1UdIwR8MHqAFHBqsufaGsCxIDJdtf/+xeUcgAacoVekVTBTMQswCQYDVQQGEwJD\r\n"
-"TjELMAkGA1UECBMCR0QxCzAJBgNVBAcTAlNaMQ8wDQYDVQQKEwZIdWF3ZWkxCzAJ\r\n"
-"BgNVBAsTAkNOMQwwCgYDVQQDEwNJT1SCCQCve5zUuux0bzAMBgNVHRMEBTADAQH/\r\n"
-"MA0GCSqGSIb3DQEBCwUAA4IBAQBgv2PQn66gRMbGJMSYS48GIFqpCo783TUTePNS\r\n"
-"tV8G1MIiQCpYNdk2wNw/iFjoLRkdx4va6jgceht5iX6SdjpoQF7y5qVDVrScQmsP\r\n"
-"U95IFcOkZJCNtOpUXdT+a3N+NlpxiScyIOtSrQnDFixWMCJQwEfg8j74qO96UvDA\r\n"
-"FuTCocOouER3ZZjQ8MEsMMquNEvMHJkMRX11L5Rxo1pc6J/EMWW5scK2rC0Hg91a\r\n"
-"Lod6aezh2K7KleC0V5ZlIuEvFoBc7bCwcBSAKA3BnQveJ8nEu9pbuBsVAjHOroVb\r\n"
-"8/bL5retJigmAN2GIyFv39TFXIySw+lW0wlp+iSPxO9s9J+t\r\n"
-"-----END CERTIFICATE-----\r\n";
 ///< two way mqtt mode
 static const char s_client_ca[] = \
 "-----BEGIN CERTIFICATE-----\r\n"
@@ -343,19 +339,18 @@ static int task_reportmsg_entry(void *args)
     connect_para.life_time =     CN_LIFE_TIME;
     connect_para.rcvfunc =       app_msg_deal;
 
-    connect_para.security.type = EN_DTLS_AL_SECURITY_TYPE_CERT;
+    connect_para.security.type = CN_SECURITY_TYPE;
 
-#ifndef CONFIG_OC_MQTT_DEMO_BS
 
     connect_para.security.u.cert.server_ca = (uint8_t *)s_server_ca;
     connect_para.security.u.cert.server_ca_len = sizeof(s_server_ca);
+
     connect_para.security.u.cert.client_ca = (uint8_t *)s_client_ca;
     connect_para.security.u.cert.client_ca_len = sizeof(s_client_ca);
     connect_para.security.u.cert.client_pk = (uint8_t *)s_client_pk;
     connect_para.security.u.cert.client_pk_len = sizeof(s_client_pk);
     connect_para.security.u.cert.client_pk_pwd = (uint8_t *)s_client_pk_pwd;
     connect_para.security.u.cert.client_pk_pwd_len = strlen(s_client_pk_pwd);
-#endif
 
     ret = oc_mqtt_profile_connect(&connect_para);
     if((ret != en_oc_mqtt_err_ok))

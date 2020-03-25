@@ -167,7 +167,7 @@ CONFIG_PCP_ENABLE      := n
 #CONFIG_DEMO_TYPE could be "oc_coap_demo" "oc_dtls_coap_demo" "oc_dtls_lwm2m_bs_demo" "oc_dtls_lwm2m_demo" "oc_dtls_lwm2m_ota_demo"
 #"oc_lwm2m_bs_demo"  "oc_lwm2m_demo" "oc_lwm2m_ota_demo" "stimer_demo"
 
-CONFIG_DEMO_ENABLE := n
+CONFIG_DEMO_ENABLE := y
 CONFIG_DEMO_TYPE   := ""
 
 #########################STANDARD DEMO END######################################

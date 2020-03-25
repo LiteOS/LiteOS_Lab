@@ -500,12 +500,13 @@ int sal_closesocket(int sockfd)
 
 struct hostent * sal_gethostbyname(const char *name)
 {
+    struct hostent *ret =NULL;
     if((NULL != s_sal_cb.domain)&&(NULL != s_sal_cb.domain->ops) &&\
        (NULL != s_sal_cb.domain->ops->gethostbyname))
     {
-        return (struct hostent *)s_sal_cb.domain->ops->gethostbyname(name);
+        ret = (struct hostent *)s_sal_cb.domain->ops->gethostbyname(name);
     }
-    return NULL;
+    return ret;
 }
 
 int sal_select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout)
