@@ -86,7 +86,7 @@ this file implement the shell for the system.the following instruction you must 
 //DEFINES FOR THE SHELL SERVER TASK STACK SIZE
 
 #ifndef  CONFIG_SHELL_TASKSTACK
-#define  CONFIG_SHELL_TASKSTACK   0x400
+#define  CONFIG_SHELL_TASKSTACK   0x800
 #endif
 
 

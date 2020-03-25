@@ -279,9 +279,6 @@ static int app_report_task_entry()
     {
     	return ret;
     }
-
-    if(NULL != context)   //success ,so we could receive and send
-    {
         //install a dealer for the led message received
         while(1) //--TODO ,you could add your own code here
         {
@@ -310,7 +307,6 @@ static int app_report_task_entry()
             oc_lwm2m_report((char *)&light,sizeof(light),1000); ///< report the light message
             osal_task_sleep(2*1000);
         }
-    }
 
     return ret;
 }

@@ -44,9 +44,6 @@
 #include <stdio.h>
 
 
-#if CONFIG_STIMER_ENABLE
-
-
 #include <osal.h>
 #include <stimer.h>
 
@@ -55,7 +52,7 @@
 
 typedef struct timer_item
 {
-    const char         *name;        ///< verify the timer, will be used in the debug
+    char               *name;        ///< verify the timer, will be used in the debug
     uint32_t            cycle;       ///< timer cycle
     uint32_t            flag;        ///< timer flag
     fn_stimer_handler   handler;     ///< timer handler
@@ -269,18 +266,31 @@ EXIT_SEMPERR:
 stimer_t stimer_create(const char *name,fn_stimer_handler handler, void *arg,uint32_t cycle,uint32_t flag)
 {
     stimer_item_t *item;
+    int            mem_len;
 
-    item  = osal_malloc(sizeof(stimer_item_t));
+    mem_len = sizeof(stimer_item_t);
+
+    if(NULL != name)
+    {
+        mem_len += strlen(name) + 1;
+    }
+
+    item  = osal_malloc( mem_len);
     if(NULL == item)
     {
         return item;
     }
     memset(item,0,sizeof(stimer_item_t));
-    item->name = name;
     item->cycle = cycle;
     item->flag = flag;
     item->handler = handler;
     item->args = arg;
+    if(NULL != name)
+    {
+        item->name = (char *)item +sizeof(stimer_item_t);
+        strcpy(item->name, name);
+    }
+
 
     if(item->flag & cn_stimer_flag_start)
     {
@@ -386,6 +396,7 @@ int32_t stimer_ioctl(stimer_t timer,en_stimer_opt_t opt, void *arg)
 }
 
 
+#if CONFIG_SHELL_ENABLE
 #include <shell.h>
 static int32_t stimer_print(int32_t argc, const char *argv[])
 {
@@ -394,14 +405,15 @@ static int32_t stimer_print(int32_t argc, const char *argv[])
 
     if(true == osal_mutex_lock(s_stimer_cb.mutex))
     {
-        printf("%-8s %-8s %-8s %-8s %-5s %-5s %s\n\r",\
-                "TimerNo","Cycle","Handler","Arg","Start","Once","DeadTime");
+        printf("%-12s %-8s %-8s %-8s %-5s %-5s %s\n\r",\
+                "Timer-Name","Cycle","Handler","Arg","Start","Once","DeadTime");
 
         item = s_stimer_cb.lst;
         while(NULL != item)
         {
-            printf("%-8d %08x %08x %08x %-5s %-5s %x\n\r",\
-                    timer_number++,(unsigned int)item->cycle,(unsigned int)item->handler,(unsigned int)(uintptr_t)item->args,\
+            printf("%-12s %08x %08x %08x %-5s %-5s %x\n\r",\
+                    (NULL==item->name)?"UNKONW":item->name,\
+                    (unsigned int)item->cycle,(unsigned int)item->handler,(unsigned int)(uintptr_t)item->args,\
                     item->flag&cn_stimer_flag_start?"Yes":"No",item->flag&cn_stimer_flag_once?"Yes":"No",\
                     (unsigned int)item->dead_time);
             item = item->nxt;
@@ -414,6 +426,7 @@ static int32_t stimer_print(int32_t argc, const char *argv[])
     return 0;
 }
 OSSHELL_EXPORT_CMD(stimer_print,"stimer","stimer");
+
 
 #endif
 

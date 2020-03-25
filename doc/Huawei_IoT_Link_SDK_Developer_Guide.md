@@ -79,7 +79,7 @@
 
 **目的**
 
-本文档用于指导开发者了解Agent Tiny SDK，并且能够通过集成Agent Tiny SDK对接华为OceanConnect云平台，开发自己的物联网应用。
+本文档用于指导开发者了解IoT Device SDK Tiny，并且能够通过集成IoT Device SDK Tiny对接华为OceanConnect云平台，开发自己的物联网应用。
 
 
 **符号约定**
@@ -97,7 +97,7 @@
 
 | 序号 | 术语名称              | 描述                                                         |
 | ---- | ---------------------| ------------------------------------------------------------ |
-| 1    | Agent Tiny SDK       |Agent Tiny SDK是Huawei LiteOS的软件开发工具包（Software Development Kit），包括端云互通组件、FOTA、JS引擎、传感框架等内容。|
+| 1    | IoT Device SDK Tiny  |IoT Device SDK Tiny是Huawei LiteOS的软件开发工具包（Software Development Kit），包括端云互通组件、FOTA、JS引擎、传感框架等内容。|
 | 2    | 设备                 | 用于采集数据的嵌入式设备，比如STM32开发板，或者温湿度采集的传感器等。|
 | 3    | 应用                |物联网平台中，应用包括用户在物联网平台上创建的应用和用户自行开发的应用服务器。应用是用户在物联网平台中为用户的业务划分一个项目空间，每个项目空间会分配一个应用ID和应用密钥，用于将开发完的应用服务器与真实设备接入到这个项目空间中，实现设备的数据采集和设备管理。应用服务器是用户基于物联网平台开放的API接口或者SDK进行自行开发的物联网应用，可接入物联网平台进行设备的管理。|
 | 4    | 产品模型            | 产品模型（也称Profile）用于描述设备具备的能力和特性。开发者通过定义Profile，在物联网平台构建一款设备的抽象模型，使平台理解该款设备支持的服务、属性、命令等信息。  |
@@ -115,13 +115,13 @@
 
 # 3 了解SDK
 ## 3.1 SDK介绍
-Agent Tiny SDK是部署在具备广域网能力、对功耗/存储/计算资源有苛刻限制的终端设备上的轻量级互联互通中间件，您只需调用API接口，便可实现设备快速接入到物联网平台以及数据上报和命令接收等功能。
+IoT Device SDK Tiny是部署在具备广域网能力、对功耗/存储/计算资源有苛刻限制的终端设备上的轻量级互联互通中间件，您只需调用API接口，便可实现设备快速接入到物联网平台以及数据上报和命令接收等功能。
 
-Agent Tiny SDK提供端云协同能力，集成了MQTT、LwM2M、CoAP、mbedtls、LwIP 全套 IoT 互联互通协议栈，且在这些协议栈的基础上，提供了开放 API，用户只需关注自身的应用，而不必关注协议内部实现细节，直接使用Agent Tiny SDK封装的API，通过连接、数据上报、命令接收和断开四个步骤就能简单快速地实现与华为OceanConnect云平台的安全可靠连接。使用Agent Tiny SDK，用户可以大大减少开发周期，聚焦自己的业务开发，快速构建自己的产品。
+IoT Device SDK Tiny提供端云协同能力，集成了MQTT、LwM2M、CoAP、mbedtls、LwIP 全套 IoT 互联互通协议栈，且在这些协议栈的基础上，提供了开放 API，用户只需关注自身的应用，而不必关注协议内部实现细节，直接使用IoT Device SDK Tiny封装的API，通过连接、数据上报、命令接收和断开四个步骤就能简单快速地实现与华为OceanConnect云平台的安全可靠连接。使用IoT Device SDK Tiny，用户可以大大减少开发周期，聚焦自己的业务开发，快速构建自己的产品。
 ## 3.2 软件架构
-Agent Tiny SDK的软件架构如下图所示，主要分为以下几层：
+IoT Device SDK Tiny的软件架构如下图所示，主要分为以下几层：
 
-- API接口：通过应用编程接口将Agent Tiny SDK能力开放给设备，终端设备调用SDK能力，快速完成华为物联网平台的接入、业务数据上报、下发命令处理等。
+- API接口：通过应用编程接口将IoT Device SDK Tiny能力开放给设备，终端设备调用SDK能力，快速完成华为物联网平台的接入、业务数据上报、下发命令处理等。
 
 - 端云互通组件：提供了终端采用MQTT、CoAP、LWM2M等多种协议接入华为物联网平台的能力。
 
@@ -142,28 +142,28 @@ Agent Tiny SDK的软件架构如下图所示，主要分为以下几层：
 |         集成策略     |说明                        |
 |:---------------------:|----------------------------|
 |可集成性|Agent Tiny作为独立的组件，不依赖特定的芯片架构和网络硬件类型，可以轻松地集成到各种通信模组上，如NB-IoT模组、WIFI模组、GSM模组、以太网硬件等。|
-|可移植性|Agent Tiny SDK的适配层提供了常用的硬件及网络适配接口，终端或者模组厂家可以根据自己的硬件实现这些接口后，即可完成Agent tiny SDK的移植。|
-|集成约束|Agent Tiny SDK的集成需要满足一定的硬件规格：(1)要求模组/芯片有物理网络硬件支持，能支持UDP协议栈;(2)模组/芯片有足够的FLASH和RAM资源供Agent Tiny协议栈做集成。建议的硬件选型规格如下所示：RAM容量>32K Flash容量>128K CPU频率>100MHZ|
+|可移植性|IoT Device SDK Tiny的适配层提供了常用的硬件及网络适配接口，终端或者模组厂家可以根据自己的硬件实现这些接口后，即可完成IoT Device SDK Tiny的移植。|
+|集成约束|IoT Device SDK Tiny的集成需要满足一定的硬件规格：(1)要求模组/芯片有物理网络硬件支持，能支持UDP协议栈;(2)模组/芯片有足够的FLASH和RAM资源供Agent Tiny协议栈做集成。建议的硬件选型规格如下所示：RAM容量>32K Flash容量>128K CPU频率>100MHZ|
 
 
 ## 3.3 安全介绍
-Agent Tiny SDK以LwM2M/CoAP协议端云连接传输数据包时，不能保证UDP通信双方的身份认证、消息传输过程中的加密传输，所以使用DTLS(Datagram Transport Layer Security)，即数据包传输层安全性协议进行加密。
+IoT Device SDK Tiny以LwM2M/CoAP协议端云连接传输数据包时，不能保证UDP通信双方的身份认证、消息传输过程中的加密传输，所以使用DTLS(Datagram Transport Layer Security)，即数据包传输层安全性协议进行加密。
 
 DTLS握手协议和TLS类似。DTLS协议在UDP之上实现了客户机与服务器双方的握手连接，在握手过程中验证对方的身份，并且使用RSA或者DH（Diffie-Hellman）实现会话密钥的建立，以便在后面的数据传输中对数据加密。它利用cookie验证机制和证书实现了通信双方的身份认证；并且用在报文段头部加上序号，缓存乱序到达的报文段；还利用重传机制实现了可靠传送。在握手完成后，通信双方就可以利用握手阶段协商好的会话密钥来对应用数据进行加解密。
 
-Agent Tiny SDK使用mbedtls加密库实现加密的优点：mbedTLS（前身PolarSSL）是面向嵌入式系统，实现的一套易用的加解密算法和SSL/TLS库。mbedTLS系统开销极小，对于系统资源要求不高。mbedTLS是开源项目，并且使用Apache 2.0许可证，使得用户既可以讲mbedTLS使用在开源项目中，也可以应用于商业项目。目前使用mbedTLS的项目很多，例如Monkey HTTP Daemon，LinkSYS路由器。
+IoT Device SDK Tiny使用mbedtls加密库实现加密的优点：mbedTLS（前身PolarSSL）是面向嵌入式系统，实现的一套易用的加解密算法和SSL/TLS库。mbedTLS系统开销极小，对于系统资源要求不高。mbedTLS是开源项目，并且使用Apache 2.0许可证，使得用户既可以讲mbedTLS使用在开源项目中，也可以应用于商业项目。目前使用mbedTLS的项目很多，例如Monkey HTTP Daemon，LinkSYS路由器。
 
 其软件架构如下图所示：
 
 ![](./meta/IoT_Link/sdk/07.png)
 
-Agent Tiny SDK首先和物联网开放平台完成握手流程，后续的应用数据将全部为加密数据，其握手流程大致如图所示：
+IoT Device SDK Tiny首先和物联网开放平台完成握手流程，后续的应用数据将全部为加密数据，其握手流程大致如图所示：
 
 ![](./meta/IoT_Link/sdk/08.png)
 
 ## 3.4 OTA升级
 
-Agent Tiny SDK端云互通组件支持物联网开放平台的软件升级，软件升级又称为SOTA（SoftWare Over The Air），是指用户可以通过OTA的方式支持对LwM2M协议的设备进行软件升级，（基于MQTT协议的设备的软件升级能力即将上线）。软件升级遵循的协议为PCP协议（PCP协议查看PCP协议介绍），设备侧需要遵循PCP协议进行软件升级的适配开发。
+IoT Device SDK Tiny端云互通组件支持物联网开放平台的软件升级，软件升级又称为SOTA（SoftWare Over The Air），是指用户可以通过OTA的方式支持对LwM2M协议的设备进行软件升级，（基于MQTT协议的设备的软件升级能力即将上线）。软件升级遵循的协议为PCP协议（PCP协议查看PCP协议介绍），设备侧需要遵循PCP协议进行软件升级的适配开发。
 
 SOTA流程如下图所示：
 
@@ -184,7 +184,7 @@ SOTA升级的主要流程为：
 
 # 4 下载SDK
 
-目前Agent Tiny SDK的源码还是托管在GITHUB上：<https://github.com/LiteOS/LiteOS>，代码会持续更新。进入网址后选择iot_link分支;
+目前IoT Device SDK Tiny的源码还是托管在GITHUB上：<https://github.com/LiteOS/LiteOS>，代码会持续更新。进入网址后选择iot_link分支;
 
 ![](./meta/IoT_Link/sdk/10.png)
 
@@ -192,7 +192,7 @@ SOTA升级的主要流程为：
 
 ![](./meta/IoT_Link/sdk/11.png)
 
-下载后解压获得源码文件夹，Agent Tiny SDK源代码目录说明：
+下载后解压获得源码文件夹，IoT Device SDK Tiny源代码目录说明：
 
 |  一级目录 | 二级目录 | 三级目录 | 说明 |
 |:--------|:--------|:---------|------|
@@ -217,7 +217,7 @@ SOTA升级的主要流程为：
 |||tcpip|TCPIP适配及协议栈实现、lwIP驱动、OS适配及协议栈实现、MacOS_socket适配及协议栈实现|
 ||oc|oc_lwm2m|LwM2M协议适配华为OC|
 |||oc_mqtt|MQTT协议适配华为OC|
-||os|osal|Agent Tiny SDK的OS适配|
+||os|osal|IoT Device SDK Tiny的OS适配|
 |||os_imp|目前系统适配层适配的操作系统|
 ||ota|——|OTA升级代码实现|
 ||queue|——|queue组件的代码实现|
@@ -237,14 +237,14 @@ SOTA升级的主要流程为：
 
 # 5 集成开发
 ## 5.1 针对模组厂商
-在物联网解决方案中，作为模组厂商的您需要让模组实现MQTTS、LwM2M、CoAP等物联网协议栈及连接平台的能力，您只需要将Agent Tiny SDK集成在现有的模组固件包中，这样模组就具备了接入华为物联网平台的能力。模组逻辑架构图如下：
+在物联网解决方案中，作为模组厂商的您需要让模组实现MQTTS、LwM2M、CoAP等物联网协议栈及连接平台的能力，您只需要将IoT Device SDK Tiny集成在现有的模组固件包中，这样模组就具备了接入华为物联网平台的能力。模组逻辑架构图如下：
 
 ![](./meta/IoT_Link/sdk/12.png)
 
 
 设备通过AT指令驱动模组即可对接华为物联网平台。为了满足设备一致性要求，华为对AT指令做了统一规划，只有遵循规划的指令，集成的模组才具备认证资格。
 
-因此，对于需要集成Agent Tiny SDK的模组厂商而言，您首先需要了解AT指令规划，再结合SDK系统架构框图，根据自身硬件特点选取需要移植的SDK组件，包括云服务抽象层API，物联组件协议适配和OS适配等。
+因此，对于需要集成IoT Device SDK Tiny的模组厂商而言，您首先需要了解AT指令规划，再结合SDK系统架构框图，根据自身硬件特点选取需要移植的SDK组件，包括云服务抽象层API，物联组件协议适配和OS适配等。
 
 
 
@@ -419,7 +419,7 @@ SOTA升级的主要流程为：
 
 
 ### 5.1.2 云服务抽象层API
-端云互通组件是Agent Tiny SDK中的重要组件，提供端云协同能力和基于MQTT协议和LwM2M协议对接华为云的开放API。
+端云互通组件是IoT Device SDK Tiny中的重要组件，提供端云协同能力和基于MQTT协议和LwM2M协议对接华为云的开放API。
 
 对基于MQTT/ LwM2M协议对接华为云的开发者（基于MQTT/ LwM2M协议或基于支持MQTT/ LwM2M协议的模组，以及内置对接华为云的模组）而言，无需关注对接华为云物联网协议的实现细节，仅仅需要将所选择的物联网协议注册到云服务抽象层（OC AL），再调用OC AL提供的抽象层接口即可。
 
@@ -505,10 +505,10 @@ OC AL提供的基于CoAP协议端云互通API如下：
 
 
 ### 5.1.3 物联组件协议层
-物联组件协议层目录：…\iot_link\network\。Agent Tiny SDK集成了LwM2M、CoAP、MQTT等物联网标准协议，您可以直接调用已实现协议，或添加自定义协议，将其注册进SDK中。
+物联组件协议层目录：…\iot_link\network\。IoT Device SDK Tiny集成了LwM2M、CoAP、MQTT等物联网标准协议，您可以直接调用已实现协议，或添加自定义协议，将其注册进SDK中。
 #### 5.1.3.1. MQTT AL
 
-根据MQTT标准协议，Agent Tiny SDK提供的MQTT服务都是建立在标准的MQTT协议基础上，并提供MQTT协议抽象层接口。适配MQTT的软件结构示意图如下：
+根据MQTT标准协议，IoT Device SDK Tiny提供的MQTT服务都是建立在标准的MQTT协议基础上，并提供MQTT协议抽象层接口。适配MQTT的软件结构示意图如下：
 
 ![](./meta/IoT_Link/sdk/14.png)
 
@@ -596,7 +596,7 @@ OC AL提供的基于CoAP协议端云互通API如下：
 #### 5.1.4.1 适配TCP/IP
 
 
-对于Agent Tiny SDK而言，其网络协议栈决定于底层操作系统，使用第三方操作系统时，可以将相关的网络传输接口进行抽象，提供相关的协议栈接口即可。Agent Tiny SDK中调用的所有网络传输的接口，通过注册机制，最终都会调用到用户注册的函数，示意图如下：
+对于IoT Device SDK Tiny而言，其网络协议栈决定于底层操作系统，使用第三方操作系统时，可以将相关的网络传输接口进行抽象，提供相关的协议栈接口即可。IoT Device SDK Tiny中调用的所有网络传输的接口，通过注册机制，最终都会调用到用户注册的函数，示意图如下：
 
 ![](./meta/IoT_Link/sdk/16.png)
 
@@ -624,7 +624,7 @@ OC AL提供的基于CoAP协议端云互通API如下：
 
 ### 5.1.5 OS适配
 #### 5.1.5.1 适配OS
-对于Agent Tiny SDK而言，其运行依赖操作系统，如果使用第三方的操作系统，则可以将相关的操作系统进行抽象，提供相关的任务创建删除、互斥锁、信号量、内存管理接口即可。Agent Tiny SDK中调用的所有系统相关的接口，通过注册机制，最终都会调用到用户注册的函数，示意图如下：
+对于IoT Device SDK Tiny而言，其运行依赖操作系统，如果使用第三方的操作系统，则可以将相关的操作系统进行抽象，提供相关的任务创建删除、互斥锁、信号量、内存管理接口即可。IoT Device SDK Tiny中调用的所有系统相关的接口，通过注册机制，最终都会调用到用户注册的函数，示意图如下：
 
 ![](./meta/IoT_Link/sdk/17.png)
 
@@ -666,7 +666,7 @@ OC AL提供的基于CoAP协议端云互通API如下：
 
 ## 5.2 集成示例
 ### 5.2.1 Linux平台MQTT连接华为云demo
-Agent Tiny SDK在demo文件夹中提供了MQTT、LwM2M和CoAP的demo供使用，本示例以Linux系统下MQTT协议直连华为IoT云平台来说明完整的对接流程。
+IoT Device SDK Tiny在demo文件夹中提供了MQTT、LwM2M和CoAP的demo供使用，本示例以Linux系统下MQTT协议直连华为IoT云平台来说明完整的对接流程。
 #### 5.2.1.1 华为DMP环境
 
 DMP，即设备管理平台，是华为OceanConnect物联网平台对智能设备进行管理的云服务。首先，您需要到华为云上申请账号，连接为https://www.huaweicloud.com/product/iot.html。
@@ -736,7 +736,7 @@ DMP，即设备管理平台，是华为OceanConnect物联网平台对智能设�
 到此为止，平台端环境准备完毕。
 
 #### 5.2.1.5 开发环境
-目前Agent Tiny SDK使用的GCC+Makefile的模式，同时所有源代码都开放，理论上是可以适应大部分的开发者环境。Agent Tiny SDK的helloworld运行在Linux下，此处GCC及Makefile安装暂不详细介绍。
+目前IoT Device SDK Tiny使用的GCC+Makefile的模式，同时所有源代码都开放，理论上是可以适应大部分的开发者环境。IoT Device SDK Tiny的helloworld运行在Linux下，此处GCC及Makefile安装暂不详细介绍。
 #### 5.2.1.6 示例代码分析
 以LINUX为例，客户在拿到代码之后，需要准备能运行LINUX的PC，该PC可以连接上网。其默认参与编译的demo为oc_tls_mqtt_demo.c。
 
@@ -755,7 +755,7 @@ DMP，即设备管理平台，是华为OceanConnect物联网平台对智能设�
 ![](./meta/IoT_Link/sdk/44.png)
 ![](./meta/IoT_Link/sdk/45.png)
 #### 5.2.1.7 编译运行
-Agent Tiny SDK下面已经适配了一些工程（target目录下），当准备好GCC编译环境以及Make工具之后，即可进入到对应的工程下进行编译，如果有错误，烦请告知。
+IoT Device SDK Tiny下面已经适配了一些工程（target目录下），当准备好GCC编译环境以及Make工具之后，即可进入到对应的工程下进行编译，如果有错误，烦请告知。
 
 ![](./meta/IoT_Link/sdk/46.png)
 
@@ -791,7 +791,7 @@ Agent Tiny SDK下面已经适配了一些工程（target目录下），当准备
 至此，IoT SDK的实例演示完成。
 
 ### 5.2.2 基于MQTT协议的模组连接云平台
-在Agent Tiny SDK已集成的模组中，以EC20模组为例（代码目录：…\targets\EC20\Src），介绍基于MQTT协议的SDK集成及连接华为云。
+在IoT Device SDK Tiny已集成的模组中，以EC20模组为例（代码目录：…\targets\EC20\Src），介绍基于MQTT协议的SDK集成及连接华为云。
 
 EC20模组将云端服务抽象层OC MQTT封装成4个开放的API：连接、数据上报、命令接收和断开连接，与MQTT协议的4个AT指令一一对应。模组连接云平台的API为：
 
@@ -827,20 +827,20 @@ STM32L431_BearPi开发板使用Boudica150的NB-IoT芯片进行通信，以STM32L
 作为开发并销售最终设备的厂商，您需要进行设备集成开发，以便让设备具备接入物联网平台的能力。根据设备自身硬件的特点不同，您需要根据自身行业特征及业务情况选择合适的接入方案。
 ### 5.3.1 配有模组的设备
 #### 5.3.1.1 MCU+模组模式
-此模式下，设备包含MCU（Micro Controller Unit）和通信模组，其中MCU集成Agent Tiny SDK及产品逻辑，模组作为通信模块，提供通信网络。
+此模式下，设备包含MCU（Micro Controller Unit）和通信模组，其中MCU集成IoT Device SDK Tiny及产品逻辑，模组作为通信模块，提供通信网络。
 
 ![](./meta/IoT_Link/sdk/63.png)
 
-如果采用的模组已获得华为认证，则该模组内已集成Agent Tiny SDK，并遵循华为AT指令规划，设备只需通过串口发送AT指令驱动模组，即可完成对接云平台。AT指令规划参考：AT指令规划。
-如果采用的模组没有被华为认证，您需要在MCU侧集成Agent Tiny SDK及产品逻辑，模组仅作为通信模块收发数据。MCU侧集成Agent Tiny SDK流程参考模组厂商集成流程。
+如果采用的模组已获得华为认证，则该模组内已集成IoT Device SDK Tiny，并遵循华为AT指令规划，设备只需通过串口发送AT指令驱动模组，即可完成对接云平台。AT指令规划参考：AT指令规划。
+如果采用的模组没有被华为认证，您需要在MCU侧集成IoT Device SDK Tiny及产品逻辑，模组仅作为通信模块收发数据。MCU侧集成IoT Device SDK Tiny流程参考模组厂商集成流程。
 
 #### 5.3.1.2 openCPU模式
-此模式下，设备只包含通信模组，不需要外加MCU，直接基于模组做二次集成开发，您需要在模组内集成Agent Tiny SDK和产品逻辑，Agent Tiny SDK集成流程参考模组厂商集成流程。
+此模式下，设备只包含通信模组，不需要外加MCU，直接基于模组做二次集成开发，您需要在模组内集成IoT Device SDK Tiny和产品逻辑，IoT Device SDK Tiny集成流程参考模组厂商集成流程。
 
 ![](./meta/IoT_Link/sdk/64.png)
 
 #### 5.3.2 没有模组的设备
-如果设备没有模组，你可以通过以太网接入华为云，同样需要在MCU侧集成Agent Tiny SDK，可参考模组厂商集成流程。
+如果设备没有模组，你可以通过以太网接入华为云，同样需要在MCU侧集成IoT Device SDK Tiny，可参考模组厂商集成流程。
 
 
 
