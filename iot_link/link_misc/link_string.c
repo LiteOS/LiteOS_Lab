@@ -137,7 +137,7 @@ char *osal_strcat(char *str[])
         for(i =0;i< str_tnum;i++)
         {
 
-            memcpy(ret + str_off,str[i],strlen(str[i]));
+            (void) memcpy(ret + str_off,str[i],strlen(str[i]));
             str_off += strlen(str[i]);
         }
         ret[str_off] = '\0';

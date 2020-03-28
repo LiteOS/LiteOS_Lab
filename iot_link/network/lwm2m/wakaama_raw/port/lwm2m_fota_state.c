@@ -152,7 +152,7 @@ int lwm2m_fota_idle_state_int_report_result(lwm2m_fota_idle_state_s *thi)
     //    result = ATINY_OK;
     thi->report_result = result;
     thi->report_flag = true;
-    memcpy(&thi->observe_info, &observe_info, sizeof(thi->observe_info));
+    (void) memcpy(&thi->observe_info, &observe_info, sizeof(thi->observe_info));
     ATINY_LOG(LOG_ERR, "need to rpt result %d", result);
 EXIT:
     memset(&observe_info, 0, sizeof(observe_info));

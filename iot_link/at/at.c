@@ -229,7 +229,7 @@ static int  __cmd_match(const void *data,size_t len)
             if(NULL != cmd->respbuf)
             {
                 cpylen = len > cmd->respbuflen?cmd->respbuflen:len;
-                memcpy((char *)cmd->respbuf,data,cpylen);
+                (void) memcpy((char *)cmd->respbuf,data,cpylen);
                 cmd->respdatalen = cpylen;
             }
             else

@@ -320,7 +320,7 @@ int lwm2m_server_bootrigger(void *msg, int len)
 
 int lwm2m_update_psk(char *psk_id, int len)
 {
-    //memcpy_s(g_psk_value,psk_id,len,16);
+    //(void) memcpy_s(g_psk_value,psk_id,len,16);
     LINK_LOG_DEBUG("update psk success\r\n");
     return LWM2M_OK;
 }
@@ -382,7 +382,7 @@ void location_get_velocity(lwm2m_velocity_s *velocity,
     tmp[3] = horizontal_speed & 0xff;
     tmp[4] = speed_uncertainty;
     copy_len = MAX_VELOCITY_LEN > sizeof(tmp) ? sizeof(tmp) : MAX_VELOCITY_LEN;
-    memcpy(velocity->opaque, tmp, copy_len);
+    (void) memcpy(velocity->opaque, tmp, copy_len);
     velocity->length = copy_len;
 }
 

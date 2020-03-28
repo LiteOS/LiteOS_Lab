@@ -181,7 +181,7 @@ uint8_t lwm2m_get_observe_info(lwm2m_context_t *contextP, lwm2m_observe_info_t *
 
         watcherP = targetP->watcherList;
         observe_info->counter = watcherP->counter;
-        memcpy(observe_info->token, watcherP->token, sizeof(observe_info->token));
+        (void) memcpy(observe_info->token, watcherP->token, sizeof(observe_info->token));
         observe_info->tokenLen = watcherP->tokenLen;
         observe_info->format = watcherP->format;
         return COAP_NO_ERROR;
@@ -242,7 +242,7 @@ uint8_t lwm2m_send_notify(lwm2m_context_t *contextP, lwm2m_observe_info_t *obser
     memset(&watcherP, 0, sizeof(watcherP));
     watcherP.lastMid = contextP->nextMID++;
     watcherP.tokenLen = observe_info->tokenLen;
-    memcpy(watcherP.token, observe_info->token, sizeof(watcherP.token));
+    (void) memcpy(watcherP.token, observe_info->token, sizeof(watcherP.token));
     watcherP.format = format;
     watcherP.counter = observe_info->counter;
     watcherP.server = server;

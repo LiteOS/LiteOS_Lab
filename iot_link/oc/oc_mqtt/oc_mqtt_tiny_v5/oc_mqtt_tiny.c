@@ -220,7 +220,7 @@ static void hub_msg_default_deal(void *arg,mqtt_al_msgrcv_t  *msg)
         json_buf = osal_malloc(msg->msg.len + 1);
         if(NULL != json_buf)
         {
-            memcpy(json_buf,msg->msg.data,msg->msg.len);
+            (void) memcpy(json_buf,msg->msg.data,msg->msg.len);
             json_buf[msg->msg.len] = '\0';
             root = cJSON_Parse(json_buf);
             if(NULL != root)
@@ -274,7 +274,7 @@ static void bs_msg_default_deal(void *arg,mqtt_al_msgrcv_t *msg)
        return;
    }
 
-   memcpy(json_buf,msg->msg.data,msg->msg.len);
+   (void) memcpy(json_buf,msg->msg.data,msg->msg.len);
    json_buf[msg->msg.len] = '\0';
 
    LINK_LOG_DEBUG("msg:%s\n\r",json_buf);
@@ -505,7 +505,7 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
         {
             cb->config.security.u.cert.server_ca_len = config->security.u.cert.server_ca_len;
             cb->config.security.u.cert.server_ca = (uint8_t *)mem_buf;
-            memcpy( mem_buf, config->security.u.cert.server_ca, config->security.u.cert.server_ca_len );
+            (void) memcpy( mem_buf, config->security.u.cert.server_ca, config->security.u.cert.server_ca_len );
             mem_buf += config->security.u.cert.server_ca_len;
         }
         else
@@ -518,7 +518,7 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
         {
             cb->config.security.u.cert.client_ca_len =  config->security.u.cert.client_ca_len;
             cb->config.security.u.cert.client_ca = (uint8_t *)mem_buf;
-            memcpy( mem_buf, config->security.u.cert.client_ca, config->security.u.cert.client_ca_len );
+            (void) memcpy( mem_buf, config->security.u.cert.client_ca, config->security.u.cert.client_ca_len );
             mem_buf += config->security.u.cert.client_ca_len;
         }
 
@@ -526,7 +526,7 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
         {
             cb->config.security.u.cert.client_pk_len =  config->security.u.cert.client_pk_len;
             cb->config.security.u.cert.client_pk = (uint8_t *)mem_buf;
-            memcpy( mem_buf, config->security.u.cert.client_pk, config->security.u.cert.client_pk_len );
+            (void) memcpy( mem_buf, config->security.u.cert.client_pk, config->security.u.cert.client_pk_len );
             mem_buf += config->security.u.cert.client_pk_len;
         }
 
@@ -534,7 +534,7 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
         {
             cb->config.security.u.cert.client_pk_pwd_len = config->security.u.cert.client_pk_pwd_len ;
             cb->config.security.u.cert.client_pk_pwd = (uint8_t *)mem_buf;
-            memcpy( mem_buf, config->security.u.cert.client_pk_pwd, config->security.u.cert.client_pk_pwd_len );
+            (void) memcpy( mem_buf, config->security.u.cert.client_pk_pwd, config->security.u.cert.client_pk_pwd_len );
             mem_buf += config->security.u.cert.client_pk_pwd_len;
         }
     }
@@ -544,7 +544,7 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
         {
             cb->config.security.u.psk.psk_id_len = config->security.u.psk.psk_id_len ;
             cb->config.security.u.psk.psk_id = (uint8_t *)mem_buf;
-            memcpy( mem_buf, config->security.u.psk.psk_id, config->security.u.psk.psk_id_len );
+            (void) memcpy( mem_buf, config->security.u.psk.psk_id, config->security.u.psk.psk_id_len );
             mem_buf += config->security.u.psk.psk_id_len;
         }
 
@@ -552,7 +552,7 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
         {
             cb->config.security.u.psk.psk_key_len = config->security.u.psk.psk_key_len;
             cb->config.security.u.psk.psk_key = (uint8_t *)mem_buf;
-            memcpy( mem_buf, config->security.u.psk.psk_key, config->security.u.psk.psk_key_len );
+            (void) memcpy( mem_buf, config->security.u.psk.psk_key, config->security.u.psk.psk_key_len );
             mem_buf += config->security.u.psk.psk_id_len;
         }
     }

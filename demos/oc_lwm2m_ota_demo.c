@@ -76,14 +76,14 @@ static char s_ota_flag[sizeof(ota_flag_t)];
 
 static int ota_flag_read(ota_flag_t *flag)
 {
-    memcpy(flag,s_ota_flag,sizeof(ota_flag_t));
+    (void) memcpy(flag,s_ota_flag,sizeof(ota_flag_t));
 
     return 0;
 }
 
 static int ota_flag_write(ota_flag_t *flag)
 {
-    memcpy(s_ota_flag,flag,sizeof(ota_flag_t));
+    (void) memcpy(s_ota_flag,flag,sizeof(ota_flag_t));
     return 0;
 }
 
@@ -135,8 +135,8 @@ static int app_msg_deal(void *usr_data,en_oc_lwm2m_msg_t type,void *msg, int len
     buf = osal_malloc(buflen);
     if(NULL != buf)
     {
-        memcpy(buf,&buflen,sizeof(buflen));
-        memcpy(buf + sizeof(buflen),msg,len);
+        (void) memcpy(buf,&buflen,sizeof(buflen));
+        (void) memcpy(buf + sizeof(buflen),msg,len);
 
         ret = queue_push(s_queue_msgrcv,buf,10);
 
@@ -166,7 +166,7 @@ static int app_cmd_task_entry()
         if(NULL != buf)
         {
             msg = buf + sizeof(msglen);
-            memcpy(&msglen,buf,sizeof(msglen));
+            (void) memcpy(&msglen,buf,sizeof(msglen));
             msglen -= sizeof(msglen);
 
             if((0xFF == msg[0]) && (0xFE == msg[1]) && (0x01 == msg[2]))

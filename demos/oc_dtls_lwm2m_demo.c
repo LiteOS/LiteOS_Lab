@@ -120,7 +120,7 @@ static int app_msg_deal(void *usr_data,en_oc_lwm2m_msg_t type,void *data, int le
             (void) printf("OC respond message received! \n\r");
             return ret;
         }
-        memcpy(s_rcv_buffer,msg,len);
+        (void) memcpy(s_rcv_buffer,msg,len);
         s_rcv_datalen = len;
 
         osal_semp_post(s_rcv_sync);

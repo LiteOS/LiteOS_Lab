@@ -546,7 +546,7 @@ int __lwm2m_task_entry(void *args)
     }
 
     hd = (handle_data_t *)args;
-    // memcpy(&hd, args, sizeof(handle_data_t));
+    // (void) memcpy(&hd, args, sizeof(handle_data_t));
 
     while (!hd->lwm2m_quit)
     {
@@ -982,7 +982,7 @@ static int __send(void *handle, lwm2m_al_send_param_t *send_param)
         return LWM2M_MALLOC_FAILED;;
     }
 
-    memcpy(data.buf, send_param->data, send_param->length);
+    (void) memcpy(data.buf, send_param->data, send_param->length);
     data.len = send_param->length;
     data.callback = (send_param->mode == MSG_CONFIRMABLE) ? lwm2m_send_ack_callback : NULL;
     data.cookie = 0;

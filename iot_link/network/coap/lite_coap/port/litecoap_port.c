@@ -245,7 +245,7 @@ int handle_coap_response(struct _coap_context_t *ctx, coap_msg_t *msg)
         /* bind success */
         if (!g_bind_finsh)
         {
-            memcpy(g_tok,msg->tok->token, msg->tok->tklen);
+            (void) memcpy(g_tok,msg->tok->token, msg->tok->tklen);
             g_tok_len = msg->tok->tklen;
             g_bind_finsh = 1;
         }

@@ -112,7 +112,7 @@ int8_t ethernetif_api_register(struct ethernet_api *api)
     {
         return ERR_ARG;
     }
-    memcpy(&s_eth_api, api, sizeof(struct ethernet_api));
+    (void) memcpy(&s_eth_api, api, sizeof(struct ethernet_api));
 
     return ERR_OK;
 }
@@ -298,7 +298,7 @@ void set_lwip_ipv6_default_gw(struct netif *netif, const ip6_addr_t *gw)
     {
         return;
     }
-    memcpy( &g_lwip_ipv6_gw, gw, sizeof(g_lwip_ipv6_gw));
+    (void) memcpy( &g_lwip_ipv6_gw, gw, sizeof(g_lwip_ipv6_gw));
 }
 #endif
 

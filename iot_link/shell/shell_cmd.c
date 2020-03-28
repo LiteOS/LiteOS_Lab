@@ -222,7 +222,7 @@ int   shell_cmd_execute(char *param){
                 if((argc == 3)&&(0 == strcmp(argv[1],"set"))){
                     //deal it simple and easy here
                     value = strtol(argv[2],NULL,0);
-                    memcpy(item->addr,&value,item->len);
+                    (void) memcpy(item->addr,&value,item->len);
                 }
                 else{
                     bytes = item->addr;

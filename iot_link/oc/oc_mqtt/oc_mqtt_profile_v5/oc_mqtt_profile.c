@@ -95,7 +95,7 @@ static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
             request_id_buf = osal_malloc(request_id_len + 1);
             if(NULL != request_id_buf)
             {
-                memcpy(request_id_buf,request_id,request_id_len);
+                (void) memcpy(request_id_buf,request_id,request_id_len);
                 request_id_buf[request_id_len] = '\0';
             }
             message.request_id = request_id_buf;

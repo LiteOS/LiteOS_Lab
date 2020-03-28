@@ -195,7 +195,7 @@ static void hub_msg_default_deal(void *arg,mqtt_al_msgrcv_t  *msg)
     json_buf = osal_malloc(msg->msg.len + 1);
     if(NULL != json_buf)
     {
-        memcpy(json_buf,msg->msg.data,msg->msg.len);
+        (void) memcpy(json_buf,msg->msg.data,msg->msg.len);
         json_buf[msg->msg.len] = '\0';
 
         LINK_LOG_DEBUG("bsmsg:%s\n\r",json_buf);
@@ -258,7 +258,7 @@ static void bs_msg_default_deal(void *arg,mqtt_al_msgrcv_t *msg)
        return;
    }
 
-   memcpy(json_buf,msg->msg.data,msg->msg.len);
+   (void) memcpy(json_buf,msg->msg.data,msg->msg.len);
    json_buf[msg->msg.len] = '\0';
 
    LINK_LOG_DEBUG("msg:%s\n\r",json_buf);

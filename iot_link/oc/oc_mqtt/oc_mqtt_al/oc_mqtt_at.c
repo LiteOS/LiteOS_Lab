@@ -81,7 +81,7 @@ static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
         topic = osal_malloc(msg->topic.len +1);
         if(NULL != topic)
         {
-            memcpy(topic, msg->topic.data,msg->topic.len);
+            (void) memcpy(topic, msg->topic.data,msg->topic.len);
             topic[msg->topic.len] = '\0';
             hwoc_mqtt_recvpub(msg->qos,msg->dup,topic,(uint8_t *)msg->msg.data,msg->msg.len);
         }

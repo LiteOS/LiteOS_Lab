@@ -482,7 +482,7 @@ void copy_server_object(lwm2m_object_t *objectDest, lwm2m_object_t *objectSrc)
 {
     server_instance_t *instanceSrc = NULL;
     server_instance_t *previousInstanceDest = NULL;
-    memcpy(objectDest, objectSrc, sizeof(lwm2m_object_t));
+    (void) memcpy(objectDest, objectSrc, sizeof(lwm2m_object_t));
     objectDest->instanceList = NULL;
     objectDest->userData = NULL;
     instanceSrc = (server_instance_t *)objectSrc->instanceList;
@@ -496,7 +496,7 @@ void copy_server_object(lwm2m_object_t *objectDest, lwm2m_object_t *objectSrc)
             return;
         }
 
-        memcpy(instanceDest, instanceSrc, sizeof(server_instance_t));
+        (void) memcpy(instanceDest, instanceSrc, sizeof(server_instance_t));
         // not sure it's necessary:
         strncpy(instanceDest->binding, instanceSrc->binding, 4);
         instanceSrc = (server_instance_t *)instanceSrc->next;
@@ -567,7 +567,7 @@ int add_server_object_instance(lwm2m_object_t *obj, int object_instance_id, void
 
     if (prv_server_check_binding_valid(srv_param->binding, strlen(srv_param->binding)))
     {
-        memcpy(instance->binding, srv_param->binding, strlen(srv_param->binding) + 1);
+        (void) memcpy(instance->binding, srv_param->binding, strlen(srv_param->binding) + 1);
     }
     else
     {

@@ -108,13 +108,13 @@ static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
 
         demo_msg->topic = (char *) demo_msg->buf;
         buf = (uint8_t *)demo_msg->topic;
-        memcpy(buf,msg->topic.data,msg->topic.len);
+        (void) memcpy(buf,msg->topic.data,msg->topic.len);
         buf[msg->topic.len] = '\0';
 
         demo_msg->msg = demo_msg->buf + msg->topic.len +1;
         demo_msg->msg_len = msg->msg.len;
         buf = demo_msg->msg;
-        memcpy(buf,msg->msg.data,msg->msg.len);
+        (void) memcpy(buf,msg->msg.data,msg->msg.len);
         buf[msg->msg.len] = '\0';
 
         (void) printf("RCVMSG:qos:%d dup:%d retain:%d topic:%s msg:len:%d payload:%s\n\r",\

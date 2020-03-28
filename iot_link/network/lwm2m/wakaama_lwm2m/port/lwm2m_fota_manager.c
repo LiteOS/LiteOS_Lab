@@ -126,7 +126,7 @@ int lwm2m_fota_manager_start_download(lwm2m_fota_manager_s *thi, const char *uri
         return LWM2M_ERR;
     }
 
-    memcpy(thi->pkg_uri, uri, len);
+    (void) memcpy(thi->pkg_uri, uri, len);
     thi->pkg_uri[len] = '\0';
     ATINY_LOG(LOG_INFO, "start download");
     return thi->current->start_download(thi->current, thi->pkg_uri);
@@ -293,7 +293,7 @@ int lwm2m_fota_manager_set_storage_device(lwm2m_fota_manager_s *thi)
         return ret;
     }
 
-    memcpy(&pack_param.ota_opt, &thi->ota_opt, sizeof(pack_param.ota_opt));
+    (void) memcpy(&pack_param.ota_opt, &thi->ota_opt, sizeof(pack_param.ota_opt));
     pack_param.malloc = osal_malloc;
     pack_param.free = osal_free;
     pack_param.printf = link_printf;

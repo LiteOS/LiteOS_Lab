@@ -277,7 +277,7 @@ int __agent_coap_task_entry(void *args)
                 optpara->len = 1;
                 opts = coap_al_add_option(optpara);
 
-                memcpy(atiny_res2+3, tmp->config_para.app_server.ep_id, strlen(tmp->config_para.app_server.ep_id));
+                (void) memcpy(atiny_res2+3, tmp->config_para.app_server.ep_id, strlen(tmp->config_para.app_server.ep_id));
 
                 optpara->head = opts;
                 optpara->opt_num = COAP_AL_OPTION_URI_QUERY;

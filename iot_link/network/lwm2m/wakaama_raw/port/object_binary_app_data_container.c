@@ -166,7 +166,7 @@ static void prv_output_buffer(uint8_t *buffer,
         int j;
         fLINK_LOG_DEBUG(stderr, "  ");
 
-        memcpy(array, buffer + i, ARRAY_MAXNUM);
+        (void) memcpy(array, buffer + i, ARRAY_MAXNUM);
 
         for(j = 0 ; j < ARRAY_MAXNUM && i + j < length; j++)
         {

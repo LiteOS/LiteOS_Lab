@@ -204,7 +204,7 @@ static int record_fw_uri(char *uri, int uri_len)
         return -1;
     }
 
-    memcpy(g_fw_update_record.uri, uri, uri_len);
+    (void) memcpy(g_fw_update_record.uri, uri, uri_len);
     g_fw_update_record.uri[uri_len] = '\0';
     g_fw_update_record.uri_len = uri_len;
     return 0;
@@ -293,8 +293,8 @@ int parse_firmware_uri(char *uri, int uri_len)
         return -1;
     }
 
-    /*lint -esym(668,memcpy) */
-    memcpy(g_ota_uri, path, path_len);
+    /*lint -esym(668,(void) memcpy) */
+    (void) memcpy(g_ota_uri, path, path_len);
     g_ota_uri[path_len] = '\0';
     return 0;
 }

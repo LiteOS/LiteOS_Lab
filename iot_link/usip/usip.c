@@ -165,7 +165,7 @@ void get_data_frame_list(frame_data_list *head,unsigned char* out_data)
     {
         len = temp->tlv_len;
         unsigned char* source_data =temp->tlv_val;
-        memcpy(out_tmp, source_data,len);
+        (void) memcpy(out_tmp, source_data,len);
         temp=temp->next;
         out_tmp = out_tmp + len;
     }

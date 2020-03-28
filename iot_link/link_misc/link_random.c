@@ -61,7 +61,7 @@ __attribute__((weak)) int link_random(void* output, int len)
     for (i = 0; i < len; i += sizeof(int))
     {
         random_number = rand();
-        memcpy(pbuf + i, &random_number,
+        (void) memcpy(pbuf + i, &random_number,
                sizeof(int) > len - i ? len - i : sizeof(int));
     }
 

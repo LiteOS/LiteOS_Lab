@@ -80,7 +80,7 @@ s32_t ring_write(tagRingBuf *ring, u8_t *buf, s32_t len)
         offset = (ring->dataoff + ring->datalen) % ring->buflen; //we could move it one time
         cpylen = lenleft;
         dst = ring->buf + offset;
-        memcpy(dst, src, cpylen);
+        (void) memcpy(dst, src, cpylen);
         ring->datalen += cpylen;
         lenleft -= cpylen;
     }
@@ -90,7 +90,7 @@ s32_t ring_write(tagRingBuf *ring, u8_t *buf, s32_t len)
         offset = ring->dataoff + ring->datalen;
         cpylen = ring->buflen - offset;
         dst = ring->buf + offset;
-        memcpy(dst, src, cpylen);
+        (void) memcpy(dst, src, cpylen);
         src += cpylen;
         ring->datalen += cpylen;
         lenleft -= cpylen;
@@ -101,7 +101,7 @@ s32_t ring_write(tagRingBuf *ring, u8_t *buf, s32_t len)
         offset = (ring->dataoff + ring->datalen) % ring->buflen; //we could move it one time
         cpylen = lenleft;
         dst = ring->buf + offset;
-        memcpy(dst, src, cpylen);
+        (void) memcpy(dst, src, cpylen);
         ring->datalen += cpylen;
     }
     return ret;
@@ -135,7 +135,7 @@ s32_t ring_read(tagRingBuf *ring, u8_t *buf, s32_t len)
         offset = ring->dataoff; //we cpy part
         cpylen = ring->buflen - ring->dataoff;
         src = ring->buf + offset;
-        memcpy(dst, src, cpylen);
+        (void) memcpy(dst, src, cpylen);
         ring->dataoff = (ring->dataoff + cpylen) % ring->buflen;
         ring->datalen -= cpylen;
         lenleft -= cpylen;
@@ -147,7 +147,7 @@ s32_t ring_read(tagRingBuf *ring, u8_t *buf, s32_t len)
         offset = ring->dataoff; //we cpy part
         cpylen = lenleft;
         src = ring->buf + offset;
-        memcpy(dst, src, cpylen);
+        (void) memcpy(dst, src, cpylen);
         ring->dataoff = ring->dataoff + cpylen;
         ring->datalen -= cpylen;
     }

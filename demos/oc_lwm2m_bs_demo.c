@@ -130,7 +130,7 @@ static int app_msg_deal(void *usr_data,en_oc_lwm2m_msg_t type,void *msg, int len
         bs_msg->msg_type = type;
         bs_msg->msg_len = len;
         bs_msg->msg_content = (char *)bs_msg + sizeof(oc_bs_msg_t);
-        memcpy(bs_msg->msg_content,msg,len);
+        (void) memcpy(bs_msg->msg_content,msg,len);
 
         ret = queue_push(s_queue_msgrcv,bs_msg,100);
         if( 0 != ret)

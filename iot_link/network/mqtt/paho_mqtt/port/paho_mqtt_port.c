@@ -277,7 +277,7 @@ static int __socket_connect(Network *n, const char *host, int port)
 
     memset(&addr,0,sizeof(addr));
     addr.sin_family = AF_INET;
-    memcpy(&addr.sin_addr.s_addr,entry->h_addr_list[0],sizeof(addr.sin_addr.s_addr));
+    (void) memcpy(&addr.sin_addr.s_addr,entry->h_addr_list[0],sizeof(addr.sin_addr.s_addr));
     addr.sin_port = htons(((uint16_t)port));
 
     if(-1 == sal_connect(fd,(struct sockaddr *)&addr,sizeof(addr)))

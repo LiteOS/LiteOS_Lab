@@ -402,7 +402,7 @@ uint8_t connectivity_moni_change(lwm2m_data_t *dataArray,
             else
             {
                 memset(data->ipAddresses[0], 0, sizeof(data->ipAddresses[0]));
-                memcpy(data->ipAddresses[0], dataArray->value.asBuffer.buffer, dataArray->value.asBuffer.length);
+                (void) memcpy(data->ipAddresses[0], dataArray->value.asBuffer.buffer, dataArray->value.asBuffer.length);
                 data->ipAddresses[0][dataArray->value.asBuffer.length] = 0;
                 result = COAP_204_CHANGED;
             }
@@ -417,7 +417,7 @@ uint8_t connectivity_moni_change(lwm2m_data_t *dataArray,
             else
             {
                 memset(data->routerIpAddresses[0], 0, sizeof(data->routerIpAddresses[0]));
-                memcpy(data->routerIpAddresses[0], dataArray->value.asBuffer.buffer, dataArray->value.asBuffer.length);
+                (void) memcpy(data->routerIpAddresses[0], dataArray->value.asBuffer.buffer, dataArray->value.asBuffer.length);
                 data->routerIpAddresses[0][dataArray->value.asBuffer.length] = 0;
                 result = COAP_204_CHANGED;
             }

@@ -260,7 +260,7 @@ static void *__socket_connect(char *host, char *port, int is_server)
 
     memset(&addr, 0, sizeof(addr));
     addr.sin_family = AF_INET;
-    memcpy(&addr.sin_addr.s_addr, entry->h_addr_list[0], sizeof(addr.sin_addr.s_addr));
+    (void) memcpy(&addr.sin_addr.s_addr, entry->h_addr_list[0], sizeof(addr.sin_addr.s_addr));
     addr.sin_port = htons(atoi(port));
 
     if (is_server)

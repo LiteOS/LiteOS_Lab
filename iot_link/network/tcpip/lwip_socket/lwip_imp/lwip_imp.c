@@ -53,14 +53,14 @@ static int __lwip_bind(int fd, struct sockaddr *addr, int addrlen)
     unsigned char buf[2];
     unsigned short family;
 
-    memcpy(&family,addr,2);
+    (void) memcpy(&family,addr,2);
     buf[0] = addrlen;
     buf[1] = family;
-    memcpy(addr,buf,2);
+    (void) memcpy(addr,buf,2);
 
     ret = lwip_bind(fd,addr,addrlen);
 
-    memcpy(addr,&family,2);  ///< recover the addr--we should not modify the user's information
+    (void) memcpy(addr,&family,2);  ///< recover the addr--we should not modify the user's information
 
 
     return ret;
@@ -72,10 +72,10 @@ static int __lwip_connect(int fd, struct sockaddr *addr, int addrlen)
     unsigned char buf[2];
     unsigned short family;
 
-    memcpy(&family,addr,2);
+    (void) memcpy(&family,addr,2);
     buf[0] = addrlen;
     buf[1] = family;
-    memcpy(addr,buf,2);
+    (void) memcpy(addr,buf,2);
 
     ret = lwip_connect(fd,addr,addrlen);
 
@@ -90,9 +90,9 @@ static int __lwip_accept(int fd, struct sockaddr *addr, socklen_t *addrlen)
 
     ret = lwip_accept(fd, addr, addrlen);
 
-    memcpy(buf,addr,2);
+    (void) memcpy(buf,addr,2);
     family = buf[1];
-    memcpy(addr,&family,2);
+    (void) memcpy(addr,&family,2);
 
     return ret;
 }
@@ -105,13 +105,13 @@ static int __lwip_sendto(int fd, const void *msg, int len, int flag, struct sock
     unsigned char buf[2];
     unsigned short family;
 
-    memcpy(&family,addr,2);
+    (void) memcpy(&family,addr,2);
     buf[0] = addrlen;
     buf[1] = family;
-    memcpy(addr,buf,2);
+    (void) memcpy(addr,buf,2);
 
     ret = lwip_sendto(fd,msg,len,flag,addr,addrlen);
-    memcpy(addr,&family,2);  ///< recover the addr--we should not modify the user's information
+    (void) memcpy(addr,&family,2);  ///< recover the addr--we should not modify the user's information
 
     return ret;
 }
@@ -125,9 +125,9 @@ static int __lwip_recvfrom(int fd, void *msg, int len, int flag, struct sockaddr
 
     ret = lwip_recvfrom(fd, msg, len,flag,addr,addrlen);
 
-    memcpy(buf,addr,2);
+    (void) memcpy(buf,addr,2);
     family = buf[1];
-    memcpy(addr,&family,2);
+    (void) memcpy(addr,&family,2);
 
     return ret;
 }

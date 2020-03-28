@@ -266,7 +266,7 @@ static int __rtk8710_connect(int fd, void *addr, int addrlen)
         uint16_t remote_port = ntohs(serv_addr->sin_port);
         struct in_addr remote_ip_int = serv_addr->sin_addr;
         remote_ip = inet_ntoa(remote_ip_int);
-        memcpy(s_rtk8710_sock_cb.remote_ip, remote_ip, strlen(remote_ip));
+        (void) memcpy(s_rtk8710_sock_cb.remote_ip, remote_ip, strlen(remote_ip));
         s_rtk8710_sock_cb.remote_port = remote_port;
 
         if(s_rtk8710_sock_cb.type == SOCK_DGRAM)

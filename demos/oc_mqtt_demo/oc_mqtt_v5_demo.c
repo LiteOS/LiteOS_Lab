@@ -184,7 +184,7 @@ static int app_msg_deal(oc_mqtt_profile_msgrcv_t *msg)
         {
             demo_msg->request_id = buf;
             datalen = strlen(msg->request_id);
-            memcpy(buf,msg->request_id,datalen);
+            (void) memcpy(buf,msg->request_id,datalen);
             buf[datalen] = '\0';
             buf += (datalen+1);
         }
@@ -196,7 +196,7 @@ static int app_msg_deal(oc_mqtt_profile_msgrcv_t *msg)
         demo_msg->msg = buf;
         demo_msg->msg_len = msg->msg_len;
         datalen = msg->msg_len;
-        memcpy(buf,msg->msg,datalen);
+        (void) memcpy(buf,msg->msg,datalen);
         buf[datalen] = '\0';
 
         (void) printf("RCVMSG:type:%d reuqestID:%s payloadlen:%d payload:%s\n\r",\

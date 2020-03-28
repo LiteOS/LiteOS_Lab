@@ -422,7 +422,7 @@ static tagImsi *checkcimi(char *devname, int times, char *simapn)
             {
                 char mnc[6];
                 memset(mnc, 0, 6);
-                memcpy(mnc, argv[position - 1], 5);
+                (void) memcpy(mnc, argv[position - 1], 5);
                 for(tmp = 0; tmp < CN_CIMI_SIZE; tmp++)
                 {
                     if(0 == strcmp(mnc, gAtcimi[tmp].mcc_mnc))

@@ -125,7 +125,7 @@ int ec2x_getfirmver(ec2x_ver_t *ver)
 
                 cpylen = cpylen > CN_EC2X_VERSION_LEN_MAX?CN_EC2X_VERSION_LEN_MAX:cpylen;
 
-                memcpy(ver->ver,str_start,cpylen);
+                (void) memcpy(ver->ver,str_start,cpylen);
             }
             ret = 0;
         }
@@ -648,7 +648,7 @@ int ec2x_getmqttversion(ec2x_ver_t *ver)
             {
                 str_end--;
                 cpylen = (int)(str_end - str_start);
-                memcpy(ver->ver,str_start,cpylen);
+                (void) memcpy(ver->ver,str_start,cpylen);
             }
             ret = 0;
         }

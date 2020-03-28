@@ -145,7 +145,7 @@ int litecoap_parse_token(coap_msg_t *msg, unsigned char *buf, int buflen)
         }
         msg->tok->token = (unsigned char *)litecoap_malloc(msg->head.tkl);
         if (msg->tok->token != NULL) {
-            memcpy(msg->tok->token, buf+4, msg->head.tkl);  /* skip header */
+            (void) memcpy(msg->tok->token, buf+4, msg->head.tkl);  /* skip header */
             msg->tok->tklen = msg->head.tkl;
         } else {
             litecoap_free(msg->tok);
@@ -259,7 +259,7 @@ int litecoap_parse_one_option(coap_msg_t *msg, unsigned short *sumdelta,
         if (newopt->value != NULL)
         {
             newopt->optlen = len;
-            memcpy(newopt->value, p+1, len);
+            (void) memcpy(newopt->value, p+1, len);
         }
         else
         {
@@ -325,7 +325,7 @@ int litecoap_parse_opts_payload(coap_msg_t *msg, const unsigned char *buf,
         msg->payloadlen = end-(p+1);
         msg->payload = (unsigned char *)litecoap_malloc(msg->payloadlen);
         if (msg->payload != NULL) {
-            memcpy(msg->payload, (unsigned char *)p + 1, msg->payloadlen);
+            (void) memcpy(msg->payload, (unsigned char *)p + 1, msg->payloadlen);
         } else {
             msg->payloadlen = 0;
         }
@@ -487,7 +487,7 @@ static int litecoap_encode_option(coap_option_t *opt, int lastoptval,
         outbuf[sumlen+1] = (optlen_ex & 0x000000ff);
         sumlen += 2;
     }
-    memcpy(outbuf + sumlen, opt->value, opt->optlen);
+    (void) memcpy(outbuf + sumlen, opt->value, opt->optlen);
     
     *len = sumlen + opt->optlen;
     return LITECOAP_OK;
@@ -582,7 +582,7 @@ int litecoap_build_byte_stream(coap_context_t *ctx, coap_msg_t *msg)
     offset = header_size;
 
     if (msg->head.tkl > 0 && msg->tok != NULL) {
-        memcpy(ctx->sndbuf.buf + offset, msg->tok->token, msg->tok->tklen);
+        (void) memcpy(ctx->sndbuf.buf + offset, msg->tok->token, msg->tok->tklen);
         offset += msg->tok->tklen;
     }
 
@@ -600,7 +600,7 @@ int litecoap_build_byte_stream(coap_context_t *ctx, coap_msg_t *msg)
     if (NULL != msg->payload)
     {
         ctx->sndbuf.buf[offset++] = msg->payloadmarker;
-        memcpy(ctx->sndbuf.buf + offset, msg->payload, msg->payloadlen);
+        (void) memcpy(ctx->sndbuf.buf + offset, msg->payload, msg->payloadlen);
         msglen = msglen + msg->payloadlen + 1;
     }
     return msglen;
@@ -642,7 +642,7 @@ coap_option_t * litecoap_add_option_to_list(coap_option_t *head,
     }
     memset(newopt->value, 0, len);
     //newopt->value = (unsigned char *)value;
-    memcpy(newopt->value, value, len);
+    (void) memcpy(newopt->value, value, len);
     newopt->next = NULL;
     
     /* note that head just a pointer, point to the fisrt node of options */
@@ -734,7 +734,7 @@ int litecoap_add_token(coap_msg_t *msg, char *tok, int tklen)
         return LITECOAP_MALLOC_FAILED;
     }
     memset(msg->tok->token, 0, tklen);
-    memcpy(msg->tok->token, tok, tklen);
+    (void) memcpy(msg->tok->token, tok, tklen);
     msg->tok->tklen = tklen;
     msg->head.tkl = tklen;
     return LITECOAP_OK;
@@ -772,7 +772,7 @@ int litecoap_add_paylaod(coap_msg_t *msg, char *payload, int len)
     }
     msg->payload = (unsigned char *)litecoap_malloc(len);
     if (msg->payload != NULL) {
-        memcpy(msg->payload, payload, len);
+        (void) memcpy(msg->payload, payload, len);
         msg->payloadlen = len;
         msg->payloadmarker = 0xff;
     } else {
@@ -830,7 +830,7 @@ coap_msg_t *litecoap_new_msg(coap_context_t *ctx,
         msg->payloadmarker = 0xff;
         msg->payload = (unsigned char *)litecoap_malloc(payloadlen);
         if (msg->payload != NULL) {
-            memcpy(msg->payload, payload, payloadlen);
+            (void) memcpy(msg->payload, payload, payloadlen);
             msg->payloadlen = payloadlen;
         } else {
             litecoap_delete_msg(msg);
