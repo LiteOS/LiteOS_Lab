@@ -154,7 +154,7 @@ void lwm2m_delay(uint32_t second);
 //#define LWM2M_WITH_LOGS
 #ifdef LWM2M_WITH_LOGS
 // Same usage as C89 printf()
-#define lwm2m_printf atiny_printf
+#define lwm2m_printf LINK_LOG_DEBUG
 #endif
 
 // communication layer

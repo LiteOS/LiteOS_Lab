@@ -129,7 +129,7 @@ bool_t uart_at_init(int baudrate)
     UART_HandleTypeDef * usart = &uart_at;
 
     //initialize the at controller
-    memset(&g_atio_cb,0,sizeof(g_atio_cb));
+    (void) memset(&g_atio_cb,0,sizeof(g_atio_cb));
     if(false == osal_semp_create(&g_atio_cb.rcvsync,CN_RCVMEM_LEN,0))
     {
         printf("%s:semp create error\n\r",__FUNCTION__);

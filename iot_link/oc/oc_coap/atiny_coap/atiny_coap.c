@@ -243,7 +243,7 @@ int __agent_coap_task_entry(void *args)
         {
 
             case ATINY_STAT_INIT:
-            	memset(initpara,0,sizeof(coap_al_initpara_t));
+            	(void) memset(initpara,0,sizeof(coap_al_initpara_t));
             	initpara->address = tmp->config_para.app_server.address;
             	initpara->port = atoi(tmp->config_para.app_server.port);
             	initpara->dealer = (fn_cmd_dealer)tmp->config_para.rcv_func;
@@ -264,7 +264,7 @@ int __agent_coap_task_entry(void *args)
                     continue;
                 }
 
-                memset(optpara,0,sizeof(coap_al_optpara_t));
+                (void) memset(optpara,0,sizeof(coap_al_optpara_t));
                 optpara->head = opts;
                 optpara->opt_num = COAP_AL_OPTION_URI_PATH;
                 optpara->data = (char *)atiny_res;
@@ -277,7 +277,7 @@ int __agent_coap_task_entry(void *args)
                 optpara->len = 1;
                 opts = coap_al_add_option(optpara);
 
-                memcpy(atiny_res2+3, tmp->config_para.app_server.ep_id, strlen(tmp->config_para.app_server.ep_id));
+                (void) memcpy(atiny_res2+3, tmp->config_para.app_server.ep_id, strlen(tmp->config_para.app_server.ep_id));
 
                 optpara->head = opts;
                 optpara->opt_num = COAP_AL_OPTION_URI_QUERY;
@@ -285,7 +285,7 @@ int __agent_coap_task_entry(void *args)
                 optpara->len = strlen(tmp->config_para.app_server.ep_id) + 3;
                 opts = coap_al_add_option(optpara);
 
-                memset(reqpara,0,sizeof(coap_al_reqpara_t));
+                (void) memset(reqpara,0,sizeof(coap_al_reqpara_t));
                 reqpara->ctx = ctx;
                 reqpara->msgtype = COAP_AL_MESSAGE_CON;
                 reqpara->code = COAP_AL_REQUEST_POST;
@@ -299,7 +299,7 @@ int __agent_coap_task_entry(void *args)
                     break;
                 }
                 /* send bind msg to huawei iot platform. */
-                memset(sndpara,0,sizeof(coap_al_sndpara_t));
+                (void) memset(sndpara,0,sizeof(coap_al_sndpara_t));
                 sndpara->handle = ctx;
                 sndpara->msg = msg;
                 ret = coap_al_send(sndpara);
@@ -329,7 +329,7 @@ int __agent_coap_task_entry(void *args)
                 }
                 break;
             case ATINY_STAT_IDLE:
-            	memset(sndpara,0,sizeof(coap_al_sndpara_t));
+            	(void) memset(sndpara,0,sizeof(coap_al_sndpara_t));
                 sndpara->handle = ctx;
                 sndpara->msg = NULL;
                 ret = coap_al_send(sndpara);
@@ -345,7 +345,7 @@ int __agent_coap_task_entry(void *args)
 
         if (startrcvmsg)
         {
-        	memset(rcvpara,0,sizeof(coap_al_rcvpara_t));
+        	(void) memset(rcvpara,0,sizeof(coap_al_rcvpara_t));
         	rcvpara->ctx = ctx;
         	ret = coap_al_recv(rcvpara);
 
@@ -390,14 +390,14 @@ int __agent_report(void *handle, char *buf, int len)
     }
     lifetime++;
 
-    memset(optpara,0,sizeof(coap_al_optpara_t));
+    (void) memset(optpara,0,sizeof(coap_al_optpara_t));
     optpara->head = opts;
     optpara->opt_num = COAP_AL_OPTION_OBSERVE;
     optpara->data = (char *)&lifetime;
     optpara->len = 1;
     opts = coap_al_add_option(optpara);
 
-    memset(reqpara,0,sizeof(coap_al_reqpara_t));
+    (void) memset(reqpara,0,sizeof(coap_al_reqpara_t));
     reqpara->ctx = ctx;
     reqpara->msgtype = COAP_AL_MESSAGE_NON;
     reqpara->code = COAP_AL_RESP_CODE(205);
@@ -412,7 +412,7 @@ int __agent_report(void *handle, char *buf, int len)
         return ATINY_ERR;
     }
 
-    memset(sndpara,0,sizeof(coap_al_sndpara_t));
+    (void) memset(sndpara,0,sizeof(coap_al_sndpara_t));
     sndpara->handle = ctx;
     sndpara->msg = msg;
     ret = coap_al_send(sndpara);

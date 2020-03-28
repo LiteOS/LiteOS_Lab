@@ -152,12 +152,12 @@ static void pcp_msg_print(const char *index,void *msg, int len)
     uint8_t *buf;
     buf = msg;
     int i = 0;
-    printf("%s:",index);
+    LINK_LOG_DEBUG("%s:",index);
     for(i =0;i<len;i ++)
     {
-        printf("%02x",buf[i]);
+        LINK_LOG_DEBUG("%02x",buf[i]);
     }
-    printf("\n\r");
+    LINK_LOG_DEBUG("\n\r");
 }
 
 static int pcp_save_flag()
@@ -178,7 +178,7 @@ static int pcp_save_newversion(pcp_notify_version_t *newversion)
     s_pcp_cb.record.blk_num = newversion->block_totalnum;
     s_pcp_cb.record.ver_code = newversion->ver_chk_code;
 
-    memcpy(s_pcp_cb.record.ver, newversion->ver, CN_VER_LEN);
+    (void) memcpy(s_pcp_cb.record.ver, newversion->ver, CN_VER_LEN);
     s_pcp_cb.record.cur_state = EN_OTA_STATUS_DOWNLOADING;
 
     ret = pcp_save_flag();
@@ -229,7 +229,7 @@ static int pcp_send_msg(en_pcp_msg_code_t msg_code, void *msg, int len)
     pcp->msg_code = msg_code;
     pcp->data_len = htons(len);
     pcp->chk_code = 0;
-    memcpy(msg_buf+sizeof(pcp_head_t),msg,len);
+    (void) memcpy(msg_buf+sizeof(pcp_head_t),msg,len);
     ///< should check the crc here
     pcp->chk_code = calc_crc16(0,msg_buf,len +sizeof(pcp_head_t));
     pcp->chk_code = htons(pcp->chk_code);
@@ -241,7 +241,7 @@ static int pcp_send_msg(en_pcp_msg_code_t msg_code, void *msg, int len)
         ret = s_pcp_cb.fn_pcp_send_msg(msg_buf,msg_len);
         if(0 != ret)
         {
-            printf("######PCP SEND FAILED######\n\r");
+            LINK_LOG_DEBUG("######PCP SEND FAILED######\n\r");
         }
     }
 
@@ -265,7 +265,7 @@ static void pcp_send_response_code(en_pcp_msg_code_t msg_code, en_pcp_response_c
 static void pcp_request_block()
 {
     pcp_request_block_t request;
-    memcpy(request.ver,s_pcp_cb.record.ver,CN_VER_LEN);
+    (void) memcpy(request.ver,s_pcp_cb.record.ver,CN_VER_LEN);
     request.blocknum = htons(s_pcp_cb.record.blk_cur);
     pcp_send_msg(EN_PCP_MSG_GETBLOCK, &request, sizeof(request));
 }
@@ -282,7 +282,7 @@ static void pcp_cmd_getversion(const pcp_head_t *head, const uint8_t *pbuf)
 {
     pcp_response_version_t  version;
     version.ret = 0;
-    memcpy(&version.ver,(uint8_t *)s_pcp_cb.record.ver, CN_VER_LEN);
+    (void) memcpy(&version.ver,(uint8_t *)s_pcp_cb.record.ver, CN_VER_LEN);
     pcp_send_msg(EN_PCP_MSG_GETVER, (uint8_t *)&version, sizeof(version));
 
     return;
@@ -299,7 +299,7 @@ static void pcp_cmd_notifyversion(const pcp_head_t *head, const uint8_t *pbuf)
         return ;
     }
 
-    memcpy(&notify,pbuf,sizeof(notify));
+    (void) memcpy(&notify,pbuf,sizeof(notify));
     notify.block_size = ntohs(notify.block_size);
     notify.block_totalnum = ntohs(notify.block_totalnum);
     notify.ver_chk_code= ntohs(notify.ver_chk_code);
@@ -339,7 +339,7 @@ static void pcp_cmd_notifyblock(const pcp_head_t *head, const uint8_t *pbuf)
         return;
     }
 
-    memcpy(&response,pbuf,sizeof(response));
+    (void) memcpy(&response,pbuf,sizeof(response));
     response.block_num = ntohs(response.block_num);
     pbuf += sizeof(response);
 
@@ -417,7 +417,7 @@ static void pcp_handle_msg(uint8_t *msg, int msglen)
     {
         return;
     }
-    memcpy(&pcp_head,msg,sizeof(pcp_head));
+    (void) memcpy(&pcp_head,msg,sizeof(pcp_head));
     pcp_head.ori_id = ntohs(pcp_head.ori_id);
     pcp_head.chk_code = ntohs(pcp_head.chk_code);
     pcp_head.data_len = ntohs(pcp_head.data_len);
@@ -458,7 +458,7 @@ static void pcp_handle_msg(uint8_t *msg, int msglen)
 
 	    ///< we should do the reboot
             osal_task_sleep(5000);
-	    printf("downloaded, goto loader!!!\n");
+	    LINK_LOG_DEBUG("downloaded, goto loader!!!\n");
             osal_reboot();
 	    while(1);   /* never come back */
             ///< todo , think we upgrade success--DO THESIMULATE
@@ -501,7 +501,7 @@ static void pcp_handle_timeout(void)
             break;
         case EN_OTA_STATUS_UPGRADED:
             upgrade_ret.retcode = s_pcp_cb.record.ret_upgrade;
-            memcpy(upgrade_ret.ver,s_pcp_cb.record.ver,CN_VER_LEN);
+            (void) memcpy(upgrade_ret.ver,s_pcp_cb.record.ver,CN_VER_LEN);
             ///< tell the server the result
 	    if (s_pcp_cb.record.updater == UPDATER_SOTA) {
 	      pcp_send_msg(EN_PCP_MSG_NOTIFYSTATE,&upgrade_ret,sizeof(upgrade_ret));
@@ -527,8 +527,8 @@ int pcp_msg_push(void *msg, int len)
     buf = osal_malloc(buflen);
     if(NULL != buf)
     {
-        memcpy(buf,&buflen,sizeof(buflen));
-        memcpy(buf + sizeof(buflen),msg,len);
+        (void) memcpy(buf,&buflen,sizeof(buflen));
+        (void) memcpy(buf + sizeof(buflen),msg,len);
 
         ret = queue_push(s_pcp_cb.msg_queue,buf,10);
         if(ret != 0)
@@ -556,7 +556,7 @@ static int pcp_entry(void *args)
     if(crc != s_pcp_cb.record.crc)
     {
         ///< do the initialize and save it
-        memset(&s_pcp_cb.record,0,sizeof(s_pcp_cb.record));
+        (void) memset(&s_pcp_cb.record,0,sizeof(s_pcp_cb.record));
         s_pcp_cb.record.cur_state = EN_OTA_STATUS_IDLE;
         pcp_save_flag();
     }
@@ -576,7 +576,7 @@ static int pcp_entry(void *args)
         if(NULL != buf)
         {
             msg = buf + sizeof(msglen);
-            memcpy(&msglen,buf,sizeof(msglen));
+            (void) memcpy(&msglen,buf,sizeof(msglen));
             msglen -= sizeof(msglen);
 
             pcp_msg_print("PCP RCV MSG:",(uint8_t *)msg,msglen >32?32:msglen);
@@ -599,7 +599,7 @@ int ota_pcp_init(int (*fn_pcp_send_msg)(void *msg,int len))
 {
     int ret = -1;
 
-    memset(&s_pcp_cb,0,sizeof(s_pcp_cb));
+    (void) memset(&s_pcp_cb,0,sizeof(s_pcp_cb));
     if(NULL == fn_pcp_send_msg)
     {
         return ret;

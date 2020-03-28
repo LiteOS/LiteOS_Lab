@@ -47,7 +47,7 @@ static void stimer_handler(void *args)
 {
     const char *timer_name = args;
 
-    printf("timer:%s triggered ---systime:%d\n\r",timer_name,(uint32_t)osal_sys_time());
+    (void) printf("timer:%s triggered ---systime:%d\n\r",timer_name,(uint32_t)osal_sys_time());
 
     return;
 }

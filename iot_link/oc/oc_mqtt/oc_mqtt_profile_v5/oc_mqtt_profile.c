@@ -38,6 +38,8 @@
  */
 
 #include <string.h>
+#include <stdio.h>
+
 #include <link_misc.h>
 #include <osal.h>
 #include <oc_mqtt_al.h>
@@ -93,7 +95,7 @@ static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
             request_id_buf = osal_malloc(request_id_len + 1);
             if(NULL != request_id_buf)
             {
-                memcpy(request_id_buf,request_id,request_id_len);
+                (void) memcpy(request_id_buf,request_id,request_id_len);
                 request_id_buf[request_id_len] = '\0';
             }
             message.request_id = request_id_buf;
@@ -217,7 +219,7 @@ static char *topic_make(char *fmt, char *device_id, char *request_id)
     ret = osal_malloc(len);
     if(NULL != ret)
     {
-        snprintf(ret,len,fmt,device_id,request_id);
+        (void) snprintf(ret,len,fmt,device_id,request_id);
     }
     return ret;
 }

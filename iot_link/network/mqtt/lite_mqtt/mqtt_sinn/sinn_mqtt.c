@@ -62,7 +62,7 @@ int sinn_mqtt_parser(sinn_buf_t *io, sinn_mqtt_msg_t *amm)
                 amm->topiclen = options.publish_head.topic_len;
                 amm->topic = options.publish_head.topic;
                 amm->id = options.publish_head.packet_id;
-                printf("pub payload:%d %s\r\n", (int)amm->payloadlen, (char *)amm->payload);
+                LINK_LOG_DEBUG("pub payload:%d %s\r\n", (int)amm->payloadlen, (char *)amm->payload);
                 for (i = 0; i < SINN_MQTT_BUILTIN_NUM; i++)
                 {
                     if(amm->mqtt_data->messageHandlers[i].topicFilter && (memcmp(options.publish_head.topic, amm->mqtt_data->messageHandlers[i].topicFilter, options.publish_head.topic_len) == 0))
@@ -141,7 +141,7 @@ int sinn_mqtt_connect(sinn_connection_t *nc, mqtt_connect_opt_t *options)
 
     if ((len = mqtt_encode_connect((nc->send_buf.data + nc->send_buf.len), (nc->send_buf.size - nc->send_buf.len), options)) <= 0)
     {
-        printf("mqtt connect error\r\n");
+        LINK_LOG_DEBUG("mqtt connect error\r\n");
         return rc;
     }
     nc->send_buf.len += len;

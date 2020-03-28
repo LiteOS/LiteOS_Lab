@@ -165,7 +165,7 @@ void get_data_frame_list(frame_data_list *head,unsigned char* out_data)
     {
         len = temp->tlv_len;
         unsigned char* source_data =temp->tlv_val;
-        memcpy(out_tmp, source_data,len);
+        (void) memcpy(out_tmp, source_data,len);
         temp=temp->next;
         out_tmp = out_tmp + len;
     }
@@ -188,7 +188,7 @@ void free_frame_list(frame_data_list *head)
 int usip_rec_task(void *args)
 {
     frame_data_list *head = (frame_data_list *)usip_malloc(sizeof(frame_data_list));
-    memset(head, 0, sizeof(frame_data_list));
+    (void) memset(head, 0, sizeof(frame_data_list));
     unsigned int rec_times=0;
     unsigned short json_data_len=0;
 
@@ -207,7 +207,7 @@ int usip_rec_task(void *args)
         if(LOS_SemPend(g_usipio_cb.usip_uart_rx_sem, LOS_WAIT_FOREVER ) == LOS_OK)
         {
             frame_data_list *node = (frame_data_list *)usip_malloc(sizeof(frame_data_list));
-            memset(node, 0, sizeof(frame_data_list));
+            (void) memset(node, 0, sizeof(frame_data_list));
             UINT8 ret = receive_one_frame_to_list(node);
             if((ret > USIP_OK))
             {
@@ -222,7 +222,7 @@ int usip_rec_task(void *args)
                     g_last_pkgnum_received = 0;
                     cmd = node->cmd;
                     json_data = (unsigned char*)usip_malloc(json_data_len + 1);
-                    memset(json_data, 0, json_data_len + 1);
+                    (void) memset(json_data, 0, json_data_len + 1);
                     get_data_frame_list(head,json_data);
                     g_cmd_process_callback(cmd,json_data,json_data_len);
                     usip_free(json_data);
@@ -250,7 +250,7 @@ int usip_rec_task_entry()
     UINT32  handle;
     TSK_INIT_PARAM_S task_init_param;
 
-    memset (&task_init_param, 0, sizeof (TSK_INIT_PARAM_S));
+    (void) memset (&task_init_param, 0, sizeof (TSK_INIT_PARAM_S));
     task_init_param.uwArg = (unsigned int)NULL;
     task_init_param.usTaskPrio = 6;
     task_init_param.pcName =(char *) "usip_rec_task";
@@ -268,8 +268,8 @@ UINT32 usip_init()
 {
 	UINT32 ret = LOS_OK;
 
-    memset(&g_usipio_cb,0,sizeof(g_usipio_cb));
-    memset(&g_skb,0,sizeof(g_skb));
+    (void) memset(&g_usipio_cb,0,sizeof(g_usipio_cb));
+    (void) memset(&g_skb,0,sizeof(g_skb));
     g_send_timeout = LOS_MS2Tick(USIP_WAIT_ACK_TIMEOUT);
     ret = LOS_BinarySemCreate(0,&g_usipio_cb.usip_uart_rx_sem);
     if (ret != LOS_OK)

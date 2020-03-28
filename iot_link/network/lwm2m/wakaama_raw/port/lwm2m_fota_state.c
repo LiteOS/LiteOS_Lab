@@ -32,6 +32,7 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
+#include <link_log.h>
 #include "lwm2m_fota_state.h"
 #include <string.h>
 #include "firmware_update.h"
@@ -113,7 +114,7 @@ static int lwm2m_fota_idle_state_get_result(int *res)
 
     if (LWM2M_ERR != ota_storage_flag_read(&flag))
     {
-        printf("%s:  ret upgrade = %u\n", __func__, flag.ret_upgrade);
+        LINK_LOG_DEBUG("%s:  ret upgrade = %u\n", __func__, flag.ret_upgrade);
         *res = flag.ret_upgrade;
         return LWM2M_OK;
     }
@@ -128,7 +129,7 @@ int lwm2m_fota_idle_state_int_report_result(lwm2m_fota_idle_state_s *thi)
     int result = LWM2M_ERR;
     ASSERT_THIS(return LWM2M_ARG_INVALID);
     thi->report_flag = false;
-    memset(&observe_info, 0, sizeof(lwm2m_observe_info_t));
+    (void) memset(&observe_info, 0, sizeof(lwm2m_observe_info_t));
 
     if (ota_pack_observe_info_read(&observe_info, sizeof(observe_info)) != LWM2M_OK)
     {
@@ -151,10 +152,10 @@ int lwm2m_fota_idle_state_int_report_result(lwm2m_fota_idle_state_s *thi)
     //    result = ATINY_OK;
     thi->report_result = result;
     thi->report_flag = true;
-    memcpy(&thi->observe_info, &observe_info, sizeof(thi->observe_info));
+    (void) memcpy(&thi->observe_info, &observe_info, sizeof(thi->observe_info));
     ATINY_LOG(LOG_ERR, "need to rpt result %d", result);
 EXIT:
-    memset(&observe_info, 0, sizeof(observe_info));
+    (void) memset(&observe_info, 0, sizeof(observe_info));
 
     if (ota_pack_observe_info_write(&observe_info, sizeof(observe_info)) != LWM2M_OK)
     {
@@ -191,7 +192,7 @@ static int lwm2m_fota_idle_state_report_result(lwm2m_fota_state_s *thi)
 
 void lwm2m_fota_idle_state_init(lwm2m_fota_idle_state_s *thi, lwm2m_fota_manager_s *manager)
 {
-    memset(thi, 0, sizeof(*thi));
+    (void) memset(thi, 0, sizeof(*thi));
     lwm2m_fota_state_init(&thi->interface, manager);
     thi->interface.start_download = lwm2m_fota_start_download;
     thi->interface.repot_result = lwm2m_fota_idle_state_report_result;

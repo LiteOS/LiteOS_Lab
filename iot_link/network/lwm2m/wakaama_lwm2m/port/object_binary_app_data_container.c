@@ -166,7 +166,7 @@ static void prv_output_buffer(uint8_t *buffer,
         int j;
         fprintf(stderr, "  ");
 
-        memcpy(array, buffer + i, ARRAY_MAXNUM);
+        (void) memcpy(array, buffer + i, ARRAY_MAXNUM);
 
         for(j = 0 ; j < ARRAY_MAXNUM && i + j < length; j++)
         {
@@ -442,7 +442,7 @@ static uint8_t prv_create(uint16_t instanceId,
 
     if (NULL == targetP) return COAP_500_INTERNAL_SERVER_ERROR;
 
-    memset(targetP, 0, sizeof(plat_instance_t));
+    (void) memset(targetP, 0, sizeof(plat_instance_t));
     //atiny_list_init(&(targetP->header));
     targetP->shortID = instanceId;
     targetP->objID = objectP->objID;
@@ -608,7 +608,7 @@ int add_app_data_object_instance(lwm2m_object_t *obj,
         return LWM2M_MALLOC_FAILED;
     }
 
-    memset(instance, 0, sizeof(plat_instance_t));
+    (void) memset(instance, 0, sizeof(plat_instance_t));
     instance->objID = obj->objID;
     get_resource_uri(obj->objID, object_instance_id, resource_id, &uri);
     ret = lwm2m_add_rpt_uri(&uri, &instance->header);

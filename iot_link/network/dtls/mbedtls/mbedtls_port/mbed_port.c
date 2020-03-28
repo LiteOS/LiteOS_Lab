@@ -167,7 +167,7 @@ int mbed_connect(void *handle,const char *server_ip, const char *server_port,int
     dtls_shakehand_info_s  sinfo;
 
 
-    memset(&sinfo, 0, sizeof(sinfo));
+    (void) memset(&sinfo, 0, sizeof(sinfo));
 
 
     sinfo.u.c.host = server_ip;

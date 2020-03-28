@@ -73,7 +73,7 @@ void hal_get_ota_opt(ota_opt_s *opt)
         return;
     }
 
-    memset(opt, 0, sizeof(*opt));
+    (void) memset(opt, 0, sizeof(*opt));
     opt->read_flash = hal_read_flash;
     opt->write_flash = hal_write_flash;
     opt->flash_block_size = FLASH_BLOCK_SIZE;

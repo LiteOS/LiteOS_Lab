@@ -416,7 +416,7 @@ oc\_lwm2m\_demo\_dtls.c中的函数app\_report\_task\_entry如下：
 			oc_config_param_t      oc_param;
 			app_light_intensity_t  light;
 	
-			memset(&oc_param,0,sizeof(oc_param));
+			(void) memset(&oc_param,0,sizeof(oc_param));
 	
 			oc_param.app_server.address = cn_app_server;
 			oc_param.app_server.port = cn_app_port;
@@ -704,7 +704,7 @@ oc\_lwm2m\_bs\_demo.c中的函数app\_data\_report如下：
 			oc_config_param_t      oc_param;
 			app_light_intensity_t  light;
 	
-			memset(&oc_param,0,sizeof(oc_param));
+			(void) memset(&oc_param,0,sizeof(oc_param));
 	
 			oc_param.app_server.ep_id = cn_endpoint_id;
 

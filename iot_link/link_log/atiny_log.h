@@ -35,39 +35,19 @@
 #ifndef ATINY_LOG_H
 #define ATINY_LOG_H
 
+
 #include <osal.h>
+#include <link_log.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef enum
-{
-    LOG_DEBUG = 0,
-    LOG_INFO,
-    LOG_WARNING,
-    LOG_ERR,
-    LOG_FATAL,
-
-    LOG_MAX
-} atiny_log_e;
-
-/**
- *@ingroup agenttiny
- *@brief set log level.
- *
- *@par Description:
- *This API is used to set log level. The log informations whose level is not less than
-  the level set up in this interface are displayed.
- *@attention none.
- *
- *@param level          [IN] Log level to be set up.
- *
- *@retval none.
- *@par Dependency: none.
- *@see atiny_get_log_level.
- */
-void atiny_set_log_level(atiny_log_e level);
+#define LOG_DEBUG             EN_LINK_LOG_LEVEL_DEBUG
+#define LOG_INFO              EN_LINK_LOG_LEVEL_INFO
+#define LOG_WARNING           EN_LINK_LOG_LEVEL_WARN
+#define LOG_ERR               EN_LINK_LOG_LEVEL_ERROR
+#define LOG_FATAL             EN_LINK_LOG_LEVEL_FATAL
 
 /**
  * @brief: you could use this as the main printf for your own log
@@ -75,43 +55,14 @@ void atiny_set_log_level(atiny_log_e level);
  *       :the input parameters is just as the printf does, and this function should be deserted
  *       :this function should not use as advised
  * */
-int atiny_printf(const char *format, ...);
+#define atiny_printf  LINK_LOG_DEBUG
+#define ATINY_LOG     LINK_LOG
 
-/**
- *@ingroup agenttiny
- *@brief get log level.
- *
- *@par Description:
- *This API is used to get log level set by atiny_set_log_level.
- *@attention none.
- *
- *@param none.
- *
- *@retval #atiny_log_e  Log level.
- *@par Dependency: none.
- *@see atiny_set_log_level.
- */
-atiny_log_e atiny_get_log_level(void);
-
-#if CONFIG_LINK_DEBUG_ENABLE
-const char* atiny_get_log_level_name(atiny_log_e log_level);
-
-#define ATINY_LOG(level, fmt, ...) \
-    do \
-    { \
-        if ((level) >= atiny_get_log_level()) \
-        { \
-            (void)atiny_printf("[%s][%u][%s:%d] " fmt "\r\n", \
-            atiny_get_log_level_name((level)), (uint32_t)osal_sys_time(), __FUNCTION__, __LINE__, ##__VA_ARGS__); \
-        } \
-    } while (0)
-#else
-#define ATINY_LOG(level, fmt, ...)
-#endif
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
+
 

@@ -227,7 +227,7 @@ static bool prv_add_ac_val(acc_ctrl_oi_t *accCtrlOiP,
     }
     else
     {
-        memset(accCtrlRiP, 0, sizeof(acc_ctrl_ri_t));
+        (void) memset(accCtrlRiP, 0, sizeof(acc_ctrl_ri_t));
         accCtrlRiP->resInstId      = acResId;
         accCtrlRiP->accCtrlValue   = acValue;
         accCtrlOiP->accCtrlValList = (acc_ctrl_ri_t *)
@@ -432,7 +432,7 @@ static uint8_t prv_create(uint16_t objInstId, int numData,
 
     if (NULL == targetP) return COAP_500_INTERNAL_SERVER_ERROR;
 
-    memset(targetP, 0, sizeof(acc_ctrl_oi_t));
+    (void) memset(targetP, 0, sizeof(acc_ctrl_oi_t));
     targetP->objInstId    = objInstId;
     objectP->instanceList = LWM2M_LIST_ADD(objectP->instanceList, targetP);
     result = prv_write_resources(objInstId, numData, tlvArray, objectP, true);
@@ -512,7 +512,7 @@ bool  acc_ctrl_obj_add_inst(lwm2m_object_t *accCtrlObjP, uint16_t instId,
         }
         else
         {
-            memset(accCtrlOiP, 0, sizeof(acc_ctrl_oi_t));
+            (void) memset(accCtrlOiP, 0, sizeof(acc_ctrl_oi_t));
             // list: key
             accCtrlOiP->objInstId    = instId;
             // object instance data:

@@ -54,7 +54,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <shell.h>
-#include  <link_misc.h>
+#include <link_misc.h>
+#include <link_log.h>
 
 
 typedef int (*fn_shell_cmdentry)(int argc, const char *argv[]);
@@ -101,17 +102,20 @@ static int   shell_cmd_help(int argc, const char *argv[]){
     int   i ;
     struct shell_item_t *item;
 
-    printf("%-16s%-5s%-4s%-10s%-20s\n\r",\
+    (void) item;
+    (void) gs_os_shell_type;
+
+    LINK_LOG_DEBUG("%-16s%-5s%-4s%-10s%-20s\n\r",\
             "Name","Type","Len","RunAddr","Description");
     for(i = 0;i <gs_shell_cb.s_num;i++){
         item = &(gs_shell_cb.s[i]);
-        printf("%-16s%-5s%-4x%08x  %-30s\n\r",\
+        LINK_LOG_DEBUG("%-16s%-5s%-4x%08x  %-30s\n\r",\
                 item->name,gs_os_shell_type[item->type%EN_OSSHELL_LAST],\
                 item->len,(unsigned int)item->addr,item->help);
     }
     for(i = 0;i <gs_shell_cb.d_num;i++){
         item = &(gs_shell_cb.d[i]);
-        printf("%-2x  %-16s%-5s%-4x%08x  %-30s\n\r",\
+        LINK_LOG_DEBUG("%-2x  %-16s%-5s%-4x%08x  %-30s\n\r",\
                 i,item->name,gs_os_shell_type[item->type%EN_OSSHELL_LAST],\
                 item->len,(unsigned int)item->addr,item->help);
     }
@@ -195,6 +199,9 @@ int   shell_cmd_execute(char *param){
     const  char *argv[cn_shell_args];
     struct shell_item_t *item;            //match the command item
     fn_shell_cmdentry shell_cmd_entry;    //command function entry
+
+    (void)bytes;
+
     string_to_arg(&argc,argv,param);      //format the parameters
     if(argc == 0){
         shell_cmd_help(0,NULL);               //if no args we show system help
@@ -203,7 +210,7 @@ int   shell_cmd_execute(char *param){
     else{
         item =shell_cmd_match(argv[0]);//find the item
         if(NULL == item){
-            printf("SHELL COMMAND NOT FIND:%s\n\r",argv[0]);
+            LINK_LOG_DEBUG("SHELL COMMAND NOT FIND:%s\n\r",argv[0]);
             ret = -1;
         }
         else{
@@ -215,13 +222,13 @@ int   shell_cmd_execute(char *param){
                 if((argc == 3)&&(0 == strcmp(argv[1],"set"))){
                     //deal it simple and easy here
                     value = strtol(argv[2],NULL,0);
-                    memcpy(item->addr,&value,item->len);
+                    (void) memcpy(item->addr,&value,item->len);
                 }
                 else{
                     bytes = item->addr;
-                    printf("(HEX):ADDR:0X%08X:",(unsigned int)bytes);
+                    LINK_LOG_DEBUG("(HEX):ADDR:0X%08X:",(unsigned int)bytes);
                     for(i = 0;i<item->len;i++){
-                        printf("%02x ",*bytes++);
+                        LINK_LOG_DEBUG("%02x ",*bytes++);
                     }
                 }
             }
@@ -269,7 +276,7 @@ int   shell_cmd_init(void){
 }
 
 static int   os_shell_version(int argc, char *argv){
-    printf("os_shell_version:%d.%d\n\r",cn_shell_ver_major,cn_shell_ver_minor);
+    LINK_LOG_DEBUG("os_shell_version:%d.%d\n\r",cn_shell_ver_major,cn_shell_ver_minor);
     return 0;
 };
 //add the shell cmd

@@ -94,7 +94,7 @@ static int __test_tls_demo(const char *host,const char *port)
     if (NULL == ssl)
     {
 
-        printf("dtls_ssl_new failed\n\r");
+        link_printf("dtls_ssl_new failed\n\r");
         goto EXIT_SSLNEW;
     }
 
@@ -106,7 +106,7 @@ static int __test_tls_demo(const char *host,const char *port)
     ret = dtls_shakehand(ssl, &shakehand_info);
     if (ret != 0)
     {
-        printf("dtls_shakehand failed\n\r");
+        link_printf("dtls_shakehand failed\n\r");
         goto EXIT_HANDSHAKE;
     }
     dtls_ssl_destroy(ssl);
@@ -145,7 +145,7 @@ static int tls_test_main(int argc, const char *argv[])
         {
             test_success++;
         }
-        printf("TEST:%d SUCCESS:%d\n\r", test_counter,test_success);
+        link_printf("TEST:%d SUCCESS:%d\n\r", test_counter,test_success);
 
         osal_task_sleep(1000);
     }

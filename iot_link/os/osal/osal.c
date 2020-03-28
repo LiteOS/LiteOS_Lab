@@ -304,7 +304,7 @@ void *osal_zalloc(size_t size)
         ret = s_os_cb->ops->malloc(size);
         if(NULL != ret)
         {
-            memset(ret,0,size);
+            (void) memset(ret,0,size);
         }
     }
 
@@ -329,7 +329,7 @@ void *osal_calloc(size_t n, size_t size)
     void *p = osal_malloc(n * size);
     if(NULL != p)
     {
-        memset(p, 0, n * size);
+        (void) memset(p, 0, n * size);
     }
 
     return p;
@@ -410,7 +410,7 @@ int osal_int_connect(int intnum, int prio, int mode, fn_interrupt_handle callbac
 
 __attribute__((weak))  int os_imp_init(void)
 {
-    printf("%s:###please implement this function by yourself####\n\r",__FUNCTION__);
+    LINK_LOG_DEBUG("%s:###please implement this function by yourself####\n\r",__FUNCTION__);
     return -1;
 }
 

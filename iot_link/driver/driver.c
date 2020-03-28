@@ -41,10 +41,11 @@
 #include <stdlib.h>
 #include <driver.h>
 
-#if CONFIG_DRIVER_ENABLE
 
 #include <sys/fcntl.h>
 #include <sys/types.h>
+
+#if CONFIG_DRIVER_ENABLE
 
 #define cn_driv_status_initialized     (1<<0)
 #define cn_driv_status_opend           (1<<1)
@@ -121,7 +122,7 @@ los_driv_t los_driv_register(os_driv_para_t *para)
     {
         goto EXIT_MALLOC;
     }
-    memset(driv,0,sizeof(struct driv_cb));
+    (void) memset(driv,0,sizeof(struct driv_cb));
 
     //do the member initialize
     driv->name = para->name;
@@ -308,7 +309,7 @@ los_dev_t  los_dev_open  (const char *name,unsigned int flag)
     {
         goto EXIT_MEMERR;
     }
-    memset(dev,0,sizeof(struct dev_cb));
+    (void) memset(dev,0,sizeof(struct dev_cb));
 
     opret = osal_mutex_lock(s_los_driv_module.lock);
     if(false == opret)
@@ -580,6 +581,8 @@ off_t  los_dev_seek (los_dev_t dev,off_t offset,int fromwhere)
 //void*      los_dev_upara_get (los_dev_t dev);
 
 //export some shell for the driver debug
+#ifdef CONFIG_LITEOS_ENABLE
+
 #include <shell.h>
 //use this function to show all the driver infomation
 static int  __driv_show_shell(int argc,const char *argv[])
@@ -588,17 +591,17 @@ static int  __driv_show_shell(int argc,const char *argv[])
 
     if(osal_mutex_lock(s_los_driv_module.lock))
     {
-        printf("%s:total %d drivers\n\r",__FUNCTION__,s_los_driv_module.drivnum);
+        LINK_LOG_DEBUG("%s:total %d drivers\n\r",__FUNCTION__,s_los_driv_module.drivnum);
         if(s_los_driv_module.drivnum != 0) //print all the driver
         {
 
-            printf("%-16s %-8s %-8s %-8s %-8s %-8s %-8s\r\n",\
+            LINK_LOG_DEBUG("%-16s %-8s %-8s %-8s %-8s %-8s %-8s\r\n",\
                 "drivername","flagmask","status","writbyte","readbyte","open","errno");
 
             driv = s_los_driv_module.drivlst;
             while(NULL != driv)
             {
-                printf("%-16s %08x %08x %08x %08x %08x %08x\r\n",driv->name,driv->flagmask,\
+                LINK_LOG_DEBUG("%-16s %08x %08x %08x %08x %08x %08x\r\n",driv->name,driv->flagmask,\
                 driv->drivstatus,driv->total_write,driv->total_read,driv->opencounter,driv->errno);
                 driv=driv->nxt;
             }
@@ -612,4 +615,6 @@ static int  __driv_show_shell(int argc,const char *argv[])
 
 OSSHELL_EXPORT_CMD(__driv_show_shell,"devlst","devlst");
 
-#endif
+#endif ///< end for CONFIG_LITEOS_ENABLE
+
+#endif ///< end for CONFIG_DRIVER_ENABLE
