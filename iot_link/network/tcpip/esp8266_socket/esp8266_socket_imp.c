@@ -252,8 +252,8 @@ static int __esp8266_connect(int fd, const struct sockaddr *addr, int addrlen)
 
     if(NULL != addr)
     {
-        memset(cmd,0,64);
-        //memset(remote_ip,0,16);
+        (void) memset(cmd,0,64);
+        //(void) memset(remote_ip,0,16);
 
         const struct sockaddr_in *serv_addr = (const struct sockaddr_in *)addr;
         uint16_t remote_port = ntohs(serv_addr->sin_port);
@@ -287,8 +287,8 @@ static int esp8266_send(int fd, const void *buf, int len, int flags)
 
     if(NULL != buf)
     {
-        memset(cmd,0,64);
-        memset(s_esp8266_sock_cb.oob_resp,0,1024);
+        (void) memset(cmd,0,64);
+        (void) memset(s_esp8266_sock_cb.oob_resp,0,1024);
 
         snLINK_LOG_DEBUG(cmd,64,"AT+CIPSEND=%d\r\n",len); //TODO:mux = 1
 
@@ -382,7 +382,7 @@ static int esp8266_close(int fd)
 {
 	char cmd[64];
 	int ret = -1;
-	memset(cmd,0,64);
+	(void) memset(cmd,0,64);
 	snLINK_LOG_DEBUG(cmd,64,"AT+CIPCLOSE\r\n");//TODO: MUX = 1;
 	if(esp8266_atcmd(cmd,"OK"))
 	{
@@ -426,12 +426,12 @@ static struct hostent *esp8266_gethostbyname(const char *name)
 
 	struct hostent *hptr = NULL;
 
-	memset(cmd,0,64);
+	(void) memset(cmd,0,64);
 	snLINK_LOG_DEBUG(cmd,64,"AT+CIPDOMAIN=\"%s\"\r\n",name);
 	if(false == esp8266_atcmd_response(cmd,"+CIPDOMAIN",resp,64))
 	{
 	    hptr = &s_esp8266_hostent;
-	    memset(hptr,0,sizeof(struct hostent));
+	    (void) memset(hptr,0,sizeof(struct hostent));
 	    ///< we could not resolve it by the at device, so we check if your address if dot point
         fmt_num = sscanf(name,"%d.%d.%d.%d",&ipv4[0],&ipv4[1],&ipv4[2],&ipv4[3]);
         if(fmt_num > 0)
@@ -461,7 +461,7 @@ static struct hostent *esp8266_gethostbyname(const char *name)
 	    str++;
 
         hptr = &s_esp8266_hostent;
-        memset(hptr,0,sizeof(struct hostent));
+        (void) memset(hptr,0,sizeof(struct hostent));
         ///< we could not resolve it by the at device, so we check if your address if dot point
         fmt_num = sscanf(str,"%d.%d.%d.%d",&ipv4[0],&ipv4[1],&ipv4[2],&ipv4[3]);
         if(fmt_num > 0)
@@ -528,7 +528,7 @@ static bool_t esp8266_echo_off(void)
 static bool_t esp8266_show_dinfo(int flag)
 {
 	char cmd[64];
-	memset(cmd,0,64);
+	(void) memset(cmd,0,64);
 	snLINK_LOG_DEBUG(cmd,64,"AT+CIPDINFO=%d\r\n",flag);
     return esp8266_atcmd(cmd,"OK");
 }
@@ -536,7 +536,7 @@ static bool_t esp8266_show_dinfo(int flag)
 static bool_t esp8266_set_mode(enum_net_mode mode)
 {
 	char cmd[64];
-	memset(cmd,0,64);
+	(void) memset(cmd,0,64);
 	snLINK_LOG_DEBUG(cmd,64,"AT+CWMODE_CUR=%d\r\n",(int)mode);
 	return esp8266_atcmd(cmd,"OK");
 }
@@ -544,7 +544,7 @@ static bool_t esp8266_set_mode(enum_net_mode mode)
 static bool_t esp8266_joinap(char *ssid, char *passwd)
 {
 	char cmd[64];
-	memset(cmd,0,64);
+	(void) memset(cmd,0,64);
     snLINK_LOG_DEBUG(cmd,64,"AT+CWJAP_CUR=\"%s\",\"%s\"\r\n",ssid, passwd);
     return esp8266_atcmd(cmd,"OK");
 }
@@ -552,7 +552,7 @@ static bool_t esp8266_joinap(char *ssid, char *passwd)
 static bool_t esp8266_set_mux(int mux)
 {
 	char cmd[64];
-	memset(cmd,0,64);
+	(void) memset(cmd,0,64);
     snLINK_LOG_DEBUG(cmd,64,"AT+CIPMUX=%d\r\n",mux);
     return esp8266_atcmd(cmd,"OK");
 }

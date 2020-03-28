@@ -289,7 +289,7 @@ static int __rcv_task_entry(void *args)
     	{
     		if(rcvlen == 0)
     		{
-                memset(g_at_cb.rcvbuf,0,CONFIG_AT_RECVMAXLEN);
+                (void) memset(g_at_cb.rcvbuf,0,CONFIG_AT_RECVMAXLEN);
     		}
             rcvlen += __resp_rcv(g_at_cb.rcvbuf+ rcvlen,CONFIG_AT_RECVMAXLEN,cn_osal_timeout_forever);
 
@@ -312,7 +312,7 @@ static int __rcv_task_entry(void *args)
     	}
     	else
     	{
-    		memset(g_at_cb.rcvbuf,0,CONFIG_AT_RECVMAXLEN);
+    		(void) memset(g_at_cb.rcvbuf,0,CONFIG_AT_RECVMAXLEN);
     		rcvlen = __resp_rcv(g_at_cb.rcvbuf,CONFIG_AT_RECVMAXLEN,cn_osal_timeout_forever);
     		if(rcvlen > 0)
 	        {
@@ -436,7 +436,7 @@ int at_init(const char *devname)
 {
     int ret = -1;
 
-    memset(&g_at_cb,0,sizeof(g_at_cb));
+    (void) memset(&g_at_cb,0,sizeof(g_at_cb));
     g_at_cb.devname = devname;
 
 
@@ -510,7 +510,7 @@ static int shell_at(int argc, const char *argv[])
     }
     
 
-    (void) memset(respbuf,0,CN_AT_SHELL_LEN);
+    (void) (void) memset(respbuf,0,CN_AT_SHELL_LEN);
     (void) snprintf((char *)cmdbuf,CN_AT_SHELL_LEN,"%s\r\n",argv[1]);
 
     ret = at_command(cmdbuf,strlen((const char *)cmdbuf),index,respbuf,CN_AT_SHELL_LEN,1000); //one second

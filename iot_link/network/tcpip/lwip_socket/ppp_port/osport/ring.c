@@ -181,7 +181,7 @@ s32_t ring_deinit(tagRingBuf *ring)
     int ret = -1;
     if(NULL != ring)
     {
-        memset(ring, 0, sizeof(tagRingBuf));
+        (void) memset(ring, 0, sizeof(tagRingBuf));
         ret = 0;
     }
     return ret;

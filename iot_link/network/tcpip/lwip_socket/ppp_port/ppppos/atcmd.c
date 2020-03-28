@@ -122,7 +122,7 @@ int AtCmd(const char *devname, char *cmd, char *buf, int buflen, int argc, char 
     //flush the device
     iodev_flush(dev);
     //initialize the buf with the specified at command
-    memset(cmdbuf, 0, CN_AT_LEN);
+    (void) memset(cmdbuf, 0, CN_AT_LEN);
     snLINK_LOG_DEBUG(cmdbuf, CN_AT_LEN, "%s\r\n", cmd);//AT+CGMI
     //write the command to the device
     len = strlen(cmdbuf);
@@ -137,7 +137,7 @@ int AtCmd(const char *devname, char *cmd, char *buf, int buflen, int argc, char 
     if((NULL != buf) && (buflen > 0))
     {
         //initialize the buf
-        memset(buf, 0, buflen);
+        (void) memset(buf, 0, buflen);
         offset = 0;
         lenleft = buflen;
         while(1)
@@ -173,7 +173,7 @@ int AtCmd(const char *devname, char *cmd, char *buf, int buflen, int argc, char 
         }
         else
         {
-            memset(&buf[offset], 0, lenleft); //make the bufleft to zero
+            (void) memset(&buf[offset], 0, lenleft); //make the bufleft to zero
         }
         if((argc > 0) && (NULL != argv))
         {
@@ -256,8 +256,8 @@ static bool_t checkmi(char *devname, int times)
     for(i = 0; i < times; i++)
     {
         LINK_LOG_DEBUG("%d->", i);
-        memset(argv, 0, sizeof(argv));
-        memset(atrcvbuf, 0, sizeof(atrcvbuf));
+        (void) memset(argv, 0, sizeof(argv));
+        (void) memset(atrcvbuf, 0, sizeof(atrcvbuf));
         argc = AtCmd(devname,"AT+CGMI" , atrcvbuf, CN_AT_LEN, 6, argv);
         if(argc > 0)
         {
@@ -295,8 +295,8 @@ static bool_t checkmm(char *devname, int times)
     for(i = 0; i < times; i++)
     {
         LINK_LOG_DEBUG("%d->", i);
-        memset(argv, 0, sizeof(argv));
-        memset(atrcvbuf, 0, sizeof(atrcvbuf));
+        (void) memset(argv, 0, sizeof(argv));
+        (void) memset(atrcvbuf, 0, sizeof(atrcvbuf));
         argc = AtCmd(devname,"AT+CGMM",atrcvbuf,CN_AT_LEN,6,argv);
         if(argc > 0)
         {
@@ -333,8 +333,8 @@ static bool_t checksn(char *devname, int times)
     for(i = 0; i < times; i++)
     {
         LINK_LOG_DEBUG("%d->", i);
-        memset(argv, 0, sizeof(argv));
-        memset(atrcvbuf, 0, sizeof(atrcvbuf));
+        (void) memset(argv, 0, sizeof(argv));
+        (void) memset(atrcvbuf, 0, sizeof(atrcvbuf));
         argc = AtCmd(devname,"AT+CGSN",atrcvbuf,CN_AT_LEN,6,argv);
         if(argc > 0)
         {
@@ -372,8 +372,8 @@ static bool_t checkmr(char *devname, int times)
     for(i = 0; i < times; i++)
     {
         LINK_LOG_DEBUG("%d->", i);
-        memset(argv, 0, sizeof(argv));
-        memset(atrcvbuf, 0, sizeof(atrcvbuf));
+        (void) memset(argv, 0, sizeof(argv));
+        (void) memset(atrcvbuf, 0, sizeof(atrcvbuf));
         argc = AtCmd(devname,"AT+CGMR",atrcvbuf,CN_AT_LEN,6,argv);
         if(argc > 0)
         {
@@ -412,8 +412,8 @@ static tagImsi *checkcimi(char *devname, int times, char *simapn)
     for(i = 0; i < times; i++)
     {
         LINK_LOG_DEBUG("%d->", i);
-        memset(argv, 0, sizeof(argv));
-        memset(atrcvbuf, 0, sizeof(atrcvbuf));
+        (void) memset(argv, 0, sizeof(argv));
+        (void) memset(atrcvbuf, 0, sizeof(atrcvbuf));
         argc = AtCmd(devname,"AT+CIMI",atrcvbuf,CN_AT_LEN,6,argv);
         if(argc > 0)
         {
@@ -421,7 +421,7 @@ static tagImsi *checkcimi(char *devname, int times, char *simapn)
             if((position != 0) && (position != -1))
             {
                 char mnc[6];
-                memset(mnc, 0, 6);
+                (void) memset(mnc, 0, 6);
                 (void) memcpy(mnc, argv[position - 1], 5);
                 for(tmp = 0; tmp < CN_CIMI_SIZE; tmp++)
                 {
@@ -464,8 +464,8 @@ static bool_t checkcpin(char *devname, int times)
     for(i = 0; i < times; i++)
     {
         LINK_LOG_DEBUG("%d->", i);
-        memset(argv, 0, sizeof(argv));
-        memset(atrcvbuf, 0, sizeof(atrcvbuf));
+        (void) memset(argv, 0, sizeof(argv));
+        (void) memset(atrcvbuf, 0, sizeof(atrcvbuf));
         argc = AtCmd(devname,"AT+CPIN?",atrcvbuf,CN_AT_LEN,6,argv);
         if(argc > 0)
         {
@@ -501,8 +501,8 @@ static bool_t  checkcgreg(char *devname, int times)
     for(i = 0; i < times; i++)
     {
         LINK_LOG_DEBUG("%d->", i);
-        memset(argv, 0, sizeof(argv));
-        memset(atrcvbuf, 0, sizeof(atrcvbuf));
+        (void) memset(argv, 0, sizeof(argv));
+        (void) memset(atrcvbuf, 0, sizeof(atrcvbuf));
         argc = AtCmd(devname,"AT+CGREG?",atrcvbuf,CN_AT_LEN,6,argv);
         if(argc > 0)
         {
@@ -535,10 +535,10 @@ static bool_t  setnetapn(char *devname, char *apn, int times)
     for(i = 0; i < times; i++)
     {
         LINK_LOG_DEBUG("%d->", i);
-        memset(argv, 0, sizeof(argv));
-        memset(atrcvbuf, 0, sizeof(atrcvbuf));
+        (void) memset(argv, 0, sizeof(argv));
+        (void) memset(atrcvbuf, 0, sizeof(atrcvbuf));
         char cgdcont[64];
-        memset(cgdcont, 0, 64);
+        (void) memset(cgdcont, 0, 64);
         snLINK_LOG_DEBUG(cgdcont,63,"%s%s%s%s","AT+CGDCONT=1,\"IP\",","\"",apn,"\"");
         argc = AtCmd(devname, cgdcont, atrcvbuf, CN_AT_LEN, 6, argv);
         if(argc > 0)
@@ -574,8 +574,8 @@ static bool_t  atdcall(char *devname, int times)
     for(i = 0; i < times; i++)
     {
         LINK_LOG_DEBUG("%d->", i);
-        memset(argv, 0, sizeof(argv));
-        memset(atrcvbuf, 0, sizeof(atrcvbuf));
+        (void) memset(argv, 0, sizeof(argv));
+        (void) memset(atrcvbuf, 0, sizeof(atrcvbuf));
         argc = AtCmd(devname,"ATD*99***1#",atrcvbuf,CN_AT_LEN,6,argv);
         if(argc > 0)
         {
@@ -606,8 +606,8 @@ static bool_t atgetsignal(char *devname, int *signal)
     int   position = -1;
     char atrcvbuf[CN_AT_LEN];
     int   result = -1;
-    memset(argv, 0, sizeof(argv));
-    memset(atrcvbuf, 0, sizeof(atrcvbuf));
+    (void) memset(argv, 0, sizeof(argv));
+    (void) memset(atrcvbuf, 0, sizeof(atrcvbuf));
     argc = AtCmd(devname,"AT+CSQ",atrcvbuf,CN_AT_LEN,6,argv);
     if(argc > 0)
     {

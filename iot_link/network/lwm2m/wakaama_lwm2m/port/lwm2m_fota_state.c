@@ -127,7 +127,7 @@ int lwm2m_fota_idle_state_int_report_result(lwm2m_fota_idle_state_s *thi)
     int result = LWM2M_ERR;
     ASSERT_THIS(return LWM2M_ARG_INVALID);
     thi->report_flag = false;
-    memset(&observe_info, 0, sizeof(lwm2m_observe_info_t));
+    (void) memset(&observe_info, 0, sizeof(lwm2m_observe_info_t));
 
     if (ota_pack_observe_info_read(&observe_info, sizeof(observe_info)) != LWM2M_OK)
     {
@@ -153,7 +153,7 @@ int lwm2m_fota_idle_state_int_report_result(lwm2m_fota_idle_state_s *thi)
     (void) memcpy(&thi->observe_info, &observe_info, sizeof(thi->observe_info));
     ATINY_LOG(LOG_INFO, "need to rpt result %d", ret);
 EXIT:
-    memset(&observe_info, 0, sizeof(observe_info));
+    (void) memset(&observe_info, 0, sizeof(observe_info));
 
     if (LWM2M_OK != flag_write(FLAG_APP, &observe_info, sizeof(observe_info)))
     {
@@ -190,7 +190,7 @@ static int lwm2m_fota_idle_state_report_result(lwm2m_fota_state_s *thi)
 
 void lwm2m_fota_idle_state_init(lwm2m_fota_idle_state_s *thi, lwm2m_fota_manager_s *manager)
 {
-    memset(thi, 0, sizeof(*thi));
+    (void) memset(thi, 0, sizeof(*thi));
     lwm2m_fota_state_init(&thi->interface, manager);
     thi->interface.start_download = lwm2m_fota_start_download;
     thi->interface.repot_result = lwm2m_fota_idle_state_report_result;

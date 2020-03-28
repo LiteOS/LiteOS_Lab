@@ -179,7 +179,7 @@ int connection_connect_dtls(connection_t *connP, security_instance_t *targetP, c
         return COAP_500_INTERNAL_SERVER_ERROR;
     }
 
-    memset(&info, 0, sizeof(info));
+    (void) memset(&info, 0, sizeof(info));
     info.client_or_server = client_or_server;
     info.finish_notify = NULL;
     info.step_notify   = NULL;
@@ -258,7 +258,7 @@ static void *__socket_connect(char *host, char *port, int is_server)
         goto EXIT_SOCKET;
     }
 
-    memset(&addr, 0, sizeof(addr));
+    (void) memset(&addr, 0, sizeof(addr));
     addr.sin_family = AF_INET;
     (void) memcpy(&addr.sin_addr.s_addr, entry->h_addr_list[0], sizeof(addr.sin_addr.s_addr));
     addr.sin_port = htons(atoi(port));
@@ -391,7 +391,7 @@ connection_t *connection_create(connection_t *connList,
         goto fail;
     }
 
-    memset(connP, 0, sizeof(connection_t));
+    (void) memset(connP, 0, sizeof(connection_t));
 #ifdef WITH_DTLS
 
     if (LWM2M_SECURITY_MODE_NONE != targetP->securityMode)

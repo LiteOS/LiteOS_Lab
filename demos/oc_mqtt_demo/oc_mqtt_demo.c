@@ -250,7 +250,7 @@ static int task_reportmsg_entry(void *args)
     int ret;
     oc_mqtt_config_t config;
 
-    memset( &config, 0, sizeof(config));
+    (void) memset( &config, 0, sizeof(config));
 
     config.boot_mode = CN_DEMO_MODE;
     config.msg_deal = app_msg_deal;

@@ -59,7 +59,7 @@ static int __sinn_sock_connect(sinn_connection_t *nc)
     dtls_establish_info_s establish_info;
     char port_buf[PORT_BUF_LEN];
 
-    memset(&shakehand_info, 0, sizeof(dtls_shakehand_info_s));
+    (void) memset(&shakehand_info, 0, sizeof(dtls_shakehand_info_s));
     conn_param = (sinn_connect_param_t *)(nc->user_data);
     ssl_param = &conn_param->ssl_param;
     if (ssl_param->type == e_sinn_ssl_type_psk)

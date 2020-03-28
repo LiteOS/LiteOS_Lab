@@ -394,8 +394,8 @@ static int draw_operator(int fresh)
         ui_clean_window(CN_UI_OPRT_X_S,CN_UI_OPRT_Y_S,CN_UI_OPRT_W,CN_UI_OPRT_H);
         Paint_DrawString_EN(CN_UI_OPRT_X_S, CN_UI_OPRT_Y_S, draw_str, &Font24, WHITE, BLACK);
 
-        memset(s_app_main_cb.operator_bak,0,sizeof(s_app_main_cb.operator_bak));
-        strcpy(s_app_main_cb.operator_bak,s_app_main_cb.operator_now);
+        (void) memset(s_app_main_cb.operator_bak,0,sizeof(s_app_main_cb.operator_bak));
+        (void) strcpy(s_app_main_cb.operator_bak,s_app_main_cb.operator_now);
     }
 
     return 0;
@@ -537,13 +537,13 @@ static int draw_time(int fresh)
 
         Paint_DrawLine(CN_UI_TIME_BASE_X,CN_UI_TIME_LINE_Y,\
                 CN_UI_TIME_BASE_X + CN_UI_TIME_W,CN_UI_TIME_LINE_Y, GRAY,LINE_STYLE_DOTTED,DOT_PIXEL_3X3);
-        strcpy(draw_str,"TIME UNKNOWN");
+        (void) strcpy(draw_str,"TIME UNKNOWN");
 
     }
     else
     {
         ui_clean_window(CN_UI_TIME_BASE_X,CN_UI_TIME_TEXT_Y,CN_UI_TIME_W,CN_UI_TIME_END_Y - CN_UI_TIME_TEXT_Y);
-        strcpy(draw_str,s_app_main_cb.time_now);
+        (void) strcpy(draw_str,s_app_main_cb.time_now);
     }
     Paint_DrawString_EN(CN_UI_TIME_BASE_X, CN_UI_TIME_TEXT_Y, draw_str, &Font24, WHITE, BLACK);
     return 0;

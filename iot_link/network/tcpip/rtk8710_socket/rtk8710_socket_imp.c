@@ -223,7 +223,7 @@ static int rtk8710_socket(int domain, int type, int protocol)
     s_rtk8710_sock_cb.protocol = protocol;
     s_rtk8710_sock_cb.sockfd = 0;
     s_rtk8710_sock_cb.remote_port = 0;
-    memset(s_rtk8710_sock_cb.remote_ip,0,sizeof(s_rtk8710_sock_cb.remote_ip));
+    (void) memset(s_rtk8710_sock_cb.remote_ip,0,sizeof(s_rtk8710_sock_cb.remote_ip));
 
     return s_rtk8710_sock_cb.sockfd;
 }
@@ -259,7 +259,7 @@ static int __rtk8710_connect(int fd, void *addr, int addrlen)
     if(NULL != addr)
     {
         
-        memset(cmd,0,64);
+        (void) memset(cmd,0,64);
 
         
         serv_addr = (struct sockaddr_in *)addr;
@@ -312,8 +312,8 @@ static int rtk8710_send(int fd, const void *buf, int len, int flags)
 
     if(NULL != buf)
     {
-        memset(cmd,0,64);
-        memset(s_rtk8710_sock_cb.oob_resp,0,1024);
+        (void) memset(cmd,0,64);
+        (void) memset(s_rtk8710_sock_cb.oob_resp,0,1024);
 
         if(s_rtk8710_sock_cb.type == SOCK_DGRAM)
         {
@@ -416,7 +416,7 @@ static int rtk8710_close(int fd)
 {
     char cmd[64];
     int ret = -1;
-    memset(cmd,0,64);
+    (void) memset(cmd,0,64);
     snLINK_LOG_DEBUG(cmd,64,"AT+NWKCLOSE=%d\r\n",s_rtk8710_sock_cb.sockfd);//TODO: MUX = 1;
     if(rtk8710_atcmd(cmd,"[NWKCLOSE]OK"))
     {
@@ -459,9 +459,9 @@ static struct hostent *rtk8710_gethostbyname(const char *name)
 	struct hostent *hptr = NULL;
 	int ret = -1;
     hptr = &s_rtk8710_hostent;
-    memset(hptr,0,sizeof(struct hostent));
+    (void) memset(hptr,0,sizeof(struct hostent));
 
-	memset(cmd,0,64);
+	(void) memset(cmd,0,64);
 	snLINK_LOG_DEBUG(cmd,64,"AT+NWKDNS=%s\r\n",name);
 	if(false == rtk8710_atcmd_response(cmd,"\r\n",resp,64))
 	{
@@ -533,7 +533,7 @@ static bool_t rtk8710_reset(void)
 static bool_t rtk8710_set_mode(enum_net_mode mode)
 {
 	char cmd[64];
-	memset(cmd,0,64);
+	(void) memset(cmd,0,64);
 	snLINK_LOG_DEBUG(cmd,64,"AT+WLMODE=%d\r\n",(int)mode);
 	return rtk8710_atcmd(cmd,"[WLMODE]OK");
 }
@@ -541,7 +541,7 @@ static bool_t rtk8710_set_mode(enum_net_mode mode)
 static bool_t rtk8710_joinap(char *ssid, char *passwd)
 {
 	char cmd[64];
-	memset(cmd,0,64);
+	(void) memset(cmd,0,64);
     snLINK_LOG_DEBUG(cmd,64,"AT+WLSTAPARAM=\"%s\",\"%s\"\r\n",ssid, passwd);
     if(rtk8710_atcmd(cmd,"[WLSTAPARAM]OK"))
     {
@@ -553,7 +553,7 @@ static bool_t rtk8710_joinap(char *ssid, char *passwd)
 static bool_t rtk8710_ver()
 {
 	char cmd[64];
-	memset(cmd,0,64);
+	(void) memset(cmd,0,64);
     snLINK_LOG_DEBUG(cmd,64,"AT+SVER\r\n");
     return rtk8710_atcmd(cmd,"OK");
 

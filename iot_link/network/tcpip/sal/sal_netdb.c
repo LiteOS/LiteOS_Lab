@@ -92,7 +92,7 @@ __attribute__((weak)) char *inet_ntoa(struct in_addr addr)
     unsigned char ip[4];
     int tmp[4];
     (void) memcpy((void *)ip,(void *)&addr,sizeof(ip));
-    memset((void *)s_inet_addr_buf,0,cn_inet_addrlen_max);
+    (void) memset((void *)s_inet_addr_buf,0,cn_inet_addrlen_max);
 
     tmp[0] = (int)ip[0];
     tmp[1] = (int)ip[1];

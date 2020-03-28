@@ -222,7 +222,7 @@ uint8_t lwm2m_send_notify(lwm2m_context_t *contextP, lwm2m_observe_info_t *obser
 #endif
     // uri.flag = (LWM2M_URI_FLAG_OBJECT_ID | LWM2M_URI_FLAG_INSTANCE_ID | LWM2M_URI_FLAG_RESOURCE_ID);
     format = (lwm2m_media_type_t)observe_info->format;
-    memset(&data, 0, sizeof(data));
+    (void) memset(&data, 0, sizeof(data));
     data.id = uri.resourceId;
     lwm2m_data_encode_int(firmware_update_state, &data);
     res = lwm2m_data_serialize(&uri, 1, &data, &format, &buffer);
@@ -239,7 +239,7 @@ uint8_t lwm2m_send_notify(lwm2m_context_t *contextP, lwm2m_observe_info_t *obser
         return COAP_500_INTERNAL_SERVER_ERROR;
     }
 
-    memset(&watcherP, 0, sizeof(watcherP));
+    (void) memset(&watcherP, 0, sizeof(watcherP));
     watcherP.lastMid = contextP->nextMID++;
     watcherP.tokenLen = observe_info->tokenLen;
     (void) memcpy(watcherP.token, observe_info->token, sizeof(watcherP.token));

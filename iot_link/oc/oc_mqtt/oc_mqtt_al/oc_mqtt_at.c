@@ -134,7 +134,7 @@ int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const
     oc_mqtt_config_t config;
 
     link_main(NULL);
-    memset(&config,0,sizeof(config));
+    (void) memset(&config,0,sizeof(config));
 
     if(bsmode)
     {

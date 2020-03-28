@@ -82,7 +82,7 @@ int mbedtls_net_connect(mbedtls_net_context *ctx, const char *host, const char *
         return ret;
     }
 
-    memset(&addr,0,sizeof(addr));
+    (void) memset(&addr,0,sizeof(addr));
     addr.sin_family = AF_INET;
     (void) memcpy(&addr.sin_addr.s_addr,entry->h_addr_list[0],sizeof(addr.sin_addr.s_addr));
     addr.sin_port = htons(((uint16_t)atoi(port)));

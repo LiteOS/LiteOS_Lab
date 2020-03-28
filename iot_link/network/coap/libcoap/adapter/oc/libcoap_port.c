@@ -638,7 +638,7 @@ int dtls_setup(coap_al_initpara_t *initparam, int client_or_server)
         return -1;
     }
 
-    memset(&info, 0, sizeof(info));
+    (void) memset(&info, 0, sizeof(info));
     info.client_or_server = client_or_server;
     info.finish_notify = NULL;
     info.step_notify   = NULL;

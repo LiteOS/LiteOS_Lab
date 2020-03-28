@@ -144,7 +144,7 @@ int ec2x_get_operator(char *buf)
     char *str_s;
     char *str_e;
 
-    memset(resp,0,128);
+    (void) memset(resp,0,128);
     ret = ec2x_atcmd_response("AT+QSPN\r\n","+QSPN:",resp,128,CN_EC2X_CMD_TIME_BASE);
     if (0 == ret)
     {
@@ -160,7 +160,7 @@ int ec2x_get_operator(char *buf)
             {
                 str_e--;
                 *str_e = '\0';
-                strcpy(buf,str_s);
+                (void) strcpy(buf,str_s);
                 ret = 0;
             }
         }
@@ -183,7 +183,7 @@ int ec2x_get_time(char *timebuffer)
     char *str_z;
 
 
-    memset(resp,0,128);
+    (void) memset(resp,0,128);
 
     ret = ec2x_atcmd_response("AT+QLTS=2\r\n","+QLTS",resp,128,CN_EC2X_CMD_TIME_BASE);
     if (0 == ret)
@@ -218,7 +218,7 @@ int ec2x_get_time(char *timebuffer)
         zone = atoi(str_z)/4;
         sLINK_LOG_DEBUG(str_e," GTM+%d",zone);
 
-        strcpy(timebuffer,str_s);
+        (void) strcpy(timebuffer,str_s);
 
         ret = 0;
     }
@@ -237,7 +237,7 @@ int ec2x_get_csq(int *csq)
     int ret = -1;
 
 
-    memset(resp,0,64);
+    (void) memset(resp,0,64);
     ret = ec2x_atcmd_response("AT+CSQ\r\n","+CSQ: ",resp,64,CN_EC2X_CMD_TIME_BASE);
     if(0 == ret)
     {
@@ -293,7 +293,7 @@ int ec2x_get_rssi(int *rssi)
     char *str_s;
     char *str_e;
 
-    memset(resp,0,128);
+    (void) memset(resp,0,128);
 
     ret = ec2x_atcmd_response("AT+QENG=\"servingcell\"\r\n","+QENG:",resp,128,CN_EC2X_CMD_TIME_BASE);
 
@@ -350,7 +350,7 @@ static int ec2x_oc_msg_deal(void *args,void *msg,size_t len)
     if(NULL != payload)
     {
         hexstr2byte(str_tmp,payload_len*2,payload);
-        memset(&oc_msg,0,sizeof(oc_msg));
+        (void) memset(&oc_msg,0,sizeof(oc_msg));
         oc_msg.qos = qos;
         oc_msg.msg.data = payload;
         oc_msg.msg.len = payload_len;
@@ -373,7 +373,7 @@ static int ec2x_oc_deconfig(void)
     char cmd[256];
     char resp[64];
 
-    memset(cmd,0,256);
+    (void) memset(cmd,0,256);
     snLINK_LOG_DEBUG(cmd,256,"AT+HWOCMQTTDISCONNECT\r");
 
     ret = ec2x_atcmd_response(cmd,"+DISCONNECT ",resp,64,5*CN_EC2X_CMD_TIME_BASE);
@@ -414,7 +414,7 @@ static int ec2x_oc_config(oc_mqtt_config_t *param)
         bs_mode = 1;
     }
 
-    memset(cmd,0,256);
+    (void) memset(cmd,0,256);
     snLINK_LOG_DEBUG(cmd,256,"AT+HWOCMQTTCONNECT=%d,%d,\"%s\",\"%s\",\"%s\",\"%s\"\r",\
             bs_mode, param->lifetime, param->server_addr, param->server_port, param->id, param->pwd);
 
@@ -471,7 +471,7 @@ static int ec2x_oc_publish(char *topic,uint8_t *msg,int len,int qos)
         cmd = osal_malloc(cmdlen);
         if(NULL != cmd)
         {
-            memset(cmd,0,cmdlen);
+            (void) memset(cmd,0,cmdlen);
             cmdlen = snLINK_LOG_DEBUG(cmd,cmdlen,CN_EC2X_SEND_FMT,qos,len);
             byte2hexstr(msg,len,&cmd[cmdlen]);
             cmdlen += len*2;
@@ -586,7 +586,7 @@ int ec2x_eniccid(iccid_t *iccid)
     {
         return ret;
     }
-    memset(cmd,0,sizeof(cmd));
+    (void) memset(cmd,0,sizeof(cmd));
     snLINK_LOG_DEBUG(cmd,64,CN_ICCID_ENABLE_CMD_FMT,iccid->id);
 
     ret = ec2x_atcmd_response(cmd,"+HWICCIDENABLE OK",resp,sizeof(resp),30*CN_EC2X_CMD_TIME_BASE);

@@ -329,7 +329,7 @@ static int task_reportmsg_entry(void *args)
     int ret;
     oc_mqtt_profile_connect_t  connect_para;
 
-    memset( &connect_para, 0, sizeof(connect_para));
+    (void) memset( &connect_para, 0, sizeof(connect_para));
 
     connect_para.boostrap =      CN_BOOT_MODE;
     connect_para.device_id =     CN_EP_DEVICEID;

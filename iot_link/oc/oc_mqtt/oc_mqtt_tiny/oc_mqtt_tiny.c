@@ -378,9 +378,9 @@ static int config_parameter_release(oc_mqtt_tiny_cb_t *cb)
     if(cb->bs_cb.hubserver_port != NULL)
         osal_free(cb->bs_cb.hubserver_port);
 
-    memset(&cb->config,0,sizeof(oc_mqtt_config_t));
+    (void) memset(&cb->config,0,sizeof(oc_mqtt_config_t));
 
-    memset(&cb->bs_cb,0,sizeof(oc_bs_mqtt_cb_t));
+    (void) memset(&cb->bs_cb,0,sizeof(oc_bs_mqtt_cb_t));
 
     cb->flag.bits.bit_daemon_status = en_daemon_status_idle;
 
@@ -444,7 +444,7 @@ static int oc_mqtt_para_release(oc_mqtt_tiny_cb_t *cb)
     osal_free(cb->mqtt_para.default_pub_topic);
     osal_free(cb->mqtt_para.default_sub_topic);
 
-    memset(&cb->mqtt_para,0,sizeof(oc_mqtt_para_t));
+    (void) memset(&cb->mqtt_para,0,sizeof(oc_mqtt_para_t));
 
     return 0;
 }
@@ -550,7 +550,7 @@ static int dmp_connect(oc_mqtt_tiny_cb_t *cb)
 
     mqtt_al_conpara_t conpara;
 
-    memset(&conpara,0,sizeof(conpara));
+    (void) memset(&conpara,0,sizeof(conpara));
 
     conpara.clientid.data = cb->mqtt_para.mqtt_clientid;
     conpara.clientid.len = strlen(conpara.clientid.data);
@@ -622,7 +622,7 @@ static int dmp_subscribe(oc_mqtt_tiny_cb_t *cb)
     {
         ret = en_oc_mqtt_err_noconected;
     }
-    memset(&subpara,0,sizeof(subpara));
+    (void) memset(&subpara,0,sizeof(subpara));
 
     if(cb->flag.bits.bit_daemon_status == en_daemon_status_bs_getaddr)
     {
@@ -659,7 +659,7 @@ static int dmp_publish(oc_mqtt_tiny_cb_t *cb,char *topic, uint8_t *msg, int len,
 
 
     ///< pub the mqtt request
-    memset(&pubpara, 0, sizeof(pubpara));
+    (void) memset(&pubpara, 0, sizeof(pubpara));
     pubpara.qos = qos;
     pubpara.retain = 0;
     pubpara.timeout = 1000;
@@ -923,7 +923,7 @@ static int tiny_publish(char *topic,uint8_t *payload, int len,int qos )
     }
 
     ///< pub the mqtt request
-    memset(&pubpara, 0, sizeof(pubpara));
+    (void) memset(&pubpara, 0, sizeof(pubpara));
     pubpara.qos = qos;
     pubpara.retain = 0;
     pubpara.timeout = 1000;
@@ -971,7 +971,7 @@ int oc_mqtt_tiny_install()
     {
         goto EXIT_MALLOC;
     }
-    memset(cb,0,sizeof(oc_mqtt_tiny_cb_t));
+    (void) memset(cb,0,sizeof(oc_mqtt_tiny_cb_t));
 
     cb->task_daemon_cmd_queue = queue_create("oc_mqtt_tiny_cmd_queue",10,1);
     if(NULL == cb->task_daemon_cmd_queue)

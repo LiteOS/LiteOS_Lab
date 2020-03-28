@@ -82,7 +82,7 @@ err_t sys_mbox_new(struct sys_mbox **mb, int size)
         goto err_handler;
     }
 
-    (void)memset(mbox, 0, sizeof(struct sys_mbox)); //CSEC_FIX_2302
+    (void)(void) memset(mbox, 0, sizeof(struct sys_mbox)); //CSEC_FIX_2302
 
     mbox->msgs = (void **)osal_malloc(sizeof(void *) * size);
 
@@ -91,7 +91,7 @@ err_t sys_mbox_new(struct sys_mbox **mb, int size)
         goto err_handler;
     }
 
-    (void)memset(mbox->msgs, 0, (sizeof(void *) * size)); //CSEC_FIX_2302
+    (void)(void) memset(mbox->msgs, 0, (sizeof(void *) * size)); //CSEC_FIX_2302
 
     mbox->mbox_size = size;
 

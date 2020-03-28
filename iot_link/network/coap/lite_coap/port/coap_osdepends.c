@@ -195,7 +195,7 @@ void *litecoap_new_resource(char *ipaddr, unsigned short port, void *ssl, coap_p
     {
         return NULL;
     }
-    memset(tmp, 0, sizeof(struct udp_res_t));
+    (void) memset(tmp, 0, sizeof(struct udp_res_t));
     if (proto == COAP_PROTO_UDP) {
         tmp->fd = sal_socket(AF_INET, SOCK_DGRAM, 0);
     } else {
@@ -263,7 +263,7 @@ coap_context_t *litecoap_malloc_context(void *res)
 	{
 		return NULL;
 	}
-    memset(tmp, 0, sizeof(coap_context_t));
+    (void) memset(tmp, 0, sizeof(coap_context_t));
 	
 	/* FIXED ME */
 	tmp->udpio = res;
@@ -427,7 +427,7 @@ int litecoap_sal_read(void *handle, char *buf, int size)
         return LITECOAP_SOCKET_SETOPT_ERR;
     }
     
-    memset(&fromAddr,0, sizeof(fromAddr));
+    (void) memset(&fromAddr,0, sizeof(fromAddr));
     fromAddr.sin_family = AF_INET;
     fromAddr.sin_addr.s_addr = htonl(INADDR_ANY);
     fromAddr.sin_port = res->remoteAddr.sin_port;

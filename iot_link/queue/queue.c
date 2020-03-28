@@ -57,7 +57,7 @@ queue_t* queue_create(const char *name,int len,int syncmode)
         goto EXIT_MEM;
     }
 
-    memset(ret,0,sizeof(queue_t));
+    (void) memset(ret,0,sizeof(queue_t));
     ret->name = name;
     ret->msg_buflen = len;
     ret->msg_buf = (void **)((uint8_t *)ret + sizeof(queue_t));

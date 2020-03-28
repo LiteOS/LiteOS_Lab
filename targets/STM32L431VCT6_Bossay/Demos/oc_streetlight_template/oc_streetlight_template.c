@@ -270,7 +270,7 @@ static int app_report_task_entry()
     app_connectivity_t     connectivity;
     app_toggle_t           light_status;
 
-    memset(&oc_param,0,sizeof(oc_param));
+    (void) memset(&oc_param,0,sizeof(oc_param));
 
     oc_param.app_server.address = cn_app_server;
     oc_param.app_server.port = cn_app_port;

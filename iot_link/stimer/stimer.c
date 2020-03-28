@@ -280,7 +280,7 @@ stimer_t stimer_create(const char *name,fn_stimer_handler handler, void *arg,uin
     {
         return item;
     }
-    memset(item,0,sizeof(stimer_item_t));
+    (void) memset(item,0,sizeof(stimer_item_t));
     item->cycle = cycle;
     item->flag = flag;
     item->handler = handler;
@@ -288,7 +288,7 @@ stimer_t stimer_create(const char *name,fn_stimer_handler handler, void *arg,uin
     if(NULL != name)
     {
         item->name = (char *)item +sizeof(stimer_item_t);
-        strcpy(item->name, name);
+        (void) strcpy(item->name, name);
     }
 
 

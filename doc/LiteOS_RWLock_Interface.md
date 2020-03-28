@@ -285,7 +285,7 @@ UINT32 Example_RWLock(VOID)
     LOS_TaskLock();
 
     /* create task1 */
-    memset(&stTask1, 0, sizeof(TSK_INIT_PARAM_S));
+    (void) memset(&stTask1, 0, sizeof(TSK_INIT_PARAM_S));
     stTask1.pfnTaskEntry = (TSK_ENTRY_FUNC)Example_RWLockTask1;
     stTask1.pcName       = "RWLockTsk1";
     stTask1.uwStackSize  = LOSCFG_BASE_CORE_TSK_DEFAULT_STACK_SIZE;
@@ -298,7 +298,7 @@ UINT32 Example_RWLock(VOID)
     }
 
     /* create task2 */
-    memset(&stTask2, 0, sizeof(TSK_INIT_PARAM_S));
+    (void) memset(&stTask2, 0, sizeof(TSK_INIT_PARAM_S));
     stTask2.pfnTaskEntry = (TSK_ENTRY_FUNC)Example_RWLockTask2;
     stTask2.pcName       = "RWLockTsk2";
     stTask2.uwStackSize  = LOSCFG_BASE_CORE_TSK_DEFAULT_STACK_SIZE;
@@ -311,7 +311,7 @@ UINT32 Example_RWLock(VOID)
     }
 
     /* create task3 */
-    memset(&stTask3, 0, sizeof(TSK_INIT_PARAM_S));
+    (void) memset(&stTask3, 0, sizeof(TSK_INIT_PARAM_S));
     stTask3.pfnTaskEntry = (TSK_ENTRY_FUNC)Example_RWLockTask3;
     stTask3.pcName       = "RWLockTsk3";
     stTask3.uwStackSize  = LOSCFG_BASE_CORE_TSK_DEFAULT_STACK_SIZE;
@@ -324,7 +324,7 @@ UINT32 Example_RWLock(VOID)
     }
 
     /* create task4 */
-    memset(&stTask4, 0, sizeof(TSK_INIT_PARAM_S));
+    (void) memset(&stTask4, 0, sizeof(TSK_INIT_PARAM_S));
     stTask4.pfnTaskEntry = (TSK_ENTRY_FUNC)Example_RWLockTask4;
     stTask4.pcName       = "RWLockTsk4";
     stTask4.uwStackSize  = LOSCFG_BASE_CORE_TSK_DEFAULT_STACK_SIZE;

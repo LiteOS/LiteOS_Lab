@@ -92,7 +92,7 @@ __attribute__((weak)) void link_printf(const char *format, ...)
     char str_buf[CONFIG_LINK_LOGBUF_LEN] = {0};
     va_list list;
 
-    (void) memset(str_buf, 0, CONFIG_LINK_LOGBUF_LEN);
+    (void) (void) memset(str_buf, 0, CONFIG_LINK_LOGBUF_LEN);
 
     va_start(list, format);
     (void) vsnprintf(str_buf, CONFIG_LINK_LOGBUF_LEN, format, list);

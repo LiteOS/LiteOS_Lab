@@ -401,11 +401,11 @@ static int config_parameter_release(oc_mqtt_tiny_cb_t *cb)
             osal_free(cb->hub_sub_topic[i]);
         }
     }
-    memset(&cb->hub_sub_topic,0,sizeof(cb->hub_sub_topic));
+    (void) memset(&cb->hub_sub_topic,0,sizeof(cb->hub_sub_topic));
 
-    memset(&cb->config,0,sizeof(oc_mqtt_config_t));
+    (void) memset(&cb->config,0,sizeof(oc_mqtt_config_t));
 
-    memset(&cb->bs_cb,0,sizeof(oc_bs_mqtt_cb_t));
+    (void) memset(&cb->bs_cb,0,sizeof(oc_bs_mqtt_cb_t));
 
     cb->flag.bits.bit_daemon_status = en_daemon_status_idle;
 
@@ -458,7 +458,7 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
     }
 
     /// now we copy the parameter
-    memset( &cb->config, 0 ,sizeof(cb->config) );
+    (void) memset( &cb->config, 0 ,sizeof(cb->config) );
 
     if( config->boot_mode == en_oc_mqtt_mode_bs_static_nodeid_hmacsha256_notimecheck_json )
     {
@@ -476,13 +476,13 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
     cb->config_mem = mem_buf; ///< this is the membuf
 
     cb->config.id = mem_buf;
-    strcpy( mem_buf,config->id );
+    (void) strcpy( mem_buf,config->id );
     mem_buf += strlen(config->id) + 1;
 
     if ( NULL != config->pwd )
     {
         cb->config.pwd = mem_buf;
-        strcpy( mem_buf, config->pwd );
+        (void) strcpy( mem_buf, config->pwd );
         mem_buf += strlen( config->pwd ) + 1;
     }
     else
@@ -491,11 +491,11 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
     }
 
     cb->config.server_addr = mem_buf;
-    strcpy( mem_buf,config->server_addr );
+    (void) strcpy( mem_buf,config->server_addr );
     mem_buf += strlen(config->server_addr) + 1;
 
     cb->config.server_port = mem_buf;
-    strcpy( mem_buf,config->server_port );
+    (void) strcpy( mem_buf,config->server_port );
     mem_buf += strlen(config->server_port) + 1;
 
     cb->config.security.type = config->security.type;
@@ -586,7 +586,7 @@ static int oc_mqtt_para_release(oc_mqtt_tiny_cb_t *cb)
     osal_free(cb->mqtt_para.default_pub_topic);
     osal_free(cb->mqtt_para.default_sub_topic);
 
-    memset(&cb->mqtt_para,0,sizeof(oc_mqtt_para_t));
+    (void) memset(&cb->mqtt_para,0,sizeof(oc_mqtt_para_t));
 
     return 0;
 }
@@ -693,7 +693,7 @@ static int dmp_connect(oc_mqtt_tiny_cb_t *cb)
 
     mqtt_al_conpara_t conpara;
 
-    memset(&conpara,0,sizeof(conpara));
+    (void) memset(&conpara,0,sizeof(conpara));
 
     conpara.clientid.data = cb->mqtt_para.mqtt_clientid;
     conpara.clientid.len = strlen(conpara.clientid.data);
@@ -765,7 +765,7 @@ static int dmp_subscribe(oc_mqtt_tiny_cb_t *cb)
     {
         ret = en_oc_mqtt_err_noconected;
     }
-    memset(&subpara,0,sizeof(subpara));
+    (void) memset(&subpara,0,sizeof(subpara));
 
     if(cb->flag.bits.bit_daemon_status == en_daemon_status_bs_getaddr)
     {
@@ -849,7 +849,7 @@ static int dmp_publish(oc_mqtt_tiny_cb_t *cb,char *topic, uint8_t *msg, int len,
 
 
     ///< pub the mqtt request
-    memset(&pubpara, 0, sizeof(pubpara));
+    (void) memset(&pubpara, 0, sizeof(pubpara));
     pubpara.qos = qos;
     pubpara.retain = 0;
     pubpara.timeout = 1000;
@@ -993,7 +993,7 @@ static int deal_api_subscribe( oc_mqtt_tiny_cb_t  *cb, oc_mqtt_daemon_cmd_t *cmd
                 ///< initialize the subtopic add it to the subscribe list
                 topic_sub->qos = subpara->qos;
                 topic_sub->topic = (char *)topic_sub + sizeof(tiny_topic_sub_t);
-                strcpy(topic_sub->topic, subpara->topic.data);
+                (void) strcpy(topic_sub->topic, subpara->topic.data);
                 topic_sub->nxt = cb->subscribe_lst;
                 cb->subscribe_lst = topic_sub;
 
@@ -1247,7 +1247,7 @@ static int tiny_publish(char *topic,uint8_t *payload, int len,int qos )
     }
 
     ///< pub the mqtt request
-    memset(&pubpara, 0, sizeof(pubpara));
+    (void) memset(&pubpara, 0, sizeof(pubpara));
     pubpara.qos = qos;
     pubpara.retain = 0;
     pubpara.timeout = 1000;
@@ -1278,7 +1278,7 @@ static int tiny_subscribe(char *topic, int qos)
     }
 
     ///< pub the mqtt request
-    memset(&subpara, 0, sizeof(subpara));
+    (void) memset(&subpara, 0, sizeof(subpara));
     subpara.qos = qos;
     subpara.topic.data = topic;
     subpara.topic.len = strlen(topic);
@@ -1299,7 +1299,7 @@ static en_oc_mqtt_err_code_t tiny_unsubscribe(char *topic)
         ret = en_oc_mqtt_err_system;
     }
     ///< pub the mqtt request
-    memset(&unsubpara, 0, sizeof(unsubpara));
+    (void) memset(&unsubpara, 0, sizeof(unsubpara));
     unsubpara.topic.data = topic;
     unsubpara.topic.len = strlen(topic);
     ret = daemon_cmd_post(en_oc_mqtt_daemon_cmd_unsubscribe,&unsubpara);
@@ -1344,7 +1344,7 @@ int oc_mqtt_tiny_install()
     {
         goto EXIT_MALLOC;
     }
-    memset(cb,0,sizeof(oc_mqtt_tiny_cb_t));
+    (void) memset(cb,0,sizeof(oc_mqtt_tiny_cb_t));
 
     cb->task_daemon_cmd_queue = queue_create("daemon_cmd_queue",10,1);
     if(NULL == cb->task_daemon_cmd_queue)

@@ -200,7 +200,7 @@ int lwm2m_add_rpt_uri(const lwm2m_uri_t *uri,  rpt_list_t *list)
             break;
         }
 
-        memset(rpt_list, 0, sizeof(*rpt_list));
+        (void) memset(rpt_list, 0, sizeof(*rpt_list));
         lwm2m_list_init(&rpt_list->rpt_list);
         (void) memcpy(&rpt_list->uri, uri, sizeof(rpt_list->uri));
         rpt_list->max_cnt = MAX_BUFFER_REPORT_CNT;
@@ -324,7 +324,7 @@ int lwm2m_queue_rpt_data(const lwm2m_uri_t *uri, const data_report_t *data)
             break;
         }
 
-        memset((void *)&data_node->list, 0, sizeof(data_node->list));
+        (void) memset((void *)&data_node->list, 0, sizeof(data_node->list));
         (void) memcpy((void *)&data_node->data, (void *)data, sizeof(data_node->data));
         lwm2m_list_insert_tail(&rpt_list->rpt_list, &data_node->list);
         rpt_list->rpt_node_cnt++;

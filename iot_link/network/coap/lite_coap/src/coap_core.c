@@ -141,7 +141,7 @@ int litecoap_parse_token(coap_msg_t *msg, unsigned char *buf, int buflen)
             if (msg->tok == NULL) {
                 return LITECOAP_MALLOC_FAILED;
             }
-            memset(msg->tok, 0, sizeof(coap_token_t));
+            (void) memset(msg->tok, 0, sizeof(coap_token_t));
         }
         msg->tok->token = (unsigned char *)litecoap_malloc(msg->head.tkl);
         if (msg->tok->token != NULL) {
@@ -250,7 +250,7 @@ int litecoap_parse_one_option(coap_msg_t *msg, unsigned short *sumdelta,
     {
         return LITECOAP_MALLOC_FAILED;
     }
-    memset(newopt, 0, sizeof(coap_option_t));
+    (void) memset(newopt, 0, sizeof(coap_option_t));
     newopt->optnum = delta + *sumdelta;
     
     if (len > 0)
@@ -632,7 +632,7 @@ coap_option_t * litecoap_add_option_to_list(coap_option_t *head,
     if (newopt == NULL) {
         return head;
     }
-    memset(newopt, 0, sizeof(coap_option_t));
+    (void) memset(newopt, 0, sizeof(coap_option_t));
     newopt->optnum = option;
     newopt->optlen = len;
     newopt->value = (unsigned char *)litecoap_malloc(len);
@@ -640,7 +640,7 @@ coap_option_t * litecoap_add_option_to_list(coap_option_t *head,
         litecoap_free(newopt);
         return head;
     }
-    memset(newopt->value, 0, len);
+    (void) memset(newopt->value, 0, len);
     //newopt->value = (unsigned char *)value;
     (void) memcpy(newopt->value, value, len);
     newopt->next = NULL;
@@ -725,7 +725,7 @@ int litecoap_add_token(coap_msg_t *msg, char *tok, int tklen)
         if (msg->tok == NULL) {
             return LITECOAP_MALLOC_FAILED;
         }
-        memset(msg->tok, 0, sizeof(coap_token_t));
+        (void) memset(msg->tok, 0, sizeof(coap_token_t));
     }
     msg->tok->token = (unsigned char *)litecoap_malloc(tklen);
     if (msg->tok->token == NULL) {
@@ -733,7 +733,7 @@ int litecoap_add_token(coap_msg_t *msg, char *tok, int tklen)
         msg->tok = NULL;
         return LITECOAP_MALLOC_FAILED;
     }
-    memset(msg->tok->token, 0, tklen);
+    (void) memset(msg->tok->token, 0, tklen);
     (void) memcpy(msg->tok->token, tok, tklen);
     msg->tok->tklen = tklen;
     msg->head.tkl = tklen;
@@ -817,7 +817,7 @@ coap_msg_t *litecoap_new_msg(coap_context_t *ctx,
     if (msg == NULL) {
         return NULL;
     }
-    memset(msg, 0, sizeof(coap_msg_t));
+    (void) memset(msg, 0, sizeof(coap_msg_t));
 
     msg->head.t = msgtype;
     msg->head.ver = 1;
@@ -902,7 +902,7 @@ int litecoap_send_back(coap_context_t *ctx, coap_msg_t *rcvmsg,
     if (newmsg == NULL) {
         return LITECOAP_MALLOC_FAILED;
     }
-    memset(newmsg, 0, sizeof(coap_msg_t));
+    (void) memset(newmsg, 0, sizeof(coap_msg_t));
 
     newmsg->head.t = type;
     newmsg->head.ver = 1;
@@ -994,7 +994,7 @@ int litecoap_addto_resndqueue(coap_context_t *ctx, coap_msg_t *msg)
     if (tmp == NULL) {
         return LITECOAP_MALLOC_FAILED;
     }
-    memset(tmp, 0, sizeof(send_queue_t));
+    (void) memset(tmp, 0, sizeof(send_queue_t));
 
     tmp->msg = msg;
     now = litecoap_time();
@@ -1056,7 +1056,7 @@ int litecoap_addto_sndqueue(coap_context_t *ctx, coap_msg_t *msg)
     if (tmp == NULL) {
         return LITECOAP_MALLOC_FAILED;
     }
-    memset(tmp, 0, sizeof(send_queue_t));
+    (void) memset(tmp, 0, sizeof(send_queue_t));
 
     tmp->msg = msg;
     tmp->next = ctx->sndque;
@@ -1432,7 +1432,7 @@ int litecoap_read(coap_context_t *ctx)
     if (msg == NULL) {
         return LITECOAP_MALLOC_FAILED;
     }
-    memset(msg, 0, sizeof(coap_msg_t));
+    (void) memset(msg, 0, sizeof(coap_msg_t));
     
     ret = litecoap_parse_header(msg, (const unsigned char *)ctx->rcvbuf.buf, len, ctx->proto);
     if (ret < 0) {

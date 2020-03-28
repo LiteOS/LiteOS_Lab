@@ -50,8 +50,8 @@ static int ota_pack_calc_stream_init(int sign_len, int file_size)
     return -1;
   }
 
-  memset(hash_cache, 0, 32);
-  memset(sign_cache, 0, 256);
+  (void) memset(hash_cache, 0, 32);
+  (void) memset(sign_cache, 0, 256);
   return 0;
 }
 

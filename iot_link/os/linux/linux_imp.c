@@ -316,7 +316,7 @@ static void *__mem_malloc(int size)
     if(size > 0)
     {
         ret = malloc(size);
-        memset(ret, 0, size);
+        (void) memset(ret, 0, size);
     }
 
     return ret;

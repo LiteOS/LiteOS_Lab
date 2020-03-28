@@ -195,7 +195,7 @@ static int app_report_task_entry()
     void                  *context;
     int                    lux = 0;
 
-    memset(&oc_param,0,sizeof(oc_param));
+    (void) memset(&oc_param,0,sizeof(oc_param));
 
     oc_param.app_server.address = cn_app_server;
     oc_param.app_server.port = cn_app_port;

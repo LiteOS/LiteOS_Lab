@@ -556,7 +556,7 @@ static int pcp_entry(void *args)
     if(crc != s_pcp_cb.record.crc)
     {
         ///< do the initialize and save it
-        memset(&s_pcp_cb.record,0,sizeof(s_pcp_cb.record));
+        (void) memset(&s_pcp_cb.record,0,sizeof(s_pcp_cb.record));
         s_pcp_cb.record.cur_state = EN_OTA_STATUS_IDLE;
         pcp_save_flag();
     }
@@ -599,7 +599,7 @@ int ota_pcp_init(int (*fn_pcp_send_msg)(void *msg,int len))
 {
     int ret = -1;
 
-    memset(&s_pcp_cb,0,sizeof(s_pcp_cb));
+    (void) memset(&s_pcp_cb,0,sizeof(s_pcp_cb));
     if(NULL == fn_pcp_send_msg)
     {
         return ret;

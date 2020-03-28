@@ -141,7 +141,7 @@ int dtls_setup(coap_al_initpara_t *initparam, int client_or_server)
         return LITECOAP_NG;
     }
 
-    memset(&info, 0, sizeof(info));
+    (void) memset(&info, 0, sizeof(info));
     info.client_or_server = client_or_server;
     info.finish_notify = NULL;
     info.step_notify   = NULL;
@@ -260,7 +260,7 @@ int handle_coap_response(struct _coap_context_t *ctx, coap_msg_t *msg)
     {
         /* bind failed */
         g_bind_finsh = 0;
-        memset(g_tok,0xf1,sizeof(g_tok));
+        (void) memset(g_tok,0xf1,sizeof(g_tok));
         g_tok_len = 8;
         return LITECOAP_OK;
     }

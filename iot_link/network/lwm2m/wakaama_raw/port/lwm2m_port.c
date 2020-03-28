@@ -615,7 +615,7 @@ static int __config(void **handle, lwm2m_al_init_param_t *init_param)
 
     // g_cmd_func = init_param->dealer;
     lwm2m_cmd_register_dealer(init_param->dealer);
-    memset(hd, 0, sizeof(handle_data_t));
+    (void) memset(hd, 0, sizeof(handle_data_t));
     lwm2m_context = lwm2m_init(&(hd->client_data));
 
     if (NULL == lwm2m_context)
@@ -741,7 +741,7 @@ int __add_object(void *handle, int object_id, int object_instance_id, int resour
             return LWM2M_MALLOC_FAILED;
         }
 
-        memset(obj, 0, sizeof(lwm2m_object_t));
+        (void) memset(obj, 0, sizeof(lwm2m_object_t));
 
         /* set object id */
         obj->objID = object_id;
@@ -972,7 +972,7 @@ static int __send(void *handle, lwm2m_al_send_param_t *send_param)
         return LWM2M_ARG_INVALID;
     }
 
-    memset((void *)&uri, 0, sizeof(uri));
+    (void) memset((void *)&uri, 0, sizeof(uri));
     get_resource_uri(send_param->object_id, send_param->object_instance_id, send_param->resource_id, &uri);
     data.buf = lwm2m_malloc(send_param->length);
 

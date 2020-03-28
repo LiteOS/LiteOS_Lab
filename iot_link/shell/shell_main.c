@@ -242,8 +242,8 @@ static void shell_cachecmd(struct shell_buffer_t *tab){
     }
     if(i == CN_CMD_CACHE){
         offset=tab->taboffset;
-        memset(tab->tab[offset],0,CN_CMDLEN_MAX);
-        strncpy(tab->tab[offset],tab->curcmd,CN_CMDLEN_MAX);
+        (void) memset(tab->tab[offset],0,CN_CMDLEN_MAX);
+        (void) strncpy(tab->tab[offset],tab->curcmd,CN_CMDLEN_MAX);
         offset = (offset +1)%CN_CMD_CACHE;
         tab->taboffset = offset;
     }
@@ -272,7 +272,7 @@ static void shell_insert_string(struct shell_buffer_t *tab, const char *str) {
         cursor--;
     }
     cursor = cursor - (str_len - 1);
-    strncpy(cursor, str, str_len);
+    (void) strncpy(cursor, str, str_len);
 }
 /*******************************************************************************
 function     :this is the  shell server task entry
@@ -290,7 +290,7 @@ static int shell_server_entry(void *args)
     unsigned int   vkmask = CN_VIRTUAL_KEY_NULL;
     struct shell_buffer_t shell_cmd_cache; 
 
-    memset(&shell_cmd_cache,0,sizeof(shell_cmd_cache));  //initialize the buffer
+    (void) memset(&shell_cmd_cache,0,sizeof(shell_cmd_cache));  //initialize the buffer
     shell_put_string(gs_welcome_info);     //put the welcome information
     shell_put_index();                                   //do initialize
     while(1){
@@ -345,11 +345,11 @@ static int shell_server_entry(void *args)
                     shell_cmd_cache.curoffset = len;
                 }
                 shell_put_backspace(len);
-                memset(shell_cmd_cache.curcmd,0,CN_CMDLEN_MAX);
+                (void) memset(shell_cmd_cache.curcmd,0,CN_CMDLEN_MAX);
                 shell_cmd_cache.curoffset = 0;
                 //then copy the previous command to current and echo all the info
                 offset = (shell_cmd_cache.taboffset +CN_CMD_CACHE -1)%CN_CMD_CACHE;
-                strncpy(shell_cmd_cache.curcmd,shell_cmd_cache.tab[offset],CN_CMDLEN_MAX);
+                (void) strncpy(shell_cmd_cache.curcmd,shell_cmd_cache.tab[offset],CN_CMDLEN_MAX);
                 shell_cmd_cache.taboffset = offset;
                 shell_cmd_cache.curoffset = strlen(shell_cmd_cache.curcmd);
                 //OK,now puts all the current character to the terminal
@@ -367,11 +367,11 @@ static int shell_server_entry(void *args)
                     shell_cmd_cache.curoffset = len;
                 }
                 shell_put_backspace(len);
-                memset(shell_cmd_cache.curcmd,0,CN_CMDLEN_MAX);
+                (void) memset(shell_cmd_cache.curcmd,0,CN_CMDLEN_MAX);
                 shell_cmd_cache.curoffset = 0;
                 //then copy the next command to current
                 offset = (shell_cmd_cache.taboffset +CN_CMD_CACHE +1)%CN_CMD_CACHE;
-                strncpy(shell_cmd_cache.curcmd,shell_cmd_cache.tab[offset],CN_CMDLEN_MAX);
+                (void) strncpy(shell_cmd_cache.curcmd,shell_cmd_cache.tab[offset],CN_CMDLEN_MAX);
                 shell_cmd_cache.taboffset = offset;
                 shell_cmd_cache.curoffset = strlen(shell_cmd_cache.curcmd);
                 //OK,now puts all the current character to the terminal
@@ -415,7 +415,7 @@ static int shell_server_entry(void *args)
                     //copy the current to the history cache if the current command is not none
                     shell_cachecmd(&shell_cmd_cache);//must do before the execute,execute will split the string
                     shell_cmd_execute(shell_cmd_cache.curcmd);  //execute the command
-                    memset(shell_cmd_cache.curcmd,0,CN_CMDLEN_MAX);
+                    (void) memset(shell_cmd_cache.curcmd,0,CN_CMDLEN_MAX);
                     shell_cmd_cache.curoffset = 0;
                 }
                 shell_put_index();
@@ -429,7 +429,7 @@ static int shell_server_entry(void *args)
                     //copy the current to the history cache if the current command is not none
                     shell_cachecmd(&shell_cmd_cache);//must do before the execute,execute will split the string
                     shell_cmd_execute(shell_cmd_cache.curcmd);  //execute the command
-                    memset(shell_cmd_cache.curcmd,0,CN_CMDLEN_MAX);
+                    (void) memset(shell_cmd_cache.curcmd,0,CN_CMDLEN_MAX);
                     shell_cmd_cache.curoffset = 0;
                 }
                 shell_put_index();
@@ -446,7 +446,7 @@ static int shell_server_entry(void *args)
                     shell_put_char(' ');
                     shell_moves_cursor_left(len + 1);
                     
-                    strcpy(substr - 1, substr);
+                    (void) strcpy(substr - 1, substr);
                     shell_cmd_cache.curoffset--;
                 } else
                     shell_bell();

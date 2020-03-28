@@ -232,7 +232,7 @@ static int update_uri_info(char *uri, int uri_len, unsigned char *update_flag)
             g_fw_update_record.uri = NULL;
         }
 
-        memset(&g_fw_update_record, 0x0, sizeof(g_fw_update_record));
+        (void) memset(&g_fw_update_record, 0x0, sizeof(g_fw_update_record));
         ret = record_fw_uri(uri, uri_len);
         *update_flag = 1;
 

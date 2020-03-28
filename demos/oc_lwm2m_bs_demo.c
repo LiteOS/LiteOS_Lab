@@ -224,7 +224,7 @@ static int app_report_task_entry()
     oc_config_param_t      oc_param;
     app_light_intensity_t  light;
 
-    memset(&oc_param,0,sizeof(oc_param));
+    (void) memset(&oc_param,0,sizeof(oc_param));
 
     oc_param.app_server.ep_id = cn_endpoint_id;
 

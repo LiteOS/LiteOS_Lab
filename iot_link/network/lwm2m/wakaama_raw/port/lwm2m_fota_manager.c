@@ -223,7 +223,7 @@ int lwm2m_fota_manager_rpt_state(lwm2m_fota_manager_s *thi, lwm2m_fota_state_e r
     const char *uri_str = "/5/0/3";
     ASSERT_THIS(return LWM2M_ARG_INVALID);
     lwm2m_fota_manager_save_rpt_state(thi, rpt_state);
-    memset((void *)&uri, 0, sizeof(uri));
+    (void) memset((void *)&uri, 0, sizeof(uri));
     (void)lwm2m_stringToUri(uri_str, strlen(uri_str), &uri);
     lwm2m_resource_value_changed(thi->lwm2m_context, &uri);
     return LWM2M_OK;
@@ -319,7 +319,7 @@ void lwm2m_fota_manager_update_notify(firmware_update_rst_e rst, void *param)
 }
 void lwm2m_fota_manager_init(lwm2m_fota_manager_s *thi)
 {
-    memset(thi, 0, sizeof(*thi));
+    (void) memset(thi, 0, sizeof(*thi));
     lwm2m_fota_idle_state_init(&thi->idle_state, thi);
     lwm2m_fota_downloading_state_init(&thi->downloading_state, thi);
     lwm2m_fota_downloaded_state_init(&thi->downloaded_state, thi);
@@ -340,7 +340,7 @@ void lwm2m_fota_manager_destroy(lwm2m_fota_manager_s *thi)
     }
 
     /*lint -e668 */
-    memset(thi, 0, sizeof(*thi));
+    (void) memset(thi, 0, sizeof(*thi));
     /*lint +e668 */
 }
 

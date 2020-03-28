@@ -48,7 +48,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
-#include <string.h> //memset()
+#include <string.h> //(void) memset()
 #include <math.h>
 
 volatile PAINT Paint;

@@ -231,14 +231,14 @@ static uint8_t prv_security_write(uint16_t instanceId,
 
                 if (NULL != targetP->uri)
                 {
-                    memset(targetP->uri, 0, dataArray[i].value.asBuffer.length + 1);
-                    strncpy(targetP->uri, (char *)dataArray[i].value.asBuffer.buffer, dataArray[i].value.asBuffer.length);
+                    (void) memset(targetP->uri, 0, dataArray[i].value.asBuffer.length + 1);
+                    (void) strncpy(targetP->uri, (char *)dataArray[i].value.asBuffer.buffer, dataArray[i].value.asBuffer.length);
                     result = COAP_204_CHANGED;
                 }
                 //            targetP->uri = (char *)lwm2m_malloc(strlen(s_bs_test_uri) + 1); ///--TODO, do the test
                 //            if (targetP->uri != NULL)
                 //            {
-                //                strncpy(targetP->uri, (char *)s_bs_test_uri, strlen(s_bs_test_uri) + 1);
+                //                (void) strncpy(targetP->uri, (char *)s_bs_test_uri, strlen(s_bs_test_uri) + 1);
                 //                result = COAP_204_CHANGED;
                 //            }
                 else
@@ -290,7 +290,7 @@ static uint8_t prv_security_write(uint16_t instanceId,
 
                 if (NULL != targetP->publicIdentity)
                 {
-                    memset(targetP->publicIdentity, 0, dataArray[i].value.asBuffer.length + 1);
+                    (void) memset(targetP->publicIdentity, 0, dataArray[i].value.asBuffer.length + 1);
                     (void) memcpy(targetP->publicIdentity, (char *)dataArray[i].value.asBuffer.buffer, dataArray[i].value.asBuffer.length);
                     targetP->publicIdLen = dataArray[i].value.asBuffer.length;
                     result = COAP_204_CHANGED;
@@ -309,7 +309,7 @@ static uint8_t prv_security_write(uint16_t instanceId,
 
                 if (NULL != targetP->serverPublicKey)
                 {
-                    memset(targetP->serverPublicKey, 0, dataArray[i].value.asBuffer.length + 1);
+                    (void) memset(targetP->serverPublicKey, 0, dataArray[i].value.asBuffer.length + 1);
                     (void) memcpy(targetP->serverPublicKey, (char *)dataArray[i].value.asBuffer.buffer, dataArray[i].value.asBuffer.length);
                     targetP->serverPublicKeyLen = dataArray[i].value.asBuffer.length;
                     result = COAP_204_CHANGED;
@@ -328,7 +328,7 @@ static uint8_t prv_security_write(uint16_t instanceId,
 
                 if (NULL != targetP->secretKey)
                 {
-                    memset(targetP->secretKey, 0, dataArray[i].value.asBuffer.length + 1);
+                    (void) memset(targetP->secretKey, 0, dataArray[i].value.asBuffer.length + 1);
                     (void) memcpy(targetP->secretKey, (char *)dataArray[i].value.asBuffer.buffer, dataArray[i].value.asBuffer.length);
                     targetP->secretKeyLen = dataArray[i].value.asBuffer.length;
                     result = COAP_204_CHANGED;
@@ -470,7 +470,7 @@ static uint8_t prv_security_create(uint16_t instanceId,
 
     if (NULL == targetP) return COAP_500_INTERNAL_SERVER_ERROR;
 
-    memset(targetP, 0, sizeof(security_instance_t));
+    (void) memset(targetP, 0, sizeof(security_instance_t));
     targetP->instanceId = instanceId;
     objectP->instanceList = LWM2M_LIST_ADD(objectP->instanceList, targetP);
     result = prv_security_write(instanceId, numData, dataArray, objectP);
@@ -516,7 +516,7 @@ void copy_security_object(lwm2m_object_t *objectDest, lwm2m_object_t *objectSrc)
             return;
         }
 
-        strncpy(instanceDest->uri, instanceSrc->uri, strlen(instanceSrc->uri) + 1);
+        (void) strncpy(instanceDest->uri, instanceSrc->uri, strlen(instanceSrc->uri) + 1);
 
         if (LWM2M_SECURITY_MODE_PRE_SHARED_KEY == instanceSrc->securityMode)
         {
@@ -604,7 +604,7 @@ int add_security_object_instance(lwm2m_object_t *obj, int object_instance_id, vo
         return LWM2M_MALLOC_FAILED;
     }
 
-    memset(instance, 0, sizeof(security_instance_t));
+    (void) memset(instance, 0, sizeof(security_instance_t));
     instance->instanceId = object_instance_id;   //i=0 for iot_server, i=1 for bs_server
     instance->isBootstrap = sec_param->is_bootstrap;
 

@@ -46,7 +46,7 @@ static void pack_man_init_pack_device(pack_storage_device_s *device)
     return;
   }
 
-  (void)memset(device, 0, sizeof(*device));
+  (void)(void) memset(device, 0, sizeof(*device));
 
   device->interface.write_software = ota_pack_man_software_write;
   device->interface.write_software_end = ota_pack_man_software_write_end;

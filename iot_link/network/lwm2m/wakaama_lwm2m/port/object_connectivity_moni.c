@@ -309,7 +309,7 @@ int add_connectivity_monitoring_object_instance(lwm2m_object_t *obj, int object_
         return LWM2M_MALLOC_FAILED;
     }
 
-    memset(obj->instanceList, 0, sizeof(lwm2m_list_t));
+    (void) memset(obj->instanceList, 0, sizeof(lwm2m_list_t));
     obj->instanceList->id = object_instance_id;
     return LWM2M_OK;
 }
@@ -339,15 +339,15 @@ int config_connectivity_monitoring_object(lwm2m_object_t *obj, void *param)
     }
 
     conn_m_data_t *myData = (conn_m_data_t *) obj->userData;
-    memset((void *)myData, 0, sizeof(conn_m_data_t));
+    (void) memset((void *)myData, 0, sizeof(conn_m_data_t));
     myData->cellId          = VALUE_CELL_ID;
     myData->signalStrength  = VALUE_RADIO_SIGNAL_STRENGTH;
     myData->linkQuality     = VALUE_LINK_QUALITY;
     myData->linkUtilization = VALUE_LINK_UTILIZATION;
-    strcpy(myData->ipAddresses[0], VALUE_IP_ADDRESS_1);
-    strcpy(myData->ipAddresses[1], VALUE_IP_ADDRESS_2);
-    strcpy(myData->routerIpAddresses[0], VALUE_ROUTER_IP_ADDRESS_1);
-    strcpy(myData->routerIpAddresses[1], VALUE_ROUTER_IP_ADDRESS_2);
+    (void) strcpy(myData->ipAddresses[0], VALUE_IP_ADDRESS_1);
+    (void) strcpy(myData->ipAddresses[1], VALUE_IP_ADDRESS_2);
+    (void) strcpy(myData->routerIpAddresses[0], VALUE_ROUTER_IP_ADDRESS_1);
+    (void) strcpy(myData->routerIpAddresses[1], VALUE_ROUTER_IP_ADDRESS_2);
     return LWM2M_OK;
 }
 
@@ -401,7 +401,7 @@ uint8_t connectivity_moni_change(lwm2m_data_t *dataArray,
             }
             else
             {
-                memset(data->ipAddresses[0], 0, sizeof(data->ipAddresses[0]));
+                (void) memset(data->ipAddresses[0], 0, sizeof(data->ipAddresses[0]));
                 (void) memcpy(data->ipAddresses[0], dataArray->value.asBuffer.buffer, dataArray->value.asBuffer.length);
                 data->ipAddresses[0][dataArray->value.asBuffer.length] = 0;
                 result = COAP_204_CHANGED;
@@ -416,7 +416,7 @@ uint8_t connectivity_moni_change(lwm2m_data_t *dataArray,
             }
             else
             {
-                memset(data->routerIpAddresses[0], 0, sizeof(data->routerIpAddresses[0]));
+                (void) memset(data->routerIpAddresses[0], 0, sizeof(data->routerIpAddresses[0]));
                 (void) memcpy(data->routerIpAddresses[0], dataArray->value.asBuffer.buffer, dataArray->value.asBuffer.length);
                 data->routerIpAddresses[0][dataArray->value.asBuffer.length] = 0;
                 result = COAP_204_CHANGED;

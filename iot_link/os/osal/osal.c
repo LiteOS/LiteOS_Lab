@@ -304,7 +304,7 @@ void *osal_zalloc(size_t size)
         ret = s_os_cb->ops->malloc(size);
         if(NULL != ret)
         {
-            memset(ret,0,size);
+            (void) memset(ret,0,size);
         }
     }
 
@@ -329,7 +329,7 @@ void *osal_calloc(size_t n, size_t size)
     void *p = osal_malloc(n * size);
     if(NULL != p)
     {
-        memset(p, 0, n * size);
+        (void) memset(p, 0, n * size);
     }
 
     return p;

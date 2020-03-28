@@ -370,8 +370,8 @@ static uint8_t prv_server_write(uint16_t instanceId,
                     && (dataArray[i].value.asBuffer.length > 0) && (dataArray[i].value.asBuffer.length <= 3)
                     && prv_server_check_binding_valid((char *)dataArray[i].value.asBuffer.buffer, dataArray[i].value.asBuffer.length))
                 {
-                    memset(targetP->binding, 0, sizeof(targetP->binding));
-                    strncpy(targetP->binding, (char *)dataArray[i].value.asBuffer.buffer, dataArray[i].value.asBuffer.length);
+                    (void) memset(targetP->binding, 0, sizeof(targetP->binding));
+                    (void) strncpy(targetP->binding, (char *)dataArray[i].value.asBuffer.buffer, dataArray[i].value.asBuffer.length);
                     result = COAP_204_CHANGED;
                 }
                 else
@@ -461,7 +461,7 @@ static uint8_t prv_server_create(uint16_t instanceId,
 
     if (NULL == serverInstance) return COAP_500_INTERNAL_SERVER_ERROR;
 
-    memset(serverInstance, 0, sizeof(server_instance_t));
+    (void) memset(serverInstance, 0, sizeof(server_instance_t));
     serverInstance->instanceId = instanceId;
     objectP->instanceList = LWM2M_LIST_ADD(objectP->instanceList, serverInstance);
     result = prv_server_write(instanceId, numData, dataArray, objectP);
@@ -498,7 +498,7 @@ void copy_server_object(lwm2m_object_t *objectDest, lwm2m_object_t *objectSrc)
 
         (void) memcpy(instanceDest, instanceSrc, sizeof(server_instance_t));
         // not sure it's necessary:
-        strncpy(instanceDest->binding, instanceSrc->binding, 4);
+        (void) strncpy(instanceDest->binding, instanceSrc->binding, 4);
         instanceSrc = (server_instance_t *)instanceSrc->next;
 
         if (NULL == previousInstanceDest)
@@ -550,7 +550,7 @@ int add_server_object_instance(lwm2m_object_t *obj, int object_instance_id, void
         return LWM2M_MALLOC_FAILED;
     }
 
-    memset(instance, 0, sizeof(server_instance_t));
+    (void) memset(instance, 0, sizeof(server_instance_t));
     instance->instanceId = 0;
     instance->shortServerId = srv_param->server_id;
 

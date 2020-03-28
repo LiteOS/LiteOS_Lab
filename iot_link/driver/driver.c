@@ -122,7 +122,7 @@ los_driv_t los_driv_register(os_driv_para_t *para)
     {
         goto EXIT_MALLOC;
     }
-    memset(driv,0,sizeof(struct driv_cb));
+    (void) memset(driv,0,sizeof(struct driv_cb));
 
     //do the member initialize
     driv->name = para->name;
@@ -309,7 +309,7 @@ los_dev_t  los_dev_open  (const char *name,unsigned int flag)
     {
         goto EXIT_MEMERR;
     }
-    memset(dev,0,sizeof(struct dev_cb));
+    (void) memset(dev,0,sizeof(struct dev_cb));
 
     opret = osal_mutex_lock(s_los_driv_module.lock);
     if(false == opret)

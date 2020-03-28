@@ -77,7 +77,7 @@ int mbedtls_hmac_calc(mbedtls_hmac_t *hmac_info)
     }
 
     mbedtls_md_init(&mbedtls_md_ctx);
-    memset(hmac_info->digest, 0x00, hmac_info->digest_len);
+    (void) memset(hmac_info->digest, 0x00, hmac_info->digest_len);
 
     ret = mbedtls_md_setup(&mbedtls_md_ctx, md_info, 1);
     if (ret != 0)

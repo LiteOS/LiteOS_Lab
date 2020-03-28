@@ -196,7 +196,7 @@ int ring_buffer_deinit(tag_ring_buffer_t *ring)
     int ret = -1;
     if(NULL != ring)
     {
-        memset(ring,0,sizeof(tag_ring_buffer_t));
+        (void) memset(ring,0,sizeof(tag_ring_buffer_t));
         ret = 0;
     }
     return ret;
