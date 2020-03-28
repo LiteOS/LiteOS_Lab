@@ -38,6 +38,8 @@
  */
 
 #include <string.h>
+#include <stdio.h>
+
 #include <link_misc.h>
 #include <osal.h>
 #include <oc_mqtt_al.h>
@@ -217,7 +219,7 @@ static char *topic_make(char *fmt, char *device_id, char *request_id)
     ret = osal_malloc(len);
     if(NULL != ret)
     {
-        snprintf(ret,len,fmt,device_id,request_id);
+        (void) snprintf(ret,len,fmt,device_id,request_id);
     }
     return ret;
 }

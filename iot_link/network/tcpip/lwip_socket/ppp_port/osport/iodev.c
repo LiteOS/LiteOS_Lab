@@ -32,6 +32,7 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 #include "osport.h"
+#include <link_log.h>
 
 
 typedef struct
@@ -72,23 +73,23 @@ s32_t iodev_read(s32_t fd, u8_t *buf, s32_t len, s32_t timeout)
     ret = uart_read(buf, len, timeout);
     if(ret > 0)
     {
-        printf("RCV:%02x Bytes:", ret);
+        LINK_LOG_DEBUG("RCV:%02x Bytes:", ret);
         for(i = 0; i < ret; i++)
         {
             if(gIOCB.debugrxmode == 1)
             {
-                printf("%c", buf[i]);
+                LINK_LOG_DEBUG("%c", buf[i]);
             }
             else if(gIOCB.debugrxmode  == 2)
             {
-                printf(" %02x", buf[i]);
+                LINK_LOG_DEBUG(" %02x", buf[i]);
             }
             else
             {
 
             }
         }
-        printf("\n\r");
+        LINK_LOG_DEBUG("\n\r");
     }
     return ret;
 }
@@ -96,23 +97,23 @@ s32_t iodev_write(s32_t fd, u8_t *buf, s32_t len, s32_t timeout)
 {
     s32_t ret;
     s32_t i;
-    printf("SND:%02x Bytes:", len);
+    LINK_LOG_DEBUG("SND:%02x Bytes:", len);
     for(i = 0; i < len; i++)
     {
         if(gIOCB.debugtxmode == 1)
         {
-            printf("%c", buf[i]);
+            LINK_LOG_DEBUG("%c", buf[i]);
         }
         else if(gIOCB.debugtxmode == 2)
         {
-            printf(" %02x", buf[i]);
+            LINK_LOG_DEBUG(" %02x", buf[i]);
         }
         else
         {
 
         }
     }
-    printf("\n\r");
+    LINK_LOG_DEBUG("\n\r");
     ret = uart_write(buf, len, timeout);
     return ret;
 }

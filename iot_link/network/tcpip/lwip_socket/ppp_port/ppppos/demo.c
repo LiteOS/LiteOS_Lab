@@ -75,6 +75,8 @@ Supported compression or miscellaneous protocols, for serial links only:
 
 */
 
+#include <link_log.h>
+
 #if USE_PPPOS
 
 #include "netif/ppp/ppp.h"
@@ -123,88 +125,88 @@ static void status_cb(ppp_pcb *pcb, int err_code, void *ctx)
 #if LWIP_DNS
         const ip_addr_t *ns;
 #endif /* LWIP_DNS */
-        printf("status_cb: Connected\n");
+        LINK_LOG_DEBUG("status_cb: Connected\n");
 #if PPP_IPV4_SUPPORT
-        printf("   our_ipaddr  = %s\n", ipaddr_ntoa(&pppif->ip_addr));
-        printf("   his_ipaddr  = %s\n", ipaddr_ntoa(&pppif->gw));
-        printf("   netmask     = %s\n", ipaddr_ntoa(&pppif->netmask));
+        LINK_LOG_DEBUG("   our_ipaddr  = %s\n", ipaddr_ntoa(&pppif->ip_addr));
+        LINK_LOG_DEBUG("   his_ipaddr  = %s\n", ipaddr_ntoa(&pppif->gw));
+        LINK_LOG_DEBUG("   netmask     = %s\n", ipaddr_ntoa(&pppif->netmask));
 #if LWIP_DNS
         ns = dns_getserver(0);
-        printf("   dns1        = %s\n", ipaddr_ntoa(ns));
+        LINK_LOG_DEBUG("   dns1        = %s\n", ipaddr_ntoa(ns));
         ns = dns_getserver(1);
-        printf("   dns2        = %s\n", ipaddr_ntoa(ns));
+        LINK_LOG_DEBUG("   dns2        = %s\n", ipaddr_ntoa(ns));
         gConnect = 1;
 #endif /* LWIP_DNS */
 #endif /* PPP_IPV4_SUPPORT */
 #if PPP_IPV6_SUPPORT
-        printf("   our6_ipaddr = %s\n", ip6addr_ntoa(netif_ip6_addr(
+        LINK_LOG_DEBUG("   our6_ipaddr = %s\n", ip6addr_ntoa(netif_ip6_addr(
                     pppif, 0)));
 #endif /* PPP_IPV6_SUPPORT */
         break;
     }
     case PPPERR_PARAM:
     {
-        printf("status_cb: Invalid parameter\n");
+        LINK_LOG_DEBUG("status_cb: Invalid parameter\n");
         break;
     }
     case PPPERR_OPEN:
     {
-        printf("status_cb: Unable to open PPP session\n");
+        LINK_LOG_DEBUG("status_cb: Unable to open PPP session\n");
         break;
     }
     case PPPERR_DEVICE:
     {
-        printf("status_cb: Invalid I/O device for PPP\n");
+        LINK_LOG_DEBUG("status_cb: Invalid I/O device for PPP\n");
         break;
     }
     case PPPERR_ALLOC:
     {
-        printf("status_cb: Unable to allocate resources\n");
+        LINK_LOG_DEBUG("status_cb: Unable to allocate resources\n");
         break;
     }
     case PPPERR_USER:
     {
-        printf("status_cb: User interrupt\n");
+        LINK_LOG_DEBUG("status_cb: User interrupt\n");
         break;
     }
     case PPPERR_CONNECT:
     {
-        printf("status_cb: Connection lost\n");
+        LINK_LOG_DEBUG("status_cb: Connection lost\n");
         break;
     }
     case PPPERR_AUTHFAIL:
     {
-        printf("status_cb: Failed authentication challenge\n");
+        LINK_LOG_DEBUG("status_cb: Failed authentication challenge\n");
         break;
     }
     case PPPERR_PROTOCOL:
     {
-        printf("status_cb: Failed to meet protocol\n");
+        LINK_LOG_DEBUG("status_cb: Failed to meet protocol\n");
         break;
     }
     case PPPERR_PEERDEAD:
     {
-        printf("status_cb: Connection timeout\n");
+        LINK_LOG_DEBUG("status_cb: Connection timeout\n");
         break;
     }
     case PPPERR_IDLETIMEOUT:
     {
-        printf("status_cb: Idle Timeout\n");
+        LINK_LOG_DEBUG("status_cb: Idle Timeout\n");
         break;
     }
     case PPPERR_CONNECTTIME:
     {
-        printf("status_cb: Max connect time reached\n");
+        LINK_LOG_DEBUG("status_cb: Max connect time reached\n");
         break;
     }
     case PPPERR_LOOPBACK:
     {
-        printf("status_cb: Loopback detected\n");
+        LINK_LOG_DEBUG("status_cb: Loopback detected\n");
         break;
     }
     default:
     {
-        printf("status_cb: Unknown error code %d\n", err_code);
+        LINK_LOG_DEBUG("status_cb: Unknown error code %d\n", err_code);
         break;
     }
     }

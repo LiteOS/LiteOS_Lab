@@ -41,13 +41,7 @@
 #include <stdio.h>
 #include <link_log.h>
 
-#if CFG_LINK_DEBUG_ENABLE
 static en_link_log_level_t s_link_log_level = EN_LINK_LOG_LEVEL_TRACE;
-#else
-static en_link_log_level_t s_link_log_level = EN_LINK_LOG_LEVEL_INFO;
-#endif
-
-
 static const char *s_link_log_names[EN_LINK_LOG_LEVEL_MAX] =
 {
     "TRACE",
@@ -85,4 +79,26 @@ const char *link_log_level_name(en_link_log_level_t log_level)
         return s_link_log_names[log_level];
     }
 
+}
+
+#include <stdarg.h>
+
+#ifndef CONFIG_LINK_LOGBUF_LEN
+#define CONFIG_LINK_LOGBUF_LEN      256  ///< you could modify it
+#endif
+
+__attribute__((weak)) void link_printf(const char *format, ...)
+{
+    char str_buf[CONFIG_LINK_LOGBUF_LEN] = {0};
+    va_list list;
+
+    (void) memset(str_buf, 0, CONFIG_LINK_LOGBUF_LEN);
+
+    va_start(list, format);
+    (void) vsnprintf(str_buf, CONFIG_LINK_LOGBUF_LEN, format, list);
+    va_end(list);
+
+    (void) printf("%s", str_buf);
+
+    return;
 }

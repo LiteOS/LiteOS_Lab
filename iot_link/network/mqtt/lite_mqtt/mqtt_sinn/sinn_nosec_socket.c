@@ -53,7 +53,7 @@ static int __sinn_sock_connect(sinn_connection_t *nc)
     nc->sock_fd = sal_socket(AF_INET, SOCK_STREAM, 0);
     if (nc->sock_fd == -1)
     {
-        printf("socket error\r\n");
+        LINK_LOG_DEBUG("socket error\r\n");
         nc->flags |= SINN_FG_RECONNECT;
         return rc;
     }
@@ -61,7 +61,7 @@ static int __sinn_sock_connect(sinn_connection_t *nc)
     rc = sal_connect(nc->sock_fd, (struct sockaddr *)&nc->address, sizeof(nc->address));
     if(rc < 0)
     {
-        printf("sock %d rc %d \r\n",  nc->sock_fd, rc);
+        LINK_LOG_DEBUG("sock %d rc %d \r\n",  nc->sock_fd, rc);
         nc->flags |= SINN_FG_RECONNECT;
         return rc;
     }
@@ -80,7 +80,7 @@ static void __sinn_sock_discon(sinn_connection_t *nc)
 
     rc = sal_closesocket(nc->sock_fd);
     if(rc < 0)
-        printf("sock %d rc %d \r\n",  nc->sock_fd, rc);
+        LINK_LOG_DEBUG("sock %d rc %d \r\n",  nc->sock_fd, rc);
 
     nc->sock_fd = -1;
 }
@@ -115,7 +115,7 @@ static sinn_time_t __sinn_sock_poll(sinn_connection_t *nc, int timeout_ms)
     now = sinn_gettime_ms();
 
     if(rc == -1)
-        printf("select() error\r\n");
+        LINK_LOG_DEBUG("select() error\r\n");
     else if(rc > 0)
     {
         if(FD_ISSET(nc->sock_fd, &rfds)) {nc->flags |= SINN_FG_CAN_RD;}
@@ -133,7 +133,7 @@ static int __sinn_sock_send(sinn_connection_t *nc, const void *buf, size_t len)
     int rc;
 
     rc = sal_send(nc->sock_fd, buf, len, 0);
-    printf("sock send len:%d\r\n", rc);
+    LINK_LOG_DEBUG("sock send len:%d\r\n", rc);
 
     return rc;
 }
@@ -143,7 +143,7 @@ static int __sinn_sock_recv(sinn_connection_t *nc, void *buf, size_t len)
     int rc;
 
     rc = sal_recv(nc->sock_fd, buf, len, 0);
-    printf("sock recv len:%d\r\n", rc);
+    LINK_LOG_DEBUG("sock recv len:%d\r\n", rc);
 
     return rc;
 }

@@ -46,9 +46,9 @@
 //test fucntion:print the params passed in
 static int shell_test_func(int argc, const char *argv[]){
     int i = 0;
-    printf("argc:%d \n\r",argc);
+    LINK_LOG_DEBUG("argc:%d \n\r",argc);
     for(i=0;i<argc;i++){
-        printf("args:%d %s\n\r",i,argv[i]);
+        LINK_LOG_DEBUG("args:%d %s\n\r",i,argv[i]);
     }
     return 0;
 }
@@ -82,7 +82,7 @@ static int shell_reboot(int argc,const char *argv[])
 {
     osal_reboot();
 
-    printf("reboot failed\n\r");
+    LINK_LOG_DEBUG("reboot failed\n\r");
 
     return -1;
 }

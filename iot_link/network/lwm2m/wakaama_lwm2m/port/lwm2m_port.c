@@ -309,7 +309,7 @@ static void lwm2m_set_bootstrap_sequence_state(lwm2m_al_init_param_t *lwm2m_para
 
 static void lwm2m_send_ack_callback(lwm2m_report_type_e type, int cookie, data_send_status_e status)
 {
-    printf("type:%d cookie:%d status:%d\n", type, cookie, status);
+    LINK_LOG_DEBUG("type:%d cookie:%d status:%d\n", type, cookie, status);
 }
 
 static void observe_handle_ack(lwm2m_transaction_t *transacP, void *message)
@@ -785,11 +785,11 @@ int __add_object(void *handle, int object_id, int object_instance_id, int resour
     {
         /* -1: find an available one */
         obj_ins_id = generate_new_object_instance_id(obj->instanceList);
-        printf("obj_ins_id: %d\n", obj_ins_id);
+        LINK_LOG_DEBUG("obj_ins_id: %d\n", obj_ins_id);
     }
     else
     {
-        printf("obj_ins_id: %d\n", obj_ins_id);
+        LINK_LOG_DEBUG("obj_ins_id: %d\n", obj_ins_id);
         obj_instance = (lwm2m_list_t *)LWM2M_LIST_FIND(obj->instanceList, obj_ins_id);
     }
 
@@ -807,7 +807,7 @@ int __add_object(void *handle, int object_id, int object_instance_id, int resour
         && (NULL != obj->instanceList)
         && (NULL == obj_instance))
     {
-        printf("standard object_id %d only supports single instance!\n", object_id);
+        LINK_LOG_DEBUG("standard object_id %d only supports single instance!\n", object_id);
         return LWM2M_SUPPORT_SINGLE_INSTANCE_ONLY;
     }
 
@@ -820,7 +820,7 @@ int __add_object(void *handle, int object_id, int object_instance_id, int resour
         && (object_id <= OBJ_ACCESS_CONTROL_ID)
         && (NULL != obj_instance))
     {
-        printf("standard object_uri %d/%d/%d does not add resource!\n", object_id, obj_ins_id, resource_id);
+        LINK_LOG_DEBUG("standard object_uri %d/%d/%d does not add resource!\n", object_id, obj_ins_id, resource_id);
         return LWM2M_OBJECT_INSTANCE_EXISTED;
     }
 

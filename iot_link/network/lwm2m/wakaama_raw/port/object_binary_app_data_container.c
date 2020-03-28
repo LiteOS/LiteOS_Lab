@@ -164,33 +164,33 @@ static void prv_output_buffer(uint8_t *buffer,
     while(i < length)
     {
         int j;
-        fprintf(stderr, "  ");
+        fLINK_LOG_DEBUG(stderr, "  ");
 
         memcpy(array, buffer + i, ARRAY_MAXNUM);
 
         for(j = 0 ; j < ARRAY_MAXNUM && i + j < length; j++)
         {
-            fprintf(stderr, "%02X ", array[j]);
+            fLINK_LOG_DEBUG(stderr, "%02X ", array[j]);
         }
 
         while(j < ARRAY_MAXNUM)
         {
-            fprintf(stderr, "   ");
+            fLINK_LOG_DEBUG(stderr, "   ");
             j++;
         }
 
-        fprintf(stderr, "  ");
+        fLINK_LOG_DEBUG(stderr, "  ");
 
         for(j = 0 ; j < ARRAY_MAXNUM && i + j < length; j++)
         {
             if(isprint(array[j]))
-                fprintf(stderr, "%c ", array[j]);
+                fLINK_LOG_DEBUG(stderr, "%c ", array[j]);
 
             else
-                fprintf(stderr, ". ");
+                fLINK_LOG_DEBUG(stderr, ". ");
         }
 
-        fprintf(stderr, "\n");
+        fLINK_LOG_DEBUG(stderr, "\n");
 
         i += ARRAY_MAXNUM;
     }
@@ -209,7 +209,7 @@ static uint8_t prv_read_data(plat_instance_t *targetP,
     {
         if (targetP->resourceMap & (1 << dataArrayP[i].id))
         {
-            //printf("19/0/0 read\r\n");
+            //LINK_LOG_DEBUG("19/0/0 read\r\n");
             if (NULL == dataCfg)
             {
                 uint8_t *buf = lwm2m_malloc(sizeof(*buf));
@@ -398,7 +398,7 @@ static uint8_t prv_write(uint16_t instanceId,
     {
         if (targetP->resourceMap & (1 << dataArray[i].id))
         {
-            snprintf(uri, MAX_STRURI_LEN, URI_FMT, targetP->objID, instanceId, dataArray[i].id);
+            snLINK_LOG_DEBUG(uri, MAX_STRURI_LEN, URI_FMT, targetP->objID, instanceId, dataArray[i].id);
             (void)lwm2m_cmd_ioctl(LWM2M_CMD_MAX,
                                   (char *)(dataArray[i].value.asBuffer.buffer),
                                   dataArray->value.asBuffer.length,
@@ -512,12 +512,12 @@ static uint8_t prv_exec(uint16_t instanceId,
     case 1:
         return COAP_405_METHOD_NOT_ALLOWED;
     case 2:
-        fprintf(stdout, "\r\n-----------------\r\n"
+        fLINK_LOG_DEBUG(stdout, "\r\n-----------------\r\n"
                 "Execute on %hu/%d/%d\r\n"
                 " Parameter (%d bytes):\r\n",
                 objectP->objID, instanceId, resourceId, length);
         prv_output_buffer((uint8_t *)buffer, length);
-        fprintf(stdout, "-----------------\r\n\r\n");
+        fLINK_LOG_DEBUG(stdout, "-----------------\r\n\r\n");
         return COAP_204_CHANGED;
     case 3:
         return COAP_405_METHOD_NOT_ALLOWED;
@@ -527,7 +527,7 @@ static uint8_t prv_exec(uint16_t instanceId,
     if (targetP->resourceMap & (1 << resourceId))
     {
         // (void)lwm2m_cmd_ioctl(LWM2M_EXECUTE_APP_DATA, (char *)buffer, length);
-        snprintf(uri, MAX_STRURI_LEN, URI_FMT, targetP->objID, instanceId, resourceId);
+        snLINK_LOG_DEBUG(uri, MAX_STRURI_LEN, URI_FMT, targetP->objID, instanceId, resourceId);
         lwm2m_cmd_ioctl(LWM2M_CMD_MAX,
                         (char *)buffer,
                         length,
@@ -545,12 +545,12 @@ static uint8_t prv_exec(uint16_t instanceId,
 void display_binary_app_data_object(lwm2m_object_t *object)
 {
 #ifdef WITH_LOGS
-    fprintf(stdout, "  /%u: Test object, instances:\r\n", object->objID);
+    fLINK_LOG_DEBUG(stdout, "  /%u: Test object, instances:\r\n", object->objID);
     plat_instance_t *instance = (plat_instance_t *)object->instanceList;
 
     while (NULL != instance)
     {
-        fprintf(stdout, "    /%u/%u: shortId: %u, test: %u\r\n",
+        fLINK_LOG_DEBUG(stdout, "    /%u/%u: shortId: %u, test: %u\r\n",
                 object->objID, instance->shortID,
                 instance->shortID, instance->test);
         instance = (plat_instance_t *)instance->next;
@@ -576,7 +576,7 @@ int add_app_data_object_instance(lwm2m_object_t *obj,
 
     if ((resource_id < 0) || (resource_id >= MAX_RES_NUM))
     {
-        printf("invalid resource id %d\n", resource_id);
+        LINK_LOG_DEBUG("invalid resource id %d\n", resource_id);
         return LWM2M_ERRNO_NORES;
     }
 

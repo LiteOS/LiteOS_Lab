@@ -132,14 +132,14 @@ static int esp8266_rcvdeal(void *args,void *msg,size_t len)
 
     if(len <strlen(CN_ESP8266_RCVINDEX))
     {
-        printf("%s:invalid frame:%d byte:%s\n\r",__FUNCTION__,len,(char *)data);
+        LINK_LOG_DEBUG("%s:invalid frame:%d byte:%s\n\r",__FUNCTION__,len,(char *)data);
         return ret;
     }
     //now deal the data
     str = strstr((char *)data,",");
     if(NULL == str)
     {
-        printf("%s:format error\n\r",__FUNCTION__);
+        LINK_LOG_DEBUG("%s:format error\n\r",__FUNCTION__);
         return ret; //format error
     }
     str++;
@@ -263,11 +263,11 @@ static int __esp8266_connect(int fd, const struct sockaddr *addr, int addrlen)
         //TODO: mux = 1
         if(s_esp8266_sock_cb.type == SOCK_DGRAM)
         {
-        	snprintf(cmd,64,"AT+CIPSTART=\"UDP\",\"%s\",%d\r\n",remote_ip,remote_port);
+        	snLINK_LOG_DEBUG(cmd,64,"AT+CIPSTART=\"UDP\",\"%s\",%d\r\n",remote_ip,remote_port);
         }
         else if(s_esp8266_sock_cb.type == SOCK_STREAM)
         {
-        	snprintf(cmd,64,"AT+CIPSTART=\"TCP\",\"%s\",%d\r\n",remote_ip,remote_port);
+        	snLINK_LOG_DEBUG(cmd,64,"AT+CIPSTART=\"TCP\",\"%s\",%d\r\n",remote_ip,remote_port);
         }
         else return ret;
 
@@ -290,7 +290,7 @@ static int esp8266_send(int fd, const void *buf, int len, int flags)
         memset(cmd,0,64);
         memset(s_esp8266_sock_cb.oob_resp,0,1024);
 
-        snprintf(cmd,64,"AT+CIPSEND=%d\r\n",len); //TODO:mux = 1
+        snLINK_LOG_DEBUG(cmd,64,"AT+CIPSEND=%d\r\n",len); //TODO:mux = 1
 
         if(esp8266_atcmd(cmd,">"))
         {
@@ -383,7 +383,7 @@ static int esp8266_close(int fd)
 	char cmd[64];
 	int ret = -1;
 	memset(cmd,0,64);
-	snprintf(cmd,64,"AT+CIPCLOSE\r\n");//TODO: MUX = 1;
+	snLINK_LOG_DEBUG(cmd,64,"AT+CIPCLOSE\r\n");//TODO: MUX = 1;
 	if(esp8266_atcmd(cmd,"OK"))
 	{
 		s_esp8266_sock_cb.isconnect = 0;
@@ -427,7 +427,7 @@ static struct hostent *esp8266_gethostbyname(const char *name)
 	struct hostent *hptr = NULL;
 
 	memset(cmd,0,64);
-	snprintf(cmd,64,"AT+CIPDOMAIN=\"%s\"\r\n",name);
+	snLINK_LOG_DEBUG(cmd,64,"AT+CIPDOMAIN=\"%s\"\r\n",name);
 	if(false == esp8266_atcmd_response(cmd,"+CIPDOMAIN",resp,64))
 	{
 	    hptr = &s_esp8266_hostent;
@@ -529,7 +529,7 @@ static bool_t esp8266_show_dinfo(int flag)
 {
 	char cmd[64];
 	memset(cmd,0,64);
-	snprintf(cmd,64,"AT+CIPDINFO=%d\r\n",flag);
+	snLINK_LOG_DEBUG(cmd,64,"AT+CIPDINFO=%d\r\n",flag);
     return esp8266_atcmd(cmd,"OK");
 }
 
@@ -537,7 +537,7 @@ static bool_t esp8266_set_mode(enum_net_mode mode)
 {
 	char cmd[64];
 	memset(cmd,0,64);
-	snprintf(cmd,64,"AT+CWMODE_CUR=%d\r\n",(int)mode);
+	snLINK_LOG_DEBUG(cmd,64,"AT+CWMODE_CUR=%d\r\n",(int)mode);
 	return esp8266_atcmd(cmd,"OK");
 }
 
@@ -545,7 +545,7 @@ static bool_t esp8266_joinap(char *ssid, char *passwd)
 {
 	char cmd[64];
 	memset(cmd,0,64);
-    snprintf(cmd,64,"AT+CWJAP_CUR=\"%s\",\"%s\"\r\n",ssid, passwd);
+    snLINK_LOG_DEBUG(cmd,64,"AT+CWJAP_CUR=\"%s\",\"%s\"\r\n",ssid, passwd);
     return esp8266_atcmd(cmd,"OK");
 }
 
@@ -553,7 +553,7 @@ static bool_t esp8266_set_mux(int mux)
 {
 	char cmd[64];
 	memset(cmd,0,64);
-    snprintf(cmd,64,"AT+CIPMUX=%d\r\n",mux);
+    snLINK_LOG_DEBUG(cmd,64,"AT+CIPMUX=%d\r\n",mux);
     return esp8266_atcmd(cmd,"OK");
 }
 
@@ -573,18 +573,18 @@ int link_tcpip_imp_init(void)
 
     while(false == esp8266_joinap(WIFI_SSID, WIFI_PASSWD))
     {
-        printf("connect ap failed, repeat...\r\n");
+        LINK_LOG_DEBUG("connect ap failed, repeat...\r\n");
     }
    //reach here means everything is ok, we can go now
     ret = link_sal_install(&s_tcpip_socket);
 
     if(0 == ret)
     {
-        printf("sal:install socket success\r\n");
+        LINK_LOG_DEBUG("sal:install socket success\r\n");
     }
     else
     {
-        printf("sal:install socket failed\r\n");
+        LINK_LOG_DEBUG("sal:install socket failed\r\n");
     }
 
     return ret;

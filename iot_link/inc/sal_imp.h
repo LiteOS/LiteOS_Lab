@@ -8,6 +8,8 @@
 #ifndef __SAL_IMP_H
 #define __SAL_IMP_H
 
+#include <link_log.h>
+
 /**
  * @brief: all the function model,please refer to the
  *       : you could declare and add more functions here

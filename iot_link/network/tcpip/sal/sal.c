@@ -34,7 +34,7 @@ static tag_sal_cb   s_sal_cb;
 
 __attribute__((weak))  int link_tcpip_imp_init(void)
 {
-    printf("%s:###please implement this function by yourself####\n\r",__FUNCTION__);
+    LINK_LOG_DEBUG("%s:###please implement this function by yourself####\n\r",__FUNCTION__);
     return -1;
 }
 

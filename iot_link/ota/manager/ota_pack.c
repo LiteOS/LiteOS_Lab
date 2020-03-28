@@ -1,4 +1,5 @@
 #include <string.h>
+#include <link_log.h>
 #include "ota_flag.h"
 #include "ota_manager.h"
 #include "flash_adaptor.h"
@@ -35,7 +36,7 @@ int ota_pack_man_software_write_end(pack_storage_device_api_s *this, pack_downlo
 
 int ota_pack_man_active_software(pack_storage_device_api_s *thi)
 {
-  //  printf("vaild actived\n");
+  //  LINK_LOG_DEBUG("vaild actived\n");
   return OK;
 }
 
@@ -70,6 +71,6 @@ int ota_pack_observe_info_read(uint8_t *buf, uint32_t len)
 int ota_pack_observe_info_write(uint8_t *buf, uint32_t len)
 {
   int ret = storage_partition_write(PART_RESERVED_INFO, buf, len, 0);
-  printf("%s return ret %d\n", __func__, ret);
+  LINK_LOG_DEBUG("%s return ret %d\n", __func__, ret);
   return ret == ERR ? ERR : OK;
 }

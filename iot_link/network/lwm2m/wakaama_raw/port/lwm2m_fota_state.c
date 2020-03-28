@@ -32,6 +32,7 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
+#include <link_log.h>
 #include "lwm2m_fota_state.h"
 #include <string.h>
 #include "firmware_update.h"
@@ -113,7 +114,7 @@ static int lwm2m_fota_idle_state_get_result(int *res)
 
     if (LWM2M_ERR != ota_storage_flag_read(&flag))
     {
-        printf("%s:  ret upgrade = %u\n", __func__, flag.ret_upgrade);
+        LINK_LOG_DEBUG("%s:  ret upgrade = %u\n", __func__, flag.ret_upgrade);
         *res = flag.ret_upgrade;
         return LWM2M_OK;
     }

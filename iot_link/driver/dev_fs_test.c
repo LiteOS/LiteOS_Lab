@@ -57,46 +57,46 @@ static testdriv_cb_test_t s_testdriv_cb_test;
 
 static bool_t testdriv_open(void *pri,int flag)
 {
-    printf("TESTDRIV:PRI:0x%08X OPEN\n\r",(unsigned int)pri);
+    LINK_LOG_DEBUG("TESTDRIV:PRI:0x%08X OPEN\n\r",(unsigned int)pri);
 
     s_testdriv_cb_test.refers++;
     return true;
 }
 static void testdriv_close(void *pri)
 {
-    printf("TESTDRIV:PRI:0x%08X CLOSE\n\r",(unsigned int)pri);
+    LINK_LOG_DEBUG("TESTDRIV:PRI:0x%08X CLOSE\n\r",(unsigned int)pri);
     s_testdriv_cb_test.refers--;
     return ;
 }
 
 static bool_t testdriv_write(void *pri,unsigned int offset,unsigned char *buf,int len,unsigned int timeout)
 {
-    printf("TESTDRIV:PRI:0x%08X WTRITE: buf:0x%08x len:%d timeout:%d\n\r",(unsigned int)pri,(unsigned int)buf,len,timeout);
+    LINK_LOG_DEBUG("TESTDRIV:PRI:0x%08X WTRITE: buf:0x%08x len:%d timeout:%d\n\r",(unsigned int)pri,(unsigned int)buf,len,timeout);
     return len;
 }
 
 static bool_t testdriv_read(void *pri,unsigned int offset,unsigned char *buf,int len,unsigned int timeout)
 {
-    printf("TESTDRIV:PRI:0x%08X READ: buf:0x%08x len:%d timeout:%d\n\r",(unsigned int)pri,(unsigned int)buf,len,timeout);
+    LINK_LOG_DEBUG("TESTDRIV:PRI:0x%08X READ: buf:0x%08x len:%d timeout:%d\n\r",(unsigned int)pri,(unsigned int)buf,len,timeout);
     return len;
 }
 
 
 static bool_t testdriv_init(void *pri)
 {
-    printf("TESTDRIV:PRI:0x%08X INIT\n\r",(unsigned int)pri);
+    LINK_LOG_DEBUG("TESTDRIV:PRI:0x%08X INIT\n\r",(unsigned int)pri);
     return true;
 }
 
 static void testdriv_deinit(void *pri)
 {
-    printf("TESTDRIV:PRI:0x%08X DEINIT\n\r",(unsigned int)pri);
+    LINK_LOG_DEBUG("TESTDRIV:PRI:0x%08X DEINIT\n\r",(unsigned int)pri);
     return ;
 }
 
 static bool_t testdriv_ioctl(void *pri,unsigned int cmd, void *para,int paralen)
 {
-    printf("TESTDRIV:PRI:0x%08X IOCTL:cmd:%d para:0x%08x paralen:%d \n\r",(unsigned int)pri,cmd,(unsigned int)para,paralen);
+    LINK_LOG_DEBUG("TESTDRIV:PRI:0x%08X IOCTL:cmd:%d para:0x%08x paralen:%d \n\r",(unsigned int)pri,cmd,(unsigned int)para,paralen);
     return  true;
 }
 
@@ -126,7 +126,7 @@ static int __driv_open(int argc,const char *argv[]) //dirvopen drivname flag
     unsigned int flag = 0;
     if(argc != 3 )
     {
-        printf("paraerr");
+        LINK_LOG_DEBUG("paraerr");
         return 0;
     }
     drivname = argv[1];
@@ -144,19 +144,19 @@ static int __driv_open(int argc,const char *argv[]) //dirvopen drivname flag
     }
     else
     {
-        printf("open flag err\r\n");
+        LINK_LOG_DEBUG("open flag err\r\n");
         return 0;
     }
 
     dev = open(drivname,flag);
     if(dev < 0)
     {
-        printf("open err\r\n");
+        LINK_LOG_DEBUG("open err\r\n");
         return 0;
     }
     else
     {
-        printf("open OK\r\n");
+        LINK_LOG_DEBUG("open OK\r\n");
     }
 
     s_shell_opendev = dev;
@@ -173,13 +173,13 @@ static int __driv_write(int argc,const char *argv[]) //drivewrite string timeout
 
     if(argc != 3)
     {
-        printf("paraerr");
+        LINK_LOG_DEBUG("paraerr");
         return 0;
     }
 
     timeout = strtoul(argv[2],NULL,0);
     ret = write(s_shell_opendev,(unsigned char *)argv[1],strlen(argv[1]));
-    printf("write:%d bytes\n\r",ret);
+    LINK_LOG_DEBUG("write:%d bytes\n\r",ret);
 
     return 0;
 }
@@ -196,7 +196,7 @@ static int __driv_read(int argc,const char *argv[]) //driveread len timeout
 
     if(argc != 3)
     {
-        printf("paraerr");
+        LINK_LOG_DEBUG("paraerr");
         return 0;
     }
 
@@ -205,7 +205,7 @@ static int __driv_read(int argc,const char *argv[]) //driveread len timeout
 
     buf = malloc(len);
     ret = read(s_shell_opendev,buf,len);
-    printf("read:%d bytes\n\r",ret);
+    LINK_LOG_DEBUG("read:%d bytes\n\r",ret);
     free(buf);
     return 0;
 }
@@ -219,7 +219,7 @@ static int __driv_ioctl(int argc,const char *argv[]) //drivioctl cmd cmdpara
 
     if(argc != 3)
     {
-        printf("paraerr");
+        LINK_LOG_DEBUG("paraerr");
         return 0;
     }
 
@@ -228,11 +228,11 @@ static int __driv_ioctl(int argc,const char *argv[]) //drivioctl cmd cmdpara
     ret = ioctl(s_shell_opendev,cmd,(unsigned int)argv[2]);
     if(ret)
     {
-        printf("IOCTL OK\r\n");
+        LINK_LOG_DEBUG("IOCTL OK\r\n");
     }
     else
     {
-        printf("IOCTL ERR\r\n");
+        LINK_LOG_DEBUG("IOCTL ERR\r\n");
     }
 
 
@@ -248,11 +248,11 @@ static int __driv_close(int argc,const char *argv[]) //drivclose
     ret = close(s_shell_opendev);
     if(ret)
     {
-        printf("CLOSE OK\r\n");
+        LINK_LOG_DEBUG("CLOSE OK\r\n");
     }
     else
     {
-        printf("CLOSE ERR\r\n");
+        LINK_LOG_DEBUG("CLOSE ERR\r\n");
 
     }
 

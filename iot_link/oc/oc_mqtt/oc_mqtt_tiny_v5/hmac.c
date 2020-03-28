@@ -36,6 +36,7 @@
 #ifdef WITH_DTLS
 
 #include <string.h>
+#include <link_log.h>
 #include "mbedtls/md.h"
 #include "mbedtls/ssl.h"
 #include "mbedtls/entropy.h"
@@ -81,7 +82,7 @@ int mbedtls_hmac_calc(mbedtls_hmac_t *hmac_info)
     ret = mbedtls_md_setup(&mbedtls_md_ctx, md_info, 1);
     if (ret != 0)
     {
-        printf("mbedtls_md_setup() returned -0x%04x\n", -ret);
+        LINK_LOG_DEBUG("mbedtls_md_setup() returned -0x%04x\n", -ret);
         goto exit;
     }
 

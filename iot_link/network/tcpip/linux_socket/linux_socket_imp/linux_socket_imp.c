@@ -63,7 +63,7 @@ static int __linux_setsockopt(int fd, int level, int option, const void *option_
             time_delay = (struct timeval *)option_value;
             if((time_delay->tv_sec == 0)&&(time_delay->tv_usec == 0))
             {
-                printf("%s:log:::::::timeout should be mapped:::::modified it 1000 us\n\r",__FUNCTION__);
+                LINK_LOG_DEBUG("%s:log:::::::timeout should be mapped:::::modified it 1000 us\n\r",__FUNCTION__);
                 time_delay->tv_usec = 1000;
             }
         }
@@ -74,7 +74,7 @@ static int __linux_setsockopt(int fd, int level, int option, const void *option_
             time_delay = (struct timeval *)option_value;
             if((time_delay->tv_sec == 0)&&(time_delay->tv_usec == 0))
             {
-                printf("%s:log:::::::timeout should be mapped:::::modified it 1000 us\n\r",__FUNCTION__);
+                LINK_LOG_DEBUG("%s:log:::::::timeout should be mapped:::::modified it 1000 us\n\r",__FUNCTION__);
                 time_delay->tv_usec = 1000;
             }
         }
@@ -121,11 +121,11 @@ int link_tcpip_imp_init(void)
 
     if(0 == ret)
     {
-        printf("sal:install socket success\r\n");
+        LINK_LOG_DEBUG("sal:install socket success\r\n");
     }
     else
     {
-        printf("sal:install socket failed\r\n");
+        LINK_LOG_DEBUG("sal:install socket failed\r\n");
     }
 
     return ret;

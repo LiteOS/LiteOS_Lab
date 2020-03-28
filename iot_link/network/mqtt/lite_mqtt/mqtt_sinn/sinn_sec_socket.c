@@ -39,7 +39,7 @@
 static void __sinn_sock_init(sinn_if_t *interface)
 {
     (void)interface;
-    printf(" using select()\r\n");
+    LINK_LOG_DEBUG(" using select()\r\n");
 }
 
 static void __sinn_sock_uninit(sinn_if_t *interface)
@@ -89,7 +89,7 @@ static int __sinn_sock_connect(sinn_connection_t *nc)
     shakehand_info.client_or_server = MBEDTLS_SSL_IS_CLIENT;
     shakehand_info.udp_or_tcp = MBEDTLS_NET_PROTO_TCP;
     shakehand_info.u.c.host = nc->server_ip;
-    snprintf(port_buf, PORT_BUF_LEN, "%d", nc->server_port);
+    snLINK_LOG_DEBUG(port_buf, PORT_BUF_LEN, "%d", nc->server_port);
     shakehand_info.u.c.port = port_buf;
 
     rc = dtls_shakehand(ssl, &shakehand_info);
@@ -109,13 +109,13 @@ static int __sinn_sock_connect(sinn_connection_t *nc)
 static void __sinn_sock_discon(sinn_connection_t *nc)
 {
     int rc = 0;
-    printf("__sinn_sock_discon\r\n");
+    LINK_LOG_DEBUG("__sinn_sock_discon\r\n");
     if(nc->sock_fd == -1)
         return;
 
     rc = sal_closesocket(nc->sock_fd);
     if(rc < 0)
-        printf("sock %d rc %d \r\n",  nc->sock_fd, rc);
+        LINK_LOG_DEBUG("sock %d rc %d \r\n",  nc->sock_fd, rc);
 
     nc->sock_fd = -1;
 }
@@ -151,7 +151,7 @@ static sinn_time_t __sinn_sock_poll(sinn_connection_t *nc, int timeout_ms)
 
     if(rc == -1)
     {
-        printf("select() error\r\n");
+        LINK_LOG_DEBUG("select() error\r\n");
         return 0;
     }
     else if(rc > 0)

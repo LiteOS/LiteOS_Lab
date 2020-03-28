@@ -296,7 +296,7 @@ int lwm2m_fota_manager_set_storage_device(lwm2m_fota_manager_s *thi)
     memcpy(&pack_param.ota_opt, &thi->ota_opt, sizeof(pack_param.ota_opt));
     pack_param.malloc = osal_malloc;
     pack_param.free = osal_free;
-    pack_param.printf = printf;
+    pack_param.printf = link_printf;
     ret = pack_init_device(&pack_param);
 
     if (LWM2M_OK != ret)

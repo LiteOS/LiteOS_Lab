@@ -266,7 +266,7 @@ static void bs_msg_default_deal(void *arg,mqtt_al_msgrcv_t *msg)
 
    char   *json_buf;
 
-   printf("bs topic:%s qos:%d\n\r",msg->topic.data,msg->qos);
+   LINK_LOG_DEBUG("bs topic:%s qos:%d\n\r",msg->topic.data,msg->qos);
 
    json_buf = osal_malloc(msg->msg.len + 1);
    if(NULL == json_buf)
@@ -277,14 +277,14 @@ static void bs_msg_default_deal(void *arg,mqtt_al_msgrcv_t *msg)
    memcpy(json_buf,msg->msg.data,msg->msg.len);
    json_buf[msg->msg.len] = '\0';
 
-   printf("msg:%s\n\r",json_buf);
+   LINK_LOG_DEBUG("msg:%s\n\r",json_buf);
    root = cJSON_Parse(json_buf);
    if(NULL != root)
    {
        addr_item = cJSON_GetObjectItem(root,"address");
        if(NULL != addr_item)
        {
-           printf("address:%s\n\r", addr_item->valuestring);
+           LINK_LOG_DEBUG("address:%s\n\r", addr_item->valuestring);
            port = strrchr(addr_item->valuestring, ':');
            if(NULL != port)
            {
@@ -322,7 +322,7 @@ static char *topic_fmt(char *fmt, char *id)
     ret = osal_malloc(len);
     if(NULL != ret)
     {
-        snprintf(ret,len,fmt,id);
+        (void) snprintf(ret,len,fmt,id);
     }
 
     return ret;
@@ -338,7 +338,7 @@ static char *clientid_fmt(char *fmt, char *id, char *salt_time)
     ret = osal_malloc(len);
     if(NULL != ret)
     {
-        snprintf(ret,len,fmt,id,salt_time);
+        (void) snprintf(ret,len,fmt,id,salt_time);
     }
 
     return ret;
@@ -602,7 +602,7 @@ static int oc_mqtt_para_gernerate(oc_mqtt_tiny_cb_t *cb)
     time_now = osal_sys_time()/1000;
     date = gmtime(&time_now);
 
-    snprintf(cb->salt_time,11,"%04d%02d%02d%02d",date->tm_year+1900,\
+    (void) snprintf(cb->salt_time,11,"%04d%02d%02d%02d",date->tm_year+1900,\
             date->tm_mon,date->tm_mday,date->tm_hour);
 
     oc_mqtt_para_release(cb);         ///< try to free all the resource we have built
@@ -715,9 +715,9 @@ static int dmp_connect(oc_mqtt_tiny_cb_t *cb)
     conpara.version = en_mqtt_al_version_3_1_1;
     conpara.willmsg = NULL;
 
-    printf("oc_mqtt_connect:server:%s port:%s \n\r",cb->mqtt_para.server_addr,cb->mqtt_para.server_port);
-    printf("oc_mqtt_connect:client_id:%s \n\r",cb->mqtt_para.mqtt_clientid);
-    printf("oc_mqtt_connect:user:%s passwd:%s \n\r",cb->mqtt_para.mqtt_user,cb->mqtt_para.mqtt_passwd);
+    LINK_LOG_DEBUG("oc_mqtt_connect:server:%s port:%s \n\r",cb->mqtt_para.server_addr,cb->mqtt_para.server_port);
+    LINK_LOG_DEBUG("oc_mqtt_connect:client_id:%s \n\r",cb->mqtt_para.mqtt_clientid);
+    LINK_LOG_DEBUG("oc_mqtt_connect:user:%s passwd:%s \n\r",cb->mqtt_para.mqtt_user,cb->mqtt_para.mqtt_passwd);
     cb->mqtt_para.mqtt_handle = mqtt_al_connect(&conpara);
 
     if(NULL != cb->mqtt_para.mqtt_handle)
@@ -748,7 +748,7 @@ static int dmp_connect(oc_mqtt_tiny_cb_t *cb)
         }
     }
 
-    printf("oc_mqtt_connect:recode:%d :%s\n\r",ret,ret==en_oc_mqtt_err_ok?"SUCCESS":"FAILED");
+    LINK_LOG_DEBUG("oc_mqtt_connect:recode:%d :%s\n\r",ret,ret==en_oc_mqtt_err_ok?"SUCCESS":"FAILED");
 
     return ret;
 
@@ -759,7 +759,7 @@ static int dmp_subscribe(oc_mqtt_tiny_cb_t *cb)
     int  ret = en_oc_mqtt_err_system;
     mqtt_al_subpara_t   subpara;
 
-    printf("oc_mqtt_subscribe:start\n\r");
+    LINK_LOG_DEBUG("oc_mqtt_subscribe:start\n\r");
 
     if(NULL == cb->mqtt_para.mqtt_handle)
     {
@@ -781,7 +781,7 @@ static int dmp_subscribe(oc_mqtt_tiny_cb_t *cb)
     subpara.topic.data = cb->mqtt_para.default_sub_topic ;
     subpara.topic.len = strlen(subpara.topic.data );
 
-    printf("oc_mqtt_default_subscribe:topic:%s\n\r",subpara.topic.data);
+    LINK_LOG_DEBUG("oc_mqtt_default_subscribe:topic:%s\n\r",subpara.topic.data);
 
     ret = mqtt_al_subscribe(cb->mqtt_para.mqtt_handle,&subpara);
     if(0 != ret)
@@ -789,7 +789,7 @@ static int dmp_subscribe(oc_mqtt_tiny_cb_t *cb)
         ret = en_oc_mqtt_err_subscribe;
     }
 
-    printf("oc_mqtt_default_subscribe:retcode:%d:%s\n\r",ret,oc_mqtt_err(ret));
+    LINK_LOG_DEBUG("oc_mqtt_default_subscribe:retcode:%d:%s\n\r",ret,oc_mqtt_err(ret));
 
     ///if not the bs mode, then subscribe all the other topic
     if(cb->flag.bits.bit_daemon_status != en_daemon_status_bs_getaddr)
@@ -803,11 +803,11 @@ static int dmp_subscribe(oc_mqtt_tiny_cb_t *cb)
             subpara.topic.len = strlen(subpara.topic.data );
             subpara.timeout = CN_OC_MQTT_TIMEOUT;
 
-            printf("oc_mqtt_subscribe:topic:%s\n\r",subpara.topic.data);
+            LINK_LOG_DEBUG("oc_mqtt_subscribe:topic:%s\n\r",subpara.topic.data);
 
             ret = mqtt_al_subscribe(cb->mqtt_para.mqtt_handle,&subpara);
 
-            printf("oc_mqtt_subscribe:retcode:%d:%s\n\r",ret,oc_mqtt_err(ret));
+            LINK_LOG_DEBUG("oc_mqtt_subscribe:retcode:%d:%s\n\r",ret,oc_mqtt_err(ret));
             if(0 != ret)
             {
                  ret = en_oc_mqtt_err_subscribe;
@@ -826,11 +826,11 @@ static int dmp_subscribe(oc_mqtt_tiny_cb_t *cb)
             subpara.topic.len = strlen(subpara.topic.data );
             subpara.timeout = CN_OC_MQTT_TIMEOUT;
 
-            printf("oc_mqtt_subscribe:topic:%s\n\r",subpara.topic.data);
+            LINK_LOG_DEBUG("oc_mqtt_subscribe:topic:%s\n\r",subpara.topic.data);
 
             ret = mqtt_al_subscribe(cb->mqtt_para.mqtt_handle,&subpara);
 
-            printf("oc_mqtt_subscribe:retcode:%d:%s\n\r",ret,oc_mqtt_err(ret));
+            LINK_LOG_DEBUG("oc_mqtt_subscribe:retcode:%d:%s\n\r",ret,oc_mqtt_err(ret));
             if(0 != ret)
             {
                  ret = en_oc_mqtt_err_subscribe;
@@ -864,21 +864,21 @@ static int dmp_publish(oc_mqtt_tiny_cb_t *cb,char *topic, uint8_t *msg, int len,
     pubpara.msg.data = (char *)msg;
     pubpara.msg.len = len;
 
-    printf("oc_mqtt_publish:topic:%s  qos:%d msglen:%d\n\r",topic,qos,len);
+    LINK_LOG_DEBUG("oc_mqtt_publish:topic:%s  qos:%d msglen:%d\n\r",topic,qos,len);
 
     ret = mqtt_al_publish(cb->mqtt_para.mqtt_handle, &pubpara);
     if(ret != 0)
     {
         ret = en_oc_mqtt_err_publish;
     }
-    printf("oc_mqtt_publish:retcode:%d:%s\n\r",ret,ret==0?"SUCCESS":"FAIL");
+    LINK_LOG_DEBUG("oc_mqtt_publish:retcode:%d:%s\n\r",ret,ret==0?"SUCCESS":"FAIL");
     return ret;
 }
 static int hub_step(oc_mqtt_tiny_cb_t  *cb)
 {
     int ret = en_oc_mqtt_err_system;
 
-    printf("%s:enter\n\r",__FUNCTION__);
+    LINK_LOG_DEBUG("%s:enter\n\r",__FUNCTION__);
     if(en_oc_mqtt_err_ok != oc_mqtt_para_gernerate(cb))
     {
         goto EXIT_ERR;
@@ -896,12 +896,12 @@ static int hub_step(oc_mqtt_tiny_cb_t  *cb)
         goto EXIT_ERR;
     }
 
-    printf("%s:ok exit\n\r",__FUNCTION__);
+    LINK_LOG_DEBUG("%s:ok exit\n\r",__FUNCTION__);
     return ret;
 
 EXIT_ERR:
     oc_mqtt_para_release(cb);
-    printf("%s:err:%d \n\r",__FUNCTION__,ret);
+    LINK_LOG_DEBUG("%s:err:%d \n\r",__FUNCTION__,ret);
     return ret;
 
 }
@@ -912,7 +912,7 @@ static int bs_step(oc_mqtt_tiny_cb_t  *cb)
     int ret = en_oc_mqtt_err_system;
     int wait_times = CN_CON_BACKOFF_MAXTIMES;
 
-    printf("%s:enter\n\r",__FUNCTION__);
+    LINK_LOG_DEBUG("%s:enter\n\r",__FUNCTION__);
     cb->flag.bits.bit_get_hubaddr = 0;
 
     if(en_oc_mqtt_err_ok != oc_mqtt_para_gernerate(cb))
@@ -957,7 +957,7 @@ static int bs_step(oc_mqtt_tiny_cb_t  *cb)
 EXIT_ERR:
     oc_mqtt_para_release(cb);
 
-    printf("%s:exit ret:%d\n\r",__FUNCTION__,ret);
+    LINK_LOG_DEBUG("%s:exit ret:%d\n\r",__FUNCTION__,ret);
 
     return ret;
 
@@ -1096,7 +1096,7 @@ static int daemon_entry(void *arg)
     oc_mqtt_daemon_cmd_t   *daemon_cmd = NULL;
 
     cb = arg;
-    printf("%s:start\n\r",__FUNCTION__);
+    LINK_LOG_DEBUG("%s:start\n\r",__FUNCTION__);
     while(1)
     {
         if(0 == queue_pop(cb->task_daemon_cmd_queue,(void **)&daemon_cmd,10*1000))
@@ -1149,7 +1149,7 @@ static int daemon_entry(void *arg)
                     }
                     break;
                 case en_oc_mqtt_daemon_cmd_publish:
-                    printf("daemon:publish enter\n\r");
+                    LINK_LOG_DEBUG("daemon:publish enter\n\r");
                     if(en_daemon_status_idle == cb->flag.bits.bit_daemon_status)
                     {
                         daemon_cmd->retcode = en_oc_mqtt_err_noconfigured;
@@ -1166,17 +1166,17 @@ static int daemon_entry(void *arg)
                     {
                         daemon_cmd->retcode = en_oc_mqtt_err_noconected;
                     }
-                    printf("daemon:publish exit\n\r");
+                    LINK_LOG_DEBUG("daemon:publish exit\n\r");
                     break;
                 case en_oc_mqtt_daemon_cmd_subscribe:
-                    printf("daemon:subscribe enter\n\r");
+                    LINK_LOG_DEBUG("daemon:subscribe enter\n\r");
                     deal_api_subscribe( cb, daemon_cmd );
-                    printf("daemon:subscribe exit\n\r");
+                    LINK_LOG_DEBUG("daemon:subscribe exit\n\r");
                     break;
                 case en_oc_mqtt_daemon_cmd_unsubscribe:
-                    printf("daemon:unsubscribe enter\n\r");
+                    LINK_LOG_DEBUG("daemon:unsubscribe enter\n\r");
                     deal_api_unsubscribe( cb, daemon_cmd );
-                    printf("daemon:unsubscribe exit\n\r");
+                    LINK_LOG_DEBUG("daemon:unsubscribe exit\n\r");
                     break;
 
                 default:
@@ -1208,7 +1208,7 @@ static int daemon_entry(void *arg)
         }
     }
 
-    printf("%s:quit\n\r",__FUNCTION__);
+    LINK_LOG_DEBUG("%s:quit\n\r",__FUNCTION__);
     return 0;
 }
 

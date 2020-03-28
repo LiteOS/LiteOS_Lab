@@ -128,19 +128,19 @@ static void net_init(void)
 
         if (inet_pton(AF_INET6, "2000::2", &ip6) <= 0)
         {
-            printf("set source ip6 failed \n");
+            (void) printf("set source ip6 failed \n");
             return;
         }
         ret = netif_add_ip6_address(&gnetif, &ip6, &idx);
         if (ret != 0)
         {
-            printf("netif_add_ip6_address failed,ret %d\n", ret);
+            (void) printf("netif_add_ip6_address failed,ret %d\n", ret);
             return;
         }
 
         if (inet_pton(AF_INET6, "2000::1", &ipv6_gw) <= 0)
         {
-            printf("inet_pton failed\n");
+            (void) printf("inet_pton failed\n");
             return;
         }
         set_lwip_ipv6_default_gw(&gnetif, &ipv6_gw);
@@ -178,7 +178,7 @@ int netdriver_install()
     hieth_hw_init();
     net_init();
 
-    printf("%s:install the netdriver\r\n",__FUNCTION__);
+    (void) printf("%s:install the netdriver\r\n",__FUNCTION__);
 
     return 0;
 }

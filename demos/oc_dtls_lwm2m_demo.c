@@ -107,15 +107,17 @@ static int             s_rcv_datalen;
 static osal_semp_t     s_rcv_sync;
 
 //use this function to push all the message to the buffer
-static int app_msg_deal(void *usr_data,en_oc_lwm2m_msg_t type,char *msg, int len)
+static int app_msg_deal(void *usr_data,en_oc_lwm2m_msg_t type,void *data, int len)
 {
     int ret = -1;
+    char *msg;
 
+    msg = data;
     if(len <= cn_app_rcv_buf_len)
     {
         if (msg[0] == 0xaa && msg[1] == 0xaa)
         {
-            printf("OC respond message received! \n\r");
+            (void) printf("OC respond message received! \n\r");
             return ret;
         }
         memcpy(s_rcv_buffer,msg,len);
@@ -124,7 +126,6 @@ static int app_msg_deal(void *usr_data,en_oc_lwm2m_msg_t type,char *msg, int len
         osal_semp_post(s_rcv_sync);
 
         ret = 0;
-
     }
     return ret;
 }
@@ -146,14 +147,14 @@ static int app_cmd_task_entry()
             {
                 case cn_app_ledcmd:
                     led_cmd = (app_led_cmd_t *)s_rcv_buffer;
-                    printf("LEDCMD:msgid:%d mid:%d msg:%s \n\r",led_cmd->msgid,ntohs(led_cmd->mid),led_cmd->led);
+                    (void) printf("LEDCMD:msgid:%d mid:%d msg:%s \n\r",led_cmd->msgid,ntohs(led_cmd->mid),led_cmd->led);
                     //add command action--TODO
                     if (led_cmd->led[0] == 'O' && led_cmd->led[1] == 'N')
                     {
                         //if you need response message,do it here--TODO
                         replymsg.msgid = cn_app_cmdreply;
                         replymsg.mid = led_cmd->mid;
-                        printf("reply mid is %d. \n\r",ntohs(replymsg.mid));
+                        (void) printf("reply mid is %d. \n\r",ntohs(replymsg.mid));
                         replymsg.errorcode = 0;
                         replymsg.curstats[0] = 'O';
                         replymsg.curstats[1] = 'N';
@@ -167,7 +168,7 @@ static int app_cmd_task_entry()
                         //if you need response message,do it here--TODO
                         replymsg.msgid = cn_app_cmdreply;
                         replymsg.mid = led_cmd->mid;
-                        printf("reply mid is %d. \n\r",ntohs(replymsg.mid));
+                        (void) printf("reply mid is %d. \n\r",ntohs(replymsg.mid));
                         replymsg.errorcode = 0;
                         replymsg.curstats[0] = 'O';
                         replymsg.curstats[1] = 'F';

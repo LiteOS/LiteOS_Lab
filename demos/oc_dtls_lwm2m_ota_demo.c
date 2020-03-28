@@ -92,14 +92,14 @@ static int ota_flag_write(ota_flag_t *flag)
 static int ota_bin_write(int offset ,void *msg,int len)
 {
 
-    printf("BIN W:%08d %08d\n\r",offset,len);
+    (void) printf("BIN W:%08d %08d\n\r",offset,len);
     return 0;
 }
 
 static int ota_bin_read(int offset ,void *buf,int len)
 {
 
-    printf("BIN R:%08d %08d\n\r",offset,len);
+    (void) printf("BIN R:%08d %08d\n\r",offset,len);
     return 0;
 }
 
@@ -177,7 +177,7 @@ static int app_cmd_task_entry()
             }
             else
             {
-                printf("RCVMSG:%d \n\r",(int)msglen);
+                (void) printf("RCVMSG:%d \n\r",(int)msglen);
                 osal_free(buf);
             }
 
@@ -234,7 +234,7 @@ static int app_report_task_entry()
 int standard_app_demo_main()
 {
 
-    printf("welcome to the application:OTA_DTLS:%s:%s\r\n",__DATE__,__TIME__);
+    (void) printf("welcome to the application:OTA_DTLS:%s:%s\r\n",__DATE__,__TIME__);
 
     ota_storage_install(&s_ota_storage_device);
 

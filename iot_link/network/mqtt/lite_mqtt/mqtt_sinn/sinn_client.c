@@ -31,7 +31,7 @@ void sinn_register_proto(sinn_connection_t *nc, sinn_event_handler proto_handler
 
 void sinn_init(sinn_manager_t *m, sinn_device_info_t *param)
 {
-    printf("sinn init\r\n");
+    LINK_LOG_DEBUG("sinn init\r\n");
 
     m->interface = (sinn_if_t *)osal_malloc(sizeof(sinn_if_t));   //TODO  check malloc and osal_malloc
     m->interface->mgr = m;
@@ -44,7 +44,7 @@ sinn_connection_t* sinn_connect(sinn_manager_t *m, sinn_event_handler cb, sinn_c
 {
     int ret = 0;
     sinn_connection_t *nc = NULL;
-    printf("sinn connect\r\n");
+    LINK_LOG_DEBUG("sinn connect\r\n");
     if ((nc = (sinn_connection_t *)osal_malloc(sizeof(sinn_connection_t))) != NULL)
     {
         nc->mgr = m;

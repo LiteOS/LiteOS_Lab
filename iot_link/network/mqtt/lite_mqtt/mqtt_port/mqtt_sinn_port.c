@@ -80,7 +80,7 @@ static void ev_handler(sinn_connection_t *nc, int event, void *event_data)
     {
         case SINN_EV_CONNECTED:
             {
-                printf("now mqtt connect\r\n");
+                LINK_LOG_DEBUG("now mqtt connect\r\n");
                 sinn_connect_param_t * sinn_conn_param;
                 mqtt_connect_opt_t *options;
                 sinn_conn_param = (sinn_connect_param_t *)(nc->user_data);
@@ -106,7 +106,7 @@ static void ev_handler(sinn_connection_t *nc, int event, void *event_data)
                 }
                 else
                 {
-                    printf("MQTT Connect Err:%d", amm->ret[0]);
+                    LINK_LOG_DEBUG("MQTT Connect Err:%d", amm->ret[0]);
                 }
                 free(amm->ret);
             }
@@ -120,7 +120,7 @@ static void ev_handler(sinn_connection_t *nc, int event, void *event_data)
             break;
         case EV_MQTT_PUBLISH:
             {
-                printf("recv pushlish %s\r\n", (char *)amm->payload);
+                LINK_LOG_DEBUG("recv pushlish %s\r\n", (char *)amm->payload);
                 mqtt_puback_opt_t options;
                 options.puback_head.packet_id = amm->id;
 
@@ -271,7 +271,7 @@ static void * __connect(mqtt_al_conpara_t *conparam)
 static int __disconnect(void *handle)
 {
     int ret = -1;
-    printf("sinn mqtt disconnect\r\n");
+    LINK_LOG_DEBUG("sinn mqtt disconnect\r\n");
     sinn_mqtt_cb_t *cb;
 
     if (NULL == handle)

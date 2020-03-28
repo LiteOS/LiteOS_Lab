@@ -199,7 +199,7 @@ static int app_msg_deal(oc_mqtt_profile_msgrcv_t *msg)
         memcpy(buf,msg->msg,datalen);
         buf[datalen] = '\0';
 
-        printf("RCVMSG:type:%d reuqestID:%s payloadlen:%d payload:%s\n\r",\
+        (void) printf("RCVMSG:type:%d reuqestID:%s payloadlen:%d payload:%s\n\r",\
                 demo_msg->type,demo_msg->request_id==NULL?"NULL":demo_msg->request_id,\
                 demo_msg->msg_len,(char *)demo_msg->msg);
 
@@ -221,7 +221,7 @@ static int  oc_cmd_normal(oc_mqtt_profile_msgrcv_t *demo_msg)
     oc_mqtt_profile_propertysetresp_t propertysetresp;
     oc_mqtt_profile_propertygetresp_t propertygetresp;
 
-    printf("DEALMSG:type:%d reuqestID:%s payloadlen:%d payload:%s\n\r",\
+    (void) printf("DEALMSG:type:%d reuqestID:%s payloadlen:%d payload:%s\n\r",\
             demo_msg->type,demo_msg->request_id==NULL?"NULL":demo_msg->request_id,\
             demo_msg->msg_len,(char *)demo_msg->msg);
     switch(demo_msg->type)
@@ -299,7 +299,7 @@ static int  oc_report_normal(void)
         ret = oc_mqtt_profile_propertyreport(NULL,&s_device_service);
     }
 
-    printf("REPORT TIMES:%d RET:%d\n\r",times,ret);
+    (void) printf("REPORT TIMES:%d RET:%d\n\r",times,ret);
     return ret;
 }
 
@@ -355,20 +355,20 @@ static int task_reportmsg_entry(void *args)
     ret = oc_mqtt_profile_connect(&connect_para);
     if((ret != en_oc_mqtt_err_ok))
     {
-        printf("config:err :code:%d\r\n",ret);
+        (void) printf("config:err :code:%d\r\n",ret);
         return -1;
     }
 
     char *topic;
     topic = "$oc/devices/54f107da-f251-436c-af4c-624f33b7d7b6/user/demo_sub";
     ret = oc_mqtt_subscribe(topic, 0);
-    printf("usersubscribe:topic:%s ret:%d \r\n",topic,ret);
+    (void) printf("usersubscribe:topic:%s ret:%d \r\n",topic,ret);
 
     ret = oc_mqtt_publish(topic,(uint8_t *) "hello world",strlen("hello world"),1);
-    printf("userpublish:ret:%d\r\n",ret);
+    (void) printf("userpublish:ret:%d\r\n",ret);
 
     ret = oc_mqtt_unsubscribe(topic);
-    printf("unsubscribe:topic:%s ret:%d \r\n",topic,ret);
+    (void) printf("unsubscribe:topic:%s ret:%d \r\n",topic,ret);
 
     while(1)  //do the loop here
     {
@@ -381,6 +381,9 @@ static int task_reportmsg_entry(void *args)
 int standard_app_demo_main()
 {
     static oc_mqtt_profile_kv_t  property;
+
+    printf("DO THE OC MQTT V5 DEMOS\n\r");
+
     s_queue_rcvmsg = queue_create("queue_rcvmsg",2,1);
 
     ///< initialize the service

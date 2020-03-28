@@ -152,12 +152,12 @@ static void pcp_msg_print(const char *index,void *msg, int len)
     uint8_t *buf;
     buf = msg;
     int i = 0;
-    printf("%s:",index);
+    LINK_LOG_DEBUG("%s:",index);
     for(i =0;i<len;i ++)
     {
-        printf("%02x",buf[i]);
+        LINK_LOG_DEBUG("%02x",buf[i]);
     }
-    printf("\n\r");
+    LINK_LOG_DEBUG("\n\r");
 }
 
 static int pcp_save_flag()
@@ -241,7 +241,7 @@ static int pcp_send_msg(en_pcp_msg_code_t msg_code, void *msg, int len)
         ret = s_pcp_cb.fn_pcp_send_msg(msg_buf,msg_len);
         if(0 != ret)
         {
-            printf("######PCP SEND FAILED######\n\r");
+            LINK_LOG_DEBUG("######PCP SEND FAILED######\n\r");
         }
     }
 
@@ -458,7 +458,7 @@ static void pcp_handle_msg(uint8_t *msg, int msglen)
 
 	    ///< we should do the reboot
             osal_task_sleep(5000);
-	    printf("downloaded, goto loader!!!\n");
+	    LINK_LOG_DEBUG("downloaded, goto loader!!!\n");
             osal_reboot();
 	    while(1);   /* never come back */
             ///< todo , think we upgrade success--DO THESIMULATE

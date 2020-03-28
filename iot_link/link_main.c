@@ -37,6 +37,7 @@
  *
  */
 
+#include <stdio.h>
 #include <link_version.h>
 //RTOS KERNEL
 #include <osal.h>
@@ -71,7 +72,7 @@ int link_main(void *args)
     s_link_start =1;
 
     osal_init();
-    printf("linkmain:%s \n\r",linkmain_version());
+    LINK_LOG_DEBUG("linkmain:%s \n\r",linkmain_version());
 
 #if CONFIG_STIMER_ENABLE
     #include <stimer.h>
@@ -90,7 +91,7 @@ int link_main(void *args)
 #endif
 
 #if CONFIG_LOADER_ENABLE
-    printf("loader main!\n");
+    LINK_LOG_DEBUG("loader main!\n");
     extern int ota_detection();
     ota_detection();
     loader_main();
