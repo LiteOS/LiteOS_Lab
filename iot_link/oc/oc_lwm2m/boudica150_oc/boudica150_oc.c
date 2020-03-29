@@ -143,7 +143,7 @@ static int boudica150_oc_report(unsigned char *buf,int len, int timeout)
     }
     osal_mutex_lock(s_report_mutex);
     (void) memset(s_boudica150_oc_cb.sndbuf, 0, cn_boudica150_cachelen);
-    snLINK_LOG_DEBUG((char *)s_boudica150_oc_cb.sndbuf,cn_boudica150_cachelen,"%s%d,",cmd,len);
+    snprintf((char *)s_boudica150_oc_cb.sndbuf,cn_boudica150_cachelen,"%s%d,",cmd,len);
     ret = byte_to_hexstr((unsigned char *)buf, len, (char *)&s_boudica150_oc_cb.sndbuf[strlen((char *)s_boudica150_oc_cb.sndbuf)]);
     s_boudica150_oc_cb.sndbuf[strlen((char *)s_boudica150_oc_cb.sndbuf)]='\r';
 
@@ -238,7 +238,7 @@ static bool_t boudica150_set_echo(int enable)
     bool_t ret ;
     char cmd[64];
     (void) memset(cmd,0,64);
-    snLINK_LOG_DEBUG(cmd,64,"ATE%d\r",enable);
+    snprintf(cmd,64,"ATE%d\r",enable);
 
     ret = boudica150_atcmd(cmd,"OK");
 
@@ -250,7 +250,7 @@ static bool_t boudica150_set_regmode(int mode)
     bool_t ret ;
     char cmd[64];
     (void) memset(cmd,0,64);
-    snLINK_LOG_DEBUG(cmd,64,"AT+QREGSWT=%d\r",mode);
+    snprintf(cmd,64,"AT+QREGSWT=%d\r",mode);
 
     ret = boudica150_atcmd(cmd,"OK");
 
@@ -280,7 +280,7 @@ static bool_t boudica150_set_fun(int enable)  //unit second
     char cmd[64];
 
     (void) memset(cmd,0,64);
-    snLINK_LOG_DEBUG(cmd,64,"AT+CFUN=%d\r",enable);
+    snprintf(cmd,64,"AT+CFUN=%d\r",enable);
 
     ret = boudica150_atcmd(cmd,"OK");
     //i think we should do some wait here
@@ -302,14 +302,14 @@ static bool_t boudica150_set_bands(const char *bands)
         ret = boudica150_atcmd_response("AT+NBAND?\r","OK",resp,64);
 
         (void) memset(cmd,0,64);
-        snLINK_LOG_DEBUG(cmd,63,"+NBAND:%s\r",bands);
+        snprintf(cmd,63,"+NBAND:%s\r",bands);
 
         if((false == ret)||(NULL == strstr(resp,cmd)))//which means we need to set it
         {
             boudica150_set_fun(0);
 
             (void) memset(cmd,0,64);
-            snLINK_LOG_DEBUG(cmd,63,"AT+NBAND=%s\r",bands);
+            snprintf(cmd,63,"AT+NBAND=%s\r",bands);
             ret = boudica150_atcmd(cmd,"OK");
 
             boudica150_set_fun(1);
@@ -335,12 +335,12 @@ static bool_t boudica150_set_plmn(const char *plmn)
         ret = boudica150_atcmd_response("AT+COPS?\r","+COPS",resp,64);
 
         (void) memset(cmd,0,64);
-        snLINK_LOG_DEBUG(cmd,63,"+COPS:1,2,\"%s\"\r",plmn);
+        snprintf(cmd,63,"+COPS:1,2,\"%s\"\r",plmn);
 
         if((false == ret)||(NULL == strstr(resp,cmd)))//which means we need to set it
         {
             (void) memset(cmd,0,64);
-            snLINK_LOG_DEBUG(cmd,63,"AT+COPS=1,2,\"%s\"\r",plmn);
+            snprintf(cmd,63,"AT+COPS=1,2,\"%s\"\r",plmn);
 
             ret = boudica150_atcmd(cmd,"OK");
         }
@@ -352,7 +352,7 @@ static bool_t boudica150_set_plmn(const char *plmn)
     else  //set it to auto
     {
         (void) memset(cmd,0,64);
-        snLINK_LOG_DEBUG(cmd,64,"AT+COPS=0\r");
+        snprintf(cmd,64,"AT+COPS=0\r");
         ret = boudica150_atcmd(cmd,"OK");
     }
 
@@ -373,11 +373,11 @@ static bool_t boudica150_set_apn(const char *apn)
         ret = boudica150_atcmd_response("AT+CGDCONT?\r","OK",resp,64);
 
         (void) memset(cmd,0,64);
-        snLINK_LOG_DEBUG(cmd,63,"+CGDCONT:\"%s\"\r",apn); //TODO, check if it is right
+        snprintf(cmd,63,"+CGDCONT:\"%s\"\r",apn); //TODO, check if it is right
         if((false == ret)||(NULL == strstr(resp,cmd)))//which means we need to set it
         {
             (void) memset(cmd,0,64);
-            snLINK_LOG_DEBUG(cmd,63,"AT+CGDCONT=%s\r",apn);
+            snprintf(cmd,63,"AT+CGDCONT=%s\r",apn);
             ret = boudica150_atcmd(cmd,"OK");
         }
         else
@@ -402,11 +402,11 @@ static bool_t boudica150_set_cdp(const char *server,const char *port)
         (void) memset(cmp,0,64);
         (void) memset(cmd,0,64);
         ret = boudica150_atcmd_response("AT+NCDP?\r","OK",resp,64);
-        snLINK_LOG_DEBUG(cmp,64,"+NCDP:%s,%s\r",server,port);
+        snprintf(cmp,64,"+NCDP:%s,%s\r",server,port);
         if((false == ret)||(NULL == strstr(resp,cmp)))//which means we need to set it
         {
             (void) memset(cmd,0,64);
-            snLINK_LOG_DEBUG(cmd,64,"AT+NCDP=%s,%s\r",server,port);
+            snprintf(cmd,64,"AT+NCDP=%s,%s\r",server,port);
             ret = boudica150_atcmd(cmd,"OK");
         }
         else
@@ -425,7 +425,7 @@ static bool_t boudica150_set_cmee(int enable)
     char cmd[64];
 
     (void) memset(cmd,0,64);
-    snLINK_LOG_DEBUG(cmd,64,"AT+CMEE=%d\r",enable);
+    snprintf(cmd,64,"AT+CMEE=%d\r",enable);
 
     ret = boudica150_atcmd(cmd,"OK");
 
@@ -439,7 +439,7 @@ static bool_t boudica150_set_cgatt(int enable)  //unit second
     char cmd[64];
 
     (void) memset(cmd,0,64);
-    snLINK_LOG_DEBUG(cmd,64,"AT+CGATT=%d\r",enable);
+    snprintf(cmd,64,"AT+CGATT=%d\r",enable);
 
     ret = boudica150_atcmd(cmd,"OK");
 
@@ -453,7 +453,7 @@ static bool_t boudica150_set_nnmi(int enable)  //unit second
     char cmd[64];
 
     (void) memset(cmd,0,64);
-    snLINK_LOG_DEBUG(cmd,64,"AT+NNMI=%d\r",enable);
+    snprintf(cmd,64,"AT+NNMI=%d\r",enable);
 
     ret = boudica150_atcmd(cmd,"OK");
 
@@ -547,7 +547,7 @@ static bool_t boudica150_set_autoconnect(int enable)
     if((false == ret)||(NULL == strstr(resp,mode)))//which means we need to set it
     {
         (void) memset(cmd,0,64);
-        snLINK_LOG_DEBUG(cmd,64,"AT+NCONFIG=%s\r",mode);
+        snprintf(cmd,64,"AT+NCONFIG=%s\r",mode);
         ret = boudica150_atcmd(cmd,"OK");
 
         boudica150_reboot();
@@ -674,7 +674,7 @@ int boudica150_get_csq(int *value)
 
     (void) memset(cmd,0,64);
     (void) memset(resp,0,64);
-    snLINK_LOG_DEBUG(cmd,64,"AT+CSQ\r");
+    snprintf(cmd,64,"AT+CSQ\r");
     if(boudica150_atcmd_response(cmd,index,resp,64))
     {
         str = strstr((char *)resp,"+CSQ:");
@@ -703,7 +703,7 @@ int* boudica150_check_nuestats(void)
 
     (void) memset(cmd,0,64);
     (void) memset(resp,0,64);
-    snLINK_LOG_DEBUG(cmd,64,"AT+NUESTATS=CELL\r");
+    snprintf(cmd,64,"AT+NUESTATS=CELL\r");
 
     if (boudica150_atcmd_response(cmd,"NUESTATS:",resp,256) < 0)
     {
@@ -719,7 +719,7 @@ int* boudica150_check_nuestats(void)
     wireless_stats[0] = rsrp;
 
     (void) memset(cmd,0,64);
-    snLINK_LOG_DEBUG(cmd,64,"AT+NUESTATS\r");
+    snprintf(cmd,64,"AT+NUESTATS\r");
     if (boudica150_atcmd_response(cmd,"OK",resp,256) < 0)
     {
         return NULL;

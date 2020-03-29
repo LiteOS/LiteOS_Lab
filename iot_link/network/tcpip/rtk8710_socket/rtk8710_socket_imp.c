@@ -271,11 +271,11 @@ static int __rtk8710_connect(int fd, void *addr, int addrlen)
 
         if(s_rtk8710_sock_cb.type == SOCK_DGRAM)
         {
-            snLINK_LOG_DEBUG(cmd,64,"AT+NWKCUDP=CLIENT,%s,%d,1\r\n",remote_ip,remote_port);
+            snprintf(cmd,64,"AT+NWKCUDP=CLIENT,%s,%d,1\r\n",remote_ip,remote_port);
         }
         else if(s_rtk8710_sock_cb.type == SOCK_STREAM)
         {
-            snLINK_LOG_DEBUG(cmd,64,"AT+NWKCTCP=CLIENT,0,%s,%d\r\n",remote_ip,remote_port);
+            snprintf(cmd,64,"AT+NWKCTCP=CLIENT,0,%s,%d\r\n",remote_ip,remote_port);
         }
         else return ret;
 
@@ -317,7 +317,7 @@ static int rtk8710_send(int fd, const void *buf, int len, int flags)
 
         if(s_rtk8710_sock_cb.type == SOCK_DGRAM)
         {
-            snLINK_LOG_DEBUG(cmd,64,"AT+NWKUDPSEND=%d,%s,%d,%d,",s_rtk8710_sock_cb.sockfd,
+            snprintf(cmd,64,"AT+NWKUDPSEND=%d,%s,%d,%d,",s_rtk8710_sock_cb.sockfd,
                      s_rtk8710_sock_cb.remote_ip,s_rtk8710_sock_cb.remote_port,len); //TODO:mux = 1
             if(rtk8710_atcmd(cmd,NULL))
             {
@@ -327,7 +327,7 @@ static int rtk8710_send(int fd, const void *buf, int len, int flags)
         }
         else if(s_rtk8710_sock_cb.type == SOCK_STREAM)
         {
-            snLINK_LOG_DEBUG(cmd,64,"AT+NWKTCPSEND=%d,%d,",s_rtk8710_sock_cb.sockfd,len); //TODO:mux = 1
+            snprintf(cmd,64,"AT+NWKTCPSEND=%d,%d,",s_rtk8710_sock_cb.sockfd,len); //TODO:mux = 1
             if(rtk8710_atcmd(cmd,NULL))
             {
                 ret = at_command((unsigned char *)buf,len,NULL,NULL,0,cn_rtk8710_cmd_timeout);
@@ -417,7 +417,7 @@ static int rtk8710_close(int fd)
     char cmd[64];
     int ret = -1;
     (void) memset(cmd,0,64);
-    snLINK_LOG_DEBUG(cmd,64,"AT+NWKCLOSE=%d\r\n",s_rtk8710_sock_cb.sockfd);//TODO: MUX = 1;
+    snprintf(cmd,64,"AT+NWKCLOSE=%d\r\n",s_rtk8710_sock_cb.sockfd);//TODO: MUX = 1;
     if(rtk8710_atcmd(cmd,"[NWKCLOSE]OK"))
     {
         ret = 0;
@@ -462,7 +462,7 @@ static struct hostent *rtk8710_gethostbyname(const char *name)
     (void) memset(hptr,0,sizeof(struct hostent));
 
 	(void) memset(cmd,0,64);
-	snLINK_LOG_DEBUG(cmd,64,"AT+NWKDNS=%s\r\n",name);
+	snprintf(cmd,64,"AT+NWKDNS=%s\r\n",name);
 	if(false == rtk8710_atcmd_response(cmd,"\r\n",resp,64))
 	{
 		//name is ip address already
@@ -534,7 +534,7 @@ static bool_t rtk8710_set_mode(enum_net_mode mode)
 {
 	char cmd[64];
 	(void) memset(cmd,0,64);
-	snLINK_LOG_DEBUG(cmd,64,"AT+WLMODE=%d\r\n",(int)mode);
+	snprintf(cmd,64,"AT+WLMODE=%d\r\n",(int)mode);
 	return rtk8710_atcmd(cmd,"[WLMODE]OK");
 }
 
@@ -542,10 +542,10 @@ static bool_t rtk8710_joinap(char *ssid, char *passwd)
 {
 	char cmd[64];
 	(void) memset(cmd,0,64);
-    snLINK_LOG_DEBUG(cmd,64,"AT+WLSTAPARAM=\"%s\",\"%s\"\r\n",ssid, passwd);
+    snprintf(cmd,64,"AT+WLSTAPARAM=\"%s\",\"%s\"\r\n",ssid, passwd);
     if(rtk8710_atcmd(cmd,"[WLSTAPARAM]OK"))
     {
-        snLINK_LOG_DEBUG(cmd,64,"AT+WLSETUP\r\n");
+        snprintf(cmd,64,"AT+WLSETUP\r\n");
         return rtk8710_atcmd(cmd,"[WLSETUP]OK");
     }
 }
@@ -554,7 +554,7 @@ static bool_t rtk8710_ver()
 {
 	char cmd[64];
 	(void) memset(cmd,0,64);
-    snLINK_LOG_DEBUG(cmd,64,"AT+SVER\r\n");
+    snprintf(cmd,64,"AT+SVER\r\n");
     return rtk8710_atcmd(cmd,"OK");
 
 }

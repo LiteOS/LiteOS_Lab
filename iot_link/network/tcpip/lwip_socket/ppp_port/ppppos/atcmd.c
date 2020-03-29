@@ -123,7 +123,7 @@ int AtCmd(const char *devname, char *cmd, char *buf, int buflen, int argc, char 
     iodev_flush(dev);
     //initialize the buf with the specified at command
     (void) memset(cmdbuf, 0, CN_AT_LEN);
-    snLINK_LOG_DEBUG(cmdbuf, CN_AT_LEN, "%s\r\n", cmd);//AT+CGMI
+    snprintf(cmdbuf, CN_AT_LEN, "%s\r\n", cmd);//AT+CGMI
     //write the command to the device
     len = strlen(cmdbuf);
     result = iodev_write(dev, (unsigned char *)cmdbuf, len, CN_IODEV_WTIMEOUT);
@@ -539,7 +539,7 @@ static bool_t  setnetapn(char *devname, char *apn, int times)
         (void) memset(atrcvbuf, 0, sizeof(atrcvbuf));
         char cgdcont[64];
         (void) memset(cgdcont, 0, 64);
-        snLINK_LOG_DEBUG(cgdcont,63,"%s%s%s%s","AT+CGDCONT=1,\"IP\",","\"",apn,"\"");
+        snprintf(cgdcont,63,"%s%s%s%s","AT+CGDCONT=1,\"IP\",","\"",apn,"\"");
         argc = AtCmd(devname, cgdcont, atrcvbuf, CN_AT_LEN, 6, argv);
         if(argc > 0)
         {

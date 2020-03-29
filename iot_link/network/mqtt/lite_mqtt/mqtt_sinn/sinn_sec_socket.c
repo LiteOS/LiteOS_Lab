@@ -89,7 +89,7 @@ static int __sinn_sock_connect(sinn_connection_t *nc)
     shakehand_info.client_or_server = MBEDTLS_SSL_IS_CLIENT;
     shakehand_info.udp_or_tcp = MBEDTLS_NET_PROTO_TCP;
     shakehand_info.u.c.host = nc->server_ip;
-    snLINK_LOG_DEBUG(port_buf, PORT_BUF_LEN, "%d", nc->server_port);
+    snprintf(port_buf, PORT_BUF_LEN, "%d", nc->server_port);
     shakehand_info.u.c.port = port_buf;
 
     rc = dtls_shakehand(ssl, &shakehand_info);
