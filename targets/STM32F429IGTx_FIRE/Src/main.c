@@ -80,7 +80,7 @@ static int link_test()
     UINT32  handle;
     TSK_INIT_PARAM_S task_init_param;
 
-    memset (&task_init_param, 0, sizeof (TSK_INIT_PARAM_S));
+    (void) memset (&task_init_param, 0, sizeof (TSK_INIT_PARAM_S));
     task_init_param.uwArg = (unsigned int)NULL;
     task_init_param.usTaskPrio = 2;
     task_init_param.pcName =(char *) "link_main";

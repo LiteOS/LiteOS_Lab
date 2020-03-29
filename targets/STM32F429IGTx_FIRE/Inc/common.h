@@ -45,8 +45,9 @@
 #define OK 0
 #define ERR -1
 
+
 #define HAL_OTA_LOG(fmt, ...) \
-(void)printf("[%s:%d][%lu]" fmt "\r\n",  __FUNCTION__, __LINE__, (uint32_t) osal_sys_time(),  ##__VA_ARGS__)
+ LINK_LOG_DEBUG("[%s:%d][%lu]" fmt "\r\n",  __FUNCTION__, __LINE__, (uint32_t) osal_sys_time(),  ##__VA_ARGS__)
 
 
 #endif //COMMON_H

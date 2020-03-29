@@ -37,6 +37,7 @@
  *
  */
 
+#include <stdio.h>
 #include <link_version.h>
 //RTOS KERNEL
 #include <osal.h>
@@ -54,7 +55,7 @@
 static char s_link_mainversion[64];
 const char *linkmain_version()
 {
-    snprintf(s_link_mainversion,64,"V%d.%d.%d AT %s ON %s",CN_LINK_VERSION_MAJOR,\
+    (void) snprintf(s_link_mainversion,64,"V%d.%d.%d AT %s ON %s",CN_LINK_VERSION_MAJOR,\
             CN_LINK_VERSION_MINOR,CN_LINK_VERSION_FEATURE,__TIME__,__DATE__);
     return s_link_mainversion;
 }
@@ -71,7 +72,7 @@ int link_main(void *args)
     s_link_start =1;
 
     osal_init();
-    printf("linkmain:%s \n\r",linkmain_version());
+    LINK_LOG_DEBUG("linkmain:%s \n\r",linkmain_version());
 
 #if CONFIG_STIMER_ENABLE
     #include <stimer.h>
@@ -90,7 +91,7 @@ int link_main(void *args)
 #endif
 
 #if CONFIG_LOADER_ENABLE
-    printf("loader main!\n");
+    LINK_LOG_DEBUG("loader main!\n");
     extern int ota_detection();
     ota_detection();
     loader_main();

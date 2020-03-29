@@ -82,9 +82,9 @@ int mbedtls_net_connect(mbedtls_net_context *ctx, const char *host, const char *
         return ret;
     }
 
-    memset(&addr,0,sizeof(addr));
+    (void) memset(&addr,0,sizeof(addr));
     addr.sin_family = AF_INET;
-    memcpy(&addr.sin_addr.s_addr,entry->h_addr_list[0],sizeof(addr.sin_addr.s_addr));
+    (void) memcpy(&addr.sin_addr.s_addr,entry->h_addr_list[0],sizeof(addr.sin_addr.s_addr));
     addr.sin_port = htons(((uint16_t)atoi(port)));
 
     if(-1 == sal_connect(ctx->fd,(struct sockaddr *)&addr,sizeof(addr)))
@@ -244,7 +244,7 @@ int mbedtls_net_accept( mbedtls_net_context *bind_ctx,
     {
         *ip_len = sizeof(client_addr.sin_addr)>buf_size?buf_size:sizeof(client_addr.sin_addr);
 
-        memcpy(client_ip,&client_addr.sin_addr,*ip_len);
+        (void) memcpy(client_ip,&client_addr.sin_addr,*ip_len);
     }
 
     return ret;

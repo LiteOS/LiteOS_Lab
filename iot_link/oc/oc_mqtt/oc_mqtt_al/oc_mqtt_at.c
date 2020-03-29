@@ -52,7 +52,7 @@ static char *s_client_pk_pwd = NULL;///< used to strorage the pwd for the pk
 ///< ATCOMMAND:    +HWMQTTRECVPUB:1,0,"HELLOTOPC",2,0010
 void __attribute__((weak)) hwoc_mqtt_recvpub(int qos,int dup,const char *topic,uint8_t *payload, int len)
 {
-    printf("%s:specified topic message\n\r",__FUNCTION__);
+    LINK_LOG_DEBUG("%s:specified topic message\n\r",__FUNCTION__);
     ///< PLEASE USE THE AT PIPE TO OUTPUT THE INFORMATION
     return;
 }
@@ -62,7 +62,7 @@ void __attribute__((weak)) hwoc_mqtt_recvpub(int qos,int dup,const char *topic,u
 ///< ATCOMMAND:    +HWMQTTRECEIVED:1,2,0010
 void __attribute__((weak)) hwoc_mqtt_received(int qos,uint8_t *payload, int len)
 {
-    printf("%s:default topic message\n\r",__FUNCTION__);
+    LINK_LOG_DEBUG("%s:default topic message\n\r",__FUNCTION__);
     ///< PLEASE USE THE AT PIPE TO OUTPUT THE INFORMATION
     return;
 }
@@ -74,14 +74,14 @@ static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
     int ret = -1;
     char *topic;
 
-    printf("%s:qos:%d dup:%d topiclen:%d msglen:%d\n\r",__FUNCTION__,msg->qos,msg->dup,\
+    LINK_LOG_DEBUG("%s:qos:%d dup:%d topiclen:%d msglen:%d\n\r",__FUNCTION__,msg->qos,msg->dup,\
             msg->topic.len,msg->msg.len);
     if((NULL != msg->topic.data) && (msg->topic.len > 0))
     {
         topic = osal_malloc(msg->topic.len +1);
         if(NULL != topic)
         {
-            memcpy(topic, msg->topic.data,msg->topic.len);
+            (void) memcpy(topic, msg->topic.data,msg->topic.len);
             topic[msg->topic.len] = '\0';
             hwoc_mqtt_recvpub(msg->qos,msg->dup,topic,(uint8_t *)msg->msg.data,msg->msg.len);
         }
@@ -134,7 +134,7 @@ int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const
     oc_mqtt_config_t config;
 
     link_main(NULL);
-    memset(&config,0,sizeof(config));
+    (void) memset(&config,0,sizeof(config));
 
     if(bsmode)
     {

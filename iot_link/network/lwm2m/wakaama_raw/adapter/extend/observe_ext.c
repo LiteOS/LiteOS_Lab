@@ -181,7 +181,7 @@ uint8_t lwm2m_get_observe_info(lwm2m_context_t *contextP, lwm2m_observe_info_t *
 
         watcherP = targetP->watcherList;
         observe_info->counter = watcherP->counter;
-        memcpy(observe_info->token, watcherP->token, sizeof(observe_info->token));
+        (void) memcpy(observe_info->token, watcherP->token, sizeof(observe_info->token));
         observe_info->tokenLen = watcherP->tokenLen;
         observe_info->format = watcherP->format;
         return COAP_NO_ERROR;
@@ -222,7 +222,7 @@ uint8_t lwm2m_send_notify(lwm2m_context_t *contextP, lwm2m_observe_info_t *obser
 #endif
     // uri.flag = (LWM2M_URI_FLAG_OBJECT_ID | LWM2M_URI_FLAG_INSTANCE_ID | LWM2M_URI_FLAG_RESOURCE_ID);
     format = (lwm2m_media_type_t)observe_info->format;
-    memset(&data, 0, sizeof(data));
+    (void) memset(&data, 0, sizeof(data));
     data.id = uri.resourceId;
     lwm2m_data_encode_int(firmware_update_state, &data);
     res = lwm2m_data_serialize(&uri, 1, &data, &format, &buffer);
@@ -239,10 +239,10 @@ uint8_t lwm2m_send_notify(lwm2m_context_t *contextP, lwm2m_observe_info_t *obser
         return COAP_500_INTERNAL_SERVER_ERROR;
     }
 
-    memset(&watcherP, 0, sizeof(watcherP));
+    (void) memset(&watcherP, 0, sizeof(watcherP));
     watcherP.lastMid = contextP->nextMID++;
     watcherP.tokenLen = observe_info->tokenLen;
-    memcpy(watcherP.token, observe_info->token, sizeof(watcherP.token));
+    (void) memcpy(watcherP.token, observe_info->token, sizeof(watcherP.token));
     watcherP.format = format;
     watcherP.counter = observe_info->counter;
     watcherP.server = server;

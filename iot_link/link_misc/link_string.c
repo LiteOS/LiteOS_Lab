@@ -106,7 +106,7 @@ char *osal_strdup(const char *ch)
     copy = (char *)osal_malloc(length + 1);
     if(NULL == copy)
         return NULL;
-    strncpy(copy, ch, length);
+    (void) strncpy(copy, ch, length);
     copy[length] = '\0';
 
     return copy;
@@ -137,7 +137,7 @@ char *osal_strcat(char *str[])
         for(i =0;i< str_tnum;i++)
         {
 
-            memcpy(ret + str_off,str[i],strlen(str[i]));
+            (void) memcpy(ret + str_off,str[i],strlen(str[i]));
             str_off += strlen(str[i]);
         }
         ret[str_off] = '\0';

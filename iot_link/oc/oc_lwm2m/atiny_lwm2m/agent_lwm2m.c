@@ -142,7 +142,7 @@ static int lwm2m_agent_receive(en_oc_lwm2m_msg_t type, char *msg, int len)
 static int agent_dealer_callback(int op, const char *uri, char *msg, int len)
 {
     int ret = -1;
-    printf("uri: %s, op: %d\n", uri, op);
+    LINK_LOG_DEBUG("uri: %s, op: %d\n", uri, op);
 
     if ((0 == strcmp(uri, APP_DOWN_CHANNEL_URI))
         || (0 == strcmp(uri, URI_TRIGER_SERVER_INITIATED_BS)))

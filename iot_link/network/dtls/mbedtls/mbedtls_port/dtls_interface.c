@@ -61,18 +61,13 @@
 #include <osal.h>
 
 
-#define MBEDTLS_DEBUG
-
-#ifdef MBEDTLS_DEBUG
-#define MBEDTLS_LOG(fmt, ...) \
-    do \
-    { \
-        (void)printf("[MBEDTLS][%s:%d] " fmt "\r\n", \
-        __FUNCTION__, __LINE__, ##__VA_ARGS__); \
-    } while (0)
+#ifdef  MBEDTLS_DEBUG
+#define MBEDTLS_LOG LINK_LOG_DEBUG
 #else
 #define MBEDTLS_LOG(fmt, ...) ((void)0)
+
 #endif
+
 
 
 mbedtls_ssl_context *dtls_ssl_new(dtls_establish_info_s *info, char plat_type)

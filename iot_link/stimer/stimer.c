@@ -280,7 +280,7 @@ stimer_t stimer_create(const char *name,fn_stimer_handler handler, void *arg,uin
     {
         return item;
     }
-    memset(item,0,sizeof(stimer_item_t));
+    (void) memset(item,0,sizeof(stimer_item_t));
     item->cycle = cycle;
     item->flag = flag;
     item->handler = handler;
@@ -288,7 +288,7 @@ stimer_t stimer_create(const char *name,fn_stimer_handler handler, void *arg,uin
     if(NULL != name)
     {
         item->name = (char *)item +sizeof(stimer_item_t);
-        strcpy(item->name, name);
+        (void) strcpy(item->name, name);
     }
 
 
@@ -403,22 +403,24 @@ static int32_t stimer_print(int32_t argc, const char *argv[])
     int       timer_number = 0;
     stimer_item_t  *item = NULL;
 
+    (void) timer_number;
+
     if(true == osal_mutex_lock(s_stimer_cb.mutex))
     {
-        printf("%-12s %-8s %-8s %-8s %-5s %-5s %s\n\r",\
+        LINK_LOG_DEBUG("%-12s %-8s %-8s %-8s %-5s %-5s %s\n\r",\
                 "Timer-Name","Cycle","Handler","Arg","Start","Once","DeadTime");
 
         item = s_stimer_cb.lst;
         while(NULL != item)
         {
-            printf("%-12s %08x %08x %08x %-5s %-5s %x\n\r",\
+            LINK_LOG_DEBUG("%-12s %08x %08x %08x %-5s %-5s %x\n\r",\
                     (NULL==item->name)?"UNKONW":item->name,\
                     (unsigned int)item->cycle,(unsigned int)item->handler,(unsigned int)(uintptr_t)item->args,\
                     item->flag&cn_stimer_flag_start?"Yes":"No",item->flag&cn_stimer_flag_once?"Yes":"No",\
                     (unsigned int)item->dead_time);
             item = item->nxt;
         }
-        printf("Total:%d Soft timers\n\r",timer_number);
+        LINK_LOG_DEBUG("Total:%d Soft timers\n\r",timer_number);
 
         osal_mutex_unlock(s_stimer_cb.mutex);
     }

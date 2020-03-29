@@ -34,7 +34,7 @@ static tag_sal_cb   s_sal_cb;
 
 __attribute__((weak))  int link_tcpip_imp_init(void)
 {
-    printf("%s:###please implement this function by yourself####\n\r",__FUNCTION__);
+    LINK_LOG_DEBUG("%s:###please implement this function by yourself####\n\r",__FUNCTION__);
     return -1;
 }
 
@@ -60,7 +60,7 @@ int link_tcpip_init(void)
         goto EXIT_MEM_ERR;
     }
 
-    memset(s_sal_cb.sock_cb_tab,0,CN_LINK_SOCKET_NUM*sizeof(void *));
+    (void) memset(s_sal_cb.sock_cb_tab,0,CN_LINK_SOCKET_NUM*sizeof(void *));
     s_sal_cb.sock_cb_num = CN_LINK_SOCKET_NUM;
     s_sal_cb.domain = NULL;
 

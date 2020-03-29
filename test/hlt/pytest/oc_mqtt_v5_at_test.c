@@ -154,7 +154,7 @@ static int demo_hubdefaultconnect()
     hwoc_mqtt_disconnect();
     for(loop = 0; loop<CN_LOOP_TIMES;loop++ )
     {
-        printf("***************%s:LOOP:%d************************\n\r",__FUNCTION__,loop);
+        link_printf("***************%s:LOOP:%d************************\n\r",__FUNCTION__,loop);
 
         if(0 != hwoc_mqtt_connect(0,CN_OC_LIFE_TIME,CN_HUB_SERVER,CN_HUB_PORT,CN_HUB_ID,CN_HUB_PWD))
         {
@@ -166,12 +166,12 @@ static int demo_hubdefaultconnect()
     }
     if(loop == CN_LOOP_TIMES)
     {
-        printf("OC MQTT HUB CONNECT TEST SUCCESS------------------\n\r");
+        link_printf("OC MQTT HUB CONNECT TEST SUCCESS------------------\n\r");
         ret = 0;
     }
     else
     {
-        printf("OC MQTT HUB CONNECT TEST FAILED ++++++++++++++++++++\n\r");
+        link_printf("OC MQTT HUB CONNECT TEST FAILED ++++++++++++++++++++\n\r");
         ret =-1;
     }
     return ret;
@@ -187,7 +187,7 @@ static int demo_hubpkconnect()
 
     for(loop = 0; loop<CN_LOOP_TIMES;loop++ )
     {
-        printf("***************%s:LOOP:%d************************\n\r",__FUNCTION__,loop);
+        link_printf("***************%s:LOOP:%d************************\n\r",__FUNCTION__,loop);
         if( 0 != hwoc_mqtt_serverca(s_server_ca))
         {
             break;
@@ -211,12 +211,12 @@ static int demo_hubpkconnect()
     }
     if(loop == CN_LOOP_TIMES)
     {
-        printf("OC MQTT HUB CONNECT TEST SUCCESS------------------\n\r");
+        link_printf("OC MQTT HUB CONNECT TEST SUCCESS------------------\n\r");
         ret = 0;
     }
     else
     {
-        printf("OC MQTT HUB CONNECT TEST FAILED ++++++++++++++++++++\n\r");
+        link_printf("OC MQTT HUB CONNECT TEST FAILED ++++++++++++++++++++\n\r");
         ret =-1;
     }
     return ret;
@@ -240,7 +240,7 @@ static int demo_selfsub()
     for(loop = 0; loop<CN_LOOP_TIMES;loop++ )
     {
 
-        printf("***************%s:LOOP:%d************************\n\r",__FUNCTION__,loop);
+        link_printf("***************%s:LOOP:%d************************\n\r",__FUNCTION__,loop);
         if(0 != hwoc_mqtt_subscribe(loop%3,CN_SELFSUB_TOPIC))
         {
             break;
@@ -261,12 +261,12 @@ static int demo_selfsub()
 
     if(loop == CN_LOOP_TIMES)
     {
-        printf("OC MQTT HUB PUBLISH  TEST SUCCESS------------------\n\r");
+        link_printf("OC MQTT HUB PUBLISH  TEST SUCCESS------------------\n\r");
         ret = 0;
     }
     else
     {
-        printf("OC MQTT HUB PUBLISH  TEST FAILED ++++++++++++++++++++\n\r");
+        link_printf("OC MQTT HUB PUBLISH  TEST FAILED ++++++++++++++++++++\n\r");
         ret =-1;
     }
     return ret;
@@ -287,7 +287,7 @@ static int demo_hubpublish()
 
     for(loop = 0; loop<CN_LOOP_TIMES;loop++ )
     {
-        printf("***************%s:LOOP:%d************************\n\r",__FUNCTION__,loop);
+        link_printf("***************%s:LOOP:%d************************\n\r",__FUNCTION__,loop);
         if(0 != hwoc_mqtt_publish(loop%3,CN_PUB_TOPIC,(uint8_t *)CN_PUB_DATA,strlen(CN_PUB_DATA)))
         {
             break;
@@ -298,12 +298,12 @@ static int demo_hubpublish()
 
     if(loop == CN_LOOP_TIMES)
     {
-        printf("OC MQTT HUB PUBLISH  TEST SUCCESS------------------\n\r");
+        link_printf("OC MQTT HUB PUBLISH  TEST SUCCESS------------------\n\r");
         ret = 0;
     }
     else
     {
-        printf("OC MQTT HUB PUBLISH  TEST FAILED ++++++++++++++++++++\n\r");
+        link_printf("OC MQTT HUB PUBLISH  TEST FAILED ++++++++++++++++++++\n\r");
         ret =-1;
     }
     return ret;
@@ -332,7 +332,7 @@ static int entry_ocmqttloop(void *arg)
     int i = 0;
     fn_demo_fun demo_fun;
 
-    printf("LOOP TEST START........\n\r");
+    link_printf("LOOP TEST START........\n\r");
     for(i =0;;i++)
     {
         demo_fun = s_demo_tab[i];
@@ -342,7 +342,7 @@ static int entry_ocmqttloop(void *arg)
 
             if(0 != ret)
             {
-                printf("demo:%d failed, and test exit\n\r ",i);
+                link_printf("demo:%d failed, and test exit\n\r ",i);
             }
         }
         else
@@ -350,7 +350,7 @@ static int entry_ocmqttloop(void *arg)
             break;
         }
     }
-    printf("LOOP TEST END..........\n\r");
+    link_printf("LOOP TEST END..........\n\r");
 
     return 0;
 }

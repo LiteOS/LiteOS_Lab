@@ -44,6 +44,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <link_log.h>
 #include <coap_al.h>
 #include <litecoap_port.h>
 
@@ -140,7 +141,7 @@ int dtls_setup(coap_al_initpara_t *initparam, int client_or_server)
         return LITECOAP_NG;
     }
 
-    memset(&info, 0, sizeof(info));
+    (void) memset(&info, 0, sizeof(info));
     info.client_or_server = client_or_server;
     info.finish_notify = NULL;
     info.step_notify   = NULL;
@@ -152,7 +153,7 @@ int dtls_setup(coap_al_initpara_t *initparam, int client_or_server)
         info.u.c.host = initparam->address;
         static char tmp[6];
         //itoa(initparam->port, tmp, 10);
-        sprintf(tmp, "%d", initparam->port);
+        (void) sprintf(tmp, "%d", initparam->port);
         info.u.c.port = tmp;
         info.timeout = DTLS_UDP_CLIENT_SHAKEHAND_TIMEOUT;
     }
@@ -244,7 +245,7 @@ int handle_coap_response(struct _coap_context_t *ctx, coap_msg_t *msg)
         /* bind success */
         if (!g_bind_finsh)
         {
-            memcpy(g_tok,msg->tok->token, msg->tok->tklen);
+            (void) memcpy(g_tok,msg->tok->token, msg->tok->tklen);
             g_tok_len = msg->tok->tklen;
             g_bind_finsh = 1;
         }
@@ -259,14 +260,14 @@ int handle_coap_response(struct _coap_context_t *ctx, coap_msg_t *msg)
     {
         /* bind failed */
         g_bind_finsh = 0;
-        memset(g_tok,0xf1,sizeof(g_tok));
+        (void) memset(g_tok,0xf1,sizeof(g_tok));
         g_tok_len = 8;
         return LITECOAP_OK;
     }
     if((COAP_MESSAGE_ACK == msg->head.t) && (0xa0 == msg->head.code))
     {
         /* bind failed */
-    	printf("device not exist!\r\n");
+    	LINK_LOG_DEBUG("device not exist!\r\n");
         return LITECOAP_OK;
     }
     if((COAP_MESSAGE_ACK == msg->head.t) && (0x44 == msg->head.code))
@@ -297,14 +298,14 @@ static int __init(coap_al_initpara_t *initparam)
     remoteser = litecoap_new_resource(initparam->address, initparam->port, initparam->ssl, initparam->proto);
     if(NULL == remoteser)
     {
-    	printf("litecoap_new_resource failed!\r\n");
+    	LINK_LOG_DEBUG("litecoap_new_resource failed!\r\n");
     	return ret;
     }
     ctx = litecoap_malloc_context(remoteser);
     if(NULL == ctx)
     {
         litecoap_delete_resource(remoteser);
-    	printf("litecoap_malloc_context failed!\r\n");
+    	LINK_LOG_DEBUG("litecoap_malloc_context failed!\r\n");
     	return ret;
     }
 
@@ -320,7 +321,7 @@ static int __init(coap_al_initpara_t *initparam)
     {
         litecoap_free_context(ctx);
         ctx = NULL;
-    	printf("litecoap_register_handler failed!\r\n");
+    	LINK_LOG_DEBUG("litecoap_register_handler failed!\r\n");
     	return ret;
     }
     litecoap_add_resource(ctx, g_oclink_res);

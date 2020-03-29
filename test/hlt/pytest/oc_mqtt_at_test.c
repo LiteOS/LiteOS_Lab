@@ -57,7 +57,7 @@ static int shell_connect(int argc, const char *argv[])
 
     if(argc != 2)
     {
-        printf("parameter err:connect mode(bs/bserr/hub/huberr)");
+        link_printf("parameter err:connect mode(bs/bserr/hub/huberr)");
         return -1;
     }
     else if(0 == strcmp(argv[1],"bs"))
@@ -93,13 +93,13 @@ static int shell_connect(int argc, const char *argv[])
     }
     else
     {
-        printf("parameter err:connect mode(bs/bserr/hub/huberr)");
+        link_printf("parameter err:connect mode(bs/bserr/hub/huberr)");
         return -1;
     }
 
     ret = hwoc_mqtt_connect(mode,10,ip,"8883",id,pwd);
 
-    printf("%s:connectcode:%d:%s\n\r",__FUNCTION__,ret,oc_mqtt_err(ret));
+    link_printf("%s:connectcode:%d:%s\n\r",__FUNCTION__,ret,oc_mqtt_err(ret));
 
     return 0;
 }
@@ -112,7 +112,7 @@ static int shell_disconnect(int argc, const char *argv[])
 
     ret = hwoc_mqtt_disconnect();
 
-    printf("%s:disconnectcode:%d:%s\n\r",__FUNCTION__,ret,oc_mqtt_err(ret));
+    link_printf("%s:disconnectcode:%d:%s\n\r",__FUNCTION__,ret,oc_mqtt_err(ret));
 
     return 0;
 }
@@ -125,7 +125,7 @@ static int shell_version(int argc, const char *argv[])
 
     ret = hwoc_mqtt_version();
 
-    printf("%s:version:%s\n\r",__FUNCTION__,ret);
+    link_printf("%s:version:%s\n\r",__FUNCTION__,ret);
 
     return 0;
 }
@@ -143,7 +143,7 @@ static int shell_send(int argc, const char *argv[])
 
     ret = hwoc_mqtt_send(atoi(argv[1]),(uint8_t*)argv[2],strlen(argv[2]));
 
-    printf("%s:send:%d:%s\n\r",__FUNCTION__,ret,oc_mqtt_err(ret));
+    link_printf("%s:send:%d:%s\n\r",__FUNCTION__,ret,oc_mqtt_err(ret));
 
     return 0;
 }
@@ -161,7 +161,7 @@ static int shell_publish(int argc, const char *argv[])
 
     ret = hwoc_mqtt_publish(atoi(argv[1]),(char *)argv[2],(uint8_t *)argv[3],strlen(argv[3]));
 
-    printf("%s:send:%d:%s\n\r",__FUNCTION__,ret,oc_mqtt_err(ret));
+    link_printf("%s:send:%d:%s\n\r",__FUNCTION__,ret,oc_mqtt_err(ret));
 
     return 0;
 }
@@ -193,7 +193,7 @@ static int demo_bsconnect()
 
     for(loop = 0; loop<CN_LOOP_TIMES;loop++ )
     {
-        printf("***************%s:LOOP:%d************************\n\r",__FUNCTION__,loop);
+        link_printf("***************%s:LOOP:%d************************\n\r",__FUNCTION__,loop);
 
         if(0 != hwoc_mqtt_connect(1,10,CN_BS_SERVER,CN_BS_PORT,CN_BS_ID,CN_BS_PWD))
         {
@@ -205,12 +205,12 @@ static int demo_bsconnect()
     }
     if(loop == CN_LOOP_TIMES)
     {
-        printf("OC MQTT BS CONNECT TEST SUCCESS------------------\n\r");
+        link_printf("OC MQTT BS CONNECT TEST SUCCESS------------------\n\r");
         ret = 0;
     }
     else
     {
-        printf("OC MQTT BS CONNECT TEST FAILED ++++++++++++++++++++\n\r");
+        link_printf("OC MQTT BS CONNECT TEST FAILED ++++++++++++++++++++\n\r");
         ret =-1;
     }
     return ret;
@@ -226,7 +226,7 @@ static int demo_hubconnect()
 
     for(loop = 0; loop<CN_LOOP_TIMES;loop++ )
     {
-        printf("***************%s:LOOP:%d************************\n\r",__FUNCTION__,loop);
+        link_printf("***************%s:LOOP:%d************************\n\r",__FUNCTION__,loop);
 
         if(0 != hwoc_mqtt_connect(0,10,CN_HUB_SERVER,CN_HUB_PORT,CN_HUB_ID,CN_HUB_PWD))
         {
@@ -238,12 +238,12 @@ static int demo_hubconnect()
     }
     if(loop == CN_LOOP_TIMES)
     {
-        printf("OC MQTT HUB CONNECT TEST SUCCESS------------------\n\r");
+        link_printf("OC MQTT HUB CONNECT TEST SUCCESS------------------\n\r");
         ret = 0;
     }
     else
     {
-        printf("OC MQTT HUB CONNECT TEST FAILED ++++++++++++++++++++\n\r");
+        link_printf("OC MQTT HUB CONNECT TEST FAILED ++++++++++++++++++++\n\r");
         ret =-1;
     }
     return ret;
@@ -261,7 +261,7 @@ static int demo_bshubconnect()
 
     for(loop = 0; loop<CN_LOOP_TIMES;loop++ )
     {
-        printf("***************%s:LOOP:%d************************\n\r",__FUNCTION__,loop);
+        link_printf("***************%s:LOOP:%d************************\n\r",__FUNCTION__,loop);
 
         if(0 != hwoc_mqtt_connect(1,10,CN_BS_SERVER,CN_BS_PORT,CN_BS_ID,CN_BS_PWD))
         {
@@ -281,12 +281,12 @@ static int demo_bshubconnect()
 
     if(loop == CN_LOOP_TIMES)
     {
-        printf("OC MQTT BS HUB CONNECT TEST SUCCESS------------------\n\r");
+        link_printf("OC MQTT BS HUB CONNECT TEST SUCCESS------------------\n\r");
         ret = 0;
     }
     else
     {
-        printf("OC MQTT BS HUB CONNECT TEST FAILED ++++++++++++++++++++\n\r");
+        link_printf("OC MQTT BS HUB CONNECT TEST FAILED ++++++++++++++++++++\n\r");
         ret =-1;
     }
     return ret;
@@ -308,7 +308,7 @@ static int demo_bspublish()
 
     for(loop = 0; loop<CN_LOOP_TIMES;loop++ )
     {
-        printf("***************%s:LOOP:%d************************\n\r",__FUNCTION__,loop);
+        link_printf("***************%s:LOOP:%d************************\n\r",__FUNCTION__,loop);
 
         if(0 != hwoc_mqtt_send(loop%3,(uint8_t *)CN_PUB_DATA,strlen(CN_PUB_DATA)))
         {
@@ -321,12 +321,12 @@ static int demo_bspublish()
 
     if(loop == CN_LOOP_TIMES)
     {
-        printf("OC MQTT BS PUB  TEST SUCCESS------------------\n\r");
+        link_printf("OC MQTT BS PUB  TEST SUCCESS------------------\n\r");
         ret = 0;
     }
     else
     {
-        printf("OC MQTT BS PUB  TEST FAILED ++++++++++++++++++++\n\r");
+        link_printf("OC MQTT BS PUB  TEST FAILED ++++++++++++++++++++\n\r");
         ret =-1;
     }
     return ret;
@@ -347,7 +347,7 @@ static int demo_hubpublish()
 
     for(loop = 0; loop<CN_LOOP_TIMES;loop++ )
     {
-        printf("***************%s:LOOP:%d************************\n\r",__FUNCTION__,loop);
+        link_printf("***************%s:LOOP:%d************************\n\r",__FUNCTION__,loop);
 
         if(0 != hwoc_mqtt_send(loop%3,(uint8_t *)CN_PUB_DATA,strlen(CN_PUB_DATA)))
         {
@@ -359,12 +359,12 @@ static int demo_hubpublish()
 
     if(loop == CN_LOOP_TIMES)
     {
-        printf("OC MQTT HUB PUBLISH  TEST SUCCESS------------------\n\r");
+        link_printf("OC MQTT HUB PUBLISH  TEST SUCCESS------------------\n\r");
         ret = 0;
     }
     else
     {
-        printf("OC MQTT HUB PUBLISH  TEST FAILED ++++++++++++++++++++\n\r");
+        link_printf("OC MQTT HUB PUBLISH  TEST FAILED ++++++++++++++++++++\n\r");
         ret =-1;
     }
     return ret;
@@ -392,7 +392,7 @@ static int entry_ocmqttloop(void *arg)
     int i = 0;
     fn_demo_fun demo_fun;
 
-    printf("LOOP TEST START........\n\r");
+    link_printf("LOOP TEST START........\n\r");
     for(i =0;;i++)
     {
         demo_fun = s_demo_tab[i];
@@ -402,7 +402,7 @@ static int entry_ocmqttloop(void *arg)
 
             if(0 != ret)
             {
-                printf("demo:%d failed, and test exit\n\r ",i);
+                link_printf("demo:%d failed, and test exit\n\r ",i);
             }
         }
         else
@@ -412,7 +412,7 @@ static int entry_ocmqttloop(void *arg)
     }
 
 
-    printf("LOOP TEST END..........\n\r");
+    link_printf("LOOP TEST END..........\n\r");
 
     return 0;
 }

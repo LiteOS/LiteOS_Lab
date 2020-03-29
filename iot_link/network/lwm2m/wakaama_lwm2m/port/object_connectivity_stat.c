@@ -254,7 +254,7 @@ lwm2m_object_t *get_object_conn_s(void)
 
     if (NULL != connObj)
     {
-        memset(connObj, 0, sizeof(lwm2m_object_t));
+        (void) memset(connObj, 0, sizeof(lwm2m_object_t));
         /*
          * It assign his unique ID
          * The 7 is the standard ID for the optional object "Connectivity Statistics".
@@ -264,7 +264,7 @@ lwm2m_object_t *get_object_conn_s(void)
 
         if (NULL != connObj->instanceList)
         {
-            memset(connObj->instanceList, 0, sizeof(lwm2m_list_t));
+            (void) memset(connObj->instanceList, 0, sizeof(lwm2m_list_t));
         }
         else
         {

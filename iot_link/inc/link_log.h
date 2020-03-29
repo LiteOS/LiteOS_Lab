@@ -60,12 +60,6 @@ typedef enum
     EN_LINK_LOG_LEVEL_MAX,
 }en_link_log_level_t;
 
-#ifndef link_print
-
-#define link_print printf
-
-#endif
-
 /**
  * @brief:use this function to get the current output log
  *
@@ -91,24 +85,45 @@ const char *link_log_level_name(en_link_log_level_t level);
  * */
 int link_log_level_set(en_link_log_level_t level);
 
-#ifndef CFG_LINK_DEBUG_ENABLE
-#define CFG_LINK_DEBUG_ENABLE 1  ///< default the debug is on
+
+/*
+ * @brief: this is a weak function ,and you could rewrite one
+ *
+ * @param fmt: same use as the fmt for printf
+ *
+ * @param unfixed: same use for printf
+ *
+ * @return: don't care about it
+ *
+ * @attention: and the components should not call this function directly, you'd better
+ *
+ *             call LINK_LOG groups
+ *
+ * */
+__attribute__((weak)) void link_printf(const char *format, ...);
+
+
+
+#ifndef CONFIG_LINK_DEBUG_ENABLE
+#define CONFIG_LINK_DEBUG_ENABLE 1  ///< default the debug is on
 #endif
 
-#define LINK_LOG_LOG(level,fmt, ...) \
+#if CONFIG_LINK_DEBUG_ENABLE
+
+extern unsigned long long osal_sys_time();
+#define LINK_LOG(level,fmt, ...) \
     do \
     { \
-        link_print("[%s][%u][%s:%d] " fmt "\r\n", \
+        link_printf("[%s][%u][%s:%d] " fmt "\r\n", \
         link_log_level_name((level)), (uint32_t)osal_sys_time(), __FUNCTION__, __LINE__, ##__VA_ARGS__); \
     } while (0)
-#if CFG_LINK_DEBUG_ENABLE
 
 #define LINK_LOG_TRACE(fmt, ...) \
     do \
     { \
         if ((EN_LINK_LOG_LEVEL_TRACE) >= link_log_level_get()) \
         { \
-            LINK_LOG_LOG(EN_LINK_LOG_LEVEL_TRACE,fmt,##__VA_ARGS__); \
+            LINK_LOG(EN_LINK_LOG_LEVEL_TRACE,fmt,##__VA_ARGS__); \
         } \
     } while (0)
 
@@ -117,22 +132,23 @@ int link_log_level_set(en_link_log_level_t level);
     { \
         if ((EN_LINK_LOG_LEVEL_DEBUG) >= link_log_level_get()) \
         { \
-            LINK_LOG_LOG(EN_LINK_LOG_LEVEL_DEBUG,fmt,##__VA_ARGS__); \
+            LINK_LOG(EN_LINK_LOG_LEVEL_DEBUG,fmt,##__VA_ARGS__); \
         } \
     } while (0)
 
 #else
 
+#define LINK_LOG(level,fmt, ...)
 #define LINK_LOG_TRACE(fmt, ...)
 #define LINK_LOG_DEBUG(fmt, ...)
 
 #endif
 
 
-#define LINK_LOG_INFO(fmt, ...)   LINK_LOG_LOG(EN_LINK_LOG_LEVEL_INFO,fmt,##__VA_ARGS__)
-#define LINK_LOG_WARN(fmt, ...)   LINK_LOG_LOG(EN_LINK_LOG_LEVEL_WARN,fmt,##__VA_ARGS__)
-#define LINK_LOG_ERROR(fmt, ...)  LINK_LOG_LOG(EN_LINK_LOG_LEVEL_ERROR,fmt,##__VA_ARGS__)
-#define LINK_LOG_FATAL(fmt, ...)  LINK_LOG_LOG(EN_LINK_LOG_LEVEL_FATAL,fmt,##__VA_ARGS__)
+#define LINK_LOG_INFO(fmt, ...)   LINK_LOG(EN_LINK_LOG_LEVEL_INFO,fmt,##__VA_ARGS__)
+#define LINK_LOG_WARN(fmt, ...)   LINK_LOG(EN_LINK_LOG_LEVEL_WARN,fmt,##__VA_ARGS__)
+#define LINK_LOG_ERROR(fmt, ...)  LINK_LOG(EN_LINK_LOG_LEVEL_ERROR,fmt,##__VA_ARGS__)
+#define LINK_LOG_FATAL(fmt, ...)  LINK_LOG(EN_LINK_LOG_LEVEL_FATAL,fmt,##__VA_ARGS__)
 
 
 #endif /* LITEOS_LAB_IOT_LINK_LINK_LOG_LINK_LOG_H_ */

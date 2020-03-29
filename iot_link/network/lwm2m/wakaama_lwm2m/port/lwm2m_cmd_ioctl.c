@@ -97,7 +97,7 @@ static int lwm2m_cmd_default(char *msg, int len, va_list valist)
     }
     else
     {
-        printf("op: %d, uri: %s\n", op, uri);
+        LINK_LOG_DEBUG("op: %d, uri: %s\n", op, uri);
     }
 
     return 0;
@@ -129,7 +129,7 @@ int lwm2m_get_firmware_ver(char *version, int len)
 
 int lwm2m_do_dev_reboot(void)
 {
-    (void)printf("device is rebooting......\r\n");
+    LINK_LOG_DEBUG("device is rebooting......\r\n");
     //LOS_TaskDelay(1000);
     osal_reboot();///< here may be we never comeback
     return LWM2M_OK;
@@ -137,7 +137,7 @@ int lwm2m_do_dev_reboot(void)
 
 int lwm2m_do_factory_reset(void)
 {
-    (void)printf("\n\t FACTORY RESET\r\n\n");
+    LINK_LOG_DEBUG("\n\t FACTORY RESET\r\n\n");
     return LWM2M_OK;
 }
 
@@ -243,14 +243,14 @@ int lwm2m_set_timezone(const char *timezone, int len)
 
 int lwm2m_get_bind_mode(char *mode, int len)
 {
-    (void)printf("bind type is UQ......\r\n");
+    LINK_LOG_DEBUG("bind type is UQ......\r\n");
     (void)snprintf(mode, len, "UQ");
     return LWM2M_OK;
 }
 
 int lwm2m_trig_firmware_update(void)
 {
-    (void)printf("firmware is updating......\r\n");
+    LINK_LOG_DEBUG("firmware is updating......\r\n");
     return LWM2M_OK;
 }
 
@@ -299,29 +299,29 @@ int lwm2m_get_link_utilization(int *utilization)
 /*
 int lwm2m_app_write(void *msg, int len)
 {
-    (void)printf("write num19 object success\r\n");
+    LINK_LOG_DEBUG("write num19 object success\r\n");
     lwm2m_receive(EN_LWM2M_MSG_APPWRITE,msg,len);
     return LWM2M_OK;
 }
 
 int lwm2m_app_execute(void *msg, int len)
 {
-    (void)printf("EXCUTE num19 object success\r\n");
+    LINK_LOG_DEBUG("EXCUTE num19 object success\r\n");
     lwm2m_receive(EN_LWM2M_MSG_APPEXECUTE,msg,len);
     return LWM2M_OK;
 }
 
 int lwm2m_server_bootrigger(void *msg, int len)
 {
-    (void)printf("SERVER TRIGGERE BOOTSTRAP\r\n");
+    LINK_LOG_DEBUG("SERVER TRIGGERE BOOTSTRAP\r\n");
     lwm2m_receive(EN_LWM2M_MSG_SERVERREBS,msg,len);
     return LWM2M_OK;
 }*/
 
 int lwm2m_update_psk(char *psk_id, int len)
 {
-    //memcpy_s(g_psk_value,psk_id,len,16);
-    (void)printf("update psk success\r\n");
+    //(void) memcpy_s(g_psk_value,psk_id,len,16);
+    LINK_LOG_DEBUG("update psk success\r\n");
     return LWM2M_OK;
 }
 
@@ -382,7 +382,7 @@ void location_get_velocity(lwm2m_velocity_s *velocity,
     tmp[3] = horizontal_speed & 0xff;
     tmp[4] = speed_uncertainty;
     copy_len = MAX_VELOCITY_LEN > sizeof(tmp) ? sizeof(tmp) : MAX_VELOCITY_LEN;
-    memcpy(velocity->opaque, tmp, copy_len);
+    (void) memcpy(velocity->opaque, tmp, copy_len);
     velocity->length = copy_len;
 }
 
@@ -573,6 +573,6 @@ int lwm2m_cmd_ioctl(lwm2m_cmd_e cmd, char *arg, int len, ...)
 
 void lwm2m_event_notify(lwm2m_event_e event, const char *arg, int len)
 {
-    (void)printf("notify:stat:%d\r\n", event);
+    LINK_LOG_DEBUG("notify:stat:%d\r\n", event);
 }
 

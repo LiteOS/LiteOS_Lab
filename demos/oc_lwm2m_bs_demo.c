@@ -130,7 +130,7 @@ static int app_msg_deal(void *usr_data,en_oc_lwm2m_msg_t type,void *msg, int len
         bs_msg->msg_type = type;
         bs_msg->msg_len = len;
         bs_msg->msg_content = (char *)bs_msg + sizeof(oc_bs_msg_t);
-        memcpy(bs_msg->msg_content,msg,len);
+        (void) memcpy(bs_msg->msg_content,msg,len);
 
         ret = queue_push(s_queue_msgrcv,bs_msg,100);
         if( 0 != ret)
@@ -167,14 +167,14 @@ static int app_cmd_task_entry()
                 {
                     case cn_app_ledcmd:
                         led_cmd = bs_msg->msg_content;
-                        printf("LEDCMD:msgid:%d mid:%d msg:%s \n\r",led_cmd->msgid,ntohs(led_cmd->mid),led_cmd->led);
+                        (void) printf("LEDCMD:msgid:%d mid:%d msg:%s \n\r",led_cmd->msgid,ntohs(led_cmd->mid),led_cmd->led);
                         //add command action--TODO
                         if (led_cmd->led[0] == 'O' && led_cmd->led[1] == 'N')
                         {
                             //if you need response message,do it here--TODO
                             replymsg.msgid = cn_app_cmdreply;
                             replymsg.mid = led_cmd->mid;
-                            printf("reply mid is %d. \n\r",ntohs(replymsg.mid));
+                            (void) printf("reply mid is %d. \n\r",ntohs(replymsg.mid));
                             replymsg.errorcode = 0;
                             replymsg.curstats[0] = 'O';
                             replymsg.curstats[1] = 'N';
@@ -188,7 +188,7 @@ static int app_cmd_task_entry()
                             //if you need response message,do it here--TODO
                             replymsg.msgid = cn_app_cmdreply;
                             replymsg.mid = led_cmd->mid;
-                            printf("reply mid is %d. \n\r",ntohs(replymsg.mid));
+                            (void) printf("reply mid is %d. \n\r",ntohs(replymsg.mid));
                             replymsg.errorcode = 0;
                             replymsg.curstats[0] = 'O';
                             replymsg.curstats[1] = 'F';
@@ -224,7 +224,7 @@ static int app_report_task_entry()
     oc_config_param_t      oc_param;
     app_light_intensity_t  light;
 
-    memset(&oc_param,0,sizeof(oc_param));
+    (void) memset(&oc_param,0,sizeof(oc_param));
 
     oc_param.app_server.ep_id = cn_endpoint_id;
 
@@ -244,7 +244,7 @@ static int app_report_task_entry()
 
             if (0 != ret)
             {
-                printf("call oc_lwm2m_config error, return %d\r\n", ret);
+                (void) printf("call oc_lwm2m_config error, return %d\r\n", ret);
             }
             else
             {
@@ -263,7 +263,7 @@ static int app_report_task_entry()
 
             if (0 != ret)
             {
-                printf("call oc_lwm2m_config error, return %d\r\n", ret);
+                (void) printf("call oc_lwm2m_config error, return %d\r\n", ret);
             }
             else
             {
@@ -292,7 +292,7 @@ static int app_report_task_entry()
 
 int standard_app_demo_main()
 {
-    printf("welcome to the application:lwm2m_bs:%s:%s\r\n",__DATE__,__TIME__);
+    (void) printf("welcome to the application:lwm2m_bs:%s:%s\r\n",__DATE__,__TIME__);
 
     s_queue_msgrcv = queue_create("ota_nodtls_rcvmsg",10,1);
 

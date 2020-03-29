@@ -200,9 +200,9 @@ int lwm2m_add_rpt_uri(const lwm2m_uri_t *uri,  rpt_list_t *list)
             break;
         }
 
-        memset(rpt_list, 0, sizeof(*rpt_list));
+        (void) memset(rpt_list, 0, sizeof(*rpt_list));
         lwm2m_list_init(&rpt_list->rpt_list);
-        memcpy(&rpt_list->uri, uri, sizeof(rpt_list->uri));
+        (void) memcpy(&rpt_list->uri, uri, sizeof(rpt_list->uri));
         rpt_list->max_cnt = MAX_BUFFER_REPORT_CNT;
         lwm2m_list_insert_tail(&g_lwm2m_rpt_table, &rpt_list->node);
         ret = LWM2M_OK;
@@ -273,7 +273,7 @@ int lwm2m_dequeue_rpt_data(rpt_list_t rpt_list,  data_report_t *data)
         data_node = (lwm2m_rpt_node_t *)rpt_list->rpt_list.next;
         lwm2m_list_delete(&data_node->list);
         rpt_list->rpt_node_cnt--;
-        memcpy((void *)data, (void *)&data_node->data, sizeof(*data));
+        (void) memcpy((void *)data, (void *)&data_node->data, sizeof(*data));
         lwm2m_free(data_node);
         ret = LWM2M_OK;
     }
@@ -324,8 +324,8 @@ int lwm2m_queue_rpt_data(const lwm2m_uri_t *uri, const data_report_t *data)
             break;
         }
 
-        memset((void *)&data_node->list, 0, sizeof(data_node->list));
-        memcpy((void *)&data_node->data, (void *)data, sizeof(data_node->data));
+        (void) memset((void *)&data_node->list, 0, sizeof(data_node->list));
+        (void) memcpy((void *)&data_node->data, (void *)data, sizeof(data_node->data));
         lwm2m_list_insert_tail(&rpt_list->rpt_list, &data_node->list);
         rpt_list->rpt_node_cnt++;
         ret = LWM2M_OK;

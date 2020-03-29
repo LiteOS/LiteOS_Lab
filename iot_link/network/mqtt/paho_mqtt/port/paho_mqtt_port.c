@@ -122,7 +122,7 @@ static int __tls_connect(Network *n, char *addr, int port)
 
     char port_buf[PORT_BUF_LEN];
 
-    memset( &para,0, sizeof(para));
+    (void) memset( &para,0, sizeof(para));
 
     para.security.type = EN_DTLS_AL_SECURITY_TYPE_CERT;
     para.istcp = 1;
@@ -134,7 +134,7 @@ static int __tls_connect(Network *n, char *addr, int port)
         return ret;
     }
 
-    snprintf(port_buf, PORT_BUF_LEN, "%d", port);
+    (void) snprintf(port_buf, PORT_BUF_LEN, "%d", port);
 
     ret = dtls_al_connect( handle, addr, port_buf, CN_MQTT_CONNECT_TIMEOUT_MS);
     if (ret != EN_DTLS_AL_ERR_OK)
@@ -275,9 +275,9 @@ static int __socket_connect(Network *n, const char *host, int port)
     }
 
 
-    memset(&addr,0,sizeof(addr));
+    (void) memset(&addr,0,sizeof(addr));
     addr.sin_family = AF_INET;
-    memcpy(&addr.sin_addr.s_addr,entry->h_addr_list[0],sizeof(addr.sin_addr.s_addr));
+    (void) memcpy(&addr.sin_addr.s_addr,entry->h_addr_list[0],sizeof(addr.sin_addr.s_addr));
     addr.sin_port = htons(((uint16_t)port));
 
     if(-1 == sal_connect(fd,(struct sockaddr *)&addr,sizeof(addr)))
@@ -423,7 +423,7 @@ static void * __connect(mqtt_al_conpara_t *conparam)
         goto EXIT_CB_MEM_ERR;
     }
 
-    memset(cb,0,sizeof(paho_mqtt_cb_t));
+    (void) memset(cb,0,sizeof(paho_mqtt_cb_t));
     cb->task = NULL;
     conparam->conret = cn_mqtt_al_con_code_err_unkown;
 
@@ -674,7 +674,7 @@ static int __publish(void *handle, mqtt_al_pubpara_t *para)
     cb = handle;
     c = &cb->client;
 
-    memset(&msg,0,sizeof(msg));
+    (void) memset(&msg,0,sizeof(msg));
     msg.retained = (unsigned char )para->retain;
     msg.qos = QOS0 + para->qos;
     msg.payload = para->msg.data;

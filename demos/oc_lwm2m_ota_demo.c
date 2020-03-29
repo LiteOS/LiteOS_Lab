@@ -76,14 +76,14 @@ static char s_ota_flag[sizeof(ota_flag_t)];
 
 static int ota_flag_read(ota_flag_t *flag)
 {
-    memcpy(flag,s_ota_flag,sizeof(ota_flag_t));
+    (void) memcpy(flag,s_ota_flag,sizeof(ota_flag_t));
 
     return 0;
 }
 
 static int ota_flag_write(ota_flag_t *flag)
 {
-    memcpy(s_ota_flag,flag,sizeof(ota_flag_t));
+    (void) memcpy(s_ota_flag,flag,sizeof(ota_flag_t));
     return 0;
 }
 
@@ -91,14 +91,14 @@ static int ota_flag_write(ota_flag_t *flag)
 static int ota_bin_write(int offset ,void *msg,int len)
 {
 
-    printf("BIN W:%08d %08d\n\r",offset,len);
+    (void) printf("BIN W:%08d %08d\n\r",offset,len);
     return 0;
 }
 
 static int ota_bin_read(int offset ,void *buf,int len)
 {
 
-    printf("BIN R:%08d %08d\n\r",offset,len);
+    (void) printf("BIN R:%08d %08d\n\r",offset,len);
     return 0;
 }
 
@@ -135,8 +135,8 @@ static int app_msg_deal(void *usr_data,en_oc_lwm2m_msg_t type,void *msg, int len
     buf = osal_malloc(buflen);
     if(NULL != buf)
     {
-        memcpy(buf,&buflen,sizeof(buflen));
-        memcpy(buf + sizeof(buflen),msg,len);
+        (void) memcpy(buf,&buflen,sizeof(buflen));
+        (void) memcpy(buf + sizeof(buflen),msg,len);
 
         ret = queue_push(s_queue_msgrcv,buf,10);
 
@@ -166,7 +166,7 @@ static int app_cmd_task_entry()
         if(NULL != buf)
         {
             msg = buf + sizeof(msglen);
-            memcpy(&msglen,buf,sizeof(msglen));
+            (void) memcpy(&msglen,buf,sizeof(msglen));
             msglen -= sizeof(msglen);
 
             if((0xFF == msg[0]) && (0xFE == msg[1]) && (0x01 == msg[2]))
@@ -176,7 +176,7 @@ static int app_cmd_task_entry()
             }
             else
             {
-                printf("RCVMSG:%d \n\r",(int)msglen);
+                (void) printf("RCVMSG:%d \n\r",(int)msglen);
                 osal_free(buf);
             }
 
@@ -193,7 +193,7 @@ static int app_report_task_entry()
     app_light_intensity_t  light;
     int                    lux = 0;
 
-    memset(&oc_param,0,sizeof(oc_param));
+    (void) memset(&oc_param,0,sizeof(oc_param));
 
     oc_param.app_server.address = cn_app_server;
     oc_param.app_server.port = cn_app_port;
@@ -229,7 +229,7 @@ static int app_report_task_entry()
 int standard_app_demo_main()
 {
 
-    printf("welcome to the application:OTA_NODTLS:%s:%s\r\n",__DATE__,__TIME__);
+    (void) printf("welcome to the application:OTA_NODTLS:%s:%s\r\n",__DATE__,__TIME__);
 
     ota_storage_install(&s_ota_storage_device);
 

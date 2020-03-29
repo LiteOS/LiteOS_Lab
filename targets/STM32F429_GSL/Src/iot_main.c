@@ -242,7 +242,7 @@ int iot_connect()
 
     oc_mqtt_config_t config;
 
-    memset(&config, 0, sizeof(config));
+    (void) memset(&config, 0, sizeof(config));
 
     config.boot_mode = en_oc_mqtt_mode_nobs_static_nodeid_hmacsha256_notimecheck_json;
     config.msg_deal = app_msg_deal;

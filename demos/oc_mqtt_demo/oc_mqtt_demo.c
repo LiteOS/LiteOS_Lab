@@ -108,16 +108,16 @@ static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
 
         demo_msg->topic = (char *) demo_msg->buf;
         buf = (uint8_t *)demo_msg->topic;
-        memcpy(buf,msg->topic.data,msg->topic.len);
+        (void) memcpy(buf,msg->topic.data,msg->topic.len);
         buf[msg->topic.len] = '\0';
 
         demo_msg->msg = demo_msg->buf + msg->topic.len +1;
         demo_msg->msg_len = msg->msg.len;
         buf = demo_msg->msg;
-        memcpy(buf,msg->msg.data,msg->msg.len);
+        (void) memcpy(buf,msg->msg.data,msg->msg.len);
         buf[msg->msg.len] = '\0';
 
-        printf("RCVMSG:qos:%d dup:%d retain:%d topic:%s msg:len:%d payload:%s\n\r",\
+        (void) printf("RCVMSG:qos:%d dup:%d retain:%d topic:%s msg:len:%d payload:%s\n\r",\
                 demo_msg->qos,demo_msg->dup,demo_msg->retain,\
                 demo_msg->topic,demo_msg->msg_len,demo_msg->msg);
 
@@ -171,7 +171,7 @@ static int  oc_cmd_normal(demo_msg_t *demo_msg)
         if(NULL != buf)
         {
             ret = oc_mqtt_report((uint8_t *)buf,strlen(buf),en_mqtt_al_qos_1);
-            printf("%s:RESPONSE:mid:%d err_int:%d retcode:%d \r\n",__FUNCTION__,\
+            (void) printf("%s:RESPONSE:mid:%d err_int:%d retcode:%d \r\n",__FUNCTION__,\
                     mid_int,err_int,ret);
 
             osal_free(buf);
@@ -214,7 +214,7 @@ static int  oc_report_normal(void)
         if(NULL != buf)
         {
             ret = oc_mqtt_report((uint8_t *)buf,strlen(buf),en_mqtt_al_qos_1);
-            printf("%s:REPORT:times:%d:value:%d retcode:%d \r\n",__FUNCTION__,times++,value,ret);
+            (void) printf("%s:REPORT:times:%d:value:%d retcode:%d \r\n",__FUNCTION__,times++,value,ret);
             osal_free(buf);
         }
 
@@ -250,7 +250,7 @@ static int task_reportmsg_entry(void *args)
     int ret;
     oc_mqtt_config_t config;
 
-    memset( &config, 0, sizeof(config));
+    (void) memset( &config, 0, sizeof(config));
 
     config.boot_mode = CN_DEMO_MODE;
     config.msg_deal = app_msg_deal;
@@ -266,7 +266,7 @@ static int task_reportmsg_entry(void *args)
     ret = oc_mqtt_config(&config);
     if((ret != en_oc_mqtt_err_ok))
     {
-        printf("config:err :code:%d\r\n",ret);
+        (void) printf("config:err :code:%d\r\n",ret);
         return -1;
     }
 
@@ -280,6 +280,8 @@ static int task_reportmsg_entry(void *args)
 
 int standard_app_demo_main()
 {
+    printf("DO THE OC MQTT V1 DEMOS\n\r");
+
     s_queue_rcvmsg = queue_create("queue_rcvmsg",2,1);
 
     osal_task_create("demo_reportmsg",task_reportmsg_entry,NULL,0x800,NULL,8);

@@ -62,7 +62,7 @@ static void *__task_create(const char *name,int (*task_entry)(void *args),\
 {
     void *ret = NULL;
     pthread_t pid;
-    printf("task create name:%s\r\n", name);
+    LINK_LOG_DEBUG("task create name:%s\r\n", name);
     if(pthread_create(&pid, NULL, (pthread_entry)task_entry, args))
         return ret;
 

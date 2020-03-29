@@ -9,6 +9,7 @@
 #define __OSAL_IMP_H
 
 
+#include <link_log.h>
 #include <osal_types.h>
 
 typedef struct
