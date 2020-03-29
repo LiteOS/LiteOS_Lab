@@ -39,6 +39,7 @@
 #ifndef LITEOS_LAB_IOT_LINK_DRIVER_DRIVER_H_
 #define LITEOS_LAB_IOT_LINK_DRIVER_DRIVER_H_
 
+#include <sys/types.h>
 
 #include <osal.h>
 
