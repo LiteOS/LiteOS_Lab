@@ -245,7 +245,7 @@ static bool_t __queue_create(osal_queue_t *queue,int len,int msgsize)
     attr.mq_msgsize = 8;
     attr.mq_curmsgs = 0;
 
-    snprintf(queuename, sizeof(queuename)/sizeof(char), "/queue%d", queueid);
+    (void) snprintf(queuename, sizeof(queuename)/sizeof(char), "/queue%d", queueid);
     *queue = (osal_queue_t)mq_open( queuename, O_RDWR | O_CREAT, 0644, &attr);
     queueid++;
     if((mqd_t)*queue == -1)

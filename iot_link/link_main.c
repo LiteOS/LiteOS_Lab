@@ -55,7 +55,7 @@
 static char s_link_mainversion[64];
 const char *linkmain_version()
 {
-    snprintf(s_link_mainversion,64,"V%d.%d.%d AT %s ON %s",CN_LINK_VERSION_MAJOR,\
+    (void) snprintf(s_link_mainversion,64,"V%d.%d.%d AT %s ON %s",CN_LINK_VERSION_MAJOR,\
             CN_LINK_VERSION_MINOR,CN_LINK_VERSION_FEATURE,__TIME__,__DATE__);
     return s_link_mainversion;
 }

@@ -398,7 +398,7 @@ static uint8_t prv_write(uint16_t instanceId,
     {
         if (targetP->resourceMap & (1 << dataArray[i].id))
         {
-            snprintf(uri, MAX_STRURI_LEN, URI_FMT, targetP->objID, instanceId, dataArray[i].id);
+            (void) snprintf(uri, MAX_STRURI_LEN, URI_FMT, targetP->objID, instanceId, dataArray[i].id);
             (void)lwm2m_cmd_ioctl(LWM2M_CMD_MAX,
                                   (char *)(dataArray[i].value.asBuffer.buffer),
                                   dataArray->value.asBuffer.length,
@@ -527,7 +527,7 @@ static uint8_t prv_exec(uint16_t instanceId,
     if (targetP->resourceMap & (1 << resourceId))
     {
         // (void)lwm2m_cmd_ioctl(LWM2M_EXECUTE_APP_DATA, (char *)buffer, length);
-        snprintf(uri, MAX_STRURI_LEN, URI_FMT, targetP->objID, instanceId, resourceId);
+        (void) snprintf(uri, MAX_STRURI_LEN, URI_FMT, targetP->objID, instanceId, resourceId);
         lwm2m_cmd_ioctl(LWM2M_CMD_MAX,
                         (char *)buffer,
                         length,

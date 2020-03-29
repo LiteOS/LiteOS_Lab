@@ -361,13 +361,13 @@ static int draw_rssi(int fresh)
 
     if(0 == fresh)
     {
-        snprintf(draw_str,CN_UI_STRLINE_LENMAX,"RSSI:%ddbm",0);
+        (void) snprintf(draw_str,CN_UI_STRLINE_LENMAX,"RSSI:%ddbm",0);
         ui_clean_window(CN_UI_RSSI_X_S,CN_UI_RSSI_Y_S,CN_UI_RSSI_W,CN_UI_RSSI_H);
         Paint_DrawString_EN(CN_UI_RSSI_X_S, CN_UI_RSSI_Y_S, draw_str, &Font24, WHITE, BLACK);
     }
     else if(s_app_main_cb.rssi_now != s_app_main_cb.rssi_bak)
     {
-        snprintf(draw_str,CN_UI_STRLINE_LENMAX,"RSSI:%ddbm",s_app_main_cb.rssi_now);
+        (void) snprintf(draw_str,CN_UI_STRLINE_LENMAX,"RSSI:%ddbm",s_app_main_cb.rssi_now);
         ui_clean_window(CN_UI_RSSI_X_S,CN_UI_RSSI_Y_S,CN_UI_RSSI_W,CN_UI_RSSI_H);
         Paint_DrawString_EN(CN_UI_RSSI_X_S, CN_UI_RSSI_Y_S, draw_str, &Font24, WHITE, BLACK);
         s_app_main_cb.rssi_bak = s_app_main_cb.rssi_now;
@@ -382,14 +382,14 @@ static int draw_operator(int fresh)
 
     if(0 == fresh)
     {
-        snprintf(draw_str,CN_UI_STRLINE_LENMAX,"OPER:%s","UNKNOWN");
+        (void) snprintf(draw_str,CN_UI_STRLINE_LENMAX,"OPER:%s","UNKNOWN");
 
         ui_clean_window(CN_UI_OPRT_X_S,CN_UI_OPRT_Y_S,CN_UI_OPRT_W,CN_UI_OPRT_H);
         Paint_DrawString_EN(CN_UI_OPRT_X_S, CN_UI_OPRT_Y_S, draw_str, &Font24, WHITE, BLACK);
     }
     else if(0 != strcmp(s_app_main_cb.operator_now, s_app_main_cb.operator_bak))
     {
-        snprintf(draw_str,CN_UI_STRLINE_LENMAX,"%s",(char *)&s_app_main_cb.operator_now[0]);
+        (void) snprintf(draw_str,CN_UI_STRLINE_LENMAX,"%s",(char *)&s_app_main_cb.operator_now[0]);
 
         ui_clean_window(CN_UI_OPRT_X_S,CN_UI_OPRT_Y_S,CN_UI_OPRT_W,CN_UI_OPRT_H);
         Paint_DrawString_EN(CN_UI_OPRT_X_S, CN_UI_OPRT_Y_S, draw_str, &Font24, WHITE, BLACK);
@@ -424,11 +424,11 @@ static int draw_eid(int fresh)
 
     if(s_app_main_cb.status_geteid)
     {
-        snprintf(draw_str,CN_UI_STRLINE_LENMAX,"EID:%s",s_app_main_cb.eid.id);
+        (void) snprintf(draw_str,CN_UI_STRLINE_LENMAX,"EID:%s",s_app_main_cb.eid.id);
     }
     else
     {
-        snprintf(draw_str,CN_UI_STRLINE_LENMAX,"EID:%s","UNKNOWN");
+        (void) snprintf(draw_str,CN_UI_STRLINE_LENMAX,"EID:%s","UNKNOWN");
     }
 
     Paint_DrawString_EN(CN_UI_ICCID_BASE_X, CN_UI_EID_TEXT_Y, draw_str, &Font24, WHITE, BLACK);
@@ -588,7 +588,7 @@ static  int draw_logo(int fresh)
 static int draw_machinestatus(int fresh)
 {
     char draw_str[CN_UI_STRLINE_LENMAX] = {0};
-    snprintf(draw_str,CN_UI_STRLINE_LENMAX,"MS:%s",machine_status(s_app_main_cb.machine_status));
+    (void) snprintf(draw_str,CN_UI_STRLINE_LENMAX,"MS:%s",machine_status(s_app_main_cb.machine_status));
 
     ui_clean_window(CN_UI_MACHINESTATUS_X,CN_UI_MACHINESTATUS_Y,CN_UI_MACHINESTATUS_W,CN_UI_MACHINESTATUS_H);
     Paint_DrawString_EN(CN_UI_MACHINESTATUS_X, CN_UI_MACHINESTATUS_Y,draw_str, &Font24, WHITE, BLACK);
@@ -609,10 +609,10 @@ static int draw_networking(int fresh)
     char draw_str[CN_UI_STRLINE_LENMAX] = {0};
     ui_clean_window(CN_UI_NETWORKING_BASE_X,CN_UI_NETWORKING_BASE_Y,CN_UI_NETWORKING_W,CN_UI_NETWORKING_H);
 
-    snprintf(draw_str,CN_UI_STRLINE_LENMAX,"CGATT:%d",s_app_main_cb.cgatt_value);
+    (void) snprintf(draw_str,CN_UI_STRLINE_LENMAX,"CGATT:%d",s_app_main_cb.cgatt_value);
     Paint_DrawString_EN(CN_UI_NETWORKING_BASE_X, CN_UI_NETWORKING_CGATT_Y, draw_str, &Font24, WHITE, BLACK);
 
-    snprintf(draw_str,CN_UI_STRLINE_LENMAX,"CGREG:%d,%d",s_app_main_cb.cgreg_n,s_app_main_cb.cgreg_state);
+    (void) snprintf(draw_str,CN_UI_STRLINE_LENMAX,"CGREG:%d,%d",s_app_main_cb.cgreg_n,s_app_main_cb.cgreg_state);
     Paint_DrawString_EN(CN_UI_NETWORKING_BASE_X, CN_UI_NETWORKING_CGREG_Y, draw_str, &Font24, WHITE, BLACK);
 
     return 0;

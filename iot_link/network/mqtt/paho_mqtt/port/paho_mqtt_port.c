@@ -134,7 +134,7 @@ static int __tls_connect(Network *n, char *addr, int port)
         return ret;
     }
 
-    snprintf(port_buf, PORT_BUF_LEN, "%d", port);
+    (void) snprintf(port_buf, PORT_BUF_LEN, "%d", port);
 
     ret = dtls_al_connect( handle, addr, port_buf, CN_MQTT_CONNECT_TIMEOUT_MS);
     if (ret != EN_DTLS_AL_ERR_OK)
