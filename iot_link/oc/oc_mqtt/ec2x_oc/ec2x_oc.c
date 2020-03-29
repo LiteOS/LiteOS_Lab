@@ -472,7 +472,7 @@ static int ec2x_oc_publish(char *topic,uint8_t *msg,int len,int qos)
         if(NULL != cmd)
         {
             (void) memset(cmd,0,cmdlen);
-            cmdlen = (void) snprintf(cmd,cmdlen,CN_EC2X_SEND_FMT,qos,len);
+            cmdlen = snprintf(cmd,cmdlen,CN_EC2X_SEND_FMT,qos,len);
             byte2hexstr(msg,len,&cmd[cmdlen]);
             cmdlen += len*2;
             cmd[cmdlen] = '\r';
