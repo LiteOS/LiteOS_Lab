@@ -119,7 +119,7 @@ static int byte_to_hexstr(const unsigned char *bufin, int len, char *bufout)
     }
     for(i = 0; i < len; i++)
     {
-        sLINK_LOG_DEBUG(bufout+i*2, "%02X", bufin[i]);
+        (void) sprintf(bufout+i*2, "%02X", bufin[i]);
     }
     return 0;
 }

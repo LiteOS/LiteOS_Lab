@@ -153,7 +153,7 @@ int dtls_setup(coap_al_initpara_t *initparam, int client_or_server)
         info.u.c.host = initparam->address;
         static char tmp[6];
         //itoa(initparam->port, tmp, 10);
-        sLINK_LOG_DEBUG(tmp, "%d", initparam->port);
+        (void) sprintf(tmp, "%d", initparam->port);
         info.u.c.port = tmp;
         info.timeout = DTLS_UDP_CLIENT_SHAKEHAND_TIMEOUT;
     }

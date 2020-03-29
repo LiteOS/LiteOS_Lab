@@ -216,7 +216,7 @@ int ec2x_get_time(char *timebuffer)
 
         *str = '\0';
         zone = atoi(str_z)/4;
-        sLINK_LOG_DEBUG(str_e," GTM+%d",zone);
+        (void) sprintf(str_e," GTM+%d",zone);
 
         (void) strcpy(timebuffer,str_s);
 
