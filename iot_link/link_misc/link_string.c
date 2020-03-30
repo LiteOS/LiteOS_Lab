@@ -42,8 +42,6 @@
 #include <string.h>
 
 #include <osal.h>
-#include <link_misc.h>
-
 //this function is used to format the char string to the argc mode
 //this function will changed the original string, used it carefully
 //return how many arguments has been
@@ -128,10 +126,11 @@ char *osal_strcat(char *str[])
     while(NULL != str[i])
     {
         str_tlen += strlen(str[i]);
+        str_tnum++;
+        i++;
     }
 
     ret = osal_malloc(str_tlen);
-
     if(NULL != ret)
     {
         for(i =0;i< str_tnum;i++)
@@ -152,6 +151,8 @@ int hexstr2byte(const char *bufin, int len, char *bufout)
     int i = 0;
     unsigned char tmp2 = 0x0;
     unsigned int tmp = 0;
+    char cc;
+
     if (NULL == bufin || len <= 0 || NULL == bufout)
     {
         return -1;
@@ -160,7 +161,8 @@ int hexstr2byte(const char *bufin, int len, char *bufout)
     {
         tmp2 =  (unsigned char )bufin[i];
         tmp2 =  tmp2 <= '9'?(unsigned char)(unsigned int)(tmp2-0x30):(unsigned char)(unsigned int)(tmp2-0x37);
-        tmp =  (unsigned int)bufin[i+1];
+        cc = bufin[i+1];
+        tmp =  (unsigned int)(unsigned char)cc;
         tmp =  tmp <= '9'?(unsigned int)(tmp-0x30):(unsigned int)(tmp-0x37);
         bufout[i/2] =(tmp2<<4)|(tmp&0x0F);
     }

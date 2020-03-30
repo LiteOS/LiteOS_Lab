@@ -118,7 +118,7 @@ static int app_msg_deal(void *msg, int len)
         (void) memcpy(s_rcv_buffer,msg,len);
         s_rcv_datalen = len;
 
-        osal_semp_post(s_rcv_sync);
+        (void) osal_semp_post(s_rcv_sync);
 
         ret = 0;
 

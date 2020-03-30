@@ -106,25 +106,25 @@ static int lwm2m_cmd_default(char *msg, int len, va_list valist)
 int lwm2m_get_manufacturer(char *manu, int len)
 {
     (void)snprintf(manu, len, "Open Mobile Alliance");
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_get_model_number(char *mode, int len)
 {
     (void)snprintf(mode, len, "Lightweight M2M Client");
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_get_serial_number(char *num, int len)
 {
     (void)snprintf(num, len, "345000123");
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_get_firmware_ver(char *version, int len)
 {
     (void)snprintf(version, len, "example_ver001");
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_do_dev_reboot(void)
@@ -132,37 +132,37 @@ int lwm2m_do_dev_reboot(void)
     LINK_LOG_DEBUG("device is rebooting......\r\n");
     //LOS_TaskDelay(1000);
     osal_reboot();///< here may be we never comeback
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_do_factory_reset(void)
 {
     LINK_LOG_DEBUG("\n\t FACTORY RESET\r\n\n");
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_get_power_source(int *arg)
 {
     *arg = LWM2M_POWER_SOURCE;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_get_source_voltage(int *voltage)
 {
     *voltage = LWM2M_POWER_VOLTAGE;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_get_power_current(int *arg)
 {
     *arg = LWM2M_POWER_CURRENT;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_get_baterry_level(int *voltage)
 {
     *voltage = LWM2M_BATTERY_LEVEL;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_get_memory_free(int *voltage)
@@ -172,21 +172,21 @@ int lwm2m_get_memory_free(int *voltage)
     link_random(&tmp, sizeof(tmp));
     tmp %= 30;
     *voltage = LWM2M_MEMORY_FREE + tmp;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
-static int err_code = LWM2M_OK;
+static int err_code = (int)LWM2M_OK;
 
 int lwm2m_get_dev_err(int *arg)
 {
     *arg = err_code;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_do_reset_dev_err(void)
 {
-    err_code = LWM2M_OK;
-    return LWM2M_OK;
+    err_code = (int)LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 static int64_t g_current_time = LWM2M_TIME_CODE;
@@ -194,13 +194,13 @@ static int64_t g_current_time = LWM2M_TIME_CODE;
 int lwm2m_get_current_time(int64_t *arg)
 {
     *arg = g_current_time + (int64_t)osal_sys_time() / 1000;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_set_current_time(const int64_t *arg)
 {
     g_current_time = *arg - (int64_t)osal_sys_time() / 1000;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 #define UTC_OFFSET_MAX_LEN 7
@@ -213,13 +213,13 @@ int lwm2m_get_UTC_offset(char *offset, int len)
         (void)snprintf(offset, len, "%s", g_UTC_offset);
     }
 
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_set_UTC_offset(const char *offset, int len)
 {
     (void)snprintf(g_UTC_offset, len + 1, "%s", offset);
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 #define TIMEZONE_MAXLEN 25
@@ -232,68 +232,68 @@ int lwm2m_get_timezone(char *timezone, int len)
         (void)snprintf(timezone, len, "%s", g_timezone);
     }
 
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_set_timezone(const char *timezone, int len)
 {
     (void)snprintf(g_timezone, len + 1, "%s", timezone);
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_get_bind_mode(char *mode, int len)
 {
     LINK_LOG_DEBUG("bind type is UQ......\r\n");
     (void)snprintf(mode, len, "UQ");
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_trig_firmware_update(void)
 {
     LINK_LOG_DEBUG("firmware is updating......\r\n");
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_get_firmware_result(int *result)
 {
     *result = 0;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_get_firmware_state(int *state)
 {
     *state = 0;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_get_network_bearer(int *network_brearer)
 {
     *network_brearer = LWM2M_NETWORK_BEARER;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_get_signal_strength(int *singal_strength)
 {
     *singal_strength = LWM2M_SIGNAL_STRENGTH;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_get_cell_id(long *cell_id)
 {
     *cell_id = LWM2M_CELL_ID;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_get_link_quality(int *quality)
 {
     *quality = LWM2M_LINK_QUALITY;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_get_link_utilization(int *utilization)
 {
     *utilization = LWM2M_LINK_UTRILIZATION;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 /*
@@ -301,64 +301,64 @@ int lwm2m_app_write(void *msg, int len)
 {
     LINK_LOG_DEBUG("write num19 object success\r\n");
     lwm2m_receive(EN_LWM2M_MSG_APPWRITE,msg,len);
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_app_execute(void *msg, int len)
 {
     LINK_LOG_DEBUG("EXCUTE num19 object success\r\n");
     lwm2m_receive(EN_LWM2M_MSG_APPEXECUTE,msg,len);
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_server_bootrigger(void *msg, int len)
 {
     LINK_LOG_DEBUG("SERVER TRIGGERE BOOTSTRAP\r\n");
     lwm2m_receive(EN_LWM2M_MSG_SERVERREBS,msg,len);
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }*/
 
 int lwm2m_update_psk(char *psk_id, int len)
 {
     //(void) memcpy_s(g_psk_value,psk_id,len,16);
     LINK_LOG_DEBUG("update psk success\r\n");
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_get_latitude(float *latitude)
 {
     *latitude = LWM2M_LATITUDE;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_get_longitude(float *longitude)
 {
     *longitude = LWM2M_LONGITUDE;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_get_altitude(float *altitude)
 {
     *altitude = LWM2M_ALTITUDE;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_get_radius(float *radius)
 {
     *radius = LWM2M_RADIUS;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_get_speed(float *speed)
 {
     *speed = LWM2M_SPEED;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_get_timestamp(uint64_t *timestamp)
 {
     *timestamp = osal_sys_time() / 1000 + LWM2M_TIME_CODE;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 //-----  3GPP TS 23.032 V11.0.0(2012-09) ---------
@@ -389,12 +389,12 @@ void location_get_velocity(lwm2m_velocity_s *velocity,
 int lwm2m_get_velocity(lwm2m_velocity_s *velocity)
 {
     location_get_velocity(velocity, 0, 0, 255);
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int lwm2m_cmd_ioctl(lwm2m_cmd_e cmd, char *arg, int len, ...)
 {
-    int result = LWM2M_OK;
+    int result = (int)LWM2M_OK;
     va_list valist;
 
     switch (cmd)
@@ -550,7 +550,7 @@ int lwm2m_cmd_ioctl(lwm2m_cmd_e cmd, char *arg, int len, ...)
             hal_get_ota_opt(opt);
             opt->key.rsa_N = "C94BECB7BCBFF459B9A71F12C3CC0603B11F0D3A366A226FD3E73D453F96EFBBCD4DFED6D9F77FD78C3AB1805E1BD3858131ACB5303F61AF524F43971B4D429CB847905E68935C1748D0096C1A09DD539CE74857F9FDF0B0EA61574C5D76BD9A67681AC6A9DB1BB22F17120B1DBF3E32633DCE34F5446F52DD7335671AC3A1F21DC557FA4CE9A4E0E3E99FED33A0BAA1C6F6EE53EDD742284D6582B51E4BF019787B8C33C2F2A095BEED11D6FE68611BD00825AF97DB985C62C3AE0DC69BD7D0118E6D620B52AFD514AD5BFA8BAB998332213D7DBF5C98DC86CB8D4F98A416802B892B8D6BEE5D55B7E688334B281E4BEDDB11BD7B374355C5919BA5A9A1C91F";
             opt->key.rsa_E = "10001";
-            result = LWM2M_OK;
+            result = (int)LWM2M_OK;
             break;
         }
 
@@ -558,7 +558,7 @@ int lwm2m_cmd_ioctl(lwm2m_cmd_e cmd, char *arg, int len, ...)
         /*
         case LWM2M_CMD_TRIGER_SERVER_INITIATED_BS:
             lwm2m_server_bootrigger(arg, len);
-            result = LWM2M_OK;
+            result = (int)LWM2M_OK;
             break;*/
 
         default:

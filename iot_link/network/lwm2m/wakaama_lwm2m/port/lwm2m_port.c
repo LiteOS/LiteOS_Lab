@@ -42,11 +42,11 @@
 #include "lwm2m_rpt.h"
 #include "lwm2m_context.h"
 #include "internals.h"
-#include "lwm2m_common.h"
-#include <atiny_log.h>
-#include "connection.h"
-
-#include <stdio.h>
+//#include "lwm2m_common.h"
+//#include <atiny_log.h>
+//#include "connection.h"
+//
+//#include <stdio.h>
 
 #ifdef CONFIG_FEATURE_FOTA
     #include "lwm2m_fota_manager.h"
@@ -92,11 +92,11 @@ static int generate_new_object_instance_id(lwm2m_list_t* instance_list)
 
 static int config_object(lwm2m_object_t *obj, void *param)
 {
-    int ret = LWM2M_ERR;
+    int ret = (int) LWM2M_ERR;
 
     if (NULL == obj)
     {
-        return LWM2M_ARG_INVALID;
+        return (int) LWM2M_ARG_INVALID;
     }
 
     switch (obj->objID)
@@ -168,11 +168,11 @@ static int add_object_instance(lwm2m_object_t *obj,
                                uint16_t resource_id,
                                void *param)
 {
-    int ret = LWM2M_ERR;
+    int ret = (int) LWM2M_ERR;
 
     if (NULL == obj)
     {
-        return LWM2M_ARG_INVALID;
+        return (int) LWM2M_ARG_INVALID;
     }
 
     switch (obj->objID)
@@ -258,7 +258,7 @@ static int lwm2m_check_mandatory_objects(lwm2m_object_t *object_list)
 
     if (NULL == object_list)
     {
-        return LWM2M_ARG_INVALID;
+        return (int) LWM2M_ARG_INVALID;
     }
 
     obj = object_list;
@@ -267,15 +267,15 @@ static int lwm2m_check_mandatory_objects(lwm2m_object_t *object_list)
     {
         object_num++;
 
-        if (OBJ_SECURITY_ID == obj->objID)
+        if ((int)OBJ_SECURITY_ID == obj->objID)
         {
             found |= 0x01;
         }
-        else if (OBJ_SERVER_ID == obj->objID)
+        else if ((int)OBJ_SERVER_ID == obj->objID)
         {
             found |= 0x02;
         }
-        else if (OBJ_DEVICE_ID == obj->objID)
+        else if ((int)OBJ_DEVICE_ID == obj->objID)
         {
             found |= 0x04;
         }
@@ -285,10 +285,10 @@ static int lwm2m_check_mandatory_objects(lwm2m_object_t *object_list)
 
     if ((object_num < 3) || (0x07 != found))
     {
-        return LWM2M_COAP_400_BAD_REQUEST;
+        return (int)LWM2M_COAP_400_BAD_REQUEST;
     }
 
-    return LWM2M_OK;
+    return (int)(int) LWM2M_OK;
 }
 
 /*
@@ -309,7 +309,7 @@ static void lwm2m_set_bootstrap_sequence_state(lwm2m_al_init_param_t *lwm2m_para
 
 static void lwm2m_send_ack_callback(lwm2m_report_type_e type, int cookie, data_send_status_e status)
 {
-    LINK_LOG_DEBUG("type:%d cookie:%d status:%d\n", type, cookie, status);
+    LINK_LOG_DEBUG("type:%d cookie:%d status:%d\n", (int)type, cookie, (int)status);
 }
 
 static void observe_handle_ack(lwm2m_transaction_t *transacP, void *message)
@@ -336,14 +336,14 @@ static void lwm2m_event_handle(module_type_t type, int code, const char *arg, in
     {
         case MODULE_LWM2M:
         {
-            if (STATE_REGISTERED == code)
+            if ((int)STATE_REGISTERED == code)
             {
                 lwm2m_event_notify(LWM2M_REG_OK, NULL, 0);
 #ifdef CONFIG_FEATURE_FOTA
                 (void)lwm2m_fota_manager_repot_result(lwm2m_fota_manager_get_instance());
 #endif
             }
-            else if (STATE_REG_FAILED == code)
+            else if ((int)STATE_REG_FAILED == code)
             {
                 lwm2m_event_notify(LWM2M_REG_FAIL, NULL, 0);
             }
@@ -358,7 +358,7 @@ static void lwm2m_event_handle(module_type_t type, int code, const char *arg, in
 
         case MODULE_URI:
         {
-            if ((NULL == arg) || (arg_len < sizeof(lwm2m_uri_t)))
+            if ((NULL == arg) || ((size_t)arg_len < sizeof(lwm2m_uri_t)))
             {
                 break;
             }
@@ -371,7 +371,7 @@ static void lwm2m_event_handle(module_type_t type, int code, const char *arg, in
                     lwm2m_event_notify(LWM2M_DATA_UNSUBSCRIBLE, (char *)&rpt_type, sizeof(rpt_type));
                 }
 
-                (void)lwm2m_clear_rpt_data((lwm2m_uri_t *)arg, SENT_FAIL);
+                (void)lwm2m_clear_rpt_data((lwm2m_uri_t *)arg, (int)SENT_FAIL);
             }
             else if (OBSERVE_SUBSCRIBE == code)
             {
@@ -408,7 +408,7 @@ static void lwm2m_connection_err_notify(lwm2m_context_t *context, connection_err
         (void)lwm2m_reconnect_ex(handle);
     }
 
-    ATINY_LOG(LOG_INFO, "connection err type %d bootstrap %d", err_type, boostrap_flag);
+    ATINY_LOG(LOG_INFO, "connection err type %d bootstrap %d", (int)err_type, boostrap_flag);
 }
 
 static int lwm2m_poll(handle_data_t *phandle, uint32_t timeout)
@@ -421,7 +421,7 @@ static int lwm2m_poll(handle_data_t *phandle, uint32_t timeout)
 
     if ((NULL == phandle) || (NULL == phandle->recv_buffer))
     {
-        return LWM2M_ARG_INVALID;
+        return (int) LWM2M_ARG_INVALID;
     }
 
     recv_buffer = phandle->recv_buffer;
@@ -446,7 +446,7 @@ static int lwm2m_poll(handle_data_t *phandle, uint32_t timeout)
         connP = connP->next;
     }
 
-    return LWM2M_OK;
+    return (int) LWM2M_OK;
 }
 
 int lwm2m_destroy(void *handle)
@@ -455,7 +455,7 @@ int lwm2m_destroy(void *handle)
 
     if (NULL == handle)
     {
-        return LWM2M_ARG_INVALID;
+        return (int) LWM2M_ARG_INVALID;
     }
 
     handle_data = (handle_data_t *)handle;
@@ -468,13 +468,13 @@ int lwm2m_destroy(void *handle)
     {
 
 #ifdef LWM2M_CLIENT_MODE
-        osal_mutex_del(handle_data->lwm2m_context->observe_mutex);
+        (void) osal_mutex_del(handle_data->lwm2m_context->observe_mutex);
 #endif
 
         lwm2m_close(handle_data->lwm2m_context);
     }
 
-    osal_semp_del(handle_data->quit_sem);
+    (void) osal_semp_del(handle_data->quit_sem);
     handle_data->quit_sem = cn_semp_invalid;
 
     /* release receive data buffer */
@@ -485,8 +485,8 @@ int lwm2m_destroy(void *handle)
     }
 
     lwm2m_free(handle_data);
-    osal_mutex_del(g_data_mutex);
-    return LWM2M_OK;
+    (void) osal_mutex_del(g_data_mutex);
+    return (int) LWM2M_OK;
 }
 
 void reboot_check(void)
@@ -528,11 +528,11 @@ int lwm2m_reconnect_ex(void *phandle)
     if (NULL == phandle)
     {
         ATINY_LOG(LOG_FATAL, "Parameter null");
-        return LWM2M_ARG_INVALID;
+        return (int) LWM2M_ARG_INVALID;
     }
 
     handle->reconnect_flag = true;
-    return LWM2M_OK;
+    return (int) LWM2M_OK;
 }
 
 void lwm2m_set_reboot_flag()
@@ -547,7 +547,7 @@ int __lwm2m_task_entry(void *args)
     if (NULL == args)
     {
         ATINY_LOG(LOG_ERR, "args is an invalid parameter!");
-        return LWM2M_ARG_INVALID;
+        return (int) LWM2M_ARG_INVALID;
     }
 
     hd = (handle_data_t *)args;
@@ -559,7 +559,7 @@ int __lwm2m_task_entry(void *args)
         (void)lwm2m_step_rpt(hd->lwm2m_context);
         lwm2m_handle_reconnect(hd);
 
-        (void)lwm2m_step(hd->lwm2m_context, (time_t *)&timeout);
+        (void)lwm2m_step(hd->lwm2m_context, (time_t *)(uint32_t *)&timeout);
 
         reboot_check();
 
@@ -572,8 +572,8 @@ int __lwm2m_task_entry(void *args)
     }
 
     /* notify task quit */
-    osal_semp_post(hd->quit_sem);
-    return LWM2M_OK;
+    (void) osal_semp_post(hd->quit_sem);
+    return (int) LWM2M_OK;
 }
 
 static int __config(void **handle, lwm2m_al_init_param_t *init_param)
@@ -586,20 +586,20 @@ static int __config(void **handle, lwm2m_al_init_param_t *init_param)
     if (NULL == handle)
     {
         ATINY_LOG(LOG_ERR, "handle is an invalid parameter!");
-        return LWM2M_ARG_INVALID;
+        return (int) LWM2M_ARG_INVALID;
     }
 
     if (NULL == init_param)
     {
         ATINY_LOG(LOG_ERR, "init_param is an invalid parameter!");
-        return LWM2M_ARG_INVALID;
+        return (int) LWM2M_ARG_INVALID;
     }
 
     /* check msg handle callback */
     if (NULL == init_param->dealer)
     {
         ATINY_LOG(LOG_ERR, "init_param->dealer is NULL!");
-        return LWM2M_ARG_INVALID;
+        return (int) LWM2M_ARG_INVALID;
     }
 
     hd = lwm2m_malloc(sizeof(handle_data_t));
@@ -612,21 +612,21 @@ static int __config(void **handle, lwm2m_al_init_param_t *init_param)
 
     result = lwm2m_init_rpt();
 
-    if (LWM2M_OK != result)
+    if ((int) LWM2M_OK != result)
     {
         ATINY_LOG(LOG_FATAL, "lwm2m_init_rpt fail,ret=%d", result);
         return result;
     }
 
     // g_cmd_func = init_param->dealer;
-    lwm2m_cmd_register_dealer(init_param->dealer);
+    (void) lwm2m_cmd_register_dealer(init_param->dealer);
     (void) memset(hd, 0, sizeof(handle_data_t));
     lwm2m_context = lwm2m_init(&(hd->client_data));
 
     if (NULL == lwm2m_context)
     {
         ATINY_LOG(LOG_ERR, "lwm2m_init fail");
-        return LWM2M_MALLOC_FAILED;
+        return (int)LWM2M_MALLOC_FAILED;
     }
 
     lwm2m_set_bootstrap_sequence_state(init_param, lwm2m_context);
@@ -637,7 +637,7 @@ static int __config(void **handle, lwm2m_al_init_param_t *init_param)
     {
         /* release memory of lwm2m_context */
         lwm2m_free(lwm2m_context);
-        return LWM2M_MALLOC_FAILED;
+        return (int)LWM2M_MALLOC_FAILED;
     }
 
     lwm2m_context->msisdn = NULL;
@@ -646,7 +646,7 @@ static int __config(void **handle, lwm2m_al_init_param_t *init_param)
     if (false == osal_mutex_create(&g_data_mutex))
     {
         ATINY_LOG(LOG_ERR, "osal_mutex_create fail");
-        return LWM2M_RESOURCE_NOT_ENOUGH;;
+        return (int)LWM2M_RESOURCE_NOT_ENOUGH;;
     }
 
     if (false == osal_semp_create(&(hd->quit_sem), 1, 0))
@@ -654,8 +654,8 @@ static int __config(void **handle, lwm2m_al_init_param_t *init_param)
         ATINY_LOG(LOG_FATAL, "osal_semp_create fail");
         lwm2m_free(lwm2m_context->endpointName);
         lwm2m_free(lwm2m_context);
-        osal_mutex_del(g_data_mutex);
-        return LWM2M_RESOURCE_NOT_ENOUGH;
+        (void) osal_mutex_del(g_data_mutex);
+        return (int)LWM2M_RESOURCE_NOT_ENOUGH;
     }
 
     /* register callback */
@@ -669,9 +669,9 @@ static int __config(void **handle, lwm2m_al_init_param_t *init_param)
         ATINY_LOG(LOG_FATAL, "memory not enough");
         lwm2m_free(lwm2m_context->endpointName);
         lwm2m_free(lwm2m_context);
-        osal_mutex_del(g_data_mutex);
-        osal_semp_del(hd->quit_sem);
-        return LWM2M_MALLOC_FAILED;
+        (void) osal_mutex_del(g_data_mutex);
+        (void) osal_semp_del(hd->quit_sem);
+        return (int)LWM2M_MALLOC_FAILED;
     }
 #ifdef LWM2M_CLIENT_MODE
 
@@ -680,8 +680,8 @@ static int __config(void **handle, lwm2m_al_init_param_t *init_param)
         ATINY_LOG(LOG_FATAL, "memory not enough");
         lwm2m_free(lwm2m_context->endpointName);
         lwm2m_free(lwm2m_context);
-        osal_mutex_del(g_data_mutex);
-        osal_semp_del(hd->quit_sem);
+        (void) osal_mutex_del(g_data_mutex);
+        (void) osal_semp_del(hd->quit_sem);
         osal_free(hd->recv_buffer);
         return LWM2M_MALLOC_FAILED;
     }
@@ -691,13 +691,13 @@ static int __config(void **handle, lwm2m_al_init_param_t *init_param)
 #ifdef CONFIG_FEATURE_FOTA
     result = lwm2m_fota_manager_set_storage_device(lwm2m_fota_manager_get_instance());
 
-    if (LWM2M_OK != result)
+    if ((int) LWM2M_OK != result)
     {
         ATINY_LOG(LOG_FATAL, "lwm2m_fota_manager_set_storage_device() called fail");
         lwm2m_free(lwm2m_context->endpointName);
         lwm2m_free(lwm2m_context);
-        osal_mutex_del(g_data_mutex);
-        osal_semp_del(hd->quit_sem);
+        (void) osal_mutex_del(g_data_mutex);
+        (void) osal_semp_del(hd->quit_sem);
         return result;
     }
 
@@ -715,17 +715,17 @@ static int __config(void **handle, lwm2m_al_init_param_t *init_param)
 
 static int __deconfig(void *handle)
 {
-    int ret = LWM2M_ERR;
+    int ret = (int) LWM2M_ERR;
 
     if (NULL == handle)
     {
         ATINY_LOG(LOG_ERR, "handle is an invalid parameter!");
-        return LWM2M_ARG_INVALID;
+        return (int) LWM2M_ARG_INVALID;
     }
 
     ret = __disconnect(handle);
 
-    if (LWM2M_OK != ret)
+    if ((int) LWM2M_OK != ret)
     {
         return ret;
     }
@@ -743,7 +743,7 @@ int __add_object(void *handle, int object_id, int object_instance_id, int resour
     if (NULL == handle)
     {
         ATINY_LOG(LOG_ERR, "handle is an invalid parameter!");
-        return LWM2M_ARG_INVALID;
+        return (int) LWM2M_ARG_INVALID;
     }
 
     hd = (handle_data_t *)handle;
@@ -808,7 +808,7 @@ int __add_object(void *handle, int object_id, int object_instance_id, int resour
         && (NULL == obj_instance))
     {
         LINK_LOG_DEBUG("standard object_id %d only supports single instance!\n", object_id);
-        return LWM2M_SUPPORT_SINGLE_INSTANCE_ONLY;
+        return (int) LWM2M_SUPPORT_SINGLE_INSTANCE_ONLY;
     }
 
     /* found these objects' instance, return
@@ -816,12 +816,12 @@ int __add_object(void *handle, int object_id, int object_instance_id, int resour
         OBJ_SERVER_ID,
         OBJ_ACCESS_CONTROL_ID,
         */
-    if ((object_id >= OBJ_SECURITY_ID)
-        && (object_id <= OBJ_ACCESS_CONTROL_ID)
+    if ((object_id >= (int)OBJ_SECURITY_ID)
+        && (object_id <= (int)OBJ_ACCESS_CONTROL_ID)
         && (NULL != obj_instance))
     {
         LINK_LOG_DEBUG("standard object_uri %d/%d/%d does not add resource!\n", object_id, obj_ins_id, resource_id);
-        return LWM2M_OBJECT_INSTANCE_EXISTED;
+        return (int) LWM2M_OBJECT_INSTANCE_EXISTED;
     }
 
     return add_object_instance(obj, obj_instance, obj_ins_id, resource_id, param);
@@ -837,14 +837,14 @@ int __delete_object(void *handle, int object_id)
     if (NULL == handle)
     {
         ATINY_LOG(LOG_ERR, "handle is an invalid parameter!");
-        return LWM2M_ARG_INVALID;
+        return (int) LWM2M_ARG_INVALID;
     }
 
     hd = (handle_data_t *)handle;
 
     if (NULL == hd->lwm2m_context)
     {
-        return LWM2M_NULL_POINTER;
+        return (int) LWM2M_NULL_POINTER;
     }
 
     lwm2m_context = hd->lwm2m_context;
@@ -915,31 +915,31 @@ int __delete_object(void *handle, int object_id)
         }
     }
 
-    return LWM2M_OK;
+    return (int) LWM2M_OK;
 }
 
 static int __connect(void *handle)
 {
-    int result = LWM2M_OK;
+    int result = (int) LWM2M_OK;
     handle_data_t *hd = NULL;
 
     if (NULL == handle)
     {
         ATINY_LOG(LOG_ERR, "handle is an invalid parameter!");
-        return LWM2M_ARG_INVALID;
+        return (int) LWM2M_ARG_INVALID;
     }
 
     hd = (handle_data_t *)handle;
 
     if (NULL == hd->lwm2m_context)
     {
-        return LWM2M_NULL_POINTER;
+        return (int) LWM2M_NULL_POINTER;
     }
 
     /* check mandatory objects */
     result = lwm2m_check_mandatory_objects(hd->lwm2m_context->objectList);
 
-    if (LWM2M_OK != result)
+    if ((int) LWM2M_OK != result)
     {
         return result;
     }
@@ -950,7 +950,7 @@ static int __connect(void *handle)
 
     if (NULL == hd->task_handle)
     {
-        result = LWM2M_ERR;
+        result = (int) LWM2M_ERR;
     }
 
     ATINY_LOG(LOG_INFO, "result %d", result);
@@ -969,8 +969,8 @@ int __disconnect(void *handle)
         hd->task_handle = NULL;
     }
 
-    osal_mutex_unlock(g_data_mutex);
-    return LWM2M_OK;
+    (void) osal_mutex_unlock(g_data_mutex);
+    return (int) LWM2M_OK;
 }
 
 static int __send(void *handle, lwm2m_al_send_param_t *send_param)
@@ -982,7 +982,7 @@ static int __send(void *handle, lwm2m_al_send_param_t *send_param)
     if (NULL == handle)
     {
         ATINY_LOG(LOG_ERR, "handle is an invalid parameter!");
-        return LWM2M_ARG_INVALID;
+        return (int) LWM2M_ARG_INVALID;
     }
 
     if ((NULL == send_param)
@@ -991,7 +991,7 @@ static int __send(void *handle, lwm2m_al_send_param_t *send_param)
         || (NULL == send_param->data))
     {
         ATINY_LOG(LOG_ERR, "invalid args");
-        return LWM2M_ARG_INVALID;
+        return (int) LWM2M_ARG_INVALID;
     }
 
     (void) memset((void *)&uri, 0, sizeof(uri));
@@ -1011,7 +1011,7 @@ static int __send(void *handle, lwm2m_al_send_param_t *send_param)
     // data.type = APP_DATA;
     ret = lwm2m_queue_rpt_data(&uri, &data);
 
-    if (LWM2M_OK != ret)
+    if ((int) LWM2M_OK != ret)
     {
         if (NULL != data.buf)
         {
@@ -1019,7 +1019,7 @@ static int __send(void *handle, lwm2m_al_send_param_t *send_param)
         }
     }
 
-    return LWM2M_OK;
+    return (int) LWM2M_OK;
 }
 
 int lwm2m_install(void)

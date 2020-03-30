@@ -158,7 +158,7 @@ static bool_t  __semp_create(osal_semp_t *semp,int limit,int initvalue)
     }
 }
 
-static bool_t  __semp_pend(osal_semp_t semp,int timeout)
+static bool_t  __semp_pend(osal_semp_t semp,unsigned int timeout)
 {
     struct timespec ts;
 

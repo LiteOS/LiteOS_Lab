@@ -172,7 +172,7 @@ static bool_t  __semp_create(osal_semp_t *semp,int limit,int initvalue)
     return ret;
 }
 
-static bool_t  __semp_pend(osal_semp_t semp,int timeout)
+static bool_t  __semp_pend(osal_semp_t semp,unsigned int timeout)
 {
     if(0 == sem_timedwait(semp,FN_MS_2_TICKS(timeout)))
     {

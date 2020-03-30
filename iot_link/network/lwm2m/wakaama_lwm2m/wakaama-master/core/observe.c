@@ -176,7 +176,7 @@ static lwm2m_watcher_t *prv_getWatcher(lwm2m_context_t *contextP,
         osal_mutex_lock(contextP->observe_mutex);
         observedP->next = contextP->observedList;
         contextP->observedList = observedP;
-        osal_mutex_unlock(contextP->observe_mutex);
+        (void) osal_mutex_unlock(contextP->observe_mutex);
     }
 
     watcherP = prv_findWatcher(observedP, serverP);
@@ -197,7 +197,7 @@ static lwm2m_watcher_t *prv_getWatcher(lwm2m_context_t *contextP,
         osal_mutex_lock(contextP->observe_mutex);
         watcherP->next = observedP->watcherList;
         observedP->watcherList = watcherP;
-        osal_mutex_unlock(contextP->observe_mutex);
+        (void) osal_mutex_unlock(contextP->observe_mutex);
     }
 
     return watcherP;
@@ -328,7 +328,7 @@ void observe_cancel(lwm2m_context_t *contextP,
                 prv_unlinkObserved(contextP, observedP);
                 lwm2m_free(observedP);
             }
-            osal_mutex_unlock(contextP->observe_mutex);
+            (void) osal_mutex_unlock(contextP->observe_mutex);
             return;
         }
     }
@@ -364,7 +364,7 @@ void observe_clear(lwm2m_context_t *contextP,
             lwm2m_free(observedP);
 
             observedP = nextP;
-            osal_mutex_unlock(contextP->observe_mutex);
+            (void) osal_mutex_unlock(contextP->observe_mutex);
         }
         else
         {
@@ -399,7 +399,7 @@ uint8_t observe_setParameters(lwm2m_context_t *contextP,
     watcherP = prv_getWatcher(contextP, uriP, serverP);
     if (watcherP == NULL) return COAP_500_INTERNAL_SERVER_ERROR;
 
-    // Check rule “lt�?value + 2*”stp�?values < “gt�?value
+    // Check rule “lt�?value + 2*”stp�?values < “gt�?value
     if ((((attrP->toSet | (watcherP->parameters ? watcherP->parameters->toSet : 0)) & ~attrP->toClear) & ATTR_FLAG_NUMERIC) == ATTR_FLAG_NUMERIC)
     {
         float gt;
@@ -916,7 +916,7 @@ void observe_step(lwm2m_context_t *contextP,
                     }
                     osal_mutex_lock(contextP->observe_mutex);
                     watcherP->update = false;
-                    osal_mutex_unlock(contextP->observe_mutex);
+                    (void) osal_mutex_unlock(contextP->observe_mutex);
                 }
 
                 // Store this value

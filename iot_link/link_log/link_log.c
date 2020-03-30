@@ -42,7 +42,7 @@
 #include <link_log.h>
 
 static en_link_log_level_t s_link_log_level = EN_LINK_LOG_LEVEL_TRACE;
-static const char *s_link_log_names[EN_LINK_LOG_LEVEL_MAX] =
+static const char *s_link_log_names[] =
 {
     "TRACE",
     "DEBUG",
@@ -80,8 +80,6 @@ const char *link_log_level_name(en_link_log_level_t log_level)
     }
 
 }
-
-#include <stdarg.h>
 
 #ifndef CONFIG_LINK_LOGBUF_LEN
 #define CONFIG_LINK_LOGBUF_LEN      256  ///< you could modify it

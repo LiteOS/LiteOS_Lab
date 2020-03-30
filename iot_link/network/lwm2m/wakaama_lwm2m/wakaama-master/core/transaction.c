@@ -401,13 +401,12 @@ bool transaction_handleResponse(lwm2m_context_t *contextP,
     LOG("error25,return false in transaction_handleResponse\n");
     return false;
 }
-//transacPÖÐ¶ÔÏó£¬³ýbufferÍâÒÑ¾­¸³Öµ
+//transacPï¿½Ð¶ï¿½ï¿½ó£¬³ï¿½bufferï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½Öµ
 int transaction_send(lwm2m_context_t *contextP,
                      lwm2m_transaction_t *transacP)
 {
     bool maxRetriesReached = false;
     coap_packet_t *message = transacP->message;
-    int ret;
 
     LOG("Entering");
 
@@ -471,13 +470,11 @@ int transaction_send(lwm2m_context_t *contextP,
 
         if (COAP_MAX_RETRANSMIT + 1 >= transacP->retrans_counter)
         {
-            ret = lwm2m_buffer_send(transacP->peerH, transacP->buffer, transacP->buffer_len, contextP->userData);
+            lwm2m_buffer_send(transacP->peerH, transacP->buffer, transacP->buffer_len, contextP->userData);
             output_buffer(stderr, (uint8_t *)(transacP->buffer), transacP->buffer_len, 0);
             transacP->retrans_time += timeout;
-            LOG_ARG("send result is %d, retrans_counter:%d", ret, transacP->retrans_counter);
+            LOG_ARG("retrans_counter:%d",transacP->retrans_counter);
             transacP->retrans_counter += 1;
-
-            UNUSEX(ret);
         }
         else
         {

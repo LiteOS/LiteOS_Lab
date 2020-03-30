@@ -182,7 +182,7 @@ bool_t  osal_semp_create(osal_semp_t *semp,int limit,int initvalue)
 
 }
 
-bool_t  osal_semp_pend(osal_semp_t semp,int timeout)
+bool_t  osal_semp_pend(osal_semp_t semp,unsigned int timeout)
 {
     bool_t ret = false;
 
@@ -398,13 +398,13 @@ int osal_reboot()  ///< maybe we should never come back
 
 int osal_int_connect(int intnum, int prio, int mode, fn_interrupt_handle callback, void *arg)
 {
-	int ret = -1;
-	if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->int_connect))
+    int ret = -1;
+    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->int_connect))
     {
         ret = s_os_cb->ops->int_connect(intnum, prio, mode, callback, arg);
-    }
+	}
 
-	return ret;
+    return ret;
 }
 
 

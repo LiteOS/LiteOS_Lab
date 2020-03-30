@@ -145,7 +145,7 @@ static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
 ///< use this function to connect to the cloud platform
 int oc_mqtt_profile_connect(oc_mqtt_profile_connect_t *payload)
 {
-    int ret = en_oc_mqtt_err_parafmt;
+    int ret = (int)en_oc_mqtt_err_parafmt;
     oc_mqtt_config_t config;
 
     if(NULL == payload)
@@ -173,7 +173,7 @@ int oc_mqtt_profile_connect(oc_mqtt_profile_connect_t *payload)
     }
 
     ret = oc_mqtt_config(&config);
-    if(ret == en_oc_mqtt_err_ok)
+    if(ret == (int)en_oc_mqtt_err_ok)
     {
         s_oc_mqtt_profile_cb.device_id = osal_strdup(payload->device_id);
         s_oc_mqtt_profile_cb.rcvfunc = payload->rcvfunc;
@@ -188,7 +188,7 @@ int oc_mqtt_profile_disconnect(void)
     int ret;
 
     ret = oc_mqtt_deconfig();
-    if(ret == en_oc_mqtt_err_ok)
+    if(ret == (int)en_oc_mqtt_err_ok)
     {
         osal_free(s_oc_mqtt_profile_cb.device_id);
         s_oc_mqtt_profile_cb.device_id = NULL;
@@ -229,7 +229,7 @@ static char *topic_make(char *fmt, char *device_id, char *request_id)
 #define CN_OC_MQTT_PROFILE_MSGUP_TOPICFMT   "$oc/devices/%s/sys/messages/up"
 int oc_mqtt_profile_msgup(char *deviceid,oc_mqtt_profile_msgup_t *payload)
 {
-    int ret = en_oc_mqtt_err_parafmt;
+    int ret = (int)en_oc_mqtt_err_parafmt;
     char *topic;
     char *msg;
 
@@ -255,11 +255,11 @@ int oc_mqtt_profile_msgup(char *deviceid,oc_mqtt_profile_msgup_t *payload)
 
     if((NULL != topic) && (NULL != msg))
     {
-        ret = oc_mqtt_publish(topic,(uint8_t *)msg,strlen(msg),en_mqtt_al_qos_1);
+        ret = oc_mqtt_publish(topic,(uint8_t *)msg,strlen(msg),(int)en_mqtt_al_qos_1);
     }
     else
     {
-        ret = en_oc_mqtt_err_sysmem;
+        ret = (int)en_oc_mqtt_err_sysmem;
     }
 
     osal_free(topic);
@@ -271,7 +271,7 @@ int oc_mqtt_profile_msgup(char *deviceid,oc_mqtt_profile_msgup_t *payload)
 #define CN_OC_MQTT_PROFILE_PROPERTYREPORT_TOPICFMT   "$oc/devices/%s/sys/properties/report"
 int oc_mqtt_profile_propertyreport(char *deviceid,oc_mqtt_profile_service_t *payload)
 {
-    int ret = en_oc_mqtt_err_parafmt;
+    int ret = (int)en_oc_mqtt_err_parafmt;
     char *topic;
     char *msg;
 
@@ -297,11 +297,11 @@ int oc_mqtt_profile_propertyreport(char *deviceid,oc_mqtt_profile_service_t *pay
 
     if((NULL != topic) && (NULL != msg))
     {
-        ret = oc_mqtt_publish(topic,(uint8_t *)msg,strlen(msg),en_mqtt_al_qos_1);
+        ret = oc_mqtt_publish(topic,(uint8_t *)msg,strlen(msg),(int)en_mqtt_al_qos_1);
     }
     else
     {
-        ret = en_oc_mqtt_err_sysmem;
+        ret = (int)en_oc_mqtt_err_sysmem;
     }
 
     osal_free(topic);
@@ -313,7 +313,7 @@ int oc_mqtt_profile_propertyreport(char *deviceid,oc_mqtt_profile_service_t *pay
 #define CN_OC_MQTT_PROFILE_GWPROPERTYREPORT_TOPICFMT   "$oc/devices/%s/sys/gateway/sub_devices/properties/report"
 int oc_mqtt_profile_gwpropertyreport(char *deviceid,oc_mqtt_profile_device_t *payload)
 {
-    int ret = en_oc_mqtt_err_parafmt;
+    int ret = (int)en_oc_mqtt_err_parafmt;
     char *topic;
     char *msg;
 
@@ -340,11 +340,11 @@ int oc_mqtt_profile_gwpropertyreport(char *deviceid,oc_mqtt_profile_device_t *pa
 
     if((NULL != topic) && (NULL != msg))
     {
-        ret = oc_mqtt_publish(topic,(uint8_t *)msg,strlen(msg),en_mqtt_al_qos_1);
+        ret = oc_mqtt_publish(topic,(uint8_t *)msg,strlen(msg),(int)en_mqtt_al_qos_1);
     }
     else
     {
-        ret = en_oc_mqtt_err_sysmem;
+        ret = (int)en_oc_mqtt_err_sysmem;
     }
 
     osal_free(topic);
@@ -357,7 +357,7 @@ int oc_mqtt_profile_gwpropertyreport(char *deviceid,oc_mqtt_profile_device_t *pa
 #define CN_OC_MQTT_PROFILE_ROPERTYSETRESP_TOPICFMT   "$oc/devices/%s/sys/properties/set/response/request_id=%s"
 int oc_mqtt_profile_propertysetresp(char *deviceid,oc_mqtt_profile_propertysetresp_t *payload)
 {
-    int ret = en_oc_mqtt_err_parafmt;
+    int ret = (int)en_oc_mqtt_err_parafmt;
     char *topic;
     char *msg;
 
@@ -382,11 +382,11 @@ int oc_mqtt_profile_propertysetresp(char *deviceid,oc_mqtt_profile_propertysetre
 
     if((NULL != topic) && (NULL != msg))
     {
-        ret = oc_mqtt_publish(topic,(uint8_t *)msg,strlen(msg),en_mqtt_al_qos_1);
+        ret = oc_mqtt_publish(topic,(uint8_t *)msg,strlen(msg),(int)en_mqtt_al_qos_1);
     }
     else
     {
-        ret = en_oc_mqtt_err_sysmem;
+        ret = (int)en_oc_mqtt_err_sysmem;
     }
 
     osal_free(topic);
@@ -399,7 +399,7 @@ int oc_mqtt_profile_propertysetresp(char *deviceid,oc_mqtt_profile_propertysetre
 #define CN_OC_MQTT_PROFILE_ROPERTYGETRESP_TOPICFMT   "$oc/devices/%s/sys/properties/get/response/request_id=%s"
 int oc_mqtt_profile_propertygetresp(char *deviceid,oc_mqtt_profile_propertygetresp_t *payload)
 {
-    int ret = en_oc_mqtt_err_parafmt;
+    int ret = (int)en_oc_mqtt_err_parafmt;
     char *topic;
     char *msg;
 
@@ -426,11 +426,11 @@ int oc_mqtt_profile_propertygetresp(char *deviceid,oc_mqtt_profile_propertygetre
 
     if((NULL != topic) && (NULL != msg))
     {
-        ret = oc_mqtt_publish(topic,(uint8_t *)msg,strlen(msg),en_mqtt_al_qos_1);
+        ret = oc_mqtt_publish(topic,(uint8_t *)msg,strlen(msg),(int)en_mqtt_al_qos_1);
     }
     else
     {
-        ret = en_oc_mqtt_err_sysmem;
+        ret = (int)en_oc_mqtt_err_sysmem;
     }
 
     osal_free(topic);
@@ -442,7 +442,7 @@ int oc_mqtt_profile_propertygetresp(char *deviceid,oc_mqtt_profile_propertygetre
 #define CN_OC_MQTT_PROFILE_CMDRESP_TOPICFMT   "$oc/devices/%s/sys/commands/response/request_id=%s"
 int oc_mqtt_profile_cmdresp(char *deviceid,oc_mqtt_profile_cmdresp_t *payload)
 {
-    int ret = en_oc_mqtt_err_parafmt;
+    int ret = (int)en_oc_mqtt_err_parafmt;
     char *topic;
     char *msg;
 
@@ -468,11 +468,11 @@ int oc_mqtt_profile_cmdresp(char *deviceid,oc_mqtt_profile_cmdresp_t *payload)
 
     if((NULL != topic) && (NULL != msg))
     {
-        ret = oc_mqtt_publish(topic,(uint8_t *)msg,strlen(msg),en_mqtt_al_qos_1);
+        ret = oc_mqtt_publish(topic,(uint8_t *)msg,strlen(msg),(int)en_mqtt_al_qos_1);
     }
     else
     {
-        ret = en_oc_mqtt_err_sysmem;
+        ret = (int)en_oc_mqtt_err_sysmem;
     }
 
     osal_free(topic);

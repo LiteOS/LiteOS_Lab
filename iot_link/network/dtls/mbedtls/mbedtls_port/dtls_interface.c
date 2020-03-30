@@ -379,7 +379,7 @@ int dtls_shakehand(mbedtls_ssl_context *ssl, const dtls_shakehand_info_s *info)
         if((flags = mbedtls_ssl_get_verify_result(ssl)) != 0)
         {
             char vrfy_buf[512];
-            mbedtls_x509_crt_verify_info(vrfy_buf, sizeof(vrfy_buf), "  ! ", flags);
+            (void) mbedtls_x509_crt_verify_info(vrfy_buf, sizeof(vrfy_buf), "  ! ", flags);
             MBEDTLS_LOG("cert verify failed: %s", vrfy_buf);
             goto exit_fail;
         }
@@ -405,7 +405,7 @@ exit_fail:
 }
 void dtls_ssl_destroy(mbedtls_ssl_context *ssl)
 {
-    int ret = 0;
+    int ret;
     mbedtls_ssl_config           *conf = NULL;
     mbedtls_ctr_drbg_context     *ctr_drbg = NULL;
     mbedtls_entropy_context      *entropy = NULL;
@@ -430,7 +430,6 @@ void dtls_ssl_destroy(mbedtls_ssl_context *ssl)
 
     do ret = mbedtls_ssl_close_notify( ssl );
     while( ret == MBEDTLS_ERR_SSL_WANT_WRITE );
-    ret = 0;
 
 
     if (NULL != conf)

@@ -594,14 +594,14 @@ int add_security_object_instance(lwm2m_object_t *obj, int object_instance_id, vo
 
     if ((NULL == obj) || (NULL == param))
     {
-        return LWM2M_ARG_INVALID;
+        return (int)LWM2M_ARG_INVALID;
     }
 
     instance = (security_instance_t *)lwm2m_malloc(sizeof(security_instance_t));
 
     if (NULL == instance)
     {
-        return LWM2M_MALLOC_FAILED;
+        return (int)LWM2M_MALLOC_FAILED;
     }
 
     (void) memset(instance, 0, sizeof(security_instance_t));
@@ -629,7 +629,7 @@ int add_security_object_instance(lwm2m_object_t *obj, int object_instance_id, vo
     if (NULL == instance->uri)
     {
         lwm2m_free(instance);
-        return LWM2M_MALLOC_FAILED;
+        return (int)LWM2M_MALLOC_FAILED;
     }
 
     instance->securityMode = LWM2M_SECURITY_MODE_NONE;
@@ -643,7 +643,7 @@ int add_security_object_instance(lwm2m_object_t *obj, int object_instance_id, vo
         {
             lwm2m_free(instance->uri);
             lwm2m_free(instance);
-            return LWM2M_MALLOC_FAILED;
+            return (int)LWM2M_MALLOC_FAILED;
         }
 
         instance->publicIdLen = strlen(sec_param->psk_id);
@@ -670,7 +670,7 @@ int add_security_object_instance(lwm2m_object_t *obj, int object_instance_id, vo
     instance->clientHoldOffTime = sec_param->hold_off_time;
     // After instance id is initialized
     obj->instanceList = LWM2M_LIST_ADD(obj->instanceList, instance);
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int config_security_object(lwm2m_object_t *obj, void *param)
@@ -686,7 +686,7 @@ int config_security_object(lwm2m_object_t *obj, void *param)
     obj->createFunc = prv_security_create;
     obj->deleteFunc = prv_security_delete;
 #endif
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 /********************* Security Obj Helpers **********************/

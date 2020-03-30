@@ -36,9 +36,9 @@
 #define __ETHERNETIF_H__
 
 #include "lwip/opt.h"
-#include "lwip/err.h"
-#include "lwip/netif.h"
-#include "lwip/pbuf.h"
+//#include "lwip/err.h"
+//#include "lwip/netif.h"
+//#include "lwip/pbuf.h"
 
 struct ethernet_api
 {

@@ -49,7 +49,7 @@ static int user_task1_entry()
     while(1)
     {
         printf("task 1 post a semp!\r\n");
-        osal_semp_post(sync_semp);
+        (void) osal_semp_post(sync_semp);
         osal_task_sleep(2*1000);
     }
 }

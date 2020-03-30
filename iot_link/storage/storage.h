@@ -57,8 +57,8 @@ typedef struct {
 
 int storage_dev_install(storage_device *dev, uint32_t max_num);
 int storage_dev_uninstall();
-int storage_device_erase(int dev_id, uint32_t addr, uint32_t len);
-int storage_device_erase_write(int dev_id, uint8_t *buf, uint32_t len, uint32_t addr);
-int storage_device_write(int dev_id, uint8_t *buf, uint32_t len, uint32_t addr);
-int storage_device_read(int dev_id, uint8_t *buf, uint32_t len, uint32_t addr);
+int storage_device_erase(uint32_t dev_id, uint32_t addr, uint32_t len);
+int storage_device_erase_write(uint32_t dev_id, uint8_t *buf, uint32_t len, uint32_t addr);
+int storage_device_write(uint32_t dev_id, uint8_t *buf, uint32_t len, uint32_t addr);
+int storage_device_read(uint32_t dev_id, uint8_t *buf, uint32_t len, uint32_t addr);
 #endif /* SOTRAGE_SOTRAGE_H */

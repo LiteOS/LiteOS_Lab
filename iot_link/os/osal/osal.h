@@ -106,7 +106,7 @@ bool_t  osal_mutex_del(osal_mutex_t mutex);
  *
  **/
 bool_t  osal_semp_create(osal_semp_t *semp,int limit,int initvalue);
-bool_t  osal_semp_pend(osal_semp_t semp,int timeout);
+bool_t  osal_semp_pend(osal_semp_t semp,unsigned int timeout);
 bool_t  osal_semp_post(osal_semp_t semp);
 bool_t  osal_semp_del(osal_semp_t semp);
 

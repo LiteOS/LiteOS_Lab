@@ -238,7 +238,7 @@ static int ui_iccid_touch(int x,int y)
     {
         printf("CARD SELECT:%d \n\r",card);
         s_app_main_cb.card_select = card;
-        osal_semp_post(s_app_main_cb.card_select_sync);
+        (void) osal_semp_post(s_app_main_cb.card_select_sync);
     }
 
     return card;

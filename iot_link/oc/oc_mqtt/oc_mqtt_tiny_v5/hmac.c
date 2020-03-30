@@ -65,13 +65,13 @@ int mbedtls_hmac_calc(mbedtls_hmac_t *hmac_info)
     const mbedtls_md_info_t *md_info;
 
     if (hmac_info == NULL || hmac_info->secret == NULL || hmac_info->input == NULL
-        || hmac_info->secret_len <= 0 || hmac_info->input_len <= 0 || hmac_info->digest_len <= 0)
+        || hmac_info->secret_len == 0 || hmac_info->input_len == 0 || hmac_info->digest_len == 0)
     {
         return MBEDTLS_ERR_MD_BAD_INPUT_DATA;
     }
 
     md_info = mbedtls_md_info_from_type(hmac_info->hmac_type);
-    if (md_info == NULL || md_info->size > hmac_info->digest_len)
+    if (md_info == NULL || (size_t)md_info->size > hmac_info->digest_len)
     {
         return MBEDTLS_ERR_MD_BAD_INPUT_DATA;
     }

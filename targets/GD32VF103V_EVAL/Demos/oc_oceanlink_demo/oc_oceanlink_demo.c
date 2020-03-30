@@ -148,7 +148,7 @@ static int app_msg_deal(void *handle,mqtt_al_msgrcv_t *msg)
 
         printf("msg:%s\n\r",s_rcv_buffer);
 
-        osal_semp_post(s_oc_rcv_sync);
+        (void) osal_semp_post(s_oc_rcv_sync);
         ret = 0;
 
     }

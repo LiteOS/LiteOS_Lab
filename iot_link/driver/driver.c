@@ -40,12 +40,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <driver.h>
-
-
 #include <sys/fcntl.h>
-#include <sys/types.h>
 
-#if CONFIG_DRIVER_ENABLE
 
 #define cn_driv_status_initialized     (1<<0)
 #define cn_driv_status_opend           (1<<1)
@@ -143,7 +139,7 @@ los_driv_t los_driv_register(os_driv_para_t *para)
 
     driv->nxt = s_los_driv_module.drivlst;
     s_los_driv_module.drivlst = driv;
-    osal_mutex_unlock(s_los_driv_module.lock);
+    (void) osal_mutex_unlock(s_los_driv_module.lock);
 
     s_los_driv_module.drivnum++;
 
@@ -151,7 +147,7 @@ los_driv_t los_driv_register(os_driv_para_t *para)
 
 
 EXIT_EXISTED:
-    osal_mutex_unlock(s_los_driv_module.lock);
+    (void) osal_mutex_unlock(s_los_driv_module.lock);
 EXIT_MUTEX:
     osal_free(driv);
     driv = NULL;
@@ -205,7 +201,7 @@ bool_t los_driv_unregister(const char *name)
             s_los_driv_module.drivnum--;
         }
 
-        osal_mutex_unlock(s_los_driv_module.lock);
+        (void) osal_mutex_unlock(s_los_driv_module.lock);
     }
 
     return ret;
@@ -223,9 +219,14 @@ bool_t los_driv_event(los_driv_t driv,unsigned int event,void *para)
 
 
 #ifdef __CC_ARM /* ARM C Compiler ,like keil,options for linker:--keep *.o(osdriv)*/
-extern unsigned int osdriv$$Base;
-extern unsigned int osdriv$$Limit;
-//#pragma section("osdriv", read)
+    extern unsigned int osdriv$$Base;
+    extern unsigned int osdriv$$Limit;
+
+#elif defined(__GNUC__)
+    extern unsigned int __osdriv_start;
+    extern unsigned int __osdriv_end;
+#else
+    #error("unknown compiler here");
 #endif
 
 
@@ -233,21 +234,18 @@ static void osdriv_load_static(void){
 
     os_driv_para_t *para;
     unsigned int num = 0;
-    int i = 0;
+    unsigned int i = 0;
 #if defined (__CC_ARM)    //you could add other compiler like this
     num = ((unsigned int)&osdriv$$Limit-(unsigned int)&osdriv$$Base)/sizeof(os_driv_para_t);
     para = (os_driv_para_t *) &osdriv$$Base;
 #elif defined(__GNUC__)
-    extern unsigned int __osdriv_start;
-    extern unsigned int __osdriv_end;
+
     para = (os_driv_para_t *)&__osdriv_start;
     num = ((unsigned int )(uintptr_t)&__osdriv_end - (unsigned int)(uintptr_t)&__osdriv_start)/sizeof(os_driv_para_t);
-#else
-    #error("unknown compiler here");
 #endif
     for(i =0;i<num;i++)
     {
-        los_driv_register(para);
+        (void) los_driv_register(para);
         para++;
     }
 
@@ -359,14 +357,14 @@ los_dev_t  los_dev_open  (const char *name,unsigned int flag)
     dev->driv = driv;
     dev->openflag =  flag;
 
-    osal_mutex_unlock(s_los_driv_module.lock);
+    (void) osal_mutex_unlock(s_los_driv_module.lock);
     return dev;
 
 EXIT_OPENERR:
 EXIT_INITERR:
 EXIT_EXCLERR:
 EXIT_DRIVERR:
-    osal_mutex_unlock(s_los_driv_module.lock);
+    (void) osal_mutex_unlock(s_los_driv_module.lock);
 EXIT_MUTEXERR:
     osal_free(dev);
     dev = NULL;
@@ -440,13 +438,13 @@ bool_t  los_dev_close  (los_dev_t dev)
     osal_free(dev);
     driv->opencounter--;
 
-    osal_mutex_unlock(s_los_driv_module.lock);
+    (void) osal_mutex_unlock(s_los_driv_module.lock);
 
     ret = true;
 
 EXIT_DETACHERR:
 EXIT_DRIVERR:
-    osal_mutex_unlock(s_los_driv_module.lock);
+    (void) osal_mutex_unlock(s_los_driv_module.lock);
 EXIT_MUTEXERR:
 EXIT_PARAERR:
     return ret;
@@ -581,7 +579,7 @@ off_t  los_dev_seek (los_dev_t dev,off_t offset,int fromwhere)
 //void*      los_dev_upara_get (los_dev_t dev);
 
 //export some shell for the driver debug
-#ifdef CONFIG_LITEOS_ENABLE
+#if CONFIG_SHELL_ENABLE
 
 #include <shell.h>
 //use this function to show all the driver infomation
@@ -607,7 +605,7 @@ static int  __driv_show_shell(int argc,const char *argv[])
             }
         }
 
-        osal_mutex_unlock(s_los_driv_module.lock);
+        (void) osal_mutex_unlock(s_los_driv_module.lock);
     }
 
     return 0;
@@ -615,6 +613,5 @@ static int  __driv_show_shell(int argc,const char *argv[])
 
 OSSHELL_EXPORT_CMD(__driv_show_shell,"devlst","devlst");
 
-#endif ///< end for CONFIG_LITEOS_ENABLE
+#endif ///< end for CONFIG_SHELL_ENABLE
 
-#endif ///< end for CONFIG_DRIVER_ENABLE

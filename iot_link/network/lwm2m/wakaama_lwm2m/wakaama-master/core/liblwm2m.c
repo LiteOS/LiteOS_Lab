@@ -209,7 +209,7 @@ static void prv_deleteObservedList(lwm2m_context_t *contextP)
 
         lwm2m_free(targetP);
     }
-    osal_mutex_unlock(contextP->observe_mutex);
+    (void) osal_mutex_unlock(contextP->observe_mutex);
 }
 #endif
 
