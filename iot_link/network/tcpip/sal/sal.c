@@ -70,7 +70,7 @@ int link_tcpip_init(void)
 
 
 EXIT_MEM_ERR:
-    osal_mutex_del(s_sal_cb.sock_cb_mutex);
+    (void) osal_mutex_del(s_sal_cb.sock_cb_mutex);
     s_sal_cb.sock_cb_mutex = cn_mutex_invalid;
 
 EXIT_MUTEX_ERR:
@@ -124,7 +124,7 @@ static void * __sal_sockcb_malloc()
             }
         }
 
-        osal_mutex_unlock(s_sal_cb.sock_cb_mutex);
+        (void) osal_mutex_unlock(s_sal_cb.sock_cb_mutex);
 
         if(i == s_sal_cb.sock_cb_num)
         {
@@ -154,7 +154,7 @@ static void __sal_sockcb_free(int sockfd)
         sockcb = s_sal_cb.sock_cb_tab[sockfd];
         s_sal_cb.sock_cb_tab[sockfd]= NULL;
 
-        osal_mutex_unlock(s_sal_cb.sock_cb_mutex);
+        (void) osal_mutex_unlock(s_sal_cb.sock_cb_mutex);
 
         osal_free(sockcb);
     }

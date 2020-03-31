@@ -53,13 +53,13 @@
 #include "connection.h"
 
 #include <sal.h>
-#include <osal.h>
+//#include <osal.h>
 
 #if defined (WITH_DTLS)
     #include "dtls_interface.h"
 #endif
 //#include "sal/atiny_socket.h"
-#include <atiny_log.h>
+//#include <atiny_log.h>
 #include "object_comm.h"
 
 #define COAP_PORT "5683"
@@ -282,7 +282,7 @@ static void *__socket_connect(char *host, char *port, int is_server)
     return ret;
 EXIT_CONNECT:
 EXIT_BIND:
-    sal_closesocket(fd);
+    (void)sal_closesocket(fd);
 EXIT_SOCKET:
     osal_free(ret);
     ret = NULL;
@@ -295,7 +295,7 @@ static void __socket_free(con_net_conext_t  *context)
 {
     if (NULL != context)
     {
-        sal_closesocket(context->fd);
+        (void)sal_closesocket(context->fd);
         osal_free(context);
     }
 }

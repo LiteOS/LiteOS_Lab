@@ -212,10 +212,10 @@ void ethernetif_input( void *pvParameters )
         */
         /*err = s_pxNetIf->input(p, s_pxNetIf);*/
         err = tcpip_input(p, s_pxNetIf);
-        if (err != ERR_OK)
+        if (err != (int)ERR_OK)
         {
-            LWIP_DEBUGF(NETIF_DEBUG, ("ethernetif_input: IP input error\n"));
-            pbuf_free(p);
+//            LWIP_DEBUGF(NETIF_DEBUG, ("ethernetif_input: IP input error\n"));
+            (void)pbuf_free(p);
             p = NULL;
         }
     }

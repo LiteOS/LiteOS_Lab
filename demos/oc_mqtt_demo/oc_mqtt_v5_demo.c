@@ -102,7 +102,6 @@ static const char s_server_ca[] =
 static queue_t                   *s_queue_rcvmsg = NULL;   ///< this is used to cached the message
 static oc_mqtt_profile_service_t  s_device_service;
 
-#ifndef CONFIG_OC_MQTT_DEMO_BS
 ///< two way mqtt mode
 static const char s_client_ca[] = \
 "-----BEGIN CERTIFICATE-----\r\n"
@@ -153,7 +152,6 @@ static const char s_client_pk[]= \
 "-----END PRIVATE KEY-----\r\n";
 static const char *s_client_pk_pwd = "123456";
 
-#endif
 
 
 //use this function to push all the message to the buffer

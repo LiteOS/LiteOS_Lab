@@ -109,7 +109,7 @@ static void atio_irq(void)
             ringspace = g_atio_cb.w_next;
             ring_buffer_write(&g_atio_cb.rcvring,(unsigned char *)&ringspace,sizeof(ringspace));
             ring_buffer_write(&g_atio_cb.rcvring,g_atio_cb.rcvbuf,ringspace);
-            osal_semp_post(g_atio_cb.rcvsync);
+            (void) osal_semp_post(g_atio_cb.rcvsync);
             g_atio_cb.rcvframe++;
         }
         g_atio_cb.w_next=0; //write from the head

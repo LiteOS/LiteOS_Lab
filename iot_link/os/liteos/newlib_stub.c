@@ -47,7 +47,7 @@ _CLOCK_T_ _times_r(struct _reent *ptr, struct tms *ptms)
 {
     /* not support */
     ptr->_errno = ENOTSUP;
-    return -1;
+    return (_CLOCK_T_)-1;
 }
 
 int _unlink_r(struct _reent *ptr, const char *file)

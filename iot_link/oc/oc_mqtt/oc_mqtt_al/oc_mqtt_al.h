@@ -87,7 +87,6 @@ typedef struct
     char            *server_port;          ///< server port:
     ///< define for the tls
     dtls_al_security_t  security;          ///< used for the transport
-
     ///< define for the mqtt
     char                              *id;
     char                              *pwd;
@@ -102,7 +101,7 @@ typedef  int (*fn_oc_mqtt_config)(oc_mqtt_config_t *param);
 typedef  int (*fn_oc_mqtt_deconfig)(void);
 typedef  int (*fn_oc_mqtt_publish)(char *topic,uint8_t *msg,int msg_len,int qos);
 typedef  int (*fn_oc_mqtt_subscribe)(char *topic, int qos);
-typedef  en_oc_mqtt_err_code_t (*fn_oc_mqtt_unsubscribe)(char *topic);
+typedef  int (*fn_oc_mqtt_unsubscribe)(char *topic);
 
 
 /**
@@ -204,7 +203,7 @@ int oc_mqtt_publish(char *topic,uint8_t *msg,int msg_len,int qos);
  *
  * @note: you should make the topic specified by your self
  */
- en_oc_mqtt_err_code_t oc_mqtt_unsubscribe(char *topic);
+ int oc_mqtt_unsubscribe(char *topic);
 
 
 
@@ -220,7 +219,7 @@ int oc_mqtt_init();
  *
  *@return the  reason  corresponding to the code
  */
-const char *oc_mqtt_err(int code);
+const char *oc_mqtt_err(en_oc_mqtt_err_code_t code);
 
 
 

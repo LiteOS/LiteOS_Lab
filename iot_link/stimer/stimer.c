@@ -195,12 +195,12 @@ static int __timer_entry(void *args)
     wait_time= cn_stimer_wait_max;
     while(1)
     {
-        osal_semp_pend(s_stimer_cb.semp,wait_time);  ///< if any timer exist before the task, then the semphore is active
+        (void)osal_semp_pend(s_stimer_cb.semp,wait_time);  ///< if any timer exist before the task, then the semphore is active
         ///< check all the list and do it
         if(true == osal_mutex_lock(s_stimer_cb.mutex))
         {
             timer_scan();
-            osal_mutex_unlock(s_stimer_cb.mutex);
+            (void) osal_mutex_unlock(s_stimer_cb.mutex);
         }
 
         ///<compute all the time to wait;
@@ -214,13 +214,13 @@ static int __timer_entry(void *args)
             else
             {
                 wait_time = s_stimer_cb.lst->dead_time > cur_time?(s_stimer_cb.lst->dead_time - cur_time):0;
-                if(wait_time > cn_stimer_wait_max)
+                if(wait_time > (cn_stimer_wait_max-1))
                 {
                     wait_time = cn_stimer_wait_max;
                 }
             }
 
-            osal_mutex_unlock(s_stimer_cb.mutex);
+            (void) osal_mutex_unlock(s_stimer_cb.mutex);
         }
     }
     return 0;
@@ -254,10 +254,10 @@ int32_t stimer_init()
     return ret;
 
 EXIT_TASKERR:
-    osal_mutex_del(s_stimer_cb.mutex);
+    (void) osal_mutex_del(s_stimer_cb.mutex);
     s_stimer_cb.mutex = cn_mutex_invalid;
 EXIT_MUTEXERR:
-    osal_semp_del(s_stimer_cb.semp);
+    (void) osal_semp_del(s_stimer_cb.semp);
     s_stimer_cb.semp = cn_semp_invalid;
 EXIT_SEMPERR:
     return ret;
@@ -304,8 +304,8 @@ stimer_t stimer_create(const char *name,fn_stimer_handler handler, void *arg,uin
     if(true == osal_mutex_lock(s_stimer_cb.mutex))
     {
         timer_add(item);
-        osal_mutex_unlock(s_stimer_cb.mutex);
-        osal_semp_post(s_stimer_cb.semp);
+        (void) osal_mutex_unlock(s_stimer_cb.mutex);
+        (void) osal_semp_post(s_stimer_cb.semp);
     }
     else
     {
@@ -323,9 +323,9 @@ int32_t stimer_delete(stimer_t timer)
     if(true == osal_mutex_lock(s_stimer_cb.mutex))
     {
         timer_remove(timer);
-        osal_mutex_unlock(s_stimer_cb.mutex);
+        (void) osal_mutex_unlock(s_stimer_cb.mutex);
         osal_free(timer);
-        osal_semp_post(s_stimer_cb.semp);
+        (void) osal_semp_post(s_stimer_cb.semp);
         ret = 0;
     }
 
@@ -360,7 +360,7 @@ int32_t stimer_ioctl(stimer_t timer,en_stimer_opt_t opt, void *arg)
                 item->flag &= (~cn_stimer_flag_start);
                 item->dead_time = cn_stimer_dead_max;
                 timer_add(item);
-                osal_semp_post(s_stimer_cb.semp);
+                (void) osal_semp_post(s_stimer_cb.semp);
                 ret = 0;
                 break;
             case en_stimer_opt_start:
@@ -369,7 +369,7 @@ int32_t stimer_ioctl(stimer_t timer,en_stimer_opt_t opt, void *arg)
                 item->flag |= cn_stimer_flag_start;
                 item->dead_time = item->cycle + osal_sys_time();
                 timer_add(item);
-                osal_semp_post(s_stimer_cb.semp);
+                (void) osal_semp_post(s_stimer_cb.semp);
                 ret = 0;
                 break;
             case en_stimer_opt_recycle:
@@ -381,14 +381,14 @@ int32_t stimer_ioctl(stimer_t timer,en_stimer_opt_t opt, void *arg)
                     item->dead_time = item->cycle + osal_sys_time();
                 }
                 timer_add(item);
-                osal_semp_post(s_stimer_cb.semp);
+                (void) osal_semp_post(s_stimer_cb.semp);
                 ret = 0;
                 break;
             default:
                 ret = -1;
 
         }
-        osal_mutex_unlock(s_stimer_cb.mutex);
+        (void) osal_mutex_unlock(s_stimer_cb.mutex);
     }
 
     return ret;
@@ -396,7 +396,7 @@ int32_t stimer_ioctl(stimer_t timer,en_stimer_opt_t opt, void *arg)
 }
 
 
-#if CONFIG_SHELL_ENABLE
+#ifdef CONFIG_SHELL_ENABLE
 #include <shell.h>
 static int32_t stimer_print(int32_t argc, const char *argv[])
 {
@@ -422,7 +422,7 @@ static int32_t stimer_print(int32_t argc, const char *argv[])
         }
         LINK_LOG_DEBUG("Total:%d Soft timers\n\r",timer_number);
 
-        osal_mutex_unlock(s_stimer_cb.mutex);
+        (void) osal_mutex_unlock(s_stimer_cb.mutex);
     }
 
     return 0;

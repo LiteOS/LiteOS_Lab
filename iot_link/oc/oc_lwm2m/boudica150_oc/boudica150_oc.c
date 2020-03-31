@@ -148,7 +148,7 @@ static int boudica150_oc_report(unsigned char *buf,int len, int timeout)
     s_boudica150_oc_cb.sndbuf[strlen((char *)s_boudica150_oc_cb.sndbuf)]='\r';
 
     ret = at_command((unsigned char *)s_boudica150_oc_cb.sndbuf,strlen((char *)s_boudica150_oc_cb.sndbuf),index,NULL,0,timeout);
-    osal_mutex_unlock(s_report_mutex);
+    (void) osal_mutex_unlock(s_report_mutex);
     if(ret >= 0)
     {
         ret = en_oc_lwm2m_err_ok;

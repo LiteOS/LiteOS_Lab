@@ -251,7 +251,7 @@ static int __socket_write(void *ctx, unsigned char *buf, int len, int timeout)
 }
 static void __socket_disconnect(void *ctx)
 {
-    sal_closesocket((int)ctx);
+    (void) sal_closesocket((int)ctx);
     return;
 }
 static int __socket_connect(Network *n, const char *host, int port)
@@ -282,7 +282,7 @@ static int __socket_connect(Network *n, const char *host, int port)
 
     if(-1 == sal_connect(fd,(struct sockaddr *)&addr,sizeof(addr)))
     {
-        sal_closesocket(fd);
+        (void) sal_closesocket(fd);
     }
     else
     {
@@ -393,7 +393,7 @@ static  int __loop_entry(void *arg)
     {
         if((NULL != cb) && MQTTIsConnected(&cb->client))
         {
-            MQTTYield(&cb->client,1000);
+           (void) MQTTYield(&cb->client,1000);
         }
         ///< for some operation system ,the task could not be awake when release,so do some wait to give up the cpu
 
@@ -524,7 +524,7 @@ static void * __connect(mqtt_al_conpara_t *conparam)
     return ret;
 
 EXIT_MQTT_MAINTASK:
-    MQTTDisconnect(c);
+    (void)MQTTDisconnect(c);
 EXIT_MQTT_CONNECT:
 EXIT_MQTT_INIT:
 EIXT_BUF_MEM_ERR:
@@ -557,11 +557,11 @@ static int __disconnect(void *handle)
     c = &cb->client;
     n = &cb->network;
     //mqtt disconnect
-    MQTTDisconnect(c);
+    (void)MQTTDisconnect(c);
     //net disconnect
     __io_disconnect(n);
     //kill the thread
-    osal_task_kill(cb->task);
+    (void)osal_task_kill(cb->task);
     //deinit the mqtt
     MQTTClientDeInit(c);
     //free the memory
@@ -676,7 +676,7 @@ static int __publish(void *handle, mqtt_al_pubpara_t *para)
 
     (void) memset(&msg,0,sizeof(msg));
     msg.retained = (unsigned char )para->retain;
-    msg.qos = QOS0 + para->qos;
+    msg.qos = QOS0 + (enum QoS)para->qos;
     msg.payload = para->msg.data;
     msg.payloadlen = para->msg.len;
     if(MQTT_SUCCESS ==  MQTTPublish(c, para->topic.data, &msg))

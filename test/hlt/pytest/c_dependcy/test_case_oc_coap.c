@@ -143,7 +143,7 @@ static int app_msg_deal(void *msg, int len)
         printf("receive on = %c\n", s_rcv_buffer[3]);
         printf("receive on1 = %c\n", s_rcv_buffer[4]);
         printf("receive on2 = %c\n", s_rcv_buffer[5]);
-        osal_semp_post(s_rcv_sync);
+        (void) osal_semp_post(s_rcv_sync);
         ret = 0;
     }
     return ret;

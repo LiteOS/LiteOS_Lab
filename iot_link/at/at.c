@@ -38,7 +38,6 @@
 #include <driver.h>
 #include <sys/fcntl.h>
 #include <iot_link_config.h>
-#include <link_log.h>
 
 //these defines could be reconfigured at the iot_link_config.h
 
@@ -101,24 +100,21 @@ static int __cmd_send(const void *buf,size_t buflen,uint32_t timeout)
     int i = 0;
     ssize_t ret = 0;
     int debugmode;
-    uint8_t *msg;
 
-    (void) msg;
     ret = los_dev_write(g_at_cb.devhandle,0,buf,buflen,timeout);
     if(ret > 0)
     {
-        msg = (uint8_t *)buf;
         debugmode = g_at_cb.txdebugmode;
         switch (debugmode)
         {
             case en_at_debug_ascii:
-                LINK_LOG_DEBUG("ATSND:%d Bytes:%s\n\r",(int)ret,(char *)msg);
+                LINK_LOG_DEBUG("ATSND:%d Bytes:%s\n\r",(int)ret,(char *)buf);
                 break;
             case en_at_debug_hex:
                 LINK_LOG_DEBUG("ATSND:%d Bytes:",(int)ret);
                 for(i =0;i<ret;i++)
                 {
-                    LINK_LOG_DEBUG("%02x ",(unsigned int)msg[i]);
+                    LINK_LOG_DEBUG("%02x ",*((uint8_t *)(buf) + i));
                 }
                 LINK_LOG_DEBUG("\n\r");
                 break;
@@ -140,14 +136,10 @@ static int __resp_rcv(void *buf,size_t buflen,uint32_t timeout)
     int i = 0;
     ssize_t ret = 0;
     int debugmode;
-    uint8_t *msg;
-
-    (void) msg;
 
     ret = los_dev_read(g_at_cb.devhandle,0,buf,buflen,timeout);
     if(ret > 0)
     {
-        msg = buf;
         debugmode = g_at_cb.rxdebugmode;
         switch (debugmode)
         {
@@ -158,7 +150,7 @@ static int __resp_rcv(void *buf,size_t buflen,uint32_t timeout)
                 LINK_LOG_DEBUG("ATRCV:%d Bytes:",(int)ret);
                 for(i =0;i<ret;i++)
                 {
-                    LINK_LOG_DEBUG("%02x ",msg[i]);
+                    LINK_LOG_DEBUG("%02x ",*((uint8_t *)(buf) + i));
                 }
                 LINK_LOG_DEBUG("\n\r");
                 break;
@@ -186,8 +178,8 @@ static int  __cmd_create(const void *cmdbuf,size_t cmdlen,const char *index,void
             cmd->index = index;
             cmd->respbuf = respbuf;
             cmd->respbuflen = respbuflen;
-            osal_semp_pend(cmd->respsync,0); //used to clear the sync
-            osal_mutex_unlock(cmd->cmdlock);
+            (void) osal_semp_pend(cmd->respsync,0); //used to clear the sync
+            (void) osal_mutex_unlock(cmd->cmdlock);
         }
         ret = 0;
     }
@@ -208,9 +200,9 @@ static int __cmd_clear(void)
         cmd->respbuf = NULL;
         cmd->respbuflen = 0;
         cmd->respdatalen = 0;
-        osal_mutex_unlock(cmd->cmdlock);
+        (void) osal_mutex_unlock(cmd->cmdlock);
      }
-     osal_semp_post(cmd->cmdsync);
+     (void) osal_semp_post(cmd->cmdsync);
      return 0;
 }
 
@@ -236,10 +228,10 @@ static int  __cmd_match(const void *data,size_t len)
             {
                 cmd->respdatalen = len; //tell the command that how many data has been get
             }
-            osal_semp_post(cmd->respsync);
+            (void) osal_semp_post(cmd->respsync);
             ret = 0;
         }
-        osal_mutex_unlock(cmd->cmdlock);
+        (void) osal_mutex_unlock(cmd->cmdlock);
     }
     return ret;
 }
@@ -287,12 +279,11 @@ static int __rcv_task_entry(void *args)
     {
     	if (1 == g_at_cb.streammode)  //in stream mode, we need to save previous frames in buffer
     	{
-    		if(rcvlen == 0)
-    		{
-                (void) memset(g_at_cb.rcvbuf,0,CONFIG_AT_RECVMAXLEN);
-    		}
+    	    if(rcvlen == 0)
+    	    {
+                (void)memset(g_at_cb.rcvbuf,0,CONFIG_AT_RECVMAXLEN);
+    	    }
             rcvlen += __resp_rcv(g_at_cb.rcvbuf+ rcvlen,CONFIG_AT_RECVMAXLEN,cn_osal_timeout_forever);
-
             if(rcvlen > 0)
             {
                 matchret = __cmd_match(g_at_cb.rcvbuf,rcvlen);
@@ -312,17 +303,16 @@ static int __rcv_task_entry(void *args)
     	}
     	else
     	{
-    		(void) memset(g_at_cb.rcvbuf,0,CONFIG_AT_RECVMAXLEN);
-    		rcvlen = __resp_rcv(g_at_cb.rcvbuf,CONFIG_AT_RECVMAXLEN,cn_osal_timeout_forever);
-    		if(rcvlen > 0)
+    	    (void) memset(g_at_cb.rcvbuf,0,CONFIG_AT_RECVMAXLEN);
+    	    rcvlen = __resp_rcv(g_at_cb.rcvbuf,CONFIG_AT_RECVMAXLEN,cn_osal_timeout_forever);
+    	    if(rcvlen > 0)
 	        {
                 matchret = __cmd_match(g_at_cb.rcvbuf,rcvlen);
                 if(0 != matchret)
                 {
-                    __oob_match(g_at_cb.rcvbuf,rcvlen);
+                   (void) __oob_match(g_at_cb.rcvbuf,rcvlen);
                 }
-    	    }
-
+	        }
         }
     }
 }
@@ -377,7 +367,7 @@ int  at_command(const void *cmd,size_t cmdlen,const char *index,void *respbuf,\
                 ret = -1;
             }
 
-            __cmd_clear();
+            (void) __cmd_clear();
         }
 
     }
@@ -471,13 +461,13 @@ int at_init(const char *devname)
 
 
 EXIT_RCVTASK:
-    osal_mutex_del(&g_at_cb.cmd.cmdlock);
+    (void) osal_mutex_del(&g_at_cb.cmd.cmdlock);
     g_at_cb.cmd.cmdlock = cn_mutex_invalid;
 EXIT_CMDLOCK:
-    osal_semp_del(&g_at_cb.cmd.respsync);
+    (void) osal_semp_del(&g_at_cb.cmd.respsync);
     g_at_cb.cmd.respsync = cn_semp_invalid;
 EXIT_RESPSYNC:
-    osal_semp_del(&g_at_cb.cmd.cmdsync);
+    (void) osal_semp_del(&g_at_cb.cmd.cmdsync);
     g_at_cb.cmd.cmdsync = cn_semp_invalid;
 EXIT_CMDSYNC:
     return ret;
@@ -485,7 +475,7 @@ EXIT_CMDSYNC:
 
 
 //////////////////////////////////DEBUG COMMAND FOLLOWING/////////////////////////////////////////
-#ifdef CONFIG_LITEOS_ENABLE
+#if CONFIG_SHELL_ENABLE
 
 #include <shell.h>
 //use this shell command,you could input at command through the terminal
@@ -529,7 +519,7 @@ OSSHELL_EXPORT_CMD(shell_at,"atcmd","atcmd atcommand atrespindex");
 //use this function to set the at command display mode:none/ascii/hex
 static int shell_atdebug(int argc,const char *argv[])
 {
-    int mode = en_at_debug_none;
+    en_at_rxtx_debugmode mode = en_at_debug_none;
     if(argc != 3)
     {
         LINK_LOG_DEBUG("paras error\n\r");
@@ -572,8 +562,8 @@ static int shell_atdebug(int argc,const char *argv[])
 }
 OSSHELL_EXPORT_CMD(shell_atdebug,"atdebug","atdebug rx/tx none/ascii/hex");
 
-
 #endif
+
 
 
 

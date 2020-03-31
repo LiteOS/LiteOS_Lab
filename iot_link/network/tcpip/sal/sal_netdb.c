@@ -98,7 +98,7 @@ __attribute__((weak)) char *inet_ntoa(struct in_addr addr)
     tmp[1] = (int)ip[1];
     tmp[2] = (int)ip[2];
     tmp[3] = (int)ip[3];
-    sprintf(s_inet_addr_buf,"%d.%d.%d.%d",tmp[0],tmp[1],tmp[2],tmp[3]);
+    (void) sprintf(s_inet_addr_buf,"%d.%d.%d.%d",tmp[0],tmp[1],tmp[2],tmp[3]);
 
     return (char *)s_inet_addr_buf;
 }
@@ -120,7 +120,7 @@ __attribute__((weak)) const char *inet_ntop(int af, const void *src, char *dst, 
         (void) memcpy((void *)&addr,src,sizeof(addr));
         str = inet_ntoa(addr);
 
-        if((NULL != str)&&(cnt > (strlen(str)+1)))
+        if((NULL != str)&&(cnt >(socklen_t)(strlen(str)+1)))
         {
             (void) memcpy((void*)dst,(void*)str,strlen(str)+1);
             result = dst;

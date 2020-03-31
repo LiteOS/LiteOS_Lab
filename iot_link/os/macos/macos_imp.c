@@ -200,7 +200,7 @@ static bool_t  __semp_del(osal_semp_t semp)
 }
 
 
-static bool_t  __semp_pend(osal_semp_t semp,int timeout)
+static bool_t  __semp_pend(osal_semp_t semp,unsigned int timeout)
 {
     bool_t ret = false;
     macos_sem_t *macos_sem = semp;

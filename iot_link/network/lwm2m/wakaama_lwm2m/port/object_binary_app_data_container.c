@@ -50,7 +50,7 @@
 #include "lwm2m_rpt.h"
 #include "lwm2m_uri.h"
 
-#define MAX_RES_NUM                         32
+#define MAX_RES_NUM                         (uint16_t)32
 
 #define PRV_TLV_BUFFER_SIZE                 64
 
@@ -91,7 +91,7 @@ static int prv_new_data(plat_instance_t *targetP,
     uint32_t resMap = targetP->resourceMap;
     uint32_t resCnt = 0;
     uint16_t resId = 0;
-    int i = 0;
+    uint32_t i = 0;
 
     while (resMap)
     {
@@ -144,7 +144,7 @@ static void prv_rm_rpt(plat_instance_t *targetP)
         if (resMap & 0x1)
         {
             lwm2m_uri_res(&uri, targetP->objID, targetP->shortID, resId);
-            lwm2m_rm_rpt_uri(&uri);
+            (void)lwm2m_rm_rpt_uri(&uri);
         }
 
         resMap >>= 1;
@@ -230,7 +230,7 @@ static uint8_t prv_read_data(plat_instance_t *targetP,
             {
                 ret = lwm2m_dequeue_rpt_data((targetP->header), &data);
 
-                if (LWM2M_OK != ret)
+                if ((int)LWM2M_OK != ret)
                 {
                     ATINY_LOG(LOG_INFO, "lwm2m_dequeue_rpt_data fail,ret=%d", ret);
                     return COAP_404_NOT_FOUND;
@@ -244,7 +244,7 @@ static uint8_t prv_read_data(plat_instance_t *targetP,
                 dataArrayP[i].type = LWM2M_TYPE_OPAQUE;
                 dataArrayP[i].value.asBuffer.buffer = data.buf;
                 dataArrayP[i].value.asBuffer.length = data.len;
-                dataCfg->type = data.type;
+                dataCfg->type = (int)data.type;
                 dataCfg->cookie = data.cookie;
                 dataCfg->callback = (lwm2m_data_process)data.callback;
             }
@@ -465,7 +465,7 @@ static uint8_t prv_create(uint16_t instanceId,
         lwm2m_uri_res(&uri, objectP->objID, instanceId, dataArray[i].id);
         ret = lwm2m_add_rpt_uri(&uri, &targetP->header);
 
-        if (LWM2M_OK != ret)
+        if ((int)LWM2M_OK != ret)
         {
             lwm2m_free(targetP);
             return COAP_404_NOT_FOUND;
@@ -528,7 +528,7 @@ static uint8_t prv_exec(uint16_t instanceId,
     {
         // (void)lwm2m_cmd_ioctl(LWM2M_EXECUTE_APP_DATA, (char *)buffer, length);
         snprintf(uri, MAX_STRURI_LEN, URI_FMT, targetP->objID, instanceId, resourceId);
-        lwm2m_cmd_ioctl(LWM2M_CMD_MAX,
+        (void)lwm2m_cmd_ioctl(LWM2M_CMD_MAX,
                         (char *)buffer,
                         length,
                         LWM2M_AL_OP_EXCUTE,
@@ -571,13 +571,13 @@ int add_app_data_object_instance(lwm2m_object_t *obj,
 
     if ((NULL == obj) || (NULL == param))
     {
-        return LWM2M_ARG_INVALID;
+        return (int)LWM2M_ARG_INVALID;
     }
 
     if ((resource_id < 0) || (resource_id >= MAX_RES_NUM))
     {
         printf("invalid resource id %d\n", resource_id);
-        return LWM2M_ERRNO_NORES;
+        return (int)LWM2M_ERRNO_NORES;
     }
 
     lwm2m_uri_t uri;
@@ -593,7 +593,7 @@ int add_app_data_object_instance(lwm2m_object_t *obj,
 
         if (instance->resourceMap & flag)
         {
-            return LWM2M_ERRNO_REPEAT;
+            return (int)LWM2M_ERRNO_REPEAT;
         }
 
         instance->resourceMap |= (1 << resource_id);
@@ -605,7 +605,7 @@ int add_app_data_object_instance(lwm2m_object_t *obj,
 
     if (NULL == instance)
     {
-        return LWM2M_MALLOC_FAILED;
+        return (int)LWM2M_MALLOC_FAILED;
     }
 
     (void) memset(instance, 0, sizeof(plat_instance_t));
@@ -613,7 +613,7 @@ int add_app_data_object_instance(lwm2m_object_t *obj,
     get_resource_uri(obj->objID, object_instance_id, resource_id, &uri);
     ret = lwm2m_add_rpt_uri(&uri, &instance->header);
 
-    if (LWM2M_OK != ret)
+    if ((int)LWM2M_OK != ret)
     {
         LOG_ARG("lwm2m_add_rpt_uri fail %d", ret);
         lwm2m_free(instance);
@@ -627,19 +627,19 @@ int add_app_data_object_instance(lwm2m_object_t *obj,
 
     if (instance->resourceMap & flag)
     {
-        return LWM2M_ERRNO_REPEAT;
+        return (int)LWM2M_ERRNO_REPEAT;
     }
 
     instance->resourceMap |= (1 << resource_id);
     obj->instanceList = LWM2M_LIST_ADD(obj->instanceList, instance);
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int config_app_data_object(lwm2m_object_t *obj, void *param)
 {
     if (NULL == obj)
     {
-        return LWM2M_ARG_INVALID;
+        return (int)LWM2M_ARG_INVALID;
     }
 
     /*
@@ -655,7 +655,7 @@ int config_app_data_object(lwm2m_object_t *obj, void *param)
     obj->executeFunc = prv_exec;
     obj->createFunc = prv_create;
     obj->deleteFunc = prv_delete;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 static void free_binary_app_data_object_rpt(lwm2m_object_t *object)

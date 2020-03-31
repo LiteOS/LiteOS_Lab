@@ -469,7 +469,7 @@ int lwm2m_destroy(void *handle)
         lwm2m_close(handle_data->lwm2m_context);
     }
 
-    osal_semp_del(handle_data->quit_sem);
+    (void) osal_semp_del(handle_data->quit_sem);
     handle_data->quit_sem = cn_semp_invalid;
 
     /* release receive data buffer */
@@ -480,7 +480,7 @@ int lwm2m_destroy(void *handle)
     }
 
     lwm2m_free(handle_data);
-    osal_mutex_del(g_data_mutex);
+    (void) osal_mutex_del(g_data_mutex);
     return LWM2M_OK;
 }
 
@@ -567,7 +567,7 @@ int __lwm2m_task_entry(void *args)
     }
 
     /* notify task quit */
-    osal_semp_post(hd->quit_sem);
+    (void) osal_semp_post(hd->quit_sem);
     return LWM2M_OK;
 }
 
@@ -649,7 +649,7 @@ static int __config(void **handle, lwm2m_al_init_param_t *init_param)
         ATINY_LOG(LOG_FATAL, "osal_semp_create fail");
         lwm2m_free(lwm2m_context->endpointName);
         lwm2m_free(lwm2m_context);
-        osal_mutex_del(g_data_mutex);
+        (void) osal_mutex_del(g_data_mutex);
         return LWM2M_RESOURCE_NOT_ENOUGH;
     }
 
@@ -664,8 +664,8 @@ static int __config(void **handle, lwm2m_al_init_param_t *init_param)
         ATINY_LOG(LOG_FATAL, "memory not enough");
         lwm2m_free(lwm2m_context->endpointName);
         lwm2m_free(lwm2m_context);
-        osal_mutex_del(g_data_mutex);
-        osal_semp_del(hd->quit_sem);
+        (void) osal_mutex_del(g_data_mutex);
+        (void) osal_semp_del(hd->quit_sem);
         return LWM2M_MALLOC_FAILED;
     }
 
@@ -677,8 +677,8 @@ static int __config(void **handle, lwm2m_al_init_param_t *init_param)
         ATINY_LOG(LOG_FATAL, "lwm2m_fota_manager_set_storage_device() called fail");
         lwm2m_free(lwm2m_context->endpointName);
         lwm2m_free(lwm2m_context);
-        osal_mutex_del(g_data_mutex);
-        osal_semp_del(hd->quit_sem);
+        (void) osal_mutex_del(g_data_mutex);
+        (void) osal_semp_del(hd->quit_sem);
         return result;
     }
 
@@ -947,7 +947,7 @@ int __disconnect(void *handle)
         hd->task_handle = NULL;
     }
 
-    osal_mutex_unlock(g_data_mutex);
+    (void) osal_mutex_unlock(g_data_mutex);
     return LWM2M_OK;
 }
 

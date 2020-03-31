@@ -331,7 +331,7 @@ static uint8_t prv_write_resources(uint16_t instanceId, int numData,
                     }
                     else
                     {
-                        for (ri = 0; ri < tlvArray[i].value.asChildren.count; ri++)
+                        for (ri = 0; (size_t)ri < tlvArray[i].value.asChildren.count; ri++)
                         {
                             if (1 != lwm2m_data_decode_int(&subTlvArray[ri], &value))
                             {
@@ -453,17 +453,17 @@ int add_access_control_object_instance(lwm2m_object_t *obj)
 {
     if (NULL == obj)
     {
-        return LWM2M_ARG_INVALID;
+        return (int)LWM2M_ARG_INVALID;
     }
 
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 int config_access_control_object(lwm2m_object_t *obj, void *param)
 {
     if (NULL == obj)
     {
-        return LWM2M_ARG_INVALID;
+        return (int)LWM2M_ARG_INVALID;
     }
 
     // Init callbacks, empty instanceList!
@@ -471,7 +471,7 @@ int config_access_control_object(lwm2m_object_t *obj, void *param)
     obj->writeFunc = prv_write;
     obj->createFunc = prv_create;
     obj->deleteFunc = prv_delete;
-    return LWM2M_OK;
+    return (int)LWM2M_OK;
 }
 
 void acl_ctrl_free_object(lwm2m_object_t *objectP)
@@ -573,7 +573,7 @@ static acc_ctrl_ri_t *prv_get_acl_instance(acc_ctrl_ri_t *accCtrlRiP, uint16_t s
 
 static inline bool prv_auth_match(OBJ_ACC_OPERATE op, uint16_t auth_op)
 {
-    return auth_op & (0x01 << op);
+    return ((uint32_t)auth_op)& (0x01 << op);
 }
 
 static bool prv_check_instance_auth(acc_ctrl_oi_t *accCtrlOiP, uint16_t objId, uint16_t instId,

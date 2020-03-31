@@ -53,7 +53,6 @@
 #ifndef DTLS_CONN_H_
 #define DTLS_CONN_H_
 #include <stdint.h>
-#include <stddef.h>
 #include <stdbool.h>
 #include "util_timer.h"
 #include "liblwm2m.h"
@@ -86,7 +85,7 @@ typedef struct _connection_t
     uint16_t                dtls_flag;
     uint16_t                bootstrap_flag;
     lwm2m_context_t        *lwm2mH;
-    uint16_t                errs[CONNECTION_ERR_MAX];
+    uint16_t                errs[(uint32_t)CONNECTION_ERR_MAX];
 #ifdef LWM2M_BOOTSTRAP
     util_timer_t server_triger_timer;
 #endif

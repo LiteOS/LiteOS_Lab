@@ -83,12 +83,12 @@ static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
         {
             (void) memcpy(topic, msg->topic.data,msg->topic.len);
             topic[msg->topic.len] = '\0';
-            hwoc_mqtt_recvpub(msg->qos,msg->dup,topic,(uint8_t *)msg->msg.data,msg->msg.len);
+            hwoc_mqtt_recvpub((int)msg->qos,msg->dup,topic,(uint8_t *)msg->msg.data,msg->msg.len);
         }
     }
     else
     {
-        hwoc_mqtt_received(msg->qos,(uint8_t *)msg->msg.data,msg->msg.len);
+        hwoc_mqtt_received((int)msg->qos,(uint8_t *)msg->msg.data,msg->msg.len);
     }
 
     return ret;
@@ -104,7 +104,7 @@ static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
 
 int hwoc_mqtt_send(int qos,uint8_t *payload,int len)
 {
-    link_main(NULL);
+    (void)link_main(NULL);
     return oc_mqtt_publish(NULL,payload, len, qos);
 }
 
@@ -116,7 +116,7 @@ int hwoc_mqtt_send(int qos,uint8_t *payload,int len)
 ///<               code:reference to en_oc_mqtt_err_code_t defines
 int hwoc_mqtt_publish(int qos,char *topic,uint8_t *payload,int len)
 {
-    link_main(NULL);
+    (void)link_main(NULL);
     return oc_mqtt_publish(topic,payload, len, qos);
 }
 
@@ -133,7 +133,7 @@ int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const
     int ret;
     oc_mqtt_config_t config;
 
-    link_main(NULL);
+    (void)link_main(NULL);
     (void) memset(&config,0,sizeof(config));
 
     if(bsmode)
@@ -189,7 +189,7 @@ int hwoc_mqtt_disconnect()
 {
     int ret = -1;
 
-    link_main(NULL);
+    (void)link_main(NULL);
     ret = oc_mqtt_deconfig();
 
     return ret;
@@ -207,7 +207,7 @@ int hwoc_mqtt_subscribe(int qos,char *topic)
 {
     int ret = -1;
 
-    link_main(NULL);
+    (void)link_main(NULL);
     ret = oc_mqtt_subscribe(topic, qos);
 
     return ret;
@@ -224,7 +224,7 @@ int hwoc_mqtt_unsubscribe(char *topic)
 {
     int ret = -1;
 
-    link_main(NULL);
+    (void)link_main(NULL);
     ret = oc_mqtt_unsubscribe(topic);
 
     return ret;
@@ -247,8 +247,8 @@ char *hwoc_mqtt_version()
 ///<             +HWOCMQTTSERVERCA ERR:CODE
 int hwoc_mqtt_serverca(char *server_ca)
 {
-    int ret = en_oc_mqtt_err_ok;
-    link_main(NULL);
+    int ret = (int)en_oc_mqtt_err_ok;
+    (void)link_main(NULL);
 
     if(NULL != s_server_ca)
     {
@@ -262,7 +262,7 @@ int hwoc_mqtt_serverca(char *server_ca)
         s_server_ca = osal_strdup(server_ca);
         if( NULL == s_server_ca)
         {
-            ret = en_oc_mqtt_err_sysmem;
+            ret = (int)en_oc_mqtt_err_sysmem;
         }
     }
     return ret;
@@ -275,8 +275,8 @@ int hwoc_mqtt_serverca(char *server_ca)
 
 int hwoc_mqtt_clientca(char *client_ca)
 {
-    int ret = en_oc_mqtt_err_ok;
-    link_main(NULL);
+    int ret = (int)en_oc_mqtt_err_ok;
+    (void)link_main(NULL);
 
     if(NULL != s_client_ca)
     {
@@ -289,7 +289,7 @@ int hwoc_mqtt_clientca(char *client_ca)
         s_client_ca = osal_strdup(client_ca);
         if(NULL == s_client_ca)
         {
-            ret = en_oc_mqtt_err_sysmem;
+            ret = (int)en_oc_mqtt_err_sysmem;
         }
     }
 
@@ -304,8 +304,8 @@ int hwoc_mqtt_clientca(char *client_ca)
 
 int hwoc_mqtt_clientpk(char *client_pk, char *client_pk_pwd)
 {
-    int ret = en_oc_mqtt_err_ok;
-    link_main(NULL);
+    int ret = (int)en_oc_mqtt_err_ok;
+    (void)link_main(NULL);
 
     if(NULL != s_client_pk)
     {
@@ -324,7 +324,7 @@ int hwoc_mqtt_clientpk(char *client_pk, char *client_pk_pwd)
         s_client_pk = osal_strdup(client_pk);
         if(NULL == s_client_pk)
         {
-            ret = en_oc_mqtt_err_sysmem;
+            ret = (int)en_oc_mqtt_err_sysmem;
             return ret;
         }
 
@@ -336,7 +336,7 @@ int hwoc_mqtt_clientpk(char *client_pk, char *client_pk_pwd)
                 osal_free(s_client_pk);
                 s_client_pk = NULL;
 
-                ret = en_oc_mqtt_err_sysmem;
+                ret = (int)en_oc_mqtt_err_sysmem;
                 return ret;
             }
         }

@@ -94,7 +94,7 @@ static void ev_handler(sinn_connection_t *nc, int event, void *event_data)
             break;
         case SINN_EV_RECONN:
             {
-                osal_semp_post(link_sem);
+                (void) osal_semp_post(link_sem);
             }
             break;
         case EV_MQTT_CONNACK:
@@ -102,7 +102,7 @@ static void ev_handler(sinn_connection_t *nc, int event, void *event_data)
                 if (amm->ret[0] == MQTT_CONNACK_ACCEPTED)
                 {
                     osal_queue_send(link_queue, &amm->ret[0], sizeof(amm->ret[0]), 0);
-                    osal_semp_post(link_sem);
+                    (void) osal_semp_post(link_sem);
                 }
                 else
                 {
@@ -114,7 +114,7 @@ static void ev_handler(sinn_connection_t *nc, int event, void *event_data)
         case EV_MQTT_SUBACK:
             {
                 osal_queue_send(link_queue, amm->ret, 8, 0);
-                osal_semp_post(link_sem);
+                (void) osal_semp_post(link_sem);
                 free(amm->ret);
             }
             break;
@@ -150,7 +150,7 @@ static void ev_handler(sinn_connection_t *nc, int event, void *event_data)
         case EV_MQTT_PUBACK:
         case EV_MQTT_PUBCOMP:
             {
-                osal_semp_post(link_sem);
+                (void) osal_semp_post(link_sem);
             }
             break;
         case EV_MQTT_PUBREL:
@@ -291,7 +291,7 @@ static int __disconnect(void *handle)
     //free the memory
     sinn_destory(cb->mgr->nc);
     osal_queue_del(link_queue);
-    osal_semp_del(link_sem);
+    (void) osal_semp_del(link_sem);
     if(cb)
     {
         osal_free(cb);

@@ -7,7 +7,7 @@ C_SOURCES += $(log_src)
 log_inc = -I $(iot_link_root)/link_log
 C_INCLUDES += $(log_inc)
 
-C_DEFS += -D CONFIG_LINK_DEBUG_ENABLE=0
+C_DEFS += -D CONFIG_LINK_DEBUG_ENABLE=1
 
 
 

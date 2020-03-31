@@ -496,12 +496,12 @@ int MQTTYield(MQTTClient* c, int timeout_ms)
         {
             rc = FAILURE;
 #if defined(MQTT_TASK)
-            (void)MutexUnlock(&c->mutex);
+            MutexUnlock(&c->mutex);
 #endif
             break;
         }
 #if defined(MQTT_TASK)
-        (void)MutexUnlock(&c->mutex);
+        MutexUnlock(&c->mutex);
 #endif
     }
     while (!TimerIsExpired(&timer));

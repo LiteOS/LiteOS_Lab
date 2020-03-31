@@ -38,11 +38,10 @@
  */
 #include "lwip/sockets.h"
 #include "lwip/netdb.h"
-#include "lwip/errno.h"
+//#include "lwip/errno.h"
 #include "lwip/tcpip.h"
 
 #include <string.h>
-#include <link_log.h>
 #include <sal_imp.h>   ///< register the lwip to sal
 
 ///< struct sockaddr and struct sockaddr_in is quit different from the normal defines, so must translate it here

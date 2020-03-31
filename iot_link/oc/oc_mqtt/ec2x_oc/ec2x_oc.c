@@ -89,7 +89,7 @@ static int ec2x_atcmd_response(const char *cmd,const char *index,char *buf, int 
         }
         nesting --;
         LINK_LOG_DEBUG("ec2x command end:%d \n\r",(int )osal_sys_time());
-        osal_mutex_unlock(s_ec2x_cb.lock);
+        (void) osal_mutex_unlock(s_ec2x_cb.lock);
     }
 
     return ret;

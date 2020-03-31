@@ -36,10 +36,8 @@
  *  2019-09-16 18:27  zhangqianfu  The first version
  *
  */
-#include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdint.h>
 #include <string.h>
 #include <osal.h>
 
@@ -60,7 +58,7 @@ queue_t* queue_create(const char *name,int len,int syncmode)
     (void) memset(ret,0,sizeof(queue_t));
     ret->name = name;
     ret->msg_buflen = len;
-    ret->msg_buf = (void **)((uint8_t *)ret + sizeof(queue_t));
+    ret->msg_buf = (void **)(uintptr_t)((uint8_t *)ret + sizeof(queue_t));
     ret->sync_mode = syncmode;
 
     if(0 == syncmode)
@@ -88,9 +86,9 @@ EXIT_OK:
     return ret;
 
 EXIT_LOCK:
-    osal_semp_del(ret->sync_write);
+    (void) osal_semp_del(ret->sync_write);
 EXIT_SYNCWRITE:
-    osal_semp_del(ret->sync_read);
+    (void) osal_semp_del(ret->sync_read);
 EXIT_SYNCREAD:
     osal_free(ret);
     ret = NULL;
@@ -128,12 +126,15 @@ int queue_push(queue_t *queue,void *data,int timeout)
     {
         if(osal_semp_pend(queue->sync_write,timeout))
         {
-            osal_mutex_lock(queue->lock);
-            ret = raw_queue_pushdata(queue,data);
-            osal_mutex_unlock(queue->lock);
+            if(osal_mutex_lock(queue->lock))
+            {
+                ret = raw_queue_pushdata(queue,data);
+                (void) osal_mutex_unlock(queue->lock);
+            }
+
             if(0 == ret)
             {
-                osal_semp_post(queue->sync_read);
+                (void) osal_semp_post(queue->sync_read);
             }
         }
     }
@@ -172,12 +173,14 @@ int queue_pop(queue_t *queue,void **buf, int timeout)
     {
         if(osal_semp_pend(queue->sync_read,timeout))
         {
-            osal_mutex_lock(queue->lock);
-            ret = raw_queue_pop(queue,buf);
-            osal_mutex_unlock(queue->lock);
+            if(osal_mutex_lock(queue->lock))
+            {
+                ret = raw_queue_pop(queue,buf);
+                (void) osal_mutex_unlock(queue->lock);
+            }
             if(0 == ret)
             {
-                osal_semp_post(queue->sync_write);
+                (void) osal_semp_post(queue->sync_write);
             }
         }
     }
@@ -199,9 +202,9 @@ int queue_delete(queue_t *queue)
     }
     if(queue->sync_mode)
     {
-        osal_semp_del(queue->sync_read);
-        osal_semp_del(queue->sync_write);
-        osal_mutex_del(queue->lock);
+        (void) osal_semp_del(queue->sync_read);
+        (void) osal_semp_del(queue->sync_write);
+        (void) osal_mutex_del(queue->lock);
     }
     osal_free(queue);
     ret = 0;
