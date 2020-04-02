@@ -43,7 +43,7 @@ extern "C" {
 
 
 /**
- * @brief :use this function to gernerate the password for the cloud platform
+ * @brief :use this function to gernerate the pwd for the cloud platform
  *        :and now it depends on the mbedtls,please define the WITH_DTLS
  * @return:0 success while -1 failed
  *

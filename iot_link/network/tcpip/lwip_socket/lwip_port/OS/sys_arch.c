@@ -477,8 +477,6 @@ err_t sys_sem_new(sys_sem_t *sem,  u8_t count)
         return ERR_ARG;
     }
 
-    LWIP_ASSERT("in sys_sem_new count exceeds the limit", (count != 0xFF));
-
     if(osal_semp_create(sem,1,count))
     {
         ret = ERR_OK;

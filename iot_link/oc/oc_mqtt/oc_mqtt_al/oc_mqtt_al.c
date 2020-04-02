@@ -153,11 +153,7 @@ static const char *s_oc_mqtt_err_tab[] =
 const char *oc_mqtt_err(en_oc_mqtt_err_code_t code)
 {
     const char *ret = NULL;
-    if((unsigned int)code >= CN_ERR_TABITEM)
-    {
-        ret =  "UNKNOWN";
-    }
-    else
+    if((unsigned int)code < CN_ERR_TABITEM)
     {
         ret = s_oc_mqtt_err_tab[(int)code];
     }

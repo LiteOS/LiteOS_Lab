@@ -72,7 +72,7 @@
 
 mbedtls_ssl_context *dtls_ssl_new(dtls_establish_info_s *info, char plat_type)
 {
-    int ret;
+    int ret = -1;
     mbedtls_ssl_context *ssl = NULL;
     mbedtls_ssl_config *conf = NULL;
     mbedtls_entropy_context *entropy = NULL;
@@ -153,12 +153,7 @@ mbedtls_ssl_context *dtls_ssl_new(dtls_establish_info_s *info, char plat_type)
 
     MBEDTLS_LOG("setting up the SSL structure");
 
-    ret = mbedtls_ssl_config_defaults(conf,plat_type,transport,MBEDTLS_SSL_PRESET_DEFAULT);
-    if (ret != 0)
-    {
-        MBEDTLS_LOG("mbedtls_ssl_config_defaults failed: -0x%x", -ret);
-        goto exit_fail;
-    }
+    (void) mbedtls_ssl_config_defaults(conf,plat_type,transport,MBEDTLS_SSL_PRESET_DEFAULT);
 
     mbedtls_ssl_conf_authmode(conf, MBEDTLS_SSL_VERIFY_REQUIRED);
     mbedtls_ssl_conf_rng(conf, mbedtls_ctr_drbg_random, ctr_drbg);

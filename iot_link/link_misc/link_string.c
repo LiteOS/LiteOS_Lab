@@ -145,7 +145,7 @@ char *osal_strcat(char *str[])
     return ret;
 }
 
-
+/*
 int hexstr2byte(const char *bufin, int len, char *bufout)
 {
     int i = 0;
@@ -168,6 +168,65 @@ int hexstr2byte(const char *bufin, int len, char *bufout)
     }
     return 0;
 }
+
+*/
+
+int hexstr2byte(const char *buf, int len, char *bufout)
+{
+    int ret = -1;
+    int i = 0;
+    uint8_t low;
+    uint8_t high;
+
+    if (NULL == buf || len <= 0 || NULL == bufout)
+    {
+        return ret;
+    }
+
+    ret = 0;
+    for(i = 0; i < len; i = i+2)
+    {
+        if(((buf[i]) >= '0') && (buf[i] <= '9'))
+        {
+            high = (uint8_t)( buf[i] - '0');
+        }
+        else if((buf[i] >= 'A') && (buf[i] <= 'F'))
+        {
+            high = (uint8_t)( buf[i] - 'A') + 10;
+        }
+        else if((buf[i] >= 'a') && (buf[i] <= 'f'))
+        {
+            high = (uint8_t)( buf[i] - 'a') + 10;
+        }
+        else
+        {
+            ret = -1;
+            break;
+        }
+
+        if(((buf[i+1]) >= '0') && (buf[i+1] <= '9'))
+        {
+            low = (uint8_t)( buf[i+1] - '0');
+        }
+        else if((buf[i+1] >= 'A') && (buf[i+1] <= 'F'))
+        {
+            low = (uint8_t)( buf[i+1] - 'A') + 10;
+        }
+        else if((buf[i+1] >= 'a') && (buf[i+1] <= 'f'))
+        {
+            low = (uint8_t)( buf[i+1] - 'a') + 10;
+        }
+        else
+        {
+            ret = -1;
+            break;
+        }
+
+        bufout[i/2] = (char)((high<<4)|(low&0x0F));
+    }
+    return ret;
+}
+
 
 
 //make a byte to 2 ascii hex

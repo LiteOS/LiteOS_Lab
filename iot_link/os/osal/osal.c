@@ -287,7 +287,7 @@ void *osal_malloc(size_t size)
 void  osal_free(void *addr)
 {
 
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->free))
+    if((NULL != addr) && (NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->free))
     {
         s_os_cb->ops->free(addr);
     }
@@ -324,15 +324,21 @@ void *osal_realloc(void *ptr,size_t newsize)
     return ret;
 }
 
+
+
 void *osal_calloc(size_t n, size_t size)
 {
-    void *p = osal_malloc(n * size);
-    if(NULL != p)
+    void *ret = NULL;
+    size_t len;
+    len = n*size;
+
+    ret = malloc(len);
+    if(NULL != ret)
     {
-        (void) memset(p, 0, n * size);
+        (void) memset(ret, 0,len);
     }
 
-    return p;
+    return ret;
 }
 
 

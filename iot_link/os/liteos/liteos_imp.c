@@ -91,7 +91,12 @@ static int __task_kill(void *task)
 
 static void __task_exit()
 {
-    while(1);  //not supported yet
+    UINT32 handle;
+    handle = LOS_CurTaskIDGet();
+
+    (void) LOS_TaskDelete(handle);
+
+    return;
 }
 
 ///< this is implement for the mutex
@@ -216,10 +221,6 @@ static void *__mem_malloc(int size)
     if(size > 0)
     {
         ret = LOS_MemAlloc(m_aucSysMem0,size);
-        if(NULL != ret)
-        {
-            memset(ret, 0, size);
-        }
     }
 
     return ret;
@@ -229,6 +230,13 @@ static void __mem_free(void *addr)
 {
     (void) LOS_MemFree(m_aucSysMem0,addr);
 }
+
+void *los_mem_realloc(void *old, int newlen)
+{
+
+    return LOS_MemRealloc(m_aucSysMem0, old, newlen);
+}
+
 
 ///< sys time
 #include <los_sys.ph>
@@ -241,7 +249,7 @@ static unsigned long long __get_sys_time()
 
 __attribute__((weak)) int liteos_reboot()
 {
-    while(1);   ///< waiting for the dog if not impelment. you could implement it your self
+    ///< waiting for the dog if not impelment. you could implement it your self
     return 0;
 }
 

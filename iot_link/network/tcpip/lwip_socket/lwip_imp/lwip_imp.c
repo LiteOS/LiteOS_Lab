@@ -187,11 +187,7 @@ int link_tcpip_imp_init(void)
     /* Initilialize the LwIP stack with RTOS */
     tcpip_init(NULL, NULL);
 
-    ret = netdriver_install();
-    if(ret != 0)
-    {
-        return ret;
-    }
+    (void) netdriver_install();
 
     ret = link_sal_install(&s_tcpip_lwip);
 

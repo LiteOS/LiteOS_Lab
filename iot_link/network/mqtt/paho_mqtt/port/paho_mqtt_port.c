@@ -52,6 +52,7 @@ typedef struct
     void          *task;    //create a task for this client
     void          *rcvbuf;  //for the mqtt engine used
     void          *sndbuf;
+    int            stop;
 }paho_mqtt_cb_t;
 
 ///< waring: the paho mqtt has the opposite return code with normal socket read and write
@@ -113,7 +114,7 @@ static int __tls_write(void *ssl, unsigned char *buffer, int len, int timeout)
 }
 
 #define PORT_BUF_LEN 16
-static int __tls_connect(Network *n, char *addr, int port)
+static int __tls_connect(Network *n,const char *addr, int port)
 {    int ret = -1;
 
     void *handle = NULL;
@@ -181,7 +182,7 @@ static int __socket_read(void *ctx, unsigned char *buf, int len, int timeout)
         return ret;
     }
 
-    fd = (int)ctx;  ///< socket could be zero
+    fd = (int)(intptr_t)ctx;  ///< socket could be zero
 
     timedelay.tv_sec = timeout/1000;
     timedelay.tv_usec = (timeout%1000)*1000;
@@ -223,7 +224,7 @@ static int __socket_write(void *ctx, unsigned char *buf, int len, int timeout)
         return ret;
     }
 
-    fd = (int)ctx;  ///< THE SOCKET COULD BE ZERO
+    fd = (int)(intptr_t)ctx;  ///< THE SOCKET COULD BE ZERO
 
     timedelay.tv_sec = timeout/1000;
     timedelay.tv_usec = (timeout%1000)*1000;
@@ -251,7 +252,7 @@ static int __socket_write(void *ctx, unsigned char *buf, int len, int timeout)
 }
 static void __socket_disconnect(void *ctx)
 {
-    (void) sal_closesocket((int)ctx);
+    (void) sal_closesocket((int)(intptr_t)ctx);
     return;
 }
 static int __socket_connect(Network *n, const char *host, int port)
@@ -287,7 +288,7 @@ static int __socket_connect(Network *n, const char *host, int port)
     else
     {
         ret = 0;
-        n->ctx = (void *)fd;
+        n->ctx = (void *)(intptr_t)fd;
     }
 
     return ret;
@@ -341,7 +342,7 @@ static int __io_write(Network *n, unsigned char *buffer, int len, int timeout_ms
     return ret;
 }
 
-static int __io_connect(Network *n, char *addr, int port)
+static int __io_connect(Network *n, const char *addr, int port)
 {
     int ret = -1;
 
@@ -357,7 +358,7 @@ static int __io_connect(Network *n, char *addr, int port)
 #if CONFIG_DTLS_ENABLE
     else
     {
-        ret = __tls_connect(n, addr, port);
+        ret = __tls_connect(n, (const char *)addr, port);
     }
 #endif
     return ret;
@@ -389,7 +390,7 @@ static  int __loop_entry(void *arg)
 {
     paho_mqtt_cb_t *cb;
     cb = arg;
-    while(1)
+    while((NULL != cb) && (cb->stop == 0))
     {
         if((NULL != cb) && MQTTIsConnected(&cb->client))
         {
@@ -402,6 +403,17 @@ static  int __loop_entry(void *arg)
     }
     return 0;
 }
+
+void __mqtt_cb_stop(paho_mqtt_cb_t   *cb)
+{
+    if(NULL != cb)
+    {
+        cb->stop = 1;
+    }
+
+    return;
+}
+
 
 
 static     MQTTClient       *s_static_client_debug = NULL;
@@ -440,7 +452,7 @@ static void * __connect(mqtt_al_conpara_t *conparam)
     {
         n->arg = *conparam->security;
     }
-    if(0 != __io_connect(n,conparam->serveraddr.data,conparam->serverport))
+    if(0 != __io_connect(n,(const char *)conparam->serveraddr.data,conparam->serverport))
     {
         conparam->conret = cn_mqtt_al_con_code_err_network;
 
@@ -518,9 +530,12 @@ static void * __connect(mqtt_al_conpara_t *conparam)
     {
         goto EXIT_MQTT_MAINTASK;
     }
+
     s_static_client_debug = c;
 
+    cb->stop = 0;
     ret = cb;
+
     return ret;
 
 EXIT_MQTT_MAINTASK:
@@ -601,7 +616,7 @@ static void general_dealer(MessageData *data)
     if(NULL != data->arg)
     {
         dealer = data->arg;
-        dealer(NULL,&msg);  ///<   the args not implement yet
+        dealer((void *)data->arg,&msg);  ///<   the args not implement yet
     }
 }
 

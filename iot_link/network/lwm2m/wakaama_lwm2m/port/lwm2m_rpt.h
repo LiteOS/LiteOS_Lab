@@ -43,7 +43,7 @@ extern "C" {
 #endif
 
 #define URI_FORMAT "uri(flag:0x%x, objId:%d, instId:%d, resId:%d)"
-#define URI_LOG_PARAM(uri) (uri)->flag, (uri)->objectId, (uri)->instanceId, (uri)->resourceId
+#define URI_LOG_PARAM(uri) (uri)->flag, (int)(uri)->objectId, (int)(uri)->instanceId, (int)(uri)->resourceId
 
 LWM2M_INLINE void get_instance_uri(uint16_t object_id, uint16_t instance_id, lwm2m_uri_t *uri)
 {

@@ -57,20 +57,21 @@ CONFIG_OS_TYPE := "liteos"
 CONFIG_ARCH_CPU_TYPE := "armv7-m"
 
 #CONFIG_SHELL_ENABLE , we supply a simple shell on the liteos,which depends the liteos,support: y n
-CONFIG_SHELL_ENABLE := y
+CONFIG_SHELL_ENABLE := n
 
 #CONFIG_STIMER_ENABLE , we supply a simple softtimer on the osal,you could choose yes or no
 CONFIG_STIMER_ENABLE := y
 
 #CONFIG_DRIVER_ENABLE , we supply a easy and simple driver framework for the sdk
 #this option based on the liteos, so you must choose liteos
-CONFIG_DRIVER_ENABLE := y
+CONFIG_DRIVER_ENABLE := n
 
 #CONFIG_DRIVER_ENABLE , we supply a easy and simple at framework for the sdk
 #this option based on the driver framework, so you must choose CONFIG_DRIVER_ENABLE
-CONFIG_AT_ENABLE     := y
+CONFIG_AT_ENABLE     := n
 ########################OS SERVICE END##########################################
 
+CONFIG_LOG_ENABLE := y
 
 ########################INDEPENDENT SERVICE START#################################
 

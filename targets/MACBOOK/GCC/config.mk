@@ -71,6 +71,8 @@ CONFIG_DRIVER_ENABLE := n
 CONFIG_AT_ENABLE     := n
 ########################OS SERVICE END##########################################
 
+CONFIG_LOG_ENABLE := y
+
 
 ########################INDEPENDENT SERVICE START#################################
 

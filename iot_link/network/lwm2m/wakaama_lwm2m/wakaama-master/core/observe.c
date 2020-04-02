@@ -383,7 +383,7 @@ uint8_t observe_setParameters(lwm2m_context_t *contextP,
 
     LOG_URI(uriP);
     LOG_ARG("toSet: %08X, toClear: %08X, minPeriod: %d, maxPeriod: %d, greaterThan: %f, lessThan: %f, step: %f",
-            attrP->toSet, attrP->toClear, attrP->minPeriod, attrP->maxPeriod, attrP->greaterThan, attrP->lessThan, attrP->step);
+            attrP->toSet, attrP->toClear, (int)attrP->minPeriod, (int)attrP->maxPeriod, attrP->greaterThan, attrP->lessThan, attrP->step);
 
     if (!LWM2M_URI_IS_SET_INSTANCE(uriP) && LWM2M_URI_IS_SET_RESOURCE(uriP)) return COAP_400_BAD_REQUEST;
 
@@ -469,7 +469,7 @@ uint8_t observe_setParameters(lwm2m_context_t *contextP,
     }
 
     LOG_ARG("Final toSet: %08X, minPeriod: %d, maxPeriod: %d, greaterThan: %f, lessThan: %f, step: %f",
-            watcherP->parameters->toSet, watcherP->parameters->minPeriod, watcherP->parameters->maxPeriod, watcherP->parameters->greaterThan, watcherP->parameters->lessThan, watcherP->parameters->step);
+            watcherP->parameters->toSet, (int)watcherP->parameters->minPeriod, (int)watcherP->parameters->maxPeriod, watcherP->parameters->greaterThan, watcherP->parameters->lessThan, watcherP->parameters->step);
 
     return COAP_204_CHANGED;
 }
@@ -625,7 +625,7 @@ void observe_app_step(lwm2m_context_t *contextP,
                     coap_set_header_token(message, watcherP->token, watcherP->tokenLen);
                     coap_set_header_observe(message, watcherP->counter++);
                     (void)message_send(contextP, message, watcherP->server->sessionH);
-                    LOG_ARG("notify no con msg, msgid:", message->mid);
+                    LOG_ARG("notify no con msg, msgid:%d", message->mid);
                 }
                 else
                 {
@@ -831,7 +831,7 @@ void observe_step(lwm2m_context_t *contextP,
                     if (watcherP->parameters != NULL
                             && (watcherP->parameters->toSet & LWM2M_ATTR_FLAG_MIN_PERIOD) != 0)
                     {
-                        LOG_ARG("Checking minimal period (%d s)", watcherP->parameters->minPeriod);
+                        LOG_ARG("Checking minimal period (%d s)", (int)watcherP->parameters->minPeriod);
 
                         if (watcherP->lastTime + watcherP->parameters->minPeriod > currentTime)
                         {
@@ -853,7 +853,7 @@ void observe_step(lwm2m_context_t *contextP,
                         && watcherP->parameters != NULL
                         && (watcherP->parameters->toSet & LWM2M_ATTR_FLAG_MAX_PERIOD) != 0)
                 {
-                    LOG_ARG("Checking maximal period (%d s)", watcherP->parameters->maxPeriod);
+                    LOG_ARG("Checking maximal period (%d s)",(int) watcherP->parameters->maxPeriod);
 
                     if (watcherP->lastTime + watcherP->parameters->maxPeriod <= currentTime)
                     {
@@ -895,7 +895,7 @@ void observe_step(lwm2m_context_t *contextP,
                             coap_init_message(message, COAP_TYPE_NON, COAP_205_CONTENT, 0);
                             coap_set_header_content_type(message, watcherP->format);
                             coap_set_payload(message, buffer, length);
-                            LOG_ARG("non observe, msgid:", message->mid);
+                            LOG_ARG("non observe, msgid:%d", (int)message->mid);
                         }
                     }
 

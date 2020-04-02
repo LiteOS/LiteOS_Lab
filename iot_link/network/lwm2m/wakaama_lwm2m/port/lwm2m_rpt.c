@@ -142,7 +142,7 @@ static void lwm2m_notify_stack_rpt_data_change(lwm2m_dl_list *node, void *contex
 
     if (!lwm2m_list_empty(&rpt_list->rpt_list))
     {
-        ATINY_LOG(LOG_INFO, "data change cnt %d "URI_FORMAT,  rpt_list->rpt_node_cnt, URI_LOG_PARAM(&rpt_list->uri));
+        ATINY_LOG(LOG_INFO, "data change cnt %d "URI_FORMAT,  (int)rpt_list->rpt_node_cnt, URI_LOG_PARAM(&rpt_list->uri));
         lwm2m_resource_value_changed(context, &rpt_list->uri);
     }
 }
@@ -311,7 +311,7 @@ int lwm2m_queue_rpt_data(const lwm2m_uri_t *uri, const data_report_t *data)
         if (rpt_list->rpt_node_cnt >= rpt_list->max_cnt)
         {
             ATINY_LOG(LOG_INFO, "uri rpt exceed rpt cnt %d max cnt %d," URI_FORMAT,
-                      rpt_list->rpt_node_cnt, rpt_list->max_cnt, URI_LOG_PARAM(uri));
+                      (int)rpt_list->rpt_node_cnt, (int)rpt_list->max_cnt, URI_LOG_PARAM(uri));
             ret = LWM2M_RESOURCE_NOT_ENOUGH;
             break;
         }

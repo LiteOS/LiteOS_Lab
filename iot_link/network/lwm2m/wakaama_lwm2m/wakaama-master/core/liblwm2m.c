@@ -376,8 +376,8 @@ END:
     if ((oldState != contextP->bsCtrl.state)
         || (oldCnt != contextP->bsCtrl.cnt))
     {
-        LOG_ARG("bsctrlstat (%d,%d) to (%d,%d)", oldState, oldCnt,
-                    contextP->bsCtrl.state, contextP->bsCtrl.cnt);
+        LOG_ARG("bsctrlstat (%d,%d) to (%d,%d)",(int)oldState, (int)oldCnt,
+                    (int)contextP->bsCtrl.state,(int)contextP->bsCtrl.cnt);
     }
 
 }

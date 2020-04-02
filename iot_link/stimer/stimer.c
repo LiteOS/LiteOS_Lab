@@ -67,6 +67,8 @@ typedef struct
     osal_mutex_t   mutex;      ///< used for protect the timer list
     stimer_item_t *lst;        ///< this is the soft timer list，
     void          *task;       ///< this is the task engine
+    int            daemon_exit;///< this is the task exit;
+
 }stimer_cb_t;
 
 static stimer_cb_t s_stimer_cb =  \
@@ -186,6 +188,16 @@ static void  timer_scan(void)
 
 }
 
+
+int stimer_daemonquit()
+{
+
+    s_stimer_cb.daemon_exit = 1;
+
+    return 0;
+}
+
+
 ///< this is the soft timer main engine
 static int __timer_entry(void *args)
 {
@@ -193,7 +205,7 @@ static int __timer_entry(void *args)
     int64_t cur_time;
 
     wait_time= cn_stimer_wait_max;
-    while(1)
+    while(s_stimer_cb.daemon_exit == 0)
     {
         (void)osal_semp_pend(s_stimer_cb.semp,wait_time);  ///< if any timer exist before the task, then the semphore is active
         ///< check all the list and do it
@@ -249,6 +261,7 @@ int32_t stimer_init()
     {
         goto EXIT_TASKERR;
     }
+    s_stimer_cb.daemon_exit = 0;
 
     ret = 0;
     return ret;
@@ -288,7 +301,7 @@ stimer_t stimer_create(const char *name,fn_stimer_handler handler, void *arg,uin
     if(NULL != name)
     {
         item->name = (char *)item +sizeof(stimer_item_t);
-        (void) strcpy(item->name, name);
+        (void) strncpy(item->name,name,strlen(name)+1);
     }
 
 
@@ -415,7 +428,7 @@ static int32_t stimer_print(int32_t argc, const char *argv[])
         {
             LINK_LOG_DEBUG("%-12s %08x %08x %08x %-5s %-5s %x\n\r",\
                     (NULL==item->name)?"UNKONW":item->name,\
-                    (unsigned int)item->cycle,(unsigned int)item->handler,(unsigned int)(uintptr_t)item->args,\
+                    (unsigned int)item->cycle,(unsigned int)(uintptr_t)item->handler,(unsigned int)(uintptr_t)item->args,\
                     item->flag&cn_stimer_flag_start?"Yes":"No",item->flag&cn_stimer_flag_once?"Yes":"No",\
                     (unsigned int)item->dead_time);
             item = item->nxt;
