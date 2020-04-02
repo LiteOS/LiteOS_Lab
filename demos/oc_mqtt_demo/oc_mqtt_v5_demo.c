@@ -96,6 +96,11 @@ static const char s_server_ca[] =
 
 #define CN_EP_DEVICEID         "54f107da-f251-436c-af4c-624f33b7d7b6"
 #define CN_EP_PASSWD           "f62fcf47d62c4ed18913"
+
+///< the client use the cert mode  SHA-256
+//72DC0E75D88CEC38A025E9C48C79D222F608B039D080BCEFC0007DAD1AFFAD00
+//#define CN_EP_DEVICEID         "5d0c76788a48f95ac41bcb9c_ca002"
+
 #define CN_BOOT_MODE            0
 #define CN_LIFE_TIME            60                         ///< the platform need more
 //if your command is very fast,please use a queue here--TODO
@@ -331,14 +336,13 @@ static int task_reportmsg_entry(void *args)
 
     connect_para.boostrap =      CN_BOOT_MODE;
     connect_para.device_id =     CN_EP_DEVICEID;
-    connect_para.device_passwd = CN_EP_PASSWD;
+    connect_para.device_passwd = NULL;
     connect_para.server_addr =   CN_SERVER_IPV4;
     connect_para.sevver_port =   CN_SERVER_PORT;
     connect_para.life_time =     CN_LIFE_TIME;
     connect_para.rcvfunc =       app_msg_deal;
 
     connect_para.security.type = CN_SECURITY_TYPE;
-
 
     connect_para.security.u.cert.server_ca = (uint8_t *)s_server_ca;
     connect_para.security.u.cert.server_ca_len = sizeof(s_server_ca);

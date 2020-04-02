@@ -62,7 +62,7 @@ LITE_OS_SEC_TEXT_INIT void osEnableFPU(void)
 }
 
 /*****************************************************************************
- Function    : LOS_Reboot
+ Function    : LOS_Reboot not implement yet, need hardware support
  Description : system exception, die in here, wait for watchdog.
  Input       : None
  Output      : None
@@ -71,9 +71,9 @@ LITE_OS_SEC_TEXT_INIT void osEnableFPU(void)
 LITE_OS_SEC_TEXT_INIT VOID LOS_Reboot(VOID)
 {
     (VOID) LOS_IntLock();
-    while (1)
-    {
-    }
+
+
+    return;
 }
 /*****************************************************************************
  Function    : osRegister

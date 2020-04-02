@@ -81,6 +81,8 @@ const char *link_log_level_name(en_link_log_level_t log_level)
 
 }
 
+/*
+
 #ifndef CONFIG_LINK_LOGBUF_LEN
 #define CONFIG_LINK_LOGBUF_LEN      256  ///< you could modify it
 #endif
@@ -93,10 +95,12 @@ __attribute__((weak)) void link_printf(const char *format, ...)
     (void) (void) memset(str_buf, 0, CONFIG_LINK_LOGBUF_LEN);
 
     va_start(list, format);
-    (void) vsnprintf(str_buf, CONFIG_LINK_LOGBUF_LEN, format, list);
+    (void) vsnprintf(str_buf, sizeof(str_buf), format, list);
     va_end(list);
 
     (void) printf("%s", str_buf);
 
     return;
 }
+
+*/

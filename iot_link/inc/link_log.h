@@ -42,6 +42,7 @@
 #include <stdarg.h>
 #include <stdint.h>
 #include <stddef.h>
+#include <stdio.h>
 
 
 /**
@@ -100,22 +101,20 @@ int link_log_level_set(en_link_log_level_t level);
  *             call LINK_LOG groups
  *
  * */
-__attribute__((weak)) void link_printf(const char *format, ...);
+//__attribute__((weak)) void link_printf(const char *format, ...);
 
-
-
-#ifndef CONFIG_LINK_DEBUG_ENABLE
-#define CONFIG_LINK_DEBUG_ENABLE 1  ///< default the debug is on
+#ifndef link_printf
+#define link_printf printf
 #endif
 
-#if CONFIG_LINK_DEBUG_ENABLE
+#ifdef CONFIG_LINK_DEBUG_ENABLE
 
 extern unsigned long long osal_sys_time();
 #define LINK_LOG(level,fmt, ...) \
     do \
     { \
-        link_printf("[%s][%u][%s:%d] " fmt "\r\n", \
-        link_log_level_name((level)), (uint32_t)osal_sys_time(), __FUNCTION__, __LINE__, ##__VA_ARGS__); \
+        (void)link_printf("[%s][%u][%s:%d] " fmt "\r\n", \
+        link_log_level_name((level)), (unsigned int)osal_sys_time(), __FUNCTION__, __LINE__, ##__VA_ARGS__); \
     } while (0)
 
 #define LINK_LOG_TRACE(fmt, ...) \

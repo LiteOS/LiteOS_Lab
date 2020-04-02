@@ -238,7 +238,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 
                 if ((LWM2M_TYPE_STRING != dataArray[i].type) || (NULL == dataArray[i].value.asBuffer.buffer))
                 {
-                    ATINY_LOG(LOG_ERR, "type ERR %d", dataArray[i].type);
+                    ATINY_LOG(LOG_ERR, "type ERR %d", (int)dataArray[i].type);
                     result = COAP_400_BAD_REQUEST;
                     break;
                 }

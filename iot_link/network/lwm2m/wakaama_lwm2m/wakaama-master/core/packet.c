@@ -245,7 +245,7 @@ void lwm2m_handle_packet(lwm2m_context_t *contextP,
     if (coap_error_code == NO_ERROR)
     {
         LOG_ARG("Parsed: ver %u, type %u, tkl %u, code %u.%.2u, mid %u, Content type: %d",
-                message->version, message->type, message->token_len, message->code >> 5, message->code & 0x1F, message->mid, message->content_type);
+                message->version, message->type, message->token_len, message->code >> 5, message->code & 0x1F, message->mid,(int) message->content_type);
         //LOG_ARG("Payload: %.*s", message->payload_len, message->payload);   //%s can not used for binary data.
         if (message->code >= COAP_GET && message->code <= COAP_DELETE)
         {
@@ -275,7 +275,7 @@ void lwm2m_handle_packet(lwm2m_context_t *contextP,
             /* get offset for blockwise transfers */
             if (coap_get_header_block2(message, &block_num, NULL, &block_size, &block_offset))
             {
-                LOG_ARG("Blockwise: block request %u (%u/%u) @ %u bytes", block_num, block_size, REST_MAX_CHUNK_SIZE, block_offset);
+                LOG_ARG("Blockwise: block request %u (%u/%u) @ %u bytes", (unsigned int)block_num, (unsigned int)block_size,REST_MAX_CHUNK_SIZE, (unsigned int)block_offset);
                 block_size = MIN(block_size, REST_MAX_CHUNK_SIZE);
                 new_offset = block_offset;
             }
@@ -307,7 +307,7 @@ void lwm2m_handle_packet(lwm2m_context_t *contextP,
 
                     // parse block1 header
                     coap_get_header_block1(message, &block1_num, &block1_more, &block1_size, NULL);
-                    LOG_ARG("Blockwise: block1 request NUM %u (SZX %u/ SZX Max%u) MORE %u", block1_num, block1_size, REST_MAX_CHUNK_SIZE, block1_more);
+                    LOG_ARG("Blockwise: block1 request NUM %u (SZX %u/ SZX Max%u) MORE %u", (unsigned int)block1_num, (unsigned int)block1_size, REST_MAX_CHUNK_SIZE, (unsigned int)block1_more);
 
                     // handle block 1
                     coap_error_code = coap_block1_handler(&serverP->block1Data, message->mid, message->payload, message->payload_len, block1_size, block1_num, block1_more, &complete_buffer, &complete_buffer_size);

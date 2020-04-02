@@ -285,7 +285,7 @@ static uint8_t prv_read(uint16_t instanceId,
 
     if (NULL == targetP)
     {
-        ATINY_LOG(LOG_ERR, "plat inst not found %d", instanceId);
+        ATINY_LOG(LOG_ERR, "plat inst not found %d", (int)instanceId);
         return COAP_404_NOT_FOUND;
     }
 

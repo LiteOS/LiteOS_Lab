@@ -275,7 +275,7 @@ static int __rcv_task_entry(void *args)
         return 0;
     }
 
-    while(1)
+    while(NULL != g_at_cb.devhandle)
     {
     	if (1 == g_at_cb.streammode)  //in stream mode, we need to save previous frames in buffer
     	{
@@ -315,6 +315,8 @@ static int __rcv_task_entry(void *args)
 	        }
         }
     }
+
+    return 0;
 }
 
 /*******************************************************************************

@@ -245,7 +245,7 @@ char *hwoc_mqtt_version()
 ///< ATCOMMAND: AT+HWOCMQTTSERVERCA = "nnnds=="  and  "" means clear it
 ///< ATRESPONSE: +HWOCMQTTSERVERCA OK
 ///<             +HWOCMQTTSERVERCA ERR:CODE
-int hwoc_mqtt_serverca(char *server_ca)
+int hwoc_mqtt_serverca(const char *server_ca)
 {
     int ret = (int)en_oc_mqtt_err_ok;
     (void)link_main(NULL);
@@ -273,7 +273,7 @@ int hwoc_mqtt_serverca(char *server_ca)
 ///< ATRESPONSE:  +HWOCMQTTCLIENTCA OK
 ///<              +HWOCMQTTCLIENTCA ERR:CODE
 
-int hwoc_mqtt_clientca(char *client_ca)
+int hwoc_mqtt_clientca(const char *client_ca)
 {
     int ret = (int)en_oc_mqtt_err_ok;
     (void)link_main(NULL);
@@ -302,7 +302,7 @@ int hwoc_mqtt_clientca(char *client_ca)
 ///< ATRESPONSE:  +HWOCMQTTCLIENTPK OK
 ///<              +HWOCMQTTCLIENTPK ERR:CODE
 
-int hwoc_mqtt_clientpk(char *client_pk, char *client_pk_pwd)
+int hwoc_mqtt_clientpk(const char *client_pk, const char *client_pk_pwd)
 {
     int ret = (int)en_oc_mqtt_err_ok;
     (void)link_main(NULL);

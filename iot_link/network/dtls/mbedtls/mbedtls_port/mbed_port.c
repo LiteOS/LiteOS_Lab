@@ -126,7 +126,7 @@ en_dtls_al_err_t mbed_new(dtls_al_para_t *para, void **handle)
 
 en_dtls_al_err_t mbed_destroy(void *handle)
 {
-    int ret = EN_DTLS_AL_ERR_PARA;
+    en_dtls_al_err_t ret = EN_DTLS_AL_ERR_PARA;
     if(NULL != handle)
     {
         dtls_ssl_destroy(handle);
