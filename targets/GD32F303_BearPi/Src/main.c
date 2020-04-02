@@ -109,7 +109,7 @@ static int link_test()
 
 int main(void)
 {
-    UINT32 uwRet = LOS_OK;
+    UINT32 uwRet;
 
     HardWare_Init();
 
@@ -126,4 +126,5 @@ int main(void)
 
 	LOS_Start();
 
+	return uwRet;
 }

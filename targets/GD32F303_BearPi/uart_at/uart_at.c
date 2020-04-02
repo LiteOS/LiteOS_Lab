@@ -34,6 +34,7 @@
 
 #include "gd32f30x.h"
 #include "BearPi-IoT_gd32f303.h"
+#include <string.h>
 #include <stdint.h>
 #include <stddef.h>
 #include <osal.h>
