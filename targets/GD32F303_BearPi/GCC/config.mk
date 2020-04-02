@@ -75,9 +75,10 @@ CONFIG_AT_ENABLE     := y
 ########################INDEPENDENT SERVICE START#################################
 
 #CONFIG_CJSON_ENABLE , we port the cJSON based on the osal,you could choose yes or no
-CONFIG_CJSON_ENABLE := n
+CONFIG_CJSON_ENABLE := y
 
 ########################INDEPENDENT SERVICE END#################################
+CONFIG_LOG_ENABLE := y
 
 
 ########################NETWORK SERVICE START###################################
@@ -93,13 +94,13 @@ CONFIG_TCPIP_TYPE := "esp8266_socket"
 #CONFIG_DTLS_ENABLE , we supply a DTLS AL (building),you could choose yes or no
 #CONFIG_DTLS_TYPE, could be "mbeddtls_psk" "mbedtls_cert" "none"
 
-CONFIG_DTLS_ENABLE   := n
-CONFIG_DTLS_TYPE     := "mbedtls_psk"
+CONFIG_DTLS_ENABLE   := y
+CONFIG_DTLS_TYPE     := "mbedtls_cert"
 
 #CONFIG_MQTT_ENABLE, we build a mqtt abstraction, which shield the difference of 
 #the implement of mqtt. 
 #CONFIG_MQTT_TYPE could be "paho_mqtt" "none"
-CONFIG_MQTT_ENABLE   := n
+CONFIG_MQTT_ENABLE   := y
 CONFIG_MQTT_TYPE     := "paho_mqtt"
 
 #CONFIG_LWM2M_ENABLE, we build a lwm2m abstraction, which shield the difference of 
@@ -111,7 +112,7 @@ CONFIG_LWM2M_TYPE     := "wakaama_lwm2m"
 #CONFIG_COAP_ENABLE, we build a coap abstraction, which shield the difference of 
 #the implement of coap. 
 #CONFIG_COAP_TYPE could be "lite_coap" "none"
-CONFIG_COAP_ENABLE   := y
+CONFIG_COAP_ENABLE   := n
 CONFIG_COAP_TYPE     := "lite_coap"
 ########################NETWORK SERVICE END#####################################
 
@@ -120,7 +121,7 @@ CONFIG_COAP_TYPE     := "lite_coap"
 #CONFIG_OC_COAP_ENABLE, we build a oc coap abstraction for huawei OceanConnect service,
 #which shield the difference of the implement of oc coap. 
 #CONFIG_OC_MQTT_TYPE could be "soft" "none"
-CONFIG_OC_COAP_ENABLE := y
+CONFIG_OC_COAP_ENABLE := n
 CONFIG_OC_COAP_TYPE   := "soft"
 
 #CONFIG_OC_MQTT_ENABLE, we build a oc mqtt abstraction for huawei OceanConnect service,
@@ -129,10 +130,10 @@ CONFIG_OC_COAP_TYPE   := "soft"
 #CONFIG_OC_MQTT_VERSION could be "V5"  "V1",use this to select the used interface
 #CONFIG_OCMQTT_DEMO_ENABLE could be y or n, use this to enable the oc mqtt demo
 #CONFIG_OCMQTT_DEMO_BSENABLE could be y or n, use this to enable the bootstrap or not
-CONFIG_OC_MQTT_ENABLE := n
+CONFIG_OC_MQTT_ENABLE := y
 CONFIG_OC_MQTT_TYPE   := "soft"
-CONFIG_OC_MQTT_VERSION := "V1"
-CONFIG_OC_MQTTDEMO_ENABLE := n
+CONFIG_OC_MQTT_VERSION := "V5"
+CONFIG_OC_MQTTDEMO_ENABLE := y
 CONFIG_OC_MQTTDEMO_BSENABLE := y
 
 
@@ -169,7 +170,7 @@ CONFIG_PCP_ENABLE      := n
 #"oc_lwm2m_bs_demo"  "oc_lwm2m_demo" "oc_lwm2m_ota_demo" "stimer_demo"
 
 CONFIG_DEMO_ENABLE := y
-CONFIG_DEMO_TYPE   := "oc_coap_demo"
+CONFIG_DEMO_TYPE   := ""
 
 #########################STANDARD DEMO END######################################
 include $(TOP_DIR)/iot_link/iot.mk

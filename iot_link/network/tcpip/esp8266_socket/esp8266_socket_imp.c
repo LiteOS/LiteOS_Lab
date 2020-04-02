@@ -564,6 +564,7 @@ int link_tcpip_imp_init(void)
     at_oobregister("esp8266rcv",CN_ESP8266_RCVINDEX,strlen(CN_ESP8266_RCVINDEX),esp8266_rcvdeal,NULL);
     ring_buffer_init(&s_esp8266_sock_cb.esp8266_rcvring,s_esp8266_sock_cb.esp8266_rcvbuf,CN_ESP8266_CACHELEN,0,0);
 
+    osal_task_sleep(1000);
 
     esp8266_reset();
     esp8266_echo_off();
@@ -573,7 +574,13 @@ int link_tcpip_imp_init(void)
 
     while(false == esp8266_joinap(WIFI_SSID, WIFI_PASSWD))
     {
-        LINK_LOG_DEBUG("connect ap failed, repeat...\r\n");
+        osal_task_sleep(1000);
+        esp8266_reset();
+        esp8266_echo_off();
+        esp8266_show_dinfo(0);
+        esp8266_set_mode(STA);
+        esp8266_set_mux(0);
+        LINK_LOG_DEBUG("connect ap failed, retry..\r\n");
     }
    //reach here means everything is ok, we can go now
     ret = link_sal_install(&s_tcpip_socket);

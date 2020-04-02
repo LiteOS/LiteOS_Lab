@@ -336,7 +336,7 @@ static int task_reportmsg_entry(void *args)
 
     connect_para.boostrap =      CN_BOOT_MODE;
     connect_para.device_id =     CN_EP_DEVICEID;
-    connect_para.device_passwd = NULL;
+    connect_para.device_passwd = CN_EP_PASSWD;
     connect_para.server_addr =   CN_SERVER_IPV4;
     connect_para.sevver_port =   CN_SERVER_PORT;
     connect_para.life_time =     CN_LIFE_TIME;
