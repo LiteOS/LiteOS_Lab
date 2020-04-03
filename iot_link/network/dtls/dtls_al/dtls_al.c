@@ -126,16 +126,19 @@ int dtls_al_uninstall(const char*name)
 
 __attribute__((weak))  int dtls_imp_init(void)
 {
-    LINK_LOG_DEBUG("%s:###please implement this function by yourself####\n\r",__FUNCTION__);
+    LINK_LOG_DEBUG("%s:###please implement dtls by yourself####\n\r",__FUNCTION__);
     return -1;
 }
 
 int dtls_al_init(void)
 {
 
-    int ret = -1;
+    int ret;
 
     ret = dtls_imp_init();
+
+    LINK_LOG_DEBUG("IOT_LINK:DO DTLS LOAD-IMPLEMENT RET:%d\n\r",ret);
+
 
     return ret;
 }

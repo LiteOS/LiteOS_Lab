@@ -417,7 +417,7 @@ static int __recv(coap_al_rcvpara_t *rcvparam)
     return ret;
 }
 
-int coap_install_litecoap()
+int coap_imp_init()
 {
     int ret = -1;
 

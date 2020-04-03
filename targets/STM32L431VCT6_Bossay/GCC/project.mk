@@ -65,14 +65,13 @@ HARDWARE_INC = \
         -I ${wildcard $(TOP_DIR)/targets/STM32L431VCT6_Bossay/Hardware/LCD}
         C_INCLUDES += $(HARDWARE_INC)
 
-USER_INC = \
-        -I $(TOP_DIR)/targets/STM32L431VCT6_Bossay/Inc
+USER_INC = -I $(TOP_DIR)/targets/STM32L431VCT6_Bossay \
+           -I $(TOP_DIR)/targets/STM32L431VCT6_Bossay/Inc
         C_INCLUDES += $(USER_INC)
         
 # C defines
 C_DEFS +=  -D USE_HAL_DRIVER -D STM32L431xx -D NDEBUG
 
-include $(SDK_DIR)/iot_link/iot.mk
 include $(TOP_DIR)/targets/STM32L431VCT6_Bossay/Demos/user_demo.mk
 
                  

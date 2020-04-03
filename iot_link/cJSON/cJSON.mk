@@ -6,14 +6,11 @@
 
 ifeq ($(CONFIG_CJSON_ENABLE),y)
 
-    CJSON_MODULE_SRC  = ${wildcard $(iot_link_root)/cJSON/*.c} 
-    C_SOURCES += $(CJSON_MODULE_SRC)	
-    		
-    CJSON_MODULE_INC = -I $(iot_link_root)/cJSON
-    C_INCLUDES += $(CJSON_MODULE_INC)
-    
+    C_SOURCES += ${wildcard $(iot_link_root)/cJSON/*.c}     		
+    C_INCLUDES += -I $(iot_link_root)/cJSON
     C_DEFS += -D CONFIG_JSON_ENABLE=1
-
+    LDFLAGS += -u _printf_float
+        
 endif
 
 

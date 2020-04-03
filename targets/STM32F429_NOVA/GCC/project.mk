@@ -24,9 +24,21 @@ TARGET_SRC =$(NOVA_ROOT)/target/platform/stm32/src/stm32_common.c  \
 TARGET_INC = -I $(NOVA_ROOT)/target/platform/stm32/stm32f4/library \
              -I $(NOVA_ROOT)/target/platform/stm32/stm32f4/library/CMSIS/Device/ST/STM32F4xx/Include \
              -I $(NOVA_ROOT)/target/platform/stm32/stm32f4/library/STM32F4xx_HAL_Driver/Inc
- 
+                    
 C_SOURCES += $(TARGET_SRC)
 C_INCLUDES += $(TARGET_INC)
+
+ifeq ($(CONFIG_UART_AT),y)
+    C_SOURCES += $(TOP_DIR)/targets/STM32F429_NOVA/Src/uart_at/uart_at.c
+endif    
+
+ifeq ($(CONFIG_ETHERNETMAC),y)
+    C_SOURCES += $(TOP_DIR)/targets/STM32F429_NOVA/Src/ethernet/eth.c \
+                 $(TOP_DIR)/targets/STM32F429_NOVA/Src/ethernet/net_driver.c                
+endif 
+
+C_INCLUDES += -I $(TOP_DIR)/targets/STM32F429_NOVA
+
 
  
                  

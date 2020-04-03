@@ -63,7 +63,7 @@ SECTIONS
   {
     . = ALIGN(4);
     g_iot_link_text_start = .;
-     *iot_link/*.o (.text .text.* .rodata .rodata.*)     
+     *iot_link/network/*.o (.text .text.* .rodata .rodata.*)     
     g_iot_link_text_end = .;
     
     *(.text)           /* .text sections (code) */

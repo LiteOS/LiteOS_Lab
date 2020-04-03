@@ -63,7 +63,8 @@ CFLAGS =
 
 
 ##########################LOAD THE SOURCES INCLUDES AND DEFINES#################
-include $(PROJECTBASE)/config.mk
+include ../.config
+include $(TOP_DIR)/iot_link/iot.mk
 include $(PROJECTBASE)/project.mk
 ################################################################################
 # paths

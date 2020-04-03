@@ -1,0 +1,139 @@
+
+#
+# Macos Project configuration For IoT Link
+#
+
+#
+# This is a demo project and hope you enjoy it
+#
+
+#
+# IoT link SDK configuration
+#
+
+#
+# you should choose a os kernel first!
+#
+
+#
+# OS configuration
+#
+# CONFIG_LITEOS_ENABLE is not set
+# CONFIG_NOVAOS_ENABLE is not set
+# CONFIG_LINUXOS_ENABLE is not set
+CONFIG_MACOS_ENABLE=y
+# CONFIG_NEW_OS is not set
+# end of OS configuration
+
+CONFIG_CJSON_ENABLE=y
+
+#
+# LinkLog configuration
+#
+CONFIG_LINKLOG_ENABLE=y
+# end of LinkLog configuration
+
+CONFIG_LINKQUEUE_ENABLE=y
+CONFIG_LINKDEMO_ENABLE=y
+
+#
+# Stimer configuration
+#
+# CONFIG_STIMER_ENABLE is not set
+# end of Stimer configuration
+
+#
+# Network configuration
+#
+
+#
+# Tcpip configuration
+#
+CONFIG_TCIP_AL_ENABLE=y
+# CONFIG_LWIP_ENABLE is not set
+# CONFIG_RTK8710_ENABLE is not set
+# CONFIG_ESP8266_ENABLE is not set
+CONFIG_MACOSSOCKET_ENABLE=y
+# CONFIG_LINUXSOCKET_ENABLE is not set
+# CONFIG_NEW_SOCKET is not set
+# end of Tcpip configuration
+
+#
+# Dtls  configuration
+#
+CONFIG_DTLS_AL_ENABLE=y
+CONFIG_MBEDTLS_ENABLE=y
+# CONFIG_OPENSSL_ENABLE is not set
+# CONFIG_NEWTLS_ENABLE is not set
+
+#
+# mbedtls configuration
+#
+CONFIG_MBEDTLS_CERT=y
+# CONFIG_MBEDTLS_PSK is not set
+# CONFIG_MBEDTLS_CERT_PSK is not set
+# end of mbedtls configuration
+# end of Dtls  configuration
+
+#
+# Coap  configuration
+#
+# CONFIG_COAP_AL_ENABLE is not set
+# end of Coap  configuration
+
+#
+# Lwm2m configuration
+#
+# CONFIG_LWM2M_AL_ENABLE is not set
+# end of Lwm2m configuration
+
+#
+# Mqtt  configuration
+#
+CONFIG_MQTT_AL_ENABLE=y
+CONFIG_PAHO_MQTT=y
+# CONFIG_LITE_MQTT is not set
+# CONFIG_NEW_MQTT is not set
+# end of Mqtt  configuration
+# end of Network configuration
+
+#
+# OceanConnect SERVICE configuration
+#
+CONFIG_OCSERVICES_ENABLE=y
+
+#
+# OceanConnect Coap configuration
+#
+# CONFIG_OCCOAP_ENABLE is not set
+# end of OceanConnect Coap configuration
+
+#
+# OceanConnect Lwm2m configuration
+#
+# CONFIG_OCLWM2M_ENABLE is not set
+# end of OceanConnect Lwm2m configuration
+
+#
+# OceanConnect Mqtt configuration
+#
+CONFIG_OCMQTT_ENABLE=y
+CONFIG_OCMQTT_ATCMD=y
+CONFIG_OC_MQTT_V5=y
+# CONFIG_OC_MQTT_V1 is not set
+CONFIG_OC_TINYMQTTV5_ENABLE=y
+# CONFIG_OCMQTT_NULL is not set
+
+#
+# OceanConnect MqttV5 Api
+#
+CONFIG_OC_MQTTV5_PROFILE=y
+CONFIG_OC_MQTTV5_DEMO=y
+CONFIG_OC_MQTTV5_DEMO_TLS=y
+# end of OceanConnect MqttV5 Api
+# end of OceanConnect Mqtt configuration
+# end of OceanConnect SERVICE configuration
+
+CONFIG_IOT_LINK_CONFIGFILE="config.h"
+# end of IoT link SDK configuration
+# end of Macos Project configuration For IoT Link

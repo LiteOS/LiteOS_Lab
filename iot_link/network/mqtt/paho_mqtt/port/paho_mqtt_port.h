@@ -39,7 +39,7 @@
  *
  */
 
-int mqtt_install_pahomqtt();
+int mqtt_imp_init();
 
 
 #endif /* PAHO_MQTT_PORT_H */
