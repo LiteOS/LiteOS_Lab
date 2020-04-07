@@ -44,7 +44,7 @@
 #include <stddef.h>
 #include <stdio.h>
 
-
+#include <iot_link_config.h>
 /**
  * @brief:this defines for the log module, and  LINK_LOG_TRACE/LINK_LOG_DEBUG will not participate the compile in the release version
  *
@@ -107,7 +107,7 @@ int link_log_level_set(en_link_log_level_t level);
 #define link_printf printf
 #endif
 
-#ifdef CONFIG_LINK_DEBUG_ENABLE
+#ifdef CONFIG_LINKLOG_ENABLE
 
 extern unsigned long long osal_sys_time();
 #define LINK_LOG(level,fmt, ...) \

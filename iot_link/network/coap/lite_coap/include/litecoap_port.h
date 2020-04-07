@@ -39,7 +39,7 @@
  *
  */
 
-int coap_install_litecoap();
+int coap_imp_init();
 
 
 #endif /* PAHO_MQTT_PORT_H */

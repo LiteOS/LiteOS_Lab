@@ -66,5 +66,8 @@ C_INCLUDES += $(FONT_INC)
 # C defines
 C_DEFS +=  -D USE_HAL_DRIVER -D STM32F429xx -D NDEBUG
 
+C_INCLUDES += -I $(TOP_DIR)/targets/STM32F429_GSL
+
+
 
                  

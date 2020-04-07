@@ -56,7 +56,7 @@ static int user_task1_entry()
             public_value += 10;
             printf("task1: public_value = %ld.\r\n", public_value);
             printf("task1: unlock a mutex.\r\n\r\n");
-            (void) osal_mutex_unlock(public_value_mutex);
+            osal_mutex_unlock(public_value_mutex);
             if(public_value > 100)
                 break;
             
@@ -75,7 +75,7 @@ static int user_task2_entry()
             public_value += 5; 
             printf("task2: public_value = %ld.\r\n", public_value);
             printf("task2: unlock a mutex.\r\n\r\n");
-            (void) osal_mutex_unlock(public_value_mutex);
+            osal_mutex_unlock(public_value_mutex);
             
             if(public_value > 90)
                 break;

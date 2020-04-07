@@ -64,6 +64,8 @@ USER_INC = \
 # C defines
 C_DEFS +=  -D GD32F30X_XD -D NDEBUG
 
-include $(TOP_DIR)/targets/GD32F303_BearPi/Demos/user_demo.mk
+C_INCLUDES += -I $(TOP_DIR)/targets/GD32F303_BearPi
+
+
 
                  

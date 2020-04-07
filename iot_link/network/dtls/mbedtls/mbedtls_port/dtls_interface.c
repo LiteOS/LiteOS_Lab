@@ -56,19 +56,10 @@
 #include "dtls_interface.h"
 #include "mbedtls/net_sockets.h"
 #include "mbedtls/ssl_internal.h"
-
 #include <sal.h>
 #include <osal.h>
 
-
-#ifdef  MBEDTLS_DEBUG
 #define MBEDTLS_LOG LINK_LOG_DEBUG
-#else
-#define MBEDTLS_LOG(fmt, ...) ((void)0)
-
-#endif
-
-
 
 mbedtls_ssl_context *dtls_ssl_new(dtls_establish_info_s *info, char plat_type)
 {

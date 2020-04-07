@@ -32,6 +32,7 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
+#include <link_log.h>
 #include <oc_mqtt_al.h>
 
 static oc_mqtt_t *s_oc_mqtt = NULL;
@@ -120,9 +121,30 @@ int oc_mqtt_unsubscribe(char *topic)
     return ret;
 }
 
-///////////////////////OC LWM2M AGENT INITIALIZE////////////////////////////////
+///////////////////////OC MQTT TINY AGENT INITIALIZE////////////////////////////
+
+__attribute__ ((weak)) int oc_mqtt_imp_init(void)
+{
+    LINK_LOG_DEBUG("%s:###please implement oc mqtt by yourself####\n\r",__FUNCTION__);
+    return 0;
+}
+
+__attribute__ ((weak)) int oc_mqtt_demo_main(void)
+{
+    LINK_LOG_WARN("Please implement the oc mqtt demo yourself \n\r");
+    return -1;
+}
+
 int oc_mqtt_init()
 {
+    int ret;
+
+    ret = oc_mqtt_imp_init();
+
+    LINK_LOG_DEBUG("IOT_LINK:DO OC MQTT LOAD-IMPLEMENT RET:%d\n\r",ret);
+
+    (void) oc_mqtt_demo_main();
+
     return 0;
 }
 
