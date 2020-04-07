@@ -275,5 +275,18 @@ int lwm2m_al_install(lwm2m_al_op_t *op);
  */
 int lwm2m_al_uninstall(void);
 
+
+/*
+ * @brief: initialize the lwm2m abstract layer
+ *
+ *         and will call the lwm2m implement internal
+ *
+ * @ return 0 success while others failed
+ * */
+
+
+int lwm2m_al_init(void);
+
+
 #endif /* LITEOS_LAB_IOT_LINK_NETWORK_LWM2M_LWM2M_AL_LWM2M_AL_H_ */
 

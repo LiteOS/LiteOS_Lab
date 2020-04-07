@@ -85,8 +85,13 @@ this file implement the shell for the system.the following instruction you must 
 #define CN_CMD_CACHE   4   //THE COMMAND CACHED DEPTH
 //DEFINES FOR THE SHELL SERVER TASK STACK SIZE
 
-#ifndef  CONFIG_SHELL_TASKSTACK
-#define  CONFIG_SHELL_TASKSTACK   0x800
+#ifndef  CONFIG_SHELL_TASK_STACKSIZE
+#define  CONFIG_SHELL_TASK_STACKSIZE   0x800
+#endif
+
+
+#ifndef  CONFIG_SHELL_TASK_STACKPRIOR
+#define  CONFIG_SHELL_TASK_STACKPRIOR  10
 #endif
 
 
@@ -491,7 +496,7 @@ void shell_init()
     shell_cmd_init();
 
     osal_task_create("shell_server",shell_server_entry,NULL,\
-                      CONFIG_SHELL_TASKSTACK+CN_CMD_CACHE*CN_CMDLEN_MAX,NULL,10);
+                      CONFIG_SHELL_TASK_STACKSIZE+CN_CMD_CACHE*CN_CMDLEN_MAX,NULL,CONFIG_SHELL_TASK_STACKPRIOR);
 }
 
 

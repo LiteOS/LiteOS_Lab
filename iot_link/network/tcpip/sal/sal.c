@@ -38,8 +38,6 @@ __attribute__((weak))  int link_tcpip_imp_init(void)
     return -1;
 }
 
-
-
 int link_tcpip_init(void)
 {
     int ret = -1;
@@ -65,6 +63,8 @@ int link_tcpip_init(void)
     s_sal_cb.domain = NULL;
 
     ret = link_tcpip_imp_init();
+    LINK_LOG_DEBUG("IOT_LINK:DO TCPIP LOAD-IMPLEMENT RET:%d\n\r",ret);
+
 
     return ret;
 

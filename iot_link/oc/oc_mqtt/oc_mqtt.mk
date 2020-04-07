@@ -4,36 +4,61 @@
 ################################################################################
 #NEXT TIME WE SHOULD MOVE THE JSON OUT
 
-ifeq ($(CONFIG_OC_MQTT_ENABLE), y)
+ifeq ($(CONFIG_OCMQTT_ENABLE), y)
 
-    OC_MQTT_AL_SRC  = ${wildcard $(iot_link_root)/oc/oc_mqtt/oc_mqtt_al/*.c}
-    C_SOURCES += $(OC_MQTT_AL_SRC)	
+    C_SOURCES += $(iot_link_root)/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c
+    C_INCLUDES +=  -I $(iot_link_root)/oc/oc_mqtt/oc_mqtt_al
     
-    OC_MQTT_AL_INC = -I $(iot_link_root)/oc/oc_mqtt/oc_mqtt_al
-    C_INCLUDES += $(OC_MQTT_AL_INC)	
-    
-    OC_MQTT_DEFS = -D CONFIG_OC_MQTT_ENABLE=1
-    C_DEFS += $(OC_MQTT_DEFS)
+#if we enable the at command here
+	ifeq ($(CONFIG_OCMQTT_ATCMD), y)
+        C_SOURCES += $(iot_link_root)/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_at.c
+    endif
     
 #   add the profile  function tools 
-    ifeq ($(CONFIG_OC_MQTT_VERSION),"V5")
-    	OC_MQTT_PROFILE_SRC  = ${wildcard $(iot_link_root)/oc/oc_mqtt/oc_mqtt_profile_v5/*.c}
-        OC_MQTT_PROFILE_INC = -I $(iot_link_root)/oc/oc_mqtt/oc_mqtt_profile_v5	    	
-    else
-    	OC_MQTT_PROFILE_SRC  = ${wildcard $(iot_link_root)/oc/oc_mqtt/oc_mqtt_profile/*.c}
-        OC_MQTT_PROFILE_INC = -I $(iot_link_root)/oc/oc_mqtt/oc_mqtt_profile
-    endif
-    C_SOURCES += $(OC_MQTT_PROFILE_SRC)	
-    C_INCLUDES += $(OC_MQTT_PROFILE_INC)	
-#   add the implement component 
-    ifeq ($(CONFIG_OC_MQTT_TYPE),"ec2x_oc")
-    	include $(iot_link_root)/oc/oc_mqtt/ec2x_oc/ec2x_oc.mk
-    else ifeq ($(CONFIG_OC_MQTT_TYPE),"soft")
-    	ifeq ($(CONFIG_OC_MQTT_VERSION),"V5")
-			include $(iot_link_root)/oc/oc_mqtt/oc_mqtt_tiny_v5/oc_mqtt_tiny.mk	
-    	else
-    		include $(iot_link_root)/oc/oc_mqtt/oc_mqtt_tiny/oc_mqtt_tiny.mk	
+    ifeq ($(CONFIG_OC_MQTTV5_PROFILE), y)
+    
+    	C_SOURCES += $(iot_link_root)/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c \
+    	             $(iot_link_root)/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c
+    	
+    	ifeq ($(CONFIG_OC_MQTTV5_DEMO), y)
+   		
+   			C_SOURCES += $(iot_link_root)/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_demo.c
+    		
     	endif
-    endif 
+    	
+       
+        C_INCLUDES += -I $(iot_link_root)/oc/oc_mqtt/oc_mqtt_profile_v5
+        
+    endif
+         	    	
+    ifeq ($(CONFIG_OC_MQTTV1_PROFILE), y)
+    	
+    	C_SOURCES  += $(iot_link_root)/oc/oc_mqtt/oc_mqtt_profile/oc_mqtt_assistant.c
+    	
+    	ifeq ($(CONFIG_OC_MQTTV1_DEMO), y)
+   		
+   			C_SOURCES += $(iot_link_root)/oc/oc_mqtt/oc_mqtt_profile/oc_mqtt_demo.c
+    		
+    	endif
+    	
+        C_INCLUDES += -I $(iot_link_root)/oc/oc_mqtt/oc_mqtt_profile
+    endif
+	
+
+	            	
+#   add the implement component 
+    ifeq ($(CONFIG_OC_TINYMQTTV5_ENABLE),y)
+    	include $(iot_link_root)/oc/oc_mqtt/oc_mqtt_tiny_v5/oc_mqtt_tiny.mk	
+    endif
+    
+    ifeq ($(CONFIG_OC_TINYMQTTV1_ENABLE),y)
+    	include $(iot_link_root)/oc/oc_mqtt/oc_mqtt_tiny/oc_mqtt_tiny.mk	
+    endif
+    
+    
+    ifeq ($(CONFIG_EC2XV1_ENABLE),y)
+    	include $(iot_link_root)/oc/oc_mqtt/ec2x_oc/ec2x_oc.mk
+   	endif 	
+    	
 
 endif

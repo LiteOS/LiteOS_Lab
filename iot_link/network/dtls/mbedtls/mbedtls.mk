@@ -26,24 +26,24 @@ ifeq ($(USE_MBEDTLS_AES_ROM_TABLES), y)
 endif
 
 
-ifeq ($(CONFIG_DTLS_TYPE), "mbedtls_cert")
+ifeq ($(CONFIG_MBEDTLS_CERT), y)
     C_DEFS += -D MBEDTLS_CONFIG_FILE=\"los_mbedtls_config_cert.h\"
     C_INCLUDES += $(MBEDTLS_INC)
     C_SOURCES += $(MBEDTLS_SRC)
     MBEDTLS_DEF += -D CONFIG_DTLS_MBEDTLS_CERT
     C_DEFS += $(MBEDTLS_DEF) -D CFG_MBEDTLS_MODE=CRT
-else ifeq ($(CONFIG_DTLS_TYPE), "mbedtls_psk")
+else ifeq ($(CONFIG_MBEDTLS_PSK), y)
     C_DEFS += -D MBEDTLS_CONFIG_FILE=\"los_mbedtls_config.h\"
     C_INCLUDES += $(MBEDTLS_INC)
     C_SOURCES += $(MBEDTLS_SRC)
     MBEDTLS_DEF += -D CONFIG_DTLS_MBEDTLS_PSK
     C_DEFS += $(MBEDTLS_DEF) -D CFG_MBEDTLS_MODE=PSK
-else ifeq ($(CONFIG_DTLS_TYPE), "mbedtls_psk_cert")
+else ifeq ($(CONFIG_MBEDTLS_CERT_PSK), y)
     C_DEFS += -D MBEDTLS_CONFIG_FILE=\"los_mbedtls_config_dtls.h\"
     C_INCLUDES += $(MBEDTLS_INC)
     C_SOURCES += $(MBEDTLS_SRC)
     MBEDTLS_DEF += -D CONFIG_DTLS_MBEDTLS_CERT -D CONFIG_DTLS_MBEDTLS_PSK
-    C_DEFS += $(MBEDTLS_DEF) -D CFG_MBEDTLS_MODE=PSK
+    C_DEFS += $(MBEDTLS_DEF) -D CFG_MBEDTLS_MODE=PSK_CERT
 else
     C_DEFS += -D NO_DTLS
 endif

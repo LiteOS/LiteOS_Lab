@@ -518,7 +518,7 @@ static const oc_mqtt_t s_ec2x_oc =
     },
 };
 
-int ec2x_oc_init(void)
+int oc_mqtt_imp_init(void)
 {
     int ret = -1;
     osal_mutex_create(&s_ec2x_cb.lock);

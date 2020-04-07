@@ -179,8 +179,9 @@ typedef struct
 }coap_al_op_t;
 
 
-#if CONFIG_COAP_ENABLE
 //////////////////////API USED FOR THE COAP APPLICAITON/////////////////////////
+
+int coap_al_init(void);  ///< initialize the coap al
 
 /**
  * @brief maybe the coap lib need do some initialize
@@ -188,14 +189,14 @@ typedef struct
  * @return 0 success while -1 failed
  *
  */
-int coap_al_init(coap_al_initpara_t *initparam);
+int coap_al_imp_init(coap_al_initpara_t *initparam);
 
 /**
  * @brief     :when you don't want to use the coap service ,please call this function
  *
  * @return 0 success while -1 failed
  */
-int coap_al_deinit(void *handle);
+int coap_al_imp_deinit(void *handle);
 
 /**
  *@brief: you could use this function to add coap option
@@ -261,20 +262,6 @@ int coap_al_install(coap_al_op_t *op);
  *
  */
 int coap_al_uninstall();
-
-#else
-
-#define coap_al_init(initparam)                -1          ///< function compatible
-#define coap_al_deinit(handle)                 -1 		   ///< function compatible
-#define coap_al_add_option(optparam)           -1 		   ///< function compatible
-#define coap_al_new_request(reqparam)          NULL        ///< function compatible
-#define coap_al_send(sndparam)                 -1          ///< function compatible
-#define coap_al_recv(rcvparam)                 -1          ///< function compatible
-#define coap_al_install(opt)                   -1          ///< function compatible
-#define coap_al_uninstall()                    -1          ///< function compatible
-
-#endif
-
 
 
 #if defined(__cplusplus)

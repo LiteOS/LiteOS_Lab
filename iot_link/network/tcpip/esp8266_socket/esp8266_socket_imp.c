@@ -53,15 +53,18 @@
 #include <iot_link_config.h>
 
 ///<anyway ,you should change it to the same as your hot point
-#ifndef CONFIG_WIFI_SSID
-#define CONFIG_WIFI_SSID         "TP-LINK_IOT_LINK"
-#define CONFIG_WIFI_PASSWD       "iotlink_2019"
+#ifndef CONFIG_ESP8266_SSID
+#define CONFIG_ESP8266_SSID         "TP-LINK_IOT_LINK"
 #endif
 
-#define WIFI_SSID                 CONFIG_WIFI_SSID
-#define WIFI_PASSWD               CONFIG_WIFI_PASSWD
+#ifndef CONFIG_ESP8266_PWD
+#define CONFIG_ESP8266_PWD       "iotlink_2019"
+#endif
 
-#define CN_ESP8266_CMDTIMEOUT    (6*1000)
+#define WIFI_SSID                 CONFIG_ESP8266_SSID
+#define WIFI_PASSWD               CONFIG_ESP8266_PWD
+
+#define CN_ESP8266_CMDTIMEOUT    (10*1000)
 #define CN_ESP8266_RCVINDEX      "\r\n+IPD"
 #define CN_ESP8266_CACHELEN      (1800)
 
@@ -574,13 +577,14 @@ int link_tcpip_imp_init(void)
 
     while(false == esp8266_joinap(WIFI_SSID, WIFI_PASSWD))
     {
+        LINK_LOG_DEBUG("connect ap failed, retry..\r\n");
+
         osal_task_sleep(1000);
         esp8266_reset();
         esp8266_echo_off();
         esp8266_show_dinfo(0);
         esp8266_set_mode(STA);
         esp8266_set_mux(0);
-        LINK_LOG_DEBUG("connect ap failed, retry..\r\n");
     }
    //reach here means everything is ok, we can go now
     ret = link_sal_install(&s_tcpip_socket);

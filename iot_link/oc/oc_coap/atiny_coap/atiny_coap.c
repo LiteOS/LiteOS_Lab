@@ -234,7 +234,7 @@ int __agent_coap_task_entry(void *args)
         /* stop atiny */
         if (atiny_stop_flag)
         {
-        	coap_al_deinit(ctx);
+            coap_al_imp_deinit(ctx);
             atiny_stop_flag = 0;
             break;
         }
@@ -251,7 +251,7 @@ int __agent_coap_task_entry(void *args)
             	initpara->psklen = tmp->security_params[0].psk_len;
             	initpara->pskid = (const unsigned char *)tmp->security_params[0].psk_Id;
                 initpara->proto = COAP_PROTO_UDP;
-                coap_al_init(initpara);
+                coap_al_imp_init(initpara);
 
             	ctx = initpara->ctx;
                 atiny_set_nextstate(&atiny_state);
@@ -508,7 +508,7 @@ const oc_coap_opt_t  s_oc_coap_agent_opt = \
     .report = __agent_report,
 };
 
-int oc_coap_install_agent()
+int oc_coap_imp_init()
 {
     int ret = -1;
 

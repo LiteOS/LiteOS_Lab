@@ -6,13 +6,14 @@
 
 ifeq ($(CONFIG_STIMER_ENABLE),y)
 
-    STIMER_MODULE_SRC  = ${wildcard $(iot_link_root)/stimer/*.c} 
-    C_SOURCES += $(STIMER_MODULE_SRC)	
-    		
-    CJSON_MODULE_INC = -I $(iot_link_root)/stimer
-    C_INCLUDES += $(CJSON_MODULE_INC)
+    C_SOURCES +=  $(iot_link_root)/stimer/stimer.c
     
-    C_DEFS += -D CONFIG_STIMER_ENABLE=1
+	ifeq ($(CONFIG_STIMER_DEMO_ENABLE),y)
+
+	    C_SOURCES +=  $(iot_link_root)/stimer/stimer_demo.c
+
+	endif
+
 
 endif
 

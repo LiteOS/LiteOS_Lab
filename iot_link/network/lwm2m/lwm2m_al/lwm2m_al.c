@@ -38,9 +38,12 @@
  *
  */
 
-#include "lwm2m_al.h"
 
 #include <stddef.h>
+
+#include <link_log.h>
+#include <lwm2m_al.h>
+
 
 typedef struct
 {
@@ -174,6 +177,25 @@ int lwm2m_al_uninstall(void)
         s_lwm2m_al_op_cb.ops = NULL;
         ret = 0;
     }
+
+    return ret;
+}
+
+__attribute__((weak))  int lwm2m_imp_init(void)
+{
+    LINK_LOG_DEBUG("%s:###please implement lwm2m by yourself####\n\r",__FUNCTION__);
+    return -1;
+}
+
+int lwm2m_al_init(void)
+{
+
+    int ret;
+
+    ret = lwm2m_imp_init();
+
+    LINK_LOG_DEBUG("IOT_LINK:DO LWM2M LOAD-IMPLEMENT RET:%d\n\r",ret);
+
 
     return ret;
 }
