@@ -13,28 +13,10 @@
 # See the Mulan PSL v1 for more details.
 #
 
+menu "LINUX Project configuration For IoT Link"
 
-menu "mbedtls configuration"
+comment "This is a demo project and hope you enjoy it"
 
-    if MBEDTLS_ENABLE
+rsource "../../iot_link/kconfig_IoTLink"
     
-        choice 
-        prompt "Please select one of the workmode for mbedtls"
-        
-        config MBEDTLS_CERT
-            bool "Use the mbed cert mode(for the cert mode)"
-        
-        config MBEDTLS_PSK
-            bool "Use the mbed psk mode(for the dtls)"
-        
-        config MBEDTLS_CERT_PSK
-            bool "Use the mbed psk-cert mode"
-        endchoice 
-        
-        config MBED_DEBUG_ENABLE
-            bool "Enable the mbed debug"
-            default n
-      
-    endif  
-      
 endmenu

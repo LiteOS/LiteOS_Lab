@@ -13,28 +13,30 @@
 # See the Mulan PSL v1 for more details.
 #
 
+menu "LiteOS for STM32L431_EVBM1 Project configuration For IoT Link"
 
-menu "mbedtls configuration"
+comment "This is a demo project and hope you enjoy it"
 
-    if MBEDTLS_ENABLE
+config ARCH_CPU_TYPE
+   string "Select the cpu arch:armv7-m armv6-m riscv32 x86-64"
+   default "armv7-m"
+   
+config UARTAT_RCVMAX
+    int  "Config the at uart receive buffer size"
+    default 2048
+
+config UARTAT_BAUDRATE
+    int  "Config the at uart baud rate"
+    default 9600
     
-        choice 
-        prompt "Please select one of the workmode for mbedtls"
+config UARTAT_DEVNAME
+    string "Config the at uart device name"
+    default "atdev"
+          
+rsource "../../iot_link/kconfig_IoTLink"
+
+
+  
+
         
-        config MBEDTLS_CERT
-            bool "Use the mbed cert mode(for the cert mode)"
-        
-        config MBEDTLS_PSK
-            bool "Use the mbed psk mode(for the dtls)"
-        
-        config MBEDTLS_CERT_PSK
-            bool "Use the mbed psk-cert mode"
-        endchoice 
-        
-        config MBED_DEBUG_ENABLE
-            bool "Enable the mbed debug"
-            default n
-      
-    endif  
-      
 endmenu

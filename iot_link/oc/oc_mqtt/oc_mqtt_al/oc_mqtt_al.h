@@ -76,6 +76,16 @@ typedef enum
     en_oc_mqtt_err_last,
 }en_oc_mqtt_err_code_t;
 
+
+typedef enum
+{
+    en_oc_mqtt_log_connected = 0,
+    en_oc_mqtt_log_disconnected,
+}en_oc_mqtt_log_t;
+
+typedef void (*fn_oc_mqtt_log)(en_oc_mqtt_log_t  logtype);
+
+
 /** @brief this is the message dealer module for the application*/
 typedef int (*fn_oc_mqtt_msg_deal)(void *arg,mqtt_al_msgrcv_t *msg);
 
@@ -92,6 +102,7 @@ typedef struct
     char                              *pwd;
     fn_oc_mqtt_msg_deal                msg_deal;       ///< when the agent receive any applciation data, please call this function
     void                              *msg_deal_arg;   ///< call back for the fn_oc_mqtt_msg_deal
+    fn_oc_mqtt_log                     log_dealer;
 
 }oc_mqtt_config_t;
 

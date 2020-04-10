@@ -129,7 +129,10 @@ static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
         {
             message.type = EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_LAST;
         }
-        s_oc_mqtt_profile_cb.rcvfunc(&message);
+        if(NULL !=  s_oc_mqtt_profile_cb.rcvfunc)
+        {
+            s_oc_mqtt_profile_cb.rcvfunc(&message);
+        }
 
         if(NULL != request_id_buf)
         {
@@ -153,6 +156,8 @@ int oc_mqtt_profile_connect(oc_mqtt_profile_connect_t *payload)
         return ret;
     }
 
+    memset(&config,0, sizeof(config));
+
     config.boot_mode =payload->boostrap;
     config.id = payload->device_id;
     config.pwd = payload->device_passwd;
@@ -162,6 +167,7 @@ int oc_mqtt_profile_connect(oc_mqtt_profile_connect_t *payload)
     config.msg_deal = app_msg_deal;
     config.msg_deal_arg = NULL;
     config.security = payload->security;
+    config.log_dealer = payload->logfunc;
 
     if(payload->boostrap)
     {

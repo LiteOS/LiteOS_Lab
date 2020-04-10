@@ -145,7 +145,7 @@ int oc_mqtt_init()
 
     (void) oc_mqtt_demo_main();
 
-    return 0;
+    return ret;
 }
 
 

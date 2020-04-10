@@ -132,16 +132,28 @@ static int __lwip_recvfrom(int fd, void *msg, int len, int flag, struct sockaddr
 }
 
 
-static int __lwip_setsockopt(int fd, int level, int option, const void *option_value,int option_len)
+///< map the level and option
+static int __lwip_setsockopt(int fd, int level, int option, const void *option_value, int option_len)
 {
-    if(level == 0xffff)  ///< the lwip make some level and option map
+    struct timeval *time_delay;
+
+    if(level == 0xffff)
     {
         level = SOL_SOCKET;
+        if((option == SO_SNDTIMEO) || (option == SO_RCVTIMEO))
+        {
+            time_delay = (struct timeval *)option_value;
+            if((time_delay->tv_sec == 0)&&(time_delay->tv_usec == 0))
+            {
+                LINK_LOG_DEBUG("%s:log:::::::timeout should be mapped:::::modified it 1000 us\n\r",__FUNCTION__);
+                time_delay->tv_usec = 1000;
+            }
+        }
+
     }
 
-    return lwip_setsockopt(fd,level,option,option_value,option_len);
+    return setsockopt(fd, level, option, option_value, option_len);
 }
-
 
 
 static const tag_tcpip_ops s_tcpip_lwip_ops =

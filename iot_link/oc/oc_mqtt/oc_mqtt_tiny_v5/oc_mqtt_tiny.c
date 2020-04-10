@@ -89,8 +89,8 @@ static const char s_oc_mqtt_ca_crt[] =
 
 #define CN_OC_BS_REPORT_TOPIC_FMT           "/huawei/v1/devices/%s/iodpsData"
 #define CN_OC_BS_CMD_TOPIC_FMT              "/huawei/v1/devices/%s/iodpsCommand"
-#define CN_OC_HUB_SUBTOPIC_DEFAULT_FMT      "$oc/devices/%s/sys/messages/down"
-#define CN_OC_HUB_PUBTOPIC_DEFAULT_FMT      "$oc/devices/%s/sys/messages/up"
+#define CN_OC_HUB_SUBTOPIC_DEFAULT_FMT      "$oc/devices/%s/sys/commands/#"
+#define CN_OC_HUB_PUBTOPIC_DEFAULT_FMT      "$oc/devices/%s/sys/properties/report"
 
 /*The unit is millisecond*/
 #define CN_CON_BACKOFF_TIME     (1000)   ///< UNIT:ms
@@ -102,7 +102,7 @@ static const char s_oc_mqtt_ca_crt[] =
 
 const char *s_new_topic_fmt[]=
 {
-    "$oc/devices/%s/sys/commands/#",
+    "$oc/devices/%s/sys/messages/down",
     "$oc/devices/%s/sys/properties/set/#",
     "$oc/devices/%s/sys/properties/get/#",
     "$oc/devices/%s/sys/shadow/get/response/#",
@@ -165,6 +165,7 @@ typedef struct
             uint32_t bit_daemon_status:3;
             uint32_t bit_get_hubaddr:1;
             uint32_t bit_do_bootstrap:1;
+            uint32_t bit_do_reportdisconnect:1;
         }bits;
     }flag;
     oc_bs_mqtt_cb_t     bs_cb;
@@ -198,59 +199,17 @@ typedef struct
 
 
 ///< here we implement the hub and bootstrap server command dealer
-
+///< the bs not debug yet
 static void hub_msg_default_deal(void *arg,mqtt_al_msgrcv_t  *msg)
 {
-    cJSON  *root = NULL;
-    cJSON  *cmd_item = NULL;
-    cJSON  *serviceid_item = NULL;
-    char   *json_buf;
-    int     pass2user = 1;
-
-    mqtt_al_msgrcv_t normal_msg;
-
     //for we must add the '/0' to the end to make sure the json parse correct
-    if ((msg == NULL) || ( msg->msg.data == NULL) ||(msg->msg.len == 0))
+    if ((msg != NULL) && ( msg->msg.data != NULL) &&(msg->msg.len > 0 ) \
+        &&(NULL != s_oc_mqtt_tiny_cb->config.msg_deal))
     {
+        s_oc_mqtt_tiny_cb->config.msg_deal(s_oc_mqtt_tiny_cb->config.msg_deal_arg,msg);
+
         return;
     }
-
-    if(s_oc_mqtt_tiny_cb->flag.bits.bit_bs_enable)
-    {
-        json_buf = osal_malloc(msg->msg.len + 1);
-        if(NULL != json_buf)
-        {
-            (void) memcpy(json_buf,msg->msg.data,msg->msg.len);
-            json_buf[msg->msg.len] = '\0';
-            root = cJSON_Parse(json_buf);
-            if(NULL != root)
-            {
-                cmd_item = cJSON_GetObjectItem(root,"cmd");
-                serviceid_item = cJSON_GetObjectItem(root,"serviceid");
-                if(((NULL != cmd_item) && (strncmp(cmd_item->valuestring, "BootstrapRequestTrigger", strlen(cmd_item->valuestring)) == 0)) &&\
-                  ((NULL != serviceid_item) && (strncmp(serviceid_item->valuestring, "IOTHUB.BS", strlen(serviceid_item->valuestring)) == 0)))
-                {
-                    s_oc_mqtt_tiny_cb->flag.bits.bit_do_bootstrap =1;
-                    pass2user = 0;  ///< this is a bootstrap message and we should not pass to the user
-                }
-                cJSON_Delete(root);
-            }
-            osal_free(json_buf);
-        }
-    }
-
-
-    if((1 == pass2user)&&(NULL != s_oc_mqtt_tiny_cb->config.msg_deal))
-    {
-        normal_msg.dup = msg->dup;
-        normal_msg.qos = msg->qos;
-        normal_msg.retain = msg->retain;
-        normal_msg.msg = msg->msg;
-        normal_msg.topic = msg->topic;
-        s_oc_mqtt_tiny_cb->config.msg_deal(s_oc_mqtt_tiny_cb->config.msg_deal_arg,&normal_msg);
-    }
-
-
     return;
 }
 
@@ -472,6 +431,7 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
     cb->config.lifetime = config->lifetime;
     cb->config.msg_deal = config->msg_deal;
     cb->config.msg_deal_arg = config->msg_deal_arg;
+    cb->config.log_dealer  = config->log_dealer;
 
     cb->config_mem = mem_buf; ///< this is the membuf
 
@@ -911,6 +871,14 @@ static int hub_step(oc_mqtt_tiny_cb_t  *cb)
     {
         goto EXIT_ERR;
     }
+    else
+    {
+        if(NULL != cb->config.log_dealer)
+        {
+            cb->flag.bits.bit_do_reportdisconnect = 0;
+            cb->config.log_dealer(en_oc_mqtt_log_connected);
+        }
+    }
 
     LINK_LOG_DEBUG("%s:ok exit\n\r",__FUNCTION__);
     return ret;
@@ -1228,6 +1196,12 @@ static int daemon_entry(void *arg)
         else if((cb->flag.bits.bit_daemon_status == (int)en_daemon_status_hub_keep) &&\
                 (en_mqtt_al_connect_ok != mqtt_al_check_status(cb->mqtt_para.mqtt_handle)))
         {
+            if((cb->flag.bits.bit_do_reportdisconnect == 0) && (NULL != cb->config.log_dealer))
+            {
+                cb->config.log_dealer(en_oc_mqtt_log_disconnected);
+                cb->flag.bits.bit_do_reportdisconnect =1;
+            }
+
             (void) hub_step(cb);
         }
         else

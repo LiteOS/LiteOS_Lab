@@ -49,51 +49,46 @@ static char *s_client_pk = NULL; ///< used to storage the client pk
 static char *s_client_pk_pwd = NULL;///< used to strorage the pwd for the pk
 
 ///< when receive any information from hw, then it call this function,THIS IS A URC imformation
-///< ATCOMMAND:    +HWMQTTRECVPUB:1,0,"HELLOTOPC",2,0010
-void __attribute__((weak)) hwoc_mqtt_recvpub(int qos,int dup,const char *topic,uint8_t *payload, int len)
+///< ATCOMMAND:    +HMPUB:"HELLOTOPC",2,0010
+__attribute__((weak)) void hwoc_mqtt_recvpub(const char *topic,int topiclen,uint8_t *payload, int payloadlen)
 {
     LINK_LOG_DEBUG("%s:specified topic message\n\r",__FUNCTION__);
     ///< PLEASE USE THE AT PIPE TO OUTPUT THE INFORMATION
     return;
 }
 
-///< when receive any information from hw, then it call this function,THIS IS A URC imformation
-///< received the default topic message
-///< ATCOMMAND:    +HWMQTTRECEIVED:1,2,0010
-void __attribute__((weak)) hwoc_mqtt_received(int qos,uint8_t *payload, int len)
+///<ATCOMMAND:
+__attribute__((weak)) void  hwoc_mqtt_log(en_oc_mqtt_log_t  logtype)
 {
-    LINK_LOG_DEBUG("%s:default topic message\n\r",__FUNCTION__);
-    ///< PLEASE USE THE AT PIPE TO OUTPUT THE INFORMATION
+
+    if(logtype == en_oc_mqtt_log_connected)
+    {
+        printf("%s:connected %d\n\r",__FUNCTION__,logtype);
+    }
+    else
+    {
+        printf("%s:disconnected %d\n\r",__FUNCTION__,logtype);
+    }
+
     return;
 }
+
 
 
 //use this function to push all the message to the buffer
 static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
 {
     int ret = -1;
-    char *topic;
 
     LINK_LOG_DEBUG("%s:qos:%d dup:%d topiclen:%d msglen:%d\n\r",__FUNCTION__,msg->qos,msg->dup,\
-            msg->topic.len,msg->msg.len);
+                    msg->topic.len,msg->msg.len);
     if((NULL != msg->topic.data) && (msg->topic.len > 0))
     {
-        topic = osal_malloc(msg->topic.len +1);
-        if(NULL != topic)
-        {
-            (void) memcpy(topic, msg->topic.data,msg->topic.len);
-            topic[msg->topic.len] = '\0';
-            hwoc_mqtt_recvpub((int)msg->qos,msg->dup,topic,(uint8_t *)msg->msg.data,msg->msg.len);
-        }
-    }
-    else
-    {
-        hwoc_mqtt_received((int)msg->qos,(uint8_t *)msg->msg.data,msg->msg.len);
+        hwoc_mqtt_recvpub(msg->topic.data,msg->topic.len,(uint8_t *)msg->msg.data,msg->msg.len);
     }
 
     return ret;
 }
-
 
 ///< when the at pipe want to send some message to the hw,then it call this function,
 ///< if the topic is NULL, then it will send to the default topic
@@ -127,14 +122,27 @@ int hwoc_mqtt_publish(int qos,char *topic,uint8_t *payload,int len)
 ///<               +CONNECTED ERR:code
 ///<               code:reference to en_oc_mqtt_err_code_t defines
 
+#define CN_CONNECT_TIMESPACE  2000   ///< unit:ms
+#define CN_TLS_DEFAULT_PORT   "8883"
+#define CN_NOTLS_PORT         "1883"
+
 int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const char *port,
                                const char *deviceid, const char *devicepasswd)
 {
-    int ret;
-    oc_mqtt_config_t config;
+    int ret = en_oc_mqtt_err_parafmt;
+    static unsigned long long time_last = 0;
+    unsigned long long time_now;
 
+    oc_mqtt_config_t config;
     (void)link_main(NULL);
     (void) memset(&config,0,sizeof(config));
+
+    time_now = osal_sys_time();
+    if((time_now - time_last) < CN_CONNECT_TIMESPACE)
+    {
+        return ret;
+    }
+    time_last = time_now;
 
     if(bsmode)
     {
@@ -145,13 +153,17 @@ int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const
         config.boot_mode = en_oc_mqtt_mode_nobs_static_nodeid_hmacsha256_notimecheck_json;
     }
     config.server_addr = (char *)ip;
+    if(NULL == port)
+    {
+        port = CN_TLS_DEFAULT_PORT;
+    }
     config.server_port =(char *) port;
     config.lifetime = lifetime;
     config.msg_deal = app_msg_deal;
     config.msg_deal_arg = NULL;
     config.id = (char *)deviceid;
     config.pwd = (char *)devicepasswd;
-
+    config.log_dealer = hwoc_mqtt_log;
     config.security.type = EN_DTLS_AL_SECURITY_TYPE_CERT;
     if( NULL != s_server_ca)
     {
@@ -172,6 +184,11 @@ int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const
         {
             config.security.u.cert.client_pk_pwd_len = strlen(s_client_pk_pwd);
         }
+    }
+
+    if(0 == strcmp(port,CN_NOTLS_PORT))
+    {
+        config.security.type = EN_DTLS_AL_SECURITY_TYPE_NONE;
     }
 
     ret = oc_mqtt_config(&config);

@@ -117,6 +117,8 @@ typedef struct
     dtls_al_security_t security;
 
     fn_oc_mqtt_profile_rcvdeal   rcvfunc;
+    fn_oc_mqtt_log               logfunc;
+
 }oc_mqtt_profile_connect_t;
 
 /**

@@ -156,8 +156,6 @@ static const char s_client_pk[]= \
 "-----END PRIVATE KEY-----\r\n";
 static const char *s_client_pk_pwd = "123456";
 
-
-
 //use this function to push all the message to the buffer
 static int app_msg_deal(oc_mqtt_profile_msgrcv_t *msg)
 {
@@ -278,10 +276,9 @@ static int  oc_report_normal(void)
 {
     int ret = en_oc_mqtt_err_ok;
     static int value = 1;
-    static int times = 0;
 
-    times = (times + 1)%2;
-    if(times == EN_OC_MQTT_PROFILE_MSG_TYPE_UP_MSGUP)
+    value++;
+    if((value%2) == EN_OC_MQTT_PROFILE_MSG_TYPE_UP_MSGUP)
     {
         oc_mqtt_profile_msgup_t msgup;
         msgup.device_id = CN_EP_DEVICEID;
@@ -292,16 +289,20 @@ static int  oc_report_normal(void)
 
         ret = oc_mqtt_profile_msgup(NULL,&msgup);
     }
-    else if(times == EN_OC_MQTT_PROFILE_MSG_TYPE_UP_PROPERTYREPORT)
+    else if((value%2) == EN_OC_MQTT_PROFILE_MSG_TYPE_UP_PROPERTYREPORT)
     {
-        value  = (value+1)%100;
         s_device_service.service_property->key = "radioValue";
         s_device_service.service_property->value = &value;
         s_device_service.service_property->type = EN_OC_MQTT_PROFILE_VALUE_INT;
         ret = oc_mqtt_profile_propertyreport(NULL,&s_device_service);
     }
+    else
+    {
+        const char *str = "{\"services\":[{\"service_id\":\"DeviceStatus\",\"properties\":{\"radioValue\":2}}]}";
+        ret = oc_mqtt_publish(NULL,(uint8_t *)str, strlen(str),0);
+    }
 
-    (void) printf("REPORT TIMES:%d RET:%d\n\r",times,ret);
+    (void) printf("REPORT TIMES:%d RET:%d\n\r",value,ret);
     return ret;
 }
 
@@ -326,6 +327,22 @@ static int task_rcvmsg_entry( void *args)
     return 0;
 }
 
+void  hwoc_mqtt_log(en_oc_mqtt_log_t  logtype)
+{
+
+    if(logtype == en_oc_mqtt_log_connected)
+    {
+        printf("%s:connected %d\n\r",__FUNCTION__,logtype);
+    }
+    else
+    {
+        printf("%s:disconnected %d\n\r",__FUNCTION__,logtype);
+    }
+
+    return;
+}
+
+
 static int task_reportmsg_entry(void *args)
 {
     int ret;
@@ -340,6 +357,7 @@ static int task_reportmsg_entry(void *args)
     connect_para.sevver_port =   CN_SERVER_PORT;
     connect_para.life_time =     CN_LIFE_TIME;
     connect_para.rcvfunc =       app_msg_deal;
+    connect_para.logfunc  = hwoc_mqtt_log;
 
     connect_para.security.type = CN_SECURITY_TYPE;
 
@@ -374,7 +392,7 @@ static int task_reportmsg_entry(void *args)
     while(1)  //do the loop here
     {
         oc_report_normal();
-        osal_task_sleep(10*1000);
+//        osal_task_sleep(10);
     }
     return 0;
 }
