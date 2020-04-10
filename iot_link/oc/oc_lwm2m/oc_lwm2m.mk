@@ -10,7 +10,9 @@ ifeq ($(CONFIG_OCLWM2M_ENABLE), y)
     ifeq ($(CONFIG_OCLWM2MTINY_ENABLE), y)
     	include $(iot_link_root)/oc/oc_lwm2m/atiny_lwm2m/atiny_lwm2m.mk
     else ifeq ($(CONFIG_BOUDICA150_ENABLE),y)
-    	include $(iot_link_root)/oc/oc_lwm2m/boudica150_oc/boudica150_oc.mk            
+    	include $(iot_link_root)/oc/oc_lwm2m/boudica150_oc/boudica150_oc.mk
+    else ifeq ($(CONFIG_BOUDICA120_ENABLE),y)
+    	include $(iot_link_root)/oc/oc_lwm2m/boudica120_oc/boudica120_oc.mk
     endif
     
     ifeq ($(CONFIG_OCLWM2M_DEMO_DTLS_ENABLE),y)
