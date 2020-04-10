@@ -12,29 +12,25 @@
 # FIT FOR A PARTICULAR PURPOSE.
 # See the Mulan PSL v1 for more details.
 #
-
-
-menu "mbedtls configuration"
-
-    if MBEDTLS_ENABLE
+config PAHO_CONNECT_TIMEOUT
+    int "Paho connect timeout:ms"
+    default 10000
+  
+config PAHO_CMD_TIMEOUT
+    int "Paho subscribe/publish timeout:ms"
+    default 10000
     
-        choice 
-        prompt "Please select one of the workmode for mbedtls"
-        
-        config MBEDTLS_CERT
-            bool "Use the mbed cert mode(for the cert mode)"
-        
-        config MBEDTLS_PSK
-            bool "Use the mbed psk mode(for the dtls)"
-        
-        config MBEDTLS_CERT_PSK
-            bool "Use the mbed psk-cert mode"
-        endchoice 
-        
-        config MBED_DEBUG_ENABLE
-            bool "Enable the mbed debug"
-            default n
+config PAHO_LOOPTIMEOUT
+    int "Paho socket recive timeout:ms"
+    default 10
+    
+config PAHO_SNDBUF_SIZE
+    int "Paho send buf:bytes"
+    default 2048
+    
+config PAHO_RCVBUF_SIZE
+    int "Paho recv buf:bytes"
+    default 2048 
+           
       
-    endif  
-      
-endmenu
+         

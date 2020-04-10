@@ -37,13 +37,30 @@
 #include <sal.h>
 #include <mqtt_al.h>
 #include <paho_mqtt_port.h>
+#include <iot_config.h>
 
-#define CN_MQTT_CONNECT_TIMEOUT_MS  (10 *1000)
-#define cn_mqtt_cmd_timeout_ms (10 * 1000)
-#define cn_mqtt_events_handle_period_ms (1*1000)
-#define cn_mqtt_keepalive_interval_s (100)
-#define cn_mqtt_sndbuf_size (1024 * 2)
-#define cn_mqtt_rcvbuf_size (1024 * 2)
+
+#ifndef CONFIG_PAHO_CONNECT_TIMEOUT
+#define CONFIG_PAHO_CONNECT_TIMEOUT  (10 *1000)
+#endif
+
+#ifndef CONFIG_PAHO_CMD_TIMEOUT
+#define CONFIG_PAHO_CMD_TIMEOUT      (10 * 1000)
+#endif
+
+
+#ifndef CONFIG_PAHO_LOOPTIMEOUT
+#define CONFIG_PAHO_LOOPTIMEOUT     (10)
+#endif
+
+
+#ifndef CONFIG_PAHO_SNDBUF_SIZE
+#define CONFIG_PAHO_SNDBUF_SIZE     (1024 * 2)
+#endif
+
+#ifndef CONFIG_PAHO_RCVBUF_SIZE
+#define CONFIG_PAHO_RCVBUF_SIZE      (1024 * 2)
+#endif
 
 typedef struct
 {
@@ -136,7 +153,7 @@ static int __tls_connect(Network *n,const char *addr, int port)
 
     (void) snprintf(port_buf, PORT_BUF_LEN, "%d", port);
 
-    ret = dtls_al_connect( handle, addr, port_buf, CN_MQTT_CONNECT_TIMEOUT_MS);
+    ret = dtls_al_connect( handle, addr, port_buf, CONFIG_PAHO_CONNECT_TIMEOUT);
     if (ret != EN_DTLS_AL_ERR_OK)
     {
         dtls_al_destroy(handle);
@@ -383,7 +400,7 @@ static  int __loop_entry(void *arg)
     {
         if((NULL != cb) && MQTTIsConnected(&cb->client))
         {
-           (void) MQTTYield(&cb->client,1000);
+           (void) MQTTYield(&cb->client, CONFIG_PAHO_LOOPTIMEOUT);
         }
         ///< for some operation system ,the task could not be awake when release,so do some wait to give up the cpu
 
@@ -448,16 +465,16 @@ static void * __connect(mqtt_al_conpara_t *conparam)
         goto EXIT_NET_CONNECT_ERR;
     }
     //then do the mqtt config
-    cb->rcvbuf = osal_malloc(cn_mqtt_rcvbuf_size) ;
-    cb->sndbuf = osal_malloc(cn_mqtt_sndbuf_size) ;
+    cb->rcvbuf = osal_malloc(CONFIG_PAHO_RCVBUF_SIZE) ;
+    cb->sndbuf = osal_malloc(CONFIG_PAHO_SNDBUF_SIZE) ;
     if((NULL == cb->rcvbuf) || (NULL == cb->sndbuf))
     {
         conparam->conret = cn_mqtt_al_con_code_err_unkown;
         goto EIXT_BUF_MEM_ERR;
     }
     c = &cb->client;
-    if(MQTT_SUCCESS != MQTTClientInit(c, n, cn_mqtt_cmd_timeout_ms,\
-            cb->sndbuf, cn_mqtt_sndbuf_size, cb->rcvbuf, cn_mqtt_rcvbuf_size))
+    if(MQTT_SUCCESS != MQTTClientInit(c, n, CONFIG_PAHO_CMD_TIMEOUT,\
+            cb->sndbuf, CONFIG_PAHO_SNDBUF_SIZE, cb->rcvbuf, CONFIG_PAHO_RCVBUF_SIZE))
     {
         goto EXIT_MQTT_INIT;
     }

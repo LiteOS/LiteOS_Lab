@@ -54,7 +54,7 @@ BUILD_DIR = build
 ######################################
 #common variables for other module or components
 C_SOURCES =
-C_DEFS = -DMBEDTLS_DEBUG_C
+C_DEFS = 
 C_INCLUDES =
 LDFLAGS =
 ASM_SOURCES_S =

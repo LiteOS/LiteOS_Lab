@@ -4,7 +4,6 @@
 #only support the "crt" mode and "psk" mode
 
 
-USE_MBEDTLS_DEBUG_C := n
 USE_MBEDTLS_AES_ROM_TABLES := y
 
 MBEDTLS_INC = \
@@ -17,7 +16,7 @@ MBEDTLS_SRC = \
 
 MBEDTLS_DEF = -D WITH_DTLS
 
-ifeq ($(USE_MBEDTLS_DEBUG_C), y) 
+ifeq ($(CONFIG_MBED_DEBUG_ENABLE), y) 
     MBEDTLS_DEF += -D MBEDTLS_DEBUG_C=1
 endif
 

@@ -36,6 +36,11 @@ choice
         bool "we will create a new mqtt ourself"    
            
     endchoice
+    
+    if PAHO_MQTT
+        rsource "./paho_mqtt/kconfig_paho"
+    endif
+    
                
 endif   
     

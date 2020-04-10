@@ -18,34 +18,23 @@
 #
 # OS configuration
 #
-CONFIG_LITEOS_ENABLE=y
+# CONFIG_LITEOS_ENABLE is not set
 # CONFIG_NOVAOS_ENABLE is not set
-# CONFIG_LINUXOS_ENABLE is not set
+CONFIG_LINUXOS_ENABLE=y
 # CONFIG_MACOS_ENABLE is not set
 # CONFIG_NEW_OS is not set
 # end of OS configuration
 
-#
-# At configuration
-#
-CONFIG_AT_ENABLE=y
-CONFIG_AT_DEVNAME="atdev"
-CONFIG_AT_OOBTABLEN=6
-CONFIG_AT_RECVMAXLEN=1024
-CONFIG_AT_TASKPRIOR=10
-# end of At configuration
-
 CONFIG_CJSON_ENABLE=y
-CONFIG_DRIVER_ENABLE=y
 
 #
 # LinkLog configuration
 #
-CONFIG_LINKLOG_ENABLE=y
+# CONFIG_LINKLOG_ENABLE is not set
 # end of LinkLog configuration
 
 CONFIG_LINKQUEUE_ENABLE=y
-CONFIG_LINKDEMO_ENABLE=y
+# CONFIG_LINKDEMO_ENABLE is not set
 
 #
 # Stimer configuration
@@ -64,11 +53,11 @@ CONFIG_STIMER_TASKPRIOR=10
 # Tcpip configuration
 #
 CONFIG_TCIP_AL_ENABLE=y
-CONFIG_LWIP_ENABLE=y
+# CONFIG_LWIP_ENABLE is not set
 # CONFIG_RTK8710_ENABLE is not set
 # CONFIG_ESP8266_ENABLE is not set
 # CONFIG_MACOSSOCKET_ENABLE is not set
-# CONFIG_LINUXSOCKET_ENABLE is not set
+CONFIG_LINUXSOCKET_ENABLE=y
 # CONFIG_NEW_SOCKET is not set
 # end of Tcpip configuration
 
@@ -108,11 +97,16 @@ CONFIG_MQTT_AL_ENABLE=y
 CONFIG_PAHO_MQTT=y
 # CONFIG_LITE_MQTT is not set
 # CONFIG_NEW_MQTT is not set
+CONFIG_PAHO_CONNECT_TIMEOUT=10000
+CONFIG_PAHO_CMD_TIMEOUT=10000
+CONFIG_PAHO_LOOPTIMEOUT=10
+CONFIG_PAHO_SNDBUF_SIZE=8092
+CONFIG_PAHO_RCVBUF_SIZE=8092
 # end of Mqtt  configuration
 # end of Network configuration
 
 #
-# OC SERVICE configuration
+# OceanConnect SERVICE configuration
 #
 CONFIG_OCSERVICES_ENABLE=y
 
@@ -145,13 +139,7 @@ CONFIG_OC_MQTTV5_PROFILE=y
 # CONFIG_OC_MQTTV5_DEMO is not set
 # end of OceanConnect MqttV5 Api
 # end of OceanConnect Mqtt configuration
-# end of OC SERVICE configuration
-
-#
-# Shell configuration
-#
-# CONFIG_SHELL_ENABLE is not set
-# end of Shell configuration
+# end of OceanConnect SERVICE configuration
 
 CONFIG_IOT_LINK_CONFIGFILE="iot_config.h"
 # end of IoT link SDK configuration
