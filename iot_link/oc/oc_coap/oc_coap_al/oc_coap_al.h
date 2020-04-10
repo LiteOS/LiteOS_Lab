@@ -71,6 +71,21 @@ typedef struct
     void                    *usr_data;        ///< used for the user
 }oc_config_param_t;
 
+typedef enum
+{
+    en_oc_coap_err_ok          = 0,      ///< this means the status ok
+    en_oc_coap_err_parafmt,              ///< this means the parameter err format
+    en_oc_coap_err_network,              ///< this means the network wrong status
+    en_oc_coap_err_conserver,            ///< this means the server refused the service for some reason(likely the id and pwd)
+    en_oc_coap_err_noconfigured,         ///< this means we have not configure it yet,so could not connect
+    en_oc_coap_err_configured,           ///< this means we has configured it, so could not reconfigure it
+    en_oc_coap_err_noconected,           ///< this means the connection has not been built, so you could not send data
+    en_oc_coap_err_gethubaddrtimeout,    ///< this means get the hub address timeout
+    en_oc_coap_err_sysmem,               ///< this means the system memory is not enough
+    en_oc_coap_err_system,               ///< this means that the system porting may have some problem,maybe not install yet
+    en_oc_coap_err_last,
+}en_oc_coap_err_code_t;
+
 ///////////////////////////MQTT AGENT INTERFACE////////////////////////////////
 typedef void* (*fn_oc_coap_config)(oc_config_param_t *param);                        ///< return the handle here
 typedef int (*fn_oc_coap_deconfig)(void *handle);                                    ///< use the handle as the params
