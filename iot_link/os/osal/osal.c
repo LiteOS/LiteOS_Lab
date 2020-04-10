@@ -222,53 +222,6 @@ bool_t  osal_semp_del(osal_semp_t semp)
 
 }
 
-bool_t  osal_queue_create(osal_queue_t *queue,int len,int msgsize)
-{
-    bool_t ret = false;
-
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->queue_create))
-    {
-        ret = s_os_cb->ops->queue_create( queue, len, msgsize);
-    }
-
-    return ret;
-}
-
-bool_t  osal_queue_send(osal_queue_t queue, void *pbuf, unsigned int bufsize, unsigned int timeout)
-{
-    bool_t ret = false;
-
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->queue_send))
-    {
-        ret = s_os_cb->ops->queue_send( queue, pbuf, bufsize, timeout);
-    }
-
-    return ret;
-}
-
-bool_t  osal_queue_recv(osal_queue_t queue, void *pbuf, unsigned int bufsize, unsigned int timeout)
-{
-    bool_t ret = false;
-
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->queue_recv))
-    {
-        ret = s_os_cb->ops->queue_recv( queue, pbuf, bufsize, timeout);
-    }
-
-    return ret;
-}
-
-bool_t  osal_queue_del(osal_queue_t queue)
-{
-    bool_t ret = false;
-
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->queue_del))
-    {
-        ret = s_os_cb->ops->queue_del( queue);
-    }
-
-    return ret;
-}
 
 
 void *osal_malloc(size_t size)
