@@ -42,6 +42,9 @@
 #include <stddef.h>
 #include <stdint.h>
 
+
+
+
 ////////////////DEFINES FOR THE STIMER HEADER///////////////////////////////////
 ///< defines for the soft timer operation method,you could use it with the stimer_ioctl function
 typedef enum
@@ -63,6 +66,7 @@ typedef void* stimer_t;
 ///< define the soft timer interrupt service function
 typedef void  (*fn_stimer_handler)(void *arg);
 
+#if CONFIG_STIMER_ENABLE
 
 /**
  * @brief: this function used for initialize the timer component, should be called after the os
@@ -110,5 +114,13 @@ int32_t       stimer_delete(stimer_t timer);
 int32_t       stimer_ioctl(stimer_t timer,en_stimer_opt_t opt, void *arg);
 
 
+#else
 
+#define  stimer_init()                                  -1
+
+#define  stimer_create(name, handler, arg, cycle, flag)  NULL
+#define  stimer_delete(timer)                           -1
+#define  stimer_ioctl(timer,opt,arg)                    -1
+
+#endif
 #endif /* LITEOS_LAB_IOT_LINK_STIMER_STIMER_H_ */

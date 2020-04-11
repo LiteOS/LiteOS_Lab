@@ -42,7 +42,7 @@ extern "C"{
 #endif
 #endif /* __cplusplus */
 
-int coap_imp_init(void);
+int coap_install_libcoap(void);
 
 #ifdef __cplusplus
 #if __cplusplus

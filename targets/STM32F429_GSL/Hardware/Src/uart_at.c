@@ -48,27 +48,15 @@ UART_HandleTypeDef uart_at;
 static USART_TypeDef*     s_pUSART = USART3;
 static uint32_t           s_uwIRQn = USART3_IRQn;
 
-#ifndef CONFIG_UARTAT_RCVMAX
-#define CONFIG_UARTAT_RCVMAX     1024  //cache a frame
-#endif
-
-#ifndef CONFIG_UARTAT_BAUDRATE
-#define CONFIG_UARTAT_BAUDRATE    115200
-#endif
-
-
-#ifndef CONFIG_UARTAT_DEVNAME
-#define CONFIG_UARTAT_DEVNAME    "atdev"
-#endif
-
-#define CN_RCVMEM_LEN  CONFIG_UARTAT_RCVMAX
+#define CN_RCVBUF_LEN  1024  //cache a frame
+#define CN_RCVMEM_LEN  1024  //use to cache more frames
 
 struct atio_cb
 {
     unsigned short        w_next;    //the next position to be write
     osal_semp_t           rcvsync;   //if a frame has been written to the ring, then active it
     tag_ring_buffer_t     rcvring;
-    unsigned char         rcvbuf[CONFIG_UARTAT_RCVMAX];
+    unsigned char         rcvbuf[CN_RCVBUF_LEN];
     unsigned char         rcvringmem[CN_RCVMEM_LEN];
     //for the debug here
     unsigned int          rframeover; //how many times the frame has been over the max length
@@ -97,7 +85,7 @@ static void atio_irq(void)
     {
        value = (uint8_t)(uart_at.Instance->DR & 0x00FF);
        g_atio_cb.rcvlen++;
-       if(g_atio_cb.w_next < CONFIG_UARTAT_RCVMAX)
+       if(g_atio_cb.w_next < CN_RCVBUF_LEN)
        {
            g_atio_cb.rcvbuf[g_atio_cb.w_next] = value;
            g_atio_cb.w_next++;
@@ -133,7 +121,7 @@ function     :use this function to initialize the uart
 parameters   :
 instruction  :
 *******************************************************************************/
-bool_t uart_at_init(void *pri)
+bool_t uart_at_init(int baud)
 {
     //initialize the at controller
     (void) memset(&g_atio_cb,0,sizeof(g_atio_cb));
@@ -145,7 +133,7 @@ bool_t uart_at_init(void *pri)
     ring_buffer_init(&g_atio_cb.rcvring,g_atio_cb.rcvringmem,CN_RCVMEM_LEN,0,0);
 
     uart_at.Instance = s_pUSART;
-    uart_at.Init.BaudRate = CONFIG_UARTAT_BAUDRATE;
+    uart_at.Init.BaudRate = baud;
     uart_at.Init.WordLength = UART_WORDLENGTH_8B;
     uart_at.Init.StopBits = UART_STOPBITS_1;
     uart_at.Init.Parity = UART_PARITY_NONE;
@@ -166,7 +154,7 @@ EXIT_SEMP:
     return false;
 }
 
-void uart_at_deinit(void *pri)
+void uartat_deinit(void)
 {
     __HAL_UART_DISABLE(&uart_at);
     __HAL_UART_DISABLE_IT(&uart_at, UART_IT_IDLE);
@@ -251,12 +239,10 @@ static ssize_t  __at_write (void *pri,size_t offset, const void *buf,size_t len,
 
 static const los_driv_op_t s_at_op = {
 
-        .init = uart_at_init,
-        .deinit = uart_at_deinit,
-        .read = __at_read,
-        .write = __at_write,
+    .read = __at_read,
+    .write = __at_write,
 };
 
-OSDRIV_EXPORT(uart_at_driv,CONFIG_UARTAT_DEVNAME,(los_driv_op_t *)&s_at_op,NULL,O_RDWR);
+OSDRIV_EXPORT(uart_at_driv,CONFIG_AT_DEVICENAME,(los_driv_op_t *)&s_at_op,NULL,O_RDWR);
 
 

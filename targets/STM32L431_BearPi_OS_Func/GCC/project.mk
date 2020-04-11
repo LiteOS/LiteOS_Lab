@@ -62,13 +62,14 @@ HARDWARE_INC = \
         -I ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi_OS_Func/Hardware/LCD}
         C_INCLUDES += $(HARDWARE_INC)
 
-USER_INC = -I $(TOP_DIR)/targets/STM32L431_BearPi_OS_Func \
-           -I $(TOP_DIR)/targets/STM32L431_BearPi_OS_Func/Inc
+USER_INC = \
+        -I $(TOP_DIR)/targets/STM32L431_BearPi_OS_Func/Inc
         C_INCLUDES += $(USER_INC)
         
 # C defines
 C_DEFS +=  -D USE_HAL_DRIVER -D STM32L431xx -D NDEBUG
 
+include $(SDK_DIR)/iot_link/iot.mk
 include $(TOP_DIR)/targets/STM32L431_BearPi_OS_Func/Demos/user_demo.mk
 
                  

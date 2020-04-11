@@ -2,12 +2,21 @@
 # this is used for compile the dtls
 ################################################################################
 
-ifeq ($(CONFIG_DTLS_AL_ENABLE), y)
+ifeq ($(CONFIG_DTLS_ENABLE), y)
 
-    C_SOURCES += ${wildcard $(iot_link_root)/network/dtls/dtls_al/*.c}
-    C_INCLUDES += -I $(iot_link_root)/network/dtls/dtls_al
+    DTLS_AL_SOURCE  = ${wildcard $(iot_link_root)/network/dtls/dtls_al/*.c}
+    C_SOURCES += $(DTLS_AL_SOURCE)
+
+    DTLS_AL_INC = -I $(iot_link_root)/network/dtls/dtls_al
+    C_INCLUDES += $(DTLS_AL_INC)
     
-    ifeq ($(CONFIG_MBEDTLS_ENABLE), y)
+    C_DEFS += -D CONFIG_DTLS_ENABLE=1
+
+    ifeq ($(CONFIG_DTLS_TYPE), "mbedtls_psk")
+      include $(iot_link_root)/network/dtls/mbedtls/mbedtls.mk
+    else ifeq ($(CONFIG_DTLS_TYPE), "mbedtls_cert")
+      include $(iot_link_root)/network/dtls/mbedtls/mbedtls.mk
+    else ifeq ($(CONFIG_DTLS_TYPE), "mbedtls_psk_cert")
       include $(iot_link_root)/network/dtls/mbedtls/mbedtls.mk
     endif
 

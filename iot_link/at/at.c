@@ -41,10 +41,6 @@
 
 //these defines could be reconfigured at the iot_link_config.h
 
-#ifndef CONFIG_AT_DEVNAME
-#define CONFIG_AT_DEVNAME              "atdev"
-#endif
-
 #ifndef CONFIG_AT_OOBTABLEN
 #define CONFIG_AT_OOBTABLEN              6              //only allow 6 oob command monitor here,you could configure it more
 #endif
@@ -52,14 +48,6 @@
 #ifndef CONFIG_AT_RECVMAXLEN
 #define CONFIG_AT_RECVMAXLEN             1024           //PROSING THAT COULD GET THE MOST REPSLENGTH
 #endif
-
-#ifndef CONFIG_AT_TASKPRIOR
-#define CONFIG_AT_TASKPRIOR              10
-#endif
-
-
-
-
 
 //at control block here
 typedef struct
@@ -436,12 +424,12 @@ instruction  :if you want to use the at frame work, please call this function
               please supply the function read and write.the read function must be
               a block function controlled by timeout
 *******************************************************************************/
-int at_init()
+int at_init(const char *devname)
 {
     int ret = -1;
 
     (void) memset(&g_at_cb,0,sizeof(g_at_cb));
-    g_at_cb.devname = CONFIG_AT_DEVNAME;
+    g_at_cb.devname = devname;
 
 
     if(false == osal_semp_create(&g_at_cb.cmd.cmdsync,1,1))

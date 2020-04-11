@@ -1022,7 +1022,7 @@ static int __send(void *handle, lwm2m_al_send_param_t *send_param)
     return (int) LWM2M_OK;
 }
 
-int lwm2m_imp_init(void)
+int lwm2m_install(void)
 {
     lwm2m_al_op_t lwm2m_op =
     {

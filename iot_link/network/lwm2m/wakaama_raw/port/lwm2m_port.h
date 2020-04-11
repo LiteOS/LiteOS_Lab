@@ -43,7 +43,7 @@
  * @brief   : this function for install wakaama to the lwm2m_al, must be call only once
  *
  */
-int lwm2m_imp_init(void);
+int lwm2m_install(void);
 
 #endif /* LWM2M_PORT_H_ */
 

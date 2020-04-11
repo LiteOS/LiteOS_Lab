@@ -756,27 +756,13 @@ const oc_lwm2m_opt_t  g_boudica150_oc_opt = \
 };
 
 
-#ifndef CONFIG_BOUDICA150_PLMN
-#define CONFIG_BOUDICA150_PLMN  "460001"
-#endif
-
-
-#ifndef CONFIG_BOUDICA150_APN
-#define CONFIG_BOUDICA150_APN   "cmnet"
-#endif
-
-
-#ifndef CONFIG_BOUDICA150_BANDS
-#define CONFIG_BOUDICA150_BANDS  "5,8,20"
-#endif
-
-int oc_lwm2m_imp_init(void)
+int boudica150_init(const char *plmn, const char *apn, const char *bands)
 {
     int ret = -1;
 
-    s_boudica150_oc_cb.plmn = NULL;
-    s_boudica150_oc_cb.apn = NULL;
-    s_boudica150_oc_cb.bands = CONFIG_BOUDICA150_BANDS;
+    s_boudica150_oc_cb.plmn = plmn;
+    s_boudica150_oc_cb.apn = apn;
+    s_boudica150_oc_cb.bands = bands;
 
     osal_mutex_create(&s_report_mutex);
 

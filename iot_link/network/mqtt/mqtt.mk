@@ -1,14 +1,22 @@
 ################################################################################
 # this is used for compile the mqtt lib
 ################################################################################
-ifeq ($(CONFIG_MQTT_AL_ENABLE), y)
+ifeq ($(CONFIG_MQTT_ENABLE), y)
+    mqtt_src  = ${wildcard $(iot_link_root)/network/mqtt/mqtt_al/*.c}
+    C_SOURCES += $(mqtt_src)
 
-    C_SOURCES  += ${wildcard $(iot_link_root)/network/mqtt/mqtt_al/*.c}
-    C_INCLUDES += -I $(iot_link_root)/network/mqtt/mqtt_al    
+    mqtt_inc = -I $(iot_link_root)/network/mqtt/mqtt_al
+    C_INCLUDES += $(mqtt_inc)
     
-    ifeq ($(CONFIG_PAHO_MQTT), y)
+    C_DEFS += -D CONFIG_MQTT_ENABLE=1
+    
+    ifeq ($(CONFIG_MQTT_TYPE), "paho_mqtt")
     	include $(iot_link_root)/network/mqtt/paho_mqtt/paho_mqtt.mk
-    endif	
+    else ifeq ($(CONFIG_MQTT_TYPE), "lite_mqtt")
+    	include $(iot_link_root)/network/mqtt/lite_mqtt/lite_mqtt.mk
+    else
+    	#you could add your mqtt here   	
+    endif
        
 endif
 

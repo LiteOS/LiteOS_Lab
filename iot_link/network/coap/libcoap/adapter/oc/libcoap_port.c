@@ -825,7 +825,7 @@ static int __recv(coap_al_rcvpara_t *rcvparam)
     return 0;
 }
 
-int coap_imp_init()
+int coap_install_libcoap()
 {
     int ret = -1;
 

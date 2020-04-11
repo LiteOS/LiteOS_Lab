@@ -962,7 +962,7 @@ static const oc_mqtt_t s_oc_mqtt_lite = \
 };
 
 ///< use this function to install the oc mqtt to the oc mqtt abstract layer
-int oc_mqtt_imp_init()
+int oc_mqtt_tiny_install()
 {
     int ret = -1;
 
@@ -1013,7 +1013,7 @@ EXIT_MALLOC:
     return ret;
 }
 
-void oc_mqtt_imp_deinit(void)
+void oc_mqtt_tiny_uninstall(void)
 {
     oc_mqtt_tiny_cb_t *cb = s_oc_mqtt_tiny_cb;
     if(!cb)

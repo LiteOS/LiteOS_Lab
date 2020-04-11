@@ -34,7 +34,8 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <link_log.h>
+
+
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -85,25 +86,14 @@ int mqtt_al_uninstall()
 
 //////////////////////////CREATE THE API FOR THE MQTT APPLICATopsN///////////////
 
-__attribute__((weak))  int mqtt_imp_init(void)
+int mqtt_al_init()
 {
-    LINK_LOG_DEBUG("%s:###please implement mqtt by yourself####\n\r",__FUNCTION__);
-    return -1;
-}
+    int ret = 0;
 
-int mqtt_al_init(void)
-{
-
-    int ret;
-
-    ret = mqtt_imp_init();
-
-    LINK_LOG_DEBUG("IOT_LINK:DO MQTT LOAD-IMPLEMENT RET:%d\n\r",ret);
-
+    //maybe need special code here
 
     return ret;
 }
-
 
 
 int  mqtt_al_deinit()

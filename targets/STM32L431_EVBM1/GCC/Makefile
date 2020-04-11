@@ -62,15 +62,14 @@ CFLAGS =
 
 
 ##########################LOAD THE SOURCES INCLUDES AND DEFINES#################
-include ../.config
-include $(TOP_DIR)/iot_link/iot.mk
+include $(PROJECTBASE)/config.mk
 include $(PROJECTBASE)/project.mk
 ################################################################################
 # paths
 ################################################################################
 
 OBJ_DIRS :=
-BUILD_DIR = appbuild
+TARGET_DIR:= $(PROJECTBASE)/build
 
 ################################################################################
 # LDFLAGS
@@ -121,7 +120,7 @@ LIBDIR  += -L$(PROJECTBASE)/../Lib
 LDFLAGS += $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(TARGET_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
 
-TARGET_DIR = $(BUILD_DIR)
+
 ############HERE WE GET THE C_OBJECT S_OBJECT AND THE PATH #####################
 
 C_OBJ := $(C_SOURCES:$(TOP_DIR)/%.c=$(TARGET_DIR)/%.o)

@@ -64,9 +64,11 @@ PERIFLIB_SOURCES =
 
 
 ##########################LOAD THE SOURCES INCLUDES AND DEFINES#################
-include ../.config
-include $(TOP_DIR)/iot_link/iot.mk
-include $(PROJECTBASE)/project.mk
+include $(PROJECTBASE)/config.mk
+
+MAIN_SRC = ${wildcard $(TOP_DIR)/targets/LINUX/Src/*.c}
+C_SOURCES += $(MAIN_SRC)
+
 ######################################
 # firmware library
 ######################################
@@ -100,40 +102,42 @@ CFLAGS += -Wno-missing-braces
 LIBS = -lc -lm -lpthread -lrt
 LDFLAGS = $(LIBS)
 
-TARGET_DIR = $(BUILD_DIR)
-############HERE WE GET THE C_OBJECT S_OBJECT AND THE PATH #####################
-
-C_OBJ := $(C_SOURCES:$(TOP_DIR)/%.c=$(TARGET_DIR)/%.o)
-OBJ_DIRS +=  $(dir $(C_OBJ))
-S_OBJ := $(ASM_SOURCES_S:$(TOP_DIR)/%.S=$(TARGET_DIR)/%.o)
-OBJ_DIRS +=  $(dir $(S_OBJ))
-OBJ_DIRS := $(sort $(OBJ_DIRS))
-
-##################DO THE BUILDING NOW###########################################
 # default action: build all
-all:$(TARGET_DIR)/$(TARGET).elf
+all: $(BUILD_DIR)/$(TARGET).elf
 
-$(TARGET_DIR)/$(TARGET).elf:$(OBJ_DIRS) $(C_OBJ) $(S_OBJ)
-	$(CC) $(C_OBJ) $(S_OBJ) $(LDFLAGS) -o $@
-	$(SZ) $@
-		
-#create the necessary path for the object
-$(OBJ_DIRS):
-	-mkdir -p $@
+#######################################
+# build the application
+#######################################
+# list of objects
+OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(C_SOURCES:.c=.o)))
+vpath %.c $(sort $(dir $(C_SOURCES)))
+# list of ASM program objects
+OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES_S:.S=.o)))
+vpath %.S $(sort $(dir $(ASM_SOURCES_S)))
 
-#compile the c file to the object, as you know we has map the .c to the .o	
-$(C_OBJ):$(TARGET_DIR)/%.o:$(TOP_DIR)/%.c
-	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(@:%.o=%.lst) $<  -o $@
+$(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
+	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
 
-#compile the s fike to the object, as you know we has map the .S to the .o
-$(S_OBJ):$(TARGET_DIR)/%.o:$(TOP_DIR)/%.S
+$(BUILD_DIR)/%.o: %.S Makefile | $(BUILD_DIR)
 	$(AS) -c $(CFLAGS) $< -o $@
-		
- 
-################################################################################
+
+$(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
+	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+	$(SZ) $@
+	
+$(BUILD_DIR):
+	mkdir $@
+
+#######################################
 # clean up
-################################################################################
+#######################################
 clean:
-	-rm -fR .dep $(TARGET_DIR)
+	-rm -fR .dep $(BUILD_DIR)
+
+#######################################
+# dependencies
+#######################################
+#-include $(shell mkdir .dep 2>/dev/null) $(wildcard .dep/*)
+-include $(wildcard $(BUILD_DIR)/*.d)
 
 # *** EOF ***

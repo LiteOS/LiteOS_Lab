@@ -33,6 +33,8 @@
  *---------------------------------------------------------------------------*/
 #include "hmac.h"
 
+#ifdef WITH_DTLS
+
 #include <string.h>
 #include <link_log.h>
 #include "mbedtls/md.h"
@@ -110,5 +112,7 @@ int hmac_generate_passwd(char *content, int contentlen,char *key,int keylen, uns
 
     return ret;
 }
+
+#endif
 
 

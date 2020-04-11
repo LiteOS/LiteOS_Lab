@@ -47,7 +47,7 @@ int ec2x_get_rssi(int *rssi);
 int ec2x_get_operator(char *buf);
 
 ///< register the ec2x oc mqtt function to the system
-int oc_mqtt_imp_init(void);
+int ec2x_oc_init(void);
 
 
 ///< iccid list

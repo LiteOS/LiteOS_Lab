@@ -31,8 +31,9 @@ USER_SRC =  \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/system_stm32f4xx.c \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/usart.c \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/uart_debug.c \
-		$(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/flash_adaptor.c
-		
+        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/eth.c \
+        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/net_driver.c \
+	$(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/flash_adaptor.c
 ifeq ($(CONFIG_OTA_ENABLE),y)
 USER_SRC += $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/ota_adaptor.c \
 		    $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/ota_port.c
@@ -40,21 +41,14 @@ endif
 ifeq ($(CONFIG_LOADER_ENABLE),y)
 USER_SRC += $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/loader_main2.c
 endif
-        
-        
-C_SOURCES += $(USER_SRC)  
+        C_SOURCES += $(USER_SRC)  
 
-ifeq ($(CONFIG_UART_AT),y)
-    C_SOURCES += $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/uart_at/uart_at.c
-endif    
+ifeq ($(CONFIG_AT_ENABLE),y)
+    UART_AT_SRC = $(TOP_DIR)/targets/STM32F429IGTx_FIRE/uart_at/uart_at.c
+    C_SOURCES += $(UART_AT_SRC)
+endif
 
-ifeq ($(CONFIG_ETHERNETMAC),y)
-    C_SOURCES += $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/ethernet/eth.c \
-                 $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/ethernet/net_driver.c                
-endif 
-
-
-OS_CONFIG_INC = \
+ OS_CONFIG_INC = \
         -I $(TOP_DIR)/targets/STM32F429IGTx_FIRE/OS_CONFIG
         C_INCLUDES += $(OS_CONFIG_INC)       
 # C includes
@@ -72,8 +66,6 @@ USER_INC = \
         
 # C defines
 C_DEFS +=  -D USE_HAL_DRIVER -D STM32F429xx -D NDEBUG
-C_INCLUDES += -I $(TOP_DIR)/targets/STM32F429IGTx_FIRE
-
 
 
                  

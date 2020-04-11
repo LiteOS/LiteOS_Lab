@@ -47,16 +47,6 @@
 #include <osal.h>
 #include <stimer.h>
 
-#ifndef  CONFIG_STIMER_STACKSIZE
-#define  CONFIG_STIMER_STACKSIZE    0x800
-#endif
-
-#ifndef  CONFIG_STIMER_TASKPRIOR
-#define  CONFIG_STIMER_TASKPRIOR    10
-#endif
-
-
-
 ///< we use the normal list to manage the timer, next time you could use the RB
 ///< tree or something else to do some optimization,thanks for your supporting
 
@@ -265,7 +255,7 @@ int32_t stimer_init()
         goto EXIT_MUTEXERR;
     }
 
-    s_stimer_cb.task = osal_task_create("soft timer",__timer_entry,NULL,CONFIG_STIMER_STACKSIZE,NULL,CONFIG_STIMER_TASKPRIOR);
+    s_stimer_cb.task = osal_task_create("soft timer",__timer_entry,NULL,0x800,NULL,10);
 
     if(NULL == s_stimer_cb.task)
     {

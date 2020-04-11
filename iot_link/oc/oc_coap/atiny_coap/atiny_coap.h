@@ -76,6 +76,6 @@
 
 int atiny_get_errcode(void);
 
-int oc_coap_imp_init();
+int oc_coap_install_agent();
 
 #endif

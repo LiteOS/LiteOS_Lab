@@ -56,6 +56,7 @@ typedef struct
 }paho_mqtt_cb_t;
 
 ///< waring: the paho mqtt has the opposite return code with normal socket read and write
+#ifdef CONFIG_DTLS_ENABLE
 
 static int __tls_read(void *ssl, unsigned char *buffer, int len, int timeout)
 {
@@ -164,6 +165,8 @@ static void __tls_disconnect(void *ctx)
     return;
 }
 
+
+#endif
 
 ///< receve function: return code:0 means timeout -1:failed  > receive length
 static int __socket_read(void *ctx, unsigned char *buf, int len, int timeout)
@@ -307,10 +310,12 @@ static int __io_read(Network *n, unsigned char *buffer, int len, int timeout_ms)
     {
         ret = __socket_read(n->ctx, buffer, len, timeout_ms);
     }
+#if CONFIG_DTLS_ENABLE
     else
     {
         ret = __tls_read(n->ctx, buffer, len, timeout_ms);
     }
+#endif
 
     return ret;
 }
@@ -328,10 +333,12 @@ static int __io_write(Network *n, unsigned char *buffer, int len, int timeout_ms
     {
         ret = __socket_write(n->ctx, buffer, len, timeout_ms);
     }
+#if CONFIG_DTLS_ENABLE
     else
     {
         ret = __tls_write(n->ctx, buffer, len,timeout_ms);
     }
+#endif
     return ret;
 }
 
@@ -348,10 +355,12 @@ static int __io_connect(Network *n, const char *addr, int port)
     {
         ret = __socket_connect(n, addr, port);
     }
+#if CONFIG_DTLS_ENABLE
     else
     {
         ret = __tls_connect(n, (const char *)addr, port);
     }
+#endif
     return ret;
 }
 
@@ -364,10 +373,12 @@ static void __io_disconnect(Network *n)
     {
         __socket_disconnect(n->ctx);
     }
+#if CONFIG_DTLS_ENABLE
     else
     {
         __tls_disconnect(n->ctx);
     }
+#endif
 
     n->ctx = NULL;
 
@@ -714,7 +725,7 @@ static en_mqtt_al_connect_state __check_status(void *handle)
 }
 
 
-int mqtt_imp_init()
+int mqtt_install_pahomqtt()
 {
     int ret = -1;
 

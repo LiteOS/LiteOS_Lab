@@ -34,7 +34,8 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <link_log.h>
+
+
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -85,7 +86,7 @@ int coap_al_uninstall()
 
 //////////////////////////CREATE THE API FOR THE COAP APPLICATopsN///////////////
 
-int coap_al_imp_init(coap_al_initpara_t *initparam)
+int coap_al_init(coap_al_initpara_t *initparam)
 {
     int ret = 0;
 
@@ -98,7 +99,7 @@ int coap_al_imp_init(coap_al_initpara_t *initparam)
 }
 
 
-int  coap_al_imp_deinit(void *handle)
+int  coap_al_deinit(void *handle)
 {
 
     int ret = 0;
@@ -166,33 +167,6 @@ int coap_al_recv(coap_al_rcvpara_t *rcvparam)
     return ret;
 
 }
-
-
-
-
-__attribute__((weak))  int coap_imp_init(void)
-{
-    LINK_LOG_DEBUG("%s:###please implement coap by yourself####\n\r",__FUNCTION__);
-    return -1;
-}
-
-int coap_al_init(void)
-{
-
-    int ret;
-
-    ret = coap_imp_init();
-
-    LINK_LOG_DEBUG("IOT_LINK:DO COAP LOAD-IMPLEMENT RET:%d\n\r",ret);
-
-
-    return ret;
-}
-
-
-
-
-
 
 #ifdef __cplusplus
 #if __cplusplus

@@ -1392,7 +1392,7 @@ static const oc_mqtt_t s_oc_mqtt_tiny = \
 };
 
 ///< use this function to install the oc mqtt to the oc mqtt abstract layer
-int oc_mqtt_imp_init()
+int oc_mqtt_tiny_install()
 {
     int ret = -1;
 

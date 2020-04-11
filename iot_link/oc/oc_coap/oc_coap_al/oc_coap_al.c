@@ -39,10 +39,10 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <string.h>
-#include <stdlib.h>
 
-#include <link_log.h>
+#include <string.h>
+
+#include <stdlib.h>
 #include <osal.h>
 #include <oc_coap_al.h>
 
@@ -154,27 +154,12 @@ int oc_coap_deconfig(void *context)
     return ret;
 }
 
-__attribute__((weak)) int oc_coap_imp_init(void)
-{
-    LINK_LOG_DEBUG("%s:PLEASE IMPLEMENT THE OC COAP YOURSELF\r\n",__FUNCTION__);
-    return -1;
-}
-
-__attribute__((weak)) int oc_coap_demo_main(void)
-{
-    LINK_LOG_DEBUG("%s:PLEASE IMPLEMENT THE OC COAP DEMO YOURSELF\r\n",__FUNCTION__);
-    return -1;
-}
-
 ///////////////////////OC LWM2M AGENT INITIALIZE////////////////////////////////
 int oc_coap_init()
 {
-    int ret;
+    int ret = -1;
 
-    ret = oc_coap_imp_init();
-    LINK_LOG_DEBUG("IOT_LINK:DO OCCOAP LOAD-IMPLEMENT RET:%d\n\r",ret);
-
-    (void) oc_coap_demo_main();
+    ret = 0;   ///< uptils now, we should do nothing here
 
     return ret;
 }

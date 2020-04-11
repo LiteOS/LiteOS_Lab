@@ -49,7 +49,7 @@ typedef int (*fn_at_oob)(void *args,void *data,size_t datalen);
  *
  * @return:0 success while -1 failed
  * */
-int at_init();
+int at_init(const char *devname);
 
 /**
  * @brief:use this function to register a function that monitor the URC message

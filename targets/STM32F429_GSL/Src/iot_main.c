@@ -52,7 +52,7 @@
 #define DEFAULT_LIFETIME            60                 ///< the platform need more
 #define DEFAULT_SERVER_IPV4         "119.3.248.253"     ///<  server ip address
 #define DEFAULT_SERVER_PORT         "8883"             ///<  server mqtt service port
-#define CN_MQTT_EP_NOTEID           "mqtt_sdk85"
+#define CN_MQTT_EP_NOTEID           "mqtt_sdk82"
 #define CN_MQTT_EP_PASSWD           "f62fcf47d62c4ed18913"
 
 //if your command is very fast,please use a queue here--TODO

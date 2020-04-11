@@ -38,7 +38,6 @@
  */
 
 #include <stdio.h>
-#include <iot_link_config.h>
 #include <link_version.h>
 //RTOS KERNEL
 #include <osal.h>
@@ -49,8 +48,8 @@
 
 
 #define  CN_LINK_VERSION_MAJOR      2
-#define  CN_LINK_VERSION_MINOR      1
-#define  CN_LINK_VERSION_FEATURE    0
+#define  CN_LINK_VERSION_MINOR      0
+#define  CN_LINK_VERSION_FEATURE    2
 
 
 static char s_link_mainversion[64];
@@ -111,11 +110,25 @@ int link_main(void *args)
 ///< install the at framework
 #ifdef CONFIG_AT_ENABLE
     #include <at.h>
-    (void)at_init();
+    #include <iot_link_config.h>
+    extern bool_t uart_at_init(int baud);
+
+
+    #ifndef CONFIG_AT_BAUDRATE
+    #define CONFIG_AT_BAUDRATE  9600
+    #endif
+
+    #ifndef CONFIG_AT_DEVICENAME
+    #define CONFIG_AT_DEVICENAME  "atdev"
+    #endif
+
+    ///< install the at framework for the link
+    (void)uart_at_init(CONFIG_AT_BAUDRATE);
+    (void)at_init(CONFIG_AT_DEVICENAME);
 #endif
 
 ///< install the cJSON, for the oc mqtt agent need the cJSON
-#ifdef CONFIG_CJSON_ENABLE
+#ifdef CONFIG_JSON_ENABLE
     #include <cJSON.h>
 
     cJSON_Hooks  hook;
@@ -125,66 +138,118 @@ int link_main(void *args)
 #endif
 
 
-//////////////////////////  TCPIP PROTOCOL /////////////////////////////////////
-#ifdef CONFIG_TCIP_AL_ENABLE
+//////////////////////////  TCPIP PROTOCOL  /////////////////////////////////////
+
+#ifdef CONFIG_TCPIP_ENABLE
     #include <sal.h>
     (void)link_tcpip_init();
 #endif
 
 //////////////////////////  DTLS PROTOCOL  /////////////////////////////////////
-#ifdef CONFIG_DTLS_AL_ENABLE
+#ifdef CONFIG_DTLS_ENABLE
     #include <dtls_al.h>
     (void)dtls_al_init();
 #endif
 
 //////////////////////////  MQTT PROTOCOL  /////////////////////////////////////
-#ifdef CONFIG_MQTT_AL_ENABLE
+#ifdef CONFIG_MQTT_ENABLE
     #include <mqtt_al.h>
     mqtt_al_init();
+#ifdef CONFIG_MQTT_PAHO_ENABLE
+    #include <paho_mqtt_port.h>
+    mqtt_install_pahomqtt();
+#endif
+
+#ifdef CONFIG_MQTT_SINN_ENABLE
+    #include <mqtt_sinn_port.h>
+    mqtt_install_sinnmqtt();
+#endif
+
 #endif
 
 
 //////////////////////////  COAP PROTOCOL  /////////////////////////////////
-#ifdef CONFIG_COAP_AL_ENABLE
-    #include <coap_al.h>
-    (void)coap_al_init();
+#ifdef CONFIG_LITE_COAP_ENABLE
+    #include <litecoap_port.h>
+    (void)coap_install_litecoap();
+#endif
+
+#ifdef CONFIG_LIBCOAP_ENABLE
+    #include <libcoap_port.h>
+    (void)coap_install_libcoap();
 #endif
 
 //////////////////////////  LWM2M PROTOCOL  /////////////////////////////////
-#ifdef CONFIG_LWM2M_AL_ENABLE
-    #include <lwm2m_al.h>
-    (void)lwm2m_al_init();
+#ifdef CONFIG_WAKAAMA_ENABLE
+    #include <lwm2m_port.h>
+    (void)lwm2m_install();
 #endif
 
 //////////////////////////  OC MQTT  //////////////////////////////////
-#ifdef CONFIG_OCMQTT_ENABLE
+
+#ifdef CONFIG_OC_MQTT_ENABLE
     #include <oc_mqtt_al.h>
     (void)oc_mqtt_init();
 
+    #ifdef CONFIG_ATINY_MQTT_ENABLE
+        #include <atiny_mqtt.h>
+        (void)oc_mqtt_install_atiny_mqtt();
+    #endif
+
+
+    #ifdef CONFIG_OC_MQTT_TINY_ENABLE
+        #include <oc_mqtt_tiny.h>
+        (void)oc_mqtt_tiny_install();
+    #endif
+
+
+    #ifdef CONFIG_OC_MQTT_EC2X_ENABLE
+        #include <ec2x_oc.h>
+        (void)ec2x_oc_init();
+    #endif
+
+
 #endif
 
-////////////////////////////  OC LWM2M /////////////////////////////////////////
-#ifdef CONFIG_OCLWM2M_ENABLE
+////////////////////////////  OC LWM2M ///////     /////////////////////////////
+
+#ifdef CONFIG_OC_LWM2M_ENABLE
     #include <oc_lwm2m_al.h>
     oc_lwm2m_init();
+
+    #ifdef CONFIG_OC_LWM2M_AGENT_ENABLE
+        #include <agent_lwm2m.h>
+        (void)oc_lwm2m_install_agent();
+    #endif
+
+    #ifdef CONFIG_OC_LWM2M_BOUDICA150_ENABLE
+        #include <boudica150_oc.h>
+        #define cn_app_bands    "5,8,20"
+        (void)boudica150_init(NULL,NULL,cn_app_bands);
+    #endif
+
 #endif
 
-////////////////////////////  OC COAP //////////////////////////////////////////
-#ifdef CONFIG_OCCOAP_ENABLE
+////////////////////////////  OC COAP ////////     /////////////////////////////
+#ifdef CONFIG_OC_COAP_ENABLE
 	#include <oc_coap_al.h>
     oc_coap_init();
+
+    #if CONFIG_ATINY_COAP_ENABLE
+        #include <atiny_coap.h>
+        oc_coap_install_agent();
+    #endif
+
 #endif
 
+#ifdef CONFIG_DEMOS_ENABLE
+    extern int standard_app_demo_main();
+    (void)standard_app_demo_main();
+#endif
 
 #ifdef CONFIG_AUTO_TEST
     #include <test_case.h>
     autotest_start();
-#endif
-
-
-#ifdef CONFIG_LINKDEMO_ENABLE
-    extern int standard_app_demo_main(void);
-    standard_app_demo_main();
 #endif
 
     return 0;

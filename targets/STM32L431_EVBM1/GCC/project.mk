@@ -31,8 +31,7 @@ C_INCLUDES += $(OS_CONFIG_INC)
 USER_SRC = ${wildcard $(SDK_DIR)/targets/STM32L431_EVBM1/Usr/*.c}
 C_SOURCES += $(USER_SRC)
 
-USER_INC = -I $(SDK_DIR)/targets/STM32L431_EVBM1 \
-           -I $(SDK_DIR)/targets/STM32L431_EVBM1/Usr
+USER_INC = -I $(SDK_DIR)/targets/STM32L431_EVBM1/Usr
 C_INCLUDES += $(USER_INC)
         
 # C defines
