@@ -1,0 +1,31 @@
+choice Demo
+	optional
+	prompt "User Defined Demo"
+	config Demo_None
+		bool "none"
+	config Demo_Helloworld
+		bool "Hello World"
+		select SHELL_ENABLE
+	config Osal_Task_Demo
+		bool "Osal Task"
+		select SHELL_ENABLE
+	config Osal_Men_Demo
+		bool "Osal Mem"
+		select SHELL_ENABLE
+	config Osal_Semp_Demo
+		bool "Osal Semp"
+		select SHELL_ENABLE
+	config Osal_Mutex_Demo
+		bool "Osal Mutex"
+		select SHELL_ENABLE
+
+endchoice
+
+config USER_DEMO
+	string
+	default "hello_world_demo" if Demo_Helloworld
+	default "osal_task_demo" if Osal_Task_Demo
+	default "osal_mem_demo" if Osal_Men_Demo
+	default "osal_semp_demo" if Osal_Semp_Demo	
+	default "osal_mutex_demo" if Osal_Mutex_Demo
+	default "none"
