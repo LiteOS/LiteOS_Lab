@@ -31,7 +31,11 @@ if OCLWM2M_ENABLE
     config BOUDICA150_ENABLE
         bool "we use the boudica150 as the oclwm2m protocol"
         select AT_ENABLE        
-                     
+
+    config BOUDICA120_ENABLE
+        bool "we use the boudica120 as the oclwm2m protocol"
+        select AT_ENABLE		
+
     config OCLWM2MNULL
         bool "we will create a new oc lwm2m ourself"    
            
