@@ -50,6 +50,7 @@ static char *s_client_pk_pwd = NULL;///< used to strorage the pwd for the pk
 
 ///< when receive any information from hw, then it call this function,THIS IS A URC imformation
 ///< ATCOMMAND:    +HMPUB:"HELLOTOPC",2,0010
+///< make sure that the topic and payload may not be ended with '\0', so you should not use strcpy
 __attribute__((weak)) void hwoc_mqtt_recvpub(const char *topic,int topiclen,uint8_t *payload, int payloadlen)
 {
     LINK_LOG_DEBUG("%s:specified topic message\n\r",__FUNCTION__);
@@ -60,7 +61,6 @@ __attribute__((weak)) void hwoc_mqtt_recvpub(const char *topic,int topiclen,uint
 ///<ATCOMMAND:
 __attribute__((weak)) void  hwoc_mqtt_log(en_oc_mqtt_log_t  logtype)
 {
-
     if(logtype == en_oc_mqtt_log_connected)
     {
         printf("%s:connected %d\n\r",__FUNCTION__,logtype);
