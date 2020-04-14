@@ -6,7 +6,7 @@
 
 #example for lwm2m
 
-ifeq ($(CONFIG_DEMO_TYPE), "none")	
+
 	
 	#example for oc_streetlight_template
 	ifeq ($(CONFIG_USER_DEMO), "oc_streetlight_template")
@@ -78,4 +78,3 @@ ifeq ($(CONFIG_DEMO_TYPE), "none")
 	C_SOURCES += $(user_hardware_src)
 	C_INCLUDES += $(user_hardware_inc)
 	C_DEFS += $(user_demo_defs)
-endif

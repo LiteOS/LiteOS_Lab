@@ -52,7 +52,7 @@
 #include <stm32l4xx_it.h>
 
 #define cn_endpoint_id        "SDK_LWM2M_NODTLS"
-#define cn_app_server         "49.4.85.232"
+#define cn_app_server         "119.3.250.80"
 #define cn_app_port           "5683"
 
 typedef unsigned char int8u;
@@ -159,7 +159,7 @@ static int app_report_task_entry()
     {
         infrared.messageId = cn_app_infrared;
         oc_lwm2m_report((char *)&infrared, sizeof(infrared), 1000);
-        osal_task_sleep(2*1000);
+        osal_task_sleep(2*100);
     }
 
 
@@ -171,7 +171,7 @@ static int app_collect_task_entry()
     Init_E53_IS1();
     while (1)
     {
-        if(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_9)==SET)//检测到人体红外
+        if(HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_9)==SET)
         {
             
             E53_IS1_Beep_StatusSet(ON);
@@ -194,7 +194,7 @@ static int app_collect_task_entry()
            // LCD_ShowString(10, 200, 200, 16, 16, "BH1750 Value is:");
            // LCD_ShowNum(140, 200, lux, 5, 16);
         }
-       osal_task_sleep(2*10);
+       osal_task_sleep(2*100);
     }
     return 0;
 }

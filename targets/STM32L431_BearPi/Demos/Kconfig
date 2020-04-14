@@ -13,7 +13,6 @@ choice Demo
 		bool "OC Track"
 	config Demo_Smoke
 		bool "OC Smoke"
-<<<<<<< HEAD
 		select OC_LWM2M
 		select SHELL_ENABLE
 		select AT_ENABLE
@@ -33,8 +32,6 @@ choice Demo
 		select AT_ENABLE
 		select BOUDICA150
 		select STIMER_ENABLE
-=======
->>>>>>> pr/3
 	config Demo_OC_Cloud_Map
 		bool "OC Cloud Map"
 endchoice

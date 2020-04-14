@@ -14,6 +14,7 @@
 #include "E53_SC2.h"
 #include "i2c.h"
 #include "stm32l4xx.h"
+#include "dwt.h"
 
 #define EVAL_I2Cx_TIMEOUT_MAX                   3000
 uint32_t I2cxTimeout = EVAL_I2Cx_TIMEOUT_MAX;
@@ -56,12 +57,12 @@ void MPU6050_Init(void)
     }
   }
 	MPU6050_WriteReg(MPU6050_RA_PWR_MGMT_1,0X80);       //复位MPU6050
-  HAL_Delay(100);
-  MPU6050_WriteReg(MPU6050_RA_PWR_MGMT_1,0X00);       //唤醒MPU6050
-  MPU6050_WriteReg(MPU6050_RA_INT_ENABLE,0X00);       //关闭所有中断
-  MPU6050_WriteReg(MPU6050_RA_USER_CTRL,0X00);        //I2C主模式关闭
-  MPU6050_WriteReg(MPU6050_RA_FIFO_EN,0X00);          //关闭FIFO
-  MPU6050_WriteReg(MPU6050_RA_INT_PIN_CFG,0X80);      //中断的逻辑电平模式,设置为0，中断信号为高电；设置为1，中断信号为低电平时。
+	delay10ms(10);
+	MPU6050_WriteReg(MPU6050_RA_PWR_MGMT_1,0X00);       //唤醒MPU6050
+	MPU6050_WriteReg(MPU6050_RA_INT_ENABLE,0X00);       //关闭所有中断
+	MPU6050_WriteReg(MPU6050_RA_USER_CTRL,0X00);        //I2C主模式关闭
+	MPU6050_WriteReg(MPU6050_RA_FIFO_EN,0X00);          //关闭FIFO
+	MPU6050_WriteReg(MPU6050_RA_INT_PIN_CFG,0X80);      //中断的逻辑电平模式,设置为0，中断信号为高电；设置为1，中断信号为低电平时。
 	Motion_Interrupt();           					           	//运动中断
 	MPU6050_WriteReg(MPU6050_RA_CONFIG,0x04);           //配置外部引脚采样和DLPF数字低通滤波器
 	MPU6050_WriteReg(MPU6050_RA_ACCEL_CONFIG,0x1C);     //加速度传感器量程和高通滤波器配置
@@ -129,7 +130,7 @@ void MPU6050ReadGyro(short *gyroData)
   ***************************************************************/
 void MPU6050ReadTemp(short *tempData)
 {
-	  uint8_t buf[2];
+	uint8_t buf[2];
     MPU6050_ReadData(MPU6050_RA_TEMP_OUT_H,buf,2);     //读取温度值
     *tempData = (buf[0] << 8) | buf[1];
 }
@@ -146,7 +147,7 @@ void MPU6050_ReturnTemp(short*Temperature)
 	uint8_t buf[2];
 	
 	MPU6050_ReadData(MPU6050_RA_TEMP_OUT_H,buf,2);     //读取温度值
-  temp3= (buf[0] << 8) | buf[1];
+	temp3= (buf[0] << 8) | buf[1];
 	*Temperature=(((double) (temp3 + 13200)) / 280)-13;
 }
 
@@ -158,17 +159,17 @@ void MPU6050_ReturnTemp(short*Temperature)
   **************************************************************/
 void Free_Fall_Interrupt(void)          //自由落体中断
 {
-    MPU6050_WriteReg(MPU6050_RA_FF_THR,0x01);             //自由落体阈值 
+    MPU6050_WriteReg(MPU6050_RA_FF_THR,0x01);             //自由落体阈值
     MPU6050_WriteReg(MPU6050_RA_FF_DUR,0x01);             //自由落体检测时间20ms 单位1ms 寄存器0X20
 }
 void Motion_Interrupt(void)             //运动中断
 {
-    MPU6050_WriteReg(MPU6050_RA_MOT_THR,0x03);            //运动阈值 
+    MPU6050_WriteReg(MPU6050_RA_MOT_THR,0x03);            //运动阈值
     MPU6050_WriteReg(MPU6050_RA_MOT_DUR,0x14);            //检测时间20ms 单位1ms 寄存器0X20
 }
 void Zero_Motion_Interrupt(void)        //静止中断
 {
-    MPU6050_WriteReg(MPU6050_RA_ZRMOT_THR,0x20);          //静止阈值 
+    MPU6050_WriteReg(MPU6050_RA_ZRMOT_THR,0x20);          //静止阈值
     MPU6050_WriteReg(MPU6050_RA_ZRMOT_DUR,0x20);          //静止检测时间20ms 单位1ms 寄存器0X20
 }
 
@@ -303,7 +304,7 @@ void Init_E53_SC2(void)
 {
     MX_I2C1_Init();
     MPU6050_Init();
-     Init_Light();
+    Init_Light();
 }
 /***************************************************************
 * 函数名称: E53_SC2_Read_Data
@@ -325,7 +326,7 @@ void E53_SC2_Read_Data(void)
       E53_SC2_Data.Accel[0] = Accel[0];
       E53_SC2_Data.Accel[1] = Accel[1];
       E53_SC2_Data.Accel[2] = Accel[2];
-			HAL_Delay(500);
+      delay10ms(50);
 }
 
 /***************************************************************
@@ -344,4 +345,3 @@ void Init_Light(void)
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 }
-
