@@ -638,7 +638,7 @@ int dtls_setup(coap_al_initpara_t *initparam, int client_or_server)
         return -1;
     }
 
-    memset(&info, 0, sizeof(info));
+    (void) memset(&info, 0, sizeof(info));
     info.client_or_server = client_or_server;
     info.finish_notify = NULL;
     info.step_notify   = NULL;
@@ -825,7 +825,7 @@ static int __recv(coap_al_rcvpara_t *rcvparam)
     return 0;
 }
 
-int coap_install_libcoap()
+int coap_imp_init()
 {
     int ret = -1;
 

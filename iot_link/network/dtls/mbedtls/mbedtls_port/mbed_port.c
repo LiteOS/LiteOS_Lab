@@ -126,7 +126,7 @@ en_dtls_al_err_t mbed_new(dtls_al_para_t *para, void **handle)
 
 en_dtls_al_err_t mbed_destroy(void *handle)
 {
-    int ret = EN_DTLS_AL_ERR_PARA;
+    en_dtls_al_err_t ret = EN_DTLS_AL_ERR_PARA;
     if(NULL != handle)
     {
         dtls_ssl_destroy(handle);
@@ -167,7 +167,7 @@ int mbed_connect(void *handle,const char *server_ip, const char *server_port,int
     dtls_shakehand_info_s  sinfo;
 
 
-    memset(&sinfo, 0, sizeof(sinfo));
+    (void) memset(&sinfo, 0, sizeof(sinfo));
 
 
     sinfo.u.c.host = server_ip;

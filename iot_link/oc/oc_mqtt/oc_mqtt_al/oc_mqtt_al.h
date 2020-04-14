@@ -76,6 +76,16 @@ typedef enum
     en_oc_mqtt_err_last,
 }en_oc_mqtt_err_code_t;
 
+
+typedef enum
+{
+    en_oc_mqtt_log_connected = 0,
+    en_oc_mqtt_log_disconnected,
+}en_oc_mqtt_log_t;
+
+typedef void (*fn_oc_mqtt_log)(en_oc_mqtt_log_t  logtype);
+
+
 /** @brief this is the message dealer module for the application*/
 typedef int (*fn_oc_mqtt_msg_deal)(void *arg,mqtt_al_msgrcv_t *msg);
 
@@ -87,12 +97,12 @@ typedef struct
     char            *server_port;          ///< server port:
     ///< define for the tls
     dtls_al_security_t  security;          ///< used for the transport
-
     ///< define for the mqtt
     char                              *id;
     char                              *pwd;
     fn_oc_mqtt_msg_deal                msg_deal;       ///< when the agent receive any applciation data, please call this function
     void                              *msg_deal_arg;   ///< call back for the fn_oc_mqtt_msg_deal
+    fn_oc_mqtt_log                     log_dealer;
 
 }oc_mqtt_config_t;
 
@@ -102,7 +112,7 @@ typedef  int (*fn_oc_mqtt_config)(oc_mqtt_config_t *param);
 typedef  int (*fn_oc_mqtt_deconfig)(void);
 typedef  int (*fn_oc_mqtt_publish)(char *topic,uint8_t *msg,int msg_len,int qos);
 typedef  int (*fn_oc_mqtt_subscribe)(char *topic, int qos);
-typedef  en_oc_mqtt_err_code_t (*fn_oc_mqtt_unsubscribe)(char *topic);
+typedef  int (*fn_oc_mqtt_unsubscribe)(char *topic);
 
 
 /**
@@ -204,7 +214,7 @@ int oc_mqtt_publish(char *topic,uint8_t *msg,int msg_len,int qos);
  *
  * @note: you should make the topic specified by your self
  */
- en_oc_mqtt_err_code_t oc_mqtt_unsubscribe(char *topic);
+ int oc_mqtt_unsubscribe(char *topic);
 
 
 
@@ -220,7 +230,7 @@ int oc_mqtt_init();
  *
  *@return the  reason  corresponding to the code
  */
-const char *oc_mqtt_err(int code);
+const char *oc_mqtt_err(en_oc_mqtt_err_code_t code);
 
 
 

@@ -142,7 +142,7 @@ static void lwm2m_notify_stack_rpt_data_change(lwm2m_dl_list *node, void *contex
 
     if (!lwm2m_list_empty(&rpt_list->rpt_list))
     {
-        ATINY_LOG(LOG_INFO, "data change cnt %d "URI_FORMAT,  rpt_list->rpt_node_cnt, URI_LOG_PARAM(&rpt_list->uri));
+        ATINY_LOG(LOG_INFO, "data change cnt %d "URI_FORMAT,  (int)rpt_list->rpt_node_cnt, URI_LOG_PARAM(&rpt_list->uri));
         lwm2m_resource_value_changed(context, &rpt_list->uri);
     }
 }
@@ -200,16 +200,16 @@ int lwm2m_add_rpt_uri(const lwm2m_uri_t *uri,  rpt_list_t *list)
             break;
         }
 
-        memset(rpt_list, 0, sizeof(*rpt_list));
+        (void) memset(rpt_list, 0, sizeof(*rpt_list));
         lwm2m_list_init(&rpt_list->rpt_list);
-        memcpy(&rpt_list->uri, uri, sizeof(rpt_list->uri));
+        (void) memcpy(&rpt_list->uri, uri, sizeof(rpt_list->uri));
         rpt_list->max_cnt = MAX_BUFFER_REPORT_CNT;
         lwm2m_list_insert_tail(&g_lwm2m_rpt_table, &rpt_list->node);
         ret = LWM2M_OK;
     }
     while (0);
 
-    osal_mutex_unlock(g_mutex);
+    (void) osal_mutex_unlock(g_mutex);
     *list = rpt_list;
     return ret;
 }
@@ -244,7 +244,7 @@ int lwm2m_rm_rpt_uri(const lwm2m_uri_t *uri)
     }
     while (0);
 
-    osal_mutex_unlock(g_mutex);
+    (void) osal_mutex_unlock(g_mutex);
     return ret;
 }
 
@@ -273,13 +273,13 @@ int lwm2m_dequeue_rpt_data(rpt_list_t rpt_list,  data_report_t *data)
         data_node = (lwm2m_rpt_node_t *)rpt_list->rpt_list.next;
         lwm2m_list_delete(&data_node->list);
         rpt_list->rpt_node_cnt--;
-        memcpy((void *)data, (void *)&data_node->data, sizeof(*data));
+        (void) memcpy((void *)data, (void *)&data_node->data, sizeof(*data));
         lwm2m_free(data_node);
         ret = LWM2M_OK;
     }
     while (0);
 
-    osal_mutex_unlock(g_mutex);
+    (void) osal_mutex_unlock(g_mutex);
     return ret;
 }
 
@@ -311,7 +311,7 @@ int lwm2m_queue_rpt_data(const lwm2m_uri_t *uri, const data_report_t *data)
         if (rpt_list->rpt_node_cnt >= rpt_list->max_cnt)
         {
             ATINY_LOG(LOG_INFO, "uri rpt exceed rpt cnt %d max cnt %d," URI_FORMAT,
-                      rpt_list->rpt_node_cnt, rpt_list->max_cnt, URI_LOG_PARAM(uri));
+                      (int)rpt_list->rpt_node_cnt, (int)rpt_list->max_cnt, URI_LOG_PARAM(uri));
             ret = LWM2M_RESOURCE_NOT_ENOUGH;
             break;
         }
@@ -324,15 +324,15 @@ int lwm2m_queue_rpt_data(const lwm2m_uri_t *uri, const data_report_t *data)
             break;
         }
 
-        memset((void *)&data_node->list, 0, sizeof(data_node->list));
-        memcpy((void *)&data_node->data, (void *)data, sizeof(data_node->data));
+        (void) memset((void *)&data_node->list, 0, sizeof(data_node->list));
+        (void) memcpy((void *)&data_node->data, (void *)data, sizeof(data_node->data));
         lwm2m_list_insert_tail(&rpt_list->rpt_list, &data_node->list);
         rpt_list->rpt_node_cnt++;
         ret = LWM2M_OK;
     }
     while (0);
 
-    osal_mutex_unlock(g_mutex);
+    (void) osal_mutex_unlock(g_mutex);
     return ret;
 }
 
@@ -365,7 +365,7 @@ int lwm2m_clear_rpt_data(const lwm2m_uri_t *uri, int result)
     }
     while (0);
 
-    osal_mutex_unlock(g_mutex);
+    (void) osal_mutex_unlock(g_mutex);
     return ret;
 }
 
@@ -373,14 +373,14 @@ int lwm2m_step_rpt(lwm2m_context_t *context)
 {
     osal_mutex_lock(g_mutex);
     lwm2m_visit_list(&g_lwm2m_rpt_table, lwm2m_notify_stack_rpt_data_change, context);
-    osal_mutex_unlock(g_mutex);
+    (void) osal_mutex_unlock(g_mutex);
     return LWM2M_OK;
 }
 
 void lwm2m_destroy_rpt(void)
 {
     lwm2m_free_list(&g_lwm2m_rpt_table, lwm2m_clear_rpt_list, (void *)NOT_SENT);
-    osal_mutex_del(g_mutex);
+    (void) osal_mutex_del(g_mutex);
     g_mutex = NULL;
 }
 
@@ -405,7 +405,7 @@ int lwm2m_set_max_rpt_cnt(const lwm2m_uri_t *uri, uint32_t max_rpt_cnt)
     }
     while (0);
 
-    osal_mutex_unlock(g_mutex);
+    (void) osal_mutex_unlock(g_mutex);
     return ret;
 }
 

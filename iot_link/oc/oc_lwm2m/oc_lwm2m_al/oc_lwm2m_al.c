@@ -89,7 +89,7 @@ int oc_lwm2m_unregister(const char *name)
 //////////////////////////APPLICATION INTERFACE/////////////////////////////////
 int oc_lwm2m_report(char  *buf, int len, int timeout)
 {
-    int ret = en_oc_lwm2m_err_system;
+    int ret = (int)en_oc_lwm2m_err_system;
 
     if ((NULL != s_oc_lwm2m_ops.opt) && (NULL != s_oc_lwm2m_ops.opt->report))
     {
@@ -102,7 +102,7 @@ int oc_lwm2m_report(char  *buf, int len, int timeout)
 
 int oc_lwm2m_config( oc_config_param_t *param)
 {
-    int ret = en_oc_lwm2m_err_system;
+    int ret = (int)en_oc_lwm2m_err_system;
 
     if ((NULL != s_oc_lwm2m_ops.opt) && (NULL != s_oc_lwm2m_ops.opt->config))
     {
@@ -112,7 +112,7 @@ int oc_lwm2m_config( oc_config_param_t *param)
         }
         else
         {
-            ret = en_oc_lwm2m_err_parafmt;
+            ret = (int)en_oc_lwm2m_err_parafmt;
         }
     }
 
@@ -122,7 +122,7 @@ int oc_lwm2m_config( oc_config_param_t *param)
 
 int oc_lwm2m_deconfig(void)
 {
-    int ret = en_oc_lwm2m_err_system;
+    int ret = (int)en_oc_lwm2m_err_system;
 
     if ((NULL != s_oc_lwm2m_ops.opt) && (NULL != s_oc_lwm2m_ops.opt->deconfig))
     {
@@ -133,10 +133,30 @@ int oc_lwm2m_deconfig(void)
 }
 
 ///////////////////////OC LWM2M AGENT INITIALIZE////////////////////////////////
+__attribute__ ((weak)) int oc_lwm2m_imp_init(void)
+{
+    LINK_LOG_WARN("Please implement the oc lwm2m yourself \n\r");
+    return -1;
+}
+
+__attribute__ ((weak)) int oc_lwm2m_demo_main(void)
+{
+    LINK_LOG_WARN("Please implement the oc lwm2m demo yourself \n\r");
+    return -1;
+}
+
 int oc_lwm2m_init()
 {
-    int ret = -1;
-    ret = 0;   ///< uptils now, we should do nothing here
-    return ret;
+    int ret;
+
+    ret = oc_lwm2m_imp_init();
+
+    LINK_LOG_DEBUG("IOT_LINK:DO OC LWM2M LOAD-IMPLEMENT RET:%d\n\r",ret);
+
+    (void) oc_lwm2m_demo_main();
+
+    return 0;
 }
+
+
 

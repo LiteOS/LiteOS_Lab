@@ -108,7 +108,7 @@ static bool_t rtk8710_atcmd_response(const char *cmd,const char *index,char *buf
 {
     int ret = 0;
     ret = at_command((unsigned char *)cmd,strlen(cmd),index,(char *)buf,len,cn_rtk8710_cmd_timeout);
-	//printf("atcmd rep:%d\r\n", ret);
+	//LINK_LOG_DEBUG("atcmd rep:%d\r\n", ret);
     if(ret >= 0)
     {
         return true;
@@ -128,13 +128,13 @@ static int rtk8710_rcvdeal(void *args,void *msg,size_t len)
     char  *str;
     unsigned short ringspace;
 
-    //printf("call oob rvdeal len:%d\r\n", len);
+    //LINK_LOG_DEBUG("call oob rvdeal len:%d\r\n", len);
 
 
     data = msg;
     if(len <strlen(cn_rtk8710_rcvindex) || len > cn_rtk8710_cachelen)
     {
-        printf("%s:invalid frame:%d byte:%s\n\r",__FUNCTION__,len,(char *)data);
+        LINK_LOG_DEBUG("%s:invalid frame:%d byte:%s\n\r",__FUNCTION__,len,(char *)data);
         return ret;
     }
 
@@ -147,7 +147,7 @@ static int rtk8710_rcvdeal(void *args,void *msg,size_t len)
     str = strstr((char *)data,",");
     if(NULL == str)
     {
-        printf("%s:format error\n\r",__FUNCTION__);
+        LINK_LOG_DEBUG("%s:format error\n\r",__FUNCTION__);
         return ret; //format error
     }
     str++;
@@ -155,7 +155,7 @@ static int rtk8710_rcvdeal(void *args,void *msg,size_t len)
     str = strstr((char *)str,",");
     if(NULL == str)
     {
-        printf("%s:format error\n\r",__FUNCTION__);
+        LINK_LOG_DEBUG("%s:format error\n\r",__FUNCTION__);
         return ret; //format error
     }
     str++;
@@ -163,7 +163,7 @@ static int rtk8710_rcvdeal(void *args,void *msg,size_t len)
     str = strstr((char *)str,",");
     if(NULL == str)
     {
-        printf("%s:format error\n\r",__FUNCTION__);
+        LINK_LOG_DEBUG("%s:format error\n\r",__FUNCTION__);
         return ret; //format error
     }
     str++;
@@ -171,7 +171,7 @@ static int rtk8710_rcvdeal(void *args,void *msg,size_t len)
     str = strstr((char *)str,",");
     if(NULL == str)
     {
-        printf("%s:format error\n\r",__FUNCTION__);
+        LINK_LOG_DEBUG("%s:format error\n\r",__FUNCTION__);
         return ret; //format error
     }
     str++;
@@ -181,14 +181,14 @@ static int rtk8710_rcvdeal(void *args,void *msg,size_t len)
     {
         datalen = (datalen * 10 + (*str - '0'));
     }
-    //printf("datalen:%d~~~~~~\r\n", datalen);
-    //printf("@@@@:%d\r\n", str-data);
+    //LINK_LOG_DEBUG("datalen:%d~~~~~~\r\n", datalen);
+    //LINK_LOG_DEBUG("@@@@:%d\r\n", str-data);
     if(datalen + (str-data) + 1 + strlen("\r\n") > len)
         return ret;
     str = strstr((char *)str,",");
     if(NULL == str)
     {
-        printf("%s:format error\n\r",__FUNCTION__);
+        LINK_LOG_DEBUG("%s:format error\n\r",__FUNCTION__);
         return ret; //format error
     }
     str++;
@@ -209,7 +209,7 @@ static int rtk8710_rcvdeal(void *args,void *msg,size_t len)
         ret = ring_buffer_write(&s_rtk8710_sock_cb.rtk8710_rcvring,str,datalen);
     }
 
-    //printf("rcv deal:%d\r\n", ret);
+    //LINK_LOG_DEBUG("rcv deal:%d\r\n", ret);
     return ret;
 
 }
@@ -223,7 +223,7 @@ static int rtk8710_socket(int domain, int type, int protocol)
     s_rtk8710_sock_cb.protocol = protocol;
     s_rtk8710_sock_cb.sockfd = 0;
     s_rtk8710_sock_cb.remote_port = 0;
-    memset(s_rtk8710_sock_cb.remote_ip,0,sizeof(s_rtk8710_sock_cb.remote_ip));
+    (void) memset(s_rtk8710_sock_cb.remote_ip,0,sizeof(s_rtk8710_sock_cb.remote_ip));
 
     return s_rtk8710_sock_cb.sockfd;
 }
@@ -259,14 +259,14 @@ static int __rtk8710_connect(int fd, void *addr, int addrlen)
     if(NULL != addr)
     {
         
-        memset(cmd,0,64);
+        (void) memset(cmd,0,64);
 
         
         serv_addr = (struct sockaddr_in *)addr;
         uint16_t remote_port = ntohs(serv_addr->sin_port);
         struct in_addr remote_ip_int = serv_addr->sin_addr;
         remote_ip = inet_ntoa(remote_ip_int);
-        memcpy(s_rtk8710_sock_cb.remote_ip, remote_ip, strlen(remote_ip));
+        (void) memcpy(s_rtk8710_sock_cb.remote_ip, remote_ip, strlen(remote_ip));
         s_rtk8710_sock_cb.remote_port = remote_port;
 
         if(s_rtk8710_sock_cb.type == SOCK_DGRAM)
@@ -312,8 +312,8 @@ static int rtk8710_send(int fd, const void *buf, int len, int flags)
 
     if(NULL != buf)
     {
-        memset(cmd,0,64);
-        memset(s_rtk8710_sock_cb.oob_resp,0,1024);
+        (void) memset(cmd,0,64);
+        (void) memset(s_rtk8710_sock_cb.oob_resp,0,1024);
 
         if(s_rtk8710_sock_cb.type == SOCK_DGRAM)
         {
@@ -416,7 +416,7 @@ static int rtk8710_close(int fd)
 {
     char cmd[64];
     int ret = -1;
-    memset(cmd,0,64);
+    (void) memset(cmd,0,64);
     snprintf(cmd,64,"AT+NWKCLOSE=%d\r\n",s_rtk8710_sock_cb.sockfd);//TODO: MUX = 1;
     if(rtk8710_atcmd(cmd,"[NWKCLOSE]OK"))
     {
@@ -459,14 +459,14 @@ static struct hostent *rtk8710_gethostbyname(const char *name)
 	struct hostent *hptr = NULL;
 	int ret = -1;
     hptr = &s_rtk8710_hostent;
-    memset(hptr,0,sizeof(struct hostent));
+    (void) memset(hptr,0,sizeof(struct hostent));
 
-	memset(cmd,0,64);
+	(void) memset(cmd,0,64);
 	snprintf(cmd,64,"AT+NWKDNS=%s\r\n",name);
 	if(false == rtk8710_atcmd_response(cmd,"\r\n",resp,64))
 	{
 		//name is ip address already
-		printf("name is ip\r\n");
+		LINK_LOG_DEBUG("name is ip\r\n");
 		sscanf(name,"%d.%d.%d.%d",&hptr->h_addr_list[0][0],&hptr->h_addr_list[0][1],&hptr->h_addr_list[0][2],&hptr->h_addr_list[0][3]);
 		return hptr;
 	}
@@ -533,7 +533,7 @@ static bool_t rtk8710_reset(void)
 static bool_t rtk8710_set_mode(enum_net_mode mode)
 {
 	char cmd[64];
-	memset(cmd,0,64);
+	(void) memset(cmd,0,64);
 	snprintf(cmd,64,"AT+WLMODE=%d\r\n",(int)mode);
 	return rtk8710_atcmd(cmd,"[WLMODE]OK");
 }
@@ -541,7 +541,7 @@ static bool_t rtk8710_set_mode(enum_net_mode mode)
 static bool_t rtk8710_joinap(char *ssid, char *passwd)
 {
 	char cmd[64];
-	memset(cmd,0,64);
+	(void) memset(cmd,0,64);
     snprintf(cmd,64,"AT+WLSTAPARAM=\"%s\",\"%s\"\r\n",ssid, passwd);
     if(rtk8710_atcmd(cmd,"[WLSTAPARAM]OK"))
     {
@@ -553,7 +553,7 @@ static bool_t rtk8710_joinap(char *ssid, char *passwd)
 static bool_t rtk8710_ver()
 {
 	char cmd[64];
-	memset(cmd,0,64);
+	(void) memset(cmd,0,64);
     snprintf(cmd,64,"AT+SVER\r\n");
     return rtk8710_atcmd(cmd,"OK");
 
@@ -574,7 +574,7 @@ int link_tcpip_imp_init(void)
 
     while(false == rtk8710_joinap(WIFI_SSID, WIFI_PASSWD))
     {
-        printf("connect ap failed, repeat...\r\n");
+        LINK_LOG_DEBUG("connect ap failed, repeat...\r\n");
     }
     //reach here means everything is ok, we can go now
 
@@ -582,11 +582,11 @@ int link_tcpip_imp_init(void)
 
     if(0 == ret)
     {
-        printf("sal:install socket success\r\n");
+        LINK_LOG_DEBUG("sal:install socket success\r\n");
     }
     else
     {
-        printf("sal:install socket failed\r\n");
+        LINK_LOG_DEBUG("sal:install socket failed\r\n");
     }
 
     return ret;

@@ -309,7 +309,7 @@ static void lwm2m_set_bootstrap_sequence_state(lwm2m_al_init_param_t *lwm2m_para
 
 static void lwm2m_send_ack_callback(lwm2m_report_type_e type, int cookie, data_send_status_e status)
 {
-    printf("type:%d cookie:%d status:%d\n", type, cookie, status);
+    LINK_LOG_DEBUG("type:%d cookie:%d status:%d\n", type, cookie, status);
 }
 
 static void observe_handle_ack(lwm2m_context_t *contextP, lwm2m_transaction_t *transacP, void *message)
@@ -469,7 +469,7 @@ int lwm2m_destroy(void *handle)
         lwm2m_close(handle_data->lwm2m_context);
     }
 
-    osal_semp_del(handle_data->quit_sem);
+    (void) osal_semp_del(handle_data->quit_sem);
     handle_data->quit_sem = cn_semp_invalid;
 
     /* release receive data buffer */
@@ -480,7 +480,7 @@ int lwm2m_destroy(void *handle)
     }
 
     lwm2m_free(handle_data);
-    osal_mutex_del(g_data_mutex);
+    (void) osal_mutex_del(g_data_mutex);
     return LWM2M_OK;
 }
 
@@ -546,7 +546,7 @@ int __lwm2m_task_entry(void *args)
     }
 
     hd = (handle_data_t *)args;
-    // memcpy(&hd, args, sizeof(handle_data_t));
+    // (void) memcpy(&hd, args, sizeof(handle_data_t));
 
     while (!hd->lwm2m_quit)
     {
@@ -567,7 +567,7 @@ int __lwm2m_task_entry(void *args)
     }
 
     /* notify task quit */
-    osal_semp_post(hd->quit_sem);
+    (void) osal_semp_post(hd->quit_sem);
     return LWM2M_OK;
 }
 
@@ -615,7 +615,7 @@ static int __config(void **handle, lwm2m_al_init_param_t *init_param)
 
     // g_cmd_func = init_param->dealer;
     lwm2m_cmd_register_dealer(init_param->dealer);
-    memset(hd, 0, sizeof(handle_data_t));
+    (void) memset(hd, 0, sizeof(handle_data_t));
     lwm2m_context = lwm2m_init(&(hd->client_data));
 
     if (NULL == lwm2m_context)
@@ -649,7 +649,7 @@ static int __config(void **handle, lwm2m_al_init_param_t *init_param)
         ATINY_LOG(LOG_FATAL, "osal_semp_create fail");
         lwm2m_free(lwm2m_context->endpointName);
         lwm2m_free(lwm2m_context);
-        osal_mutex_del(g_data_mutex);
+        (void) osal_mutex_del(g_data_mutex);
         return LWM2M_RESOURCE_NOT_ENOUGH;
     }
 
@@ -664,8 +664,8 @@ static int __config(void **handle, lwm2m_al_init_param_t *init_param)
         ATINY_LOG(LOG_FATAL, "memory not enough");
         lwm2m_free(lwm2m_context->endpointName);
         lwm2m_free(lwm2m_context);
-        osal_mutex_del(g_data_mutex);
-        osal_semp_del(hd->quit_sem);
+        (void) osal_mutex_del(g_data_mutex);
+        (void) osal_semp_del(hd->quit_sem);
         return LWM2M_MALLOC_FAILED;
     }
 
@@ -677,8 +677,8 @@ static int __config(void **handle, lwm2m_al_init_param_t *init_param)
         ATINY_LOG(LOG_FATAL, "lwm2m_fota_manager_set_storage_device() called fail");
         lwm2m_free(lwm2m_context->endpointName);
         lwm2m_free(lwm2m_context);
-        osal_mutex_del(g_data_mutex);
-        osal_semp_del(hd->quit_sem);
+        (void) osal_mutex_del(g_data_mutex);
+        (void) osal_semp_del(hd->quit_sem);
         return result;
     }
 
@@ -741,7 +741,7 @@ int __add_object(void *handle, int object_id, int object_instance_id, int resour
             return LWM2M_MALLOC_FAILED;
         }
 
-        memset(obj, 0, sizeof(lwm2m_object_t));
+        (void) memset(obj, 0, sizeof(lwm2m_object_t));
 
         /* set object id */
         obj->objID = object_id;
@@ -763,11 +763,11 @@ int __add_object(void *handle, int object_id, int object_instance_id, int resour
     {
         /* -1: find an available one */
         obj_ins_id = generate_new_object_instance_id(obj->instanceList);
-        printf("obj_ins_id: %d\n", obj_ins_id);
+        LINK_LOG_DEBUG("obj_ins_id: %d\n", obj_ins_id);
     }
     else
     {
-        printf("obj_ins_id: %d\n", obj_ins_id);
+        LINK_LOG_DEBUG("obj_ins_id: %d\n", obj_ins_id);
         obj_instance = (lwm2m_list_t *)LWM2M_LIST_FIND(obj->instanceList, obj_ins_id);
     }
 
@@ -785,7 +785,7 @@ int __add_object(void *handle, int object_id, int object_instance_id, int resour
         && (NULL != obj->instanceList)
         && (NULL == obj_instance))
     {
-        printf("standard object_id %d only supports single instance!\n", object_id);
+        LINK_LOG_DEBUG("standard object_id %d only supports single instance!\n", object_id);
         return LWM2M_SUPPORT_SINGLE_INSTANCE_ONLY;
     }
 
@@ -798,7 +798,7 @@ int __add_object(void *handle, int object_id, int object_instance_id, int resour
         && (object_id <= OBJ_ACCESS_CONTROL_ID)
         && (NULL != obj_instance))
     {
-        printf("standard object_uri %d/%d/%d does not add resource!\n", object_id, obj_ins_id, resource_id);
+        LINK_LOG_DEBUG("standard object_uri %d/%d/%d does not add resource!\n", object_id, obj_ins_id, resource_id);
         return LWM2M_OBJECT_INSTANCE_EXISTED;
     }
 
@@ -947,7 +947,7 @@ int __disconnect(void *handle)
         hd->task_handle = NULL;
     }
 
-    osal_mutex_unlock(g_data_mutex);
+    (void) osal_mutex_unlock(g_data_mutex);
     return LWM2M_OK;
 }
 
@@ -972,7 +972,7 @@ static int __send(void *handle, lwm2m_al_send_param_t *send_param)
         return LWM2M_ARG_INVALID;
     }
 
-    memset((void *)&uri, 0, sizeof(uri));
+    (void) memset((void *)&uri, 0, sizeof(uri));
     get_resource_uri(send_param->object_id, send_param->object_instance_id, send_param->resource_id, &uri);
     data.buf = lwm2m_malloc(send_param->length);
 
@@ -982,7 +982,7 @@ static int __send(void *handle, lwm2m_al_send_param_t *send_param)
         return LWM2M_MALLOC_FAILED;;
     }
 
-    memcpy(data.buf, send_param->data, send_param->length);
+    (void) memcpy(data.buf, send_param->data, send_param->length);
     data.len = send_param->length;
     data.callback = (send_param->mode == MSG_CONFIRMABLE) ? lwm2m_send_ack_callback : NULL;
     data.cookie = 0;
@@ -1000,7 +1000,7 @@ static int __send(void *handle, lwm2m_al_send_param_t *send_param)
     return LWM2M_OK;
 }
 
-int lwm2m_install(void)
+int lwm2m_imp_init(void)
 {
     lwm2m_al_op_t lwm2m_op =
     {

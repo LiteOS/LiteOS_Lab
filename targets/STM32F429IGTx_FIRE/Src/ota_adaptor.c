@@ -39,7 +39,7 @@
 static int ota_flag_read(ota_flag_t *flag)
 {
   if (flag != NULL) {
-    printf("SPI FLAG R\n");
+    (void) printf("SPI FLAG R\n");
     return storage_partition_read(PART_OTA_FLAG1, (void *)flag, sizeof(ota_flag_t), 0);
   }
   return ERR;
@@ -48,7 +48,7 @@ static int ota_flag_read(ota_flag_t *flag)
 static int ota_flag_write(ota_flag_t *flag)
 {
   if (flag != NULL) {
-    printf("SPI FLAG W:state %d\n", flag->cur_state);
+    (void) printf("SPI FLAG W:state %d\n", flag->cur_state);
     return storage_partition_write(PART_OTA_FLAG1, (void *)flag, sizeof(ota_flag_t), 0);
   }
   return ERR;
@@ -57,7 +57,7 @@ static int ota_flag_write(ota_flag_t *flag)
 static int ota_bin_read(uint32_t offset, void *buf, int len)
 {
   if (buf != NULL) {
-    printf("SPI BIN R: %08d %08d\n", offset, len);
+    (void) printf("SPI BIN R: %08d %08d\n", offset, len);
     return storage_partition_read(PART_OTA_IMG_DOWNLOAD, buf, len, offset);
   }
   return ERR;
@@ -66,7 +66,7 @@ static int ota_bin_read(uint32_t offset, void *buf, int len)
 static int ota_bin_write(uint32_t offset, void *buf, int len)
 {
   if (buf != NULL) {
-    printf("SPI BIN W: %08d %08d\n", offset, len);
+    (void) printf("SPI BIN W: %08d %08d\n", offset, len);
     return storage_partition_write(PART_OTA_IMG_DOWNLOAD, buf, len, offset);
   }
   return ERR;
@@ -106,7 +106,7 @@ void ota_update_upgrade_result(ota_flag_t *flag, uint32_t result)
 
 void hal_init_ota(void)
 {
-  printf("HAL OTA init\n");
+  (void) printf("HAL OTA init\n");
   flash_adaptor_init();
   ota_storage_install(&prv_ota_flag_s);
 }

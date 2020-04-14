@@ -5,30 +5,15 @@ choice Demo
 		bool "none"
 	config Demo_Helloworld
 		bool "Hello World"
-		select SHELL_ENABLE
 	config Demo_Streetlight
 		bool "OC Streetlight"
-		select OC_LWM2M
-		select SHELL_ENABLE
-		select AT_ENABLE
-		select BOUDICA150
-		select STIMER_ENABLE
 	config Demo_Agriculture
 		bool "OC Agriculture"
-		select OC_LWM2M
-		select SHELL_ENABLE
-		select AT_ENABLE
-		select BOUDICA150
-		select STIMER_ENABLE
 	config Demo_Track
 		bool "OC Track"
-		select OC_LWM2M
-		select SHELL_ENABLE
-		select AT_ENABLE
-		select BOUDICA150
-		select STIMER_ENABLE
 	config Demo_Smoke
 		bool "OC Smoke"
+<<<<<<< HEAD
 		select OC_LWM2M
 		select SHELL_ENABLE
 		select AT_ENABLE
@@ -48,13 +33,10 @@ choice Demo
 		select AT_ENABLE
 		select BOUDICA150
 		select STIMER_ENABLE
+=======
+>>>>>>> pr/3
 	config Demo_OC_Cloud_Map
 		bool "OC Cloud Map"
-		select OC_LWM2M
-		select SHELL_ENABLE
-		select AT_ENABLE
-		select BOUDICA150
-		select STIMER_ENABLE
 endchoice
 
 config USER_DEMO

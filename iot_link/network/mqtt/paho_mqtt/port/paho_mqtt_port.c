@@ -37,13 +37,30 @@
 #include <sal.h>
 #include <mqtt_al.h>
 #include <paho_mqtt_port.h>
+#include <iot_config.h>
 
-#define CN_MQTT_CONNECT_TIMEOUT_MS  (10 *1000)
-#define cn_mqtt_cmd_timeout_ms (10 * 1000)
-#define cn_mqtt_events_handle_period_ms (1*1000)
-#define cn_mqtt_keepalive_interval_s (100)
-#define cn_mqtt_sndbuf_size (1024 * 2)
-#define cn_mqtt_rcvbuf_size (1024 * 2)
+
+#ifndef CONFIG_PAHO_CONNECT_TIMEOUT
+#define CONFIG_PAHO_CONNECT_TIMEOUT  (10 *1000)
+#endif
+
+#ifndef CONFIG_PAHO_CMD_TIMEOUT
+#define CONFIG_PAHO_CMD_TIMEOUT      (10 * 1000)
+#endif
+
+
+#ifndef CONFIG_PAHO_LOOPTIMEOUT
+#define CONFIG_PAHO_LOOPTIMEOUT     (10)
+#endif
+
+
+#ifndef CONFIG_PAHO_SNDBUF_SIZE
+#define CONFIG_PAHO_SNDBUF_SIZE     (1024 * 2)
+#endif
+
+#ifndef CONFIG_PAHO_RCVBUF_SIZE
+#define CONFIG_PAHO_RCVBUF_SIZE      (1024 * 2)
+#endif
 
 typedef struct
 {
@@ -52,10 +69,10 @@ typedef struct
     void          *task;    //create a task for this client
     void          *rcvbuf;  //for the mqtt engine used
     void          *sndbuf;
+    int            stop;
 }paho_mqtt_cb_t;
 
 ///< waring: the paho mqtt has the opposite return code with normal socket read and write
-#ifdef CONFIG_DTLS_ENABLE
 
 static int __tls_read(void *ssl, unsigned char *buffer, int len, int timeout)
 {
@@ -113,7 +130,7 @@ static int __tls_write(void *ssl, unsigned char *buffer, int len, int timeout)
 }
 
 #define PORT_BUF_LEN 16
-static int __tls_connect(Network *n, char *addr, int port)
+static int __tls_connect(Network *n,const char *addr, int port)
 {    int ret = -1;
 
     void *handle = NULL;
@@ -122,7 +139,7 @@ static int __tls_connect(Network *n, char *addr, int port)
 
     char port_buf[PORT_BUF_LEN];
 
-    memset( &para,0, sizeof(para));
+    (void) memset( &para,0, sizeof(para));
 
     para.security.type = EN_DTLS_AL_SECURITY_TYPE_CERT;
     para.istcp = 1;
@@ -134,9 +151,9 @@ static int __tls_connect(Network *n, char *addr, int port)
         return ret;
     }
 
-    snprintf(port_buf, PORT_BUF_LEN, "%d", port);
+    (void) snprintf(port_buf, PORT_BUF_LEN, "%d", port);
 
-    ret = dtls_al_connect( handle, addr, port_buf, CN_MQTT_CONNECT_TIMEOUT_MS);
+    ret = dtls_al_connect( handle, addr, port_buf, CONFIG_PAHO_CONNECT_TIMEOUT);
     if (ret != EN_DTLS_AL_ERR_OK)
     {
         dtls_al_destroy(handle);
@@ -165,8 +182,6 @@ static void __tls_disconnect(void *ctx)
 }
 
 
-#endif
-
 ///< receve function: return code:0 means timeout -1:failed  > receive length
 static int __socket_read(void *ctx, unsigned char *buf, int len, int timeout)
 {
@@ -181,7 +196,7 @@ static int __socket_read(void *ctx, unsigned char *buf, int len, int timeout)
         return ret;
     }
 
-    fd = (int)ctx;  ///< socket could be zero
+    fd = (int)(intptr_t)ctx;  ///< socket could be zero
 
     timedelay.tv_sec = timeout/1000;
     timedelay.tv_usec = (timeout%1000)*1000;
@@ -223,7 +238,7 @@ static int __socket_write(void *ctx, unsigned char *buf, int len, int timeout)
         return ret;
     }
 
-    fd = (int)ctx;  ///< THE SOCKET COULD BE ZERO
+    fd = (int)(intptr_t)ctx;  ///< THE SOCKET COULD BE ZERO
 
     timedelay.tv_sec = timeout/1000;
     timedelay.tv_usec = (timeout%1000)*1000;
@@ -251,7 +266,7 @@ static int __socket_write(void *ctx, unsigned char *buf, int len, int timeout)
 }
 static void __socket_disconnect(void *ctx)
 {
-    sal_closesocket((int)ctx);
+    (void) sal_closesocket((int)(intptr_t)ctx);
     return;
 }
 static int __socket_connect(Network *n, const char *host, int port)
@@ -275,19 +290,19 @@ static int __socket_connect(Network *n, const char *host, int port)
     }
 
 
-    memset(&addr,0,sizeof(addr));
+    (void) memset(&addr,0,sizeof(addr));
     addr.sin_family = AF_INET;
-    memcpy(&addr.sin_addr.s_addr,entry->h_addr_list[0],sizeof(addr.sin_addr.s_addr));
+    (void) memcpy(&addr.sin_addr.s_addr,entry->h_addr_list[0],sizeof(addr.sin_addr.s_addr));
     addr.sin_port = htons(((uint16_t)port));
 
     if(-1 == sal_connect(fd,(struct sockaddr *)&addr,sizeof(addr)))
     {
-        sal_closesocket(fd);
+        (void) sal_closesocket(fd);
     }
     else
     {
         ret = 0;
-        n->ctx = (void *)fd;
+        n->ctx = (void *)(intptr_t)fd;
     }
 
     return ret;
@@ -309,12 +324,10 @@ static int __io_read(Network *n, unsigned char *buffer, int len, int timeout_ms)
     {
         ret = __socket_read(n->ctx, buffer, len, timeout_ms);
     }
-#if CONFIG_DTLS_ENABLE
     else
     {
         ret = __tls_read(n->ctx, buffer, len, timeout_ms);
     }
-#endif
 
     return ret;
 }
@@ -332,16 +345,14 @@ static int __io_write(Network *n, unsigned char *buffer, int len, int timeout_ms
     {
         ret = __socket_write(n->ctx, buffer, len, timeout_ms);
     }
-#if CONFIG_DTLS_ENABLE
     else
     {
         ret = __tls_write(n->ctx, buffer, len,timeout_ms);
     }
-#endif
     return ret;
 }
 
-static int __io_connect(Network *n, char *addr, int port)
+static int __io_connect(Network *n, const char *addr, int port)
 {
     int ret = -1;
 
@@ -354,12 +365,10 @@ static int __io_connect(Network *n, char *addr, int port)
     {
         ret = __socket_connect(n, addr, port);
     }
-#if CONFIG_DTLS_ENABLE
     else
     {
-        ret = __tls_connect(n, addr, port);
+        ret = __tls_connect(n, (const char *)addr, port);
     }
-#endif
     return ret;
 }
 
@@ -372,12 +381,10 @@ static void __io_disconnect(Network *n)
     {
         __socket_disconnect(n->ctx);
     }
-#if CONFIG_DTLS_ENABLE
     else
     {
         __tls_disconnect(n->ctx);
     }
-#endif
 
     n->ctx = NULL;
 
@@ -389,11 +396,11 @@ static  int __loop_entry(void *arg)
 {
     paho_mqtt_cb_t *cb;
     cb = arg;
-    while(1)
+    while((NULL != cb) && (cb->stop == 0))
     {
         if((NULL != cb) && MQTTIsConnected(&cb->client))
         {
-            MQTTYield(&cb->client,1000);
+           (void) MQTTYield(&cb->client, CONFIG_PAHO_LOOPTIMEOUT);
         }
         ///< for some operation system ,the task could not be awake when release,so do some wait to give up the cpu
 
@@ -402,6 +409,17 @@ static  int __loop_entry(void *arg)
     }
     return 0;
 }
+
+void __mqtt_cb_stop(paho_mqtt_cb_t   *cb)
+{
+    if(NULL != cb)
+    {
+        cb->stop = 1;
+    }
+
+    return;
+}
+
 
 
 static     MQTTClient       *s_static_client_debug = NULL;
@@ -423,7 +441,7 @@ static void * __connect(mqtt_al_conpara_t *conparam)
         goto EXIT_CB_MEM_ERR;
     }
 
-    memset(cb,0,sizeof(paho_mqtt_cb_t));
+    (void) memset(cb,0,sizeof(paho_mqtt_cb_t));
     cb->task = NULL;
     conparam->conret = cn_mqtt_al_con_code_err_unkown;
 
@@ -440,23 +458,23 @@ static void * __connect(mqtt_al_conpara_t *conparam)
     {
         n->arg = *conparam->security;
     }
-    if(0 != __io_connect(n,conparam->serveraddr.data,conparam->serverport))
+    if(0 != __io_connect(n,(const char *)conparam->serveraddr.data,conparam->serverport))
     {
         conparam->conret = cn_mqtt_al_con_code_err_network;
 
         goto EXIT_NET_CONNECT_ERR;
     }
     //then do the mqtt config
-    cb->rcvbuf = osal_malloc(cn_mqtt_rcvbuf_size) ;
-    cb->sndbuf = osal_malloc(cn_mqtt_sndbuf_size) ;
+    cb->rcvbuf = osal_malloc(CONFIG_PAHO_RCVBUF_SIZE) ;
+    cb->sndbuf = osal_malloc(CONFIG_PAHO_SNDBUF_SIZE) ;
     if((NULL == cb->rcvbuf) || (NULL == cb->sndbuf))
     {
         conparam->conret = cn_mqtt_al_con_code_err_unkown;
         goto EIXT_BUF_MEM_ERR;
     }
     c = &cb->client;
-    if(MQTT_SUCCESS != MQTTClientInit(c, n, cn_mqtt_cmd_timeout_ms,\
-            cb->sndbuf, cn_mqtt_sndbuf_size, cb->rcvbuf, cn_mqtt_rcvbuf_size))
+    if(MQTT_SUCCESS != MQTTClientInit(c, n, CONFIG_PAHO_CMD_TIMEOUT,\
+            cb->sndbuf, CONFIG_PAHO_SNDBUF_SIZE, cb->rcvbuf, CONFIG_PAHO_RCVBUF_SIZE))
     {
         goto EXIT_MQTT_INIT;
     }
@@ -518,13 +536,16 @@ static void * __connect(mqtt_al_conpara_t *conparam)
     {
         goto EXIT_MQTT_MAINTASK;
     }
+
     s_static_client_debug = c;
 
+    cb->stop = 0;
     ret = cb;
+
     return ret;
 
 EXIT_MQTT_MAINTASK:
-    MQTTDisconnect(c);
+    (void)MQTTDisconnect(c);
 EXIT_MQTT_CONNECT:
 EXIT_MQTT_INIT:
 EIXT_BUF_MEM_ERR:
@@ -557,11 +578,11 @@ static int __disconnect(void *handle)
     c = &cb->client;
     n = &cb->network;
     //mqtt disconnect
-    MQTTDisconnect(c);
+    (void)MQTTDisconnect(c);
     //net disconnect
     __io_disconnect(n);
     //kill the thread
-    osal_task_kill(cb->task);
+    (void)osal_task_kill(cb->task);
     //deinit the mqtt
     MQTTClientDeInit(c);
     //free the memory
@@ -601,7 +622,7 @@ static void general_dealer(MessageData *data)
     if(NULL != data->arg)
     {
         dealer = data->arg;
-        dealer(NULL,&msg);  ///<   the args not implement yet
+        dealer((void *)data->arg,&msg);  ///<   the args not implement yet
     }
 }
 
@@ -674,9 +695,9 @@ static int __publish(void *handle, mqtt_al_pubpara_t *para)
     cb = handle;
     c = &cb->client;
 
-    memset(&msg,0,sizeof(msg));
+    (void) memset(&msg,0,sizeof(msg));
     msg.retained = (unsigned char )para->retain;
-    msg.qos = QOS0 + para->qos;
+    msg.qos = QOS0 + (enum QoS)para->qos;
     msg.payload = para->msg.data;
     msg.payloadlen = para->msg.len;
     if(MQTT_SUCCESS ==  MQTTPublish(c, para->topic.data, &msg))
@@ -710,7 +731,7 @@ static en_mqtt_al_connect_state __check_status(void *handle)
 }
 
 
-int mqtt_install_pahomqtt()
+int mqtt_imp_init()
 {
     int ret = -1;
 

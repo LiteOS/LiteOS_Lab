@@ -57,7 +57,7 @@ __attribute__((weak)) in_addr_t inet_addr(const char *addr)
         ip[1] = (unsigned char)tmp[1];
         ip[2] = (unsigned char)tmp[2];
         ip[3] = (unsigned char)tmp[3];
-        memcpy((void *)&result,(void *)ip,sizeof(result));
+        (void) memcpy((void *)&result,(void *)ip,sizeof(result));
     }
     return result;
 }
@@ -76,7 +76,7 @@ __attribute__((weak)) int inet_aton(const char *string,struct in_addr *addr)
         ip[1] = (unsigned char)tmp[1];
         ip[2] = (unsigned char)tmp[2];
         ip[3] = (unsigned char)tmp[3];
-        memcpy((void *)addr,(void *)ip,sizeof(ip));
+        (void) memcpy((void *)addr,(void *)ip,sizeof(ip));
         result = 1;
     }
 
@@ -91,14 +91,14 @@ __attribute__((weak)) char *inet_ntoa(struct in_addr addr)
 {
     unsigned char ip[4];
     int tmp[4];
-    memcpy((void *)ip,(void *)&addr,sizeof(ip));
-    memset((void *)s_inet_addr_buf,0,cn_inet_addrlen_max);
+    (void) memcpy((void *)ip,(void *)&addr,sizeof(ip));
+    (void) memset((void *)s_inet_addr_buf,0,cn_inet_addrlen_max);
 
     tmp[0] = (int)ip[0];
     tmp[1] = (int)ip[1];
     tmp[2] = (int)ip[2];
     tmp[3] = (int)ip[3];
-    sprintf(s_inet_addr_buf,"%d.%d.%d.%d",tmp[0],tmp[1],tmp[2],tmp[3]);
+    (void) sprintf(s_inet_addr_buf,"%d.%d.%d.%d",tmp[0],tmp[1],tmp[2],tmp[3]);
 
     return (char *)s_inet_addr_buf;
 }
@@ -117,12 +117,12 @@ __attribute__((weak)) const char *inet_ntop(int af, const void *src, char *dst, 
     if(af==AF_INET)
     {
 
-        memcpy((void *)&addr,src,sizeof(addr));
+        (void) memcpy((void *)&addr,src,sizeof(addr));
         str = inet_ntoa(addr);
 
-        if((NULL != str)&&(cnt > (strlen(str)+1)))
+        if((NULL != str)&&(cnt >(socklen_t)(strlen(str)+1)))
         {
-            memcpy((void*)dst,(void*)str,strlen(str)+1);
+            (void) memcpy((void*)dst,(void*)str,strlen(str)+1);
             result = dst;
         }
     }
@@ -146,7 +146,7 @@ __attribute__((weak)) int inet_pton(int af, const char *src, void *dst)
     {
         if(inet_aton(src,&addr))
         {
-            memcpy((void *)dst,&addr,sizeof(addr));
+            (void) memcpy((void *)dst,&addr,sizeof(addr));
             result = 1;
         }
     }

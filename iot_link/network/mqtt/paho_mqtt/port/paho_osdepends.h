@@ -58,8 +58,8 @@ typedef osal_loop_timer_t  Timer;
 typedef osal_mutex_t  Mutex;
 #define MutexInit(mutex)     ((true==osal_mutex_create(mutex))?0:-1)
 #define MutexLock(mutex)     ((true==osal_mutex_lock(*mutex))?0:-1)
-#define MutexUnlock(mutex)   ((true==osal_mutex_unlock(*mutex))?0:-1)
-#define MutexDestory(mutex)  osal_mutex_del(*mutex)
+#define MutexUnlock(mutex)   ((void) osal_mutex_unlock(*mutex))
+#define MutexDestory(mutex)  ((void) osal_mutex_del(*mutex))
 
 
 typedef struct

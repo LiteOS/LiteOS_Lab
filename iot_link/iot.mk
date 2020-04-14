@@ -1,7 +1,6 @@
 ################################################################################
 # this is used for compile the iotlink
 ################################################################################
-
 iot_link_root = $(SDK_DIR)/iot_link
 
 #configure the common includes
@@ -37,30 +36,11 @@ include $(iot_link_root)/cJSON/cJSON.mk
 #configure th crc
 include $(iot_link_root)/crc/crc.mk 
 
-#configure the sal for the iot_link
-include $(iot_link_root)/network/tcpip/tcpip.mk
+#configure the network
+include $(iot_link_root)/network/network.mk
 
-#configure the dtls for the iot link
-include $(iot_link_root)/network/dtls/dtls.mk
-
-#configure the mqtt
-include $(iot_link_root)/network/mqtt/mqtt.mk
-
-#configure the lwm2m
-include $(iot_link_root)/network/lwm2m/lwm2m.mk
-
-#configure the coap
-include $(iot_link_root)/network/coap/coap.mk
-
-#configure the oc mqtt
-
-include $(iot_link_root)/oc/oc_mqtt/oc_mqtt.mk
-
-#configure the oc lwm2m
-include $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m.mk
-
-#configure the oc coap
-include $(iot_link_root)/oc/oc_coap/oc_coap.mk
+#configure the oceanconnect
+include $(iot_link_root)/oc/oc.mk
 
 #configure the ota	
 include $(iot_link_root)/ota/ota.mk
@@ -79,12 +59,13 @@ endif
 #configure storage
 include $(iot_link_root)/storage/storage.mk
 
+#configure demos
+include $(iot_link_root)/demos/demos.mk
+
 iot_link_src  = ${wildcard $(iot_link_root)/*.c} 
 C_SOURCES += $(iot_link_src)	
 		
 iot_link_inc = -I $(iot_link_root)
 C_INCLUDES += $(iot_link_inc)
-
-include $(SDK_DIR)/demos/demos.mk
 
 

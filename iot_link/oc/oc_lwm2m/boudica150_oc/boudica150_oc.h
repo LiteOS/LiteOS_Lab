@@ -36,18 +36,12 @@
 #ifndef __BOUDICA150_OC_H
 #define __BOUDICA150_OC_H
 
-#define CONFIG_OC_LWM2M_BOUDICA150_ENABLE  1 //only for test
-
-#if  CONFIG_OC_LWM2M_BOUDICA150_ENABLE
 
 /**
  *@brief this function should be called after oc_lwm2m_agent_init
  *
- *@param[in]  plmn which used by at+cops
- *@param[in]  apn which used by
- *
  */
-int boudica150_init(const char *plmn, const char *apn, const char *bands);
+int oc_lwm2m_imp_init(void);
 
 /**
  *@brief this function to get the csq of the MODULES
@@ -61,12 +55,6 @@ int boudica150_get_csq(int *value);
 
 int *boudica150_check_nuestats(void);
 
-#else
-
-#define boudica150_init(plmn,apn,bands)    -1
-#define boudica150_get_csq(value)          -1
-#define boudica150_check_nuestats(void)    NULL
-#endif
 
 
 #endif /* __BOUDICA150_OC_H */

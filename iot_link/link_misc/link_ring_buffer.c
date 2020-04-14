@@ -71,7 +71,7 @@ int ring_buffer_write(tag_ring_buffer_t *ring,unsigned char *buf, int len)
     {
         return ret;//which means parameters error
     }
-    if(ring->datalen == ring->buflen)
+    if((ring->datalen == ring->buflen)|| (ring->buflen <= 0))
     {
         ret = 0;
         return  ret;//which means you could copy nothing here
@@ -85,9 +85,12 @@ int ring_buffer_write(tag_ring_buffer_t *ring,unsigned char *buf, int len)
         offset = (ring->dataoff+ring->datalen)%ring->buflen; //we could move it one time
         cpylen = lenleft;
         dst = ring->buf + offset;
-        memcpy(dst,src,cpylen);
-        ring->datalen += cpylen;
-        lenleft -= cpylen;
+        if(cpylen > 0)
+        {
+            (void) memcpy(dst,src,cpylen);
+            ring->datalen += cpylen;
+            lenleft -= cpylen;
+        }
     }
     else if((ring->dataoff+ring->datalen + lenleft)>ring->buflen) //which means the data will be roll back
     {
@@ -95,7 +98,7 @@ int ring_buffer_write(tag_ring_buffer_t *ring,unsigned char *buf, int len)
         offset = ring->dataoff + ring->datalen;
         cpylen = ring->buflen - offset;
         dst = ring->buf + offset;
-        memcpy(dst,src,cpylen);
+        (void) memcpy(dst,src,cpylen);
         src += cpylen;
         ring->datalen += cpylen;
         lenleft -= cpylen;
@@ -106,7 +109,7 @@ int ring_buffer_write(tag_ring_buffer_t *ring,unsigned char *buf, int len)
         offset = (ring->dataoff+ring->datalen)%ring->buflen; //we could move it one time
         cpylen = lenleft;
         dst = ring->buf + offset;
-        memcpy(dst,src,cpylen);
+        (void) memcpy(dst,src,cpylen);
         ring->datalen += cpylen;
     }
     return ret;
@@ -125,7 +128,7 @@ int ring_buffer_read(tag_ring_buffer_t *ring,unsigned char *buf, int len)
     {
         return ret;//which means parameters error
     }
-    if(ring->datalen == 0)
+    if((ring->datalen == 0) || (ring->buflen <= 0))
     {
         ret = 0;
         return  ret;//which means you could copy nothing here
@@ -134,16 +137,20 @@ int ring_buffer_read(tag_ring_buffer_t *ring,unsigned char *buf, int len)
     //now let us think the method to fill the data,take care of the roll back
     lenleft = ret;
     dst = buf;
-    if((ring->dataoff+ lenleft)>=ring->buflen) //which means the data has roll back
+    if(ring->dataoff >= (ring->buflen - lenleft)) //which means the data has roll back
     {
         offset =ring->dataoff; //we cpy part
         cpylen = ring->buflen - ring->dataoff;
         src = ring->buf + offset;
-        memcpy(dst,src,cpylen);
-        ring->dataoff = (ring->dataoff + cpylen)%ring->buflen;
-        ring->datalen -= cpylen;
-        lenleft -= cpylen;
-        dst += cpylen;
+
+        if(cpylen > 0)
+        {
+            (void) memcpy(dst,src,cpylen);
+            ring->dataoff = (ring->dataoff + cpylen)%ring->buflen;
+            ring->datalen -= cpylen;
+            lenleft -= cpylen;
+            dst += cpylen;
+        }
     }
     //here means we could move it by one time
     if(lenleft > 0)
@@ -151,7 +158,7 @@ int ring_buffer_read(tag_ring_buffer_t *ring,unsigned char *buf, int len)
         offset =ring->dataoff; //we cpy part
         cpylen = lenleft;
         src = ring->buf + offset;
-        memcpy(dst,src,cpylen);
+        (void) memcpy(dst,src,cpylen);
         ring->dataoff = ring->dataoff + cpylen;
         ring->datalen -= cpylen;
     }
@@ -196,7 +203,7 @@ int ring_buffer_deinit(tag_ring_buffer_t *ring)
     int ret = -1;
     if(NULL != ring)
     {
-        memset(ring,0,sizeof(tag_ring_buffer_t));
+        (void) memset(ring,0,sizeof(tag_ring_buffer_t));
         ret = 0;
     }
     return ret;

@@ -209,7 +209,7 @@ static void prv_deleteObservedList(lwm2m_context_t *contextP)
 
         lwm2m_free(targetP);
     }
-    osal_mutex_unlock(contextP->observe_mutex);
+    (void) osal_mutex_unlock(contextP->observe_mutex);
 }
 #endif
 
@@ -376,8 +376,8 @@ END:
     if ((oldState != contextP->bsCtrl.state)
         || (oldCnt != contextP->bsCtrl.cnt))
     {
-        LOG_ARG("bsctrlstat (%d,%d) to (%d,%d)", oldState, oldCnt,
-                    contextP->bsCtrl.state, contextP->bsCtrl.cnt);
+        LOG_ARG("bsctrlstat (%d,%d) to (%d,%d)",(int)oldState, (int)oldCnt,
+                    (int)contextP->bsCtrl.state,(int)contextP->bsCtrl.cnt);
     }
 
 }

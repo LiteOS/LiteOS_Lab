@@ -56,28 +56,14 @@
 #include "dtls_interface.h"
 #include "mbedtls/net_sockets.h"
 #include "mbedtls/ssl_internal.h"
-
 #include <sal.h>
 #include <osal.h>
 
-
-#define MBEDTLS_DEBUG
-
-#ifdef MBEDTLS_DEBUG
-#define MBEDTLS_LOG(fmt, ...) \
-    do \
-    { \
-        (void)printf("[MBEDTLS][%s:%d] " fmt "\r\n", \
-        __FUNCTION__, __LINE__, ##__VA_ARGS__); \
-    } while (0)
-#else
-#define MBEDTLS_LOG(fmt, ...) ((void)0)
-#endif
-
+#define MBEDTLS_LOG LINK_LOG_DEBUG
 
 mbedtls_ssl_context *dtls_ssl_new(dtls_establish_info_s *info, char plat_type)
 {
-    int ret;
+    int ret = -1;
     mbedtls_ssl_context *ssl = NULL;
     mbedtls_ssl_config *conf = NULL;
     mbedtls_entropy_context *entropy = NULL;
@@ -158,12 +144,7 @@ mbedtls_ssl_context *dtls_ssl_new(dtls_establish_info_s *info, char plat_type)
 
     MBEDTLS_LOG("setting up the SSL structure");
 
-    ret = mbedtls_ssl_config_defaults(conf,plat_type,transport,MBEDTLS_SSL_PRESET_DEFAULT);
-    if (ret != 0)
-    {
-        MBEDTLS_LOG("mbedtls_ssl_config_defaults failed: -0x%x", -ret);
-        goto exit_fail;
-    }
+    (void) mbedtls_ssl_config_defaults(conf,plat_type,transport,MBEDTLS_SSL_PRESET_DEFAULT);
 
     mbedtls_ssl_conf_authmode(conf, MBEDTLS_SSL_VERIFY_REQUIRED);
     mbedtls_ssl_conf_rng(conf, mbedtls_ctr_drbg_random, ctr_drbg);
@@ -384,7 +365,7 @@ int dtls_shakehand(mbedtls_ssl_context *ssl, const dtls_shakehand_info_s *info)
         if((flags = mbedtls_ssl_get_verify_result(ssl)) != 0)
         {
             char vrfy_buf[512];
-            mbedtls_x509_crt_verify_info(vrfy_buf, sizeof(vrfy_buf), "  ! ", flags);
+            (void) mbedtls_x509_crt_verify_info(vrfy_buf, sizeof(vrfy_buf), "  ! ", flags);
             MBEDTLS_LOG("cert verify failed: %s", vrfy_buf);
             goto exit_fail;
         }
@@ -410,7 +391,7 @@ exit_fail:
 }
 void dtls_ssl_destroy(mbedtls_ssl_context *ssl)
 {
-    int ret = 0;
+    int ret;
     mbedtls_ssl_config           *conf = NULL;
     mbedtls_ctr_drbg_context     *ctr_drbg = NULL;
     mbedtls_entropy_context      *entropy = NULL;
@@ -435,7 +416,6 @@ void dtls_ssl_destroy(mbedtls_ssl_context *ssl)
 
     do ret = mbedtls_ssl_close_notify( ssl );
     while( ret == MBEDTLS_ERR_SSL_WANT_WRITE );
-    ret = 0;
 
 
     if (NULL != conf)

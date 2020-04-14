@@ -78,7 +78,7 @@ MPU支持两种模式的任务，”特权“任务和”非特权“任务。�
     task_init_param.pfnTaskEntry = (TSK_ENTRY_FUNC)task1;
     task_init_param.uwStackSize = 0x130;
 
-    memset(&mpuPara, 0, sizeof (mpuPara));
+    (void) memset(&mpuPara, 0, sizeof (mpuPara));
     mpuPara[0].uwRegionAddr = ((UINT32)(&c222) & ~0xff);
     mpuPara[0].uwRegionSize = 256;
     mpuPara[0].uwRegionAttr = MPU_ATTR_RW_RW | MPU_ATTR_WB | MPU_ATTR_EN;

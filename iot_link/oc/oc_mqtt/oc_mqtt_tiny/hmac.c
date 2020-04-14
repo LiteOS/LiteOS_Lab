@@ -35,7 +35,9 @@
 
 #ifdef WITH_DTLS
 
+
 #include <string.h>
+#include <link_log.h>
 #include "mbedtls/md.h"
 #include "mbedtls/ssl.h"
 #include "mbedtls/entropy.h"
@@ -64,24 +66,24 @@ int mbedtls_hmac_calc(mbedtls_hmac_t *hmac_info)
     const mbedtls_md_info_t *md_info;
 
     if (hmac_info == NULL || hmac_info->secret == NULL || hmac_info->input == NULL
-        || hmac_info->secret_len <= 0 || hmac_info->input_len <= 0 || hmac_info->digest_len <= 0)
+        || hmac_info->secret_len == 0 || hmac_info->input_len == 0 || hmac_info->digest_len == 0)
     {
         return MBEDTLS_ERR_MD_BAD_INPUT_DATA;
     }
 
     md_info = mbedtls_md_info_from_type(hmac_info->hmac_type);
-    if (md_info == NULL || md_info->size > hmac_info->digest_len)
+    if (md_info == NULL || (size_t)md_info->size > hmac_info->digest_len)
     {
         return MBEDTLS_ERR_MD_BAD_INPUT_DATA;
     }
 
     mbedtls_md_init(&mbedtls_md_ctx);
-    memset(hmac_info->digest, 0x00, hmac_info->digest_len);
+    (void) memset(hmac_info->digest, 0x00, hmac_info->digest_len);
 
     ret = mbedtls_md_setup(&mbedtls_md_ctx, md_info, 1);
     if (ret != 0)
     {
-        printf("mbedtls_md_setup() returned -0x%04x\n", -ret);
+        LINK_LOG_DEBUG("mbedtls_md_setup() returned -0x%04x\n", -ret);
         goto exit;
     }
 
@@ -111,6 +113,7 @@ int hmac_generate_passwd(char *content, int contentlen,char *key,int keylen, uns
 
     return ret;
 }
+
 
 #endif
 

@@ -142,7 +142,7 @@ static int lwm2m_agent_receive(en_oc_lwm2m_msg_t type, char *msg, int len)
 static int agent_dealer_callback(int op, const char *uri, char *msg, int len)
 {
     int ret = -1;
-    printf("uri: %s, op: %d\n", uri, op);
+    LINK_LOG_DEBUG("uri: %s, op: %d\n", uri, op);
 
     if ((0 == strcmp(uri, APP_DOWN_CHANNEL_URI))
         || (0 == strcmp(uri, URI_TRIGER_SERVER_INITIATED_BS)))
@@ -177,15 +177,15 @@ static int agent_dealer_callback(int op, const char *uri, char *msg, int len)
  * modify date:   2018-06-20
  * description: in order to check the params for the bootstrap, expecialy for the mode and the ip/port
  * return:
- *              success: ATINY_OK
- *              fail:    ATINY_ARG_INVALID
+ *              success: (int)ATINY_OK
+ *              fail:    (int)ATINY_ARG_INVALID
  *
  */
 static int atiny_check_bootstrap_init_param(atiny_param_t *atiny_params)
 {
     if (NULL == atiny_params)
     {
-        return ATINY_ARG_INVALID;
+        return (int)ATINY_ARG_INVALID;
     }
 
     if (ATINY_BOOTSTRAP_FACTORY == atiny_params->server_params.bootstrap_mode)
@@ -193,7 +193,7 @@ static int atiny_check_bootstrap_init_param(atiny_param_t *atiny_params)
         if ((NULL == atiny_params->security_params[0].server_ip) || (NULL == atiny_params->security_params[0].server_port))
         {
             ATINY_LOG(LOG_FATAL, "[bootstrap_tag]: BOOTSTRAP_FACTORY mode's params is wrong, should have iot server ip/port");
-            return ATINY_ARG_INVALID;
+            return (int)ATINY_ARG_INVALID;
         }
     }
     else if (ATINY_BOOTSTRAP_CLIENT_INITIATED == atiny_params->server_params.bootstrap_mode)
@@ -201,21 +201,21 @@ static int atiny_check_bootstrap_init_param(atiny_param_t *atiny_params)
         if ((NULL == atiny_params->security_params[1].server_ip) || (NULL == atiny_params->security_params[1].server_port))
         {
             ATINY_LOG(LOG_FATAL, "[bootstrap_tag]: BOOTSTRAP_CLIENT_INITIATED mode's params is wrong, should have bootstrap server ip/port");
-            return ATINY_ARG_INVALID;
+            return (int)ATINY_ARG_INVALID;
         }
     }
     else if (ATINY_BOOTSTRAP_SEQUENCE == atiny_params->server_params.bootstrap_mode)
     {
-        return ATINY_OK;
+        return (int)ATINY_OK;
     }
     else
     {
         //it is ok? if the mode value is not 0,1,2, we all set it to 2 ?
         ATINY_LOG(LOG_FATAL, "[bootstrap_tag]: BOOTSTRAP only have three mode, should been :0,1,2");
-        return ATINY_ARG_INVALID;
+        return (int)ATINY_ARG_INVALID;
     }
 
-    return ATINY_OK;
+    return (int)ATINY_OK;
 }
 
 static int atiny_check_psk_init_param(atiny_param_t *atiny_params)
@@ -229,7 +229,7 @@ static int atiny_check_psk_init_param(atiny_param_t *atiny_params)
 
     if (NULL == atiny_params)
     {
-        return ATINY_ARG_INVALID;
+        return (int)ATINY_ARG_INVALID;
     }
 
     //security_params have 2 element, we have 2 pair psk.
@@ -247,12 +247,12 @@ static int atiny_check_psk_init_param(atiny_param_t *atiny_params)
             if ((psk_id_len > PSK_ID_LIMIT_LEN) || (psk_len > PSK_LIMIT_LEN))
             {
                 ATINY_LOG(LOG_FATAL, "[bootstrap_tag]: psk_id len over 128 or psk len over 64");
-                return ATINY_ARG_INVALID;
+                return (int)ATINY_ARG_INVALID;
             }
         }
     }
 
-    return ATINY_OK;
+    return (int)ATINY_OK;
 }
 
 static int atiny_check_parameter(atiny_param_t *atiny_params,
@@ -261,36 +261,36 @@ static int atiny_check_parameter(atiny_param_t *atiny_params,
     if ((NULL == atiny_params) || (NULL == device_info))
     {
         ATINY_LOG(LOG_FATAL, "Parameter null");
-        return ATINY_ARG_INVALID;
+        return (int)ATINY_ARG_INVALID;
     }
 
     if (NULL == device_info->endpoint_name)
     {
         ATINY_LOG(LOG_FATAL, "Endpoint name null");
-        return ATINY_ARG_INVALID;
+        return (int)ATINY_ARG_INVALID;
     }
 
     if (NULL == device_info->manufacturer)
     {
         ATINY_LOG(LOG_FATAL, "Manufacturer name null");
-        return ATINY_ARG_INVALID;
+        return (int)ATINY_ARG_INVALID;
     }
 
-    if (ATINY_OK != atiny_check_bootstrap_init_param(atiny_params))
+    if ((int)ATINY_OK != atiny_check_bootstrap_init_param(atiny_params))
     {
         ATINY_LOG(LOG_FATAL, "[bootstrap_tag]: BOOTSTRAP's params are wrong");
-        return ATINY_ARG_INVALID;
+        return (int)ATINY_ARG_INVALID;
     }
 
     //#ifdef LWM2M_BOOTSTRAP
-    if (ATINY_OK != atiny_check_psk_init_param(atiny_params))
+    if ((int)ATINY_OK != atiny_check_psk_init_param(atiny_params))
     {
         ATINY_LOG(LOG_FATAL, "[bootstrap_tag]: psk params are wrong");
-        return ATINY_ARG_INVALID;
+        return (int)ATINY_ARG_INVALID;
     }
 
     //#endif
-    return ATINY_OK;
+    return (int)ATINY_OK;
 }
 
 static void uri_list_add(object_uri_list **head, object_uri_list *list)
@@ -329,13 +329,13 @@ static int agent_add_security_object(void *handle, atiny_param_t *lwm2m_params)
     uint8_t total_ins = 1;
     uint8_t security_params_index = 0;
     int i;
-    int ret = ATINY_ERR;
+    int ret = (int) ATINY_ERR;
     object_uri_list *security_list = NULL;
     lwm2m_al_sec_obj_param_t security_object_param;
 
     if (NULL == lwm2m_params)
     {
-        return ATINY_ARG_INVALID;
+        return (int)ATINY_ARG_INVALID;
     }
 
     security_object_param.server_id = SERVER_ID;
@@ -402,11 +402,11 @@ static int agent_add_security_object(void *handle, atiny_param_t *lwm2m_params)
         security_object_param.psk_id = lwm2m_params->security_params[security_params_index].psk_id;
         security_object_param.psk = lwm2m_params->security_params[security_params_index].psk;
         security_object_param.psk_len = lwm2m_params->security_params[security_params_index].psk_len;
-        ret = lwm2m_al_add_object(handle, OBJ_SECURITY_ID, instance_id, 0, &security_object_param);
+        ret = lwm2m_al_add_object(handle, (int)OBJ_SECURITY_ID, instance_id, 0, &security_object_param);
 
-        if (LWM2M_OK != ret)
+        if ((int) LWM2M_OK != ret)
         {
-            lwm2m_al_delete_object(handle, OBJ_SECURITY_ID);
+            (void)lwm2m_al_delete_object(handle, (int)OBJ_SECURITY_ID);
             return ret;
         }
     }//end for loop
@@ -415,11 +415,11 @@ static int agent_add_security_object(void *handle, atiny_param_t *lwm2m_params)
 
     if (NULL == security_list)
     {
-        lwm2m_al_delete_object(handle, OBJ_SECURITY_ID);
-        return ATINY_MALLOC_FAILED;
+        (void)lwm2m_al_delete_object(handle, (int)OBJ_SECURITY_ID);
+        return (int) ATINY_MALLOC_FAILED;
     }
 
-    security_list->object_id = OBJ_SECURITY_ID;
+    security_list->object_id = (int)OBJ_SECURITY_ID;
     uri_list_add(&uri_list, security_list);
     return 0;
 }
@@ -429,20 +429,20 @@ static int agent_add_server_object(void *handle, atiny_param_t *lwm2m_params)
     uint16_t instance_id = 0;
     lwm2m_al_srv_obj_param_t server_object_param;
     object_uri_list *server_list = NULL;
-    int ret = ATINY_ERR;
+    int ret = (int) ATINY_ERR;
 
     if (NULL == lwm2m_params)
     {
-        return ATINY_ARG_INVALID;
+        return (int)ATINY_ARG_INVALID;
     }
 
     server_object_param.server_id = SERVER_ID;
     server_object_param.binding = lwm2m_params->server_params.binding;
     server_object_param.life_time = lwm2m_params->server_params.life_time;
     server_object_param.storing_cnt = lwm2m_params->server_params.storing_cnt;
-    ret = lwm2m_al_add_object(handle, OBJ_SERVER_ID, instance_id, 0, &server_object_param);
+    ret = lwm2m_al_add_object(handle, (int)OBJ_SERVER_ID, instance_id, 0, &server_object_param);
 
-    if (LWM2M_OK != ret)
+    if ((int) LWM2M_OK != ret)
     {
         return ret;
     }
@@ -451,8 +451,8 @@ static int agent_add_server_object(void *handle, atiny_param_t *lwm2m_params)
 
     if (NULL == server_list)
     {
-        lwm2m_al_delete_object(handle, OBJ_SERVER_ID);
-        return ATINY_MALLOC_FAILED;
+        (void)lwm2m_al_delete_object(handle, (int)OBJ_SERVER_ID);
+        return (int) ATINY_MALLOC_FAILED;
     }
 
     server_list->object_id = OBJ_SERVER_ID;
@@ -464,10 +464,10 @@ static int agent_add_acc_ctrl_object(void *handle)
 {
     uint16_t instance_id = 0;
     object_uri_list *acc_ctrl_list = NULL;
-    int ret = ATINY_ERR;
-    ret = lwm2m_al_add_object(handle, OBJ_ACCESS_CONTROL_ID, instance_id, 0, NULL);
+    int ret = (int) ATINY_ERR;
+    ret = lwm2m_al_add_object(handle, (int)OBJ_ACCESS_CONTROL_ID, instance_id, 0, NULL);
 
-    if (LWM2M_OK != ret)
+    if ((int) LWM2M_OK != ret)
     {
         return ret;
     }
@@ -476,8 +476,8 @@ static int agent_add_acc_ctrl_object(void *handle)
 
     if (NULL == acc_ctrl_list)
     {
-        lwm2m_al_delete_object(handle, OBJ_ACCESS_CONTROL_ID);
-        return ATINY_MALLOC_FAILED;
+        (void)lwm2m_al_delete_object(handle, (int)OBJ_ACCESS_CONTROL_ID);
+        return (int) ATINY_MALLOC_FAILED;
     }
 
     acc_ctrl_list->object_id = OBJ_ACCESS_CONTROL_ID;
@@ -489,10 +489,10 @@ static int agent_add_device_object(void *handle)
 {
     uint16_t instance_id = 0;
     object_uri_list *device_list = NULL;
-    int ret = ATINY_ERR;
-    ret = lwm2m_al_add_object(handle, OBJ_DEVICE_ID, instance_id, 0, NULL);
+    int ret = (int) ATINY_ERR;
+    ret = lwm2m_al_add_object(handle, (int)OBJ_DEVICE_ID, instance_id, 0, NULL);
 
-    if (LWM2M_OK != ret)
+    if ((int) LWM2M_OK != ret)
     {
         return ret;
     }
@@ -501,8 +501,8 @@ static int agent_add_device_object(void *handle)
 
     if (NULL == device_list)
     {
-        lwm2m_al_delete_object(handle, OBJ_DEVICE_ID);
-        return ATINY_MALLOC_FAILED;
+        (void)lwm2m_al_delete_object(handle, (int)OBJ_DEVICE_ID);
+        return (int) ATINY_MALLOC_FAILED;
     }
 
     device_list->object_id = OBJ_DEVICE_ID;
@@ -514,10 +514,10 @@ static int agent_add_conn_m_object(void *handle)
 {
     uint16_t instance_id = 0;
     object_uri_list *conn_m_list = NULL;
-    int ret = ATINY_ERR;
-    ret = lwm2m_al_add_object(handle, OBJ_CONNECTIVITY_MONITORING_ID, instance_id, 0, NULL);
+    int ret = (int) ATINY_ERR;
+    ret = lwm2m_al_add_object(handle, (int)OBJ_CONNECTIVITY_MONITORING_ID, instance_id, 0, NULL);
 
-    if (LWM2M_OK != ret)
+    if ((int) LWM2M_OK != ret)
     {
         return ret;
     }
@@ -526,8 +526,8 @@ static int agent_add_conn_m_object(void *handle)
 
     if (NULL == conn_m_list)
     {
-        lwm2m_al_delete_object(handle, OBJ_CONNECTIVITY_MONITORING_ID);
-        return ATINY_MALLOC_FAILED;
+        (void)lwm2m_al_delete_object(handle, (int)OBJ_CONNECTIVITY_MONITORING_ID);
+        return (int) ATINY_MALLOC_FAILED;
     }
 
     conn_m_list->object_id = OBJ_CONNECTIVITY_MONITORING_ID;
@@ -538,12 +538,12 @@ static int agent_add_conn_m_object(void *handle)
 static int agent_add_firmware_object(void *handle)
 {
 #ifdef CONFIG_FEATURE_FOTA
-    int ret = ATINY_ERR;
+    int ret = (int) ATINY_ERR;
     uint16_t instance_id = 0;
     object_uri_list *firmware_list = NULL;
     ret = lwm2m_al_add_object(handle, OBJ_FIRMWARE_UPDATE_ID, instance_id, 0, NULL);
 
-    if (LWM2M_OK != ret)
+    if ((int) LWM2M_OK != ret)
     {
         return ret;
     }
@@ -553,7 +553,7 @@ static int agent_add_firmware_object(void *handle)
     if (NULL == firmware_list)
     {
         lwm2m_al_delete_object(handle, OBJ_FIRMWARE_UPDATE_ID);
-        return ATINY_MALLOC_FAILED;
+        return (int) ATINY_MALLOC_FAILED;
     }
 
     firmware_list->object_id = OBJ_FIRMWARE_UPDATE_ID;
@@ -566,10 +566,10 @@ static int agent_add_location_object(void *handle)
 {
     uint16_t instance_id = 0;
     object_uri_list *location_list = NULL;
-    int ret = ATINY_ERR;
-    ret = lwm2m_al_add_object(handle, OBJ_LOCATION_ID, instance_id, 0, NULL);
+    int ret = (int) ATINY_ERR;
+    ret = lwm2m_al_add_object(handle,(int)OBJ_LOCATION_ID, instance_id, 0, NULL);
 
-    if (LWM2M_OK != ret)
+    if ((int) LWM2M_OK != ret)
     {
         return ret;
     }
@@ -578,8 +578,8 @@ static int agent_add_location_object(void *handle)
 
     if (NULL == location_list)
     {
-        lwm2m_al_delete_object(handle, OBJ_LOCATION_ID);
-        return ATINY_MALLOC_FAILED;
+        (void)lwm2m_al_delete_object(handle, (int)OBJ_LOCATION_ID);
+        return (int) ATINY_MALLOC_FAILED;
     }
 
     location_list->object_id = OBJ_LOCATION_ID;
@@ -592,11 +592,11 @@ static int agent_add_binary_app_data_object(void *handle, unsigned int *storing_
     uint16_t instance_id = 0;
     int i;
     object_uri_list *binary_app_list = NULL;
-    int ret = ATINY_ERR;
+    int ret = (int) ATINY_ERR;
 
     if (NULL == storing_cnt)
     {
-        return ATINY_ARG_INVALID;
+        return (int)ATINY_ARG_INVALID;
     }
 
     // /19/0/0, /19/1/0
@@ -605,7 +605,7 @@ static int agent_add_binary_app_data_object(void *handle, unsigned int *storing_
         instance_id = i;
         ret = lwm2m_al_add_object(handle, BINARY_APP_DATA_OBJECT_ID, instance_id, 0, storing_cnt);
 
-        if (LWM2M_OK != ret)
+        if ((int) LWM2M_OK != ret)
         {
             return ret;
         }
@@ -615,8 +615,8 @@ static int agent_add_binary_app_data_object(void *handle, unsigned int *storing_
 
     if (NULL == binary_app_list)
     {
-        lwm2m_al_delete_object(handle, BINARY_APP_DATA_OBJECT_ID);
-        return ATINY_MALLOC_FAILED;
+        (void)lwm2m_al_delete_object(handle, BINARY_APP_DATA_OBJECT_ID);
+        return (int) ATINY_MALLOC_FAILED;
     }
 
     binary_app_list->object_id = BINARY_APP_DATA_OBJECT_ID;
@@ -626,7 +626,7 @@ static int agent_add_binary_app_data_object(void *handle, unsigned int *storing_
 
 static int agent_add_objects(void *handle, atiny_param_t *lwm2m_params)
 {
-    int ret = ATINY_ERR;
+    int ret = (int) ATINY_ERR;
     ret = agent_add_security_object(handle, lwm2m_params);
 
     if (0 != ret)
@@ -683,7 +683,7 @@ static int agent_delete_object(void *handle)
 {
     object_uri_list *temp = uri_list;
     object_uri_list *node = NULL;
-    int ret = ATINY_ERR;
+    int ret = (int) ATINY_ERR;
 
     while (temp != NULL)
     {
@@ -691,7 +691,7 @@ static int agent_delete_object(void *handle)
         temp = temp->next;
         ret = lwm2m_al_delete_object(handle, node->object_id);
 
-        if (LWM2M_OK != ret)
+        if ((int) LWM2M_OK != ret)
         {
             osal_free(node);
             return ret;
@@ -706,25 +706,25 @@ static int agent_delete_object(void *handle)
 
 static int __agent_config(oc_config_param_t *param)
 {
-    int ret = en_oc_lwm2m_err_system;
+    int ret = (int ) en_oc_lwm2m_err_system;
     oc_lwm2m_imp_agent_t  *agent = NULL;
 
     if (NULL != s_oc_lwm2m_agent)
     {
-        ret = en_oc_lwm2m_err_configured;
+        ret = (int ) en_oc_lwm2m_err_configured;
         return ret;
     }
 
     if (NULL == param)
     {
-        ret =en_oc_lwm2m_err_parafmt;
+        ret =(int ) en_oc_lwm2m_err_parafmt;
         return ret;
     }
 
     agent = osal_zalloc(sizeof(oc_lwm2m_imp_agent_t));
     if (NULL == agent)
     {
-        ret = en_oc_lwm2m_err_sysmem;
+        ret = (int ) en_oc_lwm2m_err_sysmem;
         return ret;
     }
 
@@ -759,11 +759,11 @@ static int __agent_config(oc_config_param_t *param)
     bs_security_param->psk_len = agent->config_para.boot_server.psk_len;
     ret = atiny_check_parameter(atiny_params, device_info);
 
-    if (ATINY_OK != ret)
+    if ((int)ATINY_OK != ret)
     {
         osal_free(agent);
 
-        ret = en_oc_lwm2m_err_parafmt;
+        ret = (int ) en_oc_lwm2m_err_parafmt;
         return ret;
     }
 
@@ -774,10 +774,10 @@ static int __agent_config(oc_config_param_t *param)
     init_param.bootstrap_type = (int)(param->boot_mode);
     ret = lwm2m_al_config(&(agent->agent_handle), &init_param);
 
-    if (ATINY_OK != ret)
+    if ((int)ATINY_OK != ret)
     {
         osal_free(agent);
-        ret = en_oc_lwm2m_err_parafmt;
+        ret = (int ) en_oc_lwm2m_err_parafmt;
         return ret;
     }
 
@@ -786,21 +786,21 @@ static int __agent_config(oc_config_param_t *param)
     if (0 != ret)
     {
         osal_free(agent);
-        ret = en_oc_lwm2m_err_system;
+        ret = (int ) en_oc_lwm2m_err_system;
         return ret;
     }
 
     ret = lwm2m_al_connect(agent->agent_handle);
 
-    if (ATINY_OK != ret)
+    if ((int)ATINY_OK != ret)
     {
         osal_free(agent);
-        ret = en_oc_lwm2m_err_network;
+        ret = (int ) en_oc_lwm2m_err_network;
         return ret;
     }
 
     s_oc_lwm2m_agent = agent;
-    ret = en_oc_lwm2m_err_ok;
+    ret = (int ) en_oc_lwm2m_err_ok;
 
     return ret;
 }
@@ -812,23 +812,23 @@ static int __agent_deconfig(void)
 
     if (NULL == handle)
     {
-        ret = en_oc_lwm2m_err_noconfigured;
+        ret = (int ) en_oc_lwm2m_err_noconfigured;
         return ret;
     }
 
-    lwm2m_al_disconnect(handle->agent_handle);
-    agent_delete_object(handle->agent_handle);
-    lwm2m_al_deconfig(handle->agent_handle);
+    (void)lwm2m_al_disconnect(handle->agent_handle);
+    (void)agent_delete_object(handle->agent_handle);
+    (void)lwm2m_al_deconfig(handle->agent_handle);
     osal_free(handle);
     s_oc_lwm2m_agent = NULL;
 
-    ret = en_oc_lwm2m_err_ok;
+    ret = (int ) en_oc_lwm2m_err_ok;
     return ret;
 }
 
 static int __agent_report(char *msg, int len, int timeout)
 {
-    int ret = en_oc_lwm2m_err_noconfigured;
+    int ret = (int ) en_oc_lwm2m_err_noconfigured;
     lwm2m_al_send_param_t send_param;
 
     if(NULL != s_oc_lwm2m_agent)
@@ -836,17 +836,17 @@ static int __agent_report(char *msg, int len, int timeout)
         send_param.data = (uint8_t *)msg;
         send_param.length = len;
         send_param.mode = MSG_NEED_CONFIRMED;
-        send_param.object_id = OBJ_APP_DATA_ID;
+        send_param.object_id = (int) OBJ_APP_DATA_ID;
         send_param.object_instance_id = 0;
         send_param.resource_id = BINARY_APP_DATA_RES_ID;
 
         if(0 == lwm2m_al_send(s_oc_lwm2m_agent,&send_param))
         {
-            ret = en_oc_lwm2m_err_ok;
+            ret = (int ) en_oc_lwm2m_err_ok;
         }
         else
         {
-            ret  = en_oc_lwm2m_err_network;
+            ret  = (int ) en_oc_lwm2m_err_network;
         }
     }
 
@@ -861,7 +861,7 @@ const oc_lwm2m_opt_t  s_oc_lwm2m_agent_opt = \
     .report = __agent_report,
 };
 
-int oc_lwm2m_install_agent()
+int oc_lwm2m_imp_init()
 {
     int ret = -1;
     ret = oc_lwm2m_register("oc_lwm2m_agent", &s_oc_lwm2m_agent_opt);

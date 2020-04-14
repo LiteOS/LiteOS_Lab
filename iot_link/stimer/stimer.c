@@ -44,18 +44,25 @@
 #include <stdio.h>
 
 
-#if CONFIG_STIMER_ENABLE
-
-
 #include <osal.h>
 #include <stimer.h>
+
+#ifndef  CONFIG_STIMER_STACKSIZE
+#define  CONFIG_STIMER_STACKSIZE    0x800
+#endif
+
+#ifndef  CONFIG_STIMER_TASKPRIOR
+#define  CONFIG_STIMER_TASKPRIOR    10
+#endif
+
+
 
 ///< we use the normal list to manage the timer, next time you could use the RB
 ///< tree or something else to do some optimization,thanks for your supporting
 
 typedef struct timer_item
 {
-    const char         *name;        ///< verify the timer, will be used in the debug
+    char               *name;        ///< verify the timer, will be used in the debug
     uint32_t            cycle;       ///< timer cycle
     uint32_t            flag;        ///< timer flag
     fn_stimer_handler   handler;     ///< timer handler
@@ -70,6 +77,8 @@ typedef struct
     osal_mutex_t   mutex;      ///< used for protect the timer list
     stimer_item_t *lst;        ///< this is the soft timer list，
     void          *task;       ///< this is the task engine
+    int            daemon_exit;///< this is the task exit;
+
 }stimer_cb_t;
 
 static stimer_cb_t s_stimer_cb =  \
@@ -189,6 +198,16 @@ static void  timer_scan(void)
 
 }
 
+
+int stimer_daemonquit()
+{
+
+    s_stimer_cb.daemon_exit = 1;
+
+    return 0;
+}
+
+
 ///< this is the soft timer main engine
 static int __timer_entry(void *args)
 {
@@ -196,14 +215,14 @@ static int __timer_entry(void *args)
     int64_t cur_time;
 
     wait_time= cn_stimer_wait_max;
-    while(1)
+    while(s_stimer_cb.daemon_exit == 0)
     {
-        osal_semp_pend(s_stimer_cb.semp,wait_time);  ///< if any timer exist before the task, then the semphore is active
+        (void)osal_semp_pend(s_stimer_cb.semp,wait_time);  ///< if any timer exist before the task, then the semphore is active
         ///< check all the list and do it
         if(true == osal_mutex_lock(s_stimer_cb.mutex))
         {
             timer_scan();
-            osal_mutex_unlock(s_stimer_cb.mutex);
+            (void) osal_mutex_unlock(s_stimer_cb.mutex);
         }
 
         ///<compute all the time to wait;
@@ -217,13 +236,13 @@ static int __timer_entry(void *args)
             else
             {
                 wait_time = s_stimer_cb.lst->dead_time > cur_time?(s_stimer_cb.lst->dead_time - cur_time):0;
-                if(wait_time > cn_stimer_wait_max)
+                if(wait_time > (cn_stimer_wait_max-1))
                 {
                     wait_time = cn_stimer_wait_max;
                 }
             }
 
-            osal_mutex_unlock(s_stimer_cb.mutex);
+            (void) osal_mutex_unlock(s_stimer_cb.mutex);
         }
     }
     return 0;
@@ -246,21 +265,22 @@ int32_t stimer_init()
         goto EXIT_MUTEXERR;
     }
 
-    s_stimer_cb.task = osal_task_create("soft timer",__timer_entry,NULL,0x800,NULL,10);
+    s_stimer_cb.task = osal_task_create("soft timer",__timer_entry,NULL,CONFIG_STIMER_STACKSIZE,NULL,CONFIG_STIMER_TASKPRIOR);
 
     if(NULL == s_stimer_cb.task)
     {
         goto EXIT_TASKERR;
     }
+    s_stimer_cb.daemon_exit = 0;
 
     ret = 0;
     return ret;
 
 EXIT_TASKERR:
-    osal_mutex_del(s_stimer_cb.mutex);
+    (void) osal_mutex_del(s_stimer_cb.mutex);
     s_stimer_cb.mutex = cn_mutex_invalid;
 EXIT_MUTEXERR:
-    osal_semp_del(s_stimer_cb.semp);
+    (void) osal_semp_del(s_stimer_cb.semp);
     s_stimer_cb.semp = cn_semp_invalid;
 EXIT_SEMPERR:
     return ret;
@@ -269,18 +289,31 @@ EXIT_SEMPERR:
 stimer_t stimer_create(const char *name,fn_stimer_handler handler, void *arg,uint32_t cycle,uint32_t flag)
 {
     stimer_item_t *item;
+    int            mem_len;
 
-    item  = osal_malloc(sizeof(stimer_item_t));
+    mem_len = sizeof(stimer_item_t);
+
+    if(NULL != name)
+    {
+        mem_len += strlen(name) + 1;
+    }
+
+    item  = osal_malloc( mem_len);
     if(NULL == item)
     {
         return item;
     }
-    memset(item,0,sizeof(stimer_item_t));
-    item->name = name;
+    (void) memset(item,0,sizeof(stimer_item_t));
     item->cycle = cycle;
     item->flag = flag;
     item->handler = handler;
     item->args = arg;
+    if(NULL != name)
+    {
+        item->name = (char *)item +sizeof(stimer_item_t);
+        (void) strncpy(item->name,name,strlen(name)+1);
+    }
+
 
     if(item->flag & cn_stimer_flag_start)
     {
@@ -294,8 +327,8 @@ stimer_t stimer_create(const char *name,fn_stimer_handler handler, void *arg,uin
     if(true == osal_mutex_lock(s_stimer_cb.mutex))
     {
         timer_add(item);
-        osal_mutex_unlock(s_stimer_cb.mutex);
-        osal_semp_post(s_stimer_cb.semp);
+        (void) osal_mutex_unlock(s_stimer_cb.mutex);
+        (void) osal_semp_post(s_stimer_cb.semp);
     }
     else
     {
@@ -313,9 +346,9 @@ int32_t stimer_delete(stimer_t timer)
     if(true == osal_mutex_lock(s_stimer_cb.mutex))
     {
         timer_remove(timer);
-        osal_mutex_unlock(s_stimer_cb.mutex);
+        (void) osal_mutex_unlock(s_stimer_cb.mutex);
         osal_free(timer);
-        osal_semp_post(s_stimer_cb.semp);
+        (void) osal_semp_post(s_stimer_cb.semp);
         ret = 0;
     }
 
@@ -350,7 +383,7 @@ int32_t stimer_ioctl(stimer_t timer,en_stimer_opt_t opt, void *arg)
                 item->flag &= (~cn_stimer_flag_start);
                 item->dead_time = cn_stimer_dead_max;
                 timer_add(item);
-                osal_semp_post(s_stimer_cb.semp);
+                (void) osal_semp_post(s_stimer_cb.semp);
                 ret = 0;
                 break;
             case en_stimer_opt_start:
@@ -359,7 +392,7 @@ int32_t stimer_ioctl(stimer_t timer,en_stimer_opt_t opt, void *arg)
                 item->flag |= cn_stimer_flag_start;
                 item->dead_time = item->cycle + osal_sys_time();
                 timer_add(item);
-                osal_semp_post(s_stimer_cb.semp);
+                (void) osal_semp_post(s_stimer_cb.semp);
                 ret = 0;
                 break;
             case en_stimer_opt_recycle:
@@ -371,14 +404,14 @@ int32_t stimer_ioctl(stimer_t timer,en_stimer_opt_t opt, void *arg)
                     item->dead_time = item->cycle + osal_sys_time();
                 }
                 timer_add(item);
-                osal_semp_post(s_stimer_cb.semp);
+                (void) osal_semp_post(s_stimer_cb.semp);
                 ret = 0;
                 break;
             default:
                 ret = -1;
 
         }
-        osal_mutex_unlock(s_stimer_cb.mutex);
+        (void) osal_mutex_unlock(s_stimer_cb.mutex);
     }
 
     return ret;
@@ -386,34 +419,39 @@ int32_t stimer_ioctl(stimer_t timer,en_stimer_opt_t opt, void *arg)
 }
 
 
+#ifdef CONFIG_SHELL_ENABLE
 #include <shell.h>
 static int32_t stimer_print(int32_t argc, const char *argv[])
 {
     int       timer_number = 0;
     stimer_item_t  *item = NULL;
 
+    (void) timer_number;
+
     if(true == osal_mutex_lock(s_stimer_cb.mutex))
     {
-        printf("%-8s %-8s %-8s %-8s %-5s %-5s %s\n\r",\
-                "TimerNo","Cycle","Handler","Arg","Start","Once","DeadTime");
+        LINK_LOG_DEBUG("%-12s %-8s %-8s %-8s %-5s %-5s %s\n\r",\
+                "Timer-Name","Cycle","Handler","Arg","Start","Once","DeadTime");
 
         item = s_stimer_cb.lst;
         while(NULL != item)
         {
-            printf("%-8d %08x %08x %08x %-5s %-5s %x\n\r",\
-                    timer_number++,(unsigned int)item->cycle,(unsigned int)item->handler,(unsigned int)(uintptr_t)item->args,\
+            LINK_LOG_DEBUG("%-12s %08x %08x %08x %-5s %-5s %x\n\r",\
+                    (NULL==item->name)?"UNKONW":item->name,\
+                    (unsigned int)item->cycle,(unsigned int)(uintptr_t)item->handler,(unsigned int)(uintptr_t)item->args,\
                     item->flag&cn_stimer_flag_start?"Yes":"No",item->flag&cn_stimer_flag_once?"Yes":"No",\
                     (unsigned int)item->dead_time);
             item = item->nxt;
         }
-        printf("Total:%d Soft timers\n\r",timer_number);
+        LINK_LOG_DEBUG("Total:%d Soft timers\n\r",timer_number);
 
-        osal_mutex_unlock(s_stimer_cb.mutex);
+        (void) osal_mutex_unlock(s_stimer_cb.mutex);
     }
 
     return 0;
 }
 OSSHELL_EXPORT_CMD(stimer_print,"stimer","stimer");
+
 
 #endif
 

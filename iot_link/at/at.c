@@ -38,7 +38,12 @@
 #include <driver.h>
 #include <sys/fcntl.h>
 #include <iot_link_config.h>
+
 //these defines could be reconfigured at the iot_link_config.h
+
+#ifndef CONFIG_AT_DEVNAME
+#define CONFIG_AT_DEVNAME              "atdev"
+#endif
 
 #ifndef CONFIG_AT_OOBTABLEN
 #define CONFIG_AT_OOBTABLEN              6              //only allow 6 oob command monitor here,you could configure it more
@@ -47,6 +52,14 @@
 #ifndef CONFIG_AT_RECVMAXLEN
 #define CONFIG_AT_RECVMAXLEN             1024           //PROSING THAT COULD GET THE MOST REPSLENGTH
 #endif
+
+#ifndef CONFIG_AT_TASKPRIOR
+#define CONFIG_AT_TASKPRIOR              10
+#endif
+
+
+
+
 
 //at control block here
 typedef struct
@@ -99,24 +112,23 @@ static int __cmd_send(const void *buf,size_t buflen,uint32_t timeout)
     int i = 0;
     ssize_t ret = 0;
     int debugmode;
-    uint8_t *msg;
+
     ret = los_dev_write(g_at_cb.devhandle,0,buf,buflen,timeout);
     if(ret > 0)
     {
-        msg = (uint8_t *)buf;
         debugmode = g_at_cb.txdebugmode;
         switch (debugmode)
         {
             case en_at_debug_ascii:
-                printf("ATSND:%d Bytes:%s\n\r",(int)ret,(char *)msg);
+                LINK_LOG_DEBUG("ATSND:%d Bytes:%s\n\r",(int)ret,(char *)buf);
                 break;
             case en_at_debug_hex:
-                printf("ATSND:%d Bytes:",(int)ret);
+                LINK_LOG_DEBUG("ATSND:%d Bytes:",(int)ret);
                 for(i =0;i<ret;i++)
                 {
-                    printf("%02x ",(unsigned int)msg[i]);
+                    LINK_LOG_DEBUG("%02x ",*((uint8_t *)(buf) + i));
                 }
-                printf("\n\r");
+                LINK_LOG_DEBUG("\n\r");
                 break;
             default:
                 break;
@@ -136,25 +148,23 @@ static int __resp_rcv(void *buf,size_t buflen,uint32_t timeout)
     int i = 0;
     ssize_t ret = 0;
     int debugmode;
-    uint8_t *msg;
 
     ret = los_dev_read(g_at_cb.devhandle,0,buf,buflen,timeout);
     if(ret > 0)
     {
-        msg = buf;
         debugmode = g_at_cb.rxdebugmode;
         switch (debugmode)
         {
             case en_at_debug_ascii:
-                printf("ATRCV:%d Bytes:%s\n\r",(int)ret,(char *)buf);
+                LINK_LOG_DEBUG("ATRCV:%d Bytes:%s\n\r",(int)ret,(char *)buf);
                 break;
             case en_at_debug_hex:
-                printf("ATRCV:%d Bytes:",(int)ret);
+                LINK_LOG_DEBUG("ATRCV:%d Bytes:",(int)ret);
                 for(i =0;i<ret;i++)
                 {
-                    printf("%02x ",msg[i]);
+                    LINK_LOG_DEBUG("%02x ",*((uint8_t *)(buf) + i));
                 }
-                printf("\n\r");
+                LINK_LOG_DEBUG("\n\r");
                 break;
             default:
                 break;
@@ -180,8 +190,8 @@ static int  __cmd_create(const void *cmdbuf,size_t cmdlen,const char *index,void
             cmd->index = index;
             cmd->respbuf = respbuf;
             cmd->respbuflen = respbuflen;
-            osal_semp_pend(cmd->respsync,0); //used to clear the sync
-            osal_mutex_unlock(cmd->cmdlock);
+            (void) osal_semp_pend(cmd->respsync,0); //used to clear the sync
+            (void) osal_mutex_unlock(cmd->cmdlock);
         }
         ret = 0;
     }
@@ -202,9 +212,9 @@ static int __cmd_clear(void)
         cmd->respbuf = NULL;
         cmd->respbuflen = 0;
         cmd->respdatalen = 0;
-        osal_mutex_unlock(cmd->cmdlock);
+        (void) osal_mutex_unlock(cmd->cmdlock);
      }
-     osal_semp_post(cmd->cmdsync);
+     (void) osal_semp_post(cmd->cmdsync);
      return 0;
 }
 
@@ -223,17 +233,17 @@ static int  __cmd_match(const void *data,size_t len)
             if(NULL != cmd->respbuf)
             {
                 cpylen = len > cmd->respbuflen?cmd->respbuflen:len;
-                memcpy((char *)cmd->respbuf,data,cpylen);
+                (void) memcpy((char *)cmd->respbuf,data,cpylen);
                 cmd->respdatalen = cpylen;
             }
             else
             {
                 cmd->respdatalen = len; //tell the command that how many data has been get
             }
-            osal_semp_post(cmd->respsync);
+            (void) osal_semp_post(cmd->respsync);
             ret = 0;
         }
-        osal_mutex_unlock(cmd->cmdlock);
+        (void) osal_mutex_unlock(cmd->cmdlock);
     }
     return ret;
 }
@@ -273,20 +283,19 @@ static int __rcv_task_entry(void *args)
     g_at_cb.devhandle = los_dev_open(g_at_cb.devname,O_RDWR);
     if(NULL == g_at_cb.devhandle)
     {
-        printf("%s:open %s err\n\r",__FUNCTION__,g_at_cb.devname);
+        LINK_LOG_DEBUG("%s:open %s err\n\r",__FUNCTION__,g_at_cb.devname);
         return 0;
     }
 
-    while(1)
+    while(NULL != g_at_cb.devhandle)
     {
     	if (1 == g_at_cb.streammode)  //in stream mode, we need to save previous frames in buffer
     	{
-    		if(rcvlen == 0)
-    		{
-                memset(g_at_cb.rcvbuf,0,CONFIG_AT_RECVMAXLEN);
-    		}
+    	    if(rcvlen == 0)
+    	    {
+                (void)memset(g_at_cb.rcvbuf,0,CONFIG_AT_RECVMAXLEN);
+    	    }
             rcvlen += __resp_rcv(g_at_cb.rcvbuf+ rcvlen,CONFIG_AT_RECVMAXLEN,cn_osal_timeout_forever);
-
             if(rcvlen > 0)
             {
                 matchret = __cmd_match(g_at_cb.rcvbuf,rcvlen);
@@ -306,19 +315,20 @@ static int __rcv_task_entry(void *args)
     	}
     	else
     	{
-    		memset(g_at_cb.rcvbuf,0,CONFIG_AT_RECVMAXLEN);
-    		rcvlen = __resp_rcv(g_at_cb.rcvbuf,CONFIG_AT_RECVMAXLEN,cn_osal_timeout_forever);
-    		if(rcvlen > 0)
+    	    (void) memset(g_at_cb.rcvbuf,0,CONFIG_AT_RECVMAXLEN);
+    	    rcvlen = __resp_rcv(g_at_cb.rcvbuf,CONFIG_AT_RECVMAXLEN,cn_osal_timeout_forever);
+    	    if(rcvlen > 0)
 	        {
                 matchret = __cmd_match(g_at_cb.rcvbuf,rcvlen);
                 if(0 != matchret)
                 {
-                    __oob_match(g_at_cb.rcvbuf,rcvlen);
+                   (void) __oob_match(g_at_cb.rcvbuf,rcvlen);
                 }
-    	    }
-
+	        }
         }
     }
+
+    return 0;
 }
 
 /*******************************************************************************
@@ -371,7 +381,7 @@ int  at_command(const void *cmd,size_t cmdlen,const char *index,void *respbuf,\
                 ret = -1;
             }
 
-            __cmd_clear();
+            (void) __cmd_clear();
         }
 
     }
@@ -426,33 +436,33 @@ instruction  :if you want to use the at frame work, please call this function
               please supply the function read and write.the read function must be
               a block function controlled by timeout
 *******************************************************************************/
-int at_init(const char *devname)
+int at_init()
 {
     int ret = -1;
 
-    memset(&g_at_cb,0,sizeof(g_at_cb));
-    g_at_cb.devname = devname;
+    (void) memset(&g_at_cb,0,sizeof(g_at_cb));
+    g_at_cb.devname = CONFIG_AT_DEVNAME;
 
 
     if(false == osal_semp_create(&g_at_cb.cmd.cmdsync,1,1))
     {
-        printf("%s:cmdsync error\n\r",__FUNCTION__);
+        LINK_LOG_DEBUG("%s:cmdsync error\n\r",__FUNCTION__);
         goto EXIT_CMDSYNC;
     }
     if(false == osal_semp_create(&g_at_cb.cmd.respsync,1,0))
     {
-        printf("%s:cmdsync error\n\r",__FUNCTION__);
+        LINK_LOG_DEBUG("%s:cmdsync error\n\r",__FUNCTION__);
         goto EXIT_RESPSYNC;
     }
     if(false == osal_mutex_create(&g_at_cb.cmd.cmdlock))
     {
-        printf("%s:cmdlock error\n\r",__FUNCTION__);
+        LINK_LOG_DEBUG("%s:cmdlock error\n\r",__FUNCTION__);
         goto EXIT_CMDLOCK;
     }
 
     if(NULL == osal_task_create("at_rcv",__rcv_task_entry,NULL,0x800,NULL,10))
     {
-        printf("%s:rcvtask create error\n\r",__FUNCTION__);
+        LINK_LOG_DEBUG("%s:rcvtask create error\n\r",__FUNCTION__);
         goto EXIT_RCVTASK;
     }
 
@@ -465,13 +475,13 @@ int at_init(const char *devname)
 
 
 EXIT_RCVTASK:
-    osal_mutex_del(&g_at_cb.cmd.cmdlock);
+    (void) osal_mutex_del(&g_at_cb.cmd.cmdlock);
     g_at_cb.cmd.cmdlock = cn_mutex_invalid;
 EXIT_CMDLOCK:
-    osal_semp_del(&g_at_cb.cmd.respsync);
+    (void) osal_semp_del(&g_at_cb.cmd.respsync);
     g_at_cb.cmd.respsync = cn_semp_invalid;
 EXIT_RESPSYNC:
-    osal_semp_del(&g_at_cb.cmd.cmdsync);
+    (void) osal_semp_del(&g_at_cb.cmd.cmdsync);
     g_at_cb.cmd.cmdsync = cn_semp_invalid;
 EXIT_CMDSYNC:
     return ret;
@@ -479,6 +489,8 @@ EXIT_CMDSYNC:
 
 
 //////////////////////////////////DEBUG COMMAND FOLLOWING/////////////////////////////////////////
+#if CONFIG_SHELL_ENABLE
+
 #include <shell.h>
 //use this shell command,you could input at command through the terminal
 static int shell_at(int argc, const char *argv[])
@@ -493,7 +505,7 @@ static int shell_at(int argc, const char *argv[])
 
     if((argc !=2)&&(argc != 3))
     {
-        printf("paras error\n\r");
+        LINK_LOG_DEBUG("paras error\n\r");
         return ret;
     }
     if(argc == 3)
@@ -502,17 +514,17 @@ static int shell_at(int argc, const char *argv[])
     }
     
 
-    memset(respbuf,0,CN_AT_SHELL_LEN);
-    snprintf((char *)cmdbuf,CN_AT_SHELL_LEN,"%s\r\n",argv[1]);
+    (void) (void) memset(respbuf,0,CN_AT_SHELL_LEN);
+    (void) snprintf((char *)cmdbuf,CN_AT_SHELL_LEN,"%s\r\n",argv[1]);
 
     ret = at_command(cmdbuf,strlen((const char *)cmdbuf),index,respbuf,CN_AT_SHELL_LEN,1000); //one second
     if(ret == 0)
     {
-        printf("atresponse:%d Bytes:%s\n\r",ret,respbuf);
+        LINK_LOG_DEBUG("atresponse:%d Bytes:%s\n\r",ret,respbuf);
     }
     else
     {
-        printf("atresponse:timeout or error\n\r");
+        LINK_LOG_DEBUG("atresponse:timeout or error\n\r");
     }
     return ret;
 }
@@ -521,10 +533,10 @@ OSSHELL_EXPORT_CMD(shell_at,"atcmd","atcmd atcommand atrespindex");
 //use this function to set the at command display mode:none/ascii/hex
 static int shell_atdebug(int argc,const char *argv[])
 {
-    int mode = en_at_debug_none;
+    en_at_rxtx_debugmode mode = en_at_debug_none;
     if(argc != 3)
     {
-        printf("paras error\n\r");
+        LINK_LOG_DEBUG("paras error\n\r");
         return -1;
     }
 
@@ -542,7 +554,7 @@ static int shell_atdebug(int argc,const char *argv[])
     }
     else
     {
-        printf("mode set error\n\r");
+        LINK_LOG_DEBUG("mode set error\n\r");
         return -2;
     }
 
@@ -556,13 +568,16 @@ static int shell_atdebug(int argc,const char *argv[])
     }
     else
     {
-        printf("type set error\n\r");
+        LINK_LOG_DEBUG("type set error\n\r");
         return -3;
     }
 
     return 0;
 }
 OSSHELL_EXPORT_CMD(shell_atdebug,"atdebug","atdebug rx/tx none/ascii/hex");
+
+#endif
+
 
 
 

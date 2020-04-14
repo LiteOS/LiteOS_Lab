@@ -38,9 +38,12 @@
  *
  */
 
-#include "lwm2m_al.h"
 
 #include <stddef.h>
+
+#include <link_log.h>
+#include <lwm2m_al.h>
+
 
 typedef struct
 {
@@ -53,7 +56,7 @@ static lwm2m_al_op_cb_t s_lwm2m_al_op_cb;
 /////////////////CREATE THE API FOR THE LWM2M LIB////////////////////////////////
 int lwm2m_al_config(void **handle, lwm2m_al_init_param_t *init_param)
 {
-    int ret = LWM2M_ERR;
+    int ret = (int)LWM2M_ERR;
 
     if ((NULL != handle)
         && (NULL != init_param)
@@ -68,7 +71,7 @@ int lwm2m_al_config(void **handle, lwm2m_al_init_param_t *init_param)
 
 int lwm2m_al_deconfig(void *handle)
 {
-    int ret = LWM2M_ERR;
+    int ret = (int)LWM2M_ERR;
 
     if ((NULL != handle)
         && (NULL != s_lwm2m_al_op_cb.ops)
@@ -82,7 +85,7 @@ int lwm2m_al_deconfig(void *handle)
 
 int lwm2m_al_add_object(void *handle, int object_id, int object_instance_id, int resource_id, void *param)
 {
-    int ret = LWM2M_ERR;
+    int ret = (int)LWM2M_ERR;
 
     if ((NULL != handle)
         && (NULL != s_lwm2m_al_op_cb.ops)
@@ -96,7 +99,7 @@ int lwm2m_al_add_object(void *handle, int object_id, int object_instance_id, int
 
 int lwm2m_al_delete_object(void *handle, int object_id)
 {
-    int ret = LWM2M_ERR;
+    int ret = (int)LWM2M_ERR;
 
     if ((NULL != handle)
         && (NULL != s_lwm2m_al_op_cb.ops)
@@ -110,7 +113,7 @@ int lwm2m_al_delete_object(void *handle, int object_id)
 
 int lwm2m_al_connect(void *handle)
 {
-    int ret = LWM2M_ERR;
+    int ret = (int)LWM2M_ERR;
 
     if ((NULL != handle)
         && (NULL != s_lwm2m_al_op_cb.ops)
@@ -124,7 +127,7 @@ int lwm2m_al_connect(void *handle)
 
 int  lwm2m_al_disconnect(void *handle)
 {
-    int ret = LWM2M_ERR;
+    int ret = (int)LWM2M_ERR;
 
     if ((NULL != handle)
         && (NULL != s_lwm2m_al_op_cb.ops)
@@ -138,7 +141,7 @@ int  lwm2m_al_disconnect(void *handle)
 
 int  lwm2m_al_send(void *handle, lwm2m_al_send_param_t *send_param)
 {
-    int ret = LWM2M_ERR;
+    int ret = (int)LWM2M_ERR;
 
     if ((NULL != handle)
         && (NULL != send_param)
@@ -153,7 +156,7 @@ int  lwm2m_al_send(void *handle, lwm2m_al_send_param_t *send_param)
 
 int lwm2m_al_install(lwm2m_al_op_t *op)
 {
-    int ret = LWM2M_ERR;
+    int ret = (int)LWM2M_ERR;
 
     if ((NULL != op) && (NULL == s_lwm2m_al_op_cb.ops))
     {
@@ -167,13 +170,32 @@ int lwm2m_al_install(lwm2m_al_op_t *op)
 
 int lwm2m_al_uninstall(void)
 {
-    int ret = LWM2M_ERR;
+    int ret = (int)LWM2M_ERR;
 
     if (NULL != s_lwm2m_al_op_cb.ops)
     {
         s_lwm2m_al_op_cb.ops = NULL;
         ret = 0;
     }
+
+    return ret;
+}
+
+__attribute__((weak))  int lwm2m_imp_init(void)
+{
+    LINK_LOG_DEBUG("%s:###please implement lwm2m by yourself####\n\r",__FUNCTION__);
+    return -1;
+}
+
+int lwm2m_al_init(void)
+{
+
+    int ret;
+
+    ret = lwm2m_imp_init();
+
+    LINK_LOG_DEBUG("IOT_LINK:DO LWM2M LOAD-IMPLEMENT RET:%d\n\r",ret);
+
 
     return ret;
 }

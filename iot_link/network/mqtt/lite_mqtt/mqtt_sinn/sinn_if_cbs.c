@@ -132,7 +132,7 @@ int sinn_nc_poll_cb(sinn_connection_t *nc)
 
     if (nc->flags & SINN_FG_RECONNECT)
     {
-        printf("reconnect ~~~~~~\r\n");
+        LINK_LOG_DEBUG("reconnect ~~~~~~\r\n");
         nc->flags &= ~SINN_FG_RECONNECT;
         sinn_dispatch_event(nc, NULL, NULL, SINN_EV_RECONN, &now);
         return 1;

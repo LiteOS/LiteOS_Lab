@@ -39,7 +39,7 @@
  *   *
  *  1, only support CRT tls mode
  *  2, the data encode only support the json mode
- *  3, the passwd only support the no check time mode
+ *  3, the pwd only support the no check time mode
  *
  */
 #include <stdint.h>
@@ -50,38 +50,37 @@
 #include <time.h>
 
 #include <queue.h>
-#include <osal.h>
+//#include <osal.h>
 #include <mqtt_al.h>
 #include <oc_mqtt_al.h>
 #include <sal.h>
 
 #include <cJSON.h>           //json mode
-#include "hmac.h"            //used to generate the user passwd
+#include "hmac.h"            //used to generate the user pwd
 
 ////CRT FOR THE OC
 static const char s_oc_mqtt_ca_crt[] =
-"-----BEGIN CERTIFICATE-----\r\n"
-"MIID4DCCAsigAwIBAgIJAK97nNS67HRvMA0GCSqGSIb3DQEBCwUAMFMxCzAJBgNV\r\n"
-"BAYTAkNOMQswCQYDVQQIEwJHRDELMAkGA1UEBxMCU1oxDzANBgNVBAoTBkh1YXdl\r\n"
-"aTELMAkGA1UECxMCQ04xDDAKBgNVBAMTA0lPVDAeFw0xNjA1MDQxMjE3MjdaFw0y\r\n"
-"NjA1MDIxMjE3MjdaMFMxCzAJBgNVBAYTAkNOMQswCQYDVQQIEwJHRDELMAkGA1UE\r\n"
-"BxMCU1oxDzANBgNVBAoTBkh1YXdlaTELMAkGA1UECxMCQ04xDDAKBgNVBAMTA0lP\r\n"
-"VDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAJxM9fwkwvxeILpkvoAM\r\n"
-"Gdqq3x0G9o445F6Shg3I0xmmzu9Of8wYuW3c4jtQ/6zscuIGyWf06ke1z//AVZ/o\r\n"
-"dp8LkuFbBbDXR5swjUJ6z15b6yaYH614Ty/d6DrCM+RaU+FWmxmOon9W/VELu2BB\r\n"
-"NXDQHJBSbWrLNGnZA2erk4JSMp7RhHrZ0QaNtT4HhIczFYtQ2lYF+sQJpQMrjoRn\r\n"
-"dSV9WB872Ja4DgcISU1+wuWLmS/NKjIvOWW1upS79yu2I4Rxos2mFy9xxz311rGC\r\n"
-"Z3X65ejFNzCUrNgf6NEP1N7wB9hUu7u50aA+/56D7EgjeI0gpFytC+a4f6JCPVWI\r\n"
-"Lr0CAwEAAaOBtjCBszAdBgNVHQ4EFgQUcGqy59oawLEgMl21//7F5RyABpwwgYMG\r\n"
-"A1UdIwR8MHqAFHBqsufaGsCxIDJdtf/+xeUcgAacoVekVTBTMQswCQYDVQQGEwJD\r\n"
-"TjELMAkGA1UECBMCR0QxCzAJBgNVBAcTAlNaMQ8wDQYDVQQKEwZIdWF3ZWkxCzAJ\r\n"
-"BgNVBAsTAkNOMQwwCgYDVQQDEwNJT1SCCQCve5zUuux0bzAMBgNVHRMEBTADAQH/\r\n"
-"MA0GCSqGSIb3DQEBCwUAA4IBAQBgv2PQn66gRMbGJMSYS48GIFqpCo783TUTePNS\r\n"
-"tV8G1MIiQCpYNdk2wNw/iFjoLRkdx4va6jgceht5iX6SdjpoQF7y5qVDVrScQmsP\r\n"
-"U95IFcOkZJCNtOpUXdT+a3N+NlpxiScyIOtSrQnDFixWMCJQwEfg8j74qO96UvDA\r\n"
-"FuTCocOouER3ZZjQ8MEsMMquNEvMHJkMRX11L5Rxo1pc6J/EMWW5scK2rC0Hg91a\r\n"
-"Lod6aezh2K7KleC0V5ZlIuEvFoBc7bCwcBSAKA3BnQveJ8nEu9pbuBsVAjHOroVb\r\n"
-"8/bL5retJigmAN2GIyFv39TFXIySw+lW0wlp+iSPxO9s9J+t\r\n"
+" -----BEGIN CERTIFICATE-----\r\n"
+"MIIDrzCCApegAwIBAgIQCDvgVpBCRrGhdWrJWZHHSjANBgkqhkiG9w0BAQUFADBh\r\n"
+"MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3\r\n"
+"d3cuZGlnaWNlcnQuY29tMSAwHgYDVQQDExdEaWdpQ2VydCBHbG9iYWwgUm9vdCBD\r\n"
+"QTAeFw0wNjExMTAwMDAwMDBaFw0zMTExMTAwMDAwMDBaMGExCzAJBgNVBAYTAlVT\r\n"
+"MRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5j\r\n"
+"b20xIDAeBgNVBAMTF0RpZ2lDZXJ0IEdsb2JhbCBSb290IENBMIIBIjANBgkqhkiG\r\n"
+"9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4jvhEXLeqKTTo1eqUKKPC3eQyaKl7hLOllsB\r\n"
+"CSDMAZOnTjC3U/dDxGkAV53ijSLdhwZAAIEJzs4bg7/fzTtxRuLWZscFs3YnFo97\r\n"
+"nh6Vfe63SKMI2tavegw5BmV/Sl0fvBf4q77uKNd0f3p4mVmFaG5cIzJLv07A6Fpt\r\n"
+"43C/dxC//AH2hdmoRBBYMql1GNXRor5H4idq9Joz+EkIYIvUX7Q6hL+hqkpMfT7P\r\n"
+"T19sdl6gSzeRntwi5m3OFBqOasv+zbMUZBfHWymeMr/y7vrTC0LUq7dBMtoM1O/4\r\n"
+"gdW7jVg/tRvoSSiicNoxBN33shbyTApOB6jtSj1etX+jkMOvJwIDAQABo2MwYTAO\r\n"
+"BgNVHQ8BAf8EBAMCAYYwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUA95QNVbR\r\n"
+"TLtm8KPiGxvDl7I90VUwHwYDVR0jBBgwFoAUA95QNVbRTLtm8KPiGxvDl7I90VUw\r\n"
+"DQYJKoZIhvcNAQEFBQADggEBAMucN6pIExIK+t1EnE9SsPTfrgT1eXkIoyQY/Esr\r\n"
+"hMAtudXH/vTBH1jLuG2cenTnmCmrEbXjcKChzUyImZOMkXDiqw8cvpOp/2PV5Adg\r\n"
+"06O/nVsJ8dWO41P0jmP6P6fbtGbfYmbW0W5BjfIttep3Sp+dWOIrWcBAI+0tKIJF\r\n"
+"PnlUkiaY4IBIqDfv8NZ5YBberOgOzW6sRBc4L0na4UU+Krk2U886UAb3LujEV0ls\r\n"
+"YSEY1QSteDwsOoBrp+uvFRTp2InBuThs4pFsiv9kuXclVzDAGySj4dzp30d8tbQk\r\n"
+"CAUw7C29C79Fv1C5qfPrmAESrciIxpg0X40KPMbp1ZWVbd4=\r\n"
 "-----END CERTIFICATE-----\r\n";
 
 
@@ -90,8 +89,8 @@ static const char s_oc_mqtt_ca_crt[] =
 
 #define CN_OC_BS_REPORT_TOPIC_FMT           "/huawei/v1/devices/%s/iodpsData"
 #define CN_OC_BS_CMD_TOPIC_FMT              "/huawei/v1/devices/%s/iodpsCommand"
-#define CN_OC_HUB_SUBTOPIC_DEFAULT_FMT      "$oc/devices/%s/sys/messages/down"
-#define CN_OC_HUB_PUBTOPIC_DEFAULT_FMT      "$oc/devices/%s/sys/messages/up"
+#define CN_OC_HUB_SUBTOPIC_DEFAULT_FMT      "$oc/devices/%s/sys/commands/#"
+#define CN_OC_HUB_PUBTOPIC_DEFAULT_FMT      "$oc/devices/%s/sys/properties/report"
 
 /*The unit is millisecond*/
 #define CN_CON_BACKOFF_TIME     (1000)   ///< UNIT:ms
@@ -103,7 +102,7 @@ static const char s_oc_mqtt_ca_crt[] =
 
 const char *s_new_topic_fmt[]=
 {
-    "$oc/devices/%s/sys/commands/#",
+    "$oc/devices/%s/sys/messages/down",
     "$oc/devices/%s/sys/properties/set/#",
     "$oc/devices/%s/sys/properties/get/#",
     "$oc/devices/%s/sys/shadow/get/response/#",
@@ -153,6 +152,7 @@ typedef struct
 
 typedef struct
 {
+    int                     daemon_exit;
     char                   *config_mem;   ///< used to storage the configuration information
     oc_mqtt_config_t        config;
     oc_mqtt_para_t          mqtt_para;
@@ -165,7 +165,7 @@ typedef struct
             uint32_t bit_daemon_status:3;
             uint32_t bit_get_hubaddr:1;
             uint32_t bit_do_bootstrap:1;
-
+            uint32_t bit_do_reportdisconnect:1;
         }bits;
     }flag;
     oc_bs_mqtt_cb_t     bs_cb;
@@ -199,59 +199,17 @@ typedef struct
 
 
 ///< here we implement the hub and bootstrap server command dealer
-
+///< the bs not debug yet
 static void hub_msg_default_deal(void *arg,mqtt_al_msgrcv_t  *msg)
 {
-    cJSON  *root = NULL;
-    cJSON  *cmd_item = NULL;
-    cJSON  *serviceid_item = NULL;
-    char   *json_buf;
-    int     pass2user = 1;
-
-    mqtt_al_msgrcv_t normal_msg;
-
     //for we must add the '/0' to the end to make sure the json parse correct
-    if ((msg == NULL) || ( msg->msg.data == NULL) ||(msg->msg.len == 0))
+    if ((msg != NULL) && ( msg->msg.data != NULL) &&(msg->msg.len > 0 ) \
+        &&(NULL != s_oc_mqtt_tiny_cb->config.msg_deal))
     {
+        s_oc_mqtt_tiny_cb->config.msg_deal(s_oc_mqtt_tiny_cb->config.msg_deal_arg,msg);
+
         return;
     }
-
-    if(s_oc_mqtt_tiny_cb->flag.bits.bit_bs_enable)
-    {
-        json_buf = osal_malloc(msg->msg.len + 1);
-        if(NULL != json_buf)
-        {
-            memcpy(json_buf,msg->msg.data,msg->msg.len);
-            json_buf[msg->msg.len] = '\0';
-            root = cJSON_Parse(json_buf);
-            if(NULL != root)
-            {
-                cmd_item = cJSON_GetObjectItem(root,"cmd");
-                serviceid_item = cJSON_GetObjectItem(root,"serviceid");
-                if(((NULL != cmd_item) && (strncmp(cmd_item->valuestring, "BootstrapRequestTrigger", strlen(cmd_item->valuestring)) == 0)) &&\
-                  ((NULL != serviceid_item) && (strncmp(serviceid_item->valuestring, "IOTHUB.BS", strlen(serviceid_item->valuestring)) == 0)))
-                {
-                    s_oc_mqtt_tiny_cb->flag.bits.bit_do_bootstrap =1;
-                    pass2user = 0;  ///< this is a bootstrap message and we should not pass to the user
-                }
-                cJSON_Delete(root);
-            }
-            osal_free(json_buf);
-        }
-    }
-
-
-    if((1 == pass2user)&&(NULL != s_oc_mqtt_tiny_cb->config.msg_deal))
-    {
-        normal_msg.dup = msg->dup;
-        normal_msg.qos = msg->qos;
-        normal_msg.retain = msg->retain;
-        normal_msg.msg = msg->msg;
-        normal_msg.topic = msg->topic;
-        s_oc_mqtt_tiny_cb->config.msg_deal(s_oc_mqtt_tiny_cb->config.msg_deal_arg,&normal_msg);
-    }
-
-
     return;
 }
 
@@ -267,7 +225,7 @@ static void bs_msg_default_deal(void *arg,mqtt_al_msgrcv_t *msg)
 
    char   *json_buf;
 
-   printf("bs topic:%s qos:%d\n\r",msg->topic.data,msg->qos);
+   LINK_LOG_DEBUG("bs topic:%s qos:%d\n\r",msg->topic.data,msg->qos);
 
    json_buf = osal_malloc(msg->msg.len + 1);
    if(NULL == json_buf)
@@ -275,17 +233,17 @@ static void bs_msg_default_deal(void *arg,mqtt_al_msgrcv_t *msg)
        return;
    }
 
-   memcpy(json_buf,msg->msg.data,msg->msg.len);
+   (void) memcpy(json_buf,msg->msg.data,msg->msg.len);
    json_buf[msg->msg.len] = '\0';
 
-   printf("msg:%s\n\r",json_buf);
+   LINK_LOG_DEBUG("msg:%s\n\r",json_buf);
    root = cJSON_Parse(json_buf);
    if(NULL != root)
    {
        addr_item = cJSON_GetObjectItem(root,"address");
        if(NULL != addr_item)
        {
-           printf("address:%s\n\r", addr_item->valuestring);
+           LINK_LOG_DEBUG("address:%s\n\r", addr_item->valuestring);
            port = strrchr(addr_item->valuestring, ':');
            if(NULL != port)
            {
@@ -313,7 +271,7 @@ static void bs_msg_default_deal(void *arg,mqtt_al_msgrcv_t *msg)
    return;
 }
 
-static char *topic_fmt(char *fmt, char *id)
+static char *topic_fmt(const char *fmt, const char *id)
 {
     char *ret = NULL;
     int len =  0;
@@ -323,13 +281,13 @@ static char *topic_fmt(char *fmt, char *id)
     ret = osal_malloc(len);
     if(NULL != ret)
     {
-        snprintf(ret,len,fmt,id);
+        (void) snprintf(ret,len,fmt,id);
     }
 
     return ret;
 }
 
-static char *clientid_fmt(char *fmt, char *id, char *salt_time)
+static char *clientid_fmt(const char *fmt, const char *id, const char *salt_time)
 {
     char *ret = NULL;
     int len =  0;
@@ -339,7 +297,7 @@ static char *clientid_fmt(char *fmt, char *id, char *salt_time)
     ret = osal_malloc(len);
     if(NULL != ret)
     {
-        snprintf(ret,len,fmt,id,salt_time);
+        (void) snprintf(ret,len,fmt,id,salt_time);
     }
 
     return ret;
@@ -348,7 +306,7 @@ static char *clientid_fmt(char *fmt, char *id, char *salt_time)
 ///< return the command code for the operation
 static int daemon_cmd_post(en_oc_mqtt_daemon_cmd cmd, void *arg)
 {
-    int ret = en_oc_mqtt_err_system;
+    int ret = (int)en_oc_mqtt_err_system;
     oc_mqtt_daemon_cmd_t *daemon_cmd;
 
     daemon_cmd = osal_malloc(sizeof(oc_mqtt_daemon_cmd_t));
@@ -361,10 +319,10 @@ static int daemon_cmd_post(en_oc_mqtt_daemon_cmd cmd, void *arg)
         {
             if(0 == queue_push(s_oc_mqtt_tiny_cb->task_daemon_cmd_queue,daemon_cmd,10))
             {
-                osal_semp_pend(daemon_cmd->signal,cn_osal_timeout_forever);
+                (void)osal_semp_pend(daemon_cmd->signal,cn_osal_timeout_forever);
                 ret = daemon_cmd->retcode;
             }
-            osal_semp_del(daemon_cmd->signal);
+            (void) osal_semp_del(daemon_cmd->signal);
         }
         osal_free(daemon_cmd);
     }
@@ -394,7 +352,7 @@ static int config_parameter_release(oc_mqtt_tiny_cb_t *cb)
         osal_free(cb->bs_cb.hubserver_port);
     }
 
-    int i = 0;
+    unsigned int i = 0;
     for(i = 0;i < CN_NEW_TOPIC_NUM;i++)
     {
         if(NULL != cb->hub_sub_topic[i])
@@ -402,11 +360,11 @@ static int config_parameter_release(oc_mqtt_tiny_cb_t *cb)
             osal_free(cb->hub_sub_topic[i]);
         }
     }
-    memset(&cb->hub_sub_topic,0,sizeof(cb->hub_sub_topic));
+    (void) memset((void *)&cb->hub_sub_topic[0],0,sizeof(cb->hub_sub_topic));
 
-    memset(&cb->config,0,sizeof(oc_mqtt_config_t));
+    (void) memset(&cb->config,0,sizeof(oc_mqtt_config_t));
 
-    memset(&cb->bs_cb,0,sizeof(oc_bs_mqtt_cb_t));
+    (void) memset(&cb->bs_cb,0,sizeof(oc_bs_mqtt_cb_t));
 
     cb->flag.bits.bit_daemon_status = en_daemon_status_idle;
 
@@ -421,12 +379,12 @@ static int config_parameter_release(oc_mqtt_tiny_cb_t *cb)
         sub_topic = sub_topic_nxt;
     }
 
-    return en_oc_mqtt_err_ok;
+    return (int)en_oc_mqtt_err_ok;
 }
 ///< check the config parameters
 static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config)
 {
-    int ret = en_oc_mqtt_err_parafmt;
+    int ret = (int)en_oc_mqtt_err_parafmt;
     int mem_len = 0;
     char *mem_buf = NULL;
 
@@ -459,7 +417,7 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
     }
 
     /// now we copy the parameter
-    memset( &cb->config, 0 ,sizeof(cb->config) );
+    (void) memset( &cb->config, 0 ,sizeof(cb->config) );
 
     if( config->boot_mode == en_oc_mqtt_mode_bs_static_nodeid_hmacsha256_notimecheck_json )
     {
@@ -473,17 +431,18 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
     cb->config.lifetime = config->lifetime;
     cb->config.msg_deal = config->msg_deal;
     cb->config.msg_deal_arg = config->msg_deal_arg;
+    cb->config.log_dealer  = config->log_dealer;
 
     cb->config_mem = mem_buf; ///< this is the membuf
 
     cb->config.id = mem_buf;
-    strcpy( mem_buf,config->id );
+    (void) strncpy( mem_buf,config->id,strlen(config->id)+1 );
     mem_buf += strlen(config->id) + 1;
 
     if ( NULL != config->pwd )
     {
         cb->config.pwd = mem_buf;
-        strcpy( mem_buf, config->pwd );
+        (void) strncpy( mem_buf, config->pwd ,strlen(config->pwd)+1);
         mem_buf += strlen( config->pwd ) + 1;
     }
     else
@@ -492,11 +451,11 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
     }
 
     cb->config.server_addr = mem_buf;
-    strcpy( mem_buf,config->server_addr );
+    (void) strncpy( mem_buf,config->server_addr,strlen(config->server_addr)+1 );
     mem_buf += strlen(config->server_addr) + 1;
 
     cb->config.server_port = mem_buf;
-    strcpy( mem_buf,config->server_port );
+    (void) strncpy( mem_buf,config->server_port,strlen(config->server_port) + 1 );
     mem_buf += strlen(config->server_port) + 1;
 
     cb->config.security.type = config->security.type;
@@ -506,7 +465,7 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
         {
             cb->config.security.u.cert.server_ca_len = config->security.u.cert.server_ca_len;
             cb->config.security.u.cert.server_ca = (uint8_t *)mem_buf;
-            memcpy( mem_buf, config->security.u.cert.server_ca, config->security.u.cert.server_ca_len );
+            (void) memcpy( mem_buf, config->security.u.cert.server_ca, config->security.u.cert.server_ca_len );
             mem_buf += config->security.u.cert.server_ca_len;
         }
         else
@@ -519,7 +478,7 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
         {
             cb->config.security.u.cert.client_ca_len =  config->security.u.cert.client_ca_len;
             cb->config.security.u.cert.client_ca = (uint8_t *)mem_buf;
-            memcpy( mem_buf, config->security.u.cert.client_ca, config->security.u.cert.client_ca_len );
+            (void) memcpy( mem_buf, config->security.u.cert.client_ca, config->security.u.cert.client_ca_len );
             mem_buf += config->security.u.cert.client_ca_len;
         }
 
@@ -527,7 +486,7 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
         {
             cb->config.security.u.cert.client_pk_len =  config->security.u.cert.client_pk_len;
             cb->config.security.u.cert.client_pk = (uint8_t *)mem_buf;
-            memcpy( mem_buf, config->security.u.cert.client_pk, config->security.u.cert.client_pk_len );
+            (void) memcpy( mem_buf, config->security.u.cert.client_pk, config->security.u.cert.client_pk_len );
             mem_buf += config->security.u.cert.client_pk_len;
         }
 
@@ -535,80 +494,84 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
         {
             cb->config.security.u.cert.client_pk_pwd_len = config->security.u.cert.client_pk_pwd_len ;
             cb->config.security.u.cert.client_pk_pwd = (uint8_t *)mem_buf;
-            memcpy( mem_buf, config->security.u.cert.client_pk_pwd, config->security.u.cert.client_pk_pwd_len );
-            mem_buf += config->security.u.cert.client_pk_pwd_len;
+            (void) memcpy( mem_buf, config->security.u.cert.client_pk_pwd, config->security.u.cert.client_pk_pwd_len );
+//            mem_buf += config->security.u.cert.client_pk_pwd_len;
         }
     }
-    else if(config->security.type == EN_DTLS_AL_SECURITY_TYPE_PSK)
-    {
-        if ( 0 != config->security.u.psk.psk_id_len)
-        {
-            cb->config.security.u.psk.psk_id_len = config->security.u.psk.psk_id_len ;
-            cb->config.security.u.psk.psk_id = (uint8_t *)mem_buf;
-            memcpy( mem_buf, config->security.u.psk.psk_id, config->security.u.psk.psk_id_len );
-            mem_buf += config->security.u.psk.psk_id_len;
-        }
+//    else if(config->security.type == EN_DTLS_AL_SECURITY_TYPE_PSK)
+//    {
+//        if ( 0 != config->security.u.psk.psk_id_len)
+//        {
+//            cb->config.security.u.psk.psk_id_len = config->security.u.psk.psk_id_len ;
+//            cb->config.security.u.psk.psk_id = (uint8_t *)mem_buf;
+//            (void) memcpy( mem_buf, config->security.u.psk.psk_id, config->security.u.psk.psk_id_len );
+//            mem_buf += config->security.u.psk.psk_id_len;
+//        }
+//
+//        if ( 0 != config->security.u.psk.psk_key_len)
+//        {
+//            cb->config.security.u.psk.psk_key_len = config->security.u.psk.psk_key_len;
+//            cb->config.security.u.psk.psk_key = (uint8_t *)mem_buf;
+//            (void) memcpy( mem_buf, config->security.u.psk.psk_key, config->security.u.psk.psk_key_len );
+//            mem_buf += config->security.u.psk.psk_id_len;
+//        }
+//    }
 
-        if ( 0 != config->security.u.psk.psk_key_len)
-        {
-            cb->config.security.u.psk.psk_key_len = config->security.u.psk.psk_key_len;
-            cb->config.security.u.psk.psk_key = (uint8_t *)mem_buf;
-            memcpy( mem_buf, config->security.u.psk.psk_key, config->security.u.psk.psk_key_len );
-            mem_buf += config->security.u.psk.psk_id_len;
-        }
-    }
 
-
-    int i = 0;
+    unsigned int i = 0;
     for(i = 0;i < CN_NEW_TOPIC_NUM;i++)
     {
-        cb->hub_sub_topic[i] = topic_fmt((char *)s_new_topic_fmt[i],cb->config.id);
+        cb->hub_sub_topic[i] = topic_fmt(s_new_topic_fmt[i],(const char *)cb->config.id);
         if(NULL == cb->hub_sub_topic[i])
         {
-            config_parameter_release(cb);
-            ret = en_oc_mqtt_err_sysmem;
+            (void)config_parameter_release(cb);
+            ret = (int)en_oc_mqtt_err_sysmem;
             return ret;
         }
     }
 
 
-    ret = en_oc_mqtt_err_ok;
+    ret = (int)en_oc_mqtt_err_ok;
     return ret;
 }
 
 
-///< generate the client_id user passwd for the mqtt need
+///< generate the client_id user pwd for the mqtt need
 static int oc_mqtt_para_release(oc_mqtt_tiny_cb_t *cb)
 {
-    mqtt_al_disconnect(cb->mqtt_para.mqtt_handle);
+    (void)mqtt_al_disconnect(cb->mqtt_para.mqtt_handle);
     osal_free(cb->mqtt_para.mqtt_clientid);
     osal_free(cb->mqtt_para.mqtt_user);
     osal_free(cb->mqtt_para.mqtt_passwd);
     osal_free(cb->mqtt_para.default_pub_topic);
     osal_free(cb->mqtt_para.default_sub_topic);
 
-    memset(&cb->mqtt_para,0,sizeof(oc_mqtt_para_t));
+    (void) memset(&cb->mqtt_para,0,sizeof(oc_mqtt_para_t));
 
     return 0;
 }
 
 static int oc_mqtt_para_gernerate(oc_mqtt_tiny_cb_t *cb)
 {
-    int ret = en_oc_mqtt_err_ok;;
-    uint8_t hmac[CN_HMAC_LEN];
+    int ret = (int)en_oc_mqtt_err_ok;;
+    uint8_t hmac[CN_HMAC_LEN] = {0};
 
     struct tm *date;
     time_t time_now;
 
     time_now = osal_sys_time()/1000;
     date = gmtime(&time_now);
+    if(NULL == date)
+    {
+        return ret;
+    }
 
-    snprintf(cb->salt_time,11,"%04d%02d%02d%02d",date->tm_year+1900,\
+    (void) snprintf(cb->salt_time,11,"%04d%02d%02d%02d",date->tm_year+1900,\
             date->tm_mon,date->tm_mday,date->tm_hour);
 
-    oc_mqtt_para_release(cb);         ///< try to free all the resource we have built
+    (void) oc_mqtt_para_release(cb);         ///< try to free all the resource we have built
 
-    cb->mqtt_para.mqtt_clientid = clientid_fmt(CN_CLIENT_ID_FMT,cb->config.id,cb->salt_time);
+    cb->mqtt_para.mqtt_clientid = clientid_fmt(CN_CLIENT_ID_FMT,(const char *)cb->config.id,(const char *)cb->salt_time);
     if(NULL == cb->mqtt_para.mqtt_clientid)
     {
         goto EXIT_MEM;
@@ -620,23 +583,31 @@ static int oc_mqtt_para_gernerate(oc_mqtt_tiny_cb_t *cb)
         goto EXIT_MEM;
     }
 
-    hmac_generate_passwd(cb->config.pwd,strlen(cb->config.pwd),\
-            cb->salt_time,strlen(cb->salt_time),hmac,sizeof(hmac));
-    cb->mqtt_para.mqtt_passwd = osal_malloc(CN_HMAC_LEN*2+1);
-    if(NULL != cb->mqtt_para.mqtt_passwd)
+    if(NULL != cb->config.pwd)
     {
-        byte2hexstr(hmac,CN_HMAC_LEN,cb->mqtt_para.mqtt_passwd);
+        (void) hmac_generate_passwd(cb->config.pwd,strlen(cb->config.pwd),\
+                cb->salt_time,strlen(cb->salt_time),hmac,sizeof(hmac));
+        cb->mqtt_para.mqtt_passwd = osal_malloc(CN_HMAC_LEN*2+1);
+        if(NULL != cb->mqtt_para.mqtt_passwd)
+        {
+            (void)byte2hexstr(hmac,CN_HMAC_LEN,cb->mqtt_para.mqtt_passwd);
+        }
+        else
+        {
+            goto EXIT_MEM;
+        }
     }
     else
     {
-        goto EXIT_MEM;
+        cb->mqtt_para.mqtt_passwd = NULL;
     }
 
-    if(cb->flag.bits.bit_daemon_status == en_daemon_status_bs_getaddr)
-    {
-        cb->mqtt_para.default_pub_topic = topic_fmt(CN_OC_BS_REPORT_TOPIC_FMT,cb->config.id);
 
-        cb->mqtt_para.default_sub_topic = topic_fmt(CN_OC_BS_CMD_TOPIC_FMT,cb->config.id);
+    if(cb->flag.bits.bit_daemon_status == (int)en_daemon_status_bs_getaddr)
+    {
+        cb->mqtt_para.default_pub_topic = topic_fmt(CN_OC_BS_REPORT_TOPIC_FMT,(const char *)cb->config.id);
+
+        cb->mqtt_para.default_sub_topic = topic_fmt(CN_OC_BS_CMD_TOPIC_FMT,(const char *)cb->config.id);
 
         cb->mqtt_para.default_msg_deal = bs_msg_default_deal;
 
@@ -649,9 +620,9 @@ static int oc_mqtt_para_gernerate(oc_mqtt_tiny_cb_t *cb)
     else
     {
 
-        cb->mqtt_para.default_pub_topic = topic_fmt(CN_OC_HUB_PUBTOPIC_DEFAULT_FMT,cb->config.id);
+        cb->mqtt_para.default_pub_topic = topic_fmt(CN_OC_HUB_PUBTOPIC_DEFAULT_FMT,(const char *)cb->config.id);
 
-        cb->mqtt_para.default_sub_topic = topic_fmt(CN_OC_HUB_SUBTOPIC_DEFAULT_FMT,cb->config.id);
+        cb->mqtt_para.default_sub_topic = topic_fmt(CN_OC_HUB_SUBTOPIC_DEFAULT_FMT,(const char *)cb->config.id);
 
         cb->mqtt_para.default_msg_deal = hub_msg_default_deal;
 
@@ -662,8 +633,8 @@ static int oc_mqtt_para_gernerate(oc_mqtt_tiny_cb_t *cb)
         }
     }
 
-    if(cb->flag.bits.bit_bs_enable && ((cb->flag.bits.bit_daemon_status == en_daemon_status_hub_keep)||\
-            (cb->flag.bits.bit_daemon_status == en_daemon_status_dmp_connecting)))
+    if(cb->flag.bits.bit_bs_enable && ((cb->flag.bits.bit_daemon_status == (int)en_daemon_status_hub_keep)||\
+            (cb->flag.bits.bit_daemon_status == (int)en_daemon_status_dmp_connecting)))
     {
         cb->mqtt_para.server_addr = cb->bs_cb.hubserver_addr;
         cb->mqtt_para.server_port = cb->bs_cb.hubserver_port;
@@ -681,8 +652,8 @@ static int oc_mqtt_para_gernerate(oc_mqtt_tiny_cb_t *cb)
     return ret;
 
 EXIT_MEM:
-    oc_mqtt_para_release(cb);
-    ret = en_oc_mqtt_err_sysmem;
+    (void) oc_mqtt_para_release(cb);
+    ret = (int)en_oc_mqtt_err_sysmem;
     return ret;
 }
 
@@ -690,11 +661,11 @@ EXIT_MEM:
 ///< return the reason code defined by the mqtt_al.h
 static int dmp_connect(oc_mqtt_tiny_cb_t *cb)
 {
-    int  ret = en_oc_mqtt_err_system;
+    int  ret = (int)en_oc_mqtt_err_system;
 
     mqtt_al_conpara_t conpara;
 
-    memset(&conpara,0,sizeof(conpara));
+    (void) memset(&conpara,0,sizeof(conpara));
 
     conpara.clientid.data = cb->mqtt_para.mqtt_clientid;
     conpara.clientid.len = strlen(conpara.clientid.data);
@@ -703,7 +674,10 @@ static int dmp_connect(oc_mqtt_tiny_cb_t *cb)
     conpara.user.len = strlen(conpara.user.data);
 
     conpara.passwd.data = cb->mqtt_para.mqtt_passwd;
-    conpara.passwd.len = strlen(conpara.passwd.data);
+    if(NULL != cb->mqtt_para.mqtt_passwd)
+    {
+        conpara.passwd.len = strlen(conpara.passwd.data);
+    }
 
     conpara.cleansession = 1;
     conpara.keepalivetime = cb->config.lifetime;
@@ -716,40 +690,40 @@ static int dmp_connect(oc_mqtt_tiny_cb_t *cb)
     conpara.version = en_mqtt_al_version_3_1_1;
     conpara.willmsg = NULL;
 
-    printf("oc_mqtt_connect:server:%s port:%s \n\r",cb->mqtt_para.server_addr,cb->mqtt_para.server_port);
-    printf("oc_mqtt_connect:client_id:%s \n\r",cb->mqtt_para.mqtt_clientid);
-    printf("oc_mqtt_connect:user:%s passwd:%s \n\r",cb->mqtt_para.mqtt_user,cb->mqtt_para.mqtt_passwd);
+    LINK_LOG_DEBUG("oc_mqtt_connect:server:%s port:%s \n\r",cb->mqtt_para.server_addr,cb->mqtt_para.server_port);
+    LINK_LOG_DEBUG("oc_mqtt_connect:client_id:%s \n\r",cb->mqtt_para.mqtt_clientid);
+    LINK_LOG_DEBUG("oc_mqtt_connect:user:%s passwd:%s \n\r",cb->mqtt_para.mqtt_user,(cb->mqtt_para.mqtt_passwd==NULL)?"NULL":cb->mqtt_para.mqtt_passwd);
     cb->mqtt_para.mqtt_handle = mqtt_al_connect(&conpara);
 
     if(NULL != cb->mqtt_para.mqtt_handle)
     {
-        ret = en_oc_mqtt_err_ok;
+        ret = (int)en_oc_mqtt_err_ok;
     }
     else
     {
         if(cn_mqtt_al_con_code_err_clientID == conpara.conret)
         {
-            ret = en_oc_mqtt_err_conclientid;
+            ret = (int)en_oc_mqtt_err_conclientid;
         }
         else if(cn_mqtt_al_con_code_err_netrefuse == conpara.conret)
         {
-            ret = en_oc_mqtt_err_conserver;
+            ret = (int)en_oc_mqtt_err_conserver;
         }
         else if(cn_mqtt_al_con_code_err_u_p == conpara.conret)
         {
-            ret = en_oc_mqtt_err_conuserpwd;
+            ret = (int)en_oc_mqtt_err_conuserpwd;
         }
         else if(cn_mqtt_al_con_code_err_auth == conpara.conret)
         {
-            ret = en_oc_mqtt_err_conclient;
+            ret = (int)en_oc_mqtt_err_conclient;
         }
         else
         {
-            ret = en_oc_mqtt_err_network;
+            ret = (int)en_oc_mqtt_err_network;
         }
     }
 
-    printf("oc_mqtt_connect:recode:%d :%s\n\r",ret,ret==en_oc_mqtt_err_ok?"SUCCESS":"FAILED");
+    LINK_LOG_DEBUG("oc_mqtt_connect:recode:%d :%s\n\r",ret,ret==(int)en_oc_mqtt_err_ok?"SUCCESS":"FAILED");
 
     return ret;
 
@@ -757,18 +731,19 @@ static int dmp_connect(oc_mqtt_tiny_cb_t *cb)
 
 static int dmp_subscribe(oc_mqtt_tiny_cb_t *cb)
 {
-    int  ret = en_oc_mqtt_err_system;
+    int  ret = (int)en_oc_mqtt_err_system;
     mqtt_al_subpara_t   subpara;
 
-    printf("oc_mqtt_subscribe:start\n\r");
+    LINK_LOG_DEBUG("oc_mqtt_subscribe:start\n\r");
 
     if(NULL == cb->mqtt_para.mqtt_handle)
     {
-        ret = en_oc_mqtt_err_noconected;
+        ret = (int)en_oc_mqtt_err_noconected;
+        return ret;
     }
-    memset(&subpara,0,sizeof(subpara));
+    (void) memset(&subpara,0,sizeof(subpara));
 
-    if(cb->flag.bits.bit_daemon_status == en_daemon_status_bs_getaddr)
+    if(cb->flag.bits.bit_daemon_status == (int)en_daemon_status_bs_getaddr)
     {
         subpara.dealer = bs_msg_default_deal;
     }
@@ -782,21 +757,21 @@ static int dmp_subscribe(oc_mqtt_tiny_cb_t *cb)
     subpara.topic.data = cb->mqtt_para.default_sub_topic ;
     subpara.topic.len = strlen(subpara.topic.data );
 
-    printf("oc_mqtt_default_subscribe:topic:%s\n\r",subpara.topic.data);
+    LINK_LOG_DEBUG("oc_mqtt_default_subscribe:topic:%s\n\r",subpara.topic.data);
 
     ret = mqtt_al_subscribe(cb->mqtt_para.mqtt_handle,&subpara);
     if(0 != ret)
     {
-        ret = en_oc_mqtt_err_subscribe;
+        ret = (int)en_oc_mqtt_err_subscribe;
     }
 
-    printf("oc_mqtt_default_subscribe:retcode:%d:%s\n\r",ret,oc_mqtt_err(ret));
+    LINK_LOG_DEBUG("oc_mqtt_default_subscribe:retcode:%d:%s\n\r",ret,oc_mqtt_err(ret));
 
     ///if not the bs mode, then subscribe all the other topic
-    if(cb->flag.bits.bit_daemon_status != en_daemon_status_bs_getaddr)
+    if(cb->flag.bits.bit_daemon_status != (int)en_daemon_status_bs_getaddr)
     {
         int i = 0;
-        for(i =0;i<CN_NEW_TOPIC_NUM;i++)
+        for(i =0;i<(int)CN_NEW_TOPIC_NUM;i++)
         {
             subpara.arg = cb;
             subpara.qos = en_mqtt_al_qos_1;
@@ -804,14 +779,14 @@ static int dmp_subscribe(oc_mqtt_tiny_cb_t *cb)
             subpara.topic.len = strlen(subpara.topic.data );
             subpara.timeout = CN_OC_MQTT_TIMEOUT;
 
-            printf("oc_mqtt_subscribe:topic:%s\n\r",subpara.topic.data);
+            LINK_LOG_DEBUG("oc_mqtt_subscribe:topic:%s\n\r",subpara.topic.data);
 
             ret = mqtt_al_subscribe(cb->mqtt_para.mqtt_handle,&subpara);
 
-            printf("oc_mqtt_subscribe:retcode:%d:%s\n\r",ret,oc_mqtt_err(ret));
+            LINK_LOG_DEBUG("oc_mqtt_subscribe:retcode:%d:%s\n\r",ret,oc_mqtt_err(ret));
             if(0 != ret)
             {
-                 ret = en_oc_mqtt_err_subscribe;
+                 ret = (int)en_oc_mqtt_err_subscribe;
                  break;
             }
         }
@@ -827,14 +802,14 @@ static int dmp_subscribe(oc_mqtt_tiny_cb_t *cb)
             subpara.topic.len = strlen(subpara.topic.data );
             subpara.timeout = CN_OC_MQTT_TIMEOUT;
 
-            printf("oc_mqtt_subscribe:topic:%s\n\r",subpara.topic.data);
+            LINK_LOG_DEBUG("oc_mqtt_subscribe:topic:%s\n\r",subpara.topic.data);
 
             ret = mqtt_al_subscribe(cb->mqtt_para.mqtt_handle,&subpara);
 
-            printf("oc_mqtt_subscribe:retcode:%d:%s\n\r",ret,oc_mqtt_err(ret));
+            LINK_LOG_DEBUG("oc_mqtt_subscribe:retcode:%d:%s\n\r",ret,oc_mqtt_err(ret));
             if(0 != ret)
             {
-                 ret = en_oc_mqtt_err_subscribe;
+                 ret = (int)en_oc_mqtt_err_subscribe;
                  break;
             }
         }
@@ -845,13 +820,13 @@ static int dmp_subscribe(oc_mqtt_tiny_cb_t *cb)
 
 static int dmp_publish(oc_mqtt_tiny_cb_t *cb,char *topic, uint8_t *msg, int len, int qos)
 {
-    int  ret = en_oc_mqtt_err_system;
+    int  ret = (int)en_oc_mqtt_err_system;
     mqtt_al_pubpara_t pubpara;
 
 
     ///< pub the mqtt request
-    memset(&pubpara, 0, sizeof(pubpara));
-    pubpara.qos = qos;
+    (void) memset(&pubpara, 0, sizeof(pubpara));
+    pubpara.qos = (en_mqtt_al_qos_t)qos;
     pubpara.retain = 0;
     pubpara.timeout = 1000;
 
@@ -865,44 +840,52 @@ static int dmp_publish(oc_mqtt_tiny_cb_t *cb,char *topic, uint8_t *msg, int len,
     pubpara.msg.data = (char *)msg;
     pubpara.msg.len = len;
 
-    printf("oc_mqtt_publish:topic:%s  qos:%d msglen:%d\n\r",topic,qos,len);
+    LINK_LOG_DEBUG("oc_mqtt_publish:topic:%s  qos:%d msglen:%d\n\r",topic,qos,len);
 
     ret = mqtt_al_publish(cb->mqtt_para.mqtt_handle, &pubpara);
     if(ret != 0)
     {
-        ret = en_oc_mqtt_err_publish;
+        ret = (int)en_oc_mqtt_err_publish;
     }
-    printf("oc_mqtt_publish:retcode:%d:%s\n\r",ret,ret==0?"SUCCESS":"FAIL");
+    LINK_LOG_DEBUG("oc_mqtt_publish:retcode:%d:%s\n\r",ret,ret==0?"SUCCESS":"FAIL");
     return ret;
 }
 static int hub_step(oc_mqtt_tiny_cb_t  *cb)
 {
-    int ret = en_oc_mqtt_err_system;
+    int ret = (int)en_oc_mqtt_err_system;
 
-    printf("%s:enter\n\r",__FUNCTION__);
-    if(en_oc_mqtt_err_ok != oc_mqtt_para_gernerate(cb))
+    LINK_LOG_DEBUG("%s:enter\n\r",__FUNCTION__);
+    if((int)en_oc_mqtt_err_ok != oc_mqtt_para_gernerate(cb))
     {
         goto EXIT_ERR;
     }
 
     ret = dmp_connect(cb);
-    if(en_oc_mqtt_err_ok != ret)
+    if((int)en_oc_mqtt_err_ok != ret)
     {
        goto EXIT_ERR;
     }
     ///< subscribe the topic here
     ret = dmp_subscribe(cb);
-    if(ret  != en_oc_mqtt_err_ok)
+    if(ret  != (int)en_oc_mqtt_err_ok)
     {
         goto EXIT_ERR;
     }
+    else
+    {
+        if(NULL != cb->config.log_dealer)
+        {
+            cb->flag.bits.bit_do_reportdisconnect = 0;
+            cb->config.log_dealer(en_oc_mqtt_log_connected);
+        }
+    }
 
-    printf("%s:ok exit\n\r",__FUNCTION__);
+    LINK_LOG_DEBUG("%s:ok exit\n\r",__FUNCTION__);
     return ret;
 
 EXIT_ERR:
-    oc_mqtt_para_release(cb);
-    printf("%s:err:%d \n\r",__FUNCTION__,ret);
+    (void) oc_mqtt_para_release(cb);
+    LINK_LOG_DEBUG("%s:err:%d \n\r",__FUNCTION__,ret);
     return ret;
 
 }
@@ -910,25 +893,25 @@ EXIT_ERR:
 ///< this is the hub connect subscribe
 static int bs_step(oc_mqtt_tiny_cb_t  *cb)
 {
-    int ret = en_oc_mqtt_err_system;
+    int ret = (int)en_oc_mqtt_err_system;
     int wait_times = CN_CON_BACKOFF_MAXTIMES;
 
-    printf("%s:enter\n\r",__FUNCTION__);
+    LINK_LOG_DEBUG("%s:enter\n\r",__FUNCTION__);
     cb->flag.bits.bit_get_hubaddr = 0;
 
-    if(en_oc_mqtt_err_ok != oc_mqtt_para_gernerate(cb))
+    if((int)en_oc_mqtt_err_ok != oc_mqtt_para_gernerate(cb))
     {
         goto EXIT_ERR;
     }
 
     ret = dmp_connect(cb);
-    if(en_oc_mqtt_err_ok != ret)
+    if((int)en_oc_mqtt_err_ok != ret)
     {
        goto EXIT_ERR;
     }
     ///< subscribe the topic here
     ret = dmp_subscribe(cb);
-    if(ret  != en_oc_mqtt_err_ok)
+    if(ret  != (int)en_oc_mqtt_err_ok)
     {
        goto EXIT_ERR;
     }
@@ -946,19 +929,19 @@ static int bs_step(oc_mqtt_tiny_cb_t  *cb)
 
     if(cb->flag.bits.bit_get_hubaddr)
     {
-        ret = en_oc_mqtt_err_ok;
+        ret = (int)en_oc_mqtt_err_ok;
     }
     else
     {
-        ret = en_oc_mqtt_err_gethubaddrtimeout;
+        ret = (int)en_oc_mqtt_err_gethubaddrtimeout;
     }
 
 
 
 EXIT_ERR:
-    oc_mqtt_para_release(cb);
+    (void) oc_mqtt_para_release(cb);
 
-    printf("%s:exit ret:%d\n\r",__FUNCTION__,ret);
+    LINK_LOG_DEBUG("%s:exit ret:%d\n\r",__FUNCTION__,ret);
 
     return ret;
 
@@ -968,17 +951,17 @@ EXIT_ERR:
 ///< this function deal with api subscribe
 static int deal_api_subscribe( oc_mqtt_tiny_cb_t  *cb, oc_mqtt_daemon_cmd_t *cmd)
 {
-    int ret = en_oc_mqtt_err_noconfigured;
+    int ret = (int)en_oc_mqtt_err_noconfigured;
     tiny_topic_sub_t  *topic_sub;
     mqtt_al_subpara_t *subpara;
 
     subpara = cmd->arg;
 
-    if(en_daemon_status_idle == cb->flag.bits.bit_daemon_status)
+    if((int)en_daemon_status_idle == cb->flag.bits.bit_daemon_status)
     {
-        ret = en_oc_mqtt_err_noconfigured;
+        ret = (int)en_oc_mqtt_err_noconfigured;
     }
-    else if((en_daemon_status_hub_keep == cb->flag.bits.bit_daemon_status) &&\
+    else if(((int)en_daemon_status_hub_keep == cb->flag.bits.bit_daemon_status) &&\
             (en_mqtt_al_connect_ok == mqtt_al_check_status(cb->mqtt_para.mqtt_handle)))
     {
 
@@ -992,28 +975,28 @@ static int deal_api_subscribe( oc_mqtt_tiny_cb_t  *cb, oc_mqtt_daemon_cmd_t *cmd
             if( 0  == mqtt_al_subscribe( cb->mqtt_para.mqtt_handle, subpara) )
             {
                 ///< initialize the subtopic add it to the subscribe list
-                topic_sub->qos = subpara->qos;
+                topic_sub->qos = (int) subpara->qos;
                 topic_sub->topic = (char *)topic_sub + sizeof(tiny_topic_sub_t);
-                strcpy(topic_sub->topic, subpara->topic.data);
+                (void) strncpy(topic_sub->topic, subpara->topic.data,strlen(subpara->topic.data)+1);
                 topic_sub->nxt = cb->subscribe_lst;
                 cb->subscribe_lst = topic_sub;
 
-                ret = en_oc_mqtt_err_ok;
+                ret = (int)en_oc_mqtt_err_ok;
             }
             else
             {
                 osal_free ( topic_sub );
-                ret = en_oc_mqtt_err_subscribe;
+                ret = (int)en_oc_mqtt_err_subscribe;
             }
         }
         else
         {
-            ret = en_oc_mqtt_err_sysmem;
+            ret = (int)en_oc_mqtt_err_sysmem;
         }
     }
     else
     {
-        ret = en_oc_mqtt_err_noconected;
+        ret = (int)en_oc_mqtt_err_noconected;
     }
 
     cmd->retcode = ret;
@@ -1025,18 +1008,18 @@ static int deal_api_subscribe( oc_mqtt_tiny_cb_t  *cb, oc_mqtt_daemon_cmd_t *cmd
 ///< unsubscribe the specified topic
 static int deal_api_unsubscribe( oc_mqtt_tiny_cb_t  *cb, oc_mqtt_daemon_cmd_t *cmd)
 {
-    int ret = en_oc_mqtt_err_noconfigured;
+    int ret = (int)en_oc_mqtt_err_noconfigured;
     tiny_topic_sub_t  *topic_sub;
     tiny_topic_sub_t  *topic_sub_nxt;
     mqtt_al_unsubpara_t *unsubpara;
 
     unsubpara = cmd->arg;
 
-    if(en_daemon_status_idle == cb->flag.bits.bit_daemon_status)
+    if((int)en_daemon_status_idle == cb->flag.bits.bit_daemon_status)
     {
-        ret = en_oc_mqtt_err_noconfigured;
+        ret = (int)en_oc_mqtt_err_noconfigured;
     }
-    else if((en_daemon_status_hub_keep == cb->flag.bits.bit_daemon_status) &&\
+    else if(((int)en_daemon_status_hub_keep == cb->flag.bits.bit_daemon_status) &&\
             (en_mqtt_al_connect_ok == mqtt_al_check_status(cb->mqtt_para.mqtt_handle)))
     {
 
@@ -1070,16 +1053,16 @@ static int deal_api_unsubscribe( oc_mqtt_tiny_cb_t  *cb, oc_mqtt_daemon_cmd_t *c
                     }
                 }
             }
-            ret = en_oc_mqtt_err_ok;
+            ret = (int)en_oc_mqtt_err_ok;
         }
         else
         {
-            ret = en_oc_mqtt_err_unsubscribe;
+            ret = (int)en_oc_mqtt_err_unsubscribe;
         }
     }
     else
     {
-        ret = en_oc_mqtt_err_noconected;
+        ret = (int)en_oc_mqtt_err_noconected;
     }
 
     cmd->retcode = ret;
@@ -1089,102 +1072,114 @@ static int deal_api_unsubscribe( oc_mqtt_tiny_cb_t  *cb, oc_mqtt_daemon_cmd_t *c
 }
 
 
+int daemon_entry_exit( oc_mqtt_tiny_cb_t  *cb)
+{
+    int ret = -1;
+
+    if(NULL != cb)
+    {
+        cb->daemon_exit = 1;
+        ret = 0;
+    }
+    return ret;
+}
+
+
 ///< this is the daemon task entry
 static int daemon_entry(void *arg)
 {
-    int ret = en_oc_mqtt_err_ok;
+    int ret = (int)en_oc_mqtt_err_ok;
     oc_mqtt_tiny_cb_t  *cb;
     oc_mqtt_daemon_cmd_t   *daemon_cmd = NULL;
 
     cb = arg;
-    printf("%s:start\n\r",__FUNCTION__);
-    while(1)
+    LINK_LOG_DEBUG("%s:start\n\r",__FUNCTION__);
+    while((NULL != cb) && (0 == cb->daemon_exit))
     {
         if(0 == queue_pop(cb->task_daemon_cmd_queue,(void **)&daemon_cmd,10*1000))
         {
-            ret = en_oc_mqtt_err_ok;
             switch (daemon_cmd->cmd)             ///< execute the command here
             {
                 case en_oc_mqtt_daemon_cmd_connect:
-                    if(cb->flag.bits.bit_daemon_status != en_daemon_status_idle)
+                    if(cb->flag.bits.bit_daemon_status != (int)en_daemon_status_idle)
                     {
-                         ret = en_oc_mqtt_err_configured;
+                         ret = (int)en_oc_mqtt_err_configured;
                     }
                     else
                     {
                         ret = config_parameter_clone(cb,daemon_cmd->arg);
-                        if((ret == en_oc_mqtt_err_ok) && (cb->flag.bits.bit_bs_enable))
+                        if((ret == (int)en_oc_mqtt_err_ok) && (cb->flag.bits.bit_bs_enable))
                         {
                             cb->flag.bits.bit_daemon_status = en_daemon_status_bs_getaddr;
                             ret = bs_step(cb);
                         }
-                        if(ret == en_oc_mqtt_err_ok)
+                        if(ret == (int)en_oc_mqtt_err_ok)
                         {
                             cb->flag.bits.bit_daemon_status = en_daemon_status_dmp_connecting;  ///< now we step in connecting status
                             ret = hub_step(cb);
                         }
 
-                        if(ret == en_oc_mqtt_err_ok)
+                        if(ret == (int)en_oc_mqtt_err_ok)
                         {
                             cb->flag.bits.bit_daemon_status = en_daemon_status_hub_keep;    ///< now we step in keep status
                         }
                         else
                         {
                             cb->flag.bits.bit_daemon_status = en_daemon_status_idle;
-                            oc_mqtt_para_release(cb);
-                            config_parameter_release(cb);
+                            (void) oc_mqtt_para_release(cb);
+                            (void) config_parameter_release(cb);
                         }
                     }
                     daemon_cmd->retcode = ret;
                     break;
                 case en_oc_mqtt_daemon_cmd_disconnect:
-                    if(cb->flag.bits.bit_daemon_status == en_daemon_status_idle)
+                    if(cb->flag.bits.bit_daemon_status == (int)en_daemon_status_idle)
                     {
-                        daemon_cmd->retcode = en_oc_mqtt_err_noconfigured;
+                        daemon_cmd->retcode = (int)en_oc_mqtt_err_noconfigured;
                     }
                     else
                     {
-                        oc_mqtt_para_release(cb);
+                        (void) oc_mqtt_para_release(cb);
 
                         daemon_cmd->retcode = config_parameter_release(cb);
                     }
                     break;
                 case en_oc_mqtt_daemon_cmd_publish:
-                    printf("daemon:publish enter\n\r");
-                    if(en_daemon_status_idle == cb->flag.bits.bit_daemon_status)
+                    LINK_LOG_DEBUG("daemon:publish enter\n\r");
+                    if((int)en_daemon_status_idle == cb->flag.bits.bit_daemon_status)
                     {
-                        daemon_cmd->retcode = en_oc_mqtt_err_noconfigured;
+                        daemon_cmd->retcode = (int)en_oc_mqtt_err_noconfigured;
                     }
-                    else if((en_daemon_status_hub_keep == cb->flag.bits.bit_daemon_status) &&\
+                    else if(((int)en_daemon_status_hub_keep == cb->flag.bits.bit_daemon_status) &&\
                             (en_mqtt_al_connect_ok == mqtt_al_check_status(cb->mqtt_para.mqtt_handle)))
                     {
                         mqtt_al_pubpara_t *pubpara;
                         pubpara = daemon_cmd->arg;
                         daemon_cmd->retcode = dmp_publish(cb, pubpara->topic.data,\
-                                   (uint8_t *)pubpara->msg.data,pubpara->msg.len,pubpara->qos);
+                                   (uint8_t *)pubpara->msg.data,pubpara->msg.len,(int)pubpara->qos);
                     }
                     else
                     {
-                        daemon_cmd->retcode = en_oc_mqtt_err_noconected;
+                        daemon_cmd->retcode = (int)en_oc_mqtt_err_noconected;
                     }
-                    printf("daemon:publish exit\n\r");
+                    LINK_LOG_DEBUG("daemon:publish exit\n\r");
                     break;
                 case en_oc_mqtt_daemon_cmd_subscribe:
-                    printf("daemon:subscribe enter\n\r");
-                    deal_api_subscribe( cb, daemon_cmd );
-                    printf("daemon:subscribe exit\n\r");
+                    LINK_LOG_DEBUG("daemon:subscribe enter\n\r");
+                    (void) deal_api_subscribe( cb, daemon_cmd );
+                    LINK_LOG_DEBUG("daemon:subscribe exit\n\r");
                     break;
                 case en_oc_mqtt_daemon_cmd_unsubscribe:
-                    printf("daemon:unsubscribe enter\n\r");
-                    deal_api_unsubscribe( cb, daemon_cmd );
-                    printf("daemon:unsubscribe exit\n\r");
+                    LINK_LOG_DEBUG("daemon:unsubscribe enter\n\r");
+                    (void) deal_api_unsubscribe( cb, daemon_cmd );
+                    LINK_LOG_DEBUG("daemon:unsubscribe exit\n\r");
                     break;
 
                 default:
                     break;
 
             }
-            osal_semp_post(daemon_cmd->signal); ///< activate the commander
+            (void) osal_semp_post(daemon_cmd->signal); ///< activate the commander
         }
 
         ///< timeout we should check if we should do the reconnect
@@ -1193,15 +1188,21 @@ static int daemon_entry(void *arg)
             cb->flag.bits.bit_do_bootstrap = 0;
 
             cb->flag.bits.bit_daemon_status = en_daemon_status_bs_getaddr;
-            bs_step(cb);
+            (void) bs_step(cb);
 
             cb->flag.bits.bit_daemon_status = en_daemon_status_hub_keep;
-            hub_step(cb);
+            (void) hub_step(cb);
         }
-        else if((cb->flag.bits.bit_daemon_status == en_daemon_status_hub_keep) &&\
+        else if((cb->flag.bits.bit_daemon_status == (int)en_daemon_status_hub_keep) &&\
                 (en_mqtt_al_connect_ok != mqtt_al_check_status(cb->mqtt_para.mqtt_handle)))
         {
-            hub_step(cb);
+            if((cb->flag.bits.bit_do_reportdisconnect == 0) && (NULL != cb->config.log_dealer))
+            {
+                cb->config.log_dealer(en_oc_mqtt_log_disconnected);
+                cb->flag.bits.bit_do_reportdisconnect =1;
+            }
+
+            (void) hub_step(cb);
         }
         else
         {
@@ -1209,7 +1210,7 @@ static int daemon_entry(void *arg)
         }
     }
 
-    printf("%s:quit\n\r",__FUNCTION__);
+    LINK_LOG_DEBUG("%s:quit\n\r",__FUNCTION__);
     return 0;
 }
 
@@ -1217,14 +1218,42 @@ static int daemon_entry(void *arg)
 ///< use this function to configure
 static int tiny_config(oc_mqtt_config_t *config)
 {
-    int ret = en_oc_mqtt_err_parafmt;
+    int cert_mode = 0;
+    int ret = (int)en_oc_mqtt_err_parafmt;
     if(NULL != config)
     {
-        if((NULL == config->id) || (NULL == config->pwd) ||\
-            (NULL == config->server_addr) || (NULL == config->server_port))
+        if((NULL == config->server_addr) || (NULL == config->server_port))  ///< no server information get
         {
             return ret;
         }
+
+        if(NULL == config->id)   ///< we should know your id
+        {
+            return ret;
+        }
+
+        if((config->security.type != EN_DTLS_AL_SECURITY_TYPE_CERT) &&(config->security.type != EN_DTLS_AL_SECURITY_TYPE_NONE))   ///< we only suport the two
+        {
+            return ret;
+        }
+
+        if(config->security.type == EN_DTLS_AL_SECURITY_TYPE_CERT)
+        {
+            if(NULL == config->security.u.cert.server_ca)  ///< should config the server ca
+            {
+                return ret;
+            }
+            if((NULL != config->security.u.cert.client_ca) && (NULL != config->security.u.cert.client_pk))
+            {
+                cert_mode = 1;
+            }
+        }
+
+        if((NULL == config->pwd) && (cert_mode == 0))   ///< we permit the no pwd but you should config the client ca
+        {
+            return ret;
+        }
+
         ret = daemon_cmd_post(en_oc_mqtt_daemon_cmd_connect,config);
     }
     return ret;
@@ -1236,20 +1265,21 @@ static int tiny_config(oc_mqtt_config_t *config)
 static int tiny_publish(char *topic,uint8_t *payload, int len,int qos )
 {
     mqtt_al_pubpara_t pubpara;
-    int  ret = en_oc_mqtt_err_parafmt;
+    int  ret = (int)en_oc_mqtt_err_parafmt;
 
-    if(qos >= en_mqtt_al_qos_err)
+    if(qos >= (int)en_mqtt_al_qos_err)
     {
         return ret;
     }
     if(NULL == s_oc_mqtt_tiny_cb)
     {
-        ret = en_oc_mqtt_err_system;
+        ret = (int)en_oc_mqtt_err_system;
+        return ret;
     }
 
     ///< pub the mqtt request
-    memset(&pubpara, 0, sizeof(pubpara));
-    pubpara.qos = qos;
+    (void) memset(&pubpara, 0, sizeof(pubpara));
+    pubpara.qos = (en_mqtt_al_qos_t)qos;
     pubpara.retain = 0;
     pubpara.timeout = 1000;
     pubpara.topic.data = topic;
@@ -1267,20 +1297,21 @@ static int tiny_subscribe(char *topic, int qos)
     ///< use this function to subscribe a topic
     mqtt_al_subpara_t  subpara;
 
-    int  ret = en_oc_mqtt_err_parafmt;
+    int  ret = (int)en_oc_mqtt_err_parafmt;
 
-    if(qos >= en_mqtt_al_qos_err)
+    if(qos >= (int)en_mqtt_al_qos_err)
     {
         return ret;
     }
     if(NULL == s_oc_mqtt_tiny_cb)
     {
-        ret = en_oc_mqtt_err_system;
+        ret = (int)en_oc_mqtt_err_system;
+        return ret;
     }
 
     ///< pub the mqtt request
-    memset(&subpara, 0, sizeof(subpara));
-    subpara.qos = qos;
+    (void) memset(&subpara, 0, sizeof(subpara));
+    subpara.qos = (en_mqtt_al_qos_t)qos;
     subpara.topic.data = topic;
     subpara.topic.len = strlen(topic);
 
@@ -1289,18 +1320,19 @@ static int tiny_subscribe(char *topic, int qos)
     return ret;
 }
 ///< use this function to unsubscribe a topic
-static en_oc_mqtt_err_code_t tiny_unsubscribe(char *topic)
+static int tiny_unsubscribe(char *topic)
 {
     ///< use this function to subscribe a topic
     mqtt_al_unsubpara_t  unsubpara;
 
-    en_oc_mqtt_err_code_t  ret = en_oc_mqtt_err_parafmt;
+    int  ret = (int)en_oc_mqtt_err_parafmt;
     if(NULL == s_oc_mqtt_tiny_cb)
     {
-        ret = en_oc_mqtt_err_system;
+        ret = (int)en_oc_mqtt_err_system;
+        return ret;
     }
     ///< pub the mqtt request
-    memset(&unsubpara, 0, sizeof(unsubpara));
+    (void) memset(&unsubpara, 0, sizeof(unsubpara));
     unsubpara.topic.data = topic;
     unsubpara.topic.len = strlen(topic);
     ret = daemon_cmd_post(en_oc_mqtt_daemon_cmd_unsubscribe,&unsubpara);
@@ -1311,7 +1343,7 @@ static en_oc_mqtt_err_code_t tiny_unsubscribe(char *topic)
 ///< use this function to deconfig it
 static int tiny_deconfig()
 {
-    int ret = en_oc_mqtt_err_system;
+    int ret = (int)en_oc_mqtt_err_system;
 
     ret = daemon_cmd_post(en_oc_mqtt_daemon_cmd_disconnect,NULL);
 
@@ -1320,7 +1352,7 @@ static int tiny_deconfig()
 
 
 
-static const oc_mqtt_t s_oc_mqtt_lite = \
+static const oc_mqtt_t s_oc_mqtt_tiny = \
 {
     .name = "oc_mqtt_tiny",
     .op =
@@ -1334,7 +1366,7 @@ static const oc_mqtt_t s_oc_mqtt_lite = \
 };
 
 ///< use this function to install the oc mqtt to the oc mqtt abstract layer
-int oc_mqtt_tiny_install()
+int oc_mqtt_imp_init()
 {
     int ret = -1;
 
@@ -1345,7 +1377,7 @@ int oc_mqtt_tiny_install()
     {
         goto EXIT_MALLOC;
     }
-    memset(cb,0,sizeof(oc_mqtt_tiny_cb_t));
+    (void) memset(cb,0,sizeof(oc_mqtt_tiny_cb_t));
 
     cb->task_daemon_cmd_queue = queue_create("daemon_cmd_queue",10,1);
     if(NULL == cb->task_daemon_cmd_queue)
@@ -1360,21 +1392,22 @@ int oc_mqtt_tiny_install()
         goto EXIT_TASK;
     }
 
-    ret = oc_mqtt_register(&s_oc_mqtt_lite);
+    ret = oc_mqtt_register(&s_oc_mqtt_tiny);
     if(0 != ret)
     {
         goto EXIT_REGISTER;
     }
+    cb->daemon_exit = 0;
     s_oc_mqtt_tiny_cb = cb;
     return ret;
 
 
 EXIT_REGISTER:
-    osal_task_kill(cb->task_daemon);
+    (void) osal_task_kill(cb->task_daemon);
     cb->task_daemon = NULL;
 
 EXIT_TASK:
-    queue_delete(cb->task_daemon_cmd_queue);
+    (void) queue_delete(cb->task_daemon_cmd_queue);
     cb->task_daemon_cmd_queue = NULL;
 
 EXIT_QUEUE:

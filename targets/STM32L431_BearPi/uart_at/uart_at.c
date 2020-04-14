@@ -47,14 +47,20 @@ UART_HandleTypeDef uart_at;
 static USART_TypeDef*     s_pUSART = LPUART1;
 static uint32_t           s_uwIRQn = LPUART1_IRQn;
 
-#ifndef CONFIG_AT_RECVMAXLEN
-#define CONFIG_AT_RECVMAXLEN   1024
+#ifndef CONFIG_UARTAT_RCVMAX
+#define CONFIG_UARTAT_RCVMAX     1024  //cache a frame
+#endif
+
+#ifndef CONFIG_UARTAT_BAUDRATE
+#define CONFIG_UARTAT_BAUDRATE    115200
 #endif
 
 
-#define CN_RCVBUF_LEN  CONFIG_AT_RECVMAXLEN  //cache a frame
-#define CN_RCVMEM_LEN  CONFIG_AT_RECVMAXLEN  //use to cache more frames
+#ifndef CONFIG_UARTAT_DEVNAME
+#define CONFIG_UARTAT_DEVNAME    "atdev"
+#endif
 
+#define CN_RCVMEM_LEN  CONFIG_UARTAT_RCVMAX
 
 
 struct atio_cb
@@ -62,7 +68,7 @@ struct atio_cb
     unsigned short        w_next;    //the next position to be write
     osal_semp_t           rcvsync;   //if a frame has been written to the ring, then active it
     tag_ring_buffer_t     rcvring;
-    unsigned char         rcvbuf[CN_RCVBUF_LEN];
+    unsigned char         rcvbuf[CONFIG_UARTAT_RCVMAX];
     unsigned char         rcvringmem[CN_RCVMEM_LEN];
     //for the debug here
     unsigned int          rframeover; //how many times the frame has been over the max length
@@ -91,7 +97,7 @@ static void atio_irq(void)
     {
        value = (uint8_t)(uart_at.Instance->RDR & 0x00FF);
        g_atio_cb.rcvlen++;
-       if(g_atio_cb.w_next < CN_RCVBUF_LEN)
+       if(g_atio_cb.w_next < CONFIG_UARTAT_RCVMAX)
        {
            g_atio_cb.rcvbuf[g_atio_cb.w_next] = value;
            g_atio_cb.w_next++;
@@ -115,7 +121,7 @@ static void atio_irq(void)
             ringspace = g_atio_cb.w_next;
             ring_buffer_write(&g_atio_cb.rcvring,(unsigned char *)&ringspace,sizeof(ringspace));
             ring_buffer_write(&g_atio_cb.rcvring,g_atio_cb.rcvbuf,ringspace);
-            osal_semp_post(g_atio_cb.rcvsync);
+            (void) osal_semp_post(g_atio_cb.rcvsync);
             g_atio_cb.rcvframe++;
         }
         g_atio_cb.w_next=0; //write from the head
@@ -136,10 +142,10 @@ function     :use this function to initialize the uart
 parameters   :
 instruction  :
 *******************************************************************************/
-bool_t uart_at_init(int baud)
+bool_t uart_at_init(void *pri)
 {
     //initialize the at controller
-    memset(&g_atio_cb,0,sizeof(g_atio_cb));
+    (void) memset(&g_atio_cb,0,sizeof(g_atio_cb));
     if(false == osal_semp_create(&g_atio_cb.rcvsync,CN_RCVMEM_LEN,0))
     {
         printf("%s:semp create error\n\r",__FUNCTION__);
@@ -148,7 +154,7 @@ bool_t uart_at_init(int baud)
     ring_buffer_init(&g_atio_cb.rcvring,g_atio_cb.rcvringmem,CN_RCVMEM_LEN,0,0);
 
     uart_at.Instance = s_pUSART;
-    uart_at.Init.BaudRate = baud;
+    uart_at.Init.BaudRate = CONFIG_UARTAT_BAUDRATE;
     uart_at.Init.WordLength = UART_WORDLENGTH_8B;
     uart_at.Init.StopBits = UART_STOPBITS_1;
     uart_at.Init.Parity = UART_PARITY_NONE;
@@ -169,7 +175,7 @@ EXIT_SEMP:
     return false;
 }
 
-void uartat_deinit(void)
+void uart_at_deinit(void *pri)
 {
     __HAL_UART_DISABLE(&uart_at);
     __HAL_UART_DISABLE_IT(&uart_at, UART_IT_IDLE);
@@ -253,10 +259,11 @@ static ssize_t  __at_write (void *pri, size_t offset,const void *buf,size_t len,
 
 static const los_driv_op_t s_at_op = {
 
-    .read = __at_read,
-    .write = __at_write,
+        .init = uart_at_init,
+        .deinit = uart_at_deinit,
+        .read = __at_read,
+        .write = __at_write,
 };
 
-OSDRIV_EXPORT(uart_at_driv,CONFIG_AT_DEVICENAME,(los_driv_op_t *)&s_at_op,NULL,O_RDWR);
-
+OSDRIV_EXPORT(uart_at_driv,CONFIG_UARTAT_DEVNAME,(los_driv_op_t *)&s_at_op,NULL,O_RDWR);
 

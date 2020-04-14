@@ -61,14 +61,14 @@ static int __test_sal_tcp(const char *host,const char *port)
     entry = sal_gethostbyname(host);
     if( !(entry && entry->h_addr_list[0] && (entry->h_addrtype == AF_INET)))
     {
-       printf("gethostbyname:%s failed\n\r",host);
+       link_printf("gethostbyname:%s failed\n\r",host);
        goto EXIT_GETIP;
     }
 
     fd = sal_socket(AF_INET,SOCK_STREAM,0);
     if(fd == -1)
     {
-        printf("socket:failed\n\r");
+        link_printf("socket:failed\n\r");
         goto EXIT_SOCKET;
     }
 
@@ -78,7 +78,7 @@ static int __test_sal_tcp(const char *host,const char *port)
     addr.sin_port = htons(atoi(port));
     if( 0 != sal_connect(fd,(struct sockaddr *)&addr,sizeof(addr)))
     {
-        printf("connect:%s failed\n\r",host);
+        link_printf("connect:%s failed\n\r",host);
         goto EXIT_CONNECT;
     }
 
@@ -87,13 +87,13 @@ static int __test_sal_tcp(const char *host,const char *port)
     ///< set the recv timeout
     if(0 != sal_setsockopt(fd,SOL_SOCKET,SO_RCVTIMEO,&timedelay,sizeof(timedelay)))
     {
-        printf("setsockopt:%d %d failed\n\r",SOL_SOCKET,SO_RCVTIMEO);
+        link_printf("setsockopt:%d %d failed\n\r",SOL_SOCKET,SO_RCVTIMEO);
         goto EXIT_SETSOCKOPT;
     }
 
     if(0 != sal_closesocket(fd))
     {
-        printf("socketclose:failed\n\r");
+        link_printf("socketclose:failed\n\r");
         goto EXIT_CLOSE;
     }
     return 0;
@@ -135,7 +135,7 @@ static int sal_test_main(int argc, const char *argv[])
         {
             test_success++;
         }
-        printf("TEST:%d SUCCESS:%d\n\r", test_counter,test_success);
+        link_printf("TEST:%d SUCCESS:%d\n\r", test_counter,test_success);
 
         osal_task_sleep(1000);
     }

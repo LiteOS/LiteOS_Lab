@@ -24,7 +24,7 @@ int printf(const char *format, ...)
     char str_buf[LOG_BUF_SIZE] = {0};
     va_list list;
 
-    memset(str_buf, 0, LOG_BUF_SIZE);
+    (void) memset(str_buf, 0, LOG_BUF_SIZE);
     va_start(list, format);
     ret = vsnprintf(str_buf, LOG_BUF_SIZE, format, list);
     va_end(list);

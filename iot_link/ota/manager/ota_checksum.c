@@ -50,8 +50,8 @@ static int ota_pack_calc_stream_init(int sign_len, int file_size)
     return -1;
   }
 
-  memset(hash_cache, 0, 32);
-  memset(sign_cache, 0, 256);
+  (void) memset(hash_cache, 0, 32);
+  (void) memset(sign_cache, 0, 256);
   return 0;
 }
 
@@ -137,12 +137,12 @@ static int ota_pack_verify_signature(uint8_t *hash, int32_t hash_len, uint8_t *s
   mbedtls_pk_init(&pk);
   ret = mbedtls_pk_parse_public_key(&pk, prv_public_key, sizeof(prv_public_key));
   if (ret != 0) {
-    printf ("parse pk failed!, ret = %x\n", ret);
+    LINK_LOG_DEBUG ("parse pk failed!, ret = %x\n", ret);
     goto exit;
   }
 
   if ((ret = mbedtls_pk_verify(&pk, MBEDTLS_MD_SHA256, hash, 0, sig, sig_len)) != 0) {
-    printf (" pk verify failed , ret = %x\n", -ret);
+    LINK_LOG_DEBUG (" pk verify failed , ret = %x\n", -ret);
     goto exit;
   }
   ret = 0;
@@ -162,7 +162,7 @@ int ota_pack_get_signature_verify_result(int sign_len, int file_len)
   ota_storage_bin_read(0, sign_cache, sign_len);
 
   if ( (ret = ota_pack_verify_signature(hash_cache, 32, sign_cache, sign_len)) != 0) {
-    printf("ota Binary signature check failed!, ret = %x\n", ret);
+    LINK_LOG_DEBUG("ota Binary signature check failed!, ret = %x\n", ret);
   }
 
   ota_pack_calc_stream_deinit();

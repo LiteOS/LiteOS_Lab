@@ -39,7 +39,7 @@
 static void __sinn_sock_init(sinn_if_t *interface)
 {
     (void)interface;
-    printf(" using select()\r\n");
+    LINK_LOG_DEBUG(" using select()\r\n");
 }
 
 static void __sinn_sock_uninit(sinn_if_t *interface)
@@ -59,7 +59,7 @@ static int __sinn_sock_connect(sinn_connection_t *nc)
     dtls_establish_info_s establish_info;
     char port_buf[PORT_BUF_LEN];
 
-    memset(&shakehand_info, 0, sizeof(dtls_shakehand_info_s));
+    (void) memset(&shakehand_info, 0, sizeof(dtls_shakehand_info_s));
     conn_param = (sinn_connect_param_t *)(nc->user_data);
     ssl_param = &conn_param->ssl_param;
     if (ssl_param->type == e_sinn_ssl_type_psk)
@@ -109,13 +109,13 @@ static int __sinn_sock_connect(sinn_connection_t *nc)
 static void __sinn_sock_discon(sinn_connection_t *nc)
 {
     int rc = 0;
-    printf("__sinn_sock_discon\r\n");
+    LINK_LOG_DEBUG("__sinn_sock_discon\r\n");
     if(nc->sock_fd == -1)
         return;
 
     rc = sal_closesocket(nc->sock_fd);
     if(rc < 0)
-        printf("sock %d rc %d \r\n",  nc->sock_fd, rc);
+        LINK_LOG_DEBUG("sock %d rc %d \r\n",  nc->sock_fd, rc);
 
     nc->sock_fd = -1;
 }
@@ -151,7 +151,7 @@ static sinn_time_t __sinn_sock_poll(sinn_connection_t *nc, int timeout_ms)
 
     if(rc == -1)
     {
-        printf("select() error\r\n");
+        LINK_LOG_DEBUG("select() error\r\n");
         return 0;
     }
     else if(rc > 0)

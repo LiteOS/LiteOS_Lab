@@ -224,7 +224,7 @@ int mqtt_decode_publish(unsigned char *buf, int buf_len, mqtt_publish_opt_t *opt
     len = mqtt_decode_fixhead(buf, &type, &options->dup, &options->qos, &options->retain, &remaning_len);
     if (type != MQTT_PACKET_TYPE_PUBLISH)
     {
-        printf("decode pulish error\r\n");
+        LINK_LOG_DEBUG("decode pulish error\r\n");
         return -1;
     }
 
@@ -285,7 +285,7 @@ int mqtt_decode_suback(unsigned char *buf, int buf_len, mqtt_suback_opt_t *optio
     len = mqtt_decode_fixhead(buf, &type, &reserved, &reserved, &reserved, &remaning_len);
     if (type != MQTT_PACKET_TYPE_SUBACK)
     {
-        printf("decode suback error\r\n");
+        LINK_LOG_DEBUG("decode suback error\r\n");
         return -1;
     }
 
@@ -325,7 +325,7 @@ int mqtt_decode_puback(unsigned char *buf, int buf_len, mqtt_puback_opt_t *optio
     len = mqtt_decode_fixhead(buf, &type, &reserved, &reserved, &reserved, &remaning_len);
     if (type != mqtt_type)
     {
-        printf("decode puback error\r\n");
+        LINK_LOG_DEBUG("decode puback error\r\n");
         return -1;
     }
 

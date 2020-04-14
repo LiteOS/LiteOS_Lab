@@ -2045,7 +2045,7 @@ UINT32 Example_SndRcvEvent(VOID)
     }
 
     /* create task */
-    memset(&stTask1, 0, sizeof(TSK_INIT_PARAM_S));
+    (void) memset(&stTask1, 0, sizeof(TSK_INIT_PARAM_S));
     stTask1.pfnTaskEntry = (TSK_ENTRY_FUNC)Example_Event;
     stTask1.pcName       = "EventTsk1";
     stTask1.uwStackSize  = LOSCFG_BASE_CORE_TSK_DEFAULT_STACK_SIZE;
@@ -2330,7 +2330,7 @@ UINT32 Example_MutexLock(VOID)
     LOS_TaskLock();
 
     /* create task1 */
-    memset(&stTask1, 0, sizeof(TSK_INIT_PARAM_S));
+    (void) memset(&stTask1, 0, sizeof(TSK_INIT_PARAM_S));
     stTask1.pfnTaskEntry = (TSK_ENTRY_FUNC)Example_MutexTask1;
     stTask1.pcName       = "MutexTsk1";
     stTask1.uwStackSize  = LOSCFG_BASE_CORE_TSK_DEFAULT_STACK_SIZE;
@@ -2343,7 +2343,7 @@ UINT32 Example_MutexLock(VOID)
     }
 
     /* create task2 */
-    memset(&stTask2, 0, sizeof(TSK_INIT_PARAM_S));
+    (void) memset(&stTask2, 0, sizeof(TSK_INIT_PARAM_S));
     stTask2.pfnTaskEntry = (TSK_ENTRY_FUNC)Example_MutexTask2;
     stTask2.pcName       = "MutexTsk2";
     stTask2.uwStackSize  = LOSCFG_BASE_CORE_TSK_DEFAULT_STACK_SIZE;
@@ -2652,7 +2652,7 @@ UINT32 Example_Semphore(VOID)
     LOS_TaskLock();
 
     /* create task1 */
-    memset(&stTask1, 0, sizeof(TSK_INIT_PARAM_S));
+    (void) memset(&stTask1, 0, sizeof(TSK_INIT_PARAM_S));
     stTask1.pfnTaskEntry = (TSK_ENTRY_FUNC)Example_SemTask1;
     stTask1.pcName       = "MutexTsk1";
     stTask1.uwStackSize  = LOSCFG_BASE_CORE_TSK_IDLE_STACK_SIZE;
@@ -2665,7 +2665,7 @@ UINT32 Example_Semphore(VOID)
     }
 
     /* create task2 */
-    memset(&stTask2, 0, sizeof(TSK_INIT_PARAM_S));
+    (void) memset(&stTask2, 0, sizeof(TSK_INIT_PARAM_S));
     stTask2.pfnTaskEntry = (TSK_ENTRY_FUNC)Example_SemTask2;
     stTask2.pcName       = "MutexTsk2";
     stTask2.uwStackSize  = LOSCFG_BASE_CORE_TSK_IDLE_STACK_SIZE;

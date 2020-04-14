@@ -62,7 +62,7 @@ static void *__task_create(const char *name,int (*task_entry)(void *args),\
 {
     void *ret = NULL;
     pthread_t pid;
-    printf("task create name:%s\r\n", name);
+    LINK_LOG_DEBUG("task create name:%s\r\n", name);
     if(pthread_create(&pid, NULL, (pthread_entry)task_entry, args))
         return ret;
 
@@ -200,7 +200,7 @@ static bool_t  __semp_del(osal_semp_t semp)
 }
 
 
-static bool_t  __semp_pend(osal_semp_t semp,int timeout)
+static bool_t  __semp_pend(osal_semp_t semp,unsigned int timeout)
 {
     bool_t ret = false;
     macos_sem_t *macos_sem = semp;

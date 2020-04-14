@@ -38,7 +38,7 @@
  */
 #include "lwip/sockets.h"
 #include "lwip/netdb.h"
-#include "lwip/errno.h"
+//#include "lwip/errno.h"
 #include "lwip/tcpip.h"
 
 #include <string.h>
@@ -52,14 +52,14 @@ static int __lwip_bind(int fd, struct sockaddr *addr, int addrlen)
     unsigned char buf[2];
     unsigned short family;
 
-    memcpy(&family,addr,2);
+    (void) memcpy(&family,addr,2);
     buf[0] = addrlen;
     buf[1] = family;
-    memcpy(addr,buf,2);
+    (void) memcpy(addr,buf,2);
 
     ret = lwip_bind(fd,addr,addrlen);
 
-    memcpy(addr,&family,2);  ///< recover the addr--we should not modify the user's information
+    (void) memcpy(addr,&family,2);  ///< recover the addr--we should not modify the user's information
 
 
     return ret;
@@ -71,10 +71,10 @@ static int __lwip_connect(int fd, struct sockaddr *addr, int addrlen)
     unsigned char buf[2];
     unsigned short family;
 
-    memcpy(&family,addr,2);
+    (void) memcpy(&family,addr,2);
     buf[0] = addrlen;
     buf[1] = family;
-    memcpy(addr,buf,2);
+    (void) memcpy(addr,buf,2);
 
     ret = lwip_connect(fd,addr,addrlen);
 
@@ -89,9 +89,9 @@ static int __lwip_accept(int fd, struct sockaddr *addr, socklen_t *addrlen)
 
     ret = lwip_accept(fd, addr, addrlen);
 
-    memcpy(buf,addr,2);
+    (void) memcpy(buf,addr,2);
     family = buf[1];
-    memcpy(addr,&family,2);
+    (void) memcpy(addr,&family,2);
 
     return ret;
 }
@@ -104,13 +104,13 @@ static int __lwip_sendto(int fd, const void *msg, int len, int flag, struct sock
     unsigned char buf[2];
     unsigned short family;
 
-    memcpy(&family,addr,2);
+    (void) memcpy(&family,addr,2);
     buf[0] = addrlen;
     buf[1] = family;
-    memcpy(addr,buf,2);
+    (void) memcpy(addr,buf,2);
 
     ret = lwip_sendto(fd,msg,len,flag,addr,addrlen);
-    memcpy(addr,&family,2);  ///< recover the addr--we should not modify the user's information
+    (void) memcpy(addr,&family,2);  ///< recover the addr--we should not modify the user's information
 
     return ret;
 }
@@ -124,24 +124,36 @@ static int __lwip_recvfrom(int fd, void *msg, int len, int flag, struct sockaddr
 
     ret = lwip_recvfrom(fd, msg, len,flag,addr,addrlen);
 
-    memcpy(buf,addr,2);
+    (void) memcpy(buf,addr,2);
     family = buf[1];
-    memcpy(addr,&family,2);
+    (void) memcpy(addr,&family,2);
 
     return ret;
 }
 
 
-static int __lwip_setsockopt(int fd, int level, int option, const void *option_value,int option_len)
+///< map the level and option
+static int __lwip_setsockopt(int fd, int level, int option, const void *option_value, int option_len)
 {
-    if(level == 0xffff)  ///< the lwip make some level and option map
+    struct timeval *time_delay;
+
+    if(level == 0xffff)
     {
         level = SOL_SOCKET;
+        if((option == SO_SNDTIMEO) || (option == SO_RCVTIMEO))
+        {
+            time_delay = (struct timeval *)option_value;
+            if((time_delay->tv_sec == 0)&&(time_delay->tv_usec == 0))
+            {
+                LINK_LOG_DEBUG("%s:log:::::::timeout should be mapped:::::modified it 1000 us\n\r",__FUNCTION__);
+                time_delay->tv_usec = 1000;
+            }
+        }
+
     }
 
-    return lwip_setsockopt(fd,level,option,option_value,option_len);
+    return setsockopt(fd, level, option, option_value, option_len);
 }
-
 
 
 static const tag_tcpip_ops s_tcpip_lwip_ops =
@@ -176,7 +188,7 @@ static const tag_tcpip_domain s_tcpip_lwip =
 extern int netdriver_install();
 __attribute__((weak)) int netdriver_install()
 {
-    printf("please remember to supply a netdriver---- please\n\r");
+    LINK_LOG_DEBUG("please remember to supply a netdriver---- please\n\r");
 
     return 0;
 }
@@ -187,15 +199,11 @@ int link_tcpip_imp_init(void)
     /* Initilialize the LwIP stack with RTOS */
     tcpip_init(NULL, NULL);
 
-    ret = netdriver_install();
-    if(ret != 0)
-    {
-        return ret;
-    }
+    (void) netdriver_install();
 
     ret = link_sal_install(&s_tcpip_lwip);
 
-    printf("%s:install ret:%d\n\r",__FUNCTION__,ret);
+    LINK_LOG_DEBUG("%s:install ret:%d\n\r",__FUNCTION__,ret);
 
     return ret;
 }

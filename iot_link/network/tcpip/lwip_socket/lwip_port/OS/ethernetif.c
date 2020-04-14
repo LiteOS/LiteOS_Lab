@@ -112,7 +112,7 @@ int8_t ethernetif_api_register(struct ethernet_api *api)
     {
         return ERR_ARG;
     }
-    memcpy(&s_eth_api, api, sizeof(struct ethernet_api));
+    (void) memcpy(&s_eth_api, api, sizeof(struct ethernet_api));
 
     return ERR_OK;
 }
@@ -212,10 +212,10 @@ void ethernetif_input( void *pvParameters )
         */
         /*err = s_pxNetIf->input(p, s_pxNetIf);*/
         err = tcpip_input(p, s_pxNetIf);
-        if (err != ERR_OK)
+        if (err != (int)ERR_OK)
         {
-            LWIP_DEBUGF(NETIF_DEBUG, ("ethernetif_input: IP input error\n"));
-            pbuf_free(p);
+//            LWIP_DEBUGF(NETIF_DEBUG, ("ethernetif_input: IP input error\n"));
+            (void)pbuf_free(p);
             p = NULL;
         }
     }
@@ -298,7 +298,7 @@ void set_lwip_ipv6_default_gw(struct netif *netif, const ip6_addr_t *gw)
     {
         return;
     }
-    memcpy( &g_lwip_ipv6_gw, gw, sizeof(g_lwip_ipv6_gw));
+    (void) memcpy( &g_lwip_ipv6_gw, gw, sizeof(g_lwip_ipv6_gw));
 }
 #endif
 

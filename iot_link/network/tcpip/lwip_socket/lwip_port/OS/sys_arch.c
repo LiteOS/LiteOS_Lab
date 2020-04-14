@@ -82,7 +82,7 @@ err_t sys_mbox_new(struct sys_mbox **mb, int size)
         goto err_handler;
     }
 
-    (void)memset(mbox, 0, sizeof(struct sys_mbox)); //CSEC_FIX_2302
+    (void)(void) memset(mbox, 0, sizeof(struct sys_mbox)); //CSEC_FIX_2302
 
     mbox->msgs = (void **)osal_malloc(sizeof(void *) * size);
 
@@ -91,7 +91,7 @@ err_t sys_mbox_new(struct sys_mbox **mb, int size)
         goto err_handler;
     }
 
-    (void)memset(mbox->msgs, 0, (sizeof(void *) * size)); //CSEC_FIX_2302
+    (void)(void) memset(mbox->msgs, 0, (sizeof(void *) * size)); //CSEC_FIX_2302
 
     mbox->mbox_size = size;
 
@@ -133,18 +133,17 @@ err_handler:
 
     if (NULL != mbox && mbox->mutex != cn_mutex_invalid)
     {
-        (void)osal_mutex_del(mbox->mutex);
+        (void) osal_mutex_del(mbox->mutex);
     }
 
     if (NULL != mbox && mbox->not_empty != cn_semp_invalid)
     {
-        (void)osal_semp_del(mbox->not_empty);
+        (void) osal_semp_del(mbox->not_empty);
     }
 
     if (NULL != mbox && mbox->not_full != cn_semp_invalid)
     {
-        osal_semp_del(mbox->not_full);
-        (void)osal_semp_del(mbox->not_full);
+        (void) osal_semp_del(mbox->not_full);
     }
 
     if (mbox != NULL)
@@ -171,13 +170,13 @@ sys_mbox_free(struct sys_mbox **mb)
 
         LWIP_DEBUGF(SYS_DEBUG, ("sys_mbox_free: going to free mbox 0x%p\n", (void *)mbox));
 
-        (void)osal_mutex_lock(mbox->mutex);
+        osal_mutex_lock(mbox->mutex);
 
-        (void)osal_semp_del(mbox->not_empty);
-        (void)osal_semp_del(mbox->not_full);
+        (void) osal_semp_del(mbox->not_empty);
+        (void) osal_semp_del(mbox->not_full);
 
-        (void)osal_mutex_unlock(mbox->mutex);
-        (void)osal_mutex_del(mbox->mutex);
+        (void) osal_mutex_unlock(mbox->mutex);
+        (void) osal_mutex_del(mbox->mutex);
 
         osal_free(mbox->msgs);
         osal_free(mbox);
@@ -217,8 +216,8 @@ void  sys_mbox_post(struct sys_mbox **mb, void *msg)   ///< check if it is empty
                 mbox->isFull = 1;
             }
 
-            osal_mutex_unlock(mbox->mutex);
-            osal_semp_post(mbox->not_empty);
+            (void) osal_mutex_unlock(mbox->mutex);
+            (void) osal_semp_post(mbox->not_empty);
         }
     }
 
@@ -259,8 +258,8 @@ err_t sys_mbox_trypost(struct sys_mbox **mb, void *msg)
                 mbox->isFull = 1;
             }
 
-            osal_mutex_unlock(mbox->mutex);
-            osal_semp_post(mbox->not_empty);
+            (void) osal_mutex_unlock(mbox->mutex);
+            (void) osal_semp_post(mbox->not_empty);
             ret = ERR_OK;
         }
     }
@@ -340,8 +339,8 @@ sys_arch_mbox_fetch(struct sys_mbox **mb, void **msg, u32_t timeout)
             {
                 mbox->isFull = 0;
             }
-            osal_mutex_unlock(mbox->mutex);
-            osal_semp_post(mbox->not_full);
+            (void) osal_mutex_unlock(mbox->mutex);
+            (void) osal_semp_post(mbox->not_full);
             time_end = osal_sys_time();
 
             time_needed = time_end - time_start;
@@ -478,8 +477,6 @@ err_t sys_sem_new(sys_sem_t *sem,  u8_t count)
         return ERR_ARG;
     }
 
-    LWIP_ASSERT("in sys_sem_new count exceeds the limit", (count != 0xFF));
-
     if(osal_semp_create(sem,1,count))
     {
         ret = ERR_OK;
@@ -566,7 +563,7 @@ void sys_sem_signal(sys_sem_t *sem)
 {
     if(NULL != sem)
     {
-        osal_semp_post(*sem);
+        (void) osal_semp_post(*sem);
     }
     return;
 }
@@ -585,7 +582,7 @@ void sys_sem_free(sys_sem_t *sem)
 {
     if(NULL != sem)
     {
-        osal_semp_del(*sem);
+        (void) osal_semp_del(*sem);
     }
 
     return;
@@ -640,7 +637,7 @@ void sys_mutex_unlock(sys_mutex_t *mutex)
 {
     if(NULL != mutex)
     {
-        osal_mutex_unlock(*mutex);
+        (void) osal_mutex_unlock(*mutex);
     }
     return;
 }
@@ -653,7 +650,7 @@ void sys_mutex_free(sys_mutex_t *mutex)
 {
     if(NULL != mutex)
     {
-        osal_mutex_del(*mutex);
+        (void) osal_mutex_del(*mutex);
     }
     return;
 }

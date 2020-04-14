@@ -119,7 +119,7 @@ int ota_storage_flag_write(ota_flag_t *flag)
 void ota_storage_flag_init()
 {
     ota_flag_t  flag;
-    memset(&flag, 0, sizeof(flag));
+    (void) memset(&flag, 0, sizeof(flag));
 
     flag.crc = calc_crc32(0,&flag,sizeof(flag) - sizeof(flag.crc));
     ota_storage_flag_write(&flag);

@@ -56,6 +56,9 @@
 #define DTLS_INTERFACE_H
 
 
+#include <link_log.h>
+
+
 #if !defined(MBEDTLS_CONFIG_FILE)
 #include "los_mbedtls_config.h"
 #else
@@ -66,11 +69,10 @@
 #include "mbedtls/platform.h"
 #else
 #include <stdio.h>
-#define mbedtls_printf     printf
+#define mbedtls_printf   LINK_LOG_DEBUG
 #endif
 
 #include "mbedtls/net_sockets.h"
-#include "mbedtls/ssl.h"
 #include "mbedtls/entropy.h"
 #include "mbedtls/ctr_drbg.h"
 #include "mbedtls/error.h"

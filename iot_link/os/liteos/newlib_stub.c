@@ -35,6 +35,7 @@
 #include <reent.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <stdio.h>
 
 int _execve_r(struct _reent *ptr, const char *name, char *const *argv, char *const *env)
 {
@@ -47,7 +48,7 @@ _CLOCK_T_ _times_r(struct _reent *ptr, struct tms *ptms)
 {
     /* not support */
     ptr->_errno = ENOTSUP;
-    return -1;
+    return (_CLOCK_T_)-1;
 }
 
 int _unlink_r(struct _reent *ptr, const char *file)
@@ -75,9 +76,11 @@ void *_malloc_r(struct _reent *ptr, size_t size)
     return malloc(size);
 }
 
+extern void *los_mem_realloc(void *old, int newlen);
+
 void *_realloc_r(struct _reent *ptr, void *old, size_t newlen)
 {
-    return realloc (old, newlen);
+    return los_mem_realloc (old, newlen);
 }
 
 void *_calloc_r(struct _reent *ptr, size_t size, size_t len)
@@ -90,19 +93,21 @@ void _free_r(struct _reent *ptr, void *addr)
     free(addr);
 }
 
-void _exit(int status)
-{
-    while (1);
-}
+
 
 void _system(const char *s)
 {
+}
+
+/*
+
+void _exit(int status)
+{
+    (void)printf("EXIT:STATUS:%d\n\r",status);
     return;
 }
-
 void abort(void)
 {
-    while (1);
 }
 
-
+*/

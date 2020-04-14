@@ -182,7 +182,7 @@ bool_t  osal_semp_create(osal_semp_t *semp,int limit,int initvalue)
 
 }
 
-bool_t  osal_semp_pend(osal_semp_t semp,int timeout)
+bool_t  osal_semp_pend(osal_semp_t semp,unsigned int timeout)
 {
     bool_t ret = false;
 
@@ -222,53 +222,6 @@ bool_t  osal_semp_del(osal_semp_t semp)
 
 }
 
-bool_t  osal_queue_create(osal_queue_t *queue,int len,int msgsize)
-{
-    bool_t ret = false;
-
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->queue_create))
-    {
-        ret = s_os_cb->ops->queue_create( queue, len, msgsize);
-    }
-
-    return ret;
-}
-
-bool_t  osal_queue_send(osal_queue_t queue, void *pbuf, unsigned int bufsize, unsigned int timeout)
-{
-    bool_t ret = false;
-
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->queue_send))
-    {
-        ret = s_os_cb->ops->queue_send( queue, pbuf, bufsize, timeout);
-    }
-
-    return ret;
-}
-
-bool_t  osal_queue_recv(osal_queue_t queue, void *pbuf, unsigned int bufsize, unsigned int timeout)
-{
-    bool_t ret = false;
-
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->queue_recv))
-    {
-        ret = s_os_cb->ops->queue_recv( queue, pbuf, bufsize, timeout);
-    }
-
-    return ret;
-}
-
-bool_t  osal_queue_del(osal_queue_t queue)
-{
-    bool_t ret = false;
-
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->queue_del))
-    {
-        ret = s_os_cb->ops->queue_del( queue);
-    }
-
-    return ret;
-}
 
 
 void *osal_malloc(size_t size)
@@ -287,7 +240,7 @@ void *osal_malloc(size_t size)
 void  osal_free(void *addr)
 {
 
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->free))
+    if((NULL != addr) && (NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->free))
     {
         s_os_cb->ops->free(addr);
     }
@@ -304,7 +257,7 @@ void *osal_zalloc(size_t size)
         ret = s_os_cb->ops->malloc(size);
         if(NULL != ret)
         {
-            memset(ret,0,size);
+            (void) memset(ret,0,size);
         }
     }
 
@@ -324,15 +277,21 @@ void *osal_realloc(void *ptr,size_t newsize)
     return ret;
 }
 
+
+
 void *osal_calloc(size_t n, size_t size)
 {
-    void *p = osal_malloc(n * size);
-    if(NULL != p)
+    void *ret = NULL;
+    size_t len;
+    len = n*size;
+
+    ret = malloc(len);
+    if(NULL != ret)
     {
-        memset(p, 0, n * size);
+        (void) memset(ret, 0,len);
     }
 
-    return p;
+    return ret;
 }
 
 
@@ -398,19 +357,19 @@ int osal_reboot()  ///< maybe we should never come back
 
 int osal_int_connect(int intnum, int prio, int mode, fn_interrupt_handle callback, void *arg)
 {
-	int ret = -1;
-	if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->int_connect))
+    int ret = -1;
+    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->int_connect))
     {
         ret = s_os_cb->ops->int_connect(intnum, prio, mode, callback, arg);
-    }
+	}
 
-	return ret;
+    return ret;
 }
 
 
 __attribute__((weak))  int os_imp_init(void)
 {
-    printf("%s:###please implement this function by yourself####\n\r",__FUNCTION__);
+    LINK_LOG_DEBUG("%s:###please implement this function by yourself####\n\r",__FUNCTION__);
     return -1;
 }
 

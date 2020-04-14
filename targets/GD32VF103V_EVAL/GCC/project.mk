@@ -80,6 +80,5 @@ ASM_SOURCES_S += $(SDK_DIR)/targets/GD32VF103V_EVAL/GCC/start.S \
         
 # C defines
 C_DEFS += -D NDEBUG -DUSE_STDPERIPH_DRIVER -DGD32VF103V_EVAL
+C_INCLUDES += -I $(TOP_DIR)/targets/GD32VF103V_EVAL
 
-
-include $(SDK_DIR)/targets/GD32VF103V_EVAL/Demos/user_demo.mk                

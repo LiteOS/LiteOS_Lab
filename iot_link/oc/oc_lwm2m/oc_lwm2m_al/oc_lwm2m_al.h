@@ -163,4 +163,14 @@ int oc_lwm2m_deconfig(void);
  */
 int oc_lwm2m_init();
 
+/*
+ * @brief this is the map for the errocode
+ *
+ * @param code: the error code
+ *
+ * @return: the string of the code
+ *
+ * */
+const char *oc_lwm2m_errcode(en_oc_lwm2m_err_code_t code);
+
 #endif /* LITEOS_LAB_IOT_LINK_OC_OC_LWM2M_OC_LWM2M_AL_OC_LWM2M_AL_H_ */

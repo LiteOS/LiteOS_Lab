@@ -238,7 +238,7 @@ static uint8_t prv_firmware_write(uint16_t instanceId,
 
                 if ((LWM2M_TYPE_STRING != dataArray[i].type) || (NULL == dataArray[i].value.asBuffer.buffer))
                 {
-                    ATINY_LOG(LOG_ERR, "type ERR %d", dataArray[i].type);
+                    ATINY_LOG(LOG_ERR, "type ERR %d", (int)dataArray[i].type);
                     result = COAP_400_BAD_REQUEST;
                     break;
                 }
@@ -328,7 +328,7 @@ int add_firmware_update_object_instance(lwm2m_object_t *obj, int object_instance
         return LWM2M_MALLOC_FAILED;
     }
 
-    memset(obj->instanceList, 0, sizeof(lwm2m_list_t));
+    (void) memset(obj->instanceList, 0, sizeof(lwm2m_list_t));
     obj->instanceList->id = object_instance_id;
     return LWM2M_OK;
 }

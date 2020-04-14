@@ -9,6 +9,7 @@
 #define __OSAL_IMP_H
 
 
+#include <link_log.h>
 #include <osal_types.h>
 
 typedef struct
@@ -28,7 +29,7 @@ typedef struct
 
     ///< semp function needed
     bool_t (*semp_create)(osal_semp_t *semp,int limit,int initvalue);
-    bool_t (*semp_pend)(osal_semp_t semp,int timeout);
+    bool_t (*semp_pend)(osal_semp_t semp,unsigned int timeout);
     bool_t (*semp_post)(osal_semp_t semp);
     bool_t (*semp_del)(osal_semp_t semp);
 

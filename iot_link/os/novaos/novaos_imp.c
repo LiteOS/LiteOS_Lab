@@ -62,7 +62,7 @@ static void *__task_create(const char *name,int (*task_entry)(void *args),\
 
     if((stack_size > 0) && (NULL == stack))
     {
-        ret = task_spawn(name,prior, 0,stack_size + 0x1000,task_entry,(uintptr_t)args);
+        ret = task_spawn(name,prior, 0,stack_size ,task_entry,(uintptr_t)args);
     }
 
     return ret;
@@ -172,7 +172,7 @@ static bool_t  __semp_create(osal_semp_t *semp,int limit,int initvalue)
     return ret;
 }
 
-static bool_t  __semp_pend(osal_semp_t semp,int timeout)
+static bool_t  __semp_pend(osal_semp_t semp,unsigned int timeout)
 {
     if(0 == sem_timedwait(semp,FN_MS_2_TICKS(timeout)))
     {

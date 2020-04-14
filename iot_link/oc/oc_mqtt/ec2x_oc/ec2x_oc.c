@@ -75,10 +75,10 @@ static int ec2x_atcmd_response(const char *cmd,const char *index,char *buf, int 
     if(osal_mutex_lock(s_ec2x_cb.lock))
     {
         nesting ++;
-        printf("ec2x command start:%d \n\r",(int )osal_sys_time());
+        LINK_LOG_DEBUG("ec2x command start:%d \n\r",(int )osal_sys_time());
         if(nesting != 1)
         {
-            printf("lock nesting:%d  \n\r",nesting);
+            LINK_LOG_DEBUG("lock nesting:%d  \n\r",nesting);
             while(1);
         }
         ret = at_command((unsigned char *)cmd,strlen(cmd),index,(char *)buf,len,timeout);
@@ -88,8 +88,8 @@ static int ec2x_atcmd_response(const char *cmd,const char *index,char *buf, int 
             ret = 0;
         }
         nesting --;
-        printf("ec2x command end:%d \n\r",(int )osal_sys_time());
-        osal_mutex_unlock(s_ec2x_cb.lock);
+        LINK_LOG_DEBUG("ec2x command end:%d \n\r",(int )osal_sys_time());
+        (void) osal_mutex_unlock(s_ec2x_cb.lock);
     }
 
     return ret;
@@ -125,7 +125,7 @@ int ec2x_getfirmver(ec2x_ver_t *ver)
 
                 cpylen = cpylen > CN_EC2X_VERSION_LEN_MAX?CN_EC2X_VERSION_LEN_MAX:cpylen;
 
-                memcpy(ver->ver,str_start,cpylen);
+                (void) memcpy(ver->ver,str_start,cpylen);
             }
             ret = 0;
         }
@@ -144,7 +144,7 @@ int ec2x_get_operator(char *buf)
     char *str_s;
     char *str_e;
 
-    memset(resp,0,128);
+    (void) memset(resp,0,128);
     ret = ec2x_atcmd_response("AT+QSPN\r\n","+QSPN:",resp,128,CN_EC2X_CMD_TIME_BASE);
     if (0 == ret)
     {
@@ -160,7 +160,7 @@ int ec2x_get_operator(char *buf)
             {
                 str_e--;
                 *str_e = '\0';
-                strcpy(buf,str_s);
+                (void) strcpy(buf,str_s);
                 ret = 0;
             }
         }
@@ -183,7 +183,7 @@ int ec2x_get_time(char *timebuffer)
     char *str_z;
 
 
-    memset(resp,0,128);
+    (void) memset(resp,0,128);
 
     ret = ec2x_atcmd_response("AT+QLTS=2\r\n","+QLTS",resp,128,CN_EC2X_CMD_TIME_BASE);
     if (0 == ret)
@@ -216,9 +216,9 @@ int ec2x_get_time(char *timebuffer)
 
         *str = '\0';
         zone = atoi(str_z)/4;
-        sprintf(str_e," GTM+%d",zone);
+        (void) sprintf(str_e," GTM+%d",zone);
 
-        strcpy(timebuffer,str_s);
+        (void) strcpy(timebuffer,str_s);
 
         ret = 0;
     }
@@ -237,7 +237,7 @@ int ec2x_get_csq(int *csq)
     int ret = -1;
 
 
-    memset(resp,0,64);
+    (void) memset(resp,0,64);
     ret = ec2x_atcmd_response("AT+CSQ\r\n","+CSQ: ",resp,64,CN_EC2X_CMD_TIME_BASE);
     if(0 == ret)
     {
@@ -293,7 +293,7 @@ int ec2x_get_rssi(int *rssi)
     char *str_s;
     char *str_e;
 
-    memset(resp,0,128);
+    (void) memset(resp,0,128);
 
     ret = ec2x_atcmd_response("AT+QENG=\"servingcell\"\r\n","+QENG:",resp,128,CN_EC2X_CMD_TIME_BASE);
 
@@ -350,7 +350,7 @@ static int ec2x_oc_msg_deal(void *args,void *msg,size_t len)
     if(NULL != payload)
     {
         hexstr2byte(str_tmp,payload_len*2,payload);
-        memset(&oc_msg,0,sizeof(oc_msg));
+        (void) memset(&oc_msg,0,sizeof(oc_msg));
         oc_msg.qos = qos;
         oc_msg.msg.data = payload;
         oc_msg.msg.len = payload_len;
@@ -373,8 +373,8 @@ static int ec2x_oc_deconfig(void)
     char cmd[256];
     char resp[64];
 
-    memset(cmd,0,256);
-    snprintf(cmd,256,"AT+HWOCMQTTDISCONNECT\r");
+    (void) memset(cmd,0,256);
+    (void) snprintf(cmd,256,"AT+HWOCMQTTDISCONNECT\r");
 
     ret = ec2x_atcmd_response(cmd,"+DISCONNECT ",resp,64,5*CN_EC2X_CMD_TIME_BASE);
     if(0 == ret)
@@ -414,8 +414,8 @@ static int ec2x_oc_config(oc_mqtt_config_t *param)
         bs_mode = 1;
     }
 
-    memset(cmd,0,256);
-    snprintf(cmd,256,"AT+HWOCMQTTCONNECT=%d,%d,\"%s\",\"%s\",\"%s\",\"%s\"\r",\
+    (void) memset(cmd,0,256);
+    (void) snprintf(cmd,256,"AT+HWOCMQTTCONNECT=%d,%d,\"%s\",\"%s\",\"%s\",\"%s\"\r",\
             bs_mode, param->lifetime, param->server_addr, param->server_port, param->id, param->pwd);
 
     ret = ec2x_atcmd_response(cmd,"+CONNECTED ",resp,64,15*CN_EC2X_CMD_TIME_BASE);
@@ -471,7 +471,7 @@ static int ec2x_oc_publish(char *topic,uint8_t *msg,int len,int qos)
         cmd = osal_malloc(cmdlen);
         if(NULL != cmd)
         {
-            memset(cmd,0,cmdlen);
+            (void) memset(cmd,0,cmdlen);
             cmdlen = snprintf(cmd,cmdlen,CN_EC2X_SEND_FMT,qos,len);
             byte2hexstr(msg,len,&cmd[cmdlen]);
             cmdlen += len*2;
@@ -518,7 +518,7 @@ static const oc_mqtt_t s_ec2x_oc =
     },
 };
 
-int ec2x_oc_init(void)
+int oc_mqtt_imp_init(void)
 {
     int ret = -1;
     osal_mutex_create(&s_ec2x_cb.lock);
@@ -586,8 +586,8 @@ int ec2x_eniccid(iccid_t *iccid)
     {
         return ret;
     }
-    memset(cmd,0,sizeof(cmd));
-    snprintf(cmd,64,CN_ICCID_ENABLE_CMD_FMT,iccid->id);
+    (void) memset(cmd,0,sizeof(cmd));
+    (void) snprintf(cmd,64,CN_ICCID_ENABLE_CMD_FMT,iccid->id);
 
     ret = ec2x_atcmd_response(cmd,"+HWICCIDENABLE OK",resp,sizeof(resp),30*CN_EC2X_CMD_TIME_BASE);
 
@@ -648,7 +648,7 @@ int ec2x_getmqttversion(ec2x_ver_t *ver)
             {
                 str_end--;
                 cpylen = (int)(str_end - str_start);
-                memcpy(ver->ver,str_start,cpylen);
+                (void) memcpy(ver->ver,str_start,cpylen);
             }
             ret = 0;
         }
@@ -662,7 +662,7 @@ int ec2x_echoset(int mode)
 {
     int ret = -1;
     char  cmd[64];
-    snprintf(cmd,64,"ATE%d\r\n",mode);
+    (void) snprintf(cmd,64,"ATE%d\r\n",mode);
 
     ret = ec2x_atcmd_response(cmd,"OK",NULL,0,CN_EC2X_CMD_TIME_BASE);
 
@@ -675,7 +675,7 @@ int ec2x_hwsimset(int mode)
 
     int ret = -1;
     char  cmd[64];
-    snprintf(cmd,64,"AT+HWSIM=%s\r\n",mode?"enable":"disable");
+    (void) snprintf(cmd,64,"AT+HWSIM=%s\r\n",mode?"enable":"disable");
 
     ret = ec2x_atcmd_response(cmd,"+HWSIM ",NULL,0,CN_EC2X_CMD_TIME_BASE);
     return ret;
@@ -685,7 +685,7 @@ int ec2x_cpin(void)
 {
     int ret = -1;
     char  cmd[64];
-    snprintf(cmd,64,"AT+CPIN?\r\n");
+    (void) snprintf(cmd,64,"AT+CPIN?\r\n");
 
     ret = ec2x_atcmd_response(cmd,"+CPIN: READY",NULL,0,CN_EC2X_CMD_TIME_BASE);
     return ret;
@@ -698,7 +698,7 @@ int ec2x_cgatt(int *cgatt)
     char  resp[64];
     char *str;
 
-    snprintf(cmd,64,"AT+CGATT?\r\n");
+    (void) snprintf(cmd,64,"AT+CGATT?\r\n");
 
     ret = ec2x_atcmd_response(cmd,"+CGATT: ",resp,64,CN_EC2X_CMD_TIME_BASE);
 
@@ -720,7 +720,7 @@ int ec2x_cgreg(int *n,int *status)
     char  resp[64];
     char *str;
 
-    snprintf(cmd,64,"AT+CGREG?\r\n");
+    (void) snprintf(cmd,64,"AT+CGREG?\r\n");
     ret = ec2x_atcmd_response(cmd,"+CGREG: ",resp,64,CN_EC2X_CMD_TIME_BASE);
 
     if(0 == ret)

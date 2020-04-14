@@ -738,7 +738,7 @@ int add_device_object_instance(lwm2m_object_t *obj, int object_instance_id)
         return LWM2M_MALLOC_FAILED;
     }
 
-    memset(obj->instanceList, 0, sizeof(lwm2m_list_t));
+    (void) memset(obj->instanceList, 0, sizeof(lwm2m_list_t));
     obj->instanceList->id = object_instance_id;
     return LWM2M_OK;
 }

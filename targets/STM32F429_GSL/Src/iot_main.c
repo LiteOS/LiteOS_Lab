@@ -50,9 +50,9 @@
 /** the address product_id device_id password crt is only for the test  */
 
 #define DEFAULT_LIFETIME            60                 ///< the platform need more
-#define DEFAULT_SERVER_IPV4         "119.3.251.30"     ///<  server ip address
+#define DEFAULT_SERVER_IPV4         "119.3.248.253"     ///<  server ip address
 #define DEFAULT_SERVER_PORT         "8883"             ///<  server mqtt service port
-#define CN_MQTT_EP_NOTEID           "mqtt_sdk81"
+#define CN_MQTT_EP_NOTEID           "mqtt_sdk85"
 #define CN_MQTT_EP_PASSWD           "f62fcf47d62c4ed18913"
 
 //if your command is very fast,please use a queue here--TODO
@@ -242,9 +242,9 @@ int iot_connect()
 
     oc_mqtt_config_t config;
 
-    memset(&config, 0, sizeof(config));
+    (void) memset(&config, 0, sizeof(config));
 
-    config.boot_mode = en_oc_mqtt_mode_bs_static_nodeid_hmacsha256_notimecheck_json;
+    config.boot_mode = en_oc_mqtt_mode_nobs_static_nodeid_hmacsha256_notimecheck_json;
     config.msg_deal = app_msg_deal;
     config.msg_deal_arg = NULL;
     config.lifetime = DEFAULT_LIFETIME;

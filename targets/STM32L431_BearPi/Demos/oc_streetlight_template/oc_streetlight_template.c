@@ -170,7 +170,7 @@ static int app_msg_deal(void *usr_data, en_oc_lwm2m_msg_t type, void *data, int 
         memcpy(s_rcv_buffer,msg,len);
         s_rcv_datalen = len;
 
-        osal_semp_post(s_rcv_sync);
+        (void) osal_semp_post(s_rcv_sync);
 
         ret = 0;
 
@@ -265,7 +265,7 @@ static int app_report_task_entry()
     app_connectivity_t     connectivity;
     app_toggle_t           light_status;
 
-    memset(&oc_param,0,sizeof(oc_param));
+    (void) memset(&oc_param,0,sizeof(oc_param));
 
     oc_param.app_server.address = cn_app_server;
     oc_param.app_server.port = cn_app_port;

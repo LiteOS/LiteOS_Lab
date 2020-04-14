@@ -34,11 +34,9 @@ static tag_sal_cb   s_sal_cb;
 
 __attribute__((weak))  int link_tcpip_imp_init(void)
 {
-    printf("%s:###please implement this function by yourself####\n\r",__FUNCTION__);
+    LINK_LOG_DEBUG("%s:###please implement this function by yourself####\n\r",__FUNCTION__);
     return -1;
 }
-
-
 
 int link_tcpip_init(void)
 {
@@ -60,17 +58,19 @@ int link_tcpip_init(void)
         goto EXIT_MEM_ERR;
     }
 
-    memset(s_sal_cb.sock_cb_tab,0,CN_LINK_SOCKET_NUM*sizeof(void *));
+    (void) memset(s_sal_cb.sock_cb_tab,0,CN_LINK_SOCKET_NUM*sizeof(void *));
     s_sal_cb.sock_cb_num = CN_LINK_SOCKET_NUM;
     s_sal_cb.domain = NULL;
 
     ret = link_tcpip_imp_init();
+    LINK_LOG_DEBUG("IOT_LINK:DO TCPIP LOAD-IMPLEMENT RET:%d\n\r",ret);
+
 
     return ret;
 
 
 EXIT_MEM_ERR:
-    osal_mutex_del(s_sal_cb.sock_cb_mutex);
+    (void) osal_mutex_del(s_sal_cb.sock_cb_mutex);
     s_sal_cb.sock_cb_mutex = cn_mutex_invalid;
 
 EXIT_MUTEX_ERR:
@@ -124,7 +124,7 @@ static void * __sal_sockcb_malloc()
             }
         }
 
-        osal_mutex_unlock(s_sal_cb.sock_cb_mutex);
+        (void) osal_mutex_unlock(s_sal_cb.sock_cb_mutex);
 
         if(i == s_sal_cb.sock_cb_num)
         {
@@ -154,7 +154,7 @@ static void __sal_sockcb_free(int sockfd)
         sockcb = s_sal_cb.sock_cb_tab[sockfd];
         s_sal_cb.sock_cb_tab[sockfd]= NULL;
 
-        osal_mutex_unlock(s_sal_cb.sock_cb_mutex);
+        (void) osal_mutex_unlock(s_sal_cb.sock_cb_mutex);
 
         osal_free(sockcb);
     }
@@ -500,12 +500,13 @@ int sal_closesocket(int sockfd)
 
 struct hostent * sal_gethostbyname(const char *name)
 {
+    struct hostent *ret =NULL;
     if((NULL != s_sal_cb.domain)&&(NULL != s_sal_cb.domain->ops) &&\
        (NULL != s_sal_cb.domain->ops->gethostbyname))
     {
-        return (struct hostent *)s_sal_cb.domain->ops->gethostbyname(name);
+        ret = (struct hostent *)s_sal_cb.domain->ops->gethostbyname(name);
     }
-    return NULL;
+    return ret;
 }
 
 int sal_select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout)

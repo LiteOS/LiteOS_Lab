@@ -43,11 +43,10 @@
 
 ///< this is implement for the task
 #include <los_task.ph>
-#include <los_task.h>
 #include <los_queue.h>
 static void __task_sleep(int ms)
 {
-    LOS_TaskDelay(ms);//which tick is ms
+    (void)LOS_TaskDelay(ms);//which tick is ms
     return;
 }
 
@@ -92,7 +91,12 @@ static int __task_kill(void *task)
 
 static void __task_exit()
 {
-    while(1);  //not supported yet
+    UINT32 handle;
+    handle = LOS_CurTaskIDGet();
+
+    (void) LOS_TaskDelete(handle);
+
+    return;
 }
 
 ///< this is implement for the mutex
@@ -165,14 +169,14 @@ static bool_t  __semp_create(osal_semp_t *semp,int limit,int initvalue)
         return false;
     }
 }
-static bool_t  __semp_pend(osal_semp_t semp,int timeout)
+static bool_t  __semp_pend(osal_semp_t semp,unsigned int timeout)
 {
     if(timeout == cn_osal_timeout_forever)
     {
         timeout = LOS_WAIT_FOREVER;
     }
 
-    if(LOS_OK == LOS_SemPend((UINT32)(uintptr_t)semp,(UINT32)timeout))
+    if(LOS_OK == LOS_SemPend((unsigned int)(UINT32)(uintptr_t)semp,(UINT32)timeout))
     {
         return true;
     }
@@ -217,10 +221,6 @@ static void *__mem_malloc(int size)
     if(size > 0)
     {
         ret = LOS_MemAlloc(m_aucSysMem0,size);
-        if(NULL != ret)
-        {
-            memset(ret, 0, size);
-        }
     }
 
     return ret;
@@ -228,8 +228,15 @@ static void *__mem_malloc(int size)
 
 static void __mem_free(void *addr)
 {
-    LOS_MemFree(m_aucSysMem0,addr);
+    (void) LOS_MemFree(m_aucSysMem0,addr);
 }
+
+void *los_mem_realloc(void *old, int newlen)
+{
+
+    return LOS_MemRealloc(m_aucSysMem0, old, newlen);
+}
+
 
 ///< sys time
 #include <los_sys.ph>
@@ -242,13 +249,13 @@ static unsigned long long __get_sys_time()
 
 __attribute__((weak)) int liteos_reboot()
 {
-    while(1);   ///< waiting for the dog if not impelment. you could implement it your self
+    ///< waiting for the dog if not impelment. you could implement it your self
     return 0;
 }
 
 
 //interrupt
-#include <los_hwi.h>
+//#include <los_hwi.h>
 static int __int_connect(int intnum, int prio, int mode, fn_interrupt_handle callback, void* arg)
 {
 	extern UINT32 LOS_HwiCreate(HWI_HANDLE_T  uwHwiNum, \

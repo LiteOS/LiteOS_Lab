@@ -42,8 +42,6 @@
 #include <string.h>
 
 #include <osal.h>
-#include <link_misc.h>
-
 //this function is used to format the char string to the argc mode
 //this function will changed the original string, used it carefully
 //return how many arguments has been
@@ -106,7 +104,7 @@ char *osal_strdup(const char *ch)
     copy = (char *)osal_malloc(length + 1);
     if(NULL == copy)
         return NULL;
-    strncpy(copy, ch, length);
+    (void) strncpy(copy, ch, length);
     copy[length] = '\0';
 
     return copy;
@@ -128,16 +126,17 @@ char *osal_strcat(char *str[])
     while(NULL != str[i])
     {
         str_tlen += strlen(str[i]);
+        str_tnum++;
+        i++;
     }
 
     ret = osal_malloc(str_tlen);
-
     if(NULL != ret)
     {
         for(i =0;i< str_tnum;i++)
         {
 
-            memcpy(ret + str_off,str[i],strlen(str[i]));
+            (void) memcpy(ret + str_off,str[i],strlen(str[i]));
             str_off += strlen(str[i]);
         }
         ret[str_off] = '\0';
@@ -146,12 +145,14 @@ char *osal_strcat(char *str[])
     return ret;
 }
 
-
+/*
 int hexstr2byte(const char *bufin, int len, char *bufout)
 {
     int i = 0;
     unsigned char tmp2 = 0x0;
     unsigned int tmp = 0;
+    char cc;
+
     if (NULL == bufin || len <= 0 || NULL == bufout)
     {
         return -1;
@@ -160,12 +161,72 @@ int hexstr2byte(const char *bufin, int len, char *bufout)
     {
         tmp2 =  (unsigned char )bufin[i];
         tmp2 =  tmp2 <= '9'?(unsigned char)(unsigned int)(tmp2-0x30):(unsigned char)(unsigned int)(tmp2-0x37);
-        tmp =  (unsigned int)bufin[i+1];
+        cc = bufin[i+1];
+        tmp =  (unsigned int)(unsigned char)cc;
         tmp =  tmp <= '9'?(unsigned int)(tmp-0x30):(unsigned int)(tmp-0x37);
         bufout[i/2] =(tmp2<<4)|(tmp&0x0F);
     }
     return 0;
 }
+
+*/
+
+int hexstr2byte(const char *buf, int len, char *bufout)
+{
+    int ret = -1;
+    int i = 0;
+    uint8_t low;
+    uint8_t high;
+
+    if (NULL == buf || len <= 0 || NULL == bufout)
+    {
+        return ret;
+    }
+
+    ret = 0;
+    for(i = 0; i < len; i = i+2)
+    {
+        if(((buf[i]) >= '0') && (buf[i] <= '9'))
+        {
+            high = (uint8_t)( buf[i] - '0');
+        }
+        else if((buf[i] >= 'A') && (buf[i] <= 'F'))
+        {
+            high = (uint8_t)( buf[i] - 'A') + 10;
+        }
+        else if((buf[i] >= 'a') && (buf[i] <= 'f'))
+        {
+            high = (uint8_t)( buf[i] - 'a') + 10;
+        }
+        else
+        {
+            ret = -1;
+            break;
+        }
+
+        if(((buf[i+1]) >= '0') && (buf[i+1] <= '9'))
+        {
+            low = (uint8_t)( buf[i+1] - '0');
+        }
+        else if((buf[i+1] >= 'A') && (buf[i+1] <= 'F'))
+        {
+            low = (uint8_t)( buf[i+1] - 'A') + 10;
+        }
+        else if((buf[i+1] >= 'a') && (buf[i+1] <= 'f'))
+        {
+            low = (uint8_t)( buf[i+1] - 'a') + 10;
+        }
+        else
+        {
+            ret = -1;
+            break;
+        }
+
+        bufout[i/2] = (char)((high<<4)|(low&0x0F));
+    }
+    return ret;
+}
+
 
 
 //make a byte to 2 ascii hex
