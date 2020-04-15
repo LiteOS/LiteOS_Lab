@@ -48,9 +48,7 @@ int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const
                                const char *deviceid, const char *devicepasswd);
 int  hwoc_mqtt_disconnect();
 int  hwoc_mqtt_publish(int qos,char *topic,uint8_t *payload,int len);
-int  hwoc_mqtt_send(int qos,uint8_t *payload,int len);
-void hwoc_mqtt_recvpub(int qos,int dup,const char *topic,uint8_t *payload, int len);
-void hwoc_mqtt_received(int qos,uint8_t *payload, int len);
+void hwoc_mqtt_recvpub(const char *topic,int topiclen,uint8_t *payload, int payloadlen);
 
 ///< at command extended for v5 version
 int hwoc_mqtt_subscribe(int qos,char *topic);
