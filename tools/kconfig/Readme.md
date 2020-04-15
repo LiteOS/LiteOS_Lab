@@ -18,7 +18,7 @@ kconfig工具来源于[ Ulf Magnusson的github工程](https://github.com/cruise2
 
 详细使用情况可以参考如下用例。
 
-## 已MACOS为例介绍使用情况
+## 以MACOS为例介绍使用情况
 
 上文介绍了kconfig的基本使用方法，本节已MACOS为例进行说明。
 
