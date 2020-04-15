@@ -15,6 +15,8 @@ ifeq ($(CONFIG_OCCOAP_ENABLE), y)
         
     ifeq ($(CONFIG_OCCOAPTINY_ENABLE), y)    
 		include $(iot_link_root)/oc/oc_coap/atiny_coap/atiny_coap.mk
+    else ifeq ($(CONFIG_BOUDICA120_ENABLE),y)
+    	include $(iot_link_root)/oc/oc_coap/boudica120_oc/boudica120_oc.mk	
     endif
 
 endif
