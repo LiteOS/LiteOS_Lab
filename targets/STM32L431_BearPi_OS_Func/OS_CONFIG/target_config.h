@@ -116,7 +116,7 @@ extern "C" {
  * @ingroup los_config
  * Size of the idle task stack
  */
-#define LOSCFG_BASE_CORE_TSK_IDLE_STACK_SIZE                (0x500U)        // IDLE task stack
+#define LOSCFG_BASE_CORE_TSK_IDLE_STACK_SIZE                (0x200U)        // IDLE task stack
 
 /**
  * @ingroup los_config
@@ -233,13 +233,13 @@ extern "C" {
  * @ingroup los_config
  * Configuration item for software timer module tailoring
  */
-#define LOSCFG_BASE_CORE_SWTMR                              YES
+#define LOSCFG_BASE_CORE_SWTMR                              NO
 
 #define LOSCFG_BASE_CORE_TSK_SWTMR_STACK_SIZE               LOSCFG_BASE_CORE_TSK_DEFAULT_STACK_SIZE
 
 #define LOSCFG_BASE_CORE_SWTMR_TASK                         YES
 
-#define LOSCFG_BASE_CORE_SWTMR_ALIGN                        YES
+#define LOSCFG_BASE_CORE_SWTMR_ALIGN                        NO
 #if(LOSCFG_BASE_CORE_SWTMR == NO && LOSCFG_BASE_CORE_SWTMR_ALIGN == YES)
     #error "swtmr align first need support swmtr, should make LOSCFG_BASE_CORE_SWTMR = YES"
 #endif

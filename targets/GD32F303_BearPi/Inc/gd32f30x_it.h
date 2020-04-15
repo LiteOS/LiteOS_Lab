@@ -39,6 +39,7 @@ OF SUCH DAMAGE.
 
 #include "gd32f30x.h"
 
+
 /* function declarations */
 /* this function handles NMI exception */
 void NMI_Handler(void);
@@ -58,5 +59,10 @@ void DebugMon_Handler(void);
 void PendSV_Handler(void);
 /* this function handles SysTick exception */
 void SysTick_Handler(void);
+
+void EXTI0_IRQHandler(void);
+void EXTI1_IRQHandler(void);
+void UART3_IRQHandler(void);
+void USART0_IRQHandler(void);
 
 #endif /* GD32F30X_IT_H */

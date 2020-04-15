@@ -44,7 +44,6 @@
 #include <oc_lwm2m_al.h>
 #include <link_endian.h>
 
-#include <boudica150_oc.h>
 #include "E53_IA1.h"
 #include "lcd.h"
 
@@ -52,7 +51,7 @@
 #include <stm32l4xx_it.h>
 
 #define cn_endpoint_id        "SDK_LWM2M_NODTLS"
-#define cn_app_server         "49.4.85.232"
+#define cn_app_server         "119.3.250.80"
 #define cn_app_port           "5683"
 
 #define cn_app_Agriculture 0x0

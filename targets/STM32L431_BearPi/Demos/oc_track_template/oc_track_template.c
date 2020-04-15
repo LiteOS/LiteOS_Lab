@@ -52,7 +52,7 @@
 #include <stm32l4xx_it.h>
 
 #define cn_endpoint_id        "SDK_LWM2M_NODTLS"
-#define cn_app_server         "49.4.85.232"
+#define cn_app_server         "119.3.250.80"
 #define cn_app_port           "5683"
 
 typedef unsigned char int8u;
@@ -212,8 +212,7 @@ static int app_report_task_entry()
     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
     oc_param.rcv_func = app_msg_deal;
 
-    // context = oc_lwm2m_config(&oc_param);
-    ret = oc_lwm2m_config(& &oc_param);
+    ret = oc_lwm2m_config(&oc_param);
     if (0 != ret)
     {
     	return ret;
