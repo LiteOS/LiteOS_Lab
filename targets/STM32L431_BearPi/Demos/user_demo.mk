@@ -6,7 +6,7 @@
 
 #example for lwm2m
 
-ifeq ($(CONFIG_DEMO_TYPE), "none")	
+
 	
 	#example for oc_streetlight_template
 	ifeq ($(CONFIG_USER_DEMO), "oc_streetlight_template")	
@@ -57,6 +57,25 @@ ifeq ($(CONFIG_DEMO_TYPE), "none")
 		user_demo_defs = -D CONFIG_OC_SMOKE_DEMO_ENABLE=1
 	endif
 
+	#example for oc_manhole_cover_template
+	ifeq ($(CONFIG_USER_DEMO), "oc_manhole_cover_template")	
+		user_demo_src  = ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Demos/oc_manhole_cover_template/*.c}
+		user_demo_inc = -I $(TOP_DIR)/targets/STM32L431_BearPi/Demos/oc_manhole_cover_template
+		user_hardware_src = ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/E53_SC2/*.c} 
+		user_hardware_inc = -I ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/E53_SC2}
+		user_demo_defs = -D CONFIG_OC_MANHOLE_COVER_DEMO_ENABLE=1
+	endif
+
+	#example for oc_infrared_template
+	ifeq ($(CONFIG_USER_DEMO), "oc_infrared_template")	
+		user_demo_src  = ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Demos/oc_infrared_template/*.c}
+		user_demo_inc = -I $(TOP_DIR)/targets/STM32L431_BearPi/Demos/oc_infrared_template
+		user_hardware_src = ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/E53_IS1/*.c} 
+		user_hardware_inc = -I ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Hardware/E53_IS1}
+		user_demo_defs = -D CONFIG_OC_INFRARED_DEMO_ENABLE=1
+		
+	endif
+	
 	#example for hello world	 
 	ifeq ($(CONFIG_USER_DEMO), "hello_world_demo")	
 		user_demo_src  = ${wildcard $(TOP_DIR)/targets/STM32L431_BearPi/Demos/hello_world_demo/*.c}
@@ -76,4 +95,3 @@ ifeq ($(CONFIG_DEMO_TYPE), "none")
 	C_SOURCES += $(user_hardware_src)
 	C_INCLUDES += $(user_hardware_inc)
 	C_DEFS += $(user_demo_defs)
-endif

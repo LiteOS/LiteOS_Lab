@@ -74,7 +74,7 @@ VOID HardWare_Init(VOID)
 	LCD_Init();					
 	LCD_Clear(WHITE);		   	
 	POINT_COLOR = RED;			
-	LCD_ShowString(10, 50, 240, 24, 24, "Welcome to IoTCluB!");
+	LCD_ShowString(10, 50, 240, 24, 24, "Welcome to BearPi!");
 	LCD_ShowString(20, 90, 240, 16, 16, "BearPi IoT Develop Board");
 	LCD_ShowString(20, 130, 240, 16, 16, "Powerd by Huawei LiteOS!");
 	LCD_ShowString(10, 170, 240, 16, 16, "Please wait for system init");

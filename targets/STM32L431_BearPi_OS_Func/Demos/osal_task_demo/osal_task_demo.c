@@ -69,7 +69,8 @@ static int user_task2_entry()
 
 int standard_app_demo_main()
 {
-    user_task1_id = osal_task_create("user_task1",user_task1_entry,NULL,0x400,NULL,USER_TASK1_PRI);
+	printf("user task 1 exit!\r\n");
+	user_task1_id = osal_task_create("user_task1",user_task1_entry,NULL,0x400,NULL,USER_TASK1_PRI);
     user_task2_id = osal_task_create("user_task2",user_task2_entry,NULL,0x400,NULL,USER_TASK2_PRI);
 
     return 0;

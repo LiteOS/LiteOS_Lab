@@ -74,7 +74,7 @@ VOID HardWare_Init(VOID)
 	LCD_Init();					
 	LCD_Clear(WHITE);		   	
 	POINT_COLOR = RED;			
-	LCD_ShowString(10, 50, 240, 24, 24, "Welcome to IoTCluB!");
+	LCD_ShowString(10, 50, 240, 24, 24, "Welcome to BearPi!");
 	LCD_ShowString(20, 90, 240, 16, 16, "BearPi IoT Develop Board");
 	LCD_ShowString(20, 130, 240, 16, 16, "Powerd by Huawei LiteOS!");
 	LCD_ShowString(10, 170, 240, 16, 16, "Please wait for system init");
@@ -89,7 +89,7 @@ static int link_test()
     UINT32  handle;
     TSK_INIT_PARAM_S task_init_param;
 
-    (void) memset (&task_init_param, 0, sizeof (TSK_INIT_PARAM_S));
+    memset (&task_init_param, 0, sizeof (TSK_INIT_PARAM_S));
     task_init_param.uwArg = (unsigned int)NULL;
     task_init_param.usTaskPrio = 2;
     task_init_param.pcName =(char *) "link_main";
