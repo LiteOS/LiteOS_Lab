@@ -23,5 +23,5 @@
 #define CONFIG_SHELL_TASK_STACKSIZE 2048
 #define CONFIG_SHELL_TASK_PRIOR 10
 #define CONFIG_IOT_LINK_CONFIGFILE "iot_config.h"
-#define CONFIG_Demo_Helloworld 1
-#define CONFIG_USER_DEMO "hello_world_demo"
+#define CONFIG_Demo_Cover 1
+#define CONFIG_USER_DEMO "oc_manhole_cover_template"

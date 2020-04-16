@@ -44,14 +44,13 @@
 #include <oc_lwm2m_al.h>
 #include <link_endian.h>
 
-#include <boudica150_oc.h>
 #include "E53_SC2.h"
 #include "lcd.h"
 
 #include <gpio.h>
 #include <stm32l4xx_it.h>
 
-#define cn_endpoint_id        "SDK_LWM2M_NODTLS"
+#define cn_endpoint_id        "BearPi_0001"
 #define cn_app_server         "119.3.250.80"
 #define cn_app_port           "5683"
 
@@ -79,13 +78,9 @@ typedef struct
     int8u Accel_z;
     string Status[5];
 } tag_app_Manhole_Cover;
-
-
 #pragma pack()
 
-void *context;
-int8_t qr_code = 1;
-extern const unsigned char gImage_Huawei_IoT_QR_Code[114720];
+
 E53_SC2_Data_TypeDef E53_SC2_Data;
 tag_app_Manhole_Cover Manhole_Cover;
 
@@ -96,23 +91,6 @@ static int             s_rcv_buffer[cn_app_rcv_buf_len];
 static int             s_rcv_datalen;
 static osal_semp_t     s_rcv_sync;
 
-static void timer1_callback(void *arg)
-{
-	qr_code = !qr_code;
-	LCD_Clear(WHITE);
-	if (qr_code == 1)
-		LCD_Show_Image(0,0,240,239,gImage_Huawei_IoT_QR_Code);
-	else
-	{
-		POINT_COLOR = RED;
-		LCD_ShowString(40, 10, 200, 16, 24, "IoTCluB BearPi");
-		LCD_ShowString(15, 50, 210, 16, 24, "LiteOS NB-IoT Demo");
-		LCD_ShowString(10, 100, 200, 16, 16, "NCDP_IP:");
-		LCD_ShowString(80, 100, 200, 16, 16, cn_app_server);
-		LCD_ShowString(10, 150, 200, 16, 16, "NCDP_PORT:");
-		LCD_ShowString(100, 150, 200, 16, 16, cn_app_port);
-	}
-}
 
 //use this function to push all the message to the buffer
 static int app_msg_deal(void *usr_data, en_oc_lwm2m_msg_t type, void *data, int len)
@@ -213,10 +191,14 @@ static int app_collect_task_entry()
                 Manhole_Cover.Status[4] = 'l';
             }
         }
-        if (qr_code == 0)
-        {
-
-        }
+		LCD_ShowString(10, 135, 200, 16, 16, "Temperature:");
+		LCD_ShowNum(140, 135, (int)E53_SC2_Data.Temperature, 5, 16);
+		LCD_ShowString(10, 160, 200, 16, 16, "Acce_X:");
+		LCD_ShowNum(140, 160, (int)E53_SC2_Data.Accel[0], 5, 16);
+		LCD_ShowString(10, 185, 200, 16, 16, "Acce_Y:");
+		LCD_ShowNum(140, 185, (int)E53_SC2_Data.Accel[1], 5, 16);
+		LCD_ShowString(10, 210, 200, 16, 16, "Acce_Z:");
+		LCD_ShowNum(140, 210, (int)E53_SC2_Data.Accel[2], 5, 16);
         osal_task_sleep(2*1000);
     }
     return 0;
@@ -227,12 +209,21 @@ static int app_collect_task_entry()
 
 int standard_app_demo_main()
 {
-    osal_semp_create(&s_rcv_sync,1,0);
+	LCD_Clear(BLACK);
+	POINT_COLOR = GREEN;
+	LCD_ShowString(10, 10, 200, 16, 24, "Welcome to BearPi");
+	LCD_ShowString(30, 40, 200, 16, 24, "Manhole Demo");
+	LCD_ShowString(10, 80, 200, 16, 16, "NCDP_IP:");
+	LCD_ShowString(80, 80, 200, 16, 16, cn_app_server);
+	LCD_ShowString(10, 110, 200, 16, 16, "NCDP_PORT:");
+	LCD_ShowString(100, 110, 200, 16, 16, cn_app_port);
+
+	osal_semp_create(&s_rcv_sync,1,0);
 
     osal_task_create("app_collect",app_collect_task_entry,NULL,0x400,NULL,3);
     osal_task_create("app_report",app_report_task_entry,NULL,0x1000,NULL,2);
 
-    stimer_create("lcdtimer",timer1_callback,NULL,8*1000,cn_stimer_flag_start);
+
 
     return 0;
 }

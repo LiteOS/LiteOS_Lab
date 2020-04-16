@@ -44,14 +44,17 @@
 #include <oc_lwm2m_al.h>
 #include <link_endian.h>
 
+#ifdef CONFIG_BOUDICA150_ENABLE
 #include <boudica150_oc.h>
+#endif
+
 #include "E53_SC1.h"
 #include "lcd.h"
 
 #include <gpio.h>
 #include <stm32l4xx_it.h>
 
-#define cn_endpoint_id        "SDK_LWM2M_NODTLS"
+#define cn_endpoint_id        "BearPi_0001"
 #define cn_app_server         "119.3.250.80"
 #define cn_app_port           "5683"
 
@@ -106,8 +109,6 @@ int8_t key1 = 0;
 int8_t key2 = 0;
 int16_t toggle = 0;
 int16_t lux;
-int8_t qr_code = 1;
-extern const unsigned char gImage_Huawei_IoT_QR_Code[114720];
 E53_SC1_Data_TypeDef E53_SC1_Data;
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
@@ -135,23 +136,16 @@ static int             s_rcv_buffer[cn_app_rcv_buf_len];
 static int             s_rcv_datalen;
 static osal_semp_t     s_rcv_sync;
 
-static void timer1_callback(void *arg)
-{
-	qr_code = !qr_code;
-	LCD_Clear(WHITE);
-	if (qr_code == 1)
-		LCD_Show_Image(0,0,240,239,gImage_Huawei_IoT_QR_Code);
-	else
-	{
-		POINT_COLOR = RED;
-		LCD_ShowString(40, 10, 200, 16, 24, "IoTCluB BearPi");
-		LCD_ShowString(15, 50, 210, 16, 24, "LiteOS NB-IoT Demo");
-		LCD_ShowString(10, 100, 200, 16, 16, "NCDP_IP:");
-		LCD_ShowString(80, 100, 200, 16, 16, cn_app_server);
-		LCD_ShowString(10, 150, 200, 16, 16, "NCDP_PORT:");
-		LCD_ShowString(100, 150, 200, 16, 16, cn_app_port);
-	}
-}
+//static void timer1_callback(void *arg)
+//{
+//	qr_code = !qr_code;
+//	LCD_Clear(WHITE);
+//	if (qr_code == 1)
+//		LCD_Show_Image(0,0,240,239,gImage_Huawei_IoT_QR_Code);
+//	else
+//	{
+
+
 
 //use this function to push all the message to the buffer
 static int app_msg_deal(void *usr_data, en_oc_lwm2m_msg_t type, void *data, int len)
@@ -248,6 +242,7 @@ static int app_cmd_task_entry()
     return ret;
 }
 
+#ifdef CONFIG_BOUDICA150_ENABLE
 static void get_netstats()
 {
 	ue_stats = boudica150_check_nuestats();
@@ -255,6 +250,7 @@ static void get_netstats()
 	if (ue_stats[2] > 10) ue_stats[2] = ue_stats[2] / 10;
 
 }
+#endif
 
 static int app_report_task_entry()
 {
@@ -284,6 +280,7 @@ static int app_report_task_entry()
         {
             if (key1 == 1)
             {
+				#ifdef CONFIG_BOUDICA150_ENABLE
             	key1 = 0;
                 connectivity.msgid = cn_app_connectivity;
                 get_netstats();
@@ -292,6 +289,7 @@ static int app_report_task_entry()
         	    connectivity.snr = htons(ue_stats[2] & 0x0000FFFF);
         	    connectivity.cellid = htonl(ue_stats[3]);
                 oc_lwm2m_report((char *)&connectivity,sizeof(connectivity),1000);    ///< report ue status message
+				#endif
             }
 
             if (key2 == 1)
@@ -318,11 +316,9 @@ static int app_collect_task_entry()
     {
         E53_SC1_Read_Data();
         printf("\r\n******************************BH1750 Value is  %d\r\n",(int)E53_SC1_Data.Lux);
-        if (qr_code == 0)
-        {
-            LCD_ShowString(10, 200, 200, 16, 16, "BH1750 Value is:");
-            LCD_ShowNum(140, 200, (int)E53_SC1_Data.Lux, 5, 16);
-        }
+
+        LCD_ShowString(10, 200, 200, 16, 16, "BH1750 Value is:");
+        LCD_ShowNum(140, 200, (int)E53_SC1_Data.Lux, 5, 16);
         osal_task_sleep(2*1000);
     }
 
@@ -330,11 +326,20 @@ static int app_collect_task_entry()
 }
 
 
-#include <stimer.h>
 
 int standard_app_demo_main()
 {
-    osal_semp_create(&s_rcv_sync,1,0);
+
+	LCD_Clear(BLACK);
+	POINT_COLOR = GREEN;
+	LCD_ShowString(10, 10, 200, 16, 24, "Welcome to BearPi!");
+	LCD_ShowString(15, 50, 210, 16, 24, "Streetlight Demo");
+	LCD_ShowString(10, 100, 200, 16, 16, "NCDP_IP:");
+	LCD_ShowString(80, 100, 200, 16, 16, cn_app_server);
+	LCD_ShowString(10, 150, 200, 16, 16, "NCDP_PORT:");
+	LCD_ShowString(100, 150, 200, 16, 16, cn_app_port);
+
+	osal_semp_create(&s_rcv_sync,1,0);
 
     osal_task_create("app_collect",app_collect_task_entry,NULL,0x400,NULL,3);
     osal_task_create("app_report",app_report_task_entry,NULL,0x1000,NULL,2);
@@ -343,7 +348,6 @@ int standard_app_demo_main()
     osal_int_connect(KEY1_EXTI_IRQn, 2,0,Key1_IRQHandler,NULL);
     osal_int_connect(KEY2_EXTI_IRQn, 3,0,Key2_IRQHandler,NULL);
 
-    stimer_create("lcdtimer",timer1_callback,NULL,8*1000,cn_stimer_flag_start);
 
     return 0;
 }
