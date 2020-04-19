@@ -174,7 +174,7 @@ CONFIG_DEMO_TYPE   := "oc_dtls_coap_demo"
 #CONFIG_DEMO_TYPE   := "oc_dtls_lwm2m_bs_demo"
 
 #########################STANDARD DEMO END######################################
-include $(TOP_DIR)/iot_link/iot.mk
+include $(iot_link_root)/iot.mk
 TEST_CONFIG_OC_LWM2M_ENABLE := n
 TEST_CONFIG_LWM2M_AL_ENABLE := n
 TEST_CONFIG_OC_MQTT_ENABLE := n

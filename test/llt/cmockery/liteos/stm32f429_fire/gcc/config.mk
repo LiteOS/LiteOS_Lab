@@ -171,7 +171,7 @@ CONFIG_DEMO_ENABLE := n
 CONFIG_DEMO_TYPE   := ""
 
 #########################STANDARD DEMO END######################################
-include $(TOP_DIR)/iot_link/iot.mk
+include $(iot_link_root)/iot.mk
 
 # extra
 C_DEFS += -DLITEOS

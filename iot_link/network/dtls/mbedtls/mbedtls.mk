@@ -7,12 +7,12 @@
 USE_MBEDTLS_AES_ROM_TABLES := y
 
 MBEDTLS_INC = \
-        -I $(TOP_DIR)/iot_link/network/dtls/mbedtls/mbedtls-2.16.2/include \
-        -I $(TOP_DIR)/iot_link/network/dtls/mbedtls/mbedtls_port
+        -I $(iot_link_root)/network/dtls/mbedtls/mbedtls-2.16.2/include \
+        -I $(iot_link_root)/network/dtls/mbedtls/mbedtls_port
 
 MBEDTLS_SRC = \
-        ${wildcard $(TOP_DIR)/iot_link/network/dtls/mbedtls/mbedtls-2.16.2/library/*.c} \
-        ${wildcard $(TOP_DIR)/iot_link/network/dtls/mbedtls/mbedtls_port/*.c}
+        ${wildcard $(iot_link_root)/network/dtls/mbedtls/mbedtls-2.16.2/library/*.c} \
+        ${wildcard $(iot_link_root)/network/dtls/mbedtls/mbedtls_port/*.c}
 
 MBEDTLS_DEF = -D WITH_DTLS
 

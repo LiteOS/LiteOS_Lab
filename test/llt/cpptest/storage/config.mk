@@ -7,4 +7,4 @@ CONFIG_OS_TYPE       := "linux"
 
 CONFIG_ARCH_CPU_TYPE := "x86-64"
 
-include $(TOP_DIR)/iot_link/iot.mk
+include $(iot_link_root)/iot.mk

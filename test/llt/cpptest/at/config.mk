@@ -12,4 +12,4 @@ CONFIG_AT_ENABLE        := y
 CONFIG_TCPIP_ENABLE     := y
 CONFIG_TCPIP_TYPE       := "linux_socket"
 
-include $(TOP_DIR)/iot_link/iot.mk
+include $(iot_link_root)/iot.mk
