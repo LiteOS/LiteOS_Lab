@@ -165,7 +165,7 @@ CONFIG_DEMO_ENABLE := n
 CONFIG_DEMO_TYPE   := "none"
 
 #########################STANDARD DEMO END######################################
-include $(TOP_DIR)/iot_link/iot.mk
+include $(iot_link_root)/iot.mk
 TEST_CONFIG_OC_LWM2M_ENABLE := n
 TEST_CONFIG_LWM2M_AL_ENABLE := n
 TEST_CONFIG_OC_MQTT_ENABLE := y
