@@ -51,7 +51,7 @@
 #include <gpio.h>
 #include <stm32l4xx_it.h>
 
-#define cn_endpoint_id        "SDK_LWM2M_NODTLS"
+#define cn_endpoint_id        "BearPi_0001"
 #define cn_app_server         "49.4.85.232"
 #define cn_app_port           "5683"
 

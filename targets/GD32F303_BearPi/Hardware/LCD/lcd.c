@@ -750,100 +750,101 @@ void LCD_Init(void)
     LCD_RST(1);
 
     delay_ms(120);
-    /* Sleep Out */
-    LCD_Write_Cmd(0x11);
-    /* wait for power stability */
-    delay_ms(120);
+	/* Memory Data Access Control */
+	LCD_Write_Cmd(0x36);
+	LCD_Write_Data(0x00);
 
-    /* Memory Data Access Control */
-    LCD_Write_Cmd(0x36);
-    LCD_Write_Data(0x00);
+	/* RGB 5-6-5-bit  */
+	LCD_Write_Cmd(0x3A);
+	LCD_Write_Data(0x65);
 
-    /* RGB 5-6-5-bit  */
-    LCD_Write_Cmd(0x3A);
-    LCD_Write_Data(0x65);
+	/* Porch Setting */
+	LCD_Write_Cmd(0xB2);
+	LCD_Write_Data(0x0C);
+	LCD_Write_Data(0x0C);
+	LCD_Write_Data(0x00);
+	LCD_Write_Data(0x33);
+	LCD_Write_Data(0x33);
 
-    /* Porch Setting */
-    LCD_Write_Cmd(0xB2);
-    LCD_Write_Data(0x0C);
-    LCD_Write_Data(0x0C);
-    LCD_Write_Data(0x00);
-    LCD_Write_Data(0x33);
-    LCD_Write_Data(0x33);
 
-    /*  Gate Control */
-    LCD_Write_Cmd(0xB7);
-    LCD_Write_Data(0x72);
+	/*  Gate Control */
+	LCD_Write_Cmd(0xB7);
+	LCD_Write_Data(0x35);
 
-    /* VCOM Setting */
-    LCD_Write_Cmd(0xBB);
-    LCD_Write_Data(0x3D); // Vcom=1.625V
+	/* VCOM Setting */
+	LCD_Write_Cmd(0xBB);
+	LCD_Write_Data(0x19);
 
-    /* LCM Control */
-    LCD_Write_Cmd(0xC0);
-    LCD_Write_Data(0x2C);
+	/* LCM Control */
+	LCD_Write_Cmd(0xC0);
+	LCD_Write_Data(0x2C);
 
-    /* VDV and VRH Command Enable */
-    LCD_Write_Cmd(0xC2);
-    LCD_Write_Data(0x01);
+	/* VDV and VRH Command Enable */
+	LCD_Write_Cmd(0xC2);
+	LCD_Write_Data(0x01);
 
-    /* VRH Set */
-    LCD_Write_Cmd(0xC3);
-    LCD_Write_Data(0x19);
+	/* VRH Set */
+	LCD_Write_Cmd(0xC3);
+	LCD_Write_Data(0x12);
 
-    /* VDV Set */
-    LCD_Write_Cmd(0xC4);
-    LCD_Write_Data(0x20);
+	/* VDV Set */
+	LCD_Write_Cmd(0xC4);
+	LCD_Write_Data(0x20);
 
-    /* Frame Rate Control in Normal Mode */
-    LCD_Write_Cmd(0xC6);
-    LCD_Write_Data(0x0F); // 60MHZ
+	/* Frame Rate Control in Normal Mode */
+	LCD_Write_Cmd(0xC6);
+	LCD_Write_Data(0x0F);	//60MHZ
 
-    /* Power Control 1 */
-    LCD_Write_Cmd(0xD0);
-    LCD_Write_Data(0xA4);
-    LCD_Write_Data(0xA1);
+	/* Power Control 1 */
+	LCD_Write_Cmd(0xD0);
+	LCD_Write_Data(0xA4);
+	LCD_Write_Data(0xA1);
 
-    /* Positive Voltage Gamma Control */
-    LCD_Write_Cmd(0xE0);
-    LCD_Write_Data(0xD0);
-    LCD_Write_Data(0x04);
-    LCD_Write_Data(0x0D);
-    LCD_Write_Data(0x11);
-    LCD_Write_Data(0x13);
-    LCD_Write_Data(0x2B);
-    LCD_Write_Data(0x3F);
-    LCD_Write_Data(0x54);
-    LCD_Write_Data(0x4C);
-    LCD_Write_Data(0x18);
-    LCD_Write_Data(0x0D);
-    LCD_Write_Data(0x0B);
-    LCD_Write_Data(0x1F);
-    LCD_Write_Data(0x23);
+	/* Positive Voltage Gamma Control */
+	LCD_Write_Cmd(0xE0);
+	LCD_Write_Data(0xD0);
+	LCD_Write_Data(0x04);
+	LCD_Write_Data(0x0D);
+	LCD_Write_Data(0x11);
+	LCD_Write_Data(0x13);
+	LCD_Write_Data(0x2B);
+	LCD_Write_Data(0x3F);
+	LCD_Write_Data(0x54);
+	LCD_Write_Data(0x4C);
+	LCD_Write_Data(0x18);
+	LCD_Write_Data(0x0D);
+	LCD_Write_Data(0x0B);
+	LCD_Write_Data(0x1F);
+	LCD_Write_Data(0x23);
 
-    /* Negative Voltage Gamma Control */
-    LCD_Write_Cmd(0xE1);
-    LCD_Write_Data(0xD0);
-    LCD_Write_Data(0x04);
-    LCD_Write_Data(0x0C);
-    LCD_Write_Data(0x11);
-    LCD_Write_Data(0x13);
-    LCD_Write_Data(0x2C);
-    LCD_Write_Data(0x3F);
-    LCD_Write_Data(0x44);
-    LCD_Write_Data(0x51);
-    LCD_Write_Data(0x2F);
-    LCD_Write_Data(0x1F);
-    LCD_Write_Data(0x1F);
-    LCD_Write_Data(0x20);
-    LCD_Write_Data(0x23);
+	/* Negative Voltage Gamma Control */
+	LCD_Write_Cmd(0xE1);
+	LCD_Write_Data(0xD0);
+	LCD_Write_Data(0x04);
+	LCD_Write_Data(0x0C);
+	LCD_Write_Data(0x11);
+	LCD_Write_Data(0x13);
+	LCD_Write_Data(0x2C);
+	LCD_Write_Data(0x3F);
+	LCD_Write_Data(0x44);
+	LCD_Write_Data(0x51);
+	LCD_Write_Data(0x2F);
+	LCD_Write_Data(0x1F);
+	LCD_Write_Data(0x1F);
+	LCD_Write_Data(0x20);
+	LCD_Write_Data(0x23);
 
-    /* Display Inversion On */
-    LCD_Write_Cmd(0x21);
+	/* Display Inversion On */
+	LCD_Write_Cmd(0x21);
+	/* Sleep Out */
+	LCD_Write_Cmd(0x11);
+	/* wait for power stability */
+	delay_ms(120);
 
-    LCD_Write_Cmd(0x29);
+	LCD_Write_Cmd(0x29);
 
-    LCD_Address_Set(0, 0, LCD_Width - 1, LCD_Height - 1);
+	LCD_Address_Set(0, 0, LCD_Width - 1, LCD_Height - 1);
+
 
     LCD_Clear(BLACK);
     /* Display on */

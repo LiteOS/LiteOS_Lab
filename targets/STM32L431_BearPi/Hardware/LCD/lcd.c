@@ -22,8 +22,8 @@
 #define LCD_Buf_Size 1152
 static uint8_t lcd_buf[LCD_Buf_Size];
 
-uint16_t	POINT_COLOR = BLACK;	//画笔颜色	默认为黑色
-uint16_t	BACK_COLOR 	= WHITE;	//背景颜色	默认为白色
+uint16_t	POINT_COLOR = GREEN;	//画笔颜色	默认为黑色
+uint16_t	BACK_COLOR 	= BLACK;	//背景颜色	默认为白色
 
 
 /**
@@ -43,7 +43,7 @@ static void LCD_Gpio_Init(void)
     /*
 	LCD_PWR:	PB15
 	LCD_RST:	PC7
-	LCD_DC:		PC6	
+	LCD_DC:		PC6
     */
     GPIO_InitStruct.Pin = GPIO_PIN_15;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -694,10 +694,6 @@ void LCD_Init(void)
     LCD_Gpio_Init();	//硬件接口初始化
 
     delay10ms(12);
-    /* Sleep Out */
-    LCD_Write_Cmd(0x11);
-    /* wait for power stability */
-    delay10ms(12);
 
     /* Memory Data Access Control */
     LCD_Write_Cmd(0x36);
@@ -718,11 +714,11 @@ void LCD_Init(void)
 
     /*  Gate Control */
     LCD_Write_Cmd(0xB7);
-    LCD_Write_Data(0x72);
+    LCD_Write_Data(0x35);
 
     /* VCOM Setting */
     LCD_Write_Cmd(0xBB);
-    LCD_Write_Data(0x3D);   //Vcom=1.625V
+    LCD_Write_Data(0x19);
 
     /* LCM Control */
     LCD_Write_Cmd(0xC0);
@@ -734,7 +730,7 @@ void LCD_Init(void)
 
     /* VRH Set */
     LCD_Write_Cmd(0xC3);
-    LCD_Write_Data(0x19);
+    LCD_Write_Data(0x12);
 
     /* VDV Set */
     LCD_Write_Cmd(0xC4);
@@ -785,12 +781,16 @@ void LCD_Init(void)
 
     /* Display Inversion On */
     LCD_Write_Cmd(0x21);
+    /* Sleep Out */
+    LCD_Write_Cmd(0x11);
+    /* wait for power stability */
+    delay10ms(12);
 
     LCD_Write_Cmd(0x29);
 
     LCD_Address_Set(0, 0, LCD_Width - 1, LCD_Height - 1);
 
-    LCD_Clear(WHITE);
+    LCD_Clear(BLACK);
 
     /* Display on */
     LCD_PWR(1);

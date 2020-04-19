@@ -13,25 +13,10 @@ choice Demo
 		bool "OC Track"
 	config Demo_Smoke
 		bool "OC Smoke"
-		select OC_LWM2M
-		select SHELL_ENABLE
-		select AT_ENABLE
-		select BOUDICA150
-		select STIMER_ENABLE
 	config Demo_Cover
 		bool "OC Cover"
-		select OC_LWM2M
-		select SHELL_ENABLE
-		select AT_ENABLE
-		select BOUDICA150
-		select STIMER_ENABLE
 	config Demo_Infrared
 		bool "OC Infrared"
-		select OC_LWM2M
-		select SHELL_ENABLE
-		select AT_ENABLE
-		select BOUDICA150
-		select STIMER_ENABLE
 	config Demo_OC_Cloud_Map
 		bool "OC Cloud Map"
 endchoice
