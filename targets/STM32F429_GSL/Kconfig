@@ -33,6 +33,6 @@ config UARTAT_DEVNAME
     string "Config the at uart device name"
     default "atdev"
           
-rsource "../../iot_link/kconfig_IoTLink"
+rsource "../../iot_link/Kconfig"
     
 endmenu

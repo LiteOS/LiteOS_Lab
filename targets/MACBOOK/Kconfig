@@ -17,6 +17,6 @@ menu "Macos Project configuration For IoT Link"
 
 comment "This is a demo project and hope you enjoy it"
 
-rsource "../../iot_link/kconfig_IoTLink"
+rsource "../../iot_link/Kconfig"
     
 endmenu
