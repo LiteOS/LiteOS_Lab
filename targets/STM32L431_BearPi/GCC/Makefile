@@ -42,7 +42,7 @@ LDSCRIPT = $(MAKEFILE_DIR)/$(LD_FILE)
 TARGET_DIR = $(abspath $(MAKEFILE_DIR)/..)
 
 #we should export the SDK_DIR FOR THE iot.mk and project.mk use
-ifndef $(SDK_DIR)
+ifndef SDK_DIR
     SDK_DIR :=$(abspath $(MAKEFILE_DIR)/../../..)
 endif
 
