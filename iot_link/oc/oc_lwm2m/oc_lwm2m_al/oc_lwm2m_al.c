@@ -153,7 +153,9 @@ int oc_lwm2m_init()
 
     LINK_LOG_DEBUG("IOT_LINK:DO OC LWM2M LOAD-IMPLEMENT RET:%d\n\r",ret);
 
+#ifdef  CONFIG_OCLWM2M_DEMO_ENABLE
     (void) oc_lwm2m_demo_main();
+#endif
 
     return 0;
 }
