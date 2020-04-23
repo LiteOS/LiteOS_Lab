@@ -756,6 +756,8 @@ static int dmp_subscribe(oc_mqtt_tiny_cb_t *cb)
     subpara.qos = en_mqtt_al_qos_1;
     subpara.topic.data = cb->mqtt_para.default_sub_topic ;
     subpara.topic.len = strlen(subpara.topic.data );
+    subpara.timeout = CN_OC_MQTT_TIMEOUT;
+
 
     LINK_LOG_DEBUG("oc_mqtt_default_subscribe:topic:%s\n\r",subpara.topic.data);
 

@@ -194,6 +194,10 @@ const char *oc_mqtt_err(en_oc_mqtt_err_code_t code)
     {
         ret = s_oc_mqtt_err_tab[(int)code];
     }
+    else
+    {
+        ret = "UNKNOWN";
+    }
     return ret;
 }
 

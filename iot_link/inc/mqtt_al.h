@@ -177,6 +177,7 @@ typedef struct
 typedef struct
 {
     mqtt_al_string_t       topic;    ///< the unsubscribe topic
+    uint32_t               timeout;  ///< how much time will be blocked
 }mqtt_al_unsubpara_t;
 
 /** @brief  descript the mqtt engine status */
