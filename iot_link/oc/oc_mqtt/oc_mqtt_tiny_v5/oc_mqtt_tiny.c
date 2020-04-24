@@ -1337,6 +1337,7 @@ static int tiny_unsubscribe(char *topic)
     (void) memset(&unsubpara, 0, sizeof(unsubpara));
     unsubpara.topic.data = topic;
     unsubpara.topic.len = strlen(topic);
+    unsubpara.timeout = CN_OC_MQTT_TIMEOUT;
     ret = daemon_cmd_post(en_oc_mqtt_daemon_cmd_unsubscribe,&unsubpara);
 
     return ret;
