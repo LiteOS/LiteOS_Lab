@@ -33,11 +33,9 @@ if DTLS_AL_ENABLE
         bool  "select the unknown one, and you should implement it"            
         
     endchoice 
-    
-    if MBEDTLS_ENABLE   
-        rsource "./mbedtls/kconfig_mbedtls"
-    endif
-                 
+
+    rsource "./mbedtls/kconfig_mbedtls"
+
 endif
 
 endmenu
