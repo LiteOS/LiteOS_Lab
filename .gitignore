@@ -1,0 +1,11 @@
+
+targets/STM32L431_BearPi/.config.old
+targets/STM32L431_BearPi/iot_config.h
+targets/STM32L431_BearPi_OS_Func/.config
+targets/STM32L431_BearPi_OS_Func/.config.old
+targets/STM32L431_BearPi_OS_Func/iot_config.h
+targets/STM32L431_BearPi/iot_config.h
+targets/STM32L431_BearPi/.config.old
+targets/STM32L431_BearPi/.config.old
+*.old
+targets/STM32L431_BearPi/.config.old
