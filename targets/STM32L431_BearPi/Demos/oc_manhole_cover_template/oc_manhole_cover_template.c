@@ -72,10 +72,10 @@ typedef char variant;
 typedef struct
 {
     int8u messageId;
-    int8u Temperature;
-    int8u Accel_x;
-    int8u Accel_y;
-    int8u Accel_z;
+    int8_t Temperature;
+    int16_t Accel_x;
+    int16_t Accel_y;
+    int16_t Accel_z;
     string Status[5];
 } tag_app_Manhole_Cover;
 #pragma pack()
@@ -140,9 +140,9 @@ static int app_report_task_entry()
     {
         Manhole_Cover.messageId = cn_app_Manhole_Cover;
         Manhole_Cover.Temperature = (int)E53_SC2_Data.Temperature;
-        Manhole_Cover.Accel_x = (int)E53_SC2_Data.Accel[0];
-        Manhole_Cover.Accel_y = (int)E53_SC2_Data.Accel[1];
-        Manhole_Cover.Accel_z = (int)E53_SC2_Data.Accel[2];
+        Manhole_Cover.Accel_x = htons(E53_SC2_Data.Accel[0] & 0x0000FFFF);
+        Manhole_Cover.Accel_y = htons(E53_SC2_Data.Accel[1] & 0x0000FFFF);
+        Manhole_Cover.Accel_z = htons(E53_SC2_Data.Accel[2] & 0x0000FFFF);
         oc_lwm2m_report((char *)&Manhole_Cover, sizeof(Manhole_Cover), 1000);
         osal_task_sleep(2*1000);
     }
