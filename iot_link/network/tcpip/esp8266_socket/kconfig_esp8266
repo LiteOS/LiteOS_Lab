@@ -14,8 +14,7 @@
 #
 
 menu "esp8266 configuration"
-
-if ESP8266_ENABLE
+visible if ESP8266_ENABLE
     
     config ESP8266_SSID
         string "The ssid of the wifi"
@@ -24,8 +23,6 @@ if ESP8266_ENABLE
     config ESP8266_PWD
         string "The pwd of the wifi"
         default "iot-link0123456"
-                
-endif
    
 endmenu
     

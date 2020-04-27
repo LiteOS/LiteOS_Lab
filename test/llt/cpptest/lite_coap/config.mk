@@ -13,4 +13,4 @@ CONFIG_TCPIP_TYPE    := "linux_socket"
 CONFIG_COAP_ENABLE   := y
 CONFIG_COAP_TYPE     := "lite_coap"
 
-include $(TOP_DIR)/iot_link/iot.mk
+include $(iot_link_root)/iot.mk

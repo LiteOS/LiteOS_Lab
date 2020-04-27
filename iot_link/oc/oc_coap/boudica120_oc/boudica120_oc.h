@@ -31,31 +31,30 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
+
+
+#ifndef __BOUDICA120_OC_H
+#define __BOUDICA120_OC_H
+
+
 /**
- *  DATE                AUTHOR      INSTRUCTION
- *  2019-11-19 15:44  zhangqianfu  The first version
+ *@brief this function should be called after oc_coap_init()
  *
  */
-#ifndef LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_AL_OC_MQTT_AT_H_
-#define LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_AL_OC_MQTT_AT_H_
+int oc_coap_imp_init();
+
+/**
+ *@brief this function to get the csq of the MODULES
+ *
+ *@param[in]  value, storage the csq
+ *@param[out] value, the csq get
+ *
+ *return 0 success while <0 failed
+ */
+int boudica120_get_csq(int *value);
+
+int *boudica120_check_nuestats(void);
 
 
-#include <stdint.h>
-#include <stddef.h>
 
-char *hwoc_mqtt_version();
-int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const char *port,
-                               const char *deviceid, const char *devicepasswd);
-int  hwoc_mqtt_disconnect();
-int  hwoc_mqtt_publish(int qos,char *topic,uint8_t *payload,int len);
-void hwoc_mqtt_recvpub(const char *topic,int topiclen,uint8_t *payload, int payloadlen);
-
-///< at command extended for v5 version
-int hwoc_mqtt_subscribe(int qos,char *topic);
-int hwoc_mqtt_unsubscribe(char *topic);
-int hwoc_mqtt_clientca(const char *client_ca);
-int hwoc_mqtt_serverca(const char *server_ca);
-int hwoc_mqtt_clientpk(const char *client_pk, const char *client_pk_pwd);
-
-
-#endif /* LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_AL_OC_MQTT_AT_H_ */
+#endif /* __BOUDICA120_OC_H */

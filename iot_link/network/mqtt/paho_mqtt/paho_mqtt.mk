@@ -3,15 +3,15 @@
 ################################################################################
 
 mqtt_paho_src = \
-		${wildcard $(TOP_DIR)/iot_link/network/mqtt/paho_mqtt/port/*.c} \
-        ${wildcard $(TOP_DIR)/iot_link/network/mqtt/paho_mqtt/paho/MQTTPacket/src/*.c} \
-        $(TOP_DIR)/iot_link/network/mqtt/paho_mqtt/paho/MQTTClient-C/src/MQTTClient.c
+		${wildcard $(iot_link_root)/network/mqtt/paho_mqtt/port/*.c} \
+        ${wildcard $(iot_link_root)/network/mqtt/paho_mqtt/paho/MQTTPacket/src/*.c} \
+        $(iot_link_root)/network/mqtt/paho_mqtt/paho/MQTTClient-C/src/MQTTClient.c
         C_SOURCES += $(mqtt_paho_src)
         
 mqtt_paho_inc = \
-        -I $(TOP_DIR)/iot_link/network/mqtt/paho_mqtt/paho/MQTTClient-C/src \
-		-I $(TOP_DIR)/iot_link/network/mqtt/paho_mqtt/paho/MQTTPacket/src \
-		-I $(TOP_DIR)/iot_link/network/mqtt/paho_mqtt/port 
+        -I $(iot_link_root)/network/mqtt/paho_mqtt/paho/MQTTClient-C/src \
+		-I $(iot_link_root)/network/mqtt/paho_mqtt/paho/MQTTPacket/src \
+		-I $(iot_link_root)/network/mqtt/paho_mqtt/port 
 
 C_INCLUDES += $(mqtt_paho_inc)
 
