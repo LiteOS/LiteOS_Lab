@@ -23,7 +23,7 @@
 static uint8_t lcd_buf[LCD_Buf_Size];
 
 uint16_t	POINT_COLOR = GREEN;	//画笔颜色	默认为黑色
-uint16_t	BACK_COLOR 	= BLACK;	//背景颜色	默认为白色
+uint16_t	BACK_COLOR 	= WHITE;	//背景颜色	默认为白色
 
 
 /**
