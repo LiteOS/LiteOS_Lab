@@ -111,5 +111,6 @@ CONFIG_IOT_LINK_CONFIGFILE="iot_config.h"
 CONFIG_Osal_Men_Demo=y
 # CONFIG_Osal_Semp_Demo is not set
 # CONFIG_Osal_Mutex_Demo is not set
+# CONFIG_OS_Interrupt_Demo is not set
 CONFIG_USER_DEMO="osal_mem_demo"
 # end of LiteOS for STM32L431_BearPi Project configuration For IoT Link
