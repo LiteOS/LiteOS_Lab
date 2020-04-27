@@ -111,6 +111,6 @@ CONFIG_Demo_Helloworld=y
 # CONFIG_Osal_Men_Demo is not set
 # CONFIG_Osal_Semp_Demo is not set
 # CONFIG_Osal_Mutex_Demo is not set
-# CONFIG_OS_Interrupt_Demo is not set
+# CONFIG_Osal_Interrupt_Demo is not set
 CONFIG_USER_DEMO="hello_world_demo"
 # end of LiteOS for STM32L431_BearPi Project configuration For IoT Link

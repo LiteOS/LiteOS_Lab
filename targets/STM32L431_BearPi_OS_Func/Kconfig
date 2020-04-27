@@ -55,8 +55,8 @@ choice Demo
 	config Osal_Mutex_Demo
 		bool "Osal Mutex"
 		select SHELL_ENABLE
-	config OS_Interrupt_Demo
-		bool "OS_Interrupt"
+	config Osal_Interrupt_Demo
+		bool "Osal_Interrupt"
 		select SHELL_ENABLE
 
 endchoice
@@ -68,7 +68,7 @@ config USER_DEMO
 	default "osal_mem_demo" if Osal_Men_Demo
 	default "osal_semp_demo" if Osal_Semp_Demo	
 	default "osal_mutex_demo" if Osal_Mutex_Demo
-	default "os_interrupt_demo" if OS_Interrupt_Demo
+	default "osal_interrupt_demo" if Osal_Interrupt_Demo
 	default "none"
 
         

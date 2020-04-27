@@ -36,10 +36,10 @@
 		user_demo_src  = ${wildcard $(TARGET_DIR)/Demos/osal_mutex_demo/*.c}
 		user_demo_defs = -D CONFIG_OSAL_MUTEX_ENABLE=1
 	endif
-	#example for os_interrupt_demo 
-	ifeq ($(CONFIG_USER_DEMO), "os_interrupt_demo")	
-		user_demo_src  = ${wildcard $(TARGET_DIR)/Demos/os_interrupt_demo/*.c}
-		user_demo_defs = -D CONFIG_INTERRUPT_ENABLE=1
+	#example for osal_interrupt_demo 
+	ifeq ($(CONFIG_USER_DEMO), "osal_interrupt_demo")	
+		user_demo_src  = ${wildcard $(TARGET_DIR)/Demos/osal_interrupt_demo/*.c}
+		user_demo_defs = -D CONFIG_OSAL_INTERRUPT_ENABLE=1
 	endif
 	
 	C_SOURCES += $(user_demo_src)
