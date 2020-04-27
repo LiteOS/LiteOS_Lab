@@ -18,4 +18,4 @@ CONFIG_DTLS_TYPE        := "mbedtls_cert"
 CONFIG_OC_MQTT_ENABLE   := y
 CONFIG_OC_MQTT_TYPE     := "soft"
 
-include $(TOP_DIR)/iot_link/iot.mk
+include $(iot_link_root)/iot.mk

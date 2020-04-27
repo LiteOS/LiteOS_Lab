@@ -129,9 +129,15 @@ __attribute__ ((weak)) int oc_mqtt_imp_init(void)
     return 0;
 }
 
-__attribute__ ((weak)) int oc_mqtt_demo_main(void)
+__attribute__ ((weak)) int oc_mqtt_v5demo_main(void)
 {
-    LINK_LOG_WARN("Please implement the oc mqtt demo yourself \n\r");
+    LINK_LOG_WARN("Please implement the oc mqtt v5 demo yourself \n\r");
+    return -1;
+}
+
+__attribute__ ((weak)) int oc_mqtt_v1demo_main(void)
+{
+    LINK_LOG_WARN("Please implement the oc mqtt v1 demo yourself \n\r");
     return -1;
 }
 
@@ -143,7 +149,16 @@ int oc_mqtt_init()
 
     LINK_LOG_DEBUG("IOT_LINK:DO OC MQTT LOAD-IMPLEMENT RET:%d\n\r",ret);
 
-    (void) oc_mqtt_demo_main();
+
+
+#ifdef CONFIG_OC_MQTTV1_DEMO
+    (void) oc_mqtt_v1demo_main();
+#endif
+
+#ifdef CONFIG_OC_MQTTV5_DEMO
+    (void) oc_mqtt_v5demo_main();
+#endif
+
 
     return ret;
 }

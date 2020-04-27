@@ -48,9 +48,7 @@ choice
            
     endchoice
     
-    if ESP8266_ENABLE
-       rsource "./esp8266_socket/kconfig_esp8266"        
-    endif
+    rsource "./esp8266_socket/kconfig_esp8266"        
            
 endif   
     

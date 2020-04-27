@@ -44,6 +44,6 @@ if UART_AT
 endif        
         
           
-rsource "../../iot_link/kconfig_IoTLink"
+rsource "../../iot_link/Kconfig"
     
 endmenu

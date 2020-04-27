@@ -49,11 +49,11 @@ include $(iot_link_root)/ota/ota.mk
 include $(iot_link_root)/loader/loader.mk
 
 ifeq ($(CONFIG_LOADER_ENABLE), y)
-#configure the upgrade patch
-include $(iot_link_root)/upgrade_patch/upgrade_patch.mk
-
-#configure the compress algo
-include $(iot_link_root)/compression_algo/compression_algo.mk
+    #configure the upgrade patch
+    include $(iot_link_root)/upgrade_patch/upgrade_patch.mk
+    
+    #configure the compress algo
+    include $(iot_link_root)/compression_algo/compression_algo.mk
 endif
 
 #configure storage

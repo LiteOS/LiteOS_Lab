@@ -174,7 +174,9 @@ int oc_coap_init()
     ret = oc_coap_imp_init();
     LINK_LOG_DEBUG("IOT_LINK:DO OCCOAP LOAD-IMPLEMENT RET:%d\n\r",ret);
 
+#ifdef CONFIG_OCCOAP_DEMO_ENABLE
     (void) oc_coap_demo_main();
+#endif
 
     return ret;
 }

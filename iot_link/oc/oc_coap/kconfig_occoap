@@ -26,10 +26,14 @@ if OCCOAP_ENABLE
     
     config OCCOAPTINY_ENABLE
         bool "we use the TINYCOAP(This is a software implement) as the occoap protocol"
-             
+
+    config BOUDICA120_ENABLE
+        bool "we use the boudica120 as the occoap protocol"
+        select AT_ENABLE
+
     config OCCOAPNULL
         bool "we will create a new oc coap ourself"    
-           
+
     endchoice
     
     config OCCOAP_DEMO_ENABLE

@@ -38,8 +38,7 @@
 
 #include <osal.h>
 #include <oc_mqtt_al.h>
-
-
+#include <oc_mqtt_at.h>
 
 extern int link_main(void *args);
 
@@ -90,18 +89,6 @@ static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
     return ret;
 }
 
-///< when the at pipe want to send some message to the hw,then it call this function,
-///< if the topic is NULL, then it will send to the default topic
-///< ATCOMMAND:    AT+HWOCMQTTSEND=1,3,001020
-///< ATRESPONSE:   +SEND OK when success
-///<               +SEND ERR:code
-///<               code:reference to en_oc_mqtt_err_code_t defines
-
-int hwoc_mqtt_send(int qos,uint8_t *payload,int len)
-{
-    (void)link_main(NULL);
-    return oc_mqtt_publish(NULL,payload, len, qos);
-}
 
 ///< when the at pipe want to send some message to the hw,then it call this function,
 ///< if the topic is NULL, then it will send to the default topic
