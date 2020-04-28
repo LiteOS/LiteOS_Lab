@@ -1,5 +1,5 @@
 ################################################################################
-# STM32F429IGTx_FIRE GCC compiler Makefile
+# STM32L431_BearPI GCC compiler Makefile
 ################################################################################
 # ------------------------------------------------
 # Generic Makefile (based on gcc)
@@ -17,9 +17,6 @@ DEBUG = 1
 # optimization
 OPT = -O0 -g
 
-USE_OTA := no
-OTA_IS_NEED_DTLS := no
-
 ################################################################################
 # binaries
 ################################################################################
@@ -35,14 +32,22 @@ HEX       = $(OBJCOPY) -O ihex
 BIN       = $(OBJCOPY) -O binary -S
 
 
-PROJECTBASE = $(abspath $(CURDIR))
-TOP_DIR     = $(abspath $(PROJECTBASE)/../../..)
+################################################################################
+# paths
+################################################################################
+BUILD_DIR = build
+LD_FILE = os.ld
+MAKEFILE_DIR = $(abspath $(CURDIR))
+LDSCRIPT = $(MAKEFILE_DIR)/$(LD_FILE)
+TARGET_DIR = $(abspath $(MAKEFILE_DIR)/..)
 
-#this is for IoT Studio automatic generating kconfig compatibility
+#we should export the SDK_DIR FOR THE iot.mk and project.mk use
 ifndef SDK_DIR
-    SDK_DIR=$(abspath $(PROJECTBASE)/../../..)
+    SDK_DIR :=$(abspath $(MAKEFILE_DIR)/../../..)
 endif
 
+DRIVERLIB_DIR := $(SDK_DIR)/drivers
+IOTLINK_DIR := $(SDK_DIR)/iot_link
 
 ################################################################################
 #common variables for other module or components
@@ -60,40 +65,11 @@ LDFLAGS =
 ASFLAGS =
 CFLAGS =
 
-
 ##########################LOAD THE SOURCES INCLUDES AND DEFINES#################
 include ../.config
-include $(TOP_DIR)/iot_link/iot.mk
-include $(PROJECTBASE)/project.mk
-################################################################################
-# paths
-################################################################################
-# firmware library path
-PERIFLIB_PATH =
-# Build path
-cfg_seperate_load_mode = no
-ifeq ($(CONFIG_LOADER_ENABLE),yes)
-	BUILD_DIR = loaderbuild
-	C_DEFS += -D cn_app_bin_addr=0x08010004
-else
-	BUILD_DIR = appbuild
-endif
+include $(SDK_DIR)/iot_link/iot.mk
+include $(MAKEFILE_DIR)/project.mk
 
-################################################################################
-# LDFLAGS
-################################################################################
-ifeq ($(cfg_seperate_load_mode),yes)
-	ifeq ($(CONFIG_LOADER_ENABLE),yes)
-		LD_FILE = os_loader.ld
-	else
-		LD_FILE = os_app.ld
-	endif
-else
-	LD_FILE = os.ld
-endif
-			
-
-LDSCRIPT = $(PROJECTBASE)/$(LD_FILE)
 
 ################################################################################
 # firmware library
@@ -130,31 +106,45 @@ CFLAGS += -Wno-missing-braces
 
 # libraries
 LIBS += -lc -lm -lnosys
-ifeq ($(USE_OTA), yes)
-LIBS += -lhwpatch
-endif
-LIBDIR  += -L$(PROJECTBASE)/../Lib
+LIBDIR  += -L$(TARGET_DIR)/Lib
 LDFLAGS += $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 LDFLAGS += -u _printf_float
 
 
-
-TARGET_DIR = $(BUILD_DIR)
 ############HERE WE GET THE C_OBJECT S_OBJECT AND THE PATH #####################
+#all the code for the compile:
+#iot_link: which indexed by the iot_link_root, it is the sdk main 
+#drivers: which maybe used by the targets, it is common for the MCUS
+#targets: which developed by the user
 
-C_OBJ := $(C_SOURCES:$(TOP_DIR)/%.c=$(TARGET_DIR)/%.o)
+#changge the path for all the sources in directory iot_link  targets drivers
+#WE WILL CREATE SAME RELATION SHIP IN THE BUILD_DIR, AND IF YOU HAVE SOURCES 
+#out of SDK_DIR TARGET_DIR, please add them as THIS
+C_OBJ :=
+C_OBJ += $(patsubst $(IOTLINK_DIR)/%.c,$(BUILD_DIR)/iot_link/%.o,$(filter $(IOTLINK_DIR)/%.c,$(C_SOURCES)))
+C_OBJ += $(patsubst $(DRIVERLIB_DIR)/%.c,$(BUILD_DIR)/drivers/%.o,$(filter $(DRIVERLIB_DIR)/%.c,$(C_SOURCES)))
+C_OBJ += $(patsubst $(TARGET_DIR)/%.c,$(BUILD_DIR)/%.o,$(filter $(TARGET_DIR)/%.c,$(C_SOURCES)))
+
+S_OBJ :=
+S_OBJ += $(patsubst $(IOTLINK_DIR)/%.S,$(BUILD_DIR)/iot_link/%.o,$(filter $(IOTLINK_DIR)/%.S,$(ASM_SOURCES_S)))
+S_OBJ += $(patsubst $(DRIVERLIB_DIR)/%.S,$(BUILD_DIR)/drivers/%.o,$(filter $(DRIVERLIB_DIR)/%.S,$(ASM_SOURCES_S)))
+S_OBJ += $(patsubst $(TARGET_DIR)/%.S,$(BUILD_DIR)/%.o,$(filter $(TARGET_DIR)/%.S,$(ASM_SOURCES_S)))
+
+OBJ_DIRS :=
 OBJ_DIRS +=  $(dir $(C_OBJ))
-S_OBJ := $(ASM_SOURCES_S:$(TOP_DIR)/%.S=$(TARGET_DIR)/%.o)
 OBJ_DIRS +=  $(dir $(S_OBJ))
 OBJ_DIRS := $(sort $(OBJ_DIRS))
 
-##################DO THE BUILDING NOW###########################################
-# default action: build all
-all:$(TARGET_DIR)/$(TARGET).elf
-	-$(HEX) $< $(TARGET_DIR)/$(TARGET).hex
-	-$(BIN) $< $(TARGET_DIR)/$(TARGET).bin	
+#ADD THE SDK_DIR AND TARGET_DIR TO THE SEARCH PATH
+vpath %.c $(SDK_DIR):$(TARGET_DIR)
+vpath %.S $(SDK_DIR):$(TARGET_DIR)
 
-$(TARGET_DIR)/$(TARGET).elf:$(OBJ_DIRS) $(C_OBJ) $(S_OBJ)
+#NOW DO THE BUILDING
+all:$(BUILD_DIR)/$(TARGET).elf
+	-$(HEX) $< $(BUILD_DIR)/$(TARGET).hex
+	-$(BIN) $< $(BUILD_DIR)/$(TARGET).bin	
+
+$(BUILD_DIR)/$(TARGET).elf:$(OBJ_DIRS) $(C_OBJ) $(S_OBJ)
 	$(CC) $(C_OBJ) $(S_OBJ) $(LDFLAGS) -o $@
 	$(SZ) $@
 		
@@ -163,18 +153,18 @@ $(OBJ_DIRS):
 	-mkdir -p $@
 
 #compile the c file to the object, as you know we has map the .c to the .o	
-$(C_OBJ):$(TARGET_DIR)/%.o:$(TOP_DIR)/%.c
+$(C_OBJ):$(BUILD_DIR)/%.o:%.c
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(@:%.o=%.lst) $<  -o $@
 
 #compile the s fike to the object, as you know we has map the .S to the .o
-$(S_OBJ):$(TARGET_DIR)/%.o:$(TOP_DIR)/%.S
+$(S_OBJ):$(BUILD_DIR)/%.o:%.S
 	$(AS) -c $(CFLAGS) $< -o $@
-		
- 
+
+
 ################################################################################
-# clean up
+# clean up: all you need to do is to remove the build dirs
 ################################################################################
 clean:
-	-rm -fR .dep $(TARGET_DIR)
+	-rm -fR .dep $(BUILD_DIR)
 
 # *** EOF ***

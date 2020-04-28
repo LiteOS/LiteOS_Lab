@@ -36,36 +36,40 @@ config UARTAT_DEVNAME
 rsource "../../iot_link/Kconfig"
 
 choice Demo
-    optional
-    prompt "User Defined Demo"
-    config Demo_None
-        bool "none"
-    config Demo_Helloworld
-        bool "Hello World"
-        select SHELL_ENABLE
-    config Osal_Task_Demo
-        bool "Osal Task"
-        select SHELL_ENABLE
-    config Osal_Men_Demo
-        bool "Osal Mem"
-        select SHELL_ENABLE
-    config Osal_Semp_Demo
-        bool "Osal Semp"
-        select SHELL_ENABLE
-    config Osal_Mutex_Demo
-        bool "Osal Mutex"
-        select SHELL_ENABLE
+	optional
+	prompt "User Defined Demo"
+	config Demo_None
+		bool "none"
+	config Demo_Helloworld
+		bool "Hello World"
+		select SHELL_ENABLE
+	config Osal_Task_Demo
+		bool "Osal Task"
+		select SHELL_ENABLE
+	config Osal_Men_Demo
+		bool "Osal Mem"
+		select SHELL_ENABLE
+	config Osal_Semp_Demo
+		bool "Osal Semp"
+		select SHELL_ENABLE
+	config Osal_Mutex_Demo
+		bool "Osal Mutex"
+		select SHELL_ENABLE
+	config Osal_Interrupt_Demo
+		bool "Osal_Interrupt"
+		select SHELL_ENABLE
 
 endchoice
 
 config USER_DEMO
-    string
-    default "hello_world_demo" if Demo_Helloworld
-    default "osal_task_demo" if Osal_Task_Demo
-    default "osal_mem_demo" if Osal_Men_Demo
-    default "osal_semp_demo" if Osal_Semp_Demo  
-    default "osal_mutex_demo" if Osal_Mutex_Demo
-    default "none"
+	string
+	default "hello_world_demo" if Demo_Helloworld
+	default "osal_task_demo" if Osal_Task_Demo
+	default "osal_mem_demo" if Osal_Men_Demo
+	default "osal_semp_demo" if Osal_Semp_Demo	
+	default "osal_mutex_demo" if Osal_Mutex_Demo
+	default "osal_interrupt_demo" if Osal_Interrupt_Demo
+	default "none"
 
         
 endmenu

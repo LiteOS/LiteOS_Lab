@@ -32,15 +32,11 @@ CONFIG_LITEOS_ENABLE=y
 #
 # At configuration
 #
-CONFIG_AT_ENABLE=y
-CONFIG_AT_DEVNAME="atdev"
-CONFIG_AT_OOBTABLEN=6
-CONFIG_AT_RECVMAXLEN=1024
-CONFIG_AT_TASKPRIOR=10
+# CONFIG_AT_ENABLE is not set
 # end of At configuration
 
-CONFIG_CJSON_ENABLE=y
-CONFIG_DRIVER_ENABLE=y
+# CONFIG_CJSON_ENABLE is not set
+# CONFIG_DRIVER_ENABLE is not set
 
 #
 # LinkLog configuration
@@ -54,10 +50,7 @@ CONFIG_LINKDEMO_ENABLE=y
 #
 # Stimer configuration
 #
-CONFIG_STIMER_ENABLE=y
-CONFIG_STIMER_STACKSIZE=2048
-CONFIG_STIMER_TASKPRIOR=10
-# CONFIG_STIMER_DEMO_ENABLE is not set
+# CONFIG_STIMER_ENABLE is not set
 # end of Stimer configuration
 
 #
@@ -98,29 +91,7 @@ CONFIG_STIMER_TASKPRIOR=10
 #
 # OceanConnect SERVICE configuration
 #
-CONFIG_OCSERVICES_ENABLE=y
-
-#
-# OceanConnect Coap configuration
-#
-# CONFIG_OCCOAP_ENABLE is not set
-# end of OceanConnect Coap configuration
-
-#
-# OceanConnect Lwm2m configuration
-#
-CONFIG_OCLWM2M_ENABLE=y
-# CONFIG_OCLWM2MTINY_ENABLE is not set
-CONFIG_BOUDICA150_ENABLE=y
-# CONFIG_OCLWM2MNULL is not set
-# CONFIG_OCLWM2M_DEMO_ENABLE is not set
-# end of OceanConnect Lwm2m configuration
-
-#
-# OceanConnect Mqtt configuration
-#
-# CONFIG_OCMQTT_ENABLE is not set
-# end of OceanConnect Mqtt configuration
+# CONFIG_OCSERVICES_ENABLE is not set
 # end of OceanConnect SERVICE configuration
 
 #
@@ -135,13 +106,11 @@ CONFIG_IOT_LINK_CONFIGFILE="iot_config.h"
 # end of IoT link SDK configuration
 
 # CONFIG_Demo_None is not set
-CONFIG_Demo_Helloworld=y
-# CONFIG_Demo_Streetlight is not set
-# CONFIG_Demo_Agriculture is not set
-# CONFIG_Demo_Track is not set
-# CONFIG_Demo_Smoke is not set
-# CONFIG_Demo_Cover is not set
-# CONFIG_Demo_Infrared is not set
-# CONFIG_Demo_OC_Cloud_Map is not set
-CONFIG_USER_DEMO="hello_world_demo"
+# CONFIG_Demo_Helloworld is not set
+# CONFIG_Osal_Task_Demo is not set
+# CONFIG_Osal_Men_Demo is not set
+# CONFIG_Osal_Semp_Demo is not set
+# CONFIG_Osal_Mutex_Demo is not set
+CONFIG_Osal_Interrupt_Demo=y
+CONFIG_USER_DEMO="osal_interrupt_demo"
 # end of LiteOS for STM32L431_BearPi Project configuration For IoT Link
