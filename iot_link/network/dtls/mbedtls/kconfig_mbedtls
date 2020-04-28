@@ -15,8 +15,7 @@
 
 
 menu "mbedtls configuration"
-
-    if MBEDTLS_ENABLE
+visible if MBEDTLS_ENABLE
     
         choice 
         prompt "Please select one of the workmode for mbedtls"
@@ -34,7 +33,5 @@ menu "mbedtls configuration"
         config MBED_DEBUG_ENABLE
             bool "Enable the mbed debug"
             default n
-      
-    endif  
-      
+
 endmenu

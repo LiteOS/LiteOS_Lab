@@ -14,7 +14,7 @@
 #
 
 menu "OceanConnect MqttV5 Api"
-depends on OC_MQTT_V5
+visible if OC_MQTT_V5
 
 config OC_MQTTV5_PROFILE
     bool  "Enable the v5  Api"
