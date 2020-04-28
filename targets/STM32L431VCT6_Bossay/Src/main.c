@@ -64,6 +64,7 @@ const struct phys_mem system_phys_mem [] =
 #endif
         { 0, 0 }
     };
+
 extern const unsigned char gImage_Bossaylogo[45128];
 VOID HardWare_Init(VOID)
 {
@@ -84,33 +85,6 @@ VOID HardWare_Init(VOID)
 	LCD_ShowString(2, 170, 240, 16, 16, "System intializing......");;	
 }
 
-void delay_us(uint32_t nus)
-{
- uint32_t temp;
- SysTick->LOAD = 9*nus;
- SysTick->VAL=0X00;//清空计数器
- SysTick->CTRL=0X01;//使能，减到零是无动作，采用外部时钟源
- do
- {
-  temp=SysTick->CTRL;//读取当前倒计数值
- }while((temp&0x01)&&(!(temp&(1<<16))));//等待时间到达
-     SysTick->CTRL=0x00; //关闭计数器
-    SysTick->VAL =0X00; //清空计数器
-}
-void delay_ms(uint16_t nms)
-{
- uint16_t temp;
- SysTick->LOAD = 9000*nms;
- SysTick->VAL=0X00;//清空计数器
- SysTick->CTRL=0X01;//使能，减到零是无动作，采用外部时钟源
- do
- {
-  temp=SysTick->CTRL;//读取当前倒计数值
- }while((temp&0x01)&&(!(temp&(1<<16))));//等待时间到达
-    SysTick->CTRL=0x00; //关闭计数器
-    SysTick->VAL =0X00; //清空计数器
-}
-
 
 
 extern int link_main(void *args);
@@ -121,7 +95,7 @@ static int link_test()
     UINT32  handle;
     TSK_INIT_PARAM_S task_init_param;
 
-    (void) memset (&task_init_param, 0, sizeof (TSK_INIT_PARAM_S));
+    memset (&task_init_param, 0, sizeof (TSK_INIT_PARAM_S));
     task_init_param.uwArg = (unsigned int)NULL;
     task_init_param.usTaskPrio = 2;
     task_init_param.pcName =(char *) "link_main";
@@ -133,6 +107,7 @@ static int link_test()
     }
     return ret;
 }
+
 
 int main(void)
 {

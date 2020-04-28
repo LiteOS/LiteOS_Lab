@@ -104,4 +104,3 @@ void hal_get_ota_opt(ota_opt_s *opt)
 }
 
 
-
