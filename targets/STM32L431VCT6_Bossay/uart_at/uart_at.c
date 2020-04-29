@@ -266,4 +266,3 @@ static const los_driv_op_t s_at_op = {
 };
 
 OSDRIV_EXPORT(uart_at_driv,CONFIG_UARTAT_DEVNAME,(los_driv_op_t *)&s_at_op,NULL,O_RDWR);
-

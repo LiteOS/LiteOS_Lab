@@ -13,7 +13,7 @@
 # See the Mulan PSL v1 for more details.
 #
 
-menu "LiteOS for STM32L431VCT6_Bossay Project configuration For IoT Link"
+menu "LiteOS for STM32L431_BearPi Project configuration For IoT Link"
 
 comment "This is a demo project and hope you enjoy it"
 
@@ -27,7 +27,7 @@ config UARTAT_RCVMAX
 
 config UARTAT_BAUDRATE
     int  "Config the at uart baud rate"
-    default 115200
+    default 9600
     
 config UARTAT_DEVNAME
     string "Config the at uart device name"
