@@ -44,7 +44,7 @@ CONFIG_DRIVER_ENABLE=y
 #
 # LinkLog configuration
 #
-CONFIG_LINKLOG_ENABLE=y
+# CONFIG_LINKLOG_ENABLE is not set
 # end of LinkLog configuration
 
 CONFIG_LINKQUEUE_ENABLE=y

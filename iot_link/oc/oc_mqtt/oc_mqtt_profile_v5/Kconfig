@@ -29,7 +29,10 @@ if OC_MQTTV5_PROFILE
        config OC_MQTTV5_DEMO_TLS
             bool  "Enable the demo tls mode"
             default n
-            select LINK_DTLS_ENABLE            
+            select LINK_DTLS_ENABLE
+       config OC_MQTTV5_DEMO_CYCLE
+             int  "DEMO REPORT LOOP CYCLE(ms)"
+             default 1000                  
     endif
      
 endif   

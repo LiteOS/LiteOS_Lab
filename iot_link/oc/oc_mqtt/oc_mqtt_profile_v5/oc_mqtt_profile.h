@@ -262,6 +262,27 @@ int oc_mqtt_profile_cmdresp(char *deviceid,oc_mqtt_profile_cmdresp_t *payload);
 
 
 
+typedef struct
+{
+
+    char   *object_device_id;           ///< target deice_id, optional
+    char   *service_id;                 ///< service_id, optional
+    char   *request_id;                 ///< the request_id, must be supplied by the service
+}oc_mqtt_profile_shadowget_t;
+/**
+ * @brief: use this function to send get the platform shadow data
+ *
+ * @param[in] deviceid: the device we registered
+ *
+ * @param[in] payload: description as oc_mqtt_profile_p_t
+ *
+ * @return :defined as en_oc_mqtt_err_code_t
+ *
+ * */
+int oc_mqtt_profile_getshadow(char *deviceid,oc_mqtt_profile_shadowget_t *payload);
+
+
+
 
 
 #endif /* LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_PROFILE_OC_MQTT_PROFILE_H_ */
