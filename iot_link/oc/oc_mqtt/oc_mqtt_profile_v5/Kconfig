@@ -13,23 +13,25 @@
 # See the Mulan PSL v1 for more details.
 #
 
-menu "OceanConnect MqttV1 Api"
-visible if OC_MQTT_V1
+menu "OceanConnect MqttV5 Api"
+visible if OC_MQTT_V5
 
-config OC_MQTTV1_PROFILE
-    bool  "use the v1 Api"
-    default n
+config OC_MQTTV5_PROFILE
+    bool  "Enable the v5  Api"
+    default y
     
-if OC_MQTTV1_PROFILE
-    config OC_MQTTV1_DEMO
-        bool "enable the v1 profile demo"
+if OC_MQTTV5_PROFILE
+    config OC_MQTTV5_DEMO
+        bool "Enable the v5 Api demo"
         default n
-    if OC_MQTTV1_DEMO
-        config OC_MQTTV1_DEMO_BS
-            bool  "enable the v1 demo bs function"
+        select OCMQTT_DEMOENABLE
+    if OC_MQTTV5_DEMO
+       config OC_MQTTV5_DEMO_TLS
+            bool  "Enable the demo tls mode"
             default n
+            select LINK_DTLS_ENABLE            
     endif
-        
-endif
+     
+endif   
            
 endmenu

@@ -44,7 +44,7 @@ rsource "./stimer/kconfig_stimer"
     
 rsource "./network/kconfig_network"
 
-rsource "./oc/kconfig_oc"
+rsource "./oc/Kconfig"
 
 
 rsource "./shell/kconfig_shell"    
