@@ -50,6 +50,7 @@ char *oc_mqtt_profile_package_gwpropertyreport(oc_mqtt_profile_device_t *payload
 char *oc_mqtt_profile_package_propertysetresp(oc_mqtt_profile_propertysetresp_t *payload);
 char *oc_mqtt_profile_package_propertygetresp(oc_mqtt_profile_propertygetresp_t *payload);
 char *oc_mqtt_profile_package_cmdresp(oc_mqtt_profile_cmdresp_t *payload);
+char *oc_mqtt_profile_package_shadowget(oc_mqtt_profile_shadowget_t *payload);
 
 
 

@@ -486,3 +486,50 @@ int oc_mqtt_profile_cmdresp(char *deviceid,oc_mqtt_profile_cmdresp_t *payload)
 
     return ret;
 }
+
+#define CN_OC_MQTT_PROFILE_GETSHADOW_TOPICFMT   "$oc/devices/%s/sys/shadow/get/request_id=%s"
+int oc_mqtt_profile_getshadow(char *deviceid,oc_mqtt_profile_shadowget_t *payload)
+{
+    int ret = (int)en_oc_mqtt_err_parafmt;
+    char *topic;
+    char *msg;
+
+    if(NULL == deviceid)
+    {
+        if(NULL == s_oc_mqtt_profile_cb.device_id)
+        {
+            return ret;
+        }
+        else
+        {
+            deviceid = s_oc_mqtt_profile_cb.device_id;
+        }
+    }
+
+    if((NULL == payload) || (NULL == payload->request_id))
+    {
+        return ret;
+    }
+
+    topic = topic_make(CN_OC_MQTT_PROFILE_GETSHADOW_TOPICFMT, deviceid,payload->request_id);
+    msg = oc_mqtt_profile_package_shadowget(payload);
+
+    if((NULL != topic) && (NULL != msg))
+    {
+        ret = oc_mqtt_publish(topic,(uint8_t *)msg,strlen(msg),(int)en_mqtt_al_qos_1);
+    }
+    else
+    {
+        ret = (int)en_oc_mqtt_err_sysmem;
+    }
+
+    osal_free(topic);
+    osal_free(msg);
+
+    return ret;
+
+
+
+}
+
+

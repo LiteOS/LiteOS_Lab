@@ -13,20 +13,28 @@
 # See the Mulan PSL v1 for more details.
 #
 
+menu "OceanConnect MqttV5 Api"
+visible if OC_MQTT_V5
 
-menu "OceanConnect SERVICE configuration" 
-
-config OCSERVICES_ENABLE
-    bool  "Enable the oc service, like the mqtt/coap/lwm2m to communicate with the oc platform"
+config OC_MQTTV5_PROFILE
+    bool  "Enable the v5  Api"
     default y
-
-if OCSERVICES_ENABLE
-    rsource "./oc_coap/kconfig_occoap"
     
-    rsource "./oc_lwm2m/kconfig_oclwm2m"
-            
-    rsource "./oc_mqtt/kconfig_ocmqtt"
-
-endif      
-         
+if OC_MQTTV5_PROFILE
+    config OC_MQTTV5_DEMO
+        bool "Enable the v5 Api demo"
+        default n
+        select OCMQTT_DEMOENABLE
+    if OC_MQTTV5_DEMO
+       config OC_MQTTV5_DEMO_TLS
+            bool  "Enable the demo tls mode"
+            default n
+            select LINK_DTLS_ENABLE
+       config OC_MQTTV5_DEMO_CYCLE
+             int  "DEMO REPORT LOOP CYCLE(ms)"
+             default 1000                  
+    endif
+     
+endif   
+           
 endmenu

@@ -36,7 +36,7 @@
  *  2020-02-06 14:36  zhangqianfu  The first version
  *
  */
-////< this file used to package the data for the profile
+////< this file used to package the data for the profile and you must make sure the data format is right
 #include <oc_mqtt_profile.h>
 #include <oc_mqtt_profile_package.h>
 
@@ -536,6 +536,61 @@ EXIT_MEM:
     return ret;
 
 }
+
+
+
+#define CN_OC_MQTT_PROFILE_GETSHADOW_SERVICEID        "service_id"
+#define CN_OC_MQTT_PROFILE_GETSHADOW_OBJECTDEVICEID   "object_device_id"
+char *oc_mqtt_profile_package_shadowget(oc_mqtt_profile_shadowget_t *payload)
+{
+    char *ret = NULL;
+    cJSON *root = NULL;
+    cJSON *object_device_id = NULL;
+    cJSON *service_id = NULL;
+
+    ///< create the root node
+    root = cJSON_CreateObject();
+    if(NULL == root)
+    {
+       goto EXIT_MEM;
+    }
+    ///< create retcode and retdesc and add it to the root
+    if(NULL != payload->object_device_id)
+    {
+        object_device_id = cJSON_CreateString(payload->object_device_id);
+        if(NULL == object_device_id)
+        {
+            goto EXIT_MEM;
+        }
+        cJSON_AddItemToObjectCS(root,CN_OC_MQTT_PROFILE_GETSHADOW_OBJECTDEVICEID,object_device_id);
+    }
+
+    if(NULL != payload->service_id)
+    {
+        service_id = cJSON_CreateString(payload->object_device_id);
+        if(NULL == service_id)
+        {
+            goto EXIT_MEM;
+        }
+        cJSON_AddItemToObjectCS(root,CN_OC_MQTT_PROFILE_GETSHADOW_SERVICEID,service_id);
+    }
+
+    ///< OK, now we make it to a buffer
+    ret = cJSON_PrintUnformatted(root);
+    cJSON_Delete(root);
+    return ret;
+
+EXIT_MEM:
+    if(NULL != root)
+    {
+       cJSON_Delete(root);
+    }
+
+    return ret;
+
+}
+
+
 
 
 

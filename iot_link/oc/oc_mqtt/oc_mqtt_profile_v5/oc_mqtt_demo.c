@@ -48,9 +48,8 @@
 #include <oc_mqtt_al.h>
 #include <oc_mqtt_profile.h>
 
-///< --TODO, the tls with ECHDE will requires more compute ability, and the mcu uptils now will be timeout,
-///<         and i think the platform will make the timeout much longer and fix this problem
-
+///< and i think the platform will make the timeout much longer and fix this problem
+///< for the MCU has weak compute ability, and the new CERT FILE of platform is very big, so should not use tls for the MCUS
 ///< 1.设备接入服务重新更新了证书以及加密套件，椭圆加密算法算法需要大算力去链接服务器，因此对月MCU而言，请选择非加密方案
 ///< 2.设备发放平台目前本身在和设备接入做对接，还不ready.
 
@@ -93,8 +92,22 @@ static const char s_server_ca[] =
 "CAUw7C29C79Fv1C5qfPrmAESrciIxpg0X40KPMbp1ZWVbd4=\r\n"
 "-----END CERTIFICATE-----\r\n";
 
-#define CN_EP_DEVICEID         "54f107da-f251-436c-af4c-624f33b7d7b6"
-#define CN_EP_PASSWD           "f62fcf47d62c4ed18913"
+
+#ifndef CONFIG_OCMQTTV5_DEMO_DEVICEID
+#define CONFIG_OCMQTTV5_DEMO_DEVICEID  "5e12ea0a334dd4f337902dc3_iotlink005"
+#endif
+
+#ifndef CONFIG_OCMQTTV5_DEMO_DEVPWD
+#define CONFIG_OCMQTTV5_DEMO_DEVPWD     "f62fcf47d62c4ed18913"
+#endif
+
+#ifndef CONFIG_OCMQTTV5_DEMO_REPORTCYCLE
+#define CONFIG_OCMQTTV5_DEMO_REPORTCYCLE   1000
+#endif
+
+
+#define CN_EP_DEVICEID        CONFIG_OCMQTTV5_DEMO_DEVICEID
+#define CN_EP_PASSWD          CONFIG_OCMQTTV5_DEMO_DEVPWD
 
 ///< the client use the cert mode  SHA-256
 //72DC0E75D88CEC38A025E9C48C79D222F608B039D080BCEFC0007DAD1AFFAD00
@@ -221,9 +234,6 @@ static int  oc_cmd_normal(oc_mqtt_profile_msgrcv_t *demo_msg)
     oc_mqtt_profile_propertysetresp_t propertysetresp;
     oc_mqtt_profile_propertygetresp_t propertygetresp;
 
-    (void) printf("DEALMSG:type:%d reuqestID:%s payloadlen:%d payload:%s\n\r",\
-            demo_msg->type,demo_msg->request_id==NULL?"NULL":demo_msg->request_id,\
-            demo_msg->msg_len,(char *)demo_msg->msg);
     switch(demo_msg->type)
     {
         case EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_MSGDOWN:
@@ -237,7 +247,7 @@ static int  oc_cmd_normal(oc_mqtt_profile_msgrcv_t *demo_msg)
             cmdresp.request_id = demo_msg->request_id;
             cmdresp.ret_code = 0;
             cmdresp.ret_name = NULL;
-            oc_mqtt_profile_cmdresp(NULL,&cmdresp);
+            (void)oc_mqtt_profile_cmdresp(NULL,&cmdresp);
             break;
 
         case EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_PROPERTYSET:
@@ -247,7 +257,7 @@ static int  oc_cmd_normal(oc_mqtt_profile_msgrcv_t *demo_msg)
             propertysetresp.request_id = demo_msg->request_id;
             propertysetresp.ret_code = 0;
             propertysetresp.ret_description = NULL;
-            oc_mqtt_profile_propertysetresp(NULL,&propertysetresp);
+            (void)oc_mqtt_profile_propertysetresp(NULL,&propertysetresp);
             break;
 
         case  EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_PROPERTYGET:
@@ -261,7 +271,9 @@ static int  oc_cmd_normal(oc_mqtt_profile_msgrcv_t *demo_msg)
 
             propertygetresp.request_id = demo_msg->request_id;
             propertygetresp.services = &s_device_service;
-            oc_mqtt_profile_propertygetresp(NULL,&propertygetresp);
+            (void)oc_mqtt_profile_propertygetresp(NULL,&propertygetresp);
+            break;
+        case EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_EVENT:
             break;
 
         default:
@@ -272,58 +284,177 @@ static int  oc_cmd_normal(oc_mqtt_profile_msgrcv_t *demo_msg)
 }
 
 
-static int  oc_report_normal(void)
+
+static int demo_usersub_topic(void)
+{
+    int ret1;
+    int ret2;
+    int ret;
+    char *topic;
+    topic = "$oc/devices/"CN_EP_DEVICEID"/user/demo_sub1";
+    ret1 = oc_mqtt_subscribe(topic, 0);
+
+    topic = "$oc/devices/"CN_EP_DEVICEID"/user/demo_sub2";
+    ret2 = oc_mqtt_subscribe(topic, 0);
+    ret = ret1>ret2?ret1:ret2;
+    return ret;
+}
+
+static int demo_userunsub_topic(void)
+{
+    int ret;
+    int ret1;
+    int ret2;
+    char *topic;
+    topic = "$oc/devices/"CN_EP_DEVICEID"/user/demo_sub1";
+    ret1 = oc_mqtt_unsubscribe(topic);
+
+    topic = "$oc/devices/"CN_EP_DEVICEID"/user/demo_sub2";
+    ret2 = oc_mqtt_unsubscribe(topic);
+
+    ret = ret1>ret2?ret1:ret2;
+    return ret;
+}
+
+static int demo_userpub(void)
+{
+    int ret;
+    char *topic;
+    topic = "$oc/devices/"CN_EP_DEVICEID"/user/demo_pub";
+    ret = oc_mqtt_publish(topic,(uint8_t *) "hello world",strlen("hello world"),1);
+    return ret;
+}
+
+static int demo_msgup_shortdata(void)   ///< big data test
 {
     int ret = en_oc_mqtt_err_ok;
+    oc_mqtt_profile_msgup_t msgup;
+
+    msgup.device_id = CN_EP_DEVICEID;
+    msgup.id = "54321";
+    msgup.name = "MSGUP";
+    msgup.msg = (void *)"Hello, new world";
+    msgup.msg_len = strlen(msgup.msg);
+    ret = oc_mqtt_profile_msgup(NULL,&msgup);
+    return ret;
+}
+
+static int demo_msgup_longdata(void)   ///< big data test
+{
+    int ret = en_oc_mqtt_err_ok;
+    oc_mqtt_profile_msgup_t msgup;
+
+    msgup.device_id = CN_EP_DEVICEID;
+    msgup.id = "12345";
+    msgup.name = "MSGUP";
+    msgup.msg = (void *)s_client_pk;
+    msgup.msg_len = sizeof(s_client_pk);
+    ret = oc_mqtt_profile_msgup(NULL,&msgup);
+    return ret;
+}
+
+static int demo_propertireport(void)
+{
+    int ret;
     static int value = 1;
 
     value++;
-    if((value%2) == EN_OC_MQTT_PROFILE_MSG_TYPE_UP_MSGUP)
-    {
-        oc_mqtt_profile_msgup_t msgup;
-        msgup.device_id = CN_EP_DEVICEID;
-        msgup.id = "12345";
-        msgup.name = "MSGUP";
-        msgup.msg = "Hello,Message Up";
-        msgup.msg_len = strlen(msgup.msg);
+    s_device_service.service_property->key = "radioValue";
+    s_device_service.service_property->value = &value;
+    s_device_service.service_property->type = EN_OC_MQTT_PROFILE_VALUE_INT;
+    ret = oc_mqtt_profile_propertyreport(NULL,&s_device_service);
 
-        ret = oc_mqtt_profile_msgup(NULL,&msgup);
-    }
-    else if((value%2) == EN_OC_MQTT_PROFILE_MSG_TYPE_UP_PROPERTYREPORT)
-    {
-        s_device_service.service_property->key = "radioValue";
-        s_device_service.service_property->value = &value;
-        s_device_service.service_property->type = EN_OC_MQTT_PROFILE_VALUE_INT;
-        ret = oc_mqtt_profile_propertyreport(NULL,&s_device_service);
-    }
-    else
-    {
-        const char *str = "{\"services\":[{\"service_id\":\"DeviceStatus\",\"properties\":{\"radioValue\":2}}]}";
-        ret = oc_mqtt_publish(NULL,(uint8_t *)str, strlen(str),0);
-    }
-
-    (void) printf("REPORT TIMES:%d RET:%d\n\r",value,ret);
     return ret;
+}
+
+static int demo_pubdefault(void)
+{
+    int ret ;
+    const char *data = "{\"services\":[{\"service_id\":\"DeviceStatus\",\"properties\":{\"radioValue\":2}}]}";
+    ret = oc_mqtt_publish(NULL,(uint8_t *)data, strlen(data),0);
+    return ret;
+}
+
+static int demo_getshadow(void)
+{
+    int ret;
+    oc_mqtt_profile_shadowget_t  payload;
+    payload.object_device_id = NULL;
+    payload.request_id = "123456789";
+    payload.service_id = NULL;
+
+    ret = oc_mqtt_profile_getshadow(NULL,&payload);
+    return ret;
+}
+
+static int demo_reportversion(void)
+{
+    int ret;
+    char *topic = "$oc/devices/"CN_EP_DEVICEID"/sys/events/up";
+    char *data = "{ \"services\": [{ \"service_id\": \"$ota\", \"event_type\": \"version_report\", \"paras\": { \"sw_version\":\"v1.0\",\"fw_version\":\"v1.0\" } }]}";
+    ret = oc_mqtt_publish(topic,(uint8_t *)data, strlen(data),0);
+
+    return ret;
+}
+
+
+typedef int (*fn_ocmqttv5_demofunc)(void);
+typedef struct
+{
+    const char          *name;
+    fn_ocmqttv5_demofunc func;
+    int                  failtimes;
+}ocmqttv5_democase_t;
+
+static ocmqttv5_democase_t g_ocmqttv5_testarray []=
+{
+    {"USERSUB",demo_usersub_topic},
+    {"USERPUB",demo_userpub},
+    {"USERUNSUB",demo_userunsub_topic},
+    {"MSGUP_SHORTDATA",demo_msgup_shortdata},
+    {"MSGUP_LONGDATA",demo_msgup_longdata},
+    {"PROPERTY_REPORT",demo_propertireport},
+    {"PUBLISH_DEFAULT",demo_pubdefault},
+    {"GETSHADOW",demo_getshadow},
+    {"REPORTVERSION",demo_reportversion},
+
+};
+#define CN_OCMQTTV5_DEMOCASENUM    (sizeof(g_ocmqttv5_testarray)/sizeof(ocmqttv5_democase_t))
+
+static void  oc_report_normal(void)
+{
+    int i = 0;
+    int ret;
+    static uint32_t runtimes = 0;
+    runtimes++;
+
+    for(i= 0;i<CN_OCMQTTV5_DEMOCASENUM;i++)
+    {
+        ret = g_ocmqttv5_testarray[i].func();
+        if(ret != 0)
+        {
+            g_ocmqttv5_testarray[i].failtimes++;
+        }
+        (void) printf("DEMORUN:%d TIMES CASE:%d RET:%d FAILTTOTAL:%d NAME:%s \r\n",\
+                       (int)runtimes,i,ret,g_ocmqttv5_testarray[i].failtimes,g_ocmqttv5_testarray[i].name);
+    }
+    return;
 }
 
 
 static int task_rcvmsg_entry( void *args)
 {
-
     oc_mqtt_profile_msgrcv_t *demo_msg;
-
     while(1)
     {
         demo_msg = NULL;
         queue_pop(s_queue_rcvmsg,(void **)&demo_msg,cn_osal_timeout_forever);
-
         if(NULL != demo_msg)
         {
             oc_cmd_normal(demo_msg);
             osal_free(demo_msg);
         }
     }
-
     return 0;
 }
 
@@ -332,16 +463,15 @@ void  hwoc_mqtt_log(en_oc_mqtt_log_t  logtype)
 
     if(logtype == en_oc_mqtt_log_connected)
     {
-        printf("%s:connected %d\n\r",__FUNCTION__,logtype);
+        (void)printf("%s:connected %d\n\r",__FUNCTION__,logtype);
     }
     else
     {
-        printf("%s:disconnected %d\n\r",__FUNCTION__,logtype);
+        (void)printf("%s:disconnected %d\n\r",__FUNCTION__,logtype);
     }
 
     return;
 }
-
 
 static int task_reportmsg_entry(void *args)
 {
@@ -378,21 +508,10 @@ static int task_reportmsg_entry(void *args)
         return -1;
     }
 
-    char *topic;
-    topic = "$oc/devices/54f107da-f251-436c-af4c-624f33b7d7b6/user/demo_sub";
-    ret = oc_mqtt_subscribe(topic, 0);
-    (void) printf("usersubscribe:topic:%s ret:%d \r\n",topic,ret);
-
-    ret = oc_mqtt_publish(topic,(uint8_t *) "hello world",strlen("hello world"),1);
-    (void) printf("userpublish:ret:%d\r\n",ret);
-
-    ret = oc_mqtt_unsubscribe(topic);
-    (void) printf("unsubscribe:topic:%s ret:%d \r\n",topic,ret);
-
     while(1)  //do the loop here
     {
         oc_report_normal();
-//        osal_task_sleep(10);
+        osal_task_sleep(CONFIG_OCMQTTV5_DEMO_REPORTCYCLE);
     }
     return 0;
 }
@@ -400,11 +519,8 @@ static int task_reportmsg_entry(void *args)
 int oc_mqtt_demo_main()
 {
     static oc_mqtt_profile_kv_t  property;
-
     printf("DO THE OC MQTT V5 DEMOS\n\r");
-
     s_queue_rcvmsg = queue_create("queue_rcvmsg",2,1);
-
     ///< initialize the service
     property.nxt   = NULL;
     s_device_service.event_time = NULL;

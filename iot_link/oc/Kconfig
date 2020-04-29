@@ -13,23 +13,20 @@
 # See the Mulan PSL v1 for more details.
 #
 
-menu "OceanConnect MqttV1 Api"
-visible if OC_MQTT_V1
 
-config OC_MQTTV1_PROFILE
-    bool  "use the v1 Api"
-    default n
+menu "OceanConnect SERVICE configuration" 
+
+config OCSERVICES_ENABLE
+    bool  "Enable the oc service, like the mqtt/coap/lwm2m to communicate with the oc platform"
+    default y
+
+if OCSERVICES_ENABLE
+    rsource "./oc_coap/kconfig_occoap"
     
-if OC_MQTTV1_PROFILE
-    config OC_MQTTV1_DEMO
-        bool "enable the v1 profile demo"
-        default n
-    if OC_MQTTV1_DEMO
-        config OC_MQTTV1_DEMO_BS
-            bool  "enable the v1 demo bs function"
-            default n
-    endif
-        
-endif
-           
+    rsource "./oc_lwm2m/kconfig_oclwm2m"
+            
+    rsource "./oc_mqtt/Kconfig"
+
+endif      
+         
 endmenu
