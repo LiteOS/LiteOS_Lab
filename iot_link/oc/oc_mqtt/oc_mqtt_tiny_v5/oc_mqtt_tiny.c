@@ -225,7 +225,7 @@ static void bs_msg_default_deal(void *arg,mqtt_al_msgrcv_t *msg)
 
    char   *json_buf;
 
-   LINK_LOG_DEBUG("bs topic:%s qos:%d\n\r",msg->topic.data,msg->qos);
+   LINK_LOG_DEBUG("bs topic:%s qos:%d\n\r",msg->topic.data,(int)msg->qos);
 
    json_buf = osal_malloc(msg->msg.len + 1);
    if(NULL == json_buf)

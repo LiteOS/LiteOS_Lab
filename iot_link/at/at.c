@@ -37,7 +37,6 @@
 #include <string.h>
 #include <driver.h>
 #include <sys/fcntl.h>
-#include <iot_link_config.h>
 
 //these defines could be reconfigured at the iot_link_config.h
 
@@ -291,12 +290,12 @@ static int __rcv_task_entry(void *args)
     {
     	if (1 == g_at_cb.streammode)  //in stream mode, we need to save previous frames in buffer
     	{
-    	    if(rcvlen == 0)
-    	    {
+            if(rcvlen == 0)
+            {
                 (void)memset(g_at_cb.rcvbuf,0,CONFIG_AT_RECVMAXLEN);
-    	    }
+            }
             rcvlen += __resp_rcv(g_at_cb.rcvbuf+ rcvlen,CONFIG_AT_RECVMAXLEN,cn_osal_timeout_forever);
-            if(rcvlen > 0)
+            if( rcvlen > 0)
             {
                 matchret = __cmd_match(g_at_cb.rcvbuf,rcvlen);
                 if(0 != matchret)
@@ -322,7 +321,7 @@ static int __rcv_task_entry(void *args)
                 matchret = __cmd_match(g_at_cb.rcvbuf,rcvlen);
                 if(0 != matchret)
                 {
-                   (void) __oob_match(g_at_cb.rcvbuf,rcvlen);
+                    (void) __oob_match(g_at_cb.rcvbuf,rcvlen);
                 }
 	        }
         }
@@ -489,7 +488,7 @@ EXIT_CMDSYNC:
 
 
 //////////////////////////////////DEBUG COMMAND FOLLOWING/////////////////////////////////////////
-#if CONFIG_SHELL_ENABLE
+#ifdef CONFIG_SHELL_ENABLE
 
 #include <shell.h>
 //use this shell command,you could input at command through the terminal

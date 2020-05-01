@@ -579,7 +579,7 @@ off_t  los_dev_seek (los_dev_t dev,off_t offset,int fromwhere)
 //void*      los_dev_upara_get (los_dev_t dev);
 
 //export some shell for the driver debug
-#if CONFIG_SHELL_ENABLE
+#ifdef CONFIG_SHELL_ENABLE
 
 #include <shell.h>
 //use this function to show all the driver infomation

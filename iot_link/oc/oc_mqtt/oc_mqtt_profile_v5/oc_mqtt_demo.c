@@ -44,7 +44,6 @@
 #include <iot_link_config.h>
 
 #include <queue.h>
-#include <osal.h>
 #include <oc_mqtt_al.h>
 #include <oc_mqtt_profile.h>
 
@@ -188,7 +187,7 @@ static int app_msg_deal(oc_mqtt_profile_msgrcv_t *msg)
     buf = osal_malloc(buflen);
     if(NULL != buf)
     {
-        demo_msg = (oc_mqtt_profile_msgrcv_t *)buf;
+        demo_msg = (oc_mqtt_profile_msgrcv_t *)(uintptr_t)buf;
         buf += sizeof(oc_mqtt_profile_msgrcv_t);
         ///< copy the message and push it to the queue
         demo_msg->type = msg->type;
@@ -213,7 +212,7 @@ static int app_msg_deal(oc_mqtt_profile_msgrcv_t *msg)
         buf[datalen] = '\0';
 
         (void) printf("RCVMSG:type:%d reuqestID:%s payloadlen:%d payload:%s\n\r",\
-                demo_msg->type,demo_msg->request_id==NULL?"NULL":demo_msg->request_id,\
+                (int) demo_msg->type,demo_msg->request_id==NULL?"NULL":demo_msg->request_id,\
                 demo_msg->msg_len,(char *)demo_msg->msg);
 
         ret = queue_push(s_queue_rcvmsg,demo_msg,10);
@@ -327,7 +326,7 @@ static int demo_userpub(void)
 
 static int demo_msgup_shortdata(void)   ///< big data test
 {
-    int ret = en_oc_mqtt_err_ok;
+    int ret = (int)en_oc_mqtt_err_ok;
     oc_mqtt_profile_msgup_t msgup;
 
     msgup.device_id = CN_EP_DEVICEID;
@@ -341,7 +340,7 @@ static int demo_msgup_shortdata(void)   ///< big data test
 
 static int demo_msgup_longdata(void)   ///< big data test
 {
-    int ret = en_oc_mqtt_err_ok;
+    int ret = (int)en_oc_mqtt_err_ok;
     oc_mqtt_profile_msgup_t msgup;
 
     msgup.device_id = CN_EP_DEVICEID;
@@ -428,7 +427,7 @@ static void  oc_report_normal(void)
     static uint32_t runtimes = 0;
     runtimes++;
 
-    for(i= 0;i<CN_OCMQTTV5_DEMOCASENUM;i++)
+    for(i= 0;i< (int)CN_OCMQTTV5_DEMOCASENUM;i++)
     {
         ret = g_ocmqttv5_testarray[i].func();
         if(ret != 0)
@@ -448,10 +447,10 @@ static int task_rcvmsg_entry( void *args)
     while(1)
     {
         demo_msg = NULL;
-        queue_pop(s_queue_rcvmsg,(void **)&demo_msg,cn_osal_timeout_forever);
+        (void)queue_pop(s_queue_rcvmsg,(void **)&demo_msg,(int)cn_osal_timeout_forever);
         if(NULL != demo_msg)
         {
-            oc_cmd_normal(demo_msg);
+            (void) oc_cmd_normal(demo_msg);
             osal_free(demo_msg);
         }
     }
@@ -463,11 +462,11 @@ void  hwoc_mqtt_log(en_oc_mqtt_log_t  logtype)
 
     if(logtype == en_oc_mqtt_log_connected)
     {
-        (void)printf("%s:connected %d\n\r",__FUNCTION__,logtype);
+        (void)printf("%s:connected %d\n\r",__FUNCTION__,(int)logtype);
     }
     else
     {
-        (void)printf("%s:disconnected %d\n\r",__FUNCTION__,logtype);
+        (void)printf("%s:disconnected %d\n\r",__FUNCTION__,(int)logtype);
     }
 
     return;
@@ -502,7 +501,7 @@ static int task_reportmsg_entry(void *args)
     connect_para.security.u.cert.client_pk_pwd_len = strlen(s_client_pk_pwd);
 
     ret = oc_mqtt_profile_connect(&connect_para);
-    if((ret != en_oc_mqtt_err_ok))
+    if((ret != (int)en_oc_mqtt_err_ok))
     {
         (void) printf("config:err :code:%d\r\n",ret);
         return -1;
@@ -519,7 +518,7 @@ static int task_reportmsg_entry(void *args)
 int oc_mqtt_demo_main()
 {
     static oc_mqtt_profile_kv_t  property;
-    printf("DO THE OC MQTT V5 DEMOS\n\r");
+    (void)printf("DO THE OC MQTT V5 DEMOS\n\r");
     s_queue_rcvmsg = queue_create("queue_rcvmsg",2,1);
     ///< initialize the service
     property.nxt   = NULL;
@@ -528,8 +527,8 @@ int oc_mqtt_demo_main()
     s_device_service.service_property = &property;
     s_device_service.nxt = NULL;
 
-    osal_task_create("demo_reportmsg",task_reportmsg_entry,NULL,0x800,NULL,8);
-    osal_task_create("demo_rcvmsg",task_rcvmsg_entry,NULL,0x800,NULL,8);
+    (void) osal_task_create("demo_reportmsg",task_reportmsg_entry,NULL,0x800,NULL,8);
+    (void) osal_task_create("demo_rcvmsg",task_rcvmsg_entry,NULL,0x800,NULL,8);
 
     return 0;
 }
