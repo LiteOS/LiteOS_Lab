@@ -490,10 +490,10 @@ void LCD_ShowChar(uint16_t x, uint16_t y, char chr, uint8_t size)
         for (t = 0; t < csize; t++)
         {
             if (size == 16)
-                temp = asc2_1608[chr][t]; //调用1608字体
+                temp = (uint8_t)(asc2_1608[(uint8_t)chr][t]); //调用1608字体
 
             else if (size == 32)
-                temp = asc2_3216[chr][t]; //调用3216字体
+                temp = (uint8_t)asc2_3216[(uint8_t)chr][t]; //调用3216字体
 
             else
                 return; //没有的字库
@@ -518,7 +518,7 @@ void LCD_ShowChar(uint16_t x, uint16_t y, char chr, uint8_t size)
 
         for (t = 0; t < csize; t++)
         {
-            temp = asc2_1206[chr][t];
+            temp = (uint8_t)asc2_1206[(uint8_t)chr][t];
 
             for (t1 = 0; t1 < 6; t1++)
             {
@@ -540,7 +540,7 @@ void LCD_ShowChar(uint16_t x, uint16_t y, char chr, uint8_t size)
 
         for (t = 0; t < csize; t++)
         {
-            temp = asc2_2412[chr][t];
+            temp = (uint8_t)asc2_2412[(uint8_t)chr][t];
 
             if (t % 2 == 0)
                 sta = 8;

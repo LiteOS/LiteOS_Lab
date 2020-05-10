@@ -122,9 +122,6 @@ int _put_char(int ch)
     return ch;
 }
 
-int puts(const char* string) {
-	return _write(0, (const void *) string, strlen(string));
-}
 
 __attribute__((used)) int _write(int fd, char *ptr, int len)
 {
@@ -158,5 +155,10 @@ __attribute__((used)) int _read(int fd, char *ptr, int len)
     *(unsigned char *)ptr = value;
     return 1;
 }
+
+int puts(const char* string) {
+    return _write(0, (char *) string, strlen(string));
+}
+
 
 #endif

@@ -73,6 +73,7 @@ typedef enum
     EN_OC_MQTT_PROFILE_VALUE_INT = 0,
     EN_OC_MQTT_PROFILE_VALUE_LONG,
     EN_OC_MQTT_PROFILE_VALUE_FLOAT,
+    EN_OC_MQTT_PROFILE_VALUE_DOUBLE,
     EN_OC_MQTT_PROFILE_VALUE_STRING,           ///< must be ended with '\0'
     EN_OC_MQTT_PROFILE_VALUE_LAST,
 }en_oc_profile_data_t;

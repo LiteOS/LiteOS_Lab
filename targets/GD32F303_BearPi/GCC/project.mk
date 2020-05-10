@@ -41,12 +41,9 @@ USER_SRC =  \
         $(TARGET_DIR)/Src/Huawei_IoT_QR_Code.c
         C_SOURCES += $(USER_SRC)  
         
-ifeq ($(CONFIG_AT_ENABLE),y)
-    UART_AT_SRC = $(TARGET_DIR)/uart_at/uart_at.c
-    C_SOURCES += $(UART_AT_SRC)
-endif
 
- OS_CONFIG_INC = \
+
+OS_CONFIG_INC = \
         -I $(TARGET_DIR)/OS_CONFIG
         C_INCLUDES += $(OS_CONFIG_INC)       
 # C includes
@@ -63,8 +60,13 @@ USER_INC = \
         
 # C defines
 C_DEFS +=  -D GD32F30X_XD -D NDEBUG
-
 C_INCLUDES += -I $(TARGET_DIR)
+
+include $(TARGET_DIR)/Demos/build.mk
+include $(TARGET_DIR)/Hardware/build.mk
+
+ 
+
 
 
 

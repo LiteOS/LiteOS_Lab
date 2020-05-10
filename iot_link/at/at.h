@@ -80,6 +80,9 @@ int at_command(const void *cmd, size_t cmdlen,const char *index,\
 
 int at_streammode_set(int mode);
 
+int at_debugclose(void);
+
+
 
 
 

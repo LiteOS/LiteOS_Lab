@@ -343,6 +343,16 @@ int at_streammode_set(int mode)
 }
 
 
+int at_debugclose(void)
+{
+    //for the debug
+    g_at_cb.rxdebugmode = en_at_debug_none;
+    g_at_cb.txdebugmode = en_at_debug_none;
+
+    return 0;
+}
+
+
 /*******************************************************************************
 function     :this is our at command here,you could send any command as you wish
 parameters   :
@@ -485,7 +495,6 @@ EXIT_RESPSYNC:
 EXIT_CMDSYNC:
     return ret;
 }
-
 
 //////////////////////////////////DEBUG COMMAND FOLLOWING/////////////////////////////////////////
 #ifdef CONFIG_SHELL_ENABLE

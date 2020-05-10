@@ -586,6 +586,8 @@ int link_tcpip_imp_init(void)
         esp8266_set_mode(STA);
         esp8266_set_mux(0);
     }
+
+    at_debugclose();
    //reach here means everything is ok, we can go now
     ret = link_sal_install(&s_tcpip_socket);
 

@@ -841,15 +841,11 @@ static int dmp_publish(oc_mqtt_tiny_cb_t *cb,char *topic, uint8_t *msg, int len,
     pubpara.topic.len =strlen(pubpara.topic.data );
     pubpara.msg.data = (char *)msg;
     pubpara.msg.len = len;
-
-    LINK_LOG_DEBUG("oc_mqtt_publish:topic:%s  qos:%d msglen:%d\n\r",topic,qos,len);
-
     ret = mqtt_al_publish(cb->mqtt_para.mqtt_handle, &pubpara);
     if(ret != 0)
     {
         ret = (int)en_oc_mqtt_err_publish;
     }
-    LINK_LOG_DEBUG("oc_mqtt_publish:retcode:%d:%s\n\r",ret,ret==0?"SUCCESS":"FAIL");
     return ret;
 }
 static int hub_step(oc_mqtt_tiny_cb_t  *cb)
@@ -1095,7 +1091,6 @@ static int daemon_entry(void *arg)
     oc_mqtt_daemon_cmd_t   *daemon_cmd = NULL;
 
     cb = arg;
-    LINK_LOG_DEBUG("%s:start\n\r",__FUNCTION__);
     while((NULL != cb) && (0 == cb->daemon_exit))
     {
         if(0 == queue_pop(cb->task_daemon_cmd_queue,(void **)&daemon_cmd,10*1000))
@@ -1147,7 +1142,6 @@ static int daemon_entry(void *arg)
                     }
                     break;
                 case en_oc_mqtt_daemon_cmd_publish:
-                    LINK_LOG_DEBUG("daemon:publish enter\n\r");
                     if((int)en_daemon_status_idle == cb->flag.bits.bit_daemon_status)
                     {
                         daemon_cmd->retcode = (int)en_oc_mqtt_err_noconfigured;
@@ -1164,7 +1158,6 @@ static int daemon_entry(void *arg)
                     {
                         daemon_cmd->retcode = (int)en_oc_mqtt_err_noconected;
                     }
-                    LINK_LOG_DEBUG("daemon:publish exit\n\r");
                     break;
                 case en_oc_mqtt_daemon_cmd_subscribe:
                     LINK_LOG_DEBUG("daemon:subscribe enter\n\r");

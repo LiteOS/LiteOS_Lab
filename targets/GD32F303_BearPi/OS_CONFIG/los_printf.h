@@ -39,6 +39,7 @@
 #ifndef _LOS_PRINTF_H
 #define _LOS_PRINTF_H
 //#ifdef LOSCFG_LIB_LIBC
+#include <stdio.h>
 #include "stdarg.h"
 //#endif
 #ifdef LOSCFG_LIB_LIBCMINI

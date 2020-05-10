@@ -20,19 +20,10 @@ comment "This is a demo project and hope you enjoy it"
 config ARCH_CPU_TYPE
    string "Select the cpu arch:armv7-m armv6-m riscv32 x86-64"
    default "armv7-m"
-   
-config UARTAT_RCVMAX
-    int  "Config the at uart receive buffer size"
-    default 2048
-
-config UARTAT_BAUDRATE
-    int  "Config the at uart baud rate"
-    default 115200
-    
-config UARTAT_DEVNAME
-    string "Config the at uart device name"
-    default "atdev"
-          
+  
+rsource "./Demos/Kconfig" 
+rsource "./Hardware/Kconfig"       
+         
 rsource "../../iot_link/Kconfig"
     
 endmenu
