@@ -62,11 +62,11 @@ __attribute__((weak)) void  hwoc_mqtt_log(en_oc_mqtt_log_t  logtype)
 {
     if(logtype == en_oc_mqtt_log_connected)
     {
-        printf("%s:connected %d\n\r",__FUNCTION__,logtype);
+        LINK_LOG_DEBUG("connected %d\n\r",(int)logtype);
     }
     else
     {
-        printf("%s:disconnected %d\n\r",__FUNCTION__,logtype);
+        LINK_LOG_DEBUG("disconnected %d\n\r",(int)logtype);
     }
 
     return;
@@ -79,7 +79,7 @@ static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
 {
     int ret = -1;
 
-    LINK_LOG_DEBUG("%s:qos:%d dup:%d topiclen:%d msglen:%d\n\r",__FUNCTION__,msg->qos,msg->dup,\
+    LINK_LOG_DEBUG("qos:%d dup:%d topiclen:%d msglen:%d\n\r",(int)msg->qos,msg->dup,\
                     msg->topic.len,msg->msg.len);
     if((NULL != msg->topic.data) && (msg->topic.len > 0))
     {
@@ -116,7 +116,7 @@ int hwoc_mqtt_publish(int qos,char *topic,uint8_t *payload,int len)
 int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const char *port,
                                const char *deviceid, const char *devicepasswd)
 {
-    int ret = en_oc_mqtt_err_parafmt;
+    int ret = (int)en_oc_mqtt_err_parafmt;
     static unsigned long long time_last = 0;
     unsigned long long time_now;
 

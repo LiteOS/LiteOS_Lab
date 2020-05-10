@@ -42,6 +42,7 @@
 #include <driver.h>
 #include "sys/fcntl.h"
 #include <iot_link_config.h>
+#include <los_hwi.h>
 
 static uint32_t s_pUSART = EVAL_COM1;
 static uint32_t s_uwIRQn = USART1_IRQn;
@@ -87,7 +88,7 @@ instruction  :we cached the data in the temp buffer,when the idle interrupt reac
               then we write the data and the length to the ring if the ring has enough
               space
 *******************************************************************************/
-static void atio_irq(void)
+static void atio_irq(void *arg)
 {
     unsigned char  value;
     unsigned short ringspace;
@@ -146,7 +147,7 @@ static bool_t uart_at_init(void *pri)
 
     gd_eval_com_init(s_pUSART, CONFIG_UARTAT_BAUDRATE);
     usart_flag_clear(s_pUSART,USART_FLAG_TC);
-    LOS_HwiCreate(s_uwIRQn, 3, 0, atio_irq, 0);
+    osal_int_connect(s_uwIRQn, 3, 0, atio_irq, NULL);
     usart_interrupt_enable(s_pUSART, USART_INT_IDLE);
     usart_interrupt_enable(s_pUSART, USART_INT_RBNE);
     return true;

@@ -156,7 +156,7 @@ int oc_mqtt_profile_connect(oc_mqtt_profile_connect_t *payload)
         return ret;
     }
 
-    memset(&config,0, sizeof(config));
+    (void) memset(&config,0, sizeof(config));
 
     config.boot_mode =payload->boostrap;
     config.id = payload->device_id;

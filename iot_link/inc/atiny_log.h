@@ -53,8 +53,19 @@ extern "C" {
  *       :the input parameters is just as the printf does, and this function should be deserted
  *       :this function should not use as advised
  * */
-#define atiny_printf  LINK_LOG_DEBUG
+
+//#define CONFIG_ATINY_DEUG
+
+#ifdef CONFIG_ATINY_DEUG
+
 #define ATINY_LOG     LINK_LOG
+
+#else
+
+#define ATINY_LOG(level,fmt, ...)
+
+
+#endif
 
 
 #ifdef __cplusplus

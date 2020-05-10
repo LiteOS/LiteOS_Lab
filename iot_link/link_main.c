@@ -184,7 +184,7 @@ int link_main(void *args)
 
 #ifdef CONFIG_LINKDEMO_ENABLE
     extern int standard_app_demo_main(void);
-    standard_app_demo_main();
+    (void) standard_app_demo_main();
 #endif
 
     return 0;

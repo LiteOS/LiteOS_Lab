@@ -55,6 +55,9 @@ static cJSON  *profile_fmtvalue(oc_mqtt_profile_kv_t  *kv)
             ret = cJSON_CreateNumber((double)(*(long *)kv->value));
             break;
         case EN_OC_MQTT_PROFILE_VALUE_FLOAT:
+            ret = cJSON_CreateNumber((double)(*(float *)kv->value));
+            break;
+        case EN_OC_MQTT_PROFILE_VALUE_DOUBLE:
             ret = cJSON_CreateNumber((*(double *)kv->value));
             break;
         case EN_OC_MQTT_PROFILE_VALUE_STRING:

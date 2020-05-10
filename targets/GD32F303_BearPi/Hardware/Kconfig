@@ -1,0 +1,23 @@
+################################################################################
+# this is used for compile the user defined oc demo
+################################################################################
+config ATUART_ENABLE
+    bool "UART FOR AT"
+    default n
+if ATUART_ENABLE
+    config UARTAT_RCVMAX
+    int  "Config the at uart receive buffer size"
+    default 2048
+
+    config UARTAT_BAUDRATE
+        int  "Config the at uart baud rate"
+        default 115200
+        
+    config UARTAT_DEVNAME
+        string "Config the at uart device name"
+        default "atdev"
+endif
+
+config LCD_ENABLE
+    bool "LCD enable"
+    default y

@@ -739,7 +739,7 @@ static int __agent_config(oc_config_param_t *param)
     device_info->manufacturer = "Agent_Tiny";
     atiny_params = &agent->tiny_param;
     atiny_params->server_params.binding = "UQ";
-    atiny_params->server_params.life_time = 20;
+    atiny_params->server_params.life_time = 2000;
     atiny_params->server_params.storing_cnt = 5;
     atiny_params->server_params.bootstrap_mode = param->boot_mode;
     atiny_params->server_params.hold_off_time = 10;
