@@ -42,17 +42,29 @@
 #include <string.h>
 #include <iot_link_config.h>
 #include <queue.h>
-#include <oc_lwm2m_al.h>
+#include <oc_coap_al.h>
 #include <link_endian.h>
 #include <lcd.h>
 #include "BearPi-IoT_gd32f303.h"
 
 
-#define CN_APP_SERVERIP       "iot-coaps.cn-north-4.myhuaweicloud.com"
-#define CN_APP_SERVERPORT     "5684"
-#define CN_APP_DEVICEID       "Lwm2mBoard001"
+//#define CONFIG_DTLS_MODE
 
+//#define CN_APP_SERVERIP       "iot-coaps.cn-north-4.myhuaweicloud.com"
+#define CN_APP_SERVERIP       "119.3.250.80"
+
+
+#ifdef CONFIG_DTLS_MODE
+#define CN_APP_SERVERPORT     "5684"
 static uint8_t  g_device_psk[]={0x01,0x02,0x03,0x04,0x05,0x06};
+
+#else
+#define CN_APP_SERVERPORT     "5683"
+#endif
+
+#define CN_APP_DEVICEID       "CoapBoard001"
+
+
 
 typedef struct
 {
@@ -61,12 +73,13 @@ typedef struct
     int                          f1_value;
     int                          f2_value;
     int                          light_status;
+    void                        *handle;
 }app_cb_t;
 static app_cb_t  g_app_cb;
 
 static void indexinfo_display()
 {
-    LCD_ShowString(10, 50, 240, 24, 24, " LWM2M ScoreBoard");
+    LCD_ShowString(10, 50, 240, 24, 24, " COAP ScoreBoard");
     LCD_ShowString(20, 74, 240, 16, 16, "BearPi IoT Develop Board");
     LCD_ShowString(20, 90, 240, 16, 16, "Powerd by Huawei LiteOS!");
     LCD_ShowString(10, 120, 240, 24, 24, "      SCORE      ");
@@ -116,7 +129,6 @@ typedef struct
 typedef struct
 {
     int               msg_len;
-    en_oc_lwm2m_msg_t msg_type;
     uint8_t *msg;
 }appmsg_down_t;
 
@@ -139,14 +151,14 @@ static int app_propertyreport(void)
     reportmsg.f1 = htonl(g_app_cb.f1_value);
     reportmsg.f2 = htonl(g_app_cb.f2_value);
     reportmsg.light_status = htonl(g_app_cb.light_status);
-    ret = oc_lwm2m_report((char *)&reportmsg,sizeof(reportmsg),1000);
+    ret = oc_coap_report(g_app_cb.handle,(char *)&reportmsg,sizeof(reportmsg));
 
     LINK_LOG_DEBUG("REPORT:F1:%d F2:%d  Light:%d RET:%d",\
             g_app_cb.f1_value,g_app_cb.f2_value,g_app_cb.light_status,ret);
     return ret;
 }
 //use this function to push all the message to the buffer
-static int app_msg_rcvhook(void *usr_data, en_oc_lwm2m_msg_t type, void *data, int len)
+static int app_msg_rcvhook(void *data, int len)
 {
     int    ret = -1;
     char  *buf;
@@ -161,7 +173,6 @@ static int app_msg_rcvhook(void *usr_data, en_oc_lwm2m_msg_t type, void *data, i
         buf += sizeof(appmsg_down_t);
         ///< copy the message and push it to the queue
         demo_msg->msg_len = len;
-        demo_msg->msg_type = type;
         demo_msg->msg = (uint8_t *)buf;
         (void) memcpy(buf,data,len);
         ret = queue_push(g_app_cb.rcvmsgqueue,demo_msg,10);
@@ -202,7 +213,7 @@ static int  oc_msg_deal(appmsg_down_t *demo_msg)
                 cmdreply.cmdcode = 0;
                 g_app_cb.f1_value = 0;
                 g_app_cb.f2_value = 0;
-                (void)oc_lwm2m_report((char *)&cmdreply,sizeof(cmdreply),1000);
+                (void)oc_coap_report(g_app_cb.handle,(char *)&cmdreply,sizeof(cmdreply));
                 score_display();
                 ret = 0;
             }
@@ -215,7 +226,7 @@ static int  oc_msg_deal(appmsg_down_t *demo_msg)
                 cmdreply.msgid = EN_APPMSG_ID_REPLYLIGHTCTRL;
                 cmdreply.mid = lighctrl.mid;
                 cmdreply.cmdcode = 0;
-                (void)oc_lwm2m_report((char *)&cmdreply,sizeof(cmdreply),1000);
+                (void)oc_coap_report(g_app_cb.handle,(char *)&cmdreply,sizeof(cmdreply));
                 ret = 0;
             }
             break;
@@ -248,20 +259,24 @@ static int task_rcvmsg_entry( void *args)
 
 static int task_reportmsg_entry(void *args)
 {
-    int ret;
+    int ret = -1;
     oc_config_param_t      oc_param;
     (void) memset(&oc_param,0,sizeof(oc_param));
     oc_param.app_server.address = CN_APP_SERVERIP;
     oc_param.app_server.port = CN_APP_SERVERPORT;
     oc_param.app_server.ep_id = CN_APP_DEVICEID;
+
+#ifdef CONFIG_DTLS_MODE
     oc_param.app_server.psk = (char *)&g_device_psk[0];
     oc_param.app_server.psk_len = sizeof(g_device_psk);
     oc_param.app_server.psk_id = CN_APP_DEVICEID;
+#endif
+
     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
     oc_param.rcv_func = app_msg_rcvhook;
 
-    ret = oc_lwm2m_config( &oc_param);
-    if (0 != ret)
+    g_app_cb.handle = oc_coap_config( &oc_param);
+    if (NULL == g_app_cb.handle)
     {
         return ret;
     }
@@ -272,7 +287,7 @@ static int task_reportmsg_entry(void *args)
         score_display();
         app_propertyreport();
     }
-    return 0;
+    return ret;
 }
 
 

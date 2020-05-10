@@ -50,7 +50,7 @@ void coap_ticks(coap_tick_t *t)
 {
     unsigned long long ms = osal_sys_time();
 
-    *t += (ms / 1000 - coap_clock_offset) * COAP_TICKS_PER_SECOND +
+    *t = (ms / 1000 - coap_clock_offset) * COAP_TICKS_PER_SECOND +
           (ms % 1000) * COAP_TICKS_PER_SECOND / 1000;
 }
 

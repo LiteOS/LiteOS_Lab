@@ -65,8 +65,8 @@ typedef struct
     int                          f1_value;
     int                          f2_value;
     int                          light_status;
-}ocmqtt_app_t;
-static ocmqtt_app_t  g_ocmqtt_app;
+}app_cb_t;
+static app_cb_t  g_app_cb;
 
 static void indexinfo_display()
 {
@@ -82,7 +82,7 @@ static void score_display(void)
 {
     char  score_string[CN_SCORE_STRING];  ///< MAY NOT BE OVERRIDE
     score_string[CN_SCORE_STRING-1] = '\0';
-    snprintf(score_string,CN_SCORE_STRING-1," F1 %04d:%04d F2",g_ocmqtt_app.f1_value, g_ocmqtt_app.f2_value);
+    snprintf(score_string,CN_SCORE_STRING-1," F1 %04d:%04d F2",g_app_cb.f1_value, g_app_cb.f2_value);
     LCD_ShowString(10, 150, 240, 24, 24, score_string);
 }
 
@@ -102,23 +102,23 @@ static int app_propertyreport(void)
     reportproperty.nxt = NULL;
 
     f1_property.key = "f1";
-    f1_property.value = &g_ocmqtt_app.f1_value;
+    f1_property.value = &g_app_cb.f1_value;
     f1_property.type = EN_OC_MQTT_PROFILE_VALUE_INT;
     f1_property.nxt = &f2_property;
 
     f2_property.key = "f2";
-    f2_property.value = &g_ocmqtt_app.f2_value;
+    f2_property.value = &g_app_cb.f2_value;
     f2_property.type = EN_OC_MQTT_PROFILE_VALUE_INT;
     f2_property.nxt = &light_property;
 
     light_property.nxt = NULL;
     light_property.key = "LightStatus";
     light_property.type = EN_OC_MQTT_PROFILE_VALUE_INT;
-    light_property.value = &g_ocmqtt_app.light_status;
+    light_property.value = &g_app_cb.light_status;
 
     ret = oc_mqtt_profile_propertyreport(NULL,&reportproperty);
     LINK_LOG_DEBUG("REPORT:F1:%d F2:%d  Light:%d RET:%d",\
-            g_ocmqtt_app.f1_value,g_ocmqtt_app.f2_value,g_ocmqtt_app.light_status,ret);
+            g_app_cb.f1_value,g_app_cb.f2_value,g_app_cb.light_status,ret);
 
 
     return ret;
@@ -164,7 +164,7 @@ static int app_msg_rcvhook(oc_mqtt_profile_msgrcv_t *msg)
         datalen = msg->msg_len;
         (void) memcpy(buf,msg->msg,datalen);
         buf[datalen] = '\0';
-        ret = queue_push(g_ocmqtt_app.rcvmsgqueue,demo_msg,10);
+        ret = queue_push(g_app_cb.rcvmsgqueue,demo_msg,10);
         if(ret != 0)
         {
             osal_free(demo_msg);
@@ -228,13 +228,13 @@ static void oc_cmd_deal(oc_mqtt_profile_msgrcv_t *demo_msg)
         {
             goto EXIT_LIGHTPARA;
         }
-        g_ocmqtt_app.light_status = obj_para->valueint;
+        g_app_cb.light_status = obj_para->valueint;
         cmdret = 0;
     }
     else if(0 == strcmp(cJSON_GetStringValue(obj_cmdname),"ScoreClear"))
     {
-        g_ocmqtt_app.f1_value = 0;
-        g_ocmqtt_app.f2_value = 0;
+        g_app_cb.f1_value = 0;
+        g_app_cb.f2_value = 0;
         score_display();
         cmdret = 0;
     }
@@ -305,7 +305,7 @@ static int task_rcvmsg_entry( void *args)
     while(1)
     {
         demo_msg = NULL;
-        (void)queue_pop(g_ocmqtt_app.rcvmsgqueue,(void **)&demo_msg,(int)cn_osal_timeout_forever);
+        (void)queue_pop(g_app_cb.rcvmsgqueue,(void **)&demo_msg,(int)cn_osal_timeout_forever);
         if(NULL != demo_msg)
         {
             (void) oc_msg_deal(demo_msg);
@@ -342,7 +342,7 @@ static int task_reportmsg_entry(void *args)
     score_display();
     while(1)  //do the loop here
     {
-        osal_semp_pend(g_ocmqtt_app.reportsync, cn_osal_timeout_forever);
+        osal_semp_pend(g_app_cb.reportsync, cn_osal_timeout_forever);
         score_display();
         app_propertyreport();
     }
@@ -354,8 +354,8 @@ void EXTI1_IRQHandler(void *arg)
 {
     if(RESET != exti_interrupt_flag_get(EXTI_1)){
         exti_interrupt_flag_clear(EXTI_1);
-        g_ocmqtt_app.f1_value++;
-        osal_semp_post(g_ocmqtt_app.reportsync);
+        g_app_cb.f1_value++;
+        osal_semp_post(g_app_cb.reportsync);
     }
 }
 
@@ -363,8 +363,8 @@ void EXTI0_IRQHandler(void *arg)
 {
     if(RESET != exti_interrupt_flag_get(EXTI_0)){
         exti_interrupt_flag_clear(EXTI_0);
-        g_ocmqtt_app.f2_value++;
-        osal_semp_post(g_ocmqtt_app.reportsync);
+        g_app_cb.f2_value++;
+        osal_semp_post(g_app_cb.reportsync);
     }
 }
 
@@ -393,13 +393,13 @@ int standard_app_demo_main()
     int ret = -1;
     LINK_LOG_DEBUG("DO THE OC MQTT V5 DEMOS\n\r");
     HardWare_Init();
-    if(false == osal_semp_create(&g_ocmqtt_app.reportsync,1,0))
+    if(false == osal_semp_create(&g_app_cb.reportsync,1,0))
     {
         LINK_LOG_ERROR("Create report sync failed");
         goto EXIT_SEMPSYNC;
     }
-    g_ocmqtt_app.rcvmsgqueue = queue_create("queue_rcvmsg",2,1);
-    if(NULL ==  g_ocmqtt_app.rcvmsgqueue)
+    g_app_cb.rcvmsgqueue = queue_create("queue_rcvmsg",2,1);
+    if(NULL ==  g_app_cb.rcvmsgqueue)
     {
         LINK_LOG_ERROR("Create receive msg queue failed");
         goto EXIT_QUEUE;
@@ -411,7 +411,7 @@ int standard_app_demo_main()
 
 
 EXIT_QUEUE:
-    osal_semp_del(g_ocmqtt_app.reportsync);
+    osal_semp_del(g_app_cb.reportsync);
 EXIT_SEMPSYNC:
     return ret;
 }

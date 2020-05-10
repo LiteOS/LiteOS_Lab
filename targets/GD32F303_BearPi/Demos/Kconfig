@@ -53,7 +53,12 @@ choice Demo
         
     config OCLWM2M_APP
         bool "OCLWM2M_APP"
-        select OCLWM2M_ENABLE	
+        select OCLWM2M_ENABLE
+    
+    config OCCOAP_APP
+        bool "OCCOAP_APP"
+        select OCCOAP_ENABLE    
+        	
 endchoice
 endif
 

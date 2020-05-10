@@ -81,5 +81,7 @@
 	
 include $(TARGET_DIR)/Demos/ocmqtt_app/build.mk
 include $(TARGET_DIR)/Demos/oclwm2m_app/build.mk
+include $(TARGET_DIR)/Demos/occoap_app/build.mk
+
 
 	
