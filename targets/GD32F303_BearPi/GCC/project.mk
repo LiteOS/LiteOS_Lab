@@ -38,11 +38,10 @@ USER_SRC =  \
         $(TARGET_DIR)/Src/systick.c \
         $(TARGET_DIR)/Src/BearPi-IoT_gd32f303.c \
         $(TARGET_DIR)/Src/uart_debug.c \
+        $(TARGET_DIR)/Src/i2c.c \
         $(TARGET_DIR)/Src/Huawei_IoT_QR_Code.c
         C_SOURCES += $(USER_SRC)  
         
-
-
 OS_CONFIG_INC = \
         -I $(TARGET_DIR)/OS_CONFIG
         C_INCLUDES += $(OS_CONFIG_INC)       

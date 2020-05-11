@@ -40,19 +40,28 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
-#include <iot_link_config.h>
+#include <link_log.h>
 #include <queue.h>
 #include <oc_lwm2m_al.h>
 #include <link_endian.h>
 #include <lcd.h>
+#include <E53_SC1.h>
 #include "BearPi-IoT_gd32f303.h"
 
-
+#ifdef CONFIG_OCLWM2M_APP_DTLSMODE
 #define CN_APP_SERVERIP       "iot-coaps.cn-north-4.myhuaweicloud.com"
 #define CN_APP_SERVERPORT     "5684"
 #define CN_APP_DEVICEID       "Lwm2mBoard001"
-
 static uint8_t  g_device_psk[]={0x01,0x02,0x03,0x04,0x05,0x06};
+
+#else
+
+#define CN_APP_SERVERIP       "iot-coaps.cn-north-4.myhuaweicloud.com"
+#define CN_APP_SERVERPORT     "5683"
+#define CN_APP_DEVICEID       "Lwm2mBoard002"
+
+#endif
+
 
 typedef struct
 {
@@ -212,9 +221,24 @@ static int  oc_msg_deal(appmsg_down_t *demo_msg)
             {
                 memcpy(&lighctrl,demo_msg->msg,sizeof(lighctrl));
                 g_app_cb.light_status = ntohl(lighctrl.light_cmd);
+                cmdreply.cmdcode = 0;
+
+                if(g_app_cb.light_status == EN_SCORELIGHT_CMD_ON)
+                {
+                    E53_SC1_LED_StatusSet(ON);
+                    LINK_LOG_DEBUG("LIGHT ON");
+                }
+                else if(g_app_cb.light_status == EN_SCORELIGHT_CMD_OFF)
+                {
+                    E53_SC1_LED_StatusSet(OFF);
+                    LINK_LOG_DEBUG("LIGHT OFF");
+                }
+                else
+                {
+                    cmdreply.cmdcode = 1;
+                }
                 cmdreply.msgid = EN_APPMSG_ID_REPLYLIGHTCTRL;
                 cmdreply.mid = lighctrl.mid;
-                cmdreply.cmdcode = 0;
                 (void)oc_lwm2m_report((char *)&cmdreply,sizeof(cmdreply),1000);
                 ret = 0;
             }
@@ -223,10 +247,10 @@ static int  oc_msg_deal(appmsg_down_t *demo_msg)
             break;
     }
 
-    if(ret == 0)
-    {
-        app_propertyreport();
-    }
+//    if(ret == 0)
+//    {
+//        app_propertyreport();
+//    }
     return ret;
 }
 
@@ -254,9 +278,13 @@ static int task_reportmsg_entry(void *args)
     oc_param.app_server.address = CN_APP_SERVERIP;
     oc_param.app_server.port = CN_APP_SERVERPORT;
     oc_param.app_server.ep_id = CN_APP_DEVICEID;
+
+#ifdef CONFIG_OCLWM2M_APP_DTLSMODE
     oc_param.app_server.psk = (char *)&g_device_psk[0];
     oc_param.app_server.psk_len = sizeof(g_device_psk);
     oc_param.app_server.psk_id = CN_APP_DEVICEID;
+#endif
+
     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
     oc_param.rcv_func = app_msg_rcvhook;
 
@@ -300,6 +328,7 @@ void HardWare_Init(void)
     /* configure systick */
     systick_config();
 
+    Init_E53_SC1();
     LCD_Init();
     LCD_Clear(BLACK);
     POINT_COLOR = GREEN;
@@ -317,7 +346,7 @@ void HardWare_Init(void)
 int standard_app_demo_main()
 {
     int ret = -1;
-    LINK_LOG_DEBUG("DO THE OC MQTT V5 DEMOS\n\r");
+    LINK_LOG_DEBUG("DO THE OC LWM2M DEMOS\n\r");
     HardWare_Init();
     if(false == osal_semp_create(&g_app_cb.reportsync,1,0))
     {
