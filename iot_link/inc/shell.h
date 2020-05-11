@@ -40,10 +40,13 @@
 #ifndef __OSSHELL_H
 #define __OSSHELL_H
 
-#if CONFIG_SHELL_ENABLE
 
 #include <stdint.h>
 #include <stddef.h>
+#include <link_log.h>
+
+#if CONFIG_SHELL_ENABLE
+
 //this is a shell module designed for the os
 //this is a shell type,maybe a command or the data variables
 enum en_os_shell_type

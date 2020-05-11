@@ -46,8 +46,7 @@ rsource "./network/kconfig_network"
 
 rsource "./oc/Kconfig"
 
-
-rsource "./shell/kconfig_shell"    
+rsource "./shell/Kconfig"    
      
 config IOT_LINK_CONFIGFILE
     string "The specified Configuration Header"
