@@ -54,9 +54,6 @@ this file implement the shell for the system.the following instruction you must 
 
 /**************************************FILE INCLIUDES**************************/
 
-
-
-
 #include <stdint.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -397,12 +394,12 @@ static int shell_server_entry(void *args)
                         //only one cmd matched, insert the matched cmd at current cursor
                         shell_insert_string(&shell_cmd_cache, matches->matches[0] + shell_cmd_cache.curoffset);
                     } else if (matches->len > 1) {
-                        LINK_LOG_DEBUG("\n\r");
+                        link_printf("\n\r");
                         for (int i = 0; i < matches->len; i++) {
                             shell_put_string(matches->matches[i]);
                             shell_put_char('\t');
                         }
-                        LINK_LOG_DEBUG("\n\r");
+                        link_printf("\n\r");
                         shell_put_index();
                         shell_put_string(shell_cmd_cache.curcmd);
                         shell_moves_cursor_left(strlen(shell_cmd_cache.curcmd) - shell_cmd_cache.curoffset);
@@ -416,7 +413,7 @@ static int shell_server_entry(void *args)
                 break;
             case CN_KEY_LF:      //execute the command here, and push the command to the history cache
                 if(strlen(shell_cmd_cache.curcmd) != 0){
-                    LINK_LOG_DEBUG("\n\r");
+                    link_printf("\n\r");
                     //copy the current to the history cache if the current command is not none
                     shell_cachecmd(&shell_cmd_cache);//must do before the execute,execute will split the string
                     shell_cmd_execute(shell_cmd_cache.curcmd);  //execute the command
@@ -430,7 +427,7 @@ static int shell_server_entry(void *args)
                 break;
             case CN_KEY_CR:      //execute the command here, and push the command to the history cache
                 if(strlen(shell_cmd_cache.curcmd) != 0){
-                    LINK_LOG_DEBUG("\n\r");
+                    link_printf("\n\r");
                     //copy the current to the history cache if the current command is not none
                     shell_cachecmd(&shell_cmd_cache);//must do before the execute,execute will split the string
                     shell_cmd_execute(shell_cmd_cache.curcmd);  //execute the command

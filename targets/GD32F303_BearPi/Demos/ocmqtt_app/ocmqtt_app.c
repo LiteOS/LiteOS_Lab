@@ -46,7 +46,8 @@
 #include <oc_mqtt_profile.h>
 
 #include <lcd.h>
-#include "BearPi-IoT_gd32f303.h"
+#include <E53_SC1.h>
+#include <BearPi-IoT_gd32f303.h>
 ///< and i think the platform will make the timeout much longer and fix this problem
 ///< for the MCU has weak compute ability, and the new CERT FILE of platform is very big, so should not use tls for the MCUS
 ///< 1.设备接入服务重新更新了证书以及加密套件，椭圆加密算法算法需要大算力去链接服务器，因此对月MCU而言，请选择非加密方案
@@ -219,10 +220,12 @@ static void oc_cmd_deal(oc_mqtt_profile_msgrcv_t *demo_msg)
         {
 
             LINK_LOG_DEBUG("LIGHT ON");
+            E53_SC1_LED_StatusSet(ON);
         }
         else if(obj_para->valueint == (int)EN_SCORELIGHT_CMD_OFF)
         {
             LINK_LOG_DEBUG("LIGHT OFF");
+            E53_SC1_LED_StatusSet(OFF);
         }
         else
         {
@@ -315,10 +318,6 @@ static int task_rcvmsg_entry( void *args)
     return 0;
 }
 
-
-
-
-
 static int task_reportmsg_entry(void *args)
 {
     int ret;
@@ -377,6 +376,7 @@ void HardWare_Init(void)
     LCD_Init();
     LCD_Clear(BLACK);
     POINT_COLOR = GREEN;
+    Init_E53_SC1();
 
     indexinfo_display();
     /* enable the F1 key GPIO clock */

@@ -19,13 +19,13 @@
 uint8_t BUF[2];
 int result;
 
-void delay_us(uint32_t n)
+static void delay_us(uint32_t n)
 {
 	uint8_t j;
 	while(n--)
 	for(j=0;j<10;j++);
 }
-void delay_ms(uint32_t n)
+static void delay_ms(uint32_t n)
 {
 	while(n--)
 	delay_us(1000);
@@ -46,9 +46,11 @@ void BH1750_I2C_Master_Transmit(uint8_t slaveAddr,uint8_t *pBuffer,uint8_t NumBy
     /* clear ADDSEND bit */
     i2c_flag_clear(I2C0, I2C_FLAG_ADDSEND);
     /* wait until the transmit data buffer is empty */
-    while(!i2c_flag_get(I2C0, I2C_FLAG_TBE));
-	
-	  for(int i = 0;i < NumByteToRead;i++) 
+    while(!i2c_flag_get(I2C0, I2C_FLAG_TBE))
+    {
+
+    }
+	for(int i = 0;i < NumByteToRead;i++)
     {
       /* data transmission */
       i2c_data_transmit(I2C0, pBuffer[i]);
@@ -103,7 +105,10 @@ void BH1750_I2C_Master_Receive(uint8_t slaveAddr, uint8_t* pBuffer, uint8_t NumB
 			i2c_stop_on_bus(I2C0);
 		}
 		/* wait until the RBNE bit is set */
-        while(!i2c_flag_get(I2C0, I2C_FLAG_RBNE));
+        while(!i2c_flag_get(I2C0, I2C_FLAG_RBNE))
+        {
+
+        }
 		/* Read a byte from the MPU6050 */
 		*pBuffer = i2c_data_receive(I2C0);
 		/* Point to the next location where the byte read will be saved */

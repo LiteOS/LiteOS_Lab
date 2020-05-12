@@ -18,6 +18,23 @@ if ATUART_ENABLE
         default "atdev"
 endif
 
+
+config E53_IA1
+    bool "E53_IA1 Enable"
+    default n
+    
+config E53_SC1
+    bool "E53_SC1 Enable"
+    default n
+    
+config E53_SF1
+    bool "E53_IA1 Enable"
+    default n
+    
+config E53_ST1
+    bool "E53_IA1 Enable"
+    default n
+
 config LCD_ENABLE
     bool "LCD enable"
     default y

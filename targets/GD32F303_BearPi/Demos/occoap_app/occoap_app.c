@@ -40,31 +40,25 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
-#include <iot_link_config.h>
+#include <link_log.h>
 #include <queue.h>
 #include <oc_coap_al.h>
 #include <link_endian.h>
 #include <lcd.h>
+#include <E53_SC1.h>
 #include "BearPi-IoT_gd32f303.h"
-
-
-//#define CONFIG_DTLS_MODE
 
 //#define CN_APP_SERVERIP       "iot-coaps.cn-north-4.myhuaweicloud.com"
 #define CN_APP_SERVERIP       "119.3.250.80"
 
-
-#ifdef CONFIG_DTLS_MODE
+#ifdef CONFIG_OCCOAP_APP_DTLSMODE
+#define CN_APP_DEVICEID       "CoapBoard001"
 #define CN_APP_SERVERPORT     "5684"
 static uint8_t  g_device_psk[]={0x01,0x02,0x03,0x04,0x05,0x06};
-
 #else
+#define CN_APP_DEVICEID       "CoapBoard002"
 #define CN_APP_SERVERPORT     "5683"
 #endif
-
-#define CN_APP_DEVICEID       "CoapBoard001"
-
-
 
 typedef struct
 {
@@ -223,9 +217,22 @@ static int  oc_msg_deal(appmsg_down_t *demo_msg)
             {
                 memcpy(&lighctrl,demo_msg->msg,sizeof(lighctrl));
                 g_app_cb.light_status = ntohl(lighctrl.light_cmd);
-                cmdreply.msgid = EN_APPMSG_ID_REPLYLIGHTCTRL;
-                cmdreply.mid = lighctrl.mid;
                 cmdreply.cmdcode = 0;
+
+                if(g_app_cb.light_status == EN_SCORELIGHT_CMD_ON)
+                {
+                    E53_SC1_LED_StatusSet(ON);
+                    LINK_LOG_DEBUG("LIGHT ON");
+                }
+                else if(g_app_cb.light_status == EN_SCORELIGHT_CMD_OFF)
+                {
+                    E53_SC1_LED_StatusSet(OFF);
+                    LINK_LOG_DEBUG("LIGHT OFF");
+                }
+                else
+                {
+                    cmdreply.cmdcode = 1;
+                }
                 (void)oc_coap_report(g_app_cb.handle,(char *)&cmdreply,sizeof(cmdreply));
                 ret = 0;
             }
@@ -266,7 +273,7 @@ static int task_reportmsg_entry(void *args)
     oc_param.app_server.port = CN_APP_SERVERPORT;
     oc_param.app_server.ep_id = CN_APP_DEVICEID;
 
-#ifdef CONFIG_DTLS_MODE
+#ifdef CONFIG_OCCOAP_APP_DTLSMODE
     oc_param.app_server.psk = (char *)&g_device_psk[0];
     oc_param.app_server.psk_len = sizeof(g_device_psk);
     oc_param.app_server.psk_id = CN_APP_DEVICEID;
@@ -319,6 +326,8 @@ void HardWare_Init(void)
     LCD_Clear(BLACK);
     POINT_COLOR = GREEN;
 
+    Init_E53_SC1();
+
     indexinfo_display();
     /* enable the F1 key GPIO clock */
     gd_eval_key_init(F1_KEY, KEY_MODE_EXTI);
@@ -332,7 +341,7 @@ void HardWare_Init(void)
 int standard_app_demo_main()
 {
     int ret = -1;
-    LINK_LOG_DEBUG("DO THE OC MQTT V5 DEMOS\n\r");
+    LINK_LOG_DEBUG("DO THE OCCOAP DEMOS\n\r");
     HardWare_Init();
     if(false == osal_semp_create(&g_app_cb.reportsync,1,0))
     {

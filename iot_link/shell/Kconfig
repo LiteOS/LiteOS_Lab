@@ -16,7 +16,7 @@ menu "Shell configuration"
     depends on LITEOS_ENABLE
 
 config SHELL_ENABLE
-    bool "Enable shell component. and we will select the LiteOS"
+    bool "Enable shell component"
     default n
 
 if SHELL_ENABLE
