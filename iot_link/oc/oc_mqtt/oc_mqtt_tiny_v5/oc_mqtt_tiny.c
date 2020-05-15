@@ -1234,10 +1234,6 @@ static int tiny_config(oc_mqtt_config_t *config)
 
         if(config->security.type == EN_DTLS_AL_SECURITY_TYPE_CERT)
         {
-            if(NULL == config->security.u.cert.server_ca)  ///< should config the server ca
-            {
-                return ret;
-            }
             if((NULL != config->security.u.cert.client_ca) && (NULL != config->security.u.cert.client_pk))
             {
                 cert_mode = 1;
