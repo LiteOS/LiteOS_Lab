@@ -73,7 +73,7 @@ int ota_flag_save(en_ota_type_t  otatype, ota_flag_t *flag)
 
 int ota_flag_get(en_ota_type_t  otatype,ota_flag_t *flag)
 {
-    int *ret = -1;
+    int ret = -1;
     uint32_t    crc;
     if((NULL != flag) && (otatype < EN_OTA_TYPE_LAST))
     {

@@ -64,39 +64,60 @@ static int jump_addr(void *addr)
 
 int loader_main(void)
 {
+    en_ota_err_t  otaret;
     ota_flag_t ota_flag;
     if(0 != ota_flag_get(CONFIG_APP_OTATYPE,&ota_flag))
     {
-        LINK_LOG_DEBUG("No OTA FLAG");
+        LINK_LOG_DEBUG("OTA FLAG MISSED:PLEASE CHECK FLAGIMG OR FLAGIMGREAD FUNCTION");
         goto EXIT;
     }
     ///< first check if we should do the upgrade
-    LINK_LOG_DEBUG("OTASTATUS:%d",(int)ota_flag.info.curstatus);
     if(ota_flag.info.curstatus != EN_OTA_STATUS_DOWNLOADED)
     {
-        LINK_LOG_DEBUG("No OTA need to do");
+        LINK_LOG_DEBUG("DO NORMAL BOOT.");
         goto EXIT;
-    }
-    ///< if we need do the upgrade, then do  the backup
-    if(EN_OTA_SUCCESS != ota_backup(CONFIG_APP_OTATYPE))
-    {
-        LINK_LOG_DEBUG("BACKUP failed");
     }
     else
     {
-        LINK_LOG_DEBUG("BACKUP success");
+        LINK_LOG_DEBUG("NOW OTA SEQUENCE START");
+    }
+    ///< if we need do the upgrade, then do  the backup
+    LINK_LOG_DEBUG("BACKUP START");
+    otaret = ota_backup(CONFIG_APP_OTATYPE);
+    if(EN_OTA_SUCCESS != otaret )
+    {
+        LINK_LOG_DEBUG("BACKUP FAILED:errcode:%d",(int)otaret);
+    }
+    else
+    {
+        LINK_LOG_DEBUG("BACKUP SUCCESS");
     }
 
     ///< if we backup success, then we do the upgrade
-    if(EN_OTA_SUCCESS != ota_patch(CONFIG_APP_OTATYPE,ota_flag.info.img_download.file_size))
+    LINK_LOG_DEBUG("PATCH START");
+    otaret =  ota_patch(CONFIG_APP_OTATYPE,ota_flag.info.img_download.file_size);
+    if(EN_OTA_SUCCESS != otaret)
     {
-        LINK_LOG_DEBUG("PATCH FAILED AND DO THE RECOVER");
+        LINK_LOG_DEBUG("PATCH FAILED:errcode:%d",(int)otaret);
         ota_flag.info.curstatus = EN_OTA_STATUS_UPGRADED_FAILED;
         (void)ota_flag_save(CONFIG_APP_OTATYPE,&ota_flag);
-        (void)ota_recover(CONFIG_APP_OTATYPE);
+
+        LINK_LOG_DEBUG("RECOVER START");
+        otaret =ota_recover(CONFIG_APP_OTATYPE);
+        if(EN_OTA_SUCCESS != otaret )
+        {
+            LINK_LOG_DEBUG("RECOVER FAILED:errcode:%d",(int)otaret);
+        }
+        else
+        {
+            LINK_LOG_DEBUG("RECOVER SUCCESS");
+        }
         goto EXIT;
     }
-    LINK_LOG_DEBUG("PATCH SUCCESS");
+    else
+    {
+        LINK_LOG_DEBUG("PATCH SUCCESS");
+    }
     ota_flag.info.curstatus = EN_OTA_STATUS_UPGRADED_SUCCESS;
     (void)ota_flag_save(CONFIG_APP_OTATYPE,&ota_flag);
 
@@ -106,40 +127,9 @@ EXIT:
     return 0;  ///< maybe never come back
 }
 
-static int loader_shell(int argc, const char *argv[])
-{
-    void *addr = (void *)CONFIG_OTA_APPADDR;
-    if(argc == 2)
-    {
-        addr = (void *)strtol(argv[1],NULL,0);
-    }
-    jump_addr(addr);
-    return 0;///< never comeback
-}
-
-
-#if CONFIG_LITEOS_ENABLE
-
-#include <shell.h>
-OSSHELL_EXPORT_CMD(loader_shell,"loader","loader addr");
-#endif
-
-#if CONFIG_NOVAOS_ENABLE
-
-#include <cmder.h>
-static int nova_command( cmder_t *cer,int argc,char *argv[])
-{
-
-    return ota_update(argc, (const char **)argv);
-}
-
-CMDER_CMD_DEF ("loader","loader addr",nova_command);
-#endif
-
-
 int standard_app_demo_main(void)
 {
-    LINK_LOG_DEBUG("%s:This is the loader main function\n\r",__FUNCTION__);
+    LINK_LOG_DEBUG("This is the LOADER and DO OTA CHECK");
     extern int loader_main(void);
     loader_main();
     return 0;

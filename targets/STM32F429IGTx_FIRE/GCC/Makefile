@@ -119,13 +119,8 @@ CFLAGS += -Wno-missing-braces
 
 # libraries
 LIBS += -lc -lm -lnosys
-ifeq ($(USE_OTA), yes)
-LIBS += -lhwpatch
-endif
-LIBDIR  += -L$(PROJECTBASE)/../Lib
 LDFLAGS += $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 LDFLAGS += -u _printf_float
-
 
 TARGET_DIR = $(BUILD_DIR)
 ############HERE WE GET THE C_OBJECT S_OBJECT AND THE PATH #####################

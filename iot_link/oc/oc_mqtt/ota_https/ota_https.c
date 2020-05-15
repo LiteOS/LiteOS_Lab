@@ -387,6 +387,7 @@ int ota_https_download(ota_https_para_t *param)
     if(param->file_size == param->file_offset)
     {
         otaflag.info.curstatus = EN_OTA_STATUS_DOWNLOADED;
+        ret = 0;
     }
     (void)ota_img_flush(otatype, EN_OTA_IMG_DOWNLOAD);
     (void)ota_flag_save(otatype,&otaflag);
@@ -400,7 +401,6 @@ int ota_https_download(ota_https_para_t *param)
     {
         LINK_LOG_DEBUG("FLAG SAVE OK");
     }
-    ret = 0;
 
 EXIT_HTTPHEADER:
 EXIT_REQSEND:
@@ -413,47 +413,6 @@ EXIT_PARAM:
     return ret;
 }
 
-static ota_https_para_t  g_otahttps_cb;
-static int http_ota(void *arg)
-{
-    memset(&g_otahttps_cb,0,sizeof(g_otahttps_cb));
-    g_otahttps_cb.authorize = "931e1c61410544f3fff5d3ac929b5819bf90d4607e4bcf413fe0de60b0a985a5";
-    g_otahttps_cb.url = "https://121.36.42.100:8943/iodm/dev/v2.0/upgradefile/applications/qOrU58z7TMg2fao5xceWanjjQSAa/devices/5e12ea0a334dd4f337902dc3_iotlink005/packages/b2731c6b96178488a8862ace";
-    g_otahttps_cb.file_size = 13183;
-    g_otahttps_cb.file_offset = 0;
-    g_otahttps_cb.version = "V2.10_TEST";
-    ota_https_download(&g_otahttps_cb);
-    return 0;
-}
-
-static int http_otacmd(int argc, const char *argv)
-{
-    osal_task_create("httpota",http_ota,NULL,0x1000,NULL,10);
-    return 0;
-}
-
-
-#if CONFIG_LITEOS_ENABLE
-
-#include <shell.h>
-
-OSSHELL_EXPORT_CMD(http_otacmd,"otahttp","otahttp");
-
-#endif
-
-#if CONFIG_NOVAOS_ENABLE
-
-#include <cmder.h>
-
-static int nova_command( cmder_t *cer,int argc,char *argv[])
-{
-
-    return http_otacmd(argc, (const char **)argv);
-}
-
-CMDER_CMD_DEF ("otahhtp","otahttp",nova_command);
-
-#endif
 
 
 
