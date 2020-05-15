@@ -1,0 +1,943 @@
+ARM GAS  /tmp/ccYbdji6.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"partition.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.bss.s_partition,"aw",%nobits
+  18              		.align	2
+  21              	s_partition:
+  22 0000 00000000 		.space	4
+  23              		.section	.bss.max_part_num,"aw",%nobits
+  24              		.align	2
+  27              	max_part_num:
+  28 0000 00000000 		.space	4
+  29              		.section	.text.storage_partition_init,"ax",%progbits
+  30              		.align	1
+  31              		.global	storage_partition_init
+  32              		.arch armv7e-m
+  33              		.syntax unified
+  34              		.thumb
+  35              		.thumb_func
+  36              		.fpu fpv4-sp-d16
+  38              	storage_partition_init:
+  39              	.LFB3:
+  40              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** #include "partition.h"
+   2:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** #include "storage.h"
+   3:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** 
+   4:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** #include <stdio.h>
+   5:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** #include <link_log.h>
+   6:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** 
+   7:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** static const storage_partition *s_partition = NULL;
+   8:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** static int max_part_num = 0;
+   9:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** int storage_partition_init(storage_partition *part, int32_t max_num)
+  10:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** {
+  41              		.loc 1 10 1
+  42              		.cfi_startproc
+  43              		@ args = 0, pretend = 0, frame = 8
+  44              		@ frame_needed = 1, uses_anonymous_args = 0
+  45              		@ link register save eliminated.
+  46 0000 80B4     		push	{r7}
+  47              	.LCFI0:
+  48              		.cfi_def_cfa_offset 4
+  49              		.cfi_offset 7, -4
+  50 0002 83B0     		sub	sp, sp, #12
+  51              	.LCFI1:
+  52              		.cfi_def_cfa_offset 16
+ARM GAS  /tmp/ccYbdji6.s 			page 2
+
+
+  53 0004 00AF     		add	r7, sp, #0
+  54              	.LCFI2:
+  55              		.cfi_def_cfa_register 7
+  56 0006 7860     		str	r0, [r7, #4]
+  57 0008 3960     		str	r1, [r7]
+  11:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   if (part != NULL && s_partition == NULL) {
+  58              		.loc 1 11 6
+  59 000a 7B68     		ldr	r3, [r7, #4]
+  60 000c 002B     		cmp	r3, #0
+  61 000e 0BD0     		beq	.L2
+  62              		.loc 1 11 35 discriminator 1
+  63 0010 094B     		ldr	r3, .L4
+  64 0012 1B68     		ldr	r3, [r3]
+  65              		.loc 1 11 20 discriminator 1
+  66 0014 002B     		cmp	r3, #0
+  67 0016 07D1     		bne	.L2
+  12:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****     s_partition = part;
+  68              		.loc 1 12 17
+  69 0018 074A     		ldr	r2, .L4
+  70 001a 7B68     		ldr	r3, [r7, #4]
+  71 001c 1360     		str	r3, [r2]
+  13:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****     max_part_num = max_num;
+  72              		.loc 1 13 18
+  73 001e 074A     		ldr	r2, .L4+4
+  74 0020 3B68     		ldr	r3, [r7]
+  75 0022 1360     		str	r3, [r2]
+  14:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****     return 0;
+  76              		.loc 1 14 12
+  77 0024 0023     		movs	r3, #0
+  78 0026 01E0     		b	.L3
+  79              	.L2:
+  15:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   }
+  16:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   return -1;
+  80              		.loc 1 16 10
+  81 0028 4FF0FF33 		mov	r3, #-1
+  82              	.L3:
+  17:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** }
+  83              		.loc 1 17 1
+  84 002c 1846     		mov	r0, r3
+  85 002e 0C37     		adds	r7, r7, #12
+  86              	.LCFI3:
+  87              		.cfi_def_cfa_offset 4
+  88 0030 BD46     		mov	sp, r7
+  89              	.LCFI4:
+  90              		.cfi_def_cfa_register 13
+  91              		@ sp needed
+  92 0032 5DF8047B 		ldr	r7, [sp], #4
+  93              	.LCFI5:
+  94              		.cfi_restore 7
+  95              		.cfi_def_cfa_offset 0
+  96 0036 7047     		bx	lr
+  97              	.L5:
+  98              		.align	2
+  99              	.L4:
+ 100 0038 00000000 		.word	s_partition
+ 101 003c 00000000 		.word	max_part_num
+ 102              		.cfi_endproc
+ARM GAS  /tmp/ccYbdji6.s 			page 3
+
+
+ 103              	.LFE3:
+ 105              		.section	.text.storage_partition_deinit,"ax",%progbits
+ 106              		.align	1
+ 107              		.global	storage_partition_deinit
+ 108              		.syntax unified
+ 109              		.thumb
+ 110              		.thumb_func
+ 111              		.fpu fpv4-sp-d16
+ 113              	storage_partition_deinit:
+ 114              	.LFB4:
+  18:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** 
+  19:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** int storage_partition_deinit()
+  20:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** {
+ 115              		.loc 1 20 1
+ 116              		.cfi_startproc
+ 117              		@ args = 0, pretend = 0, frame = 0
+ 118              		@ frame_needed = 1, uses_anonymous_args = 0
+ 119              		@ link register save eliminated.
+ 120 0000 80B4     		push	{r7}
+ 121              	.LCFI6:
+ 122              		.cfi_def_cfa_offset 4
+ 123              		.cfi_offset 7, -4
+ 124 0002 00AF     		add	r7, sp, #0
+ 125              	.LCFI7:
+ 126              		.cfi_def_cfa_register 7
+  21:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   if (s_partition != NULL) {
+ 127              		.loc 1 21 19
+ 128 0004 094B     		ldr	r3, .L9
+ 129 0006 1B68     		ldr	r3, [r3]
+ 130              		.loc 1 21 6
+ 131 0008 002B     		cmp	r3, #0
+ 132 000a 07D0     		beq	.L7
+  22:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****     s_partition = NULL;
+ 133              		.loc 1 22 17
+ 134 000c 074B     		ldr	r3, .L9
+ 135 000e 0022     		movs	r2, #0
+ 136 0010 1A60     		str	r2, [r3]
+  23:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****     max_part_num = 0;
+ 137              		.loc 1 23 18
+ 138 0012 074B     		ldr	r3, .L9+4
+ 139 0014 0022     		movs	r2, #0
+ 140 0016 1A60     		str	r2, [r3]
+  24:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****     return 0;
+ 141              		.loc 1 24 12
+ 142 0018 0023     		movs	r3, #0
+ 143 001a 01E0     		b	.L8
+ 144              	.L7:
+  25:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   }
+  26:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   return -1;
+ 145              		.loc 1 26 10
+ 146 001c 4FF0FF33 		mov	r3, #-1
+ 147              	.L8:
+  27:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** }
+ 148              		.loc 1 27 1
+ 149 0020 1846     		mov	r0, r3
+ 150 0022 BD46     		mov	sp, r7
+ 151              	.LCFI8:
+ARM GAS  /tmp/ccYbdji6.s 			page 4
+
+
+ 152              		.cfi_def_cfa_register 13
+ 153              		@ sp needed
+ 154 0024 5DF8047B 		ldr	r7, [sp], #4
+ 155              	.LCFI9:
+ 156              		.cfi_restore 7
+ 157              		.cfi_def_cfa_offset 0
+ 158 0028 7047     		bx	lr
+ 159              	.L10:
+ 160 002a 00BF     		.align	2
+ 161              	.L9:
+ 162 002c 00000000 		.word	s_partition
+ 163 0030 00000000 		.word	max_part_num
+ 164              		.cfi_endproc
+ 165              	.LFE4:
+ 167              		.section	.rodata
+ 168              		.align	2
+ 169              	.LC0:
+ 170 0000 5B25735D 		.ascii	"[%s][%u][%s:%d] %s:invalid args!\012\015\012\000"
+ 170      5B25755D 
+ 170      5B25733A 
+ 170      25645D20 
+ 170      25733A69 
+ 171              		.section	.text.storage_partition_read,"ax",%progbits
+ 172              		.align	1
+ 173              		.global	storage_partition_read
+ 174              		.syntax unified
+ 175              		.thumb
+ 176              		.thumb_func
+ 177              		.fpu fpv4-sp-d16
+ 179              	storage_partition_read:
+ 180              	.LFB5:
+  28:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** 
+  29:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** int storage_partition_read(int part_id, uint8_t *buf, uint32_t len, uint32_t offset)
+  30:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** {
+ 181              		.loc 1 30 1
+ 182              		.cfi_startproc
+ 183              		@ args = 0, pretend = 0, frame = 24
+ 184              		@ frame_needed = 1, uses_anonymous_args = 0
+ 185 0000 90B5     		push	{r4, r7, lr}
+ 186              	.LCFI10:
+ 187              		.cfi_def_cfa_offset 12
+ 188              		.cfi_offset 4, -12
+ 189              		.cfi_offset 7, -8
+ 190              		.cfi_offset 14, -4
+ 191 0002 89B0     		sub	sp, sp, #36
+ 192              	.LCFI11:
+ 193              		.cfi_def_cfa_offset 48
+ 194 0004 02AF     		add	r7, sp, #8
+ 195              	.LCFI12:
+ 196              		.cfi_def_cfa 7, 40
+ 197 0006 F860     		str	r0, [r7, #12]
+ 198 0008 B960     		str	r1, [r7, #8]
+ 199 000a 7A60     		str	r2, [r7, #4]
+ 200 000c 3B60     		str	r3, [r7]
+  31:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   const storage_partition *sp;
+  32:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** 
+  33:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   if (part_id >= max_part_num || buf == NULL)
+ARM GAS  /tmp/ccYbdji6.s 			page 5
+
+
+ 201              		.loc 1 33 15
+ 202 000e 224B     		ldr	r3, .L17
+ 203 0010 1B68     		ldr	r3, [r3]
+ 204              		.loc 1 33 6
+ 205 0012 FA68     		ldr	r2, [r7, #12]
+ 206 0014 9A42     		cmp	r2, r3
+ 207 0016 02DA     		bge	.L12
+ 208              		.loc 1 33 31 discriminator 1
+ 209 0018 BB68     		ldr	r3, [r7, #8]
+ 210 001a 002B     		cmp	r3, #0
+ 211 001c 02D1     		bne	.L13
+ 212              	.L12:
+  34:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****     return -1;
+ 213              		.loc 1 34 12
+ 214 001e 4FF0FF33 		mov	r3, #-1
+ 215 0022 34E0     		b	.L14
+ 216              	.L13:
+  35:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** 
+  36:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   sp = &s_partition[part_id];
+ 217              		.loc 1 36 8
+ 218 0024 1D4B     		ldr	r3, .L17+4
+ 219 0026 1A68     		ldr	r2, [r3]
+ 220              		.loc 1 36 20
+ 221 0028 FB68     		ldr	r3, [r7, #12]
+ 222 002a 1B01     		lsls	r3, r3, #4
+ 223              		.loc 1 36 6
+ 224 002c 1344     		add	r3, r3, r2
+ 225 002e 7B61     		str	r3, [r7, #20]
+  37:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   if ((offset + len) > (sp->start_addr + sp->size)) {
+ 226              		.loc 1 37 15
+ 227 0030 3A68     		ldr	r2, [r7]
+ 228 0032 7B68     		ldr	r3, [r7, #4]
+ 229 0034 1A44     		add	r2, r2, r3
+ 230              		.loc 1 37 27
+ 231 0036 7B69     		ldr	r3, [r7, #20]
+ 232 0038 9968     		ldr	r1, [r3, #8]
+ 233              		.loc 1 37 44
+ 234 003a 7B69     		ldr	r3, [r7, #20]
+ 235 003c DB68     		ldr	r3, [r3, #12]
+ 236              		.loc 1 37 40
+ 237 003e 0B44     		add	r3, r3, r1
+ 238              		.loc 1 37 6
+ 239 0040 9A42     		cmp	r2, r3
+ 240 0042 18D9     		bls	.L15
+  38:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****     LINK_LOG_DEBUG("%s:invalid args!\n", __func__);
+ 241              		.loc 1 38 5
+ 242 0044 FFF7FEFF 		bl	link_log_level_get
+ 243 0048 0346     		mov	r3, r0
+ 244 004a 012B     		cmp	r3, #1
+ 245 004c 10D8     		bhi	.L16
+ 246              		.loc 1 38 5 is_stmt 0 discriminator 1
+ 247 004e 0120     		movs	r0, #1
+ 248 0050 FFF7FEFF 		bl	link_log_level_name
+ 249 0054 0446     		mov	r4, r0
+ 250 0056 FFF7FEFF 		bl	osal_sys_time
+ 251 005a 0246     		mov	r2, r0
+ 252 005c 0B46     		mov	r3, r1
+ARM GAS  /tmp/ccYbdji6.s 			page 6
+
+
+ 253 005e 104B     		ldr	r3, .L17+8
+ 254 0060 0193     		str	r3, [sp, #4]
+ 255 0062 2623     		movs	r3, #38
+ 256 0064 0093     		str	r3, [sp]
+ 257 0066 0F4B     		ldr	r3, .L17+12
+ 258 0068 2146     		mov	r1, r4
+ 259 006a 0F48     		ldr	r0, .L17+16
+ 260 006c FFF7FEFF 		bl	printf
+ 261              	.L16:
+  39:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****     return -1;
+ 262              		.loc 1 39 12 is_stmt 1
+ 263 0070 4FF0FF33 		mov	r3, #-1
+ 264 0074 0BE0     		b	.L14
+ 265              	.L15:
+  40:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   }
+  41:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** 
+  42:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   return storage_device_read(sp->dev_id, buf, len, sp->start_addr + offset);
+ 266              		.loc 1 42 32
+ 267 0076 7B69     		ldr	r3, [r7, #20]
+ 268 0078 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 269              		.loc 1 42 10
+ 270 007a 1846     		mov	r0, r3
+ 271              		.loc 1 42 54
+ 272 007c 7B69     		ldr	r3, [r7, #20]
+ 273 007e 9A68     		ldr	r2, [r3, #8]
+ 274              		.loc 1 42 10
+ 275 0080 3B68     		ldr	r3, [r7]
+ 276 0082 1344     		add	r3, r3, r2
+ 277 0084 7A68     		ldr	r2, [r7, #4]
+ 278 0086 B968     		ldr	r1, [r7, #8]
+ 279 0088 FFF7FEFF 		bl	storage_device_read
+ 280 008c 0346     		mov	r3, r0
+ 281              	.L14:
+  43:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** }
+ 282              		.loc 1 43 1
+ 283 008e 1846     		mov	r0, r3
+ 284 0090 1C37     		adds	r7, r7, #28
+ 285              	.LCFI13:
+ 286              		.cfi_def_cfa_offset 12
+ 287 0092 BD46     		mov	sp, r7
+ 288              	.LCFI14:
+ 289              		.cfi_def_cfa_register 13
+ 290              		@ sp needed
+ 291 0094 90BD     		pop	{r4, r7, pc}
+ 292              	.L18:
+ 293 0096 00BF     		.align	2
+ 294              	.L17:
+ 295 0098 00000000 		.word	max_part_num
+ 296 009c 00000000 		.word	s_partition
+ 297 00a0 00000000 		.word	__func__.6677
+ 298 00a4 00000000 		.word	__FUNCTION__.6676
+ 299 00a8 00000000 		.word	.LC0
+ 300              		.cfi_endproc
+ 301              	.LFE5:
+ 303              		.section	.text.storage_partition_write,"ax",%progbits
+ 304              		.align	1
+ 305              		.global	storage_partition_write
+ARM GAS  /tmp/ccYbdji6.s 			page 7
+
+
+ 306              		.syntax unified
+ 307              		.thumb
+ 308              		.thumb_func
+ 309              		.fpu fpv4-sp-d16
+ 311              	storage_partition_write:
+ 312              	.LFB6:
+  44:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** 
+  45:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** int storage_partition_write(int part_id, uint8_t *buf, uint32_t len, uint32_t offset)
+  46:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** {
+ 313              		.loc 1 46 1
+ 314              		.cfi_startproc
+ 315              		@ args = 0, pretend = 0, frame = 24
+ 316              		@ frame_needed = 1, uses_anonymous_args = 0
+ 317 0000 90B5     		push	{r4, r7, lr}
+ 318              	.LCFI15:
+ 319              		.cfi_def_cfa_offset 12
+ 320              		.cfi_offset 4, -12
+ 321              		.cfi_offset 7, -8
+ 322              		.cfi_offset 14, -4
+ 323 0002 89B0     		sub	sp, sp, #36
+ 324              	.LCFI16:
+ 325              		.cfi_def_cfa_offset 48
+ 326 0004 02AF     		add	r7, sp, #8
+ 327              	.LCFI17:
+ 328              		.cfi_def_cfa 7, 40
+ 329 0006 F860     		str	r0, [r7, #12]
+ 330 0008 B960     		str	r1, [r7, #8]
+ 331 000a 7A60     		str	r2, [r7, #4]
+ 332 000c 3B60     		str	r3, [r7]
+  47:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   const storage_partition *sp;
+  48:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** 
+  49:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   if (part_id >= max_part_num || buf == NULL)
+ 333              		.loc 1 49 15
+ 334 000e 224B     		ldr	r3, .L25
+ 335 0010 1B68     		ldr	r3, [r3]
+ 336              		.loc 1 49 6
+ 337 0012 FA68     		ldr	r2, [r7, #12]
+ 338 0014 9A42     		cmp	r2, r3
+ 339 0016 02DA     		bge	.L20
+ 340              		.loc 1 49 31 discriminator 1
+ 341 0018 BB68     		ldr	r3, [r7, #8]
+ 342 001a 002B     		cmp	r3, #0
+ 343 001c 02D1     		bne	.L21
+ 344              	.L20:
+  50:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****     return -1;
+ 345              		.loc 1 50 12
+ 346 001e 4FF0FF33 		mov	r3, #-1
+ 347 0022 34E0     		b	.L22
+ 348              	.L21:
+  51:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** 
+  52:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   sp = &s_partition[part_id];
+ 349              		.loc 1 52 8
+ 350 0024 1D4B     		ldr	r3, .L25+4
+ 351 0026 1A68     		ldr	r2, [r3]
+ 352              		.loc 1 52 20
+ 353 0028 FB68     		ldr	r3, [r7, #12]
+ 354 002a 1B01     		lsls	r3, r3, #4
+ARM GAS  /tmp/ccYbdji6.s 			page 8
+
+
+ 355              		.loc 1 52 6
+ 356 002c 1344     		add	r3, r3, r2
+ 357 002e 7B61     		str	r3, [r7, #20]
+  53:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   if ((offset + len) > (sp->start_addr + sp->size)) {
+ 358              		.loc 1 53 15
+ 359 0030 3A68     		ldr	r2, [r7]
+ 360 0032 7B68     		ldr	r3, [r7, #4]
+ 361 0034 1A44     		add	r2, r2, r3
+ 362              		.loc 1 53 27
+ 363 0036 7B69     		ldr	r3, [r7, #20]
+ 364 0038 9968     		ldr	r1, [r3, #8]
+ 365              		.loc 1 53 44
+ 366 003a 7B69     		ldr	r3, [r7, #20]
+ 367 003c DB68     		ldr	r3, [r3, #12]
+ 368              		.loc 1 53 40
+ 369 003e 0B44     		add	r3, r3, r1
+ 370              		.loc 1 53 6
+ 371 0040 9A42     		cmp	r2, r3
+ 372 0042 18D9     		bls	.L23
+  54:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****     LINK_LOG_DEBUG("%s:invalid args!\n", __func__);
+ 373              		.loc 1 54 5
+ 374 0044 FFF7FEFF 		bl	link_log_level_get
+ 375 0048 0346     		mov	r3, r0
+ 376 004a 012B     		cmp	r3, #1
+ 377 004c 10D8     		bhi	.L24
+ 378              		.loc 1 54 5 is_stmt 0 discriminator 1
+ 379 004e 0120     		movs	r0, #1
+ 380 0050 FFF7FEFF 		bl	link_log_level_name
+ 381 0054 0446     		mov	r4, r0
+ 382 0056 FFF7FEFF 		bl	osal_sys_time
+ 383 005a 0246     		mov	r2, r0
+ 384 005c 0B46     		mov	r3, r1
+ 385 005e 104B     		ldr	r3, .L25+8
+ 386 0060 0193     		str	r3, [sp, #4]
+ 387 0062 3623     		movs	r3, #54
+ 388 0064 0093     		str	r3, [sp]
+ 389 0066 0F4B     		ldr	r3, .L25+12
+ 390 0068 2146     		mov	r1, r4
+ 391 006a 0F48     		ldr	r0, .L25+16
+ 392 006c FFF7FEFF 		bl	printf
+ 393              	.L24:
+  55:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****     return -1;
+ 394              		.loc 1 55 12 is_stmt 1
+ 395 0070 4FF0FF33 		mov	r3, #-1
+ 396 0074 0BE0     		b	.L22
+ 397              	.L23:
+  56:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   }
+  57:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** 
+  58:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   return storage_device_write(sp->dev_id, buf, len, sp->start_addr + offset);
+ 398              		.loc 1 58 33
+ 399 0076 7B69     		ldr	r3, [r7, #20]
+ 400 0078 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 401              		.loc 1 58 10
+ 402 007a 1846     		mov	r0, r3
+ 403              		.loc 1 58 55
+ 404 007c 7B69     		ldr	r3, [r7, #20]
+ 405 007e 9A68     		ldr	r2, [r3, #8]
+ARM GAS  /tmp/ccYbdji6.s 			page 9
+
+
+ 406              		.loc 1 58 10
+ 407 0080 3B68     		ldr	r3, [r7]
+ 408 0082 1344     		add	r3, r3, r2
+ 409 0084 7A68     		ldr	r2, [r7, #4]
+ 410 0086 B968     		ldr	r1, [r7, #8]
+ 411 0088 FFF7FEFF 		bl	storage_device_write
+ 412 008c 0346     		mov	r3, r0
+ 413              	.L22:
+  59:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** }
+ 414              		.loc 1 59 1
+ 415 008e 1846     		mov	r0, r3
+ 416 0090 1C37     		adds	r7, r7, #28
+ 417              	.LCFI18:
+ 418              		.cfi_def_cfa_offset 12
+ 419 0092 BD46     		mov	sp, r7
+ 420              	.LCFI19:
+ 421              		.cfi_def_cfa_register 13
+ 422              		@ sp needed
+ 423 0094 90BD     		pop	{r4, r7, pc}
+ 424              	.L26:
+ 425 0096 00BF     		.align	2
+ 426              	.L25:
+ 427 0098 00000000 		.word	max_part_num
+ 428 009c 00000000 		.word	s_partition
+ 429 00a0 00000000 		.word	__func__.6686
+ 430 00a4 00000000 		.word	__FUNCTION__.6685
+ 431 00a8 00000000 		.word	.LC0
+ 432              		.cfi_endproc
+ 433              	.LFE6:
+ 435              		.section	.text.storage_partition_erase_write,"ax",%progbits
+ 436              		.align	1
+ 437              		.global	storage_partition_erase_write
+ 438              		.syntax unified
+ 439              		.thumb
+ 440              		.thumb_func
+ 441              		.fpu fpv4-sp-d16
+ 443              	storage_partition_erase_write:
+ 444              	.LFB7:
+  60:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** 
+  61:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** int storage_partition_erase_write(int part_id, uint8_t *buf, uint32_t len, uint32_t offset)
+  62:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** {
+ 445              		.loc 1 62 1
+ 446              		.cfi_startproc
+ 447              		@ args = 0, pretend = 0, frame = 24
+ 448              		@ frame_needed = 1, uses_anonymous_args = 0
+ 449 0000 90B5     		push	{r4, r7, lr}
+ 450              	.LCFI20:
+ 451              		.cfi_def_cfa_offset 12
+ 452              		.cfi_offset 4, -12
+ 453              		.cfi_offset 7, -8
+ 454              		.cfi_offset 14, -4
+ 455 0002 89B0     		sub	sp, sp, #36
+ 456              	.LCFI21:
+ 457              		.cfi_def_cfa_offset 48
+ 458 0004 02AF     		add	r7, sp, #8
+ 459              	.LCFI22:
+ 460              		.cfi_def_cfa 7, 40
+ARM GAS  /tmp/ccYbdji6.s 			page 10
+
+
+ 461 0006 F860     		str	r0, [r7, #12]
+ 462 0008 B960     		str	r1, [r7, #8]
+ 463 000a 7A60     		str	r2, [r7, #4]
+ 464 000c 3B60     		str	r3, [r7]
+  63:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   const storage_partition *sp;
+  64:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** 
+  65:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   if (part_id >= max_part_num || buf == NULL)
+ 465              		.loc 1 65 15
+ 466 000e 224B     		ldr	r3, .L33
+ 467 0010 1B68     		ldr	r3, [r3]
+ 468              		.loc 1 65 6
+ 469 0012 FA68     		ldr	r2, [r7, #12]
+ 470 0014 9A42     		cmp	r2, r3
+ 471 0016 02DA     		bge	.L28
+ 472              		.loc 1 65 31 discriminator 1
+ 473 0018 BB68     		ldr	r3, [r7, #8]
+ 474 001a 002B     		cmp	r3, #0
+ 475 001c 02D1     		bne	.L29
+ 476              	.L28:
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****     return -1;
+ 477              		.loc 1 66 12
+ 478 001e 4FF0FF33 		mov	r3, #-1
+ 479 0022 34E0     		b	.L30
+ 480              	.L29:
+  67:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** 
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   sp = &s_partition[part_id];
+ 481              		.loc 1 68 8
+ 482 0024 1D4B     		ldr	r3, .L33+4
+ 483 0026 1A68     		ldr	r2, [r3]
+ 484              		.loc 1 68 20
+ 485 0028 FB68     		ldr	r3, [r7, #12]
+ 486 002a 1B01     		lsls	r3, r3, #4
+ 487              		.loc 1 68 6
+ 488 002c 1344     		add	r3, r3, r2
+ 489 002e 7B61     		str	r3, [r7, #20]
+  69:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   if ((offset + len) > (sp->start_addr + sp->size)){
+ 490              		.loc 1 69 15
+ 491 0030 3A68     		ldr	r2, [r7]
+ 492 0032 7B68     		ldr	r3, [r7, #4]
+ 493 0034 1A44     		add	r2, r2, r3
+ 494              		.loc 1 69 27
+ 495 0036 7B69     		ldr	r3, [r7, #20]
+ 496 0038 9968     		ldr	r1, [r3, #8]
+ 497              		.loc 1 69 44
+ 498 003a 7B69     		ldr	r3, [r7, #20]
+ 499 003c DB68     		ldr	r3, [r3, #12]
+ 500              		.loc 1 69 40
+ 501 003e 0B44     		add	r3, r3, r1
+ 502              		.loc 1 69 6
+ 503 0040 9A42     		cmp	r2, r3
+ 504 0042 18D9     		bls	.L31
+  70:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****     LINK_LOG_DEBUG("%s:invalid args!\n", __func__);
+ 505              		.loc 1 70 5
+ 506 0044 FFF7FEFF 		bl	link_log_level_get
+ 507 0048 0346     		mov	r3, r0
+ 508 004a 012B     		cmp	r3, #1
+ 509 004c 10D8     		bhi	.L32
+ARM GAS  /tmp/ccYbdji6.s 			page 11
+
+
+ 510              		.loc 1 70 5 is_stmt 0 discriminator 1
+ 511 004e 0120     		movs	r0, #1
+ 512 0050 FFF7FEFF 		bl	link_log_level_name
+ 513 0054 0446     		mov	r4, r0
+ 514 0056 FFF7FEFF 		bl	osal_sys_time
+ 515 005a 0246     		mov	r2, r0
+ 516 005c 0B46     		mov	r3, r1
+ 517 005e 104B     		ldr	r3, .L33+8
+ 518 0060 0193     		str	r3, [sp, #4]
+ 519 0062 4623     		movs	r3, #70
+ 520 0064 0093     		str	r3, [sp]
+ 521 0066 0F4B     		ldr	r3, .L33+12
+ 522 0068 2146     		mov	r1, r4
+ 523 006a 0F48     		ldr	r0, .L33+16
+ 524 006c FFF7FEFF 		bl	printf
+ 525              	.L32:
+  71:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****     return -1;
+ 526              		.loc 1 71 12 is_stmt 1
+ 527 0070 4FF0FF33 		mov	r3, #-1
+ 528 0074 0BE0     		b	.L30
+ 529              	.L31:
+  72:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   }
+  73:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   return storage_device_erase_write(sp->dev_id, buf, len, sp->start_addr + offset);
+ 530              		.loc 1 73 39
+ 531 0076 7B69     		ldr	r3, [r7, #20]
+ 532 0078 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 533              		.loc 1 73 10
+ 534 007a 1846     		mov	r0, r3
+ 535              		.loc 1 73 61
+ 536 007c 7B69     		ldr	r3, [r7, #20]
+ 537 007e 9A68     		ldr	r2, [r3, #8]
+ 538              		.loc 1 73 10
+ 539 0080 3B68     		ldr	r3, [r7]
+ 540 0082 1344     		add	r3, r3, r2
+ 541 0084 7A68     		ldr	r2, [r7, #4]
+ 542 0086 B968     		ldr	r1, [r7, #8]
+ 543 0088 FFF7FEFF 		bl	storage_device_erase_write
+ 544 008c 0346     		mov	r3, r0
+ 545              	.L30:
+  74:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** }
+ 546              		.loc 1 74 1
+ 547 008e 1846     		mov	r0, r3
+ 548 0090 1C37     		adds	r7, r7, #28
+ 549              	.LCFI23:
+ 550              		.cfi_def_cfa_offset 12
+ 551 0092 BD46     		mov	sp, r7
+ 552              	.LCFI24:
+ 553              		.cfi_def_cfa_register 13
+ 554              		@ sp needed
+ 555 0094 90BD     		pop	{r4, r7, pc}
+ 556              	.L34:
+ 557 0096 00BF     		.align	2
+ 558              	.L33:
+ 559 0098 00000000 		.word	max_part_num
+ 560 009c 00000000 		.word	s_partition
+ 561 00a0 00000000 		.word	__func__.6695
+ 562 00a4 00000000 		.word	__FUNCTION__.6694
+ARM GAS  /tmp/ccYbdji6.s 			page 12
+
+
+ 563 00a8 00000000 		.word	.LC0
+ 564              		.cfi_endproc
+ 565              	.LFE7:
+ 567              		.section	.text.storage_partition_erase,"ax",%progbits
+ 568              		.align	1
+ 569              		.global	storage_partition_erase
+ 570              		.syntax unified
+ 571              		.thumb
+ 572              		.thumb_func
+ 573              		.fpu fpv4-sp-d16
+ 575              	storage_partition_erase:
+ 576              	.LFB8:
+  75:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** 
+  76:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** int storage_partition_erase(int part_id, uint32_t offset, uint32_t len)
+  77:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** {
+ 577              		.loc 1 77 1
+ 578              		.cfi_startproc
+ 579              		@ args = 0, pretend = 0, frame = 24
+ 580              		@ frame_needed = 1, uses_anonymous_args = 0
+ 581 0000 90B5     		push	{r4, r7, lr}
+ 582              	.LCFI25:
+ 583              		.cfi_def_cfa_offset 12
+ 584              		.cfi_offset 4, -12
+ 585              		.cfi_offset 7, -8
+ 586              		.cfi_offset 14, -4
+ 587 0002 89B0     		sub	sp, sp, #36
+ 588              	.LCFI26:
+ 589              		.cfi_def_cfa_offset 48
+ 590 0004 02AF     		add	r7, sp, #8
+ 591              	.LCFI27:
+ 592              		.cfi_def_cfa 7, 40
+ 593 0006 F860     		str	r0, [r7, #12]
+ 594 0008 B960     		str	r1, [r7, #8]
+ 595 000a 7A60     		str	r2, [r7, #4]
+  78:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   const storage_partition *sp;
+  79:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** 
+  80:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   if (part_id >= max_part_num)
+ 596              		.loc 1 80 15
+ 597 000c 204B     		ldr	r3, .L40
+ 598 000e 1B68     		ldr	r3, [r3]
+ 599              		.loc 1 80 6
+ 600 0010 FA68     		ldr	r2, [r7, #12]
+ 601 0012 9A42     		cmp	r2, r3
+ 602 0014 02DB     		blt	.L36
+  81:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****     return -1;
+ 603              		.loc 1 81 12
+ 604 0016 4FF0FF33 		mov	r3, #-1
+ 605 001a 34E0     		b	.L37
+ 606              	.L36:
+  82:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** 
+  83:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   sp = &s_partition[part_id];
+ 607              		.loc 1 83 8
+ 608 001c 1D4B     		ldr	r3, .L40+4
+ 609 001e 1A68     		ldr	r2, [r3]
+ 610              		.loc 1 83 20
+ 611 0020 FB68     		ldr	r3, [r7, #12]
+ 612 0022 1B01     		lsls	r3, r3, #4
+ARM GAS  /tmp/ccYbdji6.s 			page 13
+
+
+ 613              		.loc 1 83 6
+ 614 0024 1344     		add	r3, r3, r2
+ 615 0026 7B61     		str	r3, [r7, #20]
+  84:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   if ((offset + len) > (sp->start_addr + sp->size)){
+ 616              		.loc 1 84 15
+ 617 0028 BA68     		ldr	r2, [r7, #8]
+ 618 002a 7B68     		ldr	r3, [r7, #4]
+ 619 002c 1A44     		add	r2, r2, r3
+ 620              		.loc 1 84 27
+ 621 002e 7B69     		ldr	r3, [r7, #20]
+ 622 0030 9968     		ldr	r1, [r3, #8]
+ 623              		.loc 1 84 44
+ 624 0032 7B69     		ldr	r3, [r7, #20]
+ 625 0034 DB68     		ldr	r3, [r3, #12]
+ 626              		.loc 1 84 40
+ 627 0036 0B44     		add	r3, r3, r1
+ 628              		.loc 1 84 6
+ 629 0038 9A42     		cmp	r2, r3
+ 630 003a 18D9     		bls	.L38
+  85:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****     LINK_LOG_DEBUG("%s:invalid args!\n", __func__);
+ 631              		.loc 1 85 5
+ 632 003c FFF7FEFF 		bl	link_log_level_get
+ 633 0040 0346     		mov	r3, r0
+ 634 0042 012B     		cmp	r3, #1
+ 635 0044 10D8     		bhi	.L39
+ 636              		.loc 1 85 5 is_stmt 0 discriminator 1
+ 637 0046 0120     		movs	r0, #1
+ 638 0048 FFF7FEFF 		bl	link_log_level_name
+ 639 004c 0446     		mov	r4, r0
+ 640 004e FFF7FEFF 		bl	osal_sys_time
+ 641 0052 0246     		mov	r2, r0
+ 642 0054 0B46     		mov	r3, r1
+ 643 0056 104B     		ldr	r3, .L40+8
+ 644 0058 0193     		str	r3, [sp, #4]
+ 645 005a 5523     		movs	r3, #85
+ 646 005c 0093     		str	r3, [sp]
+ 647 005e 0F4B     		ldr	r3, .L40+12
+ 648 0060 2146     		mov	r1, r4
+ 649 0062 0F48     		ldr	r0, .L40+16
+ 650 0064 FFF7FEFF 		bl	printf
+ 651              	.L39:
+  86:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****     return -1;
+ 652              		.loc 1 86 12 is_stmt 1
+ 653 0068 4FF0FF33 		mov	r3, #-1
+ 654 006c 0BE0     		b	.L37
+ 655              	.L38:
+  87:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   }
+  88:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** 
+  89:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c ****   return storage_device_erase(sp->dev_id, sp->start_addr + offset, len);
+ 656              		.loc 1 89 33
+ 657 006e 7B69     		ldr	r3, [r7, #20]
+ 658 0070 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 659              		.loc 1 89 10
+ 660 0072 1846     		mov	r0, r3
+ 661              		.loc 1 89 45
+ 662 0074 7B69     		ldr	r3, [r7, #20]
+ 663 0076 9A68     		ldr	r2, [r3, #8]
+ARM GAS  /tmp/ccYbdji6.s 			page 14
+
+
+ 664              		.loc 1 89 10
+ 665 0078 BB68     		ldr	r3, [r7, #8]
+ 666 007a 1344     		add	r3, r3, r2
+ 667 007c 7A68     		ldr	r2, [r7, #4]
+ 668 007e 1946     		mov	r1, r3
+ 669 0080 FFF7FEFF 		bl	storage_device_erase
+ 670 0084 0346     		mov	r3, r0
+ 671              	.L37:
+  90:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.c **** }
+ 672              		.loc 1 90 1
+ 673 0086 1846     		mov	r0, r3
+ 674 0088 1C37     		adds	r7, r7, #28
+ 675              	.LCFI28:
+ 676              		.cfi_def_cfa_offset 12
+ 677 008a BD46     		mov	sp, r7
+ 678              	.LCFI29:
+ 679              		.cfi_def_cfa_register 13
+ 680              		@ sp needed
+ 681 008c 90BD     		pop	{r4, r7, pc}
+ 682              	.L41:
+ 683 008e 00BF     		.align	2
+ 684              	.L40:
+ 685 0090 00000000 		.word	max_part_num
+ 686 0094 00000000 		.word	s_partition
+ 687 0098 00000000 		.word	__func__.6703
+ 688 009c 00000000 		.word	__FUNCTION__.6702
+ 689 00a0 00000000 		.word	.LC0
+ 690              		.cfi_endproc
+ 691              	.LFE8:
+ 693              		.section	.rodata.__FUNCTION__.6676,"a"
+ 694              		.align	2
+ 697              	__FUNCTION__.6676:
+ 698 0000 73746F72 		.ascii	"storage_partition_read\000"
+ 698      6167655F 
+ 698      70617274 
+ 698      6974696F 
+ 698      6E5F7265 
+ 699              		.section	.rodata.__func__.6677,"a"
+ 700              		.align	2
+ 703              	__func__.6677:
+ 704 0000 73746F72 		.ascii	"storage_partition_read\000"
+ 704      6167655F 
+ 704      70617274 
+ 704      6974696F 
+ 704      6E5F7265 
+ 705              		.section	.rodata.__FUNCTION__.6685,"a"
+ 706              		.align	2
+ 709              	__FUNCTION__.6685:
+ 710 0000 73746F72 		.ascii	"storage_partition_write\000"
+ 710      6167655F 
+ 710      70617274 
+ 710      6974696F 
+ 710      6E5F7772 
+ 711              		.section	.rodata.__func__.6686,"a"
+ 712              		.align	2
+ 715              	__func__.6686:
+ 716 0000 73746F72 		.ascii	"storage_partition_write\000"
+ARM GAS  /tmp/ccYbdji6.s 			page 15
+
+
+ 716      6167655F 
+ 716      70617274 
+ 716      6974696F 
+ 716      6E5F7772 
+ 717              		.section	.rodata.__FUNCTION__.6694,"a"
+ 718              		.align	2
+ 721              	__FUNCTION__.6694:
+ 722 0000 73746F72 		.ascii	"storage_partition_erase_write\000"
+ 722      6167655F 
+ 722      70617274 
+ 722      6974696F 
+ 722      6E5F6572 
+ 723              		.section	.rodata.__func__.6695,"a"
+ 724              		.align	2
+ 727              	__func__.6695:
+ 728 0000 73746F72 		.ascii	"storage_partition_erase_write\000"
+ 728      6167655F 
+ 728      70617274 
+ 728      6974696F 
+ 728      6E5F6572 
+ 729              		.section	.rodata.__FUNCTION__.6702,"a"
+ 730              		.align	2
+ 733              	__FUNCTION__.6702:
+ 734 0000 73746F72 		.ascii	"storage_partition_erase\000"
+ 734      6167655F 
+ 734      70617274 
+ 734      6974696F 
+ 734      6E5F6572 
+ 735              		.section	.rodata.__func__.6703,"a"
+ 736              		.align	2
+ 739              	__func__.6703:
+ 740 0000 73746F72 		.ascii	"storage_partition_erase\000"
+ 740      6167655F 
+ 740      70617274 
+ 740      6974696F 
+ 740      6E5F6572 
+ 741              		.text
+ 742              	.Letext0:
+ 743              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 744              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 745              		.file 4 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/storage/partition.h"
+ 746              		.file 5 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 747              		.file 6 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 748              		.file 7 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 749              		.file 8 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/ree
+ 750              		.file 9 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/inc/link_log.h"
+ARM GAS  /tmp/ccYbdji6.s 			page 16
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 partition.c
+     /tmp/ccYbdji6.s:18     .bss.s_partition:0000000000000000 $d
+     /tmp/ccYbdji6.s:21     .bss.s_partition:0000000000000000 s_partition
+     /tmp/ccYbdji6.s:24     .bss.max_part_num:0000000000000000 $d
+     /tmp/ccYbdji6.s:27     .bss.max_part_num:0000000000000000 max_part_num
+     /tmp/ccYbdji6.s:30     .text.storage_partition_init:0000000000000000 $t
+     /tmp/ccYbdji6.s:38     .text.storage_partition_init:0000000000000000 storage_partition_init
+     /tmp/ccYbdji6.s:100    .text.storage_partition_init:0000000000000038 $d
+     /tmp/ccYbdji6.s:106    .text.storage_partition_deinit:0000000000000000 $t
+     /tmp/ccYbdji6.s:113    .text.storage_partition_deinit:0000000000000000 storage_partition_deinit
+     /tmp/ccYbdji6.s:162    .text.storage_partition_deinit:000000000000002c $d
+     /tmp/ccYbdji6.s:168    .rodata:0000000000000000 $d
+     /tmp/ccYbdji6.s:172    .text.storage_partition_read:0000000000000000 $t
+     /tmp/ccYbdji6.s:179    .text.storage_partition_read:0000000000000000 storage_partition_read
+     /tmp/ccYbdji6.s:295    .text.storage_partition_read:0000000000000098 $d
+     /tmp/ccYbdji6.s:703    .rodata.__func__.6677:0000000000000000 __func__.6677
+     /tmp/ccYbdji6.s:697    .rodata.__FUNCTION__.6676:0000000000000000 __FUNCTION__.6676
+     /tmp/ccYbdji6.s:304    .text.storage_partition_write:0000000000000000 $t
+     /tmp/ccYbdji6.s:311    .text.storage_partition_write:0000000000000000 storage_partition_write
+     /tmp/ccYbdji6.s:427    .text.storage_partition_write:0000000000000098 $d
+     /tmp/ccYbdji6.s:715    .rodata.__func__.6686:0000000000000000 __func__.6686
+     /tmp/ccYbdji6.s:709    .rodata.__FUNCTION__.6685:0000000000000000 __FUNCTION__.6685
+     /tmp/ccYbdji6.s:436    .text.storage_partition_erase_write:0000000000000000 $t
+     /tmp/ccYbdji6.s:443    .text.storage_partition_erase_write:0000000000000000 storage_partition_erase_write
+     /tmp/ccYbdji6.s:559    .text.storage_partition_erase_write:0000000000000098 $d
+     /tmp/ccYbdji6.s:727    .rodata.__func__.6695:0000000000000000 __func__.6695
+     /tmp/ccYbdji6.s:721    .rodata.__FUNCTION__.6694:0000000000000000 __FUNCTION__.6694
+     /tmp/ccYbdji6.s:568    .text.storage_partition_erase:0000000000000000 $t
+     /tmp/ccYbdji6.s:575    .text.storage_partition_erase:0000000000000000 storage_partition_erase
+     /tmp/ccYbdji6.s:685    .text.storage_partition_erase:0000000000000090 $d
+     /tmp/ccYbdji6.s:739    .rodata.__func__.6703:0000000000000000 __func__.6703
+     /tmp/ccYbdji6.s:733    .rodata.__FUNCTION__.6702:0000000000000000 __FUNCTION__.6702
+     /tmp/ccYbdji6.s:694    .rodata.__FUNCTION__.6676:0000000000000000 $d
+     /tmp/ccYbdji6.s:700    .rodata.__func__.6677:0000000000000000 $d
+     /tmp/ccYbdji6.s:706    .rodata.__FUNCTION__.6685:0000000000000000 $d
+     /tmp/ccYbdji6.s:712    .rodata.__func__.6686:0000000000000000 $d
+     /tmp/ccYbdji6.s:718    .rodata.__FUNCTION__.6694:0000000000000000 $d
+     /tmp/ccYbdji6.s:724    .rodata.__func__.6695:0000000000000000 $d
+     /tmp/ccYbdji6.s:730    .rodata.__FUNCTION__.6702:0000000000000000 $d
+     /tmp/ccYbdji6.s:736    .rodata.__func__.6703:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+link_log_level_get
+link_log_level_name
+osal_sys_time
+printf
+storage_device_read
+storage_device_write
+storage_device_erase_write
+storage_device_erase

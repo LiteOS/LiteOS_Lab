@@ -1,0 +1,2612 @@
+ARM GAS  /tmp/ccXrN7D1.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"driver.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.bss.s_los_driv_module,"aw",%nobits
+  18              		.align	2
+  21              	s_los_driv_module:
+  22 0000 00000000 		.space	12
+  22      00000000 
+  22      00000000 
+  23              		.section	.text.__driv_match,"ax",%progbits
+  24              		.align	1
+  25              		.arch armv7e-m
+  26              		.syntax unified
+  27              		.thumb
+  28              		.thumb_func
+  29              		.fpu fpv4-sp-d16
+  31              	__driv_match:
+  32              	.LFB3:
+  33              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** /*----------------------------------------------------------------------------
+   2:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * All rights reserved.
+   4:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * are permitted provided that the following conditions are met:
+   6:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * conditions and the following disclaimer.
+   8:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * provided with the distribution.
+  11:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * permission.
+  14:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  *---------------------------------------------------------------------------*/
+ARM GAS  /tmp/ccXrN7D1.s 			page 2
+
+
+  26:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** /*----------------------------------------------------------------------------
+  27:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * Notice of Export Control Law
+  28:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * ===============================================
+  29:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  * applicable export control laws and regulations.
+  33:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  *---------------------------------------------------------------------------*/
+  34:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** /**
+  35:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  *  DATE                AUTHOR      INSTRUCTION
+  36:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  *  2019-05-14 09:36  zhangqianfu  The first version  
+  37:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  *
+  38:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****  */
+  39:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** #include <string.h>
+  40:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** #include <stdio.h>
+  41:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** #include <stdlib.h>
+  42:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** #include <driver.h>
+  43:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** #include <sys/fcntl.h>
+  44:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+  45:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+  46:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** #define cn_driv_status_initialized     (1<<0)
+  47:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** #define cn_driv_status_opend           (1<<1)
+  48:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+  49:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+  50:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** //define the error type has happened in the driver
+  51:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** typedef enum
+  52:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** {
+  53:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     en_dev_err_none = 0,   //no err happened
+  54:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     en_dev_err_init,       //call bsp open function failed
+  55:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     en_dev_err_open,       //call bsp init function failed
+  56:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+  57:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** }en_dev_error_type;
+  58:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+  59:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+  60:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** struct driv_cb
+  61:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** {
+  62:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     void                  *nxt;              //add the deice to device list
+  63:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     void                  *pri;              //bsp developed para
+  64:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     const char            *name;             //the device name
+  65:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     int                    flagmask;         //copy from the register
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     const los_driv_op_t   *op;               //operation method
+  67:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     unsigned int           drivstatus;       //show the state here like init or something like this
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     los_dev_t              devlst;           //the open list,support the multi open
+  69:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     //following member used for the debug
+  70:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     size_t            total_write;            //how many data has been sent
+  71:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     size_t            total_read;             //how many data has received
+  72:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     size_t            opencounter;            //reference counter
+  73:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     unsigned int      errno;                  //the last errno has happend
+  74:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** };
+  75:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** typedef struct
+  76:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** {
+  77:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     osal_mutex_t                    lock;      //used to lock the devlst
+  78:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     struct driv_cb                 *drivlst;   //all the dev will be added to the list
+  79:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     unsigned int                    drivnum;
+  80:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** }los_driv_module;
+  81:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** static  los_driv_module   s_los_driv_module ;  //manage all the driver here
+  82:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ARM GAS  /tmp/ccXrN7D1.s 			page 3
+
+
+  83:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** //used this function to find a dev
+  84:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** static struct driv_cb *__driv_match(const char *name)
+  85:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** {
+  34              		.loc 1 85 1
+  35              		.cfi_startproc
+  36              		@ args = 0, pretend = 0, frame = 16
+  37              		@ frame_needed = 1, uses_anonymous_args = 0
+  38 0000 80B5     		push	{r7, lr}
+  39              	.LCFI0:
+  40              		.cfi_def_cfa_offset 8
+  41              		.cfi_offset 7, -8
+  42              		.cfi_offset 14, -4
+  43 0002 84B0     		sub	sp, sp, #16
+  44              	.LCFI1:
+  45              		.cfi_def_cfa_offset 24
+  46 0004 00AF     		add	r7, sp, #0
+  47              	.LCFI2:
+  48              		.cfi_def_cfa_register 7
+  49 0006 7860     		str	r0, [r7, #4]
+  86:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     struct driv_cb *ret = NULL;
+  50              		.loc 1 86 21
+  51 0008 0023     		movs	r3, #0
+  52 000a FB60     		str	r3, [r7, #12]
+  87:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+  88:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     ret = s_los_driv_module.drivlst;
+  53              		.loc 1 88 9
+  54 000c 0C4B     		ldr	r3, .L8
+  55 000e 5B68     		ldr	r3, [r3, #4]
+  56 0010 FB60     		str	r3, [r7, #12]
+  89:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     while(NULL != ret)
+  57              		.loc 1 89 10
+  58 0012 0BE0     		b	.L2
+  59              	.L5:
+  90:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+  91:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         if(0 == strcmp(name,ret->name))
+  60              		.loc 1 91 17
+  61 0014 FB68     		ldr	r3, [r7, #12]
+  62 0016 9B68     		ldr	r3, [r3, #8]
+  63 0018 1946     		mov	r1, r3
+  64 001a 7868     		ldr	r0, [r7, #4]
+  65 001c FFF7FEFF 		bl	strcmp
+  66 0020 0346     		mov	r3, r0
+  67              		.loc 1 91 11
+  68 0022 002B     		cmp	r3, #0
+  69 0024 06D0     		beq	.L7
+  92:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         {
+  93:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             break;
+  94:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         }
+  95:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         ret = ret->nxt;
+  70              		.loc 1 95 13
+  71 0026 FB68     		ldr	r3, [r7, #12]
+  72 0028 1B68     		ldr	r3, [r3]
+  73 002a FB60     		str	r3, [r7, #12]
+  74              	.L2:
+  89:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+  75              		.loc 1 89 10
+  76 002c FB68     		ldr	r3, [r7, #12]
+ARM GAS  /tmp/ccXrN7D1.s 			page 4
+
+
+  77 002e 002B     		cmp	r3, #0
+  78 0030 F0D1     		bne	.L5
+  79 0032 00E0     		b	.L4
+  80              	.L7:
+  93:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         }
+  81              		.loc 1 93 13
+  82 0034 00BF     		nop
+  83              	.L4:
+  96:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+  97:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+  98:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     return ret;
+  84              		.loc 1 98 12
+  85 0036 FB68     		ldr	r3, [r7, #12]
+  99:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** }
+  86              		.loc 1 99 1
+  87 0038 1846     		mov	r0, r3
+  88 003a 1037     		adds	r7, r7, #16
+  89              	.LCFI3:
+  90              		.cfi_def_cfa_offset 8
+  91 003c BD46     		mov	sp, r7
+  92              	.LCFI4:
+  93              		.cfi_def_cfa_register 13
+  94              		@ sp needed
+  95 003e 80BD     		pop	{r7, pc}
+  96              	.L9:
+  97              		.align	2
+  98              	.L8:
+  99 0040 00000000 		.word	s_los_driv_module
+ 100              		.cfi_endproc
+ 101              	.LFE3:
+ 103              		.section	.text.los_driv_register,"ax",%progbits
+ 104              		.align	1
+ 105              		.global	los_driv_register
+ 106              		.syntax unified
+ 107              		.thumb
+ 108              		.thumb_func
+ 109              		.fpu fpv4-sp-d16
+ 111              	los_driv_register:
+ 112              	.LFB4:
+ 100:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 101:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** /*******************************************************************************
+ 102:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** function     :bsp developer use this function to add a device to the system
+ 103:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** parameters   :
+ 104:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** instruction  :NULL if failed else return the device handle
+ 105:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** *******************************************************************************/
+ 106:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 107:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** los_driv_t los_driv_register(os_driv_para_t *para)
+ 108:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** {
+ 113              		.loc 1 108 1
+ 114              		.cfi_startproc
+ 115              		@ args = 0, pretend = 0, frame = 16
+ 116              		@ frame_needed = 1, uses_anonymous_args = 0
+ 117 0000 80B5     		push	{r7, lr}
+ 118              	.LCFI5:
+ 119              		.cfi_def_cfa_offset 8
+ 120              		.cfi_offset 7, -8
+ 121              		.cfi_offset 14, -4
+ARM GAS  /tmp/ccXrN7D1.s 			page 5
+
+
+ 122 0002 84B0     		sub	sp, sp, #16
+ 123              	.LCFI6:
+ 124              		.cfi_def_cfa_offset 24
+ 125 0004 00AF     		add	r7, sp, #0
+ 126              	.LCFI7:
+ 127              		.cfi_def_cfa_register 7
+ 128 0006 7860     		str	r0, [r7, #4]
+ 109:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     struct driv_cb  *driv = NULL;
+ 129              		.loc 1 109 22
+ 130 0008 0023     		movs	r3, #0
+ 131 000a FB60     		str	r3, [r7, #12]
+ 110:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 111:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if((NULL == para->name)||(NULL == para->op))
+ 132              		.loc 1 111 21
+ 133 000c 7B68     		ldr	r3, [r7, #4]
+ 134 000e 1B68     		ldr	r3, [r3]
+ 135              		.loc 1 111 7
+ 136 0010 002B     		cmp	r3, #0
+ 137 0012 51D0     		beq	.L22
+ 138              		.loc 1 111 43 discriminator 1
+ 139 0014 7B68     		ldr	r3, [r7, #4]
+ 140 0016 5B68     		ldr	r3, [r3, #4]
+ 141              		.loc 1 111 28 discriminator 1
+ 142 0018 002B     		cmp	r3, #0
+ 143 001a 4DD0     		beq	.L22
+ 112:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         goto EXIT_PARAS;
+ 114:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 115:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 116:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     driv = osal_malloc(sizeof(struct driv_cb));
+ 144              		.loc 1 116 12
+ 145 001c 2C20     		movs	r0, #44
+ 146 001e FFF7FEFF 		bl	osal_malloc
+ 147 0022 F860     		str	r0, [r7, #12]
+ 117:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if(NULL == driv)
+ 148              		.loc 1 117 7
+ 149 0024 FB68     		ldr	r3, [r7, #12]
+ 150 0026 002B     		cmp	r3, #0
+ 151 0028 48D0     		beq	.L23
+ 118:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 119:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         goto EXIT_MALLOC;
+ 120:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 121:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     (void) memset(driv,0,sizeof(struct driv_cb));
+ 152              		.loc 1 121 12
+ 153 002a 2C22     		movs	r2, #44
+ 154 002c 0021     		movs	r1, #0
+ 155 002e F868     		ldr	r0, [r7, #12]
+ 156 0030 FFF7FEFF 		bl	memset
+ 122:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 123:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     //do the member initialize
+ 124:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     driv->name = para->name;
+ 157              		.loc 1 124 22
+ 158 0034 7B68     		ldr	r3, [r7, #4]
+ 159 0036 1A68     		ldr	r2, [r3]
+ 160              		.loc 1 124 16
+ 161 0038 FB68     		ldr	r3, [r7, #12]
+ 162 003a 9A60     		str	r2, [r3, #8]
+ARM GAS  /tmp/ccXrN7D1.s 			page 6
+
+
+ 125:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     driv->op = para->op;
+ 163              		.loc 1 125 20
+ 164 003c 7B68     		ldr	r3, [r7, #4]
+ 165 003e 5A68     		ldr	r2, [r3, #4]
+ 166              		.loc 1 125 14
+ 167 0040 FB68     		ldr	r3, [r7, #12]
+ 168 0042 1A61     		str	r2, [r3, #16]
+ 126:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     driv->pri = para->pri;
+ 169              		.loc 1 126 21
+ 170 0044 7B68     		ldr	r3, [r7, #4]
+ 171 0046 9A68     		ldr	r2, [r3, #8]
+ 172              		.loc 1 126 15
+ 173 0048 FB68     		ldr	r3, [r7, #12]
+ 174 004a 5A60     		str	r2, [r3, #4]
+ 127:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     driv->flagmask = para->flag;
+ 175              		.loc 1 127 26
+ 176 004c 7B68     		ldr	r3, [r7, #4]
+ 177 004e DB68     		ldr	r3, [r3, #12]
+ 178 0050 1A46     		mov	r2, r3
+ 179              		.loc 1 127 20
+ 180 0052 FB68     		ldr	r3, [r7, #12]
+ 181 0054 DA60     		str	r2, [r3, #12]
+ 128:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 129:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     //add it to the device list if no device with the same name exsit
+ 130:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if(false == osal_mutex_lock(s_los_driv_module.lock))
+ 182              		.loc 1 130 17
+ 183 0056 1C4B     		ldr	r3, .L26
+ 184 0058 1B68     		ldr	r3, [r3]
+ 185 005a 1846     		mov	r0, r3
+ 186 005c FFF7FEFF 		bl	osal_mutex_lock
+ 187 0060 0346     		mov	r3, r0
+ 188              		.loc 1 130 7
+ 189 0062 002B     		cmp	r3, #0
+ 190 0064 21D0     		beq	.L24
+ 131:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 132:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         goto EXIT_MUTEX;
+ 133:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 134:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 135:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if(NULL != __driv_match(para->name))
+ 191              		.loc 1 135 16
+ 192 0066 7B68     		ldr	r3, [r7, #4]
+ 193 0068 1B68     		ldr	r3, [r3]
+ 194 006a 1846     		mov	r0, r3
+ 195 006c FFF7FEFF 		bl	__driv_match
+ 196 0070 0346     		mov	r3, r0
+ 197              		.loc 1 135 7
+ 198 0072 002B     		cmp	r3, #0
+ 199 0074 12D1     		bne	.L25
+ 136:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 137:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         goto EXIT_EXISTED;
+ 138:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 139:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 140:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     driv->nxt = s_los_driv_module.drivlst;
+ 200              		.loc 1 140 34
+ 201 0076 144B     		ldr	r3, .L26
+ 202 0078 5A68     		ldr	r2, [r3, #4]
+ 203              		.loc 1 140 15
+ARM GAS  /tmp/ccXrN7D1.s 			page 7
+
+
+ 204 007a FB68     		ldr	r3, [r7, #12]
+ 205 007c 1A60     		str	r2, [r3]
+ 141:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     s_los_driv_module.drivlst = driv;
+ 206              		.loc 1 141 31
+ 207 007e 124A     		ldr	r2, .L26
+ 208 0080 FB68     		ldr	r3, [r7, #12]
+ 209 0082 5360     		str	r3, [r2, #4]
+ 142:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     (void) osal_mutex_unlock(s_los_driv_module.lock);
+ 210              		.loc 1 142 12
+ 211 0084 104B     		ldr	r3, .L26
+ 212 0086 1B68     		ldr	r3, [r3]
+ 213 0088 1846     		mov	r0, r3
+ 214 008a FFF7FEFF 		bl	osal_mutex_unlock
+ 143:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 144:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     s_los_driv_module.drivnum++;
+ 215              		.loc 1 144 22
+ 216 008e 0E4B     		ldr	r3, .L26
+ 217 0090 9B68     		ldr	r3, [r3, #8]
+ 218              		.loc 1 144 30
+ 219 0092 0133     		adds	r3, r3, #1
+ 220 0094 0C4A     		ldr	r2, .L26
+ 221 0096 9360     		str	r3, [r2, #8]
+ 145:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 146:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     return driv;
+ 222              		.loc 1 146 12
+ 223 0098 FB68     		ldr	r3, [r7, #12]
+ 224 009a 11E0     		b	.L19
+ 225              	.L25:
+ 137:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 226              		.loc 1 137 9
+ 227 009c 00BF     		nop
+ 228              	.L18:
+ 147:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 148:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 149:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** EXIT_EXISTED:
+ 150:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     (void) osal_mutex_unlock(s_los_driv_module.lock);
+ 229              		.loc 1 150 12
+ 230 009e 0A4B     		ldr	r3, .L26
+ 231 00a0 1B68     		ldr	r3, [r3]
+ 232 00a2 1846     		mov	r0, r3
+ 233 00a4 FFF7FEFF 		bl	osal_mutex_unlock
+ 234 00a8 00E0     		b	.L16
+ 235              	.L24:
+ 132:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 236              		.loc 1 132 9
+ 237 00aa 00BF     		nop
+ 238              	.L16:
+ 151:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** EXIT_MUTEX:
+ 152:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     osal_free(driv);
+ 239              		.loc 1 152 5
+ 240 00ac F868     		ldr	r0, [r7, #12]
+ 241 00ae FFF7FEFF 		bl	osal_free
+ 153:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     driv = NULL;
+ 242              		.loc 1 153 10
+ 243 00b2 0023     		movs	r3, #0
+ 244 00b4 FB60     		str	r3, [r7, #12]
+ 245 00b6 02E0     		b	.L20
+ARM GAS  /tmp/ccXrN7D1.s 			page 8
+
+
+ 246              	.L13:
+ 247              	.L22:
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 248              		.loc 1 113 9
+ 249 00b8 00BF     		nop
+ 250 00ba 00E0     		b	.L20
+ 251              	.L23:
+ 119:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 252              		.loc 1 119 9
+ 253 00bc 00BF     		nop
+ 254              	.L20:
+ 154:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** EXIT_MALLOC:
+ 155:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** EXIT_PARAS:
+ 156:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     return driv;
+ 255              		.loc 1 156 12
+ 256 00be FB68     		ldr	r3, [r7, #12]
+ 257              	.L19:
+ 157:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** }
+ 258              		.loc 1 157 1
+ 259 00c0 1846     		mov	r0, r3
+ 260 00c2 1037     		adds	r7, r7, #16
+ 261              	.LCFI8:
+ 262              		.cfi_def_cfa_offset 8
+ 263 00c4 BD46     		mov	sp, r7
+ 264              	.LCFI9:
+ 265              		.cfi_def_cfa_register 13
+ 266              		@ sp needed
+ 267 00c6 80BD     		pop	{r7, pc}
+ 268              	.L27:
+ 269              		.align	2
+ 270              	.L26:
+ 271 00c8 00000000 		.word	s_los_driv_module
+ 272              		.cfi_endproc
+ 273              	.LFE4:
+ 275              		.section	.text.los_driv_unregister,"ax",%progbits
+ 276              		.align	1
+ 277              		.global	los_driv_unregister
+ 278              		.syntax unified
+ 279              		.thumb
+ 280              		.thumb_func
+ 281              		.fpu fpv4-sp-d16
+ 283              	los_driv_unregister:
+ 284              	.LFB5:
+ 158:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 159:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** /*******************************************************************************
+ 160:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** function     :bsp developer use this function to remove a device from the system
+ 161:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** parameters   :
+ 162:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** instruction  :if the device has been refered,then will fail here
+ 163:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** *******************************************************************************/
+ 164:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** bool_t los_driv_unregister(const char *name)
+ 165:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** {
+ 285              		.loc 1 165 1
+ 286              		.cfi_startproc
+ 287              		@ args = 0, pretend = 0, frame = 24
+ 288              		@ frame_needed = 1, uses_anonymous_args = 0
+ 289 0000 80B5     		push	{r7, lr}
+ 290              	.LCFI10:
+ARM GAS  /tmp/ccXrN7D1.s 			page 9
+
+
+ 291              		.cfi_def_cfa_offset 8
+ 292              		.cfi_offset 7, -8
+ 293              		.cfi_offset 14, -4
+ 294 0002 86B0     		sub	sp, sp, #24
+ 295              	.LCFI11:
+ 296              		.cfi_def_cfa_offset 32
+ 297 0004 00AF     		add	r7, sp, #0
+ 298              	.LCFI12:
+ 299              		.cfi_def_cfa_register 7
+ 300 0006 7860     		str	r0, [r7, #4]
+ 166:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     struct driv_cb *tmp = NULL;
+ 301              		.loc 1 166 21
+ 302 0008 0023     		movs	r3, #0
+ 303 000a 7B61     		str	r3, [r7, #20]
+ 167:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     struct driv_cb *pre = NULL;
+ 304              		.loc 1 167 21
+ 305 000c 0023     		movs	r3, #0
+ 306 000e 3B61     		str	r3, [r7, #16]
+ 168:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     bool_t         ret = false;
+ 307              		.loc 1 168 20
+ 308 0010 0023     		movs	r3, #0
+ 309 0012 FB60     		str	r3, [r7, #12]
+ 169:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if(NULL == name)
+ 310              		.loc 1 169 7
+ 311 0014 7B68     		ldr	r3, [r7, #4]
+ 312 0016 002B     		cmp	r3, #0
+ 313 0018 01D1     		bne	.L29
+ 170:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 171:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         return ret;
+ 314              		.loc 1 171 16
+ 315 001a FB68     		ldr	r3, [r7, #12]
+ 316 001c 3FE0     		b	.L30
+ 317              	.L29:
+ 172:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 173:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 174:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if(osal_mutex_lock(s_los_driv_module.lock))
+ 318              		.loc 1 174 8
+ 319 001e 224B     		ldr	r3, .L40
+ 320 0020 1B68     		ldr	r3, [r3]
+ 321 0022 1846     		mov	r0, r3
+ 322 0024 FFF7FEFF 		bl	osal_mutex_lock
+ 323 0028 0346     		mov	r3, r0
+ 324              		.loc 1 174 7
+ 325 002a 002B     		cmp	r3, #0
+ 326 002c 36D0     		beq	.L31
+ 175:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 176:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         tmp = s_los_driv_module.drivlst;
+ 327              		.loc 1 176 13
+ 328 002e 1E4B     		ldr	r3, .L40
+ 329 0030 5B68     		ldr	r3, [r3, #4]
+ 330 0032 7B61     		str	r3, [r7, #20]
+ 177:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         pre = NULL;
+ 331              		.loc 1 177 13
+ 332 0034 0023     		movs	r3, #0
+ 333 0036 3B61     		str	r3, [r7, #16]
+ 178:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         while(NULL != tmp)
+ 334              		.loc 1 178 14
+ARM GAS  /tmp/ccXrN7D1.s 			page 10
+
+
+ 335 0038 0DE0     		b	.L32
+ 336              	.L35:
+ 179:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         {
+ 180:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             if( 0 == strcmp(name,tmp->name))
+ 337              		.loc 1 180 22
+ 338 003a 7B69     		ldr	r3, [r7, #20]
+ 339 003c 9B68     		ldr	r3, [r3, #8]
+ 340 003e 1946     		mov	r1, r3
+ 341 0040 7868     		ldr	r0, [r7, #4]
+ 342 0042 FFF7FEFF 		bl	strcmp
+ 343 0046 0346     		mov	r3, r0
+ 344              		.loc 1 180 15
+ 345 0048 002B     		cmp	r3, #0
+ 346 004a 08D0     		beq	.L39
+ 181:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             {
+ 182:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****                 break;
+ 183:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             }
+ 184:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             pre = tmp;
+ 347              		.loc 1 184 17
+ 348 004c 7B69     		ldr	r3, [r7, #20]
+ 349 004e 3B61     		str	r3, [r7, #16]
+ 185:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             tmp = tmp->nxt;
+ 350              		.loc 1 185 17
+ 351 0050 7B69     		ldr	r3, [r7, #20]
+ 352 0052 1B68     		ldr	r3, [r3]
+ 353 0054 7B61     		str	r3, [r7, #20]
+ 354              	.L32:
+ 178:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         {
+ 355              		.loc 1 178 14
+ 356 0056 7B69     		ldr	r3, [r7, #20]
+ 357 0058 002B     		cmp	r3, #0
+ 358 005a EED1     		bne	.L35
+ 359 005c 00E0     		b	.L34
+ 360              	.L39:
+ 182:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             }
+ 361              		.loc 1 182 17
+ 362 005e 00BF     		nop
+ 363              	.L34:
+ 186:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         }
+ 187:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         if(NULL != tmp)  //find the device here
+ 364              		.loc 1 187 11
+ 365 0060 7B69     		ldr	r3, [r7, #20]
+ 366 0062 002B     		cmp	r3, #0
+ 367 0064 15D0     		beq	.L36
+ 188:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         {
+ 189:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             if(pre == NULL)
+ 368              		.loc 1 189 15
+ 369 0066 3B69     		ldr	r3, [r7, #16]
+ 370 0068 002B     		cmp	r3, #0
+ 371 006a 04D1     		bne	.L37
+ 190:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             {
+ 191:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****                 s_los_driv_module.drivlst = tmp->nxt;
+ 372              		.loc 1 191 48
+ 373 006c 7B69     		ldr	r3, [r7, #20]
+ 374 006e 1B68     		ldr	r3, [r3]
+ 375              		.loc 1 191 43
+ 376 0070 0D4A     		ldr	r2, .L40
+ARM GAS  /tmp/ccXrN7D1.s 			page 11
+
+
+ 377 0072 5360     		str	r3, [r2, #4]
+ 378 0074 03E0     		b	.L38
+ 379              	.L37:
+ 192:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             }
+ 193:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             else
+ 194:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             {
+ 195:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****                 pre->nxt = tmp->nxt;
+ 380              		.loc 1 195 31
+ 381 0076 7B69     		ldr	r3, [r7, #20]
+ 382 0078 1A68     		ldr	r2, [r3]
+ 383              		.loc 1 195 26
+ 384 007a 3B69     		ldr	r3, [r7, #16]
+ 385 007c 1A60     		str	r2, [r3]
+ 386              	.L38:
+ 196:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             }
+ 197:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 198:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             osal_free(tmp);
+ 387              		.loc 1 198 13
+ 388 007e 7869     		ldr	r0, [r7, #20]
+ 389 0080 FFF7FEFF 		bl	osal_free
+ 199:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             ret = true;
+ 390              		.loc 1 199 17
+ 391 0084 0123     		movs	r3, #1
+ 392 0086 FB60     		str	r3, [r7, #12]
+ 200:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 201:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             s_los_driv_module.drivnum--;
+ 393              		.loc 1 201 30
+ 394 0088 074B     		ldr	r3, .L40
+ 395 008a 9B68     		ldr	r3, [r3, #8]
+ 396              		.loc 1 201 38
+ 397 008c 013B     		subs	r3, r3, #1
+ 398 008e 064A     		ldr	r2, .L40
+ 399 0090 9360     		str	r3, [r2, #8]
+ 400              	.L36:
+ 202:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         }
+ 203:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 204:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         (void) osal_mutex_unlock(s_los_driv_module.lock);
+ 401              		.loc 1 204 16
+ 402 0092 054B     		ldr	r3, .L40
+ 403 0094 1B68     		ldr	r3, [r3]
+ 404 0096 1846     		mov	r0, r3
+ 405 0098 FFF7FEFF 		bl	osal_mutex_unlock
+ 406              	.L31:
+ 205:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 206:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 207:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     return ret;
+ 407              		.loc 1 207 12
+ 408 009c FB68     		ldr	r3, [r7, #12]
+ 409              	.L30:
+ 208:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** }
+ 410              		.loc 1 208 1
+ 411 009e 1846     		mov	r0, r3
+ 412 00a0 1837     		adds	r7, r7, #24
+ 413              	.LCFI13:
+ 414              		.cfi_def_cfa_offset 8
+ 415 00a2 BD46     		mov	sp, r7
+ 416              	.LCFI14:
+ARM GAS  /tmp/ccXrN7D1.s 			page 12
+
+
+ 417              		.cfi_def_cfa_register 13
+ 418              		@ sp needed
+ 419 00a4 80BD     		pop	{r7, pc}
+ 420              	.L41:
+ 421 00a6 00BF     		.align	2
+ 422              	.L40:
+ 423 00a8 00000000 		.word	s_los_driv_module
+ 424              		.cfi_endproc
+ 425              	.LFE5:
+ 427              		.section	.text.los_driv_event,"ax",%progbits
+ 428              		.align	1
+ 429              		.global	los_driv_event
+ 430              		.syntax unified
+ 431              		.thumb
+ 432              		.thumb_func
+ 433              		.fpu fpv4-sp-d16
+ 435              	los_driv_event:
+ 436              	.LFB6:
+ 209:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 210:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** /*******************************************************************************
+ 211:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** function     :bsp developer use this function to notify the application any event has happened
+ 212:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** parameters   :
+ 213:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** instruction  :not implement yet,we will do it as the asynchronize call
+ 214:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** *******************************************************************************/
+ 215:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** bool_t los_driv_event(los_driv_t driv,unsigned int event,void *para)
+ 216:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** {
+ 437              		.loc 1 216 1
+ 438              		.cfi_startproc
+ 439              		@ args = 0, pretend = 0, frame = 16
+ 440              		@ frame_needed = 1, uses_anonymous_args = 0
+ 441              		@ link register save eliminated.
+ 442 0000 80B4     		push	{r7}
+ 443              	.LCFI15:
+ 444              		.cfi_def_cfa_offset 4
+ 445              		.cfi_offset 7, -4
+ 446 0002 85B0     		sub	sp, sp, #20
+ 447              	.LCFI16:
+ 448              		.cfi_def_cfa_offset 24
+ 449 0004 00AF     		add	r7, sp, #0
+ 450              	.LCFI17:
+ 451              		.cfi_def_cfa_register 7
+ 452 0006 F860     		str	r0, [r7, #12]
+ 453 0008 B960     		str	r1, [r7, #8]
+ 454 000a 7A60     		str	r2, [r7, #4]
+ 217:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     return false;
+ 455              		.loc 1 217 12
+ 456 000c 0023     		movs	r3, #0
+ 218:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** }
+ 457              		.loc 1 218 1
+ 458 000e 1846     		mov	r0, r3
+ 459 0010 1437     		adds	r7, r7, #20
+ 460              	.LCFI18:
+ 461              		.cfi_def_cfa_offset 4
+ 462 0012 BD46     		mov	sp, r7
+ 463              	.LCFI19:
+ 464              		.cfi_def_cfa_register 13
+ 465              		@ sp needed
+ARM GAS  /tmp/ccXrN7D1.s 			page 13
+
+
+ 466 0014 5DF8047B 		ldr	r7, [sp], #4
+ 467              	.LCFI20:
+ 468              		.cfi_restore 7
+ 469              		.cfi_def_cfa_offset 0
+ 470 0018 7047     		bx	lr
+ 471              		.cfi_endproc
+ 472              	.LFE6:
+ 474              		.section	.text.osdriv_load_static,"ax",%progbits
+ 475              		.align	1
+ 476              		.syntax unified
+ 477              		.thumb
+ 478              		.thumb_func
+ 479              		.fpu fpv4-sp-d16
+ 481              	osdriv_load_static:
+ 482              	.LFB7:
+ 219:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 220:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 221:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** #ifdef __CC_ARM /* ARM C Compiler ,like keil,options for linker:--keep *.o(osdriv)*/
+ 222:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     extern unsigned int osdriv$$Base;
+ 223:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     extern unsigned int osdriv$$Limit;
+ 224:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 225:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** #elif defined(__GNUC__)
+ 226:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     extern unsigned int __osdriv_start;
+ 227:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     extern unsigned int __osdriv_end;
+ 228:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** #else
+ 229:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     #error("unknown compiler here");
+ 230:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** #endif
+ 231:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 232:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 233:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** static void osdriv_load_static(void){
+ 483              		.loc 1 233 37
+ 484              		.cfi_startproc
+ 485              		@ args = 0, pretend = 0, frame = 16
+ 486              		@ frame_needed = 1, uses_anonymous_args = 0
+ 487 0000 80B5     		push	{r7, lr}
+ 488              	.LCFI21:
+ 489              		.cfi_def_cfa_offset 8
+ 490              		.cfi_offset 7, -8
+ 491              		.cfi_offset 14, -4
+ 492 0002 84B0     		sub	sp, sp, #16
+ 493              	.LCFI22:
+ 494              		.cfi_def_cfa_offset 24
+ 495 0004 00AF     		add	r7, sp, #0
+ 496              	.LCFI23:
+ 497              		.cfi_def_cfa_register 7
+ 234:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 235:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     os_driv_para_t *para;
+ 236:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     unsigned int num = 0;
+ 498              		.loc 1 236 18
+ 499 0006 0023     		movs	r3, #0
+ 500 0008 7B60     		str	r3, [r7, #4]
+ 237:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     unsigned int i = 0;
+ 501              		.loc 1 237 18
+ 502 000a 0023     		movs	r3, #0
+ 503 000c BB60     		str	r3, [r7, #8]
+ 238:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** #if defined (__CC_ARM)    //you could add other compiler like this
+ 239:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     num = ((unsigned int)&osdriv$$Limit-(unsigned int)&osdriv$$Base)/sizeof(os_driv_para_t);
+ARM GAS  /tmp/ccXrN7D1.s 			page 14
+
+
+ 240:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     para = (os_driv_para_t *) &osdriv$$Base;
+ 241:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** #elif defined(__GNUC__)
+ 242:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 243:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     para = (os_driv_para_t *)&__osdriv_start;
+ 504              		.loc 1 243 10
+ 505 000e 0D4B     		ldr	r3, .L48
+ 506 0010 FB60     		str	r3, [r7, #12]
+ 244:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     num = ((unsigned int )(uintptr_t)&__osdriv_end - (unsigned int)(uintptr_t)&__osdriv_start)/size
+ 507              		.loc 1 244 12
+ 508 0012 0D4A     		ldr	r2, .L48+4
+ 509              		.loc 1 244 54
+ 510 0014 0B4B     		ldr	r3, .L48
+ 511              		.loc 1 244 52
+ 512 0016 D31A     		subs	r3, r2, r3
+ 513              		.loc 1 244 9
+ 514 0018 1B09     		lsrs	r3, r3, #4
+ 515 001a 7B60     		str	r3, [r7, #4]
+ 245:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** #endif
+ 246:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     for(i =0;i<num;i++)
+ 516              		.loc 1 246 11
+ 517 001c 0023     		movs	r3, #0
+ 518 001e BB60     		str	r3, [r7, #8]
+ 519              		.loc 1 246 5
+ 520 0020 08E0     		b	.L45
+ 521              	.L46:
+ 247:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 248:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         (void) los_driv_register(para);
+ 522              		.loc 1 248 16 discriminator 3
+ 523 0022 F868     		ldr	r0, [r7, #12]
+ 524 0024 FFF7FEFF 		bl	los_driv_register
+ 249:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         para++;
+ 525              		.loc 1 249 13 discriminator 3
+ 526 0028 FB68     		ldr	r3, [r7, #12]
+ 527 002a 1033     		adds	r3, r3, #16
+ 528 002c FB60     		str	r3, [r7, #12]
+ 246:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 529              		.loc 1 246 21 discriminator 3
+ 530 002e BB68     		ldr	r3, [r7, #8]
+ 531 0030 0133     		adds	r3, r3, #1
+ 532 0032 BB60     		str	r3, [r7, #8]
+ 533              	.L45:
+ 246:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 534              		.loc 1 246 5 discriminator 1
+ 535 0034 BA68     		ldr	r2, [r7, #8]
+ 536 0036 7B68     		ldr	r3, [r7, #4]
+ 537 0038 9A42     		cmp	r2, r3
+ 538 003a F2D3     		bcc	.L46
+ 250:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 251:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 252:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     return;
+ 539              		.loc 1 252 5
+ 540 003c 00BF     		nop
+ 253:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** }
+ 541              		.loc 1 253 1
+ 542 003e 1037     		adds	r7, r7, #16
+ 543              	.LCFI24:
+ 544              		.cfi_def_cfa_offset 8
+ARM GAS  /tmp/ccXrN7D1.s 			page 15
+
+
+ 545 0040 BD46     		mov	sp, r7
+ 546              	.LCFI25:
+ 547              		.cfi_def_cfa_register 13
+ 548              		@ sp needed
+ 549 0042 80BD     		pop	{r7, pc}
+ 550              	.L49:
+ 551              		.align	2
+ 552              	.L48:
+ 553 0044 00000000 		.word	__osdriv_start
+ 554 0048 00000000 		.word	__osdriv_end
+ 555              		.cfi_endproc
+ 556              	.LFE7:
+ 558              		.section	.text.los_driv_init,"ax",%progbits
+ 559              		.align	1
+ 560              		.global	los_driv_init
+ 561              		.syntax unified
+ 562              		.thumb
+ 563              		.thumb_func
+ 564              		.fpu fpv4-sp-d16
+ 566              	los_driv_init:
+ 567              	.LFB8:
+ 254:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 255:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** /*******************************************************************************
+ 256:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** function     :the device module entry
+ 257:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** parameters   :
+ 258:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** instruction  :call this function to initialize the device module here
+ 259:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****               load the static init from section os_device
+ 260:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** *******************************************************************************/
+ 261:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** bool_t  los_driv_init()
+ 262:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** {
+ 568              		.loc 1 262 1
+ 569              		.cfi_startproc
+ 570              		@ args = 0, pretend = 0, frame = 8
+ 571              		@ frame_needed = 1, uses_anonymous_args = 0
+ 572 0000 80B5     		push	{r7, lr}
+ 573              	.LCFI26:
+ 574              		.cfi_def_cfa_offset 8
+ 575              		.cfi_offset 7, -8
+ 576              		.cfi_offset 14, -4
+ 577 0002 82B0     		sub	sp, sp, #8
+ 578              	.LCFI27:
+ 579              		.cfi_def_cfa_offset 16
+ 580 0004 00AF     		add	r7, sp, #0
+ 581              	.LCFI28:
+ 582              		.cfi_def_cfa_register 7
+ 263:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     bool_t ret = false;
+ 583              		.loc 1 263 12
+ 584 0006 0023     		movs	r3, #0
+ 585 0008 7B60     		str	r3, [r7, #4]
+ 264:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 265:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     ret = osal_mutex_create(&s_los_driv_module.lock);
+ 586              		.loc 1 265 11
+ 587 000a 0848     		ldr	r0, .L55
+ 588 000c FFF7FEFF 		bl	osal_mutex_create
+ 589 0010 7860     		str	r0, [r7, #4]
+ 266:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if(false == ret)
+ 590              		.loc 1 266 7
+ARM GAS  /tmp/ccXrN7D1.s 			page 16
+
+
+ 591 0012 7B68     		ldr	r3, [r7, #4]
+ 592 0014 002B     		cmp	r3, #0
+ 593 0016 02D0     		beq	.L54
+ 267:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 268:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         goto EXIT_MUTEX;
+ 269:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 270:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 271:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     //load all the static device init
+ 272:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     osdriv_load_static();
+ 594              		.loc 1 272 5
+ 595 0018 FFF7FEFF 		bl	osdriv_load_static
+ 596 001c 00E0     		b	.L52
+ 597              	.L54:
+ 268:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 598              		.loc 1 268 9
+ 599 001e 00BF     		nop
+ 600              	.L52:
+ 273:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 274:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** EXIT_MUTEX:
+ 275:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     return ret;
+ 601              		.loc 1 275 12
+ 602 0020 7B68     		ldr	r3, [r7, #4]
+ 276:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** }
+ 603              		.loc 1 276 1
+ 604 0022 1846     		mov	r0, r3
+ 605 0024 0837     		adds	r7, r7, #8
+ 606              	.LCFI29:
+ 607              		.cfi_def_cfa_offset 8
+ 608 0026 BD46     		mov	sp, r7
+ 609              	.LCFI30:
+ 610              		.cfi_def_cfa_register 13
+ 611              		@ sp needed
+ 612 0028 80BD     		pop	{r7, pc}
+ 613              	.L56:
+ 614 002a 00BF     		.align	2
+ 615              	.L55:
+ 616 002c 00000000 		.word	s_los_driv_module
+ 617              		.cfi_endproc
+ 618              	.LFE8:
+ 620              		.section	.text.los_dev_open,"ax",%progbits
+ 621              		.align	1
+ 622              		.global	los_dev_open
+ 623              		.syntax unified
+ 624              		.thumb
+ 625              		.thumb_func
+ 626              		.fpu fpv4-sp-d16
+ 628              	los_dev_open:
+ 629              	.LFB9:
+ 277:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 278:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** //here we define the data structure which used by the driv application apis
+ 279:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** struct dev_cb
+ 280:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** {
+ 281:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     void *nxt;            //used by the open lst
+ 282:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     void *driv;           //which attached dri here
+ 283:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     int openflag;       //here means the open state here
+ 284:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     unsigned int offset;
+ 285:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     //the following for the debug
+ARM GAS  /tmp/ccXrN7D1.s 			page 17
+
+
+ 286:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     unsigned int readbytes;
+ 287:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     unsigned int writebytes;
+ 288:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** };
+ 289:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 290:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** /*******************************************************************************
+ 291:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** function     :open the device with the specified name
+ 292:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** parameters   :
+ 293:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** instruction  :if first open the device,then will call the init function if exsited
+ 294:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** *******************************************************************************/
+ 295:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** los_dev_t  los_dev_open  (const char *name,unsigned int flag)
+ 296:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** {
+ 630              		.loc 1 296 1
+ 631              		.cfi_startproc
+ 632              		@ args = 0, pretend = 0, frame = 24
+ 633              		@ frame_needed = 1, uses_anonymous_args = 0
+ 634 0000 80B5     		push	{r7, lr}
+ 635              	.LCFI31:
+ 636              		.cfi_def_cfa_offset 8
+ 637              		.cfi_offset 7, -8
+ 638              		.cfi_offset 14, -4
+ 639 0002 86B0     		sub	sp, sp, #24
+ 640              	.LCFI32:
+ 641              		.cfi_def_cfa_offset 32
+ 642 0004 00AF     		add	r7, sp, #0
+ 643              	.LCFI33:
+ 644              		.cfi_def_cfa_register 7
+ 645 0006 7860     		str	r0, [r7, #4]
+ 646 0008 3960     		str	r1, [r7]
+ 297:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     bool_t opret = true;           //operate result
+ 647              		.loc 1 297 12
+ 648 000a 0123     		movs	r3, #1
+ 649 000c 3B61     		str	r3, [r7, #16]
+ 298:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     struct driv_cb *driv = NULL;   //the driver attached
+ 650              		.loc 1 298 21
+ 651 000e 0023     		movs	r3, #0
+ 652 0010 FB60     		str	r3, [r7, #12]
+ 299:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     struct dev_cb  *dev = NULL;    //the device opened
+ 653              		.loc 1 299 21
+ 654 0012 0023     		movs	r3, #0
+ 655 0014 7B61     		str	r3, [r7, #20]
+ 300:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if ( NULL == name )
+ 656              		.loc 1 300 8
+ 657 0016 7B68     		ldr	r3, [r7, #4]
+ 658 0018 002B     		cmp	r3, #0
+ 659 001a 00F08480 		beq	.L74
+ 301:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 302:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         goto EXIT_PARAERR;
+ 303:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 304:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 305:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     dev = osal_malloc(sizeof(struct dev_cb));
+ 660              		.loc 1 305 11
+ 661 001e 1820     		movs	r0, #24
+ 662 0020 FFF7FEFF 		bl	osal_malloc
+ 663 0024 7861     		str	r0, [r7, #20]
+ 306:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if (NULL == dev)
+ 664              		.loc 1 306 8
+ 665 0026 7B69     		ldr	r3, [r7, #20]
+ARM GAS  /tmp/ccXrN7D1.s 			page 18
+
+
+ 666 0028 002B     		cmp	r3, #0
+ 667 002a 7ED0     		beq	.L75
+ 307:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 308:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         goto EXIT_MEMERR;
+ 309:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 310:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     (void) memset(dev,0,sizeof(struct dev_cb));
+ 668              		.loc 1 310 12
+ 669 002c 1822     		movs	r2, #24
+ 670 002e 0021     		movs	r1, #0
+ 671 0030 7869     		ldr	r0, [r7, #20]
+ 672 0032 FFF7FEFF 		bl	memset
+ 311:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 312:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     opret = osal_mutex_lock(s_los_driv_module.lock);
+ 673              		.loc 1 312 13
+ 674 0036 404B     		ldr	r3, .L79
+ 675 0038 1B68     		ldr	r3, [r3]
+ 676 003a 1846     		mov	r0, r3
+ 677 003c FFF7FEFF 		bl	osal_mutex_lock
+ 678 0040 3861     		str	r0, [r7, #16]
+ 313:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if(false == opret)
+ 679              		.loc 1 313 7
+ 680 0042 3B69     		ldr	r3, [r7, #16]
+ 681 0044 002B     		cmp	r3, #0
+ 682 0046 67D0     		beq	.L76
+ 314:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 315:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         goto EXIT_MUTEXERR;
+ 316:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 317:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 318:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     driv = __driv_match(name);
+ 683              		.loc 1 318 12
+ 684 0048 7868     		ldr	r0, [r7, #4]
+ 685 004a FFF7FEFF 		bl	__driv_match
+ 686 004e F860     		str	r0, [r7, #12]
+ 319:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if(NULL == driv)
+ 687              		.loc 1 319 7
+ 688 0050 FB68     		ldr	r3, [r7, #12]
+ 689 0052 002B     		cmp	r3, #0
+ 690 0054 57D0     		beq	.L77
+ 320:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 321:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         goto EXIT_DRIVERR;
+ 322:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 323:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     //WE DON'T CARE TOO MUCH ABOUT THE RD AND WR FLAG,MAY BE TODO IT IN THE NEXT VERSION HERE
+ 324:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if((O_EXCL & (unsigned int )driv->flagmask) && (NULL != driv->devlst))
+ 691              		.loc 1 324 37
+ 692 0056 FB68     		ldr	r3, [r7, #12]
+ 693 0058 DB68     		ldr	r3, [r3, #12]
+ 694              		.loc 1 324 16
+ 695 005a 03F40063 		and	r3, r3, #2048
+ 696              		.loc 1 324 7
+ 697 005e 002B     		cmp	r3, #0
+ 698 0060 03D0     		beq	.L65
+ 699              		.loc 1 324 65 discriminator 1
+ 700 0062 FB68     		ldr	r3, [r7, #12]
+ 701 0064 9B69     		ldr	r3, [r3, #24]
+ 702              		.loc 1 324 49 discriminator 1
+ 703 0066 002B     		cmp	r3, #0
+ 704 0068 4FD1     		bne	.L78
+ARM GAS  /tmp/ccXrN7D1.s 			page 19
+
+
+ 705              	.L65:
+ 325:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 326:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         goto EXIT_EXCLERR;
+ 327:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 328:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 329:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if((0 == (driv->drivstatus & cn_driv_status_initialized)) && \
+ 706              		.loc 1 329 19
+ 707 006a FB68     		ldr	r3, [r7, #12]
+ 708 006c 5B69     		ldr	r3, [r3, #20]
+ 709              		.loc 1 329 32
+ 710 006e 03F00103 		and	r3, r3, #1
+ 711              		.loc 1 329 7
+ 712 0072 002B     		cmp	r3, #0
+ 713 0074 19D1     		bne	.L66
+ 330:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         (NULL != driv->op->init))
+ 714              		.loc 1 330 22 discriminator 1
+ 715 0076 FB68     		ldr	r3, [r7, #12]
+ 716 0078 1B69     		ldr	r3, [r3, #16]
+ 717              		.loc 1 330 26 discriminator 1
+ 718 007a 9B69     		ldr	r3, [r3, #24]
+ 329:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         (NULL != driv->op->init))
+ 719              		.loc 1 329 63 discriminator 1
+ 720 007c 002B     		cmp	r3, #0
+ 721 007e 14D0     		beq	.L66
+ 331:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 332:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         opret = driv->op->init(driv->pri);
+ 722              		.loc 1 332 21
+ 723 0080 FB68     		ldr	r3, [r7, #12]
+ 724 0082 1B69     		ldr	r3, [r3, #16]
+ 725              		.loc 1 332 25
+ 726 0084 9B69     		ldr	r3, [r3, #24]
+ 727              		.loc 1 332 17
+ 728 0086 FA68     		ldr	r2, [r7, #12]
+ 729 0088 5268     		ldr	r2, [r2, #4]
+ 730 008a 1046     		mov	r0, r2
+ 731 008c 9847     		blx	r3
+ 732              	.LVL0:
+ 733 008e 3861     		str	r0, [r7, #16]
+ 333:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         if(false == opret)
+ 734              		.loc 1 333 11
+ 735 0090 3B69     		ldr	r3, [r7, #16]
+ 736 0092 002B     		cmp	r3, #0
+ 737 0094 03D1     		bne	.L67
+ 334:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         {
+ 335:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             driv->errno = en_dev_err_init;
+ 738              		.loc 1 335 25
+ 739 0096 FB68     		ldr	r3, [r7, #12]
+ 740 0098 0122     		movs	r2, #1
+ 741 009a 9A62     		str	r2, [r3, #40]
+ 336:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             goto EXIT_INITERR;
+ 742              		.loc 1 336 13
+ 743 009c 36E0     		b	.L72
+ 744              	.L67:
+ 337:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         }
+ 338:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         driv->drivstatus |= cn_driv_status_initialized;
+ 745              		.loc 1 338 26
+ 746 009e FB68     		ldr	r3, [r7, #12]
+ARM GAS  /tmp/ccXrN7D1.s 			page 20
+
+
+ 747 00a0 5B69     		ldr	r3, [r3, #20]
+ 748 00a2 43F00102 		orr	r2, r3, #1
+ 749 00a6 FB68     		ldr	r3, [r7, #12]
+ 750 00a8 5A61     		str	r2, [r3, #20]
+ 751              	.L66:
+ 339:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 340:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 341:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if(NULL != driv->op->open)
+ 752              		.loc 1 341 20
+ 753 00aa FB68     		ldr	r3, [r7, #12]
+ 754 00ac 1B69     		ldr	r3, [r3, #16]
+ 755              		.loc 1 341 24
+ 756 00ae 1B68     		ldr	r3, [r3]
+ 757              		.loc 1 341 7
+ 758 00b0 002B     		cmp	r3, #0
+ 759 00b2 0FD0     		beq	.L68
+ 342:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 343:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         opret = driv->op->open(driv->pri,flag);
+ 760              		.loc 1 343 21
+ 761 00b4 FB68     		ldr	r3, [r7, #12]
+ 762 00b6 1B69     		ldr	r3, [r3, #16]
+ 763              		.loc 1 343 25
+ 764 00b8 1B68     		ldr	r3, [r3]
+ 765              		.loc 1 343 17
+ 766 00ba FA68     		ldr	r2, [r7, #12]
+ 767 00bc 5268     		ldr	r2, [r2, #4]
+ 768 00be 3968     		ldr	r1, [r7]
+ 769 00c0 1046     		mov	r0, r2
+ 770 00c2 9847     		blx	r3
+ 771              	.LVL1:
+ 772 00c4 3861     		str	r0, [r7, #16]
+ 344:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         if(false == opret)
+ 773              		.loc 1 344 11
+ 774 00c6 3B69     		ldr	r3, [r7, #16]
+ 775 00c8 002B     		cmp	r3, #0
+ 776 00ca 03D1     		bne	.L68
+ 345:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         {
+ 346:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             driv->errno = en_dev_err_open;
+ 777              		.loc 1 346 25
+ 778 00cc FB68     		ldr	r3, [r7, #12]
+ 779 00ce 0222     		movs	r2, #2
+ 780 00d0 9A62     		str	r2, [r3, #40]
+ 347:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             goto EXIT_OPENERR;
+ 781              		.loc 1 347 13
+ 782 00d2 1BE0     		b	.L72
+ 783              	.L68:
+ 348:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         }
+ 349:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 350:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 351:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     //reach here means all the initialize is ok
+ 352:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     //add the dev to the list of the drive and  attach the driv to the device
+ 353:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     driv->opencounter++;
+ 784              		.loc 1 353 9
+ 785 00d4 FB68     		ldr	r3, [r7, #12]
+ 786 00d6 5B6A     		ldr	r3, [r3, #36]
+ 787              		.loc 1 353 22
+ 788 00d8 5A1C     		adds	r2, r3, #1
+ARM GAS  /tmp/ccXrN7D1.s 			page 21
+
+
+ 789 00da FB68     		ldr	r3, [r7, #12]
+ 790 00dc 5A62     		str	r2, [r3, #36]
+ 354:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     dev->nxt = driv->devlst;
+ 791              		.loc 1 354 20
+ 792 00de FB68     		ldr	r3, [r7, #12]
+ 793 00e0 9A69     		ldr	r2, [r3, #24]
+ 794              		.loc 1 354 14
+ 795 00e2 7B69     		ldr	r3, [r7, #20]
+ 796 00e4 1A60     		str	r2, [r3]
+ 355:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     driv->devlst = dev;
+ 797              		.loc 1 355 18
+ 798 00e6 FB68     		ldr	r3, [r7, #12]
+ 799 00e8 7A69     		ldr	r2, [r7, #20]
+ 800 00ea 9A61     		str	r2, [r3, #24]
+ 356:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 357:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     dev->driv = driv;
+ 801              		.loc 1 357 15
+ 802 00ec 7B69     		ldr	r3, [r7, #20]
+ 803 00ee FA68     		ldr	r2, [r7, #12]
+ 804 00f0 5A60     		str	r2, [r3, #4]
+ 358:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     dev->openflag =  flag;
+ 805              		.loc 1 358 19
+ 806 00f2 3A68     		ldr	r2, [r7]
+ 807 00f4 7B69     		ldr	r3, [r7, #20]
+ 808 00f6 9A60     		str	r2, [r3, #8]
+ 359:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 360:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     (void) osal_mutex_unlock(s_los_driv_module.lock);
+ 809              		.loc 1 360 12
+ 810 00f8 0F4B     		ldr	r3, .L79
+ 811 00fa 1B68     		ldr	r3, [r3]
+ 812 00fc 1846     		mov	r0, r3
+ 813 00fe FFF7FEFF 		bl	osal_mutex_unlock
+ 361:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     return dev;
+ 814              		.loc 1 361 12
+ 815 0102 7B69     		ldr	r3, [r7, #20]
+ 816 0104 13E0     		b	.L69
+ 817              	.L64:
+ 818              	.L70:
+ 819              	.L71:
+ 820              	.L77:
+ 321:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 821              		.loc 1 321 9
+ 822 0106 00BF     		nop
+ 823 0108 00E0     		b	.L72
+ 824              	.L78:
+ 326:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 825              		.loc 1 326 9
+ 826 010a 00BF     		nop
+ 827              	.L72:
+ 362:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 363:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** EXIT_OPENERR:
+ 364:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** EXIT_INITERR:
+ 365:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** EXIT_EXCLERR:
+ 366:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** EXIT_DRIVERR:
+ 367:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     (void) osal_mutex_unlock(s_los_driv_module.lock);
+ 828              		.loc 1 367 12
+ 829 010c 0A4B     		ldr	r3, .L79
+ARM GAS  /tmp/ccXrN7D1.s 			page 22
+
+
+ 830 010e 1B68     		ldr	r3, [r3]
+ 831 0110 1846     		mov	r0, r3
+ 832 0112 FFF7FEFF 		bl	osal_mutex_unlock
+ 833 0116 00E0     		b	.L62
+ 834              	.L76:
+ 315:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 835              		.loc 1 315 9
+ 836 0118 00BF     		nop
+ 837              	.L62:
+ 368:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** EXIT_MUTEXERR:
+ 369:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     osal_free(dev);
+ 838              		.loc 1 369 5
+ 839 011a 7869     		ldr	r0, [r7, #20]
+ 840 011c FFF7FEFF 		bl	osal_free
+ 370:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     dev = NULL;
+ 841              		.loc 1 370 9
+ 842 0120 0023     		movs	r3, #0
+ 843 0122 7B61     		str	r3, [r7, #20]
+ 844 0124 02E0     		b	.L73
+ 845              	.L59:
+ 846              	.L74:
+ 302:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 847              		.loc 1 302 9
+ 848 0126 00BF     		nop
+ 849 0128 00E0     		b	.L73
+ 850              	.L75:
+ 308:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 851              		.loc 1 308 9
+ 852 012a 00BF     		nop
+ 853              	.L73:
+ 371:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** EXIT_MEMERR:
+ 372:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** EXIT_PARAERR:
+ 373:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     return dev;
+ 854              		.loc 1 373 12
+ 855 012c 7B69     		ldr	r3, [r7, #20]
+ 856              	.L69:
+ 374:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** }
+ 857              		.loc 1 374 1
+ 858 012e 1846     		mov	r0, r3
+ 859 0130 1837     		adds	r7, r7, #24
+ 860              	.LCFI34:
+ 861              		.cfi_def_cfa_offset 8
+ 862 0132 BD46     		mov	sp, r7
+ 863              	.LCFI35:
+ 864              		.cfi_def_cfa_register 13
+ 865              		@ sp needed
+ 866 0134 80BD     		pop	{r7, pc}
+ 867              	.L80:
+ 868 0136 00BF     		.align	2
+ 869              	.L79:
+ 870 0138 00000000 		.word	s_los_driv_module
+ 871              		.cfi_endproc
+ 872              	.LFE9:
+ 874              		.section	.text.los_dev_close,"ax",%progbits
+ 875              		.align	1
+ 876              		.global	los_dev_close
+ 877              		.syntax unified
+ARM GAS  /tmp/ccXrN7D1.s 			page 23
+
+
+ 878              		.thumb
+ 879              		.thumb_func
+ 880              		.fpu fpv4-sp-d16
+ 882              	los_dev_close:
+ 883              	.LFB10:
+ 375:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 376:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** /*******************************************************************************
+ 377:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** function     :close the device of opened
+ 378:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** parameters   :handle returned by open
+ 379:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** instruction  :
+ 380:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** *******************************************************************************/
+ 381:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** bool_t  los_dev_close  (los_dev_t dev)
+ 382:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** {
+ 884              		.loc 1 382 1
+ 885              		.cfi_startproc
+ 886              		@ args = 0, pretend = 0, frame = 24
+ 887              		@ frame_needed = 1, uses_anonymous_args = 0
+ 888 0000 80B5     		push	{r7, lr}
+ 889              	.LCFI36:
+ 890              		.cfi_def_cfa_offset 8
+ 891              		.cfi_offset 7, -8
+ 892              		.cfi_offset 14, -4
+ 893 0002 86B0     		sub	sp, sp, #24
+ 894              	.LCFI37:
+ 895              		.cfi_def_cfa_offset 32
+ 896 0004 00AF     		add	r7, sp, #0
+ 897              	.LCFI38:
+ 898              		.cfi_def_cfa_register 7
+ 899 0006 7860     		str	r0, [r7, #4]
+ 383:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     bool_t ret = false;
+ 900              		.loc 1 383 12
+ 901 0008 0023     		movs	r3, #0
+ 902 000a 7B61     		str	r3, [r7, #20]
+ 384:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     struct dev_cb *devcb = NULL;
+ 903              		.loc 1 384 20
+ 904 000c 0023     		movs	r3, #0
+ 905 000e FB60     		str	r3, [r7, #12]
+ 385:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     struct dev_cb *tmp = NULL;
+ 906              		.loc 1 385 20
+ 907 0010 0023     		movs	r3, #0
+ 908 0012 3B61     		str	r3, [r7, #16]
+ 386:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     struct driv_cb *driv = NULL;
+ 909              		.loc 1 386 21
+ 910 0014 0023     		movs	r3, #0
+ 911 0016 BB60     		str	r3, [r7, #8]
+ 387:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 388:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if ( NULL == dev )
+ 912              		.loc 1 388 8
+ 913 0018 7B68     		ldr	r3, [r7, #4]
+ 914 001a 002B     		cmp	r3, #0
+ 915 001c 6BD0     		beq	.L98
+ 389:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 390:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         goto EXIT_PARAERR;
+ 391:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 392:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     devcb = dev;
+ 916              		.loc 1 392 11
+ 917 001e 7B68     		ldr	r3, [r7, #4]
+ARM GAS  /tmp/ccXrN7D1.s 			page 24
+
+
+ 918 0020 FB60     		str	r3, [r7, #12]
+ 393:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 394:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if(false == osal_mutex_lock(s_los_driv_module.lock))
+ 919              		.loc 1 394 17
+ 920 0022 394B     		ldr	r3, .L102
+ 921 0024 1B68     		ldr	r3, [r3]
+ 922 0026 1846     		mov	r0, r3
+ 923 0028 FFF7FEFF 		bl	osal_mutex_lock
+ 924 002c 0346     		mov	r3, r0
+ 925              		.loc 1 394 7
+ 926 002e 002B     		cmp	r3, #0
+ 927 0030 63D0     		beq	.L99
+ 395:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 396:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         goto EXIT_MUTEXERR;
+ 397:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 398:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 399:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     //deattach the dev from the driv
+ 400:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     driv = devcb->driv;
+ 928              		.loc 1 400 10
+ 929 0032 FB68     		ldr	r3, [r7, #12]
+ 930 0034 5B68     		ldr	r3, [r3, #4]
+ 931 0036 BB60     		str	r3, [r7, #8]
+ 401:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if(NULL == driv)
+ 932              		.loc 1 401 7
+ 933 0038 BB68     		ldr	r3, [r7, #8]
+ 934 003a 002B     		cmp	r3, #0
+ 935 003c 52D0     		beq	.L100
+ 402:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 403:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         goto EXIT_DRIVERR;
+ 404:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 405:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 406:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if(devcb == driv->devlst)
+ 936              		.loc 1 406 21
+ 937 003e BB68     		ldr	r3, [r7, #8]
+ 938 0040 9B69     		ldr	r3, [r3, #24]
+ 939              		.loc 1 406 7
+ 940 0042 FA68     		ldr	r2, [r7, #12]
+ 941 0044 9A42     		cmp	r2, r3
+ 942 0046 04D1     		bne	.L87
+ 407:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 408:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         driv->devlst = devcb->nxt;
+ 943              		.loc 1 408 29
+ 944 0048 FB68     		ldr	r3, [r7, #12]
+ 945 004a 1A68     		ldr	r2, [r3]
+ 946              		.loc 1 408 22
+ 947 004c BB68     		ldr	r3, [r7, #8]
+ 948 004e 9A61     		str	r2, [r3, #24]
+ 949 0050 16E0     		b	.L88
+ 950              	.L87:
+ 409:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 410:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     else
+ 411:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 412:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         tmp = driv->devlst;
+ 951              		.loc 1 412 13
+ 952 0052 BB68     		ldr	r3, [r7, #8]
+ 953 0054 9B69     		ldr	r3, [r3, #24]
+ 954 0056 3B61     		str	r3, [r7, #16]
+ARM GAS  /tmp/ccXrN7D1.s 			page 25
+
+
+ 413:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         while(NULL != tmp)
+ 955              		.loc 1 413 14
+ 956 0058 0CE0     		b	.L89
+ 957              	.L92:
+ 414:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         {
+ 415:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             if(tmp->nxt == devcb)
+ 958              		.loc 1 415 19
+ 959 005a 3B69     		ldr	r3, [r7, #16]
+ 960 005c 1B68     		ldr	r3, [r3]
+ 961              		.loc 1 415 15
+ 962 005e FA68     		ldr	r2, [r7, #12]
+ 963 0060 9A42     		cmp	r2, r3
+ 964 0062 04D1     		bne	.L90
+ 416:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             {
+ 417:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****                 tmp->nxt = devcb->nxt;
+ 965              		.loc 1 417 33
+ 966 0064 FB68     		ldr	r3, [r7, #12]
+ 967 0066 1A68     		ldr	r2, [r3]
+ 968              		.loc 1 417 26
+ 969 0068 3B69     		ldr	r3, [r7, #16]
+ 970 006a 1A60     		str	r2, [r3]
+ 418:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****                 break;
+ 971              		.loc 1 418 17
+ 972 006c 05E0     		b	.L91
+ 973              	.L90:
+ 419:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             }
+ 420:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             tmp = tmp->nxt;
+ 974              		.loc 1 420 17
+ 975 006e 3B69     		ldr	r3, [r7, #16]
+ 976 0070 1B68     		ldr	r3, [r3]
+ 977 0072 3B61     		str	r3, [r7, #16]
+ 978              	.L89:
+ 413:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         {
+ 979              		.loc 1 413 14
+ 980 0074 3B69     		ldr	r3, [r7, #16]
+ 981 0076 002B     		cmp	r3, #0
+ 982 0078 EFD1     		bne	.L92
+ 983              	.L91:
+ 421:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         }
+ 422:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         if(NULL == tmp)
+ 984              		.loc 1 422 11
+ 985 007a 3B69     		ldr	r3, [r7, #16]
+ 986 007c 002B     		cmp	r3, #0
+ 987 007e 33D0     		beq	.L101
+ 988              	.L88:
+ 423:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         {
+ 424:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             goto EXIT_DETACHERR;
+ 425:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         }
+ 426:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 427:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if(NULL != driv->op->close)
+ 989              		.loc 1 427 20
+ 990 0080 BB68     		ldr	r3, [r7, #8]
+ 991 0082 1B69     		ldr	r3, [r3, #16]
+ 992              		.loc 1 427 24
+ 993 0084 DB68     		ldr	r3, [r3, #12]
+ 994              		.loc 1 427 7
+ 995 0086 002B     		cmp	r3, #0
+ARM GAS  /tmp/ccXrN7D1.s 			page 26
+
+
+ 996 0088 06D0     		beq	.L93
+ 428:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 429:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         driv->op->close(driv->pri);
+ 997              		.loc 1 429 13
+ 998 008a BB68     		ldr	r3, [r7, #8]
+ 999 008c 1B69     		ldr	r3, [r3, #16]
+ 1000              		.loc 1 429 17
+ 1001 008e DB68     		ldr	r3, [r3, #12]
+ 1002              		.loc 1 429 9
+ 1003 0090 BA68     		ldr	r2, [r7, #8]
+ 1004 0092 5268     		ldr	r2, [r2, #4]
+ 1005 0094 1046     		mov	r0, r2
+ 1006 0096 9847     		blx	r3
+ 1007              	.LVL2:
+ 1008              	.L93:
+ 430:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 431:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 432:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if((NULL == driv->devlst) && (NULL != driv->op->deinit))
+ 1009              		.loc 1 432 21
+ 1010 0098 BB68     		ldr	r3, [r7, #8]
+ 1011 009a 9B69     		ldr	r3, [r3, #24]
+ 1012              		.loc 1 432 7
+ 1013 009c 002B     		cmp	r3, #0
+ 1014 009e 11D1     		bne	.L94
+ 1015              		.loc 1 432 47 discriminator 1
+ 1016 00a0 BB68     		ldr	r3, [r7, #8]
+ 1017 00a2 1B69     		ldr	r3, [r3, #16]
+ 1018              		.loc 1 432 51 discriminator 1
+ 1019 00a4 DB69     		ldr	r3, [r3, #28]
+ 1020              		.loc 1 432 31 discriminator 1
+ 1021 00a6 002B     		cmp	r3, #0
+ 1022 00a8 0CD0     		beq	.L94
+ 433:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 434:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         driv->op->deinit(driv->pri);
+ 1023              		.loc 1 434 13
+ 1024 00aa BB68     		ldr	r3, [r7, #8]
+ 1025 00ac 1B69     		ldr	r3, [r3, #16]
+ 1026              		.loc 1 434 17
+ 1027 00ae DB69     		ldr	r3, [r3, #28]
+ 1028              		.loc 1 434 9
+ 1029 00b0 BA68     		ldr	r2, [r7, #8]
+ 1030 00b2 5268     		ldr	r2, [r2, #4]
+ 1031 00b4 1046     		mov	r0, r2
+ 1032 00b6 9847     		blx	r3
+ 1033              	.LVL3:
+ 435:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         driv->drivstatus &= (~cn_driv_status_initialized);
+ 1034              		.loc 1 435 26
+ 1035 00b8 BB68     		ldr	r3, [r7, #8]
+ 1036 00ba 5B69     		ldr	r3, [r3, #20]
+ 1037 00bc 23F00102 		bic	r2, r3, #1
+ 1038 00c0 BB68     		ldr	r3, [r7, #8]
+ 1039 00c2 5A61     		str	r2, [r3, #20]
+ 1040              	.L94:
+ 436:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 437:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 438:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     osal_free(dev);
+ 1041              		.loc 1 438 5
+ARM GAS  /tmp/ccXrN7D1.s 			page 27
+
+
+ 1042 00c4 7868     		ldr	r0, [r7, #4]
+ 1043 00c6 FFF7FEFF 		bl	osal_free
+ 439:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     driv->opencounter--;
+ 1044              		.loc 1 439 9
+ 1045 00ca BB68     		ldr	r3, [r7, #8]
+ 1046 00cc 5B6A     		ldr	r3, [r3, #36]
+ 1047              		.loc 1 439 22
+ 1048 00ce 5A1E     		subs	r2, r3, #1
+ 1049 00d0 BB68     		ldr	r3, [r7, #8]
+ 1050 00d2 5A62     		str	r2, [r3, #36]
+ 440:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 441:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     (void) osal_mutex_unlock(s_los_driv_module.lock);
+ 1051              		.loc 1 441 12
+ 1052 00d4 0C4B     		ldr	r3, .L102
+ 1053 00d6 1B68     		ldr	r3, [r3]
+ 1054 00d8 1846     		mov	r0, r3
+ 1055 00da FFF7FEFF 		bl	osal_mutex_unlock
+ 442:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 443:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     ret = true;
+ 1056              		.loc 1 443 9
+ 1057 00de 0123     		movs	r3, #1
+ 1058 00e0 7B61     		str	r3, [r7, #20]
+ 1059 00e2 02E0     		b	.L95
+ 1060              	.L86:
+ 1061              	.L100:
+ 403:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 1062              		.loc 1 403 9
+ 1063 00e4 00BF     		nop
+ 1064 00e6 00E0     		b	.L95
+ 1065              	.L101:
+ 424:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         }
+ 1066              		.loc 1 424 13
+ 1067 00e8 00BF     		nop
+ 1068              	.L95:
+ 444:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 445:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** EXIT_DETACHERR:
+ 446:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** EXIT_DRIVERR:
+ 447:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     (void) osal_mutex_unlock(s_los_driv_module.lock);
+ 1069              		.loc 1 447 12
+ 1070 00ea 074B     		ldr	r3, .L102
+ 1071 00ec 1B68     		ldr	r3, [r3]
+ 1072 00ee 1846     		mov	r0, r3
+ 1073 00f0 FFF7FEFF 		bl	osal_mutex_unlock
+ 1074 00f4 02E0     		b	.L96
+ 1075              	.L83:
+ 1076              	.L98:
+ 390:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 1077              		.loc 1 390 9
+ 1078 00f6 00BF     		nop
+ 1079 00f8 00E0     		b	.L96
+ 1080              	.L99:
+ 396:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 1081              		.loc 1 396 9
+ 1082 00fa 00BF     		nop
+ 1083              	.L96:
+ 448:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** EXIT_MUTEXERR:
+ 449:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** EXIT_PARAERR:
+ARM GAS  /tmp/ccXrN7D1.s 			page 28
+
+
+ 450:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     return ret;
+ 1084              		.loc 1 450 12
+ 1085 00fc 7B69     		ldr	r3, [r7, #20]
+ 451:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** }
+ 1086              		.loc 1 451 1
+ 1087 00fe 1846     		mov	r0, r3
+ 1088 0100 1837     		adds	r7, r7, #24
+ 1089              	.LCFI39:
+ 1090              		.cfi_def_cfa_offset 8
+ 1091 0102 BD46     		mov	sp, r7
+ 1092              	.LCFI40:
+ 1093              		.cfi_def_cfa_register 13
+ 1094              		@ sp needed
+ 1095 0104 80BD     		pop	{r7, pc}
+ 1096              	.L103:
+ 1097 0106 00BF     		.align	2
+ 1098              	.L102:
+ 1099 0108 00000000 		.word	s_los_driv_module
+ 1100              		.cfi_endproc
+ 1101              	.LFE10:
+ 1103              		.section	.text.los_dev_read,"ax",%progbits
+ 1104              		.align	1
+ 1105              		.global	los_dev_read
+ 1106              		.syntax unified
+ 1107              		.thumb
+ 1108              		.thumb_func
+ 1109              		.fpu fpv4-sp-d16
+ 1111              	los_dev_read:
+ 1112              	.LFB11:
+ 452:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 453:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** /*******************************************************************************
+ 454:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** function     :use this function to read data from the device
+ 455:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** parameters   :dev,returned by the los_dev_open function
+ 456:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****               offet:from where to read,only used for storage device
+ 457:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****               buf:used to storage the data
+ 458:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****               len:the length of the buf
+ 459:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****               timeout:the waittime if no data current
+ 460:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** instruction  :how many data has been read to the buf
+ 461:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** *******************************************************************************/
+ 462:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** ssize_t   los_dev_read  (los_dev_t dev,size_t offset, void *buf,size_t len,uint32_t timeout)
+ 463:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** {
+ 1113              		.loc 1 463 1
+ 1114              		.cfi_startproc
+ 1115              		@ args = 4, pretend = 0, frame = 32
+ 1116              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1117 0000 90B5     		push	{r4, r7, lr}
+ 1118              	.LCFI41:
+ 1119              		.cfi_def_cfa_offset 12
+ 1120              		.cfi_offset 4, -12
+ 1121              		.cfi_offset 7, -8
+ 1122              		.cfi_offset 14, -4
+ 1123 0002 8BB0     		sub	sp, sp, #44
+ 1124              	.LCFI42:
+ 1125              		.cfi_def_cfa_offset 56
+ 1126 0004 02AF     		add	r7, sp, #8
+ 1127              	.LCFI43:
+ 1128              		.cfi_def_cfa 7, 48
+ARM GAS  /tmp/ccXrN7D1.s 			page 29
+
+
+ 1129 0006 F860     		str	r0, [r7, #12]
+ 1130 0008 B960     		str	r1, [r7, #8]
+ 1131 000a 7A60     		str	r2, [r7, #4]
+ 1132 000c 3B60     		str	r3, [r7]
+ 464:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     ssize_t ret = 0;
+ 1133              		.loc 1 464 13
+ 1134 000e 0023     		movs	r3, #0
+ 1135 0010 FB61     		str	r3, [r7, #28]
+ 465:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     struct dev_cb  *devcb;
+ 466:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     struct driv_cb *drivcb;
+ 467:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 468:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if((NULL != dev)&&(NULL != buf)&&(0 != len))
+ 1136              		.loc 1 468 7
+ 1137 0012 FB68     		ldr	r3, [r7, #12]
+ 1138 0014 002B     		cmp	r3, #0
+ 1139 0016 2ED0     		beq	.L105
+ 1140              		.loc 1 468 21 discriminator 1
+ 1141 0018 7B68     		ldr	r3, [r7, #4]
+ 1142 001a 002B     		cmp	r3, #0
+ 1143 001c 2BD0     		beq	.L105
+ 1144              		.loc 1 468 36 discriminator 2
+ 1145 001e 3B68     		ldr	r3, [r7]
+ 1146 0020 002B     		cmp	r3, #0
+ 1147 0022 28D0     		beq	.L105
+ 469:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 470:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         devcb = dev;
+ 1148              		.loc 1 470 15
+ 1149 0024 FB68     		ldr	r3, [r7, #12]
+ 1150 0026 BB61     		str	r3, [r7, #24]
+ 471:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         if((0 == ((uint32_t)devcb->openflag & O_WRONLY)))
+ 1151              		.loc 1 471 34
+ 1152 0028 BB69     		ldr	r3, [r7, #24]
+ 1153 002a 9B68     		ldr	r3, [r3, #8]
+ 1154              		.loc 1 471 45
+ 1155 002c 03F00103 		and	r3, r3, #1
+ 1156              		.loc 1 471 11
+ 1157 0030 002B     		cmp	r3, #0
+ 1158 0032 20D1     		bne	.L105
+ 472:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         {
+ 473:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             drivcb = devcb->driv;
+ 1159              		.loc 1 473 20
+ 1160 0034 BB69     		ldr	r3, [r7, #24]
+ 1161 0036 5B68     		ldr	r3, [r3, #4]
+ 1162 0038 7B61     		str	r3, [r7, #20]
+ 474:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             if((NULL != drivcb->op)&&(NULL != drivcb->op->read))
+ 1163              		.loc 1 474 31
+ 1164 003a 7B69     		ldr	r3, [r7, #20]
+ 1165 003c 1B69     		ldr	r3, [r3, #16]
+ 1166              		.loc 1 474 15
+ 1167 003e 002B     		cmp	r3, #0
+ 1168 0040 19D0     		beq	.L105
+ 1169              		.loc 1 474 53 discriminator 1
+ 1170 0042 7B69     		ldr	r3, [r7, #20]
+ 1171 0044 1B69     		ldr	r3, [r3, #16]
+ 1172              		.loc 1 474 57 discriminator 1
+ 1173 0046 5B68     		ldr	r3, [r3, #4]
+ 1174              		.loc 1 474 36 discriminator 1
+ARM GAS  /tmp/ccXrN7D1.s 			page 30
+
+
+ 1175 0048 002B     		cmp	r3, #0
+ 1176 004a 14D0     		beq	.L105
+ 475:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             {
+ 476:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****                 ret = drivcb->op->read( drivcb->pri,offset,buf,len,timeout);
+ 1177              		.loc 1 476 29
+ 1178 004c 7B69     		ldr	r3, [r7, #20]
+ 1179 004e 1B69     		ldr	r3, [r3, #16]
+ 1180              		.loc 1 476 33
+ 1181 0050 5C68     		ldr	r4, [r3, #4]
+ 1182              		.loc 1 476 23
+ 1183 0052 7B69     		ldr	r3, [r7, #20]
+ 1184 0054 5868     		ldr	r0, [r3, #4]
+ 1185 0056 3B6B     		ldr	r3, [r7, #48]
+ 1186 0058 0093     		str	r3, [sp]
+ 1187 005a 3B68     		ldr	r3, [r7]
+ 1188 005c 7A68     		ldr	r2, [r7, #4]
+ 1189 005e B968     		ldr	r1, [r7, #8]
+ 1190 0060 A047     		blx	r4
+ 1191              	.LVL4:
+ 1192 0062 F861     		str	r0, [r7, #28]
+ 477:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****                 if(ret > 0)
+ 1193              		.loc 1 477 19
+ 1194 0064 FB69     		ldr	r3, [r7, #28]
+ 1195 0066 002B     		cmp	r3, #0
+ 1196 0068 05DD     		ble	.L105
+ 478:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****                 {
+ 479:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****                     drivcb->total_read += ret;
+ 1197              		.loc 1 479 40
+ 1198 006a 7B69     		ldr	r3, [r7, #20]
+ 1199 006c 1A6A     		ldr	r2, [r3, #32]
+ 1200 006e FB69     		ldr	r3, [r7, #28]
+ 1201 0070 1A44     		add	r2, r2, r3
+ 1202 0072 7B69     		ldr	r3, [r7, #20]
+ 1203 0074 1A62     		str	r2, [r3, #32]
+ 1204              	.L105:
+ 480:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****                 }
+ 481:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             }
+ 482:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         }
+ 483:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 484:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 485:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     return ret;
+ 1205              		.loc 1 485 12
+ 1206 0076 FB69     		ldr	r3, [r7, #28]
+ 486:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** }
+ 1207              		.loc 1 486 1
+ 1208 0078 1846     		mov	r0, r3
+ 1209 007a 2437     		adds	r7, r7, #36
+ 1210              	.LCFI44:
+ 1211              		.cfi_def_cfa_offset 12
+ 1212 007c BD46     		mov	sp, r7
+ 1213              	.LCFI45:
+ 1214              		.cfi_def_cfa_register 13
+ 1215              		@ sp needed
+ 1216 007e 90BD     		pop	{r4, r7, pc}
+ 1217              		.cfi_endproc
+ 1218              	.LFE11:
+ 1220              		.section	.text.los_dev_write,"ax",%progbits
+ARM GAS  /tmp/ccXrN7D1.s 			page 31
+
+
+ 1221              		.align	1
+ 1222              		.global	los_dev_write
+ 1223              		.syntax unified
+ 1224              		.thumb
+ 1225              		.thumb_func
+ 1226              		.fpu fpv4-sp-d16
+ 1228              	los_dev_write:
+ 1229              	.LFB12:
+ 487:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 488:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** /*******************************************************************************
+ 489:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** function     :use this function to write data to the device
+ 490:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** parameters   :dev,returned by the los_dev_open function
+ 491:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****               offset: from where to write,only used for storage device
+ 492:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****               buf:the data to be written
+ 493:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****               len:the length of the buf
+ 494:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****               timeout:the waittime if no data current
+ 495:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** instruction  :how many data has been written to the device
+ 496:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** *******************************************************************************/
+ 497:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** ssize_t los_dev_write (los_dev_t dev,size_t offset,const void *buf,size_t len, uint32_t timeout)
+ 498:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** {
+ 1230              		.loc 1 498 1
+ 1231              		.cfi_startproc
+ 1232              		@ args = 4, pretend = 0, frame = 32
+ 1233              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1234 0000 90B5     		push	{r4, r7, lr}
+ 1235              	.LCFI46:
+ 1236              		.cfi_def_cfa_offset 12
+ 1237              		.cfi_offset 4, -12
+ 1238              		.cfi_offset 7, -8
+ 1239              		.cfi_offset 14, -4
+ 1240 0002 8BB0     		sub	sp, sp, #44
+ 1241              	.LCFI47:
+ 1242              		.cfi_def_cfa_offset 56
+ 1243 0004 02AF     		add	r7, sp, #8
+ 1244              	.LCFI48:
+ 1245              		.cfi_def_cfa 7, 48
+ 1246 0006 F860     		str	r0, [r7, #12]
+ 1247 0008 B960     		str	r1, [r7, #8]
+ 1248 000a 7A60     		str	r2, [r7, #4]
+ 1249 000c 3B60     		str	r3, [r7]
+ 499:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     ssize_t ret = 0;
+ 1250              		.loc 1 499 13
+ 1251 000e 0023     		movs	r3, #0
+ 1252 0010 FB61     		str	r3, [r7, #28]
+ 500:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     struct dev_cb  *devcb;
+ 501:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     struct driv_cb *drivcb;
+ 502:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 503:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if((NULL != dev) && (NULL != buf) && (len != 0))
+ 1253              		.loc 1 503 7
+ 1254 0012 FB68     		ldr	r3, [r7, #12]
+ 1255 0014 002B     		cmp	r3, #0
+ 1256 0016 34D0     		beq	.L108
+ 1257              		.loc 1 503 22 discriminator 1
+ 1258 0018 7B68     		ldr	r3, [r7, #4]
+ 1259 001a 002B     		cmp	r3, #0
+ 1260 001c 31D0     		beq	.L108
+ 1261              		.loc 1 503 39 discriminator 2
+ARM GAS  /tmp/ccXrN7D1.s 			page 32
+
+
+ 1262 001e 3B68     		ldr	r3, [r7]
+ 1263 0020 002B     		cmp	r3, #0
+ 1264 0022 2ED0     		beq	.L108
+ 504:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 505:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         devcb = dev;
+ 1265              		.loc 1 505 15
+ 1266 0024 FB68     		ldr	r3, [r7, #12]
+ 1267 0026 BB61     		str	r3, [r7, #24]
+ 506:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         if((((uint32_t)devcb->openflag) & O_WRONLY) || (((uint32_t)devcb->openflag) & O_RDWR))
+ 1268              		.loc 1 506 29
+ 1269 0028 BB69     		ldr	r3, [r7, #24]
+ 1270 002a 9B68     		ldr	r3, [r3, #8]
+ 1271              		.loc 1 506 41
+ 1272 002c 03F00103 		and	r3, r3, #1
+ 1273              		.loc 1 506 11
+ 1274 0030 002B     		cmp	r3, #0
+ 1275 0032 05D1     		bne	.L109
+ 1276              		.loc 1 506 73 discriminator 1
+ 1277 0034 BB69     		ldr	r3, [r7, #24]
+ 1278 0036 9B68     		ldr	r3, [r3, #8]
+ 1279              		.loc 1 506 85 discriminator 1
+ 1280 0038 03F00203 		and	r3, r3, #2
+ 1281              		.loc 1 506 53 discriminator 1
+ 1282 003c 002B     		cmp	r3, #0
+ 1283 003e 20D0     		beq	.L108
+ 1284              	.L109:
+ 507:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         {
+ 508:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             drivcb = devcb->driv;
+ 1285              		.loc 1 508 20
+ 1286 0040 BB69     		ldr	r3, [r7, #24]
+ 1287 0042 5B68     		ldr	r3, [r3, #4]
+ 1288 0044 7B61     		str	r3, [r7, #20]
+ 509:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             if((NULL != drivcb->op)&&(NULL != drivcb->op->write))
+ 1289              		.loc 1 509 31
+ 1290 0046 7B69     		ldr	r3, [r7, #20]
+ 1291 0048 1B69     		ldr	r3, [r3, #16]
+ 1292              		.loc 1 509 15
+ 1293 004a 002B     		cmp	r3, #0
+ 1294 004c 19D0     		beq	.L108
+ 1295              		.loc 1 509 53 discriminator 1
+ 1296 004e 7B69     		ldr	r3, [r7, #20]
+ 1297 0050 1B69     		ldr	r3, [r3, #16]
+ 1298              		.loc 1 509 57 discriminator 1
+ 1299 0052 9B68     		ldr	r3, [r3, #8]
+ 1300              		.loc 1 509 36 discriminator 1
+ 1301 0054 002B     		cmp	r3, #0
+ 1302 0056 14D0     		beq	.L108
+ 510:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             {
+ 511:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****                 ret = drivcb->op->write( drivcb->pri,offset,buf,len,timeout);
+ 1303              		.loc 1 511 29
+ 1304 0058 7B69     		ldr	r3, [r7, #20]
+ 1305 005a 1B69     		ldr	r3, [r3, #16]
+ 1306              		.loc 1 511 33
+ 1307 005c 9C68     		ldr	r4, [r3, #8]
+ 1308              		.loc 1 511 23
+ 1309 005e 7B69     		ldr	r3, [r7, #20]
+ 1310 0060 5868     		ldr	r0, [r3, #4]
+ARM GAS  /tmp/ccXrN7D1.s 			page 33
+
+
+ 1311 0062 3B6B     		ldr	r3, [r7, #48]
+ 1312 0064 0093     		str	r3, [sp]
+ 1313 0066 3B68     		ldr	r3, [r7]
+ 1314 0068 7A68     		ldr	r2, [r7, #4]
+ 1315 006a B968     		ldr	r1, [r7, #8]
+ 1316 006c A047     		blx	r4
+ 1317              	.LVL5:
+ 1318 006e F861     		str	r0, [r7, #28]
+ 512:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****                 if(ret > 0)
+ 1319              		.loc 1 512 19
+ 1320 0070 FB69     		ldr	r3, [r7, #28]
+ 1321 0072 002B     		cmp	r3, #0
+ 1322 0074 05DD     		ble	.L108
+ 513:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****                 {
+ 514:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****                     drivcb->total_write += ret;
+ 1323              		.loc 1 514 41
+ 1324 0076 7B69     		ldr	r3, [r7, #20]
+ 1325 0078 DA69     		ldr	r2, [r3, #28]
+ 1326 007a FB69     		ldr	r3, [r7, #28]
+ 1327 007c 1A44     		add	r2, r2, r3
+ 1328 007e 7B69     		ldr	r3, [r7, #20]
+ 1329 0080 DA61     		str	r2, [r3, #28]
+ 1330              	.L108:
+ 515:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****                 }
+ 516:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             }
+ 517:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         }
+ 518:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 519:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 520:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     return ret;
+ 1331              		.loc 1 520 12
+ 1332 0082 FB69     		ldr	r3, [r7, #28]
+ 521:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** }
+ 1333              		.loc 1 521 1
+ 1334 0084 1846     		mov	r0, r3
+ 1335 0086 2437     		adds	r7, r7, #36
+ 1336              	.LCFI49:
+ 1337              		.cfi_def_cfa_offset 12
+ 1338 0088 BD46     		mov	sp, r7
+ 1339              	.LCFI50:
+ 1340              		.cfi_def_cfa_register 13
+ 1341              		@ sp needed
+ 1342 008a 90BD     		pop	{r4, r7, pc}
+ 1343              		.cfi_endproc
+ 1344              	.LFE12:
+ 1346              		.section	.text.los_dev_ioctl,"ax",%progbits
+ 1347              		.align	1
+ 1348              		.global	los_dev_ioctl
+ 1349              		.syntax unified
+ 1350              		.thumb
+ 1351              		.thumb_func
+ 1352              		.fpu fpv4-sp-d16
+ 1354              	los_dev_ioctl:
+ 1355              	.LFB13:
+ 522:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 523:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** /*******************************************************************************
+ 524:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** function     :use this function to control the device
+ 525:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** parameters   :dev,returned by the los_dev_open function
+ARM GAS  /tmp/ccXrN7D1.s 			page 34
+
+
+ 526:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****               cmd, must compatible with bsp develop
+ 527:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****               para,used with cmd, its length and format depend on the bsp develop
+ 528:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** instruction  :ctrol true or false
+ 529:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** *******************************************************************************/
+ 530:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** bool_t los_dev_ioctl (los_dev_t dev,unsigned int cmd,void *para,int paralen)
+ 531:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** {
+ 1356              		.loc 1 531 1
+ 1357              		.cfi_startproc
+ 1358              		@ args = 0, pretend = 0, frame = 32
+ 1359              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1360 0000 90B5     		push	{r4, r7, lr}
+ 1361              	.LCFI51:
+ 1362              		.cfi_def_cfa_offset 12
+ 1363              		.cfi_offset 4, -12
+ 1364              		.cfi_offset 7, -8
+ 1365              		.cfi_offset 14, -4
+ 1366 0002 89B0     		sub	sp, sp, #36
+ 1367              	.LCFI52:
+ 1368              		.cfi_def_cfa_offset 48
+ 1369 0004 00AF     		add	r7, sp, #0
+ 1370              	.LCFI53:
+ 1371              		.cfi_def_cfa_register 7
+ 1372 0006 F860     		str	r0, [r7, #12]
+ 1373 0008 B960     		str	r1, [r7, #8]
+ 1374 000a 7A60     		str	r2, [r7, #4]
+ 1375 000c 3B60     		str	r3, [r7]
+ 532:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     bool_t ret = false;
+ 1376              		.loc 1 532 12
+ 1377 000e 0023     		movs	r3, #0
+ 1378 0010 FB61     		str	r3, [r7, #28]
+ 533:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     struct dev_cb  *devcb;
+ 534:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     struct driv_cb *drivcb;
+ 535:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 536:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if(NULL != dev)
+ 1379              		.loc 1 536 7
+ 1380 0012 FB68     		ldr	r3, [r7, #12]
+ 1381 0014 002B     		cmp	r3, #0
+ 1382 0016 17D0     		beq	.L112
+ 537:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 538:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         devcb = dev;
+ 1383              		.loc 1 538 15
+ 1384 0018 FB68     		ldr	r3, [r7, #12]
+ 1385 001a BB61     		str	r3, [r7, #24]
+ 539:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         drivcb = devcb->driv;
+ 1386              		.loc 1 539 16
+ 1387 001c BB69     		ldr	r3, [r7, #24]
+ 1388 001e 5B68     		ldr	r3, [r3, #4]
+ 1389 0020 7B61     		str	r3, [r7, #20]
+ 540:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         if((NULL != drivcb->op)&&(NULL != drivcb->op->ioctl))
+ 1390              		.loc 1 540 27
+ 1391 0022 7B69     		ldr	r3, [r7, #20]
+ 1392 0024 1B69     		ldr	r3, [r3, #16]
+ 1393              		.loc 1 540 11
+ 1394 0026 002B     		cmp	r3, #0
+ 1395 0028 0ED0     		beq	.L112
+ 1396              		.loc 1 540 49 discriminator 1
+ 1397 002a 7B69     		ldr	r3, [r7, #20]
+ARM GAS  /tmp/ccXrN7D1.s 			page 35
+
+
+ 1398 002c 1B69     		ldr	r3, [r3, #16]
+ 1399              		.loc 1 540 53 discriminator 1
+ 1400 002e 1B69     		ldr	r3, [r3, #16]
+ 1401              		.loc 1 540 32 discriminator 1
+ 1402 0030 002B     		cmp	r3, #0
+ 1403 0032 09D0     		beq	.L112
+ 541:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         {
+ 542:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             ret = drivcb->op->ioctl( drivcb->pri,cmd,para,paralen);
+ 1404              		.loc 1 542 25
+ 1405 0034 7B69     		ldr	r3, [r7, #20]
+ 1406 0036 1B69     		ldr	r3, [r3, #16]
+ 1407              		.loc 1 542 29
+ 1408 0038 1C69     		ldr	r4, [r3, #16]
+ 1409              		.loc 1 542 19
+ 1410 003a 7B69     		ldr	r3, [r7, #20]
+ 1411 003c 5868     		ldr	r0, [r3, #4]
+ 1412 003e 3B68     		ldr	r3, [r7]
+ 1413 0040 7A68     		ldr	r2, [r7, #4]
+ 1414 0042 B968     		ldr	r1, [r7, #8]
+ 1415 0044 A047     		blx	r4
+ 1416              	.LVL6:
+ 1417 0046 F861     		str	r0, [r7, #28]
+ 1418              	.L112:
+ 543:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         }
+ 544:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 545:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 546:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     return ret;
+ 1419              		.loc 1 546 12
+ 1420 0048 FB69     		ldr	r3, [r7, #28]
+ 547:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** }
+ 1421              		.loc 1 547 1
+ 1422 004a 1846     		mov	r0, r3
+ 1423 004c 2437     		adds	r7, r7, #36
+ 1424              	.LCFI54:
+ 1425              		.cfi_def_cfa_offset 12
+ 1426 004e BD46     		mov	sp, r7
+ 1427              	.LCFI55:
+ 1428              		.cfi_def_cfa_register 13
+ 1429              		@ sp needed
+ 1430 0050 90BD     		pop	{r4, r7, pc}
+ 1431              		.cfi_endproc
+ 1432              	.LFE13:
+ 1434              		.section	.text.los_dev_seek,"ax",%progbits
+ 1435              		.align	1
+ 1436              		.global	los_dev_seek
+ 1437              		.syntax unified
+ 1438              		.thumb
+ 1439              		.thumb_func
+ 1440              		.fpu fpv4-sp-d16
+ 1442              	los_dev_seek:
+ 1443              	.LFB14:
+ 548:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 549:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** /*******************************************************************************
+ 550:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** function     :use this function to set the buffer current position,like lseek
+ 551:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** parameters   :dev,returned by the los_dev_open function
+ 552:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****               offset, refer to the lseek
+ 553:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****               fromwhere, refer to the lseek
+ARM GAS  /tmp/ccXrN7D1.s 			page 36
+
+
+ 554:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** instruction  :return the current write/read position if success, else -1
+ 555:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** *******************************************************************************/
+ 556:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** off_t  los_dev_seek (los_dev_t dev,off_t offset,int fromwhere)
+ 557:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** {
+ 1444              		.loc 1 557 1
+ 1445              		.cfi_startproc
+ 1446              		@ args = 0, pretend = 0, frame = 32
+ 1447              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1448 0000 80B5     		push	{r7, lr}
+ 1449              	.LCFI56:
+ 1450              		.cfi_def_cfa_offset 8
+ 1451              		.cfi_offset 7, -8
+ 1452              		.cfi_offset 14, -4
+ 1453 0002 88B0     		sub	sp, sp, #32
+ 1454              	.LCFI57:
+ 1455              		.cfi_def_cfa_offset 40
+ 1456 0004 00AF     		add	r7, sp, #0
+ 1457              	.LCFI58:
+ 1458              		.cfi_def_cfa_register 7
+ 1459 0006 F860     		str	r0, [r7, #12]
+ 1460 0008 B960     		str	r1, [r7, #8]
+ 1461 000a 7A60     		str	r2, [r7, #4]
+ 558:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     off_t ret = -1;
+ 1462              		.loc 1 558 11
+ 1463 000c 4FF0FF33 		mov	r3, #-1
+ 1464 0010 FB61     		str	r3, [r7, #28]
+ 559:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     struct dev_cb  *devcb;
+ 560:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     struct driv_cb *drivcb;
+ 561:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 562:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if(NULL != dev)
+ 1465              		.loc 1 562 7
+ 1466 0012 FB68     		ldr	r3, [r7, #12]
+ 1467 0014 002B     		cmp	r3, #0
+ 1468 0016 16D0     		beq	.L115
+ 563:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 564:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         devcb = dev;
+ 1469              		.loc 1 564 15
+ 1470 0018 FB68     		ldr	r3, [r7, #12]
+ 1471 001a BB61     		str	r3, [r7, #24]
+ 565:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         drivcb = devcb->driv;
+ 1472              		.loc 1 565 16
+ 1473 001c BB69     		ldr	r3, [r7, #24]
+ 1474 001e 5B68     		ldr	r3, [r3, #4]
+ 1475 0020 7B61     		str	r3, [r7, #20]
+ 566:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         if((NULL != drivcb->op)&&(NULL != drivcb->op->seek))
+ 1476              		.loc 1 566 27
+ 1477 0022 7B69     		ldr	r3, [r7, #20]
+ 1478 0024 1B69     		ldr	r3, [r3, #16]
+ 1479              		.loc 1 566 11
+ 1480 0026 002B     		cmp	r3, #0
+ 1481 0028 0DD0     		beq	.L115
+ 1482              		.loc 1 566 49 discriminator 1
+ 1483 002a 7B69     		ldr	r3, [r7, #20]
+ 1484 002c 1B69     		ldr	r3, [r3, #16]
+ 1485              		.loc 1 566 53 discriminator 1
+ 1486 002e 5B69     		ldr	r3, [r3, #20]
+ 1487              		.loc 1 566 32 discriminator 1
+ARM GAS  /tmp/ccXrN7D1.s 			page 37
+
+
+ 1488 0030 002B     		cmp	r3, #0
+ 1489 0032 08D0     		beq	.L115
+ 567:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         {
+ 568:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             ret = drivcb->op->seek( drivcb->pri,offset,fromwhere);
+ 1490              		.loc 1 568 25
+ 1491 0034 7B69     		ldr	r3, [r7, #20]
+ 1492 0036 1B69     		ldr	r3, [r3, #16]
+ 1493              		.loc 1 568 29
+ 1494 0038 5B69     		ldr	r3, [r3, #20]
+ 1495              		.loc 1 568 19
+ 1496 003a 7A69     		ldr	r2, [r7, #20]
+ 1497 003c 5068     		ldr	r0, [r2, #4]
+ 1498 003e 7A68     		ldr	r2, [r7, #4]
+ 1499 0040 B968     		ldr	r1, [r7, #8]
+ 1500 0042 9847     		blx	r3
+ 1501              	.LVL7:
+ 1502 0044 F861     		str	r0, [r7, #28]
+ 1503              	.L115:
+ 569:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         }
+ 570:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 571:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 572:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     return ret;
+ 1504              		.loc 1 572 12
+ 1505 0046 FB69     		ldr	r3, [r7, #28]
+ 573:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** }
+ 1506              		.loc 1 573 1
+ 1507 0048 1846     		mov	r0, r3
+ 1508 004a 2037     		adds	r7, r7, #32
+ 1509              	.LCFI59:
+ 1510              		.cfi_def_cfa_offset 8
+ 1511 004c BD46     		mov	sp, r7
+ 1512              	.LCFI60:
+ 1513              		.cfi_def_cfa_register 13
+ 1514              		@ sp needed
+ 1515 004e 80BD     		pop	{r7, pc}
+ 1516              		.cfi_endproc
+ 1517              	.LFE14:
+ 1519              		.section	.rodata
+ 1520              		.align	2
+ 1521              	.LC0:
+ 1522 0000 5B25735D 		.ascii	"[%s][%u][%s:%d] %s:total %d drivers\012\015\015\012"
+ 1522      5B25755D 
+ 1522      5B25733A 
+ 1522      25645D20 
+ 1522      25733A74 
+ 1523 0027 00       		.ascii	"\000"
+ 1524              		.align	2
+ 1525              	.LC1:
+ 1526 0028 5B25735D 		.ascii	"[%s][%u][%s:%d] %-16s %-8s %-8s %-8s %-8s %-8s %-8s"
+ 1526      5B25755D 
+ 1526      5B25733A 
+ 1526      25645D20 
+ 1526      252D3136 
+ 1527 005b 0D0A0D0A 		.ascii	"\015\012\015\012\000"
+ 1527      00
+ 1528              		.align	2
+ 1529              	.LC2:
+ARM GAS  /tmp/ccXrN7D1.s 			page 38
+
+
+ 1530 0060 6572726E 		.ascii	"errno\000"
+ 1530      6F00
+ 1531 0066 0000     		.align	2
+ 1532              	.LC3:
+ 1533 0068 6F70656E 		.ascii	"open\000"
+ 1533      00
+ 1534 006d 000000   		.align	2
+ 1535              	.LC4:
+ 1536 0070 72656164 		.ascii	"readbyte\000"
+ 1536      62797465 
+ 1536      00
+ 1537 0079 000000   		.align	2
+ 1538              	.LC5:
+ 1539 007c 77726974 		.ascii	"writbyte\000"
+ 1539      62797465 
+ 1539      00
+ 1540 0085 000000   		.align	2
+ 1541              	.LC6:
+ 1542 0088 73746174 		.ascii	"status\000"
+ 1542      757300
+ 1543 008f 00       		.align	2
+ 1544              	.LC7:
+ 1545 0090 666C6167 		.ascii	"flagmask\000"
+ 1545      6D61736B 
+ 1545      00
+ 1546 0099 000000   		.align	2
+ 1547              	.LC8:
+ 1548 009c 64726976 		.ascii	"drivername\000"
+ 1548      65726E61 
+ 1548      6D6500
+ 1549 00a7 00       		.align	2
+ 1550              	.LC9:
+ 1551 00a8 5B25735D 		.ascii	"[%s][%u][%s:%d] %-16s %08x %08x %08x %08x %08x %08x"
+ 1551      5B25755D 
+ 1551      5B25733A 
+ 1551      25645D20 
+ 1551      252D3136 
+ 1552 00db 0D0A0D0A 		.ascii	"\015\012\015\012\000"
+ 1552      00
+ 1553              		.section	.text.__driv_show_shell,"ax",%progbits
+ 1554              		.align	1
+ 1555              		.syntax unified
+ 1556              		.thumb
+ 1557              		.thumb_func
+ 1558              		.fpu fpv4-sp-d16
+ 1560              	__driv_show_shell:
+ 1561              	.LFB15:
+ 574:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 575:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 576:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** //the following function should be implement by the vfs,
+ 577:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** //this is very important for the multi io operation, like the select epoll and so on
+ 578:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** //bool_t     los_dev_upara_set (los_dev_t dev,void *para);
+ 579:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** //void*      los_dev_upara_get (los_dev_t dev);
+ 580:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 581:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** //export some shell for the driver debug
+ 582:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** #ifdef CONFIG_SHELL_ENABLE
+ 583:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ARM GAS  /tmp/ccXrN7D1.s 			page 39
+
+
+ 584:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** #include <shell.h>
+ 585:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** //use this function to show all the driver infomation
+ 586:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** static int  __driv_show_shell(int argc,const char *argv[])
+ 587:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** {
+ 1562              		.loc 1 587 1
+ 1563              		.cfi_startproc
+ 1564              		@ args = 0, pretend = 0, frame = 16
+ 1565              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1566 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 1567              	.LCFI61:
+ 1568              		.cfi_def_cfa_offset 24
+ 1569              		.cfi_offset 4, -24
+ 1570              		.cfi_offset 5, -20
+ 1571              		.cfi_offset 6, -16
+ 1572              		.cfi_offset 7, -12
+ 1573              		.cfi_offset 8, -8
+ 1574              		.cfi_offset 14, -4
+ 1575 0004 8CB0     		sub	sp, sp, #48
+ 1576              	.LCFI62:
+ 1577              		.cfi_def_cfa_offset 72
+ 1578 0006 08AF     		add	r7, sp, #32
+ 1579              	.LCFI63:
+ 1580              		.cfi_def_cfa 7, 40
+ 1581 0008 7860     		str	r0, [r7, #4]
+ 1582 000a 3960     		str	r1, [r7]
+ 588:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     struct driv_cb  *driv;
+ 589:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 590:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     if(osal_mutex_lock(s_los_driv_module.lock))
+ 1583              		.loc 1 590 8
+ 1584 000c 444B     		ldr	r3, .L126
+ 1585 000e 1B68     		ldr	r3, [r3]
+ 1586 0010 1846     		mov	r0, r3
+ 1587 0012 FFF7FEFF 		bl	osal_mutex_lock
+ 1588 0016 0346     		mov	r3, r0
+ 1589              		.loc 1 590 7
+ 1590 0018 002B     		cmp	r3, #0
+ 1591 001a 7BD0     		beq	.L118
+ 591:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     {
+ 592:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         LINK_LOG_DEBUG("%s:total %d drivers\n\r",__FUNCTION__,s_los_driv_module.drivnum);
+ 1592              		.loc 1 592 9
+ 1593 001c FFF7FEFF 		bl	link_log_level_get
+ 1594 0020 0346     		mov	r3, r0
+ 1595 0022 012B     		cmp	r3, #1
+ 1596 0024 14D8     		bhi	.L119
+ 1597              		.loc 1 592 9 is_stmt 0 discriminator 1
+ 1598 0026 0120     		movs	r0, #1
+ 1599 0028 FFF7FEFF 		bl	link_log_level_name
+ 1600 002c 0446     		mov	r4, r0
+ 1601 002e FFF7FEFF 		bl	osal_sys_time
+ 1602 0032 0246     		mov	r2, r0
+ 1603 0034 0B46     		mov	r3, r1
+ 1604 0036 3A4B     		ldr	r3, .L126
+ 1605 0038 9B68     		ldr	r3, [r3, #8]
+ 1606 003a 0293     		str	r3, [sp, #8]
+ 1607 003c 394B     		ldr	r3, .L126+4
+ 1608 003e 0193     		str	r3, [sp, #4]
+ 1609 0040 4FF41473 		mov	r3, #592
+ARM GAS  /tmp/ccXrN7D1.s 			page 40
+
+
+ 1610 0044 0093     		str	r3, [sp]
+ 1611 0046 374B     		ldr	r3, .L126+4
+ 1612 0048 2146     		mov	r1, r4
+ 1613 004a 3748     		ldr	r0, .L126+8
+ 1614 004c FFF7FEFF 		bl	printf
+ 1615              	.L119:
+ 593:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         if(s_los_driv_module.drivnum != 0) //print all the driver
+ 1616              		.loc 1 593 29 is_stmt 1
+ 1617 0050 334B     		ldr	r3, .L126
+ 1618 0052 9B68     		ldr	r3, [r3, #8]
+ 1619              		.loc 1 593 11
+ 1620 0054 002B     		cmp	r3, #0
+ 1621 0056 58D0     		beq	.L120
+ 594:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         {
+ 595:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 596:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             LINK_LOG_DEBUG("%-16s %-8s %-8s %-8s %-8s %-8s %-8s\r\n",\
+ 1622              		.loc 1 596 13
+ 1623 0058 FFF7FEFF 		bl	link_log_level_get
+ 1624 005c 0346     		mov	r3, r0
+ 1625 005e 012B     		cmp	r3, #1
+ 1626 0060 1DD8     		bhi	.L121
+ 1627              		.loc 1 596 13 is_stmt 0 discriminator 1
+ 1628 0062 0120     		movs	r0, #1
+ 1629 0064 FFF7FEFF 		bl	link_log_level_name
+ 1630 0068 0446     		mov	r4, r0
+ 1631 006a FFF7FEFF 		bl	osal_sys_time
+ 1632 006e 0246     		mov	r2, r0
+ 1633 0070 0B46     		mov	r3, r1
+ 1634 0072 2E4B     		ldr	r3, .L126+12
+ 1635 0074 0793     		str	r3, [sp, #28]
+ 1636 0076 2E4B     		ldr	r3, .L126+16
+ 1637 0078 0693     		str	r3, [sp, #24]
+ 1638 007a 2E4B     		ldr	r3, .L126+20
+ 1639 007c 0593     		str	r3, [sp, #20]
+ 1640 007e 2E4B     		ldr	r3, .L126+24
+ 1641 0080 0493     		str	r3, [sp, #16]
+ 1642 0082 2E4B     		ldr	r3, .L126+28
+ 1643 0084 0393     		str	r3, [sp, #12]
+ 1644 0086 2E4B     		ldr	r3, .L126+32
+ 1645 0088 0293     		str	r3, [sp, #8]
+ 1646 008a 2E4B     		ldr	r3, .L126+36
+ 1647 008c 0193     		str	r3, [sp, #4]
+ 1648 008e 4FF41573 		mov	r3, #596
+ 1649 0092 0093     		str	r3, [sp]
+ 1650 0094 234B     		ldr	r3, .L126+4
+ 1651 0096 2146     		mov	r1, r4
+ 1652 0098 2B48     		ldr	r0, .L126+40
+ 1653 009a FFF7FEFF 		bl	printf
+ 1654              	.L121:
+ 597:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****                 "drivername","flagmask","status","writbyte","readbyte","open","errno");
+ 598:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 599:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             driv = s_los_driv_module.drivlst;
+ 1655              		.loc 1 599 18 is_stmt 1
+ 1656 009e 204B     		ldr	r3, .L126
+ 1657 00a0 5B68     		ldr	r3, [r3, #4]
+ 1658 00a2 FB60     		str	r3, [r7, #12]
+ 600:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             while(NULL != driv)
+ARM GAS  /tmp/ccXrN7D1.s 			page 41
+
+
+ 1659              		.loc 1 600 18
+ 1660 00a4 2EE0     		b	.L122
+ 1661              	.L124:
+ 601:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             {
+ 602:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****                 LINK_LOG_DEBUG("%-16s %08x %08x %08x %08x %08x %08x\r\n",driv->name,driv->flagmask,
+ 1662              		.loc 1 602 17
+ 1663 00a6 FFF7FEFF 		bl	link_log_level_get
+ 1664 00aa 0346     		mov	r3, r0
+ 1665 00ac 012B     		cmp	r3, #1
+ 1666 00ae 26D8     		bhi	.L123
+ 1667              		.loc 1 602 17 is_stmt 0 discriminator 1
+ 1668 00b0 0120     		movs	r0, #1
+ 1669 00b2 FFF7FEFF 		bl	link_log_level_name
+ 1670 00b6 8046     		mov	r8, r0
+ 1671 00b8 FFF7FEFF 		bl	osal_sys_time
+ 1672 00bc 0246     		mov	r2, r0
+ 1673 00be 0B46     		mov	r3, r1
+ 1674 00c0 9446     		mov	ip, r2
+ 1675 00c2 FB68     		ldr	r3, [r7, #12]
+ 1676 00c4 9B68     		ldr	r3, [r3, #8]
+ 1677 00c6 FA68     		ldr	r2, [r7, #12]
+ 1678 00c8 D268     		ldr	r2, [r2, #12]
+ 1679 00ca F968     		ldr	r1, [r7, #12]
+ 1680 00cc 4969     		ldr	r1, [r1, #20]
+ 1681 00ce F868     		ldr	r0, [r7, #12]
+ 1682 00d0 C069     		ldr	r0, [r0, #28]
+ 1683 00d2 FC68     		ldr	r4, [r7, #12]
+ 1684 00d4 246A     		ldr	r4, [r4, #32]
+ 1685 00d6 FD68     		ldr	r5, [r7, #12]
+ 1686 00d8 6D6A     		ldr	r5, [r5, #36]
+ 1687 00da FE68     		ldr	r6, [r7, #12]
+ 1688 00dc B66A     		ldr	r6, [r6, #40]
+ 1689 00de 0796     		str	r6, [sp, #28]
+ 1690 00e0 0695     		str	r5, [sp, #24]
+ 1691 00e2 0594     		str	r4, [sp, #20]
+ 1692 00e4 0490     		str	r0, [sp, #16]
+ 1693 00e6 0391     		str	r1, [sp, #12]
+ 1694 00e8 0292     		str	r2, [sp, #8]
+ 1695 00ea 0193     		str	r3, [sp, #4]
+ 1696 00ec 40F25A23 		movw	r3, #602
+ 1697 00f0 0093     		str	r3, [sp]
+ 1698 00f2 0C4B     		ldr	r3, .L126+4
+ 1699 00f4 6246     		mov	r2, ip
+ 1700 00f6 4146     		mov	r1, r8
+ 1701 00f8 1448     		ldr	r0, .L126+44
+ 1702 00fa FFF7FEFF 		bl	printf
+ 1703              	.L123:
+ 603:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****                 driv->drivstatus,driv->total_write,driv->total_read,driv->opencounter,driv->errno);
+ 604:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****                 driv=driv->nxt;
+ 1704              		.loc 1 604 21 is_stmt 1
+ 1705 00fe FB68     		ldr	r3, [r7, #12]
+ 1706 0100 1B68     		ldr	r3, [r3]
+ 1707 0102 FB60     		str	r3, [r7, #12]
+ 1708              	.L122:
+ 600:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             {
+ 1709              		.loc 1 600 18
+ 1710 0104 FB68     		ldr	r3, [r7, #12]
+ARM GAS  /tmp/ccXrN7D1.s 			page 42
+
+
+ 1711 0106 002B     		cmp	r3, #0
+ 1712 0108 CDD1     		bne	.L124
+ 1713              	.L120:
+ 605:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****             }
+ 606:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         }
+ 607:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 608:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****         (void) osal_mutex_unlock(s_los_driv_module.lock);
+ 1714              		.loc 1 608 16
+ 1715 010a 054B     		ldr	r3, .L126
+ 1716 010c 1B68     		ldr	r3, [r3]
+ 1717 010e 1846     		mov	r0, r3
+ 1718 0110 FFF7FEFF 		bl	osal_mutex_unlock
+ 1719              	.L118:
+ 609:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     }
+ 610:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** 
+ 611:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c ****     return 0;
+ 1720              		.loc 1 611 12
+ 1721 0114 0023     		movs	r3, #0
+ 612:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.c **** }
+ 1722              		.loc 1 612 1
+ 1723 0116 1846     		mov	r0, r3
+ 1724 0118 1037     		adds	r7, r7, #16
+ 1725              	.LCFI64:
+ 1726              		.cfi_def_cfa_offset 24
+ 1727 011a BD46     		mov	sp, r7
+ 1728              	.LCFI65:
+ 1729              		.cfi_def_cfa_register 13
+ 1730              		@ sp needed
+ 1731 011c BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 1732              	.L127:
+ 1733              		.align	2
+ 1734              	.L126:
+ 1735 0120 00000000 		.word	s_los_driv_module
+ 1736 0124 00000000 		.word	__FUNCTION__.7754
+ 1737 0128 00000000 		.word	.LC0
+ 1738 012c 60000000 		.word	.LC2
+ 1739 0130 68000000 		.word	.LC3
+ 1740 0134 70000000 		.word	.LC4
+ 1741 0138 7C000000 		.word	.LC5
+ 1742 013c 88000000 		.word	.LC6
+ 1743 0140 90000000 		.word	.LC7
+ 1744 0144 9C000000 		.word	.LC8
+ 1745 0148 28000000 		.word	.LC1
+ 1746 014c A8000000 		.word	.LC9
+ 1747              		.cfi_endproc
+ 1748              	.LFE15:
+ 1750              		.section	.rodata
+ 1751              		.align	2
+ 1752              	.LC10:
+ 1753 00e0 6465766C 		.ascii	"devlst\000"
+ 1753      737400
+ 1754              		.section	oshell,"a"
+ 1755              		.align	2
+ 1758              	__oshell___driv_show_shell:
+ 1759 0000 E0000000 		.word	.LC10
+ 1760 0004 E0000000 		.word	.LC10
+ 1761 0008 00000000 		.word	__driv_show_shell
+ARM GAS  /tmp/ccXrN7D1.s 			page 43
+
+
+ 1762 000c 0000     		.short	0
+ 1763 000e 0400     		.short	4
+ 1764              		.section	.rodata.__FUNCTION__.7754,"a"
+ 1765              		.align	2
+ 1768              	__FUNCTION__.7754:
+ 1769 0000 5F5F6472 		.ascii	"__driv_show_shell\000"
+ 1769      69765F73 
+ 1769      686F775F 
+ 1769      7368656C 
+ 1769      6C00
+ 1770              		.text
+ 1771              	.Letext0:
+ 1772              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 1773              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 1774              		.file 4 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 1775              		.file 5 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 1776              		.file 6 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/ree
+ 1777              		.file 7 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 1778              		.file 8 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/typ
+ 1779              		.file 9 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/stdlib.
+ 1780              		.file 10 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/osal/osal_types.h"
+ 1781              		.file 11 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.h"
+ 1782              		.file 12 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/time.h
+ 1783              		.file 13 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/inc/link_log.h"
+ 1784              		.file 14 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/inc/shell.h"
+ARM GAS  /tmp/ccXrN7D1.s 			page 44
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 driver.c
+     /tmp/ccXrN7D1.s:18     .bss.s_los_driv_module:0000000000000000 $d
+     /tmp/ccXrN7D1.s:21     .bss.s_los_driv_module:0000000000000000 s_los_driv_module
+     /tmp/ccXrN7D1.s:24     .text.__driv_match:0000000000000000 $t
+     /tmp/ccXrN7D1.s:31     .text.__driv_match:0000000000000000 __driv_match
+     /tmp/ccXrN7D1.s:99     .text.__driv_match:0000000000000040 $d
+     /tmp/ccXrN7D1.s:104    .text.los_driv_register:0000000000000000 $t
+     /tmp/ccXrN7D1.s:111    .text.los_driv_register:0000000000000000 los_driv_register
+     /tmp/ccXrN7D1.s:271    .text.los_driv_register:00000000000000c8 $d
+     /tmp/ccXrN7D1.s:276    .text.los_driv_unregister:0000000000000000 $t
+     /tmp/ccXrN7D1.s:283    .text.los_driv_unregister:0000000000000000 los_driv_unregister
+     /tmp/ccXrN7D1.s:423    .text.los_driv_unregister:00000000000000a8 $d
+     /tmp/ccXrN7D1.s:428    .text.los_driv_event:0000000000000000 $t
+     /tmp/ccXrN7D1.s:435    .text.los_driv_event:0000000000000000 los_driv_event
+     /tmp/ccXrN7D1.s:475    .text.osdriv_load_static:0000000000000000 $t
+     /tmp/ccXrN7D1.s:481    .text.osdriv_load_static:0000000000000000 osdriv_load_static
+     /tmp/ccXrN7D1.s:553    .text.osdriv_load_static:0000000000000044 $d
+     /tmp/ccXrN7D1.s:559    .text.los_driv_init:0000000000000000 $t
+     /tmp/ccXrN7D1.s:566    .text.los_driv_init:0000000000000000 los_driv_init
+     /tmp/ccXrN7D1.s:616    .text.los_driv_init:000000000000002c $d
+     /tmp/ccXrN7D1.s:621    .text.los_dev_open:0000000000000000 $t
+     /tmp/ccXrN7D1.s:628    .text.los_dev_open:0000000000000000 los_dev_open
+     /tmp/ccXrN7D1.s:870    .text.los_dev_open:0000000000000138 $d
+     /tmp/ccXrN7D1.s:875    .text.los_dev_close:0000000000000000 $t
+     /tmp/ccXrN7D1.s:882    .text.los_dev_close:0000000000000000 los_dev_close
+     /tmp/ccXrN7D1.s:1099   .text.los_dev_close:0000000000000108 $d
+     /tmp/ccXrN7D1.s:1104   .text.los_dev_read:0000000000000000 $t
+     /tmp/ccXrN7D1.s:1111   .text.los_dev_read:0000000000000000 los_dev_read
+     /tmp/ccXrN7D1.s:1221   .text.los_dev_write:0000000000000000 $t
+     /tmp/ccXrN7D1.s:1228   .text.los_dev_write:0000000000000000 los_dev_write
+     /tmp/ccXrN7D1.s:1347   .text.los_dev_ioctl:0000000000000000 $t
+     /tmp/ccXrN7D1.s:1354   .text.los_dev_ioctl:0000000000000000 los_dev_ioctl
+     /tmp/ccXrN7D1.s:1435   .text.los_dev_seek:0000000000000000 $t
+     /tmp/ccXrN7D1.s:1442   .text.los_dev_seek:0000000000000000 los_dev_seek
+     /tmp/ccXrN7D1.s:1520   .rodata:0000000000000000 $d
+     /tmp/ccXrN7D1.s:1554   .text.__driv_show_shell:0000000000000000 $t
+     /tmp/ccXrN7D1.s:1560   .text.__driv_show_shell:0000000000000000 __driv_show_shell
+     /tmp/ccXrN7D1.s:1735   .text.__driv_show_shell:0000000000000120 $d
+     /tmp/ccXrN7D1.s:1768   .rodata.__FUNCTION__.7754:0000000000000000 __FUNCTION__.7754
+     /tmp/ccXrN7D1.s:1755   oshell:0000000000000000 $d
+     /tmp/ccXrN7D1.s:1758   oshell:0000000000000000 __oshell___driv_show_shell
+     /tmp/ccXrN7D1.s:1765   .rodata.__FUNCTION__.7754:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+strcmp
+osal_malloc
+memset
+osal_mutex_lock
+osal_mutex_unlock
+osal_free
+__osdriv_start
+__osdriv_end
+osal_mutex_create
+link_log_level_get
+link_log_level_name
+osal_sys_time
+ARM GAS  /tmp/ccXrN7D1.s 			page 45
+
+
+printf

@@ -1,0 +1,480 @@
+ARM GAS  /tmp/ccpwzbLI.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"link_main.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.bss.s_link_mainversion,"aw",%nobits
+  18              		.align	2
+  21              	s_link_mainversion:
+  22 0000 00000000 		.space	64
+  22      00000000 
+  22      00000000 
+  22      00000000 
+  22      00000000 
+  23              		.section	.rodata
+  24              		.align	2
+  25              	.LC0:
+  26 0000 5625642E 		.ascii	"V%d.%d.%d AT %s ON %s\000"
+  26      25642E25 
+  26      64204154 
+  26      20257320 
+  26      4F4E2025 
+  27 0016 0000     		.align	2
+  28              	.LC1:
+  29 0018 4D617920 		.ascii	"May 14 2020\000"
+  29      31342032 
+  29      30323000 
+  30              		.align	2
+  31              	.LC2:
+  32 0024 31353A30 		.ascii	"15:03:03\000"
+  32      333A3033 
+  32      00
+  33              		.section	.text.linkmain_version,"ax",%progbits
+  34              		.align	1
+  35              		.global	linkmain_version
+  36              		.arch armv7e-m
+  37              		.syntax unified
+  38              		.thumb
+  39              		.thumb_func
+  40              		.fpu fpv4-sp-d16
+  42              	linkmain_version:
+  43              	.LFB3:
+  44              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** /*----------------------------------------------------------------------------
+   2:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * All rights reserved.
+   4:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * Redistribution and use in source and binary forms, with or without modification,
+ARM GAS  /tmp/ccpwzbLI.s 			page 2
+
+
+   5:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * are permitted provided that the following conditions are met:
+   6:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * conditions and the following disclaimer.
+   8:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * provided with the distribution.
+  11:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * permission.
+  14:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  *---------------------------------------------------------------------------*/
+  26:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** /*----------------------------------------------------------------------------
+  27:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * Notice of Export Control Law
+  28:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * ===============================================
+  29:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  * applicable export control laws and regulations.
+  33:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  *---------------------------------------------------------------------------*/
+  34:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** /**
+  35:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  *  DATE                AUTHOR      INSTRUCTION
+  36:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  *  2019-04-28 15:00  zhangqianfu  The first version
+  37:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  *
+  38:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****  */
+  39:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+  40:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #include <stdio.h>
+  41:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #include <iot_link_config.h>
+  42:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #include <link_version.h>
+  43:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** //RTOS KERNEL
+  44:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #include <osal.h>
+  45:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+  46:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #ifdef CONFIG_MACOS_ENABLE
+  47:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     #include <sys/select.h>
+  48:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #endif
+  49:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+  50:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+  51:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #define  CN_LINK_VERSION_MAJOR      2
+  52:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #define  CN_LINK_VERSION_MINOR      1
+  53:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #define  CN_LINK_VERSION_FEATURE    1
+  54:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+  55:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+  56:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** static char s_link_mainversion[64];
+  57:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** const char *linkmain_version()
+  58:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** {
+  45              		.loc 1 58 1
+  46              		.cfi_startproc
+  47              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /tmp/ccpwzbLI.s 			page 3
+
+
+  48              		@ frame_needed = 1, uses_anonymous_args = 0
+  49 0000 80B5     		push	{r7, lr}
+  50              	.LCFI0:
+  51              		.cfi_def_cfa_offset 8
+  52              		.cfi_offset 7, -8
+  53              		.cfi_offset 14, -4
+  54 0002 84B0     		sub	sp, sp, #16
+  55              	.LCFI1:
+  56              		.cfi_def_cfa_offset 24
+  57 0004 04AF     		add	r7, sp, #16
+  58              	.LCFI2:
+  59              		.cfi_def_cfa 7, 8
+  59:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     (void) snprintf(s_link_mainversion,64,"V%d.%d.%d AT %s ON %s",CN_LINK_VERSION_MAJOR,\
+  60              		.loc 1 59 12
+  61 0006 094B     		ldr	r3, .L3
+  62 0008 0393     		str	r3, [sp, #12]
+  63 000a 094B     		ldr	r3, .L3+4
+  64 000c 0293     		str	r3, [sp, #8]
+  65 000e 0123     		movs	r3, #1
+  66 0010 0193     		str	r3, [sp, #4]
+  67 0012 0123     		movs	r3, #1
+  68 0014 0093     		str	r3, [sp]
+  69 0016 0223     		movs	r3, #2
+  70 0018 064A     		ldr	r2, .L3+8
+  71 001a 4021     		movs	r1, #64
+  72 001c 0648     		ldr	r0, .L3+12
+  73 001e FFF7FEFF 		bl	snprintf
+  60:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****             CN_LINK_VERSION_MINOR,CN_LINK_VERSION_FEATURE,__TIME__,__DATE__);
+  61:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     return s_link_mainversion;
+  74              		.loc 1 61 12
+  75 0022 054B     		ldr	r3, .L3+12
+  62:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** }
+  76              		.loc 1 62 1
+  77 0024 1846     		mov	r0, r3
+  78 0026 BD46     		mov	sp, r7
+  79              	.LCFI3:
+  80              		.cfi_def_cfa_register 13
+  81              		@ sp needed
+  82 0028 80BD     		pop	{r7, pc}
+  83              	.L4:
+  84 002a 00BF     		.align	2
+  85              	.L3:
+  86 002c 18000000 		.word	.LC1
+  87 0030 24000000 		.word	.LC2
+  88 0034 00000000 		.word	.LC0
+  89 0038 00000000 		.word	s_link_mainversion
+  90              		.cfi_endproc
+  91              	.LFE3:
+  93              		.section	.bss.s_link_start,"aw",%nobits
+  94              		.align	2
+  97              	s_link_start:
+  98 0000 00000000 		.space	4
+  99              		.section	.rodata
+ 100 002d 000000   		.align	2
+ 101              	.LC3:
+ 102 0030 5B25735D 		.ascii	"[%s][%u][%s:%d] linkmain:%s \012\015\015\012\000"
+ 102      5B25755D 
+ARM GAS  /tmp/ccpwzbLI.s 			page 4
+
+
+ 102      5B25733A 
+ 102      25645D20 
+ 102      6C696E6B 
+ 103              		.section	.text.link_main,"ax",%progbits
+ 104              		.align	1
+ 105              		.global	link_main
+ 106              		.syntax unified
+ 107              		.thumb
+ 108              		.thumb_func
+ 109              		.fpu fpv4-sp-d16
+ 111              	link_main:
+ 112              	.LFB4:
+  63:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+  64:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+  65:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** static int s_link_start = 0;
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** int link_main(void *args)
+  67:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** {
+ 113              		.loc 1 67 1
+ 114              		.cfi_startproc
+ 115              		@ args = 0, pretend = 0, frame = 8
+ 116              		@ frame_needed = 1, uses_anonymous_args = 0
+ 117 0000 B0B5     		push	{r4, r5, r7, lr}
+ 118              	.LCFI4:
+ 119              		.cfi_def_cfa_offset 16
+ 120              		.cfi_offset 4, -16
+ 121              		.cfi_offset 5, -12
+ 122              		.cfi_offset 7, -8
+ 123              		.cfi_offset 14, -4
+ 124 0002 84B0     		sub	sp, sp, #16
+ 125              	.LCFI5:
+ 126              		.cfi_def_cfa_offset 32
+ 127 0004 02AF     		add	r7, sp, #8
+ 128              	.LCFI6:
+ 129              		.cfi_def_cfa 7, 24
+ 130 0006 7860     		str	r0, [r7, #4]
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     ///< install the RTOS kernel for the link
+  69:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     if(s_link_start)
+ 131              		.loc 1 69 8
+ 132 0008 1B4B     		ldr	r3, .L9
+ 133 000a 1B68     		ldr	r3, [r3]
+ 134              		.loc 1 69 7
+ 135 000c 002B     		cmp	r3, #0
+ 136 000e 02D0     		beq	.L6
+  70:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     {
+  71:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****        return -1;
+ 137              		.loc 1 71 15
+ 138 0010 4FF0FF33 		mov	r3, #-1
+ 139 0014 2BE0     		b	.L7
+ 140              	.L6:
+  72:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     }
+  73:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     s_link_start =1;
+ 141              		.loc 1 73 18
+ 142 0016 184B     		ldr	r3, .L9
+ 143 0018 0122     		movs	r2, #1
+ 144 001a 1A60     		str	r2, [r3]
+  74:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+  75:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     (void)osal_init();
+ARM GAS  /tmp/ccpwzbLI.s 			page 5
+
+
+ 145              		.loc 1 75 11
+ 146 001c FFF7FEFF 		bl	osal_init
+  76:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     LINK_LOG_DEBUG("linkmain:%s \n\r",linkmain_version());
+ 147              		.loc 1 76 5
+ 148 0020 FFF7FEFF 		bl	link_log_level_get
+ 149 0024 0346     		mov	r3, r0
+ 150 0026 012B     		cmp	r3, #1
+ 151 0028 14D8     		bhi	.L8
+ 152              		.loc 1 76 5 is_stmt 0 discriminator 1
+ 153 002a 0120     		movs	r0, #1
+ 154 002c FFF7FEFF 		bl	link_log_level_name
+ 155 0030 0446     		mov	r4, r0
+ 156 0032 FFF7FEFF 		bl	osal_sys_time
+ 157 0036 0246     		mov	r2, r0
+ 158 0038 0B46     		mov	r3, r1
+ 159 003a 1546     		mov	r5, r2
+ 160 003c FFF7FEFF 		bl	linkmain_version
+ 161 0040 0346     		mov	r3, r0
+ 162 0042 0193     		str	r3, [sp, #4]
+ 163 0044 4C23     		movs	r3, #76
+ 164 0046 0093     		str	r3, [sp]
+ 165 0048 0C4B     		ldr	r3, .L9+4
+ 166 004a 2A46     		mov	r2, r5
+ 167 004c 2146     		mov	r1, r4
+ 168 004e 0C48     		ldr	r0, .L9+8
+ 169 0050 FFF7FEFF 		bl	printf
+ 170              	.L8:
+  77:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+  78:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #ifdef CONFIG_STIMER_ENABLE
+  79:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     #include <stimer.h>
+  80:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     stimer_init();
+ 171              		.loc 1 80 5 is_stmt 1
+ 172 0054 FFF7FEFF 		bl	stimer_init
+  81:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #endif
+  82:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+  83:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #ifdef CONFIG_SHELL_ENABLE
+  84:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     #include <shell.h>
+  85:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     shell_init();
+ 173              		.loc 1 85 5
+ 174 0058 FFF7FEFF 		bl	shell_init
+  86:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #endif
+  87:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+  88:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     /* add loader code here */
+  89:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #ifdef CONFIG_OTA_ENABLE
+  90:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     extern void hal_init_ota(void);
+  91:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     hal_init_ota();
+  92:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #endif
+  93:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+  94:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #ifdef CONFIG_LOADER_ENABLE
+  95:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     LINK_LOG_DEBUG("loader main!\n");
+  96:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     extern int ota_detection();
+  97:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     ota_detection();
+  98:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     loader_main();
+  99:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     return;
+ 100:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #endif
+ 101:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     /* add loader code here end */
+ 102:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+ARM GAS  /tmp/ccpwzbLI.s 			page 6
+
+
+ 103:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** ///< install the driver framework
+ 104:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #ifdef CONFIG_DRIVER_ENABLE
+ 105:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     #include <driver.h>
+ 106:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     ///< install the driver framework for the link
+ 107:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     (void)los_driv_init();
+ 175              		.loc 1 107 11
+ 176 005c FFF7FEFF 		bl	los_driv_init
+ 108:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #endif
+ 109:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+ 110:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+ 111:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** ///< install the at framework
+ 112:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #ifdef CONFIG_AT_ENABLE
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     #include <at.h>
+ 114:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     (void)at_init();
+ 177              		.loc 1 114 11
+ 178 0060 FFF7FEFF 		bl	at_init
+ 115:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #endif
+ 116:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+ 117:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** ///< install the cJSON, for the oc mqtt agent need the cJSON
+ 118:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #ifdef CONFIG_CJSON_ENABLE
+ 119:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     #include <cJSON.h>
+ 120:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+ 121:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     cJSON_Hooks  hook;
+ 122:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     hook.free_fn = osal_free;
+ 123:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     hook.malloc_fn = osal_malloc;
+ 124:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     cJSON_InitHooks(&hook);
+ 125:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #endif
+ 126:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+ 127:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+ 128:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** //////////////////////////  TCPIP PROTOCOL /////////////////////////////////////
+ 129:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #ifdef CONFIG_TCIP_AL_ENABLE
+ 130:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     #include <sal.h>
+ 131:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     (void)link_tcpip_init();
+ 132:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #endif
+ 133:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+ 134:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** //////////////////////////  DTLS PROTOCOL  /////////////////////////////////////
+ 135:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #ifdef CONFIG_DTLS_AL_ENABLE
+ 136:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     #include <dtls_al.h>
+ 137:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     (void)dtls_al_init();
+ 138:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #endif
+ 139:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+ 140:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** //////////////////////////  MQTT PROTOCOL  /////////////////////////////////////
+ 141:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #ifdef CONFIG_MQTT_AL_ENABLE
+ 142:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     #include <mqtt_al.h>
+ 143:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     mqtt_al_init();
+ 144:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #endif
+ 145:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+ 146:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+ 147:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** //////////////////////////  COAP PROTOCOL  /////////////////////////////////
+ 148:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #ifdef CONFIG_COAP_AL_ENABLE
+ 149:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     #include <coap_al.h>
+ 150:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     (void)coap_al_init();
+ 151:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #endif
+ 152:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+ 153:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** //////////////////////////  LWM2M PROTOCOL  /////////////////////////////////
+ 154:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #ifdef CONFIG_LWM2M_AL_ENABLE
+ 155:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     #include <lwm2m_al.h>
+ARM GAS  /tmp/ccpwzbLI.s 			page 7
+
+
+ 156:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     (void)lwm2m_al_init();
+ 157:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #endif
+ 158:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+ 159:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** //////////////////////////  OC MQTT  //////////////////////////////////
+ 160:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #ifdef CONFIG_OCMQTT_ENABLE
+ 161:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     #include <oc_mqtt_al.h>
+ 162:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     (void)oc_mqtt_init();
+ 163:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+ 164:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #endif
+ 165:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+ 166:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** ////////////////////////////  OC LWM2M /////////////////////////////////////////
+ 167:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #ifdef CONFIG_OCLWM2M_ENABLE
+ 168:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     #include <oc_lwm2m_al.h>
+ 169:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     oc_lwm2m_init();
+ 170:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #endif
+ 171:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+ 172:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** ////////////////////////////  OC COAP //////////////////////////////////////////
+ 173:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #ifdef CONFIG_OCCOAP_ENABLE
+ 174:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 	#include <oc_coap_al.h>
+ 175:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     oc_coap_init();
+ 179              		.loc 1 175 5
+ 180 0064 FFF7FEFF 		bl	oc_coap_init
+ 176:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #endif
+ 177:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+ 178:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+ 179:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #ifdef CONFIG_AUTO_TEST
+ 180:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     #include <test_case.h>
+ 181:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     autotest_start();
+ 182:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #endif
+ 183:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+ 184:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+ 185:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #ifdef CONFIG_LINKDEMO_ENABLE
+ 186:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     extern int standard_app_demo_main(void);
+ 187:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     (void) standard_app_demo_main();
+ 181              		.loc 1 187 12
+ 182 0068 FFF7FEFF 		bl	standard_app_demo_main
+ 188:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** #endif
+ 189:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** 
+ 190:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c ****     return 0;
+ 183              		.loc 1 190 12
+ 184 006c 0023     		movs	r3, #0
+ 185              	.L7:
+ 191:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_main.c **** }
+ 186              		.loc 1 191 1
+ 187 006e 1846     		mov	r0, r3
+ 188 0070 0837     		adds	r7, r7, #8
+ 189              	.LCFI7:
+ 190              		.cfi_def_cfa_offset 16
+ 191 0072 BD46     		mov	sp, r7
+ 192              	.LCFI8:
+ 193              		.cfi_def_cfa_register 13
+ 194              		@ sp needed
+ 195 0074 B0BD     		pop	{r4, r5, r7, pc}
+ 196              	.L10:
+ 197 0076 00BF     		.align	2
+ 198              	.L9:
+ 199 0078 00000000 		.word	s_link_start
+ARM GAS  /tmp/ccpwzbLI.s 			page 8
+
+
+ 200 007c 00000000 		.word	__FUNCTION__.6728
+ 201 0080 30000000 		.word	.LC3
+ 202              		.cfi_endproc
+ 203              	.LFE4:
+ 205              		.section	.rodata.__FUNCTION__.6728,"a"
+ 206              		.align	2
+ 209              	__FUNCTION__.6728:
+ 210 0000 6C696E6B 		.ascii	"link_main\000"
+ 210      5F6D6169 
+ 210      6E00
+ 211              		.text
+ 212              	.Letext0:
+ 213              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 214              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 215              		.file 4 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 216              		.file 5 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 217              		.file 6 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/ree
+ 218              		.file 7 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 219              		.file 8 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/typ
+ 220              		.file 9 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/inc/link_log.h"
+ 221              		.file 10 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/inc/stimer.h"
+ 222              		.file 11 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.h"
+ 223              		.file 12 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/at/at.h"
+ 224              		.file 13 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.h"
+ 225              		.file 14 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/inc/shell.h"
+ARM GAS  /tmp/ccpwzbLI.s 			page 9
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 link_main.c
+     /tmp/ccpwzbLI.s:18     .bss.s_link_mainversion:0000000000000000 $d
+     /tmp/ccpwzbLI.s:21     .bss.s_link_mainversion:0000000000000000 s_link_mainversion
+     /tmp/ccpwzbLI.s:24     .rodata:0000000000000000 $d
+     /tmp/ccpwzbLI.s:34     .text.linkmain_version:0000000000000000 $t
+     /tmp/ccpwzbLI.s:42     .text.linkmain_version:0000000000000000 linkmain_version
+     /tmp/ccpwzbLI.s:86     .text.linkmain_version:000000000000002c $d
+     /tmp/ccpwzbLI.s:94     .bss.s_link_start:0000000000000000 $d
+     /tmp/ccpwzbLI.s:97     .bss.s_link_start:0000000000000000 s_link_start
+     /tmp/ccpwzbLI.s:104    .text.link_main:0000000000000000 $t
+     /tmp/ccpwzbLI.s:111    .text.link_main:0000000000000000 link_main
+     /tmp/ccpwzbLI.s:199    .text.link_main:0000000000000078 $d
+     /tmp/ccpwzbLI.s:209    .rodata.__FUNCTION__.6728:0000000000000000 __FUNCTION__.6728
+     /tmp/ccpwzbLI.s:206    .rodata.__FUNCTION__.6728:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+snprintf
+osal_init
+link_log_level_get
+link_log_level_name
+osal_sys_time
+printf
+stimer_init
+shell_init
+los_driv_init
+at_init
+oc_coap_init
+standard_app_demo_main

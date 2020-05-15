@@ -1,0 +1,874 @@
+ARM GAS  /tmp/ccAt7TPW.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"main.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	BMP1
+  18              		.section	.data.BMP1,"aw"
+  19              		.align	2
+  22              	BMP1:
+  23 0000 00060AFE 		.ascii	"\000\006\012\376\012\306\000\340\000\360\000\370\000"
+  23      0AC600E0 
+  23      00F000F8 
+  23      00
+  24 000d 00000000 		.ascii	"\000\000\000\000\000\376}\273\307\357\357\357\357\357"
+  24      00FE7DBB 
+  24      C7EFEFEF 
+  24      EFEF
+  25 001b EFEFC7BB 		.ascii	"\357\357\307\273}\376\000\000\000\000\000\000\000\000"
+  25      7DFE0000 
+  25      00000000 
+  25      0000
+  26 0029 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  26      00000000 
+  26      00000000 
+  26      00
+  27 0036 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  27      00000000 
+  27      00000000 
+  27      00
+  28 0043 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  28      00000000 
+  28      00000000 
+  28      00
+  29 0050 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  29      00000000 
+  29      00000000 
+  29      00
+  30 005d 0000080C 		.ascii	"\000\000\010\014\376\376\014\010 `\376\376` \000\000"
+  30      FEFE0C08 
+  30      2060FEFE 
+  30      60200000 
+  31 006d 007848FE 		.ascii	"\000xH\376\202\272\272\202\272\272\202\272\272\202\272"
+  31      82BABA82 
+  31      BABA82BA 
+  31      BA82BA
+  32 007c BA82FE00 		.ascii	"\272\202\376\000\000\000\000\000\000\000\000\000\000"
+ARM GAS  /tmp/ccAt7TPW.s 			page 2
+
+
+  32      00000000 
+  32      00000000 
+  32      00
+  33 0089 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\001\001\001"
+  33      00000000 
+  33      00000101 
+  33      01
+  34 0096 01010101 		.ascii	"\001\001\001\001\001\001\001\001\001\001\000\000\000"
+  34      01010101 
+  34      01010000 
+  34      00
+  35 00a3 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  35      00000000 
+  35      00000000 
+  35      00
+  36 00b0 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  36      00000000 
+  36      00000000 
+  36      00
+  37 00bd 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  37      00000000 
+  37      00000000 
+  37      00
+  38 00ca 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  38      00000000 
+  38      00000000 
+  38      00
+  39 00d7 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  39      00000000 
+  39      00000000 
+  39      00
+  40 00e4 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  40      00000000 
+  40      00000000 
+  40      00
+  41 00f1 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  41      00000000 
+  41      00000000 
+  41      00
+  42 00fe 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  42      00000000 
+  42      00000000 
+  42      00
+  43 010b 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  43      00000000 
+  43      00000000 
+  43      00
+  44 0118 00000000 		.ascii	"\000\000\000\000\000\000\376\377\003\003\003\003\003"
+  44      0000FEFF 
+  44      03030303 
+  44      03
+  45 0125 03030303 		.ascii	"\003\003\003\003\377\377\000\000\376\377\003\003\003"
+  45      FFFF0000 
+  45      FEFF0303 
+  45      03
+  46 0132 03030303 		.ascii	"\003\003\003\003\003\003\377\376\000\000\000\000\300"
+  46      0303FFFE 
+ARM GAS  /tmp/ccAt7TPW.s 			page 3
+
+
+  46      00000000 
+  46      C0
+  47 013f C0C00000 		.ascii	"\300\300\000\000\000\000\376\377\003\003\003\003\003"
+  47      0000FEFF 
+  47      03030303 
+  47      03
+  48 014c 03030303 		.ascii	"\003\003\003\003\377\376\000\000\376\377\003\003\003"
+  48      FFFE0000 
+  48      FEFF0303 
+  48      03
+  49 0159 03030303 		.ascii	"\003\003\003\003\003\003\377\376\000\000\000\000\000"
+  49      0303FFFE 
+  49      00000000 
+  49      00
+  50 0166 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  50      00000000 
+  50      00000000 
+  50      00
+  51 0173 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  51      00000000 
+  51      00000000 
+  51      00
+  52 0180 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  52      00000000 
+  52      00000000 
+  52      00
+  53 018d 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  53      00000000 
+  53      00000000 
+  53      00
+  54 019a 00000000 		.ascii	"\000\000\000\000\377\377\000\000\000\000\000\000\000"
+  54      FFFF0000 
+  54      00000000 
+  54      00
+  55 01a7 0000FFFF 		.ascii	"\000\000\377\377\000\000\377\377\014\014\014\014\014"
+  55      0000FFFF 
+  55      0C0C0C0C 
+  55      0C
+  56 01b4 0C0C0C0C 		.ascii	"\014\014\014\014\377\377\000\000\000\000\341\341\341"
+  56      FFFF0000 
+  56      0000E1E1 
+  56      E1
+  57 01c1 00000000 		.ascii	"\000\000\000\000\377\377\000\000\000\000\000\000\000"
+  57      FFFF0000 
+  57      00000000 
+  57      00
+  58 01ce 0000FFFF 		.ascii	"\000\000\377\377\000\000\377\377\014\014\014\014\014"
+  58      0000FFFF 
+  58      0C0C0C0C 
+  58      0C
+  59 01db 0C0C0C0C 		.ascii	"\014\014\014\014\377\377\000\000\000\000\000\000\000"
+  59      FFFF0000 
+  59      00000000 
+  59      00
+  60 01e8 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  60      00000000 
+  60      00000000 
+ARM GAS  /tmp/ccAt7TPW.s 			page 4
+
+
+  60      00
+  61 01f5 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  61      00000000 
+  61      00000000 
+  61      00
+  62 0202 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  62      00000000 
+  62      00000000 
+  62      00
+  63 020f 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  63      00000000 
+  63      00000000 
+  63      00
+  64 021c 00000F1F 		.ascii	"\000\000\017\037\030\030\030\030\030\030\030\030\030"
+  64      18181818 
+  64      18181818 
+  64      18
+  65 0229 1F0F0000 		.ascii	"\037\017\000\000\017\037\030\030\030\030\030\030\030"
+  65      0F1F1818 
+  65      18181818 
+  65      18
+  66 0236 18181F0F 		.ascii	"\030\030\037\017\000\000\000\000\000\000\000\000\000"
+  66      00000000 
+  66      00000000 
+  66      00
+  67 0243 00000F1F 		.ascii	"\000\000\017\037\030\030\030\030\030\030\030\030\030"
+  67      18181818 
+  67      18181818 
+  67      18
+  68 0250 1F0F0000 		.ascii	"\037\017\000\000\017\037\030\030\030\030\030\030\030"
+  68      0F1F1818 
+  68      18181818 
+  68      18
+  69 025d 18181F0F 		.ascii	"\030\030\037\017\000\000\000\000\000\000\000\000\000"
+  69      00000000 
+  69      00000000 
+  69      00
+  70 026a 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  70      00000000 
+  70      00000000 
+  70      00
+  71 0277 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  71      00000000 
+  71      00000000 
+  71      00
+  72 0284 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  72      00000000 
+  72      00000000 
+  72      00
+  73 0291 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  73      00000000 
+  73      00000000 
+  73      00
+  74 029e 00000000 		.ascii	"\000\000\000\000\214B\"\022\014\000\374\002\002\002"
+  74      8C422212 
+  74      0C00FC02 
+  74      0202
+ARM GAS  /tmp/ccAt7TPW.s 			page 5
+
+
+  75 02ac FC000004 		.ascii	"\374\000\000\004\376\000\000\000 XD\376@\000\020\020"
+  75      FE000000 
+  75      205844FE 
+  75      40001010 
+  76 02bc 10101000 		.ascii	"\020\020\020\000\000\004\376\000\000\000\374\002\002"
+  76      0004FE00 
+  76      0000FC02 
+  76      02
+  77 02c9 02FC0010 		.ascii	"\002\374\000\020\020\020\020\020\000\374\002\002\002"
+  77      10101010 
+  77      00FC0202 
+  77      02
+  78 02d6 FC000004 		.ascii	"\374\000\000\004\376\000\000\000\000\000\000\000\000"
+  78      FE000000 
+  78      00000000 
+  78      00
+  79 02e3 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  79      00000000 
+  79      00000000 
+  79      00
+  80 02f0 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  80      00000000 
+  80      00000000 
+  80      00
+  81 02fd 00000000 		.ascii	"\000\000\000\000$\244.$\344$.\244$\000\000\000\370J"
+  81      24A42E24 
+  81      E4242EA4 
+  81      24000000 
+  81      F84A
+  82 030f 4C48F848 		.ascii	"LH\370HLJ\370\000\000\000\000\000\000\000\000\000\000"
+  82      4C4AF800 
+  82      00000000 
+  82      00000000 
+  82      00
+  83 0320 00000101 		.ascii	"\000\000\001\001\001\001\001\000\000\001\001\001\000"
+  83      01010100 
+  83      00010101 
+  83      00
+  84 032d 00000101 		.ascii	"\000\000\001\001\001\000\000\000\000\000\001\001\000"
+  84      01000000 
+  84      00000101 
+  84      00
+  85 033a 00000000 		.ascii	"\000\000\000\000\000\000\000\001\001\001\000\000\000"
+  85      00000001 
+  85      01010000 
+  85      00
+  86 0347 01010100 		.ascii	"\001\001\001\000\000\000\000\000\000\000\000\000\001"
+  86      00000000 
+  86      00000000 
+  86      01
+  87 0354 01010000 		.ascii	"\001\001\000\000\000\001\001\001\000\000\000\000\000"
+  87      00010101 
+  87      00000000 
+  87      00
+  88 0361 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\300 \020"
+  88      00000000 
+  88      000000C0 
+ARM GAS  /tmp/ccAt7TPW.s 			page 6
+
+
+  88      2010
+  89 036f 10101020 		.ascii	"\020\020\020 \300\000\000\300 \020\020\020\020 \300"
+  89      C00000C0 
+  89      20101010 
+  89      1020C0
+  90 037e 00000012 		.ascii	"\000\000\000\022\012\007\002\177\002\007\012\022\000"
+  90      0A07027F 
+  90      02070A12 
+  90      00
+  91 038b 00000B0A 		.ascii	"\000\000\013\012\012\012\177\012\012\012\013\000\000"
+  91      0A0A7F0A 
+  91      0A0A0B00 
+  91      00
+  92 0398 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  92      00000000 
+  92      00000000 
+  92      00
+  93 03a5 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  93      00000000 
+  93      00000000 
+  93      00
+  94 03b2 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  94      00000000 
+  94      00000000 
+  94      00
+  95 03bf 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  95      00000000 
+  95      00000000 
+  95      00
+  96 03cc 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  96      00000000 
+  96      00000000 
+  96      00
+  97 03d9 00000000 		.ascii	"\000\000\000\000\000\000\000\000\000\000\000\000\000"
+  97      00000000 
+  97      00000000 
+  97      00
+  98 03e6 00000000 		.ascii	"\000\000\000\000\000\000\037 @@@P _\200\000\037 @@@"
+  98      00001F20 
+  98      40404050 
+  98      205F8000 
+  98      1F204040 
+  99 03fb 50205F80 		.ascii	"P _\200\000"
+  99      00
+ 100              		.global	system_phys_mem
+ 101              		.section	.rodata.system_phys_mem,"a"
+ 102              		.align	2
+ 105              	system_phys_mem:
+ 106 0000 00000000 		.word	__los_heap_addr_start__
+ 107 0004 00000000 		.word	__los_heap_addr_end__
+ 108 0008 00000000 		.word	0
+ 109 000c 00000000 		.word	0
+ 110              		.section	.rodata
+ 111              		.align	2
+ 112              	.LC0:
+ 113 0000 4C343736 		.ascii	"L476_LiTeOS\000"
+ 113      5F4C6954 
+ARM GAS  /tmp/ccAt7TPW.s 			page 7
+
+
+ 113      654F5300 
+ 114              		.align	2
+ 115              	.LC1:
+ 116 000c 4E42494F 		.ascii	"NBIOT\000"
+ 116      5400
+ 117              		.section	.text.HardWare_Init,"ax",%progbits
+ 118              		.align	1
+ 119              		.global	HardWare_Init
+ 120              		.arch armv7e-m
+ 121              		.syntax unified
+ 122              		.thumb
+ 123              		.thumb_func
+ 124              		.fpu fpv4-sp-d16
+ 126              	HardWare_Init:
+ 127              	.LFB160:
+ 128              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** /*----------------------------------------------------------------------------
+   2:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+   3:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * All rights reserved.
+   4:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * are permitted provided that the following conditions are met:
+   6:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * conditions and the following disclaimer.
+   8:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * provided with the distribution.
+  11:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * permission.
+  14:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  *---------------------------------------------------------------------------*/
+  26:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** /*----------------------------------------------------------------------------
+  27:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * Notice of Export Control Law
+  28:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * ===============================================
+  29:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  * applicable export control laws and regulations.
+  33:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****  *---------------------------------------------------------------------------*/
+  34:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #include "main.h"
+  35:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #include "sys_init.h"
+  36:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #include "mem.h"
+  37:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 
+  38:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #include "los_base.h"
+  39:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #include "los_task.ph"
+  40:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #include "los_typedef.h"
+  41:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #include "los_sys.h"
+ARM GAS  /tmp/ccAt7TPW.s 			page 8
+
+
+  42:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 
+  43:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** /*****Private includes******/
+  44:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #include "i2c.h"
+  45:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #include "usart.h"
+  46:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #include "rtc.h"
+  47:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #include "gpio.h"
+  48:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #include "stdio.h"
+  49:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #include "oled.h"
+  50:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #include "bmp.h"
+  51:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #include "dht11.h"
+  52:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** /***************************/
+  53:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 
+  54:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #if defined (__CC_ARM)
+  55:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** extern char Image$$RW_IRAM1$$ZI$$Limit [];
+  56:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** extern char Image$$ARM_LIB_STACKHEAP$$Base [];
+  57:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #elif defined (__GNUC__)
+  58:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** extern char __los_heap_addr_start__ [];
+  59:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** extern char __los_heap_addr_end__ [];
+  60:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #else
+  61:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #error "fix me"
+  62:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #endif
+  63:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 
+  64:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** const struct phys_mem system_phys_mem [] =
+  65:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     {
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #if defined (__CC_ARM)
+  67:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****         { Image$$RW_IRAM1$$ZI$$Limit, Image$$ARM_LIB_STACKHEAP$$Base },
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #elif defined (__GNUC__)
+  69:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****         {(unsigned long) __los_heap_addr_start__,(unsigned long) __los_heap_addr_end__ },
+  70:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #else
+  71:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #error "fix me"
+  72:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** #endif
+  73:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****         { 0, 0 }
+  74:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     };
+  75:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 
+  76:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** VOID HardWare_Init(VOID)
+  77:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** {
+ 129              		.loc 1 77 1
+ 130              		.cfi_startproc
+ 131              		@ args = 0, pretend = 0, frame = 0
+ 132              		@ frame_needed = 1, uses_anonymous_args = 0
+ 133 0000 80B5     		push	{r7, lr}
+ 134              	.LCFI0:
+ 135              		.cfi_def_cfa_offset 8
+ 136              		.cfi_offset 7, -8
+ 137              		.cfi_offset 14, -4
+ 138 0002 00AF     		add	r7, sp, #0
+ 139              	.LCFI1:
+ 140              		.cfi_def_cfa_register 7
+  78:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	HAL_Init();
+ 141              		.loc 1 78 2
+ 142 0004 FFF7FEFF 		bl	HAL_Init
+  79:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	/* Configure the system clock */
+  80:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	SystemClock_Config();
+ 143              		.loc 1 80 2
+ 144 0008 FFF7FEFF 		bl	SystemClock_Config
+  81:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	MX_GPIO_Init();
+ 145              		.loc 1 81 2
+ARM GAS  /tmp/ccAt7TPW.s 			page 9
+
+
+ 146 000c FFF7FEFF 		bl	MX_GPIO_Init
+  82:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	MX_I2C1_Init();
+ 147              		.loc 1 82 2
+ 148 0010 FFF7FEFF 		bl	MX_I2C1_Init
+  83:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	MX_RTC_Init();
+ 149              		.loc 1 83 2
+ 150 0014 FFF7FEFF 		bl	MX_RTC_Init
+  84:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	dwt_delay_init(SystemCoreClock);
+ 151              		.loc 1 84 2
+ 152 0018 224B     		ldr	r3, .L2
+ 153 001a 1B68     		ldr	r3, [r3]
+ 154 001c 1846     		mov	r0, r3
+ 155 001e FFF7FEFF 		bl	dwt_delay_init
+  85:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	/* Init OLED */
+  86:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	OLED_Init();
+ 156              		.loc 1 86 2
+ 157 0022 FFF7FEFF 		bl	OLED_Init
+  87:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	OLED_Clear();
+ 158              		.loc 1 87 2
+ 159 0026 FFF7FEFF 		bl	OLED_Clear
+  88:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	OLED_ShowCHinese(9, 0, 0);//Zhu
+ 160              		.loc 1 88 2
+ 161 002a 0022     		movs	r2, #0
+ 162 002c 0021     		movs	r1, #0
+ 163 002e 0920     		movs	r0, #9
+ 164 0030 FFF7FEFF 		bl	OLED_ShowCHinese
+  89:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	OLED_ShowCHinese(27, 0, 1);//You
+ 165              		.loc 1 89 2
+ 166 0034 0122     		movs	r2, #1
+ 167 0036 0021     		movs	r1, #0
+ 168 0038 1B20     		movs	r0, #27
+ 169 003a FFF7FEFF 		bl	OLED_ShowCHinese
+  90:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	OLED_ShowCHinese(45, 0, 2);//Peng
+ 170              		.loc 1 90 2
+ 171 003e 0222     		movs	r2, #2
+ 172 0040 0021     		movs	r1, #0
+ 173 0042 2D20     		movs	r0, #45
+ 174 0044 FFF7FEFF 		bl	OLED_ShowCHinese
+  91:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	OLED_ShowCHinese(63, 0, 3);//Wu
+ 175              		.loc 1 91 2
+ 176 0048 0322     		movs	r2, #3
+ 177 004a 0021     		movs	r1, #0
+ 178 004c 3F20     		movs	r0, #63
+ 179 004e FFF7FEFF 		bl	OLED_ShowCHinese
+  92:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	OLED_ShowCHinese(81, 0, 4);//Lian
+ 180              		.loc 1 92 2
+ 181 0052 0422     		movs	r2, #4
+ 182 0054 0021     		movs	r1, #0
+ 183 0056 5120     		movs	r0, #81
+ 184 0058 FFF7FEFF 		bl	OLED_ShowCHinese
+  93:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	OLED_ShowCHinese(99, 0, 5);//Wang
+ 185              		.loc 1 93 2
+ 186 005c 0522     		movs	r2, #5
+ 187 005e 0021     		movs	r1, #0
+ 188 0060 6320     		movs	r0, #99
+ 189 0062 FFF7FEFF 		bl	OLED_ShowCHinese
+  94:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	OLED_ShowCHinese(36, 2, 6);//Da
+ARM GAS  /tmp/ccAt7TPW.s 			page 10
+
+
+ 190              		.loc 1 94 2
+ 191 0066 0622     		movs	r2, #6
+ 192 0068 0221     		movs	r1, #2
+ 193 006a 2420     		movs	r0, #36
+ 194 006c FFF7FEFF 		bl	OLED_ShowCHinese
+  95:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	OLED_ShowCHinese(54, 2, 7);//Jiang
+ 195              		.loc 1 95 2
+ 196 0070 0722     		movs	r2, #7
+ 197 0072 0221     		movs	r1, #2
+ 198 0074 3620     		movs	r0, #54
+ 199 0076 FFF7FEFF 		bl	OLED_ShowCHinese
+  96:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	OLED_ShowCHinese(72, 2, 8);//Tang
+ 200              		.loc 1 96 2
+ 201 007a 0822     		movs	r2, #8
+ 202 007c 0221     		movs	r1, #2
+ 203 007e 4820     		movs	r0, #72
+ 204 0080 FFF7FEFF 		bl	OLED_ShowCHinese
+  97:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	OLED_ShowString(18, 4, "L476_LiTeOS", 16);
+ 205              		.loc 1 97 2
+ 206 0084 1023     		movs	r3, #16
+ 207 0086 084A     		ldr	r2, .L2+4
+ 208 0088 0421     		movs	r1, #4
+ 209 008a 1220     		movs	r0, #18
+ 210 008c FFF7FEFF 		bl	OLED_ShowString
+  98:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	OLED_ShowString(48, 6, "NBIOT", 16);
+ 211              		.loc 1 98 2
+ 212 0090 1023     		movs	r3, #16
+ 213 0092 064A     		ldr	r2, .L2+8
+ 214 0094 0621     		movs	r1, #6
+ 215 0096 3020     		movs	r0, #48
+ 216 0098 FFF7FEFF 		bl	OLED_ShowString
+  99:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	//delayus(1000);
+ 100:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	/* Init DHT11 */
+ 101:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	DHT11_Init();
+ 217              		.loc 1 101 2
+ 218 009c FFF7FEFF 		bl	DHT11_Init
+ 102:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 	
+ 103:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** }
+ 219              		.loc 1 103 1
+ 220 00a0 00BF     		nop
+ 221 00a2 80BD     		pop	{r7, pc}
+ 222              	.L3:
+ 223              		.align	2
+ 224              	.L2:
+ 225 00a4 00000000 		.word	SystemCoreClock
+ 226 00a8 00000000 		.word	.LC0
+ 227 00ac 0C000000 		.word	.LC1
+ 228              		.cfi_endproc
+ 229              	.LFE160:
+ 231              		.section	.rodata
+ 232 0012 0000     		.align	2
+ 233              	.LC2:
+ 234 0014 6C696E6B 		.ascii	"link_main\000"
+ 234      5F6D6169 
+ 234      6E00
+ 235              		.section	.text.link_test,"ax",%progbits
+ 236              		.align	1
+ARM GAS  /tmp/ccAt7TPW.s 			page 11
+
+
+ 237              		.syntax unified
+ 238              		.thumb
+ 239              		.thumb_func
+ 240              		.fpu fpv4-sp-d16
+ 242              	link_test:
+ 243              	.LFB161:
+ 104:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 
+ 105:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** extern int link_main(void *args);
+ 106:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** static int link_test()
+ 107:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** {
+ 244              		.loc 1 107 1
+ 245              		.cfi_startproc
+ 246              		@ args = 0, pretend = 0, frame = 40
+ 247              		@ frame_needed = 1, uses_anonymous_args = 0
+ 248 0000 80B5     		push	{r7, lr}
+ 249              	.LCFI2:
+ 250              		.cfi_def_cfa_offset 8
+ 251              		.cfi_offset 7, -8
+ 252              		.cfi_offset 14, -4
+ 253 0002 8AB0     		sub	sp, sp, #40
+ 254              	.LCFI3:
+ 255              		.cfi_def_cfa_offset 48
+ 256 0004 00AF     		add	r7, sp, #0
+ 257              	.LCFI4:
+ 258              		.cfi_def_cfa_register 7
+ 108:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     int ret = -1;
+ 259              		.loc 1 108 9
+ 260 0006 4FF0FF33 		mov	r3, #-1
+ 261 000a 7B62     		str	r3, [r7, #36]
+ 109:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     UINT32 uwRet = LOS_OK;
+ 262              		.loc 1 109 12
+ 263 000c 0023     		movs	r3, #0
+ 264 000e 3B62     		str	r3, [r7, #32]
+ 110:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     UINT32  handle;
+ 111:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     TSK_INIT_PARAM_S task_init_param;
+ 112:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     memset (&task_init_param, 0, sizeof (TSK_INIT_PARAM_S));
+ 265              		.loc 1 113 5
+ 266 0010 3B1D     		adds	r3, r7, #4
+ 267 0012 1822     		movs	r2, #24
+ 268 0014 0021     		movs	r1, #0
+ 269 0016 1846     		mov	r0, r3
+ 270 0018 FFF7FEFF 		bl	memset
+ 114:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     task_init_param.uwArg = (unsigned int)NULL;
+ 271              		.loc 1 114 27
+ 272 001c 0023     		movs	r3, #0
+ 273 001e FB60     		str	r3, [r7, #12]
+ 115:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     task_init_param.usTaskPrio = 2;
+ 274              		.loc 1 115 32
+ 275 0020 0223     		movs	r3, #2
+ 276 0022 3B81     		strh	r3, [r7, #8]	@ movhi
+ 116:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     task_init_param.pcName =(char *) "link_main";
+ 277              		.loc 1 116 28
+ 278 0024 0C4B     		ldr	r3, .L7
+ 279 0026 7B61     		str	r3, [r7, #20]
+ 117:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     task_init_param.pfnTaskEntry = (TSK_ENTRY_FUNC)link_main;
+ 280              		.loc 1 117 34
+ARM GAS  /tmp/ccAt7TPW.s 			page 12
+
+
+ 281 0028 0C4B     		ldr	r3, .L7+4
+ 282 002a 7B60     		str	r3, [r7, #4]
+ 118:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     task_init_param.uwStackSize = 0x1000;
+ 283              		.loc 1 118 33
+ 284 002c 4FF48053 		mov	r3, #4096
+ 285 0030 3B61     		str	r3, [r7, #16]
+ 119:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     uwRet = LOS_TaskCreate(&handle, &task_init_param);
+ 286              		.loc 1 119 13
+ 287 0032 3A1D     		adds	r2, r7, #4
+ 288 0034 07F11C03 		add	r3, r7, #28
+ 289 0038 1146     		mov	r1, r2
+ 290 003a 1846     		mov	r0, r3
+ 291 003c FFF7FEFF 		bl	LOS_TaskCreate
+ 292 0040 3862     		str	r0, [r7, #32]
+ 120:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     if(LOS_OK == uwRet){
+ 293              		.loc 1 120 7
+ 294 0042 3B6A     		ldr	r3, [r7, #32]
+ 295 0044 002B     		cmp	r3, #0
+ 296 0046 01D1     		bne	.L5
+ 121:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****         ret = 0;
+ 297              		.loc 1 121 13
+ 298 0048 0023     		movs	r3, #0
+ 299 004a 7B62     		str	r3, [r7, #36]
+ 300              	.L5:
+ 122:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     }
+ 123:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     return ret;
+ 301              		.loc 1 123 12
+ 302 004c 7B6A     		ldr	r3, [r7, #36]
+ 124:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** }
+ 303              		.loc 1 124 1
+ 304 004e 1846     		mov	r0, r3
+ 305 0050 2837     		adds	r7, r7, #40
+ 306              	.LCFI5:
+ 307              		.cfi_def_cfa_offset 8
+ 308 0052 BD46     		mov	sp, r7
+ 309              	.LCFI6:
+ 310              		.cfi_def_cfa_register 13
+ 311              		@ sp needed
+ 312 0054 80BD     		pop	{r7, pc}
+ 313              	.L8:
+ 314 0056 00BF     		.align	2
+ 315              	.L7:
+ 316 0058 14000000 		.word	.LC2
+ 317 005c 00000000 		.word	link_main
+ 318              		.cfi_endproc
+ 319              	.LFE161:
+ 321              		.section	.text.main,"ax",%progbits
+ 322              		.align	1
+ 323              		.global	main
+ 324              		.syntax unified
+ 325              		.thumb
+ 326              		.thumb_func
+ 327              		.fpu fpv4-sp-d16
+ 329              	main:
+ 330              	.LFB162:
+ 125:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 
+ 126:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** int main(void)
+ARM GAS  /tmp/ccAt7TPW.s 			page 13
+
+
+ 127:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** {
+ 331              		.loc 1 127 1
+ 332              		.cfi_startproc
+ 333              		@ args = 0, pretend = 0, frame = 8
+ 334              		@ frame_needed = 1, uses_anonymous_args = 0
+ 335 0000 80B5     		push	{r7, lr}
+ 336              	.LCFI7:
+ 337              		.cfi_def_cfa_offset 8
+ 338              		.cfi_offset 7, -8
+ 339              		.cfi_offset 14, -4
+ 340 0002 82B0     		sub	sp, sp, #8
+ 341              	.LCFI8:
+ 342              		.cfi_def_cfa_offset 16
+ 343 0004 00AF     		add	r7, sp, #0
+ 344              	.LCFI9:
+ 345              		.cfi_def_cfa_register 7
+ 128:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     UINT32 uwRet = LOS_OK;
+ 346              		.loc 1 128 12
+ 347 0006 0023     		movs	r3, #0
+ 348 0008 7B60     		str	r3, [r7, #4]
+ 129:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     HardWare_Init();
+ 349              		.loc 1 129 5
+ 350 000a FFF7FEFF 		bl	HardWare_Init
+ 130:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     uwRet = LOS_KernelInit();
+ 351              		.loc 1 130 13
+ 352 000e FFF7FEFF 		bl	LOS_KernelInit
+ 353 0012 7860     		str	r0, [r7, #4]
+ 131:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     if (uwRet != LOS_OK)
+ 354              		.loc 1 131 8
+ 355 0014 7B68     		ldr	r3, [r7, #4]
+ 356 0016 002B     		cmp	r3, #0
+ 357 0018 01D0     		beq	.L10
+ 132:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     {
+ 133:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****         return LOS_NOK;
+ 358              		.loc 1 133 16
+ 359 001a 0123     		movs	r3, #1
+ 360 001c 08E0     		b	.L11
+ 361              	.L10:
+ 134:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     }
+ 135:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 
+ 136:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     extern void shell_uart_init(int baud);
+ 137:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     shell_uart_init(115200);
+ 362              		.loc 1 137 5
+ 363 001e 4FF4E130 		mov	r0, #115200
+ 364 0022 FFF7FEFF 		bl	shell_uart_init
+ 138:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 
+ 139:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     link_test();
+ 365              		.loc 1 139 5
+ 366 0026 FFF7FEFF 		bl	link_test
+ 140:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** 
+ 141:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     (void)LOS_Start();
+ 367              		.loc 1 141 11
+ 368 002a FFF7FEFF 		bl	LOS_Start
+ 142:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c ****     return 0;
+ 369              		.loc 1 142 12
+ 370 002e 0023     		movs	r3, #0
+ 371              	.L11:
+ARM GAS  /tmp/ccAt7TPW.s 			page 14
+
+
+ 143:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/main.c **** }
+ 372              		.loc 1 143 1
+ 373 0030 1846     		mov	r0, r3
+ 374 0032 0837     		adds	r7, r7, #8
+ 375              	.LCFI10:
+ 376              		.cfi_def_cfa_offset 8
+ 377 0034 BD46     		mov	sp, r7
+ 378              	.LCFI11:
+ 379              		.cfi_def_cfa_register 13
+ 380              		@ sp needed
+ 381 0036 80BD     		pop	{r7, pc}
+ 382              		.cfi_endproc
+ 383              	.LFE162:
+ 385              		.text
+ 386              	.Letext0:
+ 387              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 388              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 389              		.file 4 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 390              		.file 5 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/system_stm32l4xx.h"
+ 391              		.file 6 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/stm32l476xx.h"
+ 392              		.file 7 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 393              		.file 8 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 394              		.file 9 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 395              		.file 10 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/re
+ 396              		.file 11 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 397              		.file 12 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 398              		.file 13 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 399              		.file 14 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 400              		.file 15 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 401              		.file 16 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_typedef.h"
+ 402              		.file 17 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_config.h"
+ 403              		.file 18 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_list.h"
+ 404              		.file 19 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_err.h"
+ 405              		.file 20 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 406              		.file 21 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_event.h"
+ 407              		.file 22 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_tick.h"
+ 408              		.file 23 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_task.h"
+ 409              		.file 24 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/base/include/los_task.ph"
+ 410              		.file 25 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/base/include/los_slab.ph"
+ 411              		.file 26 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_memory.h"
+ 412              		.file 27 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/base/include/los_queue.ph"
+ 413              		.file 28 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/stdlib
+ 414              		.file 29 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/usart.h"
+ 415              		.file 30 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/i2c.h"
+ 416              		.file 31 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/list.h"
+ 417              		.file 32 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/base/include/chunk.h"
+ 418              		.file 33 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/base/include/cm-tlsf.h"
+ 419              		.file 34 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/base/include/heap.h"
+ 420              		.file 35 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/base/include/mem.h"
+ 421              		.file 36 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/rtc.h"
+ 422              		.file 37 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/OLED/bmp.h"
+ARM GAS  /tmp/ccAt7TPW.s 			page 15
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 main.c
+     /tmp/ccAt7TPW.s:22     .data.BMP1:0000000000000000 BMP1
+     /tmp/ccAt7TPW.s:19     .data.BMP1:0000000000000000 $d
+     /tmp/ccAt7TPW.s:105    .rodata.system_phys_mem:0000000000000000 system_phys_mem
+     /tmp/ccAt7TPW.s:102    .rodata.system_phys_mem:0000000000000000 $d
+     /tmp/ccAt7TPW.s:111    .rodata:0000000000000000 $d
+     /tmp/ccAt7TPW.s:118    .text.HardWare_Init:0000000000000000 $t
+     /tmp/ccAt7TPW.s:126    .text.HardWare_Init:0000000000000000 HardWare_Init
+     /tmp/ccAt7TPW.s:225    .text.HardWare_Init:00000000000000a4 $d
+     /tmp/ccAt7TPW.s:236    .text.link_test:0000000000000000 $t
+     /tmp/ccAt7TPW.s:242    .text.link_test:0000000000000000 link_test
+     /tmp/ccAt7TPW.s:316    .text.link_test:0000000000000058 $d
+     /tmp/ccAt7TPW.s:322    .text.main:0000000000000000 $t
+     /tmp/ccAt7TPW.s:329    .text.main:0000000000000000 main
+
+UNDEFINED SYMBOLS
+__los_heap_addr_start__
+__los_heap_addr_end__
+HAL_Init
+SystemClock_Config
+MX_GPIO_Init
+MX_I2C1_Init
+MX_RTC_Init
+dwt_delay_init
+OLED_Init
+OLED_Clear
+OLED_ShowCHinese
+OLED_ShowString
+DHT11_Init
+SystemCoreClock
+memset
+LOS_TaskCreate
+link_main
+LOS_KernelInit
+shell_uart_init
+LOS_Start

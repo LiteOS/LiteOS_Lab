@@ -1,0 +1,692 @@
+ARM GAS  /tmp/cc5V7mvg.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"use_coap_demo.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.comm	dht11_data,16,4
+  18              		.global	DHT11_str
+  19              		.section	.bss.DHT11_str,"aw",%nobits
+  20              		.align	2
+  23              	DHT11_str:
+  24 0000 00000000 		.space	10
+  24      00000000 
+  24      0000
+  25              		.section	.bss.s_rcv_buffer,"aw",%nobits
+  26              		.align	2
+  29              	s_rcv_buffer:
+  30 0000 00000000 		.space	128
+  30      00000000 
+  30      00000000 
+  30      00000000 
+  30      00000000 
+  31              		.section	.bss.s_rcv_datalen,"aw",%nobits
+  32              		.align	2
+  35              	s_rcv_datalen:
+  36 0000 00000000 		.space	4
+  37              		.section	.bss.s_rcv_sync,"aw",%nobits
+  38              		.align	2
+  41              	s_rcv_sync:
+  42 0000 00000000 		.space	4
+  43              		.section	.text.app_msg_deal,"ax",%progbits
+  44              		.align	1
+  45              		.arch armv7e-m
+  46              		.syntax unified
+  47              		.thumb
+  48              		.thumb_func
+  49              		.fpu fpv4-sp-d16
+  51              	app_msg_deal:
+  52              	.LFB133:
+  53              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_
+   1:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** /*----------------------------------------------------------------------------
+   2:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * All rights reserved.
+   4:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * are permitted provided that the following conditions are met:
+   6:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * conditions and the following disclaimer.
+ARM GAS  /tmp/cc5V7mvg.s 			page 2
+
+
+   8:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * provided with the distribution.
+  11:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * permission.
+  14:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  *---------------------------------------------------------------------------*/
+  26:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** /*----------------------------------------------------------------------------
+  27:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * Notice of Export Control Law
+  28:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * ===============================================
+  29:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  * applicable export control laws and regulations.
+  33:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  *---------------------------------------------------------------------------*/
+  34:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** /**
+  35:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  *  DATE                AUTHOR      INSTRUCTION
+  36:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  *  2020-04-21    	  FanXinhao    The first version  
+  37:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  *
+  38:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****  */
+  39:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** #include <stdint.h>
+  40:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** #include <stddef.h>
+  41:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** #include <string.h>
+  42:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** #include <los_typedef.h>
+  43:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** #include <los_task.h>
+  44:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** #include <boudica120_oc.h>
+  45:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** #include <osal.h>
+  46:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** #include <oc_coap_al.h>
+  47:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 
+  48:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** #include "dht11.h"
+  49:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** #include "oled.h"
+  50:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 
+  51:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** //DHT11 Data Struct
+  52:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** DHT11_Data_TypeDef dht11_data;
+  53:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** unsigned char DHT11_str[10] = {0};
+  54:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 
+  55:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 
+  56:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** /* LWM2M server information */
+  57:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** #define cn_endpoint_id        "coap_001"
+  58:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** #define cn_app_server         "119.3.250.80"
+  59:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** #define cn_app_port           "5683"
+  60:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 
+  61:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** //if your command is very fast,please use a queue here--TODO
+  62:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** #define cn_app_rcv_buf_len 128
+  63:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** static int8_t          s_rcv_buffer[cn_app_rcv_buf_len];
+  64:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** static int             s_rcv_datalen;
+ARM GAS  /tmp/cc5V7mvg.s 			page 3
+
+
+  65:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** static osal_semp_t     s_rcv_sync;
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 
+  67:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** //use this function to push all the message to the buffer
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** static int app_msg_deal(void *msg, int len)
+  69:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** {
+  54              		.loc 1 69 1
+  55              		.cfi_startproc
+  56              		@ args = 0, pretend = 0, frame = 16
+  57              		@ frame_needed = 1, uses_anonymous_args = 0
+  58 0000 80B5     		push	{r7, lr}
+  59              	.LCFI0:
+  60              		.cfi_def_cfa_offset 8
+  61              		.cfi_offset 7, -8
+  62              		.cfi_offset 14, -4
+  63 0002 84B0     		sub	sp, sp, #16
+  64              	.LCFI1:
+  65              		.cfi_def_cfa_offset 24
+  66 0004 00AF     		add	r7, sp, #0
+  67              	.LCFI2:
+  68              		.cfi_def_cfa_register 7
+  69 0006 7860     		str	r0, [r7, #4]
+  70 0008 3960     		str	r1, [r7]
+  70:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****     int ret = -1;
+  71              		.loc 1 70 9
+  72 000a 4FF0FF33 		mov	r3, #-1
+  73 000e FB60     		str	r3, [r7, #12]
+  71:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 
+  72:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****     if(len <= cn_app_rcv_buf_len)
+  74              		.loc 1 72 7
+  75 0010 3B68     		ldr	r3, [r7]
+  76 0012 802B     		cmp	r3, #128
+  77 0014 0FDC     		bgt	.L2
+  73:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****     {
+  74:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****         memcpy(s_rcv_buffer,msg,len);
+  78              		.loc 1 74 9
+  79 0016 3B68     		ldr	r3, [r7]
+  80 0018 1A46     		mov	r2, r3
+  81 001a 7968     		ldr	r1, [r7, #4]
+  82 001c 0848     		ldr	r0, .L4
+  83 001e FFF7FEFF 		bl	memcpy
+  75:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****         s_rcv_datalen = len;
+  84              		.loc 1 75 23
+  85 0022 084A     		ldr	r2, .L4+4
+  86 0024 3B68     		ldr	r3, [r7]
+  87 0026 1360     		str	r3, [r2]
+  76:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 
+  77:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****         osal_semp_post(s_rcv_sync);
+  88              		.loc 1 77 9
+  89 0028 074B     		ldr	r3, .L4+8
+  90 002a 1B68     		ldr	r3, [r3]
+  91 002c 1846     		mov	r0, r3
+  92 002e FFF7FEFF 		bl	osal_semp_post
+  78:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 
+  79:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****         ret = 0;
+  93              		.loc 1 79 13
+  94 0032 0023     		movs	r3, #0
+  95 0034 FB60     		str	r3, [r7, #12]
+ARM GAS  /tmp/cc5V7mvg.s 			page 4
+
+
+  96              	.L2:
+  80:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 
+  81:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****     }
+  82:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****     return ret;
+  97              		.loc 1 82 12
+  98 0036 FB68     		ldr	r3, [r7, #12]
+  83:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** }
+  99              		.loc 1 83 1
+ 100 0038 1846     		mov	r0, r3
+ 101 003a 1037     		adds	r7, r7, #16
+ 102              	.LCFI3:
+ 103              		.cfi_def_cfa_offset 8
+ 104 003c BD46     		mov	sp, r7
+ 105              	.LCFI4:
+ 106              		.cfi_def_cfa_register 13
+ 107              		@ sp needed
+ 108 003e 80BD     		pop	{r7, pc}
+ 109              	.L5:
+ 110              		.align	2
+ 111              	.L4:
+ 112 0040 00000000 		.word	s_rcv_buffer
+ 113 0044 00000000 		.word	s_rcv_datalen
+ 114 0048 00000000 		.word	s_rcv_sync
+ 115              		.cfi_endproc
+ 116              	.LFE133:
+ 118              		.section	.rodata
+ 119              		.align	2
+ 120              	.LC0:
+ 121 0000 3131392E 		.ascii	"119.3.250.80\000"
+ 121      332E3235 
+ 121      302E3830 
+ 121      00
+ 122 000d 000000   		.align	2
+ 123              	.LC1:
+ 124 0010 35363833 		.ascii	"5683\000"
+ 124      00
+ 125 0015 000000   		.align	2
+ 126              	.LC2:
+ 127 0018 636F6170 		.ascii	"coap_001\000"
+ 127      5F303031 
+ 127      00
+ 128 0021 000000   		.align	2
+ 129              	.LC3:
+ 130 0024 636F6E66 		.ascii	"config_init fail!\015\000"
+ 130      69675F69 
+ 130      6E697420 
+ 130      6661696C 
+ 130      210D00
+ 131 0037 00       		.align	2
+ 132              	.LC4:
+ 133 0038 73746172 		.ascii	"start send message to CDP server!\015\000"
+ 133      74207365 
+ 133      6E64206D 
+ 133      65737361 
+ 133      67652074 
+ 134 005b 00       		.align	2
+ 135              	.LC5:
+ARM GAS  /tmp/cc5V7mvg.s 			page 5
+
+
+ 136 005c 25303264 		.ascii	"%02d\000"
+ 136      00
+ 137              		.section	.text.coap_report_task,"ax",%progbits
+ 138              		.align	1
+ 139              		.global	coap_report_task
+ 140              		.syntax unified
+ 141              		.thumb
+ 142              		.thumb_func
+ 143              		.fpu fpv4-sp-d16
+ 145              	coap_report_task:
+ 146              	.LFB134:
+  84:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 
+  85:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** int coap_report_task(void *args)
+  86:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** {
+ 147              		.loc 1 86 1
+ 148              		.cfi_startproc
+ 149              		@ args = 0, pretend = 0, frame = 88
+ 150              		@ frame_needed = 1, uses_anonymous_args = 0
+ 151 0000 80B5     		push	{r7, lr}
+ 152              	.LCFI5:
+ 153              		.cfi_def_cfa_offset 8
+ 154              		.cfi_offset 7, -8
+ 155              		.cfi_offset 14, -4
+ 156 0002 96B0     		sub	sp, sp, #88
+ 157              	.LCFI6:
+ 158              		.cfi_def_cfa_offset 96
+ 159 0004 00AF     		add	r7, sp, #0
+ 160              	.LCFI7:
+ 161              		.cfi_def_cfa_register 7
+ 162 0006 7860     		str	r0, [r7, #4]
+  87:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****     int* handle = NULL;
+ 163              		.loc 1 87 10
+ 164 0008 0023     		movs	r3, #0
+ 165 000a 7B65     		str	r3, [r7, #84]
+  88:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****     oc_config_param_t      oc_param;
+  89:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****     char Temp[10] = {00, 22};
+ 166              		.loc 1 89 10
+ 167 000c 4FF4B053 		mov	r3, #5632
+ 168 0010 FB60     		str	r3, [r7, #12]
+ 169 0012 07F11003 		add	r3, r7, #16
+ 170 0016 0022     		movs	r2, #0
+ 171 0018 1A60     		str	r2, [r3]
+ 172 001a 9A80     		strh	r2, [r3, #4]	@ movhi
+  90:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 	oc_coap_imp_init();
+ 173              		.loc 1 90 2
+ 174 001c FFF7FEFF 		bl	oc_coap_imp_init
+  91:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 
+  92:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****     memset(&oc_param,0,sizeof(oc_param));
+ 175              		.loc 1 92 5
+ 176 0020 07F11803 		add	r3, r7, #24
+ 177 0024 3C22     		movs	r2, #60
+ 178 0026 0021     		movs	r1, #0
+ 179 0028 1846     		mov	r0, r3
+ 180 002a FFF7FEFF 		bl	memset
+  93:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 
+  94:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****     oc_param.app_server.address = cn_app_server;
+ 181              		.loc 1 94 33
+ARM GAS  /tmp/cc5V7mvg.s 			page 6
+
+
+ 182 002e 1C4B     		ldr	r3, .L10
+ 183 0030 BB63     		str	r3, [r7, #56]
+  95:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****     oc_param.app_server.port = cn_app_port;
+ 184              		.loc 1 95 30
+ 185 0032 1C4B     		ldr	r3, .L10+4
+ 186 0034 FB63     		str	r3, [r7, #60]
+  96:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****     oc_param.app_server.ep_id = cn_endpoint_id;
+ 187              		.loc 1 96 31
+ 188 0036 1C4B     		ldr	r3, .L10+8
+ 189 0038 7B63     		str	r3, [r7, #52]
+  97:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
+ 190              		.loc 1 97 24
+ 191 003a 0023     		movs	r3, #0
+ 192 003c 3B76     		strb	r3, [r7, #24]
+  98:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****     oc_param.rcv_func = app_msg_deal;
+ 193              		.loc 1 98 23
+ 194 003e 1B4B     		ldr	r3, .L10+12
+ 195 0040 FB64     		str	r3, [r7, #76]
+  99:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 
+ 100:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****     handle = oc_coap_config(&oc_param);
+ 196              		.loc 1 100 14
+ 197 0042 07F11803 		add	r3, r7, #24
+ 198 0046 1846     		mov	r0, r3
+ 199 0048 FFF7FEFF 		bl	oc_coap_config
+ 200 004c 7865     		str	r0, [r7, #84]
+ 101:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****     if (NULL == handle)
+ 201              		.loc 1 101 8
+ 202 004e 7B6D     		ldr	r3, [r7, #84]
+ 203 0050 002B     		cmp	r3, #0
+ 204 0052 03D1     		bne	.L7
+ 102:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****     {
+ 103:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 		printf("config_init fail!\r\n");
+ 205              		.loc 1 103 3
+ 206 0054 1648     		ldr	r0, .L10+16
+ 207 0056 FFF7FEFF 		bl	puts
+ 208 005a 02E0     		b	.L9
+ 209              	.L7:
+ 104:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****     }
+ 105:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 	else
+ 106:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 	{
+ 107:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 		printf("start send message to CDP server!\r\n");
+ 210              		.loc 1 107 3
+ 211 005c 1548     		ldr	r0, .L10+20
+ 212 005e FFF7FEFF 		bl	puts
+ 213              	.L9:
+ 108:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 	}
+ 109:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 	while(1)
+ 110:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 	{ 
+ 111:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****         memset(DHT11_str, 0, 6);
+ 214              		.loc 1 111 9 discriminator 1
+ 215 0062 0622     		movs	r2, #6
+ 216 0064 0021     		movs	r1, #0
+ 217 0066 1448     		ldr	r0, .L10+24
+ 218 0068 FFF7FEFF 		bl	memset
+ 112:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****         sprintf(Temp,"%02d",(int)dht11_data.temperature);
+ 219              		.loc 1 112 44 discriminator 1
+ 220 006c 134B     		ldr	r3, .L10+28
+ARM GAS  /tmp/cc5V7mvg.s 			page 7
+
+
+ 221 006e D3ED037A 		vldr.32	s15, [r3, #12]
+ 222              		.loc 1 112 9 discriminator 1
+ 223 0072 FDEEE77A 		vcvt.s32.f32	s15, s15
+ 224 0076 07F10C03 		add	r3, r7, #12
+ 225 007a 17EE902A 		vmov	r2, s15	@ int
+ 226 007e 1049     		ldr	r1, .L10+32
+ 227 0080 1846     		mov	r0, r3
+ 228 0082 FFF7FEFF 		bl	sprintf
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 		oc_coap_report(handle, Temp, 2);
+ 229              		.loc 1 113 3 discriminator 1
+ 230 0086 07F10C03 		add	r3, r7, #12
+ 231 008a 0222     		movs	r2, #2
+ 232 008c 1946     		mov	r1, r3
+ 233 008e 786D     		ldr	r0, [r7, #84]
+ 234 0090 FFF7FEFF 		bl	oc_coap_report
+ 114:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 		osal_task_sleep(10*1000);
+ 235              		.loc 1 114 3 discriminator 1
+ 236 0094 42F21070 		movw	r0, #10000
+ 237 0098 FFF7FEFF 		bl	osal_task_sleep
+ 111:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****         sprintf(Temp,"%02d",(int)dht11_data.temperature);
+ 238              		.loc 1 111 9 discriminator 1
+ 239 009c E1E7     		b	.L9
+ 240              	.L11:
+ 241 009e 00BF     		.align	2
+ 242              	.L10:
+ 243 00a0 00000000 		.word	.LC0
+ 244 00a4 10000000 		.word	.LC1
+ 245 00a8 18000000 		.word	.LC2
+ 246 00ac 00000000 		.word	app_msg_deal
+ 247 00b0 24000000 		.word	.LC3
+ 248 00b4 38000000 		.word	.LC4
+ 249 00b8 00000000 		.word	DHT11_str
+ 250 00bc 00000000 		.word	dht11_data
+ 251 00c0 5C000000 		.word	.LC5
+ 252              		.cfi_endproc
+ 253              	.LFE134:
+ 255              		.section	.rodata
+ 256 0061 000000   		.align	2
+ 257              	.LC6:
+ 258 0064 44485431 		.ascii	"DHT11 Data\000"
+ 258      31204461 
+ 258      746100
+ 259              		.global	__aeabi_f2d
+ 260 006f 00       		.align	2
+ 261              	.LC7:
+ 262 0070 74656D70 		.ascii	"temp %5.2f\000"
+ 262      2025352E 
+ 262      326600
+ 263 007b 00       		.align	2
+ 264              	.LC8:
+ 265 007c 68756D69 		.ascii	"humid %5.2f\000"
+ 265      64202535 
+ 265      2E326600 
+ 266              		.section	.text.Read_DHT11_task,"ax",%progbits
+ 267              		.align	1
+ 268              		.global	Read_DHT11_task
+ 269              		.syntax unified
+ARM GAS  /tmp/cc5V7mvg.s 			page 8
+
+
+ 270              		.thumb
+ 271              		.thumb_func
+ 272              		.fpu fpv4-sp-d16
+ 274              	Read_DHT11_task:
+ 275              	.LFB135:
+ 115:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 	}
+ 116:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** }
+ 117:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 
+ 118:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** int Read_DHT11_task(void *args)
+ 119:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** {
+ 276              		.loc 1 119 1
+ 277              		.cfi_startproc
+ 278              		@ args = 0, pretend = 0, frame = 8
+ 279              		@ frame_needed = 1, uses_anonymous_args = 0
+ 280 0000 80B5     		push	{r7, lr}
+ 281              	.LCFI8:
+ 282              		.cfi_def_cfa_offset 8
+ 283              		.cfi_offset 7, -8
+ 284              		.cfi_offset 14, -4
+ 285 0002 82B0     		sub	sp, sp, #8
+ 286              	.LCFI9:
+ 287              		.cfi_def_cfa_offset 16
+ 288 0004 00AF     		add	r7, sp, #0
+ 289              	.LCFI10:
+ 290              		.cfi_def_cfa_register 7
+ 291 0006 7860     		str	r0, [r7, #4]
+ 292              	.L13:
+ 120:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 
+ 121:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 	while(1)
+ 122:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 	{
+ 123:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 		DHT11_Read_TempAndHumidity(&dht11_data);//read DHT11
+ 293              		.loc 1 123 3 discriminator 1
+ 294 0008 1D48     		ldr	r0, .L14
+ 295 000a FFF7FEFF 		bl	DHT11_Read_TempAndHumidity
+ 124:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****         /* oled display */
+ 125:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****         OLED_Clear();
+ 296              		.loc 1 125 9 discriminator 1
+ 297 000e FFF7FEFF 		bl	OLED_Clear
+ 126:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****         OLED_ShowString(9, 0, "DHT11 Data", 10);
+ 298              		.loc 1 126 9 discriminator 1
+ 299 0012 0A23     		movs	r3, #10
+ 300 0014 1B4A     		ldr	r2, .L14+4
+ 301 0016 0021     		movs	r1, #0
+ 302 0018 0920     		movs	r0, #9
+ 303 001a FFF7FEFF 		bl	OLED_ShowString
+ 127:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****         memset(DHT11_str, 0, 6);
+ 304              		.loc 1 127 9 discriminator 1
+ 305 001e 0622     		movs	r2, #6
+ 306 0020 0021     		movs	r1, #0
+ 307 0022 1948     		ldr	r0, .L14+8
+ 308 0024 FFF7FEFF 		bl	memset
+ 128:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****         sprintf(DHT11_str,"temp %5.2f",dht11_data.temperature);
+ 309              		.loc 1 128 50 discriminator 1
+ 310 0028 154B     		ldr	r3, .L14
+ 311 002a DB68     		ldr	r3, [r3, #12]	@ float
+ 312              		.loc 1 128 9 discriminator 1
+ 313 002c 1846     		mov	r0, r3	@ float
+ARM GAS  /tmp/cc5V7mvg.s 			page 9
+
+
+ 314 002e FFF7FEFF 		bl	__aeabi_f2d
+ 315              	.LVL0:
+ 316 0032 0246     		mov	r2, r0
+ 317 0034 0B46     		mov	r3, r1
+ 318 0036 1549     		ldr	r1, .L14+12
+ 319 0038 1348     		ldr	r0, .L14+8
+ 320 003a FFF7FEFF 		bl	sprintf
+ 129:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****         OLED_ShowString(9, 2, DHT11_str, 5);
+ 321              		.loc 1 129 9 discriminator 1
+ 322 003e 0523     		movs	r3, #5
+ 323 0040 114A     		ldr	r2, .L14+8
+ 324 0042 0221     		movs	r1, #2
+ 325 0044 0920     		movs	r0, #9
+ 326 0046 FFF7FEFF 		bl	OLED_ShowString
+ 130:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****         memset(DHT11_str, 0, 6);
+ 327              		.loc 1 130 9 discriminator 1
+ 328 004a 0622     		movs	r2, #6
+ 329 004c 0021     		movs	r1, #0
+ 330 004e 0E48     		ldr	r0, .L14+8
+ 331 0050 FFF7FEFF 		bl	memset
+ 131:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****         sprintf(DHT11_str,"humid %5.2f",dht11_data.humidity);
+ 332              		.loc 1 131 51 discriminator 1
+ 333 0054 0A4B     		ldr	r3, .L14
+ 334 0056 9B68     		ldr	r3, [r3, #8]	@ float
+ 335              		.loc 1 131 9 discriminator 1
+ 336 0058 1846     		mov	r0, r3	@ float
+ 337 005a FFF7FEFF 		bl	__aeabi_f2d
+ 338              	.LVL1:
+ 339 005e 0246     		mov	r2, r0
+ 340 0060 0B46     		mov	r3, r1
+ 341 0062 0B49     		ldr	r1, .L14+16
+ 342 0064 0848     		ldr	r0, .L14+8
+ 343 0066 FFF7FEFF 		bl	sprintf
+ 132:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****         OLED_ShowString(9, 4, DHT11_str, 5);
+ 344              		.loc 1 132 9 discriminator 1
+ 345 006a 0523     		movs	r3, #5
+ 346 006c 064A     		ldr	r2, .L14+8
+ 347 006e 0421     		movs	r1, #4
+ 348 0070 0920     		movs	r0, #9
+ 349 0072 FFF7FEFF 		bl	OLED_ShowString
+ 133:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 
+ 134:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 		osal_task_sleep(5*1000);
+ 350              		.loc 1 134 3 discriminator 1
+ 351 0076 41F28830 		movw	r0, #5000
+ 352 007a FFF7FEFF 		bl	osal_task_sleep
+ 123:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****         /* oled display */
+ 353              		.loc 1 123 3 discriminator 1
+ 354 007e C3E7     		b	.L13
+ 355              	.L15:
+ 356              		.align	2
+ 357              	.L14:
+ 358 0080 00000000 		.word	dht11_data
+ 359 0084 64000000 		.word	.LC6
+ 360 0088 00000000 		.word	DHT11_str
+ 361 008c 70000000 		.word	.LC7
+ 362 0090 7C000000 		.word	.LC8
+ 363              		.cfi_endproc
+ARM GAS  /tmp/cc5V7mvg.s 			page 10
+
+
+ 364              	.LFE135:
+ 366              		.section	.rodata
+ 367              		.align	2
+ 368              	.LC9:
+ 369 0088 636F6170 		.ascii	"coap_report\000"
+ 369      5F726570 
+ 369      6F727400 
+ 370              		.align	2
+ 371              	.LC10:
+ 372 0094 52656164 		.ascii	"Read_DHT11\000"
+ 372      5F444854 
+ 372      313100
+ 373              		.section	.text.standard_app_demo_main,"ax",%progbits
+ 374              		.align	1
+ 375              		.global	standard_app_demo_main
+ 376              		.syntax unified
+ 377              		.thumb
+ 378              		.thumb_func
+ 379              		.fpu fpv4-sp-d16
+ 381              	standard_app_demo_main:
+ 382              	.LFB136:
+ 135:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 
+ 136:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 	}
+ 137:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** }
+ 138:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 
+ 139:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** int standard_app_demo_main()
+ 140:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** {
+ 383              		.loc 1 140 1
+ 384              		.cfi_startproc
+ 385              		@ args = 0, pretend = 0, frame = 0
+ 386              		@ frame_needed = 1, uses_anonymous_args = 0
+ 387 0000 80B5     		push	{r7, lr}
+ 388              	.LCFI11:
+ 389              		.cfi_def_cfa_offset 8
+ 390              		.cfi_offset 7, -8
+ 391              		.cfi_offset 14, -4
+ 392 0002 82B0     		sub	sp, sp, #8
+ 393              	.LCFI12:
+ 394              		.cfi_def_cfa_offset 16
+ 395 0004 02AF     		add	r7, sp, #8
+ 396              	.LCFI13:
+ 397              		.cfi_def_cfa 7, 8
+ 141:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****     osal_task_create("coap_report",coap_report_task, NULL, 0x1000, NULL, 3);
+ 398              		.loc 1 141 5
+ 399 0006 0323     		movs	r3, #3
+ 400 0008 0193     		str	r3, [sp, #4]
+ 401 000a 0023     		movs	r3, #0
+ 402 000c 0093     		str	r3, [sp]
+ 403 000e 4FF48053 		mov	r3, #4096
+ 404 0012 0022     		movs	r2, #0
+ 405 0014 0949     		ldr	r1, .L18
+ 406 0016 0A48     		ldr	r0, .L18+4
+ 407 0018 FFF7FEFF 		bl	osal_task_create
+ 142:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** 	osal_task_create("Read_DHT11",Read_DHT11_task, NULL, 0x500, NULL, 3);
+ 408              		.loc 1 142 2
+ 409 001c 0323     		movs	r3, #3
+ 410 001e 0193     		str	r3, [sp, #4]
+ARM GAS  /tmp/cc5V7mvg.s 			page 11
+
+
+ 411 0020 0023     		movs	r3, #0
+ 412 0022 0093     		str	r3, [sp]
+ 413 0024 4FF4A063 		mov	r3, #1280
+ 414 0028 0022     		movs	r2, #0
+ 415 002a 0649     		ldr	r1, .L18+8
+ 416 002c 0648     		ldr	r0, .L18+12
+ 417 002e FFF7FEFF 		bl	osal_task_create
+ 143:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c ****     return 0;
+ 418              		.loc 1 143 12
+ 419 0032 0023     		movs	r3, #0
+ 144:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Demos/use_coap_demo/use_coap_demo.c **** }
+ 420              		.loc 1 144 1
+ 421 0034 1846     		mov	r0, r3
+ 422 0036 BD46     		mov	sp, r7
+ 423              	.LCFI14:
+ 424              		.cfi_def_cfa_register 13
+ 425              		@ sp needed
+ 426 0038 80BD     		pop	{r7, pc}
+ 427              	.L19:
+ 428 003a 00BF     		.align	2
+ 429              	.L18:
+ 430 003c 00000000 		.word	coap_report_task
+ 431 0040 88000000 		.word	.LC9
+ 432 0044 00000000 		.word	Read_DHT11_task
+ 433 0048 94000000 		.word	.LC10
+ 434              		.cfi_endproc
+ 435              	.LFE136:
+ 437              		.text
+ 438              	.Letext0:
+ 439              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 440              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 441              		.file 4 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 442              		.file 5 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 443              		.file 6 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 444              		.file 7 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/ree
+ 445              		.file 8 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_typedef.h"
+ 446              		.file 9 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 447              		.file 10 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/system_stm32l4xx.h"
+ 448              		.file 11 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_config.h"
+ 449              		.file 12 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_err.h"
+ 450              		.file 13 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 451              		.file 14 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_tick.h"
+ 452              		.file 15 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_task.h"
+ 453              		.file 16 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/osal/osal_types.h"
+ 454              		.file 17 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.h"
+ 455              		.file 18 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.h"
+ARM GAS  /tmp/cc5V7mvg.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 use_coap_demo.c
+                            *COM*:0000000000000010 dht11_data
+     /tmp/cc5V7mvg.s:23     .bss.DHT11_str:0000000000000000 DHT11_str
+     /tmp/cc5V7mvg.s:20     .bss.DHT11_str:0000000000000000 $d
+     /tmp/cc5V7mvg.s:26     .bss.s_rcv_buffer:0000000000000000 $d
+     /tmp/cc5V7mvg.s:29     .bss.s_rcv_buffer:0000000000000000 s_rcv_buffer
+     /tmp/cc5V7mvg.s:32     .bss.s_rcv_datalen:0000000000000000 $d
+     /tmp/cc5V7mvg.s:35     .bss.s_rcv_datalen:0000000000000000 s_rcv_datalen
+     /tmp/cc5V7mvg.s:38     .bss.s_rcv_sync:0000000000000000 $d
+     /tmp/cc5V7mvg.s:41     .bss.s_rcv_sync:0000000000000000 s_rcv_sync
+     /tmp/cc5V7mvg.s:44     .text.app_msg_deal:0000000000000000 $t
+     /tmp/cc5V7mvg.s:51     .text.app_msg_deal:0000000000000000 app_msg_deal
+     /tmp/cc5V7mvg.s:112    .text.app_msg_deal:0000000000000040 $d
+     /tmp/cc5V7mvg.s:119    .rodata:0000000000000000 $d
+     /tmp/cc5V7mvg.s:138    .text.coap_report_task:0000000000000000 $t
+     /tmp/cc5V7mvg.s:145    .text.coap_report_task:0000000000000000 coap_report_task
+     /tmp/cc5V7mvg.s:243    .text.coap_report_task:00000000000000a0 $d
+     /tmp/cc5V7mvg.s:267    .text.Read_DHT11_task:0000000000000000 $t
+     /tmp/cc5V7mvg.s:274    .text.Read_DHT11_task:0000000000000000 Read_DHT11_task
+     /tmp/cc5V7mvg.s:358    .text.Read_DHT11_task:0000000000000080 $d
+     /tmp/cc5V7mvg.s:374    .text.standard_app_demo_main:0000000000000000 $t
+     /tmp/cc5V7mvg.s:381    .text.standard_app_demo_main:0000000000000000 standard_app_demo_main
+     /tmp/cc5V7mvg.s:430    .text.standard_app_demo_main:000000000000003c $d
+
+UNDEFINED SYMBOLS
+memcpy
+osal_semp_post
+oc_coap_imp_init
+memset
+oc_coap_config
+puts
+sprintf
+oc_coap_report
+osal_task_sleep
+__aeabi_f2d
+DHT11_Read_TempAndHumidity
+OLED_Clear
+OLED_ShowString
+osal_task_create

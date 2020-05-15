@@ -1,0 +1,358 @@
+ARM GAS  /tmp/ccpDbkfN.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"dwt.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.bss.cpuclkfeq,"aw",%nobits
+  18              		.align	2
+  21              	cpuclkfeq:
+  22 0000 00000000 		.space	4
+  23              		.section	.text.dwt_delay_init,"ax",%progbits
+  24              		.align	1
+  25              		.global	dwt_delay_init
+  26              		.arch armv7e-m
+  27              		.syntax unified
+  28              		.thumb
+  29              		.thumb_func
+  30              		.fpu fpv4-sp-d16
+  32              	dwt_delay_init:
+  33              	.LFB133:
+  34              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c **** /*----------------------------------------------------------------------------
+   2:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+   3:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * All rights reserved.
+   4:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * are permitted provided that the following conditions are met:
+   6:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * conditions and the following disclaimer.
+   8:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * provided with the distribution.
+  11:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * permission.
+  14:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  *---------------------------------------------------------------------------*/
+  26:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c **** /*----------------------------------------------------------------------------
+ARM GAS  /tmp/ccpDbkfN.s 			page 2
+
+
+  27:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * Notice of Export Control Law
+  28:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * ===============================================
+  29:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  * applicable export control laws and regulations.
+  33:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****  *---------------------------------------------------------------------------*/
+  34:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c **** 
+  35:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c **** #include "dwt.h"
+  36:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c **** 
+  37:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c **** static uint32_t cpuclkfeq;
+  38:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c **** 
+  39:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c **** void dwt_delay_init(uint32_t clk)
+  40:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c **** {
+  35              		.loc 1 40 1
+  36              		.cfi_startproc
+  37              		@ args = 0, pretend = 0, frame = 8
+  38              		@ frame_needed = 1, uses_anonymous_args = 0
+  39              		@ link register save eliminated.
+  40 0000 80B4     		push	{r7}
+  41              	.LCFI0:
+  42              		.cfi_def_cfa_offset 4
+  43              		.cfi_offset 7, -4
+  44 0002 83B0     		sub	sp, sp, #12
+  45              	.LCFI1:
+  46              		.cfi_def_cfa_offset 16
+  47 0004 00AF     		add	r7, sp, #0
+  48              	.LCFI2:
+  49              		.cfi_def_cfa_register 7
+  50 0006 7860     		str	r0, [r7, #4]
+  41:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****     cpuclkfeq = clk;
+  51              		.loc 1 41 15
+  52 0008 0A4A     		ldr	r2, .L2
+  53 000a 7B68     		ldr	r3, [r7, #4]
+  54 000c 1360     		str	r3, [r2]
+  42:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****     DEM_CR         |=  DEM_CR_TRCENA;
+  55              		.loc 1 42 20
+  56 000e 0A4B     		ldr	r3, .L2+4
+  57 0010 1B68     		ldr	r3, [r3]
+  58 0012 094A     		ldr	r2, .L2+4
+  59 0014 43F08073 		orr	r3, r3, #16777216
+  60 0018 1360     		str	r3, [r2]
+  43:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****     //DWT_CYCCNT      = 0u;
+  44:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****     DWT_CR         |= DWT_CR_CYCCNTENA;
+  61              		.loc 1 44 20
+  62 001a 084B     		ldr	r3, .L2+8
+  63 001c 1B68     		ldr	r3, [r3]
+  64 001e 074A     		ldr	r2, .L2+8
+  65 0020 43F00103 		orr	r3, r3, #1
+  66 0024 1360     		str	r3, [r2]
+  45:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c **** }
+  67              		.loc 1 45 1
+  68 0026 00BF     		nop
+  69 0028 0C37     		adds	r7, r7, #12
+  70              	.LCFI3:
+  71              		.cfi_def_cfa_offset 4
+  72 002a BD46     		mov	sp, r7
+ARM GAS  /tmp/ccpDbkfN.s 			page 3
+
+
+  73              	.LCFI4:
+  74              		.cfi_def_cfa_register 13
+  75              		@ sp needed
+  76 002c 5DF8047B 		ldr	r7, [sp], #4
+  77              	.LCFI5:
+  78              		.cfi_restore 7
+  79              		.cfi_def_cfa_offset 0
+  80 0030 7047     		bx	lr
+  81              	.L3:
+  82 0032 00BF     		.align	2
+  83              	.L2:
+  84 0034 00000000 		.word	cpuclkfeq
+  85 0038 FCED00E0 		.word	-536809988
+  86 003c 001000E0 		.word	-536866816
+  87              		.cfi_endproc
+  88              	.LFE133:
+  90              		.section	.text.delayus,"ax",%progbits
+  91              		.align	1
+  92              		.global	delayus
+  93              		.syntax unified
+  94              		.thumb
+  95              		.thumb_func
+  96              		.fpu fpv4-sp-d16
+  98              	delayus:
+  99              	.LFB134:
+  46:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c **** 
+  47:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c **** void delayus(uint32_t usec)
+  48:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c **** 
+  49:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c **** {
+ 100              		.loc 1 49 1
+ 101              		.cfi_startproc
+ 102              		@ args = 0, pretend = 0, frame = 24
+ 103              		@ frame_needed = 1, uses_anonymous_args = 0
+ 104 0000 80B5     		push	{r7, lr}
+ 105              	.LCFI6:
+ 106              		.cfi_def_cfa_offset 8
+ 107              		.cfi_offset 7, -8
+ 108              		.cfi_offset 14, -4
+ 109 0002 86B0     		sub	sp, sp, #24
+ 110              	.LCFI7:
+ 111              		.cfi_def_cfa_offset 32
+ 112 0004 00AF     		add	r7, sp, #0
+ 113              	.LCFI8:
+ 114              		.cfi_def_cfa_register 7
+ 115 0006 7860     		str	r0, [r7, #4]
+  50:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****     uint32_t startts, endts, ts;
+  51:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****     UINT32 uwIntSave;
+  52:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****     startts = DWT_CYCCNT;
+ 116              		.loc 1 52 15
+ 117 0008 184B     		ldr	r3, .L11
+ 118              		.loc 1 52 13
+ 119 000a 1B68     		ldr	r3, [r3]
+ 120 000c 7B61     		str	r3, [r7, #20]
+  53:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c **** 
+  54:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****     ts =  usec * (cpuclkfeq / (1000 * 1000));
+ 121              		.loc 1 54 29
+ 122 000e 184B     		ldr	r3, .L11+4
+ARM GAS  /tmp/ccpDbkfN.s 			page 4
+
+
+ 123 0010 1B68     		ldr	r3, [r3]
+ 124 0012 184A     		ldr	r2, .L11+8
+ 125 0014 A2FB0323 		umull	r2, r3, r2, r3
+ 126 0018 9A0C     		lsrs	r2, r3, #18
+ 127              		.loc 1 54 8
+ 128 001a 7B68     		ldr	r3, [r7, #4]
+ 129 001c 02FB03F3 		mul	r3, r2, r3
+ 130 0020 3B61     		str	r3, [r7, #16]
+  55:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****     endts = startts + ts;
+ 131              		.loc 1 55 11
+ 132 0022 7A69     		ldr	r2, [r7, #20]
+ 133 0024 3B69     		ldr	r3, [r7, #16]
+ 134 0026 1344     		add	r3, r3, r2
+ 135 0028 FB60     		str	r3, [r7, #12]
+  56:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****     uwIntSave = LOS_IntLock();
+ 136              		.loc 1 56 17
+ 137 002a FFF7FEFF 		bl	LOS_IntLock
+ 138 002e B860     		str	r0, [r7, #8]
+  57:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****     if(endts > startts)
+ 139              		.loc 1 57 7
+ 140 0030 FA68     		ldr	r2, [r7, #12]
+ 141 0032 7B69     		ldr	r3, [r7, #20]
+ 142 0034 9A42     		cmp	r2, r3
+ 143 0036 06D9     		bls	.L10
+  58:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****     {
+  59:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****         while(DWT_CYCCNT < endts);
+ 144              		.loc 1 59 14
+ 145 0038 00BF     		nop
+ 146              	.L6:
+ 147              		.loc 1 59 15 discriminator 1
+ 148 003a 0C4B     		ldr	r3, .L11
+ 149 003c 1B68     		ldr	r3, [r3]
+ 150              		.loc 1 59 14 discriminator 1
+ 151 003e FA68     		ldr	r2, [r7, #12]
+ 152 0040 9A42     		cmp	r2, r3
+ 153 0042 FAD8     		bhi	.L6
+ 154 0044 0BE0     		b	.L7
+ 155              	.L10:
+  60:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****     }
+  61:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****     else
+  62:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****     {
+  63:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****         while(DWT_CYCCNT > endts);
+ 156              		.loc 1 63 14
+ 157 0046 00BF     		nop
+ 158              	.L8:
+ 159              		.loc 1 63 15 discriminator 1
+ 160 0048 084B     		ldr	r3, .L11
+ 161 004a 1B68     		ldr	r3, [r3]
+ 162              		.loc 1 63 14 discriminator 1
+ 163 004c FA68     		ldr	r2, [r7, #12]
+ 164 004e 9A42     		cmp	r2, r3
+ 165 0050 FAD3     		bcc	.L8
+  64:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****         while(DWT_CYCCNT < endts);
+ 166              		.loc 1 64 14
+ 167 0052 00BF     		nop
+ 168              	.L9:
+ 169              		.loc 1 64 15 discriminator 1
+ARM GAS  /tmp/ccpDbkfN.s 			page 5
+
+
+ 170 0054 054B     		ldr	r3, .L11
+ 171 0056 1B68     		ldr	r3, [r3]
+ 172              		.loc 1 64 14 discriminator 1
+ 173 0058 FA68     		ldr	r2, [r7, #12]
+ 174 005a 9A42     		cmp	r2, r3
+ 175 005c FAD8     		bhi	.L9
+ 176              	.L7:
+  65:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****     }
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****     (VOID)LOS_IntRestore(uwIntSave);
+ 177              		.loc 1 66 5
+ 178 005e B868     		ldr	r0, [r7, #8]
+ 179 0060 FFF7FEFF 		bl	LOS_IntRestore
+  67:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c **** }
+ 180              		.loc 1 67 1
+ 181 0064 00BF     		nop
+ 182 0066 1837     		adds	r7, r7, #24
+ 183              	.LCFI9:
+ 184              		.cfi_def_cfa_offset 8
+ 185 0068 BD46     		mov	sp, r7
+ 186              	.LCFI10:
+ 187              		.cfi_def_cfa_register 13
+ 188              		@ sp needed
+ 189 006a 80BD     		pop	{r7, pc}
+ 190              	.L12:
+ 191              		.align	2
+ 192              	.L11:
+ 193 006c 041000E0 		.word	-536866812
+ 194 0070 00000000 		.word	cpuclkfeq
+ 195 0074 83DE1B43 		.word	1125899907
+ 196              		.cfi_endproc
+ 197              	.LFE134:
+ 199              		.section	.text.delay10ms,"ax",%progbits
+ 200              		.align	1
+ 201              		.global	delay10ms
+ 202              		.syntax unified
+ 203              		.thumb
+ 204              		.thumb_func
+ 205              		.fpu fpv4-sp-d16
+ 207              	delay10ms:
+ 208              	.LFB135:
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c **** 
+  69:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c **** void delay10ms(__IO uint32_t nTime)
+  70:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c **** {
+ 209              		.loc 1 70 1
+ 210              		.cfi_startproc
+ 211              		@ args = 0, pretend = 0, frame = 8
+ 212              		@ frame_needed = 1, uses_anonymous_args = 0
+ 213 0000 80B5     		push	{r7, lr}
+ 214              	.LCFI11:
+ 215              		.cfi_def_cfa_offset 8
+ 216              		.cfi_offset 7, -8
+ 217              		.cfi_offset 14, -4
+ 218 0002 82B0     		sub	sp, sp, #8
+ 219              	.LCFI12:
+ 220              		.cfi_def_cfa_offset 16
+ 221 0004 00AF     		add	r7, sp, #0
+ 222              	.LCFI13:
+ARM GAS  /tmp/ccpDbkfN.s 			page 6
+
+
+ 223              		.cfi_def_cfa_register 7
+ 224 0006 7860     		str	r0, [r7, #4]
+  71:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c ****     delayus(1000 * nTime);
+ 225              		.loc 1 71 5
+ 226 0008 7B68     		ldr	r3, [r7, #4]
+ 227 000a 4FF47A72 		mov	r2, #1000
+ 228 000e 02FB03F3 		mul	r3, r2, r3
+ 229 0012 1846     		mov	r0, r3
+ 230 0014 FFF7FEFF 		bl	delayus
+  72:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/dwt.c **** }
+ 231              		.loc 1 72 1
+ 232 0018 00BF     		nop
+ 233 001a 0837     		adds	r7, r7, #8
+ 234              	.LCFI14:
+ 235              		.cfi_def_cfa_offset 8
+ 236 001c BD46     		mov	sp, r7
+ 237              	.LCFI15:
+ 238              		.cfi_def_cfa_register 13
+ 239              		@ sp needed
+ 240 001e 80BD     		pop	{r7, pc}
+ 241              		.cfi_endproc
+ 242              	.LFE135:
+ 244              		.text
+ 245              	.Letext0:
+ 246              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 247              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 248              		.file 4 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 249              		.file 5 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/system_stm32l4xx.h"
+ 250              		.file 6 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 251              		.file 7 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 252              		.file 8 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 253              		.file 9 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/ree
+ 254              		.file 10 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_typedef.h"
+ 255              		.file 11 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_config.h"
+ 256              		.file 12 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_err.h"
+ 257              		.file 13 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/arm-m/include/los_hwi.h"
+ARM GAS  /tmp/ccpDbkfN.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 dwt.c
+     /tmp/ccpDbkfN.s:18     .bss.cpuclkfeq:0000000000000000 $d
+     /tmp/ccpDbkfN.s:21     .bss.cpuclkfeq:0000000000000000 cpuclkfeq
+     /tmp/ccpDbkfN.s:24     .text.dwt_delay_init:0000000000000000 $t
+     /tmp/ccpDbkfN.s:32     .text.dwt_delay_init:0000000000000000 dwt_delay_init
+     /tmp/ccpDbkfN.s:84     .text.dwt_delay_init:0000000000000034 $d
+     /tmp/ccpDbkfN.s:91     .text.delayus:0000000000000000 $t
+     /tmp/ccpDbkfN.s:98     .text.delayus:0000000000000000 delayus
+     /tmp/ccpDbkfN.s:193    .text.delayus:000000000000006c $d
+     /tmp/ccpDbkfN.s:200    .text.delay10ms:0000000000000000 $t
+     /tmp/ccpDbkfN.s:207    .text.delay10ms:0000000000000000 delay10ms
+
+UNDEFINED SYMBOLS
+LOS_IntLock
+LOS_IntRestore

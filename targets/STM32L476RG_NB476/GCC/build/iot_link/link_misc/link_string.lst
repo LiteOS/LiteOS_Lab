@@ -1,0 +1,1240 @@
+ARM GAS  /tmp/ccq5BZZA.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"link_string.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.string_to_arg,"ax",%progbits
+  18              		.align	1
+  19              		.global	string_to_arg
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	string_to_arg:
+  27              	.LFB3:
+  28              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** /*----------------------------------------------------------------------------
+   2:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * All rights reserved.
+   4:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * are permitted provided that the following conditions are met:
+   6:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * conditions and the following disclaimer.
+   8:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * provided with the distribution.
+  11:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * permission.
+  14:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  *---------------------------------------------------------------------------*/
+  26:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** /*----------------------------------------------------------------------------
+  27:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * Notice of Export Control Law
+  28:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * ===============================================
+  29:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+ARM GAS  /tmp/ccq5BZZA.s 			page 2
+
+
+  31:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  * applicable export control laws and regulations.
+  33:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  *---------------------------------------------------------------------------*/
+  34:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** /**
+  35:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  *  DATE                AUTHOR      INSTRUCTION
+  36:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  *  2019-04-29 09:50  zhangqianfu  The first version  
+  37:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  *
+  38:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****  */
+  39:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+  40:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** #include <stdint.h>
+  41:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** #include <stddef.h>
+  42:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** #include <string.h>
+  43:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+  44:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** #include <osal.h>
+  45:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** //this function is used to format the char string to the argc mode
+  46:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** //this function will changed the original string, used it carefully
+  47:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** //return how many arguments has been
+  48:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** int string_to_arg(int *argc, const char *argv[],char *string)
+  49:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** {
+  29              		.loc 1 49 1
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 40
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33 0000 80B5     		push	{r7, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 7, -8
+  37              		.cfi_offset 14, -4
+  38 0002 8AB0     		sub	sp, sp, #40
+  39              	.LCFI1:
+  40              		.cfi_def_cfa_offset 48
+  41 0004 00AF     		add	r7, sp, #0
+  42              	.LCFI2:
+  43              		.cfi_def_cfa_register 7
+  44 0006 F860     		str	r0, [r7, #12]
+  45 0008 B960     		str	r1, [r7, #8]
+  46 000a 7A60     		str	r2, [r7, #4]
+  50:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     int argvlen = 0;
+  47              		.loc 1 50 9
+  48 000c 0023     		movs	r3, #0
+  49 000e BB61     		str	r3, [r7, #24]
+  51:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     int paramnum = 0;
+  50              		.loc 1 51 9
+  51 0010 0023     		movs	r3, #0
+  52 0012 7B62     		str	r3, [r7, #36]
+  52:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     char *tmp = NULL;
+  53              		.loc 1 52 11
+  54 0014 0023     		movs	r3, #0
+  55 0016 3B62     		str	r3, [r7, #32]
+  53:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     char bak;
+  54:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     int len;
+  55:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+  56:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     argvlen = *argc;
+  56              		.loc 1 56 13
+  57 0018 FB68     		ldr	r3, [r7, #12]
+  58 001a 1B68     		ldr	r3, [r3]
+  59 001c BB61     		str	r3, [r7, #24]
+ARM GAS  /tmp/ccq5BZZA.s 			page 3
+
+
+  57:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     *argc = paramnum;
+  60              		.loc 1 57 11
+  61 001e FB68     		ldr	r3, [r7, #12]
+  62 0020 7A6A     		ldr	r2, [r7, #36]
+  63 0022 1A60     		str	r2, [r3]
+  58:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     if(NULL == string)
+  64              		.loc 1 58 7
+  65 0024 7B68     		ldr	r3, [r7, #4]
+  66 0026 002B     		cmp	r3, #0
+  67 0028 01D1     		bne	.L2
+  59:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     {
+  60:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         return paramnum;
+  68              		.loc 1 60 16
+  69 002a 7B6A     		ldr	r3, [r7, #36]
+  70 002c 40E0     		b	.L3
+  71              	.L2:
+  61:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     }
+  62:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+  63:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     //use the '\0' to replace the ' '
+  64:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     len = strlen(string);
+  72              		.loc 1 64 11
+  73 002e 7868     		ldr	r0, [r7, #4]
+  74 0030 FFF7FEFF 		bl	strlen
+  75 0034 0346     		mov	r3, r0
+  76              		.loc 1 64 9
+  77 0036 7B61     		str	r3, [r7, #20]
+  65:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     tmp = string;
+  78              		.loc 1 65 9
+  79 0038 7B68     		ldr	r3, [r7, #4]
+  80 003a 3B62     		str	r3, [r7, #32]
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     while(tmp < (string + len))
+  81              		.loc 1 66 10
+  82 003c 09E0     		b	.L4
+  83              	.L6:
+  67:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     {
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         if(*tmp == ' ')
+  84              		.loc 1 68 12
+  85 003e 3B6A     		ldr	r3, [r7, #32]
+  86 0040 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  87              		.loc 1 68 11
+  88 0042 202B     		cmp	r3, #32
+  89 0044 02D1     		bne	.L5
+  69:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         {
+  70:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****             *tmp = '\0';
+  90              		.loc 1 70 18
+  91 0046 3B6A     		ldr	r3, [r7, #32]
+  92 0048 0022     		movs	r2, #0
+  93 004a 1A70     		strb	r2, [r3]
+  94              	.L5:
+  71:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         }
+  72:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         tmp++;
+  95              		.loc 1 72 12
+  96 004c 3B6A     		ldr	r3, [r7, #32]
+  97 004e 0133     		adds	r3, r3, #1
+  98 0050 3B62     		str	r3, [r7, #32]
+  99              	.L4:
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     {
+ARM GAS  /tmp/ccq5BZZA.s 			page 4
+
+
+ 100              		.loc 1 66 25
+ 101 0052 7B69     		ldr	r3, [r7, #20]
+ 102 0054 7A68     		ldr	r2, [r7, #4]
+ 103 0056 1344     		add	r3, r3, r2
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     {
+ 104              		.loc 1 66 10
+ 105 0058 3A6A     		ldr	r2, [r7, #32]
+ 106 005a 9A42     		cmp	r2, r3
+ 107 005c EFD3     		bcc	.L6
+  73:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     }
+  74:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     bak = '\0';
+ 108              		.loc 1 74 9
+ 109 005e 0023     		movs	r3, #0
+ 110 0060 FB77     		strb	r3, [r7, #31]
+  75:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     tmp = string;
+ 111              		.loc 1 75 9
+ 112 0062 7B68     		ldr	r3, [r7, #4]
+ 113 0064 3B62     		str	r3, [r7, #32]
+  76:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     while(tmp < (string + len))
+ 114              		.loc 1 76 10
+ 115 0066 19E0     		b	.L7
+ 116              	.L9:
+  77:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     {
+  78:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         if((*tmp != '\0')&&(bak =='\0'))
+ 117              		.loc 1 78 13
+ 118 0068 3B6A     		ldr	r3, [r7, #32]
+ 119 006a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 120              		.loc 1 78 11
+ 121 006c 002B     		cmp	r3, #0
+ 122 006e 0FD0     		beq	.L8
+ 123              		.loc 1 78 26 discriminator 1
+ 124 0070 FB7F     		ldrb	r3, [r7, #31]	@ zero_extendqisi2
+ 125 0072 002B     		cmp	r3, #0
+ 126 0074 0CD1     		bne	.L8
+  79:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         {
+  80:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****             if(paramnum < argvlen)
+ 127              		.loc 1 80 15
+ 128 0076 7A6A     		ldr	r2, [r7, #36]
+ 129 0078 BB69     		ldr	r3, [r7, #24]
+ 130 007a 9A42     		cmp	r2, r3
+ 131 007c 08DA     		bge	.L8
+  81:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****             {
+  82:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****                 argv[paramnum] = tmp;
+ 132              		.loc 1 82 21
+ 133 007e 7B6A     		ldr	r3, [r7, #36]
+ 134 0080 9B00     		lsls	r3, r3, #2
+ 135 0082 BA68     		ldr	r2, [r7, #8]
+ 136 0084 1344     		add	r3, r3, r2
+ 137              		.loc 1 82 32
+ 138 0086 3A6A     		ldr	r2, [r7, #32]
+ 139 0088 1A60     		str	r2, [r3]
+  83:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****                 paramnum++;
+ 140              		.loc 1 83 25
+ 141 008a 7B6A     		ldr	r3, [r7, #36]
+ 142 008c 0133     		adds	r3, r3, #1
+ 143 008e 7B62     		str	r3, [r7, #36]
+ 144              	.L8:
+ARM GAS  /tmp/ccq5BZZA.s 			page 5
+
+
+  84:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****             }
+  85:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         }
+  86:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         bak = *tmp;
+ 145              		.loc 1 86 13
+ 146 0090 3B6A     		ldr	r3, [r7, #32]
+ 147 0092 1B78     		ldrb	r3, [r3]
+ 148 0094 FB77     		strb	r3, [r7, #31]
+  87:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         tmp++;
+ 149              		.loc 1 87 12
+ 150 0096 3B6A     		ldr	r3, [r7, #32]
+ 151 0098 0133     		adds	r3, r3, #1
+ 152 009a 3B62     		str	r3, [r7, #32]
+ 153              	.L7:
+  76:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     {
+ 154              		.loc 1 76 25
+ 155 009c 7B69     		ldr	r3, [r7, #20]
+ 156 009e 7A68     		ldr	r2, [r7, #4]
+ 157 00a0 1344     		add	r3, r3, r2
+  76:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     {
+ 158              		.loc 1 76 10
+ 159 00a2 3A6A     		ldr	r2, [r7, #32]
+ 160 00a4 9A42     		cmp	r2, r3
+ 161 00a6 DFD3     		bcc	.L9
+  88:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     }
+  89:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     *argc = paramnum;
+ 162              		.loc 1 89 11
+ 163 00a8 FB68     		ldr	r3, [r7, #12]
+ 164 00aa 7A6A     		ldr	r2, [r7, #36]
+ 165 00ac 1A60     		str	r2, [r3]
+  90:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+  91:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     return paramnum;
+ 166              		.loc 1 91 12
+ 167 00ae 7B6A     		ldr	r3, [r7, #36]
+ 168              	.L3:
+  92:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** }
+ 169              		.loc 1 92 1
+ 170 00b0 1846     		mov	r0, r3
+ 171 00b2 2837     		adds	r7, r7, #40
+ 172              	.LCFI3:
+ 173              		.cfi_def_cfa_offset 8
+ 174 00b4 BD46     		mov	sp, r7
+ 175              	.LCFI4:
+ 176              		.cfi_def_cfa_register 13
+ 177              		@ sp needed
+ 178 00b6 80BD     		pop	{r7, pc}
+ 179              		.cfi_endproc
+ 180              	.LFE3:
+ 182              		.section	.text.osal_strdup,"ax",%progbits
+ 183              		.align	1
+ 184              		.global	osal_strdup
+ 185              		.syntax unified
+ 186              		.thumb
+ 187              		.thumb_func
+ 188              		.fpu fpv4-sp-d16
+ 190              	osal_strdup:
+ 191              	.LFB4:
+  93:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+ARM GAS  /tmp/ccq5BZZA.s 			page 6
+
+
+  94:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+  95:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** char *osal_strdup(const char *ch)
+  96:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** {
+ 192              		.loc 1 96 1
+ 193              		.cfi_startproc
+ 194              		@ args = 0, pretend = 0, frame = 16
+ 195              		@ frame_needed = 1, uses_anonymous_args = 0
+ 196 0000 80B5     		push	{r7, lr}
+ 197              	.LCFI5:
+ 198              		.cfi_def_cfa_offset 8
+ 199              		.cfi_offset 7, -8
+ 200              		.cfi_offset 14, -4
+ 201 0002 84B0     		sub	sp, sp, #16
+ 202              	.LCFI6:
+ 203              		.cfi_def_cfa_offset 24
+ 204 0004 00AF     		add	r7, sp, #0
+ 205              	.LCFI7:
+ 206              		.cfi_def_cfa_register 7
+ 207 0006 7860     		str	r0, [r7, #4]
+  97:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     char *copy;
+  98:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     size_t length;
+  99:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+ 100:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     if(NULL == ch)
+ 208              		.loc 1 100 7
+ 209 0008 7B68     		ldr	r3, [r7, #4]
+ 210 000a 002B     		cmp	r3, #0
+ 211 000c 01D1     		bne	.L11
+ 101:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         return NULL;
+ 212              		.loc 1 101 16
+ 213 000e 0023     		movs	r3, #0
+ 214 0010 19E0     		b	.L12
+ 215              	.L11:
+ 102:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+ 103:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     length = strlen(ch);
+ 216              		.loc 1 103 14
+ 217 0012 7868     		ldr	r0, [r7, #4]
+ 218 0014 FFF7FEFF 		bl	strlen
+ 219 0018 F860     		str	r0, [r7, #12]
+ 104:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     copy = (char *)osal_malloc(length + 1);
+ 220              		.loc 1 104 20
+ 221 001a FB68     		ldr	r3, [r7, #12]
+ 222 001c 0133     		adds	r3, r3, #1
+ 223 001e 1846     		mov	r0, r3
+ 224 0020 FFF7FEFF 		bl	osal_malloc
+ 225 0024 B860     		str	r0, [r7, #8]
+ 105:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     if(NULL == copy)
+ 226              		.loc 1 105 7
+ 227 0026 BB68     		ldr	r3, [r7, #8]
+ 228 0028 002B     		cmp	r3, #0
+ 229 002a 01D1     		bne	.L13
+ 106:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         return NULL;
+ 230              		.loc 1 106 16
+ 231 002c 0023     		movs	r3, #0
+ 232 002e 0AE0     		b	.L12
+ 233              	.L13:
+ 107:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     (void) strncpy(copy, ch, length);
+ 234              		.loc 1 107 12
+ARM GAS  /tmp/ccq5BZZA.s 			page 7
+
+
+ 235 0030 FA68     		ldr	r2, [r7, #12]
+ 236 0032 7968     		ldr	r1, [r7, #4]
+ 237 0034 B868     		ldr	r0, [r7, #8]
+ 238 0036 FFF7FEFF 		bl	strncpy
+ 108:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     copy[length] = '\0';
+ 239              		.loc 1 108 9
+ 240 003a BA68     		ldr	r2, [r7, #8]
+ 241 003c FB68     		ldr	r3, [r7, #12]
+ 242 003e 1344     		add	r3, r3, r2
+ 243              		.loc 1 108 18
+ 244 0040 0022     		movs	r2, #0
+ 245 0042 1A70     		strb	r2, [r3]
+ 109:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+ 110:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     return copy;
+ 246              		.loc 1 110 12
+ 247 0044 BB68     		ldr	r3, [r7, #8]
+ 248              	.L12:
+ 111:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** }
+ 249              		.loc 1 111 1
+ 250 0046 1846     		mov	r0, r3
+ 251 0048 1037     		adds	r7, r7, #16
+ 252              	.LCFI8:
+ 253              		.cfi_def_cfa_offset 8
+ 254 004a BD46     		mov	sp, r7
+ 255              	.LCFI9:
+ 256              		.cfi_def_cfa_register 13
+ 257              		@ sp needed
+ 258 004c 80BD     		pop	{r7, pc}
+ 259              		.cfi_endproc
+ 260              	.LFE4:
+ 262              		.section	.text.osal_strcat,"ax",%progbits
+ 263              		.align	1
+ 264              		.global	osal_strcat
+ 265              		.syntax unified
+ 266              		.thumb
+ 267              		.thumb_func
+ 268              		.fpu fpv4-sp-d16
+ 270              	osal_strcat:
+ 271              	.LFB5:
+ 112:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** char *osal_strcat(char *str[])
+ 114:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** {
+ 272              		.loc 1 114 1
+ 273              		.cfi_startproc
+ 274              		@ args = 0, pretend = 0, frame = 32
+ 275              		@ frame_needed = 1, uses_anonymous_args = 0
+ 276 0000 B0B5     		push	{r4, r5, r7, lr}
+ 277              	.LCFI10:
+ 278              		.cfi_def_cfa_offset 16
+ 279              		.cfi_offset 4, -16
+ 280              		.cfi_offset 5, -12
+ 281              		.cfi_offset 7, -8
+ 282              		.cfi_offset 14, -4
+ 283 0002 88B0     		sub	sp, sp, #32
+ 284              	.LCFI11:
+ 285              		.cfi_def_cfa_offset 48
+ 286 0004 00AF     		add	r7, sp, #0
+ARM GAS  /tmp/ccq5BZZA.s 			page 8
+
+
+ 287              	.LCFI12:
+ 288              		.cfi_def_cfa_register 7
+ 289 0006 7860     		str	r0, [r7, #4]
+ 115:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     char *ret = NULL;
+ 290              		.loc 1 115 11
+ 291 0008 0023     		movs	r3, #0
+ 292 000a FB60     		str	r3, [r7, #12]
+ 116:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     int str_tnum = 0;
+ 293              		.loc 1 116 9
+ 294 000c 0023     		movs	r3, #0
+ 295 000e FB61     		str	r3, [r7, #28]
+ 117:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     int str_tlen = 0;
+ 296              		.loc 1 117 9
+ 297 0010 0023     		movs	r3, #0
+ 298 0012 BB61     		str	r3, [r7, #24]
+ 118:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     int str_off = 0;
+ 299              		.loc 1 118 9
+ 300 0014 0023     		movs	r3, #0
+ 301 0016 7B61     		str	r3, [r7, #20]
+ 119:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     int i = 0;
+ 302              		.loc 1 119 9
+ 303 0018 0023     		movs	r3, #0
+ 304 001a 3B61     		str	r3, [r7, #16]
+ 120:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+ 121:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     if(NULL == str)
+ 305              		.loc 1 121 7
+ 306 001c 7B68     		ldr	r3, [r7, #4]
+ 307 001e 002B     		cmp	r3, #0
+ 308 0020 13D1     		bne	.L17
+ 122:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     {
+ 123:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         return ret;
+ 309              		.loc 1 123 16
+ 310 0022 FB68     		ldr	r3, [r7, #12]
+ 311 0024 52E0     		b	.L16
+ 312              	.L18:
+ 124:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     }
+ 125:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+ 126:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     while(NULL != str[i])
+ 127:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     {
+ 128:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         str_tlen += strlen(str[i]);
+ 313              		.loc 1 128 31
+ 314 0026 3B69     		ldr	r3, [r7, #16]
+ 315 0028 9B00     		lsls	r3, r3, #2
+ 316 002a 7A68     		ldr	r2, [r7, #4]
+ 317 002c 1344     		add	r3, r3, r2
+ 318              		.loc 1 128 21
+ 319 002e 1B68     		ldr	r3, [r3]
+ 320 0030 1846     		mov	r0, r3
+ 321 0032 FFF7FEFF 		bl	strlen
+ 322 0036 0246     		mov	r2, r0
+ 323              		.loc 1 128 18
+ 324 0038 BB69     		ldr	r3, [r7, #24]
+ 325 003a 1344     		add	r3, r3, r2
+ 326 003c BB61     		str	r3, [r7, #24]
+ 129:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         str_tnum++;
+ 327              		.loc 1 129 17
+ 328 003e FB69     		ldr	r3, [r7, #28]
+ARM GAS  /tmp/ccq5BZZA.s 			page 9
+
+
+ 329 0040 0133     		adds	r3, r3, #1
+ 330 0042 FB61     		str	r3, [r7, #28]
+ 130:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         i++;
+ 331              		.loc 1 130 10
+ 332 0044 3B69     		ldr	r3, [r7, #16]
+ 333 0046 0133     		adds	r3, r3, #1
+ 334 0048 3B61     		str	r3, [r7, #16]
+ 335              	.L17:
+ 126:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     {
+ 336              		.loc 1 126 22
+ 337 004a 3B69     		ldr	r3, [r7, #16]
+ 338 004c 9B00     		lsls	r3, r3, #2
+ 339 004e 7A68     		ldr	r2, [r7, #4]
+ 340 0050 1344     		add	r3, r3, r2
+ 341 0052 1B68     		ldr	r3, [r3]
+ 126:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     {
+ 342              		.loc 1 126 10
+ 343 0054 002B     		cmp	r3, #0
+ 344 0056 E6D1     		bne	.L18
+ 131:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     }
+ 132:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+ 133:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     ret = osal_malloc(str_tlen);
+ 345              		.loc 1 133 11
+ 346 0058 BB69     		ldr	r3, [r7, #24]
+ 347 005a 1846     		mov	r0, r3
+ 348 005c FFF7FEFF 		bl	osal_malloc
+ 349 0060 F860     		str	r0, [r7, #12]
+ 134:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     if(NULL != ret)
+ 350              		.loc 1 134 7
+ 351 0062 FB68     		ldr	r3, [r7, #12]
+ 352 0064 002B     		cmp	r3, #0
+ 353 0066 30D0     		beq	.L19
+ 135:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     {
+ 136:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         for(i =0;i< str_tnum;i++)
+ 354              		.loc 1 136 15
+ 355 0068 0023     		movs	r3, #0
+ 356 006a 3B61     		str	r3, [r7, #16]
+ 357              		.loc 1 136 9
+ 358 006c 24E0     		b	.L20
+ 359              	.L21:
+ 137:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         {
+ 138:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+ 139:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****             (void) memcpy(ret + str_off,str[i],strlen(str[i]));
+ 360              		.loc 1 139 20 discriminator 3
+ 361 006e 7B69     		ldr	r3, [r7, #20]
+ 362              		.loc 1 139 31 discriminator 3
+ 363 0070 FA68     		ldr	r2, [r7, #12]
+ 364 0072 D418     		adds	r4, r2, r3
+ 365              		.loc 1 139 44 discriminator 3
+ 366 0074 3B69     		ldr	r3, [r7, #16]
+ 367 0076 9B00     		lsls	r3, r3, #2
+ 368 0078 7A68     		ldr	r2, [r7, #4]
+ 369 007a 1344     		add	r3, r3, r2
+ 370              		.loc 1 139 20 discriminator 3
+ 371 007c 1D68     		ldr	r5, [r3]
+ 372              		.loc 1 139 58 discriminator 3
+ 373 007e 3B69     		ldr	r3, [r7, #16]
+ARM GAS  /tmp/ccq5BZZA.s 			page 10
+
+
+ 374 0080 9B00     		lsls	r3, r3, #2
+ 375 0082 7A68     		ldr	r2, [r7, #4]
+ 376 0084 1344     		add	r3, r3, r2
+ 377              		.loc 1 139 20 discriminator 3
+ 378 0086 1B68     		ldr	r3, [r3]
+ 379 0088 1846     		mov	r0, r3
+ 380 008a FFF7FEFF 		bl	strlen
+ 381 008e 0346     		mov	r3, r0
+ 382 0090 1A46     		mov	r2, r3
+ 383 0092 2946     		mov	r1, r5
+ 384 0094 2046     		mov	r0, r4
+ 385 0096 FFF7FEFF 		bl	memcpy
+ 140:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****             str_off += strlen(str[i]);
+ 386              		.loc 1 140 34 discriminator 3
+ 387 009a 3B69     		ldr	r3, [r7, #16]
+ 388 009c 9B00     		lsls	r3, r3, #2
+ 389 009e 7A68     		ldr	r2, [r7, #4]
+ 390 00a0 1344     		add	r3, r3, r2
+ 391              		.loc 1 140 24 discriminator 3
+ 392 00a2 1B68     		ldr	r3, [r3]
+ 393 00a4 1846     		mov	r0, r3
+ 394 00a6 FFF7FEFF 		bl	strlen
+ 395 00aa 0246     		mov	r2, r0
+ 396              		.loc 1 140 21 discriminator 3
+ 397 00ac 7B69     		ldr	r3, [r7, #20]
+ 398 00ae 1344     		add	r3, r3, r2
+ 399 00b0 7B61     		str	r3, [r7, #20]
+ 136:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         {
+ 400              		.loc 1 136 31 discriminator 3
+ 401 00b2 3B69     		ldr	r3, [r7, #16]
+ 402 00b4 0133     		adds	r3, r3, #1
+ 403 00b6 3B61     		str	r3, [r7, #16]
+ 404              	.L20:
+ 136:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         {
+ 405              		.loc 1 136 9 discriminator 1
+ 406 00b8 3A69     		ldr	r2, [r7, #16]
+ 407 00ba FB69     		ldr	r3, [r7, #28]
+ 408 00bc 9A42     		cmp	r2, r3
+ 409 00be D6DB     		blt	.L21
+ 141:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         }
+ 142:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         ret[str_off] = '\0';
+ 410              		.loc 1 142 12
+ 411 00c0 7B69     		ldr	r3, [r7, #20]
+ 412 00c2 FA68     		ldr	r2, [r7, #12]
+ 413 00c4 1344     		add	r3, r3, r2
+ 414              		.loc 1 142 22
+ 415 00c6 0022     		movs	r2, #0
+ 416 00c8 1A70     		strb	r2, [r3]
+ 417              	.L19:
+ 143:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     }
+ 144:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+ 145:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     return ret;
+ 418              		.loc 1 145 12
+ 419 00ca FB68     		ldr	r3, [r7, #12]
+ 420              	.L16:
+ 146:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** }
+ 421              		.loc 1 146 1
+ARM GAS  /tmp/ccq5BZZA.s 			page 11
+
+
+ 422 00cc 1846     		mov	r0, r3
+ 423 00ce 2037     		adds	r7, r7, #32
+ 424              	.LCFI13:
+ 425              		.cfi_def_cfa_offset 16
+ 426 00d0 BD46     		mov	sp, r7
+ 427              	.LCFI14:
+ 428              		.cfi_def_cfa_register 13
+ 429              		@ sp needed
+ 430 00d2 B0BD     		pop	{r4, r5, r7, pc}
+ 431              		.cfi_endproc
+ 432              	.LFE5:
+ 434              		.section	.text.hexstr2byte,"ax",%progbits
+ 435              		.align	1
+ 436              		.global	hexstr2byte
+ 437              		.syntax unified
+ 438              		.thumb
+ 439              		.thumb_func
+ 440              		.fpu fpv4-sp-d16
+ 442              	hexstr2byte:
+ 443              	.LFB6:
+ 147:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+ 148:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** /*
+ 149:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** int hexstr2byte(const char *bufin, int len, char *bufout)
+ 150:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** {
+ 151:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     int i = 0;
+ 152:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     unsigned char tmp2 = 0x0;
+ 153:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     unsigned int tmp = 0;
+ 154:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     char cc;
+ 155:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+ 156:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     if (NULL == bufin || len <= 0 || NULL == bufout)
+ 157:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     {
+ 158:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         return -1;
+ 159:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     }
+ 160:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     for(i = 0; i < len; i = i+2)
+ 161:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     {
+ 162:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         tmp2 =  (unsigned char )bufin[i];
+ 163:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         tmp2 =  tmp2 <= '9'?(unsigned char)(unsigned int)(tmp2-0x30):(unsigned char)(unsigned int)(
+ 164:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         cc = bufin[i+1];
+ 165:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         tmp =  (unsigned int)(unsigned char)cc;
+ 166:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         tmp =  tmp <= '9'?(unsigned int)(tmp-0x30):(unsigned int)(tmp-0x37);
+ 167:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         bufout[i/2] =(tmp2<<4)|(tmp&0x0F);
+ 168:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     }
+ 169:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     return 0;
+ 170:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** }
+ 171:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+ 172:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** */
+ 173:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+ 174:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** int hexstr2byte(const char *buf, int len, char *bufout)
+ 175:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** {
+ 444              		.loc 1 175 1
+ 445              		.cfi_startproc
+ 446              		@ args = 0, pretend = 0, frame = 32
+ 447              		@ frame_needed = 1, uses_anonymous_args = 0
+ 448              		@ link register save eliminated.
+ 449 0000 80B4     		push	{r7}
+ 450              	.LCFI15:
+ 451              		.cfi_def_cfa_offset 4
+ARM GAS  /tmp/ccq5BZZA.s 			page 12
+
+
+ 452              		.cfi_offset 7, -4
+ 453 0002 89B0     		sub	sp, sp, #36
+ 454              	.LCFI16:
+ 455              		.cfi_def_cfa_offset 40
+ 456 0004 00AF     		add	r7, sp, #0
+ 457              	.LCFI17:
+ 458              		.cfi_def_cfa_register 7
+ 459 0006 F860     		str	r0, [r7, #12]
+ 460 0008 B960     		str	r1, [r7, #8]
+ 461 000a 7A60     		str	r2, [r7, #4]
+ 176:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     int ret = -1;
+ 462              		.loc 1 176 9
+ 463 000c 4FF0FF33 		mov	r3, #-1
+ 464 0010 FB61     		str	r3, [r7, #28]
+ 177:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     int i = 0;
+ 465              		.loc 1 177 9
+ 466 0012 0023     		movs	r3, #0
+ 467 0014 BB61     		str	r3, [r7, #24]
+ 178:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     uint8_t low;
+ 179:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     uint8_t high;
+ 180:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+ 181:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     if (NULL == buf || len <= 0 || NULL == bufout)
+ 468              		.loc 1 181 8
+ 469 0016 FB68     		ldr	r3, [r7, #12]
+ 470 0018 002B     		cmp	r3, #0
+ 471 001a 05D0     		beq	.L23
+ 472              		.loc 1 181 21 discriminator 1
+ 473 001c BB68     		ldr	r3, [r7, #8]
+ 474 001e 002B     		cmp	r3, #0
+ 475 0020 02DD     		ble	.L23
+ 476              		.loc 1 181 33 discriminator 2
+ 477 0022 7B68     		ldr	r3, [r7, #4]
+ 478 0024 002B     		cmp	r3, #0
+ 479 0026 01D1     		bne	.L24
+ 480              	.L23:
+ 182:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     {
+ 183:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         return ret;
+ 481              		.loc 1 183 16
+ 482 0028 FB69     		ldr	r3, [r7, #28]
+ 483 002a A3E0     		b	.L25
+ 484              	.L24:
+ 184:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     }
+ 185:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+ 186:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     ret = 0;
+ 485              		.loc 1 186 9
+ 486 002c 0023     		movs	r3, #0
+ 487 002e FB61     		str	r3, [r7, #28]
+ 187:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     for(i = 0; i < len; i = i+2)
+ 488              		.loc 1 187 11
+ 489 0030 0023     		movs	r3, #0
+ 490 0032 BB61     		str	r3, [r7, #24]
+ 491              		.loc 1 187 5
+ 492 0034 98E0     		b	.L26
+ 493              	.L36:
+ 188:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     {
+ 189:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         if(((buf[i]) >= '0') && (buf[i] <= '9'))
+ 494              		.loc 1 189 17
+ARM GAS  /tmp/ccq5BZZA.s 			page 13
+
+
+ 495 0036 BB69     		ldr	r3, [r7, #24]
+ 496 0038 FA68     		ldr	r2, [r7, #12]
+ 497 003a 1344     		add	r3, r3, r2
+ 498 003c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 499              		.loc 1 189 11
+ 500 003e 2F2B     		cmp	r3, #47
+ 501 0040 0CD9     		bls	.L27
+ 502              		.loc 1 189 37 discriminator 1
+ 503 0042 BB69     		ldr	r3, [r7, #24]
+ 504 0044 FA68     		ldr	r2, [r7, #12]
+ 505 0046 1344     		add	r3, r3, r2
+ 506 0048 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 507              		.loc 1 189 30 discriminator 1
+ 508 004a 392B     		cmp	r3, #57
+ 509 004c 06D8     		bhi	.L27
+ 190:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         {
+ 191:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****             high = (uint8_t)( buf[i] - '0');
+ 510              		.loc 1 191 34
+ 511 004e BB69     		ldr	r3, [r7, #24]
+ 512 0050 FA68     		ldr	r2, [r7, #12]
+ 513 0052 1344     		add	r3, r3, r2
+ 514 0054 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 515              		.loc 1 191 18
+ 516 0056 303B     		subs	r3, r3, #48
+ 517 0058 BB75     		strb	r3, [r7, #22]
+ 518 005a 29E0     		b	.L28
+ 519              	.L27:
+ 192:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         }
+ 193:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         else if((buf[i] >= 'A') && (buf[i] <= 'F'))
+ 520              		.loc 1 193 21
+ 521 005c BB69     		ldr	r3, [r7, #24]
+ 522 005e FA68     		ldr	r2, [r7, #12]
+ 523 0060 1344     		add	r3, r3, r2
+ 524 0062 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 525              		.loc 1 193 16
+ 526 0064 402B     		cmp	r3, #64
+ 527 0066 0CD9     		bls	.L29
+ 528              		.loc 1 193 40 discriminator 1
+ 529 0068 BB69     		ldr	r3, [r7, #24]
+ 530 006a FA68     		ldr	r2, [r7, #12]
+ 531 006c 1344     		add	r3, r3, r2
+ 532 006e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 533              		.loc 1 193 33 discriminator 1
+ 534 0070 462B     		cmp	r3, #70
+ 535 0072 06D8     		bhi	.L29
+ 194:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         {
+ 195:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****             high = (uint8_t)( buf[i] - 'A') + 10;
+ 536              		.loc 1 195 34
+ 537 0074 BB69     		ldr	r3, [r7, #24]
+ 538 0076 FA68     		ldr	r2, [r7, #12]
+ 539 0078 1344     		add	r3, r3, r2
+ 540              		.loc 1 195 45
+ 541 007a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 542              		.loc 1 195 18
+ 543 007c 373B     		subs	r3, r3, #55
+ 544 007e BB75     		strb	r3, [r7, #22]
+ 545 0080 16E0     		b	.L28
+ARM GAS  /tmp/ccq5BZZA.s 			page 14
+
+
+ 546              	.L29:
+ 196:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         }
+ 197:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         else if((buf[i] >= 'a') && (buf[i] <= 'f'))
+ 547              		.loc 1 197 21
+ 548 0082 BB69     		ldr	r3, [r7, #24]
+ 549 0084 FA68     		ldr	r2, [r7, #12]
+ 550 0086 1344     		add	r3, r3, r2
+ 551 0088 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 552              		.loc 1 197 16
+ 553 008a 602B     		cmp	r3, #96
+ 554 008c 0CD9     		bls	.L30
+ 555              		.loc 1 197 40 discriminator 1
+ 556 008e BB69     		ldr	r3, [r7, #24]
+ 557 0090 FA68     		ldr	r2, [r7, #12]
+ 558 0092 1344     		add	r3, r3, r2
+ 559 0094 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 560              		.loc 1 197 33 discriminator 1
+ 561 0096 662B     		cmp	r3, #102
+ 562 0098 06D8     		bhi	.L30
+ 198:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         {
+ 199:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****             high = (uint8_t)( buf[i] - 'a') + 10;
+ 563              		.loc 1 199 34
+ 564 009a BB69     		ldr	r3, [r7, #24]
+ 565 009c FA68     		ldr	r2, [r7, #12]
+ 566 009e 1344     		add	r3, r3, r2
+ 567              		.loc 1 199 45
+ 568 00a0 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 569              		.loc 1 199 18
+ 570 00a2 573B     		subs	r3, r3, #87
+ 571 00a4 BB75     		strb	r3, [r7, #22]
+ 572 00a6 03E0     		b	.L28
+ 573              	.L30:
+ 200:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         }
+ 201:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         else
+ 202:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         {
+ 203:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****             ret = -1;
+ 574              		.loc 1 203 17
+ 575 00a8 4FF0FF33 		mov	r3, #-1
+ 576 00ac FB61     		str	r3, [r7, #28]
+ 204:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****             break;
+ 577              		.loc 1 204 13
+ 578 00ae 60E0     		b	.L31
+ 579              	.L28:
+ 205:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         }
+ 206:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+ 207:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         if(((buf[i+1]) >= '0') && (buf[i+1] <= '9'))
+ 580              		.loc 1 207 17
+ 581 00b0 BB69     		ldr	r3, [r7, #24]
+ 582 00b2 0133     		adds	r3, r3, #1
+ 583 00b4 FA68     		ldr	r2, [r7, #12]
+ 584 00b6 1344     		add	r3, r3, r2
+ 585 00b8 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 586              		.loc 1 207 11
+ 587 00ba 2F2B     		cmp	r3, #47
+ 588 00bc 0ED9     		bls	.L32
+ 589              		.loc 1 207 39 discriminator 1
+ 590 00be BB69     		ldr	r3, [r7, #24]
+ARM GAS  /tmp/ccq5BZZA.s 			page 15
+
+
+ 591 00c0 0133     		adds	r3, r3, #1
+ 592 00c2 FA68     		ldr	r2, [r7, #12]
+ 593 00c4 1344     		add	r3, r3, r2
+ 594 00c6 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 595              		.loc 1 207 32 discriminator 1
+ 596 00c8 392B     		cmp	r3, #57
+ 597 00ca 07D8     		bhi	.L32
+ 208:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         {
+ 209:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****             low = (uint8_t)( buf[i+1] - '0');
+ 598              		.loc 1 209 33
+ 599 00cc BB69     		ldr	r3, [r7, #24]
+ 600 00ce 0133     		adds	r3, r3, #1
+ 601 00d0 FA68     		ldr	r2, [r7, #12]
+ 602 00d2 1344     		add	r3, r3, r2
+ 603 00d4 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 604              		.loc 1 209 17
+ 605 00d6 303B     		subs	r3, r3, #48
+ 606 00d8 FB75     		strb	r3, [r7, #23]
+ 607 00da 2FE0     		b	.L33
+ 608              	.L32:
+ 210:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         }
+ 211:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         else if((buf[i+1] >= 'A') && (buf[i+1] <= 'F'))
+ 609              		.loc 1 211 21
+ 610 00dc BB69     		ldr	r3, [r7, #24]
+ 611 00de 0133     		adds	r3, r3, #1
+ 612 00e0 FA68     		ldr	r2, [r7, #12]
+ 613 00e2 1344     		add	r3, r3, r2
+ 614 00e4 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 615              		.loc 1 211 16
+ 616 00e6 402B     		cmp	r3, #64
+ 617 00e8 0ED9     		bls	.L34
+ 618              		.loc 1 211 42 discriminator 1
+ 619 00ea BB69     		ldr	r3, [r7, #24]
+ 620 00ec 0133     		adds	r3, r3, #1
+ 621 00ee FA68     		ldr	r2, [r7, #12]
+ 622 00f0 1344     		add	r3, r3, r2
+ 623 00f2 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 624              		.loc 1 211 35 discriminator 1
+ 625 00f4 462B     		cmp	r3, #70
+ 626 00f6 07D8     		bhi	.L34
+ 212:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         {
+ 213:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****             low = (uint8_t)( buf[i+1] - 'A') + 10;
+ 627              		.loc 1 213 33
+ 628 00f8 BB69     		ldr	r3, [r7, #24]
+ 629 00fa 0133     		adds	r3, r3, #1
+ 630 00fc FA68     		ldr	r2, [r7, #12]
+ 631 00fe 1344     		add	r3, r3, r2
+ 632              		.loc 1 213 46
+ 633 0100 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 634              		.loc 1 213 17
+ 635 0102 373B     		subs	r3, r3, #55
+ 636 0104 FB75     		strb	r3, [r7, #23]
+ 637 0106 19E0     		b	.L33
+ 638              	.L34:
+ 214:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         }
+ 215:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         else if((buf[i+1] >= 'a') && (buf[i+1] <= 'f'))
+ 639              		.loc 1 215 21
+ARM GAS  /tmp/ccq5BZZA.s 			page 16
+
+
+ 640 0108 BB69     		ldr	r3, [r7, #24]
+ 641 010a 0133     		adds	r3, r3, #1
+ 642 010c FA68     		ldr	r2, [r7, #12]
+ 643 010e 1344     		add	r3, r3, r2
+ 644 0110 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 645              		.loc 1 215 16
+ 646 0112 602B     		cmp	r3, #96
+ 647 0114 0ED9     		bls	.L35
+ 648              		.loc 1 215 42 discriminator 1
+ 649 0116 BB69     		ldr	r3, [r7, #24]
+ 650 0118 0133     		adds	r3, r3, #1
+ 651 011a FA68     		ldr	r2, [r7, #12]
+ 652 011c 1344     		add	r3, r3, r2
+ 653 011e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 654              		.loc 1 215 35 discriminator 1
+ 655 0120 662B     		cmp	r3, #102
+ 656 0122 07D8     		bhi	.L35
+ 216:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         {
+ 217:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****             low = (uint8_t)( buf[i+1] - 'a') + 10;
+ 657              		.loc 1 217 33
+ 658 0124 BB69     		ldr	r3, [r7, #24]
+ 659 0126 0133     		adds	r3, r3, #1
+ 660 0128 FA68     		ldr	r2, [r7, #12]
+ 661 012a 1344     		add	r3, r3, r2
+ 662              		.loc 1 217 46
+ 663 012c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 664              		.loc 1 217 17
+ 665 012e 573B     		subs	r3, r3, #87
+ 666 0130 FB75     		strb	r3, [r7, #23]
+ 667 0132 03E0     		b	.L33
+ 668              	.L35:
+ 218:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         }
+ 219:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         else
+ 220:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         {
+ 221:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****             ret = -1;
+ 669              		.loc 1 221 17
+ 670 0134 4FF0FF33 		mov	r3, #-1
+ 671 0138 FB61     		str	r3, [r7, #28]
+ 222:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****             break;
+ 672              		.loc 1 222 13
+ 673 013a 1AE0     		b	.L31
+ 674              	.L33:
+ 223:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         }
+ 224:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+ 225:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         bufout[i/2] = (char)((high<<4)|(low&0x0F));
+ 675              		.loc 1 225 35 discriminator 2
+ 676 013c BB7D     		ldrb	r3, [r7, #22]	@ zero_extendqisi2
+ 677 013e 1B01     		lsls	r3, r3, #4
+ 678              		.loc 1 225 39 discriminator 2
+ 679 0140 5AB2     		sxtb	r2, r3
+ 680              		.loc 1 225 44 discriminator 2
+ 681 0142 97F91730 		ldrsb	r3, [r7, #23]
+ 682 0146 03F00F03 		and	r3, r3, #15
+ 683 014a 5BB2     		sxtb	r3, r3
+ 684              		.loc 1 225 39 discriminator 2
+ 685 014c 1343     		orrs	r3, r3, r2
+ 686 014e 59B2     		sxtb	r1, r3
+ARM GAS  /tmp/ccq5BZZA.s 			page 17
+
+
+ 687              		.loc 1 225 17 discriminator 2
+ 688 0150 BB69     		ldr	r3, [r7, #24]
+ 689 0152 DA0F     		lsrs	r2, r3, #31
+ 690 0154 1344     		add	r3, r3, r2
+ 691 0156 5B10     		asrs	r3, r3, #1
+ 692 0158 1A46     		mov	r2, r3
+ 693              		.loc 1 225 15 discriminator 2
+ 694 015a 7B68     		ldr	r3, [r7, #4]
+ 695 015c 1344     		add	r3, r3, r2
+ 696              		.loc 1 225 23 discriminator 2
+ 697 015e CAB2     		uxtb	r2, r1
+ 698              		.loc 1 225 21 discriminator 2
+ 699 0160 1A70     		strb	r2, [r3]
+ 187:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     {
+ 700              		.loc 1 187 27 discriminator 2
+ 701 0162 BB69     		ldr	r3, [r7, #24]
+ 702 0164 0233     		adds	r3, r3, #2
+ 703 0166 BB61     		str	r3, [r7, #24]
+ 704              	.L26:
+ 187:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     {
+ 705              		.loc 1 187 5 discriminator 1
+ 706 0168 BA69     		ldr	r2, [r7, #24]
+ 707 016a BB68     		ldr	r3, [r7, #8]
+ 708 016c 9A42     		cmp	r2, r3
+ 709 016e FFF662AF 		blt	.L36
+ 710              	.L31:
+ 226:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     }
+ 227:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     return ret;
+ 711              		.loc 1 227 12
+ 712 0172 FB69     		ldr	r3, [r7, #28]
+ 713              	.L25:
+ 228:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** }
+ 714              		.loc 1 228 1
+ 715 0174 1846     		mov	r0, r3
+ 716 0176 2437     		adds	r7, r7, #36
+ 717              	.LCFI18:
+ 718              		.cfi_def_cfa_offset 4
+ 719 0178 BD46     		mov	sp, r7
+ 720              	.LCFI19:
+ 721              		.cfi_def_cfa_register 13
+ 722              		@ sp needed
+ 723 017a 5DF8047B 		ldr	r7, [sp], #4
+ 724              	.LCFI20:
+ 725              		.cfi_restore 7
+ 726              		.cfi_def_cfa_offset 0
+ 727 017e 7047     		bx	lr
+ 728              		.cfi_endproc
+ 729              	.LFE6:
+ 731              		.section	.text.byte2hexstr,"ax",%progbits
+ 732              		.align	1
+ 733              		.global	byte2hexstr
+ 734              		.syntax unified
+ 735              		.thumb
+ 736              		.thumb_func
+ 737              		.fpu fpv4-sp-d16
+ 739              	byte2hexstr:
+ 740              	.LFB7:
+ARM GAS  /tmp/ccq5BZZA.s 			page 18
+
+
+ 229:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+ 230:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+ 231:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+ 232:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** //make a byte to 2 ascii hex
+ 233:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** int byte2hexstr(uint8_t *bufin, int len, char *bufout)
+ 234:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** {
+ 741              		.loc 1 234 1
+ 742              		.cfi_startproc
+ 743              		@ args = 0, pretend = 0, frame = 24
+ 744              		@ frame_needed = 1, uses_anonymous_args = 0
+ 745              		@ link register save eliminated.
+ 746 0000 80B4     		push	{r7}
+ 747              	.LCFI21:
+ 748              		.cfi_def_cfa_offset 4
+ 749              		.cfi_offset 7, -4
+ 750 0002 87B0     		sub	sp, sp, #28
+ 751              	.LCFI22:
+ 752              		.cfi_def_cfa_offset 32
+ 753 0004 00AF     		add	r7, sp, #0
+ 754              	.LCFI23:
+ 755              		.cfi_def_cfa_register 7
+ 756 0006 F860     		str	r0, [r7, #12]
+ 757 0008 B960     		str	r1, [r7, #8]
+ 758 000a 7A60     		str	r2, [r7, #4]
+ 235:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     int i = 0;
+ 759              		.loc 1 235 9
+ 760 000c 0023     		movs	r3, #0
+ 761 000e 7B61     		str	r3, [r7, #20]
+ 236:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     uint8_t tmp_l = 0x0;
+ 762              		.loc 1 236 13
+ 763 0010 0023     		movs	r3, #0
+ 764 0012 FB74     		strb	r3, [r7, #19]
+ 237:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     uint8_t tmp_h = 0;
+ 765              		.loc 1 237 13
+ 766 0014 0023     		movs	r3, #0
+ 767 0016 BB74     		strb	r3, [r7, #18]
+ 238:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     if ((NULL == bufin )|| (len <= 0 )||( NULL == bufout))
+ 768              		.loc 1 238 8
+ 769 0018 FB68     		ldr	r3, [r7, #12]
+ 770 001a 002B     		cmp	r3, #0
+ 771 001c 05D0     		beq	.L38
+ 772              		.loc 1 238 25 discriminator 1
+ 773 001e BB68     		ldr	r3, [r7, #8]
+ 774 0020 002B     		cmp	r3, #0
+ 775 0022 02DD     		ble	.L38
+ 776              		.loc 1 238 39 discriminator 2
+ 777 0024 7B68     		ldr	r3, [r7, #4]
+ 778 0026 002B     		cmp	r3, #0
+ 779 0028 02D1     		bne	.L39
+ 780              	.L38:
+ 239:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     {
+ 240:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         return -1;
+ 781              		.loc 1 240 16
+ 782 002a 4FF0FF33 		mov	r3, #-1
+ 783 002e 3EE0     		b	.L40
+ 784              	.L39:
+ 241:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     }
+ARM GAS  /tmp/ccq5BZZA.s 			page 19
+
+
+ 242:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     for(i = 0; i < len; i++)
+ 785              		.loc 1 242 11
+ 786 0030 0023     		movs	r3, #0
+ 787 0032 7B61     		str	r3, [r7, #20]
+ 788              		.loc 1 242 5
+ 789 0034 2FE0     		b	.L41
+ 790              	.L46:
+ 243:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     {
+ 244:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         tmp_h = (bufin[i]>>4)&0X0F;
+ 791              		.loc 1 244 23
+ 792 0036 7B69     		ldr	r3, [r7, #20]
+ 793 0038 FA68     		ldr	r2, [r7, #12]
+ 794 003a 1344     		add	r3, r3, r2
+ 795 003c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 796              		.loc 1 244 15
+ 797 003e 1B09     		lsrs	r3, r3, #4
+ 798 0040 BB74     		strb	r3, [r7, #18]
+ 245:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         tmp_l = bufin[i] &0x0F;
+ 799              		.loc 1 245 22
+ 800 0042 7B69     		ldr	r3, [r7, #20]
+ 801 0044 FA68     		ldr	r2, [r7, #12]
+ 802 0046 1344     		add	r3, r3, r2
+ 803 0048 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 804              		.loc 1 245 15
+ 805 004a 03F00F03 		and	r3, r3, #15
+ 806 004e FB74     		strb	r3, [r7, #19]
+ 246:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         bufout[2*i] = (tmp_h > 9)? (tmp_h - 10 + 'a'):(tmp_h +'0');
+ 807              		.loc 1 246 21
+ 808 0050 BB7C     		ldrb	r3, [r7, #18]	@ zero_extendqisi2
+ 809 0052 092B     		cmp	r3, #9
+ 810 0054 03D9     		bls	.L42
+ 811              		.loc 1 246 21 is_stmt 0 discriminator 1
+ 812 0056 BB7C     		ldrb	r3, [r7, #18]
+ 813 0058 5733     		adds	r3, r3, #87
+ 814 005a DBB2     		uxtb	r3, r3
+ 815 005c 02E0     		b	.L43
+ 816              	.L42:
+ 817              		.loc 1 246 21 discriminator 2
+ 818 005e BB7C     		ldrb	r3, [r7, #18]
+ 819 0060 3033     		adds	r3, r3, #48
+ 820 0062 DBB2     		uxtb	r3, r3
+ 821              	.L43:
+ 822              		.loc 1 246 17 is_stmt 1 discriminator 4
+ 823 0064 7A69     		ldr	r2, [r7, #20]
+ 824 0066 5200     		lsls	r2, r2, #1
+ 825 0068 1146     		mov	r1, r2
+ 826              		.loc 1 246 15 discriminator 4
+ 827 006a 7A68     		ldr	r2, [r7, #4]
+ 828 006c 0A44     		add	r2, r2, r1
+ 829              		.loc 1 246 21 discriminator 4
+ 830 006e 1370     		strb	r3, [r2]
+ 247:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****         bufout[2*i + 1] = (tmp_l > 9)? (tmp_l - 10 + 'a'):(tmp_l +'0');
+ 831              		.loc 1 247 25 discriminator 4
+ 832 0070 FB7C     		ldrb	r3, [r7, #19]	@ zero_extendqisi2
+ 833 0072 092B     		cmp	r3, #9
+ 834 0074 03D9     		bls	.L44
+ 835              		.loc 1 247 25 is_stmt 0 discriminator 1
+ARM GAS  /tmp/ccq5BZZA.s 			page 20
+
+
+ 836 0076 FB7C     		ldrb	r3, [r7, #19]
+ 837 0078 5733     		adds	r3, r3, #87
+ 838 007a DBB2     		uxtb	r3, r3
+ 839 007c 02E0     		b	.L45
+ 840              	.L44:
+ 841              		.loc 1 247 25 discriminator 2
+ 842 007e FB7C     		ldrb	r3, [r7, #19]
+ 843 0080 3033     		adds	r3, r3, #48
+ 844 0082 DBB2     		uxtb	r3, r3
+ 845              	.L45:
+ 846              		.loc 1 247 17 is_stmt 1 discriminator 4
+ 847 0084 7A69     		ldr	r2, [r7, #20]
+ 848 0086 5200     		lsls	r2, r2, #1
+ 849              		.loc 1 247 15 discriminator 4
+ 850 0088 0132     		adds	r2, r2, #1
+ 851 008a 7968     		ldr	r1, [r7, #4]
+ 852 008c 0A44     		add	r2, r2, r1
+ 853              		.loc 1 247 25 discriminator 4
+ 854 008e 1370     		strb	r3, [r2]
+ 242:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     {
+ 855              		.loc 1 242 26 discriminator 4
+ 856 0090 7B69     		ldr	r3, [r7, #20]
+ 857 0092 0133     		adds	r3, r3, #1
+ 858 0094 7B61     		str	r3, [r7, #20]
+ 859              	.L41:
+ 242:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     {
+ 860              		.loc 1 242 5 discriminator 2
+ 861 0096 7A69     		ldr	r2, [r7, #20]
+ 862 0098 BB68     		ldr	r3, [r7, #8]
+ 863 009a 9A42     		cmp	r2, r3
+ 864 009c CBDB     		blt	.L46
+ 248:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     }
+ 249:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     bufout[2*len] = '\0';
+ 865              		.loc 1 249 13
+ 866 009e BB68     		ldr	r3, [r7, #8]
+ 867 00a0 5B00     		lsls	r3, r3, #1
+ 868 00a2 1A46     		mov	r2, r3
+ 869              		.loc 1 249 11
+ 870 00a4 7B68     		ldr	r3, [r7, #4]
+ 871 00a6 1344     		add	r3, r3, r2
+ 872              		.loc 1 249 19
+ 873 00a8 0022     		movs	r2, #0
+ 874 00aa 1A70     		strb	r2, [r3]
+ 250:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** 
+ 251:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c ****     return 0;
+ 875              		.loc 1 251 12
+ 876 00ac 0023     		movs	r3, #0
+ 877              	.L40:
+ 252:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_string.c **** }
+ 878              		.loc 1 252 1
+ 879 00ae 1846     		mov	r0, r3
+ 880 00b0 1C37     		adds	r7, r7, #28
+ 881              	.LCFI24:
+ 882              		.cfi_def_cfa_offset 4
+ 883 00b2 BD46     		mov	sp, r7
+ 884              	.LCFI25:
+ 885              		.cfi_def_cfa_register 13
+ARM GAS  /tmp/ccq5BZZA.s 			page 21
+
+
+ 886              		@ sp needed
+ 887 00b4 5DF8047B 		ldr	r7, [sp], #4
+ 888              	.LCFI26:
+ 889              		.cfi_restore 7
+ 890              		.cfi_def_cfa_offset 0
+ 891 00b8 7047     		bx	lr
+ 892              		.cfi_endproc
+ 893              	.LFE7:
+ 895              		.text
+ 896              	.Letext0:
+ 897              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 898              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 899              		.file 4 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 900              		.file 5 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 901              		.file 6 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 902              		.file 7 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/ree
+ARM GAS  /tmp/ccq5BZZA.s 			page 22
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 link_string.c
+     /tmp/ccq5BZZA.s:18     .text.string_to_arg:0000000000000000 $t
+     /tmp/ccq5BZZA.s:26     .text.string_to_arg:0000000000000000 string_to_arg
+     /tmp/ccq5BZZA.s:183    .text.osal_strdup:0000000000000000 $t
+     /tmp/ccq5BZZA.s:190    .text.osal_strdup:0000000000000000 osal_strdup
+     /tmp/ccq5BZZA.s:263    .text.osal_strcat:0000000000000000 $t
+     /tmp/ccq5BZZA.s:270    .text.osal_strcat:0000000000000000 osal_strcat
+     /tmp/ccq5BZZA.s:435    .text.hexstr2byte:0000000000000000 $t
+     /tmp/ccq5BZZA.s:442    .text.hexstr2byte:0000000000000000 hexstr2byte
+     /tmp/ccq5BZZA.s:732    .text.byte2hexstr:0000000000000000 $t
+     /tmp/ccq5BZZA.s:739    .text.byte2hexstr:0000000000000000 byte2hexstr
+
+UNDEFINED SYMBOLS
+strlen
+osal_malloc
+strncpy
+memcpy

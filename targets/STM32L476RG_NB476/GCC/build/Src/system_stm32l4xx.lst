@@ -1,0 +1,783 @@
+ARM GAS  /tmp/ccrLf4Sg.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"system_stm32l4xx.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	SystemCoreClock
+  18              		.section	.data.SystemCoreClock,"aw"
+  19              		.align	2
+  22              	SystemCoreClock:
+  23 0000 00093D00 		.word	4000000
+  24              		.global	AHBPrescTable
+  25              		.section	.rodata.AHBPrescTable,"a"
+  26              		.align	2
+  29              	AHBPrescTable:
+  30 0000 00000000 		.ascii	"\000\000\000\000\000\000\000\000\001\002\003\004\006"
+  30      00000000 
+  30      01020304 
+  30      06
+  31 000d 070809   		.ascii	"\007\010\011"
+  32              		.global	APBPrescTable
+  33              		.section	.rodata.APBPrescTable,"a"
+  34              		.align	2
+  37              	APBPrescTable:
+  38 0000 00000000 		.ascii	"\000\000\000\000\001\002\003\004"
+  38      01020304 
+  39              		.global	MSIRangeTable
+  40              		.section	.rodata.MSIRangeTable,"a"
+  41              		.align	2
+  44              	MSIRangeTable:
+  45 0000 A0860100 		.word	100000
+  46 0004 400D0300 		.word	200000
+  47 0008 801A0600 		.word	400000
+  48 000c 00350C00 		.word	800000
+  49 0010 40420F00 		.word	1000000
+  50 0014 80841E00 		.word	2000000
+  51 0018 00093D00 		.word	4000000
+  52 001c 00127A00 		.word	8000000
+  53 0020 0024F400 		.word	16000000
+  54 0024 00366E01 		.word	24000000
+  55 0028 0048E801 		.word	32000000
+  56 002c 006CDC02 		.word	48000000
+  57              		.section	.text.SystemInit,"ax",%progbits
+  58              		.align	1
+  59              		.global	SystemInit
+  60              		.arch armv7e-m
+  61              		.syntax unified
+ARM GAS  /tmp/ccrLf4Sg.s 			page 2
+
+
+  62              		.thumb
+  63              		.thumb_func
+  64              		.fpu fpv4-sp-d16
+  66              	SystemInit:
+  67              	.LFB126:
+  68              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** /**
+   2:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   ******************************************************************************
+   3:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @file    system_stm32l4xx.c
+   4:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @author  MCD Application Team
+   5:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @brief   CMSIS Cortex-M4 Device Peripheral Access Layer System Source File
+   6:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *
+   7:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *   This file provides two functions and one global variable to be called from
+   8:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *   user application:
+   9:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *      - SystemInit(): This function is called at startup just after reset and
+  10:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *                      before branch to main program. This call is made inside
+  11:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *                      the "startup_stm32l4xx.s" file.
+  12:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *
+  13:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *      - SystemCoreClock variable: Contains the core clock (HCLK), it can be used
+  14:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *                                  by the user application to setup the SysTick
+  15:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *                                  timer or configure other parameters.
+  16:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *
+  17:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *      - SystemCoreClockUpdate(): Updates the variable SystemCoreClock and must
+  18:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *                                 be called whenever the core clock is changed
+  19:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *                                 during program execution.
+  20:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *
+  21:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *   After each device reset the MSI (4 MHz) is used as system clock source.
+  22:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *   Then SystemInit() function is called, in "startup_stm32l4xx.s" file, to
+  23:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *   configure the system clock before to branch to main program.
+  24:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *
+  25:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *   This file configures the system clock as follows:
+  26:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *=============================================================================
+  27:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  28:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *        System Clock source                    | MSI
+  29:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  30:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *        SYSCLK(Hz)                             | 4000000
+  31:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  32:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *        HCLK(Hz)                               | 4000000
+  33:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  34:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *        AHB Prescaler                          | 1
+  35:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  36:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *        APB1 Prescaler                         | 1
+  37:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  38:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *        APB2 Prescaler                         | 1
+  39:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  40:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *        PLL_M                                  | 1
+  41:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  42:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *        PLL_N                                  | 8
+  43:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  44:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *        PLL_P                                  | 7
+  45:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  46:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *        PLL_Q                                  | 2
+  47:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  48:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *        PLL_R                                  | 2
+  49:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  50:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *        PLLSAI1_P                              | NA
+  51:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+ARM GAS  /tmp/ccrLf4Sg.s 			page 3
+
+
+  52:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *        PLLSAI1_Q                              | NA
+  53:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  54:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *        PLLSAI1_R                              | NA
+  55:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  56:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *        PLLSAI2_P                              | NA
+  57:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  58:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *        PLLSAI2_Q                              | NA
+  59:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  60:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *        PLLSAI2_R                              | NA
+  61:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  62:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *        Require 48MHz for USB OTG FS,          | Disabled
+  63:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *        SDIO and RNG clock                     |
+  64:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *-----------------------------------------------------------------------------
+  65:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *=============================================================================
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   ******************************************************************************
+  67:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @attention
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *
+  69:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * <h2><center>&copy; Copyright (c) 2017 STMicroelectronics.
+  70:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * All rights reserved.</center></h2>
+  71:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *
+  72:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * This software component is licensed by ST under BSD 3-Clause license,
+  73:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * the "License"; You may not use this file except in compliance with the
+  74:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * License. You may obtain a copy of the License at:
+  75:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *                        opensource.org/licenses/BSD-3-Clause
+  76:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *
+  77:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   ******************************************************************************
+  78:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   */
+  79:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+  80:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** /** @addtogroup CMSIS
+  81:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @{
+  82:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   */
+  83:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+  84:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** /** @addtogroup stm32l4xx_system
+  85:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @{
+  86:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   */
+  87:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+  88:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** /** @addtogroup STM32L4xx_System_Private_Includes
+  89:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @{
+  90:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   */
+  91:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+  92:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** #include "stm32l4xx.h"
+  93:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+  94:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** #if !defined  (HSE_VALUE)
+  95:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   #define HSE_VALUE    8000000U  /*!< Value of the External oscillator in Hz */
+  96:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** #endif /* HSE_VALUE */
+  97:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+  98:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** #if !defined  (MSI_VALUE)
+  99:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   #define MSI_VALUE    4000000U  /*!< Value of the Internal oscillator in Hz*/
+ 100:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** #endif /* MSI_VALUE */
+ 101:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 102:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** #if !defined  (HSI_VALUE)
+ 103:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   #define HSI_VALUE    16000000U /*!< Value of the Internal oscillator in Hz*/
+ 104:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** #endif /* HSI_VALUE */
+ 105:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 106:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** /**
+ 107:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @}
+ 108:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   */
+ARM GAS  /tmp/ccrLf4Sg.s 			page 4
+
+
+ 109:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 110:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** /** @addtogroup STM32L4xx_System_Private_TypesDefinitions
+ 111:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @{
+ 112:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   */
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 114:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** /**
+ 115:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @}
+ 116:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   */
+ 117:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 118:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** /** @addtogroup STM32L4xx_System_Private_Defines
+ 119:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @{
+ 120:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   */
+ 121:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 122:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** /************************* Miscellaneous Configuration ************************/
+ 123:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** /*!< Uncomment the following line if you need to relocate your vector Table in
+ 124:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****      Internal SRAM. */
+ 125:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** /* #define VECT_TAB_SRAM */
+ 126:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** #define VECT_TAB_OFFSET  0x00 /*!< Vector Table base offset field.
+ 127:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****                                    This value must be a multiple of 0x200. */
+ 128:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** /******************************************************************************/
+ 129:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** /**
+ 130:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @}
+ 131:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   */
+ 132:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 133:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** /** @addtogroup STM32L4xx_System_Private_Macros
+ 134:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @{
+ 135:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   */
+ 136:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 137:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** /**
+ 138:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @}
+ 139:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   */
+ 140:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 141:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** /** @addtogroup STM32L4xx_System_Private_Variables
+ 142:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @{
+ 143:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   */
+ 144:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   /* The SystemCoreClock variable is updated in three ways:
+ 145:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****       1) by calling CMSIS function SystemCoreClockUpdate()
+ 146:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****       2) by calling HAL API function HAL_RCC_GetHCLKFreq()
+ 147:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****       3) each time HAL_RCC_ClockConfig() is called to configure the system clock frequency
+ 148:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****          Note: If you use this function to configure the system clock; then there
+ 149:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****                is no need to call the 2 first functions listed above, since SystemCoreClock
+ 150:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****                variable is updated automatically.
+ 151:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   */
+ 152:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   uint32_t SystemCoreClock = 4000000U;
+ 153:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 154:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   const uint8_t  AHBPrescTable[16] = {0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U, 6U, 7U, 8U, 9
+ 155:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   const uint8_t  APBPrescTable[8] =  {0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U};
+ 156:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   const uint32_t MSIRangeTable[12] = {100000U,   200000U,   400000U,   800000U,  1000000U,  2000000
+ 157:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****                                       4000000U, 8000000U, 16000000U, 24000000U, 32000000U, 48000000
+ 158:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** /**
+ 159:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @}
+ 160:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   */
+ 161:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 162:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** /** @addtogroup STM32L4xx_System_Private_FunctionPrototypes
+ 163:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @{
+ 164:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   */
+ 165:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ARM GAS  /tmp/ccrLf4Sg.s 			page 5
+
+
+ 166:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** /**
+ 167:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @}
+ 168:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   */
+ 169:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 170:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** /** @addtogroup STM32L4xx_System_Private_Functions
+ 171:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @{
+ 172:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   */
+ 173:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 174:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** /**
+ 175:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @brief  Setup the microcontroller system.
+ 176:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @param  None
+ 177:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @retval None
+ 178:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   */
+ 179:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 180:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** void SystemInit(void)
+ 181:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** {
+  69              		.loc 1 181 1
+  70              		.cfi_startproc
+  71              		@ args = 0, pretend = 0, frame = 0
+  72              		@ frame_needed = 1, uses_anonymous_args = 0
+  73              		@ link register save eliminated.
+  74 0000 80B4     		push	{r7}
+  75              	.LCFI0:
+  76              		.cfi_def_cfa_offset 4
+  77              		.cfi_offset 7, -4
+  78 0002 00AF     		add	r7, sp, #0
+  79              	.LCFI1:
+  80              		.cfi_def_cfa_register 7
+ 182:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   /* FPU settings ------------------------------------------------------------*/
+ 183:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   #if (__FPU_PRESENT == 1) && (__FPU_USED == 1)
+ 184:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****     SCB->CPACR |= ((3UL << 10*2)|(3UL << 11*2));  /* set CP10 and CP11 Full Access */
+  81              		.loc 1 184 16
+  82 0004 174B     		ldr	r3, .L2
+  83 0006 D3F88830 		ldr	r3, [r3, #136]
+  84 000a 164A     		ldr	r2, .L2
+  85 000c 43F47003 		orr	r3, r3, #15728640
+  86 0010 C2F88830 		str	r3, [r2, #136]
+ 185:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   #endif
+ 186:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 187:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   /* Reset the RCC clock configuration to the default reset state ------------*/
+ 188:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   /* Set MSION bit */
+ 189:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   RCC->CR |= RCC_CR_MSION;
+  87              		.loc 1 189 11
+  88 0014 144B     		ldr	r3, .L2+4
+  89 0016 1B68     		ldr	r3, [r3]
+  90 0018 134A     		ldr	r2, .L2+4
+  91 001a 43F00103 		orr	r3, r3, #1
+  92 001e 1360     		str	r3, [r2]
+ 190:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 191:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   /* Reset CFGR register */
+ 192:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   RCC->CFGR = 0x00000000U;
+  93              		.loc 1 192 6
+  94 0020 114B     		ldr	r3, .L2+4
+  95              		.loc 1 192 13
+  96 0022 0022     		movs	r2, #0
+  97 0024 9A60     		str	r2, [r3, #8]
+ 193:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ARM GAS  /tmp/ccrLf4Sg.s 			page 6
+
+
+ 194:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   /* Reset HSEON, CSSON , HSION, and PLLON bits */
+ 195:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   RCC->CR &= 0xEAF6FFFFU;
+  98              		.loc 1 195 11
+  99 0026 104B     		ldr	r3, .L2+4
+ 100 0028 1B68     		ldr	r3, [r3]
+ 101 002a 0F4A     		ldr	r2, .L2+4
+ 102 002c 23F0A853 		bic	r3, r3, #352321536
+ 103 0030 23F41023 		bic	r3, r3, #589824
+ 104 0034 1360     		str	r3, [r2]
+ 196:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 197:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   /* Reset PLLCFGR register */
+ 198:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   RCC->PLLCFGR = 0x00001000U;
+ 105              		.loc 1 198 6
+ 106 0036 0C4B     		ldr	r3, .L2+4
+ 107              		.loc 1 198 16
+ 108 0038 4FF48052 		mov	r2, #4096
+ 109 003c DA60     		str	r2, [r3, #12]
+ 199:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 200:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   /* Reset HSEBYP bit */
+ 201:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   RCC->CR &= 0xFFFBFFFFU;
+ 110              		.loc 1 201 11
+ 111 003e 0A4B     		ldr	r3, .L2+4
+ 112 0040 1B68     		ldr	r3, [r3]
+ 113 0042 094A     		ldr	r2, .L2+4
+ 114 0044 23F48023 		bic	r3, r3, #262144
+ 115 0048 1360     		str	r3, [r2]
+ 202:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 203:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   /* Disable all interrupts */
+ 204:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   RCC->CIER = 0x00000000U;
+ 116              		.loc 1 204 6
+ 117 004a 074B     		ldr	r3, .L2+4
+ 118              		.loc 1 204 13
+ 119 004c 0022     		movs	r2, #0
+ 120 004e 9A61     		str	r2, [r3, #24]
+ 205:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 206:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   /* Configure the Vector Table location add offset address ------------------*/
+ 207:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** #ifdef VECT_TAB_SRAM
+ 208:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   SCB->VTOR = SRAM_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal SRAM */
+ 209:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** #else
+ 210:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   SCB->VTOR = FLASH_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal FLASH */
+ 121              		.loc 1 210 6
+ 122 0050 044B     		ldr	r3, .L2
+ 123              		.loc 1 210 13
+ 124 0052 4FF00062 		mov	r2, #134217728
+ 125 0056 9A60     		str	r2, [r3, #8]
+ 211:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** #endif
+ 212:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** }
+ 126              		.loc 1 212 1
+ 127 0058 00BF     		nop
+ 128 005a BD46     		mov	sp, r7
+ 129              	.LCFI2:
+ 130              		.cfi_def_cfa_register 13
+ 131              		@ sp needed
+ 132 005c 5DF8047B 		ldr	r7, [sp], #4
+ 133              	.LCFI3:
+ 134              		.cfi_restore 7
+ 135              		.cfi_def_cfa_offset 0
+ARM GAS  /tmp/ccrLf4Sg.s 			page 7
+
+
+ 136 0060 7047     		bx	lr
+ 137              	.L3:
+ 138 0062 00BF     		.align	2
+ 139              	.L2:
+ 140 0064 00ED00E0 		.word	-536810240
+ 141 0068 00100240 		.word	1073876992
+ 142              		.cfi_endproc
+ 143              	.LFE126:
+ 145              		.section	.text.SystemCoreClockUpdate,"ax",%progbits
+ 146              		.align	1
+ 147              		.global	SystemCoreClockUpdate
+ 148              		.syntax unified
+ 149              		.thumb
+ 150              		.thumb_func
+ 151              		.fpu fpv4-sp-d16
+ 153              	SystemCoreClockUpdate:
+ 154              	.LFB127:
+ 213:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 214:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** /**
+ 215:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @brief  Update SystemCoreClock variable according to Clock Register Values.
+ 216:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *         The SystemCoreClock variable contains the core clock (HCLK), it can
+ 217:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *         be used by the user application to setup the SysTick timer or configure
+ 218:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *         other parameters.
+ 219:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *
+ 220:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @note   Each time the core clock (HCLK) changes, this function must be called
+ 221:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *         to update SystemCoreClock variable value. Otherwise, any configuration
+ 222:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *         based on this variable will be incorrect.
+ 223:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *
+ 224:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @note   - The system frequency computed by this function is not the real
+ 225:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *           frequency in the chip. It is calculated based on the predefined
+ 226:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *           constant and the selected clock source:
+ 227:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *
+ 228:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *           - If SYSCLK source is MSI, SystemCoreClock will contain the MSI_VALUE(*)
+ 229:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *
+ 230:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *           - If SYSCLK source is HSI, SystemCoreClock will contain the HSI_VALUE(**)
+ 231:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *
+ 232:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *           - If SYSCLK source is HSE, SystemCoreClock will contain the HSE_VALUE(***)
+ 233:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *
+ 234:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *           - If SYSCLK source is PLL, SystemCoreClock will contain the HSE_VALUE(***)
+ 235:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *             or HSI_VALUE(*) or MSI_VALUE(*) multiplied/divided by the PLL factors.
+ 236:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *
+ 237:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *         (*) MSI_VALUE is a constant defined in stm32l4xx_hal.h file (default value
+ 238:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *             4 MHz) but the real value may vary depending on the variations
+ 239:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *             in voltage and temperature.
+ 240:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *
+ 241:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *         (**) HSI_VALUE is a constant defined in stm32l4xx_hal.h file (default value
+ 242:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *              16 MHz) but the real value may vary depending on the variations
+ 243:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *              in voltage and temperature.
+ 244:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *
+ 245:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *         (***) HSE_VALUE is a constant defined in stm32l4xx_hal.h file (default value
+ 246:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *              8 MHz), user has to ensure that HSE_VALUE is same as the real
+ 247:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *              frequency of the crystal used. Otherwise, this function may
+ 248:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *              have wrong result.
+ 249:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *
+ 250:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *         - The result of this function could be not correct when using fractional
+ 251:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *           value for HSE crystal.
+ 252:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   *
+ARM GAS  /tmp/ccrLf4Sg.s 			page 8
+
+
+ 253:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @param  None
+ 254:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   * @retval None
+ 255:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   */
+ 256:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** void SystemCoreClockUpdate(void)
+ 257:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** {
+ 155              		.loc 1 257 1
+ 156              		.cfi_startproc
+ 157              		@ args = 0, pretend = 0, frame = 24
+ 158              		@ frame_needed = 1, uses_anonymous_args = 0
+ 159              		@ link register save eliminated.
+ 160 0000 80B4     		push	{r7}
+ 161              	.LCFI4:
+ 162              		.cfi_def_cfa_offset 4
+ 163              		.cfi_offset 7, -4
+ 164 0002 87B0     		sub	sp, sp, #28
+ 165              	.LCFI5:
+ 166              		.cfi_def_cfa_offset 32
+ 167 0004 00AF     		add	r7, sp, #0
+ 168              	.LCFI6:
+ 169              		.cfi_def_cfa_register 7
+ 258:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   uint32_t tmp = 0U, msirange = 0U, pllvco = 0U, pllr = 2U, pllsource = 0U, pllm = 2U;
+ 170              		.loc 1 258 12
+ 171 0006 0023     		movs	r3, #0
+ 172 0008 FB60     		str	r3, [r7, #12]
+ 173              		.loc 1 258 22
+ 174 000a 0023     		movs	r3, #0
+ 175 000c 7B61     		str	r3, [r7, #20]
+ 176              		.loc 1 258 37
+ 177 000e 0023     		movs	r3, #0
+ 178 0010 3B61     		str	r3, [r7, #16]
+ 179              		.loc 1 258 50
+ 180 0012 0223     		movs	r3, #2
+ 181 0014 BB60     		str	r3, [r7, #8]
+ 182              		.loc 1 258 61
+ 183 0016 0023     		movs	r3, #0
+ 184 0018 7B60     		str	r3, [r7, #4]
+ 185              		.loc 1 258 77
+ 186 001a 0223     		movs	r3, #2
+ 187 001c 3B60     		str	r3, [r7]
+ 259:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 260:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   /* Get MSI Range frequency--------------------------------------------------*/
+ 261:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   if((RCC->CR & RCC_CR_MSIRGSEL) == RESET)
+ 188              		.loc 1 261 10
+ 189 001e 4F4B     		ldr	r3, .L19
+ 190 0020 1B68     		ldr	r3, [r3]
+ 191              		.loc 1 261 15
+ 192 0022 03F00803 		and	r3, r3, #8
+ 193              		.loc 1 261 5
+ 194 0026 002B     		cmp	r3, #0
+ 195 0028 07D1     		bne	.L5
+ 262:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   { /* MSISRANGE from RCC_CSR applies */
+ 263:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****     msirange = (RCC->CSR & RCC_CSR_MSISRANGE) >> 8U;
+ 196              		.loc 1 263 20
+ 197 002a 4C4B     		ldr	r3, .L19
+ 198 002c D3F89430 		ldr	r3, [r3, #148]
+ 199              		.loc 1 263 47
+ 200 0030 1B0A     		lsrs	r3, r3, #8
+ARM GAS  /tmp/ccrLf4Sg.s 			page 9
+
+
+ 201              		.loc 1 263 14
+ 202 0032 03F00F03 		and	r3, r3, #15
+ 203 0036 7B61     		str	r3, [r7, #20]
+ 204 0038 05E0     		b	.L6
+ 205              	.L5:
+ 264:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   }
+ 265:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   else
+ 266:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   { /* MSIRANGE from RCC_CR applies */
+ 267:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****     msirange = (RCC->CR & RCC_CR_MSIRANGE) >> 4U;
+ 206              		.loc 1 267 20
+ 207 003a 484B     		ldr	r3, .L19
+ 208 003c 1B68     		ldr	r3, [r3]
+ 209              		.loc 1 267 44
+ 210 003e 1B09     		lsrs	r3, r3, #4
+ 211              		.loc 1 267 14
+ 212 0040 03F00F03 		and	r3, r3, #15
+ 213 0044 7B61     		str	r3, [r7, #20]
+ 214              	.L6:
+ 268:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   }
+ 269:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   /*MSI frequency range in HZ*/
+ 270:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   msirange = MSIRangeTable[msirange];
+ 215              		.loc 1 270 12
+ 216 0046 464A     		ldr	r2, .L19+4
+ 217 0048 7B69     		ldr	r3, [r7, #20]
+ 218 004a 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 219 004e 7B61     		str	r3, [r7, #20]
+ 271:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 272:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   /* Get SYSCLK source -------------------------------------------------------*/
+ 273:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   switch (RCC->CFGR & RCC_CFGR_SWS)
+ 220              		.loc 1 273 14
+ 221 0050 424B     		ldr	r3, .L19
+ 222 0052 9B68     		ldr	r3, [r3, #8]
+ 223              		.loc 1 273 21
+ 224 0054 03F00C03 		and	r3, r3, #12
+ 225 0058 0C2B     		cmp	r3, #12
+ 226 005a 66D8     		bhi	.L7
+ 227 005c 01A2     		adr	r2, .L9
+ 228 005e 52F823F0 		ldr	pc, [r2, r3, lsl #2]
+ 229 0062 00BF     		.p2align 2
+ 230              	.L9:
+ 231 0064 99000000 		.word	.L12+1
+ 232 0068 2B010000 		.word	.L7+1
+ 233 006c 2B010000 		.word	.L7+1
+ 234 0070 2B010000 		.word	.L7+1
+ 235 0074 A1000000 		.word	.L11+1
+ 236 0078 2B010000 		.word	.L7+1
+ 237 007c 2B010000 		.word	.L7+1
+ 238 0080 2B010000 		.word	.L7+1
+ 239 0084 A9000000 		.word	.L10+1
+ 240 0088 2B010000 		.word	.L7+1
+ 241 008c 2B010000 		.word	.L7+1
+ 242 0090 2B010000 		.word	.L7+1
+ 243 0094 B1000000 		.word	.L8+1
+ 244              		.p2align 1
+ 245              	.L12:
+ 274:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   {
+ 275:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****     case 0x00:  /* MSI used as system clock source */
+ARM GAS  /tmp/ccrLf4Sg.s 			page 10
+
+
+ 276:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****       SystemCoreClock = msirange;
+ 246              		.loc 1 276 23
+ 247 0098 324A     		ldr	r2, .L19+8
+ 248 009a 7B69     		ldr	r3, [r7, #20]
+ 249 009c 1360     		str	r3, [r2]
+ 277:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****       break;
+ 250              		.loc 1 277 7
+ 251 009e 48E0     		b	.L13
+ 252              	.L11:
+ 278:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 279:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****     case 0x04:  /* HSI used as system clock source */
+ 280:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****       SystemCoreClock = HSI_VALUE;
+ 253              		.loc 1 280 23
+ 254 00a0 304B     		ldr	r3, .L19+8
+ 255 00a2 314A     		ldr	r2, .L19+12
+ 256 00a4 1A60     		str	r2, [r3]
+ 281:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****       break;
+ 257              		.loc 1 281 7
+ 258 00a6 44E0     		b	.L13
+ 259              	.L10:
+ 282:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 283:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****     case 0x08:  /* HSE used as system clock source */
+ 284:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****       SystemCoreClock = HSE_VALUE;
+ 260              		.loc 1 284 23
+ 261 00a8 2E4B     		ldr	r3, .L19+8
+ 262 00aa 304A     		ldr	r2, .L19+16
+ 263 00ac 1A60     		str	r2, [r3]
+ 285:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****       break;
+ 264              		.loc 1 285 7
+ 265 00ae 40E0     		b	.L13
+ 266              	.L8:
+ 286:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 287:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****     case 0x0C:  /* PLL used as system clock  source */
+ 288:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****       /* PLL_VCO = (HSE_VALUE or HSI_VALUE or MSI_VALUE/ PLLM) * PLLN
+ 289:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****          SYSCLK = PLL_VCO / PLLR
+ 290:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****          */
+ 291:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****       pllsource = (RCC->PLLCFGR & RCC_PLLCFGR_PLLSRC);
+ 267              		.loc 1 291 23
+ 268 00b0 2A4B     		ldr	r3, .L19
+ 269 00b2 DB68     		ldr	r3, [r3, #12]
+ 270              		.loc 1 291 17
+ 271 00b4 03F00303 		and	r3, r3, #3
+ 272 00b8 7B60     		str	r3, [r7, #4]
+ 292:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****       pllm = ((RCC->PLLCFGR & RCC_PLLCFGR_PLLM) >> 4U) + 1U ;
+ 273              		.loc 1 292 19
+ 274 00ba 284B     		ldr	r3, .L19
+ 275 00bc DB68     		ldr	r3, [r3, #12]
+ 276              		.loc 1 292 49
+ 277 00be 1B09     		lsrs	r3, r3, #4
+ 278 00c0 03F00703 		and	r3, r3, #7
+ 279              		.loc 1 292 12
+ 280 00c4 0133     		adds	r3, r3, #1
+ 281 00c6 3B60     		str	r3, [r7]
+ 282 00c8 7B68     		ldr	r3, [r7, #4]
+ 283 00ca 022B     		cmp	r3, #2
+ 284 00cc 03D0     		beq	.L14
+ 285 00ce 7B68     		ldr	r3, [r7, #4]
+ARM GAS  /tmp/ccrLf4Sg.s 			page 11
+
+
+ 286 00d0 032B     		cmp	r3, #3
+ 287 00d2 06D0     		beq	.L15
+ 288 00d4 0BE0     		b	.L18
+ 289              	.L14:
+ 293:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 294:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****       switch (pllsource)
+ 295:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****       {
+ 296:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****         case 0x02:  /* HSI used as PLL clock source */
+ 297:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****           pllvco = (HSI_VALUE / pllm);
+ 290              		.loc 1 297 18
+ 291 00d6 244A     		ldr	r2, .L19+12
+ 292 00d8 3B68     		ldr	r3, [r7]
+ 293 00da B2FBF3F3 		udiv	r3, r2, r3
+ 294 00de 3B61     		str	r3, [r7, #16]
+ 298:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****           break;
+ 295              		.loc 1 298 11
+ 296 00e0 0BE0     		b	.L17
+ 297              	.L15:
+ 299:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 300:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****         case 0x03:  /* HSE used as PLL clock source */
+ 301:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****           pllvco = (HSE_VALUE / pllm);
+ 298              		.loc 1 301 18
+ 299 00e2 224A     		ldr	r2, .L19+16
+ 300 00e4 3B68     		ldr	r3, [r7]
+ 301 00e6 B2FBF3F3 		udiv	r3, r2, r3
+ 302 00ea 3B61     		str	r3, [r7, #16]
+ 302:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****           break;
+ 303              		.loc 1 302 11
+ 304 00ec 05E0     		b	.L17
+ 305              	.L18:
+ 303:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 304:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****         default:    /* MSI used as PLL clock source */
+ 305:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****           pllvco = (msirange / pllm);
+ 306              		.loc 1 305 18
+ 307 00ee 7A69     		ldr	r2, [r7, #20]
+ 308 00f0 3B68     		ldr	r3, [r7]
+ 309 00f2 B2FBF3F3 		udiv	r3, r2, r3
+ 310 00f6 3B61     		str	r3, [r7, #16]
+ 306:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****           break;
+ 311              		.loc 1 306 11
+ 312 00f8 00BF     		nop
+ 313              	.L17:
+ 307:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****       }
+ 308:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****       pllvco = pllvco * ((RCC->PLLCFGR & RCC_PLLCFGR_PLLN) >> 8U);
+ 314              		.loc 1 308 30
+ 315 00fa 184B     		ldr	r3, .L19
+ 316 00fc DB68     		ldr	r3, [r3, #12]
+ 317              		.loc 1 308 60
+ 318 00fe 1B0A     		lsrs	r3, r3, #8
+ 319 0100 03F07F02 		and	r2, r3, #127
+ 320              		.loc 1 308 14
+ 321 0104 3B69     		ldr	r3, [r7, #16]
+ 322 0106 02FB03F3 		mul	r3, r2, r3
+ 323 010a 3B61     		str	r3, [r7, #16]
+ 309:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****       pllr = (((RCC->PLLCFGR & RCC_PLLCFGR_PLLR) >> 25U) + 1U) * 2U;
+ 324              		.loc 1 309 20
+ 325 010c 134B     		ldr	r3, .L19
+ARM GAS  /tmp/ccrLf4Sg.s 			page 12
+
+
+ 326 010e DB68     		ldr	r3, [r3, #12]
+ 327              		.loc 1 309 50
+ 328 0110 5B0E     		lsrs	r3, r3, #25
+ 329 0112 03F00303 		and	r3, r3, #3
+ 330              		.loc 1 309 58
+ 331 0116 0133     		adds	r3, r3, #1
+ 332              		.loc 1 309 12
+ 333 0118 5B00     		lsls	r3, r3, #1
+ 334 011a BB60     		str	r3, [r7, #8]
+ 310:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****       SystemCoreClock = pllvco/pllr;
+ 335              		.loc 1 310 31
+ 336 011c 3A69     		ldr	r2, [r7, #16]
+ 337 011e BB68     		ldr	r3, [r7, #8]
+ 338 0120 B2FBF3F3 		udiv	r3, r2, r3
+ 339              		.loc 1 310 23
+ 340 0124 0F4A     		ldr	r2, .L19+8
+ 341 0126 1360     		str	r3, [r2]
+ 311:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****       break;
+ 342              		.loc 1 311 7
+ 343 0128 03E0     		b	.L13
+ 344              	.L7:
+ 312:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** 
+ 313:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****     default:
+ 314:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****       SystemCoreClock = msirange;
+ 345              		.loc 1 314 23
+ 346 012a 0E4A     		ldr	r2, .L19+8
+ 347 012c 7B69     		ldr	r3, [r7, #20]
+ 348 012e 1360     		str	r3, [r2]
+ 315:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****       break;
+ 349              		.loc 1 315 7
+ 350 0130 00BF     		nop
+ 351              	.L13:
+ 316:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   }
+ 317:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   /* Compute HCLK clock frequency --------------------------------------------*/
+ 318:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   /* Get HCLK prescaler */
+ 319:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   tmp = AHBPrescTable[((RCC->CFGR & RCC_CFGR_HPRE) >> 4U)];
+ 352              		.loc 1 319 28
+ 353 0132 0A4B     		ldr	r3, .L19
+ 354 0134 9B68     		ldr	r3, [r3, #8]
+ 355              		.loc 1 319 52
+ 356 0136 1B09     		lsrs	r3, r3, #4
+ 357 0138 03F00F03 		and	r3, r3, #15
+ 358              		.loc 1 319 22
+ 359 013c 0C4A     		ldr	r2, .L19+20
+ 360 013e D35C     		ldrb	r3, [r2, r3]	@ zero_extendqisi2
+ 361              		.loc 1 319 7
+ 362 0140 FB60     		str	r3, [r7, #12]
+ 320:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   /* HCLK clock frequency */
+ 321:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c ****   SystemCoreClock >>= tmp;
+ 363              		.loc 1 321 19
+ 364 0142 084B     		ldr	r3, .L19+8
+ 365 0144 1A68     		ldr	r2, [r3]
+ 366 0146 FB68     		ldr	r3, [r7, #12]
+ 367 0148 22FA03F3 		lsr	r3, r2, r3
+ 368 014c 054A     		ldr	r2, .L19+8
+ 369 014e 1360     		str	r3, [r2]
+ 322:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/system_stm32l4xx.c **** }
+ARM GAS  /tmp/ccrLf4Sg.s 			page 13
+
+
+ 370              		.loc 1 322 1
+ 371 0150 00BF     		nop
+ 372 0152 1C37     		adds	r7, r7, #28
+ 373              	.LCFI7:
+ 374              		.cfi_def_cfa_offset 4
+ 375 0154 BD46     		mov	sp, r7
+ 376              	.LCFI8:
+ 377              		.cfi_def_cfa_register 13
+ 378              		@ sp needed
+ 379 0156 5DF8047B 		ldr	r7, [sp], #4
+ 380              	.LCFI9:
+ 381              		.cfi_restore 7
+ 382              		.cfi_def_cfa_offset 0
+ 383 015a 7047     		bx	lr
+ 384              	.L20:
+ 385              		.align	2
+ 386              	.L19:
+ 387 015c 00100240 		.word	1073876992
+ 388 0160 00000000 		.word	MSIRangeTable
+ 389 0164 00000000 		.word	SystemCoreClock
+ 390 0168 0024F400 		.word	16000000
+ 391 016c 00127A00 		.word	8000000
+ 392 0170 00000000 		.word	AHBPrescTable
+ 393              		.cfi_endproc
+ 394              	.LFE127:
+ 396              		.text
+ 397              	.Letext0:
+ 398              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 399              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 400              		.file 4 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 401              		.file 5 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/system_stm32l4xx.h"
+ 402              		.file 6 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/stm32l476xx.h"
+ 403              		.file 7 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 404              		.file 8 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 405              		.file 9 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 406              		.file 10 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/re
+ 407              		.file 11 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/stm32l4xx.h"
+ARM GAS  /tmp/ccrLf4Sg.s 			page 14
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 system_stm32l4xx.c
+     /tmp/ccrLf4Sg.s:22     .data.SystemCoreClock:0000000000000000 SystemCoreClock
+     /tmp/ccrLf4Sg.s:19     .data.SystemCoreClock:0000000000000000 $d
+     /tmp/ccrLf4Sg.s:29     .rodata.AHBPrescTable:0000000000000000 AHBPrescTable
+     /tmp/ccrLf4Sg.s:26     .rodata.AHBPrescTable:0000000000000000 $d
+     /tmp/ccrLf4Sg.s:37     .rodata.APBPrescTable:0000000000000000 APBPrescTable
+     /tmp/ccrLf4Sg.s:34     .rodata.APBPrescTable:0000000000000000 $d
+     /tmp/ccrLf4Sg.s:44     .rodata.MSIRangeTable:0000000000000000 MSIRangeTable
+     /tmp/ccrLf4Sg.s:41     .rodata.MSIRangeTable:0000000000000000 $d
+     /tmp/ccrLf4Sg.s:58     .text.SystemInit:0000000000000000 $t
+     /tmp/ccrLf4Sg.s:66     .text.SystemInit:0000000000000000 SystemInit
+     /tmp/ccrLf4Sg.s:140    .text.SystemInit:0000000000000064 $d
+     /tmp/ccrLf4Sg.s:146    .text.SystemCoreClockUpdate:0000000000000000 $t
+     /tmp/ccrLf4Sg.s:153    .text.SystemCoreClockUpdate:0000000000000000 SystemCoreClockUpdate
+     /tmp/ccrLf4Sg.s:231    .text.SystemCoreClockUpdate:0000000000000064 $d
+     /tmp/ccrLf4Sg.s:244    .text.SystemCoreClockUpdate:0000000000000098 $t
+     /tmp/ccrLf4Sg.s:387    .text.SystemCoreClockUpdate:000000000000015c $d
+
+NO UNDEFINED SYMBOLS

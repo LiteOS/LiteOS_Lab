@@ -1,0 +1,1615 @@
+ARM GAS  /tmp/ccDJQuWl.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stm32l4xx_hal_uart_ex.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.HAL_RS485Ex_Init,"ax",%progbits
+  18              		.align	1
+  19              		.global	HAL_RS485Ex_Init
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	HAL_RS485Ex_Init:
+  27              	.LFB126:
+  28              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4
+   1:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /**
+   2:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   ******************************************************************************
+   3:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @file    stm32l4xx_hal_uart_ex.c
+   4:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @author  MCD Application Team
+   5:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @brief   Extended UART HAL module driver.
+   6:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *          This file provides firmware functions to manage the following extended
+   7:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *          functionalities of the Universal Asynchronous Receiver Transmitter Peripheral (UART).
+   8:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *           + Initialization and de-initialization functions
+   9:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *           + Peripheral Control functions
+  10:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *
+  11:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *
+  12:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   @verbatim
+  13:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   ==============================================================================
+  14:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****                ##### UART peripheral extended features  #####
+  15:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   ==============================================================================
+  16:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+  17:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     (#) Declare a UART_HandleTypeDef handle structure.
+  18:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+  19:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     (#) For the UART RS485 Driver Enable mode, initialize the UART registers
+  20:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****         by calling the HAL_RS485Ex_Init() API.
+  21:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+  22:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     (#) FIFO mode enabling/disabling and RX/TX FIFO threshold programming.
+  23:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+  24:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****         -@- When USART operates in FIFO mode, FIFO mode must be enabled prior 
+  25:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****             starting RX/TX transfers. Also RX/TX FIFO thresholds must be 
+  26:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****             configured prior starting RX/TX transfers.
+  27:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+  28:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     (#) Slave mode enabling/disabling and NSS pin configuration.
+  29:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+  30:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****         -@- When USART operates in Slave mode, Slave mode must be enabled prior 
+ARM GAS  /tmp/ccDJQuWl.s 			page 2
+
+
+  31:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****             starting RX/TX transfers.
+  32:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+  33:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   @endverbatim
+  34:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   ******************************************************************************
+  35:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @attention
+  36:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *
+  37:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  38:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *
+  39:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  40:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * are permitted provided that the following conditions are met:
+  41:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  42:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *      this list of conditions and the following disclaimer.
+  43:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  44:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *      this list of conditions and the following disclaimer in the documentation
+  45:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *      and/or other materials provided with the distribution.
+  46:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  47:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *      may be used to endorse or promote products derived from this software
+  48:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *      without specific prior written permission.
+  49:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *
+  50:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  51:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  52:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  53:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  54:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  55:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  56:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  57:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  58:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  59:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  60:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *
+  61:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   ******************************************************************************
+  62:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+  63:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+  64:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /* Includes ------------------------------------------------------------------*/
+  65:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** #include "stm32l4xx_hal.h"
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+  67:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /** @addtogroup STM32L4xx_HAL_Driver
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @{
+  69:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+  70:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+  71:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /** @defgroup UARTEx UARTEx
+  72:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @brief UART Extended HAL module driver
+  73:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @{
+  74:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+  75:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+  76:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** #ifdef HAL_UART_MODULE_ENABLED
+  77:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+  78:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /* Private typedef -----------------------------------------------------------*/
+  79:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /* Private define ------------------------------------------------------------*/
+  80:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /* Private macros ------------------------------------------------------------*/
+  81:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /* Private variables ---------------------------------------------------------*/
+  82:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /* Private function prototypes -----------------------------------------------*/
+  83:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /** @defgroup UARTEx_Private_Functions UARTEx Private Functions
+  84:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @{
+  85:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+  86:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** static void UARTEx_Wakeup_AddressConfig(UART_HandleTypeDef *huart, UART_WakeUpTypeDef WakeUpSelecti
+  87:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** #if defined(USART_CR1_FIFOEN)
+ARM GAS  /tmp/ccDJQuWl.s 			page 3
+
+
+  88:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** static void UARTEx_SetNbDataToProcess(UART_HandleTypeDef *huart);
+  89:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** #endif
+  90:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /**
+  91:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @}
+  92:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+  93:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+  94:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /* Exported functions --------------------------------------------------------*/
+  95:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+  96:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /** @defgroup UARTEx_Exported_Functions  UARTEx Exported Functions
+  97:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @{
+  98:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+  99:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 100:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /** @defgroup UARTEx_Exported_Functions_Group1 Initialization and de-initialization functions
+ 101:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @brief    Extended Initialization and Configuration Functions
+ 102:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *
+ 103:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** @verbatim
+ 104:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** ===============================================================================
+ 105:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****             ##### Initialization and Configuration functions #####
+ 106:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****  ===============================================================================
+ 107:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     [..]
+ 108:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     This subsection provides a set of functions allowing to initialize the USARTx or the UARTy
+ 109:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     in asynchronous mode.
+ 110:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****       (+) For the asynchronous mode the parameters below can be configured:
+ 111:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****         (++) Baud Rate
+ 112:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****         (++) Word Length
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****         (++) Stop Bit
+ 114:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****         (++) Parity: If the parity is enabled, then the MSB bit of the data written
+ 115:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****              in the data register is transmitted but is changed by the parity bit.
+ 116:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****         (++) Hardware flow control
+ 117:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****         (++) Receiver/transmitter modes
+ 118:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****         (++) Over Sampling Method
+ 119:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****         (++) One-Bit Sampling Method
+ 120:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****       (+) For the asynchronous mode, the following advanced features can be configured as well:
+ 121:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****         (++) TX and/or RX pin level inversion
+ 122:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****         (++) data logical level inversion
+ 123:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****         (++) RX and TX pins swap
+ 124:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****         (++) RX overrun detection disabling
+ 125:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****         (++) DMA disabling on RX error
+ 126:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****         (++) MSB first on communication line
+ 127:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****         (++) auto Baud rate detection
+ 128:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     [..]
+ 129:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     The HAL_RS485Ex_Init() API follows the UART RS485 mode configuration
+ 130:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****      procedures (details for the procedures are available in reference manual).
+ 131:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 132:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** @endverbatim
+ 133:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 134:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   Depending on the frame length defined by the M1 and M0 bits (7-bit, 
+ 135:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   8-bit or 9-bit), the possible UART formats are listed in the 
+ 136:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   following table.
+ 137:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 138:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     Table 1. UART frame format.
+ 139:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     +-----------------------------------------------------------------------+
+ 140:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     |  M1 bit |  M0 bit |  PCE bit  |             UART frame                |
+ 141:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     |---------|---------|-----------|---------------------------------------|
+ 142:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     |    0    |    0    |    0      |    | SB |    8 bit data   | STB |     |
+ 143:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     |---------|---------|-----------|---------------------------------------|
+ 144:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     |    0    |    0    |    1      |    | SB | 7 bit data | PB | STB |     |
+ARM GAS  /tmp/ccDJQuWl.s 			page 4
+
+
+ 145:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     |---------|---------|-----------|---------------------------------------|
+ 146:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     |    0    |    1    |    0      |    | SB |    9 bit data   | STB |     |
+ 147:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     |---------|---------|-----------|---------------------------------------|
+ 148:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     |    0    |    1    |    1      |    | SB | 8 bit data | PB | STB |     |
+ 149:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     |---------|---------|-----------|---------------------------------------|
+ 150:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     |    1    |    0    |    0      |    | SB |    7 bit data   | STB |     |
+ 151:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     |---------|---------|-----------|---------------------------------------|
+ 152:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     |    1    |    0    |    1      |    | SB | 6 bit data | PB | STB |     |
+ 153:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     +-----------------------------------------------------------------------+
+ 154:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 155:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @{
+ 156:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 157:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 158:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /**
+ 159:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @brief Initialize the RS485 Driver enable feature according to the specified
+ 160:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *         parameters in the UART_InitTypeDef and creates the associated handle.
+ 161:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param huart            UART handle.
+ 162:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param Polarity         Select the driver enable polarity.
+ 163:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *          This parameter can be one of the following values:
+ 164:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *          @arg @ref UART_DE_POLARITY_HIGH DE signal is active high
+ 165:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *          @arg @ref UART_DE_POLARITY_LOW  DE signal is active low
+ 166:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param AssertionTime    Driver Enable assertion time:
+ 167:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *       5-bit value defining the time between the activation of the DE (Driver Enable)
+ 168:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *       signal and the beginning of the start bit. It is expressed in sample time
+ 169:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *       units (1/8 or 1/16 bit time, depending on the oversampling rate)
+ 170:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param DeassertionTime  Driver Enable deassertion time:
+ 171:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *       5-bit value defining the time between the end of the last stop bit, in a
+ 172:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *       transmitted message, and the de-activation of the DE (Driver Enable) signal.
+ 173:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *       It is expressed in sample time units (1/8 or 1/16 bit time, depending on the
+ 174:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *       oversampling rate).
+ 175:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @retval HAL status
+ 176:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 177:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** HAL_StatusTypeDef HAL_RS485Ex_Init(UART_HandleTypeDef *huart, uint32_t Polarity, uint32_t Assertion
+ 178:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** {
+  29              		.loc 1 178 1
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 24
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33 0000 80B5     		push	{r7, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 7, -8
+  37              		.cfi_offset 14, -4
+  38 0002 86B0     		sub	sp, sp, #24
+  39              	.LCFI1:
+  40              		.cfi_def_cfa_offset 32
+  41 0004 00AF     		add	r7, sp, #0
+  42              	.LCFI2:
+  43              		.cfi_def_cfa_register 7
+  44 0006 F860     		str	r0, [r7, #12]
+  45 0008 B960     		str	r1, [r7, #8]
+  46 000a 7A60     		str	r2, [r7, #4]
+  47 000c 3B60     		str	r3, [r7]
+ 179:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   uint32_t temp = 0x0;
+  48              		.loc 1 179 12
+  49 000e 0023     		movs	r3, #0
+  50 0010 7B61     		str	r3, [r7, #20]
+ARM GAS  /tmp/ccDJQuWl.s 			page 5
+
+
+ 180:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 181:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Check the UART handle allocation */
+ 182:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   if(huart == NULL)
+  51              		.loc 1 182 5
+  52 0012 FB68     		ldr	r3, [r7, #12]
+  53 0014 002B     		cmp	r3, #0
+  54 0016 01D1     		bne	.L2
+ 183:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   {
+ 184:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     return HAL_ERROR;
+  55              		.loc 1 184 12
+  56 0018 0123     		movs	r3, #1
+  57 001a 59E0     		b	.L3
+  58              	.L2:
+ 185:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   }
+ 186:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Check the Driver Enable UART instance */
+ 187:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   assert_param(IS_UART_DRIVER_ENABLE_INSTANCE(huart->Instance));
+ 188:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 189:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Check the Driver Enable polarity */
+ 190:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   assert_param(IS_UART_DE_POLARITY(Polarity));
+ 191:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 192:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Check the Driver Enable assertion time */
+ 193:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   assert_param(IS_UART_ASSERTIONTIME(AssertionTime));
+ 194:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 195:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Check the Driver Enable deassertion time */
+ 196:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   assert_param(IS_UART_DEASSERTIONTIME(DeassertionTime));
+ 197:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 198:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   if(huart->gState == HAL_UART_STATE_RESET)
+  59              		.loc 1 198 11
+  60 001c FB68     		ldr	r3, [r7, #12]
+  61 001e 93F87130 		ldrb	r3, [r3, #113]
+  62 0022 DBB2     		uxtb	r3, r3
+  63              		.loc 1 198 5
+  64 0024 002B     		cmp	r3, #0
+  65 0026 06D1     		bne	.L4
+ 199:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   {
+ 200:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     /* Allocate lock resource and initialize it */
+ 201:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     huart->Lock = HAL_UNLOCKED;
+  66              		.loc 1 201 17
+  67 0028 FB68     		ldr	r3, [r7, #12]
+  68 002a 0022     		movs	r2, #0
+  69 002c 83F87020 		strb	r2, [r3, #112]
+ 202:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     
+ 203:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     /* Init the low level hardware : GPIO, CLOCK, CORTEX */
+ 204:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     HAL_UART_MspInit(huart);
+  70              		.loc 1 204 5
+  71 0030 F868     		ldr	r0, [r7, #12]
+  72 0032 FFF7FEFF 		bl	HAL_UART_MspInit
+  73              	.L4:
+ 205:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   }
+ 206:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 207:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->gState = HAL_UART_STATE_BUSY;
+  74              		.loc 1 207 17
+  75 0036 FB68     		ldr	r3, [r7, #12]
+  76 0038 2422     		movs	r2, #36
+  77 003a 83F87120 		strb	r2, [r3, #113]
+ 208:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 209:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Disable the Peripheral */
+ARM GAS  /tmp/ccDJQuWl.s 			page 6
+
+
+ 210:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UART_DISABLE(huart);
+  78              		.loc 1 210 3
+  79 003e FB68     		ldr	r3, [r7, #12]
+  80 0040 1B68     		ldr	r3, [r3]
+  81 0042 1A68     		ldr	r2, [r3]
+  82 0044 FB68     		ldr	r3, [r7, #12]
+  83 0046 1B68     		ldr	r3, [r3]
+  84 0048 22F00102 		bic	r2, r2, #1
+  85 004c 1A60     		str	r2, [r3]
+ 211:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 212:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Set the UART Communication parameters */
+ 213:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   if (UART_SetConfig(huart) == HAL_ERROR)
+  86              		.loc 1 213 7
+  87 004e F868     		ldr	r0, [r7, #12]
+  88 0050 FFF7FEFF 		bl	UART_SetConfig
+  89 0054 0346     		mov	r3, r0
+  90              		.loc 1 213 6
+  91 0056 012B     		cmp	r3, #1
+  92 0058 01D1     		bne	.L5
+ 214:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   {
+ 215:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     return HAL_ERROR;
+  93              		.loc 1 215 12
+  94 005a 0123     		movs	r3, #1
+  95 005c 38E0     		b	.L3
+  96              	.L5:
+ 216:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   }
+ 217:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 218:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   if(huart->AdvancedInit.AdvFeatureInit != UART_ADVFEATURE_NO_INIT)
+  97              		.loc 1 218 25
+  98 005e FB68     		ldr	r3, [r7, #12]
+  99 0060 5B6A     		ldr	r3, [r3, #36]
+ 100              		.loc 1 218 5
+ 101 0062 002B     		cmp	r3, #0
+ 102 0064 02D0     		beq	.L6
+ 219:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   {
+ 220:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     UART_AdvFeatureConfig(huart);
+ 103              		.loc 1 220 5
+ 104 0066 F868     		ldr	r0, [r7, #12]
+ 105 0068 FFF7FEFF 		bl	UART_AdvFeatureConfig
+ 106              	.L6:
+ 221:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   }
+ 222:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 223:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Enable the Driver Enable mode by setting the DEM bit in the CR3 register */
+ 224:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   SET_BIT(huart->Instance->CR3, USART_CR3_DEM);
+ 107              		.loc 1 224 3
+ 108 006c FB68     		ldr	r3, [r7, #12]
+ 109 006e 1B68     		ldr	r3, [r3]
+ 110 0070 9A68     		ldr	r2, [r3, #8]
+ 111 0072 FB68     		ldr	r3, [r7, #12]
+ 112 0074 1B68     		ldr	r3, [r3]
+ 113 0076 42F48042 		orr	r2, r2, #16384
+ 114 007a 9A60     		str	r2, [r3, #8]
+ 225:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 226:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Set the Driver Enable polarity */
+ 227:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   MODIFY_REG(huart->Instance->CR3, USART_CR3_DEP, Polarity);
+ 115              		.loc 1 227 3
+ 116 007c FB68     		ldr	r3, [r7, #12]
+ARM GAS  /tmp/ccDJQuWl.s 			page 7
+
+
+ 117 007e 1B68     		ldr	r3, [r3]
+ 118 0080 9B68     		ldr	r3, [r3, #8]
+ 119 0082 23F40041 		bic	r1, r3, #32768
+ 120 0086 FB68     		ldr	r3, [r7, #12]
+ 121 0088 1B68     		ldr	r3, [r3]
+ 122 008a BA68     		ldr	r2, [r7, #8]
+ 123 008c 0A43     		orrs	r2, r2, r1
+ 124 008e 9A60     		str	r2, [r3, #8]
+ 228:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 229:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Set the Driver Enable assertion and deassertion times */
+ 230:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   temp = (AssertionTime << UART_CR1_DEAT_ADDRESS_LSB_POS);
+ 125              		.loc 1 230 8
+ 126 0090 7B68     		ldr	r3, [r7, #4]
+ 127 0092 5B05     		lsls	r3, r3, #21
+ 128 0094 7B61     		str	r3, [r7, #20]
+ 231:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   temp |= (DeassertionTime << UART_CR1_DEDT_ADDRESS_LSB_POS);
+ 129              		.loc 1 231 28
+ 130 0096 3B68     		ldr	r3, [r7]
+ 131 0098 1B04     		lsls	r3, r3, #16
+ 132              		.loc 1 231 8
+ 133 009a 7A69     		ldr	r2, [r7, #20]
+ 134 009c 1343     		orrs	r3, r3, r2
+ 135 009e 7B61     		str	r3, [r7, #20]
+ 232:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   MODIFY_REG(huart->Instance->CR1, (USART_CR1_DEDT|USART_CR1_DEAT), temp);
+ 136              		.loc 1 232 3
+ 137 00a0 FB68     		ldr	r3, [r7, #12]
+ 138 00a2 1B68     		ldr	r3, [r3]
+ 139 00a4 1B68     		ldr	r3, [r3]
+ 140 00a6 23F07F73 		bic	r3, r3, #66846720
+ 141 00aa 23F44033 		bic	r3, r3, #196608
+ 142 00ae FA68     		ldr	r2, [r7, #12]
+ 143 00b0 1268     		ldr	r2, [r2]
+ 144 00b2 7969     		ldr	r1, [r7, #20]
+ 145 00b4 0B43     		orrs	r3, r3, r1
+ 146 00b6 1360     		str	r3, [r2]
+ 233:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 234:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Enable the Peripheral */
+ 235:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UART_ENABLE(huart);
+ 147              		.loc 1 235 3
+ 148 00b8 FB68     		ldr	r3, [r7, #12]
+ 149 00ba 1B68     		ldr	r3, [r3]
+ 150 00bc 1A68     		ldr	r2, [r3]
+ 151 00be FB68     		ldr	r3, [r7, #12]
+ 152 00c0 1B68     		ldr	r3, [r3]
+ 153 00c2 42F00102 		orr	r2, r2, #1
+ 154 00c6 1A60     		str	r2, [r3]
+ 236:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 237:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* TEACK and/or REACK to check before moving huart->gState and huart->RxState to Ready */
+ 238:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   return (UART_CheckIdleState(huart));
+ 155              		.loc 1 238 11
+ 156 00c8 F868     		ldr	r0, [r7, #12]
+ 157 00ca FFF7FEFF 		bl	UART_CheckIdleState
+ 158 00ce 0346     		mov	r3, r0
+ 159              	.L3:
+ 239:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** }
+ 160              		.loc 1 239 1
+ 161 00d0 1846     		mov	r0, r3
+ARM GAS  /tmp/ccDJQuWl.s 			page 8
+
+
+ 162 00d2 1837     		adds	r7, r7, #24
+ 163              	.LCFI3:
+ 164              		.cfi_def_cfa_offset 8
+ 165 00d4 BD46     		mov	sp, r7
+ 166              	.LCFI4:
+ 167              		.cfi_def_cfa_register 13
+ 168              		@ sp needed
+ 169 00d6 80BD     		pop	{r7, pc}
+ 170              		.cfi_endproc
+ 171              	.LFE126:
+ 173              		.section	.text.HAL_UARTEx_WakeupCallback,"ax",%progbits
+ 174              		.align	1
+ 175              		.weak	HAL_UARTEx_WakeupCallback
+ 176              		.syntax unified
+ 177              		.thumb
+ 178              		.thumb_func
+ 179              		.fpu fpv4-sp-d16
+ 181              	HAL_UARTEx_WakeupCallback:
+ 182              	.LFB127:
+ 240:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 241:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 242:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /**
+ 243:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @}
+ 244:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 245:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 246:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /** @defgroup UARTEx_Exported_Functions_Group2 IO operation functions
+ 247:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *  @brief Extended functions
+ 248:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *
+ 249:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** @verbatim
+ 250:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****  ===============================================================================
+ 251:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****                       ##### IO operation functions #####
+ 252:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****  ===============================================================================
+ 253:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     This subsection provides a set of Wakeup and FIFO mode related callback functions.
+ 254:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 255:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     (#) Wakeup from Stop mode Callback:
+ 256:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****         (+) HAL_UARTEx_WakeupCallback()
+ 257:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 258:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     (#) TX/RX Fifos Callbacks:
+ 259:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****         (+) HAL_UARTEx_RxFifoFullCallback()
+ 260:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****         (+) HAL_UARTEx_TxFifoEmptyCallback()
+ 261:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 262:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** @endverbatim
+ 263:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @{
+ 264:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 265:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 266:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /**
+ 267:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @brief UART wakeup from Stop mode callback.
+ 268:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param huart UART handle.
+ 269:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @retval None
+ 270:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 271:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****  __weak void HAL_UARTEx_WakeupCallback(UART_HandleTypeDef *huart)
+ 272:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** {
+ 183              		.loc 1 272 1
+ 184              		.cfi_startproc
+ 185              		@ args = 0, pretend = 0, frame = 8
+ 186              		@ frame_needed = 1, uses_anonymous_args = 0
+ 187              		@ link register save eliminated.
+ARM GAS  /tmp/ccDJQuWl.s 			page 9
+
+
+ 188 0000 80B4     		push	{r7}
+ 189              	.LCFI5:
+ 190              		.cfi_def_cfa_offset 4
+ 191              		.cfi_offset 7, -4
+ 192 0002 83B0     		sub	sp, sp, #12
+ 193              	.LCFI6:
+ 194              		.cfi_def_cfa_offset 16
+ 195 0004 00AF     		add	r7, sp, #0
+ 196              	.LCFI7:
+ 197              		.cfi_def_cfa_register 7
+ 198 0006 7860     		str	r0, [r7, #4]
+ 273:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Prevent unused argument(s) compilation warning */
+ 274:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   UNUSED(huart);
+ 275:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 276:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* NOTE : This function should not be modified, when the callback is needed,
+ 277:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****             the HAL_UARTEx_WakeupCallback can be implemented in the user file.
+ 278:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****    */
+ 279:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** }
+ 199              		.loc 1 279 1
+ 200 0008 00BF     		nop
+ 201 000a 0C37     		adds	r7, r7, #12
+ 202              	.LCFI8:
+ 203              		.cfi_def_cfa_offset 4
+ 204 000c BD46     		mov	sp, r7
+ 205              	.LCFI9:
+ 206              		.cfi_def_cfa_register 13
+ 207              		@ sp needed
+ 208 000e 5DF8047B 		ldr	r7, [sp], #4
+ 209              	.LCFI10:
+ 210              		.cfi_restore 7
+ 211              		.cfi_def_cfa_offset 0
+ 212 0012 7047     		bx	lr
+ 213              		.cfi_endproc
+ 214              	.LFE127:
+ 216              		.section	.text.HAL_MultiProcessorEx_AddressLength_Set,"ax",%progbits
+ 217              		.align	1
+ 218              		.global	HAL_MultiProcessorEx_AddressLength_Set
+ 219              		.syntax unified
+ 220              		.thumb
+ 221              		.thumb_func
+ 222              		.fpu fpv4-sp-d16
+ 224              	HAL_MultiProcessorEx_AddressLength_Set:
+ 225              	.LFB128:
+ 280:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 281:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** #if defined(USART_CR1_FIFOEN)
+ 282:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /**
+ 283:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @brief  UART RX Fifo full callback.
+ 284:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param  huart UART handle.
+ 285:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @retval None
+ 286:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 287:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** __weak void HAL_UARTEx_RxFifoFullCallback (UART_HandleTypeDef *huart)
+ 288:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** {
+ 289:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Prevent unused argument(s) compilation warning */
+ 290:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   UNUSED(huart);
+ 291:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 292:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* NOTE : This function should not be modified, when the callback is needed,
+ 293:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****             the HAL_UARTEx_RxFifoFullCallback can be implemented in the user file.
+ARM GAS  /tmp/ccDJQuWl.s 			page 10
+
+
+ 294:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****    */
+ 295:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** }
+ 296:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 297:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /**
+ 298:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @brief  UART TX Fifo empty callback.
+ 299:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param  huart UART handle.
+ 300:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @retval None
+ 301:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 302:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** __weak void HAL_UARTEx_TxFifoEmptyCallback (UART_HandleTypeDef *huart)
+ 303:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** {
+ 304:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Prevent unused argument(s) compilation warning */
+ 305:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   UNUSED(huart);
+ 306:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 307:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* NOTE : This function should not be modified, when the callback is needed,
+ 308:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****             the HAL_UARTEx_TxFifoEmptyCallback can be implemented in the user file.
+ 309:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****    */
+ 310:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** }
+ 311:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** #endif
+ 312:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 313:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /**
+ 314:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @}
+ 315:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 316:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 317:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /** @defgroup UARTEx_Exported_Functions_Group3 Peripheral Control functions
+ 318:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @brief    Extended Peripheral Control functions
+ 319:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****  *
+ 320:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** @verbatim
+ 321:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****  ===============================================================================
+ 322:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****                       ##### Peripheral Control functions #####
+ 323:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****  ===============================================================================
+ 324:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     [..] This section provides the following functions:
+ 325:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****      (+) HAL_UARTEx_EnableClockStopMode() API enables the UART clock (HSI or LSE only) during stop 
+ 326:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****      (+) HAL_UARTEx_DisableClockStopMode() API disables the above functionality
+ 327:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****      (+) HAL_MultiProcessorEx_AddressLength_Set() API optionally sets the UART node address
+ 328:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****          detection length to more than 4 bits for multiprocessor address mark wake up.
+ 329:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****      (+) HAL_UARTEx_StopModeWakeUpSourceConfig() API defines the wake-up from stop mode
+ 330:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****          trigger: address match, Start Bit detection or RXNE bit status.
+ 331:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****      (+) HAL_UARTEx_EnableStopMode() API enables the UART to wake up the MCU from stop mode
+ 332:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****      (+) HAL_UARTEx_DisableStopMode() API disables the above functionality
+ 333:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****      (+) HAL_UARTEx_WakeupCallback() called upon UART wakeup interrupt
+ 334:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****      (+) HAL_UARTEx_EnableSPISlaveMode() API enables the SPI slave mode
+ 335:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****      (+) HAL_UARTEx_DisableSPISlaveMode() API disables the SPI slave mode
+ 336:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****      (+) HAL_UARTEx_ConfigNSS API configures the Slave Select input pin (NSS)
+ 337:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****      (+) HAL_UARTEx_EnableFifoMode() API enables the FIFO mode
+ 338:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****      (+) HAL_UARTEx_DisableFifoMode() API disables the FIFO mode
+ 339:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****      (+) HAL_UARTEx_SetTxFifoThreshold() API sets the TX FIFO threshold
+ 340:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****      (+) HAL_UARTEx_SetRxFifoThreshold() API sets the RX FIFO threshold
+ 341:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 342:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** @endverbatim
+ 343:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @{
+ 344:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 345:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 346:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 347:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 348:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 349:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /**
+ 350:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @brief By default in multiprocessor mode, when the wake up method is set
+ARM GAS  /tmp/ccDJQuWl.s 			page 11
+
+
+ 351:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *        to address mark, the UART handles only 4-bit long addresses detection;
+ 352:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *        this API allows to enable longer addresses detection (6-, 7- or 8-bit
+ 353:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *        long).
+ 354:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @note  Addresses detection lengths are: 6-bit address detection in 7-bit data mode, 
+ 355:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *        7-bit address detection in 8-bit data mode, 8-bit address detection in 9-bit data mode.
+ 356:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param huart         UART handle.
+ 357:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param AddressLength This parameter can be one of the following values:
+ 358:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *          @arg @ref UART_ADDRESS_DETECT_4B 4-bit long address
+ 359:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *          @arg @ref UART_ADDRESS_DETECT_7B 6-, 7- or 8-bit long address
+ 360:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @retval HAL status
+ 361:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 362:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** HAL_StatusTypeDef HAL_MultiProcessorEx_AddressLength_Set(UART_HandleTypeDef *huart, uint32_t Addres
+ 363:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** {
+ 226              		.loc 1 363 1
+ 227              		.cfi_startproc
+ 228              		@ args = 0, pretend = 0, frame = 8
+ 229              		@ frame_needed = 1, uses_anonymous_args = 0
+ 230 0000 80B5     		push	{r7, lr}
+ 231              	.LCFI11:
+ 232              		.cfi_def_cfa_offset 8
+ 233              		.cfi_offset 7, -8
+ 234              		.cfi_offset 14, -4
+ 235 0002 82B0     		sub	sp, sp, #8
+ 236              	.LCFI12:
+ 237              		.cfi_def_cfa_offset 16
+ 238 0004 00AF     		add	r7, sp, #0
+ 239              	.LCFI13:
+ 240              		.cfi_def_cfa_register 7
+ 241 0006 7860     		str	r0, [r7, #4]
+ 242 0008 3960     		str	r1, [r7]
+ 364:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Check the UART handle allocation */
+ 365:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   if(huart == NULL)
+ 243              		.loc 1 365 5
+ 244 000a 7B68     		ldr	r3, [r7, #4]
+ 245 000c 002B     		cmp	r3, #0
+ 246 000e 01D1     		bne	.L9
+ 366:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   {
+ 367:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     return HAL_ERROR;
+ 247              		.loc 1 367 12
+ 248 0010 0123     		movs	r3, #1
+ 249 0012 21E0     		b	.L10
+ 250              	.L9:
+ 368:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   }
+ 369:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 370:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Check the address length parameter */
+ 371:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   assert_param(IS_UART_ADDRESSLENGTH_DETECT(AddressLength));
+ 372:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 373:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->gState = HAL_UART_STATE_BUSY;
+ 251              		.loc 1 373 17
+ 252 0014 7B68     		ldr	r3, [r7, #4]
+ 253 0016 2422     		movs	r2, #36
+ 254 0018 83F87120 		strb	r2, [r3, #113]
+ 374:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 375:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Disable the Peripheral */
+ 376:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UART_DISABLE(huart);
+ 255              		.loc 1 376 3
+ 256 001c 7B68     		ldr	r3, [r7, #4]
+ARM GAS  /tmp/ccDJQuWl.s 			page 12
+
+
+ 257 001e 1B68     		ldr	r3, [r3]
+ 258 0020 1A68     		ldr	r2, [r3]
+ 259 0022 7B68     		ldr	r3, [r7, #4]
+ 260 0024 1B68     		ldr	r3, [r3]
+ 261 0026 22F00102 		bic	r2, r2, #1
+ 262 002a 1A60     		str	r2, [r3]
+ 377:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 378:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Set the address length */
+ 379:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   MODIFY_REG(huart->Instance->CR2, USART_CR2_ADDM7, AddressLength);
+ 263              		.loc 1 379 3
+ 264 002c 7B68     		ldr	r3, [r7, #4]
+ 265 002e 1B68     		ldr	r3, [r3]
+ 266 0030 5B68     		ldr	r3, [r3, #4]
+ 267 0032 23F01001 		bic	r1, r3, #16
+ 268 0036 7B68     		ldr	r3, [r7, #4]
+ 269 0038 1B68     		ldr	r3, [r3]
+ 270 003a 3A68     		ldr	r2, [r7]
+ 271 003c 0A43     		orrs	r2, r2, r1
+ 272 003e 5A60     		str	r2, [r3, #4]
+ 380:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 381:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Enable the Peripheral */
+ 382:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UART_ENABLE(huart);
+ 273              		.loc 1 382 3
+ 274 0040 7B68     		ldr	r3, [r7, #4]
+ 275 0042 1B68     		ldr	r3, [r3]
+ 276 0044 1A68     		ldr	r2, [r3]
+ 277 0046 7B68     		ldr	r3, [r7, #4]
+ 278 0048 1B68     		ldr	r3, [r3]
+ 279 004a 42F00102 		orr	r2, r2, #1
+ 280 004e 1A60     		str	r2, [r3]
+ 383:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 384:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* TEACK and/or REACK to check before moving huart->gState to Ready */
+ 385:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   return (UART_CheckIdleState(huart));
+ 281              		.loc 1 385 11
+ 282 0050 7868     		ldr	r0, [r7, #4]
+ 283 0052 FFF7FEFF 		bl	UART_CheckIdleState
+ 284 0056 0346     		mov	r3, r0
+ 285              	.L10:
+ 386:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** }
+ 286              		.loc 1 386 1
+ 287 0058 1846     		mov	r0, r3
+ 288 005a 0837     		adds	r7, r7, #8
+ 289              	.LCFI14:
+ 290              		.cfi_def_cfa_offset 8
+ 291 005c BD46     		mov	sp, r7
+ 292              	.LCFI15:
+ 293              		.cfi_def_cfa_register 13
+ 294              		@ sp needed
+ 295 005e 80BD     		pop	{r7, pc}
+ 296              		.cfi_endproc
+ 297              	.LFE128:
+ 299              		.section	.text.HAL_UARTEx_StopModeWakeUpSourceConfig,"ax",%progbits
+ 300              		.align	1
+ 301              		.global	HAL_UARTEx_StopModeWakeUpSourceConfig
+ 302              		.syntax unified
+ 303              		.thumb
+ 304              		.thumb_func
+ARM GAS  /tmp/ccDJQuWl.s 			page 13
+
+
+ 305              		.fpu fpv4-sp-d16
+ 307              	HAL_UARTEx_StopModeWakeUpSourceConfig:
+ 308              	.LFB129:
+ 387:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 388:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 389:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /**
+ 390:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @brief Set Wakeup from Stop mode interrupt flag selection.
+ 391:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @note It is the application responsibility to enable the interrupt used as
+ 392:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *       usart_wkup interrupt source before entering low-power mode.
+ 393:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param huart           UART handle.
+ 394:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param WakeUpSelection Address match, Start Bit detection or RXNE/RXFNE bit status.
+ 395:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *          This parameter can be one of the following values:
+ 396:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *          @arg @ref UART_WAKEUP_ON_ADDRESS
+ 397:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *          @arg @ref UART_WAKEUP_ON_STARTBIT
+ 398:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *          @arg @ref UART_WAKEUP_ON_READDATA_NONEMPTY
+ 399:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @retval HAL status
+ 400:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 401:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** HAL_StatusTypeDef HAL_UARTEx_StopModeWakeUpSourceConfig(UART_HandleTypeDef *huart, UART_WakeUpTypeD
+ 402:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** {
+ 309              		.loc 1 402 1
+ 310              		.cfi_startproc
+ 311              		@ args = 0, pretend = 0, frame = 24
+ 312              		@ frame_needed = 1, uses_anonymous_args = 0
+ 313 0000 80B5     		push	{r7, lr}
+ 314              	.LCFI16:
+ 315              		.cfi_def_cfa_offset 8
+ 316              		.cfi_offset 7, -8
+ 317              		.cfi_offset 14, -4
+ 318 0002 88B0     		sub	sp, sp, #32
+ 319              	.LCFI17:
+ 320              		.cfi_def_cfa_offset 40
+ 321 0004 02AF     		add	r7, sp, #8
+ 322              	.LCFI18:
+ 323              		.cfi_def_cfa 7, 32
+ 324 0006 F860     		str	r0, [r7, #12]
+ 325 0008 3B1D     		adds	r3, r7, #4
+ 326 000a 83E80600 		stm	r3, {r1, r2}
+ 403:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   HAL_StatusTypeDef status = HAL_OK;
+ 327              		.loc 1 403 21
+ 328 000e 0023     		movs	r3, #0
+ 329 0010 FB75     		strb	r3, [r7, #23]
+ 404:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   uint32_t tickstart = 0;
+ 330              		.loc 1 404 12
+ 331 0012 0023     		movs	r3, #0
+ 332 0014 3B61     		str	r3, [r7, #16]
+ 405:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 406:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* check the wake-up from stop mode UART instance */
+ 407:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   assert_param(IS_UART_WAKEUP_FROMSTOP_INSTANCE(huart->Instance));
+ 408:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* check the wake-up selection parameter */
+ 409:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   assert_param(IS_UART_WAKEUP_SELECTION(WakeUpSelection.WakeUpEvent));
+ 410:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 411:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Process Locked */
+ 412:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_LOCK(huart);
+ 333              		.loc 1 412 3
+ 334 0016 FB68     		ldr	r3, [r7, #12]
+ 335 0018 93F87030 		ldrb	r3, [r3, #112]	@ zero_extendqisi2
+ 336 001c 012B     		cmp	r3, #1
+ARM GAS  /tmp/ccDJQuWl.s 			page 14
+
+
+ 337 001e 01D1     		bne	.L12
+ 338              		.loc 1 412 3 is_stmt 0 discriminator 1
+ 339 0020 0223     		movs	r3, #2
+ 340 0022 46E0     		b	.L13
+ 341              	.L12:
+ 342              		.loc 1 412 3 discriminator 2
+ 343 0024 FB68     		ldr	r3, [r7, #12]
+ 344 0026 0122     		movs	r2, #1
+ 345 0028 83F87020 		strb	r2, [r3, #112]
+ 413:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 414:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->gState = HAL_UART_STATE_BUSY;
+ 346              		.loc 1 414 17 is_stmt 1 discriminator 2
+ 347 002c FB68     		ldr	r3, [r7, #12]
+ 348 002e 2422     		movs	r2, #36
+ 349 0030 83F87120 		strb	r2, [r3, #113]
+ 415:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 416:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Disable the Peripheral */
+ 417:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UART_DISABLE(huart);
+ 350              		.loc 1 417 3 discriminator 2
+ 351 0034 FB68     		ldr	r3, [r7, #12]
+ 352 0036 1B68     		ldr	r3, [r3]
+ 353 0038 1A68     		ldr	r2, [r3]
+ 354 003a FB68     		ldr	r3, [r7, #12]
+ 355 003c 1B68     		ldr	r3, [r3]
+ 356 003e 22F00102 		bic	r2, r2, #1
+ 357 0042 1A60     		str	r2, [r3]
+ 418:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 419:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Set the wake-up selection scheme */
+ 420:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   MODIFY_REG(huart->Instance->CR3, USART_CR3_WUS, WakeUpSelection.WakeUpEvent);
+ 358              		.loc 1 420 3 discriminator 2
+ 359 0044 FB68     		ldr	r3, [r7, #12]
+ 360 0046 1B68     		ldr	r3, [r3]
+ 361 0048 9B68     		ldr	r3, [r3, #8]
+ 362 004a 23F44011 		bic	r1, r3, #3145728
+ 363 004e 7A68     		ldr	r2, [r7, #4]
+ 364 0050 FB68     		ldr	r3, [r7, #12]
+ 365 0052 1B68     		ldr	r3, [r3]
+ 366 0054 0A43     		orrs	r2, r2, r1
+ 367 0056 9A60     		str	r2, [r3, #8]
+ 421:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 422:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   if (WakeUpSelection.WakeUpEvent == UART_WAKEUP_ON_ADDRESS)
+ 368              		.loc 1 422 22 discriminator 2
+ 369 0058 7B68     		ldr	r3, [r7, #4]
+ 370              		.loc 1 422 6 discriminator 2
+ 371 005a 002B     		cmp	r3, #0
+ 372 005c 05D1     		bne	.L14
+ 423:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   {
+ 424:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     UARTEx_Wakeup_AddressConfig(huart, WakeUpSelection);
+ 373              		.loc 1 424 5
+ 374 005e 3B1D     		adds	r3, r7, #4
+ 375 0060 93E80600 		ldm	r3, {r1, r2}
+ 376 0064 F868     		ldr	r0, [r7, #12]
+ 377 0066 FFF7FEFF 		bl	UARTEx_Wakeup_AddressConfig
+ 378              	.L14:
+ 425:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   }
+ 426:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 427:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Enable the Peripheral */
+ARM GAS  /tmp/ccDJQuWl.s 			page 15
+
+
+ 428:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UART_ENABLE(huart);
+ 379              		.loc 1 428 3
+ 380 006a FB68     		ldr	r3, [r7, #12]
+ 381 006c 1B68     		ldr	r3, [r3]
+ 382 006e 1A68     		ldr	r2, [r3]
+ 383 0070 FB68     		ldr	r3, [r7, #12]
+ 384 0072 1B68     		ldr	r3, [r3]
+ 385 0074 42F00102 		orr	r2, r2, #1
+ 386 0078 1A60     		str	r2, [r3]
+ 429:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 430:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Init tickstart for timeout managment*/
+ 431:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   tickstart = HAL_GetTick();
+ 387              		.loc 1 431 15
+ 388 007a FFF7FEFF 		bl	HAL_GetTick
+ 389 007e 3861     		str	r0, [r7, #16]
+ 432:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 433:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Wait until REACK flag is set */
+ 434:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   if(UART_WaitOnFlagUntilTimeout(huart, USART_ISR_REACK, RESET, tickstart, HAL_UART_TIMEOUT_VALUE) 
+ 390              		.loc 1 434 6
+ 391 0080 6FF07E43 		mvn	r3, #-33554432
+ 392 0084 0093     		str	r3, [sp]
+ 393 0086 3B69     		ldr	r3, [r7, #16]
+ 394 0088 0022     		movs	r2, #0
+ 395 008a 4FF48001 		mov	r1, #4194304
+ 396 008e F868     		ldr	r0, [r7, #12]
+ 397 0090 FFF7FEFF 		bl	UART_WaitOnFlagUntilTimeout
+ 398 0094 0346     		mov	r3, r0
+ 399              		.loc 1 434 5
+ 400 0096 002B     		cmp	r3, #0
+ 401 0098 02D0     		beq	.L15
+ 435:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   {
+ 436:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     status = HAL_TIMEOUT;
+ 402              		.loc 1 436 12
+ 403 009a 0323     		movs	r3, #3
+ 404 009c FB75     		strb	r3, [r7, #23]
+ 405 009e 03E0     		b	.L16
+ 406              	.L15:
+ 437:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   }
+ 438:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   else
+ 439:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   {
+ 440:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     /* Initialize the UART State */
+ 441:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****     huart->gState = HAL_UART_STATE_READY;
+ 407              		.loc 1 441 19
+ 408 00a0 FB68     		ldr	r3, [r7, #12]
+ 409 00a2 2022     		movs	r2, #32
+ 410 00a4 83F87120 		strb	r2, [r3, #113]
+ 411              	.L16:
+ 442:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   }
+ 443:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 444:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Process Unlocked */
+ 445:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UNLOCK(huart);
+ 412              		.loc 1 445 3
+ 413 00a8 FB68     		ldr	r3, [r7, #12]
+ 414 00aa 0022     		movs	r2, #0
+ 415 00ac 83F87020 		strb	r2, [r3, #112]
+ 446:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 447:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   return status;
+ARM GAS  /tmp/ccDJQuWl.s 			page 16
+
+
+ 416              		.loc 1 447 10
+ 417 00b0 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 418              	.L13:
+ 448:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** }
+ 419              		.loc 1 448 1
+ 420 00b2 1846     		mov	r0, r3
+ 421 00b4 1837     		adds	r7, r7, #24
+ 422              	.LCFI19:
+ 423              		.cfi_def_cfa_offset 8
+ 424 00b6 BD46     		mov	sp, r7
+ 425              	.LCFI20:
+ 426              		.cfi_def_cfa_register 13
+ 427              		@ sp needed
+ 428 00b8 80BD     		pop	{r7, pc}
+ 429              		.cfi_endproc
+ 430              	.LFE129:
+ 432              		.section	.text.HAL_UARTEx_EnableStopMode,"ax",%progbits
+ 433              		.align	1
+ 434              		.global	HAL_UARTEx_EnableStopMode
+ 435              		.syntax unified
+ 436              		.thumb
+ 437              		.thumb_func
+ 438              		.fpu fpv4-sp-d16
+ 440              	HAL_UARTEx_EnableStopMode:
+ 441              	.LFB130:
+ 449:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 450:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 451:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /**
+ 452:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @brief Enable UART Stop Mode.
+ 453:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @note The UART is able to wake up the MCU from Stop 1 mode as long as UART clock is HSI or LSE.
+ 454:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param huart UART handle.
+ 455:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @retval HAL status
+ 456:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 457:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** HAL_StatusTypeDef HAL_UARTEx_EnableStopMode(UART_HandleTypeDef *huart)
+ 458:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** {
+ 442              		.loc 1 458 1
+ 443              		.cfi_startproc
+ 444              		@ args = 0, pretend = 0, frame = 8
+ 445              		@ frame_needed = 1, uses_anonymous_args = 0
+ 446              		@ link register save eliminated.
+ 447 0000 80B4     		push	{r7}
+ 448              	.LCFI21:
+ 449              		.cfi_def_cfa_offset 4
+ 450              		.cfi_offset 7, -4
+ 451 0002 83B0     		sub	sp, sp, #12
+ 452              	.LCFI22:
+ 453              		.cfi_def_cfa_offset 16
+ 454 0004 00AF     		add	r7, sp, #0
+ 455              	.LCFI23:
+ 456              		.cfi_def_cfa_register 7
+ 457 0006 7860     		str	r0, [r7, #4]
+ 459:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Process Locked */
+ 460:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_LOCK(huart);
+ 458              		.loc 1 460 3
+ 459 0008 7B68     		ldr	r3, [r7, #4]
+ 460 000a 93F87030 		ldrb	r3, [r3, #112]	@ zero_extendqisi2
+ 461 000e 012B     		cmp	r3, #1
+ARM GAS  /tmp/ccDJQuWl.s 			page 17
+
+
+ 462 0010 01D1     		bne	.L18
+ 463              		.loc 1 460 3 is_stmt 0 discriminator 1
+ 464 0012 0223     		movs	r3, #2
+ 465 0014 18E0     		b	.L19
+ 466              	.L18:
+ 467              		.loc 1 460 3 discriminator 2
+ 468 0016 7B68     		ldr	r3, [r7, #4]
+ 469 0018 0122     		movs	r2, #1
+ 470 001a 83F87020 		strb	r2, [r3, #112]
+ 461:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 462:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->gState = HAL_UART_STATE_BUSY;
+ 471              		.loc 1 462 17 is_stmt 1 discriminator 2
+ 472 001e 7B68     		ldr	r3, [r7, #4]
+ 473 0020 2422     		movs	r2, #36
+ 474 0022 83F87120 		strb	r2, [r3, #113]
+ 463:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 464:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Set UESM bit */
+ 465:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   SET_BIT(huart->Instance->CR1, USART_CR1_UESM);
+ 475              		.loc 1 465 3 discriminator 2
+ 476 0026 7B68     		ldr	r3, [r7, #4]
+ 477 0028 1B68     		ldr	r3, [r3]
+ 478 002a 1A68     		ldr	r2, [r3]
+ 479 002c 7B68     		ldr	r3, [r7, #4]
+ 480 002e 1B68     		ldr	r3, [r3]
+ 481 0030 42F00202 		orr	r2, r2, #2
+ 482 0034 1A60     		str	r2, [r3]
+ 466:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 467:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->gState = HAL_UART_STATE_READY;
+ 483              		.loc 1 467 17 discriminator 2
+ 484 0036 7B68     		ldr	r3, [r7, #4]
+ 485 0038 2022     		movs	r2, #32
+ 486 003a 83F87120 		strb	r2, [r3, #113]
+ 468:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 469:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Process Unlocked */
+ 470:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UNLOCK(huart);
+ 487              		.loc 1 470 3 discriminator 2
+ 488 003e 7B68     		ldr	r3, [r7, #4]
+ 489 0040 0022     		movs	r2, #0
+ 490 0042 83F87020 		strb	r2, [r3, #112]
+ 471:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 472:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   return HAL_OK;
+ 491              		.loc 1 472 10 discriminator 2
+ 492 0046 0023     		movs	r3, #0
+ 493              	.L19:
+ 473:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** }
+ 494              		.loc 1 473 1
+ 495 0048 1846     		mov	r0, r3
+ 496 004a 0C37     		adds	r7, r7, #12
+ 497              	.LCFI24:
+ 498              		.cfi_def_cfa_offset 4
+ 499 004c BD46     		mov	sp, r7
+ 500              	.LCFI25:
+ 501              		.cfi_def_cfa_register 13
+ 502              		@ sp needed
+ 503 004e 5DF8047B 		ldr	r7, [sp], #4
+ 504              	.LCFI26:
+ 505              		.cfi_restore 7
+ARM GAS  /tmp/ccDJQuWl.s 			page 18
+
+
+ 506              		.cfi_def_cfa_offset 0
+ 507 0052 7047     		bx	lr
+ 508              		.cfi_endproc
+ 509              	.LFE130:
+ 511              		.section	.text.HAL_UARTEx_DisableStopMode,"ax",%progbits
+ 512              		.align	1
+ 513              		.global	HAL_UARTEx_DisableStopMode
+ 514              		.syntax unified
+ 515              		.thumb
+ 516              		.thumb_func
+ 517              		.fpu fpv4-sp-d16
+ 519              	HAL_UARTEx_DisableStopMode:
+ 520              	.LFB131:
+ 474:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 475:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /**
+ 476:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @brief Disable UART Stop Mode.
+ 477:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param huart UART handle.
+ 478:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @retval HAL status
+ 479:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 480:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** HAL_StatusTypeDef HAL_UARTEx_DisableStopMode(UART_HandleTypeDef *huart)
+ 481:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** {
+ 521              		.loc 1 481 1
+ 522              		.cfi_startproc
+ 523              		@ args = 0, pretend = 0, frame = 8
+ 524              		@ frame_needed = 1, uses_anonymous_args = 0
+ 525              		@ link register save eliminated.
+ 526 0000 80B4     		push	{r7}
+ 527              	.LCFI27:
+ 528              		.cfi_def_cfa_offset 4
+ 529              		.cfi_offset 7, -4
+ 530 0002 83B0     		sub	sp, sp, #12
+ 531              	.LCFI28:
+ 532              		.cfi_def_cfa_offset 16
+ 533 0004 00AF     		add	r7, sp, #0
+ 534              	.LCFI29:
+ 535              		.cfi_def_cfa_register 7
+ 536 0006 7860     		str	r0, [r7, #4]
+ 482:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Process Locked */
+ 483:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_LOCK(huart);
+ 537              		.loc 1 483 3
+ 538 0008 7B68     		ldr	r3, [r7, #4]
+ 539 000a 93F87030 		ldrb	r3, [r3, #112]	@ zero_extendqisi2
+ 540 000e 012B     		cmp	r3, #1
+ 541 0010 01D1     		bne	.L21
+ 542              		.loc 1 483 3 is_stmt 0 discriminator 1
+ 543 0012 0223     		movs	r3, #2
+ 544 0014 18E0     		b	.L22
+ 545              	.L21:
+ 546              		.loc 1 483 3 discriminator 2
+ 547 0016 7B68     		ldr	r3, [r7, #4]
+ 548 0018 0122     		movs	r2, #1
+ 549 001a 83F87020 		strb	r2, [r3, #112]
+ 484:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 485:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->gState = HAL_UART_STATE_BUSY;
+ 550              		.loc 1 485 17 is_stmt 1 discriminator 2
+ 551 001e 7B68     		ldr	r3, [r7, #4]
+ 552 0020 2422     		movs	r2, #36
+ARM GAS  /tmp/ccDJQuWl.s 			page 19
+
+
+ 553 0022 83F87120 		strb	r2, [r3, #113]
+ 486:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 487:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Clear UESM bit */
+ 488:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   CLEAR_BIT(huart->Instance->CR1, USART_CR1_UESM);
+ 554              		.loc 1 488 3 discriminator 2
+ 555 0026 7B68     		ldr	r3, [r7, #4]
+ 556 0028 1B68     		ldr	r3, [r3]
+ 557 002a 1A68     		ldr	r2, [r3]
+ 558 002c 7B68     		ldr	r3, [r7, #4]
+ 559 002e 1B68     		ldr	r3, [r3]
+ 560 0030 22F00202 		bic	r2, r2, #2
+ 561 0034 1A60     		str	r2, [r3]
+ 489:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 490:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->gState = HAL_UART_STATE_READY;
+ 562              		.loc 1 490 17 discriminator 2
+ 563 0036 7B68     		ldr	r3, [r7, #4]
+ 564 0038 2022     		movs	r2, #32
+ 565 003a 83F87120 		strb	r2, [r3, #113]
+ 491:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 492:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Process Unlocked */
+ 493:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UNLOCK(huart);
+ 566              		.loc 1 493 3 discriminator 2
+ 567 003e 7B68     		ldr	r3, [r7, #4]
+ 568 0040 0022     		movs	r2, #0
+ 569 0042 83F87020 		strb	r2, [r3, #112]
+ 494:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 495:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   return HAL_OK;
+ 570              		.loc 1 495 10 discriminator 2
+ 571 0046 0023     		movs	r3, #0
+ 572              	.L22:
+ 496:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** }
+ 573              		.loc 1 496 1
+ 574 0048 1846     		mov	r0, r3
+ 575 004a 0C37     		adds	r7, r7, #12
+ 576              	.LCFI30:
+ 577              		.cfi_def_cfa_offset 4
+ 578 004c BD46     		mov	sp, r7
+ 579              	.LCFI31:
+ 580              		.cfi_def_cfa_register 13
+ 581              		@ sp needed
+ 582 004e 5DF8047B 		ldr	r7, [sp], #4
+ 583              	.LCFI32:
+ 584              		.cfi_restore 7
+ 585              		.cfi_def_cfa_offset 0
+ 586 0052 7047     		bx	lr
+ 587              		.cfi_endproc
+ 588              	.LFE131:
+ 590              		.section	.text.UARTEx_Wakeup_AddressConfig,"ax",%progbits
+ 591              		.align	1
+ 592              		.syntax unified
+ 593              		.thumb
+ 594              		.thumb_func
+ 595              		.fpu fpv4-sp-d16
+ 597              	UARTEx_Wakeup_AddressConfig:
+ 598              	.LFB132:
+ 497:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 498:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** #if defined(USART_CR2_SLVEN)
+ARM GAS  /tmp/ccDJQuWl.s 			page 20
+
+
+ 499:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /**
+ 500:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @brief  Enable the SPI slave mode.
+ 501:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @note When the UART operates in SPI slave mode, it handles data flow using
+ 502:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *       the serial interface clock derived from the external SCLK signal
+ 503:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *       provided by the external master SPI device.
+ 504:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @note In SPI slave mode, the UART must be enabled before starting the master
+ 505:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *       communications (or between frames while the clock is stable). Otherwise,
+ 506:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *       if the UART slave is enabled while the master is in the middle of a
+ 507:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *       frame, it will become desynchronized with the master. 
+ 508:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @note The data register of the slave needs to be ready before the first edge
+ 509:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *       of the communication clock or before the end of the ongoing communication,
+ 510:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *       otherwise the SPI slave will transmit zeros.
+ 511:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param huart      UART handle.
+ 512:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @retval HAL status
+ 513:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 514:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** HAL_StatusTypeDef HAL_UARTEx_EnableSlaveMode(UART_HandleTypeDef *huart)
+ 515:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** {
+ 516:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   uint32_t tmpcr1 = 0;
+ 517:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 518:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Check parameters */
+ 519:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   assert_param(IS_UART_SPI_SLAVE_INSTANCE(huart->Instance));
+ 520:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 521:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Process Locked */
+ 522:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_LOCK(huart);
+ 523:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 524:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->gState = HAL_UART_STATE_BUSY;
+ 525:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 526:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Save actual UART configuration */
+ 527:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   tmpcr1 = READ_REG(huart->Instance->CR1);
+ 528:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 529:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Disable UART */
+ 530:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UART_DISABLE(huart);
+ 531:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 532:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* In SPI slave mode mode, the following bits must be kept cleared:
+ 533:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   - LINEN and CLKEN bit in the USART_CR2 register
+ 534:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   - HDSEL, SCEN and IREN bits in the USART_CR3 register.*/
+ 535:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   CLEAR_BIT(huart->Instance->CR2, (USART_CR2_LINEN | USART_CR2_CLKEN));
+ 536:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   CLEAR_BIT(huart->Instance->CR3, (USART_CR3_SCEN | USART_CR3_HDSEL | USART_CR3_IREN));
+ 537:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 538:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Enable SPI slave mode */
+ 539:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   SET_BIT(huart->Instance->CR2, USART_CR2_SLVEN);
+ 540:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 541:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Restore UART configuration */
+ 542:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   WRITE_REG(huart->Instance->CR1, tmpcr1);
+ 543:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****  
+ 544:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->SlaveMode = UART_SLAVEMODE_ENABLE;
+ 545:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 546:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->gState = HAL_UART_STATE_READY;
+ 547:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 548:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Enable UART */
+ 549:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UART_ENABLE(huart);
+ 550:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 551:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Process Unlocked */
+ 552:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UNLOCK(huart);
+ 553:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 554:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   return HAL_OK;  
+ 555:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** }
+ARM GAS  /tmp/ccDJQuWl.s 			page 21
+
+
+ 556:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 557:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /**
+ 558:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @brief  Disable the SPI slave mode.
+ 559:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param huart      UART handle.
+ 560:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @retval HAL status
+ 561:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 562:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** HAL_StatusTypeDef HAL_UARTEx_DisableSlaveMode(UART_HandleTypeDef *huart)
+ 563:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** {
+ 564:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   uint32_t tmpcr1 = 0;
+ 565:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 566:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Check parameters */
+ 567:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   assert_param(IS_UART_SPI_SLAVE_INSTANCE(huart->Instance));
+ 568:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 569:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Process Locked */
+ 570:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_LOCK(huart);
+ 571:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 572:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->gState = HAL_UART_STATE_BUSY;
+ 573:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 574:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Save actual UART configuration */
+ 575:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   tmpcr1 = READ_REG(huart->Instance->CR1);
+ 576:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 577:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Disable UART */
+ 578:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UART_DISABLE(huart);
+ 579:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 580:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Disable SPI slave mode */
+ 581:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   CLEAR_BIT(huart->Instance->CR2, USART_CR2_SLVEN);
+ 582:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 583:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Restore UART configuration */
+ 584:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   WRITE_REG(huart->Instance->CR1, tmpcr1);
+ 585:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 586:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->SlaveMode = UART_SLAVEMODE_ENABLE;
+ 587:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 588:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->gState = HAL_UART_STATE_READY;
+ 589:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 590:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Process Unlocked */
+ 591:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UNLOCK(huart);
+ 592:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 593:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   return HAL_OK;  
+ 594:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** }
+ 595:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 596:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /**
+ 597:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @brief  Configure the Slave Select input pin (NSS).
+ 598:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @note Software NSS management: SPI slave will always be selected and NSS
+ 599:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *       input pin will be ignored.
+ 600:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @note Hardware NSS management: the SPI slave selection depends on NSS
+ 601:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *       input pin. The slave is selected when NSS is low and deselected when
+ 602:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *       NSS is high.
+ 603:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param huart      UART handle.
+ 604:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param NSSConfig   NSS configuration.
+ 605:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *          This parameter can be one of the following values:
+ 606:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *            @arg @ref UART_NSS_HARD
+ 607:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *            @arg @ref UART_NSS_SOFT
+ 608:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @retval HAL status
+ 609:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 610:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** HAL_StatusTypeDef HAL_UARTEx_ConfigNSS(UART_HandleTypeDef *huart, uint32_t NSSConfig)
+ 611:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** {
+ 612:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   uint32_t tmpcr1 = 0;
+ARM GAS  /tmp/ccDJQuWl.s 			page 22
+
+
+ 613:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 614:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Check parameters */
+ 615:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   assert_param(IS_UART_SPI_SLAVE_INSTANCE(huart->Instance));
+ 616:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   assert_param(IS_UART_NSS(NSSConfig));
+ 617:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 618:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Process Locked */
+ 619:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_LOCK(huart);
+ 620:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 621:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->gState = HAL_UART_STATE_BUSY;
+ 622:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 623:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Save actual UART configuration */
+ 624:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   tmpcr1 = READ_REG(huart->Instance->CR1);
+ 625:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 626:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Disable UART */
+ 627:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UART_DISABLE(huart);
+ 628:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 629:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Program DIS_NSS bit in the USART_CR2 register */
+ 630:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   MODIFY_REG(huart->Instance->CR2, USART_CR2_DIS_NSS, NSSConfig);
+ 631:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 632:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Restore UART configuration */
+ 633:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   WRITE_REG(huart->Instance->CR1, tmpcr1);
+ 634:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****  
+ 635:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->gState = HAL_UART_STATE_READY;
+ 636:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 637:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Process Unlocked */
+ 638:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UNLOCK(huart);
+ 639:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 640:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   return HAL_OK;
+ 641:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** }
+ 642:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** #endif
+ 643:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 644:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** #if defined(USART_CR1_FIFOEN)
+ 645:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /**
+ 646:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @brief  Enable the FIFO mode.
+ 647:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param huart      UART handle.
+ 648:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @retval HAL status
+ 649:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 650:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** HAL_StatusTypeDef HAL_UARTEx_EnableFifoMode(UART_HandleTypeDef *huart)
+ 651:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** {
+ 652:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   uint32_t tmpcr1 = 0;
+ 653:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 654:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Check parameters */
+ 655:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   assert_param(IS_UART_FIFO_INSTANCE(huart->Instance));
+ 656:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 657:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Process Locked */
+ 658:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_LOCK(huart);
+ 659:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 660:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->gState = HAL_UART_STATE_BUSY;
+ 661:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 662:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Save actual UART configuration */
+ 663:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   tmpcr1 = READ_REG(huart->Instance->CR1);
+ 664:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 665:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Disable UART */
+ 666:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UART_DISABLE(huart);
+ 667:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 668:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Enable FIFO mode */
+ 669:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   SET_BIT(tmpcr1, USART_CR1_FIFOEN);
+ARM GAS  /tmp/ccDJQuWl.s 			page 23
+
+
+ 670:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->FifoMode = UART_FIFOMODE_ENABLE;
+ 671:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 672:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Restore UART configuration */
+ 673:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   WRITE_REG(huart->Instance->CR1, tmpcr1);
+ 674:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 675:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Determine the number of data to process during RX/TX ISR execution */
+ 676:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   UARTEx_SetNbDataToProcess(huart);
+ 677:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 678:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->gState = HAL_UART_STATE_READY;
+ 679:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 680:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Process Unlocked */
+ 681:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UNLOCK(huart);
+ 682:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****  
+ 683:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   return HAL_OK;
+ 684:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** }
+ 685:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 686:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /**
+ 687:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @brief  Disable the FIFO mode.
+ 688:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param huart      UART handle.
+ 689:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @retval HAL status
+ 690:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 691:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** HAL_StatusTypeDef HAL_UARTEx_DisableFifoMode(UART_HandleTypeDef *huart)
+ 692:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** {
+ 693:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   uint32_t tmpcr1 = 0;
+ 694:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 695:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Check parameters */
+ 696:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   assert_param(IS_UART_FIFO_INSTANCE(huart->Instance));
+ 697:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 698:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Process Locked */
+ 699:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_LOCK(huart);
+ 700:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 701:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->gState = HAL_UART_STATE_BUSY;
+ 702:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 703:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Save actual UART configuration */
+ 704:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   tmpcr1 = READ_REG(huart->Instance->CR1);
+ 705:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 706:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Disable UART */
+ 707:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UART_DISABLE(huart);
+ 708:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 709:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Enable FIFO mode */
+ 710:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   CLEAR_BIT(tmpcr1, USART_CR1_FIFOEN);
+ 711:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->FifoMode = UART_FIFOMODE_DISABLE;
+ 712:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 713:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Restore UART configuration */
+ 714:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   WRITE_REG(huart->Instance->CR1, tmpcr1);
+ 715:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 716:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->gState = HAL_UART_STATE_READY;
+ 717:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 718:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Process Unlocked */
+ 719:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UNLOCK(huart);
+ 720:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****  
+ 721:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   return HAL_OK;
+ 722:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** }
+ 723:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 724:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /**
+ 725:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @brief  Set the TXFIFO threshold.
+ 726:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param huart      UART handle.
+ARM GAS  /tmp/ccDJQuWl.s 			page 24
+
+
+ 727:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param Threshold  TX FIFO threshold value
+ 728:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *          This parameter can be one of the following values:
+ 729:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *            @arg @ref UART_TXFIFO_THRESHOLD_1_8
+ 730:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *            @arg @ref UART_TXFIFO_THRESHOLD_1_4
+ 731:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *            @arg @ref UART_TXFIFO_THRESHOLD_1_2
+ 732:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *            @arg @ref UART_TXFIFO_THRESHOLD_3_4
+ 733:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *            @arg @ref UART_TXFIFO_THRESHOLD_7_8
+ 734:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *            @arg @ref UART_TXFIFO_THRESHOLD_8_8
+ 735:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @retval HAL status
+ 736:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 737:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** HAL_StatusTypeDef HAL_UARTEx_SetTxFifoThreshold(UART_HandleTypeDef *huart, uint32_t Threshold)
+ 738:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** {
+ 739:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   uint32_t tmpcr1 = 0;
+ 740:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 741:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Check parameters */
+ 742:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   assert_param(IS_UART_FIFO_INSTANCE(huart->Instance));
+ 743:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   assert_param(IS_UART_TXFIFO_THRESHOLD(Threshold));
+ 744:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 745:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Process Locked */
+ 746:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_LOCK(huart);
+ 747:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 748:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->gState = HAL_UART_STATE_BUSY;
+ 749:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 750:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Save actual UART configuration */
+ 751:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   tmpcr1 = READ_REG(huart->Instance->CR1);
+ 752:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 753:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Disable UART */
+ 754:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UART_DISABLE(huart);
+ 755:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 756:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Update TX threshold configuration */
+ 757:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   MODIFY_REG(huart->Instance->CR3, USART_CR3_TXFTCFG, Threshold);
+ 758:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 759:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Determine the number of data to process during RX/TX ISR execution */
+ 760:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   UARTEx_SetNbDataToProcess(huart);
+ 761:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 762:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Restore UART configuration */
+ 763:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   WRITE_REG(huart->Instance->CR1, tmpcr1);
+ 764:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 765:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->gState = HAL_UART_STATE_READY;
+ 766:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 767:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Process Unlocked */
+ 768:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UNLOCK(huart);
+ 769:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 770:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   return HAL_OK;
+ 771:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** }
+ 772:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 773:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /**
+ 774:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @brief  Set the RXFIFO threshold.
+ 775:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param huart      UART handle.
+ 776:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param Threshold  RX FIFO threshold value
+ 777:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *          This parameter can be one of the following values:
+ 778:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *            @arg @ref UART_RXFIFO_THRESHOLD_1_8
+ 779:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *            @arg @ref UART_RXFIFO_THRESHOLD_1_4
+ 780:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *            @arg @ref UART_RXFIFO_THRESHOLD_1_2
+ 781:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *            @arg @ref UART_RXFIFO_THRESHOLD_3_4
+ 782:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *            @arg @ref UART_RXFIFO_THRESHOLD_7_8
+ 783:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   *            @arg @ref UART_RXFIFO_THRESHOLD_8_8
+ARM GAS  /tmp/ccDJQuWl.s 			page 25
+
+
+ 784:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @retval HAL status
+ 785:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 786:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** HAL_StatusTypeDef HAL_UARTEx_SetRxFifoThreshold(UART_HandleTypeDef *huart, uint32_t Threshold)
+ 787:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** {
+ 788:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   uint32_t tmpcr1 = 0;
+ 789:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 790:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Check the parameters */
+ 791:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   assert_param(IS_UART_FIFO_INSTANCE(huart->Instance));
+ 792:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   assert_param(IS_UART_RXFIFO_THRESHOLD(Threshold));
+ 793:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 794:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Process Locked */
+ 795:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_LOCK(huart);
+ 796:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 797:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->gState = HAL_UART_STATE_BUSY;
+ 798:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 799:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Save actual UART configuration */
+ 800:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   tmpcr1 = READ_REG(huart->Instance->CR1);
+ 801:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 802:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Disable UART */
+ 803:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UART_DISABLE(huart);
+ 804:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 805:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Update RX threshold configuration */
+ 806:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   MODIFY_REG(huart->Instance->CR3, USART_CR3_RXFTCFG, Threshold);
+ 807:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 808:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Determine the number of data to process during RX/TX ISR execution */
+ 809:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   UARTEx_SetNbDataToProcess(huart);
+ 810:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 811:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Restore UART configuration */
+ 812:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   WRITE_REG(huart->Instance->CR1, tmpcr1);
+ 813:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 814:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   huart->gState = HAL_UART_STATE_READY;
+ 815:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 816:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Process Unlocked */
+ 817:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   __HAL_UNLOCK(huart);
+ 818:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 819:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   return HAL_OK;
+ 820:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** }
+ 821:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** #endif
+ 822:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 823:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /**
+ 824:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @}
+ 825:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 826:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 827:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /**
+ 828:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @}
+ 829:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 830:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 831:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /** @addtogroup UARTEx_Private_Functions
+ 832:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @{
+ 833:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ 834:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** 
+ 835:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** /**
+ 836:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @brief Initialize the UART wake-up from stop mode parameters when triggered by address detectio
+ 837:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param huart           UART handle.
+ 838:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @param WakeUpSelection UART wake up from stop mode parameters.
+ 839:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   * @retval None
+ 840:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   */
+ARM GAS  /tmp/ccDJQuWl.s 			page 26
+
+
+ 841:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** static void UARTEx_Wakeup_AddressConfig(UART_HandleTypeDef *huart, UART_WakeUpTypeDef WakeUpSelecti
+ 842:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** {
+ 599              		.loc 1 842 1
+ 600              		.cfi_startproc
+ 601              		@ args = 0, pretend = 0, frame = 16
+ 602              		@ frame_needed = 1, uses_anonymous_args = 0
+ 603              		@ link register save eliminated.
+ 604 0000 80B4     		push	{r7}
+ 605              	.LCFI33:
+ 606              		.cfi_def_cfa_offset 4
+ 607              		.cfi_offset 7, -4
+ 608 0002 85B0     		sub	sp, sp, #20
+ 609              	.LCFI34:
+ 610              		.cfi_def_cfa_offset 24
+ 611 0004 00AF     		add	r7, sp, #0
+ 612              	.LCFI35:
+ 613              		.cfi_def_cfa_register 7
+ 614 0006 F860     		str	r0, [r7, #12]
+ 615 0008 3B1D     		adds	r3, r7, #4
+ 616 000a 83E80600 		stm	r3, {r1, r2}
+ 843:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   assert_param(IS_UART_ADDRESSLENGTH_DETECT(WakeUpSelection.AddressLength));
+ 844:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 845:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Set the USART address length */
+ 846:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   MODIFY_REG(huart->Instance->CR2, USART_CR2_ADDM7, WakeUpSelection.AddressLength);
+ 617              		.loc 1 846 3
+ 618 000e FB68     		ldr	r3, [r7, #12]
+ 619 0010 1B68     		ldr	r3, [r3]
+ 620 0012 5B68     		ldr	r3, [r3, #4]
+ 621 0014 23F01002 		bic	r2, r3, #16
+ 622 0018 3B89     		ldrh	r3, [r7, #8]
+ 623 001a 1946     		mov	r1, r3
+ 624 001c FB68     		ldr	r3, [r7, #12]
+ 625 001e 1B68     		ldr	r3, [r3]
+ 626 0020 0A43     		orrs	r2, r2, r1
+ 627 0022 5A60     		str	r2, [r3, #4]
+ 847:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   
+ 848:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   /* Set the USART address node */
+ 849:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c ****   MODIFY_REG(huart->Instance->CR2, USART_CR2_ADD, ((uint32_t)WakeUpSelection.Address << UART_CR2_AD
+ 628              		.loc 1 849 3
+ 629 0024 FB68     		ldr	r3, [r7, #12]
+ 630 0026 1B68     		ldr	r3, [r3]
+ 631 0028 5B68     		ldr	r3, [r3, #4]
+ 632 002a 23F07F41 		bic	r1, r3, #-16777216
+ 633 002e BB7A     		ldrb	r3, [r7, #10]	@ zero_extendqisi2
+ 634 0030 1A06     		lsls	r2, r3, #24
+ 635 0032 FB68     		ldr	r3, [r7, #12]
+ 636 0034 1B68     		ldr	r3, [r3]
+ 637 0036 0A43     		orrs	r2, r2, r1
+ 638 0038 5A60     		str	r2, [r3, #4]
+ 850:/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c **** }
+ 639              		.loc 1 850 1
+ 640 003a 00BF     		nop
+ 641 003c 1437     		adds	r7, r7, #20
+ 642              	.LCFI36:
+ 643              		.cfi_def_cfa_offset 4
+ 644 003e BD46     		mov	sp, r7
+ 645              	.LCFI37:
+ARM GAS  /tmp/ccDJQuWl.s 			page 27
+
+
+ 646              		.cfi_def_cfa_register 13
+ 647              		@ sp needed
+ 648 0040 5DF8047B 		ldr	r7, [sp], #4
+ 649              	.LCFI38:
+ 650              		.cfi_restore 7
+ 651              		.cfi_def_cfa_offset 0
+ 652 0044 7047     		bx	lr
+ 653              		.cfi_endproc
+ 654              	.LFE132:
+ 656              		.text
+ 657              	.Letext0:
+ 658              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 659              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 660              		.file 4 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 661              		.file 5 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/system_stm32l4xx.h"
+ 662              		.file 6 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/stm32l476xx.h"
+ 663              		.file 7 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 664              		.file 8 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 665              		.file 9 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 666              		.file 10 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/re
+ 667              		.file 11 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/stm32l4xx.h"
+ 668              		.file 12 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 669              		.file 13 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 670              		.file 14 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 671              		.file 15 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ARM GAS  /tmp/ccDJQuWl.s 			page 28
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm32l4xx_hal_uart_ex.c
+     /tmp/ccDJQuWl.s:18     .text.HAL_RS485Ex_Init:0000000000000000 $t
+     /tmp/ccDJQuWl.s:26     .text.HAL_RS485Ex_Init:0000000000000000 HAL_RS485Ex_Init
+     /tmp/ccDJQuWl.s:174    .text.HAL_UARTEx_WakeupCallback:0000000000000000 $t
+     /tmp/ccDJQuWl.s:181    .text.HAL_UARTEx_WakeupCallback:0000000000000000 HAL_UARTEx_WakeupCallback
+     /tmp/ccDJQuWl.s:217    .text.HAL_MultiProcessorEx_AddressLength_Set:0000000000000000 $t
+     /tmp/ccDJQuWl.s:224    .text.HAL_MultiProcessorEx_AddressLength_Set:0000000000000000 HAL_MultiProcessorEx_AddressLength_Set
+     /tmp/ccDJQuWl.s:300    .text.HAL_UARTEx_StopModeWakeUpSourceConfig:0000000000000000 $t
+     /tmp/ccDJQuWl.s:307    .text.HAL_UARTEx_StopModeWakeUpSourceConfig:0000000000000000 HAL_UARTEx_StopModeWakeUpSourceConfig
+     /tmp/ccDJQuWl.s:597    .text.UARTEx_Wakeup_AddressConfig:0000000000000000 UARTEx_Wakeup_AddressConfig
+     /tmp/ccDJQuWl.s:433    .text.HAL_UARTEx_EnableStopMode:0000000000000000 $t
+     /tmp/ccDJQuWl.s:440    .text.HAL_UARTEx_EnableStopMode:0000000000000000 HAL_UARTEx_EnableStopMode
+     /tmp/ccDJQuWl.s:512    .text.HAL_UARTEx_DisableStopMode:0000000000000000 $t
+     /tmp/ccDJQuWl.s:519    .text.HAL_UARTEx_DisableStopMode:0000000000000000 HAL_UARTEx_DisableStopMode
+     /tmp/ccDJQuWl.s:591    .text.UARTEx_Wakeup_AddressConfig:0000000000000000 $t
+
+UNDEFINED SYMBOLS
+HAL_UART_MspInit
+UART_SetConfig
+UART_AdvFeatureConfig
+UART_CheckIdleState
+HAL_GetTick
+UART_WaitOnFlagUntilTimeout

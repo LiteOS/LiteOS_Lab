@@ -1,0 +1,297 @@
+ARM GAS  /tmp/cclQfzoh.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stm32l4xx_hal_flash_ramfunc.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.RamFunc,"ax",%progbits
+  18              		.align	1
+  19              		.global	HAL_FLASHEx_EnableRunPowerDown
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	HAL_FLASHEx_EnableRunPowerDown:
+  27              	.LFB126:
+  28              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx
+   1:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** /**
+   2:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   ******************************************************************************
+   3:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * @file    stm32l4xx_hal_flash_ramfunc.c
+   4:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * @author  MCD Application Team
+   5:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * @brief   FLASH RAMFUNC driver.
+   6:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   *          This file provides a Flash firmware functions which should be 
+   7:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   *          executed from internal SRAM
+   8:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   *            + FLASH HalfPage Programming
+   9:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   *            + FLASH Power Down in Run mode
+  10:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   *
+  11:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   *  @verbatim
+  12:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   ==============================================================================
+  13:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****                    ##### Flash RAM functions #####
+  14:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   ==============================================================================    
+  15:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** 
+  16:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****     *** ARM Compiler ***
+  17:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****     --------------------
+  18:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****     [..] RAM functions are defined using the toolchain options. 
+  19:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****          Functions that are executed in RAM should reside in a separate
+  20:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****          source module. Using the 'Options for File' dialog you can simply change
+  21:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****          the 'Code / Const' area of a module to a memory space in physical RAM.
+  22:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****          Available memory areas are declared in the 'Target' tab of the 
+  23:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****          Options for Target' dialog.
+  24:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** 
+  25:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****     *** ICCARM Compiler ***
+  26:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****     -----------------------
+  27:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****     [..] RAM functions are defined using a specific toolchain keyword "__ramfunc".
+  28:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** 
+  29:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****     *** GNU Compiler ***
+  30:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****     --------------------
+ARM GAS  /tmp/cclQfzoh.s 			page 2
+
+
+  31:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****     [..] RAM functions are defined using a specific toolchain attribute
+  32:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****          "__attribute__((section(".RamFunc")))".
+  33:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   
+  34:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   @endverbatim
+  35:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   ******************************************************************************
+  36:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * @attention
+  37:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   *
+  38:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
+  39:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   *
+  40:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * Redistribution and use in source and binary forms, with or without modification,
+  41:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * are permitted provided that the following conditions are met:
+  42:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   *   1. Redistributions of source code must retain the above copyright notice,
+  43:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   *      this list of conditions and the following disclaimer.
+  44:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   *   2. Redistributions in binary form must reproduce the above copyright notice,
+  45:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   *      this list of conditions and the following disclaimer in the documentation
+  46:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   *      and/or other materials provided with the distribution.
+  47:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   *   3. Neither the name of STMicroelectronics nor the names of its contributors
+  48:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   *      may be used to endorse or promote products derived from this software
+  49:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   *      without specific prior written permission.
+  50:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   *
+  51:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  52:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  53:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  54:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+  55:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+  56:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+  57:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+  58:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+  59:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  60:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  61:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   *
+  62:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   ******************************************************************************
+  63:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   */ 
+  64:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** 
+  65:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** /* Includes ------------------------------------------------------------------*/
+  66:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** #include "stm32l4xx_hal.h"
+  67:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** 
+  68:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** /** @addtogroup STM32L4xx_HAL_Driver
+  69:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * @{
+  70:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   */
+  71:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** 
+  72:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** /** @defgroup FLASH_RAMFUNC FLASH_RAMFUNC
+  73:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * @brief FLASH functions executed from RAM
+  74:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * @{
+  75:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   */
+  76:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** 
+  77:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** #ifdef HAL_FLASH_MODULE_ENABLED
+  78:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** 
+  79:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** /* Private typedef -----------------------------------------------------------*/
+  80:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** /* Private define ------------------------------------------------------------*/
+  81:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** /* Private macro -------------------------------------------------------------*/
+  82:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** /* Private variables ---------------------------------------------------------*/
+  83:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** extern FLASH_ProcessTypeDef pFlash;
+  84:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** 
+  85:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** /* Private function prototypes -----------------------------------------------*/
+  86:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** /* Exported functions -------------------------------------------------------*/
+  87:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** 
+ARM GAS  /tmp/cclQfzoh.s 			page 3
+
+
+  88:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** /** @defgroup FLASH_RAMFUNC_Exported_Functions FLASH in RAM function Exported Functions
+  89:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * @{
+  90:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   */
+  91:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** 
+  92:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** /** @defgroup FLASH_RAMFUNC_Exported_Functions_Group1 Peripheral features functions 
+  93:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****  *  @brief   Data transfers functions 
+  94:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****  *
+  95:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** @verbatim   
+  96:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****  ===============================================================================
+  97:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****                       ##### ramfunc functions #####
+  98:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****  ===============================================================================  
+  99:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****     [..]
+ 100:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****     This subsection provides a set of functions that should be executed from RAM.
+ 101:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** 
+ 102:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** @endverbatim
+ 103:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * @{
+ 104:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   */
+ 105:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** 
+ 106:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** /**
+ 107:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * @brief   Enable the Power down in Run Mode
+ 108:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * @note    This function should be called and executed from SRAM memory
+ 109:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * @retval None
+ 110:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   */
+ 111:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** __RAM_FUNC HAL_FLASHEx_EnableRunPowerDown(void)
+ 112:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** {
+  29              		.loc 1 112 1
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34 0000 80B4     		push	{r7}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 4
+  37              		.cfi_offset 7, -4
+  38 0002 00AF     		add	r7, sp, #0
+  39              	.LCFI1:
+  40              		.cfi_def_cfa_register 7
+ 113:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   /* Enable the Power Down in Run mode*/
+ 114:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   __HAL_FLASH_POWER_DOWN_ENABLE();
+  41              		.loc 1 114 3
+  42 0004 084B     		ldr	r3, .L3
+  43 0006 094A     		ldr	r2, .L3+4
+  44 0008 5A60     		str	r2, [r3, #4]
+  45 000a 074B     		ldr	r3, .L3
+  46 000c 084A     		ldr	r2, .L3+8
+  47 000e 5A60     		str	r2, [r3, #4]
+  48 0010 054B     		ldr	r3, .L3
+  49 0012 1B68     		ldr	r3, [r3]
+  50 0014 044A     		ldr	r2, .L3
+  51 0016 43F40053 		orr	r3, r3, #8192
+  52 001a 1360     		str	r3, [r2]
+ 115:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   
+ 116:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   return HAL_OK;
+  53              		.loc 1 116 10
+  54 001c 0023     		movs	r3, #0
+ 117:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   
+ 118:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** }
+ARM GAS  /tmp/cclQfzoh.s 			page 4
+
+
+  55              		.loc 1 118 1
+  56 001e 1846     		mov	r0, r3
+  57 0020 BD46     		mov	sp, r7
+  58              	.LCFI2:
+  59              		.cfi_def_cfa_register 13
+  60              		@ sp needed
+  61 0022 5DF8047B 		ldr	r7, [sp], #4
+  62              	.LCFI3:
+  63              		.cfi_restore 7
+  64              		.cfi_def_cfa_offset 0
+  65 0026 7047     		bx	lr
+  66              	.L4:
+  67              		.align	2
+  68              	.L3:
+  69 0028 00200240 		.word	1073881088
+  70 002c 37261504 		.word	68494903
+  71 0030 FDFCFBFA 		.word	-84148995
+  72              		.cfi_endproc
+  73              	.LFE126:
+  75              		.align	1
+  76              		.global	HAL_FLASHEx_DisableRunPowerDown
+  77              		.syntax unified
+  78              		.thumb
+  79              		.thumb_func
+  80              		.fpu fpv4-sp-d16
+  82              	HAL_FLASHEx_DisableRunPowerDown:
+  83              	.LFB127:
+ 119:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** 
+ 120:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** /**
+ 121:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * @brief   Disable the Power down in Run Mode
+ 122:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * @note    This function should be called and executed from SRAM memory
+ 123:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   * @retval None
+ 124:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   */
+ 125:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** __RAM_FUNC HAL_FLASHEx_DisableRunPowerDown(void)
+ 126:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** {
+  84              		.loc 1 126 1
+  85              		.cfi_startproc
+  86              		@ args = 0, pretend = 0, frame = 0
+  87              		@ frame_needed = 1, uses_anonymous_args = 0
+  88              		@ link register save eliminated.
+  89 0034 80B4     		push	{r7}
+  90              	.LCFI4:
+  91              		.cfi_def_cfa_offset 4
+  92              		.cfi_offset 7, -4
+  93 0036 00AF     		add	r7, sp, #0
+  94              	.LCFI5:
+  95              		.cfi_def_cfa_register 7
+ 127:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   /* Disable the Power Down in Run mode*/
+ 128:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   __HAL_FLASH_POWER_DOWN_DISABLE();
+  96              		.loc 1 128 3
+  97 0038 084B     		ldr	r3, .L7
+  98 003a 094A     		ldr	r2, .L7+4
+  99 003c 5A60     		str	r2, [r3, #4]
+ 100 003e 074B     		ldr	r3, .L7
+ 101 0040 084A     		ldr	r2, .L7+8
+ 102 0042 5A60     		str	r2, [r3, #4]
+ 103 0044 054B     		ldr	r3, .L7
+ARM GAS  /tmp/cclQfzoh.s 			page 5
+
+
+ 104 0046 1B68     		ldr	r3, [r3]
+ 105 0048 044A     		ldr	r2, .L7
+ 106 004a 23F40053 		bic	r3, r3, #8192
+ 107 004e 1360     		str	r3, [r2]
+ 129:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** 
+ 130:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c ****   return HAL_OK;  
+ 108              		.loc 1 130 10
+ 109 0050 0023     		movs	r3, #0
+ 131:/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c **** }
+ 110              		.loc 1 131 1
+ 111 0052 1846     		mov	r0, r3
+ 112 0054 BD46     		mov	sp, r7
+ 113              	.LCFI6:
+ 114              		.cfi_def_cfa_register 13
+ 115              		@ sp needed
+ 116 0056 5DF8047B 		ldr	r7, [sp], #4
+ 117              	.LCFI7:
+ 118              		.cfi_restore 7
+ 119              		.cfi_def_cfa_offset 0
+ 120 005a 7047     		bx	lr
+ 121              	.L8:
+ 122              		.align	2
+ 123              	.L7:
+ 124 005c 00200240 		.word	1073881088
+ 125 0060 37261504 		.word	68494903
+ 126 0064 FDFCFBFA 		.word	-84148995
+ 127              		.cfi_endproc
+ 128              	.LFE127:
+ 130              		.text
+ 131              	.Letext0:
+ 132              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 133              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 134              		.file 4 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 135              		.file 5 "/home/fanxinhao/Work/LiteOS_Lab/targets/STM32L476RG_NB476/Inc/system_stm32l4xx.h"
+ 136              		.file 6 "/home/fanxinhao/Work/LiteOS_Lab/targets/STM32L476RG_NB476/Inc/stm32l476xx.h"
+ 137              		.file 7 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 138              		.file 8 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 139              		.file 9 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 140              		.file 10 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/re
+ 141              		.file 11 "/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4x
+ 142              		.file 12 "/home/fanxinhao/Work/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4x
+ARM GAS  /tmp/cclQfzoh.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm32l4xx_hal_flash_ramfunc.c
+     /tmp/cclQfzoh.s:18     .RamFunc:0000000000000000 $t
+     /tmp/cclQfzoh.s:26     .RamFunc:0000000000000000 HAL_FLASHEx_EnableRunPowerDown
+     /tmp/cclQfzoh.s:69     .RamFunc:0000000000000028 $d
+     /tmp/cclQfzoh.s:75     .RamFunc:0000000000000034 $t
+     /tmp/cclQfzoh.s:82     .RamFunc:0000000000000034 HAL_FLASHEx_DisableRunPowerDown
+     /tmp/cclQfzoh.s:124    .RamFunc:000000000000005c $d
+
+NO UNDEFINED SYMBOLS

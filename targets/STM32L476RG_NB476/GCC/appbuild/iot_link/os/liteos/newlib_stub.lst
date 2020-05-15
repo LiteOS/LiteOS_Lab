@@ -1,0 +1,645 @@
+ARM GAS  /tmp/cc3krJu4.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"newlib_stub.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text._execve_r,"ax",%progbits
+  18              		.align	1
+  19              		.global	_execve_r
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	_execve_r:
+  27              	.LFB3:
+  28              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** /*----------------------------------------------------------------------------
+   2:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * Copyright (c) <2013-2018>, <Huawei Technologies Co., Ltd>
+   3:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * All rights reserved.
+   4:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * are permitted provided that the following conditions are met:
+   6:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * conditions and the following disclaimer.
+   8:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * provided with the distribution.
+  11:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * permission.
+  14:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  *---------------------------------------------------------------------------*/
+  26:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** /*----------------------------------------------------------------------------
+  27:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * Notice of Export Control Law
+  28:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * ===============================================
+  29:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+ARM GAS  /tmp/cc3krJu4.s 			page 2
+
+
+  31:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  * applicable export control laws and regulations.
+  33:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****  *---------------------------------------------------------------------------*/
+  34:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** 
+  35:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** #include <reent.h>
+  36:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** #include <stdlib.h>
+  37:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** #include <errno.h>
+  38:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** #include <stdio.h>
+  39:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** 
+  40:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** int _execve_r(struct _reent *ptr, const char *name, char *const *argv, char *const *env)
+  41:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** {
+  29              		.loc 1 41 1
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 16
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34 0000 80B4     		push	{r7}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 4
+  37              		.cfi_offset 7, -4
+  38 0002 85B0     		sub	sp, sp, #20
+  39              	.LCFI1:
+  40              		.cfi_def_cfa_offset 24
+  41 0004 00AF     		add	r7, sp, #0
+  42              	.LCFI2:
+  43              		.cfi_def_cfa_register 7
+  44 0006 F860     		str	r0, [r7, #12]
+  45 0008 B960     		str	r1, [r7, #8]
+  46 000a 7A60     		str	r2, [r7, #4]
+  47 000c 3B60     		str	r3, [r7]
+  42:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****     /* not support */
+  43:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****     ptr->_errno = ENOTSUP;
+  48              		.loc 1 43 17
+  49 000e FB68     		ldr	r3, [r7, #12]
+  50 0010 8622     		movs	r2, #134
+  51 0012 1A60     		str	r2, [r3]
+  44:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****     return -1;
+  52              		.loc 1 44 12
+  53 0014 4FF0FF33 		mov	r3, #-1
+  45:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** }
+  54              		.loc 1 45 1
+  55 0018 1846     		mov	r0, r3
+  56 001a 1437     		adds	r7, r7, #20
+  57              	.LCFI3:
+  58              		.cfi_def_cfa_offset 4
+  59 001c BD46     		mov	sp, r7
+  60              	.LCFI4:
+  61              		.cfi_def_cfa_register 13
+  62              		@ sp needed
+  63 001e 5DF8047B 		ldr	r7, [sp], #4
+  64              	.LCFI5:
+  65              		.cfi_restore 7
+  66              		.cfi_def_cfa_offset 0
+  67 0022 7047     		bx	lr
+  68              		.cfi_endproc
+  69              	.LFE3:
+  71              		.section	.text._times_r,"ax",%progbits
+ARM GAS  /tmp/cc3krJu4.s 			page 3
+
+
+  72              		.align	1
+  73              		.global	_times_r
+  74              		.syntax unified
+  75              		.thumb
+  76              		.thumb_func
+  77              		.fpu fpv4-sp-d16
+  79              	_times_r:
+  80              	.LFB4:
+  46:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** 
+  47:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** _CLOCK_T_ _times_r(struct _reent *ptr, struct tms *ptms)
+  48:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** {
+  81              		.loc 1 48 1
+  82              		.cfi_startproc
+  83              		@ args = 0, pretend = 0, frame = 8
+  84              		@ frame_needed = 1, uses_anonymous_args = 0
+  85              		@ link register save eliminated.
+  86 0000 80B4     		push	{r7}
+  87              	.LCFI6:
+  88              		.cfi_def_cfa_offset 4
+  89              		.cfi_offset 7, -4
+  90 0002 83B0     		sub	sp, sp, #12
+  91              	.LCFI7:
+  92              		.cfi_def_cfa_offset 16
+  93 0004 00AF     		add	r7, sp, #0
+  94              	.LCFI8:
+  95              		.cfi_def_cfa_register 7
+  96 0006 7860     		str	r0, [r7, #4]
+  97 0008 3960     		str	r1, [r7]
+  49:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****     /* not support */
+  50:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****     ptr->_errno = ENOTSUP;
+  98              		.loc 1 50 17
+  99 000a 7B68     		ldr	r3, [r7, #4]
+ 100 000c 8622     		movs	r2, #134
+ 101 000e 1A60     		str	r2, [r3]
+  51:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****     return (_CLOCK_T_)-1;
+ 102              		.loc 1 51 12
+ 103 0010 4FF0FF33 		mov	r3, #-1
+  52:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** }
+ 104              		.loc 1 52 1
+ 105 0014 1846     		mov	r0, r3
+ 106 0016 0C37     		adds	r7, r7, #12
+ 107              	.LCFI9:
+ 108              		.cfi_def_cfa_offset 4
+ 109 0018 BD46     		mov	sp, r7
+ 110              	.LCFI10:
+ 111              		.cfi_def_cfa_register 13
+ 112              		@ sp needed
+ 113 001a 5DF8047B 		ldr	r7, [sp], #4
+ 114              	.LCFI11:
+ 115              		.cfi_restore 7
+ 116              		.cfi_def_cfa_offset 0
+ 117 001e 7047     		bx	lr
+ 118              		.cfi_endproc
+ 119              	.LFE4:
+ 121              		.section	.text._unlink_r,"ax",%progbits
+ 122              		.align	1
+ 123              		.global	_unlink_r
+ARM GAS  /tmp/cc3krJu4.s 			page 4
+
+
+ 124              		.syntax unified
+ 125              		.thumb
+ 126              		.thumb_func
+ 127              		.fpu fpv4-sp-d16
+ 129              	_unlink_r:
+ 130              	.LFB5:
+  53:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** 
+  54:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** int _unlink_r(struct _reent *ptr, const char *file)
+  55:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** {
+ 131              		.loc 1 55 1
+ 132              		.cfi_startproc
+ 133              		@ args = 0, pretend = 0, frame = 8
+ 134              		@ frame_needed = 1, uses_anonymous_args = 0
+ 135              		@ link register save eliminated.
+ 136 0000 80B4     		push	{r7}
+ 137              	.LCFI12:
+ 138              		.cfi_def_cfa_offset 4
+ 139              		.cfi_offset 7, -4
+ 140 0002 83B0     		sub	sp, sp, #12
+ 141              	.LCFI13:
+ 142              		.cfi_def_cfa_offset 16
+ 143 0004 00AF     		add	r7, sp, #0
+ 144              	.LCFI14:
+ 145              		.cfi_def_cfa_register 7
+ 146 0006 7860     		str	r0, [r7, #4]
+ 147 0008 3960     		str	r1, [r7]
+  56:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** //    return los_unlink (file);
+  57:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****     return -1;
+ 148              		.loc 1 57 12
+ 149 000a 4FF0FF33 		mov	r3, #-1
+  58:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** }
+ 150              		.loc 1 58 1
+ 151 000e 1846     		mov	r0, r3
+ 152 0010 0C37     		adds	r7, r7, #12
+ 153              	.LCFI15:
+ 154              		.cfi_def_cfa_offset 4
+ 155 0012 BD46     		mov	sp, r7
+ 156              	.LCFI16:
+ 157              		.cfi_def_cfa_register 13
+ 158              		@ sp needed
+ 159 0014 5DF8047B 		ldr	r7, [sp], #4
+ 160              	.LCFI17:
+ 161              		.cfi_restore 7
+ 162              		.cfi_def_cfa_offset 0
+ 163 0018 7047     		bx	lr
+ 164              		.cfi_endproc
+ 165              	.LFE5:
+ 167              		.section	.text._wait_r,"ax",%progbits
+ 168              		.align	1
+ 169              		.global	_wait_r
+ 170              		.syntax unified
+ 171              		.thumb
+ 172              		.thumb_func
+ 173              		.fpu fpv4-sp-d16
+ 175              	_wait_r:
+ 176              	.LFB6:
+  59:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** 
+ARM GAS  /tmp/cc3krJu4.s 			page 5
+
+
+  60:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** int _wait_r(struct _reent *ptr, int *status)
+  61:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** {
+ 177              		.loc 1 61 1
+ 178              		.cfi_startproc
+ 179              		@ args = 0, pretend = 0, frame = 8
+ 180              		@ frame_needed = 1, uses_anonymous_args = 0
+ 181              		@ link register save eliminated.
+ 182 0000 80B4     		push	{r7}
+ 183              	.LCFI18:
+ 184              		.cfi_def_cfa_offset 4
+ 185              		.cfi_offset 7, -4
+ 186 0002 83B0     		sub	sp, sp, #12
+ 187              	.LCFI19:
+ 188              		.cfi_def_cfa_offset 16
+ 189 0004 00AF     		add	r7, sp, #0
+ 190              	.LCFI20:
+ 191              		.cfi_def_cfa_register 7
+ 192 0006 7860     		str	r0, [r7, #4]
+ 193 0008 3960     		str	r1, [r7]
+  62:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****     /* not support */
+  63:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****     ptr->_errno = ENOTSUP;
+ 194              		.loc 1 63 17
+ 195 000a 7B68     		ldr	r3, [r7, #4]
+ 196 000c 8622     		movs	r2, #134
+ 197 000e 1A60     		str	r2, [r3]
+  64:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****     return -1;
+ 198              		.loc 1 64 12
+ 199 0010 4FF0FF33 		mov	r3, #-1
+  65:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** }
+ 200              		.loc 1 65 1
+ 201 0014 1846     		mov	r0, r3
+ 202 0016 0C37     		adds	r7, r7, #12
+ 203              	.LCFI21:
+ 204              		.cfi_def_cfa_offset 4
+ 205 0018 BD46     		mov	sp, r7
+ 206              	.LCFI22:
+ 207              		.cfi_def_cfa_register 13
+ 208              		@ sp needed
+ 209 001a 5DF8047B 		ldr	r7, [sp], #4
+ 210              	.LCFI23:
+ 211              		.cfi_restore 7
+ 212              		.cfi_def_cfa_offset 0
+ 213 001e 7047     		bx	lr
+ 214              		.cfi_endproc
+ 215              	.LFE6:
+ 217              		.section	.text._gettimeofday_r,"ax",%progbits
+ 218              		.align	1
+ 219              		.global	_gettimeofday_r
+ 220              		.syntax unified
+ 221              		.thumb
+ 222              		.thumb_func
+ 223              		.fpu fpv4-sp-d16
+ 225              	_gettimeofday_r:
+ 226              	.LFB7:
+  66:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** 
+  67:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** int _gettimeofday_r(struct _reent *ptr, struct timeval *tv, void *__tzp)
+  68:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** {
+ARM GAS  /tmp/cc3krJu4.s 			page 6
+
+
+ 227              		.loc 1 68 1
+ 228              		.cfi_startproc
+ 229              		@ args = 0, pretend = 0, frame = 16
+ 230              		@ frame_needed = 1, uses_anonymous_args = 0
+ 231              		@ link register save eliminated.
+ 232 0000 80B4     		push	{r7}
+ 233              	.LCFI24:
+ 234              		.cfi_def_cfa_offset 4
+ 235              		.cfi_offset 7, -4
+ 236 0002 85B0     		sub	sp, sp, #20
+ 237              	.LCFI25:
+ 238              		.cfi_def_cfa_offset 24
+ 239 0004 00AF     		add	r7, sp, #0
+ 240              	.LCFI26:
+ 241              		.cfi_def_cfa_register 7
+ 242 0006 F860     		str	r0, [r7, #12]
+ 243 0008 B960     		str	r1, [r7, #8]
+ 244 000a 7A60     		str	r2, [r7, #4]
+  69:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****     /* not support */
+  70:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****     ptr->_errno = ENOTSUP;
+ 245              		.loc 1 70 17
+ 246 000c FB68     		ldr	r3, [r7, #12]
+ 247 000e 8622     		movs	r2, #134
+ 248 0010 1A60     		str	r2, [r3]
+  71:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****     return -1;
+ 249              		.loc 1 71 12
+ 250 0012 4FF0FF33 		mov	r3, #-1
+  72:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** }
+ 251              		.loc 1 72 1
+ 252 0016 1846     		mov	r0, r3
+ 253 0018 1437     		adds	r7, r7, #20
+ 254              	.LCFI27:
+ 255              		.cfi_def_cfa_offset 4
+ 256 001a BD46     		mov	sp, r7
+ 257              	.LCFI28:
+ 258              		.cfi_def_cfa_register 13
+ 259              		@ sp needed
+ 260 001c 5DF8047B 		ldr	r7, [sp], #4
+ 261              	.LCFI29:
+ 262              		.cfi_restore 7
+ 263              		.cfi_def_cfa_offset 0
+ 264 0020 7047     		bx	lr
+ 265              		.cfi_endproc
+ 266              	.LFE7:
+ 268              		.section	.text._malloc_r,"ax",%progbits
+ 269              		.align	1
+ 270              		.global	_malloc_r
+ 271              		.syntax unified
+ 272              		.thumb
+ 273              		.thumb_func
+ 274              		.fpu fpv4-sp-d16
+ 276              	_malloc_r:
+ 277              	.LFB8:
+  73:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** 
+  74:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** void *_malloc_r(struct _reent *ptr, size_t size)
+  75:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** {
+ 278              		.loc 1 75 1
+ARM GAS  /tmp/cc3krJu4.s 			page 7
+
+
+ 279              		.cfi_startproc
+ 280              		@ args = 0, pretend = 0, frame = 8
+ 281              		@ frame_needed = 1, uses_anonymous_args = 0
+ 282 0000 80B5     		push	{r7, lr}
+ 283              	.LCFI30:
+ 284              		.cfi_def_cfa_offset 8
+ 285              		.cfi_offset 7, -8
+ 286              		.cfi_offset 14, -4
+ 287 0002 82B0     		sub	sp, sp, #8
+ 288              	.LCFI31:
+ 289              		.cfi_def_cfa_offset 16
+ 290 0004 00AF     		add	r7, sp, #0
+ 291              	.LCFI32:
+ 292              		.cfi_def_cfa_register 7
+ 293 0006 7860     		str	r0, [r7, #4]
+ 294 0008 3960     		str	r1, [r7]
+  76:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****     return malloc(size);
+ 295              		.loc 1 76 12
+ 296 000a 3868     		ldr	r0, [r7]
+ 297 000c FFF7FEFF 		bl	malloc
+ 298 0010 0346     		mov	r3, r0
+  77:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** }
+ 299              		.loc 1 77 1
+ 300 0012 1846     		mov	r0, r3
+ 301 0014 0837     		adds	r7, r7, #8
+ 302              	.LCFI33:
+ 303              		.cfi_def_cfa_offset 8
+ 304 0016 BD46     		mov	sp, r7
+ 305              	.LCFI34:
+ 306              		.cfi_def_cfa_register 13
+ 307              		@ sp needed
+ 308 0018 80BD     		pop	{r7, pc}
+ 309              		.cfi_endproc
+ 310              	.LFE8:
+ 312              		.section	.text._realloc_r,"ax",%progbits
+ 313              		.align	1
+ 314              		.global	_realloc_r
+ 315              		.syntax unified
+ 316              		.thumb
+ 317              		.thumb_func
+ 318              		.fpu fpv4-sp-d16
+ 320              	_realloc_r:
+ 321              	.LFB9:
+  78:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** 
+  79:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** extern void *los_mem_realloc(void *old, int newlen);
+  80:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** 
+  81:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** void *_realloc_r(struct _reent *ptr, void *old, size_t newlen)
+  82:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** {
+ 322              		.loc 1 82 1
+ 323              		.cfi_startproc
+ 324              		@ args = 0, pretend = 0, frame = 16
+ 325              		@ frame_needed = 1, uses_anonymous_args = 0
+ 326 0000 80B5     		push	{r7, lr}
+ 327              	.LCFI35:
+ 328              		.cfi_def_cfa_offset 8
+ 329              		.cfi_offset 7, -8
+ 330              		.cfi_offset 14, -4
+ARM GAS  /tmp/cc3krJu4.s 			page 8
+
+
+ 331 0002 84B0     		sub	sp, sp, #16
+ 332              	.LCFI36:
+ 333              		.cfi_def_cfa_offset 24
+ 334 0004 00AF     		add	r7, sp, #0
+ 335              	.LCFI37:
+ 336              		.cfi_def_cfa_register 7
+ 337 0006 F860     		str	r0, [r7, #12]
+ 338 0008 B960     		str	r1, [r7, #8]
+ 339 000a 7A60     		str	r2, [r7, #4]
+  83:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****     return los_mem_realloc (old, newlen);
+ 340              		.loc 1 83 12
+ 341 000c 7B68     		ldr	r3, [r7, #4]
+ 342 000e 1946     		mov	r1, r3
+ 343 0010 B868     		ldr	r0, [r7, #8]
+ 344 0012 FFF7FEFF 		bl	los_mem_realloc
+ 345 0016 0346     		mov	r3, r0
+  84:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** }
+ 346              		.loc 1 84 1
+ 347 0018 1846     		mov	r0, r3
+ 348 001a 1037     		adds	r7, r7, #16
+ 349              	.LCFI38:
+ 350              		.cfi_def_cfa_offset 8
+ 351 001c BD46     		mov	sp, r7
+ 352              	.LCFI39:
+ 353              		.cfi_def_cfa_register 13
+ 354              		@ sp needed
+ 355 001e 80BD     		pop	{r7, pc}
+ 356              		.cfi_endproc
+ 357              	.LFE9:
+ 359              		.section	.text._calloc_r,"ax",%progbits
+ 360              		.align	1
+ 361              		.global	_calloc_r
+ 362              		.syntax unified
+ 363              		.thumb
+ 364              		.thumb_func
+ 365              		.fpu fpv4-sp-d16
+ 367              	_calloc_r:
+ 368              	.LFB10:
+  85:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** 
+  86:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** void *_calloc_r(struct _reent *ptr, size_t size, size_t len)
+  87:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** {
+ 369              		.loc 1 87 1
+ 370              		.cfi_startproc
+ 371              		@ args = 0, pretend = 0, frame = 16
+ 372              		@ frame_needed = 1, uses_anonymous_args = 0
+ 373 0000 80B5     		push	{r7, lr}
+ 374              	.LCFI40:
+ 375              		.cfi_def_cfa_offset 8
+ 376              		.cfi_offset 7, -8
+ 377              		.cfi_offset 14, -4
+ 378 0002 84B0     		sub	sp, sp, #16
+ 379              	.LCFI41:
+ 380              		.cfi_def_cfa_offset 24
+ 381 0004 00AF     		add	r7, sp, #0
+ 382              	.LCFI42:
+ 383              		.cfi_def_cfa_register 7
+ 384 0006 F860     		str	r0, [r7, #12]
+ARM GAS  /tmp/cc3krJu4.s 			page 9
+
+
+ 385 0008 B960     		str	r1, [r7, #8]
+ 386 000a 7A60     		str	r2, [r7, #4]
+  88:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****     return calloc(size, len);
+ 387              		.loc 1 88 12
+ 388 000c 7968     		ldr	r1, [r7, #4]
+ 389 000e B868     		ldr	r0, [r7, #8]
+ 390 0010 FFF7FEFF 		bl	calloc
+ 391 0014 0346     		mov	r3, r0
+  89:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** }
+ 392              		.loc 1 89 1
+ 393 0016 1846     		mov	r0, r3
+ 394 0018 1037     		adds	r7, r7, #16
+ 395              	.LCFI43:
+ 396              		.cfi_def_cfa_offset 8
+ 397 001a BD46     		mov	sp, r7
+ 398              	.LCFI44:
+ 399              		.cfi_def_cfa_register 13
+ 400              		@ sp needed
+ 401 001c 80BD     		pop	{r7, pc}
+ 402              		.cfi_endproc
+ 403              	.LFE10:
+ 405              		.section	.text._free_r,"ax",%progbits
+ 406              		.align	1
+ 407              		.global	_free_r
+ 408              		.syntax unified
+ 409              		.thumb
+ 410              		.thumb_func
+ 411              		.fpu fpv4-sp-d16
+ 413              	_free_r:
+ 414              	.LFB11:
+  90:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** 
+  91:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** void _free_r(struct _reent *ptr, void *addr)
+  92:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** {
+ 415              		.loc 1 92 1
+ 416              		.cfi_startproc
+ 417              		@ args = 0, pretend = 0, frame = 8
+ 418              		@ frame_needed = 1, uses_anonymous_args = 0
+ 419 0000 80B5     		push	{r7, lr}
+ 420              	.LCFI45:
+ 421              		.cfi_def_cfa_offset 8
+ 422              		.cfi_offset 7, -8
+ 423              		.cfi_offset 14, -4
+ 424 0002 82B0     		sub	sp, sp, #8
+ 425              	.LCFI46:
+ 426              		.cfi_def_cfa_offset 16
+ 427 0004 00AF     		add	r7, sp, #0
+ 428              	.LCFI47:
+ 429              		.cfi_def_cfa_register 7
+ 430 0006 7860     		str	r0, [r7, #4]
+ 431 0008 3960     		str	r1, [r7]
+  93:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c ****     free(addr);
+ 432              		.loc 1 93 5
+ 433 000a 3868     		ldr	r0, [r7]
+ 434 000c FFF7FEFF 		bl	free
+  94:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** }
+ 435              		.loc 1 94 1
+ 436 0010 00BF     		nop
+ARM GAS  /tmp/cc3krJu4.s 			page 10
+
+
+ 437 0012 0837     		adds	r7, r7, #8
+ 438              	.LCFI48:
+ 439              		.cfi_def_cfa_offset 8
+ 440 0014 BD46     		mov	sp, r7
+ 441              	.LCFI49:
+ 442              		.cfi_def_cfa_register 13
+ 443              		@ sp needed
+ 444 0016 80BD     		pop	{r7, pc}
+ 445              		.cfi_endproc
+ 446              	.LFE11:
+ 448              		.section	.text._system,"ax",%progbits
+ 449              		.align	1
+ 450              		.global	_system
+ 451              		.syntax unified
+ 452              		.thumb
+ 453              		.thumb_func
+ 454              		.fpu fpv4-sp-d16
+ 456              	_system:
+ 457              	.LFB12:
+  95:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** 
+  96:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** 
+  97:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** 
+  98:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** void _system(const char *s)
+  99:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** {
+ 458              		.loc 1 99 1
+ 459              		.cfi_startproc
+ 460              		@ args = 0, pretend = 0, frame = 8
+ 461              		@ frame_needed = 1, uses_anonymous_args = 0
+ 462              		@ link register save eliminated.
+ 463 0000 80B4     		push	{r7}
+ 464              	.LCFI50:
+ 465              		.cfi_def_cfa_offset 4
+ 466              		.cfi_offset 7, -4
+ 467 0002 83B0     		sub	sp, sp, #12
+ 468              	.LCFI51:
+ 469              		.cfi_def_cfa_offset 16
+ 470 0004 00AF     		add	r7, sp, #0
+ 471              	.LCFI52:
+ 472              		.cfi_def_cfa_register 7
+ 473 0006 7860     		str	r0, [r7, #4]
+ 100:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/newlib_stub.c **** }
+ 474              		.loc 1 100 1
+ 475 0008 00BF     		nop
+ 476 000a 0C37     		adds	r7, r7, #12
+ 477              	.LCFI53:
+ 478              		.cfi_def_cfa_offset 4
+ 479 000c BD46     		mov	sp, r7
+ 480              	.LCFI54:
+ 481              		.cfi_def_cfa_register 13
+ 482              		@ sp needed
+ 483 000e 5DF8047B 		ldr	r7, [sp], #4
+ 484              	.LCFI55:
+ 485              		.cfi_restore 7
+ 486              		.cfi_def_cfa_offset 0
+ 487 0012 7047     		bx	lr
+ 488              		.cfi_endproc
+ 489              	.LFE12:
+ARM GAS  /tmp/cc3krJu4.s 			page 11
+
+
+ 491              		.text
+ 492              	.Letext0:
+ 493              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 494              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 495              		.file 4 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 496              		.file 5 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 497              		.file 6 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/ree
+ 498              		.file 7 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/stdlib.
+ 499              		.file 8 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/err
+ 500              		.file 9 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ti
+ 501              		.file 10 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/reent.
+ARM GAS  /tmp/cc3krJu4.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 newlib_stub.c
+     /tmp/cc3krJu4.s:18     .text._execve_r:0000000000000000 $t
+     /tmp/cc3krJu4.s:26     .text._execve_r:0000000000000000 _execve_r
+     /tmp/cc3krJu4.s:72     .text._times_r:0000000000000000 $t
+     /tmp/cc3krJu4.s:79     .text._times_r:0000000000000000 _times_r
+     /tmp/cc3krJu4.s:122    .text._unlink_r:0000000000000000 $t
+     /tmp/cc3krJu4.s:129    .text._unlink_r:0000000000000000 _unlink_r
+     /tmp/cc3krJu4.s:168    .text._wait_r:0000000000000000 $t
+     /tmp/cc3krJu4.s:175    .text._wait_r:0000000000000000 _wait_r
+     /tmp/cc3krJu4.s:218    .text._gettimeofday_r:0000000000000000 $t
+     /tmp/cc3krJu4.s:225    .text._gettimeofday_r:0000000000000000 _gettimeofday_r
+     /tmp/cc3krJu4.s:269    .text._malloc_r:0000000000000000 $t
+     /tmp/cc3krJu4.s:276    .text._malloc_r:0000000000000000 _malloc_r
+     /tmp/cc3krJu4.s:313    .text._realloc_r:0000000000000000 $t
+     /tmp/cc3krJu4.s:320    .text._realloc_r:0000000000000000 _realloc_r
+     /tmp/cc3krJu4.s:360    .text._calloc_r:0000000000000000 $t
+     /tmp/cc3krJu4.s:367    .text._calloc_r:0000000000000000 _calloc_r
+     /tmp/cc3krJu4.s:406    .text._free_r:0000000000000000 $t
+     /tmp/cc3krJu4.s:413    .text._free_r:0000000000000000 _free_r
+     /tmp/cc3krJu4.s:449    .text._system:0000000000000000 $t
+     /tmp/cc3krJu4.s:456    .text._system:0000000000000000 _system
+
+UNDEFINED SYMBOLS
+malloc
+los_mem_realloc
+calloc
+free

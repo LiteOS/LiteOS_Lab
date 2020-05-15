@@ -1,0 +1,1386 @@
+ARM GAS  /tmp/ccRC0Gho.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"shell_cmd.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.bss.gs_shell_cb,"aw",%nobits
+  18              		.align	2
+  21              	gs_shell_cb:
+  22 0000 00000000 		.space	16
+  22      00000000 
+  22      00000000 
+  22      00000000 
+  23              		.section	.rodata
+  24              		.align	2
+  25              	.LC0:
+  26 0000 434D4400 		.ascii	"CMD\000"
+  27              		.align	2
+  28              	.LC1:
+  29 0004 56415200 		.ascii	"VAR\000"
+  30              		.section	.data.gs_os_shell_type,"aw"
+  31              		.align	2
+  34              	gs_os_shell_type:
+  35 0000 00000000 		.word	.LC0
+  36 0004 04000000 		.word	.LC1
+  37              		.section	.bss.tab_matches,"aw",%nobits
+  38              		.align	2
+  41              	tab_matches:
+  42 0000 00000000 		.space	68
+  42      00000000 
+  42      00000000 
+  42      00000000 
+  42      00000000 
+  43              		.section	.rodata
+  44              		.align	2
+  45              	.LC2:
+  46 0008 4C656E00 		.ascii	"Len\000"
+  47              		.align	2
+  48              	.LC3:
+  49 000c 54797065 		.ascii	"Type\000"
+  49      00
+  50 0011 000000   		.align	2
+  51              	.LC4:
+  52 0014 4E616D65 		.ascii	"Name\000"
+  52      00
+  53 0019 000000   		.align	2
+  54              	.LC5:
+ARM GAS  /tmp/ccRC0Gho.s 			page 2
+
+
+  55 001c 252D3136 		.ascii	"%-16s%-5s%-4s%-10s%-20s\012\015\000"
+  55      73252D35 
+  55      73252D34 
+  55      73252D31 
+  55      3073252D 
+  56 0036 0000     		.align	2
+  57              	.LC6:
+  58 0038 44657363 		.ascii	"Description\000"
+  58      72697074 
+  58      696F6E00 
+  59              		.align	2
+  60              	.LC7:
+  61 0044 52756E41 		.ascii	"RunAddr\000"
+  61      64647200 
+  62              		.align	2
+  63              	.LC8:
+  64 004c 252D3136 		.ascii	"%-16s%-5s%-4x%08x  %-30s\012\015\000"
+  64      73252D35 
+  64      73252D34 
+  64      78253038 
+  64      78202025 
+  65 0067 00       		.align	2
+  66              	.LC9:
+  67 0068 252D3278 		.ascii	"%-2x  %-16s%-5s%-4x%08x  %-30s\012\015\000"
+  67      2020252D 
+  67      31367325 
+  67      2D357325 
+  67      2D347825 
+  68              		.section	.text.shell_cmd_help,"ax",%progbits
+  69              		.align	1
+  70              		.arch armv7e-m
+  71              		.syntax unified
+  72              		.thumb
+  73              		.thumb_func
+  74              		.fpu fpv4-sp-d16
+  76              	shell_cmd_help:
+  77              	.LFB3:
+  78              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** /*----------------------------------------------------------------------------
+   2:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * All rights reserved.
+   4:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * are permitted provided that the following conditions are met:
+   6:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * conditions and the following disclaimer.
+   8:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * provided with the distribution.
+  11:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * permission.
+  14:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ARM GAS  /tmp/ccRC0Gho.s 			page 3
+
+
+  20:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  *---------------------------------------------------------------------------*/
+  26:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** /*----------------------------------------------------------------------------
+  27:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * Notice of Export Control Law
+  28:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * ===============================================
+  29:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * applicable export control laws and regulations.
+  33:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  *---------------------------------------------------------------------------*/
+  34:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** /**
+  35:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  *  DATE                AUTHOR      INSTRUCTION
+  36:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  *  2019-05-14 17:22  zhangqianfu  The first version
+  37:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  *
+  38:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  */
+  39:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+  40:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** /**********************************README***************************************
+  41:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * 1, we will load the command table in shell_cmd_init
+  42:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  * 2, uptil now, we support the keil,gcc,you could add more compiler here
+  43:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****  *    make sure you get the method to define a section and know its address and size
+  44:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** *******************************************************************************/
+  45:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+  46:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+  47:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** /**************************************FILE INCLIUDES**************************/
+  48:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+  49:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** #include <stdint.h>
+  50:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** #include <stddef.h>
+  51:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** #include <stdio.h>
+  52:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** #include <string.h>
+  53:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** #include <stdlib.h>
+  54:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** #include <shell.h>
+  55:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** #include <link_misc.h>
+  56:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+  57:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+  58:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** typedef int (*fn_shell_cmdentry)(int argc, const char *argv[]);
+  59:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+  60:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+  61:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** /**************************************FILE DEFINES****************************/
+  62:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** #define cn_shell_args       16     //at most could support 16 parameters for command
+  63:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** #define cn_shell_ver_major  1
+  64:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** #define cn_shell_ver_minor  0
+  65:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** /**************************************FILE DATA STRUCTURE*********************/
+  67:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** struct shell_cb_t
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** {
+  69:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     struct shell_item_t *s;      //static tabs
+  70:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     int                  s_num;  //static number
+  71:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     struct shell_item_t *d;      //dynamic list
+  72:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     int                  d_num;  //dynamic number;
+  73:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** };
+  74:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+  75:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+  76:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** /**************************************FILE VARS*******************************/
+ARM GAS  /tmp/ccRC0Gho.s 			page 4
+
+
+  77:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** static struct shell_cb_t gs_shell_cb; //shell controller here
+  78:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+  79:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** static const char *gs_os_shell_type[EN_OSSHELL_LAST]={
+  80:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     "CMD",\
+  81:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     "VAR",
+  82:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** };//this will be used in show the shell type
+  83:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** static struct shell_tab_matches tab_matches;
+  84:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** /**************************************FILE FUNCTIONS**************************/
+  85:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** //export functions
+  86:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** int   shell_cmd_execute(char *param);            //execute the command
+  87:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** int   shell_cmd_init(void);                      //do the command table load
+  88:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** const struct shell_tab_matches *shell_cmd_index(const char *index);  //find the most like command
+  89:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+  90:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+  91:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** /**************************************FILE FUNCIMPLEMENT**********************/
+  92:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+  93:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** /*******************************************************************************
+  94:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** function     :system help
+  95:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** parameters   :
+  96:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** instruction  :take care of help specified command
+  97:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** *******************************************************************************/
+  98:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** static int   shell_cmd_help(int argc, const char *argv[]){
+  79              		.loc 1 98 58
+  80              		.cfi_startproc
+  81              		@ args = 0, pretend = 0, frame = 16
+  82              		@ frame_needed = 1, uses_anonymous_args = 0
+  83 0000 90B5     		push	{r4, r7, lr}
+  84              	.LCFI0:
+  85              		.cfi_def_cfa_offset 12
+  86              		.cfi_offset 4, -12
+  87              		.cfi_offset 7, -8
+  88              		.cfi_offset 14, -4
+  89 0002 89B0     		sub	sp, sp, #36
+  90              	.LCFI1:
+  91              		.cfi_def_cfa_offset 48
+  92 0004 04AF     		add	r7, sp, #16
+  93              	.LCFI2:
+  94              		.cfi_def_cfa 7, 32
+  95 0006 7860     		str	r0, [r7, #4]
+  96 0008 3960     		str	r1, [r7]
+  99:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     int   i ;
+ 100:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     struct shell_item_t *item;
+ 101:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+ 102:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     (void) item;
+ 103:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     (void) gs_os_shell_type;
+ 104:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+ 105:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     link_printf("%-16s%-5s%-4s%-10s%-20s\n\r",\
+  97              		.loc 1 105 5
+  98 000a 304B     		ldr	r3, .L7
+  99 000c 0193     		str	r3, [sp, #4]
+ 100 000e 304B     		ldr	r3, .L7+4
+ 101 0010 0093     		str	r3, [sp]
+ 102 0012 304B     		ldr	r3, .L7+8
+ 103 0014 304A     		ldr	r2, .L7+12
+ 104 0016 3149     		ldr	r1, .L7+16
+ 105 0018 3148     		ldr	r0, .L7+20
+ 106 001a FFF7FEFF 		bl	printf
+ARM GAS  /tmp/ccRC0Gho.s 			page 5
+
+
+ 106:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****             "Name","Type","Len","RunAddr","Description");
+ 107:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     for(i = 0;i <gs_shell_cb.s_num;i++){
+ 107              		.loc 1 107 11
+ 108 001e 0023     		movs	r3, #0
+ 109 0020 FB60     		str	r3, [r7, #12]
+ 110              		.loc 1 107 5
+ 111 0022 1FE0     		b	.L2
+ 112              	.L3:
+ 108:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.s[i]);
+ 113              		.loc 1 108 29 discriminator 3
+ 114 0024 2F4B     		ldr	r3, .L7+24
+ 115 0026 1A68     		ldr	r2, [r3]
+ 116              		.loc 1 108 31 discriminator 3
+ 117 0028 FB68     		ldr	r3, [r7, #12]
+ 118 002a 1B01     		lsls	r3, r3, #4
+ 119              		.loc 1 108 14 discriminator 3
+ 120 002c 1344     		add	r3, r3, r2
+ 121 002e BB60     		str	r3, [r7, #8]
+ 109:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         link_printf("%-16s%-5s%-4x%08x  %-30s\n\r",\
+ 122              		.loc 1 109 9 discriminator 3
+ 123 0030 BB68     		ldr	r3, [r7, #8]
+ 124 0032 1968     		ldr	r1, [r3]
+ 110:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                 item->name,gs_os_shell_type[item->type%EN_OSSHELL_LAST],\
+ 125              		.loc 1 110 49 discriminator 3
+ 126 0034 BB68     		ldr	r3, [r7, #8]
+ 127 0036 9B89     		ldrh	r3, [r3, #12]
+ 128              		.loc 1 110 55 discriminator 3
+ 129 0038 03F00103 		and	r3, r3, #1
+ 109:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         link_printf("%-16s%-5s%-4x%08x  %-30s\n\r",\
+ 130              		.loc 1 109 9 discriminator 3
+ 131 003c 2A4A     		ldr	r2, .L7+28
+ 132 003e 52F82320 		ldr	r2, [r2, r3, lsl #2]
+ 111:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                 item->len,(unsigned int)item->addr,item->help);
+ 133              		.loc 1 111 21 discriminator 3
+ 134 0042 BB68     		ldr	r3, [r7, #8]
+ 135 0044 DB89     		ldrh	r3, [r3, #14]
+ 109:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         link_printf("%-16s%-5s%-4x%08x  %-30s\n\r",\
+ 136              		.loc 1 109 9 discriminator 3
+ 137 0046 1C46     		mov	r4, r3
+ 138              		.loc 1 111 45 discriminator 3
+ 139 0048 BB68     		ldr	r3, [r7, #8]
+ 140 004a 9B68     		ldr	r3, [r3, #8]
+ 109:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         link_printf("%-16s%-5s%-4x%08x  %-30s\n\r",\
+ 141              		.loc 1 109 9 discriminator 3
+ 142 004c 1846     		mov	r0, r3
+ 143 004e BB68     		ldr	r3, [r7, #8]
+ 144 0050 5B68     		ldr	r3, [r3, #4]
+ 145 0052 0193     		str	r3, [sp, #4]
+ 146 0054 0090     		str	r0, [sp]
+ 147 0056 2346     		mov	r3, r4
+ 148 0058 2448     		ldr	r0, .L7+32
+ 149 005a FFF7FEFF 		bl	printf
+ 107:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.s[i]);
+ 150              		.loc 1 107 37 discriminator 3
+ 151 005e FB68     		ldr	r3, [r7, #12]
+ 152 0060 0133     		adds	r3, r3, #1
+ 153 0062 FB60     		str	r3, [r7, #12]
+ARM GAS  /tmp/ccRC0Gho.s 			page 6
+
+
+ 154              	.L2:
+ 107:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.s[i]);
+ 155              		.loc 1 107 29 discriminator 1
+ 156 0064 1F4B     		ldr	r3, .L7+24
+ 157 0066 5B68     		ldr	r3, [r3, #4]
+ 107:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.s[i]);
+ 158              		.loc 1 107 5 discriminator 1
+ 159 0068 FA68     		ldr	r2, [r7, #12]
+ 160 006a 9A42     		cmp	r2, r3
+ 161 006c DADB     		blt	.L3
+ 112:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     }
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     for(i = 0;i <gs_shell_cb.d_num;i++){
+ 162              		.loc 1 113 11
+ 163 006e 0023     		movs	r3, #0
+ 164 0070 FB60     		str	r3, [r7, #12]
+ 165              		.loc 1 113 5
+ 166 0072 21E0     		b	.L4
+ 167              	.L5:
+ 114:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.d[i]);
+ 168              		.loc 1 114 29 discriminator 3
+ 169 0074 1B4B     		ldr	r3, .L7+24
+ 170 0076 9A68     		ldr	r2, [r3, #8]
+ 171              		.loc 1 114 31 discriminator 3
+ 172 0078 FB68     		ldr	r3, [r7, #12]
+ 173 007a 1B01     		lsls	r3, r3, #4
+ 174              		.loc 1 114 14 discriminator 3
+ 175 007c 1344     		add	r3, r3, r2
+ 176 007e BB60     		str	r3, [r7, #8]
+ 115:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         link_printf("%-2x  %-16s%-5s%-4x%08x  %-30s\n\r",\
+ 177              		.loc 1 115 9 discriminator 3
+ 178 0080 BB68     		ldr	r3, [r7, #8]
+ 179 0082 1A68     		ldr	r2, [r3]
+ 116:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                 i,item->name,gs_os_shell_type[item->type%EN_OSSHELL_LAST],\
+ 180              		.loc 1 116 51 discriminator 3
+ 181 0084 BB68     		ldr	r3, [r7, #8]
+ 182 0086 9B89     		ldrh	r3, [r3, #12]
+ 183              		.loc 1 116 57 discriminator 3
+ 184 0088 03F00103 		and	r3, r3, #1
+ 115:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         link_printf("%-2x  %-16s%-5s%-4x%08x  %-30s\n\r",\
+ 185              		.loc 1 115 9 discriminator 3
+ 186 008c 1649     		ldr	r1, .L7+28
+ 187 008e 51F82310 		ldr	r1, [r1, r3, lsl #2]
+ 117:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                 item->len,(unsigned int)item->addr,item->help);
+ 188              		.loc 1 117 21 discriminator 3
+ 189 0092 BB68     		ldr	r3, [r7, #8]
+ 190 0094 DB89     		ldrh	r3, [r3, #14]
+ 115:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         link_printf("%-2x  %-16s%-5s%-4x%08x  %-30s\n\r",\
+ 191              		.loc 1 115 9 discriminator 3
+ 192 0096 1846     		mov	r0, r3
+ 193              		.loc 1 117 45 discriminator 3
+ 194 0098 BB68     		ldr	r3, [r7, #8]
+ 195 009a 9B68     		ldr	r3, [r3, #8]
+ 115:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         link_printf("%-2x  %-16s%-5s%-4x%08x  %-30s\n\r",\
+ 196              		.loc 1 115 9 discriminator 3
+ 197 009c 1C46     		mov	r4, r3
+ 198 009e BB68     		ldr	r3, [r7, #8]
+ 199 00a0 5B68     		ldr	r3, [r3, #4]
+ARM GAS  /tmp/ccRC0Gho.s 			page 7
+
+
+ 200 00a2 0293     		str	r3, [sp, #8]
+ 201 00a4 0194     		str	r4, [sp, #4]
+ 202 00a6 0090     		str	r0, [sp]
+ 203 00a8 0B46     		mov	r3, r1
+ 204 00aa F968     		ldr	r1, [r7, #12]
+ 205 00ac 1048     		ldr	r0, .L7+36
+ 206 00ae FFF7FEFF 		bl	printf
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.d[i]);
+ 207              		.loc 1 113 37 discriminator 3
+ 208 00b2 FB68     		ldr	r3, [r7, #12]
+ 209 00b4 0133     		adds	r3, r3, #1
+ 210 00b6 FB60     		str	r3, [r7, #12]
+ 211              	.L4:
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.d[i]);
+ 212              		.loc 1 113 29 discriminator 1
+ 213 00b8 0A4B     		ldr	r3, .L7+24
+ 214 00ba DB68     		ldr	r3, [r3, #12]
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.d[i]);
+ 215              		.loc 1 113 5 discriminator 1
+ 216 00bc FA68     		ldr	r2, [r7, #12]
+ 217 00be 9A42     		cmp	r2, r3
+ 218 00c0 D8DB     		blt	.L5
+ 118:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     }
+ 119:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     return 0;
+ 219              		.loc 1 119 12
+ 220 00c2 0023     		movs	r3, #0
+ 120:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** }
+ 221              		.loc 1 120 1
+ 222 00c4 1846     		mov	r0, r3
+ 223 00c6 1437     		adds	r7, r7, #20
+ 224              	.LCFI3:
+ 225              		.cfi_def_cfa_offset 12
+ 226 00c8 BD46     		mov	sp, r7
+ 227              	.LCFI4:
+ 228              		.cfi_def_cfa_register 13
+ 229              		@ sp needed
+ 230 00ca 90BD     		pop	{r4, r7, pc}
+ 231              	.L8:
+ 232              		.align	2
+ 233              	.L7:
+ 234 00cc 38000000 		.word	.LC6
+ 235 00d0 44000000 		.word	.LC7
+ 236 00d4 08000000 		.word	.LC2
+ 237 00d8 0C000000 		.word	.LC3
+ 238 00dc 14000000 		.word	.LC4
+ 239 00e0 1C000000 		.word	.LC5
+ 240 00e4 00000000 		.word	gs_shell_cb
+ 241 00e8 00000000 		.word	gs_os_shell_type
+ 242 00ec 4C000000 		.word	.LC8
+ 243 00f0 68000000 		.word	.LC9
+ 244              		.cfi_endproc
+ 245              	.LFE3:
+ 247              		.section	.text.shell_cmd_match,"ax",%progbits
+ 248              		.align	1
+ 249              		.syntax unified
+ 250              		.thumb
+ 251              		.thumb_func
+ARM GAS  /tmp/ccRC0Gho.s 			page 8
+
+
+ 252              		.fpu fpv4-sp-d16
+ 254              	shell_cmd_match:
+ 255              	.LFB4:
+ 121:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+ 122:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** /*******************************************************************************
+ 123:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** function     :used to find the command
+ 124:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** parameters   :
+ 125:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** instruction  :
+ 126:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** *******************************************************************************/
+ 127:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** static struct shell_item_t *shell_cmd_match(const char *name)
+ 128:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** {
+ 256              		.loc 1 128 1
+ 257              		.cfi_startproc
+ 258              		@ args = 0, pretend = 0, frame = 24
+ 259              		@ frame_needed = 1, uses_anonymous_args = 0
+ 260 0000 80B5     		push	{r7, lr}
+ 261              	.LCFI5:
+ 262              		.cfi_def_cfa_offset 8
+ 263              		.cfi_offset 7, -8
+ 264              		.cfi_offset 14, -4
+ 265 0002 86B0     		sub	sp, sp, #24
+ 266              	.LCFI6:
+ 267              		.cfi_def_cfa_offset 32
+ 268 0004 00AF     		add	r7, sp, #0
+ 269              	.LCFI7:
+ 270              		.cfi_def_cfa_register 7
+ 271 0006 7860     		str	r0, [r7, #4]
+ 129:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     struct shell_item_t *item = NULL;
+ 272              		.loc 1 129 26
+ 273 0008 0023     		movs	r3, #0
+ 274 000a FB60     		str	r3, [r7, #12]
+ 130:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     struct shell_item_t  *ret = NULL;
+ 275              		.loc 1 130 27
+ 276 000c 0023     		movs	r3, #0
+ 277 000e 7B61     		str	r3, [r7, #20]
+ 131:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     int   i;
+ 132:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     //search the static tab first,if not found then find the dynamic tab
+ 133:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     ret = NULL;
+ 278              		.loc 1 133 9
+ 279 0010 0023     		movs	r3, #0
+ 280 0012 7B61     		str	r3, [r7, #20]
+ 134:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     for(i = 0;i <gs_shell_cb.s_num;i++){
+ 281              		.loc 1 134 11
+ 282 0014 0023     		movs	r3, #0
+ 283 0016 3B61     		str	r3, [r7, #16]
+ 284              		.loc 1 134 5
+ 285 0018 14E0     		b	.L10
+ 286              	.L13:
+ 135:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.s[i]);
+ 287              		.loc 1 135 29
+ 288 001a 1F4B     		ldr	r3, .L19
+ 289 001c 1A68     		ldr	r2, [r3]
+ 290              		.loc 1 135 31
+ 291 001e 3B69     		ldr	r3, [r7, #16]
+ 292 0020 1B01     		lsls	r3, r3, #4
+ 293              		.loc 1 135 14
+ 294 0022 1344     		add	r3, r3, r2
+ARM GAS  /tmp/ccRC0Gho.s 			page 9
+
+
+ 295 0024 FB60     		str	r3, [r7, #12]
+ 136:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         if(0 == strcmp(name,item->name)){
+ 296              		.loc 1 136 17
+ 297 0026 FB68     		ldr	r3, [r7, #12]
+ 298 0028 1B68     		ldr	r3, [r3]
+ 299 002a 1946     		mov	r1, r3
+ 300 002c 7868     		ldr	r0, [r7, #4]
+ 301 002e FFF7FEFF 		bl	strcmp
+ 302 0032 0346     		mov	r3, r0
+ 303              		.loc 1 136 11
+ 304 0034 002B     		cmp	r3, #0
+ 305 0036 02D1     		bne	.L11
+ 137:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****             ret = item;
+ 306              		.loc 1 137 17
+ 307 0038 FB68     		ldr	r3, [r7, #12]
+ 308 003a 7B61     		str	r3, [r7, #20]
+ 138:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****             break;
+ 309              		.loc 1 138 13
+ 310 003c 07E0     		b	.L12
+ 311              	.L11:
+ 134:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.s[i]);
+ 312              		.loc 1 134 37 discriminator 2
+ 313 003e 3B69     		ldr	r3, [r7, #16]
+ 314 0040 0133     		adds	r3, r3, #1
+ 315 0042 3B61     		str	r3, [r7, #16]
+ 316              	.L10:
+ 134:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.s[i]);
+ 317              		.loc 1 134 29 discriminator 1
+ 318 0044 144B     		ldr	r3, .L19
+ 319 0046 5B68     		ldr	r3, [r3, #4]
+ 134:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.s[i]);
+ 320              		.loc 1 134 5 discriminator 1
+ 321 0048 3A69     		ldr	r2, [r7, #16]
+ 322 004a 9A42     		cmp	r2, r3
+ 323 004c E5DB     		blt	.L13
+ 324              	.L12:
+ 139:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         }
+ 140:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     }
+ 141:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     if(NULL == ret){
+ 325              		.loc 1 141 7
+ 326 004e 7B69     		ldr	r3, [r7, #20]
+ 327 0050 002B     		cmp	r3, #0
+ 328 0052 1CD1     		bne	.L14
+ 142:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         for(i = 0;i <gs_shell_cb.d_num;i++){
+ 329              		.loc 1 142 15
+ 330 0054 0023     		movs	r3, #0
+ 331 0056 3B61     		str	r3, [r7, #16]
+ 332              		.loc 1 142 9
+ 333 0058 14E0     		b	.L15
+ 334              	.L17:
+ 143:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****             item = &(gs_shell_cb.d[i]);
+ 335              		.loc 1 143 33
+ 336 005a 0F4B     		ldr	r3, .L19
+ 337 005c 9A68     		ldr	r2, [r3, #8]
+ 338              		.loc 1 143 35
+ 339 005e 3B69     		ldr	r3, [r7, #16]
+ 340 0060 1B01     		lsls	r3, r3, #4
+ARM GAS  /tmp/ccRC0Gho.s 			page 10
+
+
+ 341              		.loc 1 143 18
+ 342 0062 1344     		add	r3, r3, r2
+ 343 0064 FB60     		str	r3, [r7, #12]
+ 144:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****             if(0 == strcmp(name,item->name)){
+ 344              		.loc 1 144 21
+ 345 0066 FB68     		ldr	r3, [r7, #12]
+ 346 0068 1B68     		ldr	r3, [r3]
+ 347 006a 1946     		mov	r1, r3
+ 348 006c 7868     		ldr	r0, [r7, #4]
+ 349 006e FFF7FEFF 		bl	strcmp
+ 350 0072 0346     		mov	r3, r0
+ 351              		.loc 1 144 15
+ 352 0074 002B     		cmp	r3, #0
+ 353 0076 02D1     		bne	.L16
+ 145:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                 ret = item;
+ 354              		.loc 1 145 21
+ 355 0078 FB68     		ldr	r3, [r7, #12]
+ 356 007a 7B61     		str	r3, [r7, #20]
+ 146:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                 break;
+ 357              		.loc 1 146 17
+ 358 007c 07E0     		b	.L14
+ 359              	.L16:
+ 142:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****             item = &(gs_shell_cb.d[i]);
+ 360              		.loc 1 142 41 discriminator 2
+ 361 007e 3B69     		ldr	r3, [r7, #16]
+ 362 0080 0133     		adds	r3, r3, #1
+ 363 0082 3B61     		str	r3, [r7, #16]
+ 364              	.L15:
+ 142:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****             item = &(gs_shell_cb.d[i]);
+ 365              		.loc 1 142 33 discriminator 1
+ 366 0084 044B     		ldr	r3, .L19
+ 367 0086 DB68     		ldr	r3, [r3, #12]
+ 142:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****             item = &(gs_shell_cb.d[i]);
+ 368              		.loc 1 142 9 discriminator 1
+ 369 0088 3A69     		ldr	r2, [r7, #16]
+ 370 008a 9A42     		cmp	r2, r3
+ 371 008c E5DB     		blt	.L17
+ 372              	.L14:
+ 147:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****             }
+ 148:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         }
+ 149:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     }
+ 150:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     return ret;
+ 373              		.loc 1 150 12
+ 374 008e 7B69     		ldr	r3, [r7, #20]
+ 151:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** }
+ 375              		.loc 1 151 1
+ 376 0090 1846     		mov	r0, r3
+ 377 0092 1837     		adds	r7, r7, #24
+ 378              	.LCFI8:
+ 379              		.cfi_def_cfa_offset 8
+ 380 0094 BD46     		mov	sp, r7
+ 381              	.LCFI9:
+ 382              		.cfi_def_cfa_register 13
+ 383              		@ sp needed
+ 384 0096 80BD     		pop	{r7, pc}
+ 385              	.L20:
+ 386              		.align	2
+ARM GAS  /tmp/ccRC0Gho.s 			page 11
+
+
+ 387              	.L19:
+ 388 0098 00000000 		.word	gs_shell_cb
+ 389              		.cfi_endproc
+ 390              	.LFE4:
+ 392              		.section	.text.shell_cmd_index,"ax",%progbits
+ 393              		.align	1
+ 394              		.global	shell_cmd_index
+ 395              		.syntax unified
+ 396              		.thumb
+ 397              		.thumb_func
+ 398              		.fpu fpv4-sp-d16
+ 400              	shell_cmd_index:
+ 401              	.LFB5:
+ 152:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+ 153:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** /*******************************************************************************
+ 154:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** function     :used to find the most like command
+ 155:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** parameters   :
+ 156:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** instruction  :
+ 157:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** *******************************************************************************/
+ 158:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** const struct shell_tab_matches *shell_cmd_index(const char *index){
+ 402              		.loc 1 158 67
+ 403              		.cfi_startproc
+ 404              		@ args = 0, pretend = 0, frame = 16
+ 405              		@ frame_needed = 1, uses_anonymous_args = 0
+ 406 0000 90B5     		push	{r4, r7, lr}
+ 407              	.LCFI10:
+ 408              		.cfi_def_cfa_offset 12
+ 409              		.cfi_offset 4, -12
+ 410              		.cfi_offset 7, -8
+ 411              		.cfi_offset 14, -4
+ 412 0002 85B0     		sub	sp, sp, #20
+ 413              	.LCFI11:
+ 414              		.cfi_def_cfa_offset 32
+ 415 0004 00AF     		add	r7, sp, #0
+ 416              	.LCFI12:
+ 417              		.cfi_def_cfa_register 7
+ 418 0006 7860     		str	r0, [r7, #4]
+ 159:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     struct shell_item_t *item;
+ 160:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     int   i;
+ 161:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     //search the static tab first,if not found then find the dynamic tab
+ 162:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     tab_matches.len = 0;
+ 419              		.loc 1 162 21
+ 420 0008 364B     		ldr	r3, .L31
+ 421 000a 0022     		movs	r2, #0
+ 422 000c A3F84020 		strh	r2, [r3, #64]	@ movhi
+ 163:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     for(i = 0;i <gs_shell_cb.s_num && tab_matches.len < MAX_TAB_MATCHES; i++){
+ 423              		.loc 1 163 11
+ 424 0010 0023     		movs	r3, #0
+ 425 0012 FB60     		str	r3, [r7, #12]
+ 426              		.loc 1 163 5
+ 427 0014 24E0     		b	.L22
+ 428              	.L25:
+ 164:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.s[i]);
+ 429              		.loc 1 164 29
+ 430 0016 344B     		ldr	r3, .L31+4
+ 431 0018 1A68     		ldr	r2, [r3]
+ 432              		.loc 1 164 31
+ARM GAS  /tmp/ccRC0Gho.s 			page 12
+
+
+ 433 001a FB68     		ldr	r3, [r7, #12]
+ 434 001c 1B01     		lsls	r3, r3, #4
+ 435              		.loc 1 164 14
+ 436 001e 1344     		add	r3, r3, r2
+ 437 0020 BB60     		str	r3, [r7, #8]
+ 165:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         if (strncmp(item->name, index, strlen(index)) == 0) {
+ 438              		.loc 1 165 13
+ 439 0022 BB68     		ldr	r3, [r7, #8]
+ 440 0024 1C68     		ldr	r4, [r3]
+ 441 0026 7868     		ldr	r0, [r7, #4]
+ 442 0028 FFF7FEFF 		bl	strlen
+ 443 002c 0346     		mov	r3, r0
+ 444 002e 1A46     		mov	r2, r3
+ 445 0030 7968     		ldr	r1, [r7, #4]
+ 446 0032 2046     		mov	r0, r4
+ 447 0034 FFF7FEFF 		bl	strncmp
+ 448 0038 0346     		mov	r3, r0
+ 449              		.loc 1 165 12
+ 450 003a 002B     		cmp	r3, #0
+ 451 003c 0DD1     		bne	.L23
+ 166:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****             tab_matches.matches[tab_matches.len++] = item->name;
+ 452              		.loc 1 166 44
+ 453 003e 294B     		ldr	r3, .L31
+ 454 0040 B3F84030 		ldrh	r3, [r3, #64]
+ 455              		.loc 1 166 48
+ 456 0044 5A1C     		adds	r2, r3, #1
+ 457 0046 91B2     		uxth	r1, r2
+ 458 0048 264A     		ldr	r2, .L31
+ 459 004a A2F84010 		strh	r1, [r2, #64]	@ movhi
+ 460 004e 1946     		mov	r1, r3
+ 461              		.loc 1 166 58
+ 462 0050 BB68     		ldr	r3, [r7, #8]
+ 463 0052 1B68     		ldr	r3, [r3]
+ 464              		.loc 1 166 52
+ 465 0054 234A     		ldr	r2, .L31
+ 466 0056 42F82130 		str	r3, [r2, r1, lsl #2]
+ 467              	.L23:
+ 163:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.s[i]);
+ 468              		.loc 1 163 75 discriminator 2
+ 469 005a FB68     		ldr	r3, [r7, #12]
+ 470 005c 0133     		adds	r3, r3, #1
+ 471 005e FB60     		str	r3, [r7, #12]
+ 472              	.L22:
+ 163:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.s[i]);
+ 473              		.loc 1 163 29 discriminator 1
+ 474 0060 214B     		ldr	r3, .L31+4
+ 475 0062 5B68     		ldr	r3, [r3, #4]
+ 163:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.s[i]);
+ 476              		.loc 1 163 5 discriminator 1
+ 477 0064 FA68     		ldr	r2, [r7, #12]
+ 478 0066 9A42     		cmp	r2, r3
+ 479 0068 04DA     		bge	.L24
+ 163:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.s[i]);
+ 480              		.loc 1 163 50 discriminator 3
+ 481 006a 1E4B     		ldr	r3, .L31
+ 482 006c B3F84030 		ldrh	r3, [r3, #64]
+ 163:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.s[i]);
+ARM GAS  /tmp/ccRC0Gho.s 			page 13
+
+
+ 483              		.loc 1 163 36 discriminator 3
+ 484 0070 0F2B     		cmp	r3, #15
+ 485 0072 D0D9     		bls	.L25
+ 486              	.L24:
+ 167:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         }
+ 168:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     }
+ 169:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     
+ 170:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     for(i = 0;i <gs_shell_cb.d_num && tab_matches.len < MAX_TAB_MATCHES; i++){
+ 487              		.loc 1 170 11
+ 488 0074 0023     		movs	r3, #0
+ 489 0076 FB60     		str	r3, [r7, #12]
+ 490              		.loc 1 170 5
+ 491 0078 24E0     		b	.L26
+ 492              	.L29:
+ 171:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.d[i]);
+ 493              		.loc 1 171 29
+ 494 007a 1B4B     		ldr	r3, .L31+4
+ 495 007c 9A68     		ldr	r2, [r3, #8]
+ 496              		.loc 1 171 31
+ 497 007e FB68     		ldr	r3, [r7, #12]
+ 498 0080 1B01     		lsls	r3, r3, #4
+ 499              		.loc 1 171 14
+ 500 0082 1344     		add	r3, r3, r2
+ 501 0084 BB60     		str	r3, [r7, #8]
+ 172:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         if(strncmp(item->name, index, strlen(index)) == 0){
+ 502              		.loc 1 172 12
+ 503 0086 BB68     		ldr	r3, [r7, #8]
+ 504 0088 1C68     		ldr	r4, [r3]
+ 505 008a 7868     		ldr	r0, [r7, #4]
+ 506 008c FFF7FEFF 		bl	strlen
+ 507 0090 0346     		mov	r3, r0
+ 508 0092 1A46     		mov	r2, r3
+ 509 0094 7968     		ldr	r1, [r7, #4]
+ 510 0096 2046     		mov	r0, r4
+ 511 0098 FFF7FEFF 		bl	strncmp
+ 512 009c 0346     		mov	r3, r0
+ 513              		.loc 1 172 11
+ 514 009e 002B     		cmp	r3, #0
+ 515 00a0 0DD1     		bne	.L27
+ 173:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****             tab_matches.matches[tab_matches.len++] = item->name;
+ 516              		.loc 1 173 44
+ 517 00a2 104B     		ldr	r3, .L31
+ 518 00a4 B3F84030 		ldrh	r3, [r3, #64]
+ 519              		.loc 1 173 48
+ 520 00a8 5A1C     		adds	r2, r3, #1
+ 521 00aa 91B2     		uxth	r1, r2
+ 522 00ac 0D4A     		ldr	r2, .L31
+ 523 00ae A2F84010 		strh	r1, [r2, #64]	@ movhi
+ 524 00b2 1946     		mov	r1, r3
+ 525              		.loc 1 173 58
+ 526 00b4 BB68     		ldr	r3, [r7, #8]
+ 527 00b6 1B68     		ldr	r3, [r3]
+ 528              		.loc 1 173 52
+ 529 00b8 0A4A     		ldr	r2, .L31
+ 530 00ba 42F82130 		str	r3, [r2, r1, lsl #2]
+ 531              	.L27:
+ 170:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.d[i]);
+ARM GAS  /tmp/ccRC0Gho.s 			page 14
+
+
+ 532              		.loc 1 170 75 discriminator 2
+ 533 00be FB68     		ldr	r3, [r7, #12]
+ 534 00c0 0133     		adds	r3, r3, #1
+ 535 00c2 FB60     		str	r3, [r7, #12]
+ 536              	.L26:
+ 170:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.d[i]);
+ 537              		.loc 1 170 29 discriminator 1
+ 538 00c4 084B     		ldr	r3, .L31+4
+ 539 00c6 DB68     		ldr	r3, [r3, #12]
+ 170:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.d[i]);
+ 540              		.loc 1 170 5 discriminator 1
+ 541 00c8 FA68     		ldr	r2, [r7, #12]
+ 542 00ca 9A42     		cmp	r2, r3
+ 543 00cc 04DA     		bge	.L28
+ 170:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.d[i]);
+ 544              		.loc 1 170 50 discriminator 3
+ 545 00ce 054B     		ldr	r3, .L31
+ 546 00d0 B3F84030 		ldrh	r3, [r3, #64]
+ 170:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item = &(gs_shell_cb.d[i]);
+ 547              		.loc 1 170 36 discriminator 3
+ 548 00d4 0F2B     		cmp	r3, #15
+ 549 00d6 D0D9     		bls	.L29
+ 550              	.L28:
+ 174:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         }
+ 175:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     }
+ 176:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     
+ 177:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     return &tab_matches;
+ 551              		.loc 1 177 12
+ 552 00d8 024B     		ldr	r3, .L31
+ 178:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** }
+ 553              		.loc 1 178 1
+ 554 00da 1846     		mov	r0, r3
+ 555 00dc 1437     		adds	r7, r7, #20
+ 556              	.LCFI13:
+ 557              		.cfi_def_cfa_offset 12
+ 558 00de BD46     		mov	sp, r7
+ 559              	.LCFI14:
+ 560              		.cfi_def_cfa_register 13
+ 561              		@ sp needed
+ 562 00e0 90BD     		pop	{r4, r7, pc}
+ 563              	.L32:
+ 564 00e2 00BF     		.align	2
+ 565              	.L31:
+ 566 00e4 00000000 		.word	tab_matches
+ 567 00e8 00000000 		.word	gs_shell_cb
+ 568              		.cfi_endproc
+ 569              	.LFE5:
+ 571              		.section	.rodata
+ 572 0089 000000   		.align	2
+ 573              	.LC10:
+ 574 008c 5348454C 		.ascii	"SHELL COMMAND NOT FIND:%s\012\015\000"
+ 574      4C20434F 
+ 574      4D4D414E 
+ 574      44204E4F 
+ 574      54204649 
+ 575              		.align	2
+ 576              	.LC11:
+ARM GAS  /tmp/ccRC0Gho.s 			page 15
+
+
+ 577 00a8 73657400 		.ascii	"set\000"
+ 578              		.align	2
+ 579              	.LC12:
+ 580 00ac 28484558 		.ascii	"(HEX):ADDR:0X%08X:\000"
+ 580      293A4144 
+ 580      44523A30 
+ 580      58253038 
+ 580      583A00
+ 581 00bf 00       		.align	2
+ 582              	.LC13:
+ 583 00c0 25303278 		.ascii	"%02x \000"
+ 583      2000
+ 584              		.section	.text.shell_cmd_execute,"ax",%progbits
+ 585              		.align	1
+ 586              		.global	shell_cmd_execute
+ 587              		.syntax unified
+ 588              		.thumb
+ 589              		.thumb_func
+ 590              		.fpu fpv4-sp-d16
+ 592              	shell_cmd_execute:
+ 593              	.LFB6:
+ 179:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+ 180:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** /*******************************************************************************
+ 181:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** function     :used to execute the command specified by the string
+ 182:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** parameters   :
+ 183:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** instruction  :we will split the string with the blank space, and the first one
+ 184:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****              will be used as the shell name to search the shell.If a shell cmd
+ 185:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****              found then will execute the command,and then all the args will be
+ 186:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****              passed to the function;if a data shell found, then will only do the
+ 187:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****              "get" or set "action";attention that the first arg is the shell name
+ 188:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****              itself!
+ 189:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** *******************************************************************************/
+ 190:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** int   shell_cmd_execute(char *param){
+ 594              		.loc 1 190 37
+ 595              		.cfi_startproc
+ 596              		@ args = 0, pretend = 0, frame = 104
+ 597              		@ frame_needed = 1, uses_anonymous_args = 0
+ 598 0000 80B5     		push	{r7, lr}
+ 599              	.LCFI15:
+ 600              		.cfi_def_cfa_offset 8
+ 601              		.cfi_offset 7, -8
+ 602              		.cfi_offset 14, -4
+ 603 0002 9AB0     		sub	sp, sp, #104
+ 604              	.LCFI16:
+ 605              		.cfi_def_cfa_offset 112
+ 606 0004 00AF     		add	r7, sp, #0
+ 607              	.LCFI17:
+ 608              		.cfi_def_cfa_register 7
+ 609 0006 7860     		str	r0, [r7, #4]
+ 191:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     int   ret= -1;
+ 610              		.loc 1 191 11
+ 611 0008 4FF0FF33 		mov	r3, #-1
+ 612 000c 7B66     		str	r3, [r7, #100]
+ 192:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     int    argc = cn_shell_args;           //split the params to argc and argv format
+ 613              		.loc 1 192 12
+ 614 000e 1023     		movs	r3, #16
+ 615 0010 3B65     		str	r3, [r7, #80]
+ARM GAS  /tmp/ccRC0Gho.s 			page 16
+
+
+ 193:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     unsigned int     value;
+ 194:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     unsigned char   *bytes;
+ 195:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     int     i;
+ 196:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     const  char *argv[cn_shell_args];
+ 197:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     struct shell_item_t *item;            //match the command item
+ 198:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     fn_shell_cmdentry shell_cmd_entry;    //command function entry
+ 199:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+ 200:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     (void)bytes;
+ 201:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+ 202:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     string_to_arg(&argc,argv,param);      //format the parameters
+ 616              		.loc 1 202 5
+ 617 0012 07F10C01 		add	r1, r7, #12
+ 618 0016 07F15003 		add	r3, r7, #80
+ 619 001a 7A68     		ldr	r2, [r7, #4]
+ 620 001c 1846     		mov	r0, r3
+ 621 001e FFF7FEFF 		bl	string_to_arg
+ 203:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     if(argc == 0){
+ 622              		.loc 1 203 13
+ 623 0022 3B6D     		ldr	r3, [r7, #80]
+ 624              		.loc 1 203 7
+ 625 0024 002B     		cmp	r3, #0
+ 626 0026 06D1     		bne	.L34
+ 204:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         shell_cmd_help(0,NULL);               //if no args we show system help
+ 627              		.loc 1 204 9
+ 628 0028 0021     		movs	r1, #0
+ 629 002a 0020     		movs	r0, #0
+ 630 002c FFF7FEFF 		bl	shell_cmd_help
+ 205:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         ret = 0;
+ 631              		.loc 1 205 13
+ 632 0030 0023     		movs	r3, #0
+ 633 0032 7B66     		str	r3, [r7, #100]
+ 634 0034 58E0     		b	.L35
+ 635              	.L34:
+ 206:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     }
+ 207:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     else{
+ 208:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         item =shell_cmd_match(argv[0]);//find the item
+ 636              		.loc 1 208 15
+ 637 0036 FB68     		ldr	r3, [r7, #12]
+ 638 0038 1846     		mov	r0, r3
+ 639 003a FFF7FEFF 		bl	shell_cmd_match
+ 640 003e B865     		str	r0, [r7, #88]
+ 209:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         if(NULL == item){
+ 641              		.loc 1 209 11
+ 642 0040 BB6D     		ldr	r3, [r7, #88]
+ 643 0042 002B     		cmp	r3, #0
+ 644 0044 08D1     		bne	.L36
+ 210:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****             link_printf("SHELL COMMAND NOT FIND:%s\n\r",argv[0]);
+ 645              		.loc 1 210 13
+ 646 0046 FB68     		ldr	r3, [r7, #12]
+ 647 0048 1946     		mov	r1, r3
+ 648 004a 2A48     		ldr	r0, .L42
+ 649 004c FFF7FEFF 		bl	printf
+ 211:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****             ret = -1;
+ 650              		.loc 1 211 17
+ 651 0050 4FF0FF33 		mov	r3, #-1
+ 652 0054 7B66     		str	r3, [r7, #100]
+ 653 0056 47E0     		b	.L35
+ARM GAS  /tmp/ccRC0Gho.s 			page 17
+
+
+ 654              	.L36:
+ 212:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         }
+ 213:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         else{
+ 214:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****             if(item->type == EN_OSSHELL_CMD){
+ 655              		.loc 1 214 20
+ 656 0058 BB6D     		ldr	r3, [r7, #88]
+ 657 005a 9B89     		ldrh	r3, [r3, #12]
+ 658              		.loc 1 214 15
+ 659 005c 002B     		cmp	r3, #0
+ 660 005e 09D1     		bne	.L37
+ 215:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                 shell_cmd_entry = (fn_shell_cmdentry)item->addr;
+ 661              		.loc 1 215 58
+ 662 0060 BB6D     		ldr	r3, [r7, #88]
+ 663 0062 9B68     		ldr	r3, [r3, #8]
+ 664              		.loc 1 215 33
+ 665 0064 7B65     		str	r3, [r7, #84]
+ 216:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                 shell_cmd_entry(argc,argv);
+ 666              		.loc 1 216 17
+ 667 0066 3A6D     		ldr	r2, [r7, #80]
+ 668 0068 07F10C01 		add	r1, r7, #12
+ 669 006c 7B6D     		ldr	r3, [r7, #84]
+ 670 006e 1046     		mov	r0, r2
+ 671 0070 9847     		blx	r3
+ 672              	.LVL0:
+ 673 0072 39E0     		b	.L35
+ 674              	.L37:
+ 217:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****             }
+ 218:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****             else{
+ 219:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                 if((argc == 3)&&(0 == strcmp(argv[1],"set"))){
+ 675              		.loc 1 219 26
+ 676 0074 3B6D     		ldr	r3, [r7, #80]
+ 677              		.loc 1 219 19
+ 678 0076 032B     		cmp	r3, #3
+ 679 0078 1AD1     		bne	.L38
+ 680              		.loc 1 219 39 discriminator 1
+ 681 007a 3B69     		ldr	r3, [r7, #16]
+ 682 007c 1E49     		ldr	r1, .L42+4
+ 683 007e 1846     		mov	r0, r3
+ 684 0080 FFF7FEFF 		bl	strcmp
+ 685 0084 0346     		mov	r3, r0
+ 686              		.loc 1 219 31 discriminator 1
+ 687 0086 002B     		cmp	r3, #0
+ 688 0088 12D1     		bne	.L38
+ 220:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                     //deal it simple and easy here
+ 221:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                     value = strtol(argv[2],NULL,0);
+ 689              		.loc 1 221 29
+ 690 008a 7B69     		ldr	r3, [r7, #20]
+ 691 008c 0022     		movs	r2, #0
+ 692 008e 0021     		movs	r1, #0
+ 693 0090 1846     		mov	r0, r3
+ 694 0092 FFF7FEFF 		bl	strtol
+ 695 0096 0346     		mov	r3, r0
+ 696              		.loc 1 221 27
+ 697 0098 FB64     		str	r3, [r7, #76]
+ 222:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                     (void) memcpy(item->addr,&value,item->len);
+ 698              		.loc 1 222 28
+ 699 009a BB6D     		ldr	r3, [r7, #88]
+ARM GAS  /tmp/ccRC0Gho.s 			page 18
+
+
+ 700 009c 9868     		ldr	r0, [r3, #8]
+ 701              		.loc 1 222 57
+ 702 009e BB6D     		ldr	r3, [r7, #88]
+ 703 00a0 DB89     		ldrh	r3, [r3, #14]
+ 704              		.loc 1 222 28
+ 705 00a2 1A46     		mov	r2, r3
+ 706 00a4 07F14C03 		add	r3, r7, #76
+ 707 00a8 1946     		mov	r1, r3
+ 708 00aa FFF7FEFF 		bl	memcpy
+ 709              		.loc 1 222 21
+ 710 00ae 1BE0     		b	.L35
+ 711              	.L38:
+ 223:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                 }
+ 224:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                 else{
+ 225:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                     bytes = item->addr;
+ 712              		.loc 1 225 27
+ 713 00b0 BB6D     		ldr	r3, [r7, #88]
+ 714 00b2 9B68     		ldr	r3, [r3, #8]
+ 715 00b4 3B66     		str	r3, [r7, #96]
+ 226:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                     link_printf("(HEX):ADDR:0X%08X:",(unsigned int)bytes);
+ 716              		.loc 1 226 21
+ 717 00b6 3B6E     		ldr	r3, [r7, #96]
+ 718 00b8 1946     		mov	r1, r3
+ 719 00ba 1048     		ldr	r0, .L42+8
+ 720 00bc FFF7FEFF 		bl	printf
+ 227:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                     for(i = 0;i<item->len;i++){
+ 721              		.loc 1 227 27
+ 722 00c0 0023     		movs	r3, #0
+ 723 00c2 FB65     		str	r3, [r7, #92]
+ 724              		.loc 1 227 21
+ 725 00c4 0AE0     		b	.L39
+ 726              	.L40:
+ 228:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                         link_printf("%02x ",*bytes++);
+ 727              		.loc 1 228 51 discriminator 3
+ 728 00c6 3B6E     		ldr	r3, [r7, #96]
+ 729 00c8 5A1C     		adds	r2, r3, #1
+ 730 00ca 3A66     		str	r2, [r7, #96]
+ 731              		.loc 1 228 45 discriminator 3
+ 732 00cc 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 733              		.loc 1 228 25 discriminator 3
+ 734 00ce 1946     		mov	r1, r3
+ 735 00d0 0B48     		ldr	r0, .L42+12
+ 736 00d2 FFF7FEFF 		bl	printf
+ 227:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                     for(i = 0;i<item->len;i++){
+ 737              		.loc 1 227 44 discriminator 3
+ 738 00d6 FB6D     		ldr	r3, [r7, #92]
+ 739 00d8 0133     		adds	r3, r3, #1
+ 740 00da FB65     		str	r3, [r7, #92]
+ 741              	.L39:
+ 227:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                     for(i = 0;i<item->len;i++){
+ 742              		.loc 1 227 37 discriminator 1
+ 743 00dc BB6D     		ldr	r3, [r7, #88]
+ 744 00de DB89     		ldrh	r3, [r3, #14]
+ 745 00e0 1A46     		mov	r2, r3
+ 227:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                     for(i = 0;i<item->len;i++){
+ 746              		.loc 1 227 21 discriminator 1
+ 747 00e2 FB6D     		ldr	r3, [r7, #92]
+ARM GAS  /tmp/ccRC0Gho.s 			page 19
+
+
+ 748 00e4 9342     		cmp	r3, r2
+ 749 00e6 EEDB     		blt	.L40
+ 750              	.L35:
+ 229:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                     }
+ 230:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****                 }
+ 231:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****             }
+ 232:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         }
+ 233:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     }
+ 234:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     return ret;
+ 751              		.loc 1 234 12
+ 752 00e8 7B6E     		ldr	r3, [r7, #100]
+ 235:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** }
+ 753              		.loc 1 235 1
+ 754 00ea 1846     		mov	r0, r3
+ 755 00ec 6837     		adds	r7, r7, #104
+ 756              	.LCFI18:
+ 757              		.cfi_def_cfa_offset 8
+ 758 00ee BD46     		mov	sp, r7
+ 759              	.LCFI19:
+ 760              		.cfi_def_cfa_register 13
+ 761              		@ sp needed
+ 762 00f0 80BD     		pop	{r7, pc}
+ 763              	.L43:
+ 764 00f2 00BF     		.align	2
+ 765              	.L42:
+ 766 00f4 8C000000 		.word	.LC10
+ 767 00f8 A8000000 		.word	.LC11
+ 768 00fc AC000000 		.word	.LC12
+ 769 0100 C0000000 		.word	.LC13
+ 770              		.cfi_endproc
+ 771              	.LFE6:
+ 773              		.section	.text.shell_cmd_init,"ax",%progbits
+ 774              		.align	1
+ 775              		.global	shell_cmd_init
+ 776              		.syntax unified
+ 777              		.thumb
+ 778              		.thumb_func
+ 779              		.fpu fpv4-sp-d16
+ 781              	shell_cmd_init:
+ 782              	.LFB7:
+ 236:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+ 237:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** /*******************************************************************************
+ 238:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** function     :used to load the command table
+ 239:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** parameters   :
+ 240:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** instruction  :different compiler has different method to ge the section("oshell")
+ 241:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****               so take care of your compiler
+ 242:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** *******************************************************************************/
+ 243:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** #ifdef __CC_ARM /* ARM C Compiler ,like keil,options for linker:--keep *.o(oshell)*/
+ 244:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** extern unsigned int oshell$$Base;
+ 245:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** extern unsigned int oshell$$Limit;
+ 246:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** //#pragma section("oshell", read) 
+ 247:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** #elif defined(__GNUC__)
+ 248:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     extern unsigned int __oshell_start;
+ 249:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     extern unsigned int __oshell_end;
+ 250:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** #else
+ 251:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     #error("unknown compiler here");
+ 252:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** #endif        
+ARM GAS  /tmp/ccRC0Gho.s 			page 20
+
+
+ 253:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+ 254:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+ 255:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** int   shell_cmd_init(void){
+ 783              		.loc 1 255 27
+ 784              		.cfi_startproc
+ 785              		@ args = 0, pretend = 0, frame = 8
+ 786              		@ frame_needed = 1, uses_anonymous_args = 0
+ 787              		@ link register save eliminated.
+ 788 0000 80B4     		push	{r7}
+ 789              	.LCFI20:
+ 790              		.cfi_def_cfa_offset 4
+ 791              		.cfi_offset 7, -4
+ 792 0002 83B0     		sub	sp, sp, #12
+ 793              	.LCFI21:
+ 794              		.cfi_def_cfa_offset 16
+ 795 0004 00AF     		add	r7, sp, #0
+ 796              	.LCFI22:
+ 797              		.cfi_def_cfa_register 7
+ 256:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     void  *cmd_start = NULL;
+ 798              		.loc 1 256 12
+ 799 0006 0023     		movs	r3, #0
+ 800 0008 7B60     		str	r3, [r7, #4]
+ 257:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     unsigned int len = 0;
+ 801              		.loc 1 257 18
+ 802 000a 0023     		movs	r3, #0
+ 803 000c 3B60     		str	r3, [r7]
+ 258:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** #if defined (__CC_ARM)    //you could add other compiler like this
+ 259:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     len = (unsigned int)&oshell$$Limit-(unsigned int)&oshell$$Base;
+ 260:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     cmd_start = &oshell$$Base;
+ 261:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** #elif defined(__GNUC__)
+ 262:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     cmd_start = &__oshell_start;
+ 804              		.loc 1 262 15
+ 805 000e 0C4B     		ldr	r3, .L47
+ 806 0010 7B60     		str	r3, [r7, #4]
+ 263:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     len = (unsigned int )&__oshell_end - (unsigned int)&__oshell_start;
+ 807              		.loc 1 263 11
+ 808 0012 0C4A     		ldr	r2, .L47+4
+ 809              		.loc 1 263 42
+ 810 0014 0A4B     		ldr	r3, .L47
+ 811              		.loc 1 263 9
+ 812 0016 D31A     		subs	r3, r2, r3
+ 813 0018 3B60     		str	r3, [r7]
+ 264:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** #else 
+ 265:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     #error("unknown compiler here");
+ 266:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** #endif    
+ 267:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     if(len > 0){
+ 814              		.loc 1 267 7
+ 815 001a 3B68     		ldr	r3, [r7]
+ 816 001c 002B     		cmp	r3, #0
+ 817 001e 08D0     		beq	.L45
+ 268:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         len = len/sizeof(struct shell_item_t);
+ 818              		.loc 1 268 13
+ 819 0020 3B68     		ldr	r3, [r7]
+ 820 0022 1B09     		lsrs	r3, r3, #4
+ 821 0024 3B60     		str	r3, [r7]
+ 269:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         gs_shell_cb.s = (struct shell_item_t *)cmd_start;
+ 822              		.loc 1 269 23
+ARM GAS  /tmp/ccRC0Gho.s 			page 21
+
+
+ 823 0026 084A     		ldr	r2, .L47+8
+ 824 0028 7B68     		ldr	r3, [r7, #4]
+ 825 002a 1360     		str	r3, [r2]
+ 270:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****         gs_shell_cb.s_num = len;
+ 826              		.loc 1 270 27
+ 827 002c 3B68     		ldr	r3, [r7]
+ 828 002e 064A     		ldr	r2, .L47+8
+ 829 0030 5360     		str	r3, [r2, #4]
+ 830              	.L45:
+ 271:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     }
+ 272:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     return 0;
+ 831              		.loc 1 272 12
+ 832 0032 0023     		movs	r3, #0
+ 273:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** }
+ 833              		.loc 1 273 1
+ 834 0034 1846     		mov	r0, r3
+ 835 0036 0C37     		adds	r7, r7, #12
+ 836              	.LCFI23:
+ 837              		.cfi_def_cfa_offset 4
+ 838 0038 BD46     		mov	sp, r7
+ 839              	.LCFI24:
+ 840              		.cfi_def_cfa_register 13
+ 841              		@ sp needed
+ 842 003a 5DF8047B 		ldr	r7, [sp], #4
+ 843              	.LCFI25:
+ 844              		.cfi_restore 7
+ 845              		.cfi_def_cfa_offset 0
+ 846 003e 7047     		bx	lr
+ 847              	.L48:
+ 848              		.align	2
+ 849              	.L47:
+ 850 0040 00000000 		.word	__oshell_start
+ 851 0044 00000000 		.word	__oshell_end
+ 852 0048 00000000 		.word	gs_shell_cb
+ 853              		.cfi_endproc
+ 854              	.LFE7:
+ 856              		.section	.rodata
+ 857 00c6 0000     		.align	2
+ 858              	.LC14:
+ 859 00c8 6F735F73 		.ascii	"os_shell_version:%d.%d\012\015\000"
+ 859      68656C6C 
+ 859      5F766572 
+ 859      73696F6E 
+ 859      3A25642E 
+ 860              		.section	.text.os_shell_version,"ax",%progbits
+ 861              		.align	1
+ 862              		.syntax unified
+ 863              		.thumb
+ 864              		.thumb_func
+ 865              		.fpu fpv4-sp-d16
+ 867              	os_shell_version:
+ 868              	.LFB8:
+ 274:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** 
+ 275:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** static int   os_shell_version(int argc, char *argv){
+ 869              		.loc 1 275 52
+ 870              		.cfi_startproc
+ 871              		@ args = 0, pretend = 0, frame = 8
+ARM GAS  /tmp/ccRC0Gho.s 			page 22
+
+
+ 872              		@ frame_needed = 1, uses_anonymous_args = 0
+ 873 0000 80B5     		push	{r7, lr}
+ 874              	.LCFI26:
+ 875              		.cfi_def_cfa_offset 8
+ 876              		.cfi_offset 7, -8
+ 877              		.cfi_offset 14, -4
+ 878 0002 82B0     		sub	sp, sp, #8
+ 879              	.LCFI27:
+ 880              		.cfi_def_cfa_offset 16
+ 881 0004 00AF     		add	r7, sp, #0
+ 882              	.LCFI28:
+ 883              		.cfi_def_cfa_register 7
+ 884 0006 7860     		str	r0, [r7, #4]
+ 885 0008 3960     		str	r1, [r7]
+ 276:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     link_printf("os_shell_version:%d.%d\n\r",cn_shell_ver_major,cn_shell_ver_minor);
+ 886              		.loc 1 276 5
+ 887 000a 0022     		movs	r2, #0
+ 888 000c 0121     		movs	r1, #1
+ 889 000e 0448     		ldr	r0, .L51
+ 890 0010 FFF7FEFF 		bl	printf
+ 277:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c ****     return 0;
+ 891              		.loc 1 277 12
+ 892 0014 0023     		movs	r3, #0
+ 278:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_cmd.c **** };
+ 893              		.loc 1 278 1
+ 894 0016 1846     		mov	r0, r3
+ 895 0018 0837     		adds	r7, r7, #8
+ 896              	.LCFI29:
+ 897              		.cfi_def_cfa_offset 8
+ 898 001a BD46     		mov	sp, r7
+ 899              	.LCFI30:
+ 900              		.cfi_def_cfa_register 13
+ 901              		@ sp needed
+ 902 001c 80BD     		pop	{r7, pc}
+ 903              	.L52:
+ 904 001e 00BF     		.align	2
+ 905              	.L51:
+ 906 0020 C8000000 		.word	.LC14
+ 907              		.cfi_endproc
+ 908              	.LFE8:
+ 910              		.section	.rodata
+ 911 00e1 000000   		.align	2
+ 912              	.LC15:
+ 913 00e4 7368656C 		.ascii	"shellversion\000"
+ 913      6C766572 
+ 913      73696F6E 
+ 913      00
+ 914              		.section	oshell,"a"
+ 915              		.align	2
+ 918              	__oshell_os_shell_version:
+ 919 0000 E4000000 		.word	.LC15
+ 920 0004 E4000000 		.word	.LC15
+ 921 0008 00000000 		.word	os_shell_version
+ 922 000c 0000     		.short	0
+ 923 000e 0400     		.short	4
+ 924              		.section	.rodata
+ 925 00f1 000000   		.align	2
+ARM GAS  /tmp/ccRC0Gho.s 			page 23
+
+
+ 926              	.LC16:
+ 927 00f4 68656C70 		.ascii	"help\000"
+ 927      00
+ 928              		.section	oshell
+ 929              		.align	2
+ 932              	__oshell_shell_cmd_help:
+ 933 0010 F4000000 		.word	.LC16
+ 934 0014 F4000000 		.word	.LC16
+ 935 0018 00000000 		.word	shell_cmd_help
+ 936 001c 0000     		.short	0
+ 937 001e 0400     		.short	4
+ 938              		.text
+ 939              	.Letext0:
+ 940              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 941              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 942              		.file 4 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 943              		.file 5 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/ree
+ 944              		.file 6 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/stdlib.
+ 945              		.file 7 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/inc/shell.h"
+ARM GAS  /tmp/ccRC0Gho.s 			page 24
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 shell_cmd.c
+     /tmp/ccRC0Gho.s:18     .bss.gs_shell_cb:0000000000000000 $d
+     /tmp/ccRC0Gho.s:21     .bss.gs_shell_cb:0000000000000000 gs_shell_cb
+     /tmp/ccRC0Gho.s:24     .rodata:0000000000000000 $d
+     /tmp/ccRC0Gho.s:31     .data.gs_os_shell_type:0000000000000000 $d
+     /tmp/ccRC0Gho.s:34     .data.gs_os_shell_type:0000000000000000 gs_os_shell_type
+     /tmp/ccRC0Gho.s:38     .bss.tab_matches:0000000000000000 $d
+     /tmp/ccRC0Gho.s:41     .bss.tab_matches:0000000000000000 tab_matches
+     /tmp/ccRC0Gho.s:69     .text.shell_cmd_help:0000000000000000 $t
+     /tmp/ccRC0Gho.s:76     .text.shell_cmd_help:0000000000000000 shell_cmd_help
+     /tmp/ccRC0Gho.s:234    .text.shell_cmd_help:00000000000000cc $d
+     /tmp/ccRC0Gho.s:248    .text.shell_cmd_match:0000000000000000 $t
+     /tmp/ccRC0Gho.s:254    .text.shell_cmd_match:0000000000000000 shell_cmd_match
+     /tmp/ccRC0Gho.s:388    .text.shell_cmd_match:0000000000000098 $d
+     /tmp/ccRC0Gho.s:393    .text.shell_cmd_index:0000000000000000 $t
+     /tmp/ccRC0Gho.s:400    .text.shell_cmd_index:0000000000000000 shell_cmd_index
+     /tmp/ccRC0Gho.s:566    .text.shell_cmd_index:00000000000000e4 $d
+     /tmp/ccRC0Gho.s:585    .text.shell_cmd_execute:0000000000000000 $t
+     /tmp/ccRC0Gho.s:592    .text.shell_cmd_execute:0000000000000000 shell_cmd_execute
+     /tmp/ccRC0Gho.s:766    .text.shell_cmd_execute:00000000000000f4 $d
+     /tmp/ccRC0Gho.s:774    .text.shell_cmd_init:0000000000000000 $t
+     /tmp/ccRC0Gho.s:781    .text.shell_cmd_init:0000000000000000 shell_cmd_init
+     /tmp/ccRC0Gho.s:850    .text.shell_cmd_init:0000000000000040 $d
+     /tmp/ccRC0Gho.s:861    .text.os_shell_version:0000000000000000 $t
+     /tmp/ccRC0Gho.s:867    .text.os_shell_version:0000000000000000 os_shell_version
+     /tmp/ccRC0Gho.s:906    .text.os_shell_version:0000000000000020 $d
+     /tmp/ccRC0Gho.s:915    oshell:0000000000000000 $d
+     /tmp/ccRC0Gho.s:918    oshell:0000000000000000 __oshell_os_shell_version
+     /tmp/ccRC0Gho.s:932    oshell:0000000000000010 __oshell_shell_cmd_help
+
+UNDEFINED SYMBOLS
+printf
+strcmp
+strlen
+strncmp
+string_to_arg
+strtol
+memcpy
+__oshell_start
+__oshell_end

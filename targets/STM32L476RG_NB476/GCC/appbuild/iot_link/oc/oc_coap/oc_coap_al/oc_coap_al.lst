@@ -1,0 +1,988 @@
+ARM GAS  /tmp/ccqsMKG2.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"oc_coap_al.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.bss.s_oc_coap_ops,"aw",%nobits
+  18              		.align	2
+  21              	s_oc_coap_ops:
+  22 0000 00000000 		.space	8
+  22      00000000 
+  23              		.section	.text.oc_coap_register,"ax",%progbits
+  24              		.align	1
+  25              		.global	oc_coap_register
+  26              		.arch armv7e-m
+  27              		.syntax unified
+  28              		.thumb
+  29              		.thumb_func
+  30              		.fpu fpv4-sp-d16
+  32              	oc_coap_register:
+  33              	.LFB3:
+  34              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** /*----------------------------------------------------------------------------
+   2:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * All rights reserved.
+   4:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * are permitted provided that the following conditions are met:
+   6:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * conditions and the following disclaimer.
+   8:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * provided with the distribution.
+  11:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * permission.
+  14:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  *---------------------------------------------------------------------------*/
+ARM GAS  /tmp/ccqsMKG2.s 			page 2
+
+
+  26:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** /*----------------------------------------------------------------------------
+  27:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * Notice of Export Control Law
+  28:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * ===============================================
+  29:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  * applicable export control laws and regulations.
+  33:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  *---------------------------------------------------------------------------*/
+  34:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** /**
+  35:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  *  DATE                AUTHOR      INSTRUCTION
+  36:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  *  2019-10-10 14:29  YuHeng-P  The first version
+  37:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  *
+  38:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****  */
+  39:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+  40:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** #include <stdint.h>
+  41:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** #include <stddef.h>
+  42:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** #include <string.h>
+  43:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** #include <stdlib.h>
+  44:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+  45:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** #include <link_log.h>
+  46:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** #include <osal.h>
+  47:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** #include <oc_coap_al.h>
+  48:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+  49:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** typedef struct
+  50:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** {
+  51:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     const char            *name;    ///< lwm2m implement name
+  52:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     const oc_coap_opt_t  *opt;     ///< lwm2m implement method
+  53:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** }oc_coap_t;
+  54:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** static oc_coap_t  s_oc_coap_ops;
+  55:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+  56:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** typedef struct
+  57:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** {
+  58:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     void                   *handle;
+  59:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     const oc_coap_opt_t    *ops;
+  60:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     oc_config_param_t       param;
+  61:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** }oc_coap_context_t;
+  62:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+  63:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+  64:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** int oc_coap_register(const char *name,const oc_coap_opt_t *opt)
+  65:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** {
+  35              		.loc 1 65 1
+  36              		.cfi_startproc
+  37              		@ args = 0, pretend = 0, frame = 16
+  38              		@ frame_needed = 1, uses_anonymous_args = 0
+  39              		@ link register save eliminated.
+  40 0000 80B4     		push	{r7}
+  41              	.LCFI0:
+  42              		.cfi_def_cfa_offset 4
+  43              		.cfi_offset 7, -4
+  44 0002 85B0     		sub	sp, sp, #20
+  45              	.LCFI1:
+  46              		.cfi_def_cfa_offset 24
+  47 0004 00AF     		add	r7, sp, #0
+  48              	.LCFI2:
+  49              		.cfi_def_cfa_register 7
+  50 0006 7860     		str	r0, [r7, #4]
+  51 0008 3960     		str	r1, [r7]
+ARM GAS  /tmp/ccqsMKG2.s 			page 3
+
+
+  66:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     int ret = -1;
+  52              		.loc 1 66 9
+  53 000a 4FF0FF33 		mov	r3, #-1
+  54 000e FB60     		str	r3, [r7, #12]
+  67:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+  68:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     if(NULL == s_oc_coap_ops.opt)
+  55              		.loc 1 68 29
+  56 0010 094B     		ldr	r3, .L4
+  57 0012 5B68     		ldr	r3, [r3, #4]
+  58              		.loc 1 68 7
+  59 0014 002B     		cmp	r3, #0
+  60 0016 07D1     		bne	.L2
+  69:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     {
+  70:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****         s_oc_coap_ops.name = name;
+  61              		.loc 1 70 28
+  62 0018 074A     		ldr	r2, .L4
+  63 001a 7B68     		ldr	r3, [r7, #4]
+  64 001c 1360     		str	r3, [r2]
+  71:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****         s_oc_coap_ops.opt =  opt;
+  65              		.loc 1 71 27
+  66 001e 064A     		ldr	r2, .L4
+  67 0020 3B68     		ldr	r3, [r7]
+  68 0022 5360     		str	r3, [r2, #4]
+  72:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****         ret = 0;
+  69              		.loc 1 72 13
+  70 0024 0023     		movs	r3, #0
+  71 0026 FB60     		str	r3, [r7, #12]
+  72              	.L2:
+  73:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     }
+  74:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     return ret;
+  73              		.loc 1 74 12
+  74 0028 FB68     		ldr	r3, [r7, #12]
+  75:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** }
+  75              		.loc 1 75 1
+  76 002a 1846     		mov	r0, r3
+  77 002c 1437     		adds	r7, r7, #20
+  78              	.LCFI3:
+  79              		.cfi_def_cfa_offset 4
+  80 002e BD46     		mov	sp, r7
+  81              	.LCFI4:
+  82              		.cfi_def_cfa_register 13
+  83              		@ sp needed
+  84 0030 5DF8047B 		ldr	r7, [sp], #4
+  85              	.LCFI5:
+  86              		.cfi_restore 7
+  87              		.cfi_def_cfa_offset 0
+  88 0034 7047     		bx	lr
+  89              	.L5:
+  90 0036 00BF     		.align	2
+  91              	.L4:
+  92 0038 00000000 		.word	s_oc_coap_ops
+  93              		.cfi_endproc
+  94              	.LFE3:
+  96              		.section	.text.oc_coap_unregister,"ax",%progbits
+  97              		.align	1
+  98              		.global	oc_coap_unregister
+  99              		.syntax unified
+ARM GAS  /tmp/ccqsMKG2.s 			page 4
+
+
+ 100              		.thumb
+ 101              		.thumb_func
+ 102              		.fpu fpv4-sp-d16
+ 104              	oc_coap_unregister:
+ 105              	.LFB4:
+  76:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+  77:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** int oc_coap_unregister(const char *name)
+  78:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** {
+ 106              		.loc 1 78 1
+ 107              		.cfi_startproc
+ 108              		@ args = 0, pretend = 0, frame = 16
+ 109              		@ frame_needed = 1, uses_anonymous_args = 0
+ 110 0000 80B5     		push	{r7, lr}
+ 111              	.LCFI6:
+ 112              		.cfi_def_cfa_offset 8
+ 113              		.cfi_offset 7, -8
+ 114              		.cfi_offset 14, -4
+ 115 0002 84B0     		sub	sp, sp, #16
+ 116              	.LCFI7:
+ 117              		.cfi_def_cfa_offset 24
+ 118 0004 00AF     		add	r7, sp, #0
+ 119              	.LCFI8:
+ 120              		.cfi_def_cfa_register 7
+ 121 0006 7860     		str	r0, [r7, #4]
+  79:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     int ret = -1;
+ 122              		.loc 1 79 9
+ 123 0008 4FF0FF33 		mov	r3, #-1
+ 124 000c FB60     		str	r3, [r7, #12]
+  80:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+  81:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     if((NULL != name) && (NULL != s_oc_coap_ops.name))
+ 125              		.loc 1 81 7
+ 126 000e 7B68     		ldr	r3, [r7, #4]
+ 127 0010 002B     		cmp	r3, #0
+ 128 0012 14D0     		beq	.L7
+ 129              		.loc 1 81 48 discriminator 1
+ 130 0014 0C4B     		ldr	r3, .L9
+ 131 0016 1B68     		ldr	r3, [r3]
+ 132              		.loc 1 81 23 discriminator 1
+ 133 0018 002B     		cmp	r3, #0
+ 134 001a 10D0     		beq	.L7
+  82:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     {
+  83:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****         if(0 == strcmp(name,s_oc_coap_ops.name))
+ 135              		.loc 1 83 17
+ 136 001c 0A4B     		ldr	r3, .L9
+ 137 001e 1B68     		ldr	r3, [r3]
+ 138 0020 1946     		mov	r1, r3
+ 139 0022 7868     		ldr	r0, [r7, #4]
+ 140 0024 FFF7FEFF 		bl	strcmp
+ 141 0028 0346     		mov	r3, r0
+ 142              		.loc 1 83 11
+ 143 002a 002B     		cmp	r3, #0
+ 144 002c 07D1     		bne	.L7
+  84:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****         {
+  85:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****             s_oc_coap_ops.opt = NULL;   ///< also think about clear all the ops in the context,
+ 145              		.loc 1 85 31
+ 146 002e 064B     		ldr	r3, .L9
+ 147 0030 0022     		movs	r2, #0
+ARM GAS  /tmp/ccqsMKG2.s 			page 5
+
+
+ 148 0032 5A60     		str	r2, [r3, #4]
+  86:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****             s_oc_coap_ops.name = NULL;
+ 149              		.loc 1 86 32
+ 150 0034 044B     		ldr	r3, .L9
+ 151 0036 0022     		movs	r2, #0
+ 152 0038 1A60     		str	r2, [r3]
+  87:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****             ret = 0;
+ 153              		.loc 1 87 17
+ 154 003a 0023     		movs	r3, #0
+ 155 003c FB60     		str	r3, [r7, #12]
+ 156              	.L7:
+  88:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****         }
+  89:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     }
+  90:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+  91:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     return ret;
+ 157              		.loc 1 91 12
+ 158 003e FB68     		ldr	r3, [r7, #12]
+  92:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** }
+ 159              		.loc 1 92 1
+ 160 0040 1846     		mov	r0, r3
+ 161 0042 1037     		adds	r7, r7, #16
+ 162              	.LCFI9:
+ 163              		.cfi_def_cfa_offset 8
+ 164 0044 BD46     		mov	sp, r7
+ 165              	.LCFI10:
+ 166              		.cfi_def_cfa_register 13
+ 167              		@ sp needed
+ 168 0046 80BD     		pop	{r7, pc}
+ 169              	.L10:
+ 170              		.align	2
+ 171              	.L9:
+ 172 0048 00000000 		.word	s_oc_coap_ops
+ 173              		.cfi_endproc
+ 174              	.LFE4:
+ 176              		.section	.text.oc_coap_report,"ax",%progbits
+ 177              		.align	1
+ 178              		.global	oc_coap_report
+ 179              		.syntax unified
+ 180              		.thumb
+ 181              		.thumb_func
+ 182              		.fpu fpv4-sp-d16
+ 184              	oc_coap_report:
+ 185              	.LFB5:
+  93:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+  94:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+  95:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** //////////////////////////APPLICATION INTERFACE/////////////////////////////////
+  96:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** int oc_coap_report(void *context, char  *buf, int len)
+  97:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** {
+ 186              		.loc 1 97 1
+ 187              		.cfi_startproc
+ 188              		@ args = 0, pretend = 0, frame = 24
+ 189              		@ frame_needed = 1, uses_anonymous_args = 0
+ 190 0000 80B5     		push	{r7, lr}
+ 191              	.LCFI11:
+ 192              		.cfi_def_cfa_offset 8
+ 193              		.cfi_offset 7, -8
+ 194              		.cfi_offset 14, -4
+ARM GAS  /tmp/ccqsMKG2.s 			page 6
+
+
+ 195 0002 86B0     		sub	sp, sp, #24
+ 196              	.LCFI12:
+ 197              		.cfi_def_cfa_offset 32
+ 198 0004 00AF     		add	r7, sp, #0
+ 199              	.LCFI13:
+ 200              		.cfi_def_cfa_register 7
+ 201 0006 F860     		str	r0, [r7, #12]
+ 202 0008 B960     		str	r1, [r7, #8]
+ 203 000a 7A60     		str	r2, [r7, #4]
+  98:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     int ret = -1;
+ 204              		.loc 1 98 9
+ 205 000c 4FF0FF33 		mov	r3, #-1
+ 206 0010 7B61     		str	r3, [r7, #20]
+  99:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     oc_coap_context_t  *oc_coap;
+ 100:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     oc_coap = context;
+ 207              		.loc 1 100 13
+ 208 0012 FB68     		ldr	r3, [r7, #12]
+ 209 0014 3B61     		str	r3, [r7, #16]
+ 101:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+ 102:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     if((NULL != oc_coap) &&(NULL != oc_coap->ops) &&(NULL != oc_coap->ops->report))
+ 210              		.loc 1 102 7
+ 211 0016 3B69     		ldr	r3, [r7, #16]
+ 212 0018 002B     		cmp	r3, #0
+ 213 001a 11D0     		beq	.L12
+ 214              		.loc 1 102 44 discriminator 1
+ 215 001c 3B69     		ldr	r3, [r7, #16]
+ 216 001e 5B68     		ldr	r3, [r3, #4]
+ 217              		.loc 1 102 26 discriminator 1
+ 218 0020 002B     		cmp	r3, #0
+ 219 0022 0DD0     		beq	.L12
+ 220              		.loc 1 102 69 discriminator 2
+ 221 0024 3B69     		ldr	r3, [r7, #16]
+ 222 0026 5B68     		ldr	r3, [r3, #4]
+ 223              		.loc 1 102 74 discriminator 2
+ 224 0028 5B68     		ldr	r3, [r3, #4]
+ 225              		.loc 1 102 51 discriminator 2
+ 226 002a 002B     		cmp	r3, #0
+ 227 002c 08D0     		beq	.L12
+ 103:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     {
+ 104:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****        ret = oc_coap->ops->report(oc_coap->handle,buf,len);
+ 228              		.loc 1 104 21
+ 229 002e 3B69     		ldr	r3, [r7, #16]
+ 230 0030 5B68     		ldr	r3, [r3, #4]
+ 231              		.loc 1 104 26
+ 232 0032 5B68     		ldr	r3, [r3, #4]
+ 233              		.loc 1 104 14
+ 234 0034 3A69     		ldr	r2, [r7, #16]
+ 235 0036 1068     		ldr	r0, [r2]
+ 236 0038 7A68     		ldr	r2, [r7, #4]
+ 237 003a B968     		ldr	r1, [r7, #8]
+ 238 003c 9847     		blx	r3
+ 239              	.LVL0:
+ 240 003e 7861     		str	r0, [r7, #20]
+ 241              	.L12:
+ 105:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     }
+ 106:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+ 107:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     return ret;
+ARM GAS  /tmp/ccqsMKG2.s 			page 7
+
+
+ 242              		.loc 1 107 12
+ 243 0040 7B69     		ldr	r3, [r7, #20]
+ 108:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** }
+ 244              		.loc 1 108 1
+ 245 0042 1846     		mov	r0, r3
+ 246 0044 1837     		adds	r7, r7, #24
+ 247              	.LCFI14:
+ 248              		.cfi_def_cfa_offset 8
+ 249 0046 BD46     		mov	sp, r7
+ 250              	.LCFI15:
+ 251              		.cfi_def_cfa_register 13
+ 252              		@ sp needed
+ 253 0048 80BD     		pop	{r7, pc}
+ 254              		.cfi_endproc
+ 255              	.LFE5:
+ 257              		.section	.text.oc_coap_config,"ax",%progbits
+ 258              		.align	1
+ 259              		.global	oc_coap_config
+ 260              		.syntax unified
+ 261              		.thumb
+ 262              		.thumb_func
+ 263              		.fpu fpv4-sp-d16
+ 265              	oc_coap_config:
+ 266              	.LFB6:
+ 109:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+ 110:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+ 111:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** void *oc_coap_config(oc_config_param_t *param)
+ 112:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** {
+ 267              		.loc 1 112 1
+ 268              		.cfi_startproc
+ 269              		@ args = 0, pretend = 0, frame = 16
+ 270              		@ frame_needed = 1, uses_anonymous_args = 0
+ 271 0000 B0B5     		push	{r4, r5, r7, lr}
+ 272              	.LCFI16:
+ 273              		.cfi_def_cfa_offset 16
+ 274              		.cfi_offset 4, -16
+ 275              		.cfi_offset 5, -12
+ 276              		.cfi_offset 7, -8
+ 277              		.cfi_offset 14, -4
+ 278 0002 84B0     		sub	sp, sp, #16
+ 279              	.LCFI17:
+ 280              		.cfi_def_cfa_offset 32
+ 281 0004 00AF     		add	r7, sp, #0
+ 282              	.LCFI18:
+ 283              		.cfi_def_cfa_register 7
+ 284 0006 7860     		str	r0, [r7, #4]
+ 113:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     void *ret = NULL;
+ 285              		.loc 1 113 11
+ 286 0008 0023     		movs	r3, #0
+ 287 000a FB60     		str	r3, [r7, #12]
+ 114:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     oc_coap_context_t  *oc_coap;
+ 115:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+ 116:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     if((NULL != s_oc_coap_ops.opt) &&(NULL != s_oc_coap_ops.opt->config))
+ 288              		.loc 1 116 30
+ 289 000c 1C4B     		ldr	r3, .L18
+ 290 000e 5B68     		ldr	r3, [r3, #4]
+ 291              		.loc 1 116 7
+ARM GAS  /tmp/ccqsMKG2.s 			page 8
+
+
+ 292 0010 002B     		cmp	r3, #0
+ 293 0012 30D0     		beq	.L15
+ 294              		.loc 1 116 60 discriminator 1
+ 295 0014 1A4B     		ldr	r3, .L18
+ 296 0016 5B68     		ldr	r3, [r3, #4]
+ 297              		.loc 1 116 64 discriminator 1
+ 298 0018 1B68     		ldr	r3, [r3]
+ 299              		.loc 1 116 36 discriminator 1
+ 300 001a 002B     		cmp	r3, #0
+ 301 001c 2BD0     		beq	.L15
+ 117:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     {
+ 118:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****         oc_coap = osal_zalloc(sizeof(oc_coap_context_t));
+ 302              		.loc 1 118 19
+ 303 001e 4420     		movs	r0, #68
+ 304 0020 FFF7FEFF 		bl	osal_zalloc
+ 305 0024 B860     		str	r0, [r7, #8]
+ 119:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****         if(NULL != oc_coap)
+ 306              		.loc 1 119 11
+ 307 0026 BB68     		ldr	r3, [r7, #8]
+ 308 0028 002B     		cmp	r3, #0
+ 309 002a 24D0     		beq	.L15
+ 120:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****         {
+ 121:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****             oc_coap->param = *param;
+ 310              		.loc 1 121 28
+ 311 002c BB68     		ldr	r3, [r7, #8]
+ 312 002e 7A68     		ldr	r2, [r7, #4]
+ 313 0030 03F10804 		add	r4, r3, #8
+ 314 0034 1546     		mov	r5, r2
+ 315 0036 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+ 316 0038 0FC4     		stmia	r4!, {r0, r1, r2, r3}
+ 317 003a 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+ 318 003c 0FC4     		stmia	r4!, {r0, r1, r2, r3}
+ 319 003e 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+ 320 0040 0FC4     		stmia	r4!, {r0, r1, r2, r3}
+ 321 0042 95E80700 		ldm	r5, {r0, r1, r2}
+ 322 0046 84E80700 		stm	r4, {r0, r1, r2}
+ 122:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****             oc_coap->ops = s_oc_coap_ops.opt;
+ 323              		.loc 1 122 41
+ 324 004a 0D4B     		ldr	r3, .L18
+ 325 004c 5A68     		ldr	r2, [r3, #4]
+ 326              		.loc 1 122 26
+ 327 004e BB68     		ldr	r3, [r7, #8]
+ 328 0050 5A60     		str	r2, [r3, #4]
+ 123:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****             oc_coap->handle = s_oc_coap_ops.opt->config(param);
+ 329              		.loc 1 123 44
+ 330 0052 0B4B     		ldr	r3, .L18
+ 331 0054 5B68     		ldr	r3, [r3, #4]
+ 332              		.loc 1 123 48
+ 333 0056 1B68     		ldr	r3, [r3]
+ 334              		.loc 1 123 31
+ 335 0058 7868     		ldr	r0, [r7, #4]
+ 336 005a 9847     		blx	r3
+ 337              	.LVL1:
+ 338 005c 0246     		mov	r2, r0
+ 339              		.loc 1 123 29
+ 340 005e BB68     		ldr	r3, [r7, #8]
+ 341 0060 1A60     		str	r2, [r3]
+ARM GAS  /tmp/ccqsMKG2.s 			page 9
+
+
+ 124:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****             if(NULL == oc_coap->handle)
+ 342              		.loc 1 124 31
+ 343 0062 BB68     		ldr	r3, [r7, #8]
+ 344 0064 1B68     		ldr	r3, [r3]
+ 345              		.loc 1 124 15
+ 346 0066 002B     		cmp	r3, #0
+ 347 0068 03D1     		bne	.L16
+ 125:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****             {
+ 126:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****                 osal_free(oc_coap);
+ 348              		.loc 1 126 17
+ 349 006a B868     		ldr	r0, [r7, #8]
+ 350 006c FFF7FEFF 		bl	osal_free
+ 351 0070 01E0     		b	.L15
+ 352              	.L16:
+ 127:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****             }
+ 128:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****             else
+ 129:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****             {
+ 130:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****                 ret = oc_coap;
+ 353              		.loc 1 130 21
+ 354 0072 BB68     		ldr	r3, [r7, #8]
+ 355 0074 FB60     		str	r3, [r7, #12]
+ 356              	.L15:
+ 131:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****             }
+ 132:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****         }
+ 133:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     }
+ 134:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+ 135:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     return ret;
+ 357              		.loc 1 135 12
+ 358 0076 FB68     		ldr	r3, [r7, #12]
+ 136:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** }
+ 359              		.loc 1 136 1
+ 360 0078 1846     		mov	r0, r3
+ 361 007a 1037     		adds	r7, r7, #16
+ 362              	.LCFI19:
+ 363              		.cfi_def_cfa_offset 16
+ 364 007c BD46     		mov	sp, r7
+ 365              	.LCFI20:
+ 366              		.cfi_def_cfa_register 13
+ 367              		@ sp needed
+ 368 007e B0BD     		pop	{r4, r5, r7, pc}
+ 369              	.L19:
+ 370              		.align	2
+ 371              	.L18:
+ 372 0080 00000000 		.word	s_oc_coap_ops
+ 373              		.cfi_endproc
+ 374              	.LFE6:
+ 376              		.section	.text.oc_coap_deconfig,"ax",%progbits
+ 377              		.align	1
+ 378              		.global	oc_coap_deconfig
+ 379              		.syntax unified
+ 380              		.thumb
+ 381              		.thumb_func
+ 382              		.fpu fpv4-sp-d16
+ 384              	oc_coap_deconfig:
+ 385              	.LFB7:
+ 137:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+ 138:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+ARM GAS  /tmp/ccqsMKG2.s 			page 10
+
+
+ 139:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** int oc_coap_deconfig(void *context)
+ 140:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** {
+ 386              		.loc 1 140 1
+ 387              		.cfi_startproc
+ 388              		@ args = 0, pretend = 0, frame = 16
+ 389              		@ frame_needed = 1, uses_anonymous_args = 0
+ 390 0000 80B5     		push	{r7, lr}
+ 391              	.LCFI21:
+ 392              		.cfi_def_cfa_offset 8
+ 393              		.cfi_offset 7, -8
+ 394              		.cfi_offset 14, -4
+ 395 0002 84B0     		sub	sp, sp, #16
+ 396              	.LCFI22:
+ 397              		.cfi_def_cfa_offset 24
+ 398 0004 00AF     		add	r7, sp, #0
+ 399              	.LCFI23:
+ 400              		.cfi_def_cfa_register 7
+ 401 0006 7860     		str	r0, [r7, #4]
+ 141:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     int ret = -1;
+ 402              		.loc 1 141 9
+ 403 0008 4FF0FF33 		mov	r3, #-1
+ 404 000c FB60     		str	r3, [r7, #12]
+ 142:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     oc_coap_context_t  *oc_coap;
+ 143:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     oc_coap = context;
+ 405              		.loc 1 143 13
+ 406 000e 7B68     		ldr	r3, [r7, #4]
+ 407 0010 BB60     		str	r3, [r7, #8]
+ 144:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+ 145:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     if((NULL != oc_coap) &&(NULL != oc_coap->ops) && (NULL != oc_coap->ops->deconfig))
+ 408              		.loc 1 145 7
+ 409 0012 BB68     		ldr	r3, [r7, #8]
+ 410 0014 002B     		cmp	r3, #0
+ 411 0016 16D0     		beq	.L21
+ 412              		.loc 1 145 44 discriminator 1
+ 413 0018 BB68     		ldr	r3, [r7, #8]
+ 414 001a 5B68     		ldr	r3, [r3, #4]
+ 415              		.loc 1 145 26 discriminator 1
+ 416 001c 002B     		cmp	r3, #0
+ 417 001e 12D0     		beq	.L21
+ 418              		.loc 1 145 70 discriminator 2
+ 419 0020 BB68     		ldr	r3, [r7, #8]
+ 420 0022 5B68     		ldr	r3, [r3, #4]
+ 421              		.loc 1 145 75 discriminator 2
+ 422 0024 9B68     		ldr	r3, [r3, #8]
+ 423              		.loc 1 145 51 discriminator 2
+ 424 0026 002B     		cmp	r3, #0
+ 425 0028 0DD0     		beq	.L21
+ 146:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     {
+ 147:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****         ret = oc_coap->ops->deconfig(oc_coap->handle); ///<  should check if deconfigure error
+ 426              		.loc 1 147 22
+ 427 002a BB68     		ldr	r3, [r7, #8]
+ 428 002c 5B68     		ldr	r3, [r3, #4]
+ 429              		.loc 1 147 27
+ 430 002e 9B68     		ldr	r3, [r3, #8]
+ 431              		.loc 1 147 15
+ 432 0030 BA68     		ldr	r2, [r7, #8]
+ 433 0032 1268     		ldr	r2, [r2]
+ARM GAS  /tmp/ccqsMKG2.s 			page 11
+
+
+ 434 0034 1046     		mov	r0, r2
+ 435 0036 9847     		blx	r3
+ 436              	.LVL2:
+ 437 0038 F860     		str	r0, [r7, #12]
+ 148:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****         if(ret == 0)
+ 438              		.loc 1 148 11
+ 439 003a FB68     		ldr	r3, [r7, #12]
+ 440 003c 002B     		cmp	r3, #0
+ 441 003e 02D1     		bne	.L21
+ 149:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****         {
+ 150:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****             osal_free(oc_coap);
+ 442              		.loc 1 150 13
+ 443 0040 B868     		ldr	r0, [r7, #8]
+ 444 0042 FFF7FEFF 		bl	osal_free
+ 445              	.L21:
+ 151:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****         }
+ 152:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     }
+ 153:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+ 154:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     return ret;
+ 446              		.loc 1 154 12
+ 447 0046 FB68     		ldr	r3, [r7, #12]
+ 155:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** }
+ 448              		.loc 1 155 1
+ 449 0048 1846     		mov	r0, r3
+ 450 004a 1037     		adds	r7, r7, #16
+ 451              	.LCFI24:
+ 452              		.cfi_def_cfa_offset 8
+ 453 004c BD46     		mov	sp, r7
+ 454              	.LCFI25:
+ 455              		.cfi_def_cfa_register 13
+ 456              		@ sp needed
+ 457 004e 80BD     		pop	{r7, pc}
+ 458              		.cfi_endproc
+ 459              	.LFE7:
+ 461              		.section	.rodata
+ 462              		.align	2
+ 463              	.LC0:
+ 464 0000 5B25735D 		.ascii	"[%s][%u][%s:%d] %s:PLEASE IMPLEMENT THE OC COAP YOU"
+ 464      5B25755D 
+ 464      5B25733A 
+ 464      25645D20 
+ 464      25733A50 
+ 465 0033 5253454C 		.ascii	"RSELF\015\012\015\012\000"
+ 465      460D0A0D 
+ 465      0A00
+ 466              		.section	.text.oc_coap_imp_init,"ax",%progbits
+ 467              		.align	1
+ 468              		.weak	oc_coap_imp_init
+ 469              		.syntax unified
+ 470              		.thumb
+ 471              		.thumb_func
+ 472              		.fpu fpv4-sp-d16
+ 474              	oc_coap_imp_init:
+ 475              	.LFB8:
+ 156:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+ 157:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** __attribute__((weak)) int oc_coap_imp_init(void)
+ 158:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** {
+ARM GAS  /tmp/ccqsMKG2.s 			page 12
+
+
+ 476              		.loc 1 158 1
+ 477              		.cfi_startproc
+ 478              		@ args = 0, pretend = 0, frame = 0
+ 479              		@ frame_needed = 1, uses_anonymous_args = 0
+ 480 0000 90B5     		push	{r4, r7, lr}
+ 481              	.LCFI26:
+ 482              		.cfi_def_cfa_offset 12
+ 483              		.cfi_offset 4, -12
+ 484              		.cfi_offset 7, -8
+ 485              		.cfi_offset 14, -4
+ 486 0002 83B0     		sub	sp, sp, #12
+ 487              	.LCFI27:
+ 488              		.cfi_def_cfa_offset 24
+ 489 0004 02AF     		add	r7, sp, #8
+ 490              	.LCFI28:
+ 491              		.cfi_def_cfa 7, 16
+ 159:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     LINK_LOG_DEBUG("%s:PLEASE IMPLEMENT THE OC COAP YOURSELF\r\n",__FUNCTION__);
+ 492              		.loc 1 159 5
+ 493 0006 FFF7FEFF 		bl	link_log_level_get
+ 494 000a 0346     		mov	r3, r0
+ 495 000c 012B     		cmp	r3, #1
+ 496 000e 10D8     		bhi	.L24
+ 497              		.loc 1 159 5 is_stmt 0 discriminator 1
+ 498 0010 0120     		movs	r0, #1
+ 499 0012 FFF7FEFF 		bl	link_log_level_name
+ 500 0016 0446     		mov	r4, r0
+ 501 0018 FFF7FEFF 		bl	osal_sys_time
+ 502 001c 0246     		mov	r2, r0
+ 503 001e 0B46     		mov	r3, r1
+ 504 0020 074B     		ldr	r3, .L26
+ 505 0022 0193     		str	r3, [sp, #4]
+ 506 0024 9F23     		movs	r3, #159
+ 507 0026 0093     		str	r3, [sp]
+ 508 0028 054B     		ldr	r3, .L26
+ 509 002a 2146     		mov	r1, r4
+ 510 002c 0548     		ldr	r0, .L26+4
+ 511 002e FFF7FEFF 		bl	printf
+ 512              	.L24:
+ 160:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     return -1;
+ 513              		.loc 1 160 12 is_stmt 1
+ 514 0032 4FF0FF33 		mov	r3, #-1
+ 161:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** }
+ 515              		.loc 1 161 1
+ 516 0036 1846     		mov	r0, r3
+ 517 0038 0437     		adds	r7, r7, #4
+ 518              	.LCFI29:
+ 519              		.cfi_def_cfa_offset 12
+ 520 003a BD46     		mov	sp, r7
+ 521              	.LCFI30:
+ 522              		.cfi_def_cfa_register 13
+ 523              		@ sp needed
+ 524 003c 90BD     		pop	{r4, r7, pc}
+ 525              	.L27:
+ 526 003e 00BF     		.align	2
+ 527              	.L26:
+ 528 0040 00000000 		.word	__FUNCTION__.7437
+ 529 0044 00000000 		.word	.LC0
+ARM GAS  /tmp/ccqsMKG2.s 			page 13
+
+
+ 530              		.cfi_endproc
+ 531              	.LFE8:
+ 533              		.section	.rodata
+ 534 003d 000000   		.align	2
+ 535              	.LC1:
+ 536 0040 5B25735D 		.ascii	"[%s][%u][%s:%d] %s:PLEASE IMPLEMENT THE OC COAP DEM"
+ 536      5B25755D 
+ 536      5B25733A 
+ 536      25645D20 
+ 536      25733A50 
+ 537 0073 4F20594F 		.ascii	"O YOURSELF\015\012\015\012\000"
+ 537      55525345 
+ 537      4C460D0A 
+ 537      0D0A00
+ 538              		.section	.text.oc_coap_demo_main,"ax",%progbits
+ 539              		.align	1
+ 540              		.weak	oc_coap_demo_main
+ 541              		.syntax unified
+ 542              		.thumb
+ 543              		.thumb_func
+ 544              		.fpu fpv4-sp-d16
+ 546              	oc_coap_demo_main:
+ 547              	.LFB9:
+ 162:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+ 163:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** __attribute__((weak)) int oc_coap_demo_main(void)
+ 164:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** {
+ 548              		.loc 1 164 1
+ 549              		.cfi_startproc
+ 550              		@ args = 0, pretend = 0, frame = 0
+ 551              		@ frame_needed = 1, uses_anonymous_args = 0
+ 552 0000 90B5     		push	{r4, r7, lr}
+ 553              	.LCFI31:
+ 554              		.cfi_def_cfa_offset 12
+ 555              		.cfi_offset 4, -12
+ 556              		.cfi_offset 7, -8
+ 557              		.cfi_offset 14, -4
+ 558 0002 83B0     		sub	sp, sp, #12
+ 559              	.LCFI32:
+ 560              		.cfi_def_cfa_offset 24
+ 561 0004 02AF     		add	r7, sp, #8
+ 562              	.LCFI33:
+ 563              		.cfi_def_cfa 7, 16
+ 165:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     LINK_LOG_DEBUG("%s:PLEASE IMPLEMENT THE OC COAP DEMO YOURSELF\r\n",__FUNCTION__);
+ 564              		.loc 1 165 5
+ 565 0006 FFF7FEFF 		bl	link_log_level_get
+ 566 000a 0346     		mov	r3, r0
+ 567 000c 012B     		cmp	r3, #1
+ 568 000e 10D8     		bhi	.L29
+ 569              		.loc 1 165 5 is_stmt 0 discriminator 1
+ 570 0010 0120     		movs	r0, #1
+ 571 0012 FFF7FEFF 		bl	link_log_level_name
+ 572 0016 0446     		mov	r4, r0
+ 573 0018 FFF7FEFF 		bl	osal_sys_time
+ 574 001c 0246     		mov	r2, r0
+ 575 001e 0B46     		mov	r3, r1
+ 576 0020 074B     		ldr	r3, .L31
+ 577 0022 0193     		str	r3, [sp, #4]
+ARM GAS  /tmp/ccqsMKG2.s 			page 14
+
+
+ 578 0024 A523     		movs	r3, #165
+ 579 0026 0093     		str	r3, [sp]
+ 580 0028 054B     		ldr	r3, .L31
+ 581 002a 2146     		mov	r1, r4
+ 582 002c 0548     		ldr	r0, .L31+4
+ 583 002e FFF7FEFF 		bl	printf
+ 584              	.L29:
+ 166:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     return -1;
+ 585              		.loc 1 166 12 is_stmt 1
+ 586 0032 4FF0FF33 		mov	r3, #-1
+ 167:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** }
+ 587              		.loc 1 167 1
+ 588 0036 1846     		mov	r0, r3
+ 589 0038 0437     		adds	r7, r7, #4
+ 590              	.LCFI34:
+ 591              		.cfi_def_cfa_offset 12
+ 592 003a BD46     		mov	sp, r7
+ 593              	.LCFI35:
+ 594              		.cfi_def_cfa_register 13
+ 595              		@ sp needed
+ 596 003c 90BD     		pop	{r4, r7, pc}
+ 597              	.L32:
+ 598 003e 00BF     		.align	2
+ 599              	.L31:
+ 600 0040 00000000 		.word	__FUNCTION__.7441
+ 601 0044 40000000 		.word	.LC1
+ 602              		.cfi_endproc
+ 603              	.LFE9:
+ 605              		.section	.rodata
+ 606 0082 0000     		.align	2
+ 607              	.LC2:
+ 608 0084 5B25735D 		.ascii	"[%s][%u][%s:%d] IOT_LINK:DO OCCOAP LOAD-IMPLEMENT R"
+ 608      5B25755D 
+ 608      5B25733A 
+ 608      25645D20 
+ 608      494F545F 
+ 609 00b7 45543A25 		.ascii	"ET:%d\012\015\015\012\000"
+ 609      640A0D0D 
+ 609      0A00
+ 610              		.section	.text.oc_coap_init,"ax",%progbits
+ 611              		.align	1
+ 612              		.global	oc_coap_init
+ 613              		.syntax unified
+ 614              		.thumb
+ 615              		.thumb_func
+ 616              		.fpu fpv4-sp-d16
+ 618              	oc_coap_init:
+ 619              	.LFB10:
+ 168:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+ 169:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** ///////////////////////OC LWM2M AGENT INITIALIZE////////////////////////////////
+ 170:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** int oc_coap_init()
+ 171:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** {
+ 620              		.loc 1 171 1
+ 621              		.cfi_startproc
+ 622              		@ args = 0, pretend = 0, frame = 8
+ 623              		@ frame_needed = 1, uses_anonymous_args = 0
+ 624 0000 90B5     		push	{r4, r7, lr}
+ARM GAS  /tmp/ccqsMKG2.s 			page 15
+
+
+ 625              	.LCFI36:
+ 626              		.cfi_def_cfa_offset 12
+ 627              		.cfi_offset 4, -12
+ 628              		.cfi_offset 7, -8
+ 629              		.cfi_offset 14, -4
+ 630 0002 85B0     		sub	sp, sp, #20
+ 631              	.LCFI37:
+ 632              		.cfi_def_cfa_offset 32
+ 633 0004 02AF     		add	r7, sp, #8
+ 634              	.LCFI38:
+ 635              		.cfi_def_cfa 7, 24
+ 172:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     int ret;
+ 173:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+ 174:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     ret = oc_coap_imp_init();
+ 636              		.loc 1 174 11
+ 637 0006 FFF7FEFF 		bl	oc_coap_imp_init
+ 638 000a 7860     		str	r0, [r7, #4]
+ 175:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     LINK_LOG_DEBUG("IOT_LINK:DO OCCOAP LOAD-IMPLEMENT RET:%d\n\r",ret);
+ 639              		.loc 1 175 5
+ 640 000c FFF7FEFF 		bl	link_log_level_get
+ 641 0010 0346     		mov	r3, r0
+ 642 0012 012B     		cmp	r3, #1
+ 643 0014 10D8     		bhi	.L34
+ 644              		.loc 1 175 5 is_stmt 0 discriminator 1
+ 645 0016 0120     		movs	r0, #1
+ 646 0018 FFF7FEFF 		bl	link_log_level_name
+ 647 001c 0446     		mov	r4, r0
+ 648 001e FFF7FEFF 		bl	osal_sys_time
+ 649 0022 0246     		mov	r2, r0
+ 650 0024 0B46     		mov	r3, r1
+ 651 0026 7B68     		ldr	r3, [r7, #4]
+ 652 0028 0193     		str	r3, [sp, #4]
+ 653 002a AF23     		movs	r3, #175
+ 654 002c 0093     		str	r3, [sp]
+ 655 002e 064B     		ldr	r3, .L36
+ 656 0030 2146     		mov	r1, r4
+ 657 0032 0648     		ldr	r0, .L36+4
+ 658 0034 FFF7FEFF 		bl	printf
+ 659              	.L34:
+ 176:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+ 177:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     (void) oc_coap_demo_main();
+ 660              		.loc 1 177 12 is_stmt 1
+ 661 0038 FFF7FEFF 		bl	oc_coap_demo_main
+ 178:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** 
+ 179:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c ****     return ret;
+ 662              		.loc 1 179 12
+ 663 003c 7B68     		ldr	r3, [r7, #4]
+ 180:/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.c **** }
+ 664              		.loc 1 180 1
+ 665 003e 1846     		mov	r0, r3
+ 666 0040 0C37     		adds	r7, r7, #12
+ 667              	.LCFI39:
+ 668              		.cfi_def_cfa_offset 12
+ 669 0042 BD46     		mov	sp, r7
+ 670              	.LCFI40:
+ 671              		.cfi_def_cfa_register 13
+ 672              		@ sp needed
+ARM GAS  /tmp/ccqsMKG2.s 			page 16
+
+
+ 673 0044 90BD     		pop	{r4, r7, pc}
+ 674              	.L37:
+ 675 0046 00BF     		.align	2
+ 676              	.L36:
+ 677 0048 00000000 		.word	__FUNCTION__.7445
+ 678 004c 84000000 		.word	.LC2
+ 679              		.cfi_endproc
+ 680              	.LFE10:
+ 682              		.section	.rodata.__FUNCTION__.7437,"a"
+ 683              		.align	2
+ 686              	__FUNCTION__.7437:
+ 687 0000 6F635F63 		.ascii	"oc_coap_imp_init\000"
+ 687      6F61705F 
+ 687      696D705F 
+ 687      696E6974 
+ 687      00
+ 688              		.section	.rodata.__FUNCTION__.7441,"a"
+ 689              		.align	2
+ 692              	__FUNCTION__.7441:
+ 693 0000 6F635F63 		.ascii	"oc_coap_demo_main\000"
+ 693      6F61705F 
+ 693      64656D6F 
+ 693      5F6D6169 
+ 693      6E00
+ 694              		.section	.rodata.__FUNCTION__.7445,"a"
+ 695              		.align	2
+ 698              	__FUNCTION__.7445:
+ 699 0000 6F635F63 		.ascii	"oc_coap_init\000"
+ 699      6F61705F 
+ 699      696E6974 
+ 699      00
+ 700              		.text
+ 701              	.Letext0:
+ 702              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 703              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 704              		.file 4 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 705              		.file 5 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/ree
+ 706              		.file 6 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/stdlib.
+ 707              		.file 7 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/oc/oc_coap/oc_coap_al/oc_coap_al.h"
+ 708              		.file 8 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/inc/link_log.h"
+ARM GAS  /tmp/ccqsMKG2.s 			page 17
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 oc_coap_al.c
+     /tmp/ccqsMKG2.s:18     .bss.s_oc_coap_ops:0000000000000000 $d
+     /tmp/ccqsMKG2.s:21     .bss.s_oc_coap_ops:0000000000000000 s_oc_coap_ops
+     /tmp/ccqsMKG2.s:24     .text.oc_coap_register:0000000000000000 $t
+     /tmp/ccqsMKG2.s:32     .text.oc_coap_register:0000000000000000 oc_coap_register
+     /tmp/ccqsMKG2.s:92     .text.oc_coap_register:0000000000000038 $d
+     /tmp/ccqsMKG2.s:97     .text.oc_coap_unregister:0000000000000000 $t
+     /tmp/ccqsMKG2.s:104    .text.oc_coap_unregister:0000000000000000 oc_coap_unregister
+     /tmp/ccqsMKG2.s:172    .text.oc_coap_unregister:0000000000000048 $d
+     /tmp/ccqsMKG2.s:177    .text.oc_coap_report:0000000000000000 $t
+     /tmp/ccqsMKG2.s:184    .text.oc_coap_report:0000000000000000 oc_coap_report
+     /tmp/ccqsMKG2.s:258    .text.oc_coap_config:0000000000000000 $t
+     /tmp/ccqsMKG2.s:265    .text.oc_coap_config:0000000000000000 oc_coap_config
+     /tmp/ccqsMKG2.s:372    .text.oc_coap_config:0000000000000080 $d
+     /tmp/ccqsMKG2.s:377    .text.oc_coap_deconfig:0000000000000000 $t
+     /tmp/ccqsMKG2.s:384    .text.oc_coap_deconfig:0000000000000000 oc_coap_deconfig
+     /tmp/ccqsMKG2.s:462    .rodata:0000000000000000 $d
+     /tmp/ccqsMKG2.s:467    .text.oc_coap_imp_init:0000000000000000 $t
+     /tmp/ccqsMKG2.s:474    .text.oc_coap_imp_init:0000000000000000 oc_coap_imp_init
+     /tmp/ccqsMKG2.s:528    .text.oc_coap_imp_init:0000000000000040 $d
+     /tmp/ccqsMKG2.s:686    .rodata.__FUNCTION__.7437:0000000000000000 __FUNCTION__.7437
+     /tmp/ccqsMKG2.s:539    .text.oc_coap_demo_main:0000000000000000 $t
+     /tmp/ccqsMKG2.s:546    .text.oc_coap_demo_main:0000000000000000 oc_coap_demo_main
+     /tmp/ccqsMKG2.s:600    .text.oc_coap_demo_main:0000000000000040 $d
+     /tmp/ccqsMKG2.s:692    .rodata.__FUNCTION__.7441:0000000000000000 __FUNCTION__.7441
+     /tmp/ccqsMKG2.s:611    .text.oc_coap_init:0000000000000000 $t
+     /tmp/ccqsMKG2.s:618    .text.oc_coap_init:0000000000000000 oc_coap_init
+     /tmp/ccqsMKG2.s:677    .text.oc_coap_init:0000000000000048 $d
+     /tmp/ccqsMKG2.s:698    .rodata.__FUNCTION__.7445:0000000000000000 __FUNCTION__.7445
+     /tmp/ccqsMKG2.s:683    .rodata.__FUNCTION__.7437:0000000000000000 $d
+     /tmp/ccqsMKG2.s:689    .rodata.__FUNCTION__.7441:0000000000000000 $d
+     /tmp/ccqsMKG2.s:695    .rodata.__FUNCTION__.7445:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+strcmp
+osal_zalloc
+osal_free
+link_log_level_get
+link_log_level_name
+osal_sys_time
+printf

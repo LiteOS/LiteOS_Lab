@@ -1,0 +1,901 @@
+ARM GAS  /tmp/cc48Fp9D.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"dht11.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.DHT11_Delay,"ax",%progbits
+  18              		.align	1
+  19              		.global	DHT11_Delay
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	DHT11_Delay:
+  27              	.LFB133:
+  28              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** #include "los_task.ph"
+   2:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** #include "dht11.h"
+   3:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 
+   4:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** static void DHT11_Mode_IPU(void);
+   5:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** static void DHT11_Mode_Out_PP(void);
+   6:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** static uint8_t DHT11_ReadByte(void);
+   7:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 
+   8:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** /* 函数体 --------------------------------------------------------------------*/
+   9:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** /**
+  10:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 函数功能: 
+  11:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 输入参数: 无
+  12:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 返 回 值: 无
+  13:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 说    明：无
+  14:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   */
+  15:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** void DHT11_Delay(uint32_t time)
+  16:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** {
+  29              		.loc 1 16 1
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 16
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34 0000 80B4     		push	{r7}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 4
+  37              		.cfi_offset 7, -4
+  38 0002 85B0     		sub	sp, sp, #20
+  39              	.LCFI1:
+  40              		.cfi_def_cfa_offset 24
+  41 0004 00AF     		add	r7, sp, #0
+  42              	.LCFI2:
+ARM GAS  /tmp/cc48Fp9D.s 			page 2
+
+
+  43              		.cfi_def_cfa_register 7
+  44 0006 7860     		str	r0, [r7, #4]
+  17:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   uint8_t i;
+  18:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 
+  19:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   while(time)
+  45              		.loc 1 19 8
+  46 0008 0BE0     		b	.L2
+  47              	.L5:
+  20:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   {    
+  21:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     for (i = 0; i < 16; i++)
+  48              		.loc 1 21 12
+  49 000a 0023     		movs	r3, #0
+  50 000c FB73     		strb	r3, [r7, #15]
+  51              		.loc 1 21 5
+  52 000e 02E0     		b	.L3
+  53              	.L4:
+  54              		.loc 1 21 26 discriminator 3
+  55 0010 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+  56 0012 0133     		adds	r3, r3, #1
+  57 0014 FB73     		strb	r3, [r7, #15]
+  58              	.L3:
+  59              		.loc 1 21 5 discriminator 1
+  60 0016 FB7B     		ldrb	r3, [r7, #15]	@ zero_extendqisi2
+  61 0018 0F2B     		cmp	r3, #15
+  62 001a F9D9     		bls	.L4
+  22:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     {
+  23:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****       
+  24:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     }
+  25:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     time--;
+  63              		.loc 1 25 9
+  64 001c 7B68     		ldr	r3, [r7, #4]
+  65 001e 013B     		subs	r3, r3, #1
+  66 0020 7B60     		str	r3, [r7, #4]
+  67              	.L2:
+  19:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   {    
+  68              		.loc 1 19 8
+  69 0022 7B68     		ldr	r3, [r7, #4]
+  70 0024 002B     		cmp	r3, #0
+  71 0026 F0D1     		bne	.L5
+  26:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   }
+  27:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** }
+  72              		.loc 1 27 1
+  73 0028 00BF     		nop
+  74 002a 00BF     		nop
+  75 002c 1437     		adds	r7, r7, #20
+  76              	.LCFI3:
+  77              		.cfi_def_cfa_offset 4
+  78 002e BD46     		mov	sp, r7
+  79              	.LCFI4:
+  80              		.cfi_def_cfa_register 13
+  81              		@ sp needed
+  82 0030 5DF8047B 		ldr	r7, [sp], #4
+  83              	.LCFI5:
+  84              		.cfi_restore 7
+  85              		.cfi_def_cfa_offset 0
+  86 0034 7047     		bx	lr
+  87              		.cfi_endproc
+ARM GAS  /tmp/cc48Fp9D.s 			page 3
+
+
+  88              	.LFE133:
+  90              		.section	.text.DHT11_Init,"ax",%progbits
+  91              		.align	1
+  92              		.global	DHT11_Init
+  93              		.syntax unified
+  94              		.thumb
+  95              		.thumb_func
+  96              		.fpu fpv4-sp-d16
+  98              	DHT11_Init:
+  99              	.LFB134:
+  28:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 
+  29:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** /**
+  30:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 函数功能: DHT11 初始化函数
+  31:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 输入参数: 无
+  32:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 返 回 值: 无
+  33:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 说    明：无
+  34:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   */
+  35:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** void DHT11_Init ( void )
+  36:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** {
+ 100              		.loc 1 36 1
+ 101              		.cfi_startproc
+ 102              		@ args = 0, pretend = 0, frame = 8
+ 103              		@ frame_needed = 1, uses_anonymous_args = 0
+ 104 0000 80B5     		push	{r7, lr}
+ 105              	.LCFI6:
+ 106              		.cfi_def_cfa_offset 8
+ 107              		.cfi_offset 7, -8
+ 108              		.cfi_offset 14, -4
+ 109 0002 82B0     		sub	sp, sp, #8
+ 110              	.LCFI7:
+ 111              		.cfi_def_cfa_offset 16
+ 112 0004 00AF     		add	r7, sp, #0
+ 113              	.LCFI8:
+ 114              		.cfi_def_cfa_register 7
+ 115              	.LBB2:
+  37:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   DHT11_Dout_GPIO_CLK_ENABLE();
+ 116              		.loc 1 37 3
+ 117 0006 0E4B     		ldr	r3, .L7
+ 118 0008 DB6C     		ldr	r3, [r3, #76]
+ 119 000a 0D4A     		ldr	r2, .L7
+ 120 000c 43F00403 		orr	r3, r3, #4
+ 121 0010 D364     		str	r3, [r2, #76]
+ 122 0012 0B4B     		ldr	r3, .L7
+ 123 0014 DB6C     		ldr	r3, [r3, #76]
+ 124 0016 03F00403 		and	r3, r3, #4
+ 125 001a 7B60     		str	r3, [r7, #4]
+ 126 001c 7B68     		ldr	r3, [r7, #4]
+ 127              	.LBE2:
+  38:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   
+  39:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   DHT11_Mode_Out_PP();
+ 128              		.loc 1 39 3
+ 129 001e FFF7FEFF 		bl	DHT11_Mode_Out_PP
+  40:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****         
+  41:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   DHT11_Dout_HIGH();  // 拉高GPIO
+ 130              		.loc 1 41 3
+ 131 0022 0122     		movs	r2, #1
+ 132 0024 4FF40051 		mov	r1, #8192
+ARM GAS  /tmp/cc48Fp9D.s 			page 4
+
+
+ 133 0028 0648     		ldr	r0, .L7+4
+ 134 002a FFF7FEFF 		bl	HAL_GPIO_WritePin
+  42:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 	delay10ms(300);
+ 135              		.loc 1 42 2
+ 136 002e 4FF49670 		mov	r0, #300
+ 137 0032 FFF7FEFF 		bl	delay10ms
+  43:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** }
+ 138              		.loc 1 43 1
+ 139 0036 00BF     		nop
+ 140 0038 0837     		adds	r7, r7, #8
+ 141              	.LCFI9:
+ 142              		.cfi_def_cfa_offset 8
+ 143 003a BD46     		mov	sp, r7
+ 144              	.LCFI10:
+ 145              		.cfi_def_cfa_register 13
+ 146              		@ sp needed
+ 147 003c 80BD     		pop	{r7, pc}
+ 148              	.L8:
+ 149 003e 00BF     		.align	2
+ 150              	.L7:
+ 151 0040 00100240 		.word	1073876992
+ 152 0044 00080048 		.word	1207961600
+ 153              		.cfi_endproc
+ 154              	.LFE134:
+ 156              		.section	.text.DHT11_Mode_IPU,"ax",%progbits
+ 157              		.align	1
+ 158              		.syntax unified
+ 159              		.thumb
+ 160              		.thumb_func
+ 161              		.fpu fpv4-sp-d16
+ 163              	DHT11_Mode_IPU:
+ 164              	.LFB135:
+  44:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 
+  45:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** /**
+  46:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 函数功能: 使DHT11-DATA引脚变为上拉输入模式
+  47:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 输入参数: 无
+  48:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 返 回 值: 无
+  49:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 说    明：无
+  50:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   */
+  51:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** static void DHT11_Mode_IPU(void)
+  52:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** {
+ 165              		.loc 1 52 1
+ 166              		.cfi_startproc
+ 167              		@ args = 0, pretend = 0, frame = 24
+ 168              		@ frame_needed = 1, uses_anonymous_args = 0
+ 169 0000 80B5     		push	{r7, lr}
+ 170              	.LCFI11:
+ 171              		.cfi_def_cfa_offset 8
+ 172              		.cfi_offset 7, -8
+ 173              		.cfi_offset 14, -4
+ 174 0002 86B0     		sub	sp, sp, #24
+ 175              	.LCFI12:
+ 176              		.cfi_def_cfa_offset 32
+ 177 0004 00AF     		add	r7, sp, #0
+ 178              	.LCFI13:
+ 179              		.cfi_def_cfa_register 7
+  53:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   GPIO_InitTypeDef GPIO_InitStruct;
+ARM GAS  /tmp/cc48Fp9D.s 			page 5
+
+
+  54:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   
+  55:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   /* 串口外设功能GPIO配置 */
+  56:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   GPIO_InitStruct.Pin   = DHT11_Dout_PIN;
+ 180              		.loc 1 56 25
+ 181 0006 4FF40053 		mov	r3, #8192
+ 182 000a 7B60     		str	r3, [r7, #4]
+  57:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   GPIO_InitStruct.Mode  = GPIO_MODE_INPUT;
+ 183              		.loc 1 57 25
+ 184 000c 0023     		movs	r3, #0
+ 185 000e BB60     		str	r3, [r7, #8]
+  58:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   GPIO_InitStruct.Pull  = GPIO_PULLUP;
+ 186              		.loc 1 58 25
+ 187 0010 0123     		movs	r3, #1
+ 188 0012 FB60     		str	r3, [r7, #12]
+  59:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   HAL_GPIO_Init(DHT11_Dout_PORT, &GPIO_InitStruct);
+ 189              		.loc 1 59 3
+ 190 0014 3B1D     		adds	r3, r7, #4
+ 191 0016 1946     		mov	r1, r3
+ 192 0018 0348     		ldr	r0, .L10
+ 193 001a FFF7FEFF 		bl	HAL_GPIO_Init
+  60:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****         
+  61:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** }
+ 194              		.loc 1 61 1
+ 195 001e 00BF     		nop
+ 196 0020 1837     		adds	r7, r7, #24
+ 197              	.LCFI14:
+ 198              		.cfi_def_cfa_offset 8
+ 199 0022 BD46     		mov	sp, r7
+ 200              	.LCFI15:
+ 201              		.cfi_def_cfa_register 13
+ 202              		@ sp needed
+ 203 0024 80BD     		pop	{r7, pc}
+ 204              	.L11:
+ 205 0026 00BF     		.align	2
+ 206              	.L10:
+ 207 0028 00080048 		.word	1207961600
+ 208              		.cfi_endproc
+ 209              	.LFE135:
+ 211              		.section	.text.DHT11_Mode_Out_PP,"ax",%progbits
+ 212              		.align	1
+ 213              		.syntax unified
+ 214              		.thumb
+ 215              		.thumb_func
+ 216              		.fpu fpv4-sp-d16
+ 218              	DHT11_Mode_Out_PP:
+ 219              	.LFB136:
+  62:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 
+  63:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** /**
+  64:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 函数功能: 使DHT11-DATA引脚变为推挽输出模式
+  65:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 输入参数: 无
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 返 回 值: 无
+  67:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 说    明：无
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   */
+  69:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** static void DHT11_Mode_Out_PP(void)
+  70:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** {
+ 220              		.loc 1 70 1
+ 221              		.cfi_startproc
+ARM GAS  /tmp/cc48Fp9D.s 			page 6
+
+
+ 222              		@ args = 0, pretend = 0, frame = 24
+ 223              		@ frame_needed = 1, uses_anonymous_args = 0
+ 224 0000 80B5     		push	{r7, lr}
+ 225              	.LCFI16:
+ 226              		.cfi_def_cfa_offset 8
+ 227              		.cfi_offset 7, -8
+ 228              		.cfi_offset 14, -4
+ 229 0002 86B0     		sub	sp, sp, #24
+ 230              	.LCFI17:
+ 231              		.cfi_def_cfa_offset 32
+ 232 0004 00AF     		add	r7, sp, #0
+ 233              	.LCFI18:
+ 234              		.cfi_def_cfa_register 7
+  71:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   GPIO_InitTypeDef GPIO_InitStruct;
+  72:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   
+  73:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   /* 串口外设功能GPIO配置 */
+  74:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   GPIO_InitStruct.Pin = DHT11_Dout_PIN;
+ 235              		.loc 1 74 23
+ 236 0006 4FF40053 		mov	r3, #8192
+ 237 000a 7B60     		str	r3, [r7, #4]
+  75:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 238              		.loc 1 75 24
+ 239 000c 0123     		movs	r3, #1
+ 240 000e BB60     		str	r3, [r7, #8]
+  76:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+ 241              		.loc 1 76 25
+ 242 0010 0223     		movs	r3, #2
+ 243 0012 3B61     		str	r3, [r7, #16]
+  77:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   HAL_GPIO_Init(DHT11_Dout_PORT, &GPIO_InitStruct);          
+ 244              		.loc 1 77 3
+ 245 0014 3B1D     		adds	r3, r7, #4
+ 246 0016 1946     		mov	r1, r3
+ 247 0018 0348     		ldr	r0, .L13
+ 248 001a FFF7FEFF 		bl	HAL_GPIO_Init
+  78:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** }
+ 249              		.loc 1 78 1
+ 250 001e 00BF     		nop
+ 251 0020 1837     		adds	r7, r7, #24
+ 252              	.LCFI19:
+ 253              		.cfi_def_cfa_offset 8
+ 254 0022 BD46     		mov	sp, r7
+ 255              	.LCFI20:
+ 256              		.cfi_def_cfa_register 13
+ 257              		@ sp needed
+ 258 0024 80BD     		pop	{r7, pc}
+ 259              	.L14:
+ 260 0026 00BF     		.align	2
+ 261              	.L13:
+ 262 0028 00080048 		.word	1207961600
+ 263              		.cfi_endproc
+ 264              	.LFE136:
+ 266              		.section	.text.DHT11_ReadByte,"ax",%progbits
+ 267              		.align	1
+ 268              		.syntax unified
+ 269              		.thumb
+ 270              		.thumb_func
+ 271              		.fpu fpv4-sp-d16
+ARM GAS  /tmp/cc48Fp9D.s 			page 7
+
+
+ 273              	DHT11_ReadByte:
+ 274              	.LFB137:
+  79:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 
+  80:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** /**
+  81:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 函数功能: 从DHT11读取一个字节，MSB先行
+  82:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 输入参数: 无
+  83:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 返 回 值: 无
+  84:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 说    明：无
+  85:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   */
+  86:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** static uint8_t DHT11_ReadByte ( void )
+  87:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** {
+ 275              		.loc 1 87 1
+ 276              		.cfi_startproc
+ 277              		@ args = 0, pretend = 0, frame = 8
+ 278              		@ frame_needed = 1, uses_anonymous_args = 0
+ 279 0000 80B5     		push	{r7, lr}
+ 280              	.LCFI21:
+ 281              		.cfi_def_cfa_offset 8
+ 282              		.cfi_offset 7, -8
+ 283              		.cfi_offset 14, -4
+ 284 0002 82B0     		sub	sp, sp, #8
+ 285              	.LCFI22:
+ 286              		.cfi_def_cfa_offset 16
+ 287 0004 00AF     		add	r7, sp, #0
+ 288              	.LCFI23:
+ 289              		.cfi_def_cfa_register 7
+  88:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 	uint8_t i, temp=0;
+ 290              		.loc 1 88 13
+ 291 0006 0023     		movs	r3, #0
+ 292 0008 BB71     		strb	r3, [r7, #6]
+  89:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 
+  90:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 	for(i=0;i<8;i++)    
+ 293              		.loc 1 90 7
+ 294 000a 0023     		movs	r3, #0
+ 295 000c FB71     		strb	r3, [r7, #7]
+ 296              		.loc 1 90 2
+ 297 000e 36E0     		b	.L16
+ 298              	.L21:
+  91:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 	{         
+  92:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 		/*每bit以50us低电平标置开始，轮询直到从机发出 的50us 低电平 结束*/  
+  93:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 		while(DHT11_Data_IN()==GPIO_PIN_RESET);
+ 299              		.loc 1 93 8
+ 300 0010 00BF     		nop
+ 301              	.L17:
+ 302              		.loc 1 93 9 discriminator 1
+ 303 0012 4FF40051 		mov	r1, #8192
+ 304 0016 1E48     		ldr	r0, .L23
+ 305 0018 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 306 001c 0346     		mov	r3, r0
+ 307              		.loc 1 93 8 discriminator 1
+ 308 001e 002B     		cmp	r3, #0
+ 309 0020 F7D0     		beq	.L17
+  94:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 
+  95:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 		/*DHT11 以26~28us的高电平表示“0”，以70us高电平表示“1”，
+  96:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 		*通过检测 x us后的电平即可区别这两个状 ，x 即下面的延时 
+  97:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 		*/
+  98:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 		delayus(40); //延时x us 这个延时需要大于数据0持续的时间即可                   
+ARM GAS  /tmp/cc48Fp9D.s 			page 8
+
+
+ 310              		.loc 1 98 3
+ 311 0022 2820     		movs	r0, #40
+ 312 0024 FFF7FEFF 		bl	delayus
+  99:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 
+ 100:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 		if(DHT11_Data_IN()==GPIO_PIN_SET)/* x us后仍为高电平表示数据“1” */
+ 313              		.loc 1 100 6
+ 314 0028 4FF40051 		mov	r1, #8192
+ 315 002c 1848     		ldr	r0, .L23
+ 316 002e FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 317 0032 0346     		mov	r3, r0
+ 318              		.loc 1 100 5
+ 319 0034 012B     		cmp	r3, #1
+ 320 0036 13D1     		bne	.L18
+ 101:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 		{
+ 102:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 			/* 等待数据1的高电平结束 */
+ 103:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 			while(DHT11_Data_IN()==GPIO_PIN_SET);
+ 321              		.loc 1 103 9
+ 322 0038 00BF     		nop
+ 323              	.L19:
+ 324              		.loc 1 103 10 discriminator 1
+ 325 003a 4FF40051 		mov	r1, #8192
+ 326 003e 1448     		ldr	r0, .L23
+ 327 0040 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 328 0044 0346     		mov	r3, r0
+ 329              		.loc 1 103 9 discriminator 1
+ 330 0046 012B     		cmp	r3, #1
+ 331 0048 F7D0     		beq	.L19
+ 104:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 
+ 105:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 			temp|=(uint8_t)(0x01<<(7-i));  //把第7-i位置1，MSB先行 
+ 332              		.loc 1 105 28
+ 333 004a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 334 004c C3F10703 		rsb	r3, r3, #7
+ 335              		.loc 1 105 24
+ 336 0050 0122     		movs	r2, #1
+ 337 0052 02FA03F3 		lsl	r3, r2, r3
+ 338              		.loc 1 105 10
+ 339 0056 DAB2     		uxtb	r2, r3
+ 340              		.loc 1 105 8
+ 341 0058 BB79     		ldrb	r3, [r7, #6]
+ 342 005a 1343     		orrs	r3, r3, r2
+ 343 005c BB71     		strb	r3, [r7, #6]
+ 344 005e 0BE0     		b	.L20
+ 345              	.L18:
+ 106:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 		}
+ 107:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 		else         // x us后为低电平表示数据“0”
+ 108:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 		{                           
+ 109:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 			temp&=(uint8_t)~(0x01<<(7-i)); //把第7-i位置0，MSB先行
+ 346              		.loc 1 109 29
+ 347 0060 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 348 0062 C3F10703 		rsb	r3, r3, #7
+ 349              		.loc 1 109 25
+ 350 0066 0122     		movs	r2, #1
+ 351 0068 02FA03F3 		lsl	r3, r2, r3
+ 352              		.loc 1 109 10
+ 353 006c DBB2     		uxtb	r3, r3
+ 354 006e DB43     		mvns	r3, r3
+ 355 0070 DAB2     		uxtb	r2, r3
+ARM GAS  /tmp/cc48Fp9D.s 			page 9
+
+
+ 356              		.loc 1 109 8
+ 357 0072 BB79     		ldrb	r3, [r7, #6]
+ 358 0074 1340     		ands	r3, r3, r2
+ 359 0076 BB71     		strb	r3, [r7, #6]
+ 360              	.L20:
+  90:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 	{         
+ 361              		.loc 1 90 15 discriminator 2
+ 362 0078 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 363 007a 0133     		adds	r3, r3, #1
+ 364 007c FB71     		strb	r3, [r7, #7]
+ 365              	.L16:
+  90:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 	{         
+ 366              		.loc 1 90 2 discriminator 1
+ 367 007e FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 368 0080 072B     		cmp	r3, #7
+ 369 0082 C5D9     		bls	.L21
+ 110:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 		}
+ 111:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 	}
+ 112:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 	return temp;
+ 370              		.loc 1 112 9
+ 371 0084 BB79     		ldrb	r3, [r7, #6]	@ zero_extendqisi2
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** }
+ 372              		.loc 1 113 1
+ 373 0086 1846     		mov	r0, r3
+ 374 0088 0837     		adds	r7, r7, #8
+ 375              	.LCFI24:
+ 376              		.cfi_def_cfa_offset 8
+ 377 008a BD46     		mov	sp, r7
+ 378              	.LCFI25:
+ 379              		.cfi_def_cfa_register 13
+ 380              		@ sp needed
+ 381 008c 80BD     		pop	{r7, pc}
+ 382              	.L24:
+ 383 008e 00BF     		.align	2
+ 384              	.L23:
+ 385 0090 00080048 		.word	1207961600
+ 386              		.cfi_endproc
+ 387              	.LFE137:
+ 389              		.section	.text.DHT11_Read_TempAndHumidity,"ax",%progbits
+ 390              		.align	1
+ 391              		.global	DHT11_Read_TempAndHumidity
+ 392              		.syntax unified
+ 393              		.thumb
+ 394              		.thumb_func
+ 395              		.fpu fpv4-sp-d16
+ 397              	DHT11_Read_TempAndHumidity:
+ 398              	.LFB138:
+ 114:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 
+ 115:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 
+ 116:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** /**
+ 117:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 函数功能: 一次完整的数据传输为40bit，高位先出
+ 118:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 输入参数: DHT11_Data:DHT11数据类型
+ 119:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 返 回 值: ERROR：  读取出错
+ 120:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   *           SUCCESS：读取成功
+ 121:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   * 说    明：8bit 湿度整数 + 8bit 湿度小数 + 8bit 温度整数 + 8bit 温度小数 + 8b
+ 122:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   */
+ 123:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** uint8_t DHT11_Read_TempAndHumidity(DHT11_Data_TypeDef *DHT11_Data)
+ARM GAS  /tmp/cc48Fp9D.s 			page 10
+
+
+ 124:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** {  
+ 399              		.loc 1 124 1
+ 400              		.cfi_startproc
+ 401              		@ args = 0, pretend = 0, frame = 16
+ 402              		@ frame_needed = 1, uses_anonymous_args = 0
+ 403 0000 80B5     		push	{r7, lr}
+ 404              	.LCFI26:
+ 405              		.cfi_def_cfa_offset 8
+ 406              		.cfi_offset 7, -8
+ 407              		.cfi_offset 14, -4
+ 408 0002 84B0     		sub	sp, sp, #16
+ 409              	.LCFI27:
+ 410              		.cfi_def_cfa_offset 24
+ 411 0004 00AF     		add	r7, sp, #0
+ 412              	.LCFI28:
+ 413              		.cfi_def_cfa_register 7
+ 414 0006 7860     		str	r0, [r7, #4]
+ 125:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   uint8_t temp;
+ 126:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****   uint16_t humi_temp;
+ 127:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 
+ 128:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 	/*输出模式*/
+ 129:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 	DHT11_Mode_Out_PP();
+ 415              		.loc 1 129 2
+ 416 0008 FFF7FEFF 		bl	DHT11_Mode_Out_PP
+ 130:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 	/*主机拉低*/
+ 131:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 	DHT11_Dout_LOW();
+ 417              		.loc 1 131 2
+ 418 000c 0022     		movs	r2, #0
+ 419 000e 4FF40051 		mov	r1, #8192
+ 420 0012 5548     		ldr	r0, .L31
+ 421 0014 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 132:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 	/*延时18ms*/
+ 133:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 	LOS_TaskDelay(18);
+ 422              		.loc 1 133 2
+ 423 0018 1220     		movs	r0, #18
+ 424 001a FFF7FEFF 		bl	LOS_TaskDelay
+ 134:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 
+ 135:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 	/*总线拉高 主机延时30us*/
+ 136:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 	DHT11_Dout_HIGH(); 
+ 425              		.loc 1 136 2
+ 426 001e 0122     		movs	r2, #1
+ 427 0020 4FF40051 		mov	r1, #8192
+ 428 0024 5048     		ldr	r0, .L31
+ 429 0026 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 137:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 
+ 138:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 	delayus(30);   //延时30us
+ 430              		.loc 1 138 2
+ 431 002a 1E20     		movs	r0, #30
+ 432 002c FFF7FEFF 		bl	delayus
+ 139:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 
+ 140:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 	/*主机设为输入 判断从机响应信号*/ 
+ 141:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 	DHT11_Mode_IPU();
+ 433              		.loc 1 141 2
+ 434 0030 FFF7FEFF 		bl	DHT11_Mode_IPU
+ 142:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 
+ 143:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 	/*判断从机是否有低电平响应信号 如不响应则跳出，响应则向下运行*/   
+ 144:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 	if(DHT11_Data_IN()==GPIO_PIN_RESET)     
+ARM GAS  /tmp/cc48Fp9D.s 			page 11
+
+
+ 435              		.loc 1 144 5
+ 436 0034 4FF40051 		mov	r1, #8192
+ 437 0038 4B48     		ldr	r0, .L31
+ 438 003a FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 439 003e 0346     		mov	r3, r0
+ 440              		.loc 1 144 4
+ 441 0040 002B     		cmp	r3, #0
+ 442 0042 40F08B80 		bne	.L26
+ 145:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 	{
+ 146:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 		/*轮询直到从机发出 的80us 低电平 响应信号结束*/  
+ 147:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 		while(DHT11_Data_IN()==GPIO_PIN_RESET);
+ 443              		.loc 1 147 8
+ 444 0046 00BF     		nop
+ 445              	.L27:
+ 446              		.loc 1 147 9 discriminator 1
+ 447 0048 4FF40051 		mov	r1, #8192
+ 448 004c 4648     		ldr	r0, .L31
+ 449 004e FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 450 0052 0346     		mov	r3, r0
+ 451              		.loc 1 147 8 discriminator 1
+ 452 0054 002B     		cmp	r3, #0
+ 453 0056 F7D0     		beq	.L27
+ 148:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 
+ 149:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 		/*轮询直到从机发出的 80us 高电平 标置信号结束*/
+ 150:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 		while(DHT11_Data_IN()==GPIO_PIN_SET);
+ 454              		.loc 1 150 8
+ 455 0058 00BF     		nop
+ 456              	.L28:
+ 457              		.loc 1 150 9 discriminator 1
+ 458 005a 4FF40051 		mov	r1, #8192
+ 459 005e 4248     		ldr	r0, .L31
+ 460 0060 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 461 0064 0346     		mov	r3, r0
+ 462              		.loc 1 150 8 discriminator 1
+ 463 0066 012B     		cmp	r3, #1
+ 464 0068 F7D0     		beq	.L28
+ 151:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 
+ 152:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     /*开始接收数据*/   
+ 153:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     DHT11_Data->humi_high8bit= DHT11_ReadByte();
+ 465              		.loc 1 153 32
+ 466 006a FFF7FEFF 		bl	DHT11_ReadByte
+ 467 006e 0346     		mov	r3, r0
+ 468 0070 1A46     		mov	r2, r3
+ 469              		.loc 1 153 30
+ 470 0072 7B68     		ldr	r3, [r7, #4]
+ 471 0074 1A70     		strb	r2, [r3]
+ 154:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     DHT11_Data->humi_low8bit = DHT11_ReadByte();
+ 472              		.loc 1 154 32
+ 473 0076 FFF7FEFF 		bl	DHT11_ReadByte
+ 474 007a 0346     		mov	r3, r0
+ 475 007c 1A46     		mov	r2, r3
+ 476              		.loc 1 154 30
+ 477 007e 7B68     		ldr	r3, [r7, #4]
+ 478 0080 5A70     		strb	r2, [r3, #1]
+ 155:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     DHT11_Data->temp_high8bit= DHT11_ReadByte();
+ 479              		.loc 1 155 32
+ 480 0082 FFF7FEFF 		bl	DHT11_ReadByte
+ARM GAS  /tmp/cc48Fp9D.s 			page 12
+
+
+ 481 0086 0346     		mov	r3, r0
+ 482 0088 1A46     		mov	r2, r3
+ 483              		.loc 1 155 30
+ 484 008a 7B68     		ldr	r3, [r7, #4]
+ 485 008c 9A70     		strb	r2, [r3, #2]
+ 156:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     DHT11_Data->temp_low8bit = DHT11_ReadByte();
+ 486              		.loc 1 156 32
+ 487 008e FFF7FEFF 		bl	DHT11_ReadByte
+ 488 0092 0346     		mov	r3, r0
+ 489 0094 1A46     		mov	r2, r3
+ 490              		.loc 1 156 30
+ 491 0096 7B68     		ldr	r3, [r7, #4]
+ 492 0098 DA70     		strb	r2, [r3, #3]
+ 157:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     DHT11_Data->check_sum    = DHT11_ReadByte();
+ 493              		.loc 1 157 32
+ 494 009a FFF7FEFF 		bl	DHT11_ReadByte
+ 495 009e 0346     		mov	r3, r0
+ 496 00a0 1A46     		mov	r2, r3
+ 497              		.loc 1 157 30
+ 498 00a2 7B68     		ldr	r3, [r7, #4]
+ 499 00a4 1A71     		strb	r2, [r3, #4]
+ 158:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** 
+ 159:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     /*读取结束，引脚改为输出模式*/
+ 160:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     DHT11_Mode_Out_PP();
+ 500              		.loc 1 160 5
+ 501 00a6 FFF7FEFF 		bl	DHT11_Mode_Out_PP
+ 161:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     /*主机拉高*/
+ 162:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     DHT11_Dout_HIGH();
+ 502              		.loc 1 162 5
+ 503 00aa 0122     		movs	r2, #1
+ 504 00ac 4FF40051 		mov	r1, #8192
+ 505 00b0 2D48     		ldr	r0, .L31
+ 506 00b2 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 163:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     
+ 164:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     /* 对数据进行处理 */
+ 165:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     humi_temp=DHT11_Data->humi_high8bit*100+DHT11_Data->humi_low8bit;
+ 507              		.loc 1 165 25
+ 508 00b6 7B68     		ldr	r3, [r7, #4]
+ 509 00b8 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 510              		.loc 1 165 44
+ 511 00ba 9BB2     		uxth	r3, r3
+ 512 00bc 1A46     		mov	r2, r3	@ movhi
+ 513 00be 9200     		lsls	r2, r2, #2
+ 514 00c0 1344     		add	r3, r3, r2
+ 515 00c2 1A46     		mov	r2, r3	@ movhi
+ 516 00c4 9100     		lsls	r1, r2, #2
+ 517 00c6 1A46     		mov	r2, r3	@ movhi
+ 518 00c8 0B46     		mov	r3, r1	@ movhi
+ 519 00ca 1344     		add	r3, r3, r2
+ 520 00cc 9B00     		lsls	r3, r3, #2
+ 521 00ce 9AB2     		uxth	r2, r3
+ 522              		.loc 1 165 55
+ 523 00d0 7B68     		ldr	r3, [r7, #4]
+ 524 00d2 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 525 00d4 9BB2     		uxth	r3, r3
+ 526              		.loc 1 165 14
+ 527 00d6 1344     		add	r3, r3, r2
+ARM GAS  /tmp/cc48Fp9D.s 			page 13
+
+
+ 528 00d8 FB81     		strh	r3, [r7, #14]	@ movhi
+ 166:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     DHT11_Data->humidity =(float)humi_temp/100;
+ 529              		.loc 1 166 27
+ 530 00da FB89     		ldrh	r3, [r7, #14]
+ 531 00dc 07EE903A 		vmov	s15, r3	@ int
+ 532 00e0 B8EE677A 		vcvt.f32.u32	s14, s15
+ 533              		.loc 1 166 43
+ 534 00e4 DFED216A 		vldr.32	s13, .L31+4
+ 535 00e8 C7EE267A 		vdiv.f32	s15, s14, s13
+ 536              		.loc 1 166 26
+ 537 00ec 7B68     		ldr	r3, [r7, #4]
+ 538 00ee C3ED027A 		vstr.32	s15, [r3, #8]
+ 167:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     
+ 168:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     humi_temp=DHT11_Data->temp_high8bit*100+DHT11_Data->temp_low8bit;
+ 539              		.loc 1 168 25
+ 540 00f2 7B68     		ldr	r3, [r7, #4]
+ 541 00f4 9B78     		ldrb	r3, [r3, #2]	@ zero_extendqisi2
+ 542              		.loc 1 168 44
+ 543 00f6 9BB2     		uxth	r3, r3
+ 544 00f8 1A46     		mov	r2, r3	@ movhi
+ 545 00fa 9200     		lsls	r2, r2, #2
+ 546 00fc 1344     		add	r3, r3, r2
+ 547 00fe 1A46     		mov	r2, r3	@ movhi
+ 548 0100 9100     		lsls	r1, r2, #2
+ 549 0102 1A46     		mov	r2, r3	@ movhi
+ 550 0104 0B46     		mov	r3, r1	@ movhi
+ 551 0106 1344     		add	r3, r3, r2
+ 552 0108 9B00     		lsls	r3, r3, #2
+ 553 010a 9AB2     		uxth	r2, r3
+ 554              		.loc 1 168 55
+ 555 010c 7B68     		ldr	r3, [r7, #4]
+ 556 010e DB78     		ldrb	r3, [r3, #3]	@ zero_extendqisi2
+ 557 0110 9BB2     		uxth	r3, r3
+ 558              		.loc 1 168 14
+ 559 0112 1344     		add	r3, r3, r2
+ 560 0114 FB81     		strh	r3, [r7, #14]	@ movhi
+ 169:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     DHT11_Data->temperature=(float)humi_temp/100;    
+ 561              		.loc 1 169 29
+ 562 0116 FB89     		ldrh	r3, [r7, #14]
+ 563 0118 07EE903A 		vmov	s15, r3	@ int
+ 564 011c B8EE677A 		vcvt.f32.u32	s14, s15
+ 565              		.loc 1 169 45
+ 566 0120 DFED126A 		vldr.32	s13, .L31+4
+ 567 0124 C7EE267A 		vdiv.f32	s15, s14, s13
+ 568              		.loc 1 169 28
+ 569 0128 7B68     		ldr	r3, [r7, #4]
+ 570 012a C3ED037A 		vstr.32	s15, [r3, #12]
+ 170:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     
+ 171:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     /*检查读取的数据是否正确*/
+ 172:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     temp = DHT11_Data->humi_high8bit + DHT11_Data->humi_low8bit + 
+ 571              		.loc 1 172 22
+ 572 012e 7B68     		ldr	r3, [r7, #4]
+ 573 0130 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 574              		.loc 1 172 50
+ 575 0132 7B68     		ldr	r3, [r7, #4]
+ 576 0134 5B78     		ldrb	r3, [r3, #1]	@ zero_extendqisi2
+ 577              		.loc 1 172 38
+ARM GAS  /tmp/cc48Fp9D.s 			page 14
+
+
+ 578 0136 1344     		add	r3, r3, r2
+ 579 0138 DAB2     		uxtb	r2, r3
+ 173:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****            DHT11_Data->temp_high8bit+ DHT11_Data->temp_low8bit;
+ 580              		.loc 1 173 22
+ 581 013a 7B68     		ldr	r3, [r7, #4]
+ 582 013c 9B78     		ldrb	r3, [r3, #2]	@ zero_extendqisi2
+ 172:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****            DHT11_Data->temp_high8bit+ DHT11_Data->temp_low8bit;
+ 583              		.loc 1 172 65
+ 584 013e 1344     		add	r3, r3, r2
+ 585 0140 DAB2     		uxtb	r2, r3
+ 586              		.loc 1 173 49
+ 587 0142 7B68     		ldr	r3, [r7, #4]
+ 588 0144 DB78     		ldrb	r3, [r3, #3]	@ zero_extendqisi2
+ 172:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****            DHT11_Data->temp_high8bit+ DHT11_Data->temp_low8bit;
+ 589              		.loc 1 172 10
+ 590 0146 1344     		add	r3, r3, r2
+ 591 0148 7B73     		strb	r3, [r7, #13]
+ 174:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     if(DHT11_Data->check_sum==temp)
+ 592              		.loc 1 174 18
+ 593 014a 7B68     		ldr	r3, [r7, #4]
+ 594 014c 1B79     		ldrb	r3, [r3, #4]	@ zero_extendqisi2
+ 595              		.loc 1 174 7
+ 596 014e 7A7B     		ldrb	r2, [r7, #13]	@ zero_extendqisi2
+ 597 0150 9A42     		cmp	r2, r3
+ 598 0152 01D1     		bne	.L29
+ 175:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     { 
+ 176:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****       return SUCCESS;
+ 599              		.loc 1 176 14
+ 600 0154 0023     		movs	r3, #0
+ 601 0156 02E0     		b	.L30
+ 602              	.L29:
+ 177:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     }
+ 178:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     else 
+ 179:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****       return ERROR;
+ 603              		.loc 1 179 14
+ 604 0158 0123     		movs	r3, #1
+ 605 015a 00E0     		b	.L30
+ 606              	.L26:
+ 180:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     }        
+ 181:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****     else
+ 182:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c ****       return ERROR;
+ 607              		.loc 1 182 14
+ 608 015c 0123     		movs	r3, #1
+ 609              	.L30:
+ 183:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.c **** }
+ 610              		.loc 1 183 1
+ 611 015e 1846     		mov	r0, r3
+ 612 0160 1037     		adds	r7, r7, #16
+ 613              	.LCFI29:
+ 614              		.cfi_def_cfa_offset 8
+ 615 0162 BD46     		mov	sp, r7
+ 616              	.LCFI30:
+ 617              		.cfi_def_cfa_register 13
+ 618              		@ sp needed
+ 619 0164 80BD     		pop	{r7, pc}
+ 620              	.L32:
+ 621 0166 00BF     		.align	2
+ARM GAS  /tmp/cc48Fp9D.s 			page 15
+
+
+ 622              	.L31:
+ 623 0168 00080048 		.word	1207961600
+ 624 016c 0000C842 		.word	1120403456
+ 625              		.cfi_endproc
+ 626              	.LFE138:
+ 628              		.text
+ 629              	.Letext0:
+ 630              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 631              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 632              		.file 4 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 633              		.file 5 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 634              		.file 6 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/ree
+ 635              		.file 7 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_typedef.h"
+ 636              		.file 8 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 637              		.file 9 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 638              		.file 10 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/system_stm32l4xx.h"
+ 639              		.file 11 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/stm32l476xx.h"
+ 640              		.file 12 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 641              		.file 13 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/stm32l4xx.h"
+ 642              		.file 14 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_config.h"
+ 643              		.file 15 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_list.h"
+ 644              		.file 16 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_err.h"
+ 645              		.file 17 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 646              		.file 18 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_tick.h"
+ 647              		.file 19 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_event.h"
+ 648              		.file 20 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_task.h"
+ 649              		.file 21 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/base/include/los_task.ph"
+ 650              		.file 22 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Hardware/DHT11/dht11.h"
+ARM GAS  /tmp/cc48Fp9D.s 			page 16
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 dht11.c
+     /tmp/cc48Fp9D.s:18     .text.DHT11_Delay:0000000000000000 $t
+     /tmp/cc48Fp9D.s:26     .text.DHT11_Delay:0000000000000000 DHT11_Delay
+     /tmp/cc48Fp9D.s:91     .text.DHT11_Init:0000000000000000 $t
+     /tmp/cc48Fp9D.s:98     .text.DHT11_Init:0000000000000000 DHT11_Init
+     /tmp/cc48Fp9D.s:218    .text.DHT11_Mode_Out_PP:0000000000000000 DHT11_Mode_Out_PP
+     /tmp/cc48Fp9D.s:151    .text.DHT11_Init:0000000000000040 $d
+     /tmp/cc48Fp9D.s:157    .text.DHT11_Mode_IPU:0000000000000000 $t
+     /tmp/cc48Fp9D.s:163    .text.DHT11_Mode_IPU:0000000000000000 DHT11_Mode_IPU
+     /tmp/cc48Fp9D.s:207    .text.DHT11_Mode_IPU:0000000000000028 $d
+     /tmp/cc48Fp9D.s:212    .text.DHT11_Mode_Out_PP:0000000000000000 $t
+     /tmp/cc48Fp9D.s:262    .text.DHT11_Mode_Out_PP:0000000000000028 $d
+     /tmp/cc48Fp9D.s:267    .text.DHT11_ReadByte:0000000000000000 $t
+     /tmp/cc48Fp9D.s:273    .text.DHT11_ReadByte:0000000000000000 DHT11_ReadByte
+     /tmp/cc48Fp9D.s:385    .text.DHT11_ReadByte:0000000000000090 $d
+     /tmp/cc48Fp9D.s:390    .text.DHT11_Read_TempAndHumidity:0000000000000000 $t
+     /tmp/cc48Fp9D.s:397    .text.DHT11_Read_TempAndHumidity:0000000000000000 DHT11_Read_TempAndHumidity
+     /tmp/cc48Fp9D.s:623    .text.DHT11_Read_TempAndHumidity:0000000000000168 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_WritePin
+delay10ms
+HAL_GPIO_Init
+HAL_GPIO_ReadPin
+delayus
+LOS_TaskDelay

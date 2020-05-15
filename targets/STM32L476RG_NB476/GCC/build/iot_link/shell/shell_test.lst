@@ -1,0 +1,374 @@
+ARM GAS  /tmp/cciM6xbN.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"shell_test.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.shell_taskinfo,"ax",%progbits
+  18              		.align	1
+  19              		.arch armv7e-m
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	shell_taskinfo:
+  26              	.LFB133:
+  27              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** /*----------------------------------------------------------------------------
+   2:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * All rights reserved.
+   4:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * are permitted provided that the following conditions are met:
+   6:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * conditions and the following disclaimer.
+   8:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * provided with the distribution.
+  11:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * permission.
+  14:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  *---------------------------------------------------------------------------*/
+  26:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** /*----------------------------------------------------------------------------
+  27:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * Notice of Export Control Law
+  28:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * ===============================================
+  29:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+ARM GAS  /tmp/cciM6xbN.s 			page 2
+
+
+  32:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  * applicable export control laws and regulations.
+  33:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  *---------------------------------------------------------------------------*/
+  34:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** /**
+  35:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  *  DATE                AUTHOR      INSTRUCTION
+  36:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  *  2019-05-14 17:22  zhangqianfu  The first version
+  37:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  *
+  38:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****  */
+  39:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** #if CONFIG_SHELL_ENABLE
+  40:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** 
+  41:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** #include <shell.h>
+  42:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** #include <los_memory.h>
+  43:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** #include <osal.h>
+  44:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** /*
+  45:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** //here we export to shell command,you could add your own shell like this
+  46:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** //test fucntion:print the params passed in
+  47:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** static int shell_test_func(int argc, const char *argv[]){
+  48:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****     int i = 0;
+  49:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****     LINK_LOG_DEBUG("argc:%d \n\r",argc);
+  50:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****     for(i=0;i<argc;i++){
+  51:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****         LINK_LOG_DEBUG("args:%d %s\n\r",i,argv[i]);
+  52:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****     }
+  53:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****     return 0;
+  54:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** }
+  55:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** OSSHELL_EXPORT_CMD(shell_test_func,"shell_test_func","shell test func"); //export a functuon demo
+  56:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** 
+  57:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** static u32_t gs_shell_test_var =123;
+  58:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** OSSHELL_EXPORT_VAR(gs_shell_test_var,"shell_test_var","shell test var");  //export a var demo here
+  59:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** */
+  60:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** //show all the task status here
+  61:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** extern UINT32 osGetAllTskInfo(VOID);
+  62:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** static int shell_taskinfo(int argc,const char *argv[]){
+  28              		.loc 1 62 55
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 8
+  31              		@ frame_needed = 1, uses_anonymous_args = 0
+  32 0000 80B5     		push	{r7, lr}
+  33              	.LCFI0:
+  34              		.cfi_def_cfa_offset 8
+  35              		.cfi_offset 7, -8
+  36              		.cfi_offset 14, -4
+  37 0002 82B0     		sub	sp, sp, #8
+  38              	.LCFI1:
+  39              		.cfi_def_cfa_offset 16
+  40 0004 00AF     		add	r7, sp, #0
+  41              	.LCFI2:
+  42              		.cfi_def_cfa_register 7
+  43 0006 7860     		str	r0, [r7, #4]
+  44 0008 3960     		str	r1, [r7]
+  63:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****     osGetAllTskInfo();
+  45              		.loc 1 63 5
+  46 000a FFF7FEFF 		bl	osGetAllTskInfo
+  64:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****     return 0;
+  47              		.loc 1 64 12
+  48 000e 0023     		movs	r3, #0
+  65:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** }
+  49              		.loc 1 65 1
+  50 0010 1846     		mov	r0, r3
+ARM GAS  /tmp/cciM6xbN.s 			page 3
+
+
+  51 0012 0837     		adds	r7, r7, #8
+  52              	.LCFI3:
+  53              		.cfi_def_cfa_offset 8
+  54 0014 BD46     		mov	sp, r7
+  55              	.LCFI4:
+  56              		.cfi_def_cfa_register 13
+  57              		@ sp needed
+  58 0016 80BD     		pop	{r7, pc}
+  59              		.cfi_endproc
+  60              	.LFE133:
+  62              		.section	.rodata
+  63              		.align	2
+  64              	.LC0:
+  65 0000 7461736B 		.ascii	"taskinfo\000"
+  65      696E666F 
+  65      00
+  66              		.section	oshell,"a"
+  67              		.align	2
+  70              	__oshell_shell_taskinfo:
+  71 0000 00000000 		.word	.LC0
+  72 0004 00000000 		.word	.LC0
+  73 0008 00000000 		.word	shell_taskinfo
+  74 000c 0000     		.short	0
+  75 000e 0400     		.short	4
+  76              		.section	.text.shell_heapinfo,"ax",%progbits
+  77              		.align	1
+  78              		.syntax unified
+  79              		.thumb
+  80              		.thumb_func
+  81              		.fpu fpv4-sp-d16
+  83              	shell_heapinfo:
+  84              	.LFB134:
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** OSSHELL_EXPORT_CMD(shell_taskinfo,"taskinfo","taskinfo");
+  67:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** 
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** //show the memstatus here
+  69:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** static int shell_heapinfo(int argc,const char *argv[])
+  70:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** {
+  85              		.loc 1 70 1
+  86              		.cfi_startproc
+  87              		@ args = 0, pretend = 0, frame = 8
+  88              		@ frame_needed = 1, uses_anonymous_args = 0
+  89 0000 80B5     		push	{r7, lr}
+  90              	.LCFI5:
+  91              		.cfi_def_cfa_offset 8
+  92              		.cfi_offset 7, -8
+  93              		.cfi_offset 14, -4
+  94 0002 82B0     		sub	sp, sp, #8
+  95              	.LCFI6:
+  96              		.cfi_def_cfa_offset 16
+  97 0004 00AF     		add	r7, sp, #0
+  98              	.LCFI7:
+  99              		.cfi_def_cfa_register 7
+ 100 0006 7860     		str	r0, [r7, #4]
+ 101 0008 3960     		str	r1, [r7]
+  71:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** #if (LOSCFG_HEAP_IMPROVED == YES)
+  72:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****     LOS_MemInfo(NULL, 1);
+ 102              		.loc 1 72 5
+ARM GAS  /tmp/cciM6xbN.s 			page 4
+
+
+ 103 000a 0121     		movs	r1, #1
+ 104 000c 0020     		movs	r0, #0
+ 105 000e FFF7FEFF 		bl	LOS_MemInfo
+  73:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** #else
+  74:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****     LOS_MemPoolList();
+  75:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** #endif
+  76:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****     return 0;
+ 106              		.loc 1 76 12
+ 107 0012 0023     		movs	r3, #0
+  77:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** }
+ 108              		.loc 1 77 1
+ 109 0014 1846     		mov	r0, r3
+ 110 0016 0837     		adds	r7, r7, #8
+ 111              	.LCFI8:
+ 112              		.cfi_def_cfa_offset 8
+ 113 0018 BD46     		mov	sp, r7
+ 114              	.LCFI9:
+ 115              		.cfi_def_cfa_register 13
+ 116              		@ sp needed
+ 117 001a 80BD     		pop	{r7, pc}
+ 118              		.cfi_endproc
+ 119              	.LFE134:
+ 121              		.section	.rodata
+ 122 0009 000000   		.align	2
+ 123              	.LC1:
+ 124 000c 68656170 		.ascii	"heapinfo\000"
+ 124      696E666F 
+ 124      00
+ 125              		.section	oshell
+ 126              		.align	2
+ 129              	__oshell_shell_heapinfo:
+ 130 0010 0C000000 		.word	.LC1
+ 131 0014 0C000000 		.word	.LC1
+ 132 0018 00000000 		.word	shell_heapinfo
+ 133 001c 0000     		.short	0
+ 134 001e 0400     		.short	4
+ 135              		.section	.rodata
+ 136 0015 000000   		.align	2
+ 137              	.LC2:
+ 138 0018 5B25735D 		.ascii	"[%s][%u][%s:%d] reboot failed\012\015\015\012\000"
+ 138      5B25755D 
+ 138      5B25733A 
+ 138      25645D20 
+ 138      7265626F 
+ 139              		.section	.text.shell_reboot,"ax",%progbits
+ 140              		.align	1
+ 141              		.syntax unified
+ 142              		.thumb
+ 143              		.thumb_func
+ 144              		.fpu fpv4-sp-d16
+ 146              	shell_reboot:
+ 147              	.LFB135:
+  78:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** OSSHELL_EXPORT_CMD(shell_heapinfo,"heapinfo","heapinfo");
+  79:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** 
+  80:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** 
+  81:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** static int shell_reboot(int argc,const char *argv[])
+  82:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** {
+ARM GAS  /tmp/cciM6xbN.s 			page 5
+
+
+ 148              		.loc 1 82 1
+ 149              		.cfi_startproc
+ 150              		@ args = 0, pretend = 0, frame = 8
+ 151              		@ frame_needed = 1, uses_anonymous_args = 0
+ 152 0000 90B5     		push	{r4, r7, lr}
+ 153              	.LCFI10:
+ 154              		.cfi_def_cfa_offset 12
+ 155              		.cfi_offset 4, -12
+ 156              		.cfi_offset 7, -8
+ 157              		.cfi_offset 14, -4
+ 158 0002 85B0     		sub	sp, sp, #20
+ 159              	.LCFI11:
+ 160              		.cfi_def_cfa_offset 32
+ 161 0004 02AF     		add	r7, sp, #8
+ 162              	.LCFI12:
+ 163              		.cfi_def_cfa 7, 24
+ 164 0006 7860     		str	r0, [r7, #4]
+ 165 0008 3960     		str	r1, [r7]
+  83:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****     osal_reboot();
+ 166              		.loc 1 83 5
+ 167 000a FFF7FEFF 		bl	osal_reboot
+  84:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** 
+  85:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****     LINK_LOG_DEBUG("reboot failed\n\r");
+ 168              		.loc 1 85 5
+ 169 000e FFF7FEFF 		bl	link_log_level_get
+ 170 0012 0346     		mov	r3, r0
+ 171 0014 012B     		cmp	r3, #1
+ 172 0016 0ED8     		bhi	.L6
+ 173              		.loc 1 85 5 is_stmt 0 discriminator 1
+ 174 0018 0120     		movs	r0, #1
+ 175 001a FFF7FEFF 		bl	link_log_level_name
+ 176 001e 0446     		mov	r4, r0
+ 177 0020 FFF7FEFF 		bl	osal_sys_time
+ 178 0024 0246     		mov	r2, r0
+ 179 0026 0B46     		mov	r3, r1
+ 180 0028 5523     		movs	r3, #85
+ 181 002a 0093     		str	r3, [sp]
+ 182 002c 054B     		ldr	r3, .L8
+ 183 002e 2146     		mov	r1, r4
+ 184 0030 0548     		ldr	r0, .L8+4
+ 185 0032 FFF7FEFF 		bl	printf
+ 186              	.L6:
+  86:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** 
+  87:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c ****     return -1;
+ 187              		.loc 1 87 12 is_stmt 1
+ 188 0036 4FF0FF33 		mov	r3, #-1
+  88:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/shell/shell_test.c **** }
+ 189              		.loc 1 88 1
+ 190 003a 1846     		mov	r0, r3
+ 191 003c 0C37     		adds	r7, r7, #12
+ 192              	.LCFI13:
+ 193              		.cfi_def_cfa_offset 12
+ 194 003e BD46     		mov	sp, r7
+ 195              	.LCFI14:
+ 196              		.cfi_def_cfa_register 13
+ 197              		@ sp needed
+ 198 0040 90BD     		pop	{r4, r7, pc}
+ARM GAS  /tmp/cciM6xbN.s 			page 6
+
+
+ 199              	.L9:
+ 200 0042 00BF     		.align	2
+ 201              	.L8:
+ 202 0044 00000000 		.word	__FUNCTION__.10073
+ 203 0048 18000000 		.word	.LC2
+ 204              		.cfi_endproc
+ 205              	.LFE135:
+ 207              		.section	.rodata
+ 208 003a 0000     		.align	2
+ 209              	.LC3:
+ 210 003c 7265626F 		.ascii	"reboot\000"
+ 210      6F7400
+ 211              		.section	oshell
+ 212              		.align	2
+ 215              	__oshell_shell_reboot:
+ 216 0020 3C000000 		.word	.LC3
+ 217 0024 3C000000 		.word	.LC3
+ 218 0028 00000000 		.word	shell_reboot
+ 219 002c 0000     		.short	0
+ 220 002e 0400     		.short	4
+ 221              		.section	.rodata.__FUNCTION__.10073,"a"
+ 222              		.align	2
+ 225              	__FUNCTION__.10073:
+ 226 0000 7368656C 		.ascii	"shell_reboot\000"
+ 226      6C5F7265 
+ 226      626F6F74 
+ 226      00
+ 227              		.text
+ 228              	.Letext0:
+ 229              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 230              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 231              		.file 4 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 232              		.file 5 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 233              		.file 6 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 234              		.file 7 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/ree
+ 235              		.file 8 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/inc/shell.h"
+ 236              		.file 9 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_typedef.h"
+ 237              		.file 10 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 238              		.file 11 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/system_stm32l4xx.h"
+ 239              		.file 12 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_config.h"
+ 240              		.file 13 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_err.h"
+ 241              		.file 14 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_memory.h"
+ 242              		.file 15 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/inc/link_log.h"
+ARM GAS  /tmp/cciM6xbN.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 shell_test.c
+     /tmp/cciM6xbN.s:18     .text.shell_taskinfo:0000000000000000 $t
+     /tmp/cciM6xbN.s:25     .text.shell_taskinfo:0000000000000000 shell_taskinfo
+     /tmp/cciM6xbN.s:63     .rodata:0000000000000000 $d
+     /tmp/cciM6xbN.s:67     oshell:0000000000000000 $d
+     /tmp/cciM6xbN.s:70     oshell:0000000000000000 __oshell_shell_taskinfo
+     /tmp/cciM6xbN.s:77     .text.shell_heapinfo:0000000000000000 $t
+     /tmp/cciM6xbN.s:83     .text.shell_heapinfo:0000000000000000 shell_heapinfo
+     /tmp/cciM6xbN.s:129    oshell:0000000000000010 __oshell_shell_heapinfo
+     /tmp/cciM6xbN.s:140    .text.shell_reboot:0000000000000000 $t
+     /tmp/cciM6xbN.s:146    .text.shell_reboot:0000000000000000 shell_reboot
+     /tmp/cciM6xbN.s:202    .text.shell_reboot:0000000000000044 $d
+     /tmp/cciM6xbN.s:225    .rodata.__FUNCTION__.10073:0000000000000000 __FUNCTION__.10073
+     /tmp/cciM6xbN.s:215    oshell:0000000000000020 __oshell_shell_reboot
+     /tmp/cciM6xbN.s:222    .rodata.__FUNCTION__.10073:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+osGetAllTskInfo
+LOS_MemInfo
+osal_reboot
+link_log_level_get
+link_log_level_name
+osal_sys_time
+printf

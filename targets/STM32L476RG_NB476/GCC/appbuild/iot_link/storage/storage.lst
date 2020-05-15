@@ -1,0 +1,682 @@
+ARM GAS  /tmp/ccsUxdQU.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"storage.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.bss.s_device,"aw",%nobits
+  18              		.align	2
+  21              	s_device:
+  22 0000 00000000 		.space	4
+  23              		.section	.bss.max_dev_num,"aw",%nobits
+  24              		.align	2
+  27              	max_dev_num:
+  28 0000 00000000 		.space	4
+  29              		.section	.text.storage_dev_install,"ax",%progbits
+  30              		.align	1
+  31              		.global	storage_dev_install
+  32              		.arch armv7e-m
+  33              		.syntax unified
+  34              		.thumb
+  35              		.thumb_func
+  36              		.fpu fpv4-sp-d16
+  38              	storage_dev_install:
+  39              	.LFB0:
+  40              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** #include "storage.h"
+   2:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** 
+   3:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** static const storage_device *s_device = NULL;
+   4:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** static uint32_t max_dev_num = 0;
+   5:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** 
+   6:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** int storage_dev_install(storage_device *dev, uint32_t max_num)
+   7:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** {
+  41              		.loc 1 7 1
+  42              		.cfi_startproc
+  43              		@ args = 0, pretend = 0, frame = 16
+  44              		@ frame_needed = 1, uses_anonymous_args = 0
+  45 0000 80B5     		push	{r7, lr}
+  46              	.LCFI0:
+  47              		.cfi_def_cfa_offset 8
+  48              		.cfi_offset 7, -8
+  49              		.cfi_offset 14, -4
+  50 0002 84B0     		sub	sp, sp, #16
+  51              	.LCFI1:
+  52              		.cfi_def_cfa_offset 24
+  53 0004 00AF     		add	r7, sp, #0
+  54              	.LCFI2:
+  55              		.cfi_def_cfa_register 7
+ARM GAS  /tmp/ccsUxdQU.s 			page 2
+
+
+  56 0006 7860     		str	r0, [r7, #4]
+  57 0008 3960     		str	r1, [r7]
+   8:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****   uint32_t i = 0;
+  58              		.loc 1 8 12
+  59 000a 0023     		movs	r3, #0
+  60 000c FB60     		str	r3, [r7, #12]
+   9:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****   if (dev != NULL && s_device == NULL) {
+  61              		.loc 1 9 6
+  62 000e 7B68     		ldr	r3, [r7, #4]
+  63 0010 002B     		cmp	r3, #0
+  64 0012 22D0     		beq	.L2
+  65              		.loc 1 9 31 discriminator 1
+  66 0014 144B     		ldr	r3, .L7
+  67 0016 1B68     		ldr	r3, [r3]
+  68              		.loc 1 9 19 discriminator 1
+  69 0018 002B     		cmp	r3, #0
+  70 001a 1ED1     		bne	.L2
+  10:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****     for (i = 0; i < max_num; i++) {
+  71              		.loc 1 10 12
+  72 001c 0023     		movs	r3, #0
+  73 001e FB60     		str	r3, [r7, #12]
+  74              		.loc 1 10 5
+  75 0020 0FE0     		b	.L3
+  76              	.L5:
+  11:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****       if (dev[i].init != NULL) {
+  77              		.loc 1 11 14
+  78 0022 FB68     		ldr	r3, [r7, #12]
+  79 0024 5B01     		lsls	r3, r3, #5
+  80 0026 7A68     		ldr	r2, [r7, #4]
+  81 0028 1344     		add	r3, r3, r2
+  82              		.loc 1 11 17
+  83 002a DB68     		ldr	r3, [r3, #12]
+  84              		.loc 1 11 10
+  85 002c 002B     		cmp	r3, #0
+  86 002e 05D0     		beq	.L4
+  12:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****         dev[i].init();
+  87              		.loc 1 12 12
+  88 0030 FB68     		ldr	r3, [r7, #12]
+  89 0032 5B01     		lsls	r3, r3, #5
+  90 0034 7A68     		ldr	r2, [r7, #4]
+  91 0036 1344     		add	r3, r3, r2
+  92              		.loc 1 12 15
+  93 0038 DB68     		ldr	r3, [r3, #12]
+  94              		.loc 1 12 9
+  95 003a 9847     		blx	r3
+  96              	.LVL0:
+  97              	.L4:
+  10:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****     for (i = 0; i < max_num; i++) {
+  98              		.loc 1 10 31 discriminator 2
+  99 003c FB68     		ldr	r3, [r7, #12]
+ 100 003e 0133     		adds	r3, r3, #1
+ 101 0040 FB60     		str	r3, [r7, #12]
+ 102              	.L3:
+  10:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****     for (i = 0; i < max_num; i++) {
+ 103              		.loc 1 10 5 discriminator 1
+ 104 0042 FA68     		ldr	r2, [r7, #12]
+ 105 0044 3B68     		ldr	r3, [r7]
+ARM GAS  /tmp/ccsUxdQU.s 			page 3
+
+
+ 106 0046 9A42     		cmp	r2, r3
+ 107 0048 EBD3     		bcc	.L5
+  13:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****       }
+  14:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****     }
+  15:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** 
+  16:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****     s_device = dev;
+ 108              		.loc 1 16 14
+ 109 004a 074A     		ldr	r2, .L7
+ 110 004c 7B68     		ldr	r3, [r7, #4]
+ 111 004e 1360     		str	r3, [r2]
+  17:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****     max_dev_num = max_num;
+ 112              		.loc 1 17 17
+ 113 0050 064A     		ldr	r2, .L7+4
+ 114 0052 3B68     		ldr	r3, [r7]
+ 115 0054 1360     		str	r3, [r2]
+  18:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****     return 0;
+ 116              		.loc 1 18 12
+ 117 0056 0023     		movs	r3, #0
+ 118 0058 01E0     		b	.L6
+ 119              	.L2:
+  19:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****   }
+  20:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****   return -1;
+ 120              		.loc 1 20 10
+ 121 005a 4FF0FF33 		mov	r3, #-1
+ 122              	.L6:
+  21:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** }
+ 123              		.loc 1 21 1
+ 124 005e 1846     		mov	r0, r3
+ 125 0060 1037     		adds	r7, r7, #16
+ 126              	.LCFI3:
+ 127              		.cfi_def_cfa_offset 8
+ 128 0062 BD46     		mov	sp, r7
+ 129              	.LCFI4:
+ 130              		.cfi_def_cfa_register 13
+ 131              		@ sp needed
+ 132 0064 80BD     		pop	{r7, pc}
+ 133              	.L8:
+ 134 0066 00BF     		.align	2
+ 135              	.L7:
+ 136 0068 00000000 		.word	s_device
+ 137 006c 00000000 		.word	max_dev_num
+ 138              		.cfi_endproc
+ 139              	.LFE0:
+ 141              		.section	.text.storage_dev_uninstall,"ax",%progbits
+ 142              		.align	1
+ 143              		.global	storage_dev_uninstall
+ 144              		.syntax unified
+ 145              		.thumb
+ 146              		.thumb_func
+ 147              		.fpu fpv4-sp-d16
+ 149              	storage_dev_uninstall:
+ 150              	.LFB1:
+  22:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** 
+  23:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** int storage_dev_uninstall()
+  24:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** {
+ 151              		.loc 1 24 1
+ 152              		.cfi_startproc
+ARM GAS  /tmp/ccsUxdQU.s 			page 4
+
+
+ 153              		@ args = 0, pretend = 0, frame = 0
+ 154              		@ frame_needed = 1, uses_anonymous_args = 0
+ 155              		@ link register save eliminated.
+ 156 0000 80B4     		push	{r7}
+ 157              	.LCFI5:
+ 158              		.cfi_def_cfa_offset 4
+ 159              		.cfi_offset 7, -4
+ 160 0002 00AF     		add	r7, sp, #0
+ 161              	.LCFI6:
+ 162              		.cfi_def_cfa_register 7
+  25:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****   if (s_device != NULL) {
+ 163              		.loc 1 25 16
+ 164 0004 094B     		ldr	r3, .L12
+ 165 0006 1B68     		ldr	r3, [r3]
+ 166              		.loc 1 25 6
+ 167 0008 002B     		cmp	r3, #0
+ 168 000a 07D0     		beq	.L10
+  26:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****     s_device = NULL;
+ 169              		.loc 1 26 14
+ 170 000c 074B     		ldr	r3, .L12
+ 171 000e 0022     		movs	r2, #0
+ 172 0010 1A60     		str	r2, [r3]
+  27:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****     max_dev_num = 0;
+ 173              		.loc 1 27 17
+ 174 0012 074B     		ldr	r3, .L12+4
+ 175 0014 0022     		movs	r2, #0
+ 176 0016 1A60     		str	r2, [r3]
+  28:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****     return 0;
+ 177              		.loc 1 28 12
+ 178 0018 0023     		movs	r3, #0
+ 179 001a 01E0     		b	.L11
+ 180              	.L10:
+  29:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****   }
+  30:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****   return -1;
+ 181              		.loc 1 30 10
+ 182 001c 4FF0FF33 		mov	r3, #-1
+ 183              	.L11:
+  31:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** }
+ 184              		.loc 1 31 1
+ 185 0020 1846     		mov	r0, r3
+ 186 0022 BD46     		mov	sp, r7
+ 187              	.LCFI7:
+ 188              		.cfi_def_cfa_register 13
+ 189              		@ sp needed
+ 190 0024 5DF8047B 		ldr	r7, [sp], #4
+ 191              	.LCFI8:
+ 192              		.cfi_restore 7
+ 193              		.cfi_def_cfa_offset 0
+ 194 0028 7047     		bx	lr
+ 195              	.L13:
+ 196 002a 00BF     		.align	2
+ 197              	.L12:
+ 198 002c 00000000 		.word	s_device
+ 199 0030 00000000 		.word	max_dev_num
+ 200              		.cfi_endproc
+ 201              	.LFE1:
+ 203              		.section	.text.storage_device_erase,"ax",%progbits
+ARM GAS  /tmp/ccsUxdQU.s 			page 5
+
+
+ 204              		.align	1
+ 205              		.global	storage_device_erase
+ 206              		.syntax unified
+ 207              		.thumb
+ 208              		.thumb_func
+ 209              		.fpu fpv4-sp-d16
+ 211              	storage_device_erase:
+ 212              	.LFB2:
+  32:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** 
+  33:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** int storage_device_erase(uint32_t dev_id, uint32_t addr, uint32_t len)
+  34:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** {
+ 213              		.loc 1 34 1
+ 214              		.cfi_startproc
+ 215              		@ args = 0, pretend = 0, frame = 16
+ 216              		@ frame_needed = 1, uses_anonymous_args = 0
+ 217 0000 80B5     		push	{r7, lr}
+ 218              	.LCFI9:
+ 219              		.cfi_def_cfa_offset 8
+ 220              		.cfi_offset 7, -8
+ 221              		.cfi_offset 14, -4
+ 222 0002 84B0     		sub	sp, sp, #16
+ 223              	.LCFI10:
+ 224              		.cfi_def_cfa_offset 24
+ 225 0004 00AF     		add	r7, sp, #0
+ 226              	.LCFI11:
+ 227              		.cfi_def_cfa_register 7
+ 228 0006 F860     		str	r0, [r7, #12]
+ 229 0008 B960     		str	r1, [r7, #8]
+ 230 000a 7A60     		str	r2, [r7, #4]
+  35:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****   if (dev_id < max_dev_num && s_device != NULL && s_device[dev_id].erase != NULL) {
+ 231              		.loc 1 35 14
+ 232 000c 114B     		ldr	r3, .L17
+ 233 000e 1B68     		ldr	r3, [r3]
+ 234              		.loc 1 35 6
+ 235 0010 FA68     		ldr	r2, [r7, #12]
+ 236 0012 9A42     		cmp	r2, r3
+ 237 0014 17D2     		bcs	.L15
+ 238              		.loc 1 35 40 discriminator 1
+ 239 0016 104B     		ldr	r3, .L17+4
+ 240 0018 1B68     		ldr	r3, [r3]
+ 241              		.loc 1 35 28 discriminator 1
+ 242 001a 002B     		cmp	r3, #0
+ 243 001c 13D0     		beq	.L15
+ 244              		.loc 1 35 59 discriminator 2
+ 245 001e 0E4B     		ldr	r3, .L17+4
+ 246 0020 1A68     		ldr	r2, [r3]
+ 247 0022 FB68     		ldr	r3, [r7, #12]
+ 248 0024 5B01     		lsls	r3, r3, #5
+ 249 0026 1344     		add	r3, r3, r2
+ 250              		.loc 1 35 67 discriminator 2
+ 251 0028 9B69     		ldr	r3, [r3, #24]
+ 252              		.loc 1 35 48 discriminator 2
+ 253 002a 002B     		cmp	r3, #0
+ 254 002c 0BD0     		beq	.L15
+  36:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****     return s_device[dev_id].erase(addr, len);
+ 255              		.loc 1 36 20
+ 256 002e 0A4B     		ldr	r3, .L17+4
+ARM GAS  /tmp/ccsUxdQU.s 			page 6
+
+
+ 257 0030 1A68     		ldr	r2, [r3]
+ 258 0032 FB68     		ldr	r3, [r7, #12]
+ 259 0034 5B01     		lsls	r3, r3, #5
+ 260 0036 1344     		add	r3, r3, r2
+ 261              		.loc 1 36 28
+ 262 0038 9B69     		ldr	r3, [r3, #24]
+ 263              		.loc 1 36 12
+ 264 003a 7A68     		ldr	r2, [r7, #4]
+ 265 003c 1146     		mov	r1, r2
+ 266 003e B868     		ldr	r0, [r7, #8]
+ 267 0040 9847     		blx	r3
+ 268              	.LVL1:
+ 269 0042 0346     		mov	r3, r0
+ 270 0044 01E0     		b	.L16
+ 271              	.L15:
+  37:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****   }
+  38:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****   return -1;
+ 272              		.loc 1 38 10
+ 273 0046 4FF0FF33 		mov	r3, #-1
+ 274              	.L16:
+  39:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** }
+ 275              		.loc 1 39 1
+ 276 004a 1846     		mov	r0, r3
+ 277 004c 1037     		adds	r7, r7, #16
+ 278              	.LCFI12:
+ 279              		.cfi_def_cfa_offset 8
+ 280 004e BD46     		mov	sp, r7
+ 281              	.LCFI13:
+ 282              		.cfi_def_cfa_register 13
+ 283              		@ sp needed
+ 284 0050 80BD     		pop	{r7, pc}
+ 285              	.L18:
+ 286 0052 00BF     		.align	2
+ 287              	.L17:
+ 288 0054 00000000 		.word	max_dev_num
+ 289 0058 00000000 		.word	s_device
+ 290              		.cfi_endproc
+ 291              	.LFE2:
+ 293              		.section	.text.storage_device_erase_write,"ax",%progbits
+ 294              		.align	1
+ 295              		.global	storage_device_erase_write
+ 296              		.syntax unified
+ 297              		.thumb
+ 298              		.thumb_func
+ 299              		.fpu fpv4-sp-d16
+ 301              	storage_device_erase_write:
+ 302              	.LFB3:
+  40:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** 
+  41:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** int storage_device_erase_write(uint32_t dev_id, uint8_t *buf, uint32_t len, uint32_t addr)
+  42:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** {
+ 303              		.loc 1 42 1
+ 304              		.cfi_startproc
+ 305              		@ args = 0, pretend = 0, frame = 16
+ 306              		@ frame_needed = 1, uses_anonymous_args = 0
+ 307 0000 80B5     		push	{r7, lr}
+ 308              	.LCFI14:
+ 309              		.cfi_def_cfa_offset 8
+ARM GAS  /tmp/ccsUxdQU.s 			page 7
+
+
+ 310              		.cfi_offset 7, -8
+ 311              		.cfi_offset 14, -4
+ 312 0002 84B0     		sub	sp, sp, #16
+ 313              	.LCFI15:
+ 314              		.cfi_def_cfa_offset 24
+ 315 0004 00AF     		add	r7, sp, #0
+ 316              	.LCFI16:
+ 317              		.cfi_def_cfa_register 7
+ 318 0006 F860     		str	r0, [r7, #12]
+ 319 0008 B960     		str	r1, [r7, #8]
+ 320 000a 7A60     		str	r2, [r7, #4]
+ 321 000c 3B60     		str	r3, [r7]
+  43:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****   if (dev_id < max_dev_num && s_device != NULL && s_device[dev_id].erase_write != NULL) {
+ 322              		.loc 1 43 14
+ 323 000e 114B     		ldr	r3, .L22
+ 324 0010 1B68     		ldr	r3, [r3]
+ 325              		.loc 1 43 6
+ 326 0012 FA68     		ldr	r2, [r7, #12]
+ 327 0014 9A42     		cmp	r2, r3
+ 328 0016 17D2     		bcs	.L20
+ 329              		.loc 1 43 40 discriminator 1
+ 330 0018 0F4B     		ldr	r3, .L22+4
+ 331 001a 1B68     		ldr	r3, [r3]
+ 332              		.loc 1 43 28 discriminator 1
+ 333 001c 002B     		cmp	r3, #0
+ 334 001e 13D0     		beq	.L20
+ 335              		.loc 1 43 59 discriminator 2
+ 336 0020 0D4B     		ldr	r3, .L22+4
+ 337 0022 1A68     		ldr	r2, [r3]
+ 338 0024 FB68     		ldr	r3, [r7, #12]
+ 339 0026 5B01     		lsls	r3, r3, #5
+ 340 0028 1344     		add	r3, r3, r2
+ 341              		.loc 1 43 67 discriminator 2
+ 342 002a DB69     		ldr	r3, [r3, #28]
+ 343              		.loc 1 43 48 discriminator 2
+ 344 002c 002B     		cmp	r3, #0
+ 345 002e 0BD0     		beq	.L20
+  44:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****     return s_device[dev_id].erase_write(buf, len, addr);
+ 346              		.loc 1 44 20
+ 347 0030 094B     		ldr	r3, .L22+4
+ 348 0032 1A68     		ldr	r2, [r3]
+ 349 0034 FB68     		ldr	r3, [r7, #12]
+ 350 0036 5B01     		lsls	r3, r3, #5
+ 351 0038 1344     		add	r3, r3, r2
+ 352              		.loc 1 44 28
+ 353 003a DB69     		ldr	r3, [r3, #28]
+ 354              		.loc 1 44 12
+ 355 003c 7968     		ldr	r1, [r7, #4]
+ 356 003e 3A68     		ldr	r2, [r7]
+ 357 0040 B868     		ldr	r0, [r7, #8]
+ 358 0042 9847     		blx	r3
+ 359              	.LVL2:
+ 360 0044 0346     		mov	r3, r0
+ 361 0046 01E0     		b	.L21
+ 362              	.L20:
+  45:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****   }
+  46:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****   return -1;
+ARM GAS  /tmp/ccsUxdQU.s 			page 8
+
+
+ 363              		.loc 1 46 10
+ 364 0048 4FF0FF33 		mov	r3, #-1
+ 365              	.L21:
+  47:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** }
+ 366              		.loc 1 47 1
+ 367 004c 1846     		mov	r0, r3
+ 368 004e 1037     		adds	r7, r7, #16
+ 369              	.LCFI17:
+ 370              		.cfi_def_cfa_offset 8
+ 371 0050 BD46     		mov	sp, r7
+ 372              	.LCFI18:
+ 373              		.cfi_def_cfa_register 13
+ 374              		@ sp needed
+ 375 0052 80BD     		pop	{r7, pc}
+ 376              	.L23:
+ 377              		.align	2
+ 378              	.L22:
+ 379 0054 00000000 		.word	max_dev_num
+ 380 0058 00000000 		.word	s_device
+ 381              		.cfi_endproc
+ 382              	.LFE3:
+ 384              		.section	.text.storage_device_write,"ax",%progbits
+ 385              		.align	1
+ 386              		.global	storage_device_write
+ 387              		.syntax unified
+ 388              		.thumb
+ 389              		.thumb_func
+ 390              		.fpu fpv4-sp-d16
+ 392              	storage_device_write:
+ 393              	.LFB4:
+  48:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** 
+  49:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** int storage_device_write(uint32_t dev_id, uint8_t *buf, uint32_t len, uint32_t addr)
+  50:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** {
+ 394              		.loc 1 50 1
+ 395              		.cfi_startproc
+ 396              		@ args = 0, pretend = 0, frame = 16
+ 397              		@ frame_needed = 1, uses_anonymous_args = 0
+ 398 0000 80B5     		push	{r7, lr}
+ 399              	.LCFI19:
+ 400              		.cfi_def_cfa_offset 8
+ 401              		.cfi_offset 7, -8
+ 402              		.cfi_offset 14, -4
+ 403 0002 84B0     		sub	sp, sp, #16
+ 404              	.LCFI20:
+ 405              		.cfi_def_cfa_offset 24
+ 406 0004 00AF     		add	r7, sp, #0
+ 407              	.LCFI21:
+ 408              		.cfi_def_cfa_register 7
+ 409 0006 F860     		str	r0, [r7, #12]
+ 410 0008 B960     		str	r1, [r7, #8]
+ 411 000a 7A60     		str	r2, [r7, #4]
+ 412 000c 3B60     		str	r3, [r7]
+  51:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****   if (dev_id < max_dev_num && s_device != NULL && s_device[dev_id].write != NULL) {
+ 413              		.loc 1 51 14
+ 414 000e 114B     		ldr	r3, .L27
+ 415 0010 1B68     		ldr	r3, [r3]
+ 416              		.loc 1 51 6
+ARM GAS  /tmp/ccsUxdQU.s 			page 9
+
+
+ 417 0012 FA68     		ldr	r2, [r7, #12]
+ 418 0014 9A42     		cmp	r2, r3
+ 419 0016 17D2     		bcs	.L25
+ 420              		.loc 1 51 40 discriminator 1
+ 421 0018 0F4B     		ldr	r3, .L27+4
+ 422 001a 1B68     		ldr	r3, [r3]
+ 423              		.loc 1 51 28 discriminator 1
+ 424 001c 002B     		cmp	r3, #0
+ 425 001e 13D0     		beq	.L25
+ 426              		.loc 1 51 59 discriminator 2
+ 427 0020 0D4B     		ldr	r3, .L27+4
+ 428 0022 1A68     		ldr	r2, [r3]
+ 429 0024 FB68     		ldr	r3, [r7, #12]
+ 430 0026 5B01     		lsls	r3, r3, #5
+ 431 0028 1344     		add	r3, r3, r2
+ 432              		.loc 1 51 67 discriminator 2
+ 433 002a 5B69     		ldr	r3, [r3, #20]
+ 434              		.loc 1 51 48 discriminator 2
+ 435 002c 002B     		cmp	r3, #0
+ 436 002e 0BD0     		beq	.L25
+  52:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****     return s_device[dev_id].write(buf, len, addr);
+ 437              		.loc 1 52 20
+ 438 0030 094B     		ldr	r3, .L27+4
+ 439 0032 1A68     		ldr	r2, [r3]
+ 440 0034 FB68     		ldr	r3, [r7, #12]
+ 441 0036 5B01     		lsls	r3, r3, #5
+ 442 0038 1344     		add	r3, r3, r2
+ 443              		.loc 1 52 28
+ 444 003a 5B69     		ldr	r3, [r3, #20]
+ 445              		.loc 1 52 12
+ 446 003c 7968     		ldr	r1, [r7, #4]
+ 447 003e 3A68     		ldr	r2, [r7]
+ 448 0040 B868     		ldr	r0, [r7, #8]
+ 449 0042 9847     		blx	r3
+ 450              	.LVL3:
+ 451 0044 0346     		mov	r3, r0
+ 452 0046 01E0     		b	.L26
+ 453              	.L25:
+  53:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****   }
+  54:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****   return -1;
+ 454              		.loc 1 54 10
+ 455 0048 4FF0FF33 		mov	r3, #-1
+ 456              	.L26:
+  55:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** }
+ 457              		.loc 1 55 1
+ 458 004c 1846     		mov	r0, r3
+ 459 004e 1037     		adds	r7, r7, #16
+ 460              	.LCFI22:
+ 461              		.cfi_def_cfa_offset 8
+ 462 0050 BD46     		mov	sp, r7
+ 463              	.LCFI23:
+ 464              		.cfi_def_cfa_register 13
+ 465              		@ sp needed
+ 466 0052 80BD     		pop	{r7, pc}
+ 467              	.L28:
+ 468              		.align	2
+ 469              	.L27:
+ARM GAS  /tmp/ccsUxdQU.s 			page 10
+
+
+ 470 0054 00000000 		.word	max_dev_num
+ 471 0058 00000000 		.word	s_device
+ 472              		.cfi_endproc
+ 473              	.LFE4:
+ 475              		.section	.text.storage_device_read,"ax",%progbits
+ 476              		.align	1
+ 477              		.global	storage_device_read
+ 478              		.syntax unified
+ 479              		.thumb
+ 480              		.thumb_func
+ 481              		.fpu fpv4-sp-d16
+ 483              	storage_device_read:
+ 484              	.LFB5:
+  56:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** 
+  57:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** int storage_device_read(uint32_t dev_id, uint8_t *buf, uint32_t len, uint32_t addr)
+  58:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** {
+ 485              		.loc 1 58 1
+ 486              		.cfi_startproc
+ 487              		@ args = 0, pretend = 0, frame = 16
+ 488              		@ frame_needed = 1, uses_anonymous_args = 0
+ 489 0000 80B5     		push	{r7, lr}
+ 490              	.LCFI24:
+ 491              		.cfi_def_cfa_offset 8
+ 492              		.cfi_offset 7, -8
+ 493              		.cfi_offset 14, -4
+ 494 0002 84B0     		sub	sp, sp, #16
+ 495              	.LCFI25:
+ 496              		.cfi_def_cfa_offset 24
+ 497 0004 00AF     		add	r7, sp, #0
+ 498              	.LCFI26:
+ 499              		.cfi_def_cfa_register 7
+ 500 0006 F860     		str	r0, [r7, #12]
+ 501 0008 B960     		str	r1, [r7, #8]
+ 502 000a 7A60     		str	r2, [r7, #4]
+ 503 000c 3B60     		str	r3, [r7]
+  59:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** 
+  60:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****   if (dev_id < max_dev_num && s_device != NULL && s_device[dev_id].read != NULL) {
+ 504              		.loc 1 60 14
+ 505 000e 114B     		ldr	r3, .L32
+ 506 0010 1B68     		ldr	r3, [r3]
+ 507              		.loc 1 60 6
+ 508 0012 FA68     		ldr	r2, [r7, #12]
+ 509 0014 9A42     		cmp	r2, r3
+ 510 0016 17D2     		bcs	.L30
+ 511              		.loc 1 60 40 discriminator 1
+ 512 0018 0F4B     		ldr	r3, .L32+4
+ 513 001a 1B68     		ldr	r3, [r3]
+ 514              		.loc 1 60 28 discriminator 1
+ 515 001c 002B     		cmp	r3, #0
+ 516 001e 13D0     		beq	.L30
+ 517              		.loc 1 60 59 discriminator 2
+ 518 0020 0D4B     		ldr	r3, .L32+4
+ 519 0022 1A68     		ldr	r2, [r3]
+ 520 0024 FB68     		ldr	r3, [r7, #12]
+ 521 0026 5B01     		lsls	r3, r3, #5
+ 522 0028 1344     		add	r3, r3, r2
+ 523              		.loc 1 60 67 discriminator 2
+ARM GAS  /tmp/ccsUxdQU.s 			page 11
+
+
+ 524 002a 1B69     		ldr	r3, [r3, #16]
+ 525              		.loc 1 60 48 discriminator 2
+ 526 002c 002B     		cmp	r3, #0
+ 527 002e 0BD0     		beq	.L30
+  61:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****     return s_device[dev_id].read(buf, len, addr);
+ 528              		.loc 1 61 20
+ 529 0030 094B     		ldr	r3, .L32+4
+ 530 0032 1A68     		ldr	r2, [r3]
+ 531 0034 FB68     		ldr	r3, [r7, #12]
+ 532 0036 5B01     		lsls	r3, r3, #5
+ 533 0038 1344     		add	r3, r3, r2
+ 534              		.loc 1 61 28
+ 535 003a 1B69     		ldr	r3, [r3, #16]
+ 536              		.loc 1 61 12
+ 537 003c 7968     		ldr	r1, [r7, #4]
+ 538 003e 3A68     		ldr	r2, [r7]
+ 539 0040 B868     		ldr	r0, [r7, #8]
+ 540 0042 9847     		blx	r3
+ 541              	.LVL4:
+ 542 0044 0346     		mov	r3, r0
+ 543 0046 01E0     		b	.L31
+ 544              	.L30:
+  62:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****   }
+  63:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c ****   return -1;
+ 545              		.loc 1 63 10
+ 546 0048 4FF0FF33 		mov	r3, #-1
+ 547              	.L31:
+  64:/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.c **** }
+ 548              		.loc 1 64 1
+ 549 004c 1846     		mov	r0, r3
+ 550 004e 1037     		adds	r7, r7, #16
+ 551              	.LCFI27:
+ 552              		.cfi_def_cfa_offset 8
+ 553 0050 BD46     		mov	sp, r7
+ 554              	.LCFI28:
+ 555              		.cfi_def_cfa_register 13
+ 556              		@ sp needed
+ 557 0052 80BD     		pop	{r7, pc}
+ 558              	.L33:
+ 559              		.align	2
+ 560              	.L32:
+ 561 0054 00000000 		.word	max_dev_num
+ 562 0058 00000000 		.word	s_device
+ 563              		.cfi_endproc
+ 564              	.LFE5:
+ 566              		.text
+ 567              	.Letext0:
+ 568              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 569              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 570              		.file 4 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/storage/storage.h"
+ARM GAS  /tmp/ccsUxdQU.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 storage.c
+     /tmp/ccsUxdQU.s:18     .bss.s_device:0000000000000000 $d
+     /tmp/ccsUxdQU.s:21     .bss.s_device:0000000000000000 s_device
+     /tmp/ccsUxdQU.s:24     .bss.max_dev_num:0000000000000000 $d
+     /tmp/ccsUxdQU.s:27     .bss.max_dev_num:0000000000000000 max_dev_num
+     /tmp/ccsUxdQU.s:30     .text.storage_dev_install:0000000000000000 $t
+     /tmp/ccsUxdQU.s:38     .text.storage_dev_install:0000000000000000 storage_dev_install
+     /tmp/ccsUxdQU.s:136    .text.storage_dev_install:0000000000000068 $d
+     /tmp/ccsUxdQU.s:142    .text.storage_dev_uninstall:0000000000000000 $t
+     /tmp/ccsUxdQU.s:149    .text.storage_dev_uninstall:0000000000000000 storage_dev_uninstall
+     /tmp/ccsUxdQU.s:198    .text.storage_dev_uninstall:000000000000002c $d
+     /tmp/ccsUxdQU.s:204    .text.storage_device_erase:0000000000000000 $t
+     /tmp/ccsUxdQU.s:211    .text.storage_device_erase:0000000000000000 storage_device_erase
+     /tmp/ccsUxdQU.s:288    .text.storage_device_erase:0000000000000054 $d
+     /tmp/ccsUxdQU.s:294    .text.storage_device_erase_write:0000000000000000 $t
+     /tmp/ccsUxdQU.s:301    .text.storage_device_erase_write:0000000000000000 storage_device_erase_write
+     /tmp/ccsUxdQU.s:379    .text.storage_device_erase_write:0000000000000054 $d
+     /tmp/ccsUxdQU.s:385    .text.storage_device_write:0000000000000000 $t
+     /tmp/ccsUxdQU.s:392    .text.storage_device_write:0000000000000000 storage_device_write
+     /tmp/ccsUxdQU.s:470    .text.storage_device_write:0000000000000054 $d
+     /tmp/ccsUxdQU.s:476    .text.storage_device_read:0000000000000000 $t
+     /tmp/ccsUxdQU.s:483    .text.storage_device_read:0000000000000000 storage_device_read
+     /tmp/ccsUxdQU.s:561    .text.storage_device_read:0000000000000054 $d
+
+NO UNDEFINED SYMBOLS

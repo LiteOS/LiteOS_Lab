@@ -1,0 +1,967 @@
+ARM GAS  /tmp/ccjKXbb9.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"usart.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.comm	hlpuart1,120,4
+  18              		.comm	huart1,120,4
+  19              		.comm	huart3,120,4
+  20              		.section	.rodata
+  21              		.align	2
+  22              	.LC0:
+  23 0000 2F686F6D 		.ascii	"/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476"
+  23      652F6661 
+  23      6E78696E 
+  23      68616F2F 
+  23      576F726B 
+  24 0033 52475F4E 		.ascii	"RG_NB476/Src/usart.c\000"
+  24      42343736 
+  24      2F537263 
+  24      2F757361 
+  24      72742E63 
+  25              		.section	.text.MX_LPUART1_UART_Init,"ax",%progbits
+  26              		.align	1
+  27              		.global	MX_LPUART1_UART_Init
+  28              		.arch armv7e-m
+  29              		.syntax unified
+  30              		.thumb
+  31              		.thumb_func
+  32              		.fpu fpv4-sp-d16
+  34              	MX_LPUART1_UART_Init:
+  35              	.LFB133:
+  36              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** /**
+   2:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   ******************************************************************************
+   3:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   * File Name          : USART.c
+   4:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   * Description        : This file provides code for the configuration
+   5:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   *                      of the USART instances.
+   6:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   ******************************************************************************
+   7:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   * @attention
+   8:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   *
+   9:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+  10:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   * All rights reserved.</center></h2>
+  11:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   *
+  12:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   * This software component is licensed by ST under BSD 3-Clause license,
+  13:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   * the "License"; You may not use this file except in compliance with the
+  14:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   * License. You may obtain a copy of the License at:
+ARM GAS  /tmp/ccjKXbb9.s 			page 2
+
+
+  15:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   *                        opensource.org/licenses/BSD-3-Clause
+  16:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   *
+  17:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   ******************************************************************************
+  18:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   */
+  19:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+  20:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** /* Includes ------------------------------------------------------------------*/
+  21:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** #include "usart.h"
+  22:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+  23:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** /* USER CODE BEGIN 0 */
+  24:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+  25:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** /* USER CODE END 0 */
+  26:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+  27:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** UART_HandleTypeDef hlpuart1;
+  28:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** UART_HandleTypeDef huart1;
+  29:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** UART_HandleTypeDef huart3;
+  30:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+  31:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** /* LPUART1 init function */
+  32:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+  33:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** void MX_LPUART1_UART_Init(void)
+  34:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** {
+  37              		.loc 1 34 1
+  38              		.cfi_startproc
+  39              		@ args = 0, pretend = 0, frame = 0
+  40              		@ frame_needed = 1, uses_anonymous_args = 0
+  41 0000 80B5     		push	{r7, lr}
+  42              	.LCFI0:
+  43              		.cfi_def_cfa_offset 8
+  44              		.cfi_offset 7, -8
+  45              		.cfi_offset 14, -4
+  46 0002 00AF     		add	r7, sp, #0
+  47              	.LCFI1:
+  48              		.cfi_def_cfa_register 7
+  35:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+  36:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   hlpuart1.Instance = LPUART1;
+  49              		.loc 1 36 21
+  50 0004 134B     		ldr	r3, .L4
+  51 0006 144A     		ldr	r2, .L4+4
+  52 0008 1A60     		str	r2, [r3]
+  37:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   hlpuart1.Init.BaudRate = 115200;
+  53              		.loc 1 37 26
+  54 000a 124B     		ldr	r3, .L4
+  55 000c 4FF4E132 		mov	r2, #115200
+  56 0010 5A60     		str	r2, [r3, #4]
+  38:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   hlpuart1.Init.WordLength = UART_WORDLENGTH_8B;
+  57              		.loc 1 38 28
+  58 0012 104B     		ldr	r3, .L4
+  59 0014 0022     		movs	r2, #0
+  60 0016 9A60     		str	r2, [r3, #8]
+  39:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   hlpuart1.Init.StopBits = UART_STOPBITS_1;
+  61              		.loc 1 39 26
+  62 0018 0E4B     		ldr	r3, .L4
+  63 001a 0022     		movs	r2, #0
+  64 001c DA60     		str	r2, [r3, #12]
+  40:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   hlpuart1.Init.Parity = UART_PARITY_NONE;
+  65              		.loc 1 40 24
+  66 001e 0D4B     		ldr	r3, .L4
+  67 0020 0022     		movs	r2, #0
+ARM GAS  /tmp/ccjKXbb9.s 			page 3
+
+
+  68 0022 1A61     		str	r2, [r3, #16]
+  41:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   hlpuart1.Init.Mode = UART_MODE_TX_RX;
+  69              		.loc 1 41 22
+  70 0024 0B4B     		ldr	r3, .L4
+  71 0026 0C22     		movs	r2, #12
+  72 0028 5A61     		str	r2, [r3, #20]
+  42:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   hlpuart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  73              		.loc 1 42 27
+  74 002a 0A4B     		ldr	r3, .L4
+  75 002c 0022     		movs	r2, #0
+  76 002e 9A61     		str	r2, [r3, #24]
+  43:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   hlpuart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+  77              		.loc 1 43 32
+  78 0030 084B     		ldr	r3, .L4
+  79 0032 0022     		movs	r2, #0
+  80 0034 1A62     		str	r2, [r3, #32]
+  44:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   hlpuart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  81              		.loc 1 44 40
+  82 0036 074B     		ldr	r3, .L4
+  83 0038 0022     		movs	r2, #0
+  84 003a 5A62     		str	r2, [r3, #36]
+  45:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   if (HAL_UART_Init(&hlpuart1) != HAL_OK)
+  85              		.loc 1 45 7
+  86 003c 0548     		ldr	r0, .L4
+  87 003e FFF7FEFF 		bl	HAL_UART_Init
+  88 0042 0346     		mov	r3, r0
+  89              		.loc 1 45 6
+  90 0044 002B     		cmp	r3, #0
+  91 0046 03D0     		beq	.L3
+  46:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   {
+  47:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     Error_Handler();
+  92              		.loc 1 47 5
+  93 0048 2F21     		movs	r1, #47
+  94 004a 0448     		ldr	r0, .L4+8
+  95 004c FFF7FEFF 		bl	_Error_Handler
+  96              	.L3:
+  48:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   }
+  49:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+  50:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** }
+  97              		.loc 1 50 1
+  98 0050 00BF     		nop
+  99 0052 80BD     		pop	{r7, pc}
+ 100              	.L5:
+ 101              		.align	2
+ 102              	.L4:
+ 103 0054 00000000 		.word	hlpuart1
+ 104 0058 00800040 		.word	1073774592
+ 105 005c 00000000 		.word	.LC0
+ 106              		.cfi_endproc
+ 107              	.LFE133:
+ 109              		.section	.text.MX_USART1_UART_Init,"ax",%progbits
+ 110              		.align	1
+ 111              		.global	MX_USART1_UART_Init
+ 112              		.syntax unified
+ 113              		.thumb
+ 114              		.thumb_func
+ 115              		.fpu fpv4-sp-d16
+ARM GAS  /tmp/ccjKXbb9.s 			page 4
+
+
+ 117              	MX_USART1_UART_Init:
+ 118              	.LFB134:
+  51:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** /* USART1 init function */
+  52:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+  53:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** void MX_USART1_UART_Init(void)
+  54:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** {
+ 119              		.loc 1 54 1
+ 120              		.cfi_startproc
+ 121              		@ args = 0, pretend = 0, frame = 0
+ 122              		@ frame_needed = 1, uses_anonymous_args = 0
+ 123 0000 80B5     		push	{r7, lr}
+ 124              	.LCFI2:
+ 125              		.cfi_def_cfa_offset 8
+ 126              		.cfi_offset 7, -8
+ 127              		.cfi_offset 14, -4
+ 128 0002 00AF     		add	r7, sp, #0
+ 129              	.LCFI3:
+ 130              		.cfi_def_cfa_register 7
+  55:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+  56:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   huart1.Instance = USART1;
+ 131              		.loc 1 56 19
+ 132 0004 154B     		ldr	r3, .L9
+ 133 0006 164A     		ldr	r2, .L9+4
+ 134 0008 1A60     		str	r2, [r3]
+  57:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   huart1.Init.BaudRate = 115200;
+ 135              		.loc 1 57 24
+ 136 000a 144B     		ldr	r3, .L9
+ 137 000c 4FF4E132 		mov	r2, #115200
+ 138 0010 5A60     		str	r2, [r3, #4]
+  58:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   huart1.Init.WordLength = UART_WORDLENGTH_8B;
+ 139              		.loc 1 58 26
+ 140 0012 124B     		ldr	r3, .L9
+ 141 0014 0022     		movs	r2, #0
+ 142 0016 9A60     		str	r2, [r3, #8]
+  59:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   huart1.Init.StopBits = UART_STOPBITS_1;
+ 143              		.loc 1 59 24
+ 144 0018 104B     		ldr	r3, .L9
+ 145 001a 0022     		movs	r2, #0
+ 146 001c DA60     		str	r2, [r3, #12]
+  60:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   huart1.Init.Parity = UART_PARITY_NONE;
+ 147              		.loc 1 60 22
+ 148 001e 0F4B     		ldr	r3, .L9
+ 149 0020 0022     		movs	r2, #0
+ 150 0022 1A61     		str	r2, [r3, #16]
+  61:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   huart1.Init.Mode = UART_MODE_TX_RX;
+ 151              		.loc 1 61 20
+ 152 0024 0D4B     		ldr	r3, .L9
+ 153 0026 0C22     		movs	r2, #12
+ 154 0028 5A61     		str	r2, [r3, #20]
+  62:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+ 155              		.loc 1 62 25
+ 156 002a 0C4B     		ldr	r3, .L9
+ 157 002c 0022     		movs	r2, #0
+ 158 002e 9A61     		str	r2, [r3, #24]
+  63:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   huart1.Init.OverSampling = UART_OVERSAMPLING_16;
+ 159              		.loc 1 63 28
+ 160 0030 0A4B     		ldr	r3, .L9
+ARM GAS  /tmp/ccjKXbb9.s 			page 5
+
+
+ 161 0032 0022     		movs	r2, #0
+ 162 0034 DA61     		str	r2, [r3, #28]
+  64:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   huart1.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+ 163              		.loc 1 64 30
+ 164 0036 094B     		ldr	r3, .L9
+ 165 0038 0022     		movs	r2, #0
+ 166 003a 1A62     		str	r2, [r3, #32]
+  65:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   huart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+ 167              		.loc 1 65 38
+ 168 003c 074B     		ldr	r3, .L9
+ 169 003e 0022     		movs	r2, #0
+ 170 0040 5A62     		str	r2, [r3, #36]
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   if (HAL_UART_Init(&huart1) != HAL_OK)
+ 171              		.loc 1 66 7
+ 172 0042 0648     		ldr	r0, .L9
+ 173 0044 FFF7FEFF 		bl	HAL_UART_Init
+ 174 0048 0346     		mov	r3, r0
+ 175              		.loc 1 66 6
+ 176 004a 002B     		cmp	r3, #0
+ 177 004c 03D0     		beq	.L8
+  67:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   {
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     Error_Handler();
+ 178              		.loc 1 68 5
+ 179 004e 4421     		movs	r1, #68
+ 180 0050 0448     		ldr	r0, .L9+8
+ 181 0052 FFF7FEFF 		bl	_Error_Handler
+ 182              	.L8:
+  69:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   }
+  70:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+  71:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** }
+ 183              		.loc 1 71 1
+ 184 0056 00BF     		nop
+ 185 0058 80BD     		pop	{r7, pc}
+ 186              	.L10:
+ 187 005a 00BF     		.align	2
+ 188              	.L9:
+ 189 005c 00000000 		.word	huart1
+ 190 0060 00380140 		.word	1073821696
+ 191 0064 00000000 		.word	.LC0
+ 192              		.cfi_endproc
+ 193              	.LFE134:
+ 195              		.section	.text.MX_USART3_UART_Init,"ax",%progbits
+ 196              		.align	1
+ 197              		.global	MX_USART3_UART_Init
+ 198              		.syntax unified
+ 199              		.thumb
+ 200              		.thumb_func
+ 201              		.fpu fpv4-sp-d16
+ 203              	MX_USART3_UART_Init:
+ 204              	.LFB135:
+  72:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** /* USART3 init function */
+  73:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+  74:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** void MX_USART3_UART_Init(void)
+  75:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** {
+ 205              		.loc 1 75 1
+ 206              		.cfi_startproc
+ 207              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /tmp/ccjKXbb9.s 			page 6
+
+
+ 208              		@ frame_needed = 1, uses_anonymous_args = 0
+ 209 0000 80B5     		push	{r7, lr}
+ 210              	.LCFI4:
+ 211              		.cfi_def_cfa_offset 8
+ 212              		.cfi_offset 7, -8
+ 213              		.cfi_offset 14, -4
+ 214 0002 00AF     		add	r7, sp, #0
+ 215              	.LCFI5:
+ 216              		.cfi_def_cfa_register 7
+  76:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+  77:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   huart3.Instance = USART3;
+ 217              		.loc 1 77 19
+ 218 0004 154B     		ldr	r3, .L14
+ 219 0006 164A     		ldr	r2, .L14+4
+ 220 0008 1A60     		str	r2, [r3]
+  78:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   huart3.Init.BaudRate = 115200;
+ 221              		.loc 1 78 24
+ 222 000a 144B     		ldr	r3, .L14
+ 223 000c 4FF4E132 		mov	r2, #115200
+ 224 0010 5A60     		str	r2, [r3, #4]
+  79:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   huart3.Init.WordLength = UART_WORDLENGTH_8B;
+ 225              		.loc 1 79 26
+ 226 0012 124B     		ldr	r3, .L14
+ 227 0014 0022     		movs	r2, #0
+ 228 0016 9A60     		str	r2, [r3, #8]
+  80:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   huart3.Init.StopBits = UART_STOPBITS_1;
+ 229              		.loc 1 80 24
+ 230 0018 104B     		ldr	r3, .L14
+ 231 001a 0022     		movs	r2, #0
+ 232 001c DA60     		str	r2, [r3, #12]
+  81:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   huart3.Init.Parity = UART_PARITY_NONE;
+ 233              		.loc 1 81 22
+ 234 001e 0F4B     		ldr	r3, .L14
+ 235 0020 0022     		movs	r2, #0
+ 236 0022 1A61     		str	r2, [r3, #16]
+  82:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   huart3.Init.Mode = UART_MODE_TX_RX;
+ 237              		.loc 1 82 20
+ 238 0024 0D4B     		ldr	r3, .L14
+ 239 0026 0C22     		movs	r2, #12
+ 240 0028 5A61     		str	r2, [r3, #20]
+  83:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+ 241              		.loc 1 83 25
+ 242 002a 0C4B     		ldr	r3, .L14
+ 243 002c 0022     		movs	r2, #0
+ 244 002e 9A61     		str	r2, [r3, #24]
+  84:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   huart3.Init.OverSampling = UART_OVERSAMPLING_16;
+ 245              		.loc 1 84 28
+ 246 0030 0A4B     		ldr	r3, .L14
+ 247 0032 0022     		movs	r2, #0
+ 248 0034 DA61     		str	r2, [r3, #28]
+  85:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   huart3.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+ 249              		.loc 1 85 30
+ 250 0036 094B     		ldr	r3, .L14
+ 251 0038 0022     		movs	r2, #0
+ 252 003a 1A62     		str	r2, [r3, #32]
+  86:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   huart3.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+ 253              		.loc 1 86 38
+ARM GAS  /tmp/ccjKXbb9.s 			page 7
+
+
+ 254 003c 074B     		ldr	r3, .L14
+ 255 003e 0022     		movs	r2, #0
+ 256 0040 5A62     		str	r2, [r3, #36]
+  87:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   if (HAL_UART_Init(&huart3) != HAL_OK)
+ 257              		.loc 1 87 7
+ 258 0042 0648     		ldr	r0, .L14
+ 259 0044 FFF7FEFF 		bl	HAL_UART_Init
+ 260 0048 0346     		mov	r3, r0
+ 261              		.loc 1 87 6
+ 262 004a 002B     		cmp	r3, #0
+ 263 004c 03D0     		beq	.L13
+  88:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   {
+  89:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     Error_Handler();
+ 264              		.loc 1 89 5
+ 265 004e 5921     		movs	r1, #89
+ 266 0050 0448     		ldr	r0, .L14+8
+ 267 0052 FFF7FEFF 		bl	_Error_Handler
+ 268              	.L13:
+  90:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   }
+  91:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+  92:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** }
+ 269              		.loc 1 92 1
+ 270 0056 00BF     		nop
+ 271 0058 80BD     		pop	{r7, pc}
+ 272              	.L15:
+ 273 005a 00BF     		.align	2
+ 274              	.L14:
+ 275 005c 00000000 		.word	huart3
+ 276 0060 00480040 		.word	1073760256
+ 277 0064 00000000 		.word	.LC0
+ 278              		.cfi_endproc
+ 279              	.LFE135:
+ 281              		.section	.text.HAL_UART_MspInit,"ax",%progbits
+ 282              		.align	1
+ 283              		.global	HAL_UART_MspInit
+ 284              		.syntax unified
+ 285              		.thumb
+ 286              		.thumb_func
+ 287              		.fpu fpv4-sp-d16
+ 289              	HAL_UART_MspInit:
+ 290              	.LFB136:
+  93:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+  94:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
+  95:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** {
+ 291              		.loc 1 95 1
+ 292              		.cfi_startproc
+ 293              		@ args = 0, pretend = 0, frame = 56
+ 294              		@ frame_needed = 1, uses_anonymous_args = 0
+ 295 0000 80B5     		push	{r7, lr}
+ 296              	.LCFI6:
+ 297              		.cfi_def_cfa_offset 8
+ 298              		.cfi_offset 7, -8
+ 299              		.cfi_offset 14, -4
+ 300 0002 8EB0     		sub	sp, sp, #56
+ 301              	.LCFI7:
+ 302              		.cfi_def_cfa_offset 64
+ 303 0004 00AF     		add	r7, sp, #0
+ARM GAS  /tmp/ccjKXbb9.s 			page 8
+
+
+ 304              	.LCFI8:
+ 305              		.cfi_def_cfa_register 7
+ 306 0006 7860     		str	r0, [r7, #4]
+  96:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+  97:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   GPIO_InitTypeDef GPIO_InitStruct = {0};
+ 307              		.loc 1 97 20
+ 308 0008 07F12403 		add	r3, r7, #36
+ 309 000c 0022     		movs	r2, #0
+ 310 000e 1A60     		str	r2, [r3]
+ 311 0010 5A60     		str	r2, [r3, #4]
+ 312 0012 9A60     		str	r2, [r3, #8]
+ 313 0014 DA60     		str	r2, [r3, #12]
+ 314 0016 1A61     		str	r2, [r3, #16]
+  98:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   if(uartHandle->Instance==LPUART1)
+ 315              		.loc 1 98 16
+ 316 0018 7B68     		ldr	r3, [r7, #4]
+ 317 001a 1B68     		ldr	r3, [r3]
+ 318              		.loc 1 98 5
+ 319 001c 464A     		ldr	r2, .L21
+ 320 001e 9342     		cmp	r3, r2
+ 321 0020 29D1     		bne	.L17
+ 322              	.LBB2:
+  99:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   {
+ 100:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE BEGIN LPUART1_MspInit 0 */
+ 101:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 102:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE END LPUART1_MspInit 0 */
+ 103:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     /* LPUART1 clock enable */
+ 104:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     __HAL_RCC_LPUART1_CLK_ENABLE();
+ 323              		.loc 1 104 5
+ 324 0022 464B     		ldr	r3, .L21+4
+ 325 0024 DB6D     		ldr	r3, [r3, #92]
+ 326 0026 454A     		ldr	r2, .L21+4
+ 327 0028 43F00103 		orr	r3, r3, #1
+ 328 002c D365     		str	r3, [r2, #92]
+ 329 002e 434B     		ldr	r3, .L21+4
+ 330 0030 DB6D     		ldr	r3, [r3, #92]
+ 331 0032 03F00103 		and	r3, r3, #1
+ 332 0036 3B62     		str	r3, [r7, #32]
+ 333 0038 3B6A     		ldr	r3, [r7, #32]
+ 334              	.LBE2:
+ 335              	.LBB3:
+ 105:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   
+ 106:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     __HAL_RCC_GPIOB_CLK_ENABLE();
+ 336              		.loc 1 106 5
+ 337 003a 404B     		ldr	r3, .L21+4
+ 338 003c DB6C     		ldr	r3, [r3, #76]
+ 339 003e 3F4A     		ldr	r2, .L21+4
+ 340 0040 43F00203 		orr	r3, r3, #2
+ 341 0044 D364     		str	r3, [r2, #76]
+ 342 0046 3D4B     		ldr	r3, .L21+4
+ 343 0048 DB6C     		ldr	r3, [r3, #76]
+ 344 004a 03F00203 		and	r3, r3, #2
+ 345 004e FB61     		str	r3, [r7, #28]
+ 346 0050 FB69     		ldr	r3, [r7, #28]
+ 347              	.LBE3:
+ 107:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     /**LPUART1 GPIO Configuration    
+ 108:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     PB10     ------> LPUART1_RX
+ARM GAS  /tmp/ccjKXbb9.s 			page 9
+
+
+ 109:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     PB11     ------> LPUART1_TX 
+ 110:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     */
+ 111:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_11;
+ 348              		.loc 1 111 25
+ 349 0052 4FF44063 		mov	r3, #3072
+ 350 0056 7B62     		str	r3, [r7, #36]
+ 112:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 351              		.loc 1 112 26
+ 352 0058 0223     		movs	r3, #2
+ 353 005a BB62     		str	r3, [r7, #40]
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 354              		.loc 1 113 26
+ 355 005c 0023     		movs	r3, #0
+ 356 005e FB62     		str	r3, [r7, #44]
+ 114:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 357              		.loc 1 114 27
+ 358 0060 0323     		movs	r3, #3
+ 359 0062 3B63     		str	r3, [r7, #48]
+ 115:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Alternate = GPIO_AF8_LPUART1;
+ 360              		.loc 1 115 31
+ 361 0064 0823     		movs	r3, #8
+ 362 0066 7B63     		str	r3, [r7, #52]
+ 116:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+ 363              		.loc 1 116 5
+ 364 0068 07F12403 		add	r3, r7, #36
+ 365 006c 1946     		mov	r1, r3
+ 366 006e 3448     		ldr	r0, .L21+8
+ 367 0070 FFF7FEFF 		bl	HAL_GPIO_Init
+ 117:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 118:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE BEGIN LPUART1_MspInit 1 */
+ 119:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 120:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE END LPUART1_MspInit 1 */
+ 121:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   }
+ 122:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   else if(uartHandle->Instance==USART1)
+ 123:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   {
+ 124:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE BEGIN USART1_MspInit 0 */
+ 125:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 126:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE END USART1_MspInit 0 */
+ 127:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     /* USART1 clock enable */
+ 128:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     __HAL_RCC_USART1_CLK_ENABLE();
+ 129:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   
+ 130:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     __HAL_RCC_GPIOA_CLK_ENABLE();
+ 131:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     /**USART1 GPIO Configuration    
+ 132:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     PA9     ------> USART1_TX
+ 133:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     PA10     ------> USART1_RX 
+ 134:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     */
+ 135:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_10;
+ 136:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 137:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 138:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 139:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Alternate = GPIO_AF7_USART1;
+ 140:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+ 141:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 142:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE BEGIN USART1_MspInit 1 */
+ 143:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 144:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE END USART1_MspInit 1 */
+ 145:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   }
+ARM GAS  /tmp/ccjKXbb9.s 			page 10
+
+
+ 146:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   else if(uartHandle->Instance==USART3)
+ 147:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   {
+ 148:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE BEGIN USART3_MspInit 0 */
+ 149:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 150:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE END USART3_MspInit 0 */
+ 151:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     /* USART3 clock enable */
+ 152:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     __HAL_RCC_USART3_CLK_ENABLE();
+ 153:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   
+ 154:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     __HAL_RCC_GPIOC_CLK_ENABLE();
+ 155:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     /**USART3 GPIO Configuration    
+ 156:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     PC4     ------> USART3_TX
+ 157:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     PC5     ------> USART3_RX 
+ 158:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     */
+ 159:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_5;
+ 160:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 161:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 162:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 163:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
+ 164:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+ 165:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 166:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE BEGIN USART3_MspInit 1 */
+ 167:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 168:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE END USART3_MspInit 1 */
+ 169:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   }
+ 170:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** }
+ 368              		.loc 1 170 1
+ 369 0074 5CE0     		b	.L20
+ 370              	.L17:
+ 122:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   {
+ 371              		.loc 1 122 21
+ 372 0076 7B68     		ldr	r3, [r7, #4]
+ 373 0078 1B68     		ldr	r3, [r3]
+ 122:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   {
+ 374              		.loc 1 122 10
+ 375 007a 324A     		ldr	r2, .L21+12
+ 376 007c 9342     		cmp	r3, r2
+ 377 007e 2AD1     		bne	.L19
+ 378              	.LBB4:
+ 128:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   
+ 379              		.loc 1 128 5
+ 380 0080 2E4B     		ldr	r3, .L21+4
+ 381 0082 1B6E     		ldr	r3, [r3, #96]
+ 382 0084 2D4A     		ldr	r2, .L21+4
+ 383 0086 43F48043 		orr	r3, r3, #16384
+ 384 008a 1366     		str	r3, [r2, #96]
+ 385 008c 2B4B     		ldr	r3, .L21+4
+ 386 008e 1B6E     		ldr	r3, [r3, #96]
+ 387 0090 03F48043 		and	r3, r3, #16384
+ 388 0094 BB61     		str	r3, [r7, #24]
+ 389 0096 BB69     		ldr	r3, [r7, #24]
+ 390              	.LBE4:
+ 391              	.LBB5:
+ 130:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     /**USART1 GPIO Configuration    
+ 392              		.loc 1 130 5
+ 393 0098 284B     		ldr	r3, .L21+4
+ 394 009a DB6C     		ldr	r3, [r3, #76]
+ 395 009c 274A     		ldr	r2, .L21+4
+ARM GAS  /tmp/ccjKXbb9.s 			page 11
+
+
+ 396 009e 43F00103 		orr	r3, r3, #1
+ 397 00a2 D364     		str	r3, [r2, #76]
+ 398 00a4 254B     		ldr	r3, .L21+4
+ 399 00a6 DB6C     		ldr	r3, [r3, #76]
+ 400 00a8 03F00103 		and	r3, r3, #1
+ 401 00ac 7B61     		str	r3, [r7, #20]
+ 402 00ae 7B69     		ldr	r3, [r7, #20]
+ 403              	.LBE5:
+ 135:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 404              		.loc 1 135 25
+ 405 00b0 4FF4C063 		mov	r3, #1536
+ 406 00b4 7B62     		str	r3, [r7, #36]
+ 136:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 407              		.loc 1 136 26
+ 408 00b6 0223     		movs	r3, #2
+ 409 00b8 BB62     		str	r3, [r7, #40]
+ 137:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 410              		.loc 1 137 26
+ 411 00ba 0023     		movs	r3, #0
+ 412 00bc FB62     		str	r3, [r7, #44]
+ 138:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Alternate = GPIO_AF7_USART1;
+ 413              		.loc 1 138 27
+ 414 00be 0323     		movs	r3, #3
+ 415 00c0 3B63     		str	r3, [r7, #48]
+ 139:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+ 416              		.loc 1 139 31
+ 417 00c2 0723     		movs	r3, #7
+ 418 00c4 7B63     		str	r3, [r7, #52]
+ 140:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 419              		.loc 1 140 5
+ 420 00c6 07F12403 		add	r3, r7, #36
+ 421 00ca 1946     		mov	r1, r3
+ 422 00cc 4FF09040 		mov	r0, #1207959552
+ 423 00d0 FFF7FEFF 		bl	HAL_GPIO_Init
+ 424              		.loc 1 170 1
+ 425 00d4 2CE0     		b	.L20
+ 426              	.L19:
+ 146:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   {
+ 427              		.loc 1 146 21
+ 428 00d6 7B68     		ldr	r3, [r7, #4]
+ 429 00d8 1B68     		ldr	r3, [r3]
+ 146:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   {
+ 430              		.loc 1 146 10
+ 431 00da 1B4A     		ldr	r2, .L21+16
+ 432 00dc 9342     		cmp	r3, r2
+ 433 00de 27D1     		bne	.L20
+ 434              	.LBB6:
+ 152:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   
+ 435              		.loc 1 152 5
+ 436 00e0 164B     		ldr	r3, .L21+4
+ 437 00e2 9B6D     		ldr	r3, [r3, #88]
+ 438 00e4 154A     		ldr	r2, .L21+4
+ 439 00e6 43F48023 		orr	r3, r3, #262144
+ 440 00ea 9365     		str	r3, [r2, #88]
+ 441 00ec 134B     		ldr	r3, .L21+4
+ 442 00ee 9B6D     		ldr	r3, [r3, #88]
+ 443 00f0 03F48023 		and	r3, r3, #262144
+ARM GAS  /tmp/ccjKXbb9.s 			page 12
+
+
+ 444 00f4 3B61     		str	r3, [r7, #16]
+ 445 00f6 3B69     		ldr	r3, [r7, #16]
+ 446              	.LBE6:
+ 447              	.LBB7:
+ 154:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     /**USART3 GPIO Configuration    
+ 448              		.loc 1 154 5
+ 449 00f8 104B     		ldr	r3, .L21+4
+ 450 00fa DB6C     		ldr	r3, [r3, #76]
+ 451 00fc 0F4A     		ldr	r2, .L21+4
+ 452 00fe 43F00403 		orr	r3, r3, #4
+ 453 0102 D364     		str	r3, [r2, #76]
+ 454 0104 0D4B     		ldr	r3, .L21+4
+ 455 0106 DB6C     		ldr	r3, [r3, #76]
+ 456 0108 03F00403 		and	r3, r3, #4
+ 457 010c FB60     		str	r3, [r7, #12]
+ 458 010e FB68     		ldr	r3, [r7, #12]
+ 459              	.LBE7:
+ 159:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 460              		.loc 1 159 25
+ 461 0110 3023     		movs	r3, #48
+ 462 0112 7B62     		str	r3, [r7, #36]
+ 160:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 463              		.loc 1 160 26
+ 464 0114 0223     		movs	r3, #2
+ 465 0116 BB62     		str	r3, [r7, #40]
+ 161:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 466              		.loc 1 161 26
+ 467 0118 0023     		movs	r3, #0
+ 468 011a FB62     		str	r3, [r7, #44]
+ 162:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     GPIO_InitStruct.Alternate = GPIO_AF7_USART3;
+ 469              		.loc 1 162 27
+ 470 011c 0323     		movs	r3, #3
+ 471 011e 3B63     		str	r3, [r7, #48]
+ 163:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+ 472              		.loc 1 163 31
+ 473 0120 0723     		movs	r3, #7
+ 474 0122 7B63     		str	r3, [r7, #52]
+ 164:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 475              		.loc 1 164 5
+ 476 0124 07F12403 		add	r3, r7, #36
+ 477 0128 1946     		mov	r1, r3
+ 478 012a 0848     		ldr	r0, .L21+20
+ 479 012c FFF7FEFF 		bl	HAL_GPIO_Init
+ 480              	.L20:
+ 481              		.loc 1 170 1
+ 482 0130 00BF     		nop
+ 483 0132 3837     		adds	r7, r7, #56
+ 484              	.LCFI9:
+ 485              		.cfi_def_cfa_offset 8
+ 486 0134 BD46     		mov	sp, r7
+ 487              	.LCFI10:
+ 488              		.cfi_def_cfa_register 13
+ 489              		@ sp needed
+ 490 0136 80BD     		pop	{r7, pc}
+ 491              	.L22:
+ 492              		.align	2
+ 493              	.L21:
+ARM GAS  /tmp/ccjKXbb9.s 			page 13
+
+
+ 494 0138 00800040 		.word	1073774592
+ 495 013c 00100240 		.word	1073876992
+ 496 0140 00040048 		.word	1207960576
+ 497 0144 00380140 		.word	1073821696
+ 498 0148 00480040 		.word	1073760256
+ 499 014c 00080048 		.word	1207961600
+ 500              		.cfi_endproc
+ 501              	.LFE136:
+ 503              		.section	.text.HAL_UART_MspDeInit,"ax",%progbits
+ 504              		.align	1
+ 505              		.global	HAL_UART_MspDeInit
+ 506              		.syntax unified
+ 507              		.thumb
+ 508              		.thumb_func
+ 509              		.fpu fpv4-sp-d16
+ 511              	HAL_UART_MspDeInit:
+ 512              	.LFB137:
+ 171:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 172:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
+ 173:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** {
+ 513              		.loc 1 173 1
+ 514              		.cfi_startproc
+ 515              		@ args = 0, pretend = 0, frame = 8
+ 516              		@ frame_needed = 1, uses_anonymous_args = 0
+ 517 0000 80B5     		push	{r7, lr}
+ 518              	.LCFI11:
+ 519              		.cfi_def_cfa_offset 8
+ 520              		.cfi_offset 7, -8
+ 521              		.cfi_offset 14, -4
+ 522 0002 82B0     		sub	sp, sp, #8
+ 523              	.LCFI12:
+ 524              		.cfi_def_cfa_offset 16
+ 525 0004 00AF     		add	r7, sp, #0
+ 526              	.LCFI13:
+ 527              		.cfi_def_cfa_register 7
+ 528 0006 7860     		str	r0, [r7, #4]
+ 174:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 175:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   if(uartHandle->Instance==LPUART1)
+ 529              		.loc 1 175 16
+ 530 0008 7B68     		ldr	r3, [r7, #4]
+ 531 000a 1B68     		ldr	r3, [r3]
+ 532              		.loc 1 175 5
+ 533 000c 1B4A     		ldr	r2, .L28
+ 534 000e 9342     		cmp	r3, r2
+ 535 0010 0ED1     		bne	.L24
+ 176:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   {
+ 177:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE BEGIN LPUART1_MspDeInit 0 */
+ 178:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 179:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE END LPUART1_MspDeInit 0 */
+ 180:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     /* Peripheral clock disable */
+ 181:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     __HAL_RCC_LPUART1_CLK_DISABLE();
+ 536              		.loc 1 181 5
+ 537 0012 1B4B     		ldr	r3, .L28+4
+ 538 0014 DB6D     		ldr	r3, [r3, #92]
+ 539 0016 1A4A     		ldr	r2, .L28+4
+ 540 0018 23F00103 		bic	r3, r3, #1
+ 541 001c D365     		str	r3, [r2, #92]
+ARM GAS  /tmp/ccjKXbb9.s 			page 14
+
+
+ 182:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   
+ 183:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     /**LPUART1 GPIO Configuration    
+ 184:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     PB10     ------> LPUART1_RX
+ 185:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     PB11     ------> LPUART1_TX 
+ 186:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     */
+ 187:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     HAL_GPIO_DeInit(GPIOB, GPIO_PIN_10|GPIO_PIN_11);
+ 542              		.loc 1 187 5
+ 543 001e 4FF44061 		mov	r1, #3072
+ 544 0022 1848     		ldr	r0, .L28+8
+ 545 0024 FFF7FEFF 		bl	HAL_GPIO_DeInit
+ 188:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 189:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     /* LPUART1 interrupt Deinit */
+ 190:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     HAL_NVIC_DisableIRQ(LPUART1_IRQn);
+ 546              		.loc 1 190 5
+ 547 0028 4620     		movs	r0, #70
+ 548 002a FFF7FEFF 		bl	HAL_NVIC_DisableIRQ
+ 191:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE BEGIN LPUART1_MspDeInit 1 */
+ 192:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 193:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE END LPUART1_MspDeInit 1 */
+ 194:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   }
+ 195:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   else if(uartHandle->Instance==USART1)
+ 196:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   {
+ 197:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE BEGIN USART1_MspDeInit 0 */
+ 198:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 199:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE END USART1_MspDeInit 0 */
+ 200:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     /* Peripheral clock disable */
+ 201:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     __HAL_RCC_USART1_CLK_DISABLE();
+ 202:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   
+ 203:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     /**USART1 GPIO Configuration    
+ 204:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     PA9     ------> USART1_TX
+ 205:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     PA10     ------> USART1_RX 
+ 206:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     */
+ 207:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     HAL_GPIO_DeInit(GPIOA, GPIO_PIN_9|GPIO_PIN_10);
+ 208:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 209:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE BEGIN USART1_MspDeInit 1 */
+ 210:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 211:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE END USART1_MspDeInit 1 */
+ 212:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   }
+ 213:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   else if(uartHandle->Instance==USART3)
+ 214:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   {
+ 215:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE BEGIN USART3_MspDeInit 0 */
+ 216:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 217:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE END USART3_MspDeInit 0 */
+ 218:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     /* Peripheral clock disable */
+ 219:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     __HAL_RCC_USART3_CLK_DISABLE();
+ 220:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   
+ 221:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     /**USART3 GPIO Configuration    
+ 222:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     PC4     ------> USART3_TX
+ 223:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     PC5     ------> USART3_RX 
+ 224:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     */
+ 225:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****     HAL_GPIO_DeInit(GPIOC, GPIO_PIN_4|GPIO_PIN_5);
+ 226:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 227:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE BEGIN USART3_MspDeInit 1 */
+ 228:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 229:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   /* USER CODE END USART3_MspDeInit 1 */
+ 230:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   }
+ 231:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** } 
+ARM GAS  /tmp/ccjKXbb9.s 			page 15
+
+
+ 549              		.loc 1 231 1
+ 550 002e 20E0     		b	.L27
+ 551              	.L24:
+ 195:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   {
+ 552              		.loc 1 195 21
+ 553 0030 7B68     		ldr	r3, [r7, #4]
+ 554 0032 1B68     		ldr	r3, [r3]
+ 195:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   {
+ 555              		.loc 1 195 10
+ 556 0034 144A     		ldr	r2, .L28+12
+ 557 0036 9342     		cmp	r3, r2
+ 558 0038 0CD1     		bne	.L26
+ 201:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   
+ 559              		.loc 1 201 5
+ 560 003a 114B     		ldr	r3, .L28+4
+ 561 003c 1B6E     		ldr	r3, [r3, #96]
+ 562 003e 104A     		ldr	r2, .L28+4
+ 563 0040 23F48043 		bic	r3, r3, #16384
+ 564 0044 1366     		str	r3, [r2, #96]
+ 207:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 565              		.loc 1 207 5
+ 566 0046 4FF4C061 		mov	r1, #1536
+ 567 004a 4FF09040 		mov	r0, #1207959552
+ 568 004e FFF7FEFF 		bl	HAL_GPIO_DeInit
+ 569              		.loc 1 231 1
+ 570 0052 0EE0     		b	.L27
+ 571              	.L26:
+ 213:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   {
+ 572              		.loc 1 213 21
+ 573 0054 7B68     		ldr	r3, [r7, #4]
+ 574 0056 1B68     		ldr	r3, [r3]
+ 213:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   {
+ 575              		.loc 1 213 10
+ 576 0058 0C4A     		ldr	r2, .L28+16
+ 577 005a 9342     		cmp	r3, r2
+ 578 005c 09D1     		bne	.L27
+ 219:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c ****   
+ 579              		.loc 1 219 5
+ 580 005e 084B     		ldr	r3, .L28+4
+ 581 0060 9B6D     		ldr	r3, [r3, #88]
+ 582 0062 074A     		ldr	r2, .L28+4
+ 583 0064 23F48023 		bic	r3, r3, #262144
+ 584 0068 9365     		str	r3, [r2, #88]
+ 225:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/usart.c **** 
+ 585              		.loc 1 225 5
+ 586 006a 3021     		movs	r1, #48
+ 587 006c 0848     		ldr	r0, .L28+20
+ 588 006e FFF7FEFF 		bl	HAL_GPIO_DeInit
+ 589              	.L27:
+ 590              		.loc 1 231 1
+ 591 0072 00BF     		nop
+ 592 0074 0837     		adds	r7, r7, #8
+ 593              	.LCFI14:
+ 594              		.cfi_def_cfa_offset 8
+ 595 0076 BD46     		mov	sp, r7
+ 596              	.LCFI15:
+ 597              		.cfi_def_cfa_register 13
+ARM GAS  /tmp/ccjKXbb9.s 			page 16
+
+
+ 598              		@ sp needed
+ 599 0078 80BD     		pop	{r7, pc}
+ 600              	.L29:
+ 601 007a 00BF     		.align	2
+ 602              	.L28:
+ 603 007c 00800040 		.word	1073774592
+ 604 0080 00100240 		.word	1073876992
+ 605 0084 00040048 		.word	1207960576
+ 606 0088 00380140 		.word	1073821696
+ 607 008c 00480040 		.word	1073760256
+ 608 0090 00080048 		.word	1207961600
+ 609              		.cfi_endproc
+ 610              	.LFE137:
+ 612              		.text
+ 613              	.Letext0:
+ 614              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 615              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 616              		.file 4 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 617              		.file 5 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/system_stm32l4xx.h"
+ 618              		.file 6 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/stm32l476xx.h"
+ 619              		.file 7 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 620              		.file 8 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 621              		.file 9 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 622              		.file 10 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/re
+ 623              		.file 11 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 624              		.file 12 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 625              		.file 13 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 626              		.file 14 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 627              		.file 15 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_typedef.h"
+ 628              		.file 16 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_config.h"
+ 629              		.file 17 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_err.h"
+ 630              		.file 18 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 631              		.file 19 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/usart.h"
+ARM GAS  /tmp/ccjKXbb9.s 			page 17
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 usart.c
+                            *COM*:0000000000000078 hlpuart1
+                            *COM*:0000000000000078 huart1
+                            *COM*:0000000000000078 huart3
+     /tmp/ccjKXbb9.s:21     .rodata:0000000000000000 $d
+     /tmp/ccjKXbb9.s:26     .text.MX_LPUART1_UART_Init:0000000000000000 $t
+     /tmp/ccjKXbb9.s:34     .text.MX_LPUART1_UART_Init:0000000000000000 MX_LPUART1_UART_Init
+     /tmp/ccjKXbb9.s:103    .text.MX_LPUART1_UART_Init:0000000000000054 $d
+     /tmp/ccjKXbb9.s:110    .text.MX_USART1_UART_Init:0000000000000000 $t
+     /tmp/ccjKXbb9.s:117    .text.MX_USART1_UART_Init:0000000000000000 MX_USART1_UART_Init
+     /tmp/ccjKXbb9.s:189    .text.MX_USART1_UART_Init:000000000000005c $d
+     /tmp/ccjKXbb9.s:196    .text.MX_USART3_UART_Init:0000000000000000 $t
+     /tmp/ccjKXbb9.s:203    .text.MX_USART3_UART_Init:0000000000000000 MX_USART3_UART_Init
+     /tmp/ccjKXbb9.s:275    .text.MX_USART3_UART_Init:000000000000005c $d
+     /tmp/ccjKXbb9.s:282    .text.HAL_UART_MspInit:0000000000000000 $t
+     /tmp/ccjKXbb9.s:289    .text.HAL_UART_MspInit:0000000000000000 HAL_UART_MspInit
+     /tmp/ccjKXbb9.s:494    .text.HAL_UART_MspInit:0000000000000138 $d
+     /tmp/ccjKXbb9.s:504    .text.HAL_UART_MspDeInit:0000000000000000 $t
+     /tmp/ccjKXbb9.s:511    .text.HAL_UART_MspDeInit:0000000000000000 HAL_UART_MspDeInit
+     /tmp/ccjKXbb9.s:603    .text.HAL_UART_MspDeInit:000000000000007c $d
+
+UNDEFINED SYMBOLS
+HAL_UART_Init
+_Error_Handler
+HAL_GPIO_Init
+HAL_GPIO_DeInit
+HAL_NVIC_DisableIRQ

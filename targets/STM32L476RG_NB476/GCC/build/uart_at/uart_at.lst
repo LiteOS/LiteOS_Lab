@@ -1,0 +1,1295 @@
+ARM GAS  /tmp/cccrZCj0.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"uart_at.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.comm	uart_at,120,4
+  18              		.section	.data.s_pUSART,"aw"
+  19              		.align	2
+  22              	s_pUSART:
+  23 0000 00480040 		.word	1073760256
+  24              		.section	.data.s_uwIRQn,"aw"
+  25              		.align	2
+  28              	s_uwIRQn:
+  29 0000 27000000 		.word	39
+  30              		.section	.bss.g_atio_cb,"aw",%nobits
+  31              		.align	2
+  34              	g_atio_cb:
+  35 0000 00000000 		.space	4148
+  35      00000000 
+  35      00000000 
+  35      00000000 
+  35      00000000 
+  36              		.section	.text.atio_irq,"ax",%progbits
+  37              		.align	1
+  38              		.arch armv7e-m
+  39              		.syntax unified
+  40              		.thumb
+  41              		.thumb_func
+  42              		.fpu fpv4-sp-d16
+  44              	atio_irq:
+  45              	.LFB133:
+  46              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** /*----------------------------------------------------------------------------
+   2:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+   3:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * All rights reserved.
+   4:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * are permitted provided that the following conditions are met:
+   6:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * conditions and the following disclaimer.
+   8:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * provided with the distribution.
+  11:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * permission.
+  14:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ARM GAS  /tmp/cccrZCj0.s 			page 2
+
+
+  15:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  *---------------------------------------------------------------------------*/
+  26:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** /*----------------------------------------------------------------------------
+  27:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * Notice of Export Control Law
+  28:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * ===============================================
+  29:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  * applicable export control laws and regulations.
+  33:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****  *---------------------------------------------------------------------------*/
+  34:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+  35:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** #include "usart.h"
+  36:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** #include "stm32l4xx.h"
+  37:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** #include <stdint.h>
+  38:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** #include <stddef.h>
+  39:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** #include <osal.h>
+  40:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** #include <link_misc.h>
+  41:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** #include <driver.h>
+  42:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** #include "sys/fcntl.h"
+  43:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** #include <iot_link_config.h>
+  44:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+  45:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+  46:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** UART_HandleTypeDef uart_at;
+  47:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** static USART_TypeDef*     s_pUSART = USART3;
+  48:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** static uint32_t           s_uwIRQn = USART3_IRQn;
+  49:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+  50:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** #ifndef CONFIG_UARTAT_RCVMAX
+  51:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** #define CONFIG_UARTAT_RCVMAX     1024  //cache a frame
+  52:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** #endif
+  53:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+  54:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** #ifndef CONFIG_UARTAT_BAUDRATE
+  55:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** #define CONFIG_UARTAT_BAUDRATE    115200
+  56:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** #endif
+  57:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+  58:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+  59:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** #ifndef CONFIG_UARTAT_DEVNAME
+  60:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** #define CONFIG_UARTAT_DEVNAME    "atdev"
+  61:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** #endif
+  62:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+  63:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** #define CN_RCVMEM_LEN  CONFIG_UARTAT_RCVMAX
+  64:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+  65:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** struct atio_cb
+  67:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** {
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     unsigned short        w_next;    //the next position to be write
+  69:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     osal_semp_t           rcvsync;   //if a frame has been written to the ring, then active it
+  70:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     tag_ring_buffer_t     rcvring;
+  71:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     unsigned char         rcvbuf[CONFIG_UARTAT_RCVMAX];
+ARM GAS  /tmp/cccrZCj0.s 			page 3
+
+
+  72:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     unsigned char         rcvringmem[CN_RCVMEM_LEN];
+  73:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     //for the debug here
+  74:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     unsigned int          rframeover; //how many times the frame has been over the max length
+  75:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     unsigned int          rframedrop; //how many frame has been droped for memmory
+  76:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     unsigned int          sndlen;     //how many bytes has been sent
+  77:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     unsigned int          rcvlen;     //how many bytes has been received
+  78:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     unsigned int          sndframe;   //how many frame has been sent
+  79:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     unsigned int          rcvframe;   //how many frame has been received
+  80:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     unsigned int          rcvringrst; //how many times the receive ring has been reset
+  81:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** };
+  82:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** static struct atio_cb   g_atio_cb;
+  83:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+  84:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+  85:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** /*******************************************************************************
+  86:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** function     :use this function to deal the uart interrupt
+  87:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** parameters   :
+  88:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** instruction  :we cached the data in the temp buffer,when the idle interrupt reached,
+  89:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****               then we write the data and the length to the ring if the ring has enough
+  90:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****               space
+  91:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** *******************************************************************************/
+  92:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** static void atio_irq(void)
+  93:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** {
+  47              		.loc 1 93 1
+  48              		.cfi_startproc
+  49              		@ args = 0, pretend = 0, frame = 8
+  50              		@ frame_needed = 1, uses_anonymous_args = 0
+  51 0000 80B5     		push	{r7, lr}
+  52              	.LCFI0:
+  53              		.cfi_def_cfa_offset 8
+  54              		.cfi_offset 7, -8
+  55              		.cfi_offset 14, -4
+  56 0002 82B0     		sub	sp, sp, #8
+  57              	.LCFI1:
+  58              		.cfi_def_cfa_offset 16
+  59 0004 00AF     		add	r7, sp, #0
+  60              	.LCFI2:
+  61              		.cfi_def_cfa_register 7
+  94:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     unsigned char  value;
+  95:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     unsigned short ringspace;
+  96:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     if(__HAL_UART_GET_FLAG(&uart_at, UART_FLAG_RXNE) != RESET)
+  62              		.loc 1 96 8
+  63 0006 494B     		ldr	r3, .L9
+  64 0008 1B68     		ldr	r3, [r3]
+  65 000a DB69     		ldr	r3, [r3, #28]
+  66 000c 03F02003 		and	r3, r3, #32
+  67              		.loc 1 96 7
+  68 0010 202B     		cmp	r3, #32
+  69 0012 2ED1     		bne	.L2
+  97:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     {
+  98:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****        value = (uint8_t)(uart_at.Instance->RDR & 0x00FF);
+  70              		.loc 1 98 33
+  71 0014 454B     		ldr	r3, .L9
+  72 0016 1B68     		ldr	r3, [r3]
+  73              		.loc 1 98 42
+  74 0018 9B8C     		ldrh	r3, [r3, #36]	@ movhi
+  75 001a 9BB2     		uxth	r3, r3
+  76              		.loc 1 98 14
+ARM GAS  /tmp/cccrZCj0.s 			page 4
+
+
+  77 001c FB71     		strb	r3, [r7, #7]
+  99:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****        g_atio_cb.rcvlen++;
+  78              		.loc 1 99 17
+  79 001e 444B     		ldr	r3, .L9+4
+  80 0020 03F58153 		add	r3, r3, #4128
+  81 0024 0433     		adds	r3, r3, #4
+  82 0026 1B68     		ldr	r3, [r3]
+  83              		.loc 1 99 24
+  84 0028 5A1C     		adds	r2, r3, #1
+  85 002a 414B     		ldr	r3, .L9+4
+  86 002c 03F58153 		add	r3, r3, #4128
+  87 0030 0433     		adds	r3, r3, #4
+  88 0032 1A60     		str	r2, [r3]
+ 100:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****        if(g_atio_cb.w_next < CONFIG_UARTAT_RCVMAX)
+  89              		.loc 1 100 20
+  90 0034 3E4B     		ldr	r3, .L9+4
+  91 0036 1B88     		ldrh	r3, [r3]
+  92              		.loc 1 100 10
+  93 0038 B3F5006F 		cmp	r3, #2048
+  94 003c 0DD2     		bcs	.L3
+ 101:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****        {
+ 102:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****            g_atio_cb.rcvbuf[g_atio_cb.w_next] = value;
+  95              		.loc 1 102 38
+  96 003e 3C4B     		ldr	r3, .L9+4
+  97 0040 1B88     		ldrh	r3, [r3]
+  98 0042 1A46     		mov	r2, r3
+  99              		.loc 1 102 47
+ 100 0044 3A4B     		ldr	r3, .L9+4
+ 101 0046 1344     		add	r3, r3, r2
+ 102 0048 FA79     		ldrb	r2, [r7, #7]
+ 103 004a 1A76     		strb	r2, [r3, #24]
+ 103:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****            g_atio_cb.w_next++;
+ 104              		.loc 1 103 21
+ 105 004c 384B     		ldr	r3, .L9+4
+ 106 004e 1B88     		ldrh	r3, [r3]
+ 107              		.loc 1 103 28
+ 108 0050 0133     		adds	r3, r3, #1
+ 109 0052 9AB2     		uxth	r2, r3
+ 110 0054 364B     		ldr	r3, .L9+4
+ 111 0056 1A80     		strh	r2, [r3]	@ movhi
+ 104:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****        }
+ 105:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****        else
+ 106:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****        {
+ 107:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****             g_atio_cb.rframeover++;
+ 108:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****        }
+ 109:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     }
+ 110:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     else if (__HAL_UART_GET_FLAG(&uart_at,UART_FLAG_IDLE) != RESET)
+ 111:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     {
+ 112:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         __HAL_UART_CLEAR_IDLEFLAG(&uart_at);
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         ringspace = CN_RCVMEM_LEN - ring_buffer_datalen(&g_atio_cb.rcvring);
+ 114:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         if(ringspace < g_atio_cb.w_next)  //not enough mem
+ 115:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         {
+ 116:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****             g_atio_cb.rframedrop++;
+ 117:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         }
+ 118:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         else
+ 119:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         {
+ 120:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****             //write data to the ring buffer:len+data format
+ARM GAS  /tmp/cccrZCj0.s 			page 5
+
+
+ 121:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****             ringspace = g_atio_cb.w_next;
+ 122:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****             ring_buffer_write(&g_atio_cb.rcvring,(unsigned char *)&ringspace,sizeof(ringspace));
+ 123:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****             ring_buffer_write(&g_atio_cb.rcvring,g_atio_cb.rcvbuf,ringspace);
+ 124:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****             (void) osal_semp_post(g_atio_cb.rcvsync);
+ 125:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****             g_atio_cb.rcvframe++;
+ 126:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         }
+ 127:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         g_atio_cb.w_next=0; //write from the head
+ 128:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     }
+ 129:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     else ///< clear the flags
+ 130:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     {
+ 131:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         __HAL_UART_CLEAR_PEFLAG(&uart_at);
+ 132:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         __HAL_UART_CLEAR_FEFLAG(&uart_at);
+ 133:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         __HAL_UART_CLEAR_NEFLAG(&uart_at);
+ 134:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         __HAL_UART_CLEAR_OREFLAG(&uart_at);
+ 135:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     }
+ 136:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+ 137:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+ 138:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** }
+ 112              		.loc 1 138 1
+ 113 0058 63E0     		b	.L8
+ 114              	.L3:
+ 107:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****        }
+ 115              		.loc 1 107 22
+ 116 005a 354B     		ldr	r3, .L9+4
+ 117 005c 03F58053 		add	r3, r3, #4096
+ 118 0060 1833     		adds	r3, r3, #24
+ 119 0062 1B68     		ldr	r3, [r3]
+ 107:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****        }
+ 120              		.loc 1 107 33
+ 121 0064 5A1C     		adds	r2, r3, #1
+ 122 0066 324B     		ldr	r3, .L9+4
+ 123 0068 03F58053 		add	r3, r3, #4096
+ 124 006c 1833     		adds	r3, r3, #24
+ 125 006e 1A60     		str	r2, [r3]
+ 126              		.loc 1 138 1
+ 127 0070 57E0     		b	.L8
+ 128              	.L2:
+ 110:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     {
+ 129              		.loc 1 110 14
+ 130 0072 2E4B     		ldr	r3, .L9
+ 131 0074 1B68     		ldr	r3, [r3]
+ 132 0076 DB69     		ldr	r3, [r3, #28]
+ 133 0078 03F01003 		and	r3, r3, #16
+ 110:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     {
+ 134              		.loc 1 110 13
+ 135 007c 102B     		cmp	r3, #16
+ 136 007e 40D1     		bne	.L5
+ 112:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         ringspace = CN_RCVMEM_LEN - ring_buffer_datalen(&g_atio_cb.rcvring);
+ 137              		.loc 1 112 9
+ 138 0080 2A4B     		ldr	r3, .L9
+ 139 0082 1B68     		ldr	r3, [r3]
+ 140 0084 1022     		movs	r2, #16
+ 141 0086 1A62     		str	r2, [r3, #32]
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         if(ringspace < g_atio_cb.w_next)  //not enough mem
+ 142              		.loc 1 113 37
+ 143 0088 2A48     		ldr	r0, .L9+8
+ 144 008a FFF7FEFF 		bl	ring_buffer_datalen
+ARM GAS  /tmp/cccrZCj0.s 			page 6
+
+
+ 145 008e 0346     		mov	r3, r0
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         if(ringspace < g_atio_cb.w_next)  //not enough mem
+ 146              		.loc 1 113 35
+ 147 0090 9BB2     		uxth	r3, r3
+ 148 0092 C3F50063 		rsb	r3, r3, #2048
+ 149 0096 9BB2     		uxth	r3, r3
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         if(ringspace < g_atio_cb.w_next)  //not enough mem
+ 150              		.loc 1 113 19
+ 151 0098 BB80     		strh	r3, [r7, #4]	@ movhi
+ 114:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         {
+ 152              		.loc 1 114 33
+ 153 009a 254B     		ldr	r3, .L9+4
+ 154 009c 1A88     		ldrh	r2, [r3]
+ 114:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         {
+ 155              		.loc 1 114 22
+ 156 009e BB88     		ldrh	r3, [r7, #4]
+ 114:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         {
+ 157              		.loc 1 114 11
+ 158 00a0 9A42     		cmp	r2, r3
+ 159 00a2 0BD9     		bls	.L6
+ 116:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         }
+ 160              		.loc 1 116 22
+ 161 00a4 224B     		ldr	r3, .L9+4
+ 162 00a6 03F58053 		add	r3, r3, #4096
+ 163 00aa 1C33     		adds	r3, r3, #28
+ 164 00ac 1B68     		ldr	r3, [r3]
+ 116:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         }
+ 165              		.loc 1 116 33
+ 166 00ae 5A1C     		adds	r2, r3, #1
+ 167 00b0 1F4B     		ldr	r3, .L9+4
+ 168 00b2 03F58053 		add	r3, r3, #4096
+ 169 00b6 1C33     		adds	r3, r3, #28
+ 170 00b8 1A60     		str	r2, [r3]
+ 171 00ba 1EE0     		b	.L7
+ 172              	.L6:
+ 121:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****             ring_buffer_write(&g_atio_cb.rcvring,(unsigned char *)&ringspace,sizeof(ringspace));
+ 173              		.loc 1 121 34
+ 174 00bc 1C4B     		ldr	r3, .L9+4
+ 175 00be 1B88     		ldrh	r3, [r3]
+ 121:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****             ring_buffer_write(&g_atio_cb.rcvring,(unsigned char *)&ringspace,sizeof(ringspace));
+ 176              		.loc 1 121 23
+ 177 00c0 BB80     		strh	r3, [r7, #4]	@ movhi
+ 122:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****             ring_buffer_write(&g_atio_cb.rcvring,g_atio_cb.rcvbuf,ringspace);
+ 178              		.loc 1 122 13
+ 179 00c2 3B1D     		adds	r3, r7, #4
+ 180 00c4 0222     		movs	r2, #2
+ 181 00c6 1946     		mov	r1, r3
+ 182 00c8 1A48     		ldr	r0, .L9+8
+ 183 00ca FFF7FEFF 		bl	ring_buffer_write
+ 123:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****             (void) osal_semp_post(g_atio_cb.rcvsync);
+ 184              		.loc 1 123 13
+ 185 00ce BB88     		ldrh	r3, [r7, #4]
+ 186 00d0 1A46     		mov	r2, r3
+ 187 00d2 1949     		ldr	r1, .L9+12
+ 188 00d4 1748     		ldr	r0, .L9+8
+ 189 00d6 FFF7FEFF 		bl	ring_buffer_write
+ 124:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****             g_atio_cb.rcvframe++;
+ARM GAS  /tmp/cccrZCj0.s 			page 7
+
+
+ 190              		.loc 1 124 20
+ 191 00da 154B     		ldr	r3, .L9+4
+ 192 00dc 5B68     		ldr	r3, [r3, #4]
+ 193 00de 1846     		mov	r0, r3
+ 194 00e0 FFF7FEFF 		bl	osal_semp_post
+ 125:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         }
+ 195              		.loc 1 125 22
+ 196 00e4 124B     		ldr	r3, .L9+4
+ 197 00e6 03F58153 		add	r3, r3, #4128
+ 198 00ea 0C33     		adds	r3, r3, #12
+ 199 00ec 1B68     		ldr	r3, [r3]
+ 125:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         }
+ 200              		.loc 1 125 31
+ 201 00ee 5A1C     		adds	r2, r3, #1
+ 202 00f0 0F4B     		ldr	r3, .L9+4
+ 203 00f2 03F58153 		add	r3, r3, #4128
+ 204 00f6 0C33     		adds	r3, r3, #12
+ 205 00f8 1A60     		str	r2, [r3]
+ 206              	.L7:
+ 127:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     }
+ 207              		.loc 1 127 25
+ 208 00fa 0D4B     		ldr	r3, .L9+4
+ 209 00fc 0022     		movs	r2, #0
+ 210 00fe 1A80     		strh	r2, [r3]	@ movhi
+ 211              		.loc 1 138 1
+ 212 0100 0FE0     		b	.L8
+ 213              	.L5:
+ 131:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         __HAL_UART_CLEAR_FEFLAG(&uart_at);
+ 214              		.loc 1 131 9
+ 215 0102 0A4B     		ldr	r3, .L9
+ 216 0104 1B68     		ldr	r3, [r3]
+ 217 0106 0122     		movs	r2, #1
+ 218 0108 1A62     		str	r2, [r3, #32]
+ 132:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         __HAL_UART_CLEAR_NEFLAG(&uart_at);
+ 219              		.loc 1 132 9
+ 220 010a 084B     		ldr	r3, .L9
+ 221 010c 1B68     		ldr	r3, [r3]
+ 222 010e 0222     		movs	r2, #2
+ 223 0110 1A62     		str	r2, [r3, #32]
+ 133:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         __HAL_UART_CLEAR_OREFLAG(&uart_at);
+ 224              		.loc 1 133 9
+ 225 0112 064B     		ldr	r3, .L9
+ 226 0114 1B68     		ldr	r3, [r3]
+ 227 0116 0422     		movs	r2, #4
+ 228 0118 1A62     		str	r2, [r3, #32]
+ 134:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     }
+ 229              		.loc 1 134 9
+ 230 011a 044B     		ldr	r3, .L9
+ 231 011c 1B68     		ldr	r3, [r3]
+ 232 011e 0822     		movs	r2, #8
+ 233 0120 1A62     		str	r2, [r3, #32]
+ 234              	.L8:
+ 235              		.loc 1 138 1
+ 236 0122 00BF     		nop
+ 237 0124 0837     		adds	r7, r7, #8
+ 238              	.LCFI3:
+ 239              		.cfi_def_cfa_offset 8
+ARM GAS  /tmp/cccrZCj0.s 			page 8
+
+
+ 240 0126 BD46     		mov	sp, r7
+ 241              	.LCFI4:
+ 242              		.cfi_def_cfa_register 13
+ 243              		@ sp needed
+ 244 0128 80BD     		pop	{r7, pc}
+ 245              	.L10:
+ 246 012a 00BF     		.align	2
+ 247              	.L9:
+ 248 012c 00000000 		.word	uart_at
+ 249 0130 00000000 		.word	g_atio_cb
+ 250 0134 08000000 		.word	g_atio_cb+8
+ 251 0138 18000000 		.word	g_atio_cb+24
+ 252              		.cfi_endproc
+ 253              	.LFE133:
+ 255              		.section	.rodata
+ 256              		.align	2
+ 257              	.LC0:
+ 258 0000 25733A73 		.ascii	"%s:semp create error\012\015\000"
+ 258      656D7020 
+ 258      63726561 
+ 258      74652065 
+ 258      72726F72 
+ 259 0017 00       		.align	2
+ 260              	.LC1:
+ 261 0018 2F686F6D 		.ascii	"/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476"
+ 261      652F6661 
+ 261      6E78696E 
+ 261      68616F2F 
+ 261      576F726B 
+ 262 004b 52475F4E 		.ascii	"RG_NB476/uart_at/uart_at.c\000"
+ 262      42343736 
+ 262      2F756172 
+ 262      745F6174 
+ 262      2F756172 
+ 263              		.section	.text.uart_at_init,"ax",%progbits
+ 264              		.align	1
+ 265              		.global	uart_at_init
+ 266              		.syntax unified
+ 267              		.thumb
+ 268              		.thumb_func
+ 269              		.fpu fpv4-sp-d16
+ 271              	uart_at_init:
+ 272              	.LFB134:
+ 139:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+ 140:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** /*******************************************************************************
+ 141:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** function     :use this function to initialize the uart
+ 142:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** parameters   :
+ 143:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** instruction  :
+ 144:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** *******************************************************************************/
+ 145:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** bool_t uart_at_init(void *pri)
+ 146:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** {
+ 273              		.loc 1 146 1
+ 274              		.cfi_startproc
+ 275              		@ args = 0, pretend = 0, frame = 8
+ 276              		@ frame_needed = 1, uses_anonymous_args = 0
+ 277 0000 80B5     		push	{r7, lr}
+ 278              	.LCFI5:
+ARM GAS  /tmp/cccrZCj0.s 			page 9
+
+
+ 279              		.cfi_def_cfa_offset 8
+ 280              		.cfi_offset 7, -8
+ 281              		.cfi_offset 14, -4
+ 282 0002 84B0     		sub	sp, sp, #16
+ 283              	.LCFI6:
+ 284              		.cfi_def_cfa_offset 24
+ 285 0004 02AF     		add	r7, sp, #8
+ 286              	.LCFI7:
+ 287              		.cfi_def_cfa 7, 16
+ 288 0006 7860     		str	r0, [r7, #4]
+ 147:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     //initialize the at controller
+ 148:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     (void) memset(&g_atio_cb,0,sizeof(g_atio_cb));
+ 289              		.loc 1 148 12
+ 290 0008 41F23402 		movw	r2, #4148
+ 291 000c 0021     		movs	r1, #0
+ 292 000e 3148     		ldr	r0, .L16
+ 293 0010 FFF7FEFF 		bl	memset
+ 149:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     if(false == osal_semp_create(&g_atio_cb.rcvsync,CN_RCVMEM_LEN,0))
+ 294              		.loc 1 149 17
+ 295 0014 0022     		movs	r2, #0
+ 296 0016 4FF40061 		mov	r1, #2048
+ 297 001a 2F48     		ldr	r0, .L16+4
+ 298 001c FFF7FEFF 		bl	osal_semp_create
+ 299 0020 0346     		mov	r3, r0
+ 300              		.loc 1 149 7
+ 301 0022 002B     		cmp	r3, #0
+ 302 0024 06D1     		bne	.L12
+ 150:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     {
+ 151:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         printf("%s:semp create error\n\r",__FUNCTION__);
+ 303              		.loc 1 151 9
+ 304 0026 2D49     		ldr	r1, .L16+8
+ 305 0028 2D48     		ldr	r0, .L16+12
+ 306 002a FFF7FEFF 		bl	printf
+ 152:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         goto EXIT_SEMP;
+ 307              		.loc 1 152 9
+ 308 002e 00BF     		nop
+ 309              	.L13:
+ 153:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     }
+ 154:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     ring_buffer_init(&g_atio_cb.rcvring,g_atio_cb.rcvringmem,CN_RCVMEM_LEN,0,0);
+ 155:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+ 156:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     uart_at.Instance = s_pUSART;
+ 157:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     uart_at.Init.BaudRate = CONFIG_UARTAT_BAUDRATE;
+ 158:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     uart_at.Init.WordLength = UART_WORDLENGTH_8B;
+ 159:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     uart_at.Init.StopBits = UART_STOPBITS_1;
+ 160:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     uart_at.Init.Parity = UART_PARITY_NONE;
+ 161:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     uart_at.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+ 162:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     uart_at.Init.Mode = UART_MODE_TX_RX;
+ 163:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     uart_at.Init.OverSampling = UART_OVERSAMPLING_16;
+ 164:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     if(HAL_UART_Init(&uart_at) != HAL_OK)
+ 165:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     {
+ 166:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         _Error_Handler(__FILE__, __LINE__);
+ 167:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     }
+ 168:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     __HAL_UART_CLEAR_FLAG(&uart_at,UART_FLAG_TC);
+ 169:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     LOS_HwiCreate(s_uwIRQn, 3, 0, atio_irq, 0);
+ 170:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     __HAL_UART_ENABLE_IT(&uart_at, UART_IT_IDLE);
+ 171:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     __HAL_UART_ENABLE_IT(&uart_at, UART_IT_RXNE);
+ 172:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     return true;
+ARM GAS  /tmp/cccrZCj0.s 			page 10
+
+
+ 173:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+ 174:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** EXIT_SEMP:
+ 175:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     return false;
+ 310              		.loc 1 175 12
+ 311 0030 0023     		movs	r3, #0
+ 312 0032 4AE0     		b	.L15
+ 313              	.L12:
+ 154:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+ 314              		.loc 1 154 5
+ 315 0034 0023     		movs	r3, #0
+ 316 0036 0093     		str	r3, [sp]
+ 317 0038 0023     		movs	r3, #0
+ 318 003a 4FF40062 		mov	r2, #2048
+ 319 003e 2949     		ldr	r1, .L16+16
+ 320 0040 2948     		ldr	r0, .L16+20
+ 321 0042 FFF7FEFF 		bl	ring_buffer_init
+ 156:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     uart_at.Init.BaudRate = CONFIG_UARTAT_BAUDRATE;
+ 322              		.loc 1 156 22
+ 323 0046 294B     		ldr	r3, .L16+24
+ 324 0048 1B68     		ldr	r3, [r3]
+ 325 004a 294A     		ldr	r2, .L16+28
+ 326 004c 1360     		str	r3, [r2]
+ 157:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     uart_at.Init.WordLength = UART_WORDLENGTH_8B;
+ 327              		.loc 1 157 27
+ 328 004e 284B     		ldr	r3, .L16+28
+ 329 0050 4FF41652 		mov	r2, #9600
+ 330 0054 5A60     		str	r2, [r3, #4]
+ 158:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     uart_at.Init.StopBits = UART_STOPBITS_1;
+ 331              		.loc 1 158 29
+ 332 0056 264B     		ldr	r3, .L16+28
+ 333 0058 0022     		movs	r2, #0
+ 334 005a 9A60     		str	r2, [r3, #8]
+ 159:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     uart_at.Init.Parity = UART_PARITY_NONE;
+ 335              		.loc 1 159 27
+ 336 005c 244B     		ldr	r3, .L16+28
+ 337 005e 0022     		movs	r2, #0
+ 338 0060 DA60     		str	r2, [r3, #12]
+ 160:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     uart_at.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+ 339              		.loc 1 160 25
+ 340 0062 234B     		ldr	r3, .L16+28
+ 341 0064 0022     		movs	r2, #0
+ 342 0066 1A61     		str	r2, [r3, #16]
+ 161:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     uart_at.Init.Mode = UART_MODE_TX_RX;
+ 343              		.loc 1 161 28
+ 344 0068 214B     		ldr	r3, .L16+28
+ 345 006a 0022     		movs	r2, #0
+ 346 006c 9A61     		str	r2, [r3, #24]
+ 162:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     uart_at.Init.OverSampling = UART_OVERSAMPLING_16;
+ 347              		.loc 1 162 23
+ 348 006e 204B     		ldr	r3, .L16+28
+ 349 0070 0C22     		movs	r2, #12
+ 350 0072 5A61     		str	r2, [r3, #20]
+ 163:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     if(HAL_UART_Init(&uart_at) != HAL_OK)
+ 351              		.loc 1 163 31
+ 352 0074 1E4B     		ldr	r3, .L16+28
+ 353 0076 0022     		movs	r2, #0
+ 354 0078 DA61     		str	r2, [r3, #28]
+ARM GAS  /tmp/cccrZCj0.s 			page 11
+
+
+ 164:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     {
+ 355              		.loc 1 164 8
+ 356 007a 1D48     		ldr	r0, .L16+28
+ 357 007c FFF7FEFF 		bl	HAL_UART_Init
+ 358 0080 0346     		mov	r3, r0
+ 164:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     {
+ 359              		.loc 1 164 7
+ 360 0082 002B     		cmp	r3, #0
+ 361 0084 03D0     		beq	.L14
+ 166:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     }
+ 362              		.loc 1 166 9
+ 363 0086 A621     		movs	r1, #166
+ 364 0088 1A48     		ldr	r0, .L16+32
+ 365 008a FFF7FEFF 		bl	_Error_Handler
+ 366              	.L14:
+ 168:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     LOS_HwiCreate(s_uwIRQn, 3, 0, atio_irq, 0);
+ 367              		.loc 1 168 5
+ 368 008e 184B     		ldr	r3, .L16+28
+ 369 0090 1B68     		ldr	r3, [r3]
+ 370 0092 4022     		movs	r2, #64
+ 371 0094 1A62     		str	r2, [r3, #32]
+ 169:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     __HAL_UART_ENABLE_IT(&uart_at, UART_IT_IDLE);
+ 372              		.loc 1 169 5
+ 373 0096 184B     		ldr	r3, .L16+36
+ 374 0098 1868     		ldr	r0, [r3]
+ 375 009a 0023     		movs	r3, #0
+ 376 009c 0093     		str	r3, [sp]
+ 377 009e 174B     		ldr	r3, .L16+40
+ 378 00a0 0022     		movs	r2, #0
+ 379 00a2 0321     		movs	r1, #3
+ 380 00a4 FFF7FEFF 		bl	LOS_HwiCreate
+ 170:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     __HAL_UART_ENABLE_IT(&uart_at, UART_IT_RXNE);
+ 381              		.loc 1 170 5
+ 382 00a8 114B     		ldr	r3, .L16+28
+ 383 00aa 1B68     		ldr	r3, [r3]
+ 384 00ac 1A68     		ldr	r2, [r3]
+ 385 00ae 104B     		ldr	r3, .L16+28
+ 386 00b0 1B68     		ldr	r3, [r3]
+ 387 00b2 42F01002 		orr	r2, r2, #16
+ 388 00b6 1A60     		str	r2, [r3]
+ 171:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     return true;
+ 389              		.loc 1 171 5
+ 390 00b8 0D4B     		ldr	r3, .L16+28
+ 391 00ba 1B68     		ldr	r3, [r3]
+ 392 00bc 1A68     		ldr	r2, [r3]
+ 393 00be 0C4B     		ldr	r3, .L16+28
+ 394 00c0 1B68     		ldr	r3, [r3]
+ 395 00c2 42F02002 		orr	r2, r2, #32
+ 396 00c6 1A60     		str	r2, [r3]
+ 172:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+ 397              		.loc 1 172 12
+ 398 00c8 0123     		movs	r3, #1
+ 399              	.L15:
+ 176:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** }
+ 400              		.loc 1 176 1
+ 401 00ca 1846     		mov	r0, r3
+ 402 00cc 0837     		adds	r7, r7, #8
+ARM GAS  /tmp/cccrZCj0.s 			page 12
+
+
+ 403              	.LCFI8:
+ 404              		.cfi_def_cfa_offset 8
+ 405 00ce BD46     		mov	sp, r7
+ 406              	.LCFI9:
+ 407              		.cfi_def_cfa_register 13
+ 408              		@ sp needed
+ 409 00d0 80BD     		pop	{r7, pc}
+ 410              	.L17:
+ 411 00d2 00BF     		.align	2
+ 412              	.L16:
+ 413 00d4 00000000 		.word	g_atio_cb
+ 414 00d8 04000000 		.word	g_atio_cb+4
+ 415 00dc 00000000 		.word	__FUNCTION__.10204
+ 416 00e0 00000000 		.word	.LC0
+ 417 00e4 18080000 		.word	g_atio_cb+2072
+ 418 00e8 08000000 		.word	g_atio_cb+8
+ 419 00ec 00000000 		.word	s_pUSART
+ 420 00f0 00000000 		.word	uart_at
+ 421 00f4 18000000 		.word	.LC1
+ 422 00f8 00000000 		.word	s_uwIRQn
+ 423 00fc 00000000 		.word	atio_irq
+ 424              		.cfi_endproc
+ 425              	.LFE134:
+ 427              		.section	.text.uart_at_deinit,"ax",%progbits
+ 428              		.align	1
+ 429              		.global	uart_at_deinit
+ 430              		.syntax unified
+ 431              		.thumb
+ 432              		.thumb_func
+ 433              		.fpu fpv4-sp-d16
+ 435              	uart_at_deinit:
+ 436              	.LFB135:
+ 177:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+ 178:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** void uart_at_deinit(void *pri)
+ 179:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** {
+ 437              		.loc 1 179 1
+ 438              		.cfi_startproc
+ 439              		@ args = 0, pretend = 0, frame = 8
+ 440              		@ frame_needed = 1, uses_anonymous_args = 0
+ 441              		@ link register save eliminated.
+ 442 0000 80B4     		push	{r7}
+ 443              	.LCFI10:
+ 444              		.cfi_def_cfa_offset 4
+ 445              		.cfi_offset 7, -4
+ 446 0002 83B0     		sub	sp, sp, #12
+ 447              	.LCFI11:
+ 448              		.cfi_def_cfa_offset 16
+ 449 0004 00AF     		add	r7, sp, #0
+ 450              	.LCFI12:
+ 451              		.cfi_def_cfa_register 7
+ 452 0006 7860     		str	r0, [r7, #4]
+ 180:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     __HAL_UART_DISABLE(&uart_at);
+ 453              		.loc 1 180 5
+ 454 0008 0E4B     		ldr	r3, .L19
+ 455 000a 1B68     		ldr	r3, [r3]
+ 456 000c 1A68     		ldr	r2, [r3]
+ 457 000e 0D4B     		ldr	r3, .L19
+ARM GAS  /tmp/cccrZCj0.s 			page 13
+
+
+ 458 0010 1B68     		ldr	r3, [r3]
+ 459 0012 22F00102 		bic	r2, r2, #1
+ 460 0016 1A60     		str	r2, [r3]
+ 181:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     __HAL_UART_DISABLE_IT(&uart_at, UART_IT_IDLE);
+ 461              		.loc 1 181 5
+ 462 0018 0A4B     		ldr	r3, .L19
+ 463 001a 1B68     		ldr	r3, [r3]
+ 464 001c 1A68     		ldr	r2, [r3]
+ 465 001e 094B     		ldr	r3, .L19
+ 466 0020 1B68     		ldr	r3, [r3]
+ 467 0022 22F01002 		bic	r2, r2, #16
+ 468 0026 1A60     		str	r2, [r3]
+ 182:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     __HAL_UART_DISABLE_IT(&uart_at, UART_IT_RXNE);
+ 469              		.loc 1 182 5
+ 470 0028 064B     		ldr	r3, .L19
+ 471 002a 1B68     		ldr	r3, [r3]
+ 472 002c 1A68     		ldr	r2, [r3]
+ 473 002e 054B     		ldr	r3, .L19
+ 474 0030 1B68     		ldr	r3, [r3]
+ 475 0032 22F02002 		bic	r2, r2, #32
+ 476 0036 1A60     		str	r2, [r3]
+ 183:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** }
+ 477              		.loc 1 183 1
+ 478 0038 00BF     		nop
+ 479 003a 0C37     		adds	r7, r7, #12
+ 480              	.LCFI13:
+ 481              		.cfi_def_cfa_offset 4
+ 482 003c BD46     		mov	sp, r7
+ 483              	.LCFI14:
+ 484              		.cfi_def_cfa_register 13
+ 485              		@ sp needed
+ 486 003e 5DF8047B 		ldr	r7, [sp], #4
+ 487              	.LCFI15:
+ 488              		.cfi_restore 7
+ 489              		.cfi_def_cfa_offset 0
+ 490 0042 7047     		bx	lr
+ 491              	.L20:
+ 492              		.align	2
+ 493              	.L19:
+ 494 0044 00000000 		.word	uart_at
+ 495              		.cfi_endproc
+ 496              	.LFE135:
+ 498              		.section	.text.uart_at_send,"ax",%progbits
+ 499              		.align	1
+ 500              		.syntax unified
+ 501              		.thumb
+ 502              		.thumb_func
+ 503              		.fpu fpv4-sp-d16
+ 505              	uart_at_send:
+ 506              	.LFB136:
+ 184:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+ 185:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** /*******************************************************************************
+ 186:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** function     :use this function to send a frame to the uart
+ 187:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** parameters   :
+ 188:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** instruction  :
+ 189:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** *******************************************************************************/
+ 190:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** static ssize_t uart_at_send(const char  *buf, size_t len,uint32_t timeout)
+ARM GAS  /tmp/cccrZCj0.s 			page 14
+
+
+ 191:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** {
+ 507              		.loc 1 191 1
+ 508              		.cfi_startproc
+ 509              		@ args = 0, pretend = 0, frame = 16
+ 510              		@ frame_needed = 1, uses_anonymous_args = 0
+ 511 0000 80B5     		push	{r7, lr}
+ 512              	.LCFI16:
+ 513              		.cfi_def_cfa_offset 8
+ 514              		.cfi_offset 7, -8
+ 515              		.cfi_offset 14, -4
+ 516 0002 84B0     		sub	sp, sp, #16
+ 517              	.LCFI17:
+ 518              		.cfi_def_cfa_offset 24
+ 519 0004 00AF     		add	r7, sp, #0
+ 520              	.LCFI18:
+ 521              		.cfi_def_cfa_register 7
+ 522 0006 F860     		str	r0, [r7, #12]
+ 523 0008 B960     		str	r1, [r7, #8]
+ 524 000a 7A60     		str	r2, [r7, #4]
+ 192:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     HAL_UART_Transmit(&uart_at,(unsigned char *)buf,len,timeout);
+ 525              		.loc 1 192 5
+ 526 000c BB68     		ldr	r3, [r7, #8]
+ 527 000e 9AB2     		uxth	r2, r3
+ 528 0010 7B68     		ldr	r3, [r7, #4]
+ 529 0012 F968     		ldr	r1, [r7, #12]
+ 530 0014 0E48     		ldr	r0, .L23
+ 531 0016 FFF7FEFF 		bl	HAL_UART_Transmit
+ 193:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     g_atio_cb.sndlen += len;
+ 532              		.loc 1 193 22
+ 533 001a 0E4B     		ldr	r3, .L23+4
+ 534 001c 03F58153 		add	r3, r3, #4128
+ 535 0020 1A68     		ldr	r2, [r3]
+ 536 0022 BB68     		ldr	r3, [r7, #8]
+ 537 0024 1A44     		add	r2, r2, r3
+ 538 0026 0B4B     		ldr	r3, .L23+4
+ 539 0028 03F58153 		add	r3, r3, #4128
+ 540 002c 1A60     		str	r2, [r3]
+ 194:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     g_atio_cb.sndframe ++;
+ 541              		.loc 1 194 14
+ 542 002e 094B     		ldr	r3, .L23+4
+ 543 0030 03F58153 		add	r3, r3, #4128
+ 544 0034 0833     		adds	r3, r3, #8
+ 545 0036 1B68     		ldr	r3, [r3]
+ 546              		.loc 1 194 24
+ 547 0038 5A1C     		adds	r2, r3, #1
+ 548 003a 064B     		ldr	r3, .L23+4
+ 549 003c 03F58153 		add	r3, r3, #4128
+ 550 0040 0833     		adds	r3, r3, #8
+ 551 0042 1A60     		str	r2, [r3]
+ 195:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+ 196:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     return len;
+ 552              		.loc 1 196 12
+ 553 0044 BB68     		ldr	r3, [r7, #8]
+ 197:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** }
+ 554              		.loc 1 197 1
+ 555 0046 1846     		mov	r0, r3
+ 556 0048 1037     		adds	r7, r7, #16
+ARM GAS  /tmp/cccrZCj0.s 			page 15
+
+
+ 557              	.LCFI19:
+ 558              		.cfi_def_cfa_offset 8
+ 559 004a BD46     		mov	sp, r7
+ 560              	.LCFI20:
+ 561              		.cfi_def_cfa_register 13
+ 562              		@ sp needed
+ 563 004c 80BD     		pop	{r7, pc}
+ 564              	.L24:
+ 565 004e 00BF     		.align	2
+ 566              	.L23:
+ 567 0050 00000000 		.word	uart_at
+ 568 0054 00000000 		.word	g_atio_cb
+ 569              		.cfi_endproc
+ 570              	.LFE136:
+ 572              		.section	.text.uart_at_receive,"ax",%progbits
+ 573              		.align	1
+ 574              		.syntax unified
+ 575              		.thumb
+ 576              		.thumb_func
+ 577              		.fpu fpv4-sp-d16
+ 579              	uart_at_receive:
+ 580              	.LFB137:
+ 198:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** /*******************************************************************************
+ 199:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** function     :use this function to read a frame from the uart
+ 200:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** parameters   :
+ 201:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** instruction  :
+ 202:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** *******************************************************************************/
+ 203:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** static ssize_t uart_at_receive(void *buf,size_t len,uint32_t timeout)
+ 204:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** {
+ 581              		.loc 1 204 1
+ 582              		.cfi_startproc
+ 583              		@ args = 0, pretend = 0, frame = 32
+ 584              		@ frame_needed = 1, uses_anonymous_args = 0
+ 585 0000 80B5     		push	{r7, lr}
+ 586              	.LCFI21:
+ 587              		.cfi_def_cfa_offset 8
+ 588              		.cfi_offset 7, -8
+ 589              		.cfi_offset 14, -4
+ 590 0002 88B0     		sub	sp, sp, #32
+ 591              	.LCFI22:
+ 592              		.cfi_def_cfa_offset 40
+ 593 0004 00AF     		add	r7, sp, #0
+ 594              	.LCFI23:
+ 595              		.cfi_def_cfa_register 7
+ 596 0006 F860     		str	r0, [r7, #12]
+ 597 0008 B960     		str	r1, [r7, #8]
+ 598 000a 7A60     		str	r2, [r7, #4]
+ 205:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     unsigned short cpylen;
+ 206:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     unsigned short framelen;
+ 207:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     unsigned short readlen;
+ 208:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     int32_t ret = 0;
+ 599              		.loc 1 208 13
+ 600 000c 0023     		movs	r3, #0
+ 601 000e FB61     		str	r3, [r7, #28]
+ 209:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     unsigned int lock;
+ 210:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     if(osal_semp_pend(g_atio_cb.rcvsync,timeout))
+ 602              		.loc 1 210 8
+ARM GAS  /tmp/cccrZCj0.s 			page 16
+
+
+ 603 0010 324B     		ldr	r3, .L32
+ 604 0012 5B68     		ldr	r3, [r3, #4]
+ 605 0014 7968     		ldr	r1, [r7, #4]
+ 606 0016 1846     		mov	r0, r3
+ 607 0018 FFF7FEFF 		bl	osal_semp_pend
+ 608 001c 0346     		mov	r3, r0
+ 609              		.loc 1 210 7
+ 610 001e 002B     		cmp	r3, #0
+ 611 0020 56D0     		beq	.L26
+ 211:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     {
+ 212:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         lock = LOS_IntLock();
+ 612              		.loc 1 212 16
+ 613 0022 FFF7FEFF 		bl	LOS_IntLock
+ 614 0026 B861     		str	r0, [r7, #24]
+ 213:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         readlen = sizeof(framelen);
+ 615              		.loc 1 213 17
+ 616 0028 0223     		movs	r3, #2
+ 617 002a FB82     		strh	r3, [r7, #22]	@ movhi
+ 214:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         cpylen = ring_buffer_read(&g_atio_cb.rcvring,(unsigned char *)&framelen,readlen);
+ 618              		.loc 1 214 18
+ 619 002c FA8A     		ldrh	r2, [r7, #22]
+ 620 002e 07F11203 		add	r3, r7, #18
+ 621 0032 1946     		mov	r1, r3
+ 622 0034 2A48     		ldr	r0, .L32+4
+ 623 0036 FFF7FEFF 		bl	ring_buffer_read
+ 624 003a 0346     		mov	r3, r0
+ 625              		.loc 1 214 16
+ 626 003c BB82     		strh	r3, [r7, #20]	@ movhi
+ 215:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         if(cpylen != readlen)
+ 627              		.loc 1 215 11
+ 628 003e BA8A     		ldrh	r2, [r7, #20]
+ 629 0040 FB8A     		ldrh	r3, [r7, #22]
+ 630 0042 9A42     		cmp	r2, r3
+ 631 0044 0ED0     		beq	.L27
+ 216:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         {
+ 217:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****             ring_buffer_reset(&g_atio_cb.rcvring);  //bad ring format here
+ 632              		.loc 1 217 13
+ 633 0046 2648     		ldr	r0, .L32+4
+ 634 0048 FFF7FEFF 		bl	ring_buffer_reset
+ 218:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****             g_atio_cb.rcvringrst++;
+ 635              		.loc 1 218 22
+ 636 004c 234B     		ldr	r3, .L32
+ 637 004e 03F58153 		add	r3, r3, #4128
+ 638 0052 1033     		adds	r3, r3, #16
+ 639 0054 1B68     		ldr	r3, [r3]
+ 640              		.loc 1 218 33
+ 641 0056 5A1C     		adds	r2, r3, #1
+ 642 0058 204B     		ldr	r3, .L32
+ 643 005a 03F58153 		add	r3, r3, #4128
+ 644 005e 1033     		adds	r3, r3, #16
+ 645 0060 1A60     		str	r2, [r3]
+ 646 0062 32E0     		b	.L28
+ 647              	.L27:
+ 219:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         }
+ 220:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         else
+ 221:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         {
+ 222:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****             if(framelen > len)
+ARM GAS  /tmp/cccrZCj0.s 			page 17
+
+
+ 648              		.loc 1 222 25
+ 649 0064 7B8A     		ldrh	r3, [r7, #18]
+ 650 0066 1A46     		mov	r2, r3
+ 651              		.loc 1 222 15
+ 652 0068 BB68     		ldr	r3, [r7, #8]
+ 653 006a 9342     		cmp	r3, r2
+ 654 006c 0ED2     		bcs	.L29
+ 223:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****             {
+ 224:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****                 ring_buffer_reset(&g_atio_cb.rcvring);  //bad ring format here
+ 655              		.loc 1 224 17
+ 656 006e 1C48     		ldr	r0, .L32+4
+ 657 0070 FFF7FEFF 		bl	ring_buffer_reset
+ 225:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****                 g_atio_cb.rcvringrst++;
+ 658              		.loc 1 225 26
+ 659 0074 194B     		ldr	r3, .L32
+ 660 0076 03F58153 		add	r3, r3, #4128
+ 661 007a 1033     		adds	r3, r3, #16
+ 662 007c 1B68     		ldr	r3, [r3]
+ 663              		.loc 1 225 37
+ 664 007e 5A1C     		adds	r2, r3, #1
+ 665 0080 164B     		ldr	r3, .L32
+ 666 0082 03F58153 		add	r3, r3, #4128
+ 667 0086 1033     		adds	r3, r3, #16
+ 668 0088 1A60     		str	r2, [r3]
+ 669 008a 1EE0     		b	.L28
+ 670              	.L29:
+ 226:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****             }
+ 227:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****             else
+ 228:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****             {
+ 229:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****                 readlen = framelen;
+ 671              		.loc 1 229 25
+ 672 008c 7B8A     		ldrh	r3, [r7, #18]	@ movhi
+ 673 008e FB82     		strh	r3, [r7, #22]	@ movhi
+ 230:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****                 cpylen = ring_buffer_read(&g_atio_cb.rcvring,(unsigned char *)buf,readlen);
+ 674              		.loc 1 230 26
+ 675 0090 FB8A     		ldrh	r3, [r7, #22]
+ 676 0092 1A46     		mov	r2, r3
+ 677 0094 F968     		ldr	r1, [r7, #12]
+ 678 0096 1248     		ldr	r0, .L32+4
+ 679 0098 FFF7FEFF 		bl	ring_buffer_read
+ 680 009c 0346     		mov	r3, r0
+ 681              		.loc 1 230 24
+ 682 009e BB82     		strh	r3, [r7, #20]	@ movhi
+ 231:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****                 if(cpylen != framelen)
+ 683              		.loc 1 231 27
+ 684 00a0 7B8A     		ldrh	r3, [r7, #18]
+ 685              		.loc 1 231 19
+ 686 00a2 BA8A     		ldrh	r2, [r7, #20]
+ 687 00a4 9A42     		cmp	r2, r3
+ 688 00a6 0ED0     		beq	.L30
+ 232:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****                 {
+ 233:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****                     ring_buffer_reset(&g_atio_cb.rcvring);  //bad ring format here
+ 689              		.loc 1 233 21
+ 690 00a8 0D48     		ldr	r0, .L32+4
+ 691 00aa FFF7FEFF 		bl	ring_buffer_reset
+ 234:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****                     g_atio_cb.rcvringrst++;
+ 692              		.loc 1 234 30
+ARM GAS  /tmp/cccrZCj0.s 			page 18
+
+
+ 693 00ae 0B4B     		ldr	r3, .L32
+ 694 00b0 03F58153 		add	r3, r3, #4128
+ 695 00b4 1033     		adds	r3, r3, #16
+ 696 00b6 1B68     		ldr	r3, [r3]
+ 697              		.loc 1 234 41
+ 698 00b8 5A1C     		adds	r2, r3, #1
+ 699 00ba 084B     		ldr	r3, .L32
+ 700 00bc 03F58153 		add	r3, r3, #4128
+ 701 00c0 1033     		adds	r3, r3, #16
+ 702 00c2 1A60     		str	r2, [r3]
+ 703 00c4 01E0     		b	.L28
+ 704              	.L30:
+ 235:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****                 }
+ 236:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****                 else
+ 237:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****                 {
+ 238:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****                     ret = cpylen;
+ 705              		.loc 1 238 25
+ 706 00c6 BB8A     		ldrh	r3, [r7, #20]
+ 707 00c8 FB61     		str	r3, [r7, #28]
+ 708              	.L28:
+ 239:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****                 }
+ 240:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****             }
+ 241:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         }
+ 242:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****         LOS_IntRestore(lock);
+ 709              		.loc 1 242 9
+ 710 00ca B869     		ldr	r0, [r7, #24]
+ 711 00cc FFF7FEFF 		bl	LOS_IntRestore
+ 712              	.L26:
+ 243:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     }
+ 244:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     return ret;
+ 713              		.loc 1 244 12
+ 714 00d0 FB69     		ldr	r3, [r7, #28]
+ 245:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** }
+ 715              		.loc 1 245 1
+ 716 00d2 1846     		mov	r0, r3
+ 717 00d4 2037     		adds	r7, r7, #32
+ 718              	.LCFI24:
+ 719              		.cfi_def_cfa_offset 8
+ 720 00d6 BD46     		mov	sp, r7
+ 721              	.LCFI25:
+ 722              		.cfi_def_cfa_register 13
+ 723              		@ sp needed
+ 724 00d8 80BD     		pop	{r7, pc}
+ 725              	.L33:
+ 726 00da 00BF     		.align	2
+ 727              	.L32:
+ 728 00dc 00000000 		.word	g_atio_cb
+ 729 00e0 08000000 		.word	g_atio_cb+8
+ 730              		.cfi_endproc
+ 731              	.LFE137:
+ 733              		.section	.text.__at_read,"ax",%progbits
+ 734              		.align	1
+ 735              		.syntax unified
+ 736              		.thumb
+ 737              		.thumb_func
+ 738              		.fpu fpv4-sp-d16
+ 740              	__at_read:
+ARM GAS  /tmp/cccrZCj0.s 			page 19
+
+
+ 741              	.LFB138:
+ 246:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+ 247:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** //make it as the at device here
+ 248:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** static ssize_t  __at_read  (void *pri,size_t offset,void *buf,size_t len, uint32_t timeout)
+ 249:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** {
+ 742              		.loc 1 249 1
+ 743              		.cfi_startproc
+ 744              		@ args = 4, pretend = 0, frame = 16
+ 745              		@ frame_needed = 1, uses_anonymous_args = 0
+ 746 0000 80B5     		push	{r7, lr}
+ 747              	.LCFI26:
+ 748              		.cfi_def_cfa_offset 8
+ 749              		.cfi_offset 7, -8
+ 750              		.cfi_offset 14, -4
+ 751 0002 84B0     		sub	sp, sp, #16
+ 752              	.LCFI27:
+ 753              		.cfi_def_cfa_offset 24
+ 754 0004 00AF     		add	r7, sp, #0
+ 755              	.LCFI28:
+ 756              		.cfi_def_cfa_register 7
+ 757 0006 F860     		str	r0, [r7, #12]
+ 758 0008 B960     		str	r1, [r7, #8]
+ 759 000a 7A60     		str	r2, [r7, #4]
+ 760 000c 3B60     		str	r3, [r7]
+ 250:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     return uart_at_receive(buf,len, timeout);
+ 761              		.loc 1 250 12
+ 762 000e BA69     		ldr	r2, [r7, #24]
+ 763 0010 3968     		ldr	r1, [r7]
+ 764 0012 7868     		ldr	r0, [r7, #4]
+ 765 0014 FFF7FEFF 		bl	uart_at_receive
+ 766 0018 0346     		mov	r3, r0
+ 251:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+ 252:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** }
+ 767              		.loc 1 252 1
+ 768 001a 1846     		mov	r0, r3
+ 769 001c 1037     		adds	r7, r7, #16
+ 770              	.LCFI29:
+ 771              		.cfi_def_cfa_offset 8
+ 772 001e BD46     		mov	sp, r7
+ 773              	.LCFI30:
+ 774              		.cfi_def_cfa_register 13
+ 775              		@ sp needed
+ 776 0020 80BD     		pop	{r7, pc}
+ 777              		.cfi_endproc
+ 778              	.LFE138:
+ 780              		.section	.text.__at_write,"ax",%progbits
+ 781              		.align	1
+ 782              		.syntax unified
+ 783              		.thumb
+ 784              		.thumb_func
+ 785              		.fpu fpv4-sp-d16
+ 787              	__at_write:
+ 788              	.LFB139:
+ 253:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** static ssize_t  __at_write (void *pri, size_t offset,const void *buf,size_t len,uint32_t timeout)
+ 254:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** {
+ 789              		.loc 1 254 1
+ 790              		.cfi_startproc
+ARM GAS  /tmp/cccrZCj0.s 			page 20
+
+
+ 791              		@ args = 4, pretend = 0, frame = 16
+ 792              		@ frame_needed = 1, uses_anonymous_args = 0
+ 793 0000 80B5     		push	{r7, lr}
+ 794              	.LCFI31:
+ 795              		.cfi_def_cfa_offset 8
+ 796              		.cfi_offset 7, -8
+ 797              		.cfi_offset 14, -4
+ 798 0002 84B0     		sub	sp, sp, #16
+ 799              	.LCFI32:
+ 800              		.cfi_def_cfa_offset 24
+ 801 0004 00AF     		add	r7, sp, #0
+ 802              	.LCFI33:
+ 803              		.cfi_def_cfa_register 7
+ 804 0006 F860     		str	r0, [r7, #12]
+ 805 0008 B960     		str	r1, [r7, #8]
+ 806 000a 7A60     		str	r2, [r7, #4]
+ 807 000c 3B60     		str	r3, [r7]
+ 255:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c ****     return uart_at_send(buf, len, timeout);
+ 808              		.loc 1 255 12
+ 809 000e BA69     		ldr	r2, [r7, #24]
+ 810 0010 3968     		ldr	r1, [r7]
+ 811 0012 7868     		ldr	r0, [r7, #4]
+ 812 0014 FFF7FEFF 		bl	uart_at_send
+ 813 0018 0346     		mov	r3, r0
+ 256:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** 
+ 257:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/uart_at/uart_at.c **** }
+ 814              		.loc 1 257 1
+ 815 001a 1846     		mov	r0, r3
+ 816 001c 1037     		adds	r7, r7, #16
+ 817              	.LCFI34:
+ 818              		.cfi_def_cfa_offset 8
+ 819 001e BD46     		mov	sp, r7
+ 820              	.LCFI35:
+ 821              		.cfi_def_cfa_register 13
+ 822              		@ sp needed
+ 823 0020 80BD     		pop	{r7, pc}
+ 824              		.cfi_endproc
+ 825              	.LFE139:
+ 827              		.section	.rodata.s_at_op,"a"
+ 828              		.align	2
+ 831              	s_at_op:
+ 832 0000 00000000 		.space	4
+ 833 0004 00000000 		.word	__at_read
+ 834 0008 00000000 		.word	__at_write
+ 835 000c 00000000 		.space	12
+ 835      00000000 
+ 835      00000000 
+ 836 0018 00000000 		.word	uart_at_init
+ 837 001c 00000000 		.word	uart_at_deinit
+ 838              		.section	.rodata
+ 839 0066 0000     		.align	2
+ 840              	.LC2:
+ 841 0068 61746465 		.ascii	"atdev\000"
+ 841      7600
+ 842              		.section	osdriv,"a"
+ 843              		.align	2
+ 846              	uart_at_driv:
+ARM GAS  /tmp/cccrZCj0.s 			page 21
+
+
+ 847 0000 68000000 		.word	.LC2
+ 848 0004 00000000 		.word	s_at_op
+ 849 0008 00000000 		.word	0
+ 850 000c 02000000 		.word	2
+ 851              		.section	.rodata.__FUNCTION__.10204,"a"
+ 852              		.align	2
+ 855              	__FUNCTION__.10204:
+ 856 0000 75617274 		.ascii	"uart_at_init\000"
+ 856      5F61745F 
+ 856      696E6974 
+ 856      00
+ 857              		.text
+ 858              	.Letext0:
+ 859              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 860              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 861              		.file 4 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 862              		.file 5 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/system_stm32l4xx.h"
+ 863              		.file 6 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/stm32l476xx.h"
+ 864              		.file 7 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/stm32l4xx.h"
+ 865              		.file 8 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 866              		.file 9 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 867              		.file 10 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_t
+ 868              		.file 11 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/re
+ 869              		.file 12 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/ty
+ 870              		.file 13 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 871              		.file 14 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 872              		.file 15 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 873              		.file 16 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_typedef.h"
+ 874              		.file 17 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_config.h"
+ 875              		.file 18 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_err.h"
+ 876              		.file 19 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 877              		.file 20 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/usart.h"
+ 878              		.file 21 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_misc.h"
+ 879              		.file 22 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/osal/osal_types.h"
+ 880              		.file 23 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/driver/driver.h"
+ 881              		.file 24 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/time.h
+ARM GAS  /tmp/cccrZCj0.s 			page 22
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 uart_at.c
+                            *COM*:0000000000000078 uart_at
+     /tmp/cccrZCj0.s:19     .data.s_pUSART:0000000000000000 $d
+     /tmp/cccrZCj0.s:22     .data.s_pUSART:0000000000000000 s_pUSART
+     /tmp/cccrZCj0.s:25     .data.s_uwIRQn:0000000000000000 $d
+     /tmp/cccrZCj0.s:28     .data.s_uwIRQn:0000000000000000 s_uwIRQn
+     /tmp/cccrZCj0.s:31     .bss.g_atio_cb:0000000000000000 $d
+     /tmp/cccrZCj0.s:34     .bss.g_atio_cb:0000000000000000 g_atio_cb
+     /tmp/cccrZCj0.s:37     .text.atio_irq:0000000000000000 $t
+     /tmp/cccrZCj0.s:44     .text.atio_irq:0000000000000000 atio_irq
+     /tmp/cccrZCj0.s:248    .text.atio_irq:000000000000012c $d
+     /tmp/cccrZCj0.s:256    .rodata:0000000000000000 $d
+     /tmp/cccrZCj0.s:264    .text.uart_at_init:0000000000000000 $t
+     /tmp/cccrZCj0.s:271    .text.uart_at_init:0000000000000000 uart_at_init
+     /tmp/cccrZCj0.s:413    .text.uart_at_init:00000000000000d4 $d
+     /tmp/cccrZCj0.s:855    .rodata.__FUNCTION__.10204:0000000000000000 __FUNCTION__.10204
+     /tmp/cccrZCj0.s:428    .text.uart_at_deinit:0000000000000000 $t
+     /tmp/cccrZCj0.s:435    .text.uart_at_deinit:0000000000000000 uart_at_deinit
+     /tmp/cccrZCj0.s:494    .text.uart_at_deinit:0000000000000044 $d
+     /tmp/cccrZCj0.s:499    .text.uart_at_send:0000000000000000 $t
+     /tmp/cccrZCj0.s:505    .text.uart_at_send:0000000000000000 uart_at_send
+     /tmp/cccrZCj0.s:567    .text.uart_at_send:0000000000000050 $d
+     /tmp/cccrZCj0.s:573    .text.uart_at_receive:0000000000000000 $t
+     /tmp/cccrZCj0.s:579    .text.uart_at_receive:0000000000000000 uart_at_receive
+     /tmp/cccrZCj0.s:728    .text.uart_at_receive:00000000000000dc $d
+     /tmp/cccrZCj0.s:734    .text.__at_read:0000000000000000 $t
+     /tmp/cccrZCj0.s:740    .text.__at_read:0000000000000000 __at_read
+     /tmp/cccrZCj0.s:781    .text.__at_write:0000000000000000 $t
+     /tmp/cccrZCj0.s:787    .text.__at_write:0000000000000000 __at_write
+     /tmp/cccrZCj0.s:828    .rodata.s_at_op:0000000000000000 $d
+     /tmp/cccrZCj0.s:831    .rodata.s_at_op:0000000000000000 s_at_op
+     /tmp/cccrZCj0.s:843    osdriv:0000000000000000 $d
+     /tmp/cccrZCj0.s:846    osdriv:0000000000000000 uart_at_driv
+     /tmp/cccrZCj0.s:852    .rodata.__FUNCTION__.10204:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+ring_buffer_datalen
+ring_buffer_write
+osal_semp_post
+memset
+osal_semp_create
+printf
+ring_buffer_init
+HAL_UART_Init
+_Error_Handler
+LOS_HwiCreate
+HAL_UART_Transmit
+osal_semp_pend
+LOS_IntLock
+ring_buffer_read
+ring_buffer_reset
+LOS_IntRestore

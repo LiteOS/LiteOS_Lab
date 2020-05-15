@@ -1,0 +1,485 @@
+ARM GAS  /tmp/cc7tqmv3.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"i2c.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.comm	hi2c1,76,4
+  18              		.section	.rodata
+  19              		.align	2
+  20              	.LC0:
+  21 0000 2F686F6D 		.ascii	"/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476"
+  21      652F6661 
+  21      6E78696E 
+  21      68616F2F 
+  21      576F726B 
+  22 0033 52475F4E 		.ascii	"RG_NB476/Src/i2c.c\000"
+  22      42343736 
+  22      2F537263 
+  22      2F693263 
+  22      2E6300
+  23              		.section	.text.MX_I2C1_Init,"ax",%progbits
+  24              		.align	1
+  25              		.global	MX_I2C1_Init
+  26              		.arch armv7e-m
+  27              		.syntax unified
+  28              		.thumb
+  29              		.thumb_func
+  30              		.fpu fpv4-sp-d16
+  32              	MX_I2C1_Init:
+  33              	.LFB133:
+  34              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** /**
+   2:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   ******************************************************************************
+   3:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   * File Name          : I2C.c
+   4:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   * Description        : This file provides code for the configuration
+   5:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   *                      of the I2C instances.
+   6:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   ******************************************************************************
+   7:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   * @attention
+   8:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   *
+   9:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+  10:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   * All rights reserved.</center></h2>
+  11:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   *
+  12:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   * This software component is licensed by ST under BSD 3-Clause license,
+  13:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   * the "License"; You may not use this file except in compliance with the
+  14:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   * License. You may obtain a copy of the License at:
+  15:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   *                        opensource.org/licenses/BSD-3-Clause
+  16:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   *
+ARM GAS  /tmp/cc7tqmv3.s 			page 2
+
+
+  17:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   ******************************************************************************
+  18:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   */
+  19:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** 
+  20:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** /* Includes ------------------------------------------------------------------*/
+  21:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** #include "i2c.h"
+  22:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** 
+  23:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** /* USER CODE BEGIN 0 */
+  24:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** 
+  25:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** /* USER CODE END 0 */
+  26:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** 
+  27:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** I2C_HandleTypeDef hi2c1;
+  28:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** 
+  29:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** /* I2C1 init function */
+  30:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** void MX_I2C1_Init(void)
+  31:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** {
+  35              		.loc 1 31 1
+  36              		.cfi_startproc
+  37              		@ args = 0, pretend = 0, frame = 0
+  38              		@ frame_needed = 1, uses_anonymous_args = 0
+  39 0000 80B5     		push	{r7, lr}
+  40              	.LCFI0:
+  41              		.cfi_def_cfa_offset 8
+  42              		.cfi_offset 7, -8
+  43              		.cfi_offset 14, -4
+  44 0002 00AF     		add	r7, sp, #0
+  45              	.LCFI1:
+  46              		.cfi_def_cfa_register 7
+  32:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** 
+  33:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   hi2c1.Instance = I2C1;
+  47              		.loc 1 33 18
+  48 0004 1E4B     		ldr	r3, .L6
+  49 0006 1F4A     		ldr	r2, .L6+4
+  50 0008 1A60     		str	r2, [r3]
+  34:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   hi2c1.Init.Timing = 0x10909CEC;
+  51              		.loc 1 34 21
+  52 000a 1D4B     		ldr	r3, .L6
+  53 000c 1E4A     		ldr	r2, .L6+8
+  54 000e 5A60     		str	r2, [r3, #4]
+  35:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   hi2c1.Init.OwnAddress1 = 0;
+  55              		.loc 1 35 26
+  56 0010 1B4B     		ldr	r3, .L6
+  57 0012 0022     		movs	r2, #0
+  58 0014 9A60     		str	r2, [r3, #8]
+  36:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  59              		.loc 1 36 29
+  60 0016 1A4B     		ldr	r3, .L6
+  61 0018 0122     		movs	r2, #1
+  62 001a DA60     		str	r2, [r3, #12]
+  37:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  63              		.loc 1 37 30
+  64 001c 184B     		ldr	r3, .L6
+  65 001e 0022     		movs	r2, #0
+  66 0020 1A61     		str	r2, [r3, #16]
+  38:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   hi2c1.Init.OwnAddress2 = 0;
+  67              		.loc 1 38 26
+  68 0022 174B     		ldr	r3, .L6
+  69 0024 0022     		movs	r2, #0
+ARM GAS  /tmp/cc7tqmv3.s 			page 3
+
+
+  70 0026 5A61     		str	r2, [r3, #20]
+  39:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   hi2c1.Init.OwnAddress2Masks = I2C_OA2_NOMASK;
+  71              		.loc 1 39 31
+  72 0028 154B     		ldr	r3, .L6
+  73 002a 0022     		movs	r2, #0
+  74 002c 9A61     		str	r2, [r3, #24]
+  40:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  75              		.loc 1 40 30
+  76 002e 144B     		ldr	r3, .L6
+  77 0030 0022     		movs	r2, #0
+  78 0032 DA61     		str	r2, [r3, #28]
+  41:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  79              		.loc 1 41 28
+  80 0034 124B     		ldr	r3, .L6
+  81 0036 0022     		movs	r2, #0
+  82 0038 1A62     		str	r2, [r3, #32]
+  42:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   if (HAL_I2C_Init(&hi2c1) != HAL_OK)
+  83              		.loc 1 42 7
+  84 003a 1148     		ldr	r0, .L6
+  85 003c FFF7FEFF 		bl	HAL_I2C_Init
+  86 0040 0346     		mov	r3, r0
+  87              		.loc 1 42 6
+  88 0042 002B     		cmp	r3, #0
+  89 0044 03D0     		beq	.L2
+  43:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   {
+  44:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     _Error_Handler(__FILE__, __LINE__);
+  90              		.loc 1 44 5
+  91 0046 2C21     		movs	r1, #44
+  92 0048 1048     		ldr	r0, .L6+12
+  93 004a FFF7FEFF 		bl	_Error_Handler
+  94              	.L2:
+  45:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   }
+  46:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   /** Configure Analogue filter 
+  47:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   */
+  48:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   if (HAL_I2CEx_ConfigAnalogFilter(&hi2c1, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
+  95              		.loc 1 48 7
+  96 004e 0021     		movs	r1, #0
+  97 0050 0B48     		ldr	r0, .L6
+  98 0052 FFF7FEFF 		bl	HAL_I2CEx_ConfigAnalogFilter
+  99 0056 0346     		mov	r3, r0
+ 100              		.loc 1 48 6
+ 101 0058 002B     		cmp	r3, #0
+ 102 005a 03D0     		beq	.L3
+  49:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   {
+  50:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     _Error_Handler(__FILE__, __LINE__);
+ 103              		.loc 1 50 5
+ 104 005c 3221     		movs	r1, #50
+ 105 005e 0B48     		ldr	r0, .L6+12
+ 106 0060 FFF7FEFF 		bl	_Error_Handler
+ 107              	.L3:
+  51:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   }
+  52:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   /** Configure Digital filter 
+  53:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   */
+  54:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   if (HAL_I2CEx_ConfigDigitalFilter(&hi2c1, 0) != HAL_OK)
+ 108              		.loc 1 54 7
+ 109 0064 0021     		movs	r1, #0
+ 110 0066 0648     		ldr	r0, .L6
+ARM GAS  /tmp/cc7tqmv3.s 			page 4
+
+
+ 111 0068 FFF7FEFF 		bl	HAL_I2CEx_ConfigDigitalFilter
+ 112 006c 0346     		mov	r3, r0
+ 113              		.loc 1 54 6
+ 114 006e 002B     		cmp	r3, #0
+ 115 0070 03D0     		beq	.L5
+  55:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   {
+  56:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     _Error_Handler(__FILE__, __LINE__);
+ 116              		.loc 1 56 5
+ 117 0072 3821     		movs	r1, #56
+ 118 0074 0548     		ldr	r0, .L6+12
+ 119 0076 FFF7FEFF 		bl	_Error_Handler
+ 120              	.L5:
+  57:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   }
+  58:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** 
+  59:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** }
+ 121              		.loc 1 59 1
+ 122 007a 00BF     		nop
+ 123 007c 80BD     		pop	{r7, pc}
+ 124              	.L7:
+ 125 007e 00BF     		.align	2
+ 126              	.L6:
+ 127 0080 00000000 		.word	hi2c1
+ 128 0084 00540040 		.word	1073763328
+ 129 0088 EC9C9010 		.word	277912812
+ 130 008c 00000000 		.word	.LC0
+ 131              		.cfi_endproc
+ 132              	.LFE133:
+ 134              		.section	.text.HAL_I2C_MspInit,"ax",%progbits
+ 135              		.align	1
+ 136              		.global	HAL_I2C_MspInit
+ 137              		.syntax unified
+ 138              		.thumb
+ 139              		.thumb_func
+ 140              		.fpu fpv4-sp-d16
+ 142              	HAL_I2C_MspInit:
+ 143              	.LFB134:
+  60:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** 
+  61:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** void HAL_I2C_MspInit(I2C_HandleTypeDef* i2cHandle)
+  62:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** {
+ 144              		.loc 1 62 1
+ 145              		.cfi_startproc
+ 146              		@ args = 0, pretend = 0, frame = 40
+ 147              		@ frame_needed = 1, uses_anonymous_args = 0
+ 148 0000 80B5     		push	{r7, lr}
+ 149              	.LCFI2:
+ 150              		.cfi_def_cfa_offset 8
+ 151              		.cfi_offset 7, -8
+ 152              		.cfi_offset 14, -4
+ 153 0002 8AB0     		sub	sp, sp, #40
+ 154              	.LCFI3:
+ 155              		.cfi_def_cfa_offset 48
+ 156 0004 00AF     		add	r7, sp, #0
+ 157              	.LCFI4:
+ 158              		.cfi_def_cfa_register 7
+ 159 0006 7860     		str	r0, [r7, #4]
+  63:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** 
+  64:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   GPIO_InitTypeDef GPIO_InitStruct = {0};
+ARM GAS  /tmp/cc7tqmv3.s 			page 5
+
+
+ 160              		.loc 1 64 20
+ 161 0008 07F11403 		add	r3, r7, #20
+ 162 000c 0022     		movs	r2, #0
+ 163 000e 1A60     		str	r2, [r3]
+ 164 0010 5A60     		str	r2, [r3, #4]
+ 165 0012 9A60     		str	r2, [r3, #8]
+ 166 0014 DA60     		str	r2, [r3, #12]
+ 167 0016 1A61     		str	r2, [r3, #16]
+  65:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   if(i2cHandle->Instance==I2C1)
+ 168              		.loc 1 65 15
+ 169 0018 7B68     		ldr	r3, [r7, #4]
+ 170 001a 1B68     		ldr	r3, [r3]
+ 171              		.loc 1 65 5
+ 172 001c 174A     		ldr	r2, .L11
+ 173 001e 9342     		cmp	r3, r2
+ 174 0020 27D1     		bne	.L10
+ 175              	.LBB2:
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   {
+  67:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   /* USER CODE BEGIN I2C1_MspInit 0 */
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** 
+  69:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   /* USER CODE END I2C1_MspInit 0 */
+  70:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   
+  71:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     __HAL_RCC_GPIOB_CLK_ENABLE();
+ 176              		.loc 1 71 5
+ 177 0022 174B     		ldr	r3, .L11+4
+ 178 0024 DB6C     		ldr	r3, [r3, #76]
+ 179 0026 164A     		ldr	r2, .L11+4
+ 180 0028 43F00203 		orr	r3, r3, #2
+ 181 002c D364     		str	r3, [r2, #76]
+ 182 002e 144B     		ldr	r3, .L11+4
+ 183 0030 DB6C     		ldr	r3, [r3, #76]
+ 184 0032 03F00203 		and	r3, r3, #2
+ 185 0036 3B61     		str	r3, [r7, #16]
+ 186 0038 3B69     		ldr	r3, [r7, #16]
+ 187              	.LBE2:
+  72:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     /**I2C1 GPIO Configuration    
+  73:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     PB6     ------> I2C1_SCL
+  74:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     PB7     ------> I2C1_SDA 
+  75:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     */
+  76:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     GPIO_InitStruct.Pin = OLED_SCL_Pin|OLED_SDA_Pin;
+ 188              		.loc 1 76 25
+ 189 003a C023     		movs	r3, #192
+ 190 003c 7B61     		str	r3, [r7, #20]
+  77:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+ 191              		.loc 1 77 26
+ 192 003e 1223     		movs	r3, #18
+ 193 0040 BB61     		str	r3, [r7, #24]
+  78:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     GPIO_InitStruct.Pull = GPIO_PULLUP;
+ 194              		.loc 1 78 26
+ 195 0042 0123     		movs	r3, #1
+ 196 0044 FB61     		str	r3, [r7, #28]
+  79:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+ 197              		.loc 1 79 27
+ 198 0046 0323     		movs	r3, #3
+ 199 0048 3B62     		str	r3, [r7, #32]
+  80:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     GPIO_InitStruct.Alternate = GPIO_AF4_I2C1;
+ 200              		.loc 1 80 31
+ARM GAS  /tmp/cc7tqmv3.s 			page 6
+
+
+ 201 004a 0423     		movs	r3, #4
+ 202 004c 7B62     		str	r3, [r7, #36]
+  81:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+ 203              		.loc 1 81 5
+ 204 004e 07F11403 		add	r3, r7, #20
+ 205 0052 1946     		mov	r1, r3
+ 206 0054 0B48     		ldr	r0, .L11+8
+ 207 0056 FFF7FEFF 		bl	HAL_GPIO_Init
+ 208              	.LBB3:
+  82:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** 
+  83:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     /* I2C1 clock enable */
+  84:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     __HAL_RCC_I2C1_CLK_ENABLE();
+ 209              		.loc 1 84 5
+ 210 005a 094B     		ldr	r3, .L11+4
+ 211 005c 9B6D     		ldr	r3, [r3, #88]
+ 212 005e 084A     		ldr	r2, .L11+4
+ 213 0060 43F40013 		orr	r3, r3, #2097152
+ 214 0064 9365     		str	r3, [r2, #88]
+ 215 0066 064B     		ldr	r3, .L11+4
+ 216 0068 9B6D     		ldr	r3, [r3, #88]
+ 217 006a 03F40013 		and	r3, r3, #2097152
+ 218 006e FB60     		str	r3, [r7, #12]
+ 219 0070 FB68     		ldr	r3, [r7, #12]
+ 220              	.L10:
+ 221              	.LBE3:
+  85:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   /* USER CODE BEGIN I2C1_MspInit 1 */
+  86:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** 
+  87:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   /* USER CODE END I2C1_MspInit 1 */
+  88:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   }
+  89:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** }
+ 222              		.loc 1 89 1
+ 223 0072 00BF     		nop
+ 224 0074 2837     		adds	r7, r7, #40
+ 225              	.LCFI5:
+ 226              		.cfi_def_cfa_offset 8
+ 227 0076 BD46     		mov	sp, r7
+ 228              	.LCFI6:
+ 229              		.cfi_def_cfa_register 13
+ 230              		@ sp needed
+ 231 0078 80BD     		pop	{r7, pc}
+ 232              	.L12:
+ 233 007a 00BF     		.align	2
+ 234              	.L11:
+ 235 007c 00540040 		.word	1073763328
+ 236 0080 00100240 		.word	1073876992
+ 237 0084 00040048 		.word	1207960576
+ 238              		.cfi_endproc
+ 239              	.LFE134:
+ 241              		.section	.text.HAL_I2C_MspDeInit,"ax",%progbits
+ 242              		.align	1
+ 243              		.global	HAL_I2C_MspDeInit
+ 244              		.syntax unified
+ 245              		.thumb
+ 246              		.thumb_func
+ 247              		.fpu fpv4-sp-d16
+ 249              	HAL_I2C_MspDeInit:
+ 250              	.LFB135:
+ARM GAS  /tmp/cc7tqmv3.s 			page 7
+
+
+  90:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** 
+  91:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** void HAL_I2C_MspDeInit(I2C_HandleTypeDef* i2cHandle)
+  92:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** {
+ 251              		.loc 1 92 1
+ 252              		.cfi_startproc
+ 253              		@ args = 0, pretend = 0, frame = 8
+ 254              		@ frame_needed = 1, uses_anonymous_args = 0
+ 255 0000 80B5     		push	{r7, lr}
+ 256              	.LCFI7:
+ 257              		.cfi_def_cfa_offset 8
+ 258              		.cfi_offset 7, -8
+ 259              		.cfi_offset 14, -4
+ 260 0002 82B0     		sub	sp, sp, #8
+ 261              	.LCFI8:
+ 262              		.cfi_def_cfa_offset 16
+ 263 0004 00AF     		add	r7, sp, #0
+ 264              	.LCFI9:
+ 265              		.cfi_def_cfa_register 7
+ 266 0006 7860     		str	r0, [r7, #4]
+  93:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** 
+  94:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   if(i2cHandle->Instance==I2C1)
+ 267              		.loc 1 94 15
+ 268 0008 7B68     		ldr	r3, [r7, #4]
+ 269 000a 1B68     		ldr	r3, [r3]
+ 270              		.loc 1 94 5
+ 271 000c 084A     		ldr	r2, .L16
+ 272 000e 9342     		cmp	r3, r2
+ 273 0010 09D1     		bne	.L15
+  95:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   {
+  96:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   /* USER CODE BEGIN I2C1_MspDeInit 0 */
+  97:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** 
+  98:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   /* USER CODE END I2C1_MspDeInit 0 */
+  99:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     /* Peripheral clock disable */
+ 100:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     __HAL_RCC_I2C1_CLK_DISABLE();
+ 274              		.loc 1 100 5
+ 275 0012 084B     		ldr	r3, .L16+4
+ 276 0014 9B6D     		ldr	r3, [r3, #88]
+ 277 0016 074A     		ldr	r2, .L16+4
+ 278 0018 23F40013 		bic	r3, r3, #2097152
+ 279 001c 9365     		str	r3, [r2, #88]
+ 101:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   
+ 102:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     /**I2C1 GPIO Configuration    
+ 103:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     PB6     ------> I2C1_SCL
+ 104:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     PB7     ------> I2C1_SDA 
+ 105:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     */
+ 106:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****     HAL_GPIO_DeInit(GPIOB, OLED_SCL_Pin|OLED_SDA_Pin);
+ 280              		.loc 1 106 5
+ 281 001e C021     		movs	r1, #192
+ 282 0020 0548     		ldr	r0, .L16+8
+ 283 0022 FFF7FEFF 		bl	HAL_GPIO_DeInit
+ 284              	.L15:
+ 107:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** 
+ 108:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   /* USER CODE BEGIN I2C1_MspDeInit 1 */
+ 109:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** 
+ 110:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   /* USER CODE END I2C1_MspDeInit 1 */
+ 111:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c ****   }
+ 112:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/i2c.c **** } 
+ARM GAS  /tmp/cc7tqmv3.s 			page 8
+
+
+ 285              		.loc 1 112 1
+ 286 0026 00BF     		nop
+ 287 0028 0837     		adds	r7, r7, #8
+ 288              	.LCFI10:
+ 289              		.cfi_def_cfa_offset 8
+ 290 002a BD46     		mov	sp, r7
+ 291              	.LCFI11:
+ 292              		.cfi_def_cfa_register 13
+ 293              		@ sp needed
+ 294 002c 80BD     		pop	{r7, pc}
+ 295              	.L17:
+ 296 002e 00BF     		.align	2
+ 297              	.L16:
+ 298 0030 00540040 		.word	1073763328
+ 299 0034 00100240 		.word	1073876992
+ 300 0038 00040048 		.word	1207960576
+ 301              		.cfi_endproc
+ 302              	.LFE135:
+ 304              		.text
+ 305              	.Letext0:
+ 306              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 307              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 308              		.file 4 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 309              		.file 5 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/system_stm32l4xx.h"
+ 310              		.file 6 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/stm32l476xx.h"
+ 311              		.file 7 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 312              		.file 8 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 313              		.file 9 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 314              		.file 10 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/re
+ 315              		.file 11 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 316              		.file 12 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 317              		.file 13 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 318              		.file 14 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 319              		.file 15 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_typedef.h"
+ 320              		.file 16 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_config.h"
+ 321              		.file 17 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_err.h"
+ 322              		.file 18 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 323              		.file 19 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/i2c.h"
+ARM GAS  /tmp/cc7tqmv3.s 			page 9
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 i2c.c
+                            *COM*:000000000000004c hi2c1
+     /tmp/cc7tqmv3.s:19     .rodata:0000000000000000 $d
+     /tmp/cc7tqmv3.s:24     .text.MX_I2C1_Init:0000000000000000 $t
+     /tmp/cc7tqmv3.s:32     .text.MX_I2C1_Init:0000000000000000 MX_I2C1_Init
+     /tmp/cc7tqmv3.s:127    .text.MX_I2C1_Init:0000000000000080 $d
+     /tmp/cc7tqmv3.s:135    .text.HAL_I2C_MspInit:0000000000000000 $t
+     /tmp/cc7tqmv3.s:142    .text.HAL_I2C_MspInit:0000000000000000 HAL_I2C_MspInit
+     /tmp/cc7tqmv3.s:235    .text.HAL_I2C_MspInit:000000000000007c $d
+     /tmp/cc7tqmv3.s:242    .text.HAL_I2C_MspDeInit:0000000000000000 $t
+     /tmp/cc7tqmv3.s:249    .text.HAL_I2C_MspDeInit:0000000000000000 HAL_I2C_MspDeInit
+     /tmp/cc7tqmv3.s:298    .text.HAL_I2C_MspDeInit:0000000000000030 $d
+
+UNDEFINED SYMBOLS
+HAL_I2C_Init
+_Error_Handler
+HAL_I2CEx_ConfigAnalogFilter
+HAL_I2CEx_ConfigDigitalFilter
+HAL_GPIO_Init
+HAL_GPIO_DeInit

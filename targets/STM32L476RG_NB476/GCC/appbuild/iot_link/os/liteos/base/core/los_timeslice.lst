@@ -1,0 +1,284 @@
+ARM GAS  /tmp/ccaLptWP.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"los_timeslice.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.comm	g_stTaskTimeSlice,8,4
+  18              		.section	.text.osTimesliceInit,"ax",%progbits
+  19              		.align	1
+  20              		.global	osTimesliceInit
+  21              		.arch armv7e-m
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  25              		.fpu fpv4-sp-d16
+  27              	osTimesliceInit:
+  28              	.LFB135:
+  29              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** /*----------------------------------------------------------------------------
+   2:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * Copyright (c) <2013-2015>, <Huawei Technologies Co., Ltd>
+   3:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * All rights reserved.
+   4:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * are permitted provided that the following conditions are met:
+   6:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * conditions and the following disclaimer.
+   8:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * provided with the distribution.
+  11:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * permission.
+  14:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  *---------------------------------------------------------------------------*/
+  26:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** /*----------------------------------------------------------------------------
+  27:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * Notice of Export Control Law
+  28:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * ===============================================
+  29:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+ARM GAS  /tmp/ccaLptWP.s 			page 2
+
+
+  30:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  * applicable export control laws and regulations.
+  33:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  *---------------------------------------------------------------------------*/
+  34:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** 
+  35:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** #include "los_sys.ph"
+  36:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** #include "los_task.ph"
+  37:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** #include "los_tick.ph"
+  38:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** #include "los_typedef.ph"
+  39:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** #include "los_timeslice.ph"
+  40:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** 
+  41:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** #ifdef __cplusplus
+  42:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** #if __cplusplus
+  43:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** extern "C" {
+  44:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** #endif /* __cplusplus */
+  45:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** #endif /* __cplusplus */
+  46:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** 
+  47:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** #if(LOSCFG_BASE_CORE_TIMESLICE == YES)
+  48:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** LITE_OS_SEC_BSS OS_TASK_ROBIN_S        g_stTaskTimeSlice;
+  49:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** 
+  50:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** /*****************************************************************************
+  51:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  Function     : osTimesliceInit
+  52:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  Description  : Initialztion Timeslice
+  53:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  Input        : None
+  54:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  Output       : None
+  55:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  Return       : None
+  56:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  *****************************************************************************/
+  57:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** LITE_OS_SEC_TEXT_INIT VOID osTimesliceInit(VOID)
+  58:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** {
+  30              		.loc 1 58 1
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 1, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  35 0000 80B4     		push	{r7}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 4
+  38              		.cfi_offset 7, -4
+  39 0002 00AF     		add	r7, sp, #0
+  40              	.LCFI1:
+  41              		.cfi_def_cfa_register 7
+  59:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****     g_stTaskTimeSlice.pstTask = (LOS_TASK_CB *)NULL;
+  42              		.loc 1 59 31
+  43 0004 054B     		ldr	r3, .L2
+  44 0006 0022     		movs	r2, #0
+  45 0008 1A60     		str	r2, [r3]
+  60:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****     g_stTaskTimeSlice.usTout = LOSCFG_BASE_CORE_TIMESLICE_TIMEOUT;
+  46              		.loc 1 60 30
+  47 000a 044B     		ldr	r3, .L2
+  48 000c 0A22     		movs	r2, #10
+  49 000e DA80     		strh	r2, [r3, #6]	@ movhi
+  61:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** }
+  50              		.loc 1 61 1
+  51 0010 00BF     		nop
+  52 0012 BD46     		mov	sp, r7
+  53              	.LCFI2:
+  54              		.cfi_def_cfa_register 13
+ARM GAS  /tmp/ccaLptWP.s 			page 3
+
+
+  55              		@ sp needed
+  56 0014 5DF8047B 		ldr	r7, [sp], #4
+  57              	.LCFI3:
+  58              		.cfi_restore 7
+  59              		.cfi_def_cfa_offset 0
+  60 0018 7047     		bx	lr
+  61              	.L3:
+  62 001a 00BF     		.align	2
+  63              	.L2:
+  64 001c 00000000 		.word	g_stTaskTimeSlice
+  65              		.cfi_endproc
+  66              	.LFE135:
+  68              		.section	.text.osTimesliceCheck,"ax",%progbits
+  69              		.align	1
+  70              		.global	osTimesliceCheck
+  71              		.syntax unified
+  72              		.thumb
+  73              		.thumb_func
+  74              		.fpu fpv4-sp-d16
+  76              	osTimesliceCheck:
+  77              	.LFB136:
+  62:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** 
+  63:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** /*****************************************************************************
+  64:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  Function     : osTimesliceCheck
+  65:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  Description  : check Timeslice
+  66:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  Input        : None
+  67:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  Output       : None
+  68:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  Return       : None
+  69:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****  *****************************************************************************/
+  70:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** LITE_OS_SEC_TEXT VOID osTimesliceCheck(VOID)
+  71:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** {
+  78              		.loc 1 71 1
+  79              		.cfi_startproc
+  80              		@ args = 0, pretend = 0, frame = 0
+  81              		@ frame_needed = 1, uses_anonymous_args = 0
+  82 0000 80B5     		push	{r7, lr}
+  83              	.LCFI4:
+  84              		.cfi_def_cfa_offset 8
+  85              		.cfi_offset 7, -8
+  86              		.cfi_offset 14, -4
+  87 0002 00AF     		add	r7, sp, #0
+  88              	.LCFI5:
+  89              		.cfi_def_cfa_register 7
+  72:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****     if (g_stTaskTimeSlice.pstTask != g_stLosTask.pstRunTask)
+  90              		.loc 1 72 26
+  91 0004 124B     		ldr	r3, .L8
+  92 0006 1A68     		ldr	r2, [r3]
+  93              		.loc 1 72 49
+  94 0008 124B     		ldr	r3, .L8+4
+  95 000a 1B68     		ldr	r3, [r3]
+  96              		.loc 1 72 8
+  97 000c 9A42     		cmp	r2, r3
+  98 000e 0FD0     		beq	.L5
+  73:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****     {
+  74:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****         g_stTaskTimeSlice.pstTask = g_stLosTask.pstRunTask;
+  99              		.loc 1 74 48
+ 100 0010 104B     		ldr	r3, .L8+4
+ARM GAS  /tmp/ccaLptWP.s 			page 4
+
+
+ 101 0012 1B68     		ldr	r3, [r3]
+ 102              		.loc 1 74 35
+ 103 0014 0E4A     		ldr	r2, .L8
+ 104 0016 1360     		str	r3, [r2]
+  75:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****         g_stTaskTimeSlice.usTime = (UINT16)g_ullTickCount + g_stTaskTimeSlice.usTout - 1;
+ 105              		.loc 1 75 36
+ 106 0018 0F4B     		ldr	r3, .L8+8
+ 107 001a D3E90023 		ldrd	r2, [r3]
+ 108 001e 92B2     		uxth	r2, r2
+ 109              		.loc 1 75 78
+ 110 0020 0B4B     		ldr	r3, .L8
+ 111 0022 DB88     		ldrh	r3, [r3, #6]
+ 112              		.loc 1 75 59
+ 113 0024 1344     		add	r3, r3, r2
+ 114 0026 9BB2     		uxth	r3, r3
+ 115              		.loc 1 75 86
+ 116 0028 013B     		subs	r3, r3, #1
+ 117 002a 9AB2     		uxth	r2, r3
+ 118              		.loc 1 75 34
+ 119 002c 084B     		ldr	r3, .L8
+ 120 002e 9A80     		strh	r2, [r3, #4]	@ movhi
+ 121              	.L5:
+  76:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****     }
+  77:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** 
+  78:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****     if (g_stTaskTimeSlice.usTime == (UINT16)g_ullTickCount)
+ 122              		.loc 1 78 26
+ 123 0030 074B     		ldr	r3, .L8
+ 124 0032 9988     		ldrh	r1, [r3, #4]
+ 125              		.loc 1 78 34
+ 126 0034 084B     		ldr	r3, .L8+8
+ 127 0036 D3E90023 		ldrd	r2, [r3]
+ 128 003a 93B2     		uxth	r3, r2
+ 129              		.loc 1 78 8
+ 130 003c 9942     		cmp	r1, r3
+ 131 003e 04D1     		bne	.L7
+  79:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****     {
+  80:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****         g_stTaskTimeSlice.pstTask = (LOS_TASK_CB *)NULL;
+ 132              		.loc 1 80 35
+ 133 0040 034B     		ldr	r3, .L8
+ 134 0042 0022     		movs	r2, #0
+ 135 0044 1A60     		str	r2, [r3]
+  81:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****         if (LOS_TaskYield() != LOS_OK)
+ 136              		.loc 1 81 13
+ 137 0046 FFF7FEFF 		bl	LOS_TaskYield
+ 138              	.L7:
+  82:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****         {
+  83:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****             PRINT_INFO("%s, %d\n", __FUNCTION__, __LINE__);
+  84:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****         }
+  85:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c ****     } /*lint !e548*/
+  86:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_timeslice.c **** }
+ 139              		.loc 1 86 1
+ 140 004a 00BF     		nop
+ 141 004c 80BD     		pop	{r7, pc}
+ 142              	.L9:
+ 143 004e 00BF     		.align	2
+ 144              	.L8:
+ 145 0050 00000000 		.word	g_stTaskTimeSlice
+ARM GAS  /tmp/ccaLptWP.s 			page 5
+
+
+ 146 0054 00000000 		.word	g_stLosTask
+ 147 0058 00000000 		.word	g_ullTickCount
+ 148              		.cfi_endproc
+ 149              	.LFE136:
+ 151              		.text
+ 152              	.Letext0:
+ 153              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 154              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 155              		.file 4 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 156              		.file 5 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 157              		.file 6 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/ree
+ 158              		.file 7 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_typedef.h"
+ 159              		.file 8 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 160              		.file 9 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 161              		.file 10 "/home/fanxinhao/Work/LiteOS_Lab/targets/STM32L476RG_NB476/Inc/system_stm32l4xx.h"
+ 162              		.file 11 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_config.h"
+ 163              		.file 12 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_list.h"
+ 164              		.file 13 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_err.h"
+ 165              		.file 14 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 166              		.file 15 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_tick.h"
+ 167              		.file 16 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_event.h"
+ 168              		.file 17 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_task.h"
+ 169              		.file 18 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/include/los_task.ph"
+ 170              		.file 19 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/include/los_tick.ph"
+ARM GAS  /tmp/ccaLptWP.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 los_timeslice.c
+                            *COM*:0000000000000008 g_stTaskTimeSlice
+     /tmp/ccaLptWP.s:19     .text.osTimesliceInit:0000000000000000 $t
+     /tmp/ccaLptWP.s:27     .text.osTimesliceInit:0000000000000000 osTimesliceInit
+     /tmp/ccaLptWP.s:64     .text.osTimesliceInit:000000000000001c $d
+     /tmp/ccaLptWP.s:69     .text.osTimesliceCheck:0000000000000000 $t
+     /tmp/ccaLptWP.s:76     .text.osTimesliceCheck:0000000000000000 osTimesliceCheck
+     /tmp/ccaLptWP.s:145    .text.osTimesliceCheck:0000000000000050 $d
+
+UNDEFINED SYMBOLS
+LOS_TaskYield
+g_stLosTask
+g_ullTickCount

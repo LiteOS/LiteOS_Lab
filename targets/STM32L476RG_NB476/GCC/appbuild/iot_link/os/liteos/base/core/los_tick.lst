@@ -1,0 +1,333 @@
+ARM GAS  /tmp/ccg3Mn1t.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"los_tick.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.comm	g_ullTickCount,8,8
+  18              		.comm	g_uwTicksPerSec,4,4
+  19              		.comm	g_uwCyclePerSec,4,4
+  20              		.comm	g_uwCyclesPerTick,4,4
+  21              		.comm	g_uwSysClock,4,4
+  22              		.global	g_bSysTickStart
+  23              		.section	.bss.g_bSysTickStart,"aw",%nobits
+  24              		.align	2
+  27              	g_bSysTickStart:
+  28 0000 00000000 		.space	4
+  29              		.section	.text.osTickHandler,"ax",%progbits
+  30              		.align	1
+  31              		.global	osTickHandler
+  32              		.arch armv7e-m
+  33              		.syntax unified
+  34              		.thumb
+  35              		.thumb_func
+  36              		.fpu fpv4-sp-d16
+  38              	osTickHandler:
+  39              	.LFB133:
+  40              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** /*----------------------------------------------------------------------------
+   2:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * Copyright (c) <2013-2015>, <Huawei Technologies Co., Ltd>
+   3:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * All rights reserved.
+   4:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * are permitted provided that the following conditions are met:
+   6:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * conditions and the following disclaimer.
+   8:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * provided with the distribution.
+  11:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * permission.
+  14:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ARM GAS  /tmp/ccg3Mn1t.s 			page 2
+
+
+  21:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  *---------------------------------------------------------------------------*/
+  26:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** /*----------------------------------------------------------------------------
+  27:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * Notice of Export Control Law
+  28:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * ===============================================
+  29:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  * applicable export control laws and regulations.
+  33:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  *---------------------------------------------------------------------------*/
+  34:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** 
+  35:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #include "los_tick.inc"
+  36:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #include "los_base.ph"
+  37:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #include "los_swtmr.ph"
+  38:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #include "los_task.ph"
+  39:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #include "los_timeslice.ph"
+  40:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #if (LOSCFG_KERNEL_TICKLESS == YES)
+  41:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #include "los_tickless.ph"
+  42:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #endif
+  43:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** 
+  44:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #ifdef __cplusplus
+  45:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #if __cplusplus
+  46:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** extern "C" {
+  47:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #endif /* __cplusplus */
+  48:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #endif /* __cplusplus */
+  49:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** 
+  50:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** 
+  51:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** LITE_OS_SEC_BSS UINT64      g_ullTickCount;
+  52:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** LITE_OS_SEC_BSS UINT32      g_uwTicksPerSec;
+  53:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** LITE_OS_SEC_BSS UINT32      g_uwCyclePerSec;
+  54:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** LITE_OS_SEC_BSS UINT32      g_uwCyclesPerTick;
+  55:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** LITE_OS_SEC_BSS UINT32      g_uwSysClock;
+  56:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** LITE_OS_SEC_DATA_INIT BOOL  g_bSysTickStart = FALSE;
+  57:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** 
+  58:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #if (LOSCFG_KERNEL_TICKLESS == YES)
+  59:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** /*****************************************************************************
+  60:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  Description : Tick interruption handler
+  61:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  Input       : None
+  62:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  Output      : None
+  63:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  Return      : None
+  64:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  *****************************************************************************/
+  65:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** LITE_OS_SEC_TEXT VOID osTickHandlerLoop(UINT32 uwElapseTicks)
+  66:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** {
+  67:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****     UINT32 uwIndex;
+  68:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** 
+  69:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****     for (uwIndex = 0; uwIndex < uwElapseTicks; uwIndex++)
+  70:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****     {
+  71:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #if (LOSCFG_BASE_CORE_TICK_HW_TIME == YES)
+  72:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****         platform_tick_handler();
+  73:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #endif
+  74:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** 
+  75:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****         g_ullTickCount ++;
+  76:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** 
+  77:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #if(LOSCFG_BASE_CORE_TIMESLICE == YES)
+ARM GAS  /tmp/ccg3Mn1t.s 			page 3
+
+
+  78:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****         osTimesliceCheck();
+  79:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #endif
+  80:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****         osTaskScan();   //task timeout scan
+  81:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #if (LOSCFG_BASE_CORE_SWTMR == YES)
+  82:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****         (VOID)osSwtmrScan();
+  83:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #endif
+  84:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****     }
+  85:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** }
+  86:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** 
+  87:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #endif
+  88:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** 
+  89:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** /*****************************************************************************
+  90:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  Description : Tick interruption handler
+  91:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  Input       : None
+  92:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  Output      : None
+  93:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  Return      : None
+  94:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****  *****************************************************************************/
+  95:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** LITE_OS_SEC_TEXT VOID osTickHandler(VOID)
+  96:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** {
+  41              		.loc 1 96 1
+  42              		.cfi_startproc
+  43              		@ args = 0, pretend = 0, frame = 0
+  44              		@ frame_needed = 1, uses_anonymous_args = 0
+  45 0000 B0B5     		push	{r4, r5, r7, lr}
+  46              	.LCFI0:
+  47              		.cfi_def_cfa_offset 16
+  48              		.cfi_offset 4, -16
+  49              		.cfi_offset 5, -12
+  50              		.cfi_offset 7, -8
+  51              		.cfi_offset 14, -4
+  52 0002 00AF     		add	r7, sp, #0
+  53              	.LCFI1:
+  54              		.cfi_def_cfa_register 7
+  97:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****     if (!g_bSysTickStart)
+  55              		.loc 1 97 9
+  56 0004 0E4B     		ldr	r3, .L4
+  57 0006 1B68     		ldr	r3, [r3]
+  58              		.loc 1 97 8
+  59 0008 002B     		cmp	r3, #0
+  60 000a 09D1     		bne	.L2
+  98:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****     {
+  99:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****         g_ullTickCount++;
+  61              		.loc 1 99 23
+  62 000c 0D4B     		ldr	r3, .L4+4
+  63 000e D3E90023 		ldrd	r2, [r3]
+  64 0012 541C     		adds	r4, r2, #1
+  65 0014 43F10005 		adc	r5, r3, #0
+  66 0018 0A4B     		ldr	r3, .L4+4
+  67 001a C3E90045 		strd	r4, [r3]
+ 100:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****         return;
+  68              		.loc 1 100 9
+  69 001e 0EE0     		b	.L1
+  70              	.L2:
+ 101:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****     }
+ 102:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** 
+ 103:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #if (LOSCFG_KERNEL_TICKLESS == YES)
+ 104:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****     if (g_bReloadSysTickFlag)
+ARM GAS  /tmp/ccg3Mn1t.s 			page 4
+
+
+ 105:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****     {
+ 106:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****         LOS_SysTickReload(OS_SYS_CLOCK / LOSCFG_BASE_CORE_TICK_PER_SECOND);
+ 107:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****         g_bReloadSysTickFlag = 0;
+ 108:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****     }
+ 109:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****     g_bTickIrqFlag = g_bTicklessFlag;
+ 110:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** 
+ 111:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****     #if (LOSCFG_PLATFORM_HWI == NO)
+ 112:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****     if (g_uwSysTickIntFlag == TICKLESS_OS_TICK_INT_WAIT)
+ 113:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****     {
+ 114:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****         g_uwSysTickIntFlag = TICKLESS_OS_TICK_INT_SET;
+ 115:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****     }
+ 116:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****     #endif
+ 117:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #endif
+ 118:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** 
+ 119:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #if (LOSCFG_BASE_CORE_TICK_HW_TIME == YES)
+ 120:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****     platform_tick_handler();
+ 121:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #endif
+ 122:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** 
+ 123:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****     g_ullTickCount ++;
+  71              		.loc 1 123 20
+  72 0020 084B     		ldr	r3, .L4+4
+  73 0022 D3E90023 		ldrd	r2, [r3]
+  74 0026 501C     		adds	r0, r2, #1
+  75 0028 43F10001 		adc	r1, r3, #0
+  76 002c 054B     		ldr	r3, .L4+4
+  77 002e C3E90001 		strd	r0, [r3]
+ 124:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** 
+ 125:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #if(LOSCFG_BASE_CORE_TIMESLICE == YES)
+ 126:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****     osTimesliceCheck();
+  78              		.loc 1 126 5
+  79 0032 FFF7FEFF 		bl	osTimesliceCheck
+ 127:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #endif
+ 128:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** 
+ 129:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****     osTaskScan();   //task timeout scan
+  80              		.loc 1 129 5
+  81 0036 FFF7FEFF 		bl	osTaskScan
+ 130:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** 
+ 131:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #if (LOSCFG_BASE_CORE_SWTMR == YES)
+ 132:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****     (VOID)osSwtmrScan();
+  82              		.loc 1 132 11
+  83 003a FFF7FEFF 		bl	osSwtmrScan
+  84              	.L1:
+ 133:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** #endif
+ 134:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** }
+  85              		.loc 1 134 1
+  86 003e B0BD     		pop	{r4, r5, r7, pc}
+  87              	.L5:
+  88              		.align	2
+  89              	.L4:
+  90 0040 00000000 		.word	g_bSysTickStart
+  91 0044 00000000 		.word	g_ullTickCount
+  92              		.cfi_endproc
+  93              	.LFE133:
+  95              		.section	.text.LOS_SysClockGet,"ax",%progbits
+  96              		.align	1
+  97              		.global	LOS_SysClockGet
+  98              		.syntax unified
+ARM GAS  /tmp/ccg3Mn1t.s 			page 5
+
+
+  99              		.thumb
+ 100              		.thumb_func
+ 101              		.fpu fpv4-sp-d16
+ 103              	LOS_SysClockGet:
+ 104              	.LFB134:
+ 135:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** 
+ 136:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** LITE_OS_SEC_TEXT UINT32 LOS_SysClockGet(void)
+ 137:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** {
+ 105              		.loc 1 137 1
+ 106              		.cfi_startproc
+ 107              		@ args = 0, pretend = 0, frame = 0
+ 108              		@ frame_needed = 1, uses_anonymous_args = 0
+ 109              		@ link register save eliminated.
+ 110 0000 80B4     		push	{r7}
+ 111              	.LCFI2:
+ 112              		.cfi_def_cfa_offset 4
+ 113              		.cfi_offset 7, -4
+ 114 0002 00AF     		add	r7, sp, #0
+ 115              	.LCFI3:
+ 116              		.cfi_def_cfa_register 7
+ 138:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c ****     return g_uwSysClock;
+ 117              		.loc 1 138 12
+ 118 0004 034B     		ldr	r3, .L8
+ 119 0006 1B68     		ldr	r3, [r3]
+ 139:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/core/los_tick.c **** }
+ 120              		.loc 1 139 1
+ 121 0008 1846     		mov	r0, r3
+ 122 000a BD46     		mov	sp, r7
+ 123              	.LCFI4:
+ 124              		.cfi_def_cfa_register 13
+ 125              		@ sp needed
+ 126 000c 5DF8047B 		ldr	r7, [sp], #4
+ 127              	.LCFI5:
+ 128              		.cfi_restore 7
+ 129              		.cfi_def_cfa_offset 0
+ 130 0010 7047     		bx	lr
+ 131              	.L9:
+ 132 0012 00BF     		.align	2
+ 133              	.L8:
+ 134 0014 00000000 		.word	g_uwSysClock
+ 135              		.cfi_endproc
+ 136              	.LFE134:
+ 138              		.text
+ 139              	.Letext0:
+ 140              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 141              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 142              		.file 4 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 143              		.file 5 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 144              		.file 6 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/ree
+ 145              		.file 7 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_typedef.h"
+ 146              		.file 8 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 147              		.file 9 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 148              		.file 10 "/home/fanxinhao/Work/LiteOS_Lab/targets/STM32L476RG_NB476/Inc/system_stm32l4xx.h"
+ 149              		.file 11 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_config.h"
+ 150              		.file 12 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_list.h"
+ 151              		.file 13 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_err.h"
+ 152              		.file 14 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_tick.h"
+ARM GAS  /tmp/ccg3Mn1t.s 			page 6
+
+
+ 153              		.file 15 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/include/los_tick.ph"
+ 154              		.file 16 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 155              		.file 17 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_event.h"
+ 156              		.file 18 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_task.h"
+ 157              		.file 19 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_swtmr.h"
+ 158              		.file 20 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/include/los_swtmr.ph"
+ 159              		.file 21 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/include/los_task.ph"
+ARM GAS  /tmp/ccg3Mn1t.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 los_tick.c
+                            *COM*:0000000000000008 g_ullTickCount
+                            *COM*:0000000000000004 g_uwTicksPerSec
+                            *COM*:0000000000000004 g_uwCyclePerSec
+                            *COM*:0000000000000004 g_uwCyclesPerTick
+                            *COM*:0000000000000004 g_uwSysClock
+     /tmp/ccg3Mn1t.s:27     .bss.g_bSysTickStart:0000000000000000 g_bSysTickStart
+     /tmp/ccg3Mn1t.s:24     .bss.g_bSysTickStart:0000000000000000 $d
+     /tmp/ccg3Mn1t.s:30     .text.osTickHandler:0000000000000000 $t
+     /tmp/ccg3Mn1t.s:38     .text.osTickHandler:0000000000000000 osTickHandler
+     /tmp/ccg3Mn1t.s:90     .text.osTickHandler:0000000000000040 $d
+     /tmp/ccg3Mn1t.s:96     .text.LOS_SysClockGet:0000000000000000 $t
+     /tmp/ccg3Mn1t.s:103    .text.LOS_SysClockGet:0000000000000000 LOS_SysClockGet
+     /tmp/ccg3Mn1t.s:134    .text.LOS_SysClockGet:0000000000000014 $d
+
+UNDEFINED SYMBOLS
+osTimesliceCheck
+osTaskScan
+osSwtmrScan

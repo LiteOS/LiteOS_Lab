@@ -1,0 +1,364 @@
+ARM GAS  /tmp/cccJAdxG.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"rtc.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.comm	hrtc,36,4
+  18              		.section	.rodata
+  19              		.align	2
+  20              	.LC0:
+  21 0000 2F686F6D 		.ascii	"/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476"
+  21      652F6661 
+  21      6E78696E 
+  21      68616F2F 
+  21      576F726B 
+  22 0033 52475F4E 		.ascii	"RG_NB476/Src/rtc.c\000"
+  22      42343736 
+  22      2F537263 
+  22      2F727463 
+  22      2E6300
+  23              		.section	.text.MX_RTC_Init,"ax",%progbits
+  24              		.align	1
+  25              		.global	MX_RTC_Init
+  26              		.arch armv7e-m
+  27              		.syntax unified
+  28              		.thumb
+  29              		.thumb_func
+  30              		.fpu fpv4-sp-d16
+  32              	MX_RTC_Init:
+  33              	.LFB133:
+  34              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** /**
+   2:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   ******************************************************************************
+   3:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   * File Name          : RTC.c
+   4:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   * Description        : This file provides code for the configuration
+   5:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   *                      of the RTC instances.
+   6:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   ******************************************************************************
+   7:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   * @attention
+   8:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   *
+   9:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+  10:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   * All rights reserved.</center></h2>
+  11:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   *
+  12:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   * This software component is licensed by ST under BSD 3-Clause license,
+  13:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   * the "License"; You may not use this file except in compliance with the
+  14:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   * License. You may obtain a copy of the License at:
+  15:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   *                        opensource.org/licenses/BSD-3-Clause
+  16:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   *
+ARM GAS  /tmp/cccJAdxG.s 			page 2
+
+
+  17:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   ******************************************************************************
+  18:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   */
+  19:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** 
+  20:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** /* Includes ------------------------------------------------------------------*/
+  21:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** #include "rtc.h"
+  22:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** 
+  23:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** /* USER CODE BEGIN 0 */
+  24:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** 
+  25:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** /* USER CODE END 0 */
+  26:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** 
+  27:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** RTC_HandleTypeDef hrtc;
+  28:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** 
+  29:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** /* RTC init function */
+  30:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** void MX_RTC_Init(void)
+  31:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** {
+  35              		.loc 1 31 1
+  36              		.cfi_startproc
+  37              		@ args = 0, pretend = 0, frame = 0
+  38              		@ frame_needed = 1, uses_anonymous_args = 0
+  39 0000 80B5     		push	{r7, lr}
+  40              	.LCFI0:
+  41              		.cfi_def_cfa_offset 8
+  42              		.cfi_offset 7, -8
+  43              		.cfi_offset 14, -4
+  44 0002 00AF     		add	r7, sp, #0
+  45              	.LCFI1:
+  46              		.cfi_def_cfa_register 7
+  32:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** 
+  33:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   /** Initialize RTC Only 
+  34:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   */
+  35:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   hrtc.Instance = RTC;
+  47              		.loc 1 35 17
+  48 0004 114B     		ldr	r3, .L4
+  49 0006 124A     		ldr	r2, .L4+4
+  50 0008 1A60     		str	r2, [r3]
+  36:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   hrtc.Init.HourFormat = RTC_HOURFORMAT_24;
+  51              		.loc 1 36 24
+  52 000a 104B     		ldr	r3, .L4
+  53 000c 0022     		movs	r2, #0
+  54 000e 5A60     		str	r2, [r3, #4]
+  37:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   hrtc.Init.AsynchPrediv = 127;
+  55              		.loc 1 37 26
+  56 0010 0E4B     		ldr	r3, .L4
+  57 0012 7F22     		movs	r2, #127
+  58 0014 9A60     		str	r2, [r3, #8]
+  38:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   hrtc.Init.SynchPrediv = 255;
+  59              		.loc 1 38 25
+  60 0016 0D4B     		ldr	r3, .L4
+  61 0018 FF22     		movs	r2, #255
+  62 001a DA60     		str	r2, [r3, #12]
+  39:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   hrtc.Init.OutPut = RTC_OUTPUT_DISABLE;
+  63              		.loc 1 39 20
+  64 001c 0B4B     		ldr	r3, .L4
+  65 001e 0022     		movs	r2, #0
+  66 0020 1A61     		str	r2, [r3, #16]
+  40:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   hrtc.Init.OutPutRemap = RTC_OUTPUT_REMAP_NONE;
+  67              		.loc 1 40 25
+ARM GAS  /tmp/cccJAdxG.s 			page 3
+
+
+  68 0022 0A4B     		ldr	r3, .L4
+  69 0024 0022     		movs	r2, #0
+  70 0026 5A61     		str	r2, [r3, #20]
+  41:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   hrtc.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
+  71              		.loc 1 41 28
+  72 0028 084B     		ldr	r3, .L4
+  73 002a 0022     		movs	r2, #0
+  74 002c 9A61     		str	r2, [r3, #24]
+  42:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   hrtc.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
+  75              		.loc 1 42 24
+  76 002e 074B     		ldr	r3, .L4
+  77 0030 0022     		movs	r2, #0
+  78 0032 DA61     		str	r2, [r3, #28]
+  43:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   if (HAL_RTC_Init(&hrtc) != HAL_OK)
+  79              		.loc 1 43 7
+  80 0034 0548     		ldr	r0, .L4
+  81 0036 FFF7FEFF 		bl	HAL_RTC_Init
+  82 003a 0346     		mov	r3, r0
+  83              		.loc 1 43 6
+  84 003c 002B     		cmp	r3, #0
+  85 003e 03D0     		beq	.L3
+  44:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   {
+  45:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****     _Error_Handler(__FILE__, __LINE__);
+  86              		.loc 1 45 5
+  87 0040 2D21     		movs	r1, #45
+  88 0042 0448     		ldr	r0, .L4+8
+  89 0044 FFF7FEFF 		bl	_Error_Handler
+  90              	.L3:
+  46:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   }
+  47:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** 
+  48:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** }
+  91              		.loc 1 48 1
+  92 0048 00BF     		nop
+  93 004a 80BD     		pop	{r7, pc}
+  94              	.L5:
+  95              		.align	2
+  96              	.L4:
+  97 004c 00000000 		.word	hrtc
+  98 0050 00280040 		.word	1073752064
+  99 0054 00000000 		.word	.LC0
+ 100              		.cfi_endproc
+ 101              	.LFE133:
+ 103              		.section	.text.HAL_RTC_MspInit,"ax",%progbits
+ 104              		.align	1
+ 105              		.global	HAL_RTC_MspInit
+ 106              		.syntax unified
+ 107              		.thumb
+ 108              		.thumb_func
+ 109              		.fpu fpv4-sp-d16
+ 111              	HAL_RTC_MspInit:
+ 112              	.LFB134:
+  49:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** 
+  50:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** void HAL_RTC_MspInit(RTC_HandleTypeDef* rtcHandle)
+  51:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** {
+ 113              		.loc 1 51 1
+ 114              		.cfi_startproc
+ 115              		@ args = 0, pretend = 0, frame = 8
+ARM GAS  /tmp/cccJAdxG.s 			page 4
+
+
+ 116              		@ frame_needed = 1, uses_anonymous_args = 0
+ 117              		@ link register save eliminated.
+ 118 0000 80B4     		push	{r7}
+ 119              	.LCFI2:
+ 120              		.cfi_def_cfa_offset 4
+ 121              		.cfi_offset 7, -4
+ 122 0002 83B0     		sub	sp, sp, #12
+ 123              	.LCFI3:
+ 124              		.cfi_def_cfa_offset 16
+ 125 0004 00AF     		add	r7, sp, #0
+ 126              	.LCFI4:
+ 127              		.cfi_def_cfa_register 7
+ 128 0006 7860     		str	r0, [r7, #4]
+  52:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** 
+  53:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   if(rtcHandle->Instance==RTC)
+ 129              		.loc 1 53 15
+ 130 0008 7B68     		ldr	r3, [r7, #4]
+ 131 000a 1B68     		ldr	r3, [r3]
+ 132              		.loc 1 53 5
+ 133 000c 084A     		ldr	r2, .L9
+ 134 000e 9342     		cmp	r3, r2
+ 135 0010 07D1     		bne	.L8
+  54:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   {
+  55:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   /* USER CODE BEGIN RTC_MspInit 0 */
+  56:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** 
+  57:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   /* USER CODE END RTC_MspInit 0 */
+  58:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****     /* RTC clock enable */
+  59:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****     __HAL_RCC_RTC_ENABLE();
+ 136              		.loc 1 59 5
+ 137 0012 084B     		ldr	r3, .L9+4
+ 138 0014 D3F89030 		ldr	r3, [r3, #144]
+ 139 0018 064A     		ldr	r2, .L9+4
+ 140 001a 43F40043 		orr	r3, r3, #32768
+ 141 001e C2F89030 		str	r3, [r2, #144]
+ 142              	.L8:
+  60:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   /* USER CODE BEGIN RTC_MspInit 1 */
+  61:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** 
+  62:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   /* USER CODE END RTC_MspInit 1 */
+  63:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   }
+  64:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** }
+ 143              		.loc 1 64 1
+ 144 0022 00BF     		nop
+ 145 0024 0C37     		adds	r7, r7, #12
+ 146              	.LCFI5:
+ 147              		.cfi_def_cfa_offset 4
+ 148 0026 BD46     		mov	sp, r7
+ 149              	.LCFI6:
+ 150              		.cfi_def_cfa_register 13
+ 151              		@ sp needed
+ 152 0028 5DF8047B 		ldr	r7, [sp], #4
+ 153              	.LCFI7:
+ 154              		.cfi_restore 7
+ 155              		.cfi_def_cfa_offset 0
+ 156 002c 7047     		bx	lr
+ 157              	.L10:
+ 158 002e 00BF     		.align	2
+ 159              	.L9:
+ARM GAS  /tmp/cccJAdxG.s 			page 5
+
+
+ 160 0030 00280040 		.word	1073752064
+ 161 0034 00100240 		.word	1073876992
+ 162              		.cfi_endproc
+ 163              	.LFE134:
+ 165              		.section	.text.HAL_RTC_MspDeInit,"ax",%progbits
+ 166              		.align	1
+ 167              		.global	HAL_RTC_MspDeInit
+ 168              		.syntax unified
+ 169              		.thumb
+ 170              		.thumb_func
+ 171              		.fpu fpv4-sp-d16
+ 173              	HAL_RTC_MspDeInit:
+ 174              	.LFB135:
+  65:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** 
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** void HAL_RTC_MspDeInit(RTC_HandleTypeDef* rtcHandle)
+  67:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** {
+ 175              		.loc 1 67 1
+ 176              		.cfi_startproc
+ 177              		@ args = 0, pretend = 0, frame = 8
+ 178              		@ frame_needed = 1, uses_anonymous_args = 0
+ 179              		@ link register save eliminated.
+ 180 0000 80B4     		push	{r7}
+ 181              	.LCFI8:
+ 182              		.cfi_def_cfa_offset 4
+ 183              		.cfi_offset 7, -4
+ 184 0002 83B0     		sub	sp, sp, #12
+ 185              	.LCFI9:
+ 186              		.cfi_def_cfa_offset 16
+ 187 0004 00AF     		add	r7, sp, #0
+ 188              	.LCFI10:
+ 189              		.cfi_def_cfa_register 7
+ 190 0006 7860     		str	r0, [r7, #4]
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** 
+  69:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   if(rtcHandle->Instance==RTC)
+ 191              		.loc 1 69 15
+ 192 0008 7B68     		ldr	r3, [r7, #4]
+ 193 000a 1B68     		ldr	r3, [r3]
+ 194              		.loc 1 69 5
+ 195 000c 084A     		ldr	r2, .L14
+ 196 000e 9342     		cmp	r3, r2
+ 197 0010 07D1     		bne	.L13
+  70:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   {
+  71:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   /* USER CODE BEGIN RTC_MspDeInit 0 */
+  72:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** 
+  73:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   /* USER CODE END RTC_MspDeInit 0 */
+  74:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****     /* Peripheral clock disable */
+  75:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****     __HAL_RCC_RTC_DISABLE();
+ 198              		.loc 1 75 5
+ 199 0012 084B     		ldr	r3, .L14+4
+ 200 0014 D3F89030 		ldr	r3, [r3, #144]
+ 201 0018 064A     		ldr	r2, .L14+4
+ 202 001a 23F40043 		bic	r3, r3, #32768
+ 203 001e C2F89030 		str	r3, [r2, #144]
+ 204              	.L13:
+  76:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   /* USER CODE BEGIN RTC_MspDeInit 1 */
+  77:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** 
+  78:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   /* USER CODE END RTC_MspDeInit 1 */
+ARM GAS  /tmp/cccJAdxG.s 			page 6
+
+
+  79:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c ****   }
+  80:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/rtc.c **** } 
+ 205              		.loc 1 80 1
+ 206 0022 00BF     		nop
+ 207 0024 0C37     		adds	r7, r7, #12
+ 208              	.LCFI11:
+ 209              		.cfi_def_cfa_offset 4
+ 210 0026 BD46     		mov	sp, r7
+ 211              	.LCFI12:
+ 212              		.cfi_def_cfa_register 13
+ 213              		@ sp needed
+ 214 0028 5DF8047B 		ldr	r7, [sp], #4
+ 215              	.LCFI13:
+ 216              		.cfi_restore 7
+ 217              		.cfi_def_cfa_offset 0
+ 218 002c 7047     		bx	lr
+ 219              	.L15:
+ 220 002e 00BF     		.align	2
+ 221              	.L14:
+ 222 0030 00280040 		.word	1073752064
+ 223 0034 00100240 		.word	1073876992
+ 224              		.cfi_endproc
+ 225              	.LFE135:
+ 227              		.text
+ 228              	.Letext0:
+ 229              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 230              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 231              		.file 4 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 232              		.file 5 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/system_stm32l4xx.h"
+ 233              		.file 6 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/stm32l476xx.h"
+ 234              		.file 7 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 235              		.file 8 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 236              		.file 9 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 237              		.file 10 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/re
+ 238              		.file 11 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 239              		.file 12 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 240              		.file 13 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_typedef.h"
+ 241              		.file 14 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_config.h"
+ 242              		.file 15 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_err.h"
+ 243              		.file 16 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 244              		.file 17 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/rtc.h"
+ARM GAS  /tmp/cccJAdxG.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 rtc.c
+                            *COM*:0000000000000024 hrtc
+     /tmp/cccJAdxG.s:19     .rodata:0000000000000000 $d
+     /tmp/cccJAdxG.s:24     .text.MX_RTC_Init:0000000000000000 $t
+     /tmp/cccJAdxG.s:32     .text.MX_RTC_Init:0000000000000000 MX_RTC_Init
+     /tmp/cccJAdxG.s:97     .text.MX_RTC_Init:000000000000004c $d
+     /tmp/cccJAdxG.s:104    .text.HAL_RTC_MspInit:0000000000000000 $t
+     /tmp/cccJAdxG.s:111    .text.HAL_RTC_MspInit:0000000000000000 HAL_RTC_MspInit
+     /tmp/cccJAdxG.s:160    .text.HAL_RTC_MspInit:0000000000000030 $d
+     /tmp/cccJAdxG.s:166    .text.HAL_RTC_MspDeInit:0000000000000000 $t
+     /tmp/cccJAdxG.s:173    .text.HAL_RTC_MspDeInit:0000000000000000 HAL_RTC_MspDeInit
+     /tmp/cccJAdxG.s:222    .text.HAL_RTC_MspDeInit:0000000000000030 $d
+
+UNDEFINED SYMBOLS
+HAL_RTC_Init
+_Error_Handler

@@ -1,0 +1,220 @@
+ARM GAS  /tmp/cc6FF2Ux.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"link_random.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.link_random,"ax",%progbits
+  18              		.align	1
+  19              		.weak	link_random
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	link_random:
+  27              	.LFB3:
+  28              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c **** /*----------------------------------------------------------------------------
+   2:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * All rights reserved.
+   4:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * are permitted provided that the following conditions are met:
+   6:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * conditions and the following disclaimer.
+   8:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * provided with the distribution.
+  11:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * permission.
+  14:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  *---------------------------------------------------------------------------*/
+  26:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c **** /*----------------------------------------------------------------------------
+  27:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * Notice of Export Control Law
+  28:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * ===============================================
+  29:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+ARM GAS  /tmp/cc6FF2Ux.s 			page 2
+
+
+  31:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  * applicable export control laws and regulations.
+  33:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  *---------------------------------------------------------------------------*/
+  34:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c **** /**
+  35:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  *  DATE                AUTHOR      INSTRUCTION
+  36:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  *  2019-05-10 10:26  zhangqianfu  The first version  
+  37:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  *
+  38:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****  */
+  39:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c **** #include <stdint.h>
+  40:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c **** #include <stddef.h>
+  41:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c **** 
+  42:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c **** #include <stdlib.h>
+  43:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c **** #include <string.h>
+  44:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c **** 
+  45:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c **** #include <osal.h>
+  46:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c **** 
+  47:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c **** __attribute__((weak)) int link_random(void* output, int len)
+  48:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c **** {
+  29              		.loc 1 48 1
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 24
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33 0000 80B5     		push	{r7, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 7, -8
+  37              		.cfi_offset 14, -4
+  38 0002 86B0     		sub	sp, sp, #24
+  39              	.LCFI1:
+  40              		.cfi_def_cfa_offset 32
+  41 0004 00AF     		add	r7, sp, #0
+  42              	.LCFI2:
+  43              		.cfi_def_cfa_register 7
+  44 0006 7860     		str	r0, [r7, #4]
+  45 0008 3960     		str	r1, [r7]
+  49:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****     int i;
+  50:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****     int random_number;
+  51:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****     char* pbuf;
+  52:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c **** 
+  53:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****     if (NULL == output)
+  46              		.loc 1 53 8
+  47 000a 7B68     		ldr	r3, [r7, #4]
+  48 000c 002B     		cmp	r3, #0
+  49 000e 02D1     		bne	.L2
+  54:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****     {
+  55:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****         return -1;
+  50              		.loc 1 55 16
+  51 0010 4FF0FF33 		mov	r3, #-1
+  52 0014 27E0     		b	.L6
+  53              	.L2:
+  56:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****     }
+  57:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c **** 
+  58:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****     pbuf = output;
+  54              		.loc 1 58 10
+  55 0016 7B68     		ldr	r3, [r7, #4]
+  56 0018 3B61     		str	r3, [r7, #16]
+  59:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****     srand(osal_sys_time());
+ARM GAS  /tmp/cc6FF2Ux.s 			page 3
+
+
+  57              		.loc 1 59 11
+  58 001a FFF7FEFF 		bl	osal_sys_time
+  59 001e 0246     		mov	r2, r0
+  60 0020 0B46     		mov	r3, r1
+  61              		.loc 1 59 5
+  62 0022 1346     		mov	r3, r2
+  63 0024 1846     		mov	r0, r3
+  64 0026 FFF7FEFF 		bl	srand
+  60:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c **** 
+  61:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****     for (i = 0; i < len; i += sizeof(int))
+  65              		.loc 1 61 12
+  66 002a 0023     		movs	r3, #0
+  67 002c 7B61     		str	r3, [r7, #20]
+  68              		.loc 1 61 5
+  69 002e 15E0     		b	.L4
+  70              	.L5:
+  62:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****     {
+  63:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****         random_number = rand();
+  71              		.loc 1 63 25 discriminator 3
+  72 0030 FFF7FEFF 		bl	rand
+  73 0034 0346     		mov	r3, r0
+  74              		.loc 1 63 23 discriminator 3
+  75 0036 FB60     		str	r3, [r7, #12]
+  64:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****         (void) memcpy(pbuf + i, &random_number,
+  76              		.loc 1 64 16 discriminator 3
+  77 0038 7B69     		ldr	r3, [r7, #20]
+  78              		.loc 1 64 28 discriminator 3
+  79 003a 3A69     		ldr	r2, [r7, #16]
+  80 003c D018     		adds	r0, r2, r3
+  65:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****                sizeof(int) > (unsigned int)(len - i)? (unsigned int)(len - i): sizeof(int));
+  81              		.loc 1 65 49 discriminator 3
+  82 003e 3A68     		ldr	r2, [r7]
+  83 0040 7B69     		ldr	r3, [r7, #20]
+  84 0042 D31A     		subs	r3, r2, r3
+  64:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****         (void) memcpy(pbuf + i, &random_number,
+  85              		.loc 1 64 16 discriminator 3
+  86 0044 042B     		cmp	r3, #4
+  87 0046 28BF     		it	cs
+  88 0048 0423     		movcs	r3, #4
+  89 004a 1A46     		mov	r2, r3
+  90 004c 07F10C03 		add	r3, r7, #12
+  91 0050 1946     		mov	r1, r3
+  92 0052 FFF7FEFF 		bl	memcpy
+  61:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****     {
+  93              		.loc 1 61 28 discriminator 3
+  94 0056 7B69     		ldr	r3, [r7, #20]
+  95 0058 0433     		adds	r3, r3, #4
+  96 005a 7B61     		str	r3, [r7, #20]
+  97              	.L4:
+  61:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****     {
+  98              		.loc 1 61 5 discriminator 1
+  99 005c 7A69     		ldr	r2, [r7, #20]
+ 100 005e 3B68     		ldr	r3, [r7]
+ 101 0060 9A42     		cmp	r2, r3
+ 102 0062 E5DB     		blt	.L5
+  66:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****     }
+  67:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c **** 
+ARM GAS  /tmp/cc6FF2Ux.s 			page 4
+
+
+  68:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c ****     return 0;
+ 103              		.loc 1 68 12
+ 104 0064 0023     		movs	r3, #0
+ 105              	.L6:
+  69:/home/fanxinhao/Work/LiteOS_Lab/iot_link/link_misc/link_random.c **** }
+ 106              		.loc 1 69 1 discriminator 1
+ 107 0066 1846     		mov	r0, r3
+ 108 0068 1837     		adds	r7, r7, #24
+ 109              	.LCFI3:
+ 110              		.cfi_def_cfa_offset 8
+ 111 006a BD46     		mov	sp, r7
+ 112              	.LCFI4:
+ 113              		.cfi_def_cfa_register 13
+ 114              		@ sp needed
+ 115 006c 80BD     		pop	{r7, pc}
+ 116              		.cfi_endproc
+ 117              	.LFE3:
+ 119              		.text
+ 120              	.Letext0:
+ 121              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 122              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 123              		.file 4 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 124              		.file 5 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/ree
+ 125              		.file 6 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/stdlib.
+ARM GAS  /tmp/cc6FF2Ux.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 link_random.c
+     /tmp/cc6FF2Ux.s:18     .text.link_random:0000000000000000 $t
+     /tmp/cc6FF2Ux.s:26     .text.link_random:0000000000000000 link_random
+
+UNDEFINED SYMBOLS
+osal_sys_time
+srand
+rand
+memcpy

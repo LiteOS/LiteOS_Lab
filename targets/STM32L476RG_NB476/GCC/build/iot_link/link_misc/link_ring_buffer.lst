@@ -1,0 +1,1120 @@
+ARM GAS  /tmp/ccL8PiJY.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"link_ring_buffer.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.ring_buffer_init,"ax",%progbits
+  18              		.align	1
+  19              		.global	ring_buffer_init
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	ring_buffer_init:
+  27              	.LFB0:
+  28              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** /*----------------------------------------------------------------------------
+   2:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * All rights reserved.
+   4:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * are permitted provided that the following conditions are met:
+   6:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * conditions and the following disclaimer.
+   8:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * provided with the distribution.
+  11:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * permission.
+  14:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  *---------------------------------------------------------------------------*/
+  26:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** /*----------------------------------------------------------------------------
+  27:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * Notice of Export Control Law
+  28:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * ===============================================
+  29:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+ARM GAS  /tmp/ccL8PiJY.s 			page 2
+
+
+  31:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  * applicable export control laws and regulations.
+  33:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  *---------------------------------------------------------------------------*/
+  34:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** /**
+  35:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  *  DATE                AUTHOR      INSTRUCTION
+  36:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  *  2019-04-29 10:34  zhangqianfu  The first version  
+  37:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  *
+  38:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****  */
+  39:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** #include <stdint.h>
+  40:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** #include <stddef.h>
+  41:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** #include <string.h>
+  42:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** 
+  43:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** #include <link_misc.h>
+  44:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** 
+  45:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** 
+  46:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** int ring_buffer_init(tag_ring_buffer_t *ring,unsigned char *buf, int buflen,int offset,int datalen)
+  47:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** {
+  29              		.loc 1 47 1
+  30              		.cfi_startproc
+  31              		@ args = 4, pretend = 0, frame = 24
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34 0000 80B4     		push	{r7}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 4
+  37              		.cfi_offset 7, -4
+  38 0002 87B0     		sub	sp, sp, #28
+  39              	.LCFI1:
+  40              		.cfi_def_cfa_offset 32
+  41 0004 00AF     		add	r7, sp, #0
+  42              	.LCFI2:
+  43              		.cfi_def_cfa_register 7
+  44 0006 F860     		str	r0, [r7, #12]
+  45 0008 B960     		str	r1, [r7, #8]
+  46 000a 7A60     		str	r2, [r7, #4]
+  47 000c 3B60     		str	r3, [r7]
+  48:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     int ret = -1;
+  48              		.loc 1 48 9
+  49 000e 4FF0FF33 		mov	r3, #-1
+  50 0012 7B61     		str	r3, [r7, #20]
+  49:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     if((NULL == ring))
+  51              		.loc 1 49 7
+  52 0014 FB68     		ldr	r3, [r7, #12]
+  53 0016 002B     		cmp	r3, #0
+  54 0018 01D1     		bne	.L2
+  50:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     {
+  51:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         return ret;
+  55              		.loc 1 51 16
+  56 001a 7B69     		ldr	r3, [r7, #20]
+  57 001c 0EE0     		b	.L3
+  58              	.L2:
+  52:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     }
+  53:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     ring->buf     = buf;
+  59              		.loc 1 53 19
+  60 001e FB68     		ldr	r3, [r7, #12]
+  61 0020 BA68     		ldr	r2, [r7, #8]
+  62 0022 1A60     		str	r2, [r3]
+ARM GAS  /tmp/ccL8PiJY.s 			page 3
+
+
+  54:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     ring->buflen  = buflen;
+  63              		.loc 1 54 19
+  64 0024 FB68     		ldr	r3, [r7, #12]
+  65 0026 7A68     		ldr	r2, [r7, #4]
+  66 0028 5A60     		str	r2, [r3, #4]
+  55:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     ring->datalen = datalen;
+  67              		.loc 1 55 19
+  68 002a FB68     		ldr	r3, [r7, #12]
+  69 002c 3A6A     		ldr	r2, [r7, #32]
+  70 002e 9A60     		str	r2, [r3, #8]
+  56:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     ring->dataoff = offset;
+  71              		.loc 1 56 19
+  72 0030 FB68     		ldr	r3, [r7, #12]
+  73 0032 3A68     		ldr	r2, [r7]
+  74 0034 DA60     		str	r2, [r3, #12]
+  57:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     ret = 0;
+  75              		.loc 1 57 9
+  76 0036 0023     		movs	r3, #0
+  77 0038 7B61     		str	r3, [r7, #20]
+  58:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     return ret;
+  78              		.loc 1 58 12
+  79 003a 7B69     		ldr	r3, [r7, #20]
+  80              	.L3:
+  59:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** }
+  81              		.loc 1 59 1
+  82 003c 1846     		mov	r0, r3
+  83 003e 1C37     		adds	r7, r7, #28
+  84              	.LCFI3:
+  85              		.cfi_def_cfa_offset 4
+  86 0040 BD46     		mov	sp, r7
+  87              	.LCFI4:
+  88              		.cfi_def_cfa_register 13
+  89              		@ sp needed
+  90 0042 5DF8047B 		ldr	r7, [sp], #4
+  91              	.LCFI5:
+  92              		.cfi_restore 7
+  93              		.cfi_def_cfa_offset 0
+  94 0046 7047     		bx	lr
+  95              		.cfi_endproc
+  96              	.LFE0:
+  98              		.section	.text.ring_buffer_write,"ax",%progbits
+  99              		.align	1
+ 100              		.global	ring_buffer_write
+ 101              		.syntax unified
+ 102              		.thumb
+ 103              		.thumb_func
+ 104              		.fpu fpv4-sp-d16
+ 106              	ring_buffer_write:
+ 107              	.LFB1:
+  60:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** 
+  61:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** 
+  62:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** int ring_buffer_write(tag_ring_buffer_t *ring,unsigned char *buf, int len)
+  63:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** {
+ 108              		.loc 1 63 1
+ 109              		.cfi_startproc
+ 110              		@ args = 0, pretend = 0, frame = 40
+ 111              		@ frame_needed = 1, uses_anonymous_args = 0
+ARM GAS  /tmp/ccL8PiJY.s 			page 4
+
+
+ 112 0000 80B5     		push	{r7, lr}
+ 113              	.LCFI6:
+ 114              		.cfi_def_cfa_offset 8
+ 115              		.cfi_offset 7, -8
+ 116              		.cfi_offset 14, -4
+ 117 0002 8AB0     		sub	sp, sp, #40
+ 118              	.LCFI7:
+ 119              		.cfi_def_cfa_offset 48
+ 120 0004 00AF     		add	r7, sp, #0
+ 121              	.LCFI8:
+ 122              		.cfi_def_cfa_register 7
+ 123 0006 F860     		str	r0, [r7, #12]
+ 124 0008 B960     		str	r1, [r7, #8]
+ 125 000a 7A60     		str	r2, [r7, #4]
+  64:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     int ret = -1;
+ 126              		.loc 1 64 9
+ 127 000c 4FF0FF33 		mov	r3, #-1
+ 128 0010 FB61     		str	r3, [r7, #28]
+  65:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     int cpylen;  //the current time we should move
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     int lenleft;  //and how many data still left to move
+  67:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     int offset;
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     unsigned char *src;
+  69:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     unsigned char *dst;
+  70:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     if((NULL == ring)||(NULL == buf)||(0 == len))
+ 129              		.loc 1 70 7
+ 130 0012 FB68     		ldr	r3, [r7, #12]
+ 131 0014 002B     		cmp	r3, #0
+ 132 0016 05D0     		beq	.L5
+ 133              		.loc 1 70 22 discriminator 1
+ 134 0018 BB68     		ldr	r3, [r7, #8]
+ 135 001a 002B     		cmp	r3, #0
+ 136 001c 02D0     		beq	.L5
+ 137              		.loc 1 70 37 discriminator 2
+ 138 001e 7B68     		ldr	r3, [r7, #4]
+ 139 0020 002B     		cmp	r3, #0
+ 140 0022 01D1     		bne	.L6
+ 141              	.L5:
+  71:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     {
+  72:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         return ret;//which means parameters error
+ 142              		.loc 1 72 16
+ 143 0024 FB69     		ldr	r3, [r7, #28]
+ 144 0026 9FE0     		b	.L7
+ 145              	.L6:
+  73:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     }
+  74:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     if((ring->datalen == ring->buflen)|| (ring->buflen <= 0))
+ 146              		.loc 1 74 13
+ 147 0028 FB68     		ldr	r3, [r7, #12]
+ 148 002a 9A68     		ldr	r2, [r3, #8]
+ 149              		.loc 1 74 30
+ 150 002c FB68     		ldr	r3, [r7, #12]
+ 151 002e 5B68     		ldr	r3, [r3, #4]
+ 152              		.loc 1 74 7
+ 153 0030 9A42     		cmp	r2, r3
+ 154 0032 03D0     		beq	.L8
+ 155              		.loc 1 74 47 discriminator 1
+ 156 0034 FB68     		ldr	r3, [r7, #12]
+ 157 0036 5B68     		ldr	r3, [r3, #4]
+ARM GAS  /tmp/ccL8PiJY.s 			page 5
+
+
+ 158              		.loc 1 74 39 discriminator 1
+ 159 0038 002B     		cmp	r3, #0
+ 160 003a 03DC     		bgt	.L9
+ 161              	.L8:
+  75:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     {
+  76:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         ret = 0;
+ 162              		.loc 1 76 13
+ 163 003c 0023     		movs	r3, #0
+ 164 003e FB61     		str	r3, [r7, #28]
+  77:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         return  ret;//which means you could copy nothing here
+ 165              		.loc 1 77 17
+ 166 0040 FB69     		ldr	r3, [r7, #28]
+ 167 0042 91E0     		b	.L7
+ 168              	.L9:
+  78:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     }
+  79:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     ret = len > (ring->buflen-ring->datalen)?(ring->buflen-ring->datalen):len;
+ 169              		.loc 1 79 22
+ 170 0044 FB68     		ldr	r3, [r7, #12]
+ 171 0046 5A68     		ldr	r2, [r3, #4]
+ 172              		.loc 1 79 35
+ 173 0048 FB68     		ldr	r3, [r7, #12]
+ 174 004a 9B68     		ldr	r3, [r3, #8]
+ 175              		.loc 1 79 30
+ 176 004c D31A     		subs	r3, r2, r3
+ 177              		.loc 1 79 9
+ 178 004e 7A68     		ldr	r2, [r7, #4]
+ 179 0050 9342     		cmp	r3, r2
+ 180 0052 A8BF     		it	ge
+ 181 0054 1346     		movge	r3, r2
+ 182 0056 FB61     		str	r3, [r7, #28]
+  80:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     //now let us think the method to fill the data,take care of the roll back
+  81:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     lenleft = ret;
+ 183              		.loc 1 81 13
+ 184 0058 FB69     		ldr	r3, [r7, #28]
+ 185 005a 7B62     		str	r3, [r7, #36]
+  82:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     src = buf;
+ 186              		.loc 1 82 9
+ 187 005c BB68     		ldr	r3, [r7, #8]
+ 188 005e 3B62     		str	r3, [r7, #32]
+  83:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     if((ring->dataoff+ring->datalen)>ring->buflen) //which means the data has roll back
+ 189              		.loc 1 83 13
+ 190 0060 FB68     		ldr	r3, [r7, #12]
+ 191 0062 DA68     		ldr	r2, [r3, #12]
+ 192              		.loc 1 83 27
+ 193 0064 FB68     		ldr	r3, [r7, #12]
+ 194 0066 9B68     		ldr	r3, [r3, #8]
+ 195              		.loc 1 83 22
+ 196 0068 1A44     		add	r2, r2, r3
+ 197              		.loc 1 83 42
+ 198 006a FB68     		ldr	r3, [r7, #12]
+ 199 006c 5B68     		ldr	r3, [r3, #4]
+ 200              		.loc 1 83 7
+ 201 006e 9A42     		cmp	r2, r3
+ 202 0070 27DD     		ble	.L10
+  84:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     {
+  85:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         offset = (ring->dataoff+ring->datalen)%ring->buflen; //we could move it one time
+ 203              		.loc 1 85 23
+ARM GAS  /tmp/ccL8PiJY.s 			page 6
+
+
+ 204 0072 FB68     		ldr	r3, [r7, #12]
+ 205 0074 DA68     		ldr	r2, [r3, #12]
+ 206              		.loc 1 85 37
+ 207 0076 FB68     		ldr	r3, [r7, #12]
+ 208 0078 9B68     		ldr	r3, [r3, #8]
+ 209              		.loc 1 85 32
+ 210 007a 1344     		add	r3, r3, r2
+ 211              		.loc 1 85 52
+ 212 007c FA68     		ldr	r2, [r7, #12]
+ 213 007e 5268     		ldr	r2, [r2, #4]
+ 214              		.loc 1 85 16
+ 215 0080 93FBF2F1 		sdiv	r1, r3, r2
+ 216 0084 02FB01F2 		mul	r2, r2, r1
+ 217 0088 9B1A     		subs	r3, r3, r2
+ 218 008a BB61     		str	r3, [r7, #24]
+  86:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         cpylen = lenleft;
+ 219              		.loc 1 86 16
+ 220 008c 7B6A     		ldr	r3, [r7, #36]
+ 221 008e 7B61     		str	r3, [r7, #20]
+  87:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         dst = ring->buf + offset;
+ 222              		.loc 1 87 19
+ 223 0090 FB68     		ldr	r3, [r7, #12]
+ 224 0092 1A68     		ldr	r2, [r3]
+ 225              		.loc 1 87 25
+ 226 0094 BB69     		ldr	r3, [r7, #24]
+ 227              		.loc 1 87 13
+ 228 0096 1344     		add	r3, r3, r2
+ 229 0098 3B61     		str	r3, [r7, #16]
+  88:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         if(cpylen > 0)
+ 230              		.loc 1 88 11
+ 231 009a 7B69     		ldr	r3, [r7, #20]
+ 232 009c 002B     		cmp	r3, #0
+ 233 009e 3FDD     		ble	.L11
+  89:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         {
+  90:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****             (void) memcpy(dst,src,cpylen);
+ 234              		.loc 1 90 20
+ 235 00a0 7B69     		ldr	r3, [r7, #20]
+ 236 00a2 1A46     		mov	r2, r3
+ 237 00a4 396A     		ldr	r1, [r7, #32]
+ 238 00a6 3869     		ldr	r0, [r7, #16]
+ 239 00a8 FFF7FEFF 		bl	memcpy
+  91:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****             ring->datalen += cpylen;
+ 240              		.loc 1 91 27
+ 241 00ac FB68     		ldr	r3, [r7, #12]
+ 242 00ae 9A68     		ldr	r2, [r3, #8]
+ 243 00b0 7B69     		ldr	r3, [r7, #20]
+ 244 00b2 1A44     		add	r2, r2, r3
+ 245 00b4 FB68     		ldr	r3, [r7, #12]
+ 246 00b6 9A60     		str	r2, [r3, #8]
+  92:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****             lenleft -= cpylen;
+ 247              		.loc 1 92 21
+ 248 00b8 7A6A     		ldr	r2, [r7, #36]
+ 249 00ba 7B69     		ldr	r3, [r7, #20]
+ 250 00bc D31A     		subs	r3, r2, r3
+ 251 00be 7B62     		str	r3, [r7, #36]
+ 252 00c0 2EE0     		b	.L11
+ 253              	.L10:
+ARM GAS  /tmp/ccL8PiJY.s 			page 7
+
+
+  93:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         }
+  94:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     }
+  95:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     else if((ring->dataoff+ring->datalen + lenleft)>ring->buflen) //which means the data will be ro
+ 254              		.loc 1 95 18
+ 255 00c2 FB68     		ldr	r3, [r7, #12]
+ 256 00c4 DA68     		ldr	r2, [r3, #12]
+ 257              		.loc 1 95 32
+ 258 00c6 FB68     		ldr	r3, [r7, #12]
+ 259 00c8 9B68     		ldr	r3, [r3, #8]
+ 260              		.loc 1 95 27
+ 261 00ca 1A44     		add	r2, r2, r3
+ 262              		.loc 1 95 42
+ 263 00cc 7B6A     		ldr	r3, [r7, #36]
+ 264 00ce 1A44     		add	r2, r2, r3
+ 265              		.loc 1 95 57
+ 266 00d0 FB68     		ldr	r3, [r7, #12]
+ 267 00d2 5B68     		ldr	r3, [r3, #4]
+ 268              		.loc 1 95 12
+ 269 00d4 9A42     		cmp	r2, r3
+ 270 00d6 23DD     		ble	.L11
+  96:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     {
+  97:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         //which means roll back,we should copy some here to the tail
+  98:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         offset = ring->dataoff + ring->datalen;
+ 271              		.loc 1 98 22
+ 272 00d8 FB68     		ldr	r3, [r7, #12]
+ 273 00da DA68     		ldr	r2, [r3, #12]
+ 274              		.loc 1 98 38
+ 275 00dc FB68     		ldr	r3, [r7, #12]
+ 276 00de 9B68     		ldr	r3, [r3, #8]
+ 277              		.loc 1 98 16
+ 278 00e0 1344     		add	r3, r3, r2
+ 279 00e2 BB61     		str	r3, [r7, #24]
+  99:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         cpylen = ring->buflen - offset;
+ 280              		.loc 1 99 22
+ 281 00e4 FB68     		ldr	r3, [r7, #12]
+ 282 00e6 5A68     		ldr	r2, [r3, #4]
+ 283              		.loc 1 99 16
+ 284 00e8 BB69     		ldr	r3, [r7, #24]
+ 285 00ea D31A     		subs	r3, r2, r3
+ 286 00ec 7B61     		str	r3, [r7, #20]
+ 100:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         dst = ring->buf + offset;
+ 287              		.loc 1 100 19
+ 288 00ee FB68     		ldr	r3, [r7, #12]
+ 289 00f0 1A68     		ldr	r2, [r3]
+ 290              		.loc 1 100 25
+ 291 00f2 BB69     		ldr	r3, [r7, #24]
+ 292              		.loc 1 100 13
+ 293 00f4 1344     		add	r3, r3, r2
+ 294 00f6 3B61     		str	r3, [r7, #16]
+ 101:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         (void) memcpy(dst,src,cpylen);
+ 295              		.loc 1 101 16
+ 296 00f8 7B69     		ldr	r3, [r7, #20]
+ 297 00fa 1A46     		mov	r2, r3
+ 298 00fc 396A     		ldr	r1, [r7, #32]
+ 299 00fe 3869     		ldr	r0, [r7, #16]
+ 300 0100 FFF7FEFF 		bl	memcpy
+ 102:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         src += cpylen;
+ARM GAS  /tmp/ccL8PiJY.s 			page 8
+
+
+ 301              		.loc 1 102 13
+ 302 0104 7B69     		ldr	r3, [r7, #20]
+ 303 0106 3A6A     		ldr	r2, [r7, #32]
+ 304 0108 1344     		add	r3, r3, r2
+ 305 010a 3B62     		str	r3, [r7, #32]
+ 103:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         ring->datalen += cpylen;
+ 306              		.loc 1 103 23
+ 307 010c FB68     		ldr	r3, [r7, #12]
+ 308 010e 9A68     		ldr	r2, [r3, #8]
+ 309 0110 7B69     		ldr	r3, [r7, #20]
+ 310 0112 1A44     		add	r2, r2, r3
+ 311 0114 FB68     		ldr	r3, [r7, #12]
+ 312 0116 9A60     		str	r2, [r3, #8]
+ 104:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         lenleft -= cpylen;
+ 313              		.loc 1 104 17
+ 314 0118 7A6A     		ldr	r2, [r7, #36]
+ 315 011a 7B69     		ldr	r3, [r7, #20]
+ 316 011c D31A     		subs	r3, r2, r3
+ 317 011e 7B62     		str	r3, [r7, #36]
+ 318              	.L11:
+ 105:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     }
+ 106:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     //here means we could move it by one time
+ 107:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     if(lenleft > 0)
+ 319              		.loc 1 107 7
+ 320 0120 7B6A     		ldr	r3, [r7, #36]
+ 321 0122 002B     		cmp	r3, #0
+ 322 0124 1FDD     		ble	.L12
+ 108:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     {
+ 109:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         offset = (ring->dataoff+ring->datalen)%ring->buflen; //we could move it one time
+ 323              		.loc 1 109 23
+ 324 0126 FB68     		ldr	r3, [r7, #12]
+ 325 0128 DA68     		ldr	r2, [r3, #12]
+ 326              		.loc 1 109 37
+ 327 012a FB68     		ldr	r3, [r7, #12]
+ 328 012c 9B68     		ldr	r3, [r3, #8]
+ 329              		.loc 1 109 32
+ 330 012e 1344     		add	r3, r3, r2
+ 331              		.loc 1 109 52
+ 332 0130 FA68     		ldr	r2, [r7, #12]
+ 333 0132 5268     		ldr	r2, [r2, #4]
+ 334              		.loc 1 109 16
+ 335 0134 93FBF2F1 		sdiv	r1, r3, r2
+ 336 0138 02FB01F2 		mul	r2, r2, r1
+ 337 013c 9B1A     		subs	r3, r3, r2
+ 338 013e BB61     		str	r3, [r7, #24]
+ 110:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         cpylen = lenleft;
+ 339              		.loc 1 110 16
+ 340 0140 7B6A     		ldr	r3, [r7, #36]
+ 341 0142 7B61     		str	r3, [r7, #20]
+ 111:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         dst = ring->buf + offset;
+ 342              		.loc 1 111 19
+ 343 0144 FB68     		ldr	r3, [r7, #12]
+ 344 0146 1A68     		ldr	r2, [r3]
+ 345              		.loc 1 111 25
+ 346 0148 BB69     		ldr	r3, [r7, #24]
+ 347              		.loc 1 111 13
+ 348 014a 1344     		add	r3, r3, r2
+ARM GAS  /tmp/ccL8PiJY.s 			page 9
+
+
+ 349 014c 3B61     		str	r3, [r7, #16]
+ 112:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         (void) memcpy(dst,src,cpylen);
+ 350              		.loc 1 112 16
+ 351 014e 7B69     		ldr	r3, [r7, #20]
+ 352 0150 1A46     		mov	r2, r3
+ 353 0152 396A     		ldr	r1, [r7, #32]
+ 354 0154 3869     		ldr	r0, [r7, #16]
+ 355 0156 FFF7FEFF 		bl	memcpy
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         ring->datalen += cpylen;
+ 356              		.loc 1 113 23
+ 357 015a FB68     		ldr	r3, [r7, #12]
+ 358 015c 9A68     		ldr	r2, [r3, #8]
+ 359 015e 7B69     		ldr	r3, [r7, #20]
+ 360 0160 1A44     		add	r2, r2, r3
+ 361 0162 FB68     		ldr	r3, [r7, #12]
+ 362 0164 9A60     		str	r2, [r3, #8]
+ 363              	.L12:
+ 114:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     }
+ 115:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     return ret;
+ 364              		.loc 1 115 12
+ 365 0166 FB69     		ldr	r3, [r7, #28]
+ 366              	.L7:
+ 116:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** }
+ 367              		.loc 1 116 1
+ 368 0168 1846     		mov	r0, r3
+ 369 016a 2837     		adds	r7, r7, #40
+ 370              	.LCFI9:
+ 371              		.cfi_def_cfa_offset 8
+ 372 016c BD46     		mov	sp, r7
+ 373              	.LCFI10:
+ 374              		.cfi_def_cfa_register 13
+ 375              		@ sp needed
+ 376 016e 80BD     		pop	{r7, pc}
+ 377              		.cfi_endproc
+ 378              	.LFE1:
+ 380              		.section	.text.ring_buffer_read,"ax",%progbits
+ 381              		.align	1
+ 382              		.global	ring_buffer_read
+ 383              		.syntax unified
+ 384              		.thumb
+ 385              		.thumb_func
+ 386              		.fpu fpv4-sp-d16
+ 388              	ring_buffer_read:
+ 389              	.LFB2:
+ 117:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** 
+ 118:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** 
+ 119:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** int ring_buffer_read(tag_ring_buffer_t *ring,unsigned char *buf, int len)
+ 120:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** {
+ 390              		.loc 1 120 1
+ 391              		.cfi_startproc
+ 392              		@ args = 0, pretend = 0, frame = 40
+ 393              		@ frame_needed = 1, uses_anonymous_args = 0
+ 394 0000 80B5     		push	{r7, lr}
+ 395              	.LCFI11:
+ 396              		.cfi_def_cfa_offset 8
+ 397              		.cfi_offset 7, -8
+ 398              		.cfi_offset 14, -4
+ARM GAS  /tmp/ccL8PiJY.s 			page 10
+
+
+ 399 0002 8AB0     		sub	sp, sp, #40
+ 400              	.LCFI12:
+ 401              		.cfi_def_cfa_offset 48
+ 402 0004 00AF     		add	r7, sp, #0
+ 403              	.LCFI13:
+ 404              		.cfi_def_cfa_register 7
+ 405 0006 F860     		str	r0, [r7, #12]
+ 406 0008 B960     		str	r1, [r7, #8]
+ 407 000a 7A60     		str	r2, [r7, #4]
+ 121:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     int ret = -1;
+ 408              		.loc 1 121 9
+ 409 000c 4FF0FF33 		mov	r3, #-1
+ 410 0010 FB61     		str	r3, [r7, #28]
+ 122:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     int cpylen;  //the current time we should move
+ 123:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     int lenleft;  //and how many data still left to move
+ 124:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     int offset;
+ 125:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     unsigned char *src;
+ 126:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     unsigned char *dst;
+ 127:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     if((NULL == ring)||(NULL == buf)||(0 == len))
+ 411              		.loc 1 127 7
+ 412 0012 FB68     		ldr	r3, [r7, #12]
+ 413 0014 002B     		cmp	r3, #0
+ 414 0016 05D0     		beq	.L14
+ 415              		.loc 1 127 22 discriminator 1
+ 416 0018 BB68     		ldr	r3, [r7, #8]
+ 417 001a 002B     		cmp	r3, #0
+ 418 001c 02D0     		beq	.L14
+ 419              		.loc 1 127 37 discriminator 2
+ 420 001e 7B68     		ldr	r3, [r7, #4]
+ 421 0020 002B     		cmp	r3, #0
+ 422 0022 01D1     		bne	.L15
+ 423              	.L14:
+ 128:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     {
+ 129:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         return ret;//which means parameters error
+ 424              		.loc 1 129 16
+ 425 0024 FB69     		ldr	r3, [r7, #28]
+ 426 0026 70E0     		b	.L16
+ 427              	.L15:
+ 130:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     }
+ 131:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     if((ring->datalen == 0) || (ring->buflen <= 0))
+ 428              		.loc 1 131 13
+ 429 0028 FB68     		ldr	r3, [r7, #12]
+ 430 002a 9B68     		ldr	r3, [r3, #8]
+ 431              		.loc 1 131 7
+ 432 002c 002B     		cmp	r3, #0
+ 433 002e 03D0     		beq	.L17
+ 434              		.loc 1 131 37 discriminator 1
+ 435 0030 FB68     		ldr	r3, [r7, #12]
+ 436 0032 5B68     		ldr	r3, [r3, #4]
+ 437              		.loc 1 131 29 discriminator 1
+ 438 0034 002B     		cmp	r3, #0
+ 439 0036 03DC     		bgt	.L18
+ 440              	.L17:
+ 132:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     {
+ 133:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         ret = 0;
+ 441              		.loc 1 133 13
+ 442 0038 0023     		movs	r3, #0
+ARM GAS  /tmp/ccL8PiJY.s 			page 11
+
+
+ 443 003a FB61     		str	r3, [r7, #28]
+ 134:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         return  ret;//which means you could copy nothing here
+ 444              		.loc 1 134 17
+ 445 003c FB69     		ldr	r3, [r7, #28]
+ 446 003e 64E0     		b	.L16
+ 447              	.L18:
+ 135:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     }
+ 136:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     ret = len > ring->datalen?ring->datalen:len;
+ 448              		.loc 1 136 21
+ 449 0040 FB68     		ldr	r3, [r7, #12]
+ 450 0042 9B68     		ldr	r3, [r3, #8]
+ 451              		.loc 1 136 9
+ 452 0044 7A68     		ldr	r2, [r7, #4]
+ 453 0046 9342     		cmp	r3, r2
+ 454 0048 A8BF     		it	ge
+ 455 004a 1346     		movge	r3, r2
+ 456 004c FB61     		str	r3, [r7, #28]
+ 137:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     //now let us think the method to fill the data,take care of the roll back
+ 138:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     lenleft = ret;
+ 457              		.loc 1 138 13
+ 458 004e FB69     		ldr	r3, [r7, #28]
+ 459 0050 7B62     		str	r3, [r7, #36]
+ 139:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     dst = buf;
+ 460              		.loc 1 139 9
+ 461 0052 BB68     		ldr	r3, [r7, #8]
+ 462 0054 3B62     		str	r3, [r7, #32]
+ 140:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     if(ring->dataoff >= (ring->buflen - lenleft)) //which means the data has roll back
+ 463              		.loc 1 140 12
+ 464 0056 FB68     		ldr	r3, [r7, #12]
+ 465 0058 DA68     		ldr	r2, [r3, #12]
+ 466              		.loc 1 140 30
+ 467 005a FB68     		ldr	r3, [r7, #12]
+ 468 005c 5968     		ldr	r1, [r3, #4]
+ 469              		.loc 1 140 39
+ 470 005e 7B6A     		ldr	r3, [r7, #36]
+ 471 0060 CB1A     		subs	r3, r1, r3
+ 472              		.loc 1 140 7
+ 473 0062 9A42     		cmp	r2, r3
+ 474 0064 31DB     		blt	.L19
+ 141:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     {
+ 142:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         offset =ring->dataoff; //we cpy part
+ 475              		.loc 1 142 16
+ 476 0066 FB68     		ldr	r3, [r7, #12]
+ 477 0068 DB68     		ldr	r3, [r3, #12]
+ 478 006a BB61     		str	r3, [r7, #24]
+ 143:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         cpylen = ring->buflen - ring->dataoff;
+ 479              		.loc 1 143 22
+ 480 006c FB68     		ldr	r3, [r7, #12]
+ 481 006e 5A68     		ldr	r2, [r3, #4]
+ 482              		.loc 1 143 37
+ 483 0070 FB68     		ldr	r3, [r7, #12]
+ 484 0072 DB68     		ldr	r3, [r3, #12]
+ 485              		.loc 1 143 16
+ 486 0074 D31A     		subs	r3, r2, r3
+ 487 0076 7B61     		str	r3, [r7, #20]
+ 144:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         src = ring->buf + offset;
+ 488              		.loc 1 144 19
+ARM GAS  /tmp/ccL8PiJY.s 			page 12
+
+
+ 489 0078 FB68     		ldr	r3, [r7, #12]
+ 490 007a 1A68     		ldr	r2, [r3]
+ 491              		.loc 1 144 25
+ 492 007c BB69     		ldr	r3, [r7, #24]
+ 493              		.loc 1 144 13
+ 494 007e 1344     		add	r3, r3, r2
+ 495 0080 3B61     		str	r3, [r7, #16]
+ 145:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** 
+ 146:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         if(cpylen > 0)
+ 496              		.loc 1 146 11
+ 497 0082 7B69     		ldr	r3, [r7, #20]
+ 498 0084 002B     		cmp	r3, #0
+ 499 0086 20DD     		ble	.L19
+ 147:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         {
+ 148:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****             (void) memcpy(dst,src,cpylen);
+ 500              		.loc 1 148 20
+ 501 0088 7B69     		ldr	r3, [r7, #20]
+ 502 008a 1A46     		mov	r2, r3
+ 503 008c 3969     		ldr	r1, [r7, #16]
+ 504 008e 386A     		ldr	r0, [r7, #32]
+ 505 0090 FFF7FEFF 		bl	memcpy
+ 149:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****             ring->dataoff = (ring->dataoff + cpylen)%ring->buflen;
+ 506              		.loc 1 149 34
+ 507 0094 FB68     		ldr	r3, [r7, #12]
+ 508 0096 DA68     		ldr	r2, [r3, #12]
+ 509              		.loc 1 149 44
+ 510 0098 7B69     		ldr	r3, [r7, #20]
+ 511 009a 1344     		add	r3, r3, r2
+ 512              		.loc 1 149 58
+ 513 009c FA68     		ldr	r2, [r7, #12]
+ 514 009e 5268     		ldr	r2, [r2, #4]
+ 515              		.loc 1 149 53
+ 516 00a0 93FBF2F1 		sdiv	r1, r3, r2
+ 517 00a4 02FB01F2 		mul	r2, r2, r1
+ 518 00a8 9A1A     		subs	r2, r3, r2
+ 519              		.loc 1 149 27
+ 520 00aa FB68     		ldr	r3, [r7, #12]
+ 521 00ac DA60     		str	r2, [r3, #12]
+ 150:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****             ring->datalen -= cpylen;
+ 522              		.loc 1 150 27
+ 523 00ae FB68     		ldr	r3, [r7, #12]
+ 524 00b0 9A68     		ldr	r2, [r3, #8]
+ 525 00b2 7B69     		ldr	r3, [r7, #20]
+ 526 00b4 D21A     		subs	r2, r2, r3
+ 527 00b6 FB68     		ldr	r3, [r7, #12]
+ 528 00b8 9A60     		str	r2, [r3, #8]
+ 151:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****             lenleft -= cpylen;
+ 529              		.loc 1 151 21
+ 530 00ba 7A6A     		ldr	r2, [r7, #36]
+ 531 00bc 7B69     		ldr	r3, [r7, #20]
+ 532 00be D31A     		subs	r3, r2, r3
+ 533 00c0 7B62     		str	r3, [r7, #36]
+ 152:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****             dst += cpylen;
+ 534              		.loc 1 152 17
+ 535 00c2 7B69     		ldr	r3, [r7, #20]
+ 536 00c4 3A6A     		ldr	r2, [r7, #32]
+ 537 00c6 1344     		add	r3, r3, r2
+ARM GAS  /tmp/ccL8PiJY.s 			page 13
+
+
+ 538 00c8 3B62     		str	r3, [r7, #32]
+ 539              	.L19:
+ 153:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         }
+ 154:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     }
+ 155:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     //here means we could move it by one time
+ 156:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     if(lenleft > 0)
+ 540              		.loc 1 156 7
+ 541 00ca 7B6A     		ldr	r3, [r7, #36]
+ 542 00cc 002B     		cmp	r3, #0
+ 543 00ce 1BDD     		ble	.L20
+ 157:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     {
+ 158:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         offset =ring->dataoff; //we cpy part
+ 544              		.loc 1 158 16
+ 545 00d0 FB68     		ldr	r3, [r7, #12]
+ 546 00d2 DB68     		ldr	r3, [r3, #12]
+ 547 00d4 BB61     		str	r3, [r7, #24]
+ 159:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         cpylen = lenleft;
+ 548              		.loc 1 159 16
+ 549 00d6 7B6A     		ldr	r3, [r7, #36]
+ 550 00d8 7B61     		str	r3, [r7, #20]
+ 160:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         src = ring->buf + offset;
+ 551              		.loc 1 160 19
+ 552 00da FB68     		ldr	r3, [r7, #12]
+ 553 00dc 1A68     		ldr	r2, [r3]
+ 554              		.loc 1 160 25
+ 555 00de BB69     		ldr	r3, [r7, #24]
+ 556              		.loc 1 160 13
+ 557 00e0 1344     		add	r3, r3, r2
+ 558 00e2 3B61     		str	r3, [r7, #16]
+ 161:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         (void) memcpy(dst,src,cpylen);
+ 559              		.loc 1 161 16
+ 560 00e4 7B69     		ldr	r3, [r7, #20]
+ 561 00e6 1A46     		mov	r2, r3
+ 562 00e8 3969     		ldr	r1, [r7, #16]
+ 563 00ea 386A     		ldr	r0, [r7, #32]
+ 564 00ec FFF7FEFF 		bl	memcpy
+ 162:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         ring->dataoff = ring->dataoff + cpylen;
+ 565              		.loc 1 162 29
+ 566 00f0 FB68     		ldr	r3, [r7, #12]
+ 567 00f2 DA68     		ldr	r2, [r3, #12]
+ 568              		.loc 1 162 39
+ 569 00f4 7B69     		ldr	r3, [r7, #20]
+ 570 00f6 1A44     		add	r2, r2, r3
+ 571              		.loc 1 162 23
+ 572 00f8 FB68     		ldr	r3, [r7, #12]
+ 573 00fa DA60     		str	r2, [r3, #12]
+ 163:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         ring->datalen -= cpylen;
+ 574              		.loc 1 163 23
+ 575 00fc FB68     		ldr	r3, [r7, #12]
+ 576 00fe 9A68     		ldr	r2, [r3, #8]
+ 577 0100 7B69     		ldr	r3, [r7, #20]
+ 578 0102 D21A     		subs	r2, r2, r3
+ 579 0104 FB68     		ldr	r3, [r7, #12]
+ 580 0106 9A60     		str	r2, [r3, #8]
+ 581              	.L20:
+ 164:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     }
+ 165:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     return ret;
+ARM GAS  /tmp/ccL8PiJY.s 			page 14
+
+
+ 582              		.loc 1 165 12
+ 583 0108 FB69     		ldr	r3, [r7, #28]
+ 584              	.L16:
+ 166:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** }
+ 585              		.loc 1 166 1
+ 586 010a 1846     		mov	r0, r3
+ 587 010c 2837     		adds	r7, r7, #40
+ 588              	.LCFI14:
+ 589              		.cfi_def_cfa_offset 8
+ 590 010e BD46     		mov	sp, r7
+ 591              	.LCFI15:
+ 592              		.cfi_def_cfa_register 13
+ 593              		@ sp needed
+ 594 0110 80BD     		pop	{r7, pc}
+ 595              		.cfi_endproc
+ 596              	.LFE2:
+ 598              		.section	.text.ring_buffer_datalen,"ax",%progbits
+ 599              		.align	1
+ 600              		.global	ring_buffer_datalen
+ 601              		.syntax unified
+ 602              		.thumb
+ 603              		.thumb_func
+ 604              		.fpu fpv4-sp-d16
+ 606              	ring_buffer_datalen:
+ 607              	.LFB3:
+ 167:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** 
+ 168:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** 
+ 169:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** int ring_buffer_datalen(tag_ring_buffer_t *ring)
+ 170:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** {
+ 608              		.loc 1 170 1
+ 609              		.cfi_startproc
+ 610              		@ args = 0, pretend = 0, frame = 16
+ 611              		@ frame_needed = 1, uses_anonymous_args = 0
+ 612              		@ link register save eliminated.
+ 613 0000 80B4     		push	{r7}
+ 614              	.LCFI16:
+ 615              		.cfi_def_cfa_offset 4
+ 616              		.cfi_offset 7, -4
+ 617 0002 85B0     		sub	sp, sp, #20
+ 618              	.LCFI17:
+ 619              		.cfi_def_cfa_offset 24
+ 620 0004 00AF     		add	r7, sp, #0
+ 621              	.LCFI18:
+ 622              		.cfi_def_cfa_register 7
+ 623 0006 7860     		str	r0, [r7, #4]
+ 171:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     int ret = -1;
+ 624              		.loc 1 171 9
+ 625 0008 4FF0FF33 		mov	r3, #-1
+ 626 000c FB60     		str	r3, [r7, #12]
+ 172:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     if(NULL != ring)
+ 627              		.loc 1 172 7
+ 628 000e 7B68     		ldr	r3, [r7, #4]
+ 629 0010 002B     		cmp	r3, #0
+ 630 0012 02D0     		beq	.L22
+ 173:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     {
+ 174:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         ret = ring->datalen;
+ 631              		.loc 1 174 13
+ARM GAS  /tmp/ccL8PiJY.s 			page 15
+
+
+ 632 0014 7B68     		ldr	r3, [r7, #4]
+ 633 0016 9B68     		ldr	r3, [r3, #8]
+ 634 0018 FB60     		str	r3, [r7, #12]
+ 635              	.L22:
+ 175:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     }
+ 176:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     return ret;
+ 636              		.loc 1 176 12
+ 637 001a FB68     		ldr	r3, [r7, #12]
+ 177:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** }
+ 638              		.loc 1 177 1
+ 639 001c 1846     		mov	r0, r3
+ 640 001e 1437     		adds	r7, r7, #20
+ 641              	.LCFI19:
+ 642              		.cfi_def_cfa_offset 4
+ 643 0020 BD46     		mov	sp, r7
+ 644              	.LCFI20:
+ 645              		.cfi_def_cfa_register 13
+ 646              		@ sp needed
+ 647 0022 5DF8047B 		ldr	r7, [sp], #4
+ 648              	.LCFI21:
+ 649              		.cfi_restore 7
+ 650              		.cfi_def_cfa_offset 0
+ 651 0026 7047     		bx	lr
+ 652              		.cfi_endproc
+ 653              	.LFE3:
+ 655              		.section	.text.ring_buffer_freespace,"ax",%progbits
+ 656              		.align	1
+ 657              		.global	ring_buffer_freespace
+ 658              		.syntax unified
+ 659              		.thumb
+ 660              		.thumb_func
+ 661              		.fpu fpv4-sp-d16
+ 663              	ring_buffer_freespace:
+ 664              	.LFB4:
+ 178:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** 
+ 179:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** int ring_buffer_freespace(tag_ring_buffer_t *ring)
+ 180:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** {
+ 665              		.loc 1 180 1
+ 666              		.cfi_startproc
+ 667              		@ args = 0, pretend = 0, frame = 16
+ 668              		@ frame_needed = 1, uses_anonymous_args = 0
+ 669              		@ link register save eliminated.
+ 670 0000 80B4     		push	{r7}
+ 671              	.LCFI22:
+ 672              		.cfi_def_cfa_offset 4
+ 673              		.cfi_offset 7, -4
+ 674 0002 85B0     		sub	sp, sp, #20
+ 675              	.LCFI23:
+ 676              		.cfi_def_cfa_offset 24
+ 677 0004 00AF     		add	r7, sp, #0
+ 678              	.LCFI24:
+ 679              		.cfi_def_cfa_register 7
+ 680 0006 7860     		str	r0, [r7, #4]
+ 181:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     int ret = -1;
+ 681              		.loc 1 181 9
+ 682 0008 4FF0FF33 		mov	r3, #-1
+ 683 000c FB60     		str	r3, [r7, #12]
+ARM GAS  /tmp/ccL8PiJY.s 			page 16
+
+
+ 182:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     if(NULL != ring)
+ 684              		.loc 1 182 7
+ 685 000e 7B68     		ldr	r3, [r7, #4]
+ 686 0010 002B     		cmp	r3, #0
+ 687 0012 05D0     		beq	.L25
+ 183:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     {
+ 184:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         ret = ring->buflen-ring->datalen;
+ 688              		.loc 1 184 19
+ 689 0014 7B68     		ldr	r3, [r7, #4]
+ 690 0016 5A68     		ldr	r2, [r3, #4]
+ 691              		.loc 1 184 32
+ 692 0018 7B68     		ldr	r3, [r7, #4]
+ 693 001a 9B68     		ldr	r3, [r3, #8]
+ 694              		.loc 1 184 13
+ 695 001c D31A     		subs	r3, r2, r3
+ 696 001e FB60     		str	r3, [r7, #12]
+ 697              	.L25:
+ 185:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     }
+ 186:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     return ret;
+ 698              		.loc 1 186 12
+ 699 0020 FB68     		ldr	r3, [r7, #12]
+ 187:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** }
+ 700              		.loc 1 187 1
+ 701 0022 1846     		mov	r0, r3
+ 702 0024 1437     		adds	r7, r7, #20
+ 703              	.LCFI25:
+ 704              		.cfi_def_cfa_offset 4
+ 705 0026 BD46     		mov	sp, r7
+ 706              	.LCFI26:
+ 707              		.cfi_def_cfa_register 13
+ 708              		@ sp needed
+ 709 0028 5DF8047B 		ldr	r7, [sp], #4
+ 710              	.LCFI27:
+ 711              		.cfi_restore 7
+ 712              		.cfi_def_cfa_offset 0
+ 713 002c 7047     		bx	lr
+ 714              		.cfi_endproc
+ 715              	.LFE4:
+ 717              		.section	.text.ring_buffer_reset,"ax",%progbits
+ 718              		.align	1
+ 719              		.global	ring_buffer_reset
+ 720              		.syntax unified
+ 721              		.thumb
+ 722              		.thumb_func
+ 723              		.fpu fpv4-sp-d16
+ 725              	ring_buffer_reset:
+ 726              	.LFB5:
+ 188:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** 
+ 189:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** int ring_buffer_reset(tag_ring_buffer_t *ring)
+ 190:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** {
+ 727              		.loc 1 190 1
+ 728              		.cfi_startproc
+ 729              		@ args = 0, pretend = 0, frame = 16
+ 730              		@ frame_needed = 1, uses_anonymous_args = 0
+ 731              		@ link register save eliminated.
+ 732 0000 80B4     		push	{r7}
+ 733              	.LCFI28:
+ARM GAS  /tmp/ccL8PiJY.s 			page 17
+
+
+ 734              		.cfi_def_cfa_offset 4
+ 735              		.cfi_offset 7, -4
+ 736 0002 85B0     		sub	sp, sp, #20
+ 737              	.LCFI29:
+ 738              		.cfi_def_cfa_offset 24
+ 739 0004 00AF     		add	r7, sp, #0
+ 740              	.LCFI30:
+ 741              		.cfi_def_cfa_register 7
+ 742 0006 7860     		str	r0, [r7, #4]
+ 191:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     int ret = -1;
+ 743              		.loc 1 191 9
+ 744 0008 4FF0FF33 		mov	r3, #-1
+ 745 000c FB60     		str	r3, [r7, #12]
+ 192:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     if(NULL != ring)
+ 746              		.loc 1 192 7
+ 747 000e 7B68     		ldr	r3, [r7, #4]
+ 748 0010 002B     		cmp	r3, #0
+ 749 0012 07D0     		beq	.L28
+ 193:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     {
+ 194:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         ring->datalen = 0;
+ 750              		.loc 1 194 23
+ 751 0014 7B68     		ldr	r3, [r7, #4]
+ 752 0016 0022     		movs	r2, #0
+ 753 0018 9A60     		str	r2, [r3, #8]
+ 195:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         ring->dataoff = 0;
+ 754              		.loc 1 195 23
+ 755 001a 7B68     		ldr	r3, [r7, #4]
+ 756 001c 0022     		movs	r2, #0
+ 757 001e DA60     		str	r2, [r3, #12]
+ 196:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         ret = 0;
+ 758              		.loc 1 196 13
+ 759 0020 0023     		movs	r3, #0
+ 760 0022 FB60     		str	r3, [r7, #12]
+ 761              	.L28:
+ 197:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     }
+ 198:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     return ret;
+ 762              		.loc 1 198 12
+ 763 0024 FB68     		ldr	r3, [r7, #12]
+ 199:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** }
+ 764              		.loc 1 199 1
+ 765 0026 1846     		mov	r0, r3
+ 766 0028 1437     		adds	r7, r7, #20
+ 767              	.LCFI31:
+ 768              		.cfi_def_cfa_offset 4
+ 769 002a BD46     		mov	sp, r7
+ 770              	.LCFI32:
+ 771              		.cfi_def_cfa_register 13
+ 772              		@ sp needed
+ 773 002c 5DF8047B 		ldr	r7, [sp], #4
+ 774              	.LCFI33:
+ 775              		.cfi_restore 7
+ 776              		.cfi_def_cfa_offset 0
+ 777 0030 7047     		bx	lr
+ 778              		.cfi_endproc
+ 779              	.LFE5:
+ 781              		.section	.text.ring_buffer_deinit,"ax",%progbits
+ 782              		.align	1
+ARM GAS  /tmp/ccL8PiJY.s 			page 18
+
+
+ 783              		.global	ring_buffer_deinit
+ 784              		.syntax unified
+ 785              		.thumb
+ 786              		.thumb_func
+ 787              		.fpu fpv4-sp-d16
+ 789              	ring_buffer_deinit:
+ 790              	.LFB6:
+ 200:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** 
+ 201:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** int ring_buffer_deinit(tag_ring_buffer_t *ring)
+ 202:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** {
+ 791              		.loc 1 202 1
+ 792              		.cfi_startproc
+ 793              		@ args = 0, pretend = 0, frame = 16
+ 794              		@ frame_needed = 1, uses_anonymous_args = 0
+ 795 0000 80B5     		push	{r7, lr}
+ 796              	.LCFI34:
+ 797              		.cfi_def_cfa_offset 8
+ 798              		.cfi_offset 7, -8
+ 799              		.cfi_offset 14, -4
+ 800 0002 84B0     		sub	sp, sp, #16
+ 801              	.LCFI35:
+ 802              		.cfi_def_cfa_offset 24
+ 803 0004 00AF     		add	r7, sp, #0
+ 804              	.LCFI36:
+ 805              		.cfi_def_cfa_register 7
+ 806 0006 7860     		str	r0, [r7, #4]
+ 203:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     int ret = -1;
+ 807              		.loc 1 203 9
+ 808 0008 4FF0FF33 		mov	r3, #-1
+ 809 000c FB60     		str	r3, [r7, #12]
+ 204:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     if(NULL != ring)
+ 810              		.loc 1 204 7
+ 811 000e 7B68     		ldr	r3, [r7, #4]
+ 812 0010 002B     		cmp	r3, #0
+ 813 0012 06D0     		beq	.L31
+ 205:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     {
+ 206:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         (void) memset(ring,0,sizeof(tag_ring_buffer_t));
+ 814              		.loc 1 206 16
+ 815 0014 1022     		movs	r2, #16
+ 816 0016 0021     		movs	r1, #0
+ 817 0018 7868     		ldr	r0, [r7, #4]
+ 818 001a FFF7FEFF 		bl	memset
+ 207:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****         ret = 0;
+ 819              		.loc 1 207 13
+ 820 001e 0023     		movs	r3, #0
+ 821 0020 FB60     		str	r3, [r7, #12]
+ 822              	.L31:
+ 208:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     }
+ 209:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c ****     return ret;
+ 823              		.loc 1 209 12
+ 824 0022 FB68     		ldr	r3, [r7, #12]
+ 210:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_ring_buffer.c **** }
+ 825              		.loc 1 210 1
+ 826 0024 1846     		mov	r0, r3
+ 827 0026 1037     		adds	r7, r7, #16
+ 828              	.LCFI37:
+ 829              		.cfi_def_cfa_offset 8
+ARM GAS  /tmp/ccL8PiJY.s 			page 19
+
+
+ 830 0028 BD46     		mov	sp, r7
+ 831              	.LCFI38:
+ 832              		.cfi_def_cfa_register 13
+ 833              		@ sp needed
+ 834 002a 80BD     		pop	{r7, pc}
+ 835              		.cfi_endproc
+ 836              	.LFE6:
+ 838              		.text
+ 839              	.Letext0:
+ 840              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 841              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 842              		.file 4 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 843              		.file 5 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/ree
+ 844              		.file 6 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/link_misc/link_misc.h"
+ARM GAS  /tmp/ccL8PiJY.s 			page 20
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 link_ring_buffer.c
+     /tmp/ccL8PiJY.s:18     .text.ring_buffer_init:0000000000000000 $t
+     /tmp/ccL8PiJY.s:26     .text.ring_buffer_init:0000000000000000 ring_buffer_init
+     /tmp/ccL8PiJY.s:99     .text.ring_buffer_write:0000000000000000 $t
+     /tmp/ccL8PiJY.s:106    .text.ring_buffer_write:0000000000000000 ring_buffer_write
+     /tmp/ccL8PiJY.s:381    .text.ring_buffer_read:0000000000000000 $t
+     /tmp/ccL8PiJY.s:388    .text.ring_buffer_read:0000000000000000 ring_buffer_read
+     /tmp/ccL8PiJY.s:599    .text.ring_buffer_datalen:0000000000000000 $t
+     /tmp/ccL8PiJY.s:606    .text.ring_buffer_datalen:0000000000000000 ring_buffer_datalen
+     /tmp/ccL8PiJY.s:656    .text.ring_buffer_freespace:0000000000000000 $t
+     /tmp/ccL8PiJY.s:663    .text.ring_buffer_freespace:0000000000000000 ring_buffer_freespace
+     /tmp/ccL8PiJY.s:718    .text.ring_buffer_reset:0000000000000000 $t
+     /tmp/ccL8PiJY.s:725    .text.ring_buffer_reset:0000000000000000 ring_buffer_reset
+     /tmp/ccL8PiJY.s:782    .text.ring_buffer_deinit:0000000000000000 $t
+     /tmp/ccL8PiJY.s:789    .text.ring_buffer_deinit:0000000000000000 ring_buffer_deinit
+
+UNDEFINED SYMBOLS
+memcpy
+memset

@@ -1,0 +1,3040 @@
+ARM GAS  /tmp/ccqDQHKf.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"los_svc.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.LOS_UsrTaskCreateOnly,"ax",%progbits
+  18              		.align	1
+  19              		.weak	LOS_UsrTaskCreateOnly
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	LOS_UsrTaskCreateOnly:
+  27              	.LFB133:
+  28              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h"
+   1:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** /*----------------------------------------------------------------------------
+   2:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * Copyright (c) <2019>, <Huawei Technologies Co., Ltd>
+   3:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * All rights reserved.
+   4:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * are permitted provided that the following conditions are met:
+   6:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * conditions and the following disclaimer.
+   8:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * provided with the distribution.
+  11:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * permission.
+  14:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  *---------------------------------------------------------------------------*/
+  26:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** /*----------------------------------------------------------------------------
+  27:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * Notice of Export Control Law
+  28:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * ===============================================
+  29:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+ARM GAS  /tmp/ccqDQHKf.s 			page 2
+
+
+  31:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * applicable export control laws and regulations.
+  33:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  *---------------------------------------------------------------------------*/
+  34:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+  35:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #ifndef _LOS_SVC_H
+  36:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define _LOS_SVC_H
+  37:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+  38:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #include <los_config.h>
+  39:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #include <los_typedef.h>
+  40:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+  41:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #include <los_task.h>
+  42:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #include <los_membox.h>
+  43:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #include <los_memory.h>
+  44:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #include <los_queue.h>
+  45:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #include <los_event.h>
+  46:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #include <los_mux.h>
+  47:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #include <los_sem.h>
+  48:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #include <los_swtmr.h>
+  49:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #include <los_sys.h>
+  50:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+  51:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** /*
+  52:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * syscall number bits:
+  53:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  *
+  54:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  *     8-bits        8-bits               16-bits
+  55:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * ------------------------------------------------------------
+  56:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * |           |               |                              |
+  57:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * |  module#  |  args_on_sp#  |           routine#           |
+  58:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * |           |               |                              |
+  59:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * ------------------------------------------------------------
+  60:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  * 31          23              15                             0
+  61:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****  */
+  62:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+  63:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SVC_NUM(mod, args, rtn)                 \
+  64:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****     (((mod) << 24) + (((args) & 0x0f) << 16) + ((rtn) & 0xffff))
+  65:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+  66:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** /* module ids */
+  67:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+  68:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define MOD_TASK                        0
+  69:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define MOD_MEM                         1
+  70:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define MOD_QUEUE                       2
+  71:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define MOD_EVENT                       3
+  72:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define MOD_MUX                         4
+  73:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define MOD_SEM                         5
+  74:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define MOD_SWTIMER                     6
+  75:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define MOD_SYS                         7
+  76:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define MOD_CUSTOM                      15
+  77:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+  78:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** /* syscall numbers for task module */
+  79:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+  80:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_TaskCreateOnly              SVC_NUM (MOD_TASK, 2, 0)
+  81:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_TaskCreate                  SVC_NUM (MOD_TASK, 2, 1)
+  82:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_TaskDelete                  SVC_NUM (MOD_TASK, 1, 2)
+  83:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_TaskResume                  SVC_NUM (MOD_TASK, 1, 3)
+  84:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_TaskSuspend                 SVC_NUM (MOD_TASK, 1, 4)
+  85:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_TaskDelay                   SVC_NUM (MOD_TASK, 1, 5)
+  86:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_TaskYield                   SVC_NUM (MOD_TASK, 0, 6)
+  87:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_TaskLock                    SVC_NUM (MOD_TASK, 0, 7)
+ARM GAS  /tmp/ccqDQHKf.s 			page 3
+
+
+  88:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_TaskUnlock                  SVC_NUM (MOD_TASK, 0, 8)
+  89:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_CurTaskPriSet               SVC_NUM (MOD_TASK, 1, 9)
+  90:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_TaskPriSet                  SVC_NUM (MOD_TASK, 2, 10)
+  91:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_TaskPriGet                  SVC_NUM (MOD_TASK, 1, 11)
+  92:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_CurTaskIDGet                SVC_NUM (MOD_TASK, 0, 12)
+  93:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_TaskInfoGet                 SVC_NUM (MOD_TASK, 2, 13)
+  94:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_TaskStatusGet               SVC_NUM (MOD_TASK, 2, 14)
+  95:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_TaskNameGet                 SVC_NUM (MOD_TASK, 0, 15)
+  96:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_TaskInfoMonitor             SVC_NUM (MOD_TASK, 0, 16)
+  97:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_NextTaskIDGet               SVC_NUM (MOD_TASK, 0, 17)
+  98:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+  99:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** /* syscall numbers for memory module */
+ 100:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 101:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_MemboxInit                  SVC_NUM (MOD_MEM, 3, 0)
+ 102:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_MemboxClr                   SVC_NUM (MOD_MEM, 2, 1)
+ 103:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_MemboxAlloc                 SVC_NUM (MOD_MEM, 1, 2)
+ 104:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_MemboxFree                  SVC_NUM (MOD_MEM, 2, 3)
+ 105:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_MemboxStatisticsGet         SVC_NUM (MOD_MEM, 4, 4)
+ 106:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_MemInit                     SVC_NUM (MOD_MEM, 2, 5)
+ 107:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_MemAlloc                    SVC_NUM (MOD_MEM, 2, 6)
+ 108:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_MemFree                     SVC_NUM (MOD_MEM, 2, 7)
+ 109:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_MemRealloc                  SVC_NUM (MOD_MEM, 3, 8)
+ 110:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_MemAllocAlign               SVC_NUM (MOD_MEM, 3, 9)
+ 111:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** //#define SCN_MemStatisticsGet            SVC_NUM (MOD_MEM, 2, 10)
+ 112:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** //#define SCN_MemGetMaxFreeBlkSize        SVC_NUM (MOD_MEM, 1, 11)
+ 113:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 114:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** /* syscall numbers for queue module */
+ 115:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 116:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_QueueCreate                 SVC_NUM (MOD_QUEUE, 5, 0)
+ 117:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_QueueRead                   SVC_NUM (MOD_QUEUE, 4, 1)
+ 118:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_QueueWrite                  SVC_NUM (MOD_QUEUE, 4, 2)
+ 119:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_QueueReadCopy               SVC_NUM (MOD_QUEUE, 4, 3)
+ 120:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_QueueWriteCopy              SVC_NUM (MOD_QUEUE, 4, 4)
+ 121:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_QueueWriteHead              SVC_NUM (MOD_QUEUE, 4, 5)
+ 122:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_QueueDelete                 SVC_NUM (MOD_QUEUE, 1, 6)
+ 123:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_QueueInfoGet                SVC_NUM (MOD_QUEUE, 2, 7)
+ 124:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 125:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** /* syscall numbers for event module */
+ 126:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 127:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_EventInit                   SVC_NUM (MOD_EVENT, 1, 0)
+ 128:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_EventRead                   SVC_NUM (MOD_EVENT, 4, 1)
+ 129:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_EventWrite                  SVC_NUM (MOD_EVENT, 2, 2)
+ 130:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_EventClear                  SVC_NUM (MOD_EVENT, 2, 3)
+ 131:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_EventPoll                   SVC_NUM (MOD_EVENT, 3, 4)
+ 132:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_EventDestroy                SVC_NUM (MOD_EVENT, 1, 5)
+ 133:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 134:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** /* syscall numbers for mutex module */
+ 135:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 136:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_MuxCreate                   SVC_NUM (MOD_MUX, 1, 0)
+ 137:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_MuxDelete                   SVC_NUM (MOD_MUX, 1, 1)
+ 138:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_MuxPend                     SVC_NUM (MOD_MUX, 2, 2)
+ 139:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_MuxPost                     SVC_NUM (MOD_MUX, 1, 3)
+ 140:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 141:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** /* syscall numbers for semaphore module */
+ 142:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 143:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_SemCreate                   SVC_NUM (MOD_SEM, 2, 0)
+ 144:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_BinarySemCreate             SVC_NUM (MOD_SEM, 2, 1)
+ARM GAS  /tmp/ccqDQHKf.s 			page 4
+
+
+ 145:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_SemDelete                   SVC_NUM (MOD_SEM, 1, 2)
+ 146:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_SemPend                     SVC_NUM (MOD_SEM, 2, 3)
+ 147:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_SemPost                     SVC_NUM (MOD_SEM, 1, 4)
+ 148:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 149:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** /* syscall numbers for software timer module */
+ 150:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 151:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #if (LOSCFG_BASE_CORE_SWTMR_ALIGN == YES)
+ 152:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_SwtmrCreate                 SVC_NUM (MOD_SWTIMER, 5, 0)
+ 153:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #else
+ 154:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_SwtmrCreate                 SVC_NUM (MOD_SWTIMER, 7, 0)
+ 155:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #endif
+ 156:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_SwtmrDelete                 SVC_NUM (MOD_SWTIMER, 1, 1)
+ 157:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_SwtmrStart                  SVC_NUM (MOD_SWTIMER, 1, 2)
+ 158:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_SwtmrStop                   SVC_NUM (MOD_SWTIMER, 1, 3)
+ 159:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_SwtmrTimeGet                SVC_NUM (MOD_SWTIMER, 2, 4)
+ 160:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 161:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** /* syscall numbers for sys module (los_sys.c/h) */
+ 162:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 163:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_MS2Tick                     SVC_NUM (MOD_SYS, 1, 0)
+ 164:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_Tick2MS                     SVC_NUM (MOD_SYS, 1, 1)
+ 165:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_CyclePerTickGet             SVC_NUM (MOD_SYS, 0, 2)
+ 166:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_TickCountGet                SVC_NUM (MOD_SYS, 0, 3)
+ 167:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** ///////////////////////////////////////////////////////////////////////////////////
+ 168:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SCN_printf                      SVC_NUM (MOD_SYS, 4, 4)
+ 169:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** ///////////////////////////////////////////////////////////////////////////////////
+ 170:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 171:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #if defined (__CC_ARM)
+ 172:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 173:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SYSCALL_RTN(sn, rt, name, ...)  __svc_indirect_r7(0) rt __##name (int r12, ##__VA_ARGS__);
+ 174:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 175:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_TaskCreateOnly(...)         __LOS_TaskCreateOnly(SCN_TaskCreateOnly, ##__VA_ARGS__)
+ 176:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrTaskCreate(...)          __LOS_UsrTaskCreate(SCN_TaskCreate, ##__VA_ARGS__)
+ 177:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrTaskDelete(...)          __LOS_UsrTaskDelete(SCN_TaskDelete, ##__VA_ARGS__)
+ 178:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrTaskResume(...)          __LOS_UsrTaskResume(SCN_TaskResume, ##__VA_ARGS__)
+ 179:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrTaskSuspend(...)         __LOS_UsrTaskSuspend(SCN_TaskSuspend, ##__VA_ARGS__)
+ 180:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrTaskDelay(...)           __LOS_UsrTaskDelay(SCN_TaskDelay, ##__VA_ARGS__)
+ 181:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrTaskYield(...)           __LOS_UsrTaskYield(SCN_TaskYield, ##__VA_ARGS__)
+ 182:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrTaskLock(...)            __LOS_UsrTaskLock(SCN_TaskLock, ##__VA_ARGS__)
+ 183:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrTaskUnlock(...)          __LOS_UsrTaskUnlock(SCN_TaskUnlock, ##__VA_ARGS__)
+ 184:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrCurTaskPriSet(...)       __LOS_UsrCurTaskPriSet(SCN_CurTaskPriSet, ##__VA_ARGS__)
+ 185:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrTaskPriSet(...)          __LOS_UsrTaskPriSet(SCN_TaskPriSet, ##__VA_ARGS__)
+ 186:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrTaskPriGet(...)          __LOS_UsrTaskPriGet(SCN_TaskPriGet, ##__VA_ARGS__)
+ 187:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrCurTaskIDGet(...)        __LOS_UsrCurTaskIDGet(SCN_CurTaskIDGet, ##__VA_ARGS__)
+ 188:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrTaskInfoGet(...)         __LOS_UsrTaskInfoGet(SCN_TaskInfoGet, ##__VA_ARGS__)
+ 189:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrTaskStatusGet(...)       __LOS_UsrTaskStatusGet(SCN_TaskStatusGet, ##__VA_ARGS__)
+ 190:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrTaskNameGet(...)         __LOS_UsrTaskNameGet(SCN_TaskNameGet, ##__VA_ARGS__)
+ 191:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrTaskInfoMonitor(...)     __LOS_UsrTaskInfoMonitor(SCN_TaskInfoMonitor, ##__VA_ARGS__
+ 192:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrNextTaskIDGet(...)       __LOS_UsrNextTaskIDGet(SCN_NextTaskIDGet, ##__VA_ARGS__)
+ 193:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 194:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrMemboxInit(...)          __LOS_UsrMemboxInit(SCN_MemboxInit, ##__VA_ARGS__)
+ 195:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrMemboxClr(...)           __LOS_UsrMemboxClr(SCN_MemboxClr, ##__VA_ARGS__)
+ 196:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrMemboxAlloc(...)         __LOS_UsrMemboxAlloc(SCN_MemboxAlloc, ##__VA_ARGS__)
+ 197:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrMemboxFree(...)          __LOS_UsrMemboxFree(SCN_MemboxFree, ##__VA_ARGS__)
+ 198:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrMemboxStatisticsGet(...) __LOS_UsrMemboxStatisticsGet(SCN_MemboxStatisticsGet, ##__V
+ 199:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrMemInit(...)             __LOS_UsrMemInit(SCN_MemInit, ##__VA_ARGS__)
+ 200:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrMemAlloc(...)            __LOS_UsrMemAlloc(SCN_MemAlloc, ##__VA_ARGS__)
+ 201:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrMemFree(...)             __LOS_UsrMemFree(SCN_MemFree, ##__VA_ARGS__)
+ARM GAS  /tmp/ccqDQHKf.s 			page 5
+
+
+ 202:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrMemRealloc(...)          __LOS_UsrMemRealloc(SCN_MemRealloc, ##__VA_ARGS__)
+ 203:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrMemAllocAlign(...)       __LOS_UsrMemAllocAlign(SCN_MemAllocAlign, ##__VA_ARGS__)
+ 204:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 205:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrQueueCreate(...)         __LOS_UsrQueueCreate(SCN_QueueCreate, ##__VA_ARGS__)
+ 206:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrQueueRead(...)           __LOS_UsrQueueRead(SCN_QueueRead, ##__VA_ARGS__)
+ 207:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrQueueWrite(...)          __LOS_UsrQueueWrite(SCN_QueueWrite, ##__VA_ARGS__)
+ 208:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrQueueReadCopy(...)       __LOS_UsrQueueReadCopy(SCN_QueueReadCopy, ##__VA_ARGS__)
+ 209:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrQueueWriteCopy(...)      __LOS_UsrQueueWriteCopy(SCN_QueueWriteCopy, ##__VA_ARGS__)
+ 210:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrQueueWriteHead(...)      __LOS_UsrQueueWriteHead(SCN_QueueWriteHead, ##__VA_ARGS__)
+ 211:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrQueueDelete(...)         __LOS_UsrQueueDelete(SCN_QueueDelete, ##__VA_ARGS__)
+ 212:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrQueueInfoGet(...)        __LOS_UsrQueueInfoGet(SCN_QueueInfoGet, ##__VA_ARGS__)
+ 213:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 214:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrEventInit(...)           __LOS_UsrEventInit(SCN_EventInit, ##__VA_ARGS__)
+ 215:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrEventRead(...)           __LOS_UsrEventRead(SCN_EventRead, ##__VA_ARGS__)
+ 216:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrEventWrite(...)          __LOS_UsrEventWrite(SCN_EventWrite, ##__VA_ARGS__)
+ 217:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrEventClear(...)          __LOS_UsrEventClear(SCN_EventClear, ##__VA_ARGS__)
+ 218:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrEventPoll(...)           __LOS_UsrEventPoll(SCN_EventPoll, ##__VA_ARGS__)
+ 219:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrEventDestroy(...)        __LOS_UsrEventDestroy(SCN_EventDestroy, ##__VA_ARGS__)
+ 220:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 221:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrMuxCreate(...)           __LOS_UsrMuxCreate(SCN_MuxCreate, ##__VA_ARGS__)
+ 222:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrMuxDelete(...)           __LOS_UsrMuxDelete(SCN_MuxDelete, ##__VA_ARGS__)
+ 223:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrMuxPend(...)             __LOS_UsrMuxPend(SCN_MuxPend, ##__VA_ARGS__)
+ 224:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrMuxPost(...)             __LOS_UsrMuxPost(SCN_MuxPost, ##__VA_ARGS__)
+ 225:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 226:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrSemCreate(...)           __LOS_UsrSemCreate(SCN_SemCreate, ##__VA_ARGS__)
+ 227:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrBinarySemCreate(...)     __LOS_UsrBinarySemCreate(SCN_BinarySemCreate, ##__VA_ARGS__
+ 228:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrSemDelete(...)           __LOS_UsrSemDelete(SCN_SemDelete, ##__VA_ARGS__)
+ 229:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrSemPend(...)             __LOS_UsrSemPend(SCN_SemPend, ##__VA_ARGS__)
+ 230:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrSemPost(...)             __LOS_UsrSemPost(SCN_SemPost, ##__VA_ARGS__)
+ 231:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 232:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrSwtmrCreate(...)         __LOS_UsrSwtmrCreate(SCN_SwtmrCreate, ##__VA_ARGS__)
+ 233:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrSwtmrDelete(...)         __LOS_UsrSwtmrDelete(SCN_SwtmrDelete, ##__VA_ARGS__)
+ 234:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrSwtmrStart(...)          __LOS_UsrSwtmrStart(SCN_SwtmrStart, ##__VA_ARGS__)
+ 235:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrSwtmrStop(...)           __LOS_UsrSwtmrStop(SCN_SwtmrStop, ##__VA_ARGS__)
+ 236:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrSwtmrTimeGet(...)        __LOS_UsrSwtmrTimeGet(SCN_SwtmrTimeGet, ##__VA_ARGS__)
+ 237:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 238:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrMS2Tick(...)             __LOS_UsrMS2Tick(SCN_MS2Tick, ##__VA_ARGS__)
+ 239:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrTick2MS(...)             __LOS_UsrTick2MS(SCN_Tick2MS, ##__VA_ARGS__)
+ 240:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrCyclePerTickGet(...)     __LOS_UsrCyclePerTickGet(SCN_CyclePerTickGet, ##__VA_ARGS__
+ 241:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrTickCountGet(...)        __LOS_UsrTickCountGet(SCN_TickCountGet, ##__VA_ARGS__)
+ 242:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define LOS_UsrPrintf(...)              __LOS_UsrPrintf(SCN_printf, ##__VA_ARGS__)
+ 243:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 244:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #elif defined (__GNUC__)
+ 245:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 246:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define _SYSCALL_RTN(sn, rt, name, ...)                     \
+ 247:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****     _Pragma("GCC diagnostic push")                          \
+ 248:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****     _Pragma("GCC diagnostic ignored \"-Wreturn-type\"")     \
+ 249:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****     __attribute__((naked))                                  \
+ 250:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****     __attribute__((unused))                                 \
+ 251:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****     __attribute__ ((weak)) rt name (__VA_ARGS__)            \
+ 252:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****     {                                                       \
+ 253:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****         __asm(                                              \
+ 254:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****             "push {r7, lr}\n\t"                             \
+ 255:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****             "ldr  r7, ="#sn"\n\t"                           \
+ 256:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****             "svc  #0\n\t"                                   \
+ 257:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****             "pop  {r7, pc}\n\t"                             \
+ 258:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****             : : : "r0", "r1", "r2", "r3", "r12", "cc"       \
+ARM GAS  /tmp/ccqDQHKf.s 			page 6
+
+
+ 259:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****         );                                                  \
+ 260:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****     }                                                       \
+ 261:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****     _Pragma("GCC diagnostic pop")
+ 262:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 263:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #define SYSCALL_RTN(sn, rt, name, ...) _SYSCALL_RTN(sn, rt, name, ##__VA_ARGS__)
+ 264:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 265:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #else
+ 266:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #error "not supported tool"
+ 267:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #endif
+ 268:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 269:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_TaskCreateOnly,
+  29              		.loc 1 269 1
+  30              		.cfi_startproc
+  31              		@ Naked Function: prologue and epilogue provided by programmer.
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 1, uses_anonymous_args = 0
+  34              		.loc 1 269 1
+  35              		.syntax unified
+  36              	@ 269 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+  37 0000 80B5     		push {r7, lr}
+  38 0002 4FF40037 		ldr  r7, =(((0) << 24) + (((2) & 0x0f) << 16) + ((0) & 0xffff))
+  39 0006 00DF     		svc  #0
+  40 0008 80BD     		pop  {r7, pc}
+  41              		
+  42              	@ 0 "" 2
+  43              		.thumb
+  44              		.syntax unified
+  45 000a 00BF     		nop
+  46 000c 1846     		mov	r0, r3
+  47              		.cfi_endproc
+  48              	.LFE133:
+  50              		.section	.text.LOS_UsrTaskCreate,"ax",%progbits
+  51              		.align	1
+  52              		.weak	LOS_UsrTaskCreate
+  53              		.syntax unified
+  54              		.thumb
+  55              		.thumb_func
+  56              		.fpu fpv4-sp-d16
+  58              	LOS_UsrTaskCreate:
+  59              	.LFB134:
+ 270:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrTaskCreateOnly, UINT32 *puwTaskID, TSK_INIT_PARAM_S *pstInitParam)
+ 271:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_TaskCreate,
+  60              		.loc 1 271 1
+  61              		.cfi_startproc
+  62              		@ Naked Function: prologue and epilogue provided by programmer.
+  63              		@ args = 0, pretend = 0, frame = 0
+  64              		@ frame_needed = 1, uses_anonymous_args = 0
+  65              		.loc 1 271 1
+  66              		.syntax unified
+  67              	@ 271 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+  68 0000 80B5     		push {r7, lr}
+  69 0002 024F     		ldr  r7, =(((0) << 24) + (((2) & 0x0f) << 16) + ((1) & 0xffff))
+  70 0004 00DF     		svc  #0
+  71 0006 80BD     		pop  {r7, pc}
+  72              		
+  73              	@ 0 "" 2
+  74              		.thumb
+ARM GAS  /tmp/ccqDQHKf.s 			page 7
+
+
+  75              		.syntax unified
+  76 0008 00BF     		nop
+  77 000a 1846     		mov	r0, r3
+  78              		.cfi_endproc
+  79              	.LFE134:
+  81              		.section	.text.LOS_UsrTaskDelete,"ax",%progbits
+  82              		.align	1
+  83              		.weak	LOS_UsrTaskDelete
+  84              		.syntax unified
+  85              		.thumb
+  86              		.thumb_func
+  87              		.fpu fpv4-sp-d16
+  89              	LOS_UsrTaskDelete:
+  90              	.LFB135:
+ 272:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrTaskCreate, UINT32 *puwTaskID, TSK_INIT_PARAM_S *pstInitParam)
+ 273:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_TaskDelete,
+  91              		.loc 1 273 1
+  92              		.cfi_startproc
+  93              		@ Naked Function: prologue and epilogue provided by programmer.
+  94              		@ args = 0, pretend = 0, frame = 0
+  95              		@ frame_needed = 1, uses_anonymous_args = 0
+  96              		.loc 1 273 1
+  97              		.syntax unified
+  98              	@ 273 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+  99 0000 80B5     		push {r7, lr}
+ 100 0002 024F     		ldr  r7, =(((0) << 24) + (((1) & 0x0f) << 16) + ((2) & 0xffff))
+ 101 0004 00DF     		svc  #0
+ 102 0006 80BD     		pop  {r7, pc}
+ 103              		
+ 104              	@ 0 "" 2
+ 105              		.thumb
+ 106              		.syntax unified
+ 107 0008 00BF     		nop
+ 108 000a 1846     		mov	r0, r3
+ 109              		.cfi_endproc
+ 110              	.LFE135:
+ 112              		.section	.text.LOS_UsrTaskResume,"ax",%progbits
+ 113              		.align	1
+ 114              		.weak	LOS_UsrTaskResume
+ 115              		.syntax unified
+ 116              		.thumb
+ 117              		.thumb_func
+ 118              		.fpu fpv4-sp-d16
+ 120              	LOS_UsrTaskResume:
+ 121              	.LFB136:
+ 274:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrTaskDelete, UINT32 uwTaskID)
+ 275:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_TaskResume,
+ 122              		.loc 1 275 1
+ 123              		.cfi_startproc
+ 124              		@ Naked Function: prologue and epilogue provided by programmer.
+ 125              		@ args = 0, pretend = 0, frame = 0
+ 126              		@ frame_needed = 1, uses_anonymous_args = 0
+ 127              		.loc 1 275 1
+ 128              		.syntax unified
+ 129              	@ 275 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 130 0000 80B5     		push {r7, lr}
+ 131 0002 024F     		ldr  r7, =(((0) << 24) + (((1) & 0x0f) << 16) + ((3) & 0xffff))
+ARM GAS  /tmp/ccqDQHKf.s 			page 8
+
+
+ 132 0004 00DF     		svc  #0
+ 133 0006 80BD     		pop  {r7, pc}
+ 134              		
+ 135              	@ 0 "" 2
+ 136              		.thumb
+ 137              		.syntax unified
+ 138 0008 00BF     		nop
+ 139 000a 1846     		mov	r0, r3
+ 140              		.cfi_endproc
+ 141              	.LFE136:
+ 143              		.section	.text.LOS_UsrTaskSuspend,"ax",%progbits
+ 144              		.align	1
+ 145              		.weak	LOS_UsrTaskSuspend
+ 146              		.syntax unified
+ 147              		.thumb
+ 148              		.thumb_func
+ 149              		.fpu fpv4-sp-d16
+ 151              	LOS_UsrTaskSuspend:
+ 152              	.LFB137:
+ 276:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrTaskResume, UINT32 uwTaskID)
+ 277:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_TaskSuspend,
+ 153              		.loc 1 277 1
+ 154              		.cfi_startproc
+ 155              		@ Naked Function: prologue and epilogue provided by programmer.
+ 156              		@ args = 0, pretend = 0, frame = 0
+ 157              		@ frame_needed = 1, uses_anonymous_args = 0
+ 158              		.loc 1 277 1
+ 159              		.syntax unified
+ 160              	@ 277 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 161 0000 80B5     		push {r7, lr}
+ 162 0002 024F     		ldr  r7, =(((0) << 24) + (((1) & 0x0f) << 16) + ((4) & 0xffff))
+ 163 0004 00DF     		svc  #0
+ 164 0006 80BD     		pop  {r7, pc}
+ 165              		
+ 166              	@ 0 "" 2
+ 167              		.thumb
+ 168              		.syntax unified
+ 169 0008 00BF     		nop
+ 170 000a 1846     		mov	r0, r3
+ 171              		.cfi_endproc
+ 172              	.LFE137:
+ 174              		.section	.text.LOS_UsrTaskDelay,"ax",%progbits
+ 175              		.align	1
+ 176              		.weak	LOS_UsrTaskDelay
+ 177              		.syntax unified
+ 178              		.thumb
+ 179              		.thumb_func
+ 180              		.fpu fpv4-sp-d16
+ 182              	LOS_UsrTaskDelay:
+ 183              	.LFB138:
+ 278:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrTaskSuspend, UINT32 uwTaskID)
+ 279:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_TaskDelay,
+ 184              		.loc 1 279 1
+ 185              		.cfi_startproc
+ 186              		@ Naked Function: prologue and epilogue provided by programmer.
+ 187              		@ args = 0, pretend = 0, frame = 0
+ 188              		@ frame_needed = 1, uses_anonymous_args = 0
+ARM GAS  /tmp/ccqDQHKf.s 			page 9
+
+
+ 189              		.loc 1 279 1
+ 190              		.syntax unified
+ 191              	@ 279 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 192 0000 80B5     		push {r7, lr}
+ 193 0002 024F     		ldr  r7, =(((0) << 24) + (((1) & 0x0f) << 16) + ((5) & 0xffff))
+ 194 0004 00DF     		svc  #0
+ 195 0006 80BD     		pop  {r7, pc}
+ 196              		
+ 197              	@ 0 "" 2
+ 198              		.thumb
+ 199              		.syntax unified
+ 200 0008 00BF     		nop
+ 201 000a 1846     		mov	r0, r3
+ 202              		.cfi_endproc
+ 203              	.LFE138:
+ 205              		.section	.text.LOS_UsrTaskYield,"ax",%progbits
+ 206              		.align	1
+ 207              		.weak	LOS_UsrTaskYield
+ 208              		.syntax unified
+ 209              		.thumb
+ 210              		.thumb_func
+ 211              		.fpu fpv4-sp-d16
+ 213              	LOS_UsrTaskYield:
+ 214              	.LFB139:
+ 280:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrTaskDelay, UINT32 uwTick)
+ 281:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_TaskYield,
+ 215              		.loc 1 281 1
+ 216              		.cfi_startproc
+ 217              		@ Naked Function: prologue and epilogue provided by programmer.
+ 218              		@ args = 0, pretend = 0, frame = 0
+ 219              		@ frame_needed = 1, uses_anonymous_args = 0
+ 220              		.loc 1 281 1
+ 221              		.syntax unified
+ 222              	@ 281 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 223 0000 80B5     		push {r7, lr}
+ 224 0002 4FF00607 		ldr  r7, =(((0) << 24) + (((0) & 0x0f) << 16) + ((6) & 0xffff))
+ 225 0006 00DF     		svc  #0
+ 226 0008 80BD     		pop  {r7, pc}
+ 227              		
+ 228              	@ 0 "" 2
+ 229              		.thumb
+ 230              		.syntax unified
+ 231 000a 00BF     		nop
+ 232 000c 1846     		mov	r0, r3
+ 233              		.cfi_endproc
+ 234              	.LFE139:
+ 236              		.section	.text.LOS_UsrTaskLock,"ax",%progbits
+ 237              		.align	1
+ 238              		.weak	LOS_UsrTaskLock
+ 239              		.syntax unified
+ 240              		.thumb
+ 241              		.thumb_func
+ 242              		.fpu fpv4-sp-d16
+ 244              	LOS_UsrTaskLock:
+ 245              	.LFB140:
+ 282:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrTaskYield)
+ 283:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_TaskLock,
+ARM GAS  /tmp/ccqDQHKf.s 			page 10
+
+
+ 246              		.loc 1 283 1
+ 247              		.cfi_startproc
+ 248              		@ Naked Function: prologue and epilogue provided by programmer.
+ 249              		@ args = 0, pretend = 0, frame = 0
+ 250              		@ frame_needed = 1, uses_anonymous_args = 0
+ 251              		.loc 1 283 1
+ 252              		.syntax unified
+ 253              	@ 283 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 254 0000 80B5     		push {r7, lr}
+ 255 0002 4FF00707 		ldr  r7, =(((0) << 24) + (((0) & 0x0f) << 16) + ((7) & 0xffff))
+ 256 0006 00DF     		svc  #0
+ 257 0008 80BD     		pop  {r7, pc}
+ 258              		
+ 259              	@ 0 "" 2
+ 260              		.thumb
+ 261              		.syntax unified
+ 262 000a 00BF     		nop
+ 263              		.cfi_endproc
+ 264              	.LFE140:
+ 266              		.section	.text.LOS_UsrTaskUnlock,"ax",%progbits
+ 267              		.align	1
+ 268              		.weak	LOS_UsrTaskUnlock
+ 269              		.syntax unified
+ 270              		.thumb
+ 271              		.thumb_func
+ 272              		.fpu fpv4-sp-d16
+ 274              	LOS_UsrTaskUnlock:
+ 275              	.LFB141:
+ 284:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              VOID, LOS_UsrTaskLock)
+ 285:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_TaskUnlock,
+ 276              		.loc 1 285 1
+ 277              		.cfi_startproc
+ 278              		@ Naked Function: prologue and epilogue provided by programmer.
+ 279              		@ args = 0, pretend = 0, frame = 0
+ 280              		@ frame_needed = 1, uses_anonymous_args = 0
+ 281              		.loc 1 285 1
+ 282              		.syntax unified
+ 283              	@ 285 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 284 0000 80B5     		push {r7, lr}
+ 285 0002 4FF00807 		ldr  r7, =(((0) << 24) + (((0) & 0x0f) << 16) + ((8) & 0xffff))
+ 286 0006 00DF     		svc  #0
+ 287 0008 80BD     		pop  {r7, pc}
+ 288              		
+ 289              	@ 0 "" 2
+ 290              		.thumb
+ 291              		.syntax unified
+ 292 000a 00BF     		nop
+ 293              		.cfi_endproc
+ 294              	.LFE141:
+ 296              		.section	.text.LOS_UsrCurTaskPriSet,"ax",%progbits
+ 297              		.align	1
+ 298              		.weak	LOS_UsrCurTaskPriSet
+ 299              		.syntax unified
+ 300              		.thumb
+ 301              		.thumb_func
+ 302              		.fpu fpv4-sp-d16
+ 304              	LOS_UsrCurTaskPriSet:
+ARM GAS  /tmp/ccqDQHKf.s 			page 11
+
+
+ 305              	.LFB142:
+ 286:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              VOID, LOS_UsrTaskUnlock)
+ 287:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_CurTaskPriSet,
+ 306              		.loc 1 287 1
+ 307              		.cfi_startproc
+ 308              		@ Naked Function: prologue and epilogue provided by programmer.
+ 309              		@ args = 0, pretend = 0, frame = 0
+ 310              		@ frame_needed = 1, uses_anonymous_args = 0
+ 311              		.loc 1 287 1
+ 312              		.syntax unified
+ 313              	@ 287 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 314 0000 80B5     		push {r7, lr}
+ 315 0002 024F     		ldr  r7, =(((0) << 24) + (((1) & 0x0f) << 16) + ((9) & 0xffff))
+ 316 0004 00DF     		svc  #0
+ 317 0006 80BD     		pop  {r7, pc}
+ 318              		
+ 319              	@ 0 "" 2
+ 320              		.thumb
+ 321              		.syntax unified
+ 322 0008 00BF     		nop
+ 323 000a 1846     		mov	r0, r3
+ 324              		.cfi_endproc
+ 325              	.LFE142:
+ 327              		.section	.text.LOS_UsrTaskPriSet,"ax",%progbits
+ 328              		.align	1
+ 329              		.weak	LOS_UsrTaskPriSet
+ 330              		.syntax unified
+ 331              		.thumb
+ 332              		.thumb_func
+ 333              		.fpu fpv4-sp-d16
+ 335              	LOS_UsrTaskPriSet:
+ 336              	.LFB143:
+ 288:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrCurTaskPriSet, UINT16 usTaskPrio)
+ 289:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_TaskPriSet,
+ 337              		.loc 1 289 1
+ 338              		.cfi_startproc
+ 339              		@ Naked Function: prologue and epilogue provided by programmer.
+ 340              		@ args = 0, pretend = 0, frame = 0
+ 341              		@ frame_needed = 1, uses_anonymous_args = 0
+ 342              		.loc 1 289 1
+ 343              		.syntax unified
+ 344              	@ 289 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 345 0000 80B5     		push {r7, lr}
+ 346 0002 024F     		ldr  r7, =(((0) << 24) + (((2) & 0x0f) << 16) + ((10) & 0xffff))
+ 347 0004 00DF     		svc  #0
+ 348 0006 80BD     		pop  {r7, pc}
+ 349              		
+ 350              	@ 0 "" 2
+ 351              		.thumb
+ 352              		.syntax unified
+ 353 0008 00BF     		nop
+ 354 000a 1846     		mov	r0, r3
+ 355              		.cfi_endproc
+ 356              	.LFE143:
+ 358              		.section	.text.LOS_UsrTaskPriGet,"ax",%progbits
+ 359              		.align	1
+ 360              		.weak	LOS_UsrTaskPriGet
+ARM GAS  /tmp/ccqDQHKf.s 			page 12
+
+
+ 361              		.syntax unified
+ 362              		.thumb
+ 363              		.thumb_func
+ 364              		.fpu fpv4-sp-d16
+ 366              	LOS_UsrTaskPriGet:
+ 367              	.LFB144:
+ 290:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrTaskPriSet, UINT32 uwTaskID, UINT16 usTaskPrio)
+ 291:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_TaskPriGet,
+ 368              		.loc 1 291 1
+ 369              		.cfi_startproc
+ 370              		@ Naked Function: prologue and epilogue provided by programmer.
+ 371              		@ args = 0, pretend = 0, frame = 0
+ 372              		@ frame_needed = 1, uses_anonymous_args = 0
+ 373              		.loc 1 291 1
+ 374              		.syntax unified
+ 375              	@ 291 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 376 0000 80B5     		push {r7, lr}
+ 377 0002 024F     		ldr  r7, =(((0) << 24) + (((1) & 0x0f) << 16) + ((11) & 0xffff))
+ 378 0004 00DF     		svc  #0
+ 379 0006 80BD     		pop  {r7, pc}
+ 380              		
+ 381              	@ 0 "" 2
+ 382              		.thumb
+ 383              		.syntax unified
+ 384 0008 00BF     		nop
+ 385 000a 1846     		mov	r0, r3
+ 386              		.cfi_endproc
+ 387              	.LFE144:
+ 389              		.section	.text.LOS_UsrCurTaskIDGet,"ax",%progbits
+ 390              		.align	1
+ 391              		.weak	LOS_UsrCurTaskIDGet
+ 392              		.syntax unified
+ 393              		.thumb
+ 394              		.thumb_func
+ 395              		.fpu fpv4-sp-d16
+ 397              	LOS_UsrCurTaskIDGet:
+ 398              	.LFB145:
+ 292:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT16, LOS_UsrTaskPriGet, UINT32 uwTaskID)
+ 293:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_CurTaskIDGet,
+ 399              		.loc 1 293 1
+ 400              		.cfi_startproc
+ 401              		@ Naked Function: prologue and epilogue provided by programmer.
+ 402              		@ args = 0, pretend = 0, frame = 0
+ 403              		@ frame_needed = 1, uses_anonymous_args = 0
+ 404              		.loc 1 293 1
+ 405              		.syntax unified
+ 406              	@ 293 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 407 0000 80B5     		push {r7, lr}
+ 408 0002 4FF00C07 		ldr  r7, =(((0) << 24) + (((0) & 0x0f) << 16) + ((12) & 0xffff))
+ 409 0006 00DF     		svc  #0
+ 410 0008 80BD     		pop  {r7, pc}
+ 411              		
+ 412              	@ 0 "" 2
+ 413              		.thumb
+ 414              		.syntax unified
+ 415 000a 00BF     		nop
+ 416 000c 1846     		mov	r0, r3
+ARM GAS  /tmp/ccqDQHKf.s 			page 13
+
+
+ 417              		.cfi_endproc
+ 418              	.LFE145:
+ 420              		.section	.text.LOS_UsrTaskInfoGet,"ax",%progbits
+ 421              		.align	1
+ 422              		.weak	LOS_UsrTaskInfoGet
+ 423              		.syntax unified
+ 424              		.thumb
+ 425              		.thumb_func
+ 426              		.fpu fpv4-sp-d16
+ 428              	LOS_UsrTaskInfoGet:
+ 429              	.LFB146:
+ 294:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrCurTaskIDGet)
+ 295:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_TaskInfoGet,
+ 430              		.loc 1 295 1
+ 431              		.cfi_startproc
+ 432              		@ Naked Function: prologue and epilogue provided by programmer.
+ 433              		@ args = 0, pretend = 0, frame = 0
+ 434              		@ frame_needed = 1, uses_anonymous_args = 0
+ 435              		.loc 1 295 1
+ 436              		.syntax unified
+ 437              	@ 295 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 438 0000 80B5     		push {r7, lr}
+ 439 0002 024F     		ldr  r7, =(((0) << 24) + (((2) & 0x0f) << 16) + ((13) & 0xffff))
+ 440 0004 00DF     		svc  #0
+ 441 0006 80BD     		pop  {r7, pc}
+ 442              		
+ 443              	@ 0 "" 2
+ 444              		.thumb
+ 445              		.syntax unified
+ 446 0008 00BF     		nop
+ 447 000a 1846     		mov	r0, r3
+ 448              		.cfi_endproc
+ 449              	.LFE146:
+ 451              		.section	.text.LOS_UsrTaskStatusGet,"ax",%progbits
+ 452              		.align	1
+ 453              		.weak	LOS_UsrTaskStatusGet
+ 454              		.syntax unified
+ 455              		.thumb
+ 456              		.thumb_func
+ 457              		.fpu fpv4-sp-d16
+ 459              	LOS_UsrTaskStatusGet:
+ 460              	.LFB147:
+ 296:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrTaskInfoGet, UINT32 uwTaskID, TSK_INFO_S *pstTaskInfo)
+ 297:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_TaskStatusGet,
+ 461              		.loc 1 297 1
+ 462              		.cfi_startproc
+ 463              		@ Naked Function: prologue and epilogue provided by programmer.
+ 464              		@ args = 0, pretend = 0, frame = 0
+ 465              		@ frame_needed = 1, uses_anonymous_args = 0
+ 466              		.loc 1 297 1
+ 467              		.syntax unified
+ 468              	@ 297 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 469 0000 80B5     		push {r7, lr}
+ 470 0002 024F     		ldr  r7, =(((0) << 24) + (((2) & 0x0f) << 16) + ((14) & 0xffff))
+ 471 0004 00DF     		svc  #0
+ 472 0006 80BD     		pop  {r7, pc}
+ 473              		
+ARM GAS  /tmp/ccqDQHKf.s 			page 14
+
+
+ 474              	@ 0 "" 2
+ 475              		.thumb
+ 476              		.syntax unified
+ 477 0008 00BF     		nop
+ 478 000a 1846     		mov	r0, r3
+ 479              		.cfi_endproc
+ 480              	.LFE147:
+ 482              		.section	.text.LOS_UsrTaskNameGet,"ax",%progbits
+ 483              		.align	1
+ 484              		.weak	LOS_UsrTaskNameGet
+ 485              		.syntax unified
+ 486              		.thumb
+ 487              		.thumb_func
+ 488              		.fpu fpv4-sp-d16
+ 490              	LOS_UsrTaskNameGet:
+ 491              	.LFB148:
+ 298:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrTaskStatusGet, UINT32 uwTaskID, UINT32* puwTaskStatus)
+ 299:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_TaskNameGet,
+ 492              		.loc 1 299 1
+ 493              		.cfi_startproc
+ 494              		@ Naked Function: prologue and epilogue provided by programmer.
+ 495              		@ args = 0, pretend = 0, frame = 0
+ 496              		@ frame_needed = 1, uses_anonymous_args = 0
+ 497              		.loc 1 299 1
+ 498              		.syntax unified
+ 499              	@ 299 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 500 0000 80B5     		push {r7, lr}
+ 501 0002 4FF00F07 		ldr  r7, =(((0) << 24) + (((0) & 0x0f) << 16) + ((15) & 0xffff))
+ 502 0006 00DF     		svc  #0
+ 503 0008 80BD     		pop  {r7, pc}
+ 504              		
+ 505              	@ 0 "" 2
+ 506              		.thumb
+ 507              		.syntax unified
+ 508 000a 00BF     		nop
+ 509 000c 1846     		mov	r0, r3
+ 510              		.cfi_endproc
+ 511              	.LFE148:
+ 513              		.section	.text.LOS_UsrTaskInfoMonitor,"ax",%progbits
+ 514              		.align	1
+ 515              		.weak	LOS_UsrTaskInfoMonitor
+ 516              		.syntax unified
+ 517              		.thumb
+ 518              		.thumb_func
+ 519              		.fpu fpv4-sp-d16
+ 521              	LOS_UsrTaskInfoMonitor:
+ 522              	.LFB149:
+ 300:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              CHAR *, LOS_UsrTaskNameGet, UINT32 uwTaskID)
+ 301:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_TaskInfoMonitor,
+ 523              		.loc 1 301 1
+ 524              		.cfi_startproc
+ 525              		@ Naked Function: prologue and epilogue provided by programmer.
+ 526              		@ args = 0, pretend = 0, frame = 0
+ 527              		@ frame_needed = 1, uses_anonymous_args = 0
+ 528              		.loc 1 301 1
+ 529              		.syntax unified
+ 530              	@ 301 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ARM GAS  /tmp/ccqDQHKf.s 			page 15
+
+
+ 531 0000 80B5     		push {r7, lr}
+ 532 0002 4FF01007 		ldr  r7, =(((0) << 24) + (((0) & 0x0f) << 16) + ((16) & 0xffff))
+ 533 0006 00DF     		svc  #0
+ 534 0008 80BD     		pop  {r7, pc}
+ 535              		
+ 536              	@ 0 "" 2
+ 537              		.thumb
+ 538              		.syntax unified
+ 539 000a 00BF     		nop
+ 540 000c 1846     		mov	r0, r3
+ 541              		.cfi_endproc
+ 542              	.LFE149:
+ 544              		.section	.text.LOS_UsrNextTaskIDGet,"ax",%progbits
+ 545              		.align	1
+ 546              		.weak	LOS_UsrNextTaskIDGet
+ 547              		.syntax unified
+ 548              		.thumb
+ 549              		.thumb_func
+ 550              		.fpu fpv4-sp-d16
+ 552              	LOS_UsrNextTaskIDGet:
+ 553              	.LFB150:
+ 302:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrTaskInfoMonitor)
+ 303:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_NextTaskIDGet,
+ 554              		.loc 1 303 1
+ 555              		.cfi_startproc
+ 556              		@ Naked Function: prologue and epilogue provided by programmer.
+ 557              		@ args = 0, pretend = 0, frame = 0
+ 558              		@ frame_needed = 1, uses_anonymous_args = 0
+ 559              		.loc 1 303 1
+ 560              		.syntax unified
+ 561              	@ 303 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 562 0000 80B5     		push {r7, lr}
+ 563 0002 4FF01107 		ldr  r7, =(((0) << 24) + (((0) & 0x0f) << 16) + ((17) & 0xffff))
+ 564 0006 00DF     		svc  #0
+ 565 0008 80BD     		pop  {r7, pc}
+ 566              		
+ 567              	@ 0 "" 2
+ 568              		.thumb
+ 569              		.syntax unified
+ 570 000a 00BF     		nop
+ 571 000c 1846     		mov	r0, r3
+ 572              		.cfi_endproc
+ 573              	.LFE150:
+ 575              		.section	.text.LOS_UsrMemboxInit,"ax",%progbits
+ 576              		.align	1
+ 577              		.weak	LOS_UsrMemboxInit
+ 578              		.syntax unified
+ 579              		.thumb
+ 580              		.thumb_func
+ 581              		.fpu fpv4-sp-d16
+ 583              	LOS_UsrMemboxInit:
+ 584              	.LFB151:
+ 304:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrNextTaskIDGet)
+ 305:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 306:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_MemboxInit,
+ 585              		.loc 1 306 1
+ 586              		.cfi_startproc
+ARM GAS  /tmp/ccqDQHKf.s 			page 16
+
+
+ 587              		@ Naked Function: prologue and epilogue provided by programmer.
+ 588              		@ args = 0, pretend = 0, frame = 0
+ 589              		@ frame_needed = 1, uses_anonymous_args = 0
+ 590              		.loc 1 306 1
+ 591              		.syntax unified
+ 592              	@ 306 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 593 0000 80B5     		push {r7, lr}
+ 594 0002 024F     		ldr  r7, =(((1) << 24) + (((3) & 0x0f) << 16) + ((0) & 0xffff))
+ 595 0004 00DF     		svc  #0
+ 596 0006 80BD     		pop  {r7, pc}
+ 597              		
+ 598              	@ 0 "" 2
+ 599              		.thumb
+ 600              		.syntax unified
+ 601 0008 00BF     		nop
+ 602 000a 1846     		mov	r0, r3
+ 603              		.cfi_endproc
+ 604              	.LFE151:
+ 606              		.section	.text.LOS_UsrMemboxClr,"ax",%progbits
+ 607              		.align	1
+ 608              		.weak	LOS_UsrMemboxClr
+ 609              		.syntax unified
+ 610              		.thumb
+ 611              		.thumb_func
+ 612              		.fpu fpv4-sp-d16
+ 614              	LOS_UsrMemboxClr:
+ 615              	.LFB152:
+ 307:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrMemboxInit, VOID *pBoxMem, UINT32 uwBoxSize, UINT32 uwBlkSize)
+ 308:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_MemboxClr,
+ 616              		.loc 1 308 1
+ 617              		.cfi_startproc
+ 618              		@ Naked Function: prologue and epilogue provided by programmer.
+ 619              		@ args = 0, pretend = 0, frame = 0
+ 620              		@ frame_needed = 1, uses_anonymous_args = 0
+ 621              		.loc 1 308 1
+ 622              		.syntax unified
+ 623              	@ 308 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 624 0000 80B5     		push {r7, lr}
+ 625 0002 024F     		ldr  r7, =(((1) << 24) + (((2) & 0x0f) << 16) + ((1) & 0xffff))
+ 626 0004 00DF     		svc  #0
+ 627 0006 80BD     		pop  {r7, pc}
+ 628              		
+ 629              	@ 0 "" 2
+ 630              		.thumb
+ 631              		.syntax unified
+ 632 0008 00BF     		nop
+ 633              		.cfi_endproc
+ 634              	.LFE152:
+ 636 000a 0000     		.section	.text.LOS_UsrMemboxAlloc,"ax",%progbits
+ 637              		.align	1
+ 638              		.weak	LOS_UsrMemboxAlloc
+ 639              		.syntax unified
+ 640              		.thumb
+ 641              		.thumb_func
+ 642              		.fpu fpv4-sp-d16
+ 644              	LOS_UsrMemboxAlloc:
+ 645              	.LFB153:
+ARM GAS  /tmp/ccqDQHKf.s 			page 17
+
+
+ 309:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              VOID, LOS_UsrMemboxClr, VOID *pBoxMem, VOID *pBox)
+ 310:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_MemboxAlloc,
+ 646              		.loc 1 310 1
+ 647              		.cfi_startproc
+ 648              		@ Naked Function: prologue and epilogue provided by programmer.
+ 649              		@ args = 0, pretend = 0, frame = 0
+ 650              		@ frame_needed = 1, uses_anonymous_args = 0
+ 651              		.loc 1 310 1
+ 652              		.syntax unified
+ 653              	@ 310 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 654 0000 80B5     		push {r7, lr}
+ 655 0002 024F     		ldr  r7, =(((1) << 24) + (((1) & 0x0f) << 16) + ((2) & 0xffff))
+ 656 0004 00DF     		svc  #0
+ 657 0006 80BD     		pop  {r7, pc}
+ 658              		
+ 659              	@ 0 "" 2
+ 660              		.thumb
+ 661              		.syntax unified
+ 662 0008 00BF     		nop
+ 663 000a 1846     		mov	r0, r3
+ 664              		.cfi_endproc
+ 665              	.LFE153:
+ 667              		.section	.text.LOS_UsrMemboxFree,"ax",%progbits
+ 668              		.align	1
+ 669              		.weak	LOS_UsrMemboxFree
+ 670              		.syntax unified
+ 671              		.thumb
+ 672              		.thumb_func
+ 673              		.fpu fpv4-sp-d16
+ 675              	LOS_UsrMemboxFree:
+ 676              	.LFB154:
+ 311:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              VOID *, LOS_UsrMemboxAlloc, VOID *pBoxMem)
+ 312:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_MemboxFree,
+ 677              		.loc 1 312 1
+ 678              		.cfi_startproc
+ 679              		@ Naked Function: prologue and epilogue provided by programmer.
+ 680              		@ args = 0, pretend = 0, frame = 0
+ 681              		@ frame_needed = 1, uses_anonymous_args = 0
+ 682              		.loc 1 312 1
+ 683              		.syntax unified
+ 684              	@ 312 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 685 0000 80B5     		push {r7, lr}
+ 686 0002 024F     		ldr  r7, =(((1) << 24) + (((2) & 0x0f) << 16) + ((3) & 0xffff))
+ 687 0004 00DF     		svc  #0
+ 688 0006 80BD     		pop  {r7, pc}
+ 689              		
+ 690              	@ 0 "" 2
+ 691              		.thumb
+ 692              		.syntax unified
+ 693 0008 00BF     		nop
+ 694 000a 1846     		mov	r0, r3
+ 695              		.cfi_endproc
+ 696              	.LFE154:
+ 698              		.section	.text.LOS_UsrMemboxStatisticsGet,"ax",%progbits
+ 699              		.align	1
+ 700              		.weak	LOS_UsrMemboxStatisticsGet
+ 701              		.syntax unified
+ARM GAS  /tmp/ccqDQHKf.s 			page 18
+
+
+ 702              		.thumb
+ 703              		.thumb_func
+ 704              		.fpu fpv4-sp-d16
+ 706              	LOS_UsrMemboxStatisticsGet:
+ 707              	.LFB155:
+ 313:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrMemboxFree, VOID *pBoxMem, VOID *pBox)
+ 314:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_MemboxStatisticsGet,
+ 708              		.loc 1 314 1
+ 709              		.cfi_startproc
+ 710              		@ Naked Function: prologue and epilogue provided by programmer.
+ 711              		@ args = 0, pretend = 0, frame = 0
+ 712              		@ frame_needed = 1, uses_anonymous_args = 0
+ 713              		.loc 1 314 1
+ 714              		.syntax unified
+ 715              	@ 314 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 716 0000 80B5     		push {r7, lr}
+ 717 0002 024F     		ldr  r7, =(((1) << 24) + (((4) & 0x0f) << 16) + ((4) & 0xffff))
+ 718 0004 00DF     		svc  #0
+ 719 0006 80BD     		pop  {r7, pc}
+ 720              		
+ 721              	@ 0 "" 2
+ 722              		.thumb
+ 723              		.syntax unified
+ 724 0008 00BF     		nop
+ 725 000a 1846     		mov	r0, r3
+ 726              		.cfi_endproc
+ 727              	.LFE155:
+ 729              		.section	.text.LOS_UsrMemInit,"ax",%progbits
+ 730              		.align	1
+ 731              		.weak	LOS_UsrMemInit
+ 732              		.syntax unified
+ 733              		.thumb
+ 734              		.thumb_func
+ 735              		.fpu fpv4-sp-d16
+ 737              	LOS_UsrMemInit:
+ 738              	.LFB156:
+ 315:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrMemboxStatisticsGet, VOID *pBoxMem, UINT32 *puwMaxBlk, UINT32 *puwBlkCn
+ 316:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_MemInit,
+ 739              		.loc 1 316 1
+ 740              		.cfi_startproc
+ 741              		@ Naked Function: prologue and epilogue provided by programmer.
+ 742              		@ args = 0, pretend = 0, frame = 0
+ 743              		@ frame_needed = 1, uses_anonymous_args = 0
+ 744              		.loc 1 316 1
+ 745              		.syntax unified
+ 746              	@ 316 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 747 0000 80B5     		push {r7, lr}
+ 748 0002 024F     		ldr  r7, =(((1) << 24) + (((2) & 0x0f) << 16) + ((5) & 0xffff))
+ 749 0004 00DF     		svc  #0
+ 750 0006 80BD     		pop  {r7, pc}
+ 751              		
+ 752              	@ 0 "" 2
+ 753              		.thumb
+ 754              		.syntax unified
+ 755 0008 00BF     		nop
+ 756 000a 1846     		mov	r0, r3
+ 757              		.cfi_endproc
+ARM GAS  /tmp/ccqDQHKf.s 			page 19
+
+
+ 758              	.LFE156:
+ 760              		.section	.text.LOS_UsrMemAlloc,"ax",%progbits
+ 761              		.align	1
+ 762              		.weak	LOS_UsrMemAlloc
+ 763              		.syntax unified
+ 764              		.thumb
+ 765              		.thumb_func
+ 766              		.fpu fpv4-sp-d16
+ 768              	LOS_UsrMemAlloc:
+ 769              	.LFB157:
+ 317:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrMemInit, VOID *pPool, UINT32 uwSize)
+ 318:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_MemAlloc,
+ 770              		.loc 1 318 1
+ 771              		.cfi_startproc
+ 772              		@ Naked Function: prologue and epilogue provided by programmer.
+ 773              		@ args = 0, pretend = 0, frame = 0
+ 774              		@ frame_needed = 1, uses_anonymous_args = 0
+ 775              		.loc 1 318 1
+ 776              		.syntax unified
+ 777              	@ 318 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 778 0000 80B5     		push {r7, lr}
+ 779 0002 024F     		ldr  r7, =(((1) << 24) + (((2) & 0x0f) << 16) + ((6) & 0xffff))
+ 780 0004 00DF     		svc  #0
+ 781 0006 80BD     		pop  {r7, pc}
+ 782              		
+ 783              	@ 0 "" 2
+ 784              		.thumb
+ 785              		.syntax unified
+ 786 0008 00BF     		nop
+ 787 000a 1846     		mov	r0, r3
+ 788              		.cfi_endproc
+ 789              	.LFE157:
+ 791              		.section	.text.LOS_UsrMemFree,"ax",%progbits
+ 792              		.align	1
+ 793              		.weak	LOS_UsrMemFree
+ 794              		.syntax unified
+ 795              		.thumb
+ 796              		.thumb_func
+ 797              		.fpu fpv4-sp-d16
+ 799              	LOS_UsrMemFree:
+ 800              	.LFB158:
+ 319:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              VOID *, LOS_UsrMemAlloc , VOID *pPool, UINT32  size)
+ 320:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_MemFree,
+ 801              		.loc 1 320 1
+ 802              		.cfi_startproc
+ 803              		@ Naked Function: prologue and epilogue provided by programmer.
+ 804              		@ args = 0, pretend = 0, frame = 0
+ 805              		@ frame_needed = 1, uses_anonymous_args = 0
+ 806              		.loc 1 320 1
+ 807              		.syntax unified
+ 808              	@ 320 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 809 0000 80B5     		push {r7, lr}
+ 810 0002 024F     		ldr  r7, =(((1) << 24) + (((2) & 0x0f) << 16) + ((7) & 0xffff))
+ 811 0004 00DF     		svc  #0
+ 812 0006 80BD     		pop  {r7, pc}
+ 813              		
+ 814              	@ 0 "" 2
+ARM GAS  /tmp/ccqDQHKf.s 			page 20
+
+
+ 815              		.thumb
+ 816              		.syntax unified
+ 817 0008 00BF     		nop
+ 818 000a 1846     		mov	r0, r3
+ 819              		.cfi_endproc
+ 820              	.LFE158:
+ 822              		.section	.text.LOS_UsrMemRealloc,"ax",%progbits
+ 823              		.align	1
+ 824              		.weak	LOS_UsrMemRealloc
+ 825              		.syntax unified
+ 826              		.thumb
+ 827              		.thumb_func
+ 828              		.fpu fpv4-sp-d16
+ 830              	LOS_UsrMemRealloc:
+ 831              	.LFB159:
+ 321:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrMemFree, VOID *pPool, VOID *pMem)
+ 322:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_MemRealloc,
+ 832              		.loc 1 322 1
+ 833              		.cfi_startproc
+ 834              		@ Naked Function: prologue and epilogue provided by programmer.
+ 835              		@ args = 0, pretend = 0, frame = 0
+ 836              		@ frame_needed = 1, uses_anonymous_args = 0
+ 837              		.loc 1 322 1
+ 838              		.syntax unified
+ 839              	@ 322 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 840 0000 80B5     		push {r7, lr}
+ 841 0002 024F     		ldr  r7, =(((1) << 24) + (((3) & 0x0f) << 16) + ((8) & 0xffff))
+ 842 0004 00DF     		svc  #0
+ 843 0006 80BD     		pop  {r7, pc}
+ 844              		
+ 845              	@ 0 "" 2
+ 846              		.thumb
+ 847              		.syntax unified
+ 848 0008 00BF     		nop
+ 849 000a 1846     		mov	r0, r3
+ 850              		.cfi_endproc
+ 851              	.LFE159:
+ 853              		.section	.text.LOS_UsrMemAllocAlign,"ax",%progbits
+ 854              		.align	1
+ 855              		.weak	LOS_UsrMemAllocAlign
+ 856              		.syntax unified
+ 857              		.thumb
+ 858              		.thumb_func
+ 859              		.fpu fpv4-sp-d16
+ 861              	LOS_UsrMemAllocAlign:
+ 862              	.LFB160:
+ 323:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              VOID *, LOS_UsrMemRealloc, VOID *pPool, VOID *pPtr, UINT32 uwSize)
+ 324:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_MemAllocAlign,
+ 863              		.loc 1 324 1
+ 864              		.cfi_startproc
+ 865              		@ Naked Function: prologue and epilogue provided by programmer.
+ 866              		@ args = 0, pretend = 0, frame = 0
+ 867              		@ frame_needed = 1, uses_anonymous_args = 0
+ 868              		.loc 1 324 1
+ 869              		.syntax unified
+ 870              	@ 324 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 871 0000 80B5     		push {r7, lr}
+ARM GAS  /tmp/ccqDQHKf.s 			page 21
+
+
+ 872 0002 024F     		ldr  r7, =(((1) << 24) + (((3) & 0x0f) << 16) + ((9) & 0xffff))
+ 873 0004 00DF     		svc  #0
+ 874 0006 80BD     		pop  {r7, pc}
+ 875              		
+ 876              	@ 0 "" 2
+ 877              		.thumb
+ 878              		.syntax unified
+ 879 0008 00BF     		nop
+ 880 000a 1846     		mov	r0, r3
+ 881              		.cfi_endproc
+ 882              	.LFE160:
+ 884              		.section	.text.LOS_UsrQueueCreate,"ax",%progbits
+ 885              		.align	1
+ 886              		.weak	LOS_UsrQueueCreate
+ 887              		.syntax unified
+ 888              		.thumb
+ 889              		.thumb_func
+ 890              		.fpu fpv4-sp-d16
+ 892              	LOS_UsrQueueCreate:
+ 893              	.LFB161:
+ 325:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              VOID *, LOS_UsrMemAllocAlign , VOID *pPool, UINT32 uwSize, UINT32 uwBoundary)
+ 326:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 327:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** typedef struct
+ 328:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** {
+ 329:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****      CHAR * pcQueueName;
+ 330:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****      UINT16 usLen;
+ 331:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****      UINT32 *puwQueueID;
+ 332:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****      UINT32 uwFlags;
+ 333:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****      UINT16 usMaxMsgSize;
+ 334:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** } QUEUE_INIT_PARAM_S;
+ 335:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 336:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 337:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_QueueCreate,
+ 894              		.loc 1 337 1
+ 895              		.cfi_startproc
+ 896              		@ Naked Function: prologue and epilogue provided by programmer.
+ 897              		@ args = 0, pretend = 0, frame = 0
+ 898              		@ frame_needed = 1, uses_anonymous_args = 0
+ 899              		.loc 1 337 1
+ 900              		.syntax unified
+ 901              	@ 337 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 902 0000 80B5     		push {r7, lr}
+ 903 0002 024F     		ldr  r7, =(((2) << 24) + (((5) & 0x0f) << 16) + ((0) & 0xffff))
+ 904 0004 00DF     		svc  #0
+ 905 0006 80BD     		pop  {r7, pc}
+ 906              		
+ 907              	@ 0 "" 2
+ 908              		.thumb
+ 909              		.syntax unified
+ 910 0008 00BF     		nop
+ 911 000a 1846     		mov	r0, r3
+ 912              		.cfi_endproc
+ 913              	.LFE161:
+ 915              		.section	.text.LOS_UsrQueueRead,"ax",%progbits
+ 916              		.align	1
+ 917              		.weak	LOS_UsrQueueRead
+ 918              		.syntax unified
+ARM GAS  /tmp/ccqDQHKf.s 			page 22
+
+
+ 919              		.thumb
+ 920              		.thumb_func
+ 921              		.fpu fpv4-sp-d16
+ 923              	LOS_UsrQueueRead:
+ 924              	.LFB162:
+ 338:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrQueueCreate, QUEUE_INIT_PARAM_S *pstInitParam)
+ 339:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_QueueRead,
+ 925              		.loc 1 339 1
+ 926              		.cfi_startproc
+ 927              		@ Naked Function: prologue and epilogue provided by programmer.
+ 928              		@ args = 0, pretend = 0, frame = 0
+ 929              		@ frame_needed = 1, uses_anonymous_args = 0
+ 930              		.loc 1 339 1
+ 931              		.syntax unified
+ 932              	@ 339 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 933 0000 80B5     		push {r7, lr}
+ 934 0002 024F     		ldr  r7, =(((2) << 24) + (((4) & 0x0f) << 16) + ((1) & 0xffff))
+ 935 0004 00DF     		svc  #0
+ 936 0006 80BD     		pop  {r7, pc}
+ 937              		
+ 938              	@ 0 "" 2
+ 939              		.thumb
+ 940              		.syntax unified
+ 941 0008 00BF     		nop
+ 942 000a 1846     		mov	r0, r3
+ 943              		.cfi_endproc
+ 944              	.LFE162:
+ 946              		.section	.text.LOS_UsrQueueWrite,"ax",%progbits
+ 947              		.align	1
+ 948              		.weak	LOS_UsrQueueWrite
+ 949              		.syntax unified
+ 950              		.thumb
+ 951              		.thumb_func
+ 952              		.fpu fpv4-sp-d16
+ 954              	LOS_UsrQueueWrite:
+ 955              	.LFB163:
+ 340:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrQueueRead, UINT32 uwQueueID, VOID *pBufferAddr, UINT32 uwBufferSize, UI
+ 341:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_QueueWrite,
+ 956              		.loc 1 341 1
+ 957              		.cfi_startproc
+ 958              		@ Naked Function: prologue and epilogue provided by programmer.
+ 959              		@ args = 0, pretend = 0, frame = 0
+ 960              		@ frame_needed = 1, uses_anonymous_args = 0
+ 961              		.loc 1 341 1
+ 962              		.syntax unified
+ 963              	@ 341 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 964 0000 80B5     		push {r7, lr}
+ 965 0002 024F     		ldr  r7, =(((2) << 24) + (((4) & 0x0f) << 16) + ((2) & 0xffff))
+ 966 0004 00DF     		svc  #0
+ 967 0006 80BD     		pop  {r7, pc}
+ 968              		
+ 969              	@ 0 "" 2
+ 970              		.thumb
+ 971              		.syntax unified
+ 972 0008 00BF     		nop
+ 973 000a 1846     		mov	r0, r3
+ 974              		.cfi_endproc
+ARM GAS  /tmp/ccqDQHKf.s 			page 23
+
+
+ 975              	.LFE163:
+ 977              		.section	.text.LOS_UsrQueueReadCopy,"ax",%progbits
+ 978              		.align	1
+ 979              		.weak	LOS_UsrQueueReadCopy
+ 980              		.syntax unified
+ 981              		.thumb
+ 982              		.thumb_func
+ 983              		.fpu fpv4-sp-d16
+ 985              	LOS_UsrQueueReadCopy:
+ 986              	.LFB164:
+ 342:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrQueueWrite, UINT32 uwQueueID, VOID *pBufferAddr, UINT32 uwBufferSize, U
+ 343:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_QueueReadCopy,
+ 987              		.loc 1 343 1
+ 988              		.cfi_startproc
+ 989              		@ Naked Function: prologue and epilogue provided by programmer.
+ 990              		@ args = 0, pretend = 0, frame = 0
+ 991              		@ frame_needed = 1, uses_anonymous_args = 0
+ 992              		.loc 1 343 1
+ 993              		.syntax unified
+ 994              	@ 343 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 995 0000 80B5     		push {r7, lr}
+ 996 0002 024F     		ldr  r7, =(((2) << 24) + (((4) & 0x0f) << 16) + ((3) & 0xffff))
+ 997 0004 00DF     		svc  #0
+ 998 0006 80BD     		pop  {r7, pc}
+ 999              		
+ 1000              	@ 0 "" 2
+ 1001              		.thumb
+ 1002              		.syntax unified
+ 1003 0008 00BF     		nop
+ 1004 000a 1846     		mov	r0, r3
+ 1005              		.cfi_endproc
+ 1006              	.LFE164:
+ 1008              		.section	.text.LOS_UsrQueueWriteCopy,"ax",%progbits
+ 1009              		.align	1
+ 1010              		.weak	LOS_UsrQueueWriteCopy
+ 1011              		.syntax unified
+ 1012              		.thumb
+ 1013              		.thumb_func
+ 1014              		.fpu fpv4-sp-d16
+ 1016              	LOS_UsrQueueWriteCopy:
+ 1017              	.LFB165:
+ 344:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrQueueReadCopy, UINT32 uwQueueID, VOID *pBufferAddr, UINT32 *puwBufferSi
+ 345:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_QueueWriteCopy,
+ 1018              		.loc 1 345 1
+ 1019              		.cfi_startproc
+ 1020              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1021              		@ args = 0, pretend = 0, frame = 0
+ 1022              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1023              		.loc 1 345 1
+ 1024              		.syntax unified
+ 1025              	@ 345 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1026 0000 80B5     		push {r7, lr}
+ 1027 0002 024F     		ldr  r7, =(((2) << 24) + (((4) & 0x0f) << 16) + ((4) & 0xffff))
+ 1028 0004 00DF     		svc  #0
+ 1029 0006 80BD     		pop  {r7, pc}
+ 1030              		
+ 1031              	@ 0 "" 2
+ARM GAS  /tmp/ccqDQHKf.s 			page 24
+
+
+ 1032              		.thumb
+ 1033              		.syntax unified
+ 1034 0008 00BF     		nop
+ 1035 000a 1846     		mov	r0, r3
+ 1036              		.cfi_endproc
+ 1037              	.LFE165:
+ 1039              		.section	.text.LOS_UsrQueueWriteHead,"ax",%progbits
+ 1040              		.align	1
+ 1041              		.weak	LOS_UsrQueueWriteHead
+ 1042              		.syntax unified
+ 1043              		.thumb
+ 1044              		.thumb_func
+ 1045              		.fpu fpv4-sp-d16
+ 1047              	LOS_UsrQueueWriteHead:
+ 1048              	.LFB166:
+ 346:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrQueueWriteCopy, UINT32 uwQueueID, VOID *pBufferAddr, UINT32 uwBufferSiz
+ 347:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_QueueWriteHead,
+ 1049              		.loc 1 347 1
+ 1050              		.cfi_startproc
+ 1051              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1052              		@ args = 0, pretend = 0, frame = 0
+ 1053              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1054              		.loc 1 347 1
+ 1055              		.syntax unified
+ 1056              	@ 347 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1057 0000 80B5     		push {r7, lr}
+ 1058 0002 024F     		ldr  r7, =(((2) << 24) + (((4) & 0x0f) << 16) + ((5) & 0xffff))
+ 1059 0004 00DF     		svc  #0
+ 1060 0006 80BD     		pop  {r7, pc}
+ 1061              		
+ 1062              	@ 0 "" 2
+ 1063              		.thumb
+ 1064              		.syntax unified
+ 1065 0008 00BF     		nop
+ 1066 000a 1846     		mov	r0, r3
+ 1067              		.cfi_endproc
+ 1068              	.LFE166:
+ 1070              		.section	.text.LOS_UsrQueueDelete,"ax",%progbits
+ 1071              		.align	1
+ 1072              		.weak	LOS_UsrQueueDelete
+ 1073              		.syntax unified
+ 1074              		.thumb
+ 1075              		.thumb_func
+ 1076              		.fpu fpv4-sp-d16
+ 1078              	LOS_UsrQueueDelete:
+ 1079              	.LFB167:
+ 348:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrQueueWriteHead, UINT32 uwQueueID, VOID *pBufferAddr, UINT32 uwBufferSiz
+ 349:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_QueueDelete,
+ 1080              		.loc 1 349 1
+ 1081              		.cfi_startproc
+ 1082              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1083              		@ args = 0, pretend = 0, frame = 0
+ 1084              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1085              		.loc 1 349 1
+ 1086              		.syntax unified
+ 1087              	@ 349 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1088 0000 80B5     		push {r7, lr}
+ARM GAS  /tmp/ccqDQHKf.s 			page 25
+
+
+ 1089 0002 024F     		ldr  r7, =(((2) << 24) + (((1) & 0x0f) << 16) + ((6) & 0xffff))
+ 1090 0004 00DF     		svc  #0
+ 1091 0006 80BD     		pop  {r7, pc}
+ 1092              		
+ 1093              	@ 0 "" 2
+ 1094              		.thumb
+ 1095              		.syntax unified
+ 1096 0008 00BF     		nop
+ 1097 000a 1846     		mov	r0, r3
+ 1098              		.cfi_endproc
+ 1099              	.LFE167:
+ 1101              		.section	.text.LOS_UsrQueueInfoGet,"ax",%progbits
+ 1102              		.align	1
+ 1103              		.weak	LOS_UsrQueueInfoGet
+ 1104              		.syntax unified
+ 1105              		.thumb
+ 1106              		.thumb_func
+ 1107              		.fpu fpv4-sp-d16
+ 1109              	LOS_UsrQueueInfoGet:
+ 1110              	.LFB168:
+ 350:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrQueueDelete, UINT32 uwQueueID)
+ 351:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_QueueInfoGet,
+ 1111              		.loc 1 351 1
+ 1112              		.cfi_startproc
+ 1113              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1114              		@ args = 0, pretend = 0, frame = 0
+ 1115              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1116              		.loc 1 351 1
+ 1117              		.syntax unified
+ 1118              	@ 351 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1119 0000 80B5     		push {r7, lr}
+ 1120 0002 024F     		ldr  r7, =(((2) << 24) + (((2) & 0x0f) << 16) + ((7) & 0xffff))
+ 1121 0004 00DF     		svc  #0
+ 1122 0006 80BD     		pop  {r7, pc}
+ 1123              		
+ 1124              	@ 0 "" 2
+ 1125              		.thumb
+ 1126              		.syntax unified
+ 1127 0008 00BF     		nop
+ 1128 000a 1846     		mov	r0, r3
+ 1129              		.cfi_endproc
+ 1130              	.LFE168:
+ 1132              		.section	.text.LOS_UsrEventInit,"ax",%progbits
+ 1133              		.align	1
+ 1134              		.weak	LOS_UsrEventInit
+ 1135              		.syntax unified
+ 1136              		.thumb
+ 1137              		.thumb_func
+ 1138              		.fpu fpv4-sp-d16
+ 1140              	LOS_UsrEventInit:
+ 1141              	.LFB169:
+ 352:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrQueueInfoGet, UINT32 uwQueueID, QUEUE_INFO_S *pstQueueInfo)
+ 353:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 354:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_EventInit,
+ 1142              		.loc 1 354 1
+ 1143              		.cfi_startproc
+ 1144              		@ Naked Function: prologue and epilogue provided by programmer.
+ARM GAS  /tmp/ccqDQHKf.s 			page 26
+
+
+ 1145              		@ args = 0, pretend = 0, frame = 0
+ 1146              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1147              		.loc 1 354 1
+ 1148              		.syntax unified
+ 1149              	@ 354 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1150 0000 80B5     		push {r7, lr}
+ 1151 0002 024F     		ldr  r7, =(((3) << 24) + (((1) & 0x0f) << 16) + ((0) & 0xffff))
+ 1152 0004 00DF     		svc  #0
+ 1153 0006 80BD     		pop  {r7, pc}
+ 1154              		
+ 1155              	@ 0 "" 2
+ 1156              		.thumb
+ 1157              		.syntax unified
+ 1158 0008 00BF     		nop
+ 1159 000a 1846     		mov	r0, r3
+ 1160              		.cfi_endproc
+ 1161              	.LFE169:
+ 1163              		.section	.text.LOS_UsrEventRead,"ax",%progbits
+ 1164              		.align	1
+ 1165              		.weak	LOS_UsrEventRead
+ 1166              		.syntax unified
+ 1167              		.thumb
+ 1168              		.thumb_func
+ 1169              		.fpu fpv4-sp-d16
+ 1171              	LOS_UsrEventRead:
+ 1172              	.LFB170:
+ 355:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrEventInit, PEVENT_CB_S pstEventCB)
+ 356:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_EventRead,
+ 1173              		.loc 1 356 1
+ 1174              		.cfi_startproc
+ 1175              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1176              		@ args = 0, pretend = 0, frame = 0
+ 1177              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1178              		.loc 1 356 1
+ 1179              		.syntax unified
+ 1180              	@ 356 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1181 0000 80B5     		push {r7, lr}
+ 1182 0002 024F     		ldr  r7, =(((3) << 24) + (((4) & 0x0f) << 16) + ((1) & 0xffff))
+ 1183 0004 00DF     		svc  #0
+ 1184 0006 80BD     		pop  {r7, pc}
+ 1185              		
+ 1186              	@ 0 "" 2
+ 1187              		.thumb
+ 1188              		.syntax unified
+ 1189 0008 00BF     		nop
+ 1190 000a 1846     		mov	r0, r3
+ 1191              		.cfi_endproc
+ 1192              	.LFE170:
+ 1194              		.section	.text.LOS_UsrEventWrite,"ax",%progbits
+ 1195              		.align	1
+ 1196              		.weak	LOS_UsrEventWrite
+ 1197              		.syntax unified
+ 1198              		.thumb
+ 1199              		.thumb_func
+ 1200              		.fpu fpv4-sp-d16
+ 1202              	LOS_UsrEventWrite:
+ 1203              	.LFB171:
+ARM GAS  /tmp/ccqDQHKf.s 			page 27
+
+
+ 357:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrEventRead, PEVENT_CB_S pstEventCB, UINT32 uwEventMask, UINT32 uwMode, U
+ 358:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_EventWrite,
+ 1204              		.loc 1 358 1
+ 1205              		.cfi_startproc
+ 1206              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1207              		@ args = 0, pretend = 0, frame = 0
+ 1208              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1209              		.loc 1 358 1
+ 1210              		.syntax unified
+ 1211              	@ 358 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1212 0000 80B5     		push {r7, lr}
+ 1213 0002 024F     		ldr  r7, =(((3) << 24) + (((2) & 0x0f) << 16) + ((2) & 0xffff))
+ 1214 0004 00DF     		svc  #0
+ 1215 0006 80BD     		pop  {r7, pc}
+ 1216              		
+ 1217              	@ 0 "" 2
+ 1218              		.thumb
+ 1219              		.syntax unified
+ 1220 0008 00BF     		nop
+ 1221 000a 1846     		mov	r0, r3
+ 1222              		.cfi_endproc
+ 1223              	.LFE171:
+ 1225              		.section	.text.LOS_UsrEventClear,"ax",%progbits
+ 1226              		.align	1
+ 1227              		.weak	LOS_UsrEventClear
+ 1228              		.syntax unified
+ 1229              		.thumb
+ 1230              		.thumb_func
+ 1231              		.fpu fpv4-sp-d16
+ 1233              	LOS_UsrEventClear:
+ 1234              	.LFB172:
+ 359:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrEventWrite, PEVENT_CB_S pstEventCB, UINT32 uwEvents)
+ 360:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_EventClear,
+ 1235              		.loc 1 360 1
+ 1236              		.cfi_startproc
+ 1237              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1238              		@ args = 0, pretend = 0, frame = 0
+ 1239              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1240              		.loc 1 360 1
+ 1241              		.syntax unified
+ 1242              	@ 360 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1243 0000 80B5     		push {r7, lr}
+ 1244 0002 024F     		ldr  r7, =(((3) << 24) + (((2) & 0x0f) << 16) + ((3) & 0xffff))
+ 1245 0004 00DF     		svc  #0
+ 1246 0006 80BD     		pop  {r7, pc}
+ 1247              		
+ 1248              	@ 0 "" 2
+ 1249              		.thumb
+ 1250              		.syntax unified
+ 1251 0008 00BF     		nop
+ 1252 000a 1846     		mov	r0, r3
+ 1253              		.cfi_endproc
+ 1254              	.LFE172:
+ 1256              		.section	.text.LOS_UsrEventPoll,"ax",%progbits
+ 1257              		.align	1
+ 1258              		.weak	LOS_UsrEventPoll
+ 1259              		.syntax unified
+ARM GAS  /tmp/ccqDQHKf.s 			page 28
+
+
+ 1260              		.thumb
+ 1261              		.thumb_func
+ 1262              		.fpu fpv4-sp-d16
+ 1264              	LOS_UsrEventPoll:
+ 1265              	.LFB173:
+ 361:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrEventClear, PEVENT_CB_S pstEventCB, UINT32 uwEvents)
+ 362:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_EventPoll,
+ 1266              		.loc 1 362 1
+ 1267              		.cfi_startproc
+ 1268              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1269              		@ args = 0, pretend = 0, frame = 0
+ 1270              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1271              		.loc 1 362 1
+ 1272              		.syntax unified
+ 1273              	@ 362 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1274 0000 80B5     		push {r7, lr}
+ 1275 0002 024F     		ldr  r7, =(((3) << 24) + (((3) & 0x0f) << 16) + ((4) & 0xffff))
+ 1276 0004 00DF     		svc  #0
+ 1277 0006 80BD     		pop  {r7, pc}
+ 1278              		
+ 1279              	@ 0 "" 2
+ 1280              		.thumb
+ 1281              		.syntax unified
+ 1282 0008 00BF     		nop
+ 1283 000a 1846     		mov	r0, r3
+ 1284              		.cfi_endproc
+ 1285              	.LFE173:
+ 1287              		.section	.text.LOS_UsrEventDestroy,"ax",%progbits
+ 1288              		.align	1
+ 1289              		.weak	LOS_UsrEventDestroy
+ 1290              		.syntax unified
+ 1291              		.thumb
+ 1292              		.thumb_func
+ 1293              		.fpu fpv4-sp-d16
+ 1295              	LOS_UsrEventDestroy:
+ 1296              	.LFB174:
+ 363:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrEventPoll, UINT32 *uwEventID, UINT32 uwEventMask, UINT32 uwMode)
+ 364:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_EventDestroy,
+ 1297              		.loc 1 364 1
+ 1298              		.cfi_startproc
+ 1299              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1300              		@ args = 0, pretend = 0, frame = 0
+ 1301              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1302              		.loc 1 364 1
+ 1303              		.syntax unified
+ 1304              	@ 364 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1305 0000 80B5     		push {r7, lr}
+ 1306 0002 024F     		ldr  r7, =(((3) << 24) + (((1) & 0x0f) << 16) + ((5) & 0xffff))
+ 1307 0004 00DF     		svc  #0
+ 1308 0006 80BD     		pop  {r7, pc}
+ 1309              		
+ 1310              	@ 0 "" 2
+ 1311              		.thumb
+ 1312              		.syntax unified
+ 1313 0008 00BF     		nop
+ 1314 000a 1846     		mov	r0, r3
+ 1315              		.cfi_endproc
+ARM GAS  /tmp/ccqDQHKf.s 			page 29
+
+
+ 1316              	.LFE174:
+ 1318              		.section	.text.LOS_UsrMuxCreate,"ax",%progbits
+ 1319              		.align	1
+ 1320              		.weak	LOS_UsrMuxCreate
+ 1321              		.syntax unified
+ 1322              		.thumb
+ 1323              		.thumb_func
+ 1324              		.fpu fpv4-sp-d16
+ 1326              	LOS_UsrMuxCreate:
+ 1327              	.LFB175:
+ 365:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrEventDestroy, PEVENT_CB_S pstEventCB)
+ 366:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 367:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_MuxCreate,
+ 1328              		.loc 1 367 1
+ 1329              		.cfi_startproc
+ 1330              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1331              		@ args = 0, pretend = 0, frame = 0
+ 1332              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1333              		.loc 1 367 1
+ 1334              		.syntax unified
+ 1335              	@ 367 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1336 0000 80B5     		push {r7, lr}
+ 1337 0002 024F     		ldr  r7, =(((4) << 24) + (((1) & 0x0f) << 16) + ((0) & 0xffff))
+ 1338 0004 00DF     		svc  #0
+ 1339 0006 80BD     		pop  {r7, pc}
+ 1340              		
+ 1341              	@ 0 "" 2
+ 1342              		.thumb
+ 1343              		.syntax unified
+ 1344 0008 00BF     		nop
+ 1345 000a 1846     		mov	r0, r3
+ 1346              		.cfi_endproc
+ 1347              	.LFE175:
+ 1349              		.section	.text.LOS_UsrMuxDelete,"ax",%progbits
+ 1350              		.align	1
+ 1351              		.weak	LOS_UsrMuxDelete
+ 1352              		.syntax unified
+ 1353              		.thumb
+ 1354              		.thumb_func
+ 1355              		.fpu fpv4-sp-d16
+ 1357              	LOS_UsrMuxDelete:
+ 1358              	.LFB176:
+ 368:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrMuxCreate, UINT32 *puwMuxHandle)
+ 369:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_MuxDelete,
+ 1359              		.loc 1 369 1
+ 1360              		.cfi_startproc
+ 1361              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1362              		@ args = 0, pretend = 0, frame = 0
+ 1363              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1364              		.loc 1 369 1
+ 1365              		.syntax unified
+ 1366              	@ 369 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1367 0000 80B5     		push {r7, lr}
+ 1368 0002 024F     		ldr  r7, =(((4) << 24) + (((1) & 0x0f) << 16) + ((1) & 0xffff))
+ 1369 0004 00DF     		svc  #0
+ 1370 0006 80BD     		pop  {r7, pc}
+ 1371              		
+ARM GAS  /tmp/ccqDQHKf.s 			page 30
+
+
+ 1372              	@ 0 "" 2
+ 1373              		.thumb
+ 1374              		.syntax unified
+ 1375 0008 00BF     		nop
+ 1376 000a 1846     		mov	r0, r3
+ 1377              		.cfi_endproc
+ 1378              	.LFE176:
+ 1380              		.section	.text.LOS_UsrMuxPend,"ax",%progbits
+ 1381              		.align	1
+ 1382              		.weak	LOS_UsrMuxPend
+ 1383              		.syntax unified
+ 1384              		.thumb
+ 1385              		.thumb_func
+ 1386              		.fpu fpv4-sp-d16
+ 1388              	LOS_UsrMuxPend:
+ 1389              	.LFB177:
+ 370:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrMuxDelete, UINT32 puwMuxHandle)
+ 371:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_MuxPend,
+ 1390              		.loc 1 371 1
+ 1391              		.cfi_startproc
+ 1392              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1393              		@ args = 0, pretend = 0, frame = 0
+ 1394              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1395              		.loc 1 371 1
+ 1396              		.syntax unified
+ 1397              	@ 371 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1398 0000 80B5     		push {r7, lr}
+ 1399 0002 024F     		ldr  r7, =(((4) << 24) + (((2) & 0x0f) << 16) + ((2) & 0xffff))
+ 1400 0004 00DF     		svc  #0
+ 1401 0006 80BD     		pop  {r7, pc}
+ 1402              		
+ 1403              	@ 0 "" 2
+ 1404              		.thumb
+ 1405              		.syntax unified
+ 1406 0008 00BF     		nop
+ 1407 000a 1846     		mov	r0, r3
+ 1408              		.cfi_endproc
+ 1409              	.LFE177:
+ 1411              		.section	.text.LOS_UsrMuxPost,"ax",%progbits
+ 1412              		.align	1
+ 1413              		.weak	LOS_UsrMuxPost
+ 1414              		.syntax unified
+ 1415              		.thumb
+ 1416              		.thumb_func
+ 1417              		.fpu fpv4-sp-d16
+ 1419              	LOS_UsrMuxPost:
+ 1420              	.LFB178:
+ 372:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrMuxPend, UINT32 uwMuxHandle, UINT32 uwTimeout)
+ 373:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_MuxPost,
+ 1421              		.loc 1 373 1
+ 1422              		.cfi_startproc
+ 1423              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1424              		@ args = 0, pretend = 0, frame = 0
+ 1425              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1426              		.loc 1 373 1
+ 1427              		.syntax unified
+ 1428              	@ 373 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ARM GAS  /tmp/ccqDQHKf.s 			page 31
+
+
+ 1429 0000 80B5     		push {r7, lr}
+ 1430 0002 024F     		ldr  r7, =(((4) << 24) + (((1) & 0x0f) << 16) + ((3) & 0xffff))
+ 1431 0004 00DF     		svc  #0
+ 1432 0006 80BD     		pop  {r7, pc}
+ 1433              		
+ 1434              	@ 0 "" 2
+ 1435              		.thumb
+ 1436              		.syntax unified
+ 1437 0008 00BF     		nop
+ 1438 000a 1846     		mov	r0, r3
+ 1439              		.cfi_endproc
+ 1440              	.LFE178:
+ 1442              		.section	.text.LOS_UsrSemCreate,"ax",%progbits
+ 1443              		.align	1
+ 1444              		.weak	LOS_UsrSemCreate
+ 1445              		.syntax unified
+ 1446              		.thumb
+ 1447              		.thumb_func
+ 1448              		.fpu fpv4-sp-d16
+ 1450              	LOS_UsrSemCreate:
+ 1451              	.LFB179:
+ 374:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrMuxPost, UINT32 uwMuxHandle)
+ 375:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 376:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_SemCreate,
+ 1452              		.loc 1 376 1
+ 1453              		.cfi_startproc
+ 1454              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1455              		@ args = 0, pretend = 0, frame = 0
+ 1456              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1457              		.loc 1 376 1
+ 1458              		.syntax unified
+ 1459              	@ 376 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1460 0000 80B5     		push {r7, lr}
+ 1461 0002 024F     		ldr  r7, =(((5) << 24) + (((2) & 0x0f) << 16) + ((0) & 0xffff))
+ 1462 0004 00DF     		svc  #0
+ 1463 0006 80BD     		pop  {r7, pc}
+ 1464              		
+ 1465              	@ 0 "" 2
+ 1466              		.thumb
+ 1467              		.syntax unified
+ 1468 0008 00BF     		nop
+ 1469 000a 1846     		mov	r0, r3
+ 1470              		.cfi_endproc
+ 1471              	.LFE179:
+ 1473              		.section	.text.LOS_UsrBinarySemCreate,"ax",%progbits
+ 1474              		.align	1
+ 1475              		.weak	LOS_UsrBinarySemCreate
+ 1476              		.syntax unified
+ 1477              		.thumb
+ 1478              		.thumb_func
+ 1479              		.fpu fpv4-sp-d16
+ 1481              	LOS_UsrBinarySemCreate:
+ 1482              	.LFB180:
+ 377:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrSemCreate, UINT16 usCount, UINT32 *puwSemHandle)
+ 378:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_BinarySemCreate,
+ 1483              		.loc 1 378 1
+ 1484              		.cfi_startproc
+ARM GAS  /tmp/ccqDQHKf.s 			page 32
+
+
+ 1485              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1486              		@ args = 0, pretend = 0, frame = 0
+ 1487              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1488              		.loc 1 378 1
+ 1489              		.syntax unified
+ 1490              	@ 378 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1491 0000 80B5     		push {r7, lr}
+ 1492 0002 024F     		ldr  r7, =(((5) << 24) + (((2) & 0x0f) << 16) + ((1) & 0xffff))
+ 1493 0004 00DF     		svc  #0
+ 1494 0006 80BD     		pop  {r7, pc}
+ 1495              		
+ 1496              	@ 0 "" 2
+ 1497              		.thumb
+ 1498              		.syntax unified
+ 1499 0008 00BF     		nop
+ 1500 000a 1846     		mov	r0, r3
+ 1501              		.cfi_endproc
+ 1502              	.LFE180:
+ 1504              		.section	.text.LOS_UsrSemDelete,"ax",%progbits
+ 1505              		.align	1
+ 1506              		.weak	LOS_UsrSemDelete
+ 1507              		.syntax unified
+ 1508              		.thumb
+ 1509              		.thumb_func
+ 1510              		.fpu fpv4-sp-d16
+ 1512              	LOS_UsrSemDelete:
+ 1513              	.LFB181:
+ 379:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrBinarySemCreate , UINT16 usCount, UINT32 *puwSemHandle)
+ 380:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_SemDelete,
+ 1514              		.loc 1 380 1
+ 1515              		.cfi_startproc
+ 1516              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1517              		@ args = 0, pretend = 0, frame = 0
+ 1518              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1519              		.loc 1 380 1
+ 1520              		.syntax unified
+ 1521              	@ 380 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1522 0000 80B5     		push {r7, lr}
+ 1523 0002 024F     		ldr  r7, =(((5) << 24) + (((1) & 0x0f) << 16) + ((2) & 0xffff))
+ 1524 0004 00DF     		svc  #0
+ 1525 0006 80BD     		pop  {r7, pc}
+ 1526              		
+ 1527              	@ 0 "" 2
+ 1528              		.thumb
+ 1529              		.syntax unified
+ 1530 0008 00BF     		nop
+ 1531 000a 1846     		mov	r0, r3
+ 1532              		.cfi_endproc
+ 1533              	.LFE181:
+ 1535              		.section	.text.LOS_UsrSemPend,"ax",%progbits
+ 1536              		.align	1
+ 1537              		.weak	LOS_UsrSemPend
+ 1538              		.syntax unified
+ 1539              		.thumb
+ 1540              		.thumb_func
+ 1541              		.fpu fpv4-sp-d16
+ 1543              	LOS_UsrSemPend:
+ARM GAS  /tmp/ccqDQHKf.s 			page 33
+
+
+ 1544              	.LFB182:
+ 381:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrSemDelete, UINT32 uwSemHandle)
+ 382:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_SemPend,
+ 1545              		.loc 1 382 1
+ 1546              		.cfi_startproc
+ 1547              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1548              		@ args = 0, pretend = 0, frame = 0
+ 1549              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1550              		.loc 1 382 1
+ 1551              		.syntax unified
+ 1552              	@ 382 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1553 0000 80B5     		push {r7, lr}
+ 1554 0002 024F     		ldr  r7, =(((5) << 24) + (((2) & 0x0f) << 16) + ((3) & 0xffff))
+ 1555 0004 00DF     		svc  #0
+ 1556 0006 80BD     		pop  {r7, pc}
+ 1557              		
+ 1558              	@ 0 "" 2
+ 1559              		.thumb
+ 1560              		.syntax unified
+ 1561 0008 00BF     		nop
+ 1562 000a 1846     		mov	r0, r3
+ 1563              		.cfi_endproc
+ 1564              	.LFE182:
+ 1566              		.section	.text.LOS_UsrSemPost,"ax",%progbits
+ 1567              		.align	1
+ 1568              		.weak	LOS_UsrSemPost
+ 1569              		.syntax unified
+ 1570              		.thumb
+ 1571              		.thumb_func
+ 1572              		.fpu fpv4-sp-d16
+ 1574              	LOS_UsrSemPost:
+ 1575              	.LFB183:
+ 383:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrSemPend, UINT32 uwSemHandle, UINT32 uwTimeout)
+ 384:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_SemPost,
+ 1576              		.loc 1 384 1
+ 1577              		.cfi_startproc
+ 1578              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1579              		@ args = 0, pretend = 0, frame = 0
+ 1580              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1581              		.loc 1 384 1
+ 1582              		.syntax unified
+ 1583              	@ 384 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1584 0000 80B5     		push {r7, lr}
+ 1585 0002 024F     		ldr  r7, =(((5) << 24) + (((1) & 0x0f) << 16) + ((4) & 0xffff))
+ 1586 0004 00DF     		svc  #0
+ 1587 0006 80BD     		pop  {r7, pc}
+ 1588              		
+ 1589              	@ 0 "" 2
+ 1590              		.thumb
+ 1591              		.syntax unified
+ 1592 0008 00BF     		nop
+ 1593 000a 1846     		mov	r0, r3
+ 1594              		.cfi_endproc
+ 1595              	.LFE183:
+ 1597              		.section	.text.LOS_UsrSwtmrCreate,"ax",%progbits
+ 1598              		.align	1
+ 1599              		.weak	LOS_UsrSwtmrCreate
+ARM GAS  /tmp/ccqDQHKf.s 			page 34
+
+
+ 1600              		.syntax unified
+ 1601              		.thumb
+ 1602              		.thumb_func
+ 1603              		.fpu fpv4-sp-d16
+ 1605              	LOS_UsrSwtmrCreate:
+ 1606              	.LFB184:
+ 385:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrSemPost, UINT32 uwSemHandle)
+ 386:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 387:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** typedef struct
+ 388:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** {
+ 389:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****      UINT32 uwInterval;
+ 390:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****      UINT8 ucMode;
+ 391:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****      SWTMR_PROC_FUNC pfnHandler;
+ 392:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****      UINT16 *pusSwTmrID;
+ 393:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****      UINT32 uwArg;
+ 394:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #if (LOSCFG_BASE_CORE_SWTMR_ALIGN == YES)
+ 395:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****      UINT8 ucRouses;
+ 396:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****      UINT8 ucSensitive;
+ 397:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** #endif
+ 398:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** } SWTMR_INIT_PARAM_S;
+ 399:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 400:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_SwtmrCreate,
+ 1607              		.loc 1 400 1
+ 1608              		.cfi_startproc
+ 1609              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1610              		@ args = 0, pretend = 0, frame = 0
+ 1611              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1612              		.loc 1 400 1
+ 1613              		.syntax unified
+ 1614              	@ 400 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1615 0000 80B5     		push {r7, lr}
+ 1616 0002 024F     		ldr  r7, =(((6) << 24) + (((5) & 0x0f) << 16) + ((0) & 0xffff))
+ 1617 0004 00DF     		svc  #0
+ 1618 0006 80BD     		pop  {r7, pc}
+ 1619              		
+ 1620              	@ 0 "" 2
+ 1621              		.thumb
+ 1622              		.syntax unified
+ 1623 0008 00BF     		nop
+ 1624 000a 1846     		mov	r0, r3
+ 1625              		.cfi_endproc
+ 1626              	.LFE184:
+ 1628              		.section	.text.LOS_UsrSwtmrDelete,"ax",%progbits
+ 1629              		.align	1
+ 1630              		.weak	LOS_UsrSwtmrDelete
+ 1631              		.syntax unified
+ 1632              		.thumb
+ 1633              		.thumb_func
+ 1634              		.fpu fpv4-sp-d16
+ 1636              	LOS_UsrSwtmrDelete:
+ 1637              	.LFB185:
+ 401:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrSwtmrCreate, SWTMR_INIT_PARAM_S *pstInitParam)
+ 402:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_SwtmrDelete,
+ 1638              		.loc 1 402 1
+ 1639              		.cfi_startproc
+ 1640              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1641              		@ args = 0, pretend = 0, frame = 0
+ARM GAS  /tmp/ccqDQHKf.s 			page 35
+
+
+ 1642              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1643              		.loc 1 402 1
+ 1644              		.syntax unified
+ 1645              	@ 402 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1646 0000 80B5     		push {r7, lr}
+ 1647 0002 024F     		ldr  r7, =(((6) << 24) + (((1) & 0x0f) << 16) + ((1) & 0xffff))
+ 1648 0004 00DF     		svc  #0
+ 1649 0006 80BD     		pop  {r7, pc}
+ 1650              		
+ 1651              	@ 0 "" 2
+ 1652              		.thumb
+ 1653              		.syntax unified
+ 1654 0008 00BF     		nop
+ 1655 000a 1846     		mov	r0, r3
+ 1656              		.cfi_endproc
+ 1657              	.LFE185:
+ 1659              		.section	.text.LOS_UsrSwtmrStart,"ax",%progbits
+ 1660              		.align	1
+ 1661              		.weak	LOS_UsrSwtmrStart
+ 1662              		.syntax unified
+ 1663              		.thumb
+ 1664              		.thumb_func
+ 1665              		.fpu fpv4-sp-d16
+ 1667              	LOS_UsrSwtmrStart:
+ 1668              	.LFB186:
+ 403:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrSwtmrDelete, UINT16 usSwTmrID)
+ 404:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_SwtmrStart,
+ 1669              		.loc 1 404 1
+ 1670              		.cfi_startproc
+ 1671              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1672              		@ args = 0, pretend = 0, frame = 0
+ 1673              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1674              		.loc 1 404 1
+ 1675              		.syntax unified
+ 1676              	@ 404 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1677 0000 80B5     		push {r7, lr}
+ 1678 0002 024F     		ldr  r7, =(((6) << 24) + (((1) & 0x0f) << 16) + ((2) & 0xffff))
+ 1679 0004 00DF     		svc  #0
+ 1680 0006 80BD     		pop  {r7, pc}
+ 1681              		
+ 1682              	@ 0 "" 2
+ 1683              		.thumb
+ 1684              		.syntax unified
+ 1685 0008 00BF     		nop
+ 1686 000a 1846     		mov	r0, r3
+ 1687              		.cfi_endproc
+ 1688              	.LFE186:
+ 1690              		.section	.text.LOS_UsrSwtmrStop,"ax",%progbits
+ 1691              		.align	1
+ 1692              		.weak	LOS_UsrSwtmrStop
+ 1693              		.syntax unified
+ 1694              		.thumb
+ 1695              		.thumb_func
+ 1696              		.fpu fpv4-sp-d16
+ 1698              	LOS_UsrSwtmrStop:
+ 1699              	.LFB187:
+ 405:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrSwtmrStart, UINT16 usSwTmrID)
+ARM GAS  /tmp/ccqDQHKf.s 			page 36
+
+
+ 406:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_SwtmrStop,
+ 1700              		.loc 1 406 1
+ 1701              		.cfi_startproc
+ 1702              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1703              		@ args = 0, pretend = 0, frame = 0
+ 1704              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1705              		.loc 1 406 1
+ 1706              		.syntax unified
+ 1707              	@ 406 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1708 0000 80B5     		push {r7, lr}
+ 1709 0002 024F     		ldr  r7, =(((6) << 24) + (((1) & 0x0f) << 16) + ((3) & 0xffff))
+ 1710 0004 00DF     		svc  #0
+ 1711 0006 80BD     		pop  {r7, pc}
+ 1712              		
+ 1713              	@ 0 "" 2
+ 1714              		.thumb
+ 1715              		.syntax unified
+ 1716 0008 00BF     		nop
+ 1717 000a 1846     		mov	r0, r3
+ 1718              		.cfi_endproc
+ 1719              	.LFE187:
+ 1721              		.section	.text.LOS_UsrSwtmrTimeGet,"ax",%progbits
+ 1722              		.align	1
+ 1723              		.weak	LOS_UsrSwtmrTimeGet
+ 1724              		.syntax unified
+ 1725              		.thumb
+ 1726              		.thumb_func
+ 1727              		.fpu fpv4-sp-d16
+ 1729              	LOS_UsrSwtmrTimeGet:
+ 1730              	.LFB188:
+ 407:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrSwtmrStop, UINT16 usSwTmrID)
+ 408:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_SwtmrTimeGet,
+ 1731              		.loc 1 408 1
+ 1732              		.cfi_startproc
+ 1733              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1734              		@ args = 0, pretend = 0, frame = 0
+ 1735              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1736              		.loc 1 408 1
+ 1737              		.syntax unified
+ 1738              	@ 408 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1739 0000 80B5     		push {r7, lr}
+ 1740 0002 024F     		ldr  r7, =(((6) << 24) + (((2) & 0x0f) << 16) + ((4) & 0xffff))
+ 1741 0004 00DF     		svc  #0
+ 1742 0006 80BD     		pop  {r7, pc}
+ 1743              		
+ 1744              	@ 0 "" 2
+ 1745              		.thumb
+ 1746              		.syntax unified
+ 1747 0008 00BF     		nop
+ 1748 000a 1846     		mov	r0, r3
+ 1749              		.cfi_endproc
+ 1750              	.LFE188:
+ 1752              		.section	.text.LOS_UsrMS2Tick,"ax",%progbits
+ 1753              		.align	1
+ 1754              		.weak	LOS_UsrMS2Tick
+ 1755              		.syntax unified
+ 1756              		.thumb
+ARM GAS  /tmp/ccqDQHKf.s 			page 37
+
+
+ 1757              		.thumb_func
+ 1758              		.fpu fpv4-sp-d16
+ 1760              	LOS_UsrMS2Tick:
+ 1761              	.LFB189:
+ 409:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrSwtmrTimeGet, UINT16 usSwTmrID, UINT32 *uwTick)
+ 410:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** 
+ 411:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_MS2Tick,
+ 1762              		.loc 1 411 1
+ 1763              		.cfi_startproc
+ 1764              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1765              		@ args = 0, pretend = 0, frame = 0
+ 1766              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1767              		.loc 1 411 1
+ 1768              		.syntax unified
+ 1769              	@ 411 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1770 0000 80B5     		push {r7, lr}
+ 1771 0002 024F     		ldr  r7, =(((7) << 24) + (((1) & 0x0f) << 16) + ((0) & 0xffff))
+ 1772 0004 00DF     		svc  #0
+ 1773 0006 80BD     		pop  {r7, pc}
+ 1774              		
+ 1775              	@ 0 "" 2
+ 1776              		.thumb
+ 1777              		.syntax unified
+ 1778 0008 00BF     		nop
+ 1779 000a 1846     		mov	r0, r3
+ 1780              		.cfi_endproc
+ 1781              	.LFE189:
+ 1783              		.section	.text.LOS_UsrTick2MS,"ax",%progbits
+ 1784              		.align	1
+ 1785              		.weak	LOS_UsrTick2MS
+ 1786              		.syntax unified
+ 1787              		.thumb
+ 1788              		.thumb_func
+ 1789              		.fpu fpv4-sp-d16
+ 1791              	LOS_UsrTick2MS:
+ 1792              	.LFB190:
+ 412:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrMS2Tick, UINT32 uwMillisec)
+ 413:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_Tick2MS,
+ 1793              		.loc 1 413 1
+ 1794              		.cfi_startproc
+ 1795              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1796              		@ args = 0, pretend = 0, frame = 0
+ 1797              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1798              		.loc 1 413 1
+ 1799              		.syntax unified
+ 1800              	@ 413 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1801 0000 80B5     		push {r7, lr}
+ 1802 0002 024F     		ldr  r7, =(((7) << 24) + (((1) & 0x0f) << 16) + ((1) & 0xffff))
+ 1803 0004 00DF     		svc  #0
+ 1804 0006 80BD     		pop  {r7, pc}
+ 1805              		
+ 1806              	@ 0 "" 2
+ 1807              		.thumb
+ 1808              		.syntax unified
+ 1809 0008 00BF     		nop
+ 1810 000a 1846     		mov	r0, r3
+ 1811              		.cfi_endproc
+ARM GAS  /tmp/ccqDQHKf.s 			page 38
+
+
+ 1812              	.LFE190:
+ 1814              		.section	.text.LOS_UsrCyclePerTickGet,"ax",%progbits
+ 1815              		.align	1
+ 1816              		.weak	LOS_UsrCyclePerTickGet
+ 1817              		.syntax unified
+ 1818              		.thumb
+ 1819              		.thumb_func
+ 1820              		.fpu fpv4-sp-d16
+ 1822              	LOS_UsrCyclePerTickGet:
+ 1823              	.LFB191:
+ 414:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrTick2MS, UINT32 uwTick)
+ 415:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_CyclePerTickGet,
+ 1824              		.loc 1 415 1
+ 1825              		.cfi_startproc
+ 1826              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1827              		@ args = 0, pretend = 0, frame = 0
+ 1828              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1829              		.loc 1 415 1
+ 1830              		.syntax unified
+ 1831              	@ 415 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1832 0000 80B5     		push {r7, lr}
+ 1833 0002 024F     		ldr  r7, =(((7) << 24) + (((0) & 0x0f) << 16) + ((2) & 0xffff))
+ 1834 0004 00DF     		svc  #0
+ 1835 0006 80BD     		pop  {r7, pc}
+ 1836              		
+ 1837              	@ 0 "" 2
+ 1838              		.thumb
+ 1839              		.syntax unified
+ 1840 0008 00BF     		nop
+ 1841 000a 1846     		mov	r0, r3
+ 1842              		.cfi_endproc
+ 1843              	.LFE191:
+ 1845              		.section	.text.LOS_UsrTickCountGet,"ax",%progbits
+ 1846              		.align	1
+ 1847              		.weak	LOS_UsrTickCountGet
+ 1848              		.syntax unified
+ 1849              		.thumb
+ 1850              		.thumb_func
+ 1851              		.fpu fpv4-sp-d16
+ 1853              	LOS_UsrTickCountGet:
+ 1854              	.LFB192:
+ 416:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT32, LOS_UsrCyclePerTickGet)
+ 417:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_TickCountGet,
+ 1855              		.loc 1 417 1
+ 1856              		.cfi_startproc
+ 1857              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1858              		@ args = 0, pretend = 0, frame = 0
+ 1859              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1860              		.loc 1 417 1
+ 1861              		.syntax unified
+ 1862              	@ 417 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1863 0000 80B5     		push {r7, lr}
+ 1864 0002 034F     		ldr  r7, =(((7) << 24) + (((0) & 0x0f) << 16) + ((3) & 0xffff))
+ 1865 0004 00DF     		svc  #0
+ 1866 0006 80BD     		pop  {r7, pc}
+ 1867              		
+ 1868              	@ 0 "" 2
+ARM GAS  /tmp/ccqDQHKf.s 			page 39
+
+
+ 1869              		.thumb
+ 1870              		.syntax unified
+ 1871 0008 00BF     		nop
+ 1872 000a 1046     		mov	r0, r2
+ 1873 000c 1946     		mov	r1, r3
+ 1874              		.cfi_endproc
+ 1875              	.LFE192:
+ 1877 000e 0000     		.section	.text.LOS_UsrPrintf,"ax",%progbits
+ 1878              		.align	1
+ 1879              		.weak	LOS_UsrPrintf
+ 1880              		.syntax unified
+ 1881              		.thumb
+ 1882              		.thumb_func
+ 1883              		.fpu fpv4-sp-d16
+ 1885              	LOS_UsrPrintf:
+ 1886              	.LFB193:
+ 418:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h ****              UINT64, LOS_UsrTickCountGet)
+ 419:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h **** SYSCALL_RTN (SCN_printf,
+ 1887              		.loc 1 419 1
+ 1888              		.cfi_startproc
+ 1889              		@ Naked Function: prologue and epilogue provided by programmer.
+ 1890              		@ args = 0, pretend = 0, frame = 0
+ 1891              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1892              		.loc 1 419 1
+ 1893              		.syntax unified
+ 1894              	@ 419 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_svc.h" 1
+ 1895 0000 80B5     		push {r7, lr}
+ 1896 0002 024F     		ldr  r7, =(((7) << 24) + (((4) & 0x0f) << 16) + ((4) & 0xffff))
+ 1897 0004 00DF     		svc  #0
+ 1898 0006 80BD     		pop  {r7, pc}
+ 1899              		
+ 1900              	@ 0 "" 2
+ 1901              		.thumb
+ 1902              		.syntax unified
+ 1903 0008 00BF     		nop
+ 1904 000a 1846     		mov	r0, r3
+ 1905              		.cfi_endproc
+ 1906              	.LFE193:
+ 1908              		.global	svc_tbl_task
+ 1909              		.section	.rodata.svc_tbl_task,"a"
+ 1910              		.align	2
+ 1913              	svc_tbl_task:
+ 1914 0000 00000000 		.word	LOS_TaskCreateOnly
+ 1915 0004 00000000 		.word	LOS_TaskCreate
+ 1916 0008 00000000 		.word	LOS_TaskDelete
+ 1917 000c 00000000 		.word	LOS_TaskResume
+ 1918 0010 00000000 		.word	LOS_TaskSuspend
+ 1919 0014 00000000 		.word	LOS_TaskDelay
+ 1920 0018 00000000 		.word	LOS_TaskYield
+ 1921 001c 00000000 		.word	LOS_TaskLock
+ 1922 0020 00000000 		.word	LOS_TaskUnlock
+ 1923 0024 00000000 		.word	LOS_CurTaskPriSet
+ 1924 0028 00000000 		.word	LOS_TaskPriSet
+ 1925 002c 00000000 		.word	LOS_TaskPriGet
+ 1926 0030 00000000 		.word	LOS_CurTaskIDGet
+ 1927 0034 00000000 		.word	LOS_TaskInfoGet
+ 1928 0038 00000000 		.word	LOS_TaskStatusGet
+ARM GAS  /tmp/ccqDQHKf.s 			page 40
+
+
+ 1929 003c 00000000 		.word	LOS_TaskNameGet
+ 1930 0040 00000000 		.word	LOS_TaskInfoMonitor
+ 1931 0044 00000000 		.word	LOS_NextTaskIDGet
+ 1932              		.global	svc_tbl_mem
+ 1933              		.section	.rodata.svc_tbl_mem,"a"
+ 1934              		.align	2
+ 1937              	svc_tbl_mem:
+ 1938 0000 00000000 		.word	LOS_MemboxInit
+ 1939 0004 00000000 		.word	LOS_MemboxClr
+ 1940 0008 00000000 		.word	LOS_MemboxAlloc
+ 1941 000c 00000000 		.word	LOS_MemboxFree
+ 1942 0010 00000000 		.word	LOS_MemboxStatisticsGet
+ 1943 0014 00000000 		.word	LOS_MemInit
+ 1944 0018 00000000 		.word	LOS_MemAlloc
+ 1945 001c 00000000 		.word	LOS_MemFree
+ 1946 0020 00000000 		.word	LOS_MemRealloc
+ 1947 0024 00000000 		.word	LOS_MemAllocAlign
+ 1948              		.section	.text.LOS_QueueCreateSvc,"ax",%progbits
+ 1949              		.align	1
+ 1950              		.syntax unified
+ 1951              		.thumb
+ 1952              		.thumb_func
+ 1953              		.fpu fpv4-sp-d16
+ 1955              	LOS_QueueCreateSvc:
+ 1956              	.LFB194:
+ 1957              		.file 2 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** /*----------------------------------------------------------------------------
+   2:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * Copyright (c) <2019>, <Huawei Technologies Co., Ltd>
+   3:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * All rights reserved.
+   4:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * are permitted provided that the following conditions are met:
+   6:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * conditions and the following disclaimer.
+   8:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * provided with the distribution.
+  11:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * permission.
+  14:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  *---------------------------------------------------------------------------*/
+  26:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** /*----------------------------------------------------------------------------
+  27:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * Notice of Export Control Law
+  28:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * ===============================================
+  29:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+ARM GAS  /tmp/ccqDQHKf.s 			page 41
+
+
+  32:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  * applicable export control laws and regulations.
+  33:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****  *---------------------------------------------------------------------------*/
+  34:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** 
+  35:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #include <stdio.h>
+  36:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** 
+  37:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #include <los_config.h>
+  38:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** 
+  39:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #include <los_task.h>
+  40:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #include <los_membox.h>
+  41:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #include <los_memory.h>
+  42:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #include <los_queue.h>
+  43:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #include <los_event.h>
+  44:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #include <los_mux.h>
+  45:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #include <los_sem.h>
+  46:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #include <los_swtmr.h>
+  47:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #include <los_sys.h>
+  48:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** 
+  49:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #include "los_svc.h"
+  50:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** 
+  51:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** typedef uint32_t (* syscall_rtn_t) (uint32_t);
+  52:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** 
+  53:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** const syscall_rtn_t svc_tbl_task [] =
+  54:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** {
+  55:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #if (LOSCFG_STATIC_TASK == NO)
+  56:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_TaskCreateOnly,
+  57:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_TaskCreate,
+  58:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #else
+  59:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) NULL,
+  60:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) NULL,
+  61:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #endif
+  62:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_TaskDelete,
+  63:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_TaskResume,
+  64:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_TaskSuspend,
+  65:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_TaskDelay,
+  66:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_TaskYield,
+  67:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_TaskLock,
+  68:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_TaskUnlock,
+  69:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_CurTaskPriSet,
+  70:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_TaskPriSet,
+  71:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_TaskPriGet,
+  72:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_CurTaskIDGet,
+  73:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_TaskInfoGet,
+  74:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_TaskStatusGet,
+  75:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_TaskNameGet,
+  76:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_TaskInfoMonitor,
+  77:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_NextTaskIDGet,
+  78:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** };
+  79:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** 
+  80:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** const syscall_rtn_t svc_tbl_mem [] =
+  81:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** {
+  82:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_MemboxInit,
+  83:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_MemboxClr,
+  84:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_MemboxAlloc,
+  85:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_MemboxFree,
+  86:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_MemboxStatisticsGet,
+  87:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_MemInit,
+  88:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_MemAlloc,
+ARM GAS  /tmp/ccqDQHKf.s 			page 42
+
+
+  89:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_MemFree,
+  90:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_MemRealloc,
+  91:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_MemAllocAlign,
+  92:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** };
+  93:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** 
+  94:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #if (LOSCFG_BASE_IPC_QUEUE == YES)
+  95:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     
+  96:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** static UINT32 LOS_QueueCreateSvc (QUEUE_INIT_PARAM_S *pstInitParam)
+  97:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** {
+ 1958              		.loc 2 97 1
+ 1959              		.cfi_startproc
+ 1960              		@ args = 0, pretend = 0, frame = 8
+ 1961              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1962 0000 90B5     		push	{r4, r7, lr}
+ 1963              	.LCFI0:
+ 1964              		.cfi_def_cfa_offset 12
+ 1965              		.cfi_offset 4, -12
+ 1966              		.cfi_offset 7, -8
+ 1967              		.cfi_offset 14, -4
+ 1968 0002 85B0     		sub	sp, sp, #20
+ 1969              	.LCFI1:
+ 1970              		.cfi_def_cfa_offset 32
+ 1971 0004 02AF     		add	r7, sp, #8
+ 1972              	.LCFI2:
+ 1973              		.cfi_def_cfa 7, 24
+ 1974 0006 7860     		str	r0, [r7, #4]
+  98:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     return LOS_QueueCreate(pstInitParam->pcQueueName, pstInitParam->usLen, 
+ 1975              		.loc 2 98 12
+ 1976 0008 7B68     		ldr	r3, [r7, #4]
+ 1977 000a 1868     		ldr	r0, [r3]
+ 1978 000c 7B68     		ldr	r3, [r7, #4]
+ 1979 000e 9988     		ldrh	r1, [r3, #4]
+ 1980 0010 7B68     		ldr	r3, [r7, #4]
+ 1981 0012 9A68     		ldr	r2, [r3, #8]
+ 1982 0014 7B68     		ldr	r3, [r7, #4]
+ 1983 0016 DC68     		ldr	r4, [r3, #12]
+ 1984 0018 7B68     		ldr	r3, [r7, #4]
+ 1985 001a 1B8A     		ldrh	r3, [r3, #16]
+ 1986 001c 0093     		str	r3, [sp]
+ 1987 001e 2346     		mov	r3, r4
+ 1988 0020 FFF7FEFF 		bl	LOS_QueueCreate
+ 1989 0024 0346     		mov	r3, r0
+  99:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****                            pstInitParam->puwQueueID, pstInitParam->uwFlags,
+ 100:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****                            pstInitParam->usMaxMsgSize);
+ 101:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** }
+ 1990              		.loc 2 101 1
+ 1991 0026 1846     		mov	r0, r3
+ 1992 0028 0C37     		adds	r7, r7, #12
+ 1993              	.LCFI3:
+ 1994              		.cfi_def_cfa_offset 12
+ 1995 002a BD46     		mov	sp, r7
+ 1996              	.LCFI4:
+ 1997              		.cfi_def_cfa_register 13
+ 1998              		@ sp needed
+ 1999 002c 90BD     		pop	{r4, r7, pc}
+ 2000              		.cfi_endproc
+ 2001              	.LFE194:
+ARM GAS  /tmp/ccqDQHKf.s 			page 43
+
+
+ 2003              		.global	svc_tbl_queue
+ 2004              		.section	.rodata.svc_tbl_queue,"a"
+ 2005              		.align	2
+ 2008              	svc_tbl_queue:
+ 2009 0000 00000000 		.word	LOS_QueueCreateSvc
+ 2010 0004 00000000 		.word	LOS_QueueRead
+ 2011 0008 00000000 		.word	LOS_QueueWrite
+ 2012 000c 00000000 		.word	LOS_QueueReadCopy
+ 2013 0010 00000000 		.word	LOS_QueueWriteCopy
+ 2014 0014 00000000 		.word	LOS_QueueWriteHead
+ 2015 0018 00000000 		.word	LOS_QueueDelete
+ 2016 001c 00000000 		.word	LOS_QueueInfoGet
+ 2017              		.global	svc_tbl_event
+ 2018              		.section	.rodata.svc_tbl_event,"a"
+ 2019              		.align	2
+ 2022              	svc_tbl_event:
+ 2023 0000 00000000 		.word	LOS_EventInit
+ 2024 0004 00000000 		.word	LOS_EventRead
+ 2025 0008 00000000 		.word	LOS_EventWrite
+ 2026 000c 00000000 		.word	LOS_EventClear
+ 2027 0010 00000000 		.word	LOS_EventPoll
+ 2028 0014 00000000 		.word	LOS_EventDestroy
+ 2029              		.global	svc_tbl_mux
+ 2030              		.section	.rodata.svc_tbl_mux,"a"
+ 2031              		.align	2
+ 2034              	svc_tbl_mux:
+ 2035 0000 00000000 		.word	LOS_MuxCreate
+ 2036 0004 00000000 		.word	LOS_MuxDelete
+ 2037 0008 00000000 		.word	LOS_MuxPend
+ 2038 000c 00000000 		.word	LOS_MuxPost
+ 2039              		.global	svc_tbl_sem
+ 2040              		.section	.rodata.svc_tbl_sem,"a"
+ 2041              		.align	2
+ 2044              	svc_tbl_sem:
+ 2045 0000 00000000 		.word	LOS_SemCreate
+ 2046 0004 00000000 		.word	LOS_BinarySemCreate
+ 2047 0008 00000000 		.word	LOS_SemDelete
+ 2048 000c 00000000 		.word	LOS_SemPend
+ 2049 0010 00000000 		.word	LOS_SemPost
+ 2050              		.section	.text.LOS_SwtmrCreateSvc,"ax",%progbits
+ 2051              		.align	1
+ 2052              		.syntax unified
+ 2053              		.thumb
+ 2054              		.thumb_func
+ 2055              		.fpu fpv4-sp-d16
+ 2057              	LOS_SwtmrCreateSvc:
+ 2058              	.LFB195:
+ 102:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** 
+ 103:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** const syscall_rtn_t svc_tbl_queue [] =
+ 104:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** {
+ 105:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_QueueCreateSvc,
+ 106:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_QueueRead,
+ 107:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_QueueWrite,
+ 108:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_QueueReadCopy,
+ 109:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_QueueWriteCopy,
+ 110:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_QueueWriteHead,
+ 111:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_QueueDelete,
+ARM GAS  /tmp/ccqDQHKf.s 			page 44
+
+
+ 112:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_QueueInfoGet,
+ 113:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** };
+ 114:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #endif
+ 115:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** 
+ 116:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** const syscall_rtn_t svc_tbl_event [] =
+ 117:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** {
+ 118:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_EventInit,
+ 119:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_EventRead,
+ 120:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_EventWrite,
+ 121:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_EventClear,
+ 122:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_EventPoll,
+ 123:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_EventDestroy,
+ 124:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** };
+ 125:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** 
+ 126:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #if (LOSCFG_BASE_IPC_MUX == YES)
+ 127:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** const syscall_rtn_t svc_tbl_mux [] =
+ 128:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** {
+ 129:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_MuxCreate,
+ 130:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_MuxDelete,
+ 131:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_MuxPend,
+ 132:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_MuxPost,
+ 133:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** };
+ 134:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #endif
+ 135:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** 
+ 136:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #if (LOSCFG_BASE_IPC_SEM == YES)
+ 137:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** const syscall_rtn_t svc_tbl_sem [] =
+ 138:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** {
+ 139:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_SemCreate,
+ 140:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_BinarySemCreate,
+ 141:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_SemDelete,
+ 142:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_SemPend,
+ 143:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     (syscall_rtn_t) LOS_SemPost,
+ 144:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** };
+ 145:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #endif
+ 146:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** 
+ 147:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #if (LOSCFG_BASE_CORE_SWTMR == YES)
+ 148:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     
+ 149:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** static UINT32 LOS_SwtmrCreateSvc (SWTMR_INIT_PARAM_S *pstInitParam)
+ 150:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** {
+ 2059              		.loc 2 150 1
+ 2060              		.cfi_startproc
+ 2061              		@ args = 0, pretend = 0, frame = 8
+ 2062              		@ frame_needed = 1, uses_anonymous_args = 0
+ 2063 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 2064              	.LCFI5:
+ 2065              		.cfi_def_cfa_offset 20
+ 2066              		.cfi_offset 4, -20
+ 2067              		.cfi_offset 5, -16
+ 2068              		.cfi_offset 6, -12
+ 2069              		.cfi_offset 7, -8
+ 2070              		.cfi_offset 14, -4
+ 2071 0002 87B0     		sub	sp, sp, #28
+ 2072              	.LCFI6:
+ 2073              		.cfi_def_cfa_offset 48
+ 2074 0004 04AF     		add	r7, sp, #16
+ 2075              	.LCFI7:
+ 2076              		.cfi_def_cfa 7, 32
+ARM GAS  /tmp/ccqDQHKf.s 			page 45
+
+
+ 2077 0006 7860     		str	r0, [r7, #4]
+ 151:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****     return LOS_SwtmrCreate(pstInitParam->uwInterval, pstInitParam->ucMode, 
+ 2078              		.loc 2 151 12
+ 2079 0008 7B68     		ldr	r3, [r7, #4]
+ 2080 000a 1868     		ldr	r0, [r3]
+ 2081 000c 7B68     		ldr	r3, [r7, #4]
+ 2082 000e 1C79     		ldrb	r4, [r3, #4]	@ zero_extendqisi2
+ 2083 0010 7B68     		ldr	r3, [r7, #4]
+ 2084 0012 9D68     		ldr	r5, [r3, #8]
+ 2085 0014 7B68     		ldr	r3, [r7, #4]
+ 2086 0016 DE68     		ldr	r6, [r3, #12]
+ 2087 0018 7B68     		ldr	r3, [r7, #4]
+ 2088 001a 1B69     		ldr	r3, [r3, #16]
+ 2089 001c 7A68     		ldr	r2, [r7, #4]
+ 2090 001e 127D     		ldrb	r2, [r2, #20]	@ zero_extendqisi2
+ 2091 0020 7968     		ldr	r1, [r7, #4]
+ 2092 0022 497D     		ldrb	r1, [r1, #21]	@ zero_extendqisi2
+ 2093 0024 0291     		str	r1, [sp, #8]
+ 2094 0026 0192     		str	r2, [sp, #4]
+ 2095 0028 0093     		str	r3, [sp]
+ 2096 002a 3346     		mov	r3, r6
+ 2097 002c 2A46     		mov	r2, r5
+ 2098 002e 2146     		mov	r1, r4
+ 2099 0030 FFF7FEFF 		bl	LOS_SwtmrCreate
+ 2100 0034 0346     		mov	r3, r0
+ 152:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****                            pstInitParam->pfnHandler, pstInitParam->pusSwTmrID,
+ 153:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****                            pstInitParam->uwArg
+ 154:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #if (LOSCFG_BASE_CORE_SWTMR_ALIGN == YES)
+ 155:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****                            , pstInitParam->ucRouses, pstInitParam->ucSensitive
+ 156:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** #endif
+ 157:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c ****                            );
+ 158:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/src/los_svc.c **** }
+ 2101              		.loc 2 158 1
+ 2102 0036 1846     		mov	r0, r3
+ 2103 0038 0C37     		adds	r7, r7, #12
+ 2104              	.LCFI8:
+ 2105              		.cfi_def_cfa_offset 20
+ 2106 003a BD46     		mov	sp, r7
+ 2107              	.LCFI9:
+ 2108              		.cfi_def_cfa_register 13
+ 2109              		@ sp needed
+ 2110 003c F0BD     		pop	{r4, r5, r6, r7, pc}
+ 2111              		.cfi_endproc
+ 2112              	.LFE195:
+ 2114              		.global	svc_tbl_swtimer
+ 2115              		.section	.rodata.svc_tbl_swtimer,"a"
+ 2116              		.align	2
+ 2119              	svc_tbl_swtimer:
+ 2120 0000 00000000 		.word	LOS_SwtmrCreateSvc
+ 2121 0004 00000000 		.word	LOS_SwtmrDelete
+ 2122 0008 00000000 		.word	LOS_SwtmrStart
+ 2123 000c 00000000 		.word	LOS_SwtmrStop
+ 2124 0010 00000000 		.word	LOS_SwtmrTimeGet
+ 2125              		.global	svc_tbl_sys
+ 2126              		.section	.rodata.svc_tbl_sys,"a"
+ 2127              		.align	2
+ 2130              	svc_tbl_sys:
+ARM GAS  /tmp/ccqDQHKf.s 			page 46
+
+
+ 2131 0000 00000000 		.word	LOS_MS2Tick
+ 2132 0004 00000000 		.word	LOS_Tick2MS
+ 2133 0008 00000000 		.word	LOS_CyclePerTickGet
+ 2134 000c 00000000 		.word	LOS_TickCountGet
+ 2135 0010 00000000 		.word	printf
+ 2136              		.weak	svc_tbl_custom
+ 2137              		.section	.rodata.svc_tbl_custom,"a"
+ 2138              		.align	2
+ 2141              	svc_tbl_custom:
+ 2142 0000 00000000 		.space	20
+ 2142      00000000 
+ 2142      00000000 
+ 2142      00000000 
+ 2142      00000000 
+ 2143              		.global	svc_tables
+ 2144              		.section	.data.svc_tables,"aw"
+ 2145              		.align	2
+ 2148              	svc_tables:
+ 2149 0000 00000000 		.word	svc_tbl_task
+ 2150 0004 00000000 		.word	svc_tbl_mem
+ 2151 0008 00000000 		.word	svc_tbl_queue
+ 2152 000c 00000000 		.word	svc_tbl_event
+ 2153 0010 00000000 		.word	svc_tbl_mux
+ 2154 0014 00000000 		.word	svc_tbl_sem
+ 2155 0018 00000000 		.word	svc_tbl_swtimer
+ 2156 001c 00000000 		.word	svc_tbl_sys
+ 2157 0020 00000000 		.word	0
+ 2158 0024 00000000 		.word	0
+ 2159 0028 00000000 		.word	0
+ 2160 002c 00000000 		.word	0
+ 2161 0030 00000000 		.word	0
+ 2162 0034 00000000 		.word	0
+ 2163 0038 00000000 		.word	0
+ 2164 003c 00000000 		.word	svc_tbl_custom
+ 2165 0040 00000000 		.word	0
+ 2166              		.text
+ 2167              	.Letext0:
+ 2168              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 2169              		.file 4 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 2170              		.file 5 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 2171              		.file 6 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 2172              		.file 7 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/ree
+ 2173              		.file 8 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 2174              		.file 9 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_typedef.h"
+ 2175              		.file 10 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 2176              		.file 11 "/home/fanxinhao/Work/LiteOS_Lab/targets/STM32L476RG_NB476/Inc/system_stm32l4xx.h"
+ 2177              		.file 12 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_config.h"
+ 2178              		.file 13 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_list.h"
+ 2179              		.file 14 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_err.h"
+ 2180              		.file 15 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 2181              		.file 16 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_tick.h"
+ 2182              		.file 17 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_event.h"
+ 2183              		.file 18 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_task.h"
+ 2184              		.file 19 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_memory.h"
+ 2185              		.file 20 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_queue.h"
+ 2186              		.file 21 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_swtmr.h"
+ARM GAS  /tmp/ccqDQHKf.s 			page 47
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 los_svc.c
+     /tmp/ccqDQHKf.s:18     .text.LOS_UsrTaskCreateOnly:0000000000000000 $t
+     /tmp/ccqDQHKf.s:26     .text.LOS_UsrTaskCreateOnly:0000000000000000 LOS_UsrTaskCreateOnly
+     /tmp/ccqDQHKf.s:51     .text.LOS_UsrTaskCreate:0000000000000000 $t
+     /tmp/ccqDQHKf.s:58     .text.LOS_UsrTaskCreate:0000000000000000 LOS_UsrTaskCreate
+     /tmp/ccqDQHKf.s:82     .text.LOS_UsrTaskDelete:0000000000000000 $t
+     /tmp/ccqDQHKf.s:89     .text.LOS_UsrTaskDelete:0000000000000000 LOS_UsrTaskDelete
+     /tmp/ccqDQHKf.s:113    .text.LOS_UsrTaskResume:0000000000000000 $t
+     /tmp/ccqDQHKf.s:120    .text.LOS_UsrTaskResume:0000000000000000 LOS_UsrTaskResume
+     /tmp/ccqDQHKf.s:144    .text.LOS_UsrTaskSuspend:0000000000000000 $t
+     /tmp/ccqDQHKf.s:151    .text.LOS_UsrTaskSuspend:0000000000000000 LOS_UsrTaskSuspend
+     /tmp/ccqDQHKf.s:175    .text.LOS_UsrTaskDelay:0000000000000000 $t
+     /tmp/ccqDQHKf.s:182    .text.LOS_UsrTaskDelay:0000000000000000 LOS_UsrTaskDelay
+     /tmp/ccqDQHKf.s:206    .text.LOS_UsrTaskYield:0000000000000000 $t
+     /tmp/ccqDQHKf.s:213    .text.LOS_UsrTaskYield:0000000000000000 LOS_UsrTaskYield
+     /tmp/ccqDQHKf.s:237    .text.LOS_UsrTaskLock:0000000000000000 $t
+     /tmp/ccqDQHKf.s:244    .text.LOS_UsrTaskLock:0000000000000000 LOS_UsrTaskLock
+     /tmp/ccqDQHKf.s:267    .text.LOS_UsrTaskUnlock:0000000000000000 $t
+     /tmp/ccqDQHKf.s:274    .text.LOS_UsrTaskUnlock:0000000000000000 LOS_UsrTaskUnlock
+     /tmp/ccqDQHKf.s:297    .text.LOS_UsrCurTaskPriSet:0000000000000000 $t
+     /tmp/ccqDQHKf.s:304    .text.LOS_UsrCurTaskPriSet:0000000000000000 LOS_UsrCurTaskPriSet
+     /tmp/ccqDQHKf.s:328    .text.LOS_UsrTaskPriSet:0000000000000000 $t
+     /tmp/ccqDQHKf.s:335    .text.LOS_UsrTaskPriSet:0000000000000000 LOS_UsrTaskPriSet
+     /tmp/ccqDQHKf.s:359    .text.LOS_UsrTaskPriGet:0000000000000000 $t
+     /tmp/ccqDQHKf.s:366    .text.LOS_UsrTaskPriGet:0000000000000000 LOS_UsrTaskPriGet
+     /tmp/ccqDQHKf.s:390    .text.LOS_UsrCurTaskIDGet:0000000000000000 $t
+     /tmp/ccqDQHKf.s:397    .text.LOS_UsrCurTaskIDGet:0000000000000000 LOS_UsrCurTaskIDGet
+     /tmp/ccqDQHKf.s:421    .text.LOS_UsrTaskInfoGet:0000000000000000 $t
+     /tmp/ccqDQHKf.s:428    .text.LOS_UsrTaskInfoGet:0000000000000000 LOS_UsrTaskInfoGet
+     /tmp/ccqDQHKf.s:452    .text.LOS_UsrTaskStatusGet:0000000000000000 $t
+     /tmp/ccqDQHKf.s:459    .text.LOS_UsrTaskStatusGet:0000000000000000 LOS_UsrTaskStatusGet
+     /tmp/ccqDQHKf.s:483    .text.LOS_UsrTaskNameGet:0000000000000000 $t
+     /tmp/ccqDQHKf.s:490    .text.LOS_UsrTaskNameGet:0000000000000000 LOS_UsrTaskNameGet
+     /tmp/ccqDQHKf.s:514    .text.LOS_UsrTaskInfoMonitor:0000000000000000 $t
+     /tmp/ccqDQHKf.s:521    .text.LOS_UsrTaskInfoMonitor:0000000000000000 LOS_UsrTaskInfoMonitor
+     /tmp/ccqDQHKf.s:545    .text.LOS_UsrNextTaskIDGet:0000000000000000 $t
+     /tmp/ccqDQHKf.s:552    .text.LOS_UsrNextTaskIDGet:0000000000000000 LOS_UsrNextTaskIDGet
+     /tmp/ccqDQHKf.s:576    .text.LOS_UsrMemboxInit:0000000000000000 $t
+     /tmp/ccqDQHKf.s:583    .text.LOS_UsrMemboxInit:0000000000000000 LOS_UsrMemboxInit
+     /tmp/ccqDQHKf.s:607    .text.LOS_UsrMemboxClr:0000000000000000 $t
+     /tmp/ccqDQHKf.s:614    .text.LOS_UsrMemboxClr:0000000000000000 LOS_UsrMemboxClr
+     /tmp/ccqDQHKf.s:637    .text.LOS_UsrMemboxAlloc:0000000000000000 $t
+     /tmp/ccqDQHKf.s:644    .text.LOS_UsrMemboxAlloc:0000000000000000 LOS_UsrMemboxAlloc
+     /tmp/ccqDQHKf.s:668    .text.LOS_UsrMemboxFree:0000000000000000 $t
+     /tmp/ccqDQHKf.s:675    .text.LOS_UsrMemboxFree:0000000000000000 LOS_UsrMemboxFree
+     /tmp/ccqDQHKf.s:699    .text.LOS_UsrMemboxStatisticsGet:0000000000000000 $t
+     /tmp/ccqDQHKf.s:706    .text.LOS_UsrMemboxStatisticsGet:0000000000000000 LOS_UsrMemboxStatisticsGet
+     /tmp/ccqDQHKf.s:730    .text.LOS_UsrMemInit:0000000000000000 $t
+     /tmp/ccqDQHKf.s:737    .text.LOS_UsrMemInit:0000000000000000 LOS_UsrMemInit
+     /tmp/ccqDQHKf.s:761    .text.LOS_UsrMemAlloc:0000000000000000 $t
+     /tmp/ccqDQHKf.s:768    .text.LOS_UsrMemAlloc:0000000000000000 LOS_UsrMemAlloc
+     /tmp/ccqDQHKf.s:792    .text.LOS_UsrMemFree:0000000000000000 $t
+     /tmp/ccqDQHKf.s:799    .text.LOS_UsrMemFree:0000000000000000 LOS_UsrMemFree
+     /tmp/ccqDQHKf.s:823    .text.LOS_UsrMemRealloc:0000000000000000 $t
+     /tmp/ccqDQHKf.s:830    .text.LOS_UsrMemRealloc:0000000000000000 LOS_UsrMemRealloc
+     /tmp/ccqDQHKf.s:854    .text.LOS_UsrMemAllocAlign:0000000000000000 $t
+ARM GAS  /tmp/ccqDQHKf.s 			page 48
+
+
+     /tmp/ccqDQHKf.s:861    .text.LOS_UsrMemAllocAlign:0000000000000000 LOS_UsrMemAllocAlign
+     /tmp/ccqDQHKf.s:885    .text.LOS_UsrQueueCreate:0000000000000000 $t
+     /tmp/ccqDQHKf.s:892    .text.LOS_UsrQueueCreate:0000000000000000 LOS_UsrQueueCreate
+     /tmp/ccqDQHKf.s:916    .text.LOS_UsrQueueRead:0000000000000000 $t
+     /tmp/ccqDQHKf.s:923    .text.LOS_UsrQueueRead:0000000000000000 LOS_UsrQueueRead
+     /tmp/ccqDQHKf.s:947    .text.LOS_UsrQueueWrite:0000000000000000 $t
+     /tmp/ccqDQHKf.s:954    .text.LOS_UsrQueueWrite:0000000000000000 LOS_UsrQueueWrite
+     /tmp/ccqDQHKf.s:978    .text.LOS_UsrQueueReadCopy:0000000000000000 $t
+     /tmp/ccqDQHKf.s:985    .text.LOS_UsrQueueReadCopy:0000000000000000 LOS_UsrQueueReadCopy
+     /tmp/ccqDQHKf.s:1009   .text.LOS_UsrQueueWriteCopy:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1016   .text.LOS_UsrQueueWriteCopy:0000000000000000 LOS_UsrQueueWriteCopy
+     /tmp/ccqDQHKf.s:1040   .text.LOS_UsrQueueWriteHead:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1047   .text.LOS_UsrQueueWriteHead:0000000000000000 LOS_UsrQueueWriteHead
+     /tmp/ccqDQHKf.s:1071   .text.LOS_UsrQueueDelete:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1078   .text.LOS_UsrQueueDelete:0000000000000000 LOS_UsrQueueDelete
+     /tmp/ccqDQHKf.s:1102   .text.LOS_UsrQueueInfoGet:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1109   .text.LOS_UsrQueueInfoGet:0000000000000000 LOS_UsrQueueInfoGet
+     /tmp/ccqDQHKf.s:1133   .text.LOS_UsrEventInit:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1140   .text.LOS_UsrEventInit:0000000000000000 LOS_UsrEventInit
+     /tmp/ccqDQHKf.s:1164   .text.LOS_UsrEventRead:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1171   .text.LOS_UsrEventRead:0000000000000000 LOS_UsrEventRead
+     /tmp/ccqDQHKf.s:1195   .text.LOS_UsrEventWrite:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1202   .text.LOS_UsrEventWrite:0000000000000000 LOS_UsrEventWrite
+     /tmp/ccqDQHKf.s:1226   .text.LOS_UsrEventClear:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1233   .text.LOS_UsrEventClear:0000000000000000 LOS_UsrEventClear
+     /tmp/ccqDQHKf.s:1257   .text.LOS_UsrEventPoll:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1264   .text.LOS_UsrEventPoll:0000000000000000 LOS_UsrEventPoll
+     /tmp/ccqDQHKf.s:1288   .text.LOS_UsrEventDestroy:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1295   .text.LOS_UsrEventDestroy:0000000000000000 LOS_UsrEventDestroy
+     /tmp/ccqDQHKf.s:1319   .text.LOS_UsrMuxCreate:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1326   .text.LOS_UsrMuxCreate:0000000000000000 LOS_UsrMuxCreate
+     /tmp/ccqDQHKf.s:1350   .text.LOS_UsrMuxDelete:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1357   .text.LOS_UsrMuxDelete:0000000000000000 LOS_UsrMuxDelete
+     /tmp/ccqDQHKf.s:1381   .text.LOS_UsrMuxPend:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1388   .text.LOS_UsrMuxPend:0000000000000000 LOS_UsrMuxPend
+     /tmp/ccqDQHKf.s:1412   .text.LOS_UsrMuxPost:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1419   .text.LOS_UsrMuxPost:0000000000000000 LOS_UsrMuxPost
+     /tmp/ccqDQHKf.s:1443   .text.LOS_UsrSemCreate:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1450   .text.LOS_UsrSemCreate:0000000000000000 LOS_UsrSemCreate
+     /tmp/ccqDQHKf.s:1474   .text.LOS_UsrBinarySemCreate:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1481   .text.LOS_UsrBinarySemCreate:0000000000000000 LOS_UsrBinarySemCreate
+     /tmp/ccqDQHKf.s:1505   .text.LOS_UsrSemDelete:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1512   .text.LOS_UsrSemDelete:0000000000000000 LOS_UsrSemDelete
+     /tmp/ccqDQHKf.s:1536   .text.LOS_UsrSemPend:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1543   .text.LOS_UsrSemPend:0000000000000000 LOS_UsrSemPend
+     /tmp/ccqDQHKf.s:1567   .text.LOS_UsrSemPost:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1574   .text.LOS_UsrSemPost:0000000000000000 LOS_UsrSemPost
+     /tmp/ccqDQHKf.s:1598   .text.LOS_UsrSwtmrCreate:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1605   .text.LOS_UsrSwtmrCreate:0000000000000000 LOS_UsrSwtmrCreate
+     /tmp/ccqDQHKf.s:1629   .text.LOS_UsrSwtmrDelete:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1636   .text.LOS_UsrSwtmrDelete:0000000000000000 LOS_UsrSwtmrDelete
+     /tmp/ccqDQHKf.s:1660   .text.LOS_UsrSwtmrStart:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1667   .text.LOS_UsrSwtmrStart:0000000000000000 LOS_UsrSwtmrStart
+     /tmp/ccqDQHKf.s:1691   .text.LOS_UsrSwtmrStop:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1698   .text.LOS_UsrSwtmrStop:0000000000000000 LOS_UsrSwtmrStop
+     /tmp/ccqDQHKf.s:1722   .text.LOS_UsrSwtmrTimeGet:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1729   .text.LOS_UsrSwtmrTimeGet:0000000000000000 LOS_UsrSwtmrTimeGet
+ARM GAS  /tmp/ccqDQHKf.s 			page 49
+
+
+     /tmp/ccqDQHKf.s:1753   .text.LOS_UsrMS2Tick:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1760   .text.LOS_UsrMS2Tick:0000000000000000 LOS_UsrMS2Tick
+     /tmp/ccqDQHKf.s:1784   .text.LOS_UsrTick2MS:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1791   .text.LOS_UsrTick2MS:0000000000000000 LOS_UsrTick2MS
+     /tmp/ccqDQHKf.s:1815   .text.LOS_UsrCyclePerTickGet:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1822   .text.LOS_UsrCyclePerTickGet:0000000000000000 LOS_UsrCyclePerTickGet
+     /tmp/ccqDQHKf.s:1846   .text.LOS_UsrTickCountGet:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1853   .text.LOS_UsrTickCountGet:0000000000000000 LOS_UsrTickCountGet
+     /tmp/ccqDQHKf.s:1878   .text.LOS_UsrPrintf:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1885   .text.LOS_UsrPrintf:0000000000000000 LOS_UsrPrintf
+     /tmp/ccqDQHKf.s:1913   .rodata.svc_tbl_task:0000000000000000 svc_tbl_task
+     /tmp/ccqDQHKf.s:1910   .rodata.svc_tbl_task:0000000000000000 $d
+     /tmp/ccqDQHKf.s:1937   .rodata.svc_tbl_mem:0000000000000000 svc_tbl_mem
+     /tmp/ccqDQHKf.s:1934   .rodata.svc_tbl_mem:0000000000000000 $d
+     /tmp/ccqDQHKf.s:1949   .text.LOS_QueueCreateSvc:0000000000000000 $t
+     /tmp/ccqDQHKf.s:1955   .text.LOS_QueueCreateSvc:0000000000000000 LOS_QueueCreateSvc
+     /tmp/ccqDQHKf.s:2008   .rodata.svc_tbl_queue:0000000000000000 svc_tbl_queue
+     /tmp/ccqDQHKf.s:2005   .rodata.svc_tbl_queue:0000000000000000 $d
+     /tmp/ccqDQHKf.s:2022   .rodata.svc_tbl_event:0000000000000000 svc_tbl_event
+     /tmp/ccqDQHKf.s:2019   .rodata.svc_tbl_event:0000000000000000 $d
+     /tmp/ccqDQHKf.s:2034   .rodata.svc_tbl_mux:0000000000000000 svc_tbl_mux
+     /tmp/ccqDQHKf.s:2031   .rodata.svc_tbl_mux:0000000000000000 $d
+     /tmp/ccqDQHKf.s:2044   .rodata.svc_tbl_sem:0000000000000000 svc_tbl_sem
+     /tmp/ccqDQHKf.s:2041   .rodata.svc_tbl_sem:0000000000000000 $d
+     /tmp/ccqDQHKf.s:2051   .text.LOS_SwtmrCreateSvc:0000000000000000 $t
+     /tmp/ccqDQHKf.s:2057   .text.LOS_SwtmrCreateSvc:0000000000000000 LOS_SwtmrCreateSvc
+     /tmp/ccqDQHKf.s:2119   .rodata.svc_tbl_swtimer:0000000000000000 svc_tbl_swtimer
+     /tmp/ccqDQHKf.s:2116   .rodata.svc_tbl_swtimer:0000000000000000 $d
+     /tmp/ccqDQHKf.s:2130   .rodata.svc_tbl_sys:0000000000000000 svc_tbl_sys
+     /tmp/ccqDQHKf.s:2127   .rodata.svc_tbl_sys:0000000000000000 $d
+     /tmp/ccqDQHKf.s:2141   .rodata.svc_tbl_custom:0000000000000000 svc_tbl_custom
+     /tmp/ccqDQHKf.s:2138   .rodata.svc_tbl_custom:0000000000000000 $d
+     /tmp/ccqDQHKf.s:2148   .data.svc_tables:0000000000000000 svc_tables
+     /tmp/ccqDQHKf.s:2145   .data.svc_tables:0000000000000000 $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrPrintf:000000000000000c $d
+     /tmp/ccqDQHKf.s:1877   .text.LOS_UsrTickCountGet:000000000000000e $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrTickCountGet:0000000000000010 $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrCyclePerTickGet:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrTick2MS:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrMS2Tick:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrSwtmrTimeGet:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrSwtmrStop:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrSwtmrStart:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrSwtmrDelete:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrSwtmrCreate:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrSemPost:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrSemPend:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrSemDelete:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrBinarySemCreate:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrSemCreate:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrMuxPost:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrMuxPend:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrMuxDelete:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrMuxCreate:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrEventDestroy:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrEventPoll:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrEventClear:000000000000000c $d
+ARM GAS  /tmp/ccqDQHKf.s 			page 50
+
+
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrEventWrite:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrEventRead:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrEventInit:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrQueueInfoGet:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrQueueDelete:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrQueueWriteHead:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrQueueWriteCopy:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrQueueReadCopy:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrQueueWrite:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrQueueRead:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrQueueCreate:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrMemAllocAlign:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrMemRealloc:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrMemFree:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrMemAlloc:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrMemInit:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrMemboxStatisticsGet:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrMemboxFree:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrMemboxAlloc:000000000000000c $d
+     /tmp/ccqDQHKf.s:636    .text.LOS_UsrMemboxClr:000000000000000a $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrMemboxClr:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrMemboxInit:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrTaskStatusGet:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrTaskInfoGet:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrTaskPriGet:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrTaskPriSet:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrCurTaskPriSet:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrTaskDelay:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrTaskSuspend:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrTaskResume:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrTaskDelete:000000000000000c $d
+     /tmp/ccqDQHKf.s:8108   .text.LOS_UsrTaskCreate:000000000000000c $d
+
+UNDEFINED SYMBOLS
+LOS_TaskCreateOnly
+LOS_TaskCreate
+LOS_TaskDelete
+LOS_TaskResume
+LOS_TaskSuspend
+LOS_TaskDelay
+LOS_TaskYield
+LOS_TaskLock
+LOS_TaskUnlock
+LOS_CurTaskPriSet
+LOS_TaskPriSet
+LOS_TaskPriGet
+LOS_CurTaskIDGet
+LOS_TaskInfoGet
+LOS_TaskStatusGet
+LOS_TaskNameGet
+LOS_TaskInfoMonitor
+LOS_NextTaskIDGet
+LOS_MemboxInit
+LOS_MemboxClr
+LOS_MemboxAlloc
+LOS_MemboxFree
+LOS_MemboxStatisticsGet
+ARM GAS  /tmp/ccqDQHKf.s 			page 51
+
+
+LOS_MemInit
+LOS_MemAlloc
+LOS_MemFree
+LOS_MemRealloc
+LOS_MemAllocAlign
+LOS_QueueCreate
+LOS_QueueRead
+LOS_QueueWrite
+LOS_QueueReadCopy
+LOS_QueueWriteCopy
+LOS_QueueWriteHead
+LOS_QueueDelete
+LOS_QueueInfoGet
+LOS_EventInit
+LOS_EventRead
+LOS_EventWrite
+LOS_EventClear
+LOS_EventPoll
+LOS_EventDestroy
+LOS_MuxCreate
+LOS_MuxDelete
+LOS_MuxPend
+LOS_MuxPost
+LOS_SemCreate
+LOS_BinarySemCreate
+LOS_SemDelete
+LOS_SemPend
+LOS_SemPost
+LOS_SwtmrCreate
+LOS_SwtmrDelete
+LOS_SwtmrStart
+LOS_SwtmrStop
+LOS_SwtmrTimeGet
+LOS_MS2Tick
+LOS_Tick2MS
+LOS_CyclePerTickGet
+LOS_TickCountGet
+printf

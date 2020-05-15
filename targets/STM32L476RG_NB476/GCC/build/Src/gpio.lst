@@ -1,0 +1,323 @@
+ARM GAS  /tmp/ccMeE1Mp.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"gpio.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.MX_GPIO_Init,"ax",%progbits
+  18              		.align	1
+  19              		.global	MX_GPIO_Init
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	MX_GPIO_Init:
+  27              	.LFB133:
+  28              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** /**
+   2:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   ******************************************************************************
+   3:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   * File Name          : gpio.c
+   4:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   * Description        : This file provides code for the configuration
+   5:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   *                      of all used GPIO pins.
+   6:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   ******************************************************************************
+   7:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   * @attention
+   8:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   *
+   9:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+  10:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   * All rights reserved.</center></h2>
+  11:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   *
+  12:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   * This software component is licensed by ST under BSD 3-Clause license,
+  13:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   * the "License"; You may not use this file except in compliance with the
+  14:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   * License. You may obtain a copy of the License at:
+  15:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   *                        opensource.org/licenses/BSD-3-Clause
+  16:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   *
+  17:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   ******************************************************************************
+  18:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   */
+  19:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** 
+  20:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** /* Includes ------------------------------------------------------------------*/
+  21:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** #include "gpio.h"
+  22:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** /* USER CODE BEGIN 0 */
+  23:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** 
+  24:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** /* USER CODE END 0 */
+  25:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** 
+  26:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** /*----------------------------------------------------------------------------*/
+  27:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** /* Configure GPIO                                                             */
+  28:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** /*----------------------------------------------------------------------------*/
+  29:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** /* USER CODE BEGIN 1 */
+  30:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** 
+ARM GAS  /tmp/ccMeE1Mp.s 			page 2
+
+
+  31:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** /* USER CODE END 1 */
+  32:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** 
+  33:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** /** Configure pins as 
+  34:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****         * Analog 
+  35:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****         * Input 
+  36:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****         * Output
+  37:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****         * EVENT_OUT
+  38:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****         * EXTI
+  39:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** */
+  40:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** void MX_GPIO_Init(void)
+  41:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** {
+  29              		.loc 1 41 1
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 40
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33 0000 80B5     		push	{r7, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 7, -8
+  37              		.cfi_offset 14, -4
+  38 0002 8AB0     		sub	sp, sp, #40
+  39              	.LCFI1:
+  40              		.cfi_def_cfa_offset 48
+  41 0004 00AF     		add	r7, sp, #0
+  42              	.LCFI2:
+  43              		.cfi_def_cfa_register 7
+  42:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** 
+  43:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   GPIO_InitTypeDef GPIO_InitStruct = {0};
+  44              		.loc 1 43 20
+  45 0006 07F11403 		add	r3, r7, #20
+  46 000a 0022     		movs	r2, #0
+  47 000c 1A60     		str	r2, [r3]
+  48 000e 5A60     		str	r2, [r3, #4]
+  49 0010 9A60     		str	r2, [r3, #8]
+  50 0012 DA60     		str	r2, [r3, #12]
+  51 0014 1A61     		str	r2, [r3, #16]
+  52              	.LBB2:
+  44:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** 
+  45:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   /* GPIO Ports Clock Enable */
+  46:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   __HAL_RCC_GPIOC_CLK_ENABLE();
+  53              		.loc 1 46 3
+  54 0016 3A4B     		ldr	r3, .L2
+  55 0018 DB6C     		ldr	r3, [r3, #76]
+  56 001a 394A     		ldr	r2, .L2
+  57 001c 43F00403 		orr	r3, r3, #4
+  58 0020 D364     		str	r3, [r2, #76]
+  59 0022 374B     		ldr	r3, .L2
+  60 0024 DB6C     		ldr	r3, [r3, #76]
+  61 0026 03F00403 		and	r3, r3, #4
+  62 002a 3B61     		str	r3, [r7, #16]
+  63 002c 3B69     		ldr	r3, [r7, #16]
+  64              	.LBE2:
+  65              	.LBB3:
+  47:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   __HAL_RCC_GPIOH_CLK_ENABLE();
+  66              		.loc 1 47 3
+  67 002e 344B     		ldr	r3, .L2
+  68 0030 DB6C     		ldr	r3, [r3, #76]
+ARM GAS  /tmp/ccMeE1Mp.s 			page 3
+
+
+  69 0032 334A     		ldr	r2, .L2
+  70 0034 43F08003 		orr	r3, r3, #128
+  71 0038 D364     		str	r3, [r2, #76]
+  72 003a 314B     		ldr	r3, .L2
+  73 003c DB6C     		ldr	r3, [r3, #76]
+  74 003e 03F08003 		and	r3, r3, #128
+  75 0042 FB60     		str	r3, [r7, #12]
+  76 0044 FB68     		ldr	r3, [r7, #12]
+  77              	.LBE3:
+  78              	.LBB4:
+  48:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   __HAL_RCC_GPIOB_CLK_ENABLE();
+  79              		.loc 1 48 3
+  80 0046 2E4B     		ldr	r3, .L2
+  81 0048 DB6C     		ldr	r3, [r3, #76]
+  82 004a 2D4A     		ldr	r2, .L2
+  83 004c 43F00203 		orr	r3, r3, #2
+  84 0050 D364     		str	r3, [r2, #76]
+  85 0052 2B4B     		ldr	r3, .L2
+  86 0054 DB6C     		ldr	r3, [r3, #76]
+  87 0056 03F00203 		and	r3, r3, #2
+  88 005a BB60     		str	r3, [r7, #8]
+  89 005c BB68     		ldr	r3, [r7, #8]
+  90              	.LBE4:
+  91              	.LBB5:
+  49:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   __HAL_RCC_GPIOA_CLK_ENABLE();
+  92              		.loc 1 49 3
+  93 005e 284B     		ldr	r3, .L2
+  94 0060 DB6C     		ldr	r3, [r3, #76]
+  95 0062 274A     		ldr	r2, .L2
+  96 0064 43F00103 		orr	r3, r3, #1
+  97 0068 D364     		str	r3, [r2, #76]
+  98 006a 254B     		ldr	r3, .L2
+  99 006c DB6C     		ldr	r3, [r3, #76]
+ 100 006e 03F00103 		and	r3, r3, #1
+ 101 0072 7B60     		str	r3, [r7, #4]
+ 102 0074 7B68     		ldr	r3, [r7, #4]
+ 103              	.LBE5:
+  50:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** 
+  51:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   /*Configure GPIO pin Output Level */
+  52:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET);
+ 104              		.loc 1 52 3
+ 105 0076 0122     		movs	r2, #1
+ 106 0078 0421     		movs	r1, #4
+ 107 007a 2248     		ldr	r0, .L2+4
+ 108 007c FFF7FEFF 		bl	HAL_GPIO_WritePin
+  53:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** 
+  54:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   /*Configure GPIO pin Output Level */
+  55:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   HAL_GPIO_WritePin(NB_EN_GPIO_Port, NB_EN_Pin, GPIO_PIN_RESET);
+ 109              		.loc 1 55 3
+ 110 0080 0022     		movs	r2, #0
+ 111 0082 4021     		movs	r1, #64
+ 112 0084 2048     		ldr	r0, .L2+8
+ 113 0086 FFF7FEFF 		bl	HAL_GPIO_WritePin
+  56:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** 
+  57:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   /*Configure GPIO pins : PCPin PCPin PCPin PCPin 
+  58:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****                            PCPin */
+  59:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   GPIO_InitStruct.Pin = DHT11_DATA_Pin|KEY4_Pin|KEY3_Pin|KEY2_Pin 
+ARM GAS  /tmp/ccMeE1Mp.s 			page 4
+
+
+ 114              		.loc 1 59 23
+ 115 008a 42F20F03 		movw	r3, #8207
+ 116 008e 7B61     		str	r3, [r7, #20]
+  60:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****                           |KEY1_Pin;
+  61:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+ 117              		.loc 1 61 24
+ 118 0090 0023     		movs	r3, #0
+ 119 0092 BB61     		str	r3, [r7, #24]
+  62:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   GPIO_InitStruct.Pull = GPIO_PULLUP;
+ 120              		.loc 1 62 24
+ 121 0094 0123     		movs	r3, #1
+ 122 0096 FB61     		str	r3, [r7, #28]
+  63:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+ 123              		.loc 1 63 3
+ 124 0098 07F11403 		add	r3, r7, #20
+ 125 009c 1946     		mov	r1, r3
+ 126 009e 1A48     		ldr	r0, .L2+8
+ 127 00a0 FFF7FEFF 		bl	HAL_GPIO_Init
+  64:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** 
+  65:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   /*Configure GPIO pin : PtPin */
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   GPIO_InitStruct.Pin = LED_Pin;
+ 128              		.loc 1 66 23
+ 129 00a4 0423     		movs	r3, #4
+ 130 00a6 7B61     		str	r3, [r7, #20]
+  67:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 131              		.loc 1 67 24
+ 132 00a8 0123     		movs	r3, #1
+ 133 00aa BB61     		str	r3, [r7, #24]
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 134              		.loc 1 68 24
+ 135 00ac 0023     		movs	r3, #0
+ 136 00ae FB61     		str	r3, [r7, #28]
+  69:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 137              		.loc 1 69 25
+ 138 00b0 0023     		movs	r3, #0
+ 139 00b2 3B62     		str	r3, [r7, #32]
+  70:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   HAL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
+ 140              		.loc 1 70 3
+ 141 00b4 07F11403 		add	r3, r7, #20
+ 142 00b8 1946     		mov	r1, r3
+ 143 00ba 1248     		ldr	r0, .L2+4
+ 144 00bc FFF7FEFF 		bl	HAL_GPIO_Init
+  71:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** 
+  72:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   /*Configure GPIO pin : PtPin */
+  73:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   GPIO_InitStruct.Pin = NB_RI_Pin;
+ 145              		.loc 1 73 23
+ 146 00c0 4FF40043 		mov	r3, #32768
+ 147 00c4 7B61     		str	r3, [r7, #20]
+  74:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+ 148              		.loc 1 74 24
+ 149 00c6 0023     		movs	r3, #0
+ 150 00c8 BB61     		str	r3, [r7, #24]
+  75:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 151              		.loc 1 75 24
+ 152 00ca 0023     		movs	r3, #0
+ 153 00cc FB61     		str	r3, [r7, #28]
+  76:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   HAL_GPIO_Init(NB_RI_GPIO_Port, &GPIO_InitStruct);
+ARM GAS  /tmp/ccMeE1Mp.s 			page 5
+
+
+ 154              		.loc 1 76 3
+ 155 00ce 07F11403 		add	r3, r7, #20
+ 156 00d2 1946     		mov	r1, r3
+ 157 00d4 0B48     		ldr	r0, .L2+4
+ 158 00d6 FFF7FEFF 		bl	HAL_GPIO_Init
+  77:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** 
+  78:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   /*Configure GPIO pin : PtPin */
+  79:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   GPIO_InitStruct.Pin = NB_EN_Pin;
+ 159              		.loc 1 79 23
+ 160 00da 4023     		movs	r3, #64
+ 161 00dc 7B61     		str	r3, [r7, #20]
+  80:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 162              		.loc 1 80 24
+ 163 00de 0123     		movs	r3, #1
+ 164 00e0 BB61     		str	r3, [r7, #24]
+  81:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 165              		.loc 1 81 24
+ 166 00e2 0023     		movs	r3, #0
+ 167 00e4 FB61     		str	r3, [r7, #28]
+  82:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 168              		.loc 1 82 25
+ 169 00e6 0023     		movs	r3, #0
+ 170 00e8 3B62     		str	r3, [r7, #32]
+  83:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c ****   HAL_GPIO_Init(NB_EN_GPIO_Port, &GPIO_InitStruct);
+ 171              		.loc 1 83 3
+ 172 00ea 07F11403 		add	r3, r7, #20
+ 173 00ee 1946     		mov	r1, r3
+ 174 00f0 0548     		ldr	r0, .L2+8
+ 175 00f2 FFF7FEFF 		bl	HAL_GPIO_Init
+  84:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** 
+  85:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/gpio.c **** }
+ 176              		.loc 1 85 1
+ 177 00f6 00BF     		nop
+ 178 00f8 2837     		adds	r7, r7, #40
+ 179              	.LCFI3:
+ 180              		.cfi_def_cfa_offset 8
+ 181 00fa BD46     		mov	sp, r7
+ 182              	.LCFI4:
+ 183              		.cfi_def_cfa_register 13
+ 184              		@ sp needed
+ 185 00fc 80BD     		pop	{r7, pc}
+ 186              	.L3:
+ 187 00fe 00BF     		.align	2
+ 188              	.L2:
+ 189 0100 00100240 		.word	1073876992
+ 190 0104 00040048 		.word	1207960576
+ 191 0108 00080048 		.word	1207961600
+ 192              		.cfi_endproc
+ 193              	.LFE133:
+ 195              		.text
+ 196              	.Letext0:
+ 197              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 198              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 199              		.file 4 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 200              		.file 5 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/system_stm32l4xx.h"
+ 201              		.file 6 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/stm32l476xx.h"
+ 202              		.file 7 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ARM GAS  /tmp/ccMeE1Mp.s 			page 6
+
+
+ 203              		.file 8 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 204              		.file 9 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 205              		.file 10 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/re
+ 206              		.file 11 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 207              		.file 12 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_typedef.h"
+ 208              		.file 13 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_config.h"
+ 209              		.file 14 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_err.h"
+ 210              		.file 15 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/arm-m/include/los_hwi.h"
+ARM GAS  /tmp/ccMeE1Mp.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 gpio.c
+     /tmp/ccMeE1Mp.s:18     .text.MX_GPIO_Init:0000000000000000 $t
+     /tmp/ccMeE1Mp.s:26     .text.MX_GPIO_Init:0000000000000000 MX_GPIO_Init
+     /tmp/ccMeE1Mp.s:189    .text.MX_GPIO_Init:0000000000000100 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_WritePin
+HAL_GPIO_Init

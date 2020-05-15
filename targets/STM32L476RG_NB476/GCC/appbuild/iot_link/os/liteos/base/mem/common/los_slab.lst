@@ -1,0 +1,1919 @@
+ARM GAS  /tmp/ccottVZ9.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"los_slab.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.osAtomicBitsetInit,"ax",%progbits
+  18              		.align	1
+  19              		.global	osAtomicBitsetInit
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	osAtomicBitsetInit:
+  27              	.LFB133:
+  28              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** /*----------------------------------------------------------------------------
+   2:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * Copyright (c) <2013-2017>, <Huawei Technologies Co., Ltd>
+   3:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * All rights reserved.
+   4:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * are permitted provided that the following conditions are met:
+   6:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * conditions and the following disclaimer.
+   8:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * provided with the distribution.
+  11:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * permission.
+  14:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  *---------------------------------------------------------------------------*/
+  26:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** /*----------------------------------------------------------------------------
+  27:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * Notice of Export Control Law
+  28:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * ===============================================
+  29:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+ARM GAS  /tmp/ccottVZ9.s 			page 2
+
+
+  31:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  * applicable export control laws and regulations.
+  33:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****  *---------------------------------------------------------------------------*/
+  34:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** #include <string.h>
+  35:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** #include <stdint.h>
+  36:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** #include <los_slab.ph>
+  37:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+  38:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** extern VOID* osHeapAlloc(VOID *pPool, UINT32 uwSz);
+  39:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** extern BOOL osHeapFree(VOID *pPool, VOID* pPtr);
+  40:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+  41:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** VOID osAtomicBitsetInit(struct AtomicBitset *pstSet, UINT32 uwNumBits)
+  42:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** {
+  29              		.loc 1 42 1
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 8
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33 0000 80B5     		push	{r7, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 7, -8
+  37              		.cfi_offset 14, -4
+  38 0002 82B0     		sub	sp, sp, #8
+  39              	.LCFI1:
+  40              		.cfi_def_cfa_offset 16
+  41 0004 00AF     		add	r7, sp, #0
+  42              	.LCFI2:
+  43              		.cfi_def_cfa_register 7
+  44 0006 7860     		str	r0, [r7, #4]
+  45 0008 3960     		str	r1, [r7]
+  43:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     pstSet->numBits = uwNumBits;
+  46              		.loc 1 43 21
+  47 000a 7B68     		ldr	r3, [r7, #4]
+  48 000c 3A68     		ldr	r2, [r7]
+  49 000e 1A60     		str	r2, [r3]
+  44:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     memset(pstSet->words, 0, (uwNumBits + 31) / 8);
+  50              		.loc 1 44 18
+  51 0010 7B68     		ldr	r3, [r7, #4]
+  52 0012 181D     		adds	r0, r3, #4
+  53              		.loc 1 44 41
+  54 0014 3B68     		ldr	r3, [r7]
+  55 0016 1F33     		adds	r3, r3, #31
+  56              		.loc 1 44 5
+  57 0018 DB08     		lsrs	r3, r3, #3
+  58 001a 1A46     		mov	r2, r3
+  59 001c 0021     		movs	r1, #0
+  60 001e FFF7FEFF 		bl	memset
+  45:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     if (uwNumBits & 31) //mark all high bits so that osAtomicBitsetFindClearAndSet() is simpler
+  61              		.loc 1 45 19
+  62 0022 3B68     		ldr	r3, [r7]
+  63 0024 03F01F03 		and	r3, r3, #31
+  64              		.loc 1 45 8
+  65 0028 002B     		cmp	r3, #0
+  66 002a 0CD0     		beq	.L3
+  46:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     {
+  47:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         pstSet->words[uwNumBits / 32] = ((UINT32)((INT32)-1LL)) << (uwNumBits & 31);
+  67              		.loc 1 47 79
+  68 002c 3B68     		ldr	r3, [r7]
+ARM GAS  /tmp/ccottVZ9.s 			page 3
+
+
+  69 002e 03F01F02 		and	r2, r3, #31
+  70              		.loc 1 47 33
+  71 0032 3B68     		ldr	r3, [r7]
+  72 0034 5B09     		lsrs	r3, r3, #5
+  73              		.loc 1 47 65
+  74 0036 4FF0FF31 		mov	r1, #-1
+  75 003a 01FA02F2 		lsl	r2, r1, r2
+  76              		.loc 1 47 39
+  77 003e 7968     		ldr	r1, [r7, #4]
+  78 0040 9B00     		lsls	r3, r3, #2
+  79 0042 0B44     		add	r3, r3, r1
+  80 0044 5A60     		str	r2, [r3, #4]
+  81              	.L3:
+  48:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     }
+  49:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** }
+  82              		.loc 1 49 1
+  83 0046 00BF     		nop
+  84 0048 0837     		adds	r7, r7, #8
+  85              	.LCFI3:
+  86              		.cfi_def_cfa_offset 8
+  87 004a BD46     		mov	sp, r7
+  88              	.LCFI4:
+  89              		.cfi_def_cfa_register 13
+  90              		@ sp needed
+  91 004c 80BD     		pop	{r7, pc}
+  92              		.cfi_endproc
+  93              	.LFE133:
+  95              		.section	.text.osAtomicBitsetGetNumBits,"ax",%progbits
+  96              		.align	1
+  97              		.global	osAtomicBitsetGetNumBits
+  98              		.syntax unified
+  99              		.thumb
+ 100              		.thumb_func
+ 101              		.fpu fpv4-sp-d16
+ 103              	osAtomicBitsetGetNumBits:
+ 104              	.LFB134:
+  50:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+  51:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** inline UINT32 osAtomicBitsetGetNumBits(const struct AtomicBitset *pstSet)
+  52:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** {
+ 105              		.loc 1 52 1
+ 106              		.cfi_startproc
+ 107              		@ args = 0, pretend = 0, frame = 8
+ 108              		@ frame_needed = 1, uses_anonymous_args = 0
+ 109              		@ link register save eliminated.
+ 110 0000 80B4     		push	{r7}
+ 111              	.LCFI5:
+ 112              		.cfi_def_cfa_offset 4
+ 113              		.cfi_offset 7, -4
+ 114 0002 83B0     		sub	sp, sp, #12
+ 115              	.LCFI6:
+ 116              		.cfi_def_cfa_offset 16
+ 117 0004 00AF     		add	r7, sp, #0
+ 118              	.LCFI7:
+ 119              		.cfi_def_cfa_register 7
+ 120 0006 7860     		str	r0, [r7, #4]
+  53:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     return pstSet->numBits;
+ 121              		.loc 1 53 18
+ARM GAS  /tmp/ccottVZ9.s 			page 4
+
+
+ 122 0008 7B68     		ldr	r3, [r7, #4]
+ 123 000a 1B68     		ldr	r3, [r3]
+  54:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** }
+ 124              		.loc 1 54 1
+ 125 000c 1846     		mov	r0, r3
+ 126 000e 0C37     		adds	r7, r7, #12
+ 127              	.LCFI8:
+ 128              		.cfi_def_cfa_offset 4
+ 129 0010 BD46     		mov	sp, r7
+ 130              	.LCFI9:
+ 131              		.cfi_def_cfa_register 13
+ 132              		@ sp needed
+ 133 0012 5DF8047B 		ldr	r7, [sp], #4
+ 134              	.LCFI10:
+ 135              		.cfi_restore 7
+ 136              		.cfi_def_cfa_offset 0
+ 137 0016 7047     		bx	lr
+ 138              		.cfi_endproc
+ 139              	.LFE134:
+ 141              		.section	.text.osAtomicBitsetGetBit,"ax",%progbits
+ 142              		.align	1
+ 143              		.global	osAtomicBitsetGetBit
+ 144              		.syntax unified
+ 145              		.thumb
+ 146              		.thumb_func
+ 147              		.fpu fpv4-sp-d16
+ 149              	osAtomicBitsetGetBit:
+ 150              	.LFB135:
+  55:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+  56:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** BOOL osAtomicBitsetGetBit(const struct AtomicBitset *pstSet, UINT32 uwNum)
+  57:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** {
+ 151              		.loc 1 57 1
+ 152              		.cfi_startproc
+ 153              		@ args = 0, pretend = 0, frame = 8
+ 154              		@ frame_needed = 1, uses_anonymous_args = 0
+ 155              		@ link register save eliminated.
+ 156 0000 80B4     		push	{r7}
+ 157              	.LCFI11:
+ 158              		.cfi_def_cfa_offset 4
+ 159              		.cfi_offset 7, -4
+ 160 0002 83B0     		sub	sp, sp, #12
+ 161              	.LCFI12:
+ 162              		.cfi_def_cfa_offset 16
+ 163 0004 00AF     		add	r7, sp, #0
+ 164              	.LCFI13:
+ 165              		.cfi_def_cfa_register 7
+ 166 0006 7860     		str	r0, [r7, #4]
+ 167 0008 3960     		str	r1, [r7]
+  58:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     if (uwNum >= pstSet->numBits) /* any value is as good as the next */
+ 168              		.loc 1 58 24
+ 169 000a 7B68     		ldr	r3, [r7, #4]
+ 170 000c 1B68     		ldr	r3, [r3]
+ 171              		.loc 1 58 8
+ 172 000e 3A68     		ldr	r2, [r7]
+ 173 0010 9A42     		cmp	r2, r3
+ 174 0012 01D3     		bcc	.L7
+  59:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     {
+ARM GAS  /tmp/ccottVZ9.s 			page 5
+
+
+  60:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         return FALSE;
+ 175              		.loc 1 60 16
+ 176 0014 0023     		movs	r3, #0
+ 177 0016 11E0     		b	.L8
+ 178              	.L7:
+  61:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     }
+  62:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     return !!((pstSet->words[uwNum / 32]) & (1UL << (uwNum & 31)));
+ 179              		.loc 1 62 36
+ 180 0018 3B68     		ldr	r3, [r7]
+ 181 001a 5B09     		lsrs	r3, r3, #5
+ 182              		.loc 1 62 29
+ 183 001c 7A68     		ldr	r2, [r7, #4]
+ 184 001e 9B00     		lsls	r3, r3, #2
+ 185 0020 1344     		add	r3, r3, r2
+ 186 0022 5A68     		ldr	r2, [r3, #4]
+ 187              		.loc 1 62 60
+ 188 0024 3B68     		ldr	r3, [r7]
+ 189 0026 03F01F03 		and	r3, r3, #31
+ 190              		.loc 1 62 12
+ 191 002a 22FA03F3 		lsr	r3, r2, r3
+ 192 002e 03F00103 		and	r3, r3, #1
+ 193 0032 002B     		cmp	r3, #0
+ 194 0034 14BF     		ite	ne
+ 195 0036 0123     		movne	r3, #1
+ 196 0038 0023     		moveq	r3, #0
+ 197 003a DBB2     		uxtb	r3, r3
+ 198              	.L8:
+  63:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** }
+ 199              		.loc 1 63 1
+ 200 003c 1846     		mov	r0, r3
+ 201 003e 0C37     		adds	r7, r7, #12
+ 202              	.LCFI14:
+ 203              		.cfi_def_cfa_offset 4
+ 204 0040 BD46     		mov	sp, r7
+ 205              	.LCFI15:
+ 206              		.cfi_def_cfa_register 13
+ 207              		@ sp needed
+ 208 0042 5DF8047B 		ldr	r7, [sp], #4
+ 209              	.LCFI16:
+ 210              		.cfi_restore 7
+ 211              		.cfi_def_cfa_offset 0
+ 212 0046 7047     		bx	lr
+ 213              		.cfi_endproc
+ 214              	.LFE135:
+ 216              		.section	.text.osAtomicBitsetClearBit,"ax",%progbits
+ 217              		.align	1
+ 218              		.global	osAtomicBitsetClearBit
+ 219              		.syntax unified
+ 220              		.thumb
+ 221              		.thumb_func
+ 222              		.fpu fpv4-sp-d16
+ 224              	osAtomicBitsetClearBit:
+ 225              	.LFB136:
+  64:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+  65:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** VOID osAtomicBitsetClearBit(struct AtomicBitset *pstSet, UINT32 uwNum)
+  66:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** {
+ 226              		.loc 1 66 1
+ARM GAS  /tmp/ccottVZ9.s 			page 6
+
+
+ 227              		.cfi_startproc
+ 228              		@ args = 0, pretend = 0, frame = 16
+ 229              		@ frame_needed = 1, uses_anonymous_args = 0
+ 230              		@ link register save eliminated.
+ 231 0000 80B4     		push	{r7}
+ 232              	.LCFI17:
+ 233              		.cfi_def_cfa_offset 4
+ 234              		.cfi_offset 7, -4
+ 235 0002 85B0     		sub	sp, sp, #20
+ 236              	.LCFI18:
+ 237              		.cfi_def_cfa_offset 24
+ 238 0004 00AF     		add	r7, sp, #0
+ 239              	.LCFI19:
+ 240              		.cfi_def_cfa_register 7
+ 241 0006 7860     		str	r0, [r7, #4]
+ 242 0008 3960     		str	r1, [r7]
+  67:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     UINT32 *puwWordPtr = pstSet->words + uwNum / 32;
+ 243              		.loc 1 67 26
+ 244 000a 7B68     		ldr	r3, [r7, #4]
+ 245 000c 1A1D     		adds	r2, r3, #4
+ 246              		.loc 1 67 48
+ 247 000e 3B68     		ldr	r3, [r7]
+ 248 0010 5B09     		lsrs	r3, r3, #5
+ 249              		.loc 1 67 40
+ 250 0012 9B00     		lsls	r3, r3, #2
+ 251              		.loc 1 67 13
+ 252 0014 1344     		add	r3, r3, r2
+ 253 0016 FB60     		str	r3, [r7, #12]
+  68:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+  69:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     if (uwNum >= pstSet->numBits)
+ 254              		.loc 1 69 24
+ 255 0018 7B68     		ldr	r3, [r7, #4]
+ 256 001a 1B68     		ldr	r3, [r3]
+ 257              		.loc 1 69 8
+ 258 001c 3A68     		ldr	r2, [r7]
+ 259 001e 9A42     		cmp	r2, r3
+ 260 0020 0CD2     		bcs	.L12
+  70:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     {
+  71:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         return;
+  72:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     }
+  73:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     (*puwWordPtr) &= ~(1UL << (uwNum & 31));
+ 261              		.loc 1 73 19
+ 262 0022 FB68     		ldr	r3, [r7, #12]
+ 263 0024 1A68     		ldr	r2, [r3]
+ 264              		.loc 1 73 38
+ 265 0026 3B68     		ldr	r3, [r7]
+ 266 0028 03F01F03 		and	r3, r3, #31
+ 267              		.loc 1 73 28
+ 268 002c 0121     		movs	r1, #1
+ 269 002e 01FA03F3 		lsl	r3, r1, r3
+ 270              		.loc 1 73 22
+ 271 0032 DB43     		mvns	r3, r3
+ 272              		.loc 1 73 19
+ 273 0034 1A40     		ands	r2, r2, r3
+ 274 0036 FB68     		ldr	r3, [r7, #12]
+ 275 0038 1A60     		str	r2, [r3]
+ 276 003a 00E0     		b	.L9
+ARM GAS  /tmp/ccottVZ9.s 			page 7
+
+
+ 277              	.L12:
+  71:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     }
+ 278              		.loc 1 71 9
+ 279 003c 00BF     		nop
+ 280              	.L9:
+  74:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** }
+ 281              		.loc 1 74 1
+ 282 003e 1437     		adds	r7, r7, #20
+ 283              	.LCFI20:
+ 284              		.cfi_def_cfa_offset 4
+ 285 0040 BD46     		mov	sp, r7
+ 286              	.LCFI21:
+ 287              		.cfi_def_cfa_register 13
+ 288              		@ sp needed
+ 289 0042 5DF8047B 		ldr	r7, [sp], #4
+ 290              	.LCFI22:
+ 291              		.cfi_restore 7
+ 292              		.cfi_def_cfa_offset 0
+ 293 0046 7047     		bx	lr
+ 294              		.cfi_endproc
+ 295              	.LFE136:
+ 297              		.section	.text.osAtomicBitsetFindClearAndSet,"ax",%progbits
+ 298              		.align	1
+ 299              		.global	osAtomicBitsetFindClearAndSet
+ 300              		.syntax unified
+ 301              		.thumb
+ 302              		.thumb_func
+ 303              		.fpu fpv4-sp-d16
+ 305              	osAtomicBitsetFindClearAndSet:
+ 306              	.LFB137:
+  75:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+  76:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** /* find from the high bit to high bit£¬return the address of the first available bit */
+  77:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** INT32 osAtomicBitsetFindClearAndSet(struct AtomicBitset *pstSet)
+  78:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** {
+ 307              		.loc 1 78 1
+ 308              		.cfi_startproc
+ 309              		@ args = 0, pretend = 0, frame = 32
+ 310              		@ frame_needed = 1, uses_anonymous_args = 0
+ 311              		@ link register save eliminated.
+ 312 0000 80B4     		push	{r7}
+ 313              	.LCFI23:
+ 314              		.cfi_def_cfa_offset 4
+ 315              		.cfi_offset 7, -4
+ 316 0002 89B0     		sub	sp, sp, #36
+ 317              	.LCFI24:
+ 318              		.cfi_def_cfa_offset 40
+ 319 0004 00AF     		add	r7, sp, #0
+ 320              	.LCFI25:
+ 321              		.cfi_def_cfa_register 7
+ 322 0006 7860     		str	r0, [r7, #4]
+  79:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     UINT32 uwIdx, uwNumWords = (pstSet->numBits + 31) / 32;
+ 323              		.loc 1 79 39
+ 324 0008 7B68     		ldr	r3, [r7, #4]
+ 325 000a 1B68     		ldr	r3, [r3]
+ 326              		.loc 1 79 49
+ 327 000c 1F33     		adds	r3, r3, #31
+ 328              		.loc 1 79 19
+ARM GAS  /tmp/ccottVZ9.s 			page 8
+
+
+ 329 000e 5B09     		lsrs	r3, r3, #5
+ 330 0010 FB60     		str	r3, [r7, #12]
+  80:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     UINT32 *puwWordPtr = pstSet->words;
+ 331              		.loc 1 80 13
+ 332 0012 7B68     		ldr	r3, [r7, #4]
+ 333 0014 0433     		adds	r3, r3, #4
+ 334 0016 BB61     		str	r3, [r7, #24]
+  81:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     UINT32 uwTmpWord;
+  82:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     INT32 swCnt = 0;
+ 335              		.loc 1 82 11
+ 336 0018 0023     		movs	r3, #0
+ 337 001a 3B61     		str	r3, [r7, #16]
+  83:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+  84:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     for (uwIdx = 0; uwIdx < uwNumWords; uwIdx++, puwWordPtr++)
+ 338              		.loc 1 84 16
+ 339 001c 0023     		movs	r3, #0
+ 340 001e FB61     		str	r3, [r7, #28]
+ 341              		.loc 1 84 5
+ 342 0020 29E0     		b	.L14
+ 343              	.L19:
+  85:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     {
+  86:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         if (*puwWordPtr == 0xFFFFFFFF)
+ 344              		.loc 1 86 13
+ 345 0022 BB69     		ldr	r3, [r7, #24]
+ 346 0024 1B68     		ldr	r3, [r3]
+ 347              		.loc 1 86 12
+ 348 0026 B3F1FF3F 		cmp	r3, #-1
+ 349 002a 06D1     		bne	.L15
+  84:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     {
+ 350              		.loc 1 84 46
+ 351 002c FB69     		ldr	r3, [r7, #28]
+ 352 002e 0133     		adds	r3, r3, #1
+ 353 0030 FB61     		str	r3, [r7, #28]
+  84:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     {
+ 354              		.loc 1 84 60
+ 355 0032 BB69     		ldr	r3, [r7, #24]
+ 356 0034 0433     		adds	r3, r3, #4
+ 357 0036 BB61     		str	r3, [r7, #24]
+ 358 0038 1DE0     		b	.L14
+ 359              	.L15:
+  87:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         {
+  88:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****             continue;
+  89:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         }
+  90:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+  91:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         uwTmpWord = ~(*puwWordPtr);
+ 360              		.loc 1 91 23
+ 361 003a BB69     		ldr	r3, [r7, #24]
+ 362 003c 1B68     		ldr	r3, [r3]
+ 363              		.loc 1 91 19
+ 364 003e DB43     		mvns	r3, r3
+ 365 0040 7B61     		str	r3, [r7, #20]
+  92:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+  93:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         while(uwTmpWord)
+ 366              		.loc 1 93 14
+ 367 0042 05E0     		b	.L16
+ 368              	.L17:
+  94:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         {
+ARM GAS  /tmp/ccottVZ9.s 			page 9
+
+
+  95:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****             uwTmpWord = uwTmpWord >> 1UL;
+ 369              		.loc 1 95 23
+ 370 0044 7B69     		ldr	r3, [r7, #20]
+ 371 0046 5B08     		lsrs	r3, r3, #1
+ 372 0048 7B61     		str	r3, [r7, #20]
+  96:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****             swCnt++;
+ 373              		.loc 1 96 18
+ 374 004a 3B69     		ldr	r3, [r7, #16]
+ 375 004c 0133     		adds	r3, r3, #1
+ 376 004e 3B61     		str	r3, [r7, #16]
+ 377              	.L16:
+  93:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         {
+ 378              		.loc 1 93 14
+ 379 0050 7B69     		ldr	r3, [r7, #20]
+ 380 0052 002B     		cmp	r3, #0
+ 381 0054 F6D1     		bne	.L17
+  97:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         }
+  98:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+  99:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         *puwWordPtr |= (1UL << (swCnt - 1));
+ 382              		.loc 1 99 21
+ 383 0056 BB69     		ldr	r3, [r7, #24]
+ 384 0058 1A68     		ldr	r2, [r3]
+ 385              		.loc 1 99 39
+ 386 005a 3B69     		ldr	r3, [r7, #16]
+ 387 005c 013B     		subs	r3, r3, #1
+ 388              		.loc 1 99 29
+ 389 005e 0121     		movs	r1, #1
+ 390 0060 01FA03F3 		lsl	r3, r1, r3
+ 391              		.loc 1 99 21
+ 392 0064 1A43     		orrs	r2, r2, r3
+ 393 0066 BB69     		ldr	r3, [r7, #24]
+ 394 0068 1A60     		str	r2, [r3]
+ 100:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 101:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         return (INT32)(uwIdx * 32 + swCnt - 1);
+ 395              		.loc 1 101 30
+ 396 006a FB69     		ldr	r3, [r7, #28]
+ 397 006c 5A01     		lsls	r2, r3, #5
+ 398              		.loc 1 101 35
+ 399 006e 3B69     		ldr	r3, [r7, #16]
+ 400 0070 1344     		add	r3, r3, r2
+ 401              		.loc 1 101 43
+ 402 0072 013B     		subs	r3, r3, #1
+ 403              		.loc 1 101 16
+ 404 0074 05E0     		b	.L18
+ 405              	.L14:
+  84:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     {
+ 406              		.loc 1 84 5 discriminator 1
+ 407 0076 FA69     		ldr	r2, [r7, #28]
+ 408 0078 FB68     		ldr	r3, [r7, #12]
+ 409 007a 9A42     		cmp	r2, r3
+ 410 007c D1D3     		bcc	.L19
+ 102:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     }
+ 103:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 104:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     return -1;
+ 411              		.loc 1 104 12
+ 412 007e 4FF0FF33 		mov	r3, #-1
+ 413              	.L18:
+ARM GAS  /tmp/ccottVZ9.s 			page 10
+
+
+ 105:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** }
+ 414              		.loc 1 105 1
+ 415 0082 1846     		mov	r0, r3
+ 416 0084 2437     		adds	r7, r7, #36
+ 417              	.LCFI26:
+ 418              		.cfi_def_cfa_offset 4
+ 419 0086 BD46     		mov	sp, r7
+ 420              	.LCFI27:
+ 421              		.cfi_def_cfa_register 13
+ 422              		@ sp needed
+ 423 0088 5DF8047B 		ldr	r7, [sp], #4
+ 424              	.LCFI28:
+ 425              		.cfi_restore 7
+ 426              		.cfi_def_cfa_offset 0
+ 427 008c 7047     		bx	lr
+ 428              		.cfi_endproc
+ 429              	.LFE137:
+ 431              		.section	.text.osAtomicBitsetIdxChgToNatural,"ax",%progbits
+ 432              		.align	1
+ 433              		.global	osAtomicBitsetIdxChgToNatural
+ 434              		.syntax unified
+ 435              		.thumb
+ 436              		.thumb_func
+ 437              		.fpu fpv4-sp-d16
+ 439              	osAtomicBitsetIdxChgToNatural:
+ 440              	.LFB138:
+ 106:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 107:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** /* change the order of the output idx of osAtomicBitsetFindClearAndSet to order of natural numbers 
+ 108:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** INT32 osAtomicBitsetIdxChgToNatural(struct AtomicBitset *pstBitset, INT32 swIdx)
+ 109:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** {
+ 441              		.loc 1 109 1
+ 442              		.cfi_startproc
+ 443              		@ args = 0, pretend = 0, frame = 16
+ 444              		@ frame_needed = 1, uses_anonymous_args = 0
+ 445              		@ link register save eliminated.
+ 446 0000 80B4     		push	{r7}
+ 447              	.LCFI29:
+ 448              		.cfi_def_cfa_offset 4
+ 449              		.cfi_offset 7, -4
+ 450 0002 85B0     		sub	sp, sp, #20
+ 451              	.LCFI30:
+ 452              		.cfi_def_cfa_offset 24
+ 453 0004 00AF     		add	r7, sp, #0
+ 454              	.LCFI31:
+ 455              		.cfi_def_cfa_register 7
+ 456 0006 7860     		str	r0, [r7, #4]
+ 457 0008 3960     		str	r1, [r7]
+ 110:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     UINT32 uwRet, uwB;
+ 111:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     if (swIdx < 0)
+ 458              		.loc 1 111 8
+ 459 000a 3B68     		ldr	r3, [r7]
+ 460 000c 002B     		cmp	r3, #0
+ 461 000e 01DA     		bge	.L21
+ 112:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     {
+ 113:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         return swIdx;
+ 462              		.loc 1 113 16
+ 463 0010 3B68     		ldr	r3, [r7]
+ARM GAS  /tmp/ccottVZ9.s 			page 11
+
+
+ 464 0012 15E0     		b	.L22
+ 465              	.L21:
+ 114:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     }
+ 115:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     uwB = 31 + (swIdx & ~31);
+ 466              		.loc 1 115 23
+ 467 0014 3B68     		ldr	r3, [r7]
+ 468 0016 23F01F03 		bic	r3, r3, #31
+ 469              		.loc 1 115 14
+ 470 001a 1F33     		adds	r3, r3, #31
+ 471              		.loc 1 115 9
+ 472 001c FB60     		str	r3, [r7, #12]
+ 116:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     if (uwB > pstBitset->numBits - 1)
+ 473              		.loc 1 116 24
+ 474 001e 7B68     		ldr	r3, [r7, #4]
+ 475 0020 1B68     		ldr	r3, [r3]
+ 476              		.loc 1 116 34
+ 477 0022 013B     		subs	r3, r3, #1
+ 478              		.loc 1 116 8
+ 479 0024 FA68     		ldr	r2, [r7, #12]
+ 480 0026 9A42     		cmp	r2, r3
+ 481 0028 03D9     		bls	.L23
+ 117:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     {
+ 118:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         uwB = pstBitset->numBits - 1;
+ 482              		.loc 1 118 24
+ 483 002a 7B68     		ldr	r3, [r7, #4]
+ 484 002c 1B68     		ldr	r3, [r3]
+ 485              		.loc 1 118 13
+ 486 002e 013B     		subs	r3, r3, #1
+ 487 0030 FB60     		str	r3, [r7, #12]
+ 488              	.L23:
+ 119:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     }
+ 120:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     uwRet = uwB - (swIdx & 31);
+ 489              		.loc 1 120 26
+ 490 0032 3B68     		ldr	r3, [r7]
+ 491 0034 03F01F03 		and	r3, r3, #31
+ 492              		.loc 1 120 11
+ 493 0038 FA68     		ldr	r2, [r7, #12]
+ 494 003a D31A     		subs	r3, r2, r3
+ 495 003c BB60     		str	r3, [r7, #8]
+ 121:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     return uwRet;
+ 496              		.loc 1 121 12
+ 497 003e BB68     		ldr	r3, [r7, #8]
+ 498              	.L22:
+ 122:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** }
+ 499              		.loc 1 122 1
+ 500 0040 1846     		mov	r0, r3
+ 501 0042 1437     		adds	r7, r7, #20
+ 502              	.LCFI32:
+ 503              		.cfi_def_cfa_offset 4
+ 504 0044 BD46     		mov	sp, r7
+ 505              	.LCFI33:
+ 506              		.cfi_def_cfa_register 13
+ 507              		@ sp needed
+ 508 0046 5DF8047B 		ldr	r7, [sp], #4
+ 509              	.LCFI34:
+ 510              		.cfi_restore 7
+ 511              		.cfi_def_cfa_offset 0
+ARM GAS  /tmp/ccottVZ9.s 			page 12
+
+
+ 512 004a 7047     		bx	lr
+ 513              		.cfi_endproc
+ 514              	.LFE138:
+ 516              		.section	.text.osAtomicBitsetEmpty,"ax",%progbits
+ 517              		.align	1
+ 518              		.global	osAtomicBitsetEmpty
+ 519              		.syntax unified
+ 520              		.thumb
+ 521              		.thumb_func
+ 522              		.fpu fpv4-sp-d16
+ 524              	osAtomicBitsetEmpty:
+ 525              	.LFB139:
+ 123:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 124:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** BOOL osAtomicBitsetEmpty(struct AtomicBitset *pstBitset)
+ 125:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** {
+ 526              		.loc 1 125 1
+ 527              		.cfi_startproc
+ 528              		@ args = 0, pretend = 0, frame = 16
+ 529              		@ frame_needed = 1, uses_anonymous_args = 0
+ 530              		@ link register save eliminated.
+ 531 0000 80B4     		push	{r7}
+ 532              	.LCFI35:
+ 533              		.cfi_def_cfa_offset 4
+ 534              		.cfi_offset 7, -4
+ 535 0002 85B0     		sub	sp, sp, #20
+ 536              	.LCFI36:
+ 537              		.cfi_def_cfa_offset 24
+ 538 0004 00AF     		add	r7, sp, #0
+ 539              	.LCFI37:
+ 540              		.cfi_def_cfa_register 7
+ 541 0006 7860     		str	r0, [r7, #4]
+ 126:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     UINT32 uwIdx = 0;
+ 542              		.loc 1 126 12
+ 543 0008 0023     		movs	r3, #0
+ 544 000a FB60     		str	r3, [r7, #12]
+ 127:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     for (uwIdx = 0; uwIdx < pstBitset->numBits / 32;)
+ 545              		.loc 1 127 16
+ 546 000c 0023     		movs	r3, #0
+ 547 000e FB60     		str	r3, [r7, #12]
+ 548              		.loc 1 127 5
+ 549 0010 0BE0     		b	.L25
+ 550              	.L28:
+ 128:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     {
+ 129:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         if (pstBitset->words[uwIdx] != 0)
+ 551              		.loc 1 129 29
+ 552 0012 7A68     		ldr	r2, [r7, #4]
+ 553 0014 FB68     		ldr	r3, [r7, #12]
+ 554 0016 9B00     		lsls	r3, r3, #2
+ 555 0018 1344     		add	r3, r3, r2
+ 556 001a 5B68     		ldr	r3, [r3, #4]
+ 557              		.loc 1 129 12
+ 558 001c 002B     		cmp	r3, #0
+ 559 001e 01D0     		beq	.L26
+ 130:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         {
+ 131:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****             return FALSE;
+ 560              		.loc 1 131 20
+ 561 0020 0023     		movs	r3, #0
+ARM GAS  /tmp/ccottVZ9.s 			page 13
+
+
+ 562 0022 22E0     		b	.L27
+ 563              	.L26:
+ 132:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         }
+ 133:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         uwIdx++;
+ 564              		.loc 1 133 14
+ 565 0024 FB68     		ldr	r3, [r7, #12]
+ 566 0026 0133     		adds	r3, r3, #1
+ 567 0028 FB60     		str	r3, [r7, #12]
+ 568              	.L25:
+ 127:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     {
+ 569              		.loc 1 127 38 discriminator 1
+ 570 002a 7B68     		ldr	r3, [r7, #4]
+ 571 002c 1B68     		ldr	r3, [r3]
+ 127:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     {
+ 572              		.loc 1 127 48 discriminator 1
+ 573 002e 5B09     		lsrs	r3, r3, #5
+ 127:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     {
+ 574              		.loc 1 127 5 discriminator 1
+ 575 0030 FA68     		ldr	r2, [r7, #12]
+ 576 0032 9A42     		cmp	r2, r3
+ 577 0034 EDD3     		bcc	.L28
+ 134:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     }
+ 135:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     if (pstBitset->numBits & 31)
+ 578              		.loc 1 135 18
+ 579 0036 7B68     		ldr	r3, [r7, #4]
+ 580 0038 1B68     		ldr	r3, [r3]
+ 581              		.loc 1 135 28
+ 582 003a 03F01F03 		and	r3, r3, #31
+ 583              		.loc 1 135 8
+ 584 003e 002B     		cmp	r3, #0
+ 585 0040 12D0     		beq	.L29
+ 136:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     {
+ 137:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         if (pstBitset->words[uwIdx] & ~(0xFFFFFFFF << (pstBitset->numBits & 31)))
+ 586              		.loc 1 137 29
+ 587 0042 7A68     		ldr	r2, [r7, #4]
+ 588 0044 FB68     		ldr	r3, [r7, #12]
+ 589 0046 9B00     		lsls	r3, r3, #2
+ 590 0048 1344     		add	r3, r3, r2
+ 591 004a 5A68     		ldr	r2, [r3, #4]
+ 592              		.loc 1 137 65
+ 593 004c 7B68     		ldr	r3, [r7, #4]
+ 594 004e 1B68     		ldr	r3, [r3]
+ 595              		.loc 1 137 75
+ 596 0050 03F01F03 		and	r3, r3, #31
+ 597              		.loc 1 137 52
+ 598 0054 4FF0FF31 		mov	r1, #-1
+ 599 0058 01FA03F3 		lsl	r3, r1, r3
+ 600              		.loc 1 137 39
+ 601 005c DB43     		mvns	r3, r3
+ 602              		.loc 1 137 37
+ 603 005e 1340     		ands	r3, r3, r2
+ 604              		.loc 1 137 12
+ 605 0060 002B     		cmp	r3, #0
+ 606 0062 01D0     		beq	.L29
+ 138:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         {
+ 139:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****             return FALSE;
+ 607              		.loc 1 139 20
+ARM GAS  /tmp/ccottVZ9.s 			page 14
+
+
+ 608 0064 0023     		movs	r3, #0
+ 609 0066 00E0     		b	.L27
+ 610              	.L29:
+ 140:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         }
+ 141:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     }
+ 142:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     return TRUE;
+ 611              		.loc 1 142 12
+ 612 0068 0123     		movs	r3, #1
+ 613              	.L27:
+ 143:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** }
+ 614              		.loc 1 143 1
+ 615 006a 1846     		mov	r0, r3
+ 616 006c 1437     		adds	r7, r7, #20
+ 617              	.LCFI38:
+ 618              		.cfi_def_cfa_offset 4
+ 619 006e BD46     		mov	sp, r7
+ 620              	.LCFI39:
+ 621              		.cfi_def_cfa_register 13
+ 622              		@ sp needed
+ 623 0070 5DF8047B 		ldr	r7, [sp], #4
+ 624              	.LCFI40:
+ 625              		.cfi_restore 7
+ 626              		.cfi_def_cfa_offset 0
+ 627 0074 7047     		bx	lr
+ 628              		.cfi_endproc
+ 629              	.LFE139:
+ 631              		.section	.text.osSlabAllocatorNew,"ax",%progbits
+ 632              		.align	1
+ 633              		.global	osSlabAllocatorNew
+ 634              		.syntax unified
+ 635              		.thumb
+ 636              		.thumb_func
+ 637              		.fpu fpv4-sp-d16
+ 639              	osSlabAllocatorNew:
+ 640              	.LFB140:
+ 144:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 145:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** OS_SLAB_ALLOCATOR* osSlabAllocatorNew(VOID *pPool, UINT32 uwItemSz, UINT32 uwItemAlign, UINT32 uwNu
+ 146:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** {
+ 641              		.loc 1 146 1
+ 642              		.cfi_startproc
+ 643              		@ args = 0, pretend = 0, frame = 32
+ 644              		@ frame_needed = 1, uses_anonymous_args = 0
+ 645 0000 80B5     		push	{r7, lr}
+ 646              	.LCFI41:
+ 647              		.cfi_def_cfa_offset 8
+ 648              		.cfi_offset 7, -8
+ 649              		.cfi_offset 14, -4
+ 650 0002 88B0     		sub	sp, sp, #32
+ 651              	.LCFI42:
+ 652              		.cfi_def_cfa_offset 40
+ 653 0004 00AF     		add	r7, sp, #0
+ 654              	.LCFI43:
+ 655              		.cfi_def_cfa_register 7
+ 656 0006 F860     		str	r0, [r7, #12]
+ 657 0008 B960     		str	r1, [r7, #8]
+ 658 000a 7A60     		str	r2, [r7, #4]
+ 659 000c 3B60     		str	r3, [r7]
+ARM GAS  /tmp/ccottVZ9.s 			page 15
+
+
+ 147:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     OS_SLAB_ALLOCATOR *pstAllocator;
+ 148:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     UINT32 uwBitsetSz, uwDataSz;
+ 149:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 150:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     /* calcualte size */
+ 151:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     uwBitsetSz = ATOMIC_BITSET_SZ(uwNumItems);
+ 660              		.loc 1 151 18
+ 661 000e 3B68     		ldr	r3, [r7]
+ 662 0010 1F33     		adds	r3, r3, #31
+ 663 0012 DB08     		lsrs	r3, r3, #3
+ 664              		.loc 1 151 16
+ 665 0014 0433     		adds	r3, r3, #4
+ 666 0016 FB61     		str	r3, [r7, #28]
+ 152:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 153:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     uwBitsetSz = (uwBitsetSz + uwItemAlign - 1) & ~(uwItemAlign - 1);
+ 667              		.loc 1 153 30
+ 668 0018 FA69     		ldr	r2, [r7, #28]
+ 669 001a 7B68     		ldr	r3, [r7, #4]
+ 670 001c 1344     		add	r3, r3, r2
+ 671              		.loc 1 153 44
+ 672 001e 5A1E     		subs	r2, r3, #1
+ 673              		.loc 1 153 51
+ 674 0020 7B68     		ldr	r3, [r7, #4]
+ 675 0022 5B42     		rsbs	r3, r3, #0
+ 676              		.loc 1 153 16
+ 677 0024 1340     		ands	r3, r3, r2
+ 678 0026 FB61     		str	r3, [r7, #28]
+ 154:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     uwItemSz = (uwItemSz + uwItemAlign - 1) & ~(uwItemAlign - 1);
+ 679              		.loc 1 154 26
+ 680 0028 BA68     		ldr	r2, [r7, #8]
+ 681 002a 7B68     		ldr	r3, [r7, #4]
+ 682 002c 1344     		add	r3, r3, r2
+ 683              		.loc 1 154 40
+ 684 002e 5A1E     		subs	r2, r3, #1
+ 685              		.loc 1 154 47
+ 686 0030 7B68     		ldr	r3, [r7, #4]
+ 687 0032 5B42     		rsbs	r3, r3, #0
+ 688              		.loc 1 154 14
+ 689 0034 1340     		ands	r3, r3, r2
+ 690 0036 BB60     		str	r3, [r7, #8]
+ 155:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     uwDataSz = uwItemSz * uwNumItems;
+ 691              		.loc 1 155 14
+ 692 0038 BB68     		ldr	r3, [r7, #8]
+ 693 003a 3A68     		ldr	r2, [r7]
+ 694 003c 02FB03F3 		mul	r3, r2, r3
+ 695 0040 BB61     		str	r3, [r7, #24]
+ 156:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 157:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     pstAllocator = (OS_SLAB_ALLOCATOR*)osHeapAlloc(pPool, sizeof(OS_SLAB_ALLOCATOR) + uwBitsetSz + 
+ 696              		.loc 1 157 98
+ 697 0042 FA69     		ldr	r2, [r7, #28]
+ 698 0044 BB69     		ldr	r3, [r7, #24]
+ 699 0046 1344     		add	r3, r3, r2
+ 700              		.loc 1 157 40
+ 701 0048 0C33     		adds	r3, r3, #12
+ 702 004a 1946     		mov	r1, r3
+ 703 004c F868     		ldr	r0, [r7, #12]
+ 704 004e FFF7FEFF 		bl	osHeapAlloc
+ 705 0052 7861     		str	r0, [r7, #20]
+ARM GAS  /tmp/ccottVZ9.s 			page 16
+
+
+ 158:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 159:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     if (pstAllocator)
+ 706              		.loc 1 159 8
+ 707 0054 7B69     		ldr	r3, [r7, #20]
+ 708 0056 002B     		cmp	r3, #0
+ 709 0058 13D0     		beq	.L31
+ 160:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     {
+ 161:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         pstAllocator->uwItemSz = uwItemSz;
+ 710              		.loc 1 161 32
+ 711 005a 7B69     		ldr	r3, [r7, #20]
+ 712 005c BA68     		ldr	r2, [r7, #8]
+ 713 005e 1A60     		str	r2, [r3]
+ 162:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 163:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         pstAllocator->bitset = (struct AtomicBitset *)((UINT8*)pstAllocator + sizeof(OS_SLAB_ALLOCA
+ 714              		.loc 1 163 32
+ 715 0060 7B69     		ldr	r3, [r7, #20]
+ 716 0062 03F10C02 		add	r2, r3, #12
+ 717              		.loc 1 163 30
+ 718 0066 7B69     		ldr	r3, [r7, #20]
+ 719 0068 9A60     		str	r2, [r3, #8]
+ 164:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         pstAllocator->ucDataChunks = ((UINT8*)pstAllocator->bitset) + uwBitsetSz;
+ 720              		.loc 1 164 59
+ 721 006a 7B69     		ldr	r3, [r7, #20]
+ 722 006c 9A68     		ldr	r2, [r3, #8]
+ 723              		.loc 1 164 69
+ 724 006e FB69     		ldr	r3, [r7, #28]
+ 725 0070 1A44     		add	r2, r2, r3
+ 726              		.loc 1 164 36
+ 727 0072 7B69     		ldr	r3, [r7, #20]
+ 728 0074 5A60     		str	r2, [r3, #4]
+ 165:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         osAtomicBitsetInit(pstAllocator->bitset, uwNumItems);
+ 729              		.loc 1 165 9
+ 730 0076 7B69     		ldr	r3, [r7, #20]
+ 731 0078 9B68     		ldr	r3, [r3, #8]
+ 732 007a 3968     		ldr	r1, [r7]
+ 733 007c 1846     		mov	r0, r3
+ 734 007e FFF7FEFF 		bl	osAtomicBitsetInit
+ 735              	.L31:
+ 166:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     }
+ 167:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 168:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     return pstAllocator;
+ 736              		.loc 1 168 12
+ 737 0082 7B69     		ldr	r3, [r7, #20]
+ 169:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** }
+ 738              		.loc 1 169 1
+ 739 0084 1846     		mov	r0, r3
+ 740 0086 2037     		adds	r7, r7, #32
+ 741              	.LCFI44:
+ 742              		.cfi_def_cfa_offset 8
+ 743 0088 BD46     		mov	sp, r7
+ 744              	.LCFI45:
+ 745              		.cfi_def_cfa_register 13
+ 746              		@ sp needed
+ 747 008a 80BD     		pop	{r7, pc}
+ 748              		.cfi_endproc
+ 749              	.LFE140:
+ 751              		.section	.text.osSlabAllocatorDestroy,"ax",%progbits
+ARM GAS  /tmp/ccottVZ9.s 			page 17
+
+
+ 752              		.align	1
+ 753              		.global	osSlabAllocatorDestroy
+ 754              		.syntax unified
+ 755              		.thumb
+ 756              		.thumb_func
+ 757              		.fpu fpv4-sp-d16
+ 759              	osSlabAllocatorDestroy:
+ 760              	.LFB141:
+ 170:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 171:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 172:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** VOID osSlabAllocatorDestroy(VOID *pPool, OS_SLAB_ALLOCATOR *pstAllocator)
+ 173:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** {
+ 761              		.loc 1 173 1
+ 762              		.cfi_startproc
+ 763              		@ args = 0, pretend = 0, frame = 8
+ 764              		@ frame_needed = 1, uses_anonymous_args = 0
+ 765 0000 80B5     		push	{r7, lr}
+ 766              	.LCFI46:
+ 767              		.cfi_def_cfa_offset 8
+ 768              		.cfi_offset 7, -8
+ 769              		.cfi_offset 14, -4
+ 770 0002 82B0     		sub	sp, sp, #8
+ 771              	.LCFI47:
+ 772              		.cfi_def_cfa_offset 16
+ 773 0004 00AF     		add	r7, sp, #0
+ 774              	.LCFI48:
+ 775              		.cfi_def_cfa_register 7
+ 776 0006 7860     		str	r0, [r7, #4]
+ 777 0008 3960     		str	r1, [r7]
+ 174:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     (VOID)osHeapFree(pPool, pstAllocator);
+ 778              		.loc 1 174 11
+ 779 000a 3968     		ldr	r1, [r7]
+ 780 000c 7868     		ldr	r0, [r7, #4]
+ 781 000e FFF7FEFF 		bl	osHeapFree
+ 175:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** }
+ 782              		.loc 1 175 1
+ 783 0012 00BF     		nop
+ 784 0014 0837     		adds	r7, r7, #8
+ 785              	.LCFI49:
+ 786              		.cfi_def_cfa_offset 8
+ 787 0016 BD46     		mov	sp, r7
+ 788              	.LCFI50:
+ 789              		.cfi_def_cfa_register 13
+ 790              		@ sp needed
+ 791 0018 80BD     		pop	{r7, pc}
+ 792              		.cfi_endproc
+ 793              	.LFE141:
+ 795              		.section	.text.osSlabAllocatorAlloc,"ax",%progbits
+ 796              		.align	1
+ 797              		.global	osSlabAllocatorAlloc
+ 798              		.syntax unified
+ 799              		.thumb
+ 800              		.thumb_func
+ 801              		.fpu fpv4-sp-d16
+ 803              	osSlabAllocatorAlloc:
+ 804              	.LFB142:
+ 176:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ARM GAS  /tmp/ccottVZ9.s 			page 18
+
+
+ 177:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** VOID* osSlabAllocatorAlloc(OS_SLAB_ALLOCATOR *pstAllocator)
+ 178:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** {
+ 805              		.loc 1 178 1
+ 806              		.cfi_startproc
+ 807              		@ args = 0, pretend = 0, frame = 16
+ 808              		@ frame_needed = 1, uses_anonymous_args = 0
+ 809 0000 80B5     		push	{r7, lr}
+ 810              	.LCFI51:
+ 811              		.cfi_def_cfa_offset 8
+ 812              		.cfi_offset 7, -8
+ 813              		.cfi_offset 14, -4
+ 814 0002 84B0     		sub	sp, sp, #16
+ 815              	.LCFI52:
+ 816              		.cfi_def_cfa_offset 24
+ 817 0004 00AF     		add	r7, sp, #0
+ 818              	.LCFI53:
+ 819              		.cfi_def_cfa_register 7
+ 820 0006 7860     		str	r0, [r7, #4]
+ 179:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     INT32 swItemIdx = osAtomicBitsetFindClearAndSet(pstAllocator->bitset);
+ 821              		.loc 1 179 23
+ 822 0008 7B68     		ldr	r3, [r7, #4]
+ 823 000a 9B68     		ldr	r3, [r3, #8]
+ 824 000c 1846     		mov	r0, r3
+ 825 000e FFF7FEFF 		bl	osAtomicBitsetFindClearAndSet
+ 826 0012 F860     		str	r0, [r7, #12]
+ 180:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     if (swItemIdx < 0)
+ 827              		.loc 1 180 8
+ 828 0014 FB68     		ldr	r3, [r7, #12]
+ 829 0016 002B     		cmp	r3, #0
+ 830 0018 01DA     		bge	.L35
+ 181:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         return NULL;
+ 831              		.loc 1 181 16
+ 832 001a 0023     		movs	r3, #0
+ 833 001c 07E0     		b	.L36
+ 834              	.L35:
+ 182:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 183:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     return pstAllocator->ucDataChunks + pstAllocator->uwItemSz * swItemIdx;
+ 835              		.loc 1 183 24
+ 836 001e 7B68     		ldr	r3, [r7, #4]
+ 837 0020 5A68     		ldr	r2, [r3, #4]
+ 838              		.loc 1 183 53
+ 839 0022 7B68     		ldr	r3, [r7, #4]
+ 840 0024 1B68     		ldr	r3, [r3]
+ 841              		.loc 1 183 64
+ 842 0026 F968     		ldr	r1, [r7, #12]
+ 843 0028 01FB03F3 		mul	r3, r1, r3
+ 844              		.loc 1 183 39
+ 845 002c 1344     		add	r3, r3, r2
+ 846              	.L36:
+ 184:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** }
+ 847              		.loc 1 184 1
+ 848 002e 1846     		mov	r0, r3
+ 849 0030 1037     		adds	r7, r7, #16
+ 850              	.LCFI54:
+ 851              		.cfi_def_cfa_offset 8
+ 852 0032 BD46     		mov	sp, r7
+ 853              	.LCFI55:
+ARM GAS  /tmp/ccottVZ9.s 			page 19
+
+
+ 854              		.cfi_def_cfa_register 13
+ 855              		@ sp needed
+ 856 0034 80BD     		pop	{r7, pc}
+ 857              		.cfi_endproc
+ 858              	.LFE142:
+ 860              		.section	.text.osSlabAllocatorFree,"ax",%progbits
+ 861              		.align	1
+ 862              		.global	osSlabAllocatorFree
+ 863              		.syntax unified
+ 864              		.thumb
+ 865              		.thumb_func
+ 866              		.fpu fpv4-sp-d16
+ 868              	osSlabAllocatorFree:
+ 869              	.LFB143:
+ 185:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 186:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** BOOL osSlabAllocatorFree(OS_SLAB_ALLOCATOR *pstAllocator, VOID* ptrP)
+ 187:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** {
+ 870              		.loc 1 187 1
+ 871              		.cfi_startproc
+ 872              		@ args = 0, pretend = 0, frame = 24
+ 873              		@ frame_needed = 1, uses_anonymous_args = 0
+ 874 0000 80B5     		push	{r7, lr}
+ 875              	.LCFI56:
+ 876              		.cfi_def_cfa_offset 8
+ 877              		.cfi_offset 7, -8
+ 878              		.cfi_offset 14, -4
+ 879 0002 86B0     		sub	sp, sp, #24
+ 880              	.LCFI57:
+ 881              		.cfi_def_cfa_offset 32
+ 882 0004 00AF     		add	r7, sp, #0
+ 883              	.LCFI58:
+ 884              		.cfi_def_cfa_register 7
+ 885 0006 7860     		str	r0, [r7, #4]
+ 886 0008 3960     		str	r1, [r7]
+ 188:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     UINT8 *ptr = (UINT8*)ptrP;
+ 887              		.loc 1 188 12
+ 888 000a 3B68     		ldr	r3, [r7]
+ 889 000c 7B61     		str	r3, [r7, #20]
+ 189:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     UINT32 uwItemOffset = ptr - pstAllocator->ucDataChunks;
+ 890              		.loc 1 189 45
+ 891 000e 7B68     		ldr	r3, [r7, #4]
+ 892 0010 5B68     		ldr	r3, [r3, #4]
+ 893              		.loc 1 189 31
+ 894 0012 7A69     		ldr	r2, [r7, #20]
+ 895 0014 D31A     		subs	r3, r2, r3
+ 896              		.loc 1 189 12
+ 897 0016 3B61     		str	r3, [r7, #16]
+ 190:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     UINT32 uwItemIdx = uwItemOffset / pstAllocator->uwItemSz;
+ 898              		.loc 1 190 51
+ 899 0018 7B68     		ldr	r3, [r7, #4]
+ 900 001a 1B68     		ldr	r3, [r3]
+ 901              		.loc 1 190 12
+ 902 001c 3A69     		ldr	r2, [r7, #16]
+ 903 001e B2FBF3F3 		udiv	r3, r2, r3
+ 904 0022 FB60     		str	r3, [r7, #12]
+ 191:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 192:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     //check for invalid inputs
+ARM GAS  /tmp/ccottVZ9.s 			page 20
+
+
+ 193:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     if ((uwItemOffset % pstAllocator->uwItemSz) || (uwItemIdx >= osAtomicBitsetGetNumBits(pstAlloca
+ 905              		.loc 1 193 37
+ 906 0024 7B68     		ldr	r3, [r7, #4]
+ 907 0026 1A68     		ldr	r2, [r3]
+ 908              		.loc 1 193 23
+ 909 0028 3B69     		ldr	r3, [r7, #16]
+ 910 002a B3FBF2F1 		udiv	r1, r3, r2
+ 911 002e 02FB01F2 		mul	r2, r2, r1
+ 912 0032 9B1A     		subs	r3, r3, r2
+ 913              		.loc 1 193 8
+ 914 0034 002B     		cmp	r3, #0
+ 915 0036 11D1     		bne	.L38
+ 916              		.loc 1 193 103 discriminator 1
+ 917 0038 7B68     		ldr	r3, [r7, #4]
+ 918 003a 9B68     		ldr	r3, [r3, #8]
+ 919              		.loc 1 193 66 discriminator 1
+ 920 003c 1846     		mov	r0, r3
+ 921 003e FFF7FEFF 		bl	osAtomicBitsetGetNumBits
+ 922 0042 0246     		mov	r2, r0
+ 923              		.loc 1 193 49 discriminator 1
+ 924 0044 FB68     		ldr	r3, [r7, #12]
+ 925 0046 9342     		cmp	r3, r2
+ 926 0048 08D2     		bcs	.L38
+ 927              		.loc 1 193 151 discriminator 2
+ 928 004a 7B68     		ldr	r3, [r7, #4]
+ 929 004c 9B68     		ldr	r3, [r3, #8]
+ 930              		.loc 1 193 118 discriminator 2
+ 931 004e F968     		ldr	r1, [r7, #12]
+ 932 0050 1846     		mov	r0, r3
+ 933 0052 FFF7FEFF 		bl	osAtomicBitsetGetBit
+ 934 0056 0346     		mov	r3, r0
+ 935              		.loc 1 193 114 discriminator 2
+ 936 0058 002B     		cmp	r3, #0
+ 937 005a 01D1     		bne	.L39
+ 938              	.L38:
+ 194:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         return FALSE;
+ 939              		.loc 1 194 16
+ 940 005c 0023     		movs	r3, #0
+ 941 005e 06E0     		b	.L40
+ 942              	.L39:
+ 195:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 196:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     osAtomicBitsetClearBit(pstAllocator->bitset, uwItemIdx);
+ 943              		.loc 1 196 5
+ 944 0060 7B68     		ldr	r3, [r7, #4]
+ 945 0062 9B68     		ldr	r3, [r3, #8]
+ 946 0064 F968     		ldr	r1, [r7, #12]
+ 947 0066 1846     		mov	r0, r3
+ 948 0068 FFF7FEFF 		bl	osAtomicBitsetClearBit
+ 197:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     return TRUE;
+ 949              		.loc 1 197 12
+ 950 006c 0123     		movs	r3, #1
+ 951              	.L40:
+ 198:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** }
+ 952              		.loc 1 198 1
+ 953 006e 1846     		mov	r0, r3
+ 954 0070 1837     		adds	r7, r7, #24
+ 955              	.LCFI59:
+ARM GAS  /tmp/ccottVZ9.s 			page 21
+
+
+ 956              		.cfi_def_cfa_offset 8
+ 957 0072 BD46     		mov	sp, r7
+ 958              	.LCFI60:
+ 959              		.cfi_def_cfa_register 13
+ 960              		@ sp needed
+ 961 0074 80BD     		pop	{r7, pc}
+ 962              		.cfi_endproc
+ 963              	.LFE143:
+ 965              		.section	.text.osSlabAllocatorGetNth,"ax",%progbits
+ 966              		.align	1
+ 967              		.global	osSlabAllocatorGetNth
+ 968              		.syntax unified
+ 969              		.thumb
+ 970              		.thumb_func
+ 971              		.fpu fpv4-sp-d16
+ 973              	osSlabAllocatorGetNth:
+ 974              	.LFB144:
+ 199:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 200:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** VOID* osSlabAllocatorGetNth(OS_SLAB_ALLOCATOR *pstAllocator, UINT32 uwIdx)
+ 201:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** {
+ 975              		.loc 1 201 1
+ 976              		.cfi_startproc
+ 977              		@ args = 0, pretend = 0, frame = 8
+ 978              		@ frame_needed = 1, uses_anonymous_args = 0
+ 979 0000 80B5     		push	{r7, lr}
+ 980              	.LCFI61:
+ 981              		.cfi_def_cfa_offset 8
+ 982              		.cfi_offset 7, -8
+ 983              		.cfi_offset 14, -4
+ 984 0002 82B0     		sub	sp, sp, #8
+ 985              	.LCFI62:
+ 986              		.cfi_def_cfa_offset 16
+ 987 0004 00AF     		add	r7, sp, #0
+ 988              	.LCFI63:
+ 989              		.cfi_def_cfa_register 7
+ 990 0006 7860     		str	r0, [r7, #4]
+ 991 0008 3960     		str	r1, [r7]
+ 202:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     if (!osAtomicBitsetGetBit(pstAllocator->bitset, uwIdx))
+ 992              		.loc 1 202 43
+ 993 000a 7B68     		ldr	r3, [r7, #4]
+ 994 000c 9B68     		ldr	r3, [r3, #8]
+ 995              		.loc 1 202 10
+ 996 000e 3968     		ldr	r1, [r7]
+ 997 0010 1846     		mov	r0, r3
+ 998 0012 FFF7FEFF 		bl	osAtomicBitsetGetBit
+ 999 0016 0346     		mov	r3, r0
+ 1000              		.loc 1 202 8
+ 1001 0018 002B     		cmp	r3, #0
+ 1002 001a 01D1     		bne	.L42
+ 203:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         return NULL;
+ 1003              		.loc 1 203 16
+ 1004 001c 0023     		movs	r3, #0
+ 1005 001e 07E0     		b	.L43
+ 1006              	.L42:
+ 204:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 205:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     return pstAllocator->ucDataChunks + pstAllocator->uwItemSz * uwIdx;
+ 1007              		.loc 1 205 24
+ARM GAS  /tmp/ccottVZ9.s 			page 22
+
+
+ 1008 0020 7B68     		ldr	r3, [r7, #4]
+ 1009 0022 5A68     		ldr	r2, [r3, #4]
+ 1010              		.loc 1 205 53
+ 1011 0024 7B68     		ldr	r3, [r7, #4]
+ 1012 0026 1B68     		ldr	r3, [r3]
+ 1013              		.loc 1 205 64
+ 1014 0028 3968     		ldr	r1, [r7]
+ 1015 002a 01FB03F3 		mul	r3, r1, r3
+ 1016              		.loc 1 205 39
+ 1017 002e 1344     		add	r3, r3, r2
+ 1018              	.L43:
+ 206:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** }
+ 1019              		.loc 1 206 1
+ 1020 0030 1846     		mov	r0, r3
+ 1021 0032 0837     		adds	r7, r7, #8
+ 1022              	.LCFI64:
+ 1023              		.cfi_def_cfa_offset 8
+ 1024 0034 BD46     		mov	sp, r7
+ 1025              	.LCFI65:
+ 1026              		.cfi_def_cfa_register 13
+ 1027              		@ sp needed
+ 1028 0036 80BD     		pop	{r7, pc}
+ 1029              		.cfi_endproc
+ 1030              	.LFE144:
+ 1032              		.section	.text.osSlabAllocatorGetIdxP,"ax",%progbits
+ 1033              		.align	1
+ 1034              		.global	osSlabAllocatorGetIdxP
+ 1035              		.syntax unified
+ 1036              		.thumb
+ 1037              		.thumb_func
+ 1038              		.fpu fpv4-sp-d16
+ 1040              	osSlabAllocatorGetIdxP:
+ 1041              	.LFB145:
+ 207:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 208:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** VOID* osSlabAllocatorGetIdxP(OS_SLAB_ALLOCATOR *pstAllocator, UINT32 uwIdx)
+ 209:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** {
+ 1042              		.loc 1 209 1
+ 1043              		.cfi_startproc
+ 1044              		@ args = 0, pretend = 0, frame = 8
+ 1045              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1046              		@ link register save eliminated.
+ 1047 0000 80B4     		push	{r7}
+ 1048              	.LCFI66:
+ 1049              		.cfi_def_cfa_offset 4
+ 1050              		.cfi_offset 7, -4
+ 1051 0002 83B0     		sub	sp, sp, #12
+ 1052              	.LCFI67:
+ 1053              		.cfi_def_cfa_offset 16
+ 1054 0004 00AF     		add	r7, sp, #0
+ 1055              	.LCFI68:
+ 1056              		.cfi_def_cfa_register 7
+ 1057 0006 7860     		str	r0, [r7, #4]
+ 1058 0008 3960     		str	r1, [r7]
+ 210:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     return pstAllocator->ucDataChunks + pstAllocator->uwItemSz * uwIdx;
+ 1059              		.loc 1 210 24
+ 1060 000a 7B68     		ldr	r3, [r7, #4]
+ 1061 000c 5A68     		ldr	r2, [r3, #4]
+ARM GAS  /tmp/ccottVZ9.s 			page 23
+
+
+ 1062              		.loc 1 210 53
+ 1063 000e 7B68     		ldr	r3, [r7, #4]
+ 1064 0010 1B68     		ldr	r3, [r3]
+ 1065              		.loc 1 210 64
+ 1066 0012 3968     		ldr	r1, [r7]
+ 1067 0014 01FB03F3 		mul	r3, r1, r3
+ 1068              		.loc 1 210 39
+ 1069 0018 1344     		add	r3, r3, r2
+ 211:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** }
+ 1070              		.loc 1 211 1
+ 1071 001a 1846     		mov	r0, r3
+ 1072 001c 0C37     		adds	r7, r7, #12
+ 1073              	.LCFI69:
+ 1074              		.cfi_def_cfa_offset 4
+ 1075 001e BD46     		mov	sp, r7
+ 1076              	.LCFI70:
+ 1077              		.cfi_def_cfa_register 13
+ 1078              		@ sp needed
+ 1079 0020 5DF8047B 		ldr	r7, [sp], #4
+ 1080              	.LCFI71:
+ 1081              		.cfi_restore 7
+ 1082              		.cfi_def_cfa_offset 0
+ 1083 0024 7047     		bx	lr
+ 1084              		.cfi_endproc
+ 1085              	.LFE145:
+ 1087              		.section	.text.osSlabAllocatorGetIndex,"ax",%progbits
+ 1088              		.align	1
+ 1089              		.global	osSlabAllocatorGetIndex
+ 1090              		.syntax unified
+ 1091              		.thumb
+ 1092              		.thumb_func
+ 1093              		.fpu fpv4-sp-d16
+ 1095              	osSlabAllocatorGetIndex:
+ 1096              	.LFB146:
+ 212:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 213:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** UINT32 osSlabAllocatorGetIndex(OS_SLAB_ALLOCATOR *pstAllocator, VOID* ptrP)
+ 214:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** {
+ 1097              		.loc 1 214 1
+ 1098              		.cfi_startproc
+ 1099              		@ args = 0, pretend = 0, frame = 24
+ 1100              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1101 0000 80B5     		push	{r7, lr}
+ 1102              	.LCFI72:
+ 1103              		.cfi_def_cfa_offset 8
+ 1104              		.cfi_offset 7, -8
+ 1105              		.cfi_offset 14, -4
+ 1106 0002 86B0     		sub	sp, sp, #24
+ 1107              	.LCFI73:
+ 1108              		.cfi_def_cfa_offset 32
+ 1109 0004 00AF     		add	r7, sp, #0
+ 1110              	.LCFI74:
+ 1111              		.cfi_def_cfa_register 7
+ 1112 0006 7860     		str	r0, [r7, #4]
+ 1113 0008 3960     		str	r1, [r7]
+ 215:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     UINT8 *ptr = (UINT8*)ptrP;
+ 1114              		.loc 1 215 12
+ 1115 000a 3B68     		ldr	r3, [r7]
+ARM GAS  /tmp/ccottVZ9.s 			page 24
+
+
+ 1116 000c 7B61     		str	r3, [r7, #20]
+ 216:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     UINT32 uwItemOffset = ptr - pstAllocator->ucDataChunks;
+ 1117              		.loc 1 216 45
+ 1118 000e 7B68     		ldr	r3, [r7, #4]
+ 1119 0010 5B68     		ldr	r3, [r3, #4]
+ 1120              		.loc 1 216 31
+ 1121 0012 7A69     		ldr	r2, [r7, #20]
+ 1122 0014 D31A     		subs	r3, r2, r3
+ 1123              		.loc 1 216 12
+ 1124 0016 3B61     		str	r3, [r7, #16]
+ 217:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     UINT32 uwItemIdx = uwItemOffset / pstAllocator->uwItemSz;
+ 1125              		.loc 1 217 51
+ 1126 0018 7B68     		ldr	r3, [r7, #4]
+ 1127 001a 1B68     		ldr	r3, [r3]
+ 1128              		.loc 1 217 12
+ 1129 001c 3A69     		ldr	r2, [r7, #16]
+ 1130 001e B2FBF3F3 		udiv	r3, r2, r3
+ 1131 0022 FB60     		str	r3, [r7, #12]
+ 218:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 219:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     if ((uwItemOffset % pstAllocator->uwItemSz) || (uwItemIdx >= osAtomicBitsetGetNumBits(pstAlloca
+ 1132              		.loc 1 219 37
+ 1133 0024 7B68     		ldr	r3, [r7, #4]
+ 1134 0026 1A68     		ldr	r2, [r3]
+ 1135              		.loc 1 219 23
+ 1136 0028 3B69     		ldr	r3, [r7, #16]
+ 1137 002a B3FBF2F1 		udiv	r1, r3, r2
+ 1138 002e 02FB01F2 		mul	r2, r2, r1
+ 1139 0032 9B1A     		subs	r3, r3, r2
+ 1140              		.loc 1 219 8
+ 1141 0034 002B     		cmp	r3, #0
+ 1142 0036 11D1     		bne	.L47
+ 1143              		.loc 1 219 103 discriminator 1
+ 1144 0038 7B68     		ldr	r3, [r7, #4]
+ 1145 003a 9B68     		ldr	r3, [r3, #8]
+ 1146              		.loc 1 219 66 discriminator 1
+ 1147 003c 1846     		mov	r0, r3
+ 1148 003e FFF7FEFF 		bl	osAtomicBitsetGetNumBits
+ 1149 0042 0246     		mov	r2, r0
+ 1150              		.loc 1 219 49 discriminator 1
+ 1151 0044 FB68     		ldr	r3, [r7, #12]
+ 1152 0046 9342     		cmp	r3, r2
+ 1153 0048 08D2     		bcs	.L47
+ 1154              		.loc 1 219 151 discriminator 2
+ 1155 004a 7B68     		ldr	r3, [r7, #4]
+ 1156 004c 9B68     		ldr	r3, [r3, #8]
+ 1157              		.loc 1 219 118 discriminator 2
+ 1158 004e F968     		ldr	r1, [r7, #12]
+ 1159 0050 1846     		mov	r0, r3
+ 1160 0052 FFF7FEFF 		bl	osAtomicBitsetGetBit
+ 1161 0056 0346     		mov	r3, r0
+ 1162              		.loc 1 219 114 discriminator 2
+ 1163 0058 002B     		cmp	r3, #0
+ 1164 005a 02D1     		bne	.L48
+ 1165              	.L47:
+ 220:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         return (UINT32)(-1);
+ 1166              		.loc 1 220 16
+ 1167 005c 4FF0FF33 		mov	r3, #-1
+ARM GAS  /tmp/ccottVZ9.s 			page 25
+
+
+ 1168 0060 00E0     		b	.L49
+ 1169              	.L48:
+ 221:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 222:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     return uwItemIdx;
+ 1170              		.loc 1 222 12
+ 1171 0062 FB68     		ldr	r3, [r7, #12]
+ 1172              	.L49:
+ 223:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** }
+ 1173              		.loc 1 223 1
+ 1174 0064 1846     		mov	r0, r3
+ 1175 0066 1837     		adds	r7, r7, #24
+ 1176              	.LCFI75:
+ 1177              		.cfi_def_cfa_offset 8
+ 1178 0068 BD46     		mov	sp, r7
+ 1179              	.LCFI76:
+ 1180              		.cfi_def_cfa_register 13
+ 1181              		@ sp needed
+ 1182 006a 80BD     		pop	{r7, pc}
+ 1183              		.cfi_endproc
+ 1184              	.LFE146:
+ 1186              		.section	.text.osSlabAllocatorGetNumItems,"ax",%progbits
+ 1187              		.align	1
+ 1188              		.global	osSlabAllocatorGetNumItems
+ 1189              		.syntax unified
+ 1190              		.thumb
+ 1191              		.thumb_func
+ 1192              		.fpu fpv4-sp-d16
+ 1194              	osSlabAllocatorGetNumItems:
+ 1195              	.LFB147:
+ 224:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 225:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** UINT32 osSlabAllocatorGetNumItems(OS_SLAB_ALLOCATOR *pstAllocator)
+ 226:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** {
+ 1196              		.loc 1 226 1
+ 1197              		.cfi_startproc
+ 1198              		@ args = 0, pretend = 0, frame = 8
+ 1199              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1200 0000 80B5     		push	{r7, lr}
+ 1201              	.LCFI77:
+ 1202              		.cfi_def_cfa_offset 8
+ 1203              		.cfi_offset 7, -8
+ 1204              		.cfi_offset 14, -4
+ 1205 0002 82B0     		sub	sp, sp, #8
+ 1206              	.LCFI78:
+ 1207              		.cfi_def_cfa_offset 16
+ 1208 0004 00AF     		add	r7, sp, #0
+ 1209              	.LCFI79:
+ 1210              		.cfi_def_cfa_register 7
+ 1211 0006 7860     		str	r0, [r7, #4]
+ 227:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     return osAtomicBitsetGetNumBits(pstAllocator->bitset);
+ 1212              		.loc 1 227 49
+ 1213 0008 7B68     		ldr	r3, [r7, #4]
+ 1214 000a 9B68     		ldr	r3, [r3, #8]
+ 1215              		.loc 1 227 12
+ 1216 000c 1846     		mov	r0, r3
+ 1217 000e FFF7FEFF 		bl	osAtomicBitsetGetNumBits
+ 1218 0012 0346     		mov	r3, r0
+ 228:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** }
+ARM GAS  /tmp/ccottVZ9.s 			page 26
+
+
+ 1219              		.loc 1 228 1
+ 1220 0014 1846     		mov	r0, r3
+ 1221 0016 0837     		adds	r7, r7, #8
+ 1222              	.LCFI80:
+ 1223              		.cfi_def_cfa_offset 8
+ 1224 0018 BD46     		mov	sp, r7
+ 1225              	.LCFI81:
+ 1226              		.cfi_def_cfa_register 13
+ 1227              		@ sp needed
+ 1228 001a 80BD     		pop	{r7, pc}
+ 1229              		.cfi_endproc
+ 1230              	.LFE147:
+ 1232              		.section	.text.osSlabAllocatorEmpty,"ax",%progbits
+ 1233              		.align	1
+ 1234              		.global	osSlabAllocatorEmpty
+ 1235              		.syntax unified
+ 1236              		.thumb
+ 1237              		.thumb_func
+ 1238              		.fpu fpv4-sp-d16
+ 1240              	osSlabAllocatorEmpty:
+ 1241              	.LFB148:
+ 229:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 230:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** BOOL osSlabAllocatorEmpty(OS_SLAB_ALLOCATOR *pstAllocator)
+ 231:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** {
+ 1242              		.loc 1 231 1
+ 1243              		.cfi_startproc
+ 1244              		@ args = 0, pretend = 0, frame = 8
+ 1245              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1246 0000 80B5     		push	{r7, lr}
+ 1247              	.LCFI82:
+ 1248              		.cfi_def_cfa_offset 8
+ 1249              		.cfi_offset 7, -8
+ 1250              		.cfi_offset 14, -4
+ 1251 0002 82B0     		sub	sp, sp, #8
+ 1252              	.LCFI83:
+ 1253              		.cfi_def_cfa_offset 16
+ 1254 0004 00AF     		add	r7, sp, #0
+ 1255              	.LCFI84:
+ 1256              		.cfi_def_cfa_register 7
+ 1257 0006 7860     		str	r0, [r7, #4]
+ 232:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     return osAtomicBitsetEmpty(pstAllocator->bitset);
+ 1258              		.loc 1 232 12
+ 1259 0008 7B68     		ldr	r3, [r7, #4]
+ 1260 000a 9B68     		ldr	r3, [r3, #8]
+ 1261 000c 1846     		mov	r0, r3
+ 1262 000e FFF7FEFF 		bl	osAtomicBitsetEmpty
+ 1263 0012 0346     		mov	r3, r0
+ 233:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** }
+ 1264              		.loc 1 233 1
+ 1265 0014 1846     		mov	r0, r3
+ 1266 0016 0837     		adds	r7, r7, #8
+ 1267              	.LCFI85:
+ 1268              		.cfi_def_cfa_offset 8
+ 1269 0018 BD46     		mov	sp, r7
+ 1270              	.LCFI86:
+ 1271              		.cfi_def_cfa_register 13
+ 1272              		@ sp needed
+ARM GAS  /tmp/ccottVZ9.s 			page 27
+
+
+ 1273 001a 80BD     		pop	{r7, pc}
+ 1274              		.cfi_endproc
+ 1275              	.LFE148:
+ 1277              		.section	.text.osSlabAllocatorGetUsedItemCnt,"ax",%progbits
+ 1278              		.align	1
+ 1279              		.global	osSlabAllocatorGetUsedItemCnt
+ 1280              		.syntax unified
+ 1281              		.thumb
+ 1282              		.thumb_func
+ 1283              		.fpu fpv4-sp-d16
+ 1285              	osSlabAllocatorGetUsedItemCnt:
+ 1286              	.LFB149:
+ 234:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 235:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** UINT32 osSlabAllocatorGetUsedItemCnt(OS_SLAB_ALLOCATOR *pstAllocator)
+ 236:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** {
+ 1287              		.loc 1 236 1
+ 1288              		.cfi_startproc
+ 1289              		@ args = 0, pretend = 0, frame = 24
+ 1290              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1291 0000 80B5     		push	{r7, lr}
+ 1292              	.LCFI87:
+ 1293              		.cfi_def_cfa_offset 8
+ 1294              		.cfi_offset 7, -8
+ 1295              		.cfi_offset 14, -4
+ 1296 0002 86B0     		sub	sp, sp, #24
+ 1297              	.LCFI88:
+ 1298              		.cfi_def_cfa_offset 32
+ 1299 0004 00AF     		add	r7, sp, #0
+ 1300              	.LCFI89:
+ 1301              		.cfi_def_cfa_register 7
+ 1302 0006 7860     		str	r0, [r7, #4]
+ 237:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     UINT32 uwUsed, uwIdx;
+ 238:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     struct AtomicBitset *p_bitset = pstAllocator->bitset;
+ 1303              		.loc 1 238 26
+ 1304 0008 7B68     		ldr	r3, [r7, #4]
+ 1305 000a 9B68     		ldr	r3, [r3, #8]
+ 1306 000c FB60     		str	r3, [r7, #12]
+ 239:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     for (uwUsed = 0, uwIdx = 0; uwIdx < p_bitset->numBits; uwIdx++)
+ 1307              		.loc 1 239 17
+ 1308 000e 0023     		movs	r3, #0
+ 1309 0010 7B61     		str	r3, [r7, #20]
+ 1310              		.loc 1 239 28
+ 1311 0012 0023     		movs	r3, #0
+ 1312 0014 3B61     		str	r3, [r7, #16]
+ 1313              		.loc 1 239 5
+ 1314 0016 0CE0     		b	.L55
+ 1315              	.L57:
+ 240:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     {
+ 241:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         if (osAtomicBitsetGetBit(p_bitset, uwIdx))
+ 1316              		.loc 1 241 13
+ 1317 0018 3969     		ldr	r1, [r7, #16]
+ 1318 001a F868     		ldr	r0, [r7, #12]
+ 1319 001c FFF7FEFF 		bl	osAtomicBitsetGetBit
+ 1320 0020 0346     		mov	r3, r0
+ 1321              		.loc 1 241 12
+ 1322 0022 002B     		cmp	r3, #0
+ 1323 0024 02D0     		beq	.L56
+ARM GAS  /tmp/ccottVZ9.s 			page 28
+
+
+ 242:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         {
+ 243:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****             uwUsed ++;
+ 1324              		.loc 1 243 20
+ 1325 0026 7B69     		ldr	r3, [r7, #20]
+ 1326 0028 0133     		adds	r3, r3, #1
+ 1327 002a 7B61     		str	r3, [r7, #20]
+ 1328              	.L56:
+ 239:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     {
+ 1329              		.loc 1 239 65 discriminator 2
+ 1330 002c 3B69     		ldr	r3, [r7, #16]
+ 1331 002e 0133     		adds	r3, r3, #1
+ 1332 0030 3B61     		str	r3, [r7, #16]
+ 1333              	.L55:
+ 239:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     {
+ 1334              		.loc 1 239 49 discriminator 1
+ 1335 0032 FB68     		ldr	r3, [r7, #12]
+ 1336 0034 1B68     		ldr	r3, [r3]
+ 239:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     {
+ 1337              		.loc 1 239 5 discriminator 1
+ 1338 0036 3A69     		ldr	r2, [r7, #16]
+ 1339 0038 9A42     		cmp	r2, r3
+ 1340 003a EDD3     		bcc	.L57
+ 244:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         }
+ 245:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     }
+ 246:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     return uwUsed;
+ 1341              		.loc 1 246 12
+ 1342 003c 7B69     		ldr	r3, [r7, #20]
+ 247:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** }
+ 1343              		.loc 1 247 1
+ 1344 003e 1846     		mov	r0, r3
+ 1345 0040 1837     		adds	r7, r7, #24
+ 1346              	.LCFI90:
+ 1347              		.cfi_def_cfa_offset 8
+ 1348 0042 BD46     		mov	sp, r7
+ 1349              	.LCFI91:
+ 1350              		.cfi_def_cfa_register 13
+ 1351              		@ sp needed
+ 1352 0044 80BD     		pop	{r7, pc}
+ 1353              		.cfi_endproc
+ 1354              	.LFE149:
+ 1356              		.section	.text.osSlabAllocatorGetSlabInfo,"ax",%progbits
+ 1357              		.align	1
+ 1358              		.global	osSlabAllocatorGetSlabInfo
+ 1359              		.syntax unified
+ 1360              		.thumb
+ 1361              		.thumb_func
+ 1362              		.fpu fpv4-sp-d16
+ 1364              	osSlabAllocatorGetSlabInfo:
+ 1365              	.LFB150:
+ 248:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 249:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** VOID osSlabAllocatorGetSlabInfo(OS_SLAB_ALLOCATOR *pstAllocator, UINT32 *puwItemSz, UINT32 *puwItem
+ 250:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** {
+ 1366              		.loc 1 250 1
+ 1367              		.cfi_startproc
+ 1368              		@ args = 0, pretend = 0, frame = 16
+ 1369              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1370 0000 80B5     		push	{r7, lr}
+ARM GAS  /tmp/ccottVZ9.s 			page 29
+
+
+ 1371              	.LCFI92:
+ 1372              		.cfi_def_cfa_offset 8
+ 1373              		.cfi_offset 7, -8
+ 1374              		.cfi_offset 14, -4
+ 1375 0002 84B0     		sub	sp, sp, #16
+ 1376              	.LCFI93:
+ 1377              		.cfi_def_cfa_offset 24
+ 1378 0004 00AF     		add	r7, sp, #0
+ 1379              	.LCFI94:
+ 1380              		.cfi_def_cfa_register 7
+ 1381 0006 F860     		str	r0, [r7, #12]
+ 1382 0008 B960     		str	r1, [r7, #8]
+ 1383 000a 7A60     		str	r2, [r7, #4]
+ 1384 000c 3B60     		str	r3, [r7]
+ 251:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     *puwItemSz = pstAllocator->uwItemSz;
+ 1385              		.loc 1 251 30
+ 1386 000e FB68     		ldr	r3, [r7, #12]
+ 1387 0010 1A68     		ldr	r2, [r3]
+ 1388              		.loc 1 251 16
+ 1389 0012 BB68     		ldr	r3, [r7, #8]
+ 1390 0014 1A60     		str	r2, [r3]
+ 252:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     *puwItemCnt = osAtomicBitsetGetNumBits(pstAllocator->bitset);
+ 1391              		.loc 1 252 56
+ 1392 0016 FB68     		ldr	r3, [r7, #12]
+ 1393 0018 9B68     		ldr	r3, [r3, #8]
+ 1394              		.loc 1 252 19
+ 1395 001a 1846     		mov	r0, r3
+ 1396 001c FFF7FEFF 		bl	osAtomicBitsetGetNumBits
+ 1397 0020 0246     		mov	r2, r0
+ 1398              		.loc 1 252 17
+ 1399 0022 7B68     		ldr	r3, [r7, #4]
+ 1400 0024 1A60     		str	r2, [r3]
+ 253:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     *puwCurUsage = osSlabAllocatorGetUsedItemCnt(pstAllocator);
+ 1401              		.loc 1 253 20
+ 1402 0026 F868     		ldr	r0, [r7, #12]
+ 1403 0028 FFF7FEFF 		bl	osSlabAllocatorGetUsedItemCnt
+ 1404 002c 0246     		mov	r2, r0
+ 1405              		.loc 1 253 18
+ 1406 002e 3B68     		ldr	r3, [r7]
+ 1407 0030 1A60     		str	r2, [r3]
+ 254:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** }
+ 1408              		.loc 1 254 1
+ 1409 0032 00BF     		nop
+ 1410 0034 1037     		adds	r7, r7, #16
+ 1411              	.LCFI95:
+ 1412              		.cfi_def_cfa_offset 8
+ 1413 0036 BD46     		mov	sp, r7
+ 1414              	.LCFI96:
+ 1415              		.cfi_def_cfa_register 13
+ 1416              		@ sp needed
+ 1417 0038 80BD     		pop	{r7, pc}
+ 1418              		.cfi_endproc
+ 1419              	.LFE150:
+ 1421              		.section	.text.osSlabAllocatorCheck,"ax",%progbits
+ 1422              		.align	1
+ 1423              		.global	osSlabAllocatorCheck
+ 1424              		.syntax unified
+ARM GAS  /tmp/ccottVZ9.s 			page 30
+
+
+ 1425              		.thumb
+ 1426              		.thumb_func
+ 1427              		.fpu fpv4-sp-d16
+ 1429              	osSlabAllocatorCheck:
+ 1430              	.LFB151:
+ 255:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 256:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** BOOL osSlabAllocatorCheck(OS_SLAB_ALLOCATOR *pstAllocator, VOID* ptrP)
+ 257:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** {
+ 1431              		.loc 1 257 1
+ 1432              		.cfi_startproc
+ 1433              		@ args = 0, pretend = 0, frame = 24
+ 1434              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1435 0000 80B5     		push	{r7, lr}
+ 1436              	.LCFI97:
+ 1437              		.cfi_def_cfa_offset 8
+ 1438              		.cfi_offset 7, -8
+ 1439              		.cfi_offset 14, -4
+ 1440 0002 86B0     		sub	sp, sp, #24
+ 1441              	.LCFI98:
+ 1442              		.cfi_def_cfa_offset 32
+ 1443 0004 00AF     		add	r7, sp, #0
+ 1444              	.LCFI99:
+ 1445              		.cfi_def_cfa_register 7
+ 1446 0006 7860     		str	r0, [r7, #4]
+ 1447 0008 3960     		str	r1, [r7]
+ 258:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     UINT8 *ptr = (UINT8*)ptrP;
+ 1448              		.loc 1 258 12
+ 1449 000a 3B68     		ldr	r3, [r7]
+ 1450 000c 7B61     		str	r3, [r7, #20]
+ 259:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     UINT32 uwItemOffset = ptr - pstAllocator->ucDataChunks;
+ 1451              		.loc 1 259 45
+ 1452 000e 7B68     		ldr	r3, [r7, #4]
+ 1453 0010 5B68     		ldr	r3, [r3, #4]
+ 1454              		.loc 1 259 31
+ 1455 0012 7A69     		ldr	r2, [r7, #20]
+ 1456 0014 D31A     		subs	r3, r2, r3
+ 1457              		.loc 1 259 12
+ 1458 0016 3B61     		str	r3, [r7, #16]
+ 260:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     UINT32 uwItemIdx = uwItemOffset / pstAllocator->uwItemSz;
+ 1459              		.loc 1 260 51
+ 1460 0018 7B68     		ldr	r3, [r7, #4]
+ 1461 001a 1B68     		ldr	r3, [r3]
+ 1462              		.loc 1 260 12
+ 1463 001c 3A69     		ldr	r2, [r7, #16]
+ 1464 001e B2FBF3F3 		udiv	r3, r2, r3
+ 1465 0022 FB60     		str	r3, [r7, #12]
+ 261:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 262:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     //check for invalid inputs
+ 263:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 264:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     if ((uwItemOffset % pstAllocator->uwItemSz) || (uwItemIdx >= osAtomicBitsetGetNumBits(pstAlloca
+ 1466              		.loc 1 264 37
+ 1467 0024 7B68     		ldr	r3, [r7, #4]
+ 1468 0026 1A68     		ldr	r2, [r3]
+ 1469              		.loc 1 264 23
+ 1470 0028 3B69     		ldr	r3, [r7, #16]
+ 1471 002a B3FBF2F1 		udiv	r1, r3, r2
+ 1472 002e 02FB01F2 		mul	r2, r2, r1
+ARM GAS  /tmp/ccottVZ9.s 			page 31
+
+
+ 1473 0032 9B1A     		subs	r3, r3, r2
+ 1474              		.loc 1 264 8
+ 1475 0034 002B     		cmp	r3, #0
+ 1476 0036 11D1     		bne	.L61
+ 1477              		.loc 1 264 103 discriminator 1
+ 1478 0038 7B68     		ldr	r3, [r7, #4]
+ 1479 003a 9B68     		ldr	r3, [r3, #8]
+ 1480              		.loc 1 264 66 discriminator 1
+ 1481 003c 1846     		mov	r0, r3
+ 1482 003e FFF7FEFF 		bl	osAtomicBitsetGetNumBits
+ 1483 0042 0246     		mov	r2, r0
+ 1484              		.loc 1 264 49 discriminator 1
+ 1485 0044 FB68     		ldr	r3, [r7, #12]
+ 1486 0046 9342     		cmp	r3, r2
+ 1487 0048 08D2     		bcs	.L61
+ 265:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         || !osAtomicBitsetGetBit(pstAllocator->bitset, uwItemIdx))
+ 1488              		.loc 1 265 46
+ 1489 004a 7B68     		ldr	r3, [r7, #4]
+ 1490 004c 9B68     		ldr	r3, [r3, #8]
+ 1491              		.loc 1 265 13
+ 1492 004e F968     		ldr	r1, [r7, #12]
+ 1493 0050 1846     		mov	r0, r3
+ 1494 0052 FFF7FEFF 		bl	osAtomicBitsetGetBit
+ 1495 0056 0346     		mov	r3, r0
+ 1496              		.loc 1 265 9
+ 1497 0058 002B     		cmp	r3, #0
+ 1498 005a 01D1     		bne	.L62
+ 1499              	.L61:
+ 266:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****         return FALSE;
+ 1500              		.loc 1 266 16
+ 1501 005c 0023     		movs	r3, #0
+ 1502 005e 00E0     		b	.L63
+ 1503              	.L62:
+ 267:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** 
+ 268:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c ****     return TRUE;
+ 1504              		.loc 1 268 12
+ 1505 0060 0123     		movs	r3, #1
+ 1506              	.L63:
+ 269:/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/mem/common/los_slab.c **** }
+ 1507              		.loc 1 269 1
+ 1508 0062 1846     		mov	r0, r3
+ 1509 0064 1837     		adds	r7, r7, #24
+ 1510              	.LCFI100:
+ 1511              		.cfi_def_cfa_offset 8
+ 1512 0066 BD46     		mov	sp, r7
+ 1513              	.LCFI101:
+ 1514              		.cfi_def_cfa_register 13
+ 1515              		@ sp needed
+ 1516 0068 80BD     		pop	{r7, pc}
+ 1517              		.cfi_endproc
+ 1518              	.LFE151:
+ 1520              		.text
+ 1521              	.Letext0:
+ 1522              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 1523              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 1524              		.file 4 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 1525              		.file 5 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ARM GAS  /tmp/ccottVZ9.s 			page 32
+
+
+ 1526              		.file 6 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/ree
+ 1527              		.file 7 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 1528              		.file 8 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_typedef.h"
+ 1529              		.file 9 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 1530              		.file 10 "/home/fanxinhao/Work/LiteOS_Lab/targets/STM32L476RG_NB476/Inc/system_stm32l4xx.h"
+ 1531              		.file 11 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_config.h"
+ 1532              		.file 12 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/include/los_err.h"
+ 1533              		.file 13 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/os/liteos/base/include/los_slab.ph"
+ARM GAS  /tmp/ccottVZ9.s 			page 33
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 los_slab.c
+     /tmp/ccottVZ9.s:18     .text.osAtomicBitsetInit:0000000000000000 $t
+     /tmp/ccottVZ9.s:26     .text.osAtomicBitsetInit:0000000000000000 osAtomicBitsetInit
+     /tmp/ccottVZ9.s:96     .text.osAtomicBitsetGetNumBits:0000000000000000 $t
+     /tmp/ccottVZ9.s:103    .text.osAtomicBitsetGetNumBits:0000000000000000 osAtomicBitsetGetNumBits
+     /tmp/ccottVZ9.s:142    .text.osAtomicBitsetGetBit:0000000000000000 $t
+     /tmp/ccottVZ9.s:149    .text.osAtomicBitsetGetBit:0000000000000000 osAtomicBitsetGetBit
+     /tmp/ccottVZ9.s:217    .text.osAtomicBitsetClearBit:0000000000000000 $t
+     /tmp/ccottVZ9.s:224    .text.osAtomicBitsetClearBit:0000000000000000 osAtomicBitsetClearBit
+     /tmp/ccottVZ9.s:298    .text.osAtomicBitsetFindClearAndSet:0000000000000000 $t
+     /tmp/ccottVZ9.s:305    .text.osAtomicBitsetFindClearAndSet:0000000000000000 osAtomicBitsetFindClearAndSet
+     /tmp/ccottVZ9.s:432    .text.osAtomicBitsetIdxChgToNatural:0000000000000000 $t
+     /tmp/ccottVZ9.s:439    .text.osAtomicBitsetIdxChgToNatural:0000000000000000 osAtomicBitsetIdxChgToNatural
+     /tmp/ccottVZ9.s:517    .text.osAtomicBitsetEmpty:0000000000000000 $t
+     /tmp/ccottVZ9.s:524    .text.osAtomicBitsetEmpty:0000000000000000 osAtomicBitsetEmpty
+     /tmp/ccottVZ9.s:632    .text.osSlabAllocatorNew:0000000000000000 $t
+     /tmp/ccottVZ9.s:639    .text.osSlabAllocatorNew:0000000000000000 osSlabAllocatorNew
+     /tmp/ccottVZ9.s:752    .text.osSlabAllocatorDestroy:0000000000000000 $t
+     /tmp/ccottVZ9.s:759    .text.osSlabAllocatorDestroy:0000000000000000 osSlabAllocatorDestroy
+     /tmp/ccottVZ9.s:796    .text.osSlabAllocatorAlloc:0000000000000000 $t
+     /tmp/ccottVZ9.s:803    .text.osSlabAllocatorAlloc:0000000000000000 osSlabAllocatorAlloc
+     /tmp/ccottVZ9.s:861    .text.osSlabAllocatorFree:0000000000000000 $t
+     /tmp/ccottVZ9.s:868    .text.osSlabAllocatorFree:0000000000000000 osSlabAllocatorFree
+     /tmp/ccottVZ9.s:966    .text.osSlabAllocatorGetNth:0000000000000000 $t
+     /tmp/ccottVZ9.s:973    .text.osSlabAllocatorGetNth:0000000000000000 osSlabAllocatorGetNth
+     /tmp/ccottVZ9.s:1033   .text.osSlabAllocatorGetIdxP:0000000000000000 $t
+     /tmp/ccottVZ9.s:1040   .text.osSlabAllocatorGetIdxP:0000000000000000 osSlabAllocatorGetIdxP
+     /tmp/ccottVZ9.s:1088   .text.osSlabAllocatorGetIndex:0000000000000000 $t
+     /tmp/ccottVZ9.s:1095   .text.osSlabAllocatorGetIndex:0000000000000000 osSlabAllocatorGetIndex
+     /tmp/ccottVZ9.s:1187   .text.osSlabAllocatorGetNumItems:0000000000000000 $t
+     /tmp/ccottVZ9.s:1194   .text.osSlabAllocatorGetNumItems:0000000000000000 osSlabAllocatorGetNumItems
+     /tmp/ccottVZ9.s:1233   .text.osSlabAllocatorEmpty:0000000000000000 $t
+     /tmp/ccottVZ9.s:1240   .text.osSlabAllocatorEmpty:0000000000000000 osSlabAllocatorEmpty
+     /tmp/ccottVZ9.s:1278   .text.osSlabAllocatorGetUsedItemCnt:0000000000000000 $t
+     /tmp/ccottVZ9.s:1285   .text.osSlabAllocatorGetUsedItemCnt:0000000000000000 osSlabAllocatorGetUsedItemCnt
+     /tmp/ccottVZ9.s:1357   .text.osSlabAllocatorGetSlabInfo:0000000000000000 $t
+     /tmp/ccottVZ9.s:1364   .text.osSlabAllocatorGetSlabInfo:0000000000000000 osSlabAllocatorGetSlabInfo
+     /tmp/ccottVZ9.s:1422   .text.osSlabAllocatorCheck:0000000000000000 $t
+     /tmp/ccottVZ9.s:1429   .text.osSlabAllocatorCheck:0000000000000000 osSlabAllocatorCheck
+
+UNDEFINED SYMBOLS
+memset
+osHeapAlloc
+osHeapFree

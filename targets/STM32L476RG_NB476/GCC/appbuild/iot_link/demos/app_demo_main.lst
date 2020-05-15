@@ -1,0 +1,182 @@
+ARM GAS  /tmp/ccuODN3f.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"app_demo_main.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.rodata
+  18              		.align	2
+  19              	.LC0:
+  20 0000 5B25735D 		.ascii	"[%s][%u][%s:%d] %s:###please implement app demo by "
+  20      5B25755D 
+  20      5B25733A 
+  20      25645D20 
+  20      25733A23 
+  21 0033 796F7572 		.ascii	"yourself####\012\015\015\012\000"
+  21      73656C66 
+  21      23232323 
+  21      0A0D0D0A 
+  21      00
+  22              		.section	.text.standard_app_demo_main,"ax",%progbits
+  23              		.align	1
+  24              		.weak	standard_app_demo_main
+  25              		.arch armv7e-m
+  26              		.syntax unified
+  27              		.thumb
+  28              		.thumb_func
+  29              		.fpu fpv4-sp-d16
+  31              	standard_app_demo_main:
+  32              	.LFB3:
+  33              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c **** /*----------------------------------------------------------------------------
+   2:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * All rights reserved.
+   4:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * are permitted provided that the following conditions are met:
+   6:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * conditions and the following disclaimer.
+   8:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * provided with the distribution.
+  11:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * permission.
+  14:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ARM GAS  /tmp/ccuODN3f.s 			page 2
+
+
+  18:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  *---------------------------------------------------------------------------*/
+  26:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c **** /*----------------------------------------------------------------------------
+  27:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * Notice of Export Control Law
+  28:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * ===============================================
+  29:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  * applicable export control laws and regulations.
+  33:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  *---------------------------------------------------------------------------*/
+  34:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c **** /**
+  35:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  *  DATE                AUTHOR      INSTRUCTION
+  36:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  *  2020-04-05 20:54  zhangqianfu  The first version
+  37:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  *
+  38:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****  */
+  39:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c **** #include <link_log.h>
+  40:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c **** 
+  41:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c **** __attribute__ ((weak)) int standard_app_demo_main(void)
+  42:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c **** {
+  34              		.loc 1 42 1
+  35              		.cfi_startproc
+  36              		@ args = 0, pretend = 0, frame = 0
+  37              		@ frame_needed = 1, uses_anonymous_args = 0
+  38 0000 90B5     		push	{r4, r7, lr}
+  39              	.LCFI0:
+  40              		.cfi_def_cfa_offset 12
+  41              		.cfi_offset 4, -12
+  42              		.cfi_offset 7, -8
+  43              		.cfi_offset 14, -4
+  44 0002 83B0     		sub	sp, sp, #12
+  45              	.LCFI1:
+  46              		.cfi_def_cfa_offset 24
+  47 0004 02AF     		add	r7, sp, #8
+  48              	.LCFI2:
+  49              		.cfi_def_cfa 7, 16
+  43:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****     LINK_LOG_DEBUG("%s:###please implement app demo by yourself####\n\r",__FUNCTION__);
+  50              		.loc 1 43 5
+  51 0006 FFF7FEFF 		bl	link_log_level_get
+  52 000a 0346     		mov	r3, r0
+  53 000c 012B     		cmp	r3, #1
+  54 000e 10D8     		bhi	.L2
+  55              		.loc 1 43 5 is_stmt 0 discriminator 1
+  56 0010 0120     		movs	r0, #1
+  57 0012 FFF7FEFF 		bl	link_log_level_name
+  58 0016 0446     		mov	r4, r0
+  59 0018 FFF7FEFF 		bl	osal_sys_time
+  60 001c 0246     		mov	r2, r0
+  61 001e 0B46     		mov	r3, r1
+  62 0020 074B     		ldr	r3, .L4
+  63 0022 0193     		str	r3, [sp, #4]
+  64 0024 2B23     		movs	r3, #43
+ARM GAS  /tmp/ccuODN3f.s 			page 3
+
+
+  65 0026 0093     		str	r3, [sp]
+  66 0028 054B     		ldr	r3, .L4
+  67 002a 2146     		mov	r1, r4
+  68 002c 0548     		ldr	r0, .L4+4
+  69 002e FFF7FEFF 		bl	printf
+  70              	.L2:
+  44:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c ****     return -1;
+  71              		.loc 1 44 12 is_stmt 1
+  72 0032 4FF0FF33 		mov	r3, #-1
+  45:/home/fanxinhao/Work/LiteOS_Lab/iot_link/demos/app_demo_main.c **** }
+  73              		.loc 1 45 1
+  74 0036 1846     		mov	r0, r3
+  75 0038 0437     		adds	r7, r7, #4
+  76              	.LCFI3:
+  77              		.cfi_def_cfa_offset 12
+  78 003a BD46     		mov	sp, r7
+  79              	.LCFI4:
+  80              		.cfi_def_cfa_register 13
+  81              		@ sp needed
+  82 003c 90BD     		pop	{r4, r7, pc}
+  83              	.L5:
+  84 003e 00BF     		.align	2
+  85              	.L4:
+  86 0040 00000000 		.word	__FUNCTION__.6592
+  87 0044 00000000 		.word	.LC0
+  88              		.cfi_endproc
+  89              	.LFE3:
+  91              		.section	.rodata.__FUNCTION__.6592,"a"
+  92              		.align	2
+  95              	__FUNCTION__.6592:
+  96 0000 7374616E 		.ascii	"standard_app_demo_main\000"
+  96      64617264 
+  96      5F617070 
+  96      5F64656D 
+  96      6F5F6D61 
+  97              		.text
+  98              	.Letext0:
+  99              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 100              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 101              		.file 4 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 102              		.file 5 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/ree
+ 103              		.file 6 "/home/fanxinhao/Work/LiteOS_Lab/iot_link/inc/link_log.h"
+ARM GAS  /tmp/ccuODN3f.s 			page 4
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 app_demo_main.c
+     /tmp/ccuODN3f.s:18     .rodata:0000000000000000 $d
+     /tmp/ccuODN3f.s:23     .text.standard_app_demo_main:0000000000000000 $t
+     /tmp/ccuODN3f.s:31     .text.standard_app_demo_main:0000000000000000 standard_app_demo_main
+     /tmp/ccuODN3f.s:86     .text.standard_app_demo_main:0000000000000040 $d
+     /tmp/ccuODN3f.s:95     .rodata.__FUNCTION__.6592:0000000000000000 __FUNCTION__.6592
+     /tmp/ccuODN3f.s:92     .rodata.__FUNCTION__.6592:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+link_log_level_get
+link_log_level_name
+osal_sys_time
+printf

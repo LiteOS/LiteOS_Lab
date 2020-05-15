@@ -1,0 +1,489 @@
+ARM GAS  /tmp/cc2Asx6z.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"crc16.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	crc16_ccitt_table
+  18              		.section	.data.crc16_ccitt_table,"aw"
+  19              		.align	2
+  22              	crc16_ccitt_table:
+  23 0000 0000     		.short	0
+  24 0002 2110     		.short	4129
+  25 0004 4220     		.short	8258
+  26 0006 6330     		.short	12387
+  27 0008 8440     		.short	16516
+  28 000a A550     		.short	20645
+  29 000c C660     		.short	24774
+  30 000e E770     		.short	28903
+  31 0010 0881     		.short	-32504
+  32 0012 2991     		.short	-28375
+  33 0014 4AA1     		.short	-24246
+  34 0016 6BB1     		.short	-20117
+  35 0018 8CC1     		.short	-15988
+  36 001a ADD1     		.short	-11859
+  37 001c CEE1     		.short	-7730
+  38 001e EFF1     		.short	-3601
+  39 0020 3112     		.short	4657
+  40 0022 1002     		.short	528
+  41 0024 7332     		.short	12915
+  42 0026 5222     		.short	8786
+  43 0028 B552     		.short	21173
+  44 002a 9442     		.short	17044
+  45 002c F772     		.short	29431
+  46 002e D662     		.short	25302
+  47 0030 3993     		.short	-27847
+  48 0032 1883     		.short	-31976
+  49 0034 7BB3     		.short	-19589
+  50 0036 5AA3     		.short	-23718
+  51 0038 BDD3     		.short	-11331
+  52 003a 9CC3     		.short	-15460
+  53 003c FFF3     		.short	-3073
+  54 003e DEE3     		.short	-7202
+  55 0040 6224     		.short	9314
+  56 0042 4334     		.short	13379
+  57 0044 2004     		.short	1056
+  58 0046 0114     		.short	5121
+  59 0048 E664     		.short	25830
+ARM GAS  /tmp/cc2Asx6z.s 			page 2
+
+
+  60 004a C774     		.short	29895
+  61 004c A444     		.short	17572
+  62 004e 8554     		.short	21637
+  63 0050 6AA5     		.short	-23190
+  64 0052 4BB5     		.short	-19125
+  65 0054 2885     		.short	-31448
+  66 0056 0995     		.short	-27383
+  67 0058 EEE5     		.short	-6674
+  68 005a CFF5     		.short	-2609
+  69 005c ACC5     		.short	-14932
+  70 005e 8DD5     		.short	-10867
+  71 0060 5336     		.short	13907
+  72 0062 7226     		.short	9842
+  73 0064 1116     		.short	5649
+  74 0066 3006     		.short	1584
+  75 0068 D776     		.short	30423
+  76 006a F666     		.short	26358
+  77 006c 9556     		.short	22165
+  78 006e B446     		.short	18100
+  79 0070 5BB7     		.short	-18597
+  80 0072 7AA7     		.short	-22662
+  81 0074 1997     		.short	-26855
+  82 0076 3887     		.short	-30920
+  83 0078 DFF7     		.short	-2081
+  84 007a FEE7     		.short	-6146
+  85 007c 9DD7     		.short	-10339
+  86 007e BCC7     		.short	-14404
+  87 0080 C448     		.short	18628
+  88 0082 E558     		.short	22757
+  89 0084 8668     		.short	26758
+  90 0086 A778     		.short	30887
+  91 0088 4008     		.short	2112
+  92 008a 6118     		.short	6241
+  93 008c 0228     		.short	10242
+  94 008e 2338     		.short	14371
+  95 0090 CCC9     		.short	-13876
+  96 0092 EDD9     		.short	-9747
+  97 0094 8EE9     		.short	-5746
+  98 0096 AFF9     		.short	-1617
+  99 0098 4889     		.short	-30392
+ 100 009a 6999     		.short	-26263
+ 101 009c 0AA9     		.short	-22262
+ 102 009e 2BB9     		.short	-18133
+ 103 00a0 F55A     		.short	23285
+ 104 00a2 D44A     		.short	19156
+ 105 00a4 B77A     		.short	31415
+ 106 00a6 966A     		.short	27286
+ 107 00a8 711A     		.short	6769
+ 108 00aa 500A     		.short	2640
+ 109 00ac 333A     		.short	14899
+ 110 00ae 122A     		.short	10770
+ 111 00b0 FDDB     		.short	-9219
+ 112 00b2 DCCB     		.short	-13348
+ 113 00b4 BFFB     		.short	-1089
+ 114 00b6 9EEB     		.short	-5218
+ 115 00b8 799B     		.short	-25735
+ 116 00ba 588B     		.short	-29864
+ARM GAS  /tmp/cc2Asx6z.s 			page 3
+
+
+ 117 00bc 3BBB     		.short	-17605
+ 118 00be 1AAB     		.short	-21734
+ 119 00c0 A66C     		.short	27814
+ 120 00c2 877C     		.short	31879
+ 121 00c4 E44C     		.short	19684
+ 122 00c6 C55C     		.short	23749
+ 123 00c8 222C     		.short	11298
+ 124 00ca 033C     		.short	15363
+ 125 00cc 600C     		.short	3168
+ 126 00ce 411C     		.short	7233
+ 127 00d0 AEED     		.short	-4690
+ 128 00d2 8FFD     		.short	-625
+ 129 00d4 ECCD     		.short	-12820
+ 130 00d6 CDDD     		.short	-8755
+ 131 00d8 2AAD     		.short	-21206
+ 132 00da 0BBD     		.short	-17141
+ 133 00dc 688D     		.short	-29336
+ 134 00de 499D     		.short	-25271
+ 135 00e0 977E     		.short	32407
+ 136 00e2 B66E     		.short	28342
+ 137 00e4 D55E     		.short	24277
+ 138 00e6 F44E     		.short	20212
+ 139 00e8 133E     		.short	15891
+ 140 00ea 322E     		.short	11826
+ 141 00ec 511E     		.short	7761
+ 142 00ee 700E     		.short	3696
+ 143 00f0 9FFF     		.short	-97
+ 144 00f2 BEEF     		.short	-4162
+ 145 00f4 DDDF     		.short	-8227
+ 146 00f6 FCCF     		.short	-12292
+ 147 00f8 1BBF     		.short	-16613
+ 148 00fa 3AAF     		.short	-20678
+ 149 00fc 599F     		.short	-24743
+ 150 00fe 788F     		.short	-28808
+ 151 0100 8891     		.short	-28280
+ 152 0102 A981     		.short	-32343
+ 153 0104 CAB1     		.short	-20022
+ 154 0106 EBA1     		.short	-24085
+ 155 0108 0CD1     		.short	-12020
+ 156 010a 2DC1     		.short	-16083
+ 157 010c 4EF1     		.short	-3762
+ 158 010e 6FE1     		.short	-7825
+ 159 0110 8010     		.short	4224
+ 160 0112 A100     		.short	161
+ 161 0114 C230     		.short	12482
+ 162 0116 E320     		.short	8419
+ 163 0118 0450     		.short	20484
+ 164 011a 2540     		.short	16421
+ 165 011c 4670     		.short	28742
+ 166 011e 6760     		.short	24679
+ 167 0120 B983     		.short	-31815
+ 168 0122 9893     		.short	-27752
+ 169 0124 FBA3     		.short	-23557
+ 170 0126 DAB3     		.short	-19494
+ 171 0128 3DC3     		.short	-15555
+ 172 012a 1CD3     		.short	-11492
+ 173 012c 7FE3     		.short	-7297
+ARM GAS  /tmp/cc2Asx6z.s 			page 4
+
+
+ 174 012e 5EF3     		.short	-3234
+ 175 0130 B102     		.short	689
+ 176 0132 9012     		.short	4752
+ 177 0134 F322     		.short	8947
+ 178 0136 D232     		.short	13010
+ 179 0138 3542     		.short	16949
+ 180 013a 1452     		.short	21012
+ 181 013c 7762     		.short	25207
+ 182 013e 5672     		.short	29270
+ 183 0140 EAB5     		.short	-18966
+ 184 0142 CBA5     		.short	-23093
+ 185 0144 A895     		.short	-27224
+ 186 0146 8985     		.short	-31351
+ 187 0148 6EF5     		.short	-2706
+ 188 014a 4FE5     		.short	-6833
+ 189 014c 2CD5     		.short	-10964
+ 190 014e 0DC5     		.short	-15091
+ 191 0150 E234     		.short	13538
+ 192 0152 C324     		.short	9411
+ 193 0154 A014     		.short	5280
+ 194 0156 8104     		.short	1153
+ 195 0158 6674     		.short	29798
+ 196 015a 4764     		.short	25671
+ 197 015c 2454     		.short	21540
+ 198 015e 0544     		.short	17413
+ 199 0160 DBA7     		.short	-22565
+ 200 0162 FAB7     		.short	-18438
+ 201 0164 9987     		.short	-30823
+ 202 0166 B897     		.short	-26696
+ 203 0168 5FE7     		.short	-6305
+ 204 016a 7EF7     		.short	-2178
+ 205 016c 1DC7     		.short	-14563
+ 206 016e 3CD7     		.short	-10436
+ 207 0170 D326     		.short	9939
+ 208 0172 F236     		.short	14066
+ 209 0174 9106     		.short	1681
+ 210 0176 B016     		.short	5808
+ 211 0178 5766     		.short	26199
+ 212 017a 7676     		.short	30326
+ 213 017c 1546     		.short	17941
+ 214 017e 3456     		.short	22068
+ 215 0180 4CD9     		.short	-9908
+ 216 0182 6DC9     		.short	-13971
+ 217 0184 0EF9     		.short	-1778
+ 218 0186 2FE9     		.short	-5841
+ 219 0188 C899     		.short	-26168
+ 220 018a E989     		.short	-30231
+ 221 018c 8AB9     		.short	-18038
+ 222 018e ABA9     		.short	-22101
+ 223 0190 4458     		.short	22596
+ 224 0192 6548     		.short	18533
+ 225 0194 0678     		.short	30726
+ 226 0196 2768     		.short	26663
+ 227 0198 C018     		.short	6336
+ 228 019a E108     		.short	2273
+ 229 019c 8238     		.short	14466
+ 230 019e A328     		.short	10403
+ARM GAS  /tmp/cc2Asx6z.s 			page 5
+
+
+ 231 01a0 7DCB     		.short	-13443
+ 232 01a2 5CDB     		.short	-9380
+ 233 01a4 3FEB     		.short	-5313
+ 234 01a6 1EFB     		.short	-1250
+ 235 01a8 F98B     		.short	-29703
+ 236 01aa D89B     		.short	-25640
+ 237 01ac BBAB     		.short	-21573
+ 238 01ae 9ABB     		.short	-17510
+ 239 01b0 754A     		.short	19061
+ 240 01b2 545A     		.short	23124
+ 241 01b4 376A     		.short	27191
+ 242 01b6 167A     		.short	31254
+ 243 01b8 F10A     		.short	2801
+ 244 01ba D01A     		.short	6864
+ 245 01bc B32A     		.short	10931
+ 246 01be 923A     		.short	14994
+ 247 01c0 2EFD     		.short	-722
+ 248 01c2 0FED     		.short	-4849
+ 249 01c4 6CDD     		.short	-8852
+ 250 01c6 4DCD     		.short	-12979
+ 251 01c8 AABD     		.short	-16982
+ 252 01ca 8BAD     		.short	-21109
+ 253 01cc E89D     		.short	-25112
+ 254 01ce C98D     		.short	-29239
+ 255 01d0 267C     		.short	31782
+ 256 01d2 076C     		.short	27655
+ 257 01d4 645C     		.short	23652
+ 258 01d6 454C     		.short	19525
+ 259 01d8 A23C     		.short	15522
+ 260 01da 832C     		.short	11395
+ 261 01dc E01C     		.short	7392
+ 262 01de C10C     		.short	3265
+ 263 01e0 1FEF     		.short	-4321
+ 264 01e2 3EFF     		.short	-194
+ 265 01e4 5DCF     		.short	-12451
+ 266 01e6 7CDF     		.short	-8324
+ 267 01e8 9BAF     		.short	-20581
+ 268 01ea BABF     		.short	-16454
+ 269 01ec D98F     		.short	-28711
+ 270 01ee F89F     		.short	-24584
+ 271 01f0 176E     		.short	28183
+ 272 01f2 367E     		.short	32310
+ 273 01f4 554E     		.short	20053
+ 274 01f6 745E     		.short	24180
+ 275 01f8 932E     		.short	11923
+ 276 01fa B23E     		.short	16050
+ 277 01fc D10E     		.short	3793
+ 278 01fe F01E     		.short	7920
+ 279              		.section	.text.calc_crc16,"ax",%progbits
+ 280              		.align	1
+ 281              		.global	calc_crc16
+ 282              		.arch armv7e-m
+ 283              		.syntax unified
+ 284              		.thumb
+ 285              		.thumb_func
+ 286              		.fpu fpv4-sp-d16
+ 288              	calc_crc16:
+ARM GAS  /tmp/cc2Asx6z.s 			page 6
+
+
+ 289              	.LFB0:
+ 290              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c **** /*----------------------------------------------------------------------------
+   2:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * All rights reserved.
+   4:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * are permitted provided that the following conditions are met:
+   6:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * conditions and the following disclaimer.
+   8:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * provided with the distribution.
+  11:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * permission.
+  14:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  *---------------------------------------------------------------------------*/
+  26:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c **** /*----------------------------------------------------------------------------
+  27:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * Notice of Export Control Law
+  28:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * ===============================================
+  29:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  * applicable export control laws and regulations.
+  33:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  *---------------------------------------------------------------------------*/
+  34:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c **** /**
+  35:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  *  DATE                AUTHOR      INSTRUCTION
+  36:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  *  2019-05-30 15:20  zhangqianfu  The first version
+  37:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  *
+  38:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****  */
+  39:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c **** 
+  40:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c **** #include <stdint.h>
+  41:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c **** #include <stddef.h>
+  42:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c **** 
+  43:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c **** uint16_t crc16_ccitt_table[] = { 0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7, 0x
+  44:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****                             0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef, 0x1231, 0x0210, 0x3273, 0x2252,
+  45:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****                             0xa35a, 0xd3bd, 0xc39c, 0xf3ff, 0xe3de, 0x2462, 0x3443, 0x0420, 0x1401,
+  46:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****                             0x9509, 0xe5ee, 0xf5cf, 0xc5ac, 0xd58d, 0x3653, 0x2672, 0x1611, 0x0630,
+  47:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****                             0x8738, 0xf7df, 0xe7fe, 0xd79d, 0xc7bc, 0x48c4, 0x58e5, 0x6886, 0x78a7,
+  48:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****                             0xf9af, 0x8948, 0x9969, 0xa90a, 0xb92b, 0x5af5, 0x4ad4, 0x7ab7, 0x6a96,
+  49:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****                             0xeb9e, 0x9b79, 0x8b58, 0xbb3b, 0xab1a, 0x6ca6, 0x7c87, 0x4ce4, 0x5cc5,
+  50:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****                             0xddcd, 0xad2a, 0xbd0b, 0x8d68, 0x9d49, 0x7e97, 0x6eb6, 0x5ed5, 0x4ef4,
+  51:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****                             0xcffc, 0xbf1b, 0xaf3a, 0x9f59, 0x8f78, 0x9188, 0x81a9, 0xb1ca, 0xa1eb,
+  52:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****                             0x20e3, 0x5004, 0x4025, 0x7046, 0x6067, 0x83b9, 0x9398, 0xa3fb, 0xb3da,
+  53:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****                             0x32d2, 0x4235, 0x5214, 0x6277, 0x7256, 0xb5ea, 0xa5cb, 0x95a8, 0x8589,
+  54:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****                             0x0481, 0x7466, 0x6447, 0x5424, 0x4405, 0xa7db, 0xb7fa, 0x8799, 0x97b8,
+  55:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****                             0x16b0, 0x6657, 0x7676, 0x4615, 0x5634, 0xd94c, 0xc96d, 0xf90e, 0xe92f,
+ARM GAS  /tmp/cc2Asx6z.s 			page 7
+
+
+  56:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****                             0x6827, 0x18c0, 0x08e1, 0x3882, 0x28a3, 0xcb7d, 0xdb5c, 0xeb3f, 0xfb1e,
+  57:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****                             0x7a16, 0x0af1, 0x1ad0, 0x2ab3, 0x3a92, 0xfd2e, 0xed0f, 0xdd6c, 0xcd4d,
+  58:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****                             0x4c45, 0x3ca2, 0x2c83, 0x1ce0, 0x0cc1, 0xef1f, 0xff3e, 0xcf5d, 0xdf7c,
+  59:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****                             0x5e74, 0x2e93, 0x3eb2, 0x0ed1, 0x1ef0
+  60:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****                           };
+  61:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c **** 
+  62:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c **** uint16_t calc_crc16(uint16_t reg_init, const unsigned char *massage, int len)
+  63:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c **** {
+ 291              		.loc 1 63 1
+ 292              		.cfi_startproc
+ 293              		@ args = 0, pretend = 0, frame = 24
+ 294              		@ frame_needed = 1, uses_anonymous_args = 0
+ 295              		@ link register save eliminated.
+ 296 0000 80B4     		push	{r7}
+ 297              	.LCFI0:
+ 298              		.cfi_def_cfa_offset 4
+ 299              		.cfi_offset 7, -4
+ 300 0002 87B0     		sub	sp, sp, #28
+ 301              	.LCFI1:
+ 302              		.cfi_def_cfa_offset 32
+ 303 0004 00AF     		add	r7, sp, #0
+ 304              	.LCFI2:
+ 305              		.cfi_def_cfa_register 7
+ 306 0006 0346     		mov	r3, r0
+ 307 0008 B960     		str	r1, [r7, #8]
+ 308 000a 7A60     		str	r2, [r7, #4]
+ 309 000c FB81     		strh	r3, [r7, #14]	@ movhi
+  64:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****     uint16_t crc_reg = 0;
+ 310              		.loc 1 64 14
+ 311 000e 0023     		movs	r3, #0
+ 312 0010 FB82     		strh	r3, [r7, #22]	@ movhi
+  65:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****     int i = 0;
+ 313              		.loc 1 65 9
+ 314 0012 0023     		movs	r3, #0
+ 315 0014 3B61     		str	r3, [r7, #16]
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****     crc_reg = reg_init;
+ 316              		.loc 1 66 13
+ 317 0016 FB89     		ldrh	r3, [r7, #14]	@ movhi
+ 318 0018 FB82     		strh	r3, [r7, #22]	@ movhi
+  67:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c **** 
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****     for(i = 0; i < len; i++)
+ 319              		.loc 1 68 11
+ 320 001a 0023     		movs	r3, #0
+ 321 001c 3B61     		str	r3, [r7, #16]
+ 322              		.loc 1 68 5
+ 323 001e 11E0     		b	.L2
+ 324              	.L3:
+  69:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****     {
+  70:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****         crc_reg = (crc_reg >> 8) ^ crc16_ccitt_table[(crc_reg ^ massage[i]) & 0xff];
+ 325              		.loc 1 70 17 discriminator 3
+ 326 0020 FB8A     		ldrh	r3, [r7, #22]
+ 327 0022 1B0A     		lsrs	r3, r3, #8
+ 328 0024 9AB2     		uxth	r2, r3
+ 329              		.loc 1 70 63 discriminator 3
+ 330 0026 FB8A     		ldrh	r3, [r7, #22]
+ 331              		.loc 1 70 72 discriminator 3
+ 332 0028 3969     		ldr	r1, [r7, #16]
+ARM GAS  /tmp/cc2Asx6z.s 			page 8
+
+
+ 333 002a B868     		ldr	r0, [r7, #8]
+ 334 002c 0144     		add	r1, r1, r0
+ 335 002e 0978     		ldrb	r1, [r1]	@ zero_extendqisi2
+ 336              		.loc 1 70 63 discriminator 3
+ 337 0030 4B40     		eors	r3, r3, r1
+ 338              		.loc 1 70 77 discriminator 3
+ 339 0032 DBB2     		uxtb	r3, r3
+ 340              		.loc 1 70 53 discriminator 3
+ 341 0034 0949     		ldr	r1, .L5
+ 342 0036 31F81330 		ldrh	r3, [r1, r3, lsl #1]
+ 343              		.loc 1 70 17 discriminator 3
+ 344 003a 5340     		eors	r3, r3, r2
+ 345 003c FB82     		strh	r3, [r7, #22]	@ movhi
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****     {
+ 346              		.loc 1 68 26 discriminator 3
+ 347 003e 3B69     		ldr	r3, [r7, #16]
+ 348 0040 0133     		adds	r3, r3, #1
+ 349 0042 3B61     		str	r3, [r7, #16]
+ 350              	.L2:
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****     {
+ 351              		.loc 1 68 5 discriminator 1
+ 352 0044 3A69     		ldr	r2, [r7, #16]
+ 353 0046 7B68     		ldr	r3, [r7, #4]
+ 354 0048 9A42     		cmp	r2, r3
+ 355 004a E9DB     		blt	.L3
+  71:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****     }
+  72:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c ****     return crc_reg;
+ 356              		.loc 1 72 12
+ 357 004c FB8A     		ldrh	r3, [r7, #22]
+  73:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc16.c **** }
+ 358              		.loc 1 73 1
+ 359 004e 1846     		mov	r0, r3
+ 360 0050 1C37     		adds	r7, r7, #28
+ 361              	.LCFI3:
+ 362              		.cfi_def_cfa_offset 4
+ 363 0052 BD46     		mov	sp, r7
+ 364              	.LCFI4:
+ 365              		.cfi_def_cfa_register 13
+ 366              		@ sp needed
+ 367 0054 5DF8047B 		ldr	r7, [sp], #4
+ 368              	.LCFI5:
+ 369              		.cfi_restore 7
+ 370              		.cfi_def_cfa_offset 0
+ 371 0058 7047     		bx	lr
+ 372              	.L6:
+ 373 005a 00BF     		.align	2
+ 374              	.L5:
+ 375 005c 00000000 		.word	crc16_ccitt_table
+ 376              		.cfi_endproc
+ 377              	.LFE0:
+ 379              		.text
+ 380              	.Letext0:
+ 381              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 382              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ARM GAS  /tmp/cc2Asx6z.s 			page 9
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 crc16.c
+     /tmp/cc2Asx6z.s:22     .data.crc16_ccitt_table:0000000000000000 crc16_ccitt_table
+     /tmp/cc2Asx6z.s:19     .data.crc16_ccitt_table:0000000000000000 $d
+     /tmp/cc2Asx6z.s:280    .text.calc_crc16:0000000000000000 $t
+     /tmp/cc2Asx6z.s:288    .text.calc_crc16:0000000000000000 calc_crc16
+     /tmp/cc2Asx6z.s:375    .text.calc_crc16:000000000000005c $d
+
+NO UNDEFINED SYMBOLS

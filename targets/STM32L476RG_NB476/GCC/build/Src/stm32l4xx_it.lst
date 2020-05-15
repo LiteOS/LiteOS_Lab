@@ -1,0 +1,513 @@
+ARM GAS  /tmp/ccWqVFXy.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stm32l4xx_it.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.NMI_Handler,"ax",%progbits
+  18              		.align	1
+  19              		.global	NMI_Handler
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	NMI_Handler:
+  27              	.LFB133:
+  28              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* USER CODE BEGIN Header */
+   2:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /**
+   3:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   ******************************************************************************
+   4:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   * @file    stm32l4xx_it.c
+   5:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   * @brief   Interrupt Service Routines.
+   6:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   ******************************************************************************
+   7:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   * @attention
+   8:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   *
+   9:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+  10:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   * All rights reserved.</center></h2>
+  11:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   *
+  12:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   * This software component is licensed by ST under BSD 3-Clause license,
+  13:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   * the "License"; You may not use this file except in compliance with the
+  14:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   * License. You may obtain a copy of the License at:
+  15:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   *                        opensource.org/licenses/BSD-3-Clause
+  16:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   *
+  17:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   ******************************************************************************
+  18:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   */
+  19:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* USER CODE END Header */
+  20:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+  21:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* Includes ------------------------------------------------------------------*/
+  22:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** #include "main.h"
+  23:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** #include "stm32l4xx_it.h"
+  24:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* Private includes ----------------------------------------------------------*/
+  25:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* USER CODE BEGIN Includes */
+  26:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* USER CODE END Includes */
+  27:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+  28:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* Private typedef -----------------------------------------------------------*/
+  29:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* USER CODE BEGIN TD */
+  30:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+ARM GAS  /tmp/ccWqVFXy.s 			page 2
+
+
+  31:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* USER CODE END TD */
+  32:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+  33:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* Private define ------------------------------------------------------------*/
+  34:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* USER CODE BEGIN PD */
+  35:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****  
+  36:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* USER CODE END PD */
+  37:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+  38:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* Private macro -------------------------------------------------------------*/
+  39:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* USER CODE BEGIN PM */
+  40:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+  41:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* USER CODE END PM */
+  42:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+  43:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* Private variables ---------------------------------------------------------*/
+  44:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* USER CODE BEGIN PV */
+  45:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+  46:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* USER CODE END PV */
+  47:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+  48:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* Private function prototypes -----------------------------------------------*/
+  49:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* USER CODE BEGIN PFP */
+  50:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+  51:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* USER CODE END PFP */
+  52:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+  53:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* Private user code ---------------------------------------------------------*/
+  54:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* USER CODE BEGIN 0 */
+  55:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+  56:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* USER CODE END 0 */
+  57:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+  58:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* External variables --------------------------------------------------------*/
+  59:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** extern UART_HandleTypeDef hlpuart1;
+  60:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* USER CODE BEGIN EV */
+  61:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+  62:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* USER CODE END EV */
+  63:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+  64:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /******************************************************************************/
+  65:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /*           Cortex-M4 Processor Interruption and Exception Handlers          */ 
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /******************************************************************************/
+  67:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /**
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   * @brief This function handles Non maskable interrupt.
+  69:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   */
+  70:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** void NMI_Handler(void)
+  71:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** {
+  29              		.loc 1 71 1
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34 0000 80B4     		push	{r7}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 4
+  37              		.cfi_offset 7, -4
+  38 0002 00AF     		add	r7, sp, #0
+  39              	.LCFI1:
+  40              		.cfi_def_cfa_register 7
+  72:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE BEGIN NonMaskableInt_IRQn 0 */
+  73:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+  74:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE END NonMaskableInt_IRQn 0 */
+  75:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE BEGIN NonMaskableInt_IRQn 1 */
+ARM GAS  /tmp/ccWqVFXy.s 			page 3
+
+
+  76:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+  77:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE END NonMaskableInt_IRQn 1 */
+  78:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** }
+  41              		.loc 1 78 1
+  42 0004 00BF     		nop
+  43 0006 BD46     		mov	sp, r7
+  44              	.LCFI2:
+  45              		.cfi_def_cfa_register 13
+  46              		@ sp needed
+  47 0008 5DF8047B 		ldr	r7, [sp], #4
+  48              	.LCFI3:
+  49              		.cfi_restore 7
+  50              		.cfi_def_cfa_offset 0
+  51 000c 7047     		bx	lr
+  52              		.cfi_endproc
+  53              	.LFE133:
+  55              		.section	.text.HardFault_Handler,"ax",%progbits
+  56              		.align	1
+  57              		.global	HardFault_Handler
+  58              		.syntax unified
+  59              		.thumb
+  60              		.thumb_func
+  61              		.fpu fpv4-sp-d16
+  63              	HardFault_Handler:
+  64              	.LFB134:
+  79:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+  80:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /**
+  81:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   * @brief This function handles Hard fault interrupt.
+  82:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   */
+  83:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** void HardFault_Handler(void)
+  84:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** {
+  65              		.loc 1 84 1
+  66              		.cfi_startproc
+  67              		@ args = 0, pretend = 0, frame = 0
+  68              		@ frame_needed = 1, uses_anonymous_args = 0
+  69              		@ link register save eliminated.
+  70 0000 80B4     		push	{r7}
+  71              	.LCFI4:
+  72              		.cfi_def_cfa_offset 4
+  73              		.cfi_offset 7, -4
+  74 0002 00AF     		add	r7, sp, #0
+  75              	.LCFI5:
+  76              		.cfi_def_cfa_register 7
+  77              	.L3:
+  85:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE BEGIN HardFault_IRQn 0 */
+  86:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+  87:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE END HardFault_IRQn 0 */
+  88:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   while (1)
+  78              		.loc 1 88 9 discriminator 1
+  79 0004 FEE7     		b	.L3
+  80              		.cfi_endproc
+  81              	.LFE134:
+  83              		.section	.text.MemManage_Handler,"ax",%progbits
+  84              		.align	1
+  85              		.global	MemManage_Handler
+  86              		.syntax unified
+  87              		.thumb
+ARM GAS  /tmp/ccWqVFXy.s 			page 4
+
+
+  88              		.thumb_func
+  89              		.fpu fpv4-sp-d16
+  91              	MemManage_Handler:
+  92              	.LFB135:
+  89:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   {
+  90:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****     /* USER CODE BEGIN W1_HardFault_IRQn 0 */
+  91:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****     /* USER CODE END W1_HardFault_IRQn 0 */
+  92:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   }
+  93:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** }
+  94:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+  95:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /**
+  96:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   * @brief This function handles Memory management fault.
+  97:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   */
+  98:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** void MemManage_Handler(void)
+  99:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** {
+  93              		.loc 1 99 1
+  94              		.cfi_startproc
+  95              		@ args = 0, pretend = 0, frame = 0
+  96              		@ frame_needed = 1, uses_anonymous_args = 0
+  97              		@ link register save eliminated.
+  98 0000 80B4     		push	{r7}
+  99              	.LCFI6:
+ 100              		.cfi_def_cfa_offset 4
+ 101              		.cfi_offset 7, -4
+ 102 0002 00AF     		add	r7, sp, #0
+ 103              	.LCFI7:
+ 104              		.cfi_def_cfa_register 7
+ 105              	.L5:
+ 100:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE BEGIN MemoryManagement_IRQn 0 */
+ 101:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+ 102:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE END MemoryManagement_IRQn 0 */
+ 103:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   while (1)
+ 106              		.loc 1 103 9 discriminator 1
+ 107 0004 FEE7     		b	.L5
+ 108              		.cfi_endproc
+ 109              	.LFE135:
+ 111              		.section	.text.BusFault_Handler,"ax",%progbits
+ 112              		.align	1
+ 113              		.global	BusFault_Handler
+ 114              		.syntax unified
+ 115              		.thumb
+ 116              		.thumb_func
+ 117              		.fpu fpv4-sp-d16
+ 119              	BusFault_Handler:
+ 120              	.LFB136:
+ 104:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   {
+ 105:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****     /* USER CODE BEGIN W1_MemoryManagement_IRQn 0 */
+ 106:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****     /* USER CODE END W1_MemoryManagement_IRQn 0 */
+ 107:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   }
+ 108:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** }
+ 109:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+ 110:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /**
+ 111:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   * @brief This function handles Prefetch fault, memory access fault.
+ 112:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   */
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** void BusFault_Handler(void)
+ 114:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** {
+ 121              		.loc 1 114 1
+ARM GAS  /tmp/ccWqVFXy.s 			page 5
+
+
+ 122              		.cfi_startproc
+ 123              		@ args = 0, pretend = 0, frame = 0
+ 124              		@ frame_needed = 1, uses_anonymous_args = 0
+ 125              		@ link register save eliminated.
+ 126 0000 80B4     		push	{r7}
+ 127              	.LCFI8:
+ 128              		.cfi_def_cfa_offset 4
+ 129              		.cfi_offset 7, -4
+ 130 0002 00AF     		add	r7, sp, #0
+ 131              	.LCFI9:
+ 132              		.cfi_def_cfa_register 7
+ 133              	.L7:
+ 115:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE BEGIN BusFault_IRQn 0 */
+ 116:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+ 117:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE END BusFault_IRQn 0 */
+ 118:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   while (1)
+ 134              		.loc 1 118 9 discriminator 1
+ 135 0004 FEE7     		b	.L7
+ 136              		.cfi_endproc
+ 137              	.LFE136:
+ 139              		.section	.text.UsageFault_Handler,"ax",%progbits
+ 140              		.align	1
+ 141              		.global	UsageFault_Handler
+ 142              		.syntax unified
+ 143              		.thumb
+ 144              		.thumb_func
+ 145              		.fpu fpv4-sp-d16
+ 147              	UsageFault_Handler:
+ 148              	.LFB137:
+ 119:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   {
+ 120:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****     /* USER CODE BEGIN W1_BusFault_IRQn 0 */
+ 121:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****     /* USER CODE END W1_BusFault_IRQn 0 */
+ 122:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   }
+ 123:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** }
+ 124:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+ 125:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /**
+ 126:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   * @brief This function handles Undefined instruction or illegal state.
+ 127:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   */
+ 128:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** void UsageFault_Handler(void)
+ 129:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** {
+ 149              		.loc 1 129 1
+ 150              		.cfi_startproc
+ 151              		@ args = 0, pretend = 0, frame = 0
+ 152              		@ frame_needed = 1, uses_anonymous_args = 0
+ 153              		@ link register save eliminated.
+ 154 0000 80B4     		push	{r7}
+ 155              	.LCFI10:
+ 156              		.cfi_def_cfa_offset 4
+ 157              		.cfi_offset 7, -4
+ 158 0002 00AF     		add	r7, sp, #0
+ 159              	.LCFI11:
+ 160              		.cfi_def_cfa_register 7
+ 161              	.L9:
+ 130:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE BEGIN UsageFault_IRQn 0 */
+ 131:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+ 132:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE END UsageFault_IRQn 0 */
+ 133:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   while (1)
+ARM GAS  /tmp/ccWqVFXy.s 			page 6
+
+
+ 162              		.loc 1 133 9 discriminator 1
+ 163 0004 FEE7     		b	.L9
+ 164              		.cfi_endproc
+ 165              	.LFE137:
+ 167              		.section	.text.SVC_Handler,"ax",%progbits
+ 168              		.align	1
+ 169              		.global	SVC_Handler
+ 170              		.syntax unified
+ 171              		.thumb
+ 172              		.thumb_func
+ 173              		.fpu fpv4-sp-d16
+ 175              	SVC_Handler:
+ 176              	.LFB138:
+ 134:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   {
+ 135:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****     /* USER CODE BEGIN W1_UsageFault_IRQn 0 */
+ 136:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****     /* USER CODE END W1_UsageFault_IRQn 0 */
+ 137:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   }
+ 138:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** }
+ 139:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+ 140:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /**
+ 141:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   * @brief This function handles System service call via SWI instruction.
+ 142:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   */
+ 143:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** void SVC_Handler(void)
+ 144:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** {
+ 177              		.loc 1 144 1
+ 178              		.cfi_startproc
+ 179              		@ args = 0, pretend = 0, frame = 0
+ 180              		@ frame_needed = 1, uses_anonymous_args = 0
+ 181              		@ link register save eliminated.
+ 182 0000 80B4     		push	{r7}
+ 183              	.LCFI12:
+ 184              		.cfi_def_cfa_offset 4
+ 185              		.cfi_offset 7, -4
+ 186 0002 00AF     		add	r7, sp, #0
+ 187              	.LCFI13:
+ 188              		.cfi_def_cfa_register 7
+ 145:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE BEGIN SVCall_IRQn 0 */
+ 146:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+ 147:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE END SVCall_IRQn 0 */
+ 148:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE BEGIN SVCall_IRQn 1 */
+ 149:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+ 150:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE END SVCall_IRQn 1 */
+ 151:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** }
+ 189              		.loc 1 151 1
+ 190 0004 00BF     		nop
+ 191 0006 BD46     		mov	sp, r7
+ 192              	.LCFI14:
+ 193              		.cfi_def_cfa_register 13
+ 194              		@ sp needed
+ 195 0008 5DF8047B 		ldr	r7, [sp], #4
+ 196              	.LCFI15:
+ 197              		.cfi_restore 7
+ 198              		.cfi_def_cfa_offset 0
+ 199 000c 7047     		bx	lr
+ 200              		.cfi_endproc
+ 201              	.LFE138:
+ 203              		.section	.text.DebugMon_Handler,"ax",%progbits
+ARM GAS  /tmp/ccWqVFXy.s 			page 7
+
+
+ 204              		.align	1
+ 205              		.global	DebugMon_Handler
+ 206              		.syntax unified
+ 207              		.thumb
+ 208              		.thumb_func
+ 209              		.fpu fpv4-sp-d16
+ 211              	DebugMon_Handler:
+ 212              	.LFB139:
+ 152:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+ 153:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /**
+ 154:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   * @brief This function handles Debug monitor.
+ 155:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   */
+ 156:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** void DebugMon_Handler(void)
+ 157:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** {
+ 213              		.loc 1 157 1
+ 214              		.cfi_startproc
+ 215              		@ args = 0, pretend = 0, frame = 0
+ 216              		@ frame_needed = 1, uses_anonymous_args = 0
+ 217              		@ link register save eliminated.
+ 218 0000 80B4     		push	{r7}
+ 219              	.LCFI16:
+ 220              		.cfi_def_cfa_offset 4
+ 221              		.cfi_offset 7, -4
+ 222 0002 00AF     		add	r7, sp, #0
+ 223              	.LCFI17:
+ 224              		.cfi_def_cfa_register 7
+ 158:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE BEGIN DebugMonitor_IRQn 0 */
+ 159:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+ 160:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE END DebugMonitor_IRQn 0 */
+ 161:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE BEGIN DebugMonitor_IRQn 1 */
+ 162:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+ 163:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE END DebugMonitor_IRQn 1 */
+ 164:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** }
+ 225              		.loc 1 164 1
+ 226 0004 00BF     		nop
+ 227 0006 BD46     		mov	sp, r7
+ 228              	.LCFI18:
+ 229              		.cfi_def_cfa_register 13
+ 230              		@ sp needed
+ 231 0008 5DF8047B 		ldr	r7, [sp], #4
+ 232              	.LCFI19:
+ 233              		.cfi_restore 7
+ 234              		.cfi_def_cfa_offset 0
+ 235 000c 7047     		bx	lr
+ 236              		.cfi_endproc
+ 237              	.LFE139:
+ 239              		.section	.text.LPUART1_IRQHandler,"ax",%progbits
+ 240              		.align	1
+ 241              		.global	LPUART1_IRQHandler
+ 242              		.syntax unified
+ 243              		.thumb
+ 244              		.thumb_func
+ 245              		.fpu fpv4-sp-d16
+ 247              	LPUART1_IRQHandler:
+ 248              	.LFB140:
+ 165:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+ 166:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /******************************************************************************/
+ARM GAS  /tmp/ccWqVFXy.s 			page 8
+
+
+ 167:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* STM32L4xx Peripheral Interrupt Handlers                                    */
+ 168:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* Add here the Interrupt Handlers for the used peripherals.                  */
+ 169:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* For the available peripheral interrupt handler names,                      */
+ 170:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /* please refer to the startup file (startup_stm32l4xx.s).                    */
+ 171:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /******************************************************************************/
+ 172:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+ 173:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** /**
+ 174:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   * @brief This function handles LPUART1 global interrupt.
+ 175:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   */
+ 176:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** void LPUART1_IRQHandler(void)
+ 177:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** {
+ 249              		.loc 1 177 1
+ 250              		.cfi_startproc
+ 251              		@ args = 0, pretend = 0, frame = 0
+ 252              		@ frame_needed = 1, uses_anonymous_args = 0
+ 253 0000 80B5     		push	{r7, lr}
+ 254              	.LCFI20:
+ 255              		.cfi_def_cfa_offset 8
+ 256              		.cfi_offset 7, -8
+ 257              		.cfi_offset 14, -4
+ 258 0002 00AF     		add	r7, sp, #0
+ 259              	.LCFI21:
+ 260              		.cfi_def_cfa_register 7
+ 178:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE BEGIN LPUART1_IRQn 0 */
+ 179:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+ 180:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE END LPUART1_IRQn 0 */
+ 181:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   HAL_UART_IRQHandler(&hlpuart1);
+ 261              		.loc 1 181 3
+ 262 0004 0248     		ldr	r0, .L13
+ 263 0006 FFF7FEFF 		bl	HAL_UART_IRQHandler
+ 182:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE BEGIN LPUART1_IRQn 1 */
+ 183:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** 
+ 184:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c ****   /* USER CODE END LPUART1_IRQn 1 */
+ 185:/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Src/stm32l4xx_it.c **** }
+ 264              		.loc 1 185 1
+ 265 000a 00BF     		nop
+ 266 000c 80BD     		pop	{r7, pc}
+ 267              	.L14:
+ 268 000e 00BF     		.align	2
+ 269              	.L13:
+ 270 0010 00000000 		.word	hlpuart1
+ 271              		.cfi_endproc
+ 272              	.LFE140:
+ 274              		.text
+ 275              	.Letext0:
+ 276              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 277              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ 278              		.file 4 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 279              		.file 5 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/system_stm32l4xx.h"
+ 280              		.file 6 "/home/fanxinhao/Work/LiteOS_Lab_2/targets/STM32L476RG_NB476/Inc/stm32l476xx.h"
+ 281              		.file 7 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/loc
+ 282              		.file 8 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_ty
+ 283              		.file 9 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/lib/gcc/arm-none-eabi/9.2.1/i
+ 284              		.file 10 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/re
+ 285              		.file 11 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 286              		.file 12 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ 287              		.file 13 "/home/fanxinhao/Work/LiteOS_Lab_2/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l
+ARM GAS  /tmp/ccWqVFXy.s 			page 9
+
+
+ 288              		.file 14 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_typedef.h"
+ 289              		.file 15 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_config.h"
+ 290              		.file 16 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/include/los_err.h"
+ 291              		.file 17 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/os/liteos/arch/arm/arm-m/include/los_hwi.h"
+ARM GAS  /tmp/ccWqVFXy.s 			page 10
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stm32l4xx_it.c
+     /tmp/ccWqVFXy.s:18     .text.NMI_Handler:0000000000000000 $t
+     /tmp/ccWqVFXy.s:26     .text.NMI_Handler:0000000000000000 NMI_Handler
+     /tmp/ccWqVFXy.s:56     .text.HardFault_Handler:0000000000000000 $t
+     /tmp/ccWqVFXy.s:63     .text.HardFault_Handler:0000000000000000 HardFault_Handler
+     /tmp/ccWqVFXy.s:84     .text.MemManage_Handler:0000000000000000 $t
+     /tmp/ccWqVFXy.s:91     .text.MemManage_Handler:0000000000000000 MemManage_Handler
+     /tmp/ccWqVFXy.s:112    .text.BusFault_Handler:0000000000000000 $t
+     /tmp/ccWqVFXy.s:119    .text.BusFault_Handler:0000000000000000 BusFault_Handler
+     /tmp/ccWqVFXy.s:140    .text.UsageFault_Handler:0000000000000000 $t
+     /tmp/ccWqVFXy.s:147    .text.UsageFault_Handler:0000000000000000 UsageFault_Handler
+     /tmp/ccWqVFXy.s:168    .text.SVC_Handler:0000000000000000 $t
+     /tmp/ccWqVFXy.s:175    .text.SVC_Handler:0000000000000000 SVC_Handler
+     /tmp/ccWqVFXy.s:204    .text.DebugMon_Handler:0000000000000000 $t
+     /tmp/ccWqVFXy.s:211    .text.DebugMon_Handler:0000000000000000 DebugMon_Handler
+     /tmp/ccWqVFXy.s:240    .text.LPUART1_IRQHandler:0000000000000000 $t
+     /tmp/ccWqVFXy.s:247    .text.LPUART1_IRQHandler:0000000000000000 LPUART1_IRQHandler
+     /tmp/ccWqVFXy.s:270    .text.LPUART1_IRQHandler:0000000000000010 $d
+
+UNDEFINED SYMBOLS
+HAL_UART_IRQHandler
+hlpuart1

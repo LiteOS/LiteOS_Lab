@@ -1,0 +1,549 @@
+ARM GAS  /tmp/cctNTKwd.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"crc32.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.rodata.crc_table,"a"
+  18              		.align	2
+  21              	crc_table:
+  22 0000 00000000 		.word	0
+  23 0004 96300777 		.word	1996959894
+  24 0008 2C610EEE 		.word	-301047508
+  25 000c BA510999 		.word	-1727442502
+  26 0010 19C46D07 		.word	124634137
+  27 0014 8FF46A70 		.word	1886057615
+  28 0018 35A563E9 		.word	-379345611
+  29 001c A395649E 		.word	-1637575261
+  30 0020 3288DB0E 		.word	249268274
+  31 0024 A4B8DC79 		.word	2044508324
+  32 0028 1EE9D5E0 		.word	-522852066
+  33 002c 88D9D297 		.word	-1747789432
+  34 0030 2B4CB609 		.word	162941995
+  35 0034 BD7CB17E 		.word	2125561021
+  36 0038 072DB8E7 		.word	-407360249
+  37 003c 911DBF90 		.word	-1866523247
+  38 0040 6410B71D 		.word	498536548
+  39 0044 F220B06A 		.word	1789927666
+  40 0048 4871B9F3 		.word	-205950648
+  41 004c DE41BE84 		.word	-2067906082
+  42 0050 7DD4DA1A 		.word	450548861
+  43 0054 EBE4DD6D 		.word	1843258603
+  44 0058 51B5D4F4 		.word	-187386543
+  45 005c C785D383 		.word	-2083289657
+  46 0060 56986C13 		.word	325883990
+  47 0064 C0A86B64 		.word	1684777152
+  48 0068 7AF962FD 		.word	-43845254
+  49 006c ECC9658A 		.word	-1973040660
+  50 0070 4F5C0114 		.word	335633487
+  51 0074 D96C0663 		.word	1661365465
+  52 0078 633D0FFA 		.word	-99664541
+  53 007c F50D088D 		.word	-1928851979
+  54 0080 C8206E3B 		.word	997073096
+  55 0084 5E10694C 		.word	1281953886
+  56 0088 E44160D5 		.word	-715111964
+  57 008c 727167A2 		.word	-1570279054
+  58 0090 D1E4033C 		.word	1006888145
+  59 0094 47D4044B 		.word	1258607687
+ARM GAS  /tmp/cctNTKwd.s 			page 2
+
+
+  60 0098 FD850DD2 		.word	-770865667
+  61 009c 6BB50AA5 		.word	-1526024853
+  62 00a0 FAA8B535 		.word	901097722
+  63 00a4 6C98B242 		.word	1119000684
+  64 00a8 D6C9BBDB 		.word	-608450090
+  65 00ac 40F9BCAC 		.word	-1396901568
+  66 00b0 E36CD832 		.word	853044451
+  67 00b4 755CDF45 		.word	1172266101
+  68 00b8 CF0DD6DC 		.word	-589951537
+  69 00bc 593DD1AB 		.word	-1412350631
+  70 00c0 AC30D926 		.word	651767980
+  71 00c4 3A00DE51 		.word	1373503546
+  72 00c8 8051D7C8 		.word	-925412992
+  73 00cc 1661D0BF 		.word	-1076862698
+  74 00d0 B5F4B421 		.word	565507253
+  75 00d4 23C4B356 		.word	1454621731
+  76 00d8 9995BACF 		.word	-809855591
+  77 00dc 0FA5BDB8 		.word	-1195530993
+  78 00e0 9EB80228 		.word	671266974
+  79 00e4 0888055F 		.word	1594198024
+  80 00e8 B2D90CC6 		.word	-972236366
+  81 00ec 24E90BB1 		.word	-1324619484
+  82 00f0 877C6F2F 		.word	795835527
+  83 00f4 114C6858 		.word	1483230225
+  84 00f8 AB1D61C1 		.word	-1050600021
+  85 00fc 3D2D66B6 		.word	-1234817731
+  86 0100 9041DC76 		.word	1994146192
+  87 0104 0671DB01 		.word	31158534
+  88 0108 BC20D298 		.word	-1731059524
+  89 010c 2A10D5EF 		.word	-271249366
+  90 0110 8985B171 		.word	1907459465
+  91 0114 1FB5B606 		.word	112637215
+  92 0118 A5E4BF9F 		.word	-1614814043
+  93 011c 33D4B8E8 		.word	-390540237
+  94 0120 A2C90778 		.word	2013776290
+  95 0124 34F9000F 		.word	251722036
+  96 0128 8EA80996 		.word	-1777751922
+  97 012c 18980EE1 		.word	-519137256
+  98 0130 BB0D6A7F 		.word	2137656763
+  99 0134 2D3D6D08 		.word	141376813
+ 100 0138 976C6491 		.word	-1855689577
+ 101 013c 015C63E6 		.word	-429695999
+ 102 0140 F4516B6B 		.word	1802195444
+ 103 0144 62616C1C 		.word	476864866
+ 104 0148 D8306585 		.word	-2056965928
+ 105 014c 4E0062F2 		.word	-228458418
+ 106 0150 ED95066C 		.word	1812370925
+ 107 0154 7BA5011B 		.word	453092731
+ 108 0158 C1F40882 		.word	-2113342271
+ 109 015c 57C40FF5 		.word	-183516073
+ 110 0160 C6D9B065 		.word	1706088902
+ 111 0164 50E9B712 		.word	314042704
+ 112 0168 EAB8BE8B 		.word	-1950435094
+ 113 016c 7C88B9FC 		.word	-54949764
+ 114 0170 DF1DDD62 		.word	1658658271
+ 115 0174 492DDA15 		.word	366619977
+ 116 0178 F37CD38C 		.word	-1932296973
+ARM GAS  /tmp/cctNTKwd.s 			page 3
+
+
+ 117 017c 654CD4FB 		.word	-69972891
+ 118 0180 5861B24D 		.word	1303535960
+ 119 0184 CE51B53A 		.word	984961486
+ 120 0188 7400BCA3 		.word	-1547960204
+ 121 018c E230BBD4 		.word	-725929758
+ 122 0190 41A5DF4A 		.word	1256170817
+ 123 0194 D795D83D 		.word	1037604311
+ 124 0198 6DC4D1A4 		.word	-1529756563
+ 125 019c FBF4D6D3 		.word	-740887301
+ 126 01a0 6AE96943 		.word	1131014506
+ 127 01a4 FCD96E34 		.word	879679996
+ 128 01a8 468867AD 		.word	-1385723834
+ 129 01ac D0B860DA 		.word	-631195440
+ 130 01b0 732D0444 		.word	1141124467
+ 131 01b4 E51D0333 		.word	855842277
+ 132 01b8 5F4C0AAA 		.word	-1442165665
+ 133 01bc C97C0DDD 		.word	-586318647
+ 134 01c0 3C710550 		.word	1342533948
+ 135 01c4 AA410227 		.word	654459306
+ 136 01c8 10100BBE 		.word	-1106571248
+ 137 01cc 86200CC9 		.word	-921952122
+ 138 01d0 25B56857 		.word	1466479909
+ 139 01d4 B3856F20 		.word	544179635
+ 140 01d8 09D466B9 		.word	-1184443383
+ 141 01dc 9FE461CE 		.word	-832445281
+ 142 01e0 0EF9DE5E 		.word	1591671054
+ 143 01e4 98C9D929 		.word	702138776
+ 144 01e8 2298D0B0 		.word	-1328506846
+ 145 01ec B4A8D7C7 		.word	-942167884
+ 146 01f0 173DB359 		.word	1504918807
+ 147 01f4 810DB42E 		.word	783551873
+ 148 01f8 3B5CBDB7 		.word	-1212326853
+ 149 01fc AD6CBAC0 		.word	-1061524307
+ 150 0200 2083B8ED 		.word	-306674912
+ 151 0204 B6B3BF9A 		.word	-1698712650
+ 152 0208 0CE2B603 		.word	62317068
+ 153 020c 9AD2B174 		.word	1957810842
+ 154 0210 3947D5EA 		.word	-355121351
+ 155 0214 AF77D29D 		.word	-1647151185
+ 156 0218 1526DB04 		.word	81470997
+ 157 021c 8316DC73 		.word	1943803523
+ 158 0220 120B63E3 		.word	-480048366
+ 159 0224 843B6494 		.word	-1805370492
+ 160 0228 3E6A6D0D 		.word	225274430
+ 161 022c A85A6A7A 		.word	2053790376
+ 162 0230 0BCF0EE4 		.word	-468791541
+ 163 0234 9DFF0993 		.word	-1828061283
+ 164 0238 27AE000A 		.word	167816743
+ 165 023c B19E077D 		.word	2097651377
+ 166 0240 44930FF0 		.word	-267414716
+ 167 0244 D2A30887 		.word	-2029476910
+ 168 0248 68F2011E 		.word	503444072
+ 169 024c FEC20669 		.word	1762050814
+ 170 0250 5D5762F7 		.word	-144550051
+ 171 0254 CB676580 		.word	-2140837941
+ 172 0258 71366C19 		.word	426522225
+ 173 025c E7066B6E 		.word	1852507879
+ARM GAS  /tmp/cctNTKwd.s 			page 4
+
+
+ 174 0260 761BD4FE 		.word	-19653770
+ 175 0264 E02BD389 		.word	-1982649376
+ 176 0268 5A7ADA10 		.word	282753626
+ 177 026c CC4ADD67 		.word	1742555852
+ 178 0270 6FDFB9F9 		.word	-105259153
+ 179 0274 F9EFBE8E 		.word	-1900089351
+ 180 0278 43BEB717 		.word	397917763
+ 181 027c D58EB060 		.word	1622183637
+ 182 0280 E8A3D6D6 		.word	-690576408
+ 183 0284 7E93D1A1 		.word	-1580100738
+ 184 0288 C4C2D838 		.word	953729732
+ 185 028c 52F2DF4F 		.word	1340076626
+ 186 0290 F167BBD1 		.word	-776247311
+ 187 0294 6757BCA6 		.word	-1497606297
+ 188 0298 DD06B53F 		.word	1068828381
+ 189 029c 4B36B248 		.word	1219638859
+ 190 02a0 DA2B0DD8 		.word	-670225446
+ 191 02a4 4C1B0AAF 		.word	-1358292148
+ 192 02a8 F64A0336 		.word	906185462
+ 193 02ac 607A0441 		.word	1090812512
+ 194 02b0 C3EF60DF 		.word	-547295293
+ 195 02b4 55DF67A8 		.word	-1469587627
+ 196 02b8 EF8E6E31 		.word	829329135
+ 197 02bc 79BE6946 		.word	1181335161
+ 198 02c0 8CB361CB 		.word	-882789492
+ 199 02c4 1A8366BC 		.word	-1134132454
+ 200 02c8 A0D26F25 		.word	628085408
+ 201 02cc 36E26852 		.word	1382605366
+ 202 02d0 95770CCC 		.word	-871598187
+ 203 02d4 03470BBB 		.word	-1156888829
+ 204 02d8 B9160222 		.word	570562233
+ 205 02dc 2F260555 		.word	1426400815
+ 206 02e0 BE3BBAC5 		.word	-977650754
+ 207 02e4 280BBDB2 		.word	-1296233688
+ 208 02e8 925AB42B 		.word	733239954
+ 209 02ec 046AB35C 		.word	1555261956
+ 210 02f0 A7FFD7C2 		.word	-1026031705
+ 211 02f4 31CFD0B5 		.word	-1244606671
+ 212 02f8 8B9ED92C 		.word	752459403
+ 213 02fc 1DAEDE5B 		.word	1541320221
+ 214 0300 B0C2649B 		.word	-1687895376
+ 215 0304 26F263EC 		.word	-328994266
+ 216 0308 9CA36A75 		.word	1969922972
+ 217 030c 0A936D02 		.word	40735498
+ 218 0310 A906099C 		.word	-1677130071
+ 219 0314 3F360EEB 		.word	-351390145
+ 220 0318 85670772 		.word	1913087877
+ 221 031c 13570005 		.word	83908371
+ 222 0320 824ABF95 		.word	-1782625662
+ 223 0324 147AB8E2 		.word	-491226604
+ 224 0328 AE2BB17B 		.word	2075208622
+ 225 032c 381BB60C 		.word	213261112
+ 226 0330 9B8ED292 		.word	-1831694693
+ 227 0334 0DBED5E5 		.word	-438977011
+ 228 0338 B7EFDC7C 		.word	2094854071
+ 229 033c 21DFDB0B 		.word	198958881
+ 230 0340 D4D2D386 		.word	-2032938284
+ARM GAS  /tmp/cctNTKwd.s 			page 5
+
+
+ 231 0344 42E2D4F1 		.word	-237706686
+ 232 0348 F8B3DD68 		.word	1759359992
+ 233 034c 6E83DA1F 		.word	534414190
+ 234 0350 CD16BE81 		.word	-2118248755
+ 235 0354 5B26B9F6 		.word	-155638181
+ 236 0358 E177B06F 		.word	1873836001
+ 237 035c 7747B718 		.word	414664567
+ 238 0360 E65A0888 		.word	-2012718362
+ 239 0364 706A0FFF 		.word	-15766928
+ 240 0368 CA3B0666 		.word	1711684554
+ 241 036c 5C0B0111 		.word	285281116
+ 242 0370 FF9E658F 		.word	-1889165569
+ 243 0374 69AE62F8 		.word	-127750551
+ 244 0378 D3FF6B61 		.word	1634467795
+ 245 037c 45CF6C16 		.word	376229701
+ 246 0380 78E20AA0 		.word	-1609899400
+ 247 0384 EED20DD7 		.word	-686959890
+ 248 0388 5483044E 		.word	1308918612
+ 249 038c C2B30339 		.word	956543938
+ 250 0390 612667A7 		.word	-1486412191
+ 251 0394 F71660D0 		.word	-799009033
+ 252 0398 4D476949 		.word	1231636301
+ 253 039c DB776E3E 		.word	1047427035
+ 254 03a0 4A6AD1AE 		.word	-1362007478
+ 255 03a4 DC5AD6D9 		.word	-640263460
+ 256 03a8 660BDF40 		.word	1088359270
+ 257 03ac F03BD837 		.word	936918000
+ 258 03b0 53AEBCA9 		.word	-1447252397
+ 259 03b4 C59EBBDE 		.word	-558129467
+ 260 03b8 7FCFB247 		.word	1202900863
+ 261 03bc E9FFB530 		.word	817233897
+ 262 03c0 1CF2BDBD 		.word	-1111625188
+ 263 03c4 8AC2BACA 		.word	-893730166
+ 264 03c8 3093B353 		.word	1404277552
+ 265 03cc A6A3B424 		.word	615818150
+ 266 03d0 0536D0BA 		.word	-1160759803
+ 267 03d4 9306D7CD 		.word	-841546093
+ 268 03d8 2957DE54 		.word	1423857449
+ 269 03dc BF67D923 		.word	601450431
+ 270 03e0 2E7A66B3 		.word	-1285129682
+ 271 03e4 B84A61C4 		.word	-1000256840
+ 272 03e8 021B685D 		.word	1567103746
+ 273 03ec 942B6F2A 		.word	711928724
+ 274 03f0 37BE0BB4 		.word	-1274298825
+ 275 03f4 A18E0CC3 		.word	-1022587231
+ 276 03f8 1BDF055A 		.word	1510334235
+ 277 03fc 8DEF022D 		.word	755167117
+ 278              		.section	.text.calc_crc32,"ax",%progbits
+ 279              		.align	1
+ 280              		.global	calc_crc32
+ 281              		.arch armv7e-m
+ 282              		.syntax unified
+ 283              		.thumb
+ 284              		.thumb_func
+ 285              		.fpu fpv4-sp-d16
+ 287              	calc_crc32:
+ 288              	.LFB0:
+ARM GAS  /tmp/cctNTKwd.s 			page 6
+
+
+ 289              		.file 1 "/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c"
+   1:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c **** /*----------------------------------------------------------------------------
+   2:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * All rights reserved.
+   4:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * are permitted provided that the following conditions are met:
+   6:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * conditions and the following disclaimer.
+   8:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * provided with the distribution.
+  11:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * permission.
+  14:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  *---------------------------------------------------------------------------*/
+  26:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c **** /*----------------------------------------------------------------------------
+  27:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * Notice of Export Control Law
+  28:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * ===============================================
+  29:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  * applicable export control laws and regulations.
+  33:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  *---------------------------------------------------------------------------*/
+  34:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c **** /**
+  35:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  *  DATE                AUTHOR      INSTRUCTION
+  36:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  *  2019-05-30 15:20  zhangqianfu  The first version
+  37:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  *
+  38:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****  */
+  39:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c **** 
+  40:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c **** #include <stdint.h>
+  41:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c **** #include <stddef.h>
+  42:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c **** 
+  43:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c **** static const uint32_t crc_table[256] =
+  44:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c **** {
+  45:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419,
+  46:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x706af48f, 0xe963a535, 0x9e6495a3, 0x0edb8832, 0x79dcb8a4,
+  47:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0xe0d5e91e, 0x97d2d988, 0x09b64c2b, 0x7eb17cbd, 0xe7b82d07,
+  48:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x90bf1d91, 0x1db71064, 0x6ab020f2, 0xf3b97148, 0x84be41de,
+  49:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x1adad47d, 0x6ddde4eb, 0xf4d4b551, 0x83d385c7, 0x136c9856,
+  50:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x646ba8c0, 0xfd62f97a, 0x8a65c9ec, 0x14015c4f, 0x63066cd9,
+  51:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0xfa0f3d63, 0x8d080df5, 0x3b6e20c8, 0x4c69105e, 0xd56041e4,
+  52:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0xa2677172, 0x3c03e4d1, 0x4b04d447, 0xd20d85fd, 0xa50ab56b,
+  53:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x35b5a8fa, 0x42b2986c, 0xdbbbc9d6, 0xacbcf940, 0x32d86ce3,
+  54:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x45df5c75, 0xdcd60dcf, 0xabd13d59, 0x26d930ac, 0x51de003a,
+  55:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0xc8d75180, 0xbfd06116, 0x21b4f4b5, 0x56b3c423, 0xcfba9599,
+  56:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0xb8bda50f, 0x2802b89e, 0x5f058808, 0xc60cd9b2, 0xb10be924,
+ARM GAS  /tmp/cctNTKwd.s 			page 7
+
+
+  57:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x2f6f7c87, 0x58684c11, 0xc1611dab, 0xb6662d3d, 0x76dc4190,
+  58:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x01db7106, 0x98d220bc, 0xefd5102a, 0x71b18589, 0x06b6b51f,
+  59:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x9fbfe4a5, 0xe8b8d433, 0x7807c9a2, 0x0f00f934, 0x9609a88e,
+  60:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0xe10e9818, 0x7f6a0dbb, 0x086d3d2d, 0x91646c97, 0xe6635c01,
+  61:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x6b6b51f4, 0x1c6c6162, 0x856530d8, 0xf262004e, 0x6c0695ed,
+  62:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x1b01a57b, 0x8208f4c1, 0xf50fc457, 0x65b0d9c6, 0x12b7e950,
+  63:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x8bbeb8ea, 0xfcb9887c, 0x62dd1ddf, 0x15da2d49, 0x8cd37cf3,
+  64:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0xfbd44c65, 0x4db26158, 0x3ab551ce, 0xa3bc0074, 0xd4bb30e2,
+  65:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x4adfa541, 0x3dd895d7, 0xa4d1c46d, 0xd3d6f4fb, 0x4369e96a,
+  66:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x346ed9fc, 0xad678846, 0xda60b8d0, 0x44042d73, 0x33031de5,
+  67:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0xaa0a4c5f, 0xdd0d7cc9, 0x5005713c, 0x270241aa, 0xbe0b1010,
+  68:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0xc90c2086, 0x5768b525, 0x206f85b3, 0xb966d409, 0xce61e49f,
+  69:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x5edef90e, 0x29d9c998, 0xb0d09822, 0xc7d7a8b4, 0x59b33d17,
+  70:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x2eb40d81, 0xb7bd5c3b, 0xc0ba6cad, 0xedb88320, 0x9abfb3b6,
+  71:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x03b6e20c, 0x74b1d29a, 0xead54739, 0x9dd277af, 0x04db2615,
+  72:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x73dc1683, 0xe3630b12, 0x94643b84, 0x0d6d6a3e, 0x7a6a5aa8,
+  73:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0xe40ecf0b, 0x9309ff9d, 0x0a00ae27, 0x7d079eb1, 0xf00f9344,
+  74:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x8708a3d2, 0x1e01f268, 0x6906c2fe, 0xf762575d, 0x806567cb,
+  75:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x196c3671, 0x6e6b06e7, 0xfed41b76, 0x89d32be0, 0x10da7a5a,
+  76:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x67dd4acc, 0xf9b9df6f, 0x8ebeeff9, 0x17b7be43, 0x60b08ed5,
+  77:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0xd6d6a3e8, 0xa1d1937e, 0x38d8c2c4, 0x4fdff252, 0xd1bb67f1,
+  78:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0xa6bc5767, 0x3fb506dd, 0x48b2364b, 0xd80d2bda, 0xaf0a1b4c,
+  79:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x36034af6, 0x41047a60, 0xdf60efc3, 0xa867df55, 0x316e8eef,
+  80:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x4669be79, 0xcb61b38c, 0xbc66831a, 0x256fd2a0, 0x5268e236,
+  81:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0xcc0c7795, 0xbb0b4703, 0x220216b9, 0x5505262f, 0xc5ba3bbe,
+  82:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0xb2bd0b28, 0x2bb45a92, 0x5cb36a04, 0xc2d7ffa7, 0xb5d0cf31,
+  83:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x2cd99e8b, 0x5bdeae1d, 0x9b64c2b0, 0xec63f226, 0x756aa39c,
+  84:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x026d930a, 0x9c0906a9, 0xeb0e363f, 0x72076785, 0x05005713,
+  85:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x95bf4a82, 0xe2b87a14, 0x7bb12bae, 0x0cb61b38, 0x92d28e9b,
+  86:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0xe5d5be0d, 0x7cdcefb7, 0x0bdbdf21, 0x86d3d2d4, 0xf1d4e242,
+  87:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x68ddb3f8, 0x1fda836e, 0x81be16cd, 0xf6b9265b, 0x6fb077e1,
+  88:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x18b74777, 0x88085ae6, 0xff0f6a70, 0x66063bca, 0x11010b5c,
+  89:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x8f659eff, 0xf862ae69, 0x616bffd3, 0x166ccf45, 0xa00ae278,
+  90:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0xd70dd2ee, 0x4e048354, 0x3903b3c2, 0xa7672661, 0xd06016f7,
+  91:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x4969474d, 0x3e6e77db, 0xaed16a4a, 0xd9d65adc, 0x40df0b66,
+  92:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x37d83bf0, 0xa9bcae53, 0xdebb9ec5, 0x47b2cf7f, 0x30b5ffe9,
+  93:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0xbdbdf21c, 0xcabac28a, 0x53b39330, 0x24b4a3a6, 0xbad03605,
+  94:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0xcdd70693, 0x54de5729, 0x23d967bf, 0xb3667a2e, 0xc4614ab8,
+  95:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x5d681b02, 0x2a6f2b94, 0xb40bbe37, 0xc30c8ea1, 0x5a05df1b,
+  96:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     0x2d02ef8d
+  97:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c **** };
+  98:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c **** 
+  99:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c **** uint32_t calc_crc32(uint32_t origin, const void *buf, int32_t len)
+ 100:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c **** {
+ 290              		.loc 1 100 1
+ 291              		.cfi_startproc
+ 292              		@ args = 0, pretend = 0, frame = 32
+ 293              		@ frame_needed = 1, uses_anonymous_args = 0
+ 294              		@ link register save eliminated.
+ 295 0000 80B4     		push	{r7}
+ 296              	.LCFI0:
+ 297              		.cfi_def_cfa_offset 4
+ 298              		.cfi_offset 7, -4
+ 299 0002 89B0     		sub	sp, sp, #36
+ 300              	.LCFI1:
+ 301              		.cfi_def_cfa_offset 40
+ 302 0004 00AF     		add	r7, sp, #0
+ARM GAS  /tmp/cctNTKwd.s 			page 8
+
+
+ 303              	.LCFI2:
+ 304              		.cfi_def_cfa_register 7
+ 305 0006 F860     		str	r0, [r7, #12]
+ 306 0008 B960     		str	r1, [r7, #8]
+ 307 000a 7A60     		str	r2, [r7, #4]
+ 101:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     int i;
+ 102:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     uint32_t crc;
+ 103:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     const uint8_t *pbuf;
+ 104:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c **** 
+ 105:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     if (NULL == buf || len < 0)
+ 308              		.loc 1 105 8
+ 309 000c BB68     		ldr	r3, [r7, #8]
+ 310 000e 002B     		cmp	r3, #0
+ 311 0010 02D0     		beq	.L2
+ 312              		.loc 1 105 21 discriminator 1
+ 313 0012 7B68     		ldr	r3, [r7, #4]
+ 314 0014 002B     		cmp	r3, #0
+ 315 0016 01DA     		bge	.L3
+ 316              	.L2:
+ 106:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     {
+ 107:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****         return 0;
+ 317              		.loc 1 107 16
+ 318 0018 0023     		movs	r3, #0
+ 319 001a 1FE0     		b	.L4
+ 320              	.L3:
+ 108:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     }
+ 109:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c **** 
+ 110:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     pbuf = (const uint8_t *)buf;
+ 321              		.loc 1 110 10
+ 322 001c BB68     		ldr	r3, [r7, #8]
+ 323 001e 7B61     		str	r3, [r7, #20]
+ 111:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     crc = ~origin;
+ 324              		.loc 1 111 9
+ 325 0020 FB68     		ldr	r3, [r7, #12]
+ 326 0022 DB43     		mvns	r3, r3
+ 327 0024 BB61     		str	r3, [r7, #24]
+ 112:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c **** 
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     for (i = 0; i < len; ++i)
+ 328              		.loc 1 113 12
+ 329 0026 0023     		movs	r3, #0
+ 330 0028 FB61     		str	r3, [r7, #28]
+ 331              		.loc 1 113 5
+ 332 002a 11E0     		b	.L5
+ 333              	.L6:
+ 114:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     {
+ 115:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****         crc = (crc >> 8) ^ crc_table[((crc & 0xff) ^ pbuf[i]) & 0xff];
+ 334              		.loc 1 115 20 discriminator 3
+ 335 002c BB69     		ldr	r3, [r7, #24]
+ 336 002e 1A0A     		lsrs	r2, r3, #8
+ 337              		.loc 1 115 44 discriminator 3
+ 338 0030 BB69     		ldr	r3, [r7, #24]
+ 339 0032 DBB2     		uxtb	r3, r3
+ 340              		.loc 1 115 58 discriminator 3
+ 341 0034 F969     		ldr	r1, [r7, #28]
+ 342 0036 7869     		ldr	r0, [r7, #20]
+ 343 0038 0144     		add	r1, r1, r0
+ 344 003a 0978     		ldrb	r1, [r1]	@ zero_extendqisi2
+ARM GAS  /tmp/cctNTKwd.s 			page 9
+
+
+ 345              		.loc 1 115 52 discriminator 3
+ 346 003c 4B40     		eors	r3, r3, r1
+ 347              		.loc 1 115 63 discriminator 3
+ 348 003e DBB2     		uxtb	r3, r3
+ 349              		.loc 1 115 37 discriminator 3
+ 350 0040 0949     		ldr	r1, .L7
+ 351 0042 51F82330 		ldr	r3, [r1, r3, lsl #2]
+ 352              		.loc 1 115 13 discriminator 3
+ 353 0046 5340     		eors	r3, r3, r2
+ 354 0048 BB61     		str	r3, [r7, #24]
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     {
+ 355              		.loc 1 113 26 discriminator 3
+ 356 004a FB69     		ldr	r3, [r7, #28]
+ 357 004c 0133     		adds	r3, r3, #1
+ 358 004e FB61     		str	r3, [r7, #28]
+ 359              	.L5:
+ 113:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     {
+ 360              		.loc 1 113 5 discriminator 1
+ 361 0050 FA69     		ldr	r2, [r7, #28]
+ 362 0052 7B68     		ldr	r3, [r7, #4]
+ 363 0054 9A42     		cmp	r2, r3
+ 364 0056 E9DB     		blt	.L6
+ 116:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     }
+ 117:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c **** 
+ 118:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c ****     return ~crc;
+ 365              		.loc 1 118 12
+ 366 0058 BB69     		ldr	r3, [r7, #24]
+ 367 005a DB43     		mvns	r3, r3
+ 368              	.L4:
+ 119:/home/fanxinhao/Work/LiteOS_Lab_2/iot_link/crc/crc32.c **** }
+ 369              		.loc 1 119 1
+ 370 005c 1846     		mov	r0, r3
+ 371 005e 2437     		adds	r7, r7, #36
+ 372              	.LCFI3:
+ 373              		.cfi_def_cfa_offset 4
+ 374 0060 BD46     		mov	sp, r7
+ 375              	.LCFI4:
+ 376              		.cfi_def_cfa_register 13
+ 377              		@ sp needed
+ 378 0062 5DF8047B 		ldr	r7, [sp], #4
+ 379              	.LCFI5:
+ 380              		.cfi_restore 7
+ 381              		.cfi_def_cfa_offset 0
+ 382 0066 7047     		bx	lr
+ 383              	.L8:
+ 384              		.align	2
+ 385              	.L7:
+ 386 0068 00000000 		.word	crc_table
+ 387              		.cfi_endproc
+ 388              	.LFE0:
+ 390              		.text
+ 391              	.Letext0:
+ 392              		.file 2 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/machine
+ 393              		.file 3 "/home/fanxinhao/toolchain/gcc-arm-none-eabi-9-2019-q4-major/arm-none-eabi/include/sys/_st
+ARM GAS  /tmp/cctNTKwd.s 			page 10
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 crc32.c
+     /tmp/cctNTKwd.s:18     .rodata.crc_table:0000000000000000 $d
+     /tmp/cctNTKwd.s:21     .rodata.crc_table:0000000000000000 crc_table
+     /tmp/cctNTKwd.s:279    .text.calc_crc32:0000000000000000 $t
+     /tmp/cctNTKwd.s:287    .text.calc_crc32:0000000000000000 calc_crc32
+     /tmp/cctNTKwd.s:386    .text.calc_crc32:0000000000000068 $d
+
+NO UNDEFINED SYMBOLS
