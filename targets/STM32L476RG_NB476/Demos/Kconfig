@@ -1,0 +1,13 @@
+choice Demo
+	optional
+	prompt "User Defined Demo"
+	config Demo_None
+		bool "none"
+	config Demo_Use_Coap
+		bool "Report temperature"
+endchoice
+
+config USER_DEMO
+	string
+	default "use_coap_demo" if Demo_Use_Coap
+	default "none"

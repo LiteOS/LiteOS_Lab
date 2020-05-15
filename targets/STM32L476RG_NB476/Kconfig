@@ -1,0 +1,58 @@
+#
+# Copyright (c) [2020] Huawei Technologies Co.,Ltd.All rights reserved.
+#
+# LiteOS NOVA is licensed under the Mulan PSL v1.
+# You can use this software according to the terms and conditions of the Mulan PSL v1.
+# You may obtain a copy of Mulan PSL v1 at:
+#
+#   http://license.coscl.org.cn/MulanPSL
+#
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
+# FIT FOR A PARTICULAR PURPOSE.
+# See the Mulan PSL v1 for more details.
+#
+
+menu "LiteOS for STM32L476_NB476 Project configuration For IoT Link"
+
+comment "This is a demo project and hope you enjoy it"
+
+config ARCH_CPU_TYPE
+   string "Select the cpu arch:armv7-m armv6-m riscv32 x86-64"
+   default "armv7-m"
+   
+config UARTAT_RCVMAX
+    int  "Config the at uart receive buffer size"
+    default 2048
+
+config UARTAT_BAUDRATE
+    int  "Config the at uart baud rate"
+    default 9600
+    
+config UARTAT_DEVNAME
+    string "Config the at uart device name"
+    default "atdev"
+          
+rsource "../../iot_link/Kconfig"
+
+
+choice Demo
+    optional
+    prompt "User Defined Demo"
+    config Demo_None
+        bool "none"
+	config Demo_Use_Coap
+     	bool "Report temperature"
+         select OC_COAP
+         select SHELL_ENABLE
+         select AT_ENABLE
+         select BOUDICA120
+endchoice
+
+config USER_DEMO
+    string
+	default "use_coap_demo" if Demo_Use_Coap
+    default "none"
+
+        
+endmenu
