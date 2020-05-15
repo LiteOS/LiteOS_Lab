@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -31,83 +31,52 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-#include "ota_adaptor.h"
-#include "partition.h"
-#include "flash_adaptor.h"
-#include "common.h"
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2020-05-14 17:18  zhangqianfu  The first version
+ *
+ */
+#ifndef LITEOS_LAB_IOT_LINK_LINK_OTA_LOADER_OTA_UPGRADE_H_
+#define LITEOS_LAB_IOT_LINK_LINK_OTA_LOADER_OTA_UPGRADE_H_
 
-static int ota_flag_read(ota_flag_t *flag)
+#include <ota_img.h>
+
+typedef enum _en_ota_err_t
 {
-  if (flag != NULL) {
-    (void) printf("SPI FLAG R\n");
-    return storage_partition_read(PART_OTA_FLAG1, (void *)flag, sizeof(ota_flag_t), 0);
-  }
-  return ERR;
-}
+    EN_OTA_SUCCESS = 0,
 
-static int ota_flag_write(ota_flag_t *flag)
-{
-  if (flag != NULL) {
-    (void) printf("SPI FLAG W:state %d\n", flag->cur_state);
-    return storage_partition_write(PART_OTA_FLAG1, (void *)flag, sizeof(ota_flag_t), 0);
-  }
-  return ERR;
-}
+    EN_OTA_ERR_UNKNOWN = 0X80,
 
-static int ota_bin_read(uint32_t offset, void *buf, int len)
-{
-  if (buf != NULL) {
-    (void) printf("SPI BIN R: %08d %08d\n", offset, len);
-    return storage_partition_read(PART_OTA_IMG_DOWNLOAD, buf, len, offset);
-  }
-  return ERR;
-}
+    EN_OTA_ERR_DOWNLOADREAD,
+    EN_OTA_ERR_DOWNLOADWRITE,
+    EN_OTA_ERR_DOWNLOADERRASE,
+    EN_OTA_ERR_DOWNLOADFLUSH,
+    EN_OTA_ERR_NODOWNLOADIMG,
+    EN_OTA_ERR_DOWNLOADIMGSIZE,
 
-static int ota_bin_write(uint32_t offset, void *buf, int len)
-{
-  if (buf != NULL) {
-    (void) printf("SPI BIN W: %08d %08d\n", offset, len);
-    return storage_partition_write(PART_OTA_IMG_DOWNLOAD, buf, len, offset);
-  }
-  return ERR;
-}
+    EN_OTA_ERR_BACKUPREAD,
+    EN_OTA_ERR_BACKUPWRITE,
+    EN_OTA_ERR_BACKUPERASE,
+    EN_OTA_ERR_BACKUPFLUSH,
+    EN_OTA_ERR_NOBACKUPIMG,
+    EN_OTA_ERR_BACKUPIMGSIZE,
 
-static ota_storage_t  prv_ota_flag_s =
-{
-   .name = "fire_ota_spi_storage",
-   {
-    .flag_read = ota_flag_read,
-    .flag_write = ota_flag_write,
-    .bin_read = ota_bin_read,
-    .bin_write = ota_bin_write,
-   }
-};
+    EN_OTA_ERR_RUNNNINGREAD,
+    EN_OTA_ERR_RUNNINGWRITE,
+    EN_OTA_ERR_RUNNINGERASE,
+    EN_OTA_ERR_RUNNINGFLUSH,
+    EN_OTA_ERR_NORUNNINGIMG,
+    EN_OTA_ERR_RUNNINGIMGSIZE,
 
-/* 0: full upgrade, 1: diff upgrade */
-EN_PACKAGE_TYPE get_package_type(const uint8_t *data, uint32_t len)
-{
-  ota_binary_info *info;
-  if (data == NULL ||len <= sizeof(ota_binary_info))
-    return ERR;
+    EN_OTA_ERR_DECOMPRESSMETHOD,
+    EN_OTA_ERR_PATCHHEAD,
+    EN_OTA_ERR_PATCH,
+}en_ota_err_t;
 
-  info = (ota_binary_info *)data;
-  return info->pack_type;
-}
 
-void ota_update_upgrade_result(ota_flag_t *flag, uint32_t result)
-{
-  if (flag != NULL) {
-    flag->cur_state = EN_OTA_STATUS_UPGRADED;
-    flag->ret_upgrade = result;
-    flag->crc = calc_crc32(0, flag, sizeof(*flag) - sizeof(flag->crc));
-    ota_storage_flag_write(flag);
-  }
-}
+en_ota_err_t ota_patch(en_ota_type_t otatype, int download_filesize);
+en_ota_err_t ota_backup(en_ota_type_t  otatype);
+en_ota_err_t ota_recover(en_ota_type_t  otatype);
 
-void hal_init_ota(void)
-{
-  (void) printf("HAL OTA init\n");
-  flash_adaptor_init();
-  ota_storage_install(&prv_ota_flag_s);
-}
 
+#endif /* LITEOS_LAB_IOT_LINK_LINK_OTA_LOADER_OTA_UPGRADE_H_ */

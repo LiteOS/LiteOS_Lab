@@ -13,31 +13,21 @@
 # See the Mulan PSL v1 for more details.
 #
 
+menu "OTA"
 
-menu "Dtls  configuration"
-
-config DTLS_AL_ENABLE
-    bool "enable the dtls abstract layer "
+#OTA_ENABLE ONLY ENABLE THE IMG COMPONENTS, AND  THIS NEEDED BY THE FOTA OR SOTA DOWNLOAD RPOCESS
+config OTA_ENABLE
+    bool  "Enable the Link OTA"
     default y
-    
-if DTLS_AL_ENABLE
-    choice
-    prompt "please select one dtls implement"
-    config MBEDTLS_ENABLE
-        bool  "select mbedtls(polar ssl) as the (d)tls"
-        
-    config OPENSSL_ENABLE
-        bool  "select openssl as the (d)tls"
-    
-    config NEWTLS_ENABLE
-        bool  "select the unknown one, and you should implement it"            
-        
-    endchoice 
-    
-    if MBEDTLS_ENABLE   
-        rsource "./mbedtls/kconfig_mbedtls"
-    endif
-                 
-endif
 
+if OTA_ENABLE
+    config OTA_VERSIONLEN
+        int  "Version string length"
+        default 32
+#OTA_PATCH, SUPPLY THE METHOD DO THE BACKUP UPGRADE RECOVER
+    config OTA_PATCH
+        bool "Enable the img patch"
+        default n        
+endif    
+                 
 endmenu

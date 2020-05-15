@@ -59,6 +59,10 @@ ifeq ($(CONFIG_OCMQTT_ENABLE), y)
     ifeq ($(CONFIG_EC2XV1_ENABLE),y)
     	include $(iot_link_root)/oc/oc_mqtt/ec2x_oc/ec2x_oc.mk
    	endif 	
+   	
+   	ifeq ($(CONFIG_OCMQTT_OTA),y)
+   	   	include $(iot_link_root)/oc/oc_mqtt/ota_https/ota_https.mk
+   	endif
     	
 
 endif

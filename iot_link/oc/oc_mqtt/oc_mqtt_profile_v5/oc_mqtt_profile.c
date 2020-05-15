@@ -527,9 +527,6 @@ int oc_mqtt_profile_getshadow(char *deviceid,oc_mqtt_profile_shadowget_t *payloa
     osal_free(msg);
 
     return ret;
-
-
-
 }
 
 

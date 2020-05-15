@@ -33,67 +33,49 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-29 15:00  zhangqianfu  The first version  
+ *  2020-05-08 11:22  zhangqianfu  The first version
  *
  */
+#ifndef LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_OTA_OTA_HTTPS_H_
+#define LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_OTA_OTA_HTTPS_H_
 
 
-#include <string.h>
-#include <stdlib.h>
-#include <osal.h>
-#include <shell.h>
-
-#ifdef cn_app_bin_addr
-
-///< here remember to close all the interrupt here--TODO
-
-static int jump_addr(void *addr)
-{
-    unsigned int start_cmd;
-
-    int (*jump_func)(void );
-
-    start_cmd = *(unsigned int *)(addr);
-
-    jump_func = (int (*)(void))(start_cmd);
-
-    jump_func();
-
-
-    return 0;  ///< maybe never come back
-}
-
-
-int loader_main(void)
-{
-
-    jump_addr((void *)cn_app_bin_addr);
-
-    return 0;  ///< maybe never come back
-}
-
-static int loader_main_shell(int argc, const char *argv[])
-{
-    void *addr = (void *)cn_app_bin_addr;
-    if(argc == 2)
-    {
-        addr = (void *)strtol(argv[1],NULL,0);
-    }
-
-    jump_addr(addr);
-
-    return 0;///< never comeback
-}
-
-OSSHELL_EXPORT_CMD(loader_main_shell,"loader","loader");
-
-#else
-
-#error("no application address defined, could not boot\n\r");
-
+///< this file implement the downloading profile
+#ifndef CONFIG_OCMQTT_HTTPS_CACHELEN
+#define CONFIG_OCMQTT_HTTPS_CACHELEN  1024
 #endif
 
+#ifndef CONFIG_OCMQTT_HTTPS_TIMEOUT
+#define CONFIG_OCMQTT_HTTPS_TIMEOUT   (10*1000)
+#endif
+
+///< this function used for write the data to the flash
+typedef int (*fn_binwrite)(int offset, uint8_t *buf, int len);
+typedef enum
+{
+    EN_HTTPS_DOWNLOADLOG_BEGINDDOWNLOAD = 0,
+    EN_HTTPS_DOWNLOADLOG_DOWNLOADTIMEOUT,
+    EN_HTTPS_DOWNLOADLOG_DOWNLOADSUCCESS,
+    EN_HTTPS_DOWNLOADLOG_NETCONNERR,
+    EN_HTTPS_DOWNLOADLOG_PARAERR,
+    EN_HTTPS_DOWNLOADLOG_MEMERR,
+}en_https_downloadlog_t;
+const char *https_eventlogname(en_https_downloadlog_t type);
+typedef int (*fn_httpsdownload_event)(en_https_downloadlog_t type);
+typedef struct
+{
+    const char *url;
+    const char *signatural;
+    const char *authorize;
+    const char *version;
+    int                 file_size;
+    int                 file_offset;
+    uint8_t             cache[CONFIG_OCMQTT_HTTPS_CACHELEN];
+    int                 ota_type;
+    fn_httpsdownload_event eventlog;
+    fn_binwrite         file_write;
+}ota_https_para_t;
+int ota_https_download(ota_https_para_t *param);
 
 
-
-
+#endif /* LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_OTA_OTA_HTTPS_H_ */

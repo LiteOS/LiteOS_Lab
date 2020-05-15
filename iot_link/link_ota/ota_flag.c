@@ -31,56 +31,70 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-
-/**@defgroup agent AgentTiny
- * @defgroup agenttiny Agenttiny Definition
- * @ingroup agent
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2020-05-08 20:54  zhangqianfu  The first version
+ *
  */
-#ifndef OTA_API_H
-#define OTA_API_H
 
-#include <stdbool.h>
-#include <stdint.h>
+#include <string.h>
+#include <crc.h>
+#include <link_log.h>
+#include <ota_flag.h>
 
+typedef struct
+{
+    ota_flag_t flag[EN_OTA_TYPE_LAST];
+}ota_flag_cb_t;
 
-#ifdef __cplusplus
-extern "C" {
+#ifndef CONFIG_SOTA_VERSION
+#define CONFIG_SOTA_VERSION  "SOTAV1.0"
+#endif
+
+#ifndef CONFIG_FOTA_VERSION
+#define CONFIG_FOTA_VERSION  "FOTAV1.0"
 #endif
 
 
-typedef enum
+int ota_flag_save(en_ota_type_t  otatype, ota_flag_t *flag)
 {
-    OTA_FULL_SOFTWARE,
-    OTA_DIFF_SOFTWARE,
-    OTA_UPDATE_INFO
-} ota_flash_type_e;
+    int ret = -1;
 
+    if(otatype < EN_OTA_TYPE_LAST)
+    {
+        flag->crc = calc_crc32(0,&flag->info, sizeof(flag->info));
+        ota_img_erase(otatype,EN_OTA_IMG_FLAG);
+        ret = ota_img_write(otatype,EN_OTA_IMG_FLAG,0,flag,sizeof(ota_flag_t));
+        ota_img_flush(otatype,EN_OTA_IMG_FLAG);
+    }
 
-typedef struct
-{
-    const char *rsa_N; /* RSA public key N, should valid all the time */
-    const char *rsa_E; /* RSA public key E, should valid all the time */
-}ota_key_s;
-
-typedef enum
-{
-    OTA_DOWNLOAD_SUCCESS,
-    OTA_DOWNLOAD_FAIL
-} ota_download_result_e;
-
-
-typedef struct
-{
-    int (*read_flash)(ota_flash_type_e type, void *buf, int32_t len, uint32_t location);
-    int (*write_flash)(ota_flash_type_e type, const void *buf, int32_t len, uint32_t location);
-    uint32_t flash_block_size;
-    ota_key_s key;
-}ota_opt_s;
-
-
-#ifdef __cplusplus
+    return ret;
 }
-#endif
 
-#endif
+int ota_flag_get(en_ota_type_t  otatype,ota_flag_t *flag)
+{
+    int *ret = -1;
+    uint32_t    crc;
+    if((NULL != flag) && (otatype < EN_OTA_TYPE_LAST))
+    {
+        if(0 != ota_img_read(EN_OTA_TYPE_FOTA,EN_OTA_IMG_FLAG,0,flag,sizeof(ota_flag_t)))
+        {
+            LINK_LOG_ERROR("FLAG READ ERROR");
+            goto EXIT;
+        }
+        crc = calc_crc32(0,&flag->info, sizeof(flag->info));
+        if(crc != flag->crc)
+        {
+            LINK_LOG_ERROR("FLAG DESTROYED--CRC ERR");
+            goto EXIT;
+        }
+        ret = 0;
+    }
+EXIT:
+    return ret;
+}
+
+
+
+
 

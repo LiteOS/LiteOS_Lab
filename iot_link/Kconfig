@@ -40,8 +40,10 @@ config LINKDEMO_ENABLE
     bool  "Enable IoT Link Demo"
     default y    
             
-rsource "./stimer/kconfig_stimer"    
-    
+rsource "./stimer/kconfig_stimer"
+
+rsource "./link_ota/Kconfig"
+
 rsource "./network/kconfig_network"
 
 rsource "./oc/Kconfig"

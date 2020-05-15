@@ -33,15 +33,102 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-28 09:41  zhangqianfu  The first version  
+ *  2020-05-08 20:56  zhangqianfu  The first version
  *
  */
-#ifndef LITEOS_LAB_IOT_LINK_LOADER_LOADER_H_
-#define LITEOS_LAB_IOT_LINK_LOADER_LOADER_H_
+
+
+#include <ota_img.h>
+
+static int imgerase_func(uintptr_t  arg, int imgsize)
+{
+    LINK_LOG_DEBUG("TEST IMG EARASE:img:%s imgsize:%d",(char *)arg, imgsize);
+    return 0;
+}
+
+static int imgflush_func(uintptr_t  arg, int imgsize)
+{
+    LINK_LOG_DEBUG("TEST IMG FLUSH:img:%s imgsize:%d",(char *)arg, imgsize);
+    return 0;
+}
 
 
 
+static int imgread_func(uintptr_t  arg, int offset, void *buf, int len)
+{
+    LINK_LOG_DEBUG("TEST IMG READ:img:%s offset:%d len:%d",(char *)arg, offset, len);
+    return 0;
+}
 
 
+static int imgwrite_func(uintptr_t  arg, int offset,const void *buf, int len)
+{
+    LINK_LOG_DEBUG("TEST IMG WRITE:img:%s offset:%d len:%d",(char *)arg, offset, len);
+    return 0;
+}
 
-#endif /* LITEOS_LAB_IOT_LINK_LOADER_LOADER_H_ */
+static const ota_img_t  g_otaimg_flag = {
+    .name = "FLAG",
+    .type = EN_OTA_IMG_FLAG,
+    .arg = (uintptr_t)"FLAGIMG",
+    {
+       .write = imgwrite_func,
+       .read = imgread_func,
+       .erase = imgerase_func,
+       .erase = imgflush_func,
+    },
+};
+
+static const ota_img_t  g_otaimg_running = {
+    .name = "RUNIMG",
+    .type = EN_OTA_IMG_RUNNING,
+    .arg = (uintptr_t)"RUNNINGIMG",
+    {
+        .write = imgwrite_func,
+        .read = imgread_func,
+        .erase = imgerase_func,
+        .flush = imgflush_func,
+    },
+};
+
+static const ota_img_t  g_otaimg_backup = {
+    .name =  "BACKUP",
+    .type =  EN_OTA_IMG_BACKUP,
+    .arg =  (uintptr_t)"BACKUPIMG",
+    {
+        .write = imgwrite_func,
+        .read = imgread_func,
+        .erase = imgerase_func,
+        .flush = imgflush_func,
+    },
+};
+
+static const ota_img_t  g_otaimg_download = {
+    .name = "DOWNLOAD",
+    .type = EN_OTA_IMG_DOWNLOAD,
+    .arg = (uintptr_t)"DOWNLOADIMG",
+    {
+        .write = imgwrite_func,
+        .read = imgread_func,
+        .erase = imgerase_func,
+        .flush = imgflush_func,
+    },
+};
+
+__attribute__((weak)) int ota_img_init()
+{
+    ota_img_bind(EN_OTA_TYPE_FOTA,&g_otaimg_flag);
+    ota_img_bind(EN_OTA_TYPE_SOTA,&g_otaimg_flag);
+
+    ota_img_bind(EN_OTA_TYPE_FOTA,&g_otaimg_backup);
+    ota_img_bind(EN_OTA_TYPE_SOTA,&g_otaimg_backup);
+
+    ota_img_bind(EN_OTA_TYPE_FOTA,&g_otaimg_running);
+    ota_img_bind(EN_OTA_TYPE_SOTA,&g_otaimg_running);
+
+    ota_img_bind(EN_OTA_TYPE_FOTA,&g_otaimg_download);
+    ota_img_bind(EN_OTA_TYPE_SOTA,&g_otaimg_download);
+
+    return 0;
+}
+

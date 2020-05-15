@@ -43,21 +43,7 @@ include $(iot_link_root)/network/network.mk
 include $(iot_link_root)/oc/oc.mk
 
 #configure the ota	
-include $(iot_link_root)/ota/ota.mk
-
-#configure the loader	
-include $(iot_link_root)/loader/loader.mk
-
-ifeq ($(CONFIG_LOADER_ENABLE), y)
-    #configure the upgrade patch
-    include $(iot_link_root)/upgrade_patch/upgrade_patch.mk
-    
-    #configure the compress algo
-    include $(iot_link_root)/compression_algo/compression_algo.mk
-endif
-
-#configure storage
-include $(iot_link_root)/storage/storage.mk
+include $(iot_link_root)/link_ota/build.mk
 
 #configure demos
 include $(iot_link_root)/demos/demos.mk

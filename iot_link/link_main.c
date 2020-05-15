@@ -49,8 +49,8 @@
 
 
 #define  CN_LINK_VERSION_MAJOR      2
-#define  CN_LINK_VERSION_MINOR      1
-#define  CN_LINK_VERSION_FEATURE    2
+#define  CN_LINK_VERSION_MINOR      2
+#define  CN_LINK_VERSION_FEATURE    1
 
 
 static char s_link_mainversion[64];
@@ -87,18 +87,9 @@ int link_main(void *args)
 
     /* add loader code here */
 #ifdef CONFIG_OTA_ENABLE
-    extern void hal_init_ota(void);
-    hal_init_ota();
+    extern int ota_img_init();
+    ota_img_init();
 #endif
-
-#ifdef CONFIG_LOADER_ENABLE
-    LINK_LOG_DEBUG("loader main!\n");
-    extern int ota_detection();
-    ota_detection();
-    loader_main();
-    return;
-#endif
-    /* add loader code here end */
 
 ///< install the driver framework
 #ifdef CONFIG_DRIVER_ENABLE
