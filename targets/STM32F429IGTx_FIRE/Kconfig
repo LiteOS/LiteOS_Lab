@@ -23,13 +23,15 @@ config ARCH_CPU_TYPE
    
 choice 
     prompt "Uart2/3 reuse PB11 PA2 WITH ETHERNET MAC"
-    config ETHERNETMAC
-        bool  "Enable Ethernet MAC" 
-    config UART_AT
-        bool "Enable UART_AT"   
+    config PB11PA2_NONE
+        bool  "Not Used"
+    config PB11PA2_UARTAT
+        bool "Enable PB11PA2 AS UART"
+    config PB11PA2_MAC
+        bool "Enable PN11PA2 AS MAC" 
 endchoice   
 
-if UART_AT    
+if PB11PA2_UARTAT    
     config UARTAT_RCVMAX
         int  "Config the at uart receive buffer size"
         default 2048
@@ -41,8 +43,19 @@ if UART_AT
     config UARTAT_DEVNAME
         string "Config the at uart device name"
         default "atdev"
-endif        
-        
+endif
+
+config OTA_APP_ENABLE
+    bool "Enable the ota app"
+    default n
+    select OTA_ENABLE
+      
+    
+config OTA_LOADER_ENABLE
+    bool "Enable the ota loader"
+    default n
+    select OTA_ENABLE
+    select OTA_PATCH    
           
 rsource "../../iot_link/Kconfig"
     

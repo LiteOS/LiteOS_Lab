@@ -31,56 +31,51 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-
-/**@defgroup agent AgentTiny
- * @defgroup agenttiny Agenttiny Definition
- * @ingroup agent
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2020-05-08 11:22  zhangqianfu  The first version
+ *
  */
-#ifndef OTA_API_H
-#define OTA_API_H
-
-#include <stdbool.h>
-#include <stdint.h>
+#ifndef LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_OTA_OTA_HTTPS_H_
+#define LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_OTA_OTA_HTTPS_H_
 
 
-#ifdef __cplusplus
-extern "C" {
+///< this file implement the downloading profile
+#ifndef CONFIG_OCMQTT_HTTPS_CACHELEN
+#define CONFIG_OCMQTT_HTTPS_CACHELEN  1024
 #endif
 
+#ifndef CONFIG_OCMQTT_HTTPS_TIMEOUT
+#define CONFIG_OCMQTT_HTTPS_TIMEOUT   (10*1000)
+#endif
 
+///< this function used for write the data to the flash
+typedef int (*fn_binwrite)(int offset, uint8_t *buf, int len);
 typedef enum
 {
-    OTA_FULL_SOFTWARE,
-    OTA_DIFF_SOFTWARE,
-    OTA_UPDATE_INFO
-} ota_flash_type_e;
-
-
+    EN_HTTPS_DOWNLOADLOG_BEGINDDOWNLOAD = 0,
+    EN_HTTPS_DOWNLOADLOG_DOWNLOADTIMEOUT,
+    EN_HTTPS_DOWNLOADLOG_DOWNLOADSUCCESS,
+    EN_HTTPS_DOWNLOADLOG_NETCONNERR,
+    EN_HTTPS_DOWNLOADLOG_PARAERR,
+    EN_HTTPS_DOWNLOADLOG_MEMERR,
+}en_https_downloadlog_t;
+const char *https_eventlogname(en_https_downloadlog_t type);
+typedef int (*fn_httpsdownload_event)(en_https_downloadlog_t type);
 typedef struct
 {
-    const char *rsa_N; /* RSA public key N, should valid all the time */
-    const char *rsa_E; /* RSA public key E, should valid all the time */
-}ota_key_s;
-
-typedef enum
-{
-    OTA_DOWNLOAD_SUCCESS,
-    OTA_DOWNLOAD_FAIL
-} ota_download_result_e;
-
-
-typedef struct
-{
-    int (*read_flash)(ota_flash_type_e type, void *buf, int32_t len, uint32_t location);
-    int (*write_flash)(ota_flash_type_e type, const void *buf, int32_t len, uint32_t location);
-    uint32_t flash_block_size;
-    ota_key_s key;
-}ota_opt_s;
+    const char *url;
+    const char *signatural;
+    const char *authorize;
+    const char *version;
+    int                 file_size;
+    int                 file_offset;
+    uint8_t             cache[CONFIG_OCMQTT_HTTPS_CACHELEN];
+    int                 ota_type;
+    fn_httpsdownload_event eventlog;
+    fn_binwrite         file_write;
+}ota_https_para_t;
+int ota_https_download(ota_https_para_t *param);
 
 
-#ifdef __cplusplus
-}
-#endif
-
-#endif
-
+#endif /* LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_OTA_OTA_HTTPS_H_ */

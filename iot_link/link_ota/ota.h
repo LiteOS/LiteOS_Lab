@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------
- * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+ * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -31,53 +31,14 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-
-#include "ota_port.h"
-#include "common.h"
-#include <string.h>
-#include <stdlib.h>
-#include <board.h>
-#include "partition.h"
-#include "flash_adaptor.h"
-
-static int hal_check_flash_param(ota_flash_type_e type, int32_t len, uint32_t location)
-{
-    return OK;
-}
-
-static int hal_read_flash(ota_flash_type_e type, void *buf, int32_t len, uint32_t location)
-{
-    if (hal_check_flash_param(type, len, location) != OK)
-    {
-        return ERR;
-    }
-
-    return storage_partition_read(type, buf, len, location);
-}
-
-static int hal_write_flash(ota_flash_type_e type, const void *buf, int32_t len, uint32_t location)
-{
-    if (hal_check_flash_param(type, len, location) != OK)
-    {
-        return ERR;
-    }
-
-    return storage_partition_write(type, buf, len, location);
-}
-
-void hal_get_ota_opt(ota_opt_s *opt)
-{
-    if (opt == NULL)
-    {
-        HAL_OTA_LOG("opt NULL");
-        return;
-    }
-
-    (void) memset(opt, 0, sizeof(*opt));
-    opt->read_flash = hal_read_flash;
-    opt->write_flash = hal_write_flash;
-    opt->flash_block_size = FLASH_BLOCK_SIZE;
-}
+/**
+ *  DATE                AUTHOR      INSTRUCTION
+ *  2020-05-14 17:17  zhangqianfu  The first version
+ *
+ */
+#ifndef LITEOS_LAB_IOT_LINK_LINK_OTA_OTA_H_
+#define LITEOS_LAB_IOT_LINK_LINK_OTA_OTA_H_
 
 
 
+#endif /* LITEOS_LAB_IOT_LINK_LINK_OTA_OTA_H_ */

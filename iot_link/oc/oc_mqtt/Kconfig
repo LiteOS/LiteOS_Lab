@@ -24,6 +24,11 @@ if  OCMQTT_ENABLE
     config OCMQTT_ATCMD
         bool  "Enable the OCMQTT AT COMMAND API"
         default y
+        
+    config OCMQTT_OTA
+        bool  "Enable the OCMQTT  OTA"
+        default y    
+        select OTA_ENABLE
     
     config OCMQTT_DEMOENABLE
         bool "Enable the OCMQTT STANDARD DEMO"

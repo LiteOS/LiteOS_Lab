@@ -33,94 +33,107 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-09-18 15:39  zhangqianfu  The first version
+ *  2020-05-08 20:33  zhangqianfu  The first version
  *
  */
-#include <stdint.h>
-#include <stddef.h>
-#include <string.h>
-#include <ota_flag.h>
-#include <crc.h>
 
-static const ota_storage_t *s_ota_storage = NULL;
+#include <ota_img.h>
 
-int  ota_storage_install(const ota_storage_t *device)
+typedef struct
+{
+    const ota_img_t  *ota[EN_OTA_TYPE_LAST][EN_OTA_IMG_LAST];
+}ota_img_cb_t;
+static ota_img_cb_t  g_img_cb_t;
+
+
+int ota_img_bind(en_ota_type_t otatype, const ota_img_t *img)
 {
     int ret = -1;
-    if((NULL == s_ota_storage) &&\
-       (NULL != device->name))
+    if ((NULL != img)&&(otatype < EN_OTA_TYPE_LAST) && (img->type  < EN_OTA_IMG_LAST) )
     {
-        s_ota_storage = device;
+        g_img_cb_t.ota[otatype][img->type] = img;
         ret = 0;
     }
-
     return ret;
 }
 
-int  ota_storage_uninstall(const ota_storage_t *device)
-{
 
-    s_ota_storage = NULL;
-
-    return 0;
-}
-
-
-int ota_storage_bin_read(int offset, void *buf, int len)
+int ota_img_read(en_ota_type_t otatype, en_ota_img_type_t imgtype,int offset, void *buf, int len)
 {
     int ret = -1;
-
-    if((NULL != s_ota_storage) && (NULL != s_ota_storage->opt.bin_read))
+    const ota_img_t *img;
+    if((otatype < EN_OTA_TYPE_LAST) && (imgtype  < EN_OTA_IMG_LAST) && (NULL != g_img_cb_t.ota[otatype][imgtype]))
     {
-        ret = s_ota_storage->opt.bin_read(offset,buf,len);
+        img = g_img_cb_t.ota[otatype][imgtype];
+        if(NULL != img->opt.read)
+        {
+            ret = img->opt.read(img->arg,offset, buf, len);
+        }
     }
 
     return ret;
 }
 
-int ota_storage_bin_write(int offset, void *msg, int len)
+int ota_img_write(en_ota_type_t otatype, en_ota_img_type_t imgtype,int offset,const void *buf, int len)
 {
     int ret = -1;
-
-    if((NULL != s_ota_storage) && (NULL != s_ota_storage->opt.bin_write))
+    const ota_img_t *img;
+    if((otatype < EN_OTA_TYPE_LAST) && (imgtype  < EN_OTA_IMG_LAST) && (NULL != g_img_cb_t.ota[otatype][imgtype]))
     {
-        ret = s_ota_storage->opt.bin_write(offset,msg,len);
+        img = g_img_cb_t.ota[otatype][imgtype];
+        if(NULL != img->opt.write)
+        {
+            ret = img->opt.write(img->arg,offset, buf, len);
+        }
     }
+    return ret;
+}
 
+int ota_img_erase(en_ota_type_t otatype, en_ota_img_type_t imgtype)
+{
+    int ret = -1;
+    const ota_img_t *img;
+    if((otatype < EN_OTA_TYPE_LAST) && (imgtype  < EN_OTA_IMG_LAST) && (NULL != g_img_cb_t.ota[otatype][imgtype]))
+    {
+        img = g_img_cb_t.ota[otatype][imgtype];
+        if(NULL != img->opt.erase)
+        {
+            ret = img->opt.erase(img->arg,img->size);
+        }
+    }
+    return ret;
+}
+
+int ota_img_flush(en_ota_type_t otatype, en_ota_img_type_t imgtype)
+{
+    int ret = -1;
+    const ota_img_t *img;
+    if((otatype < EN_OTA_TYPE_LAST) && (imgtype  < EN_OTA_IMG_LAST) && (NULL != g_img_cb_t.ota[otatype][imgtype]))
+    {
+        img = g_img_cb_t.ota[otatype][imgtype];
+        if(NULL != img->opt.flush)
+        {
+            ret = img->opt.flush(img->arg,img->size);
+        }
+    }
+    return ret;
+}
+
+int ota_img_size(en_ota_type_t otatype, en_ota_img_type_t imgtype, int *size)
+{
+    int ret = -1;
+    const ota_img_t *img;
+    if((otatype < EN_OTA_TYPE_LAST) && (imgtype  < EN_OTA_IMG_LAST) && (NULL != g_img_cb_t.ota[otatype][imgtype]))
+    {
+        img = g_img_cb_t.ota[otatype][imgtype];
+        *size = img->size;
+        ret = 0;
+    }
     return ret;
 }
 
 
 
-int ota_storage_flag_read(ota_flag_t *flag)
-{
-    int ret = -1;
 
-    if((NULL != s_ota_storage) && (NULL != s_ota_storage->opt.flag_read))
-    {
-        ret = s_ota_storage->opt.flag_read(flag);
-    }
 
-    return ret;
-}
 
-int ota_storage_flag_write(ota_flag_t *flag)
-{
-    int ret = -1;
-
-    if((NULL != s_ota_storage) && (NULL != s_ota_storage->opt.flag_write))
-    {
-        ret = s_ota_storage->opt.flag_write(flag);
-    }
-
-    return ret;
-}
-
-void ota_storage_flag_init()
-{
-    ota_flag_t  flag;
-    (void) memset(&flag, 0, sizeof(flag));
-
-    flag.crc = calc_crc32(0,&flag,sizeof(flag) - sizeof(flag.crc));
-    ota_storage_flag_write(&flag);
-}

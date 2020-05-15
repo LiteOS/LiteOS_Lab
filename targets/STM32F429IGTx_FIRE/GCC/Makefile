@@ -17,9 +17,6 @@ DEBUG = 1
 # optimization
 OPT = -O0 -g
 
-USE_OTA := no
-OTA_IS_NEED_DTLS := no
-
 ################################################################################
 # binaries
 ################################################################################
@@ -67,30 +64,21 @@ include ../.config
 include $(TOP_DIR)/iot_link/iot.mk
 include $(PROJECTBASE)/project.mk
 ################################################################################
-# paths
+# paths and ld files
 ################################################################################
 # firmware library path
 PERIFLIB_PATH =
-# Build path
-
-ifeq ($(CONFIG_LOADER_ENABLE),y)
-	BUILD_DIR = loaderbuild
-	C_DEFS += -D cn_app_bin_addr=0x08020004
-else
-	BUILD_DIR = appbuild
-endif
-
-################################################################################
-# LDFLAGS
-################################################################################
-ifeq ($(CONFIG_SEPERATE_LOAD_MODE),y)
-	ifeq ($(CONFIG_LOADER_ENABLE),y)
+ifeq ($(CONFIG_OTA_ENABLE),y)
+	ifeq ($(CONFIG_OTA_LOADER_ENABLE),y)
 		LD_FILE = os_loader.ld
+		BUILD_DIR = loaderbuild
 	else
 		LD_FILE = os_app.ld
+		BUILD_DIR = appbuild
 	endif
 else
 	LD_FILE = os.ld
+	BUILD_DIR = osbuild
 endif
 			
 
@@ -131,13 +119,8 @@ CFLAGS += -Wno-missing-braces
 
 # libraries
 LIBS += -lc -lm -lnosys
-ifeq ($(USE_OTA), yes)
-LIBS += -lhwpatch
-endif
-LIBDIR  += -L$(PROJECTBASE)/../Lib
 LDFLAGS += $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 LDFLAGS += -u _printf_float
-
 
 TARGET_DIR = $(BUILD_DIR)
 ############HERE WE GET THE C_OBJECT S_OBJECT AND THE PATH #####################

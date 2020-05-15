@@ -30,33 +30,26 @@ USER_SRC =  \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/main.c \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/system_stm32f4xx.c \
         $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/usart.c \
-        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/uart_debug.c \
-		$(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/flash_adaptor.c
-		
-ifeq ($(CONFIG_OTA_ENABLE),y)
-USER_SRC += $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/ota_adaptor.c \
-		    $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/ota_port.c
-endif
-ifeq ($(CONFIG_LOADER_ENABLE),y)
-USER_SRC += $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/loader_main2.c
-endif
-        
-        
+        $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/uart_debug.c        
 C_SOURCES += $(USER_SRC)  
 
-ifeq ($(CONFIG_UART_AT),y)
+ifeq ($(CONFIG_PB11PA2_UARTAT),y)
     C_SOURCES += $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/uart_at/uart_at.c
 endif    
 
-ifeq ($(CONFIG_ETHERNETMAC),y)
-    C_SOURCES += $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/ethernet/eth.c \
-                 $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/ethernet/net_driver.c                
+ifeq ($(CONFIG_PB11PA2_MAC),y)
+
+	ifeq ($(CONFIG_LWIP_ENABLE), y)
+    	C_SOURCES += $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/ethernet/eth.c \
+                 $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/ethernet/net_driver.c
+	endif
+
+              
 endif 
 
 
-OS_CONFIG_INC = \
-        -I $(TOP_DIR)/targets/STM32F429IGTx_FIRE/OS_CONFIG
-        C_INCLUDES += $(OS_CONFIG_INC)       
+OS_CONFIG_INC = -I $(TOP_DIR)/targets/STM32F429IGTx_FIRE/OS_CONFIG
+C_INCLUDES += $(OS_CONFIG_INC)       
 # C includes
 HAL_DRIVER_INC = \
         -I $(SDK_DIR)/drivers/third_party/ST/STM32F4xx_HAL_Driver/Inc \
@@ -73,6 +66,21 @@ USER_INC = \
 # C defines
 C_DEFS +=  -D USE_HAL_DRIVER -D STM32F429xx -D NDEBUG
 C_INCLUDES += -I $(TOP_DIR)/targets/STM32F429IGTx_FIRE
+
+ifeq ($(CONFIG_OTA_ENABLE),y)
+    C_SOURCES += ${wildcard $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/ota_flash/*.c}
+    C_INCLUDES += -I $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/ota_flash
+endif
+
+ifeq ($(CONFIG_OTA_LOADER_ENABLE), y)
+    C_SOURCES += $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/loader.c
+endif 
+
+
+ifeq ($(CONFIG_OTA_APP_ENABLE), y)
+    C_SOURCES += $(TOP_DIR)/targets/STM32F429IGTx_FIRE/Src/app_mqttota.c
+endif 
+
 
 
 

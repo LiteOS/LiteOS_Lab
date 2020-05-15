@@ -33,65 +33,66 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2019-05-29 15:00  zhangqianfu  The first version  
+ *  2020-05-08 20:54  zhangqianfu  The first version
  *
  */
 
-
 #include <string.h>
-#include <stdlib.h>
-#include <osal.h>
-#include <shell.h>
+#include <crc.h>
+#include <link_log.h>
+#include <ota_flag.h>
 
-#ifdef cn_app_bin_addr
-
-///< here remember to close all the interrupt here--TODO
-
-static int jump_addr(void *addr)
+typedef struct
 {
-    unsigned int start_cmd;
+    ota_flag_t flag[EN_OTA_TYPE_LAST];
+}ota_flag_cb_t;
 
-    int (*jump_func)(void );
+#ifndef CONFIG_SOTA_VERSION
+#define CONFIG_SOTA_VERSION  "SOTAV1.0"
+#endif
 
-    start_cmd = *(unsigned int *)(addr);
-
-    jump_func = (int (*)(void))(start_cmd);
-
-    jump_func();
-
-
-    return 0;  ///< maybe never come back
-}
+#ifndef CONFIG_FOTA_VERSION
+#define CONFIG_FOTA_VERSION  "FOTAV1.0"
+#endif
 
 
-int loader_main(void)
+int ota_flag_save(en_ota_type_t  otatype, ota_flag_t *flag)
 {
+    int ret = -1;
 
-    jump_addr((void *)cn_app_bin_addr);
-
-    return 0;  ///< maybe never come back
-}
-
-static int loader_main_shell(int argc, const char *argv[])
-{
-    void *addr = (void *)cn_app_bin_addr;
-    if(argc == 2)
+    if(otatype < EN_OTA_TYPE_LAST)
     {
-        addr = (void *)strtol(argv[1],NULL,0);
+        flag->crc = calc_crc32(0,&flag->info, sizeof(flag->info));
+        ota_img_erase(otatype,EN_OTA_IMG_FLAG);
+        ret = ota_img_write(otatype,EN_OTA_IMG_FLAG,0,flag,sizeof(ota_flag_t));
+        ota_img_flush(otatype,EN_OTA_IMG_FLAG);
     }
 
-    jump_addr(addr);
-
-    return 0;///< never comeback
+    return ret;
 }
 
-OSSHELL_EXPORT_CMD(loader_main_shell,"loader","loader");
-
-#else
-
-#error("no application address defined, could not boot\n\r");
-
-#endif
+int ota_flag_get(en_ota_type_t  otatype,ota_flag_t *flag)
+{
+    int ret = -1;
+    uint32_t    crc;
+    if((NULL != flag) && (otatype < EN_OTA_TYPE_LAST))
+    {
+        if(0 != ota_img_read(EN_OTA_TYPE_FOTA,EN_OTA_IMG_FLAG,0,flag,sizeof(ota_flag_t)))
+        {
+            LINK_LOG_ERROR("FLAG READ ERROR");
+            goto EXIT;
+        }
+        crc = calc_crc32(0,&flag->info, sizeof(flag->info));
+        if(crc != flag->crc)
+        {
+            LINK_LOG_ERROR("FLAG DESTROYED--CRC ERR");
+            goto EXIT;
+        }
+        ret = 0;
+    }
+EXIT:
+    return ret;
+}
 
 
 

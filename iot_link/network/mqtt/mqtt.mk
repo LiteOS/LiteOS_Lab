@@ -9,6 +9,10 @@ ifeq ($(CONFIG_MQTT_AL_ENABLE), y)
     ifeq ($(CONFIG_PAHO_MQTT), y)
     	include $(iot_link_root)/network/mqtt/paho_mqtt/paho_mqtt.mk
     endif	
+    
+    ifeq ($(CONFIG_LITE_MQTT), y)
+    	include $(iot_link_root)/network/mqtt/lite_mqtt/lite_mqtt.mk
+    endif	
        
 endif
 

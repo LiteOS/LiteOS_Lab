@@ -75,53 +75,49 @@ static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
     int ret = -1;
 
     char *request_id = NULL;
-    char *request_id_buf = NULL;
-    int   request_id_len = 0;
-
+    char *topicbuf;
     oc_mqtt_profile_msgrcv_t  message;
 
+    topicbuf = osal_malloc(msg->topic.len + 1);
+    if(NULL == topicbuf)
+    {
+        return ret;
+    }
+    memcpy(topicbuf, msg->topic.data, msg->topic.len);
+    topicbuf[msg->topic.len] = '\0';
     if(NULL != s_oc_mqtt_profile_cb.rcvfunc)
     {
         message.msg = msg->msg.data;
         message.msg_len = msg->msg.len;
 
-        request_id = strstr(msg->topic.data,CN_OC_MQTT_PROFILE_REQUESTID_INDEX);
+        request_id = strstr(topicbuf,CN_OC_MQTT_PROFILE_REQUESTID_INDEX);
         if(NULL != request_id)
         {
             request_id  += strlen(CN_OC_MQTT_PROFILE_REQUESTID_INDEX);
-
-            request_id_len = (int)( msg->topic.data + msg->topic.len - request_id);
-
-            request_id_buf = osal_malloc(request_id_len + 1);
-            if(NULL != request_id_buf)
-            {
-                (void) memcpy(request_id_buf,request_id,request_id_len);
-                request_id_buf[request_id_len] = '\0';
-            }
-            message.request_id = request_id_buf;
+            message.request_id = request_id;
         }
         else
         {
             message.request_id = NULL;
         }
 
-        if(NULL != strstr(msg->topic.data,CN_OC_MQTT_PROFILE_MSGDOWN_INDEX))
+        if(NULL != strstr(topicbuf,CN_OC_MQTT_PROFILE_MSGDOWN_INDEX))
         {
             message.type = EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_MSGDOWN;
         }
-        else if(NULL != strstr(msg->topic.data,CN_OC_MQTT_PROFILE_SETPROPERTY_INDEX))
+        else if(NULL != strstr(topicbuf,CN_OC_MQTT_PROFILE_SETPROPERTY_INDEX))
         {
             message.type = EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_PROPERTYSET;
         }
-        else if(NULL != strstr(msg->topic.data,CN_OC_MQTT_PROFILE_GETPROPERTY_INDEX))
+        else if(NULL != strstr(topicbuf,CN_OC_MQTT_PROFILE_GETPROPERTY_INDEX))
         {
             message.type = EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_PROPERTYGET;
         }
-        else if(NULL != strstr(msg->topic.data,CN_OC_MQTT_PROFILE_CMD_INDEX))
+        else if(NULL != strstr(topicbuf,CN_OC_MQTT_PROFILE_CMD_INDEX))
         {
             message.type = EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_COMMANDS;
         }
-        else if(NULL != strstr(msg->topic.data,CN_OC_MQTT_PROFILE_EVENTDOWN_INDEX))
+        else if(NULL != strstr(topicbuf,CN_OC_MQTT_PROFILE_EVENTDOWN_INDEX))
         {
             message.type = EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_EVENT;
         }
@@ -133,14 +129,9 @@ static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
         {
             s_oc_mqtt_profile_cb.rcvfunc(&message);
         }
-
-        if(NULL != request_id_buf)
-        {
-            osal_free(request_id_buf);
-        }
-
     }
 
+    osal_free(topicbuf);
     return ret;
 }
 
@@ -527,9 +518,6 @@ int oc_mqtt_profile_getshadow(char *deviceid,oc_mqtt_profile_shadowget_t *payloa
     osal_free(msg);
 
     return ret;
-
-
-
 }
 
 
