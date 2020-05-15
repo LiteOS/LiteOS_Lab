@@ -50,7 +50,7 @@
 
 #define  CN_LINK_VERSION_MAJOR      2
 #define  CN_LINK_VERSION_MINOR      1
-#define  CN_LINK_VERSION_FEATURE    1
+#define  CN_LINK_VERSION_FEATURE    2
 
 
 static char s_link_mainversion[64];
