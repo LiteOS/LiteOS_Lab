@@ -39,7 +39,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include <coap_al.h>
+//#include <coap_al.h>
 
 /** @brief this is the message dealer module for the application*/
 typedef int (*fn_oc_coap_msg_deal)(void *msg, int len);
@@ -71,12 +71,26 @@ typedef struct
     void                    *usr_data;        ///< used for the user
 }oc_config_param_t;
 
-///////////////////////////MQTT AGENT INTERFACE////////////////////////////////
+typedef enum
+{
+    en_oc_coap_err_ok          = 0,      ///< this means the status ok
+    en_oc_coap_err_parafmt,              ///< this means the parameter err format
+    en_oc_coap_err_network,              ///< this means the network wrong status
+    en_oc_coap_err_conserver,            ///< this means the server refused the service for some reason(likely the id and pwd)
+    en_oc_coap_err_noconfigured,         ///< this means we have not configure it yet,so could not connect
+    en_oc_coap_err_configured,           ///< this means we has configured it, so could not reconfigure it
+    en_oc_coap_err_noconected,           ///< this means the connection has not been built, so you could not send data
+    en_oc_coap_err_gethubaddrtimeout,    ///< this means get the hub address timeout
+    en_oc_coap_err_sysmem,               ///< this means the system memory is not enough
+    en_oc_coap_err_system,               ///< this means that the system porting may have some problem,maybe not install yet
+    en_oc_coap_err_last,
+}en_oc_coap_err_code_t;
+///////////////////////////COAP AGENT INTERFACE////////////////////////////////
 typedef void* (*fn_oc_coap_config)(oc_config_param_t *param);                        ///< return the handle here
 typedef int (*fn_oc_coap_deconfig)(void *handle);                                    ///< use the handle as the params
 typedef int (*fn_oc_coap_report)(void *handle,char *msg,int len);                    ///< use the handle and report params
 /**
- * @brief this data structure defines the mqtt agent implement
+ * @brief this data structure defines the coap agent implement
  */
 typedef struct
 {
@@ -86,9 +100,9 @@ typedef struct
 }oc_coap_opt_t;
 
 /**
- *@brief the mqtt agent should use this function to register the method for the application
+ *@brief the coap agent should use this function to register the method for the application
  *
- *@param[in] opt, the operation method implement by the mqtt agent developer
+ *@param[in] opt, the operation method implement by the coap agent developer
  *@return 0 success while -1 failed
  */
 int oc_coap_register(const char *name,const oc_coap_opt_t *opt);
