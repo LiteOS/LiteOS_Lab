@@ -92,7 +92,7 @@ typedef int (*fn_oc_mqtt_msg_deal)(void *arg,mqtt_al_msgrcv_t *msg);
 typedef struct
 {
     en_oc_mqtt_mode  boot_mode;            ///< if bs mode, then the server and port must be the bs server's
-    uint8_t          lifetime;             ///< the keep alive time, used for the mqtt protocol
+    uint16_t         lifetime;             ///< the keep alive time, used for the mqtt protocol
     char            *server_addr;          ///< server address:domain name or ip address
     char            *server_port;          ///< server port:
     ///< define for the tls
