@@ -237,7 +237,7 @@ en_ota_err_t ota_backup(en_ota_type_t  otatype)
         goto EXIT;
     }
 
-    if(0 != ota_img_erase(otatype, EN_OTA_IMG_DOWNLOAD))
+    if(0 != ota_img_erase(otatype, EN_OTA_IMG_BACKUP))
     {
         ret = EN_OTA_ERR_RUNNINGERASE;
         goto EXIT;

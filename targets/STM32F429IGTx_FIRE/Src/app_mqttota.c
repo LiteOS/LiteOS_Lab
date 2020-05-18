@@ -53,7 +53,8 @@
 #define CN_SECURITY_TYPE               EN_DTLS_AL_SECURITY_TYPE_NONE
 
 #ifndef CONFIG_OCMQTTV5_DEMO_DEVICEID
-#define CONFIG_OCMQTTV5_DEMO_DEVICEID  "5e12ea0a334dd4f337902dc3_iotlink005"
+//#define CONFIG_OCMQTTV5_DEMO_DEVICEID  "5e12ea0a334dd4f337902dc3_iotlink005"
+#define CONFIG_OCMQTTV5_DEMO_DEVICEID  "5ec202b0078a9302c5b7750c_mqttota001"
 #endif
 
 #ifndef CONFIG_OCMQTTV5_DEMO_DEVPWD
@@ -71,7 +72,7 @@
 #define CN_BOOT_MODE           0
 #define CN_LIFE_TIME           40                         ///< the platform need more
 #define CN_OTA_SOTA_VERSION    "SOTAV1"
-#define CN_OTA_FOTA_VERSION    "FOTAV2"
+#define CN_OTA_FOTA_VERSION    "FOTAV1"
 //if your command is very fast,please use a queue here--TODO
 static queue_t                   *s_queue_rcvmsg = NULL;   ///< this is used to cached the message
 static oc_mqtt_profile_service_t  s_device_service;
@@ -244,6 +245,7 @@ static int oc_cmd_event_firmupdate(cJSON *event)
             {
 //                oc_report_upgraderet(0,otapara->version);
                 LINK_LOG_DEBUG("DOWNLOADING SUCCESS");
+                osal_task_sleep(5*1000);
                 osal_reboot();
             }
             ret = 0;
@@ -451,7 +453,7 @@ static int task_reportmsg_entry(void *args)
     {
         otaflag.info.curstatus = EN_OTA_STATUS_IDLE;
         ota_flag_save(EN_OTA_TYPE_FOTA,&otaflag);
-        oc_report_upgraderet(0,CN_OTA_SOTA_VERSION);
+        oc_report_upgraderet(1,CN_OTA_SOTA_VERSION);
     }
 
     while(1)  //do the loop here
