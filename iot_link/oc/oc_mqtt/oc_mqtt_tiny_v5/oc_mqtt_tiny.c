@@ -98,7 +98,9 @@ static const char s_oc_mqtt_ca_crt[] =
 #define CN_HMAC_LEN              32
 #define CN_STRING_MAXLEN         127
 
-#define CN_OC_MQTT_TIMEOUT      (10*1000)
+#define CN_OC_MQTT_TIMEOUT             (10*1000)
+#define CN_OC_MQTT_LIFETIMEDEFAULT     (300)
+#define CN_OC_MQTT_LIFELEAST           (30)
 
 const char *s_new_topic_fmt[]=
 {
@@ -682,11 +684,10 @@ static int dmp_connect(oc_mqtt_tiny_cb_t *cb)
     conpara.cleansession = 1;
     conpara.keepalivetime = cb->config.lifetime;
     conpara.security = &cb->config.security;
-
     conpara.serveraddr.data = (char *)cb->mqtt_para.server_addr;
     conpara.serveraddr.len = strlen(conpara.serveraddr.data);
     conpara.serverport = atoi(cb->mqtt_para.server_port);
-    conpara.timeout = 10000;
+    conpara.timeout = CN_OC_MQTT_TIMEOUT;
     conpara.version = en_mqtt_al_version_3_1_1;
     conpara.willmsg = NULL;
 
@@ -1220,6 +1221,14 @@ static int tiny_config(oc_mqtt_config_t *config)
         if((NULL == config->server_addr) || (NULL == config->server_port))  ///< no server information get
         {
             return ret;
+        }
+        if(config->lifetime == 0)
+        {
+            config->lifetime = CN_OC_MQTT_LIFETIMEDEFAULT;
+        }
+        else if(config->lifetime < CN_OC_MQTT_LIFELEAST)
+        {
+            config->lifetime = CN_OC_MQTT_LIFELEAST;
         }
 
         if(NULL == config->id)   ///< we should know your id
