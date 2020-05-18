@@ -78,7 +78,7 @@ Download:根据选择解决方案（差分还是全量）来定义其大小
 
 ## OTA实践
 
-​	以STM32F429IGTx的野火开发板为例，[参考STM32F429实践](.ota_stm32f429.md)。
+​	以STM32F429IGTx的野火开发板为例，[参考STM32F429实践](./ota_stm32f429.md)。
 
 
 
