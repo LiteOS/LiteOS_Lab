@@ -17,7 +17,7 @@
 menu "Dtls  configuration"
 
 config DTLS_AL_ENABLE
-    bool "enable the dtls abstract layer "
+    bool "enable the dtls abstract layer"
     default y
     
 if DTLS_AL_ENABLE
@@ -25,13 +25,12 @@ if DTLS_AL_ENABLE
     prompt "please select one dtls implement"
     config MBEDTLS_ENABLE
         bool  "select mbedtls(polar ssl) as the (d)tls"
-        
+            
     config OPENSSL_ENABLE
         bool  "select openssl as the (d)tls"
-    
-    config NEWTLS_ENABLE
-        bool  "select the unknown one, and you should implement it"            
         
+    config NEWTLS_ENABLE
+        bool  "select the unknown one, and you should implement it"
     endchoice 
     
     if MBEDTLS_ENABLE   

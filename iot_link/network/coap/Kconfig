@@ -13,18 +13,23 @@
 # See the Mulan PSL v1 for more details.
 #
 
+menu "Coap  configuration"
 
-menu "Network configuration"
+config COAP_AL_ENABLE
+    bool "Enable the coap abstract layer"
+    default n
 
-rsource "./tcpip/kconfig_tcpip"
-
-rsource "./dtls/kconfig_dtls"
+if COAP_AL_ENABLE
+    choice
+        prompt "please select one coap implement"   
+        config LITECOAP_ENABLE
+            bool "we use the litecoap as the coap protocol"
         
-rsource "./coap/kconfig_coap"
-
-rsource "./lwm2m/kconfig_lwm2m"
-
-rsource "./mqtt/kconfig_mqtt"
-      
-         
+        config LIBCOAP_ENABLE
+            bool "we use the libcoap as the coap protocol"
+                  
+        config COAP_NEWENABLE
+            bool "Create a New Coap"                
+    endchoice
+endif
 endmenu
