@@ -41,7 +41,7 @@ choice
                
     config LINUXSOCKET_ENABLE
         bool "we use the linux socket ,and will select the linux"
-        select  LINUXOS_ENABLE 
+        select LINUXOS_ENABLE
              
     config NEW_SOCKET
         bool "we will create a new tcpip ourself"    
