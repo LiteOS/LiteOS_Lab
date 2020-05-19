@@ -16,10 +16,8 @@
 menu "IoT link SDK configuration"
 comment "you should choose a os kernel first!"
 
-rsource "./os/kconfig_os"   
-
-rsource "./at/kconfig_at"
-     
+rsource "./os/Kconfig"   
+rsource "./at/Kconfig"
 config CJSON_ENABLE
     bool "Enable cJson library."
     default y
@@ -29,7 +27,7 @@ config DRIVER_ENABLE
     default y
     depends on LITEOS_ENABLE || NOVAOS_ENABLE || NEW_OS
         
-rsource "./link_log/kconfig_linklog"    
+rsource "./link_log/Kconfig"    
 
     
 config LINKQUEUE_ENABLE
@@ -40,11 +38,11 @@ config LINKDEMO_ENABLE
     bool  "Enable IoT Link Demo"
     default y    
             
-rsource "./stimer/kconfig_stimer"
+rsource "./stimer/Kconfig"
 
 rsource "./link_ota/Kconfig"
 
-rsource "./network/kconfig_network"
+rsource "./network/Kconfig"
 
 rsource "./oc/Kconfig"
 

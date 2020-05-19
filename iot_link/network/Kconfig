@@ -16,15 +16,15 @@
 
 menu "Network configuration"
 
-rsource "./tcpip/kconfig_tcpip"
+rsource "./tcpip/Kconfig"
 
-rsource "./dtls/kconfig_dtls"
+rsource "./dtls/Kconfig"
         
-rsource "./coap/kconfig_coap"
+rsource "./coap/Kconfig"
 
-rsource "./lwm2m/kconfig_lwm2m"
+rsource "./lwm2m/Kconfig"
 
-rsource "./mqtt/kconfig_mqtt"
+rsource "./mqtt/Kconfig"
       
          
 endmenu
