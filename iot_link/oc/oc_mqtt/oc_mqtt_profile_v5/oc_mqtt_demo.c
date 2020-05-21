@@ -93,7 +93,7 @@ static const char s_server_ca[] =
 
 
 #ifndef CONFIG_OCMQTTV5_DEMO_DEVICEID
-#define CONFIG_OCMQTTV5_DEMO_DEVICEID  "5e12ea0a334dd4f337902dc3_iotlink005"
+#define CONFIG_OCMQTTV5_DEMO_DEVICEID  "5ec3f516cce62b02c56524a9_ca002"
 #endif
 
 #ifndef CONFIG_OCMQTTV5_DEMO_DEVPWD

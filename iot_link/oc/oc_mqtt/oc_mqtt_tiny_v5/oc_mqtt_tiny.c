@@ -99,8 +99,9 @@ static const char s_oc_mqtt_ca_crt[] =
 #define CN_STRING_MAXLEN         127
 
 #define CN_OC_MQTT_TIMEOUT             (10*1000)
-#define CN_OC_MQTT_LIFETIMEDEFAULT     (300)
+#define CN_OC_MQTT_LIFETIMEDEFAULT     (120)
 #define CN_OC_MQTT_LIFELEAST           (30)
+#define CN_OC_MQTT_LIFEMAX             (1200)
 
 const char *s_new_topic_fmt[]=
 {
@@ -497,28 +498,8 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
             cb->config.security.u.cert.client_pk_pwd_len = config->security.u.cert.client_pk_pwd_len ;
             cb->config.security.u.cert.client_pk_pwd = (uint8_t *)mem_buf;
             (void) memcpy( mem_buf, config->security.u.cert.client_pk_pwd, config->security.u.cert.client_pk_pwd_len );
-//            mem_buf += config->security.u.cert.client_pk_pwd_len;
         }
     }
-//    else if(config->security.type == EN_DTLS_AL_SECURITY_TYPE_PSK)
-//    {
-//        if ( 0 != config->security.u.psk.psk_id_len)
-//        {
-//            cb->config.security.u.psk.psk_id_len = config->security.u.psk.psk_id_len ;
-//            cb->config.security.u.psk.psk_id = (uint8_t *)mem_buf;
-//            (void) memcpy( mem_buf, config->security.u.psk.psk_id, config->security.u.psk.psk_id_len );
-//            mem_buf += config->security.u.psk.psk_id_len;
-//        }
-//
-//        if ( 0 != config->security.u.psk.psk_key_len)
-//        {
-//            cb->config.security.u.psk.psk_key_len = config->security.u.psk.psk_key_len;
-//            cb->config.security.u.psk.psk_key = (uint8_t *)mem_buf;
-//            (void) memcpy( mem_buf, config->security.u.psk.psk_key, config->security.u.psk.psk_key_len );
-//            mem_buf += config->security.u.psk.psk_id_len;
-//        }
-//    }
-
 
     unsigned int i = 0;
     for(i = 0;i < CN_NEW_TOPIC_NUM;i++)
@@ -815,6 +796,7 @@ static int dmp_subscribe(oc_mqtt_tiny_cb_t *cb)
                  ret = (int)en_oc_mqtt_err_subscribe;
                  break;
             }
+            topic_sub = topic_sub->nxt;
         }
     }
 
@@ -1229,6 +1211,10 @@ static int tiny_config(oc_mqtt_config_t *config)
         else if(config->lifetime < CN_OC_MQTT_LIFELEAST)
         {
             config->lifetime = CN_OC_MQTT_LIFELEAST;
+        }
+        else if(config->lifetime > CN_OC_MQTT_LIFEMAX)
+        {
+            config->lifetime = CN_OC_MQTT_LIFEMAX;
         }
 
         if(NULL == config->id)   ///< we should know your id
