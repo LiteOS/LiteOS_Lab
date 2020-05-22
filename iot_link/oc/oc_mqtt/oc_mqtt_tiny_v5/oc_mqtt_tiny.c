@@ -935,9 +935,9 @@ static int deal_api_subscribe( oc_mqtt_tiny_cb_t  *cb, oc_mqtt_daemon_cmd_t *cmd
     int ret = (int)en_oc_mqtt_err_noconfigured;
     tiny_topic_sub_t  *topic_sub;
     mqtt_al_subpara_t *subpara;
+    mqtt_al_subpara_t  sub_new;
 
     subpara = cmd->arg;
-
     if((int)en_daemon_status_idle == cb->flag.bits.bit_daemon_status)
     {
         ret = (int)en_oc_mqtt_err_noconfigured;
@@ -945,34 +945,58 @@ static int deal_api_subscribe( oc_mqtt_tiny_cb_t  *cb, oc_mqtt_daemon_cmd_t *cmd
     else if(((int)en_daemon_status_hub_keep == cb->flag.bits.bit_daemon_status) &&\
             (en_mqtt_al_connect_ok == mqtt_al_check_status(cb->mqtt_para.mqtt_handle)))
     {
-
-        topic_sub = osal_malloc( sizeof( tiny_topic_sub_t ) + subpara->topic.len + 1 );
-        if ( NULL != topic_sub)
+        ///< checkif the topic has been subscribe
+        topic_sub = cb->subscribe_lst;
+        while(NULL != topic_sub)
         {
-
-            subpara->arg = cb;
-            subpara->dealer = hub_msg_default_deal;
-            subpara->timeout = CN_OC_MQTT_TIMEOUT;
-            if( 0  == mqtt_al_subscribe( cb->mqtt_para.mqtt_handle, subpara) )
+            if(0 == strcmp(topic_sub->topic, subpara->topic.data))
             {
-                ///< initialize the subtopic add it to the subscribe list
-                topic_sub->qos = (int) subpara->qos;
-                topic_sub->topic = (char *)topic_sub + sizeof(tiny_topic_sub_t);
-                (void) strncpy(topic_sub->topic, subpara->topic.data,strlen(subpara->topic.data)+1);
-                topic_sub->nxt = cb->subscribe_lst;
-                cb->subscribe_lst = topic_sub;
+                break;
+            }
+            topic_sub = topic_sub->nxt;
+        }
 
-                ret = (int)en_oc_mqtt_err_ok;
-            }
-            else
-            {
-                osal_free ( topic_sub );
-                ret = (int)en_oc_mqtt_err_subscribe;
-            }
+        if(NULL != topic_sub) ///< THERE HAS BEEN ONE
+        {
+            LINK_LOG_DEBUG("RESUBSCRIBED THE SAME TOPIC");
+            ret = (int)en_oc_mqtt_err_subscribe;
         }
         else
         {
-            ret = (int)en_oc_mqtt_err_sysmem;
+            topic_sub = osal_malloc( sizeof( tiny_topic_sub_t ) + subpara->topic.len + 1 );
+            if ( NULL != topic_sub)
+            {
+                ///< initialize the subtopic and add it to the subscribe list when success
+                topic_sub->qos = (int) subpara->qos;
+                topic_sub->topic = (char *)topic_sub + sizeof(tiny_topic_sub_t);
+                (void) strncpy(topic_sub->topic, subpara->topic.data,subpara->topic.len);
+                topic_sub->topic[subpara->topic.len] = '\0';
+
+                ///< copy the old parameters to the new one, for we could not change the user's memory
+                (void)memset(&sub_new,0,sizeof(sub_new));
+                sub_new.arg = cb;
+                sub_new.dealer = hub_msg_default_deal;
+                sub_new.timeout = CN_OC_MQTT_TIMEOUT;
+                sub_new.qos = topic_sub->qos;
+                sub_new.topic.data  = topic_sub->topic;
+                sub_new.topic.len = subpara->topic.len;
+                if( 0  == mqtt_al_subscribe( cb->mqtt_para.mqtt_handle, &sub_new) )
+                {
+                    topic_sub->nxt = cb->subscribe_lst;
+                    cb->subscribe_lst = topic_sub;
+                    ret = (int)en_oc_mqtt_err_ok;
+                }
+                else
+                {
+                    osal_free ( topic_sub );
+                    ret = (int)en_oc_mqtt_err_subscribe;
+                }
+                subpara->subret = sub_new.subret;
+            }
+            else
+            {
+                ret = (int)en_oc_mqtt_err_sysmem;
+            }
         }
     }
     else

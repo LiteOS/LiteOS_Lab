@@ -392,24 +392,6 @@ static void __io_disconnect(Network *n)
 }
 
 ///////////////////////CREATE THE API FOR THE MQTT_AL///////////////////////////
-static  int __loop_entry(void *arg)
-{
-    paho_mqtt_cb_t *cb;
-    cb = arg;
-    while((NULL != cb) && (cb->stop == 0))
-    {
-        if((NULL != cb) && MQTTIsConnected(&cb->client))
-        {
-           (void) MQTTYield(&cb->client, CONFIG_PAHO_LOOPTIMEOUT);
-        }
-        ///< for some operation system ,the task could not be awake when release,so do some wait to give up the cpu
-
-        osal_task_sleep(1);///< when disconnect, this has been killed
-
-    }
-    return 0;
-}
-
 void __mqtt_cb_stop(paho_mqtt_cb_t   *cb)
 {
     if(NULL != cb)
@@ -420,9 +402,43 @@ void __mqtt_cb_stop(paho_mqtt_cb_t   *cb)
     return;
 }
 
+static  int __loop_entry(void *arg)
+{
+    paho_mqtt_cb_t *cb;
+    Network          *n = NULL;
+    MQTTClient       *c = NULL;
+
+    cb = arg;
+    while((NULL != cb) && (cb->stop == 0))
+    {
+        if((NULL != cb) && MQTTIsConnected(&cb->client))
+        {
+           (void) MQTTYield(&cb->client, CONFIG_PAHO_LOOPTIMEOUT);
+        }
+        ///< for some operation system ,the task could not be awake when release,so do some wait to give up the cpu
+
+        osal_task_sleep(1);///< when disconnect, this has been killed
+    }
+
+    c = &cb->client;
+    n = &cb->network;
+    //net disconnect
+    LINK_LOG_DEBUG("PAHO TASK TO CLOSE THE NETWORK");
+    __io_disconnect(n);
+    //deinit the mqtt
+    LINK_LOG_DEBUG("PAHO TASK TO CLEAR THE MUTEX");
+    MQTTClientDeInit(c);
+    //free the memory
+    LINK_LOG_DEBUG("PAHO TASK TO FREE THE MEMORY");
+    osal_free(cb->rcvbuf);
+    osal_free(cb->sndbuf);
+    osal_free(cb);
+    LINK_LOG_DEBUG("PAHO TASK EXIT");
+
+    return 0;
+}
 
 
-static     MQTTClient       *s_static_client_debug = NULL;
 static void * __connect(mqtt_al_conpara_t *conparam)
 {
 
@@ -536,9 +552,6 @@ static void * __connect(mqtt_al_conpara_t *conparam)
     {
         goto EXIT_MQTT_MAINTASK;
     }
-
-    s_static_client_debug = c;
-
     cb->stop = 0;
     ret = cb;
 
@@ -547,6 +560,7 @@ static void * __connect(mqtt_al_conpara_t *conparam)
 EXIT_MQTT_MAINTASK:
     (void)MQTTDisconnect(c);
 EXIT_MQTT_CONNECT:
+    MQTTClientDeInit(c);
 EXIT_MQTT_INIT:
 EIXT_BUF_MEM_ERR:
     __io_disconnect(n);
@@ -563,32 +577,25 @@ static int __disconnect(void *handle)
 {
     int ret = -1;
 
-    Network          *n = NULL;
     MQTTClient       *c = NULL;
     paho_mqtt_cb_t   *cb = NULL;
 
-
+    LINK_LOG_DEBUG("PAHO_EXIT_NOW");
     if (NULL == handle)
     {
         return ret;
     }
-
     cb = handle;
 
     c = &cb->client;
-    n = &cb->network;
+    LINK_LOG_DEBUG("PAHO_EXIT_SENDISCONNECT  MESSAGE");
     //mqtt disconnect
     (void)MQTTDisconnect(c);
-    //net disconnect
-    __io_disconnect(n);
-    //kill the thread
-    (void)osal_task_kill(cb->task);
-    //deinit the mqtt
-    MQTTClientDeInit(c);
-    //free the memory
-    osal_free(cb->rcvbuf);
-    osal_free(cb->sndbuf);
-    osal_free(cb);
+
+    //make the task to exit
+    LINK_LOG_DEBUG("PAHO MAKE THE TASK TO EXIT");
+    __mqtt_cb_stop(cb);
+    osal_task_sleep(1000);
 
     return 0;
 }
