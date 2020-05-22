@@ -560,6 +560,7 @@ static void * __connect(mqtt_al_conpara_t *conparam)
 EXIT_MQTT_MAINTASK:
     (void)MQTTDisconnect(c);
 EXIT_MQTT_CONNECT:
+    MQTTClientDeInit(c);
 EXIT_MQTT_INIT:
 EIXT_BUF_MEM_ERR:
     __io_disconnect(n);
