@@ -70,6 +70,7 @@ typedef struct
     void          *rcvbuf;  //for the mqtt engine used
     void          *sndbuf;
     int            stop;
+    int            stoped;
 }paho_mqtt_cb_t;
 
 ///< waring: the paho mqtt has the opposite return code with normal socket read and write
@@ -405,8 +406,6 @@ void __mqtt_cb_stop(paho_mqtt_cb_t   *cb)
 static  int __loop_entry(void *arg)
 {
     paho_mqtt_cb_t *cb;
-    Network          *n = NULL;
-    MQTTClient       *c = NULL;
 
     cb = arg;
     while((NULL != cb) && (cb->stop == 0))
@@ -419,21 +418,7 @@ static  int __loop_entry(void *arg)
 
         osal_task_sleep(1);///< when disconnect, this has been killed
     }
-
-    c = &cb->client;
-    n = &cb->network;
-    //net disconnect
-    LINK_LOG_DEBUG("PAHO TASK TO CLOSE THE NETWORK");
-    __io_disconnect(n);
-    //deinit the mqtt
-    LINK_LOG_DEBUG("PAHO TASK TO CLEAR THE MUTEX");
-    MQTTClientDeInit(c);
-    //free the memory
-    LINK_LOG_DEBUG("PAHO TASK TO FREE THE MEMORY");
-    osal_free(cb->rcvbuf);
-    osal_free(cb->sndbuf);
-    osal_free(cb);
-    LINK_LOG_DEBUG("PAHO TASK EXIT");
+    cb->stoped =1;
 
     return 0;
 }
@@ -553,6 +538,7 @@ static void * __connect(mqtt_al_conpara_t *conparam)
         goto EXIT_MQTT_MAINTASK;
     }
     cb->stop = 0;
+    cb->stoped = 0;
     ret = cb;
 
     return ret;
@@ -579,6 +565,7 @@ static int __disconnect(void *handle)
 
     MQTTClient       *c = NULL;
     paho_mqtt_cb_t   *cb = NULL;
+    Network           *n = NULL;
 
     LINK_LOG_DEBUG("PAHO_EXIT_NOW");
     if (NULL == handle)
@@ -591,12 +578,29 @@ static int __disconnect(void *handle)
     LINK_LOG_DEBUG("PAHO_EXIT_SENDISCONNECT  MESSAGE");
     //mqtt disconnect
     (void)MQTTDisconnect(c);
-
     //make the task to exit
     LINK_LOG_DEBUG("PAHO MAKE THE TASK TO EXIT");
     __mqtt_cb_stop(cb);
-    osal_task_sleep(1000);
 
+    while(0 == cb->stoped)  ///< wait for the loop to exit
+    {
+        osal_task_sleep(1000);
+    }
+    osal_task_kill(cb->task);
+    c = &cb->client;
+    n = &cb->network;
+    //net disconnect
+    LINK_LOG_DEBUG("PAHO  TO CLOSE THE NETWORK");
+    __io_disconnect(n);
+    //deinit the mqtt
+    LINK_LOG_DEBUG("PAHO  TO CLEAR THE MUTEX");
+    MQTTClientDeInit(c);
+    //free the memory
+    LINK_LOG_DEBUG("PAHO  TO FREE THE MEMORY");
+    osal_free(cb->rcvbuf);
+    osal_free(cb->sndbuf);
+    osal_free(cb);
+    LINK_LOG_DEBUG("PAHO TASK EXIT");
     return 0;
 }
 
