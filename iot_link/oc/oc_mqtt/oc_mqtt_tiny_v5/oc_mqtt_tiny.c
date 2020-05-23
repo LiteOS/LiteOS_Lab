@@ -1228,6 +1228,13 @@ static int tiny_config(oc_mqtt_config_t *config)
         {
             return ret;
         }
+        if(config->boot_mode != en_oc_mqtt_mode_nobs_static_nodeid_hmacsha256_notimecheck_json )
+        {
+            LINK_LOG_DEBUG("BS NOT SUPPORT YET");
+            ret = en_oc_mqtt_err_gethubaddrtimeout;
+            return ret;
+        }
+
         if(config->lifetime == 0)
         {
             config->lifetime = CN_OC_MQTT_LIFETIMEDEFAULT;
