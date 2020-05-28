@@ -109,7 +109,7 @@ int link_log_level_set(en_link_log_level_t level);
 
 #ifdef CONFIG_LINKLOG_ENABLE
 
-extern unsigned long long osal_sys_time();
+extern unsigned long long osal_sys_time(void);
 #define LINK_LOG(level,fmt, ...) \
     do \
     { \

@@ -117,7 +117,7 @@ int link_main(void *args)
 
 
 //////////////////////////  TCPIP PROTOCOL /////////////////////////////////////
-#ifdef CONFIG_TCIP_AL_ENABLE
+#ifdef CONFIG_TCPIP_AL_ENABLE
     #include <sal.h>
     (void)link_tcpip_init();
 #endif
