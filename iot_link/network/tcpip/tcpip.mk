@@ -2,7 +2,7 @@
 # this is used for compile the iotlink
 ################################################################################
 
-ifeq ($(CONFIG_TCIP_AL_ENABLE), y)
+ifeq ($(CONFIG_TCPIP_AL_ENABLE), y)
 
     C_SOURCES += ${wildcard $(iot_link_root)/network/tcpip/sal/*.c}    		
     C_INCLUDES += -I $(iot_link_root)/network/tcpip/sal

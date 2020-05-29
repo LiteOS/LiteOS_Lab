@@ -61,7 +61,7 @@ CONFIG_STIMER_TASKPRIOR=10
 #
 # Tcpip configuration
 #
-# CONFIG_TCIP_AL_ENABLE is not set
+# CONFIG_TCPIP_AL_ENABLE is not set
 # end of Tcpip configuration
 
 #

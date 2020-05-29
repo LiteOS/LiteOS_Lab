@@ -15,11 +15,11 @@
 
 menu "Tcpip configuration"
 
-config TCIP_AL_ENABLE
+config TCPIP_AL_ENABLE
     bool "Enable the tcpip abstract layer"
     default y
 
-if TCIP_AL_ENABLE
+if TCPIP_AL_ENABLE
 
 choice 
     prompt "please select one tcpip implement; if you have your self, please select none"
