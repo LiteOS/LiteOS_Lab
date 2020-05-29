@@ -75,7 +75,7 @@ static const ota_img_t  g_otaimg_flag = {
        .write = imgwrite_func,
        .read = imgread_func,
        .erase = imgerase_func,
-       .erase = imgflush_func,
+       .flush = imgflush_func,
     },
 };
 

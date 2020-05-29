@@ -135,7 +135,7 @@ static const ota_img_t  g_otaimg_backup = {
 
 
 static const ota_img_t  g_otaimg_download = {
-    .name = "BACKUP",
+    .name = "DOWNLOAD",
     .size = CONFIG_OTAIMG_DOWNLOADSIZE,
     .type = EN_OTA_IMG_DOWNLOAD,
     .arg = (uintptr_t)CN_OTAIMG_DOWNLOAD_OFFSET,
