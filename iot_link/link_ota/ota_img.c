@@ -63,7 +63,7 @@ int ota_img_read(en_ota_type_t otatype, en_ota_img_type_t imgtype,int offset, vo
     int ret = -1;
     const ota_img_t *img;
     if((otatype < EN_OTA_TYPE_LAST) && (imgtype  < EN_OTA_IMG_LAST) && \
-       (NULL != g_img_cb_t.ota[otatype][imgtype])  && (NULL != buf) && (offset > 0) && (len > 0))
+       (NULL != g_img_cb_t.ota[otatype][imgtype])  && (NULL != buf) && (offset >= 0) && (len > 0))
     {
         img = g_img_cb_t.ota[otatype][imgtype];
         if((NULL != img->opt.read) && (offset <= (img->size - len)))
@@ -80,7 +80,7 @@ int ota_img_write(en_ota_type_t otatype, en_ota_img_type_t imgtype,int offset,co
     int ret = -1;
     const ota_img_t *img;
     if((otatype < EN_OTA_TYPE_LAST) && (imgtype  < EN_OTA_IMG_LAST) && \
-       (NULL != g_img_cb_t.ota[otatype][imgtype]) && (NULL != buf) && (offset > 0) && (len > 0))
+       (NULL != g_img_cb_t.ota[otatype][imgtype]) && (NULL != buf) && (offset >= 0) && (len > 0))
     {
         img = g_img_cb_t.ota[otatype][imgtype];
         if((NULL != img->opt.write) && (offset <= (img->size - len)))

@@ -11,5 +11,15 @@ ifeq ($(CONFIG_OTA_ENABLE),y)
  		include  $(iot_link_root)/link_ota/patch/build.mk    
     endif
     
+    ifeq ($(CONFIG_OTA_IMG_DEMO),y)
+    	include  $(iot_link_root)/link_ota/img_demo/build.mk   
+    endif
+    
+    ifeq ($(CONFIG_OTA_IMG_CHECK),y)
+    	include  $(iot_link_root)/link_ota/img_check/build.mk   
+    endif
+    
+    
+    
 endif
 
