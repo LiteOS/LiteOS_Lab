@@ -422,8 +422,14 @@ static int task_reportmsg_entry(void *args)
 
     if(0 != ota_flag_get(EN_OTA_TYPE_FOTA,&otaflag))
     {
-        LINK_LOG_ERROR("GET FOTA FLAG ERR");
-        return ret;
+        LINK_LOG_ERROR("GET FOTA FLAG ERR AND SHOULD DO THE INITIALIZE");
+        otaflag.info.curstatus = EN_OTA_STATUS_IDLE;
+        ret = ota_flag_save(EN_OTA_TYPE_FOTA,&otaflag);
+        if(0 != ret)
+        {
+            LINK_LOG_ERROR("FLAG SAVE FAILED AND WE SHOULD QUIT");
+            return ret;
+        }
     }
 
     (void) memset( &connect_para, 0, sizeof(connect_para));
@@ -453,7 +459,7 @@ static int task_reportmsg_entry(void *args)
     {
         otaflag.info.curstatus = EN_OTA_STATUS_IDLE;
         ota_flag_save(EN_OTA_TYPE_FOTA,&otaflag);
-        oc_report_upgraderet(1,CN_OTA_SOTA_VERSION);
+        oc_report_upgraderet(1,CN_OTA_FOTA_VERSION);
     }
 
     while(1)  //do the loop here
