@@ -54,7 +54,7 @@
 
 #ifndef CONFIG_OCMQTTV5_DEMO_DEVICEID
 //#define CONFIG_OCMQTTV5_DEMO_DEVICEID  "5e12ea0a334dd4f337902dc3_iotlink005"
-#define CONFIG_OCMQTTV5_DEMO_DEVICEID  "5ec202b0078a9302c5b7750c_mqttota001"
+#define CONFIG_OCMQTTV5_DEMO_DEVICEID  "5ec3f516cce62b02c56524a9_otamqtt003"
 #endif
 
 #ifndef CONFIG_OCMQTTV5_DEMO_DEVPWD
@@ -423,6 +423,7 @@ static int task_reportmsg_entry(void *args)
     if(0 != ota_flag_get(EN_OTA_TYPE_FOTA,&otaflag))
     {
         LINK_LOG_ERROR("GET FOTA FLAG ERR AND SHOULD DO THE INITIALIZE");
+        memset(&otaflag,0,sizeof(otaflag));
         otaflag.info.curstatus = EN_OTA_STATUS_IDLE;
         ret = ota_flag_save(EN_OTA_TYPE_FOTA,&otaflag);
         if(0 != ret)

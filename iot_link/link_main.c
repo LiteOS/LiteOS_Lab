@@ -87,8 +87,8 @@ int link_main(void *args)
 
     /* add loader code here */
 #ifdef CONFIG_OTA_ENABLE
-    extern int ota_img_init();
-    ota_img_init();
+    #include <ota_init.h>
+    ota_init();
 #endif
 
 ///< install the driver framework
