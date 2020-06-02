@@ -316,11 +316,6 @@ static int __io_read(Network *n, unsigned char *buffer, int len, int timeout_ms)
 {
     int ret = -1;
 
-    if((NULL == n) || (NULL == buffer ))
-    {
-        return ret;
-    }
-
     if(n->arg.type == EN_DTLS_AL_SECURITY_TYPE_NONE)
     {
         ret = __socket_read(n->ctx, buffer, len, timeout_ms);
@@ -336,11 +331,6 @@ static int __io_read(Network *n, unsigned char *buffer, int len, int timeout_ms)
 static int __io_write(Network *n, unsigned char *buffer, int len, int timeout_ms)
 {
     int ret = -1;
-
-    if((NULL == n) || (NULL == buffer ))
-    {
-        return -1;
-    }
 
     if(n->arg.type == EN_DTLS_AL_SECURITY_TYPE_NONE)
     {
@@ -392,6 +382,69 @@ static void __io_disconnect(Network *n)
     return;
 }
 
+
+///< make the mqtt io loop read or write
+static int mqtt_io_read(Network *n, unsigned char *buffer, int len, int timeout_ms)
+{
+    int ret = -1;
+    int cur_sum = 0;
+    int cur_ret;
+    unsigned long long time_deadtime;
+
+    if((NULL == n) || (NULL == buffer ))
+    {
+        return ret;
+    }
+
+    time_deadtime = osal_sys_time();
+    do{
+        cur_ret = __io_read(n, buffer+cur_sum,len-cur_sum,timeout_ms);
+        if(cur_ret == 0)
+        {
+            ret = 0;
+            break;
+        }
+        else if(cur_ret > 0)
+        {
+            cur_sum += cur_ret;
+            ret = cur_sum;
+        }
+
+    }while((osal_sys_time() < time_deadtime) && (cur_sum < len));
+
+    return ret;
+}
+
+static int mqtt_io_write(Network *n, unsigned char *buffer, int len, int timeout_ms)
+{
+    int ret = -1;
+    int cur_sum = 0;
+    int cur_ret;
+    unsigned long long time_deadtime;
+
+    if((NULL == n) || (NULL == buffer ))
+    {
+        return ret;
+    }
+
+    time_deadtime = osal_sys_time();
+    do{
+        cur_ret = __io_write(n, buffer+cur_sum,len-cur_sum,timeout_ms);
+        if(cur_ret == 0)
+        {
+            ret = 0;
+            break;
+        }
+        else if(cur_ret > 0)
+        {
+            cur_sum += cur_ret;
+            ret = cur_sum;
+        }
+
+    }while((osal_sys_time() < time_deadtime) && (cur_sum < len));
+
+    return ret;
+}
 ///////////////////////CREATE THE API FOR THE MQTT_AL///////////////////////////
 void __mqtt_cb_stop(paho_mqtt_cb_t   *cb)
 {
@@ -448,8 +501,8 @@ static void * __connect(mqtt_al_conpara_t *conparam)
 
     //do the net connect
     n = &cb->network;
-    n->mqttread = __io_read;
-    n->mqttwrite = __io_write;
+    n->mqttread = mqtt_io_read;
+    n->mqttwrite = mqtt_io_write;
 
     if(NULL == conparam->security)
     {
