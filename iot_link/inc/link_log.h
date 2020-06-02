@@ -43,7 +43,6 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <stdio.h>
-
 #include <iot_link_config.h>
 /**
  * @brief:this defines for the log module, and  LINK_LOG_TRACE/LINK_LOG_DEBUG will not participate the compile in the release version
@@ -118,8 +117,8 @@ extern unsigned long long osal_sys_time(void);
 #define LINK_LOG(level,fmt, ...) \
     do \
     { \
-        link_printf("[%s][%u][%s:%d] " fmt "\r\n", \
-        link_log_level_name((level)), (unsigned int)osal_sys_time(), __FUNCTION__, __LINE__, ##__VA_ARGS__); \
+        link_printf("[%s][%u][%s] " fmt "\r\n", \
+        link_log_level_name((level)), (unsigned int)osal_sys_time(),__FUNCTION__, ##__VA_ARGS__); \
     } while (0)
 
 #define LINK_LOG_TRACE(fmt, ...) \

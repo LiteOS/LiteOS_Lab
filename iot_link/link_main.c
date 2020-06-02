@@ -73,7 +73,7 @@ int link_main(void *args)
     s_link_start =1;
 
     (void)osal_init();
-    LINK_LOG_DEBUG("linkmain:%s \n\r",linkmain_version());
+    LINK_LOG_DEBUG("linkmain:%s",linkmain_version());
 
 #ifdef CONFIG_STIMER_ENABLE
     #include <stimer.h>

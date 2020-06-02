@@ -107,13 +107,18 @@ static at_cb_t g_at_cb;   //this is the at controller here
 static void print_ascii(const char *index,const uint8_t *data, int len)
 {
     int i = 0;
-    int tmp;
 
     link_printf("%s:%d bytes:",index,len);
     for( i = 0;i< len;i++)
     {
-        tmp = isprint((int)data[i])?(int)data[i]:'?';
-        link_printf("%c",(char)tmp);
+        if(isprint((int)data[i]))
+        {
+            link_printf("%c",(char)data[i]);
+        }
+        else
+        {
+            link_printf("\\%02x ",(int)((int)data[i]));
+        }
     }
     link_printf("\r\n");
     return;

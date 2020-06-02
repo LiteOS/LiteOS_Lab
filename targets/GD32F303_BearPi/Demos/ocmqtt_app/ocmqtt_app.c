@@ -55,7 +55,7 @@
 
 #define CONFIG_OCMQTTV5_DEMO_SERVERIP       "121.36.42.100"
 #define CONFIG_OCMQTTV5_DEMO_SERVERPORT     "1883"
-#define CONFIG_OCMQTTV5_DEMO_DEVICEID       "5eb7650e9c441c07e956261c_MQTTBoard001"
+#define CONFIG_OCMQTTV5_DEMO_DEVICEID       "5ed5f2c039d04f02c7d8fe80_MqttBoard001"
 #define CONFIG_OCMQTTV5_DEMO_DEVPWD         "f62fcf47d62c4ed18913"
 #define CONFIG_OCMQTTV5_DEMO_LIFE           60     ///< seconds
 
@@ -388,10 +388,13 @@ void HardWare_Init(void)
     osal_int_connect(EXTI1_IRQn, 3,0,EXTI1_IRQHandler,NULL);
 }
 
+
+static const char *g_user_instruction = "There are two buttons and one light;When push the buttons, we will counter and do the report!";
 int standard_app_demo_main()
 {
     int ret = -1;
-    LINK_LOG_DEBUG("DO THE OC MQTT V5 DEMOS\n\r");
+    LINK_LOG_DEBUG("This Is MQTT V5 DEMOS:ScoreBoard");
+    LINK_LOG_DEBUG("Usage:%s",g_user_instruction);
     HardWare_Init();
     if(false == osal_semp_create(&g_app_cb.reportsync,1,0))
     {

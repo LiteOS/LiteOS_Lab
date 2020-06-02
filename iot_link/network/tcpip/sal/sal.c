@@ -63,7 +63,7 @@ int link_tcpip_init(void)
     s_sal_cb.domain = NULL;
 
     ret = link_tcpip_imp_init();
-    LINK_LOG_DEBUG("IOT_LINK:DO TCPIP LOAD-IMPLEMENT RET:%d\n\r",ret);
+    LINK_LOG_DEBUG("IOT_LINK:DO TCPIP LOAD-IMPLEMENT RET:%d",ret);
 
 
     return ret;

@@ -59,10 +59,8 @@ this file implement the shell for the system.the following instruction you must 
 #include <stdio.h>
 #include <string.h>
 #include <shell.h>
+#include <link_log.h>
 #include <osal.h>
-
-
-
 
 /**************************************FILE DEFINES****************************/
 //DEFINE VIRTUAL KEYS:VIRTUAL KEYS ARE COMBINED BY:0X1b 0xXX CODE
@@ -129,9 +127,7 @@ instruction  :you could reimplement by redirection
 *******************************************************************************/
 static void shell_put_char(int ch)
 {
-    putchar(ch);
-    fflush (stdout) ; //if you use the glibc, then the you must use this to make it
-                      //output immediately
+    link_printf("%c",ch);
 }
 
 /*******************************************************************************
