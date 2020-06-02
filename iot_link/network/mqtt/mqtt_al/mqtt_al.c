@@ -87,24 +87,19 @@ int mqtt_al_uninstall()
 
 __attribute__((weak))  int mqtt_imp_init(void)
 {
-    LINK_LOG_DEBUG("%s:###please implement mqtt by yourself####\n\r",__FUNCTION__);
+    LINK_LOG_DEBUG("%s:###please implement mqtt by yourself####",__FUNCTION__);
     return -1;
 }
 
 int mqtt_al_init(void)
 {
-
     int ret;
 
     ret = mqtt_imp_init();
-
-    LINK_LOG_DEBUG("IOT_LINK:DO MQTT LOAD-IMPLEMENT RET:%d\n\r",ret);
-
+    LINK_LOG_DEBUG("IOT_LINK:DO MQTT LOAD-IMPLEMENT RET:%d",ret);
 
     return ret;
 }
-
-
 
 int  mqtt_al_deinit()
 {
@@ -146,7 +141,7 @@ int mqtt_al_disconnect(void *handle)
 }
 
 
-int    mqtt_al_publish(void *handle, mqtt_al_pubpara_t *pubpara)
+int mqtt_al_publish(void *handle, mqtt_al_pubpara_t *pubpara)
 {
 
     int ret = -1;

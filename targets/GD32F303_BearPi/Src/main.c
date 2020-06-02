@@ -92,7 +92,6 @@ int main(void)
 {
     UINT32 uwRet;
 
-
     uwRet = LOS_KernelInit();
 	if (uwRet != LOS_OK)
 	{

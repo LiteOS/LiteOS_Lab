@@ -135,14 +135,14 @@ static int esp8266_rcvdeal(void *args,void *msg,size_t len)
 
     if(len <strlen(CN_ESP8266_RCVINDEX))
     {
-        LINK_LOG_DEBUG("%s:invalid frame:%d byte:%s\n\r",__FUNCTION__,len,(char *)data);
+        LINK_LOG_DEBUG("%s:invalid frame:%d byte:%s",__FUNCTION__,len,(char *)data);
         return ret;
     }
     //now deal the data
     str = strstr((char *)data,",");
     if(NULL == str)
     {
-        LINK_LOG_DEBUG("%s:format error\n\r",__FUNCTION__);
+        LINK_LOG_DEBUG("%s:format error",__FUNCTION__);
         return ret; //format error
     }
     str++;
@@ -587,17 +587,17 @@ int link_tcpip_imp_init(void)
         esp8266_set_mux(0);
     }
 
-    at_debugclose();
+//    at_debugclose();
    //reach here means everything is ok, we can go now
     ret = link_sal_install(&s_tcpip_socket);
 
     if(0 == ret)
     {
-        LINK_LOG_DEBUG("sal:install socket success\r\n");
+        LINK_LOG_DEBUG("sal:install socket success");
     }
     else
     {
-        LINK_LOG_DEBUG("sal:install socket failed\r\n");
+        LINK_LOG_DEBUG("sal:install socket failed");
     }
 
     return ret;

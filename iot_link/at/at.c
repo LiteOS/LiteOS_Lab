@@ -37,6 +37,8 @@
 #include <string.h>
 #include <driver.h>
 #include <sys/fcntl.h>
+#include <ctype.h>
+#include <link_log.h>
 
 //these defines could be reconfigured at the iot_link_config.h
 
@@ -49,16 +51,12 @@
 #endif
 
 #ifndef CONFIG_AT_RECVMAXLEN
-#define CONFIG_AT_RECVMAXLEN             1024           //PROSING THAT COULD GET THE MOST REPSLENGTH
+#define CONFIG_AT_RECVMAXLEN             2048           //PROSING THAT COULD GET THE MOST REPSLENGTH
 #endif
 
 #ifndef CONFIG_AT_TASKPRIOR
 #define CONFIG_AT_TASKPRIOR              10
 #endif
-
-
-
-
 
 //at control block here
 typedef struct
@@ -105,33 +103,63 @@ typedef struct
 }at_cb_t;
 static at_cb_t g_at_cb;   //this is the at controller here
 
+
+static void print_ascii(const char *index,const uint8_t *data, int len)
+{
+    int i = 0;
+
+    link_printf("%s:%d bytes:",index,len);
+    for( i = 0;i< len;i++)
+    {
+        if(isprint((int)data[i]))
+        {
+            link_printf("%c",(char)data[i]);
+        }
+        else
+        {
+            link_printf("\\%02x ",(int)((int)data[i]));
+        }
+    }
+    link_printf("\r\n");
+    return;
+}
+
+static void print_hex(const char *index,const uint8_t *data, int len)
+{
+    int i = 0;
+    link_printf("%s:%d bytes:",index, len);
+    for(i =0;i<len;i++)
+    {
+        link_printf("%02x ",*((uint8_t *)(data) + i));
+    }
+    link_printf("\r\n");
+    return;
+}
+
+static void print_payload(const char *index,const uint8_t *data, int len,en_at_rxtx_debugmode mode)
+{
+    if(mode == en_at_debug_ascii)
+    {
+        print_ascii(index, data, len);
+    }
+    else if(mode == en_at_debug_hex)
+    {
+        print_hex(index,data, len);
+    }
+    else
+    {
+
+    }
+}
 //this function used to send the data to the AT channel
 static int __cmd_send(const void *buf,size_t buflen,uint32_t timeout)
 {
-    int i = 0;
     ssize_t ret = 0;
-    int debugmode;
 
     ret = los_dev_write(g_at_cb.devhandle,0,buf,buflen,timeout);
     if(ret > 0)
     {
-        debugmode = g_at_cb.txdebugmode;
-        switch (debugmode)
-        {
-            case en_at_debug_ascii:
-                LINK_LOG_DEBUG("ATSND:%d Bytes:%s\n\r",(int)ret,(char *)buf);
-                break;
-            case en_at_debug_hex:
-                LINK_LOG_DEBUG("ATSND:%d Bytes:",(int)ret);
-                for(i =0;i<ret;i++)
-                {
-                    LINK_LOG_DEBUG("%02x ",*((uint8_t *)(buf) + i));
-                }
-                LINK_LOG_DEBUG("\n\r");
-                break;
-            default:
-                break;
-        }
+        print_payload("ATSND",buf, buflen,g_at_cb.txdebugmode);
         ret = 0;
     }
     else
@@ -144,30 +172,12 @@ static int __cmd_send(const void *buf,size_t buflen,uint32_t timeout)
 //this function used to receive data from the AT channel
 static int __resp_rcv(void *buf,size_t buflen,uint32_t timeout)
 {
-    int i = 0;
     ssize_t ret = 0;
-    int debugmode;
 
     ret = los_dev_read(g_at_cb.devhandle,0,buf,buflen,timeout);
     if(ret > 0)
     {
-        debugmode = g_at_cb.rxdebugmode;
-        switch (debugmode)
-        {
-            case en_at_debug_ascii:
-                LINK_LOG_DEBUG("ATRCV:%d Bytes:%s\n\r",(int)ret,(char *)buf);
-                break;
-            case en_at_debug_hex:
-                LINK_LOG_DEBUG("ATRCV:%d Bytes:",(int)ret);
-                for(i =0;i<ret;i++)
-                {
-                    LINK_LOG_DEBUG("%02x ",*((uint8_t *)(buf) + i));
-                }
-                LINK_LOG_DEBUG("\n\r");
-                break;
-            default:
-                break;
-        }
+        print_payload("ATRCV",buf, ret,g_at_cb.rxdebugmode);
     }  
  
     return ret;
