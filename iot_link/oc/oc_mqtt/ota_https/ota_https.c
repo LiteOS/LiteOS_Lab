@@ -388,7 +388,19 @@ static int https_filedownload(ota_https_para_t  *param,http_section_t *section)
     ret = ota_flag_get(param->ota_type, &otaflag);
     if(ret != 0 )
     {
+        LINK_LOG_ERROR("Get the failed");
         goto EXIT_FLAGGET;
+    }
+
+    ret = ota_img_erase(param->ota_type,EN_OTA_IMG_DOWNLOAD);
+    if(ret != 0 )
+    {
+        LINK_LOG_ERROR("Erase the download img failed");
+        goto EXIT_FLAGGET;
+    }
+    else
+    {
+        LINK_LOG_DEBUG("Erase the download img SUCCESS");
     }
 
     file_off = 0;
@@ -473,16 +485,9 @@ int ota_https_download(ota_https_para_t *param)
 
     osal_free(section);
 
-
 EXIT_SECTIONPARAM:
    return ret;
 }
-
-
-
-
-
-
 
 #ifdef CONFIG_SHELL_ENABLE
 #include <shell.h>
