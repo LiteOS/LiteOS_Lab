@@ -73,28 +73,44 @@ static const char g_https_serverca[] =
 
 
 ///< build the http request
-#define CN_OTA_HTTPS_REQ_FMT  "GET %s HTTP/1.1\r\nAuthorization: Bearer %s\r\nHost: %s:%s\r\n\r\n"
+#define CN_OTA_HTTPS_REQ_FMT  "GET %s HTTP/1.1\r\nAuthorization: Bearer %s\r\nHost: %s:%s\r\nConnection: keep-alive\r\nRange: bytes=%d-%d\r\n\r\n"
+
+#ifndef CONFIG_HTTPOTA_BUFLEN
+#define CONFIG_HTTPOTA_BUFLEN  1024
+#endif
+
+#ifndef CONFIG_OCMQTT_HTTPS_TIMEOUT
+#define CONFIG_OCMQTT_HTTPS_TIMEOUT   (10*1000)
+#endif
+
 typedef struct
 {
     const char *host;
     const char *port;
     const char *url_re;
-}ota_https_netpara_t;
-static int ota_https_buildreq(ota_https_para_t *cb,ota_https_netpara_t *netpara)
+    const char *bearer;
+    int         offset;
+    int         len;
+    uint8_t     cache[CONFIG_HTTPOTA_BUFLEN];
+}http_section_t;
+
+///< build the request header
+static int http_makerequest(http_section_t *section)
 {
     int ret;
-    ret = snprintf((char *)cb->cache,CONFIG_OCMQTT_HTTPS_CACHELEN,CN_OTA_HTTPS_REQ_FMT,netpara->url_re,\
-                    cb->authorize,netpara->host,netpara->port);
+    ret = snprintf((char *)section->cache,CONFIG_HTTPOTA_BUFLEN,CN_OTA_HTTPS_REQ_FMT,section->url_re,\
+            section->bearer,section->host,section->port,section->offset + 1, section->offset + section->len); ///< start from 1
     return ret;
 }
 
+///< this is the url test format
 ///< https://121.36.42.100:8943/iodm/dev/v2.0/upgradefile/applications/qOrU58z7TMg2fao5xceWanjjQSAa/devices/5e12ea0a334dd4f337902dc3_iotlink005/packages/b2731c6b96178488a8862ace
 #define CN_URL_HOST_INDEX "https://"
 #define CN_URL_PORT_INDEX ":"
 #define CN_URL_PORT_DEFAULT "443"
-static ota_https_netpara_t *ota_https_getnetpara(ota_https_para_t *cb)
+static http_section_t *http_decodeurl(ota_https_para_t *cb)
 {
-    ota_https_netpara_t *ret = NULL;
+    http_section_t *ret = NULL;
     const char *host_start;
     const char *host_end;
     const char *port_start;
@@ -143,14 +159,14 @@ static ota_https_netpara_t *ota_https_getnetpara(ota_https_para_t *cb)
         urlre_start = tmp_ret;
         urlre_end = cb->url + strlen(cb->url) -1;
     }
-    len = sizeof(ota_https_netpara_t) + (host_end - host_start +1) + (port_end- port_start +1) + (urlre_end - urlre_start + 1);
-    tmp = osal_malloc(len);
-    if(NULL == tmp)
+    len = sizeof(http_section_t) + (host_end - host_start + 1 + 1) + (port_end- port_start + 1 + 1) + (urlre_end - urlre_start + 1 + 1);
+    ret = (http_section_t *)osal_malloc(len);
+    if(NULL == ret)
     {
         goto EXIT_MEM;
     }
-    ret = (ota_https_netpara_t *)tmp;
-    tmp += sizeof(ota_https_netpara_t);
+    tmp = (char *)ret;
+    tmp += sizeof(http_section_t);
     ///< initialize the member in the parameters
     len = host_end - host_start + 1;
     memcpy(tmp, host_start, len);
@@ -169,6 +185,7 @@ static ota_https_netpara_t *ota_https_getnetpara(ota_https_para_t *cb)
     tmp[len] = '\0';
     ret->url_re = tmp;
 
+    ret->bearer = cb->authorize;
     return ret;
 
 EXIT_MEM:
@@ -229,7 +246,7 @@ typedef enum
     EN_HEADER_STATUS_RNRN,       ///< which means receive the \r\n\r\n
 }en_header_status;
 
-static int loop_dealheader(ota_https_para_t *cb,void *handle)
+static int loop_dealheader(http_section_t *section,void *handle)
 {
     int ret = -1;
     int offset = 0;
@@ -242,7 +259,11 @@ static int loop_dealheader(ota_https_para_t *cb,void *handle)
         {
             break;
         }
-        cb->cache[offset ++] = (uint8_t)cur;
+        if(offset < (CONFIG_HTTPOTA_BUFLEN-1))
+        {
+            section->cache[offset ++] = (uint8_t)cur;   ///< we should check if overblow
+        }
+
         switch (status)
         {
             case EN_HEADER_STATUS_NORMAL:
@@ -283,44 +304,95 @@ static int loop_dealheader(ota_https_para_t *cb,void *handle)
                 break;
             default:
                 break;
-
         }
-
     }
+
+    if(offset > 0)
+    {
+        section->cache[offset] = '\0';
+        LINK_LOG_DEBUG("HEADER:%s",section->cache);
+    }
+
 
     return ret;
 }
 
 
-///< return 0 success while -1 failed;
-int ota_https_download(ota_https_para_t *param)
+///< use this function to do the request
+static int http_getandrecv(http_section_t *section,void *handle)
 {
-    int ret = -1;
+    int ret;
     int len;
-    void *handle = NULL;
-    uint8_t *buf;
-    ota_https_netpara_t  *netpara;
-    dtls_al_para_t dtls_para;
+    ///< send the request
+    len = http_makerequest(section);
+    LINK_LOG_DEBUG("HTTPREQ:%d Bytes REQ:%s\r\n",len,section->cache);
+
+    ret = loop_netwrite(handle, section->cache,len,CONFIG_OCMQTT_HTTPS_TIMEOUT);
+    if(ret != 0)
+    {
+        LINK_LOG_ERROR("TLS REQUEST ERR");
+        goto EXIT_HANDLE;
+    }
+    ///< WE SHOULD DEAL THE HTTP HEADER
+    ret = loop_dealheader(section,handle);
+    if(ret != 0)
+    {
+        LINK_LOG_ERROR("HTTP HEADER ERR");
+        goto EXIT_HANDLE;
+    }
+
+    len = section->len; ///< should check if the response matched the length--TODO
+    ret = loop_netread(handle, section->cache,len,CONFIG_OCMQTT_HTTPS_TIMEOUT);
+
+EXIT_HANDLE:
+    return ret;
+}
+
+///< use this function to do the request and do the storage
+static int http_dealsection(http_section_t *section,void *handle,en_ota_type_t otatype)
+{
+    int ret;
+
+    ret = http_getandrecv(section, handle);
+    if(ret == 0)
+    {
+        LINK_LOG_DEBUG("DOWNLOAD OFFSET:%d LEN:%d SUCCESS",section->offset, section->len);
+
+        ret = ota_img_write(otatype, EN_OTA_IMG_DOWNLOAD, section->offset, section->cache, section->len);
+        if( ret == 0)
+        {
+            LINK_LOG_DEBUG("SAVE OFFSET:%d LEN:%d SUCCESS",section->offset, section->len);
+        }
+        else
+        {
+            LINK_LOG_ERROR("SAVE OFFSET:%d LEN:%d FAILED",section->offset, section->len);
+        }
+    }
+    else
+    {
+        LINK_LOG_ERROR("DOWNLOAD OFFSET:%d LEN:%d FAILED",section->offset, section->len);
+    }
+    return ret;
+}
+
+///< download the file by split it to sections
+static int https_filedownload(ota_https_para_t  *param,http_section_t *section)
+{
+    int ret = 1;
+    int file_off;
+    int file_lenleft;
     ota_flag_t     otaflag;
-    ota_flag_t     otaflagclone;
+    dtls_al_para_t dtls_para;
+    void          *handle = NULL;
 
-
-    ///< first we will get the ota flag.
-    en_ota_type_t  otatype= param->ota_type;
-    if(0 != ota_flag_get(otatype, &otaflag))
+    ret = ota_flag_get(param->ota_type, &otaflag);
+    if(ret != 0 )
     {
-        goto EXIT_PARAM;
+        goto EXIT_FLAGGET;
     }
-    otaflag.info.img_download.file_size = param->file_size;
-    otaflag.info.img_download.file_off = param->file_offset;
-    strncpy((char *)otaflag.info.img_download.ver,param->version,CONFIG_OTA_VERSIONLEN);
-    otaflag.info.curstatus = EN_OTA_STATUS_DOWNLOADING;
 
-    netpara = ota_https_getnetpara(param);
-    if(NULL == netpara)
-    {
-        goto EXIT_NETPARA;
-    }
+    file_off = 0;
+    file_lenleft = param->file_size;
 
     (void) memset( &dtls_para,0, sizeof(dtls_para));
     dtls_para.security.type = EN_DTLS_AL_SECURITY_TYPE_CERT;
@@ -335,83 +407,148 @@ int ota_https_download(ota_https_para_t *param)
         goto EXIT_TLSHANDLE;
     }
 
-    ret = dtls_al_connect( handle, netpara->host, netpara->port, CONFIG_OCMQTT_HTTPS_TIMEOUT);
+    ret = dtls_al_connect( handle, section->host, section->port, CONFIG_OCMQTT_HTTPS_TIMEOUT);
     if (ret != EN_DTLS_AL_ERR_OK)
     {
         LINK_LOG_ERROR("TLS CONNECT ERR");
         goto EXIT_TLSCONNECT;
     }
-    ///< send the request
-    len = ota_https_buildreq(param,netpara);
-    LINK_LOG_DEBUG("HTTPREQ:%d Bytes REQ:%s\r\n",len,param->cache);
 
-    ret = loop_netwrite(handle, param->cache,len,CONFIG_OCMQTT_HTTPS_TIMEOUT);
-    if(ret != 0)
+    while(file_lenleft > 0)
     {
-        LINK_LOG_ERROR("TLS REQUEST ERR");
-        goto EXIT_REQSEND;
-    }
-    ///< WE SHOULD DEAL THE HTTP HEADER
-    ret = loop_dealheader(param,handle);
-    if(ret != 0)
-    {
-        LINK_LOG_ERROR("HTTP HEADER ERR");
-        goto EXIT_HTTPHEADER;
-    }
+        section->offset = file_off;
+        section->len = file_lenleft > CONFIG_HTTPOTA_BUFLEN?CONFIG_HTTPOTA_BUFLEN:file_lenleft;
 
-    ///< DO THE BODY RECEIVE
-    ///< firs we will erase the download area
-    ota_img_erase(otatype, EN_OTA_IMG_DOWNLOAD);
-
-    LINK_LOG_DEBUG("HTTP BODY RECEIVE");
-    buf = param->cache;
-    len = (param->file_size - param->file_offset) > CONFIG_OCMQTT_HTTPS_CACHELEN?CONFIG_OCMQTT_HTTPS_CACHELEN:(param->file_size - param->file_offset);
-    do{
-        ret = loop_netread(handle, buf,len,CONFIG_OCMQTT_HTTPS_TIMEOUT);
-        ///< deal the data
-        if(ret == 0)
+        ret = http_dealsection(section, handle, param->ota_type);
+        if(0 == ret)
         {
-            LINK_LOG_DEBUG("RCVING:total:%d hasrcved:%d curlen:%d \r\n",param->file_size, param->file_offset,len);
-            ret = ota_img_write(otatype, EN_OTA_IMG_DOWNLOAD, otaflag.info.img_download.file_off, buf, len);
-            if(0 != ret)
-            {
-                break;
-            }
-            param->file_offset += len;
-            otaflag.info.img_download.file_off += len;
+            file_lenleft -= section->len;
+            file_off += section->len;
         }
-        buf  = param->cache;
-        len = (param->file_size - param->file_offset) > CONFIG_OCMQTT_HTTPS_CACHELEN?CONFIG_OCMQTT_HTTPS_CACHELEN:(param->file_size - param->file_offset);
-    }while((ret == 0) && (param->file_size != param->file_offset));
-    LINK_LOG_DEBUG("RCVFINISHED:total:%d hasrcved:%d\r\n",param->file_size, param->file_offset);
-    if(param->file_size == param->file_offset)
-    {
-        otaflag.info.curstatus = EN_OTA_STATUS_DOWNLOADED;
-        ret = 0;
+        else
+        {
+            break;
+        }
     }
-    (void)ota_img_flush(otatype, EN_OTA_IMG_DOWNLOAD);
-    (void)ota_flag_save(otatype,&otaflag);
-
-    ota_flag_get(otatype, &otaflagclone);
-    if(0 != memcmp(&otaflag, &otaflagclone,sizeof(otaflag)))
+    ///< if we download success
+    dtls_al_destroy(handle);
+    (void)ota_img_flush(param->ota_type, EN_OTA_IMG_DOWNLOAD);
+    if(ret == 0)
+    {
+        otaflag.info.img_download.file_size = param->file_size;
+        otaflag.info.img_download.file_off = param->file_offset;
+        strncpy((char *)otaflag.info.img_download.ver,param->version,CONFIG_OTA_VERSIONLEN);
+        otaflag.info.curstatus = EN_OTA_STATUS_DOWNLOADED;
+        ret = ota_flag_save(param->ota_type,&otaflag);
+    }
+    if(0 != ret)
     {
         LINK_LOG_ERROR("FLAG SAVE ERR");
     }
-    else
-    {
-        LINK_LOG_DEBUG("FLAG SAVE OK");
-    }
+    return ret;
 
-EXIT_HTTPHEADER:
-EXIT_REQSEND:
+
 EXIT_TLSCONNECT:
     dtls_al_destroy(handle);
 EXIT_TLSHANDLE:
-    osal_free(netpara);
-EXIT_NETPARA:
-EXIT_PARAM:
+EXIT_FLAGGET:
+    ret = -1;
     return ret;
 }
+
+
+
+///< return 0 success while -1 failed;
+int ota_https_download(ota_https_para_t *param)
+{
+    int ret = -1;
+    http_section_t *section;
+
+    section = http_decodeurl(param);
+    if(NULL == section)
+    {
+        goto EXIT_SECTIONPARAM;
+    }
+    ret = https_filedownload(param, section);
+
+    osal_free(section);
+
+
+EXIT_SECTIONPARAM:
+   return ret;
+}
+
+
+
+
+
+
+
+#ifdef CONFIG_SHELL_ENABLE
+#include <shell.h>
+
+
+static int shell_tls(int argc, const char *argv[])
+{
+    int ret = -1;
+    dtls_al_para_t dtls_para;
+    void          *handle = NULL;
+    (void) memset( &dtls_para,0, sizeof(dtls_para));
+    dtls_para.security.type = EN_DTLS_AL_SECURITY_TYPE_CERT;
+    dtls_para.istcp = 1;
+    dtls_para.isclient = 1;
+    dtls_para.security.u.cert.server_ca = (uint8_t *)g_https_serverca;
+    dtls_para.security.u.cert.server_ca_len = sizeof(g_https_serverca);
+
+    if(EN_DTLS_AL_ERR_OK != dtls_al_new(&dtls_para,&handle))
+    {
+        LINK_LOG_ERROR("TLS HANDLE BUILD ERR");
+        goto EXIT_TLSHANDLE;
+    }
+
+    ret = dtls_al_connect( handle,"121.36.42.100", "8943", CONFIG_OCMQTT_HTTPS_TIMEOUT);
+    if (ret != EN_DTLS_AL_ERR_OK)
+    {
+        LINK_LOG_ERROR("TLS CONNECT ERR");
+        goto EXIT_TLSCONNECT;
+    }
+
+    EXIT_TLSCONNECT:
+        dtls_al_destroy(handle);
+    EXIT_TLSHANDLE:
+        ret = -1;
+        return ret;
+}
+
+OSSHELL_EXPORT_CMD(shell_tls,"tls","tls");
+
+
+//use this shell command,you could input at command through the terminal
+static int shell_ota(int argc, const char *argv[])
+{
+    int ret = -1;
+    ota_https_para_t param;
+
+    param.authorize = "b049fe1108541641fac2950224f38121ca2b8bd109231a20be8184a6aa25ff22";
+    param.eventlog = NULL;
+    param.file_offset = 0;
+    param.file_size = 153749;
+    param.ota_type = EN_OTA_TYPE_FOTA;
+    param.signatural ="fe1cd0c44ae669982755637af47d1fcda78bca409fb4bd5f2a2a5e7b0812da55";
+    param.url = "https://121.36.42.100:8943/iodm/dev/v2.0/upgradefile/applications/2d5d5e70abde4f6a802b9f8476e9fcf0/devices/5ec3f516cce62b02c56524a9_otamqtt003/packages/112d9ce0a943e8964606a8b3";
+    param.version= "FOTAV2";
+
+    ret = ota_https_download(&param);
+    return ret;
+}
+OSSHELL_EXPORT_CMD(shell_ota,"ota","ota");
+
+
+#endif
+
+
+
+
 
 
 
