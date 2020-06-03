@@ -40,14 +40,6 @@
 #define LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_OTA_OTA_HTTPS_H_
 
 
-///< this file implement the downloading profile
-#ifndef CONFIG_OCMQTT_HTTPS_CACHELEN
-#define CONFIG_OCMQTT_HTTPS_CACHELEN  1024
-#endif
-
-#ifndef CONFIG_OCMQTT_HTTPS_TIMEOUT
-#define CONFIG_OCMQTT_HTTPS_TIMEOUT   (10*1000)
-#endif
 
 ///< this function used for write the data to the flash
 typedef int (*fn_binwrite)(int offset, uint8_t *buf, int len);
@@ -70,10 +62,8 @@ typedef struct
     const char *version;
     int                 file_size;
     int                 file_offset;
-    uint8_t             cache[CONFIG_OCMQTT_HTTPS_CACHELEN];
-    int                 ota_type;
+    en_ota_type_t       ota_type;
     fn_httpsdownload_event eventlog;
-    fn_binwrite         file_write;
 }ota_https_para_t;
 int ota_https_download(ota_https_para_t *param);
 
