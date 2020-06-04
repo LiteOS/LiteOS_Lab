@@ -79,7 +79,7 @@
 
 **目的**
 
-本文档用于指导开发者了解IoT Device SDK Tiny，并且能够通过集成IoT Device SDK Tiny对接华为OceanConnect云平台，开发自己的物联网应用。
+本文档用于指导开发者了解IoT Device SDK Tiny，并且能够通过集成IoT Device SDK Tiny对接华为IoT云平台，开发自己的物联网应用。
 
 
 **符号约定**
@@ -117,7 +117,7 @@
 ## 3.1 SDK介绍
 IoT Device SDK Tiny是部署在具备广域网能力、对功耗/存储/计算资源有苛刻限制的终端设备上的轻量级互联互通中间件，您只需调用API接口，便可实现设备快速接入到物联网平台以及数据上报和命令接收等功能。
 
-IoT Device SDK Tiny提供端云协同能力，集成了MQTT、LwM2M、CoAP、mbedtls、LwIP 全套 IoT 互联互通协议栈，且在这些协议栈的基础上，提供了开放 API，用户只需关注自身的应用，而不必关注协议内部实现细节，直接使用IoT Device SDK Tiny封装的API，通过连接、数据上报、命令接收和断开四个步骤就能简单快速地实现与华为OceanConnect云平台的安全可靠连接。使用IoT Device SDK Tiny，用户可以大大减少开发周期，聚焦自己的业务开发，快速构建自己的产品。
+IoT Device SDK Tiny提供端云协同能力，集成了MQTT、LwM2M、CoAP、mbedtls、LwIP 全套 IoT 互联互通协议栈，且在这些协议栈的基础上，提供了开放 API，用户只需关注自身的应用，而不必关注协议内部实现细节，直接使用IoT Device SDK Tiny封装的API，通过连接、数据上报、命令接收和断开四个步骤就能简单快速地实现与华为IoT云平台的安全可靠连接。使用IoT Device SDK Tiny，用户可以大大减少开发周期，聚焦自己的业务开发，快速构建自己的产品。
 ## 3.2 软件架构
 IoT Device SDK Tiny的软件架构如下图所示，主要分为以下几层：
 
@@ -132,7 +132,7 @@ IoT Device SDK Tiny的软件架构如下图所示，主要分为以下几层：
 - OS适配层：提供了LiteOS、Linux等操作系统内核，您也可以添加第三方操作系统内核。
 
 
-- HAL硬件平台抽象层：提供交叉编译能力，以便于Agent Tiny 集成在不同硬件平台。
+- HAL硬件平台抽象层：提供交叉编译能力，以便于SDK 集成在不同硬件平台。
 
 
 ![](./meta/IoT_Link/sdk/06.png)
@@ -179,7 +179,7 @@ SOTA升级的主要流程为：
 
 （4）	创建软件升级任务；
 
-具体软件升级操作步骤请参考开发中心—软件升级<https://support.huaweicloud.com/devg-IoT/iot_02_9983.html>。
+具体软件升级操作步骤请参考开发中心—软件升<https://support.huaweicloud.com/usermanual-iothub/iot_01_0047.html>。
 
 
 # 4 下载SDK
@@ -196,7 +196,6 @@ SOTA升级的主要流程为：
 
 |  一级目录 | 二级目录 | 三级目录 | 说明 |
 |:--------|:--------|:---------|------|
-|demos|——|——|LwM2M、MQTT、CoAP等协议的demo范例|
 |doc|——|——|存放使用文档及API说明等文档|
 |drivers/third_party|GigaDevice|——|第三方MCU厂商GD的BSP库|
 ||ST|——|第三方MCU厂商ST的BSP库|
@@ -209,7 +208,6 @@ SOTA升级的主要流程为：
 ||inc|——|存放内核内部使用头文件|
 ||link_log|——|日志|
 ||link_misc|——|杂项|
-||loader|——|应用加载|
 ||network|coap|CoAP的适配及协议实现|
 |||dtls|mbedtls的适配及协议实现|
 |||lwm2m|LwM2M的开源协议栈wakaama的适配|
@@ -219,16 +217,14 @@ SOTA升级的主要流程为：
 |||oc_mqtt|MQTT协议适配华为OC|
 ||os|osal|IoT Device SDK Tiny的OS适配|
 |||os_imp|目前系统适配层适配的操作系统|
-||ota|——|OTA升级代码实现|
+||link_ota|——|OTA升级代码实现|
 ||queue|——|queue组件的代码实现|
 ||shell|——|shell组件代码实现|
 ||stimer|——|stimer组件代码实现|
-||upgrade_patch|——|差分算法（HDiffpatch）|
 |target|EC20|——|EC20全网通4G IoT通信模组，已完成适配及SDK的AT指令框架的实现|
 ||GD32VF103V_EVAL|——|GD32VF103V开发板提供MQTT和LwM2M的demo供使用者连接华为OC|
 ||LINUX|——|适配LINUX平台，通过以太网连接华为OC，提供MQTT及LwM2M的直连DMP及经BS引导连接的demo|
 ||MACBOOK|——|适配MACOS平台，通过以太网连接华为OC，提供MQTT及LwM2M的直连华为OC及经BS引导连接|
-||N720|——|N720 全网通4G IoT通信模组，包含SDK的AT指令框架的实现|
 ||STM32F429IGTx_FIRE|——|野火STM32F429（ARM Cortex M4)以太网/ESP8266串口WiFi/SIM900A GPRS/NB-IoT BC95四种连接方式的LiteOS SDK端云demo，内部用编译宏区分，其中wifi、gprs、NB-IOT使用LiteOS SDK的AT框架实现|
 ||STM32L431_BearPi|——|STM32L431_BearPi（ARM Cortex M4)以太网/ESP8266串口WiFi/SIM900A GPRS/NB-IoT BC95四种连接方式的LiteOS SDK端云demo，内部用编译宏区分，其中wifi、gprs、NB-IOT使用LiteOS SDK的AT框架实现|
 ||STM32L431_EVBM1|——|物联网俱乐部EVB-M1 STM32L431（ARM Cortex M4）ESP8266WiFi/NB-IoT BC95两种|
@@ -667,14 +663,14 @@ OC AL提供的基于CoAP协议端云互通API如下：
 ## 5.2 集成示例
 ### 5.2.1 Linux平台MQTT连接华为云demo
 IoT Device SDK Tiny在demo文件夹中提供了MQTT、LwM2M和CoAP的demo供使用，本示例以Linux系统下MQTT协议直连华为IoT云平台来说明完整的对接流程。
-#### 5.2.1.1 华为DMP环境
+#### 5.2.1.1 华为IoT平台
 
-DMP，即设备管理平台，是华为OceanConnect物联网平台对智能设备进行管理的云服务。首先，您需要到华为云上申请账号，连接为https://www.huaweicloud.com/product/iot.html。
+IoTDA是华为IoT物联网平台对智能设备接入的云服务。首先，您需要到华为云上申请账号，连接为https://www.huaweicloud.com/product/iot.html。
 
 ![](./meta/IoT_Link/sdk/18.png)
 
 
-注册登录之后选择产品->IoT物联网->设备接入，联系OceanLink团队人员开启公测环境（包括设备接入、设备管理、设备发放以及全球SIM联接服务）。
+注册登录之后选择产品->IoT物联网->设备接入（包括同时可以申请设备发放以及全球SIM联接服务）。
 ![](./meta/IoT_Link/sdk/19.png)
 
 本章节介绍SDK示例演示，因此相关的高级功能参考开发者指导页面：
