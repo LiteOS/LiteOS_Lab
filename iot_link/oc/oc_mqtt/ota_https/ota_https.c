@@ -388,7 +388,19 @@ static int https_filedownload(ota_https_para_t  *param,http_section_t *section)
     ret = ota_flag_get(param->ota_type, &otaflag);
     if(ret != 0 )
     {
+        LINK_LOG_ERROR("Get the failed");
         goto EXIT_FLAGGET;
+    }
+
+    ret = ota_img_erase(param->ota_type,EN_OTA_IMG_DOWNLOAD);
+    if(ret != 0 )
+    {
+        LINK_LOG_ERROR("Erase the download img failed");
+        goto EXIT_ERASE;
+    }
+    else
+    {
+        LINK_LOG_DEBUG("Erase the download img SUCCESS");
     }
 
     file_off = 0;
@@ -451,6 +463,7 @@ static int https_filedownload(ota_https_para_t  *param,http_section_t *section)
 EXIT_TLSCONNECT:
     dtls_al_destroy(handle);
 EXIT_TLSHANDLE:
+EXIT_ERASE:
 EXIT_FLAGGET:
     ret = -1;
     return ret;
@@ -473,55 +486,12 @@ int ota_https_download(ota_https_para_t *param)
 
     osal_free(section);
 
-
 EXIT_SECTIONPARAM:
    return ret;
 }
 
-
-
-
-
-
-
 #ifdef CONFIG_SHELL_ENABLE
 #include <shell.h>
-
-
-static int shell_tls(int argc, const char *argv[])
-{
-    int ret = -1;
-    dtls_al_para_t dtls_para;
-    void          *handle = NULL;
-    (void) memset( &dtls_para,0, sizeof(dtls_para));
-    dtls_para.security.type = EN_DTLS_AL_SECURITY_TYPE_CERT;
-    dtls_para.istcp = 1;
-    dtls_para.isclient = 1;
-    dtls_para.security.u.cert.server_ca = (uint8_t *)g_https_serverca;
-    dtls_para.security.u.cert.server_ca_len = sizeof(g_https_serverca);
-
-    if(EN_DTLS_AL_ERR_OK != dtls_al_new(&dtls_para,&handle))
-    {
-        LINK_LOG_ERROR("TLS HANDLE BUILD ERR");
-        goto EXIT_TLSHANDLE;
-    }
-
-    ret = dtls_al_connect( handle,"121.36.42.100", "8943", CONFIG_OCMQTT_HTTPS_TIMEOUT);
-    if (ret != EN_DTLS_AL_ERR_OK)
-    {
-        LINK_LOG_ERROR("TLS CONNECT ERR");
-        goto EXIT_TLSCONNECT;
-    }
-
-    EXIT_TLSCONNECT:
-        dtls_al_destroy(handle);
-    EXIT_TLSHANDLE:
-        ret = -1;
-        return ret;
-}
-
-OSSHELL_EXPORT_CMD(shell_tls,"tls","tls");
-
 
 //use this shell command,you could input at command through the terminal
 static int shell_ota(int argc, const char *argv[])
