@@ -29,7 +29,12 @@ if  OCMQTT_ENABLE
         bool  "Enable the OCMQTT  OTA"
         default y    
         select OTA_ENABLE
-    
+        
+    config OCMQTT_OTASHA256CHECK
+        bool "Enable the sh256 check from the platform"
+        default n
+        depends on OCMQTT_OTA   
+        
     config OCMQTT_DEMOENABLE
         bool "Enable the OCMQTT STANDARD DEMO"
         default n

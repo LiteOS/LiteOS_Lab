@@ -61,7 +61,7 @@ ifeq ($(CONFIG_OCMQTT_ENABLE), y)
    	endif 	
    	
    	ifeq ($(CONFIG_OCMQTT_OTA),y)
-   	   	include $(iot_link_root)/oc/oc_mqtt/ota_https/ota_https.mk
+   	   	include $(iot_link_root)/oc/oc_mqtt/ota_https/build.mk
    	endif
     	
 

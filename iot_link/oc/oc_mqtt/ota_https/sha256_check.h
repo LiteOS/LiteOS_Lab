@@ -33,40 +33,22 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2020-05-08 11:22  zhangqianfu  The first version
+ *  2020-06-05 09:41  zhangqianfu  The first version
  *
  */
-#ifndef LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_OTA_OTA_HTTPS_H_
-#define LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_OTA_OTA_HTTPS_H_
+#ifndef LITEOS_LAB_IOT_LINK_LINK_OTA_SIGNATURE_VERIFY_SIGNATURE_VERIFY_H_
+#define LITEOS_LAB_IOT_LINK_LINK_OTA_SIGNATURE_VERIFY_SIGNATURE_VERIFY_H_
 
+#include <ota_img.h>
 
-
-///< this function used for write the data to the flash
-typedef int (*fn_binwrite)(int offset, uint8_t *buf, int len);
-typedef enum
-{
-    EN_HTTPS_DOWNLOADLOG_BEGINDDOWNLOAD = 0,
-    EN_HTTPS_DOWNLOADLOG_DOWNLOADTIMEOUT,
-    EN_HTTPS_DOWNLOADLOG_DOWNLOADSUCCESS,
-    EN_HTTPS_DOWNLOADLOG_NETCONNERR,
-    EN_HTTPS_DOWNLOADLOG_PARAERR,
-    EN_HTTPS_DOWNLOADLOG_MEMERR,
-}en_https_downloadlog_t;
-const char *https_eventlogname(en_https_downloadlog_t type);
-typedef int (*fn_httpsdownload_event)(en_https_downloadlog_t type);
+///< and now we only support the SHA256 mode
 typedef struct
 {
-    const char *url;
-    const char *signature;
-    const char *authorize;
-    const char *version;
-    const char *signature_public;
-    int                 file_size;
-    int                 file_offset;
-    en_ota_type_t       ota_type;
-    fn_httpsdownload_event eventlog;
-}ota_https_para_t;
-int ota_https_download(ota_https_para_t *param);
+    const char     *sha256;
+    int             data_offset;
+    int             data_len;
+    en_ota_type_t   ota_type;
+}sha256_check_t;
+int sha256_check(sha256_check_t *param);
 
-
-#endif /* LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_OTA_OTA_HTTPS_H_ */
+#endif /* LITEOS_LAB_IOT_LINK_LINK_OTA_SIGNATURE_VERIFY_SIGNATURE_VERIFY_H_ */
