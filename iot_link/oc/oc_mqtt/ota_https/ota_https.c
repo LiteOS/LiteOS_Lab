@@ -46,6 +46,9 @@
 #include <ota_flag.h>
 #include <ota_https.h>
 
+#include "sha256_check.h"
+
+
 ///< server key
 static const char g_https_serverca[] =
 " -----BEGIN CERTIFICATE-----\r\n"
@@ -381,16 +384,8 @@ static int https_filedownload(ota_https_para_t  *param,http_section_t *section)
     int ret = 1;
     int file_off;
     int file_lenleft;
-    ota_flag_t     otaflag;
     dtls_al_para_t dtls_para;
     void          *handle = NULL;
-
-    ret = ota_flag_get(param->ota_type, &otaflag);
-    if(ret != 0 )
-    {
-        LINK_LOG_ERROR("Get the failed");
-        goto EXIT_FLAGGET;
-    }
 
     ret = ota_img_erase(param->ota_type,EN_OTA_IMG_DOWNLOAD);
     if(ret != 0 )
@@ -445,18 +440,6 @@ static int https_filedownload(ota_https_para_t  *param,http_section_t *section)
     ///< if we download success
     dtls_al_destroy(handle);
     (void)ota_img_flush(param->ota_type, EN_OTA_IMG_DOWNLOAD);
-    if(ret == 0)
-    {
-        otaflag.info.img_download.file_size = param->file_size;
-        otaflag.info.img_download.file_off = param->file_offset;
-        strncpy((char *)otaflag.info.img_download.ver,param->version,CONFIG_OTA_VERSIONLEN);
-        otaflag.info.curstatus = EN_OTA_STATUS_DOWNLOADED;
-        ret = ota_flag_save(param->ota_type,&otaflag);
-    }
-    if(0 != ret)
-    {
-        LINK_LOG_ERROR("FLAG SAVE ERR");
-    }
     return ret;
 
 
@@ -464,7 +447,6 @@ EXIT_TLSCONNECT:
     dtls_al_destroy(handle);
 EXIT_TLSHANDLE:
 EXIT_ERASE:
-EXIT_FLAGGET:
     ret = -1;
     return ret;
 }
@@ -476,45 +458,68 @@ int ota_https_download(ota_https_para_t *param)
 {
     int ret = -1;
     http_section_t *section;
+    ota_flag_t     otaflag;
+
+    ret = ota_flag_get(param->ota_type, &otaflag);
+    if(ret != 0 )
+    {
+        LINK_LOG_ERROR("GET OTA FLAG FAILED");
+        goto EXIT_FLAGGET;
+    }
 
     section = http_decodeurl(param);
     if(NULL == section)
     {
+        LINK_LOG_ERROR("DECODE URL FAILED");
         goto EXIT_SECTIONPARAM;
     }
+
     ret = https_filedownload(param, section);
+    if(ret != 0)
+    {
+        LINK_LOG_ERROR("HTTPS DOWNLOAD FAILED ");
+        goto EXIT_DOWNLOAD;
+    }
 
+#ifdef CONFIG_OCMQTT_OTASHA256CHECK
+    sha256_check_t  sha256_checkpara;
+
+    if(NULL != param->signature)
+    {
+        sha256_checkpara.data_len = param->file_size;
+        sha256_checkpara.data_offset = 0;
+        sha256_checkpara.ota_type = param->ota_type;
+        sha256_checkpara.sha256 = param->signature;
+        ret = sha256_check(&sha256_checkpara);
+        if(ret != 0)
+        {
+            goto EXIT_SIGNATURE;
+        }
+    }
+#endif
+    otaflag.info.img_download.file_size = param->file_size;
+    otaflag.info.img_download.file_off = param->file_offset;
+    strncpy((char *)otaflag.info.img_download.ver,param->version,CONFIG_OTA_VERSIONLEN);
+    otaflag.info.curstatus = EN_OTA_STATUS_DOWNLOADED;
+    ret = ota_flag_save(param->ota_type,&otaflag);
+    if(ret != 0)
+    {
+        LINK_LOG_ERROR("FLAG SAVE ERR");
+        goto EXIT_FLAGSAVE;
+    }
+    LINK_LOG_DEBUG("DOWNLOAD SUCCESS AND COULD DO UPGRADING");
+
+
+EXIT_FLAGSAVE:
+EXIT_SIGNATURE:
+EXIT_DOWNLOAD:
     osal_free(section);
-
 EXIT_SECTIONPARAM:
+EXIT_FLAGGET:
    return ret;
 }
 
-#ifdef CONFIG_SHELL_ENABLE
-#include <shell.h>
 
-//use this shell command,you could input at command through the terminal
-static int shell_ota(int argc, const char *argv[])
-{
-    int ret = -1;
-    ota_https_para_t param;
-
-    param.authorize = "b049fe1108541641fac2950224f38121ca2b8bd109231a20be8184a6aa25ff22";
-    param.eventlog = NULL;
-    param.file_offset = 0;
-    param.file_size = 153749;
-    param.ota_type = EN_OTA_TYPE_FOTA;
-    param.signatural ="fe1cd0c44ae669982755637af47d1fcda78bca409fb4bd5f2a2a5e7b0812da55";
-    param.url = "https://121.36.42.100:8943/iodm/dev/v2.0/upgradefile/applications/2d5d5e70abde4f6a802b9f8476e9fcf0/devices/5ec3f516cce62b02c56524a9_otamqtt003/packages/112d9ce0a943e8964606a8b3";
-    param.version= "FOTAV2";
-
-    ret = ota_https_download(&param);
-    return ret;
-}
-OSSHELL_EXPORT_CMD(shell_ota,"ota","ota");
-
-
-#endif
 
 
 

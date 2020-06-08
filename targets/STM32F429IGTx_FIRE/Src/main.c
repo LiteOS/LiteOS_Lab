@@ -93,7 +93,6 @@ static int link_test()
     return ret;
 }
 
-
 int main(void)
 {
     UINT32 uwRet = LOS_OK;

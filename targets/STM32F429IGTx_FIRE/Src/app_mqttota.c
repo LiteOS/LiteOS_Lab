@@ -47,6 +47,16 @@
 #include <oc_mqtt_profile.h>
 #include <ota_flag.h>
 
+const char* g_signature_public=
+"-----BEGIN RSA PUBLIC KEY-----\r\n"
+"MIIBCgKCAQEAz9u5vpDoov9DDrkWkwdWQnLjiYXO3RuwXmcSCu/N1Wrv55b3w/BJ\r\n"
+"iXl7mTv1zWrU9gL+jdMXrxP6BK5nOh3wa8tiPGqPnM2tNCUVEt2dmDasroh8VVv1\r\n"
+"9yOUiSlNGSZ+UrnuUlAzMLt0GJrCPHesapOQ7OkAQd2SNbQfv/vFmXzUcNUAZxr4\r\n"
+"zJmSoZT9aXTO/RfShlsgrPtpz+8sejcRR5s4LKn5KsJwjqJ+sHmnEKlcGiciNGIx\r\n"
+"Ajf2nFigo7QrZ+4o6kvweNA05Ptg29j/0JPr0WbyLsCWDVaAneelh8Sl3TPdZYOM\r\n"
+"6iHE2k1sLBeP7X3lymWh3BZ9rU+xngi9lQIDAQAB\r\n"
+"-----END RSA PUBLIC KEY-----\r\n";
+
 //#define CN_SERVER_IPV4       "iot-mqtts.cn-north-4.myhuaweicloud.com"
 #define CN_SERVER_IPV4                 "121.36.42.100"
 #define CN_SERVER_PORT                 "1883"
@@ -208,7 +218,6 @@ static int oc_cmd_event_firmupdate(cJSON *event)
     cJSON *obj_filesize;
     cJSON *obj_accesstoken;
     cJSON *obj_sign;
-
     ota_https_para_t *otapara;
 
     otapara = osal_malloc(sizeof(ota_https_para_t));
@@ -232,18 +241,19 @@ static int oc_cmd_event_firmupdate(cJSON *event)
         {
             otapara->authorize = cJSON_GetStringValue(obj_accesstoken);
             otapara->url = cJSON_GetStringValue(obj_url);
-            otapara->signatural = cJSON_GetStringValue(obj_sign);
+            otapara->signature = cJSON_GetStringValue(obj_sign);
             otapara->file_size = obj_filesize->valueint;
             otapara->version = cJSON_GetStringValue(obj_version);
+            otapara->signature_public = g_signature_public;
             ///< here we do the firmware download
-            if(0 != ota_https_download(otapara))
+            ret =  ota_https_download(otapara);
+            if(ret != 0)
             {
                 oc_report_upgraderet(6,otapara->version);
                 LINK_LOG_ERROR("DOWNLOADING ERR");
             }
             else
             {
-//                oc_report_upgraderet(0,otapara->version);
                 LINK_LOG_DEBUG("DOWNLOADING SUCCESS");
                 osal_task_sleep(5*1000);
                 osal_reboot();
