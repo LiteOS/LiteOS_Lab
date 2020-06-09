@@ -33,40 +33,48 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2020-05-08 11:22  zhangqianfu  The first version
+ *  2020-06-08 15:58  zhangqianfu  The first version
  *
  */
-#ifndef LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_OTA_OTA_HTTPS_H_
-#define LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_OTA_OTA_HTTPS_H_
 
+#include "ota_sign_verify.h"
+#include "mbedtls/md.h"
+#include "mbedtls/pk.h"
+#include <link_log.h>
+#include <string.h>
 
-
-///< this function used for write the data to the flash
-typedef int (*fn_binwrite)(int offset, uint8_t *buf, int len);
-typedef enum
+int ota_sign_verify(sign_verify_para_t *para)
 {
-    EN_HTTPS_DOWNLOADLOG_BEGINDDOWNLOAD = 0,
-    EN_HTTPS_DOWNLOADLOG_DOWNLOADTIMEOUT,
-    EN_HTTPS_DOWNLOADLOG_DOWNLOADSUCCESS,
-    EN_HTTPS_DOWNLOADLOG_NETCONNERR,
-    EN_HTTPS_DOWNLOADLOG_PARAERR,
-    EN_HTTPS_DOWNLOADLOG_MEMERR,
-}en_https_downloadlog_t;
-const char *https_eventlogname(en_https_downloadlog_t type);
-typedef int (*fn_httpsdownload_event)(en_https_downloadlog_t type);
-typedef struct
-{
-    const char *url;
-    const char *signature;
-    const char *authorize;
-    const char *version;
-    const char *signature_public;
-    int                 file_size;
-    int                 file_offset;
-    en_ota_type_t       ota_type;
-    fn_httpsdownload_event eventlog;
-}ota_https_para_t;
-int ota_https_download(ota_https_para_t *param);
+    int ret = 1;
+    mbedtls_pk_context pk;
+
+    ///check the parameters
+    if ((NULL == para) || (NULL == para->client_public_key) ||\
+            (NULL == para->hash) ||(NULL == para->sign))
+    {
+        return ret;
+    }
+    ///< do the pk init and setup
+    mbedtls_pk_init(&pk);
+    ret = mbedtls_pk_parse_public_key(&pk, (const unsigned char *)para->client_public_key, strlen(para->client_public_key)+1);
+    if (ret != 0)
+    {
+        LINK_LOG_ERROR("LOAD PUBLIC KEY ERROR");
+        goto EXIT_KEYPARSE;
+    }
+
+    if ((ret = mbedtls_pk_verify(&pk, MBEDTLS_MD_SHA256, para->hash, para->hash_len, para->sign, para->sign_len)) != 0) {
+        LINK_LOG_ERROR("SIGN CHECK FAILED");
+        goto EXIT_KEYPARSE;
+    }
+    LINK_LOG_DEBUG("SIGN CHECK SUCCESS");
+    ret = 0;
+
+EXIT_KEYPARSE:
+    mbedtls_pk_free( &pk );
+    return ret;
+}
 
 
-#endif /* LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_OTA_OTA_HTTPS_H_ */
+
+

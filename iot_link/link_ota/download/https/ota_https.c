@@ -37,6 +37,8 @@
  *
  */
 
+#include "ota_https.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <link_log.h>
@@ -44,9 +46,10 @@
 #include <dtls_al.h>
 #include <ota_img.h>
 #include <ota_flag.h>
-#include <ota_https.h>
 
+#ifdef CONFIG_HTTPS_DOWNLOADING_SHA256CHECK
 #include "sha256_check.h"
+#endif
 
 
 ///< server key
@@ -481,9 +484,8 @@ int ota_https_download(ota_https_para_t *param)
         goto EXIT_DOWNLOAD;
     }
 
-#ifdef CONFIG_OCMQTT_OTASHA256CHECK
+#ifdef CONFIG_HTTPS_DOWNLOADING_SHA256CHECK
     sha256_check_t  sha256_checkpara;
-
     if(NULL != param->signature)
     {
         sha256_checkpara.data_len = param->file_size;
@@ -495,6 +497,7 @@ int ota_https_download(ota_https_para_t *param)
         {
             goto EXIT_SIGNATURE;
         }
+        LINK_LOG_DEBUG("SHA256 CHECK SUCCESS");
     }
 #endif
     otaflag.info.img_download.file_size = param->file_size;

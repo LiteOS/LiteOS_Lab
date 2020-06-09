@@ -49,6 +49,7 @@ config OTA_APP_ENABLE
     bool "Enable the ota app"
     default n
     select OTA_ENABLE
+    select OTA_HTTPS
       
     
 config OTA_LOADER_ENABLE

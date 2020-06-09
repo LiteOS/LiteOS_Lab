@@ -24,22 +24,11 @@ if  OCMQTT_ENABLE
     config OCMQTT_ATCMD
         bool  "Enable the OCMQTT AT COMMAND API"
         default y
-        
-    config OCMQTT_OTA
-        bool  "Enable the OCMQTT  OTA"
-        default y    
-        select OTA_ENABLE
-        
-    config OCMQTT_OTASHA256CHECK
-        bool "Enable the sh256 check from the platform"
-        default n
-        depends on OCMQTT_OTA   
-        
+            
     config OCMQTT_DEMOENABLE
         bool "Enable the OCMQTT STANDARD DEMO"
         default n
         
-    
     choice
     prompt "Please select the interface type"
      
