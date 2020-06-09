@@ -19,7 +19,14 @@ ifeq ($(CONFIG_OTA_ENABLE),y)
     	include  $(iot_link_root)/link_ota/img_check/build.mk   
     endif
     
+    ifeq ($(CONFIG_OTA_DOWNLOADCHECK_ENABLE),y)
+       	include  $(iot_link_root)/link_ota/download_check/build.mk   
+    endif
     
+    ifeq ($(CONFIG_OTA_DOWNLOAD_ENABLE),y)
+       	include  $(iot_link_root)/link_ota/download/build.mk   
+    endif
     
+       
 endif
 

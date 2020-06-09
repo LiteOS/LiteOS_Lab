@@ -68,17 +68,18 @@ include $(PROJECTBASE)/project.mk
 ################################################################################
 # firmware library path
 PERIFLIB_PATH =
-ifeq ($(CONFIG_OTA_ENABLE),y)
-	ifeq ($(CONFIG_OTA_LOADER_ENABLE),y)
-		LD_FILE = os_loader.ld
-		BUILD_DIR = loaderbuild
-	else
-		LD_FILE = os_app.ld
-		BUILD_DIR = appbuild
-	endif
-else
-	LD_FILE = os.ld
-	BUILD_DIR = osbuild
+
+LD_FILE := os.ld
+BUILD_DIR := osbuild
+
+ifeq ($(CONFIG_OTA_LOADER_ENABLE),y)
+	LD_FILE = os_loader.ld
+	BUILD_DIR = loaderbuild
+endif
+
+ifeq ($(CONFIG_OTA_APP_ENABLE),y)
+    LD_FILE := os_app.ld
+    BUILD_DIR := appbuild
 endif
 			
 

@@ -33,102 +33,50 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2020-05-08 20:56  zhangqianfu  The first version
+ *  2020-06-08 17:28  zhangqianfu  The first version
  *
  */
 
+#include "ota_sign.h"
+#include <link_log.h>
+#include <string.h>
+#include "mbedtls/md.h"
+#include "mbedtls/pk.h"
 
-#include <ota_img.h>
 
-static int imgerase_func(uintptr_t  arg, int imgsize)
+///< attention: consider the security, the user should supply a security random function, and should rewrite the link_random(weak)
+extern int mbedtls_hardware_poll(void *data,unsigned char *output, size_t len, size_t *olen);
+int ota_sign(sign_para_t *para)
 {
-    LINK_LOG_DEBUG("TEST IMG EARASE:img:%s imgsize:%d",(char *)arg, imgsize);
-    return 0;
-}
+    int ret = 1;
+    mbedtls_pk_context pk;
 
-static int imgflush_func(uintptr_t  arg, int imgsize)
-{
-    LINK_LOG_DEBUG("TEST IMG FLUSH:img:%s imgsize:%d",(char *)arg, imgsize);
-    return 0;
-}
-
-
-
-static int imgread_func(uintptr_t  arg, int offset, void *buf, int len)
-{
-    LINK_LOG_DEBUG("TEST IMG READ:img:%s offset:%d len:%d",(char *)arg, offset, len);
-    return 0;
-}
-
-
-static int imgwrite_func(uintptr_t  arg, int offset,const void *buf, int len)
-{
-    LINK_LOG_DEBUG("TEST IMG WRITE:img:%s offset:%d len:%d",(char *)arg, offset, len);
-    return 0;
-}
-
-static const ota_img_t  g_otaimg_flag = {
-    .name = "FLAG",
-    .type = EN_OTA_IMG_FLAG,
-    .arg = (uintptr_t)"FLAGIMG",
+    ///check the parameters
+    if((NULL == para) || (NULL == para->client_private_key) ||\
+       (NULL == para->hash) || (NULL == para->sign))
     {
-       .write = imgwrite_func,
-       .read = imgread_func,
-       .erase = imgerase_func,
-       .flush = imgflush_func,
-    },
-};
-
-static const ota_img_t  g_otaimg_running = {
-    .name = "RUNIMG",
-    .type = EN_OTA_IMG_RUNNING,
-    .arg = (uintptr_t)"RUNNINGIMG",
+        return ret;
+    }
+    ///< do the pk init and setup
+    mbedtls_pk_init(&pk);
+    ret = mbedtls_pk_parse_key(&pk, para->client_private_key, strlen(para->client_private_key)+1,\
+            para->client_private_key_pwd,strlen(para->client_private_key_pwd));
+    if (ret != 0)
     {
-        .write = imgwrite_func,
-        .read = imgread_func,
-        .erase = imgerase_func,
-        .flush = imgflush_func,
-    },
-};
+        LINK_LOG_ERROR("LOAD PRIVATE KEY ERROR");
+        goto EXIT_KEYPARSE;
+    }
 
-static const ota_img_t  g_otaimg_backup = {
-    .name =  "BACKUP",
-    .type =  EN_OTA_IMG_BACKUP,
-    .arg =  (uintptr_t)"BACKUPIMG",
+    ret = mbedtls_pk_sign(&pk, MBEDTLS_MD_SHA256, para->hash, para->hash_len, para->sign, para->sign_len,mbedtls_hardware_poll,NULL);
+    if (ret != 0)
     {
-        .write = imgwrite_func,
-        .read = imgread_func,
-        .erase = imgerase_func,
-        .flush = imgflush_func,
-    },
-};
+        LINK_LOG_ERROR("SIGN  FAILED");
+        goto EXIT_KEYPARSE;
+    }
+    LINK_LOG_DEBUG("SIGN  SUCCESS");
+    ret = 0;
 
-static const ota_img_t  g_otaimg_download = {
-    .name = "DOWNLOAD",
-    .type = EN_OTA_IMG_DOWNLOAD,
-    .arg = (uintptr_t)"DOWNLOADIMG",
-    {
-        .write = imgwrite_func,
-        .read = imgread_func,
-        .erase = imgerase_func,
-        .flush = imgflush_func,
-    },
-};
-
-__attribute__((weak)) int ota_img_init()
-{
-    ota_img_bind(EN_OTA_TYPE_FOTA,&g_otaimg_flag);
-    ota_img_bind(EN_OTA_TYPE_SOTA,&g_otaimg_flag);
-
-    ota_img_bind(EN_OTA_TYPE_FOTA,&g_otaimg_backup);
-    ota_img_bind(EN_OTA_TYPE_SOTA,&g_otaimg_backup);
-
-    ota_img_bind(EN_OTA_TYPE_FOTA,&g_otaimg_running);
-    ota_img_bind(EN_OTA_TYPE_SOTA,&g_otaimg_running);
-
-    ota_img_bind(EN_OTA_TYPE_FOTA,&g_otaimg_download);
-    ota_img_bind(EN_OTA_TYPE_SOTA,&g_otaimg_download);
-
-    return 0;
+EXIT_KEYPARSE:
+    mbedtls_pk_free( &pk );
+    return ret;
 }
-

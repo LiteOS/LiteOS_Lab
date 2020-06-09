@@ -13,7 +13,7 @@
 # See the Mulan PSL v1 for more details.
 #
 
-menu "OTA"
+menu "OTA CONFIGURE"
 
 #OTA_ENABLE ONLY ENABLE THE IMG COMPONENTS, AND  THIS NEEDED BY THE FOTA OR SOTA DOWNLOAD RPOCESS
 #OTA_PATCH, SUPPLY THE METHOD DO THE BACKUP UPGRADE RECOVER, THE LOADER NEED THIS
@@ -56,7 +56,23 @@ if OTA_ENABLE
         bool "Img just PRINT"
         default y
         depends on OTA_IMG_DEMO
+        
+    config OTA_DOWNLOADCHECK_ENABLE
+        bool "Enable the download file check components"
+        default n
+   
+    if OTA_DOWNLOADCHECK_ENABLE
+        rsource "./download_check/Kconfig"
+    endif
             
-                          
+        
+    config OTA_DOWNLOAD_ENABLE
+        bool "Enable the download file from the IoT platform"
+        default n
+          
+    if OTA_DOWNLOAD_ENABLE
+        rsource "./download/Kconfig"
+    endif
+                                              
 endif                  
 endmenu
