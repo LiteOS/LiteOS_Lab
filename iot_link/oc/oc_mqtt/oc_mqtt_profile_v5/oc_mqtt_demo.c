@@ -161,6 +161,30 @@ static oc_mqtt_profile_service_t  s_device_service;
 
 
 
+static const char g_data_msg[] =
+" -----BEGIN CERTIFICATE-----\r\n"
+"MIIDrzCCApegAwIBAgIQCDvgVpBCRrGhdWrJWZHHSjANBgkqhkiG9w0BAQUFADBh\r\n"
+"MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3\r\n"
+"d3cuZGlnaWNlcnQuY29tMSAwHgYDVQQDExdEaWdpQ2VydCBHbG9iYWwgUm9vdCBD\r\n"
+"QTAeFw0wNjExMTAwMDAwMDBaFw0zMTExMTAwMDAwMDBaMGExCzAJBgNVBAYTAlVT\r\n"
+"MRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5j\r\n"
+"b20xIDAeBgNVBAMTF0RpZ2lDZXJ0IEdsb2JhbCBSb290IENBMIIBIjANBgkqhkiG\r\n"
+"9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4jvhEXLeqKTTo1eqUKKPC3eQyaKl7hLOllsB\r\n"
+"CSDMAZOnTjC3U/dDxGkAV53ijSLdhwZAAIEJzs4bg7/fzTtxRuLWZscFs3YnFo97\r\n"
+"nh6Vfe63SKMI2tavegw5BmV/Sl0fvBf4q77uKNd0f3p4mVmFaG5cIzJLv07A6Fpt\r\n"
+"43C/dxC//AH2hdmoRBBYMql1GNXRor5H4idq9Joz+EkIYIvUX7Q6hL+hqkpMfT7P\r\n"
+"T19sdl6gSzeRntwi5m3OFBqOasv+zbMUZBfHWymeMr/y7vrTC0LUq7dBMtoM1O/4\r\n"
+"gdW7jVg/tRvoSSiicNoxBN33shbyTApOB6jtSj1etX+jkMOvJwIDAQABo2MwYTAO\r\n"
+"BgNVHQ8BAf8EBAMCAYYwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUA95QNVbR\r\n"
+"TLtm8KPiGxvDl7I90VUwHwYDVR0jBBgwFoAUA95QNVbRTLtm8KPiGxvDl7I90VUw\r\n"
+"DQYJKoZIhvcNAQEFBQADggEBAMucN6pIExIK+t1EnE9SsPTfrgT1eXkIoyQY/Esr\r\n"
+"hMAtudXH/vTBH1jLuG2cenTnmCmrEbXjcKChzUyImZOMkXDiqw8cvpOp/2PV5Adg\r\n"
+"06O/nVsJ8dWO41P0jmP6P6fbtGbfYmbW0W5BjfIttep3Sp+dWOIrWcBAI+0tKIJF\r\n"
+"PnlUkiaY4IBIqDfv8NZ5YBberOgOzW6sRBc4L0na4UU+Krk2U886UAb3LujEV0ls\r\n"
+"YSEY1QSteDwsOoBrp+uvFRTp2InBuThs4pFsiv9kuXclVzDAGySj4dzp30d8tbQk\r\n"
+"CAUw7C29C79Fv1C5qfPrmAESrciIxpg0X40KPMbp1ZWVbd4=\r\n"
+"-----END CERTIFICATE-----\r\n";
+
 
 //use this function to push all the message to the buffer
 static int app_msg_deal(oc_mqtt_profile_msgrcv_t *msg)
@@ -340,8 +364,8 @@ static int demo_msgup_longdata(void)   ///< big data test
     msgup.device_id = CN_EP_DEVICEID;
     msgup.id = "12345";
     msgup.name = "MSGUP";
-    msgup.msg = (void *)s_client_pk;
-    msgup.msg_len = sizeof(s_client_pk);
+    msgup.msg = (void *)g_data_msg;
+    msgup.msg_len = sizeof(g_data_msg);
     ret = oc_mqtt_profile_msgup(NULL,&msgup);
     return ret;
 }
@@ -475,7 +499,7 @@ static int task_reportmsg_entry(void *args)
 
     connect_para.boostrap =      CN_BOOT_MODE;
     connect_para.device_id =     CN_EP_DEVICEID;
-    connect_para.device_passwd = NULL;
+    connect_para.device_passwd = CN_EP_PASSWD;
     connect_para.server_addr =   CN_SERVER_IPV4;
     connect_para.sevver_port =   CN_SERVER_PORT;
     connect_para.life_time =     CN_LIFE_TIME;
@@ -488,6 +512,7 @@ static int task_reportmsg_entry(void *args)
     connect_para.security.u.cert.server_ca = (uint8_t *)s_server_ca;
     connect_para.security.u.cert.server_ca_len = sizeof(s_server_ca);
 #ifdef CONFIG_OC_MQTTV5_TLS_BIDIRECTION
+    connect_para.device_passwd = NULL;
     connect_para.security.u.cert.client_ca = (uint8_t *)s_client_ca;
     connect_para.security.u.cert.client_ca_len = sizeof(s_client_ca);
     connect_para.security.u.cert.client_pk = (uint8_t *)s_client_pk;
