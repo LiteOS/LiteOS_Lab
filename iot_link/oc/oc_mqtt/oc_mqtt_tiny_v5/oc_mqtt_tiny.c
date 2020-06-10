@@ -87,8 +87,8 @@ static const char s_oc_mqtt_ca_crt[] =
 ///< devices normal data report and receive topic format
 #define CN_CLIENT_ID_FMT                    "%s_0_0_%s"
 
-#define CN_OC_BS_REPORT_TOPIC_FMT           "/huawei/v1/devices/%s/iodpsData"
-#define CN_OC_BS_CMD_TOPIC_FMT              "/huawei/v1/devices/%s/iodpsCommand"
+#define CN_OC_BS_REPORT_TOPIC_FMT           "$oc/devices/%s/sys/bootstrap/up"
+#define CN_OC_BS_CMD_TOPIC_FMT              "$oc/devices/%s/sys/bootstrap/down"
 #define CN_OC_HUB_SUBTOPIC_DEFAULT_FMT      "$oc/devices/%s/sys/commands/#"
 #define CN_OC_HUB_PUBTOPIC_DEFAULT_FMT      "$oc/devices/%s/sys/properties/report"
 
@@ -1227,12 +1227,12 @@ static int tiny_config(oc_mqtt_config_t *config)
         {
             return ret;
         }
-        if(config->boot_mode != en_oc_mqtt_mode_nobs_static_nodeid_hmacsha256_notimecheck_json )
-        {
-            LINK_LOG_DEBUG("BS NOT SUPPORT YET");
-            ret = en_oc_mqtt_err_gethubaddrtimeout;
-            return ret;
-        }
+//        if(config->boot_mode != en_oc_mqtt_mode_nobs_static_nodeid_hmacsha256_notimecheck_json )
+//        {
+//            LINK_LOG_DEBUG("BS NOT SUPPORT YET");
+//            ret = en_oc_mqtt_err_gethubaddrtimeout;
+//            return ret;
+//        }
 
         if(config->lifetime == 0)
         {

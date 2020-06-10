@@ -31,8 +31,16 @@ if OC_MQTTV5_PROFILE
             default n
             select LINK_DTLS_ENABLE
        config OC_MQTTV5_DEMO_CYCLE
-             int  "DEMO REPORT LOOP CYCLE(ms)"
-             default 1000                  
+            int  "DEMO REPORT LOOP CYCLE(ms)"
+            default 1000  
+       config OC_MQTTV5_BS_ENABLE
+            bool "Enable the bs mode"
+            default n  
+            select OC_MQTTV5_DEMO_TLS  
+       config OC_MQTTV5_TLS_BIDIRECTION
+            bool "Enable the tls bidirection"
+            default n
+            select  OC_MQTTV5_DEMO_TLS                             
     endif
      
 endif   
