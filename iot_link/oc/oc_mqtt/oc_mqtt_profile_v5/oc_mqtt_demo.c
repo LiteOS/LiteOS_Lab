@@ -40,32 +40,28 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
-
 #include <iot_link_config.h>
-
 #include <queue.h>
 #include <oc_mqtt_al.h>
 #include <oc_mqtt_profile.h>
 
-///< and i think the platform will make the timeout much longer and fix this problem
-///< for the MCU has weak compute ability, and the new CERT FILE of platform is very big, so should not use tls for the MCUS
-///< 1.设备接入服务重新更新了证书以及加密套件，椭圆加密算法算法需要大算力去链接服务器，因此对月MCU而言，请选择非加密方案
-///< 2.设备发放平台目前本身在和设备接入做对接，还不ready.
+///< TAKE CARES:
+///< 1, for the MCU has weak compute ability, and the new CERT FILE of platform is very big, so should not use tls for the MCUS
+///< 2, please modify the deviceID and passwd, and make sure that they match with the IoT platform
 
+#ifdef CONFIG_OC_MQTTV5_BS_ENABLE
+#define CN_SERVER_IPV4         "iot-bs.cn-north-4.myhuaweicloud.com"
+//#define CN_SERVER_IPV4         "119.3.251.30"
+#define CN_BOOT_MODE            1
+#else
 //#define CN_SERVER_IPV4       "iot-mqtts.cn-north-4.myhuaweicloud.com"
-#define CN_SERVER_IPV4       "121.36.42.100"
+#define CN_SERVER_IPV4         "121.36.42.100"
+#define CN_BOOT_MODE            0
+#endif
 
-#if  CONFIG_OC_MQTTV5_DEMO_TLS
-
+#ifdef  CONFIG_OC_MQTTV5_DEMO_TLS
 #define CN_SERVER_PORT       "8883"
 #define CN_SECURITY_TYPE     EN_DTLS_AL_SECURITY_TYPE_CERT
-
-#else
-
-#define CN_SERVER_PORT       "1883"
-#define CN_SECURITY_TYPE     EN_DTLS_AL_SECURITY_TYPE_NONE
-
-#endif
 ///< server key
 static const char s_server_ca[] =
 " -----BEGIN CERTIFICATE-----\r\n"
@@ -91,34 +87,12 @@ static const char s_server_ca[] =
 "CAUw7C29C79Fv1C5qfPrmAESrciIxpg0X40KPMbp1ZWVbd4=\r\n"
 "-----END CERTIFICATE-----\r\n";
 
-
-#ifndef CONFIG_OCMQTTV5_DEMO_DEVICEID
-#define CONFIG_OCMQTTV5_DEMO_DEVICEID  "5ec3f516cce62b02c56524a9_ca002"
-#endif
-
-#ifndef CONFIG_OCMQTTV5_DEMO_DEVPWD
-#define CONFIG_OCMQTTV5_DEMO_DEVPWD     "f62fcf47d62c4ed18913"
-#endif
-
-#ifndef CONFIG_OCMQTTV5_DEMO_REPORTCYCLE
-#define CONFIG_OCMQTTV5_DEMO_REPORTCYCLE   1000
-#endif
-
-
-#define CN_EP_DEVICEID        CONFIG_OCMQTTV5_DEMO_DEVICEID
-#define CN_EP_PASSWD          CONFIG_OCMQTTV5_DEMO_DEVPWD
+#ifdef CONFIG_OC_MQTTV5_TLS_BIDIRECTION
 
 ///< the client use the cert mode  SHA-256
 //72DC0E75D88CEC38A025E9C48C79D222F608B039D080BCEFC0007DAD1AFFAD00
-//#define CN_EP_DEVICEID         "5d0c76788a48f95ac41bcb9c_ca002"
-
-#define CN_BOOT_MODE            0
-#define CN_LIFE_TIME            60                         ///< the platform need more
-//if your command is very fast,please use a queue here--TODO
-static queue_t                   *s_queue_rcvmsg = NULL;   ///< this is used to cached the message
-static oc_mqtt_profile_service_t  s_device_service;
-
-///< two way mqtt mode
+//72dc0e7
+///< bidirection  mqtt mode
 static const char s_client_ca[] = \
 "-----BEGIN CERTIFICATE-----\r\n"
 "MIICuDCCAaACCQDAnCoP3W+otTANBgkqhkiG9w0BAQsFADAdMQswCQYDVQQGEwJD\r\n"
@@ -167,6 +141,50 @@ static const char s_client_pk[]= \
 "deaXc4ZpE64iV+eAtZ8VVQ==\r\n"
 "-----END PRIVATE KEY-----\r\n";
 static const char *s_client_pk_pwd = "123456";
+#endif
+
+#else
+#define CN_SERVER_PORT       "1883"
+#define CN_SECURITY_TYPE     EN_DTLS_AL_SECURITY_TYPE_NONE
+#endif
+
+
+#ifndef CONFIG_OCMQTTV5_DEMO_REPORTCYCLE
+#define CONFIG_OCMQTTV5_DEMO_REPORTCYCLE   1000
+#endif
+
+#define CN_EP_DEVICEID "5ecb90df65950b07183b58dd_dpmqtt003"
+#define CN_EP_PASSWD   "f62fcf47d62c4ed18913"
+#define CN_LIFE_TIME   60   ///< the platform need more
+static queue_t *s_queue_rcvmsg = NULL;   ///< this is used to cached the message
+static oc_mqtt_profile_service_t  s_device_service;
+
+
+
+static const char g_data_msg[] =
+" -----BEGIN CERTIFICATE-----\r\n"
+"MIIDrzCCApegAwIBAgIQCDvgVpBCRrGhdWrJWZHHSjANBgkqhkiG9w0BAQUFADBh\r\n"
+"MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3\r\n"
+"d3cuZGlnaWNlcnQuY29tMSAwHgYDVQQDExdEaWdpQ2VydCBHbG9iYWwgUm9vdCBD\r\n"
+"QTAeFw0wNjExMTAwMDAwMDBaFw0zMTExMTAwMDAwMDBaMGExCzAJBgNVBAYTAlVT\r\n"
+"MRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5j\r\n"
+"b20xIDAeBgNVBAMTF0RpZ2lDZXJ0IEdsb2JhbCBSb290IENBMIIBIjANBgkqhkiG\r\n"
+"9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4jvhEXLeqKTTo1eqUKKPC3eQyaKl7hLOllsB\r\n"
+"CSDMAZOnTjC3U/dDxGkAV53ijSLdhwZAAIEJzs4bg7/fzTtxRuLWZscFs3YnFo97\r\n"
+"nh6Vfe63SKMI2tavegw5BmV/Sl0fvBf4q77uKNd0f3p4mVmFaG5cIzJLv07A6Fpt\r\n"
+"43C/dxC//AH2hdmoRBBYMql1GNXRor5H4idq9Joz+EkIYIvUX7Q6hL+hqkpMfT7P\r\n"
+"T19sdl6gSzeRntwi5m3OFBqOasv+zbMUZBfHWymeMr/y7vrTC0LUq7dBMtoM1O/4\r\n"
+"gdW7jVg/tRvoSSiicNoxBN33shbyTApOB6jtSj1etX+jkMOvJwIDAQABo2MwYTAO\r\n"
+"BgNVHQ8BAf8EBAMCAYYwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUA95QNVbR\r\n"
+"TLtm8KPiGxvDl7I90VUwHwYDVR0jBBgwFoAUA95QNVbRTLtm8KPiGxvDl7I90VUw\r\n"
+"DQYJKoZIhvcNAQEFBQADggEBAMucN6pIExIK+t1EnE9SsPTfrgT1eXkIoyQY/Esr\r\n"
+"hMAtudXH/vTBH1jLuG2cenTnmCmrEbXjcKChzUyImZOMkXDiqw8cvpOp/2PV5Adg\r\n"
+"06O/nVsJ8dWO41P0jmP6P6fbtGbfYmbW0W5BjfIttep3Sp+dWOIrWcBAI+0tKIJF\r\n"
+"PnlUkiaY4IBIqDfv8NZ5YBberOgOzW6sRBc4L0na4UU+Krk2U886UAb3LujEV0ls\r\n"
+"YSEY1QSteDwsOoBrp+uvFRTp2InBuThs4pFsiv9kuXclVzDAGySj4dzp30d8tbQk\r\n"
+"CAUw7C29C79Fv1C5qfPrmAESrciIxpg0X40KPMbp1ZWVbd4=\r\n"
+"-----END CERTIFICATE-----\r\n";
+
 
 //use this function to push all the message to the buffer
 static int app_msg_deal(oc_mqtt_profile_msgrcv_t *msg)
@@ -346,8 +364,8 @@ static int demo_msgup_longdata(void)   ///< big data test
     msgup.device_id = CN_EP_DEVICEID;
     msgup.id = "12345";
     msgup.name = "MSGUP";
-    msgup.msg = (void *)s_client_pk;
-    msgup.msg_len = sizeof(s_client_pk);
+    msgup.msg = (void *)g_data_msg;
+    msgup.msg_len = sizeof(g_data_msg);
     ret = oc_mqtt_profile_msgup(NULL,&msgup);
     return ret;
 }
@@ -490,15 +508,19 @@ static int task_reportmsg_entry(void *args)
 
     connect_para.security.type = CN_SECURITY_TYPE;
 
+#ifdef CONFIG_OC_MQTTV5_DEMO_TLS
     connect_para.security.u.cert.server_ca = (uint8_t *)s_server_ca;
     connect_para.security.u.cert.server_ca_len = sizeof(s_server_ca);
-
+#ifdef CONFIG_OC_MQTTV5_TLS_BIDIRECTION
+    connect_para.device_passwd = NULL;
     connect_para.security.u.cert.client_ca = (uint8_t *)s_client_ca;
     connect_para.security.u.cert.client_ca_len = sizeof(s_client_ca);
     connect_para.security.u.cert.client_pk = (uint8_t *)s_client_pk;
     connect_para.security.u.cert.client_pk_len = sizeof(s_client_pk);
     connect_para.security.u.cert.client_pk_pwd = (uint8_t *)s_client_pk_pwd;
     connect_para.security.u.cert.client_pk_pwd_len = strlen(s_client_pk_pwd);
+#endif   ///<endfor bidirection
+#endif   ///<endfor tls
 
     ret = oc_mqtt_profile_connect(&connect_para);
     if((ret != (int)en_oc_mqtt_err_ok))
@@ -506,7 +528,6 @@ static int task_reportmsg_entry(void *args)
         (void) printf("config:err :code:%d\r\n",ret);
         return -1;
     }
-
     while(1)  //do the loop here
     {
         oc_report_normal();

@@ -93,6 +93,7 @@ static int link_test()
     return ret;
 }
 
+
 int main(void)
 {
     UINT32 uwRet = LOS_OK;
@@ -106,7 +107,6 @@ int main(void)
 
     extern void shell_uart_init(int baud);
     shell_uart_init(115200);
-
     link_test();
 
     (void)LOS_Start();

@@ -162,6 +162,12 @@ static void net_init(void)
         /* When the netif link is down this function must be called */
         netif_set_down(&gnetif);
     }
+
+    ///< here we should set the dns,if not, then we could not do the domain name resolved
+#include <lwip/dns.h>
+    ip4_addr_t dns_server;
+    IP4_ADDR(&dns_server,114,114,114,114);
+    dns_setserver(0,&dns_server);
 }
 
 #include <los_hwi.h>
