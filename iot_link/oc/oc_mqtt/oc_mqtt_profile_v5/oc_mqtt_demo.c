@@ -292,7 +292,8 @@ static int  oc_cmd_normal(oc_mqtt_profile_msgrcv_t *demo_msg)
             break;
         case EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_EVENT:
             break;
-
+        case EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_BS:
+            break;
         default:
             break;
 

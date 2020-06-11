@@ -70,6 +70,8 @@ static oc_mqtt_profile_cb_t s_oc_mqtt_profile_cb;
 #define CN_OC_MQTT_PROFILE_GETPROPERTY_INDEX           "/sys/properties/get/"
 #define CN_OC_MQTT_PROFILE_CMD_INDEX                   "/sys/commands/"
 #define CN_OC_MQTT_PROFILE_EVENTDOWN_INDEX             "/sys/events/down"
+#define CN_OC_MQTT_PROFILE_BS_INDEX                    "/sys/bootstrap/down"
+
 static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
 {
     int ret = -1;
@@ -121,6 +123,10 @@ static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
         {
             message.type = EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_EVENT;
         }
+        else if(NULL != strstr(topicbuf,CN_OC_MQTT_PROFILE_BS_INDEX))
+        {
+            message.type = EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_BS;
+        }
         else
         {
             message.type = EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_LAST;
@@ -148,7 +154,6 @@ int oc_mqtt_profile_connect(oc_mqtt_profile_connect_t *payload)
     }
 
     (void) memset(&config,0, sizeof(config));
-
     config.boot_mode =payload->boostrap;
     config.id = payload->device_id;
     config.pwd = payload->device_passwd;
@@ -169,12 +174,13 @@ int oc_mqtt_profile_connect(oc_mqtt_profile_connect_t *payload)
         config.boot_mode = en_oc_mqtt_mode_nobs_static_nodeid_hmacsha256_notimecheck_json;
     }
 
-    ret = oc_mqtt_config(&config);
-    if(ret == (int)en_oc_mqtt_err_ok)
+    if(NULL != s_oc_mqtt_profile_cb.device_id)
     {
-        s_oc_mqtt_profile_cb.device_id = osal_strdup(payload->device_id);
-        s_oc_mqtt_profile_cb.rcvfunc = payload->rcvfunc;
+        osal_free(s_oc_mqtt_profile_cb.device_id);
     }
+    s_oc_mqtt_profile_cb.device_id = osal_strdup(payload->device_id);
+    s_oc_mqtt_profile_cb.rcvfunc = payload->rcvfunc;
+    ret = oc_mqtt_config(&config);
 
     return ret;
 }

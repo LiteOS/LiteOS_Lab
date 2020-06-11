@@ -205,18 +205,14 @@ typedef struct
 ///< the bs not debug yet
 static void hub_msg_default_deal(void *arg,mqtt_al_msgrcv_t  *msg)
 {
-    //for we must add the '/0' to the end to make sure the json parse correct
+    ///< we pass this message to the client, and let the client to deal with
     if ((msg != NULL) && ( msg->msg.data != NULL) &&(msg->msg.len > 0 ) \
         &&(NULL != s_oc_mqtt_tiny_cb->config.msg_deal))
     {
         s_oc_mqtt_tiny_cb->config.msg_deal(s_oc_mqtt_tiny_cb->config.msg_deal_arg,msg);
-
-        return;
     }
     return;
 }
-
-
 
 ///< deal the bootstrap server messages
 static void bs_msg_default_deal(void *arg,mqtt_al_msgrcv_t *msg)
@@ -270,7 +266,12 @@ static void bs_msg_default_deal(void *arg,mqtt_al_msgrcv_t *msg)
        cJSON_Delete(root);
    }
    osal_free(json_buf);
-
+   ///<any way, we still pass this message to the client and let the client known this message
+   if ((msg != NULL) && ( msg->msg.data != NULL) &&(msg->msg.len > 0 ) \
+       &&(NULL != s_oc_mqtt_tiny_cb->config.msg_deal))
+   {
+       s_oc_mqtt_tiny_cb->config.msg_deal(s_oc_mqtt_tiny_cb->config.msg_deal_arg,msg);
+   }
    return;
 }
 
