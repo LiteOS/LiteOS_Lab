@@ -62,76 +62,16 @@ static int jump_addr(void *addr)
 }
 
 
-int loader_main(void)
-{
-    en_ota_err_t  otaret;
-    ota_flag_t ota_flag;
-    if(0 != ota_flag_get(CONFIG_APP_OTATYPE,&ota_flag))
-    {
-        LINK_LOG_DEBUG("OTA FLAG MISSED:PLEASE CHECK FLAGIMG OR FLAGIMGREAD FUNCTION");
-        goto EXIT;
-    }
-    ///< first check if we should do the upgrade
-    if(ota_flag.info.curstatus != EN_OTA_STATUS_DOWNLOADED)
-    {
-        LINK_LOG_DEBUG("DO NORMAL BOOT.");
-        goto EXIT;
-    }
-    else
-    {
-        LINK_LOG_DEBUG("NOW OTA SEQUENCE START");
-    }
-    ///< if we need do the upgrade, then do  the backup
-    LINK_LOG_DEBUG("BACKUP START");
-    otaret = ota_backup(CONFIG_APP_OTATYPE);
-    if(EN_OTA_SUCCESS != otaret )
-    {
-        LINK_LOG_DEBUG("BACKUP FAILED:errcode:%d",(int)otaret);
-    }
-    else
-    {
-        LINK_LOG_DEBUG("BACKUP SUCCESS");
-    }
-
-    ///< if we backup success, then we do the upgrade
-    LINK_LOG_DEBUG("PATCH START");
-    otaret =  ota_patch(CONFIG_APP_OTATYPE,ota_flag.info.img_download.file_size);
-    if(EN_OTA_SUCCESS != otaret)
-    {
-        LINK_LOG_DEBUG("PATCH FAILED:errcode:%d",(int)otaret);
-        ota_flag.info.curstatus = EN_OTA_STATUS_UPGRADED_FAILED;
-        (void)ota_flag_save(CONFIG_APP_OTATYPE,&ota_flag);
-
-        LINK_LOG_DEBUG("RECOVER START");
-        otaret =ota_recover(CONFIG_APP_OTATYPE);
-        if(EN_OTA_SUCCESS != otaret )
-        {
-            LINK_LOG_DEBUG("RECOVER FAILED:errcode:%d",(int)otaret);
-        }
-        else
-        {
-            LINK_LOG_DEBUG("RECOVER SUCCESS");
-        }
-        goto EXIT;
-    }
-    else
-    {
-        LINK_LOG_DEBUG("PATCH SUCCESS");
-    }
-    ota_flag.info.curstatus = EN_OTA_STATUS_UPGRADED_SUCCESS;
-    (void)ota_flag_save(CONFIG_APP_OTATYPE,&ota_flag);
-
-EXIT:
-    LINK_LOG_DEBUG("BEGIN TO JUMP TO APPLICATION:%08X",CONFIG_OTA_APPADDR);
-    jump_addr((void *)CONFIG_OTA_APPADDR);
-    return 0;  ///< maybe never come back
-}
-
 int standard_app_demo_main(void)
 {
-    LINK_LOG_DEBUG("This is the LOADER and DO OTA CHECK");
-    extern int loader_main(void);
-    loader_main();
+    en_ota_err_t  ota_ret;
+    LINK_LOG_DEBUG("Loader Start");
+    ota_ret = ota_commonflow(CONFIG_APP_OTATYPE);
+    if(ota_ret != EN_OTA_ERR_RECOVER)  ///< THE APPLICATION MAYBE DESTROYED AND COULD NOT RUN
+    {
+        LINK_LOG_DEBUG("BEGIN TO JUMP TO APPLICATION:%08X",CONFIG_OTA_APPADDR);
+        jump_addr((void *)CONFIG_OTA_APPADDR);
+    }
     return 0;
 }
 

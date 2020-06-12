@@ -62,11 +62,11 @@ static hpatch_BOOL stream_downloadread(const hpatch_TStreamInput *stream, hpatch
     }
 }
 
-static void stream_downloadinit(hpatch_TStreamInput *stream , int size, en_ota_type_t otatype)
+static void stream_downloadinit(hpatch_TStreamInput *stream , int size, en_ota_type_t ota_type)
 {
     stream->streamSize = (hpatch_StreamPos_t)size;
     stream->read = stream_downloadread;
-    stream->streamImport = (void*)(uintptr_t)(otatype);
+    stream->streamImport = (void*)(uintptr_t)(ota_type);
 
 }
 
@@ -83,11 +83,11 @@ static hpatch_BOOL stream_backupread(const hpatch_TStreamInput *stream, hpatch_S
     }
 }
 
-static void stream_backupinit(hpatch_TStreamInput *stream, int size,en_ota_type_t otatype)
+static void stream_backupinit(hpatch_TStreamInput *stream, int size,en_ota_type_t ota_type)
 {
     stream->streamSize = (hpatch_StreamPos_t)size;
     stream->read = stream_backupread;
-    stream->streamImport = (void*)(uintptr_t)(otatype);
+    stream->streamImport = (void*)(uintptr_t)(ota_type);
 }
 
 
@@ -117,12 +117,12 @@ static hpatch_BOOL stream_runningread(const hpatch_TStreamOutput *stream, hpatch
     }
 }
 
-static void stream_runninginit(hpatch_TStreamOutput *stream, int size,en_ota_type_t otatype)
+static void stream_runninginit(hpatch_TStreamOutput *stream, int size,en_ota_type_t ota_type)
 {
     stream->streamSize = (hpatch_StreamPos_t)size;
     stream->read_writed = stream_runningread;
     stream->write = stream_runningwrite;
-    stream->streamImport = (void*)(uintptr_t)(otatype);
+    stream->streamImport = (void*)(uintptr_t)(ota_type);
 }
 
 hpatch_BOOL getDecompressPlugin(const hpatch_compressedDiffInfo* diffInfo,
@@ -153,7 +153,7 @@ hpatch_BOOL getDecompressPlugin(const hpatch_compressedDiffInfo* diffInfo,
 #define CN_OTACACHE_SIZE  (hpatch_kStreamCacheSize * 4)
 static uint8_t  g_otacache_mem[CN_OTACACHE_SIZE];
 
-en_ota_err_t ota_patch(en_ota_type_t otatype, int download_filesize)
+en_ota_err_t ota_patch(en_ota_type_t ota_type, int download_filesize)
 {
     en_ota_err_t ret = EN_OTA_ERR_UNKNOWN;
     int  img_size;
@@ -163,58 +163,72 @@ en_ota_err_t ota_patch(en_ota_type_t otatype, int download_filesize)
     hpatch_TStreamInput  backup_img_stream;
     hpatch_TStreamOutput running_img_stream;
 
-    if (0 != ota_img_read(otatype,EN_OTA_IMG_DOWNLOAD,CONFIG_IMGDOWNLOAD_OFFSET,g_otacache_mem,CN_OTACACHE_SIZE))
+    if(ota_type >= EN_OTA_TYPE_LAST)
     {
+        ret = EN_OTA_ERR_PARAS;
+        goto EXIT;
+    }
+
+    if (0 != ota_img_read(ota_type,EN_OTA_IMG_DOWNLOAD,CONFIG_IMGDOWNLOAD_OFFSET,g_otacache_mem,CN_OTACACHE_SIZE))
+    {
+        LINK_LOG_ERROR("READ DOWNLOADING ERROR");
         ret = EN_OTA_ERR_NODOWNLOADIMG;
         goto EXIT;
     }
 
     if(hpatch_TRUE != getCompressedDiffInfo_mem(&diff_info, g_otacache_mem , g_otacache_mem + CN_OTACACHE_SIZE))
     {
-        ret = EN_OTA_ERR_PATCHHEAD;
+        LINK_LOG_ERROR("DOWNLOADING INFORMATION ERROR");
+        ret = EN_OTA_ERR_PATCHING;
         goto EXIT;
     }
 
     LINK_LOG_DEBUG("new img size:%d, old img size:%d\n", (int)diff_info.newDataSize, (int)diff_info.oldDataSize);
     if(hpatch_TRUE != getDecompressPlugin(&diff_info, &decompress_plugin))
     {
+        LINK_LOG_ERROR("GET DECOMPRESSPLUGINS ERROR");
         ret = EN_OTA_ERR_DECOMPRESSMETHOD;
         goto EXIT;
     }
     ///< check if the data size matched
-    if((0 != ota_img_size(otatype, EN_OTA_IMG_BACKUP,&img_size)) || ((int)diff_info.oldDataSize >  img_size))
+    if((0 != ota_img_size(ota_type, EN_OTA_IMG_BACKUP,&img_size)) || ((int)diff_info.oldDataSize >  img_size))
     {
+        LINK_LOG_ERROR("BACKUPSIZE TOO SMALL");
         ret = EN_OTA_ERR_BACKUPIMGSIZE;
         goto EXIT;
     }
 
-    if((0 != ota_img_size(otatype, EN_OTA_IMG_DOWNLOAD,&img_size)) || ((int)diff_info.newDataSize >  img_size))
+    if((0 != ota_img_size(ota_type, EN_OTA_IMG_DOWNLOAD,&img_size)) || ((int)diff_info.newDataSize >  img_size))
     {
+        LINK_LOG_ERROR("DOWNLOAD IMG MAYBE NOT COMPLETE");
         ret = EN_OTA_ERR_DOWNLOADIMGSIZE;
         goto EXIT;
     }
 
-    if((0 != ota_img_size(otatype, EN_OTA_IMG_RUNNING,&img_size)) || ((int)diff_info.newDataSize >  img_size))
+    if((0 != ota_img_size(ota_type, EN_OTA_IMG_RUNNING,&img_size)) || ((int)diff_info.newDataSize >  img_size))
     {
+        LINK_LOG_ERROR("RUNNING IMG TOO SMALL");
         ret = EN_OTA_ERR_RUNNINGIMGSIZE;
         goto EXIT;
     }
 
     ///< now we do the running erase
-    if ( 0 != ota_img_erase(otatype, EN_OTA_IMG_RUNNING))
+    if ( 0 != ota_img_erase(ota_type, EN_OTA_IMG_RUNNING))
     {
+        LINK_LOG_ERROR("ERASE RUNNING FAILED");
         ret = EN_OTA_ERR_RUNNINGERASE;
         goto EXIT;
     }
     ///< now do th stream initialize
-    stream_runninginit(&running_img_stream,(int)diff_info.newDataSize, otatype);
-    stream_backupinit(&backup_img_stream,(int)diff_info.oldDataSize, otatype);
-    stream_downloadinit(&download_img_stream,download_filesize -CONFIG_IMGDOWNLOAD_OFFSET, otatype);
+    stream_runninginit(&running_img_stream,(int)diff_info.newDataSize, ota_type);
+    stream_backupinit(&backup_img_stream,(int)diff_info.oldDataSize, ota_type);
+    stream_downloadinit(&download_img_stream,download_filesize -CONFIG_IMGDOWNLOAD_OFFSET, ota_type);
 
     if (patch_decompress_with_cache(&running_img_stream, &backup_img_stream, &download_img_stream,
             decompress_plugin,  g_otacache_mem , g_otacache_mem + CN_OTACACHE_SIZE) != hpatch_TRUE)
     {
-        ret = EN_OTA_ERR_PATCH;
+        LINK_LOG_ERROR("PATCHING PROCESS FAILED");
+        ret = EN_OTA_ERR_PATCHING;
         goto EXIT;
     }
     ret = EN_OTA_SUCCESS;
@@ -224,20 +238,26 @@ EXIT:
 }
 
 ///< which you could use this function to do a img backUP:move the running to the backup
-en_ota_err_t ota_backup(en_ota_type_t  otatype)
+en_ota_err_t ota_backup(en_ota_type_t  ota_type)
 {
     en_ota_err_t ret = EN_OTA_ERR_UNKNOWN;
     int size_left;
     int movelen;
     int offset = 0;
 
-    if(0 != ota_img_size(otatype, EN_OTA_IMG_RUNNING, &size_left))
+    if(ota_type >= EN_OTA_TYPE_LAST)
+    {
+        ret = EN_OTA_ERR_PARAS;
+        goto EXIT;
+    }
+
+    if(0 != ota_img_size(ota_type, EN_OTA_IMG_RUNNING, &size_left))
     {
         ret = EN_OTA_ERR_NORUNNINGIMG;
         goto EXIT;
     }
 
-    if(0 != ota_img_erase(otatype, EN_OTA_IMG_BACKUP))
+    if(0 != ota_img_erase(ota_type, EN_OTA_IMG_BACKUP))
     {
         ret = EN_OTA_ERR_RUNNINGERASE;
         goto EXIT;
@@ -246,13 +266,15 @@ en_ota_err_t ota_backup(en_ota_type_t  otatype)
     while(size_left > 0)
     {
         movelen = size_left > CN_OTACACHE_SIZE ?CN_OTACACHE_SIZE:size_left;
-        if(ota_img_read(otatype,EN_OTA_IMG_RUNNING,offset,g_otacache_mem, movelen) != 0)
+        if(ota_img_read(ota_type,EN_OTA_IMG_RUNNING,offset,g_otacache_mem, movelen) != 0)
         {
+            LINK_LOG_ERROR("READ RUNNING:offset:%d len:%d FAILED",offset, movelen);
             ret = EN_OTA_ERR_RUNNNINGREAD;
             goto EXIT;
         }
-        if(ota_img_write(otatype,EN_OTA_IMG_BACKUP,offset,g_otacache_mem, movelen) != 0)
+        if(ota_img_write(ota_type,EN_OTA_IMG_BACKUP,offset,g_otacache_mem, movelen) != 0)
         {
+            LINK_LOG_ERROR("WRITE BACKUP:offset:%d len:%d FAILED",offset,movelen);
             ret = EN_OTA_ERR_BACKUPWRITE;
             goto EXIT;
         }
@@ -260,7 +282,7 @@ en_ota_err_t ota_backup(en_ota_type_t  otatype)
         size_left -= movelen;
     }
 
-    if( 0 != ota_img_flush(otatype,EN_OTA_IMG_BACKUP))
+    if( 0 != ota_img_flush(ota_type,EN_OTA_IMG_BACKUP))
     {
         ret = EN_OTA_ERR_BACKUPFLUSH;
         goto EXIT;
@@ -271,20 +293,26 @@ EXIT:
 }
 
 ///< which you could use this fucntion to do a img recover
-en_ota_err_t ota_recover(en_ota_type_t  otatype)
+en_ota_err_t ota_recover(en_ota_type_t  ota_type)
 {
     en_ota_err_t ret = EN_OTA_ERR_UNKNOWN;
     int size_left;
     int movelen;
     int offset = 0;
 
-    if(0 != ota_img_size(otatype, EN_OTA_IMG_RUNNING, &size_left))
+    if(ota_type >= EN_OTA_TYPE_LAST)
+    {
+        ret = EN_OTA_ERR_PARAS;
+        goto EXIT;
+    }
+
+    if(0 != ota_img_size(ota_type, EN_OTA_IMG_RUNNING, &size_left))
     {
         ret = EN_OTA_ERR_NORUNNINGIMG;
         goto EXIT;
     }
 
-    if(0 != ota_img_erase(otatype, EN_OTA_IMG_RUNNING))
+    if(0 != ota_img_erase(ota_type, EN_OTA_IMG_RUNNING))
     {
         ret = EN_OTA_ERR_RUNNINGERASE;
         goto EXIT;
@@ -293,13 +321,15 @@ en_ota_err_t ota_recover(en_ota_type_t  otatype)
     while(size_left > 0)
     {
         movelen = size_left > CN_OTACACHE_SIZE ?CN_OTACACHE_SIZE:size_left;
-        if(ota_img_read(otatype,EN_OTA_IMG_BACKUP,offset,g_otacache_mem, movelen) != 0)
+        if(ota_img_read(ota_type,EN_OTA_IMG_BACKUP,offset,g_otacache_mem, movelen) != 0)
         {
+            LINK_LOG_ERROR("READ BACKUP:offset:%d len:%d FAILED",offset, movelen);
             ret = EN_OTA_ERR_BACKUPREAD;
             goto EXIT;
         }
-        if(ota_img_write(otatype,EN_OTA_IMG_RUNNING,offset,g_otacache_mem, movelen) != 0)
+        if(ota_img_write(ota_type,EN_OTA_IMG_RUNNING,offset,g_otacache_mem, movelen) != 0)
         {
+            LINK_LOG_ERROR("WRITE RUNNING:offset:%d len:%d FAILED",offset,movelen);
             ret = EN_OTA_ERR_RUNNINGWRITE;
             goto EXIT;
         }
@@ -307,7 +337,7 @@ en_ota_err_t ota_recover(en_ota_type_t  otatype)
         size_left -= movelen;
     }
 
-    if( 0 != ota_img_flush(otatype,EN_OTA_IMG_RUNNING))
+    if( 0 != ota_img_flush(ota_type,EN_OTA_IMG_RUNNING))
     {
         ret = EN_OTA_ERR_RUNNINGFLUSH;
         goto EXIT;
@@ -316,4 +346,110 @@ en_ota_err_t ota_recover(en_ota_type_t  otatype)
 EXIT:
     return ret;
 }
+
+
+en_ota_err_t ota_commonflow(en_ota_type_t ota_type)
+{
+    en_ota_err_t  ota_ret = EN_OTA_ERR_UNKNOWN;
+    en_ota_upgrade_step_t  upgrade_step;
+    ota_flag_t ota_flag;
+
+    if(ota_type >= EN_OTA_TYPE_LAST)
+    {
+        ota_ret = EN_OTA_ERR_PARAS;
+        goto FLOW_EXIT;
+    }
+
+    if(0 != ota_flag_get(ota_type,&ota_flag))
+    {
+        LINK_LOG_ERROR("GET FLAG ERR AND SHOULD DO THE INITIALIZE");
+        memset(&ota_flag,0,sizeof(ota_flag));
+        ota_flag.info.curstatus = EN_OTA_STATUS_IDLE;
+        ota_flag.info.upgrade_step = EN_OTA_UPGRADE_STEP_INIT;
+        (void)ota_flag_save(ota_type,&ota_flag);
+        ota_ret = EN_OTA_ERR_FLAG_GET;
+        goto FLOW_EXIT;
+    }
+    ///< first check if we should do the upgrade
+    if(ota_flag.info.curstatus != EN_OTA_STATUS_DOWNLOADED)
+    {
+        LINK_LOG_DEBUG("DO NORMAL BOOT.");
+        ota_ret = EN_OTA_SUCCESS;
+        goto FLOW_EXIT;
+    }
+    LINK_LOG_DEBUG("NOW OTA SEQUENCE START");
+
+    ///< DO THE BACKUP IF NEEDED
+    upgrade_step = ota_flag.info.upgrade_step;
+    if((upgrade_step == EN_OTA_UPGRADE_STEP_START) || (upgrade_step == EN_OTA_UPGRADE_STEP_BACKUP))
+    {
+         LINK_LOG_DEBUG("BACKUP START");
+         if(EN_OTA_SUCCESS != ota_backup(ota_type))
+         {
+             LINK_LOG_ERROR("BACKUP FAILED");
+             upgrade_step = EN_OTA_UPGRADE_STEP_DONE;
+             ota_flag.info.curstatus = EN_OTA_STATUS_UPGRADED_FAILED;
+             ota_flag.info.upgrade_step = upgrade_step;
+             (void)ota_flag_save(ota_type,&ota_flag);
+             ota_ret = EN_OTA_ERR_BACKUP;
+             goto FLOW_EXIT;
+         }
+         upgrade_step = EN_OTA_UPGRADE_STEP_PATCH;
+         ota_flag.info.upgrade_step = upgrade_step;
+         (void)ota_flag_save(ota_type,&ota_flag);
+         LINK_LOG_DEBUG("BACKUP SUCCESS");
+    }
+
+    ///< DO THE PATCH IF NEEDED
+    if(upgrade_step == EN_OTA_UPGRADE_STEP_PATCH)
+    {
+        LINK_LOG_DEBUG("PATCH START");
+        if(EN_OTA_SUCCESS != ota_patch(ota_type,ota_flag.info.img_download.file_size))
+        {
+            upgrade_step = EN_OTA_UPGRADE_STEP_RECOVER;
+            ota_flag.info.upgrade_step = upgrade_step;
+            (void)ota_flag_save(ota_type,&ota_flag);
+            LINK_LOG_ERROR("PATCH FAILED");
+            ota_ret = EN_OTA_ERR_PATCH;
+        }
+        else
+        {
+            upgrade_step = EN_OTA_UPGRADE_STEP_DONE;
+            ota_flag.info.upgrade_step = upgrade_step;
+            ota_flag.info.curstatus = EN_OTA_STATUS_UPGRADED_SUCCESS;
+            (void)ota_flag_save(ota_type,&ota_flag);
+            LINK_LOG_DEBUG("PATCH SUCCESS");
+            ota_ret = EN_OTA_SUCCESS;
+            goto FLOW_EXIT;
+        }
+    }
+
+    ///< DO THE RECOVER
+    if(upgrade_step == EN_OTA_UPGRADE_STEP_RECOVER)
+    {
+        LINK_LOG_DEBUG("RECOVER START");
+        if(EN_OTA_SUCCESS != ota_recover(ota_type) )
+        {
+            LINK_LOG_ERROR("RECOVER FAILED");
+            ota_ret = EN_OTA_ERR_RECOVER;
+        }
+        else
+        {
+            LINK_LOG_DEBUG("RECOVER SUCCESS");
+        }
+        ///< FOR THE RECOVER, THIS IS THE LAST STATUS, AND WE COULD MAKE MORE METHOD TO SAVE THE MACHINE
+        upgrade_step = EN_OTA_UPGRADE_STEP_DONE;
+        ota_flag.info.upgrade_step = upgrade_step;
+        ota_flag.info.curstatus = EN_OTA_STATUS_UPGRADED_FAILED;
+        (void)ota_flag_save(ota_type,&ota_flag);
+        goto FLOW_EXIT;
+    }
+
+FLOW_EXIT:
+    return ota_ret;  ///< maybe never come back
+}
+
+
+
+
 

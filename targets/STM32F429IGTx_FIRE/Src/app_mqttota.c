@@ -435,6 +435,7 @@ static int task_reportmsg_entry(void *args)
         LINK_LOG_ERROR("GET FOTA FLAG ERR AND SHOULD DO THE INITIALIZE");
         memset(&otaflag,0,sizeof(otaflag));
         otaflag.info.curstatus = EN_OTA_STATUS_IDLE;
+        otaflag.info.upgrade_step = EN_OTA_UPGRADE_STEP_INIT;
         ret = ota_flag_save(EN_OTA_TYPE_FOTA,&otaflag);
         if(0 != ret)
         {
@@ -462,15 +463,15 @@ static int task_reportmsg_entry(void *args)
 
     if(otaflag.info.curstatus == EN_OTA_STATUS_UPGRADED_SUCCESS)
     {
+        oc_report_upgraderet(0,CN_OTA_FOTA_VERSION);
         otaflag.info.curstatus = EN_OTA_STATUS_IDLE;
         ota_flag_save(EN_OTA_TYPE_FOTA,&otaflag);
-        oc_report_upgraderet(0,CN_OTA_FOTA_VERSION);
     }
     else if(otaflag.info.curstatus == EN_OTA_STATUS_UPGRADED_FAILED)
     {
+        oc_report_upgraderet(1,CN_OTA_FOTA_VERSION);
         otaflag.info.curstatus = EN_OTA_STATUS_IDLE;
         ota_flag_save(EN_OTA_TYPE_FOTA,&otaflag);
-        oc_report_upgraderet(1,CN_OTA_FOTA_VERSION);
     }
 
     while(1)  //do the loop here
@@ -480,8 +481,6 @@ static int task_reportmsg_entry(void *args)
     }
     return 0;
 }
-
-
 
 int standard_app_demo_main(void)
 {
