@@ -60,10 +60,10 @@
 #define CN_OTAIMG_FLAG_OFFSET          (CN_OTAIMG_BASEOFFET)
 #define CN_OTAIMG_DOWNLOAD_OFFSET      (CN_OTAIMG_FLAG_OFFSET + CONFIG_OTAIMG_FLAGSIZE)
 #define CN_OTAIMG_BACKUP_OFFSET        (CN_OTAIMG_DOWNLOAD_OFFSET + CONFIG_OTAIMG_DOWNLOADSIZE)
-#define CN_OTAIMG_OFFSETEND            (CN_OTAIMG_BACKUP_OFFSET + CONFIG_OTAIMG_BACKUPSIZE)
+#define CN_OTAIMG_FLAGBACKUP_OFFSET    (CN_OTAIMG_BACKUP_OFFSET + CONFIG_OTAIMG_BACKUPSIZE)
 
 /*    The spi flash for OTA we used
- *    |-----flag(4k)--|----DOWNLOAD(512K)-----|----BACKUP(512K)----|
+ *    |-----flag(4k)--|----DOWNLOAD(512K)-----|----BACKUP(512K)----|---FLAGBACKUP(4K)---|
  *
  * */
 static int spiflash_read(uintptr_t arg, int offset, void *buf, int len)
@@ -147,6 +147,20 @@ static const ota_img_t  g_otaimg_download = {
     },
 };
 
+static const ota_img_t  g_otaimg_flagbackup = {
+    .name = "FLAGBACKUP",
+    .size = CONFIG_OTAIMG_FLAGSIZE,
+    .type = EN_OTA_IMG_FLAGBACKUP,
+    .arg = (uintptr_t)CN_OTAIMG_FLAGBACKUP_OFFSET,
+    {
+        .write = spiflash_write,
+        .read = spiflash_read,
+        .erase = spiflash_erase,
+        .flush = spiflash_flush,
+    },
+};
+
+
 /**
  * The INNER flash FOR OTA WE USED
  *
@@ -221,6 +235,7 @@ int ota_img_init()
     ota_img_bind(EN_OTA_TYPE_FOTA,&g_otaimg_flag);
     ota_img_bind(EN_OTA_TYPE_FOTA,&g_otaimg_backup);
     ota_img_bind(EN_OTA_TYPE_FOTA,&g_otaimg_download);
+    ota_img_bind(EN_OTA_TYPE_FOTA,&g_otaimg_flagbackup);
     ota_img_bind(EN_OTA_TYPE_FOTA,&g_otaimg_running);
 
     return 0;

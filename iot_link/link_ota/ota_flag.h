@@ -55,6 +55,31 @@ typedef enum
     EN_OTA_STATUS_UPGRADED_FAILED,
 }en_ota_status_t;
 
+
+
+/**
+ * UPGRADE MACHINE STATUS:
+ *
+ *                                                         --(PATCHLED FAILD)-->REVOVER---
+ *                                                        /                                \
+ *  INIT(FIRST TIME) ------>START----->BACKUP---->PATCH--/-------------------------------------->done
+ *
+ *  TAKE CARES:
+ *  1,if any error in the BACKUP(START) step, we will goto done status and set the ret failed;
+ *  2,if patch failed( do the diff-recover or uncompressed), we will do the recover;
+ *  3,if recover failed, then the loader maybe destroyed , and we could not do any more thing
+ *
+ * */
+typedef enum
+{
+    EN_OTA_UPGRADE_STEP_INIT = 0,
+    EN_OTA_UPGRADE_STEP_START,
+    EN_OTA_UPGRADE_STEP_BACKUP,
+    EN_OTA_UPGRADE_STEP_PATCH,
+    EN_OTA_UPGRADE_STEP_RECOVER,
+    EN_OTA_UPGRADE_STEP_DONE,
+}en_ota_upgrade_step_t;
+
 #pragma pack(1)
 typedef struct
 {
@@ -71,7 +96,8 @@ typedef struct
 {
     struct
     {
-        uint32_t      curstatus;
+        uint32_t      curstatus;         ///< defined as en_ota_status_t
+        uint32_t      upgrade_step;      ///< defined as en_ota_upgrade_step_t
         ota_imginfo_t img_running;
         ota_imginfo_t img_backup;
         ota_imginfo_t img_download;

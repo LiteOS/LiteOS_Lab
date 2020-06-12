@@ -69,14 +69,23 @@ typedef enum _en_ota_err_t
     EN_OTA_ERR_RUNNINGIMGSIZE,
 
     EN_OTA_ERR_DECOMPRESSMETHOD,
-    EN_OTA_ERR_PATCHHEAD,
+    EN_OTA_ERR_PATCHING,
+///< FOLLOWING USED ONLY BY ota_commonflow
+    EN_OTA_ERR_PARAS,
+    EN_OTA_ERR_FLAG_GET,
+    EN_OTA_ERR_FLAG_SAVE,
+    EN_OTA_ERR_BACKUP,
     EN_OTA_ERR_PATCH,
+    EN_OTA_ERR_RECOVER,
 }en_ota_err_t;
 
-
+///< you could use the patch backup recover to do your own loader flow,
+///< and you also could use the ota_commonflow instead
 en_ota_err_t ota_patch(en_ota_type_t otatype, int download_filesize);
 en_ota_err_t ota_backup(en_ota_type_t  otatype);
 en_ota_err_t ota_recover(en_ota_type_t  otatype);
+en_ota_err_t ota_commonflow(en_ota_type_t ota_type);
+
 
 
 #endif /* LITEOS_LAB_IOT_LINK_LINK_OTA_LOADER_OTA_UPGRADE_H_ */

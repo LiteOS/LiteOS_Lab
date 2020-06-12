@@ -42,32 +42,95 @@
 #include <link_log.h>
 #include <ota_flag.h>
 
-typedef struct
+///< attention that when we write the flag, it maybe powered down when erase or write
+///< so we use need a backup img，supposed that the flash has no problem when read or write except unexpected powered down
+/**
+ * ACTION:
+ * 1,WHEN WRITE, CHECK THE DATA IN THE BACKUP IS WELL PRESERVED OR NOT;
+ *   IF WELL PRESERVED, THEN WRITE DATA TO MASTER FIRST, ELSE WRITE TO THE BACKUP ONE FIRST;
+ *   AND THIS ACTION MAKE ANYTIME WE COULD FIND A GOOD IMG, MASTER ONE OR BACKUP ONE;AND WE COULD
+ *   NOT AVOID THE CASE THAT WE LOSE THE DATA WHEN WRITTING; MAYBE NEXT TIME WE WILL DO THE LOG FILEFORMAT
+ * 2,WHEN READ, READ THE MASTER ONE FIRST, IF MASTER IS OK THEN SYN IT TO THE BACKUP ONE; IF MASTER IS DESTROYED, TRY
+ *   TO READ FROM THE BACKUP ONE, AND SYNC IT TO THE MASTER
+ *
+ * Then we could think some cases when unexpected power down comes: supposed the img we write will be destroyed when powered down
+ * a, if comes at the time we write the master, then we are sure that the backup img is well preserved
+ * b, if comes at the time we write the backup, then we are sure that the backup img is well preserved
+ *
+ * Anyway, we could not backup the data if both the img is destroyed! So when you read the flag failed,
+ * you should do the flag initialize first!
+ *
+ * */
+
+static int ota_flag_imgupdate(en_ota_type_t  otatype,en_ota_img_type_t img, ota_flag_t *flag)
 {
-    ota_flag_t flag[EN_OTA_TYPE_LAST];
-}ota_flag_cb_t;
+    int ret;
+    ret = ota_img_erase(otatype,EN_OTA_IMG_FLAG);
+    if(ret != 0)
+    {
+        goto EXIT_UPDATE;
+    }
+    ret = ota_img_write(otatype,EN_OTA_IMG_FLAG,0,flag,sizeof(ota_flag_t));
+    if(ret != 0)
+    {
+        goto EXIT_UPDATE;
+    }
+    ret = ota_img_flush(otatype,EN_OTA_IMG_FLAG);
+    if(ret != 0)
+    {
+        goto EXIT_UPDATE;
+    }
+EXIT_UPDATE:
+    return ret;
+}
 
-#ifndef CONFIG_SOTA_VERSION
-#define CONFIG_SOTA_VERSION  "SOTAV1.0"
-#endif
-
-#ifndef CONFIG_FOTA_VERSION
-#define CONFIG_FOTA_VERSION  "FOTAV1.0"
-#endif
 
 
 int ota_flag_save(en_ota_type_t  otatype, ota_flag_t *flag)
 {
     int ret = -1;
+    uint32_t    crc;
+    ota_flag_t  flag_backup;
 
-    if(otatype < EN_OTA_TYPE_LAST)
+    if((otatype  >= EN_OTA_TYPE_LAST) || (NULL == flag))
     {
-        flag->crc = calc_crc32(0,&flag->info, sizeof(flag->info));
-        ota_img_erase(otatype,EN_OTA_IMG_FLAG);
-        ret = ota_img_write(otatype,EN_OTA_IMG_FLAG,0,flag,sizeof(ota_flag_t));
-        ota_img_flush(otatype,EN_OTA_IMG_FLAG);
+        return ret;
     }
-
+    flag->crc = calc_crc32(0,&flag->info, sizeof(flag->info));
+    ///< check if the backup one is ok or not
+    ret = ota_img_read(otatype,EN_OTA_IMG_FLAGBACKUP,0,&flag_backup,sizeof(ota_flag_t));
+    if(ret != 0)
+    {
+        LINK_LOG_ERROR("FLAGBACKUP READ ERROR");
+        goto EXIT_SAVE;
+    }
+    crc = calc_crc32(0,&flag_backup.info, sizeof(flag_backup.info));
+    if(crc != flag_backup.crc) ///< the backup one is not preserved
+    {
+        ret = ota_flag_imgupdate(otatype,EN_OTA_IMG_FLAGBACKUP,flag);
+        if(ret != 0)
+        {
+            LINK_LOG_ERROR("FLAGBACKUP UPDATE ERROR");
+            goto EXIT_SAVE;
+        }
+    }
+    ret = ota_flag_imgupdate(otatype,EN_OTA_IMG_FLAG,flag);
+    if(ret != 0)
+    {
+        LINK_LOG_ERROR("FLAGMASTER UPDATE ERROR");
+        goto EXIT_SAVE;
+    }
+    ///< AND AT THE SAME TIME WE WILL DO WRITE THE DATA TO THE BACKUP IMG,
+    if(crc == flag_backup.crc)
+    {
+        ret = ota_flag_imgupdate(otatype,EN_OTA_IMG_FLAGBACKUP,flag);
+        if(ret != 0)
+        {
+            LINK_LOG_ERROR("FLAGBACKUP UPDATE ERROR");
+            goto EXIT_SAVE;
+        }
+    }
+EXIT_SAVE:
     return ret;
 }
 
@@ -75,22 +138,50 @@ int ota_flag_get(en_ota_type_t  otatype,ota_flag_t *flag)
 {
     int ret = -1;
     uint32_t    crc;
-    if((NULL != flag) && (otatype < EN_OTA_TYPE_LAST))
+    ota_flag_t  flag_backup;
+    if((NULL == flag) || (otatype >= EN_OTA_TYPE_LAST))
     {
-        if(0 != ota_img_read(EN_OTA_TYPE_FOTA,EN_OTA_IMG_FLAG,0,flag,sizeof(ota_flag_t)))
-        {
-            LINK_LOG_ERROR("FLAG READ ERROR");
-            goto EXIT;
-        }
-        crc = calc_crc32(0,&flag->info, sizeof(flag->info));
-        if(crc != flag->crc)
-        {
-            LINK_LOG_ERROR("FLAG DESTROYED--CRC ERR");
-            goto EXIT;
-        }
-        ret = 0;
+        LINK_LOG_ERROR("PARAMETERS ERROR");
+        goto EXIT_GET;
     }
-EXIT:
+    ///< read the master one
+    ret = ota_img_read(otatype,EN_OTA_IMG_FLAG,0,flag,sizeof(ota_flag_t));
+    if(ret != 0)
+    {
+        LINK_LOG_ERROR("FLAGMASTER READ ERROR");
+        goto EXIT_GET;
+    }
+    crc = calc_crc32(0,&flag->info, sizeof(flag->info));
+    if(crc == flag->crc)  ///< READ MASTER SUCCESS; and we should check if the
+    {
+        ///< CHECK THE BACKUP ONE, WE DON'T CARE READ SUCCESS OR NOT, WE JUST WANT TO DO THE SYNC
+       (void) ota_img_read(otatype,EN_OTA_IMG_FLAGBACKUP,0,&flag_backup,sizeof(ota_flag_t));
+       if(0 != memcmp(flag,&flag_backup,sizeof(ota_flag_t)))
+       {
+           (void) ota_flag_imgupdate(otatype,EN_OTA_IMG_FLAGBACKUP,flag);
+       }
+       goto EXIT_GET;
+    }
+    LINK_LOG_ERROR("MASTER FLAG DESTROYED");
+    ///< the master one is not ok, so try to read the backup one
+    ret = ota_img_read(otatype,EN_OTA_IMG_FLAGBACKUP,0,flag,sizeof(ota_flag_t));
+    if(ret != 0)
+    {
+        LINK_LOG_ERROR(" FLAGBACKUP READ ERROR");
+        goto EXIT_GET;
+    }
+    crc = calc_crc32(0,&flag->info, sizeof(flag->info));
+    if(crc != flag->crc)   ///< back up one is also destroyed
+    {
+        LINK_LOG_ERROR(" FLAGBACKUP DESTRORED");
+        ret = -1;
+        goto EXIT_GET;
+    }
+    LINK_LOG_DEBUG("FLAGBACKUP SUCCESS");
+    ///< WE WRITE THE DATA TO THE MASTER IMG
+    (void) ota_flag_imgupdate(otatype,EN_OTA_IMG_FLAG,flag);
+
+EXIT_GET:
     return ret;
 }
 

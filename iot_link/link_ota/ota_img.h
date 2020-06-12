@@ -49,6 +49,7 @@ typedef enum
     EN_OTA_IMG_DOWNLOAD,
     EN_OTA_IMG_BACKUP,
     EN_OTA_IMG_FLAG,
+    EN_OTA_IMG_FLAGBACKUP,   ///< THIS IS THE FLAG BACKUP IMG
     EN_OTA_IMG_LAST,
 }en_ota_img_type_t;
 

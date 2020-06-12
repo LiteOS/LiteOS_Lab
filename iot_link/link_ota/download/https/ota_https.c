@@ -504,6 +504,8 @@ int ota_https_download(ota_https_para_t *param)
     otaflag.info.img_download.file_off = param->file_offset;
     strncpy((char *)otaflag.info.img_download.ver,param->version,CONFIG_OTA_VERSIONLEN);
     otaflag.info.curstatus = EN_OTA_STATUS_DOWNLOADED;
+    otaflag.info.upgrade_step = EN_OTA_UPGRADE_STEP_START;
+
     ret = ota_flag_save(param->ota_type,&otaflag);
     if(ret != 0)
     {
