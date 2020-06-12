@@ -81,12 +81,16 @@ static const char g_https_serverca[] =
 ///< build the http request
 #define CN_OTA_HTTPS_REQ_FMT  "GET %s HTTP/1.1\r\nAuthorization: Bearer %s\r\nHost: %s:%s\r\nConnection: keep-alive\r\nRange: bytes=%d-%d\r\n\r\n"
 
-#ifndef CONFIG_HTTPOTA_BUFLEN
-#define CONFIG_HTTPOTA_BUFLEN  1024
+#ifndef CONFIG_HTTPS_DOWNLOADING_BLKLEN
+#define CONFIG_HTTPS_DOWNLOADING_BLKLEN  1024
 #endif
 
-#ifndef CONFIG_OCMQTT_HTTPS_TIMEOUT
-#define CONFIG_OCMQTT_HTTPS_TIMEOUT   (10*1000)
+#ifndef CONFIG_HTTPS_DOWNLOADING_RWTIMEOUT
+#define CONFIG_HTTPS_DOWNLOADING_RWTIMEOUT   (10*1000)
+#endif
+
+#ifndef CONFIG_HTTP_DOWNLOADING_TRYTIMES
+#define CONFIG_HTTP_DOWNLOADING_TRYTIMES   24
 #endif
 
 typedef struct
@@ -97,14 +101,14 @@ typedef struct
     const char *bearer;
     int         offset;
     int         len;
-    uint8_t     cache[CONFIG_HTTPOTA_BUFLEN];
+    uint8_t     cache[CONFIG_HTTPS_DOWNLOADING_BLKLEN];
 }http_section_t;
 
 ///< build the request header
 static int http_makerequest(http_section_t *section)
 {
     int ret;
-    ret = snprintf((char *)section->cache,CONFIG_HTTPOTA_BUFLEN,CN_OTA_HTTPS_REQ_FMT,section->url_re,\
+    ret = snprintf((char *)section->cache,CONFIG_HTTPS_DOWNLOADING_BLKLEN,CN_OTA_HTTPS_REQ_FMT,section->url_re,\
             section->bearer,section->host,section->port,section->offset + 1, section->offset + section->len); ///< start from 1
     return ret;
 }
@@ -260,12 +264,12 @@ static int loop_dealheader(http_section_t *section,void *handle)
     en_header_status status = EN_HEADER_STATUS_NORMAL;
     while(status != EN_HEADER_STATUS_RNRN)
     {
-        ret = loop_netread(handle,(uint8_t *) &cur, 1, CONFIG_OCMQTT_HTTPS_TIMEOUT);
+        ret = loop_netread(handle,(uint8_t *) &cur, 1, CONFIG_HTTPS_DOWNLOADING_RWTIMEOUT);
         if(ret != 0)
         {
             break;
         }
-        if(offset < (CONFIG_HTTPOTA_BUFLEN-1))
+        if(offset < (CONFIG_HTTPS_DOWNLOADING_BLKLEN-1))
         {
             section->cache[offset ++] = (uint8_t)cur;   ///< we should check if overblow
         }
@@ -333,7 +337,7 @@ static int http_getandrecv(http_section_t *section,void *handle)
     len = http_makerequest(section);
     LINK_LOG_DEBUG("HTTPREQ:%d Bytes REQ:%s\r\n",len,section->cache);
 
-    ret = loop_netwrite(handle, section->cache,len,CONFIG_OCMQTT_HTTPS_TIMEOUT);
+    ret = loop_netwrite(handle, section->cache,len,CONFIG_HTTPS_DOWNLOADING_RWTIMEOUT);
     if(ret != 0)
     {
         LINK_LOG_ERROR("TLS REQUEST ERR");
@@ -348,7 +352,7 @@ static int http_getandrecv(http_section_t *section,void *handle)
     }
 
     len = section->len; ///< should check if the response matched the length--TODO
-    ret = loop_netread(handle, section->cache,len,CONFIG_OCMQTT_HTTPS_TIMEOUT);
+    ret = loop_netread(handle, section->cache,len,CONFIG_HTTPS_DOWNLOADING_RWTIMEOUT);
 
 EXIT_HANDLE:
     return ret;
@@ -388,7 +392,8 @@ static int https_filedownload(ota_https_para_t  *param,http_section_t *section)
     int file_off;
     int file_lenleft;
     dtls_al_para_t dtls_para;
-    void          *handle = NULL;
+    void *handle = NULL;
+    int try_times = 0;
 
     ret = ota_img_erase(param->ota_type,EN_OTA_IMG_DOWNLOAD);
     if(ret != 0 )
@@ -404,57 +409,64 @@ static int https_filedownload(ota_https_para_t  *param,http_section_t *section)
     file_off = 0;
     file_lenleft = param->file_size;
 
-    (void) memset( &dtls_para,0, sizeof(dtls_para));
-    dtls_para.security.type = EN_DTLS_AL_SECURITY_TYPE_CERT;
-    dtls_para.istcp = 1;
-    dtls_para.isclient = 1;
-    dtls_para.security.u.cert.server_ca = (uint8_t *)g_https_serverca;
-    dtls_para.security.u.cert.server_ca_len = sizeof(g_https_serverca);
-
-    if(EN_DTLS_AL_ERR_OK != dtls_al_new(&dtls_para,&handle))
+    while((try_times < CONFIG_HTTP_DOWNLOADING_TRYTIMES) && (file_lenleft > 0))
     {
-        LINK_LOG_ERROR("TLS HANDLE BUILD ERR");
-        goto EXIT_TLSHANDLE;
-    }
+        try_times++;
 
-    ret = dtls_al_connect( handle, section->host, section->port, CONFIG_OCMQTT_HTTPS_TIMEOUT);
-    if (ret != EN_DTLS_AL_ERR_OK)
-    {
-        LINK_LOG_ERROR("TLS CONNECT ERR");
-        goto EXIT_TLSCONNECT;
-    }
+        (void) memset( &dtls_para,0, sizeof(dtls_para));
+        dtls_para.security.type = EN_DTLS_AL_SECURITY_TYPE_CERT;
+        dtls_para.istcp = 1;
+        dtls_para.isclient = 1;
+        dtls_para.security.u.cert.server_ca = (uint8_t *)g_https_serverca;
+        dtls_para.security.u.cert.server_ca_len = sizeof(g_https_serverca);
 
-    while(file_lenleft > 0)
-    {
-        section->offset = file_off;
-        section->len = file_lenleft > CONFIG_HTTPOTA_BUFLEN?CONFIG_HTTPOTA_BUFLEN:file_lenleft;
-
-        ret = http_dealsection(section, handle, param->ota_type);
-        if(0 == ret)
+        if(EN_DTLS_AL_ERR_OK != dtls_al_new(&dtls_para,&handle))
         {
-            file_lenleft -= section->len;
-            file_off += section->len;
+            LINK_LOG_ERROR("TLS HANDLE BUILD ERR");
+            continue;
         }
-        else
-        {
-            break;
-        }
-    }
-    ///< if we download success
-    dtls_al_destroy(handle);
-    (void)ota_img_flush(param->ota_type, EN_OTA_IMG_DOWNLOAD);
-    return ret;
 
+        ret = dtls_al_connect( handle, section->host, section->port, CONFIG_HTTPS_DOWNLOADING_RWTIMEOUT);
+        if (ret != EN_DTLS_AL_ERR_OK)
+        {
+            LINK_LOG_ERROR("TLS CONNECT ERR");
+            goto EXIT_TLSCONNECT;
+        }
+
+        while(file_lenleft > 0)
+        {
+            section->offset = file_off;
+            section->len = file_lenleft > CONFIG_HTTPS_DOWNLOADING_BLKLEN?CONFIG_HTTPS_DOWNLOADING_BLKLEN:file_lenleft;
+
+            ret = http_dealsection(section, handle, param->ota_type);
+            if(0 == ret)
+            {
+                file_lenleft -= section->len;
+                file_off += section->len;
+            }
+            else
+            {
+                break;
+            }
+        }
 
 EXIT_TLSCONNECT:
-    dtls_al_destroy(handle);
-EXIT_TLSHANDLE:
+        dtls_al_destroy(handle);
+    }
+
+    (void)ota_img_flush(param->ota_type, EN_OTA_IMG_DOWNLOAD);
+    if(file_lenleft == 0)
+    {
+        ret = 0;
+    }
+    else
+    {
+        ret = -1;
+    }
+
 EXIT_ERASE:
-    ret = -1;
     return ret;
 }
-
-
 
 ///< return 0 success while -1 failed;
 int ota_https_download(ota_https_para_t *param)

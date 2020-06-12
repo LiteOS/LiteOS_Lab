@@ -28,6 +28,15 @@ if OTA_DOWNLOAD_HTTPS
         bool "Enable the https download file signature check"
         default n
         select OTA_SIGNVERIFY_ENABLE
+    config HTTPS_DOWNGLOADING_TRYTIMES
+        int "Https try times when disconnect while downloading"
+        default 24
+    config HTTPS_DOWNGLOADING_RWTIMEOUT
+        int "Https receive or send timeout(ms)"
+        default 10000
+    config HTTPS_DOWNGLOADING_BLKLEN
+        int "Https receive BLOCK SIZE"
+        default 1024 
 endif        
         
         
