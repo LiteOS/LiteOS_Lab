@@ -138,11 +138,11 @@ hpatch_BOOL getDecompressPlugin(const hpatch_compressedDiffInfo* diffInfo,
                 return hpatch_FALSE; //error
             }else{
                 if (strlen(diffInfo->compressType)>0)
-                    printf("  diffFile added useless compress tag \"%s\"\n",diffInfo->compressType);
+                    LINK_LOG_DEBUG("  diffFile added useless compress tag \"%s\"\n",diffInfo->compressType);
                 decompressPlugin=0;
             }
         }else{
-            printf("hpatchz run with decompress plugin: \"%s\" (need decompress %d)\n",
+            LINK_LOG_DEBUG("hpatchz run with decompress plugin: \"%s\" (need decompress %d)\n",
             diffInfo->compressType,diffInfo->compressedCount);
         }
     }
