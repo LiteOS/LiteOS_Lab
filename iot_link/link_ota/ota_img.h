@@ -69,7 +69,7 @@ typedef struct
     fn_ota_imgread   read;
     fn_ota_imgerase  erase;
     fn_ota_imgflush  flush;
-}ota_img_opts_t;;
+}ota_img_opts_t;
 
 typedef struct
 {
