@@ -85,7 +85,8 @@ static const char s_oc_mqtt_ca_crt[] =
 
 
 ///< devices normal data report and receive topic format
-#define CN_CLIENT_ID_FMT                    "%s_0_0_%s"
+#define CN_CLIENT_ID_FMTNORMAL               "%s_0_0_%s"    ///< "deviceid_0_0_salttime"
+#define CN_CLIENT_ID_FMTGROUP                "%s_0_%s"      ///< "deviceid_0_scopeid"
 
 #define CN_OC_BS_REPORT_TOPIC_FMT           "$oc/devices/%s/sys/bootstrap/up"
 #define CN_OC_BS_CMD_TOPIC_FMT              "$oc/devices/%s/sys/bootstrap/down"
@@ -94,7 +95,7 @@ static const char s_oc_mqtt_ca_crt[] =
 
 /*The unit is millisecond*/
 #define CN_CON_BACKOFF_TIME     (1000)   ///< UNIT:ms
-#define CN_CON_BACKOFF_MAXTIMES  20      ///< WHEN WAIT OR GET ADDRESS ,WE COULD TRY MAX TIMES
+#define CN_CON_BACKOFF_MAXTIMES  40      ///< WHEN WAIT OR GET ADDRESS ,WE COULD TRY MAX TIMES
 #define CN_HMAC_LEN              32
 #define CN_STRING_MAXLEN         127
 
@@ -160,7 +161,6 @@ typedef struct
     oc_mqtt_config_t        config;
     oc_mqtt_para_t          mqtt_para;
     union{
-
         uint32_t value;
         struct
         {
@@ -291,19 +291,30 @@ static char *topic_fmt(const char *fmt, const char *id)
     return ret;
 }
 
-static char *clientid_fmt(const char *fmt, const char *id, const char *salt_time)
+static char *clientid_fmt(const char *id, const char *salt_time,const char *scopeid, int group_mode)
 {
     char *ret = NULL;
     int len =  0;
+    const char *fmt;
+    const char *param;
 
-    len = strlen(fmt) + strlen(id) + strlen(salt_time) + 1;
+    if(group_mode)
+    {
+        fmt = CN_CLIENT_ID_FMTGROUP;
+        param = scopeid;
+    }
+    else
+    {
+        fmt = CN_CLIENT_ID_FMTNORMAL;
+        param = salt_time;
+    }
 
+    len = strlen(fmt) + strlen(id) + strlen(param) + 1;
     ret = osal_malloc(len);
     if(NULL != ret)
     {
-        (void) snprintf(ret,len,fmt,id,salt_time);
+        (void) snprintf(ret,len,fmt,id,param);
     }
-
     return ret;
 }
 
@@ -411,6 +422,10 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
     {
         mem_len += strlen(config->pwd) + 1;
     }
+    if( NULL != config->scope_id)
+    {
+        mem_len += strlen(config->scope_id) + 1;
+    }
     mem_len += strlen(config->server_addr) + 1;
     mem_len += strlen(config->server_port) + 1;
     ////< now we
@@ -445,8 +460,8 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
 
     if ( NULL != config->pwd )
     {
-        cb->config.pwd = mem_buf;
         (void) strncpy( mem_buf, config->pwd ,strlen(config->pwd)+1);
+        cb->config.pwd = mem_buf;
         mem_buf += strlen( config->pwd ) + 1;
     }
     else
@@ -454,12 +469,23 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
         cb->config.pwd = NULL;
     }
 
-    cb->config.server_addr = mem_buf;
+    if (NULL != config->scope_id)
+    {
+        (void) strncpy( mem_buf, config->scope_id ,strlen(config->scope_id)+1);
+        cb->config.scope_id = mem_buf;
+        mem_buf += strlen( config->scope_id ) + 1;
+    }
+    else
+    {
+        cb->config.scope_id = NULL;
+    }
+
     (void) strncpy( mem_buf,config->server_addr,strlen(config->server_addr)+1 );
+    cb->config.server_addr = mem_buf;
     mem_buf += strlen(config->server_addr) + 1;
 
-    cb->config.server_port = mem_buf;
     (void) strncpy( mem_buf,config->server_port,strlen(config->server_port) + 1 );
+    cb->config.server_port = mem_buf;
     mem_buf += strlen(config->server_port) + 1;
 
     cb->config.security.type = config->security.type;
@@ -468,8 +494,8 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
         if ( 0 != config->security.u.cert.server_ca_len)
         {
             cb->config.security.u.cert.server_ca_len = config->security.u.cert.server_ca_len;
-            cb->config.security.u.cert.server_ca = (uint8_t *)mem_buf;
             (void) memcpy( mem_buf, config->security.u.cert.server_ca, config->security.u.cert.server_ca_len );
+            cb->config.security.u.cert.server_ca = (uint8_t *)mem_buf;
             mem_buf += config->security.u.cert.server_ca_len;
         }
         else
@@ -481,24 +507,24 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
         if ( 0 != config->security.u.cert.client_ca_len)
         {
             cb->config.security.u.cert.client_ca_len =  config->security.u.cert.client_ca_len;
-            cb->config.security.u.cert.client_ca = (uint8_t *)mem_buf;
             (void) memcpy( mem_buf, config->security.u.cert.client_ca, config->security.u.cert.client_ca_len );
+            cb->config.security.u.cert.client_ca = (uint8_t *)mem_buf;
             mem_buf += config->security.u.cert.client_ca_len;
         }
 
         if ( 0 != config->security.u.cert.client_pk_len)
         {
             cb->config.security.u.cert.client_pk_len =  config->security.u.cert.client_pk_len;
-            cb->config.security.u.cert.client_pk = (uint8_t *)mem_buf;
             (void) memcpy( mem_buf, config->security.u.cert.client_pk, config->security.u.cert.client_pk_len );
+            cb->config.security.u.cert.client_pk = (uint8_t *)mem_buf;
             mem_buf += config->security.u.cert.client_pk_len;
         }
 
         if ( 0 != config->security.u.cert.client_pk_pwd_len)
         {
             cb->config.security.u.cert.client_pk_pwd_len = config->security.u.cert.client_pk_pwd_len ;
-            cb->config.security.u.cert.client_pk_pwd = (uint8_t *)mem_buf;
             (void) memcpy( mem_buf, config->security.u.cert.client_pk_pwd, config->security.u.cert.client_pk_pwd_len );
+            cb->config.security.u.cert.client_pk_pwd = (uint8_t *)mem_buf;
         }
     }
 
@@ -513,7 +539,6 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb,oc_mqtt_config_t *config
             return ret;
         }
     }
-
 
     ret = (int)en_oc_mqtt_err_ok;
     return ret;
@@ -537,9 +562,9 @@ static int oc_mqtt_para_release(oc_mqtt_tiny_cb_t *cb)
 
 static int oc_mqtt_para_gernerate(oc_mqtt_tiny_cb_t *cb)
 {
-    int ret = (int)en_oc_mqtt_err_ok;;
+    int ret = (int)en_oc_mqtt_err_ok;
+    int group_mode = 0;
     uint8_t hmac[CN_HMAC_LEN] = {0};
-
     struct tm *date;
     time_t time_now;
 
@@ -554,12 +579,6 @@ static int oc_mqtt_para_gernerate(oc_mqtt_tiny_cb_t *cb)
             date->tm_mon,date->tm_mday,date->tm_hour);
 
     (void) oc_mqtt_para_release(cb);         ///< try to free all the resource we have built
-
-    cb->mqtt_para.mqtt_clientid = clientid_fmt(CN_CLIENT_ID_FMT,(const char *)cb->config.id,(const char *)cb->salt_time);
-    if(NULL == cb->mqtt_para.mqtt_clientid)
-    {
-        goto EXIT_MEM;
-    }
 
     cb->mqtt_para.mqtt_user = osal_strdup(cb->config.id);
     if(NULL == cb->mqtt_para.mqtt_user)
@@ -589,12 +608,13 @@ static int oc_mqtt_para_gernerate(oc_mqtt_tiny_cb_t *cb)
 
     if(cb->flag.bits.bit_daemon_status == (int)en_daemon_status_bs_getaddr)
     {
+        if(NULL != cb->config.scope_id)
+        {
+            group_mode = 1;
+        }
         cb->mqtt_para.default_pub_topic = topic_fmt(CN_OC_BS_REPORT_TOPIC_FMT,(const char *)cb->config.id);
-
         cb->mqtt_para.default_sub_topic = topic_fmt(CN_OC_BS_CMD_TOPIC_FMT,(const char *)cb->config.id);
-
         cb->mqtt_para.default_msg_deal = bs_msg_default_deal;
-
         if((NULL == cb->mqtt_para.default_pub_topic) || \
                 (NULL == cb->mqtt_para.default_sub_topic))
         {
@@ -605,16 +625,19 @@ static int oc_mqtt_para_gernerate(oc_mqtt_tiny_cb_t *cb)
     {
 
         cb->mqtt_para.default_pub_topic = topic_fmt(CN_OC_HUB_PUBTOPIC_DEFAULT_FMT,(const char *)cb->config.id);
-
         cb->mqtt_para.default_sub_topic = topic_fmt(CN_OC_HUB_SUBTOPIC_DEFAULT_FMT,(const char *)cb->config.id);
-
         cb->mqtt_para.default_msg_deal = hub_msg_default_deal;
-
         if((NULL == cb->mqtt_para.default_pub_topic) || \
                 (NULL == cb->mqtt_para.default_sub_topic))
         {
             goto EXIT_MEM;
         }
+    }
+
+    cb->mqtt_para.mqtt_clientid = clientid_fmt((const char *)cb->config.id,(const char *)cb->salt_time,cb->config.scope_id,group_mode);
+    if(NULL == cb->mqtt_para.mqtt_clientid)
+    {
+        goto EXIT_MEM;
     }
 
     if(cb->flag.bits.bit_bs_enable && ((cb->flag.bits.bit_daemon_status == (int)en_daemon_status_hub_keep)||\

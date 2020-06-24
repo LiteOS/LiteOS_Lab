@@ -157,6 +157,7 @@ int oc_mqtt_profile_connect(oc_mqtt_profile_connect_t *payload)
     config.boot_mode =payload->boostrap;
     config.id = payload->device_id;
     config.pwd = payload->device_passwd;
+    config.scope_id = payload->scope_id;
     config.server_addr = payload->server_addr;
     config.server_port = payload->sevver_port;
     config.lifetime = payload->life_time;
