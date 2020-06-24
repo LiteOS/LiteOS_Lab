@@ -100,10 +100,10 @@ typedef struct
     ///< define for the mqtt
     char                              *id;
     char                              *pwd;
+    char                              *scope_id;
     fn_oc_mqtt_msg_deal                msg_deal;       ///< when the agent receive any applciation data, please call this function
     void                              *msg_deal_arg;   ///< call back for the fn_oc_mqtt_msg_deal
     fn_oc_mqtt_log                     log_dealer;
-
 }oc_mqtt_config_t;
 
 ///////////////////////////MQTT AGENT INTERFACE//////////////////////////////////
