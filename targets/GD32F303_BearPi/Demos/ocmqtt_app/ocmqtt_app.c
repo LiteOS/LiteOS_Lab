@@ -328,7 +328,7 @@ static int task_reportmsg_entry(void *args)
     connect_para.device_id =     CONFIG_OCMQTTV5_DEMO_DEVICEID;
     connect_para.device_passwd = CONFIG_OCMQTTV5_DEMO_DEVPWD;
     connect_para.server_addr =   CONFIG_OCMQTTV5_DEMO_SERVERIP;
-    connect_para.sevver_port =   CONFIG_OCMQTTV5_DEMO_SERVERPORT;
+    connect_para.server_port =   CONFIG_OCMQTTV5_DEMO_SERVERPORT;
     connect_para.life_time =     CONFIG_OCMQTTV5_DEMO_LIFE;
     connect_para.rcvfunc =       app_msg_rcvhook;
     connect_para.security.type = EN_DTLS_AL_SECURITY_TYPE_NONE;

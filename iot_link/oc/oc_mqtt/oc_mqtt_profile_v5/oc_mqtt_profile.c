@@ -159,7 +159,7 @@ int oc_mqtt_profile_connect(oc_mqtt_profile_connect_t *payload)
     config.pwd = payload->device_passwd;
     config.scope_id = payload->scope_id;
     config.server_addr = payload->server_addr;
-    config.server_port = payload->sevver_port;
+    config.server_port = payload->server_port;
     config.lifetime = payload->life_time;
     config.msg_deal = app_msg_deal;
     config.msg_deal_arg = NULL;

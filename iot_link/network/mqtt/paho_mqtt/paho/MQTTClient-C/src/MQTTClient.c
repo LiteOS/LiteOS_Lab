@@ -345,7 +345,8 @@ int keepalive(MQTTClient* c)
     if (c->keepAliveInterval == 0)
         goto exit;
 
-    if (TimerIsExpired(&c->last_sent) || TimerIsExpired(&c->last_received))
+    ///<ACOCORDING TO THE protocol,we only care about the  send time
+    if (TimerIsExpired(&c->last_sent))
     {
         if (c->ping_outstanding)
             rc = FAILURE; /* PINGRESP not received in keepalive interval */

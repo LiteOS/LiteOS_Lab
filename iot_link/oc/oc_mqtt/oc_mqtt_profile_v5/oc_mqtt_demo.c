@@ -502,7 +502,7 @@ static int task_reportmsg_entry(void *args)
     connect_para.device_id =     CN_EP_DEVICEID;
     connect_para.device_passwd = CN_EP_PASSWD;
     connect_para.server_addr =   CN_SERVER_IPV4;
-    connect_para.sevver_port =   CN_SERVER_PORT;
+    connect_para.server_port =   CN_SERVER_PORT;
     connect_para.life_time =     CN_LIFE_TIME;
     connect_para.rcvfunc =       app_msg_deal;
     connect_para.logfunc  = hwoc_mqtt_log;
