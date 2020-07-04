@@ -72,11 +72,21 @@ static void *__task_create(const char *name,int (*task_entry)(void *args),\
 
 static int __task_kill(void *task)
 {
+//    pthread_t pid;
+//
+//    pid = (pthread_t)task;
+//    return pthread_cancel(pid);
+    int ret;
     pthread_t pid;
 
     pid = (pthread_t)task;
-    return pthread_cancel(pid);
+    (void)pthread_cancel(pid);  //MAYBE NOT EXIT YET, MAKE SURE YOU ARE THE THREAD OWNER
+
+    ret = pthread_join(pid, NULL);
+    return ret;
+
 }
+
 
 static void __task_exit()
 {

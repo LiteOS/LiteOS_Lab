@@ -113,7 +113,7 @@ typedef struct
 
     int life_time;             ///< ping echo cycle
     char             *server_addr;
-    char             *sevver_port;
+    char             *server_port;
     char             *device_id;
     char             *device_passwd;
     char             *scope_id;
