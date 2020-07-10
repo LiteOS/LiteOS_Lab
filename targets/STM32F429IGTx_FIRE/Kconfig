@@ -50,13 +50,14 @@ config OTA_APP_ENABLE
     default n
     select OTA_ENABLE
     select OTA_HTTPS
-      
+    select LINKDEMO_ENABLE
     
 config OTA_LOADER_ENABLE
     bool "Enable the ota loader"
     default n
     select OTA_ENABLE
-    select OTA_PATCH    
+    select OTA_PATCH
+    select LINKDEMO_ENABLE    
           
 rsource "../../iot_link/Kconfig"
     
