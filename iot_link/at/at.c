@@ -55,7 +55,7 @@
 #endif
 
 #ifndef CONFIG_AT_TASKPRIOR
-#define CONFIG_AT_TASKPRIOR              10
+#define CONFIG_AT_TASKPRIOR              3
 #endif
 
 //at control block here
@@ -479,7 +479,7 @@ int at_init()
         goto EXIT_CMDLOCK;
     }
 
-    if(NULL == osal_task_create("at_rcv",__rcv_task_entry,NULL,0x800,NULL,10))
+    if(NULL == osal_task_create("at_rcv",__rcv_task_entry,NULL,0x800,NULL,CONFIG_AT_TASKPRIOR))
     {
         LINK_LOG_DEBUG("%s:rcvtask create error\n\r",__FUNCTION__);
         goto EXIT_RCVTASK;

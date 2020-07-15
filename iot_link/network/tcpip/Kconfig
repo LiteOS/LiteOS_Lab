@@ -34,6 +34,10 @@ choice
     config ESP8266_ENABLE
         bool  "we use esp8266, and will select the at components"    
         select AT_ENABLE
+        
+    config FIBOCOML716_ENABLE
+        bool "we use FIBOCOML716, and will select the at components"
+        select AT_ENABLE    
           
     config MACOSSOCKET_ENABLE
         bool "we use the macos socket ,and select the macos"
