@@ -286,8 +286,6 @@ instruction  :this task read the device continousely and blocked by the read fun
 *******************************************************************************/
 static int __rcv_task_entry(void *args)
 {
-    bool_t matchret;
-    int oobret;
     int  rcvlen = 0;
 
     g_at_cb.devhandle = los_dev_open(g_at_cb.devname,O_RDWR);

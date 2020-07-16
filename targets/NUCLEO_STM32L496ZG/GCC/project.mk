@@ -42,7 +42,7 @@ HAL_DRIVER_INC = \
 #INCLUDE THE USER SOURCES
 
 USER_SRC = $(TARGET_DIR)/Src/board.c \
-           $(TARGET_DIR)/Src/iot_main.c  \
+           $(TARGET_DIR)/Src/main.c  \
            $(TARGET_DIR)/Src/uart_debug.c   \
            $(TARGET_DIR)/Src/stm32l4xx_hal_msp.c   \
            $(TARGET_DIR)/Src/stm32l4xx_it.c   \
