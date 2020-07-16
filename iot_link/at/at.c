@@ -55,7 +55,7 @@
 #endif
 
 #ifndef CONFIG_AT_TASKPRIOR
-#define CONFIG_AT_TASKPRIOR              10
+#define CONFIG_AT_TASKPRIOR              3
 #endif
 
 //at control block here
@@ -269,7 +269,8 @@ static int  __oob_match(void *data,size_t len)
         if((oob->func != NULL)&&(oob->index != NULL)&&\
             (0 == memcmp(oob->index,data,oob->len)))
         {
-            ret = oob->func(oob->args,data,len);
+            oob->func(oob->args,data,len);
+            ret = 0;
             break;
         }
     }
@@ -285,8 +286,6 @@ instruction  :this task read the device continousely and blocked by the read fun
 *******************************************************************************/
 static int __rcv_task_entry(void *args)
 {
-    bool_t matchret;
-    int oobret;
     int  rcvlen = 0;
 
     g_at_cb.devhandle = los_dev_open(g_at_cb.devname,O_RDWR);
@@ -307,11 +306,9 @@ static int __rcv_task_entry(void *args)
             rcvlen += __resp_rcv(g_at_cb.rcvbuf+ rcvlen,CONFIG_AT_RECVMAXLEN,cn_osal_timeout_forever);
             if( rcvlen > 0)
             {
-                matchret = __cmd_match(g_at_cb.rcvbuf,rcvlen);
-                if(0 != matchret)
+                if(0 != __oob_match(g_at_cb.rcvbuf,rcvlen))
                 {
-                    oobret = __oob_match(g_at_cb.rcvbuf,rcvlen);
-                    if(oobret != -1)
+                    if(0 == __cmd_match(g_at_cb.rcvbuf,rcvlen))
                     {
                         rcvlen = 0;
                     }
@@ -328,11 +325,10 @@ static int __rcv_task_entry(void *args)
     	    rcvlen = __resp_rcv(g_at_cb.rcvbuf,CONFIG_AT_RECVMAXLEN,cn_osal_timeout_forever);
     	    if(rcvlen > 0)
 	        {
-                matchret = __cmd_match(g_at_cb.rcvbuf,rcvlen);
-                if(0 != matchret)
-                {
-                    (void) __oob_match(g_at_cb.rcvbuf,rcvlen);
-                }
+    	        if(0 != __oob_match(g_at_cb.rcvbuf,rcvlen))
+    	        {
+    	            (void)__cmd_match(g_at_cb.rcvbuf,rcvlen);
+    	        }
 	        }
         }
     }
@@ -479,7 +475,7 @@ int at_init()
         goto EXIT_CMDLOCK;
     }
 
-    if(NULL == osal_task_create("at_rcv",__rcv_task_entry,NULL,0x800,NULL,10))
+    if(NULL == osal_task_create("at_rcv",__rcv_task_entry,NULL,0x800,NULL,CONFIG_AT_TASKPRIOR))
     {
         LINK_LOG_DEBUG("%s:rcvtask create error\n\r",__FUNCTION__);
         goto EXIT_RCVTASK;
