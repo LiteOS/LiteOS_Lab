@@ -62,22 +62,12 @@ const char* g_signature_public=
 #define CN_SERVER_PORT                 "1883"
 #define CN_SECURITY_TYPE               EN_DTLS_AL_SECURITY_TYPE_NONE
 
-#ifndef CONFIG_OCMQTTV5_DEMO_DEVICEID
-//#define CONFIG_OCMQTTV5_DEMO_DEVICEID  "5e12ea0a334dd4f337902dc3_iotlink005"
-#define CONFIG_OCMQTTV5_DEMO_DEVICEID  "5ec3f516cce62b02c56524a9_otamqtt003"
-#endif
-
-#ifndef CONFIG_OCMQTTV5_DEMO_DEVPWD
-#define CONFIG_OCMQTTV5_DEMO_DEVPWD     "f62fcf47d62c4ed18913"
-#endif
-
 #ifndef CONFIG_OCMQTTV5_DEMO_REPORTCYCLE
 #define CONFIG_OCMQTTV5_DEMO_REPORTCYCLE   (10*1000)
 #endif
 
-#define CN_EP_DEVICEID        CONFIG_OCMQTTV5_DEMO_DEVICEID
-#define CN_EP_PASSWD          CONFIG_OCMQTTV5_DEMO_DEVPWD
-
+#define CN_EP_DEVICEID        "xxxxxxxxxxxxx"
+#define CN_EP_PASSWD          "xxxxx"
 
 #define CN_BOOT_MODE           0
 #define CN_LIFE_TIME           40                         ///< the platform need more
@@ -171,8 +161,8 @@ static int oc_cmd_event_versionquery(cJSON *event)
     return ret;
 }
 
+///< data format
 //Topic: $oc/devices/{device_id}/sys/events/up
-//数据格式：
 //{
 //    "object_device_id": "{object_device_id}",
 //    "services": [{
@@ -487,7 +477,7 @@ int standard_app_demo_main(void)
 {
     static oc_mqtt_profile_kv_t  property;
 
-    LINK_LOG_DEBUG("This is STM32F429IGTX MQTT OTA application--VERSION:%s",CN_OTA_FOTA_VERSION);
+    LINK_LOG_DEBUG("This is NUCLEOL496 MQTT OTA application--VERSION:%s",CN_OTA_FOTA_VERSION);
     s_queue_rcvmsg = queue_create("queue_rcvmsg",2,1);
     ///< initialize the service
     property.nxt   = NULL;

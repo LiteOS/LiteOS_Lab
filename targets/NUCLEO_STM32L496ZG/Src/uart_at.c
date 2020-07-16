@@ -73,9 +73,11 @@ struct atio_cb
 {
     unsigned short        w_next;    //the next position to be write
     osal_semp_t           rcvsync;   //if a frame has been written to the ring, then active it
+    osal_mutex_t          wlock;
     tag_ring_buffer_t     rcvring;
     unsigned char         rcvbuf[CONFIG_UARTAT_RCVMAX];
     unsigned char         rcvringmem[CN_RCVMEM_LEN];
+
     //for the debug here
     unsigned int          rframeover; //how many times the frame has been over the max length
     unsigned int          rframedrop; //how many frame has been droped for memmory
@@ -157,6 +159,14 @@ bool_t uart_at_init(void *pri)
         printf("%s:semp create error\n\r",__FUNCTION__);
         goto EXIT_SEMP;
     }
+
+    if(false == osal_mutex_create(&g_atio_cb.wlock))
+    {
+        printf("%s:mutex create error\n\r",__FUNCTION__);
+        goto EXIT_MUTEX;
+    }
+
+
     ring_buffer_init(&g_atio_cb.rcvring,g_atio_cb.rcvringmem,CN_RCVMEM_LEN,0,0);
 
     uart_at->Instance = s_pUSART;
@@ -178,6 +188,9 @@ bool_t uart_at_init(void *pri)
     __HAL_UART_ENABLE_IT(uart_at, UART_IT_RXNE);
     return true;
 
+EXIT_MUTEX:
+    osal_semp_del(g_atio_cb.rcvsync);
+    g_atio_cb.rcvsync = cn_semp_invalid;
 EXIT_SEMP:
     return false;
 }
@@ -187,6 +200,13 @@ void uart_at_deinit(void *pri)
     __HAL_UART_DISABLE(uart_at);
     __HAL_UART_DISABLE_IT(uart_at, UART_IT_IDLE);
     __HAL_UART_DISABLE_IT(uart_at, UART_IT_RXNE);
+
+    osal_mutex_del(g_atio_cb.wlock);
+    g_atio_cb.wlock = cn_mutex_invalid;
+
+    osal_semp_del(g_atio_cb.rcvsync);
+    g_atio_cb.rcvsync = cn_semp_invalid;
+
 }
 
 /*******************************************************************************
@@ -196,13 +216,18 @@ instruction  :
 *******************************************************************************/
 static ssize_t uart_at_send(const char  *buf, size_t len,uint32_t timeout)
 {
-    unsigned int lock = LOS_IntLock();
-    HAL_UART_Transmit(uart_at,(unsigned char *)buf,len,timeout);
-    LOS_IntRestore(lock);
-    g_atio_cb.sndlen += len;
-    g_atio_cb.sndframe ++;
+    int ret = -1;
+    if(osal_mutex_lock(g_atio_cb.wlock))
+    {
+        HAL_UART_Transmit(uart_at,(unsigned char *)buf,len,timeout);
+        g_atio_cb.sndlen += len;
+        g_atio_cb.sndframe ++;
 
-    return len;
+        ret = len;
+
+        osal_mutex_unlock(g_atio_cb.wlock);
+    }
+    return ret;
 }
 /*******************************************************************************
 function     :use this function to read a frame from the uart
@@ -264,7 +289,7 @@ static ssize_t  __at_write (void *pri, size_t offset,const void *buf,size_t len,
     return uart_at_send(buf, len, timeout);
 }
 
-void uart_at_enable (void)
+void atdevice_enable (void)
 {
     printf ("toggle module\n\r");
     HAL_GPIO_WritePin(MODULE_POWER_ON_GPIO_Port, MODULE_POWER_ON_Pin, GPIO_PIN_RESET);
