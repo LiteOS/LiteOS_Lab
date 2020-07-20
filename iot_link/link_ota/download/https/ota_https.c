@@ -443,6 +443,7 @@ static int https_filedownload(ota_https_para_t  *param,http_section_t *section)
             {
                 file_lenleft -= section->len;
                 file_off += section->len;
+                param->report_progress(0, param->file_size, file_off);
             }
             else
             {

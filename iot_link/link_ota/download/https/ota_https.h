@@ -53,6 +53,7 @@ typedef struct
     int                 file_size;
     int                 file_offset;
     en_ota_type_t       ota_type;
+    int                 (*report_progress)(int, int, int);
 }ota_https_para_t;
 
 ///< https download, 0 success while others failed
