@@ -172,7 +172,7 @@ static int oc_cmd_event_versionquery(cJSON *event)
 }
 
 //Topic: $oc/devices/{device_id}/sys/events/up
-//数据格式：
+//data format
 //{
 //    "object_device_id": "{object_device_id}",
 //    "services": [{
@@ -207,7 +207,25 @@ static int oc_report_upgraderet(int upgraderet, const char *version)
     }
     return ret;
 }
+int oc_report_upgraderet_progress(int upgraderet, int sumLen, int curLen )   //data upload
+{
+    int ret;
+    char *topic = "$oc/devices/"CN_EP_DEVICEID"/sys/events/up"; 
+    char *fmt = "{ \"services\": [{ \"service_id\": \"$ota\", \"event_type\": \"upgrade_progress_report\", \"paras\": { \"result_code\":%d,\"progress\":%d } }]}";
+    char *data;
+    int   len;
 
+    len = strlen(fmt) + sizeof(upgraderet) + sizeof(sumLen);
+    data = osal_malloc(len);
+    if(NULL != data)
+    {
+        snprintf(data, len, fmt,upgraderet, 100*curLen/sumLen);
+        LINK_LOG_DEBUG("REPORT:UPGRADERET:%s",data);
+        ret = oc_mqtt_publish(topic,(uint8_t *)data, strlen(data),0);
+        osal_free(data);
+    }
+    return ret;
+}
 
 static int oc_cmd_event_firmupdate(cJSON *event)
 {
@@ -245,6 +263,7 @@ static int oc_cmd_event_firmupdate(cJSON *event)
             otapara->file_size = obj_filesize->valueint;
             otapara->version = cJSON_GetStringValue(obj_version);
             otapara->signature_public = g_signature_public;
+            otapara->report_progress = oc_report_upgraderet_progress;
             ///< here we do the firmware download
             ret =  ota_https_download(otapara);
             if(ret != 0)
@@ -375,7 +394,7 @@ static int demo_pubdefault(void)
 {
     int ret ;
     static int radio = 0;
-    const char *fmt = "{\"services\":[{\"service_id\":\"DeviceStatus\",\"properties\":{\"radioValue\":%d}}]}";
+    const char *fmt = "{\"services\":[{\"service_id\":\"SensorService\",\"properties\":{\"accelerometer_x\":%d}}]}";
     char *data;
     int   len;
 
@@ -383,7 +402,8 @@ static int demo_pubdefault(void)
     data = osal_malloc(len);
     if(NULL != data)
     {
-        snprintf(data, len, fmt,radio++);
+    	radio+=2;
+        snprintf(data, len, fmt,radio);
         ret = oc_mqtt_publish(NULL,(uint8_t *)data, strlen(data),0);
         osal_free(data);
     }
