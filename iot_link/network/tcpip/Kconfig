@@ -41,11 +41,9 @@ choice
           
     config MACOSSOCKET_ENABLE
         bool "we use the macos socket ,and select the macos"
-        select MACOS_ENABLE
                
     config LINUXSOCKET_ENABLE
         bool "we use the linux socket ,and will select the linux"
-        select LINUXOS_ENABLE
              
     config NEW_SOCKET
         bool "we will create a new tcpip ourself"    
@@ -53,7 +51,7 @@ choice
     endchoice
     
     if ESP8266_ENABLE
-       rsource "./esp8266_socket/kconfig_esp8266"        
+       rsource "./esp8266/Kconfig"        
     endif
            
 endif   

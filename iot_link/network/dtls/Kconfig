@@ -21,8 +21,6 @@ config DTLS_AL_ENABLE
     default y
     
 if DTLS_AL_ENABLE
-    choice
-    prompt "please select one dtls implement"
     config MBEDTLS_ENABLE
         bool  "select mbedtls(polar ssl) as the (d)tls"
             
@@ -31,8 +29,7 @@ if DTLS_AL_ENABLE
         
     config NEWTLS_ENABLE
         bool  "select the unknown one, and you should implement it"
-    endchoice 
-    
+            
     if MBEDTLS_ENABLE   
         rsource "./mbedtls/kconfig_mbedtls"
     endif

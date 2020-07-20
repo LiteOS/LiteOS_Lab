@@ -18,11 +18,19 @@ visible if ESP8266_ENABLE
     
     config ESP8266_SSID
         string "The ssid of the wifi"
-        default "iot-link_2019"
+        default "IoTdebug"
     
     config ESP8266_PWD
         string "The pwd of the wifi"
-        default "iot-link0123456"
+        default "IoTdebug"
+        
+    config ESP8266_RCVCACHE
+       int "The receive cache of the wifi"
+       default 1024
+    
+    config ESP8266_CMDTIMEOUT
+        int "The at command timeout of the wifi"
+        default 2000   
    
 endmenu
     
