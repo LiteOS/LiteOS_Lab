@@ -230,8 +230,6 @@ static char *Esp8266MsgDealSingle(char *msg,size_t len)
     {
         ring_buffer_write(&sock->rcvRing,(unsigned char *)str,datalen);
     }
-
-    LINK_LOG_DEBUG("GETDATA:FD:%d Len:%d",fd, datalen);
     ret = str + datalen;
 
     return ret;
