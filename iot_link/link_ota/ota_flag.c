@@ -65,17 +65,17 @@
 static int ota_flag_imgupdate(en_ota_type_t  otatype,en_ota_img_type_t img, ota_flag_t *flag)
 {
     int ret;
-    ret = ota_img_erase(otatype,EN_OTA_IMG_FLAG);
+    ret = ota_img_erase(otatype,img);
     if(ret != 0)
     {
         goto EXIT_UPDATE;
     }
-    ret = ota_img_write(otatype,EN_OTA_IMG_FLAG,0,flag,sizeof(ota_flag_t));
+    ret = ota_img_write(otatype,img,0,flag,sizeof(ota_flag_t));
     if(ret != 0)
     {
         goto EXIT_UPDATE;
     }
-    ret = ota_img_flush(otatype,EN_OTA_IMG_FLAG);
+    ret = ota_img_flush(otatype,img);
     if(ret != 0)
     {
         goto EXIT_UPDATE;

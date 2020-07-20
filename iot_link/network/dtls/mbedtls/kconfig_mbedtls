@@ -16,10 +16,7 @@
 
 menu "mbedtls configuration"
 visible if MBEDTLS_ENABLE
-    
-        choice 
-        prompt "Please select one of the workmode for mbedtls"
-        
+            
         config MBEDTLS_CERT
             bool "Use the mbed cert mode(for the cert mode)"
         
@@ -28,7 +25,6 @@ visible if MBEDTLS_ENABLE
         
         config MBEDTLS_CERT_PSK
             bool "Use the mbed psk-cert mode"
-        endchoice 
         
         config MBED_DEBUG_ENABLE
             bool "Enable the mbed debug"
