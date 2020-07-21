@@ -219,10 +219,4 @@ SOTA使用自定义对象19，并使用了PCP协议作为数据传输协议。�
 -   在config.mk中定义CONFIG\_LOADER\_ENABLE值为y，进行Loader镜像的编译。将改值改为n，进行APP镜像的编译。
 -   在Makefile文件中将cfg\_seperate\_load\_mode赋值为yes，以使用对应的链接脚本来构建对应的执行文件。
 
-# 进度上报
-新版本增加了进度上报功能，主要改动一下三个文件 app_mqttota.c, ota_https.c, ota_https.h
-在文件app_mqttota.c中新增进度上报函数int oc_report_upgraderet_progress(int upgraderet, int sumLen, int curLen ) 
-其中upgraderet为result_code, sumLen为固件升级包的大小, curLen为当前已经下载的文件大小
-在文件ota_https.c中的函数https_filedownload里增加了进度上报语句
-在文件ota_https.h中的结构体ota_https_para_t中增加了int (* report_progress)(int, int, int)函数指针，该指针指向文件app_mqttota.c中
-进度上报函数int oc_report_upgraderet_progress(int upgraderet, int sumLen, int curLen )，并且在文件ota_https.c中的函数https_filedownload里进行了调用
+
