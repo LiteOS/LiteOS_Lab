@@ -83,12 +83,10 @@ Download:根据选择解决方案（差分还是全量）来定义其大小
 ​	以STM32F429IGTx的野火开发板为例，[参考STM32F429实践](./ota_stm32f429.md)。
 
 ## 进度上报
-新版本增加了进度上报功能，主要改动一下三个文件 app_mqttota.c, ota_https.c, ota_https.h
-在文件app_mqttota.c中新增进度上报函数int oc_report_upgraderet_progress(int upgraderet, int sumLen, int curLen ) 
-其中upgraderet为result_code, sumLen为固件升级包的大小, curLen为当前已经下载的文件大小
-在文件ota_https.c中的函数https_filedownload里增加了进度上报语句
-在文件ota_https.h中的结构体ota_https_para_t中增加了int (* report_progress)(int, int, int)函数指针，该指针指向文件app_mqttota.c中
-进度上报函数int oc_report_upgraderet_progress(int upgraderet, int sumLen, int curLen )，并且在文件ota_https.c中的函数https_filedownload里进行了调用。
+新版本增加了进度上报功能
+用户可以根据自己的需求进行定义。例如在文件app_mqttota.c中新增进度上报函数int oc_report_upgraderet_progress(int upgraderet, int sumLen, int curLen ) 其中upgraderet为result_code, sumLen为固件升级包的大小, curLen为当前已经下载的文件大小。
+在文件ota_https.c中的函数https_filedownload里增加了进度上报语句进行进度上报
+在文件ota_https.h中的结构体ota_https_para_t中增加了int (* report_progress)(int, int, int)函数指针，用户可以将其指向自己定义的进度上报函数，例如将该指针指向文件app_mqttota.c中进度上报函数int oc_report_upgraderet_progress(int upgraderet, int sumLen, int curLen )，并且在文件ota_https.c中的函数https_filedownload里进行了调用。
 
 
 
