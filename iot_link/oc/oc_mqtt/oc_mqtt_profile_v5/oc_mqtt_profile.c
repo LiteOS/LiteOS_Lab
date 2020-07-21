@@ -528,3 +528,43 @@ int oc_mqtt_profile_getshadow(char *deviceid,oc_mqtt_profile_shadowget_t *payloa
 }
 
 
+#define CN_OC_MQTT_PROFILE_EVENT_TOPICFMT   "$oc/devices/%s/sys/events/up"
+int oc_mqtt_profile_reportevent(char *deviceid,oc_mqtt_profile_event_t *event)
+{
+    int ret = (int)en_oc_mqtt_err_parafmt;
+    char *topic;
+    char *msg;
+
+    if(NULL == deviceid){
+        if(NULL == s_oc_mqtt_profile_cb.device_id){
+            return ret;
+        }
+        else{
+            deviceid = s_oc_mqtt_profile_cb.device_id;
+        }
+    }
+
+    if((event == NULL) || (event->event_type == NULL)){
+        return ret;
+    }
+
+    topic = topic_make(CN_OC_MQTT_PROFILE_EVENT_TOPICFMT, deviceid,NULL);
+    msg = oc_mqtt_profile_package_event(event);
+
+    if((topic != NULL) && (msg != NULL)){
+        ret = oc_mqtt_publish(topic,(uint8_t *)msg,strlen(msg),(int)en_mqtt_al_qos_1);
+    }
+    else{
+        ret = (int)en_oc_mqtt_err_sysmem;
+    }
+
+    osal_free(topic);
+    osal_free(msg);
+
+    return ret;
+}
+
+
+
+
+

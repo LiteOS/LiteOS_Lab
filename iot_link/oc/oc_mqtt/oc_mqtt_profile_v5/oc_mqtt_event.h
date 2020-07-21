@@ -32,25 +32,66 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 /**
- *  DATE                AUTHOR      INSTRUCTION
- *  2020-02-06 14:40  zhangqianfu  The first version
+ *  DATE                    INSTRUCTION
+ *  2020-07-21 18:43  The first version
  *
  */
-#ifndef LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_PROFILE_OC_MQTT_PROFILE_PACKAGE_H_
-#define LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_PROFILE_OC_MQTT_PROFILE_PACKAGE_H_
+#ifndef LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_PROFILE_V5_OC_MQTT_EVENT_H_
+#define LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_PROFILE_V5_OC_MQTT_EVENT_H_
+
+/**
+ * @brief:the user could use this function to report the version to the iot platform
+ *
+ * @param: deiceID, the device id
+ *
+ * @param: objectDeviceID, the information sent to ,could be NULL
+ *
+ *
+ * @param: softVersion, the software version of the device, could be NULL
+ *
+ * @param:firmVersion, the firmware version of the device, could be NULL
+ *
+ * @return:0 success while others failed
+ *
+ * */
+int OcMqttReportVersionEvent(const char *deviceID, const char *objectDeviceID,\
+                              const char *softVersion, const char *firmVersion);
 
 
-#include <oc_mqtt_profile.h>
+typedef enum{
+
+  EN_OC_MQTT_UPGRADERET_SUCCESS = 0,
+  EN_OC_MQTT_UPGRADERET_BUSY,
+  EN_OC_MQTT_UPGRADERET_WEAKSIGNAL,
+  EN_OC_MQTT_UPGRADERET_SAMEVERSION,
+  EN_OC_MQTT_UPGRADERET_POWERLESS,
+  EN_OC_MQTT_UPGRADERET_SPACELESS,
+  EN_OC_MQTT_UPGRADERET_DOWNLOADTIMEOUT,
+  EN_OC_MQTT_UPGRADERET_PACKCHECKERR,
+  EN_OC_MQTT_UPGRADERET_PACKTYPENOTSUPPORT,
+  EN_OC_MQTT_UPGRADERET_MEMLESS,
+  EN_OC_MQTT_UPGRADERET_UPGRADEERR,
+  EN_OC_MQTT_UPGRADERET_INTERNALERR = 255,
+}en_oc_mqtt_upgraderet_t;
+
+/**
+ * @brief:the user could use this function to report the upgrade result
+ *
+ * @param: deiceID, the device id
+ *
+ *  @param: objectDeviceID, the information sent to ,could be NULL
+ *
+ * @param: upgraderet:defined as en_oc_mqtt_upgraderet_t
+ *
+ * @param: version, the current version of the device, maybe software of hardware
+ *
+ * @param: progress, the upgrade progress, 0-100, and -1 means not report the option
+ *
+ * @return:0 success while others failed
+ *
+ * */
+int OcMqttReportUpgradeProcessEvent(const char *deviceID, const char *objectDeviceID, \
+                                    int upgraderet, const char *version, int progress);
 
 
-///< defines for the package tools
-char *oc_mqtt_profile_package_msgup(oc_mqtt_profile_msgup_t *payload);
-char *oc_mqtt_profile_package_propertyreport(oc_mqtt_profile_service_t *payload);
-char *oc_mqtt_profile_package_gwpropertyreport(oc_mqtt_profile_device_t *payload);
-char *oc_mqtt_profile_package_propertysetresp(oc_mqtt_profile_propertysetresp_t *payload);
-char *oc_mqtt_profile_package_propertygetresp(oc_mqtt_profile_propertygetresp_t *payload);
-char *oc_mqtt_profile_package_cmdresp(oc_mqtt_profile_cmdresp_t *payload);
-char *oc_mqtt_profile_package_shadowget(oc_mqtt_profile_shadowget_t *payload);
-char *oc_mqtt_profile_package_event(oc_mqtt_profile_event_t *event);
-
-#endif /* LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_PROFILE_OC_MQTT_PROFILE_PACKAGE_H_ */
+#endif /* LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_PROFILE_V5_OC_MQTT_EVENT_H_ */
