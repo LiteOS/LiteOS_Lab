@@ -159,7 +159,7 @@ static int DealFirmupgradeEvent(cJSON *event)
             ///< here we do the firmware download
             ret =  ota_https_download(&otapara);
             if(ret != 0){
-                OcMqttReportUpgradeProcessEvent(CN_EP_DEVICEID,NULL,6,otapara.version,-1);
+                OcMqttReportUpgradeProcessEvent(CN_EP_DEVICEID,NULL,(int)EN_OC_MQTT_UPGRADERET_DOWNLOADTIMEOUT,otapara.version,-1);
                 LINK_LOG_ERROR("DOWNLOADING ERR");
             }
             else {
@@ -346,12 +346,12 @@ static int ReportMsgTaskEntry(void *args)
 
     if(otaflag.info.curstatus == EN_OTA_STATUS_UPGRADED_SUCCESS){
 
-        OcMqttReportUpgradeProcessEvent(CN_EP_DEVICEID,NULL,0,CN_OTA_FOTA_VERSION,100);
+        OcMqttReportUpgradeProcessEvent(CN_EP_DEVICEID,NULL,(int)EN_OC_MQTT_UPGRADERET_SUCCESS,CN_OTA_FOTA_VERSION,100);
         otaflag.info.curstatus = EN_OTA_STATUS_IDLE;
         ota_flag_save(EN_OTA_TYPE_FOTA,&otaflag);
     }
     else if(otaflag.info.curstatus == EN_OTA_STATUS_UPGRADED_FAILED){
-        OcMqttReportUpgradeProcessEvent(CN_EP_DEVICEID,NULL,0,CN_OTA_FOTA_VERSION,-1);
+        OcMqttReportUpgradeProcessEvent(CN_EP_DEVICEID,NULL,(int)EN_OC_MQTT_UPGRADERET_UPGRADEERR,CN_OTA_FOTA_VERSION,-1);
         otaflag.info.curstatus = EN_OTA_STATUS_IDLE;
         ota_flag_save(EN_OTA_TYPE_FOTA,&otaflag);
     }
