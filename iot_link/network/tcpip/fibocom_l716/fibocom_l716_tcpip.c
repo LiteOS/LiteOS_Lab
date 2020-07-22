@@ -506,7 +506,7 @@ static const tag_tcpip_domain s_tcpip_socket =
     .ops = &s_tcpip_socket_ops,
 };
 
-static bool_t __l716_joinap(void)
+static bool_t _l716_joinnetwork(void)
 {
     extern void atdevice_enable(void);
     
@@ -562,12 +562,9 @@ int link_tcpip_imp_init(void)
 
     at_oobregister("l716cn", RCVINDEX, strlen(RCVINDEX), __l716_rcvdeal, NULL);
 
-    if (!__l716_joinap()) {
-        printf("Fail to enable network!\r\n");
-        osal_mutex_del(g_atcombo_lock);
-        osal_mutex_del(g_iobufer_lock);
-
-        return -1;
+    while (!_l716_joinnetwork()) {
+        printf("Fail to enable network and try another time\r\n");
+        osal_task_sleep(1000);
     }
 
    //reach here means everything is ok, we can go now
