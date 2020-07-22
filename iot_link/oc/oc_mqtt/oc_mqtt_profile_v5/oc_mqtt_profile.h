@@ -42,6 +42,29 @@
 #include <stdint.h>
 #include <oc_mqtt_al.h>
 
+
+///< define all the json key will be used in the profile
+#define CN_OC_JSON_KEY_SERVICEID        "service_id"
+#define CN_OC_JSON_KEY_OBJECTDEVICEID   "object_device_id"
+#define CN_OC_JSON_KEY_NAME             "name"
+#define CN_OC_JSON_KEY_ID               "id"
+#define CN_OC_JSON_KEY_CONTENT          "content"
+#define CN_OC_JSON_KEY_PROPERTIES       "properties"
+#define CN_OC_JSON_KEY_EVENTTIME        "event_time"
+#define CN_OC_JSON_KEY_EVENTTYPE        "event_type"
+#define CN_OC_JSON_KEY_DEVICES          "devices"
+#define CN_OC_JSON_KEY_DEVICEID         "device_id"
+#define CN_OC_JSON_KEY_RESULTCODE       "result_code"
+#define CN_OC_JSON_KEY_RESPONSENAME     "response_name"
+#define CN_OC_JSON_KEY_PARAS            "paras"
+#define CN_OC_JSON_KEY_RESULTDESC       "result_desc"
+#define CN_OC_JSON_KEY_SERVICES         "services"
+#define CN_OC_JSON_KEY_SWVERSION        "sw_version"
+#define CN_OC_JSON_KEY_FWVERSION        "fw_version"
+#define CN_OC_JSON_KEY_VERSION          "version"
+#define CN_OC_JSON_KEY_PROGRESS         "progress"
+
+
 ///< UP means the device send data to the cloud
 typedef enum
 {
@@ -285,6 +308,32 @@ typedef struct
 int oc_mqtt_profile_getshadow(char *deviceid,oc_mqtt_profile_shadowget_t *payload);
 
 
+#define CN_OC_MQTT_EVENTTYPE_VERSIONQUERY   "version_query"
+#define CN_OC_MQTT_EVENTTYPE_VERSIONREPORT  "version_report"
+#define CN_OC_MQTT_EVENTTYPE_FWUPGRADE      "firmware_upgrade"
+#define CN_OC_MQTT_EVENTTYPE_SWUPGRADE      "software_upgrade"
+#define CN_OC_MQTT_EVENTTYPE_UPGRADEPROGRESSREPORT "upgrade_progress_report"
+
+typedef struct
+{
+    char *object_device_id;
+    char *service_id;
+    char *event_type;
+    char *event_time;
+    oc_mqtt_profile_kv_t *paras;
+}oc_mqtt_profile_event_t;
+
+/**
+ * @brief: use this fucntion to make the event
+ *
+ * @param:deviceid: the deviceID
+ *
+ * @param:event:defines as the oc_mqtt_profile_event_t
+ *
+ * @return: the json string of the event.
+ *
+ * */
+int oc_mqtt_profile_reportevent(char *deviceid,oc_mqtt_profile_event_t *event);
 
 
 

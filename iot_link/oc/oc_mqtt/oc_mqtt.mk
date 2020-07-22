@@ -18,7 +18,9 @@ ifeq ($(CONFIG_OCMQTT_ENABLE), y)
     ifeq ($(CONFIG_OC_MQTTV5_PROFILE), y)
     
     	C_SOURCES += $(iot_link_root)/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c \
-    	             $(iot_link_root)/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c
+    	             $(iot_link_root)/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c  \
+    	             $(iot_link_root)/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c
+    	             
     	
     	ifeq ($(CONFIG_OC_MQTTV5_DEMO), y)
    		
