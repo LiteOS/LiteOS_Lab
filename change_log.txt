@@ -2,8 +2,17 @@ v1.3.1:
     1,将os的实现接口归一化，清除link_main的os组件相关的编译宏
     2,将tcpip的实现接口归一化，清除link_main的tcpip组件的编译宏开关
 
-v2.0.0:
+v2.1.0:
     1,增加OC MQTT的V5接口支持,由于设备发放平台暂时不ready,因此先屏蔽
     2,DTLS增加DTLS AL，用于支持LWM2M MQTT COAP等组件
+
+v2.2.1:
+    1,增加了OTA功能，基于MQTT的FOTA
+   
+v2.2.2:
+    1,增加了OTA升级时候的掉电保护
+    2，增加了OTA下载校验
+    3，增加了OTA下载进度上报功能
+    
     
      
