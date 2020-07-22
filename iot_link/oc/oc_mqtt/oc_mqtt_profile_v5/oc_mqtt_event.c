@@ -122,7 +122,7 @@ int oc_mqtt_report_upgradeprogress(const char *deviceID, const char *objectDevic
     resultCode.key = CN_OC_JSON_KEY_RESULTCODE;
     resultCode.type = EN_OC_MQTT_PROFILE_VALUE_INT;
     resultCode.value = &upgraderet;
-    resultCode.nxt = &cur;
+    resultCode.nxt = cur;
     cur = &resultCode;
 
     if(version != NULL){
