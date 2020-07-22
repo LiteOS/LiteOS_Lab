@@ -26,7 +26,7 @@ ifeq ($(CONFIG_TCPIP_AL_ENABLE), y)
     endif
     
     ifeq ($(CONFIG_RTK8710_ENABLE), y)
-        include $(iot_link_root)/network/tcpip/rtk8710_socket/rtk8710_socket_imp.mk        
+        include $(iot_link_root)/network/tcpip/rtk8710/build.mk
     endif
     
     ifeq ($(CONFIG_FIBOCOML716_ENABLE), y)

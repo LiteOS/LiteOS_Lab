@@ -54,7 +54,7 @@
  * @return:0 success while others failed
  *
  * */
-int OcMqttReportVersionEvent(const char *deviceID, const char *objectDeviceID,\
+int oc_mqtt_report_version(const char *deviceID, const char *objectDeviceID,\
                               const char *softVersion, const char *firmVersion);
 
 
@@ -90,7 +90,7 @@ typedef enum{
  * @return:0 success while others failed
  *
  * */
-int OcMqttReportUpgradeProcessEvent(const char *deviceID, const char *objectDeviceID, \
+int oc_mqtt_report_upgradeprogress(const char *deviceID, const char *objectDeviceID, \
                                     int upgraderet, const char *version, int progress);
 
 

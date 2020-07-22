@@ -67,11 +67,11 @@
 #define CN_OTA_SOTA_VERSION    "SOTAV1"
 #define CN_OTA_FOTA_VERSION    "FOTAV1"
 //if your command is very fast,please use a queue here--TODO
-static queue_t                   *gRcvMsgQueue = NULL;   ///< this is used to cached the message
-static oc_mqtt_profile_service_t  gDevicePropertyService;
+static queue_t                   *g_queue_rcvmsg = NULL;   ///< this is used to cached the message
+static oc_mqtt_profile_service_t  g_services_deviceproperty;
 
 //use this function to push all the message to the buffer
-static int RcvMsgDealHook(oc_mqtt_profile_msgrcv_t *msg)
+static int deal_rcv_msg_hook(oc_mqtt_profile_msgrcv_t *msg)
 {
     int    ret = -1;
     char  *buf;
@@ -111,7 +111,7 @@ static int RcvMsgDealHook(oc_mqtt_profile_msgrcv_t *msg)
         LINK_LOG_DEBUG("RCVMSG:type:%d reuqestID:%s payloadlen:%d payload:%s\n\r",\
                 (int) demo_msg->type,demo_msg->request_id==NULL?"NULL":demo_msg->request_id,\
                 demo_msg->msg_len,(char *)demo_msg->msg);
-        ret = queue_push(gRcvMsgQueue,demo_msg,10);
+        ret = queue_push(g_queue_rcvmsg,demo_msg,10);
         if(ret != 0){
             osal_free(demo_msg);
         }
@@ -121,13 +121,13 @@ static int RcvMsgDealHook(oc_mqtt_profile_msgrcv_t *msg)
 }
 
 
-static int DealUpgradeLog(int ret, int total, int cur){
-
-    return OcMqttReportUpgradeProcessEvent(CN_EP_DEVICEID,NULL,ret,NULL,cur*100/total);
+static int deal_upgradeprogress_hook(int ret, int total, int cur)
+{
+    return oc_mqtt_report_upgradeprogress(CN_EP_DEVICEID,NULL,ret,NULL,cur*100/total);
 }
 
 
-static int DealFirmupgradeEvent(cJSON *event)
+static int deal_firmupgrade_event(cJSON *event)
 {
     int ret = -1;
     cJSON *objParas;
@@ -155,11 +155,11 @@ static int DealFirmupgradeEvent(cJSON *event)
             otapara.signature = cJSON_GetStringValue(objSign);
             otapara.file_size = objFileSize->valueint;
             otapara.version = cJSON_GetStringValue(objVersion);
-            otapara.report_progress = DealUpgradeLog;
+            otapara.report_progress = deal_upgradeprogress_hook;
             ///< here we do the firmware download
             ret =  ota_https_download(&otapara);
             if(ret != 0){
-                OcMqttReportUpgradeProcessEvent(CN_EP_DEVICEID,NULL,(int)EN_OC_MQTT_UPGRADERET_DOWNLOADTIMEOUT,otapara.version,-1);
+                oc_mqtt_report_upgradeprogress(CN_EP_DEVICEID,NULL,(int)EN_OC_MQTT_UPGRADERET_DOWNLOADTIMEOUT,otapara.version,-1);
                 LINK_LOG_ERROR("DOWNLOADING ERR");
             }
             else {
@@ -174,7 +174,7 @@ static int DealFirmupgradeEvent(cJSON *event)
 }
 
 
-static int DealEvent(oc_mqtt_profile_msgrcv_t *msg)
+static int deal_event(oc_mqtt_profile_msgrcv_t *msg)
 {
     int ret = -1;
     cJSON *objRoot;
@@ -199,11 +199,11 @@ static int DealEvent(oc_mqtt_profile_msgrcv_t *msg)
             continue;
         }
         if(0 == strcmp(cJSON_GetStringValue(objEventType),CN_OC_MQTT_EVENTTYPE_VERSIONQUERY)){
-            OcMqttReportVersionEvent(CN_EP_DEVICEID,NULL,CN_OTA_SOTA_VERSION, CN_OTA_FOTA_VERSION);
+            oc_mqtt_report_version(CN_EP_DEVICEID,NULL,CN_OTA_SOTA_VERSION, CN_OTA_FOTA_VERSION);
         }
         else if(0 == strcmp(cJSON_GetStringValue(objEventType),CN_OC_MQTT_EVENTTYPE_FWUPGRADE))
         {
-            DealFirmupgradeEvent(objService);
+            deal_firmupgrade_event(objService);
         }
     }
     cJSON_Delete(objRoot);
@@ -216,7 +216,7 @@ EXIT_JSONFMT:
 }
 
 ///< now we deal the message here
-static int  DealRcvMsg(oc_mqtt_profile_msgrcv_t *demo_msg)
+static int  deal_rcv_msg(oc_mqtt_profile_msgrcv_t *demo_msg)
 {
     static int value = 0;
     oc_mqtt_profile_cmdresp_t  cmdresp;
@@ -250,15 +250,15 @@ static int  DealRcvMsg(oc_mqtt_profile_msgrcv_t *demo_msg)
             ///< add your own deal here
             ///< do the response
             value  = (value+1)%100;
-            gDevicePropertyService.service_property->key = "radioValue";
-            gDevicePropertyService.service_property->value = &value;
-            gDevicePropertyService.service_property->type = EN_OC_MQTT_PROFILE_VALUE_INT;
+            g_services_deviceproperty.service_property->key = "radioValue";
+            g_services_deviceproperty.service_property->value = &value;
+            g_services_deviceproperty.service_property->type = EN_OC_MQTT_PROFILE_VALUE_INT;
             propertygetresp.request_id = demo_msg->request_id;
-            propertygetresp.services = &gDevicePropertyService;
+            propertygetresp.services = &g_services_deviceproperty;
             (void)oc_mqtt_profile_propertygetresp(NULL,&propertygetresp);
             break;
         case EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_EVENT:
-            DealEvent(demo_msg);
+            deal_event(demo_msg);
             break;
 
         default:
@@ -268,37 +268,37 @@ static int  DealRcvMsg(oc_mqtt_profile_msgrcv_t *demo_msg)
     return 0;
 }
 
-static int ReportProperty(void)
+static int report_deviceproperty(void)
 {
     int ret ;
     static int value = 0;
 
-    gDevicePropertyService.service_property->key = "valueReport";
-    gDevicePropertyService.service_property->value = &value;
-    gDevicePropertyService.service_property->type = EN_OC_MQTT_PROFILE_VALUE_INT;
+    g_services_deviceproperty.service_property->key = "valueReport";
+    g_services_deviceproperty.service_property->value = &value;
+    g_services_deviceproperty.service_property->type = EN_OC_MQTT_PROFILE_VALUE_INT;
     value += 2;
 
-    ret = oc_mqtt_profile_propertyreport(CN_EP_DEVICEID,&gDevicePropertyService);
+    ret = oc_mqtt_profile_propertyreport(CN_EP_DEVICEID,&g_services_deviceproperty);
     return ret;
 }
 
-static int RcvMsgDealTaskEntry( void *args)
+static int deal_rcvmsg_task_entry( void *args)
 {
     oc_mqtt_profile_msgrcv_t *demo_msg;
     while(1)
     {
         demo_msg = NULL;
-        (void)queue_pop(gRcvMsgQueue,(void **)&demo_msg,(int)cn_osal_timeout_forever);
+        (void)queue_pop(g_queue_rcvmsg,(void **)&demo_msg,(int)cn_osal_timeout_forever);
         if(NULL != demo_msg)
         {
-            (void) DealRcvMsg(demo_msg);
+            (void) deal_rcv_msg(demo_msg);
             osal_free(demo_msg);
         }
     }
     return 0;
 }
 
-static void MqttStatusHookLog(en_oc_mqtt_log_t  logtype)
+static void deal_mqtt_status_hook(en_oc_mqtt_log_t  logtype)
 {
 
     if(logtype == en_oc_mqtt_log_connected){
@@ -310,7 +310,7 @@ static void MqttStatusHookLog(en_oc_mqtt_log_t  logtype)
     return;
 }
 
-static int ReportMsgTaskEntry(void *args)
+static int report_msg_task_entry(void *args)
 {
     int ret = -1;
     oc_mqtt_profile_connect_t  connect_para;
@@ -335,8 +335,8 @@ static int ReportMsgTaskEntry(void *args)
     connect_para.server_addr =   CN_SERVER_IPV4;
     connect_para.server_port =   CN_SERVER_PORT;
     connect_para.life_time =     CN_LIFE_TIME;
-    connect_para.rcvfunc =       RcvMsgDealHook;
-    connect_para.logfunc  = MqttStatusHookLog;
+    connect_para.rcvfunc =       deal_rcv_msg_hook;
+    connect_para.logfunc  = deal_mqtt_status_hook;
     connect_para.security.type = CN_SECURITY_TYPE;
     ret = oc_mqtt_profile_connect(&connect_para);
     if((ret != (int)en_oc_mqtt_err_ok)){
@@ -346,18 +346,18 @@ static int ReportMsgTaskEntry(void *args)
 
     if(otaflag.info.curstatus == EN_OTA_STATUS_UPGRADED_SUCCESS){
 
-        OcMqttReportUpgradeProcessEvent(CN_EP_DEVICEID,NULL,(int)EN_OC_MQTT_UPGRADERET_SUCCESS,CN_OTA_FOTA_VERSION,100);
+        oc_mqtt_report_upgradeprogress(CN_EP_DEVICEID,NULL,(int)EN_OC_MQTT_UPGRADERET_SUCCESS,CN_OTA_FOTA_VERSION,100);
         otaflag.info.curstatus = EN_OTA_STATUS_IDLE;
         ota_flag_save(EN_OTA_TYPE_FOTA,&otaflag);
     }
     else if(otaflag.info.curstatus == EN_OTA_STATUS_UPGRADED_FAILED){
-        OcMqttReportUpgradeProcessEvent(CN_EP_DEVICEID,NULL,(int)EN_OC_MQTT_UPGRADERET_UPGRADEERR,CN_OTA_FOTA_VERSION,-1);
+        oc_mqtt_report_upgradeprogress(CN_EP_DEVICEID,NULL,(int)EN_OC_MQTT_UPGRADERET_UPGRADEERR,CN_OTA_FOTA_VERSION,-1);
         otaflag.info.curstatus = EN_OTA_STATUS_IDLE;
         ota_flag_save(EN_OTA_TYPE_FOTA,&otaflag);
     }
 
     while(1){
-        ReportProperty();
+        report_deviceproperty();
         osal_task_sleep(CONFIG_OCMQTTV5_DEMO_REPORTCYCLE);
     }
     return 0;
@@ -368,21 +368,21 @@ int standard_app_demo_main(void)
     static oc_mqtt_profile_kv_t  property;
 
     LINK_LOG_DEBUG("This is NUCLEOL496 MQTT OTA application--VERSION:%s",CN_OTA_FOTA_VERSION);
-    gRcvMsgQueue = queue_create("queue_rcvmsg",2,1);
+    g_queue_rcvmsg = queue_create("queue_rcvmsg",2,1);
     ///< initialize the service
     property.nxt   = NULL;
-    gDevicePropertyService.event_time = NULL;
-    gDevicePropertyService.service_id = "DeviceStatus";
-    gDevicePropertyService.service_property = &property;
-    gDevicePropertyService.nxt = NULL;
+    g_services_deviceproperty.event_time = NULL;
+    g_services_deviceproperty.service_id = "DeviceStatus";
+    g_services_deviceproperty.service_property = &property;
+    g_services_deviceproperty.nxt = NULL;
 
-    (void) osal_task_create("demo_reportmsg",ReportMsgTaskEntry,NULL,0x800,NULL,8);
-    (void) osal_task_create("demo_rcvmsg",RcvMsgDealTaskEntry,NULL,0x1800,NULL,8);
+    (void) osal_task_create("demo_reportmsg",report_msg_task_entry,NULL,0x800,NULL,8);
+    (void) osal_task_create("demo_rcvmsg",deal_rcvmsg_task_entry,NULL,0x1800,NULL,8);
 
     return 0;
 }
 
-static int VersionView(int argc, const char *argv[])
+static int view_version(int argc, const char *argv[])
 {
     LINK_LOG_DEBUG("S_VERSION:%s F_VERSION:%s",CN_OTA_SOTA_VERSION,CN_OTA_FOTA_VERSION);
     return 0;
@@ -391,7 +391,7 @@ static int VersionView(int argc, const char *argv[])
 #if CONFIG_LITEOS_ENABLE
 
 #include <shell.h>
-OSSHELL_EXPORT_CMD(VersionView,"version","version");
+OSSHELL_EXPORT_CMD(view_version,"version","version");
 #endif
 
 #if CONFIG_NOVAOS_ENABLE
@@ -400,7 +400,7 @@ OSSHELL_EXPORT_CMD(VersionView,"version","version");
 static int nova_command( cmder_t *cer,int argc,char *argv[])
 {
 
-    return VersionView(argc, (const char **)argv);
+    return view_version(argc, (const char **)argv);
 }
 
 CMDER_CMD_DEF ("version","version",nova_command);
