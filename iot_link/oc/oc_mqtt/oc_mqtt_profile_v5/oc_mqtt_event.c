@@ -57,7 +57,7 @@ Topic: $oc/devices/{device_id}/sys/events/up
 }
 */
 ///< you could use this function to report the software or firmware version
-int OcMqttReportVersionEvent(const char *deviceID,const char *objectDeviceID, const char *softVersion, const char *firmVersion)
+int oc_mqtt_report_version(const char *deviceID,const char *objectDeviceID, const char *softVersion, const char *firmVersion)
 {
     int ret = -1;
     oc_mqtt_profile_kv_t    firmVer;
@@ -110,7 +110,7 @@ int OcMqttReportVersionEvent(const char *deviceID,const char *objectDeviceID, co
 //        }
 //    }]
 //}
-int OcMqttReportUpgradeProcessEvent(const char *deviceID, const char *objectDeviceID, int upgraderet, const char *version, int progress)
+int oc_mqtt_report_upgradeprogress(const char *deviceID, const char *objectDeviceID, int upgraderet, const char *version, int progress)
 {
     int ret = -1;
     oc_mqtt_profile_kv_t    prog;
@@ -146,7 +146,6 @@ int OcMqttReportUpgradeProcessEvent(const char *deviceID, const char *objectDevi
     event.event_type = CN_OC_MQTT_EVENTTYPE_UPGRADEPROGRESSREPORT;
     event.service_id = "$ota";
     event.paras = cur;
-
 
     ret = oc_mqtt_profile_reportevent((char *)deviceID, &event);
 
