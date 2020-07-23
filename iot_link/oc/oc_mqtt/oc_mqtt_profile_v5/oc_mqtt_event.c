@@ -127,7 +127,7 @@ int oc_mqtt_report_upgradeprogress(const char *deviceID, const char *objectDevic
 
     if(version != NULL){
         ver.key =  CN_OC_JSON_KEY_VERSION;
-        ver.type = EN_OC_MQTT_PROFILE_VALUE_INT;
+        ver.type = EN_OC_MQTT_PROFILE_VALUE_STRING;
         ver.value =(void *) version;
         ver.nxt = cur;
         cur = &ver;
