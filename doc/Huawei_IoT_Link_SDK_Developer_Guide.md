@@ -141,7 +141,7 @@ IoT Device SDK Tiny的软件架构如下图所示，主要分为以下几层：
 
 |         集成策略     |说明                        |
 |:---------------------:|----------------------------|
-|可集成性|Agent Tiny作为独立的组件，不依赖特定的芯片架构和网络硬件类型，可以轻松地集成到各种通信模组上，如NB-IoT模组、WIFI模组、GSM模组、以太网硬件等。|
+|可集成性|作为独立的组件，不依赖特定的芯片架构和网络硬件类型，可以轻松地集成到各种通信模组上，如NB-IoT模组、WIFI模组、GSM模组、以太网硬件等。|
 |可移植性|IoT Device SDK Tiny的适配层提供了常用的硬件及网络适配接口，终端或者模组厂家可以根据自己的硬件实现这些接口后，即可完成IoT Device SDK Tiny的移植。|
 |集成约束|IoT Device SDK Tiny的集成需要满足一定的硬件规格：(1)要求模组/芯片有物理网络硬件支持，能支持UDP协议栈;(2)模组/芯片有足够的FLASH和RAM资源供Agent Tiny协议栈做集成。建议的硬件选型规格如下所示：RAM容量>32K Flash容量>128K CPU频率>100MHZ|
 
@@ -184,7 +184,7 @@ SOTA升级的主要流程为：
 
 # 4 下载SDK
 
-目前IoT Device SDK Tiny的源码还是托管在GITHUB上：<https://github.com/LiteOS/LiteOS>，代码会持续更新。进入网址后选择iot_link分支;
+目前IoT Device SDK Tiny的源码还是托管在GITHUB上<https://github.com/LiteOS/LiteOS_Lab>，代码会持续更新。进入网址后选择iot_link分支;
 
 ![](./meta/IoT_Link/sdk/10.png)
 
