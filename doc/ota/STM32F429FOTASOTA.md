@@ -1,10 +1,10 @@
 ### 基于STM32F429 FIRE开发板的FOTA，SOTA实践
 基于STM32F429 FIRE开发板的FOTA，SOTA升级流程如下图所示。
-![](./meta/FOTA_SOTA/upgradeProcess.png)
+![](./meta/upgradeProcess.png)
 本文着重讲述软件更新/固件更新部分，其余部分可以参考[华为云软固件升级](<https://support.huaweicloud.com/api-iothub/iot_06_v5_3028.html>)
 #### FOTA升级步骤
 下图所示为具体的升级步骤流程。
-![](./meta/FOTA_SOTA/sota.png)
+![](./meta/SOTA_FOTA_Upgrade.png)
 当判断需要进行软件更新之后
 1. 处理云平台上下发的JSON升级数据以获取下载信息（下载链接，文件版本，文件大小，签名信息等）
 2. 获取当前程序的状态即flag，若获取失败打印LINK_LOG_ERROR("GET OTA FLAG FAILED")，上报平台更新失败信息
