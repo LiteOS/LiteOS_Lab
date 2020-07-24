@@ -33,7 +33,7 @@
  *---------------------------------------------------------------------------*/
 /**
  *  DATE                AUTHOR      INSTRUCTION
- *  2020-05-15 10:18  zhangqianfu  The first version
+ *  2020-07-23 16:32     xxx     The second version
  *
  */
 
@@ -46,49 +46,35 @@
 #include <oc_mqtt_al.h>
 #include <oc_mqtt_profile.h>
 #include <ota_flag.h>
+#include <ota_https.h>
+#include <cJSON.h>
+#include <oc_mqtt_event.h>
 
-const char* g_signature_public=
-"-----BEGIN RSA PUBLIC KEY-----\r\n"
-"MIIBCgKCAQEAz9u5vpDoov9DDrkWkwdWQnLjiYXO3RuwXmcSCu/N1Wrv55b3w/BJ\r\n"
-"iXl7mTv1zWrU9gL+jdMXrxP6BK5nOh3wa8tiPGqPnM2tNCUVEt2dmDasroh8VVv1\r\n"
-"9yOUiSlNGSZ+UrnuUlAzMLt0GJrCPHesapOQ7OkAQd2SNbQfv/vFmXzUcNUAZxr4\r\n"
-"zJmSoZT9aXTO/RfShlsgrPtpz+8sejcRR5s4LKn5KsJwjqJ+sHmnEKlcGiciNGIx\r\n"
-"Ajf2nFigo7QrZ+4o6kvweNA05Ptg29j/0JPr0WbyLsCWDVaAneelh8Sl3TPdZYOM\r\n"
-"6iHE2k1sLBeP7X3lymWh3BZ9rU+xngi9lQIDAQAB\r\n"
-"-----END RSA PUBLIC KEY-----\r\n";
 
 //#define CN_SERVER_IPV4       "iot-mqtts.cn-north-4.myhuaweicloud.com"
 #define CN_SERVER_IPV4                 "121.36.42.100"
 #define CN_SERVER_PORT                 "1883"
 #define CN_SECURITY_TYPE               EN_DTLS_AL_SECURITY_TYPE_NONE
 
-#ifndef CONFIG_OCMQTTV5_DEMO_DEVICEID
-//#define CONFIG_OCMQTTV5_DEMO_DEVICEID  "5e12ea0a334dd4f337902dc3_iotlink005"
-#define CONFIG_OCMQTTV5_DEMO_DEVICEID  "5ec3f516cce62b02c56524a9_otamqtt003"
-#endif
-
-#ifndef CONFIG_OCMQTTV5_DEMO_DEVPWD
-#define CONFIG_OCMQTTV5_DEMO_DEVPWD     "f62fcf47d62c4ed18913"
-#endif
-
 #ifndef CONFIG_OCMQTTV5_DEMO_REPORTCYCLE
 #define CONFIG_OCMQTTV5_DEMO_REPORTCYCLE   (10*1000)
 #endif
 
-#define CN_EP_DEVICEID        CONFIG_OCMQTTV5_DEMO_DEVICEID
-#define CN_EP_PASSWD          CONFIG_OCMQTTV5_DEMO_DEVPWD
-
-
-#define CN_BOOT_MODE           0
-#define CN_LIFE_TIME           40                         ///< the platform need more
+#define CN_EP_DEVICEID        "5f083127ded33202ca5291fe_pppp"
+#define CN_EP_PASSWD          "f62fcf47d62c4ed18913"
+#define CN_BOOT_MODE            0
+#define CN_LIFE_TIME            40
 #define CN_OTA_SOTA_VERSION    "SOTAV1"
 #define CN_OTA_FOTA_VERSION    "FOTAV1"
+
+
 //if your command is very fast,please use a queue here--TODO
-static queue_t                   *s_queue_rcvmsg = NULL;   ///< this is used to cached the message
-static oc_mqtt_profile_service_t  s_device_service;
+static queue_t                   *g_queue_rcvmsg = NULL;   ///< this is used to cached the message
+
+static oc_mqtt_profile_service_t  g_services_deviceproperty;
 
 //use this function to push all the message to the buffer
-static int app_msg_deal(oc_mqtt_profile_msgrcv_t *msg)
+static int deal_rcv_msg_hook(oc_mqtt_profile_msgrcv_t *msg)
 {
     int    ret = -1;
     char  *buf;
@@ -98,29 +84,24 @@ static int app_msg_deal(oc_mqtt_profile_msgrcv_t *msg)
 
     ///< clone the message
     buflen = sizeof(oc_mqtt_profile_msgrcv_t) + msg->msg_len + 1;///< we copy with '\0' endings
-    if(NULL != msg->request_id)
-    {
+    if(NULL != msg->request_id){
         buflen += strlen(msg->request_id) +1; ///< ending with '\0'
     }
 
     buf = osal_malloc(buflen);
-    if(NULL != buf)
-    {
+    if(NULL != buf){
         demo_msg = (oc_mqtt_profile_msgrcv_t *)(uintptr_t)buf;
         buf += sizeof(oc_mqtt_profile_msgrcv_t);
         ///< copy the message and push it to the queue
         demo_msg->type = msg->type;
-
-        if(NULL != msg->request_id)
-        {
+        if(NULL != msg->request_id){
             demo_msg->request_id = buf;
             datalen = strlen(msg->request_id);
             (void) memcpy(buf,msg->request_id,datalen);
             buf[datalen] = '\0';
             buf += (datalen+1);
         }
-        else
-        {
+        else{
             demo_msg->request_id = NULL;
         }
 
@@ -133,10 +114,8 @@ static int app_msg_deal(oc_mqtt_profile_msgrcv_t *msg)
         LINK_LOG_DEBUG("RCVMSG:type:%d reuqestID:%s payloadlen:%d payload:%s\n\r",\
                 (int) demo_msg->type,demo_msg->request_id==NULL?"NULL":demo_msg->request_id,\
                 demo_msg->msg_len,(char *)demo_msg->msg);
-
-        ret = queue_push(s_queue_rcvmsg,demo_msg,10);
-        if(ret != 0)
-        {
+        ret = queue_push(g_queue_rcvmsg,demo_msg,10);
+        if(ret != 0){
             osal_free(demo_msg);
         }
     }
@@ -144,135 +123,50 @@ static int app_msg_deal(oc_mqtt_profile_msgrcv_t *msg)
     return ret;
 }
 
-#include <cJSON.h>
-#include <ota_https.h>
-#define CN_EVENT_SERVICES_ID         "services"
-#define CN_EVENT_TYPE_INDEX          "event_type"
-#define CN_EVENT_TYPE_VERSIONQUERY   "version_query"
-#define CN_EVENT_TYPE_FIRMUPDATE     "firmware_upgrade"
 
-static int oc_cmd_event_versionquery(cJSON *event)
+static int deal_upgradeprogress_hook(int ret, int total, int cur)
 {
-    int ret;
-    char *topic = "$oc/devices/"CN_EP_DEVICEID"/sys/events/up";
-    char *fmt = "{ \"services\": [{ \"service_id\": \"$ota\", \"event_type\": \"version_report\", \"paras\": { \"sw_version\":\"v1.0\",\"fw_version\":\"%s\" } }]}";
-    char *data;
-    int   len;
-
-    len = strlen(fmt) + strlen(CN_OTA_FOTA_VERSION) + 1;
-    data = osal_malloc(len);
-    if(NULL != data)
-    {
-        snprintf(data, len,fmt, CN_OTA_FOTA_VERSION);
-        LINK_LOG_DEBUG("REPLY:CURVERSION:%s",data);
-        ret = oc_mqtt_publish(topic,(uint8_t *)data, strlen(data),0);
-        osal_free(data);
-    }
-    return ret;
+    return oc_mqtt_report_upgradeprogress(CN_EP_DEVICEID,NULL,ret,NULL,cur*100/total);
 }
 
-//Topic: $oc/devices/{device_id}/sys/events/up
-//data format
-//{
-//    "object_device_id": "{object_device_id}",
-//    "services": [{
-//        "service_id": "$ota",
-//        "event_type": "upgrade_progress_report",
-//        "event_time": "20151212T121212Z",
-//        "paras": {
-//            "result_code": 0,
-//            "progress": 80,
-//            "version": "V2.0",
-//            "description": "upgrade processing"
-//        }
-//    }]
-//}
 
-static int oc_report_upgraderet(int upgraderet, const char *version)
-{
-    int ret;
-    char *topic = "$oc/devices/"CN_EP_DEVICEID"/sys/events/up";
-    char *fmt = "{ \"services\": [{ \"service_id\": \"$ota\", \"event_type\": \"upgrade_progress_report\", \"paras\": { \"result_code\":%d,\"version\":\"%s\" } }]}";
-    char *data;
-    int   len;
-
-    len = strlen(fmt) + strlen(version) + sizeof(upgraderet);
-    data = osal_malloc(len);
-    if(NULL != data)
-    {
-        snprintf(data, len, fmt,upgraderet, version);
-        LINK_LOG_DEBUG("REPORT:UPGRADERET:%s",data);
-        ret = oc_mqtt_publish(topic,(uint8_t *)data, strlen(data),0);
-        osal_free(data);
-    }
-    return ret;
-}
-int oc_report_upgraderet_progress(int upgraderet, int sumLen, int curLen )   //data upload
-{
-    int ret;
-    char *topic = "$oc/devices/"CN_EP_DEVICEID"/sys/events/up"; 
-    char *fmt = "{ \"services\": [{ \"service_id\": \"$ota\", \"event_type\": \"upgrade_progress_report\", \"paras\": { \"result_code\":%d,\"progress\":%d } }]}";
-    char *data;
-    int   len;
-
-    len = strlen(fmt) + sizeof(upgraderet) + sizeof(sumLen);
-    data = osal_malloc(len);
-    if(NULL != data)
-    {
-        snprintf(data, len, fmt,upgraderet, 100*curLen/sumLen);
-        LINK_LOG_DEBUG("REPORT:UPGRADERET:%s",data);
-        ret = oc_mqtt_publish(topic,(uint8_t *)data, strlen(data),0);
-        osal_free(data);
-    }
-    return ret;
-}
-
-static int oc_cmd_event_firmupdate(cJSON *event)
+static int deal_firmupgrade_event(cJSON *event)
 {
     int ret = -1;
-    cJSON *obj_paras;
-    cJSON *obj_version;
-    cJSON *obj_url;
-    cJSON *obj_filesize;
-    cJSON *obj_accesstoken;
-    cJSON *obj_sign;
-    ota_https_para_t *otapara;
+    cJSON *objParas;
+    cJSON *objVersion;
+    cJSON *objUrl;
+    cJSON *objFileSize;
+    cJSON *objAccesstoken;
+    cJSON *objSign;
+    ota_https_para_t otapara;
 
-    otapara = osal_malloc(sizeof(ota_https_para_t));
-    memset(otapara, 0, sizeof(ota_https_para_t));
-    if(NULL == otapara)
-    {
-        return ret;
-    }
+    objParas = cJSON_GetObjectItem(event, "paras");
+    if(NULL != objParas){
 
-    obj_paras = cJSON_GetObjectItem(event, "paras");
-    if(NULL != obj_paras)
-    {
-        obj_version = cJSON_GetObjectItem(obj_paras, "version");
-        obj_url = cJSON_GetObjectItem(obj_paras, "url");
-        obj_filesize = cJSON_GetObjectItem(obj_paras, "file_size");
-        obj_accesstoken = cJSON_GetObjectItem(obj_paras, "access_token");
-        obj_sign = cJSON_GetObjectItem(obj_paras, "sign");
+        objVersion = cJSON_GetObjectItem(objParas, "version");
+        objUrl = cJSON_GetObjectItem(objParas, "url");
+        objFileSize = cJSON_GetObjectItem(objParas, "file_size");
+        objAccesstoken = cJSON_GetObjectItem(objParas, "access_token");
+        objSign = cJSON_GetObjectItem(objParas, "sign");
 
-        if((NULL != obj_version) && (NULL != obj_url) && (NULL != obj_filesize) && \
-                (NULL != obj_accesstoken) && (NULL != obj_sign))
-        {
-            otapara->authorize = cJSON_GetStringValue(obj_accesstoken);
-            otapara->url = cJSON_GetStringValue(obj_url);
-            otapara->signature = cJSON_GetStringValue(obj_sign);
-            otapara->file_size = obj_filesize->valueint;
-            otapara->version = cJSON_GetStringValue(obj_version);
-            otapara->signature_public = g_signature_public;
-            otapara->report_progress = oc_report_upgraderet_progress;
+        if((NULL != objVersion) && (NULL != objUrl) && (NULL != objFileSize) && \
+                (NULL != objAccesstoken) && (NULL != objSign)){
+            memset(&otapara, 0, sizeof(otapara));
+            otapara.authorize = cJSON_GetStringValue(objAccesstoken);
+            otapara.url = cJSON_GetStringValue(objUrl);
+            otapara.signature = cJSON_GetStringValue(objSign);
+            otapara.file_size = objFileSize->valueint;
+            otapara.version = cJSON_GetStringValue(objVersion);
+            otapara.report_progress = deal_upgradeprogress_hook;
+            otapara.ota_type = EN_OTA_TYPE_FOTA;
             ///< here we do the firmware download
-            ret =  ota_https_download(otapara);
-            if(ret != 0)
-            {
-                oc_report_upgraderet(6,otapara->version);
+            ret =  ota_https_download(&otapara);
+            if(ret != 0){
+                oc_mqtt_report_upgradeprogress(CN_EP_DEVICEID,NULL,(int)EN_OC_MQTT_UPGRADERET_DOWNLOADTIMEOUT,otapara.version,-1);
                 LINK_LOG_ERROR("DOWNLOADING ERR");
             }
-            else
-            {
+            else {
                 LINK_LOG_DEBUG("DOWNLOADING SUCCESS");
                 osal_task_sleep(5*1000);
                 osal_reboot();
@@ -280,68 +174,112 @@ static int oc_cmd_event_firmupdate(cJSON *event)
             ret = 0;
         }
     }
-
-    osal_free(otapara);
-
     return ret;
 }
 
-
-static int oc_cmd_event(oc_mqtt_profile_msgrcv_t *msg)
+static int deal_softupgrade_event(cJSON *event)
 {
     int ret = -1;
-    cJSON *obj_root;
-    cJSON *obj_servicearry;
-    cJSON *obj_service;
-    cJSON *obj_eventtype;
+    cJSON *objParas;
+    cJSON *objVersion;
+    cJSON *objUrl;
+    cJSON *objFileSize;
+    cJSON *objAccesstoken;
+    cJSON *objSign;
+    ota_https_para_t otapara;
 
-    obj_root = cJSON_Parse(msg->msg);
-    if(NULL == obj_root)
-    {
+    objParas = cJSON_GetObjectItem(event, "paras");
+    if(NULL != objParas){
+
+        objVersion = cJSON_GetObjectItem(objParas, "version");
+        objUrl = cJSON_GetObjectItem(objParas, "url");
+        objFileSize = cJSON_GetObjectItem(objParas, "file_size");
+        objAccesstoken = cJSON_GetObjectItem(objParas, "access_token");
+        objSign = cJSON_GetObjectItem(objParas, "sign");
+
+        if((NULL != objVersion) && (NULL != objUrl) && (NULL != objFileSize) && \
+                (NULL != objAccesstoken) && (NULL != objSign)){
+            memset(&otapara, 0, sizeof(otapara));
+            otapara.authorize = cJSON_GetStringValue(objAccesstoken);
+            otapara.url = cJSON_GetStringValue(objUrl);
+            otapara.signature = cJSON_GetStringValue(objSign);
+            otapara.file_size = objFileSize->valueint;
+            otapara.version = cJSON_GetStringValue(objVersion);
+            otapara.report_progress = deal_upgradeprogress_hook;
+            otapara.ota_type = EN_OTA_TYPE_SOTA;
+            ///< here we do the firmware download
+            ret =  ota_https_download(&otapara);
+            if(ret != 0){
+                oc_mqtt_report_upgradeprogress(CN_EP_DEVICEID,NULL,(int)EN_OC_MQTT_UPGRADERET_DOWNLOADTIMEOUT,otapara.version,-1);
+                LINK_LOG_ERROR("DOWNLOADING ERR");
+            }
+            else {
+                LINK_LOG_DEBUG("DOWNLOADING SUCCESS");
+                osal_task_sleep(5*1000);
+                osal_reboot();
+            }
+            ret = 0;
+        }
+    }
+    return ret;
+}
+
+static int deal_event(oc_mqtt_profile_msgrcv_t *msg)
+{
+    int ret = -1;
+    cJSON *objRoot;
+    cJSON *objServices;
+    cJSON *objService;
+    cJSON *objEventType;
+
+    objRoot = cJSON_Parse(msg->msg);
+    if(NULL == objRoot){
         goto EXIT_JSONFMT;
     }
 
-    obj_servicearry = cJSON_GetObjectItem(obj_root,CN_EVENT_SERVICES_ID);
-    if((NULL == obj_servicearry) || (!cJSON_IsArray(obj_servicearry)))
+    objServices = cJSON_GetObjectItem(objRoot,CN_OC_JSON_KEY_SERVICES);
+    if((NULL == objServices) || (!cJSON_IsArray(objServices)))
     {
         goto EXIT_JSONSERVICEARRY;
     }
 
-    cJSON_ArrayForEach(obj_service,obj_servicearry)
-    {
-        obj_eventtype = cJSON_GetObjectItem(obj_service,CN_EVENT_TYPE_INDEX);
-        if(NULL == obj_eventtype)
+    cJSON_ArrayForEach(objService,objServices){
+        objEventType = cJSON_GetObjectItem(objService,CN_OC_JSON_KEY_EVENTTYPE);
+        if(NULL == objEventType)
         {
             continue;
         }
-        if(0 == strcmp(cJSON_GetStringValue(obj_eventtype),CN_EVENT_TYPE_VERSIONQUERY))
+        if(0 == strcmp(cJSON_GetStringValue(objEventType), CN_OC_MQTT_EVENTTYPE_VERSIONQUERY))
         {
-            oc_cmd_event_versionquery(obj_service);
+            oc_mqtt_report_version(CN_EP_DEVICEID,NULL,CN_OTA_SOTA_VERSION, CN_OTA_FOTA_VERSION);
         }
-        else if(0 == strcmp(cJSON_GetStringValue(obj_eventtype),CN_EVENT_TYPE_FIRMUPDATE))
+        else if(0 == strcmp(cJSON_GetStringValue(objEventType),CN_OC_MQTT_EVENTTYPE_FWUPGRADE))
         {
-            oc_cmd_event_firmupdate(obj_service);
+            deal_firmupgrade_event(objService);
+        }
+        else if(0 == strcmp(cJSON_GetStringValue(objEventType),CN_OC_MQTT_EVENTTYPE_SWUPGRADE))
+        {
+            deal_softupgrade_event(objService);
         }
     }
-    cJSON_Delete(obj_root);
+    cJSON_Delete(objRoot);
     return 0;
 
 EXIT_JSONSERVICEARRY:
-    cJSON_Delete(obj_root);
+    cJSON_Delete(objRoot);
 EXIT_JSONFMT:
     return ret;
 }
 
 ///< now we deal the message here
-static int  oc_cmd_normal(oc_mqtt_profile_msgrcv_t *demo_msg)
+static int  deal_rcv_msg(oc_mqtt_profile_msgrcv_t *demo_msg)
 {
     static int value = 0;
     oc_mqtt_profile_cmdresp_t  cmdresp;
     oc_mqtt_profile_propertysetresp_t propertysetresp;
     oc_mqtt_profile_propertygetresp_t propertygetresp;
 
-    switch(demo_msg->type)
-    {
+    switch(demo_msg->type){
         case EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_MSGDOWN:
             ///< add your own deal here
             break;
@@ -371,16 +309,15 @@ static int  oc_cmd_normal(oc_mqtt_profile_msgrcv_t *demo_msg)
 
             ///< do the response
             value  = (value+1)%100;
-            s_device_service.service_property->key = "radioValue";
-            s_device_service.service_property->value = &value;
-            s_device_service.service_property->type = EN_OC_MQTT_PROFILE_VALUE_INT;
-
+            g_services_deviceproperty.service_property->key = "accelerometer_x";
+            g_services_deviceproperty.service_property->value = &value;
+            g_services_deviceproperty.service_property->type = EN_OC_MQTT_PROFILE_VALUE_INT;
             propertygetresp.request_id = demo_msg->request_id;
-            propertygetresp.services = &s_device_service;
+            propertygetresp.services = &g_services_deviceproperty;
             (void)oc_mqtt_profile_propertygetresp(NULL,&propertygetresp);
             break;
         case EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_EVENT:
-            oc_cmd_event(demo_msg);
+            deal_event(demo_msg);
             break;
 
         default:
@@ -390,75 +327,64 @@ static int  oc_cmd_normal(oc_mqtt_profile_msgrcv_t *demo_msg)
     return 0;
 }
 
-static int demo_pubdefault(void)
+static int report_deviceproperty(void)
 {
     int ret ;
-    static int radio = 0;
-    const char *fmt = "{\"services\":[{\"service_id\":\"SensorService\",\"properties\":{\"accelerometer_x\":%d}}]}";
-    char *data;
-    int   len;
+    static int value = 1;
 
-    len = strlen(fmt) + 16;
-    data = osal_malloc(len);
-    if(NULL != data)
-    {
-    	radio+=2;
-        snprintf(data, len, fmt,radio);
-        ret = oc_mqtt_publish(NULL,(uint8_t *)data, strlen(data),0);
-        osal_free(data);
-    }
+    g_services_deviceproperty.service_property->key = "accelerometer_x";
+    g_services_deviceproperty.service_property->value = &value;
+    g_services_deviceproperty.service_property->type = EN_OC_MQTT_PROFILE_VALUE_INT;
+    value += 2;
+
+    ret = oc_mqtt_profile_propertyreport(CN_EP_DEVICEID,&g_services_deviceproperty);
     return ret;
 }
 
-
-
-static int task_rcvmsg_entry( void *args)
+static int deal_rcvmsg_task_entry( void *args)
 {
     oc_mqtt_profile_msgrcv_t *demo_msg;
     while(1)
     {
         demo_msg = NULL;
-        (void)queue_pop(s_queue_rcvmsg,(void **)&demo_msg,(int)cn_osal_timeout_forever);
+        (void)queue_pop(g_queue_rcvmsg,(void **)&demo_msg,(int)cn_osal_timeout_forever);
         if(NULL != demo_msg)
         {
-            (void) oc_cmd_normal(demo_msg);
+            (void) deal_rcv_msg(demo_msg);
             osal_free(demo_msg);
         }
     }
     return 0;
 }
 
-void  hwoc_mqtt_log(en_oc_mqtt_log_t  logtype)
+static void deal_mqtt_status_hook(en_oc_mqtt_log_t  logtype)
 {
 
-    if(logtype == en_oc_mqtt_log_connected)
-    {
-        (void)printf("%s:connected %d\n\r",__FUNCTION__,(int)logtype);
+    if(logtype == en_oc_mqtt_log_connected){
+        LINK_LOG_DEBUG("connected");
     }
-    else
-    {
-        (void)printf("%s:disconnected %d\n\r",__FUNCTION__,(int)logtype);
+    else{
+        LINK_LOG_DEBUG("disconnected");
     }
 
     return;
 }
 
-static int task_reportmsg_entry(void *args)
+static int report_msg_task_entry(void *args)
 {
     int ret = -1;
     oc_mqtt_profile_connect_t  connect_para;
     static ota_flag_t  otaflag;
 
 
-    if(0 != ota_flag_get(EN_OTA_TYPE_FOTA,&otaflag))
+    if(0 != ota_flag_get(EN_OTA_TYPE_SOTA,&otaflag))
     {
         LINK_LOG_ERROR("GET FOTA FLAG ERR AND SHOULD DO THE INITIALIZE");
         memset(&otaflag,0,sizeof(otaflag));
         otaflag.info.curstatus = EN_OTA_STATUS_IDLE;
         otaflag.info.upgrade_step = EN_OTA_UPGRADE_STEP_INIT;
-        ret = ota_flag_save(EN_OTA_TYPE_FOTA,&otaflag);
-        if(0 != ret)
-        {
+        ret = ota_flag_save(EN_OTA_TYPE_SOTA,&otaflag);
+        if(0 != ret){
             LINK_LOG_ERROR("FLAG SAVE FAILED AND WE SHOULD QUIT");
             return ret;
         }
@@ -471,32 +397,29 @@ static int task_reportmsg_entry(void *args)
     connect_para.server_addr =   CN_SERVER_IPV4;
     connect_para.server_port =   CN_SERVER_PORT;
     connect_para.life_time =     CN_LIFE_TIME;
-    connect_para.rcvfunc =       app_msg_deal;
-    connect_para.logfunc  = hwoc_mqtt_log;
+    connect_para.rcvfunc =       deal_rcv_msg_hook;
+    connect_para.logfunc  = deal_mqtt_status_hook;
     connect_para.security.type = CN_SECURITY_TYPE;
     ret = oc_mqtt_profile_connect(&connect_para);
-    if((ret != (int)en_oc_mqtt_err_ok))
-    {
+    if((ret != (int)en_oc_mqtt_err_ok)){
         LINK_LOG_ERROR("CONNECT ERR");
         return ret;
     }
 
-    if(otaflag.info.curstatus == EN_OTA_STATUS_UPGRADED_SUCCESS)
-    {
-        oc_report_upgraderet(0,CN_OTA_FOTA_VERSION);
+    if(otaflag.info.curstatus == EN_OTA_STATUS_UPGRADED_SUCCESS){
+
+        oc_mqtt_report_upgradeprogress(CN_EP_DEVICEID,NULL,(int)EN_OC_MQTT_UPGRADERET_SUCCESS,CN_OTA_SOTA_VERSION,100);
         otaflag.info.curstatus = EN_OTA_STATUS_IDLE;
-        ota_flag_save(EN_OTA_TYPE_FOTA,&otaflag);
+        ota_flag_save(EN_OTA_TYPE_SOTA,&otaflag);
     }
-    else if(otaflag.info.curstatus == EN_OTA_STATUS_UPGRADED_FAILED)
-    {
-        oc_report_upgraderet(1,CN_OTA_FOTA_VERSION);
+    else if(otaflag.info.curstatus == EN_OTA_STATUS_UPGRADED_FAILED){
+        oc_mqtt_report_upgradeprogress(CN_EP_DEVICEID,NULL,(int)EN_OC_MQTT_UPGRADERET_UPGRADEERR,CN_OTA_SOTA_VERSION,-1);
         otaflag.info.curstatus = EN_OTA_STATUS_IDLE;
-        ota_flag_save(EN_OTA_TYPE_FOTA,&otaflag);
+        ota_flag_save(EN_OTA_TYPE_SOTA,&otaflag);
     }
 
-    while(1)  //do the loop here
-    {
-        demo_pubdefault();
+    while(1){
+        report_deviceproperty();
         osal_task_sleep(CONFIG_OCMQTTV5_DEMO_REPORTCYCLE);
     }
     return 0;
@@ -506,23 +429,22 @@ int standard_app_demo_main(void)
 {
     static oc_mqtt_profile_kv_t  property;
 
-    LINK_LOG_DEBUG("This is STM32F429IGTX MQTT OTA application--VERSION:%s",CN_OTA_FOTA_VERSION);
-    s_queue_rcvmsg = queue_create("queue_rcvmsg",2,1);
+    LINK_LOG_DEBUG("This is STM32F429IGTX MQTT OTA application--VERSION:%s",CN_OTA_SOTA_VERSION);
+    g_queue_rcvmsg = queue_create("queue_rcvmsg",2,1);
     ///< initialize the service
     property.nxt   = NULL;
-    s_device_service.event_time = NULL;
-    s_device_service.service_id = "DeviceStatus";
-    s_device_service.service_property = &property;
-    s_device_service.nxt = NULL;
+    g_services_deviceproperty.event_time = NULL;
+    g_services_deviceproperty.service_id = "SensorService";
+    g_services_deviceproperty.service_property = &property;
+    g_services_deviceproperty.nxt = NULL;
 
-    (void) osal_task_create("demo_reportmsg",task_reportmsg_entry,NULL,0x800,NULL,8);
-    (void) osal_task_create("demo_rcvmsg",task_rcvmsg_entry,NULL,0x1800,NULL,8);
+    (void) osal_task_create("demo_reportmsg",report_msg_task_entry,NULL,0x800,NULL,8);
+    (void) osal_task_create("demo_rcvmsg",deal_rcvmsg_task_entry,NULL,0x1800,NULL,8);
 
     return 0;
 }
 
-
-static int version_shell(int argc, const char *argv[])
+static int view_version(int argc, const char *argv[])
 {
     LINK_LOG_DEBUG("S_VERSION:%s F_VERSION:%s",CN_OTA_SOTA_VERSION,CN_OTA_FOTA_VERSION);
     return 0;
@@ -531,7 +453,7 @@ static int version_shell(int argc, const char *argv[])
 #if CONFIG_LITEOS_ENABLE
 
 #include <shell.h>
-OSSHELL_EXPORT_CMD(version_shell,"version","version");
+OSSHELL_EXPORT_CMD(view_version,"version","version");
 #endif
 
 #if CONFIG_NOVAOS_ENABLE
@@ -540,7 +462,7 @@ OSSHELL_EXPORT_CMD(version_shell,"version","version");
 static int nova_command( cmder_t *cer,int argc,char *argv[])
 {
 
-    return version_shell(argc, (const char **)argv);
+    return view_version(argc, (const char **)argv);
 }
 
 CMDER_CMD_DEF ("version","version",nova_command);

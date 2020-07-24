@@ -238,6 +238,12 @@ int ota_img_init()
     ota_img_bind(EN_OTA_TYPE_FOTA,&g_otaimg_flagbackup);
     ota_img_bind(EN_OTA_TYPE_FOTA,&g_otaimg_running);
 
+    ota_img_bind(EN_OTA_TYPE_SOTA,&g_otaimg_flag);
+	ota_img_bind(EN_OTA_TYPE_SOTA,&g_otaimg_backup);
+	ota_img_bind(EN_OTA_TYPE_SOTA,&g_otaimg_download);
+	ota_img_bind(EN_OTA_TYPE_SOTA,&g_otaimg_flagbackup);
+	ota_img_bind(EN_OTA_TYPE_SOTA,&g_otaimg_running);
+
     return 0;
 }
 
