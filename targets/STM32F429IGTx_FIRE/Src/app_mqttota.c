@@ -60,8 +60,8 @@
 #define CONFIG_OCMQTTV5_DEMO_REPORTCYCLE   (10*1000)
 #endif
 
-#define CN_EP_DEVICEID        "5f083127ded33202ca5291fe_pppp"
-#define CN_EP_PASSWD          "f62fcf47d62c4ed18913"
+#define CN_EP_DEVICEID        "xxxxxxxxxxxxx"
+#define CN_EP_PASSWD          "xxxxx"
 #define CN_BOOT_MODE            0
 #define CN_LIFE_TIME            40
 #define CN_OTA_SOTA_VERSION    "SOTAV1"
