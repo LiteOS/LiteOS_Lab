@@ -8,7 +8,7 @@
 
 ​		基于STM32F429 FIRE开发板的FOTA，SOTA升级流程如下图所示。loader程序和app程序进入开发版之后，按下复位按键程序开始从loader执行，loader判断app程序是否已经备份，若未备份则执行备份操作，若有新文件（固件/软件）需要更新，华为云平台将会下发版本获取命令给设备，设备获取到平台下发的命令之后会上传当前软件或者固件版本给云端，云端接收到设备发送的固件（软件）版本信息进行版本匹配，若设备的固件（软件）已经是最新版本则不会下发版本升级命令，若设备的固件（软件）不是最新版本则下发版本更新命令，设备接收到版本更新命令则进行版本更新操作，更新完成将上报更新完成情况。
 
-![](D:\HuaweiProject\LiteOS_Lab-iot_link\LiteOS_Lab-iot_link\doc\ota\meta\upgradeProcess.png)
+![](./meta/upgradeProcess.png)
 
 ​		下面将着重介绍固件（软件）更新的具体程序框架，以固件更新为例，程序执行的具体流程如下图所示。在设备接收到云端下发的升级指令之后将会进行如下操作：
 
@@ -19,7 +19,7 @@
 5. 下载完成之后进行sha256check校验，若校验失败跳转返回ret，上报平台更新失败信息
 6. loader进行patch，上报平台更新成功信息
 
-![](D:\HuaweiProject\LiteOS_Lab-iot_link\LiteOS_Lab-iot_link\doc\ota\meta\SOTA_FOTA_Upgrade.png)
+![](./meta/SOTA_FOTA_Upgrade.png)
 
 SOTA升级步骤与FOTA相同，程序需要进行如下的修改以实现了SOTA
 
