@@ -167,7 +167,7 @@ static int deal_firmupgrade_event(cJSON *event)
             otapara.file_size = objFileSize->valueint;
             otapara.version = cJSON_GetStringValue(objVersion);
             otapara.report_progress = deal_upgradeprogress_hook;
-            otapara.ota_type = EN_OTA_TYPE_FOTA;
+            otapara.ota_type = CONFIG_APP_OTATYPE;
             ///< here we do the firmware download
             ret =  ota_https_download(&otapara);
             if(ret != 0){
