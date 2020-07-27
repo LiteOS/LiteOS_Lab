@@ -43,8 +43,9 @@
 #include <ota_flag.h>
 
 #ifndef CONFIG_APP_OTATYPE
-//#define CONFIG_APP_OTATYPE EN_OTA_TYPE_FOTA
 #define CONFIG_APP_OTATYPE EN_OTA_TYPE_SOTA
+#else
+#define CONFIG_APP_OTATYPE EN_OTA_TYPE_FOTA
 #endif
 
 #ifndef CONFIG_OTA_APPADDR

@@ -60,6 +60,13 @@
 #define CONFIG_OCMQTTV5_DEMO_REPORTCYCLE   (10*1000)
 #endif
 
+#ifndef CONFIG_APP_OTATYPE
+//#define CONFIG_APP_OTATYPE EN_OTA_TYPE_FOTA
+#define CONFIG_APP_OTATYPE EN_OTA_TYPE_SOTA
+#else
+#define CONFIG_APP_OTATYPE EN_OTA_TYPE_FOTA
+#endif
+
 #define CN_EP_DEVICEID        "5f083127ded33202ca5291fe_pppp"
 #define CN_EP_PASSWD          "f62fcf47d62c4ed18913"
 #define CN_BOOT_MODE            0
@@ -206,7 +213,7 @@ static int deal_softupgrade_event(cJSON *event)
             otapara.file_size = objFileSize->valueint;
             otapara.version = cJSON_GetStringValue(objVersion);
             otapara.report_progress = deal_upgradeprogress_hook;
-            otapara.ota_type = EN_OTA_TYPE_SOTA;
+            otapara.ota_type = CONFIG_APP_OTATYPE;
             ///< here we do the firmware download
             ret =  ota_https_download(&otapara);
             if(ret != 0){
@@ -377,13 +384,13 @@ static int report_msg_task_entry(void *args)
     static ota_flag_t  otaflag;
 
 
-    if(0 != ota_flag_get(EN_OTA_TYPE_SOTA,&otaflag))
+    if(0 != ota_flag_get(CONFIG_APP_OTATYPE,&otaflag))
     {
         LINK_LOG_ERROR("GET FOTA FLAG ERR AND SHOULD DO THE INITIALIZE");
         memset(&otaflag,0,sizeof(otaflag));
         otaflag.info.curstatus = EN_OTA_STATUS_IDLE;
         otaflag.info.upgrade_step = EN_OTA_UPGRADE_STEP_INIT;
-        ret = ota_flag_save(EN_OTA_TYPE_SOTA,&otaflag);
+        ret = ota_flag_save(CONFIG_APP_OTATYPE,&otaflag);
         if(0 != ret){
             LINK_LOG_ERROR("FLAG SAVE FAILED AND WE SHOULD QUIT");
             return ret;
@@ -410,12 +417,12 @@ static int report_msg_task_entry(void *args)
 
         oc_mqtt_report_upgradeprogress(CN_EP_DEVICEID,NULL,(int)EN_OC_MQTT_UPGRADERET_SUCCESS,CN_OTA_SOTA_VERSION,100);
         otaflag.info.curstatus = EN_OTA_STATUS_IDLE;
-        ota_flag_save(EN_OTA_TYPE_SOTA,&otaflag);
+        ota_flag_save(CONFIG_APP_OTATYPE,&otaflag);
     }
     else if(otaflag.info.curstatus == EN_OTA_STATUS_UPGRADED_FAILED){
         oc_mqtt_report_upgradeprogress(CN_EP_DEVICEID,NULL,(int)EN_OC_MQTT_UPGRADERET_UPGRADEERR,CN_OTA_SOTA_VERSION,-1);
         otaflag.info.curstatus = EN_OTA_STATUS_IDLE;
-        ota_flag_save(EN_OTA_TYPE_SOTA,&otaflag);
+        ota_flag_save(CONFIG_APP_OTATYPE,&otaflag);
     }
 
     while(1){
