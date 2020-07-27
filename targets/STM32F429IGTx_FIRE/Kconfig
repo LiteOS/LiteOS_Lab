@@ -53,7 +53,7 @@ config OTA_APP_ENABLE
     select LINKDEMO_ENABLE
     
 config APP_OTATYPE
-    bool "Enable the app type FOTA"
+    bool "Enable the ota type FOTA"
     default n
     
 config OTA_LOADER_ENABLE
