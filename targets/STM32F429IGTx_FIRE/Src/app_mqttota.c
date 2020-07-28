@@ -60,15 +60,16 @@
 #define CONFIG_OCMQTTV5_DEMO_REPORTCYCLE   (10*1000)
 #endif
 
-#ifndef CONFIG_APP_OTATYPE
-//#define CONFIG_APP_OTATYPE EN_OTA_TYPE_FOTA
+
+#ifndef CONFIG_OTA_FOTA
 #define CONFIG_APP_OTATYPE EN_OTA_TYPE_SOTA
 #else
 #define CONFIG_APP_OTATYPE EN_OTA_TYPE_FOTA
 #endif
 
-#define CN_EP_DEVICEID        "5f083127ded33202ca5291fe_pppp"
-#define CN_EP_PASSWD          "f62fcf47d62c4ed18913"
+#define CN_EP_DEVICEID        "xxxxxxxxxxxxx"
+#define CN_EP_PASSWD          "xxxxx"
+
 #define CN_BOOT_MODE            0
 #define CN_LIFE_TIME            40
 #define CN_OTA_SOTA_VERSION    "SOTAV1"
@@ -166,7 +167,7 @@ static int deal_firmupgrade_event(cJSON *event)
             otapara.file_size = objFileSize->valueint;
             otapara.version = cJSON_GetStringValue(objVersion);
             otapara.report_progress = deal_upgradeprogress_hook;
-            otapara.ota_type = EN_OTA_TYPE_FOTA;
+            otapara.ota_type = CONFIG_APP_OTATYPE;
             ///< here we do the firmware download
             ret =  ota_https_download(&otapara);
             if(ret != 0){
