@@ -51,10 +51,16 @@ config OTA_APP_ENABLE
     select OTA_ENABLE
     select OTA_HTTPS
     select LINKDEMO_ENABLE
+
+choice
+	prompt "Choice ota type"
+	config OTA_FOTA
+	bool "Enable FOTA OTA"
+	config OTA_SOTA
+	bool "Enable SOTA OTA"
+endchoice
     
-config APP_OTATYPE
-    bool "Enable the app type FOTA"
-    default n
+
     
 config OTA_LOADER_ENABLE
     bool "Enable the ota loader"
