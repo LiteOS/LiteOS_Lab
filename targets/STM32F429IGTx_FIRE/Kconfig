@@ -59,12 +59,7 @@ choice
 	config OTA_SOTA
 	bool "Enable SOTA OTA"
 endchoice
-    
-
-config APP_OTATYPE
-    bool "Enable the ota type FOTA"
-    default n
-    
+        
 config OTA_LOADER_ENABLE
     bool "Enable the ota loader"
     default n
