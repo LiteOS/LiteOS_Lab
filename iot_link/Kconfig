@@ -37,6 +37,9 @@ config LINKQUEUE_ENABLE
 config LINKDEMO_ENABLE
     bool  "Enable IoT Link Demo"
     default y    
+config SECUREC_ENABLE
+    bool "Enable the secure_c lib"
+    default n
             
 rsource "./stimer/Kconfig"
 
