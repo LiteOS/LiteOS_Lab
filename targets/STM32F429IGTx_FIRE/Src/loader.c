@@ -43,9 +43,9 @@
 #include <ota_flag.h>
 
 #ifndef CONFIG_OTA_FOTA
-#define CONFIG_APP_OTATYPE EN_OTA_TYPE_SOTA
+#define OTATYPE EN_OTA_TYPE_SOTA
 #else
-#define CONFIG_APP_OTATYPE EN_OTA_TYPE_FOTA
+#define OTATYPE EN_OTA_TYPE_FOTA
 #endif
 
 #ifndef CONFIG_OTA_APPADDR
@@ -68,7 +68,7 @@ int standard_app_demo_main(void)
 {
     en_ota_err_t  ota_ret;
     LINK_LOG_DEBUG("Loader Start");
-    ota_ret = ota_commonflow(CONFIG_APP_OTATYPE);
+    ota_ret = ota_commonflow(OTATYPE);
     if(ota_ret != EN_OTA_ERR_RECOVER)  ///< THE APPLICATION MAYBE DESTROYED AND COULD NOT RUN
     {
         LINK_LOG_DEBUG("BEGIN TO JUMP TO APPLICATION:%08X",CONFIG_OTA_APPADDR);
