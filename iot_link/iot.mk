@@ -48,6 +48,8 @@ include $(iot_link_root)/link_ota/build.mk
 #configure demos
 include $(iot_link_root)/demos/demos.mk
 
+#configure the secure clib
+include $(iot_link_root)/secure_c/build.mk
 iot_link_src  = ${wildcard $(iot_link_root)/*.c} 
 C_SOURCES += $(iot_link_src)	
 		
