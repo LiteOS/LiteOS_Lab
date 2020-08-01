@@ -36,7 +36,7 @@ typedef struct
     ///< queue function needed
     bool_t (*queue_create)(osal_queue_t *queue,int len,int msgsize);
     bool_t (*queue_send)(osal_queue_t queue, void *pbuf, unsigned int bufsize, unsigned int timeout);
-    bool_t (*queue_recv)(osal_queue_t queue, void *pbuf, unsigned int bufsize, unsigned int timeout);
+    bool_t (*queue_recv)(osal_queue_t queue, void *pbuf, unsigned int *bufsize, unsigned int timeout);
     bool_t (*queue_del)(osal_queue_t queue);
 
     ///< memory function needed

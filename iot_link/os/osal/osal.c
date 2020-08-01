@@ -367,6 +367,57 @@ int osal_int_connect(int intnum, int prio, int mode, fn_interrupt_handle callbac
 }
 
 
+
+bool_t  osal_queue_create(osal_queue_t *queue,int len,int msgsize)
+{
+    int ret = false;
+
+    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->queue_create))
+    {
+        ret = s_os_cb->ops->queue_create( queue, len, msgsize);
+    }
+
+    return ret;
+}
+
+bool_t  osal_queue_send(osal_queue_t queue, void *pbuf, unsigned int bufsize, unsigned int timeout)
+{
+    int ret = false;
+
+    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->queue_send))
+    {
+        ret = s_os_cb->ops->queue_send( queue, pbuf, bufsize, timeout);
+    }
+
+    return ret;
+}
+
+bool_t  osal_queue_recv(osal_queue_t queue, void *pbuf, unsigned int *bufsize, unsigned int timeout)
+{
+    int ret = false;
+
+    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->queue_recv))
+    {
+        ret = s_os_cb->ops->queue_recv( queue, pbuf, bufsize, timeout);
+    }
+
+    return ret;
+}
+
+bool_t  osal_queue_del(osal_queue_t queue)
+{
+    int ret = false;
+
+    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->queue_del))
+    {
+        ret = s_os_cb->ops->queue_del( queue);
+    }
+
+    return ret;
+}
+
+
+
 __attribute__((weak))  int os_imp_init(void)
 {
     LINK_LOG_DEBUG("%s:###please implement this function by yourself####\n\r",__FUNCTION__);

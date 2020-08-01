@@ -112,6 +112,15 @@ bool_t  osal_semp_del(osal_semp_t semp);
 
 
 /**
+ *@brief: the queue method that the os must supplied for the link
+ *
+ **/
+bool_t  osal_queue_create(osal_queue_t *queue,int len,int msgsize);
+bool_t  osal_queue_send(osal_queue_t queue, void *pbuf, unsigned int bufsize, unsigned int timeout);
+bool_t  osal_queue_recv(osal_queue_t queue, void *pbuf, unsigned int *bufsize, unsigned int timeout);
+bool_t  osal_queue_del(osal_queue_t queue);
+
+/**
  *@brief: the memory method that the os must supplied for the link
  *
  **/
