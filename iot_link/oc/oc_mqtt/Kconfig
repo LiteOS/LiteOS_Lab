@@ -48,7 +48,7 @@ if  OCMQTT_ENABLE
             help "This is a software implement, and use the v1 interface with dmp"
             select MQTT_AL_ENABLE
         config EC2XV1_ENABLE
-	    bool "Enable EC2XV1"
+	        bool "Enable EC2XV1"
             help "we use the EC2X as the ocmqtt protocol,support the v1 interface"
             select AT_ENABLE        
     endif
@@ -58,6 +58,11 @@ if  OCMQTT_ENABLE
             bool "Enable OCTinyMqttV5"
             help "This is a software implement, and use the v5 interface with dmp"
             select MQTT_AL_ENABLE
+        config OC_EC2XV5_ENABLE
+            bool "Enable EC2XV5"
+            help "This is implement by the EC2X module integrated the OCMQTT FUNCTION"
+            select  MQTT_AL_ENABLE
+            select  AT_ENABLE   
     endif            
        
                      

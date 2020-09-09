@@ -93,6 +93,8 @@ choice Demo
         select AT_ENABLE
         select BOUDICA150
         select STIMER_ENABLE
+    config Demo_OC_MQTT
+        bool "OC MQTT"    
 endchoice
 
 config USER_DEMO
@@ -105,6 +107,7 @@ config USER_DEMO
     default "oc_manhole_cover_template" if Demo_Cover
 	default "oc_infrared_template" if Demo_Infrared
     default "oc_cloud_map_demo" if Demo_OC_Cloud_Map
+    default "oc_mqtt_demo" if Demo_OC_MQTT
     default "none"
 
         

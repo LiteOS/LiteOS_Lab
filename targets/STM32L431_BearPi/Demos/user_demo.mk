@@ -89,6 +89,12 @@
 		user_demo_inc = -I $(TARGET_DIR)/Demos/oc_cloud_map_demo
 		user_demo_defs = -D CONFIG_OC_LWM2M_CLOUD_MAP_ENABLE=1
 	endif
+	
+	#example for oc_mqtt
+	ifeq ($(CONFIG_USER_DEMO), "oc_mqtt_demo")	
+		user_demo_src  = ${wildcard $(TARGET_DIR)/Demos/oc_mqtt/*.c}
+		user_demo_inc = -I $(TARGET_DIR)/Demos/oc_mqtt
+	endif
 
 	C_SOURCES += $(user_demo_src)
 	C_INCLUDES += $(user_demo_inc)
