@@ -15,7 +15,8 @@ TARGET = Huawei_LiteOS
 # debug build?
 DEBUG = 1
 # optimization
-OPT = -O0 -g
+#OPT = -O0 -g
+OPT = -Os
 
 ################################################################################
 # binaries

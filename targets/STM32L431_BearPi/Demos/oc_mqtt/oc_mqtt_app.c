@@ -46,12 +46,28 @@
 #include <oc_mqtt_profile.h>
 #include <oc_mqtt_hardware.h>
 
-#define CONFIG_OCMQTTV5_DEMO_SERVERIP       "121.36.42.100"
-#define CONFIG_OCMQTTV5_DEMO_SERVERPORT     "1883"
-#define CONFIG_OCMQTTV5_DEMO_DEVICEID       "5f58768785edc002bc69cbf2_hcdemo123456"
-#define CONFIG_OCMQTTV5_DEMO_DEVPWD         "123456789"
-#define CONFIG_OCMQTTV5_DEMO_LIFE           60     ///< seconds
-#define CONFIG_QUEUE_TIMEOUT                (5*1000)
+#ifndef CONFIG_APP_SERVERIP
+#define CONFIG_APP_SERVERIP       "121.36.42.100"
+#endif
+#ifndef CONFIG_APP_SERVERPORT
+#define CONFIG_APP_SERVERPORT     "1883"
+#endif
+
+#ifndef CONFIG_APP_DEVICEID
+#define CONFIG_APP_DEVICEID       "5f58768785edc002bc69cbf2_hcdemo123456"
+#endif
+
+#ifndef CONFIG_APP_DEVICEPWD
+#define CONFIG_APP_DEVICEPWD      "123456789"
+#endif
+
+#ifndef CONFIG_APP_LIFETIME
+#define CONFIG_APP_LIFETIME       60     ///< seconds
+#endif
+
+#ifndef CONFIG_QUEUE_TIMEOUT
+#define CONFIG_QUEUE_TIMEOUT      (5*1000)
+#endif
 
 typedef enum
 {
@@ -211,10 +227,12 @@ static void deal_cmd_msg(cmd_t *cmd)
         if(0 == strcmp(cJSON_GetStringValue(obj_para),"ON")){
             g_app_cb.led = 1;
             E53_IA1_LED(1);
+            LINK_LOG_DEBUG("Light On!");
         }
         else{
             g_app_cb.led = 0;
             E53_IA1_LED(0);
+            LINK_LOG_DEBUG("Light Off!");
         }
         cmdret = 0;
     }
@@ -231,10 +249,12 @@ static void deal_cmd_msg(cmd_t *cmd)
         if(0 == strcmp(cJSON_GetStringValue(obj_para),"ON")){
             g_app_cb.motor = 1;
             E53_IA1_MOTOR(1);
+            LINK_LOG_DEBUG("Motor On!");
         }
         else{
             g_app_cb.motor = 0;
             E53_IA1_MOTOR(0);
+            LINK_LOG_DEBUG("Motor Off!");
         }
         cmdret = 0;
     }
@@ -260,11 +280,11 @@ static void deal_conn_msg(void)
     (void) memset( &connect_para, 0, sizeof(connect_para));
 
     connect_para.boostrap =      0;
-    connect_para.device_id =     CONFIG_OCMQTTV5_DEMO_DEVICEID;
-    connect_para.device_passwd = CONFIG_OCMQTTV5_DEMO_DEVPWD;
-    connect_para.server_addr =   CONFIG_OCMQTTV5_DEMO_SERVERIP;
-    connect_para.server_port =   CONFIG_OCMQTTV5_DEMO_SERVERPORT;
-    connect_para.life_time =     CONFIG_OCMQTTV5_DEMO_LIFE;
+    connect_para.device_id =     CONFIG_APP_DEVICEID;
+    connect_para.device_passwd = CONFIG_APP_DEVICEPWD;
+    connect_para.server_addr =   CONFIG_APP_SERVERIP;
+    connect_para.server_port =   CONFIG_APP_SERVERPORT;
+    connect_para.life_time =     CONFIG_APP_LIFETIME;
     connect_para.rcvfunc =       msg_rcv_callback;
     connect_para.security.type = EN_DTLS_AL_SECURITY_TYPE_NONE;
     ret = oc_mqtt_profile_connect(&connect_para);
@@ -422,6 +442,7 @@ int standard_app_demo_main()
 
     (void)osal_task_create("iot_main",task_main_entry,NULL,0x800,NULL,8);
     (void)osal_task_create("sensor",task_sensor_entry,NULL,0x800,NULL,9);
+    shell_conn(0,NULL);
     ret = 0;
     return ret;
 }

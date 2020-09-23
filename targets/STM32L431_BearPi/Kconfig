@@ -96,6 +96,24 @@ choice Demo
     config Demo_OC_MQTT
         bool "OC MQTT"    
 endchoice
+if Demo_OC_MQTT
+     config APP_SERVERIP
+        string "IoT Platform Server Address"
+        default "121.36.42.100"
+     config APP_SERVERPORT
+        string "IoT Platform Server Port"
+        default "1883"
+     config APP_DEVICEID
+        string "Device ID"
+        default "xxxxx"
+     config APP_DEVICEPWD
+        string "Device PWD"
+        default "xxxxx"
+     config APP_LIFETIME
+        int "MQTT Keepalive Time"
+        default 100    
+endif
+
 
 config USER_DEMO
     string
