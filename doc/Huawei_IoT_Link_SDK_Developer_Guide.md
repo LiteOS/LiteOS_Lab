@@ -1,50 +1,3 @@
-<!-- TOC -->
-
-- [1 知识共享许可协议说明](#1-知识共享许可协议说明)
-- [2 前言](#2-前言)
-- [3 了解SDK](#3-了解sdk)
-    - [3.1 SDK介绍](#31-sdk介绍)
-    - [3.2 软件架构](#32-软件架构)
-    - [3.3 安全介绍](#33-安全介绍)
-    - [3.4 OTA升级](#34-ota升级)
-- [4 下载SDK](#4-下载sdk)
-- [5 集成开发](#5-集成开发)
-    - [5.1 针对模组厂商](#51-针对模组厂商)
-        - [5.1.1 AT指令规划](#511-at指令规划)
-            - [5.1.1.1 MQTT协议AT指令规划](#5111-mqtt协议at指令规划)
-            - [5.1.1.2 LwM2M协议AT指令规划](#5112-lwm2m协议at指令规划)
-        - [5.1.2 云服务抽象层API](#512-云服务抽象层api)
-            - [5.1.2.1 OC-MQTT](#5121-oc-mqtt)
-            - [5.1.2.2 OC-LwM2M](#5122-oc-lwm2m)
-            - [5.1.2.3 OC-CoAP](#5123-oc-coap)
-        - [5.1.3 物联组件协议层](#513-物联组件协议层)
-            - [5.1.3.1. MQTT AL](#5131-mqtt-al)
-            - [5.1.3.2. LWM2M AL](#5132-lwm2m-al)
-            - [5.1.3.3. COAP AL](#5133-coap-al)
-        - [5.1.4 基础组件适配](#514-基础组件适配)
-            - [5.1.4.1 适配TCP/IP](#5141-适配tcpip)
-        - [5.1.5 OS适配](#515-os适配)
-            - [5.1.5.1 适配OS](#5151-适配os)
-    - [5.2 集成示例](#52-集成示例)
-        - [5.2.1 Linux平台MQTT连接华为云demo](#521-linux平台mqtt连接华为云demo)
-            - [5.2.1.1 华为DMP环境](#5211-华为dmp环境)
-            - [5.2.1.2 进入开发界面并建立项目](#5212-进入开发界面并建立项目)
-            - [5.2.1.3 创建产品模型](#5213-创建产品模型)
-            - [5.2.1.4 创建设备](#5214-创建设备)
-            - [5.2.1.5 开发环境](#5215-开发环境)
-            - [5.2.1.6 示例代码分析](#5216-示例代码分析)
-            - [5.2.1.7 编译运行](#5217-编译运行)
-            - [5.2.1.8 平台演示及调试](#5218-平台演示及调试)
-        - [5.2.2 基于MQTT协议的模组连接云平台](#522-基于mqtt协议的模组连接云平台)
-        - [5.2.3 基于LWM2M协议的模组连接云平台](#523-基于lwm2m协议的模组连接云平台)
-    - [5.3 针对设备厂商](#53-针对设备厂商)
-        - [5.3.1 配有模组的设备](#531-配有模组的设备)
-            - [5.3.1.1 MCU+模组模式](#5311-mcu模组模式)
-            - [5.3.1.2 openCPU模式](#5312-opencpu模式)
-            - [5.3.2 没有模组的设备](#532-没有模组的设备)
-
-<!-- /TOC -->
-
 # 1 知识共享许可协议说明
 
 **您可以自由地：**
@@ -163,23 +116,9 @@ IoT Device SDK Tiny首先和物联网开放平台完成握手流程，后续的�
 
 ## 3.4 OTA升级
 
-IoT Device SDK Tiny端云互通组件支持物联网开放平台的软件升级，软件升级又称为SOTA（SoftWare Over The Air），是指用户可以通过OTA的方式支持对LwM2M协议的设备进行软件升级，（基于MQTT协议的设备的软件升级能力即将上线）。软件升级遵循的协议为PCP协议（PCP协议查看PCP协议介绍），设备侧需要遵循PCP协议进行软件升级的适配开发。
+IoT Device SDK Tiny端云互通组件支持物联网开放平台的软固件升级。软件或者固件升级都可以分为下载、升级、上报的流程。端侧设备需要配合云端的下载或者上报流程完成程序的更新。关于云端的软固件升级可以参考[云端软固件升级](https://support.huaweicloud.com/api-iothub/iot_06_v5_3027.html)。目前OTA升级的方式包含LWM2M和MQTT两种方式。
 
-SOTA流程如下图所示：
 
-![](./meta/IoT_Link/sdk/09.png)
-
-SOTA升级的主要流程为：
-
-（1）	检查设备软件升级能力；
-
-（2）	制作软件升级版本包；
-
-（3）	上传软件升级版本包；
-
-（4）	创建软件升级任务；
-
-具体软件升级操作步骤请参考开发中心—软件升<https://support.huaweicloud.com/usermanual-iothub/iot_01_0047.html>。
 
 
 # 4 下载SDK
@@ -242,180 +181,10 @@ SOTA升级的主要流程为：
 
 因此，对于需要集成IoT Device SDK Tiny的模组厂商而言，您首先需要了解AT指令规划，再结合SDK系统架构框图，根据自身硬件特点选取需要移植的SDK组件，包括云服务抽象层API，物联组件协议适配和OS适配等。
 
-
-
-
-
-### 5.1.1 AT指令规划
-#### 5.1.1.1 MQTT协议AT指令规划
-
-
-
-+ **连接**
-
-设备侧连接云平台发送的AT指令格式为：
-
-    AT+HWOCMQTTCONNECT=”bs”, ”lifetime”, “host”, “port”, “noteid”, “passwd”
-
-各参数解释:
-
-
-(1)bs: 表示是否经过引导(BS)服务器，0表示直接连接DMP，1表示经过BS服务器接入DMP；
-
-(2)lifetime: 该参数用作MQTT协议的心跳，时间单位为秒；
-
-(3)host: bs是“1”为BS服务器的地址或者域名，bs是“0”为DMP服务器的域名或者地址；
-
-(4)port: BS服务器或者DMP服务器的端口号；
-
-(5)noteid: 设备标识，在云平台添加设备时获取；
-
-(6)passwd: 设备密码，在云平台添加设备时获取。
-
-如果返回+CONNECTED OK，表示设备与云平台连接成功；返回+CONNECTED ERR则代表连接失败。
-
-
-
-
-+ **数据上报**
-
-设备侧发送数据到云平台的AT指令格式为：
-
-
-    AT+HWOCMQTTSEND=”qos”, “len”, “ascii payload”
-
-各参数解释：
-
-(1)qos: MQTT协议的qos，取值为0/1/2；
-
-(2)len: 待发送数据长度（byte数据长度）；
-
-(3)ascii payload: 待发送数据的ASCII码的16进制数据。
-
-注：设备侧发送的数据务必采用JSON格式，目前DMP对MQTT协议只支持JSON格式，如果发送二进制码流，组需要在云端添加组件解析。例：要发送的数据为：{"msgType":"deviceReq","hasMore":0,"data":[{"serviceId":"Battery","serviceData":{"batteryLevel":56}}]}
-
-将这些字符的ASCII码值用十六进制表示为：
-
-	7b226d736754797065223a22646576696365526571222c226861734d6f7265223a302c226461746122
-	3a5b7b22736572766963654964223a2242617474657279222c227365727669636544617461223a7b22
-	626174746572794c6576656c223a35367d7d5d7d
-
-
-设备侧对应的AT指令为：
-
-	AT+HWOCMQTTSEND=0,102,7b226d736754797065223a22646576696365526571222c226861734d6f72
-	65223a302c2264617461223a5b7b22736572766963654964223a2242617474657279222c2273657276
-	69636544617461223a7b22626174746572794c6576656c223a35367d7d5d7d
-
-如果AT指令发送成功，返回+SEND OK，否则返回+SNED ERR。
-
-
-
-
-
-
-+ **命令接收**
-
-模组向设备上报云平台数据的AT指令格式为：
-
-
-     +HWOCMQTTRECEIVED=”qos”, “len”, “ascii payload”
-
-各参数解释：
-
-(1)qos: MQTT协议的qos，取值为0/1/2；
-
-(2)len: 接收到的数据长度（byte数据长度）；
-
-(3)ascii payload: 转换为ASCII码的16进制数据。
-
-
-
-
-+ **关闭连接**
-
-设备关闭连接云平台的AT指令为：
-
-
-     AT+HWOCMQTTDISCONNECT
-命令发送成功后，返回+DISCONNECT OK，云平台将显示设备离线；失败则返回+DISCONNECT ERR。
-
-
-
-#### 5.1.1.2 LwM2M协议AT指令规划
-
-
-+ **连接**
-
-设备侧连接云平台发送的AT指令格式为：
-
-
-
-    AT+ HWOCLWM2MCONNECT=”bsmode”, ” serverip”, “serverport”, “deviceid”, “passwd”
-
-各参数解释：
-
-（1）bsmode: 0表示直连DMP，1表示BS模式连接DMP；
-
-（2）serverip: DMP服务器地址或者BS服务器地址(默认BS) ；
-
-（3）serverport: DMP服务器或者BS服务器的端口号；
-
-（4）deviceid: 设备标识；
-
-（5）passwd: 设备密码。
-
-如果返回+CONNECTED OK，表示连接成功；返回+CONNECTED ERR则代表连接失败。
-
-
-+ **数据上报**
-
-设备侧发送数据到云平台的AT指令格式为：
-
-
-    AT+HWOCLWM2MSEND=“len”, “payload”
-
-各参数解释：
-
-（1）len: 待发送数据长度（byte数据长度）；
-
-（2）payload: 待发送给云平台的数据。
-
-返回：+SEND OK代表发送成功；返回+SNED ERR则代表发送失败。
-
-
- + **命令接收**
-
-模组向设备上报云平台数据流的AT指令格式为：
-
-
-	 +HWOCLWM2MRECEIVED=“len”, “payload”
-
-各参数解释：
-
-（1）len: 接收到的数据长度（byte数据长度）；
-
-（2）payload: 待发送给设备的数据。
-
-
-+ **关闭连接**
-
-设备关闭连接云平台的AT指令为：
-
-
-
-	AT+HWOCLWM2MDISCONNECT
-
-命令发送成功后，返回+DISCONNECT OK，云平台将显示设备离线；失败则返回+DISCONNECT ERR。
-
-
-
-
-
-
+​		关于AT指令的定义和参考使用烦请参考[ MQTT模组AT规划](https://support.huaweicloud.com/api-iothub/iot_06_v5_1400.html)。
 
 ### 5.1.2 云服务抽象层API
-端云互通组件是IoT Device SDK Tiny中的重要组件，提供端云协同能力和基于MQTT协议和LwM2M协议对接华为云的开放API。
+​	端云互通组件是IoT Device SDK Tiny中的重要组件，提供端云协同能力和基于MQTT协议和LwM2M协议对接华为云的开放API。
 
 对基于MQTT/ LwM2M协议对接华为云的开发者（基于MQTT/ LwM2M协议或基于支持MQTT/ LwM2M协议的模组，以及内置对接华为云的模组）而言，无需关注对接华为云物联网协议的实现细节，仅仅需要将所选择的物联网协议注册到云服务抽象层（OC AL），再调用OC AL提供的抽象层接口即可。
 
@@ -428,26 +197,11 @@ OC AL提供的基于MQTT协议抽象层接口代码目录为：…\iot_link\oc\o
 |目录|描述|
 |:-|:-|
 |…/oc_mqtt_al|适配华为OC服务的MQTT抽象层。通过注册机制，最终调用到用户注册的函数|
-|…/oc_mqtt_imp/atiny_mqtt|SDK内置的soft类设备适配华为OC服务的MQTT的具体实现。|
-|…/oc_mqtt_imp/ec20_oc|SDK内置的ec20模组适配华为OC服务的MQTT的具体实现。可以通过抽象层提供的oc_mqtt_register接口将相关功能注册到SDK中。|
+| …/oc_mqtt_tiny_v5    |SDK内置的soft类设备适配华为OC服务的MQTT的具体实现(针对云端V5版本接口)。|
+|…/oc_mqtt_profile_v5|SDK内置的基于物模型的接口，解析了topic，定义了相关的数据格式|
 
 
-OC AL提供的MQTT协议端云互通API如下：
-
-
-|接口名|描述|
-|:-|:-|
-|int oc_mqtt_register(const tag_oc_mqtt_ops *opt)|将已经实现的config/report/deconfig注册到OC MQTT中，注册成功返回0，失败返回-1|
-|int oc_mqtt_init()|OC MQTT初始化|
-|cJSON *oc_mqtt_json_fmt_report(tag_oc_mqtt_report *report)|将待发送MQTT数据转成cJSON格式|
-|cJSON *oc_mqtt_json_fmt_response(tag_oc_mqtt_response *response)|将响应信息转成cJSON格式|
-|void *oc_mqtt_config(tag_oc_mqtt_config *param)|设置华为OC MQTT协议连接参数，等待连接建立并保持，如果连接成功，返回非空句柄|
-|int oc_mqtt_report(void *handle,char *msg,int len, en_mqtt_al_qos_t qos)|发送MQTT数据到华为OC|
-|int oc_mqtt_deconfig(void *handle)|断开连接|
-
-
-
-
+OC AL提供的MQTT协议端云互通API烦请参考最新的oc_mqtt_al.h文件。
 
 #### 5.1.2.2 OC-LwM2M
 
@@ -457,22 +211,11 @@ OC AL提供的基于LwM2M协议抽象层接口代码目录为：…\iot_link\oc\
 
 |目录|描述|
 |:-|:-|
-|…/oc_lwm2m/oc_lwm2m_al|华为云服务OC LwM2M的抽象层接口及实现。通过注册，最终调用底层的适配函数|
-|…/oc_lwm2m_imp/atiny_lwm2m|SDK内置的soft类设备适配华为OC服务的LwM2M的具体实现。通过抽象层提供的oc_lwm2m_register注册函数，将相关功能注册到SDK中|
+|…/oc_lwm2m_al|华为云服务OC LwM2M的抽象层接口及实现。通过注册，最终调用底层的适配函数|
+|…/atiny_lwm2m|SDK内置的soft类设备适配华为OC服务的LwM2M的具体实现。通过抽象层提供的oc_lwm2m_register注册函数，将相关功能注册到SDK中|
 |…/oc_lwm2m_imp/boudica150|SDK内置的boudica150适配华为OC服务的LwM2M的具体实现。通过抽象层提供的oc_lwm2m_register注册函数，将相关功能注册到SDK中|
-|…/oc_lwm2m_imp/oc_lwm2m_imp_demo|demo|
 
-OC AL提供的基于LwM2M协议端云互通API如下：
-
-
-|接口名|描述|
-|:-|:-|
-|int oc_lwm2m_register(const char *name,const oc_lwm2m_opt_t *opt);|将已经实现的config/report/deconfig注册到OC LwM2M中，注册成功返回0，失败返回-1|
-|int oc_lwm2m_unregister(const char *name);|取消注册|
-|int oc_lwm2m_init();|OC LwM2M初始化|
-|int oc_lwm2m_config(oc_config_param_t *param);|设置华为OC LwM2M协议连接参数，等待连接建立并保持;返回0成功 否则错误代码|
-|int oc_lwm2m_report(char *buf, int len,int timeout);|发送LwM2M数据到华为OC|
-|int oc_lwm2m_deconfig(void );|断开连接|
+OC AL提供的基于LwM2M协议端云互通API参考oc_lwm2m_al.h文件。
 
 #### 5.1.2.3 OC-CoAP
 OC AL提供的基于CoAP协议抽象层接口代码目录为：…\iot_link\oc\oc_coap，具体如下：
@@ -480,24 +223,10 @@ OC AL提供的基于CoAP协议抽象层接口代码目录为：…\iot_link\oc\o
 
 |目录|描述|
 |:-|:-|
-|…/oc_lwm2m/oc_coap_al|华为云服务OC LwM2M的抽象层接口及实现。通过注册，最终调用底层的适配函数|
-|…/oc_lwm2m_imp/atiny_coap|SDK内置的soft类设备适配华为OC服务的CoAP的具体实现。通过抽象层提供的oc_coap_register注册函数，将相关功能注册到SDK中|
+|…/oc_coap_al|华为云服务OC LwM2M的抽象层接口及实现。通过注册，最终调用底层的适配函数|
+|…/atiny_coap|SDK内置的soft类设备适配华为OC服务的CoAP的具体实现。通过抽象层提供的oc_coap_register注册函数，将相关功能注册到SDK中|
 
-OC AL提供的基于CoAP协议端云互通API如下：
-
-|接口名|描述|
-|:-|:-|
-|int oc_coap_register(const char *name,const oc_coap_opt_t *opt);|将已经实现的config/report/deconfig注册到OC CoAP中，注册成功返回0，失败返回-1|
-|int oc_coap_init();|OC CoAP初始化|
-|void *oc_coap_config(oc_config_param_t *param);|设置华为OC CoAP协议连接参数，等待连接建立并保持，如果连接成功，返回非空句柄。|
-|int oc_coap_report(void *handle,char *msg,int len);|发送CoAP数据到华为OC|
-|int oc_coap_deconfig(void *handle);|断开连接|
-
-
-
-
-
-
+OC AL提供的基于CoAP协议端云互通API参考oc_coap_al.h文件
 
 
 ### 5.1.3 物联组件协议层
@@ -581,246 +310,26 @@ OC AL提供的基于CoAP协议端云互通API如下：
 ||int coap_al_install(coap_al_op_t *op);|将协议栈注册到系统中|
 ||int coap_al_uninstall();|取消注册|
 
-
-
-
-
-
-
 ### 5.1.4 基础组件适配
 基础组件包括传感器框架、驱动框架、VFS/DEVFS、安全可靠传输、TCP/IP等，您可根据实际需求选择适配。
 #### 5.1.4.1 适配TCP/IP
 
 
-对于IoT Device SDK Tiny而言，其网络协议栈决定于底层操作系统，使用第三方操作系统时，可以将相关的网络传输接口进行抽象，提供相关的协议栈接口即可。IoT Device SDK Tiny中调用的所有网络传输的接口，通过注册机制，最终都会调用到用户注册的函数，示意图如下：
+​		对于IoT Device SDK Tiny而言，其网络协议栈决定于底层操作系统，使用第三方操作系统时，可以将相关的网络传输接口进行抽象，提供相关的协议栈接口即可。IoT Device SDK Tiny中调用的所有网络传输的接口，通过注册机制，最终都会调用到用户注册的函数。
 
-![](./meta/IoT_Link/sdk/16.png)
-
-用户可以调用tcpip_sal_install函数进行操作系统注册。
-相关的定义如下：
-
-    typedef struct
-    {
-        const char           *name;    ///< this member reserved now
-        int                   domain;  ///< this member to match the tcpip  ops,likes AF_INET and so on
-        const tag_tcpip_ops  *ops;     ///< this member used to implement the user's operation
-    }tag_tcpip_domain;
-    int tcpip_sal_install(const tag_tcpip_domain *domain);
-
-
-相关适配接口介绍：
-
-|接口分类|接口名|说明|
-|:-|:-|:-|
-|网络Socket相关接口|int sal_socket(int domain, int type, int protocol)|创建socket连接|
-||void osal_free(void *addr)|断开socket连接|
-||int sal_recv(int sockfd,void *buf,size_t len,int flags)|通过socket接收数据|
-||int sal_send(int sockfd,const void *buf,size_t len,int flags)|通过socket发送数据|
+​		用户可以调用link_sal_install函数进行TCPIP功能注册。同时用户必须实现link_tcpip_imp_init函数，该函数是一个弱符号函数。在该SDK初始化的过程中,调用顺序为：link_tcpip_init--->link_tcpip_imp_init--->link_sal_install,在初始化完毕之后，才可以使用TCPIP相关的功能。详细参考sal_imp.h头文件，同时我们已经适配了LWIP/ESP8266/L716等软件或者模组提供的TCPIP功能，如果你有第三方的组件或者模组，可以参考实现。
 
 
 ### 5.1.5 OS适配
 #### 5.1.5.1 适配OS
-对于IoT Device SDK Tiny而言，其运行依赖操作系统，如果使用第三方的操作系统，则可以将相关的操作系统进行抽象，提供相关的任务创建删除、互斥锁、信号量、内存管理接口即可。IoT Device SDK Tiny中调用的所有系统相关的接口，通过注册机制，最终都会调用到用户注册的函数，示意图如下：
+​		对于IoT Device SDK Tiny而言，其运行依赖操作系统，如果使用第三方的操作系统，则可以将相关的操作系统进行抽象，提供相关的任务创建删除、互斥锁、信号量、内存管理接口即可。IoT Device SDK Tiny中调用的所有系统相关的接口，通过注册机制，最终都会调用到用户注册的函数。
 
-![](./meta/IoT_Link/sdk/17.png)
+​		用户可以调用osal_install函数进行注册操作系统服务。调用顺序如下:
 
-用户可以调用osal_install函数进行注册操作系统服务。
-相关的定义如下：
-
-    typedef struct
-    {
-        const char         *name;  ///< operation system name
-        const tag_os_ops   *ops;   ///< system function interface
-    }tag_os;
-    int osal_install(const tag_os *os); //install the os to the link layer
-
-相关实现可以参考LiteOS以及Linux的适配（文件夹位置LiteOS_Lab-iot_link\iot_link\os\os_imp）。相关适配接口如下：
-
-
-|相关接口类型|	函数接口|	描述|
-|:-|:-|:-|
-|任务|	void* osal_task_create(const char *name,int (*task_entry)(void *args),void *args,int stack_size,void *stack,int prior)|	任务创建|
-||int osal_task_kill(void *task)	|任务结束|
-||void osal_task_exit(void)	|任务推出|
-||void osal_task_sleep(int ms)	|任务休眠|
-|互斥锁	|int osal_mutex_create(osal_mutex_t *mutex)	|互斥锁创建|
-||int osal_mutex_lock(osal_mutex_t mutex)	|互斥锁上锁|
-||int osal_mutex_unlock(osal_mutex_t mutex)	|互斥锁解锁|
-||int osal_mutex_del(osal_mutex_t mutex)	|互斥锁删除|
-|信号量	|int osal_semp_create(osal_semp_t *semp,int limit,int initvalue)|信号量创建|
-|信号量创建|int osal_semp_pend(osal_semp_t semp,int timeout)	|信号量挂起|
-||int osal_semp_post(osal_semp_t semp)	|信号量发送|
-||int  osal_semp_del(osal_semp_t semp)	|信号量删除|
-|内存管理|void *osal_malloc(size_t size)	|动态内存分配|
-||void  osal_free(void *addr)	|动态内存清空|
-||void *osal_zalloc(size_t size)|	动态内存分配|
-||void *osal_realloc(void *ptr,size_t newsize)|	动态内存重分配|
-||void *osal_calloc(size_t n, size_t size)	|动态内存分配（初始化0）|
-
-具体代码参见osal.c。
-
-
-## 5.2 集成示例
-### 5.2.1 Linux平台MQTT连接华为云demo
-IoT Device SDK Tiny在demo文件夹中提供了MQTT、LwM2M和CoAP的demo供使用，本示例以Linux系统下MQTT协议直连华为IoT云平台来说明完整的对接流程。
-#### 5.2.1.1 华为IoT平台
-
-IoTDA是华为IoT物联网平台对智能设备接入的云服务。首先，您需要到华为云上申请账号，连接为https://www.huaweicloud.com/product/iot.html。
-
-![](./meta/IoT_Link/sdk/18.png)
-
-
-注册登录之后选择产品->IoT物联网->设备接入（包括同时可以申请设备发放以及全球SIM联接服务）。
-![](./meta/IoT_Link/sdk/19.png)
-
-本章节介绍SDK示例演示，因此相关的高级功能参考开发者指导页面：
-![](./meta/IoT_Link/sdk/20.png)
-
-进入之后的界面：
-![](./meta/IoT_Link/sdk/21.png)
-
-#### 5.2.1.2 进入开发界面并建立项目
-选择开发者中心并进入
-![](./meta/IoT_Link/sdk/22.png)
-
-点击我的项目创建自己的相关项目
-![](./meta/IoT_Link/sdk/23.png)
-
-
-![](./meta/IoT_Link/sdk/24.png)
-
-![](./meta/IoT_Link/sdk/25.png)
-
-####5.2.1.3 创建产品模型
-选择产品开发新建产品，即可跳转到产品模型定义界面。
-![](./meta/IoT_Link/sdk/26.png)
-
-既可以根据已有的产品进行创建，也可以自定义创建产品，本次采用自定义模式创建。
-![](./meta/IoT_Link/sdk/27.png)
-
-
-![](./meta/IoT_Link/sdk/28.png)
-
-这一步补全了产品的各类信息，下一步是定义产品的属性功能。选择新建服务，开始添加产品的相关特性。
-![](./meta/IoT_Link/sdk/29.png)
-
-给产品定义属性，用于接收设备向平台上报的数据。属性名为batteryLevel，，类型定义为int型，最大值设置为100，访问模式RWE全部勾选，完成后点击确定。
-![](./meta/IoT_Link/sdk/30.png)
-
-给产品增加命令，用于平台向设备发送命令。命令名称为cmd，设置下发命令属性名称：ioswitch，属性类型定义为int型，最大值99。通过上报和下发，构成了演示的上行和下行通道。
-![](./meta/IoT_Link/sdk/31.png)
-
-
-![](./meta/IoT_Link/sdk/32.png)
-![](./meta/IoT_Link/sdk/33.png)
-添加完后如图所示：
-![](./meta/IoT_Link/sdk/34.png)
-
-#### 5.2.1.4 创建设备
-创建了产品模型之后，需要根据模型创建具体的设备。点击设备管理->添加真实设备，即可进入添加设备界面。
-![](./meta/IoT_Link/sdk/35.png)
-进入界面之后，选择刚才建立的产品模型，进行设备创建。
-![](./meta/IoT_Link/sdk/36.png)
-设备标识是识别该设备的唯一标识符，要求唯一，此处为示范，用户使用时以实际命名为准。
-![](./meta/IoT_Link/sdk/37.png)
-此处注意，确认之后自动生成产品设备ID及密钥，请妥善保存，后面设备使用的MQTT三元组（clientID user passwd）都是用这几个信息生成的。
-![](./meta/IoT_Link/sdk/38.png)
-创建完毕之后，即可在设备管理中看到刚刚创建的设备，此时设备状态为离线。
-![](./meta/IoT_Link/sdk/39.png)
-点击对接信息，可以查看设备的对接信息，可以查看设备接入平台对应的IP和端口。
-![](./meta/IoT_Link/sdk/40.png)
-到此为止，平台端环境准备完毕。
-
-#### 5.2.1.5 开发环境
-目前IoT Device SDK Tiny使用的GCC+Makefile的模式，同时所有源代码都开放，理论上是可以适应大部分的开发者环境。IoT Device SDK Tiny的helloworld运行在Linux下，此处GCC及Makefile安装暂不详细介绍。
-#### 5.2.1.6 示例代码分析
-以LINUX为例，客户在拿到代码之后，需要准备能运行LINUX的PC，该PC可以连接上网。其默认参与编译的demo为oc_tls_mqtt_demo.c。
-
-![](./meta/IoT_Link/sdk/41.png)
-
-代码中此处，将定义的noteid、deviceid、passwd、ip及port替换成上面获取到的数值。
-
-![](./meta/IoT_Link/sdk/42.png)
-
-接着，在设备连接的时候，可以使用deviceid，也可以使用noteid，但是需要注意的是auth_type保持一致。
-
-![](./meta/IoT_Link/sdk/43.png)
-
-同时注意到，REPORT以及命令的数据，和产品模型中定义的名称务必保持一致。
-
-![](./meta/IoT_Link/sdk/44.png)
-![](./meta/IoT_Link/sdk/45.png)
-#### 5.2.1.7 编译运行
-IoT Device SDK Tiny下面已经适配了一些工程（target目录下），当准备好GCC编译环境以及Make工具之后，即可进入到对应的工程下进行编译，如果有错误，烦请告知。
-
-![](./meta/IoT_Link/sdk/46.png)
-
-此次选择Linux运行，还需进入target/LINUX/GCC/config.mk中进行修改适配。
-
-![](./meta/IoT_Link/sdk/47.png)
-
-保存推出，并make编译生成Huawei_LiteOS.elf。
-
-![](./meta/IoT_Link/sdk/48.png)
-运行Huawei_LiteOS.elf。
-
-![](./meta/IoT_Link/sdk/49.png)
-#### 5.2.1.8 平台演示及调试
-登录开发者中心，可以看到设备已经上线。
-
-![](./meta/IoT_Link/sdk/50.png)
-
-点击调试产品，可以进入平台的设备调试界面。
-
-![](./meta/IoT_Link/sdk/51.png)
-![](./meta/IoT_Link/sdk/52.png)
-
-可以看到所创建的设备已经上报的数据，同时在输入栏中填入数据，即可看到下发的数据。
-
-![](./meta/IoT_Link/sdk/53.png)
-
-在终端程序可以看到接收到的数据和源码是匹配的。
-
-![](./meta/IoT_Link/sdk/54.png)
-![](./meta/IoT_Link/sdk/55.png)
-
-至此，IoT SDK的实例演示完成。
-
-### 5.2.2 基于MQTT协议的模组连接云平台
-在IoT Device SDK Tiny已集成的模组中，以EC20模组为例（代码目录：…\targets\EC20\Src），介绍基于MQTT协议的SDK集成及连接华为云。
-
-EC20模组将云端服务抽象层OC MQTT封装成4个开放的API：连接、数据上报、命令接收和断开连接，与MQTT协议的4个AT指令一一对应。模组连接云平台的API为：
-
-![](./meta/IoT_Link/sdk/56.png)
-各输入参数解释分别对应连接AT指令中的”bs”，” lifetime”，” host”，” port”，“noteid”，“passwd”。如果连接成功，则会返回非空句柄并赋值给全局量，用作发送或者关闭使用。
-模组上报数据至IoT云平台的API为：
-![](./meta/IoT_Link/sdk/57.png)
-
-各输入参数qos、payload、len分别对应数据上报AT指令中的”qos”，“ascii payload”和”len”。
-模组关闭连接IoT云平台的API为：
-![](./meta/IoT_Link/sdk/58.png)
-
- EC20模组demo运行逻辑（…/targets/EC20/Src/at_demo.c）如下，先进行OS、MQTT协议等组件的初始化工作，再与云平台建立连接。
-![](./meta/IoT_Link/sdk/59.png)
-
-注意：hwoc_mqtt_connect()内的参数需要根据实际情况修改，IP、端口号在对接信息中查看，设备标识、产品密钥在设备管理中查看。
-
-
-### 5.2.3 基于LWM2M协议的模组连接云平台
-STM32L431_BearPi开发板使用Boudica150的NB-IoT芯片进行通信，以STM32L431_BearPi开发板直连demo为例，最终将调用到oc_lwm2m_demo_main()，目录：…\targets\STM32L431_BearPi\Demos\oc_streetlight_template\oc_streetlight_template.c。
-
-![](./meta/IoT_Link/sdk/60.png)
-
-其中app_report_task_entry()为向云平台上报数据任务，app_cmd_task_entry()为处理云平台下发命令任务。
-
-![](./meta/IoT_Link/sdk/61.png)
-
-其中app_msg_deal()将云端下发的数据填入全局数组s_rcv_buffer。
-
-![](./meta/IoT_Link/sdk/62.png)
+osal_init--->os_imp_init-->osal_install。其中os_imp_init是弱符号函数，需要用户根据自的需要实现，在其中调用osal_install函数实现系统服务的注册。
 
 ## 5.3 针对设备厂商
-作为开发并销售最终设备的厂商，您需要进行设备集成开发，以便让设备具备接入物联网平台的能力。根据设备自身硬件的特点不同，您需要根据自身行业特征及业务情况选择合适的接入方案。
+​		作为开发并销售最终设备的厂商，您需要进行设备集成开发，以便让设备具备接入物联网平台的能力。根据设备自身硬件的特点不同，您需要根据自身行业特征及业务情况选择合适的接入方案。
 ### 5.3.1 配有模组的设备
 #### 5.3.1.1 MCU+模组模式
 此模式下，设备包含MCU（Micro Controller Unit）和通信模组，其中MCU集成IoT Device SDK Tiny及产品逻辑，模组作为通信模块，提供通信网络。

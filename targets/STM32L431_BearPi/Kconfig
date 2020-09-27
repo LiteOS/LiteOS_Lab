@@ -93,7 +93,27 @@ choice Demo
         select AT_ENABLE
         select BOUDICA150
         select STIMER_ENABLE
+    config Demo_OC_MQTT
+        bool "OC MQTT"    
 endchoice
+if Demo_OC_MQTT
+     config APP_SERVERIP
+        string "IoT Platform Server Address"
+        default "121.36.42.100"
+     config APP_SERVERPORT
+        string "IoT Platform Server Port"
+        default "1883"
+     config APP_DEVICEID
+        string "Device ID"
+        default "xxxxx"
+     config APP_DEVICEPWD
+        string "Device PWD"
+        default "xxxxx"
+     config APP_LIFETIME
+        int "MQTT Keepalive Time"
+        default 100    
+endif
+
 
 config USER_DEMO
     string
@@ -105,6 +125,7 @@ config USER_DEMO
     default "oc_manhole_cover_template" if Demo_Cover
 	default "oc_infrared_template" if Demo_Infrared
     default "oc_cloud_map_demo" if Demo_OC_Cloud_Map
+    default "oc_mqtt_demo" if Demo_OC_MQTT
     default "none"
 
         
