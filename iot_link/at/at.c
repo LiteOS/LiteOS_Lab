@@ -111,14 +111,7 @@ static void print_ascii(const char *index,const uint8_t *data, int len)
     link_printf("%s:%d bytes:",index,len);
     for( i = 0;i< len;i++)
     {
-        if(isprint((int)data[i]))
-        {
-            link_printf("%c",(char)data[i]);
-        }
-        else
-        {
-            link_printf("\\%02x ",(int)((int)data[i]));
-        }
+        link_printf("%c",(char)data[i]);
     }
     link_printf("\r\n");
     return;

@@ -52,6 +52,11 @@ CONFIG_LINKQUEUE_ENABLE=y
 CONFIG_LINKDEMO_ENABLE=y
 
 #
+# Securec configuration
+#
+# CONFIG_SECUREC_ENABLE is not set
+
+#
 # Stimer configuration
 #
 CONFIG_STIMER_ENABLE=y
@@ -59,6 +64,12 @@ CONFIG_STIMER_STACKSIZE=2048
 CONFIG_STIMER_TASKPRIOR=10
 # CONFIG_STIMER_DEMO_ENABLE is not set
 # end of Stimer configuration
+
+#
+# OTA configuration
+#
+# CONFIG_OTA_ENABLE is not set
+# end of OTA configuration
 
 #
 # Network configuration
@@ -143,5 +154,6 @@ CONFIG_Demo_Streetlight=y
 # CONFIG_Demo_Cover is not set
 # CONFIG_Demo_Infrared is not set
 # CONFIG_Demo_OC_Cloud_Map is not set
+# CONFIG_Demo_OC_MQTT is not set
 CONFIG_USER_DEMO="oc_streetlight_template"
 # end of LiteOS for STM32L431_BearPi Project configuration For IoT Link
