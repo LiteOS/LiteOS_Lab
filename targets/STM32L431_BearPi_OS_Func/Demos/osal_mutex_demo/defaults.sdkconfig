@@ -37,6 +37,7 @@ CONFIG_LITEOS_ENABLE=y
 
 # CONFIG_CJSON_ENABLE is not set
 # CONFIG_DRIVER_ENABLE is not set
+# CONFIG_OTA_ENABLE is not set
 
 #
 # LinkLog configuration
@@ -48,10 +49,21 @@ CONFIG_LINKQUEUE_ENABLE=y
 CONFIG_LINKDEMO_ENABLE=y
 
 #
+# Securec configuration
+#
+# CONFIG_SECUREC_ENABLE is not set
+
+#
 # Stimer configuration
 #
 # CONFIG_STIMER_ENABLE is not set
 # end of Stimer configuration
+
+#
+# OTA configuration
+#
+# CONFIG_OTA_ENABLE is not set
+# end of OTA configuration
 
 #
 # Network configuration

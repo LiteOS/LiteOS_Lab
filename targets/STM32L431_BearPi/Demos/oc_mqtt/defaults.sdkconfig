@@ -6,9 +6,25 @@
 #
 # This is a demo project and hope you enjoy it
 #
+
+#
+# Select the cpu arch:armv7-m armv6-m riscv32 x86-64
+#
 CONFIG_ARCH_CPU_TYPE="armv7-m"
+
+#
+# Config the at uart receive buffer size
+#
 CONFIG_UARTAT_RCVMAX=2048
-CONFIG_UARTAT_BAUDRATE=9600
+
+#
+# Config the at uart baud rate
+#
+CONFIG_UARTAT_BAUDRATE=115200
+
+#
+# Config the at uart device name
+#
 CONFIG_UARTAT_DEVNAME="atdev"
 
 #
@@ -21,6 +37,10 @@ CONFIG_UARTAT_DEVNAME="atdev"
 
 #
 # OS configuration
+#
+
+#
+# please select one os;if you has your own, please select the os_new
 #
 CONFIG_LITEOS_ENABLE=y
 # CONFIG_NOVAOS_ENABLE is not set
@@ -50,6 +70,7 @@ CONFIG_LINKLOG_ENABLE=y
 
 CONFIG_LINKQUEUE_ENABLE=y
 CONFIG_LINKDEMO_ENABLE=y
+# CONFIG_SECUREC_ENABLE is not set
 
 #
 # Stimer configuration
@@ -63,8 +84,16 @@ CONFIG_STIMER_TASKPRIOR=10
 #
 # OTA configuration
 #
-# CONFIG_OTA_ENABLE is not set
-# end of OTA configuration
+CONFIG_OTA_ENABLE=y
+CONFIG_OTA_VERSIONLEN=32
+# CONFIG_OTA_PATCH is not set
+# CONFIG_OTA_IMG_CHECK is not set
+CONFIG_OTA_IMG_DEMO=y
+# CONFIG_OTA_IMG_MEMORY is not set
+CONFIG_OTA_IMG_NULL=y
+# CONFIG_OTA_DOWNLOADCHECK_ENABLE is not set
+# CONFIG_OTA_DOWNLOAD_ENABLE is not set
+# end of OTA configuratio
 
 #
 # Network configuration
@@ -73,13 +102,41 @@ CONFIG_STIMER_TASKPRIOR=10
 #
 # Tcpip configuration
 #
-# CONFIG_TCPIP_AL_ENABLE is not set
+CONFIG_TCPIP_AL_ENABLE=y
+# CONFIG_LWIP_ENABLE is not set
+# CONFIG_RTK8710_ENABLE is not set
+CONFIG_ESP8266_ENABLE=y
+# CONFIG_FIBOCOML716_ENABLE is not set
+# CONFIG_MACOSSOCKET_ENABLE is not set
+# CONFIG_LINUXSOCKET_ENABLE is not set
+# CONFIG_NEW_SOCKET is not set
+
+#
+# esp8266 configuration
+#
+CONFIG_ESP8266_SSID="IoTdebug"
+CONFIG_ESP8266_PWD="IoTdebug"
+CONFIG_ESP8266_RCVCACHE=1024
+CONFIG_ESP8266_CMDTIMEOUT=2000
+# end of esp8266 configuration
 # end of Tcpip configuration
 
 #
 # Dtls  configuration
 #
-# CONFIG_DTLS_AL_ENABLE is not set
+CONFIG_DTLS_AL_ENABLE=y
+CONFIG_MBEDTLS_ENABLE=y
+# CONFIG_OPENSSL_ENABLE is not set
+# CONFIG_NEWTLS_ENABLE is not set
+
+#
+# mbedtls configuration
+#
+CONFIG_MBEDTLS_CERT=y
+# CONFIG_MBEDTLS_PSK is not set
+CONFIG_MBEDTLS_CERT_PSK=y
+# CONFIG_MBED_DEBUG_ENABLE is not set
+# end of mbedtls configuration
 # end of Dtls  configuration
 
 #
@@ -97,7 +154,15 @@ CONFIG_STIMER_TASKPRIOR=10
 #
 # Mqtt  configuration
 #
-# CONFIG_MQTT_AL_ENABLE is not set
+CONFIG_MQTT_AL_ENABLE=y
+CONFIG_PAHO_MQTT=y
+# CONFIG_LITE_MQTT is not set
+# CONFIG_NEW_MQTT is not set
+CONFIG_PAHO_CONNECT_TIMEOUT=10000
+CONFIG_PAHO_CMD_TIMEOUT=10000
+CONFIG_PAHO_LOOPTIMEOUT=10
+CONFIG_PAHO_SNDBUF_SIZE=2048
+CONFIG_PAHO_RCVBUF_SIZE=2048
 # end of Mqtt  configuration
 # end of Network configuration
 
@@ -115,17 +180,27 @@ CONFIG_OCSERVICES_ENABLE=y
 #
 # OceanConnect Lwm2m configuration
 #
-CONFIG_OCLWM2M_ENABLE=y
-# CONFIG_OCLWM2MTINY_ENABLE is not set
-CONFIG_BOUDICA150_ENABLE=y
-# CONFIG_OCLWM2MNULL is not set
-# CONFIG_OCLWM2M_DEMO_ENABLE is not set
+# CONFIG_OCLWM2M_ENABLE is not set
 # end of OceanConnect Lwm2m configuration
 
 #
 # OceanConnect Mqtt configuration
 #
-# CONFIG_OCMQTT_ENABLE is not set
+CONFIG_OCMQTT_ENABLE=y
+# CONFIG_OCMQTT_ATCMD is not set
+# CONFIG_OCMQTT_DEMOENABLE is not set
+CONFIG_OC_MQTT_V5=y
+# CONFIG_OC_MQTT_V1 is not set
+CONFIG_OC_TINYMQTTV5_ENABLE=y
+# CONFIG_OC_EC2XV5_ENABLE is not set
+# CONFIG_OCMQTT_NULL is not set
+
+#
+# OceanConnect MqttV5 Api
+#
+CONFIG_OC_MQTTV5_PROFILE=y
+# CONFIG_OC_MQTTV5_DEMO is not set
+# end of OceanConnect MqttV5 Api
 # end of OceanConnect Mqtt configuration
 # end of OceanConnect SERVICE configuration
 
@@ -137,11 +212,18 @@ CONFIG_SHELL_TASK_STACKSIZE=2048
 CONFIG_SHELL_TASK_PRIOR=10
 # end of Shell configuration
 
+#
+# The specified Configuration Header
+#
 CONFIG_IOT_LINK_CONFIGFILE="iot_config.h"
+# end of The specified Configuration Header
 # end of IoT link SDK configuration
 
+#
+# User Defined Demo
+#
 # CONFIG_Demo_None is not set
-CONFIG_Demo_Helloworld=y
+# CONFIG_Demo_Helloworld is not set
 # CONFIG_Demo_Streetlight is not set
 # CONFIG_Demo_Agriculture is not set
 # CONFIG_Demo_Track is not set
@@ -149,6 +231,11 @@ CONFIG_Demo_Helloworld=y
 # CONFIG_Demo_Cover is not set
 # CONFIG_Demo_Infrared is not set
 # CONFIG_Demo_OC_Cloud_Map is not set
-# CONFIG_Demo_OC_MQTT is not set
-CONFIG_USER_DEMO="hello_world_demo"
+CONFIG_Demo_OC_MQTT=y
+CONFIG_APP_SERVERIP="121.36.42.100"
+CONFIG_APP_SERVERPORT="1883"
+CONFIG_APP_DEVICEID="xxxxx"
+CONFIG_APP_DEVICEPWD="xxxxx"
+CONFIG_APP_LIFETIME=100
+CONFIG_USER_DEMO="oc_mqtt_demo"
 # end of LiteOS for STM32L431_BearPi Project configuration For IoT Link
