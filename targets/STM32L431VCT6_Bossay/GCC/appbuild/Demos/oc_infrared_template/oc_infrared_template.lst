@@ -1,0 +1,964 @@
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"oc_infrared_template.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.comm	context,4,4
+  18              		.global	qr_code
+  19              		.section	.data.qr_code,"aw"
+  22              	qr_code:
+  23 0000 01       		.byte	1
+  24              		.comm	gImage_Bossaylogo,45128,4
+  25              		.comm	infrared,5,4
+  26              		.section	.bss.s_rcv_buffer,"aw",%nobits
+  27              		.align	2
+  30              	s_rcv_buffer:
+  31 0000 00000000 		.space	512
+  31      00000000 
+  31      00000000 
+  31      00000000 
+  31      00000000 
+  32              		.section	.bss.s_rcv_datalen,"aw",%nobits
+  33              		.align	2
+  36              	s_rcv_datalen:
+  37 0000 00000000 		.space	4
+  38              		.section	.bss.s_rcv_sync,"aw",%nobits
+  39              		.align	2
+  42              	s_rcv_sync:
+  43 0000 00000000 		.space	4
+  44              		.section	.rodata
+  45              		.align	2
+  46              	.LC0:
+  47 0000 49532044 		.ascii	"IS Demo\000"
+  47      656D6F00 
+  48              		.align	2
+  49              	.LC1:
+  50 0008 4E434450 		.ascii	"NCDP_IP:\000"
+  50      5F49503A 
+  50      00
+  51 0011 000000   		.align	2
+  52              	.LC2:
+  53 0014 34392E34 		.ascii	"49.4.85.232\000"
+  53      2E38352E 
+  53      32333200 
+  54              		.align	2
+  55              	.LC3:
+  56 0020 4E434450 		.ascii	"NCDP_PORT:\000"
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s 			page 2
+
+
+  56      5F504F52 
+  56      543A00
+  57 002b 00       		.align	2
+  58              	.LC4:
+  59 002c 35363833 		.ascii	"5683\000"
+  59      00
+  60              		.section	.text.timer1_callback,"ax",%progbits
+  61              		.align	1
+  62              		.arch armv7e-m
+  63              		.syntax unified
+  64              		.thumb
+  65              		.thumb_func
+  66              		.fpu fpv4-sp-d16
+  68              	timer1_callback:
+  69              	.LFB287:
+  70              		.file 1 "d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template/oc_infrared_templat
+   1:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** /*----------------------------------------------------------------------------
+   2:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * All rights reserved.
+   4:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * are permitted provided that the following conditions are met:
+   6:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * conditions and the following disclaimer.
+   8:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * provided with the distribution.
+  11:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * permission.
+  14:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  *---------------------------------------------------------------------------*/
+  26:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** /*----------------------------------------------------------------------------
+  27:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * Notice of Export Control Law
+  28:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * ===============================================
+  29:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  * applicable export control laws and regulations.
+  33:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  *---------------------------------------------------------------------------*/
+  34:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** /**
+  35:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  *  DATE                AUTHOR      INSTRUCTION
+  36:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  *  2019-11-27 10:12  zhangzhongfeng  The first version  
+  37:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  *
+  38:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****  */
+  39:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** #include <stdint.h>
+  40:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** #include <stddef.h>
+  41:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** #include <string.h>
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s 			page 3
+
+
+  42:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+  43:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** #include <osal.h>
+  44:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** #include <oc_lwm2m_al.h>
+  45:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** #include <link_endian.h>
+  46:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+  47:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** #include <boudica150_oc.h>
+  48:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** #include "E53_IS1.h"
+  49:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** #include "lcd.h"
+  50:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+  51:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** #include <gpio.h>
+  52:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** #include <stm32l4xx_it.h>
+  53:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+  54:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** #define cn_endpoint_id        "SDK_LWM2M_NODTLS"
+  55:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** #define cn_app_server         "49.4.85.232"
+  56:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** #define cn_app_port           "5683"
+  57:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+  58:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** typedef unsigned char int8u;
+  59:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** typedef char int8s;
+  60:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** typedef unsigned short int16u;
+  61:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** typedef short int16s;
+  62:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** typedef unsigned char int24u;
+  63:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** typedef char int24s;
+  64:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** typedef int int32s;
+  65:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** typedef char string;
+  66:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** typedef char array;
+  67:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** typedef char varstring;
+  68:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** typedef char variant;
+  69:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+  70:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** #define cn_app_infrared 0x0
+  71:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+  72:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** #pragma pack(1)
+  73:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** typedef struct
+  74:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** {
+  75:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     int8u messageId;
+  76:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     string Status[4];
+  77:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** } tag_app_infrared;
+  78:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+  79:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+  80:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** #pragma pack()
+  81:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+  82:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** void *context;
+  83:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** int8_t qr_code = 1;
+  84:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** extern const unsigned char gImage_Huawei_IoT_QR_Code[114720];
+  85:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** unsigned char gImage_Bossaylogo[45128];
+  86:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+  87:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** tag_app_infrared infrared;
+  88:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+  89:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+  90:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** //if your command is very fast,please use a queue here--TODO
+  91:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** #define cn_app_rcv_buf_len 128
+  92:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** static int             s_rcv_buffer[cn_app_rcv_buf_len];
+  93:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** static int             s_rcv_datalen;
+  94:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** static osal_semp_t     s_rcv_sync;
+  95:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+  96:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** static void timer1_callback(void *arg)
+  97:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** {
+  71              		.loc 1 97 1
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s 			page 4
+
+
+  72              		.cfi_startproc
+  73              		@ args = 0, pretend = 0, frame = 8
+  74              		@ frame_needed = 1, uses_anonymous_args = 0
+  75 0000 80B5     		push	{r7, lr}
+  76              	.LCFI0:
+  77              		.cfi_def_cfa_offset 8
+  78              		.cfi_offset 7, -8
+  79              		.cfi_offset 14, -4
+  80 0002 84B0     		sub	sp, sp, #16
+  81              	.LCFI1:
+  82              		.cfi_def_cfa_offset 24
+  83 0004 02AF     		add	r7, sp, #8
+  84              	.LCFI2:
+  85              		.cfi_def_cfa 7, 16
+  86 0006 7860     		str	r0, [r7, #4]
+  98:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 	qr_code = !qr_code;
+  87              		.loc 1 98 12
+  88 0008 2F4B     		ldr	r3, .L5
+  89 000a 93F90030 		ldrsb	r3, [r3]
+  90 000e 002B     		cmp	r3, #0
+  91 0010 0CBF     		ite	eq
+  92 0012 0123     		moveq	r3, #1
+  93 0014 0023     		movne	r3, #0
+  94 0016 DBB2     		uxtb	r3, r3
+  95 0018 5AB2     		sxtb	r2, r3
+  96              		.loc 1 98 10
+  97 001a 2B4B     		ldr	r3, .L5
+  98 001c 1A70     		strb	r2, [r3]
+  99:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 	LCD_Clear(WHITE);
+  99              		.loc 1 99 2
+ 100 001e 4FF6FF70 		movw	r0, #65535
+ 101 0022 FFF7FEFF 		bl	LCD_Clear
+ 100:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 	if (qr_code == 1)
+ 102              		.loc 1 100 14
+ 103 0026 284B     		ldr	r3, .L5
+ 104 0028 93F90030 		ldrsb	r3, [r3]
+ 105              		.loc 1 100 5
+ 106 002c 012B     		cmp	r3, #1
+ 107 002e 08D1     		bne	.L2
+ 101:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 		LCD_Show_Image(0,0,240,239,gImage_Huawei_IoT_QR_Code);
+ 108              		.loc 1 101 3
+ 109 0030 264B     		ldr	r3, .L5+4
+ 110 0032 0093     		str	r3, [sp]
+ 111 0034 EF23     		movs	r3, #239
+ 112 0036 F022     		movs	r2, #240
+ 113 0038 0021     		movs	r1, #0
+ 114 003a 0020     		movs	r0, #0
+ 115 003c FFF7FEFF 		bl	LCD_Show_Image
+ 102:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 	else
+ 103:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 	{
+ 104:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 		POINT_COLOR = RED;
+ 105:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         LCD_Show_Image(0,0,240,93,gImage_Bossaylogo);
+ 106:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         LCD_ShowString(180, 110, 200, 16, 16, "IS Demo");
+ 107:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 		LCD_ShowString(10, 130, 200, 16, 16, "NCDP_IP:");
+ 108:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 		LCD_ShowString(80, 130, 200, 16, 16, cn_app_server);
+ 109:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 		LCD_ShowString(10, 150, 200, 16, 16, "NCDP_PORT:");
+ 110:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 		LCD_ShowString(100, 150, 200, 16, 16, cn_app_port);
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s 			page 5
+
+
+ 111:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 	}
+ 112:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** }
+ 116              		.loc 1 112 1
+ 117 0040 3DE0     		b	.L4
+ 118              	.L2:
+ 104:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         LCD_Show_Image(0,0,240,93,gImage_Bossaylogo);
+ 119              		.loc 1 104 15
+ 120 0042 234B     		ldr	r3, .L5+8
+ 121 0044 4FF47842 		mov	r2, #63488
+ 122 0048 1A80     		strh	r2, [r3]	@ movhi
+ 105:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         LCD_ShowString(180, 110, 200, 16, 16, "IS Demo");
+ 123              		.loc 1 105 9
+ 124 004a 224B     		ldr	r3, .L5+12
+ 125 004c 0093     		str	r3, [sp]
+ 126 004e 5D23     		movs	r3, #93
+ 127 0050 F022     		movs	r2, #240
+ 128 0052 0021     		movs	r1, #0
+ 129 0054 0020     		movs	r0, #0
+ 130 0056 FFF7FEFF 		bl	LCD_Show_Image
+ 106:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 		LCD_ShowString(10, 130, 200, 16, 16, "NCDP_IP:");
+ 131              		.loc 1 106 9
+ 132 005a 1F4B     		ldr	r3, .L5+16
+ 133 005c 0193     		str	r3, [sp, #4]
+ 134 005e 1023     		movs	r3, #16
+ 135 0060 0093     		str	r3, [sp]
+ 136 0062 1023     		movs	r3, #16
+ 137 0064 C822     		movs	r2, #200
+ 138 0066 6E21     		movs	r1, #110
+ 139 0068 B420     		movs	r0, #180
+ 140 006a FFF7FEFF 		bl	LCD_ShowString
+ 107:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 		LCD_ShowString(80, 130, 200, 16, 16, cn_app_server);
+ 141              		.loc 1 107 3
+ 142 006e 1B4B     		ldr	r3, .L5+20
+ 143 0070 0193     		str	r3, [sp, #4]
+ 144 0072 1023     		movs	r3, #16
+ 145 0074 0093     		str	r3, [sp]
+ 146 0076 1023     		movs	r3, #16
+ 147 0078 C822     		movs	r2, #200
+ 148 007a 8221     		movs	r1, #130
+ 149 007c 0A20     		movs	r0, #10
+ 150 007e FFF7FEFF 		bl	LCD_ShowString
+ 108:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 		LCD_ShowString(10, 150, 200, 16, 16, "NCDP_PORT:");
+ 151              		.loc 1 108 3
+ 152 0082 174B     		ldr	r3, .L5+24
+ 153 0084 0193     		str	r3, [sp, #4]
+ 154 0086 1023     		movs	r3, #16
+ 155 0088 0093     		str	r3, [sp]
+ 156 008a 1023     		movs	r3, #16
+ 157 008c C822     		movs	r2, #200
+ 158 008e 8221     		movs	r1, #130
+ 159 0090 5020     		movs	r0, #80
+ 160 0092 FFF7FEFF 		bl	LCD_ShowString
+ 109:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 		LCD_ShowString(100, 150, 200, 16, 16, cn_app_port);
+ 161              		.loc 1 109 3
+ 162 0096 134B     		ldr	r3, .L5+28
+ 163 0098 0193     		str	r3, [sp, #4]
+ 164 009a 1023     		movs	r3, #16
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s 			page 6
+
+
+ 165 009c 0093     		str	r3, [sp]
+ 166 009e 1023     		movs	r3, #16
+ 167 00a0 C822     		movs	r2, #200
+ 168 00a2 9621     		movs	r1, #150
+ 169 00a4 0A20     		movs	r0, #10
+ 170 00a6 FFF7FEFF 		bl	LCD_ShowString
+ 110:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 	}
+ 171              		.loc 1 110 3
+ 172 00aa 0F4B     		ldr	r3, .L5+32
+ 173 00ac 0193     		str	r3, [sp, #4]
+ 174 00ae 1023     		movs	r3, #16
+ 175 00b0 0093     		str	r3, [sp]
+ 176 00b2 1023     		movs	r3, #16
+ 177 00b4 C822     		movs	r2, #200
+ 178 00b6 9621     		movs	r1, #150
+ 179 00b8 6420     		movs	r0, #100
+ 180 00ba FFF7FEFF 		bl	LCD_ShowString
+ 181              	.L4:
+ 182              		.loc 1 112 1
+ 183 00be 00BF     		nop
+ 184 00c0 0837     		adds	r7, r7, #8
+ 185              	.LCFI3:
+ 186              		.cfi_def_cfa_offset 8
+ 187 00c2 BD46     		mov	sp, r7
+ 188              	.LCFI4:
+ 189              		.cfi_def_cfa_register 13
+ 190              		@ sp needed
+ 191 00c4 80BD     		pop	{r7, pc}
+ 192              	.L6:
+ 193 00c6 00BF     		.align	2
+ 194              	.L5:
+ 195 00c8 00000000 		.word	qr_code
+ 196 00cc 00000000 		.word	gImage_Huawei_IoT_QR_Code
+ 197 00d0 00000000 		.word	POINT_COLOR
+ 198 00d4 00000000 		.word	gImage_Bossaylogo
+ 199 00d8 00000000 		.word	.LC0
+ 200 00dc 08000000 		.word	.LC1
+ 201 00e0 14000000 		.word	.LC2
+ 202 00e4 20000000 		.word	.LC3
+ 203 00e8 2C000000 		.word	.LC4
+ 204              		.cfi_endproc
+ 205              	.LFE287:
+ 207              		.section	.rodata
+ 208 0031 000000   		.align	2
+ 209              	.LC5:
+ 210 0034 4F432072 		.ascii	"OC respond message received! \012\015\000"
+ 210      6573706F 
+ 210      6E64206D 
+ 210      65737361 
+ 210      67652072 
+ 211              		.section	.text.app_msg_deal,"ax",%progbits
+ 212              		.align	1
+ 213              		.syntax unified
+ 214              		.thumb
+ 215              		.thumb_func
+ 216              		.fpu fpv4-sp-d16
+ 218              	app_msg_deal:
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s 			page 7
+
+
+ 219              	.LFB288:
+ 113:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+ 114:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** //use this function to push all the message to the buffer
+ 115:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** static int app_msg_deal(void *usr_data, en_oc_lwm2m_msg_t type, void *data, int len)
+ 116:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** {
+ 220              		.loc 1 116 1
+ 221              		.cfi_startproc
+ 222              		@ args = 0, pretend = 0, frame = 24
+ 223              		@ frame_needed = 1, uses_anonymous_args = 0
+ 224 0000 80B5     		push	{r7, lr}
+ 225              	.LCFI5:
+ 226              		.cfi_def_cfa_offset 8
+ 227              		.cfi_offset 7, -8
+ 228              		.cfi_offset 14, -4
+ 229 0002 86B0     		sub	sp, sp, #24
+ 230              	.LCFI6:
+ 231              		.cfi_def_cfa_offset 32
+ 232 0004 00AF     		add	r7, sp, #0
+ 233              	.LCFI7:
+ 234              		.cfi_def_cfa_register 7
+ 235 0006 F860     		str	r0, [r7, #12]
+ 236 0008 7A60     		str	r2, [r7, #4]
+ 237 000a 3B60     		str	r3, [r7]
+ 238 000c 0B46     		mov	r3, r1
+ 239 000e FB72     		strb	r3, [r7, #11]
+ 117:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     unsigned char *msg;
+ 118:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     msg = data;
+ 240              		.loc 1 118 9
+ 241 0010 7B68     		ldr	r3, [r7, #4]
+ 242 0012 3B61     		str	r3, [r7, #16]
+ 119:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     int ret = -1;
+ 243              		.loc 1 119 9
+ 244 0014 4FF0FF33 		mov	r3, #-1
+ 245 0018 7B61     		str	r3, [r7, #20]
+ 120:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+ 121:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     if(len <= cn_app_rcv_buf_len)
+ 246              		.loc 1 121 7
+ 247 001a 3B68     		ldr	r3, [r7]
+ 248 001c 802B     		cmp	r3, #128
+ 249 001e 1DDC     		bgt	.L8
+ 122:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     {
+ 123:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     	if (msg[0] == 0xaa && msg[1] == 0xaa)
+ 250              		.loc 1 123 13
+ 251 0020 3B69     		ldr	r3, [r7, #16]
+ 252 0022 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 253              		.loc 1 123 9
+ 254 0024 AA2B     		cmp	r3, #170
+ 255 0026 09D1     		bne	.L9
+ 256              		.loc 1 123 31 discriminator 1
+ 257 0028 3B69     		ldr	r3, [r7, #16]
+ 258 002a 0133     		adds	r3, r3, #1
+ 259 002c 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 260              		.loc 1 123 25 discriminator 1
+ 261 002e AA2B     		cmp	r3, #170
+ 262 0030 04D1     		bne	.L9
+ 124:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     	{
+ 125:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     		printf("OC respond message received! \n\r");
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s 			page 8
+
+
+ 263              		.loc 1 125 7
+ 264 0032 0D48     		ldr	r0, .L11
+ 265 0034 FFF7FEFF 		bl	printf
+ 126:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     		return ret;
+ 266              		.loc 1 126 14
+ 267 0038 7B69     		ldr	r3, [r7, #20]
+ 268 003a 10E0     		b	.L10
+ 269              	.L9:
+ 127:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     	}
+ 128:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         memcpy(s_rcv_buffer,msg,len);
+ 270              		.loc 1 128 9
+ 271 003c 3B68     		ldr	r3, [r7]
+ 272 003e 1A46     		mov	r2, r3
+ 273 0040 3969     		ldr	r1, [r7, #16]
+ 274 0042 0A48     		ldr	r0, .L11+4
+ 275 0044 FFF7FEFF 		bl	memcpy
+ 129:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         s_rcv_datalen = len;
+ 276              		.loc 1 129 23
+ 277 0048 094A     		ldr	r2, .L11+8
+ 278 004a 3B68     		ldr	r3, [r7]
+ 279 004c 1360     		str	r3, [r2]
+ 130:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+ 131:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         osal_semp_post(s_rcv_sync);
+ 280              		.loc 1 131 9
+ 281 004e 094B     		ldr	r3, .L11+12
+ 282 0050 1B68     		ldr	r3, [r3]
+ 283 0052 1846     		mov	r0, r3
+ 284 0054 FFF7FEFF 		bl	osal_semp_post
+ 132:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         ret = 0;
+ 285              		.loc 1 132 13
+ 286 0058 0023     		movs	r3, #0
+ 287 005a 7B61     		str	r3, [r7, #20]
+ 288              	.L8:
+ 133:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+ 134:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     }
+ 135:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     return ret;
+ 289              		.loc 1 135 12
+ 290 005c 7B69     		ldr	r3, [r7, #20]
+ 291              	.L10:
+ 136:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** }
+ 292              		.loc 1 136 1
+ 293 005e 1846     		mov	r0, r3
+ 294 0060 1837     		adds	r7, r7, #24
+ 295              	.LCFI8:
+ 296              		.cfi_def_cfa_offset 8
+ 297 0062 BD46     		mov	sp, r7
+ 298              	.LCFI9:
+ 299              		.cfi_def_cfa_register 13
+ 300              		@ sp needed
+ 301 0064 80BD     		pop	{r7, pc}
+ 302              	.L12:
+ 303 0066 00BF     		.align	2
+ 304              	.L11:
+ 305 0068 34000000 		.word	.LC5
+ 306 006c 00000000 		.word	s_rcv_buffer
+ 307 0070 00000000 		.word	s_rcv_datalen
+ 308 0074 00000000 		.word	s_rcv_sync
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s 			page 9
+
+
+ 309              		.cfi_endproc
+ 310              	.LFE288:
+ 312              		.section	.rodata
+ 313              		.align	2
+ 314              	.LC6:
+ 315 0054 53444B5F 		.ascii	"SDK_LWM2M_NODTLS\000"
+ 315      4C574D32 
+ 315      4D5F4E4F 
+ 315      44544C53 
+ 315      00
+ 316              		.section	.text.app_report_task_entry,"ax",%progbits
+ 317              		.align	1
+ 318              		.syntax unified
+ 319              		.thumb
+ 320              		.thumb_func
+ 321              		.fpu fpv4-sp-d16
+ 323              	app_report_task_entry:
+ 324              	.LFB289:
+ 137:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+ 138:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** static int app_report_task_entry()
+ 139:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** {
+ 325              		.loc 1 139 1
+ 326              		.cfi_startproc
+ 327              		@ args = 0, pretend = 0, frame = 64
+ 328              		@ frame_needed = 1, uses_anonymous_args = 0
+ 329 0000 80B5     		push	{r7, lr}
+ 330              	.LCFI10:
+ 331              		.cfi_def_cfa_offset 8
+ 332              		.cfi_offset 7, -8
+ 333              		.cfi_offset 14, -4
+ 334 0002 90B0     		sub	sp, sp, #64
+ 335              	.LCFI11:
+ 336              		.cfi_def_cfa_offset 72
+ 337 0004 00AF     		add	r7, sp, #0
+ 338              	.LCFI12:
+ 339              		.cfi_def_cfa_register 7
+ 140:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     int ret = -1;
+ 340              		.loc 1 140 9
+ 341 0006 4FF0FF33 		mov	r3, #-1
+ 342 000a FB63     		str	r3, [r7, #60]
+ 141:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+ 142:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     oc_config_param_t      oc_param;
+ 143:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     
+ 144:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     memset(&oc_param,0,sizeof(oc_param));
+ 343              		.loc 1 144 5
+ 344 000c 3B46     		mov	r3, r7
+ 345 000e 3C22     		movs	r2, #60
+ 346 0010 0021     		movs	r1, #0
+ 347 0012 1846     		mov	r0, r3
+ 348 0014 FFF7FEFF 		bl	memset
+ 145:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+ 146:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     oc_param.app_server.address = cn_app_server;
+ 349              		.loc 1 146 33
+ 350 0018 124B     		ldr	r3, .L17
+ 351 001a 3B62     		str	r3, [r7, #32]
+ 147:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     oc_param.app_server.port = cn_app_port;
+ 352              		.loc 1 147 30
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s 			page 10
+
+
+ 353 001c 124B     		ldr	r3, .L17+4
+ 354 001e 7B62     		str	r3, [r7, #36]
+ 148:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     oc_param.app_server.ep_id = cn_endpoint_id;
+ 355              		.loc 1 148 31
+ 356 0020 124B     		ldr	r3, .L17+8
+ 357 0022 FB61     		str	r3, [r7, #28]
+ 149:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     oc_param.boot_mode = en_oc_boot_strap_mode_factory;
+ 358              		.loc 1 149 24
+ 359 0024 0023     		movs	r3, #0
+ 360 0026 3B70     		strb	r3, [r7]
+ 150:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     oc_param.rcv_func = app_msg_deal;
+ 361              		.loc 1 150 23
+ 362 0028 114B     		ldr	r3, .L17+12
+ 363 002a 7B63     		str	r3, [r7, #52]
+ 151:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+ 152:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     ret = oc_lwm2m_config( &oc_param);
+ 364              		.loc 1 152 11
+ 365 002c 3B46     		mov	r3, r7
+ 366 002e 1846     		mov	r0, r3
+ 367 0030 FFF7FEFF 		bl	oc_lwm2m_config
+ 368 0034 F863     		str	r0, [r7, #60]
+ 153:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     if (0 != ret)
+ 369              		.loc 1 153 8
+ 370 0036 FB6B     		ldr	r3, [r7, #60]
+ 371 0038 002B     		cmp	r3, #0
+ 372 003a 01D0     		beq	.L14
+ 154:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     {
+ 155:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     	return ret;
+ 373              		.loc 1 155 13
+ 374 003c FB6B     		ldr	r3, [r7, #60]
+ 375 003e 0DE0     		b	.L16
+ 376              	.L14:
+ 156:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     }
+ 157:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+ 158:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     //install a dealer for the led message received
+ 159:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     while(1) //--TODO ,you could add your own code here
+ 160:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     {
+ 161:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         infrared.messageId = cn_app_infrared;
+ 377              		.loc 1 161 28 discriminator 1
+ 378 0040 0C4B     		ldr	r3, .L17+16
+ 379 0042 0022     		movs	r2, #0
+ 380 0044 1A70     		strb	r2, [r3]
+ 162:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         oc_lwm2m_report((char *)&infrared, sizeof(infrared), 1000);
+ 381              		.loc 1 162 9 discriminator 1
+ 382 0046 4FF47A72 		mov	r2, #1000
+ 383 004a 0521     		movs	r1, #5
+ 384 004c 0948     		ldr	r0, .L17+16
+ 385 004e FFF7FEFF 		bl	oc_lwm2m_report
+ 163:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         osal_task_sleep(2*1000);
+ 386              		.loc 1 163 9 discriminator 1
+ 387 0052 4FF4FA60 		mov	r0, #2000
+ 388 0056 FFF7FEFF 		bl	osal_task_sleep
+ 161:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         oc_lwm2m_report((char *)&infrared, sizeof(infrared), 1000);
+ 389              		.loc 1 161 28 discriminator 1
+ 390 005a F1E7     		b	.L14
+ 391              	.L16:
+ 164:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     }
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s 			page 11
+
+
+ 165:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+ 166:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+ 167:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     return 0;
+ 168:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** }
+ 392              		.loc 1 168 1 discriminator 1
+ 393 005c 1846     		mov	r0, r3
+ 394 005e 4037     		adds	r7, r7, #64
+ 395              	.LCFI13:
+ 396              		.cfi_def_cfa_offset 8
+ 397 0060 BD46     		mov	sp, r7
+ 398              	.LCFI14:
+ 399              		.cfi_def_cfa_register 13
+ 400              		@ sp needed
+ 401 0062 80BD     		pop	{r7, pc}
+ 402              	.L18:
+ 403              		.align	2
+ 404              	.L17:
+ 405 0064 14000000 		.word	.LC2
+ 406 0068 2C000000 		.word	.LC4
+ 407 006c 54000000 		.word	.LC6
+ 408 0070 00000000 		.word	app_msg_deal
+ 409 0074 00000000 		.word	infrared
+ 410              		.cfi_endproc
+ 411              	.LFE289:
+ 413              		.section	.rodata
+ 414 0065 000000   		.align	2
+ 415              	.LC7:
+ 416 0068 2D2D2D2D 		.ascii	"-----------------%s----------------------\015\012\000"
+ 416      2D2D2D2D 
+ 416      2D2D2D2D 
+ 416      2D2D2D2D 
+ 416      2D25732D 
+ 417              		.section	.text.app_collect_task_entry,"ax",%progbits
+ 418              		.align	1
+ 419              		.syntax unified
+ 420              		.thumb
+ 421              		.thumb_func
+ 422              		.fpu fpv4-sp-d16
+ 424              	app_collect_task_entry:
+ 425              	.LFB290:
+ 169:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+ 170:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** static int app_collect_task_entry()
+ 171:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** {
+ 426              		.loc 1 171 1
+ 427              		.cfi_startproc
+ 428              		@ args = 0, pretend = 0, frame = 0
+ 429              		@ frame_needed = 1, uses_anonymous_args = 0
+ 430 0000 80B5     		push	{r7, lr}
+ 431              	.LCFI15:
+ 432              		.cfi_def_cfa_offset 8
+ 433              		.cfi_offset 7, -8
+ 434              		.cfi_offset 14, -4
+ 435 0002 00AF     		add	r7, sp, #0
+ 436              	.LCFI16:
+ 437              		.cfi_def_cfa_register 7
+ 172:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     Init_E53_IS1();
+ 438              		.loc 1 172 5
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s 			page 12
+
+
+ 439 0004 FFF7FEFF 		bl	Init_E53_IS1
+ 440              	.L22:
+ 173:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     while (1)
+ 174:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     {
+ 175:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         if(HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_12)==SET)//检测到人体红外
+ 441              		.loc 1 175 12
+ 442 0008 4FF48051 		mov	r1, #4096
+ 443 000c 1848     		ldr	r0, .L24
+ 444 000e FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 445 0012 0346     		mov	r3, r0
+ 446              		.loc 1 175 11
+ 447 0014 012B     		cmp	r3, #1
+ 448 0016 13D1     		bne	.L20
+ 176:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         {
+ 177:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****             
+ 178:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****             E53_IS1_Beep_StatusSet(ON);
+ 449              		.loc 1 178 13
+ 450 0018 0120     		movs	r0, #1
+ 451 001a FFF7FEFF 		bl	E53_IS1_Beep_StatusSet
+ 179:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****             infrared.Status[0] = 'H';
+ 452              		.loc 1 179 32
+ 453 001e 154B     		ldr	r3, .L24+4
+ 454 0020 4822     		movs	r2, #72
+ 455 0022 5A70     		strb	r2, [r3, #1]
+ 180:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****             infrared.Status[1] = 'a';
+ 456              		.loc 1 180 32
+ 457 0024 134B     		ldr	r3, .L24+4
+ 458 0026 6122     		movs	r2, #97
+ 459 0028 9A70     		strb	r2, [r3, #2]
+ 181:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****             infrared.Status[2] = 'v';
+ 460              		.loc 1 181 32
+ 461 002a 124B     		ldr	r3, .L24+4
+ 462 002c 7622     		movs	r2, #118
+ 463 002e DA70     		strb	r2, [r3, #3]
+ 182:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****             infrared.Status[3] = 'e';
+ 464              		.loc 1 182 32
+ 465 0030 104B     		ldr	r3, .L24+4
+ 466 0032 6522     		movs	r2, #101
+ 467 0034 1A71     		strb	r2, [r3, #4]
+ 183:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****             printf("-----------------%s----------------------\r\n",infrared.Status);
+ 468              		.loc 1 183 13
+ 469 0036 1049     		ldr	r1, .L24+8
+ 470 0038 1048     		ldr	r0, .L24+12
+ 471 003a FFF7FEFF 		bl	printf
+ 472 003e 12E0     		b	.L23
+ 473              	.L20:
+ 184:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+ 185:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         }
+ 186:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         else
+ 187:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         {
+ 188:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****             E53_IS1_Beep_StatusSet(OFF);
+ 474              		.loc 1 188 13
+ 475 0040 0020     		movs	r0, #0
+ 476 0042 FFF7FEFF 		bl	E53_IS1_Beep_StatusSet
+ 189:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****             infrared.Status[0] = ' ';
+ 477              		.loc 1 189 32
+ 478 0046 0B4B     		ldr	r3, .L24+4
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s 			page 13
+
+
+ 479 0048 2022     		movs	r2, #32
+ 480 004a 5A70     		strb	r2, [r3, #1]
+ 190:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****             infrared.Status[1] = ' ';
+ 481              		.loc 1 190 32
+ 482 004c 094B     		ldr	r3, .L24+4
+ 483 004e 2022     		movs	r2, #32
+ 484 0050 9A70     		strb	r2, [r3, #2]
+ 191:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****             infrared.Status[2] = 'N';
+ 485              		.loc 1 191 32
+ 486 0052 084B     		ldr	r3, .L24+4
+ 487 0054 4E22     		movs	r2, #78
+ 488 0056 DA70     		strb	r2, [r3, #3]
+ 192:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****             infrared.Status[3] = 'O';
+ 489              		.loc 1 192 32
+ 490 0058 064B     		ldr	r3, .L24+4
+ 491 005a 4F22     		movs	r2, #79
+ 492 005c 1A71     		strb	r2, [r3, #4]
+ 193:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****             printf("-----------------%s----------------------\r\n",infrared.Status);
+ 493              		.loc 1 193 13
+ 494 005e 0649     		ldr	r1, .L24+8
+ 495 0060 0648     		ldr	r0, .L24+12
+ 496 0062 FFF7FEFF 		bl	printf
+ 497              	.L23:
+ 194:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         }
+ 195:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         if (qr_code == 0)
+ 196:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         {
+ 197:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         //    LCD_ShowString(10, 200, 200, 16, 16, "BH1750 Value is:");
+ 198:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         // LCD_ShowString(10, 200, 200, 16, 16, "Please wear helmet!");
+ 199:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         //    LCD_ShowNum(140, 200, lux, 5, 16);
+ 200:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         }
+ 201:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****        osal_task_sleep(2*10);
+ 498              		.loc 1 201 8
+ 499 0066 1420     		movs	r0, #20
+ 500 0068 FFF7FEFF 		bl	osal_task_sleep
+ 175:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****         {
+ 501              		.loc 1 175 11
+ 502 006c CCE7     		b	.L22
+ 503              	.L25:
+ 504 006e 00BF     		.align	2
+ 505              	.L24:
+ 506 0070 000C0048 		.word	1207962624
+ 507 0074 00000000 		.word	infrared
+ 508 0078 01000000 		.word	infrared+1
+ 509 007c 68000000 		.word	.LC7
+ 510              		.cfi_endproc
+ 511              	.LFE290:
+ 513              		.section	.rodata
+ 514              		.align	2
+ 515              	.LC8:
+ 516 0094 6170705F 		.ascii	"app_collect\000"
+ 516      636F6C6C 
+ 516      65637400 
+ 517              		.align	2
+ 518              	.LC9:
+ 519 00a0 6170705F 		.ascii	"app_report\000"
+ 519      7265706F 
+ 519      727400
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s 			page 14
+
+
+ 520 00ab 00       		.align	2
+ 521              	.LC10:
+ 522 00ac 6C636474 		.ascii	"lcdtimer\000"
+ 522      696D6572 
+ 522      00
+ 523              		.section	.text.standard_app_demo_main,"ax",%progbits
+ 524              		.align	1
+ 525              		.global	standard_app_demo_main
+ 526              		.syntax unified
+ 527              		.thumb
+ 528              		.thumb_func
+ 529              		.fpu fpv4-sp-d16
+ 531              	standard_app_demo_main:
+ 532              	.LFB291:
+ 202:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     }
+ 203:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     return 0;
+ 204:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** }
+ 205:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+ 206:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+ 207:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** #include <stimer.h>
+ 208:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+ 209:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** int standard_app_demo_main()
+ 210:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** {
+ 533              		.loc 1 210 1
+ 534              		.cfi_startproc
+ 535              		@ args = 0, pretend = 0, frame = 0
+ 536              		@ frame_needed = 1, uses_anonymous_args = 0
+ 537 0000 80B5     		push	{r7, lr}
+ 538              	.LCFI17:
+ 539              		.cfi_def_cfa_offset 8
+ 540              		.cfi_offset 7, -8
+ 541              		.cfi_offset 14, -4
+ 542 0002 82B0     		sub	sp, sp, #8
+ 543              	.LCFI18:
+ 544              		.cfi_def_cfa_offset 16
+ 545 0004 02AF     		add	r7, sp, #8
+ 546              	.LCFI19:
+ 547              		.cfi_def_cfa 7, 8
+ 211:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     osal_semp_create(&s_rcv_sync,1,0);
+ 548              		.loc 1 211 5
+ 549 0006 0022     		movs	r2, #0
+ 550 0008 0121     		movs	r1, #1
+ 551 000a 1348     		ldr	r0, .L28
+ 552 000c FFF7FEFF 		bl	osal_semp_create
+ 212:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+ 213:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     osal_task_create("app_collect",app_collect_task_entry,NULL,0x400,NULL,3);
+ 553              		.loc 1 213 5
+ 554 0010 0323     		movs	r3, #3
+ 555 0012 0193     		str	r3, [sp, #4]
+ 556 0014 0023     		movs	r3, #0
+ 557 0016 0093     		str	r3, [sp]
+ 558 0018 4FF48063 		mov	r3, #1024
+ 559 001c 0022     		movs	r2, #0
+ 560 001e 0F49     		ldr	r1, .L28+4
+ 561 0020 0F48     		ldr	r0, .L28+8
+ 562 0022 FFF7FEFF 		bl	osal_task_create
+ 214:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     osal_task_create("app_report",app_report_task_entry,NULL,0x1000,NULL,2);
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s 			page 15
+
+
+ 563              		.loc 1 214 5
+ 564 0026 0223     		movs	r3, #2
+ 565 0028 0193     		str	r3, [sp, #4]
+ 566 002a 0023     		movs	r3, #0
+ 567 002c 0093     		str	r3, [sp]
+ 568 002e 4FF48053 		mov	r3, #4096
+ 569 0032 0022     		movs	r2, #0
+ 570 0034 0B49     		ldr	r1, .L28+12
+ 571 0036 0C48     		ldr	r0, .L28+16
+ 572 0038 FFF7FEFF 		bl	osal_task_create
+ 215:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+ 216:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     stimer_create("lcdtimer",timer1_callback,NULL,8*1000,cn_stimer_flag_start);
+ 573              		.loc 1 216 5
+ 574 003c 0223     		movs	r3, #2
+ 575 003e 0093     		str	r3, [sp]
+ 576 0040 4FF4FA53 		mov	r3, #8000
+ 577 0044 0022     		movs	r2, #0
+ 578 0046 0949     		ldr	r1, .L28+20
+ 579 0048 0948     		ldr	r0, .L28+24
+ 580 004a FFF7FEFF 		bl	stimer_create
+ 217:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** 
+ 218:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c ****     return 0;
+ 581              		.loc 1 218 12
+ 582 004e 0023     		movs	r3, #0
+ 219:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/oc_infrared_template\oc_infrared_template.c **** }
+ 583              		.loc 1 219 1
+ 584 0050 1846     		mov	r0, r3
+ 585 0052 BD46     		mov	sp, r7
+ 586              	.LCFI20:
+ 587              		.cfi_def_cfa_register 13
+ 588              		@ sp needed
+ 589 0054 80BD     		pop	{r7, pc}
+ 590              	.L29:
+ 591 0056 00BF     		.align	2
+ 592              	.L28:
+ 593 0058 00000000 		.word	s_rcv_sync
+ 594 005c 00000000 		.word	app_collect_task_entry
+ 595 0060 94000000 		.word	.LC8
+ 596 0064 00000000 		.word	app_report_task_entry
+ 597 0068 A0000000 		.word	.LC9
+ 598 006c 00000000 		.word	timer1_callback
+ 599 0070 AC000000 		.word	.LC10
+ 600              		.cfi_endproc
+ 601              	.LFE291:
+ 603              		.text
+ 604              	.Letext0:
+ 605              		.file 2 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 606              		.file 3 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 607              		.file 4 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 608              		.file 5 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 609              		.file 6 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\lib\\gcc\\arm-none
+ 610              		.file 7 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 611              		.file 8 "d:/LiteOS_Lab/iot_link/os/osal/osal_types.h"
+ 612              		.file 9 "d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al/oc_lwm2m_al.h"
+ 613              		.file 10 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_typedef.h"
+ 614              		.file 11 "d:/LiteOS_Lab/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 615              		.file 12 "d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Inc/system_stm32l4xx.h"
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s 			page 16
+
+
+ 616              		.file 13 "d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Inc/stm32l431xx.h"
+ 617              		.file 14 "d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Inc/stm32l4xx.h"
+ 618              		.file 15 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_config.h"
+ 619              		.file 16 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_err.h"
+ 620              		.file 17 "d:/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 621              		.file 18 "d:/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h"
+ 622              		.file 19 "d:/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_dma.h"
+ 623              		.file 20 "d:/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim.h"
+ 624              		.file 21 "d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface/E53_IS1.h"
+ 625              		.file 22 "d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/LCD/lcd.h"
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s 			page 17
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 oc_infrared_template.c
+                            *COM*:00000004 context
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:22     .data.qr_code:00000000 qr_code
+                            *COM*:0000b048 gImage_Bossaylogo
+                            *COM*:00000005 infrared
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:27     .bss.s_rcv_buffer:00000000 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:30     .bss.s_rcv_buffer:00000000 s_rcv_buffer
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:33     .bss.s_rcv_datalen:00000000 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:36     .bss.s_rcv_datalen:00000000 s_rcv_datalen
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:39     .bss.s_rcv_sync:00000000 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:42     .bss.s_rcv_sync:00000000 s_rcv_sync
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:45     .rodata:00000000 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:61     .text.timer1_callback:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:68     .text.timer1_callback:00000000 timer1_callback
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:195    .text.timer1_callback:000000c8 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:212    .text.app_msg_deal:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:218    .text.app_msg_deal:00000000 app_msg_deal
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:305    .text.app_msg_deal:00000068 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:317    .text.app_report_task_entry:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:323    .text.app_report_task_entry:00000000 app_report_task_entry
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:405    .text.app_report_task_entry:00000064 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:418    .text.app_collect_task_entry:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:424    .text.app_collect_task_entry:00000000 app_collect_task_entry
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:506    .text.app_collect_task_entry:00000070 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:524    .text.standard_app_demo_main:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:531    .text.standard_app_demo_main:00000000 standard_app_demo_main
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHGNi4D.s:593    .text.standard_app_demo_main:00000058 $d
+
+UNDEFINED SYMBOLS
+LCD_Clear
+LCD_Show_Image
+LCD_ShowString
+gImage_Huawei_IoT_QR_Code
+POINT_COLOR
+printf
+memcpy
+osal_semp_post
+memset
+oc_lwm2m_config
+oc_lwm2m_report
+osal_task_sleep
+Init_E53_IS1
+HAL_GPIO_ReadPin
+E53_IS1_Beep_StatusSet
+osal_semp_create
+osal_task_create
+stimer_create

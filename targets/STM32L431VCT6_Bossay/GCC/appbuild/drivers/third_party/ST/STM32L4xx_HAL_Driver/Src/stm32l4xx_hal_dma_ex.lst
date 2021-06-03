@@ -1,0 +1,39 @@
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccbWerZN.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stm32l4xx_hal_dma_ex.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              	.Letext0:
+  18              		.file 1 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+  19              		.file 2 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+  20              		.file 3 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+  21              		.file 4 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\lib\\gcc\\arm-none
+  22              		.file 5 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+  23              		.file 6 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_typedef.h"
+  24              		.file 7 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+  25              		.file 8 "d:/LiteOS_Lab/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+  26              		.file 9 "d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Inc/system_stm32l4xx.h"
+  27              		.file 10 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_config.h"
+  28              		.file 11 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_err.h"
+  29              		.file 12 "d:/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_hwi.h"
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccbWerZN.s 			page 2
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32l4xx_hal_dma_ex.c
+
+NO UNDEFINED SYMBOLS

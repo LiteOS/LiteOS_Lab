@@ -1,0 +1,208 @@
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccsXDDCa.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"los_err.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.comm	g_stUserErrFunc,4,4
+  18              		.section	.text.LOS_ErrHandle,"ax",%progbits
+  19              		.align	1
+  20              		.global	LOS_ErrHandle
+  21              		.arch armv7e-m
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  25              		.fpu fpv4-sp-d16
+  27              	LOS_ErrHandle:
+  28              	.LFB287:
+  29              		.file 1 "d:/LiteOS_Lab/iot_link/os/liteos/base/om/los_err.c"
+   1:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** /*----------------------------------------------------------------------------
+   2:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * Copyright (c) <2013-2015>, <Huawei Technologies Co., Ltd>
+   3:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * All rights reserved.
+   4:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * are permitted provided that the following conditions are met:
+   6:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * conditions and the following disclaimer.
+   8:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * provided with the distribution.
+  11:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * permission.
+  14:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  *---------------------------------------------------------------------------*/
+  26:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** /*----------------------------------------------------------------------------
+  27:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * Notice of Export Control Law
+  28:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * ===============================================
+  29:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccsXDDCa.s 			page 2
+
+
+  30:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  * applicable export control laws and regulations.
+  33:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****  *---------------------------------------------------------------------------*/
+  34:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** 
+  35:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** #include "los_err.inc"
+  36:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** 
+  37:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** #ifdef __cplusplus
+  38:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** #if __cplusplus
+  39:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** extern "C" {
+  40:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** #endif /* __cplusplus */
+  41:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** #endif /* __cplusplus */
+  42:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** 
+  43:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** LITE_OS_SEC_BSS USER_ERR_FUNC_S      g_stUserErrFunc;
+  44:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** 
+  45:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** /*****************************************************************************
+  46:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** Function   : LOS_ErrHandle
+  47:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** Description: Error handle
+  48:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** Input   : pcFileName
+  49:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****           uwLineNo    -- error line number
+  50:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****           uwErrorNo   -- user defined error number
+  51:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****           uwParaLen   -- length of pPara
+  52:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****           pPara       -- user description of error
+  53:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** Output  :
+  54:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** Return  : uwErrorNo   -- user defined error number
+  55:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** Other   : None
+  56:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** *****************************************************************************/
+  57:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** LITE_OS_SEC_TEXT_INIT UINT32 LOS_ErrHandle( CHAR *pcFileName,
+  58:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****                                      UINT32 uwLineNo,
+  59:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****                                      UINT32 uwErrorNo,
+  60:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****                                      UINT32 uwParaLen,
+  61:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****                                      VOID  *pPara)
+  62:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** {
+  30              		.loc 1 62 1
+  31              		.cfi_startproc
+  32              		@ args = 4, pretend = 0, frame = 16
+  33              		@ frame_needed = 1, uses_anonymous_args = 0
+  34 0000 90B5     		push	{r4, r7, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 12
+  37              		.cfi_offset 4, -12
+  38              		.cfi_offset 7, -8
+  39              		.cfi_offset 14, -4
+  40 0002 87B0     		sub	sp, sp, #28
+  41              	.LCFI1:
+  42              		.cfi_def_cfa_offset 40
+  43 0004 02AF     		add	r7, sp, #8
+  44              	.LCFI2:
+  45              		.cfi_def_cfa 7, 32
+  46 0006 F860     		str	r0, [r7, #12]
+  47 0008 B960     		str	r1, [r7, #8]
+  48 000a 7A60     		str	r2, [r7, #4]
+  49 000c 3B60     		str	r3, [r7]
+  63:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** 
+  64:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****     if (NULL != g_stUserErrFunc.pfnHook)
+  50              		.loc 1 64 32
+  51 000e 0C4B     		ldr	r3, .L5
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccsXDDCa.s 			page 3
+
+
+  52 0010 1B68     		ldr	r3, [r3]
+  53              		.loc 1 64 8
+  54 0012 002B     		cmp	r3, #0
+  55 0014 08D0     		beq	.L2
+  65:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****     {
+  66:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****         g_stUserErrFunc.pfnHook(pcFileName, uwLineNo, uwErrorNo, uwParaLen, pPara);
+  56              		.loc 1 66 24
+  57 0016 0A4B     		ldr	r3, .L5
+  58 0018 1C68     		ldr	r4, [r3]
+  59              		.loc 1 66 9
+  60 001a 3B6A     		ldr	r3, [r7, #32]
+  61 001c 0093     		str	r3, [sp]
+  62 001e 3B68     		ldr	r3, [r7]
+  63 0020 7A68     		ldr	r2, [r7, #4]
+  64 0022 B968     		ldr	r1, [r7, #8]
+  65 0024 F868     		ldr	r0, [r7, #12]
+  66 0026 A047     		blx	r4
+  67              	.LVL0:
+  68              	.L2:
+  67:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****     }
+  68:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** 
+  69:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****     if (OS_ERR_MAGIC_WORD != uwLineNo)
+  69              		.loc 1 69 8
+  70 0028 BB68     		ldr	r3, [r7, #8]
+  71 002a 064A     		ldr	r2, .L5+4
+  72 002c 9342     		cmp	r3, r2
+  73 002e 01D0     		beq	.L3
+  70:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****     {
+  71:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****         return LOS_OK;
+  74              		.loc 1 71 16
+  75 0030 0023     		movs	r3, #0
+  76 0032 00E0     		b	.L4
+  77              	.L3:
+  72:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****     }
+  73:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** 
+  74:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c ****     return LOS_OK;
+  78              		.loc 1 74 12
+  79 0034 0023     		movs	r3, #0
+  80              	.L4:
+  75:d:/LiteOS_Lab/iot_link/os/liteos/base/om\los_err.c **** }
+  81              		.loc 1 75 1
+  82 0036 1846     		mov	r0, r3
+  83 0038 1437     		adds	r7, r7, #20
+  84              	.LCFI3:
+  85              		.cfi_def_cfa_offset 12
+  86 003a BD46     		mov	sp, r7
+  87              	.LCFI4:
+  88              		.cfi_def_cfa_register 13
+  89              		@ sp needed
+  90 003c 90BD     		pop	{r4, r7, pc}
+  91              	.L6:
+  92 003e 00BF     		.align	2
+  93              	.L5:
+  94 0040 00000000 		.word	g_stUserErrFunc
+  95 0044 F8C3B2A1 		.word	-1582119944
+  96              		.cfi_endproc
+  97              	.LFE287:
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccsXDDCa.s 			page 4
+
+
+  99              		.text
+ 100              	.Letext0:
+ 101              		.file 2 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 102              		.file 3 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 103              		.file 4 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 104              		.file 5 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\lib\\gcc\\arm-none
+ 105              		.file 6 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 106              		.file 7 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_typedef.h"
+ 107              		.file 8 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 108              		.file 9 "d:/LiteOS_Lab/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 109              		.file 10 "d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Inc/system_stm32l4xx.h"
+ 110              		.file 11 "d:/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 111              		.file 12 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_config.h"
+ 112              		.file 13 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_err.h"
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccsXDDCa.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 los_err.c
+                            *COM*:00000004 g_stUserErrFunc
+C:\Users\ADMINI~1\AppData\Local\Temp\ccsXDDCa.s:19     .text.LOS_ErrHandle:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccsXDDCa.s:27     .text.LOS_ErrHandle:00000000 LOS_ErrHandle
+C:\Users\ADMINI~1\AppData\Local\Temp\ccsXDDCa.s:94     .text.LOS_ErrHandle:00000040 $d
+
+NO UNDEFINED SYMBOLS

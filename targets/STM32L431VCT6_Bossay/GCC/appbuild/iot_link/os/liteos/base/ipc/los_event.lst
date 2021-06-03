@@ -1,0 +1,1507 @@
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"los_event.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.LOS_ListInit,"ax",%progbits
+  18              		.align	1
+  19              		.arch armv7e-m
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	LOS_ListInit:
+  26              	.LFB0:
+  27              		.file 1 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_list.h"
+   1:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** /*----------------------------------------------------------------------------
+   2:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * Copyright (c) <2013-2015>, <Huawei Technologies Co., Ltd>
+   3:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * All rights reserved.
+   4:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * are permitted provided that the following conditions are met:
+   6:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * conditions and the following disclaimer.
+   8:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * provided with the distribution.
+  11:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * to endorse or promote products derived from this software without specific prior written
+  13:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * permission.
+  14:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *---------------------------------------------------------------------------*/
+  26:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** /*----------------------------------------------------------------------------
+  27:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * Notice of Export Control Law
+  28:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * ===============================================
+  29:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 2
+
+
+  32:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * applicable export control laws and regulations.
+  33:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *---------------------------------------------------------------------------*/
+  34:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** 
+  35:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  /** @defgroup los_list Doubly linked list
+  36:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  * @ingroup kernel
+  37:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  */
+  38:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** 
+  39:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** #ifndef _LOS_LIST_H
+  40:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** #define _LOS_LIST_H
+  41:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** 
+  42:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** #include "los_typedef.h"
+  43:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** 
+  44:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** #ifdef __cplusplus
+  45:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** #if __cplusplus
+  46:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** extern "C" {
+  47:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** #endif /* __cplusplus */
+  48:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** #endif /* __cplusplus */
+  49:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** 
+  50:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** 
+  51:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** /**
+  52:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@ingroup los_list
+  53:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *Structure of a node in a doubly linked list.
+  54:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  */
+  55:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** typedef struct LOS_DL_LIST
+  56:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** {
+  57:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****     struct LOS_DL_LIST *pstPrev;            /**< Current node's pointer to the previous node*/
+  58:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****     struct LOS_DL_LIST *pstNext;            /**< Current node's pointer to the next node*/
+  59:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** } LOS_DL_LIST;
+  60:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** 
+  61:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** /**
+  62:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@ingroup los_list
+  63:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@brief Initialize a doubly linked list.
+  64:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *
+  65:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@par Description:
+  66:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *This API is used to initialize a doubly linked list.
+  67:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@attention
+  68:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<ul>
+  69:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<li>The parameter passed in should be ensured to be a legal pointer.</li>
+  70:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *</ul>
+  71:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *
+  72:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@param pstList    [IN] Node in a doubly linked list.
+  73:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *
+  74:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@retval None.
+  75:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@par Dependency:
+  76:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<ul><li>los_list.h: the header file that contains the API declaration.</li></ul>
+  77:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@see
+  78:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@since Huawei LiteOS V100R001C00
+  79:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  */
+  80:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** LITE_OS_SEC_ALW_INLINE STATIC_INLINE VOID LOS_ListInit(LOS_DL_LIST *pstList)
+  81:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** {
+  28              		.loc 1 81 1
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 8
+  31              		@ frame_needed = 1, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33 0000 80B4     		push	{r7}
+  34              	.LCFI0:
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 3
+
+
+  35              		.cfi_def_cfa_offset 4
+  36              		.cfi_offset 7, -4
+  37 0002 83B0     		sub	sp, sp, #12
+  38              	.LCFI1:
+  39              		.cfi_def_cfa_offset 16
+  40 0004 00AF     		add	r7, sp, #0
+  41              	.LCFI2:
+  42              		.cfi_def_cfa_register 7
+  43 0006 7860     		str	r0, [r7, #4]
+  82:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****     pstList->pstNext = pstList;
+  44              		.loc 1 82 22
+  45 0008 7B68     		ldr	r3, [r7, #4]
+  46 000a 7A68     		ldr	r2, [r7, #4]
+  47 000c 5A60     		str	r2, [r3, #4]
+  83:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****     pstList->pstPrev = pstList;
+  48              		.loc 1 83 22
+  49 000e 7B68     		ldr	r3, [r7, #4]
+  50 0010 7A68     		ldr	r2, [r7, #4]
+  51 0012 1A60     		str	r2, [r3]
+  84:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** }
+  52              		.loc 1 84 1
+  53 0014 00BF     		nop
+  54 0016 0C37     		adds	r7, r7, #12
+  55              	.LCFI3:
+  56              		.cfi_def_cfa_offset 4
+  57 0018 BD46     		mov	sp, r7
+  58              	.LCFI4:
+  59              		.cfi_def_cfa_register 13
+  60              		@ sp needed
+  61 001a 5DF8047B 		ldr	r7, [sp], #4
+  62              	.LCFI5:
+  63              		.cfi_restore 7
+  64              		.cfi_def_cfa_offset 0
+  65 001e 7047     		bx	lr
+  66              		.cfi_endproc
+  67              	.LFE0:
+  69              		.section	.text.LOS_ListEmpty,"ax",%progbits
+  70              		.align	1
+  71              		.syntax unified
+  72              		.thumb
+  73              		.thumb_func
+  74              		.fpu fpv4-sp-d16
+  76              	LOS_ListEmpty:
+  77              	.LFB4:
+  85:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** 
+  86:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** /**
+  87:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@ingroup los_list
+  88:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@brief Point to the next node pointed to by the current node.
+  89:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *
+  90:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@par Description:
+  91:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<ul>
+  92:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<li>This API is used to point to the next node pointed to by the current node.</li>
+  93:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *</ul>
+  94:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@attention
+  95:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<ul>
+  96:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<li>None.</li>
+  97:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *</ul>
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 4
+
+
+  98:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *
+  99:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@param pstObject  [IN] Node in the doubly linked list.
+ 100:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *
+ 101:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@retval None.
+ 102:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@par Dependency:
+ 103:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<ul><li>los_list.h: the header file that contains the API declaration.</li></ul>
+ 104:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@see
+ 105:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@since Huawei LiteOS V100R001C00
+ 106:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  */
+ 107:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** #define LOS_DL_LIST_FIRST(pstObject) ((pstObject)->pstNext)
+ 108:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** 
+ 109:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** /**
+ 110:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@ingroup los_list
+ 111:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@brief Insert a new node to a doubly linked list.
+ 112:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *
+ 113:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@par Description:
+ 114:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *This API is used to insert a new node to a doubly linked list.
+ 115:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@attention
+ 116:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<ul>
+ 117:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<li>The parameters passed in should be ensured to be legal pointers.</li>
+ 118:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *</ul>
+ 119:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *
+ 120:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@param pstList    [IN]   Doubly linked list where the new node is inserted.
+ 121:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@param pstNode    [IN]   New node to be inserted.
+ 122:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *
+ 123:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@retval None
+ 124:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@par Dependency:
+ 125:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<ul><li>los_list.h: the header file that contains the API declaration.</li></ul>
+ 126:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@see LOS_ListDelete
+ 127:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@since Huawei LiteOS V100R001C00
+ 128:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  */
+ 129:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** LITE_OS_SEC_ALW_INLINE STATIC_INLINE VOID LOS_ListAdd(LOS_DL_LIST *pstList, LOS_DL_LIST *pstNode)
+ 130:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** {
+ 131:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****     pstNode->pstNext = pstList->pstNext;
+ 132:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****     pstNode->pstPrev = pstList;
+ 133:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****     pstList->pstNext->pstPrev = pstNode;
+ 134:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****     pstList->pstNext = pstNode;
+ 135:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** }
+ 136:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** 
+ 137:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** /**
+ 138:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@ingroup los_list
+ 139:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@brief Insert a node to the tail of a doubly linked list.
+ 140:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *
+ 141:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@par Description:
+ 142:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *This API is used to insert a new node to the tail of a doubly linked list.
+ 143:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@attention
+ 144:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<ul>
+ 145:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<li>The parameters passed in should be ensured to be legal pointers.</li>
+ 146:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *</ul>
+ 147:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *
+ 148:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@param pstList     [IN] Doubly linked list where the new node is inserted.
+ 149:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@param pstNode     [IN] New node to be inserted.
+ 150:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *
+ 151:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@retval None.
+ 152:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@par Dependency:
+ 153:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<ul><li>los_list.h: the header file that contains the API declaration.</li></ul>
+ 154:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@see LOS_ListAdd | LOS_ListHeadInsert
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 5
+
+
+ 155:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@since Huawei LiteOS V100R001C00
+ 156:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  */
+ 157:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** LITE_OS_SEC_ALW_INLINE STATIC_INLINE VOID LOS_ListTailInsert(LOS_DL_LIST *pstList, LOS_DL_LIST *pst
+ 158:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** {
+ 159:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****     LOS_ListAdd(pstList->pstPrev, pstNode);
+ 160:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** }
+ 161:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** 
+ 162:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** /**
+ 163:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@ingroup los_list
+ 164:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@brief Delete a specified node from a doubly linked list.
+ 165:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *
+ 166:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@par Description:
+ 167:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<ul>
+ 168:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<li>This API is used to delete a specified node from a doubly linked list.</li>
+ 169:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *</ul>
+ 170:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@attention
+ 171:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<ul>
+ 172:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<li>The parameter passed in should be ensured to be a legal pointer.</li>
+ 173:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *</ul>
+ 174:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *
+ 175:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@param pstNode    [IN] Node to be deleted.
+ 176:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *
+ 177:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@retval None.
+ 178:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@par Dependency:
+ 179:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<ul><li>los_list.h: the header file that contains the API declaration.</li></ul>
+ 180:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@see LOS_ListAdd
+ 181:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@since Huawei LiteOS V100R001C00
+ 182:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  */
+ 183:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** LITE_OS_SEC_ALW_INLINE STATIC_INLINE VOID LOS_ListDelete(LOS_DL_LIST *pstNode)
+ 184:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** {
+ 185:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****     pstNode->pstNext->pstPrev = pstNode->pstPrev;
+ 186:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****     pstNode->pstPrev->pstNext = pstNode->pstNext;
+ 187:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****     pstNode->pstNext = (LOS_DL_LIST *)NULL;
+ 188:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****     pstNode->pstPrev = (LOS_DL_LIST *)NULL;
+ 189:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** }
+ 190:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** 
+ 191:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** /**
+ 192:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@ingroup los_list
+ 193:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@brief Identify whether a specified doubly linked list is empty.
+ 194:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *
+ 195:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@par Description:
+ 196:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<ul>
+ 197:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<li>This API is used to return whether a doubly linked list is empty.</li>
+ 198:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *</ul>
+ 199:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@attention
+ 200:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<ul>
+ 201:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<li>The parameter passed in should be ensured to be a legal pointer.</li>
+ 202:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *</ul>
+ 203:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *
+ 204:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@param pstList  [IN] Doubly linked list.
+ 205:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *
+ 206:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@retval TRUE The doubly linked list is empty.
+ 207:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@retval FALSE The doubly linked list is not empty.
+ 208:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@par Dependency:
+ 209:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *<ul><li>los_list.h: the header file that contains the API declaration.</li></ul>
+ 210:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@see
+ 211:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  *@since Huawei LiteOS V100R001C00
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 6
+
+
+ 212:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****  */
+ 213:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** LITE_OS_SEC_ALW_INLINE STATIC_INLINE BOOL LOS_ListEmpty(LOS_DL_LIST *pstNode)
+ 214:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** {
+  78              		.loc 1 214 1
+  79              		.cfi_startproc
+  80              		@ args = 0, pretend = 0, frame = 8
+  81              		@ frame_needed = 1, uses_anonymous_args = 0
+  82              		@ link register save eliminated.
+  83 0000 80B4     		push	{r7}
+  84              	.LCFI6:
+  85              		.cfi_def_cfa_offset 4
+  86              		.cfi_offset 7, -4
+  87 0002 83B0     		sub	sp, sp, #12
+  88              	.LCFI7:
+  89              		.cfi_def_cfa_offset 16
+  90 0004 00AF     		add	r7, sp, #0
+  91              	.LCFI8:
+  92              		.cfi_def_cfa_register 7
+  93 0006 7860     		str	r0, [r7, #4]
+ 215:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h ****     return (BOOL)(pstNode->pstNext == pstNode);
+  94              		.loc 1 215 26
+  95 0008 7B68     		ldr	r3, [r7, #4]
+  96 000a 5B68     		ldr	r3, [r3, #4]
+  97              		.loc 1 215 12
+  98 000c 7A68     		ldr	r2, [r7, #4]
+  99 000e 9A42     		cmp	r2, r3
+ 100 0010 0CBF     		ite	eq
+ 101 0012 0123     		moveq	r3, #1
+ 102 0014 0023     		movne	r3, #0
+ 103 0016 DBB2     		uxtb	r3, r3
+ 216:d:/LiteOS_Lab/iot_link/os/liteos/include\los_list.h **** }
+ 104              		.loc 1 216 1
+ 105 0018 1846     		mov	r0, r3
+ 106 001a 0C37     		adds	r7, r7, #12
+ 107              	.LCFI9:
+ 108              		.cfi_def_cfa_offset 4
+ 109 001c BD46     		mov	sp, r7
+ 110              	.LCFI10:
+ 111              		.cfi_def_cfa_register 13
+ 112              		@ sp needed
+ 113 001e 5DF8047B 		ldr	r7, [sp], #4
+ 114              	.LCFI11:
+ 115              		.cfi_restore 7
+ 116              		.cfi_def_cfa_offset 0
+ 117 0022 7047     		bx	lr
+ 118              		.cfi_endproc
+ 119              	.LFE4:
+ 121              		.section	.text.LOS_EventInit,"ax",%progbits
+ 122              		.align	1
+ 123              		.global	LOS_EventInit
+ 124              		.syntax unified
+ 125              		.thumb
+ 126              		.thumb_func
+ 127              		.fpu fpv4-sp-d16
+ 129              	LOS_EventInit:
+ 130              	.LFB287:
+ 131              		.file 2 "d:/LiteOS_Lab/iot_link/os/liteos/base/ipc/los_event.c"
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 7
+
+
+   1:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** /*----------------------------------------------------------------------------
+   2:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * Copyright (c) <2013-2015>, <Huawei Technologies Co., Ltd>
+   3:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * All rights reserved.
+   4:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * are permitted provided that the following conditions are met:
+   6:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * conditions and the following disclaimer.
+   8:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * provided with the distribution.
+  11:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * permission.
+  14:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  *---------------------------------------------------------------------------*/
+  26:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** /*----------------------------------------------------------------------------
+  27:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * Notice of Export Control Law
+  28:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * ===============================================
+  29:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  * applicable export control laws and regulations.
+  33:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****  *---------------------------------------------------------------------------*/
+  34:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+  35:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** #include "los_priqueue.ph"
+  36:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** #include "los_task.ph"
+  37:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** #include "los_hw.h"
+  38:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** #include "los_hwi.h"
+  39:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** #include "los_event.inc"
+  40:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+  41:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** #ifdef __cplusplus
+  42:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** #if __cplusplus
+  43:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** extern "C"{
+  44:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** #endif
+  45:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** #endif /* __cplusplus */
+  46:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+  47:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+  48:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** LITE_OS_SEC_TEXT_INIT UINT32 LOS_EventInit(PEVENT_CB_S pstEventCB)
+  49:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** {
+ 132              		.loc 2 49 1
+ 133              		.cfi_startproc
+ 134              		@ args = 0, pretend = 0, frame = 8
+ 135              		@ frame_needed = 1, uses_anonymous_args = 0
+ 136 0000 80B5     		push	{r7, lr}
+ 137              	.LCFI12:
+ 138              		.cfi_def_cfa_offset 8
+ 139              		.cfi_offset 7, -8
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 8
+
+
+ 140              		.cfi_offset 14, -4
+ 141 0002 82B0     		sub	sp, sp, #8
+ 142              	.LCFI13:
+ 143              		.cfi_def_cfa_offset 16
+ 144 0004 00AF     		add	r7, sp, #0
+ 145              	.LCFI14:
+ 146              		.cfi_def_cfa_register 7
+ 147 0006 7860     		str	r0, [r7, #4]
+  50:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     if (pstEventCB == NULL)
+ 148              		.loc 2 50 8
+ 149 0008 7B68     		ldr	r3, [r7, #4]
+ 150 000a 002B     		cmp	r3, #0
+ 151 000c 01D1     		bne	.L5
+  51:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     {
+  52:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         return LOS_ERRNO_EVENT_PTR_NULL;
+ 152              		.loc 2 52 16
+ 153 000e 074B     		ldr	r3, .L7
+ 154 0010 08E0     		b	.L6
+ 155              	.L5:
+  53:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     }
+  54:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     pstEventCB->uwEventID = 0;
+ 156              		.loc 2 54 27
+ 157 0012 7B68     		ldr	r3, [r7, #4]
+ 158 0014 0022     		movs	r2, #0
+ 159 0016 1A60     		str	r2, [r3]
+  55:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     LOS_ListInit(&pstEventCB->stEventList);
+ 160              		.loc 2 55 5
+ 161 0018 7B68     		ldr	r3, [r7, #4]
+ 162 001a 0433     		adds	r3, r3, #4
+ 163 001c 1846     		mov	r0, r3
+ 164 001e FFF7FEFF 		bl	LOS_ListInit
+  56:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     return LOS_OK;
+ 165              		.loc 2 56 12
+ 166 0022 0023     		movs	r3, #0
+ 167              	.L6:
+  57:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** }
+ 168              		.loc 2 57 1
+ 169 0024 1846     		mov	r0, r3
+ 170 0026 0837     		adds	r7, r7, #8
+ 171              	.LCFI15:
+ 172              		.cfi_def_cfa_offset 8
+ 173 0028 BD46     		mov	sp, r7
+ 174              	.LCFI16:
+ 175              		.cfi_def_cfa_register 13
+ 176              		@ sp needed
+ 177 002a 80BD     		pop	{r7, pc}
+ 178              	.L8:
+ 179              		.align	2
+ 180              	.L7:
+ 181 002c 061C0002 		.word	33561606
+ 182              		.cfi_endproc
+ 183              	.LFE287:
+ 185              		.section	.text.LOS_EventPoll,"ax",%progbits
+ 186              		.align	1
+ 187              		.global	LOS_EventPoll
+ 188              		.syntax unified
+ 189              		.thumb
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 9
+
+
+ 190              		.thumb_func
+ 191              		.fpu fpv4-sp-d16
+ 193              	LOS_EventPoll:
+ 194              	.LFB288:
+  58:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+  59:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** LITE_OS_SEC_TEXT UINT32 LOS_EventPoll(UINT32 *uwEventID, UINT32 uwEventMask, UINT32 uwMode)
+  60:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** {
+ 195              		.loc 2 60 1
+ 196              		.cfi_startproc
+ 197              		@ args = 0, pretend = 0, frame = 24
+ 198              		@ frame_needed = 1, uses_anonymous_args = 0
+ 199 0000 80B5     		push	{r7, lr}
+ 200              	.LCFI17:
+ 201              		.cfi_def_cfa_offset 8
+ 202              		.cfi_offset 7, -8
+ 203              		.cfi_offset 14, -4
+ 204 0002 86B0     		sub	sp, sp, #24
+ 205              	.LCFI18:
+ 206              		.cfi_def_cfa_offset 32
+ 207 0004 00AF     		add	r7, sp, #0
+ 208              	.LCFI19:
+ 209              		.cfi_def_cfa_register 7
+ 210 0006 F860     		str	r0, [r7, #12]
+ 211 0008 B960     		str	r1, [r7, #8]
+ 212 000a 7A60     		str	r2, [r7, #4]
+  61:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****      UINT32     uwRet = 0;
+ 213              		.loc 2 61 17
+ 214 000c 0023     		movs	r3, #0
+ 215 000e 7B61     		str	r3, [r7, #20]
+  62:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****      UINTPTR    uvIntSave;
+  63:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+  64:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****      uvIntSave = LOS_IntLock();
+ 216              		.loc 2 64 18
+ 217 0010 FFF7FEFF 		bl	LOS_IntLock
+ 218 0014 3861     		str	r0, [r7, #16]
+  65:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****      if (uwMode & LOS_WAITMODE_OR)
+ 219              		.loc 2 65 17
+ 220 0016 7B68     		ldr	r3, [r7, #4]
+ 221 0018 03F00203 		and	r3, r3, #2
+ 222              		.loc 2 65 9
+ 223 001c 002B     		cmp	r3, #0
+ 224 001e 0BD0     		beq	.L10
+  66:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****      {
+  67:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****          if (0 != (*uwEventID & uwEventMask))
+ 225              		.loc 2 67 20
+ 226 0020 FB68     		ldr	r3, [r7, #12]
+ 227 0022 1A68     		ldr	r2, [r3]
+ 228              		.loc 2 67 31
+ 229 0024 BB68     		ldr	r3, [r7, #8]
+ 230 0026 1340     		ands	r3, r3, r2
+ 231              		.loc 2 67 13
+ 232 0028 002B     		cmp	r3, #0
+ 233 002a 14D0     		beq	.L11
+  68:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****          {
+  69:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****             uwRet = *uwEventID & uwEventMask;
+ 234              		.loc 2 69 21
+ 235 002c FB68     		ldr	r3, [r7, #12]
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 10
+
+
+ 236 002e 1B68     		ldr	r3, [r3]
+ 237              		.loc 2 69 19
+ 238 0030 BA68     		ldr	r2, [r7, #8]
+ 239 0032 1340     		ands	r3, r3, r2
+ 240 0034 7B61     		str	r3, [r7, #20]
+ 241 0036 0EE0     		b	.L11
+ 242              	.L10:
+  70:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****          }
+  71:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****      }
+  72:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****      else
+  73:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****      {
+  74:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****          if ((uwEventMask != 0) && (uwEventMask == (*uwEventID & uwEventMask)))
+ 243              		.loc 2 74 13
+ 244 0038 BB68     		ldr	r3, [r7, #8]
+ 245 003a 002B     		cmp	r3, #0
+ 246 003c 0BD0     		beq	.L11
+ 247              		.loc 2 74 53 discriminator 1
+ 248 003e FB68     		ldr	r3, [r7, #12]
+ 249 0040 1A68     		ldr	r2, [r3]
+ 250              		.loc 2 74 64 discriminator 1
+ 251 0042 BB68     		ldr	r3, [r7, #8]
+ 252 0044 1340     		ands	r3, r3, r2
+ 253              		.loc 2 74 33 discriminator 1
+ 254 0046 BA68     		ldr	r2, [r7, #8]
+ 255 0048 9A42     		cmp	r2, r3
+ 256 004a 04D1     		bne	.L11
+  75:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****          {
+  76:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****             uwRet = *uwEventID & uwEventMask;
+ 257              		.loc 2 76 21
+ 258 004c FB68     		ldr	r3, [r7, #12]
+ 259 004e 1B68     		ldr	r3, [r3]
+ 260              		.loc 2 76 19
+ 261 0050 BA68     		ldr	r2, [r7, #8]
+ 262 0052 1340     		ands	r3, r3, r2
+ 263 0054 7B61     		str	r3, [r7, #20]
+ 264              	.L11:
+  77:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****          }
+  78:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****      }
+  79:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+  80:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****      if (uwRet && (LOS_WAITMODE_CLR & uwMode))
+ 265              		.loc 2 80 9
+ 266 0056 7B69     		ldr	r3, [r7, #20]
+ 267 0058 002B     		cmp	r3, #0
+ 268 005a 0BD0     		beq	.L12
+ 269              		.loc 2 80 37 discriminator 1
+ 270 005c 7B68     		ldr	r3, [r7, #4]
+ 271 005e 03F00103 		and	r3, r3, #1
+ 272              		.loc 2 80 16 discriminator 1
+ 273 0062 002B     		cmp	r3, #0
+ 274 0064 06D0     		beq	.L12
+  81:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****      {
+  82:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         *uwEventID = *uwEventID & ~(uwRet);
+ 275              		.loc 2 82 22
+ 276 0066 FB68     		ldr	r3, [r7, #12]
+ 277 0068 1A68     		ldr	r2, [r3]
+ 278              		.loc 2 82 35
+ 279 006a 7B69     		ldr	r3, [r7, #20]
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 11
+
+
+ 280 006c DB43     		mvns	r3, r3
+ 281              		.loc 2 82 33
+ 282 006e 1A40     		ands	r2, r2, r3
+ 283              		.loc 2 82 20
+ 284 0070 FB68     		ldr	r3, [r7, #12]
+ 285 0072 1A60     		str	r2, [r3]
+ 286              	.L12:
+  83:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****      }
+  84:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+  85:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****      LOS_IntRestore(uvIntSave);
+ 287              		.loc 2 85 6
+ 288 0074 3869     		ldr	r0, [r7, #16]
+ 289 0076 FFF7FEFF 		bl	LOS_IntRestore
+  86:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****      return uwRet;
+ 290              		.loc 2 86 13
+ 291 007a 7B69     		ldr	r3, [r7, #20]
+  87:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** }
+ 292              		.loc 2 87 1
+ 293 007c 1846     		mov	r0, r3
+ 294 007e 1837     		adds	r7, r7, #24
+ 295              	.LCFI20:
+ 296              		.cfi_def_cfa_offset 8
+ 297 0080 BD46     		mov	sp, r7
+ 298              	.LCFI21:
+ 299              		.cfi_def_cfa_register 13
+ 300              		@ sp needed
+ 301 0082 80BD     		pop	{r7, pc}
+ 302              		.cfi_endproc
+ 303              	.LFE288:
+ 305              		.section	.text.LOS_EventRead,"ax",%progbits
+ 306              		.align	1
+ 307              		.global	LOS_EventRead
+ 308              		.syntax unified
+ 309              		.thumb
+ 310              		.thumb_func
+ 311              		.fpu fpv4-sp-d16
+ 313              	LOS_EventRead:
+ 314              	.LFB289:
+  88:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+  89:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** LITE_OS_SEC_TEXT UINT32 LOS_EventRead(PEVENT_CB_S pstEventCB, UINT32 uwEventMask, UINT32 uwMode, UI
+  90:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** {
+ 315              		.loc 2 90 1
+ 316              		.cfi_startproc
+ 317              		@ args = 0, pretend = 0, frame = 32
+ 318              		@ frame_needed = 1, uses_anonymous_args = 0
+ 319 0000 80B5     		push	{r7, lr}
+ 320              	.LCFI22:
+ 321              		.cfi_def_cfa_offset 8
+ 322              		.cfi_offset 7, -8
+ 323              		.cfi_offset 14, -4
+ 324 0002 88B0     		sub	sp, sp, #32
+ 325              	.LCFI23:
+ 326              		.cfi_def_cfa_offset 40
+ 327 0004 00AF     		add	r7, sp, #0
+ 328              	.LCFI24:
+ 329              		.cfi_def_cfa_register 7
+ 330 0006 F860     		str	r0, [r7, #12]
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 12
+
+
+ 331 0008 B960     		str	r1, [r7, #8]
+ 332 000a 7A60     		str	r2, [r7, #4]
+ 333 000c 3B60     		str	r3, [r7]
+  91:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     UINT32      uwRet = 0;
+ 334              		.loc 2 91 17
+ 335 000e 0023     		movs	r3, #0
+ 336 0010 FB61     		str	r3, [r7, #28]
+  92:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     UINTPTR     uvIntSave;
+  93:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     LOS_TASK_CB *pstRunTsk;
+  94:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+  95:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     if (pstEventCB == NULL)
+ 337              		.loc 2 95 8
+ 338 0012 FB68     		ldr	r3, [r7, #12]
+ 339 0014 002B     		cmp	r3, #0
+ 340 0016 01D1     		bne	.L15
+  96:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     {
+  97:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         return LOS_ERRNO_EVENT_PTR_NULL;
+ 341              		.loc 2 97 16
+ 342 0018 494B     		ldr	r3, .L30
+ 343 001a 8CE0     		b	.L16
+ 344              	.L15:
+  98:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     }
+  99:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 100:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     if ((pstEventCB->stEventList.pstNext == NULL) || (pstEventCB->stEventList.pstPrev == NULL))
+ 345              		.loc 2 100 33
+ 346 001c FB68     		ldr	r3, [r7, #12]
+ 347 001e 9B68     		ldr	r3, [r3, #8]
+ 348              		.loc 2 100 8
+ 349 0020 002B     		cmp	r3, #0
+ 350 0022 03D0     		beq	.L17
+ 351              		.loc 2 100 78 discriminator 1
+ 352 0024 FB68     		ldr	r3, [r7, #12]
+ 353 0026 5B68     		ldr	r3, [r3, #4]
+ 354              		.loc 2 100 51 discriminator 1
+ 355 0028 002B     		cmp	r3, #0
+ 356 002a 01D1     		bne	.L18
+ 357              	.L17:
+ 101:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     {
+ 102:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         return LOS_ERRNO_EVENT_NOT_INITIALIZED;
+ 358              		.loc 2 102 16
+ 359 002c 454B     		ldr	r3, .L30+4
+ 360 002e 82E0     		b	.L16
+ 361              	.L18:
+ 103:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     }
+ 104:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 105:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     if (uwEventMask == 0)
+ 362              		.loc 2 105 8
+ 363 0030 BB68     		ldr	r3, [r7, #8]
+ 364 0032 002B     		cmp	r3, #0
+ 365 0034 01D1     		bne	.L19
+ 106:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     {
+ 107:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         return LOS_ERRNO_EVENT_EVENTMASK_INVALID;
+ 366              		.loc 2 107 16
+ 367 0036 444B     		ldr	r3, .L30+8
+ 368 0038 7DE0     		b	.L16
+ 369              	.L19:
+ 108:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     }
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 13
+
+
+ 109:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 110:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     if (uwEventMask & LOS_ERRTYPE_ERROR)
+ 370              		.loc 2 110 21
+ 371 003a BB68     		ldr	r3, [r7, #8]
+ 372 003c 03F00073 		and	r3, r3, #33554432
+ 373              		.loc 2 110 8
+ 374 0040 002B     		cmp	r3, #0
+ 375 0042 01D0     		beq	.L20
+ 111:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     {
+ 112:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         return LOS_ERRNO_EVENT_SETBIT_INVALID;
+ 376              		.loc 2 112 16
+ 377 0044 414B     		ldr	r3, .L30+12
+ 378 0046 76E0     		b	.L16
+ 379              	.L20:
+ 113:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     }
+ 114:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 115:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     if (((uwMode & LOS_WAITMODE_OR) && (uwMode & LOS_WAITMODE_AND)) ||
+ 380              		.loc 2 115 18
+ 381 0048 7B68     		ldr	r3, [r7, #4]
+ 382 004a 03F00203 		and	r3, r3, #2
+ 383              		.loc 2 115 8
+ 384 004e 002B     		cmp	r3, #0
+ 385 0050 04D0     		beq	.L21
+ 386              		.loc 2 115 48 discriminator 1
+ 387 0052 7B68     		ldr	r3, [r7, #4]
+ 388 0054 03F00403 		and	r3, r3, #4
+ 389              		.loc 2 115 37 discriminator 1
+ 390 0058 002B     		cmp	r3, #0
+ 391 005a 09D1     		bne	.L22
+ 392              	.L21:
+ 116:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         uwMode & ~(LOS_WAITMODE_OR | LOS_WAITMODE_AND | LOS_WAITMODE_CLR) ||
+ 393              		.loc 2 116 16 discriminator 3
+ 394 005c 7B68     		ldr	r3, [r7, #4]
+ 395 005e 23F00703 		bic	r3, r3, #7
+ 115:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         uwMode & ~(LOS_WAITMODE_OR | LOS_WAITMODE_AND | LOS_WAITMODE_CLR) ||
+ 396              		.loc 2 115 69 discriminator 3
+ 397 0062 002B     		cmp	r3, #0
+ 398 0064 04D1     		bne	.L22
+ 117:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         !(uwMode & (LOS_WAITMODE_OR | LOS_WAITMODE_AND)))
+ 399              		.loc 2 117 18
+ 400 0066 7B68     		ldr	r3, [r7, #4]
+ 401 0068 03F00603 		and	r3, r3, #6
+ 116:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         uwMode & ~(LOS_WAITMODE_OR | LOS_WAITMODE_AND | LOS_WAITMODE_CLR) ||
+ 402              		.loc 2 116 75
+ 403 006c 002B     		cmp	r3, #0
+ 404 006e 01D1     		bne	.L23
+ 405              	.L22:
+ 118:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     {
+ 119:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         return LOS_ERRNO_EVENT_FLAGS_INVALID;
+ 406              		.loc 2 119 16
+ 407 0070 374B     		ldr	r3, .L30+16
+ 408 0072 60E0     		b	.L16
+ 409              	.L23:
+ 120:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     }
+ 121:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 122:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     if (OS_INT_ACTIVE)
+ 410              		.loc 2 122 9
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 14
+
+
+ 411 0074 FFF7FEFF 		bl	osIntNumGet
+ 412 0078 0346     		mov	r3, r0
+ 413              		.loc 2 122 8
+ 414 007a 002B     		cmp	r3, #0
+ 415 007c 01D0     		beq	.L24
+ 123:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     {
+ 124:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         return LOS_ERRNO_EVENT_READ_IN_INTERRUPT;
+ 416              		.loc 2 124 16
+ 417 007e 354B     		ldr	r3, .L30+20
+ 418 0080 59E0     		b	.L16
+ 419              	.L24:
+ 125:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     }
+ 126:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 127:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     uvIntSave = LOS_IntLock();
+ 420              		.loc 2 127 17
+ 421 0082 FFF7FEFF 		bl	LOS_IntLock
+ 422 0086 B861     		str	r0, [r7, #24]
+ 128:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     uwRet = LOS_EventPoll(&(pstEventCB->uwEventID), uwEventMask, uwMode);
+ 423              		.loc 2 128 13
+ 424 0088 FB68     		ldr	r3, [r7, #12]
+ 425 008a 7A68     		ldr	r2, [r7, #4]
+ 426 008c B968     		ldr	r1, [r7, #8]
+ 427 008e 1846     		mov	r0, r3
+ 428 0090 FFF7FEFF 		bl	LOS_EventPoll
+ 429 0094 F861     		str	r0, [r7, #28]
+ 129:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 130:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     if (uwRet == 0)
+ 430              		.loc 2 130 8
+ 431 0096 FB69     		ldr	r3, [r7, #28]
+ 432 0098 002B     		cmp	r3, #0
+ 433 009a 48D1     		bne	.L25
+ 131:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     {
+ 132:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         if (uwTimeOut == 0)
+ 434              		.loc 2 132 12
+ 435 009c 3B68     		ldr	r3, [r7]
+ 436 009e 002B     		cmp	r3, #0
+ 437 00a0 04D1     		bne	.L26
+ 133:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         {
+ 134:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****             (VOID)LOS_IntRestore(uvIntSave);
+ 438              		.loc 2 134 13
+ 439 00a2 B869     		ldr	r0, [r7, #24]
+ 440 00a4 FFF7FEFF 		bl	LOS_IntRestore
+ 135:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****             return uwRet;
+ 441              		.loc 2 135 20
+ 442 00a8 FB69     		ldr	r3, [r7, #28]
+ 443 00aa 44E0     		b	.L16
+ 444              	.L26:
+ 136:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         }
+ 137:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 138:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         if (g_usLosTaskLock)
+ 445              		.loc 2 138 13
+ 446 00ac 2A4B     		ldr	r3, .L30+24
+ 447 00ae 1B88     		ldrh	r3, [r3]
+ 448              		.loc 2 138 12
+ 449 00b0 002B     		cmp	r3, #0
+ 450 00b2 04D0     		beq	.L27
+ 139:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         {
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 15
+
+
+ 140:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****             (VOID)LOS_IntRestore(uvIntSave);
+ 451              		.loc 2 140 13
+ 452 00b4 B869     		ldr	r0, [r7, #24]
+ 453 00b6 FFF7FEFF 		bl	LOS_IntRestore
+ 141:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****             return LOS_ERRNO_EVENT_READ_IN_LOCK;
+ 454              		.loc 2 141 20
+ 455 00ba 284B     		ldr	r3, .L30+28
+ 456 00bc 3BE0     		b	.L16
+ 457              	.L27:
+ 142:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         }
+ 143:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 144:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         pstRunTsk = g_stLosTask.pstRunTask;
+ 458              		.loc 2 144 19
+ 459 00be 284B     		ldr	r3, .L30+32
+ 460 00c0 1B68     		ldr	r3, [r3]
+ 461 00c2 7B61     		str	r3, [r7, #20]
+ 145:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         pstRunTsk->uwEventMask = uwEventMask;
+ 462              		.loc 2 145 32
+ 463 00c4 7B69     		ldr	r3, [r7, #20]
+ 464 00c6 BA68     		ldr	r2, [r7, #8]
+ 465 00c8 9A64     		str	r2, [r3, #72]
+ 146:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         pstRunTsk->uwEventMode = uwMode;
+ 466              		.loc 2 146 32
+ 467 00ca 7B69     		ldr	r3, [r7, #20]
+ 468 00cc 7A68     		ldr	r2, [r7, #4]
+ 469 00ce DA64     		str	r2, [r3, #76]
+ 147:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         osTaskWait(&pstEventCB->stEventList, OS_TASK_STATUS_PEND, uwTimeOut);
+ 470              		.loc 2 147 9
+ 471 00d0 FB68     		ldr	r3, [r7, #12]
+ 472 00d2 0433     		adds	r3, r3, #4
+ 473 00d4 3A68     		ldr	r2, [r7]
+ 474 00d6 0821     		movs	r1, #8
+ 475 00d8 1846     		mov	r0, r3
+ 476 00da FFF7FEFF 		bl	osTaskWait
+ 148:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         (VOID)LOS_IntRestore(uvIntSave);
+ 477              		.loc 2 148 9
+ 478 00de B869     		ldr	r0, [r7, #24]
+ 479 00e0 FFF7FEFF 		bl	LOS_IntRestore
+ 149:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         LOS_Schedule();
+ 480              		.loc 2 149 9
+ 481 00e4 FFF7FEFF 		bl	LOS_Schedule
+ 150:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 151:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         if (pstRunTsk->usTaskStatus & OS_TASK_STATUS_TIMEOUT)
+ 482              		.loc 2 151 22
+ 483 00e8 7B69     		ldr	r3, [r7, #20]
+ 484 00ea 9B88     		ldrh	r3, [r3, #4]
+ 485              		.loc 2 151 37
+ 486 00ec 03F04003 		and	r3, r3, #64
+ 487              		.loc 2 151 12
+ 488 00f0 002B     		cmp	r3, #0
+ 489 00f2 0ED0     		beq	.L28
+ 152:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         {
+ 153:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****             uvIntSave = LOS_IntLock();
+ 490              		.loc 2 153 25
+ 491 00f4 FFF7FEFF 		bl	LOS_IntLock
+ 492 00f8 B861     		str	r0, [r7, #24]
+ 154:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****             pstRunTsk->usTaskStatus &= (~OS_TASK_STATUS_TIMEOUT);
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 16
+
+
+ 493              		.loc 2 154 37
+ 494 00fa 7B69     		ldr	r3, [r7, #20]
+ 495 00fc 9B88     		ldrh	r3, [r3, #4]
+ 496 00fe 23F04003 		bic	r3, r3, #64
+ 497 0102 9AB2     		uxth	r2, r3
+ 498 0104 7B69     		ldr	r3, [r7, #20]
+ 499 0106 9A80     		strh	r2, [r3, #4]	@ movhi
+ 155:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****             (VOID)LOS_IntRestore(uvIntSave);
+ 500              		.loc 2 155 13
+ 501 0108 B869     		ldr	r0, [r7, #24]
+ 502 010a FFF7FEFF 		bl	LOS_IntRestore
+ 156:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****             return LOS_ERRNO_EVENT_READ_TIMEOUT;
+ 503              		.loc 2 156 20
+ 504 010e 154B     		ldr	r3, .L30+36
+ 505 0110 11E0     		b	.L16
+ 506              	.L28:
+ 157:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         }
+ 158:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 159:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         uvIntSave = LOS_IntLock();
+ 507              		.loc 2 159 21
+ 508 0112 FFF7FEFF 		bl	LOS_IntLock
+ 509 0116 B861     		str	r0, [r7, #24]
+ 160:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         uwRet = LOS_EventPoll(&pstEventCB->uwEventID,uwEventMask,uwMode);
+ 510              		.loc 2 160 17
+ 511 0118 FB68     		ldr	r3, [r7, #12]
+ 512 011a 7A68     		ldr	r2, [r7, #4]
+ 513 011c B968     		ldr	r1, [r7, #8]
+ 514 011e 1846     		mov	r0, r3
+ 515 0120 FFF7FEFF 		bl	LOS_EventPoll
+ 516 0124 F861     		str	r0, [r7, #28]
+ 161:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         (VOID)LOS_IntRestore(uvIntSave);
+ 517              		.loc 2 161 9
+ 518 0126 B869     		ldr	r0, [r7, #24]
+ 519 0128 FFF7FEFF 		bl	LOS_IntRestore
+ 520 012c 02E0     		b	.L29
+ 521              	.L25:
+ 162:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     }
+ 163:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     else
+ 164:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     {
+ 165:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         (VOID)LOS_IntRestore(uvIntSave);
+ 522              		.loc 2 165 9
+ 523 012e B869     		ldr	r0, [r7, #24]
+ 524 0130 FFF7FEFF 		bl	LOS_IntRestore
+ 525              	.L29:
+ 166:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     }
+ 167:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 168:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     return uwRet;
+ 526              		.loc 2 168 12
+ 527 0134 FB69     		ldr	r3, [r7, #28]
+ 528              	.L16:
+ 169:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** }
+ 529              		.loc 2 169 1
+ 530 0136 1846     		mov	r0, r3
+ 531 0138 2037     		adds	r7, r7, #32
+ 532              	.LCFI25:
+ 533              		.cfi_def_cfa_offset 8
+ 534 013a BD46     		mov	sp, r7
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 17
+
+
+ 535              	.LCFI26:
+ 536              		.cfi_def_cfa_register 13
+ 537              		@ sp needed
+ 538 013c 80BD     		pop	{r7, pc}
+ 539              	.L31:
+ 540 013e 00BF     		.align	2
+ 541              	.L30:
+ 542 0140 061C0002 		.word	33561606
+ 543 0144 071C0002 		.word	33561607
+ 544 0148 021C0002 		.word	33561602
+ 545 014c 001C0002 		.word	33561600
+ 546 0150 041C0002 		.word	33561604
+ 547 0154 031C0002 		.word	33561603
+ 548 0158 00000000 		.word	g_usLosTaskLock
+ 549 015c 051C0002 		.word	33561605
+ 550 0160 00000000 		.word	g_stLosTask
+ 551 0164 011C0002 		.word	33561601
+ 552              		.cfi_endproc
+ 553              	.LFE289:
+ 555              		.section	.text.LOS_EventWrite,"ax",%progbits
+ 556              		.align	1
+ 557              		.global	LOS_EventWrite
+ 558              		.syntax unified
+ 559              		.thumb
+ 560              		.thumb_func
+ 561              		.fpu fpv4-sp-d16
+ 563              	LOS_EventWrite:
+ 564              	.LFB290:
+ 170:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 171:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** LITE_OS_SEC_TEXT UINT32 LOS_EventWrite(PEVENT_CB_S pstEventCB, UINT32 uwEvents)
+ 172:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** {
+ 565              		.loc 2 172 1
+ 566              		.cfi_startproc
+ 567              		@ args = 0, pretend = 0, frame = 24
+ 568              		@ frame_needed = 1, uses_anonymous_args = 0
+ 569 0000 80B5     		push	{r7, lr}
+ 570              	.LCFI27:
+ 571              		.cfi_def_cfa_offset 8
+ 572              		.cfi_offset 7, -8
+ 573              		.cfi_offset 14, -4
+ 574 0002 86B0     		sub	sp, sp, #24
+ 575              	.LCFI28:
+ 576              		.cfi_def_cfa_offset 32
+ 577 0004 00AF     		add	r7, sp, #0
+ 578              	.LCFI29:
+ 579              		.cfi_def_cfa_register 7
+ 580 0006 7860     		str	r0, [r7, #4]
+ 581 0008 3960     		str	r1, [r7]
+ 173:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     LOS_TASK_CB *pstResumedTask;
+ 174:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     LOS_TASK_CB *pstNextTask = (LOS_TASK_CB *)NULL;
+ 582              		.loc 2 174 18
+ 583 000a 0023     		movs	r3, #0
+ 584 000c FB60     		str	r3, [r7, #12]
+ 175:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     UINTPTR     uvIntSave;
+ 176:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     UINT8       ucExitFlag = 0;
+ 585              		.loc 2 176 17
+ 586 000e 0023     		movs	r3, #0
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 18
+
+
+ 587 0010 FB74     		strb	r3, [r7, #19]
+ 177:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 178:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     if (pstEventCB == NULL)
+ 588              		.loc 2 178 8
+ 589 0012 7B68     		ldr	r3, [r7, #4]
+ 590 0014 002B     		cmp	r3, #0
+ 591 0016 01D1     		bne	.L33
+ 179:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     {
+ 180:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         return LOS_ERRNO_EVENT_PTR_NULL;
+ 592              		.loc 2 180 16
+ 593 0018 344B     		ldr	r3, .L44
+ 594 001a 62E0     		b	.L34
+ 595              	.L33:
+ 181:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     }
+ 182:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 183:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     if ((pstEventCB->stEventList.pstNext == NULL) || (pstEventCB->stEventList.pstPrev == NULL))
+ 596              		.loc 2 183 33
+ 597 001c 7B68     		ldr	r3, [r7, #4]
+ 598 001e 9B68     		ldr	r3, [r3, #8]
+ 599              		.loc 2 183 8
+ 600 0020 002B     		cmp	r3, #0
+ 601 0022 03D0     		beq	.L35
+ 602              		.loc 2 183 78 discriminator 1
+ 603 0024 7B68     		ldr	r3, [r7, #4]
+ 604 0026 5B68     		ldr	r3, [r3, #4]
+ 605              		.loc 2 183 51 discriminator 1
+ 606 0028 002B     		cmp	r3, #0
+ 607 002a 01D1     		bne	.L36
+ 608              	.L35:
+ 184:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     {
+ 185:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         return LOS_ERRNO_EVENT_NOT_INITIALIZED;
+ 609              		.loc 2 185 16
+ 610 002c 304B     		ldr	r3, .L44+4
+ 611 002e 58E0     		b	.L34
+ 612              	.L36:
+ 186:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     }
+ 187:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 188:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     if (uwEvents & LOS_ERRTYPE_ERROR)
+ 613              		.loc 2 188 18
+ 614 0030 3B68     		ldr	r3, [r7]
+ 615 0032 03F00073 		and	r3, r3, #33554432
+ 616              		.loc 2 188 8
+ 617 0036 002B     		cmp	r3, #0
+ 618 0038 01D0     		beq	.L37
+ 189:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     {
+ 190:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         return LOS_ERRNO_EVENT_SETBIT_INVALID;
+ 619              		.loc 2 190 16
+ 620 003a 2E4B     		ldr	r3, .L44+8
+ 621 003c 51E0     		b	.L34
+ 622              	.L37:
+ 191:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     }
+ 192:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 193:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     uvIntSave = LOS_IntLock();
+ 623              		.loc 2 193 17
+ 624 003e FFF7FEFF 		bl	LOS_IntLock
+ 625 0042 B860     		str	r0, [r7, #8]
+ 194:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 19
+
+
+ 195:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     pstEventCB->uwEventID |= uwEvents;
+ 626              		.loc 2 195 27
+ 627 0044 7B68     		ldr	r3, [r7, #4]
+ 628 0046 1A68     		ldr	r2, [r3]
+ 629 0048 3B68     		ldr	r3, [r7]
+ 630 004a 1A43     		orrs	r2, r2, r3
+ 631 004c 7B68     		ldr	r3, [r7, #4]
+ 632 004e 1A60     		str	r2, [r3]
+ 196:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     if (!LOS_ListEmpty(&pstEventCB->stEventList))
+ 633              		.loc 2 196 10
+ 634 0050 7B68     		ldr	r3, [r7, #4]
+ 635 0052 0433     		adds	r3, r3, #4
+ 636 0054 1846     		mov	r0, r3
+ 637 0056 FFF7FEFF 		bl	LOS_ListEmpty
+ 638 005a 0346     		mov	r3, r0
+ 639              		.loc 2 196 8
+ 640 005c 002B     		cmp	r3, #0
+ 641 005e 3CD1     		bne	.L38
+ 197:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     {
+ 198:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         for (pstResumedTask = LOS_DL_LIST_ENTRY((&pstEventCB->stEventList)->pstNext, LOS_TASK_CB, s
+ 642              		.loc 2 198 31
+ 643 0060 7B68     		ldr	r3, [r7, #4]
+ 644 0062 9B68     		ldr	r3, [r3, #8]
+ 645              		.loc 2 198 29
+ 646 0064 283B     		subs	r3, r3, #40
+ 647 0066 7B61     		str	r3, [r7, #20]
+ 648              		.loc 2 198 9
+ 649 0068 26E0     		b	.L39
+ 650              	.L43:
+ 199:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****             &pstResumedTask->stPendList != (&pstEventCB->stEventList);)
+ 200:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         {
+ 201:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****             pstNextTask = LOS_DL_LIST_ENTRY(pstResumedTask->stPendList.pstNext, LOS_TASK_CB, stPend
+ 651              		.loc 2 201 27
+ 652 006a 7B69     		ldr	r3, [r7, #20]
+ 653 006c DB6A     		ldr	r3, [r3, #44]
+ 654              		.loc 2 201 25
+ 655 006e 283B     		subs	r3, r3, #40
+ 656 0070 FB60     		str	r3, [r7, #12]
+ 202:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 203:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****             if (((pstResumedTask->uwEventMode & LOS_WAITMODE_OR) && (pstResumedTask->uwEventMask & 
+ 657              		.loc 2 203 33
+ 658 0072 7B69     		ldr	r3, [r7, #20]
+ 659 0074 DB6C     		ldr	r3, [r3, #76]
+ 660              		.loc 2 203 47
+ 661 0076 03F00203 		and	r3, r3, #2
+ 662              		.loc 2 203 16
+ 663 007a 002B     		cmp	r3, #0
+ 664 007c 05D0     		beq	.L40
+ 665              		.loc 2 203 84 discriminator 1
+ 666 007e 7B69     		ldr	r3, [r7, #20]
+ 667 0080 9A6C     		ldr	r2, [r3, #72]
+ 668              		.loc 2 203 98 discriminator 1
+ 669 0082 3B68     		ldr	r3, [r7]
+ 670 0084 1340     		ands	r3, r3, r2
+ 671              		.loc 2 203 66 discriminator 1
+ 672 0086 002B     		cmp	r3, #0
+ 673 0088 0ED1     		bne	.L41
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 20
+
+
+ 674              	.L40:
+ 204:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****                 ((pstResumedTask->uwEventMode & LOS_WAITMODE_AND) && (pstResumedTask->uwEventMask &
+ 675              		.loc 2 204 33 discriminator 3
+ 676 008a 7B69     		ldr	r3, [r7, #20]
+ 677 008c DB6C     		ldr	r3, [r3, #76]
+ 678              		.loc 2 204 47 discriminator 3
+ 679 008e 03F00403 		and	r3, r3, #4
+ 203:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****                 ((pstResumedTask->uwEventMode & LOS_WAITMODE_AND) && (pstResumedTask->uwEventMask &
+ 680              		.loc 2 203 116 discriminator 3
+ 681 0092 002B     		cmp	r3, #0
+ 682 0094 0ED0     		beq	.L42
+ 683              		.loc 2 204 85
+ 684 0096 7B69     		ldr	r3, [r7, #20]
+ 685 0098 9A6C     		ldr	r2, [r3, #72]
+ 686              		.loc 2 204 111
+ 687 009a 7B68     		ldr	r3, [r7, #4]
+ 688 009c 1B68     		ldr	r3, [r3]
+ 689              		.loc 2 204 99
+ 690 009e 1A40     		ands	r2, r2, r3
+ 691              		.loc 2 204 141
+ 692 00a0 7B69     		ldr	r3, [r7, #20]
+ 693 00a2 9B6C     		ldr	r3, [r3, #72]
+ 694              		.loc 2 204 67
+ 695 00a4 9A42     		cmp	r2, r3
+ 696 00a6 05D1     		bne	.L42
+ 697              	.L41:
+ 205:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****             {
+ 206:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****                 ucExitFlag = 1;
+ 698              		.loc 2 206 28
+ 699 00a8 0123     		movs	r3, #1
+ 700 00aa FB74     		strb	r3, [r7, #19]
+ 207:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 208:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****                 osTaskWake(pstResumedTask, OS_TASK_STATUS_PEND);
+ 701              		.loc 2 208 17
+ 702 00ac 0821     		movs	r1, #8
+ 703 00ae 7869     		ldr	r0, [r7, #20]
+ 704 00b0 FFF7FEFF 		bl	osTaskWake
+ 705              	.L42:
+ 209:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****             }
+ 210:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****             pstResumedTask = pstNextTask;
+ 706              		.loc 2 210 28
+ 707 00b4 FB68     		ldr	r3, [r7, #12]
+ 708 00b6 7B61     		str	r3, [r7, #20]
+ 709              	.L39:
+ 199:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         {
+ 710              		.loc 2 199 13 discriminator 1
+ 711 00b8 7B69     		ldr	r3, [r7, #20]
+ 712 00ba 03F12802 		add	r2, r3, #40
+ 199:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         {
+ 713              		.loc 2 199 45 discriminator 1
+ 714 00be 7B68     		ldr	r3, [r7, #4]
+ 715 00c0 0433     		adds	r3, r3, #4
+ 198:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****             &pstResumedTask->stPendList != (&pstEventCB->stEventList);)
+ 716              		.loc 2 198 9 discriminator 1
+ 717 00c2 9A42     		cmp	r2, r3
+ 718 00c4 D1D1     		bne	.L43
+ 211:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         }
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 21
+
+
+ 212:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 213:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         if (ucExitFlag == 1)
+ 719              		.loc 2 213 12
+ 720 00c6 FB7C     		ldrb	r3, [r7, #19]	@ zero_extendqisi2
+ 721 00c8 012B     		cmp	r3, #1
+ 722 00ca 06D1     		bne	.L38
+ 214:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         {
+ 215:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****             (VOID)LOS_IntRestore(uvIntSave);
+ 723              		.loc 2 215 13
+ 724 00cc B868     		ldr	r0, [r7, #8]
+ 725 00ce FFF7FEFF 		bl	LOS_IntRestore
+ 216:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****             LOS_Schedule();
+ 726              		.loc 2 216 13
+ 727 00d2 FFF7FEFF 		bl	LOS_Schedule
+ 217:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****             return LOS_OK;
+ 728              		.loc 2 217 20
+ 729 00d6 0023     		movs	r3, #0
+ 730 00d8 03E0     		b	.L34
+ 731              	.L38:
+ 218:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         }
+ 219:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     }
+ 220:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 221:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     (VOID)LOS_IntRestore(uvIntSave);
+ 732              		.loc 2 221 5
+ 733 00da B868     		ldr	r0, [r7, #8]
+ 734 00dc FFF7FEFF 		bl	LOS_IntRestore
+ 222:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     return LOS_OK;
+ 735              		.loc 2 222 12
+ 736 00e0 0023     		movs	r3, #0
+ 737              	.L34:
+ 223:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** }
+ 738              		.loc 2 223 1
+ 739 00e2 1846     		mov	r0, r3
+ 740 00e4 1837     		adds	r7, r7, #24
+ 741              	.LCFI30:
+ 742              		.cfi_def_cfa_offset 8
+ 743 00e6 BD46     		mov	sp, r7
+ 744              	.LCFI31:
+ 745              		.cfi_def_cfa_register 13
+ 746              		@ sp needed
+ 747 00e8 80BD     		pop	{r7, pc}
+ 748              	.L45:
+ 749 00ea 00BF     		.align	2
+ 750              	.L44:
+ 751 00ec 061C0002 		.word	33561606
+ 752 00f0 071C0002 		.word	33561607
+ 753 00f4 001C0002 		.word	33561600
+ 754              		.cfi_endproc
+ 755              	.LFE290:
+ 757              		.section	.text.LOS_EventDestroy,"ax",%progbits
+ 758              		.align	1
+ 759              		.global	LOS_EventDestroy
+ 760              		.syntax unified
+ 761              		.thumb
+ 762              		.thumb_func
+ 763              		.fpu fpv4-sp-d16
+ 765              	LOS_EventDestroy:
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 22
+
+
+ 766              	.LFB291:
+ 224:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 225:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** LITE_OS_SEC_TEXT_INIT UINT32 LOS_EventDestroy(PEVENT_CB_S pstEventCB)
+ 226:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** {
+ 767              		.loc 2 226 1
+ 768              		.cfi_startproc
+ 769              		@ args = 0, pretend = 0, frame = 16
+ 770              		@ frame_needed = 1, uses_anonymous_args = 0
+ 771 0000 80B5     		push	{r7, lr}
+ 772              	.LCFI32:
+ 773              		.cfi_def_cfa_offset 8
+ 774              		.cfi_offset 7, -8
+ 775              		.cfi_offset 14, -4
+ 776 0002 84B0     		sub	sp, sp, #16
+ 777              	.LCFI33:
+ 778              		.cfi_def_cfa_offset 24
+ 779 0004 00AF     		add	r7, sp, #0
+ 780              	.LCFI34:
+ 781              		.cfi_def_cfa_register 7
+ 782 0006 7860     		str	r0, [r7, #4]
+ 227:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     UINTPTR uvIntSave;
+ 228:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 229:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     if (pstEventCB == NULL)
+ 783              		.loc 2 229 8
+ 784 0008 7B68     		ldr	r3, [r7, #4]
+ 785 000a 002B     		cmp	r3, #0
+ 786 000c 01D1     		bne	.L47
+ 230:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     {
+ 231:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         return LOS_ERRNO_EVENT_PTR_NULL;
+ 787              		.loc 2 231 16
+ 788 000e 104B     		ldr	r3, .L50
+ 789 0010 19E0     		b	.L48
+ 790              	.L47:
+ 232:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     }
+ 233:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 234:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     uvIntSave = LOS_IntLock();
+ 791              		.loc 2 234 17
+ 792 0012 FFF7FEFF 		bl	LOS_IntLock
+ 793 0016 F860     		str	r0, [r7, #12]
+ 235:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 236:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     if (!LOS_ListEmpty(&pstEventCB->stEventList))
+ 794              		.loc 2 236 10
+ 795 0018 7B68     		ldr	r3, [r7, #4]
+ 796 001a 0433     		adds	r3, r3, #4
+ 797 001c 1846     		mov	r0, r3
+ 798 001e FFF7FEFF 		bl	LOS_ListEmpty
+ 799 0022 0346     		mov	r3, r0
+ 800              		.loc 2 236 8
+ 801 0024 002B     		cmp	r3, #0
+ 802 0026 04D1     		bne	.L49
+ 237:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     {
+ 238:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         (VOID)LOS_IntRestore(uvIntSave);
+ 803              		.loc 2 238 9
+ 804 0028 F868     		ldr	r0, [r7, #12]
+ 805 002a FFF7FEFF 		bl	LOS_IntRestore
+ 239:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         return LOS_ERRNO_EVENT_SHOULD_NOT_DESTROY;
+ 806              		.loc 2 239 16
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 23
+
+
+ 807 002e 094B     		ldr	r3, .L50+4
+ 808 0030 09E0     		b	.L48
+ 809              	.L49:
+ 240:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     }
+ 241:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 242:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     pstEventCB->stEventList.pstNext = (LOS_DL_LIST *)NULL;
+ 810              		.loc 2 242 37
+ 811 0032 7B68     		ldr	r3, [r7, #4]
+ 812 0034 0022     		movs	r2, #0
+ 813 0036 9A60     		str	r2, [r3, #8]
+ 243:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     pstEventCB->stEventList.pstPrev = (LOS_DL_LIST *)NULL;
+ 814              		.loc 2 243 37
+ 815 0038 7B68     		ldr	r3, [r7, #4]
+ 816 003a 0022     		movs	r2, #0
+ 817 003c 5A60     		str	r2, [r3, #4]
+ 244:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 245:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     (VOID)LOS_IntRestore(uvIntSave);
+ 818              		.loc 2 245 5
+ 819 003e F868     		ldr	r0, [r7, #12]
+ 820 0040 FFF7FEFF 		bl	LOS_IntRestore
+ 246:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 247:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     return LOS_OK;
+ 821              		.loc 2 247 12
+ 822 0044 0023     		movs	r3, #0
+ 823              	.L48:
+ 248:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** }
+ 824              		.loc 2 248 1
+ 825 0046 1846     		mov	r0, r3
+ 826 0048 1037     		adds	r7, r7, #16
+ 827              	.LCFI35:
+ 828              		.cfi_def_cfa_offset 8
+ 829 004a BD46     		mov	sp, r7
+ 830              	.LCFI36:
+ 831              		.cfi_def_cfa_register 13
+ 832              		@ sp needed
+ 833 004c 80BD     		pop	{r7, pc}
+ 834              	.L51:
+ 835 004e 00BF     		.align	2
+ 836              	.L50:
+ 837 0050 061C0002 		.word	33561606
+ 838 0054 081C0002 		.word	33561608
+ 839              		.cfi_endproc
+ 840              	.LFE291:
+ 842              		.section	.text.LOS_EventClear,"ax",%progbits
+ 843              		.align	1
+ 844              		.global	LOS_EventClear
+ 845              		.syntax unified
+ 846              		.thumb
+ 847              		.thumb_func
+ 848              		.fpu fpv4-sp-d16
+ 850              	LOS_EventClear:
+ 851              	.LFB292:
+ 249:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 250:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** LITE_OS_SEC_TEXT_MINOR UINT32 LOS_EventClear(PEVENT_CB_S pstEventCB, UINT32 uwEvents)
+ 251:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** {
+ 852              		.loc 2 251 1
+ 853              		.cfi_startproc
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 24
+
+
+ 854              		@ args = 0, pretend = 0, frame = 16
+ 855              		@ frame_needed = 1, uses_anonymous_args = 0
+ 856 0000 80B5     		push	{r7, lr}
+ 857              	.LCFI37:
+ 858              		.cfi_def_cfa_offset 8
+ 859              		.cfi_offset 7, -8
+ 860              		.cfi_offset 14, -4
+ 861 0002 84B0     		sub	sp, sp, #16
+ 862              	.LCFI38:
+ 863              		.cfi_def_cfa_offset 24
+ 864 0004 00AF     		add	r7, sp, #0
+ 865              	.LCFI39:
+ 866              		.cfi_def_cfa_register 7
+ 867 0006 7860     		str	r0, [r7, #4]
+ 868 0008 3960     		str	r1, [r7]
+ 252:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     UINTPTR uvIntSave;
+ 253:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 254:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     if (pstEventCB == NULL)
+ 869              		.loc 2 254 8
+ 870 000a 7B68     		ldr	r3, [r7, #4]
+ 871 000c 002B     		cmp	r3, #0
+ 872 000e 01D1     		bne	.L53
+ 255:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     {
+ 256:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****         return LOS_ERRNO_EVENT_PTR_NULL;
+ 873              		.loc 2 256 16
+ 874 0010 094B     		ldr	r3, .L55
+ 875 0012 0CE0     		b	.L54
+ 876              	.L53:
+ 257:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     }
+ 258:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     uvIntSave = LOS_IntLock();
+ 877              		.loc 2 258 17
+ 878 0014 FFF7FEFF 		bl	LOS_IntLock
+ 879 0018 F860     		str	r0, [r7, #12]
+ 259:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     pstEventCB->uwEventID &= uwEvents;
+ 880              		.loc 2 259 27
+ 881 001a 7B68     		ldr	r3, [r7, #4]
+ 882 001c 1A68     		ldr	r2, [r3]
+ 883 001e 3B68     		ldr	r3, [r7]
+ 884 0020 1A40     		ands	r2, r2, r3
+ 885 0022 7B68     		ldr	r3, [r7, #4]
+ 886 0024 1A60     		str	r2, [r3]
+ 260:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     (VOID)LOS_IntRestore(uvIntSave);
+ 887              		.loc 2 260 5
+ 888 0026 F868     		ldr	r0, [r7, #12]
+ 889 0028 FFF7FEFF 		bl	LOS_IntRestore
+ 261:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** 
+ 262:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c ****     return LOS_OK;
+ 890              		.loc 2 262 12
+ 891 002c 0023     		movs	r3, #0
+ 892              	.L54:
+ 263:d:/LiteOS_Lab/iot_link/os/liteos/base/ipc\los_event.c **** }
+ 893              		.loc 2 263 1
+ 894 002e 1846     		mov	r0, r3
+ 895 0030 1037     		adds	r7, r7, #16
+ 896              	.LCFI40:
+ 897              		.cfi_def_cfa_offset 8
+ 898 0032 BD46     		mov	sp, r7
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 25
+
+
+ 899              	.LCFI41:
+ 900              		.cfi_def_cfa_register 13
+ 901              		@ sp needed
+ 902 0034 80BD     		pop	{r7, pc}
+ 903              	.L56:
+ 904 0036 00BF     		.align	2
+ 905              	.L55:
+ 906 0038 061C0002 		.word	33561606
+ 907              		.cfi_endproc
+ 908              	.LFE292:
+ 910              		.text
+ 911              	.Letext0:
+ 912              		.file 3 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 913              		.file 4 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 914              		.file 5 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 915              		.file 6 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\lib\\gcc\\arm-none
+ 916              		.file 7 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 917              		.file 8 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_typedef.h"
+ 918              		.file 9 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 919              		.file 10 "d:/LiteOS_Lab/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 920              		.file 11 "d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Inc/system_stm32l4xx.h"
+ 921              		.file 12 "d:/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 922              		.file 13 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_event.h"
+ 923              		.file 14 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_config.h"
+ 924              		.file 15 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_err.h"
+ 925              		.file 16 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_tick.h"
+ 926              		.file 17 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_task.h"
+ 927              		.file 18 "d:/LiteOS_Lab/iot_link/os/liteos/base/include/los_task.ph"
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s 			page 26
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 los_event.c
+C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s:18     .text.LOS_ListInit:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s:25     .text.LOS_ListInit:00000000 LOS_ListInit
+C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s:70     .text.LOS_ListEmpty:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s:76     .text.LOS_ListEmpty:00000000 LOS_ListEmpty
+C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s:122    .text.LOS_EventInit:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s:129    .text.LOS_EventInit:00000000 LOS_EventInit
+C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s:181    .text.LOS_EventInit:0000002c $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s:186    .text.LOS_EventPoll:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s:193    .text.LOS_EventPoll:00000000 LOS_EventPoll
+C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s:306    .text.LOS_EventRead:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s:313    .text.LOS_EventRead:00000000 LOS_EventRead
+C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s:542    .text.LOS_EventRead:00000140 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s:556    .text.LOS_EventWrite:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s:563    .text.LOS_EventWrite:00000000 LOS_EventWrite
+C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s:751    .text.LOS_EventWrite:000000ec $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s:758    .text.LOS_EventDestroy:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s:765    .text.LOS_EventDestroy:00000000 LOS_EventDestroy
+C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s:837    .text.LOS_EventDestroy:00000050 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s:843    .text.LOS_EventClear:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s:850    .text.LOS_EventClear:00000000 LOS_EventClear
+C:\Users\ADMINI~1\AppData\Local\Temp\ccv1yy8q.s:906    .text.LOS_EventClear:00000038 $d
+
+UNDEFINED SYMBOLS
+LOS_IntLock
+LOS_IntRestore
+osIntNumGet
+osTaskWait
+LOS_Schedule
+g_usLosTaskLock
+g_stLosTask
+osTaskWake

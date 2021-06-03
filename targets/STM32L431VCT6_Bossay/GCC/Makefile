@@ -69,6 +69,7 @@ CFLAGS =
 include ../.config
 include $(SDK_DIR)/iot_link/iot.mk
 include $(GCC_DIR)/project.mk
+#include $(SDK_DIR)/targets/STM32L431VCT6_Bossay/Demos/user_demo.mk
 
 
 ################################################################################

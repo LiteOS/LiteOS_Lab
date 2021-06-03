@@ -1,0 +1,285 @@
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccWgOoxN.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"los_misc.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.LOS_Align,"ax",%progbits
+  18              		.align	1
+  19              		.global	LOS_Align
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	LOS_Align:
+  27              	.LFB289:
+  28              		.file 1 "d:/LiteOS_Lab/iot_link/os/liteos/base/misc/los_misc.c"
+   1:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c **** /*----------------------------------------------------------------------------
+   2:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * Copyright (c) <2013-2015>, <Huawei Technologies Co., Ltd>
+   3:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * All rights reserved.
+   4:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * are permitted provided that the following conditions are met:
+   6:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * conditions and the following disclaimer.
+   8:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * provided with the distribution.
+  11:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * permission.
+  14:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  *---------------------------------------------------------------------------*/
+  26:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c **** /*----------------------------------------------------------------------------
+  27:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * Notice of Export Control Law
+  28:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * ===============================================
+  29:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccWgOoxN.s 			page 2
+
+
+  31:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  * applicable export control laws and regulations.
+  33:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****  *---------------------------------------------------------------------------*/
+  34:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c **** 
+  35:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c **** #include "los_base.ph"
+  36:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c **** #include "los_sys.ph"
+  37:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c **** #include "los_task.ph"
+  38:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c **** #include "los_hwi.h"
+  39:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c **** 
+  40:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c **** LITE_OS_SEC_TEXT UINT32 LOS_Align(UINT32 uwAddr, UINT32 uwBoundary)
+  41:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c **** {
+  29              		.loc 1 41 1
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 8
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34 0000 80B4     		push	{r7}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 4
+  37              		.cfi_offset 7, -4
+  38 0002 83B0     		sub	sp, sp, #12
+  39              	.LCFI1:
+  40              		.cfi_def_cfa_offset 16
+  41 0004 00AF     		add	r7, sp, #0
+  42              	.LCFI2:
+  43              		.cfi_def_cfa_register 7
+  44 0006 7860     		str	r0, [r7, #4]
+  45 0008 3960     		str	r1, [r7]
+  42:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****     if (uwAddr + uwBoundary - 1 > uwAddr) {
+  46              		.loc 1 42 16
+  47 000a 7A68     		ldr	r2, [r7, #4]
+  48 000c 3B68     		ldr	r3, [r7]
+  49 000e 1344     		add	r3, r3, r2
+  50              		.loc 1 42 29
+  51 0010 013B     		subs	r3, r3, #1
+  52              		.loc 1 42 8
+  53 0012 7A68     		ldr	r2, [r7, #4]
+  54 0014 9A42     		cmp	r2, r3
+  55 0016 07D2     		bcs	.L2
+  43:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****         return (uwAddr + uwBoundary - 1) & ~(uwBoundary - 1);
+  56              		.loc 1 43 24
+  57 0018 7A68     		ldr	r2, [r7, #4]
+  58 001a 3B68     		ldr	r3, [r7]
+  59 001c 1344     		add	r3, r3, r2
+  60              		.loc 1 43 37
+  61 001e 5A1E     		subs	r2, r3, #1
+  62              		.loc 1 43 44
+  63 0020 3B68     		ldr	r3, [r7]
+  64 0022 5B42     		rsbs	r3, r3, #0
+  65              		.loc 1 43 42
+  66 0024 1340     		ands	r3, r3, r2
+  67 0026 03E0     		b	.L3
+  68              	.L2:
+  44:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****     } else {
+  45:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****         return uwAddr & ~(uwBoundary - 1);
+  69              		.loc 1 45 25
+  70 0028 3B68     		ldr	r3, [r7]
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccWgOoxN.s 			page 3
+
+
+  71 002a 5A42     		rsbs	r2, r3, #0
+  72              		.loc 1 45 23
+  73 002c 7B68     		ldr	r3, [r7, #4]
+  74 002e 1340     		ands	r3, r3, r2
+  75              	.L3:
+  46:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****     }
+  47:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c **** }
+  76              		.loc 1 47 1
+  77 0030 1846     		mov	r0, r3
+  78 0032 0C37     		adds	r7, r7, #12
+  79              	.LCFI3:
+  80              		.cfi_def_cfa_offset 4
+  81 0034 BD46     		mov	sp, r7
+  82              	.LCFI4:
+  83              		.cfi_def_cfa_register 13
+  84              		@ sp needed
+  85 0036 5DF8047B 		ldr	r7, [sp], #4
+  86              	.LCFI5:
+  87              		.cfi_restore 7
+  88              		.cfi_def_cfa_offset 0
+  89 003a 7047     		bx	lr
+  90              		.cfi_endproc
+  91              	.LFE289:
+  93              		.section	.text.LOS_Msleep,"ax",%progbits
+  94              		.align	1
+  95              		.global	LOS_Msleep
+  96              		.syntax unified
+  97              		.thumb
+  98              		.thumb_func
+  99              		.fpu fpv4-sp-d16
+ 101              	LOS_Msleep:
+ 102              	.LFB290:
+  48:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c **** 
+  49:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c **** LITE_OS_SEC_TEXT_MINOR VOID LOS_Msleep(UINT32 uwMsecs)
+  50:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c **** {
+ 103              		.loc 1 50 1
+ 104              		.cfi_startproc
+ 105              		@ args = 0, pretend = 0, frame = 16
+ 106              		@ frame_needed = 1, uses_anonymous_args = 0
+ 107 0000 80B5     		push	{r7, lr}
+ 108              	.LCFI6:
+ 109              		.cfi_def_cfa_offset 8
+ 110              		.cfi_offset 7, -8
+ 111              		.cfi_offset 14, -4
+ 112 0002 84B0     		sub	sp, sp, #16
+ 113              	.LCFI7:
+ 114              		.cfi_def_cfa_offset 24
+ 115 0004 00AF     		add	r7, sp, #0
+ 116              	.LCFI8:
+ 117              		.cfi_def_cfa_register 7
+ 118 0006 7860     		str	r0, [r7, #4]
+  51:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****     UINT32 uwInterval = 0;
+ 119              		.loc 1 51 12
+ 120 0008 0023     		movs	r3, #0
+ 121 000a FB60     		str	r3, [r7, #12]
+  52:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c **** 
+  53:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****     if (OS_INT_ACTIVE)
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccWgOoxN.s 			page 4
+
+
+ 122              		.loc 1 53 9
+ 123 000c FFF7FEFF 		bl	osIntNumGet
+ 124 0010 0346     		mov	r3, r0
+ 125              		.loc 1 53 8
+ 126 0012 002B     		cmp	r3, #0
+ 127 0014 12D1     		bne	.L9
+  54:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****     {
+  55:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****         return;
+  56:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****     }
+  57:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c **** 
+  58:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****     if (uwMsecs == 0)
+ 128              		.loc 1 58 8
+ 129 0016 7B68     		ldr	r3, [r7, #4]
+ 130 0018 002B     		cmp	r3, #0
+ 131 001a 02D1     		bne	.L7
+  59:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****     {
+  60:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****         uwInterval = 0;
+ 132              		.loc 1 60 20
+ 133 001c 0023     		movs	r3, #0
+ 134 001e FB60     		str	r3, [r7, #12]
+ 135 0020 08E0     		b	.L8
+ 136              	.L7:
+  61:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****     }
+  62:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****     else
+  63:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****     {
+  64:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****         uwInterval = LOS_MS2Tick(uwMsecs);
+ 137              		.loc 1 64 22
+ 138 0022 7868     		ldr	r0, [r7, #4]
+ 139 0024 FFF7FEFF 		bl	LOS_MS2Tick
+ 140 0028 F860     		str	r0, [r7, #12]
+  65:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****         if (uwInterval == 0)
+ 141              		.loc 1 65 12
+ 142 002a FB68     		ldr	r3, [r7, #12]
+ 143 002c 002B     		cmp	r3, #0
+ 144 002e 01D1     		bne	.L8
+  66:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****         {
+  67:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****              uwInterval = 1;
+ 145              		.loc 1 67 25
+ 146 0030 0123     		movs	r3, #1
+ 147 0032 FB60     		str	r3, [r7, #12]
+ 148              	.L8:
+  68:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****         }
+  69:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****     }
+  70:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c **** 
+  71:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****     (VOID)LOS_TaskDelay(uwInterval);
+ 149              		.loc 1 71 11
+ 150 0034 F868     		ldr	r0, [r7, #12]
+ 151 0036 FFF7FEFF 		bl	LOS_TaskDelay
+ 152 003a 00E0     		b	.L4
+ 153              	.L9:
+  55:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c ****     }
+ 154              		.loc 1 55 9
+ 155 003c 00BF     		nop
+ 156              	.L4:
+  72:d:/LiteOS_Lab/iot_link/os/liteos/base/misc\los_misc.c **** }
+ 157              		.loc 1 72 1
+ 158 003e 1037     		adds	r7, r7, #16
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccWgOoxN.s 			page 5
+
+
+ 159              	.LCFI9:
+ 160              		.cfi_def_cfa_offset 8
+ 161 0040 BD46     		mov	sp, r7
+ 162              	.LCFI10:
+ 163              		.cfi_def_cfa_register 13
+ 164              		@ sp needed
+ 165 0042 80BD     		pop	{r7, pc}
+ 166              		.cfi_endproc
+ 167              	.LFE290:
+ 169              		.text
+ 170              	.Letext0:
+ 171              		.file 2 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 172              		.file 3 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 173              		.file 4 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 174              		.file 5 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\lib\\gcc\\arm-none
+ 175              		.file 6 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 176              		.file 7 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_typedef.h"
+ 177              		.file 8 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 178              		.file 9 "d:/LiteOS_Lab/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 179              		.file 10 "d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Inc/system_stm32l4xx.h"
+ 180              		.file 11 "d:/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 181              		.file 12 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_list.h"
+ 182              		.file 13 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_event.h"
+ 183              		.file 14 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_config.h"
+ 184              		.file 15 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_err.h"
+ 185              		.file 16 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_tick.h"
+ 186              		.file 17 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_task.h"
+ 187              		.file 18 "d:/LiteOS_Lab/iot_link/os/liteos/base/include/los_task.ph"
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccWgOoxN.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 los_misc.c
+C:\Users\ADMINI~1\AppData\Local\Temp\ccWgOoxN.s:18     .text.LOS_Align:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccWgOoxN.s:26     .text.LOS_Align:00000000 LOS_Align
+C:\Users\ADMINI~1\AppData\Local\Temp\ccWgOoxN.s:94     .text.LOS_Msleep:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccWgOoxN.s:101    .text.LOS_Msleep:00000000 LOS_Msleep
+
+UNDEFINED SYMBOLS
+osIntNumGet
+LOS_MS2Tick
+LOS_TaskDelay

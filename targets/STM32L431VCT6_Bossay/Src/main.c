@@ -81,7 +81,7 @@ VOID HardWare_Init(VOID)
     LCD_Show_Image(0,0,240,93,gImage_Bossaylogo);			
 	//LCD_ShowString(10, 50, 240, 24, 24, "Welcome to Bossay!");
 	//LCD_ShowString(20, 90, 240, 16, 16, "IoT Deveoper Box");
-	LCD_ShowString(20, 130, 240, 16, 16, "Powered by Huawei LiteOS!");
+	LCD_ShowString(20, 130, 240, 16, 16, "Powered by Fancheng Meng!");
 	LCD_ShowString(2, 170, 240, 16, 16, "System intializing......");;	
 }
 

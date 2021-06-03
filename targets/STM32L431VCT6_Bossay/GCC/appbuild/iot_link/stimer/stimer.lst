@@ -1,0 +1,2227 @@
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"stimer.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.data.s_stimer_cb,"aw"
+  18              		.align	2
+  21              	s_stimer_cb:
+  22 0000 FFFFFFFF 		.word	-1
+  23 0004 FFFFFFFF 		.word	-1
+  24 0008 00000000 		.word	0
+  25 000c 00000000 		.word	0
+  26 0010 00000000 		.space	4
+  27              		.section	.text.timer_remove,"ax",%progbits
+  28              		.align	1
+  29              		.arch armv7e-m
+  30              		.syntax unified
+  31              		.thumb
+  32              		.thumb_func
+  33              		.fpu fpv4-sp-d16
+  35              	timer_remove:
+  36              	.LFB3:
+  37              		.file 1 "d:/LiteOS_Lab/iot_link/stimer/stimer.c"
+   1:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** /*----------------------------------------------------------------------------
+   2:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * All rights reserved.
+   4:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * are permitted provided that the following conditions are met:
+   6:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * conditions and the following disclaimer.
+   8:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * provided with the distribution.
+  11:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * permission.
+  14:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 2
+
+
+  24:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  *---------------------------------------------------------------------------*/
+  26:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** /*----------------------------------------------------------------------------
+  27:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * Notice of Export Control Law
+  28:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * ===============================================
+  29:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * applicable export control laws and regulations.
+  33:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  *---------------------------------------------------------------------------*/
+  34:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** /**
+  35:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  *  DATE                AUTHOR      INSTRUCTION
+  36:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  *  2019-07-26 18:04  zhangqianfu  The first version
+  37:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  *
+  38:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  */
+  39:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+  40:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** #include <stddef.h>
+  41:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** #include <stdint.h>
+  42:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** #include <stdlib.h>
+  43:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** #include <string.h>
+  44:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** #include <stdio.h>
+  45:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+  46:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+  47:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** #include <osal.h>
+  48:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** #include <stimer.h>
+  49:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+  50:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** #ifndef  CONFIG_STIMER_STACKSIZE
+  51:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** #define  CONFIG_STIMER_STACKSIZE    0x800
+  52:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** #endif
+  53:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+  54:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** #ifndef  CONFIG_STIMER_TASKPRIOR
+  55:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** #define  CONFIG_STIMER_TASKPRIOR    10
+  56:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** #endif
+  57:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+  58:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+  59:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+  60:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** ///< we use the normal list to manage the timer, next time you could use the RB
+  61:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** ///< tree or something else to do some optimization,thanks for your supporting
+  62:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+  63:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** typedef struct timer_item
+  64:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** {
+  65:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     char               *name;        ///< verify the timer, will be used in the debug
+  66:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     uint32_t            cycle;       ///< timer cycle
+  67:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     uint32_t            flag;        ///< timer flag
+  68:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     fn_stimer_handler   handler;     ///< timer handler
+  69:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     void               *args;        ///< timer handler parameter
+  70:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     int64_t             dead_time;   ///< it is the dead time
+  71:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     struct timer_item  *nxt;         ///< used for the timer list
+  72:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** }stimer_item_t;  ///< each timer will have this structure
+  73:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+  74:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** typedef struct
+  75:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** {
+  76:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     osal_semp_t    semp;       ///< used for time wait sync
+  77:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     osal_mutex_t   mutex;      ///< used for protect the timer list
+  78:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     stimer_item_t *lst;        ///< this is the soft timer list，
+  79:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     void          *task;       ///< this is the task engine
+  80:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     int            daemon_exit;///< this is the task exit;
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 3
+
+
+  81:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+  82:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** }stimer_cb_t;
+  83:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+  84:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** static stimer_cb_t s_stimer_cb =  \
+  85:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** {
+  86:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     .semp  = cn_semp_invalid,
+  87:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     .mutex = cn_mutex_invalid,
+  88:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     .lst   = NULL,
+  89:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     .task  = NULL,
+  90:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** };
+  91:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+  92:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+  93:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** #define cn_stimer_wait_max  (cn_osal_timeout_forever)    ///< almost the max time
+  94:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** #define cn_stimer_dead_max  (0x7fffffffffffffff)         ///< maybe the int64_t max time
+  95:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** static void timer_remove(stimer_item_t *item)
+  96:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** {
+  38              		.loc 1 96 1
+  39              		.cfi_startproc
+  40              		@ args = 0, pretend = 0, frame = 16
+  41              		@ frame_needed = 1, uses_anonymous_args = 0
+  42              		@ link register save eliminated.
+  43 0000 80B4     		push	{r7}
+  44              	.LCFI0:
+  45              		.cfi_def_cfa_offset 4
+  46              		.cfi_offset 7, -4
+  47 0002 85B0     		sub	sp, sp, #20
+  48              	.LCFI1:
+  49              		.cfi_def_cfa_offset 24
+  50 0004 00AF     		add	r7, sp, #0
+  51              	.LCFI2:
+  52              		.cfi_def_cfa_register 7
+  53 0006 7860     		str	r0, [r7, #4]
+  97:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     stimer_item_t  *tmp;
+  98:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     if(item == s_stimer_cb.lst)
+  54              		.loc 1 98 27
+  55 0008 134B     		ldr	r3, .L7
+  56 000a 9B68     		ldr	r3, [r3, #8]
+  57              		.loc 1 98 7
+  58 000c 7A68     		ldr	r2, [r7, #4]
+  59 000e 9A42     		cmp	r2, r3
+  60 0010 04D1     		bne	.L2
+  99:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 100:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         s_stimer_cb.lst = item->nxt ;
+  61              		.loc 1 100 31
+  62 0012 7B68     		ldr	r3, [r7, #4]
+  63 0014 1B6A     		ldr	r3, [r3, #32]
+  64              		.loc 1 100 25
+  65 0016 104A     		ldr	r2, .L7
+  66 0018 9360     		str	r3, [r2, #8]
+  67 001a 13E0     		b	.L3
+  68              	.L2:
+ 101:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 102:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     else
+ 103:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 104:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         tmp = s_stimer_cb.lst;
+  69              		.loc 1 104 13
+  70 001c 0E4B     		ldr	r3, .L7
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 4
+
+
+  71 001e 9B68     		ldr	r3, [r3, #8]
+  72 0020 FB60     		str	r3, [r7, #12]
+ 105:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         while(NULL != tmp)
+  73              		.loc 1 105 14
+  74 0022 0CE0     		b	.L4
+  75              	.L6:
+ 106:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         {
+ 107:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             if(tmp->nxt == item)
+  76              		.loc 1 107 19
+  77 0024 FB68     		ldr	r3, [r7, #12]
+  78 0026 1B6A     		ldr	r3, [r3, #32]
+  79              		.loc 1 107 15
+  80 0028 7A68     		ldr	r2, [r7, #4]
+  81 002a 9A42     		cmp	r2, r3
+  82 002c 04D1     		bne	.L5
+ 108:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             {
+ 109:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 tmp->nxt = item->nxt;
+  83              		.loc 1 109 32
+  84 002e 7B68     		ldr	r3, [r7, #4]
+  85 0030 1A6A     		ldr	r2, [r3, #32]
+  86              		.loc 1 109 26
+  87 0032 FB68     		ldr	r3, [r7, #12]
+  88 0034 1A62     		str	r2, [r3, #32]
+ 110:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 break;
+  89              		.loc 1 110 17
+  90 0036 05E0     		b	.L3
+  91              	.L5:
+ 111:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             }
+ 112:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             tmp = tmp->nxt;
+  92              		.loc 1 112 17
+  93 0038 FB68     		ldr	r3, [r7, #12]
+  94 003a 1B6A     		ldr	r3, [r3, #32]
+  95 003c FB60     		str	r3, [r7, #12]
+  96              	.L4:
+ 105:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         {
+  97              		.loc 1 105 14
+  98 003e FB68     		ldr	r3, [r7, #12]
+  99 0040 002B     		cmp	r3, #0
+ 100 0042 EFD1     		bne	.L6
+ 101              	.L3:
+ 113:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         }
+ 114:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 115:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     item->nxt = NULL;
+ 102              		.loc 1 115 15
+ 103 0044 7B68     		ldr	r3, [r7, #4]
+ 104 0046 0022     		movs	r2, #0
+ 105 0048 1A62     		str	r2, [r3, #32]
+ 116:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** }
+ 106              		.loc 1 116 1
+ 107 004a 00BF     		nop
+ 108 004c 1437     		adds	r7, r7, #20
+ 109              	.LCFI3:
+ 110              		.cfi_def_cfa_offset 4
+ 111 004e BD46     		mov	sp, r7
+ 112              	.LCFI4:
+ 113              		.cfi_def_cfa_register 13
+ 114              		@ sp needed
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 5
+
+
+ 115 0050 5DF8047B 		ldr	r7, [sp], #4
+ 116              	.LCFI5:
+ 117              		.cfi_restore 7
+ 118              		.cfi_def_cfa_offset 0
+ 119 0054 7047     		bx	lr
+ 120              	.L8:
+ 121 0056 00BF     		.align	2
+ 122              	.L7:
+ 123 0058 00000000 		.word	s_stimer_cb
+ 124              		.cfi_endproc
+ 125              	.LFE3:
+ 127              		.section	.text.timer_add,"ax",%progbits
+ 128              		.align	1
+ 129              		.syntax unified
+ 130              		.thumb
+ 131              		.thumb_func
+ 132              		.fpu fpv4-sp-d16
+ 134              	timer_add:
+ 135              	.LFB4:
+ 117:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** ///< add the timer to the queue,by dead time
+ 118:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** static void timer_add(stimer_item_t *timer)
+ 119:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** {
+ 136              		.loc 1 119 1
+ 137              		.cfi_startproc
+ 138              		@ args = 0, pretend = 0, frame = 24
+ 139              		@ frame_needed = 1, uses_anonymous_args = 0
+ 140              		@ link register save eliminated.
+ 141 0000 80B4     		push	{r7}
+ 142              	.LCFI6:
+ 143              		.cfi_def_cfa_offset 4
+ 144              		.cfi_offset 7, -4
+ 145 0002 87B0     		sub	sp, sp, #28
+ 146              	.LCFI7:
+ 147              		.cfi_def_cfa_offset 32
+ 148 0004 00AF     		add	r7, sp, #0
+ 149              	.LCFI8:
+ 150              		.cfi_def_cfa_register 7
+ 151 0006 7860     		str	r0, [r7, #4]
+ 120:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     int64_t        dead_time;
+ 121:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     stimer_item_t  *tmp;  ///< find a timer,who's dead time is less and the following one is equal 
+ 122:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 123:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     tmp = s_stimer_cb.lst;
+ 152              		.loc 1 123 9
+ 153 0008 224B     		ldr	r3, .L18
+ 154 000a 9B68     		ldr	r3, [r3, #8]
+ 155 000c 7B61     		str	r3, [r7, #20]
+ 124:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 125:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     dead_time = timer->dead_time;
+ 156              		.loc 1 125 15
+ 157 000e 7B68     		ldr	r3, [r7, #4]
+ 158 0010 D3E90623 		ldrd	r2, [r3, #24]
+ 159 0014 C7E90223 		strd	r2, [r7, #8]
+ 126:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 127:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     while(NULL != tmp)
+ 160              		.loc 1 127 10
+ 161 0018 1CE0     		b	.L10
+ 162              	.L13:
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 6
+
+
+ 128:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 129:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         if(tmp->dead_time >= dead_time)   ///< all dead time is bigger
+ 163              		.loc 1 129 15
+ 164 001a 7B69     		ldr	r3, [r7, #20]
+ 165 001c D3E90601 		ldrd	r0, [r3, #24]
+ 166              		.loc 1 129 11
+ 167 0020 D7E90223 		ldrd	r2, [r7, #8]
+ 168 0024 9042     		cmp	r0, r2
+ 169 0026 71EB0303 		sbcs	r3, r1, r3
+ 170 002a 02DB     		blt	.L11
+ 130:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         {
+ 131:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             tmp = NULL;
+ 171              		.loc 1 131 17
+ 172 002c 0023     		movs	r3, #0
+ 173 002e 7B61     		str	r3, [r7, #20]
+ 132:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             break;
+ 174              		.loc 1 132 13
+ 175 0030 13E0     		b	.L12
+ 176              	.L11:
+ 133:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         }
+ 134:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         else if((NULL ==tmp->nxt) ||(tmp->nxt->dead_time >= dead_time))  ///< find one
+ 177              		.loc 1 134 28
+ 178 0032 7B69     		ldr	r3, [r7, #20]
+ 179 0034 1B6A     		ldr	r3, [r3, #32]
+ 180              		.loc 1 134 16
+ 181 0036 002B     		cmp	r3, #0
+ 182 0038 0FD0     		beq	.L12
+ 183              		.loc 1 134 41 discriminator 1
+ 184 003a 7B69     		ldr	r3, [r7, #20]
+ 185 003c 1B6A     		ldr	r3, [r3, #32]
+ 186              		.loc 1 134 46 discriminator 1
+ 187 003e D3E90601 		ldrd	r0, [r3, #24]
+ 188              		.loc 1 134 35 discriminator 1
+ 189 0042 D7E90223 		ldrd	r2, [r7, #8]
+ 190 0046 9042     		cmp	r0, r2
+ 191 0048 71EB0303 		sbcs	r3, r1, r3
+ 192 004c 05DA     		bge	.L12
+ 135:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         {
+ 136:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             break;
+ 137:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         }
+ 138:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         else ///< continue to find
+ 139:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         {
+ 140:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             tmp = tmp->nxt;
+ 193              		.loc 1 140 17
+ 194 004e 7B69     		ldr	r3, [r7, #20]
+ 195 0050 1B6A     		ldr	r3, [r3, #32]
+ 196 0052 7B61     		str	r3, [r7, #20]
+ 197              	.L10:
+ 127:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 198              		.loc 1 127 10
+ 199 0054 7B69     		ldr	r3, [r7, #20]
+ 200 0056 002B     		cmp	r3, #0
+ 201 0058 DFD1     		bne	.L13
+ 202              	.L12:
+ 141:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         }
+ 142:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 143:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     if(NULL == tmp)
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 7
+
+
+ 203              		.loc 1 143 7
+ 204 005a 7B69     		ldr	r3, [r7, #20]
+ 205 005c 002B     		cmp	r3, #0
+ 206 005e 0BD1     		bne	.L14
+ 144:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 145:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         if(NULL != s_stimer_cb.lst)
+ 207              		.loc 1 145 31
+ 208 0060 0C4B     		ldr	r3, .L18
+ 209 0062 9B68     		ldr	r3, [r3, #8]
+ 210              		.loc 1 145 11
+ 211 0064 002B     		cmp	r3, #0
+ 212 0066 03D0     		beq	.L15
+ 146:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         {
+ 147:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             timer->nxt = s_stimer_cb.lst;
+ 213              		.loc 1 147 37
+ 214 0068 0A4B     		ldr	r3, .L18
+ 215 006a 9A68     		ldr	r2, [r3, #8]
+ 216              		.loc 1 147 24
+ 217 006c 7B68     		ldr	r3, [r7, #4]
+ 218 006e 1A62     		str	r2, [r3, #32]
+ 219              	.L15:
+ 148:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         }
+ 149:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         s_stimer_cb.lst = timer;
+ 220              		.loc 1 149 25
+ 221 0070 084A     		ldr	r2, .L18
+ 222 0072 7B68     		ldr	r3, [r7, #4]
+ 223 0074 9360     		str	r3, [r2, #8]
+ 150:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 151:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     else
+ 152:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 153:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         timer->nxt = tmp->nxt;
+ 154:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         tmp->nxt = timer;
+ 155:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 156:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 157:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     return;
+ 224              		.loc 1 157 5
+ 225 0076 07E0     		b	.L9
+ 226              	.L14:
+ 153:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         tmp->nxt = timer;
+ 227              		.loc 1 153 25
+ 228 0078 7B69     		ldr	r3, [r7, #20]
+ 229 007a 1A6A     		ldr	r2, [r3, #32]
+ 153:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         tmp->nxt = timer;
+ 230              		.loc 1 153 20
+ 231 007c 7B68     		ldr	r3, [r7, #4]
+ 232 007e 1A62     		str	r2, [r3, #32]
+ 154:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 233              		.loc 1 154 18
+ 234 0080 7B69     		ldr	r3, [r7, #20]
+ 235 0082 7A68     		ldr	r2, [r7, #4]
+ 236 0084 1A62     		str	r2, [r3, #32]
+ 237              		.loc 1 157 5
+ 238 0086 00BF     		nop
+ 239              	.L9:
+ 158:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** }
+ 240              		.loc 1 158 1
+ 241 0088 1C37     		adds	r7, r7, #28
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 8
+
+
+ 242              	.LCFI9:
+ 243              		.cfi_def_cfa_offset 4
+ 244 008a BD46     		mov	sp, r7
+ 245              	.LCFI10:
+ 246              		.cfi_def_cfa_register 13
+ 247              		@ sp needed
+ 248 008c 5DF8047B 		ldr	r7, [sp], #4
+ 249              	.LCFI11:
+ 250              		.cfi_restore 7
+ 251              		.cfi_def_cfa_offset 0
+ 252 0090 7047     		bx	lr
+ 253              	.L19:
+ 254 0092 00BF     		.align	2
+ 255              	.L18:
+ 256 0094 00000000 		.word	s_stimer_cb
+ 257              		.cfi_endproc
+ 258              	.LFE4:
+ 260              		.section	.text.timer_scan,"ax",%progbits
+ 261              		.align	1
+ 262              		.syntax unified
+ 263              		.thumb
+ 264              		.thumb_func
+ 265              		.fpu fpv4-sp-d16
+ 267              	timer_scan:
+ 268              	.LFB5:
+ 159:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 160:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** ///< scan the all the list, take it easy
+ 161:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** static void  timer_scan(void)
+ 162:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** {
+ 269              		.loc 1 162 1
+ 270              		.cfi_startproc
+ 271              		@ args = 0, pretend = 0, frame = 16
+ 272              		@ frame_needed = 1, uses_anonymous_args = 0
+ 273 0000 B0B5     		push	{r4, r5, r7, lr}
+ 274              	.LCFI12:
+ 275              		.cfi_def_cfa_offset 16
+ 276              		.cfi_offset 4, -16
+ 277              		.cfi_offset 5, -12
+ 278              		.cfi_offset 7, -8
+ 279              		.cfi_offset 14, -4
+ 280 0002 84B0     		sub	sp, sp, #16
+ 281              	.LCFI13:
+ 282              		.cfi_def_cfa_offset 32
+ 283 0004 00AF     		add	r7, sp, #0
+ 284              	.LCFI14:
+ 285              		.cfi_def_cfa_register 7
+ 163:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     stimer_item_t *item;
+ 164:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     int64_t       cur_time;
+ 165:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 166:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     while(NULL != s_stimer_cb.lst)
+ 286              		.loc 1 166 10
+ 287 0006 4BE0     		b	.L21
+ 288              	.L27:
+ 167:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 168:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         item = s_stimer_cb.lst;
+ 289              		.loc 1 168 14
+ 290 0008 2A4B     		ldr	r3, .L28
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 9
+
+
+ 291 000a 9B68     		ldr	r3, [r3, #8]
+ 292 000c FB60     		str	r3, [r7, #12]
+ 169:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         s_stimer_cb.lst = item->nxt;
+ 293              		.loc 1 169 31
+ 294 000e FB68     		ldr	r3, [r7, #12]
+ 295 0010 1B6A     		ldr	r3, [r3, #32]
+ 296              		.loc 1 169 25
+ 297 0012 284A     		ldr	r2, .L28
+ 298 0014 9360     		str	r3, [r2, #8]
+ 170:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         item->nxt = NULL;
+ 299              		.loc 1 170 19
+ 300 0016 FB68     		ldr	r3, [r7, #12]
+ 301 0018 0022     		movs	r2, #0
+ 302 001a 1A62     		str	r2, [r3, #32]
+ 171:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 172:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         cur_time = osal_sys_time();
+ 303              		.loc 1 172 20
+ 304 001c FFF7FEFF 		bl	osal_sys_time
+ 305 0020 0246     		mov	r2, r0
+ 306 0022 0B46     		mov	r3, r1
+ 307              		.loc 1 172 18
+ 308 0024 C7E90023 		strd	r2, [r7]
+ 173:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         ///< check if is timeout or not
+ 174:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         if(item->dead_time <= cur_time)
+ 309              		.loc 1 174 16
+ 310 0028 FB68     		ldr	r3, [r7, #12]
+ 311 002a D3E90623 		ldrd	r2, [r3, #24]
+ 312              		.loc 1 174 11
+ 313 002e D7E90001 		ldrd	r0, [r7]
+ 314 0032 9042     		cmp	r0, r2
+ 315 0034 71EB0303 		sbcs	r3, r1, r3
+ 316 0038 2EDB     		blt	.L22
+ 175:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         {
+ 176:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             if(NULL != item->handler)
+ 317              		.loc 1 176 28
+ 318 003a FB68     		ldr	r3, [r7, #12]
+ 319 003c DB68     		ldr	r3, [r3, #12]
+ 320              		.loc 1 176 15
+ 321 003e 002B     		cmp	r3, #0
+ 322 0040 05D0     		beq	.L23
+ 177:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             {
+ 178:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 item->handler(item->args);
+ 323              		.loc 1 178 21
+ 324 0042 FB68     		ldr	r3, [r7, #12]
+ 325 0044 DB68     		ldr	r3, [r3, #12]
+ 326              		.loc 1 178 17
+ 327 0046 FA68     		ldr	r2, [r7, #12]
+ 328 0048 1269     		ldr	r2, [r2, #16]
+ 329 004a 1046     		mov	r0, r2
+ 330 004c 9847     		blx	r3
+ 331              	.LVL0:
+ 332              	.L23:
+ 179:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             }
+ 180:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             if(item->flag & cn_stimer_flag_once)
+ 333              		.loc 1 180 20
+ 334 004e FB68     		ldr	r3, [r7, #12]
+ 335 0050 9B68     		ldr	r3, [r3, #8]
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 10
+
+
+ 336              		.loc 1 180 27
+ 337 0052 03F00103 		and	r3, r3, #1
+ 338              		.loc 1 180 15
+ 339 0056 002B     		cmp	r3, #0
+ 340 0058 0DD0     		beq	.L24
+ 181:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             {
+ 182:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 item->flag &= (~cn_stimer_flag_start);
+ 341              		.loc 1 182 28
+ 342 005a FB68     		ldr	r3, [r7, #12]
+ 343 005c 9B68     		ldr	r3, [r3, #8]
+ 344 005e 23F00202 		bic	r2, r3, #2
+ 345 0062 FB68     		ldr	r3, [r7, #12]
+ 346 0064 9A60     		str	r2, [r3, #8]
+ 183:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 item->dead_time = cn_stimer_dead_max;
+ 347              		.loc 1 183 33
+ 348 0066 F968     		ldr	r1, [r7, #12]
+ 349 0068 4FF0FF32 		mov	r2, #-1
+ 350 006c 6FF00043 		mvn	r3, #-2147483648
+ 351 0070 C1E90623 		strd	r2, [r1, #24]
+ 352 0074 0CE0     		b	.L25
+ 353              	.L24:
+ 184:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             }
+ 185:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             else
+ 186:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             {
+ 187:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 item->dead_time = cur_time + item->cycle;
+ 354              		.loc 1 187 50
+ 355 0076 FB68     		ldr	r3, [r7, #12]
+ 356 0078 5B68     		ldr	r3, [r3, #4]
+ 357 007a 1846     		mov	r0, r3
+ 358 007c 4FF00001 		mov	r1, #0
+ 359              		.loc 1 187 44
+ 360 0080 D7E90023 		ldrd	r2, [r7]
+ 361 0084 8418     		adds	r4, r0, r2
+ 362 0086 41EB0305 		adc	r5, r1, r3
+ 363              		.loc 1 187 33
+ 364 008a FB68     		ldr	r3, [r7, #12]
+ 365 008c C3E90645 		strd	r4, [r3, #24]
+ 366              	.L25:
+ 188:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             }
+ 189:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 190:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             timer_add(item);
+ 367              		.loc 1 190 13
+ 368 0090 F868     		ldr	r0, [r7, #12]
+ 369 0092 FFF7FEFF 		bl	timer_add
+ 370 0096 03E0     		b	.L21
+ 371              	.L22:
+ 191:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         }
+ 192:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         else
+ 193:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         {
+ 194:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             timer_add(item);
+ 372              		.loc 1 194 13
+ 373 0098 F868     		ldr	r0, [r7, #12]
+ 374 009a FFF7FEFF 		bl	timer_add
+ 195:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             break;
+ 375              		.loc 1 195 13
+ 376 009e 04E0     		b	.L26
+ 377              	.L21:
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 11
+
+
+ 166:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 378              		.loc 1 166 30
+ 379 00a0 044B     		ldr	r3, .L28
+ 380 00a2 9B68     		ldr	r3, [r3, #8]
+ 166:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 381              		.loc 1 166 10
+ 382 00a4 002B     		cmp	r3, #0
+ 383 00a6 AFD1     		bne	.L27
+ 196:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         }
+ 197:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 198:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 199:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** }
+ 384              		.loc 1 199 1
+ 385 00a8 00BF     		nop
+ 386              	.L26:
+ 387 00aa 00BF     		nop
+ 388 00ac 1037     		adds	r7, r7, #16
+ 389              	.LCFI15:
+ 390              		.cfi_def_cfa_offset 16
+ 391 00ae BD46     		mov	sp, r7
+ 392              	.LCFI16:
+ 393              		.cfi_def_cfa_register 13
+ 394              		@ sp needed
+ 395 00b0 B0BD     		pop	{r4, r5, r7, pc}
+ 396              	.L29:
+ 397 00b2 00BF     		.align	2
+ 398              	.L28:
+ 399 00b4 00000000 		.word	s_stimer_cb
+ 400              		.cfi_endproc
+ 401              	.LFE5:
+ 403              		.section	.text.stimer_daemonquit,"ax",%progbits
+ 404              		.align	1
+ 405              		.global	stimer_daemonquit
+ 406              		.syntax unified
+ 407              		.thumb
+ 408              		.thumb_func
+ 409              		.fpu fpv4-sp-d16
+ 411              	stimer_daemonquit:
+ 412              	.LFB6:
+ 200:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 201:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 202:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** int stimer_daemonquit()
+ 203:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** {
+ 413              		.loc 1 203 1
+ 414              		.cfi_startproc
+ 415              		@ args = 0, pretend = 0, frame = 0
+ 416              		@ frame_needed = 1, uses_anonymous_args = 0
+ 417              		@ link register save eliminated.
+ 418 0000 80B4     		push	{r7}
+ 419              	.LCFI17:
+ 420              		.cfi_def_cfa_offset 4
+ 421              		.cfi_offset 7, -4
+ 422 0002 00AF     		add	r7, sp, #0
+ 423              	.LCFI18:
+ 424              		.cfi_def_cfa_register 7
+ 204:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 205:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     s_stimer_cb.daemon_exit = 1;
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 12
+
+
+ 425              		.loc 1 205 29
+ 426 0004 044B     		ldr	r3, .L32
+ 427 0006 0122     		movs	r2, #1
+ 428 0008 1A61     		str	r2, [r3, #16]
+ 206:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 207:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     return 0;
+ 429              		.loc 1 207 12
+ 430 000a 0023     		movs	r3, #0
+ 208:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** }
+ 431              		.loc 1 208 1
+ 432 000c 1846     		mov	r0, r3
+ 433 000e BD46     		mov	sp, r7
+ 434              	.LCFI19:
+ 435              		.cfi_def_cfa_register 13
+ 436              		@ sp needed
+ 437 0010 5DF8047B 		ldr	r7, [sp], #4
+ 438              	.LCFI20:
+ 439              		.cfi_restore 7
+ 440              		.cfi_def_cfa_offset 0
+ 441 0014 7047     		bx	lr
+ 442              	.L33:
+ 443 0016 00BF     		.align	2
+ 444              	.L32:
+ 445 0018 00000000 		.word	s_stimer_cb
+ 446              		.cfi_endproc
+ 447              	.LFE6:
+ 449              		.section	.text.__timer_entry,"ax",%progbits
+ 450              		.align	1
+ 451              		.syntax unified
+ 452              		.thumb
+ 453              		.thumb_func
+ 454              		.fpu fpv4-sp-d16
+ 456              	__timer_entry:
+ 457              	.LFB7:
+ 209:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 210:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 211:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** ///< this is the soft timer main engine
+ 212:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** static int __timer_entry(void *args)
+ 213:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** {
+ 458              		.loc 1 213 1
+ 459              		.cfi_startproc
+ 460              		@ args = 0, pretend = 0, frame = 24
+ 461              		@ frame_needed = 1, uses_anonymous_args = 0
+ 462 0000 80B5     		push	{r7, lr}
+ 463              	.LCFI21:
+ 464              		.cfi_def_cfa_offset 8
+ 465              		.cfi_offset 7, -8
+ 466              		.cfi_offset 14, -4
+ 467 0002 86B0     		sub	sp, sp, #24
+ 468              	.LCFI22:
+ 469              		.cfi_def_cfa_offset 32
+ 470 0004 00AF     		add	r7, sp, #0
+ 471              	.LCFI23:
+ 472              		.cfi_def_cfa_register 7
+ 473 0006 7860     		str	r0, [r7, #4]
+ 214:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     uint32_t wait_time;
+ 215:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     int64_t cur_time;
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 13
+
+
+ 216:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 217:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     wait_time= cn_stimer_wait_max;
+ 474              		.loc 1 217 14
+ 475 0008 4FF0FF33 		mov	r3, #-1
+ 476 000c 7B61     		str	r3, [r7, #20]
+ 218:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     while(s_stimer_cb.daemon_exit == 0)
+ 477              		.loc 1 218 10
+ 478 000e 55E0     		b	.L35
+ 479              	.L42:
+ 219:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 220:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         (void)osal_semp_pend(s_stimer_cb.semp,wait_time);  ///< if any timer exist before the task,
+ 480              		.loc 1 220 15
+ 481 0010 2F4B     		ldr	r3, .L44
+ 482 0012 1B68     		ldr	r3, [r3]
+ 483 0014 7969     		ldr	r1, [r7, #20]
+ 484 0016 1846     		mov	r0, r3
+ 485 0018 FFF7FEFF 		bl	osal_semp_pend
+ 221:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         ///< check all the list and do it
+ 222:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         if(true == osal_mutex_lock(s_stimer_cb.mutex))
+ 486              		.loc 1 222 20
+ 487 001c 2C4B     		ldr	r3, .L44
+ 488 001e 5B68     		ldr	r3, [r3, #4]
+ 489 0020 1846     		mov	r0, r3
+ 490 0022 FFF7FEFF 		bl	osal_mutex_lock
+ 491 0026 0346     		mov	r3, r0
+ 492              		.loc 1 222 11
+ 493 0028 012B     		cmp	r3, #1
+ 494 002a 06D1     		bne	.L36
+ 223:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         {
+ 224:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             timer_scan();
+ 495              		.loc 1 224 13
+ 496 002c FFF7FEFF 		bl	timer_scan
+ 225:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             (void) osal_mutex_unlock(s_stimer_cb.mutex);
+ 497              		.loc 1 225 20
+ 498 0030 274B     		ldr	r3, .L44
+ 499 0032 5B68     		ldr	r3, [r3, #4]
+ 500 0034 1846     		mov	r0, r3
+ 501 0036 FFF7FEFF 		bl	osal_mutex_unlock
+ 502              	.L36:
+ 226:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         }
+ 227:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 228:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         ///<compute all the time to wait;
+ 229:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         cur_time = osal_sys_time();
+ 503              		.loc 1 229 20
+ 504 003a FFF7FEFF 		bl	osal_sys_time
+ 505 003e 0246     		mov	r2, r0
+ 506 0040 0B46     		mov	r3, r1
+ 507              		.loc 1 229 18
+ 508 0042 C7E90223 		strd	r2, [r7, #8]
+ 230:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         if(true == osal_mutex_lock(s_stimer_cb.mutex))
+ 509              		.loc 1 230 20
+ 510 0046 224B     		ldr	r3, .L44
+ 511 0048 5B68     		ldr	r3, [r3, #4]
+ 512 004a 1846     		mov	r0, r3
+ 513 004c FFF7FEFF 		bl	osal_mutex_lock
+ 514 0050 0346     		mov	r3, r0
+ 515              		.loc 1 230 11
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 14
+
+
+ 516 0052 012B     		cmp	r3, #1
+ 517 0054 32D1     		bne	.L35
+ 231:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         {
+ 232:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             if(( NULL==s_stimer_cb.lst) ||(cn_stimer_dead_max == s_stimer_cb.lst->dead_time))
+ 518              		.loc 1 232 35
+ 519 0056 1E4B     		ldr	r3, .L44
+ 520 0058 9B68     		ldr	r3, [r3, #8]
+ 521              		.loc 1 232 15
+ 522 005a 002B     		cmp	r3, #0
+ 523 005c 0BD0     		beq	.L37
+ 524              		.loc 1 232 77 discriminator 1
+ 525 005e 1C4B     		ldr	r3, .L44
+ 526 0060 9B68     		ldr	r3, [r3, #8]
+ 527              		.loc 1 232 81 discriminator 1
+ 528 0062 D3E90623 		ldrd	r2, [r3, #24]
+ 529              		.loc 1 232 41 discriminator 1
+ 530 0066 4FF0FF30 		mov	r0, #-1
+ 531 006a 6FF00041 		mvn	r1, #-2147483648
+ 532 006e 8B42     		cmp	r3, r1
+ 533 0070 08BF     		it	eq
+ 534 0072 8242     		cmpeq	r2, r0
+ 535 0074 03D1     		bne	.L38
+ 536              	.L37:
+ 233:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             {
+ 234:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 wait_time = cn_stimer_wait_max;
+ 537              		.loc 1 234 27
+ 538 0076 4FF0FF33 		mov	r3, #-1
+ 539 007a 7B61     		str	r3, [r7, #20]
+ 540 007c 19E0     		b	.L39
+ 541              	.L38:
+ 235:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             }
+ 236:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             else
+ 237:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             {
+ 238:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 wait_time = s_stimer_cb.lst->dead_time > cur_time?(s_stimer_cb.lst->dead_time - cur
+ 542              		.loc 1 238 40
+ 543 007e 144B     		ldr	r3, .L44
+ 544 0080 9B68     		ldr	r3, [r3, #8]
+ 545              		.loc 1 238 44
+ 546 0082 D3E90623 		ldrd	r2, [r3, #24]
+ 547              		.loc 1 238 27
+ 548 0086 D7E90201 		ldrd	r0, [r7, #8]
+ 549 008a 9042     		cmp	r0, r2
+ 550 008c 71EB0303 		sbcs	r3, r1, r3
+ 551 0090 06DA     		bge	.L40
+ 552              		.loc 1 238 79 discriminator 1
+ 553 0092 0F4B     		ldr	r3, .L44
+ 554 0094 9B68     		ldr	r3, [r3, #8]
+ 555              		.loc 1 238 83 discriminator 1
+ 556 0096 D3E90623 		ldrd	r2, [r3, #24]
+ 557              		.loc 1 238 95 discriminator 1
+ 558 009a BB68     		ldr	r3, [r7, #8]
+ 559              		.loc 1 238 27 discriminator 1
+ 560 009c D31A     		subs	r3, r2, r3
+ 561 009e 00E0     		b	.L41
+ 562              	.L40:
+ 563              		.loc 1 238 27 is_stmt 0 discriminator 2
+ 564 00a0 0023     		movs	r3, #0
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 15
+
+
+ 565              	.L41:
+ 566              		.loc 1 238 27 discriminator 4
+ 567 00a2 7B61     		str	r3, [r7, #20]
+ 239:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 if(wait_time > (cn_stimer_wait_max-1))
+ 568              		.loc 1 239 19 is_stmt 1 discriminator 4
+ 569 00a4 7B69     		ldr	r3, [r7, #20]
+ 570 00a6 B3F1FF3F 		cmp	r3, #-1
+ 571 00aa 02D1     		bne	.L39
+ 240:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 {
+ 241:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                     wait_time = cn_stimer_wait_max;
+ 572              		.loc 1 241 31
+ 573 00ac 4FF0FF33 		mov	r3, #-1
+ 574 00b0 7B61     		str	r3, [r7, #20]
+ 575              	.L39:
+ 242:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 }
+ 243:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             }
+ 244:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 245:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             (void) osal_mutex_unlock(s_stimer_cb.mutex);
+ 576              		.loc 1 245 20
+ 577 00b2 074B     		ldr	r3, .L44
+ 578 00b4 5B68     		ldr	r3, [r3, #4]
+ 579 00b6 1846     		mov	r0, r3
+ 580 00b8 FFF7FEFF 		bl	osal_mutex_unlock
+ 581              	.L35:
+ 218:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 582              		.loc 1 218 22
+ 583 00bc 044B     		ldr	r3, .L44
+ 584 00be 1B69     		ldr	r3, [r3, #16]
+ 218:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 585              		.loc 1 218 10
+ 586 00c0 002B     		cmp	r3, #0
+ 587 00c2 A5D0     		beq	.L42
+ 246:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         }
+ 247:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 248:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     return 0;
+ 588              		.loc 1 248 12
+ 589 00c4 0023     		movs	r3, #0
+ 249:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** }
+ 590              		.loc 1 249 1
+ 591 00c6 1846     		mov	r0, r3
+ 592 00c8 1837     		adds	r7, r7, #24
+ 593              	.LCFI24:
+ 594              		.cfi_def_cfa_offset 8
+ 595 00ca BD46     		mov	sp, r7
+ 596              	.LCFI25:
+ 597              		.cfi_def_cfa_register 13
+ 598              		@ sp needed
+ 599 00cc 80BD     		pop	{r7, pc}
+ 600              	.L45:
+ 601 00ce 00BF     		.align	2
+ 602              	.L44:
+ 603 00d0 00000000 		.word	s_stimer_cb
+ 604              		.cfi_endproc
+ 605              	.LFE7:
+ 607              		.section	.rodata
+ 608              		.align	2
+ 609              	.LC0:
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 16
+
+
+ 610 0000 736F6674 		.ascii	"soft timer\000"
+ 610      2074696D 
+ 610      657200
+ 611              		.section	.text.stimer_init,"ax",%progbits
+ 612              		.align	1
+ 613              		.global	stimer_init
+ 614              		.syntax unified
+ 615              		.thumb
+ 616              		.thumb_func
+ 617              		.fpu fpv4-sp-d16
+ 619              	stimer_init:
+ 620              	.LFB8:
+ 250:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 251:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** /**
+ 252:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * @brief: this function used for initialize the timer component, should be called after the os
+ 253:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  *
+ 254:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****  * */
+ 255:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** int32_t stimer_init()
+ 256:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** {
+ 621              		.loc 1 256 1
+ 622              		.cfi_startproc
+ 623              		@ args = 0, pretend = 0, frame = 8
+ 624              		@ frame_needed = 1, uses_anonymous_args = 0
+ 625 0000 80B5     		push	{r7, lr}
+ 626              	.LCFI26:
+ 627              		.cfi_def_cfa_offset 8
+ 628              		.cfi_offset 7, -8
+ 629              		.cfi_offset 14, -4
+ 630 0002 84B0     		sub	sp, sp, #16
+ 631              	.LCFI27:
+ 632              		.cfi_def_cfa_offset 24
+ 633 0004 02AF     		add	r7, sp, #8
+ 634              	.LCFI28:
+ 635              		.cfi_def_cfa 7, 16
+ 257:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     int32_t ret =-1;
+ 636              		.loc 1 257 13
+ 637 0006 4FF0FF33 		mov	r3, #-1
+ 638 000a 7B60     		str	r3, [r7, #4]
+ 258:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 259:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     if(false == osal_semp_create(&s_stimer_cb.semp,1,0))
+ 639              		.loc 1 259 17
+ 640 000c 0022     		movs	r2, #0
+ 641 000e 0121     		movs	r1, #1
+ 642 0010 2048     		ldr	r0, .L58
+ 643 0012 FFF7FEFF 		bl	osal_semp_create
+ 644 0016 0346     		mov	r3, r0
+ 645              		.loc 1 259 7
+ 646 0018 002B     		cmp	r3, #0
+ 647 001a 34D0     		beq	.L55
+ 260:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 261:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         goto EXIT_SEMPERR;
+ 262:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 263:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     if(false == osal_mutex_create(&s_stimer_cb.mutex))
+ 648              		.loc 1 263 17
+ 649 001c 1E48     		ldr	r0, .L58+4
+ 650 001e FFF7FEFF 		bl	osal_mutex_create
+ 651 0022 0346     		mov	r3, r0
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 17
+
+
+ 652              		.loc 1 263 7
+ 653 0024 002B     		cmp	r3, #0
+ 654 0026 23D0     		beq	.L56
+ 264:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 265:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         goto EXIT_MUTEXERR;
+ 266:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 267:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 268:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     s_stimer_cb.task = osal_task_create("soft timer",__timer_entry,NULL,CONFIG_STIMER_STACKSIZE,NUL
+ 655              		.loc 1 268 24
+ 656 0028 0A23     		movs	r3, #10
+ 657 002a 0193     		str	r3, [sp, #4]
+ 658 002c 0023     		movs	r3, #0
+ 659 002e 0093     		str	r3, [sp]
+ 660 0030 4FF40063 		mov	r3, #2048
+ 661 0034 0022     		movs	r2, #0
+ 662 0036 1949     		ldr	r1, .L58+8
+ 663 0038 1948     		ldr	r0, .L58+12
+ 664 003a FFF7FEFF 		bl	osal_task_create
+ 665 003e 0346     		mov	r3, r0
+ 666              		.loc 1 268 22
+ 667 0040 144A     		ldr	r2, .L58
+ 668 0042 D360     		str	r3, [r2, #12]
+ 269:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 270:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     if(NULL == s_stimer_cb.task)
+ 669              		.loc 1 270 27
+ 670 0044 134B     		ldr	r3, .L58
+ 671 0046 DB68     		ldr	r3, [r3, #12]
+ 672              		.loc 1 270 7
+ 673 0048 002B     		cmp	r3, #0
+ 674 004a 06D0     		beq	.L57
+ 271:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 272:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         goto EXIT_TASKERR;
+ 273:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 274:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     s_stimer_cb.daemon_exit = 0;
+ 675              		.loc 1 274 29
+ 676 004c 114B     		ldr	r3, .L58
+ 677 004e 0022     		movs	r2, #0
+ 678 0050 1A61     		str	r2, [r3, #16]
+ 275:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 276:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     ret = 0;
+ 679              		.loc 1 276 9
+ 680 0052 0023     		movs	r3, #0
+ 681 0054 7B60     		str	r3, [r7, #4]
+ 277:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     return ret;
+ 682              		.loc 1 277 12
+ 683 0056 7B68     		ldr	r3, [r7, #4]
+ 684 0058 17E0     		b	.L53
+ 685              	.L57:
+ 272:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 686              		.loc 1 272 9
+ 687 005a 00BF     		nop
+ 688              	.L52:
+ 278:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 279:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** EXIT_TASKERR:
+ 280:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     (void) osal_mutex_del(s_stimer_cb.mutex);
+ 689              		.loc 1 280 12
+ 690 005c 0D4B     		ldr	r3, .L58
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 18
+
+
+ 691 005e 5B68     		ldr	r3, [r3, #4]
+ 692 0060 1846     		mov	r0, r3
+ 693 0062 FFF7FEFF 		bl	osal_mutex_del
+ 281:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     s_stimer_cb.mutex = cn_mutex_invalid;
+ 694              		.loc 1 281 23
+ 695 0066 0B4B     		ldr	r3, .L58
+ 696 0068 4FF0FF32 		mov	r2, #-1
+ 697 006c 5A60     		str	r2, [r3, #4]
+ 698 006e 00E0     		b	.L50
+ 699              	.L56:
+ 265:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 700              		.loc 1 265 9
+ 701 0070 00BF     		nop
+ 702              	.L50:
+ 282:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** EXIT_MUTEXERR:
+ 283:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     (void) osal_semp_del(s_stimer_cb.semp);
+ 703              		.loc 1 283 12
+ 704 0072 084B     		ldr	r3, .L58
+ 705 0074 1B68     		ldr	r3, [r3]
+ 706 0076 1846     		mov	r0, r3
+ 707 0078 FFF7FEFF 		bl	osal_semp_del
+ 284:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     s_stimer_cb.semp = cn_semp_invalid;
+ 708              		.loc 1 284 22
+ 709 007c 054B     		ldr	r3, .L58
+ 710 007e 4FF0FF32 		mov	r2, #-1
+ 711 0082 1A60     		str	r2, [r3]
+ 712 0084 00E0     		b	.L48
+ 713              	.L55:
+ 261:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 714              		.loc 1 261 9
+ 715 0086 00BF     		nop
+ 716              	.L48:
+ 285:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** EXIT_SEMPERR:
+ 286:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     return ret;
+ 717              		.loc 1 286 12
+ 718 0088 7B68     		ldr	r3, [r7, #4]
+ 719              	.L53:
+ 287:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** }
+ 720              		.loc 1 287 1
+ 721 008a 1846     		mov	r0, r3
+ 722 008c 0837     		adds	r7, r7, #8
+ 723              	.LCFI29:
+ 724              		.cfi_def_cfa_offset 8
+ 725 008e BD46     		mov	sp, r7
+ 726              	.LCFI30:
+ 727              		.cfi_def_cfa_register 13
+ 728              		@ sp needed
+ 729 0090 80BD     		pop	{r7, pc}
+ 730              	.L59:
+ 731 0092 00BF     		.align	2
+ 732              	.L58:
+ 733 0094 00000000 		.word	s_stimer_cb
+ 734 0098 04000000 		.word	s_stimer_cb+4
+ 735 009c 00000000 		.word	__timer_entry
+ 736 00a0 00000000 		.word	.LC0
+ 737              		.cfi_endproc
+ 738              	.LFE8:
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 19
+
+
+ 740              		.section	.text.stimer_create,"ax",%progbits
+ 741              		.align	1
+ 742              		.global	stimer_create
+ 743              		.syntax unified
+ 744              		.thumb
+ 745              		.thumb_func
+ 746              		.fpu fpv4-sp-d16
+ 748              	stimer_create:
+ 749              	.LFB9:
+ 288:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 289:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** stimer_t stimer_create(const char *name,fn_stimer_handler handler, void *arg,uint32_t cycle,uint32_
+ 290:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** {
+ 750              		.loc 1 290 1
+ 751              		.cfi_startproc
+ 752              		@ args = 4, pretend = 0, frame = 24
+ 753              		@ frame_needed = 1, uses_anonymous_args = 0
+ 754 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 755              	.LCFI31:
+ 756              		.cfi_def_cfa_offset 20
+ 757              		.cfi_offset 4, -20
+ 758              		.cfi_offset 5, -16
+ 759              		.cfi_offset 6, -12
+ 760              		.cfi_offset 7, -8
+ 761              		.cfi_offset 14, -4
+ 762 0002 87B0     		sub	sp, sp, #28
+ 763              	.LCFI32:
+ 764              		.cfi_def_cfa_offset 48
+ 765 0004 00AF     		add	r7, sp, #0
+ 766              	.LCFI33:
+ 767              		.cfi_def_cfa_register 7
+ 768 0006 F860     		str	r0, [r7, #12]
+ 769 0008 B960     		str	r1, [r7, #8]
+ 770 000a 7A60     		str	r2, [r7, #4]
+ 771 000c 3B60     		str	r3, [r7]
+ 291:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     stimer_item_t *item;
+ 292:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     int            mem_len;
+ 293:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 294:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     mem_len = sizeof(stimer_item_t);
+ 772              		.loc 1 294 13
+ 773 000e 2823     		movs	r3, #40
+ 774 0010 3B61     		str	r3, [r7, #16]
+ 295:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 296:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     if(NULL != name)
+ 775              		.loc 1 296 7
+ 776 0012 FB68     		ldr	r3, [r7, #12]
+ 777 0014 002B     		cmp	r3, #0
+ 778 0016 07D0     		beq	.L61
+ 297:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 298:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         mem_len += strlen(name) + 1;
+ 779              		.loc 1 298 20
+ 780 0018 F868     		ldr	r0, [r7, #12]
+ 781 001a FFF7FEFF 		bl	strlen
+ 782 001e 0246     		mov	r2, r0
+ 783              		.loc 1 298 17
+ 784 0020 3B69     		ldr	r3, [r7, #16]
+ 785 0022 1344     		add	r3, r3, r2
+ 786 0024 0133     		adds	r3, r3, #1
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 20
+
+
+ 787 0026 3B61     		str	r3, [r7, #16]
+ 788              	.L61:
+ 299:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 300:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 301:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     item  = osal_malloc( mem_len);
+ 789              		.loc 1 301 13
+ 790 0028 3B69     		ldr	r3, [r7, #16]
+ 791 002a 1846     		mov	r0, r3
+ 792 002c FFF7FEFF 		bl	osal_malloc
+ 793 0030 7861     		str	r0, [r7, #20]
+ 302:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     if(NULL == item)
+ 794              		.loc 1 302 7
+ 795 0032 7B69     		ldr	r3, [r7, #20]
+ 796 0034 002B     		cmp	r3, #0
+ 797 0036 01D1     		bne	.L62
+ 303:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 304:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         return item;
+ 798              		.loc 1 304 16
+ 799 0038 7B69     		ldr	r3, [r7, #20]
+ 800 003a 5DE0     		b	.L63
+ 801              	.L62:
+ 305:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 306:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     (void) memset(item,0,sizeof(stimer_item_t));
+ 802              		.loc 1 306 12
+ 803 003c 2822     		movs	r2, #40
+ 804 003e 0021     		movs	r1, #0
+ 805 0040 7869     		ldr	r0, [r7, #20]
+ 806 0042 FFF7FEFF 		bl	memset
+ 307:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     item->cycle = cycle;
+ 807              		.loc 1 307 17
+ 808 0046 7B69     		ldr	r3, [r7, #20]
+ 809 0048 3A68     		ldr	r2, [r7]
+ 810 004a 5A60     		str	r2, [r3, #4]
+ 308:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     item->flag = flag;
+ 811              		.loc 1 308 16
+ 812 004c 7B69     		ldr	r3, [r7, #20]
+ 813 004e 3A6B     		ldr	r2, [r7, #48]
+ 814 0050 9A60     		str	r2, [r3, #8]
+ 309:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     item->handler = handler;
+ 815              		.loc 1 309 19
+ 816 0052 7B69     		ldr	r3, [r7, #20]
+ 817 0054 BA68     		ldr	r2, [r7, #8]
+ 818 0056 DA60     		str	r2, [r3, #12]
+ 310:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     item->args = arg;
+ 819              		.loc 1 310 16
+ 820 0058 7B69     		ldr	r3, [r7, #20]
+ 821 005a 7A68     		ldr	r2, [r7, #4]
+ 822 005c 1A61     		str	r2, [r3, #16]
+ 311:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     if(NULL != name)
+ 823              		.loc 1 311 7
+ 824 005e FB68     		ldr	r3, [r7, #12]
+ 825 0060 002B     		cmp	r3, #0
+ 826 0062 10D0     		beq	.L64
+ 312:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 313:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         item->name = (char *)item +sizeof(stimer_item_t);
+ 827              		.loc 1 313 35
+ 828 0064 7B69     		ldr	r3, [r7, #20]
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 21
+
+
+ 829 0066 03F12802 		add	r2, r3, #40
+ 830              		.loc 1 313 20
+ 831 006a 7B69     		ldr	r3, [r7, #20]
+ 832 006c 1A60     		str	r2, [r3]
+ 314:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         (void) strncpy(item->name,name,strlen(name)+1);
+ 833              		.loc 1 314 16
+ 834 006e 7B69     		ldr	r3, [r7, #20]
+ 835 0070 1E68     		ldr	r6, [r3]
+ 836              		.loc 1 314 40
+ 837 0072 F868     		ldr	r0, [r7, #12]
+ 838 0074 FFF7FEFF 		bl	strlen
+ 839 0078 0346     		mov	r3, r0
+ 840              		.loc 1 314 16
+ 841 007a 0133     		adds	r3, r3, #1
+ 842 007c 1A46     		mov	r2, r3
+ 843 007e F968     		ldr	r1, [r7, #12]
+ 844 0080 3046     		mov	r0, r6
+ 845 0082 FFF7FEFF 		bl	strncpy
+ 846              	.L64:
+ 315:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 316:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 317:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 318:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     if(item->flag & cn_stimer_flag_start)
+ 847              		.loc 1 318 12
+ 848 0086 7B69     		ldr	r3, [r7, #20]
+ 849 0088 9B68     		ldr	r3, [r3, #8]
+ 850              		.loc 1 318 19
+ 851 008a 03F00203 		and	r3, r3, #2
+ 852              		.loc 1 318 7
+ 853 008e 002B     		cmp	r3, #0
+ 854 0090 0FD0     		beq	.L65
+ 319:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 320:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         item->dead_time  = osal_sys_time() + item->cycle;
+ 855              		.loc 1 320 28
+ 856 0092 FFF7FEFF 		bl	osal_sys_time
+ 857              		.loc 1 320 50
+ 858 0096 7B69     		ldr	r3, [r7, #20]
+ 859 0098 5B68     		ldr	r3, [r3, #4]
+ 860 009a 1A46     		mov	r2, r3
+ 861 009c 4FF00003 		mov	r3, #0
+ 862              		.loc 1 320 44
+ 863 00a0 8418     		adds	r4, r0, r2
+ 864 00a2 41EB0305 		adc	r5, r1, r3
+ 865 00a6 2246     		mov	r2, r4
+ 866 00a8 2B46     		mov	r3, r5
+ 867              		.loc 1 320 26
+ 868 00aa 7969     		ldr	r1, [r7, #20]
+ 869 00ac C1E90623 		strd	r2, [r1, #24]
+ 870 00b0 06E0     		b	.L66
+ 871              	.L65:
+ 321:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 322:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     else
+ 323:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 324:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         item->dead_time = cn_stimer_dead_max;
+ 872              		.loc 1 324 25
+ 873 00b2 7969     		ldr	r1, [r7, #20]
+ 874 00b4 4FF0FF32 		mov	r2, #-1
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 22
+
+
+ 875 00b8 6FF00043 		mvn	r3, #-2147483648
+ 876 00bc C1E90623 		strd	r2, [r1, #24]
+ 877              	.L66:
+ 325:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 326:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 327:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     if(true == osal_mutex_lock(s_stimer_cb.mutex))
+ 878              		.loc 1 327 16
+ 879 00c0 0F4B     		ldr	r3, .L69
+ 880 00c2 5B68     		ldr	r3, [r3, #4]
+ 881 00c4 1846     		mov	r0, r3
+ 882 00c6 FFF7FEFF 		bl	osal_mutex_lock
+ 883 00ca 0346     		mov	r3, r0
+ 884              		.loc 1 327 7
+ 885 00cc 012B     		cmp	r3, #1
+ 886 00ce 0DD1     		bne	.L67
+ 328:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 329:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         timer_add(item);
+ 887              		.loc 1 329 9
+ 888 00d0 7869     		ldr	r0, [r7, #20]
+ 889 00d2 FFF7FEFF 		bl	timer_add
+ 330:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         (void) osal_mutex_unlock(s_stimer_cb.mutex);
+ 890              		.loc 1 330 16
+ 891 00d6 0A4B     		ldr	r3, .L69
+ 892 00d8 5B68     		ldr	r3, [r3, #4]
+ 893 00da 1846     		mov	r0, r3
+ 894 00dc FFF7FEFF 		bl	osal_mutex_unlock
+ 331:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         (void) osal_semp_post(s_stimer_cb.semp);
+ 895              		.loc 1 331 16
+ 896 00e0 074B     		ldr	r3, .L69
+ 897 00e2 1B68     		ldr	r3, [r3]
+ 898 00e4 1846     		mov	r0, r3
+ 899 00e6 FFF7FEFF 		bl	osal_semp_post
+ 900 00ea 04E0     		b	.L68
+ 901              	.L67:
+ 332:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 333:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     else
+ 334:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 335:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         osal_free(item);
+ 902              		.loc 1 335 9
+ 903 00ec 7869     		ldr	r0, [r7, #20]
+ 904 00ee FFF7FEFF 		bl	osal_free
+ 336:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         item = NULL;
+ 905              		.loc 1 336 14
+ 906 00f2 0023     		movs	r3, #0
+ 907 00f4 7B61     		str	r3, [r7, #20]
+ 908              	.L68:
+ 337:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 338:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 339:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     return item;
+ 909              		.loc 1 339 12
+ 910 00f6 7B69     		ldr	r3, [r7, #20]
+ 911              	.L63:
+ 340:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** }
+ 912              		.loc 1 340 1
+ 913 00f8 1846     		mov	r0, r3
+ 914 00fa 1C37     		adds	r7, r7, #28
+ 915              	.LCFI34:
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 23
+
+
+ 916              		.cfi_def_cfa_offset 20
+ 917 00fc BD46     		mov	sp, r7
+ 918              	.LCFI35:
+ 919              		.cfi_def_cfa_register 13
+ 920              		@ sp needed
+ 921 00fe F0BD     		pop	{r4, r5, r6, r7, pc}
+ 922              	.L70:
+ 923              		.align	2
+ 924              	.L69:
+ 925 0100 00000000 		.word	s_stimer_cb
+ 926              		.cfi_endproc
+ 927              	.LFE9:
+ 929              		.section	.text.stimer_delete,"ax",%progbits
+ 930              		.align	1
+ 931              		.global	stimer_delete
+ 932              		.syntax unified
+ 933              		.thumb
+ 934              		.thumb_func
+ 935              		.fpu fpv4-sp-d16
+ 937              	stimer_delete:
+ 938              	.LFB10:
+ 341:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 342:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** int32_t stimer_delete(stimer_t timer)
+ 343:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** {
+ 939              		.loc 1 343 1
+ 940              		.cfi_startproc
+ 941              		@ args = 0, pretend = 0, frame = 16
+ 942              		@ frame_needed = 1, uses_anonymous_args = 0
+ 943 0000 80B5     		push	{r7, lr}
+ 944              	.LCFI36:
+ 945              		.cfi_def_cfa_offset 8
+ 946              		.cfi_offset 7, -8
+ 947              		.cfi_offset 14, -4
+ 948 0002 84B0     		sub	sp, sp, #16
+ 949              	.LCFI37:
+ 950              		.cfi_def_cfa_offset 24
+ 951 0004 00AF     		add	r7, sp, #0
+ 952              	.LCFI38:
+ 953              		.cfi_def_cfa_register 7
+ 954 0006 7860     		str	r0, [r7, #4]
+ 344:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     int32_t ret = -1;
+ 955              		.loc 1 344 13
+ 956 0008 4FF0FF33 		mov	r3, #-1
+ 957 000c FB60     		str	r3, [r7, #12]
+ 345:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 346:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     if(true == osal_mutex_lock(s_stimer_cb.mutex))
+ 958              		.loc 1 346 16
+ 959 000e 0F4B     		ldr	r3, .L74
+ 960 0010 5B68     		ldr	r3, [r3, #4]
+ 961 0012 1846     		mov	r0, r3
+ 962 0014 FFF7FEFF 		bl	osal_mutex_lock
+ 963 0018 0346     		mov	r3, r0
+ 964              		.loc 1 346 7
+ 965 001a 012B     		cmp	r3, #1
+ 966 001c 11D1     		bne	.L72
+ 347:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 348:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         timer_remove(timer);
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 24
+
+
+ 967              		.loc 1 348 9
+ 968 001e 7868     		ldr	r0, [r7, #4]
+ 969 0020 FFF7FEFF 		bl	timer_remove
+ 349:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         (void) osal_mutex_unlock(s_stimer_cb.mutex);
+ 970              		.loc 1 349 16
+ 971 0024 094B     		ldr	r3, .L74
+ 972 0026 5B68     		ldr	r3, [r3, #4]
+ 973 0028 1846     		mov	r0, r3
+ 974 002a FFF7FEFF 		bl	osal_mutex_unlock
+ 350:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         osal_free(timer);
+ 975              		.loc 1 350 9
+ 976 002e 7868     		ldr	r0, [r7, #4]
+ 977 0030 FFF7FEFF 		bl	osal_free
+ 351:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         (void) osal_semp_post(s_stimer_cb.semp);
+ 978              		.loc 1 351 16
+ 979 0034 054B     		ldr	r3, .L74
+ 980 0036 1B68     		ldr	r3, [r3]
+ 981 0038 1846     		mov	r0, r3
+ 982 003a FFF7FEFF 		bl	osal_semp_post
+ 352:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         ret = 0;
+ 983              		.loc 1 352 13
+ 984 003e 0023     		movs	r3, #0
+ 985 0040 FB60     		str	r3, [r7, #12]
+ 986              	.L72:
+ 353:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 354:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 355:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     return ret;
+ 987              		.loc 1 355 12
+ 988 0042 FB68     		ldr	r3, [r7, #12]
+ 356:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** }
+ 989              		.loc 1 356 1
+ 990 0044 1846     		mov	r0, r3
+ 991 0046 1037     		adds	r7, r7, #16
+ 992              	.LCFI39:
+ 993              		.cfi_def_cfa_offset 8
+ 994 0048 BD46     		mov	sp, r7
+ 995              	.LCFI40:
+ 996              		.cfi_def_cfa_register 13
+ 997              		@ sp needed
+ 998 004a 80BD     		pop	{r7, pc}
+ 999              	.L75:
+ 1000              		.align	2
+ 1001              	.L74:
+ 1002 004c 00000000 		.word	s_stimer_cb
+ 1003              		.cfi_endproc
+ 1004              	.LFE10:
+ 1006              		.section	.text.stimer_ioctl,"ax",%progbits
+ 1007              		.align	1
+ 1008              		.global	stimer_ioctl
+ 1009              		.syntax unified
+ 1010              		.thumb
+ 1011              		.thumb_func
+ 1012              		.fpu fpv4-sp-d16
+ 1014              	stimer_ioctl:
+ 1015              	.LFB11:
+ 357:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 358:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** int32_t stimer_ioctl(stimer_t timer,en_stimer_opt_t opt, void *arg)
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 25
+
+
+ 359:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** {
+ 1016              		.loc 1 359 1
+ 1017              		.cfi_startproc
+ 1018              		@ args = 0, pretend = 0, frame = 24
+ 1019              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1020 0000 2DE9B04F 		push	{r4, r5, r7, r8, r9, r10, fp, lr}
+ 1021              	.LCFI41:
+ 1022              		.cfi_def_cfa_offset 32
+ 1023              		.cfi_offset 4, -32
+ 1024              		.cfi_offset 5, -28
+ 1025              		.cfi_offset 7, -24
+ 1026              		.cfi_offset 8, -20
+ 1027              		.cfi_offset 9, -16
+ 1028              		.cfi_offset 10, -12
+ 1029              		.cfi_offset 11, -8
+ 1030              		.cfi_offset 14, -4
+ 1031 0004 86B0     		sub	sp, sp, #24
+ 1032              	.LCFI42:
+ 1033              		.cfi_def_cfa_offset 56
+ 1034 0006 00AF     		add	r7, sp, #0
+ 1035              	.LCFI43:
+ 1036              		.cfi_def_cfa_register 7
+ 1037 0008 F860     		str	r0, [r7, #12]
+ 1038 000a 0B46     		mov	r3, r1
+ 1039 000c 7A60     		str	r2, [r7, #4]
+ 1040 000e FB72     		strb	r3, [r7, #11]
+ 360:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     int32_t ret = -1;
+ 1041              		.loc 1 360 13
+ 1042 0010 4FF0FF33 		mov	r3, #-1
+ 1043 0014 7B61     		str	r3, [r7, #20]
+ 361:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 362:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     stimer_item_t   *item;
+ 363:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     if(NULL == timer)
+ 1044              		.loc 1 363 7
+ 1045 0016 FB68     		ldr	r3, [r7, #12]
+ 1046 0018 002B     		cmp	r3, #0
+ 1047 001a 01D1     		bne	.L77
+ 364:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 365:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         return ret;
+ 1048              		.loc 1 365 16
+ 1049 001c 7B69     		ldr	r3, [r7, #20]
+ 1050 001e ABE0     		b	.L78
+ 1051              	.L77:
+ 366:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 367:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 368:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     item = timer;
+ 1052              		.loc 1 368 10
+ 1053 0020 FB68     		ldr	r3, [r7, #12]
+ 1054 0022 3B61     		str	r3, [r7, #16]
+ 369:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     if(true == osal_mutex_lock(s_stimer_cb.mutex))
+ 1055              		.loc 1 369 16
+ 1056 0024 574B     		ldr	r3, .L90
+ 1057 0026 5B68     		ldr	r3, [r3, #4]
+ 1058 0028 1846     		mov	r0, r3
+ 1059 002a FFF7FEFF 		bl	osal_mutex_lock
+ 1060 002e 0346     		mov	r3, r0
+ 1061              		.loc 1 369 7
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 26
+
+
+ 1062 0030 012B     		cmp	r3, #1
+ 1063 0032 40F0A080 		bne	.L79
+ 370:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 371:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         switch(opt)
+ 1064              		.loc 1 371 9
+ 1065 0036 FB7A     		ldrb	r3, [r7, #11]	@ zero_extendqisi2
+ 1066 0038 032B     		cmp	r3, #3
+ 1067 003a 00F29280 		bhi	.L80
+ 1068 003e 01A2     		adr	r2, .L82
+ 1069 0040 52F823F0 		ldr	pc, [r2, r3, lsl #2]
+ 1070              		.p2align 2
+ 1071              	.L82:
+ 1072 0044 7B000000 		.word	.L85+1
+ 1073 0048 B7000000 		.word	.L84+1
+ 1074 004c 55000000 		.word	.L83+1
+ 1075 0050 09010000 		.word	.L81+1
+ 1076              		.p2align 1
+ 1077              	.L83:
+ 372:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         {
+ 373:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             case en_stimer_opt_gettime:
+ 374:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 if(NULL != arg)
+ 1078              		.loc 1 374 19
+ 1079 0054 7B68     		ldr	r3, [r7, #4]
+ 1080 0056 002B     		cmp	r3, #0
+ 1081 0058 00F08780 		beq	.L89
+ 375:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 {
+ 376:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                     *(uint32_t *)arg = item->dead_time- osal_sys_time();
+ 1082              		.loc 1 376 44
+ 1083 005c 3B69     		ldr	r3, [r7, #16]
+ 1084 005e D3E90623 		ldrd	r2, [r3, #24]
+ 1085              		.loc 1 376 55
+ 1086 0062 1446     		mov	r4, r2
+ 1087              		.loc 1 376 57
+ 1088 0064 FFF7FEFF 		bl	osal_sys_time
+ 1089 0068 0246     		mov	r2, r0
+ 1090 006a 0B46     		mov	r3, r1
+ 1091              		.loc 1 376 55
+ 1092 006c 1346     		mov	r3, r2
+ 1093 006e E21A     		subs	r2, r4, r3
+ 1094              		.loc 1 376 38
+ 1095 0070 7B68     		ldr	r3, [r7, #4]
+ 1096 0072 1A60     		str	r2, [r3]
+ 377:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                     ret = 0;
+ 1097              		.loc 1 377 25
+ 1098 0074 0023     		movs	r3, #0
+ 1099 0076 7B61     		str	r3, [r7, #20]
+ 378:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 }
+ 379:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 break;
+ 1100              		.loc 1 379 17
+ 1101 0078 77E0     		b	.L89
+ 1102              	.L85:
+ 380:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             case en_stimer_opt_stop:
+ 381:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 timer_remove(item);
+ 1103              		.loc 1 381 17
+ 1104 007a 3869     		ldr	r0, [r7, #16]
+ 1105 007c FFF7FEFF 		bl	timer_remove
+ 382:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 item->nxt = NULL;
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 27
+
+
+ 1106              		.loc 1 382 27
+ 1107 0080 3B69     		ldr	r3, [r7, #16]
+ 1108 0082 0022     		movs	r2, #0
+ 1109 0084 1A62     		str	r2, [r3, #32]
+ 383:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 item->flag &= (~cn_stimer_flag_start);
+ 1110              		.loc 1 383 28
+ 1111 0086 3B69     		ldr	r3, [r7, #16]
+ 1112 0088 9B68     		ldr	r3, [r3, #8]
+ 1113 008a 23F00202 		bic	r2, r3, #2
+ 1114 008e 3B69     		ldr	r3, [r7, #16]
+ 1115 0090 9A60     		str	r2, [r3, #8]
+ 384:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 item->dead_time = cn_stimer_dead_max;
+ 1116              		.loc 1 384 33
+ 1117 0092 3969     		ldr	r1, [r7, #16]
+ 1118 0094 4FF0FF32 		mov	r2, #-1
+ 1119 0098 6FF00043 		mvn	r3, #-2147483648
+ 1120 009c C1E90623 		strd	r2, [r1, #24]
+ 385:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 timer_add(item);
+ 1121              		.loc 1 385 17
+ 1122 00a0 3869     		ldr	r0, [r7, #16]
+ 1123 00a2 FFF7FEFF 		bl	timer_add
+ 386:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 (void) osal_semp_post(s_stimer_cb.semp);
+ 1124              		.loc 1 386 24
+ 1125 00a6 374B     		ldr	r3, .L90
+ 1126 00a8 1B68     		ldr	r3, [r3]
+ 1127 00aa 1846     		mov	r0, r3
+ 1128 00ac FFF7FEFF 		bl	osal_semp_post
+ 387:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 ret = 0;
+ 1129              		.loc 1 387 21
+ 1130 00b0 0023     		movs	r3, #0
+ 1131 00b2 7B61     		str	r3, [r7, #20]
+ 388:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 break;
+ 1132              		.loc 1 388 17
+ 1133 00b4 5AE0     		b	.L87
+ 1134              	.L84:
+ 389:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             case en_stimer_opt_start:
+ 390:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 timer_remove(item);
+ 1135              		.loc 1 390 17
+ 1136 00b6 3869     		ldr	r0, [r7, #16]
+ 1137 00b8 FFF7FEFF 		bl	timer_remove
+ 391:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 item->nxt = NULL;
+ 1138              		.loc 1 391 27
+ 1139 00bc 3B69     		ldr	r3, [r7, #16]
+ 1140 00be 0022     		movs	r2, #0
+ 1141 00c0 1A62     		str	r2, [r3, #32]
+ 392:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 item->flag |= cn_stimer_flag_start;
+ 1142              		.loc 1 392 28
+ 1143 00c2 3B69     		ldr	r3, [r7, #16]
+ 1144 00c4 9B68     		ldr	r3, [r3, #8]
+ 1145 00c6 43F00202 		orr	r2, r3, #2
+ 1146 00ca 3B69     		ldr	r3, [r7, #16]
+ 1147 00cc 9A60     		str	r2, [r3, #8]
+ 393:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 item->dead_time = item->cycle + osal_sys_time();
+ 1148              		.loc 1 393 39
+ 1149 00ce 3B69     		ldr	r3, [r7, #16]
+ 1150 00d0 5B68     		ldr	r3, [r3, #4]
+ 1151 00d2 1C46     		mov	r4, r3
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 28
+
+
+ 1152 00d4 4FF00005 		mov	r5, #0
+ 1153              		.loc 1 393 49
+ 1154 00d8 FFF7FEFF 		bl	osal_sys_time
+ 1155 00dc 0246     		mov	r2, r0
+ 1156 00de 0B46     		mov	r3, r1
+ 1157              		.loc 1 393 47
+ 1158 00e0 14EB020A 		adds	r10, r4, r2
+ 1159 00e4 45EB030B 		adc	fp, r5, r3
+ 1160 00e8 5246     		mov	r2, r10
+ 1161 00ea 5B46     		mov	r3, fp
+ 1162              		.loc 1 393 33
+ 1163 00ec 3969     		ldr	r1, [r7, #16]
+ 1164 00ee C1E90623 		strd	r2, [r1, #24]
+ 394:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 timer_add(item);
+ 1165              		.loc 1 394 17
+ 1166 00f2 3869     		ldr	r0, [r7, #16]
+ 1167 00f4 FFF7FEFF 		bl	timer_add
+ 395:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 (void) osal_semp_post(s_stimer_cb.semp);
+ 1168              		.loc 1 395 24
+ 1169 00f8 224B     		ldr	r3, .L90
+ 1170 00fa 1B68     		ldr	r3, [r3]
+ 1171 00fc 1846     		mov	r0, r3
+ 1172 00fe FFF7FEFF 		bl	osal_semp_post
+ 396:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 ret = 0;
+ 1173              		.loc 1 396 21
+ 1174 0102 0023     		movs	r3, #0
+ 1175 0104 7B61     		str	r3, [r7, #20]
+ 397:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 break;
+ 1176              		.loc 1 397 17
+ 1177 0106 31E0     		b	.L87
+ 1178              	.L81:
+ 398:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             case en_stimer_opt_recycle:
+ 399:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 timer_remove(item);
+ 1179              		.loc 1 399 17
+ 1180 0108 3869     		ldr	r0, [r7, #16]
+ 1181 010a FFF7FEFF 		bl	timer_remove
+ 400:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 item->nxt = NULL;
+ 1182              		.loc 1 400 27
+ 1183 010e 3B69     		ldr	r3, [r7, #16]
+ 1184 0110 0022     		movs	r2, #0
+ 1185 0112 1A62     		str	r2, [r3, #32]
+ 401:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 item->cycle = *(uint32_t *)arg;
+ 1186              		.loc 1 401 31
+ 1187 0114 7B68     		ldr	r3, [r7, #4]
+ 1188 0116 1A68     		ldr	r2, [r3]
+ 1189              		.loc 1 401 29
+ 1190 0118 3B69     		ldr	r3, [r7, #16]
+ 1191 011a 5A60     		str	r2, [r3, #4]
+ 402:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 if(item->flag & cn_stimer_flag_start)
+ 1192              		.loc 1 402 24
+ 1193 011c 3B69     		ldr	r3, [r7, #16]
+ 1194 011e 9B68     		ldr	r3, [r3, #8]
+ 1195              		.loc 1 402 31
+ 1196 0120 03F00203 		and	r3, r3, #2
+ 1197              		.loc 1 402 19
+ 1198 0124 002B     		cmp	r3, #0
+ 1199 0126 11D0     		beq	.L88
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 29
+
+
+ 403:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 {
+ 404:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                     item->dead_time = item->cycle + osal_sys_time();
+ 1200              		.loc 1 404 43
+ 1201 0128 3B69     		ldr	r3, [r7, #16]
+ 1202 012a 5B68     		ldr	r3, [r3, #4]
+ 1203 012c 1C46     		mov	r4, r3
+ 1204 012e 4FF00005 		mov	r5, #0
+ 1205              		.loc 1 404 53
+ 1206 0132 FFF7FEFF 		bl	osal_sys_time
+ 1207 0136 0246     		mov	r2, r0
+ 1208 0138 0B46     		mov	r3, r1
+ 1209              		.loc 1 404 51
+ 1210 013a 14EB0208 		adds	r8, r4, r2
+ 1211 013e 45EB0309 		adc	r9, r5, r3
+ 1212 0142 4246     		mov	r2, r8
+ 1213 0144 4B46     		mov	r3, r9
+ 1214              		.loc 1 404 37
+ 1215 0146 3969     		ldr	r1, [r7, #16]
+ 1216 0148 C1E90623 		strd	r2, [r1, #24]
+ 1217              	.L88:
+ 405:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 }
+ 406:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 timer_add(item);
+ 1218              		.loc 1 406 17
+ 1219 014c 3869     		ldr	r0, [r7, #16]
+ 1220 014e FFF7FEFF 		bl	timer_add
+ 407:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 (void) osal_semp_post(s_stimer_cb.semp);
+ 1221              		.loc 1 407 24
+ 1222 0152 0C4B     		ldr	r3, .L90
+ 1223 0154 1B68     		ldr	r3, [r3]
+ 1224 0156 1846     		mov	r0, r3
+ 1225 0158 FFF7FEFF 		bl	osal_semp_post
+ 408:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 ret = 0;
+ 1226              		.loc 1 408 21
+ 1227 015c 0023     		movs	r3, #0
+ 1228 015e 7B61     		str	r3, [r7, #20]
+ 409:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 break;
+ 1229              		.loc 1 409 17
+ 1230 0160 04E0     		b	.L87
+ 1231              	.L80:
+ 410:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             default:
+ 411:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 ret = -1;
+ 1232              		.loc 1 411 21
+ 1233 0162 4FF0FF33 		mov	r3, #-1
+ 1234 0166 7B61     		str	r3, [r7, #20]
+ 1235 0168 00E0     		b	.L87
+ 1236              	.L89:
+ 379:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             case en_stimer_opt_stop:
+ 1237              		.loc 1 379 17
+ 1238 016a 00BF     		nop
+ 1239              	.L87:
+ 412:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 413:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         }
+ 414:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         (void) osal_mutex_unlock(s_stimer_cb.mutex);
+ 1240              		.loc 1 414 16
+ 1241 016c 054B     		ldr	r3, .L90
+ 1242 016e 5B68     		ldr	r3, [r3, #4]
+ 1243 0170 1846     		mov	r0, r3
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 30
+
+
+ 1244 0172 FFF7FEFF 		bl	osal_mutex_unlock
+ 1245              	.L79:
+ 415:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 416:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 417:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     return ret;
+ 1246              		.loc 1 417 12
+ 1247 0176 7B69     		ldr	r3, [r7, #20]
+ 1248              	.L78:
+ 418:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 419:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** }
+ 1249              		.loc 1 419 1
+ 1250 0178 1846     		mov	r0, r3
+ 1251 017a 1837     		adds	r7, r7, #24
+ 1252              	.LCFI44:
+ 1253              		.cfi_def_cfa_offset 32
+ 1254 017c BD46     		mov	sp, r7
+ 1255              	.LCFI45:
+ 1256              		.cfi_def_cfa_register 13
+ 1257              		@ sp needed
+ 1258 017e BDE8B08F 		pop	{r4, r5, r7, r8, r9, r10, fp, pc}
+ 1259              	.L91:
+ 1260 0182 00BF     		.align	2
+ 1261              	.L90:
+ 1262 0184 00000000 		.word	s_stimer_cb
+ 1263              		.cfi_endproc
+ 1264              	.LFE11:
+ 1266              		.section	.rodata
+ 1267 000b 00       		.align	2
+ 1268              	.LC1:
+ 1269 000c 5B25735D 		.ascii	"[%s][%u][%s] %-12s %-8s %-8s %-8s %-5s %-5s %s\012\015"
+ 1269      5B25755D 
+ 1269      5B25735D 
+ 1269      20252D31 
+ 1269      32732025 
+ 1270 003c 0D0A00   		.ascii	"\015\012\000"
+ 1271 003f 00       		.align	2
+ 1272              	.LC2:
+ 1273 0040 44656164 		.ascii	"DeadTime\000"
+ 1273      54696D65 
+ 1273      00
+ 1274 0049 000000   		.align	2
+ 1275              	.LC3:
+ 1276 004c 4F6E6365 		.ascii	"Once\000"
+ 1276      00
+ 1277 0051 000000   		.align	2
+ 1278              	.LC4:
+ 1279 0054 53746172 		.ascii	"Start\000"
+ 1279      7400
+ 1280 005a 0000     		.align	2
+ 1281              	.LC5:
+ 1282 005c 41726700 		.ascii	"Arg\000"
+ 1283              		.align	2
+ 1284              	.LC6:
+ 1285 0060 48616E64 		.ascii	"Handler\000"
+ 1285      6C657200 
+ 1286              		.align	2
+ 1287              	.LC7:
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 31
+
+
+ 1288 0068 4379636C 		.ascii	"Cycle\000"
+ 1288      6500
+ 1289 006e 0000     		.align	2
+ 1290              	.LC8:
+ 1291 0070 54696D65 		.ascii	"Timer-Name\000"
+ 1291      722D4E61 
+ 1291      6D6500
+ 1292 007b 00       		.align	2
+ 1293              	.LC9:
+ 1294 007c 554E4B4F 		.ascii	"UNKONW\000"
+ 1294      4E5700
+ 1295 0083 00       		.align	2
+ 1296              	.LC10:
+ 1297 0084 59657300 		.ascii	"Yes\000"
+ 1298              		.align	2
+ 1299              	.LC11:
+ 1300 0088 4E6F00   		.ascii	"No\000"
+ 1301 008b 00       		.align	2
+ 1302              	.LC12:
+ 1303 008c 5B25735D 		.ascii	"[%s][%u][%s] %-12s %08x %08x %08x %-5s %-5s %x\012\015"
+ 1303      5B25755D 
+ 1303      5B25735D 
+ 1303      20252D31 
+ 1303      32732025 
+ 1304 00bc 0D0A00   		.ascii	"\015\012\000"
+ 1305 00bf 00       		.align	2
+ 1306              	.LC13:
+ 1307 00c0 5B25735D 		.ascii	"[%s][%u][%s] Total:%d Soft timers\012\015\015\012\000"
+ 1307      5B25755D 
+ 1307      5B25735D 
+ 1307      20546F74 
+ 1307      616C3A25 
+ 1308              		.section	.text.stimer_print,"ax",%progbits
+ 1309              		.align	1
+ 1310              		.syntax unified
+ 1311              		.thumb
+ 1312              		.thumb_func
+ 1313              		.fpu fpv4-sp-d16
+ 1315              	stimer_print:
+ 1316              	.LFB12:
+ 420:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 421:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 422:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** #ifdef CONFIG_SHELL_ENABLE
+ 423:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** #include <shell.h>
+ 424:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** static int32_t stimer_print(int32_t argc, const char *argv[])
+ 425:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** {
+ 1317              		.loc 1 425 1
+ 1318              		.cfi_startproc
+ 1319              		@ args = 0, pretend = 0, frame = 24
+ 1320              		@ frame_needed = 1, uses_anonymous_args = 0
+ 1321 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 1322              	.LCFI46:
+ 1323              		.cfi_def_cfa_offset 20
+ 1324              		.cfi_offset 4, -20
+ 1325              		.cfi_offset 5, -16
+ 1326              		.cfi_offset 6, -12
+ 1327              		.cfi_offset 7, -8
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 32
+
+
+ 1328              		.cfi_offset 14, -4
+ 1329 0002 8FB0     		sub	sp, sp, #60
+ 1330              	.LCFI47:
+ 1331              		.cfi_def_cfa_offset 80
+ 1332 0004 08AF     		add	r7, sp, #32
+ 1333              	.LCFI48:
+ 1334              		.cfi_def_cfa 7, 48
+ 1335 0006 F860     		str	r0, [r7, #12]
+ 1336 0008 B960     		str	r1, [r7, #8]
+ 426:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     int       timer_number = 0;
+ 1337              		.loc 1 426 15
+ 1338 000a 0023     		movs	r3, #0
+ 1339 000c 3B61     		str	r3, [r7, #16]
+ 427:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     stimer_item_t  *item = NULL;
+ 1340              		.loc 1 427 21
+ 1341 000e 0023     		movs	r3, #0
+ 1342 0010 7B61     		str	r3, [r7, #20]
+ 428:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 429:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     (void) timer_number;
+ 430:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 431:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     if(true == osal_mutex_lock(s_stimer_cb.mutex))
+ 1343              		.loc 1 431 16
+ 1344 0012 534B     		ldr	r3, .L106
+ 1345 0014 5B68     		ldr	r3, [r3, #4]
+ 1346 0016 1846     		mov	r0, r3
+ 1347 0018 FFF7FEFF 		bl	osal_mutex_lock
+ 1348 001c 0346     		mov	r3, r0
+ 1349              		.loc 1 431 7
+ 1350 001e 012B     		cmp	r3, #1
+ 1351 0020 40F09880 		bne	.L93
+ 432:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     {
+ 433:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         LINK_LOG_DEBUG("%-12s %-8s %-8s %-8s %-5s %-5s %s\n\r",\
+ 1352              		.loc 1 433 9
+ 1353 0024 FFF7FEFF 		bl	link_log_level_get
+ 1354 0028 0346     		mov	r3, r0
+ 1355 002a 012B     		cmp	r3, #1
+ 1356 002c 20D8     		bhi	.L94
+ 1357              		.loc 1 433 9 is_stmt 0 discriminator 1
+ 1358 002e 0120     		movs	r0, #1
+ 1359 0030 FFF7FEFF 		bl	link_log_level_name
+ 1360 0034 0446     		mov	r4, r0
+ 1361 0036 FFF7FEFF 		bl	osal_sys_time
+ 1362 003a 0246     		mov	r2, r0
+ 1363 003c 0B46     		mov	r3, r1
+ 1364 003e 494B     		ldr	r3, .L106+4
+ 1365 0040 0693     		str	r3, [sp, #24]
+ 1366 0042 494B     		ldr	r3, .L106+8
+ 1367 0044 0593     		str	r3, [sp, #20]
+ 1368 0046 494B     		ldr	r3, .L106+12
+ 1369 0048 0493     		str	r3, [sp, #16]
+ 1370 004a 494B     		ldr	r3, .L106+16
+ 1371 004c 0393     		str	r3, [sp, #12]
+ 1372 004e 494B     		ldr	r3, .L106+20
+ 1373 0050 0293     		str	r3, [sp, #8]
+ 1374 0052 494B     		ldr	r3, .L106+24
+ 1375 0054 0193     		str	r3, [sp, #4]
+ 1376 0056 494B     		ldr	r3, .L106+28
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 33
+
+
+ 1377 0058 0093     		str	r3, [sp]
+ 1378 005a 494B     		ldr	r3, .L106+32
+ 1379 005c 2146     		mov	r1, r4
+ 1380 005e 4948     		ldr	r0, .L106+36
+ 1381 0060 FFF7FEFF 		bl	printf
+ 1382 0064 484B     		ldr	r3, .L106+40
+ 1383 0066 1B68     		ldr	r3, [r3]
+ 1384 0068 9B68     		ldr	r3, [r3, #8]
+ 1385 006a 1846     		mov	r0, r3
+ 1386 006c FFF7FEFF 		bl	fflush
+ 1387              	.L94:
+ 434:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                 "Timer-Name","Cycle","Handler","Arg","Start","Once","DeadTime");
+ 435:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 436:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         item = s_stimer_cb.lst;
+ 1388              		.loc 1 436 14 is_stmt 1
+ 1389 0070 3B4B     		ldr	r3, .L106
+ 1390 0072 9B68     		ldr	r3, [r3, #8]
+ 1391 0074 7B61     		str	r3, [r7, #20]
+ 437:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         while(NULL != item)
+ 1392              		.loc 1 437 14
+ 1393 0076 4BE0     		b	.L95
+ 1394              	.L103:
+ 438:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         {
+ 439:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             LINK_LOG_DEBUG("%-12s %08x %08x %08x %-5s %-5s %x\n\r",\
+ 1395              		.loc 1 439 13
+ 1396 0078 FFF7FEFF 		bl	link_log_level_get
+ 1397 007c 0346     		mov	r3, r0
+ 1398 007e 012B     		cmp	r3, #1
+ 1399 0080 43D8     		bhi	.L96
+ 1400              		.loc 1 439 13 is_stmt 0 discriminator 1
+ 1401 0082 0120     		movs	r0, #1
+ 1402 0084 FFF7FEFF 		bl	link_log_level_name
+ 1403 0088 0646     		mov	r6, r0
+ 1404 008a FFF7FEFF 		bl	osal_sys_time
+ 1405 008e 0246     		mov	r2, r0
+ 1406 0090 0B46     		mov	r3, r1
+ 1407 0092 9446     		mov	ip, r2
+ 1408 0094 7B69     		ldr	r3, [r7, #20]
+ 1409 0096 1B68     		ldr	r3, [r3]
+ 1410 0098 002B     		cmp	r3, #0
+ 1411 009a 02D0     		beq	.L97
+ 1412              		.loc 1 439 13 discriminator 2
+ 1413 009c 7B69     		ldr	r3, [r7, #20]
+ 1414 009e 1B68     		ldr	r3, [r3]
+ 1415 00a0 00E0     		b	.L98
+ 1416              	.L97:
+ 1417              		.loc 1 439 13 discriminator 3
+ 1418 00a2 3A4B     		ldr	r3, .L106+44
+ 1419              	.L98:
+ 1420              		.loc 1 439 13 discriminator 5
+ 1421 00a4 7A69     		ldr	r2, [r7, #20]
+ 1422 00a6 5268     		ldr	r2, [r2, #4]
+ 1423 00a8 7969     		ldr	r1, [r7, #20]
+ 1424 00aa C968     		ldr	r1, [r1, #12]
+ 1425 00ac 7960     		str	r1, [r7, #4]
+ 1426 00ae 7969     		ldr	r1, [r7, #20]
+ 1427 00b0 0969     		ldr	r1, [r1, #16]
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 34
+
+
+ 1428 00b2 3960     		str	r1, [r7]
+ 1429 00b4 7969     		ldr	r1, [r7, #20]
+ 1430 00b6 8968     		ldr	r1, [r1, #8]
+ 1431 00b8 01F00201 		and	r1, r1, #2
+ 1432 00bc 0029     		cmp	r1, #0
+ 1433 00be 01D0     		beq	.L99
+ 1434              		.loc 1 439 13 discriminator 6
+ 1435 00c0 334C     		ldr	r4, .L106+48
+ 1436 00c2 00E0     		b	.L100
+ 1437              	.L99:
+ 1438              		.loc 1 439 13 discriminator 7
+ 1439 00c4 334C     		ldr	r4, .L106+52
+ 1440              	.L100:
+ 1441              		.loc 1 439 13 discriminator 9
+ 1442 00c6 7969     		ldr	r1, [r7, #20]
+ 1443 00c8 8968     		ldr	r1, [r1, #8]
+ 1444 00ca 01F00101 		and	r1, r1, #1
+ 1445 00ce 0029     		cmp	r1, #0
+ 1446 00d0 01D0     		beq	.L101
+ 1447              		.loc 1 439 13 discriminator 10
+ 1448 00d2 2F4D     		ldr	r5, .L106+48
+ 1449 00d4 00E0     		b	.L102
+ 1450              	.L101:
+ 1451              		.loc 1 439 13 discriminator 11
+ 1452 00d6 2F4D     		ldr	r5, .L106+52
+ 1453              	.L102:
+ 1454              		.loc 1 439 13 discriminator 13
+ 1455 00d8 7969     		ldr	r1, [r7, #20]
+ 1456 00da D1E90601 		ldrd	r0, [r1, #24]
+ 1457 00de 0146     		mov	r1, r0
+ 1458 00e0 0691     		str	r1, [sp, #24]
+ 1459 00e2 0595     		str	r5, [sp, #20]
+ 1460 00e4 0494     		str	r4, [sp, #16]
+ 1461 00e6 3968     		ldr	r1, [r7]
+ 1462 00e8 0391     		str	r1, [sp, #12]
+ 1463 00ea 7968     		ldr	r1, [r7, #4]
+ 1464 00ec 0291     		str	r1, [sp, #8]
+ 1465 00ee 0192     		str	r2, [sp, #4]
+ 1466 00f0 0093     		str	r3, [sp]
+ 1467 00f2 234B     		ldr	r3, .L106+32
+ 1468 00f4 6246     		mov	r2, ip
+ 1469 00f6 3146     		mov	r1, r6
+ 1470 00f8 2748     		ldr	r0, .L106+56
+ 1471 00fa FFF7FEFF 		bl	printf
+ 1472 00fe 224B     		ldr	r3, .L106+40
+ 1473 0100 1B68     		ldr	r3, [r3]
+ 1474 0102 9B68     		ldr	r3, [r3, #8]
+ 1475 0104 1846     		mov	r0, r3
+ 1476 0106 FFF7FEFF 		bl	fflush
+ 1477              	.L96:
+ 440:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                     (NULL==item->name)?"UNKONW":item->name,\
+ 441:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                     (unsigned int)item->cycle,(unsigned int)(uintptr_t)item->handler,(unsigned int)
+ 442:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                     item->flag&cn_stimer_flag_start?"Yes":"No",item->flag&cn_stimer_flag_once?"Yes"
+ 443:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****                     (unsigned int)item->dead_time);
+ 444:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****             item = item->nxt;
+ 1478              		.loc 1 444 18 is_stmt 1
+ 1479 010a 7B69     		ldr	r3, [r7, #20]
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 35
+
+
+ 1480 010c 1B6A     		ldr	r3, [r3, #32]
+ 1481 010e 7B61     		str	r3, [r7, #20]
+ 1482              	.L95:
+ 437:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         {
+ 1483              		.loc 1 437 14
+ 1484 0110 7B69     		ldr	r3, [r7, #20]
+ 1485 0112 002B     		cmp	r3, #0
+ 1486 0114 B0D1     		bne	.L103
+ 445:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         }
+ 446:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         LINK_LOG_DEBUG("Total:%d Soft timers\n\r",timer_number);
+ 1487              		.loc 1 446 9
+ 1488 0116 FFF7FEFF 		bl	link_log_level_get
+ 1489 011a 0346     		mov	r3, r0
+ 1490 011c 012B     		cmp	r3, #1
+ 1491 011e 14D8     		bhi	.L104
+ 1492              		.loc 1 446 9 is_stmt 0 discriminator 1
+ 1493 0120 0120     		movs	r0, #1
+ 1494 0122 FFF7FEFF 		bl	link_log_level_name
+ 1495 0126 0446     		mov	r4, r0
+ 1496 0128 FFF7FEFF 		bl	osal_sys_time
+ 1497 012c 0246     		mov	r2, r0
+ 1498 012e 0B46     		mov	r3, r1
+ 1499 0130 3B69     		ldr	r3, [r7, #16]
+ 1500 0132 0093     		str	r3, [sp]
+ 1501 0134 124B     		ldr	r3, .L106+32
+ 1502 0136 2146     		mov	r1, r4
+ 1503 0138 1848     		ldr	r0, .L106+60
+ 1504 013a FFF7FEFF 		bl	printf
+ 1505 013e 124B     		ldr	r3, .L106+40
+ 1506 0140 1B68     		ldr	r3, [r3]
+ 1507 0142 9B68     		ldr	r3, [r3, #8]
+ 1508 0144 1846     		mov	r0, r3
+ 1509 0146 FFF7FEFF 		bl	fflush
+ 1510              	.L104:
+ 447:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 448:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****         (void) osal_mutex_unlock(s_stimer_cb.mutex);
+ 1511              		.loc 1 448 16 is_stmt 1
+ 1512 014a 054B     		ldr	r3, .L106
+ 1513 014c 5B68     		ldr	r3, [r3, #4]
+ 1514 014e 1846     		mov	r0, r3
+ 1515 0150 FFF7FEFF 		bl	osal_mutex_unlock
+ 1516              	.L93:
+ 449:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     }
+ 450:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** 
+ 451:d:/LiteOS_Lab/iot_link/stimer\stimer.c ****     return 0;
+ 1517              		.loc 1 451 12
+ 1518 0154 0023     		movs	r3, #0
+ 452:d:/LiteOS_Lab/iot_link/stimer\stimer.c **** }
+ 1519              		.loc 1 452 1
+ 1520 0156 1846     		mov	r0, r3
+ 1521 0158 1C37     		adds	r7, r7, #28
+ 1522              	.LCFI49:
+ 1523              		.cfi_def_cfa_offset 20
+ 1524 015a BD46     		mov	sp, r7
+ 1525              	.LCFI50:
+ 1526              		.cfi_def_cfa_register 13
+ 1527              		@ sp needed
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 36
+
+
+ 1528 015c F0BD     		pop	{r4, r5, r6, r7, pc}
+ 1529              	.L107:
+ 1530 015e 00BF     		.align	2
+ 1531              	.L106:
+ 1532 0160 00000000 		.word	s_stimer_cb
+ 1533 0164 40000000 		.word	.LC2
+ 1534 0168 4C000000 		.word	.LC3
+ 1535 016c 54000000 		.word	.LC4
+ 1536 0170 5C000000 		.word	.LC5
+ 1537 0174 60000000 		.word	.LC6
+ 1538 0178 68000000 		.word	.LC7
+ 1539 017c 70000000 		.word	.LC8
+ 1540 0180 00000000 		.word	__FUNCTION__.7480
+ 1541 0184 0C000000 		.word	.LC1
+ 1542 0188 00000000 		.word	_impure_ptr
+ 1543 018c 7C000000 		.word	.LC9
+ 1544 0190 84000000 		.word	.LC10
+ 1545 0194 88000000 		.word	.LC11
+ 1546 0198 8C000000 		.word	.LC12
+ 1547 019c C0000000 		.word	.LC13
+ 1548              		.cfi_endproc
+ 1549              	.LFE12:
+ 1551              		.section	.rodata
+ 1552 00e6 0000     		.align	2
+ 1553              	.LC14:
+ 1554 00e8 7374696D 		.ascii	"stimer\000"
+ 1554      657200
+ 1555              		.section	oshell,"a"
+ 1556              		.align	2
+ 1559              	__oshell_stimer_print:
+ 1560 0000 E8000000 		.word	.LC14
+ 1561 0004 E8000000 		.word	.LC14
+ 1562 0008 00000000 		.word	stimer_print
+ 1563 000c 0000     		.short	0
+ 1564 000e 0400     		.short	4
+ 1565              		.section	.rodata.__FUNCTION__.7480,"a"
+ 1566              		.align	2
+ 1569              	__FUNCTION__.7480:
+ 1570 0000 7374696D 		.ascii	"stimer_print\000"
+ 1570      65725F70 
+ 1570      72696E74 
+ 1570      00
+ 1571              		.text
+ 1572              	.Letext0:
+ 1573              		.file 2 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 1574              		.file 3 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 1575              		.file 4 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 1576              		.file 5 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 1577              		.file 6 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\lib\\gcc\\arm-none
+ 1578              		.file 7 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 1579              		.file 8 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 1580              		.file 9 "d:/LiteOS_Lab/iot_link/os/osal/osal_types.h"
+ 1581              		.file 10 "d:/LiteOS_Lab/iot_link/inc/link_log.h"
+ 1582              		.file 11 "d:/LiteOS_Lab/iot_link/inc/stimer.h"
+ 1583              		.file 12 "d:/LiteOS_Lab/iot_link/inc/shell.h"
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 37
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stimer.c
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:18     .data.s_stimer_cb:00000000 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:21     .data.s_stimer_cb:00000000 s_stimer_cb
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:28     .text.timer_remove:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:35     .text.timer_remove:00000000 timer_remove
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:123    .text.timer_remove:00000058 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:128    .text.timer_add:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:134    .text.timer_add:00000000 timer_add
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:256    .text.timer_add:00000094 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:261    .text.timer_scan:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:267    .text.timer_scan:00000000 timer_scan
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:399    .text.timer_scan:000000b4 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:404    .text.stimer_daemonquit:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:411    .text.stimer_daemonquit:00000000 stimer_daemonquit
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:445    .text.stimer_daemonquit:00000018 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:450    .text.__timer_entry:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:456    .text.__timer_entry:00000000 __timer_entry
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:603    .text.__timer_entry:000000d0 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:608    .rodata:00000000 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:612    .text.stimer_init:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:619    .text.stimer_init:00000000 stimer_init
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:733    .text.stimer_init:00000094 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:741    .text.stimer_create:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:748    .text.stimer_create:00000000 stimer_create
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:925    .text.stimer_create:00000100 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:930    .text.stimer_delete:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:937    .text.stimer_delete:00000000 stimer_delete
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:1002   .text.stimer_delete:0000004c $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:1007   .text.stimer_ioctl:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:1014   .text.stimer_ioctl:00000000 stimer_ioctl
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:1072   .text.stimer_ioctl:00000044 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:1076   .text.stimer_ioctl:00000054 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:1262   .text.stimer_ioctl:00000184 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:1309   .text.stimer_print:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:1315   .text.stimer_print:00000000 stimer_print
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:1532   .text.stimer_print:00000160 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:1569   .rodata.__FUNCTION__.7480:00000000 __FUNCTION__.7480
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:1556   oshell:00000000 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:1559   oshell:00000000 __oshell_stimer_print
+C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s:1566   .rodata.__FUNCTION__.7480:00000000 $d
+
+UNDEFINED SYMBOLS
+osal_sys_time
+osal_semp_pend
+osal_mutex_lock
+osal_mutex_unlock
+osal_semp_create
+osal_mutex_create
+osal_task_create
+osal_mutex_del
+osal_semp_del
+strlen
+osal_malloc
+memset
+strncpy
+osal_semp_post
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cclBLEzb.s 			page 38
+
+
+osal_free
+link_log_level_get
+link_log_level_name
+printf
+fflush
+_impure_ptr

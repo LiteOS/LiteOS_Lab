@@ -1,0 +1,453 @@
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccmzT7yi.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"osal_mutex_demo.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.global	public_value
+  18              		.section	.bss.public_value,"aw",%nobits
+  19              		.align	2
+  22              	public_value:
+  23 0000 00000000 		.space	4
+  24              		.comm	public_value_mutex,4,4
+  25              		.section	.rodata
+  26              		.align	2
+  27              	.LC0:
+  28 0000 0D0A7461 		.ascii	"\015\012task1: lock a mutex.\015\000"
+  28      736B313A 
+  28      206C6F63 
+  28      6B206120 
+  28      6D757465 
+  29              		.align	2
+  30              	.LC1:
+  31 0018 7461736B 		.ascii	"task1: public_value = %ld.\015\012\000"
+  31      313A2070 
+  31      75626C69 
+  31      635F7661 
+  31      6C756520 
+  32 0035 000000   		.align	2
+  33              	.LC2:
+  34 0038 7461736B 		.ascii	"task1: unlock a mutex.\015\012\015\000"
+  34      313A2075 
+  34      6E6C6F63 
+  34      6B206120 
+  34      6D757465 
+  35              		.section	.text.user_task1_entry,"ax",%progbits
+  36              		.align	1
+  37              		.arch armv7e-m
+  38              		.syntax unified
+  39              		.thumb
+  40              		.thumb_func
+  41              		.fpu fpv4-sp-d16
+  43              	user_task1_entry:
+  44              	.LFB3:
+  45              		.file 1 "d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo/osal_mutex_demo.c"
+   1:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** /* 使用osal接口需要包含该头文件 */
+   2:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** #include <osal.h>
+   3:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** 
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccmzT7yi.s 			page 2
+
+
+   4:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** /* 任务优先级宏定义（shell任务的优先级为10） */
+   5:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** #define USER_TASK1_PRI  12  //低优先级
+   6:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** #define USER_TASK2_PRI  11  //高优先级
+   7:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** 
+   8:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** /* 共享资源 */
+   9:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** uint32_t public_value = 0;
+  10:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** 
+  11:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** /* 互斥锁索引ID */
+  12:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** osal_mutex_t public_value_mutex;
+  13:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** 
+  14:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** /* 任务task1入口函数 */
+  15:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** static int user_task1_entry()
+  16:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** {
+  46              		.loc 1 16 1
+  47              		.cfi_startproc
+  48              		@ args = 0, pretend = 0, frame = 0
+  49              		@ frame_needed = 1, uses_anonymous_args = 0
+  50 0000 80B5     		push	{r7, lr}
+  51              	.LCFI0:
+  52              		.cfi_def_cfa_offset 8
+  53              		.cfi_offset 7, -8
+  54              		.cfi_offset 14, -4
+  55 0002 00AF     		add	r7, sp, #0
+  56              	.LCFI1:
+  57              		.cfi_def_cfa_register 7
+  58              	.L4:
+  17:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****     while(1)
+  18:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****     {
+  19:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****         /* 尝试获取互斥锁 */
+  20:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****         if(true == osal_mutex_lock(public_value_mutex))
+  59              		.loc 1 20 20
+  60 0004 134B     		ldr	r3, .L8
+  61 0006 1B68     		ldr	r3, [r3]
+  62 0008 1846     		mov	r0, r3
+  63 000a FFF7FEFF 		bl	osal_mutex_lock
+  64 000e 0346     		mov	r3, r0
+  65              		.loc 1 20 11
+  66 0010 012B     		cmp	r3, #1
+  67 0012 F7D1     		bne	.L4
+  21:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****         {
+  22:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****             /* 获取到互斥锁，对共享资源进行操作 */
+  23:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****             printf("\r\ntask1: lock a mutex.\r\n");
+  68              		.loc 1 23 13
+  69 0014 1048     		ldr	r0, .L8+4
+  70 0016 FFF7FEFF 		bl	puts
+  24:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****             public_value += 10;
+  71              		.loc 1 24 26
+  72 001a 104B     		ldr	r3, .L8+8
+  73 001c 1B68     		ldr	r3, [r3]
+  74 001e 0A33     		adds	r3, r3, #10
+  75 0020 0E4A     		ldr	r2, .L8+8
+  76 0022 1360     		str	r3, [r2]
+  25:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****             printf("task1: public_value = %ld.\r\n", public_value);
+  77              		.loc 1 25 13
+  78 0024 0D4B     		ldr	r3, .L8+8
+  79 0026 1B68     		ldr	r3, [r3]
+  80 0028 1946     		mov	r1, r3
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccmzT7yi.s 			page 3
+
+
+  81 002a 0D48     		ldr	r0, .L8+12
+  82 002c FFF7FEFF 		bl	printf
+  26:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** 
+  27:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****             /* 对共享资源操作完毕，释放互斥锁 */
+  28:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****             printf("task1: unlock a mutex.\r\n\r\n");
+  83              		.loc 1 28 13
+  84 0030 0C48     		ldr	r0, .L8+16
+  85 0032 FFF7FEFF 		bl	puts
+  29:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****             osal_mutex_unlock(public_value_mutex);
+  86              		.loc 1 29 13
+  87 0036 074B     		ldr	r3, .L8
+  88 0038 1B68     		ldr	r3, [r3]
+  89 003a 1846     		mov	r0, r3
+  90 003c FFF7FEFF 		bl	osal_mutex_unlock
+  30:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** 
+  31:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****             /* 满足条件则结束任务 */
+  32:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****             if(public_value > 100)
+  91              		.loc 1 32 29
+  92 0040 064B     		ldr	r3, .L8+8
+  93 0042 1B68     		ldr	r3, [r3]
+  94              		.loc 1 32 15
+  95 0044 642B     		cmp	r3, #100
+  96 0046 00D8     		bhi	.L7
+  20:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****         {
+  97              		.loc 1 20 11
+  98 0048 DCE7     		b	.L4
+  99              	.L7:
+  33:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****                 break;
+ 100              		.loc 1 33 17
+ 101 004a 00BF     		nop
+  34:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** 
+  35:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****         }
+  36:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****     }
+  37:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** 
+  38:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****     /* while(1)会执行结束，所以需要返回值 */
+  39:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****     return 0;
+ 102              		.loc 1 39 12
+ 103 004c 0023     		movs	r3, #0
+  40:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** }
+ 104              		.loc 1 40 1
+ 105 004e 1846     		mov	r0, r3
+ 106 0050 80BD     		pop	{r7, pc}
+ 107              	.L9:
+ 108 0052 00BF     		.align	2
+ 109              	.L8:
+ 110 0054 00000000 		.word	public_value_mutex
+ 111 0058 00000000 		.word	.LC0
+ 112 005c 00000000 		.word	public_value
+ 113 0060 18000000 		.word	.LC1
+ 114 0064 38000000 		.word	.LC2
+ 115              		.cfi_endproc
+ 116              	.LFE3:
+ 118              		.section	.rodata
+ 119 0052 0000     		.align	2
+ 120              	.LC3:
+ 121 0054 0D0A7461 		.ascii	"\015\012task2: lock a mutex.\015\000"
+ 121      736B323A 
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccmzT7yi.s 			page 4
+
+
+ 121      206C6F63 
+ 121      6B206120 
+ 121      6D757465 
+ 122              		.align	2
+ 123              	.LC4:
+ 124 006c 7461736B 		.ascii	"task2: public_value = %ld.\015\012\000"
+ 124      323A2070 
+ 124      75626C69 
+ 124      635F7661 
+ 124      6C756520 
+ 125 0089 000000   		.align	2
+ 126              	.LC5:
+ 127 008c 7461736B 		.ascii	"task2: unlock a mutex.\015\012\015\000"
+ 127      323A2075 
+ 127      6E6C6F63 
+ 127      6B206120 
+ 127      6D757465 
+ 128              		.section	.text.user_task2_entry,"ax",%progbits
+ 129              		.align	1
+ 130              		.syntax unified
+ 131              		.thumb
+ 132              		.thumb_func
+ 133              		.fpu fpv4-sp-d16
+ 135              	user_task2_entry:
+ 136              	.LFB4:
+  41:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** 
+  42:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** /* 任务task2入口函数 */
+  43:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** static int user_task2_entry()
+  44:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** {
+ 137              		.loc 1 44 1
+ 138              		.cfi_startproc
+ 139              		@ args = 0, pretend = 0, frame = 0
+ 140              		@ frame_needed = 1, uses_anonymous_args = 0
+ 141 0000 80B5     		push	{r7, lr}
+ 142              	.LCFI2:
+ 143              		.cfi_def_cfa_offset 8
+ 144              		.cfi_offset 7, -8
+ 145              		.cfi_offset 14, -4
+ 146 0002 00AF     		add	r7, sp, #0
+ 147              	.LCFI3:
+ 148              		.cfi_def_cfa_register 7
+ 149              	.L14:
+  45:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****     while (1)
+  46:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****     {
+  47:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****         /* 尝试获取互斥锁 */
+  48:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****        if(true == osal_mutex_lock(public_value_mutex))
+ 150              		.loc 1 48 19
+ 151 0004 144B     		ldr	r3, .L18
+ 152 0006 1B68     		ldr	r3, [r3]
+ 153 0008 1846     		mov	r0, r3
+ 154 000a FFF7FEFF 		bl	osal_mutex_lock
+ 155 000e 0346     		mov	r3, r0
+ 156              		.loc 1 48 10
+ 157 0010 012B     		cmp	r3, #1
+ 158 0012 F7D1     		bne	.L14
+  49:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****         {
+  50:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****             /* 获取到互斥锁，对共享资源进行操作 */
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccmzT7yi.s 			page 5
+
+
+  51:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****             printf("\r\ntask2: lock a mutex.\r\n");
+ 159              		.loc 1 51 13
+ 160 0014 1148     		ldr	r0, .L18+4
+ 161 0016 FFF7FEFF 		bl	puts
+  52:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****             public_value += 5; 
+ 162              		.loc 1 52 26
+ 163 001a 114B     		ldr	r3, .L18+8
+ 164 001c 1B68     		ldr	r3, [r3]
+ 165 001e 0533     		adds	r3, r3, #5
+ 166 0020 0F4A     		ldr	r2, .L18+8
+ 167 0022 1360     		str	r3, [r2]
+  53:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****             printf("task2: public_value = %ld.\r\n", public_value);
+ 168              		.loc 1 53 13
+ 169 0024 0E4B     		ldr	r3, .L18+8
+ 170 0026 1B68     		ldr	r3, [r3]
+ 171 0028 1946     		mov	r1, r3
+ 172 002a 0E48     		ldr	r0, .L18+12
+ 173 002c FFF7FEFF 		bl	printf
+  54:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** 
+  55:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****             /* 对共享资源操作完毕，释放互斥锁 */
+  56:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****             printf("task2: unlock a mutex.\r\n\r\n");
+ 174              		.loc 1 56 13
+ 175 0030 0D48     		ldr	r0, .L18+16
+ 176 0032 FFF7FEFF 		bl	puts
+  57:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****             osal_mutex_unlock(public_value_mutex);
+ 177              		.loc 1 57 13
+ 178 0036 084B     		ldr	r3, .L18
+ 179 0038 1B68     		ldr	r3, [r3]
+ 180 003a 1846     		mov	r0, r3
+ 181 003c FFF7FEFF 		bl	osal_mutex_unlock
+  58:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** 
+  59:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****             /* 满足条件则结束任务 */
+  60:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****             if(public_value > 90)
+ 182              		.loc 1 60 29
+ 183 0040 074B     		ldr	r3, .L18+8
+ 184 0042 1B68     		ldr	r3, [r3]
+ 185              		.loc 1 60 15
+ 186 0044 5A2B     		cmp	r3, #90
+ 187 0046 03D8     		bhi	.L17
+  61:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****                 break;
+  62:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****             /* 优先级较高，需要挂起一下，让task1获取到互斥锁，否则task2再�
+  63:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****             osal_task_sleep(10);
+ 188              		.loc 1 63 13
+ 189 0048 0A20     		movs	r0, #10
+ 190 004a FFF7FEFF 		bl	osal_task_sleep
+  48:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****         {
+ 191              		.loc 1 48 10
+ 192 004e D9E7     		b	.L14
+ 193              	.L17:
+  61:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****                 break;
+ 194              		.loc 1 61 17
+ 195 0050 00BF     		nop
+  64:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****         }
+  65:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****     }
+  66:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** 
+  67:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****     /* while(1)会执行结束，所以需要返回值 */
+  68:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****     return 0;
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccmzT7yi.s 			page 6
+
+
+ 196              		.loc 1 68 12
+ 197 0052 0023     		movs	r3, #0
+  69:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** }
+ 198              		.loc 1 69 1
+ 199 0054 1846     		mov	r0, r3
+ 200 0056 80BD     		pop	{r7, pc}
+ 201              	.L19:
+ 202              		.align	2
+ 203              	.L18:
+ 204 0058 00000000 		.word	public_value_mutex
+ 205 005c 54000000 		.word	.LC3
+ 206 0060 00000000 		.word	public_value
+ 207 0064 6C000000 		.word	.LC4
+ 208 0068 8C000000 		.word	.LC5
+ 209              		.cfi_endproc
+ 210              	.LFE4:
+ 212              		.section	.rodata
+ 213 00a6 0000     		.align	2
+ 214              	.LC6:
+ 215 00a8 75736572 		.ascii	"user_task1\000"
+ 215      5F746173 
+ 215      6B3100
+ 216 00b3 00       		.align	2
+ 217              	.LC7:
+ 218 00b4 75736572 		.ascii	"user_task2\000"
+ 218      5F746173 
+ 218      6B3200
+ 219              		.section	.text.standard_app_demo_main,"ax",%progbits
+ 220              		.align	1
+ 221              		.global	standard_app_demo_main
+ 222              		.syntax unified
+ 223              		.thumb
+ 224              		.thumb_func
+ 225              		.fpu fpv4-sp-d16
+ 227              	standard_app_demo_main:
+ 228              	.LFB5:
+  70:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** 
+  71:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** /* 标准demo启动函数，函数名不要修改，否则会影响下一步实验 */
+  72:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** int standard_app_demo_main()
+  73:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** {
+ 229              		.loc 1 73 1
+ 230              		.cfi_startproc
+ 231              		@ args = 0, pretend = 0, frame = 0
+ 232              		@ frame_needed = 1, uses_anonymous_args = 0
+ 233 0000 80B5     		push	{r7, lr}
+ 234              	.LCFI4:
+ 235              		.cfi_def_cfa_offset 8
+ 236              		.cfi_offset 7, -8
+ 237              		.cfi_offset 14, -4
+ 238 0002 82B0     		sub	sp, sp, #8
+ 239              	.LCFI5:
+ 240              		.cfi_def_cfa_offset 16
+ 241 0004 02AF     		add	r7, sp, #8
+ 242              	.LCFI6:
+ 243              		.cfi_def_cfa 7, 8
+  74:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****     /* 创建互斥锁public_value_mutex */
+  75:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****     osal_mutex_create(&public_value_mutex);
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccmzT7yi.s 			page 7
+
+
+ 244              		.loc 1 75 5
+ 245 0006 0E48     		ldr	r0, .L22
+ 246 0008 FFF7FEFF 		bl	osal_mutex_create
+  76:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** 
+  77:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****     /* 创建任务task1 */
+  78:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****     osal_task_create("user_task1",user_task1_entry,NULL,0x400,NULL,USER_TASK1_PRI);
+ 247              		.loc 1 78 5
+ 248 000c 0C23     		movs	r3, #12
+ 249 000e 0193     		str	r3, [sp, #4]
+ 250 0010 0023     		movs	r3, #0
+ 251 0012 0093     		str	r3, [sp]
+ 252 0014 4FF48063 		mov	r3, #1024
+ 253 0018 0022     		movs	r2, #0
+ 254 001a 0A49     		ldr	r1, .L22+4
+ 255 001c 0A48     		ldr	r0, .L22+8
+ 256 001e FFF7FEFF 		bl	osal_task_create
+  79:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** 
+  80:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****     /* 创建任务task2 */
+  81:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****     osal_task_create("user_task2",user_task2_entry,NULL,0x400,NULL,USER_TASK2_PRI);
+ 257              		.loc 1 81 5
+ 258 0022 0B23     		movs	r3, #11
+ 259 0024 0193     		str	r3, [sp, #4]
+ 260 0026 0023     		movs	r3, #0
+ 261 0028 0093     		str	r3, [sp]
+ 262 002a 4FF48063 		mov	r3, #1024
+ 263 002e 0022     		movs	r2, #0
+ 264 0030 0649     		ldr	r1, .L22+12
+ 265 0032 0748     		ldr	r0, .L22+16
+ 266 0034 FFF7FEFF 		bl	osal_task_create
+  82:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** 
+  83:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c ****     return 0;
+ 267              		.loc 1 83 12
+ 268 0038 0023     		movs	r3, #0
+  84:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Demos/osal_kernel_demo\osal_mutex_demo.c **** }...
+ 269              		.loc 1 84 1
+ 270 003a 1846     		mov	r0, r3
+ 271 003c BD46     		mov	sp, r7
+ 272              	.LCFI7:
+ 273              		.cfi_def_cfa_register 13
+ 274              		@ sp needed
+ 275 003e 80BD     		pop	{r7, pc}
+ 276              	.L23:
+ 277              		.align	2
+ 278              	.L22:
+ 279 0040 00000000 		.word	public_value_mutex
+ 280 0044 00000000 		.word	user_task1_entry
+ 281 0048 A8000000 		.word	.LC6
+ 282 004c 00000000 		.word	user_task2_entry
+ 283 0050 B4000000 		.word	.LC7
+ 284              		.cfi_endproc
+ 285              	.LFE5:
+ 287              		.text
+ 288              	.Letext0:
+ 289              		.file 2 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 290              		.file 3 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 291              		.file 4 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 292              		.file 5 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccmzT7yi.s 			page 8
+
+
+ 293              		.file 6 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\lib\\gcc\\arm-none
+ 294              		.file 7 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 295              		.file 8 "d:/LiteOS_Lab/iot_link/os/osal/osal_types.h"
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccmzT7yi.s 			page 9
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 osal_mutex_demo.c
+C:\Users\ADMINI~1\AppData\Local\Temp\ccmzT7yi.s:22     .bss.public_value:00000000 public_value
+C:\Users\ADMINI~1\AppData\Local\Temp\ccmzT7yi.s:19     .bss.public_value:00000000 $d
+                            *COM*:00000004 public_value_mutex
+C:\Users\ADMINI~1\AppData\Local\Temp\ccmzT7yi.s:26     .rodata:00000000 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccmzT7yi.s:36     .text.user_task1_entry:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccmzT7yi.s:43     .text.user_task1_entry:00000000 user_task1_entry
+C:\Users\ADMINI~1\AppData\Local\Temp\ccmzT7yi.s:110    .text.user_task1_entry:00000054 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccmzT7yi.s:129    .text.user_task2_entry:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccmzT7yi.s:135    .text.user_task2_entry:00000000 user_task2_entry
+C:\Users\ADMINI~1\AppData\Local\Temp\ccmzT7yi.s:204    .text.user_task2_entry:00000058 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccmzT7yi.s:220    .text.standard_app_demo_main:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccmzT7yi.s:227    .text.standard_app_demo_main:00000000 standard_app_demo_main
+C:\Users\ADMINI~1\AppData\Local\Temp\ccmzT7yi.s:279    .text.standard_app_demo_main:00000040 $d
+
+UNDEFINED SYMBOLS
+osal_mutex_lock
+puts
+printf
+osal_mutex_unlock
+osal_task_sleep
+osal_mutex_create
+osal_task_create

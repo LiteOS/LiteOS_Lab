@@ -1,0 +1,871 @@
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"E53_IS1.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.comm	htim16,64,4
+  18              		.section	.text.Infrared_Init,"ax",%progbits
+  19              		.align	1
+  20              		.global	Infrared_Init
+  21              		.arch armv7e-m
+  22              		.syntax unified
+  23              		.thumb
+  24              		.thumb_func
+  25              		.fpu fpv4-sp-d16
+  27              	Infrared_Init:
+  28              	.LFB287:
+  29              		.file 1 "d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface/E53_IS1.c"
+   1:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** /********************************************************************************
+   2:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 文件名称 ：E53_IS1.c
+   3:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 作 者：Bossay IoT 开发组
+   4:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 版 本：V1.0
+   5:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 编写日期 ：2020-02-12
+   6:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 功 能：人体红外检测扩展板驱动
+   7:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** *********************************************************************************
+   8:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 说 明 ：本案例配套Bossay IoT Box开发板使用
+   9:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 网 站 ：edu.ibossay.com
+  10:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 电 话 ：4006916913 
+  11:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** *********************************************************************************/
+  12:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** #include "E53_IS1.h"
+  13:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** #include "stm32l4xx.h"
+  14:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+  15:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+  16:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** TIM_HandleTypeDef htim16;
+  17:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+  18:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** void Infrared_Init(void)
+  19:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** {
+  30              		.loc 1 19 1
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 24
+  33              		@ frame_needed = 1, uses_anonymous_args = 0
+  34 0000 80B5     		push	{r7, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 8
+  37              		.cfi_offset 7, -8
+  38              		.cfi_offset 14, -4
+  39 0002 86B0     		sub	sp, sp, #24
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s 			page 2
+
+
+  40              	.LCFI1:
+  41              		.cfi_def_cfa_offset 32
+  42 0004 00AF     		add	r7, sp, #0
+  43              	.LCFI2:
+  44              		.cfi_def_cfa_register 7
+  45              	.LBB2:
+  20:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+  21:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   GPIO_InitTypeDef GPIO_InitStruct;
+  22:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+  23:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   /* GPIO Ports Clock Enable */
+  24:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+  25:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   IS1_IN_GPIO_CLK_ENABLE();
+  46              		.loc 1 25 3
+  47 0006 0E4B     		ldr	r3, .L2
+  48 0008 DB6C     		ldr	r3, [r3, #76]
+  49 000a 0D4A     		ldr	r2, .L2
+  50 000c 43F00803 		orr	r3, r3, #8
+  51 0010 D364     		str	r3, [r2, #76]
+  52 0012 0B4B     		ldr	r3, .L2
+  53 0014 DB6C     		ldr	r3, [r3, #76]
+  54 0016 03F00803 		and	r3, r3, #8
+  55 001a 3B60     		str	r3, [r7]
+  56 001c 3B68     		ldr	r3, [r7]
+  57              	.LBE2:
+  26:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 	
+  27:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 	GPIO_InitStruct.Pin = IS1_IN_Pin;
+  58              		.loc 1 27 22
+  59 001e 4FF48053 		mov	r3, #4096
+  60 0022 7B60     		str	r3, [r7, #4]
+  28:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  61              		.loc 1 28 24
+  62 0024 0023     		movs	r3, #0
+  63 0026 BB60     		str	r3, [r7, #8]
+  29:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+  64              		.loc 1 29 24
+  65 0028 0223     		movs	r3, #2
+  66 002a FB60     		str	r3, [r7, #12]
+  30:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   HAL_GPIO_Init(IS1_IN_GPIO_Port, &GPIO_InitStruct);
+  67              		.loc 1 30 3
+  68 002c 3B1D     		adds	r3, r7, #4
+  69 002e 1946     		mov	r1, r3
+  70 0030 0448     		ldr	r0, .L2+4
+  71 0032 FFF7FEFF 		bl	HAL_GPIO_Init
+  31:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 	
+  32:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** }
+  72              		.loc 1 32 1
+  73 0036 00BF     		nop
+  74 0038 1837     		adds	r7, r7, #24
+  75              	.LCFI3:
+  76              		.cfi_def_cfa_offset 8
+  77 003a BD46     		mov	sp, r7
+  78              	.LCFI4:
+  79              		.cfi_def_cfa_register 13
+  80              		@ sp needed
+  81 003c 80BD     		pop	{r7, pc}
+  82              	.L3:
+  83 003e 00BF     		.align	2
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s 			page 3
+
+
+  84              	.L2:
+  85 0040 00100240 		.word	1073876992
+  86 0044 000C0048 		.word	1207962624
+  87              		.cfi_endproc
+  88              	.LFE287:
+  90              		.section	.rodata
+  91              		.align	2
+  92              	.LC0:
+  93 0000 643A2F4C 		.ascii	"d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware"
+  93      6974654F 
+  93      535F4C61 
+  93      622F7461 
+  93      72676574 
+  94 0033 2F496F54 		.ascii	"/IoTBox/rsrvd_interface/E53_IS1.c\000"
+  94      426F782F 
+  94      72737276 
+  94      645F696E 
+  94      74657266 
+  95              		.section	.text.MX_TIM16_Init,"ax",%progbits
+  96              		.align	1
+  97              		.global	MX_TIM16_Init
+  98              		.syntax unified
+  99              		.thumb
+ 100              		.thumb_func
+ 101              		.fpu fpv4-sp-d16
+ 103              	MX_TIM16_Init:
+ 104              	.LFB288:
+  33:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+  34:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** /***************************************************************
+  35:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 函数名称: MX_TIM16_Init
+  36:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 说    明: 初始化定时器16
+  37:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 参    数: 无
+  38:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 返 回 值: 无
+  39:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** ***************************************************************/
+  40:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** /* TIM16 init function */
+  41:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** void MX_TIM16_Init(void)
+  42:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** {
+ 105              		.loc 1 42 1
+ 106              		.cfi_startproc
+ 107              		@ args = 0, pretend = 0, frame = 72
+ 108              		@ frame_needed = 1, uses_anonymous_args = 0
+ 109 0000 80B5     		push	{r7, lr}
+ 110              	.LCFI5:
+ 111              		.cfi_def_cfa_offset 8
+ 112              		.cfi_offset 7, -8
+ 113              		.cfi_offset 14, -4
+ 114 0002 92B0     		sub	sp, sp, #72
+ 115              	.LCFI6:
+ 116              		.cfi_def_cfa_offset 80
+ 117 0004 00AF     		add	r7, sp, #0
+ 118              	.LCFI7:
+ 119              		.cfi_def_cfa_register 7
+  43:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   TIM_OC_InitTypeDef sConfigOC;
+  44:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig;
+  45:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+  46:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   htim16.Instance = TIM16;
+ 120              		.loc 1 46 19
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s 			page 4
+
+
+ 121 0006 354B     		ldr	r3, .L9
+ 122 0008 354A     		ldr	r2, .L9+4
+ 123 000a 1A60     		str	r2, [r3]
+  47:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   htim16.Init.Prescaler = 79;
+ 124              		.loc 1 47 25
+ 125 000c 334B     		ldr	r3, .L9
+ 126 000e 4F22     		movs	r2, #79
+ 127 0010 5A60     		str	r2, [r3, #4]
+  48:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   htim16.Init.CounterMode = TIM_COUNTERMODE_UP;
+ 128              		.loc 1 48 27
+ 129 0012 324B     		ldr	r3, .L9
+ 130 0014 0022     		movs	r2, #0
+ 131 0016 9A60     		str	r2, [r3, #8]
+  49:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   htim16.Init.Period = 999;
+ 132              		.loc 1 49 22
+ 133 0018 304B     		ldr	r3, .L9
+ 134 001a 40F2E732 		movw	r2, #999
+ 135 001e DA60     		str	r2, [r3, #12]
+  50:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   htim16.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+ 136              		.loc 1 50 29
+ 137 0020 2E4B     		ldr	r3, .L9
+ 138 0022 0022     		movs	r2, #0
+ 139 0024 1A61     		str	r2, [r3, #16]
+  51:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   htim16.Init.RepetitionCounter = 0;
+ 140              		.loc 1 51 33
+ 141 0026 2D4B     		ldr	r3, .L9
+ 142 0028 0022     		movs	r2, #0
+ 143 002a 5A61     		str	r2, [r3, #20]
+  52:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   htim16.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+ 144              		.loc 1 52 33
+ 145 002c 2B4B     		ldr	r3, .L9
+ 146 002e 0022     		movs	r2, #0
+ 147 0030 9A61     		str	r2, [r3, #24]
+  53:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   if (HAL_TIM_Base_Init(&htim16) != HAL_OK)
+ 148              		.loc 1 53 7
+ 149 0032 2A48     		ldr	r0, .L9
+ 150 0034 FFF7FEFF 		bl	HAL_TIM_Base_Init
+ 151 0038 0346     		mov	r3, r0
+ 152              		.loc 1 53 6
+ 153 003a 002B     		cmp	r3, #0
+ 154 003c 03D0     		beq	.L5
+  54:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   {
+  55:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****     _Error_Handler(__FILE__, __LINE__);
+ 155              		.loc 1 55 5
+ 156 003e 3721     		movs	r1, #55
+ 157 0040 2848     		ldr	r0, .L9+8
+ 158 0042 FFF7FEFF 		bl	_Error_Handler
+ 159              	.L5:
+  56:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   }
+  57:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+  58:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   if (HAL_TIM_PWM_Init(&htim16) != HAL_OK)
+ 160              		.loc 1 58 7
+ 161 0046 2548     		ldr	r0, .L9
+ 162 0048 FFF7FEFF 		bl	HAL_TIM_PWM_Init
+ 163 004c 0346     		mov	r3, r0
+ 164              		.loc 1 58 6
+ 165 004e 002B     		cmp	r3, #0
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s 			page 5
+
+
+ 166 0050 03D0     		beq	.L6
+  59:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   {
+  60:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****     _Error_Handler(__FILE__, __LINE__);
+ 167              		.loc 1 60 5
+ 168 0052 3C21     		movs	r1, #60
+ 169 0054 2348     		ldr	r0, .L9+8
+ 170 0056 FFF7FEFF 		bl	_Error_Handler
+ 171              	.L6:
+  61:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   }
+  62:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+  63:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   sConfigOC.OCMode = TIM_OCMODE_PWM1;
+ 172              		.loc 1 63 20
+ 173 005a 6023     		movs	r3, #96
+ 174 005c FB62     		str	r3, [r7, #44]
+  64:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   sConfigOC.Pulse = 499;
+ 175              		.loc 1 64 19
+ 176 005e 40F2F313 		movw	r3, #499
+ 177 0062 3B63     		str	r3, [r7, #48]
+  65:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+ 178              		.loc 1 65 24
+ 179 0064 0023     		movs	r3, #0
+ 180 0066 7B63     		str	r3, [r7, #52]
+  66:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
+ 181              		.loc 1 66 25
+ 182 0068 0023     		movs	r3, #0
+ 183 006a BB63     		str	r3, [r7, #56]
+  67:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+ 184              		.loc 1 67 24
+ 185 006c 0023     		movs	r3, #0
+ 186 006e FB63     		str	r3, [r7, #60]
+  68:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
+ 187              		.loc 1 68 25
+ 188 0070 0023     		movs	r3, #0
+ 189 0072 3B64     		str	r3, [r7, #64]
+  69:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
+ 190              		.loc 1 69 26
+ 191 0074 0023     		movs	r3, #0
+ 192 0076 7B64     		str	r3, [r7, #68]
+  70:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   if (HAL_TIM_PWM_ConfigChannel(&htim16, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+ 193              		.loc 1 70 7
+ 194 0078 07F12C03 		add	r3, r7, #44
+ 195 007c 0022     		movs	r2, #0
+ 196 007e 1946     		mov	r1, r3
+ 197 0080 1648     		ldr	r0, .L9
+ 198 0082 FFF7FEFF 		bl	HAL_TIM_PWM_ConfigChannel
+ 199 0086 0346     		mov	r3, r0
+ 200              		.loc 1 70 6
+ 201 0088 002B     		cmp	r3, #0
+ 202 008a 03D0     		beq	.L7
+  71:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   {
+  72:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****     _Error_Handler(__FILE__, __LINE__);
+ 203              		.loc 1 72 5
+ 204 008c 4821     		movs	r1, #72
+ 205 008e 1548     		ldr	r0, .L9+8
+ 206 0090 FFF7FEFF 		bl	_Error_Handler
+ 207              	.L7:
+  73:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   }
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s 			page 6
+
+
+  74:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+  75:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
+ 208              		.loc 1 75 40
+ 209 0094 0023     		movs	r3, #0
+ 210 0096 3B60     		str	r3, [r7]
+  76:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
+ 211              		.loc 1 76 41
+ 212 0098 0023     		movs	r3, #0
+ 213 009a 7B60     		str	r3, [r7, #4]
+  77:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
+ 214              		.loc 1 77 34
+ 215 009c 0023     		movs	r3, #0
+ 216 009e BB60     		str	r3, [r7, #8]
+  78:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   sBreakDeadTimeConfig.DeadTime = 0;
+ 217              		.loc 1 78 33
+ 218 00a0 0023     		movs	r3, #0
+ 219 00a2 FB60     		str	r3, [r7, #12]
+  79:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
+ 220              		.loc 1 79 35
+ 221 00a4 0023     		movs	r3, #0
+ 222 00a6 3B61     		str	r3, [r7, #16]
+  80:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
+ 223              		.loc 1 80 38
+ 224 00a8 4FF40053 		mov	r3, #8192
+ 225 00ac 7B61     		str	r3, [r7, #20]
+  81:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   sBreakDeadTimeConfig.BreakFilter = 0;
+ 226              		.loc 1 81 36
+ 227 00ae 0023     		movs	r3, #0
+ 228 00b0 BB61     		str	r3, [r7, #24]
+  82:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
+ 229              		.loc 1 82 40
+ 230 00b2 0023     		movs	r3, #0
+ 231 00b4 BB62     		str	r3, [r7, #40]
+  83:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   if (HAL_TIMEx_ConfigBreakDeadTime(&htim16, &sBreakDeadTimeConfig) != HAL_OK)
+ 232              		.loc 1 83 7
+ 233 00b6 3B46     		mov	r3, r7
+ 234 00b8 1946     		mov	r1, r3
+ 235 00ba 0848     		ldr	r0, .L9
+ 236 00bc FFF7FEFF 		bl	HAL_TIMEx_ConfigBreakDeadTime
+ 237 00c0 0346     		mov	r3, r0
+ 238              		.loc 1 83 6
+ 239 00c2 002B     		cmp	r3, #0
+ 240 00c4 03D0     		beq	.L8
+  84:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   {
+  85:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****     _Error_Handler(__FILE__, __LINE__);
+ 241              		.loc 1 85 5
+ 242 00c6 5521     		movs	r1, #85
+ 243 00c8 0648     		ldr	r0, .L9+8
+ 244 00ca FFF7FEFF 		bl	_Error_Handler
+ 245              	.L8:
+  86:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   }
+  87:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+  88:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   HAL_TIM_MspPostInit(&htim16);
+ 246              		.loc 1 88 3
+ 247 00ce 0348     		ldr	r0, .L9
+ 248 00d0 FFF7FEFF 		bl	HAL_TIM_MspPostInit
+  89:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s 			page 7
+
+
+  90:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** }
+ 249              		.loc 1 90 1
+ 250 00d4 00BF     		nop
+ 251 00d6 4837     		adds	r7, r7, #72
+ 252              	.LCFI8:
+ 253              		.cfi_def_cfa_offset 8
+ 254 00d8 BD46     		mov	sp, r7
+ 255              	.LCFI9:
+ 256              		.cfi_def_cfa_register 13
+ 257              		@ sp needed
+ 258 00da 80BD     		pop	{r7, pc}
+ 259              	.L10:
+ 260              		.align	2
+ 261              	.L9:
+ 262 00dc 00000000 		.word	htim16
+ 263 00e0 00440140 		.word	1073824768
+ 264 00e4 00000000 		.word	.LC0
+ 265              		.cfi_endproc
+ 266              	.LFE288:
+ 268              		.section	.text.HAL_TIM_Base_MspInit,"ax",%progbits
+ 269              		.align	1
+ 270              		.global	HAL_TIM_Base_MspInit
+ 271              		.syntax unified
+ 272              		.thumb
+ 273              		.thumb_func
+ 274              		.fpu fpv4-sp-d16
+ 276              	HAL_TIM_Base_MspInit:
+ 277              	.LFB289:
+  91:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** /***************************************************************
+  92:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 函数名称: HAL_TIM_Base_MspInit
+  93:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 说    明: 使能定时器16时钟,设置时钟源
+  94:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 参    数: 无
+  95:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 返 回 值: 无
+  96:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** ***************************************************************/
+  97:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** void HAL_TIM_Base_MspInit(TIM_HandleTypeDef* tim_baseHandle)
+  98:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** {
+ 278              		.loc 1 98 1
+ 279              		.cfi_startproc
+ 280              		@ args = 0, pretend = 0, frame = 16
+ 281              		@ frame_needed = 1, uses_anonymous_args = 0
+ 282              		@ link register save eliminated.
+ 283 0000 80B4     		push	{r7}
+ 284              	.LCFI10:
+ 285              		.cfi_def_cfa_offset 4
+ 286              		.cfi_offset 7, -4
+ 287 0002 85B0     		sub	sp, sp, #20
+ 288              	.LCFI11:
+ 289              		.cfi_def_cfa_offset 24
+ 290 0004 00AF     		add	r7, sp, #0
+ 291              	.LCFI12:
+ 292              		.cfi_def_cfa_register 7
+ 293 0006 7860     		str	r0, [r7, #4]
+  99:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+ 100:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 	if(tim_baseHandle->Instance==TIM16)
+ 294              		.loc 1 100 19
+ 295 0008 7B68     		ldr	r3, [r7, #4]
+ 296 000a 1B68     		ldr	r3, [r3]
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s 			page 8
+
+
+ 297              		.loc 1 100 4
+ 298 000c 0A4A     		ldr	r2, .L14
+ 299 000e 9342     		cmp	r3, r2
+ 300 0010 0BD1     		bne	.L13
+ 301              	.LBB3:
+ 101:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   {
+ 102:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   /* USER CODE BEGIN TIM16_MspInit 0 */
+ 103:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+ 104:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   /* USER CODE END TIM16_MspInit 0 */
+ 105:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****     /* TIM16 clock enable */
+ 106:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****     __HAL_RCC_TIM16_CLK_ENABLE();
+ 302              		.loc 1 106 5
+ 303 0012 0A4B     		ldr	r3, .L14+4
+ 304 0014 1B6E     		ldr	r3, [r3, #96]
+ 305 0016 094A     		ldr	r2, .L14+4
+ 306 0018 43F40033 		orr	r3, r3, #131072
+ 307 001c 1366     		str	r3, [r2, #96]
+ 308 001e 074B     		ldr	r3, .L14+4
+ 309 0020 1B6E     		ldr	r3, [r3, #96]
+ 310 0022 03F40033 		and	r3, r3, #131072
+ 311 0026 FB60     		str	r3, [r7, #12]
+ 312 0028 FB68     		ldr	r3, [r7, #12]
+ 313              	.L13:
+ 314              	.LBE3:
+ 107:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   /* USER CODE BEGIN TIM16_MspInit 1 */
+ 108:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+ 109:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   /* USER CODE END TIM16_MspInit 1 */
+ 110:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   }
+ 111:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** }
+ 315              		.loc 1 111 1
+ 316 002a 00BF     		nop
+ 317 002c 1437     		adds	r7, r7, #20
+ 318              	.LCFI13:
+ 319              		.cfi_def_cfa_offset 4
+ 320 002e BD46     		mov	sp, r7
+ 321              	.LCFI14:
+ 322              		.cfi_def_cfa_register 13
+ 323              		@ sp needed
+ 324 0030 5DF8047B 		ldr	r7, [sp], #4
+ 325              	.LCFI15:
+ 326              		.cfi_restore 7
+ 327              		.cfi_def_cfa_offset 0
+ 328 0034 7047     		bx	lr
+ 329              	.L15:
+ 330 0036 00BF     		.align	2
+ 331              	.L14:
+ 332 0038 00440140 		.word	1073824768
+ 333 003c 00100240 		.word	1073876992
+ 334              		.cfi_endproc
+ 335              	.LFE289:
+ 337              		.section	.text.HAL_TIM_MspPostInit,"ax",%progbits
+ 338              		.align	1
+ 339              		.global	HAL_TIM_MspPostInit
+ 340              		.syntax unified
+ 341              		.thumb
+ 342              		.thumb_func
+ 343              		.fpu fpv4-sp-d16
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s 			page 9
+
+
+ 345              	HAL_TIM_MspPostInit:
+ 346              	.LFB290:
+ 112:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+ 113:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** /***************************************************************
+ 114:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 函数名称: HAL_TIM_MspPostInit
+ 115:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 说    明: 使能定时器16硬件初始化
+ 116:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 参    数: 无
+ 117:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 返 回 值: 无
+ 118:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** ***************************************************************/
+ 119:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** void HAL_TIM_MspPostInit(TIM_HandleTypeDef* timHandle)
+ 120:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** {
+ 347              		.loc 1 120 1
+ 348              		.cfi_startproc
+ 349              		@ args = 0, pretend = 0, frame = 32
+ 350              		@ frame_needed = 1, uses_anonymous_args = 0
+ 351 0000 80B5     		push	{r7, lr}
+ 352              	.LCFI16:
+ 353              		.cfi_def_cfa_offset 8
+ 354              		.cfi_offset 7, -8
+ 355              		.cfi_offset 14, -4
+ 356 0002 88B0     		sub	sp, sp, #32
+ 357              	.LCFI17:
+ 358              		.cfi_def_cfa_offset 40
+ 359 0004 00AF     		add	r7, sp, #0
+ 360              	.LCFI18:
+ 361              		.cfi_def_cfa_register 7
+ 362 0006 7860     		str	r0, [r7, #4]
+ 121:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+ 122:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   GPIO_InitTypeDef GPIO_InitStruct;
+ 123:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   if(timHandle->Instance==TIM16)
+ 363              		.loc 1 123 15
+ 364 0008 7B68     		ldr	r3, [r7, #4]
+ 365 000a 1B68     		ldr	r3, [r3]
+ 366              		.loc 1 123 5
+ 367 000c 0B4A     		ldr	r2, .L19
+ 368 000e 9342     		cmp	r3, r2
+ 369 0010 10D1     		bne	.L18
+ 124:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   {
+ 125:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   /* USER CODE BEGIN TIM16_MspPostInit 0 */
+ 126:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+ 127:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   /* USER CODE END TIM16_MspPostInit 0 */
+ 128:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   
+ 129:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****     /**TIM16 GPIO Configuration    
+ 130:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****     PB8     ------> TIM16_CH1 
+ 131:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****     */
+ 132:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****     GPIO_InitStruct.Pin = IS1_Beep_Pin;
+ 370              		.loc 1 132 25
+ 371 0012 4FF48073 		mov	r3, #256
+ 372 0016 FB60     		str	r3, [r7, #12]
+ 133:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+ 373              		.loc 1 133 26
+ 374 0018 0223     		movs	r3, #2
+ 375 001a 3B61     		str	r3, [r7, #16]
+ 134:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 376              		.loc 1 134 26
+ 377 001c 0023     		movs	r3, #0
+ 378 001e 7B61     		str	r3, [r7, #20]
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s 			page 10
+
+
+ 135:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+ 379              		.loc 1 135 27
+ 380 0020 0223     		movs	r3, #2
+ 381 0022 BB61     		str	r3, [r7, #24]
+ 136:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****     GPIO_InitStruct.Alternate = GPIO_AF14_TIM16;
+ 382              		.loc 1 136 31
+ 383 0024 0E23     		movs	r3, #14
+ 384 0026 FB61     		str	r3, [r7, #28]
+ 137:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****     HAL_GPIO_Init(IS1_Beep_GPIO_Port, &GPIO_InitStruct);
+ 385              		.loc 1 137 5
+ 386 0028 07F10C03 		add	r3, r7, #12
+ 387 002c 1946     		mov	r1, r3
+ 388 002e 0448     		ldr	r0, .L19+4
+ 389 0030 FFF7FEFF 		bl	HAL_GPIO_Init
+ 390              	.L18:
+ 138:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+ 139:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   /* USER CODE BEGIN TIM16_MspPostInit 1 */
+ 140:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+ 141:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   /* USER CODE END TIM16_MspPostInit 1 */
+ 142:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   }
+ 143:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+ 144:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** }
+ 391              		.loc 1 144 1
+ 392 0034 00BF     		nop
+ 393 0036 2037     		adds	r7, r7, #32
+ 394              	.LCFI19:
+ 395              		.cfi_def_cfa_offset 8
+ 396 0038 BD46     		mov	sp, r7
+ 397              	.LCFI20:
+ 398              		.cfi_def_cfa_register 13
+ 399              		@ sp needed
+ 400 003a 80BD     		pop	{r7, pc}
+ 401              	.L20:
+ 402              		.align	2
+ 403              	.L19:
+ 404 003c 00440140 		.word	1073824768
+ 405 0040 00040048 		.word	1207960576
+ 406              		.cfi_endproc
+ 407              	.LFE290:
+ 409              		.section	.text.Init_Beep,"ax",%progbits
+ 410              		.align	1
+ 411              		.global	Init_Beep
+ 412              		.syntax unified
+ 413              		.thumb
+ 414              		.thumb_func
+ 415              		.fpu fpv4-sp-d16
+ 417              	Init_Beep:
+ 418              	.LFB291:
+ 145:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** /***************************************************************
+ 146:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 函数名称: Init_Beep
+ 147:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 说    明: 初始化E53_IS1的蜂鸣器
+ 148:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 参    数: 无
+ 149:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 返 回 值: 无
+ 150:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** ***************************************************************/
+ 151:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** void Init_Beep(void)
+ 152:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** {
+ 419              		.loc 1 152 1
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s 			page 11
+
+
+ 420              		.cfi_startproc
+ 421              		@ args = 0, pretend = 0, frame = 24
+ 422              		@ frame_needed = 1, uses_anonymous_args = 0
+ 423 0000 80B5     		push	{r7, lr}
+ 424              	.LCFI21:
+ 425              		.cfi_def_cfa_offset 8
+ 426              		.cfi_offset 7, -8
+ 427              		.cfi_offset 14, -4
+ 428 0002 86B0     		sub	sp, sp, #24
+ 429              	.LCFI22:
+ 430              		.cfi_def_cfa_offset 32
+ 431 0004 00AF     		add	r7, sp, #0
+ 432              	.LCFI23:
+ 433              		.cfi_def_cfa_register 7
+ 434              	.LBB4:
+ 153:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   GPIO_InitTypeDef GPIO_InitStruct;
+ 154:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+ 155:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   /* GPIO Ports Clock Enable */
+ 156:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   IS1_Beep_GPIO_CLK_ENABLE();
+ 435              		.loc 1 156 3
+ 436 0006 124B     		ldr	r3, .L22
+ 437 0008 DB6C     		ldr	r3, [r3, #76]
+ 438 000a 114A     		ldr	r2, .L22
+ 439 000c 43F00203 		orr	r3, r3, #2
+ 440 0010 D364     		str	r3, [r2, #76]
+ 441 0012 0F4B     		ldr	r3, .L22
+ 442 0014 DB6C     		ldr	r3, [r3, #76]
+ 443 0016 03F00203 		and	r3, r3, #2
+ 444 001a 3B60     		str	r3, [r7]
+ 445 001c 3B68     		ldr	r3, [r7]
+ 446              	.LBE4:
+ 157:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+ 158:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 	 /*Configure GPIO pin Output Level */
+ 159:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   HAL_GPIO_WritePin(IS1_Beep_GPIO_Port, IS1_Beep_Pin, GPIO_PIN_RESET);
+ 447              		.loc 1 159 3
+ 448 001e 0022     		movs	r2, #0
+ 449 0020 4FF48071 		mov	r1, #256
+ 450 0024 0B48     		ldr	r0, .L22+4
+ 451 0026 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 160:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 	
+ 161:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 	 /*Configure GPIO pin : PtPin */
+ 162:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   GPIO_InitStruct.Pin = IS1_Beep_Pin;
+ 452              		.loc 1 162 23
+ 453 002a 4FF48073 		mov	r3, #256
+ 454 002e 7B60     		str	r3, [r7, #4]
+ 163:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+ 455              		.loc 1 163 24
+ 456 0030 0123     		movs	r3, #1
+ 457 0032 BB60     		str	r3, [r7, #8]
+ 164:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 458              		.loc 1 164 24
+ 459 0034 0023     		movs	r3, #0
+ 460 0036 FB60     		str	r3, [r7, #12]
+ 165:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+ 461              		.loc 1 165 25
+ 462 0038 0023     		movs	r3, #0
+ 463 003a 3B61     		str	r3, [r7, #16]
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s 			page 12
+
+
+ 166:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   HAL_GPIO_Init(IS1_Beep_GPIO_Port, &GPIO_InitStruct);
+ 464              		.loc 1 166 3
+ 465 003c 3B1D     		adds	r3, r7, #4
+ 466 003e 1946     		mov	r1, r3
+ 467 0040 0448     		ldr	r0, .L22+4
+ 468 0042 FFF7FEFF 		bl	HAL_GPIO_Init
+ 167:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** }
+ 469              		.loc 1 167 1
+ 470 0046 00BF     		nop
+ 471 0048 1837     		adds	r7, r7, #24
+ 472              	.LCFI24:
+ 473              		.cfi_def_cfa_offset 8
+ 474 004a BD46     		mov	sp, r7
+ 475              	.LCFI25:
+ 476              		.cfi_def_cfa_register 13
+ 477              		@ sp needed
+ 478 004c 80BD     		pop	{r7, pc}
+ 479              	.L23:
+ 480 004e 00BF     		.align	2
+ 481              	.L22:
+ 482 0050 00100240 		.word	1073876992
+ 483 0054 00040048 		.word	1207960576
+ 484              		.cfi_endproc
+ 485              	.LFE291:
+ 487              		.section	.text.Init_E53_IS1,"ax",%progbits
+ 488              		.align	1
+ 489              		.global	Init_E53_IS1
+ 490              		.syntax unified
+ 491              		.thumb
+ 492              		.thumb_func
+ 493              		.fpu fpv4-sp-d16
+ 495              	Init_E53_IS1:
+ 496              	.LFB292:
+ 168:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** /***************************************************************
+ 169:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 函数名称: Init_E53_IS1
+ 170:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 说    明: 初始化E53_IS1扩展板
+ 171:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 参    数: 无
+ 172:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 返 回 值: 无
+ 173:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** ***************************************************************/
+ 174:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** void Init_E53_IS1(void)
+ 175:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** {
+ 497              		.loc 1 175 1
+ 498              		.cfi_startproc
+ 499              		@ args = 0, pretend = 0, frame = 0
+ 500              		@ frame_needed = 1, uses_anonymous_args = 0
+ 501 0000 80B5     		push	{r7, lr}
+ 502              	.LCFI26:
+ 503              		.cfi_def_cfa_offset 8
+ 504              		.cfi_offset 7, -8
+ 505              		.cfi_offset 14, -4
+ 506 0002 00AF     		add	r7, sp, #0
+ 507              	.LCFI27:
+ 508              		.cfi_def_cfa_register 7
+ 176:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 	Init_Beep();
+ 509              		.loc 1 176 2
+ 510 0004 FFF7FEFF 		bl	Init_Beep
+ 177:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c ****   Infrared_Init();
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s 			page 13
+
+
+ 511              		.loc 1 177 3
+ 512 0008 FFF7FEFF 		bl	Infrared_Init
+ 178:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 	MX_TIM16_Init();	
+ 513              		.loc 1 178 2
+ 514 000c FFF7FEFF 		bl	MX_TIM16_Init
+ 179:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** }
+ 515              		.loc 1 179 1
+ 516 0010 00BF     		nop
+ 517 0012 80BD     		pop	{r7, pc}
+ 518              		.cfi_endproc
+ 519              	.LFE292:
+ 521              		.section	.text.E53_IS1_Beep_StatusSet,"ax",%progbits
+ 522              		.align	1
+ 523              		.global	E53_IS1_Beep_StatusSet
+ 524              		.syntax unified
+ 525              		.thumb
+ 526              		.thumb_func
+ 527              		.fpu fpv4-sp-d16
+ 529              	E53_IS1_Beep_StatusSet:
+ 530              	.LFB293:
+ 180:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 
+ 181:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** /***************************************************************
+ 182:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 函数名称: E53_IS1_Beep_StatusSet
+ 183:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 说    明: E53_IS11蜂鸣器报警与否
+ 184:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 参    数: status,枚举的数据
+ 185:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** *									OFF,关蜂鸣器
+ 186:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** *									ON,开蜂鸣器
+ 187:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** * 返 回 值: 无
+ 188:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** ***************************************************************/
+ 189:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** void E53_IS1_Beep_StatusSet(E53_IS1_Status_ENUM status)
+ 190:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** {
+ 531              		.loc 1 190 1
+ 532              		.cfi_startproc
+ 533              		@ args = 0, pretend = 0, frame = 8
+ 534              		@ frame_needed = 1, uses_anonymous_args = 0
+ 535 0000 80B5     		push	{r7, lr}
+ 536              	.LCFI28:
+ 537              		.cfi_def_cfa_offset 8
+ 538              		.cfi_offset 7, -8
+ 539              		.cfi_offset 14, -4
+ 540 0002 82B0     		sub	sp, sp, #8
+ 541              	.LCFI29:
+ 542              		.cfi_def_cfa_offset 16
+ 543 0004 00AF     		add	r7, sp, #0
+ 544              	.LCFI30:
+ 545              		.cfi_def_cfa_register 7
+ 546 0006 0346     		mov	r3, r0
+ 547 0008 FB71     		strb	r3, [r7, #7]
+ 191:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 	if(status == ON)
+ 548              		.loc 1 191 4
+ 549 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 550 000c 012B     		cmp	r3, #1
+ 551 000e 03D1     		bne	.L26
+ 192:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 		HAL_TIM_PWM_Start(&htim16,TIM_CHANNEL_1);
+ 552              		.loc 1 192 3
+ 553 0010 0021     		movs	r1, #0
+ 554 0012 0748     		ldr	r0, .L29
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s 			page 14
+
+
+ 555 0014 FFF7FEFF 		bl	HAL_TIM_PWM_Start
+ 556              	.L26:
+ 193:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 	if(status == OFF)
+ 557              		.loc 1 193 4
+ 558 0018 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 559 001a 002B     		cmp	r3, #0
+ 560 001c 03D1     		bne	.L28
+ 194:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** 		HAL_TIM_PWM_Stop(&htim16,TIM_CHANNEL_1);
+ 561              		.loc 1 194 3
+ 562 001e 0021     		movs	r1, #0
+ 563 0020 0348     		ldr	r0, .L29
+ 564 0022 FFF7FEFF 		bl	HAL_TIM_PWM_Stop
+ 565              	.L28:
+ 195:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface\E53_IS1.c **** }...
+ 566              		.loc 1 195 1
+ 567 0026 00BF     		nop
+ 568 0028 0837     		adds	r7, r7, #8
+ 569              	.LCFI31:
+ 570              		.cfi_def_cfa_offset 8
+ 571 002a BD46     		mov	sp, r7
+ 572              	.LCFI32:
+ 573              		.cfi_def_cfa_register 13
+ 574              		@ sp needed
+ 575 002c 80BD     		pop	{r7, pc}
+ 576              	.L30:
+ 577 002e 00BF     		.align	2
+ 578              	.L29:
+ 579 0030 00000000 		.word	htim16
+ 580              		.cfi_endproc
+ 581              	.LFE293:
+ 583              		.text
+ 584              	.Letext0:
+ 585              		.file 2 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 586              		.file 3 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 587              		.file 4 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 588              		.file 5 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\lib\\gcc\\arm-none
+ 589              		.file 6 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 590              		.file 7 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_typedef.h"
+ 591              		.file 8 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 592              		.file 9 "d:/LiteOS_Lab/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 593              		.file 10 "d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Inc/system_stm32l4xx.h"
+ 594              		.file 11 "d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Inc/stm32l431xx.h"
+ 595              		.file 12 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_config.h"
+ 596              		.file 13 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_err.h"
+ 597              		.file 14 "d:/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 598              		.file 15 "d:/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h"
+ 599              		.file 16 "d:/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_gpio.h"
+ 600              		.file 17 "d:/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_dma.h"
+ 601              		.file 18 "d:/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim.h"
+ 602              		.file 19 "d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Hardware/IoTBox/rsrvd_interface/E53_IS1.h"
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s 			page 15
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 E53_IS1.c
+                            *COM*:00000040 htim16
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s:19     .text.Infrared_Init:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s:27     .text.Infrared_Init:00000000 Infrared_Init
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s:85     .text.Infrared_Init:00000040 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s:91     .rodata:00000000 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s:96     .text.MX_TIM16_Init:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s:103    .text.MX_TIM16_Init:00000000 MX_TIM16_Init
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s:345    .text.HAL_TIM_MspPostInit:00000000 HAL_TIM_MspPostInit
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s:262    .text.MX_TIM16_Init:000000dc $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s:269    .text.HAL_TIM_Base_MspInit:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s:276    .text.HAL_TIM_Base_MspInit:00000000 HAL_TIM_Base_MspInit
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s:332    .text.HAL_TIM_Base_MspInit:00000038 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s:338    .text.HAL_TIM_MspPostInit:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s:404    .text.HAL_TIM_MspPostInit:0000003c $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s:410    .text.Init_Beep:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s:417    .text.Init_Beep:00000000 Init_Beep
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s:482    .text.Init_Beep:00000050 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s:488    .text.Init_E53_IS1:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s:495    .text.Init_E53_IS1:00000000 Init_E53_IS1
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s:522    .text.E53_IS1_Beep_StatusSet:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s:529    .text.E53_IS1_Beep_StatusSet:00000000 E53_IS1_Beep_StatusSet
+C:\Users\ADMINI~1\AppData\Local\Temp\ccHFsAPB.s:579    .text.E53_IS1_Beep_StatusSet:00000030 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_Init
+HAL_TIM_Base_Init
+_Error_Handler
+HAL_TIM_PWM_Init
+HAL_TIM_PWM_ConfigChannel
+HAL_TIMEx_ConfigBreakDeadTime
+HAL_GPIO_WritePin
+HAL_TIM_PWM_Start
+HAL_TIM_PWM_Stop

@@ -1,0 +1,645 @@
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"uart_debug.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.data.s_pUSART,"aw"
+  18              		.align	2
+  21              	s_pUSART:
+  22 0000 00440040 		.word	1073759232
+  23              		.section	.data.s_uwIRQn,"aw"
+  24              		.align	2
+  27              	s_uwIRQn:
+  28 0000 26000000 		.word	38
+  29              		.section	.bss.s_uart_init,"aw",%nobits
+  30              		.align	2
+  33              	s_uart_init:
+  34 0000 00000000 		.space	4
+  35              		.comm	uart_debug,120,4
+  36              		.section	.bss.s_uartdebug_rcv_ring,"aw",%nobits
+  37              		.align	2
+  40              	s_uartdebug_rcv_ring:
+  41 0000 00000000 		.space	16
+  41      00000000 
+  41      00000000 
+  41      00000000 
+  42              		.section	.bss.s_uartdebug_rcv_ringmem,"aw",%nobits
+  43              		.align	2
+  46              	s_uartdebug_rcv_ringmem:
+  47 0000 00000000 		.space	128
+  47      00000000 
+  47      00000000 
+  47      00000000 
+  47      00000000 
+  48              		.section	.bss.s_uartdebug_rcv_sync,"aw",%nobits
+  49              		.align	2
+  52              	s_uartdebug_rcv_sync:
+  53 0000 00000000 		.space	4
+  54              		.section	.text.uart_debug_irq,"ax",%progbits
+  55              		.align	1
+  56              		.arch armv7e-m
+  57              		.syntax unified
+  58              		.thumb
+  59              		.thumb_func
+  60              		.fpu fpv4-sp-d16
+  62              	uart_debug_irq:
+  63              	.LFB287:
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s 			page 2
+
+
+  64              		.file 1 "d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src/uart_debug.c"
+   1:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** /*----------------------------------------------------------------------------
+   2:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+   3:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * All rights reserved.
+   4:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * are permitted provided that the following conditions are met:
+   6:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * conditions and the following disclaimer.
+   8:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * provided with the distribution.
+  11:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * permission.
+  14:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  *---------------------------------------------------------------------------*/
+  26:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** /*----------------------------------------------------------------------------
+  27:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * Notice of Export Control Law
+  28:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * ===============================================
+  29:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  * applicable export control laws and regulations.
+  33:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****  *---------------------------------------------------------------------------*/
+  34:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** 
+  35:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** #include "usart.h"
+  36:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** 
+  37:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** #include "stm32l4xx.h"
+  38:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** #include <stdint.h>
+  39:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** #include <stddef.h>
+  40:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** 
+  41:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** #include <osal.h>
+  42:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** #include <link_misc.h>
+  43:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** 
+  44:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** #include <los_hwi.h>
+  45:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** #include <los_sem.h>
+  46:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** #include <los_base.h>
+  47:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** 
+  48:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** #define CN_RCV_RING_BUFLEN  128
+  49:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** 
+  50:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** static USART_TypeDef*     s_pUSART = USART2;
+  51:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** static uint32_t           s_uwIRQn = USART2_IRQn;
+  52:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** 
+  53:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** static bool_t s_uart_init = false;
+  54:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** 
+  55:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** /* USART1 init function */
+  56:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** UART_HandleTypeDef uart_debug;
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s 			page 3
+
+
+  57:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** static tag_ring_buffer_t  s_uartdebug_rcv_ring;
+  58:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** static unsigned char      s_uartdebug_rcv_ringmem[CN_RCV_RING_BUFLEN];
+  59:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** static UINT32        s_uartdebug_rcv_sync;
+  60:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** static void uart_debug_irq(void)
+  61:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** {
+  65              		.loc 1 61 1
+  66              		.cfi_startproc
+  67              		@ args = 0, pretend = 0, frame = 8
+  68              		@ frame_needed = 1, uses_anonymous_args = 0
+  69 0000 80B5     		push	{r7, lr}
+  70              	.LCFI0:
+  71              		.cfi_def_cfa_offset 8
+  72              		.cfi_offset 7, -8
+  73              		.cfi_offset 14, -4
+  74 0002 82B0     		sub	sp, sp, #8
+  75              	.LCFI1:
+  76              		.cfi_def_cfa_offset 16
+  77 0004 00AF     		add	r7, sp, #0
+  78              	.LCFI2:
+  79              		.cfi_def_cfa_register 7
+  62:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     unsigned char value;
+  63:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     if(__HAL_UART_GET_FLAG(&uart_debug, UART_FLAG_RXNE) != RESET)
+  80              		.loc 1 63 8
+  81 0006 144B     		ldr	r3, .L5
+  82 0008 1B68     		ldr	r3, [r3]
+  83 000a DB69     		ldr	r3, [r3, #28]
+  84 000c 03F02003 		and	r3, r3, #32
+  85              		.loc 1 63 7
+  86 0010 202B     		cmp	r3, #32
+  87 0012 11D1     		bne	.L2
+  64:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     {
+  65:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****         value = (uint8_t)(uart_debug.Instance->RDR & 0x00FF);
+  88              		.loc 1 65 37
+  89 0014 104B     		ldr	r3, .L5
+  90 0016 1B68     		ldr	r3, [r3]
+  91              		.loc 1 65 46
+  92 0018 9B8C     		ldrh	r3, [r3, #36]	@ movhi
+  93 001a 9BB2     		uxth	r3, r3
+  94              		.loc 1 65 17
+  95 001c DBB2     		uxtb	r3, r3
+  96              		.loc 1 65 15
+  97 001e FB71     		strb	r3, [r7, #7]
+  66:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****         ring_buffer_write(&s_uartdebug_rcv_ring,&value,1);
+  98              		.loc 1 66 9
+  99 0020 FB1D     		adds	r3, r7, #7
+ 100 0022 0122     		movs	r2, #1
+ 101 0024 1946     		mov	r1, r3
+ 102 0026 0D48     		ldr	r0, .L5+4
+ 103 0028 FFF7FEFF 		bl	ring_buffer_write
+  67:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****         LOS_SemPost(s_uartdebug_rcv_sync);
+ 104              		.loc 1 67 9
+ 105 002c 0C4B     		ldr	r3, .L5+8
+ 106 002e 1B68     		ldr	r3, [r3]
+ 107 0030 1846     		mov	r0, r3
+ 108 0032 FFF7FEFF 		bl	LOS_SemPost
+  68:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     }
+  69:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     else if (__HAL_UART_GET_FLAG(&uart_debug,UART_FLAG_IDLE) != RESET)
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s 			page 4
+
+
+  70:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     {
+  71:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****         __HAL_UART_CLEAR_IDLEFLAG(&uart_debug);
+  72:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     }
+  73:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** }
+ 109              		.loc 1 73 1
+ 110 0036 0AE0     		b	.L4
+ 111              	.L2:
+  69:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     {
+ 112              		.loc 1 69 14
+ 113 0038 074B     		ldr	r3, .L5
+ 114 003a 1B68     		ldr	r3, [r3]
+ 115 003c DB69     		ldr	r3, [r3, #28]
+ 116 003e 03F01003 		and	r3, r3, #16
+  69:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     {
+ 117              		.loc 1 69 13
+ 118 0042 102B     		cmp	r3, #16
+ 119 0044 03D1     		bne	.L4
+  71:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     }
+ 120              		.loc 1 71 9
+ 121 0046 044B     		ldr	r3, .L5
+ 122 0048 1B68     		ldr	r3, [r3]
+ 123 004a 1022     		movs	r2, #16
+ 124 004c 1A62     		str	r2, [r3, #32]
+ 125              	.L4:
+ 126              		.loc 1 73 1
+ 127 004e 00BF     		nop
+ 128 0050 0837     		adds	r7, r7, #8
+ 129              	.LCFI3:
+ 130              		.cfi_def_cfa_offset 8
+ 131 0052 BD46     		mov	sp, r7
+ 132              	.LCFI4:
+ 133              		.cfi_def_cfa_register 13
+ 134              		@ sp needed
+ 135 0054 80BD     		pop	{r7, pc}
+ 136              	.L6:
+ 137 0056 00BF     		.align	2
+ 138              	.L5:
+ 139 0058 00000000 		.word	uart_debug
+ 140 005c 00000000 		.word	s_uartdebug_rcv_ring
+ 141 0060 00000000 		.word	s_uartdebug_rcv_sync
+ 142              		.cfi_endproc
+ 143              	.LFE287:
+ 145              		.section	.text.shell_uart_init,"ax",%progbits
+ 146              		.align	1
+ 147              		.global	shell_uart_init
+ 148              		.syntax unified
+ 149              		.thumb
+ 150              		.thumb_func
+ 151              		.fpu fpv4-sp-d16
+ 153              	shell_uart_init:
+ 154              	.LFB288:
+  74:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** void shell_uart_init(int baud)
+  75:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** {
+ 155              		.loc 1 75 1
+ 156              		.cfi_startproc
+ 157              		@ args = 0, pretend = 0, frame = 8
+ 158              		@ frame_needed = 1, uses_anonymous_args = 0
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s 			page 5
+
+
+ 159 0000 80B5     		push	{r7, lr}
+ 160              	.LCFI5:
+ 161              		.cfi_def_cfa_offset 8
+ 162              		.cfi_offset 7, -8
+ 163              		.cfi_offset 14, -4
+ 164 0002 84B0     		sub	sp, sp, #16
+ 165              	.LCFI6:
+ 166              		.cfi_def_cfa_offset 24
+ 167 0004 02AF     		add	r7, sp, #8
+ 168              	.LCFI7:
+ 169              		.cfi_def_cfa 7, 16
+ 170 0006 7860     		str	r0, [r7, #4]
+  76:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     uart_debug.Instance = s_pUSART;
+ 171              		.loc 1 76 25
+ 172 0008 224B     		ldr	r3, .L11
+ 173 000a 1B68     		ldr	r3, [r3]
+ 174 000c 224A     		ldr	r2, .L11+4
+ 175 000e 1360     		str	r3, [r2]
+  77:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     uart_debug.Init.BaudRate = baud;
+ 176              		.loc 1 77 30
+ 177 0010 7B68     		ldr	r3, [r7, #4]
+ 178 0012 214A     		ldr	r2, .L11+4
+ 179 0014 5360     		str	r3, [r2, #4]
+  78:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     uart_debug.Init.WordLength = UART_WORDLENGTH_8B;
+ 180              		.loc 1 78 32
+ 181 0016 204B     		ldr	r3, .L11+4
+ 182 0018 0022     		movs	r2, #0
+ 183 001a 9A60     		str	r2, [r3, #8]
+  79:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     uart_debug.Init.StopBits = UART_STOPBITS_1;
+ 184              		.loc 1 79 30
+ 185 001c 1E4B     		ldr	r3, .L11+4
+ 186 001e 0022     		movs	r2, #0
+ 187 0020 DA60     		str	r2, [r3, #12]
+  80:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     uart_debug.Init.Parity = UART_PARITY_NONE;
+ 188              		.loc 1 80 28
+ 189 0022 1D4B     		ldr	r3, .L11+4
+ 190 0024 0022     		movs	r2, #0
+ 191 0026 1A61     		str	r2, [r3, #16]
+  81:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     uart_debug.Init.Mode = UART_MODE_TX_RX;
+ 192              		.loc 1 81 26
+ 193 0028 1B4B     		ldr	r3, .L11+4
+ 194 002a 0C22     		movs	r2, #12
+ 195 002c 5A61     		str	r2, [r3, #20]
+  82:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     uart_debug.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+ 196              		.loc 1 82 31
+ 197 002e 1A4B     		ldr	r3, .L11+4
+ 198 0030 0022     		movs	r2, #0
+ 199 0032 9A61     		str	r2, [r3, #24]
+  83:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     uart_debug.Init.OverSampling = UART_OVERSAMPLING_16;
+ 200              		.loc 1 83 34
+ 201 0034 184B     		ldr	r3, .L11+4
+ 202 0036 0022     		movs	r2, #0
+ 203 0038 DA61     		str	r2, [r3, #28]
+  84:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     if (HAL_UART_Init(&uart_debug) != HAL_OK)
+ 204              		.loc 1 84 9
+ 205 003a 1748     		ldr	r0, .L11+4
+ 206 003c FFF7FEFF 		bl	HAL_UART_Init
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s 			page 6
+
+
+ 207 0040 0346     		mov	r3, r0
+ 208              		.loc 1 84 8
+ 209 0042 002B     		cmp	r3, #0
+ 210 0044 21D1     		bne	.L10
+  85:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     {
+  86:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****         return;
+  87:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     }
+  88:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     LOS_HwiCreate(s_uwIRQn, 3, 0, uart_debug_irq, 0);
+ 211              		.loc 1 88 5
+ 212 0046 154B     		ldr	r3, .L11+8
+ 213 0048 1868     		ldr	r0, [r3]
+ 214 004a 0023     		movs	r3, #0
+ 215 004c 0093     		str	r3, [sp]
+ 216 004e 144B     		ldr	r3, .L11+12
+ 217 0050 0022     		movs	r2, #0
+ 218 0052 0321     		movs	r1, #3
+ 219 0054 FFF7FEFF 		bl	LOS_HwiCreate
+  89:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     //__HAL_UART_ENABLE_IT(&uart_debug, UART_IT_IDLE);
+  90:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     __HAL_UART_ENABLE_IT(&uart_debug, UART_IT_RXNE);
+ 220              		.loc 1 90 5
+ 221 0058 0F4B     		ldr	r3, .L11+4
+ 222 005a 1B68     		ldr	r3, [r3]
+ 223 005c 1A68     		ldr	r2, [r3]
+ 224 005e 0E4B     		ldr	r3, .L11+4
+ 225 0060 1B68     		ldr	r3, [r3]
+ 226 0062 42F02002 		orr	r2, r2, #32
+ 227 0066 1A60     		str	r2, [r3]
+  91:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     
+  92:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     //create the receive buffer and receive sync
+  93:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     extern UINT32 osSemCreate (UINT16 usCount, UINT16 usMaxCount, UINT32 *puwSemHandle);
+  94:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     osSemCreate(0,CN_RCV_RING_BUFLEN,(UINT32 *)&s_uartdebug_rcv_sync);
+ 228              		.loc 1 94 5
+ 229 0068 0E4A     		ldr	r2, .L11+16
+ 230 006a 8021     		movs	r1, #128
+ 231 006c 0020     		movs	r0, #0
+ 232 006e FFF7FEFF 		bl	osSemCreate
+  95:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     ring_buffer_init(&s_uartdebug_rcv_ring,s_uartdebug_rcv_ringmem,CN_RCV_RING_BUFLEN,0,0);
+ 233              		.loc 1 95 5
+ 234 0072 0023     		movs	r3, #0
+ 235 0074 0093     		str	r3, [sp]
+ 236 0076 0023     		movs	r3, #0
+ 237 0078 8022     		movs	r2, #128
+ 238 007a 0B49     		ldr	r1, .L11+20
+ 239 007c 0B48     		ldr	r0, .L11+24
+ 240 007e FFF7FEFF 		bl	ring_buffer_init
+  96:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     s_uart_init = true;
+ 241              		.loc 1 96 17
+ 242 0082 0B4B     		ldr	r3, .L11+28
+ 243 0084 0122     		movs	r2, #1
+ 244 0086 1A60     		str	r2, [r3]
+ 245 0088 00E0     		b	.L7
+ 246              	.L10:
+  86:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     }
+ 247              		.loc 1 86 9
+ 248 008a 00BF     		nop
+ 249              	.L7:
+  97:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** 
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s 			page 7
+
+
+  98:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** }
+ 250              		.loc 1 98 1
+ 251 008c 0837     		adds	r7, r7, #8
+ 252              	.LCFI8:
+ 253              		.cfi_def_cfa_offset 8
+ 254 008e BD46     		mov	sp, r7
+ 255              	.LCFI9:
+ 256              		.cfi_def_cfa_register 13
+ 257              		@ sp needed
+ 258 0090 80BD     		pop	{r7, pc}
+ 259              	.L12:
+ 260 0092 00BF     		.align	2
+ 261              	.L11:
+ 262 0094 00000000 		.word	s_pUSART
+ 263 0098 00000000 		.word	uart_debug
+ 264 009c 00000000 		.word	s_uwIRQn
+ 265 00a0 00000000 		.word	uart_debug_irq
+ 266 00a4 00000000 		.word	s_uartdebug_rcv_sync
+ 267 00a8 00000000 		.word	s_uartdebug_rcv_ringmem
+ 268 00ac 00000000 		.word	s_uartdebug_rcv_ring
+ 269 00b0 00000000 		.word	s_uart_init
+ 270              		.cfi_endproc
+ 271              	.LFE288:
+ 273              		.section	.text._write,"ax",%progbits
+ 274              		.align	1
+ 275              		.global	_write
+ 276              		.syntax unified
+ 277              		.thumb
+ 278              		.thumb_func
+ 279              		.fpu fpv4-sp-d16
+ 281              	_write:
+ 282              	.LFB289:
+  99:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** 
+ 100:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** 
+ 101:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** /* define fputc */
+ 102:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** #if defined ( __CC_ARM ) || defined ( __ICCARM__ )  /* KEIL and IAR: printf will call fputc to prin
+ 103:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** int fputc(int ch, FILE *f)
+ 104:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** {
+ 105:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     HAL_UART_Transmit(&uart_debug, (uint8_t *)&ch, 1, 0xFFFF);
+ 106:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     return ch;
+ 107:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** }
+ 108:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** int fgetc(FILE *f){
+ 109:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     int ret = 0;
+ 110:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     unsigned char  value;
+ 111:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     do
+ 112:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     {
+ 113:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****         if(LOS_OK == LOS_SemPend(s_uartdebug_rcv_sync,LOS_WAIT_FOREVER))
+ 114:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****         {
+ 115:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****             ret = ring_buffer_read(&s_uartdebug_rcv_ring,&value,1);
+ 116:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****         }
+ 117:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     }while(ret <=0);
+ 118:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     ret = value;
+ 119:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     return ret;
+ 120:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** }
+ 121:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** #elif defined ( __GNUC__ )  /* GCC: printf will call _write to print */
+ 122:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** 
+ 123:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** 
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s 			page 8
+
+
+ 124:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** __attribute__((used)) int _write(int fd, char *ptr, int len)
+ 125:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** {
+ 283              		.loc 1 125 1
+ 284              		.cfi_startproc
+ 285              		@ args = 0, pretend = 0, frame = 16
+ 286              		@ frame_needed = 1, uses_anonymous_args = 0
+ 287 0000 80B5     		push	{r7, lr}
+ 288              	.LCFI10:
+ 289              		.cfi_def_cfa_offset 8
+ 290              		.cfi_offset 7, -8
+ 291              		.cfi_offset 14, -4
+ 292 0002 84B0     		sub	sp, sp, #16
+ 293              	.LCFI11:
+ 294              		.cfi_def_cfa_offset 24
+ 295 0004 00AF     		add	r7, sp, #0
+ 296              	.LCFI12:
+ 297              		.cfi_def_cfa_register 7
+ 298 0006 F860     		str	r0, [r7, #12]
+ 299 0008 B960     		str	r1, [r7, #8]
+ 300 000a 7A60     		str	r2, [r7, #4]
+ 126:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     if(s_uart_init)
+ 301              		.loc 1 126 8
+ 302 000c 084B     		ldr	r3, .L16
+ 303 000e 1B68     		ldr	r3, [r3]
+ 304              		.loc 1 126 7
+ 305 0010 002B     		cmp	r3, #0
+ 306 0012 07D0     		beq	.L14
+ 127:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     {
+ 128:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****         HAL_UART_Transmit(&uart_debug, (uint8_t *)ptr, len, 0xFFFF);
+ 307              		.loc 1 128 9
+ 308 0014 7B68     		ldr	r3, [r7, #4]
+ 309 0016 9AB2     		uxth	r2, r3
+ 310 0018 4FF6FF73 		movw	r3, #65535
+ 311 001c B968     		ldr	r1, [r7, #8]
+ 312 001e 0548     		ldr	r0, .L16+4
+ 313 0020 FFF7FEFF 		bl	HAL_UART_Transmit
+ 314              	.L14:
+ 129:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     }
+ 130:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     return len;
+ 315              		.loc 1 130 12
+ 316 0024 7B68     		ldr	r3, [r7, #4]
+ 131:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** }
+ 317              		.loc 1 131 1
+ 318 0026 1846     		mov	r0, r3
+ 319 0028 1037     		adds	r7, r7, #16
+ 320              	.LCFI13:
+ 321              		.cfi_def_cfa_offset 8
+ 322 002a BD46     		mov	sp, r7
+ 323              	.LCFI14:
+ 324              		.cfi_def_cfa_register 13
+ 325              		@ sp needed
+ 326 002c 80BD     		pop	{r7, pc}
+ 327              	.L17:
+ 328 002e 00BF     		.align	2
+ 329              	.L16:
+ 330 0030 00000000 		.word	s_uart_init
+ 331 0034 00000000 		.word	uart_debug
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s 			page 9
+
+
+ 332              		.cfi_endproc
+ 333              	.LFE289:
+ 335              		.section	.text._read,"ax",%progbits
+ 336              		.align	1
+ 337              		.global	_read
+ 338              		.syntax unified
+ 339              		.thumb
+ 340              		.thumb_func
+ 341              		.fpu fpv4-sp-d16
+ 343              	_read:
+ 344              	.LFB290:
+ 132:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** __attribute__((used)) int _read(int fd, char *ptr, int len)
+ 133:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** {
+ 345              		.loc 1 133 1
+ 346              		.cfi_startproc
+ 347              		@ args = 0, pretend = 0, frame = 24
+ 348              		@ frame_needed = 1, uses_anonymous_args = 0
+ 349 0000 80B5     		push	{r7, lr}
+ 350              	.LCFI15:
+ 351              		.cfi_def_cfa_offset 8
+ 352              		.cfi_offset 7, -8
+ 353              		.cfi_offset 14, -4
+ 354 0002 86B0     		sub	sp, sp, #24
+ 355              	.LCFI16:
+ 356              		.cfi_def_cfa_offset 32
+ 357 0004 00AF     		add	r7, sp, #0
+ 358              	.LCFI17:
+ 359              		.cfi_def_cfa_register 7
+ 360 0006 F860     		str	r0, [r7, #12]
+ 361 0008 B960     		str	r1, [r7, #8]
+ 362 000a 7A60     		str	r2, [r7, #4]
+ 134:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     int ret = 0;
+ 363              		.loc 1 134 9
+ 364 000c 0023     		movs	r3, #0
+ 365 000e 7B61     		str	r3, [r7, #20]
+ 366              	.L20:
+ 135:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     unsigned char  value;
+ 136:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     do
+ 137:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     {
+ 138:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****         if(LOS_OK == LOS_SemPend(s_uartdebug_rcv_sync,LOS_WAIT_FOREVER))
+ 367              		.loc 1 138 22
+ 368 0010 0E4B     		ldr	r3, .L22
+ 369 0012 1B68     		ldr	r3, [r3]
+ 370 0014 4FF0FF31 		mov	r1, #-1
+ 371 0018 1846     		mov	r0, r3
+ 372 001a FFF7FEFF 		bl	LOS_SemPend
+ 373 001e 0346     		mov	r3, r0
+ 374              		.loc 1 138 11
+ 375 0020 002B     		cmp	r3, #0
+ 376 0022 07D1     		bne	.L19
+ 139:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****         {
+ 140:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****             ret = ring_buffer_read(&s_uartdebug_rcv_ring,&value,1);
+ 377              		.loc 1 140 19
+ 378 0024 07F11303 		add	r3, r7, #19
+ 379 0028 0122     		movs	r2, #1
+ 380 002a 1946     		mov	r1, r3
+ 381 002c 0848     		ldr	r0, .L22+4
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s 			page 10
+
+
+ 382 002e FFF7FEFF 		bl	ring_buffer_read
+ 383 0032 7861     		str	r0, [r7, #20]
+ 384              	.L19:
+ 141:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****         }
+ 142:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     }while(ret <=0);
+ 385              		.loc 1 142 5
+ 386 0034 7B69     		ldr	r3, [r7, #20]
+ 387 0036 002B     		cmp	r3, #0
+ 388 0038 EADD     		ble	.L20
+ 143:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     *(unsigned char *)ptr = value;
+ 389              		.loc 1 143 27
+ 390 003a FA7C     		ldrb	r2, [r7, #19]	@ zero_extendqisi2
+ 391 003c BB68     		ldr	r3, [r7, #8]
+ 392 003e 1A70     		strb	r2, [r3]
+ 144:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c ****     return 1;
+ 393              		.loc 1 144 12
+ 394 0040 0123     		movs	r3, #1
+ 145:d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Src\uart_debug.c **** }
+ 395              		.loc 1 145 1
+ 396 0042 1846     		mov	r0, r3
+ 397 0044 1837     		adds	r7, r7, #24
+ 398              	.LCFI18:
+ 399              		.cfi_def_cfa_offset 8
+ 400 0046 BD46     		mov	sp, r7
+ 401              	.LCFI19:
+ 402              		.cfi_def_cfa_register 13
+ 403              		@ sp needed
+ 404 0048 80BD     		pop	{r7, pc}
+ 405              	.L23:
+ 406 004a 00BF     		.align	2
+ 407              	.L22:
+ 408 004c 00000000 		.word	s_uartdebug_rcv_sync
+ 409 0050 00000000 		.word	s_uartdebug_rcv_ring
+ 410              		.cfi_endproc
+ 411              	.LFE290:
+ 413              		.text
+ 414              	.Letext0:
+ 415              		.file 2 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 416              		.file 3 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 417              		.file 4 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 418              		.file 5 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\lib\\gcc\\arm-none
+ 419              		.file 6 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 420              		.file 7 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_typedef.h"
+ 421              		.file 8 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 422              		.file 9 "d:/LiteOS_Lab/iot_link/os/liteos/arch/arm/common/cmsis/core_cm4.h"
+ 423              		.file 10 "d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Inc/system_stm32l4xx.h"
+ 424              		.file 11 "d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Inc/stm32l431xx.h"
+ 425              		.file 12 "d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Inc/stm32l4xx.h"
+ 426              		.file 13 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_config.h"
+ 427              		.file 14 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_err.h"
+ 428              		.file 15 "d:/LiteOS_Lab/iot_link/os/liteos/arch/arm/arm-m/include/los_hwi.h"
+ 429              		.file 16 "d:/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h"
+ 430              		.file 17 "d:/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_dma.h"
+ 431              		.file 18 "d:/LiteOS_Lab/drivers/third_party/ST/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h"
+ 432              		.file 19 "d:/LiteOS_Lab/targets/STM32L431VCT6_Bossay/Inc/usart.h"
+ 433              		.file 20 "d:/LiteOS_Lab/iot_link/link_misc/link_misc.h"
+ 434              		.file 21 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_tick.h"
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s 			page 11
+
+
+ 435              		.file 22 "d:/LiteOS_Lab/iot_link/os/liteos/include/los_task.h"
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 uart_debug.c
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:18     .data.s_pUSART:00000000 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:21     .data.s_pUSART:00000000 s_pUSART
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:24     .data.s_uwIRQn:00000000 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:27     .data.s_uwIRQn:00000000 s_uwIRQn
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:30     .bss.s_uart_init:00000000 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:33     .bss.s_uart_init:00000000 s_uart_init
+                            *COM*:00000078 uart_debug
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:37     .bss.s_uartdebug_rcv_ring:00000000 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:40     .bss.s_uartdebug_rcv_ring:00000000 s_uartdebug_rcv_ring
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:43     .bss.s_uartdebug_rcv_ringmem:00000000 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:46     .bss.s_uartdebug_rcv_ringmem:00000000 s_uartdebug_rcv_ringmem
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:49     .bss.s_uartdebug_rcv_sync:00000000 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:52     .bss.s_uartdebug_rcv_sync:00000000 s_uartdebug_rcv_sync
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:55     .text.uart_debug_irq:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:62     .text.uart_debug_irq:00000000 uart_debug_irq
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:139    .text.uart_debug_irq:00000058 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:146    .text.shell_uart_init:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:153    .text.shell_uart_init:00000000 shell_uart_init
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:262    .text.shell_uart_init:00000094 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:274    .text._write:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:281    .text._write:00000000 _write
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:330    .text._write:00000030 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:336    .text._read:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:343    .text._read:00000000 _read
+C:\Users\ADMINI~1\AppData\Local\Temp\cc9VT4Sa.s:408    .text._read:0000004c $d
+
+UNDEFINED SYMBOLS
+ring_buffer_write
+LOS_SemPost
+HAL_UART_Init
+LOS_HwiCreate
+osSemCreate
+ring_buffer_init
+HAL_UART_Transmit
+LOS_SemPend
+ring_buffer_read

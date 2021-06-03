@@ -1,0 +1,884 @@
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"oc_lwm2m_al.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.bss.s_oc_lwm2m_ops,"aw",%nobits
+  18              		.align	2
+  21              	s_oc_lwm2m_ops:
+  22 0000 00000000 		.space	8
+  22      00000000 
+  23              		.section	.text.oc_lwm2m_register,"ax",%progbits
+  24              		.align	1
+  25              		.global	oc_lwm2m_register
+  26              		.arch armv7e-m
+  27              		.syntax unified
+  28              		.thumb
+  29              		.thumb_func
+  30              		.fpu fpv4-sp-d16
+  32              	oc_lwm2m_register:
+  33              	.LFB3:
+  34              		.file 1 "d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al/oc_lwm2m_al.c"
+   1:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** /*----------------------------------------------------------------------------
+   2:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * All rights reserved.
+   4:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * are permitted provided that the following conditions are met:
+   6:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * conditions and the following disclaimer.
+   8:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * provided with the distribution.
+  11:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * permission.
+  14:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  *---------------------------------------------------------------------------*/
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s 			page 2
+
+
+  26:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** /*----------------------------------------------------------------------------
+  27:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * Notice of Export Control Law
+  28:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * ===============================================
+  29:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  * applicable export control laws and regulations.
+  33:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  *---------------------------------------------------------------------------*/
+  34:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** /**
+  35:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  *  DATE                AUTHOR      INSTRUCTION
+  36:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  *  2019-05-14 17:22  zhangqianfu  The first version
+  37:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  *
+  38:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****  */
+  39:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+  40:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** #include <stdint.h>
+  41:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** #include <stddef.h>
+  42:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+  43:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** #include <string.h>
+  44:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+  45:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** #include <stdlib.h>
+  46:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** #include <osal.h>
+  47:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** #include <oc_lwm2m_al.h>
+  48:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+  49:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** typedef struct
+  50:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** {
+  51:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     const char            *name;    ///< lwm2m implement name
+  52:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     const oc_lwm2m_opt_t  *opt;     ///< lwm2m implement method
+  53:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** } oc_lwm2m_t;
+  54:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** static oc_lwm2m_t  s_oc_lwm2m_ops;
+  55:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+  56:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+  57:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** int oc_lwm2m_register(const char *name, const oc_lwm2m_opt_t *opt)
+  58:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** {
+  35              		.loc 1 58 1
+  36              		.cfi_startproc
+  37              		@ args = 0, pretend = 0, frame = 16
+  38              		@ frame_needed = 1, uses_anonymous_args = 0
+  39              		@ link register save eliminated.
+  40 0000 80B4     		push	{r7}
+  41              	.LCFI0:
+  42              		.cfi_def_cfa_offset 4
+  43              		.cfi_offset 7, -4
+  44 0002 85B0     		sub	sp, sp, #20
+  45              	.LCFI1:
+  46              		.cfi_def_cfa_offset 24
+  47 0004 00AF     		add	r7, sp, #0
+  48              	.LCFI2:
+  49              		.cfi_def_cfa_register 7
+  50 0006 7860     		str	r0, [r7, #4]
+  51 0008 3960     		str	r1, [r7]
+  59:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     int ret = -1;
+  52              		.loc 1 59 9
+  53 000a 4FF0FF33 		mov	r3, #-1
+  54 000e FB60     		str	r3, [r7, #12]
+  60:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+  61:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     if (NULL == s_oc_lwm2m_ops.opt)
+  55              		.loc 1 61 31
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s 			page 3
+
+
+  56 0010 094B     		ldr	r3, .L4
+  57 0012 5B68     		ldr	r3, [r3, #4]
+  58              		.loc 1 61 8
+  59 0014 002B     		cmp	r3, #0
+  60 0016 07D1     		bne	.L2
+  62:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     {
+  63:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****         s_oc_lwm2m_ops.name = name;
+  61              		.loc 1 63 29
+  62 0018 074A     		ldr	r2, .L4
+  63 001a 7B68     		ldr	r3, [r7, #4]
+  64 001c 1360     		str	r3, [r2]
+  64:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****         s_oc_lwm2m_ops.opt =  opt;
+  65              		.loc 1 64 28
+  66 001e 064A     		ldr	r2, .L4
+  67 0020 3B68     		ldr	r3, [r7]
+  68 0022 5360     		str	r3, [r2, #4]
+  65:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****         ret = 0;
+  69              		.loc 1 65 13
+  70 0024 0023     		movs	r3, #0
+  71 0026 FB60     		str	r3, [r7, #12]
+  72              	.L2:
+  66:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     }
+  67:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+  68:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     return ret;
+  73              		.loc 1 68 12
+  74 0028 FB68     		ldr	r3, [r7, #12]
+  69:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** }
+  75              		.loc 1 69 1
+  76 002a 1846     		mov	r0, r3
+  77 002c 1437     		adds	r7, r7, #20
+  78              	.LCFI3:
+  79              		.cfi_def_cfa_offset 4
+  80 002e BD46     		mov	sp, r7
+  81              	.LCFI4:
+  82              		.cfi_def_cfa_register 13
+  83              		@ sp needed
+  84 0030 5DF8047B 		ldr	r7, [sp], #4
+  85              	.LCFI5:
+  86              		.cfi_restore 7
+  87              		.cfi_def_cfa_offset 0
+  88 0034 7047     		bx	lr
+  89              	.L5:
+  90 0036 00BF     		.align	2
+  91              	.L4:
+  92 0038 00000000 		.word	s_oc_lwm2m_ops
+  93              		.cfi_endproc
+  94              	.LFE3:
+  96              		.section	.text.oc_lwm2m_unregister,"ax",%progbits
+  97              		.align	1
+  98              		.global	oc_lwm2m_unregister
+  99              		.syntax unified
+ 100              		.thumb
+ 101              		.thumb_func
+ 102              		.fpu fpv4-sp-d16
+ 104              	oc_lwm2m_unregister:
+ 105              	.LFB4:
+  70:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s 			page 4
+
+
+  71:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** int oc_lwm2m_unregister(const char *name)
+  72:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** {
+ 106              		.loc 1 72 1
+ 107              		.cfi_startproc
+ 108              		@ args = 0, pretend = 0, frame = 16
+ 109              		@ frame_needed = 1, uses_anonymous_args = 0
+ 110 0000 80B5     		push	{r7, lr}
+ 111              	.LCFI6:
+ 112              		.cfi_def_cfa_offset 8
+ 113              		.cfi_offset 7, -8
+ 114              		.cfi_offset 14, -4
+ 115 0002 84B0     		sub	sp, sp, #16
+ 116              	.LCFI7:
+ 117              		.cfi_def_cfa_offset 24
+ 118 0004 00AF     		add	r7, sp, #0
+ 119              	.LCFI8:
+ 120              		.cfi_def_cfa_register 7
+ 121 0006 7860     		str	r0, [r7, #4]
+  73:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     int ret = -1;
+ 122              		.loc 1 73 9
+ 123 0008 4FF0FF33 		mov	r3, #-1
+ 124 000c FB60     		str	r3, [r7, #12]
+  74:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+  75:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     if ((NULL != name) && (NULL != s_oc_lwm2m_ops.name))
+ 125              		.loc 1 75 8
+ 126 000e 7B68     		ldr	r3, [r7, #4]
+ 127 0010 002B     		cmp	r3, #0
+ 128 0012 14D0     		beq	.L7
+ 129              		.loc 1 75 50 discriminator 1
+ 130 0014 0C4B     		ldr	r3, .L9
+ 131 0016 1B68     		ldr	r3, [r3]
+ 132              		.loc 1 75 24 discriminator 1
+ 133 0018 002B     		cmp	r3, #0
+ 134 001a 10D0     		beq	.L7
+  76:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     {
+  77:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****         if (0 == strcmp(name, s_oc_lwm2m_ops.name))
+ 135              		.loc 1 77 18
+ 136 001c 0A4B     		ldr	r3, .L9
+ 137 001e 1B68     		ldr	r3, [r3]
+ 138 0020 1946     		mov	r1, r3
+ 139 0022 7868     		ldr	r0, [r7, #4]
+ 140 0024 FFF7FEFF 		bl	strcmp
+ 141 0028 0346     		mov	r3, r0
+ 142              		.loc 1 77 12
+ 143 002a 002B     		cmp	r3, #0
+ 144 002c 07D1     		bne	.L7
+  78:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****         {
+  79:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****             s_oc_lwm2m_ops.opt = NULL;   ///< also think about clear all the ops in the context,
+ 145              		.loc 1 79 32
+ 146 002e 064B     		ldr	r3, .L9
+ 147 0030 0022     		movs	r2, #0
+ 148 0032 5A60     		str	r2, [r3, #4]
+  80:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****             s_oc_lwm2m_ops.name = NULL;
+ 149              		.loc 1 80 33
+ 150 0034 044B     		ldr	r3, .L9
+ 151 0036 0022     		movs	r2, #0
+ 152 0038 1A60     		str	r2, [r3]
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s 			page 5
+
+
+  81:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****             ret = 0;
+ 153              		.loc 1 81 17
+ 154 003a 0023     		movs	r3, #0
+ 155 003c FB60     		str	r3, [r7, #12]
+ 156              	.L7:
+  82:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****         }
+  83:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     }
+  84:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+  85:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     return ret;
+ 157              		.loc 1 85 12
+ 158 003e FB68     		ldr	r3, [r7, #12]
+  86:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** }
+ 159              		.loc 1 86 1
+ 160 0040 1846     		mov	r0, r3
+ 161 0042 1037     		adds	r7, r7, #16
+ 162              	.LCFI9:
+ 163              		.cfi_def_cfa_offset 8
+ 164 0044 BD46     		mov	sp, r7
+ 165              	.LCFI10:
+ 166              		.cfi_def_cfa_register 13
+ 167              		@ sp needed
+ 168 0046 80BD     		pop	{r7, pc}
+ 169              	.L10:
+ 170              		.align	2
+ 171              	.L9:
+ 172 0048 00000000 		.word	s_oc_lwm2m_ops
+ 173              		.cfi_endproc
+ 174              	.LFE4:
+ 176              		.section	.text.oc_lwm2m_report,"ax",%progbits
+ 177              		.align	1
+ 178              		.global	oc_lwm2m_report
+ 179              		.syntax unified
+ 180              		.thumb
+ 181              		.thumb_func
+ 182              		.fpu fpv4-sp-d16
+ 184              	oc_lwm2m_report:
+ 185              	.LFB5:
+  87:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+  88:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+  89:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** //////////////////////////APPLICATION INTERFACE/////////////////////////////////
+  90:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** int oc_lwm2m_report(char  *buf, int len, int timeout)
+  91:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** {
+ 186              		.loc 1 91 1
+ 187              		.cfi_startproc
+ 188              		@ args = 0, pretend = 0, frame = 24
+ 189              		@ frame_needed = 1, uses_anonymous_args = 0
+ 190 0000 80B5     		push	{r7, lr}
+ 191              	.LCFI11:
+ 192              		.cfi_def_cfa_offset 8
+ 193              		.cfi_offset 7, -8
+ 194              		.cfi_offset 14, -4
+ 195 0002 86B0     		sub	sp, sp, #24
+ 196              	.LCFI12:
+ 197              		.cfi_def_cfa_offset 32
+ 198 0004 00AF     		add	r7, sp, #0
+ 199              	.LCFI13:
+ 200              		.cfi_def_cfa_register 7
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s 			page 6
+
+
+ 201 0006 F860     		str	r0, [r7, #12]
+ 202 0008 B960     		str	r1, [r7, #8]
+ 203 000a 7A60     		str	r2, [r7, #4]
+  92:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     int ret = (int)en_oc_lwm2m_err_system;
+ 204              		.loc 1 92 9
+ 205 000c 0923     		movs	r3, #9
+ 206 000e 7B61     		str	r3, [r7, #20]
+  93:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+  94:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     if ((NULL != s_oc_lwm2m_ops.opt) && (NULL != s_oc_lwm2m_ops.opt->report))
+ 207              		.loc 1 94 32
+ 208 0010 0A4B     		ldr	r3, .L14
+ 209 0012 5B68     		ldr	r3, [r3, #4]
+ 210              		.loc 1 94 8
+ 211 0014 002B     		cmp	r3, #0
+ 212 0016 0CD0     		beq	.L12
+ 213              		.loc 1 94 64 discriminator 1
+ 214 0018 084B     		ldr	r3, .L14
+ 215 001a 5B68     		ldr	r3, [r3, #4]
+ 216              		.loc 1 94 68 discriminator 1
+ 217 001c 5B68     		ldr	r3, [r3, #4]
+ 218              		.loc 1 94 38 discriminator 1
+ 219 001e 002B     		cmp	r3, #0
+ 220 0020 07D0     		beq	.L12
+  95:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     {
+  96:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****         ret = s_oc_lwm2m_ops.opt->report(buf, len, timeout);
+ 221              		.loc 1 96 29
+ 222 0022 064B     		ldr	r3, .L14
+ 223 0024 5B68     		ldr	r3, [r3, #4]
+ 224              		.loc 1 96 33
+ 225 0026 5B68     		ldr	r3, [r3, #4]
+ 226              		.loc 1 96 15
+ 227 0028 7A68     		ldr	r2, [r7, #4]
+ 228 002a B968     		ldr	r1, [r7, #8]
+ 229 002c F868     		ldr	r0, [r7, #12]
+ 230 002e 9847     		blx	r3
+ 231              	.LVL0:
+ 232 0030 7861     		str	r0, [r7, #20]
+ 233              	.L12:
+  97:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     }
+  98:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+  99:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     return ret;
+ 234              		.loc 1 99 12
+ 235 0032 7B69     		ldr	r3, [r7, #20]
+ 100:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** }
+ 236              		.loc 1 100 1
+ 237 0034 1846     		mov	r0, r3
+ 238 0036 1837     		adds	r7, r7, #24
+ 239              	.LCFI14:
+ 240              		.cfi_def_cfa_offset 8
+ 241 0038 BD46     		mov	sp, r7
+ 242              	.LCFI15:
+ 243              		.cfi_def_cfa_register 13
+ 244              		@ sp needed
+ 245 003a 80BD     		pop	{r7, pc}
+ 246              	.L15:
+ 247              		.align	2
+ 248              	.L14:
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s 			page 7
+
+
+ 249 003c 00000000 		.word	s_oc_lwm2m_ops
+ 250              		.cfi_endproc
+ 251              	.LFE5:
+ 253              		.section	.text.oc_lwm2m_config,"ax",%progbits
+ 254              		.align	1
+ 255              		.global	oc_lwm2m_config
+ 256              		.syntax unified
+ 257              		.thumb
+ 258              		.thumb_func
+ 259              		.fpu fpv4-sp-d16
+ 261              	oc_lwm2m_config:
+ 262              	.LFB6:
+ 101:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+ 102:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+ 103:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** int oc_lwm2m_config( oc_config_param_t *param)
+ 104:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** {
+ 263              		.loc 1 104 1
+ 264              		.cfi_startproc
+ 265              		@ args = 0, pretend = 0, frame = 16
+ 266              		@ frame_needed = 1, uses_anonymous_args = 0
+ 267 0000 80B5     		push	{r7, lr}
+ 268              	.LCFI16:
+ 269              		.cfi_def_cfa_offset 8
+ 270              		.cfi_offset 7, -8
+ 271              		.cfi_offset 14, -4
+ 272 0002 84B0     		sub	sp, sp, #16
+ 273              	.LCFI17:
+ 274              		.cfi_def_cfa_offset 24
+ 275 0004 00AF     		add	r7, sp, #0
+ 276              	.LCFI18:
+ 277              		.cfi_def_cfa_register 7
+ 278 0006 7860     		str	r0, [r7, #4]
+ 105:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     int ret = (int)en_oc_lwm2m_err_system;
+ 279              		.loc 1 105 9
+ 280 0008 0923     		movs	r3, #9
+ 281 000a FB60     		str	r3, [r7, #12]
+ 106:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+ 107:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     if ((NULL != s_oc_lwm2m_ops.opt) && (NULL != s_oc_lwm2m_ops.opt->config))
+ 282              		.loc 1 107 32
+ 283 000c 0C4B     		ldr	r3, .L20
+ 284 000e 5B68     		ldr	r3, [r3, #4]
+ 285              		.loc 1 107 8
+ 286 0010 002B     		cmp	r3, #0
+ 287 0012 10D0     		beq	.L17
+ 288              		.loc 1 107 64 discriminator 1
+ 289 0014 0A4B     		ldr	r3, .L20
+ 290 0016 5B68     		ldr	r3, [r3, #4]
+ 291              		.loc 1 107 68 discriminator 1
+ 292 0018 1B68     		ldr	r3, [r3]
+ 293              		.loc 1 107 38 discriminator 1
+ 294 001a 002B     		cmp	r3, #0
+ 295 001c 0BD0     		beq	.L17
+ 108:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     {
+ 109:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****         if(NULL != param)
+ 296              		.loc 1 109 11
+ 297 001e 7B68     		ldr	r3, [r7, #4]
+ 298 0020 002B     		cmp	r3, #0
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s 			page 8
+
+
+ 299 0022 06D0     		beq	.L18
+ 110:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****         {
+ 111:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****             ret = s_oc_lwm2m_ops.opt->config(param);
+ 300              		.loc 1 111 33
+ 301 0024 064B     		ldr	r3, .L20
+ 302 0026 5B68     		ldr	r3, [r3, #4]
+ 303              		.loc 1 111 37
+ 304 0028 1B68     		ldr	r3, [r3]
+ 305              		.loc 1 111 19
+ 306 002a 7868     		ldr	r0, [r7, #4]
+ 307 002c 9847     		blx	r3
+ 308              	.LVL1:
+ 309 002e F860     		str	r0, [r7, #12]
+ 310 0030 01E0     		b	.L17
+ 311              	.L18:
+ 112:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****         }
+ 113:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****         else
+ 114:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****         {
+ 115:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****             ret = (int)en_oc_lwm2m_err_parafmt;
+ 312              		.loc 1 115 17
+ 313 0032 0123     		movs	r3, #1
+ 314 0034 FB60     		str	r3, [r7, #12]
+ 315              	.L17:
+ 116:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****         }
+ 117:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     }
+ 118:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+ 119:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     return ret;
+ 316              		.loc 1 119 12
+ 317 0036 FB68     		ldr	r3, [r7, #12]
+ 120:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** }
+ 318              		.loc 1 120 1
+ 319 0038 1846     		mov	r0, r3
+ 320 003a 1037     		adds	r7, r7, #16
+ 321              	.LCFI19:
+ 322              		.cfi_def_cfa_offset 8
+ 323 003c BD46     		mov	sp, r7
+ 324              	.LCFI20:
+ 325              		.cfi_def_cfa_register 13
+ 326              		@ sp needed
+ 327 003e 80BD     		pop	{r7, pc}
+ 328              	.L21:
+ 329              		.align	2
+ 330              	.L20:
+ 331 0040 00000000 		.word	s_oc_lwm2m_ops
+ 332              		.cfi_endproc
+ 333              	.LFE6:
+ 335              		.section	.text.oc_lwm2m_deconfig,"ax",%progbits
+ 336              		.align	1
+ 337              		.global	oc_lwm2m_deconfig
+ 338              		.syntax unified
+ 339              		.thumb
+ 340              		.thumb_func
+ 341              		.fpu fpv4-sp-d16
+ 343              	oc_lwm2m_deconfig:
+ 344              	.LFB7:
+ 121:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+ 122:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s 			page 9
+
+
+ 123:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** int oc_lwm2m_deconfig(void)
+ 124:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** {
+ 345              		.loc 1 124 1
+ 346              		.cfi_startproc
+ 347              		@ args = 0, pretend = 0, frame = 8
+ 348              		@ frame_needed = 1, uses_anonymous_args = 0
+ 349 0000 80B5     		push	{r7, lr}
+ 350              	.LCFI21:
+ 351              		.cfi_def_cfa_offset 8
+ 352              		.cfi_offset 7, -8
+ 353              		.cfi_offset 14, -4
+ 354 0002 82B0     		sub	sp, sp, #8
+ 355              	.LCFI22:
+ 356              		.cfi_def_cfa_offset 16
+ 357 0004 00AF     		add	r7, sp, #0
+ 358              	.LCFI23:
+ 359              		.cfi_def_cfa_register 7
+ 125:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     int ret = (int)en_oc_lwm2m_err_system;
+ 360              		.loc 1 125 9
+ 361 0006 0923     		movs	r3, #9
+ 362 0008 7B60     		str	r3, [r7, #4]
+ 126:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+ 127:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     if ((NULL != s_oc_lwm2m_ops.opt) && (NULL != s_oc_lwm2m_ops.opt->deconfig))
+ 363              		.loc 1 127 32
+ 364 000a 094B     		ldr	r3, .L25
+ 365 000c 5B68     		ldr	r3, [r3, #4]
+ 366              		.loc 1 127 8
+ 367 000e 002B     		cmp	r3, #0
+ 368 0010 09D0     		beq	.L23
+ 369              		.loc 1 127 64 discriminator 1
+ 370 0012 074B     		ldr	r3, .L25
+ 371 0014 5B68     		ldr	r3, [r3, #4]
+ 372              		.loc 1 127 68 discriminator 1
+ 373 0016 9B68     		ldr	r3, [r3, #8]
+ 374              		.loc 1 127 38 discriminator 1
+ 375 0018 002B     		cmp	r3, #0
+ 376 001a 04D0     		beq	.L23
+ 128:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     {
+ 129:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****         ret = s_oc_lwm2m_ops.opt->deconfig();
+ 377              		.loc 1 129 29
+ 378 001c 044B     		ldr	r3, .L25
+ 379 001e 5B68     		ldr	r3, [r3, #4]
+ 380              		.loc 1 129 33
+ 381 0020 9B68     		ldr	r3, [r3, #8]
+ 382              		.loc 1 129 15
+ 383 0022 9847     		blx	r3
+ 384              	.LVL2:
+ 385 0024 7860     		str	r0, [r7, #4]
+ 386              	.L23:
+ 130:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     }
+ 131:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+ 132:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     return ret;
+ 387              		.loc 1 132 12
+ 388 0026 7B68     		ldr	r3, [r7, #4]
+ 133:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** }
+ 389              		.loc 1 133 1
+ 390 0028 1846     		mov	r0, r3
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s 			page 10
+
+
+ 391 002a 0837     		adds	r7, r7, #8
+ 392              	.LCFI24:
+ 393              		.cfi_def_cfa_offset 8
+ 394 002c BD46     		mov	sp, r7
+ 395              	.LCFI25:
+ 396              		.cfi_def_cfa_register 13
+ 397              		@ sp needed
+ 398 002e 80BD     		pop	{r7, pc}
+ 399              	.L26:
+ 400              		.align	2
+ 401              	.L25:
+ 402 0030 00000000 		.word	s_oc_lwm2m_ops
+ 403              		.cfi_endproc
+ 404              	.LFE7:
+ 406              		.section	.rodata
+ 407              		.align	2
+ 408              	.LC0:
+ 409 0000 5B25735D 		.ascii	"[%s][%u][%s] Please implement the oc lwm2m yourself"
+ 409      5B25755D 
+ 409      5B25735D 
+ 409      20506C65 
+ 409      61736520 
+ 410 0033 200A0D0D 		.ascii	" \012\015\015\012\000"
+ 410      0A00
+ 411              		.section	.text.oc_lwm2m_imp_init,"ax",%progbits
+ 412              		.align	1
+ 413              		.weak	oc_lwm2m_imp_init
+ 414              		.syntax unified
+ 415              		.thumb
+ 416              		.thumb_func
+ 417              		.fpu fpv4-sp-d16
+ 419              	oc_lwm2m_imp_init:
+ 420              	.LFB8:
+ 134:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+ 135:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** ///////////////////////OC LWM2M AGENT INITIALIZE////////////////////////////////
+ 136:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** __attribute__ ((weak)) int oc_lwm2m_imp_init(void)
+ 137:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** {
+ 421              		.loc 1 137 1
+ 422              		.cfi_startproc
+ 423              		@ args = 0, pretend = 0, frame = 0
+ 424              		@ frame_needed = 1, uses_anonymous_args = 0
+ 425 0000 98B5     		push	{r3, r4, r7, lr}
+ 426              	.LCFI26:
+ 427              		.cfi_def_cfa_offset 16
+ 428              		.cfi_offset 3, -16
+ 429              		.cfi_offset 4, -12
+ 430              		.cfi_offset 7, -8
+ 431              		.cfi_offset 14, -4
+ 432 0002 00AF     		add	r7, sp, #0
+ 433              	.LCFI27:
+ 434              		.cfi_def_cfa_register 7
+ 138:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     LINK_LOG_WARN("Please implement the oc lwm2m yourself \n\r");
+ 435              		.loc 1 138 5
+ 436 0004 0320     		movs	r0, #3
+ 437 0006 FFF7FEFF 		bl	link_log_level_name
+ 438 000a 0446     		mov	r4, r0
+ 439 000c FFF7FEFF 		bl	osal_sys_time
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s 			page 11
+
+
+ 440 0010 0246     		mov	r2, r0
+ 441 0012 0B46     		mov	r3, r1
+ 442 0014 074B     		ldr	r3, .L29
+ 443 0016 2146     		mov	r1, r4
+ 444 0018 0748     		ldr	r0, .L29+4
+ 445 001a FFF7FEFF 		bl	printf
+ 446 001e 074B     		ldr	r3, .L29+8
+ 447 0020 1B68     		ldr	r3, [r3]
+ 448 0022 9B68     		ldr	r3, [r3, #8]
+ 449 0024 1846     		mov	r0, r3
+ 450 0026 FFF7FEFF 		bl	fflush
+ 139:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     return -1;
+ 451              		.loc 1 139 12
+ 452 002a 4FF0FF33 		mov	r3, #-1
+ 140:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** }
+ 453              		.loc 1 140 1
+ 454 002e 1846     		mov	r0, r3
+ 455 0030 98BD     		pop	{r3, r4, r7, pc}
+ 456              	.L30:
+ 457 0032 00BF     		.align	2
+ 458              	.L29:
+ 459 0034 00000000 		.word	__FUNCTION__.7458
+ 460 0038 00000000 		.word	.LC0
+ 461 003c 00000000 		.word	_impure_ptr
+ 462              		.cfi_endproc
+ 463              	.LFE8:
+ 465              		.section	.rodata
+ 466 0039 000000   		.align	2
+ 467              	.LC1:
+ 468 003c 5B25735D 		.ascii	"[%s][%u][%s] Please implement the oc lwm2m demo you"
+ 468      5B25755D 
+ 468      5B25735D 
+ 468      20506C65 
+ 468      61736520 
+ 469 006f 7273656C 		.ascii	"rself \012\015\015\012\000"
+ 469      66200A0D 
+ 469      0D0A00
+ 470              		.section	.text.oc_lwm2m_demo_main,"ax",%progbits
+ 471              		.align	1
+ 472              		.weak	oc_lwm2m_demo_main
+ 473              		.syntax unified
+ 474              		.thumb
+ 475              		.thumb_func
+ 476              		.fpu fpv4-sp-d16
+ 478              	oc_lwm2m_demo_main:
+ 479              	.LFB9:
+ 141:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+ 142:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** __attribute__ ((weak)) int oc_lwm2m_demo_main(void)
+ 143:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** {
+ 480              		.loc 1 143 1
+ 481              		.cfi_startproc
+ 482              		@ args = 0, pretend = 0, frame = 0
+ 483              		@ frame_needed = 1, uses_anonymous_args = 0
+ 484 0000 98B5     		push	{r3, r4, r7, lr}
+ 485              	.LCFI28:
+ 486              		.cfi_def_cfa_offset 16
+ 487              		.cfi_offset 3, -16
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s 			page 12
+
+
+ 488              		.cfi_offset 4, -12
+ 489              		.cfi_offset 7, -8
+ 490              		.cfi_offset 14, -4
+ 491 0002 00AF     		add	r7, sp, #0
+ 492              	.LCFI29:
+ 493              		.cfi_def_cfa_register 7
+ 144:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     LINK_LOG_WARN("Please implement the oc lwm2m demo yourself \n\r");
+ 494              		.loc 1 144 5
+ 495 0004 0320     		movs	r0, #3
+ 496 0006 FFF7FEFF 		bl	link_log_level_name
+ 497 000a 0446     		mov	r4, r0
+ 498 000c FFF7FEFF 		bl	osal_sys_time
+ 499 0010 0246     		mov	r2, r0
+ 500 0012 0B46     		mov	r3, r1
+ 501 0014 074B     		ldr	r3, .L33
+ 502 0016 2146     		mov	r1, r4
+ 503 0018 0748     		ldr	r0, .L33+4
+ 504 001a FFF7FEFF 		bl	printf
+ 505 001e 074B     		ldr	r3, .L33+8
+ 506 0020 1B68     		ldr	r3, [r3]
+ 507 0022 9B68     		ldr	r3, [r3, #8]
+ 508 0024 1846     		mov	r0, r3
+ 509 0026 FFF7FEFF 		bl	fflush
+ 145:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     return -1;
+ 510              		.loc 1 145 12
+ 511 002a 4FF0FF33 		mov	r3, #-1
+ 146:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** }
+ 512              		.loc 1 146 1
+ 513 002e 1846     		mov	r0, r3
+ 514 0030 98BD     		pop	{r3, r4, r7, pc}
+ 515              	.L34:
+ 516 0032 00BF     		.align	2
+ 517              	.L33:
+ 518 0034 00000000 		.word	__FUNCTION__.7462
+ 519 0038 3C000000 		.word	.LC1
+ 520 003c 00000000 		.word	_impure_ptr
+ 521              		.cfi_endproc
+ 522              	.LFE9:
+ 524              		.section	.rodata
+ 525 007a 0000     		.align	2
+ 526              	.LC2:
+ 527 007c 5B25735D 		.ascii	"[%s][%u][%s] IOT_LINK:DO OC LWM2M LOAD-IMPLEMENT RE"
+ 527      5B25755D 
+ 527      5B25735D 
+ 527      20494F54 
+ 527      5F4C494E 
+ 528 00af 543A2564 		.ascii	"T:%d\012\015\015\012\000"
+ 528      0A0D0D0A 
+ 528      00
+ 529              		.section	.text.oc_lwm2m_init,"ax",%progbits
+ 530              		.align	1
+ 531              		.global	oc_lwm2m_init
+ 532              		.syntax unified
+ 533              		.thumb
+ 534              		.thumb_func
+ 535              		.fpu fpv4-sp-d16
+ 537              	oc_lwm2m_init:
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s 			page 13
+
+
+ 538              	.LFB10:
+ 147:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+ 148:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** int oc_lwm2m_init()
+ 149:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** {
+ 539              		.loc 1 149 1
+ 540              		.cfi_startproc
+ 541              		@ args = 0, pretend = 0, frame = 8
+ 542              		@ frame_needed = 1, uses_anonymous_args = 0
+ 543 0000 90B5     		push	{r4, r7, lr}
+ 544              	.LCFI30:
+ 545              		.cfi_def_cfa_offset 12
+ 546              		.cfi_offset 4, -12
+ 547              		.cfi_offset 7, -8
+ 548              		.cfi_offset 14, -4
+ 549 0002 85B0     		sub	sp, sp, #20
+ 550              	.LCFI31:
+ 551              		.cfi_def_cfa_offset 32
+ 552 0004 02AF     		add	r7, sp, #8
+ 553              	.LCFI32:
+ 554              		.cfi_def_cfa 7, 24
+ 150:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     int ret;
+ 151:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+ 152:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     ret = oc_lwm2m_imp_init();
+ 555              		.loc 1 152 11
+ 556 0006 FFF7FEFF 		bl	oc_lwm2m_imp_init
+ 557 000a 7860     		str	r0, [r7, #4]
+ 153:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+ 154:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     LINK_LOG_DEBUG("IOT_LINK:DO OC LWM2M LOAD-IMPLEMENT RET:%d\n\r",ret);
+ 558              		.loc 1 154 5
+ 559 000c FFF7FEFF 		bl	link_log_level_get
+ 560 0010 0346     		mov	r3, r0
+ 561 0012 012B     		cmp	r3, #1
+ 562 0014 14D8     		bhi	.L36
+ 563              		.loc 1 154 5 is_stmt 0 discriminator 1
+ 564 0016 0120     		movs	r0, #1
+ 565 0018 FFF7FEFF 		bl	link_log_level_name
+ 566 001c 0446     		mov	r4, r0
+ 567 001e FFF7FEFF 		bl	osal_sys_time
+ 568 0022 0246     		mov	r2, r0
+ 569 0024 0B46     		mov	r3, r1
+ 570 0026 7B68     		ldr	r3, [r7, #4]
+ 571 0028 0093     		str	r3, [sp]
+ 572 002a 084B     		ldr	r3, .L38
+ 573 002c 2146     		mov	r1, r4
+ 574 002e 0848     		ldr	r0, .L38+4
+ 575 0030 FFF7FEFF 		bl	printf
+ 576 0034 074B     		ldr	r3, .L38+8
+ 577 0036 1B68     		ldr	r3, [r3]
+ 578 0038 9B68     		ldr	r3, [r3, #8]
+ 579 003a 1846     		mov	r0, r3
+ 580 003c FFF7FEFF 		bl	fflush
+ 581              	.L36:
+ 155:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+ 156:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** #ifdef  CONFIG_OCLWM2M_DEMO_ENABLE
+ 157:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     (void) oc_lwm2m_demo_main();
+ 158:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** #endif
+ 159:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** 
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s 			page 14
+
+
+ 160:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c ****     return 0;
+ 582              		.loc 1 160 12 is_stmt 1
+ 583 0040 0023     		movs	r3, #0
+ 161:d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al\oc_lwm2m_al.c **** }
+ 584              		.loc 1 161 1
+ 585 0042 1846     		mov	r0, r3
+ 586 0044 0C37     		adds	r7, r7, #12
+ 587              	.LCFI33:
+ 588              		.cfi_def_cfa_offset 12
+ 589 0046 BD46     		mov	sp, r7
+ 590              	.LCFI34:
+ 591              		.cfi_def_cfa_register 13
+ 592              		@ sp needed
+ 593 0048 90BD     		pop	{r4, r7, pc}
+ 594              	.L39:
+ 595 004a 00BF     		.align	2
+ 596              	.L38:
+ 597 004c 00000000 		.word	__FUNCTION__.7466
+ 598 0050 7C000000 		.word	.LC2
+ 599 0054 00000000 		.word	_impure_ptr
+ 600              		.cfi_endproc
+ 601              	.LFE10:
+ 603              		.section	.rodata.__FUNCTION__.7458,"a"
+ 604              		.align	2
+ 607              	__FUNCTION__.7458:
+ 608 0000 6F635F6C 		.ascii	"oc_lwm2m_imp_init\000"
+ 608      776D326D 
+ 608      5F696D70 
+ 608      5F696E69 
+ 608      7400
+ 609              		.section	.rodata.__FUNCTION__.7462,"a"
+ 610              		.align	2
+ 613              	__FUNCTION__.7462:
+ 614 0000 6F635F6C 		.ascii	"oc_lwm2m_demo_main\000"
+ 614      776D326D 
+ 614      5F64656D 
+ 614      6F5F6D61 
+ 614      696E00
+ 615              		.section	.rodata.__FUNCTION__.7466,"a"
+ 616              		.align	2
+ 619              	__FUNCTION__.7466:
+ 620 0000 6F635F6C 		.ascii	"oc_lwm2m_init\000"
+ 620      776D326D 
+ 620      5F696E69 
+ 620      7400
+ 621              		.text
+ 622              	.Letext0:
+ 623              		.file 2 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 624              		.file 3 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 625              		.file 4 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\lib\\gcc\\arm-none
+ 626              		.file 5 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 627              		.file 6 "c:\\users\\administrator\\.huawei-liteos-studio\\tools\\arm-none-eabi\\arm-none-eabi\\inc
+ 628              		.file 7 "d:/LiteOS_Lab/iot_link/oc/oc_lwm2m/oc_lwm2m_al/oc_lwm2m_al.h"
+ 629              		.file 8 "d:/LiteOS_Lab/iot_link/inc/link_log.h"
+ARM GAS  C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s 			page 15
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 oc_lwm2m_al.c
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:18     .bss.s_oc_lwm2m_ops:00000000 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:21     .bss.s_oc_lwm2m_ops:00000000 s_oc_lwm2m_ops
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:24     .text.oc_lwm2m_register:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:32     .text.oc_lwm2m_register:00000000 oc_lwm2m_register
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:92     .text.oc_lwm2m_register:00000038 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:97     .text.oc_lwm2m_unregister:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:104    .text.oc_lwm2m_unregister:00000000 oc_lwm2m_unregister
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:172    .text.oc_lwm2m_unregister:00000048 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:177    .text.oc_lwm2m_report:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:184    .text.oc_lwm2m_report:00000000 oc_lwm2m_report
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:249    .text.oc_lwm2m_report:0000003c $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:254    .text.oc_lwm2m_config:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:261    .text.oc_lwm2m_config:00000000 oc_lwm2m_config
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:331    .text.oc_lwm2m_config:00000040 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:336    .text.oc_lwm2m_deconfig:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:343    .text.oc_lwm2m_deconfig:00000000 oc_lwm2m_deconfig
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:402    .text.oc_lwm2m_deconfig:00000030 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:407    .rodata:00000000 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:412    .text.oc_lwm2m_imp_init:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:419    .text.oc_lwm2m_imp_init:00000000 oc_lwm2m_imp_init
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:459    .text.oc_lwm2m_imp_init:00000034 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:607    .rodata.__FUNCTION__.7458:00000000 __FUNCTION__.7458
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:471    .text.oc_lwm2m_demo_main:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:478    .text.oc_lwm2m_demo_main:00000000 oc_lwm2m_demo_main
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:518    .text.oc_lwm2m_demo_main:00000034 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:613    .rodata.__FUNCTION__.7462:00000000 __FUNCTION__.7462
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:530    .text.oc_lwm2m_init:00000000 $t
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:537    .text.oc_lwm2m_init:00000000 oc_lwm2m_init
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:597    .text.oc_lwm2m_init:0000004c $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:619    .rodata.__FUNCTION__.7466:00000000 __FUNCTION__.7466
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:604    .rodata.__FUNCTION__.7458:00000000 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:610    .rodata.__FUNCTION__.7462:00000000 $d
+C:\Users\ADMINI~1\AppData\Local\Temp\ccyphB0a.s:616    .rodata.__FUNCTION__.7466:00000000 $d
+
+UNDEFINED SYMBOLS
+strcmp
+link_log_level_name
+osal_sys_time
+printf
+fflush
+_impure_ptr
+link_log_level_get
