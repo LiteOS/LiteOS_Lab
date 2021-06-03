@@ -5,6 +5,8 @@
 #if you have defined multiple demos by yourself, modify this file to compile the chosen demo.
 
 #example for lwm2m
+#CONFIG_USER_DEMO="oc_streetlight_template"
+
 
 	#example for oc_streetlight_template
 	ifeq ($(CONFIG_USER_DEMO), "oc_streetlight_template")	
@@ -34,6 +36,49 @@
 		user_demo_defs = -D CONFIG_OC_LWM2M_DEMO_ENABLE=1
 		
 	endif
+
+	#example for oc_manhole_cover_template
+	ifeq ($(CONFIG_USER_DEMO), "oc_manhole_cover_template")	
+		user_demo_src  = ${wildcard $(TARGET_DIR)/Demos/oc_manhole_cover_template/*.c}
+		user_demo_inc = -I $(TARGET_DIR)/Demos/oc_manhole_cover_template
+		user_hardware_src = ${wildcard $(TARGET_DIR)/Hardware/IoTBox/rsrvd_interface/E53_SC2.c} 
+		user_hardware_inc = -I ${wildcard $(TARGET_DIR)/Hardware/IoTBox/rsrvd_interface}
+		user_demo_defs = -D CONFIG_OC_MANHOLE_COVER_DEMO_ENABLE=1
+	endif
+
+	#example for oc_infrared_template
+	ifeq ($(CONFIG_USER_DEMO), "oc_infrared_template")	
+		user_demo_src  = ${wildcard $(TARGET_DIR)/Demos/oc_infrared_template/*.c}
+		user_demo_inc = -I $(TARGET_DIR)/Demos/oc_infrared_template
+		user_hardware_src = ${wildcard $(TARGET_DIR)/Hardware/IoTBox/rsrvd_interface/E53_IS1.c} 
+		user_hardware_inc = -I ${wildcard $(TARGET_DIR)/Hardware/IoTBox/rsrvd_interface}
+		user_demo_defs = -D CONFIG_OC_INFRARED_DEMO_ENABLE=1
+		
+	endif
+
+	#example for osal_task_demo
+    ifeq ($(CONFIG_USER_DEMO), "osal_task_demo")    
+        user_demo_src  = ${wildcard $(TARGET_DIR)/Demos/osal_kernel_demo/osal_task_demo.c}
+        user_demo_defs = -D CONFIG_OSAL_TASK_DEMO_ENABLE=1
+    endif
+
+#example for osal_semp_demo
+    ifeq ($(CONFIG_USER_DEMO), "osal_semp_demo")    
+        user_demo_src  = ${wildcard $(TARGET_DIR)/Demos/osal_kernel_demo/osal_semp_demo.c}
+        user_demo_defs = -D CONFIG_OSAL_SEMP_DEMO_ENABLE=1
+    endif
+
+#example for osal_mutex_demo
+    ifeq ($(CONFIG_USER_DEMO), "osal_mutex_demo")    
+        user_demo_src  = ${wildcard $(TARGET_DIR)/Demos/osal_kernel_demo/osal_mutex_demo.c}
+        user_demo_defs = -D CONFIG_OSAL_MUTEX_DEMO_ENABLE=1
+    endif
+
+#example for osal_mem_demo
+    ifeq ($(CONFIG_USER_DEMO), "osal_mem_demo")    
+        user_demo_src  = ${wildcard $(TARGET_DIR)/Demos/osal_kernel_demo/osal_mem_demo.c}
+        user_demo_defs = -D CONFIG_OSAL_MUTEX_DEMO_ENABLE=1s
+    endif
 
 	#example for oc_track_template
 	ifeq ($(CONFIG_USER_DEMO), "oc_track_template")	

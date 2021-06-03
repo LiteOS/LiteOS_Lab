@@ -1,7 +1,0 @@
-################################################################################
-# this is used for compile the project
-################################################################################
-C_SOURCES += ${wildcard $(TOP_DIR)/targets/LINUX/Src/*.c}
-C_INCLUDES += -I $(TOP_DIR)/targets/LINUX
-              
-

@@ -44,6 +44,9 @@ choice Demo
     config Demo_Helloworld
         bool "Hello World"
         select SHELL_ENABLE
+    config Demo_Osalmutex
+        bool "Hello World"
+        select SHELL_ENABLE
     config Demo_Streetlight
         bool "OC Streetlight"
         select OC_LWM2M
@@ -89,6 +92,7 @@ config USER_DEMO
     default "oc_track_template" if Demo_Track
     default "oc_smoke_template" if Demo_Smoke
     default "oc_cloud_map_demo" if Demo_OC_Cloud_Map
+    default "osal_mutex_demo" if Demo_Osalmutex
     default "none"
 
         
