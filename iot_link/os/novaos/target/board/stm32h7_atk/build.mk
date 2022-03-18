@@ -1,1 +1,0 @@
-dir-$(CONFIG_STM32H7_ATK) += *
