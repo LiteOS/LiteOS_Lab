@@ -32,7 +32,7 @@
 
 **目的**
 
-​		本文档用于指导开发者了解huaweicloud_iot_link，并且能够通过集成huaweicloud_iot_link对接华为云IoT物联网平台，开发自己的物联网应用。
+​		本文档用于指导开发者了解IoT Device SDK Tiny，并且能够通过集成IoT Device SDK Tiny对接华为云IoT物联网平台，开发自己的物联网应用。
 
 **符号约定**
 
@@ -49,7 +49,7 @@
 
 | 序号 | 术语名称              | 描述                                                         |
 | ---- | ---------------------| ------------------------------------------------------------ |
-| 1    | huaweicloud_iot_link |huaweicloud_iot_link软件开发工具包（Software Development Kit），包括端云互通组件、FOTA、JS引擎、传感框架等内容。|
+| 1    | IoT Device SDK Tiny |IoT Device SDK Tiny软件开发工具包（Software Development Kit），包括端云互通组件、FOTA、JS引擎、传感框架等内容。|
 | 2    | 设备                 | 用于采集数据的嵌入式设备，比如STM32开发板，或者温湿度采集的传感器等。|
 | 3    | 应用                |物联网平台中，应用包括用户在物联网平台上创建的应用和用户自行开发的应用服务器。应用是用户在物联网平台中为用户的业务划分一个项目空间，每个项目空间会分配一个应用ID和应用密钥，用于将开发完的应用服务器与真实设备接入到这个项目空间中，实现设备的数据采集和设备管理。应用服务器是用户基于物联网平台开放的API接口或者SDK进行自行开发的物联网应用，可接入物联网平台进行设备的管理。|
 | 4    | 产品模型            | 产品模型（也称Profile）用于描述设备具备的能力和特性。开发者通过定义Profile，在物联网平台构建一款设备的抽象模型，使平台理解该款设备支持的服务、属性、命令等信息。  |
@@ -67,14 +67,14 @@
 
 # 3 了解SDK
 ## 3.1 SDK介绍
-​		huaweicloud_iot_link SDK是部署在具备广域网能力、对功耗、存储、计算资源有苛刻限制的终端设备上的轻量级的互联互通中间件，您只需调用API接口，便可实现设备快速接入到物联网平台以及数据上报和命令接收等功能。
+​		IoT Device SDK Tiny是部署在具备广域网能力、对功耗、存储、计算资源有苛刻限制的终端设备上的轻量级的互联互通中间件，您只需调用API接口，便可实现设备快速接入到物联网平台以及数据上报和命令接收等功能。
 
-​		huaweicloud_iot_link SDK提供端云协同能力，集成了MQTT、LWM2M、CoAP、mbedtls、LwIP全套IoT互联互通协议栈，且在这些协议栈的基础之上，提供了开放API，用户只需关注自身的应用，而不必关注协议内部实现细节，直接使用SDK封装的API，通过连接、数据上报、命令接收和断开四个步骤就能简单快速的实现与华为云IoT平台的安全可靠连接。使用该SDK，用户可以大大减少开发周期，聚焦自己的业务开发，快速构建自己的产品。
+​		IoT Device SDK Tiny提供端云协同能力，集成了MQTT、LWM2M、CoAP、mbedtls、LwIP全套IoT互联互通协议栈，且在这些协议栈的基础之上，提供了开放API，用户只需关注自身的应用，而不必关注协议内部实现细节，直接使用SDK封装的API，通过连接、数据上报、命令接收和断开四个步骤就能简单快速的实现与华为云IoT平台的安全可靠连接。使用该SDK，用户可以大大减少开发周期，聚焦自己的业务开发，快速构建自己的产品。
 
 ​		同时该SDK还具有可裁剪特性，在移植过程中可以根据需求进行定制化组件，节省内存空间，减小移植难度。
 
 ## 3.2 软件架构
-​		huaweicloud_iot_link SDK的软件架构如下图所示，主要分为以下几层：
+​		IoT Device SDK Tiny的软件架构如下图所示，主要分为以下几层：
 
 - API接口：通过应用编程接口将SDK能力开放给设备，终端设备调用SDK能力，快速完成华为物联网平台的接入、业务数据上报、下发命令处理等。
 
@@ -102,36 +102,36 @@
 
 
 ## 3.3 安全介绍
-​		huaweicloud_iot_link SDK以LwM2M/CoAP协议端云连接传输数据包时，不能保证UDP通信双方的身份认证、消息传输过程中的加密传输，所以使用DTLS(Datagram Transport Layer Security)，即数据包传输层安全性协议进行加密。
+​		IoT Device SDK Tiny以LwM2M/CoAP协议端云连接传输数据包时，不能保证UDP通信双方的身份认证、消息传输过程中的加密传输，所以使用DTLS(Datagram Transport Layer Security)，即数据包传输层安全性协议进行加密。
 
 ​		DTLS握手协议和TLS类似。DTLS协议在UDP之上实现了客户机与服务器双方的握手连接，在握手过程中验证对方的身份，并且使用RSA或者DH（Diffie-Hellman）实现会话密钥的建立，以便在后面的数据传输中对数据加密。它利用cookie验证机制和证书实现了通信双方的身份认证；并且用在报文段头部加上序号，缓存乱序到达的报文段；还利用重传机制实现了可靠传送。在握手完成后，通信双方就可以利用握手阶段协商好的会话密钥来对应用数据进行加解密。
 
-​		huaweicloud_iot_link SDK使用mbedtls加密库实现加密的优点：mbedTLS（前身PolarSSL）是面向嵌入式系统，实现的一套易用的加解密算法和SSL/TLS库。mbedTLS系统开销极小，对于系统资源要求不高。mbedTLS是开源项目，并且使用Apache 2.0许可证，使得用户既可以讲mbedTLS使用在开源项目中，也可以应用于商业项目。目前使用mbedTLS的项目很多，例如Monkey HTTP Daemon，LinkSYS路由器。
+​		IoT Device SDK Tiny使用mbedtls加密库实现加密的优点：mbedTLS（前身PolarSSL）是面向嵌入式系统，实现的一套易用的加解密算法和SSL/TLS库。mbedTLS系统开销极小，对于系统资源要求不高。mbedTLS是开源项目，并且使用Apache 2.0许可证，使得用户既可以讲mbedTLS使用在开源项目中，也可以应用于商业项目。目前使用mbedTLS的项目很多，例如Monkey HTTP Daemon，LinkSYS路由器。
 
 ​		其软件架构如下图所示：
 
 ![](./meta/IoT_Link/sdk/07.png)
 
-​		huaweicloud_iot_link SDK首先和物联网开放平台完成握手流程，后续的应用数据将全部为加密数据，其握手流程大致如图所示：
+​		IoT Device SDK Tiny首先和物联网开放平台完成握手流程，后续的应用数据将全部为加密数据，其握手流程大致如图所示：
 
 ![](./meta/IoT_Link/sdk/08.png)
 
 ## 3.4 OTA升级
 
-​		huaweicloud_iot_link SDK端云互通组件支持物联网开放平台的软固件升级。软件或者固件升级都可以分为下载、升级、上报的流程。端侧设备需要配合云端的下载或者上报流程完成程序的更新。关于云端的软固件升级可以参考[云端软固件升级](https://support.huaweicloud.com/api-iothub/iot_06_v5_3027.html)。目前OTA升级的方式包含LWM2M和MQTT两种方式。
+​		IoT Device SDK Tiny端云互通组件支持物联网开放平台的软固件升级。软件或者固件升级都可以分为下载、升级、上报的流程。端侧设备需要配合云端的下载或者上报流程完成程序的更新。关于云端的软固件升级可以参考[云端软固件升级](https://support.huaweicloud.com/api-iothub/iot_06_v5_3027.html)。目前OTA升级的方式包含LWM2M和MQTT两种方式。
 
 
 
 
 # 4 下载SDK
 
-​		目前huaweicloud_iot_link SDK的源码还是托管在gitee上<https://gitee.com/xingli_chen/huaweicloud_iot_link>，代码会持续更新。进入网址后选择master分支;选择Clone并且下载源码压缩包;
+​		IoT Device SDK Tiny的源码还是托管在github上https://github.com/LiteOS/LiteOS_Lab/tree/iot-device-sdk-tiny，代码会持续更新。进入网址后选择master分支;选择Clone并且下载源码压缩包;
 
 ​		下载后解压获得源码文件夹，IoT Device SDK Tiny源代码目录说明：
 
 |  一级目录 | 二级目录 | 三级目录 | 说明 |
 |:--------|:--------|:---------|------|
-| huaweicloud_iot_link | at                | ——       | AT指令框架实现                                               |
+| LiteOS_Lab | at                | ——       | AT指令框架实现                                               |
 || cJSON             | ——       | cJSON                                                        |
 || crc               | ——       | crc校验                                                      |
 |                      |demos|——|示例|
@@ -166,7 +166,7 @@
 
 # 5 集成开发
 ## 5.1 针对模组厂商
-​		在物联网解决方案中，作为模组厂商的您需要让模组实现MQTTS、LwM2M、CoAP等物联网协议栈及连接平台的能力，您只需要将huaweicloud_iot_link SDK集成在现有的模组固件包中，这样模组就具备了接入华为物联网平台的能力。模组逻辑架构图如下：
+​		在物联网解决方案中，作为模组厂商的您需要让模组实现MQTTS、LwM2M、CoAP等物联网协议栈及连接平台的能力，您只需要将IoT Device SDK Tiny集成在现有的模组固件包中，这样模组就具备了接入华为物联网平台的能力。模组逻辑架构图如下：
 
 ![](./meta/IoT_Link/sdk/12.png)
 
@@ -178,7 +178,7 @@
 ​		关于AT指令的定义和参考使用烦请参考[ MQTT模组AT规划](https://support.huaweicloud.com/api-iothub/iot_06_v5_1400.html)。
 
 ### 5.1.2 云服务抽象层API
-​		端云互通组件是huaweicloud_iot_link SDK中的重要组件，提供端云协同能力和基于MQTT协议和LwM2M协议、CoAP协议对接华为云的开放API。
+​		端云互通组件是IoT Device SDK Tiny中的重要组件，提供端云协同能力和基于MQTT协议和LwM2M协议、CoAP协议对接华为云的开放API。
 
 ​		对基于MQTT/ LwM2M/CoAP协议对接华为云的开发者（基于MQTT/ LwM2M/CoAP协议或基于支持MQTT/ LwM2M协议的模组，以及内置对接华为云的模组）而言，无需关注对接华为云物联网协议的实现细节，仅仅需要将所选择的物联网协议注册到云服务抽象层（OC AL），再调用OC AL提供的抽象层接口即可。
 
@@ -224,10 +224,10 @@
 
 
 ### 5.1.3 物联组件协议层
-​		物联组件协议层目录：…\network\。huaweicloud_iot_link SDK集成了LwM2M、CoAP、MQTT等物联网标准协议，您可以直接调用已实现协议，或添加自定义协议，将其注册进SDK中。
+​		物联组件协议层目录：…\network\。IoT Device SDK Tiny集成了LwM2M、CoAP、MQTT等物联网标准协议，您可以直接调用已实现协议，或添加自定义协议，将其注册进SDK中。
 #### 5.1.3.1. MQTT AL
 
-​		根据MQTT标准协议，huaweicloud_iot_link SDK提供的MQTT服务都是建立在标准的MQTT协议基础上，并提供MQTT协议抽象层接口。适配MQTT的软件结构示意图如下：
+​		根据MQTT标准协议，IoT Device SDK Tiny提供的MQTT服务都是建立在标准的MQTT协议基础上，并提供MQTT协议抽象层接口。适配MQTT的软件结构示意图如下：
 
 ![](./meta/IoT_Link/sdk/14.png)
 
@@ -349,14 +349,14 @@ int coap_al_install(coap_al_op_t *op);
 #### 5.1.4.1 适配TCP/IP
 
 
-​		对于huaweicloud_iot_link SDK而言，其网络协议栈决定于底层操作系统，使用第三方操作系统时，可以将相关的网络传输接口进行抽象，提供相关的协议栈接口即可。huaweicloud_iot_link SDK中调用的所有网络传输的接口，通过注册机制，最终都会调用到用户注册的函数。
+​		对于IoT Device SDK Tiny而言，其网络协议栈决定于底层操作系统，使用第三方操作系统时，可以将相关的网络传输接口进行抽象，提供相关的协议栈接口即可。IoT Device SDK Tiny中调用的所有网络传输的接口，通过注册机制，最终都会调用到用户注册的函数。
 
 ​		用户可以调用link_sal_install函数进行TCPIP功能注册。同时用户必须实现link_tcpip_imp_init函数，该函数是一个弱符号函数。在该SDK初始化的过程中,调用顺序为：link_tcpip_init--->link_tcpip_imp_init--->link_sal_install,在初始化完毕之后，才可以使用TCPIP相关的功能。详细参考sal_imp.h头文件，同时我们已经适配了LWIP/ESP8266/L716等软件或者模组提供的TCPIP功能，如果你有第三方的组件或者模组，可以参考实现。
 
 
 ### 5.1.5 OS适配
 #### 5.1.5.1 适配OS
-​		对于huaweicloud_iot_link SDK而言，其运行依赖操作系统，如果使用第三方的操作系统，则可以将相关的操作系统进行抽象，提供相关的任务创建删除、互斥锁、信号量、内存管理接口即可。huaweicloud_iot_link SDK中调用的所有系统相关的接口，通过注册机制，最终都会调用到用户注册的函数。
+​		对于IoT Device SDK Tiny而言，其运行依赖操作系统，如果使用第三方的操作系统，则可以将相关的操作系统进行抽象，提供相关的任务创建删除、互斥锁、信号量、内存管理接口即可。IoT Device SDK Tiny中调用的所有系统相关的接口，通过注册机制，最终都会调用到用户注册的函数。
 
 ​		用户可以调用osal_install函数进行注册操作系统服务。调用顺序如下:
 
@@ -366,20 +366,20 @@ int coap_al_install(coap_al_op_t *op);
 ​		作为开发并销售最终设备的厂商，您需要进行设备集成开发，以便让设备具备接入物联网平台的能力。根据设备自身硬件的特点不同，您需要根据自身行业特征及业务情况选择合适的接入方案。
 ### 5.3.1 配有模组的设备
 #### 5.3.1.1 MCU+模组模式
-​		此模式下，设备包含MCU（Micro Controller Unit）和通信模组，其中MCU集成huaweicloud_iot_link SDK及产品逻辑，模组作为通信模块，提供通信网络。
+​		此模式下，设备包含MCU（Micro Controller Unit）和通信模组，其中MCU集成IoT Device SDK Tiny及产品逻辑，模组作为通信模块，提供通信网络。
 
 ![](./meta/IoT_Link/sdk/63.png)
 
-​		如果采用的模组已获得华为认证，则该模组内已集成huaweicloud_iot_link SDK，并遵循华为AT指令规划，设备只需通过串口发送AT指令驱动模组，即可完成对接云平台。AT指令规划参考：AT指令规划。
-​		如果采用的模组没有被华为认证，您需要在MCU侧集成huaweicloud_iot_link SDK及产品逻辑，模组仅作为通信模块收发数据。MCU侧集成huaweicloud_iot_link SDK流程参考模组厂商集成流程。
+​		如果采用的模组已获得华为认证，则该模组内已集成IoT Device SDK Tiny，并遵循华为AT指令规划，设备只需通过串口发送AT指令驱动模组，即可完成对接云平台。AT指令规划参考：AT指令规划。
+​		如果采用的模组没有被华为认证，您需要在MCU侧集成IoT Device SDK Tiny及产品逻辑，模组仅作为通信模块收发数据。MCU侧集成IoT Device SDK Tiny流程参考模组厂商集成流程。
 
 #### 5.3.1.2 openCPU模式
-​		此模式下，设备只包含通信模组，不需要外加MCU，直接基于模组做二次集成开发，您需要在模组内集成huaweicloud_iot_link SDK和产品逻辑，huaweicloud_iot_link SDK集成流程参考模组厂商集成流程。
+​		此模式下，设备只包含通信模组，不需要外加MCU，直接基于模组做二次集成开发，您需要在模组内集成IoT Device SDK Tiny和产品逻辑，IoT Device SDK Tiny集成流程参考模组厂商集成流程。
 
 ![](./meta/IoT_Link/sdk/64.png)
 
 #### 5.3.2 没有模组的设备
-​		如果设备没有模组，你可以通过以太网接入华为云，同样需要在MCU侧集成huaweicloud_iot_link SDK，可参考模组厂商集成流程。
+​		如果设备没有模组，你可以通过以太网接入华为云，同样需要在MCU侧集成IoT Device SDK Tiny，可参考模组厂商集成流程。
 
 
 
