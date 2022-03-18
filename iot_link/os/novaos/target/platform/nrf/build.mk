@@ -1,1 +1,0 @@
-dir-$(CONFIG_NRF) = *
