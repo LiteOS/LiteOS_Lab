@@ -283,6 +283,27 @@ static void deal_conn_msg(void)
     connect_para.rcvfunc =       msg_rcv_callback;
     connect_para.security.type = EN_DTLS_AL_SECURITY_TYPE_NONE;
     ret = oc_mqtt_profile_connect(&connect_para);
+
+    // a simple reconnection avoidance algorithm demo
+    int min_back_off = 1000;
+    int default_back_off = 1000;
+    int max_back_off = 30 * 1000;
+    int retry_times = 0;
+    int max_retry_times = 20;
+    while (ret != (int)en_oc_mqtt_err_ok) {
+        int low_bound = (int) default_back_off * 0.8;
+        int high_bound = (int) default_back_off * 1.0;
+        int random_back_off = (int) rand() % (high_bound - low_bound);
+        int back_off_with_jitter = (int) pow(2.0, (double) retry_times) * (random_back_off + low_bound);
+        int next_retry_time = (int) (min_back_off + back_off_with_jitter) > max_back_off ? max_back_off : (min_back_off + back_off_with_jitter);
+        osal_task_sleep(next_retry_time);
+        retry_times++;
+        if (retry_times > max_retry_times) {
+            retry_times = 0;
+        }
+        ret = oc_mqtt_profile_connect(&connect_para);
+    }
+
     if((ret == (int)en_oc_mqtt_err_ok)){
         g_app_cb.connected = 1;
     }
