@@ -102,6 +102,7 @@ typedef struct
     int                          motor;
 }app_cb_t;
 static app_cb_t  g_app_cb;
+extern link_main_task_entry(void);
 
 static void deal_report_msg(report_t *report)
 {
@@ -400,6 +401,7 @@ static int shell_disconn(int argc, const char *argv[])
 
 int standard_app_demo_main()
 {
+    link_main_task_entry();
     int ret = -1;
     LINK_LOG_DEBUG("This Is MQTT V5 DEMOS:HC Display");
     g_app_cb.app_msg = queue_create("queue_rcvmsg",10,1);
