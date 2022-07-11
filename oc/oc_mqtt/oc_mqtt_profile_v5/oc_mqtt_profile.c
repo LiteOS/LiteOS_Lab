@@ -67,6 +67,7 @@ static oc_mqtt_profile_cb_t s_oc_mqtt_profile_cb;
 #define CN_OC_MQTT_PROFILE_CMD_INDEX                   "/sys/commands/"
 #define CN_OC_MQTT_PROFILE_EVENTDOWN_INDEX             "/sys/events/down"
 #define CN_OC_MQTT_PROFILE_BS_INDEX                    "/sys/bootstrap/down"
+#define CN_OC_MQTT_PROFILE_GETSHADOW_INDEX             "/sys/shadow/get"
 
 static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
 {
@@ -122,6 +123,10 @@ static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
         else if(NULL != strstr(topicbuf,CN_OC_MQTT_PROFILE_BS_INDEX))
         {
             message.type = EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_BS;
+        }
+        else if(NULL != strstr(topicbuf,CN_OC_MQTT_PROFILE_GETSHADOW_INDEX))
+        {
+            message.type = EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_SHADOWGET;
         }
         else
         {

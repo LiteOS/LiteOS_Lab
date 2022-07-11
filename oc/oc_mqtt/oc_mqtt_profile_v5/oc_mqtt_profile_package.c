@@ -40,6 +40,7 @@
 
 
 
+static cJSON *JsonCreateKvLst(oc_mqtt_profile_kv_t *kvlst);
 ///< format the report data to json string mode
 static cJSON  *JsonCreateKv(oc_mqtt_profile_kv_t  *kv)
 {
@@ -60,6 +61,21 @@ static cJSON  *JsonCreateKv(oc_mqtt_profile_kv_t  *kv)
             break;
         case EN_OC_MQTT_PROFILE_VALUE_STRING:
             ret = cJSON_CreateString((const char *)kv->value);
+            break;
+        case EN_OC_MQTT_PROFILE_VALUE_INT_ARRAY:
+            ret = cJSON_CreateIntArray((const int*)kv->value, kv->array_size);
+            break;
+        case EN_OC_MQTT_PROFILE_VALUE_FLOAT_ARRAY:
+            ret = cJSON_CreateFloatArray((const float*)kv->value, kv->array_size);
+            break;
+        case EN_OC_MQTT_PROFILE_VALUE_DOUBLE_ARRAY:
+            ret = cJSON_CreateDoubleArray((const double*)kv->value, kv->array_size);
+            break;
+        case EN_OC_MQTT_PROFILE_VALUE_STRING_ARRAY:
+            ret = cJSON_CreateStringArray((const char**)kv->value, kv->array_size);
+            break;
+        case EN_OC_MQTT_PROFILE_VALUE_KV_T:
+            ret = JsonCreateKvLst(kv->value);
             break;
         default:
             break;

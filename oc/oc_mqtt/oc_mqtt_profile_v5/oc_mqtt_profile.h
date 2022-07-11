@@ -83,6 +83,7 @@ typedef enum
     EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_PROPERTYGET,        ///< THIS IS THE PLATFORM GET PROPERTY
     EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_EVENT,              ///< THIS IS THE EVENT
     EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_BS,                 ///< THIS IS THE BOOTSTRAP
+    EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_SHADOWGET,          ///< THIS IS THE GET SHADOW
     EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_LAST,
 }en_oc_mqtt_profile_msg_type_down_t;
 
@@ -95,6 +96,11 @@ typedef enum
     EN_OC_MQTT_PROFILE_VALUE_FLOAT,
     EN_OC_MQTT_PROFILE_VALUE_DOUBLE,
     EN_OC_MQTT_PROFILE_VALUE_STRING,           ///< must be ended with '\0'
+    EN_OC_MQTT_PROFILE_VALUE_INT_ARRAY,
+    EN_OC_MQTT_PROFILE_VALUE_FLOAT_ARRAY,
+    EN_OC_MQTT_PROFILE_VALUE_DOUBLE_ARRAY,
+    EN_OC_MQTT_PROFILE_VALUE_STRING_ARRAY,
+    EN_OC_MQTT_PROFILE_VALUE_KV_T,
     EN_OC_MQTT_PROFILE_VALUE_LAST,
 }en_oc_profile_data_t;
 
@@ -105,6 +111,7 @@ typedef struct
     char                 *key;
     en_oc_profile_data_t  type;
     void                 *value;
+    int                  array_size;
 }oc_mqtt_profile_kv_t;
 
 
