@@ -77,3 +77,6 @@
 // Enable iot_config.h
 #define CONFIG_IOT_LINK_CONFIGFILE "iot_config.h"
 
+// Enable message storage in abnormal scene demo
+#define CONFIG_MSG_STORAGE_ABNORMAL_SCENE_DEMO
+

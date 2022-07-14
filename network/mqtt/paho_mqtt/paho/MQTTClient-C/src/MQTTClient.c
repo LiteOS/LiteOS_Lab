@@ -16,7 +16,7 @@
  *   Ian Craggs - add ability to set message handler separately #6
  *******************************************************************************/
 #include "MQTTClient.h"
-
+#include "iot_config.h"
 static void NewMessageData(MessageData* md, MQTTString* aTopicName, MQTTMessage* aMessage) {
     md->topicName = aTopicName;
     md->message = aMessage;
@@ -852,6 +852,10 @@ exit:
     return rc;
 }
 
+#ifdef CONFIG_MSG_STORAGE_ABNORMAL_SCENE_DEMO
+#include "queue.h"
+extern queue_t * g_queue_msg_report_fail;
+#endif
 
 int MQTTPublish(MQTTClient* c, const char* topicName, MQTTMessage* message)
 {
@@ -889,8 +893,18 @@ int MQTTPublish(MQTTClient* c, const char* topicName, MQTTMessage* message)
         {
             unsigned short mypacketid;
             unsigned char dup, type;
-            if (MQTTDeserialize_ack(&type, &dup, &mypacketid, c->readbuf, c->readbuf_size) != 1)
+            if (MQTTDeserialize_ack(&type, &dup, &mypacketid, c->readbuf, c->readbuf_size) != 1){printf("rc = failure \n");
                 rc = FAILURE;
+            }
+            #ifdef CONFIG_MSG_STORAGE_ABNORMAL_SCENE_DEMO 
+            else {
+                #include "oc_mqtt_profile.h"
+                oc_mqtt_profile_service_t *success_msg;
+                success_msg = NULL;
+                queue_pop(g_queue_msg_report_fail, (void **)&success_msg, (int) cn_osal_timeout_forever);
+                printf("hello i am xingli \n");
+            }
+            #endif
         }
         else
             rc = FAILURE;

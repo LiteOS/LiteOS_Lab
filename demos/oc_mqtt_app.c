@@ -102,6 +102,11 @@ typedef struct
     int                          motor;
 }app_cb_t;
 static app_cb_t  g_app_cb;
+
+#ifdef CONFIG_MSG_STORAGE_ABNORMAL_SCENE_DEMO
+queue_t * g_queue_msg_report_fail = NULL;
+#endif
+
 extern link_main_task_entry(void);
 
 static void deal_report_msg(report_t *report)
@@ -350,6 +355,42 @@ static int task_main_entry( void *args)
     return 0;
 }
 
+#ifdef CONFIG_MSG_STORAGE_ABNORMAL_SCENE_DEMO
+void push_msg_into_queue(report_t *report)
+{
+    oc_mqtt_profile_service_t service;
+    oc_mqtt_profile_kv_t temperature;
+    oc_mqtt_profile_kv_t humidity;
+    oc_mqtt_profile_kv_t luminance;
+
+    service.event_time = NULL;
+    service.service_id = "Agriculture";
+    service.service_property = &temperature;
+    service.nxt = NULL;
+
+    temperature.key = "Temperature";
+    temperature.value = &report->temp;
+    temperature.type = EN_OC_MQTT_PROFILE_VALUE_INT;
+    temperature.nxt = &humidity;
+
+    humidity.key = "Humidity";
+    humidity.value = &report->hum;
+    humidity.type = EN_OC_MQTT_PROFILE_VALUE_INT;
+    humidity.nxt = &luminance;
+
+    luminance.key = "Luminance";
+    luminance.value = &report->lum;
+    luminance.type = EN_OC_MQTT_PROFILE_VALUE_INT;
+    luminance.nxt = NULL;
+
+    if (0 != queue_push(g_queue_msg_report_fail, &service, CONFIG_QUEUE_TIMEOUT))
+    {
+        return;
+    }
+
+}
+#endif
+
 static int task_sensor_entry( void *args)
 {
     app_msg_t *app_msg;
@@ -363,6 +404,12 @@ static int task_sensor_entry( void *args)
             app_msg->msg.report.hum = rand() % 25;
             app_msg->msg.report.lum = rand() % 35;
             app_msg->msg.report.temp = rand() % 100;
+
+            #ifdef CONFIG_MSG_STORAGE_ABNORMAL_SCENE_DEMO
+            push_msg_into_queue(&app_msg->msg.report);
+            printf("queue.size = %d\n", g_queue_msg_report_fail->msg_num);
+            #endif
+            
             if(0 != queue_push(g_app_cb.app_msg,app_msg,CONFIG_QUEUE_TIMEOUT)){
                 osal_free(app_msg);
             }
@@ -398,12 +445,16 @@ static int shell_disconn(int argc, const char *argv[])
     return 0;
 }
 
-
 int standard_app_demo_main()
 {
     link_main_task_entry();
     int ret = -1;
     LINK_LOG_DEBUG("This Is MQTT V5 DEMOS:HC Display");
+
+    #ifdef CONFIG_MSG_STORAGE_ABNORMAL_SCENE_DEMO
+    g_queue_msg_report_fail = queue_create("g_queue_msg_report_fail", 10, 1);
+    #endif
+
     g_app_cb.app_msg = queue_create("queue_rcvmsg",10,1);
     if(NULL ==  g_app_cb.app_msg){
         LINK_LOG_ERROR("Create receive msg queue failed");
