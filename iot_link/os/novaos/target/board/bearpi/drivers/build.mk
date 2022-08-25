@@ -1,1 +1,0 @@
-src-$(CONFIG_BH1750) += bh1750.c
