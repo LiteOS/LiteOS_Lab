@@ -35,7 +35,7 @@
 #ifndef _LOS_DEVFS_H
 #define _LOS_DEVFS_H
 
-#include <los_kifs.h>
+#include "los_kifs.h"
 
 #define DEVFS_FLAGS_R            KIFS_ATTR_R
 #define DEVFS_FLAGS_W            KIFS_ATTR_W

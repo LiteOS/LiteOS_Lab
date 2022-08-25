@@ -40,14 +40,14 @@
 #define LWM2M_COMMON_H
 #include <stdbool.h>
 #include <stdint.h>
-#include <atiny_log.h>
+#include "atiny_log.h"
 #ifdef CONFIG_FEATURE_FOTA
     #include "ota/ota_api.h"
 #endif
 #include "liblwm2m_api.h"
-#include <liblwm2m.h>
+#include "liblwm2m.h"
 
-#include <lwm2m_al.h>
+#include "lwm2m_al.h"
 
 #ifdef __cplusplus
 extern "C" {

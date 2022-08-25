@@ -34,10 +34,10 @@
 
 
 #include <stdio.h>
-#include <iot_link_config.h>
-#include <link_version.h>
+#include "iot_link_config.h"
+#include "link_version.h"
 //RTOS KERNEL
-#include <osal.h>
+#include "osal.h"
 
 #ifdef CONFIG_MACOS_ENABLE
     #include <sys/select.h>
@@ -72,38 +72,37 @@ int link_main(void *args)
     LINK_LOG_DEBUG("linkmain:%s",linkmain_version());
 
 #ifdef CONFIG_STIMER_ENABLE
-    #include <stimer.h>
+    #include "stimer.h"
     stimer_init();
 #endif
 
 #ifdef CONFIG_SHELL_ENABLE
-    #include <shell.h>
+    #include "shell.h"
     shell_init();
 #endif
 
     /* add loader code here */
 #ifdef CONFIG_OTA_ENABLE
-    #include <ota_init.h>
+    #include "ota_init.h"
     ota_init();
 #endif
 
 ///< install the driver framework
 #ifdef CONFIG_DRIVER_ENABLE
-    #include <driver.h>
+    #include "driver.h"
     ///< install the driver framework for the link
     (void)los_driv_init();
 #endif
 
-
 ///< install the at framework
 #ifdef CONFIG_AT_ENABLE
-    #include <at.h>
+    #include "at.h"
     (void)at_init();
 #endif
 
 ///< install the cJSON, for the oc mqtt agent need the cJSON
 #ifdef CONFIG_CJSON_ENABLE
-    #include <cJSON.h>
+    #include "cJSON.h"
 
     cJSON_Hooks  hook;
     hook.free_fn = osal_free;
@@ -114,61 +113,59 @@ int link_main(void *args)
 
 //////////////////////////  TCPIP PROTOCOL /////////////////////////////////////
 #ifdef CONFIG_TCPIP_AL_ENABLE
-    #include <sal.h>
+    #include "sal.h"
     (void)link_tcpip_init();
 #endif
 
 //////////////////////////  DTLS PROTOCOL  /////////////////////////////////////
 #ifdef CONFIG_DTLS_AL_ENABLE
-    #include <dtls_al.h>
+    #include "dtls_al.h"
     (void)dtls_al_init();
 #endif
 
 //////////////////////////  MQTT PROTOCOL  /////////////////////////////////////
 #ifdef CONFIG_MQTT_AL_ENABLE
-    #include <mqtt_al.h>
+    #include "mqtt_al.h"
     mqtt_al_init();
 #endif
 
-
 //////////////////////////  COAP PROTOCOL  /////////////////////////////////
 #ifdef CONFIG_COAP_AL_ENABLE
-    #include <coap_al.h>
+    #include "coap_al.h"
     (void)coap_al_init();
 #endif
 
 //////////////////////////  LWM2M PROTOCOL  /////////////////////////////////
 #ifdef CONFIG_LWM2M_AL_ENABLE
-    #include <lwm2m_al.h>
+    #include "lwm2m_al.h"
     (void)lwm2m_al_init();
 #endif
 
 //////////////////////////  OC MQTT  //////////////////////////////////
 #ifdef CONFIG_OCMQTT_ENABLE
-    #include <oc_mqtt_al.h>
+    #include "oc_mqtt_al.h"
     (void)oc_mqtt_init();
-
 #endif
 
 ////////////////////////////  OC LWM2M /////////////////////////////////////////
 #ifdef CONFIG_OCLWM2M_ENABLE
-    #include <oc_lwm2m_al.h>
+    #include "oc_lwm2m_al.h"
     oc_lwm2m_init();
 #endif
 
 ////////////////////////////  OC COAP //////////////////////////////////////////
 #ifdef CONFIG_OCCOAP_ENABLE
-	#include <oc_coap_al.h>
+	#include "oc_coap_al.h"
     oc_coap_init();
 #endif
 
-
+////////////////////////////  AUTO TEST ////////////////////////////////////////
 #ifdef CONFIG_AUTO_TEST
-    #include <test_case.h>
+    #include "test_case.h"
     autotest_start();
 #endif
 
-
+////////////////////////////  LINK DEMO ////////////////////////////////////////
 #ifdef CONFIG_LINKDEMO_ENABLE
     extern int standard_app_demo_main(void);
     (void) standard_app_demo_main();
@@ -176,5 +173,3 @@ int link_main(void *args)
 
     return 0;
 }
-
-

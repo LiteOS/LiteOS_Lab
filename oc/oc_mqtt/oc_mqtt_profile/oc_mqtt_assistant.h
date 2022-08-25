@@ -35,7 +35,7 @@
 #ifndef LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_AL_OC_MQTT_ASSISTANT_H_
 #define LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_AL_OC_MQTT_ASSISTANT_H_
 
-#include <cJSON.h>
+#include "cJSON.h"
 
 //////////////////////////OC MQTT ASSISTANT INTERFACE///////////////////////////
 /* msg type, json name, its value is string*/

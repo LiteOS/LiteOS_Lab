@@ -5,7 +5,7 @@
 #ifndef __SAL_IMP_H
 #define __SAL_IMP_H
 
-#include <link_log.h>
+#include "link_log.h"
 
 /**
  * @brief: all the function model,please refer to the

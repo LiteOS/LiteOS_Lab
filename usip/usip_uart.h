@@ -33,6 +33,6 @@
  *---------------------------------------------------------------------------*/
 #ifndef USIP_UART_H_
 #define USIP_UART_H_
-void usip_uart_init();
+void usip_uart_init(void);
 void send_one_byte(unsigned char data);
 #endif /* USIP_UART_H_ */

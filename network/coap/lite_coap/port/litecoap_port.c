@@ -44,9 +44,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include <link_log.h>
-#include <coap_al.h>
-#include <litecoap_port.h>
+#include "link_log.h"
+#include "coap_al.h"
+#include "litecoap_port.h"
 
 #include "coap_core.h"
 #include "litecoap.h"

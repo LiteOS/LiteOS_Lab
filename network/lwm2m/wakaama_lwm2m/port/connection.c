@@ -52,14 +52,14 @@
 #include <ctype.h>
 #include "connection.h"
 
-#include <sal.h>
-//#include <osal.h>
+#include "sal.h"
+//#include "osal.h"
 
 #if defined (WITH_DTLS)
     #include "dtls_interface.h"
 #endif
 //#include "sal/atiny_socket.h"
-//#include <atiny_log.h>
+//#include "atiny_log.h"
 #include "object_comm.h"
 
 #define COAP_PORT "5683"

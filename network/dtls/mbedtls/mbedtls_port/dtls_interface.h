@@ -55,9 +55,7 @@
 #ifndef DTLS_INTERFACE_H
 #define DTLS_INTERFACE_H
 
-
-#include <link_log.h>
-
+#include "link_log.h"
 
 #if !defined(MBEDTLS_CONFIG_FILE)
 #include "los_mbedtls_config.h"

@@ -32,7 +32,7 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#include  <osal_imp.h>
+#include  "osal_imp.h"
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -31,10 +31,9 @@
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
-
-#include <link_log.h>
-#include <oc_mqtt_al.h>
-
+#include "oc_mqtt_al.h"
+#include "link_log.h"
+#include "oc_mqtt_tiny.h"
 static oc_mqtt_t *s_oc_mqtt = NULL;
 ///////////////////////OC AGENT INSTALL INTERFACE///////////////////////////////
 int oc_mqtt_register(const oc_mqtt_t *opt)
@@ -62,7 +61,7 @@ int oc_mqtt_config(oc_mqtt_config_t *param)
     return ret;
 }
 
-int oc_mqtt_deconfig()
+int oc_mqtt_deconfig(void)
 {
     int ret =(int)en_oc_mqtt_err_system;
 
@@ -136,7 +135,7 @@ __attribute__ ((weak)) int oc_mqtt_demo_main(void)
 }
 
 
-int oc_mqtt_init()
+int oc_mqtt_init(void)
 {
     int ret;
 

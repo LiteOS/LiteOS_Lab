@@ -33,12 +33,9 @@
  *---------------------------------------------------------------------------*/
 
 ////< this file used to package the data for the profile and you must make sure the data format is right
-#include <oc_mqtt_profile.h>
-#include <oc_mqtt_profile_package.h>
-#include <cJSON.h>
-
-
-
+#include "oc_mqtt_profile_package.h"
+#include "oc_mqtt_profile.h"
+#include "cJSON.h"
 
 static cJSON *JsonCreateKvLst(oc_mqtt_profile_kv_t *kvlst);
 ///< format the report data to json string mode
@@ -681,7 +678,6 @@ EXIT_MEM:
     }
     return ret;
 }
-
 
 
 

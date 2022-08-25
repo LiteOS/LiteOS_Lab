@@ -54,9 +54,9 @@ this file implement the shell for the system.the following instruction you must 
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
-#include <shell.h>
-#include <link_log.h>
-#include <osal.h>
+#include "shell.h"
+#include "link_log.h"
+#include "osal.h"
 
 /**************************************FILE DEFINES****************************/
 //DEFINE VIRTUAL KEYS:VIRTUAL KEYS ARE COMBINED BY:0X1b 0xXX CODE
@@ -112,7 +112,7 @@ function     :function used to get char from the input device
 parameters   :
 instruction  :you could reimplement by redirection,make sure it is block mode
 *******************************************************************************/
-static int shell_get_char()
+static int shell_get_char(void)
 {
     return getchar();
 }
@@ -205,7 +205,7 @@ function     :function used ring the terminal's bell
 parameters   :
 instruction  :
 *******************************************************************************/
-static void shell_bell() {
+static void shell_bell(void) {
     shell_put_char('\a');
 }
 /*******************************************************************************
@@ -480,14 +480,11 @@ instruction  :if you want use shell,you should do two things
               2,call shell_init in your process:make sure after the system has
                 been initialized
 *******************************************************************************/
-void shell_init()
+void shell_init(void)
 {
     shell_cmd_init();
 
     osal_task_create("shell_server",shell_server_entry,NULL,\
                       CONFIG_SHELL_TASK_STACKSIZE+CN_CMD_CACHE*CN_CMDLEN_MAX,NULL,CONFIG_SHELL_TASK_STACKPRIOR);
 }
-
-
-
 

@@ -34,11 +34,11 @@
 
 //include the file which implement the function
 #include  <string.h>
-#include  <osal_imp.h>
+#include  "osal_imp.h"
 
 ///< this is implement for the task
-#include <task.h>
-#include <kconfig.h>
+#include "task.h"
+#include "kconfig.h"
 
 ///< we need to translate the time mini-second to ticks: use the CONFIG_SYS_TICK_HZ
 #define FN_MS_2_TICKS(ms)     (ms*CONFIG_SYS_TICK_HZ/1000)

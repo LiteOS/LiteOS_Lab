@@ -35,7 +35,7 @@
 #ifndef ATINY_LOG_H
 #define ATINY_LOG_H
 
-#include <link_log.h>
+#include "link_log.h"
 
 #ifdef __cplusplus
 extern "C" {

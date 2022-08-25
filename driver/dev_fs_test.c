@@ -36,8 +36,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <shell.h>
-#include <driver.h>
+#include "shell.h"
+#include "driver.h"
 #include "fs/inc/los_vfs.h"
 #include "sys/fcntl.h"
 

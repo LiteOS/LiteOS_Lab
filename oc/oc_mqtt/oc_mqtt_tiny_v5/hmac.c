@@ -34,13 +34,12 @@
 #include "hmac.h"
 
 #include <string.h>
-#include <link_log.h>
+#include "link_log.h"
 #include "mbedtls/md.h"
 #include "mbedtls/ssl.h"
 #include "mbedtls/entropy.h"
 #include "mbedtls/ctr_drbg.h"
 #include "mbedtls/platform.h"
-
 #include "mbedtls/md_internal.h"
 #include "dtls_interface.h"
 

@@ -157,7 +157,7 @@ int oc_lwm2m_deconfig(void);
  *
  *@return 0 success while <0 failed
  */
-int oc_lwm2m_init();
+int oc_lwm2m_init(void);
 
 /*
  * @brief this is the map for the errocode

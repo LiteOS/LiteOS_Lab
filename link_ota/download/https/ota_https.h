@@ -36,7 +36,7 @@
 #define LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_OTA_OTA_HTTPS_H_
 
 #include <stdint.h>
-#include <ota_img.h>
+#include "ota_img.h"
 
 
 typedef struct

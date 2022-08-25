@@ -34,7 +34,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <link_log.h>
+#include "link_log.h"
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -43,7 +43,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#include <coap_al.h>
+#include "coap_al.h"
 
 
 typedef struct

@@ -39,7 +39,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <stdio.h>
-#include <iot_link_config.h>
+#include "iot_link_config.h"
 /**
  * @brief:this defines for the log module, and  LINK_LOG_TRACE/LINK_LOG_DEBUG will not participate the compile in the release version
  *

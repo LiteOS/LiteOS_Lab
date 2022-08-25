@@ -32,13 +32,13 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#include <at.h>
+#include "at.h"
 #include <stdlib.h>
 #include <string.h>
-#include <driver.h>
+#include "driver.h"
 #include <sys/fcntl.h>
 #include <ctype.h>
-#include <link_log.h>
+#include "link_log.h"
 
 //these defines could be reconfigured at the iot_link_config.h
 
@@ -444,7 +444,7 @@ instruction  :if you want to use the at frame work, please call this function
               please supply the function read and write.the read function must be
               a block function controlled by timeout
 *******************************************************************************/
-int at_init()
+int at_init(void)
 {
     int ret = -1;
 

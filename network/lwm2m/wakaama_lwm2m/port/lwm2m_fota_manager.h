@@ -52,7 +52,7 @@
 #ifndef LWM2M_FOTA_MANAGER_H_
 #define LWM2M_FOTA_MANAGER_H_
 
-#include <lwm2m_common.h>
+#include "lwm2m_common.h"
 #include "liblwm2m.h"
 #include "ota/package.h"
 

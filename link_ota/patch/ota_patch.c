@@ -37,10 +37,10 @@
  *         we hope you could do the img binded first
  * */
 #include <stdio.h>
-#include <osal.h>
-#include <ota_img.h>
-#include <ota_flag.h>
-#include <ota_patch.h>
+#include "osal.h"
+#include "ota_img.h"
+#include "ota_flag.h"
+#include "ota_patch.h"
 #include "libHDiffPatch/HPatch/patch.h"
 #include "decompress_plugin_demo.h"
 

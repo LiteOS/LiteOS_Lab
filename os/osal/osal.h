@@ -38,9 +38,9 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include <link_log.h>
-#include <link_misc.h>
-#include <osal_types.h>
+#include "link_log.h"
+#include "link_misc.h"
+#include "osal_types.h"
 
 //we need nothing here except the standard struct here
 //kernel port here
@@ -75,7 +75,7 @@ int osal_task_kill(void *task);
  * @brief:use this function  to exit from the current task
  *
  **/
-void osal_task_exit();
+void osal_task_exit(void);
 
 /**
  * @brief:use this function to make the task to sleep
@@ -131,7 +131,7 @@ void *osal_calloc(size_t n, size_t size);
  *
  * @return:system time (unit ms)
  * */
-unsigned long long osal_sys_time();
+unsigned long long osal_sys_time(void);
 
 /**
  *

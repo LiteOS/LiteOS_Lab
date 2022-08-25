@@ -37,8 +37,8 @@
  *
  */
 
-#include <oc_mqtt_event.h>
-#include <oc_mqtt_profile.h>
+#include "oc_mqtt_event.h"
+#include "oc_mqtt_profile.h"
 
 /**
 Topic: $oc/devices/{device_id}/sys/events/up

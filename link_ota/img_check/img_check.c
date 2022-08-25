@@ -34,9 +34,9 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <link_log.h>
-#include <ota_img.h>
-#include <ota_flag.h>
+#include "link_log.h"
+#include "ota_img.h"
+#include "ota_flag.h"
 
 
 /**

@@ -35,8 +35,8 @@
 
 #if CFG_DEVFS_ENABLE
 
-#include <fs/los_vfs.h>
-#include <driver.h>
+#include "fs/los_vfs.h"
+#include "driver.h"
 
 #define cn_devfs_timeout 0xffffffff
 #define cn_devfs_name    "devfs"

@@ -35,11 +35,11 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
-#include <queue.h>
 
-#include <osal.h>
-#include <oc_mqtt_al.h>
-#include <oc_mqtt_assistant.h>
+#include "queue.h"
+#include "osal.h"
+#include "oc_mqtt_al.h"
+#include "oc_mqtt_assistant.h"
 
 ///< ANYWAY, YOU COULD CONFIG IT TO THE ONE MODE,ALL THE INFORMATION IS JUST FOR THE TEST
 #if CONFIG_OC_MQTT_DEMO_BS
@@ -278,7 +278,7 @@ static int task_reportmsg_entry(void *args)
     return 0;
 }
 
-int oc_mqtt_demo_main()
+int oc_mqtt_demo_main(void)
 {
     printf("DO THE OC MQTT V1 DEMOS\n\r");
 

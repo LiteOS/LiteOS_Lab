@@ -34,9 +34,9 @@
 
 #ifndef LWM2M_RPT_H
 #define LWM2M_RPT_H
-#include <lwm2m_common.h>
+#include "lwm2m_common.h"
 #include "lwm2m_list.h"
-#include <liblwm2m.h>
+#include "liblwm2m.h"
 
 #ifdef __cplusplus
 extern "C" {

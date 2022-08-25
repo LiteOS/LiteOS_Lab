@@ -52,12 +52,12 @@
  *
  *  This file is part of mbed TLS (https://tls.mbed.org)
  */
-
+#include <string.h>
 #include "dtls_interface.h"
 #include "mbedtls/net_sockets.h"
 #include "mbedtls/ssl_internal.h"
-#include <sal.h>
-#include <osal.h>
+#include "sal.h"
+#include "osal.h"
 
 #define MBEDTLS_LOG LINK_LOG_DEBUG
 

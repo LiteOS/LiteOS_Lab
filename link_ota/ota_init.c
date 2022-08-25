@@ -34,8 +34,8 @@
 
 
 
-#include <link_log.h>
-#include <ota_img.h>
+#include "link_log.h"
+#include "ota_img.h"
 
 int ota_init(void)
 {

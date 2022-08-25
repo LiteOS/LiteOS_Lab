@@ -35,9 +35,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <osal.h>
 
-
+#include "osal.h"
 #include "queue.h"
 
 queue_t* queue_create(const char *name,int len,int syncmode)

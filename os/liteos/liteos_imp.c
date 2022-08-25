@@ -34,7 +34,7 @@
 
 //include the file which implement the function
 #include  <string.h>
-#include  <osal_imp.h>
+#include  "osal_imp.h"
 
 ///< this is implement for the task
 #include <los_task.ph>
@@ -286,7 +286,7 @@ void *los_mem_realloc(void *old, int newlen)
 #include <los_sys.ph>
 
 extern UINT64 osKernelGetTickCount (void);
-static unsigned long long __get_sys_time()
+static unsigned long long __get_sys_time(void)
 {
     return osKernelGetTickCount() * (OS_SYS_MS_PER_SECOND / LOSCFG_BASE_CORE_TICK_PER_SECOND);
 }
@@ -341,7 +341,6 @@ static const tag_os_ops s_liteos_ops =
 
 	.int_connect = __int_connect,
 };
-
 
 
 static const tag_os s_link_liteos =

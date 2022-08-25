@@ -41,10 +41,10 @@
 #include <sys/errno.h>
 #endif
 
-#include <los_printf.h>
+#include "los_printf.h"
 
-#include <los_vfs.h>
-#include <los_kifs.h>
+#include "los_vfs.h"
+#include "los_kifs.h"
 
 struct kifs_node
 {

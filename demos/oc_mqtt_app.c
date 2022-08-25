@@ -36,10 +36,10 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
-#include <iot_link_config.h>
-#include <queue.h>
-#include <oc_mqtt_al.h>
-#include <oc_mqtt_profile.h>
+#include "iot_link_config.h"
+#include "queue.h¡°
+#include "oc_mqtt_al.h"
+#include "oc_mqtt_profile.h"
 
 #ifndef CONFIG_APP_SERVERIP
 #define CONFIG_APP_SERVERIP       "121.36.42.100"
@@ -70,13 +70,13 @@ typedef enum
     en_msg_report,
     en_msg_conn,
     en_msg_disconn,
-}en_msg_type_t;
+} en_msg_type_t;
 
 typedef struct
 {
     char *request_id;
     char *payload;
-}cmd_t;
+} cmd_t;
 
 typedef struct
 {
@@ -92,7 +92,7 @@ typedef struct
         cmd_t cmd;
         report_t report;
     }msg;
-}app_msg_t;
+} app_msg_t;
 
 typedef struct
 {
@@ -100,7 +100,7 @@ typedef struct
     int                          connected;
     int                          led;
     int                          motor;
-}app_cb_t;
+} app_cb_t;
 static app_cb_t  g_app_cb;
 
 #ifdef CONFIG_MSG_STORAGE_ABNORMAL_SCENE_DEMO
@@ -196,7 +196,7 @@ static int msg_rcv_callback(oc_mqtt_profile_msgrcv_t *msg)
 }
 
 ///< COMMAND DEAL
-#include <cJSON.h>
+#include "cJSON.h"
 static void deal_cmd_msg(cmd_t *cmd)
 {
     cJSON *obj_root;
@@ -217,7 +217,7 @@ static void deal_cmd_msg(cmd_t *cmd)
     }
     if(0 == strcmp(cJSON_GetStringValue(obj_cmdname),"Agriculture_Control_light")){
         obj_paras = cJSON_GetObjectItem(obj_root,"Paras");
-        if(NULL == obj_paras){
+        if(NULL == obj_paras) {
             goto EXIT_OBJPARAS;
         }
         obj_para = cJSON_GetObjectItem(obj_paras,"Light");

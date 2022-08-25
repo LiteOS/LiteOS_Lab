@@ -33,7 +33,7 @@
  *---------------------------------------------------------------------------*/
 
 
-#include <ota_img.h>
+#include "ota_img.h"
 
 static int imgerase_func(uintptr_t  arg, int imgsize)
 {

@@ -53,7 +53,7 @@
 #include <stddef.h>
 #include <string.h>
 
-#include <osal.h>
+#include "osal.h"
 
 
 #ifndef LWM2M_MEMORY_TRACE

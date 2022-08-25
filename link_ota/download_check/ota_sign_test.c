@@ -34,7 +34,7 @@
 
 #include "ota_sign.h"
 
-#include <shell.h>
+#include "shell.h"
 ///< two way mqtt mode
 static const char g_client_public[] = \
 "-----BEGIN PUBLIC KEY-----\r\n"

@@ -33,7 +33,7 @@
  *---------------------------------------------------------------------------*/
 
 #include "ota_sign.h"
-#include <link_log.h>
+#include "link_log.h"
 #include <string.h>
 #include "mbedtls/md.h"
 #include "mbedtls/pk.h"

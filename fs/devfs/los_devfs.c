@@ -32,8 +32,8 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#include <los_config.h>
-#include <los_devfs.h>
+#include "los_config.h"
+#include "los_devfs.h"
 
 #if (LOSCFG_ENABLE_DEVFS == YES)
 

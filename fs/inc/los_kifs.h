@@ -35,7 +35,7 @@
 #ifndef _LOS_KIFS_H
 #define _LOS_KIFS_H
 
-#include <los_vfs.h>
+#include "los_vfs.h"
 
 #define KIFS_ATTR_R             (1 << 0)
 #define KIFS_ATTR_W             (1 << 1)

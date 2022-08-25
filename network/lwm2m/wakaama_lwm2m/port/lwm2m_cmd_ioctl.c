@@ -38,7 +38,7 @@
     #include "ota_port.h"
 #endif
 
-#include <osal.h>
+#include "osal.h"
 
 #include <stdio.h>
 #include <stdlib.h>

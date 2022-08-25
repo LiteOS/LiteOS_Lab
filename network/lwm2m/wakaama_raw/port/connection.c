@@ -52,8 +52,8 @@
 #include <ctype.h>
 #include "connection.h"
 
-#include <sal.h>
-#include <osal.h>
+#include "sal.h"
+#include "osal.h"
 
 #if defined (WITH_DTLS)
     #include "dtls_interface.h"

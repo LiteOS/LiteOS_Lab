@@ -32,7 +32,7 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#include  <osal_imp.h>
+#include  "osal_imp.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -130,7 +130,6 @@ static bool_t  __mutex_del(osal_mutex_t mutex)
 
     return false;
 }
-
 
 ///< this is implement for the semp
 //semp of the os
@@ -230,9 +229,6 @@ static bool_t  __semp_del(osal_semp_t semp)
     }
 }
 
-
-
-
 ///< sys time
 #include <sys/time.h>
 static unsigned long long __get_sys_time()
@@ -243,7 +239,6 @@ static unsigned long long __get_sys_time()
 
     return ((unsigned long long)tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 }
-
 
 static const tag_os_ops s_linux_ops =
 {
@@ -280,7 +275,7 @@ int os_imp_init(void)
     int ret = -1;
 
     ret = osal_install(&s_link_linux);
-    sigaction(SIGPIPE, &(struct sigaction){SIG_IGN}, NULL);
+    sigaction(SIGPIPE, &(struct sigaction){{SIG_IGN}}, NULL);
 
     return ret;
 }

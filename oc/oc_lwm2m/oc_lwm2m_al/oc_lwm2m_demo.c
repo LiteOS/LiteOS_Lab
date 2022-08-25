@@ -36,9 +36,9 @@
 #include <stddef.h>
 #include <string.h>
 
-#include <osal.h>
-#include <oc_lwm2m_al.h>
-#include <link_endian.h>
+#include "osal.h"
+#include "oc_lwm2m_al.h"
+#include "link_endian.h"
 
 #define cn_endpoint_id        "lwm2m_001"
 #define cn_app_server         "49.4.85.232"
@@ -119,7 +119,7 @@ static int app_msg_deal(void *usr_data,en_oc_lwm2m_msg_t type, void *msg, int le
 }
 
 
-static int app_cmd_task_entry()
+static int app_cmd_task_entry(void *args)
 {
     int ret = -1;
     app_led_cmd_t *led_cmd;
@@ -179,7 +179,7 @@ static int app_cmd_task_entry()
 
 
 
-static int app_report_task_entry()
+static int app_report_task_entry(void *args)
 {
     int ret = -1;
     int lux = 0;
@@ -218,7 +218,7 @@ static int app_report_task_entry()
 
 
 
-int oc_lwm2m_demo_main()
+int oc_lwm2m_demo_main(void)
 {
     osal_semp_create(&s_rcv_sync,1,0);
 

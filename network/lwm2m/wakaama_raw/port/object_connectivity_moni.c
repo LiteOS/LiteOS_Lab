@@ -71,7 +71,7 @@
  */
 
 #include "internals.h"
-#include <lwm2m_common.h>
+#include "lwm2m_common.h"
 
 // Resource Id's:
 #define RES_M_NETWORK_BEARER            0

@@ -37,8 +37,8 @@
 #endif
 
 #include <stdlib.h>
-#include <sal.h>
-#include <osal.h>
+#include "sal.h"
+#include "osal.h"
 #include "litecoap.h"
 #include "coap_core.h"
 #include "litecoap_err.h"

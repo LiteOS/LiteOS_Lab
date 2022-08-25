@@ -36,7 +36,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <iot_config.h>
+#include "iot_config.h"
 
 extern int link_main(void *args); 
 
@@ -81,7 +81,7 @@ extern int link_main(void *args);
 #endif
 
 #ifdef CONFIG_OPENHARMONYOS_ENABLE
-#include <cmsis_os2.h>
+#include "cmsis_os2.h"
     void create_task_by_openharmonyos(void)
     {
         osThreadAttr_t attr;

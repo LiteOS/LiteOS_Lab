@@ -37,7 +37,7 @@
 #include <stddef.h>
 #include <string.h>
 
-#include <sal.h>
+#include "sal.h"
 
 __attribute__((weak)) in_addr_t inet_addr(const char *addr)
 {

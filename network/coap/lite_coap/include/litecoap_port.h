@@ -39,7 +39,7 @@
  *
  */
 
-int coap_imp_init();
+int coap_imp_init(void);
 
 
 #endif /* PAHO_MQTT_PORT_H */

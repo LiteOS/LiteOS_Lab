@@ -32,7 +32,7 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#include <link_log.h>
+#include "link_log.h"
 #include "lwm2m_fota_state.h"
 #include <string.h>
 #include "firmware_update.h"

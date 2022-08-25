@@ -52,7 +52,7 @@
 #ifndef LWM2M_FOTA_STATE_H_
 #define LWM2M_FOTA_STATE_H_
 #include "lwm2m_fota_manager.h"
-#include <atiny_log.h>
+#include "atiny_log.h"
 #include "object_comm.h"
 #include "flag_manager.h"
 #include "upgrade_flag.h"

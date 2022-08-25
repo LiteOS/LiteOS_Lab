@@ -34,10 +34,9 @@
 
 
 #include <string.h>
-#include <osal.h>
-#include <dtls_al.h>
-#include <dtls_interface.h>
-
+#include "osal.h"
+#include "dtls_al.h"
+#include "dtls_interface.h"
 
 #if defined(MBEDTLS_DEBUG_C)
 static void mbed_port_debug( void *ctx, int level,

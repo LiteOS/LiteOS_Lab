@@ -33,10 +33,10 @@
  *---------------------------------------------------------------------------*/
 #include <string.h>
 
-#include <sinn_client.h>
-#include <mqtt_al.h>
-#include <sinn_mqtt.h>
-#include <osal.h>
+#include "sinn_client.h"
+#include "mqtt_al.h"
+#include "sinn_mqtt.h"
+#include "osal.h"
 
 #ifdef WITH_DTLS
 #include "sinn_sec_socket.h"
@@ -69,9 +69,6 @@ static int __loop_entry(void *arg)
     }
     return 0;
 }
-
-
-
 
 static void ev_handler(sinn_connection_t *nc, int event, void *event_data)
 {
@@ -458,7 +455,7 @@ static en_mqtt_al_connect_state __check_status(void *handle)
     return ret;
 }
 
-int mqtt_install_sinnmqtt()
+int mqtt_install_sinnmqtt(void)
 {
     int ret = -1;
 

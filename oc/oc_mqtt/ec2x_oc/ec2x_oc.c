@@ -34,20 +34,15 @@
 
 
 #include <string.h>
-#include <at.h>
-#include <oc_mqtt_al.h>
-#include <osal.h>
+#include "at.h"
+#include "oc_mqtt_al.h"
+#include "osal.h"
 #include <stdlib.h>
-
-
-#include <ec2x_oc.h>
-
+#include "ec2x_oc.h"
 
 #define CN_RCV_BUFLEN          1024
 #define CN_EC2X_CMD_TIME_BASE  (1000)
 #define CN_URC_DEACT           "\r\n+QIURC:"
-
-
 
 typedef struct
 {

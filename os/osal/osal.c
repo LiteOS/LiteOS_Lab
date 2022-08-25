@@ -36,12 +36,10 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <unistd.h>
-
-
 #include <string.h>
 
-#include <osal_imp.h>
-#include <osal.h>
+#include "osal_imp.h"
+#include "osal.h"
 
 static const tag_os *s_os_cb = NULL;
 
@@ -87,7 +85,7 @@ int osal_task_kill(void *task)
 }
 
 
-void osal_task_exit()
+void osal_task_exit(void)
 {
 
     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->task_exit))
@@ -219,7 +217,6 @@ bool_t  osal_semp_del(osal_semp_t semp)
 }
 
 
-
 void *osal_malloc(size_t size)
 {
     void *ret = NULL;
@@ -273,8 +270,6 @@ void *osal_realloc(void *ptr,size_t newsize)
     return ret;
 }
 
-
-
 void *osal_calloc(size_t n, size_t size)
 {
     void *ret = NULL;
@@ -291,8 +286,7 @@ void *osal_calloc(size_t n, size_t size)
 }
 
 
-
-unsigned long long osal_sys_time()
+unsigned long long osal_sys_time(void)
 {
 
     unsigned long long  ret = 0;
@@ -322,7 +316,6 @@ void osal_loop_timer_count_downms(osal_loop_timer_t *timer, unsigned int timeout
     timer->dead_time = now + timeout;
 }
 
-
 void osal_loop_timer_count_down(osal_loop_timer_t *timer, unsigned int timeout)
 {
     osal_loop_timer_count_downms(timer,timeout*1000);
@@ -335,9 +328,7 @@ int osal_loop_timer_left(osal_loop_timer_t *timer)
 }
 
 
-
-
-int osal_reboot()  ///< maybe we should never come back
+int osal_reboot(void)  ///< maybe we should never come back
 {
     int ret = -1;
 
@@ -349,8 +340,6 @@ int osal_reboot()  ///< maybe we should never come back
     return ret;
 }
 
-
-
 int osal_int_connect(int intnum, int prio, int mode, fn_interrupt_handle callback, void *arg)
 {
     int ret = -1;
@@ -361,7 +350,6 @@ int osal_int_connect(int intnum, int prio, int mode, fn_interrupt_handle callbac
 
     return ret;
 }
-
 
 
 bool_t  osal_queue_create(osal_queue_t *queue,int len,int msgsize)

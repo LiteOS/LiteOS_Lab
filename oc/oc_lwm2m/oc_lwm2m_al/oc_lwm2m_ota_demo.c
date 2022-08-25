@@ -35,13 +35,13 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <string.h>
-#include <link_endian.h>
 
-#include <osal.h>
-#include <oc_lwm2m_al.h>
-#include <ota_flag.h>
-#include <pcp.h>
-#include <queue.h>
+#include "link_endian.h"
+#include "osal.h"
+#include "oc_lwm2m_al.h"
+#include "ota_flag.h"
+#include "pcp.h"
+#include "queue.h"
 
 #define cn_endpoint_id        "sota_test01"
 #define cn_app_server         "49.4.85.232"
@@ -148,7 +148,7 @@ static int app_msg_deal(void *usr_data,en_oc_lwm2m_msg_t type,void *msg, int len
 
 static int s_report_switch = 1;
 
-static int app_cmd_task_entry()
+static int app_cmd_task_entry(void *args)
 {
     int ret = -1;
 
@@ -181,7 +181,7 @@ static int app_cmd_task_entry()
     return ret;
 }
 
-static int app_report_task_entry()
+static int app_report_task_entry(void *args)
 {
     int ret = -1;
 
@@ -222,7 +222,7 @@ static int app_report_task_entry()
     return ret;
 }
 
-int oc_lwm2m_demo_main()
+int oc_lwm2m_demo_main(void)
 {
 
     (void) printf("welcome to the application:OTA_NODTLS:%s:%s\r\n",__DATE__,__TIME__);

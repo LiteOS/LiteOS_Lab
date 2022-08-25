@@ -36,11 +36,11 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <link_log.h>
-#include <osal.h>
-#include <dtls_al.h>
-#include <ota_img.h>
-#include <ota_flag.h>
+#include "link_log.h"
+#include "osal.h"
+#include "dtls_al.h"
+#include "ota_img.h"
+#include "ota_flag.h"
 
 #ifdef CONFIG_HTTPS_DOWNLOADING_SHA256CHECK
 #include "sha256_check.h"

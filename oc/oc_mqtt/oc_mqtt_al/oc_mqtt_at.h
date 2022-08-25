@@ -39,10 +39,10 @@
 #include <stdint.h>
 #include <stddef.h>
 
-char *hwoc_mqtt_version();
+char *hwoc_mqtt_version(void);
 int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const char *port,
                                const char *deviceid, const char *devicepasswd);
-int  hwoc_mqtt_disconnect();
+int  hwoc_mqtt_disconnect(void);
 int  hwoc_mqtt_publish(int qos,char *topic,uint8_t *payload,int len);
 void hwoc_mqtt_recvpub(const char *topic,int topiclen,uint8_t *payload, int payloadlen);
 

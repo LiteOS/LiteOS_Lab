@@ -35,13 +35,13 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <string.h>
-#include <link_endian.h>
 
-#include <osal.h>
-#include <oc_lwm2m_al.h>
-#include <ota_flag.h>
-#include <pcp.h>
-#include <queue.h>
+#include "link_endian.h"
+#include "osal.h>
+#include "oc_lwm2m_al.h"
+#include "ota_flag.h"
+#include "pcp.h"
+#include "queue.h"
 
 #define cn_endpoint_id        "sota_test_dtls"
 #define cn_app_server         "49.4.85.232"

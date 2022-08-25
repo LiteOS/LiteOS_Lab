@@ -20,7 +20,7 @@ int storage_dev_install(storage_device *dev, uint32_t max_num)
   return -1;
 }
 
-int storage_dev_uninstall()
+int storage_dev_uninstall(void)
 {
   if (s_device != NULL) {
     s_device = NULL;

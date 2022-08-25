@@ -54,8 +54,8 @@
 #include <string.h>
 #include <stdarg.h>
 
-#include <osal.h>
-#include <link_misc.h>
+#include "osal.h"
+#include "link_misc.h"
 
 
 #ifndef LWM2M_MEMORY_TRACE

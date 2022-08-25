@@ -34,7 +34,7 @@
 
 #include <string.h>
 #include <stdio.h>
-#include <link_log.h>
+#include "link_log.h"
 
 static en_link_log_level_t s_link_log_level = EN_LINK_LOG_LEVEL_TRACE;
 static const char *s_link_log_names[] =

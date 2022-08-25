@@ -35,7 +35,7 @@
 #include "ota_sign_verify.h"
 #include "mbedtls/md.h"
 #include "mbedtls/pk.h"
-#include <link_log.h>
+#include "link_log.h"
 #include <string.h>
 
 int ota_sign_verify(sign_verify_para_t *para)

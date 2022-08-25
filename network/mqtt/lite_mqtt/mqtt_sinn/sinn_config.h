@@ -2,7 +2,7 @@
 #define __SINN_CONFIG_H__
 
 #include <stddef.h>
-#include <osal.h>
+#include "osal.h"
 
 #define SINN_EVENTS_HANDLE_PERIOD_MS (100)
 #define SINN_RECONN_MAX_TIMES        (5)

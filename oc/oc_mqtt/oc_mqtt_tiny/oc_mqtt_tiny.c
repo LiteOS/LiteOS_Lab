@@ -39,15 +39,15 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
-#include <link_misc.h>
+#include "link_misc.h"
 #include <time.h>
 
-#include <queue.h>
-#include <mqtt_al.h>
-#include <oc_mqtt_al.h>
-#include <sal.h>
+#include "queue.h"
+#include "mqtt_al.h"
+#include "oc_mqtt_al.h"
+#include "sal.h"
 
-#include <cJSON.h>           //json mode
+#include "cJSON.h"           //json mode
 #include "hmac.h"            //used to generate the user passwd
 
 ////CRT FOR THE OC
@@ -935,7 +935,7 @@ static int tiny_publish(char *topic,uint8_t *payload, int len,int qos )
 
 
 ///< use this function to deconfig it
-static int tiny_deconfig()
+static int tiny_deconfig(void)
 {
     int ret = (int)en_oc_mqtt_err_system;
 
@@ -956,7 +956,7 @@ static const oc_mqtt_t s_oc_mqtt_lite = \
 };
 
 ///< use this function to install the oc mqtt to the oc mqtt abstract layer
-int oc_mqtt_imp_init()
+int oc_mqtt_imp_init(void)
 {
     int ret = -1;
 

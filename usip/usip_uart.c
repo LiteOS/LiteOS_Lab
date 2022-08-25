@@ -33,7 +33,7 @@
  *---------------------------------------------------------------------------*/
 #include "usart.h"
 #include "stm32f4xx.h"
-#include <los_hwi.h>
+#include "los_hwi.h"
 
 #include "usip.h"
 #include "usip_uart.h"
@@ -55,7 +55,7 @@ void usip_uart_irq(void)
     }
 }
 
-void usip_uart_init()
+void usip_uart_init(void)
 {
     //initialize the usip_uart
     usip_uart_handle.Instance = s_pUSART;

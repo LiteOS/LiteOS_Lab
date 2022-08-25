@@ -33,10 +33,10 @@
  *---------------------------------------------------------------------------*/
 
 
-#include <osal.h>
-#include <lwm2m_al.h>
-#include <oc_lwm2m_al.h>
-#include <atiny_log.h>
+#include "osal.h"
+#include "lwm2m_al.h"
+#include "oc_lwm2m_al.h"
+#include "atiny_log.h"
 #include <string.h>
 
 typedef enum
@@ -857,7 +857,7 @@ const oc_lwm2m_opt_t  s_oc_lwm2m_agent_opt = \
     .report = __agent_report,
 };
 
-int oc_lwm2m_imp_init()
+int oc_lwm2m_imp_init(void)
 {
     int ret = -1;
     ret = oc_lwm2m_register("oc_lwm2m_agent", &s_oc_lwm2m_agent_opt);

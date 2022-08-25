@@ -35,11 +35,11 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <shell.h>
-#include <driver.h>
+#include "shell.h"
+#include "driver.h"
 #include <sys/fcntl.h>
 
-#include <osal.h>
+#include "osal.h"
 
 //this file implement some demo to test the device module
 #define cn_testdriv_buf_len 256

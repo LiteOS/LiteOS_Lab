@@ -39,7 +39,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include <mqtt_al.h>
+#include "mqtt_al.h"
 
 
 ///< the mode for the huawei OceanConnect  mode
@@ -223,7 +223,7 @@ int oc_mqtt_publish(char *topic,uint8_t *msg,int msg_len,int qos);
  *
  *@return 0 success while <0 failed
  */
-int oc_mqtt_init();
+int oc_mqtt_init(void);
 
 /**
  *@brief use this function to get the errcode for the oc mqtt

@@ -3,8 +3,8 @@
 #define __OSAL_IMP_H
 
 
-#include <link_log.h>
-#include <osal_types.h>
+#include "link_log.h"
+#include "osal_types.h"
 
 typedef struct
 {
@@ -12,7 +12,7 @@ typedef struct
     void* (*task_create)(const char *name,int (*task_entry)(void *args),\
                       void *args,int stack_size,void *stack,int prior);
     int   (*task_kill)(void *task);
-    void  (*task_exit)();
+    void  (*task_exit)(void);
     void  (*task_sleep)(int ms);
 
     ///< mutex function needed
@@ -34,9 +34,9 @@ typedef struct
     bool_t (*queue_del)(osal_queue_t queue);
 
     ///< memory function needed
-    void *(*malloc)(int size);
+    void *(*malloc)(size_t size);
     void  (*free)(void *addr);
-    void *(*realloc)(void *ptr, int newsize);
+    void *(*realloc)(void *ptr, size_t newsize);
 
 
     ///< system time

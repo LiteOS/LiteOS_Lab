@@ -37,8 +37,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#include <stimer.h>
-#include <osal.h>
+#include "stimer.h"
+#include "osal.h"
 
 static void stimer_handler(void *args)
 {

@@ -43,7 +43,7 @@
 
 #if defined (__GNUC__) || defined (__CC_ARM)
 #include <sys/fcntl.h>
-#include <los_memory.h>
+#include "los_memory.h"
 #endif
 
 #include "los_vfs.h"

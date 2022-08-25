@@ -36,8 +36,8 @@
 
 #include <stddef.h>
 
-#include <link_log.h>
-#include <lwm2m_al.h>
+#include "link_log.h"
+#include "lwm2m_al.h"
 
 
 typedef struct

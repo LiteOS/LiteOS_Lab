@@ -35,7 +35,7 @@
 #ifndef LITEOS_LAB_IOT_LINK_LINK_OTA_SIGNATURE_VERIFY_SIGNATURE_VERIFY_H_
 #define LITEOS_LAB_IOT_LINK_LINK_OTA_SIGNATURE_VERIFY_SIGNATURE_VERIFY_H_
 
-#include <ota_img.h>
+#include "ota_img.h"
 
 ///< and now we only support the SHA256 mode
 typedef struct

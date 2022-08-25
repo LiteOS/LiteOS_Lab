@@ -35,7 +35,7 @@
 #ifndef LITEOS_LAB_IOT_LINK_LINK_OTA_OTA_FLAG_H_
 #define LITEOS_LAB_IOT_LINK_LINK_OTA_OTA_FLAG_H_
 
-#include <ota_img.h>
+#include "ota_img.h"
 
 #ifndef CONFIG_OTA_VERSIONLEN
 #define CONFIG_OTA_VERSIONLEN  32

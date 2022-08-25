@@ -36,7 +36,7 @@
 #include <stddef.h>
 #include <string.h>
 
-#include <link_misc.h>
+#include "link_misc.h"
 
 
 int ring_buffer_init(tag_ring_buffer_t *ring,unsigned char *buf, int buflen,int offset,int datalen)

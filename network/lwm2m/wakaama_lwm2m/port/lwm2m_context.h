@@ -35,10 +35,10 @@
 #ifndef _LWM2M_CONTEXT_H
 #define _LWM2M_CONTEXT_H
 #include "liblwm2m.h"
-#include <lwm2m_common.h>
+#include "lwm2m_common.h"
 #include "object_comm.h"
 
-#include <osal.h>
+#include "osal.h"
 
 #define SERVER_URI_MAX_LEN      (64)
 #define MAX_PACKET_SIZE         (1024)

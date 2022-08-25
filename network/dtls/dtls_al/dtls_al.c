@@ -38,8 +38,8 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdio.h>
-#include <dtls_al.h>
-#include <link_log.h>
+#include "dtls_al.h"
+#include "link_log.h"
 
 
 static const dtls_al_t  *s_dtls_al;

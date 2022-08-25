@@ -41,7 +41,7 @@
 
 #include "connection.h"
 
-#include <osal.h>
+#include "osal.h"
 
 
 #ifdef __cplusplus

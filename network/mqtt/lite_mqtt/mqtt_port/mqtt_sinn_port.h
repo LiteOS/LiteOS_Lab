@@ -39,7 +39,7 @@
  *
  */
 
-int mqtt_install_sinnmqtt();
+int mqtt_install_sinnmqtt(void);
 
 
 #endif /* __MQTT_SINN_PORT_H__ */

@@ -34,9 +34,9 @@
 
 #if CONFIG_SHELL_ENABLE
 
-#include <shell.h>
-#include <los_memory.h>
-#include <osal.h>
+#include "shell.h"
+#include "los_memory.h"
+#include "osal.h"
 /*
 //here we export to shell command,you could add your own shell like this
 //test fucntion:print the params passed in

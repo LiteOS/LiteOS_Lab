@@ -41,7 +41,7 @@
  *@brief this function should be called after oc_coap_init()
  *
  */
-int oc_coap_imp_init();
+int oc_coap_imp_init(void);
 
 /**
  *@brief this function to get the csq of the MODULES

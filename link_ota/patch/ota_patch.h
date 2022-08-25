@@ -35,7 +35,7 @@
 #ifndef LITEOS_LAB_IOT_LINK_LINK_OTA_LOADER_OTA_UPGRADE_H_
 #define LITEOS_LAB_IOT_LINK_LINK_OTA_LOADER_OTA_UPGRADE_H_
 
-#include <ota_img.h>
+#include "ota_img.h"
 
 typedef enum _en_ota_err_t
 {

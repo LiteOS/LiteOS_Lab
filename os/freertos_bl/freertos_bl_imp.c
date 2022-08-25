@@ -34,13 +34,13 @@
 
 
 //include the file which implement the function
-#include <FreeRTOS.h>
-#include <task.h>
-#include <semphr.h>
+#include "FreeRTOS.h"
+#include "task.h"
+#include "semphr.h"
 
 #include  <stdio.h>
 #include  <string.h>
-#include  <osal_imp.h>
+#include  "osal_imp.h"
 
 ///< this is implement for the task
 static void __task_sleep(int ms)
@@ -78,7 +78,7 @@ static int __task_kill(void *task)
     return ret;
 }
 
-static void __task_exit()
+static void __task_exit(void)
 {
     while(1);  //not supported yet
 }

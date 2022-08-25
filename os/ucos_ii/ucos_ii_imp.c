@@ -34,11 +34,11 @@
 
 //include the file which implement the function
 #include  <string.h>
-#include  <osal_imp.h>
+#include  "osal_imp.h"
 
 ///< this is implement for the task
 #include "os_cpu.h"
-#include <ucos_ii.h>
+#include "ucos_ii.h"
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -271,7 +271,7 @@ static void __mem_free(void *addr)
 }
 
 ///< sys time
-static unsigned long long __get_sys_time()
+static unsigned long long __get_sys_time(void)
 {
     return OSTimeGet() * 1000 / OS_TICKS_PER_SEC;
 }

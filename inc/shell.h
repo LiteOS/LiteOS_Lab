@@ -39,7 +39,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <link_log.h>
+#include "link_log.h"
 
 #if CONFIG_SHELL_ENABLE
 
@@ -96,7 +96,7 @@ void shell_init(void);
 
 #define OSSHELL_EXPORT_CMD(cmdentry,cmdname,cmdhelp)
 #define OSSHELL_EXPORT_VAR(var,varname,varhelp)
-#define shell_init()
+#define shell_init(void)
 
 #endif   //end for the shell_config
 

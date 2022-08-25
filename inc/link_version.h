@@ -35,6 +35,6 @@
 #ifndef LITEOS_LAB_IOT_LINK_INC_LINK_VERSION_H_
 #define LITEOS_LAB_IOT_LINK_INC_LINK_VERSION_H_
 
-const char *linkmain_version();
+const char *linkmain_version(void);
 
 #endif /* LITEOS_LAB_IOT_LINK_INC_LINK_VERSION_H_ */

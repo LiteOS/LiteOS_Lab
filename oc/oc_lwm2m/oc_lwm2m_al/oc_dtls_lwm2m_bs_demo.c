@@ -37,9 +37,9 @@
 #include <stddef.h>
 #include <string.h>
 
-#include <link_endian.h>
-#include <osal.h>
-#include <oc_lwm2m_al.h>
+#include "link_endian.h"
+#include "osal.h"
+#include "oc_lwm2m_al.h"
 
 #define cn_app_server         "iot-bs.cn-north-4.myhuaweicloud.com"
 //#define cn_app_server       "119.3.251.30"

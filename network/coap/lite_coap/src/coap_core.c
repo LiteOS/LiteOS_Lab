@@ -34,8 +34,8 @@
 
 #include <string.h>
  
-#include <litecoap.h>
-#include <litecoap_err.h>
+#include "litecoap.h"
+#include "litecoap_err.h"
 
 /*****************************************************************************
  Function    : litecoap_parse_header_size

@@ -2,7 +2,7 @@
 #include "storage.h"
 
 #include <stdio.h>
-#include <link_log.h>
+#include "link_log.h"
 
 static const storage_partition *s_partition = NULL;
 static int max_part_num = 0;

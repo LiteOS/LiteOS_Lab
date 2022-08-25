@@ -36,10 +36,10 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
-#include <iot_link_config.h>
-#include <queue.h>
-#include <oc_mqtt_al.h>
-#include <oc_mqtt_profile.h>
+#include "iot_link_config.h"
+#include "queue.h"
+#include "oc_mqtt_al.h"
+#include "oc_mqtt_profile.h"
 
 ///< TAKE CARES:
 ///< 1, for the MCU has weak compute ability, and the new CERT FILE of platform is very big, so should not use tls for the MCUS

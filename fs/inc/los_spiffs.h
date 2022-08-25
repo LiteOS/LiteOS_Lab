@@ -35,8 +35,8 @@
 #ifndef _LOS_SPIFFS_H
 #define _LOS_SPIFFS_H
 
-#include <spiffs_config.h>
-#include <spiffs.h>
+#include "spiffs_config.h"
+#include "spiffs.h"
 
 extern int spiffs_init (void);
 int spiffs_mount (const char * path, u32_t phys_addr, u32_t phys_size,

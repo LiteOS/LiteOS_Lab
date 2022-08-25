@@ -36,9 +36,9 @@
 #include <stddef.h>
 #include <string.h>
 
-#include <osal.h>
-#include <oc_coap_al.h>
-#include <link_endian.h>
+#include "osal.h"
+#include "oc_coap_al.h"
+#include "link_endian.h"
 
 #define cn_endpoint_id        "coap_001"
 #define cn_app_server         "49.4.85.232"

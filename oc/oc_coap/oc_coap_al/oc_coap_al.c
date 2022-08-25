@@ -38,9 +38,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include <link_log.h>
-#include <osal.h>
-#include <oc_coap_al.h>
+#include "link_log.h"
+#include "osal.h"
+#include "oc_coap_al.h"
 
 typedef struct
 {

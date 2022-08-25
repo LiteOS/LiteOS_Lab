@@ -37,7 +37,7 @@
 #include <stddef.h>
 #include <string.h>
 
-#include <osal.h>
+#include "osal.h"
 //this function is used to format the char string to the argc mode
 //this function will changed the original string, used it carefully
 //return how many arguments has been
@@ -246,9 +246,3 @@ int byte2hexstr(uint8_t *bufin, int len, char *bufout)
 
     return 0;
 }
-
-
-
-
-
-

@@ -9,9 +9,9 @@
 #include <string.h>
 #include <sys/select.h>
 
-#include <sal_define.h>
-#include <sal_types.h>
-#include <link_endian.h>
+#include "sal_define.h"
+#include "sal_types.h"
+#include "link_endian.h"
 
 /**
  *

@@ -44,14 +44,15 @@
 #include <link_misc.h>
 #include <time.h>
 
-#include <queue.h>
-//#include <osal.h>
-#include <mqtt_al.h>
-#include <oc_mqtt_al.h>
-#include <sal.h>
+#include "queue.h"
+#include "osal.h"
+#include "mqtt_al.h"
+#include "oc_mqtt_al.h"
+//#include "sal.h"
 
-#include <cJSON.h>           //json mode
+#include "cJSON.h"           //json mode
 #include "hmac.h"            //used to generate the user pwd
+#include "link_log.h"
 
 ////CRT FOR THE OC
 static const char s_oc_mqtt_ca_crt[] =

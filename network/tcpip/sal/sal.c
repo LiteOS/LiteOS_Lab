@@ -3,9 +3,9 @@
  */
 
 ///< attention that this file is the main implement
-#include <osal.h>
-#include <sal.h>
-#include <sal_imp.h>
+#include "osal.h"
+#include "sal.h"
+#include "sal_imp.h"
 
 
 #define CN_LINK_SOCKET_NUM 10
@@ -92,7 +92,7 @@ int link_sal_install(const tag_tcpip_domain *domain)
 }
 
 ///< malloc a sock fd and memory
-static void * __sal_sockcb_malloc()
+static void * __sal_sockcb_malloc(void)
 {
     int i =  0;
 

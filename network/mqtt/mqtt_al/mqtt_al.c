@@ -34,7 +34,8 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <link_log.h>
+#include "link_log.h"
+#include "paho_mqtt_port.h"
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -43,7 +44,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#include <mqtt_al.h>
+#include "mqtt_al.h"
 
 
 typedef struct
@@ -70,7 +71,7 @@ int mqtt_al_install(mqtt_al_op_t *op)
     return ret;
 }
 
-int mqtt_al_uninstall()
+int mqtt_al_uninstall(void)
 {
     int ret = -1;
     if(NULL != s_mqtt_al_op_cb.ops)
@@ -101,7 +102,7 @@ int mqtt_al_init(void)
     return ret;
 }
 
-int  mqtt_al_deinit()
+int  mqtt_al_deinit(void)
 {
 
     int ret = 0;

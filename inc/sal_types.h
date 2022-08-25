@@ -52,9 +52,6 @@ struct linger
     int l_linger;   /* How long to linger for   */
 };
 
-
-;
-
 struct in_addr
 {
     in_addr_t s_addr;                    /* IPv4 address */

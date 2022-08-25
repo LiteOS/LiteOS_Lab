@@ -36,8 +36,7 @@
 #define LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_PROFILE_OC_MQTT_PROFILE_H_
 
 #include <stdint.h>
-#include <oc_mqtt_al.h>
-
+#include "oc_mqtt_al.h"
 
 ///< define all the json key will be used in the profile
 #define CN_OC_JSON_KEY_SERVICEID        "service_id"

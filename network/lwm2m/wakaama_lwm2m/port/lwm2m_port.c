@@ -34,7 +34,7 @@
 
 
 #include "lwm2m_port.h"
-#include <lwm2m_al.h>
+#include "lwm2m_al.h"
 #include "lwm2m_rpt.h"
 #include "lwm2m_context.h"
 #include "internals.h"

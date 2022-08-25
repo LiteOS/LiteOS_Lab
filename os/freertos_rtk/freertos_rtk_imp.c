@@ -34,11 +34,11 @@
 
 
 //include the file which implement the function
-#include  <string.h>
-#include  <osal_imp.h>
-#include <FreeRTOS.h>
-#include <osdep_service.h>
-#include  <stdio.h>
+#include <string.h>
+#include "osal_imp.h"
+#include "FreeRTOS.h"
+#include "osdep_service.h"
+#include <stdio.h>
 
 
 extern struct osdep_service_ops osdep_service;
@@ -113,8 +113,7 @@ static struct list_node * __find_and_del_from_list(_thread_hdl_ task)
     {
         return NULL;
     }
-    
-    
+     
 }
 
 
@@ -168,7 +167,7 @@ static int __task_kill(void *task)
     return true;
 }
 
-static void __task_exit()
+static void __task_exit(void)
 {
     while(1);  //not supported yet
 }
@@ -318,7 +317,7 @@ static bool_t __queue_del(osal_queue_t queue)
 //extern UINT64 osKernelGetTickCount (void);
 #define OS_SYS_MS_PER_SECOND                   1000
 
-static unsigned long long __get_sys_time()
+static unsigned long long __get_sys_time(void)
 {
     return rtw_get_current_time();
 }

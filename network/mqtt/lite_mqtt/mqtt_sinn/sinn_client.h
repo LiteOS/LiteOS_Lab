@@ -3,11 +3,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "sal.h"
 #ifdef CONFIG_WITH_LWIP
-#include <sal.h>
 #include "lwip/errno.h"
 #else
-#include <sal.h>
 #include <errno.h>
 #endif
 

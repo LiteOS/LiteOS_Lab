@@ -34,11 +34,10 @@
 
 #include <stdint.h>
 #include <stddef.h>
-
 #include <stdlib.h>
 #include <string.h>
 
-#include <osal.h>
+#include "osal.h"
 
 __attribute__((weak)) int link_random(void* output, int len)
 {

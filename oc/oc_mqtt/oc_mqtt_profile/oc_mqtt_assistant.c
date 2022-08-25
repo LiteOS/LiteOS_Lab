@@ -36,7 +36,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <oc_mqtt_assistant.h>
+#include "oc_mqtt_assistant.h"
 
 
 ///< format the report data to json string mode

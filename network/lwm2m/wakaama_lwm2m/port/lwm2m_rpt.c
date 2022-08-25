@@ -35,9 +35,9 @@
 #include "liblwm2m.h"
 #include "lwm2m_rpt.h"
 
-#include <atiny_log.h>
+#include "atiny_log.h"
 #include <string.h>
-#include <osal.h>
+#include "osal.h"
 
 typedef struct _lwm2m_rpt_list_t
 {

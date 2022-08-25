@@ -35,7 +35,7 @@
 #ifndef LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_TINY_OC_MQTT_TINY_H_
 #define LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_TINY_OC_MQTT_TINY_H_
 
-int oc_mqtt_imp_init();
+int oc_mqtt_imp_init(void);
 void oc_mqtt_imp_deinit(void);
 
 

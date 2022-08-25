@@ -34,12 +34,12 @@
 
 
 #include "lwm2m_port.h"
-#include <lwm2m_al.h>
+#include "lwm2m_al.h"
 #include "lwm2m_rpt.h"
 #include "lwm2m_context.h"
 #include "internals.h"
 #include "lwm2m_common.h"
-#include <atiny_log.h>
+#include "atiny_log.h"
 #include "connection.h"
 
 #include <stdio.h>

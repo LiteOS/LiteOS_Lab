@@ -32,9 +32,9 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 #include <stdlib.h>
-#include <osal.h>
-#include <sal.h>
 
+#include "osal.h"
+#include "sal.h"
 #include "mbedtls/net_sockets.h"
 
 ///< attention that we only port the ip dot mode and only think about the ipv4

@@ -33,10 +33,10 @@
  *---------------------------------------------------------------------------*/
 
 #include "internals.h"
-#include <lwm2m_common.h>
+#include "lwm2m_common.h"
 #include "ota/package.h"
 #include "firmware_update.h"
-#include <atiny_log.h>
+#include "atiny_log.h"
 
 #define FW_BLOCK_SIZE (512)
 

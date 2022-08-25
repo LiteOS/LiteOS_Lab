@@ -35,10 +35,10 @@
 #include "sha256_check.h"
 
 #include <string.h>
-#include <link_misc.h>
-#include <mbedtls/md.h>
-#include <mbedtls/pk.h>
-#include <ota_img.h>
+#include "link_misc.h"
+#include "mbedtls/md.h"
+#include "mbedtls/pk.h"
+#include "ota_img.h"
 
 ///< now we only support the SHA256
 

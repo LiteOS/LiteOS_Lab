@@ -37,7 +37,7 @@
 
 #include <sys/types.h>
 
-#include <osal.h>
+#include "osal.h"
 
 
 typedef void* los_driv_t ;//returned by the driver register

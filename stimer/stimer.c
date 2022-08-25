@@ -40,7 +40,7 @@
 #include <stdio.h>
 
 
-#include <osal.h>
+#include "osal.h"
 #include <stimer.h>
 
 #ifndef  CONFIG_STIMER_STACKSIZE

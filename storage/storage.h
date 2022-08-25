@@ -44,7 +44,7 @@ typedef struct {
   char *name;
   uint32_t size;
 
-  void (*init)();
+  void (*init)(void);
   int (*read)(void *buf, int32_t len, uint32_t offset);
   int (*write)(const uint8_t *buf, int32_t len, uint32_t offset);
   int (*erase)(uint32_t offset, int32_t len);

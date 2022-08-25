@@ -68,7 +68,7 @@
  * 5 update result             read
  */
 
-#include <atiny_log.h>
+#include "atiny_log.h"
 #include "internals.h"
 #include "lwm2m_common.h"
 

@@ -36,11 +36,11 @@
 #include <string.h>
 #include <stdio.h>
 
-#include <link_misc.h>
-#include <osal.h>
-#include <oc_mqtt_al.h>
-#include <oc_mqtt_profile.h>
-#include <oc_mqtt_profile_package.h>
+#include "oc_mqtt_profile.h"
+#include "link_misc.h"
+#include "osal.h"
+#include "oc_mqtt_al.h"
+#include "oc_mqtt_profile_package.h"
 
 typedef struct
 {

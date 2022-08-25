@@ -34,9 +34,9 @@
 
 
 #include <string.h>
-#include <crc.h>
-#include <link_log.h>
-#include <ota_flag.h>
+#include "crc.h"
+#include "link_log.h"
+#include "ota_flag.h"
 
 ///< attention that when we write the flag, it maybe powered down when erase or write
 ///< so we use need a backup img，supposed that the flash has no problem when read or write except unexpected powered down

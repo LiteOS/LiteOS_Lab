@@ -36,7 +36,7 @@
 #define LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_PROFILE_OC_MQTT_PROFILE_PACKAGE_H_
 
 
-#include <oc_mqtt_profile.h>
+#include "oc_mqtt_profile.h"
 
 
 ///< defines for the package tools

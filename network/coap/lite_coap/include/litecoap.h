@@ -40,7 +40,7 @@
 void *litecoap_malloc(int size);
 int litecoap_free(void *p);
 int litecoap_delay(unsigned int ms);
-unsigned long long litecoap_time();
+unsigned long long litecoap_time(void);
 /**
  * use server ip and port to create coap_context_t resources
  */

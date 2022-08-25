@@ -38,9 +38,9 @@
 #include <string.h>
 
 #include "atiny_coap.h"
-#include <osal.h>
-#include <coap_al.h>
-#include <oc_coap_al.h>
+#include "osal.h"
+#include "coap_al.h"
+#include "oc_coap_al.h"
 
 typedef struct
 {

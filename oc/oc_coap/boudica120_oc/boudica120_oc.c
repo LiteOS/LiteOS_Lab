@@ -36,10 +36,10 @@
 
 
 #include <string.h>
-#include <at.h>
-#include <boudica120_oc.h>
-#include <oc_coap_al.h>
-#include <osal.h>
+#include "at.h"
+#include "boudica120_oc.h"
+#include "oc_coap_al.h"
+#include "osal.h"
 
 ///<  only support the bootstrap mode
 

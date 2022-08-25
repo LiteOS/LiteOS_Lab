@@ -35,12 +35,10 @@
 
 #include <stdint.h>
 #include <stddef.h>
-
 #include <string.h>
-
 #include <stdlib.h>
-#include <osal.h>
-#include <oc_lwm2m_al.h>
+#include "osal.h"
+#include "oc_lwm2m_al.h"
 
 typedef struct
 {
@@ -141,7 +139,7 @@ __attribute__ ((weak)) int oc_lwm2m_demo_main(void)
     return -1;
 }
 
-int oc_lwm2m_init()
+int oc_lwm2m_init(void)
 {
     int ret;
 

@@ -37,13 +37,13 @@
 #include <stdint.h>
 #include <stdarg.h>
 
-#include <link_endian.h>
-#include <link_misc.h>
-#include <crc.h>
-#include <osal.h>
-#include <pcp.h>
-#include <ota_flag.h>
-#include <ota_manager.h>
+#include "link_endian.h"
+#include "link_misc.h"
+#include "crc.h"
+#include "osal.h"
+#include "pcp.h"
+#include "ota_flag.h"
+#include "ota_manager.h"
 
 
 #define CN_VER_LEN      16

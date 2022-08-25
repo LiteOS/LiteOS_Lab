@@ -38,11 +38,11 @@
  */
 
 #include <string.h>
-#include <at.h>
-#include <oc_mqtt_al.h>
-#include <osal.h>
+#include "at.h"
+#include "oc_mqtt_al.h"
+#include "osal.h"
 #include <stdlib.h>
-#include <iot_link_config.h>
+#include "iot_link_config.h"
 
 #ifndef CONFIG_EC2X_RCVLEN
 #define CONFIG_EC2X_RCVLEN 1024

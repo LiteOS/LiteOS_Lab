@@ -65,7 +65,7 @@ typedef void  (*fn_stimer_handler)(void *arg);
  *
  * @return: 0 success while -1 failed
  * */
-int32_t stimer_init();
+int32_t stimer_init(void);
 
 /**
  * @brief: you could use this function for create a soft timer as you wished

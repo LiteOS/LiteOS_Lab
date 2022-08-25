@@ -37,10 +37,10 @@
 #include <stddef.h>
 #include <string.h>
 
-#include <link_endian.h>
-#include <osal.h>
-#include <oc_lwm2m_al.h>
-#include <queue.h>
+#include "link_endian.h"
+#include "osal.h"
+#include "oc_lwm2m_al.h"
+#include "queue.h"
 
 
 //#define cn_app_server         "iot-bs.cn-north-4.myhuaweicloud.com"
@@ -138,7 +138,7 @@ static int app_msg_deal(void *usr_data,en_oc_lwm2m_msg_t type,void *msg, int len
 }
 
 
-static int app_cmd_task_entry()
+static int app_cmd_task_entry(void *args)
 {
     int ret = -1;
     app_led_cmd_t *led_cmd;
@@ -212,7 +212,7 @@ static int app_cmd_task_entry()
 
 
 
-static int app_report_task_entry()
+static int app_report_task_entry(void *args)
 {
     int ret = -1;
     int lux = 0;
@@ -286,7 +286,7 @@ static int app_report_task_entry()
 
 
 
-int oc_lwm2m_demo_main()
+int oc_lwm2m_demo_main(void)
 {
     (void) printf("welcome to the application:lwm2m_bs:%s:%s\r\n",__DATE__,__TIME__);
 

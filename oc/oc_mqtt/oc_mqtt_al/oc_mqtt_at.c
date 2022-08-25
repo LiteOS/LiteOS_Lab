@@ -36,9 +36,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include <osal.h>
-#include <oc_mqtt_al.h>
-#include <oc_mqtt_at.h>
+#include "oc_mqtt_at.h"
+#include "osal.h"
+#include "oc_mqtt_al.h"
 
 extern int link_main(void *args);
 
@@ -189,7 +189,7 @@ int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const
 ///                +DISCONNECT ERR:code  when succes
 ///<               code:reference to en_oc_mqtt_err_code_t defines
 
-int hwoc_mqtt_disconnect()
+int hwoc_mqtt_disconnect(void)
 {
     int ret = -1;
 
@@ -237,7 +237,7 @@ int hwoc_mqtt_unsubscribe(char *topic)
 ///< WHEN YOU WANT TO KNOW WHICH VERSION YOU USE
 ///< ATCOMMAND: AT+HWOCMQTTVERSION
 ///< ATRESPONSE: +HWOCMQTTVERSION:vx.x.x AT XXXXXX ON XXXXX
-char *hwoc_mqtt_version()
+char *hwoc_mqtt_version(void)
 {
     extern char *linkmain_version();
 
@@ -348,12 +348,3 @@ int hwoc_mqtt_clientpk(const char *client_pk, const char *client_pk_pwd)
 
     return ret;
 }
-
-
-
-
-
-
-
-
-

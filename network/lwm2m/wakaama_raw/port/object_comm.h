@@ -62,7 +62,7 @@
 #define OBJECT_COMM_H_
 
 #include "internals.h"
-#include <lwm2m_common.h>
+#include "lwm2m_common.h"
 #include "connection.h"
 #include "lwm2m_list.h"
 

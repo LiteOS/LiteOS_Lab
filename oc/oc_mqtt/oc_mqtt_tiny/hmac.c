@@ -37,7 +37,7 @@
 
 
 #include <string.h>
-#include <link_log.h>
+#include "link_log.h"
 #include "mbedtls/md.h"
 #include "mbedtls/ssl.h"
 #include "mbedtls/entropy.h"

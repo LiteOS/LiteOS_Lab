@@ -35,7 +35,7 @@
 #ifndef _LWM2M_CONTEXT_H
 #define _LWM2M_CONTEXT_H
 #include "liblwm2m.h"
-#include <lwm2m_common.h>
+#include "lwm2m_common.h"
 #include "object_comm.h"
 
 #include <osal.h>

@@ -36,7 +36,7 @@
 #define MQTT_AL_H
 
 #include <stdint.h>
-#include <dtls_al.h>
+#include "dtls_al.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -239,14 +239,14 @@ typedef struct
  * @return 0 success while -1 failed
  *
  */
-int mqtt_al_init();
+int mqtt_al_init(void);
 
 /**
  * @brief     :when you don't want to use the mqtt service ,please call this function
  *
  * @return 0 success while -1 failed
  */
-int  mqtt_al_deinit();
+int  mqtt_al_deinit(void);
 /**
  *@brief: you could use this function to connect to the mqtt server
  *
@@ -334,7 +334,7 @@ int mqtt_al_install(mqtt_al_op_t *op);
  *@return 0 success while -1 failed
  *
  */
-int mqtt_al_uninstall();
+int mqtt_al_uninstall(void);
 
 
 
