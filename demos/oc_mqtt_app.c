@@ -37,7 +37,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "iot_link_config.h"
-#include "queue.h¡°
+#include "queue.h"
 #include "oc_mqtt_al.h"
 #include "oc_mqtt_profile.h"
 
@@ -290,13 +290,14 @@ static void deal_conn_msg(void)
     connect_para.security.type = EN_DTLS_AL_SECURITY_TYPE_NONE;
     ret = oc_mqtt_profile_connect(&connect_para);
 
+#ifdef CONFIG_BACKOFF_RECNONNECT
     // a simple reconnection avoidance algorithm demo
     int min_back_off = 1000;
     int default_back_off = 1000;
     int max_back_off = 30 * 1000;
     int retry_times = 0;
     int max_retry_times = 20;
-    while (ret != (int)en_oc_mqtt_err_ok) {
+    while ((int)en_oc_mqtt_err_ok != ret && (int)en_oc_mqtt_err_conuserpwd != ret) {
         int low_bound = (int) default_back_off * 0.8;
         int high_bound = (int) default_back_off * 1.0;
         int random_back_off = (int) rand() % (high_bound - low_bound);
@@ -309,8 +310,9 @@ static void deal_conn_msg(void)
         }
         ret = oc_mqtt_profile_connect(&connect_para);
     }
+#endif
 
-    if((ret == (int)en_oc_mqtt_err_ok)){
+    if((int)en_oc_mqtt_err_ok == ret){
         g_app_cb.connected = 1;
     }
     return;
@@ -320,7 +322,7 @@ static void deal_disconn_msg(void)
 {
     int ret;
     ret = oc_mqtt_profile_disconnect();
-    if((ret == (int)en_oc_mqtt_err_ok)){
+    if((int)en_oc_mqtt_err_ok == ret){
         g_app_cb.connected = 0;
     }
     return;
@@ -445,7 +447,7 @@ static int shell_disconn(int argc, const char *argv[])
     return 0;
 }
 
-int standard_app_demo_main()
+int standard_app_demo_main(void)
 {
     link_main_task_entry();
     int ret = -1;
