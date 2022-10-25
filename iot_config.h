@@ -22,8 +22,8 @@
 // #define CONFIG_SHELL_TASK_PRIOR 10
 
 // Enable Demo
-#define CONFIG_LINKDEMO_ENABLE 1
-#define CONFIG_USER_DEMO "oc_mqtt_demo"
+//#define CONFIG_LINKDEMO_ENABLE 1
+//#define CONFIG_USER_DEMO "oc_mqtt_demo"
 
 // Enable NB-IoT
 //#define CONFIG_BOUDICA150_ENABLE 1
@@ -61,6 +61,7 @@
 #define CONFIG_OC_MQTT_V5 1
 #define CONFIG_OC_TINYMQTTV5_ENABLE 1
 #define CONFIG_OC_MQTTV5_PROFILE 1
+#define CONFIG_QUEUE_TIMEOUT (5 * 1000)
 
 // MQTT Configuration
 #define CONFIG_PAHO_CONNECT_TIMEOUT 10000
