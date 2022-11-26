@@ -2,8 +2,8 @@
  * sal_imp.h
  */
 
-#ifndef __SAL_IMP_H
-#define __SAL_IMP_H
+#ifndef SAL_IMP_H
+#define SAL_IMP_H
 
 #include "link_log.h"
 
@@ -15,41 +15,37 @@
 
 typedef int (*fn_sal_socket)(int domain, int type, int protocol);
 
-typedef int (*fn_sal_bind)(int sock,const void *addr,int addrlen);
+typedef int (*fn_sal_bind)(int sock, const void *addr, int addrlen);
 
-typedef int (*fn_sal_listen)(int sock,  int backlog);
+typedef int (*fn_sal_listen)(int sock, int backlog);
 
-typedef int (*fn_sal_accept)(int sock,void *addr,int *addrlen);
+typedef int (*fn_sal_accept)(int sock, void *addr, int *addrlen);
 
-typedef int (*fn_sal_connect)(int sock, const void *addr,int addrlen);
+typedef int (*fn_sal_connect)(int sock, const void *addr, int addrlen);
 
-typedef int (*fn_sal_getsockname)(int sock, void *addr,int *addrlen);
+typedef int (*fn_sal_getsockname)(int sock, void *addr, int *addrlen);
 
-typedef int (*fn_sal_getpeername)(int sock, void *addr,int *addrlen);
+typedef int (*fn_sal_getpeername)(int sock, void *addr, int *addrlen);
 
-typedef int (*fn_sal_getsockopt)(int sock, int level, int optname,\
-                                 void *optval, int *optlen);
-typedef int (*fn_sal_setsockopt)(int sock, int level, int optname,\
-                                 const void *optval, int optlen);
+typedef int (*fn_sal_getsockopt)(int sock, int level, int optname, void *optval, int *optlen);
+
+typedef int (*fn_sal_setsockopt)(int sock, int level, int optname, const void *optval, int optlen);
 
 typedef int (*fn_sal_recv)(int sock, void *mem, int len, int flags);
 
-typedef int (*fn_sal_recvfrom)(int sock, void *mem, int len, int flags,
-                              void *from, int *fromlen);
+typedef int (*fn_sal_recvfrom)(int sock, void *mem, int len, int flags, void *from, int *fromlen);
 
-typedef int (*fn_sal_send)(int sock,const void *buf,int len,int flags);
+typedef int (*fn_sal_send)(int sock, const void *buf, int len, int flags);
 
-typedef int (*fn_sal_sendto)(int sock, const void *dataptr, int size, int flags,
-                             const void *to, int tolen);
+typedef int (*fn_sal_sendto)(int sock, const void *dataptr, int size, int flags, const void *to, int tolen);
 
 typedef int (*fn_sal_shutdown)(int sock, int how);
 
 typedef int (*fn_sal_closesocket)(int sock);
 
-typedef void * (*fn_sal_gethostbyname)(const char *name);
+typedef void *(*fn_sal_gethostbyname)(const char *name);
 
 typedef int (*fn_sal_select)(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *timeout);
-
 
 typedef struct
 {
@@ -72,14 +68,12 @@ typedef struct
     fn_sal_select           select;
 }tag_tcpip_ops;
 
-
 typedef struct
 {
     const char           *name;    ///< this member reserved now
     int                   domain;  ///< this member to match the tcpip ops,likes AF_INET and so on
     const tag_tcpip_ops  *ops;     ///< this member used to implement the user's operation
 }tag_tcpip_domain;
-
 
 /**
  * @brief: the tcpip stack should use this function to install it to the socket
@@ -93,4 +87,4 @@ int link_sal_install(const tag_tcpip_domain *domain);
 int link_tcpip_imp_init(void); ///< the developer implement the function
 
 
-#endif /* __SAL_IMP_H */
+#endif /* SAL_IMP_H */

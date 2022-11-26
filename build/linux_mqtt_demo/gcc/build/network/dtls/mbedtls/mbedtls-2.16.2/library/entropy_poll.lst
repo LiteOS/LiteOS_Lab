@@ -1,0 +1,30 @@
+GAS LISTING /tmp/ccXGxYyw.s 			page 1
+
+
+   1              		.file	"entropy_poll.c"
+   2              		.text
+   3              	.Ltext0:
+   4              	.Letext0:
+ 143              		.section	.note.gnu.property,"a"
+ 144              		.align 8
+ 145 0000 04000000 		.long	 1f - 0f
+ 146 0004 10000000 		.long	 4f - 1f
+ 147 0008 05000000 		.long	 5
+ 148              	0:
+ 149 000c 474E5500 		.string	 "GNU"
+ 150              	1:
+ 151              		.align 8
+ 152 0010 020000C0 		.long	 0xc0000002
+ 153 0014 04000000 		.long	 3f - 2f
+ 154              	2:
+ 155 0018 03000000 		.long	 0x3
+ 156              	3:
+ 157 001c 00000000 		.align 8
+ 158              	4:
+GAS LISTING /tmp/ccXGxYyw.s 			page 2
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 entropy_poll.c
+
+NO UNDEFINED SYMBOLS

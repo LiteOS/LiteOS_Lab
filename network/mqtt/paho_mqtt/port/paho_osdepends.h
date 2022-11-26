@@ -35,17 +35,14 @@
 #ifndef MQTT_OSDEP_H
 #define MQTT_OSDEP_H
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 
 #include  <osal.h>
 #include  <mqtt_al.h>
 
 #define MQTT_TASK 1
-
 
 typedef osal_loop_timer_t  Timer;
 
@@ -61,16 +58,12 @@ typedef osal_mutex_t  Mutex;
 #define MutexUnlock(mutex)   ((void) osal_mutex_unlock(*mutex))
 #define MutexDestory(mutex)  ((void) osal_mutex_del(*mutex))
 
-
-typedef struct
-{
+typedef struct {
 	void * no_used;
 } Thread;
 int ThreadStart(Thread *thread, void (*fn)(void *), void *arg);
 
-
-typedef struct Network
-{
+typedef struct Network {
     void *ctx;                      ///< if it is tls, then it is tls context, else it is socket fd
     dtls_al_security_t arg;
     int (*mqttread) (struct Network*, unsigned char*, int, int);

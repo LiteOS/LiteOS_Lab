@@ -16,5 +16,3 @@ ifeq ($(CONFIG_STIMER_ENABLE),y)
 
 
 endif
-
-

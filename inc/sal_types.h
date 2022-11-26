@@ -9,7 +9,6 @@
 #include <stdint.h>
 #include <stddef.h>
 
-
 /**
  * @brief: all the structure and defines needed by the  applications should include
  *         this file;if you have the one yourself, please check whether they have the same value
@@ -24,7 +23,6 @@
 #define ssize_t   int
 #endif
 
-
 #ifndef sa_family_t
 #define sa_family_t  uint16_t
 #endif
@@ -33,33 +31,25 @@
 #define in_port_t  uint16_t
 #endif
 
-
 #ifndef in_addr_t
 #define in_addr_t uint32_t
 #endif
 
-
-
-struct sockaddr
-{
+struct sockaddr {
     sa_family_t     sa_family;      /* address family, AF_xxx   */
     char            sa_data[14];    /* 14 bytes of protocol address */
 };
 
-struct linger
-{
+struct linger {
     int l_onoff;    /* Linger active            */
     int l_linger;   /* How long to linger for   */
 };
 
-struct in_addr
-{
+struct in_addr {
     in_addr_t s_addr;                    /* IPv4 address */
 };
 
-
-struct sockaddr_in
-{
+struct sockaddr_in {
     sa_family_t sin_family;             /* AF_INET */
     in_port_t sin_port;                 /* Port number.  */
     struct in_addr sin_addr;            /* Internet address.  */
@@ -76,5 +66,6 @@ struct hostent {
                            network byte order) for the host, terminated by a null pointer. */
 #define h_addr h_addr_list[0] /* for backward compatibility */
 };
+
 
 #endif /* __SAL_TYPES_H */

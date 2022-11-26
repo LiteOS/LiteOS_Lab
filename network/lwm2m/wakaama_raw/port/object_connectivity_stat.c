@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,17 +22,17 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
-/*******************************************************************************
+/* ******************************************************************************
  *
  * Copyright (c) 2015 Bosch Software Innovations GmbH Germany.
  * All rights reserved. This program and the accompanying materials
@@ -40,57 +40,55 @@
  * and Eclipse Distribution License v1.0 which accompany this distribution.
  *
  * The Eclipse Public License is available at
- *    http://www.eclipse.org/legal/epl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * The Eclipse Distribution License is available at
- *    http://www.eclipse.org/org/documents/edl-v10.php.
+ * http://www.eclipse.org/org/documents/edl-v10.php.
  *
  * Contributors:
- *    Bosch Software Innovations GmbH - Please refer to git log
+ * Bosch Software Innovations GmbH - Please refer to git log
  *
- *******************************************************************************/
+ * ***************************************************************************** */
 
 /*
  * This connectivity statistics object is optional and single instance only
  *
- *  Resources:
+ * Resources:
  *
- *          Name         | ID | Oper. | Inst. | Mand.|  Type   | Range | Units | Description |
- *  SMS Tx Counter       |  0 |   R   | Single|  No  | Integer |       |       |             |
- *  SMS Rx Counter       |  1 |   R   | Single|  No  | Integer |       |       |             |
- *  Tx Data              |  2 |   R   | Single|  No  | Integer |       | kByte |             |
- *  Rx Data              |  3 |   R   | Single|  No  | Integer |       | kByte |             |
- *  Max Message Size     |  4 |   R   | Single|  No  | Integer |       | Byte  |             |
- *  Average Message Size |  5 |   R   | Single|  No  | Integer |       | Byte  |             |
- *  StartOrReset         |  6 |   E   | Single|  Yes | Integer |       |       |             |
+ * Name         | ID | Oper. | Inst. | Mand.|  Type   | Range | Units | Description |
+ * SMS Tx Counter       |  0 |   R   | Single|  No  | Integer |       |       |             |
+ * SMS Rx Counter       |  1 |   R   | Single|  No  | Integer |       |       |             |
+ * Tx Data              |  2 |   R   | Single|  No  | Integer |       | kByte |             |
+ * Rx Data              |  3 |   R   | Single|  No  | Integer |       | kByte |             |
+ * Max Message Size     |  4 |   R   | Single|  No  | Integer |       | Byte  |             |
+ * Average Message Size |  5 |   R   | Single|  No  | Integer |       | Byte  |             |
+ * StartOrReset         |  6 |   E   | Single|  Yes | Integer |       |       |             |
  */
 
 #include "internals.h"
 
 // Resource Id's:
-#define RES_O_SMS_TX_COUNTER            0
-#define RES_O_SMS_RX_COUNTER            1
-#define RES_O_TX_DATA                   2
-#define RES_O_RX_DATA                   3
-#define RES_O_MAX_MESSAGE_SIZE          4
-#define RES_O_AVERAGE_MESSAGE_SIZE      5
-#define RES_M_START_OR_RESET            6
+#define RES_O_SMS_TX_COUNTER        0
+#define RES_O_SMS_RX_COUNTER        1
+#define RES_O_TX_DATA               2
+#define RES_O_RX_DATA               3
+#define RES_O_MAX_MESSAGE_SIZE      4
+#define RES_O_AVERAGE_MESSAGE_SIZE  5
+#define RES_M_START_OR_RESET        6
 
-typedef struct
-{
-    int64_t   smsTxCounter;
-    int64_t   smsRxCounter;
-    int64_t   txDataByte;             // report in kByte!
-    int64_t   rxDataByte;             // report in kByte!
-    int64_t   maxMessageSize;
-    int64_t   avrMessageSize;
-    int64_t   messageCount;           // private for incremental average calc.
-    bool      collectDataStarted;
+typedef struct {
+    int64_t     smsTxCounter;
+    int64_t     smsRxCounter;
+    int64_t     txDataByte; // report in kByte!
+    int64_t     rxDataByte; // report in kByte!
+    int64_t     maxMessageSize;
+    int64_t     avrMessageSize;
+    int64_t     messageCount; // private for incremental average calc.
+    bool        collectDataStarted;
 } conn_s_data_t;
 
 static uint8_t prv_set_tlv(lwm2m_data_t *dataP, conn_s_data_t *connStDataP)
 {
-    switch (dataP->id)
-    {
+    switch (dataP->id) {
         case RES_O_SMS_TX_COUNTER:
             lwm2m_data_encode_int(connStDataP->smsTxCounter, dataP);
             return COAP_205_CONTENT;
@@ -116,24 +114,23 @@ static uint8_t prv_set_tlv(lwm2m_data_t *dataP, conn_s_data_t *connStDataP)
             return COAP_205_CONTENT;
 
         default:
-            return COAP_404_NOT_FOUND ;
+            return COAP_404_NOT_FOUND;
     }
 }
 
-static uint8_t prv_read(uint16_t instanceId, int *numDataP, lwm2m_data_t **dataArrayP, lwm2m_data_cfg_t *dataCfg, lwm2m_object_t *objectP)
+static uint8_t prv_read(uint16_t instanceId, int *numDataP, lwm2m_data_t **dataArrayP, lwm2m_data_cfg_t *dataCfg,
+    lwm2m_object_t *objectP)
 {
     uint8_t result;
     int i;
 
     // this is a single instance object
-    if (0 != instanceId)
-    {
-        return COAP_404_NOT_FOUND ;
+    if (0 != instanceId) {
+        return COAP_404_NOT_FOUND;
     }
 
     // is the server asking for the full object ?
-    if (0 == *numDataP)
-    {
+    if (0 == *numDataP) {
         uint16_t resList[] =
         {
             RES_O_SMS_TX_COUNTER,
@@ -147,54 +144,49 @@ static uint8_t prv_read(uint16_t instanceId, int *numDataP, lwm2m_data_t **dataA
         *dataArrayP = lwm2m_data_new(nbRes);
 
         if (NULL == *dataArrayP)
-            return COAP_500_INTERNAL_SERVER_ERROR ;
+            return COAP_500_INTERNAL_SERVER_ERROR;
 
         *numDataP = nbRes;
 
-        for (i = 0; i < nbRes; i++)
-        {
+        for (i = 0; i < nbRes; i++) {
             (*dataArrayP)[i].id = resList[i];
         }
     }
 
     i = 0;
 
-    do
-    {
+    do {
         result = prv_set_tlv((*dataArrayP) + i, (conn_s_data_t *)(objectP->userData));
         i++;
-    }
-    while (i < *numDataP && result == COAP_205_CONTENT);
+    } while (i < *numDataP && result == COAP_205_CONTENT);
 
     return result;
 }
 
 static void prv_resetCounter(lwm2m_object_t *objectP, bool start)
 {
-    conn_s_data_t *myData = (conn_s_data_t *) objectP->userData;
-    myData->smsTxCounter        = 0;
-    myData->smsRxCounter        = 0;
-    myData->txDataByte          = 0;
-    myData->rxDataByte          = 0;
-    myData->maxMessageSize      = 0;
-    myData->avrMessageSize      = 0;
-    myData->messageCount        = 0;
-    myData->collectDataStarted  = start;
+    conn_s_data_t *myData = (conn_s_data_t *)objectP->userData;
+    myData->smsTxCounter = 0;
+    myData->smsRxCounter = 0;
+    myData->txDataByte = 0;
+    myData->rxDataByte = 0;
+    myData->maxMessageSize = 0;
+    myData->avrMessageSize = 0;
+    myData->messageCount = 0;
+    myData->collectDataStarted = start;
 }
 
-static uint8_t prv_exec(uint16_t instanceId, uint16_t resourceId,
-                        uint8_t *buffer, int length, lwm2m_object_t *objectP)
+static uint8_t prv_exec(uint16_t instanceId, uint16_t resourceId, uint8_t *buffer, int length, lwm2m_object_t *objectP)
 {
     // this is a single instance object
-    if (0 != instanceId)
-    {
+    if (0 != instanceId) {
         return COAP_404_NOT_FOUND;
     }
 
-    if (0 != length) return COAP_400_BAD_REQUEST;
+    if (0 != length)
+        return COAP_400_BAD_REQUEST;
 
-    switch (resourceId)
-    {
+    switch (resourceId) {
         case RES_M_START_OR_RESET:
             prv_resetCounter(objectP, true);
             return COAP_204_CHANGED;
@@ -208,17 +200,16 @@ void conn_s_updateTxStatistic(lwm2m_object_t *objectP, uint16_t txDataByte, bool
 {
     conn_s_data_t *myData = (conn_s_data_t *)(objectP->userData);
 
-    if (myData->collectDataStarted)
-    {
+    if (myData->collectDataStarted) {
         myData->txDataByte += txDataByte;
         myData->messageCount++;
-        myData->avrMessageSize = (myData->txDataByte + myData->rxDataByte) /
-                                 myData->messageCount;
+        myData->avrMessageSize = (myData->txDataByte + myData->rxDataByte) / myData->messageCount;
 
         if (txDataByte > myData->maxMessageSize)
             myData->maxMessageSize = txDataByte;
 
-        if (smsBased) myData->smsTxCounter++;
+        if (smsBased)
+            myData->smsTxCounter++;
     }
 }
 
@@ -226,19 +217,18 @@ void conn_s_updateRxStatistic(lwm2m_object_t *objectP, uint16_t rxDataByte, bool
 {
     conn_s_data_t *myData = (conn_s_data_t *)(objectP->userData);
 
-    if (myData->collectDataStarted)
-    {
+    if (myData->collectDataStarted) {
         myData->rxDataByte += rxDataByte;
         myData->messageCount++;
-        myData->avrMessageSize = (myData->txDataByte + myData->rxDataByte) /
-                                 myData->messageCount;
+        myData->avrMessageSize = (myData->txDataByte + myData->rxDataByte) / myData->messageCount;
 
         if (rxDataByte > myData->maxMessageSize)
             myData->maxMessageSize = rxDataByte;
 
         myData->txDataByte += rxDataByte;
 
-        if (smsBased) myData->smsRxCounter++;
+        if (smsBased)
+            myData->smsRxCounter++;
     }
 }
 
@@ -250,11 +240,10 @@ lwm2m_object_t *get_object_conn_s(void)
      * a pointer to the structure that represent it.
      */
     lwm2m_object_t *connObj;
-    connObj = (lwm2m_object_t *) lwm2m_malloc(sizeof(lwm2m_object_t));
+    connObj = (lwm2m_object_t *)lwm2m_malloc(sizeof(lwm2m_object_t));
 
-    if (NULL != connObj)
-    {
-        (void) memset(connObj, 0, sizeof(lwm2m_object_t));
+    if (NULL != connObj) {
+        (void)memset(connObj, 0, sizeof(lwm2m_object_t));
         /*
          * It assign his unique ID
          * The 7 is the standard ID for the optional object "Connectivity Statistics".
@@ -262,12 +251,9 @@ lwm2m_object_t *get_object_conn_s(void)
         connObj->objID = LWM2M_CONN_STATS_OBJECT_ID;
         connObj->instanceList = lwm2m_malloc(sizeof(lwm2m_list_t));
 
-        if (NULL != connObj->instanceList)
-        {
-            (void) memset(connObj->instanceList, 0, sizeof(lwm2m_list_t));
-        }
-        else
-        {
+        if (NULL != connObj->instanceList) {
+            (void)memset(connObj->instanceList, 0, sizeof(lwm2m_list_t));
+        } else {
             lwm2m_free(connObj);
             return NULL;
         }
@@ -278,20 +264,17 @@ lwm2m_object_t *get_object_conn_s(void)
          * query is made by the server or core. In fact the library don't need
          * to know the resources of the object, only the server does.
          */
-        connObj->readFunc     = prv_read;
-        connObj->executeFunc  = prv_exec;
-        connObj->userData     = lwm2m_malloc(sizeof(conn_s_data_t));
+        connObj->readFunc = prv_read;
+        connObj->executeFunc = prv_exec;
+        connObj->userData = lwm2m_malloc(sizeof(conn_s_data_t));
 
         /*
          * Also some user data can be stored in the object with a private
          * structure containing the needed variables.
          */
-        if (NULL != connObj->userData)
-        {
+        if (NULL != connObj->userData) {
             prv_resetCounter(connObj, false);
-        }
-        else
-        {
+        } else {
             lwm2m_free(connObj->instanceList);
             lwm2m_free(connObj);
             connObj = NULL;

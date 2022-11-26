@@ -1,0 +1,2411 @@
+GAS LISTING /tmp/ccIpkymc.s 			page 1
+
+
+   1              		.file	"rsa_internal.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.mbedtls_rsa_deduce_primes,"ax",@progbits
+   5              		.globl	mbedtls_rsa_deduce_primes
+   7              	mbedtls_rsa_deduce_primes:
+   8              	.LFB0:
+   9              		.file 1 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c"
+   1:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** /*
+   2:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *  Helper functions for the RSA module
+   3:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *
+   4:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *  Copyright (C) 2006-2017, ARM Limited, All Rights Reserved
+   5:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *  SPDX-License-Identifier: Apache-2.0
+   6:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *
+   7:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
+   8:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *  not use this file except in compliance with the License.
+   9:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *  You may obtain a copy of the License at
+  10:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *
+  11:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *  http://www.apache.org/licenses/LICENSE-2.0
+  12:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *
+  13:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *  Unless required by applicable law or agreed to in writing, software
+  14:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  15:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  16:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *  See the License for the specific language governing permissions and
+  17:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *  limitations under the License.
+  18:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *
+  19:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *  This file is part of mbed TLS (https://tls.mbed.org)
+  20:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *
+  21:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  */
+  22:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+  23:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** #if !defined(MBEDTLS_CONFIG_FILE)
+  24:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** #include "mbedtls/config.h"
+  25:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** #else
+  26:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** #include MBEDTLS_CONFIG_FILE
+  27:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** #endif
+  28:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+  29:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** #if defined(MBEDTLS_RSA_C)
+  30:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+  31:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** #include "mbedtls/rsa.h"
+  32:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** #include "mbedtls/bignum.h"
+  33:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** #include "mbedtls/rsa_internal.h"
+  34:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+  35:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** /*
+  36:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  * Compute RSA prime factors from public and private exponents
+  37:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *
+  38:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  * Summary of algorithm:
+  39:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  * Setting F := lcm(P-1,Q-1), the idea is as follows:
+  40:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *
+  41:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  * (a) For any 1 <= X < N with gcd(X,N)=1, we have X^F = 1 modulo N, so X^(F/2)
+  42:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *     is a square root of 1 in Z/NZ. Since Z/NZ ~= Z/PZ x Z/QZ by CRT and the
+  43:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *     square roots of 1 in Z/PZ and Z/QZ are +1 and -1, this leaves the four
+  44:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *     possibilities X^(F/2) = (+-1, +-1). If it happens that X^(F/2) = (-1,+1)
+  45:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *     or (+1,-1), then gcd(X^(F/2) + 1, N) will be equal to one of the prime
+  46:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *     factors of N.
+  47:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *
+  48:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  * (b) If we don't know F/2 but (F/2) * K for some odd (!) K, then the same
+  49:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *     construction still applies since (-)^K is the identity on the set of
+GAS LISTING /tmp/ccIpkymc.s 			page 2
+
+
+  50:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *     roots of 1 in Z/NZ.
+  51:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *
+  52:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  * The public and private key primitives (-)^E and (-)^D are mutually inverse
+  53:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  * bijections on Z/NZ if and only if (-)^(DE) is the identity on Z/NZ, i.e.
+  54:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  * if and only if DE - 1 is a multiple of F, say DE - 1 = F * L.
+  55:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  * Splitting L = 2^t * K with K odd, we have
+  56:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *
+  57:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *   DE - 1 = FL = (F/2) * (2^(t+1)) * K,
+  58:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *
+  59:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  * so (F / 2) * K is among the numbers
+  60:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *
+  61:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *   (DE - 1) >> 1, (DE - 1) >> 2, ..., (DE - 1) >> ord
+  62:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *
+  63:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  * where ord is the order of 2 in (DE - 1).
+  64:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  * We can therefore iterate through these numbers apply the construction
+  65:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  * of (a) and (b) above to attempt to factor N.
+  66:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  *
+  67:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  */
+  68:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** int mbedtls_rsa_deduce_primes( mbedtls_mpi const *N,
+  69:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                      mbedtls_mpi const *E, mbedtls_mpi const *D,
+  70:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                      mbedtls_mpi *P, mbedtls_mpi *Q )
+  71:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** {
+  10              		.loc 1 71 1
+  11              		.cfi_startproc
+  12 0000 F30F1EFA 		endbr64
+  13 0004 55       		pushq	%rbp
+  14              	.LCFI0:
+  15              		.cfi_def_cfa_offset 16
+  16              		.cfi_offset 6, -16
+  17 0005 4889E5   		movq	%rsp, %rbp
+  18              	.LCFI1:
+  19              		.cfi_def_cfa_register 6
+  20 0008 4881ECD0 		subq	$208, %rsp
+  20      000000
+  21 000f 4889BD58 		movq	%rdi, -168(%rbp)
+  21      FFFFFF
+  22 0016 4889B550 		movq	%rsi, -176(%rbp)
+  22      FFFFFF
+  23 001d 48899548 		movq	%rdx, -184(%rbp)
+  23      FFFFFF
+  24 0024 48898D40 		movq	%rcx, -192(%rbp)
+  24      FFFFFF
+  25 002b 4C898538 		movq	%r8, -200(%rbp)
+  25      FFFFFF
+  26              		.loc 1 71 1
+  27 0032 64488B04 		movq	%fs:40, %rax
+  27      25280000 
+  27      00
+  28 003b 488945F8 		movq	%rax, -8(%rbp)
+  29 003f 31C0     		xorl	%eax, %eax
+  72:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     int ret = 0;
+  30              		.loc 1 72 9
+  31 0041 C78574FF 		movl	$0, -140(%rbp)
+  31      FFFF0000 
+  31      0000
+  73:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+  74:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     uint16_t attempt;  /* Number of current attempt  */
+GAS LISTING /tmp/ccIpkymc.s 			page 3
+
+
+  75:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     uint16_t iter;     /* Number of squares computed in the current attempt */
+  76:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+  77:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     uint16_t order;    /* Order of 2 in DE - 1 */
+  78:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+  79:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi T;  /* Holds largest odd divisor of DE - 1     */
+  80:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi K;  /* Temporary holding the current candidate */
+  81:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+  82:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     const unsigned char primes[] = { 2,
+  32              		.loc 1 82 25
+  33 004b 48B80203 		movabsq	$1373893702338282242, %rax
+  33      05070B0D 
+  33      1113
+  34 0055 48BA171D 		movabsq	$3832329263632030999, %rdx
+  34      1F25292B 
+  34      2F35
+  35 005f 488945C0 		movq	%rax, -64(%rbp)
+  36 0063 488955C8 		movq	%rdx, -56(%rbp)
+  37 0067 48B83B3D 		movabsq	$6436575468589366587, %rax
+  37      4347494F 
+  37      5359
+  38 0071 48BA6165 		movabsq	$-8971327217931426463, %rdx
+  38      676B6D71 
+  38      7F83
+  39 007b 488945D0 		movq	%rax, -48(%rbp)
+  40 007f 488955D8 		movq	%rdx, -40(%rbp)
+  41 0083 48B8898B 		movabsq	$-5933594086788985975, %rax
+  41      95979DA3 
+  41      A7AD
+  42 008d 48BAB3B5 		movabsq	$-2318289730992622157, %rdx
+  42      BFC1C5C7 
+  42      D3DF
+  43 0097 488945E0 		movq	%rax, -32(%rbp)
+  44 009b 488955E8 		movq	%rdx, -24(%rbp)
+  45 009f C745F0E3 		movl	$-269883933, -16(%rbp)
+  45      E5E9EF
+  46 00a6 66C745F4 		movw	$-1039, -12(%rbp)
+  46      F1FB
+  83:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****            3,    5,    7,   11,   13,   17,   19,   23,
+  84:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****           29,   31,   37,   41,   43,   47,   53,   59,
+  85:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****           61,   67,   71,   73,   79,   83,   89,   97,
+  86:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****          101,  103,  107,  109,  113,  127,  131,  137,
+  87:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****          139,  149,  151,  157,  163,  167,  173,  179,
+  88:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****          181,  191,  193,  197,  199,  211,  223,  227,
+  89:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****          229,  233,  239,  241,  251
+  90:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     };
+  91:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+  92:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     const size_t num_primes = sizeof( primes ) / sizeof( *primes );
+  47              		.loc 1 92 18
+  48 00ac 48C78578 		movq	$54, -136(%rbp)
+  48      FFFFFF36 
+  48      000000
+  93:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+  94:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     if( P == NULL || Q == NULL || P->p != NULL || Q->p != NULL )
+  49              		.loc 1 94 7
+  50 00b7 4883BD40 		cmpq	$0, -192(%rbp)
+  50      FFFFFF00 
+  51 00bf 742A     		je	.L2
+GAS LISTING /tmp/ccIpkymc.s 			page 4
+
+
+  52              		.loc 1 94 19 discriminator 1
+  53 00c1 4883BD38 		cmpq	$0, -200(%rbp)
+  53      FFFFFF00 
+  54 00c9 7420     		je	.L2
+  55              		.loc 1 94 36 discriminator 2
+  56 00cb 488B8540 		movq	-192(%rbp), %rax
+  56      FFFFFF
+  57 00d2 488B4010 		movq	16(%rax), %rax
+  58              		.loc 1 94 32 discriminator 2
+  59 00d6 4885C0   		testq	%rax, %rax
+  60 00d9 7510     		jne	.L2
+  61              		.loc 1 94 52 discriminator 3
+  62 00db 488B8538 		movq	-200(%rbp), %rax
+  62      FFFFFF
+  63 00e2 488B4010 		movq	16(%rax), %rax
+  64              		.loc 1 94 48 discriminator 3
+  65 00e6 4885C0   		testq	%rax, %rax
+  66 00e9 740A     		je	.L3
+  67              	.L2:
+  95:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         return( MBEDTLS_ERR_MPI_BAD_INPUT_DATA );
+  68              		.loc 1 95 15
+  69 00eb B8FCFFFF 		movl	$-4, %eax
+  69      FF
+  70 00f0 E9310400 		jmp	.L31
+  70      00
+  71              	.L3:
+  96:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+  97:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     if( mbedtls_mpi_cmp_int( N, 0 ) <= 0 ||
+  72              		.loc 1 97 9
+  73 00f5 488B8558 		movq	-168(%rbp), %rax
+  73      FFFFFF
+  74 00fc BE000000 		movl	$0, %esi
+  74      00
+  75 0101 4889C7   		movq	%rax, %rdi
+  76 0104 E8000000 		call	mbedtls_mpi_cmp_int@PLT
+  76      00
+  77              		.loc 1 97 7
+  78 0109 85C0     		testl	%eax, %eax
+  79 010b 7E6A     		jle	.L5
+  98:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         mbedtls_mpi_cmp_int( D, 1 ) <= 0 ||
+  80              		.loc 1 98 9 discriminator 1
+  81 010d 488B8548 		movq	-184(%rbp), %rax
+  81      FFFFFF
+  82 0114 BE010000 		movl	$1, %esi
+  82      00
+  83 0119 4889C7   		movq	%rax, %rdi
+  84 011c E8000000 		call	mbedtls_mpi_cmp_int@PLT
+  84      00
+  97:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         mbedtls_mpi_cmp_int( D, 1 ) <= 0 ||
+  85              		.loc 1 97 42 discriminator 1
+  86 0121 85C0     		testl	%eax, %eax
+  87 0123 7E52     		jle	.L5
+  99:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         mbedtls_mpi_cmp_mpi( D, N ) >= 0 ||
+  88              		.loc 1 99 9
+  89 0125 488B9558 		movq	-168(%rbp), %rdx
+  89      FFFFFF
+  90 012c 488B8548 		movq	-184(%rbp), %rax
+GAS LISTING /tmp/ccIpkymc.s 			page 5
+
+
+  90      FFFFFF
+  91 0133 4889D6   		movq	%rdx, %rsi
+  92 0136 4889C7   		movq	%rax, %rdi
+  93 0139 E8000000 		call	mbedtls_mpi_cmp_mpi@PLT
+  93      00
+  98:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         mbedtls_mpi_cmp_int( D, 1 ) <= 0 ||
+  94              		.loc 1 98 42
+  95 013e 85C0     		testl	%eax, %eax
+  96 0140 7935     		jns	.L5
+ 100:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         mbedtls_mpi_cmp_int( E, 1 ) <= 0 ||
+  97              		.loc 1 100 9
+  98 0142 488B8550 		movq	-176(%rbp), %rax
+  98      FFFFFF
+  99 0149 BE010000 		movl	$1, %esi
+  99      00
+ 100 014e 4889C7   		movq	%rax, %rdi
+ 101 0151 E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 101      00
+  99:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         mbedtls_mpi_cmp_mpi( D, N ) >= 0 ||
+ 102              		.loc 1 99 42
+ 103 0156 85C0     		testl	%eax, %eax
+ 104 0158 7E1D     		jle	.L5
+ 101:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         mbedtls_mpi_cmp_mpi( E, N ) >= 0 )
+ 105              		.loc 1 101 9
+ 106 015a 488B9558 		movq	-168(%rbp), %rdx
+ 106      FFFFFF
+ 107 0161 488B8550 		movq	-176(%rbp), %rax
+ 107      FFFFFF
+ 108 0168 4889D6   		movq	%rdx, %rsi
+ 109 016b 4889C7   		movq	%rax, %rdi
+ 110 016e E8000000 		call	mbedtls_mpi_cmp_mpi@PLT
+ 110      00
+ 100:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         mbedtls_mpi_cmp_int( E, 1 ) <= 0 ||
+ 111              		.loc 1 100 42
+ 112 0173 85C0     		testl	%eax, %eax
+ 113 0175 780A     		js	.L6
+ 114              	.L5:
+ 102:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     {
+ 103:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         return( MBEDTLS_ERR_MPI_BAD_INPUT_DATA );
+ 115              		.loc 1 103 15
+ 116 0177 B8FCFFFF 		movl	$-4, %eax
+ 116      FF
+ 117 017c E9A50300 		jmp	.L31
+ 117      00
+ 118              	.L6:
+ 104:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     }
+ 105:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 106:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     /*
+ 107:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****      * Initializations and temporary changes
+ 108:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****      */
+ 109:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 110:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi_init( &K );
+ 119              		.loc 1 110 5
+ 120 0181 488D45A0 		leaq	-96(%rbp), %rax
+ 121 0185 4889C7   		movq	%rax, %rdi
+ 122 0188 E8000000 		call	mbedtls_mpi_init@PLT
+ 122      00
+GAS LISTING /tmp/ccIpkymc.s 			page 6
+
+
+ 111:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi_init( &T );
+ 123              		.loc 1 111 5
+ 124 018d 488D4580 		leaq	-128(%rbp), %rax
+ 125 0191 4889C7   		movq	%rax, %rdi
+ 126 0194 E8000000 		call	mbedtls_mpi_init@PLT
+ 126      00
+ 112:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 113:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     /* T := DE - 1 */
+ 114:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( &T, D,  E ) );
+ 127              		.loc 1 114 5
+ 128 0199 488B9550 		movq	-176(%rbp), %rdx
+ 128      FFFFFF
+ 129 01a0 488B8D48 		movq	-184(%rbp), %rcx
+ 129      FFFFFF
+ 130 01a7 488D4580 		leaq	-128(%rbp), %rax
+ 131 01ab 4889CE   		movq	%rcx, %rsi
+ 132 01ae 4889C7   		movq	%rax, %rdi
+ 133 01b1 E8000000 		call	mbedtls_mpi_mul_mpi@PLT
+ 133      00
+ 134 01b6 898574FF 		movl	%eax, -140(%rbp)
+ 134      FFFF
+ 135 01bc 83BD74FF 		cmpl	$0, -140(%rbp)
+ 135      FFFF00
+ 136 01c3 0F852303 		jne	.L33
+ 136      0000
+ 115:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &T, &T, 1 ) );
+ 137              		.loc 1 115 5
+ 138 01c9 488D4D80 		leaq	-128(%rbp), %rcx
+ 139 01cd 488D4580 		leaq	-128(%rbp), %rax
+ 140 01d1 BA010000 		movl	$1, %edx
+ 140      00
+ 141 01d6 4889CE   		movq	%rcx, %rsi
+ 142 01d9 4889C7   		movq	%rax, %rdi
+ 143 01dc E8000000 		call	mbedtls_mpi_sub_int@PLT
+ 143      00
+ 144 01e1 898574FF 		movl	%eax, -140(%rbp)
+ 144      FFFF
+ 145 01e7 83BD74FF 		cmpl	$0, -140(%rbp)
+ 145      FFFF00
+ 146 01ee 0F85FB02 		jne	.L34
+ 146      0000
+ 116:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 117:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     if( ( order = (uint16_t) mbedtls_mpi_lsb( &T ) ) == 0 )
+ 147              		.loc 1 117 30
+ 148 01f4 488D4580 		leaq	-128(%rbp), %rax
+ 149 01f8 4889C7   		movq	%rax, %rdi
+ 150 01fb E8000000 		call	mbedtls_mpi_lsb@PLT
+ 150      00
+ 151              		.loc 1 117 17
+ 152 0200 66898572 		movw	%ax, -142(%rbp)
+ 152      FFFFFF
+ 153              		.loc 1 117 7
+ 154 0207 6683BD72 		cmpw	$0, -142(%rbp)
+ 154      FFFFFF00 
+ 155 020f 750F     		jne	.L10
+ 118:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     {
+ 119:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         ret = MBEDTLS_ERR_MPI_BAD_INPUT_DATA;
+GAS LISTING /tmp/ccIpkymc.s 			page 7
+
+
+ 156              		.loc 1 119 13
+ 157 0211 C78574FF 		movl	$-4, -140(%rbp)
+ 157      FFFFFCFF 
+ 157      FFFF
+ 120:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         goto cleanup;
+ 158              		.loc 1 120 9
+ 159 021b E9E80200 		jmp	.L8
+ 159      00
+ 160              	.L10:
+ 121:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     }
+ 122:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 123:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     /* After this operation, T holds the largest odd divisor of DE - 1. */
+ 124:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_shift_r( &T, order ) );
+ 161              		.loc 1 124 5
+ 162 0220 0FB79572 		movzwl	-142(%rbp), %edx
+ 162      FFFFFF
+ 163 0227 488D4580 		leaq	-128(%rbp), %rax
+ 164 022b 4889D6   		movq	%rdx, %rsi
+ 165 022e 4889C7   		movq	%rax, %rdi
+ 166 0231 E8000000 		call	mbedtls_mpi_shift_r@PLT
+ 166      00
+ 167 0236 898574FF 		movl	%eax, -140(%rbp)
+ 167      FFFF
+ 168 023c 83BD74FF 		cmpl	$0, -140(%rbp)
+ 168      FFFF00
+ 169 0243 0F85A902 		jne	.L35
+ 169      0000
+ 125:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 126:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     /*
+ 127:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****      * Actual work
+ 128:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****      */
+ 129:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 130:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     /* Skip trying 2 if N == 1 mod 8 */
+ 131:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     attempt = 0;
+ 170              		.loc 1 131 13
+ 171 0249 66C7856E 		movw	$0, -146(%rbp)
+ 171      FFFFFF00 
+ 171      00
+ 132:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     if( N->p[0] % 8 == 1 )
+ 172              		.loc 1 132 10
+ 173 0252 488B8558 		movq	-168(%rbp), %rax
+ 173      FFFFFF
+ 174 0259 488B4010 		movq	16(%rax), %rax
+ 175              		.loc 1 132 13
+ 176 025d 488B00   		movq	(%rax), %rax
+ 177              		.loc 1 132 17
+ 178 0260 83E007   		andl	$7, %eax
+ 179              		.loc 1 132 7
+ 180 0263 4883F801 		cmpq	$1, %rax
+ 181 0267 0F855C02 		jne	.L13
+ 181      0000
+ 133:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         attempt = 1;
+ 182              		.loc 1 133 17
+ 183 026d 66C7856E 		movw	$1, -146(%rbp)
+ 183      FFFFFF01 
+ 183      00
+ 134:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+GAS LISTING /tmp/ccIpkymc.s 			page 8
+
+
+ 135:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     for( ; attempt < num_primes; ++attempt )
+ 184              		.loc 1 135 5
+ 185 0276 E94E0200 		jmp	.L13
+ 185      00
+ 186              	.L30:
+ 136:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     {
+ 137:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         mbedtls_mpi_lset( &K, primes[attempt] );
+ 187              		.loc 1 137 37
+ 188 027b 0FB7856E 		movzwl	-146(%rbp), %eax
+ 188      FFFFFF
+ 189 0282 4898     		cltq
+ 190 0284 0FB64405 		movzbl	-64(%rbp,%rax), %eax
+ 190      C0
+ 191              		.loc 1 137 9
+ 192 0289 0FB6D0   		movzbl	%al, %edx
+ 193 028c 488D45A0 		leaq	-96(%rbp), %rax
+ 194 0290 4889D6   		movq	%rdx, %rsi
+ 195 0293 4889C7   		movq	%rax, %rdi
+ 196 0296 E8000000 		call	mbedtls_mpi_lset@PLT
+ 196      00
+ 138:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 139:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         /* Check if gcd(K,N) = 1 */
+ 140:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_gcd( P, &K, N ) );
+ 197              		.loc 1 140 9
+ 198 029b 488B9558 		movq	-168(%rbp), %rdx
+ 198      FFFFFF
+ 199 02a2 488D4DA0 		leaq	-96(%rbp), %rcx
+ 200 02a6 488B8540 		movq	-192(%rbp), %rax
+ 200      FFFFFF
+ 201 02ad 4889CE   		movq	%rcx, %rsi
+ 202 02b0 4889C7   		movq	%rax, %rdi
+ 203 02b3 E8000000 		call	mbedtls_mpi_gcd@PLT
+ 203      00
+ 204 02b8 898574FF 		movl	%eax, -140(%rbp)
+ 204      FFFF
+ 205 02be 83BD74FF 		cmpl	$0, -140(%rbp)
+ 205      FFFF00
+ 206 02c5 0F852A02 		jne	.L36
+ 206      0000
+ 141:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         if( mbedtls_mpi_cmp_int( P, 1 ) != 0 )
+ 207              		.loc 1 141 13
+ 208 02cb 488B8540 		movq	-192(%rbp), %rax
+ 208      FFFFFF
+ 209 02d2 BE010000 		movl	$1, %esi
+ 209      00
+ 210 02d7 4889C7   		movq	%rax, %rdi
+ 211 02da E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 211      00
+ 212              		.loc 1 141 11
+ 213 02df 85C0     		testl	%eax, %eax
+ 214 02e1 0F85D901 		jne	.L37
+ 214      0000
+ 142:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             continue;
+ 143:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 144:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         /* Go through K^T + 1, K^(2T) + 1, K^(4T) + 1, ...
+ 145:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****          * and check whether they have nontrivial GCD with N. */
+ 146:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_exp_mod( &K, &K, &T, N,
+GAS LISTING /tmp/ccIpkymc.s 			page 9
+
+
+ 215              		.loc 1 146 9
+ 216 02e7 488BBD38 		movq	-200(%rbp), %rdi
+ 216      FFFFFF
+ 217 02ee 488B8D58 		movq	-168(%rbp), %rcx
+ 217      FFFFFF
+ 218 02f5 488D5580 		leaq	-128(%rbp), %rdx
+ 219 02f9 488D75A0 		leaq	-96(%rbp), %rsi
+ 220 02fd 488D45A0 		leaq	-96(%rbp), %rax
+ 221 0301 4989F8   		movq	%rdi, %r8
+ 222 0304 4889C7   		movq	%rax, %rdi
+ 223 0307 E8000000 		call	mbedtls_mpi_exp_mod@PLT
+ 223      00
+ 224 030c 898574FF 		movl	%eax, -140(%rbp)
+ 224      FFFF
+ 225 0312 83BD74FF 		cmpl	$0, -140(%rbp)
+ 225      FFFF00
+ 226 0319 0F85D901 		jne	.L38
+ 226      0000
+ 147:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                              Q /* temporarily use Q for storing Montgomery
+ 148:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                                 * multiplication helper values */ ) );
+ 149:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 150:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         for( iter = 1; iter <= order; ++iter )
+ 227              		.loc 1 150 19
+ 228 031f 66C78570 		movw	$1, -144(%rbp)
+ 228      FFFFFF01 
+ 228      00
+ 229              		.loc 1 150 9
+ 230 0328 E9650100 		jmp	.L18
+ 230      00
+ 231              	.L28:
+ 151:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         {
+ 152:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             /* If we reach 1 prematurely, there's no point
+ 153:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****              * in continuing to square K */
+ 154:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             if( mbedtls_mpi_cmp_int( &K, 1 ) == 0 )
+ 232              		.loc 1 154 17
+ 233 032d 488D45A0 		leaq	-96(%rbp), %rax
+ 234 0331 BE010000 		movl	$1, %esi
+ 234      00
+ 235 0336 4889C7   		movq	%rax, %rdi
+ 236 0339 E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 236      00
+ 237              		.loc 1 154 15
+ 238 033e 85C0     		testl	%eax, %eax
+ 239 0340 0F846201 		je	.L39
+ 239      0000
+ 155:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                 break;
+ 156:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 157:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             MBEDTLS_MPI_CHK( mbedtls_mpi_add_int( &K, &K, 1 ) );
+ 240              		.loc 1 157 13
+ 241 0346 488D4DA0 		leaq	-96(%rbp), %rcx
+ 242 034a 488D45A0 		leaq	-96(%rbp), %rax
+ 243 034e BA010000 		movl	$1, %edx
+ 243      00
+ 244 0353 4889CE   		movq	%rcx, %rsi
+ 245 0356 4889C7   		movq	%rax, %rdi
+ 246 0359 E8000000 		call	mbedtls_mpi_add_int@PLT
+ 246      00
+GAS LISTING /tmp/ccIpkymc.s 			page 10
+
+
+ 247 035e 898574FF 		movl	%eax, -140(%rbp)
+ 247      FFFF
+ 248 0364 83BD74FF 		cmpl	$0, -140(%rbp)
+ 248      FFFF00
+ 249 036b 0F858A01 		jne	.L40
+ 249      0000
+ 158:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             MBEDTLS_MPI_CHK( mbedtls_mpi_gcd( P, &K, N ) );
+ 250              		.loc 1 158 13
+ 251 0371 488B9558 		movq	-168(%rbp), %rdx
+ 251      FFFFFF
+ 252 0378 488D4DA0 		leaq	-96(%rbp), %rcx
+ 253 037c 488B8540 		movq	-192(%rbp), %rax
+ 253      FFFFFF
+ 254 0383 4889CE   		movq	%rcx, %rsi
+ 255 0386 4889C7   		movq	%rax, %rdi
+ 256 0389 E8000000 		call	mbedtls_mpi_gcd@PLT
+ 256      00
+ 257 038e 898574FF 		movl	%eax, -140(%rbp)
+ 257      FFFF
+ 258 0394 83BD74FF 		cmpl	$0, -140(%rbp)
+ 258      FFFF00
+ 259 039b 0F855D01 		jne	.L41
+ 259      0000
+ 159:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 160:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             if( mbedtls_mpi_cmp_int( P, 1 ) ==  1 &&
+ 260              		.loc 1 160 17
+ 261 03a1 488B8540 		movq	-192(%rbp), %rax
+ 261      FFFFFF
+ 262 03a8 BE010000 		movl	$1, %esi
+ 262      00
+ 263 03ad 4889C7   		movq	%rax, %rdi
+ 264 03b0 E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 264      00
+ 265              		.loc 1 160 15
+ 266 03b5 83F801   		cmpl	$1, %eax
+ 267 03b8 7552     		jne	.L23
+ 161:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                 mbedtls_mpi_cmp_mpi( P, N ) == -1 )
+ 268              		.loc 1 161 17 discriminator 1
+ 269 03ba 488B9558 		movq	-168(%rbp), %rdx
+ 269      FFFFFF
+ 270 03c1 488B8540 		movq	-192(%rbp), %rax
+ 270      FFFFFF
+ 271 03c8 4889D6   		movq	%rdx, %rsi
+ 272 03cb 4889C7   		movq	%rax, %rdi
+ 273 03ce E8000000 		call	mbedtls_mpi_cmp_mpi@PLT
+ 273      00
+ 160:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                 mbedtls_mpi_cmp_mpi( P, N ) == -1 )
+ 274              		.loc 1 160 51 discriminator 1
+ 275 03d3 83F8FF   		cmpl	$-1, %eax
+ 276 03d6 7534     		jne	.L23
+ 162:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             {
+ 163:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                 /*
+ 164:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                  * Have found a nontrivial divisor P of N.
+ 165:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                  * Set Q := N / P.
+ 166:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                  */
+ 167:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 168:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                 MBEDTLS_MPI_CHK( mbedtls_mpi_div_mpi( Q, NULL, N, P ) );
+GAS LISTING /tmp/ccIpkymc.s 			page 11
+
+
+ 277              		.loc 1 168 17
+ 278 03d8 488B8D40 		movq	-192(%rbp), %rcx
+ 278      FFFFFF
+ 279 03df 488B9558 		movq	-168(%rbp), %rdx
+ 279      FFFFFF
+ 280 03e6 488B8538 		movq	-200(%rbp), %rax
+ 280      FFFFFF
+ 281 03ed BE000000 		movl	$0, %esi
+ 281      00
+ 282 03f2 4889C7   		movq	%rax, %rdi
+ 283 03f5 E8000000 		call	mbedtls_mpi_div_mpi@PLT
+ 283      00
+ 284 03fa 898574FF 		movl	%eax, -140(%rbp)
+ 284      FFFF
+ 285 0400 83BD74FF 		cmpl	$0, -140(%rbp)
+ 285      FFFF00
+ 169:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                 goto cleanup;
+ 286              		.loc 1 169 17
+ 287 0407 E9FC0000 		jmp	.L8
+ 287      00
+ 288              	.L23:
+ 170:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             }
+ 171:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 172:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &K, &K, 1 ) );
+ 289              		.loc 1 172 13
+ 290 040c 488D4DA0 		leaq	-96(%rbp), %rcx
+ 291 0410 488D45A0 		leaq	-96(%rbp), %rax
+ 292 0414 BA010000 		movl	$1, %edx
+ 292      00
+ 293 0419 4889CE   		movq	%rcx, %rsi
+ 294 041c 4889C7   		movq	%rax, %rdi
+ 295 041f E8000000 		call	mbedtls_mpi_sub_int@PLT
+ 295      00
+ 296 0424 898574FF 		movl	%eax, -140(%rbp)
+ 296      FFFF
+ 297 042a 83BD74FF 		cmpl	$0, -140(%rbp)
+ 297      FFFF00
+ 298 0431 0F85CA00 		jne	.L42
+ 298      0000
+ 173:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( &K, &K, &K ) );
+ 299              		.loc 1 173 13
+ 300 0437 488D55A0 		leaq	-96(%rbp), %rdx
+ 301 043b 488D4DA0 		leaq	-96(%rbp), %rcx
+ 302 043f 488D45A0 		leaq	-96(%rbp), %rax
+ 303 0443 4889CE   		movq	%rcx, %rsi
+ 304 0446 4889C7   		movq	%rax, %rdi
+ 305 0449 E8000000 		call	mbedtls_mpi_mul_mpi@PLT
+ 305      00
+ 306 044e 898574FF 		movl	%eax, -140(%rbp)
+ 306      FFFF
+ 307 0454 83BD74FF 		cmpl	$0, -140(%rbp)
+ 307      FFFF00
+ 308 045b 0F85A300 		jne	.L43
+ 308      0000
+ 174:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( &K, &K, N ) );
+ 309              		.loc 1 174 13
+ 310 0461 488B9558 		movq	-168(%rbp), %rdx
+GAS LISTING /tmp/ccIpkymc.s 			page 12
+
+
+ 310      FFFFFF
+ 311 0468 488D4DA0 		leaq	-96(%rbp), %rcx
+ 312 046c 488D45A0 		leaq	-96(%rbp), %rax
+ 313 0470 4889CE   		movq	%rcx, %rsi
+ 314 0473 4889C7   		movq	%rax, %rdi
+ 315 0476 E8000000 		call	mbedtls_mpi_mod_mpi@PLT
+ 315      00
+ 316 047b 898574FF 		movl	%eax, -140(%rbp)
+ 316      FFFF
+ 317 0481 83BD74FF 		cmpl	$0, -140(%rbp)
+ 317      FFFF00
+ 318 0488 757D     		jne	.L44
+ 150:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         {
+ 319              		.loc 1 150 39 discriminator 2
+ 320 048a 66838570 		addw	$1, -144(%rbp)
+ 320      FFFFFF01 
+ 321              	.L18:
+ 150:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         {
+ 322              		.loc 1 150 9 discriminator 1
+ 323 0492 0FB78570 		movzwl	-144(%rbp), %eax
+ 323      FFFFFF
+ 324 0499 663B8572 		cmpw	-142(%rbp), %ax
+ 324      FFFFFF
+ 325 04a0 0F8687FE 		jbe	.L28
+ 325      FFFF
+ 326 04a6 EB01     		jmp	.L20
+ 327              	.L39:
+ 155:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 328              		.loc 1 155 17
+ 329 04a8 90       		nop
+ 330              	.L20:
+ 175:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         }
+ 176:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 177:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         /*
+ 178:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****          * If we get here, then either we prematurely aborted the loop because
+ 179:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****          * we reached 1, or K holds primes[attempt]^(DE - 1) mod N, which must
+ 180:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****          * be 1 if D,E,N were consistent.
+ 181:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****          * Check if that's the case and abort if not, to avoid very long,
+ 182:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****          * yet eventually failing, computations if N,D,E were not sane.
+ 183:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****          */
+ 184:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         if( mbedtls_mpi_cmp_int( &K, 1 ) != 0 )
+ 331              		.loc 1 184 13
+ 332 04a9 488D45A0 		leaq	-96(%rbp), %rax
+ 333 04ad BE010000 		movl	$1, %esi
+ 333      00
+ 334 04b2 4889C7   		movq	%rax, %rdi
+ 335 04b5 E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 335      00
+ 336              		.loc 1 184 11
+ 337 04ba 85C0     		testl	%eax, %eax
+ 338 04bc 7521     		jne	.L45
+ 339 04be EB01     		jmp	.L16
+ 340              	.L37:
+ 142:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 341              		.loc 1 142 13
+ 342 04c0 90       		nop
+ 343              	.L16:
+GAS LISTING /tmp/ccIpkymc.s 			page 13
+
+
+ 135:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     {
+ 344              		.loc 1 135 34
+ 345 04c1 6683856E 		addw	$1, -146(%rbp)
+ 345      FFFFFF01 
+ 346              	.L13:
+ 135:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     {
+ 347              		.loc 1 135 20 discriminator 1
+ 348 04c9 0FB7856E 		movzwl	-146(%rbp), %eax
+ 348      FFFFFF
+ 135:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     {
+ 349              		.loc 1 135 5 discriminator 1
+ 350 04d0 48398578 		cmpq	%rax, -136(%rbp)
+ 350      FFFFFF
+ 351 04d7 0F879EFD 		ja	.L30
+ 351      FFFF
+ 352 04dd EB01     		jmp	.L29
+ 353              	.L45:
+ 185:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         {
+ 186:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             break;
+ 354              		.loc 1 186 13
+ 355 04df 90       		nop
+ 356              	.L29:
+ 187:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         }
+ 188:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     }
+ 189:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 190:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     ret = MBEDTLS_ERR_MPI_BAD_INPUT_DATA;
+ 357              		.loc 1 190 9
+ 358 04e0 C78574FF 		movl	$-4, -140(%rbp)
+ 358      FFFFFCFF 
+ 358      FFFF
+ 359 04ea EB1C     		jmp	.L8
+ 360              	.L33:
+ 114:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &T, &T, 1 ) );
+ 361              		.loc 1 114 5
+ 362 04ec 90       		nop
+ 363 04ed EB19     		jmp	.L8
+ 364              	.L34:
+ 115:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 365              		.loc 1 115 5
+ 366 04ef 90       		nop
+ 367 04f0 EB16     		jmp	.L8
+ 368              	.L35:
+ 124:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 369              		.loc 1 124 5
+ 370 04f2 90       		nop
+ 371 04f3 EB13     		jmp	.L8
+ 372              	.L36:
+ 140:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         if( mbedtls_mpi_cmp_int( P, 1 ) != 0 )
+ 373              		.loc 1 140 9
+ 374 04f5 90       		nop
+ 375 04f6 EB10     		jmp	.L8
+ 376              	.L38:
+ 146:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                              Q /* temporarily use Q for storing Montgomery
+ 377              		.loc 1 146 9
+ 378 04f8 90       		nop
+ 379 04f9 EB0D     		jmp	.L8
+ 380              	.L40:
+GAS LISTING /tmp/ccIpkymc.s 			page 14
+
+
+ 157:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             MBEDTLS_MPI_CHK( mbedtls_mpi_gcd( P, &K, N ) );
+ 381              		.loc 1 157 13
+ 382 04fb 90       		nop
+ 383 04fc EB0A     		jmp	.L8
+ 384              	.L41:
+ 158:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 385              		.loc 1 158 13
+ 386 04fe 90       		nop
+ 387 04ff EB07     		jmp	.L8
+ 388              	.L42:
+ 172:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( &K, &K, &K ) );
+ 389              		.loc 1 172 13
+ 390 0501 90       		nop
+ 391 0502 EB04     		jmp	.L8
+ 392              	.L43:
+ 173:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( &K, &K, N ) );
+ 393              		.loc 1 173 13
+ 394 0504 90       		nop
+ 395 0505 EB01     		jmp	.L8
+ 396              	.L44:
+ 174:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         }
+ 397              		.loc 1 174 13
+ 398 0507 90       		nop
+ 399              	.L8:
+ 191:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 192:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** cleanup:
+ 193:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 194:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi_free( &K );
+ 400              		.loc 1 194 5
+ 401 0508 488D45A0 		leaq	-96(%rbp), %rax
+ 402 050c 4889C7   		movq	%rax, %rdi
+ 403 050f E8000000 		call	mbedtls_mpi_free@PLT
+ 403      00
+ 195:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi_free( &T );
+ 404              		.loc 1 195 5
+ 405 0514 488D4580 		leaq	-128(%rbp), %rax
+ 406 0518 4889C7   		movq	%rax, %rdi
+ 407 051b E8000000 		call	mbedtls_mpi_free@PLT
+ 407      00
+ 196:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     return( ret );
+ 408              		.loc 1 196 11
+ 409 0520 8B8574FF 		movl	-140(%rbp), %eax
+ 409      FFFF
+ 410              	.L31:
+ 197:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** }
+ 411              		.loc 1 197 1 discriminator 1
+ 412 0526 488B4DF8 		movq	-8(%rbp), %rcx
+ 413 052a 6448330C 		xorq	%fs:40, %rcx
+ 413      25280000 
+ 413      00
+ 414 0533 7405     		je	.L32
+ 415              		.loc 1 197 1 is_stmt 0
+ 416 0535 E8000000 		call	__stack_chk_fail@PLT
+ 416      00
+ 417              	.L32:
+ 418 053a C9       		leave
+ 419              	.LCFI2:
+GAS LISTING /tmp/ccIpkymc.s 			page 15
+
+
+ 420              		.cfi_def_cfa 7, 8
+ 421 053b C3       		ret
+ 422              		.cfi_endproc
+ 423              	.LFE0:
+ 425              		.section	.text.mbedtls_rsa_deduce_private_exponent,"ax",@progbits
+ 426              		.globl	mbedtls_rsa_deduce_private_exponent
+ 428              	mbedtls_rsa_deduce_private_exponent:
+ 429              	.LFB1:
+ 198:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 199:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** /*
+ 200:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  * Given P, Q and the public exponent E, deduce D.
+ 201:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  * This is essentially a modular inversion.
+ 202:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  */
+ 203:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** int mbedtls_rsa_deduce_private_exponent( mbedtls_mpi const *P,
+ 204:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                                          mbedtls_mpi const *Q,
+ 205:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                                          mbedtls_mpi const *E,
+ 206:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                                          mbedtls_mpi *D )
+ 207:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** {
+ 430              		.loc 1 207 1 is_stmt 1
+ 431              		.cfi_startproc
+ 432 0000 F30F1EFA 		endbr64
+ 433 0004 55       		pushq	%rbp
+ 434              	.LCFI3:
+ 435              		.cfi_def_cfa_offset 16
+ 436              		.cfi_offset 6, -16
+ 437 0005 4889E5   		movq	%rsp, %rbp
+ 438              	.LCFI4:
+ 439              		.cfi_def_cfa_register 6
+ 440 0008 4883EC70 		subq	$112, %rsp
+ 441 000c 48897DA8 		movq	%rdi, -88(%rbp)
+ 442 0010 488975A0 		movq	%rsi, -96(%rbp)
+ 443 0014 48895598 		movq	%rdx, -104(%rbp)
+ 444 0018 48894D90 		movq	%rcx, -112(%rbp)
+ 445              		.loc 1 207 1
+ 446 001c 64488B04 		movq	%fs:40, %rax
+ 446      25280000 
+ 446      00
+ 447 0025 488945F8 		movq	%rax, -8(%rbp)
+ 448 0029 31C0     		xorl	%eax, %eax
+ 208:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     int ret = 0;
+ 449              		.loc 1 208 9
+ 450 002b C745BC00 		movl	$0, -68(%rbp)
+ 450      000000
+ 209:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi K, L;
+ 210:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 211:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     if( D == NULL || mbedtls_mpi_cmp_int( D, 0 ) != 0 )
+ 451              		.loc 1 211 7
+ 452 0032 48837D90 		cmpq	$0, -112(%rbp)
+ 452      00
+ 453 0037 7415     		je	.L47
+ 454              		.loc 1 211 22 discriminator 1
+ 455 0039 488B4590 		movq	-112(%rbp), %rax
+ 456 003d BE000000 		movl	$0, %esi
+ 456      00
+ 457 0042 4889C7   		movq	%rax, %rdi
+ 458 0045 E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 458      00
+GAS LISTING /tmp/ccIpkymc.s 			page 16
+
+
+ 459              		.loc 1 211 19 discriminator 1
+ 460 004a 85C0     		testl	%eax, %eax
+ 461 004c 740A     		je	.L48
+ 462              	.L47:
+ 212:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         return( MBEDTLS_ERR_MPI_BAD_INPUT_DATA );
+ 463              		.loc 1 212 15
+ 464 004e B8FCFFFF 		movl	$-4, %eax
+ 464      FF
+ 465 0053 E9550100 		jmp	.L58
+ 465      00
+ 466              	.L48:
+ 213:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 214:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     if( mbedtls_mpi_cmp_int( P, 1 ) <= 0 ||
+ 467              		.loc 1 214 9
+ 468 0058 488B45A8 		movq	-88(%rbp), %rax
+ 469 005c BE010000 		movl	$1, %esi
+ 469      00
+ 470 0061 4889C7   		movq	%rax, %rdi
+ 471 0064 E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 471      00
+ 472              		.loc 1 214 7
+ 473 0069 85C0     		testl	%eax, %eax
+ 474 006b 7E2A     		jle	.L50
+ 215:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         mbedtls_mpi_cmp_int( Q, 1 ) <= 0 ||
+ 475              		.loc 1 215 9 discriminator 1
+ 476 006d 488B45A0 		movq	-96(%rbp), %rax
+ 477 0071 BE010000 		movl	$1, %esi
+ 477      00
+ 478 0076 4889C7   		movq	%rax, %rdi
+ 479 0079 E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 479      00
+ 214:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         mbedtls_mpi_cmp_int( Q, 1 ) <= 0 ||
+ 480              		.loc 1 214 42 discriminator 1
+ 481 007e 85C0     		testl	%eax, %eax
+ 482 0080 7E15     		jle	.L50
+ 216:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         mbedtls_mpi_cmp_int( E, 0 ) == 0 )
+ 483              		.loc 1 216 9
+ 484 0082 488B4598 		movq	-104(%rbp), %rax
+ 485 0086 BE000000 		movl	$0, %esi
+ 485      00
+ 486 008b 4889C7   		movq	%rax, %rdi
+ 487 008e E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 487      00
+ 215:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         mbedtls_mpi_cmp_int( Q, 1 ) <= 0 ||
+ 488              		.loc 1 215 42
+ 489 0093 85C0     		testl	%eax, %eax
+ 490 0095 750A     		jne	.L51
+ 491              	.L50:
+ 217:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     {
+ 218:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         return( MBEDTLS_ERR_MPI_BAD_INPUT_DATA );
+ 492              		.loc 1 218 15
+ 493 0097 B8FCFFFF 		movl	$-4, %eax
+ 493      FF
+ 494 009c E90C0100 		jmp	.L58
+ 494      00
+ 495              	.L51:
+ 219:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     }
+GAS LISTING /tmp/ccIpkymc.s 			page 17
+
+
+ 220:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 221:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi_init( &K );
+ 496              		.loc 1 221 5
+ 497 00a1 488D45C0 		leaq	-64(%rbp), %rax
+ 498 00a5 4889C7   		movq	%rax, %rdi
+ 499 00a8 E8000000 		call	mbedtls_mpi_init@PLT
+ 499      00
+ 222:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi_init( &L );
+ 500              		.loc 1 222 5
+ 501 00ad 488D45E0 		leaq	-32(%rbp), %rax
+ 502 00b1 4889C7   		movq	%rax, %rdi
+ 503 00b4 E8000000 		call	mbedtls_mpi_init@PLT
+ 503      00
+ 223:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 224:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     /* Temporarily put K := P-1 and L := Q-1 */
+ 225:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &K, P, 1 ) );
+ 504              		.loc 1 225 5
+ 505 00b9 488B4DA8 		movq	-88(%rbp), %rcx
+ 506 00bd 488D45C0 		leaq	-64(%rbp), %rax
+ 507 00c1 BA010000 		movl	$1, %edx
+ 507      00
+ 508 00c6 4889CE   		movq	%rcx, %rsi
+ 509 00c9 4889C7   		movq	%rax, %rdi
+ 510 00cc E8000000 		call	mbedtls_mpi_sub_int@PLT
+ 510      00
+ 511 00d1 8945BC   		movl	%eax, -68(%rbp)
+ 512 00d4 837DBC00 		cmpl	$0, -68(%rbp)
+ 513 00d8 0F85A700 		jne	.L60
+ 513      0000
+ 226:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &L, Q, 1 ) );
+ 514              		.loc 1 226 5
+ 515 00de 488B4DA0 		movq	-96(%rbp), %rcx
+ 516 00e2 488D45E0 		leaq	-32(%rbp), %rax
+ 517 00e6 BA010000 		movl	$1, %edx
+ 517      00
+ 518 00eb 4889CE   		movq	%rcx, %rsi
+ 519 00ee 4889C7   		movq	%rax, %rdi
+ 520 00f1 E8000000 		call	mbedtls_mpi_sub_int@PLT
+ 520      00
+ 521 00f6 8945BC   		movl	%eax, -68(%rbp)
+ 522 00f9 837DBC00 		cmpl	$0, -68(%rbp)
+ 523 00fd 0F858500 		jne	.L61
+ 523      0000
+ 227:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 228:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     /* Temporarily put D := gcd(P-1, Q-1) */
+ 229:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_gcd( D, &K, &L ) );
+ 524              		.loc 1 229 5
+ 525 0103 488D55E0 		leaq	-32(%rbp), %rdx
+ 526 0107 488D4DC0 		leaq	-64(%rbp), %rcx
+ 527 010b 488B4590 		movq	-112(%rbp), %rax
+ 528 010f 4889CE   		movq	%rcx, %rsi
+ 529 0112 4889C7   		movq	%rax, %rdi
+ 530 0115 E8000000 		call	mbedtls_mpi_gcd@PLT
+ 530      00
+ 531 011a 8945BC   		movl	%eax, -68(%rbp)
+ 532 011d 837DBC00 		cmpl	$0, -68(%rbp)
+ 533 0121 7568     		jne	.L62
+GAS LISTING /tmp/ccIpkymc.s 			page 18
+
+
+ 230:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 231:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     /* K := LCM(P-1, Q-1) */
+ 232:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( &K, &K, &L ) );
+ 534              		.loc 1 232 5
+ 535 0123 488D55E0 		leaq	-32(%rbp), %rdx
+ 536 0127 488D4DC0 		leaq	-64(%rbp), %rcx
+ 537 012b 488D45C0 		leaq	-64(%rbp), %rax
+ 538 012f 4889CE   		movq	%rcx, %rsi
+ 539 0132 4889C7   		movq	%rax, %rdi
+ 540 0135 E8000000 		call	mbedtls_mpi_mul_mpi@PLT
+ 540      00
+ 541 013a 8945BC   		movl	%eax, -68(%rbp)
+ 542 013d 837DBC00 		cmpl	$0, -68(%rbp)
+ 543 0141 754B     		jne	.L63
+ 233:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_div_mpi( &K, NULL, &K, D ) );
+ 544              		.loc 1 233 5
+ 545 0143 488B4D90 		movq	-112(%rbp), %rcx
+ 546 0147 488D55C0 		leaq	-64(%rbp), %rdx
+ 547 014b 488D45C0 		leaq	-64(%rbp), %rax
+ 548 014f BE000000 		movl	$0, %esi
+ 548      00
+ 549 0154 4889C7   		movq	%rax, %rdi
+ 550 0157 E8000000 		call	mbedtls_mpi_div_mpi@PLT
+ 550      00
+ 551 015c 8945BC   		movl	%eax, -68(%rbp)
+ 552 015f 837DBC00 		cmpl	$0, -68(%rbp)
+ 553 0163 752C     		jne	.L64
+ 234:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 235:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     /* Compute modular inverse of E in LCM(P-1, Q-1) */
+ 236:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_inv_mod( D, E, &K ) );
+ 554              		.loc 1 236 5
+ 555 0165 488D55C0 		leaq	-64(%rbp), %rdx
+ 556 0169 488B4D98 		movq	-104(%rbp), %rcx
+ 557 016d 488B4590 		movq	-112(%rbp), %rax
+ 558 0171 4889CE   		movq	%rcx, %rsi
+ 559 0174 4889C7   		movq	%rax, %rdi
+ 560 0177 E8000000 		call	mbedtls_mpi_inv_mod@PLT
+ 560      00
+ 561 017c 8945BC   		movl	%eax, -68(%rbp)
+ 562 017f 837DBC00 		cmpl	$0, -68(%rbp)
+ 237:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 238:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** cleanup:
+ 563              		.loc 1 238 1
+ 564 0183 EB0D     		jmp	.L53
+ 565              	.L60:
+ 225:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &L, Q, 1 ) );
+ 566              		.loc 1 225 5
+ 567 0185 90       		nop
+ 568 0186 EB0A     		jmp	.L53
+ 569              	.L61:
+ 226:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 570              		.loc 1 226 5
+ 571 0188 90       		nop
+ 572 0189 EB07     		jmp	.L53
+ 573              	.L62:
+ 229:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 574              		.loc 1 229 5
+GAS LISTING /tmp/ccIpkymc.s 			page 19
+
+
+ 575 018b 90       		nop
+ 576 018c EB04     		jmp	.L53
+ 577              	.L63:
+ 232:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_div_mpi( &K, NULL, &K, D ) );
+ 578              		.loc 1 232 5
+ 579 018e 90       		nop
+ 580 018f EB01     		jmp	.L53
+ 581              	.L64:
+ 233:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 582              		.loc 1 233 5
+ 583 0191 90       		nop
+ 584              	.L53:
+ 239:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 240:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi_free( &K );
+ 585              		.loc 1 240 5
+ 586 0192 488D45C0 		leaq	-64(%rbp), %rax
+ 587 0196 4889C7   		movq	%rax, %rdi
+ 588 0199 E8000000 		call	mbedtls_mpi_free@PLT
+ 588      00
+ 241:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi_free( &L );
+ 589              		.loc 1 241 5
+ 590 019e 488D45E0 		leaq	-32(%rbp), %rax
+ 591 01a2 4889C7   		movq	%rax, %rdi
+ 592 01a5 E8000000 		call	mbedtls_mpi_free@PLT
+ 592      00
+ 242:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 243:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     return( ret );
+ 593              		.loc 1 243 11
+ 594 01aa 8B45BC   		movl	-68(%rbp), %eax
+ 595              	.L58:
+ 244:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** }
+ 596              		.loc 1 244 1 discriminator 1
+ 597 01ad 488B75F8 		movq	-8(%rbp), %rsi
+ 598 01b1 64483334 		xorq	%fs:40, %rsi
+ 598      25280000 
+ 598      00
+ 599 01ba 7405     		je	.L59
+ 600              		.loc 1 244 1 is_stmt 0
+ 601 01bc E8000000 		call	__stack_chk_fail@PLT
+ 601      00
+ 602              	.L59:
+ 603 01c1 C9       		leave
+ 604              	.LCFI5:
+ 605              		.cfi_def_cfa 7, 8
+ 606 01c2 C3       		ret
+ 607              		.cfi_endproc
+ 608              	.LFE1:
+ 610              		.section	.text.mbedtls_rsa_validate_crt,"ax",@progbits
+ 611              		.globl	mbedtls_rsa_validate_crt
+ 613              	mbedtls_rsa_validate_crt:
+ 614              	.LFB2:
+ 245:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 246:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** /*
+ 247:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  * Check that RSA CRT parameters are in accordance with core parameters.
+ 248:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  */
+ 249:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** int mbedtls_rsa_validate_crt( const mbedtls_mpi *P,  const mbedtls_mpi *Q,
+ 250:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                               const mbedtls_mpi *D,  const mbedtls_mpi *DP,
+GAS LISTING /tmp/ccIpkymc.s 			page 20
+
+
+ 251:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                               const mbedtls_mpi *DQ, const mbedtls_mpi *QP )
+ 252:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** {
+ 615              		.loc 1 252 1 is_stmt 1
+ 616              		.cfi_startproc
+ 617 0000 F30F1EFA 		endbr64
+ 618 0004 55       		pushq	%rbp
+ 619              	.LCFI6:
+ 620              		.cfi_def_cfa_offset 16
+ 621              		.cfi_offset 6, -16
+ 622 0005 4889E5   		movq	%rsp, %rbp
+ 623              	.LCFI7:
+ 624              		.cfi_def_cfa_register 6
+ 625 0008 4883C480 		addq	$-128, %rsp
+ 626 000c 48897DA8 		movq	%rdi, -88(%rbp)
+ 627 0010 488975A0 		movq	%rsi, -96(%rbp)
+ 628 0014 48895598 		movq	%rdx, -104(%rbp)
+ 629 0018 48894D90 		movq	%rcx, -112(%rbp)
+ 630 001c 4C894588 		movq	%r8, -120(%rbp)
+ 631 0020 4C894D80 		movq	%r9, -128(%rbp)
+ 632              		.loc 1 252 1
+ 633 0024 64488B04 		movq	%fs:40, %rax
+ 633      25280000 
+ 633      00
+ 634 002d 488945F8 		movq	%rax, -8(%rbp)
+ 635 0031 31C0     		xorl	%eax, %eax
+ 253:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     int ret = 0;
+ 636              		.loc 1 253 9
+ 637 0033 C745BC00 		movl	$0, -68(%rbp)
+ 637      000000
+ 254:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 255:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi K, L;
+ 256:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi_init( &K );
+ 638              		.loc 1 256 5
+ 639 003a 488D45C0 		leaq	-64(%rbp), %rax
+ 640 003e 4889C7   		movq	%rax, %rdi
+ 641 0041 E8000000 		call	mbedtls_mpi_init@PLT
+ 641      00
+ 257:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi_init( &L );
+ 642              		.loc 1 257 5
+ 643 0046 488D45E0 		leaq	-32(%rbp), %rax
+ 644 004a 4889C7   		movq	%rax, %rdi
+ 645 004d E8000000 		call	mbedtls_mpi_init@PLT
+ 645      00
+ 258:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 259:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     /* Check that DP - D == 0 mod P - 1 */
+ 260:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     if( DP != NULL )
+ 646              		.loc 1 260 7
+ 647 0052 48837D90 		cmpq	$0, -112(%rbp)
+ 647      00
+ 648 0057 0F84A100 		je	.L66
+ 648      0000
+ 261:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     {
+ 262:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         if( P == NULL )
+ 649              		.loc 1 262 11
+ 650 005d 48837DA8 		cmpq	$0, -88(%rbp)
+ 650      00
+ 651 0062 750C     		jne	.L67
+GAS LISTING /tmp/ccIpkymc.s 			page 21
+
+
+ 263:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         {
+ 264:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             ret = MBEDTLS_ERR_RSA_BAD_INPUT_DATA;
+ 652              		.loc 1 264 17
+ 653 0064 C745BC80 		movl	$-16512, -68(%rbp)
+ 653      BFFFFF
+ 265:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             goto cleanup;
+ 654              		.loc 1 265 13
+ 655 006b E9FA0100 		jmp	.L68
+ 655      00
+ 656              	.L67:
+ 266:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         }
+ 267:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 268:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &K, P, 1 ) );
+ 657              		.loc 1 268 9
+ 658 0070 488B4DA8 		movq	-88(%rbp), %rcx
+ 659 0074 488D45C0 		leaq	-64(%rbp), %rax
+ 660 0078 BA010000 		movl	$1, %edx
+ 660      00
+ 661 007d 4889CE   		movq	%rcx, %rsi
+ 662 0080 4889C7   		movq	%rax, %rdi
+ 663 0083 E8000000 		call	mbedtls_mpi_sub_int@PLT
+ 663      00
+ 664 0088 8945BC   		movl	%eax, -68(%rbp)
+ 665 008b 837DBC00 		cmpl	$0, -68(%rbp)
+ 666 008f 0F85B901 		jne	.L85
+ 666      0000
+ 269:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_sub_mpi( &L, DP, D ) );
+ 667              		.loc 1 269 9
+ 668 0095 488B5598 		movq	-104(%rbp), %rdx
+ 669 0099 488B4D90 		movq	-112(%rbp), %rcx
+ 670 009d 488D45E0 		leaq	-32(%rbp), %rax
+ 671 00a1 4889CE   		movq	%rcx, %rsi
+ 672 00a4 4889C7   		movq	%rax, %rdi
+ 673 00a7 E8000000 		call	mbedtls_mpi_sub_mpi@PLT
+ 673      00
+ 674 00ac 8945BC   		movl	%eax, -68(%rbp)
+ 675 00af 837DBC00 		cmpl	$0, -68(%rbp)
+ 676 00b3 0F859801 		jne	.L86
+ 676      0000
+ 270:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( &L, &L, &K ) );
+ 677              		.loc 1 270 9
+ 678 00b9 488D55C0 		leaq	-64(%rbp), %rdx
+ 679 00bd 488D4DE0 		leaq	-32(%rbp), %rcx
+ 680 00c1 488D45E0 		leaq	-32(%rbp), %rax
+ 681 00c5 4889CE   		movq	%rcx, %rsi
+ 682 00c8 4889C7   		movq	%rax, %rdi
+ 683 00cb E8000000 		call	mbedtls_mpi_mod_mpi@PLT
+ 683      00
+ 684 00d0 8945BC   		movl	%eax, -68(%rbp)
+ 685 00d3 837DBC00 		cmpl	$0, -68(%rbp)
+ 686 00d7 0F857701 		jne	.L87
+ 686      0000
+ 271:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 272:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         if( mbedtls_mpi_cmp_int( &L, 0 ) != 0 )
+ 687              		.loc 1 272 13
+ 688 00dd 488D45E0 		leaq	-32(%rbp), %rax
+ 689 00e1 BE000000 		movl	$0, %esi
+GAS LISTING /tmp/ccIpkymc.s 			page 22
+
+
+ 689      00
+ 690 00e6 4889C7   		movq	%rax, %rdi
+ 691 00e9 E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 691      00
+ 692              		.loc 1 272 11
+ 693 00ee 85C0     		testl	%eax, %eax
+ 694 00f0 740C     		je	.L66
+ 273:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         {
+ 274:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             ret = MBEDTLS_ERR_RSA_KEY_CHECK_FAILED;
+ 695              		.loc 1 274 17
+ 696 00f2 C745BC00 		movl	$-16896, -68(%rbp)
+ 696      BEFFFF
+ 275:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             goto cleanup;
+ 697              		.loc 1 275 13
+ 698 00f9 E96C0100 		jmp	.L68
+ 698      00
+ 699              	.L66:
+ 276:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         }
+ 277:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     }
+ 278:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 279:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     /* Check that DQ - D == 0 mod Q - 1 */
+ 280:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     if( DQ != NULL )
+ 700              		.loc 1 280 7
+ 701 00fe 48837D88 		cmpq	$0, -120(%rbp)
+ 701      00
+ 702 0103 0F84A100 		je	.L72
+ 702      0000
+ 281:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     {
+ 282:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         if( Q == NULL )
+ 703              		.loc 1 282 11
+ 704 0109 48837DA0 		cmpq	$0, -96(%rbp)
+ 704      00
+ 705 010e 750C     		jne	.L73
+ 283:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         {
+ 284:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             ret = MBEDTLS_ERR_RSA_BAD_INPUT_DATA;
+ 706              		.loc 1 284 17
+ 707 0110 C745BC80 		movl	$-16512, -68(%rbp)
+ 707      BFFFFF
+ 285:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             goto cleanup;
+ 708              		.loc 1 285 13
+ 709 0117 E94E0100 		jmp	.L68
+ 709      00
+ 710              	.L73:
+ 286:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         }
+ 287:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 288:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &K, Q, 1 ) );
+ 711              		.loc 1 288 9
+ 712 011c 488B4DA0 		movq	-96(%rbp), %rcx
+ 713 0120 488D45C0 		leaq	-64(%rbp), %rax
+ 714 0124 BA010000 		movl	$1, %edx
+ 714      00
+ 715 0129 4889CE   		movq	%rcx, %rsi
+ 716 012c 4889C7   		movq	%rax, %rdi
+ 717 012f E8000000 		call	mbedtls_mpi_sub_int@PLT
+ 717      00
+ 718 0134 8945BC   		movl	%eax, -68(%rbp)
+ 719 0137 837DBC00 		cmpl	$0, -68(%rbp)
+GAS LISTING /tmp/ccIpkymc.s 			page 23
+
+
+ 720 013b 0F851601 		jne	.L88
+ 720      0000
+ 289:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_sub_mpi( &L, DQ, D ) );
+ 721              		.loc 1 289 9
+ 722 0141 488B5598 		movq	-104(%rbp), %rdx
+ 723 0145 488B4D88 		movq	-120(%rbp), %rcx
+ 724 0149 488D45E0 		leaq	-32(%rbp), %rax
+ 725 014d 4889CE   		movq	%rcx, %rsi
+ 726 0150 4889C7   		movq	%rax, %rdi
+ 727 0153 E8000000 		call	mbedtls_mpi_sub_mpi@PLT
+ 727      00
+ 728 0158 8945BC   		movl	%eax, -68(%rbp)
+ 729 015b 837DBC00 		cmpl	$0, -68(%rbp)
+ 730 015f 0F85F500 		jne	.L89
+ 730      0000
+ 290:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( &L, &L, &K ) );
+ 731              		.loc 1 290 9
+ 732 0165 488D55C0 		leaq	-64(%rbp), %rdx
+ 733 0169 488D4DE0 		leaq	-32(%rbp), %rcx
+ 734 016d 488D45E0 		leaq	-32(%rbp), %rax
+ 735 0171 4889CE   		movq	%rcx, %rsi
+ 736 0174 4889C7   		movq	%rax, %rdi
+ 737 0177 E8000000 		call	mbedtls_mpi_mod_mpi@PLT
+ 737      00
+ 738 017c 8945BC   		movl	%eax, -68(%rbp)
+ 739 017f 837DBC00 		cmpl	$0, -68(%rbp)
+ 740 0183 0F85D400 		jne	.L90
+ 740      0000
+ 291:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 292:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         if( mbedtls_mpi_cmp_int( &L, 0 ) != 0 )
+ 741              		.loc 1 292 13
+ 742 0189 488D45E0 		leaq	-32(%rbp), %rax
+ 743 018d BE000000 		movl	$0, %esi
+ 743      00
+ 744 0192 4889C7   		movq	%rax, %rdi
+ 745 0195 E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 745      00
+ 746              		.loc 1 292 11
+ 747 019a 85C0     		testl	%eax, %eax
+ 748 019c 740C     		je	.L72
+ 293:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         {
+ 294:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             ret = MBEDTLS_ERR_RSA_KEY_CHECK_FAILED;
+ 749              		.loc 1 294 17
+ 750 019e C745BC00 		movl	$-16896, -68(%rbp)
+ 750      BEFFFF
+ 295:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             goto cleanup;
+ 751              		.loc 1 295 13
+ 752 01a5 E9C00000 		jmp	.L68
+ 752      00
+ 753              	.L72:
+ 296:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         }
+ 297:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     }
+ 298:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 299:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     /* Check that QP * Q - 1 == 0 mod P */
+ 300:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     if( QP != NULL )
+ 754              		.loc 1 300 7
+ 755 01aa 48837D80 		cmpq	$0, -128(%rbp)
+GAS LISTING /tmp/ccIpkymc.s 			page 24
+
+
+ 755      00
+ 756 01af 0F84AB00 		je	.L91
+ 756      0000
+ 301:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     {
+ 302:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         if( P == NULL || Q == NULL )
+ 757              		.loc 1 302 11
+ 758 01b5 48837DA8 		cmpq	$0, -88(%rbp)
+ 758      00
+ 759 01ba 7407     		je	.L77
+ 760              		.loc 1 302 23 discriminator 1
+ 761 01bc 48837DA0 		cmpq	$0, -96(%rbp)
+ 761      00
+ 762 01c1 750C     		jne	.L78
+ 763              	.L77:
+ 303:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         {
+ 304:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             ret = MBEDTLS_ERR_RSA_BAD_INPUT_DATA;
+ 764              		.loc 1 304 17
+ 765 01c3 C745BC80 		movl	$-16512, -68(%rbp)
+ 765      BFFFFF
+ 305:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             goto cleanup;
+ 766              		.loc 1 305 13
+ 767 01ca E99B0000 		jmp	.L68
+ 767      00
+ 768              	.L78:
+ 306:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         }
+ 307:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 308:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( &K, QP, Q ) );
+ 769              		.loc 1 308 9
+ 770 01cf 488B55A0 		movq	-96(%rbp), %rdx
+ 771 01d3 488B4D80 		movq	-128(%rbp), %rcx
+ 772 01d7 488D45C0 		leaq	-64(%rbp), %rax
+ 773 01db 4889CE   		movq	%rcx, %rsi
+ 774 01de 4889C7   		movq	%rax, %rdi
+ 775 01e1 E8000000 		call	mbedtls_mpi_mul_mpi@PLT
+ 775      00
+ 776 01e6 8945BC   		movl	%eax, -68(%rbp)
+ 777 01e9 837DBC00 		cmpl	$0, -68(%rbp)
+ 778 01ed 7574     		jne	.L92
+ 309:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &K, &K, 1 ) );
+ 779              		.loc 1 309 9
+ 780 01ef 488D4DC0 		leaq	-64(%rbp), %rcx
+ 781 01f3 488D45C0 		leaq	-64(%rbp), %rax
+ 782 01f7 BA010000 		movl	$1, %edx
+ 782      00
+ 783 01fc 4889CE   		movq	%rcx, %rsi
+ 784 01ff 4889C7   		movq	%rax, %rdi
+ 785 0202 E8000000 		call	mbedtls_mpi_sub_int@PLT
+ 785      00
+ 786 0207 8945BC   		movl	%eax, -68(%rbp)
+ 787 020a 837DBC00 		cmpl	$0, -68(%rbp)
+ 788 020e 7556     		jne	.L93
+ 310:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( &K, &K, P ) );
+ 789              		.loc 1 310 9
+ 790 0210 488B55A8 		movq	-88(%rbp), %rdx
+ 791 0214 488D4DC0 		leaq	-64(%rbp), %rcx
+ 792 0218 488D45C0 		leaq	-64(%rbp), %rax
+ 793 021c 4889CE   		movq	%rcx, %rsi
+GAS LISTING /tmp/ccIpkymc.s 			page 25
+
+
+ 794 021f 4889C7   		movq	%rax, %rdi
+ 795 0222 E8000000 		call	mbedtls_mpi_mod_mpi@PLT
+ 795      00
+ 796 0227 8945BC   		movl	%eax, -68(%rbp)
+ 797 022a 837DBC00 		cmpl	$0, -68(%rbp)
+ 798 022e 7539     		jne	.L94
+ 311:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         if( mbedtls_mpi_cmp_int( &K, 0 ) != 0 )
+ 799              		.loc 1 311 13
+ 800 0230 488D45C0 		leaq	-64(%rbp), %rax
+ 801 0234 BE000000 		movl	$0, %esi
+ 801      00
+ 802 0239 4889C7   		movq	%rax, %rdi
+ 803 023c E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 803      00
+ 804              		.loc 1 311 11
+ 805 0241 85C0     		testl	%eax, %eax
+ 806 0243 741B     		je	.L91
+ 312:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         {
+ 313:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             ret = MBEDTLS_ERR_RSA_KEY_CHECK_FAILED;
+ 807              		.loc 1 313 17
+ 808 0245 C745BC00 		movl	$-16896, -68(%rbp)
+ 808      BEFFFF
+ 314:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             goto cleanup;
+ 809              		.loc 1 314 13
+ 810 024c EB1C     		jmp	.L68
+ 811              	.L85:
+ 268:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_sub_mpi( &L, DP, D ) );
+ 812              		.loc 1 268 9
+ 813 024e 90       		nop
+ 814 024f EB19     		jmp	.L68
+ 815              	.L86:
+ 269:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( &L, &L, &K ) );
+ 816              		.loc 1 269 9
+ 817 0251 90       		nop
+ 818 0252 EB16     		jmp	.L68
+ 819              	.L87:
+ 270:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 820              		.loc 1 270 9
+ 821 0254 90       		nop
+ 822 0255 EB13     		jmp	.L68
+ 823              	.L88:
+ 288:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_sub_mpi( &L, DQ, D ) );
+ 824              		.loc 1 288 9
+ 825 0257 90       		nop
+ 826 0258 EB10     		jmp	.L68
+ 827              	.L89:
+ 289:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( &L, &L, &K ) );
+ 828              		.loc 1 289 9
+ 829 025a 90       		nop
+ 830 025b EB0D     		jmp	.L68
+ 831              	.L90:
+ 290:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 832              		.loc 1 290 9
+ 833 025d 90       		nop
+ 834 025e EB0A     		jmp	.L68
+ 835              	.L91:
+ 315:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         }
+GAS LISTING /tmp/ccIpkymc.s 			page 26
+
+
+ 316:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     }
+ 317:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 318:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** cleanup:
+ 836              		.loc 1 318 1
+ 837 0260 90       		nop
+ 838 0261 EB07     		jmp	.L68
+ 839              	.L92:
+ 308:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &K, &K, 1 ) );
+ 840              		.loc 1 308 9
+ 841 0263 90       		nop
+ 842 0264 EB04     		jmp	.L68
+ 843              	.L93:
+ 309:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( &K, &K, P ) );
+ 844              		.loc 1 309 9
+ 845 0266 90       		nop
+ 846 0267 EB01     		jmp	.L68
+ 847              	.L94:
+ 310:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         if( mbedtls_mpi_cmp_int( &K, 0 ) != 0 )
+ 848              		.loc 1 310 9
+ 849 0269 90       		nop
+ 850              	.L68:
+ 319:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 320:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     /* Wrap MPI error codes by RSA check failure error code */
+ 321:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     if( ret != 0 &&
+ 851              		.loc 1 321 7
+ 852 026a 837DBC00 		cmpl	$0, -68(%rbp)
+ 853 026e 7419     		je	.L82
+ 854              		.loc 1 321 18 discriminator 1
+ 855 0270 817DBC00 		cmpl	$-16896, -68(%rbp)
+ 855      BEFFFF
+ 856 0277 7410     		je	.L82
+ 322:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         ret != MBEDTLS_ERR_RSA_KEY_CHECK_FAILED &&
+ 857              		.loc 1 322 49
+ 858 0279 817DBC80 		cmpl	$-16512, -68(%rbp)
+ 858      BFFFFF
+ 859 0280 7407     		je	.L82
+ 323:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         ret != MBEDTLS_ERR_RSA_BAD_INPUT_DATA )
+ 324:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     {
+ 325:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         ret += MBEDTLS_ERR_RSA_KEY_CHECK_FAILED;
+ 860              		.loc 1 325 13
+ 861 0282 816DBC00 		subl	$16896, -68(%rbp)
+ 861      420000
+ 862              	.L82:
+ 326:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     }
+ 327:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 328:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi_free( &K );
+ 863              		.loc 1 328 5
+ 864 0289 488D45C0 		leaq	-64(%rbp), %rax
+ 865 028d 4889C7   		movq	%rax, %rdi
+ 866 0290 E8000000 		call	mbedtls_mpi_free@PLT
+ 866      00
+ 329:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi_free( &L );
+ 867              		.loc 1 329 5
+ 868 0295 488D45E0 		leaq	-32(%rbp), %rax
+ 869 0299 4889C7   		movq	%rax, %rdi
+ 870 029c E8000000 		call	mbedtls_mpi_free@PLT
+ 870      00
+GAS LISTING /tmp/ccIpkymc.s 			page 27
+
+
+ 330:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 331:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     return( ret );
+ 871              		.loc 1 331 11
+ 872 02a1 8B45BC   		movl	-68(%rbp), %eax
+ 332:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** }
+ 873              		.loc 1 332 1
+ 874 02a4 488B75F8 		movq	-8(%rbp), %rsi
+ 875 02a8 64483334 		xorq	%fs:40, %rsi
+ 875      25280000 
+ 875      00
+ 876 02b1 7405     		je	.L84
+ 877 02b3 E8000000 		call	__stack_chk_fail@PLT
+ 877      00
+ 878              	.L84:
+ 879 02b8 C9       		leave
+ 880              	.LCFI8:
+ 881              		.cfi_def_cfa 7, 8
+ 882 02b9 C3       		ret
+ 883              		.cfi_endproc
+ 884              	.LFE2:
+ 886              		.section	.text.mbedtls_rsa_validate_params,"ax",@progbits
+ 887              		.globl	mbedtls_rsa_validate_params
+ 889              	mbedtls_rsa_validate_params:
+ 890              	.LFB3:
+ 333:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 334:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** /*
+ 335:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  * Check that core RSA parameters are sane.
+ 336:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****  */
+ 337:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** int mbedtls_rsa_validate_params( const mbedtls_mpi *N, const mbedtls_mpi *P,
+ 338:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                                  const mbedtls_mpi *Q, const mbedtls_mpi *D,
+ 339:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                                  const mbedtls_mpi *E,
+ 340:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                                  int (*f_rng)(void *, unsigned char *, size_t),
+ 341:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                                  void *p_rng )
+ 342:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** {
+ 891              		.loc 1 342 1
+ 892              		.cfi_startproc
+ 893 0000 F30F1EFA 		endbr64
+ 894 0004 55       		pushq	%rbp
+ 895              	.LCFI9:
+ 896              		.cfi_def_cfa_offset 16
+ 897              		.cfi_offset 6, -16
+ 898 0005 4889E5   		movq	%rsp, %rbp
+ 899              	.LCFI10:
+ 900              		.cfi_def_cfa_register 6
+ 901 0008 4881EC90 		subq	$144, %rsp
+ 901      000000
+ 902 000f 48897DA8 		movq	%rdi, -88(%rbp)
+ 903 0013 488975A0 		movq	%rsi, -96(%rbp)
+ 904 0017 48895598 		movq	%rdx, -104(%rbp)
+ 905 001b 48894D90 		movq	%rcx, -112(%rbp)
+ 906 001f 4C894588 		movq	%r8, -120(%rbp)
+ 907 0023 4C894D80 		movq	%r9, -128(%rbp)
+ 908 0027 488B4510 		movq	16(%rbp), %rax
+ 909 002b 48898578 		movq	%rax, -136(%rbp)
+ 909      FFFFFF
+ 910              		.loc 1 342 1
+ 911 0032 64488B04 		movq	%fs:40, %rax
+GAS LISTING /tmp/ccIpkymc.s 			page 28
+
+
+ 911      25280000 
+ 911      00
+ 912 003b 488945F8 		movq	%rax, -8(%rbp)
+ 913 003f 31C0     		xorl	%eax, %eax
+ 343:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     int ret = 0;
+ 914              		.loc 1 343 9
+ 915 0041 C745BC00 		movl	$0, -68(%rbp)
+ 915      000000
+ 344:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi K, L;
+ 345:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 346:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi_init( &K );
+ 916              		.loc 1 346 5
+ 917 0048 488D45C0 		leaq	-64(%rbp), %rax
+ 918 004c 4889C7   		movq	%rax, %rdi
+ 919 004f E8000000 		call	mbedtls_mpi_init@PLT
+ 919      00
+ 347:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi_init( &L );
+ 920              		.loc 1 347 5
+ 921 0054 488D45E0 		leaq	-32(%rbp), %rax
+ 922 0058 4889C7   		movq	%rax, %rdi
+ 923 005b E8000000 		call	mbedtls_mpi_init@PLT
+ 923      00
+ 348:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 349:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     /*
+ 350:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****      * Step 1: If PRNG provided, check that P and Q are prime
+ 351:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****      */
+ 352:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 353:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** #if defined(MBEDTLS_GENPRIME)
+ 354:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     /*
+ 355:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****      * When generating keys, the strongest security we support aims for an error
+ 356:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****      * rate of at most 2^-100 and we are aiming for the same certainty here as
+ 357:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****      * well.
+ 358:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****      */
+ 359:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     if( f_rng != NULL && P != NULL &&
+ 360:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         ( ret = mbedtls_mpi_is_prime_ext( P, 50, f_rng, p_rng ) ) != 0 )
+ 361:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     {
+ 362:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         ret = MBEDTLS_ERR_RSA_KEY_CHECK_FAILED;
+ 363:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         goto cleanup;
+ 364:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     }
+ 365:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 366:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     if( f_rng != NULL && Q != NULL &&
+ 367:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         ( ret = mbedtls_mpi_is_prime_ext( Q, 50, f_rng, p_rng ) ) != 0 )
+ 368:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     {
+ 369:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         ret = MBEDTLS_ERR_RSA_KEY_CHECK_FAILED;
+ 370:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         goto cleanup;
+ 371:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     }
+ 372:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** #else
+ 373:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     ((void) f_rng);
+ 374:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     ((void) p_rng);
+ 375:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** #endif /* MBEDTLS_GENPRIME */
+ 376:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 377:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     /*
+ 378:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****      * Step 2: Check that 1 < N = P * Q
+ 379:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****      */
+ 380:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 381:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     if( P != NULL && Q != NULL && N != NULL )
+ 924              		.loc 1 381 7
+GAS LISTING /tmp/ccIpkymc.s 			page 29
+
+
+ 925 0060 48837DA0 		cmpq	$0, -96(%rbp)
+ 925      00
+ 926 0065 746A     		je	.L96
+ 927              		.loc 1 381 19 discriminator 1
+ 928 0067 48837D98 		cmpq	$0, -104(%rbp)
+ 928      00
+ 929 006c 7463     		je	.L96
+ 930              		.loc 1 381 32 discriminator 2
+ 931 006e 48837DA8 		cmpq	$0, -88(%rbp)
+ 931      00
+ 932 0073 745C     		je	.L96
+ 382:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     {
+ 383:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( &K, P, Q ) );
+ 933              		.loc 1 383 9
+ 934 0075 488B5598 		movq	-104(%rbp), %rdx
+ 935 0079 488B4DA0 		movq	-96(%rbp), %rcx
+ 936 007d 488D45C0 		leaq	-64(%rbp), %rax
+ 937 0081 4889CE   		movq	%rcx, %rsi
+ 938 0084 4889C7   		movq	%rax, %rdi
+ 939 0087 E8000000 		call	mbedtls_mpi_mul_mpi@PLT
+ 939      00
+ 940 008c 8945BC   		movl	%eax, -68(%rbp)
+ 941 008f 837DBC00 		cmpl	$0, -68(%rbp)
+ 942 0093 0F856A02 		jne	.L116
+ 942      0000
+ 384:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         if( mbedtls_mpi_cmp_int( N, 1 )  <= 0 ||
+ 943              		.loc 1 384 13
+ 944 0099 488B45A8 		movq	-88(%rbp), %rax
+ 945 009d BE010000 		movl	$1, %esi
+ 945      00
+ 946 00a2 4889C7   		movq	%rax, %rdi
+ 947 00a5 E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 947      00
+ 948              		.loc 1 384 11
+ 949 00aa 85C0     		testl	%eax, %eax
+ 950 00ac 7E17     		jle	.L99
+ 385:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             mbedtls_mpi_cmp_mpi( &K, N ) != 0 )
+ 951              		.loc 1 385 13 discriminator 1
+ 952 00ae 488B55A8 		movq	-88(%rbp), %rdx
+ 953 00b2 488D45C0 		leaq	-64(%rbp), %rax
+ 954 00b6 4889D6   		movq	%rdx, %rsi
+ 955 00b9 4889C7   		movq	%rax, %rdi
+ 956 00bc E8000000 		call	mbedtls_mpi_cmp_mpi@PLT
+ 956      00
+ 384:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         if( mbedtls_mpi_cmp_int( N, 1 )  <= 0 ||
+ 957              		.loc 1 384 47 discriminator 1
+ 958 00c1 85C0     		testl	%eax, %eax
+ 959 00c3 740C     		je	.L96
+ 960              	.L99:
+ 386:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         {
+ 387:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             ret = MBEDTLS_ERR_RSA_KEY_CHECK_FAILED;
+ 961              		.loc 1 387 17
+ 962 00c5 C745BC00 		movl	$-16896, -68(%rbp)
+ 962      BEFFFF
+ 388:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             goto cleanup;
+ 963              		.loc 1 388 13
+ 964 00cc E94E0200 		jmp	.L98
+GAS LISTING /tmp/ccIpkymc.s 			page 30
+
+
+ 964      00
+ 965              	.L96:
+ 389:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         }
+ 390:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     }
+ 391:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 392:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     /*
+ 393:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****      * Step 3: Check and 1 < D, E < N if present.
+ 394:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****      */
+ 395:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 396:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     if( N != NULL && D != NULL && E != NULL )
+ 966              		.loc 1 396 7
+ 967 00d1 48837DA8 		cmpq	$0, -88(%rbp)
+ 967      00
+ 968 00d6 7472     		je	.L100
+ 969              		.loc 1 396 19 discriminator 1
+ 970 00d8 48837D90 		cmpq	$0, -112(%rbp)
+ 970      00
+ 971 00dd 746B     		je	.L100
+ 972              		.loc 1 396 32 discriminator 2
+ 973 00df 48837D88 		cmpq	$0, -120(%rbp)
+ 973      00
+ 974 00e4 7464     		je	.L100
+ 397:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     {
+ 398:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         if ( mbedtls_mpi_cmp_int( D, 1 ) <= 0 ||
+ 975              		.loc 1 398 14
+ 976 00e6 488B4590 		movq	-112(%rbp), %rax
+ 977 00ea BE010000 		movl	$1, %esi
+ 977      00
+ 978 00ef 4889C7   		movq	%rax, %rdi
+ 979 00f2 E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 979      00
+ 980              		.loc 1 398 12
+ 981 00f7 85C0     		testl	%eax, %eax
+ 982 00f9 7E43     		jle	.L101
+ 399:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****              mbedtls_mpi_cmp_int( E, 1 ) <= 0 ||
+ 983              		.loc 1 399 14 discriminator 1
+ 984 00fb 488B4588 		movq	-120(%rbp), %rax
+ 985 00ff BE010000 		movl	$1, %esi
+ 985      00
+ 986 0104 4889C7   		movq	%rax, %rdi
+ 987 0107 E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 987      00
+ 398:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****              mbedtls_mpi_cmp_int( E, 1 ) <= 0 ||
+ 988              		.loc 1 398 47 discriminator 1
+ 989 010c 85C0     		testl	%eax, %eax
+ 990 010e 7E2E     		jle	.L101
+ 400:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****              mbedtls_mpi_cmp_mpi( D, N ) >= 0 ||
+ 991              		.loc 1 400 14
+ 992 0110 488B55A8 		movq	-88(%rbp), %rdx
+ 993 0114 488B4590 		movq	-112(%rbp), %rax
+ 994 0118 4889D6   		movq	%rdx, %rsi
+ 995 011b 4889C7   		movq	%rax, %rdi
+ 996 011e E8000000 		call	mbedtls_mpi_cmp_mpi@PLT
+ 996      00
+ 399:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****              mbedtls_mpi_cmp_int( E, 1 ) <= 0 ||
+ 997              		.loc 1 399 47
+ 998 0123 85C0     		testl	%eax, %eax
+GAS LISTING /tmp/ccIpkymc.s 			page 31
+
+
+ 999 0125 7917     		jns	.L101
+ 401:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****              mbedtls_mpi_cmp_mpi( E, N ) >= 0 )
+ 1000              		.loc 1 401 14
+ 1001 0127 488B55A8 		movq	-88(%rbp), %rdx
+ 1002 012b 488B4588 		movq	-120(%rbp), %rax
+ 1003 012f 4889D6   		movq	%rdx, %rsi
+ 1004 0132 4889C7   		movq	%rax, %rdi
+ 1005 0135 E8000000 		call	mbedtls_mpi_cmp_mpi@PLT
+ 1005      00
+ 400:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****              mbedtls_mpi_cmp_mpi( D, N ) >= 0 ||
+ 1006              		.loc 1 400 47
+ 1007 013a 85C0     		testl	%eax, %eax
+ 1008 013c 780C     		js	.L100
+ 1009              	.L101:
+ 402:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         {
+ 403:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             ret = MBEDTLS_ERR_RSA_KEY_CHECK_FAILED;
+ 1010              		.loc 1 403 17
+ 1011 013e C745BC00 		movl	$-16896, -68(%rbp)
+ 1011      BEFFFF
+ 404:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             goto cleanup;
+ 1012              		.loc 1 404 13
+ 1013 0145 E9D50100 		jmp	.L98
+ 1013      00
+ 1014              	.L100:
+ 405:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         }
+ 406:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     }
+ 407:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 408:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     /*
+ 409:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****      * Step 4: Check that D, E are inverse modulo P-1 and Q-1
+ 410:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****      */
+ 411:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 412:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     if( P != NULL && Q != NULL && D != NULL && E != NULL )
+ 1015              		.loc 1 412 7
+ 1016 014a 48837DA0 		cmpq	$0, -96(%rbp)
+ 1016      00
+ 1017 014f 0F84B101 		je	.L117
+ 1017      0000
+ 1018              		.loc 1 412 19 discriminator 1
+ 1019 0155 48837D98 		cmpq	$0, -104(%rbp)
+ 1019      00
+ 1020 015a 0F84A601 		je	.L117
+ 1020      0000
+ 1021              		.loc 1 412 32 discriminator 2
+ 1022 0160 48837D90 		cmpq	$0, -112(%rbp)
+ 1022      00
+ 1023 0165 0F849B01 		je	.L117
+ 1023      0000
+ 1024              		.loc 1 412 45 discriminator 3
+ 1025 016b 48837D88 		cmpq	$0, -120(%rbp)
+ 1025      00
+ 1026 0170 0F849001 		je	.L117
+ 1026      0000
+ 413:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     {
+ 414:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         if( mbedtls_mpi_cmp_int( P, 1 ) <= 0 ||
+ 1027              		.loc 1 414 13
+ 1028 0176 488B45A0 		movq	-96(%rbp), %rax
+ 1029 017a BE010000 		movl	$1, %esi
+GAS LISTING /tmp/ccIpkymc.s 			page 32
+
+
+ 1029      00
+ 1030 017f 4889C7   		movq	%rax, %rdi
+ 1031 0182 E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 1031      00
+ 1032              		.loc 1 414 11
+ 1033 0187 85C0     		testl	%eax, %eax
+ 1034 0189 7E15     		jle	.L102
+ 415:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             mbedtls_mpi_cmp_int( Q, 1 ) <= 0 )
+ 1035              		.loc 1 415 13 discriminator 1
+ 1036 018b 488B4598 		movq	-104(%rbp), %rax
+ 1037 018f BE010000 		movl	$1, %esi
+ 1037      00
+ 1038 0194 4889C7   		movq	%rax, %rdi
+ 1039 0197 E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 1039      00
+ 414:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             mbedtls_mpi_cmp_int( Q, 1 ) <= 0 )
+ 1040              		.loc 1 414 46 discriminator 1
+ 1041 019c 85C0     		testl	%eax, %eax
+ 1042 019e 7F0C     		jg	.L103
+ 1043              	.L102:
+ 416:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         {
+ 417:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             ret = MBEDTLS_ERR_RSA_KEY_CHECK_FAILED;
+ 1044              		.loc 1 417 17
+ 1045 01a0 C745BC00 		movl	$-16896, -68(%rbp)
+ 1045      BEFFFF
+ 418:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             goto cleanup;
+ 1046              		.loc 1 418 13
+ 1047 01a7 E9730100 		jmp	.L98
+ 1047      00
+ 1048              	.L103:
+ 419:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         }
+ 420:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 421:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         /* Compute DE-1 mod P-1 */
+ 422:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( &K, D, E ) );
+ 1049              		.loc 1 422 9
+ 1050 01ac 488B5588 		movq	-120(%rbp), %rdx
+ 1051 01b0 488B4D90 		movq	-112(%rbp), %rcx
+ 1052 01b4 488D45C0 		leaq	-64(%rbp), %rax
+ 1053 01b8 4889CE   		movq	%rcx, %rsi
+ 1054 01bb 4889C7   		movq	%rax, %rdi
+ 1055 01be E8000000 		call	mbedtls_mpi_mul_mpi@PLT
+ 1055      00
+ 1056 01c3 8945BC   		movl	%eax, -68(%rbp)
+ 1057 01c6 837DBC00 		cmpl	$0, -68(%rbp)
+ 1058 01ca 0F853901 		jne	.L118
+ 1058      0000
+ 423:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &K, &K, 1 ) );
+ 1059              		.loc 1 423 9
+ 1060 01d0 488D4DC0 		leaq	-64(%rbp), %rcx
+ 1061 01d4 488D45C0 		leaq	-64(%rbp), %rax
+ 1062 01d8 BA010000 		movl	$1, %edx
+ 1062      00
+ 1063 01dd 4889CE   		movq	%rcx, %rsi
+ 1064 01e0 4889C7   		movq	%rax, %rdi
+ 1065 01e3 E8000000 		call	mbedtls_mpi_sub_int@PLT
+ 1065      00
+ 1066 01e8 8945BC   		movl	%eax, -68(%rbp)
+GAS LISTING /tmp/ccIpkymc.s 			page 33
+
+
+ 1067 01eb 837DBC00 		cmpl	$0, -68(%rbp)
+ 1068 01ef 0F851701 		jne	.L119
+ 1068      0000
+ 424:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &L, P, 1 ) );
+ 1069              		.loc 1 424 9
+ 1070 01f5 488B4DA0 		movq	-96(%rbp), %rcx
+ 1071 01f9 488D45E0 		leaq	-32(%rbp), %rax
+ 1072 01fd BA010000 		movl	$1, %edx
+ 1072      00
+ 1073 0202 4889CE   		movq	%rcx, %rsi
+ 1074 0205 4889C7   		movq	%rax, %rdi
+ 1075 0208 E8000000 		call	mbedtls_mpi_sub_int@PLT
+ 1075      00
+ 1076 020d 8945BC   		movl	%eax, -68(%rbp)
+ 1077 0210 837DBC00 		cmpl	$0, -68(%rbp)
+ 1078 0214 0F85F500 		jne	.L120
+ 1078      0000
+ 425:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( &K, &K, &L ) );
+ 1079              		.loc 1 425 9
+ 1080 021a 488D55E0 		leaq	-32(%rbp), %rdx
+ 1081 021e 488D4DC0 		leaq	-64(%rbp), %rcx
+ 1082 0222 488D45C0 		leaq	-64(%rbp), %rax
+ 1083 0226 4889CE   		movq	%rcx, %rsi
+ 1084 0229 4889C7   		movq	%rax, %rdi
+ 1085 022c E8000000 		call	mbedtls_mpi_mod_mpi@PLT
+ 1085      00
+ 1086 0231 8945BC   		movl	%eax, -68(%rbp)
+ 1087 0234 837DBC00 		cmpl	$0, -68(%rbp)
+ 1088 0238 0F85D400 		jne	.L121
+ 1088      0000
+ 426:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         if( mbedtls_mpi_cmp_int( &K, 0 ) != 0 )
+ 1089              		.loc 1 426 13
+ 1090 023e 488D45C0 		leaq	-64(%rbp), %rax
+ 1091 0242 BE000000 		movl	$0, %esi
+ 1091      00
+ 1092 0247 4889C7   		movq	%rax, %rdi
+ 1093 024a E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 1093      00
+ 1094              		.loc 1 426 11
+ 1095 024f 85C0     		testl	%eax, %eax
+ 1096 0251 740C     		je	.L108
+ 427:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         {
+ 428:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             ret = MBEDTLS_ERR_RSA_KEY_CHECK_FAILED;
+ 1097              		.loc 1 428 17
+ 1098 0253 C745BC00 		movl	$-16896, -68(%rbp)
+ 1098      BEFFFF
+ 429:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             goto cleanup;
+ 1099              		.loc 1 429 13
+ 1100 025a E9C00000 		jmp	.L98
+ 1100      00
+ 1101              	.L108:
+ 430:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         }
+ 431:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 432:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         /* Compute DE-1 mod Q-1 */
+ 433:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( &K, D, E ) );
+ 1102              		.loc 1 433 9
+ 1103 025f 488B5588 		movq	-120(%rbp), %rdx
+GAS LISTING /tmp/ccIpkymc.s 			page 34
+
+
+ 1104 0263 488B4D90 		movq	-112(%rbp), %rcx
+ 1105 0267 488D45C0 		leaq	-64(%rbp), %rax
+ 1106 026b 4889CE   		movq	%rcx, %rsi
+ 1107 026e 4889C7   		movq	%rax, %rdi
+ 1108 0271 E8000000 		call	mbedtls_mpi_mul_mpi@PLT
+ 1108      00
+ 1109 0276 8945BC   		movl	%eax, -68(%rbp)
+ 1110 0279 837DBC00 		cmpl	$0, -68(%rbp)
+ 1111 027d 0F859200 		jne	.L122
+ 1111      0000
+ 434:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &K, &K, 1 ) );
+ 1112              		.loc 1 434 9
+ 1113 0283 488D4DC0 		leaq	-64(%rbp), %rcx
+ 1114 0287 488D45C0 		leaq	-64(%rbp), %rax
+ 1115 028b BA010000 		movl	$1, %edx
+ 1115      00
+ 1116 0290 4889CE   		movq	%rcx, %rsi
+ 1117 0293 4889C7   		movq	%rax, %rdi
+ 1118 0296 E8000000 		call	mbedtls_mpi_sub_int@PLT
+ 1118      00
+ 1119 029b 8945BC   		movl	%eax, -68(%rbp)
+ 1120 029e 837DBC00 		cmpl	$0, -68(%rbp)
+ 1121 02a2 7574     		jne	.L123
+ 435:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &L, Q, 1 ) );
+ 1122              		.loc 1 435 9
+ 1123 02a4 488B4D98 		movq	-104(%rbp), %rcx
+ 1124 02a8 488D45E0 		leaq	-32(%rbp), %rax
+ 1125 02ac BA010000 		movl	$1, %edx
+ 1125      00
+ 1126 02b1 4889CE   		movq	%rcx, %rsi
+ 1127 02b4 4889C7   		movq	%rax, %rdi
+ 1128 02b7 E8000000 		call	mbedtls_mpi_sub_int@PLT
+ 1128      00
+ 1129 02bc 8945BC   		movl	%eax, -68(%rbp)
+ 1130 02bf 837DBC00 		cmpl	$0, -68(%rbp)
+ 1131 02c3 7556     		jne	.L124
+ 436:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( &K, &K, &L ) );
+ 1132              		.loc 1 436 9
+ 1133 02c5 488D55E0 		leaq	-32(%rbp), %rdx
+ 1134 02c9 488D4DC0 		leaq	-64(%rbp), %rcx
+ 1135 02cd 488D45C0 		leaq	-64(%rbp), %rax
+ 1136 02d1 4889CE   		movq	%rcx, %rsi
+ 1137 02d4 4889C7   		movq	%rax, %rdi
+ 1138 02d7 E8000000 		call	mbedtls_mpi_mod_mpi@PLT
+ 1138      00
+ 1139 02dc 8945BC   		movl	%eax, -68(%rbp)
+ 1140 02df 837DBC00 		cmpl	$0, -68(%rbp)
+ 1141 02e3 7539     		jne	.L125
+ 437:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         if( mbedtls_mpi_cmp_int( &K, 0 ) != 0 )
+ 1142              		.loc 1 437 13
+ 1143 02e5 488D45C0 		leaq	-64(%rbp), %rax
+ 1144 02e9 BE000000 		movl	$0, %esi
+ 1144      00
+ 1145 02ee 4889C7   		movq	%rax, %rdi
+ 1146 02f1 E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 1146      00
+ 1147              		.loc 1 437 11
+GAS LISTING /tmp/ccIpkymc.s 			page 35
+
+
+ 1148 02f6 85C0     		testl	%eax, %eax
+ 1149 02f8 740C     		je	.L117
+ 438:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         {
+ 439:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             ret = MBEDTLS_ERR_RSA_KEY_CHECK_FAILED;
+ 1150              		.loc 1 439 17
+ 1151 02fa C745BC00 		movl	$-16896, -68(%rbp)
+ 1151      BEFFFF
+ 440:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****             goto cleanup;
+ 1152              		.loc 1 440 13
+ 1153 0301 EB1C     		jmp	.L98
+ 1154              	.L116:
+ 383:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         if( mbedtls_mpi_cmp_int( N, 1 )  <= 0 ||
+ 1155              		.loc 1 383 9
+ 1156 0303 90       		nop
+ 1157 0304 EB19     		jmp	.L98
+ 1158              	.L117:
+ 441:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         }
+ 442:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     }
+ 443:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 444:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** cleanup:
+ 1159              		.loc 1 444 1
+ 1160 0306 90       		nop
+ 1161 0307 EB16     		jmp	.L98
+ 1162              	.L118:
+ 422:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &K, &K, 1 ) );
+ 1163              		.loc 1 422 9
+ 1164 0309 90       		nop
+ 1165 030a EB13     		jmp	.L98
+ 1166              	.L119:
+ 423:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &L, P, 1 ) );
+ 1167              		.loc 1 423 9
+ 1168 030c 90       		nop
+ 1169 030d EB10     		jmp	.L98
+ 1170              	.L120:
+ 424:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( &K, &K, &L ) );
+ 1171              		.loc 1 424 9
+ 1172 030f 90       		nop
+ 1173 0310 EB0D     		jmp	.L98
+ 1174              	.L121:
+ 425:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         if( mbedtls_mpi_cmp_int( &K, 0 ) != 0 )
+ 1175              		.loc 1 425 9
+ 1176 0312 90       		nop
+ 1177 0313 EB0A     		jmp	.L98
+ 1178              	.L122:
+ 433:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &K, &K, 1 ) );
+ 1179              		.loc 1 433 9
+ 1180 0315 90       		nop
+ 1181 0316 EB07     		jmp	.L98
+ 1182              	.L123:
+ 434:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &L, Q, 1 ) );
+ 1183              		.loc 1 434 9
+ 1184 0318 90       		nop
+ 1185 0319 EB04     		jmp	.L98
+ 1186              	.L124:
+ 435:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( &K, &K, &L ) );
+ 1187              		.loc 1 435 9
+ 1188 031b 90       		nop
+GAS LISTING /tmp/ccIpkymc.s 			page 36
+
+
+ 1189 031c EB01     		jmp	.L98
+ 1190              	.L125:
+ 436:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         if( mbedtls_mpi_cmp_int( &K, 0 ) != 0 )
+ 1191              		.loc 1 436 9
+ 1192 031e 90       		nop
+ 1193              	.L98:
+ 445:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 446:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi_free( &K );
+ 1194              		.loc 1 446 5
+ 1195 031f 488D45C0 		leaq	-64(%rbp), %rax
+ 1196 0323 4889C7   		movq	%rax, %rdi
+ 1197 0326 E8000000 		call	mbedtls_mpi_free@PLT
+ 1197      00
+ 447:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi_free( &L );
+ 1198              		.loc 1 447 5
+ 1199 032b 488D45E0 		leaq	-32(%rbp), %rax
+ 1200 032f 4889C7   		movq	%rax, %rdi
+ 1201 0332 E8000000 		call	mbedtls_mpi_free@PLT
+ 1201      00
+ 448:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 449:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     /* Wrap MPI error codes by RSA check failure error code */
+ 450:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     if( ret != 0 && ret != MBEDTLS_ERR_RSA_KEY_CHECK_FAILED )
+ 1202              		.loc 1 450 7
+ 1203 0337 837DBC00 		cmpl	$0, -68(%rbp)
+ 1204 033b 7410     		je	.L113
+ 1205              		.loc 1 450 18 discriminator 1
+ 1206 033d 817DBC00 		cmpl	$-16896, -68(%rbp)
+ 1206      BEFFFF
+ 1207 0344 7407     		je	.L113
+ 451:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     {
+ 452:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         ret += MBEDTLS_ERR_RSA_KEY_CHECK_FAILED;
+ 1208              		.loc 1 452 13
+ 1209 0346 816DBC00 		subl	$16896, -68(%rbp)
+ 1209      420000
+ 1210              	.L113:
+ 453:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     }
+ 454:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 455:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     return( ret );
+ 1211              		.loc 1 455 11
+ 1212 034d 8B45BC   		movl	-68(%rbp), %eax
+ 456:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** }
+ 1213              		.loc 1 456 1
+ 1214 0350 488B4DF8 		movq	-8(%rbp), %rcx
+ 1215 0354 6448330C 		xorq	%fs:40, %rcx
+ 1215      25280000 
+ 1215      00
+ 1216 035d 7405     		je	.L115
+ 1217 035f E8000000 		call	__stack_chk_fail@PLT
+ 1217      00
+ 1218              	.L115:
+ 1219 0364 C9       		leave
+ 1220              	.LCFI11:
+ 1221              		.cfi_def_cfa 7, 8
+ 1222 0365 C3       		ret
+ 1223              		.cfi_endproc
+ 1224              	.LFE3:
+ 1226              		.section	.text.mbedtls_rsa_deduce_crt,"ax",@progbits
+GAS LISTING /tmp/ccIpkymc.s 			page 37
+
+
+ 1227              		.globl	mbedtls_rsa_deduce_crt
+ 1229              	mbedtls_rsa_deduce_crt:
+ 1230              	.LFB4:
+ 457:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 458:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** int mbedtls_rsa_deduce_crt( const mbedtls_mpi *P, const mbedtls_mpi *Q,
+ 459:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                             const mbedtls_mpi *D, mbedtls_mpi *DP,
+ 460:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****                             mbedtls_mpi *DQ, mbedtls_mpi *QP )
+ 461:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** {
+ 1231              		.loc 1 461 1
+ 1232              		.cfi_startproc
+ 1233 0000 F30F1EFA 		endbr64
+ 1234 0004 55       		pushq	%rbp
+ 1235              	.LCFI12:
+ 1236              		.cfi_def_cfa_offset 16
+ 1237              		.cfi_offset 6, -16
+ 1238 0005 4889E5   		movq	%rsp, %rbp
+ 1239              	.LCFI13:
+ 1240              		.cfi_def_cfa_register 6
+ 1241 0008 4883EC60 		subq	$96, %rsp
+ 1242 000c 48897DC8 		movq	%rdi, -56(%rbp)
+ 1243 0010 488975C0 		movq	%rsi, -64(%rbp)
+ 1244 0014 488955B8 		movq	%rdx, -72(%rbp)
+ 1245 0018 48894DB0 		movq	%rcx, -80(%rbp)
+ 1246 001c 4C8945A8 		movq	%r8, -88(%rbp)
+ 1247 0020 4C894DA0 		movq	%r9, -96(%rbp)
+ 1248              		.loc 1 461 1
+ 1249 0024 64488B04 		movq	%fs:40, %rax
+ 1249      25280000 
+ 1249      00
+ 1250 002d 488945F8 		movq	%rax, -8(%rbp)
+ 1251 0031 31C0     		xorl	%eax, %eax
+ 462:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     int ret = 0;
+ 1252              		.loc 1 462 9
+ 1253 0033 C745DC00 		movl	$0, -36(%rbp)
+ 1253      000000
+ 463:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi K;
+ 464:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi_init( &K );
+ 1254              		.loc 1 464 5
+ 1255 003a 488D45E0 		leaq	-32(%rbp), %rax
+ 1256 003e 4889C7   		movq	%rax, %rdi
+ 1257 0041 E8000000 		call	mbedtls_mpi_init@PLT
+ 1257      00
+ 465:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 466:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     /* DP = D mod P-1 */
+ 467:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     if( DP != NULL )
+ 1258              		.loc 1 467 7
+ 1259 0046 48837DB0 		cmpq	$0, -80(%rbp)
+ 1259      00
+ 1260 004b 7445     		je	.L127
+ 468:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     {
+ 469:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &K, P, 1  ) );
+ 1261              		.loc 1 469 9
+ 1262 004d 488B4DC8 		movq	-56(%rbp), %rcx
+ 1263 0051 488D45E0 		leaq	-32(%rbp), %rax
+ 1264 0055 BA010000 		movl	$1, %edx
+ 1264      00
+ 1265 005a 4889CE   		movq	%rcx, %rsi
+GAS LISTING /tmp/ccIpkymc.s 			page 38
+
+
+ 1266 005d 4889C7   		movq	%rax, %rdi
+ 1267 0060 E8000000 		call	mbedtls_mpi_sub_int@PLT
+ 1267      00
+ 1268 0065 8945DC   		movl	%eax, -36(%rbp)
+ 1269 0068 837DDC00 		cmpl	$0, -36(%rbp)
+ 1270 006c 0F858F00 		jne	.L134
+ 1270      0000
+ 470:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( DP, D, &K ) );
+ 1271              		.loc 1 470 9
+ 1272 0072 488D55E0 		leaq	-32(%rbp), %rdx
+ 1273 0076 488B4DB8 		movq	-72(%rbp), %rcx
+ 1274 007a 488B45B0 		movq	-80(%rbp), %rax
+ 1275 007e 4889CE   		movq	%rcx, %rsi
+ 1276 0081 4889C7   		movq	%rax, %rdi
+ 1277 0084 E8000000 		call	mbedtls_mpi_mod_mpi@PLT
+ 1277      00
+ 1278 0089 8945DC   		movl	%eax, -36(%rbp)
+ 1279 008c 837DDC00 		cmpl	$0, -36(%rbp)
+ 1280 0090 7572     		jne	.L135
+ 1281              	.L127:
+ 471:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     }
+ 472:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 473:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     /* DQ = D mod Q-1 */
+ 474:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     if( DQ != NULL )
+ 1282              		.loc 1 474 7
+ 1283 0092 48837DA8 		cmpq	$0, -88(%rbp)
+ 1283      00
+ 1284 0097 7441     		je	.L130
+ 475:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     {
+ 476:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &K, Q, 1  ) );
+ 1285              		.loc 1 476 9
+ 1286 0099 488B4DC0 		movq	-64(%rbp), %rcx
+ 1287 009d 488D45E0 		leaq	-32(%rbp), %rax
+ 1288 00a1 BA010000 		movl	$1, %edx
+ 1288      00
+ 1289 00a6 4889CE   		movq	%rcx, %rsi
+ 1290 00a9 4889C7   		movq	%rax, %rdi
+ 1291 00ac E8000000 		call	mbedtls_mpi_sub_int@PLT
+ 1291      00
+ 1292 00b1 8945DC   		movl	%eax, -36(%rbp)
+ 1293 00b4 837DDC00 		cmpl	$0, -36(%rbp)
+ 1294 00b8 754D     		jne	.L136
+ 477:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( DQ, D, &K ) );
+ 1295              		.loc 1 477 9
+ 1296 00ba 488D55E0 		leaq	-32(%rbp), %rdx
+ 1297 00be 488B4DB8 		movq	-72(%rbp), %rcx
+ 1298 00c2 488B45A8 		movq	-88(%rbp), %rax
+ 1299 00c6 4889CE   		movq	%rcx, %rsi
+ 1300 00c9 4889C7   		movq	%rax, %rdi
+ 1301 00cc E8000000 		call	mbedtls_mpi_mod_mpi@PLT
+ 1301      00
+ 1302 00d1 8945DC   		movl	%eax, -36(%rbp)
+ 1303 00d4 837DDC00 		cmpl	$0, -36(%rbp)
+ 1304 00d8 7530     		jne	.L137
+ 1305              	.L130:
+ 478:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     }
+ 479:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+GAS LISTING /tmp/ccIpkymc.s 			page 39
+
+
+ 480:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     /* QP = Q^{-1} mod P */
+ 481:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     if( QP != NULL )
+ 1306              		.loc 1 481 7
+ 1307 00da 48837DA0 		cmpq	$0, -96(%rbp)
+ 1307      00
+ 1308 00df 742C     		je	.L138
+ 482:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     {
+ 483:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_inv_mod( QP, Q, P ) );
+ 1309              		.loc 1 483 9
+ 1310 00e1 488B55C8 		movq	-56(%rbp), %rdx
+ 1311 00e5 488B4DC0 		movq	-64(%rbp), %rcx
+ 1312 00e9 488B45A0 		movq	-96(%rbp), %rax
+ 1313 00ed 4889CE   		movq	%rcx, %rsi
+ 1314 00f0 4889C7   		movq	%rax, %rdi
+ 1315 00f3 E8000000 		call	mbedtls_mpi_inv_mod@PLT
+ 1315      00
+ 1316 00f8 8945DC   		movl	%eax, -36(%rbp)
+ 1317 00fb 837DDC00 		cmpl	$0, -36(%rbp)
+ 484:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     }
+ 485:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 486:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** cleanup:
+ 1318              		.loc 1 486 1
+ 1319 00ff EB0C     		jmp	.L138
+ 1320              	.L134:
+ 469:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( DP, D, &K ) );
+ 1321              		.loc 1 469 9
+ 1322 0101 90       		nop
+ 1323 0102 EB0A     		jmp	.L129
+ 1324              	.L135:
+ 470:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     }
+ 1325              		.loc 1 470 9
+ 1326 0104 90       		nop
+ 1327 0105 EB07     		jmp	.L129
+ 1328              	.L136:
+ 476:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( DQ, D, &K ) );
+ 1329              		.loc 1 476 9
+ 1330 0107 90       		nop
+ 1331 0108 EB04     		jmp	.L129
+ 1332              	.L137:
+ 477:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     }
+ 1333              		.loc 1 477 9
+ 1334 010a 90       		nop
+ 1335 010b EB01     		jmp	.L129
+ 1336              	.L138:
+ 1337              		.loc 1 486 1
+ 1338 010d 90       		nop
+ 1339              	.L129:
+ 487:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     mbedtls_mpi_free( &K );
+ 1340              		.loc 1 487 5
+ 1341 010e 488D45E0 		leaq	-32(%rbp), %rax
+ 1342 0112 4889C7   		movq	%rax, %rdi
+ 1343 0115 E8000000 		call	mbedtls_mpi_free@PLT
+ 1343      00
+ 488:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** 
+ 489:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c ****     return( ret );
+ 1344              		.loc 1 489 11
+ 1345 011a 8B45DC   		movl	-36(%rbp), %eax
+GAS LISTING /tmp/ccIpkymc.s 			page 40
+
+
+ 490:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/rsa_internal.c **** }
+ 1346              		.loc 1 490 1
+ 1347 011d 488B75F8 		movq	-8(%rbp), %rsi
+ 1348 0121 64483334 		xorq	%fs:40, %rsi
+ 1348      25280000 
+ 1348      00
+ 1349 012a 7405     		je	.L133
+ 1350 012c E8000000 		call	__stack_chk_fail@PLT
+ 1350      00
+ 1351              	.L133:
+ 1352 0131 C9       		leave
+ 1353              	.LCFI14:
+ 1354              		.cfi_def_cfa 7, 8
+ 1355 0132 C3       		ret
+ 1356              		.cfi_endproc
+ 1357              	.LFE4:
+ 1359              		.text
+ 1360              	.Letext0:
+ 1361              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 1362              		.file 3 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 1363              		.file 4 "/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h"
+ 1364              		.file 5 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/bignum.
+ 2640              		.section	.note.gnu.property,"a"
+ 2641              		.align 8
+ 2642 0000 04000000 		.long	 1f - 0f
+ 2643 0004 10000000 		.long	 4f - 1f
+ 2644 0008 05000000 		.long	 5
+ 2645              	0:
+ 2646 000c 474E5500 		.string	 "GNU"
+ 2647              	1:
+ 2648              		.align 8
+ 2649 0010 020000C0 		.long	 0xc0000002
+ 2650 0014 04000000 		.long	 3f - 2f
+ 2651              	2:
+ 2652 0018 03000000 		.long	 0x3
+ 2653              	3:
+ 2654 001c 00000000 		.align 8
+ 2655              	4:
+GAS LISTING /tmp/ccIpkymc.s 			page 41
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 rsa_internal.c
+     /tmp/ccIpkymc.s:7      .text.mbedtls_rsa_deduce_primes:0000000000000000 mbedtls_rsa_deduce_primes
+     /tmp/ccIpkymc.s:428    .text.mbedtls_rsa_deduce_private_exponent:0000000000000000 mbedtls_rsa_deduce_private_exponent
+     /tmp/ccIpkymc.s:613    .text.mbedtls_rsa_validate_crt:0000000000000000 mbedtls_rsa_validate_crt
+     /tmp/ccIpkymc.s:889    .text.mbedtls_rsa_validate_params:0000000000000000 mbedtls_rsa_validate_params
+     /tmp/ccIpkymc.s:1229   .text.mbedtls_rsa_deduce_crt:0000000000000000 mbedtls_rsa_deduce_crt
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+mbedtls_mpi_cmp_int
+mbedtls_mpi_cmp_mpi
+mbedtls_mpi_init
+mbedtls_mpi_mul_mpi
+mbedtls_mpi_sub_int
+mbedtls_mpi_lsb
+mbedtls_mpi_shift_r
+mbedtls_mpi_lset
+mbedtls_mpi_gcd
+mbedtls_mpi_exp_mod
+mbedtls_mpi_add_int
+mbedtls_mpi_div_mpi
+mbedtls_mpi_mod_mpi
+mbedtls_mpi_free
+__stack_chk_fail
+mbedtls_mpi_inv_mod
+mbedtls_mpi_sub_mpi

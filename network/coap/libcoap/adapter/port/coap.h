@@ -42,8 +42,8 @@
  * of use.
  */
 
-#ifndef COAP_H_
-#define COAP_H_
+#ifndef COAP_H
+#define COAP_H
 
 /* Define the address where bug reports for libcoap should be sent. */
 #define LIBCOAP_PACKAGE_BUGREPORT "libcoap-developers@lists.sourceforge.net"
@@ -90,4 +90,4 @@ extern "C" {
 }
 #endif
 
-#endif /* COAP_H_ */
+#endif /* COAP_H */

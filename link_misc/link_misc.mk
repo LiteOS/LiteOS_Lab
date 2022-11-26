@@ -7,5 +7,3 @@ C_SOURCES += $(LINK_MISC_SOURCE)
 		
 LINK_MISC_INC = -I $(iot_link_root)/link_misc
 C_INCLUDES += $(LINK_MISC_INC)
-
-

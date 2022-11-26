@@ -1,0 +1,1138 @@
+GAS LISTING /tmp/cceVOwpQ.s 			page 1
+
+
+   1              		.file	"net_sockets_alt.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.mbedtls_net_init,"ax",@progbits
+   5              		.globl	mbedtls_net_init
+   7              	mbedtls_net_init:
+   8              	.LFB21:
+   9              		.file 1 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c"
+   1:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** /* ----------------------------------------------------------------------------
+   2:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+   3:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * All rights reserved.
+   4:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * are permitted provided that the following conditions are met:
+   6:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * conditions and the following disclaimer.
+   8:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * provided with the distribution.
+  11:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * permission.
+  14:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * --------------------------------------------------------------------------- */
+  26:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** /* ----------------------------------------------------------------------------
+  27:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * Notice of Export Control Law
+  28:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * ===============================================
+  29:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * applicable export control laws and regulations.
+  33:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****  * --------------------------------------------------------------------------- */
+  34:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** #include <stdlib.h>
+  35:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+  36:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** #include "osal.h"
+  37:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** #include "sal.h"
+  38:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** #include "mbedtls/net_sockets.h"
+  39:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+  40:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** // /< attention that we only port the ip dot mode and only think about the ipv4
+  41:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+  42:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** void mbedtls_net_init(mbedtls_net_context *ctx)
+  43:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** {
+  10              		.loc 1 43 1
+  11              		.cfi_startproc
+  12 0000 F30F1EFA 		endbr64
+  13 0004 55       		pushq	%rbp
+  14              	.LCFI0:
+  15              		.cfi_def_cfa_offset 16
+GAS LISTING /tmp/cceVOwpQ.s 			page 2
+
+
+  16              		.cfi_offset 6, -16
+  17 0005 4889E5   		movq	%rsp, %rbp
+  18              	.LCFI1:
+  19              		.cfi_def_cfa_register 6
+  20 0008 4883EC20 		subq	$32, %rsp
+  21 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  22              		.loc 1 43 1
+  23 0010 64488B04 		movq	%fs:40, %rax
+  23      25280000 
+  23      00
+  24 0019 488945F8 		movq	%rax, -8(%rbp)
+  25 001d 31C0     		xorl	%eax, %eax
+  44:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     ctx->fd = -1;
+  26              		.loc 1 44 13
+  27 001f 488B45E8 		movq	-24(%rbp), %rax
+  28 0023 C700FFFF 		movl	$-1, (%rax)
+  28      FFFF
+  45:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** }
+  29              		.loc 1 45 1
+  30 0029 90       		nop
+  31 002a 488B45F8 		movq	-8(%rbp), %rax
+  32 002e 64483304 		xorq	%fs:40, %rax
+  32      25280000 
+  32      00
+  33 0037 7405     		je	.L2
+  34 0039 E8000000 		call	__stack_chk_fail@PLT
+  34      00
+  35              	.L2:
+  36 003e C9       		leave
+  37              	.LCFI2:
+  38              		.cfi_def_cfa 7, 8
+  39 003f C3       		ret
+  40              		.cfi_endproc
+  41              	.LFE21:
+  43              		.section	.text.mbedtls_net_connect,"ax",@progbits
+  44              		.globl	mbedtls_net_connect
+  46              	mbedtls_net_connect:
+  47              	.LFB22:
+  46:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+  47:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** // /< resovled the host name
+  48:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** int mbedtls_net_connect(mbedtls_net_context *ctx, const char *host, const char *port, int proto)
+  49:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** {
+  48              		.loc 1 49 1
+  49              		.cfi_startproc
+  50 0000 F30F1EFA 		endbr64
+  51 0004 55       		pushq	%rbp
+  52              	.LCFI3:
+  53              		.cfi_def_cfa_offset 16
+  54              		.cfi_offset 6, -16
+  55 0005 4889E5   		movq	%rsp, %rbp
+  56              	.LCFI4:
+  57              		.cfi_def_cfa_register 6
+  58 0008 53       		pushq	%rbx
+  59 0009 4883EC58 		subq	$88, %rsp
+  60              		.cfi_offset 3, -24
+  61 000d 48897DB8 		movq	%rdi, -72(%rbp)
+  62 0011 488975B0 		movq	%rsi, -80(%rbp)
+GAS LISTING /tmp/cceVOwpQ.s 			page 3
+
+
+  63 0015 488955A8 		movq	%rdx, -88(%rbp)
+  64 0019 894DA4   		movl	%ecx, -92(%rbp)
+  65              		.loc 1 49 1
+  66 001c 64488B04 		movq	%fs:40, %rax
+  66      25280000 
+  66      00
+  67 0025 488945E8 		movq	%rax, -24(%rbp)
+  68 0029 31C0     		xorl	%eax, %eax
+  50:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     int ret = MBEDTLS_ERR_NET_SOCKET_FAILED;
+  69              		.loc 1 50 9
+  70 002b C745C4BE 		movl	$-66, -60(%rbp)
+  70      FFFFFF
+  51:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     struct sockaddr_in addr;
+  52:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+  53:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     if (NULL == ctx) {
+  71              		.loc 1 53 8
+  72 0032 48837DB8 		cmpq	$0, -72(%rbp)
+  72      00
+  73 0037 7508     		jne	.L4
+  54:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         return ret;
+  74              		.loc 1 54 16
+  75 0039 8B45C4   		movl	-60(%rbp), %eax
+  76 003c E93B0100 		jmp	.L12
+  76      00
+  77              	.L4:
+  55:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     }
+  56:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+  57:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     // /< first we try use the gethostbyname to get the ip address, the host maybe a domain name
+  58:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     struct hostent *entry = NULL;
+  78              		.loc 1 58 21
+  79 0041 48C745C8 		movq	$0, -56(%rbp)
+  79      00000000 
+  59:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     entry = sal_gethostbyname(host);
+  80              		.loc 1 59 13
+  81 0049 488B45B0 		movq	-80(%rbp), %rax
+  82 004d 4889C7   		movq	%rax, %rdi
+  83 0050 E8000000 		call	sal_gethostbyname@PLT
+  83      00
+  84 0055 488945C8 		movq	%rax, -56(%rbp)
+  60:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     if (!(entry && entry->h_addr_list[0] && (entry->h_addrtype == AF_INET))) {
+  85              		.loc 1 60 8
+  86 0059 48837DC8 		cmpq	$0, -56(%rbp)
+  86      00
+  87 005e 741C     		je	.L6
+  88              		.loc 1 60 25 discriminator 1
+  89 0060 488B45C8 		movq	-56(%rbp), %rax
+  90 0064 488B4018 		movq	24(%rax), %rax
+  91              		.loc 1 60 38 discriminator 1
+  92 0068 488B00   		movq	(%rax), %rax
+  93              		.loc 1 60 17 discriminator 1
+  94 006b 4885C0   		testq	%rax, %rax
+  95 006e 740C     		je	.L6
+  96              		.loc 1 60 51 discriminator 2
+  97 0070 488B45C8 		movq	-56(%rbp), %rax
+  98 0074 8B4010   		movl	16(%rax), %eax
+  99              		.loc 1 60 9 discriminator 2
+ 100 0077 83F802   		cmpl	$2, %eax
+GAS LISTING /tmp/cceVOwpQ.s 			page 4
+
+
+ 101 007a 740A     		je	.L7
+ 102              	.L6:
+  61:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         return MBEDTLS_ERR_NET_UNKNOWN_HOST;
+ 103              		.loc 1 61 16
+ 104 007c B8AEFFFF 		movl	$-82, %eax
+ 104      FF
+ 105 0081 E9F60000 		jmp	.L12
+ 105      00
+ 106              	.L7:
+  62:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     }
+  63:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+  64:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     ctx->fd = -1;
+ 107              		.loc 1 64 13
+ 108 0086 488B45B8 		movq	-72(%rbp), %rax
+ 109 008a C700FFFF 		movl	$-1, (%rax)
+ 109      FFFF
+  65:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+  66:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     if (proto == MBEDTLS_NET_PROTO_TCP) {
+ 110              		.loc 1 66 8
+ 111 0090 837DA400 		cmpl	$0, -92(%rbp)
+ 112 0094 751C     		jne	.L8
+  67:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         ctx->fd = sal_socket(AF_INET, SOCK_STREAM, 0);
+ 113              		.loc 1 67 19
+ 114 0096 BA000000 		movl	$0, %edx
+ 114      00
+ 115 009b BE010000 		movl	$1, %esi
+ 115      00
+ 116 00a0 BF020000 		movl	$2, %edi
+ 116      00
+ 117 00a5 E8000000 		call	sal_socket@PLT
+ 117      00
+ 118              		.loc 1 67 17
+ 119 00aa 488B55B8 		movq	-72(%rbp), %rdx
+ 120 00ae 8902     		movl	%eax, (%rdx)
+ 121 00b0 EB20     		jmp	.L9
+ 122              	.L8:
+  68:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     } else if (proto == MBEDTLS_NET_PROTO_UDP) {
+ 123              		.loc 1 68 15
+ 124 00b2 837DA401 		cmpl	$1, -92(%rbp)
+ 125 00b6 751A     		jne	.L9
+  69:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         ctx->fd = sal_socket(AF_INET, SOCK_DGRAM, 0);
+ 126              		.loc 1 69 19
+ 127 00b8 BA000000 		movl	$0, %edx
+ 127      00
+ 128 00bd BE020000 		movl	$2, %esi
+ 128      00
+ 129 00c2 BF020000 		movl	$2, %edi
+ 129      00
+ 130 00c7 E8000000 		call	sal_socket@PLT
+ 130      00
+ 131              		.loc 1 69 17
+ 132 00cc 488B55B8 		movq	-72(%rbp), %rdx
+ 133 00d0 8902     		movl	%eax, (%rdx)
+ 134              	.L9:
+  70:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     } else {
+  71:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     }
+  72:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+GAS LISTING /tmp/cceVOwpQ.s 			page 5
+
+
+  73:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     if (ctx->fd == -1) {
+ 135              		.loc 1 73 12
+ 136 00d2 488B45B8 		movq	-72(%rbp), %rax
+ 137 00d6 8B00     		movl	(%rax), %eax
+ 138              		.loc 1 73 8
+ 139 00d8 83F8FF   		cmpl	$-1, %eax
+ 140 00db 7508     		jne	.L10
+  74:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         return ret;
+ 141              		.loc 1 74 16
+ 142 00dd 8B45C4   		movl	-60(%rbp), %eax
+ 143 00e0 E9970000 		jmp	.L12
+ 143      00
+ 144              	.L10:
+  75:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     }
+  76:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+  77:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     (void)memset(&addr, 0, sizeof(addr));
+ 145              		.loc 1 77 11
+ 146 00e5 488D45D0 		leaq	-48(%rbp), %rax
+ 147 00e9 BA100000 		movl	$16, %edx
+ 147      00
+ 148 00ee BE000000 		movl	$0, %esi
+ 148      00
+ 149 00f3 4889C7   		movq	%rax, %rdi
+ 150 00f6 E8000000 		call	memset@PLT
+ 150      00
+  78:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     addr.sin_family = AF_INET;
+ 151              		.loc 1 78 21
+ 152 00fb 66C745D0 		movw	$2, -48(%rbp)
+ 152      0200
+  79:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     (void)memcpy(&addr.sin_addr.s_addr, entry->h_addr_list[0], sizeof(addr.sin_addr.s_addr));
+ 153              		.loc 1 79 46
+ 154 0101 488B45C8 		movq	-56(%rbp), %rax
+ 155 0105 488B4018 		movq	24(%rax), %rax
+ 156              		.loc 1 79 11
+ 157 0109 488B00   		movq	(%rax), %rax
+ 158 010c 8B00     		movl	(%rax), %eax
+ 159 010e 8945D4   		movl	%eax, -44(%rbp)
+  80:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     addr.sin_port = htons(((uint16_t)atoi(port)));
+ 160              		.loc 1 80 21
+ 161 0111 488B45A8 		movq	-88(%rbp), %rax
+ 162 0115 4889C7   		movq	%rax, %rdi
+ 163 0118 E8000000 		call	atoi@PLT
+ 163      00
+ 164 011d 66C1E808 		shrw	$8, %ax
+ 165 0121 89C3     		movl	%eax, %ebx
+ 166 0123 488B45A8 		movq	-88(%rbp), %rax
+ 167 0127 4889C7   		movq	%rax, %rdi
+ 168 012a E8000000 		call	atoi@PLT
+ 168      00
+ 169 012f 0FB7C0   		movzwl	%ax, %eax
+ 170 0132 C1E008   		sall	$8, %eax
+ 171 0135 09D8     		orl	%ebx, %eax
+ 172              		.loc 1 80 19
+ 173 0137 668945D2 		movw	%ax, -46(%rbp)
+  81:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+  82:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     if (-1 == sal_connect(ctx->fd, (struct sockaddr *)&addr, sizeof(addr))) {
+ 174              		.loc 1 82 15
+GAS LISTING /tmp/cceVOwpQ.s 			page 6
+
+
+ 175 013b 488B45B8 		movq	-72(%rbp), %rax
+ 176 013f 8B00     		movl	(%rax), %eax
+ 177 0141 488D4DD0 		leaq	-48(%rbp), %rcx
+ 178 0145 BA100000 		movl	$16, %edx
+ 178      00
+ 179 014a 4889CE   		movq	%rcx, %rsi
+ 180 014d 89C7     		movl	%eax, %edi
+ 181 014f E8000000 		call	sal_connect@PLT
+ 181      00
+ 182              		.loc 1 82 8
+ 183 0154 83F8FF   		cmpl	$-1, %eax
+ 184 0157 751E     		jne	.L11
+  83:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         sal_closesocket(ctx->fd);
+ 185              		.loc 1 83 9
+ 186 0159 488B45B8 		movq	-72(%rbp), %rax
+ 187 015d 8B00     		movl	(%rax), %eax
+ 188 015f 89C7     		movl	%eax, %edi
+ 189 0161 E8000000 		call	sal_closesocket@PLT
+ 189      00
+  84:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         ctx->fd = -1;
+ 190              		.loc 1 84 17
+ 191 0166 488B45B8 		movq	-72(%rbp), %rax
+ 192 016a C700FFFF 		movl	$-1, (%rax)
+ 192      FFFF
+  85:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         return MBEDTLS_ERR_NET_CONNECT_FAILED;
+ 193              		.loc 1 85 16
+ 194 0170 B8BCFFFF 		movl	$-68, %eax
+ 194      FF
+ 195 0175 EB05     		jmp	.L12
+ 196              	.L11:
+  86:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     }
+  87:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     return 0;
+ 197              		.loc 1 87 12
+ 198 0177 B8000000 		movl	$0, %eax
+ 198      00
+ 199              	.L12:
+  88:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** }
+ 200              		.loc 1 88 1 discriminator 1
+ 201 017c 488B5DE8 		movq	-24(%rbp), %rbx
+ 202 0180 6448331C 		xorq	%fs:40, %rbx
+ 202      25280000 
+ 202      00
+ 203 0189 7405     		je	.L13
+ 204              		.loc 1 88 1 is_stmt 0
+ 205 018b E8000000 		call	__stack_chk_fail@PLT
+ 205      00
+ 206              	.L13:
+ 207 0190 4883C458 		addq	$88, %rsp
+ 208 0194 5B       		popq	%rbx
+ 209 0195 5D       		popq	%rbp
+ 210              	.LCFI5:
+ 211              		.cfi_def_cfa 7, 8
+ 212 0196 C3       		ret
+ 213              		.cfi_endproc
+ 214              	.LFE22:
+ 216              		.section	.text.mbedtls_net_usleep,"ax",@progbits
+ 217              		.globl	mbedtls_net_usleep
+GAS LISTING /tmp/cceVOwpQ.s 			page 7
+
+
+ 219              	mbedtls_net_usleep:
+ 220              	.LFB23:
+  89:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+  90:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** void mbedtls_net_usleep(unsigned long usec)
+  91:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** {
+ 221              		.loc 1 91 1 is_stmt 1
+ 222              		.cfi_startproc
+ 223 0000 F30F1EFA 		endbr64
+ 224 0004 55       		pushq	%rbp
+ 225              	.LCFI6:
+ 226              		.cfi_def_cfa_offset 16
+ 227              		.cfi_offset 6, -16
+ 228 0005 4889E5   		movq	%rsp, %rbp
+ 229              	.LCFI7:
+ 230              		.cfi_def_cfa_register 6
+ 231 0008 4883EC20 		subq	$32, %rsp
+ 232 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 233              		.loc 1 91 1
+ 234 0010 64488B04 		movq	%fs:40, %rax
+ 234      25280000 
+ 234      00
+ 235 0019 488945F8 		movq	%rax, -8(%rbp)
+ 236 001d 31C0     		xorl	%eax, %eax
+  92:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     osal_task_sleep(usec / 1000); // /--TODO, we only support the ms delay for the system
+ 237              		.loc 1 92 26
+ 238 001f 488B45E8 		movq	-24(%rbp), %rax
+ 239 0023 48C1E803 		shrq	$3, %rax
+ 240 0027 48BACFF7 		movabsq	$2361183241434822607, %rdx
+ 240      53E3A59B 
+ 240      C420
+ 241 0031 48F7E2   		mulq	%rdx
+ 242 0034 4889D0   		movq	%rdx, %rax
+ 243 0037 48C1E804 		shrq	$4, %rax
+ 244              		.loc 1 92 5
+ 245 003b 89C7     		movl	%eax, %edi
+ 246 003d E8000000 		call	osal_task_sleep@PLT
+ 246      00
+  93:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** }
+ 247              		.loc 1 93 1
+ 248 0042 90       		nop
+ 249 0043 488B45F8 		movq	-8(%rbp), %rax
+ 250 0047 64483304 		xorq	%fs:40, %rax
+ 250      25280000 
+ 250      00
+ 251 0050 7405     		je	.L15
+ 252 0052 E8000000 		call	__stack_chk_fail@PLT
+ 252      00
+ 253              	.L15:
+ 254 0057 C9       		leave
+ 255              	.LCFI8:
+ 256              		.cfi_def_cfa 7, 8
+ 257 0058 C3       		ret
+ 258              		.cfi_endproc
+ 259              	.LFE23:
+ 261              		.section	.text.mbedtls_net_recv,"ax",@progbits
+ 262              		.globl	mbedtls_net_recv
+ 264              	mbedtls_net_recv:
+GAS LISTING /tmp/cceVOwpQ.s 			page 8
+
+
+ 265              	.LFB24:
+  94:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+  95:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** int mbedtls_net_recv(void *ctx, unsigned char *buf, size_t len)
+  96:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** {
+ 266              		.loc 1 96 1
+ 267              		.cfi_startproc
+ 268 0000 F30F1EFA 		endbr64
+ 269 0004 55       		pushq	%rbp
+ 270              	.LCFI9:
+ 271              		.cfi_def_cfa_offset 16
+ 272              		.cfi_offset 6, -16
+ 273 0005 4889E5   		movq	%rsp, %rbp
+ 274              	.LCFI10:
+ 275              		.cfi_def_cfa_register 6
+ 276 0008 4883EC40 		subq	$64, %rsp
+ 277 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 278 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 279 0014 488955C8 		movq	%rdx, -56(%rbp)
+ 280              		.loc 1 96 1
+ 281 0018 64488B04 		movq	%fs:40, %rax
+ 281      25280000 
+ 281      00
+ 282 0021 488945F8 		movq	%rax, -8(%rbp)
+ 283 0025 31C0     		xorl	%eax, %eax
+  97:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     int fd;
+  98:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     int ret = MBEDTLS_ERR_NET_RECV_FAILED;
+ 284              		.loc 1 98 9
+ 285 0027 C745ECB4 		movl	$-76, -20(%rbp)
+ 285      FFFFFF
+  99:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     int rcvlen = -1;
+ 286              		.loc 1 99 9
+ 287 002e C745F0FF 		movl	$-1, -16(%rbp)
+ 287      FFFFFF
+ 100:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+ 101:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     if (NULL == ctx) {
+ 288              		.loc 1 101 8
+ 289 0035 48837DD8 		cmpq	$0, -40(%rbp)
+ 289      00
+ 290 003a 7505     		jne	.L17
+ 102:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         return ret;
+ 291              		.loc 1 102 16
+ 292 003c 8B45EC   		movl	-20(%rbp), %eax
+ 293 003f EB4A     		jmp	.L18
+ 294              	.L17:
+ 103:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     }
+ 104:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+ 105:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     fd = ((mbedtls_net_context *)ctx)->fd;
+ 295              		.loc 1 105 8
+ 296 0041 488B45D8 		movq	-40(%rbp), %rax
+ 297 0045 8B00     		movl	(%rax), %eax
+ 298 0047 8945F4   		movl	%eax, -12(%rbp)
+ 106:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     rcvlen = sal_recv(fd, buf, len, 0);
+ 299              		.loc 1 106 14
+ 300 004a 488B55C8 		movq	-56(%rbp), %rdx
+ 301 004e 488B75D0 		movq	-48(%rbp), %rsi
+ 302 0052 8B45F4   		movl	-12(%rbp), %eax
+ 303 0055 B9000000 		movl	$0, %ecx
+GAS LISTING /tmp/cceVOwpQ.s 			page 9
+
+
+ 303      00
+ 304 005a 89C7     		movl	%eax, %edi
+ 305 005c E8000000 		call	sal_recv@PLT
+ 305      00
+ 306 0061 8945F0   		movl	%eax, -16(%rbp)
+ 107:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     if (rcvlen == 0) {
+ 307              		.loc 1 107 8
+ 308 0064 837DF000 		cmpl	$0, -16(%rbp)
+ 309 0068 7509     		jne	.L19
+ 108:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         ret = MBEDTLS_ERR_NET_RECV_FAILED;
+ 310              		.loc 1 108 13
+ 311 006a C745ECB4 		movl	$-76, -20(%rbp)
+ 311      FFFFFF
+ 312 0071 EB15     		jmp	.L20
+ 313              	.L19:
+ 109:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     } else if (rcvlen < 0) {
+ 314              		.loc 1 109 15
+ 315 0073 837DF000 		cmpl	$0, -16(%rbp)
+ 316 0077 7909     		jns	.L21
+ 110:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         ret = MBEDTLS_ERR_SSL_WANT_READ;
+ 317              		.loc 1 110 13
+ 318 0079 C745EC00 		movl	$-26880, -20(%rbp)
+ 318      97FFFF
+ 319 0080 EB06     		jmp	.L20
+ 320              	.L21:
+ 111:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     } else {
+ 112:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         ret = rcvlen;
+ 321              		.loc 1 112 13
+ 322 0082 8B45F0   		movl	-16(%rbp), %eax
+ 323 0085 8945EC   		movl	%eax, -20(%rbp)
+ 324              	.L20:
+ 113:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     }
+ 114:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     return ret;
+ 325              		.loc 1 114 12
+ 326 0088 8B45EC   		movl	-20(%rbp), %eax
+ 327              	.L18:
+ 115:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** }
+ 328              		.loc 1 115 1
+ 329 008b 488B4DF8 		movq	-8(%rbp), %rcx
+ 330 008f 6448330C 		xorq	%fs:40, %rcx
+ 330      25280000 
+ 330      00
+ 331 0098 7405     		je	.L22
+ 332 009a E8000000 		call	__stack_chk_fail@PLT
+ 332      00
+ 333              	.L22:
+ 334 009f C9       		leave
+ 335              	.LCFI11:
+ 336              		.cfi_def_cfa 7, 8
+ 337 00a0 C3       		ret
+ 338              		.cfi_endproc
+ 339              	.LFE24:
+ 341              		.section	.text.mbedtls_net_recv_timeout,"ax",@progbits
+ 342              		.globl	mbedtls_net_recv_timeout
+ 344              	mbedtls_net_recv_timeout:
+ 345              	.LFB25:
+ 116:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+GAS LISTING /tmp/cceVOwpQ.s 			page 10
+
+
+ 117:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** #include <time.h>
+ 118:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+ 119:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** int mbedtls_net_recv_timeout(void *ctx, unsigned char *buf, size_t len, uint32_t timeout)
+ 120:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** {
+ 346              		.loc 1 120 1
+ 347              		.cfi_startproc
+ 348 0000 F30F1EFA 		endbr64
+ 349 0004 55       		pushq	%rbp
+ 350              	.LCFI12:
+ 351              		.cfi_def_cfa_offset 16
+ 352              		.cfi_offset 6, -16
+ 353 0005 4889E5   		movq	%rsp, %rbp
+ 354              	.LCFI13:
+ 355              		.cfi_def_cfa_register 6
+ 356 0008 4883EC50 		subq	$80, %rsp
+ 357 000c 48897DC8 		movq	%rdi, -56(%rbp)
+ 358 0010 488975C0 		movq	%rsi, -64(%rbp)
+ 359 0014 488955B8 		movq	%rdx, -72(%rbp)
+ 360 0018 894DB4   		movl	%ecx, -76(%rbp)
+ 361              		.loc 1 120 1
+ 362 001b 64488B04 		movq	%fs:40, %rax
+ 362      25280000 
+ 362      00
+ 363 0024 488945F8 		movq	%rax, -8(%rbp)
+ 364 0028 31C0     		xorl	%eax, %eax
+ 121:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     int fd;
+ 122:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     int ret = MBEDTLS_ERR_NET_RECV_FAILED;
+ 365              		.loc 1 122 9
+ 366 002a C745D4B4 		movl	$-76, -44(%rbp)
+ 366      FFFFFF
+ 123:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     int rcvlen = -1;
+ 367              		.loc 1 123 9
+ 368 0031 C745D8FF 		movl	$-1, -40(%rbp)
+ 368      FFFFFF
+ 124:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+ 125:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     struct timeval timedelay;
+ 126:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+ 127:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     if (NULL == ctx) {
+ 369              		.loc 1 127 8
+ 370 0038 48837DC8 		cmpq	$0, -56(%rbp)
+ 370      00
+ 371 003d 7508     		jne	.L24
+ 128:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         return ret;
+ 372              		.loc 1 128 16
+ 373 003f 8B45D4   		movl	-44(%rbp), %eax
+ 374 0042 E9B60000 		jmp	.L30
+ 374      00
+ 375              	.L24:
+ 129:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     }
+ 130:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+ 131:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     fd = ((mbedtls_net_context *)ctx)->fd;
+ 376              		.loc 1 131 8
+ 377 0047 488B45C8 		movq	-56(%rbp), %rax
+ 378 004b 8B00     		movl	(%rax), %eax
+ 379 004d 8945DC   		movl	%eax, -36(%rbp)
+ 132:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+ 133:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     timedelay.tv_sec = timeout / 1000;
+GAS LISTING /tmp/cceVOwpQ.s 			page 11
+
+
+ 380              		.loc 1 133 32
+ 381 0050 8B45B4   		movl	-76(%rbp), %eax
+ 382 0053 89C0     		movl	%eax, %eax
+ 383 0055 4869C0D3 		imulq	$274877907, %rax, %rax
+ 383      4D6210
+ 384 005c 48C1E820 		shrq	$32, %rax
+ 385 0060 C1E806   		shrl	$6, %eax
+ 386 0063 89C0     		movl	%eax, %eax
+ 387              		.loc 1 133 22
+ 388 0065 488945E0 		movq	%rax, -32(%rbp)
+ 134:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     timedelay.tv_usec = (timeout % 1000) * 1000;
+ 389              		.loc 1 134 34
+ 390 0069 8B55B4   		movl	-76(%rbp), %edx
+ 391 006c 89D0     		movl	%edx, %eax
+ 392 006e 4869C0D3 		imulq	$274877907, %rax, %rax
+ 392      4D6210
+ 393 0075 48C1E820 		shrq	$32, %rax
+ 394 0079 C1E806   		shrl	$6, %eax
+ 395 007c 69C0E803 		imull	$1000, %eax, %eax
+ 395      0000
+ 396 0082 29C2     		subl	%eax, %edx
+ 397 0084 89D0     		movl	%edx, %eax
+ 398              		.loc 1 134 42
+ 399 0086 69C0E803 		imull	$1000, %eax, %eax
+ 399      0000
+ 400 008c 89C0     		movl	%eax, %eax
+ 401              		.loc 1 134 23
+ 402 008e 488945E8 		movq	%rax, -24(%rbp)
+ 135:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+ 136:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     // /< set the recv timeout
+ 137:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     if (0 != sal_setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &timedelay, sizeof(timedelay))) {
+ 403              		.loc 1 137 14
+ 404 0092 488D55E0 		leaq	-32(%rbp), %rdx
+ 405 0096 8B45DC   		movl	-36(%rbp), %eax
+ 406 0099 41B81000 		movl	$16, %r8d
+ 406      0000
+ 407 009f 4889D1   		movq	%rdx, %rcx
+ 408 00a2 BA061000 		movl	$4102, %edx
+ 408      00
+ 409 00a7 BEFFFF00 		movl	$65535, %esi
+ 409      00
+ 410 00ac 89C7     		movl	%eax, %edi
+ 411 00ae E8000000 		call	sal_setsockopt@PLT
+ 411      00
+ 412              		.loc 1 137 8
+ 413 00b3 85C0     		testl	%eax, %eax
+ 414 00b5 7405     		je	.L26
+ 138:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         return ret; // could not support the rcv timeout
+ 415              		.loc 1 138 16
+ 416 00b7 8B45D4   		movl	-44(%rbp), %eax
+ 417 00ba EB41     		jmp	.L30
+ 418              	.L26:
+ 139:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     }
+ 140:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+ 141:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     rcvlen = sal_recv(fd, buf, len, 0);
+ 419              		.loc 1 141 14
+ 420 00bc 488B55B8 		movq	-72(%rbp), %rdx
+GAS LISTING /tmp/cceVOwpQ.s 			page 12
+
+
+ 421 00c0 488B75C0 		movq	-64(%rbp), %rsi
+ 422 00c4 8B45DC   		movl	-36(%rbp), %eax
+ 423 00c7 B9000000 		movl	$0, %ecx
+ 423      00
+ 424 00cc 89C7     		movl	%eax, %edi
+ 425 00ce E8000000 		call	sal_recv@PLT
+ 425      00
+ 426 00d3 8945D8   		movl	%eax, -40(%rbp)
+ 142:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     if (rcvlen == 0) {
+ 427              		.loc 1 142 8
+ 428 00d6 837DD800 		cmpl	$0, -40(%rbp)
+ 429 00da 7509     		jne	.L27
+ 143:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         ret = MBEDTLS_ERR_NET_RECV_FAILED;
+ 430              		.loc 1 143 13
+ 431 00dc C745D4B4 		movl	$-76, -44(%rbp)
+ 431      FFFFFF
+ 432 00e3 EB15     		jmp	.L28
+ 433              	.L27:
+ 144:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     } else if (rcvlen < 0) {
+ 434              		.loc 1 144 15
+ 435 00e5 837DD800 		cmpl	$0, -40(%rbp)
+ 436 00e9 7909     		jns	.L29
+ 145:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         ret = MBEDTLS_ERR_SSL_WANT_READ;
+ 437              		.loc 1 145 13
+ 438 00eb C745D400 		movl	$-26880, -44(%rbp)
+ 438      97FFFF
+ 439 00f2 EB06     		jmp	.L28
+ 440              	.L29:
+ 146:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     } else {
+ 147:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         ret = rcvlen;
+ 441              		.loc 1 147 13
+ 442 00f4 8B45D8   		movl	-40(%rbp), %eax
+ 443 00f7 8945D4   		movl	%eax, -44(%rbp)
+ 444              	.L28:
+ 148:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     }
+ 149:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     return ret;
+ 445              		.loc 1 149 12
+ 446 00fa 8B45D4   		movl	-44(%rbp), %eax
+ 447              	.L30:
+ 150:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** }
+ 448              		.loc 1 150 1 discriminator 1
+ 449 00fd 488B4DF8 		movq	-8(%rbp), %rcx
+ 450 0101 6448330C 		xorq	%fs:40, %rcx
+ 450      25280000 
+ 450      00
+ 451 010a 7405     		je	.L31
+ 452              		.loc 1 150 1 is_stmt 0
+ 453 010c E8000000 		call	__stack_chk_fail@PLT
+ 453      00
+ 454              	.L31:
+ 455 0111 C9       		leave
+ 456              	.LCFI14:
+ 457              		.cfi_def_cfa 7, 8
+ 458 0112 C3       		ret
+ 459              		.cfi_endproc
+ 460              	.LFE25:
+ 462              		.section	.text.mbedtls_net_send,"ax",@progbits
+GAS LISTING /tmp/cceVOwpQ.s 			page 13
+
+
+ 463              		.globl	mbedtls_net_send
+ 465              	mbedtls_net_send:
+ 466              	.LFB26:
+ 151:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+ 152:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** int mbedtls_net_send(void *ctx, const unsigned char *buf, size_t len)
+ 153:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** {
+ 467              		.loc 1 153 1 is_stmt 1
+ 468              		.cfi_startproc
+ 469 0000 F30F1EFA 		endbr64
+ 470 0004 55       		pushq	%rbp
+ 471              	.LCFI15:
+ 472              		.cfi_def_cfa_offset 16
+ 473              		.cfi_offset 6, -16
+ 474 0005 4889E5   		movq	%rsp, %rbp
+ 475              	.LCFI16:
+ 476              		.cfi_def_cfa_register 6
+ 477 0008 4883EC40 		subq	$64, %rsp
+ 478 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 479 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 480 0014 488955C8 		movq	%rdx, -56(%rbp)
+ 481              		.loc 1 153 1
+ 482 0018 64488B04 		movq	%fs:40, %rax
+ 482      25280000 
+ 482      00
+ 483 0021 488945F8 		movq	%rax, -8(%rbp)
+ 484 0025 31C0     		xorl	%eax, %eax
+ 154:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     int fd;
+ 155:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     int ret = MBEDTLS_ERR_NET_SEND_FAILED;
+ 485              		.loc 1 155 9
+ 486 0027 C745ECB2 		movl	$-78, -20(%rbp)
+ 486      FFFFFF
+ 156:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     int senlen = -1;
+ 487              		.loc 1 156 9
+ 488 002e C745F0FF 		movl	$-1, -16(%rbp)
+ 488      FFFFFF
+ 157:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+ 158:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     if (NULL == ctx) {
+ 489              		.loc 1 158 8
+ 490 0035 48837DD8 		cmpq	$0, -40(%rbp)
+ 490      00
+ 491 003a 7505     		jne	.L33
+ 159:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         return ret;
+ 492              		.loc 1 159 16
+ 493 003c 8B45EC   		movl	-20(%rbp), %eax
+ 494 003f EB4A     		jmp	.L34
+ 495              	.L33:
+ 160:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     }
+ 161:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+ 162:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     fd = ((mbedtls_net_context *)ctx)->fd;
+ 496              		.loc 1 162 8
+ 497 0041 488B45D8 		movq	-40(%rbp), %rax
+ 498 0045 8B00     		movl	(%rax), %eax
+ 499 0047 8945F4   		movl	%eax, -12(%rbp)
+ 163:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+ 164:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     senlen = sal_send(fd, buf, len, 0);
+ 500              		.loc 1 164 14
+ 501 004a 488B55C8 		movq	-56(%rbp), %rdx
+GAS LISTING /tmp/cceVOwpQ.s 			page 14
+
+
+ 502 004e 488B75D0 		movq	-48(%rbp), %rsi
+ 503 0052 8B45F4   		movl	-12(%rbp), %eax
+ 504 0055 B9000000 		movl	$0, %ecx
+ 504      00
+ 505 005a 89C7     		movl	%eax, %edi
+ 506 005c E8000000 		call	sal_send@PLT
+ 506      00
+ 507 0061 8945F0   		movl	%eax, -16(%rbp)
+ 165:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     if (senlen == 0) {
+ 508              		.loc 1 165 8
+ 509 0064 837DF000 		cmpl	$0, -16(%rbp)
+ 510 0068 7509     		jne	.L35
+ 166:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         ret = MBEDTLS_ERR_NET_SEND_FAILED;
+ 511              		.loc 1 166 13
+ 512 006a C745ECB2 		movl	$-78, -20(%rbp)
+ 512      FFFFFF
+ 513 0071 EB15     		jmp	.L36
+ 514              	.L35:
+ 167:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     } else if (senlen < 0) {
+ 515              		.loc 1 167 15
+ 516 0073 837DF000 		cmpl	$0, -16(%rbp)
+ 517 0077 7909     		jns	.L37
+ 168:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         ret = MBEDTLS_ERR_SSL_WANT_WRITE;
+ 518              		.loc 1 168 13
+ 519 0079 C745EC80 		movl	$-26752, -20(%rbp)
+ 519      97FFFF
+ 520 0080 EB06     		jmp	.L36
+ 521              	.L37:
+ 169:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     } else {
+ 170:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         ret = senlen;
+ 522              		.loc 1 170 13
+ 523 0082 8B45F0   		movl	-16(%rbp), %eax
+ 524 0085 8945EC   		movl	%eax, -20(%rbp)
+ 525              	.L36:
+ 171:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     }
+ 172:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+ 173:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     return ret;
+ 526              		.loc 1 173 12
+ 527 0088 8B45EC   		movl	-20(%rbp), %eax
+ 528              	.L34:
+ 174:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** }
+ 529              		.loc 1 174 1
+ 530 008b 488B4DF8 		movq	-8(%rbp), %rcx
+ 531 008f 6448330C 		xorq	%fs:40, %rcx
+ 531      25280000 
+ 531      00
+ 532 0098 7405     		je	.L38
+ 533 009a E8000000 		call	__stack_chk_fail@PLT
+ 533      00
+ 534              	.L38:
+ 535 009f C9       		leave
+ 536              	.LCFI17:
+ 537              		.cfi_def_cfa 7, 8
+ 538 00a0 C3       		ret
+ 539              		.cfi_endproc
+ 540              	.LFE26:
+ 542              		.section	.text.mbedtls_net_free,"ax",@progbits
+GAS LISTING /tmp/cceVOwpQ.s 			page 15
+
+
+ 543              		.globl	mbedtls_net_free
+ 545              	mbedtls_net_free:
+ 546              	.LFB27:
+ 175:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+ 176:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** void mbedtls_net_free(mbedtls_net_context *ctx)
+ 177:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** {
+ 547              		.loc 1 177 1
+ 548              		.cfi_startproc
+ 549 0000 F30F1EFA 		endbr64
+ 550 0004 55       		pushq	%rbp
+ 551              	.LCFI18:
+ 552              		.cfi_def_cfa_offset 16
+ 553              		.cfi_offset 6, -16
+ 554 0005 4889E5   		movq	%rsp, %rbp
+ 555              	.LCFI19:
+ 556              		.cfi_def_cfa_register 6
+ 557 0008 4883EC20 		subq	$32, %rsp
+ 558 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 559              		.loc 1 177 1
+ 560 0010 64488B04 		movq	%fs:40, %rax
+ 560      25280000 
+ 560      00
+ 561 0019 488945F8 		movq	%rax, -8(%rbp)
+ 562 001d 31C0     		xorl	%eax, %eax
+ 178:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     if (NULL != ctx) {
+ 563              		.loc 1 178 8
+ 564 001f 48837DE8 		cmpq	$0, -24(%rbp)
+ 564      00
+ 565 0024 7419     		je	.L42
+ 179:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         sal_closesocket(((mbedtls_net_context *)ctx)->fd);
+ 566              		.loc 1 179 9
+ 567 0026 488B45E8 		movq	-24(%rbp), %rax
+ 568 002a 8B00     		movl	(%rax), %eax
+ 569 002c 89C7     		movl	%eax, %edi
+ 570 002e E8000000 		call	sal_closesocket@PLT
+ 570      00
+ 180:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         osal_free(ctx);
+ 571              		.loc 1 180 9
+ 572 0033 488B45E8 		movq	-24(%rbp), %rax
+ 573 0037 4889C7   		movq	%rax, %rdi
+ 574 003a E8000000 		call	osal_free@PLT
+ 574      00
+ 575              	.L42:
+ 181:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     }
+ 182:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** }
+ 576              		.loc 1 182 1
+ 577 003f 90       		nop
+ 578 0040 488B45F8 		movq	-8(%rbp), %rax
+ 579 0044 64483304 		xorq	%fs:40, %rax
+ 579      25280000 
+ 579      00
+ 580 004d 7405     		je	.L41
+ 581 004f E8000000 		call	__stack_chk_fail@PLT
+ 581      00
+ 582              	.L41:
+ 583 0054 C9       		leave
+ 584              	.LCFI20:
+GAS LISTING /tmp/cceVOwpQ.s 			page 16
+
+
+ 585              		.cfi_def_cfa 7, 8
+ 586 0055 C3       		ret
+ 587              		.cfi_endproc
+ 588              	.LFE27:
+ 590              		.section	.text.mbedtls_net_accept,"ax",@progbits
+ 591              		.globl	mbedtls_net_accept
+ 593              	mbedtls_net_accept:
+ 594              	.LFB28:
+ 183:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+ 184:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** int mbedtls_net_accept(mbedtls_net_context *bind_ctx, mbedtls_net_context *client_ctx, void *client
+ 185:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     size_t *ip_len)
+ 186:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** {
+ 595              		.loc 1 186 1
+ 596              		.cfi_startproc
+ 597 0000 F30F1EFA 		endbr64
+ 598 0004 55       		pushq	%rbp
+ 599              	.LCFI21:
+ 600              		.cfi_def_cfa_offset 16
+ 601              		.cfi_offset 6, -16
+ 602 0005 4889E5   		movq	%rsp, %rbp
+ 603              	.LCFI22:
+ 604              		.cfi_def_cfa_register 6
+ 605 0008 4883EC60 		subq	$96, %rsp
+ 606 000c 48897DC8 		movq	%rdi, -56(%rbp)
+ 607 0010 488975C0 		movq	%rsi, -64(%rbp)
+ 608 0014 488955B8 		movq	%rdx, -72(%rbp)
+ 609 0018 48894DB0 		movq	%rcx, -80(%rbp)
+ 610 001c 4C8945A8 		movq	%r8, -88(%rbp)
+ 611              		.loc 1 186 1
+ 612 0020 64488B04 		movq	%fs:40, %rax
+ 612      25280000 
+ 612      00
+ 613 0029 488945F8 		movq	%rax, -8(%rbp)
+ 614 002d 31C0     		xorl	%eax, %eax
+ 187:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     int ret = MBEDTLS_ERR_NET_SOCKET_FAILED;
+ 615              		.loc 1 187 9
+ 616 002f C745DCBE 		movl	$-66, -36(%rbp)
+ 616      FFFFFF
+ 188:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     struct sockaddr_in client_addr;
+ 189:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     int addrlen;
+ 190:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+ 191:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     if ((NULL == bind_ctx) || (NULL == client_ctx)) {
+ 617              		.loc 1 191 8
+ 618 0036 48837DC8 		cmpq	$0, -56(%rbp)
+ 618      00
+ 619 003b 7407     		je	.L44
+ 620              		.loc 1 191 28 discriminator 1
+ 621 003d 48837DC0 		cmpq	$0, -64(%rbp)
+ 621      00
+ 622 0042 7508     		jne	.L45
+ 623              	.L44:
+ 192:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         return ret;
+ 624              		.loc 1 192 16
+ 625 0044 8B45DC   		movl	-36(%rbp), %eax
+ 626 0047 E9990000 		jmp	.L50
+ 626      00
+ 627              	.L45:
+GAS LISTING /tmp/cceVOwpQ.s 			page 17
+
+
+ 193:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     }
+ 194:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+ 195:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     sal_listen(((mbedtls_net_context *)bind_ctx)->fd, MBEDTLS_NET_LISTEN_BACKLOG);
+ 628              		.loc 1 195 5
+ 629 004c 488B45C8 		movq	-56(%rbp), %rax
+ 630 0050 8B00     		movl	(%rax), %eax
+ 631 0052 BE0A0000 		movl	$10, %esi
+ 631      00
+ 632 0057 89C7     		movl	%eax, %edi
+ 633 0059 E8000000 		call	sal_listen@PLT
+ 633      00
+ 196:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+ 197:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     addrlen = sizeof(client_addr);
+ 634              		.loc 1 197 13
+ 635 005e C745D810 		movl	$16, -40(%rbp)
+ 635      000000
+ 198:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     ((mbedtls_net_context *)client_ctx)->fd =
+ 199:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         sal_accept(((mbedtls_net_context *)bind_ctx)->fd, (struct sockaddr *)&client_addr, &addrlen
+ 636              		.loc 1 199 9
+ 637 0065 488B45C8 		movq	-56(%rbp), %rax
+ 638 0069 8B00     		movl	(%rax), %eax
+ 639 006b 488D55D8 		leaq	-40(%rbp), %rdx
+ 640 006f 488D4DE0 		leaq	-32(%rbp), %rcx
+ 641 0073 4889CE   		movq	%rcx, %rsi
+ 642 0076 89C7     		movl	%eax, %edi
+ 643 0078 E8000000 		call	sal_accept@PLT
+ 643      00
+ 198:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     ((mbedtls_net_context *)client_ctx)->fd =
+ 644              		.loc 1 198 45
+ 645 007d 488B55C0 		movq	-64(%rbp), %rdx
+ 646 0081 8902     		movl	%eax, (%rdx)
+ 200:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     if (-1 == ((mbedtls_net_context *)client_ctx)->fd) {
+ 647              		.loc 1 200 50
+ 648 0083 488B45C0 		movq	-64(%rbp), %rax
+ 649 0087 8B00     		movl	(%rax), %eax
+ 650              		.loc 1 200 8
+ 651 0089 83F8FF   		cmpl	$-1, %eax
+ 652 008c 7509     		jne	.L47
+ 201:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         ret = MBEDTLS_ERR_NET_ACCEPT_FAILED;
+ 653              		.loc 1 201 13
+ 654 008e C745DCB6 		movl	$-74, -36(%rbp)
+ 654      FFFFFF
+ 655 0095 EB07     		jmp	.L48
+ 656              	.L47:
+ 202:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     } else {
+ 203:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         ret = 0;
+ 657              		.loc 1 203 13
+ 658 0097 C745DC00 		movl	$0, -36(%rbp)
+ 658      000000
+ 659              	.L48:
+ 204:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     }
+ 205:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+ 206:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     if ((0 == ret) && (NULL != client_ip)) {
+ 660              		.loc 1 206 8
+ 661 009e 837DDC00 		cmpl	$0, -36(%rbp)
+ 662 00a2 753E     		jne	.L49
+ 663              		.loc 1 206 20 discriminator 1
+GAS LISTING /tmp/cceVOwpQ.s 			page 18
+
+
+ 664 00a4 48837DB8 		cmpq	$0, -72(%rbp)
+ 664      00
+ 665 00a9 7437     		je	.L49
+ 207:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         *ip_len = sizeof(client_addr.sin_addr) > buf_size ? buf_size : sizeof(client_addr.sin_addr)
+ 666              		.loc 1 207 70
+ 667 00ab B8040000 		movl	$4, %eax
+ 667      00
+ 668 00b0 48837DB0 		cmpq	$4, -80(%rbp)
+ 668      04
+ 669 00b5 480F4645 		cmovbe	-80(%rbp), %rax
+ 669      B0
+ 670 00ba 4889C2   		movq	%rax, %rdx
+ 671              		.loc 1 207 17
+ 672 00bd 488B45A8 		movq	-88(%rbp), %rax
+ 673 00c1 488910   		movq	%rdx, (%rax)
+ 208:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+ 209:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****         (void)memcpy(client_ip, &client_addr.sin_addr, *ip_len);
+ 674              		.loc 1 209 15
+ 675 00c4 488B45A8 		movq	-88(%rbp), %rax
+ 676 00c8 488B10   		movq	(%rax), %rdx
+ 677 00cb 488D45E0 		leaq	-32(%rbp), %rax
+ 678 00cf 488D4804 		leaq	4(%rax), %rcx
+ 679 00d3 488B45B8 		movq	-72(%rbp), %rax
+ 680 00d7 4889CE   		movq	%rcx, %rsi
+ 681 00da 4889C7   		movq	%rax, %rdi
+ 682 00dd E8000000 		call	memcpy@PLT
+ 682      00
+ 683              	.L49:
+ 210:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     }
+ 211:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** 
+ 212:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c ****     return ret;
+ 684              		.loc 1 212 12
+ 685 00e2 8B45DC   		movl	-36(%rbp), %eax
+ 686              	.L50:
+ 213:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/net_sockets_alt.c **** }
+ 687              		.loc 1 213 1 discriminator 1
+ 688 00e5 488B75F8 		movq	-8(%rbp), %rsi
+ 689 00e9 64483334 		xorq	%fs:40, %rsi
+ 689      25280000 
+ 689      00
+ 690 00f2 7405     		je	.L51
+ 691              		.loc 1 213 1 is_stmt 0
+ 692 00f4 E8000000 		call	__stack_chk_fail@PLT
+ 692      00
+ 693              	.L51:
+ 694 00f9 C9       		leave
+ 695              	.LCFI23:
+ 696              		.cfi_def_cfa 7, 8
+ 697 00fa C3       		ret
+ 698              		.cfi_endproc
+ 699              	.LFE28:
+ 701              		.text
+ 702              	.Letext0:
+ 703              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 704              		.file 3 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 705              		.file 4 "/usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h"
+ 706              		.file 5 "/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h"
+GAS LISTING /tmp/cceVOwpQ.s 			page 19
+
+
+ 707              		.file 6 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 708              		.file 7 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 709              		.file 8 "/usr/include/stdio.h"
+ 710              		.file 9 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 711              		.file 10 "/home/xingli/share/LiteOS_Lab/inc/sal_types.h"
+ 712              		.file 11 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/x509_c
+ 713              		.file 12 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/net_so
+ 714              		.file 13 "/usr/include/time.h"
+ 2852              		.section	.note.gnu.property,"a"
+ 2853              		.align 8
+ 2854 0000 04000000 		.long	 1f - 0f
+ 2855 0004 10000000 		.long	 4f - 1f
+ 2856 0008 05000000 		.long	 5
+ 2857              	0:
+ 2858 000c 474E5500 		.string	 "GNU"
+ 2859              	1:
+ 2860              		.align 8
+ 2861 0010 020000C0 		.long	 0xc0000002
+ 2862 0014 04000000 		.long	 3f - 2f
+ 2863              	2:
+ 2864 0018 03000000 		.long	 0x3
+ 2865              	3:
+ 2866 001c 00000000 		.align 8
+ 2867              	4:
+GAS LISTING /tmp/cceVOwpQ.s 			page 20
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 net_sockets_alt.c
+     /tmp/cceVOwpQ.s:7      .text.mbedtls_net_init:0000000000000000 mbedtls_net_init
+     /tmp/cceVOwpQ.s:46     .text.mbedtls_net_connect:0000000000000000 mbedtls_net_connect
+     /tmp/cceVOwpQ.s:219    .text.mbedtls_net_usleep:0000000000000000 mbedtls_net_usleep
+     /tmp/cceVOwpQ.s:264    .text.mbedtls_net_recv:0000000000000000 mbedtls_net_recv
+     /tmp/cceVOwpQ.s:344    .text.mbedtls_net_recv_timeout:0000000000000000 mbedtls_net_recv_timeout
+     /tmp/cceVOwpQ.s:465    .text.mbedtls_net_send:0000000000000000 mbedtls_net_send
+     /tmp/cceVOwpQ.s:545    .text.mbedtls_net_free:0000000000000000 mbedtls_net_free
+     /tmp/cceVOwpQ.s:593    .text.mbedtls_net_accept:0000000000000000 mbedtls_net_accept
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+__stack_chk_fail
+sal_gethostbyname
+sal_socket
+memset
+atoi
+sal_connect
+sal_closesocket
+osal_task_sleep
+sal_recv
+sal_setsockopt
+sal_send
+osal_free
+sal_listen
+sal_accept
+memcpy

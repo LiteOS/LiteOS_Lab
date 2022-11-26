@@ -1,0 +1,2465 @@
+GAS LISTING /tmp/cceimW80.s 			page 1
+
+
+   1              		.file	"strcpy_s.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.SecDoMemcpy,"ax",@progbits
+   6              	SecDoMemcpy:
+   7              	.LFB6:
+   8              		.file 1 "/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h"
+   1:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** /*
+   2:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  * Copyright (c) [2019] Huawei Technologies Co.,Ltd.All rights reserved.
+   3:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  *
+   4:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  * OpenArkCompiler is licensed under the Mulan PSL v1. 
+   5:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  * You can use this software according to the terms and conditions of the Mulan PSL v1.
+   6:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  * You may obtain a copy of Mulan PSL v1 at:
+   7:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  *
+   8:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  * 	http://license.coscl.org.cn/MulanPSL 
+   9:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  *
+  10:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER 
+  11:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
+  12:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  * FIT FOR A PARTICULAR PURPOSE.  
+  13:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  * See the Mulan PSL v1 for more details.  
+  14:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  */
+  15:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+  16:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifndef SECURECUTIL_H_46C86578_F8FF_4E49_8E64_9B175241761F
+  17:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECURECUTIL_H_46C86578_F8FF_4E49_8E64_9B175241761F
+  18:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #include "securec.h"
+  19:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+  20:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #if (defined(_MSC_VER)) && (_MSC_VER >= 1400)
+  21:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_MASK_MSVC_CRT_WARNING __pragma(warning(push)) \
+  22:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     __pragma(warning(disable:4996 4127))
+  23:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_END_MASK_MSVC_CRT_WARNING  __pragma(warning(pop))
+  24:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #else
+  25:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_MASK_MSVC_CRT_WARNING
+  26:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_END_MASK_MSVC_CRT_WARNING
+  27:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+  28:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_WHILE_ZERO SECUREC_MASK_MSVC_CRT_WARNING while (0) SECUREC_END_MASK_MSVC_CRT_WARNIN
+  29:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+  30:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifndef SECUREC_HAVE_STRNLEN
+  31:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #if (defined(_XOPEN_SOURCE) && _XOPEN_SOURCE >= 700) || (defined(_POSIX_C_SOURCE) && _POSIX_C_SOURC
+  32:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #if SECUREC_IN_KERNEL
+  33:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_HAVE_STRNLEN 0
+  34:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #else
+  35:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #if defined(__GLIBC__) && __GLIBC__ >= 2 && defined(__GLIBC_MINOR__) && __GLIBC_MINOR__ >= 10
+  36:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_HAVE_STRNLEN 1
+  37:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #else
+  38:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_HAVE_STRNLEN 0
+  39:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+  40:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+  41:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #else
+  42:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_HAVE_STRNLEN 0
+  43:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+  44:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+  45:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+  46:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #if SECUREC_IN_KERNEL
+  47:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** /* in kernel disbale functions */
+  48:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifndef SECUREC_ENABLE_SCANF_FILE
+  49:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ENABLE_SCANF_FILE 0
+  50:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+GAS LISTING /tmp/cceimW80.s 			page 2
+
+
+  51:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifndef SECUREC_ENABLE_SCANF_FLOAT
+  52:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ENABLE_SCANF_FLOAT 0
+  53:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+  54:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifndef SECUREC_ENABLE_SPRINTF_FLOAT
+  55:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ENABLE_SPRINTF_FLOAT 0
+  56:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+  57:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifndef SECUREC_HAVE_MBTOWC
+  58:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_HAVE_MBTOWC 0
+  59:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+  60:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifndef SECUREC_HAVE_WCTOMB
+  61:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_HAVE_WCTOMB 0
+  62:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+  63:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifndef SECUREC_HAVE_WCHART
+  64:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_HAVE_WCHART 0
+  65:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+  66:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #else /* no in kernel */
+  67:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** /* Systems that do not support file, can define this macro to 0. */
+  68:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifndef SECUREC_ENABLE_SCANF_FILE
+  69:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ENABLE_SCANF_FILE 1
+  70:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+  71:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifndef SECUREC_ENABLE_SCANF_FLOAT
+  72:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ENABLE_SCANF_FLOAT 1
+  73:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+  74:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** /* Systems that do not support float, can define this macro to 0. */
+  75:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifndef SECUREC_ENABLE_SPRINTF_FLOAT
+  76:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ENABLE_SPRINTF_FLOAT 1
+  77:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+  78:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifndef SECUREC_HAVE_MBTOWC
+  79:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_HAVE_MBTOWC 1
+  80:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+  81:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifndef SECUREC_HAVE_WCTOMB
+  82:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_HAVE_WCTOMB 1
+  83:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+  84:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifndef SECUREC_HAVE_WCHART
+  85:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_HAVE_WCHART 1
+  86:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+  87:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+  88:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+  89:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+  90:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_INT_MAX                     2147483647
+  91:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_MUL_SIXTEEN(x)              ((x) << 4)
+  92:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_MUL_EIGHT(x)                ((x) << 3)
+  93:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_MUL_TEN(x)                  ((((x) << 2) + (x)) << 1)
+  94:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** /* Limited format input and output width */
+  95:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_MAX_WIDTH_LEN_DIV_TEN       21474836
+  96:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_MAX_WIDTH_LEN               SECUREC_MUL_TEN(SECUREC_MAX_WIDTH_LEN_DIV_TEN)
+  97:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** /* Is the x multiplied by 10 greater than */
+  98:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_MUL_TEN_ADD_BEYOND_MAX(x)   (((x) > SECUREC_MAX_WIDTH_LEN_DIV_TEN))
+  99:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 100:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_FLOAT_BUFSIZE               (309 + 40)  /* Max length of double value */
+ 101:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_FLOAT_BUFSIZE_LB            (4932 + 40) /* Max length of long double value */
+ 102:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_FLOAT_DEFAULT_PRECISION     6
+ 103:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 104:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** /* This macro does not handle pointer equality or integer overflow */
+ 105:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_MEMORY_NO_OVERLAP(dest, src, count) \
+ 106:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     (((src) < (dest) && ((const char *)(src) + (count)) <= (char *)(dest)) || \
+ 107:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     ((dest) < (src) && ((char *)(dest) + (count)) <= (const char *)(src)))
+GAS LISTING /tmp/cceimW80.s 			page 3
+
+
+ 108:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 109:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_MEMORY_IS_OVERLAP(dest, src, count) \
+ 110:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     (((src) < (dest) && ((const char *)(src) + (count)) > (char *)(dest)) || \
+ 111:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     ((dest) < (src) && ((char *)(dest) + (count)) > (const char *)(src)))
+ 112:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 113:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** /*
+ 114:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  * Check whether the strings overlap, len is the length of the string not include terminator
+ 115:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  * Length is related to data type char or wchar , do not force conversion of types
+ 116:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  */
+ 117:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_STRING_NO_OVERLAP(dest, src, len) \
+ 118:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     (((src) < (dest) && ((src) + (len)) < (dest)) || \
+ 119:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     ((dest) < (src) && ((dest) + (len)) < (src)))
+ 120:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 121:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** /*
+ 122:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  * Check whether the strings overlap for strcpy wcscpy function, dest len and src Len are not inclu
+ 123:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  * Length is related to data type char or wchar , do not force conversion of types
+ 124:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  */
+ 125:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_STRING_IS_OVERLAP(dest, src, len) \
+ 126:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     (((src) < (dest) && ((src) + (len)) >= (dest)) || \
+ 127:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     ((dest) < (src) && ((dest) + (len)) >= (src)))
+ 128:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 129:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** /*
+ 130:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  * Check whether the strings overlap for strcat wcscat function, dest len and src Len are not inclu
+ 131:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  * Length is related to data type char or wchar , do not force conversion of types
+ 132:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  */
+ 133:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_CAT_STRING_IS_OVERLAP(dest, destLen, src, srcLen) \
+ 134:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     (((dest) < (src) && ((dest) + (destLen) + (srcLen)) >= (src)) || \
+ 135:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     ((src) < (dest) && ((src) + (srcLen)) >= (dest)))
+ 136:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 137:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 138:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #if SECUREC_HAVE_STRNLEN
+ 139:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_CALC_STR_LEN(str, maxLen, outLen) do { \
+ 140:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     *(outLen) = strnlen((str), (maxLen)); \
+ 141:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SECUREC_WHILE_ZERO
+ 142:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_CALC_STR_LEN_OPT(str, maxLen, outLen) do { \
+ 143:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     if ((maxLen) > 8) { \
+ 144:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****         /* Optimization or len less then 8 */ \
+ 145:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****         if (*((str) + 0) == '\0') { \
+ 146:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****             *(outLen) = 0; \
+ 147:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****         } else if (*((str) + 1) == '\0') { \
+ 148:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****             *(outLen) = 1; \
+ 149:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****         } else if (*((str) + 2) == '\0') { \
+ 150:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****             *(outLen) = 2; \
+ 151:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****         } else if (*((str) + 3) == '\0') { \
+ 152:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****             *(outLen) = 3; \
+ 153:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****         } else if (*((str) + 4) == '\0') { \
+ 154:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****             *(outLen) = 4; \
+ 155:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****         } else if (*((str) + 5) == '\0') { \
+ 156:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****             *(outLen) = 5; \
+ 157:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****         } else if (*((str) + 6) == '\0') { \
+ 158:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****             *(outLen) = 6; \
+ 159:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****         } else if (*((str) + 7) == '\0') { \
+ 160:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****             *(outLen) = 7; \
+ 161:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****         } else if (*((str) + 8) == '\0') { \
+ 162:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****             /* Optimization with a length of 8 */ \
+ 163:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****             *(outLen) = 8; \
+ 164:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****         } else { \
+GAS LISTING /tmp/cceimW80.s 			page 4
+
+
+ 165:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****             /* The offset is 8 because the performance of 8 byte alignment is high */ \
+ 166:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****             *(outLen) = 8 + strnlen((str) + 8, (maxLen) - 8); \
+ 167:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****         } \
+ 168:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     } else { \
+ 169:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****         SECUREC_CALC_STR_LEN((str), (maxLen), (outLen)); \
+ 170:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     } \
+ 171:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SECUREC_WHILE_ZERO
+ 172:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #else
+ 173:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_CALC_STR_LEN(str, maxLen, outLen) do { \
+ 174:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     const char *strEnd = (const char *)(str); \
+ 175:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     size_t availableSize = (size_t)(maxLen); \
+ 176:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     while (availableSize > 0 && *strEnd != '\0') { \
+ 177:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****         --availableSize; \
+ 178:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****         ++strEnd; \
+ 179:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     } \
+ 180:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     *(outLen) = (size_t)(strEnd - (str)); \
+ 181:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SECUREC_WHILE_ZERO
+ 182:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_CALC_STR_LEN_OPT SECUREC_CALC_STR_LEN
+ 183:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+ 184:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 185:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_CALC_WSTR_LEN(str, maxLen, outLen) do { \
+ 186:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     const wchar_t *strEnd = (const wchar_t *)(str); \
+ 187:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     *(outLen) = 0; \
+ 188:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     while (*(outLen) < (maxLen) && *strEnd != L'\0') { \
+ 189:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****         *(outLen) = *(outLen) + 1; \
+ 190:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****         ++strEnd; \
+ 191:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     } \
+ 192:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SECUREC_WHILE_ZERO
+ 193:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 194:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 195:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifdef SECUREC_FORMAT_OUTPUT_INPUT
+ 196:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #if defined(SECUREC_COMPATIBLE_WIN_FORMAT) || defined(__ARMCC_VERSION)
+ 197:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef __int64 SecInt64;
+ 198:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef unsigned __int64 SecUnsignedInt64;
+ 199:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #if defined(__ARMCC_VERSION)
+ 200:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef unsigned int SecUnsignedInt32;
+ 201:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #else
+ 202:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef unsigned __int32 SecUnsignedInt32;
+ 203:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+ 204:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #else
+ 205:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef unsigned int SecUnsignedInt32;
+ 206:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef long long SecInt64;
+ 207:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef unsigned long long SecUnsignedInt64;
+ 208:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+ 209:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 210:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifdef SECUREC_FOR_WCHAR
+ 211:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #if defined(SECUREC_VXWORKS_PLATFORM) && !defined(__WINT_TYPE__)
+ 212:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef wchar_t wint_t;
+ 213:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+ 214:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef wchar_t SecChar;
+ 215:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef wchar_t SecUnsignedChar;
+ 216:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef wint_t SecInt;
+ 217:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef wint_t SecUnsignedInt;
+ 218:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #else /*  no SECUREC_FOR_WCHAR */
+ 219:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef char SecChar;
+ 220:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef unsigned char SecUnsignedChar;
+ 221:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef int SecInt;
+GAS LISTING /tmp/cceimW80.s 			page 5
+
+
+ 222:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef unsigned int SecUnsignedInt;
+ 223:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+ 224:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+ 225:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 226:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** /* Determine whether the address is 8-byte aligned
+ 227:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  * Some systems do not have uintptr_t type, so  use NULL to clear tool alarm 507
+ 228:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  */
+ 229:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ADDR_ALIGNED_8(addr) (SecIsAddrAligned8((addr), NULL) == 0)
+ 230:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 231:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** /* If you define the memory allocation function,
+ 232:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  * you need to define the function prototype. You can define this macro as a header file.
+ 233:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  */
+ 234:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #if defined(SECUREC_MALLOC_PROTOTYPE)
+ 235:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** SECUREC_MALLOC_PROTOTYPE
+ 236:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+ 237:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 238:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifndef SECUREC_MALLOC
+ 239:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_MALLOC(x) malloc((size_t)(x))
+ 240:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+ 241:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 242:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifndef SECUREC_FREE
+ 243:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_FREE(x)   free((void *)(x))
+ 244:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+ 245:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 246:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** /* struct for performance */
+ 247:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 248:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[1]; /* Performance optimization code structure assignment length 1 bytes */
+ 249:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf1;
+ 250:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 251:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[2]; /* Performance optimization code structure assignment length 2 bytes */
+ 252:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf2;
+ 253:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 254:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[3]; /* Performance optimization code structure assignment length 3 bytes */
+ 255:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf3;
+ 256:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 257:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[4]; /* Performance optimization code structure assignment length 4 bytes */
+ 258:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf4;
+ 259:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 260:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[5]; /* Performance optimization code structure assignment length 5 bytes */
+ 261:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf5;
+ 262:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 263:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[6]; /* Performance optimization code structure assignment length 6 bytes */
+ 264:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf6;
+ 265:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 266:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[7]; /* Performance optimization code structure assignment length 7 bytes */
+ 267:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf7;
+ 268:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 269:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[8]; /* Performance optimization code structure assignment length 8 bytes */
+ 270:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf8;
+ 271:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 272:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[9]; /* Performance optimization code structure assignment length 9 bytes */
+ 273:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf9;
+ 274:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 275:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[10]; /* Performance optimization code structure assignment length 10 bytes */
+ 276:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf10;
+ 277:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 278:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[11]; /* Performance optimization code structure assignment length 11 bytes */
+GAS LISTING /tmp/cceimW80.s 			page 6
+
+
+ 279:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf11;
+ 280:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 281:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[12]; /* Performance optimization code structure assignment length 12 bytes */
+ 282:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf12;
+ 283:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 284:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[13]; /* Performance optimization code structure assignment length 13 bytes */
+ 285:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf13;
+ 286:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 287:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[14]; /* Performance optimization code structure assignment length 14 bytes */
+ 288:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf14;
+ 289:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 290:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[15]; /* Performance optimization code structure assignment length 15 bytes */
+ 291:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf15;
+ 292:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 293:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[16]; /* Performance optimization code structure assignment length 16 bytes */
+ 294:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf16;
+ 295:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 296:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[17]; /* Performance optimization code structure assignment length 17 bytes */
+ 297:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf17;
+ 298:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 299:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[18]; /* Performance optimization code structure assignment length 18 bytes */
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf18;
+ 301:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 302:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[19]; /* Performance optimization code structure assignment length 19 bytes */
+ 303:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf19;
+ 304:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 305:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[20]; /* Performance optimization code structure assignment length 20 bytes */
+ 306:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf20;
+ 307:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 308:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[21]; /* Performance optimization code structure assignment length 21 bytes */
+ 309:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf21;
+ 310:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 311:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[22]; /* Performance optimization code structure assignment length 22 bytes */
+ 312:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf22;
+ 313:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 314:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[23]; /* Performance optimization code structure assignment length 23 bytes */
+ 315:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf23;
+ 316:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 317:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[24]; /* Performance optimization code structure assignment length 24 bytes */
+ 318:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf24;
+ 319:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 320:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[25]; /* Performance optimization code structure assignment length 25 bytes */
+ 321:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf25;
+ 322:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 323:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[26]; /* Performance optimization code structure assignment length 26 bytes */
+ 324:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf26;
+ 325:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 326:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[27]; /* Performance optimization code structure assignment length 27 bytes */
+ 327:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf27;
+ 328:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 329:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[28]; /* Performance optimization code structure assignment length 28 bytes */
+ 330:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf28;
+ 331:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 332:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[29]; /* Performance optimization code structure assignment length 29 bytes */
+ 333:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf29;
+ 334:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 335:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[30]; /* Performance optimization code structure assignment length 30 bytes */
+GAS LISTING /tmp/cceimW80.s 			page 7
+
+
+ 336:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf30;
+ 337:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 338:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[31]; /* Performance optimization code structure assignment length 31 bytes */
+ 339:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf31;
+ 340:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 341:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[32]; /* Performance optimization code structure assignment length 32 bytes */
+ 342:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf32;
+ 343:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 344:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[33]; /* Performance optimization code structure assignment length 33 bytes */
+ 345:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf33;
+ 346:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 347:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[34]; /* Performance optimization code structure assignment length 34 bytes */
+ 348:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf34;
+ 349:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 350:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[35]; /* Performance optimization code structure assignment length 35 bytes */
+ 351:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf35;
+ 352:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 353:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[36]; /* Performance optimization code structure assignment length 36 bytes */
+ 354:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf36;
+ 355:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 356:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[37]; /* Performance optimization code structure assignment length 37 bytes */
+ 357:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf37;
+ 358:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 359:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[38]; /* Performance optimization code structure assignment length 38 bytes */
+ 360:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf38;
+ 361:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 362:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[39]; /* Performance optimization code structure assignment length 39 bytes */
+ 363:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf39;
+ 364:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 365:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[40]; /* Performance optimization code structure assignment length 40 bytes */
+ 366:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf40;
+ 367:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 368:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[41]; /* Performance optimization code structure assignment length 41 bytes */
+ 369:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf41;
+ 370:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 371:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[42]; /* Performance optimization code structure assignment length 42 bytes */
+ 372:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf42;
+ 373:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 374:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[43]; /* Performance optimization code structure assignment length 43 bytes */
+ 375:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf43;
+ 376:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 377:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[44]; /* Performance optimization code structure assignment length 44 bytes */
+ 378:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf44;
+ 379:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 380:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[45]; /* Performance optimization code structure assignment length 45 bytes */
+ 381:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf45;
+ 382:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 383:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[46]; /* Performance optimization code structure assignment length 46 bytes */
+ 384:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf46;
+ 385:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 386:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[47]; /* Performance optimization code structure assignment length 47 bytes */
+ 387:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf47;
+ 388:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 389:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[48]; /* Performance optimization code structure assignment length 48 bytes */
+ 390:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf48;
+ 391:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 392:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[49]; /* Performance optimization code structure assignment length 49 bytes */
+GAS LISTING /tmp/cceimW80.s 			page 8
+
+
+ 393:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf49;
+ 394:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 395:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[50]; /* Performance optimization code structure assignment length 50 bytes */
+ 396:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf50;
+ 397:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 398:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[51]; /* Performance optimization code structure assignment length 51 bytes */
+ 399:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf51;
+ 400:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 401:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[52]; /* Performance optimization code structure assignment length 52 bytes */
+ 402:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf52;
+ 403:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 404:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[53]; /* Performance optimization code structure assignment length 53 bytes */
+ 405:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf53;
+ 406:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 407:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[54]; /* Performance optimization code structure assignment length 54 bytes */
+ 408:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf54;
+ 409:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 410:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[55]; /* Performance optimization code structure assignment length 55 bytes */
+ 411:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf55;
+ 412:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 413:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[56]; /* Performance optimization code structure assignment length 56 bytes */
+ 414:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf56;
+ 415:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 416:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[57]; /* Performance optimization code structure assignment length 57 bytes */
+ 417:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf57;
+ 418:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 419:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[58]; /* Performance optimization code structure assignment length 58 bytes */
+ 420:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf58;
+ 421:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 422:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[59]; /* Performance optimization code structure assignment length 59 bytes */
+ 423:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf59;
+ 424:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 425:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[60]; /* Performance optimization code structure assignment length 60 bytes */
+ 426:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf60;
+ 427:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 428:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[61]; /* Performance optimization code structure assignment length 61 bytes */
+ 429:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf61;
+ 430:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 431:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[62]; /* Performance optimization code structure assignment length 62 bytes */
+ 432:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf62;
+ 433:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 434:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[63]; /* Performance optimization code structure assignment length 63 bytes */
+ 435:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf63;
+ 436:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** typedef struct {
+ 437:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     unsigned char buf[64]; /* Performance optimization code structure assignment length 64 bytes */
+ 438:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** } SecStrBuf64;
+ 439:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 440:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 441:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 442:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 443:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** /* User can change the error handler by modify the following definition,
+ 444:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  * such as logging the detail error in file.
+ 445:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****  */
+ 446:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #if defined(_DEBUG) || defined(DEBUG)
+ 447:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #if defined(SECUREC_ERROR_HANDLER_BY_ASSERT)
+ 448:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_PARAMTER(msg) assert(msg "invalid argument" == NULL)
+ 449:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_RANGE(msg)    assert(msg "invalid dest buffer size" == NULL)
+GAS LISTING /tmp/cceimW80.s 			page 9
+
+
+ 450:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ERROR_BUFFER_OVERLAP(msg)   assert(msg "buffer overlap" == NULL)
+ 451:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #elif defined(SECUREC_ERROR_HANDLER_BY_PRINTF)
+ 452:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #if SECUREC_IN_KERNEL
+ 453:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_PARAMTER(msg) printk("%s invalid argument\n", msg)
+ 454:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_RANGE(msg)    printk("%s invalid dest buffer size\n", msg)
+ 455:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ERROR_BUFFER_OVERLAP(msg)   printk("%s buffer overlap\n", msg)
+ 456:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #else
+ 457:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_PARAMTER(msg) printf("%s invalid argument\n", msg)
+ 458:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_RANGE(msg)    printf("%s invalid dest buffer size\n", msg)
+ 459:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ERROR_BUFFER_OVERLAP(msg)   printf("%s buffer overlap\n", msg)
+ 460:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+ 461:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #elif defined(SECUREC_ERROR_HANDLER_BY_FILE_LOG)
+ 462:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_PARAMTER(msg) LogSecureCRuntimeError(msg " EINVAL\n")
+ 463:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_RANGE(msg)    LogSecureCRuntimeError(msg " ERANGE\n")
+ 464:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ERROR_BUFFER_OVERLAP(msg)   LogSecureCRuntimeError(msg " EOVERLAP\n")
+ 465:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #else /* no HANDLER is defined */
+ 466:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_PARAMTER(msg) ((void)0)
+ 467:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_RANGE(msg)    ((void)0)
+ 468:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ERROR_BUFFER_OVERLAP(msg)   ((void)0)
+ 469:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+ 470:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #else /* no DEBUG */
+ 471:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_PARAMTER(msg) ((void)0)
+ 472:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_RANGE(msg)    ((void)0)
+ 473:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #define SECUREC_ERROR_BUFFER_OVERLAP(msg)   ((void)0)
+ 474:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+ 475:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 476:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifdef __cplusplus
+ 477:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** extern "C" {
+ 478:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+ 479:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 480:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** /* assembly language memory copy and memory set for X86 or MIPS ... */
+ 481:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifdef SECUREC_USE_ASM
+ 482:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     extern void *memcpy_opt(void *, const void *, size_t);
+ 483:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     extern void *memset_opt(void *, int, size_t);
+ 484:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+ 485:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 486:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #if defined(SECUREC_ERROR_HANDLER_BY_FILE_LOG)
+ 487:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     extern void LogSecureCRuntimeError(const char *errDetail);
+ 488:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+ 489:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 490:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifdef SECUREC_INLINE_DO_MEMCPY
+ 491:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** static void SecDoMemcpy(void *dest, const void *src, size_t count)
+ 492:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** {
+   9              		.loc 1 492 1
+  10              		.cfi_startproc
+  11 0000 F30F1EFA 		endbr64
+  12 0004 55       		pushq	%rbp
+  13              	.LCFI0:
+  14              		.cfi_def_cfa_offset 16
+  15              		.cfi_offset 6, -16
+  16 0005 4889E5   		movq	%rsp, %rbp
+  17              	.LCFI1:
+  18              		.cfi_def_cfa_register 6
+  19 0008 4883EC30 		subq	$48, %rsp
+  20 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  21 0010 488975E0 		movq	%rsi, -32(%rbp)
+  22 0014 488955D8 		movq	%rdx, -40(%rbp)
+GAS LISTING /tmp/cceimW80.s 			page 10
+
+
+  23              		.loc 1 492 1
+  24 0018 64488B04 		movq	%fs:40, %rax
+  24      25280000 
+  24      00
+  25 0021 488945F8 		movq	%rax, -8(%rbp)
+  26 0025 31C0     		xorl	%eax, %eax
+ 493:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     /*
+ 494:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****      * if SECUREC_USE_ASM macro is enabled, it will call assembly language function to improve perf
+ 495:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****      */
+ 496:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifdef SECUREC_USE_ASM
+ 497:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     (void)memcpy_opt(dest, src, count);
+ 498:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #else
+ 499:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     /* large enough, let system API do it */
+ 500:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     (void)memcpy(dest, src, count);
+  27              		.loc 1 500 11
+  28 0027 488B55D8 		movq	-40(%rbp), %rdx
+  29 002b 488B4DE0 		movq	-32(%rbp), %rcx
+  30 002f 488B45E8 		movq	-24(%rbp), %rax
+  31 0033 4889CE   		movq	%rcx, %rsi
+  32 0036 4889C7   		movq	%rax, %rdi
+  33 0039 E8000000 		call	memcpy@PLT
+  33      00
+ 501:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+ 502:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** }
+  34              		.loc 1 502 1
+  35 003e 90       		nop
+  36 003f 488B45F8 		movq	-8(%rbp), %rax
+  37 0043 64483304 		xorq	%fs:40, %rax
+  37      25280000 
+  37      00
+  38 004c 7405     		je	.L2
+  39 004e E8000000 		call	__stack_chk_fail@PLT
+  39      00
+  40              	.L2:
+  41 0053 C9       		leave
+  42              	.LCFI2:
+  43              		.cfi_def_cfa 7, 8
+  44 0054 C3       		ret
+  45              		.cfi_endproc
+  46              	.LFE6:
+  48              		.section	.text.SecStrMinLen,"ax",@progbits
+  50              	SecStrMinLen:
+  51              	.LFB7:
+ 503:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+ 504:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 505:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifdef SECUREC_INLINE_DO_MEMSET
+ 506:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** static void SecDoMemset(void *dest, int c, size_t count)
+ 507:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** {
+ 508:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifdef SECUREC_USE_ASM
+ 509:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     (void)memset_opt(dest, c, count);
+ 510:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #else
+ 511:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     (void)memset(dest, c, count);
+ 512:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+ 513:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** }
+ 514:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #endif
+ 515:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** 
+ 516:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** #ifdef SECUREC_INLINE_STR_LEN
+GAS LISTING /tmp/cceimW80.s 			page 11
+
+
+ 517:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** /* The function compiler will be inlined and not placed in other files */
+ 518:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** static size_t SecStrMinLen(const char *str, size_t maxLen)
+ 519:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** {
+  52              		.loc 1 519 1
+  53              		.cfi_startproc
+  54 0000 F30F1EFA 		endbr64
+  55 0004 55       		pushq	%rbp
+  56              	.LCFI3:
+  57              		.cfi_def_cfa_offset 16
+  58              		.cfi_offset 6, -16
+  59 0005 4889E5   		movq	%rsp, %rbp
+  60              	.LCFI4:
+  61              		.cfi_def_cfa_register 6
+  62 0008 4883EC20 		subq	$32, %rsp
+  63 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  64 0010 488975E0 		movq	%rsi, -32(%rbp)
+  65              		.loc 1 519 1
+  66 0014 64488B04 		movq	%fs:40, %rax
+  66      25280000 
+  66      00
+  67 001d 488945F8 		movq	%rax, -8(%rbp)
+  68 0021 31C0     		xorl	%eax, %eax
+ 520:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     size_t len;
+ 521:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     SECUREC_CALC_STR_LEN(str, maxLen, &len);
+  69              		.loc 1 521 5
+  70 0023 488B55E0 		movq	-32(%rbp), %rdx
+  71 0027 488B45E8 		movq	-24(%rbp), %rax
+  72 002b 4889D6   		movq	%rdx, %rsi
+  73 002e 4889C7   		movq	%rax, %rdi
+  74 0031 E8000000 		call	strnlen@PLT
+  74      00
+  75 0036 488945F0 		movq	%rax, -16(%rbp)
+ 522:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h ****     return len;
+  76              		.loc 1 522 12
+  77 003a 488B45F0 		movq	-16(%rbp), %rax
+ 523:/home/xingli/share/LiteOS_Lab/secure_c/src/securecutil.h **** }
+  78              		.loc 1 523 1
+  79 003e 488B4DF8 		movq	-8(%rbp), %rcx
+  80 0042 6448330C 		xorq	%fs:40, %rcx
+  80      25280000 
+  80      00
+  81 004b 7405     		je	.L5
+  82 004d E8000000 		call	__stack_chk_fail@PLT
+  82      00
+  83              	.L5:
+  84 0052 C9       		leave
+  85              	.LCFI5:
+  86              		.cfi_def_cfa 7, 8
+  87 0053 C3       		ret
+  88              		.cfi_endproc
+  89              	.LFE7:
+  91              		.section	.text.SecIsAddrAligned8,"ax",@progbits
+  93              	SecIsAddrAligned8:
+  94              	.LFB8:
+  95              		.file 2 "/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c"
+   1:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** /*
+   2:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  * Copyright (c) [2019] Huawei Technologies Co.,Ltd.All rights reserved.
+GAS LISTING /tmp/cceimW80.s 			page 12
+
+
+   3:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *
+   4:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  * OpenArkCompiler is licensed under the Mulan PSL v1. 
+   5:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  * You can use this software according to the terms and conditions of the Mulan PSL v1.
+   6:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  * You may obtain a copy of Mulan PSL v1 at:
+   7:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *
+   8:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  * 	http://license.coscl.org.cn/MulanPSL 
+   9:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *
+  10:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER 
+  11:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
+  12:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  * FIT FOR A PARTICULAR PURPOSE.  
+  13:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  * See the Mulan PSL v1 for more details.  
+  14:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  */
+  15:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** /* [Standardize-exceptions] Use unsafe function: Performance-sensitive
+  16:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  * [reason] Always used in the performance critical path,
+  17:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *          and sufficient input validation is performed before calling
+  18:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  */
+  19:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** 
+  20:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** #define SECUREC_INLINE_STR_LEN   1
+  21:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** #define SECUREC_INLINE_DO_MEMCPY 1
+  22:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** 
+  23:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** #include "securecutil.h"
+  24:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** 
+  25:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** #if SECUREC_IN_KERNEL== 0
+  26:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** #ifndef SECUREC_STRCOPY_THRESHOLD_SIZE
+  27:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** #define SECUREC_STRCOPY_THRESHOLD_SIZE   32UL
+  28:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** #endif
+  29:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** 
+  30:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** /*
+  31:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  * Determine whether the address is 8-byte aligned, use static to increase performance
+  32:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  * return 0 is aligned
+  33:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  */
+  34:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** static int SecIsAddrAligned8(const void *addr, const void *zeroAddr)
+  35:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** {
+  96              		.loc 2 35 1
+  97              		.cfi_startproc
+  98 0000 F30F1EFA 		endbr64
+  99 0004 55       		pushq	%rbp
+ 100              	.LCFI6:
+ 101              		.cfi_def_cfa_offset 16
+ 102              		.cfi_offset 6, -16
+ 103 0005 4889E5   		movq	%rsp, %rbp
+ 104              	.LCFI7:
+ 105              		.cfi_def_cfa_register 6
+ 106 0008 4883EC20 		subq	$32, %rsp
+ 107 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 108 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 109              		.loc 2 35 1
+ 110 0014 64488B04 		movq	%fs:40, %rax
+ 110      25280000 
+ 110      00
+ 111 001d 488945F8 		movq	%rax, -8(%rbp)
+ 112 0021 31C0     		xorl	%eax, %eax
+  36:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     return (int)(((size_t)((const char*)addr - (const char*)zeroAddr)) & 7); /* use 7 to check alig
+ 113              		.loc 2 36 46
+ 114 0023 488B45E8 		movq	-24(%rbp), %rax
+ 115 0027 482B45E0 		subq	-32(%rbp), %rax
+ 116              		.loc 2 36 12
+GAS LISTING /tmp/cceimW80.s 			page 13
+
+
+ 117 002b 83E007   		andl	$7, %eax
+  37:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** }
+ 118              		.loc 2 37 1
+ 119 002e 488B55F8 		movq	-8(%rbp), %rdx
+ 120 0032 64483314 		xorq	%fs:40, %rdx
+ 120      25280000 
+ 120      00
+ 121 003b 7405     		je	.L8
+ 122 003d E8000000 		call	__stack_chk_fail@PLT
+ 122      00
+ 123              	.L8:
+ 124 0042 C9       		leave
+ 125              	.LCFI8:
+ 126              		.cfi_def_cfa 7, 8
+ 127 0043 C3       		ret
+ 128              		.cfi_endproc
+ 129              	.LFE8:
+ 131              		.section	.text.CheckSrcRange,"ax",@progbits
+ 133              	CheckSrcRange:
+ 134              	.LFB9:
+  38:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** 
+  39:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** /* The purpose of converting to void is to clean up the alarm */
+  40:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** #define SECUREC_SMALL_STR_COPY do { \
+  41:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     if (SECUREC_ADDR_ALIGNED_8(strDest) && SECUREC_ADDR_ALIGNED_8(strSrc)) { \
+  42:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         /* use struct assignment */ \
+  43:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         switch (srcStrLen) { \
+  44:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 1: \
+  45:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf1 *)(void *)strDest = *(const SecStrBuf1 *)(const void *)strSrc; \
+  46:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+  47:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 2: \
+  48:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf2 *)(void *)strDest = *(const SecStrBuf2 *)(const void *)strSrc; \
+  49:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+  50:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 3: \
+  51:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf3 *)(void *)strDest = *(const SecStrBuf3 *)(const void *)strSrc; \
+  52:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+  53:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 4: \
+  54:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf4 *)(void *)strDest = *(const SecStrBuf4 *)(const void *)strSrc; \
+  55:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+  56:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 5: \
+  57:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf5 *)(void *)strDest = *(const SecStrBuf5 *)(const void *)strSrc; \
+  58:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+  59:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 6: \
+  60:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf6 *)(void *)strDest = *(const SecStrBuf6 *)(const void *)strSrc; \
+  61:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+  62:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 7: \
+  63:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf7 *)(void *)strDest = *(const SecStrBuf7 *)(const void *)strSrc; \
+  64:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+  65:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 8: \
+  66:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf8 *)(void *)strDest = *(const SecStrBuf8 *)(const void *)strSrc; \
+  67:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+  68:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 9: \
+  69:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf9 *)(void *)strDest = *(const SecStrBuf9 *)(const void *)strSrc; \
+  70:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+  71:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 10: \
+  72:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf10 *)(void *)strDest = *(const SecStrBuf10 *)(const void *)strSrc; \
+  73:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+  74:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 11: \
+GAS LISTING /tmp/cceimW80.s 			page 14
+
+
+  75:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf11 *)(void *)strDest = *(const SecStrBuf11 *)(const void *)strSrc; \
+  76:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+  77:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 12: \
+  78:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf12 *)(void *)strDest = *(const SecStrBuf12 *)(const void *)strSrc; \
+  79:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+  80:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 13: \
+  81:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf13 *)(void *)strDest = *(const SecStrBuf13 *)(const void *)strSrc; \
+  82:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+  83:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 14: \
+  84:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf14 *)(void *)strDest = *(const SecStrBuf14 *)(const void *)strSrc; \
+  85:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+  86:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 15: \
+  87:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf15 *)(void *)strDest = *(const SecStrBuf15 *)(const void *)strSrc; \
+  88:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+  89:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 16: \
+  90:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf16 *)(void *)strDest = *(const SecStrBuf16 *)(const void *)strSrc; \
+  91:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+  92:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 17: \
+  93:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf17 *)(void *)strDest = *(const SecStrBuf17 *)(const void *)strSrc; \
+  94:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+  95:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 18: \
+  96:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf18 *)(void *)strDest = *(const SecStrBuf18 *)(const void *)strSrc; \
+  97:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+  98:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 19: \
+  99:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf19 *)(void *)strDest = *(const SecStrBuf19 *)(const void *)strSrc; \
+ 100:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+ 101:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 20: \
+ 102:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf20 *)(void *)strDest = *(const SecStrBuf20 *)(const void *)strSrc; \
+ 103:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+ 104:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 21: \
+ 105:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf21 *)(void *)strDest = *(const SecStrBuf21 *)(const void *)strSrc; \
+ 106:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+ 107:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 22: \
+ 108:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf22 *)(void *)strDest = *(const SecStrBuf22 *)(const void *)strSrc; \
+ 109:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+ 110:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 23: \
+ 111:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf23 *)(void *)strDest = *(const SecStrBuf23 *)(const void *)strSrc; \
+ 112:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+ 113:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 24: \
+ 114:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf24 *)(void *)strDest = *(const SecStrBuf24 *)(const void *)strSrc; \
+ 115:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+ 116:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 25: \
+ 117:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf25 *)(void *)strDest = *(const SecStrBuf25 *)(const void *)strSrc; \
+ 118:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+ 119:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 26: \
+ 120:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf26 *)(void *)strDest = *(const SecStrBuf26 *)(const void *)strSrc; \
+ 121:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+ 122:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 27: \
+ 123:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf27 *)(void *)strDest = *(const SecStrBuf27 *)(const void *)strSrc; \
+ 124:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+ 125:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 28: \
+ 126:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf28 *)(void *)strDest = *(const SecStrBuf28 *)(const void *)strSrc; \
+ 127:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+ 128:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 29: \
+ 129:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf29 *)(void *)strDest = *(const SecStrBuf29 *)(const void *)strSrc; \
+ 130:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+ 131:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 30: \
+GAS LISTING /tmp/cceimW80.s 			page 15
+
+
+ 132:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf30 *)(void *)strDest = *(const SecStrBuf30 *)(const void *)strSrc; \
+ 133:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+ 134:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 31: \
+ 135:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf31 *)(void *)strDest = *(const SecStrBuf31 *)(const void *)strSrc; \
+ 136:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+ 137:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 32: \
+ 138:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(SecStrBuf32 *)(void *)strDest = *(const SecStrBuf32 *)(const void *)strSrc; \
+ 139:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+ 140:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             default: \
+ 141:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+ 142:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         } /* END switch */ \
+ 143:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     } else { \
+ 144:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         char *tmpStrDest = (char *)strDest; \
+ 145:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         const char *tmpStrSrc = (const char *)strSrc; \
+ 146:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         switch (srcStrLen) { \
+ 147:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 32: \
+ 148:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 149:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 150:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 31: \
+ 151:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 152:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 153:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 30: \
+ 154:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 155:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 156:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 29: \
+ 157:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 158:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 159:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 28: \
+ 160:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 161:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 162:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 27: \
+ 163:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 164:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 165:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 26: \
+ 166:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 167:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 168:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 25: \
+ 169:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 170:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 171:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 24: \
+ 172:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 173:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 174:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 23: \
+ 175:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 176:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 177:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 22: \
+ 178:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 179:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 180:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 21: \
+ 181:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 182:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 183:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 20: \
+ 184:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 185:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 186:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 19: \
+ 187:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 188:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+GAS LISTING /tmp/cceimW80.s 			page 16
+
+
+ 189:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 18: \
+ 190:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 191:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 192:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 17: \
+ 193:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 194:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 195:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 16: \
+ 196:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 197:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 198:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 15: \
+ 199:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 200:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 201:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 14: \
+ 202:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 203:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 204:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 13: \
+ 205:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 206:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 207:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 12: \
+ 208:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 209:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 210:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 11: \
+ 211:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 212:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 213:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 10: \
+ 214:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 215:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 216:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 9: \
+ 217:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 218:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 219:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 8: \
+ 220:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 221:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 222:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 7: \
+ 223:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 224:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 225:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 6: \
+ 226:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 227:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 228:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 5: \
+ 229:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 230:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 231:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 4: \
+ 232:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 233:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 234:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 3: \
+ 235:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 236:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 237:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 2: \
+ 238:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 239:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 240:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             case 1: \
+ 241:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 *(tmpStrDest++) = *(tmpStrSrc++); \
+ 242:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* fall-through */ /* FALLTHRU */ \
+ 243:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             default: \
+ 244:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 break; \
+ 245:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         } \
+GAS LISTING /tmp/cceimW80.s 			page 17
+
+
+ 246:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     } \
+ 247:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** } SECUREC_WHILE_ZERO
+ 248:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** #endif
+ 249:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** 
+ 250:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** /*
+ 251:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  * Check Src Range
+ 252:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  */
+ 253:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** static errno_t CheckSrcRange(char *strDest, size_t destMax, const char *strSrc)
+ 254:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** {
+ 135              		.loc 2 254 1
+ 136              		.cfi_startproc
+ 137 0000 F30F1EFA 		endbr64
+ 138 0004 55       		pushq	%rbp
+ 139              	.LCFI9:
+ 140              		.cfi_def_cfa_offset 16
+ 141              		.cfi_offset 6, -16
+ 142 0005 4889E5   		movq	%rsp, %rbp
+ 143              	.LCFI10:
+ 144              		.cfi_def_cfa_register 6
+ 145 0008 4883EC40 		subq	$64, %rsp
+ 146 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 147 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 148 0014 488955C8 		movq	%rdx, -56(%rbp)
+ 149              		.loc 2 254 1
+ 150 0018 64488B04 		movq	%fs:40, %rax
+ 150      25280000 
+ 150      00
+ 151 0021 488945F8 		movq	%rax, -8(%rbp)
+ 152 0025 31C0     		xorl	%eax, %eax
+ 255:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     size_t tmpDestMax = destMax;
+ 153              		.loc 2 255 12
+ 154 0027 488B45D0 		movq	-48(%rbp), %rax
+ 155 002b 488945E8 		movq	%rax, -24(%rbp)
+ 256:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     const char *tmpSrc = strSrc;
+ 156              		.loc 2 256 17
+ 157 002f 488B45C8 		movq	-56(%rbp), %rax
+ 158 0033 488945F0 		movq	%rax, -16(%rbp)
+ 257:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     /* use destMax as boundary checker and destMax must be greater than zero */
+ 258:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     while (*(tmpSrc) != '\0' && tmpDestMax > 0) {
+ 159              		.loc 2 258 11
+ 160 0037 EB0A     		jmp	.L10
+ 161              	.L12:
+ 259:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         ++tmpSrc;
+ 162              		.loc 2 259 9
+ 163 0039 488345F0 		addq	$1, -16(%rbp)
+ 163      01
+ 260:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         --tmpDestMax;
+ 164              		.loc 2 260 9
+ 165 003e 48836DE8 		subq	$1, -24(%rbp)
+ 165      01
+ 166              	.L10:
+ 258:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         ++tmpSrc;
+ 167              		.loc 2 258 12
+ 168 0043 488B45F0 		movq	-16(%rbp), %rax
+ 169 0047 0FB600   		movzbl	(%rax), %eax
+ 258:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         ++tmpSrc;
+ 170              		.loc 2 258 11
+GAS LISTING /tmp/cceimW80.s 			page 18
+
+
+ 171 004a 84C0     		testb	%al, %al
+ 172 004c 7407     		je	.L11
+ 258:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         ++tmpSrc;
+ 173              		.loc 2 258 30 discriminator 1
+ 174 004e 48837DE8 		cmpq	$0, -24(%rbp)
+ 174      00
+ 175 0053 75E4     		jne	.L12
+ 176              	.L11:
+ 261:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 262:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     if (tmpDestMax == 0) {
+ 177              		.loc 2 262 8
+ 178 0055 48837DE8 		cmpq	$0, -24(%rbp)
+ 178      00
+ 179 005a 750E     		jne	.L13
+ 263:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         strDest[0] = '\0';
+ 180              		.loc 2 263 20
+ 181 005c 488B45D8 		movq	-40(%rbp), %rax
+ 182 0060 C60000   		movb	$0, (%rax)
+ 264:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         SECUREC_ERROR_INVALID_RANGE("strcpy_s");
+ 265:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         return ERANGE_AND_RESET;
+ 183              		.loc 2 265 16
+ 184 0063 B8A20000 		movl	$162, %eax
+ 184      00
+ 185 0068 EB05     		jmp	.L14
+ 186              	.L13:
+ 266:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 267:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     return EOK;
+ 187              		.loc 2 267 12
+ 188 006a B8000000 		movl	$0, %eax
+ 188      00
+ 189              	.L14:
+ 268:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** }
+ 190              		.loc 2 268 1
+ 191 006f 488B4DF8 		movq	-8(%rbp), %rcx
+ 192 0073 6448330C 		xorq	%fs:40, %rcx
+ 192      25280000 
+ 192      00
+ 193 007c 7405     		je	.L15
+ 194 007e E8000000 		call	__stack_chk_fail@PLT
+ 194      00
+ 195              	.L15:
+ 196 0083 C9       		leave
+ 197              	.LCFI11:
+ 198              		.cfi_def_cfa 7, 8
+ 199 0084 C3       		ret
+ 200              		.cfi_endproc
+ 201              	.LFE9:
+ 203              		.section	.text.strcpy_error,"ax",@progbits
+ 204              		.globl	strcpy_error
+ 206              	strcpy_error:
+ 207              	.LFB10:
+ 269:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** 
+ 270:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** /*
+ 271:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  * Handling errors
+ 272:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  */
+ 273:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** errno_t strcpy_error(char *strDest, size_t destMax, const char *strSrc)
+ 274:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** {
+GAS LISTING /tmp/cceimW80.s 			page 19
+
+
+ 208              		.loc 2 274 1
+ 209              		.cfi_startproc
+ 210 0000 F30F1EFA 		endbr64
+ 211 0004 55       		pushq	%rbp
+ 212              	.LCFI12:
+ 213              		.cfi_def_cfa_offset 16
+ 214              		.cfi_offset 6, -16
+ 215 0005 4889E5   		movq	%rsp, %rbp
+ 216              	.LCFI13:
+ 217              		.cfi_def_cfa_register 6
+ 218 0008 4883EC30 		subq	$48, %rsp
+ 219 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 220 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 221 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 222              		.loc 2 274 1
+ 223 0018 64488B04 		movq	%fs:40, %rax
+ 223      25280000 
+ 223      00
+ 224 0021 488945F8 		movq	%rax, -8(%rbp)
+ 225 0025 31C0     		xorl	%eax, %eax
+ 275:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     if (destMax == 0 || destMax > SECUREC_STRING_MAX_LEN) {
+ 226              		.loc 2 275 8
+ 227 0027 48837DE0 		cmpq	$0, -32(%rbp)
+ 227      00
+ 228 002c 740B     		je	.L17
+ 229              		.loc 2 275 22 discriminator 1
+ 230 002e B8000000 		movl	$2147483648, %eax
+ 230      80
+ 231 0033 483945E0 		cmpq	%rax, -32(%rbp)
+ 232 0037 7207     		jb	.L18
+ 233              	.L17:
+ 276:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         SECUREC_ERROR_INVALID_RANGE("strcpy_s");
+ 277:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         return ERANGE;
+ 234              		.loc 2 277 16
+ 235 0039 B8220000 		movl	$34, %eax
+ 235      00
+ 236 003e EB41     		jmp	.L19
+ 237              	.L18:
+ 278:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     } else if (strDest == NULL || strSrc == NULL) {
+ 238              		.loc 2 278 15
+ 239 0040 48837DE8 		cmpq	$0, -24(%rbp)
+ 239      00
+ 240 0045 7407     		je	.L20
+ 241              		.loc 2 278 32 discriminator 1
+ 242 0047 48837DD8 		cmpq	$0, -40(%rbp)
+ 242      00
+ 243 004c 751C     		jne	.L21
+ 244              	.L20:
+ 279:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         SECUREC_ERROR_INVALID_PARAMTER("strcpy_s");
+ 280:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         if (strDest != NULL) {
+ 245              		.loc 2 280 12
+ 246 004e 48837DE8 		cmpq	$0, -24(%rbp)
+ 246      00
+ 247 0053 740E     		je	.L22
+ 281:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             strDest[0] = '\0';
+ 248              		.loc 2 281 24
+ 249 0055 488B45E8 		movq	-24(%rbp), %rax
+GAS LISTING /tmp/cceimW80.s 			page 20
+
+
+ 250 0059 C60000   		movb	$0, (%rax)
+ 282:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             return EINVAL_AND_RESET;
+ 251              		.loc 2 282 20
+ 252 005c B8960000 		movl	$150, %eax
+ 252      00
+ 253 0061 EB1E     		jmp	.L19
+ 254              	.L22:
+ 283:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         }
+ 284:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         return EINVAL;
+ 255              		.loc 2 284 16
+ 256 0063 B8160000 		movl	$22, %eax
+ 256      00
+ 257 0068 EB17     		jmp	.L19
+ 258              	.L21:
+ 285:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 286:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     return CheckSrcRange(strDest, destMax, strSrc);
+ 259              		.loc 2 286 12
+ 260 006a 488B55D8 		movq	-40(%rbp), %rdx
+ 261 006e 488B4DE0 		movq	-32(%rbp), %rcx
+ 262 0072 488B45E8 		movq	-24(%rbp), %rax
+ 263 0076 4889CE   		movq	%rcx, %rsi
+ 264 0079 4889C7   		movq	%rax, %rdi
+ 265 007c E8000000 		call	CheckSrcRange
+ 265      00
+ 266              	.L19:
+ 287:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** }
+ 267              		.loc 2 287 1
+ 268 0081 488B4DF8 		movq	-8(%rbp), %rcx
+ 269 0085 6448330C 		xorq	%fs:40, %rcx
+ 269      25280000 
+ 269      00
+ 270 008e 7405     		je	.L23
+ 271 0090 E8000000 		call	__stack_chk_fail@PLT
+ 271      00
+ 272              	.L23:
+ 273 0095 C9       		leave
+ 274              	.LCFI14:
+ 275              		.cfi_def_cfa 7, 8
+ 276 0096 C3       		ret
+ 277              		.cfi_endproc
+ 278              	.LFE10:
+ 280              		.section	.text.SecDoStrcpyOpt,"ax",@progbits
+ 282              	SecDoStrcpyOpt:
+ 283              	.LFB11:
+ 288:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** 
+ 289:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** /*
+ 290:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  * Performance optimization. srcStrLen  include '\0'
+ 291:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  */
+ 292:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** static void SecDoStrcpyOpt(char *strDest, const char *strSrc, size_t srcStrLen)
+ 293:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** {
+ 284              		.loc 2 293 1
+ 285              		.cfi_startproc
+ 286 0000 F30F1EFA 		endbr64
+ 287 0004 55       		pushq	%rbp
+ 288              	.LCFI15:
+ 289              		.cfi_def_cfa_offset 16
+ 290              		.cfi_offset 6, -16
+GAS LISTING /tmp/cceimW80.s 			page 21
+
+
+ 291 0005 4889E5   		movq	%rsp, %rbp
+ 292              	.LCFI16:
+ 293              		.cfi_def_cfa_register 6
+ 294 0008 53       		pushq	%rbx
+ 295 0009 4883EC48 		subq	$72, %rsp
+ 296              		.cfi_offset 3, -24
+ 297 000d 48897DC8 		movq	%rdi, -56(%rbp)
+ 298 0011 488975C0 		movq	%rsi, -64(%rbp)
+ 299 0015 488955B8 		movq	%rdx, -72(%rbp)
+ 300              		.loc 2 293 1
+ 301 0019 64488B04 		movq	%fs:40, %rax
+ 301      25280000 
+ 301      00
+ 302 0022 488945E8 		movq	%rax, -24(%rbp)
+ 303 0026 31C0     		xorl	%eax, %eax
+ 294:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** #if SECUREC_IN_KERNEL
+ 295:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     SecDoMemcpy(strDest, strSrc, srcStrLen);
+ 296:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** #else
+ 297:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     if (srcStrLen > SECUREC_STRCOPY_THRESHOLD_SIZE) {
+ 304              		.loc 2 297 8
+ 305 0028 48837DB8 		cmpq	$32, -72(%rbp)
+ 305      20
+ 306 002d 761C     		jbe	.L25
+ 298:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         SecDoMemcpy(strDest, strSrc, srcStrLen);
+ 307              		.loc 2 298 9
+ 308 002f 488B55B8 		movq	-72(%rbp), %rdx
+ 309 0033 488B4DC0 		movq	-64(%rbp), %rcx
+ 310 0037 488B45C8 		movq	-56(%rbp), %rax
+ 311 003b 4889CE   		movq	%rcx, %rsi
+ 312 003e 4889C7   		movq	%rax, %rdi
+ 313 0041 E8000000 		call	SecDoMemcpy
+ 313      00
+ 299:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     } else {
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         SECUREC_SMALL_STR_COPY;
+ 301:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 302:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** #endif
+ 303:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** }
+ 314              		.loc 2 303 1
+ 315 0046 E98E0800 		jmp	.L100
+ 315      00
+ 316              	.L25:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 317              		.loc 2 300 9
+ 318 004b 488B45C8 		movq	-56(%rbp), %rax
+ 319 004f BE000000 		movl	$0, %esi
+ 319      00
+ 320 0054 4889C7   		movq	%rax, %rdi
+ 321 0057 E8000000 		call	SecIsAddrAligned8
+ 321      00
+ 322 005c 85C0     		testl	%eax, %eax
+ 323 005e 0F859404 		jne	.L27
+ 323      0000
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 324              		.loc 2 300 9 is_stmt 0 discriminator 1
+ 325 0064 488B45C0 		movq	-64(%rbp), %rax
+ 326 0068 BE000000 		movl	$0, %esi
+ 326      00
+GAS LISTING /tmp/cceimW80.s 			page 22
+
+
+ 327 006d 4889C7   		movq	%rax, %rdi
+ 328 0070 E8000000 		call	SecIsAddrAligned8
+ 328      00
+ 329 0075 85C0     		testl	%eax, %eax
+ 330 0077 0F857B04 		jne	.L27
+ 330      0000
+ 331 007d 48837DB8 		cmpq	$32, -72(%rbp)
+ 331      20
+ 332 0082 0F876A04 		ja	.L98
+ 332      0000
+ 333 0088 488B45B8 		movq	-72(%rbp), %rax
+ 334 008c 488D1485 		leaq	0(,%rax,4), %rdx
+ 334      00000000 
+ 335 0094 488D0500 		leaq	.L30(%rip), %rax
+ 335      000000
+ 336 009b 8B0402   		movl	(%rdx,%rax), %eax
+ 337 009e 4898     		cltq
+ 338 00a0 488D1500 		leaq	.L30(%rip), %rdx
+ 338      000000
+ 339 00a7 4801D0   		addq	%rdx, %rax
+ 340 00aa 3EFFE0   		notrack jmp	*%rax
+ 341              		.section	.rodata.SecDoStrcpyOpt,"a",@progbits
+ 342              		.align 4
+ 343              		.align 4
+ 344              	.L30:
+ 345 0000 00000000 		.long	.L98-.L30
+ 346 0004 00000000 		.long	.L61-.L30
+ 347 0008 00000000 		.long	.L60-.L30
+ 348 000c 00000000 		.long	.L59-.L30
+ 349 0010 00000000 		.long	.L58-.L30
+ 350 0014 00000000 		.long	.L57-.L30
+ 351 0018 00000000 		.long	.L56-.L30
+ 352 001c 00000000 		.long	.L55-.L30
+ 353 0020 00000000 		.long	.L54-.L30
+ 354 0024 00000000 		.long	.L53-.L30
+ 355 0028 00000000 		.long	.L52-.L30
+ 356 002c 00000000 		.long	.L51-.L30
+ 357 0030 00000000 		.long	.L50-.L30
+ 358 0034 00000000 		.long	.L49-.L30
+ 359 0038 00000000 		.long	.L48-.L30
+ 360 003c 00000000 		.long	.L47-.L30
+ 361 0040 00000000 		.long	.L46-.L30
+ 362 0044 00000000 		.long	.L45-.L30
+ 363 0048 00000000 		.long	.L44-.L30
+ 364 004c 00000000 		.long	.L43-.L30
+ 365 0050 00000000 		.long	.L42-.L30
+ 366 0054 00000000 		.long	.L41-.L30
+ 367 0058 00000000 		.long	.L40-.L30
+ 368 005c 00000000 		.long	.L39-.L30
+ 369 0060 00000000 		.long	.L38-.L30
+ 370 0064 00000000 		.long	.L37-.L30
+ 371 0068 00000000 		.long	.L36-.L30
+ 372 006c 00000000 		.long	.L35-.L30
+ 373 0070 00000000 		.long	.L34-.L30
+ 374 0074 00000000 		.long	.L33-.L30
+ 375 0078 00000000 		.long	.L32-.L30
+ 376 007c 00000000 		.long	.L31-.L30
+GAS LISTING /tmp/cceimW80.s 			page 23
+
+
+ 377 0080 00000000 		.long	.L29-.L30
+ 378              		.section	.text.SecDoStrcpyOpt
+ 379              	.L61:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 380              		.loc 2 300 9 discriminator 6
+ 381 00ad 488B45C8 		movq	-56(%rbp), %rax
+ 382 00b1 488B55C0 		movq	-64(%rbp), %rdx
+ 383 00b5 0FB612   		movzbl	(%rdx), %edx
+ 384 00b8 8810     		movb	%dl, (%rax)
+ 385 00ba E9330400 		jmp	.L98
+ 385      00
+ 386              	.L60:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 387              		.loc 2 300 9 discriminator 7
+ 388 00bf 488B45C8 		movq	-56(%rbp), %rax
+ 389 00c3 488B55C0 		movq	-64(%rbp), %rdx
+ 390 00c7 0FB712   		movzwl	(%rdx), %edx
+ 391 00ca 668910   		movw	%dx, (%rax)
+ 392 00cd E9200400 		jmp	.L98
+ 392      00
+ 393              	.L59:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 394              		.loc 2 300 9 discriminator 8
+ 395 00d2 488B45C8 		movq	-56(%rbp), %rax
+ 396 00d6 488B55C0 		movq	-64(%rbp), %rdx
+ 397 00da 0FB70A   		movzwl	(%rdx), %ecx
+ 398 00dd 668908   		movw	%cx, (%rax)
+ 399 00e0 0FB65202 		movzbl	2(%rdx), %edx
+ 400 00e4 885002   		movb	%dl, 2(%rax)
+ 401 00e7 E9060400 		jmp	.L98
+ 401      00
+ 402              	.L58:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 403              		.loc 2 300 9 discriminator 9
+ 404 00ec 488B45C8 		movq	-56(%rbp), %rax
+ 405 00f0 488B55C0 		movq	-64(%rbp), %rdx
+ 406 00f4 8B12     		movl	(%rdx), %edx
+ 407 00f6 8910     		movl	%edx, (%rax)
+ 408 00f8 E9F50300 		jmp	.L98
+ 408      00
+ 409              	.L57:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 410              		.loc 2 300 9 discriminator 10
+ 411 00fd 488B45C8 		movq	-56(%rbp), %rax
+ 412 0101 488B55C0 		movq	-64(%rbp), %rdx
+ 413 0105 8B0A     		movl	(%rdx), %ecx
+ 414 0107 8908     		movl	%ecx, (%rax)
+ 415 0109 0FB65204 		movzbl	4(%rdx), %edx
+ 416 010d 885004   		movb	%dl, 4(%rax)
+ 417 0110 E9DD0300 		jmp	.L98
+ 417      00
+ 418              	.L56:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 419              		.loc 2 300 9 discriminator 11
+ 420 0115 488B45C8 		movq	-56(%rbp), %rax
+ 421 0119 488B55C0 		movq	-64(%rbp), %rdx
+ 422 011d 8B0A     		movl	(%rdx), %ecx
+GAS LISTING /tmp/cceimW80.s 			page 24
+
+
+ 423 011f 8908     		movl	%ecx, (%rax)
+ 424 0121 0FB75204 		movzwl	4(%rdx), %edx
+ 425 0125 66895004 		movw	%dx, 4(%rax)
+ 426 0129 E9C40300 		jmp	.L98
+ 426      00
+ 427              	.L55:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 428              		.loc 2 300 9 discriminator 12
+ 429 012e 488B45C8 		movq	-56(%rbp), %rax
+ 430 0132 488B55C0 		movq	-64(%rbp), %rdx
+ 431 0136 8B0A     		movl	(%rdx), %ecx
+ 432 0138 8908     		movl	%ecx, (%rax)
+ 433 013a 0FB74A04 		movzwl	4(%rdx), %ecx
+ 434 013e 66894804 		movw	%cx, 4(%rax)
+ 435 0142 0FB65206 		movzbl	6(%rdx), %edx
+ 436 0146 885006   		movb	%dl, 6(%rax)
+ 437 0149 E9A40300 		jmp	.L98
+ 437      00
+ 438              	.L54:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 439              		.loc 2 300 9 discriminator 13
+ 440 014e 488B45C8 		movq	-56(%rbp), %rax
+ 441 0152 488B55C0 		movq	-64(%rbp), %rdx
+ 442 0156 488B12   		movq	(%rdx), %rdx
+ 443 0159 488910   		movq	%rdx, (%rax)
+ 444 015c E9910300 		jmp	.L98
+ 444      00
+ 445              	.L53:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 446              		.loc 2 300 9 discriminator 14
+ 447 0161 488B45C8 		movq	-56(%rbp), %rax
+ 448 0165 488B55C0 		movq	-64(%rbp), %rdx
+ 449 0169 488B0A   		movq	(%rdx), %rcx
+ 450 016c 488908   		movq	%rcx, (%rax)
+ 451 016f 0FB65208 		movzbl	8(%rdx), %edx
+ 452 0173 885008   		movb	%dl, 8(%rax)
+ 453 0176 E9770300 		jmp	.L98
+ 453      00
+ 454              	.L52:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 455              		.loc 2 300 9 discriminator 15
+ 456 017b 488B45C8 		movq	-56(%rbp), %rax
+ 457 017f 488B55C0 		movq	-64(%rbp), %rdx
+ 458 0183 488B0A   		movq	(%rdx), %rcx
+ 459 0186 488908   		movq	%rcx, (%rax)
+ 460 0189 0FB75208 		movzwl	8(%rdx), %edx
+ 461 018d 66895008 		movw	%dx, 8(%rax)
+ 462 0191 E95C0300 		jmp	.L98
+ 462      00
+ 463              	.L51:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 464              		.loc 2 300 9 discriminator 16
+ 465 0196 488B45C8 		movq	-56(%rbp), %rax
+ 466 019a 488B55C0 		movq	-64(%rbp), %rdx
+ 467 019e 488B0A   		movq	(%rdx), %rcx
+ 468 01a1 488908   		movq	%rcx, (%rax)
+ 469 01a4 0FB74A08 		movzwl	8(%rdx), %ecx
+GAS LISTING /tmp/cceimW80.s 			page 25
+
+
+ 470 01a8 66894808 		movw	%cx, 8(%rax)
+ 471 01ac 0FB6520A 		movzbl	10(%rdx), %edx
+ 472 01b0 88500A   		movb	%dl, 10(%rax)
+ 473 01b3 E93A0300 		jmp	.L98
+ 473      00
+ 474              	.L50:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 475              		.loc 2 300 9 discriminator 17
+ 476 01b8 488B45C8 		movq	-56(%rbp), %rax
+ 477 01bc 488B55C0 		movq	-64(%rbp), %rdx
+ 478 01c0 488B0A   		movq	(%rdx), %rcx
+ 479 01c3 488908   		movq	%rcx, (%rax)
+ 480 01c6 8B5208   		movl	8(%rdx), %edx
+ 481 01c9 895008   		movl	%edx, 8(%rax)
+ 482 01cc E9210300 		jmp	.L98
+ 482      00
+ 483              	.L49:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 484              		.loc 2 300 9 discriminator 18
+ 485 01d1 488B45C8 		movq	-56(%rbp), %rax
+ 486 01d5 488B55C0 		movq	-64(%rbp), %rdx
+ 487 01d9 488B0A   		movq	(%rdx), %rcx
+ 488 01dc 488908   		movq	%rcx, (%rax)
+ 489 01df 8B4A08   		movl	8(%rdx), %ecx
+ 490 01e2 894808   		movl	%ecx, 8(%rax)
+ 491 01e5 0FB6520C 		movzbl	12(%rdx), %edx
+ 492 01e9 88500C   		movb	%dl, 12(%rax)
+ 493 01ec E9010300 		jmp	.L98
+ 493      00
+ 494              	.L48:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 495              		.loc 2 300 9 discriminator 19
+ 496 01f1 488B45C8 		movq	-56(%rbp), %rax
+ 497 01f5 488B55C0 		movq	-64(%rbp), %rdx
+ 498 01f9 488B0A   		movq	(%rdx), %rcx
+ 499 01fc 488908   		movq	%rcx, (%rax)
+ 500 01ff 8B4A08   		movl	8(%rdx), %ecx
+ 501 0202 894808   		movl	%ecx, 8(%rax)
+ 502 0205 0FB7520C 		movzwl	12(%rdx), %edx
+ 503 0209 6689500C 		movw	%dx, 12(%rax)
+ 504 020d E9E00200 		jmp	.L98
+ 504      00
+ 505              	.L47:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 506              		.loc 2 300 9 discriminator 20
+ 507 0212 488B45C8 		movq	-56(%rbp), %rax
+ 508 0216 488B55C0 		movq	-64(%rbp), %rdx
+ 509 021a 488B0A   		movq	(%rdx), %rcx
+ 510 021d 488908   		movq	%rcx, (%rax)
+ 511 0220 8B4A08   		movl	8(%rdx), %ecx
+ 512 0223 894808   		movl	%ecx, 8(%rax)
+ 513 0226 0FB74A0C 		movzwl	12(%rdx), %ecx
+ 514 022a 6689480C 		movw	%cx, 12(%rax)
+ 515 022e 0FB6520E 		movzbl	14(%rdx), %edx
+ 516 0232 88500E   		movb	%dl, 14(%rax)
+ 517 0235 E9B80200 		jmp	.L98
+ 517      00
+GAS LISTING /tmp/cceimW80.s 			page 26
+
+
+ 518              	.L46:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 519              		.loc 2 300 9 discriminator 21
+ 520 023a 488B4DC8 		movq	-56(%rbp), %rcx
+ 521 023e 488B45C0 		movq	-64(%rbp), %rax
+ 522 0242 488B5008 		movq	8(%rax), %rdx
+ 523 0246 488B00   		movq	(%rax), %rax
+ 524 0249 488901   		movq	%rax, (%rcx)
+ 525 024c 48895108 		movq	%rdx, 8(%rcx)
+ 526 0250 E99D0200 		jmp	.L98
+ 526      00
+ 527              	.L45:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 528              		.loc 2 300 9 discriminator 22
+ 529 0255 488B4DC8 		movq	-56(%rbp), %rcx
+ 530 0259 488B75C0 		movq	-64(%rbp), %rsi
+ 531 025d 488B06   		movq	(%rsi), %rax
+ 532 0260 488B5608 		movq	8(%rsi), %rdx
+ 533 0264 488901   		movq	%rax, (%rcx)
+ 534 0267 48895108 		movq	%rdx, 8(%rcx)
+ 535 026b 0FB64610 		movzbl	16(%rsi), %eax
+ 536 026f 884110   		movb	%al, 16(%rcx)
+ 537 0272 E97B0200 		jmp	.L98
+ 537      00
+ 538              	.L44:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 539              		.loc 2 300 9 discriminator 23
+ 540 0277 488B4DC8 		movq	-56(%rbp), %rcx
+ 541 027b 488B75C0 		movq	-64(%rbp), %rsi
+ 542 027f 488B06   		movq	(%rsi), %rax
+ 543 0282 488B5608 		movq	8(%rsi), %rdx
+ 544 0286 488901   		movq	%rax, (%rcx)
+ 545 0289 48895108 		movq	%rdx, 8(%rcx)
+ 546 028d 0FB74610 		movzwl	16(%rsi), %eax
+ 547 0291 66894110 		movw	%ax, 16(%rcx)
+ 548 0295 E9580200 		jmp	.L98
+ 548      00
+ 549              	.L43:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 550              		.loc 2 300 9 discriminator 24
+ 551 029a 488B45C8 		movq	-56(%rbp), %rax
+ 552 029e 488B55C0 		movq	-64(%rbp), %rdx
+ 553 02a2 488B0A   		movq	(%rdx), %rcx
+ 554 02a5 488B5A08 		movq	8(%rdx), %rbx
+ 555 02a9 488908   		movq	%rcx, (%rax)
+ 556 02ac 48895808 		movq	%rbx, 8(%rax)
+ 557 02b0 0FB74A10 		movzwl	16(%rdx), %ecx
+ 558 02b4 66894810 		movw	%cx, 16(%rax)
+ 559 02b8 0FB65212 		movzbl	18(%rdx), %edx
+ 560 02bc 885012   		movb	%dl, 18(%rax)
+ 561 02bf E92E0200 		jmp	.L98
+ 561      00
+ 562              	.L42:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 563              		.loc 2 300 9 discriminator 25
+ 564 02c4 488B4DC8 		movq	-56(%rbp), %rcx
+ 565 02c8 488B75C0 		movq	-64(%rbp), %rsi
+GAS LISTING /tmp/cceimW80.s 			page 27
+
+
+ 566 02cc 488B06   		movq	(%rsi), %rax
+ 567 02cf 488B5608 		movq	8(%rsi), %rdx
+ 568 02d3 488901   		movq	%rax, (%rcx)
+ 569 02d6 48895108 		movq	%rdx, 8(%rcx)
+ 570 02da 8B4610   		movl	16(%rsi), %eax
+ 571 02dd 894110   		movl	%eax, 16(%rcx)
+ 572 02e0 E90D0200 		jmp	.L98
+ 572      00
+ 573              	.L41:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 574              		.loc 2 300 9 discriminator 26
+ 575 02e5 488B45C8 		movq	-56(%rbp), %rax
+ 576 02e9 488B55C0 		movq	-64(%rbp), %rdx
+ 577 02ed 488B0A   		movq	(%rdx), %rcx
+ 578 02f0 488B5A08 		movq	8(%rdx), %rbx
+ 579 02f4 488908   		movq	%rcx, (%rax)
+ 580 02f7 48895808 		movq	%rbx, 8(%rax)
+ 581 02fb 8B4A10   		movl	16(%rdx), %ecx
+ 582 02fe 894810   		movl	%ecx, 16(%rax)
+ 583 0301 0FB65214 		movzbl	20(%rdx), %edx
+ 584 0305 885014   		movb	%dl, 20(%rax)
+ 585 0308 E9E50100 		jmp	.L98
+ 585      00
+ 586              	.L40:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 587              		.loc 2 300 9 discriminator 27
+ 588 030d 488B45C8 		movq	-56(%rbp), %rax
+ 589 0311 488B55C0 		movq	-64(%rbp), %rdx
+ 590 0315 488B0A   		movq	(%rdx), %rcx
+ 591 0318 488B5A08 		movq	8(%rdx), %rbx
+ 592 031c 488908   		movq	%rcx, (%rax)
+ 593 031f 48895808 		movq	%rbx, 8(%rax)
+ 594 0323 8B4A10   		movl	16(%rdx), %ecx
+ 595 0326 894810   		movl	%ecx, 16(%rax)
+ 596 0329 0FB75214 		movzwl	20(%rdx), %edx
+ 597 032d 66895014 		movw	%dx, 20(%rax)
+ 598 0331 E9BC0100 		jmp	.L98
+ 598      00
+ 599              	.L39:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 600              		.loc 2 300 9 discriminator 28
+ 601 0336 488B45C8 		movq	-56(%rbp), %rax
+ 602 033a 488B55C0 		movq	-64(%rbp), %rdx
+ 603 033e 488B0A   		movq	(%rdx), %rcx
+ 604 0341 488B5A08 		movq	8(%rdx), %rbx
+ 605 0345 488908   		movq	%rcx, (%rax)
+ 606 0348 48895808 		movq	%rbx, 8(%rax)
+ 607 034c 8B4A10   		movl	16(%rdx), %ecx
+ 608 034f 894810   		movl	%ecx, 16(%rax)
+ 609 0352 0FB74A14 		movzwl	20(%rdx), %ecx
+ 610 0356 66894814 		movw	%cx, 20(%rax)
+ 611 035a 0FB65216 		movzbl	22(%rdx), %edx
+ 612 035e 885016   		movb	%dl, 22(%rax)
+ 613 0361 E98C0100 		jmp	.L98
+ 613      00
+ 614              	.L38:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+GAS LISTING /tmp/cceimW80.s 			page 28
+
+
+ 615              		.loc 2 300 9 discriminator 29
+ 616 0366 488B4DC8 		movq	-56(%rbp), %rcx
+ 617 036a 488B75C0 		movq	-64(%rbp), %rsi
+ 618 036e 488B06   		movq	(%rsi), %rax
+ 619 0371 488B5608 		movq	8(%rsi), %rdx
+ 620 0375 488901   		movq	%rax, (%rcx)
+ 621 0378 48895108 		movq	%rdx, 8(%rcx)
+ 622 037c 488B4610 		movq	16(%rsi), %rax
+ 623 0380 48894110 		movq	%rax, 16(%rcx)
+ 624 0384 E9690100 		jmp	.L98
+ 624      00
+ 625              	.L37:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 626              		.loc 2 300 9 discriminator 30
+ 627 0389 488B45C8 		movq	-56(%rbp), %rax
+ 628 038d 488B55C0 		movq	-64(%rbp), %rdx
+ 629 0391 488B0A   		movq	(%rdx), %rcx
+ 630 0394 488B5A08 		movq	8(%rdx), %rbx
+ 631 0398 488908   		movq	%rcx, (%rax)
+ 632 039b 48895808 		movq	%rbx, 8(%rax)
+ 633 039f 488B4A10 		movq	16(%rdx), %rcx
+ 634 03a3 48894810 		movq	%rcx, 16(%rax)
+ 635 03a7 0FB65218 		movzbl	24(%rdx), %edx
+ 636 03ab 885018   		movb	%dl, 24(%rax)
+ 637 03ae E93F0100 		jmp	.L98
+ 637      00
+ 638              	.L36:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 639              		.loc 2 300 9 discriminator 31
+ 640 03b3 488B45C8 		movq	-56(%rbp), %rax
+ 641 03b7 488B55C0 		movq	-64(%rbp), %rdx
+ 642 03bb 488B0A   		movq	(%rdx), %rcx
+ 643 03be 488B5A08 		movq	8(%rdx), %rbx
+ 644 03c2 488908   		movq	%rcx, (%rax)
+ 645 03c5 48895808 		movq	%rbx, 8(%rax)
+ 646 03c9 488B4A10 		movq	16(%rdx), %rcx
+ 647 03cd 48894810 		movq	%rcx, 16(%rax)
+ 648 03d1 0FB75218 		movzwl	24(%rdx), %edx
+ 649 03d5 66895018 		movw	%dx, 24(%rax)
+ 650 03d9 E9140100 		jmp	.L98
+ 650      00
+ 651              	.L35:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 652              		.loc 2 300 9 discriminator 32
+ 653 03de 488B45C8 		movq	-56(%rbp), %rax
+ 654 03e2 488B55C0 		movq	-64(%rbp), %rdx
+ 655 03e6 488B0A   		movq	(%rdx), %rcx
+ 656 03e9 488B5A08 		movq	8(%rdx), %rbx
+ 657 03ed 488908   		movq	%rcx, (%rax)
+ 658 03f0 48895808 		movq	%rbx, 8(%rax)
+ 659 03f4 488B4A10 		movq	16(%rdx), %rcx
+ 660 03f8 48894810 		movq	%rcx, 16(%rax)
+ 661 03fc 0FB74A18 		movzwl	24(%rdx), %ecx
+ 662 0400 66894818 		movw	%cx, 24(%rax)
+ 663 0404 0FB6521A 		movzbl	26(%rdx), %edx
+ 664 0408 88501A   		movb	%dl, 26(%rax)
+ 665 040b E9E20000 		jmp	.L98
+GAS LISTING /tmp/cceimW80.s 			page 29
+
+
+ 665      00
+ 666              	.L34:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 667              		.loc 2 300 9 discriminator 33
+ 668 0410 488B45C8 		movq	-56(%rbp), %rax
+ 669 0414 488B55C0 		movq	-64(%rbp), %rdx
+ 670 0418 488B0A   		movq	(%rdx), %rcx
+ 671 041b 488B5A08 		movq	8(%rdx), %rbx
+ 672 041f 488908   		movq	%rcx, (%rax)
+ 673 0422 48895808 		movq	%rbx, 8(%rax)
+ 674 0426 488B4A10 		movq	16(%rdx), %rcx
+ 675 042a 48894810 		movq	%rcx, 16(%rax)
+ 676 042e 8B5218   		movl	24(%rdx), %edx
+ 677 0431 895018   		movl	%edx, 24(%rax)
+ 678 0434 E9B90000 		jmp	.L98
+ 678      00
+ 679              	.L33:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 680              		.loc 2 300 9 discriminator 34
+ 681 0439 488B45C8 		movq	-56(%rbp), %rax
+ 682 043d 488B55C0 		movq	-64(%rbp), %rdx
+ 683 0441 488B0A   		movq	(%rdx), %rcx
+ 684 0444 488B5A08 		movq	8(%rdx), %rbx
+ 685 0448 488908   		movq	%rcx, (%rax)
+ 686 044b 48895808 		movq	%rbx, 8(%rax)
+ 687 044f 488B4A10 		movq	16(%rdx), %rcx
+ 688 0453 48894810 		movq	%rcx, 16(%rax)
+ 689 0457 8B4A18   		movl	24(%rdx), %ecx
+ 690 045a 894818   		movl	%ecx, 24(%rax)
+ 691 045d 0FB6521C 		movzbl	28(%rdx), %edx
+ 692 0461 88501C   		movb	%dl, 28(%rax)
+ 693 0464 E9890000 		jmp	.L98
+ 693      00
+ 694              	.L32:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 695              		.loc 2 300 9 discriminator 35
+ 696 0469 488B45C8 		movq	-56(%rbp), %rax
+ 697 046d 488B55C0 		movq	-64(%rbp), %rdx
+ 698 0471 488B0A   		movq	(%rdx), %rcx
+ 699 0474 488B5A08 		movq	8(%rdx), %rbx
+ 700 0478 488908   		movq	%rcx, (%rax)
+ 701 047b 48895808 		movq	%rbx, 8(%rax)
+ 702 047f 488B4A10 		movq	16(%rdx), %rcx
+ 703 0483 48894810 		movq	%rcx, 16(%rax)
+ 704 0487 8B4A18   		movl	24(%rdx), %ecx
+ 705 048a 894818   		movl	%ecx, 24(%rax)
+ 706 048d 0FB7521C 		movzwl	28(%rdx), %edx
+ 707 0491 6689501C 		movw	%dx, 28(%rax)
+ 708 0495 EB5B     		jmp	.L98
+ 709              	.L31:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 710              		.loc 2 300 9 discriminator 36
+ 711 0497 488B45C8 		movq	-56(%rbp), %rax
+ 712 049b 488B55C0 		movq	-64(%rbp), %rdx
+ 713 049f 488B0A   		movq	(%rdx), %rcx
+ 714 04a2 488B5A08 		movq	8(%rdx), %rbx
+ 715 04a6 488908   		movq	%rcx, (%rax)
+GAS LISTING /tmp/cceimW80.s 			page 30
+
+
+ 716 04a9 48895808 		movq	%rbx, 8(%rax)
+ 717 04ad 488B4A10 		movq	16(%rdx), %rcx
+ 718 04b1 48894810 		movq	%rcx, 16(%rax)
+ 719 04b5 8B4A18   		movl	24(%rdx), %ecx
+ 720 04b8 894818   		movl	%ecx, 24(%rax)
+ 721 04bb 0FB74A1C 		movzwl	28(%rdx), %ecx
+ 722 04bf 6689481C 		movw	%cx, 28(%rax)
+ 723 04c3 0FB6521E 		movzbl	30(%rdx), %edx
+ 724 04c7 88501E   		movb	%dl, 30(%rax)
+ 725 04ca EB26     		jmp	.L98
+ 726              	.L29:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 727              		.loc 2 300 9 discriminator 37
+ 728 04cc 488B4DC8 		movq	-56(%rbp), %rcx
+ 729 04d0 488B75C0 		movq	-64(%rbp), %rsi
+ 730 04d4 488B06   		movq	(%rsi), %rax
+ 731 04d7 488B5608 		movq	8(%rsi), %rdx
+ 732 04db 488901   		movq	%rax, (%rcx)
+ 733 04de 48895108 		movq	%rdx, 8(%rcx)
+ 734 04e2 488B4610 		movq	16(%rsi), %rax
+ 735 04e6 488B5618 		movq	24(%rsi), %rdx
+ 736 04ea 48894110 		movq	%rax, 16(%rcx)
+ 737 04ee 48895118 		movq	%rdx, 24(%rcx)
+ 738              	.L98:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 739              		.loc 2 300 9
+ 740 04f2 90       		nop
+ 741 04f3 E9E10300 		jmp	.L26
+ 741      00
+ 742              	.L27:
+ 743              	.LBB2:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 744              		.loc 2 300 9 discriminator 4
+ 745 04f8 488B45C8 		movq	-56(%rbp), %rax
+ 746 04fc 488945D8 		movq	%rax, -40(%rbp)
+ 747 0500 488B45C0 		movq	-64(%rbp), %rax
+ 748 0504 488945E0 		movq	%rax, -32(%rbp)
+ 749 0508 48837DB8 		cmpq	$32, -72(%rbp)
+ 749      20
+ 750 050d 0F87C503 		ja	.L99
+ 750      0000
+ 751 0513 488B45B8 		movq	-72(%rbp), %rax
+ 752 0517 488D1485 		leaq	0(,%rax,4), %rdx
+ 752      00000000 
+ 753 051f 488D0500 		leaq	.L65(%rip), %rax
+ 753      000000
+ 754 0526 8B0402   		movl	(%rdx,%rax), %eax
+ 755 0529 4898     		cltq
+ 756 052b 488D1500 		leaq	.L65(%rip), %rdx
+ 756      000000
+ 757 0532 4801D0   		addq	%rdx, %rax
+ 758 0535 3EFFE0   		notrack jmp	*%rax
+ 759              		.section	.rodata.SecDoStrcpyOpt
+ 760              		.align 4
+ 761              		.align 4
+ 762              	.L65:
+ 763 0084 00000000 		.long	.L99-.L65
+GAS LISTING /tmp/cceimW80.s 			page 31
+
+
+ 764 0088 00000000 		.long	.L96-.L65
+ 765 008c 00000000 		.long	.L95-.L65
+ 766 0090 00000000 		.long	.L94-.L65
+ 767 0094 00000000 		.long	.L93-.L65
+ 768 0098 00000000 		.long	.L92-.L65
+ 769 009c 00000000 		.long	.L91-.L65
+ 770 00a0 00000000 		.long	.L90-.L65
+ 771 00a4 00000000 		.long	.L89-.L65
+ 772 00a8 00000000 		.long	.L88-.L65
+ 773 00ac 00000000 		.long	.L87-.L65
+ 774 00b0 00000000 		.long	.L86-.L65
+ 775 00b4 00000000 		.long	.L85-.L65
+ 776 00b8 00000000 		.long	.L84-.L65
+ 777 00bc 00000000 		.long	.L83-.L65
+ 778 00c0 00000000 		.long	.L82-.L65
+ 779 00c4 00000000 		.long	.L81-.L65
+ 780 00c8 00000000 		.long	.L80-.L65
+ 781 00cc 00000000 		.long	.L79-.L65
+ 782 00d0 00000000 		.long	.L78-.L65
+ 783 00d4 00000000 		.long	.L77-.L65
+ 784 00d8 00000000 		.long	.L76-.L65
+ 785 00dc 00000000 		.long	.L75-.L65
+ 786 00e0 00000000 		.long	.L74-.L65
+ 787 00e4 00000000 		.long	.L73-.L65
+ 788 00e8 00000000 		.long	.L72-.L65
+ 789 00ec 00000000 		.long	.L71-.L65
+ 790 00f0 00000000 		.long	.L70-.L65
+ 791 00f4 00000000 		.long	.L69-.L65
+ 792 00f8 00000000 		.long	.L68-.L65
+ 793 00fc 00000000 		.long	.L67-.L65
+ 794 0100 00000000 		.long	.L66-.L65
+ 795 0104 00000000 		.long	.L64-.L65
+ 796              		.section	.text.SecDoStrcpyOpt
+ 797              	.L64:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 798              		.loc 2 300 9 discriminator 103
+ 799 0538 488B55E0 		movq	-32(%rbp), %rdx
+ 800 053c 488D4201 		leaq	1(%rdx), %rax
+ 801 0540 488945E0 		movq	%rax, -32(%rbp)
+ 802 0544 488B45D8 		movq	-40(%rbp), %rax
+ 803 0548 488D4801 		leaq	1(%rax), %rcx
+ 804 054c 48894DD8 		movq	%rcx, -40(%rbp)
+ 805 0550 0FB612   		movzbl	(%rdx), %edx
+ 806 0553 8810     		movb	%dl, (%rax)
+ 807              	.L66:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 808              		.loc 2 300 9 discriminator 104
+ 809 0555 488B55E0 		movq	-32(%rbp), %rdx
+ 810 0559 488D4201 		leaq	1(%rdx), %rax
+ 811 055d 488945E0 		movq	%rax, -32(%rbp)
+ 812 0561 488B45D8 		movq	-40(%rbp), %rax
+ 813 0565 488D4801 		leaq	1(%rax), %rcx
+ 814 0569 48894DD8 		movq	%rcx, -40(%rbp)
+ 815 056d 0FB612   		movzbl	(%rdx), %edx
+ 816 0570 8810     		movb	%dl, (%rax)
+ 817              	.L67:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+GAS LISTING /tmp/cceimW80.s 			page 32
+
+
+ 818              		.loc 2 300 9 discriminator 105
+ 819 0572 488B55E0 		movq	-32(%rbp), %rdx
+ 820 0576 488D4201 		leaq	1(%rdx), %rax
+ 821 057a 488945E0 		movq	%rax, -32(%rbp)
+ 822 057e 488B45D8 		movq	-40(%rbp), %rax
+ 823 0582 488D4801 		leaq	1(%rax), %rcx
+ 824 0586 48894DD8 		movq	%rcx, -40(%rbp)
+ 825 058a 0FB612   		movzbl	(%rdx), %edx
+ 826 058d 8810     		movb	%dl, (%rax)
+ 827              	.L68:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 828              		.loc 2 300 9 discriminator 106
+ 829 058f 488B55E0 		movq	-32(%rbp), %rdx
+ 830 0593 488D4201 		leaq	1(%rdx), %rax
+ 831 0597 488945E0 		movq	%rax, -32(%rbp)
+ 832 059b 488B45D8 		movq	-40(%rbp), %rax
+ 833 059f 488D4801 		leaq	1(%rax), %rcx
+ 834 05a3 48894DD8 		movq	%rcx, -40(%rbp)
+ 835 05a7 0FB612   		movzbl	(%rdx), %edx
+ 836 05aa 8810     		movb	%dl, (%rax)
+ 837              	.L69:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 838              		.loc 2 300 9 discriminator 107
+ 839 05ac 488B55E0 		movq	-32(%rbp), %rdx
+ 840 05b0 488D4201 		leaq	1(%rdx), %rax
+ 841 05b4 488945E0 		movq	%rax, -32(%rbp)
+ 842 05b8 488B45D8 		movq	-40(%rbp), %rax
+ 843 05bc 488D4801 		leaq	1(%rax), %rcx
+ 844 05c0 48894DD8 		movq	%rcx, -40(%rbp)
+ 845 05c4 0FB612   		movzbl	(%rdx), %edx
+ 846 05c7 8810     		movb	%dl, (%rax)
+ 847              	.L70:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 848              		.loc 2 300 9 discriminator 108
+ 849 05c9 488B55E0 		movq	-32(%rbp), %rdx
+ 850 05cd 488D4201 		leaq	1(%rdx), %rax
+ 851 05d1 488945E0 		movq	%rax, -32(%rbp)
+ 852 05d5 488B45D8 		movq	-40(%rbp), %rax
+ 853 05d9 488D4801 		leaq	1(%rax), %rcx
+ 854 05dd 48894DD8 		movq	%rcx, -40(%rbp)
+ 855 05e1 0FB612   		movzbl	(%rdx), %edx
+ 856 05e4 8810     		movb	%dl, (%rax)
+ 857              	.L71:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 858              		.loc 2 300 9 discriminator 109
+ 859 05e6 488B55E0 		movq	-32(%rbp), %rdx
+ 860 05ea 488D4201 		leaq	1(%rdx), %rax
+ 861 05ee 488945E0 		movq	%rax, -32(%rbp)
+ 862 05f2 488B45D8 		movq	-40(%rbp), %rax
+ 863 05f6 488D4801 		leaq	1(%rax), %rcx
+ 864 05fa 48894DD8 		movq	%rcx, -40(%rbp)
+ 865 05fe 0FB612   		movzbl	(%rdx), %edx
+ 866 0601 8810     		movb	%dl, (%rax)
+ 867              	.L72:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 868              		.loc 2 300 9 discriminator 110
+ 869 0603 488B55E0 		movq	-32(%rbp), %rdx
+GAS LISTING /tmp/cceimW80.s 			page 33
+
+
+ 870 0607 488D4201 		leaq	1(%rdx), %rax
+ 871 060b 488945E0 		movq	%rax, -32(%rbp)
+ 872 060f 488B45D8 		movq	-40(%rbp), %rax
+ 873 0613 488D4801 		leaq	1(%rax), %rcx
+ 874 0617 48894DD8 		movq	%rcx, -40(%rbp)
+ 875 061b 0FB612   		movzbl	(%rdx), %edx
+ 876 061e 8810     		movb	%dl, (%rax)
+ 877              	.L73:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 878              		.loc 2 300 9 discriminator 111
+ 879 0620 488B55E0 		movq	-32(%rbp), %rdx
+ 880 0624 488D4201 		leaq	1(%rdx), %rax
+ 881 0628 488945E0 		movq	%rax, -32(%rbp)
+ 882 062c 488B45D8 		movq	-40(%rbp), %rax
+ 883 0630 488D4801 		leaq	1(%rax), %rcx
+ 884 0634 48894DD8 		movq	%rcx, -40(%rbp)
+ 885 0638 0FB612   		movzbl	(%rdx), %edx
+ 886 063b 8810     		movb	%dl, (%rax)
+ 887              	.L74:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 888              		.loc 2 300 9 discriminator 112
+ 889 063d 488B55E0 		movq	-32(%rbp), %rdx
+ 890 0641 488D4201 		leaq	1(%rdx), %rax
+ 891 0645 488945E0 		movq	%rax, -32(%rbp)
+ 892 0649 488B45D8 		movq	-40(%rbp), %rax
+ 893 064d 488D4801 		leaq	1(%rax), %rcx
+ 894 0651 48894DD8 		movq	%rcx, -40(%rbp)
+ 895 0655 0FB612   		movzbl	(%rdx), %edx
+ 896 0658 8810     		movb	%dl, (%rax)
+ 897              	.L75:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 898              		.loc 2 300 9 discriminator 113
+ 899 065a 488B55E0 		movq	-32(%rbp), %rdx
+ 900 065e 488D4201 		leaq	1(%rdx), %rax
+ 901 0662 488945E0 		movq	%rax, -32(%rbp)
+ 902 0666 488B45D8 		movq	-40(%rbp), %rax
+ 903 066a 488D4801 		leaq	1(%rax), %rcx
+ 904 066e 48894DD8 		movq	%rcx, -40(%rbp)
+ 905 0672 0FB612   		movzbl	(%rdx), %edx
+ 906 0675 8810     		movb	%dl, (%rax)
+ 907              	.L76:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 908              		.loc 2 300 9 discriminator 114
+ 909 0677 488B55E0 		movq	-32(%rbp), %rdx
+ 910 067b 488D4201 		leaq	1(%rdx), %rax
+ 911 067f 488945E0 		movq	%rax, -32(%rbp)
+ 912 0683 488B45D8 		movq	-40(%rbp), %rax
+ 913 0687 488D4801 		leaq	1(%rax), %rcx
+ 914 068b 48894DD8 		movq	%rcx, -40(%rbp)
+ 915 068f 0FB612   		movzbl	(%rdx), %edx
+ 916 0692 8810     		movb	%dl, (%rax)
+ 917              	.L77:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 918              		.loc 2 300 9 discriminator 115
+ 919 0694 488B55E0 		movq	-32(%rbp), %rdx
+ 920 0698 488D4201 		leaq	1(%rdx), %rax
+ 921 069c 488945E0 		movq	%rax, -32(%rbp)
+GAS LISTING /tmp/cceimW80.s 			page 34
+
+
+ 922 06a0 488B45D8 		movq	-40(%rbp), %rax
+ 923 06a4 488D4801 		leaq	1(%rax), %rcx
+ 924 06a8 48894DD8 		movq	%rcx, -40(%rbp)
+ 925 06ac 0FB612   		movzbl	(%rdx), %edx
+ 926 06af 8810     		movb	%dl, (%rax)
+ 927              	.L78:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 928              		.loc 2 300 9 discriminator 116
+ 929 06b1 488B55E0 		movq	-32(%rbp), %rdx
+ 930 06b5 488D4201 		leaq	1(%rdx), %rax
+ 931 06b9 488945E0 		movq	%rax, -32(%rbp)
+ 932 06bd 488B45D8 		movq	-40(%rbp), %rax
+ 933 06c1 488D4801 		leaq	1(%rax), %rcx
+ 934 06c5 48894DD8 		movq	%rcx, -40(%rbp)
+ 935 06c9 0FB612   		movzbl	(%rdx), %edx
+ 936 06cc 8810     		movb	%dl, (%rax)
+ 937              	.L79:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 938              		.loc 2 300 9 discriminator 117
+ 939 06ce 488B55E0 		movq	-32(%rbp), %rdx
+ 940 06d2 488D4201 		leaq	1(%rdx), %rax
+ 941 06d6 488945E0 		movq	%rax, -32(%rbp)
+ 942 06da 488B45D8 		movq	-40(%rbp), %rax
+ 943 06de 488D4801 		leaq	1(%rax), %rcx
+ 944 06e2 48894DD8 		movq	%rcx, -40(%rbp)
+ 945 06e6 0FB612   		movzbl	(%rdx), %edx
+ 946 06e9 8810     		movb	%dl, (%rax)
+ 947              	.L80:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 948              		.loc 2 300 9 discriminator 118
+ 949 06eb 488B55E0 		movq	-32(%rbp), %rdx
+ 950 06ef 488D4201 		leaq	1(%rdx), %rax
+ 951 06f3 488945E0 		movq	%rax, -32(%rbp)
+ 952 06f7 488B45D8 		movq	-40(%rbp), %rax
+ 953 06fb 488D4801 		leaq	1(%rax), %rcx
+ 954 06ff 48894DD8 		movq	%rcx, -40(%rbp)
+ 955 0703 0FB612   		movzbl	(%rdx), %edx
+ 956 0706 8810     		movb	%dl, (%rax)
+ 957              	.L81:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 958              		.loc 2 300 9 discriminator 119
+ 959 0708 488B55E0 		movq	-32(%rbp), %rdx
+ 960 070c 488D4201 		leaq	1(%rdx), %rax
+ 961 0710 488945E0 		movq	%rax, -32(%rbp)
+ 962 0714 488B45D8 		movq	-40(%rbp), %rax
+ 963 0718 488D4801 		leaq	1(%rax), %rcx
+ 964 071c 48894DD8 		movq	%rcx, -40(%rbp)
+ 965 0720 0FB612   		movzbl	(%rdx), %edx
+ 966 0723 8810     		movb	%dl, (%rax)
+ 967              	.L82:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 968              		.loc 2 300 9 discriminator 120
+ 969 0725 488B55E0 		movq	-32(%rbp), %rdx
+ 970 0729 488D4201 		leaq	1(%rdx), %rax
+ 971 072d 488945E0 		movq	%rax, -32(%rbp)
+ 972 0731 488B45D8 		movq	-40(%rbp), %rax
+ 973 0735 488D4801 		leaq	1(%rax), %rcx
+GAS LISTING /tmp/cceimW80.s 			page 35
+
+
+ 974 0739 48894DD8 		movq	%rcx, -40(%rbp)
+ 975 073d 0FB612   		movzbl	(%rdx), %edx
+ 976 0740 8810     		movb	%dl, (%rax)
+ 977              	.L83:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 978              		.loc 2 300 9 discriminator 121
+ 979 0742 488B55E0 		movq	-32(%rbp), %rdx
+ 980 0746 488D4201 		leaq	1(%rdx), %rax
+ 981 074a 488945E0 		movq	%rax, -32(%rbp)
+ 982 074e 488B45D8 		movq	-40(%rbp), %rax
+ 983 0752 488D4801 		leaq	1(%rax), %rcx
+ 984 0756 48894DD8 		movq	%rcx, -40(%rbp)
+ 985 075a 0FB612   		movzbl	(%rdx), %edx
+ 986 075d 8810     		movb	%dl, (%rax)
+ 987              	.L84:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 988              		.loc 2 300 9 discriminator 122
+ 989 075f 488B55E0 		movq	-32(%rbp), %rdx
+ 990 0763 488D4201 		leaq	1(%rdx), %rax
+ 991 0767 488945E0 		movq	%rax, -32(%rbp)
+ 992 076b 488B45D8 		movq	-40(%rbp), %rax
+ 993 076f 488D4801 		leaq	1(%rax), %rcx
+ 994 0773 48894DD8 		movq	%rcx, -40(%rbp)
+ 995 0777 0FB612   		movzbl	(%rdx), %edx
+ 996 077a 8810     		movb	%dl, (%rax)
+ 997              	.L85:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 998              		.loc 2 300 9 discriminator 123
+ 999 077c 488B55E0 		movq	-32(%rbp), %rdx
+ 1000 0780 488D4201 		leaq	1(%rdx), %rax
+ 1001 0784 488945E0 		movq	%rax, -32(%rbp)
+ 1002 0788 488B45D8 		movq	-40(%rbp), %rax
+ 1003 078c 488D4801 		leaq	1(%rax), %rcx
+ 1004 0790 48894DD8 		movq	%rcx, -40(%rbp)
+ 1005 0794 0FB612   		movzbl	(%rdx), %edx
+ 1006 0797 8810     		movb	%dl, (%rax)
+ 1007              	.L86:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 1008              		.loc 2 300 9 discriminator 124
+ 1009 0799 488B55E0 		movq	-32(%rbp), %rdx
+ 1010 079d 488D4201 		leaq	1(%rdx), %rax
+ 1011 07a1 488945E0 		movq	%rax, -32(%rbp)
+ 1012 07a5 488B45D8 		movq	-40(%rbp), %rax
+ 1013 07a9 488D4801 		leaq	1(%rax), %rcx
+ 1014 07ad 48894DD8 		movq	%rcx, -40(%rbp)
+ 1015 07b1 0FB612   		movzbl	(%rdx), %edx
+ 1016 07b4 8810     		movb	%dl, (%rax)
+ 1017              	.L87:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 1018              		.loc 2 300 9 discriminator 125
+ 1019 07b6 488B55E0 		movq	-32(%rbp), %rdx
+ 1020 07ba 488D4201 		leaq	1(%rdx), %rax
+ 1021 07be 488945E0 		movq	%rax, -32(%rbp)
+ 1022 07c2 488B45D8 		movq	-40(%rbp), %rax
+ 1023 07c6 488D4801 		leaq	1(%rax), %rcx
+ 1024 07ca 48894DD8 		movq	%rcx, -40(%rbp)
+ 1025 07ce 0FB612   		movzbl	(%rdx), %edx
+GAS LISTING /tmp/cceimW80.s 			page 36
+
+
+ 1026 07d1 8810     		movb	%dl, (%rax)
+ 1027              	.L88:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 1028              		.loc 2 300 9 discriminator 126
+ 1029 07d3 488B55E0 		movq	-32(%rbp), %rdx
+ 1030 07d7 488D4201 		leaq	1(%rdx), %rax
+ 1031 07db 488945E0 		movq	%rax, -32(%rbp)
+ 1032 07df 488B45D8 		movq	-40(%rbp), %rax
+ 1033 07e3 488D4801 		leaq	1(%rax), %rcx
+ 1034 07e7 48894DD8 		movq	%rcx, -40(%rbp)
+ 1035 07eb 0FB612   		movzbl	(%rdx), %edx
+ 1036 07ee 8810     		movb	%dl, (%rax)
+ 1037              	.L89:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 1038              		.loc 2 300 9 discriminator 127
+ 1039 07f0 488B55E0 		movq	-32(%rbp), %rdx
+ 1040 07f4 488D4201 		leaq	1(%rdx), %rax
+ 1041 07f8 488945E0 		movq	%rax, -32(%rbp)
+ 1042 07fc 488B45D8 		movq	-40(%rbp), %rax
+ 1043 0800 488D4801 		leaq	1(%rax), %rcx
+ 1044 0804 48894DD8 		movq	%rcx, -40(%rbp)
+ 1045 0808 0FB612   		movzbl	(%rdx), %edx
+ 1046 080b 8810     		movb	%dl, (%rax)
+ 1047              	.L90:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 1048              		.loc 2 300 9 discriminator 128
+ 1049 080d 488B55E0 		movq	-32(%rbp), %rdx
+ 1050 0811 488D4201 		leaq	1(%rdx), %rax
+ 1051 0815 488945E0 		movq	%rax, -32(%rbp)
+ 1052 0819 488B45D8 		movq	-40(%rbp), %rax
+ 1053 081d 488D4801 		leaq	1(%rax), %rcx
+ 1054 0821 48894DD8 		movq	%rcx, -40(%rbp)
+ 1055 0825 0FB612   		movzbl	(%rdx), %edx
+ 1056 0828 8810     		movb	%dl, (%rax)
+ 1057              	.L91:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 1058              		.loc 2 300 9 discriminator 129
+ 1059 082a 488B55E0 		movq	-32(%rbp), %rdx
+ 1060 082e 488D4201 		leaq	1(%rdx), %rax
+ 1061 0832 488945E0 		movq	%rax, -32(%rbp)
+ 1062 0836 488B45D8 		movq	-40(%rbp), %rax
+ 1063 083a 488D4801 		leaq	1(%rax), %rcx
+ 1064 083e 48894DD8 		movq	%rcx, -40(%rbp)
+ 1065 0842 0FB612   		movzbl	(%rdx), %edx
+ 1066 0845 8810     		movb	%dl, (%rax)
+ 1067              	.L92:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 1068              		.loc 2 300 9 discriminator 130
+ 1069 0847 488B55E0 		movq	-32(%rbp), %rdx
+ 1070 084b 488D4201 		leaq	1(%rdx), %rax
+ 1071 084f 488945E0 		movq	%rax, -32(%rbp)
+ 1072 0853 488B45D8 		movq	-40(%rbp), %rax
+ 1073 0857 488D4801 		leaq	1(%rax), %rcx
+ 1074 085b 48894DD8 		movq	%rcx, -40(%rbp)
+ 1075 085f 0FB612   		movzbl	(%rdx), %edx
+ 1076 0862 8810     		movb	%dl, (%rax)
+ 1077              	.L93:
+GAS LISTING /tmp/cceimW80.s 			page 37
+
+
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 1078              		.loc 2 300 9 discriminator 131
+ 1079 0864 488B55E0 		movq	-32(%rbp), %rdx
+ 1080 0868 488D4201 		leaq	1(%rdx), %rax
+ 1081 086c 488945E0 		movq	%rax, -32(%rbp)
+ 1082 0870 488B45D8 		movq	-40(%rbp), %rax
+ 1083 0874 488D4801 		leaq	1(%rax), %rcx
+ 1084 0878 48894DD8 		movq	%rcx, -40(%rbp)
+ 1085 087c 0FB612   		movzbl	(%rdx), %edx
+ 1086 087f 8810     		movb	%dl, (%rax)
+ 1087              	.L94:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 1088              		.loc 2 300 9 discriminator 132
+ 1089 0881 488B55E0 		movq	-32(%rbp), %rdx
+ 1090 0885 488D4201 		leaq	1(%rdx), %rax
+ 1091 0889 488945E0 		movq	%rax, -32(%rbp)
+ 1092 088d 488B45D8 		movq	-40(%rbp), %rax
+ 1093 0891 488D4801 		leaq	1(%rax), %rcx
+ 1094 0895 48894DD8 		movq	%rcx, -40(%rbp)
+ 1095 0899 0FB612   		movzbl	(%rdx), %edx
+ 1096 089c 8810     		movb	%dl, (%rax)
+ 1097              	.L95:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 1098              		.loc 2 300 9 discriminator 133
+ 1099 089e 488B55E0 		movq	-32(%rbp), %rdx
+ 1100 08a2 488D4201 		leaq	1(%rdx), %rax
+ 1101 08a6 488945E0 		movq	%rax, -32(%rbp)
+ 1102 08aa 488B45D8 		movq	-40(%rbp), %rax
+ 1103 08ae 488D4801 		leaq	1(%rax), %rcx
+ 1104 08b2 48894DD8 		movq	%rcx, -40(%rbp)
+ 1105 08b6 0FB612   		movzbl	(%rdx), %edx
+ 1106 08b9 8810     		movb	%dl, (%rax)
+ 1107              	.L96:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 1108              		.loc 2 300 9 discriminator 134
+ 1109 08bb 488B55E0 		movq	-32(%rbp), %rdx
+ 1110 08bf 488D4201 		leaq	1(%rdx), %rax
+ 1111 08c3 488945E0 		movq	%rax, -32(%rbp)
+ 1112 08c7 488B45D8 		movq	-40(%rbp), %rax
+ 1113 08cb 488D4801 		leaq	1(%rax), %rcx
+ 1114 08cf 48894DD8 		movq	%rcx, -40(%rbp)
+ 1115 08d3 0FB612   		movzbl	(%rdx), %edx
+ 1116 08d6 8810     		movb	%dl, (%rax)
+ 1117              	.L99:
+ 300:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 1118              		.loc 2 300 9
+ 1119 08d8 90       		nop
+ 1120              	.L26:
+ 1121              	.L100:
+ 1122              	.LBE2:
+ 1123              		.loc 2 303 1 is_stmt 1
+ 1124 08d9 90       		nop
+ 1125 08da 488B45E8 		movq	-24(%rbp), %rax
+ 1126 08de 64483304 		xorq	%fs:40, %rax
+ 1126      25280000 
+ 1126      00
+ 1127 08e7 7405     		je	.L97
+GAS LISTING /tmp/cceimW80.s 			page 38
+
+
+ 1128 08e9 E8000000 		call	__stack_chk_fail@PLT
+ 1128      00
+ 1129              	.L97:
+ 1130 08ee 4883C448 		addq	$72, %rsp
+ 1131 08f2 5B       		popq	%rbx
+ 1132 08f3 5D       		popq	%rbp
+ 1133              	.LCFI17:
+ 1134              		.cfi_def_cfa 7, 8
+ 1135 08f4 C3       		ret
+ 1136              		.cfi_endproc
+ 1137              	.LFE11:
+ 1139              		.section	.text.strcpy_s,"ax",@progbits
+ 1140              		.globl	strcpy_s
+ 1142              	strcpy_s:
+ 1143              	.LFB12:
+ 304:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** 
+ 305:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** /*
+ 306:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  * <FUNCTION DESCRIPTION>
+ 307:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *    The strcpy_s function copies the string pointed to  strSrc
+ 308:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *          (including the terminating null character) into the array pointed to by strDest
+ 309:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *    The destination string must be large enough to hold the source string,
+ 310:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *    including the terminating null character. strcpy_s will return EOVERLAP_AND_RESET
+ 311:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *    if the source and destination strings overlap.
+ 312:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *
+ 313:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  * <INPUT PARAMETERS>
+ 314:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *    strDest                          Location of destination string buffer
+ 315:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *    destMax                        Size of the destination string buffer.
+ 316:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *    strSrc                            Null-terminated source string buffer.
+ 317:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *
+ 318:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  * <OUTPUT PARAMETERS>
+ 319:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *    strDest                         is updated.
+ 320:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *
+ 321:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  * <RETURN VALUE>
+ 322:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *    EOK                               Success
+ 323:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *    EINVAL                          strDest is  NULL and destMax != 0 and destMax <= SECUREC_STRI
+ 324:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *    EINVAL_AND_RESET       strDest !=  NULL and strSrc is NULL and destMax != 0 and destMax <= SE
+ 325:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *    ERANGE                         destMax is 0 and destMax > SECUREC_STRING_MAX_LEN
+ 326:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *    ERANGE_AND_RESET      strDest have not enough space  and all other parameters are valid  and 
+ 327:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *    EOVERLAP_AND_RESET   dest buffer and source buffer are overlapped and all  parameters are val
+ 328:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *
+ 329:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  *    If there is a runtime-constraint violation, strDest[0] will be set to the '\0' when strDest a
+ 330:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****  */
+ 331:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** errno_t strcpy_s(char *strDest, size_t destMax, const char *strSrc)
+ 332:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** {
+ 1144              		.loc 2 332 1
+ 1145              		.cfi_startproc
+ 1146 0000 F30F1EFA 		endbr64
+ 1147 0004 55       		pushq	%rbp
+ 1148              	.LCFI18:
+ 1149              		.cfi_def_cfa_offset 16
+ 1150              		.cfi_offset 6, -16
+ 1151 0005 4889E5   		movq	%rsp, %rbp
+ 1152              	.LCFI19:
+ 1153              		.cfi_def_cfa_register 6
+ 1154 0008 4883EC30 		subq	$48, %rsp
+ 1155 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1156 0010 488975E0 		movq	%rsi, -32(%rbp)
+GAS LISTING /tmp/cceimW80.s 			page 39
+
+
+ 1157 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 1158              		.loc 2 332 1
+ 1159 0018 64488B04 		movq	%fs:40, %rax
+ 1159      25280000 
+ 1159      00
+ 1160 0021 488945F8 		movq	%rax, -8(%rbp)
+ 1161 0025 31C0     		xorl	%eax, %eax
+ 333:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     if ((destMax > 0 && destMax <= SECUREC_STRING_MAX_LEN && strDest != NULL && strSrc != NULL && s
+ 1162              		.loc 2 333 8
+ 1163 0027 48837DE0 		cmpq	$0, -32(%rbp)
+ 1163      00
+ 1164 002c 0F84BA00 		je	.L102
+ 1164      0000
+ 1165              		.loc 2 333 22 discriminator 1
+ 1166 0032 B8000000 		movl	$2147483648, %eax
+ 1166      80
+ 1167 0037 483945E0 		cmpq	%rax, -32(%rbp)
+ 1168 003b 0F83AB00 		jnb	.L102
+ 1168      0000
+ 1169              		.loc 2 333 59 discriminator 2
+ 1170 0041 48837DE8 		cmpq	$0, -24(%rbp)
+ 1170      00
+ 1171 0046 0F84A000 		je	.L102
+ 1171      0000
+ 1172              		.loc 2 333 78 discriminator 3
+ 1173 004c 48837DD8 		cmpq	$0, -40(%rbp)
+ 1173      00
+ 1174 0051 0F849500 		je	.L102
+ 1174      0000
+ 1175              		.loc 2 333 96 discriminator 4
+ 1176 0057 488B45E8 		movq	-24(%rbp), %rax
+ 1177 005b 483B45D8 		cmpq	-40(%rbp), %rax
+ 1178 005f 0F848700 		je	.L102
+ 1178      0000
+ 1179              	.LBB3:
+ 334:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         size_t srcStrLen = SecStrMinLen(strSrc, destMax) + 1; /* len  include \0 */
+ 1180              		.loc 2 334 28
+ 1181 0065 488B55E0 		movq	-32(%rbp), %rdx
+ 1182 0069 488B45D8 		movq	-40(%rbp), %rax
+ 1183 006d 4889D6   		movq	%rdx, %rsi
+ 1184 0070 4889C7   		movq	%rax, %rdi
+ 1185 0073 E8000000 		call	SecStrMinLen
+ 1185      00
+ 1186              		.loc 2 334 16
+ 1187 0078 4883C001 		addq	$1, %rax
+ 1188 007c 488945F0 		movq	%rax, -16(%rbp)
+ 335:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         if (srcStrLen <= destMax) {
+ 1189              		.loc 2 335 12
+ 1190 0080 488B45F0 		movq	-16(%rbp), %rax
+ 1191 0084 483B45E0 		cmpq	-32(%rbp), %rax
+ 1192 0088 7762     		ja	.L102
+ 336:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             /* use mem overlap check include \0 */
+ 337:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             if (SECUREC_MEMORY_NO_OVERLAP(strDest, strSrc, srcStrLen)) {
+ 1193              		.loc 2 337 16
+ 1194 008a 488B45D8 		movq	-40(%rbp), %rax
+ 1195 008e 483B45E8 		cmpq	-24(%rbp), %rax
+ 1196 0092 7311     		jnb	.L103
+GAS LISTING /tmp/cceimW80.s 			page 40
+
+
+ 1197              		.loc 2 337 17 discriminator 1
+ 1198 0094 488B55D8 		movq	-40(%rbp), %rdx
+ 1199 0098 488B45F0 		movq	-16(%rbp), %rax
+ 1200 009c 4801D0   		addq	%rdx, %rax
+ 1201 009f 483945E8 		cmpq	%rax, -24(%rbp)
+ 1202 00a3 731B     		jnb	.L104
+ 1203              	.L103:
+ 1204              		.loc 2 337 17 is_stmt 0 discriminator 3
+ 1205 00a5 488B45E8 		movq	-24(%rbp), %rax
+ 1206 00a9 483B45D8 		cmpq	-40(%rbp), %rax
+ 1207 00ad 732F     		jnb	.L105
+ 1208              		.loc 2 337 17 discriminator 4
+ 1209 00af 488B55E8 		movq	-24(%rbp), %rdx
+ 1210 00b3 488B45F0 		movq	-16(%rbp), %rax
+ 1211 00b7 4801D0   		addq	%rdx, %rax
+ 1212 00ba 483945D8 		cmpq	%rax, -40(%rbp)
+ 1213 00be 721E     		jb	.L105
+ 1214              	.L104:
+ 338:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 /* performance optimization srcStrLen include '\0' */
+ 339:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 SecDoStrcpyOpt(strDest, strSrc, srcStrLen);
+ 1215              		.loc 2 339 17 is_stmt 1
+ 1216 00c0 488B55F0 		movq	-16(%rbp), %rdx
+ 1217 00c4 488B4DD8 		movq	-40(%rbp), %rcx
+ 1218 00c8 488B45E8 		movq	-24(%rbp), %rax
+ 1219 00cc 4889CE   		movq	%rcx, %rsi
+ 1220 00cf 4889C7   		movq	%rax, %rdi
+ 1221 00d2 E8000000 		call	SecDoStrcpyOpt
+ 1221      00
+ 340:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 return EOK;
+ 1222              		.loc 2 340 24
+ 1223 00d7 B8000000 		movl	$0, %eax
+ 1223      00
+ 1224 00dc EB25     		jmp	.L106
+ 1225              	.L105:
+ 341:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             } else {
+ 342:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 strDest[0] = '\0';
+ 1226              		.loc 2 342 28
+ 1227 00de 488B45E8 		movq	-24(%rbp), %rax
+ 1228 00e2 C60000   		movb	$0, (%rax)
+ 343:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 SECUREC_ERROR_BUFFER_OVERLAP("strcpy_s");
+ 344:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****                 return EOVERLAP_AND_RESET;
+ 1229              		.loc 2 344 24
+ 1230 00e5 B8B60000 		movl	$182, %eax
+ 1230      00
+ 1231 00ea EB17     		jmp	.L106
+ 1232              	.L102:
+ 1233              	.LBE3:
+ 345:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****             }
+ 346:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****         }
+ 347:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     }
+ 348:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c ****     return strcpy_error(strDest, destMax, strSrc);
+ 1234              		.loc 2 348 12
+ 1235 00ec 488B55D8 		movq	-40(%rbp), %rdx
+ 1236 00f0 488B4DE0 		movq	-32(%rbp), %rcx
+ 1237 00f4 488B45E8 		movq	-24(%rbp), %rax
+ 1238 00f8 4889CE   		movq	%rcx, %rsi
+ 1239 00fb 4889C7   		movq	%rax, %rdi
+GAS LISTING /tmp/cceimW80.s 			page 41
+
+
+ 1240 00fe E8000000 		call	strcpy_error
+ 1240      00
+ 1241              	.L106:
+ 349:/home/xingli/share/LiteOS_Lab/secure_c/src/strcpy_s.c **** }
+ 1242              		.loc 2 349 1
+ 1243 0103 488B4DF8 		movq	-8(%rbp), %rcx
+ 1244 0107 6448330C 		xorq	%fs:40, %rcx
+ 1244      25280000 
+ 1244      00
+ 1245 0110 7405     		je	.L107
+ 1246 0112 E8000000 		call	__stack_chk_fail@PLT
+ 1246      00
+ 1247              	.L107:
+ 1248 0117 C9       		leave
+ 1249              	.LCFI20:
+ 1250              		.cfi_def_cfa 7, 8
+ 1251 0118 C3       		ret
+ 1252              		.cfi_endproc
+ 1253              	.LFE12:
+ 1255              		.text
+ 1256              	.Letext0:
+ 1257              		.file 3 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 1258              		.file 4 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 1259              		.file 5 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 1260              		.file 6 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 1261              		.file 7 "/usr/include/stdio.h"
+ 1262              		.file 8 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 1263              		.file 9 "/home/xingli/share/LiteOS_Lab/secure_c/include/securec.h"
+ 3925              		.section	.note.gnu.property,"a"
+ 3926              		.align 8
+ 3927 0000 04000000 		.long	 1f - 0f
+ 3928 0004 10000000 		.long	 4f - 1f
+ 3929 0008 05000000 		.long	 5
+ 3930              	0:
+ 3931 000c 474E5500 		.string	 "GNU"
+ 3932              	1:
+ 3933              		.align 8
+ 3934 0010 020000C0 		.long	 0xc0000002
+ 3935 0014 04000000 		.long	 3f - 2f
+ 3936              	2:
+ 3937 0018 03000000 		.long	 0x3
+ 3938              	3:
+ 3939 001c 00000000 		.align 8
+ 3940              	4:
+GAS LISTING /tmp/cceimW80.s 			page 42
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 strcpy_s.c
+     /tmp/cceimW80.s:6      .text.SecDoMemcpy:0000000000000000 SecDoMemcpy
+     /tmp/cceimW80.s:50     .text.SecStrMinLen:0000000000000000 SecStrMinLen
+     /tmp/cceimW80.s:93     .text.SecIsAddrAligned8:0000000000000000 SecIsAddrAligned8
+     /tmp/cceimW80.s:133    .text.CheckSrcRange:0000000000000000 CheckSrcRange
+     /tmp/cceimW80.s:206    .text.strcpy_error:0000000000000000 strcpy_error
+     /tmp/cceimW80.s:282    .text.SecDoStrcpyOpt:0000000000000000 SecDoStrcpyOpt
+     /tmp/cceimW80.s:1142   .text.strcpy_s:0000000000000000 strcpy_s
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+memcpy
+__stack_chk_fail
+strnlen

@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,15 +22,15 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
 #include <stddef.h>
 #include <stdint.h>
@@ -47,8 +47,7 @@ int osal_install(const tag_os *os)
 {
     int ret = -1;
 
-    if(NULL == s_os_cb)
-    {
+    if (NULL == s_os_cb) {
         s_os_cb = os;
         ret = 0;
     }
@@ -56,185 +55,148 @@ int osal_install(const tag_os *os)
     return ret;
 }
 
-
-void* osal_task_create(const char *name,int (*task_entry)(void *args),\
-                      void *args,int stack_size,void *stack,int prior)
+void *osal_task_create(const char *name, int (*task_entry)(void *args), void *args, int stack_size, void *stack,
+    int prior)
 {
     void *ret = NULL;
 
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->task_create))
-    {
-        ret = s_os_cb->ops->task_create(name, task_entry,args,stack_size,stack,prior);
+    if ((NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->task_create)) {
+        ret = s_os_cb->ops->task_create(name, task_entry, args, stack_size, stack, prior);
     }
 
     return ret;
 }
-
 
 int osal_task_kill(void *task)
 {
     int ret = -1;
 
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->task_kill))
-    {
+    if ((NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->task_kill)) {
         ret = s_os_cb->ops->task_kill(task);
     }
 
     return ret;
-
 }
-
 
 void osal_task_exit(void)
 {
-
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->task_exit))
-    {
+    if ((NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->task_exit)) {
         s_os_cb->ops->task_exit();
     }
-    return ;
-
+    return;
 }
-
 
 void osal_task_sleep(int ms)
 {
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->task_sleep))
-    {
+    if ((NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->task_sleep)) {
         s_os_cb->ops->task_sleep(ms);
     }
 
-    return ;
-
+    return;
 }
 
-
-bool_t  osal_mutex_create(osal_mutex_t *mutex)
+bool_t osal_mutex_create(osal_mutex_t *mutex)
 {
     bool_t ret = false;
 
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->mutex_create))
-    {
+    if ((NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->mutex_create)) {
         ret = s_os_cb->ops->mutex_create(mutex);
     }
 
     return ret;
-
 }
 
-
-bool_t  osal_mutex_lock(osal_mutex_t mutex)
+bool_t osal_mutex_lock(osal_mutex_t mutex)
 {
     bool_t ret = false;
 
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->mutex_lock))
-    {
+    if ((NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->mutex_lock)) {
         ret = s_os_cb->ops->mutex_lock(mutex);
     }
 
     return ret;
-
 }
 
-
-bool_t  osal_mutex_unlock(osal_mutex_t mutex)
+bool_t osal_mutex_unlock(osal_mutex_t mutex)
 {
     bool_t ret = false;
 
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->mutex_unlock))
-    {
+    if ((NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->mutex_unlock)) {
         ret = s_os_cb->ops->mutex_unlock(mutex);
     }
 
     return ret;
-
 }
 
-bool_t  osal_mutex_del(osal_mutex_t mutex)
+bool_t osal_mutex_del(osal_mutex_t mutex)
 {
     bool_t ret = false;
 
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->mutex_del))
-    {
+    if ((NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->mutex_del)) {
         ret = s_os_cb->ops->mutex_del(mutex);
     }
 
     return ret;
-
 }
 
-bool_t  osal_semp_create(osal_semp_t *semp,int limit,int initvalue)
+bool_t osal_semp_create(osal_semp_t *semp, int limit, int initvalue)
 {
     bool_t ret = false;
 
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->semp_create))
-    {
-        ret = s_os_cb->ops->semp_create(semp,limit,initvalue);
+    if ((NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->semp_create)) {
+        ret = s_os_cb->ops->semp_create(semp, limit, initvalue);
     }
 
     return ret;
-
 }
 
-bool_t  osal_semp_pend(osal_semp_t semp,unsigned int timeout)
+bool_t osal_semp_pend(osal_semp_t semp, unsigned int timeout)
 {
     bool_t ret = false;
 
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->semp_pend))
-    {
-        ret = s_os_cb->ops->semp_pend(semp,timeout);
+    if ((NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->semp_pend)) {
+        ret = s_os_cb->ops->semp_pend(semp, timeout);
     }
 
     return ret;
-
 }
 
-
-bool_t  osal_semp_post(osal_semp_t semp)
+bool_t osal_semp_post(osal_semp_t semp)
 {
     bool_t ret = false;
 
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->semp_post))
-    {
+    if ((NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->semp_post)) {
         ret = s_os_cb->ops->semp_post(semp);
     }
 
     return ret;
-
 }
 
-bool_t  osal_semp_del(osal_semp_t semp)
+bool_t osal_semp_del(osal_semp_t semp)
 {
     bool_t ret = false;
 
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->semp_del))
-    {
+    if ((NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->semp_del)) {
         ret = s_os_cb->ops->semp_del(semp);
     }
 
     return ret;
-
 }
-
 
 void *osal_malloc(size_t size)
 {
     void *ret = NULL;
 
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->malloc))
-    {
+    if ((NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->malloc)) {
         ret = s_os_cb->ops->malloc(size);
     }
 
     return ret;
-
 }
 
-void  osal_free(void *addr)
+void osal_free(void *addr)
 {
-
-    if((NULL != addr) && (NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->free))
-    {
+    if ((NULL != addr) && (NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->free)) {
         s_os_cb->ops->free(addr);
     }
 
@@ -245,26 +207,22 @@ void *osal_zalloc(size_t size)
 {
     void *ret = NULL;
 
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->malloc))
-    {
+    if ((NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->malloc)) {
         ret = s_os_cb->ops->malloc(size);
-        if(NULL != ret)
-        {
-            (void) memset(ret,0,size);
+        if (NULL != ret) {
+            (void)memset(ret, 0, size);
         }
     }
 
     return ret;
-
 }
 
-void *osal_realloc(void *ptr,size_t newsize)
+void *osal_realloc(void *ptr, size_t newsize)
 {
     void *ret = NULL;
 
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->realloc))
-    {
-        ret = s_os_cb->ops->realloc(ptr,newsize);
+    if ((NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->realloc)) {
+        ret = s_os_cb->ops->realloc(ptr, newsize);
     }
 
     return ret;
@@ -274,25 +232,21 @@ void *osal_calloc(size_t n, size_t size)
 {
     void *ret = NULL;
     size_t len;
-    len = n*size;
+    len = n * size;
 
     ret = malloc(len);
-    if(NULL != ret)
-    {
-        (void) memset(ret, 0,len);
+    if (NULL != ret) {
+        (void)memset(ret, 0, len);
     }
 
     return ret;
 }
 
-
 unsigned long long osal_sys_time(void)
 {
+    unsigned long long ret = 0;
 
-    unsigned long long  ret = 0;
-
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->get_sys_time))
-    {
+    if ((NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->get_sys_time)) {
         ret = s_os_cb->ops->get_sys_time();
     }
 
@@ -318,7 +272,7 @@ void osal_loop_timer_count_downms(osal_loop_timer_t *timer, unsigned int timeout
 
 void osal_loop_timer_count_down(osal_loop_timer_t *timer, unsigned int timeout)
 {
-    osal_loop_timer_count_downms(timer,timeout*1000);
+    osal_loop_timer_count_downms(timer, timeout * 1000);
 }
 
 int osal_loop_timer_left(osal_loop_timer_t *timer)
@@ -327,13 +281,11 @@ int osal_loop_timer_left(osal_loop_timer_t *timer)
     return timer->dead_time <= now ? 0 : timer->dead_time - now;
 }
 
-
-int osal_reboot(void)  ///< maybe we should never come back
+int osal_reboot(void) // /< maybe we should never come back
 {
     int ret = -1;
 
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->reboot))
-    {
+    if ((NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->reboot)) {
         ret = s_os_cb->ops->reboot();
     }
 
@@ -343,68 +295,60 @@ int osal_reboot(void)  ///< maybe we should never come back
 int osal_int_connect(int intnum, int prio, int mode, fn_interrupt_handle callback, void *arg)
 {
     int ret = -1;
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->int_connect))
-    {
+    if ((NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->int_connect)) {
         ret = s_os_cb->ops->int_connect(intnum, prio, mode, callback, arg);
-	}
-
-    return ret;
-}
-
-
-bool_t  osal_queue_create(osal_queue_t *queue,int len,int msgsize)
-{
-    int ret = false;
-
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->queue_create))
-    {
-        ret = s_os_cb->ops->queue_create( queue, len, msgsize);
     }
 
     return ret;
 }
 
-bool_t  osal_queue_send(osal_queue_t queue, void *pbuf, unsigned int bufsize, unsigned int timeout)
+bool_t osal_queue_create(osal_queue_t *queue, int len, int msgsize)
 {
     int ret = false;
 
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->queue_send))
-    {
-        ret = s_os_cb->ops->queue_send( queue, pbuf, bufsize, timeout);
+    if ((NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->queue_create)) {
+        ret = s_os_cb->ops->queue_create(queue, len, msgsize);
     }
 
     return ret;
 }
 
-bool_t  osal_queue_recv(osal_queue_t queue, void *pbuf, unsigned int *bufsize, unsigned int timeout)
+bool_t osal_queue_send(osal_queue_t queue, void *pbuf, unsigned int bufsize, unsigned int timeout)
 {
     int ret = false;
 
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->queue_recv))
-    {
-        ret = s_os_cb->ops->queue_recv( queue, pbuf, bufsize, timeout);
+    if ((NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->queue_send)) {
+        ret = s_os_cb->ops->queue_send(queue, pbuf, bufsize, timeout);
     }
 
     return ret;
 }
 
-bool_t  osal_queue_del(osal_queue_t queue)
+bool_t osal_queue_recv(osal_queue_t queue, void *pbuf, unsigned int *bufsize, unsigned int timeout)
 {
     int ret = false;
 
-    if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->queue_del))
-    {
-        ret = s_os_cb->ops->queue_del( queue);
+    if ((NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->queue_recv)) {
+        ret = s_os_cb->ops->queue_recv(queue, pbuf, bufsize, timeout);
     }
 
     return ret;
 }
 
-
-
-__attribute__((weak))  int os_imp_init(void)
+bool_t osal_queue_del(osal_queue_t queue)
 {
-    LINK_LOG_DEBUG("%s:###please implement this function by yourself####\n\r",__FUNCTION__);
+    int ret = false;
+
+    if ((NULL != s_os_cb) && (NULL != s_os_cb->ops) && (NULL != s_os_cb->ops->queue_del)) {
+        ret = s_os_cb->ops->queue_del(queue);
+    }
+
+    return ret;
+}
+
+__attribute__((weak)) int os_imp_init(void)
+{
+    LINK_LOG_DEBUG("%s:###please implement this function by yourself####\n\r", __FUNCTION__);
     return -1;
 }
 
@@ -414,4 +358,3 @@ int osal_init(void)
     ret = os_imp_init();
     return ret;
 }
-

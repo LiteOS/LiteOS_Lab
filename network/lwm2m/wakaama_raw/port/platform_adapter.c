@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,17 +22,17 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
-/*******************************************************************************
+/* ******************************************************************************
  *
  * Copyright (c) 2013, 2014, 2015 Intel Corporation and others.
  * All rights reserved. This program and the accompanying materials
@@ -40,13 +40,13 @@
  * and Eclipse Distribution License v1.0 which accompany this distribution.
  *
  * The Eclipse Public License is available at
- *    http://www.eclipse.org/legal/epl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * The Eclipse Distribution License is available at
- *    http://www.eclipse.org/org/documents/edl-v10.php.
+ * http://www.eclipse.org/org/documents/edl-v10.php.
  *
  * Contributors:
- *    David Navarro, Intel Corporation - initial API and implementation
- *******************************************************************************/
+ * David Navarro, Intel Corporation - initial API and implementation
+ * ***************************************************************************** */
 
 
 #include <stdint.h>
@@ -77,9 +77,7 @@ char *lwm2m_strdup(const char *str)
 
 #endif
 
-int lwm2m_strncmp(const char *s1,
-                  const char *s2,
-                  size_t n)
+int lwm2m_strncmp(const char *s1, const char *s2, size_t n)
 {
     return strncmp(s1, s2, n);
 }
@@ -106,4 +104,3 @@ void lwm2m_printf(const char *format, ...)
     vfprintf(stderr, format, ap);
     va_end(ap);
 }
-

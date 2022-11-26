@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,15 +22,15 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
 #ifndef LWM2M_RPT_H
 #define LWM2M_RPT_H
@@ -47,8 +47,7 @@ extern "C" {
 
 LWM2M_INLINE void get_instance_uri(uint16_t object_id, uint16_t instance_id, lwm2m_uri_t *uri)
 {
-    if (NULL == uri)
-    {
+    if (NULL == uri) {
         return;
     }
 
@@ -60,8 +59,7 @@ LWM2M_INLINE void get_instance_uri(uint16_t object_id, uint16_t instance_id, lwm
 
 LWM2M_INLINE void get_resource_uri(uint16_t object_id, uint16_t instance_id, uint16_t resource_id, lwm2m_uri_t *uri)
 {
-    if (NULL == uri)
-    {
+    if (NULL == uri) {
         return;
     }
 
@@ -75,10 +73,10 @@ struct _lwm2m_rpt_list_t;
 typedef struct _lwm2m_rpt_list_t *rpt_list_t;
 
 int lwm2m_init_rpt(void);
-int lwm2m_add_rpt_uri(const lwm2m_uri_t *uri,  rpt_list_t *list);
+int lwm2m_add_rpt_uri(const lwm2m_uri_t *uri, rpt_list_t *list);
 int lwm2m_rm_rpt_uri(const lwm2m_uri_t *uri);
 
-int lwm2m_dequeue_rpt_data(rpt_list_t rpt_list,  data_report_t *data);
+int lwm2m_dequeue_rpt_data(rpt_list_t rpt_list, data_report_t *data);
 int lwm2m_queue_rpt_data(const lwm2m_uri_t *uri, const data_report_t *data);
 int lwm2m_clear_rpt_data(const lwm2m_uri_t *uri, int result);
 
@@ -91,4 +89,3 @@ int lwm2m_set_max_rpt_cnt(const lwm2m_uri_t *uri, uint32_t max_rpt_cnt);
 #endif
 
 #endif
-

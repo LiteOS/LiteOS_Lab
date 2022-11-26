@@ -11,4 +11,3 @@ ifeq ($(CONFIG_SHELL_ENABLE),y)
     
     C_DEFS += -D CONFIG_SHELL_ENABLE=1
 endif
-

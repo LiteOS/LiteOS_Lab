@@ -32,12 +32,12 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef __SINN_SEC_SOCKET_H__
-#define __SINN_SEC_SOCKET_H__
+#ifndef SINN_SEC_SOCKET_H
+#define SINN_SEC_SOCKET_H
 
 #include "sinn_client.h"
 #if WITH_DTLS
 #include "dtls_interface.h"
 #endif
 
-#endif /* __SINN_SEC_SOCKET_H__ */
+#endif /* SINN_SEC_SOCKET_H */

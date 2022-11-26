@@ -3,7 +3,6 @@
 #include "mqtt_packet.h"
 #include "sinn_config.h"
 
-
 typedef enum MQTT_CONNACK_RETCODE
 {
     MQTT_CONNACK_ACCEPTED = 0x0,
@@ -13,8 +12,6 @@ typedef enum MQTT_CONNACK_RETCODE
     MQTT_CONNACK_BAD_AUTH = 0x4,
     MQTT_CONNACK_NOT_AUTHORIZED = 0x5,
 } MQTT_CONNACK_RETCODE_e;
-
-
 
 #define EV_MQTT_BASE             0x100
 #define EV_MQTT_CONNECT          (EV_MQTT_BASE + MQTT_PACKET_TYPE_CONNECT)
@@ -32,15 +29,11 @@ typedef enum MQTT_CONNACK_RETCODE
 #define EV_MQTT_PINGRESP         (EV_MQTT_BASE + MQTT_PACKET_TYPE_PINGRESP)
 #define EV_MQTT_DISCONNECT       (EV_MQTT_BASE + MQTT_PACKET_TYPE_DISCONNECT)
 
-
-
 #define MAX_PACKET_ID 0xFFFF
-
 
 typedef struct sinn_mqtt_proto_data  sinn_mqtt_proto_data_t;
 
-typedef struct sinn_mqtt_msg
-{
+typedef struct sinn_mqtt_msg {
     unsigned char type;
     EN_QOS qos;
     unsigned int len;
@@ -57,12 +50,9 @@ typedef struct sinn_mqtt_msg
     char *ret;    // used for conret and subret
 } sinn_mqtt_msg_t;
 
-
-
 typedef void (*sinn_mqtt_msg_handler)(sinn_mqtt_msg_t *);
 
-typedef struct sinn_mqtt_proto_data
-{
+typedef struct sinn_mqtt_proto_data {
     unsigned short keep_alive;
     sinn_time_t last_time;
     unsigned int next_packetid;
@@ -74,7 +64,6 @@ typedef struct sinn_mqtt_proto_data
         void *arg;
     } messageHandlers[SINN_MQTT_BUILTIN_NUM];      /* Message handlers are indexed by subscription topic */
 } sinn_mqtt_proto_data_t;
-
 
 int sinn_mqtt_packetid(sinn_connection_t *nc);
 int sinn_mqtt_connect(sinn_connection_t *nc, mqtt_connect_opt_t *options);

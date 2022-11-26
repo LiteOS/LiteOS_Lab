@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2019>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,15 +22,15 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
 /* coap_config.h.  Generated from coap_config.h.in by configure.  */
 /* coap_config.h.in.  Generated from configure.ac by autoheader.  */
@@ -39,16 +39,16 @@
 /* #undef AC_APPLE_UNIVERSAL_BUILD */
 
 /* Define to 1 if you have the <arpa/inet.h> header file. */
-//#define HAVE_ARPA_INET_H 1
+// #define HAVE_ARPA_INET_H 1
 
 /* Define to 1 if you have the <assert.h> header file. */
 #define HAVE_ASSERT_H 1
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
-//#define HAVE_DLFCN_H 1
+// #define HAVE_DLFCN_H 1
 
 /* Define to 1 if you have the `getaddrinfo' function. */
-//#define HAVE_GETADDRINFO 1
+// #define HAVE_GETADDRINFO 1
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
@@ -75,16 +75,16 @@
 #define HAVE_MEMSET 1
 
 /* Define to 1 if you have the <netdb.h> header file. */
-//#define HAVE_NETDB_H 1
+// #define HAVE_NETDB_H 1
 
 /* Define to 1 if you have the <netinet/in.h> header file. */
-//#define HAVE_NETINET_IN_H 1
+// #define HAVE_NETINET_IN_H 1
 
 /* Define if the system has libssl1.1 */
 /* #undef HAVE_OPENSSL */
 
 /* Define to 1 if you have the `select' function. */
-//#define HAVE_SELECT 1
+// #define HAVE_SELECT 1
 
 /* Define to 1 if you have the `socket' function. */
 #define HAVE_SOCKET 1
@@ -111,34 +111,34 @@
 #define HAVE_STRRCHR 1
 
 /* Define to 1 if you have the <syslog.h> header file. */
-//#define HAVE_SYSLOG_H 1
+// #define HAVE_SYSLOG_H 1
 
 /* Define to 1 if you have the <sys/ioctl.h> header file. */
-//#define HAVE_SYS_IOCTL_H 1
+// #define HAVE_SYS_IOCTL_H 1
 
 /* Define to 1 if you have the <sys/socket.h> header file. */
-//#define HAVE_SYS_SOCKET_H 1
+// #define HAVE_SYS_SOCKET_H 1
 
 /* Define to 1 if you have the <sys/stat.h> header file. */
-//#define HAVE_SYS_STAT_H 1
+// #define HAVE_SYS_STAT_H 1
 
 /* Define to 1 if you have the <sys/time.h> header file. */
-//#define HAVE_SYS_TIME_H 1
+// #define HAVE_SYS_TIME_H 1
 
 /* Define to 1 if you have the <sys/types.h> header file. */
-//#define HAVE_SYS_TYPES_H 1
+// #define HAVE_SYS_TYPES_H 1
 
 /* Define to 1 if you have the <sys/unistd.h> header file. */
-//#define HAVE_SYS_UNISTD_H 1
+// #define HAVE_SYS_UNISTD_H 1
 
 /* Define to 1 if you have the <time.h> header file. */
 #define HAVE_TIME_H 1
 
 /* Define to 1 if you have the <unistd.h> header file. */
-//#define HAVE_UNISTD_H 1
+// #define HAVE_UNISTD_H 1
 
 /* Define to 1 if you have the `sockaddr' struct. */
-//#define HAVE_SOCKETADDR 1
+// #define HAVE_SOCKETADDR 1
 
 /* Define to the sub-directory where libtool stores uninstalled libraries. */
 #define LT_OBJDIR ".libs/"
@@ -167,13 +167,13 @@
 /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
    significant byte first (like Motorola and SPARC, unlike Intel). */
 #if defined AC_APPLE_UNIVERSAL_BUILD
-# if defined __BIG_ENDIAN__
-#  define WORDS_BIGENDIAN 1
-# endif
+#if defined __BIG_ENDIAN__
+#define WORDS_BIGENDIAN 1
+#endif
 #else
-# ifndef WORDS_BIGENDIAN
+#ifndef WORDS_BIGENDIAN
 /* #  undef WORDS_BIGENDIAN */
-# endif
+#endif
 #endif
 
 /* Define this to 1 for ancillary data on MacOS */

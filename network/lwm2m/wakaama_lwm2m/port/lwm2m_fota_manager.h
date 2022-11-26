@@ -49,8 +49,8 @@
  *
  *******************************************************************************/
 
-#ifndef LWM2M_FOTA_MANAGER_H_
-#define LWM2M_FOTA_MANAGER_H_
+#ifndef LWM2M_FOTA_MANAGER_H
+#define LWM2M_FOTA_MANAGER_H
 
 #include "lwm2m_common.h"
 #include "liblwm2m.h"
@@ -58,9 +58,9 @@
 
 #define array_size(a) (sizeof(a)/sizeof(*(a)))
 
-
 /*
-0: Initial value. Once the updating process is initiated (Download /Update), this Resource MUST be reset to Initial value.
+0: Initial value. Once the updating process is initiated (Download /Update), 
+    this Resource MUST be reset to Initial value.
 1: Firmware updated successfully,
 2: Not enough flash memory for the new firmware package.
 3. Out of RAM during downloading process.
@@ -74,18 +74,16 @@
 */
 
 typedef int lwm2m_fota_state_e;
-enum //atiny_fota_state_e
-{
+// atiny_fota_state_e
+enum {
     LWM2M_FOTA_IDLE = 0,
     LWM2M_FOTA_DOWNLOADING,
     LWM2M_FOTA_DOWNLOADED,
     LWM2M_FOTA_UPDATING
 };
 
-
 typedef int lwm2m_update_result_e;
-enum
-{
+enum {
     LWM2M_FIRMWARE_UPDATE_NULL = 0,
     LWM2M_FIRMWARE_UPDATE_SUCCESS = 1,
     LWM2M_FIRMWARE_UPDATE_FAIL = 8
@@ -117,10 +115,7 @@ void lwm2m_fota_manager_destroy(lwm2m_fota_manager_s *thi);
 int lwm2m_fota_manager_rpt_state(lwm2m_fota_manager_s *thi, lwm2m_fota_state_e rpt_state);
 void lwm2m_fota_manager_save_rpt_state(lwm2m_fota_manager_s *thi, lwm2m_fota_state_e rpt_state);
 
-
 lwm2m_fota_state_e lwm2m_fota_manager_get_rpt_state(const lwm2m_fota_manager_s *thi);
-
-
 
 lwm2m_fota_manager_s *lwm2m_fota_manager_get_instance(void);
 

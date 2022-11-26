@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,17 +22,17 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
-/**@defgroup agent AgentTiny
+/* *@defgroup agent AgentTiny
  * @defgroup agenttiny Agenttiny Definition
  * @ingroup agent
  */
@@ -46,18 +46,15 @@
 extern "C" {
 #endif
 
-//bootstrap at least have one mode, we have three mode.
-typedef enum
-{
+// bootstrap at least have one mode, we have three mode.
+typedef enum {
     BOOTSTRAP_FACTORY = 0,
     BOOTSTRAP_CLIENT_INITIATED,
     BOOTSTRAP_SEQUENCE
 } lwm2m_bootstrap_type_e;
-
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
-

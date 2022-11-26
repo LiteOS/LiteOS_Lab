@@ -1,0 +1,159 @@
+GAS LISTING /tmp/ccRWMkTA.s 			page 1
+
+
+   1              		.file	"entropy_hardware_poll.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.mbedtls_hardware_poll,"ax",@progbits
+   5              		.globl	mbedtls_hardware_poll
+   7              	mbedtls_hardware_poll:
+   8              	.LFB0:
+   9              		.file 1 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c"
+   1:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c **** /* ----------------------------------------------------------------------------
+   2:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+   3:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * All rights reserved.
+   4:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * are permitted provided that the following conditions are met:
+   6:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * conditions and the following disclaimer.
+   8:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * provided with the distribution.
+  11:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * permission.
+  14:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * --------------------------------------------------------------------------- */
+  26:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c **** /* ----------------------------------------------------------------------------
+  27:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * Notice of Export Control Law
+  28:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * ===============================================
+  29:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * applicable export control laws and regulations.
+  33:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****  * --------------------------------------------------------------------------- */
+  34:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c **** 
+  35:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c **** 
+  36:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c **** #include "mbedtls/entropy.h"
+  37:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c **** #include "link_misc.h"
+  38:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c **** 
+  39:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c **** int mbedtls_hardware_poll(void *data, unsigned char *output, size_t len, size_t *olen);
+  40:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c **** int mbedtls_hardware_poll(void *data, unsigned char *output, size_t len, size_t *olen)
+  41:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c **** {
+  10              		.loc 1 41 1
+  11              		.cfi_startproc
+  12 0000 F30F1EFA 		endbr64
+  13 0004 55       		pushq	%rbp
+  14              	.LCFI0:
+  15              		.cfi_def_cfa_offset 16
+  16              		.cfi_offset 6, -16
+  17 0005 4889E5   		movq	%rsp, %rbp
+GAS LISTING /tmp/ccRWMkTA.s 			page 2
+
+
+  18              	.LCFI1:
+  19              		.cfi_def_cfa_register 6
+  20 0008 4883EC30 		subq	$48, %rsp
+  21 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  22 0010 488975E0 		movq	%rsi, -32(%rbp)
+  23 0014 488955D8 		movq	%rdx, -40(%rbp)
+  24 0018 48894DD0 		movq	%rcx, -48(%rbp)
+  25              		.loc 1 41 1
+  26 001c 64488B04 		movq	%fs:40, %rax
+  26      25280000 
+  26      00
+  27 0025 488945F8 		movq	%rax, -8(%rbp)
+  28 0029 31C0     		xorl	%eax, %eax
+  42:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****     ((void)data);
+  43:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****     *olen = 0;
+  29              		.loc 1 43 11
+  30 002b 488B45D0 		movq	-48(%rbp), %rax
+  31 002f 48C70000 		movq	$0, (%rax)
+  31      000000
+  44:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****     if (0 != link_random(output, len))
+  32              		.loc 1 44 14
+  33 0036 488B45D8 		movq	-40(%rbp), %rax
+  34 003a 89C2     		movl	%eax, %edx
+  35 003c 488B45E0 		movq	-32(%rbp), %rax
+  36 0040 89D6     		movl	%edx, %esi
+  37 0042 4889C7   		movq	%rax, %rdi
+  38 0045 E8000000 		call	link_random@PLT
+  38      00
+  39              		.loc 1 44 8
+  40 004a 85C0     		testl	%eax, %eax
+  41 004c 7407     		je	.L2
+  45:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****         return MBEDTLS_ERR_ENTROPY_SOURCE_FAILED;
+  42              		.loc 1 45 16
+  43 004e B8C4FFFF 		movl	$-60, %eax
+  43      FF
+  44 0053 EB10     		jmp	.L3
+  45              	.L2:
+  46:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****     *olen = len;
+  46              		.loc 1 46 11
+  47 0055 488B45D0 		movq	-48(%rbp), %rax
+  48 0059 488B55D8 		movq	-40(%rbp), %rdx
+  49 005d 488910   		movq	%rdx, (%rax)
+  47:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c ****     return 0;
+  50              		.loc 1 47 12
+  51 0060 B8000000 		movl	$0, %eax
+  51      00
+  52              	.L3:
+  48:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls_port/entropy_hardware_poll.c **** }
+  53              		.loc 1 48 1
+  54 0065 488B4DF8 		movq	-8(%rbp), %rcx
+  55 0069 6448330C 		xorq	%fs:40, %rcx
+  55      25280000 
+  55      00
+  56 0072 7405     		je	.L4
+  57 0074 E8000000 		call	__stack_chk_fail@PLT
+  57      00
+  58              	.L4:
+GAS LISTING /tmp/ccRWMkTA.s 			page 3
+
+
+  59 0079 C9       		leave
+  60              	.LCFI2:
+  61              		.cfi_def_cfa 7, 8
+  62 007a C3       		ret
+  63              		.cfi_endproc
+  64              	.LFE0:
+  66              		.text
+  67              	.Letext0:
+  68              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 414              		.section	.note.gnu.property,"a"
+ 415              		.align 8
+ 416 0000 04000000 		.long	 1f - 0f
+ 417 0004 10000000 		.long	 4f - 1f
+ 418 0008 05000000 		.long	 5
+ 419              	0:
+ 420 000c 474E5500 		.string	 "GNU"
+ 421              	1:
+ 422              		.align 8
+ 423 0010 020000C0 		.long	 0xc0000002
+ 424 0014 04000000 		.long	 3f - 2f
+ 425              	2:
+ 426 0018 03000000 		.long	 0x3
+ 427              	3:
+ 428 001c 00000000 		.align 8
+ 429              	4:
+GAS LISTING /tmp/ccRWMkTA.s 			page 4
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 entropy_hardware_poll.c
+     /tmp/ccRWMkTA.s:7      .text.mbedtls_hardware_poll:0000000000000000 mbedtls_hardware_poll
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+link_random
+__stack_chk_fail

@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,15 +22,15 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
 #include <string.h>
 #include <stdio.h>
@@ -50,8 +50,7 @@ static const char *s_link_log_names[] =
 int link_log_level_set(en_link_log_level_t level)
 {
     int ret = -1;
-    if(level < EN_LINK_LOG_LEVEL_MAX )
-    {
+    if (level < EN_LINK_LOG_LEVEL_MAX) {
         s_link_log_level = level;
         ret = 0;
     }
@@ -65,15 +64,11 @@ en_link_log_level_t link_log_level_get(void)
 
 const char *link_log_level_name(en_link_log_level_t log_level)
 {
-    if (log_level >= EN_LINK_LOG_LEVEL_MAX)
-    {
+    if (log_level >= EN_LINK_LOG_LEVEL_MAX) {
         return "NULL ";
-    }
-    else
-    {
+    } else {
         return s_link_log_names[log_level];
     }
-
 }
 
 /*

@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,28 +22,28 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of CHN and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
 #include <string.h>
- 
+
 #include "litecoap.h"
 #include "litecoap_err.h"
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_parse_header_size
  Description : parse coap header info and store it
  Input       : buf @ coap message buf
                proto @ coap over protocol (UDP or TCP)
  Return      : coap header size
- *****************************************************************************/
+ **************************************************************************** */
 static size_t litecoap_parse_header_size(const unsigned char *buf, coap_proto_t proto)
 {
     size_t header_size = 0;
@@ -62,7 +62,6 @@ static size_t litecoap_parse_header_size(const unsigned char *buf, coap_proto_t 
         } else {
             header_size = 6;
         }
-
     } else if (proto == COAP_PROTO_UDP || proto == COAP_PROTO_DTLS) {
         header_size = 4;
     }
@@ -70,7 +69,7 @@ static size_t litecoap_parse_header_size(const unsigned char *buf, coap_proto_t 
     return header_size;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_parse_header
  Description : parse coap header info and store it
  Input       : buf @ coap message buf
@@ -78,18 +77,16 @@ static size_t litecoap_parse_header_size(const unsigned char *buf, coap_proto_t 
                proto @ coap over protocol (UDP or TCP)
  Output      : msg @ coap message pointer
  Return      : LITECOAP_OK means parse success, other value failed.
- *****************************************************************************/
+ **************************************************************************** */
 static int litecoap_parse_header(coap_msg_t *msg, const unsigned char *buf, int buflen, coap_proto_t proto)
 {
     size_t header_size;
-    if ((NULL == msg) || (NULL == buf))
-    {
+    if ((NULL == msg) || (NULL == buf)) {
         return LITECOAP_PARAM_NULL;
     }
 
     header_size = litecoap_parse_header_size(buf, proto);
-    if (buflen < header_size)
-    {
+    if (buflen < header_size) {
         return LITECOAP_BUF_LEN_TOO_SMALL;
     }
 
@@ -98,7 +95,7 @@ static int litecoap_parse_header(coap_msg_t *msg, const unsigned char *buf, int 
         if (msg->head.ver != COAP_VERSION) {
             return LITECOAP_VER_ERR;
         }
-        
+
         msg->head.t = (buf[0] & 0x30) >> 4;
         msg->head.tkl = buf[0] & 0x0F;
         msg->head.code = buf[1];
@@ -115,14 +112,14 @@ static int litecoap_parse_header(coap_msg_t *msg, const unsigned char *buf, int 
     return LITECOAP_OK;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_parse_token
  Description : parse coap token info and store it
  Input       : buf @ coap message buf
                buflen @ coap message buf length
  Output      : msg @ coap message pointer
  Return      : LITECOAP_OK means parse success, other value failed.
- *****************************************************************************/
+ **************************************************************************** */
 int litecoap_parse_token(coap_msg_t *msg, unsigned char *buf, int buflen)
 {
     if ((msg == NULL) || (buf == NULL)) {
@@ -141,11 +138,11 @@ int litecoap_parse_token(coap_msg_t *msg, unsigned char *buf, int buflen)
             if (msg->tok == NULL) {
                 return LITECOAP_MALLOC_FAILED;
             }
-            (void) memset(msg->tok, 0, sizeof(coap_token_t));
+            (void)memset(msg->tok, 0, sizeof(coap_token_t));
         }
         msg->tok->token = (unsigned char *)litecoap_malloc(msg->head.tkl);
         if (msg->tok->token != NULL) {
-            (void) memcpy(msg->tok->token, buf+4, msg->head.tkl);  /* skip header */
+            (void)memcpy(msg->tok->token, buf + 4, msg->head.tkl); /* skip header */
             msg->tok->tklen = msg->head.tkl;
         } else {
             litecoap_free(msg->tok);
@@ -158,7 +155,7 @@ int litecoap_parse_token(coap_msg_t *msg, unsigned char *buf, int buflen)
     }
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_parse_one_option
  Description : parse coap one option info and store it in msg, it called by
                litecoap_parse_opts_payload()
@@ -167,102 +164,79 @@ int litecoap_parse_token(coap_msg_t *msg, unsigned char *buf, int buflen)
  Output      : msg @ coap message pointer
                sumdelta @ last delta that get from last option.
  Return      : LITECOAP_OK means parse success, other value failed.
- *****************************************************************************/
-int litecoap_parse_one_option(coap_msg_t *msg, unsigned short *sumdelta,
-                              const unsigned char **buf, int buflen)
+ **************************************************************************** */
+int litecoap_parse_one_option(coap_msg_t *msg, unsigned short *sumdelta, const unsigned char **buf, int buflen)
 {
     const unsigned char *p = *buf;
     unsigned char headlen = 1;
     unsigned short len, delta;
     coap_option_t *newopt = NULL;
     coap_option_t *tmpopt = NULL;
-    
-    if ((msg == NULL) || (sumdelta == NULL) || (buf == NULL))
-    {
+
+    if ((msg == NULL) || (sumdelta == NULL) || (buf == NULL)) {
         return LITECOAP_PARAM_NULL;
     }
 
-    if (buflen < headlen) /* too small */
-    {
+    if (buflen < headlen) { /* too small */
         return LITECOAP_BUF_LEN_TOO_SMALL;
     }
 
     delta = (p[0] & 0xF0) >> 4;
     len = p[0] & 0x0F;
-    
-    if (delta == 13)
-    {
+
+    if (delta == 13) {
         headlen++;
-        if (buflen < headlen)
-        {
+        if (buflen < headlen) {
             return LITECOAP_BUF_LEN_TOO_SMALL;
         }
         delta = p[1] + 13;
         p++;
-    }
-    else if (delta == 14)
-    {
+    } else if (delta == 14) {
         headlen += 2;
-        if (buflen < headlen)
-        {
+        if (buflen < headlen) {
             return LITECOAP_BUF_LEN_TOO_SMALL;
         }
         delta = ((p[1] << 8) | p[2]) + 269;
         p += 2;
-    }
-    else if (delta == 0x000F)
-    {
+    } else if (delta == 0x000F) {
         return LITECOAP_OPTION_DELTA_ERR;
     }
 
-    if (len == 13)
-    {
+    if (len == 13) {
         headlen++;
-        if (buflen < headlen)
-        {
+        if (buflen < headlen) {
             return LITECOAP_BUF_LEN_TOO_SMALL;
         }
         len = p[1] + 13;
         p++;
-    }
-    else if (len == 14)
-    {
+    } else if (len == 14) {
         headlen += 2;
-        if (buflen < headlen)
-        {
+        if (buflen < headlen) {
             return LITECOAP_BUF_LEN_TOO_SMALL;
         }
         len = ((p[1] << 8) | p[2]) + 269;
         p += 2;
-    }
-    else if (len == 15)
-    {
+    } else if (len == 15) {
         return LITECOAP_OPTION_LEN_ERR;
     }
 
-    if ((p + 1 + len) > (*buf + buflen))
-    {
+    if ((p + 1 + len) > (*buf + buflen)) {
         return LITECOAP_OPTION_LEN_ERR;
     }
 
     newopt = (coap_option_t *)litecoap_malloc(sizeof(coap_option_t));
-    if (newopt == NULL)
-    {
+    if (newopt == NULL) {
         return LITECOAP_MALLOC_FAILED;
     }
-    (void) memset(newopt, 0, sizeof(coap_option_t));
+    (void)memset(newopt, 0, sizeof(coap_option_t));
     newopt->optnum = delta + *sumdelta;
-    
-    if (len > 0)
-    {
+
+    if (len > 0) {
         newopt->value = (unsigned char *)litecoap_malloc(len);
-        if (newopt->value != NULL)
-        {
+        if (newopt->value != NULL) {
             newopt->optlen = len;
-            (void) memcpy(newopt->value, p+1, len);
-        }
-        else
-        {
+            (void)memcpy(newopt->value, p + 1, len);
+        } else {
             litecoap_free(newopt);
             return LITECOAP_MALLOC_FAILED;
         }
@@ -270,35 +244,30 @@ int litecoap_parse_one_option(coap_msg_t *msg, unsigned short *sumdelta,
     newopt->next = NULL;
     msg->optcnt++;
     tmpopt = msg->option;
-    if (tmpopt == NULL)
-    {
+    if (tmpopt == NULL) {
         msg->option = newopt;
-    }
-    else
-    {
-        while(tmpopt->next != NULL)
-        {
+    } else {
+        while (tmpopt->next != NULL) {
             tmpopt = tmpopt->next;
         }
         tmpopt->next = newopt;
     }
-    
+
     *buf = p + 1 + len;
     *sumdelta += delta;
 
     return LITECOAP_OK;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_parse_opts_payload
  Description : parse coap payload and options and store it in msg
  Input       : buf @ coap message's buf that start from option
                buflen @ coap message buf length
  Output      : msg @ coap message pointer
  Return      : LITECOAP_OK means parse success, other value failed.
- *****************************************************************************/
-int litecoap_parse_opts_payload(coap_msg_t *msg, const unsigned char *buf,
-                                int buflen)
+ **************************************************************************** */
+int litecoap_parse_opts_payload(coap_msg_t *msg, const unsigned char *buf, int buflen)
 {
     unsigned short sumdelta = 0;
     const unsigned char *p = NULL;
@@ -314,18 +283,18 @@ int litecoap_parse_opts_payload(coap_msg_t *msg, const unsigned char *buf,
         return LITECOAP_OPTION_OVERRUN_ERR;
     }
 
-    while((p < end) && (*p != 0xFF)) {
-        ret = litecoap_parse_one_option(msg, &sumdelta, &p, end-p);
+    while ((p < end) && (*p != 0xFF)) {
+        ret = litecoap_parse_one_option(msg, &sumdelta, &p, end - p);
         if (0 != ret) {
             return ret;
         }
     }
 
-    if ((p+1 < end) && (*p == 0xFF))  /* payload marker */ {
-        msg->payloadlen = end-(p+1);
+    if ((p + 1 < end) && (*p == 0xFF)) /* payload marker */ {
+        msg->payloadlen = end - (p + 1);
         msg->payload = (unsigned char *)litecoap_malloc(msg->payloadlen);
         if (msg->payload != NULL) {
-            (void) memcpy(msg->payload, (unsigned char *)p + 1, msg->payloadlen);
+            (void)memcpy(msg->payload, (unsigned char *)p + 1, msg->payloadlen);
         } else {
             msg->payloadlen = 0;
         }
@@ -375,7 +344,7 @@ static int litecoap_option_len(coap_option_t *opt, int lastoptval, int *len)
         optlen_ex = optlen - 13;
         optlen = 13;
     } else if (optlen >= 269) {
-        optlen_ex = optlen - 269 -14;
+        optlen_ex = optlen - 269 - 14;
         optlen = 14;
     }
 
@@ -397,8 +366,7 @@ static int litecoap_option_len(coap_option_t *opt, int lastoptval, int *len)
     return LITECOAP_OK;
 }
 
-
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_encode_option
  Description : encode coap option from option struct to byte stream
  Input       : opt @ option's pointer
@@ -406,9 +374,8 @@ static int litecoap_option_len(coap_option_t *opt, int lastoptval, int *len)
  Output      : outbuf @ buf that used for storing the options bytes stream
                len @ the bytes number that option changed to byte stream
  Return      : LITECOAP_OK means parse success, other value failed.
- *****************************************************************************/
-static int litecoap_encode_option(coap_option_t *opt, int lastoptval,
-                                  unsigned char *outbuf, int *len)
+ **************************************************************************** */
+static int litecoap_encode_option(coap_option_t *opt, int lastoptval, unsigned char *outbuf, int *len)
 {
     int delta = 0;
     int delta_ex = 0;
@@ -416,91 +383,75 @@ static int litecoap_encode_option(coap_option_t *opt, int lastoptval,
     int optlen_ex = 0;
     unsigned char tmp;
     int sumlen = 0;
-    
-    if ((opt == NULL) || (outbuf == NULL) || (len == NULL))
-    {
+
+    if ((opt == NULL) || (outbuf == NULL) || (len == NULL)) {
         return LITECOAP_PARAM_NULL;
     }
-    if (opt->optnum < lastoptval)
-    {
+    if (opt->optnum < lastoptval) {
         return LITECOAP_OPTION_POSTION_ERR;
     }
-    
+
     delta = opt->optnum - lastoptval;
-    if (delta < 13)
-    {
+    if (delta < 13) {
         delta = opt->optnum - lastoptval;
         delta_ex = 0;
-    } 
-    else if (delta < 269)
-    {
+    } else if (delta < 269) {
         delta_ex = delta - 13;
         delta = 13;
-    }
-    else if (delta >= 269)
-    {
+    } else if (delta >= 269) {
         delta_ex = delta - 269 - 14;
         delta = 14;
     }
 
     optlen = opt->optlen;
-    if (optlen < 13)
-    {
+    if (optlen < 13) {
         optlen = opt->optlen;
         optlen_ex = 0;
-    } 
-    else if (optlen < 269)
-    {
+    } else if (optlen < 269) {
         optlen_ex = optlen - 13;
         optlen = 13;
-    }
-    else if (optlen >= 269)
-    {
+    } else if (optlen >= 269) {
         optlen_ex = optlen - 269 - 14;
         optlen = 14;
     }
-    
+
     tmp = (unsigned char)delta;
     outbuf[0] = tmp << 4;
     tmp = (unsigned char)optlen;
-    outbuf[0] |= tmp &0x0f;
+    outbuf[0] |= tmp & 0x0f;
     sumlen = 1;
-    if (delta == 13)
-    {
+    if (delta == 13) {
         outbuf[sumlen] = delta_ex;
         sumlen++;
     }
-    if (delta == 14)
-    {
+    if (delta == 14) {
         outbuf[sumlen] = (delta_ex & 0x0000ffff) >> 8;
         outbuf[sumlen + 1] = (delta_ex & 0x000000ff);
         sumlen += 2;
     }
-    if (optlen == 13)
-    {
+    if (optlen == 13) {
         outbuf[sumlen] = optlen_ex;
         sumlen++;
     }
-    if (optlen == 14)
-    {
+    if (optlen == 14) {
         outbuf[sumlen] = (optlen_ex & 0x0000ffff) >> 8;
-        outbuf[sumlen+1] = (optlen_ex & 0x000000ff);
+        outbuf[sumlen + 1] = (optlen_ex & 0x000000ff);
         sumlen += 2;
     }
-    (void) memcpy(outbuf + sumlen, opt->value, opt->optlen);
-    
+    (void)memcpy(outbuf + sumlen, opt->value, opt->optlen);
+
     *len = sumlen + opt->optlen;
     return LITECOAP_OK;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_build_byte_stream
  Description : encode coap message to byte stream
  Input       : msg @ coap message pointer
- Output      : ctx @ coap connection instance pointer, it contains a buf 
+ Output      : ctx @ coap connection instance pointer, it contains a buf
                that can store the byte stream
  Return      : LITECOAP_OK means parse success, other value failed.
- *****************************************************************************/
+ **************************************************************************** */
 int litecoap_build_byte_stream(coap_context_t *ctx, coap_msg_t *msg)
 {
     int len = 0;
@@ -509,13 +460,11 @@ int litecoap_build_byte_stream(coap_context_t *ctx, coap_msg_t *msg)
     coap_option_t *tmp = NULL;
     int sumdelta = 0;
     int msglen = 0;
-    if ((ctx == NULL) || (msg == NULL))
-    {
+    if ((ctx == NULL) || (msg == NULL)) {
         return LITECOAP_PARAM_NULL;
     }
-    
-    if (ctx->sndbuf.buf == NULL)
-    {
+
+    if (ctx->sndbuf.buf == NULL) {
         return LITECOAP_CONTEX_BUF_NULL;
     }
     tmp = msg->option;
@@ -530,7 +479,7 @@ int litecoap_build_byte_stream(coap_context_t *ctx, coap_msg_t *msg)
         ctx->sndbuf.buf[3] = msg->head.msgid[1];
     } else if (ctx->proto == COAP_PROTO_TCP || ctx->proto == COAP_PROTO_TLS) {
         while (tmp != NULL) {
-            //litecoap_encode_option(tmp, sumdelta, ctx->sndbuf.buf + offset, &len);
+            // litecoap_encode_option(tmp, sumdelta, ctx->sndbuf.buf + offset, &len);
             litecoap_option_len(tmp, sumdelta, &len);
             offset = offset + len;
             len = 0;
@@ -582,7 +531,7 @@ int litecoap_build_byte_stream(coap_context_t *ctx, coap_msg_t *msg)
     offset = header_size;
 
     if (msg->head.tkl > 0 && msg->tok != NULL) {
-        (void) memcpy(ctx->sndbuf.buf + offset, msg->tok->token, msg->tok->tklen);
+        (void)memcpy(ctx->sndbuf.buf + offset, msg->tok->token, msg->tok->tklen);
         offset += msg->tok->tklen;
     }
 
@@ -597,29 +546,26 @@ int litecoap_build_byte_stream(coap_context_t *ctx, coap_msg_t *msg)
     }
     msglen = offset;
 
-    if (NULL != msg->payload)
-    {
+    if (NULL != msg->payload) {
         ctx->sndbuf.buf[offset++] = msg->payloadmarker;
-        (void) memcpy(ctx->sndbuf.buf + offset, msg->payload, msg->payloadlen);
+        (void)memcpy(ctx->sndbuf.buf + offset, msg->payload, msg->payloadlen);
         msglen = msglen + msg->payloadlen + 1;
     }
     return msglen;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_add_option_to_list
  Description : add a option to option list
- Input       : head @ option list head pointer, if the option is the first 
+ Input       : head @ option list head pointer, if the option is the first
                option for coap message, its value should be NULL.
                option @ the option number
                vale @ option payload
                len @ option payload length
  Output      : None
  Return      : head @ option list head pointer.
- *****************************************************************************/
-coap_option_t * litecoap_add_option_to_list(coap_option_t *head,
-								unsigned short option, 
-								char *value, int len)
+ **************************************************************************** */
+coap_option_t *litecoap_add_option_to_list(coap_option_t *head, unsigned short option, char *value, int len)
 {
     coap_option_t *tmp = NULL;
     coap_option_t *next = NULL;
@@ -627,24 +573,24 @@ coap_option_t * litecoap_add_option_to_list(coap_option_t *head,
     if ((value == NULL) || (len == 0)) {
         return NULL;
     }
-    
+
     newopt = (coap_option_t *)litecoap_malloc(sizeof(coap_option_t));
     if (newopt == NULL) {
         return head;
     }
-    (void) memset(newopt, 0, sizeof(coap_option_t));
+    (void)memset(newopt, 0, sizeof(coap_option_t));
     newopt->optnum = option;
     newopt->optlen = len;
     newopt->value = (unsigned char *)litecoap_malloc(len);
-    if(newopt->value == NULL) {
+    if (newopt->value == NULL) {
         litecoap_free(newopt);
         return head;
     }
-    (void) memset(newopt->value, 0, len);
-    //newopt->value = (unsigned char *)value;
-    (void) memcpy(newopt->value, value, len);
+    (void)memset(newopt->value, 0, len);
+    // newopt->value = (unsigned char *)value;
+    (void)memcpy(newopt->value, value, len);
     newopt->next = NULL;
-    
+
     /* note that head just a pointer, point to the fisrt node of options */
     tmp = head;
     if (head == NULL) {
@@ -668,17 +614,17 @@ coap_option_t * litecoap_add_option_to_list(coap_option_t *head,
     }
     tmp->next = newopt;
     newopt->next = next;
-    
+
     return head;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_free_option
  Description : free all option in the option list
- Input       : head @ option list head pointer, 
+ Input       : head @ option list head pointer,
  Output      : None
  Return      : LITECOAP_OK @ free ok, other value means free failed.
- *****************************************************************************/
+ **************************************************************************** */
 int litecoap_free_option(coap_option_t *head)
 {
     coap_option_t *tmp = NULL;
@@ -687,7 +633,7 @@ int litecoap_free_option(coap_option_t *head)
     if (head == NULL) {
         return LITECOAP_PARAM_NULL;
     }
-    
+
     tmp = head;
     while (tmp != NULL) {
         next = tmp->next;
@@ -701,14 +647,14 @@ int litecoap_free_option(coap_option_t *head)
     return LITECOAP_OK;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_add_token
  Description : add a token to the coap message.
- Input       : tok @ token's pointer 
+ Input       : tok @ token's pointer
                tklen @ token length
  Output      : msg @ coap message pointer
  Return      : LITECOAP_OK @ add success , other value means failed.
- *****************************************************************************/
+ **************************************************************************** */
 int litecoap_add_token(coap_msg_t *msg, char *tok, int tklen)
 {
     if ((msg == NULL) || (tklen < 0) || (tklen > COAP_MAX_TOKEN_LEN)) {
@@ -725,7 +671,7 @@ int litecoap_add_token(coap_msg_t *msg, char *tok, int tklen)
         if (msg->tok == NULL) {
             return LITECOAP_MALLOC_FAILED;
         }
-        (void) memset(msg->tok, 0, sizeof(coap_token_t));
+        (void)memset(msg->tok, 0, sizeof(coap_token_t));
     }
     msg->tok->token = (unsigned char *)litecoap_malloc(tklen);
     if (msg->tok->token == NULL) {
@@ -733,20 +679,20 @@ int litecoap_add_token(coap_msg_t *msg, char *tok, int tklen)
         msg->tok = NULL;
         return LITECOAP_MALLOC_FAILED;
     }
-    (void) memset(msg->tok->token, 0, tklen);
-    (void) memcpy(msg->tok->token, tok, tklen);
+    (void)memset(msg->tok->token, 0, tklen);
+    (void)memcpy(msg->tok->token, tok, tklen);
     msg->tok->tklen = tklen;
     msg->head.tkl = tklen;
     return LITECOAP_OK;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_add_option
  Description : add option list to the coap message.
- Input       : opts @ option list pointer 
+ Input       : opts @ option list pointer
  Output      : msg @ coap message pointer
  Return      : LITECOAP_OK @ add success , other value means failed.
- *****************************************************************************/
+ **************************************************************************** */
 int litecoap_add_option(coap_msg_t *msg, coap_option_t *opts)
 {
     if ((msg == NULL) || (opts == NULL)) {
@@ -757,14 +703,14 @@ int litecoap_add_option(coap_msg_t *msg, coap_option_t *opts)
     return LITECOAP_OK;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_add_paylaod
  Description : add payload to the coap message.
- Input       : payload @ payload buf's pointer 
+ Input       : payload @ payload buf's pointer
                len @ paylaod data length
  Output      : msg @ coap message pointer
  Return      : LITECOAP_OK @ add success , other value means failed.
- *****************************************************************************/
+ **************************************************************************** */
 int litecoap_add_paylaod(coap_msg_t *msg, char *payload, int len)
 {
     if ((msg == NULL) || (payload == NULL) || (len == 0)) {
@@ -772,7 +718,7 @@ int litecoap_add_paylaod(coap_msg_t *msg, char *payload, int len)
     }
     msg->payload = (unsigned char *)litecoap_malloc(len);
     if (msg->payload != NULL) {
-        (void) memcpy(msg->payload, payload, len);
+        (void)memcpy(msg->payload, payload, len);
         msg->payloadlen = len;
         msg->payloadmarker = 0xff;
     } else {
@@ -780,11 +726,11 @@ int litecoap_add_paylaod(coap_msg_t *msg, char *payload, int len)
         msg->payloadlen = 0;
         return LITECOAP_MALLOC_FAILED;
     }
-    
+
     return LITECOAP_OK;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_new_msg
  Description : create a coap message and init it with some data.and update
                coap message id.
@@ -795,13 +741,9 @@ int litecoap_add_paylaod(coap_msg_t *msg, char *payload, int len)
                payloadlen @ coap payload length
  Output      : ctx @ coap connection instance, it contains coap message id.
  Return      : msg @ the created message's pointer.
- *****************************************************************************/
-coap_msg_t *litecoap_new_msg(coap_context_t *ctx,
-                             unsigned char msgtype, 
-                             unsigned char code, 
-                             coap_option_t *optlist, 
-                             unsigned char *payload, 
-                             int payloadlen)
+ **************************************************************************** */
+coap_msg_t *litecoap_new_msg(coap_context_t *ctx, unsigned char msgtype, unsigned char code, coap_option_t *optlist,
+    unsigned char *payload, int payloadlen)
 {
     coap_msg_t *msg = NULL;
 
@@ -817,20 +759,20 @@ coap_msg_t *litecoap_new_msg(coap_context_t *ctx,
     if (msg == NULL) {
         return NULL;
     }
-    (void) memset(msg, 0, sizeof(coap_msg_t));
+    (void)memset(msg, 0, sizeof(coap_msg_t));
 
     msg->head.t = msgtype;
     msg->head.ver = 1;
     ctx->msgid++;
-    msg->head.msgid[0] = (unsigned char)((ctx->msgid)&0x00ff);
-    msg->head.msgid[1] = (unsigned char)((ctx->msgid&0xff00)>>8);
+    msg->head.msgid[0] = (unsigned char)((ctx->msgid) & 0x00ff);
+    msg->head.msgid[1] = (unsigned char)((ctx->msgid & 0xff00) >> 8);
     msg->head.code = code;
     msg->option = optlist;
     if (payload != NULL) {
         msg->payloadmarker = 0xff;
         msg->payload = (unsigned char *)litecoap_malloc(payloadlen);
         if (msg->payload != NULL) {
-            (void) memcpy(msg->payload, payload, payloadlen);
+            (void)memcpy(msg->payload, payload, payloadlen);
             msg->payloadlen = payloadlen;
         } else {
             litecoap_delete_msg(msg);
@@ -840,13 +782,13 @@ coap_msg_t *litecoap_new_msg(coap_context_t *ctx,
     return msg;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_delete_msg
  Description : free the coap message.
  Input       : msg @ coap message pointer that need free.
  Output      : None
  Return      : LITECOAP_OK @ free message ok, other valude means failed.
- *****************************************************************************/
+ **************************************************************************** */
 int litecoap_delete_msg(coap_msg_t *msg)
 {
     coap_option_t *tmp = NULL;
@@ -879,18 +821,17 @@ int litecoap_delete_msg(coap_msg_t *msg)
     return LITECOAP_OK;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_send_back
- Description : create a new coap message based on recived coap message 
+ Description : create a new coap message based on recived coap message
                and send it
  Input       : ctx @ coap connection instance,
                rcvmsg @ recived coap message's pointer
                type @ new coap message's message type
  Output      : None
  Return      : LITECOAP_OK @ process ok, other valude means failed.
- *****************************************************************************/
-int litecoap_send_back(coap_context_t *ctx, coap_msg_t *rcvmsg,
-                       unsigned char type)
+ **************************************************************************** */
+int litecoap_send_back(coap_context_t *ctx, coap_msg_t *rcvmsg, unsigned char type)
 {
     coap_msg_t *newmsg = NULL;
     int datalen = 0;
@@ -902,7 +843,7 @@ int litecoap_send_back(coap_context_t *ctx, coap_msg_t *rcvmsg,
     if (newmsg == NULL) {
         return LITECOAP_MALLOC_FAILED;
     }
-    (void) memset(newmsg, 0, sizeof(coap_msg_t));
+    (void)memset(newmsg, 0, sizeof(coap_msg_t));
 
     newmsg->head.t = type;
     newmsg->head.ver = 1;
@@ -912,7 +853,7 @@ int litecoap_send_back(coap_context_t *ctx, coap_msg_t *rcvmsg,
     newmsg->option = NULL;
     newmsg->payload = NULL;
     newmsg->payloadlen = 0;
-    
+
     datalen = litecoap_build_byte_stream(ctx, newmsg);
     if (datalen < 0) {
         litecoap_free(newmsg);
@@ -925,14 +866,14 @@ int litecoap_send_back(coap_context_t *ctx, coap_msg_t *rcvmsg,
     return LITECOAP_OK;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_send_rst
  Description : send reset message
  Input       : ctx @ coap connection instance,
                rcvmsg @ recived coap message's pointer
  Output      : None
  Return      : ret @ LITECOAP_OK process ok, other valude means failed.
- *****************************************************************************/
+ **************************************************************************** */
 int litecoap_send_rst(coap_context_t *ctx, coap_msg_t *rcvmsg)
 {
     int ret = 0;
@@ -940,14 +881,14 @@ int litecoap_send_rst(coap_context_t *ctx, coap_msg_t *rcvmsg)
     return ret;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_send_rst
  Description : send ack message
  Input       : ctx @ coap connection instance,
                rcvmsg @ recived coap message's pointer
  Output      : None
  Return      : ret @ LITECOAP_OK process ok, other valude means failed.
- *****************************************************************************/
+ **************************************************************************** */
 int litecoap_send_ack(coap_context_t *ctx, coap_msg_t *rcvmsg)
 {
     int ret = 0;
@@ -955,14 +896,14 @@ int litecoap_send_ack(coap_context_t *ctx, coap_msg_t *rcvmsg)
     return ret;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_register_handler
  Description : regist coap message process callback function
  Input       : ctx @ coap connection instance,
                func @ coap message process callback function pointer
  Output      : None
  Return      : ret @ LITECOAP_OK process ok, other valude means failed.
- *****************************************************************************/
+ **************************************************************************** */
 int litecoap_register_handler(coap_context_t *ctx, msghandler func)
 {
     if (ctx == NULL) {
@@ -972,14 +913,14 @@ int litecoap_register_handler(coap_context_t *ctx, msghandler func)
     return LITECOAP_OK;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_addto_resndqueue
  Description : add coap message to resend list.this list is for confirm mesage
  Input       : ctx @ coap connection instance,
                msg @ coap message pointer
  Output      : None
  Return      : LITECOAP_OK process ok, other valude means failed.
- *****************************************************************************/
+ **************************************************************************** */
 int litecoap_addto_resndqueue(coap_context_t *ctx, coap_msg_t *msg)
 {
     send_queue_t *tmp = NULL;
@@ -994,7 +935,7 @@ int litecoap_addto_resndqueue(coap_context_t *ctx, coap_msg_t *msg)
     if (tmp == NULL) {
         return LITECOAP_MALLOC_FAILED;
     }
-    (void) memset(tmp, 0, sizeof(send_queue_t));
+    (void)memset(tmp, 0, sizeof(send_queue_t));
 
     tmp->msg = msg;
     now = litecoap_time();
@@ -1002,17 +943,15 @@ int litecoap_addto_resndqueue(coap_context_t *ctx, coap_msg_t *msg)
     if (ctx->resndque == NULL) {
         ctx->base_time = now;
         ctx->resndque = tmp;
-        tmp->timeout = (ctx->ack_timeout.integer * 1000 + ctx->ack_timeout.decimals)
-                        * (2 << ctx->max_retransmit - 1)
-                        * (ctx->ack_random_factor.integer * 1000 + ctx->ack_random_factor.decimals)
-                        / 1000;
+        tmp->timeout = (ctx->ack_timeout.integer * 1000 + ctx->ack_timeout.decimals) * (2 << ctx->max_retransmit - 1) *
+            (ctx->ack_random_factor.integer * 1000 + ctx->ack_random_factor.decimals) / 1000;
         tmp->time = tmp->timeout;
         return LITECOAP_OK;
     } else {
         tmp->time = (now - ctx->base_time) + tmp->timeout;
     }
 
-    s= ctx->resndque;
+    s = ctx->resndque;
     if (s->time > tmp->time) {
         tmp->next = s;
         ctx->resndque = tmp;
@@ -1036,15 +975,15 @@ int litecoap_addto_resndqueue(coap_context_t *ctx, coap_msg_t *msg)
     return LITECOAP_OK;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_addto_sndqueue
- Description : add coap message to send list.this list's affect is decide by 
+ Description : add coap message to send list.this list's affect is decide by
                the coap user.
  Input       : ctx @ coap connection instance,
                msg @ coap message pointer
  Output      : None
  Return      : LITECOAP_OK process ok, other valude means failed.
- *****************************************************************************/
+ **************************************************************************** */
 int litecoap_addto_sndqueue(coap_context_t *ctx, coap_msg_t *msg)
 {
     send_queue_t *tmp = NULL;
@@ -1056,7 +995,7 @@ int litecoap_addto_sndqueue(coap_context_t *ctx, coap_msg_t *msg)
     if (tmp == NULL) {
         return LITECOAP_MALLOC_FAILED;
     }
-    (void) memset(tmp, 0, sizeof(send_queue_t));
+    (void)memset(tmp, 0, sizeof(send_queue_t));
 
     tmp->msg = msg;
     tmp->next = ctx->sndque;
@@ -1065,7 +1004,7 @@ int litecoap_addto_sndqueue(coap_context_t *ctx, coap_msg_t *msg)
     return LITECOAP_OK;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_remove_resndqueue
  Description : remove a coap message from resend list.
  Input       : ctx @ coap connection instance,
@@ -1073,7 +1012,7 @@ int litecoap_addto_sndqueue(coap_context_t *ctx, coap_msg_t *msg)
                coap message need remove from resend list.
  Output      : None
  Return      : LITECOAP_OK process ok, other valude means failed.
- *****************************************************************************/
+ **************************************************************************** */
 int litecoap_remove_resndqueue(coap_context_t *ctx, coap_msg_t *rcvmsg)
 {
     send_queue_t *tmp = NULL;
@@ -1101,19 +1040,19 @@ int litecoap_remove_resndqueue(coap_context_t *ctx, coap_msg_t *rcvmsg)
             break;
         }
         before = tmp;
-        tmp = tmp->next;   
+        tmp = tmp->next;
     }
-    
+
     return LITECOAP_OK;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_discard_resndqueue
  Description : remove all coap message from resend list.
  Input       : ctx @ coap connection instance
  Output      : None
  Return      : LITECOAP_OK process ok, other valude means failed.
- *****************************************************************************/
+ **************************************************************************** */
 int litecoap_discard_resndqueue(coap_context_t *ctx)
 {
     send_queue_t *tmp = NULL;
@@ -1121,32 +1060,32 @@ int litecoap_discard_resndqueue(coap_context_t *ctx)
     if (ctx == NULL) {
         return LITECOAP_PARAM_NULL;
     }
-    
+
     tmp = ctx->resndque;
     while (tmp != NULL) {
         next = tmp->next;
         litecoap_delete_msg(tmp->msg);
         tmp->msg = NULL;
         litecoap_free(tmp);
-        tmp = next;   
+        tmp = next;
     }
     ctx->resndque = NULL;
     return LITECOAP_OK;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_remove_sndqueue
  Description : remove a coap message from send list.
  Input       : ctx @ coap connection instance
                msg @ coap message's pointer, that need remove from send list
  Output      : None
  Return      : LITECOAP_OK process ok, other valude means failed.
- *****************************************************************************/
+ **************************************************************************** */
 int litecoap_remove_sndqueue(coap_context_t *ctx, coap_msg_t *msg)
 {
     send_queue_t *tmp = NULL;
     send_queue_t *before = NULL;
-    
+
     if ((ctx == NULL) || (msg == NULL)) {
         return LITECOAP_PARAM_NULL;
     }
@@ -1167,13 +1106,13 @@ int litecoap_remove_sndqueue(coap_context_t *ctx, coap_msg_t *msg)
             }
         }
         before = tmp;
-        tmp = tmp->next;   
+        tmp = tmp->next;
     }
-    
+
     return LITECOAP_OK;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_add_resource
  Description : add coap resouce, it contains resouce that remote endpoint can
                observe, get, post....
@@ -1181,7 +1120,7 @@ int litecoap_remove_sndqueue(coap_context_t *ctx, coap_msg_t *msg)
                res @ resource of coap endpoint.
  Output      : None
  Return      : LITECOAP_OK process ok, other valude means failed.
- *****************************************************************************/
+ **************************************************************************** */
 int litecoap_add_resource(coap_context_t *ctx, coap_res_t *res)
 {
     if (ctx == NULL) {
@@ -1192,27 +1131,24 @@ int litecoap_add_resource(coap_context_t *ctx, coap_res_t *res)
     return LITECOAP_OK;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_option_check_critical
  Description : add coap private resouce, it contains socket handle ...
  Input       : ctx @ coap connection instance
                msg @ coap message that need to checkout.
  Output      : None
  Return      : LITECOAP_OK process ok, other valude means failed.
- *****************************************************************************/
+ **************************************************************************** */
 int litecoap_option_check_critical(coap_msg_t *msg)
 {
     unsigned short option = 0;
-    
+
     /* note: this func is for the future, now we don't use it */
-    switch(option)
-    {
-        
-    }
+    switch (option) {}
     return LITECOAP_OK;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_find_opts
  Description : find out a coap option number that equal the input option number
                it called by litecoap_handle_request().
@@ -1221,10 +1157,8 @@ int litecoap_option_check_critical(coap_msg_t *msg)
  Output      : count @ total number of the option number that find in the coap
                messaget
  Return      : first @ the first opion's pointer in the coap message.
- *****************************************************************************/
-static coap_option_t *litecoap_find_opts(coap_msg_t *rcvmsg,
-                                         unsigned char num, 
-                                         unsigned char *count)
+ **************************************************************************** */
+static coap_option_t *litecoap_find_opts(coap_msg_t *rcvmsg, unsigned char num, unsigned char *count)
 {
     /* FIXME, options is always sorted, can find faster than this */
     size_t i;
@@ -1249,22 +1183,22 @@ static coap_option_t *litecoap_find_opts(coap_msg_t *rcvmsg,
     return first;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_handle_request
- Description : process reviced coap messages that request resource in the 
+ Description : process reviced coap messages that request resource in the
                local resource.
  Input       : ctx @ coap connection instance.
                rcvmsg @ recived coap message
  Output      : None
  Return      : LITECOAP_OK means process ok, other value means error happended.
- *****************************************************************************/
+ **************************************************************************** */
 int litecoap_handle_request(coap_context_t *ctx, coap_msg_t *rcvmsg)
 {
     coap_res_t *res = NULL;
     coap_option_t *tmp = NULL;
     coap_option_t *opthead = NULL;
     coap_msg_t *respmsg = NULL;
-    //char contype[2] = {0xff,0xff};
+    // char contype[2] = {0xff,0xff};
     int i = 0;
     int ret = 0;
     unsigned char pathcnt = 0;
@@ -1283,11 +1217,8 @@ int litecoap_handle_request(coap_context_t *ctx, coap_msg_t *rcvmsg)
             res++;
             continue;
         }
-        opthead = litecoap_find_opts(rcvmsg,
-                                     COAP_OPTION_URI_PATH, 
-                                     &pathcnt);
-        if ((opthead != NULL) 
-            && (pathcnt == res->path->count)) {
+        opthead = litecoap_find_opts(rcvmsg, COAP_OPTION_URI_PATH, &pathcnt);
+        if ((opthead != NULL) && (pathcnt == res->path->count)) {
             tmp = opthead;
             for (i = 0; i < pathcnt; i++) {
                 if (tmp->optlen != strlen(res->path->elems[i])) {
@@ -1310,21 +1241,16 @@ int litecoap_handle_request(coap_context_t *ctx, coap_msg_t *rcvmsg)
     opthead = NULL;
     if (findres) {
         if (rcvmsg->head.t == COAP_MESSAGE_CON) {
-            respmsg = litecoap_new_msg(ctx,COAP_MESSAGE_ACK,
-                                       COAP_RESP_CODE(204),
-                                       NULL,NULL, 0);
-        } else if (rcvmsg->head.t != COAP_MESSAGE_NON){
-            respmsg = litecoap_new_msg(ctx,COAP_MESSAGE_NON,
-                                       COAP_RESP_CODE(204),
-                                       NULL,NULL, 0);
+            respmsg = litecoap_new_msg(ctx, COAP_MESSAGE_ACK, COAP_RESP_CODE(204), NULL, NULL, 0);
+        } else if (rcvmsg->head.t != COAP_MESSAGE_NON) {
+            respmsg = litecoap_new_msg(ctx, COAP_MESSAGE_NON, COAP_RESP_CODE(204), NULL, NULL, 0);
         }
 
         if (respmsg == NULL) {
             return LITECOAP_PARAM_NULL;
         }
 
-        ret = litecoap_add_token(respmsg, (char *)rcvmsg->tok->token,
-                                 rcvmsg->tok->tklen);
+        ret = litecoap_add_token(respmsg, (char *)rcvmsg->tok->token, rcvmsg->tok->tklen);
         if (ret != LITECOAP_OK) {
             litecoap_delete_msg(respmsg);
             return LITECOAP_NG;
@@ -1334,25 +1260,20 @@ int litecoap_handle_request(coap_context_t *ctx, coap_msg_t *rcvmsg)
         res->handler(rcvmsg, respmsg);
         litecoap_send(ctx, respmsg);
     } else {
-        //opthead = litecoap_add_option_to_list(opthead,
-        //                                      COAP_OPTION_CONTENT_FORMAT, 
+        // opthead = litecoap_add_option_to_list(opthead,
+        //                                      COAP_OPTION_CONTENT_FORMAT,
         //                                      contype, 2);
         if (rcvmsg->head.t == COAP_MESSAGE_CON) {
-            respmsg = litecoap_new_msg(ctx, COAP_MESSAGE_ACK,
-                                       COAP_RESP_CODE(404), 
-                                       opthead, NULL, 0);
+            respmsg = litecoap_new_msg(ctx, COAP_MESSAGE_ACK, COAP_RESP_CODE(404), opthead, NULL, 0);
         } else {
-            respmsg = litecoap_new_msg(ctx,COAP_MESSAGE_NON,
-                                       COAP_RESP_CODE(404), 
-                                       opthead, NULL, 0);
+            respmsg = litecoap_new_msg(ctx, COAP_MESSAGE_NON, COAP_RESP_CODE(404), opthead, NULL, 0);
         }
 
         if (respmsg == NULL) {
             return LITECOAP_PARAM_NULL;
         }
         if (respmsg && rcvmsg && rcvmsg->tok && rcvmsg->tok->token) {
-            ret = litecoap_add_token(respmsg, (char *)rcvmsg->tok->token,
-                                 rcvmsg->tok->tklen);
+            ret = litecoap_add_token(respmsg, (char *)rcvmsg->tok->token, rcvmsg->tok->tklen);
         }
         if (ret != LITECOAP_OK) {
             litecoap_delete_msg(respmsg);
@@ -1363,27 +1284,26 @@ int litecoap_handle_request(coap_context_t *ctx, coap_msg_t *rcvmsg)
     return LITECOAP_OK;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_handle_msg
- Description : process reviced coap messages 
+ Description : process reviced coap messages
  Input       : ctx @ coap connection instance.
                msg @ recived coap message
  Output      : None
  Return      : LITECOAP_OK means process ok, other value means error happended.
- *****************************************************************************/
+ **************************************************************************** */
 int litecoap_handle_msg(coap_context_t *ctx, coap_msg_t *msg)
 {
-    switch (msg->head.t)
-    {
+    switch (msg->head.t) {
         case COAP_MESSAGE_ACK:
             litecoap_remove_resndqueue(ctx, msg);
             break;
         case COAP_MESSAGE_RST:
             litecoap_remove_resndqueue(ctx, msg);
             break;
-        case COAP_MESSAGE_NON :
-        case COAP_MESSAGE_CON :
-            //litecoap_send_ack(ctx, msg);
+        case COAP_MESSAGE_NON:
+        case COAP_MESSAGE_CON:
+            // litecoap_send_ack(ctx, msg);
             break;
         default:
             break;
@@ -1397,13 +1317,13 @@ int litecoap_handle_msg(coap_context_t *ctx, coap_msg_t *msg)
     return LITECOAP_OK;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_read
  Description : read coap messages from tcp/ip stack.
  Input       : ctx @ coap connection instance.
  Output      : None
  Return      : LITECOAP_OK means process ok, other value means error happended.
- *****************************************************************************/
+ **************************************************************************** */
 int litecoap_read(coap_context_t *ctx)
 {
     coap_msg_t *msg = NULL;
@@ -1415,25 +1335,23 @@ int litecoap_read(coap_context_t *ctx)
     if (ctx == NULL) {
         return LITECOAP_PARAM_NULL;
     }
-    len = ctx->netops->network_read( ctx->udpio, 
-                                     (char *)ctx->rcvbuf.buf, 
-                                     ctx->rcvbuf.len);
+    len = ctx->netops->network_read(ctx->udpio, (char *)ctx->rcvbuf.buf, ctx->rcvbuf.len);
     if (len == 0) {
         return LITECOAP_OK;
     }
     if (len < 0) {
         return LITECOAP_SOCKET_NETWORK_ERR;
     }
-    /* 
-        fixed me: need parse data and then handle coap message 
+    /*
+        fixed me: need parse data and then handle coap message
         need malloc coap msg buffers, deal with it and then free, it
     */
     msg = (coap_msg_t *)litecoap_malloc(sizeof(coap_msg_t));
     if (msg == NULL) {
         return LITECOAP_MALLOC_FAILED;
     }
-    (void) memset(msg, 0, sizeof(coap_msg_t));
-    
+    (void)memset(msg, 0, sizeof(coap_msg_t));
+
     ret = litecoap_parse_header(msg, (const unsigned char *)ctx->rcvbuf.buf, len, ctx->proto);
     if (ret < 0) {
         litecoap_delete_msg(msg);
@@ -1450,9 +1368,9 @@ int litecoap_read(coap_context_t *ctx)
         litecoap_delete_msg(msg);
         return LITECOAP_OPTION_ERR;
     }
-    
-    /* 
-       if pack is ack, rst ... no need send anything, if con msg, 
+
+    /*
+       if pack is ack, rst ... no need send anything, if con msg,
        send a ack and pass to response_handler
     */
     litecoap_handle_msg(ctx, msg);
@@ -1469,14 +1387,14 @@ int litecoap_read(coap_context_t *ctx)
     return LITECOAP_OK;
 }
 
-/*****************************************************************************
+/* ****************************************************************************
  Function    : litecoap_send
  Description : send coap messages to tcp/ip stack.
  Input       : ctx @ coap connection instance.
                msg @ coap message that need to send.
  Output      : None
  Return      : LITECOAP_OK means process ok, other value means error happended.
- *****************************************************************************/
+ **************************************************************************** */
 int litecoap_send(coap_context_t *ctx, coap_msg_t *msg)
 {
     int slen = 0;
@@ -1508,7 +1426,7 @@ int litecoap_send(coap_context_t *ctx, coap_msg_t *msg)
         if (retry == 10) {
             break;
         }
-    } while(n != slen);
+    } while (n != slen);
     /* delete msg that do not need stored for retransmit */
     if (msg->head.t != COAP_MESSAGE_CON) {
         litecoap_delete_msg(msg);
@@ -1516,7 +1434,8 @@ int litecoap_send(coap_context_t *ctx, coap_msg_t *msg)
     return n;
 }
 
-int litecoap_retransmit(coap_context_t *ctx, send_queue_t *node) {
+int litecoap_retransmit(coap_context_t *ctx, send_queue_t *node)
+{
     unsigned long long now;
     if (ctx == NULL || node == NULL) {
         return LITECOAP_PARAM_NULL;

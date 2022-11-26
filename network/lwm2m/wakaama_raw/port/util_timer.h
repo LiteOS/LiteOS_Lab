@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,25 +22,23 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
-/**@defgroup agent AgentTiny
+/* *@defgroup agent AgentTiny
  * @defgroup agenttiny Agenttiny Definition
  * @ingroup agent
  */
 
-
-
-#ifndef _UTIL_TIMER_H_
-#define _UTIL_TIMER_H_
+#ifndef UTIL_TIMER_H
+#define UTIL_TIMER_H
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
@@ -53,16 +51,15 @@ extern "C" {
 #ifdef LWM2M_CLIENT_MODE
 
 // time uint is second, and max value 0xffffffff is hundreds of years.so ignore the turn to 0 problem
-typedef struct
-{
-    time_t  expireTime;
-    time_t  interval;
-    void    (*callback)(void *param);
-    void   *param;
-    bool    startFlag;
+typedef struct {
+    time_t expireTime;
+    time_t interval;
+    void (*callback)(void *param);
+    void *param;
+    bool startFlag;
 } util_timer_t;
 
-void timer_init(util_timer_t *timer, time_t interval, void(*callback)(void *param), void *param);
+void timer_init(util_timer_t *timer, time_t interval, void (*callback)(void *param), void *param);
 void timer_start(util_timer_t *timer);
 void timer_stop(util_timer_t *timer);
 void timer_step(util_timer_t *timer);

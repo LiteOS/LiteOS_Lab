@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2016-2019>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,26 +22,24 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
 #include "internals.h"
 
 #ifdef LWM2M_CLIENT_MODE
 
-void registration_reset(lwm2m_context_t *contextP,
-                        lwm2m_server_t *serverP)
+void registration_reset(lwm2m_context_t *contextP, lwm2m_server_t *serverP)
 {
-    //registration_deregister(contextP, serverP);
-    if (NULL != serverP->sessionH)
-    {
+    // registration_deregister(contextP, serverP);
+    if (NULL != serverP->sessionH) {
         lwm2m_close_connection(serverP->sessionH, contextP->userData);
         serverP->sessionH = NULL;
     }
@@ -53,21 +51,16 @@ lwm2m_server_t *registration_get_registered_server(lwm2m_context_t *contextP)
 {
     lwm2m_server_t *targetP;
 
-    if (NULL == contextP)
-    {
+    if (NULL == contextP) {
         LOG("null pointer");
         return NULL;
     }
 
     targetP = contextP->serverList;
 
-    while (NULL != targetP)
-    {
-        if ((STATE_REGISTERED == targetP->status)
-            || (STATE_REG_UPDATE_PENDING == targetP->status)
-            || (STATE_REG_UPDATE_NEEDED == targetP->status)
-            || (STATE_REG_FULL_UPDATE_NEEDED == targetP->status))
-        {
+    while (NULL != targetP) {
+        if ((STATE_REGISTERED == targetP->status) || (STATE_REG_UPDATE_PENDING == targetP->status) ||
+            (STATE_REG_UPDATE_NEEDED == targetP->status) || (STATE_REG_FULL_UPDATE_NEEDED == targetP->status)) {
             return targetP;
         }
 

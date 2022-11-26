@@ -92,4 +92,3 @@ off_t      los_dev_seek  (los_dev_t dev,off_t offset, int fromwhere);
 
 1. 如果使能驱动框架，则需要添加driver目录，并且在编译中定义CONFIG_DRIVER_ENABLE=1
 3. 包含路径：驱动的注册和使用需要包含driver.h
-

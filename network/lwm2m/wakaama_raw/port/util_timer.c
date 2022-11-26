@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,21 +22,21 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
 #ifdef LWM2M_CLIENT_MODE
 #include "util_timer.h"
 #include "liblwm2m.h"
 
-void timer_init(util_timer_t *timer, time_t interval, void(*callback)(void *param), void *param)
+void timer_init(util_timer_t *timer, time_t interval, void (*callback)(void *param), void *param)
 {
     timer->expireTime = lwm2m_gettime() + interval;
     timer->interval = interval;
@@ -54,24 +54,22 @@ void timer_stop(util_timer_t *timer)
 {
     timer->startFlag = false;
 }
+
 void timer_step(util_timer_t *timer)
 {
     time_t current;
 
-    if (!timer->startFlag)
-    {
+    if (!timer->startFlag) {
         return;
     }
 
     current = lwm2m_gettime();
 
-    if (current < timer->expireTime)
-    {
+    if (current < timer->expireTime) {
         return;
     }
 
-    if (timer->callback)
-    {
+    if (timer->callback) {
         timer->callback(timer->param);
     }
 
@@ -79,4 +77,3 @@ void timer_step(util_timer_t *timer)
 }
 
 #endif // LWM2M_CLIENT_MODE
-

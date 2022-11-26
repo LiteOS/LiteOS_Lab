@@ -14,4 +14,3 @@ ifeq ($(CONFIG_AT_ENABLE),y)
     AT_MODULE_DEF = -D CONFIG_AT_ENABLE=1
     C_DEFS += $(AT_MODULE_DEF)
 endif
-

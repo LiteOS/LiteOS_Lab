@@ -1,0 +1,3171 @@
+GAS LISTING /tmp/ccdS8Ktk.s 			page 1
+
+
+   1              		.file	"ecdsa.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.derive_mpi,"ax",@progbits
+   6              	derive_mpi:
+   7              	.LFB6:
+   8              		.file 1 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c"
+   1:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+   2:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  *  Elliptic curve DSA
+   3:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  *
+   4:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
+   5:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  *  SPDX-License-Identifier: Apache-2.0
+   6:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  *
+   7:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
+   8:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  *  not use this file except in compliance with the License.
+   9:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  *  You may obtain a copy of the License at
+  10:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  *
+  11:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  *  http://www.apache.org/licenses/LICENSE-2.0
+  12:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  *
+  13:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  *  Unless required by applicable law or agreed to in writing, software
+  14:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  15:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  16:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  *  See the License for the specific language governing permissions and
+  17:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  *  limitations under the License.
+  18:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  *
+  19:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  *  This file is part of mbed TLS (https://tls.mbed.org)
+  20:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+  21:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+  22:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+  23:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * References:
+  24:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  *
+  25:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * SEC1 http://www.secg.org/index.php?action=secg,docs_secg
+  26:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+  27:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+  28:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if !defined(MBEDTLS_CONFIG_FILE)
+  29:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #include "mbedtls/config.h"
+  30:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #else
+  31:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #include MBEDTLS_CONFIG_FILE
+  32:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #endif
+  33:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+  34:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if defined(MBEDTLS_ECDSA_C)
+  35:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+  36:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #include "mbedtls/ecdsa.h"
+  37:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #include "mbedtls/asn1write.h"
+  38:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+  39:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #include <string.h>
+  40:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+  41:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if defined(MBEDTLS_ECDSA_DETERMINISTIC)
+  42:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #include "mbedtls/hmac_drbg.h"
+  43:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #endif
+  44:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+  45:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if defined(MBEDTLS_PLATFORM_C)
+  46:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #include "mbedtls/platform.h"
+  47:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #else
+  48:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #include <stdlib.h>
+  49:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #define mbedtls_calloc    calloc
+  50:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #define mbedtls_free       free
+GAS LISTING /tmp/ccdS8Ktk.s 			page 2
+
+
+  51:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #endif
+  52:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+  53:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #include "mbedtls/platform_util.h"
+  54:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+  55:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /* Parameter validation macros based on platform_util.h */
+  56:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #define ECDSA_VALIDATE_RET( cond )    \
+  57:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_INTERNAL_VALIDATE_RET( cond, MBEDTLS_ERR_ECP_BAD_INPUT_DATA )
+  58:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #define ECDSA_VALIDATE( cond )        \
+  59:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_INTERNAL_VALIDATE( cond )
+  60:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+  61:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if defined(MBEDTLS_ECP_RESTARTABLE)
+  62:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+  63:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+  64:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Sub-context for ecdsa_verify()
+  65:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+  66:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** struct mbedtls_ecdsa_restart_ver
+  67:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+  68:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi u1, u2;     /* intermediate values  */
+  69:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     enum {                  /* what to do next?     */
+  70:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ecdsa_ver_init = 0, /* getting started      */
+  71:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ecdsa_ver_muladd,   /* muladd step          */
+  72:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     } state;
+  73:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** };
+  74:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+  75:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+  76:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Init verify restart sub-context
+  77:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+  78:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** static void ecdsa_restart_ver_init( mbedtls_ecdsa_restart_ver_ctx *ctx )
+  79:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+  80:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_init( &ctx->u1 );
+  81:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_init( &ctx->u2 );
+  82:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ctx->state = ecdsa_ver_init;
+  83:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+  84:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+  85:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+  86:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Free the components of a verify restart sub-context
+  87:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+  88:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** static void ecdsa_restart_ver_free( mbedtls_ecdsa_restart_ver_ctx *ctx )
+  89:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+  90:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( ctx == NULL )
+  91:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         return;
+  92:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+  93:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_free( &ctx->u1 );
+  94:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_free( &ctx->u2 );
+  95:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+  96:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ecdsa_restart_ver_init( ctx );
+  97:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+  98:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+  99:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+ 100:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Sub-context for ecdsa_sign()
+ 101:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+ 102:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** struct mbedtls_ecdsa_restart_sig
+ 103:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+ 104:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     int sign_tries;
+ 105:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     int key_tries;
+ 106:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi k;          /* per-signature random */
+ 107:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi r;          /* r value              */
+GAS LISTING /tmp/ccdS8Ktk.s 			page 3
+
+
+ 108:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     enum {                  /* what to do next?     */
+ 109:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ecdsa_sig_init = 0, /* getting started      */
+ 110:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ecdsa_sig_mul,      /* doing ecp_mul()      */
+ 111:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ecdsa_sig_modn,     /* mod N computations   */
+ 112:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     } state;
+ 113:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** };
+ 114:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 115:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+ 116:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Init verify sign sub-context
+ 117:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+ 118:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** static void ecdsa_restart_sig_init( mbedtls_ecdsa_restart_sig_ctx *ctx )
+ 119:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+ 120:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ctx->sign_tries = 0;
+ 121:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ctx->key_tries = 0;
+ 122:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_init( &ctx->k );
+ 123:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_init( &ctx->r );
+ 124:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ctx->state = ecdsa_sig_init;
+ 125:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+ 126:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 127:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+ 128:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Free the components of a sign restart sub-context
+ 129:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+ 130:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** static void ecdsa_restart_sig_free( mbedtls_ecdsa_restart_sig_ctx *ctx )
+ 131:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+ 132:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( ctx == NULL )
+ 133:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         return;
+ 134:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 135:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_free( &ctx->k );
+ 136:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_free( &ctx->r );
+ 137:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+ 138:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 139:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if defined(MBEDTLS_ECDSA_DETERMINISTIC)
+ 140:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+ 141:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Sub-context for ecdsa_sign_det()
+ 142:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+ 143:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** struct mbedtls_ecdsa_restart_det
+ 144:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+ 145:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_hmac_drbg_context rng_ctx;  /* DRBG state   */
+ 146:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     enum {                      /* what to do next?     */
+ 147:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ecdsa_det_init = 0,     /* getting started      */
+ 148:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ecdsa_det_sign,         /* make signature       */
+ 149:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     } state;
+ 150:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** };
+ 151:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 152:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+ 153:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Init verify sign_det sub-context
+ 154:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+ 155:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** static void ecdsa_restart_det_init( mbedtls_ecdsa_restart_det_ctx *ctx )
+ 156:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+ 157:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_hmac_drbg_init( &ctx->rng_ctx );
+ 158:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ctx->state = ecdsa_det_init;
+ 159:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+ 160:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 161:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+ 162:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Free the components of a sign_det restart sub-context
+ 163:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+ 164:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** static void ecdsa_restart_det_free( mbedtls_ecdsa_restart_det_ctx *ctx )
+GAS LISTING /tmp/ccdS8Ktk.s 			page 4
+
+
+ 165:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+ 166:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( ctx == NULL )
+ 167:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         return;
+ 168:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 169:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_hmac_drbg_free( &ctx->rng_ctx );
+ 170:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 171:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ecdsa_restart_det_init( ctx );
+ 172:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+ 173:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #endif /* MBEDTLS_ECDSA_DETERMINISTIC */
+ 174:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 175:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #define ECDSA_RS_ECP    &rs_ctx->ecp
+ 176:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 177:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /* Utility macro for checking and updating ops budget */
+ 178:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #define ECDSA_BUDGET( ops )   \
+ 179:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_MPI_CHK( mbedtls_ecp_check_budget( grp, &rs_ctx->ecp, ops ) );
+ 180:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 181:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /* Call this when entering a function that needs its own sub-context */
+ 182:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #define ECDSA_RS_ENTER( SUB )   do {                                 \
+ 183:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     /* reset ops count for this call if top-level */                 \
+ 184:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( rs_ctx != NULL && rs_ctx->ecp.depth++ == 0 )                 \
+ 185:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         rs_ctx->ecp.ops_done = 0;                                    \
+ 186:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                                                      \
+ 187:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     /* set up our own sub-context if needed */                       \
+ 188:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( mbedtls_ecp_restart_is_enabled() &&                          \
+ 189:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         rs_ctx != NULL && rs_ctx->SUB == NULL )                      \
+ 190:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     {                                                                \
+ 191:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         rs_ctx->SUB = mbedtls_calloc( 1, sizeof( *rs_ctx->SUB ) );   \
+ 192:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         if( rs_ctx->SUB == NULL )                                    \
+ 193:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****             return( MBEDTLS_ERR_ECP_ALLOC_FAILED );                  \
+ 194:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                                                      \
+ 195:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ecdsa_restart_## SUB ##_init( rs_ctx->SUB );                 \
+ 196:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     }                                                                \
+ 197:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** } while( 0 )
+ 198:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 199:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /* Call this when leaving a function that needs its own sub-context */
+ 200:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #define ECDSA_RS_LEAVE( SUB )   do {                                 \
+ 201:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     /* clear our sub-context when not in progress (done or error) */ \
+ 202:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( rs_ctx != NULL && rs_ctx->SUB != NULL &&                     \
+ 203:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ret != MBEDTLS_ERR_ECP_IN_PROGRESS )                         \
+ 204:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     {                                                                \
+ 205:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ecdsa_restart_## SUB ##_free( rs_ctx->SUB );                 \
+ 206:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         mbedtls_free( rs_ctx->SUB );                                 \
+ 207:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         rs_ctx->SUB = NULL;                                          \
+ 208:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     }                                                                \
+ 209:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                                                      \
+ 210:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( rs_ctx != NULL )                                             \
+ 211:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         rs_ctx->ecp.depth--;                                         \
+ 212:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** } while( 0 )
+ 213:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 214:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #else /* MBEDTLS_ECP_RESTARTABLE */
+ 215:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 216:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #define ECDSA_RS_ECP    NULL
+ 217:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 218:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #define ECDSA_BUDGET( ops )   /* no-op; for compatibility */
+ 219:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 220:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #define ECDSA_RS_ENTER( SUB )   (void) rs_ctx
+ 221:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #define ECDSA_RS_LEAVE( SUB )   (void) rs_ctx
+GAS LISTING /tmp/ccdS8Ktk.s 			page 5
+
+
+ 222:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 223:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #endif /* MBEDTLS_ECP_RESTARTABLE */
+ 224:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 225:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+ 226:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Derive a suitable integer for group grp from a buffer of length len
+ 227:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * SEC1 4.1.3 step 5 aka SEC1 4.1.4 step 3
+ 228:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+ 229:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** static int derive_mpi( const mbedtls_ecp_group *grp, mbedtls_mpi *x,
+ 230:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                        const unsigned char *buf, size_t blen )
+ 231:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+   9              		.loc 1 231 1
+  10              		.cfi_startproc
+  11 0000 F30F1EFA 		endbr64
+  12 0004 55       		pushq	%rbp
+  13              	.LCFI0:
+  14              		.cfi_def_cfa_offset 16
+  15              		.cfi_offset 6, -16
+  16 0005 4889E5   		movq	%rsp, %rbp
+  17              	.LCFI1:
+  18              		.cfi_def_cfa_register 6
+  19 0008 4883EC40 		subq	$64, %rsp
+  20 000c 48897DD8 		movq	%rdi, -40(%rbp)
+  21 0010 488975D0 		movq	%rsi, -48(%rbp)
+  22 0014 488955C8 		movq	%rdx, -56(%rbp)
+  23 0018 48894DC0 		movq	%rcx, -64(%rbp)
+  24              		.loc 1 231 1
+  25 001c 64488B04 		movq	%fs:40, %rax
+  25      25280000 
+  25      00
+  26 0025 488945F8 		movq	%rax, -8(%rbp)
+  27 0029 31C0     		xorl	%eax, %eax
+ 232:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     int ret;
+ 233:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     size_t n_size = ( grp->nbits + 7 ) / 8;
+  28              		.loc 1 233 26
+  29 002b 488B45D8 		movq	-40(%rbp), %rax
+  30 002f 488B80B8 		movq	184(%rax), %rax
+  30      000000
+  31              		.loc 1 233 34
+  32 0036 4883C007 		addq	$7, %rax
+  33              		.loc 1 233 12
+  34 003a 48C1E803 		shrq	$3, %rax
+  35 003e 488945E8 		movq	%rax, -24(%rbp)
+ 234:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     size_t use_size = blen > n_size ? n_size : blen;
+  36              		.loc 1 234 12
+  37 0042 488B45E8 		movq	-24(%rbp), %rax
+  38 0046 483945C0 		cmpq	%rax, -64(%rbp)
+  39 004a 480F4645 		cmovbe	-64(%rbp), %rax
+  39      C0
+  40 004f 488945F0 		movq	%rax, -16(%rbp)
+ 235:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 236:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_read_binary( x, buf, use_size ) );
+  41              		.loc 1 236 5
+  42 0053 488B55F0 		movq	-16(%rbp), %rdx
+  43 0057 488B4DC8 		movq	-56(%rbp), %rcx
+  44 005b 488B45D0 		movq	-48(%rbp), %rax
+  45 005f 4889CE   		movq	%rcx, %rsi
+  46 0062 4889C7   		movq	%rax, %rdi
+GAS LISTING /tmp/ccdS8Ktk.s 			page 6
+
+
+  47 0065 E8000000 		call	mbedtls_mpi_read_binary@PLT
+  47      00
+  48 006a 8945E4   		movl	%eax, -28(%rbp)
+  49 006d 837DE400 		cmpl	$0, -28(%rbp)
+  50 0071 0F859300 		jne	.L7
+  50      0000
+ 237:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( use_size * 8 > grp->nbits )
+  51              		.loc 1 237 18
+  52 0077 488B45F0 		movq	-16(%rbp), %rax
+  53 007b 488D14C5 		leaq	0(,%rax,8), %rdx
+  53      00000000 
+  54              		.loc 1 237 27
+  55 0083 488B45D8 		movq	-40(%rbp), %rax
+  56 0087 488B80B8 		movq	184(%rax), %rax
+  56      000000
+  57              		.loc 1 237 7
+  58 008e 4839C2   		cmpq	%rax, %rdx
+  59 0091 7632     		jbe	.L4
+ 238:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_shift_r( x, use_size * 8 - grp->nbits ) );
+  60              		.loc 1 238 9
+  61 0093 488B45F0 		movq	-16(%rbp), %rax
+  62 0097 488D14C5 		leaq	0(,%rax,8), %rdx
+  62      00000000 
+  63 009f 488B45D8 		movq	-40(%rbp), %rax
+  64 00a3 488B80B8 		movq	184(%rax), %rax
+  64      000000
+  65 00aa 4829C2   		subq	%rax, %rdx
+  66 00ad 488B45D0 		movq	-48(%rbp), %rax
+  67 00b1 4889D6   		movq	%rdx, %rsi
+  68 00b4 4889C7   		movq	%rax, %rdi
+  69 00b7 E8000000 		call	mbedtls_mpi_shift_r@PLT
+  69      00
+  70 00bc 8945E4   		movl	%eax, -28(%rbp)
+  71 00bf 837DE400 		cmpl	$0, -28(%rbp)
+  72 00c3 7548     		jne	.L8
+  73              	.L4:
+ 239:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 240:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     /* While at it, reduce modulo N */
+ 241:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( mbedtls_mpi_cmp_mpi( x, &grp->N ) >= 0 )
+  74              		.loc 1 241 9
+  75 00c5 488B45D8 		movq	-40(%rbp), %rax
+  76 00c9 488D9098 		leaq	152(%rax), %rdx
+  76      000000
+  77 00d0 488B45D0 		movq	-48(%rbp), %rax
+  78 00d4 4889D6   		movq	%rdx, %rsi
+  79 00d7 4889C7   		movq	%rax, %rdi
+  80 00da E8000000 		call	mbedtls_mpi_cmp_mpi@PLT
+  80      00
+  81              		.loc 1 241 7
+  82 00df 85C0     		testl	%eax, %eax
+  83 00e1 782D     		js	.L9
+ 242:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_sub_mpi( x, x, &grp->N ) );
+  84              		.loc 1 242 9
+  85 00e3 488B45D8 		movq	-40(%rbp), %rax
+  86 00e7 488D9098 		leaq	152(%rax), %rdx
+  86      000000
+  87 00ee 488B4DD0 		movq	-48(%rbp), %rcx
+GAS LISTING /tmp/ccdS8Ktk.s 			page 7
+
+
+  88 00f2 488B45D0 		movq	-48(%rbp), %rax
+  89 00f6 4889CE   		movq	%rcx, %rsi
+  90 00f9 4889C7   		movq	%rax, %rdi
+  91 00fc E8000000 		call	mbedtls_mpi_sub_mpi@PLT
+  91      00
+  92 0101 8945E4   		movl	%eax, -28(%rbp)
+  93 0104 837DE400 		cmpl	$0, -28(%rbp)
+ 243:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 244:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** cleanup:
+  94              		.loc 1 244 1
+  95 0108 EB06     		jmp	.L9
+  96              	.L7:
+ 236:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( use_size * 8 > grp->nbits )
+  97              		.loc 1 236 5
+  98 010a 90       		nop
+  99 010b EB04     		jmp	.L3
+ 100              	.L8:
+ 238:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 101              		.loc 1 238 9
+ 102 010d 90       		nop
+ 103 010e EB01     		jmp	.L3
+ 104              	.L9:
+ 105              		.loc 1 244 1
+ 106 0110 90       		nop
+ 107              	.L3:
+ 245:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     return( ret );
+ 108              		.loc 1 245 11
+ 109 0111 8B45E4   		movl	-28(%rbp), %eax
+ 246:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+ 110              		.loc 1 246 1
+ 111 0114 488B4DF8 		movq	-8(%rbp), %rcx
+ 112 0118 6448330C 		xorq	%fs:40, %rcx
+ 112      25280000 
+ 112      00
+ 113 0121 7405     		je	.L6
+ 114 0123 E8000000 		call	__stack_chk_fail@PLT
+ 114      00
+ 115              	.L6:
+ 116 0128 C9       		leave
+ 117              	.LCFI2:
+ 118              		.cfi_def_cfa 7, 8
+ 119 0129 C3       		ret
+ 120              		.cfi_endproc
+ 121              	.LFE6:
+ 123              		.section	.text.ecdsa_sign_restartable,"ax",@progbits
+ 125              	ecdsa_sign_restartable:
+ 126              	.LFB7:
+ 247:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 248:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if !defined(MBEDTLS_ECDSA_SIGN_ALT)
+ 249:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+ 250:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Compute ECDSA signature of a hashed message (SEC1 4.1.3)
+ 251:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Obviously, compared to SEC1 4.1.3, we skip step 4 (hash message)
+ 252:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+ 253:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** static int ecdsa_sign_restartable( mbedtls_ecp_group *grp,
+ 254:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                 mbedtls_mpi *r, mbedtls_mpi *s,
+ 255:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                 const mbedtls_mpi *d, const unsigned char *buf, size_t blen,
+ 256:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                 int (*f_rng)(void *, unsigned char *, size_t), void *p_rng,
+GAS LISTING /tmp/ccdS8Ktk.s 			page 8
+
+
+ 257:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                 mbedtls_ecdsa_restart_ctx *rs_ctx )
+ 258:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+ 127              		.loc 1 258 1
+ 128              		.cfi_startproc
+ 129 0000 F30F1EFA 		endbr64
+ 130 0004 55       		pushq	%rbp
+ 131              	.LCFI3:
+ 132              		.cfi_def_cfa_offset 16
+ 133              		.cfi_offset 6, -16
+ 134 0005 4889E5   		movq	%rsp, %rbp
+ 135              	.LCFI4:
+ 136              		.cfi_def_cfa_register 6
+ 137 0008 4881EC30 		subq	$304, %rsp
+ 137      010000
+ 138 000f 4889BD18 		movq	%rdi, -232(%rbp)
+ 138      FFFFFF
+ 139 0016 4889B510 		movq	%rsi, -240(%rbp)
+ 139      FFFFFF
+ 140 001d 48899508 		movq	%rdx, -248(%rbp)
+ 140      FFFFFF
+ 141 0024 48898D00 		movq	%rcx, -256(%rbp)
+ 141      FFFFFF
+ 142 002b 4C8985F8 		movq	%r8, -264(%rbp)
+ 142      FEFFFF
+ 143 0032 4C898DF0 		movq	%r9, -272(%rbp)
+ 143      FEFFFF
+ 144 0039 488B4510 		movq	16(%rbp), %rax
+ 145 003d 488985E8 		movq	%rax, -280(%rbp)
+ 145      FEFFFF
+ 146 0044 488B4518 		movq	24(%rbp), %rax
+ 147 0048 488985E0 		movq	%rax, -288(%rbp)
+ 147      FEFFFF
+ 148 004f 488B4520 		movq	32(%rbp), %rax
+ 149 0053 488985D8 		movq	%rax, -296(%rbp)
+ 149      FEFFFF
+ 150              		.loc 1 258 1
+ 151 005a 64488B04 		movq	%fs:40, %rax
+ 151      25280000 
+ 151      00
+ 152 0063 488945F8 		movq	%rax, -8(%rbp)
+ 153 0067 31C0     		xorl	%eax, %eax
+ 259:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     int ret, key_tries, sign_tries;
+ 260:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     int *p_sign_tries = &sign_tries, *p_key_tries = &key_tries;
+ 154              		.loc 1 260 10
+ 155 0069 488D8528 		leaq	-216(%rbp), %rax
+ 155      FFFFFF
+ 156 0070 48898530 		movq	%rax, -208(%rbp)
+ 156      FFFFFF
+ 157              		.loc 1 260 39
+ 158 0077 488D8524 		leaq	-220(%rbp), %rax
+ 158      FFFFFF
+ 159 007e 48898538 		movq	%rax, -200(%rbp)
+ 159      FFFFFF
+ 261:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_ecp_point R;
+ 262:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi k, e, t;
+ 263:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi *pk = &k, *pr = r;
+ 160              		.loc 1 263 18
+GAS LISTING /tmp/ccdS8Ktk.s 			page 9
+
+
+ 161 0085 488D8550 		leaq	-176(%rbp), %rax
+ 161      FFFFFF
+ 162 008c 48898540 		movq	%rax, -192(%rbp)
+ 162      FFFFFF
+ 163              		.loc 1 263 28
+ 164 0093 488B8510 		movq	-240(%rbp), %rax
+ 164      FFFFFF
+ 165 009a 48898548 		movq	%rax, -184(%rbp)
+ 165      FFFFFF
+ 264:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 265:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     /* Fail cleanly on curves such as Curve25519 that can't be used for ECDSA */
+ 266:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( grp->N.p == NULL )
+ 166              		.loc 1 266 15
+ 167 00a1 488B8518 		movq	-232(%rbp), %rax
+ 167      FFFFFF
+ 168 00a8 488B80A8 		movq	168(%rax), %rax
+ 168      000000
+ 169              		.loc 1 266 7
+ 170 00af 4885C0   		testq	%rax, %rax
+ 171 00b2 750A     		jne	.L11
+ 267:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         return( MBEDTLS_ERR_ECP_BAD_INPUT_DATA );
+ 172              		.loc 1 267 15
+ 173 00b4 B880B0FF 		movl	$-20352, %eax
+ 173      FF
+ 174 00b9 E9120400 		jmp	.L32
+ 174      00
+ 175              	.L11:
+ 268:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 269:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     /* Make sure d is in range 1..n-1 */
+ 270:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( mbedtls_mpi_cmp_int( d, 1 ) < 0 || mbedtls_mpi_cmp_mpi( d, &grp->N ) >= 0 )
+ 176              		.loc 1 270 9
+ 177 00be 488B8500 		movq	-256(%rbp), %rax
+ 177      FFFFFF
+ 178 00c5 BE010000 		movl	$1, %esi
+ 178      00
+ 179 00ca 4889C7   		movq	%rax, %rdi
+ 180 00cd E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 180      00
+ 181              		.loc 1 270 7
+ 182 00d2 85C0     		testl	%eax, %eax
+ 183 00d4 7824     		js	.L13
+ 184              		.loc 1 270 68 discriminator 1
+ 185 00d6 488B8518 		movq	-232(%rbp), %rax
+ 185      FFFFFF
+ 186 00dd 488D9098 		leaq	152(%rax), %rdx
+ 186      000000
+ 187              		.loc 1 270 44 discriminator 1
+ 188 00e4 488B8500 		movq	-256(%rbp), %rax
+ 188      FFFFFF
+ 189 00eb 4889D6   		movq	%rdx, %rsi
+ 190 00ee 4889C7   		movq	%rax, %rdi
+ 191 00f1 E8000000 		call	mbedtls_mpi_cmp_mpi@PLT
+ 191      00
+ 192              		.loc 1 270 41 discriminator 1
+ 193 00f6 85C0     		testl	%eax, %eax
+ 194 00f8 780A     		js	.L14
+ 195              	.L13:
+GAS LISTING /tmp/ccdS8Ktk.s 			page 10
+
+
+ 271:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         return( MBEDTLS_ERR_ECP_INVALID_KEY );
+ 196              		.loc 1 271 15
+ 197 00fa B880B3FF 		movl	$-19584, %eax
+ 197      FF
+ 198 00ff E9CC0300 		jmp	.L32
+ 198      00
+ 199              	.L14:
+ 272:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 273:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_ecp_point_init( &R );
+ 200              		.loc 1 273 5
+ 201 0104 488D45B0 		leaq	-80(%rbp), %rax
+ 202 0108 4889C7   		movq	%rax, %rdi
+ 203 010b E8000000 		call	mbedtls_ecp_point_init@PLT
+ 203      00
+ 274:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_init( &k ); mbedtls_mpi_init( &e ); mbedtls_mpi_init( &t );
+ 204              		.loc 1 274 5
+ 205 0110 488D8550 		leaq	-176(%rbp), %rax
+ 205      FFFFFF
+ 206 0117 4889C7   		movq	%rax, %rdi
+ 207 011a E8000000 		call	mbedtls_mpi_init@PLT
+ 207      00
+ 208              		.loc 1 274 29
+ 209 011f 488D8570 		leaq	-144(%rbp), %rax
+ 209      FFFFFF
+ 210 0126 4889C7   		movq	%rax, %rdi
+ 211 0129 E8000000 		call	mbedtls_mpi_init@PLT
+ 211      00
+ 212              		.loc 1 274 53
+ 213 012e 488D4590 		leaq	-112(%rbp), %rax
+ 214 0132 4889C7   		movq	%rax, %rdi
+ 215 0135 E8000000 		call	mbedtls_mpi_init@PLT
+ 215      00
+ 275:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 276:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_RS_ENTER( sig );
+ 277:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 278:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if defined(MBEDTLS_ECP_RESTARTABLE)
+ 279:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( rs_ctx != NULL && rs_ctx->sig != NULL )
+ 280:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     {
+ 281:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         /* redirect to our context */
+ 282:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         p_sign_tries = &rs_ctx->sig->sign_tries;
+ 283:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         p_key_tries = &rs_ctx->sig->key_tries;
+ 284:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         pk = &rs_ctx->sig->k;
+ 285:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         pr = &rs_ctx->sig->r;
+ 286:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 287:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         /* jump to current step */
+ 288:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         if( rs_ctx->sig->state == ecdsa_sig_mul )
+ 289:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****             goto mul;
+ 290:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         if( rs_ctx->sig->state == ecdsa_sig_modn )
+ 291:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****             goto modn;
+ 292:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     }
+ 293:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #endif /* MBEDTLS_ECP_RESTARTABLE */
+ 294:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 295:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     *p_sign_tries = 0;
+ 216              		.loc 1 295 19
+ 217 013a 488B8530 		movq	-208(%rbp), %rax
+ 217      FFFFFF
+ 218 0141 C7000000 		movl	$0, (%rax)
+GAS LISTING /tmp/ccdS8Ktk.s 			page 11
+
+
+ 218      0000
+ 219              	.L31:
+ 296:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     do
+ 297:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     {
+ 298:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         if( *p_sign_tries++ > 10 )
+ 220              		.loc 1 298 26
+ 221 0147 488B8530 		movq	-208(%rbp), %rax
+ 221      FFFFFF
+ 222 014e 488D5004 		leaq	4(%rax), %rdx
+ 223 0152 48899530 		movq	%rdx, -208(%rbp)
+ 223      FFFFFF
+ 224              		.loc 1 298 13
+ 225 0159 8B00     		movl	(%rax), %eax
+ 226              		.loc 1 298 11
+ 227 015b 83F80A   		cmpl	$10, %eax
+ 228 015e 7E0F     		jle	.L15
+ 299:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         {
+ 300:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****             ret = MBEDTLS_ERR_ECP_RANDOM_FAILED;
+ 229              		.loc 1 300 17
+ 230 0160 C7852CFF 		movl	$-19712, -212(%rbp)
+ 230      FFFF00B3 
+ 230      FFFF
+ 301:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****             goto cleanup;
+ 231              		.loc 1 301 13
+ 232 016a E9250300 		jmp	.L16
+ 232      00
+ 233              	.L15:
+ 302:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         }
+ 303:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 304:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         /*
+ 305:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****          * Steps 1-3: generate a suitable ephemeral keypair
+ 306:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****          * and set r = xR mod n
+ 307:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****          */
+ 308:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         *p_key_tries = 0;
+ 234              		.loc 1 308 22
+ 235 016f 488B8538 		movq	-200(%rbp), %rax
+ 235      FFFFFF
+ 236 0176 C7000000 		movl	$0, (%rax)
+ 236      0000
+ 237              	.L21:
+ 309:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         do
+ 310:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         {
+ 311:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****             if( *p_key_tries++ > 10 )
+ 238              		.loc 1 311 29
+ 239 017c 488B8538 		movq	-200(%rbp), %rax
+ 239      FFFFFF
+ 240 0183 488D5004 		leaq	4(%rax), %rdx
+ 241 0187 48899538 		movq	%rdx, -200(%rbp)
+ 241      FFFFFF
+ 242              		.loc 1 311 17
+ 243 018e 8B00     		movl	(%rax), %eax
+ 244              		.loc 1 311 15
+ 245 0190 83F80A   		cmpl	$10, %eax
+ 246 0193 7E0F     		jle	.L17
+ 312:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****             {
+ 313:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                 ret = MBEDTLS_ERR_ECP_RANDOM_FAILED;
+ 247              		.loc 1 313 21
+GAS LISTING /tmp/ccdS8Ktk.s 			page 12
+
+
+ 248 0195 C7852CFF 		movl	$-19712, -212(%rbp)
+ 248      FFFF00B3 
+ 248      FFFF
+ 314:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                 goto cleanup;
+ 249              		.loc 1 314 17
+ 250 019f E9F00200 		jmp	.L16
+ 250      00
+ 251              	.L17:
+ 315:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****             }
+ 316:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 317:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****             MBEDTLS_MPI_CHK( mbedtls_ecp_gen_privkey( grp, pk, f_rng, p_rng ) );
+ 252              		.loc 1 317 13
+ 253 01a4 488B8DE0 		movq	-288(%rbp), %rcx
+ 253      FEFFFF
+ 254 01ab 488B95E8 		movq	-280(%rbp), %rdx
+ 254      FEFFFF
+ 255 01b2 488BB540 		movq	-192(%rbp), %rsi
+ 255      FFFFFF
+ 256 01b9 488B8518 		movq	-232(%rbp), %rax
+ 256      FFFFFF
+ 257 01c0 4889C7   		movq	%rax, %rdi
+ 258 01c3 E8000000 		call	mbedtls_ecp_gen_privkey@PLT
+ 258      00
+ 259 01c8 89852CFF 		movl	%eax, -212(%rbp)
+ 259      FFFF
+ 260 01ce 83BD2CFF 		cmpl	$0, -212(%rbp)
+ 260      FFFF00
+ 261 01d5 0F859702 		jne	.L34
+ 261      0000
+ 318:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 319:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if defined(MBEDTLS_ECP_RESTARTABLE)
+ 320:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****             if( rs_ctx != NULL && rs_ctx->sig != NULL )
+ 321:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                 rs_ctx->sig->state = ecdsa_sig_mul;
+ 322:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 323:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** mul:
+ 324:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #endif
+ 325:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****             MBEDTLS_MPI_CHK( mbedtls_ecp_mul_restartable( grp, &R, pk, &grp->G,
+ 262              		.loc 1 325 13
+ 263 01db 488B8518 		movq	-232(%rbp), %rax
+ 263      FFFFFF
+ 264 01e2 488D4850 		leaq	80(%rax), %rcx
+ 265 01e6 4C8B85E0 		movq	-288(%rbp), %r8
+ 265      FEFFFF
+ 266 01ed 488BBDE8 		movq	-280(%rbp), %rdi
+ 266      FEFFFF
+ 267 01f4 488B9540 		movq	-192(%rbp), %rdx
+ 267      FFFFFF
+ 268 01fb 488D75B0 		leaq	-80(%rbp), %rsi
+ 269 01ff 488B8518 		movq	-232(%rbp), %rax
+ 269      FFFFFF
+ 270 0206 4883EC08 		subq	$8, %rsp
+ 271 020a 6A00     		pushq	$0
+ 272 020c 4D89C1   		movq	%r8, %r9
+ 273 020f 4989F8   		movq	%rdi, %r8
+ 274 0212 4889C7   		movq	%rax, %rdi
+ 275 0215 E8000000 		call	mbedtls_ecp_mul_restartable@PLT
+ 275      00
+GAS LISTING /tmp/ccdS8Ktk.s 			page 13
+
+
+ 276 021a 4883C410 		addq	$16, %rsp
+ 277 021e 89852CFF 		movl	%eax, -212(%rbp)
+ 277      FFFF
+ 278 0224 83BD2CFF 		cmpl	$0, -212(%rbp)
+ 278      FFFF00
+ 279 022b 0F854402 		jne	.L35
+ 279      0000
+ 326:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                                   f_rng, p_rng, ECDSA_RS_ECP ) );
+ 327:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****             MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( pr, &R.X, &grp->N ) );
+ 280              		.loc 1 327 13
+ 281 0231 488B8518 		movq	-232(%rbp), %rax
+ 281      FFFFFF
+ 282 0238 488D9098 		leaq	152(%rax), %rdx
+ 282      000000
+ 283 023f 488D4DB0 		leaq	-80(%rbp), %rcx
+ 284 0243 488B8548 		movq	-184(%rbp), %rax
+ 284      FFFFFF
+ 285 024a 4889CE   		movq	%rcx, %rsi
+ 286 024d 4889C7   		movq	%rax, %rdi
+ 287 0250 E8000000 		call	mbedtls_mpi_mod_mpi@PLT
+ 287      00
+ 288 0255 89852CFF 		movl	%eax, -212(%rbp)
+ 288      FFFF
+ 289 025b 83BD2CFF 		cmpl	$0, -212(%rbp)
+ 289      FFFF00
+ 290 0262 0F851002 		jne	.L36
+ 290      0000
+ 328:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         }
+ 329:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         while( mbedtls_mpi_cmp_int( pr, 0 ) == 0 );
+ 291              		.loc 1 329 16
+ 292 0268 488B8548 		movq	-184(%rbp), %rax
+ 292      FFFFFF
+ 293 026f BE000000 		movl	$0, %esi
+ 293      00
+ 294 0274 4889C7   		movq	%rax, %rdi
+ 295 0277 E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 295      00
+ 296              		.loc 1 329 9
+ 297 027c 85C0     		testl	%eax, %eax
+ 298 027e 0F84F8FE 		je	.L21
+ 298      FFFF
+ 330:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 331:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if defined(MBEDTLS_ECP_RESTARTABLE)
+ 332:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         if( rs_ctx != NULL && rs_ctx->sig != NULL )
+ 333:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****             rs_ctx->sig->state = ecdsa_sig_modn;
+ 334:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 335:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** modn:
+ 336:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #endif
+ 337:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         /*
+ 338:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****          * Accounting for everything up to the end of the loop
+ 339:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****          * (step 6, but checking now avoids saving e and t)
+ 340:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****          */
+ 341:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ECDSA_BUDGET( MBEDTLS_ECP_OPS_INV + 4 );
+ 342:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 343:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         /*
+ 344:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****          * Step 5: derive MPI from hashed message
+ 345:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****          */
+GAS LISTING /tmp/ccdS8Ktk.s 			page 14
+
+
+ 346:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         MBEDTLS_MPI_CHK( derive_mpi( grp, &e, buf, blen ) );
+ 299              		.loc 1 346 9
+ 300 0284 488B8DF0 		movq	-272(%rbp), %rcx
+ 300      FEFFFF
+ 301 028b 488B95F8 		movq	-264(%rbp), %rdx
+ 301      FEFFFF
+ 302 0292 488DB570 		leaq	-144(%rbp), %rsi
+ 302      FFFFFF
+ 303 0299 488B8518 		movq	-232(%rbp), %rax
+ 303      FFFFFF
+ 304 02a0 4889C7   		movq	%rax, %rdi
+ 305 02a3 E8000000 		call	derive_mpi
+ 305      00
+ 306 02a8 89852CFF 		movl	%eax, -212(%rbp)
+ 306      FFFF
+ 307 02ae 83BD2CFF 		cmpl	$0, -212(%rbp)
+ 307      FFFF00
+ 308 02b5 0F85C001 		jne	.L37
+ 308      0000
+ 347:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 348:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         /*
+ 349:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****          * Generate a random value to blind inv_mod in next step,
+ 350:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****          * avoiding a potential timing leak.
+ 351:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****          */
+ 352:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         MBEDTLS_MPI_CHK( mbedtls_ecp_gen_privkey( grp, &t, f_rng, p_rng ) );
+ 309              		.loc 1 352 9
+ 310 02bb 488B8DE0 		movq	-288(%rbp), %rcx
+ 310      FEFFFF
+ 311 02c2 488B95E8 		movq	-280(%rbp), %rdx
+ 311      FEFFFF
+ 312 02c9 488D7590 		leaq	-112(%rbp), %rsi
+ 313 02cd 488B8518 		movq	-232(%rbp), %rax
+ 313      FFFFFF
+ 314 02d4 4889C7   		movq	%rax, %rdi
+ 315 02d7 E8000000 		call	mbedtls_ecp_gen_privkey@PLT
+ 315      00
+ 316 02dc 89852CFF 		movl	%eax, -212(%rbp)
+ 316      FFFF
+ 317 02e2 83BD2CFF 		cmpl	$0, -212(%rbp)
+ 317      FFFF00
+ 318 02e9 0F858F01 		jne	.L38
+ 318      0000
+ 353:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 354:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         /*
+ 355:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****          * Step 6: compute s = (e + r * d) / k = t (e + rd) / (kt) mod n
+ 356:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****          */
+ 357:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( s, pr, d ) );
+ 319              		.loc 1 357 9
+ 320 02ef 488B9500 		movq	-256(%rbp), %rdx
+ 320      FFFFFF
+ 321 02f6 488B8D48 		movq	-184(%rbp), %rcx
+ 321      FFFFFF
+ 322 02fd 488B8508 		movq	-248(%rbp), %rax
+ 322      FFFFFF
+ 323 0304 4889CE   		movq	%rcx, %rsi
+ 324 0307 4889C7   		movq	%rax, %rdi
+ 325 030a E8000000 		call	mbedtls_mpi_mul_mpi@PLT
+GAS LISTING /tmp/ccdS8Ktk.s 			page 15
+
+
+ 325      00
+ 326 030f 89852CFF 		movl	%eax, -212(%rbp)
+ 326      FFFF
+ 327 0315 83BD2CFF 		cmpl	$0, -212(%rbp)
+ 327      FFFF00
+ 328 031c 0F855F01 		jne	.L39
+ 328      0000
+ 358:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_add_mpi( &e, &e, s ) );
+ 329              		.loc 1 358 9
+ 330 0322 488B9508 		movq	-248(%rbp), %rdx
+ 330      FFFFFF
+ 331 0329 488D8D70 		leaq	-144(%rbp), %rcx
+ 331      FFFFFF
+ 332 0330 488D8570 		leaq	-144(%rbp), %rax
+ 332      FFFFFF
+ 333 0337 4889CE   		movq	%rcx, %rsi
+ 334 033a 4889C7   		movq	%rax, %rdi
+ 335 033d E8000000 		call	mbedtls_mpi_add_mpi@PLT
+ 335      00
+ 336 0342 89852CFF 		movl	%eax, -212(%rbp)
+ 336      FFFF
+ 337 0348 83BD2CFF 		cmpl	$0, -212(%rbp)
+ 337      FFFF00
+ 338 034f 0F852F01 		jne	.L40
+ 338      0000
+ 359:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( &e, &e, &t ) );
+ 339              		.loc 1 359 9
+ 340 0355 488D5590 		leaq	-112(%rbp), %rdx
+ 341 0359 488D8D70 		leaq	-144(%rbp), %rcx
+ 341      FFFFFF
+ 342 0360 488D8570 		leaq	-144(%rbp), %rax
+ 342      FFFFFF
+ 343 0367 4889CE   		movq	%rcx, %rsi
+ 344 036a 4889C7   		movq	%rax, %rdi
+ 345 036d E8000000 		call	mbedtls_mpi_mul_mpi@PLT
+ 345      00
+ 346 0372 89852CFF 		movl	%eax, -212(%rbp)
+ 346      FFFF
+ 347 0378 83BD2CFF 		cmpl	$0, -212(%rbp)
+ 347      FFFF00
+ 348 037f 0F850201 		jne	.L41
+ 348      0000
+ 360:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( pk, pk, &t ) );
+ 349              		.loc 1 360 9
+ 350 0385 488D5590 		leaq	-112(%rbp), %rdx
+ 351 0389 488B8D40 		movq	-192(%rbp), %rcx
+ 351      FFFFFF
+ 352 0390 488B8540 		movq	-192(%rbp), %rax
+ 352      FFFFFF
+ 353 0397 4889CE   		movq	%rcx, %rsi
+ 354 039a 4889C7   		movq	%rax, %rdi
+ 355 039d E8000000 		call	mbedtls_mpi_mul_mpi@PLT
+ 355      00
+ 356 03a2 89852CFF 		movl	%eax, -212(%rbp)
+ 356      FFFF
+ 357 03a8 83BD2CFF 		cmpl	$0, -212(%rbp)
+ 357      FFFF00
+GAS LISTING /tmp/ccdS8Ktk.s 			page 16
+
+
+ 358 03af 0F85D500 		jne	.L42
+ 358      0000
+ 361:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_inv_mod( s, pk, &grp->N ) );
+ 359              		.loc 1 361 9
+ 360 03b5 488B8518 		movq	-232(%rbp), %rax
+ 360      FFFFFF
+ 361 03bc 488D9098 		leaq	152(%rax), %rdx
+ 361      000000
+ 362 03c3 488B8D40 		movq	-192(%rbp), %rcx
+ 362      FFFFFF
+ 363 03ca 488B8508 		movq	-248(%rbp), %rax
+ 363      FFFFFF
+ 364 03d1 4889CE   		movq	%rcx, %rsi
+ 365 03d4 4889C7   		movq	%rax, %rdi
+ 366 03d7 E8000000 		call	mbedtls_mpi_inv_mod@PLT
+ 366      00
+ 367 03dc 89852CFF 		movl	%eax, -212(%rbp)
+ 367      FFFF
+ 368 03e2 83BD2CFF 		cmpl	$0, -212(%rbp)
+ 368      FFFF00
+ 369 03e9 0F859E00 		jne	.L43
+ 369      0000
+ 362:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( s, s, &e ) );
+ 370              		.loc 1 362 9
+ 371 03ef 488D9570 		leaq	-144(%rbp), %rdx
+ 371      FFFFFF
+ 372 03f6 488B8D08 		movq	-248(%rbp), %rcx
+ 372      FFFFFF
+ 373 03fd 488B8508 		movq	-248(%rbp), %rax
+ 373      FFFFFF
+ 374 0404 4889CE   		movq	%rcx, %rsi
+ 375 0407 4889C7   		movq	%rax, %rdi
+ 376 040a E8000000 		call	mbedtls_mpi_mul_mpi@PLT
+ 376      00
+ 377 040f 89852CFF 		movl	%eax, -212(%rbp)
+ 377      FFFF
+ 378 0415 83BD2CFF 		cmpl	$0, -212(%rbp)
+ 378      FFFF00
+ 379 041c 7572     		jne	.L44
+ 363:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( s, s, &grp->N ) );
+ 380              		.loc 1 363 9
+ 381 041e 488B8518 		movq	-232(%rbp), %rax
+ 381      FFFFFF
+ 382 0425 488D9098 		leaq	152(%rax), %rdx
+ 382      000000
+ 383 042c 488B8D08 		movq	-248(%rbp), %rcx
+ 383      FFFFFF
+ 384 0433 488B8508 		movq	-248(%rbp), %rax
+ 384      FFFFFF
+ 385 043a 4889CE   		movq	%rcx, %rsi
+ 386 043d 4889C7   		movq	%rax, %rdi
+ 387 0440 E8000000 		call	mbedtls_mpi_mod_mpi@PLT
+ 387      00
+ 388 0445 89852CFF 		movl	%eax, -212(%rbp)
+ 388      FFFF
+ 389 044b 83BD2CFF 		cmpl	$0, -212(%rbp)
+ 389      FFFF00
+GAS LISTING /tmp/ccdS8Ktk.s 			page 17
+
+
+ 390 0452 753F     		jne	.L45
+ 364:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     }
+ 365:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     while( mbedtls_mpi_cmp_int( s, 0 ) == 0 );
+ 391              		.loc 1 365 12
+ 392 0454 488B8508 		movq	-248(%rbp), %rax
+ 392      FFFFFF
+ 393 045b BE000000 		movl	$0, %esi
+ 393      00
+ 394 0460 4889C7   		movq	%rax, %rdi
+ 395 0463 E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 395      00
+ 396              		.loc 1 365 5
+ 397 0468 85C0     		testl	%eax, %eax
+ 398 046a 0F84D7FC 		je	.L31
+ 398      FFFF
+ 366:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 367:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if defined(MBEDTLS_ECP_RESTARTABLE)
+ 368:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( rs_ctx != NULL && rs_ctx->sig != NULL )
+ 369:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         mbedtls_mpi_copy( r, pr );
+ 370:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #endif
+ 371:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 372:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** cleanup:
+ 399              		.loc 1 372 1
+ 400 0470 EB22     		jmp	.L16
+ 401              	.L34:
+ 317:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 402              		.loc 1 317 13
+ 403 0472 90       		nop
+ 404 0473 EB1F     		jmp	.L16
+ 405              	.L35:
+ 325:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                                   f_rng, p_rng, ECDSA_RS_ECP ) );
+ 406              		.loc 1 325 13
+ 407 0475 90       		nop
+ 408 0476 EB1C     		jmp	.L16
+ 409              	.L36:
+ 327:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         }
+ 410              		.loc 1 327 13
+ 411 0478 90       		nop
+ 412 0479 EB19     		jmp	.L16
+ 413              	.L37:
+ 346:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 414              		.loc 1 346 9
+ 415 047b 90       		nop
+ 416 047c EB16     		jmp	.L16
+ 417              	.L38:
+ 352:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 418              		.loc 1 352 9
+ 419 047e 90       		nop
+ 420 047f EB13     		jmp	.L16
+ 421              	.L39:
+ 357:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_add_mpi( &e, &e, s ) );
+ 422              		.loc 1 357 9
+ 423 0481 90       		nop
+ 424 0482 EB10     		jmp	.L16
+ 425              	.L40:
+ 358:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( &e, &e, &t ) );
+ 426              		.loc 1 358 9
+GAS LISTING /tmp/ccdS8Ktk.s 			page 18
+
+
+ 427 0484 90       		nop
+ 428 0485 EB0D     		jmp	.L16
+ 429              	.L41:
+ 359:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( pk, pk, &t ) );
+ 430              		.loc 1 359 9
+ 431 0487 90       		nop
+ 432 0488 EB0A     		jmp	.L16
+ 433              	.L42:
+ 360:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_inv_mod( s, pk, &grp->N ) );
+ 434              		.loc 1 360 9
+ 435 048a 90       		nop
+ 436 048b EB07     		jmp	.L16
+ 437              	.L43:
+ 361:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( s, s, &e ) );
+ 438              		.loc 1 361 9
+ 439 048d 90       		nop
+ 440 048e EB04     		jmp	.L16
+ 441              	.L44:
+ 362:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( s, s, &grp->N ) );
+ 442              		.loc 1 362 9
+ 443 0490 90       		nop
+ 444 0491 EB01     		jmp	.L16
+ 445              	.L45:
+ 363:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     }
+ 446              		.loc 1 363 9
+ 447 0493 90       		nop
+ 448              	.L16:
+ 373:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_ecp_point_free( &R );
+ 449              		.loc 1 373 5
+ 450 0494 488D45B0 		leaq	-80(%rbp), %rax
+ 451 0498 4889C7   		movq	%rax, %rdi
+ 452 049b E8000000 		call	mbedtls_ecp_point_free@PLT
+ 452      00
+ 374:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_free( &k ); mbedtls_mpi_free( &e ); mbedtls_mpi_free( &t );
+ 453              		.loc 1 374 5
+ 454 04a0 488D8550 		leaq	-176(%rbp), %rax
+ 454      FFFFFF
+ 455 04a7 4889C7   		movq	%rax, %rdi
+ 456 04aa E8000000 		call	mbedtls_mpi_free@PLT
+ 456      00
+ 457              		.loc 1 374 29
+ 458 04af 488D8570 		leaq	-144(%rbp), %rax
+ 458      FFFFFF
+ 459 04b6 4889C7   		movq	%rax, %rdi
+ 460 04b9 E8000000 		call	mbedtls_mpi_free@PLT
+ 460      00
+ 461              		.loc 1 374 53
+ 462 04be 488D4590 		leaq	-112(%rbp), %rax
+ 463 04c2 4889C7   		movq	%rax, %rdi
+ 464 04c5 E8000000 		call	mbedtls_mpi_free@PLT
+ 464      00
+ 375:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 376:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_RS_LEAVE( sig );
+ 377:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 378:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     return( ret );
+ 465              		.loc 1 378 11
+ 466 04ca 8B852CFF 		movl	-212(%rbp), %eax
+GAS LISTING /tmp/ccdS8Ktk.s 			page 19
+
+
+ 466      FFFF
+ 467              	.L32:
+ 379:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+ 468              		.loc 1 379 1 discriminator 1
+ 469 04d0 488B75F8 		movq	-8(%rbp), %rsi
+ 470 04d4 64483334 		xorq	%fs:40, %rsi
+ 470      25280000 
+ 470      00
+ 471 04dd 7405     		je	.L33
+ 472              		.loc 1 379 1 is_stmt 0
+ 473 04df E8000000 		call	__stack_chk_fail@PLT
+ 473      00
+ 474              	.L33:
+ 475 04e4 C9       		leave
+ 476              	.LCFI5:
+ 477              		.cfi_def_cfa 7, 8
+ 478 04e5 C3       		ret
+ 479              		.cfi_endproc
+ 480              	.LFE7:
+ 482              		.section	.text.mbedtls_ecdsa_sign,"ax",@progbits
+ 483              		.globl	mbedtls_ecdsa_sign
+ 485              	mbedtls_ecdsa_sign:
+ 486              	.LFB8:
+ 380:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 381:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+ 382:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Compute ECDSA signature of a hashed message
+ 383:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+ 384:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** int mbedtls_ecdsa_sign( mbedtls_ecp_group *grp, mbedtls_mpi *r, mbedtls_mpi *s,
+ 385:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                 const mbedtls_mpi *d, const unsigned char *buf, size_t blen,
+ 386:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                 int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
+ 387:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+ 487              		.loc 1 387 1 is_stmt 1
+ 488              		.cfi_startproc
+ 489 0000 F30F1EFA 		endbr64
+ 490 0004 55       		pushq	%rbp
+ 491              	.LCFI6:
+ 492              		.cfi_def_cfa_offset 16
+ 493              		.cfi_offset 6, -16
+ 494 0005 4889E5   		movq	%rsp, %rbp
+ 495              	.LCFI7:
+ 496              		.cfi_def_cfa_register 6
+ 497 0008 4883EC50 		subq	$80, %rsp
+ 498 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 499 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 500 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 501 0018 48894DD0 		movq	%rcx, -48(%rbp)
+ 502 001c 4C8945C8 		movq	%r8, -56(%rbp)
+ 503 0020 4C894DC0 		movq	%r9, -64(%rbp)
+ 504 0024 488B4510 		movq	16(%rbp), %rax
+ 505 0028 488945B8 		movq	%rax, -72(%rbp)
+ 506 002c 488B4518 		movq	24(%rbp), %rax
+ 507 0030 488945B0 		movq	%rax, -80(%rbp)
+ 508              		.loc 1 387 1
+ 509 0034 64488B04 		movq	%fs:40, %rax
+ 509      25280000 
+ 509      00
+ 510 003d 488945F8 		movq	%rax, -8(%rbp)
+GAS LISTING /tmp/ccdS8Ktk.s 			page 20
+
+
+ 511 0041 31C0     		xorl	%eax, %eax
+ 388:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( grp   != NULL );
+ 389:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( r     != NULL );
+ 390:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( s     != NULL );
+ 391:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( d     != NULL );
+ 392:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( f_rng != NULL );
+ 393:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( buf   != NULL || blen == 0 );
+ 394:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 395:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     return( ecdsa_sign_restartable( grp, r, s, d, buf, blen,
+ 512              		.loc 1 395 13
+ 513 0043 4C8B45C0 		movq	-64(%rbp), %r8
+ 514 0047 488B7DC8 		movq	-56(%rbp), %rdi
+ 515 004b 488B4DD0 		movq	-48(%rbp), %rcx
+ 516 004f 488B55D8 		movq	-40(%rbp), %rdx
+ 517 0053 488B75E0 		movq	-32(%rbp), %rsi
+ 518 0057 488B45E8 		movq	-24(%rbp), %rax
+ 519 005b 4883EC08 		subq	$8, %rsp
+ 520 005f 6A00     		pushq	$0
+ 521 0061 FF75B0   		pushq	-80(%rbp)
+ 522 0064 FF75B8   		pushq	-72(%rbp)
+ 523 0067 4D89C1   		movq	%r8, %r9
+ 524 006a 4989F8   		movq	%rdi, %r8
+ 525 006d 4889C7   		movq	%rax, %rdi
+ 526 0070 E8000000 		call	ecdsa_sign_restartable
+ 526      00
+ 527 0075 4883C420 		addq	$32, %rsp
+ 396:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                     f_rng, p_rng, NULL ) );
+ 397:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+ 528              		.loc 1 397 1
+ 529 0079 488B55F8 		movq	-8(%rbp), %rdx
+ 530 007d 64483314 		xorq	%fs:40, %rdx
+ 530      25280000 
+ 530      00
+ 531 0086 7405     		je	.L48
+ 532 0088 E8000000 		call	__stack_chk_fail@PLT
+ 532      00
+ 533              	.L48:
+ 534 008d C9       		leave
+ 535              	.LCFI8:
+ 536              		.cfi_def_cfa 7, 8
+ 537 008e C3       		ret
+ 538              		.cfi_endproc
+ 539              	.LFE8:
+ 541              		.section	.text.ecdsa_verify_restartable,"ax",@progbits
+ 543              	ecdsa_verify_restartable:
+ 544              	.LFB9:
+ 398:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #endif /* !MBEDTLS_ECDSA_SIGN_ALT */
+ 399:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 400:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if defined(MBEDTLS_ECDSA_DETERMINISTIC)
+ 401:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+ 402:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Deterministic signature wrapper
+ 403:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+ 404:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** static int ecdsa_sign_det_restartable( mbedtls_ecp_group *grp,
+ 405:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                     mbedtls_mpi *r, mbedtls_mpi *s,
+ 406:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                     const mbedtls_mpi *d, const unsigned char *buf, size_t blen,
+ 407:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                     mbedtls_md_type_t md_alg,
+ 408:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                     mbedtls_ecdsa_restart_ctx *rs_ctx )
+GAS LISTING /tmp/ccdS8Ktk.s 			page 21
+
+
+ 409:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+ 410:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     int ret;
+ 411:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_hmac_drbg_context rng_ctx;
+ 412:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_hmac_drbg_context *p_rng = &rng_ctx;
+ 413:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     unsigned char data[2 * MBEDTLS_ECP_MAX_BYTES];
+ 414:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     size_t grp_len = ( grp->nbits + 7 ) / 8;
+ 415:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     const mbedtls_md_info_t *md_info;
+ 416:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi h;
+ 417:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 418:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( ( md_info = mbedtls_md_info_from_type( md_alg ) ) == NULL )
+ 419:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         return( MBEDTLS_ERR_ECP_BAD_INPUT_DATA );
+ 420:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 421:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_init( &h );
+ 422:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_hmac_drbg_init( &rng_ctx );
+ 423:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 424:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_RS_ENTER( det );
+ 425:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 426:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if defined(MBEDTLS_ECP_RESTARTABLE)
+ 427:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( rs_ctx != NULL && rs_ctx->det != NULL )
+ 428:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     {
+ 429:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         /* redirect to our context */
+ 430:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         p_rng = &rs_ctx->det->rng_ctx;
+ 431:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 432:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         /* jump to current step */
+ 433:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         if( rs_ctx->det->state == ecdsa_det_sign )
+ 434:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****             goto sign;
+ 435:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     }
+ 436:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #endif /* MBEDTLS_ECP_RESTARTABLE */
+ 437:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 438:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     /* Use private key and message hash (reduced) to initialize HMAC_DRBG */
+ 439:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_write_binary( d, data, grp_len ) );
+ 440:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_MPI_CHK( derive_mpi( grp, &h, buf, blen ) );
+ 441:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_write_binary( &h, data + grp_len, grp_len ) );
+ 442:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_hmac_drbg_seed_buf( p_rng, md_info, data, 2 * grp_len );
+ 443:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 444:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if defined(MBEDTLS_ECP_RESTARTABLE)
+ 445:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( rs_ctx != NULL && rs_ctx->det != NULL )
+ 446:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         rs_ctx->det->state = ecdsa_det_sign;
+ 447:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 448:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** sign:
+ 449:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #endif
+ 450:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if defined(MBEDTLS_ECDSA_SIGN_ALT)
+ 451:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ret = mbedtls_ecdsa_sign( grp, r, s, d, buf, blen,
+ 452:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                               mbedtls_hmac_drbg_random, p_rng );
+ 453:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #else
+ 454:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ret = ecdsa_sign_restartable( grp, r, s, d, buf, blen,
+ 455:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                       mbedtls_hmac_drbg_random, p_rng, rs_ctx );
+ 456:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #endif /* MBEDTLS_ECDSA_SIGN_ALT */
+ 457:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 458:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** cleanup:
+ 459:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_hmac_drbg_free( &rng_ctx );
+ 460:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_free( &h );
+ 461:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 462:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_RS_LEAVE( det );
+ 463:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 464:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     return( ret );
+ 465:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+GAS LISTING /tmp/ccdS8Ktk.s 			page 22
+
+
+ 466:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 467:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+ 468:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Deterministic signature wrapper
+ 469:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+ 470:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** int mbedtls_ecdsa_sign_det( mbedtls_ecp_group *grp, mbedtls_mpi *r, mbedtls_mpi *s,
+ 471:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                     const mbedtls_mpi *d, const unsigned char *buf, size_t blen,
+ 472:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                     mbedtls_md_type_t md_alg )
+ 473:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+ 474:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( grp   != NULL );
+ 475:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( r     != NULL );
+ 476:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( s     != NULL );
+ 477:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( d     != NULL );
+ 478:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( buf   != NULL || blen == 0 );
+ 479:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 480:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     return( ecdsa_sign_det_restartable( grp, r, s, d, buf, blen, md_alg, NULL ) );
+ 481:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+ 482:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #endif /* MBEDTLS_ECDSA_DETERMINISTIC */
+ 483:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 484:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if !defined(MBEDTLS_ECDSA_VERIFY_ALT)
+ 485:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+ 486:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Verify ECDSA signature of hashed message (SEC1 4.1.4)
+ 487:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Obviously, compared to SEC1 4.1.3, we skip step 2 (hash message)
+ 488:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+ 489:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** static int ecdsa_verify_restartable( mbedtls_ecp_group *grp,
+ 490:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                      const unsigned char *buf, size_t blen,
+ 491:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                      const mbedtls_ecp_point *Q,
+ 492:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                      const mbedtls_mpi *r, const mbedtls_mpi *s,
+ 493:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                      mbedtls_ecdsa_restart_ctx *rs_ctx )
+ 494:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+ 545              		.loc 1 494 1
+ 546              		.cfi_startproc
+ 547 0000 F30F1EFA 		endbr64
+ 548 0004 55       		pushq	%rbp
+ 549              	.LCFI9:
+ 550              		.cfi_def_cfa_offset 16
+ 551              		.cfi_offset 6, -16
+ 552 0005 4889E5   		movq	%rsp, %rbp
+ 553              	.LCFI10:
+ 554              		.cfi_def_cfa_register 6
+ 555 0008 4881EC30 		subq	$304, %rsp
+ 555      010000
+ 556 000f 4889BD08 		movq	%rdi, -248(%rbp)
+ 556      FFFFFF
+ 557 0016 4889B500 		movq	%rsi, -256(%rbp)
+ 557      FFFFFF
+ 558 001d 488995F8 		movq	%rdx, -264(%rbp)
+ 558      FEFFFF
+ 559 0024 48898DF0 		movq	%rcx, -272(%rbp)
+ 559      FEFFFF
+ 560 002b 4C8985E8 		movq	%r8, -280(%rbp)
+ 560      FEFFFF
+ 561 0032 4C898DE0 		movq	%r9, -288(%rbp)
+ 561      FEFFFF
+ 562 0039 488B4510 		movq	16(%rbp), %rax
+ 563 003d 488985D8 		movq	%rax, -296(%rbp)
+ 563      FEFFFF
+ 564              		.loc 1 494 1
+GAS LISTING /tmp/ccdS8Ktk.s 			page 23
+
+
+ 565 0044 64488B04 		movq	%fs:40, %rax
+ 565      25280000 
+ 565      00
+ 566 004d 488945F8 		movq	%rax, -8(%rbp)
+ 567 0051 31C0     		xorl	%eax, %eax
+ 495:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     int ret;
+ 496:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi e, s_inv, u1, u2;
+ 497:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_ecp_point R;
+ 498:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi *pu1 = &u1, *pu2 = &u2;
+ 568              		.loc 1 498 18
+ 569 0053 488D8570 		leaq	-144(%rbp), %rax
+ 569      FFFFFF
+ 570 005a 48898520 		movq	%rax, -224(%rbp)
+ 570      FFFFFF
+ 571              		.loc 1 498 30
+ 572 0061 488D4590 		leaq	-112(%rbp), %rax
+ 573 0065 48898528 		movq	%rax, -216(%rbp)
+ 573      FFFFFF
+ 499:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 500:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_ecp_point_init( &R );
+ 574              		.loc 1 500 5
+ 575 006c 488D45B0 		leaq	-80(%rbp), %rax
+ 576 0070 4889C7   		movq	%rax, %rdi
+ 577 0073 E8000000 		call	mbedtls_ecp_point_init@PLT
+ 577      00
+ 501:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_init( &e ); mbedtls_mpi_init( &s_inv );
+ 578              		.loc 1 501 5
+ 579 0078 488D8530 		leaq	-208(%rbp), %rax
+ 579      FFFFFF
+ 580 007f 4889C7   		movq	%rax, %rdi
+ 581 0082 E8000000 		call	mbedtls_mpi_init@PLT
+ 581      00
+ 582              		.loc 1 501 29
+ 583 0087 488D8550 		leaq	-176(%rbp), %rax
+ 583      FFFFFF
+ 584 008e 4889C7   		movq	%rax, %rdi
+ 585 0091 E8000000 		call	mbedtls_mpi_init@PLT
+ 585      00
+ 502:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_init( &u1 ); mbedtls_mpi_init( &u2 );
+ 586              		.loc 1 502 5
+ 587 0096 488D8570 		leaq	-144(%rbp), %rax
+ 587      FFFFFF
+ 588 009d 4889C7   		movq	%rax, %rdi
+ 589 00a0 E8000000 		call	mbedtls_mpi_init@PLT
+ 589      00
+ 590              		.loc 1 502 30
+ 591 00a5 488D4590 		leaq	-112(%rbp), %rax
+ 592 00a9 4889C7   		movq	%rax, %rdi
+ 593 00ac E8000000 		call	mbedtls_mpi_init@PLT
+ 593      00
+ 503:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 504:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     /* Fail cleanly on curves such as Curve25519 that can't be used for ECDSA */
+ 505:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( grp->N.p == NULL )
+ 594              		.loc 1 505 15
+ 595 00b1 488B8508 		movq	-248(%rbp), %rax
+ 595      FFFFFF
+ 596 00b8 488B80A8 		movq	168(%rax), %rax
+GAS LISTING /tmp/ccdS8Ktk.s 			page 24
+
+
+ 596      000000
+ 597              		.loc 1 505 7
+ 598 00bf 4885C0   		testq	%rax, %rax
+ 599 00c2 750A     		jne	.L50
+ 506:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         return( MBEDTLS_ERR_ECP_BAD_INPUT_DATA );
+ 600              		.loc 1 506 15
+ 601 00c4 B880B0FF 		movl	$-20352, %eax
+ 601      FF
+ 602 00c9 E9FE0200 		jmp	.L64
+ 602      00
+ 603              	.L50:
+ 507:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 508:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_RS_ENTER( ver );
+ 509:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 510:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if defined(MBEDTLS_ECP_RESTARTABLE)
+ 511:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( rs_ctx != NULL && rs_ctx->ver != NULL )
+ 512:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     {
+ 513:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         /* redirect to our context */
+ 514:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         pu1 = &rs_ctx->ver->u1;
+ 515:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         pu2 = &rs_ctx->ver->u2;
+ 516:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 517:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         /* jump to current step */
+ 518:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         if( rs_ctx->ver->state == ecdsa_ver_muladd )
+ 519:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****             goto muladd;
+ 520:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     }
+ 521:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #endif /* MBEDTLS_ECP_RESTARTABLE */
+ 522:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 523:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     /*
+ 524:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****      * Step 1: make sure r and s are in range 1..n-1
+ 525:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****      */
+ 526:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( mbedtls_mpi_cmp_int( r, 1 ) < 0 || mbedtls_mpi_cmp_mpi( r, &grp->N ) >= 0 ||
+ 604              		.loc 1 526 9
+ 605 00ce 488B85E8 		movq	-280(%rbp), %rax
+ 605      FEFFFF
+ 606 00d5 BE010000 		movl	$1, %esi
+ 606      00
+ 607 00da 4889C7   		movq	%rax, %rdi
+ 608 00dd E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 608      00
+ 609              		.loc 1 526 7
+ 610 00e2 85C0     		testl	%eax, %eax
+ 611 00e4 7860     		js	.L52
+ 612              		.loc 1 526 68 discriminator 1
+ 613 00e6 488B8508 		movq	-248(%rbp), %rax
+ 613      FFFFFF
+ 614 00ed 488D9098 		leaq	152(%rax), %rdx
+ 614      000000
+ 615              		.loc 1 526 44 discriminator 1
+ 616 00f4 488B85E8 		movq	-280(%rbp), %rax
+ 616      FEFFFF
+ 617 00fb 4889D6   		movq	%rdx, %rsi
+ 618 00fe 4889C7   		movq	%rax, %rdi
+ 619 0101 E8000000 		call	mbedtls_mpi_cmp_mpi@PLT
+ 619      00
+ 620              		.loc 1 526 41 discriminator 1
+ 621 0106 85C0     		testl	%eax, %eax
+ 622 0108 793C     		jns	.L52
+GAS LISTING /tmp/ccdS8Ktk.s 			page 25
+
+
+ 527:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         mbedtls_mpi_cmp_int( s, 1 ) < 0 || mbedtls_mpi_cmp_mpi( s, &grp->N ) >= 0 )
+ 623              		.loc 1 527 9 discriminator 2
+ 624 010a 488B85E0 		movq	-288(%rbp), %rax
+ 624      FEFFFF
+ 625 0111 BE010000 		movl	$1, %esi
+ 625      00
+ 626 0116 4889C7   		movq	%rax, %rdi
+ 627 0119 E8000000 		call	mbedtls_mpi_cmp_int@PLT
+ 627      00
+ 526:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         mbedtls_mpi_cmp_int( s, 1 ) < 0 || mbedtls_mpi_cmp_mpi( s, &grp->N ) >= 0 )
+ 628              		.loc 1 526 83 discriminator 2
+ 629 011e 85C0     		testl	%eax, %eax
+ 630 0120 7824     		js	.L52
+ 631              		.loc 1 527 68
+ 632 0122 488B8508 		movq	-248(%rbp), %rax
+ 632      FFFFFF
+ 633 0129 488D9098 		leaq	152(%rax), %rdx
+ 633      000000
+ 634              		.loc 1 527 44
+ 635 0130 488B85E0 		movq	-288(%rbp), %rax
+ 635      FEFFFF
+ 636 0137 4889D6   		movq	%rdx, %rsi
+ 637 013a 4889C7   		movq	%rax, %rdi
+ 638 013d E8000000 		call	mbedtls_mpi_cmp_mpi@PLT
+ 638      00
+ 639              		.loc 1 527 41
+ 640 0142 85C0     		testl	%eax, %eax
+ 641 0144 780F     		js	.L53
+ 642              	.L52:
+ 528:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     {
+ 529:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ret = MBEDTLS_ERR_ECP_VERIFY_FAILED;
+ 643              		.loc 1 529 13
+ 644 0146 C7851CFF 		movl	$-19968, -228(%rbp)
+ 644      FFFF00B2 
+ 644      FFFF
+ 530:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         goto cleanup;
+ 645              		.loc 1 530 9
+ 646 0150 E92C0200 		jmp	.L54
+ 646      00
+ 647              	.L53:
+ 531:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     }
+ 532:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 533:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     /*
+ 534:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****      * Step 3: derive MPI from hashed message
+ 535:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****      */
+ 536:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_MPI_CHK( derive_mpi( grp, &e, buf, blen ) );
+ 648              		.loc 1 536 5
+ 649 0155 488B8DF8 		movq	-264(%rbp), %rcx
+ 649      FEFFFF
+ 650 015c 488B9500 		movq	-256(%rbp), %rdx
+ 650      FFFFFF
+ 651 0163 488DB530 		leaq	-208(%rbp), %rsi
+ 651      FFFFFF
+ 652 016a 488B8508 		movq	-248(%rbp), %rax
+ 652      FFFFFF
+ 653 0171 4889C7   		movq	%rax, %rdi
+ 654 0174 E8000000 		call	derive_mpi
+GAS LISTING /tmp/ccdS8Ktk.s 			page 26
+
+
+ 654      00
+ 655 0179 89851CFF 		movl	%eax, -228(%rbp)
+ 655      FFFF
+ 656 017f 83BD1CFF 		cmpl	$0, -228(%rbp)
+ 656      FFFF00
+ 657 0186 0F85DC01 		jne	.L66
+ 657      0000
+ 537:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 538:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     /*
+ 539:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****      * Step 4: u1 = e / s mod n, u2 = r / s mod n
+ 540:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****      */
+ 541:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_BUDGET( MBEDTLS_ECP_OPS_CHK + MBEDTLS_ECP_OPS_INV + 2 );
+ 542:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 543:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_inv_mod( &s_inv, s, &grp->N ) );
+ 658              		.loc 1 543 5
+ 659 018c 488B8508 		movq	-248(%rbp), %rax
+ 659      FFFFFF
+ 660 0193 488D9098 		leaq	152(%rax), %rdx
+ 660      000000
+ 661 019a 488B8DE0 		movq	-288(%rbp), %rcx
+ 661      FEFFFF
+ 662 01a1 488D8550 		leaq	-176(%rbp), %rax
+ 662      FFFFFF
+ 663 01a8 4889CE   		movq	%rcx, %rsi
+ 664 01ab 4889C7   		movq	%rax, %rdi
+ 665 01ae E8000000 		call	mbedtls_mpi_inv_mod@PLT
+ 665      00
+ 666 01b3 89851CFF 		movl	%eax, -228(%rbp)
+ 666      FFFF
+ 667 01b9 83BD1CFF 		cmpl	$0, -228(%rbp)
+ 667      FFFF00
+ 668 01c0 0F85A501 		jne	.L67
+ 668      0000
+ 544:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 545:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( pu1, &e, &s_inv ) );
+ 669              		.loc 1 545 5
+ 670 01c6 488D9550 		leaq	-176(%rbp), %rdx
+ 670      FFFFFF
+ 671 01cd 488D8D30 		leaq	-208(%rbp), %rcx
+ 671      FFFFFF
+ 672 01d4 488B8520 		movq	-224(%rbp), %rax
+ 672      FFFFFF
+ 673 01db 4889CE   		movq	%rcx, %rsi
+ 674 01de 4889C7   		movq	%rax, %rdi
+ 675 01e1 E8000000 		call	mbedtls_mpi_mul_mpi@PLT
+ 675      00
+ 676 01e6 89851CFF 		movl	%eax, -228(%rbp)
+ 676      FFFF
+ 677 01ec 83BD1CFF 		cmpl	$0, -228(%rbp)
+ 677      FFFF00
+ 678 01f3 0F857501 		jne	.L68
+ 678      0000
+ 546:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( pu1, pu1, &grp->N ) );
+ 679              		.loc 1 546 5
+ 680 01f9 488B8508 		movq	-248(%rbp), %rax
+ 680      FFFFFF
+ 681 0200 488D9098 		leaq	152(%rax), %rdx
+GAS LISTING /tmp/ccdS8Ktk.s 			page 27
+
+
+ 681      000000
+ 682 0207 488B8D20 		movq	-224(%rbp), %rcx
+ 682      FFFFFF
+ 683 020e 488B8520 		movq	-224(%rbp), %rax
+ 683      FFFFFF
+ 684 0215 4889CE   		movq	%rcx, %rsi
+ 685 0218 4889C7   		movq	%rax, %rdi
+ 686 021b E8000000 		call	mbedtls_mpi_mod_mpi@PLT
+ 686      00
+ 687 0220 89851CFF 		movl	%eax, -228(%rbp)
+ 687      FFFF
+ 688 0226 83BD1CFF 		cmpl	$0, -228(%rbp)
+ 688      FFFF00
+ 689 022d 0F853E01 		jne	.L69
+ 689      0000
+ 547:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 548:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( pu2, r, &s_inv ) );
+ 690              		.loc 1 548 5
+ 691 0233 488D9550 		leaq	-176(%rbp), %rdx
+ 691      FFFFFF
+ 692 023a 488B8DE8 		movq	-280(%rbp), %rcx
+ 692      FEFFFF
+ 693 0241 488B8528 		movq	-216(%rbp), %rax
+ 693      FFFFFF
+ 694 0248 4889CE   		movq	%rcx, %rsi
+ 695 024b 4889C7   		movq	%rax, %rdi
+ 696 024e E8000000 		call	mbedtls_mpi_mul_mpi@PLT
+ 696      00
+ 697 0253 89851CFF 		movl	%eax, -228(%rbp)
+ 697      FFFF
+ 698 0259 83BD1CFF 		cmpl	$0, -228(%rbp)
+ 698      FFFF00
+ 699 0260 0F850E01 		jne	.L70
+ 699      0000
+ 549:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( pu2, pu2, &grp->N ) );
+ 700              		.loc 1 549 5
+ 701 0266 488B8508 		movq	-248(%rbp), %rax
+ 701      FFFFFF
+ 702 026d 488D9098 		leaq	152(%rax), %rdx
+ 702      000000
+ 703 0274 488B8D28 		movq	-216(%rbp), %rcx
+ 703      FFFFFF
+ 704 027b 488B8528 		movq	-216(%rbp), %rax
+ 704      FFFFFF
+ 705 0282 4889CE   		movq	%rcx, %rsi
+ 706 0285 4889C7   		movq	%rax, %rdi
+ 707 0288 E8000000 		call	mbedtls_mpi_mod_mpi@PLT
+ 707      00
+ 708 028d 89851CFF 		movl	%eax, -228(%rbp)
+ 708      FFFF
+ 709 0293 83BD1CFF 		cmpl	$0, -228(%rbp)
+ 709      FFFF00
+ 710 029a 0F85D700 		jne	.L71
+ 710      0000
+ 550:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 551:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if defined(MBEDTLS_ECP_RESTARTABLE)
+ 552:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( rs_ctx != NULL && rs_ctx->ver != NULL )
+GAS LISTING /tmp/ccdS8Ktk.s 			page 28
+
+
+ 553:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         rs_ctx->ver->state = ecdsa_ver_muladd;
+ 554:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 555:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** muladd:
+ 556:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #endif
+ 557:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     /*
+ 558:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****      * Step 5: R = u1 G + u2 Q
+ 559:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****      */
+ 560:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_MPI_CHK( mbedtls_ecp_muladd_restartable( grp,
+ 711              		.loc 1 560 5
+ 712 02a0 488B8508 		movq	-248(%rbp), %rax
+ 712      FFFFFF
+ 713 02a7 488D4850 		leaq	80(%rax), %rcx
+ 714 02ab 4C8B85F0 		movq	-272(%rbp), %r8
+ 714      FEFFFF
+ 715 02b2 488BBD28 		movq	-216(%rbp), %rdi
+ 715      FFFFFF
+ 716 02b9 488B9520 		movq	-224(%rbp), %rdx
+ 716      FFFFFF
+ 717 02c0 488D75B0 		leaq	-80(%rbp), %rsi
+ 718 02c4 488B8508 		movq	-248(%rbp), %rax
+ 718      FFFFFF
+ 719 02cb 4883EC08 		subq	$8, %rsp
+ 720 02cf 6A00     		pushq	$0
+ 721 02d1 4D89C1   		movq	%r8, %r9
+ 722 02d4 4989F8   		movq	%rdi, %r8
+ 723 02d7 4889C7   		movq	%rax, %rdi
+ 724 02da E8000000 		call	mbedtls_ecp_muladd_restartable@PLT
+ 724      00
+ 725 02df 4883C410 		addq	$16, %rsp
+ 726 02e3 89851CFF 		movl	%eax, -228(%rbp)
+ 726      FFFF
+ 727 02e9 83BD1CFF 		cmpl	$0, -228(%rbp)
+ 727      FFFF00
+ 728 02f0 0F858400 		jne	.L72
+ 728      0000
+ 561:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                      &R, pu1, &grp->G, pu2, Q, ECDSA_RS_ECP ) );
+ 562:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 563:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( mbedtls_ecp_is_zero( &R ) )
+ 729              		.loc 1 563 9
+ 730 02f6 488D45B0 		leaq	-80(%rbp), %rax
+ 731 02fa 4889C7   		movq	%rax, %rdi
+ 732 02fd E8000000 		call	mbedtls_ecp_is_zero@PLT
+ 732      00
+ 733              		.loc 1 563 7
+ 734 0302 85C0     		testl	%eax, %eax
+ 735 0304 740C     		je	.L62
+ 564:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     {
+ 565:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ret = MBEDTLS_ERR_ECP_VERIFY_FAILED;
+ 736              		.loc 1 565 13
+ 737 0306 C7851CFF 		movl	$-19968, -228(%rbp)
+ 737      FFFF00B2 
+ 737      FFFF
+ 566:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         goto cleanup;
+ 738              		.loc 1 566 9
+ 739 0310 EB6F     		jmp	.L54
+ 740              	.L62:
+ 567:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     }
+GAS LISTING /tmp/ccdS8Ktk.s 			page 29
+
+
+ 568:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 569:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     /*
+ 570:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****      * Step 6: convert xR to an integer (no-op)
+ 571:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****      * Step 7: reduce xR mod n (gives v)
+ 572:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****      */
+ 573:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( &R.X, &R.X, &grp->N ) );
+ 741              		.loc 1 573 5
+ 742 0312 488B8508 		movq	-248(%rbp), %rax
+ 742      FFFFFF
+ 743 0319 488D9098 		leaq	152(%rax), %rdx
+ 743      000000
+ 744 0320 488D4DB0 		leaq	-80(%rbp), %rcx
+ 745 0324 488D45B0 		leaq	-80(%rbp), %rax
+ 746 0328 4889CE   		movq	%rcx, %rsi
+ 747 032b 4889C7   		movq	%rax, %rdi
+ 748 032e E8000000 		call	mbedtls_mpi_mod_mpi@PLT
+ 748      00
+ 749 0333 89851CFF 		movl	%eax, -228(%rbp)
+ 749      FFFF
+ 750 0339 83BD1CFF 		cmpl	$0, -228(%rbp)
+ 750      FFFF00
+ 751 0340 753B     		jne	.L73
+ 574:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 575:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     /*
+ 576:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****      * Step 8: check if v (that is, R.X) is equal to r
+ 577:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****      */
+ 578:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( mbedtls_mpi_cmp_mpi( &R.X, r ) != 0 )
+ 752              		.loc 1 578 9
+ 753 0342 488B95E8 		movq	-280(%rbp), %rdx
+ 753      FEFFFF
+ 754 0349 488D45B0 		leaq	-80(%rbp), %rax
+ 755 034d 4889D6   		movq	%rdx, %rsi
+ 756 0350 4889C7   		movq	%rax, %rdi
+ 757 0353 E8000000 		call	mbedtls_mpi_cmp_mpi@PLT
+ 757      00
+ 758              		.loc 1 578 7
+ 759 0358 85C0     		testl	%eax, %eax
+ 760 035a 7424     		je	.L74
+ 579:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     {
+ 580:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ret = MBEDTLS_ERR_ECP_VERIFY_FAILED;
+ 761              		.loc 1 580 13
+ 762 035c C7851CFF 		movl	$-19968, -228(%rbp)
+ 762      FFFF00B2 
+ 762      FFFF
+ 581:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         goto cleanup;
+ 763              		.loc 1 581 9
+ 764 0366 EB19     		jmp	.L54
+ 765              	.L66:
+ 536:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 766              		.loc 1 536 5
+ 767 0368 90       		nop
+ 768 0369 EB16     		jmp	.L54
+ 769              	.L67:
+ 543:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 770              		.loc 1 543 5
+ 771 036b 90       		nop
+ 772 036c EB13     		jmp	.L54
+GAS LISTING /tmp/ccdS8Ktk.s 			page 30
+
+
+ 773              	.L68:
+ 545:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( pu1, pu1, &grp->N ) );
+ 774              		.loc 1 545 5
+ 775 036e 90       		nop
+ 776 036f EB10     		jmp	.L54
+ 777              	.L69:
+ 546:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 778              		.loc 1 546 5
+ 779 0371 90       		nop
+ 780 0372 EB0D     		jmp	.L54
+ 781              	.L70:
+ 548:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( pu2, pu2, &grp->N ) );
+ 782              		.loc 1 548 5
+ 783 0374 90       		nop
+ 784 0375 EB0A     		jmp	.L54
+ 785              	.L71:
+ 549:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 786              		.loc 1 549 5
+ 787 0377 90       		nop
+ 788 0378 EB07     		jmp	.L54
+ 789              	.L72:
+ 560:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                      &R, pu1, &grp->G, pu2, Q, ECDSA_RS_ECP ) );
+ 790              		.loc 1 560 5
+ 791 037a 90       		nop
+ 792 037b EB04     		jmp	.L54
+ 793              	.L73:
+ 573:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 794              		.loc 1 573 5
+ 795 037d 90       		nop
+ 796 037e EB01     		jmp	.L54
+ 797              	.L74:
+ 582:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     }
+ 583:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 584:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** cleanup:
+ 798              		.loc 1 584 1
+ 799 0380 90       		nop
+ 800              	.L54:
+ 585:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_ecp_point_free( &R );
+ 801              		.loc 1 585 5
+ 802 0381 488D45B0 		leaq	-80(%rbp), %rax
+ 803 0385 4889C7   		movq	%rax, %rdi
+ 804 0388 E8000000 		call	mbedtls_ecp_point_free@PLT
+ 804      00
+ 586:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_free( &e ); mbedtls_mpi_free( &s_inv );
+ 805              		.loc 1 586 5
+ 806 038d 488D8530 		leaq	-208(%rbp), %rax
+ 806      FFFFFF
+ 807 0394 4889C7   		movq	%rax, %rdi
+ 808 0397 E8000000 		call	mbedtls_mpi_free@PLT
+ 808      00
+ 809              		.loc 1 586 29
+ 810 039c 488D8550 		leaq	-176(%rbp), %rax
+ 810      FFFFFF
+ 811 03a3 4889C7   		movq	%rax, %rdi
+ 812 03a6 E8000000 		call	mbedtls_mpi_free@PLT
+ 812      00
+ 587:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_free( &u1 ); mbedtls_mpi_free( &u2 );
+GAS LISTING /tmp/ccdS8Ktk.s 			page 31
+
+
+ 813              		.loc 1 587 5
+ 814 03ab 488D8570 		leaq	-144(%rbp), %rax
+ 814      FFFFFF
+ 815 03b2 4889C7   		movq	%rax, %rdi
+ 816 03b5 E8000000 		call	mbedtls_mpi_free@PLT
+ 816      00
+ 817              		.loc 1 587 30
+ 818 03ba 488D4590 		leaq	-112(%rbp), %rax
+ 819 03be 4889C7   		movq	%rax, %rdi
+ 820 03c1 E8000000 		call	mbedtls_mpi_free@PLT
+ 820      00
+ 588:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 589:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_RS_LEAVE( ver );
+ 590:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 591:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     return( ret );
+ 821              		.loc 1 591 11
+ 822 03c6 8B851CFF 		movl	-228(%rbp), %eax
+ 822      FFFF
+ 823              	.L64:
+ 592:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+ 824              		.loc 1 592 1 discriminator 1
+ 825 03cc 488B75F8 		movq	-8(%rbp), %rsi
+ 826 03d0 64483334 		xorq	%fs:40, %rsi
+ 826      25280000 
+ 826      00
+ 827 03d9 7405     		je	.L65
+ 828              		.loc 1 592 1 is_stmt 0
+ 829 03db E8000000 		call	__stack_chk_fail@PLT
+ 829      00
+ 830              	.L65:
+ 831 03e0 C9       		leave
+ 832              	.LCFI11:
+ 833              		.cfi_def_cfa 7, 8
+ 834 03e1 C3       		ret
+ 835              		.cfi_endproc
+ 836              	.LFE9:
+ 838              		.section	.text.mbedtls_ecdsa_verify,"ax",@progbits
+ 839              		.globl	mbedtls_ecdsa_verify
+ 841              	mbedtls_ecdsa_verify:
+ 842              	.LFB10:
+ 593:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 594:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+ 595:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Verify ECDSA signature of hashed message
+ 596:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+ 597:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** int mbedtls_ecdsa_verify( mbedtls_ecp_group *grp,
+ 598:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                           const unsigned char *buf, size_t blen,
+ 599:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                           const mbedtls_ecp_point *Q,
+ 600:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                           const mbedtls_mpi *r,
+ 601:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                           const mbedtls_mpi *s)
+ 602:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+ 843              		.loc 1 602 1 is_stmt 1
+ 844              		.cfi_startproc
+ 845 0000 F30F1EFA 		endbr64
+ 846 0004 55       		pushq	%rbp
+ 847              	.LCFI12:
+ 848              		.cfi_def_cfa_offset 16
+ 849              		.cfi_offset 6, -16
+GAS LISTING /tmp/ccdS8Ktk.s 			page 32
+
+
+ 850 0005 4889E5   		movq	%rsp, %rbp
+ 851              	.LCFI13:
+ 852              		.cfi_def_cfa_register 6
+ 853 0008 4883EC40 		subq	$64, %rsp
+ 854 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 855 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 856 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 857 0018 48894DD0 		movq	%rcx, -48(%rbp)
+ 858 001c 4C8945C8 		movq	%r8, -56(%rbp)
+ 859 0020 4C894DC0 		movq	%r9, -64(%rbp)
+ 860              		.loc 1 602 1
+ 861 0024 64488B04 		movq	%fs:40, %rax
+ 861      25280000 
+ 861      00
+ 862 002d 488945F8 		movq	%rax, -8(%rbp)
+ 863 0031 31C0     		xorl	%eax, %eax
+ 603:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( grp != NULL );
+ 604:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( Q   != NULL );
+ 605:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( r   != NULL );
+ 606:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( s   != NULL );
+ 607:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( buf != NULL || blen == 0 );
+ 608:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 609:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     return( ecdsa_verify_restartable( grp, buf, blen, Q, r, s, NULL ) );
+ 864              		.loc 1 609 13
+ 865 0033 4C8B45C0 		movq	-64(%rbp), %r8
+ 866 0037 488B7DC8 		movq	-56(%rbp), %rdi
+ 867 003b 488B4DD0 		movq	-48(%rbp), %rcx
+ 868 003f 488B55D8 		movq	-40(%rbp), %rdx
+ 869 0043 488B75E0 		movq	-32(%rbp), %rsi
+ 870 0047 488B45E8 		movq	-24(%rbp), %rax
+ 871 004b 4883EC08 		subq	$8, %rsp
+ 872 004f 6A00     		pushq	$0
+ 873 0051 4D89C1   		movq	%r8, %r9
+ 874 0054 4989F8   		movq	%rdi, %r8
+ 875 0057 4889C7   		movq	%rax, %rdi
+ 876 005a E8000000 		call	ecdsa_verify_restartable
+ 876      00
+ 877 005f 4883C410 		addq	$16, %rsp
+ 610:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+ 878              		.loc 1 610 1
+ 879 0063 488B55F8 		movq	-8(%rbp), %rdx
+ 880 0067 64483314 		xorq	%fs:40, %rdx
+ 880      25280000 
+ 880      00
+ 881 0070 7405     		je	.L77
+ 882 0072 E8000000 		call	__stack_chk_fail@PLT
+ 882      00
+ 883              	.L77:
+ 884 0077 C9       		leave
+ 885              	.LCFI14:
+ 886              		.cfi_def_cfa 7, 8
+ 887 0078 C3       		ret
+ 888              		.cfi_endproc
+ 889              	.LFE10:
+ 891              		.section	.text.ecdsa_signature_to_asn1,"ax",@progbits
+ 893              	ecdsa_signature_to_asn1:
+ 894              	.LFB11:
+GAS LISTING /tmp/ccdS8Ktk.s 			page 33
+
+
+ 611:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #endif /* !MBEDTLS_ECDSA_VERIFY_ALT */
+ 612:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 613:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+ 614:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Convert a signature (given by context) to ASN.1
+ 615:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+ 616:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** static int ecdsa_signature_to_asn1( const mbedtls_mpi *r, const mbedtls_mpi *s,
+ 617:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                     unsigned char *sig, size_t *slen )
+ 618:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+ 895              		.loc 1 618 1
+ 896              		.cfi_startproc
+ 897 0000 F30F1EFA 		endbr64
+ 898 0004 55       		pushq	%rbp
+ 899              	.LCFI15:
+ 900              		.cfi_def_cfa_offset 16
+ 901              		.cfi_offset 6, -16
+ 902 0005 4889E5   		movq	%rsp, %rbp
+ 903              	.LCFI16:
+ 904              		.cfi_def_cfa_register 6
+ 905 0008 4881ECE0 		subq	$224, %rsp
+ 905      000000
+ 906 000f 4889BD38 		movq	%rdi, -200(%rbp)
+ 906      FFFFFF
+ 907 0016 4889B530 		movq	%rsi, -208(%rbp)
+ 907      FFFFFF
+ 908 001d 48899528 		movq	%rdx, -216(%rbp)
+ 908      FFFFFF
+ 909 0024 48898D20 		movq	%rcx, -224(%rbp)
+ 909      FFFFFF
+ 910              		.loc 1 618 1
+ 911 002b 64488B04 		movq	%fs:40, %rax
+ 911      25280000 
+ 911      00
+ 912 0034 488945F8 		movq	%rax, -8(%rbp)
+ 913 0038 31C0     		xorl	%eax, %eax
+ 619:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     int ret;
+ 620:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     unsigned char buf[MBEDTLS_ECDSA_MAX_LEN];
+ 621:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     unsigned char *p = buf + sizeof( buf );
+ 914              		.loc 1 621 28
+ 915 003a 488D8560 		leaq	-160(%rbp), %rax
+ 915      FFFFFF
+ 916 0041 48058D00 		addq	$141, %rax
+ 916      0000
+ 917              		.loc 1 621 20
+ 918 0047 48898550 		movq	%rax, -176(%rbp)
+ 918      FFFFFF
+ 622:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     size_t len = 0;
+ 919              		.loc 1 622 12
+ 920 004e 48C78558 		movq	$0, -168(%rbp)
+ 920      FFFFFF00 
+ 920      000000
+ 623:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 624:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_mpi( &p, buf, s ) );
+ 921              		.loc 1 624 5
+ 922 0059 488B9530 		movq	-208(%rbp), %rdx
+ 922      FFFFFF
+ 923 0060 488D8D60 		leaq	-160(%rbp), %rcx
+ 923      FFFFFF
+GAS LISTING /tmp/ccdS8Ktk.s 			page 34
+
+
+ 924 0067 488D8550 		leaq	-176(%rbp), %rax
+ 924      FFFFFF
+ 925 006e 4889CE   		movq	%rcx, %rsi
+ 926 0071 4889C7   		movq	%rax, %rdi
+ 927 0074 E8000000 		call	mbedtls_asn1_write_mpi@PLT
+ 927      00
+ 928 0079 89854CFF 		movl	%eax, -180(%rbp)
+ 928      FFFF
+ 929 007f 83BD4CFF 		cmpl	$0, -180(%rbp)
+ 929      FFFF00
+ 930 0086 790B     		jns	.L79
+ 931              		.loc 1 624 5 is_stmt 0 discriminator 1
+ 932 0088 8B854CFF 		movl	-180(%rbp), %eax
+ 932      FFFF
+ 933 008e E91B0100 		jmp	.L84
+ 933      00
+ 934              	.L79:
+ 935              		.loc 1 624 5 discriminator 2
+ 936 0093 8B854CFF 		movl	-180(%rbp), %eax
+ 936      FFFF
+ 937 0099 4898     		cltq
+ 938 009b 48018558 		addq	%rax, -168(%rbp)
+ 938      FFFFFF
+ 625:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_mpi( &p, buf, r ) );
+ 939              		.loc 1 625 5 is_stmt 1 discriminator 2
+ 940 00a2 488B9538 		movq	-200(%rbp), %rdx
+ 940      FFFFFF
+ 941 00a9 488D8D60 		leaq	-160(%rbp), %rcx
+ 941      FFFFFF
+ 942 00b0 488D8550 		leaq	-176(%rbp), %rax
+ 942      FFFFFF
+ 943 00b7 4889CE   		movq	%rcx, %rsi
+ 944 00ba 4889C7   		movq	%rax, %rdi
+ 945 00bd E8000000 		call	mbedtls_asn1_write_mpi@PLT
+ 945      00
+ 946 00c2 89854CFF 		movl	%eax, -180(%rbp)
+ 946      FFFF
+ 947 00c8 83BD4CFF 		cmpl	$0, -180(%rbp)
+ 947      FFFF00
+ 948 00cf 790B     		jns	.L81
+ 949              		.loc 1 625 5 is_stmt 0 discriminator 1
+ 950 00d1 8B854CFF 		movl	-180(%rbp), %eax
+ 950      FFFF
+ 951 00d7 E9D20000 		jmp	.L84
+ 951      00
+ 952              	.L81:
+ 953              		.loc 1 625 5 discriminator 2
+ 954 00dc 8B854CFF 		movl	-180(%rbp), %eax
+ 954      FFFF
+ 955 00e2 4898     		cltq
+ 956 00e4 48018558 		addq	%rax, -168(%rbp)
+ 956      FFFFFF
+ 626:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 627:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( &p, buf, len ) );
+ 957              		.loc 1 627 5 is_stmt 1 discriminator 2
+ 958 00eb 488B9558 		movq	-168(%rbp), %rdx
+ 958      FFFFFF
+GAS LISTING /tmp/ccdS8Ktk.s 			page 35
+
+
+ 959 00f2 488D8D60 		leaq	-160(%rbp), %rcx
+ 959      FFFFFF
+ 960 00f9 488D8550 		leaq	-176(%rbp), %rax
+ 960      FFFFFF
+ 961 0100 4889CE   		movq	%rcx, %rsi
+ 962 0103 4889C7   		movq	%rax, %rdi
+ 963 0106 E8000000 		call	mbedtls_asn1_write_len@PLT
+ 963      00
+ 964 010b 89854CFF 		movl	%eax, -180(%rbp)
+ 964      FFFF
+ 965 0111 83BD4CFF 		cmpl	$0, -180(%rbp)
+ 965      FFFF00
+ 966 0118 790B     		jns	.L82
+ 967              		.loc 1 627 5 is_stmt 0 discriminator 1
+ 968 011a 8B854CFF 		movl	-180(%rbp), %eax
+ 968      FFFF
+ 969 0120 E9890000 		jmp	.L84
+ 969      00
+ 970              	.L82:
+ 971              		.loc 1 627 5 discriminator 2
+ 972 0125 8B854CFF 		movl	-180(%rbp), %eax
+ 972      FFFF
+ 973 012b 4898     		cltq
+ 974 012d 48018558 		addq	%rax, -168(%rbp)
+ 974      FFFFFF
+ 628:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( &p, buf,
+ 975              		.loc 1 628 5 is_stmt 1 discriminator 2
+ 976 0134 488D8D60 		leaq	-160(%rbp), %rcx
+ 976      FFFFFF
+ 977 013b 488D8550 		leaq	-176(%rbp), %rax
+ 977      FFFFFF
+ 978 0142 BA300000 		movl	$48, %edx
+ 978      00
+ 979 0147 4889CE   		movq	%rcx, %rsi
+ 980 014a 4889C7   		movq	%rax, %rdi
+ 981 014d E8000000 		call	mbedtls_asn1_write_tag@PLT
+ 981      00
+ 982 0152 89854CFF 		movl	%eax, -180(%rbp)
+ 982      FFFF
+ 983 0158 83BD4CFF 		cmpl	$0, -180(%rbp)
+ 983      FFFF00
+ 984 015f 7908     		jns	.L83
+ 985              		.loc 1 628 5 is_stmt 0 discriminator 1
+ 986 0161 8B854CFF 		movl	-180(%rbp), %eax
+ 986      FFFF
+ 987 0167 EB45     		jmp	.L84
+ 988              	.L83:
+ 989              		.loc 1 628 5 discriminator 2
+ 990 0169 8B854CFF 		movl	-180(%rbp), %eax
+ 990      FFFF
+ 991 016f 4898     		cltq
+ 992 0171 48018558 		addq	%rax, -168(%rbp)
+ 992      FFFFFF
+ 629:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                        MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE ) );
+ 630:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 631:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     memcpy( sig, p, len );
+ 993              		.loc 1 631 5 is_stmt 1 discriminator 2
+GAS LISTING /tmp/ccdS8Ktk.s 			page 36
+
+
+ 994 0178 488B8D50 		movq	-176(%rbp), %rcx
+ 994      FFFFFF
+ 995 017f 488B9558 		movq	-168(%rbp), %rdx
+ 995      FFFFFF
+ 996 0186 488B8528 		movq	-216(%rbp), %rax
+ 996      FFFFFF
+ 997 018d 4889CE   		movq	%rcx, %rsi
+ 998 0190 4889C7   		movq	%rax, %rdi
+ 999 0193 E8000000 		call	memcpy@PLT
+ 999      00
+ 632:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     *slen = len;
+ 1000              		.loc 1 632 11 discriminator 2
+ 1001 0198 488B8520 		movq	-224(%rbp), %rax
+ 1001      FFFFFF
+ 1002 019f 488B9558 		movq	-168(%rbp), %rdx
+ 1002      FFFFFF
+ 1003 01a6 488910   		movq	%rdx, (%rax)
+ 633:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 634:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     return( 0 );
+ 1004              		.loc 1 634 11 discriminator 2
+ 1005 01a9 B8000000 		movl	$0, %eax
+ 1005      00
+ 1006              	.L84:
+ 635:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+ 1007              		.loc 1 635 1 discriminator 1
+ 1008 01ae 488B75F8 		movq	-8(%rbp), %rsi
+ 1009 01b2 64483334 		xorq	%fs:40, %rsi
+ 1009      25280000 
+ 1009      00
+ 1010 01bb 7405     		je	.L85
+ 1011              		.loc 1 635 1 is_stmt 0
+ 1012 01bd E8000000 		call	__stack_chk_fail@PLT
+ 1012      00
+ 1013              	.L85:
+ 1014 01c2 C9       		leave
+ 1015              	.LCFI17:
+ 1016              		.cfi_def_cfa 7, 8
+ 1017 01c3 C3       		ret
+ 1018              		.cfi_endproc
+ 1019              	.LFE11:
+ 1021              		.section	.text.mbedtls_ecdsa_write_signature_restartable,"ax",@progbits
+ 1022              		.globl	mbedtls_ecdsa_write_signature_restartable
+ 1024              	mbedtls_ecdsa_write_signature_restartable:
+ 1025              	.LFB12:
+ 636:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 637:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+ 638:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Compute and write signature
+ 639:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+ 640:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** int mbedtls_ecdsa_write_signature_restartable( mbedtls_ecdsa_context *ctx,
+ 641:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                            mbedtls_md_type_t md_alg,
+ 642:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                            const unsigned char *hash, size_t hlen,
+ 643:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                            unsigned char *sig, size_t *slen,
+ 644:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                            int (*f_rng)(void *, unsigned char *, size_t),
+ 645:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                            void *p_rng,
+ 646:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                            mbedtls_ecdsa_restart_ctx *rs_ctx )
+ 647:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+ 1026              		.loc 1 647 1 is_stmt 1
+GAS LISTING /tmp/ccdS8Ktk.s 			page 37
+
+
+ 1027              		.cfi_startproc
+ 1028 0000 F30F1EFA 		endbr64
+ 1029 0004 55       		pushq	%rbp
+ 1030              	.LCFI18:
+ 1031              		.cfi_def_cfa_offset 16
+ 1032              		.cfi_offset 6, -16
+ 1033 0005 4889E5   		movq	%rsp, %rbp
+ 1034              	.LCFI19:
+ 1035              		.cfi_def_cfa_register 6
+ 1036 0008 4881ECA0 		subq	$160, %rsp
+ 1036      000000
+ 1037 000f 48897DA8 		movq	%rdi, -88(%rbp)
+ 1038 0013 8975A4   		movl	%esi, -92(%rbp)
+ 1039 0016 48895598 		movq	%rdx, -104(%rbp)
+ 1040 001a 48894D90 		movq	%rcx, -112(%rbp)
+ 1041 001e 4C894588 		movq	%r8, -120(%rbp)
+ 1042 0022 4C894D80 		movq	%r9, -128(%rbp)
+ 1043 0026 488B4510 		movq	16(%rbp), %rax
+ 1044 002a 48898578 		movq	%rax, -136(%rbp)
+ 1044      FFFFFF
+ 1045 0031 488B4518 		movq	24(%rbp), %rax
+ 1046 0035 48898570 		movq	%rax, -144(%rbp)
+ 1046      FFFFFF
+ 1047 003c 488B4520 		movq	32(%rbp), %rax
+ 1048 0040 48898568 		movq	%rax, -152(%rbp)
+ 1048      FFFFFF
+ 1049              		.loc 1 647 1
+ 1050 0047 64488B04 		movq	%fs:40, %rax
+ 1050      25280000 
+ 1050      00
+ 1051 0050 488945F8 		movq	%rax, -8(%rbp)
+ 1052 0054 31C0     		xorl	%eax, %eax
+ 648:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     int ret;
+ 649:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi r, s;
+ 650:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( ctx  != NULL );
+ 651:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( hash != NULL );
+ 652:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( sig  != NULL );
+ 653:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( slen != NULL );
+ 654:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 655:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_init( &r );
+ 1053              		.loc 1 655 5
+ 1054 0056 488D45C0 		leaq	-64(%rbp), %rax
+ 1055 005a 4889C7   		movq	%rax, %rdi
+ 1056 005d E8000000 		call	mbedtls_mpi_init@PLT
+ 1056      00
+ 656:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_init( &s );
+ 1057              		.loc 1 656 5
+ 1058 0062 488D45E0 		leaq	-32(%rbp), %rax
+ 1059 0066 4889C7   		movq	%rax, %rdi
+ 1060 0069 E8000000 		call	mbedtls_mpi_init@PLT
+ 1060      00
+ 657:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 658:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if defined(MBEDTLS_ECDSA_DETERMINISTIC)
+ 659:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     (void) f_rng;
+ 660:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     (void) p_rng;
+ 661:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 662:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_MPI_CHK( ecdsa_sign_det_restartable( &ctx->grp, &r, &s, &ctx->d,
+GAS LISTING /tmp/ccdS8Ktk.s 			page 38
+
+
+ 663:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                              hash, hlen, md_alg, rs_ctx ) );
+ 664:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #else
+ 665:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     (void) md_alg;
+ 666:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 667:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if defined(MBEDTLS_ECDSA_SIGN_ALT)
+ 668:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_MPI_CHK( mbedtls_ecdsa_sign( &ctx->grp, &r, &s, &ctx->d,
+ 669:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                          hash, hlen, f_rng, p_rng ) );
+ 670:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #else
+ 671:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_MPI_CHK( ecdsa_sign_restartable( &ctx->grp, &r, &s, &ctx->d,
+ 1061              		.loc 1 671 5
+ 1062 006e 488B45A8 		movq	-88(%rbp), %rax
+ 1063 0072 488D88F8 		leaq	248(%rax), %rcx
+ 1063      000000
+ 1064 0079 488B45A8 		movq	-88(%rbp), %rax
+ 1065 007d 4C8B4590 		movq	-112(%rbp), %r8
+ 1066 0081 488B7D98 		movq	-104(%rbp), %rdi
+ 1067 0085 488D55E0 		leaq	-32(%rbp), %rdx
+ 1068 0089 488D75C0 		leaq	-64(%rbp), %rsi
+ 1069 008d 4883EC08 		subq	$8, %rsp
+ 1070 0091 FFB568FF 		pushq	-152(%rbp)
+ 1070      FFFF
+ 1071 0097 FFB570FF 		pushq	-144(%rbp)
+ 1071      FFFF
+ 1072 009d FFB578FF 		pushq	-136(%rbp)
+ 1072      FFFF
+ 1073 00a3 4D89C1   		movq	%r8, %r9
+ 1074 00a6 4989F8   		movq	%rdi, %r8
+ 1075 00a9 4889C7   		movq	%rax, %rdi
+ 1076 00ac E8000000 		call	ecdsa_sign_restartable
+ 1076      00
+ 1077 00b1 4883C420 		addq	$32, %rsp
+ 1078 00b5 8945BC   		movl	%eax, -68(%rbp)
+ 1079 00b8 837DBC00 		cmpl	$0, -68(%rbp)
+ 1080 00bc 7521     		jne	.L91
+ 672:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                          hash, hlen, f_rng, p_rng, rs_ctx ) );
+ 673:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #endif /* MBEDTLS_ECDSA_SIGN_ALT */
+ 674:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #endif /* MBEDTLS_ECDSA_DETERMINISTIC */
+ 675:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 676:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     MBEDTLS_MPI_CHK( ecdsa_signature_to_asn1( &r, &s, sig, slen ) );
+ 1081              		.loc 1 676 5
+ 1082 00be 488B4D80 		movq	-128(%rbp), %rcx
+ 1083 00c2 488B5588 		movq	-120(%rbp), %rdx
+ 1084 00c6 488D75E0 		leaq	-32(%rbp), %rsi
+ 1085 00ca 488D45C0 		leaq	-64(%rbp), %rax
+ 1086 00ce 4889C7   		movq	%rax, %rdi
+ 1087 00d1 E8000000 		call	ecdsa_signature_to_asn1
+ 1087      00
+ 1088 00d6 8945BC   		movl	%eax, -68(%rbp)
+ 1089 00d9 837DBC00 		cmpl	$0, -68(%rbp)
+ 677:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 678:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** cleanup:
+ 1090              		.loc 1 678 1
+ 1091 00dd EB01     		jmp	.L88
+ 1092              	.L91:
+ 671:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                          hash, hlen, f_rng, p_rng, rs_ctx ) );
+ 1093              		.loc 1 671 5
+ 1094 00df 90       		nop
+GAS LISTING /tmp/ccdS8Ktk.s 			page 39
+
+
+ 1095              	.L88:
+ 679:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_free( &r );
+ 1096              		.loc 1 679 5
+ 1097 00e0 488D45C0 		leaq	-64(%rbp), %rax
+ 1098 00e4 4889C7   		movq	%rax, %rdi
+ 1099 00e7 E8000000 		call	mbedtls_mpi_free@PLT
+ 1099      00
+ 680:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_free( &s );
+ 1100              		.loc 1 680 5
+ 1101 00ec 488D45E0 		leaq	-32(%rbp), %rax
+ 1102 00f0 4889C7   		movq	%rax, %rdi
+ 1103 00f3 E8000000 		call	mbedtls_mpi_free@PLT
+ 1103      00
+ 681:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 682:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     return( ret );
+ 1104              		.loc 1 682 11
+ 1105 00f8 8B45BC   		movl	-68(%rbp), %eax
+ 683:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+ 1106              		.loc 1 683 1
+ 1107 00fb 488B55F8 		movq	-8(%rbp), %rdx
+ 1108 00ff 64483314 		xorq	%fs:40, %rdx
+ 1108      25280000 
+ 1108      00
+ 1109 0108 7405     		je	.L90
+ 1110 010a E8000000 		call	__stack_chk_fail@PLT
+ 1110      00
+ 1111              	.L90:
+ 1112 010f C9       		leave
+ 1113              	.LCFI20:
+ 1114              		.cfi_def_cfa 7, 8
+ 1115 0110 C3       		ret
+ 1116              		.cfi_endproc
+ 1117              	.LFE12:
+ 1119              		.section	.text.mbedtls_ecdsa_write_signature,"ax",@progbits
+ 1120              		.globl	mbedtls_ecdsa_write_signature
+ 1122              	mbedtls_ecdsa_write_signature:
+ 1123              	.LFB13:
+ 684:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 685:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+ 686:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Compute and write signature
+ 687:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+ 688:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** int mbedtls_ecdsa_write_signature( mbedtls_ecdsa_context *ctx,
+ 689:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                  mbedtls_md_type_t md_alg,
+ 690:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                  const unsigned char *hash, size_t hlen,
+ 691:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                  unsigned char *sig, size_t *slen,
+ 692:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                  int (*f_rng)(void *, unsigned char *, size_t),
+ 693:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                  void *p_rng )
+ 694:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+ 1124              		.loc 1 694 1
+ 1125              		.cfi_startproc
+ 1126 0000 F30F1EFA 		endbr64
+ 1127 0004 55       		pushq	%rbp
+ 1128              	.LCFI21:
+ 1129              		.cfi_def_cfa_offset 16
+ 1130              		.cfi_offset 6, -16
+ 1131 0005 4889E5   		movq	%rsp, %rbp
+ 1132              	.LCFI22:
+GAS LISTING /tmp/ccdS8Ktk.s 			page 40
+
+
+ 1133              		.cfi_def_cfa_register 6
+ 1134 0008 4883EC50 		subq	$80, %rsp
+ 1135 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1136 0010 8975E4   		movl	%esi, -28(%rbp)
+ 1137 0013 488955D8 		movq	%rdx, -40(%rbp)
+ 1138 0017 48894DD0 		movq	%rcx, -48(%rbp)
+ 1139 001b 4C8945C8 		movq	%r8, -56(%rbp)
+ 1140 001f 4C894DC0 		movq	%r9, -64(%rbp)
+ 1141 0023 488B4510 		movq	16(%rbp), %rax
+ 1142 0027 488945B8 		movq	%rax, -72(%rbp)
+ 1143 002b 488B4518 		movq	24(%rbp), %rax
+ 1144 002f 488945B0 		movq	%rax, -80(%rbp)
+ 1145              		.loc 1 694 1
+ 1146 0033 64488B04 		movq	%fs:40, %rax
+ 1146      25280000 
+ 1146      00
+ 1147 003c 488945F8 		movq	%rax, -8(%rbp)
+ 1148 0040 31C0     		xorl	%eax, %eax
+ 695:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( ctx  != NULL );
+ 696:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( hash != NULL );
+ 697:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( sig  != NULL );
+ 698:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( slen != NULL );
+ 699:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     return( mbedtls_ecdsa_write_signature_restartable(
+ 1149              		.loc 1 699 13
+ 1150 0042 4C8B45C0 		movq	-64(%rbp), %r8
+ 1151 0046 488B7DC8 		movq	-56(%rbp), %rdi
+ 1152 004a 488B4DD0 		movq	-48(%rbp), %rcx
+ 1153 004e 488B55D8 		movq	-40(%rbp), %rdx
+ 1154 0052 8B75E4   		movl	-28(%rbp), %esi
+ 1155 0055 488B45E8 		movq	-24(%rbp), %rax
+ 1156 0059 4883EC08 		subq	$8, %rsp
+ 1157 005d 6A00     		pushq	$0
+ 1158 005f FF75B0   		pushq	-80(%rbp)
+ 1159 0062 FF75B8   		pushq	-72(%rbp)
+ 1160 0065 4D89C1   		movq	%r8, %r9
+ 1161 0068 4989F8   		movq	%rdi, %r8
+ 1162 006b 4889C7   		movq	%rax, %rdi
+ 1163 006e E8000000 		call	mbedtls_ecdsa_write_signature_restartable
+ 1163      00
+ 1164 0073 4883C420 		addq	$32, %rsp
+ 700:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                 ctx, md_alg, hash, hlen, sig, slen, f_rng, p_rng, NULL ) );
+ 701:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+ 1165              		.loc 1 701 1
+ 1166 0077 488B55F8 		movq	-8(%rbp), %rdx
+ 1167 007b 64483314 		xorq	%fs:40, %rdx
+ 1167      25280000 
+ 1167      00
+ 1168 0084 7405     		je	.L94
+ 1169 0086 E8000000 		call	__stack_chk_fail@PLT
+ 1169      00
+ 1170              	.L94:
+ 1171 008b C9       		leave
+ 1172              	.LCFI23:
+ 1173              		.cfi_def_cfa 7, 8
+ 1174 008c C3       		ret
+ 1175              		.cfi_endproc
+ 1176              	.LFE13:
+GAS LISTING /tmp/ccdS8Ktk.s 			page 41
+
+
+ 1178              		.section	.text.mbedtls_ecdsa_read_signature,"ax",@progbits
+ 1179              		.globl	mbedtls_ecdsa_read_signature
+ 1181              	mbedtls_ecdsa_read_signature:
+ 1182              	.LFB14:
+ 702:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 703:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if !defined(MBEDTLS_DEPRECATED_REMOVED) && \
+ 704:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     defined(MBEDTLS_ECDSA_DETERMINISTIC)
+ 705:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** int mbedtls_ecdsa_write_signature_det( mbedtls_ecdsa_context *ctx,
+ 706:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                const unsigned char *hash, size_t hlen,
+ 707:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                unsigned char *sig, size_t *slen,
+ 708:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                mbedtls_md_type_t md_alg )
+ 709:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+ 710:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( ctx  != NULL );
+ 711:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( hash != NULL );
+ 712:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( sig  != NULL );
+ 713:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( slen != NULL );
+ 714:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     return( mbedtls_ecdsa_write_signature( ctx, md_alg, hash, hlen, sig, slen,
+ 715:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                    NULL, NULL ) );
+ 716:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+ 717:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #endif
+ 718:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 719:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+ 720:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Read and check signature
+ 721:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+ 722:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** int mbedtls_ecdsa_read_signature( mbedtls_ecdsa_context *ctx,
+ 723:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                           const unsigned char *hash, size_t hlen,
+ 724:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                           const unsigned char *sig, size_t slen )
+ 725:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+ 1183              		.loc 1 725 1
+ 1184              		.cfi_startproc
+ 1185 0000 F30F1EFA 		endbr64
+ 1186 0004 55       		pushq	%rbp
+ 1187              	.LCFI24:
+ 1188              		.cfi_def_cfa_offset 16
+ 1189              		.cfi_offset 6, -16
+ 1190 0005 4889E5   		movq	%rsp, %rbp
+ 1191              	.LCFI25:
+ 1192              		.cfi_def_cfa_register 6
+ 1193 0008 4883EC40 		subq	$64, %rsp
+ 1194 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1195 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 1196 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 1197 0018 48894DD0 		movq	%rcx, -48(%rbp)
+ 1198 001c 4C8945C8 		movq	%r8, -56(%rbp)
+ 1199              		.loc 1 725 1
+ 1200 0020 64488B04 		movq	%fs:40, %rax
+ 1200      25280000 
+ 1200      00
+ 1201 0029 488945F8 		movq	%rax, -8(%rbp)
+ 1202 002d 31C0     		xorl	%eax, %eax
+ 726:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( ctx  != NULL );
+ 727:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( hash != NULL );
+ 728:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( sig  != NULL );
+ 729:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     return( mbedtls_ecdsa_read_signature_restartable(
+ 1203              		.loc 1 729 13
+ 1204 002f 488B7DC8 		movq	-56(%rbp), %rdi
+ 1205 0033 488B4DD0 		movq	-48(%rbp), %rcx
+GAS LISTING /tmp/ccdS8Ktk.s 			page 42
+
+
+ 1206 0037 488B55D8 		movq	-40(%rbp), %rdx
+ 1207 003b 488B75E0 		movq	-32(%rbp), %rsi
+ 1208 003f 488B45E8 		movq	-24(%rbp), %rax
+ 1209 0043 41B90000 		movl	$0, %r9d
+ 1209      0000
+ 1210 0049 4989F8   		movq	%rdi, %r8
+ 1211 004c 4889C7   		movq	%rax, %rdi
+ 1212 004f E8000000 		call	mbedtls_ecdsa_read_signature_restartable
+ 1212      00
+ 730:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                 ctx, hash, hlen, sig, slen, NULL ) );
+ 731:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+ 1213              		.loc 1 731 1
+ 1214 0054 488B55F8 		movq	-8(%rbp), %rdx
+ 1215 0058 64483314 		xorq	%fs:40, %rdx
+ 1215      25280000 
+ 1215      00
+ 1216 0061 7405     		je	.L97
+ 1217 0063 E8000000 		call	__stack_chk_fail@PLT
+ 1217      00
+ 1218              	.L97:
+ 1219 0068 C9       		leave
+ 1220              	.LCFI26:
+ 1221              		.cfi_def_cfa 7, 8
+ 1222 0069 C3       		ret
+ 1223              		.cfi_endproc
+ 1224              	.LFE14:
+ 1226              		.section	.text.mbedtls_ecdsa_read_signature_restartable,"ax",@progbits
+ 1227              		.globl	mbedtls_ecdsa_read_signature_restartable
+ 1229              	mbedtls_ecdsa_read_signature_restartable:
+ 1230              	.LFB15:
+ 732:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 733:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+ 734:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Restartable read and check signature
+ 735:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+ 736:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** int mbedtls_ecdsa_read_signature_restartable( mbedtls_ecdsa_context *ctx,
+ 737:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                           const unsigned char *hash, size_t hlen,
+ 738:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                           const unsigned char *sig, size_t slen,
+ 739:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                           mbedtls_ecdsa_restart_ctx *rs_ctx )
+ 740:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+ 1231              		.loc 1 740 1
+ 1232              		.cfi_startproc
+ 1233 0000 F30F1EFA 		endbr64
+ 1234 0004 55       		pushq	%rbp
+ 1235              	.LCFI27:
+ 1236              		.cfi_def_cfa_offset 16
+ 1237              		.cfi_offset 6, -16
+ 1238 0005 4889E5   		movq	%rsp, %rbp
+ 1239              	.LCFI28:
+ 1240              		.cfi_def_cfa_register 6
+ 1241 0008 4881EC90 		subq	$144, %rsp
+ 1241      000000
+ 1242 000f 48897D98 		movq	%rdi, -104(%rbp)
+ 1243 0013 48897590 		movq	%rsi, -112(%rbp)
+ 1244 0017 48895588 		movq	%rdx, -120(%rbp)
+ 1245 001b 48894D80 		movq	%rcx, -128(%rbp)
+ 1246 001f 4C898578 		movq	%r8, -136(%rbp)
+ 1246      FFFFFF
+GAS LISTING /tmp/ccdS8Ktk.s 			page 43
+
+
+ 1247 0026 4C898D70 		movq	%r9, -144(%rbp)
+ 1247      FFFFFF
+ 1248              		.loc 1 740 1
+ 1249 002d 64488B04 		movq	%fs:40, %rax
+ 1249      25280000 
+ 1249      00
+ 1250 0036 488945F8 		movq	%rax, -8(%rbp)
+ 1251 003a 31C0     		xorl	%eax, %eax
+ 741:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     int ret;
+ 742:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     unsigned char *p = (unsigned char *) sig;
+ 1252              		.loc 1 742 20
+ 1253 003c 488B4580 		movq	-128(%rbp), %rax
+ 1254 0040 488945A8 		movq	%rax, -88(%rbp)
+ 743:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     const unsigned char *end = sig + slen;
+ 1255              		.loc 1 743 26
+ 1256 0044 488B5580 		movq	-128(%rbp), %rdx
+ 1257 0048 488B8578 		movq	-136(%rbp), %rax
+ 1257      FFFFFF
+ 1258 004f 4801D0   		addq	%rdx, %rax
+ 1259 0052 488945B8 		movq	%rax, -72(%rbp)
+ 744:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     size_t len;
+ 745:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi r, s;
+ 746:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( ctx  != NULL );
+ 747:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( hash != NULL );
+ 748:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( sig  != NULL );
+ 749:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 750:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_init( &r );
+ 1260              		.loc 1 750 5
+ 1261 0056 488D45C0 		leaq	-64(%rbp), %rax
+ 1262 005a 4889C7   		movq	%rax, %rdi
+ 1263 005d E8000000 		call	mbedtls_mpi_init@PLT
+ 1263      00
+ 751:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_init( &s );
+ 1264              		.loc 1 751 5
+ 1265 0062 488D45E0 		leaq	-32(%rbp), %rax
+ 1266 0066 4889C7   		movq	%rax, %rdi
+ 1267 0069 E8000000 		call	mbedtls_mpi_init@PLT
+ 1267      00
+ 752:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 753:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( ( ret = mbedtls_asn1_get_tag( &p, end, &len,
+ 1268              		.loc 1 753 17
+ 1269 006e 488D55B0 		leaq	-80(%rbp), %rdx
+ 1270 0072 488B75B8 		movq	-72(%rbp), %rsi
+ 1271 0076 488D45A8 		leaq	-88(%rbp), %rax
+ 1272 007a B9300000 		movl	$48, %ecx
+ 1272      00
+ 1273 007f 4889C7   		movq	%rax, %rdi
+ 1274 0082 E8000000 		call	mbedtls_asn1_get_tag@PLT
+ 1274      00
+ 1275 0087 8945A4   		movl	%eax, -92(%rbp)
+ 1276              		.loc 1 753 7
+ 1277 008a 837DA400 		cmpl	$0, -92(%rbp)
+ 1278 008e 740C     		je	.L99
+ 754:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                     MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE ) ) != 0 )
+ 755:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     {
+ 756:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ret += MBEDTLS_ERR_ECP_BAD_INPUT_DATA;
+ 1279              		.loc 1 756 13
+GAS LISTING /tmp/ccdS8Ktk.s 			page 44
+
+
+ 1280 0090 816DA480 		subl	$20352, -92(%rbp)
+ 1280      4F0000
+ 757:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         goto cleanup;
+ 1281              		.loc 1 757 9
+ 1282 0097 E9C10000 		jmp	.L100
+ 1282      00
+ 1283              	.L99:
+ 758:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     }
+ 759:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 760:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( p + len != end )
+ 1284              		.loc 1 760 11
+ 1285 009c 488B55A8 		movq	-88(%rbp), %rdx
+ 1286 00a0 488B45B0 		movq	-80(%rbp), %rax
+ 1287 00a4 4801D0   		addq	%rdx, %rax
+ 1288              		.loc 1 760 7
+ 1289 00a7 483945B8 		cmpq	%rax, -72(%rbp)
+ 1290 00ab 740C     		je	.L101
+ 761:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     {
+ 762:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ret = MBEDTLS_ERR_ECP_BAD_INPUT_DATA +
+ 1291              		.loc 1 762 13
+ 1292 00ad C745A41A 		movl	$-20454, -92(%rbp)
+ 1292      B0FFFF
+ 763:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****               MBEDTLS_ERR_ASN1_LENGTH_MISMATCH;
+ 764:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         goto cleanup;
+ 1293              		.loc 1 764 9
+ 1294 00b4 E9A40000 		jmp	.L100
+ 1294      00
+ 1295              	.L101:
+ 765:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     }
+ 766:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 767:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( ( ret = mbedtls_asn1_get_mpi( &p, end, &r ) ) != 0 ||
+ 1296              		.loc 1 767 17
+ 1297 00b9 488D55C0 		leaq	-64(%rbp), %rdx
+ 1298 00bd 488B4DB8 		movq	-72(%rbp), %rcx
+ 1299 00c1 488D45A8 		leaq	-88(%rbp), %rax
+ 1300 00c5 4889CE   		movq	%rcx, %rsi
+ 1301 00c8 4889C7   		movq	%rax, %rdi
+ 1302 00cb E8000000 		call	mbedtls_asn1_get_mpi@PLT
+ 1302      00
+ 1303 00d0 8945A4   		movl	%eax, -92(%rbp)
+ 1304              		.loc 1 767 7
+ 1305 00d3 837DA400 		cmpl	$0, -92(%rbp)
+ 1306 00d7 7520     		jne	.L102
+ 768:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ( ret = mbedtls_asn1_get_mpi( &p, end, &s ) ) != 0 )
+ 1307              		.loc 1 768 17 discriminator 1
+ 1308 00d9 488D55E0 		leaq	-32(%rbp), %rdx
+ 1309 00dd 488B4DB8 		movq	-72(%rbp), %rcx
+ 1310 00e1 488D45A8 		leaq	-88(%rbp), %rax
+ 1311 00e5 4889CE   		movq	%rcx, %rsi
+ 1312 00e8 4889C7   		movq	%rax, %rdi
+ 1313 00eb E8000000 		call	mbedtls_asn1_get_mpi@PLT
+ 1313      00
+ 1314 00f0 8945A4   		movl	%eax, -92(%rbp)
+ 767:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ( ret = mbedtls_asn1_get_mpi( &p, end, &s ) ) != 0 )
+ 1315              		.loc 1 767 60 discriminator 1
+ 1316 00f3 837DA400 		cmpl	$0, -92(%rbp)
+ 1317 00f7 7409     		je	.L103
+GAS LISTING /tmp/ccdS8Ktk.s 			page 45
+
+
+ 1318              	.L102:
+ 769:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     {
+ 770:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ret += MBEDTLS_ERR_ECP_BAD_INPUT_DATA;
+ 1319              		.loc 1 770 13
+ 1320 00f9 816DA480 		subl	$20352, -92(%rbp)
+ 1320      4F0000
+ 771:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         goto cleanup;
+ 1321              		.loc 1 771 9
+ 1322 0100 EB5B     		jmp	.L100
+ 1323              	.L103:
+ 772:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     }
+ 773:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if defined(MBEDTLS_ECDSA_VERIFY_ALT)
+ 774:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( ( ret = mbedtls_ecdsa_verify( &ctx->grp, hash, hlen,
+ 775:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                       &ctx->Q, &r, &s ) ) != 0 )
+ 776:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         goto cleanup;
+ 777:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #else
+ 778:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( ( ret = ecdsa_verify_restartable( &ctx->grp, hash, hlen,
+ 779:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                               &ctx->Q, &r, &s, rs_ctx ) ) != 0 )
+ 1324              		.loc 1 779 31
+ 1325 0102 488B4598 		movq	-104(%rbp), %rax
+ 1326 0106 488D8810 		leaq	272(%rax), %rcx
+ 1326      010000
+ 778:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                               &ctx->Q, &r, &s, rs_ctx ) ) != 0 )
+ 1327              		.loc 1 778 17
+ 1328 010d 488B4598 		movq	-104(%rbp), %rax
+ 1329 0111 4C8D45E0 		leaq	-32(%rbp), %r8
+ 1330 0115 488D7DC0 		leaq	-64(%rbp), %rdi
+ 1331 0119 488B5588 		movq	-120(%rbp), %rdx
+ 1332 011d 488B7590 		movq	-112(%rbp), %rsi
+ 1333 0121 4883EC08 		subq	$8, %rsp
+ 1334 0125 FFB570FF 		pushq	-144(%rbp)
+ 1334      FFFF
+ 1335 012b 4D89C1   		movq	%r8, %r9
+ 1336 012e 4989F8   		movq	%rdi, %r8
+ 1337 0131 4889C7   		movq	%rax, %rdi
+ 1338 0134 E8000000 		call	ecdsa_verify_restartable
+ 1338      00
+ 1339 0139 4883C410 		addq	$16, %rsp
+ 1340 013d 8945A4   		movl	%eax, -92(%rbp)
+ 778:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                               &ctx->Q, &r, &s, rs_ctx ) ) != 0 )
+ 1341              		.loc 1 778 7
+ 1342 0140 837DA400 		cmpl	$0, -92(%rbp)
+ 1343 0144 7513     		jne	.L107
+ 780:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         goto cleanup;
+ 781:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #endif /* MBEDTLS_ECDSA_VERIFY_ALT */
+ 782:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 783:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     /* At this point we know that the buffer starts with a valid signature.
+ 784:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****      * Return 0 if the buffer just contains the signature, and a specific
+ 785:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****      * error code if the valid signature is followed by more data. */
+ 786:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( p != end )
+ 1344              		.loc 1 786 11
+ 1345 0146 488B45A8 		movq	-88(%rbp), %rax
+ 1346              		.loc 1 786 7
+ 1347 014a 483945B8 		cmpq	%rax, -72(%rbp)
+ 1348 014e 740C     		je	.L108
+ 787:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ret = MBEDTLS_ERR_ECP_SIG_LEN_MISMATCH;
+ 1349              		.loc 1 787 13
+GAS LISTING /tmp/ccdS8Ktk.s 			page 46
+
+
+ 1350 0150 C745A400 		movl	$-19456, -92(%rbp)
+ 1350      B4FFFF
+ 1351 0157 EB04     		jmp	.L100
+ 1352              	.L107:
+ 780:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         goto cleanup;
+ 1353              		.loc 1 780 9
+ 1354 0159 90       		nop
+ 1355 015a EB01     		jmp	.L100
+ 1356              	.L108:
+ 788:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 789:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** cleanup:
+ 1357              		.loc 1 789 1
+ 1358 015c 90       		nop
+ 1359              	.L100:
+ 790:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_free( &r );
+ 1360              		.loc 1 790 5
+ 1361 015d 488D45C0 		leaq	-64(%rbp), %rax
+ 1362 0161 4889C7   		movq	%rax, %rdi
+ 1363 0164 E8000000 		call	mbedtls_mpi_free@PLT
+ 1363      00
+ 791:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_mpi_free( &s );
+ 1364              		.loc 1 791 5
+ 1365 0169 488D45E0 		leaq	-32(%rbp), %rax
+ 1366 016d 4889C7   		movq	%rax, %rdi
+ 1367 0170 E8000000 		call	mbedtls_mpi_free@PLT
+ 1367      00
+ 792:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 793:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     return( ret );
+ 1368              		.loc 1 793 11
+ 1369 0175 8B45A4   		movl	-92(%rbp), %eax
+ 794:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+ 1370              		.loc 1 794 1
+ 1371 0178 488B4DF8 		movq	-8(%rbp), %rcx
+ 1372 017c 6448330C 		xorq	%fs:40, %rcx
+ 1372      25280000 
+ 1372      00
+ 1373 0185 7405     		je	.L106
+ 1374 0187 E8000000 		call	__stack_chk_fail@PLT
+ 1374      00
+ 1375              	.L106:
+ 1376 018c C9       		leave
+ 1377              	.LCFI29:
+ 1378              		.cfi_def_cfa 7, 8
+ 1379 018d C3       		ret
+ 1380              		.cfi_endproc
+ 1381              	.LFE15:
+ 1383              		.section	.text.mbedtls_ecdsa_genkey,"ax",@progbits
+ 1384              		.globl	mbedtls_ecdsa_genkey
+ 1386              	mbedtls_ecdsa_genkey:
+ 1387              	.LFB16:
+ 795:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 796:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #if !defined(MBEDTLS_ECDSA_GENKEY_ALT)
+ 797:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+ 798:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Generate key pair
+ 799:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+ 800:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** int mbedtls_ecdsa_genkey( mbedtls_ecdsa_context *ctx, mbedtls_ecp_group_id gid,
+ 801:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                   int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
+GAS LISTING /tmp/ccdS8Ktk.s 			page 47
+
+
+ 802:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+ 1388              		.loc 1 802 1
+ 1389              		.cfi_startproc
+ 1390 0000 F30F1EFA 		endbr64
+ 1391 0004 55       		pushq	%rbp
+ 1392              	.LCFI30:
+ 1393              		.cfi_def_cfa_offset 16
+ 1394              		.cfi_offset 6, -16
+ 1395 0005 4889E5   		movq	%rsp, %rbp
+ 1396              	.LCFI31:
+ 1397              		.cfi_def_cfa_register 6
+ 1398 0008 4883EC30 		subq	$48, %rsp
+ 1399 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1400 0010 8975E4   		movl	%esi, -28(%rbp)
+ 1401 0013 488955D8 		movq	%rdx, -40(%rbp)
+ 1402 0017 48894DD0 		movq	%rcx, -48(%rbp)
+ 1403              		.loc 1 802 1
+ 1404 001b 64488B04 		movq	%fs:40, %rax
+ 1404      25280000 
+ 1404      00
+ 1405 0024 488945F8 		movq	%rax, -8(%rbp)
+ 1406 0028 31C0     		xorl	%eax, %eax
+ 803:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     int ret = 0;
+ 1407              		.loc 1 803 9
+ 1408 002a C745F400 		movl	$0, -12(%rbp)
+ 1408      000000
+ 804:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( ctx   != NULL );
+ 805:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( f_rng != NULL );
+ 806:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 807:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ret = mbedtls_ecp_group_load( &ctx->grp, gid );
+ 1409              		.loc 1 807 11
+ 1410 0031 488B45E8 		movq	-24(%rbp), %rax
+ 1411 0035 8B55E4   		movl	-28(%rbp), %edx
+ 1412 0038 89D6     		movl	%edx, %esi
+ 1413 003a 4889C7   		movq	%rax, %rdi
+ 1414 003d E8000000 		call	mbedtls_ecp_group_load@PLT
+ 1414      00
+ 1415 0042 8945F4   		movl	%eax, -12(%rbp)
+ 808:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( ret != 0 )
+ 1416              		.loc 1 808 7
+ 1417 0045 837DF400 		cmpl	$0, -12(%rbp)
+ 1418 0049 7405     		je	.L110
+ 809:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         return( ret );
+ 1419              		.loc 1 809 15
+ 1420 004b 8B45F4   		movl	-12(%rbp), %eax
+ 1421 004e EB33     		jmp	.L111
+ 1422              	.L110:
+ 810:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 811:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****    return( mbedtls_ecp_gen_keypair( &ctx->grp, &ctx->d,
+ 1423              		.loc 1 811 12
+ 1424 0050 488B45E8 		movq	-24(%rbp), %rax
+ 1425 0054 488DB810 		leaq	272(%rax), %rdi
+ 1425      010000
+ 1426 005b 488B45E8 		movq	-24(%rbp), %rax
+ 1427 005f 488DB0F8 		leaq	248(%rax), %rsi
+ 1427      000000
+ 1428 0066 488B45E8 		movq	-24(%rbp), %rax
+GAS LISTING /tmp/ccdS8Ktk.s 			page 48
+
+
+ 1429 006a 488B4DD0 		movq	-48(%rbp), %rcx
+ 1430 006e 488B55D8 		movq	-40(%rbp), %rdx
+ 1431 0072 4989C8   		movq	%rcx, %r8
+ 1432 0075 4889D1   		movq	%rdx, %rcx
+ 1433 0078 4889FA   		movq	%rdi, %rdx
+ 1434 007b 4889C7   		movq	%rax, %rdi
+ 1435 007e E8000000 		call	mbedtls_ecp_gen_keypair@PLT
+ 1435      00
+ 1436              	.L111:
+ 812:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****                                     &ctx->Q, f_rng, p_rng ) );
+ 813:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+ 1437              		.loc 1 813 1
+ 1438 0083 488B4DF8 		movq	-8(%rbp), %rcx
+ 1439 0087 6448330C 		xorq	%fs:40, %rcx
+ 1439      25280000 
+ 1439      00
+ 1440 0090 7405     		je	.L112
+ 1441 0092 E8000000 		call	__stack_chk_fail@PLT
+ 1441      00
+ 1442              	.L112:
+ 1443 0097 C9       		leave
+ 1444              	.LCFI32:
+ 1445              		.cfi_def_cfa 7, 8
+ 1446 0098 C3       		ret
+ 1447              		.cfi_endproc
+ 1448              	.LFE16:
+ 1450              		.section	.text.mbedtls_ecdsa_from_keypair,"ax",@progbits
+ 1451              		.globl	mbedtls_ecdsa_from_keypair
+ 1453              	mbedtls_ecdsa_from_keypair:
+ 1454              	.LFB17:
+ 814:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** #endif /* !MBEDTLS_ECDSA_GENKEY_ALT */
+ 815:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 816:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+ 817:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Set context from an mbedtls_ecp_keypair
+ 818:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+ 819:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** int mbedtls_ecdsa_from_keypair( mbedtls_ecdsa_context *ctx, const mbedtls_ecp_keypair *key )
+ 820:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+ 1455              		.loc 1 820 1
+ 1456              		.cfi_startproc
+ 1457 0000 F30F1EFA 		endbr64
+ 1458 0004 55       		pushq	%rbp
+ 1459              	.LCFI33:
+ 1460              		.cfi_def_cfa_offset 16
+ 1461              		.cfi_offset 6, -16
+ 1462 0005 4889E5   		movq	%rsp, %rbp
+ 1463              	.LCFI34:
+ 1464              		.cfi_def_cfa_register 6
+ 1465 0008 4883EC20 		subq	$32, %rsp
+ 1466 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1467 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 1468              		.loc 1 820 1
+ 1469 0014 64488B04 		movq	%fs:40, %rax
+ 1469      25280000 
+ 1469      00
+ 1470 001d 488945F8 		movq	%rax, -8(%rbp)
+ 1471 0021 31C0     		xorl	%eax, %eax
+ 821:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     int ret;
+GAS LISTING /tmp/ccdS8Ktk.s 			page 49
+
+
+ 822:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( ctx != NULL );
+ 823:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE_RET( key != NULL );
+ 824:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 825:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( ( ret = mbedtls_ecp_group_copy( &ctx->grp, &key->grp ) ) != 0 ||
+ 1472              		.loc 1 825 17
+ 1473 0023 488B55E0 		movq	-32(%rbp), %rdx
+ 1474 0027 488B45E8 		movq	-24(%rbp), %rax
+ 1475 002b 4889D6   		movq	%rdx, %rsi
+ 1476 002e 4889C7   		movq	%rax, %rdi
+ 1477 0031 E8000000 		call	mbedtls_ecp_group_copy@PLT
+ 1477      00
+ 1478 0036 8945F4   		movl	%eax, -12(%rbp)
+ 1479              		.loc 1 825 7
+ 1480 0039 837DF400 		cmpl	$0, -12(%rbp)
+ 1481 003d 7552     		jne	.L114
+ 826:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ( ret = mbedtls_mpi_copy( &ctx->d, &key->d ) ) != 0 ||
+ 1482              		.loc 1 826 17 discriminator 1
+ 1483 003f 488B45E0 		movq	-32(%rbp), %rax
+ 1484 0043 488D90F8 		leaq	248(%rax), %rdx
+ 1484      000000
+ 1485 004a 488B45E8 		movq	-24(%rbp), %rax
+ 1486 004e 4805F800 		addq	$248, %rax
+ 1486      0000
+ 1487 0054 4889D6   		movq	%rdx, %rsi
+ 1488 0057 4889C7   		movq	%rax, %rdi
+ 1489 005a E8000000 		call	mbedtls_mpi_copy@PLT
+ 1489      00
+ 1490 005f 8945F4   		movl	%eax, -12(%rbp)
+ 825:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ( ret = mbedtls_mpi_copy( &ctx->d, &key->d ) ) != 0 ||
+ 1491              		.loc 1 825 71 discriminator 1
+ 1492 0062 837DF400 		cmpl	$0, -12(%rbp)
+ 1493 0066 7529     		jne	.L114
+ 827:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ( ret = mbedtls_ecp_copy( &ctx->Q, &key->Q ) ) != 0 )
+ 1494              		.loc 1 827 17
+ 1495 0068 488B45E0 		movq	-32(%rbp), %rax
+ 1496 006c 488D9010 		leaq	272(%rax), %rdx
+ 1496      010000
+ 1497 0073 488B45E8 		movq	-24(%rbp), %rax
+ 1498 0077 48051001 		addq	$272, %rax
+ 1498      0000
+ 1499 007d 4889D6   		movq	%rdx, %rsi
+ 1500 0080 4889C7   		movq	%rax, %rdi
+ 1501 0083 E8000000 		call	mbedtls_ecp_copy@PLT
+ 1501      00
+ 1502 0088 8945F4   		movl	%eax, -12(%rbp)
+ 826:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         ( ret = mbedtls_mpi_copy( &ctx->d, &key->d ) ) != 0 ||
+ 1503              		.loc 1 826 61
+ 1504 008b 837DF400 		cmpl	$0, -12(%rbp)
+ 1505 008f 740C     		je	.L115
+ 1506              	.L114:
+ 828:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     {
+ 829:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         mbedtls_ecdsa_free( ctx );
+ 1507              		.loc 1 829 9
+ 1508 0091 488B45E8 		movq	-24(%rbp), %rax
+ 1509 0095 4889C7   		movq	%rax, %rdi
+ 1510 0098 E8000000 		call	mbedtls_ecdsa_free
+ 1510      00
+GAS LISTING /tmp/ccdS8Ktk.s 			page 50
+
+
+ 1511              	.L115:
+ 830:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     }
+ 831:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 832:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     return( ret );
+ 1512              		.loc 1 832 11
+ 1513 009d 8B45F4   		movl	-12(%rbp), %eax
+ 833:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+ 1514              		.loc 1 833 1
+ 1515 00a0 488B4DF8 		movq	-8(%rbp), %rcx
+ 1516 00a4 6448330C 		xorq	%fs:40, %rcx
+ 1516      25280000 
+ 1516      00
+ 1517 00ad 7405     		je	.L117
+ 1518 00af E8000000 		call	__stack_chk_fail@PLT
+ 1518      00
+ 1519              	.L117:
+ 1520 00b4 C9       		leave
+ 1521              	.LCFI35:
+ 1522              		.cfi_def_cfa 7, 8
+ 1523 00b5 C3       		ret
+ 1524              		.cfi_endproc
+ 1525              	.LFE17:
+ 1527              		.section	.text.mbedtls_ecdsa_init,"ax",@progbits
+ 1528              		.globl	mbedtls_ecdsa_init
+ 1530              	mbedtls_ecdsa_init:
+ 1531              	.LFB18:
+ 834:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 835:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+ 836:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Initialize context
+ 837:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+ 838:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** void mbedtls_ecdsa_init( mbedtls_ecdsa_context *ctx )
+ 839:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+ 1532              		.loc 1 839 1
+ 1533              		.cfi_startproc
+ 1534 0000 F30F1EFA 		endbr64
+ 1535 0004 55       		pushq	%rbp
+ 1536              	.LCFI36:
+ 1537              		.cfi_def_cfa_offset 16
+ 1538              		.cfi_offset 6, -16
+ 1539 0005 4889E5   		movq	%rsp, %rbp
+ 1540              	.LCFI37:
+ 1541              		.cfi_def_cfa_register 6
+ 1542 0008 4883EC20 		subq	$32, %rsp
+ 1543 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1544              		.loc 1 839 1
+ 1545 0010 64488B04 		movq	%fs:40, %rax
+ 1545      25280000 
+ 1545      00
+ 1546 0019 488945F8 		movq	%rax, -8(%rbp)
+ 1547 001d 31C0     		xorl	%eax, %eax
+ 840:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     ECDSA_VALIDATE( ctx != NULL );
+ 841:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 842:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_ecp_keypair_init( ctx );
+ 1548              		.loc 1 842 5
+ 1549 001f 488B45E8 		movq	-24(%rbp), %rax
+ 1550 0023 4889C7   		movq	%rax, %rdi
+ 1551 0026 E8000000 		call	mbedtls_ecp_keypair_init@PLT
+GAS LISTING /tmp/ccdS8Ktk.s 			page 51
+
+
+ 1551      00
+ 843:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+ 1552              		.loc 1 843 1
+ 1553 002b 90       		nop
+ 1554 002c 488B45F8 		movq	-8(%rbp), %rax
+ 1555 0030 64483304 		xorq	%fs:40, %rax
+ 1555      25280000 
+ 1555      00
+ 1556 0039 7405     		je	.L119
+ 1557 003b E8000000 		call	__stack_chk_fail@PLT
+ 1557      00
+ 1558              	.L119:
+ 1559 0040 C9       		leave
+ 1560              	.LCFI38:
+ 1561              		.cfi_def_cfa 7, 8
+ 1562 0041 C3       		ret
+ 1563              		.cfi_endproc
+ 1564              	.LFE18:
+ 1566              		.section	.text.mbedtls_ecdsa_free,"ax",@progbits
+ 1567              		.globl	mbedtls_ecdsa_free
+ 1569              	mbedtls_ecdsa_free:
+ 1570              	.LFB19:
+ 844:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 845:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** /*
+ 846:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  * Free context
+ 847:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****  */
+ 848:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** void mbedtls_ecdsa_free( mbedtls_ecdsa_context *ctx )
+ 849:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** {
+ 1571              		.loc 1 849 1
+ 1572              		.cfi_startproc
+ 1573 0000 F30F1EFA 		endbr64
+ 1574 0004 55       		pushq	%rbp
+ 1575              	.LCFI39:
+ 1576              		.cfi_def_cfa_offset 16
+ 1577              		.cfi_offset 6, -16
+ 1578 0005 4889E5   		movq	%rsp, %rbp
+ 1579              	.LCFI40:
+ 1580              		.cfi_def_cfa_register 6
+ 1581 0008 4883EC20 		subq	$32, %rsp
+ 1582 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1583              		.loc 1 849 1
+ 1584 0010 64488B04 		movq	%fs:40, %rax
+ 1584      25280000 
+ 1584      00
+ 1585 0019 488945F8 		movq	%rax, -8(%rbp)
+ 1586 001d 31C0     		xorl	%eax, %eax
+ 850:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     if( ctx == NULL )
+ 1587              		.loc 1 850 7
+ 1588 001f 48837DE8 		cmpq	$0, -24(%rbp)
+ 1588      00
+ 1589 0024 740E     		je	.L124
+ 851:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         return;
+ 852:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** 
+ 853:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****     mbedtls_ecp_keypair_free( ctx );
+ 1590              		.loc 1 853 5
+ 1591 0026 488B45E8 		movq	-24(%rbp), %rax
+ 1592 002a 4889C7   		movq	%rax, %rdi
+GAS LISTING /tmp/ccdS8Ktk.s 			page 52
+
+
+ 1593 002d E8000000 		call	mbedtls_ecp_keypair_free@PLT
+ 1593      00
+ 1594 0032 EB01     		jmp	.L120
+ 1595              	.L124:
+ 851:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c ****         return;
+ 1596              		.loc 1 851 9
+ 1597 0034 90       		nop
+ 1598              	.L120:
+ 854:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/ecdsa.c **** }
+ 1599              		.loc 1 854 1
+ 1600 0035 488B45F8 		movq	-8(%rbp), %rax
+ 1601 0039 64483304 		xorq	%fs:40, %rax
+ 1601      25280000 
+ 1601      00
+ 1602 0042 7405     		je	.L123
+ 1603 0044 E8000000 		call	__stack_chk_fail@PLT
+ 1603      00
+ 1604              	.L123:
+ 1605 0049 C9       		leave
+ 1606              	.LCFI41:
+ 1607              		.cfi_def_cfa 7, 8
+ 1608 004a C3       		ret
+ 1609              		.cfi_endproc
+ 1610              	.LFE19:
+ 1612              		.text
+ 1613              	.Letext0:
+ 1614              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 1615              		.file 3 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 1616              		.file 4 "/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h"
+ 1617              		.file 5 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/bignum.
+ 1618              		.file 6 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/ecp.h"
+ 1619              		.file 7 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/md.h"
+ 1620              		.file 8 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/ecdsa.h
+ 1621              		.file 9 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 1622              		.file 10 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 1623              		.file 11 "/usr/include/stdio.h"
+ 1624              		.file 12 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 1625              		.file 13 "/usr/include/time.h"
+ 1626              		.file 14 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/platfo
+ 5157              		.section	.note.gnu.property,"a"
+ 5158              		.align 8
+ 5159 0000 04000000 		.long	 1f - 0f
+ 5160 0004 10000000 		.long	 4f - 1f
+ 5161 0008 05000000 		.long	 5
+ 5162              	0:
+ 5163 000c 474E5500 		.string	 "GNU"
+ 5164              	1:
+ 5165              		.align 8
+ 5166 0010 020000C0 		.long	 0xc0000002
+ 5167 0014 04000000 		.long	 3f - 2f
+ 5168              	2:
+ 5169 0018 03000000 		.long	 0x3
+ 5170              	3:
+ 5171 001c 00000000 		.align 8
+ 5172              	4:
+GAS LISTING /tmp/ccdS8Ktk.s 			page 53
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 ecdsa.c
+     /tmp/ccdS8Ktk.s:6      .text.derive_mpi:0000000000000000 derive_mpi
+     /tmp/ccdS8Ktk.s:125    .text.ecdsa_sign_restartable:0000000000000000 ecdsa_sign_restartable
+     /tmp/ccdS8Ktk.s:485    .text.mbedtls_ecdsa_sign:0000000000000000 mbedtls_ecdsa_sign
+     /tmp/ccdS8Ktk.s:543    .text.ecdsa_verify_restartable:0000000000000000 ecdsa_verify_restartable
+     /tmp/ccdS8Ktk.s:841    .text.mbedtls_ecdsa_verify:0000000000000000 mbedtls_ecdsa_verify
+     /tmp/ccdS8Ktk.s:893    .text.ecdsa_signature_to_asn1:0000000000000000 ecdsa_signature_to_asn1
+     /tmp/ccdS8Ktk.s:1024   .text.mbedtls_ecdsa_write_signature_restartable:0000000000000000 mbedtls_ecdsa_write_signature_restartable
+     /tmp/ccdS8Ktk.s:1122   .text.mbedtls_ecdsa_write_signature:0000000000000000 mbedtls_ecdsa_write_signature
+     /tmp/ccdS8Ktk.s:1181   .text.mbedtls_ecdsa_read_signature:0000000000000000 mbedtls_ecdsa_read_signature
+     /tmp/ccdS8Ktk.s:1229   .text.mbedtls_ecdsa_read_signature_restartable:0000000000000000 mbedtls_ecdsa_read_signature_restartable
+     /tmp/ccdS8Ktk.s:1386   .text.mbedtls_ecdsa_genkey:0000000000000000 mbedtls_ecdsa_genkey
+     /tmp/ccdS8Ktk.s:1453   .text.mbedtls_ecdsa_from_keypair:0000000000000000 mbedtls_ecdsa_from_keypair
+     /tmp/ccdS8Ktk.s:1569   .text.mbedtls_ecdsa_free:0000000000000000 mbedtls_ecdsa_free
+     /tmp/ccdS8Ktk.s:1530   .text.mbedtls_ecdsa_init:0000000000000000 mbedtls_ecdsa_init
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+mbedtls_mpi_read_binary
+mbedtls_mpi_shift_r
+mbedtls_mpi_cmp_mpi
+mbedtls_mpi_sub_mpi
+__stack_chk_fail
+mbedtls_mpi_cmp_int
+mbedtls_ecp_point_init
+mbedtls_mpi_init
+mbedtls_ecp_gen_privkey
+mbedtls_ecp_mul_restartable
+mbedtls_mpi_mod_mpi
+mbedtls_mpi_mul_mpi
+mbedtls_mpi_add_mpi
+mbedtls_mpi_inv_mod
+mbedtls_ecp_point_free
+mbedtls_mpi_free
+mbedtls_ecp_muladd_restartable
+mbedtls_ecp_is_zero
+mbedtls_asn1_write_mpi
+mbedtls_asn1_write_len
+mbedtls_asn1_write_tag
+memcpy
+mbedtls_asn1_get_tag
+mbedtls_asn1_get_mpi
+mbedtls_ecp_group_load
+mbedtls_ecp_gen_keypair
+mbedtls_ecp_group_copy
+mbedtls_mpi_copy
+mbedtls_ecp_copy
+mbedtls_ecp_keypair_init
+mbedtls_ecp_keypair_free

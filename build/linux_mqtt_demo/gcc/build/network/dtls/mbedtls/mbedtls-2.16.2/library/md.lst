@@ -1,0 +1,2609 @@
+GAS LISTING /tmp/ccEkA5hM.s 			page 1
+
+
+   1              		.file	"md.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.rodata.supported_digests,"a"
+   5              		.align 16
+   8              	supported_digests:
+   9 0000 06000000 		.long	6
+  10 0004 05000000 		.long	5
+  11 0008 04000000 		.long	4
+  12 000c 00000000 		.long	0
+  13              		.section	.text.mbedtls_md_list,"ax",@progbits
+  14              		.globl	mbedtls_md_list
+  16              	mbedtls_md_list:
+  17              	.LFB6:
+  18              		.file 1 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c"
+   1:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** /**
+   2:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  * \file mbedtls_md.c
+   3:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  *
+   4:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  * \brief Generic message digest wrapper for mbed TLS
+   5:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  *
+   6:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  * \author Adriaan de Jong <dejong@fox-it.com>
+   7:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  *
+   8:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
+   9:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  *  SPDX-License-Identifier: Apache-2.0
+  10:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  *
+  11:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
+  12:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  *  not use this file except in compliance with the License.
+  13:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  *  You may obtain a copy of the License at
+  14:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  *
+  15:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  *  http://www.apache.org/licenses/LICENSE-2.0
+  16:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  *
+  17:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  *  Unless required by applicable law or agreed to in writing, software
+  18:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  19:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  20:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  *  See the License for the specific language governing permissions and
+  21:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  *  limitations under the License.
+  22:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  *
+  23:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  *  This file is part of mbed TLS (https://tls.mbed.org)
+  24:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  */
+  25:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+  26:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if !defined(MBEDTLS_CONFIG_FILE)
+  27:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #include "mbedtls/config.h"
+  28:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #else
+  29:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #include MBEDTLS_CONFIG_FILE
+  30:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+  31:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+  32:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_MD_C)
+  33:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+  34:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #include "mbedtls/md.h"
+  35:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #include "mbedtls/md_internal.h"
+  36:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #include "mbedtls/platform_util.h"
+  37:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+  38:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_PLATFORM_C)
+  39:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #include "mbedtls/platform.h"
+  40:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #else
+  41:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #include <stdlib.h>
+  42:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #define mbedtls_calloc    calloc
+GAS LISTING /tmp/ccEkA5hM.s 			page 2
+
+
+  43:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #define mbedtls_free       free
+  44:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+  45:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+  46:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #include <string.h>
+  47:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+  48:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_FS_IO)
+  49:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #include <stdio.h>
+  50:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+  51:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+  52:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** /*
+  53:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  * Reminder: update profiles in x509_crt.c when adding a new hash!
+  54:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****  */
+  55:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** static const int supported_digests[] = {
+  56:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+  57:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_SHA512_C)
+  58:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         MBEDTLS_MD_SHA512,
+  59:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         MBEDTLS_MD_SHA384,
+  60:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+  61:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+  62:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_SHA256_C)
+  63:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         MBEDTLS_MD_SHA256,
+  64:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         MBEDTLS_MD_SHA224,
+  65:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+  66:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+  67:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_SHA1_C)
+  68:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         MBEDTLS_MD_SHA1,
+  69:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+  70:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+  71:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_RIPEMD160_C)
+  72:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         MBEDTLS_MD_RIPEMD160,
+  73:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+  74:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+  75:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_MD5_C)
+  76:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         MBEDTLS_MD_MD5,
+  77:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+  78:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+  79:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_MD4_C)
+  80:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         MBEDTLS_MD_MD4,
+  81:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+  82:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+  83:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_MD2_C)
+  84:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         MBEDTLS_MD_MD2,
+  85:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+  86:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+  87:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         MBEDTLS_MD_NONE
+  88:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** };
+  89:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+  90:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** const int *mbedtls_md_list( void )
+  91:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** {
+  19              		.loc 1 91 1
+  20              		.cfi_startproc
+  21 0000 F30F1EFA 		endbr64
+  22 0004 55       		pushq	%rbp
+  23              	.LCFI0:
+  24              		.cfi_def_cfa_offset 16
+  25              		.cfi_offset 6, -16
+  26 0005 4889E5   		movq	%rsp, %rbp
+GAS LISTING /tmp/ccEkA5hM.s 			page 3
+
+
+  27              	.LCFI1:
+  28              		.cfi_def_cfa_register 6
+  29 0008 4883EC10 		subq	$16, %rsp
+  30              		.loc 1 91 1
+  31 000c 64488B04 		movq	%fs:40, %rax
+  31      25280000 
+  31      00
+  32 0015 488945F8 		movq	%rax, -8(%rbp)
+  33 0019 31C0     		xorl	%eax, %eax
+  92:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     return( supported_digests );
+  34              		.loc 1 92 11
+  35 001b 488D0500 		leaq	supported_digests(%rip), %rax
+  35      000000
+  93:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** }
+  36              		.loc 1 93 1
+  37 0022 488B55F8 		movq	-8(%rbp), %rdx
+  38 0026 64483314 		xorq	%fs:40, %rdx
+  38      25280000 
+  38      00
+  39 002f 7405     		je	.L3
+  40 0031 E8000000 		call	__stack_chk_fail@PLT
+  40      00
+  41              	.L3:
+  42 0036 C9       		leave
+  43              	.LCFI2:
+  44              		.cfi_def_cfa 7, 8
+  45 0037 C3       		ret
+  46              		.cfi_endproc
+  47              	.LFE6:
+  49              		.section	.rodata
+  50              	.LC0:
+  51 0000 53484131 		.string	"SHA1"
+  51      00
+  52              	.LC1:
+  53 0005 53484100 		.string	"SHA"
+  54              	.LC2:
+  55 0009 53484132 		.string	"SHA224"
+  55      323400
+  56              	.LC3:
+  57 0010 53484132 		.string	"SHA256"
+  57      353600
+  58              		.section	.text.mbedtls_md_info_from_string,"ax",@progbits
+  59              		.globl	mbedtls_md_info_from_string
+  61              	mbedtls_md_info_from_string:
+  62              	.LFB7:
+  94:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+  95:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** const mbedtls_md_info_t *mbedtls_md_info_from_string( const char *md_name )
+  96:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** {
+  63              		.loc 1 96 1
+  64              		.cfi_startproc
+  65 0000 F30F1EFA 		endbr64
+  66 0004 55       		pushq	%rbp
+  67              	.LCFI3:
+  68              		.cfi_def_cfa_offset 16
+  69              		.cfi_offset 6, -16
+  70 0005 4889E5   		movq	%rsp, %rbp
+  71              	.LCFI4:
+GAS LISTING /tmp/ccEkA5hM.s 			page 4
+
+
+  72              		.cfi_def_cfa_register 6
+  73 0008 4883EC20 		subq	$32, %rsp
+  74 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  75              		.loc 1 96 1
+  76 0010 64488B04 		movq	%fs:40, %rax
+  76      25280000 
+  76      00
+  77 0019 488945F8 		movq	%rax, -8(%rbp)
+  78 001d 31C0     		xorl	%eax, %eax
+  97:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( NULL == md_name )
+  79              		.loc 1 97 7
+  80 001f 48837DE8 		cmpq	$0, -24(%rbp)
+  80      00
+  81 0024 750A     		jne	.L5
+  98:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( NULL );
+  82              		.loc 1 98 15
+  83 0026 B8000000 		movl	$0, %eax
+  83      00
+  84 002b E9850000 		jmp	.L6
+  84      00
+  85              	.L5:
+  99:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 100:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     /* Get the appropriate digest information */
+ 101:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_MD2_C)
+ 102:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( !strcmp( "MD2", md_name ) )
+ 103:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return mbedtls_md_info_from_type( MBEDTLS_MD_MD2 );
+ 104:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+ 105:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_MD4_C)
+ 106:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( !strcmp( "MD4", md_name ) )
+ 107:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return mbedtls_md_info_from_type( MBEDTLS_MD_MD4 );
+ 108:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+ 109:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_MD5_C)
+ 110:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( !strcmp( "MD5", md_name ) )
+ 111:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return mbedtls_md_info_from_type( MBEDTLS_MD_MD5 );
+ 112:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+ 113:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_RIPEMD160_C)
+ 114:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( !strcmp( "RIPEMD160", md_name ) )
+ 115:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return mbedtls_md_info_from_type( MBEDTLS_MD_RIPEMD160 );
+ 116:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+ 117:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_SHA1_C)
+ 118:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( !strcmp( "SHA1", md_name ) || !strcmp( "SHA", md_name ) )
+  86              		.loc 1 118 10
+  87 0030 488B45E8 		movq	-24(%rbp), %rax
+  88 0034 4889C6   		movq	%rax, %rsi
+  89 0037 488D3D00 		leaq	.LC0(%rip), %rdi
+  89      000000
+  90 003e E8000000 		call	strcmp@PLT
+  90      00
+  91              		.loc 1 118 7
+  92 0043 85C0     		testl	%eax, %eax
+  93 0045 7417     		je	.L7
+  94              		.loc 1 118 40 discriminator 1
+  95 0047 488B45E8 		movq	-24(%rbp), %rax
+  96 004b 4889C6   		movq	%rax, %rsi
+  97 004e 488D3D00 		leaq	.LC1(%rip), %rdi
+  97      000000
+  98 0055 E8000000 		call	strcmp@PLT
+GAS LISTING /tmp/ccEkA5hM.s 			page 5
+
+
+  98      00
+  99              		.loc 1 118 36 discriminator 1
+ 100 005a 85C0     		testl	%eax, %eax
+ 101 005c 750C     		jne	.L8
+ 102              	.L7:
+ 119:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return mbedtls_md_info_from_type( MBEDTLS_MD_SHA1 );
+ 103              		.loc 1 119 16
+ 104 005e BF040000 		movl	$4, %edi
+ 104      00
+ 105 0063 E8000000 		call	mbedtls_md_info_from_type
+ 105      00
+ 106 0068 EB4B     		jmp	.L6
+ 107              	.L8:
+ 120:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+ 121:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_SHA256_C)
+ 122:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( !strcmp( "SHA224", md_name ) )
+ 108              		.loc 1 122 10
+ 109 006a 488B45E8 		movq	-24(%rbp), %rax
+ 110 006e 4889C6   		movq	%rax, %rsi
+ 111 0071 488D3D00 		leaq	.LC2(%rip), %rdi
+ 111      000000
+ 112 0078 E8000000 		call	strcmp@PLT
+ 112      00
+ 113              		.loc 1 122 7
+ 114 007d 85C0     		testl	%eax, %eax
+ 115 007f 750C     		jne	.L9
+ 123:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return mbedtls_md_info_from_type( MBEDTLS_MD_SHA224 );
+ 116              		.loc 1 123 16
+ 117 0081 BF050000 		movl	$5, %edi
+ 117      00
+ 118 0086 E8000000 		call	mbedtls_md_info_from_type
+ 118      00
+ 119 008b EB28     		jmp	.L6
+ 120              	.L9:
+ 124:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( !strcmp( "SHA256", md_name ) )
+ 121              		.loc 1 124 10
+ 122 008d 488B45E8 		movq	-24(%rbp), %rax
+ 123 0091 4889C6   		movq	%rax, %rsi
+ 124 0094 488D3D00 		leaq	.LC3(%rip), %rdi
+ 124      000000
+ 125 009b E8000000 		call	strcmp@PLT
+ 125      00
+ 126              		.loc 1 124 7
+ 127 00a0 85C0     		testl	%eax, %eax
+ 128 00a2 750C     		jne	.L10
+ 125:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return mbedtls_md_info_from_type( MBEDTLS_MD_SHA256 );
+ 129              		.loc 1 125 16
+ 130 00a4 BF060000 		movl	$6, %edi
+ 130      00
+ 131 00a9 E8000000 		call	mbedtls_md_info_from_type
+ 131      00
+ 132 00ae EB05     		jmp	.L6
+ 133              	.L10:
+ 126:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+ 127:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_SHA512_C)
+ 128:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( !strcmp( "SHA384", md_name ) )
+ 129:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return mbedtls_md_info_from_type( MBEDTLS_MD_SHA384 );
+GAS LISTING /tmp/ccEkA5hM.s 			page 6
+
+
+ 130:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( !strcmp( "SHA512", md_name ) )
+ 131:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return mbedtls_md_info_from_type( MBEDTLS_MD_SHA512 );
+ 132:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+ 133:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     return( NULL );
+ 134              		.loc 1 133 11
+ 135 00b0 B8000000 		movl	$0, %eax
+ 135      00
+ 136              	.L6:
+ 134:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** }
+ 137              		.loc 1 134 1
+ 138 00b5 488B55F8 		movq	-8(%rbp), %rdx
+ 139 00b9 64483314 		xorq	%fs:40, %rdx
+ 139      25280000 
+ 139      00
+ 140 00c2 7405     		je	.L11
+ 141 00c4 E8000000 		call	__stack_chk_fail@PLT
+ 141      00
+ 142              	.L11:
+ 143 00c9 C9       		leave
+ 144              	.LCFI5:
+ 145              		.cfi_def_cfa 7, 8
+ 146 00ca C3       		ret
+ 147              		.cfi_endproc
+ 148              	.LFE7:
+ 150              		.section	.text.mbedtls_md_info_from_type,"ax",@progbits
+ 151              		.globl	mbedtls_md_info_from_type
+ 153              	mbedtls_md_info_from_type:
+ 154              	.LFB8:
+ 135:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 136:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** const mbedtls_md_info_t *mbedtls_md_info_from_type( mbedtls_md_type_t md_type )
+ 137:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** {
+ 155              		.loc 1 137 1
+ 156              		.cfi_startproc
+ 157 0000 F30F1EFA 		endbr64
+ 158 0004 55       		pushq	%rbp
+ 159              	.LCFI6:
+ 160              		.cfi_def_cfa_offset 16
+ 161              		.cfi_offset 6, -16
+ 162 0005 4889E5   		movq	%rsp, %rbp
+ 163              	.LCFI7:
+ 164              		.cfi_def_cfa_register 6
+ 165 0008 4883EC20 		subq	$32, %rsp
+ 166 000c 897DEC   		movl	%edi, -20(%rbp)
+ 167              		.loc 1 137 1
+ 168 000f 64488B04 		movq	%fs:40, %rax
+ 168      25280000 
+ 168      00
+ 169 0018 488945F8 		movq	%rax, -8(%rbp)
+ 170 001c 31C0     		xorl	%eax, %eax
+ 138:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     switch( md_type )
+ 171              		.loc 1 138 5
+ 172 001e 837DEC06 		cmpl	$6, -20(%rbp)
+ 173 0022 7426     		je	.L13
+ 174 0024 837DEC06 		cmpl	$6, -20(%rbp)
+ 175 0028 7729     		ja	.L14
+ 176 002a 837DEC04 		cmpl	$4, -20(%rbp)
+ 177 002e 7408     		je	.L15
+GAS LISTING /tmp/ccEkA5hM.s 			page 7
+
+
+ 178 0030 837DEC05 		cmpl	$5, -20(%rbp)
+ 179 0034 740B     		je	.L16
+ 180 0036 EB1B     		jmp	.L14
+ 181              	.L15:
+ 139:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     {
+ 140:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_MD2_C)
+ 141:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         case MBEDTLS_MD_MD2:
+ 142:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****             return( &mbedtls_md2_info );
+ 143:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+ 144:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_MD4_C)
+ 145:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         case MBEDTLS_MD_MD4:
+ 146:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****             return( &mbedtls_md4_info );
+ 147:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+ 148:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_MD5_C)
+ 149:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         case MBEDTLS_MD_MD5:
+ 150:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****             return( &mbedtls_md5_info );
+ 151:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+ 152:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_RIPEMD160_C)
+ 153:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         case MBEDTLS_MD_RIPEMD160:
+ 154:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****             return( &mbedtls_ripemd160_info );
+ 155:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+ 156:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_SHA1_C)
+ 157:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         case MBEDTLS_MD_SHA1:
+ 158:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****             return( &mbedtls_sha1_info );
+ 182              		.loc 1 158 21
+ 183 0038 488D0500 		leaq	mbedtls_sha1_info(%rip), %rax
+ 183      000000
+ 184 003f EB17     		jmp	.L17
+ 185              	.L16:
+ 159:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+ 160:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_SHA256_C)
+ 161:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         case MBEDTLS_MD_SHA224:
+ 162:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****             return( &mbedtls_sha224_info );
+ 186              		.loc 1 162 21
+ 187 0041 488D0500 		leaq	mbedtls_sha224_info(%rip), %rax
+ 187      000000
+ 188 0048 EB0E     		jmp	.L17
+ 189              	.L13:
+ 163:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         case MBEDTLS_MD_SHA256:
+ 164:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****             return( &mbedtls_sha256_info );
+ 190              		.loc 1 164 21
+ 191 004a 488D0500 		leaq	mbedtls_sha256_info(%rip), %rax
+ 191      000000
+ 192 0051 EB05     		jmp	.L17
+ 193              	.L14:
+ 165:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+ 166:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_SHA512_C)
+ 167:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         case MBEDTLS_MD_SHA384:
+ 168:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****             return( &mbedtls_sha384_info );
+ 169:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         case MBEDTLS_MD_SHA512:
+ 170:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****             return( &mbedtls_sha512_info );
+ 171:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+ 172:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         default:
+ 173:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****             return( NULL );
+ 194              		.loc 1 173 19
+ 195 0053 B8000000 		movl	$0, %eax
+ 195      00
+GAS LISTING /tmp/ccEkA5hM.s 			page 8
+
+
+ 196              	.L17:
+ 174:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     }
+ 175:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** }
+ 197              		.loc 1 175 1
+ 198 0058 488B55F8 		movq	-8(%rbp), %rdx
+ 199 005c 64483314 		xorq	%fs:40, %rdx
+ 199      25280000 
+ 199      00
+ 200 0065 7405     		je	.L18
+ 201 0067 E8000000 		call	__stack_chk_fail@PLT
+ 201      00
+ 202              	.L18:
+ 203 006c C9       		leave
+ 204              	.LCFI8:
+ 205              		.cfi_def_cfa 7, 8
+ 206 006d C3       		ret
+ 207              		.cfi_endproc
+ 208              	.LFE8:
+ 210              		.section	.text.mbedtls_md_init,"ax",@progbits
+ 211              		.globl	mbedtls_md_init
+ 213              	mbedtls_md_init:
+ 214              	.LFB9:
+ 176:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 177:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** void mbedtls_md_init( mbedtls_md_context_t *ctx )
+ 178:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** {
+ 215              		.loc 1 178 1
+ 216              		.cfi_startproc
+ 217 0000 F30F1EFA 		endbr64
+ 218 0004 55       		pushq	%rbp
+ 219              	.LCFI9:
+ 220              		.cfi_def_cfa_offset 16
+ 221              		.cfi_offset 6, -16
+ 222 0005 4889E5   		movq	%rsp, %rbp
+ 223              	.LCFI10:
+ 224              		.cfi_def_cfa_register 6
+ 225 0008 4883EC20 		subq	$32, %rsp
+ 226 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 227              		.loc 1 178 1
+ 228 0010 64488B04 		movq	%fs:40, %rax
+ 228      25280000 
+ 228      00
+ 229 0019 488945F8 		movq	%rax, -8(%rbp)
+ 230 001d 31C0     		xorl	%eax, %eax
+ 179:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     memset( ctx, 0, sizeof( mbedtls_md_context_t ) );
+ 231              		.loc 1 179 5
+ 232 001f 488B45E8 		movq	-24(%rbp), %rax
+ 233 0023 BA180000 		movl	$24, %edx
+ 233      00
+ 234 0028 BE000000 		movl	$0, %esi
+ 234      00
+ 235 002d 4889C7   		movq	%rax, %rdi
+ 236 0030 E8000000 		call	memset@PLT
+ 236      00
+ 180:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** }
+ 237              		.loc 1 180 1
+ 238 0035 90       		nop
+ 239 0036 488B45F8 		movq	-8(%rbp), %rax
+GAS LISTING /tmp/ccEkA5hM.s 			page 9
+
+
+ 240 003a 64483304 		xorq	%fs:40, %rax
+ 240      25280000 
+ 240      00
+ 241 0043 7405     		je	.L20
+ 242 0045 E8000000 		call	__stack_chk_fail@PLT
+ 242      00
+ 243              	.L20:
+ 244 004a C9       		leave
+ 245              	.LCFI11:
+ 246              		.cfi_def_cfa 7, 8
+ 247 004b C3       		ret
+ 248              		.cfi_endproc
+ 249              	.LFE9:
+ 251              		.section	.text.mbedtls_md_free,"ax",@progbits
+ 252              		.globl	mbedtls_md_free
+ 254              	mbedtls_md_free:
+ 255              	.LFB10:
+ 181:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 182:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** void mbedtls_md_free( mbedtls_md_context_t *ctx )
+ 183:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** {
+ 256              		.loc 1 183 1
+ 257              		.cfi_startproc
+ 258 0000 F30F1EFA 		endbr64
+ 259 0004 55       		pushq	%rbp
+ 260              	.LCFI12:
+ 261              		.cfi_def_cfa_offset 16
+ 262              		.cfi_offset 6, -16
+ 263 0005 4889E5   		movq	%rsp, %rbp
+ 264              	.LCFI13:
+ 265              		.cfi_def_cfa_register 6
+ 266 0008 4883EC20 		subq	$32, %rsp
+ 267 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 268              		.loc 1 183 1
+ 269 0010 64488B04 		movq	%fs:40, %rax
+ 269      25280000 
+ 269      00
+ 270 0019 488945F8 		movq	%rax, -8(%rbp)
+ 271 001d 31C0     		xorl	%eax, %eax
+ 184:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ctx == NULL || ctx->md_info == NULL )
+ 272              		.loc 1 184 7
+ 273 001f 48837DE8 		cmpq	$0, -24(%rbp)
+ 273      00
+ 274 0024 0F848300 		je	.L28
+ 274      0000
+ 275              		.loc 1 184 27 discriminator 1
+ 276 002a 488B45E8 		movq	-24(%rbp), %rax
+ 277 002e 488B00   		movq	(%rax), %rax
+ 278              		.loc 1 184 21 discriminator 1
+ 279 0031 4885C0   		testq	%rax, %rax
+ 280 0034 7477     		je	.L28
+ 185:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return;
+ 186:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 187:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ctx->md_ctx != NULL )
+ 281              		.loc 1 187 12
+ 282 0036 488B45E8 		movq	-24(%rbp), %rax
+ 283 003a 488B4008 		movq	8(%rax), %rax
+ 284              		.loc 1 187 7
+GAS LISTING /tmp/ccEkA5hM.s 			page 10
+
+
+ 285 003e 4885C0   		testq	%rax, %rax
+ 286 0041 7418     		je	.L25
+ 188:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         ctx->md_info->ctx_free_func( ctx->md_ctx );
+ 287              		.loc 1 188 12
+ 288 0043 488B45E8 		movq	-24(%rbp), %rax
+ 289 0047 488B00   		movq	(%rax), %rax
+ 290              		.loc 1 188 21
+ 291 004a 488B5040 		movq	64(%rax), %rdx
+ 292              		.loc 1 188 9
+ 293 004e 488B45E8 		movq	-24(%rbp), %rax
+ 294 0052 488B4008 		movq	8(%rax), %rax
+ 295 0056 4889C7   		movq	%rax, %rdi
+ 296 0059 FFD2     		call	*%rdx
+ 297              	.LVL0:
+ 298              	.L25:
+ 189:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 190:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ctx->hmac_ctx != NULL )
+ 299              		.loc 1 190 12
+ 300 005b 488B45E8 		movq	-24(%rbp), %rax
+ 301 005f 488B4010 		movq	16(%rax), %rax
+ 302              		.loc 1 190 7
+ 303 0063 4885C0   		testq	%rax, %rax
+ 304 0066 7432     		je	.L26
+ 191:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     {
+ 192:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         mbedtls_platform_zeroize( ctx->hmac_ctx,
+ 193:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****                                   2 * ctx->md_info->block_size );
+ 305              		.loc 1 193 42
+ 306 0068 488B45E8 		movq	-24(%rbp), %rax
+ 307 006c 488B00   		movq	(%rax), %rax
+ 308              		.loc 1 193 51
+ 309 006f 8B4014   		movl	20(%rax), %eax
+ 310              		.loc 1 193 37
+ 311 0072 01C0     		addl	%eax, %eax
+ 192:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****                                   2 * ctx->md_info->block_size );
+ 312              		.loc 1 192 9
+ 313 0074 4863D0   		movslq	%eax, %rdx
+ 314 0077 488B45E8 		movq	-24(%rbp), %rax
+ 315 007b 488B4010 		movq	16(%rax), %rax
+ 316 007f 4889D6   		movq	%rdx, %rsi
+ 317 0082 4889C7   		movq	%rax, %rdi
+ 318 0085 E8000000 		call	mbedtls_platform_zeroize@PLT
+ 318      00
+ 194:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         mbedtls_free( ctx->hmac_ctx );
+ 319              		.loc 1 194 9
+ 320 008a 488B45E8 		movq	-24(%rbp), %rax
+ 321 008e 488B4010 		movq	16(%rax), %rax
+ 322 0092 4889C7   		movq	%rax, %rdi
+ 323 0095 E8000000 		call	mbedtls_free@PLT
+ 323      00
+ 324              	.L26:
+ 195:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     }
+ 196:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 197:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     mbedtls_platform_zeroize( ctx, sizeof( mbedtls_md_context_t ) );
+ 325              		.loc 1 197 5
+ 326 009a 488B45E8 		movq	-24(%rbp), %rax
+ 327 009e BE180000 		movl	$24, %esi
+ 327      00
+GAS LISTING /tmp/ccEkA5hM.s 			page 11
+
+
+ 328 00a3 4889C7   		movq	%rax, %rdi
+ 329 00a6 E8000000 		call	mbedtls_platform_zeroize@PLT
+ 329      00
+ 330 00ab EB01     		jmp	.L21
+ 331              	.L28:
+ 185:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 332              		.loc 1 185 9
+ 333 00ad 90       		nop
+ 334              	.L21:
+ 198:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** }
+ 335              		.loc 1 198 1
+ 336 00ae 488B45F8 		movq	-8(%rbp), %rax
+ 337 00b2 64483304 		xorq	%fs:40, %rax
+ 337      25280000 
+ 337      00
+ 338 00bb 7405     		je	.L27
+ 339 00bd E8000000 		call	__stack_chk_fail@PLT
+ 339      00
+ 340              	.L27:
+ 341 00c2 C9       		leave
+ 342              	.LCFI14:
+ 343              		.cfi_def_cfa 7, 8
+ 344 00c3 C3       		ret
+ 345              		.cfi_endproc
+ 346              	.LFE10:
+ 348              		.section	.text.mbedtls_md_clone,"ax",@progbits
+ 349              		.globl	mbedtls_md_clone
+ 351              	mbedtls_md_clone:
+ 352              	.LFB11:
+ 199:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 200:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** int mbedtls_md_clone( mbedtls_md_context_t *dst,
+ 201:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****                       const mbedtls_md_context_t *src )
+ 202:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** {
+ 353              		.loc 1 202 1
+ 354              		.cfi_startproc
+ 355 0000 F30F1EFA 		endbr64
+ 356 0004 55       		pushq	%rbp
+ 357              	.LCFI15:
+ 358              		.cfi_def_cfa_offset 16
+ 359              		.cfi_offset 6, -16
+ 360 0005 4889E5   		movq	%rsp, %rbp
+ 361              	.LCFI16:
+ 362              		.cfi_def_cfa_register 6
+ 363 0008 4883EC20 		subq	$32, %rsp
+ 364 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 365 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 366              		.loc 1 202 1
+ 367 0014 64488B04 		movq	%fs:40, %rax
+ 367      25280000 
+ 367      00
+ 368 001d 488945F8 		movq	%rax, -8(%rbp)
+ 369 0021 31C0     		xorl	%eax, %eax
+ 203:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( dst == NULL || dst->md_info == NULL ||
+ 370              		.loc 1 203 7
+ 371 0023 48837DE8 		cmpq	$0, -24(%rbp)
+ 371      00
+ 372 0028 7432     		je	.L30
+GAS LISTING /tmp/ccEkA5hM.s 			page 12
+
+
+ 373              		.loc 1 203 27 discriminator 1
+ 374 002a 488B45E8 		movq	-24(%rbp), %rax
+ 375 002e 488B00   		movq	(%rax), %rax
+ 376              		.loc 1 203 21 discriminator 1
+ 377 0031 4885C0   		testq	%rax, %rax
+ 378 0034 7426     		je	.L30
+ 379              		.loc 1 203 45 discriminator 2
+ 380 0036 48837DE0 		cmpq	$0, -32(%rbp)
+ 380      00
+ 381 003b 741F     		je	.L30
+ 204:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         src == NULL || src->md_info == NULL ||
+ 382              		.loc 1 204 27
+ 383 003d 488B45E0 		movq	-32(%rbp), %rax
+ 384 0041 488B00   		movq	(%rax), %rax
+ 385              		.loc 1 204 21
+ 386 0044 4885C0   		testq	%rax, %rax
+ 387 0047 7413     		je	.L30
+ 205:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         dst->md_info != src->md_info )
+ 388              		.loc 1 205 12 discriminator 1
+ 389 0049 488B45E8 		movq	-24(%rbp), %rax
+ 390 004d 488B10   		movq	(%rax), %rdx
+ 391              		.loc 1 205 28 discriminator 1
+ 392 0050 488B45E0 		movq	-32(%rbp), %rax
+ 393 0054 488B00   		movq	(%rax), %rax
+ 204:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         src == NULL || src->md_info == NULL ||
+ 394              		.loc 1 204 45 discriminator 1
+ 395 0057 4839C2   		cmpq	%rax, %rdx
+ 396 005a 7407     		je	.L31
+ 397              	.L30:
+ 206:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     {
+ 207:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( MBEDTLS_ERR_MD_BAD_INPUT_DATA );
+ 398              		.loc 1 207 15
+ 399 005c B800AFFF 		movl	$-20736, %eax
+ 399      FF
+ 400 0061 EB28     		jmp	.L32
+ 401              	.L31:
+ 208:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     }
+ 209:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 210:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     dst->md_info->clone_func( dst->md_ctx, src->md_ctx );
+ 402              		.loc 1 210 8
+ 403 0063 488B45E8 		movq	-24(%rbp), %rax
+ 404 0067 488B00   		movq	(%rax), %rax
+ 405              		.loc 1 210 17
+ 406 006a 488B4848 		movq	72(%rax), %rcx
+ 407              		.loc 1 210 47
+ 408 006e 488B45E0 		movq	-32(%rbp), %rax
+ 409 0072 488B5008 		movq	8(%rax), %rdx
+ 410              		.loc 1 210 5
+ 411 0076 488B45E8 		movq	-24(%rbp), %rax
+ 412 007a 488B4008 		movq	8(%rax), %rax
+ 413 007e 4889D6   		movq	%rdx, %rsi
+ 414 0081 4889C7   		movq	%rax, %rdi
+ 415 0084 FFD1     		call	*%rcx
+ 416              	.LVL1:
+ 211:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 212:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     return( 0 );
+ 417              		.loc 1 212 11
+GAS LISTING /tmp/ccEkA5hM.s 			page 13
+
+
+ 418 0086 B8000000 		movl	$0, %eax
+ 418      00
+ 419              	.L32:
+ 213:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** }
+ 420              		.loc 1 213 1
+ 421 008b 488B4DF8 		movq	-8(%rbp), %rcx
+ 422 008f 6448330C 		xorq	%fs:40, %rcx
+ 422      25280000 
+ 422      00
+ 423 0098 7405     		je	.L33
+ 424 009a E8000000 		call	__stack_chk_fail@PLT
+ 424      00
+ 425              	.L33:
+ 426 009f C9       		leave
+ 427              	.LCFI17:
+ 428              		.cfi_def_cfa 7, 8
+ 429 00a0 C3       		ret
+ 430              		.cfi_endproc
+ 431              	.LFE11:
+ 433              		.section	.text.mbedtls_md_init_ctx,"ax",@progbits
+ 434              		.globl	mbedtls_md_init_ctx
+ 436              	mbedtls_md_init_ctx:
+ 437              	.LFB12:
+ 214:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 215:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if ! defined(MBEDTLS_DEPRECATED_REMOVED)
+ 216:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** int mbedtls_md_init_ctx( mbedtls_md_context_t *ctx, const mbedtls_md_info_t *md_info )
+ 217:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** {
+ 438              		.loc 1 217 1
+ 439              		.cfi_startproc
+ 440 0000 F30F1EFA 		endbr64
+ 441 0004 55       		pushq	%rbp
+ 442              	.LCFI18:
+ 443              		.cfi_def_cfa_offset 16
+ 444              		.cfi_offset 6, -16
+ 445 0005 4889E5   		movq	%rsp, %rbp
+ 446              	.LCFI19:
+ 447              		.cfi_def_cfa_register 6
+ 448 0008 4883EC20 		subq	$32, %rsp
+ 449 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 450 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 451              		.loc 1 217 1
+ 452 0014 64488B04 		movq	%fs:40, %rax
+ 452      25280000 
+ 452      00
+ 453 001d 488945F8 		movq	%rax, -8(%rbp)
+ 454 0021 31C0     		xorl	%eax, %eax
+ 218:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     return mbedtls_md_setup( ctx, md_info, 1 );
+ 455              		.loc 1 218 12
+ 456 0023 488B4DE0 		movq	-32(%rbp), %rcx
+ 457 0027 488B45E8 		movq	-24(%rbp), %rax
+ 458 002b BA010000 		movl	$1, %edx
+ 458      00
+ 459 0030 4889CE   		movq	%rcx, %rsi
+ 460 0033 4889C7   		movq	%rax, %rdi
+ 461 0036 E8000000 		call	mbedtls_md_setup
+ 461      00
+ 219:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** }
+GAS LISTING /tmp/ccEkA5hM.s 			page 14
+
+
+ 462              		.loc 1 219 1
+ 463 003b 488B55F8 		movq	-8(%rbp), %rdx
+ 464 003f 64483314 		xorq	%fs:40, %rdx
+ 464      25280000 
+ 464      00
+ 465 0048 7405     		je	.L36
+ 466 004a E8000000 		call	__stack_chk_fail@PLT
+ 466      00
+ 467              	.L36:
+ 468 004f C9       		leave
+ 469              	.LCFI20:
+ 470              		.cfi_def_cfa 7, 8
+ 471 0050 C3       		ret
+ 472              		.cfi_endproc
+ 473              	.LFE12:
+ 475              		.section	.text.mbedtls_md_setup,"ax",@progbits
+ 476              		.globl	mbedtls_md_setup
+ 478              	mbedtls_md_setup:
+ 479              	.LFB13:
+ 220:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif
+ 221:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 222:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** int mbedtls_md_setup( mbedtls_md_context_t *ctx, const mbedtls_md_info_t *md_info, int hmac )
+ 223:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** {
+ 480              		.loc 1 223 1
+ 481              		.cfi_startproc
+ 482 0000 F30F1EFA 		endbr64
+ 483 0004 55       		pushq	%rbp
+ 484              	.LCFI21:
+ 485              		.cfi_def_cfa_offset 16
+ 486              		.cfi_offset 6, -16
+ 487 0005 4889E5   		movq	%rsp, %rbp
+ 488              	.LCFI22:
+ 489              		.cfi_def_cfa_register 6
+ 490 0008 4883EC30 		subq	$48, %rsp
+ 491 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 492 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 493 0014 8955DC   		movl	%edx, -36(%rbp)
+ 494              		.loc 1 223 1
+ 495 0017 64488B04 		movq	%fs:40, %rax
+ 495      25280000 
+ 495      00
+ 496 0020 488945F8 		movq	%rax, -8(%rbp)
+ 497 0024 31C0     		xorl	%eax, %eax
+ 224:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( md_info == NULL || ctx == NULL )
+ 498              		.loc 1 224 7
+ 499 0026 48837DE0 		cmpq	$0, -32(%rbp)
+ 499      00
+ 500 002b 7407     		je	.L38
+ 501              		.loc 1 224 25 discriminator 1
+ 502 002d 48837DE8 		cmpq	$0, -24(%rbp)
+ 502      00
+ 503 0032 750A     		jne	.L39
+ 504              	.L38:
+ 225:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( MBEDTLS_ERR_MD_BAD_INPUT_DATA );
+ 505              		.loc 1 225 15
+ 506 0034 B800AFFF 		movl	$-20736, %eax
+ 506      FF
+GAS LISTING /tmp/ccEkA5hM.s 			page 15
+
+
+ 507 0039 E9830000 		jmp	.L40
+ 507      00
+ 508              	.L39:
+ 226:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 227:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ( ctx->md_ctx = md_info->ctx_alloc_func() ) == NULL )
+ 509              		.loc 1 227 32
+ 510 003e 488B45E0 		movq	-32(%rbp), %rax
+ 511 0042 488B4038 		movq	56(%rax), %rax
+ 512              		.loc 1 227 25
+ 513 0046 FFD0     		call	*%rax
+ 514              	.LVL2:
+ 515              		.loc 1 227 23
+ 516 0048 488B55E8 		movq	-24(%rbp), %rdx
+ 517 004c 48894208 		movq	%rax, 8(%rdx)
+ 518              		.loc 1 227 14
+ 519 0050 488B45E8 		movq	-24(%rbp), %rax
+ 520 0054 488B4008 		movq	8(%rax), %rax
+ 521              		.loc 1 227 7
+ 522 0058 4885C0   		testq	%rax, %rax
+ 523 005b 7507     		jne	.L41
+ 228:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( MBEDTLS_ERR_MD_ALLOC_FAILED );
+ 524              		.loc 1 228 15
+ 525 005d B880AEFF 		movl	$-20864, %eax
+ 525      FF
+ 526 0062 EB5D     		jmp	.L40
+ 527              	.L41:
+ 229:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 230:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( hmac != 0 )
+ 528              		.loc 1 230 7
+ 529 0064 837DDC00 		cmpl	$0, -36(%rbp)
+ 530 0068 7447     		je	.L42
+ 231:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     {
+ 232:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         ctx->hmac_ctx = mbedtls_calloc( 2, md_info->block_size );
+ 531              		.loc 1 232 51
+ 532 006a 488B45E0 		movq	-32(%rbp), %rax
+ 533 006e 8B4014   		movl	20(%rax), %eax
+ 534              		.loc 1 232 25
+ 535 0071 4898     		cltq
+ 536 0073 4889C6   		movq	%rax, %rsi
+ 537 0076 BF020000 		movl	$2, %edi
+ 537      00
+ 538 007b E8000000 		call	mbedtls_calloc@PLT
+ 538      00
+ 539              		.loc 1 232 23
+ 540 0080 488B55E8 		movq	-24(%rbp), %rdx
+ 541 0084 48894210 		movq	%rax, 16(%rdx)
+ 233:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         if( ctx->hmac_ctx == NULL )
+ 542              		.loc 1 233 16
+ 543 0088 488B45E8 		movq	-24(%rbp), %rax
+ 544 008c 488B4010 		movq	16(%rax), %rax
+ 545              		.loc 1 233 11
+ 546 0090 4885C0   		testq	%rax, %rax
+ 547 0093 751C     		jne	.L42
+ 234:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         {
+ 235:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****             md_info->ctx_free_func( ctx->md_ctx );
+ 548              		.loc 1 235 20
+ 549 0095 488B45E0 		movq	-32(%rbp), %rax
+GAS LISTING /tmp/ccEkA5hM.s 			page 16
+
+
+ 550 0099 488B5040 		movq	64(%rax), %rdx
+ 551              		.loc 1 235 13
+ 552 009d 488B45E8 		movq	-24(%rbp), %rax
+ 553 00a1 488B4008 		movq	8(%rax), %rax
+ 554 00a5 4889C7   		movq	%rax, %rdi
+ 555 00a8 FFD2     		call	*%rdx
+ 556              	.LVL3:
+ 236:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****             return( MBEDTLS_ERR_MD_ALLOC_FAILED );
+ 557              		.loc 1 236 19
+ 558 00aa B880AEFF 		movl	$-20864, %eax
+ 558      FF
+ 559 00af EB10     		jmp	.L40
+ 560              	.L42:
+ 237:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         }
+ 238:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     }
+ 239:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 240:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     ctx->md_info = md_info;
+ 561              		.loc 1 240 18
+ 562 00b1 488B45E8 		movq	-24(%rbp), %rax
+ 563 00b5 488B55E0 		movq	-32(%rbp), %rdx
+ 564 00b9 488910   		movq	%rdx, (%rax)
+ 241:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 242:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     return( 0 );
+ 565              		.loc 1 242 11
+ 566 00bc B8000000 		movl	$0, %eax
+ 566      00
+ 567              	.L40:
+ 243:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** }
+ 568              		.loc 1 243 1
+ 569 00c1 488B4DF8 		movq	-8(%rbp), %rcx
+ 570 00c5 6448330C 		xorq	%fs:40, %rcx
+ 570      25280000 
+ 570      00
+ 571 00ce 7405     		je	.L43
+ 572 00d0 E8000000 		call	__stack_chk_fail@PLT
+ 572      00
+ 573              	.L43:
+ 574 00d5 C9       		leave
+ 575              	.LCFI23:
+ 576              		.cfi_def_cfa 7, 8
+ 577 00d6 C3       		ret
+ 578              		.cfi_endproc
+ 579              	.LFE13:
+ 581              		.section	.text.mbedtls_md_starts,"ax",@progbits
+ 582              		.globl	mbedtls_md_starts
+ 584              	mbedtls_md_starts:
+ 585              	.LFB14:
+ 244:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 245:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** int mbedtls_md_starts( mbedtls_md_context_t *ctx )
+ 246:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** {
+ 586              		.loc 1 246 1
+ 587              		.cfi_startproc
+ 588 0000 F30F1EFA 		endbr64
+ 589 0004 55       		pushq	%rbp
+ 590              	.LCFI24:
+ 591              		.cfi_def_cfa_offset 16
+ 592              		.cfi_offset 6, -16
+GAS LISTING /tmp/ccEkA5hM.s 			page 17
+
+
+ 593 0005 4889E5   		movq	%rsp, %rbp
+ 594              	.LCFI25:
+ 595              		.cfi_def_cfa_register 6
+ 596 0008 4883EC20 		subq	$32, %rsp
+ 597 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 598              		.loc 1 246 1
+ 599 0010 64488B04 		movq	%fs:40, %rax
+ 599      25280000 
+ 599      00
+ 600 0019 488945F8 		movq	%rax, -8(%rbp)
+ 601 001d 31C0     		xorl	%eax, %eax
+ 247:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ctx == NULL || ctx->md_info == NULL )
+ 602              		.loc 1 247 7
+ 603 001f 48837DE8 		cmpq	$0, -24(%rbp)
+ 603      00
+ 604 0024 740C     		je	.L45
+ 605              		.loc 1 247 27 discriminator 1
+ 606 0026 488B45E8 		movq	-24(%rbp), %rax
+ 607 002a 488B00   		movq	(%rax), %rax
+ 608              		.loc 1 247 21 discriminator 1
+ 609 002d 4885C0   		testq	%rax, %rax
+ 610 0030 7507     		jne	.L46
+ 611              	.L45:
+ 248:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( MBEDTLS_ERR_MD_BAD_INPUT_DATA );
+ 612              		.loc 1 248 15
+ 613 0032 B800AFFF 		movl	$-20736, %eax
+ 613      FF
+ 614 0037 EB18     		jmp	.L47
+ 615              	.L46:
+ 249:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 250:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     return( ctx->md_info->starts_func( ctx->md_ctx ) );
+ 616              		.loc 1 250 16
+ 617 0039 488B45E8 		movq	-24(%rbp), %rax
+ 618 003d 488B00   		movq	(%rax), %rax
+ 619              		.loc 1 250 25
+ 620 0040 488B5018 		movq	24(%rax), %rdx
+ 621              		.loc 1 250 13
+ 622 0044 488B45E8 		movq	-24(%rbp), %rax
+ 623 0048 488B4008 		movq	8(%rax), %rax
+ 624 004c 4889C7   		movq	%rax, %rdi
+ 625 004f FFD2     		call	*%rdx
+ 626              	.LVL4:
+ 627              	.L47:
+ 251:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** }
+ 628              		.loc 1 251 1
+ 629 0051 488B4DF8 		movq	-8(%rbp), %rcx
+ 630 0055 6448330C 		xorq	%fs:40, %rcx
+ 630      25280000 
+ 630      00
+ 631 005e 7405     		je	.L48
+ 632 0060 E8000000 		call	__stack_chk_fail@PLT
+ 632      00
+ 633              	.L48:
+ 634 0065 C9       		leave
+ 635              	.LCFI26:
+ 636              		.cfi_def_cfa 7, 8
+ 637 0066 C3       		ret
+GAS LISTING /tmp/ccEkA5hM.s 			page 18
+
+
+ 638              		.cfi_endproc
+ 639              	.LFE14:
+ 641              		.section	.text.mbedtls_md_update,"ax",@progbits
+ 642              		.globl	mbedtls_md_update
+ 644              	mbedtls_md_update:
+ 645              	.LFB15:
+ 252:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 253:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** int mbedtls_md_update( mbedtls_md_context_t *ctx, const unsigned char *input, size_t ilen )
+ 254:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** {
+ 646              		.loc 1 254 1
+ 647              		.cfi_startproc
+ 648 0000 F30F1EFA 		endbr64
+ 649 0004 55       		pushq	%rbp
+ 650              	.LCFI27:
+ 651              		.cfi_def_cfa_offset 16
+ 652              		.cfi_offset 6, -16
+ 653 0005 4889E5   		movq	%rsp, %rbp
+ 654              	.LCFI28:
+ 655              		.cfi_def_cfa_register 6
+ 656 0008 4883EC30 		subq	$48, %rsp
+ 657 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 658 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 659 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 660              		.loc 1 254 1
+ 661 0018 64488B04 		movq	%fs:40, %rax
+ 661      25280000 
+ 661      00
+ 662 0021 488945F8 		movq	%rax, -8(%rbp)
+ 663 0025 31C0     		xorl	%eax, %eax
+ 255:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ctx == NULL || ctx->md_info == NULL )
+ 664              		.loc 1 255 7
+ 665 0027 48837DE8 		cmpq	$0, -24(%rbp)
+ 665      00
+ 666 002c 740C     		je	.L50
+ 667              		.loc 1 255 27 discriminator 1
+ 668 002e 488B45E8 		movq	-24(%rbp), %rax
+ 669 0032 488B00   		movq	(%rax), %rax
+ 670              		.loc 1 255 21 discriminator 1
+ 671 0035 4885C0   		testq	%rax, %rax
+ 672 0038 7507     		jne	.L51
+ 673              	.L50:
+ 256:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( MBEDTLS_ERR_MD_BAD_INPUT_DATA );
+ 674              		.loc 1 256 15
+ 675 003a B800AFFF 		movl	$-20736, %eax
+ 675      FF
+ 676 003f EB24     		jmp	.L52
+ 677              	.L51:
+ 257:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 258:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     return( ctx->md_info->update_func( ctx->md_ctx, input, ilen ) );
+ 678              		.loc 1 258 16
+ 679 0041 488B45E8 		movq	-24(%rbp), %rax
+ 680 0045 488B00   		movq	(%rax), %rax
+ 681              		.loc 1 258 25
+ 682 0048 4C8B4020 		movq	32(%rax), %r8
+ 683              		.loc 1 258 13
+ 684 004c 488B45E8 		movq	-24(%rbp), %rax
+ 685 0050 488B4008 		movq	8(%rax), %rax
+GAS LISTING /tmp/ccEkA5hM.s 			page 19
+
+
+ 686 0054 488B55D8 		movq	-40(%rbp), %rdx
+ 687 0058 488B4DE0 		movq	-32(%rbp), %rcx
+ 688 005c 4889CE   		movq	%rcx, %rsi
+ 689 005f 4889C7   		movq	%rax, %rdi
+ 690 0062 41FFD0   		call	*%r8
+ 691              	.LVL5:
+ 692              	.L52:
+ 259:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** }
+ 693              		.loc 1 259 1
+ 694 0065 488B4DF8 		movq	-8(%rbp), %rcx
+ 695 0069 6448330C 		xorq	%fs:40, %rcx
+ 695      25280000 
+ 695      00
+ 696 0072 7405     		je	.L53
+ 697 0074 E8000000 		call	__stack_chk_fail@PLT
+ 697      00
+ 698              	.L53:
+ 699 0079 C9       		leave
+ 700              	.LCFI29:
+ 701              		.cfi_def_cfa 7, 8
+ 702 007a C3       		ret
+ 703              		.cfi_endproc
+ 704              	.LFE15:
+ 706              		.section	.text.mbedtls_md_finish,"ax",@progbits
+ 707              		.globl	mbedtls_md_finish
+ 709              	mbedtls_md_finish:
+ 710              	.LFB16:
+ 260:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 261:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** int mbedtls_md_finish( mbedtls_md_context_t *ctx, unsigned char *output )
+ 262:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** {
+ 711              		.loc 1 262 1
+ 712              		.cfi_startproc
+ 713 0000 F30F1EFA 		endbr64
+ 714 0004 55       		pushq	%rbp
+ 715              	.LCFI30:
+ 716              		.cfi_def_cfa_offset 16
+ 717              		.cfi_offset 6, -16
+ 718 0005 4889E5   		movq	%rsp, %rbp
+ 719              	.LCFI31:
+ 720              		.cfi_def_cfa_register 6
+ 721 0008 4883EC20 		subq	$32, %rsp
+ 722 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 723 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 724              		.loc 1 262 1
+ 725 0014 64488B04 		movq	%fs:40, %rax
+ 725      25280000 
+ 725      00
+ 726 001d 488945F8 		movq	%rax, -8(%rbp)
+ 727 0021 31C0     		xorl	%eax, %eax
+ 263:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ctx == NULL || ctx->md_info == NULL )
+ 728              		.loc 1 263 7
+ 729 0023 48837DE8 		cmpq	$0, -24(%rbp)
+ 729      00
+ 730 0028 740C     		je	.L55
+ 731              		.loc 1 263 27 discriminator 1
+ 732 002a 488B45E8 		movq	-24(%rbp), %rax
+ 733 002e 488B00   		movq	(%rax), %rax
+GAS LISTING /tmp/ccEkA5hM.s 			page 20
+
+
+ 734              		.loc 1 263 21 discriminator 1
+ 735 0031 4885C0   		testq	%rax, %rax
+ 736 0034 7507     		jne	.L56
+ 737              	.L55:
+ 264:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( MBEDTLS_ERR_MD_BAD_INPUT_DATA );
+ 738              		.loc 1 264 15
+ 739 0036 B800AFFF 		movl	$-20736, %eax
+ 739      FF
+ 740 003b EB1F     		jmp	.L57
+ 741              	.L56:
+ 265:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 266:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     return( ctx->md_info->finish_func( ctx->md_ctx, output ) );
+ 742              		.loc 1 266 16
+ 743 003d 488B45E8 		movq	-24(%rbp), %rax
+ 744 0041 488B00   		movq	(%rax), %rax
+ 745              		.loc 1 266 25
+ 746 0044 488B4828 		movq	40(%rax), %rcx
+ 747              		.loc 1 266 13
+ 748 0048 488B45E8 		movq	-24(%rbp), %rax
+ 749 004c 488B4008 		movq	8(%rax), %rax
+ 750 0050 488B55E0 		movq	-32(%rbp), %rdx
+ 751 0054 4889D6   		movq	%rdx, %rsi
+ 752 0057 4889C7   		movq	%rax, %rdi
+ 753 005a FFD1     		call	*%rcx
+ 754              	.LVL6:
+ 755              	.L57:
+ 267:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** }
+ 756              		.loc 1 267 1
+ 757 005c 488B55F8 		movq	-8(%rbp), %rdx
+ 758 0060 64483314 		xorq	%fs:40, %rdx
+ 758      25280000 
+ 758      00
+ 759 0069 7405     		je	.L58
+ 760 006b E8000000 		call	__stack_chk_fail@PLT
+ 760      00
+ 761              	.L58:
+ 762 0070 C9       		leave
+ 763              	.LCFI32:
+ 764              		.cfi_def_cfa 7, 8
+ 765 0071 C3       		ret
+ 766              		.cfi_endproc
+ 767              	.LFE16:
+ 769              		.section	.text.mbedtls_md,"ax",@progbits
+ 770              		.globl	mbedtls_md
+ 772              	mbedtls_md:
+ 773              	.LFB17:
+ 268:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 269:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** int mbedtls_md( const mbedtls_md_info_t *md_info, const unsigned char *input, size_t ilen,
+ 270:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****             unsigned char *output )
+ 271:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** {
+ 774              		.loc 1 271 1
+ 775              		.cfi_startproc
+ 776 0000 F30F1EFA 		endbr64
+ 777 0004 55       		pushq	%rbp
+ 778              	.LCFI33:
+ 779              		.cfi_def_cfa_offset 16
+ 780              		.cfi_offset 6, -16
+GAS LISTING /tmp/ccEkA5hM.s 			page 21
+
+
+ 781 0005 4889E5   		movq	%rsp, %rbp
+ 782              	.LCFI34:
+ 783              		.cfi_def_cfa_register 6
+ 784 0008 4883EC30 		subq	$48, %rsp
+ 785 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 786 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 787 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 788 0018 48894DD0 		movq	%rcx, -48(%rbp)
+ 789              		.loc 1 271 1
+ 790 001c 64488B04 		movq	%fs:40, %rax
+ 790      25280000 
+ 790      00
+ 791 0025 488945F8 		movq	%rax, -8(%rbp)
+ 792 0029 31C0     		xorl	%eax, %eax
+ 272:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( md_info == NULL )
+ 793              		.loc 1 272 7
+ 794 002b 48837DE8 		cmpq	$0, -24(%rbp)
+ 794      00
+ 795 0030 7507     		jne	.L60
+ 273:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( MBEDTLS_ERR_MD_BAD_INPUT_DATA );
+ 796              		.loc 1 273 15
+ 797 0032 B800AFFF 		movl	$-20736, %eax
+ 797      FF
+ 798 0037 EB1D     		jmp	.L61
+ 799              	.L60:
+ 274:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 275:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     return( md_info->digest_func( input, ilen, output ) );
+ 800              		.loc 1 275 20
+ 801 0039 488B45E8 		movq	-24(%rbp), %rax
+ 802 003d 4C8B4030 		movq	48(%rax), %r8
+ 803              		.loc 1 275 13
+ 804 0041 488B55D0 		movq	-48(%rbp), %rdx
+ 805 0045 488B4DD8 		movq	-40(%rbp), %rcx
+ 806 0049 488B45E0 		movq	-32(%rbp), %rax
+ 807 004d 4889CE   		movq	%rcx, %rsi
+ 808 0050 4889C7   		movq	%rax, %rdi
+ 809 0053 41FFD0   		call	*%r8
+ 810              	.LVL7:
+ 811              	.L61:
+ 276:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** }
+ 812              		.loc 1 276 1
+ 813 0056 488B75F8 		movq	-8(%rbp), %rsi
+ 814 005a 64483334 		xorq	%fs:40, %rsi
+ 814      25280000 
+ 814      00
+ 815 0063 7405     		je	.L62
+ 816 0065 E8000000 		call	__stack_chk_fail@PLT
+ 816      00
+ 817              	.L62:
+ 818 006a C9       		leave
+ 819              	.LCFI35:
+ 820              		.cfi_def_cfa 7, 8
+ 821 006b C3       		ret
+ 822              		.cfi_endproc
+ 823              	.LFE17:
+ 825              		.section	.text.mbedtls_md_hmac_starts,"ax",@progbits
+ 826              		.globl	mbedtls_md_hmac_starts
+GAS LISTING /tmp/ccEkA5hM.s 			page 22
+
+
+ 828              	mbedtls_md_hmac_starts:
+ 829              	.LFB18:
+ 277:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 278:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #if defined(MBEDTLS_FS_IO)
+ 279:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** int mbedtls_md_file( const mbedtls_md_info_t *md_info, const char *path, unsigned char *output )
+ 280:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** {
+ 281:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     int ret;
+ 282:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     FILE *f;
+ 283:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     size_t n;
+ 284:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     mbedtls_md_context_t ctx;
+ 285:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     unsigned char buf[1024];
+ 286:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 287:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( md_info == NULL )
+ 288:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( MBEDTLS_ERR_MD_BAD_INPUT_DATA );
+ 289:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 290:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ( f = fopen( path, "rb" ) ) == NULL )
+ 291:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( MBEDTLS_ERR_MD_FILE_IO_ERROR );
+ 292:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 293:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     mbedtls_md_init( &ctx );
+ 294:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 295:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ( ret = mbedtls_md_setup( &ctx, md_info, 0 ) ) != 0 )
+ 296:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         goto cleanup;
+ 297:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 298:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ( ret = md_info->starts_func( ctx.md_ctx ) ) != 0 )
+ 299:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         goto cleanup;
+ 300:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 301:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     while( ( n = fread( buf, 1, sizeof( buf ), f ) ) > 0 )
+ 302:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         if( ( ret = md_info->update_func( ctx.md_ctx, buf, n ) ) != 0 )
+ 303:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****             goto cleanup;
+ 304:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 305:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ferror( f ) != 0 )
+ 306:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         ret = MBEDTLS_ERR_MD_FILE_IO_ERROR;
+ 307:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     else
+ 308:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         ret = md_info->finish_func( ctx.md_ctx, output );
+ 309:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 310:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** cleanup:
+ 311:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     mbedtls_platform_zeroize( buf, sizeof( buf ) );
+ 312:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     fclose( f );
+ 313:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     mbedtls_md_free( &ctx );
+ 314:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 315:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     return( ret );
+ 316:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** }
+ 317:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** #endif /* MBEDTLS_FS_IO */
+ 318:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 319:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** int mbedtls_md_hmac_starts( mbedtls_md_context_t *ctx, const unsigned char *key, size_t keylen )
+ 320:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** {
+ 830              		.loc 1 320 1
+ 831              		.cfi_startproc
+ 832 0000 F30F1EFA 		endbr64
+ 833 0004 55       		pushq	%rbp
+ 834              	.LCFI36:
+ 835              		.cfi_def_cfa_offset 16
+ 836              		.cfi_offset 6, -16
+ 837 0005 4889E5   		movq	%rsp, %rbp
+ 838              	.LCFI37:
+ 839              		.cfi_def_cfa_register 6
+ 840 0008 4883EC70 		subq	$112, %rsp
+GAS LISTING /tmp/ccEkA5hM.s 			page 23
+
+
+ 841 000c 48897DA8 		movq	%rdi, -88(%rbp)
+ 842 0010 488975A0 		movq	%rsi, -96(%rbp)
+ 843 0014 48895598 		movq	%rdx, -104(%rbp)
+ 844              		.loc 1 320 1
+ 845 0018 64488B04 		movq	%fs:40, %rax
+ 845      25280000 
+ 845      00
+ 846 0021 488945F8 		movq	%rax, -8(%rbp)
+ 847 0025 31C0     		xorl	%eax, %eax
+ 321:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     int ret;
+ 322:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     unsigned char sum[MBEDTLS_MD_MAX_SIZE];
+ 323:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     unsigned char *ipad, *opad;
+ 324:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     size_t i;
+ 325:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 326:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ctx == NULL || ctx->md_info == NULL || ctx->hmac_ctx == NULL )
+ 848              		.loc 1 326 7
+ 849 0027 48837DA8 		cmpq	$0, -88(%rbp)
+ 849      00
+ 850 002c 7419     		je	.L64
+ 851              		.loc 1 326 27 discriminator 1
+ 852 002e 488B45A8 		movq	-88(%rbp), %rax
+ 853 0032 488B00   		movq	(%rax), %rax
+ 854              		.loc 1 326 21 discriminator 1
+ 855 0035 4885C0   		testq	%rax, %rax
+ 856 0038 740D     		je	.L64
+ 857              		.loc 1 326 51 discriminator 2
+ 858 003a 488B45A8 		movq	-88(%rbp), %rax
+ 859 003e 488B4010 		movq	16(%rax), %rax
+ 860              		.loc 1 326 45 discriminator 2
+ 861 0042 4885C0   		testq	%rax, %rax
+ 862 0045 750A     		jne	.L65
+ 863              	.L64:
+ 327:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( MBEDTLS_ERR_MD_BAD_INPUT_DATA );
+ 864              		.loc 1 327 15
+ 865 0047 B800AFFF 		movl	$-20736, %eax
+ 865      FF
+ 866 004c E9FB0100 		jmp	.L75
+ 866      00
+ 867              	.L65:
+ 328:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 329:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( keylen > (size_t) ctx->md_info->block_size )
+ 868              		.loc 1 329 30
+ 869 0051 488B45A8 		movq	-88(%rbp), %rax
+ 870 0055 488B00   		movq	(%rax), %rax
+ 871              		.loc 1 329 39
+ 872 0058 8B4014   		movl	20(%rax), %eax
+ 873              		.loc 1 329 18
+ 874 005b 4898     		cltq
+ 875              		.loc 1 329 7
+ 876 005d 48394598 		cmpq	%rax, -104(%rbp)
+ 877 0061 0F869A00 		jbe	.L67
+ 877      0000
+ 330:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     {
+ 331:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         if( ( ret = ctx->md_info->starts_func( ctx->md_ctx ) ) != 0 )
+ 878              		.loc 1 331 24
+ 879 0067 488B45A8 		movq	-88(%rbp), %rax
+ 880 006b 488B00   		movq	(%rax), %rax
+GAS LISTING /tmp/ccEkA5hM.s 			page 24
+
+
+ 881              		.loc 1 331 33
+ 882 006e 488B5018 		movq	24(%rax), %rdx
+ 883              		.loc 1 331 21
+ 884 0072 488B45A8 		movq	-88(%rbp), %rax
+ 885 0076 488B4008 		movq	8(%rax), %rax
+ 886 007a 4889C7   		movq	%rax, %rdi
+ 887 007d FFD2     		call	*%rdx
+ 888              	.LVL8:
+ 889 007f 8945B4   		movl	%eax, -76(%rbp)
+ 890              		.loc 1 331 11
+ 891 0082 837DB400 		cmpl	$0, -76(%rbp)
+ 892 0086 0F85A201 		jne	.L77
+ 892      0000
+ 332:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****             goto cleanup;
+ 333:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         if( ( ret = ctx->md_info->update_func( ctx->md_ctx, key, keylen ) ) != 0 )
+ 893              		.loc 1 333 24
+ 894 008c 488B45A8 		movq	-88(%rbp), %rax
+ 895 0090 488B00   		movq	(%rax), %rax
+ 896              		.loc 1 333 33
+ 897 0093 4C8B4020 		movq	32(%rax), %r8
+ 898              		.loc 1 333 21
+ 899 0097 488B45A8 		movq	-88(%rbp), %rax
+ 900 009b 488B4008 		movq	8(%rax), %rax
+ 901 009f 488B5598 		movq	-104(%rbp), %rdx
+ 902 00a3 488B4DA0 		movq	-96(%rbp), %rcx
+ 903 00a7 4889CE   		movq	%rcx, %rsi
+ 904 00aa 4889C7   		movq	%rax, %rdi
+ 905 00ad 41FFD0   		call	*%r8
+ 906              	.LVL9:
+ 907 00b0 8945B4   		movl	%eax, -76(%rbp)
+ 908              		.loc 1 333 11
+ 909 00b3 837DB400 		cmpl	$0, -76(%rbp)
+ 910 00b7 0F857401 		jne	.L78
+ 910      0000
+ 334:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****             goto cleanup;
+ 335:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         if( ( ret = ctx->md_info->finish_func( ctx->md_ctx, sum ) ) != 0 )
+ 911              		.loc 1 335 24
+ 912 00bd 488B45A8 		movq	-88(%rbp), %rax
+ 913 00c1 488B00   		movq	(%rax), %rax
+ 914              		.loc 1 335 33
+ 915 00c4 488B4828 		movq	40(%rax), %rcx
+ 916              		.loc 1 335 21
+ 917 00c8 488B45A8 		movq	-88(%rbp), %rax
+ 918 00cc 488B4008 		movq	8(%rax), %rax
+ 919 00d0 488D55D0 		leaq	-48(%rbp), %rdx
+ 920 00d4 4889D6   		movq	%rdx, %rsi
+ 921 00d7 4889C7   		movq	%rax, %rdi
+ 922 00da FFD1     		call	*%rcx
+ 923              	.LVL10:
+ 924 00dc 8945B4   		movl	%eax, -76(%rbp)
+ 925              		.loc 1 335 11
+ 926 00df 837DB400 		cmpl	$0, -76(%rbp)
+ 927 00e3 0F854B01 		jne	.L79
+ 927      0000
+ 336:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****             goto cleanup;
+ 337:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 338:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         keylen = ctx->md_info->size;
+GAS LISTING /tmp/ccEkA5hM.s 			page 25
+
+
+ 928              		.loc 1 338 21
+ 929 00e9 488B45A8 		movq	-88(%rbp), %rax
+ 930 00ed 488B00   		movq	(%rax), %rax
+ 931              		.loc 1 338 30
+ 932 00f0 8B4010   		movl	16(%rax), %eax
+ 933              		.loc 1 338 16
+ 934 00f3 4898     		cltq
+ 935 00f5 48894598 		movq	%rax, -104(%rbp)
+ 339:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         key = sum;
+ 936              		.loc 1 339 13
+ 937 00f9 488D45D0 		leaq	-48(%rbp), %rax
+ 938 00fd 488945A0 		movq	%rax, -96(%rbp)
+ 939              	.L67:
+ 340:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     }
+ 341:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 342:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     ipad = (unsigned char *) ctx->hmac_ctx;
+ 940              		.loc 1 342 10
+ 941 0101 488B45A8 		movq	-88(%rbp), %rax
+ 942 0105 488B4010 		movq	16(%rax), %rax
+ 943 0109 488945C0 		movq	%rax, -64(%rbp)
+ 343:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     opad = (unsigned char *) ctx->hmac_ctx + ctx->md_info->block_size;
+ 944              		.loc 1 343 33
+ 945 010d 488B45A8 		movq	-88(%rbp), %rax
+ 946 0111 488B5010 		movq	16(%rax), %rdx
+ 947              		.loc 1 343 49
+ 948 0115 488B45A8 		movq	-88(%rbp), %rax
+ 949 0119 488B00   		movq	(%rax), %rax
+ 950              		.loc 1 343 58
+ 951 011c 8B4014   		movl	20(%rax), %eax
+ 952 011f 4898     		cltq
+ 953              		.loc 1 343 10
+ 954 0121 4801D0   		addq	%rdx, %rax
+ 955 0124 488945C8 		movq	%rax, -56(%rbp)
+ 344:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 345:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     memset( ipad, 0x36, ctx->md_info->block_size );
+ 956              		.loc 1 345 28
+ 957 0128 488B45A8 		movq	-88(%rbp), %rax
+ 958 012c 488B00   		movq	(%rax), %rax
+ 959              		.loc 1 345 37
+ 960 012f 8B4014   		movl	20(%rax), %eax
+ 961              		.loc 1 345 5
+ 962 0132 4863D0   		movslq	%eax, %rdx
+ 963 0135 488B45C0 		movq	-64(%rbp), %rax
+ 964 0139 BE360000 		movl	$54, %esi
+ 964      00
+ 965 013e 4889C7   		movq	%rax, %rdi
+ 966 0141 E8000000 		call	memset@PLT
+ 966      00
+ 346:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     memset( opad, 0x5C, ctx->md_info->block_size );
+ 967              		.loc 1 346 28
+ 968 0146 488B45A8 		movq	-88(%rbp), %rax
+ 969 014a 488B00   		movq	(%rax), %rax
+ 970              		.loc 1 346 37
+ 971 014d 8B4014   		movl	20(%rax), %eax
+ 972              		.loc 1 346 5
+ 973 0150 4863D0   		movslq	%eax, %rdx
+ 974 0153 488B45C8 		movq	-56(%rbp), %rax
+GAS LISTING /tmp/ccEkA5hM.s 			page 26
+
+
+ 975 0157 BE5C0000 		movl	$92, %esi
+ 975      00
+ 976 015c 4889C7   		movq	%rax, %rdi
+ 977 015f E8000000 		call	memset@PLT
+ 977      00
+ 347:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 348:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     for( i = 0; i < keylen; i++ )
+ 978              		.loc 1 348 12
+ 979 0164 48C745B8 		movq	$0, -72(%rbp)
+ 979      00000000 
+ 980              		.loc 1 348 5
+ 981 016c EB5F     		jmp	.L72
+ 982              	.L73:
+ 349:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     {
+ 350:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         ipad[i] = (unsigned char)( ipad[i] ^ key[i] );
+ 983              		.loc 1 350 40 discriminator 3
+ 984 016e 488B55C0 		movq	-64(%rbp), %rdx
+ 985 0172 488B45B8 		movq	-72(%rbp), %rax
+ 986 0176 4801D0   		addq	%rdx, %rax
+ 987 0179 0FB630   		movzbl	(%rax), %esi
+ 988              		.loc 1 350 49 discriminator 3
+ 989 017c 488B55A0 		movq	-96(%rbp), %rdx
+ 990 0180 488B45B8 		movq	-72(%rbp), %rax
+ 991 0184 4801D0   		addq	%rdx, %rax
+ 992 0187 0FB608   		movzbl	(%rax), %ecx
+ 993              		.loc 1 350 13 discriminator 3
+ 994 018a 488B55C0 		movq	-64(%rbp), %rdx
+ 995 018e 488B45B8 		movq	-72(%rbp), %rax
+ 996 0192 4801D0   		addq	%rdx, %rax
+ 997              		.loc 1 350 19 discriminator 3
+ 998 0195 31CE     		xorl	%ecx, %esi
+ 999 0197 89F2     		movl	%esi, %edx
+ 1000              		.loc 1 350 17 discriminator 3
+ 1001 0199 8810     		movb	%dl, (%rax)
+ 351:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         opad[i] = (unsigned char)( opad[i] ^ key[i] );
+ 1002              		.loc 1 351 40 discriminator 3
+ 1003 019b 488B55C8 		movq	-56(%rbp), %rdx
+ 1004 019f 488B45B8 		movq	-72(%rbp), %rax
+ 1005 01a3 4801D0   		addq	%rdx, %rax
+ 1006 01a6 0FB630   		movzbl	(%rax), %esi
+ 1007              		.loc 1 351 49 discriminator 3
+ 1008 01a9 488B55A0 		movq	-96(%rbp), %rdx
+ 1009 01ad 488B45B8 		movq	-72(%rbp), %rax
+ 1010 01b1 4801D0   		addq	%rdx, %rax
+ 1011 01b4 0FB608   		movzbl	(%rax), %ecx
+ 1012              		.loc 1 351 13 discriminator 3
+ 1013 01b7 488B55C8 		movq	-56(%rbp), %rdx
+ 1014 01bb 488B45B8 		movq	-72(%rbp), %rax
+ 1015 01bf 4801D0   		addq	%rdx, %rax
+ 1016              		.loc 1 351 19 discriminator 3
+ 1017 01c2 31CE     		xorl	%ecx, %esi
+ 1018 01c4 89F2     		movl	%esi, %edx
+ 1019              		.loc 1 351 17 discriminator 3
+ 1020 01c6 8810     		movb	%dl, (%rax)
+ 348:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     {
+ 1021              		.loc 1 348 30 discriminator 3
+ 1022 01c8 488345B8 		addq	$1, -72(%rbp)
+GAS LISTING /tmp/ccEkA5hM.s 			page 27
+
+
+ 1022      01
+ 1023              	.L72:
+ 348:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     {
+ 1024              		.loc 1 348 5 discriminator 1
+ 1025 01cd 488B45B8 		movq	-72(%rbp), %rax
+ 1026 01d1 483B4598 		cmpq	-104(%rbp), %rax
+ 1027 01d5 7297     		jb	.L73
+ 352:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     }
+ 353:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 354:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ( ret = ctx->md_info->starts_func( ctx->md_ctx ) ) != 0 )
+ 1028              		.loc 1 354 20
+ 1029 01d7 488B45A8 		movq	-88(%rbp), %rax
+ 1030 01db 488B00   		movq	(%rax), %rax
+ 1031              		.loc 1 354 29
+ 1032 01de 488B5018 		movq	24(%rax), %rdx
+ 1033              		.loc 1 354 17
+ 1034 01e2 488B45A8 		movq	-88(%rbp), %rax
+ 1035 01e6 488B4008 		movq	8(%rax), %rax
+ 1036 01ea 4889C7   		movq	%rax, %rdi
+ 1037 01ed FFD2     		call	*%rdx
+ 1038              	.LVL11:
+ 1039 01ef 8945B4   		movl	%eax, -76(%rbp)
+ 1040              		.loc 1 354 7
+ 1041 01f2 837DB400 		cmpl	$0, -76(%rbp)
+ 1042 01f6 753F     		jne	.L80
+ 355:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         goto cleanup;
+ 356:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ( ret = ctx->md_info->update_func( ctx->md_ctx, ipad,
+ 1043              		.loc 1 356 20
+ 1044 01f8 488B45A8 		movq	-88(%rbp), %rax
+ 1045 01fc 488B00   		movq	(%rax), %rax
+ 1046              		.loc 1 356 29
+ 1047 01ff 4C8B4020 		movq	32(%rax), %r8
+ 357:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****                                            ctx->md_info->block_size ) ) != 0 )
+ 1048              		.loc 1 357 47
+ 1049 0203 488B45A8 		movq	-88(%rbp), %rax
+ 1050 0207 488B00   		movq	(%rax), %rax
+ 1051              		.loc 1 357 56
+ 1052 020a 8B4014   		movl	20(%rax), %eax
+ 356:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****                                            ctx->md_info->block_size ) ) != 0 )
+ 1053              		.loc 1 356 17
+ 1054 020d 4863D0   		movslq	%eax, %rdx
+ 1055 0210 488B45A8 		movq	-88(%rbp), %rax
+ 1056 0214 488B4008 		movq	8(%rax), %rax
+ 1057 0218 488B4DC0 		movq	-64(%rbp), %rcx
+ 1058 021c 4889CE   		movq	%rcx, %rsi
+ 1059 021f 4889C7   		movq	%rax, %rdi
+ 1060 0222 41FFD0   		call	*%r8
+ 1061              	.LVL12:
+ 1062 0225 8945B4   		movl	%eax, -76(%rbp)
+ 356:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****                                            ctx->md_info->block_size ) ) != 0 )
+ 1063              		.loc 1 356 7
+ 1064 0228 837DB400 		cmpl	$0, -76(%rbp)
+ 358:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         goto cleanup;
+ 359:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 360:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** cleanup:
+ 1065              		.loc 1 360 1
+ 1066 022c EB0A     		jmp	.L69
+GAS LISTING /tmp/ccEkA5hM.s 			page 28
+
+
+ 1067              	.L77:
+ 332:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         if( ( ret = ctx->md_info->update_func( ctx->md_ctx, key, keylen ) ) != 0 )
+ 1068              		.loc 1 332 13
+ 1069 022e 90       		nop
+ 1070 022f EB07     		jmp	.L69
+ 1071              	.L78:
+ 334:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         if( ( ret = ctx->md_info->finish_func( ctx->md_ctx, sum ) ) != 0 )
+ 1072              		.loc 1 334 13
+ 1073 0231 90       		nop
+ 1074 0232 EB04     		jmp	.L69
+ 1075              	.L79:
+ 336:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 1076              		.loc 1 336 13
+ 1077 0234 90       		nop
+ 1078 0235 EB01     		jmp	.L69
+ 1079              	.L80:
+ 355:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ( ret = ctx->md_info->update_func( ctx->md_ctx, ipad,
+ 1080              		.loc 1 355 9
+ 1081 0237 90       		nop
+ 1082              	.L69:
+ 361:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     mbedtls_platform_zeroize( sum, sizeof( sum ) );
+ 1083              		.loc 1 361 5
+ 1084 0238 488D45D0 		leaq	-48(%rbp), %rax
+ 1085 023c BE200000 		movl	$32, %esi
+ 1085      00
+ 1086 0241 4889C7   		movq	%rax, %rdi
+ 1087 0244 E8000000 		call	mbedtls_platform_zeroize@PLT
+ 1087      00
+ 362:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 363:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     return( ret );
+ 1088              		.loc 1 363 11
+ 1089 0249 8B45B4   		movl	-76(%rbp), %eax
+ 1090              	.L75:
+ 364:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** }
+ 1091              		.loc 1 364 1 discriminator 1
+ 1092 024c 488B7DF8 		movq	-8(%rbp), %rdi
+ 1093 0250 6448333C 		xorq	%fs:40, %rdi
+ 1093      25280000 
+ 1093      00
+ 1094 0259 7405     		je	.L76
+ 1095              		.loc 1 364 1 is_stmt 0
+ 1096 025b E8000000 		call	__stack_chk_fail@PLT
+ 1096      00
+ 1097              	.L76:
+ 1098 0260 C9       		leave
+ 1099              	.LCFI38:
+ 1100              		.cfi_def_cfa 7, 8
+ 1101 0261 C3       		ret
+ 1102              		.cfi_endproc
+ 1103              	.LFE18:
+ 1105              		.section	.text.mbedtls_md_hmac_update,"ax",@progbits
+ 1106              		.globl	mbedtls_md_hmac_update
+ 1108              	mbedtls_md_hmac_update:
+ 1109              	.LFB19:
+ 365:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 366:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** int mbedtls_md_hmac_update( mbedtls_md_context_t *ctx, const unsigned char *input, size_t ilen )
+ 367:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** {
+GAS LISTING /tmp/ccEkA5hM.s 			page 29
+
+
+ 1110              		.loc 1 367 1 is_stmt 1
+ 1111              		.cfi_startproc
+ 1112 0000 F30F1EFA 		endbr64
+ 1113 0004 55       		pushq	%rbp
+ 1114              	.LCFI39:
+ 1115              		.cfi_def_cfa_offset 16
+ 1116              		.cfi_offset 6, -16
+ 1117 0005 4889E5   		movq	%rsp, %rbp
+ 1118              	.LCFI40:
+ 1119              		.cfi_def_cfa_register 6
+ 1120 0008 4883EC30 		subq	$48, %rsp
+ 1121 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1122 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 1123 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 1124              		.loc 1 367 1
+ 1125 0018 64488B04 		movq	%fs:40, %rax
+ 1125      25280000 
+ 1125      00
+ 1126 0021 488945F8 		movq	%rax, -8(%rbp)
+ 1127 0025 31C0     		xorl	%eax, %eax
+ 368:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ctx == NULL || ctx->md_info == NULL || ctx->hmac_ctx == NULL )
+ 1128              		.loc 1 368 7
+ 1129 0027 48837DE8 		cmpq	$0, -24(%rbp)
+ 1129      00
+ 1130 002c 7419     		je	.L82
+ 1131              		.loc 1 368 27 discriminator 1
+ 1132 002e 488B45E8 		movq	-24(%rbp), %rax
+ 1133 0032 488B00   		movq	(%rax), %rax
+ 1134              		.loc 1 368 21 discriminator 1
+ 1135 0035 4885C0   		testq	%rax, %rax
+ 1136 0038 740D     		je	.L82
+ 1137              		.loc 1 368 51 discriminator 2
+ 1138 003a 488B45E8 		movq	-24(%rbp), %rax
+ 1139 003e 488B4010 		movq	16(%rax), %rax
+ 1140              		.loc 1 368 45 discriminator 2
+ 1141 0042 4885C0   		testq	%rax, %rax
+ 1142 0045 7507     		jne	.L83
+ 1143              	.L82:
+ 369:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( MBEDTLS_ERR_MD_BAD_INPUT_DATA );
+ 1144              		.loc 1 369 15
+ 1145 0047 B800AFFF 		movl	$-20736, %eax
+ 1145      FF
+ 1146 004c EB24     		jmp	.L84
+ 1147              	.L83:
+ 370:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 371:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     return( ctx->md_info->update_func( ctx->md_ctx, input, ilen ) );
+ 1148              		.loc 1 371 16
+ 1149 004e 488B45E8 		movq	-24(%rbp), %rax
+ 1150 0052 488B00   		movq	(%rax), %rax
+ 1151              		.loc 1 371 25
+ 1152 0055 4C8B4020 		movq	32(%rax), %r8
+ 1153              		.loc 1 371 13
+ 1154 0059 488B45E8 		movq	-24(%rbp), %rax
+ 1155 005d 488B4008 		movq	8(%rax), %rax
+ 1156 0061 488B55D8 		movq	-40(%rbp), %rdx
+ 1157 0065 488B4DE0 		movq	-32(%rbp), %rcx
+ 1158 0069 4889CE   		movq	%rcx, %rsi
+GAS LISTING /tmp/ccEkA5hM.s 			page 30
+
+
+ 1159 006c 4889C7   		movq	%rax, %rdi
+ 1160 006f 41FFD0   		call	*%r8
+ 1161              	.LVL13:
+ 1162              	.L84:
+ 372:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** }
+ 1163              		.loc 1 372 1
+ 1164 0072 488B4DF8 		movq	-8(%rbp), %rcx
+ 1165 0076 6448330C 		xorq	%fs:40, %rcx
+ 1165      25280000 
+ 1165      00
+ 1166 007f 7405     		je	.L85
+ 1167 0081 E8000000 		call	__stack_chk_fail@PLT
+ 1167      00
+ 1168              	.L85:
+ 1169 0086 C9       		leave
+ 1170              	.LCFI41:
+ 1171              		.cfi_def_cfa 7, 8
+ 1172 0087 C3       		ret
+ 1173              		.cfi_endproc
+ 1174              	.LFE19:
+ 1176              		.section	.text.mbedtls_md_hmac_finish,"ax",@progbits
+ 1177              		.globl	mbedtls_md_hmac_finish
+ 1179              	mbedtls_md_hmac_finish:
+ 1180              	.LFB20:
+ 373:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 374:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** int mbedtls_md_hmac_finish( mbedtls_md_context_t *ctx, unsigned char *output )
+ 375:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** {
+ 1181              		.loc 1 375 1
+ 1182              		.cfi_startproc
+ 1183 0000 F30F1EFA 		endbr64
+ 1184 0004 55       		pushq	%rbp
+ 1185              	.LCFI42:
+ 1186              		.cfi_def_cfa_offset 16
+ 1187              		.cfi_offset 6, -16
+ 1188 0005 4889E5   		movq	%rsp, %rbp
+ 1189              	.LCFI43:
+ 1190              		.cfi_def_cfa_register 6
+ 1191 0008 4883EC50 		subq	$80, %rsp
+ 1192 000c 48897DB8 		movq	%rdi, -72(%rbp)
+ 1193 0010 488975B0 		movq	%rsi, -80(%rbp)
+ 1194              		.loc 1 375 1
+ 1195 0014 64488B04 		movq	%fs:40, %rax
+ 1195      25280000 
+ 1195      00
+ 1196 001d 488945F8 		movq	%rax, -8(%rbp)
+ 1197 0021 31C0     		xorl	%eax, %eax
+ 376:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     int ret;
+ 377:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     unsigned char tmp[MBEDTLS_MD_MAX_SIZE];
+ 378:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     unsigned char *opad;
+ 379:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 380:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ctx == NULL || ctx->md_info == NULL || ctx->hmac_ctx == NULL )
+ 1198              		.loc 1 380 7
+ 1199 0023 48837DB8 		cmpq	$0, -72(%rbp)
+ 1199      00
+ 1200 0028 7419     		je	.L87
+ 1201              		.loc 1 380 27 discriminator 1
+ 1202 002a 488B45B8 		movq	-72(%rbp), %rax
+GAS LISTING /tmp/ccEkA5hM.s 			page 31
+
+
+ 1203 002e 488B00   		movq	(%rax), %rax
+ 1204              		.loc 1 380 21 discriminator 1
+ 1205 0031 4885C0   		testq	%rax, %rax
+ 1206 0034 740D     		je	.L87
+ 1207              		.loc 1 380 51 discriminator 2
+ 1208 0036 488B45B8 		movq	-72(%rbp), %rax
+ 1209 003a 488B4010 		movq	16(%rax), %rax
+ 1210              		.loc 1 380 45 discriminator 2
+ 1211 003e 4885C0   		testq	%rax, %rax
+ 1212 0041 750A     		jne	.L88
+ 1213              	.L87:
+ 381:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( MBEDTLS_ERR_MD_BAD_INPUT_DATA );
+ 1214              		.loc 1 381 15
+ 1215 0043 B800AFFF 		movl	$-20736, %eax
+ 1215      FF
+ 1216 0048 E9090100 		jmp	.L94
+ 1216      00
+ 1217              	.L88:
+ 382:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 383:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     opad = (unsigned char *) ctx->hmac_ctx + ctx->md_info->block_size;
+ 1218              		.loc 1 383 33
+ 1219 004d 488B45B8 		movq	-72(%rbp), %rax
+ 1220 0051 488B5010 		movq	16(%rax), %rdx
+ 1221              		.loc 1 383 49
+ 1222 0055 488B45B8 		movq	-72(%rbp), %rax
+ 1223 0059 488B00   		movq	(%rax), %rax
+ 1224              		.loc 1 383 58
+ 1225 005c 8B4014   		movl	20(%rax), %eax
+ 1226 005f 4898     		cltq
+ 1227              		.loc 1 383 10
+ 1228 0061 4801D0   		addq	%rdx, %rax
+ 1229 0064 488945C8 		movq	%rax, -56(%rbp)
+ 384:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 385:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ( ret = ctx->md_info->finish_func( ctx->md_ctx, tmp ) ) != 0 )
+ 1230              		.loc 1 385 20
+ 1231 0068 488B45B8 		movq	-72(%rbp), %rax
+ 1232 006c 488B00   		movq	(%rax), %rax
+ 1233              		.loc 1 385 29
+ 1234 006f 488B4828 		movq	40(%rax), %rcx
+ 1235              		.loc 1 385 17
+ 1236 0073 488B45B8 		movq	-72(%rbp), %rax
+ 1237 0077 488B4008 		movq	8(%rax), %rax
+ 1238 007b 488D55D0 		leaq	-48(%rbp), %rdx
+ 1239 007f 4889D6   		movq	%rdx, %rsi
+ 1240 0082 4889C7   		movq	%rax, %rdi
+ 1241 0085 FFD1     		call	*%rcx
+ 1242              	.LVL14:
+ 1243 0087 8945C4   		movl	%eax, -60(%rbp)
+ 1244              		.loc 1 385 7
+ 1245 008a 837DC400 		cmpl	$0, -60(%rbp)
+ 1246 008e 7408     		je	.L90
+ 386:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( ret );
+ 1247              		.loc 1 386 15
+ 1248 0090 8B45C4   		movl	-60(%rbp), %eax
+ 1249 0093 E9BE0000 		jmp	.L94
+ 1249      00
+ 1250              	.L90:
+GAS LISTING /tmp/ccEkA5hM.s 			page 32
+
+
+ 387:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ( ret = ctx->md_info->starts_func( ctx->md_ctx ) ) != 0 )
+ 1251              		.loc 1 387 20
+ 1252 0098 488B45B8 		movq	-72(%rbp), %rax
+ 1253 009c 488B00   		movq	(%rax), %rax
+ 1254              		.loc 1 387 29
+ 1255 009f 488B5018 		movq	24(%rax), %rdx
+ 1256              		.loc 1 387 17
+ 1257 00a3 488B45B8 		movq	-72(%rbp), %rax
+ 1258 00a7 488B4008 		movq	8(%rax), %rax
+ 1259 00ab 4889C7   		movq	%rax, %rdi
+ 1260 00ae FFD2     		call	*%rdx
+ 1261              	.LVL15:
+ 1262 00b0 8945C4   		movl	%eax, -60(%rbp)
+ 1263              		.loc 1 387 7
+ 1264 00b3 837DC400 		cmpl	$0, -60(%rbp)
+ 1265 00b7 7408     		je	.L91
+ 388:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( ret );
+ 1266              		.loc 1 388 15
+ 1267 00b9 8B45C4   		movl	-60(%rbp), %eax
+ 1268 00bc E9950000 		jmp	.L94
+ 1268      00
+ 1269              	.L91:
+ 389:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ( ret = ctx->md_info->update_func( ctx->md_ctx, opad,
+ 1270              		.loc 1 389 20
+ 1271 00c1 488B45B8 		movq	-72(%rbp), %rax
+ 1272 00c5 488B00   		movq	(%rax), %rax
+ 1273              		.loc 1 389 29
+ 1274 00c8 4C8B4020 		movq	32(%rax), %r8
+ 390:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****                                            ctx->md_info->block_size ) ) != 0 )
+ 1275              		.loc 1 390 47
+ 1276 00cc 488B45B8 		movq	-72(%rbp), %rax
+ 1277 00d0 488B00   		movq	(%rax), %rax
+ 1278              		.loc 1 390 56
+ 1279 00d3 8B4014   		movl	20(%rax), %eax
+ 389:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ( ret = ctx->md_info->update_func( ctx->md_ctx, opad,
+ 1280              		.loc 1 389 17
+ 1281 00d6 4863D0   		movslq	%eax, %rdx
+ 1282 00d9 488B45B8 		movq	-72(%rbp), %rax
+ 1283 00dd 488B4008 		movq	8(%rax), %rax
+ 1284 00e1 488B4DC8 		movq	-56(%rbp), %rcx
+ 1285 00e5 4889CE   		movq	%rcx, %rsi
+ 1286 00e8 4889C7   		movq	%rax, %rdi
+ 1287 00eb 41FFD0   		call	*%r8
+ 1288              	.LVL16:
+ 1289 00ee 8945C4   		movl	%eax, -60(%rbp)
+ 389:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ( ret = ctx->md_info->update_func( ctx->md_ctx, opad,
+ 1290              		.loc 1 389 7
+ 1291 00f1 837DC400 		cmpl	$0, -60(%rbp)
+ 1292 00f5 7405     		je	.L92
+ 391:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( ret );
+ 1293              		.loc 1 391 15
+ 1294 00f7 8B45C4   		movl	-60(%rbp), %eax
+ 1295 00fa EB5A     		jmp	.L94
+ 1296              	.L92:
+ 392:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ( ret = ctx->md_info->update_func( ctx->md_ctx, tmp,
+ 1297              		.loc 1 392 20
+ 1298 00fc 488B45B8 		movq	-72(%rbp), %rax
+GAS LISTING /tmp/ccEkA5hM.s 			page 33
+
+
+ 1299 0100 488B00   		movq	(%rax), %rax
+ 1300              		.loc 1 392 29
+ 1301 0103 4C8B4020 		movq	32(%rax), %r8
+ 393:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****                                            ctx->md_info->size ) ) != 0 )
+ 1302              		.loc 1 393 47
+ 1303 0107 488B45B8 		movq	-72(%rbp), %rax
+ 1304 010b 488B00   		movq	(%rax), %rax
+ 1305              		.loc 1 393 56
+ 1306 010e 8B4010   		movl	16(%rax), %eax
+ 392:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ( ret = ctx->md_info->update_func( ctx->md_ctx, tmp,
+ 1307              		.loc 1 392 17
+ 1308 0111 4863D0   		movslq	%eax, %rdx
+ 1309 0114 488B45B8 		movq	-72(%rbp), %rax
+ 1310 0118 488B4008 		movq	8(%rax), %rax
+ 1311 011c 488D4DD0 		leaq	-48(%rbp), %rcx
+ 1312 0120 4889CE   		movq	%rcx, %rsi
+ 1313 0123 4889C7   		movq	%rax, %rdi
+ 1314 0126 41FFD0   		call	*%r8
+ 1315              	.LVL17:
+ 1316 0129 8945C4   		movl	%eax, -60(%rbp)
+ 392:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ( ret = ctx->md_info->update_func( ctx->md_ctx, tmp,
+ 1317              		.loc 1 392 7
+ 1318 012c 837DC400 		cmpl	$0, -60(%rbp)
+ 1319 0130 7405     		je	.L93
+ 394:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( ret );
+ 1320              		.loc 1 394 15
+ 1321 0132 8B45C4   		movl	-60(%rbp), %eax
+ 1322 0135 EB1F     		jmp	.L94
+ 1323              	.L93:
+ 395:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     return( ctx->md_info->finish_func( ctx->md_ctx, output ) );
+ 1324              		.loc 1 395 16
+ 1325 0137 488B45B8 		movq	-72(%rbp), %rax
+ 1326 013b 488B00   		movq	(%rax), %rax
+ 1327              		.loc 1 395 25
+ 1328 013e 488B4828 		movq	40(%rax), %rcx
+ 1329              		.loc 1 395 13
+ 1330 0142 488B45B8 		movq	-72(%rbp), %rax
+ 1331 0146 488B4008 		movq	8(%rax), %rax
+ 1332 014a 488B55B0 		movq	-80(%rbp), %rdx
+ 1333 014e 4889D6   		movq	%rdx, %rsi
+ 1334 0151 4889C7   		movq	%rax, %rdi
+ 1335 0154 FFD1     		call	*%rcx
+ 1336              	.LVL18:
+ 1337              	.L94:
+ 396:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** }
+ 1338              		.loc 1 396 1 discriminator 1
+ 1339 0156 488B75F8 		movq	-8(%rbp), %rsi
+ 1340 015a 64483334 		xorq	%fs:40, %rsi
+ 1340      25280000 
+ 1340      00
+ 1341 0163 7405     		je	.L95
+ 1342              		.loc 1 396 1 is_stmt 0
+ 1343 0165 E8000000 		call	__stack_chk_fail@PLT
+ 1343      00
+ 1344              	.L95:
+ 1345 016a C9       		leave
+ 1346              	.LCFI44:
+GAS LISTING /tmp/ccEkA5hM.s 			page 34
+
+
+ 1347              		.cfi_def_cfa 7, 8
+ 1348 016b C3       		ret
+ 1349              		.cfi_endproc
+ 1350              	.LFE20:
+ 1352              		.section	.text.mbedtls_md_hmac_reset,"ax",@progbits
+ 1353              		.globl	mbedtls_md_hmac_reset
+ 1355              	mbedtls_md_hmac_reset:
+ 1356              	.LFB21:
+ 397:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 398:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** int mbedtls_md_hmac_reset( mbedtls_md_context_t *ctx )
+ 399:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** {
+ 1357              		.loc 1 399 1 is_stmt 1
+ 1358              		.cfi_startproc
+ 1359 0000 F30F1EFA 		endbr64
+ 1360 0004 55       		pushq	%rbp
+ 1361              	.LCFI45:
+ 1362              		.cfi_def_cfa_offset 16
+ 1363              		.cfi_offset 6, -16
+ 1364 0005 4889E5   		movq	%rsp, %rbp
+ 1365              	.LCFI46:
+ 1366              		.cfi_def_cfa_register 6
+ 1367 0008 4883EC30 		subq	$48, %rsp
+ 1368 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 1369              		.loc 1 399 1
+ 1370 0010 64488B04 		movq	%fs:40, %rax
+ 1370      25280000 
+ 1370      00
+ 1371 0019 488945F8 		movq	%rax, -8(%rbp)
+ 1372 001d 31C0     		xorl	%eax, %eax
+ 400:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     int ret;
+ 401:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     unsigned char *ipad;
+ 402:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 403:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ctx == NULL || ctx->md_info == NULL || ctx->hmac_ctx == NULL )
+ 1373              		.loc 1 403 7
+ 1374 001f 48837DD8 		cmpq	$0, -40(%rbp)
+ 1374      00
+ 1375 0024 7419     		je	.L97
+ 1376              		.loc 1 403 27 discriminator 1
+ 1377 0026 488B45D8 		movq	-40(%rbp), %rax
+ 1378 002a 488B00   		movq	(%rax), %rax
+ 1379              		.loc 1 403 21 discriminator 1
+ 1380 002d 4885C0   		testq	%rax, %rax
+ 1381 0030 740D     		je	.L97
+ 1382              		.loc 1 403 51 discriminator 2
+ 1383 0032 488B45D8 		movq	-40(%rbp), %rax
+ 1384 0036 488B4010 		movq	16(%rax), %rax
+ 1385              		.loc 1 403 45 discriminator 2
+ 1386 003a 4885C0   		testq	%rax, %rax
+ 1387 003d 7507     		jne	.L98
+ 1388              	.L97:
+ 404:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( MBEDTLS_ERR_MD_BAD_INPUT_DATA );
+ 1389              		.loc 1 404 15
+ 1390 003f B800AFFF 		movl	$-20736, %eax
+ 1390      FF
+ 1391 0044 EB5F     		jmp	.L99
+ 1392              	.L98:
+ 405:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+GAS LISTING /tmp/ccEkA5hM.s 			page 35
+
+
+ 406:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     ipad = (unsigned char *) ctx->hmac_ctx;
+ 1393              		.loc 1 406 10
+ 1394 0046 488B45D8 		movq	-40(%rbp), %rax
+ 1395 004a 488B4010 		movq	16(%rax), %rax
+ 1396 004e 488945F0 		movq	%rax, -16(%rbp)
+ 407:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 408:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ( ret = ctx->md_info->starts_func( ctx->md_ctx ) ) != 0 )
+ 1397              		.loc 1 408 20
+ 1398 0052 488B45D8 		movq	-40(%rbp), %rax
+ 1399 0056 488B00   		movq	(%rax), %rax
+ 1400              		.loc 1 408 29
+ 1401 0059 488B5018 		movq	24(%rax), %rdx
+ 1402              		.loc 1 408 17
+ 1403 005d 488B45D8 		movq	-40(%rbp), %rax
+ 1404 0061 488B4008 		movq	8(%rax), %rax
+ 1405 0065 4889C7   		movq	%rax, %rdi
+ 1406 0068 FFD2     		call	*%rdx
+ 1407              	.LVL19:
+ 1408 006a 8945EC   		movl	%eax, -20(%rbp)
+ 1409              		.loc 1 408 7
+ 1410 006d 837DEC00 		cmpl	$0, -20(%rbp)
+ 1411 0071 7405     		je	.L100
+ 409:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( ret );
+ 1412              		.loc 1 409 15
+ 1413 0073 8B45EC   		movl	-20(%rbp), %eax
+ 1414 0076 EB2D     		jmp	.L99
+ 1415              	.L100:
+ 410:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     return( ctx->md_info->update_func( ctx->md_ctx, ipad,
+ 1416              		.loc 1 410 16
+ 1417 0078 488B45D8 		movq	-40(%rbp), %rax
+ 1418 007c 488B00   		movq	(%rax), %rax
+ 1419              		.loc 1 410 25
+ 1420 007f 4C8B4020 		movq	32(%rax), %r8
+ 411:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****                                        ctx->md_info->block_size ) );
+ 1421              		.loc 1 411 43
+ 1422 0083 488B45D8 		movq	-40(%rbp), %rax
+ 1423 0087 488B00   		movq	(%rax), %rax
+ 1424              		.loc 1 411 52
+ 1425 008a 8B4014   		movl	20(%rax), %eax
+ 410:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     return( ctx->md_info->update_func( ctx->md_ctx, ipad,
+ 1426              		.loc 1 410 13
+ 1427 008d 4863D0   		movslq	%eax, %rdx
+ 1428 0090 488B45D8 		movq	-40(%rbp), %rax
+ 1429 0094 488B4008 		movq	8(%rax), %rax
+ 1430 0098 488B4DF0 		movq	-16(%rbp), %rcx
+ 1431 009c 4889CE   		movq	%rcx, %rsi
+ 1432 009f 4889C7   		movq	%rax, %rdi
+ 1433 00a2 41FFD0   		call	*%r8
+ 1434              	.LVL20:
+ 1435              	.L99:
+ 412:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** }
+ 1436              		.loc 1 412 1
+ 1437 00a5 488B75F8 		movq	-8(%rbp), %rsi
+ 1438 00a9 64483334 		xorq	%fs:40, %rsi
+ 1438      25280000 
+ 1438      00
+ 1439 00b2 7405     		je	.L101
+GAS LISTING /tmp/ccEkA5hM.s 			page 36
+
+
+ 1440 00b4 E8000000 		call	__stack_chk_fail@PLT
+ 1440      00
+ 1441              	.L101:
+ 1442 00b9 C9       		leave
+ 1443              	.LCFI47:
+ 1444              		.cfi_def_cfa 7, 8
+ 1445 00ba C3       		ret
+ 1446              		.cfi_endproc
+ 1447              	.LFE21:
+ 1449              		.section	.text.mbedtls_md_hmac,"ax",@progbits
+ 1450              		.globl	mbedtls_md_hmac
+ 1452              	mbedtls_md_hmac:
+ 1453              	.LFB22:
+ 413:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 414:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** int mbedtls_md_hmac( const mbedtls_md_info_t *md_info,
+ 415:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****                      const unsigned char *key, size_t keylen,
+ 416:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****                      const unsigned char *input, size_t ilen,
+ 417:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****                      unsigned char *output )
+ 418:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** {
+ 1454              		.loc 1 418 1
+ 1455              		.cfi_startproc
+ 1456 0000 F30F1EFA 		endbr64
+ 1457 0004 55       		pushq	%rbp
+ 1458              	.LCFI48:
+ 1459              		.cfi_def_cfa_offset 16
+ 1460              		.cfi_offset 6, -16
+ 1461 0005 4889E5   		movq	%rsp, %rbp
+ 1462              	.LCFI49:
+ 1463              		.cfi_def_cfa_register 6
+ 1464 0008 4883EC60 		subq	$96, %rsp
+ 1465 000c 48897DC8 		movq	%rdi, -56(%rbp)
+ 1466 0010 488975C0 		movq	%rsi, -64(%rbp)
+ 1467 0014 488955B8 		movq	%rdx, -72(%rbp)
+ 1468 0018 48894DB0 		movq	%rcx, -80(%rbp)
+ 1469 001c 4C8945A8 		movq	%r8, -88(%rbp)
+ 1470 0020 4C894DA0 		movq	%r9, -96(%rbp)
+ 1471              		.loc 1 418 1
+ 1472 0024 64488B04 		movq	%fs:40, %rax
+ 1472      25280000 
+ 1472      00
+ 1473 002d 488945F8 		movq	%rax, -8(%rbp)
+ 1474 0031 31C0     		xorl	%eax, %eax
+ 419:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     mbedtls_md_context_t ctx;
+ 420:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     int ret;
+ 421:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 422:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( md_info == NULL )
+ 1475              		.loc 1 422 7
+ 1476 0033 48837DC8 		cmpq	$0, -56(%rbp)
+ 1476      00
+ 1477 0038 750A     		jne	.L103
+ 423:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( MBEDTLS_ERR_MD_BAD_INPUT_DATA );
+ 1478              		.loc 1 423 15
+ 1479 003a B800AFFF 		movl	$-20736, %eax
+ 1479      FF
+ 1480 003f E99F0000 		jmp	.L109
+ 1480      00
+ 1481              	.L103:
+GAS LISTING /tmp/ccEkA5hM.s 			page 37
+
+
+ 424:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 425:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     mbedtls_md_init( &ctx );
+ 1482              		.loc 1 425 5
+ 1483 0044 488D45E0 		leaq	-32(%rbp), %rax
+ 1484 0048 4889C7   		movq	%rax, %rdi
+ 1485 004b E8000000 		call	mbedtls_md_init
+ 1485      00
+ 426:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 427:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ( ret = mbedtls_md_setup( &ctx, md_info, 1 ) ) != 0 )
+ 1486              		.loc 1 427 17
+ 1487 0050 488B4DC8 		movq	-56(%rbp), %rcx
+ 1488 0054 488D45E0 		leaq	-32(%rbp), %rax
+ 1489 0058 BA010000 		movl	$1, %edx
+ 1489      00
+ 1490 005d 4889CE   		movq	%rcx, %rsi
+ 1491 0060 4889C7   		movq	%rax, %rdi
+ 1492 0063 E8000000 		call	mbedtls_md_setup
+ 1492      00
+ 1493 0068 8945DC   		movl	%eax, -36(%rbp)
+ 1494              		.loc 1 427 7
+ 1495 006b 837DDC00 		cmpl	$0, -36(%rbp)
+ 1496 006f 755C     		jne	.L111
+ 428:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         goto cleanup;
+ 429:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 430:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ( ret = mbedtls_md_hmac_starts( &ctx, key, keylen ) ) != 0 )
+ 1497              		.loc 1 430 17
+ 1498 0071 488B55B8 		movq	-72(%rbp), %rdx
+ 1499 0075 488B4DC0 		movq	-64(%rbp), %rcx
+ 1500 0079 488D45E0 		leaq	-32(%rbp), %rax
+ 1501 007d 4889CE   		movq	%rcx, %rsi
+ 1502 0080 4889C7   		movq	%rax, %rdi
+ 1503 0083 E8000000 		call	mbedtls_md_hmac_starts
+ 1503      00
+ 1504 0088 8945DC   		movl	%eax, -36(%rbp)
+ 1505              		.loc 1 430 7
+ 1506 008b 837DDC00 		cmpl	$0, -36(%rbp)
+ 1507 008f 753F     		jne	.L112
+ 431:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         goto cleanup;
+ 432:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ( ret = mbedtls_md_hmac_update( &ctx, input, ilen ) ) != 0 )
+ 1508              		.loc 1 432 17
+ 1509 0091 488B55A8 		movq	-88(%rbp), %rdx
+ 1510 0095 488B4DB0 		movq	-80(%rbp), %rcx
+ 1511 0099 488D45E0 		leaq	-32(%rbp), %rax
+ 1512 009d 4889CE   		movq	%rcx, %rsi
+ 1513 00a0 4889C7   		movq	%rax, %rdi
+ 1514 00a3 E8000000 		call	mbedtls_md_hmac_update
+ 1514      00
+ 1515 00a8 8945DC   		movl	%eax, -36(%rbp)
+ 1516              		.loc 1 432 7
+ 1517 00ab 837DDC00 		cmpl	$0, -36(%rbp)
+ 1518 00af 7522     		jne	.L113
+ 433:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         goto cleanup;
+ 434:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ( ret = mbedtls_md_hmac_finish( &ctx, output ) ) != 0 )
+ 1519              		.loc 1 434 17
+ 1520 00b1 488B55A0 		movq	-96(%rbp), %rdx
+ 1521 00b5 488D45E0 		leaq	-32(%rbp), %rax
+ 1522 00b9 4889D6   		movq	%rdx, %rsi
+GAS LISTING /tmp/ccEkA5hM.s 			page 38
+
+
+ 1523 00bc 4889C7   		movq	%rax, %rdi
+ 1524 00bf E8000000 		call	mbedtls_md_hmac_finish
+ 1524      00
+ 1525 00c4 8945DC   		movl	%eax, -36(%rbp)
+ 1526              		.loc 1 434 7
+ 1527 00c7 837DDC00 		cmpl	$0, -36(%rbp)
+ 435:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         goto cleanup;
+ 436:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 437:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** cleanup:
+ 1528              		.loc 1 437 1
+ 1529 00cb EB07     		jmp	.L106
+ 1530              	.L111:
+ 428:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 1531              		.loc 1 428 9
+ 1532 00cd 90       		nop
+ 1533 00ce EB04     		jmp	.L106
+ 1534              	.L112:
+ 431:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ( ret = mbedtls_md_hmac_update( &ctx, input, ilen ) ) != 0 )
+ 1535              		.loc 1 431 9
+ 1536 00d0 90       		nop
+ 1537 00d1 EB01     		jmp	.L106
+ 1538              	.L113:
+ 433:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ( ret = mbedtls_md_hmac_finish( &ctx, output ) ) != 0 )
+ 1539              		.loc 1 433 9
+ 1540 00d3 90       		nop
+ 1541              	.L106:
+ 438:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     mbedtls_md_free( &ctx );
+ 1542              		.loc 1 438 5
+ 1543 00d4 488D45E0 		leaq	-32(%rbp), %rax
+ 1544 00d8 4889C7   		movq	%rax, %rdi
+ 1545 00db E8000000 		call	mbedtls_md_free
+ 1545      00
+ 439:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 440:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     return( ret );
+ 1546              		.loc 1 440 11
+ 1547 00e0 8B45DC   		movl	-36(%rbp), %eax
+ 1548              	.L109:
+ 441:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** }
+ 1549              		.loc 1 441 1 discriminator 1
+ 1550 00e3 488B75F8 		movq	-8(%rbp), %rsi
+ 1551 00e7 64483334 		xorq	%fs:40, %rsi
+ 1551      25280000 
+ 1551      00
+ 1552 00f0 7405     		je	.L110
+ 1553              		.loc 1 441 1 is_stmt 0
+ 1554 00f2 E8000000 		call	__stack_chk_fail@PLT
+ 1554      00
+ 1555              	.L110:
+ 1556 00f7 C9       		leave
+ 1557              	.LCFI50:
+ 1558              		.cfi_def_cfa 7, 8
+ 1559 00f8 C3       		ret
+ 1560              		.cfi_endproc
+ 1561              	.LFE22:
+ 1563              		.section	.text.mbedtls_md_process,"ax",@progbits
+ 1564              		.globl	mbedtls_md_process
+ 1566              	mbedtls_md_process:
+GAS LISTING /tmp/ccEkA5hM.s 			page 39
+
+
+ 1567              	.LFB23:
+ 442:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 443:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** int mbedtls_md_process( mbedtls_md_context_t *ctx, const unsigned char *data )
+ 444:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** {
+ 1568              		.loc 1 444 1 is_stmt 1
+ 1569              		.cfi_startproc
+ 1570 0000 F30F1EFA 		endbr64
+ 1571 0004 55       		pushq	%rbp
+ 1572              	.LCFI51:
+ 1573              		.cfi_def_cfa_offset 16
+ 1574              		.cfi_offset 6, -16
+ 1575 0005 4889E5   		movq	%rsp, %rbp
+ 1576              	.LCFI52:
+ 1577              		.cfi_def_cfa_register 6
+ 1578 0008 4883EC20 		subq	$32, %rsp
+ 1579 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1580 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 1581              		.loc 1 444 1
+ 1582 0014 64488B04 		movq	%fs:40, %rax
+ 1582      25280000 
+ 1582      00
+ 1583 001d 488945F8 		movq	%rax, -8(%rbp)
+ 1584 0021 31C0     		xorl	%eax, %eax
+ 445:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( ctx == NULL || ctx->md_info == NULL )
+ 1585              		.loc 1 445 7
+ 1586 0023 48837DE8 		cmpq	$0, -24(%rbp)
+ 1586      00
+ 1587 0028 740C     		je	.L115
+ 1588              		.loc 1 445 27 discriminator 1
+ 1589 002a 488B45E8 		movq	-24(%rbp), %rax
+ 1590 002e 488B00   		movq	(%rax), %rax
+ 1591              		.loc 1 445 21 discriminator 1
+ 1592 0031 4885C0   		testq	%rax, %rax
+ 1593 0034 7507     		jne	.L116
+ 1594              	.L115:
+ 446:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( MBEDTLS_ERR_MD_BAD_INPUT_DATA );
+ 1595              		.loc 1 446 15
+ 1596 0036 B800AFFF 		movl	$-20736, %eax
+ 1596      FF
+ 1597 003b EB1F     		jmp	.L117
+ 1598              	.L116:
+ 447:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 448:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     return( ctx->md_info->process_func( ctx->md_ctx, data ) );
+ 1599              		.loc 1 448 16
+ 1600 003d 488B45E8 		movq	-24(%rbp), %rax
+ 1601 0041 488B00   		movq	(%rax), %rax
+ 1602              		.loc 1 448 25
+ 1603 0044 488B4850 		movq	80(%rax), %rcx
+ 1604              		.loc 1 448 13
+ 1605 0048 488B45E8 		movq	-24(%rbp), %rax
+ 1606 004c 488B4008 		movq	8(%rax), %rax
+ 1607 0050 488B55E0 		movq	-32(%rbp), %rdx
+ 1608 0054 4889D6   		movq	%rdx, %rsi
+ 1609 0057 4889C7   		movq	%rax, %rdi
+ 1610 005a FFD1     		call	*%rcx
+ 1611              	.LVL21:
+ 1612              	.L117:
+GAS LISTING /tmp/ccEkA5hM.s 			page 40
+
+
+ 449:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** }
+ 1613              		.loc 1 449 1
+ 1614 005c 488B55F8 		movq	-8(%rbp), %rdx
+ 1615 0060 64483314 		xorq	%fs:40, %rdx
+ 1615      25280000 
+ 1615      00
+ 1616 0069 7405     		je	.L118
+ 1617 006b E8000000 		call	__stack_chk_fail@PLT
+ 1617      00
+ 1618              	.L118:
+ 1619 0070 C9       		leave
+ 1620              	.LCFI53:
+ 1621              		.cfi_def_cfa 7, 8
+ 1622 0071 C3       		ret
+ 1623              		.cfi_endproc
+ 1624              	.LFE23:
+ 1626              		.section	.text.mbedtls_md_get_size,"ax",@progbits
+ 1627              		.globl	mbedtls_md_get_size
+ 1629              	mbedtls_md_get_size:
+ 1630              	.LFB24:
+ 450:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 451:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** unsigned char mbedtls_md_get_size( const mbedtls_md_info_t *md_info )
+ 452:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** {
+ 1631              		.loc 1 452 1
+ 1632              		.cfi_startproc
+ 1633 0000 F30F1EFA 		endbr64
+ 1634 0004 55       		pushq	%rbp
+ 1635              	.LCFI54:
+ 1636              		.cfi_def_cfa_offset 16
+ 1637              		.cfi_offset 6, -16
+ 1638 0005 4889E5   		movq	%rsp, %rbp
+ 1639              	.LCFI55:
+ 1640              		.cfi_def_cfa_register 6
+ 1641 0008 4883EC20 		subq	$32, %rsp
+ 1642 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1643              		.loc 1 452 1
+ 1644 0010 64488B04 		movq	%fs:40, %rax
+ 1644      25280000 
+ 1644      00
+ 1645 0019 488945F8 		movq	%rax, -8(%rbp)
+ 1646 001d 31C0     		xorl	%eax, %eax
+ 453:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( md_info == NULL )
+ 1647              		.loc 1 453 7
+ 1648 001f 48837DE8 		cmpq	$0, -24(%rbp)
+ 1648      00
+ 1649 0024 7507     		jne	.L120
+ 454:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( 0 );
+ 1650              		.loc 1 454 15
+ 1651 0026 B8000000 		movl	$0, %eax
+ 1651      00
+ 1652 002b EB07     		jmp	.L121
+ 1653              	.L120:
+ 455:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 456:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     return md_info->size;
+ 1654              		.loc 1 456 19
+ 1655 002d 488B45E8 		movq	-24(%rbp), %rax
+ 1656 0031 8B4010   		movl	16(%rax), %eax
+GAS LISTING /tmp/ccEkA5hM.s 			page 41
+
+
+ 1657              	.L121:
+ 457:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** }
+ 1658              		.loc 1 457 1
+ 1659 0034 488B55F8 		movq	-8(%rbp), %rdx
+ 1660 0038 64483314 		xorq	%fs:40, %rdx
+ 1660      25280000 
+ 1660      00
+ 1661 0041 7405     		je	.L122
+ 1662 0043 E8000000 		call	__stack_chk_fail@PLT
+ 1662      00
+ 1663              	.L122:
+ 1664 0048 C9       		leave
+ 1665              	.LCFI56:
+ 1666              		.cfi_def_cfa 7, 8
+ 1667 0049 C3       		ret
+ 1668              		.cfi_endproc
+ 1669              	.LFE24:
+ 1671              		.section	.text.mbedtls_md_get_type,"ax",@progbits
+ 1672              		.globl	mbedtls_md_get_type
+ 1674              	mbedtls_md_get_type:
+ 1675              	.LFB25:
+ 458:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 459:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** mbedtls_md_type_t mbedtls_md_get_type( const mbedtls_md_info_t *md_info )
+ 460:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** {
+ 1676              		.loc 1 460 1
+ 1677              		.cfi_startproc
+ 1678 0000 F30F1EFA 		endbr64
+ 1679 0004 55       		pushq	%rbp
+ 1680              	.LCFI57:
+ 1681              		.cfi_def_cfa_offset 16
+ 1682              		.cfi_offset 6, -16
+ 1683 0005 4889E5   		movq	%rsp, %rbp
+ 1684              	.LCFI58:
+ 1685              		.cfi_def_cfa_register 6
+ 1686 0008 4883EC20 		subq	$32, %rsp
+ 1687 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1688              		.loc 1 460 1
+ 1689 0010 64488B04 		movq	%fs:40, %rax
+ 1689      25280000 
+ 1689      00
+ 1690 0019 488945F8 		movq	%rax, -8(%rbp)
+ 1691 001d 31C0     		xorl	%eax, %eax
+ 461:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( md_info == NULL )
+ 1692              		.loc 1 461 7
+ 1693 001f 48837DE8 		cmpq	$0, -24(%rbp)
+ 1693      00
+ 1694 0024 7507     		jne	.L124
+ 462:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( MBEDTLS_MD_NONE );
+ 1695              		.loc 1 462 15
+ 1696 0026 B8000000 		movl	$0, %eax
+ 1696      00
+ 1697 002b EB06     		jmp	.L125
+ 1698              	.L124:
+ 463:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 464:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     return md_info->type;
+ 1699              		.loc 1 464 19
+ 1700 002d 488B45E8 		movq	-24(%rbp), %rax
+GAS LISTING /tmp/ccEkA5hM.s 			page 42
+
+
+ 1701 0031 8B00     		movl	(%rax), %eax
+ 1702              	.L125:
+ 465:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** }
+ 1703              		.loc 1 465 1
+ 1704 0033 488B55F8 		movq	-8(%rbp), %rdx
+ 1705 0037 64483314 		xorq	%fs:40, %rdx
+ 1705      25280000 
+ 1705      00
+ 1706 0040 7405     		je	.L126
+ 1707 0042 E8000000 		call	__stack_chk_fail@PLT
+ 1707      00
+ 1708              	.L126:
+ 1709 0047 C9       		leave
+ 1710              	.LCFI59:
+ 1711              		.cfi_def_cfa 7, 8
+ 1712 0048 C3       		ret
+ 1713              		.cfi_endproc
+ 1714              	.LFE25:
+ 1716              		.section	.text.mbedtls_md_get_name,"ax",@progbits
+ 1717              		.globl	mbedtls_md_get_name
+ 1719              	mbedtls_md_get_name:
+ 1720              	.LFB26:
+ 466:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 467:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** const char *mbedtls_md_get_name( const mbedtls_md_info_t *md_info )
+ 468:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** {
+ 1721              		.loc 1 468 1
+ 1722              		.cfi_startproc
+ 1723 0000 F30F1EFA 		endbr64
+ 1724 0004 55       		pushq	%rbp
+ 1725              	.LCFI60:
+ 1726              		.cfi_def_cfa_offset 16
+ 1727              		.cfi_offset 6, -16
+ 1728 0005 4889E5   		movq	%rsp, %rbp
+ 1729              	.LCFI61:
+ 1730              		.cfi_def_cfa_register 6
+ 1731 0008 4883EC20 		subq	$32, %rsp
+ 1732 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1733              		.loc 1 468 1
+ 1734 0010 64488B04 		movq	%fs:40, %rax
+ 1734      25280000 
+ 1734      00
+ 1735 0019 488945F8 		movq	%rax, -8(%rbp)
+ 1736 001d 31C0     		xorl	%eax, %eax
+ 469:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     if( md_info == NULL )
+ 1737              		.loc 1 469 7
+ 1738 001f 48837DE8 		cmpq	$0, -24(%rbp)
+ 1738      00
+ 1739 0024 7507     		jne	.L128
+ 470:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****         return( NULL );
+ 1740              		.loc 1 470 15
+ 1741 0026 B8000000 		movl	$0, %eax
+ 1741      00
+ 1742 002b EB08     		jmp	.L129
+ 1743              	.L128:
+ 471:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** 
+ 472:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c ****     return md_info->name;
+ 1744              		.loc 1 472 19
+GAS LISTING /tmp/ccEkA5hM.s 			page 43
+
+
+ 1745 002d 488B45E8 		movq	-24(%rbp), %rax
+ 1746 0031 488B4008 		movq	8(%rax), %rax
+ 1747              	.L129:
+ 473:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/md.c **** }
+ 1748              		.loc 1 473 1
+ 1749 0035 488B55F8 		movq	-8(%rbp), %rdx
+ 1750 0039 64483314 		xorq	%fs:40, %rdx
+ 1750      25280000 
+ 1750      00
+ 1751 0042 7405     		je	.L130
+ 1752 0044 E8000000 		call	__stack_chk_fail@PLT
+ 1752      00
+ 1753              	.L130:
+ 1754 0049 C9       		leave
+ 1755              	.LCFI62:
+ 1756              		.cfi_def_cfa 7, 8
+ 1757 004a C3       		ret
+ 1758              		.cfi_endproc
+ 1759              	.LFE26:
+ 1761              		.text
+ 1762              	.Letext0:
+ 1763              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 1764              		.file 3 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/md.h"
+ 1765              		.file 4 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/md_inte
+ 1766              		.file 5 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 1767              		.file 6 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 1768              		.file 7 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 1769              		.file 8 "/usr/include/stdio.h"
+ 1770              		.file 9 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 1771              		.file 10 "/usr/include/time.h"
+ 1772              		.file 11 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/platfo
+ 4834              		.section	.note.gnu.property,"a"
+ 4835              		.align 8
+ 4836 0000 04000000 		.long	 1f - 0f
+ 4837 0004 10000000 		.long	 4f - 1f
+ 4838 0008 05000000 		.long	 5
+ 4839              	0:
+ 4840 000c 474E5500 		.string	 "GNU"
+ 4841              	1:
+ 4842              		.align 8
+ 4843 0010 020000C0 		.long	 0xc0000002
+ 4844 0014 04000000 		.long	 3f - 2f
+ 4845              	2:
+ 4846 0018 03000000 		.long	 0x3
+ 4847              	3:
+ 4848 001c 00000000 		.align 8
+ 4849              	4:
+GAS LISTING /tmp/ccEkA5hM.s 			page 44
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 md.c
+     /tmp/ccEkA5hM.s:8      .rodata.supported_digests:0000000000000000 supported_digests
+     /tmp/ccEkA5hM.s:16     .text.mbedtls_md_list:0000000000000000 mbedtls_md_list
+     /tmp/ccEkA5hM.s:61     .text.mbedtls_md_info_from_string:0000000000000000 mbedtls_md_info_from_string
+     /tmp/ccEkA5hM.s:153    .text.mbedtls_md_info_from_type:0000000000000000 mbedtls_md_info_from_type
+     /tmp/ccEkA5hM.s:213    .text.mbedtls_md_init:0000000000000000 mbedtls_md_init
+     /tmp/ccEkA5hM.s:254    .text.mbedtls_md_free:0000000000000000 mbedtls_md_free
+     /tmp/ccEkA5hM.s:351    .text.mbedtls_md_clone:0000000000000000 mbedtls_md_clone
+     /tmp/ccEkA5hM.s:436    .text.mbedtls_md_init_ctx:0000000000000000 mbedtls_md_init_ctx
+     /tmp/ccEkA5hM.s:478    .text.mbedtls_md_setup:0000000000000000 mbedtls_md_setup
+     /tmp/ccEkA5hM.s:584    .text.mbedtls_md_starts:0000000000000000 mbedtls_md_starts
+     /tmp/ccEkA5hM.s:644    .text.mbedtls_md_update:0000000000000000 mbedtls_md_update
+     /tmp/ccEkA5hM.s:709    .text.mbedtls_md_finish:0000000000000000 mbedtls_md_finish
+     /tmp/ccEkA5hM.s:772    .text.mbedtls_md:0000000000000000 mbedtls_md
+     /tmp/ccEkA5hM.s:828    .text.mbedtls_md_hmac_starts:0000000000000000 mbedtls_md_hmac_starts
+     /tmp/ccEkA5hM.s:1108   .text.mbedtls_md_hmac_update:0000000000000000 mbedtls_md_hmac_update
+     /tmp/ccEkA5hM.s:1179   .text.mbedtls_md_hmac_finish:0000000000000000 mbedtls_md_hmac_finish
+     /tmp/ccEkA5hM.s:1355   .text.mbedtls_md_hmac_reset:0000000000000000 mbedtls_md_hmac_reset
+     /tmp/ccEkA5hM.s:1452   .text.mbedtls_md_hmac:0000000000000000 mbedtls_md_hmac
+     /tmp/ccEkA5hM.s:1566   .text.mbedtls_md_process:0000000000000000 mbedtls_md_process
+     /tmp/ccEkA5hM.s:1629   .text.mbedtls_md_get_size:0000000000000000 mbedtls_md_get_size
+     /tmp/ccEkA5hM.s:1674   .text.mbedtls_md_get_type:0000000000000000 mbedtls_md_get_type
+     /tmp/ccEkA5hM.s:1719   .text.mbedtls_md_get_name:0000000000000000 mbedtls_md_get_name
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+__stack_chk_fail
+strcmp
+mbedtls_sha1_info
+mbedtls_sha224_info
+mbedtls_sha256_info
+memset
+mbedtls_platform_zeroize
+mbedtls_free
+mbedtls_calloc

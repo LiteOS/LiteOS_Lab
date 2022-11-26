@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2016-2019>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,39 +22,38 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
 #include "internals.h"
 
-
 #ifdef LWM2M_CLIENT_MODE
 
-#define RES_M_STATE  3
+#define RES_M_STATE 3
 
-static lwm2m_transaction_callback_t  observe_call_back;
+static lwm2m_transaction_callback_t observe_call_back;
 
 void lwm2m_register_observe_ack_call_back(lwm2m_transaction_callback_t callback)
 {
     observe_call_back = callback;
 }
 
-int observe_send_transaction(lwm2m_context_t *contextP, lwm2m_data_cfg_t  *cfg, lwm2m_watcher_t *watcherP,
-                             uint8_t *buffer, size_t length)
+int observe_send_transaction(lwm2m_context_t *contextP, lwm2m_data_cfg_t *cfg, lwm2m_watcher_t *watcherP,
+    uint8_t *buffer, size_t length)
 {
     lwm2m_transaction_t *transaction;
     int ret;
-    transaction = transaction_new(watcherP->server->sessionH, COAP_205_CONTENT, NULL, NULL, watcherP->lastMid, watcherP->tokenLen, watcherP->token);
+    transaction = transaction_new(watcherP->server->sessionH, COAP_205_CONTENT, NULL, NULL, watcherP->lastMid,
+        watcherP->tokenLen, watcherP->token);
 
-    if (NULL == transaction)
-    {
+    if (NULL == transaction) {
         LOG("transaction_new null");
         return COAP_500_INTERNAL_SERVER_ERROR;
     }
@@ -72,57 +71,44 @@ int observe_send_transaction(lwm2m_context_t *contextP, lwm2m_data_cfg_t  *cfg, 
     return ret;
 }
 
-void observe_app_step(lwm2m_context_t *contextP,
-                      lwm2m_observed_t *targetP,
-                      time_t currentTime,
-                      time_t *timeoutP)
+void observe_app_step(lwm2m_context_t *contextP, lwm2m_observed_t *targetP, time_t currentTime, time_t *timeoutP)
 {
     LOG("Entering");
     lwm2m_watcher_t *watcherP;
     uint8_t *buffer = NULL;
     size_t length = 0;
     lwm2m_data_t *dataP = NULL;
-    lwm2m_data_cfg_t  cfg = {0, 0, NULL};
+    lwm2m_data_cfg_t cfg = { 0, 0, NULL };
     int size = 0;
 
-    while (COAP_205_CONTENT == object_readData(contextP, &targetP->uri, &size, &dataP, &cfg, 0))
-    {
-        for (watcherP = targetP->watcherList ; watcherP != NULL ; watcherP = watcherP->next)
-        {
+    while (COAP_205_CONTENT == object_readData(contextP, &targetP->uri, &size, &dataP, &cfg, 0)) {
+        for (watcherP = targetP->watcherList; watcherP != NULL; watcherP = watcherP->next) {
             int res;
 
-            if (NULL == buffer)
-            {
+            if (NULL == buffer) {
                 res = lwm2m_data_serialize(&targetP->uri, size, dataP, &(watcherP->format), &buffer);
 
-                if (res < 0)
-                {
-                    if (NULL != dataP)
-                    {
+                if (res < 0) {
+                    if (NULL != dataP) {
                         lwm2m_data_free(size, dataP);
                         dataP = NULL;
                     }
 
-                    if (NULL != buffer)
-                    {
+                    if (NULL != buffer) {
                         lwm2m_free(buffer);
                     }
 
                     break;
-                }
-                else
-                {
+                } else {
                     length = (size_t)res;
                 }
             }
 
-            if (true == watcherP->active)
-            {
+            if (true == watcherP->active) {
                 watcherP->lastTime = currentTime;
                 watcherP->lastMid = contextP->nextMID++;
 
-                if (NULL == cfg.callback)
-                {
+                if (NULL == cfg.callback) {
                     coap_packet_t message[1];
                     coap_init_message(message, COAP_TYPE_NON, COAP_205_CONTENT, 0);
                     coap_set_header_content_type(message, watcherP->format);
@@ -132,29 +118,24 @@ void observe_app_step(lwm2m_context_t *contextP,
                     coap_set_header_observe(message, watcherP->counter++);
                     (void)message_send(contextP, message, watcherP->server->sessionH);
                     LOG_ARG("notify no con msg, msgid:", message->mid);
-                }
-                else
-                {
+                } else {
                     (void)observe_send_transaction(contextP, &cfg, watcherP, buffer, length);
                 }
             }
         }
 
-        if (NULL != dataP)
-        {
+        if (NULL != dataP) {
             lwm2m_data_free(size, dataP);
             dataP = NULL;
         }
 
-        if (NULL != buffer)
-        {
+        if (NULL != buffer) {
             lwm2m_free(buffer);
             buffer = NULL;
         }
     }
 
-    if (NULL != dataP)
-    {
+    if (NULL != dataP) {
         lwm2m_data_free(size, dataP);
     }
 }
@@ -163,25 +144,20 @@ uint8_t lwm2m_get_observe_info(lwm2m_context_t *contextP, lwm2m_observe_info_t *
     lwm2m_observed_t *targetP;
     lwm2m_watcher_t *watcherP;
 
-    if ((NULL == observe_info) || (NULL == contextP))
-    {
+    if ((NULL == observe_info) || (NULL == contextP)) {
         LOG("null pointer\n");
         return COAP_500_INTERNAL_SERVER_ERROR;
     }
 
-    for (targetP = contextP->observedList ; NULL != targetP; targetP = targetP->next)
-    {
-        if ((!LWM2M_URI_IS_SET_RESOURCE(&targetP->uri))
-            || (LWM2M_FIRMWARE_UPDATE_OBJECT_ID != targetP->uri.objectId)
-            || (0 != targetP->uri.instanceId)
-            || (RES_M_STATE != targetP->uri.resourceId))
-        {
+    for (targetP = contextP->observedList; NULL != targetP; targetP = targetP->next) {
+        if ((!LWM2M_URI_IS_SET_RESOURCE(&targetP->uri)) || (LWM2M_FIRMWARE_UPDATE_OBJECT_ID != targetP->uri.objectId) ||
+            (0 != targetP->uri.instanceId) || (RES_M_STATE != targetP->uri.resourceId)) {
             continue;
         }
 
         watcherP = targetP->watcherList;
         observe_info->counter = watcherP->counter;
-        (void) memcpy(observe_info->token, watcherP->token, sizeof(observe_info->token));
+        (void)memcpy(observe_info->token, watcherP->token, sizeof(observe_info->token));
         observe_info->tokenLen = watcherP->tokenLen;
         observe_info->format = watcherP->format;
         return COAP_NO_ERROR;
@@ -190,7 +166,8 @@ uint8_t lwm2m_get_observe_info(lwm2m_context_t *contextP, lwm2m_observe_info_t *
     return COAP_500_INTERNAL_SERVER_ERROR;
 }
 
-uint8_t lwm2m_send_notify(lwm2m_context_t *contextP, lwm2m_observe_info_t *observe_info, int firmware_update_state,  lwm2m_data_cfg_t  *cfg)
+uint8_t lwm2m_send_notify(lwm2m_context_t *contextP, lwm2m_observe_info_t *observe_info, int firmware_update_state,
+    lwm2m_data_cfg_t *cfg)
 {
     lwm2m_uri_t uri;
     int res;
@@ -200,16 +177,14 @@ uint8_t lwm2m_send_notify(lwm2m_context_t *contextP, lwm2m_observe_info_t *obser
     lwm2m_server_t *server;
     lwm2m_watcher_t watcherP;
 
-    if ((NULL == observe_info) || (NULL == contextP) || (NULL == cfg))
-    {
+    if ((NULL == observe_info) || (NULL == contextP) || (NULL == cfg)) {
         LOG("null pointer\n");
         return COAP_500_INTERNAL_SERVER_ERROR;
     }
 
     server = registration_get_registered_server(contextP);
 
-    if (NULL == server)
-    {
+    if (NULL == server) {
         LOG("registration_get_registered_server fail\n");
         return COAP_500_INTERNAL_SERVER_ERROR;
     }
@@ -222,27 +197,25 @@ uint8_t lwm2m_send_notify(lwm2m_context_t *contextP, lwm2m_observe_info_t *obser
 #endif
     // uri.flag = (LWM2M_URI_FLAG_OBJECT_ID | LWM2M_URI_FLAG_INSTANCE_ID | LWM2M_URI_FLAG_RESOURCE_ID);
     format = (lwm2m_media_type_t)observe_info->format;
-    (void) memset(&data, 0, sizeof(data));
+    (void)memset(&data, 0, sizeof(data));
     data.id = uri.resourceId;
     lwm2m_data_encode_int(firmware_update_state, &data);
     res = lwm2m_data_serialize(&uri, 1, &data, &format, &buffer);
 
-    if (res < 0)
-    {
+    if (res < 0) {
         LOG("lwm2m_data_serialize fail\n");
 
-        if (NULL != buffer)
-        {
+        if (NULL != buffer) {
             lwm2m_free(buffer);
         }
 
         return COAP_500_INTERNAL_SERVER_ERROR;
     }
 
-    (void) memset(&watcherP, 0, sizeof(watcherP));
+    (void)memset(&watcherP, 0, sizeof(watcherP));
     watcherP.lastMid = contextP->nextMID++;
     watcherP.tokenLen = observe_info->tokenLen;
-    (void) memcpy(watcherP.token, observe_info->token, sizeof(watcherP.token));
+    (void)memcpy(watcherP.token, observe_info->token, sizeof(watcherP.token));
     watcherP.format = format;
     watcherP.counter = observe_info->counter;
     watcherP.server = server;

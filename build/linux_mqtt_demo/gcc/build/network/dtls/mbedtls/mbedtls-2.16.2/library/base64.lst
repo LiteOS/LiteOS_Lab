@@ -1,0 +1,1202 @@
+GAS LISTING /tmp/cc5Bv4w7.s 			page 1
+
+
+   1              		.file	"base64.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.rodata.base64_enc_map,"a"
+   5              		.align 32
+   8              	base64_enc_map:
+   9 0000 41424344 		.ascii	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567"
+   9      45464748 
+   9      494A4B4C 
+   9      4D4E4F50 
+   9      51525354 
+  10 003c 38392B2F 		.ascii	"89+/"
+  11              		.section	.rodata.base64_dec_map,"a"
+  12              		.align 32
+  15              	base64_dec_map:
+  16 0000 7F7F7F7F 		.string	"\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177\
+  16      7F7F7F7F 
+  16      7F7F7F7F 
+  16      7F7F7F7F 
+  16      7F7F7F7F 
+  17 0042 01020304 		.ascii	"\001\002\003\004\005\006\007\b\t\n\013\f\r\016\017\020\021\022"
+  17      05060708 
+  17      090A0B0C 
+  17      0D0E0F10 
+  17      1112
+  18 0054 13141516 		.ascii	"\023\024\025\026\027\030\031\177\177\177\177\177\177\032\033"
+  18      1718197F 
+  18      7F7F7F7F 
+  18      7F1A1B
+  19 0063 1C1D1E1F 		.ascii	"\034\035\036\037 !\"#$%&'()*+,-./0123\177\177\177\177\177"
+  19      20212223 
+  19      24252627 
+  19      28292A2B 
+  19      2C2D2E2F 
+  20              		.section	.text.mbedtls_base64_encode,"ax",@progbits
+  21              		.globl	mbedtls_base64_encode
+  23              	mbedtls_base64_encode:
+  24              	.LFB0:
+  25              		.file 1 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c"
+   1:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** /*
+   2:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  *  RFC 1521 base64 encoding/decoding
+   3:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  *
+   4:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
+   5:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  *  SPDX-License-Identifier: Apache-2.0
+   6:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  *
+   7:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
+   8:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  *  not use this file except in compliance with the License.
+   9:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  *  You may obtain a copy of the License at
+  10:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  *
+  11:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  *  http://www.apache.org/licenses/LICENSE-2.0
+  12:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  *
+  13:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  *  Unless required by applicable law or agreed to in writing, software
+  14:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  15:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  16:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  *  See the License for the specific language governing permissions and
+  17:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  *  limitations under the License.
+  18:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  *
+GAS LISTING /tmp/cc5Bv4w7.s 			page 2
+
+
+  19:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  *  This file is part of mbed TLS (https://tls.mbed.org)
+  20:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  */
+  21:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+  22:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** #if !defined(MBEDTLS_CONFIG_FILE)
+  23:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** #include "mbedtls/config.h"
+  24:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** #else
+  25:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** #include MBEDTLS_CONFIG_FILE
+  26:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** #endif
+  27:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+  28:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** #if defined(MBEDTLS_BASE64_C)
+  29:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+  30:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** #include "mbedtls/base64.h"
+  31:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+  32:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** #include <stdint.h>
+  33:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+  34:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** #if defined(MBEDTLS_SELF_TEST)
+  35:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** #include <string.h>
+  36:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** #if defined(MBEDTLS_PLATFORM_C)
+  37:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** #include "mbedtls/platform.h"
+  38:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** #else
+  39:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** #include <stdio.h>
+  40:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** #define mbedtls_printf printf
+  41:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** #endif /* MBEDTLS_PLATFORM_C */
+  42:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** #endif /* MBEDTLS_SELF_TEST */
+  43:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+  44:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** static const unsigned char base64_enc_map[64] =
+  45:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** {
+  46:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+  47:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+  48:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd',
+  49:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+  50:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x',
+  51:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7',
+  52:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     '8', '9', '+', '/'
+  53:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** };
+  54:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+  55:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** static const unsigned char base64_dec_map[128] =
+  56:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** {
+  57:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     127, 127, 127, 127, 127, 127, 127, 127, 127, 127,
+  58:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     127, 127, 127, 127, 127, 127, 127, 127, 127, 127,
+  59:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     127, 127, 127, 127, 127, 127, 127, 127, 127, 127,
+  60:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     127, 127, 127, 127, 127, 127, 127, 127, 127, 127,
+  61:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     127, 127, 127,  62, 127, 127, 127,  63,  52,  53,
+  62:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****      54,  55,  56,  57,  58,  59,  60,  61, 127, 127,
+  63:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     127,  64, 127, 127, 127,   0,   1,   2,   3,   4,
+  64:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****       5,   6,   7,   8,   9,  10,  11,  12,  13,  14,
+  65:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****      15,  16,  17,  18,  19,  20,  21,  22,  23,  24,
+  66:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****      25, 127, 127, 127, 127, 127, 127,  26,  27,  28,
+  67:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****      29,  30,  31,  32,  33,  34,  35,  36,  37,  38,
+  68:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****      39,  40,  41,  42,  43,  44,  45,  46,  47,  48,
+  69:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****      49,  50,  51, 127, 127, 127, 127, 127
+  70:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** };
+  71:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+  72:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** #define BASE64_SIZE_T_MAX   ( (size_t) -1 ) /* SIZE_T_MAX is not standard */
+  73:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+  74:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** /*
+  75:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  * Encode a buffer into base64 format
+GAS LISTING /tmp/cc5Bv4w7.s 			page 3
+
+
+  76:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  */
+  77:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** int mbedtls_base64_encode( unsigned char *dst, size_t dlen, size_t *olen,
+  78:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****                    const unsigned char *src, size_t slen )
+  79:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** {
+  26              		.loc 1 79 1
+  27              		.cfi_startproc
+  28 0000 F30F1EFA 		endbr64
+  29 0004 55       		pushq	%rbp
+  30              	.LCFI0:
+  31              		.cfi_def_cfa_offset 16
+  32              		.cfi_offset 6, -16
+  33 0005 4889E5   		movq	%rsp, %rbp
+  34              	.LCFI1:
+  35              		.cfi_def_cfa_register 6
+  36 0008 4883EC60 		subq	$96, %rsp
+  37 000c 48897DC8 		movq	%rdi, -56(%rbp)
+  38 0010 488975C0 		movq	%rsi, -64(%rbp)
+  39 0014 488955B8 		movq	%rdx, -72(%rbp)
+  40 0018 48894DB0 		movq	%rcx, -80(%rbp)
+  41 001c 4C8945A8 		movq	%r8, -88(%rbp)
+  42              		.loc 1 79 1
+  43 0020 64488B04 		movq	%fs:40, %rax
+  43      25280000 
+  43      00
+  44 0029 488945F8 		movq	%rax, -8(%rbp)
+  45 002d 31C0     		xorl	%eax, %eax
+  80:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     size_t i, n;
+  81:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     int C1, C2, C3;
+  82:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     unsigned char *p;
+  83:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+  84:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     if( slen == 0 )
+  46              		.loc 1 84 7
+  47 002f 48837DA8 		cmpq	$0, -88(%rbp)
+  47      00
+  48 0034 7515     		jne	.L2
+  85:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     {
+  86:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         *olen = 0;
+  49              		.loc 1 86 15
+  50 0036 488B45B8 		movq	-72(%rbp), %rax
+  51 003a 48C70000 		movq	$0, (%rax)
+  51      000000
+  87:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         return( 0 );
+  52              		.loc 1 87 15
+  53 0041 B8000000 		movl	$0, %eax
+  53      00
+  54 0046 E9FE0200 		jmp	.L3
+  54      00
+  55              	.L2:
+  88:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     }
+  89:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+  90:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     n = slen / 3 + ( slen % 3 != 0 );
+  56              		.loc 1 90 14
+  57 004b 488B45A8 		movq	-88(%rbp), %rax
+  58 004f 48BAABAA 		movabsq	$-6148914691236517205, %rdx
+  58      AAAAAAAA 
+  58      AAAA
+  59 0059 48F7E2   		mulq	%rdx
+GAS LISTING /tmp/cc5Bv4w7.s 			page 4
+
+
+  60 005c 4889D6   		movq	%rdx, %rsi
+  61 005f 48D1EE   		shrq	%rsi
+  62              		.loc 1 90 27
+  63 0062 488B4DA8 		movq	-88(%rbp), %rcx
+  64 0066 48BAABAA 		movabsq	$-6148914691236517205, %rdx
+  64      AAAAAAAA 
+  64      AAAA
+  65 0070 4889C8   		movq	%rcx, %rax
+  66 0073 48F7E2   		mulq	%rdx
+  67 0076 4889D0   		movq	%rdx, %rax
+  68 0079 48D1E8   		shrq	%rax
+  69 007c 4889C2   		movq	%rax, %rdx
+  70 007f 4801D2   		addq	%rdx, %rdx
+  71 0082 4801C2   		addq	%rax, %rdx
+  72 0085 4889C8   		movq	%rcx, %rax
+  73 0088 4829D0   		subq	%rdx, %rax
+  74              		.loc 1 90 31
+  75 008b 4885C0   		testq	%rax, %rax
+  76 008e 0F95C0   		setne	%al
+  77 0091 0FB6C0   		movzbl	%al, %eax
+  78              		.loc 1 90 7
+  79 0094 4801F0   		addq	%rsi, %rax
+  80 0097 488945F0 		movq	%rax, -16(%rbp)
+  91:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+  92:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     if( n > ( BASE64_SIZE_T_MAX - 1 ) / 4 )
+  81              		.loc 1 92 7
+  82 009b 48B8FFFF 		movabsq	$4611686018427387903, %rax
+  82      FFFFFFFF 
+  82      FF3F
+  83 00a5 483945F0 		cmpq	%rax, -16(%rbp)
+  84 00a9 7615     		jbe	.L4
+  93:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     {
+  94:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         *olen = BASE64_SIZE_T_MAX;
+  85              		.loc 1 94 15
+  86 00ab 488B45B8 		movq	-72(%rbp), %rax
+  87 00af 48C700FF 		movq	$-1, (%rax)
+  87      FFFFFF
+  95:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         return( MBEDTLS_ERR_BASE64_BUFFER_TOO_SMALL );
+  88              		.loc 1 95 15
+  89 00b6 B8D6FFFF 		movl	$-42, %eax
+  89      FF
+  90 00bb E9890200 		jmp	.L3
+  90      00
+  91              	.L4:
+  96:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     }
+  97:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+  98:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     n *= 4;
+  92              		.loc 1 98 7
+  93 00c0 48C165F0 		salq	$2, -16(%rbp)
+  93      02
+  99:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 100:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     if( ( dlen < n + 1 ) || ( NULL == dst ) )
+  94              		.loc 1 100 20
+  95 00c5 488B45F0 		movq	-16(%rbp), %rax
+  96 00c9 4883C001 		addq	$1, %rax
+  97              		.loc 1 100 7
+  98 00cd 483945C0 		cmpq	%rax, -64(%rbp)
+GAS LISTING /tmp/cc5Bv4w7.s 			page 5
+
+
+  99 00d1 7207     		jb	.L5
+ 100              		.loc 1 100 26 discriminator 1
+ 101 00d3 48837DC8 		cmpq	$0, -56(%rbp)
+ 101      00
+ 102 00d8 7519     		jne	.L6
+ 103              	.L5:
+ 101:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     {
+ 102:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         *olen = n + 1;
+ 104              		.loc 1 102 19
+ 105 00da 488B45F0 		movq	-16(%rbp), %rax
+ 106 00de 488D5001 		leaq	1(%rax), %rdx
+ 107              		.loc 1 102 15
+ 108 00e2 488B45B8 		movq	-72(%rbp), %rax
+ 109 00e6 488910   		movq	%rdx, (%rax)
+ 103:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         return( MBEDTLS_ERR_BASE64_BUFFER_TOO_SMALL );
+ 110              		.loc 1 103 15
+ 111 00e9 B8D6FFFF 		movl	$-42, %eax
+ 111      FF
+ 112 00ee E9560200 		jmp	.L3
+ 112      00
+ 113              	.L6:
+ 104:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     }
+ 105:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 106:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     n = ( slen / 3 ) * 3;
+ 114              		.loc 1 106 16
+ 115 00f3 488B45A8 		movq	-88(%rbp), %rax
+ 116 00f7 48BAABAA 		movabsq	$-6148914691236517205, %rdx
+ 116      AAAAAAAA 
+ 116      AAAA
+ 117 0101 48F7E2   		mulq	%rdx
+ 118 0104 48D1EA   		shrq	%rdx
+ 119              		.loc 1 106 7
+ 120 0107 4889D0   		movq	%rdx, %rax
+ 121 010a 4801C0   		addq	%rax, %rax
+ 122 010d 4801D0   		addq	%rdx, %rax
+ 123 0110 488945F0 		movq	%rax, -16(%rbp)
+ 107:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 108:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     for( i = 0, p = dst; i < n; i += 3 )
+ 124              		.loc 1 108 12
+ 125 0114 48C745E0 		movq	$0, -32(%rbp)
+ 125      00000000 
+ 126              		.loc 1 108 19
+ 127 011c 488B45C8 		movq	-56(%rbp), %rax
+ 128 0120 488945E8 		movq	%rax, -24(%rbp)
+ 129              		.loc 1 108 5
+ 130 0124 E9F70000 		jmp	.L7
+ 130      00
+ 131              	.L8:
+ 109:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     {
+ 110:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         C1 = *src++;
+ 132              		.loc 1 110 18 discriminator 3
+ 133 0129 488B45B0 		movq	-80(%rbp), %rax
+ 134 012d 488D5001 		leaq	1(%rax), %rdx
+ 135 0131 488955B0 		movq	%rdx, -80(%rbp)
+ 136              		.loc 1 110 14 discriminator 3
+ 137 0135 0FB600   		movzbl	(%rax), %eax
+ 138              		.loc 1 110 12 discriminator 3
+GAS LISTING /tmp/cc5Bv4w7.s 			page 6
+
+
+ 139 0138 0FB6C0   		movzbl	%al, %eax
+ 140 013b 8945D4   		movl	%eax, -44(%rbp)
+ 111:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         C2 = *src++;
+ 141              		.loc 1 111 18 discriminator 3
+ 142 013e 488B45B0 		movq	-80(%rbp), %rax
+ 143 0142 488D5001 		leaq	1(%rax), %rdx
+ 144 0146 488955B0 		movq	%rdx, -80(%rbp)
+ 145              		.loc 1 111 14 discriminator 3
+ 146 014a 0FB600   		movzbl	(%rax), %eax
+ 147              		.loc 1 111 12 discriminator 3
+ 148 014d 0FB6C0   		movzbl	%al, %eax
+ 149 0150 8945D8   		movl	%eax, -40(%rbp)
+ 112:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         C3 = *src++;
+ 150              		.loc 1 112 18 discriminator 3
+ 151 0153 488B45B0 		movq	-80(%rbp), %rax
+ 152 0157 488D5001 		leaq	1(%rax), %rdx
+ 153 015b 488955B0 		movq	%rdx, -80(%rbp)
+ 154              		.loc 1 112 14 discriminator 3
+ 155 015f 0FB600   		movzbl	(%rax), %eax
+ 156              		.loc 1 112 12 discriminator 3
+ 157 0162 0FB6C0   		movzbl	%al, %eax
+ 158 0165 8945DC   		movl	%eax, -36(%rbp)
+ 113:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 114:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         *p++ = base64_enc_map[(C1 >> 2) & 0x3F];
+ 159              		.loc 1 114 35 discriminator 3
+ 160 0168 8B45D4   		movl	-44(%rbp), %eax
+ 161 016b C1F802   		sarl	$2, %eax
+ 162              		.loc 1 114 41 discriminator 3
+ 163 016e 83E03F   		andl	$63, %eax
+ 164 0171 89C1     		movl	%eax, %ecx
+ 165              		.loc 1 114 11 discriminator 3
+ 166 0173 488B45E8 		movq	-24(%rbp), %rax
+ 167 0177 488D5001 		leaq	1(%rax), %rdx
+ 168 017b 488955E8 		movq	%rdx, -24(%rbp)
+ 169              		.loc 1 114 30 discriminator 3
+ 170 017f 4863D1   		movslq	%ecx, %rdx
+ 171 0182 488D0D00 		leaq	base64_enc_map(%rip), %rcx
+ 171      000000
+ 172 0189 0FB6140A 		movzbl	(%rdx,%rcx), %edx
+ 173              		.loc 1 114 14 discriminator 3
+ 174 018d 8810     		movb	%dl, (%rax)
+ 115:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         *p++ = base64_enc_map[(((C1 &  3) << 4) + (C2 >> 4)) & 0x3F];
+ 175              		.loc 1 115 43 discriminator 3
+ 176 018f 8B45D4   		movl	-44(%rbp), %eax
+ 177 0192 C1E004   		sall	$4, %eax
+ 178 0195 83E030   		andl	$48, %eax
+ 179 0198 89C2     		movl	%eax, %edx
+ 180              		.loc 1 115 55 discriminator 3
+ 181 019a 8B45D8   		movl	-40(%rbp), %eax
+ 182 019d C1F804   		sarl	$4, %eax
+ 183              		.loc 1 115 49 discriminator 3
+ 184 01a0 01D0     		addl	%edx, %eax
+ 185              		.loc 1 115 62 discriminator 3
+ 186 01a2 83E03F   		andl	$63, %eax
+ 187 01a5 89C1     		movl	%eax, %ecx
+ 188              		.loc 1 115 11 discriminator 3
+ 189 01a7 488B45E8 		movq	-24(%rbp), %rax
+GAS LISTING /tmp/cc5Bv4w7.s 			page 7
+
+
+ 190 01ab 488D5001 		leaq	1(%rax), %rdx
+ 191 01af 488955E8 		movq	%rdx, -24(%rbp)
+ 192              		.loc 1 115 30 discriminator 3
+ 193 01b3 4863D1   		movslq	%ecx, %rdx
+ 194 01b6 488D0D00 		leaq	base64_enc_map(%rip), %rcx
+ 194      000000
+ 195 01bd 0FB6140A 		movzbl	(%rdx,%rcx), %edx
+ 196              		.loc 1 115 14 discriminator 3
+ 197 01c1 8810     		movb	%dl, (%rax)
+ 116:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         *p++ = base64_enc_map[(((C2 & 15) << 2) + (C3 >> 6)) & 0x3F];
+ 198              		.loc 1 116 43 discriminator 3
+ 199 01c3 8B45D8   		movl	-40(%rbp), %eax
+ 200 01c6 C1E002   		sall	$2, %eax
+ 201 01c9 83E03C   		andl	$60, %eax
+ 202 01cc 89C2     		movl	%eax, %edx
+ 203              		.loc 1 116 55 discriminator 3
+ 204 01ce 8B45DC   		movl	-36(%rbp), %eax
+ 205 01d1 C1F806   		sarl	$6, %eax
+ 206              		.loc 1 116 49 discriminator 3
+ 207 01d4 01D0     		addl	%edx, %eax
+ 208              		.loc 1 116 62 discriminator 3
+ 209 01d6 83E03F   		andl	$63, %eax
+ 210 01d9 89C1     		movl	%eax, %ecx
+ 211              		.loc 1 116 11 discriminator 3
+ 212 01db 488B45E8 		movq	-24(%rbp), %rax
+ 213 01df 488D5001 		leaq	1(%rax), %rdx
+ 214 01e3 488955E8 		movq	%rdx, -24(%rbp)
+ 215              		.loc 1 116 30 discriminator 3
+ 216 01e7 4863D1   		movslq	%ecx, %rdx
+ 217 01ea 488D0D00 		leaq	base64_enc_map(%rip), %rcx
+ 217      000000
+ 218 01f1 0FB6140A 		movzbl	(%rdx,%rcx), %edx
+ 219              		.loc 1 116 14 discriminator 3
+ 220 01f5 8810     		movb	%dl, (%rax)
+ 117:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         *p++ = base64_enc_map[C3 & 0x3F];
+ 221              		.loc 1 117 34 discriminator 3
+ 222 01f7 8B45DC   		movl	-36(%rbp), %eax
+ 223 01fa 83E03F   		andl	$63, %eax
+ 224 01fd 89C1     		movl	%eax, %ecx
+ 225              		.loc 1 117 11 discriminator 3
+ 226 01ff 488B45E8 		movq	-24(%rbp), %rax
+ 227 0203 488D5001 		leaq	1(%rax), %rdx
+ 228 0207 488955E8 		movq	%rdx, -24(%rbp)
+ 229              		.loc 1 117 30 discriminator 3
+ 230 020b 4863D1   		movslq	%ecx, %rdx
+ 231 020e 488D0D00 		leaq	base64_enc_map(%rip), %rcx
+ 231      000000
+ 232 0215 0FB6140A 		movzbl	(%rdx,%rcx), %edx
+ 233              		.loc 1 117 14 discriminator 3
+ 234 0219 8810     		movb	%dl, (%rax)
+ 108:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     {
+ 235              		.loc 1 108 35 discriminator 3
+ 236 021b 488345E0 		addq	$3, -32(%rbp)
+ 236      03
+ 237              	.L7:
+ 108:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     {
+ 238              		.loc 1 108 5 discriminator 1
+GAS LISTING /tmp/cc5Bv4w7.s 			page 8
+
+
+ 239 0220 488B45E0 		movq	-32(%rbp), %rax
+ 240 0224 483B45F0 		cmpq	-16(%rbp), %rax
+ 241 0228 0F82FBFE 		jb	.L8
+ 241      FFFF
+ 118:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     }
+ 119:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 120:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     if( i < slen )
+ 242              		.loc 1 120 7
+ 243 022e 488B45E0 		movq	-32(%rbp), %rax
+ 244 0232 483B45A8 		cmpq	-88(%rbp), %rax
+ 245 0236 0F83EF00 		jnb	.L9
+ 245      0000
+ 121:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     {
+ 122:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         C1 = *src++;
+ 246              		.loc 1 122 18
+ 247 023c 488B45B0 		movq	-80(%rbp), %rax
+ 248 0240 488D5001 		leaq	1(%rax), %rdx
+ 249 0244 488955B0 		movq	%rdx, -80(%rbp)
+ 250              		.loc 1 122 14
+ 251 0248 0FB600   		movzbl	(%rax), %eax
+ 252              		.loc 1 122 12
+ 253 024b 0FB6C0   		movzbl	%al, %eax
+ 254 024e 8945D4   		movl	%eax, -44(%rbp)
+ 123:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         C2 = ( ( i + 1 ) < slen ) ? *src++ : 0;
+ 255              		.loc 1 123 20
+ 256 0251 488B45E0 		movq	-32(%rbp), %rax
+ 257 0255 4883C001 		addq	$1, %rax
+ 258              		.loc 1 123 44
+ 259 0259 483945A8 		cmpq	%rax, -88(%rbp)
+ 260 025d 7614     		jbe	.L10
+ 261              		.loc 1 123 41 discriminator 1
+ 262 025f 488B45B0 		movq	-80(%rbp), %rax
+ 263 0263 488D5001 		leaq	1(%rax), %rdx
+ 264 0267 488955B0 		movq	%rdx, -80(%rbp)
+ 265              		.loc 1 123 37 discriminator 1
+ 266 026b 0FB600   		movzbl	(%rax), %eax
+ 267              		.loc 1 123 44 discriminator 1
+ 268 026e 0FB6C0   		movzbl	%al, %eax
+ 269 0271 EB05     		jmp	.L11
+ 270              	.L10:
+ 271              		.loc 1 123 44 is_stmt 0 discriminator 2
+ 272 0273 B8000000 		movl	$0, %eax
+ 272      00
+ 273              	.L11:
+ 274              		.loc 1 123 12 is_stmt 1 discriminator 4
+ 275 0278 8945D8   		movl	%eax, -40(%rbp)
+ 124:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 125:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         *p++ = base64_enc_map[(C1 >> 2) & 0x3F];
+ 276              		.loc 1 125 35 discriminator 4
+ 277 027b 8B45D4   		movl	-44(%rbp), %eax
+ 278 027e C1F802   		sarl	$2, %eax
+ 279              		.loc 1 125 41 discriminator 4
+ 280 0281 83E03F   		andl	$63, %eax
+ 281 0284 89C1     		movl	%eax, %ecx
+ 282              		.loc 1 125 11 discriminator 4
+ 283 0286 488B45E8 		movq	-24(%rbp), %rax
+ 284 028a 488D5001 		leaq	1(%rax), %rdx
+GAS LISTING /tmp/cc5Bv4w7.s 			page 9
+
+
+ 285 028e 488955E8 		movq	%rdx, -24(%rbp)
+ 286              		.loc 1 125 30 discriminator 4
+ 287 0292 4863D1   		movslq	%ecx, %rdx
+ 288 0295 488D0D00 		leaq	base64_enc_map(%rip), %rcx
+ 288      000000
+ 289 029c 0FB6140A 		movzbl	(%rdx,%rcx), %edx
+ 290              		.loc 1 125 14 discriminator 4
+ 291 02a0 8810     		movb	%dl, (%rax)
+ 126:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         *p++ = base64_enc_map[(((C1 & 3) << 4) + (C2 >> 4)) & 0x3F];
+ 292              		.loc 1 126 42 discriminator 4
+ 293 02a2 8B45D4   		movl	-44(%rbp), %eax
+ 294 02a5 C1E004   		sall	$4, %eax
+ 295 02a8 83E030   		andl	$48, %eax
+ 296 02ab 89C2     		movl	%eax, %edx
+ 297              		.loc 1 126 54 discriminator 4
+ 298 02ad 8B45D8   		movl	-40(%rbp), %eax
+ 299 02b0 C1F804   		sarl	$4, %eax
+ 300              		.loc 1 126 48 discriminator 4
+ 301 02b3 01D0     		addl	%edx, %eax
+ 302              		.loc 1 126 61 discriminator 4
+ 303 02b5 83E03F   		andl	$63, %eax
+ 304 02b8 89C1     		movl	%eax, %ecx
+ 305              		.loc 1 126 11 discriminator 4
+ 306 02ba 488B45E8 		movq	-24(%rbp), %rax
+ 307 02be 488D5001 		leaq	1(%rax), %rdx
+ 308 02c2 488955E8 		movq	%rdx, -24(%rbp)
+ 309              		.loc 1 126 30 discriminator 4
+ 310 02c6 4863D1   		movslq	%ecx, %rdx
+ 311 02c9 488D0D00 		leaq	base64_enc_map(%rip), %rcx
+ 311      000000
+ 312 02d0 0FB6140A 		movzbl	(%rdx,%rcx), %edx
+ 313              		.loc 1 126 14 discriminator 4
+ 314 02d4 8810     		movb	%dl, (%rax)
+ 127:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 128:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         if( ( i + 1 ) < slen )
+ 315              		.loc 1 128 17 discriminator 4
+ 316 02d6 488B45E0 		movq	-32(%rbp), %rax
+ 317 02da 4883C001 		addq	$1, %rax
+ 318              		.loc 1 128 11 discriminator 4
+ 319 02de 483945A8 		cmpq	%rax, -88(%rbp)
+ 320 02e2 7629     		jbe	.L12
+ 129:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****              *p++ = base64_enc_map[((C2 & 15) << 2) & 0x3F];
+ 321              		.loc 1 129 47
+ 322 02e4 8B45D8   		movl	-40(%rbp), %eax
+ 323 02e7 C1E002   		sall	$2, %eax
+ 324              		.loc 1 129 53
+ 325 02ea 83E03C   		andl	$60, %eax
+ 326 02ed 89C1     		movl	%eax, %ecx
+ 327              		.loc 1 129 16
+ 328 02ef 488B45E8 		movq	-24(%rbp), %rax
+ 329 02f3 488D5001 		leaq	1(%rax), %rdx
+ 330 02f7 488955E8 		movq	%rdx, -24(%rbp)
+ 331              		.loc 1 129 35
+ 332 02fb 4863D1   		movslq	%ecx, %rdx
+ 333 02fe 488D0D00 		leaq	base64_enc_map(%rip), %rcx
+ 333      000000
+ 334 0305 0FB6140A 		movzbl	(%rdx,%rcx), %edx
+GAS LISTING /tmp/cc5Bv4w7.s 			page 10
+
+
+ 335              		.loc 1 129 19
+ 336 0309 8810     		movb	%dl, (%rax)
+ 337 030b EB0F     		jmp	.L13
+ 338              	.L12:
+ 130:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         else *p++ = '=';
+ 339              		.loc 1 130 16
+ 340 030d 488B45E8 		movq	-24(%rbp), %rax
+ 341 0311 488D5001 		leaq	1(%rax), %rdx
+ 342 0315 488955E8 		movq	%rdx, -24(%rbp)
+ 343              		.loc 1 130 19
+ 344 0319 C6003D   		movb	$61, (%rax)
+ 345              	.L13:
+ 131:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 132:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         *p++ = '=';
+ 346              		.loc 1 132 11
+ 347 031c 488B45E8 		movq	-24(%rbp), %rax
+ 348 0320 488D5001 		leaq	1(%rax), %rdx
+ 349 0324 488955E8 		movq	%rdx, -24(%rbp)
+ 350              		.loc 1 132 14
+ 351 0328 C6003D   		movb	$61, (%rax)
+ 352              	.L9:
+ 133:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     }
+ 134:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 135:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     *olen = p - dst;
+ 353              		.loc 1 135 15
+ 354 032b 488B45E8 		movq	-24(%rbp), %rax
+ 355 032f 482B45C8 		subq	-56(%rbp), %rax
+ 356 0333 4889C2   		movq	%rax, %rdx
+ 357              		.loc 1 135 11
+ 358 0336 488B45B8 		movq	-72(%rbp), %rax
+ 359 033a 488910   		movq	%rdx, (%rax)
+ 136:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     *p = 0;
+ 360              		.loc 1 136 8
+ 361 033d 488B45E8 		movq	-24(%rbp), %rax
+ 362 0341 C60000   		movb	$0, (%rax)
+ 137:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 138:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     return( 0 );
+ 363              		.loc 1 138 11
+ 364 0344 B8000000 		movl	$0, %eax
+ 364      00
+ 365              	.L3:
+ 139:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** }
+ 366              		.loc 1 139 1
+ 367 0349 488B7DF8 		movq	-8(%rbp), %rdi
+ 368 034d 6448333C 		xorq	%fs:40, %rdi
+ 368      25280000 
+ 368      00
+ 369 0356 7405     		je	.L14
+ 370 0358 E8000000 		call	__stack_chk_fail@PLT
+ 370      00
+ 371              	.L14:
+ 372 035d C9       		leave
+ 373              	.LCFI2:
+ 374              		.cfi_def_cfa 7, 8
+ 375 035e C3       		ret
+ 376              		.cfi_endproc
+ 377              	.LFE0:
+GAS LISTING /tmp/cc5Bv4w7.s 			page 11
+
+
+ 379              		.section	.text.mbedtls_base64_decode,"ax",@progbits
+ 380              		.globl	mbedtls_base64_decode
+ 382              	mbedtls_base64_decode:
+ 383              	.LFB1:
+ 140:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 141:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** /*
+ 142:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  * Decode a base64-formatted buffer
+ 143:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****  */
+ 144:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** int mbedtls_base64_decode( unsigned char *dst, size_t dlen, size_t *olen,
+ 145:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****                    const unsigned char *src, size_t slen )
+ 146:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** {
+ 384              		.loc 1 146 1
+ 385              		.cfi_startproc
+ 386 0000 F30F1EFA 		endbr64
+ 387 0004 55       		pushq	%rbp
+ 388              	.LCFI3:
+ 389              		.cfi_def_cfa_offset 16
+ 390              		.cfi_offset 6, -16
+ 391 0005 4889E5   		movq	%rsp, %rbp
+ 392              	.LCFI4:
+ 393              		.cfi_def_cfa_register 6
+ 394 0008 4883EC60 		subq	$96, %rsp
+ 395 000c 48897DC8 		movq	%rdi, -56(%rbp)
+ 396 0010 488975C0 		movq	%rsi, -64(%rbp)
+ 397 0014 488955B8 		movq	%rdx, -72(%rbp)
+ 398 0018 48894DB0 		movq	%rcx, -80(%rbp)
+ 399 001c 4C8945A8 		movq	%r8, -88(%rbp)
+ 400              		.loc 1 146 1
+ 401 0020 64488B04 		movq	%fs:40, %rax
+ 401      25280000 
+ 401      00
+ 402 0029 488945F8 		movq	%rax, -8(%rbp)
+ 403 002d 31C0     		xorl	%eax, %eax
+ 147:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     size_t i, n;
+ 148:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     uint32_t j, x;
+ 149:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     unsigned char *p;
+ 150:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 151:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     /* First pass: check for validity and get output length */
+ 152:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     for( i = n = j = 0; i < slen; i++ )
+ 404              		.loc 1 152 20
+ 405 002f C745D800 		movl	$0, -40(%rbp)
+ 405      000000
+ 406              		.loc 1 152 16
+ 407 0036 48C745E8 		movq	$0, -24(%rbp)
+ 407      00000000 
+ 408              		.loc 1 152 12
+ 409 003e 488B45E8 		movq	-24(%rbp), %rax
+ 410 0042 488945E0 		movq	%rax, -32(%rbp)
+ 411              		.loc 1 152 5
+ 412 0046 E9420100 		jmp	.L16
+ 412      00
+ 413              	.L31:
+ 153:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     {
+ 154:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         /* Skip spaces before checking for EOL */
+ 155:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         x = 0;
+ 414              		.loc 1 155 11
+ 415 004b C745DC00 		movl	$0, -36(%rbp)
+GAS LISTING /tmp/cc5Bv4w7.s 			page 12
+
+
+ 415      000000
+ 156:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         while( i < slen && src[i] == ' ' )
+ 416              		.loc 1 156 14
+ 417 0052 EB09     		jmp	.L17
+ 418              	.L19:
+ 157:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         {
+ 158:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****             ++i;
+ 419              		.loc 1 158 13
+ 420 0054 488345E0 		addq	$1, -32(%rbp)
+ 420      01
+ 159:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****             ++x;
+ 421              		.loc 1 159 13
+ 422 0059 8345DC01 		addl	$1, -36(%rbp)
+ 423              	.L17:
+ 156:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         while( i < slen && src[i] == ' ' )
+ 424              		.loc 1 156 14
+ 425 005d 488B45E0 		movq	-32(%rbp), %rax
+ 426 0061 483B45A8 		cmpq	-88(%rbp), %rax
+ 427 0065 7312     		jnb	.L18
+ 156:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         while( i < slen && src[i] == ' ' )
+ 428              		.loc 1 156 31 discriminator 1
+ 429 0067 488B55B0 		movq	-80(%rbp), %rdx
+ 430 006b 488B45E0 		movq	-32(%rbp), %rax
+ 431 006f 4801D0   		addq	%rdx, %rax
+ 432 0072 0FB600   		movzbl	(%rax), %eax
+ 156:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         while( i < slen && src[i] == ' ' )
+ 433              		.loc 1 156 25 discriminator 1
+ 434 0075 3C20     		cmpb	$32, %al
+ 435 0077 74DB     		je	.L19
+ 436              	.L18:
+ 160:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         }
+ 161:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 162:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         /* Spaces at end of buffer are OK */
+ 163:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         if( i == slen )
+ 437              		.loc 1 163 11
+ 438 0079 488B45E0 		movq	-32(%rbp), %rax
+ 439 007d 483B45A8 		cmpq	-88(%rbp), %rax
+ 440 0081 0F841601 		je	.L43
+ 440      0000
+ 164:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****             break;
+ 165:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 166:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         if( ( slen - i ) >= 2 &&
+ 441              		.loc 1 166 20
+ 442 0087 488B45A8 		movq	-88(%rbp), %rax
+ 443 008b 482B45E0 		subq	-32(%rbp), %rax
+ 444              		.loc 1 166 11
+ 445 008f 4883F801 		cmpq	$1, %rax
+ 446 0093 762C     		jbe	.L22
+ 167:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****             src[i] == '\r' && src[i + 1] == '\n' )
+ 447              		.loc 1 167 16 discriminator 1
+ 448 0095 488B55B0 		movq	-80(%rbp), %rdx
+ 449 0099 488B45E0 		movq	-32(%rbp), %rax
+ 450 009d 4801D0   		addq	%rdx, %rax
+ 451 00a0 0FB600   		movzbl	(%rax), %eax
+ 166:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****             src[i] == '\r' && src[i + 1] == '\n' )
+ 452              		.loc 1 166 31 discriminator 1
+ 453 00a3 3C0D     		cmpb	$13, %al
+GAS LISTING /tmp/cc5Bv4w7.s 			page 13
+
+
+ 454 00a5 751A     		jne	.L22
+ 455              		.loc 1 167 34
+ 456 00a7 488B45E0 		movq	-32(%rbp), %rax
+ 457 00ab 488D5001 		leaq	1(%rax), %rdx
+ 458 00af 488B45B0 		movq	-80(%rbp), %rax
+ 459 00b3 4801D0   		addq	%rdx, %rax
+ 460 00b6 0FB600   		movzbl	(%rax), %eax
+ 461              		.loc 1 167 28
+ 462 00b9 3C0A     		cmpb	$10, %al
+ 463 00bb 0F84C300 		je	.L44
+ 463      0000
+ 464              	.L22:
+ 168:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****             continue;
+ 169:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 170:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         if( src[i] == '\n' )
+ 465              		.loc 1 170 16
+ 466 00c1 488B55B0 		movq	-80(%rbp), %rdx
+ 467 00c5 488B45E0 		movq	-32(%rbp), %rax
+ 468 00c9 4801D0   		addq	%rdx, %rax
+ 469 00cc 0FB600   		movzbl	(%rax), %eax
+ 470              		.loc 1 170 11
+ 471 00cf 3C0A     		cmpb	$10, %al
+ 472 00d1 0F84B000 		je	.L45
+ 472      0000
+ 171:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****             continue;
+ 172:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 173:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         /* Space inside a line is an error */
+ 174:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         if( x != 0 )
+ 473              		.loc 1 174 11
+ 474 00d7 837DDC00 		cmpl	$0, -36(%rbp)
+ 475 00db 740A     		je	.L25
+ 175:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****             return( MBEDTLS_ERR_BASE64_INVALID_CHARACTER );
+ 476              		.loc 1 175 19
+ 477 00dd B8D4FFFF 		movl	$-44, %eax
+ 477      FF
+ 478 00e2 E9710200 		jmp	.L26
+ 478      00
+ 479              	.L25:
+ 176:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 177:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         if( src[i] == '=' && ++j > 2 )
+ 480              		.loc 1 177 16
+ 481 00e7 488B55B0 		movq	-80(%rbp), %rdx
+ 482 00eb 488B45E0 		movq	-32(%rbp), %rax
+ 483 00ef 4801D0   		addq	%rdx, %rax
+ 484 00f2 0FB600   		movzbl	(%rax), %eax
+ 485              		.loc 1 177 11
+ 486 00f5 3C3D     		cmpb	$61, %al
+ 487 00f7 7514     		jne	.L27
+ 488              		.loc 1 177 27 discriminator 1
+ 489 00f9 8345D801 		addl	$1, -40(%rbp)
+ 490 00fd 837DD802 		cmpl	$2, -40(%rbp)
+ 491 0101 760A     		jbe	.L27
+ 178:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****             return( MBEDTLS_ERR_BASE64_INVALID_CHARACTER );
+ 492              		.loc 1 178 19
+ 493 0103 B8D4FFFF 		movl	$-44, %eax
+ 493      FF
+ 494 0108 E94B0200 		jmp	.L26
+GAS LISTING /tmp/cc5Bv4w7.s 			page 14
+
+
+ 494      00
+ 495              	.L27:
+ 179:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 180:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         if( src[i] > 127 || base64_dec_map[src[i]] == 127 )
+ 496              		.loc 1 180 16
+ 497 010d 488B55B0 		movq	-80(%rbp), %rdx
+ 498 0111 488B45E0 		movq	-32(%rbp), %rax
+ 499 0115 4801D0   		addq	%rdx, %rax
+ 500 0118 0FB600   		movzbl	(%rax), %eax
+ 501              		.loc 1 180 11
+ 502 011b 84C0     		testb	%al, %al
+ 503 011d 7822     		js	.L28
+ 504              		.loc 1 180 47 discriminator 1
+ 505 011f 488B55B0 		movq	-80(%rbp), %rdx
+ 506 0123 488B45E0 		movq	-32(%rbp), %rax
+ 507 0127 4801D0   		addq	%rdx, %rax
+ 508 012a 0FB600   		movzbl	(%rax), %eax
+ 509 012d 0FB6C0   		movzbl	%al, %eax
+ 510              		.loc 1 180 43 discriminator 1
+ 511 0130 4898     		cltq
+ 512 0132 488D1500 		leaq	base64_dec_map(%rip), %rdx
+ 512      000000
+ 513 0139 0FB60410 		movzbl	(%rax,%rdx), %eax
+ 514              		.loc 1 180 26 discriminator 1
+ 515 013d 3C7F     		cmpb	$127, %al
+ 516 013f 750A     		jne	.L29
+ 517              	.L28:
+ 181:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****             return( MBEDTLS_ERR_BASE64_INVALID_CHARACTER );
+ 518              		.loc 1 181 19
+ 519 0141 B8D4FFFF 		movl	$-44, %eax
+ 519      FF
+ 520 0146 E90D0200 		jmp	.L26
+ 520      00
+ 521              	.L29:
+ 182:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 183:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         if( base64_dec_map[src[i]] < 64 && j != 0 )
+ 522              		.loc 1 183 31
+ 523 014b 488B55B0 		movq	-80(%rbp), %rdx
+ 524 014f 488B45E0 		movq	-32(%rbp), %rax
+ 525 0153 4801D0   		addq	%rdx, %rax
+ 526 0156 0FB600   		movzbl	(%rax), %eax
+ 527 0159 0FB6C0   		movzbl	%al, %eax
+ 528              		.loc 1 183 27
+ 529 015c 4898     		cltq
+ 530 015e 488D1500 		leaq	base64_dec_map(%rip), %rdx
+ 530      000000
+ 531 0165 0FB60410 		movzbl	(%rax,%rdx), %eax
+ 532              		.loc 1 183 11
+ 533 0169 3C3F     		cmpb	$63, %al
+ 534 016b 7710     		ja	.L30
+ 535              		.loc 1 183 41 discriminator 1
+ 536 016d 837DD800 		cmpl	$0, -40(%rbp)
+ 537 0171 740A     		je	.L30
+ 184:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****             return( MBEDTLS_ERR_BASE64_INVALID_CHARACTER );
+ 538              		.loc 1 184 19
+ 539 0173 B8D4FFFF 		movl	$-44, %eax
+ 539      FF
+GAS LISTING /tmp/cc5Bv4w7.s 			page 15
+
+
+ 540 0178 E9DB0100 		jmp	.L26
+ 540      00
+ 541              	.L30:
+ 185:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 186:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         n++;
+ 542              		.loc 1 186 10
+ 543 017d 488345E8 		addq	$1, -24(%rbp)
+ 543      01
+ 544 0182 EB04     		jmp	.L23
+ 545              	.L44:
+ 168:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 546              		.loc 1 168 13
+ 547 0184 90       		nop
+ 548 0185 EB01     		jmp	.L23
+ 549              	.L45:
+ 171:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 550              		.loc 1 171 13
+ 551 0187 90       		nop
+ 552              	.L23:
+ 152:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     {
+ 553              		.loc 1 152 36 discriminator 2
+ 554 0188 488345E0 		addq	$1, -32(%rbp)
+ 554      01
+ 555              	.L16:
+ 152:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     {
+ 556              		.loc 1 152 5 discriminator 1
+ 557 018d 488B45E0 		movq	-32(%rbp), %rax
+ 558 0191 483B45A8 		cmpq	-88(%rbp), %rax
+ 559 0195 0F82B0FE 		jb	.L31
+ 559      FFFF
+ 560 019b EB01     		jmp	.L21
+ 561              	.L43:
+ 164:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 562              		.loc 1 164 13
+ 563 019d 90       		nop
+ 564              	.L21:
+ 187:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     }
+ 188:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 189:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     if( n == 0 )
+ 565              		.loc 1 189 7
+ 566 019e 48837DE8 		cmpq	$0, -24(%rbp)
+ 566      00
+ 567 01a3 7515     		jne	.L32
+ 190:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     {
+ 191:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         *olen = 0;
+ 568              		.loc 1 191 15
+ 569 01a5 488B45B8 		movq	-72(%rbp), %rax
+ 570 01a9 48C70000 		movq	$0, (%rax)
+ 570      000000
+ 192:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         return( 0 );
+ 571              		.loc 1 192 15
+ 572 01b0 B8000000 		movl	$0, %eax
+ 572      00
+ 573 01b5 E99E0100 		jmp	.L26
+ 573      00
+ 574              	.L32:
+ 193:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     }
+GAS LISTING /tmp/cc5Bv4w7.s 			page 16
+
+
+ 194:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 195:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     /* The following expression is to calculate the following formula without
+ 196:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****      * risk of integer overflow in n:
+ 197:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****      *     n = ( ( n * 6 ) + 7 ) >> 3;
+ 198:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****      */
+ 199:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     n = ( 6 * ( n >> 3 ) ) + ( ( 6 * ( n & 0x7 ) + 7 ) >> 3 );
+ 575              		.loc 1 199 19
+ 576 01ba 488B45E8 		movq	-24(%rbp), %rax
+ 577 01be 48C1E803 		shrq	$3, %rax
+ 578 01c2 4889C2   		movq	%rax, %rdx
+ 579              		.loc 1 199 13
+ 580 01c5 4889D0   		movq	%rdx, %rax
+ 581 01c8 4801C0   		addq	%rax, %rax
+ 582 01cb 4801D0   		addq	%rdx, %rax
+ 583 01ce 4801C0   		addq	%rax, %rax
+ 584 01d1 4889C1   		movq	%rax, %rcx
+ 585              		.loc 1 199 42
+ 586 01d4 488B45E8 		movq	-24(%rbp), %rax
+ 587 01d8 83E007   		andl	$7, %eax
+ 588 01db 4889C2   		movq	%rax, %rdx
+ 589              		.loc 1 199 36
+ 590 01de 4889D0   		movq	%rdx, %rax
+ 591 01e1 4801C0   		addq	%rax, %rax
+ 592 01e4 4801D0   		addq	%rdx, %rax
+ 593 01e7 4801C0   		addq	%rax, %rax
+ 594              		.loc 1 199 50
+ 595 01ea 4883C007 		addq	$7, %rax
+ 596              		.loc 1 199 56
+ 597 01ee 48C1E803 		shrq	$3, %rax
+ 598              		.loc 1 199 7
+ 599 01f2 4801C8   		addq	%rcx, %rax
+ 600 01f5 488945E8 		movq	%rax, -24(%rbp)
+ 200:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     n -= j;
+ 601              		.loc 1 200 7
+ 602 01f9 8B45D8   		movl	-40(%rbp), %eax
+ 603 01fc 482945E8 		subq	%rax, -24(%rbp)
+ 201:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 202:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     if( dst == NULL || dlen < n )
+ 604              		.loc 1 202 7
+ 605 0200 48837DC8 		cmpq	$0, -56(%rbp)
+ 605      00
+ 606 0205 740A     		je	.L33
+ 607              		.loc 1 202 21 discriminator 1
+ 608 0207 488B45C0 		movq	-64(%rbp), %rax
+ 609 020b 483B45E8 		cmpq	-24(%rbp), %rax
+ 610 020f 7315     		jnb	.L34
+ 611              	.L33:
+ 203:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     {
+ 204:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         *olen = n;
+ 612              		.loc 1 204 15
+ 613 0211 488B45B8 		movq	-72(%rbp), %rax
+ 614 0215 488B55E8 		movq	-24(%rbp), %rdx
+ 615 0219 488910   		movq	%rdx, (%rax)
+ 205:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         return( MBEDTLS_ERR_BASE64_BUFFER_TOO_SMALL );
+ 616              		.loc 1 205 15
+ 617 021c B8D6FFFF 		movl	$-42, %eax
+ 617      FF
+GAS LISTING /tmp/cc5Bv4w7.s 			page 17
+
+
+ 618 0221 E9320100 		jmp	.L26
+ 618      00
+ 619              	.L34:
+ 206:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     }
+ 207:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 208:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****    for( j = 3, n = x = 0, p = dst; i > 0; i--, src++ )
+ 620              		.loc 1 208 11
+ 621 0226 C745D803 		movl	$3, -40(%rbp)
+ 621      000000
+ 622              		.loc 1 208 22
+ 623 022d C745DC00 		movl	$0, -36(%rbp)
+ 623      000000
+ 624              		.loc 1 208 18
+ 625 0234 48C745E8 		movq	$0, -24(%rbp)
+ 625      00000000 
+ 626              		.loc 1 208 29
+ 627 023c 488B45C8 		movq	-56(%rbp), %rax
+ 628 0240 488945F0 		movq	%rax, -16(%rbp)
+ 629              		.loc 1 208 4
+ 630 0244 E9ED0000 		jmp	.L35
+ 630      00
+ 631              	.L41:
+ 209:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****    {
+ 210:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         if( *src == '\r' || *src == '\n' || *src == ' ' )
+ 632              		.loc 1 210 13
+ 633 0249 488B45B0 		movq	-80(%rbp), %rax
+ 634 024d 0FB600   		movzbl	(%rax), %eax
+ 635              		.loc 1 210 11
+ 636 0250 3C0D     		cmpb	$13, %al
+ 637 0252 0F84D300 		je	.L46
+ 637      0000
+ 638              		.loc 1 210 29 discriminator 1
+ 639 0258 488B45B0 		movq	-80(%rbp), %rax
+ 640 025c 0FB600   		movzbl	(%rax), %eax
+ 641              		.loc 1 210 26 discriminator 1
+ 642 025f 3C0A     		cmpb	$10, %al
+ 643 0261 0F84C400 		je	.L46
+ 643      0000
+ 644              		.loc 1 210 45 discriminator 2
+ 645 0267 488B45B0 		movq	-80(%rbp), %rax
+ 646 026b 0FB600   		movzbl	(%rax), %eax
+ 647              		.loc 1 210 42 discriminator 2
+ 648 026e 3C20     		cmpb	$32, %al
+ 649 0270 0F84B500 		je	.L46
+ 649      0000
+ 211:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****             continue;
+ 212:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 213:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         j -= ( base64_dec_map[*src] == 64 );
+ 650              		.loc 1 213 31
+ 651 0276 488B45B0 		movq	-80(%rbp), %rax
+ 652 027a 0FB600   		movzbl	(%rax), %eax
+ 653 027d 0FB6C0   		movzbl	%al, %eax
+ 654              		.loc 1 213 30
+ 655 0280 4898     		cltq
+ 656 0282 488D1500 		leaq	base64_dec_map(%rip), %rdx
+ 656      000000
+ 657 0289 0FB60410 		movzbl	(%rax,%rdx), %eax
+GAS LISTING /tmp/cc5Bv4w7.s 			page 18
+
+
+ 658              		.loc 1 213 37
+ 659 028d 3C40     		cmpb	$64, %al
+ 660 028f 0F94C0   		sete	%al
+ 661 0292 0FB6C0   		movzbl	%al, %eax
+ 662              		.loc 1 213 11
+ 663 0295 2945D8   		subl	%eax, -40(%rbp)
+ 214:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         x  = ( x << 6 ) | ( base64_dec_map[*src] & 0x3F );
+ 664              		.loc 1 214 18
+ 665 0298 8B45DC   		movl	-36(%rbp), %eax
+ 666 029b C1E006   		sall	$6, %eax
+ 667 029e 89C1     		movl	%eax, %ecx
+ 668              		.loc 1 214 44
+ 669 02a0 488B45B0 		movq	-80(%rbp), %rax
+ 670 02a4 0FB600   		movzbl	(%rax), %eax
+ 671 02a7 0FB6C0   		movzbl	%al, %eax
+ 672              		.loc 1 214 43
+ 673 02aa 4898     		cltq
+ 674 02ac 488D1500 		leaq	base64_dec_map(%rip), %rdx
+ 674      000000
+ 675 02b3 0FB60410 		movzbl	(%rax,%rdx), %eax
+ 676              		.loc 1 214 50
+ 677 02b7 0FB6C0   		movzbl	%al, %eax
+ 678 02ba 83E03F   		andl	$63, %eax
+ 679              		.loc 1 214 12
+ 680 02bd 09C8     		orl	%ecx, %eax
+ 681 02bf 8945DC   		movl	%eax, -36(%rbp)
+ 215:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 216:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         if( ++n == 4 )
+ 682              		.loc 1 216 11
+ 683 02c2 488345E8 		addq	$1, -24(%rbp)
+ 683      01
+ 684 02c7 48837DE8 		cmpq	$4, -24(%rbp)
+ 684      04
+ 685 02cc 755E     		jne	.L38
+ 217:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         {
+ 218:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****             n = 0;
+ 686              		.loc 1 218 15
+ 687 02ce 48C745E8 		movq	$0, -24(%rbp)
+ 687      00000000 
+ 219:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****             if( j > 0 ) *p++ = (unsigned char)( x >> 16 );
+ 688              		.loc 1 219 15
+ 689 02d6 837DD800 		cmpl	$0, -40(%rbp)
+ 690 02da 7418     		je	.L39
+ 691              		.loc 1 219 51 discriminator 1
+ 692 02dc 8B45DC   		movl	-36(%rbp), %eax
+ 693 02df C1E810   		shrl	$16, %eax
+ 694 02e2 89C1     		movl	%eax, %ecx
+ 695              		.loc 1 219 27 discriminator 1
+ 696 02e4 488B45F0 		movq	-16(%rbp), %rax
+ 697 02e8 488D5001 		leaq	1(%rax), %rdx
+ 698 02ec 488955F0 		movq	%rdx, -16(%rbp)
+ 699              		.loc 1 219 32 discriminator 1
+ 700 02f0 89CA     		movl	%ecx, %edx
+ 701              		.loc 1 219 30 discriminator 1
+ 702 02f2 8810     		movb	%dl, (%rax)
+ 703              	.L39:
+ 220:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****             if( j > 1 ) *p++ = (unsigned char)( x >>  8 );
+GAS LISTING /tmp/cc5Bv4w7.s 			page 19
+
+
+ 704              		.loc 1 220 15
+ 705 02f4 837DD801 		cmpl	$1, -40(%rbp)
+ 706 02f8 7618     		jbe	.L40
+ 707              		.loc 1 220 51 discriminator 1
+ 708 02fa 8B45DC   		movl	-36(%rbp), %eax
+ 709 02fd C1E808   		shrl	$8, %eax
+ 710 0300 89C1     		movl	%eax, %ecx
+ 711              		.loc 1 220 27 discriminator 1
+ 712 0302 488B45F0 		movq	-16(%rbp), %rax
+ 713 0306 488D5001 		leaq	1(%rax), %rdx
+ 714 030a 488955F0 		movq	%rdx, -16(%rbp)
+ 715              		.loc 1 220 32 discriminator 1
+ 716 030e 89CA     		movl	%ecx, %edx
+ 717              		.loc 1 220 30 discriminator 1
+ 718 0310 8810     		movb	%dl, (%rax)
+ 719              	.L40:
+ 221:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****             if( j > 2 ) *p++ = (unsigned char)( x       );
+ 720              		.loc 1 221 15
+ 721 0312 837DD802 		cmpl	$2, -40(%rbp)
+ 722 0316 7614     		jbe	.L38
+ 723              		.loc 1 221 27 discriminator 1
+ 724 0318 488B45F0 		movq	-16(%rbp), %rax
+ 725 031c 488D5001 		leaq	1(%rax), %rdx
+ 726 0320 488955F0 		movq	%rdx, -16(%rbp)
+ 727              		.loc 1 221 32 discriminator 1
+ 728 0324 8B55DC   		movl	-36(%rbp), %edx
+ 729              		.loc 1 221 30 discriminator 1
+ 730 0327 8810     		movb	%dl, (%rax)
+ 731 0329 EB01     		jmp	.L38
+ 732              	.L46:
+ 211:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 733              		.loc 1 211 13
+ 734 032b 90       		nop
+ 735              	.L38:
+ 208:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****    {
+ 736              		.loc 1 208 44 discriminator 2
+ 737 032c 48836DE0 		subq	$1, -32(%rbp)
+ 737      01
+ 208:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****    {
+ 738              		.loc 1 208 51 discriminator 2
+ 739 0331 488345B0 		addq	$1, -80(%rbp)
+ 739      01
+ 740              	.L35:
+ 208:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****    {
+ 741              		.loc 1 208 4 discriminator 1
+ 742 0336 48837DE0 		cmpq	$0, -32(%rbp)
+ 742      00
+ 743 033b 0F8508FF 		jne	.L41
+ 743      FFFF
+ 222:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****         }
+ 223:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     }
+ 224:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 225:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     *olen = p - dst;
+ 744              		.loc 1 225 15
+ 745 0341 488B45F0 		movq	-16(%rbp), %rax
+ 746 0345 482B45C8 		subq	-56(%rbp), %rax
+ 747 0349 4889C2   		movq	%rax, %rdx
+GAS LISTING /tmp/cc5Bv4w7.s 			page 20
+
+
+ 748              		.loc 1 225 11
+ 749 034c 488B45B8 		movq	-72(%rbp), %rax
+ 750 0350 488910   		movq	%rdx, (%rax)
+ 226:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** 
+ 227:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c ****     return( 0 );
+ 751              		.loc 1 227 11
+ 752 0353 B8000000 		movl	$0, %eax
+ 752      00
+ 753              	.L26:
+ 228:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/base64.c **** }
+ 754              		.loc 1 228 1
+ 755 0358 488B75F8 		movq	-8(%rbp), %rsi
+ 756 035c 64483334 		xorq	%fs:40, %rsi
+ 756      25280000 
+ 756      00
+ 757 0365 7405     		je	.L42
+ 758 0367 E8000000 		call	__stack_chk_fail@PLT
+ 758      00
+ 759              	.L42:
+ 760 036c C9       		leave
+ 761              	.LCFI5:
+ 762              		.cfi_def_cfa 7, 8
+ 763 036d C3       		ret
+ 764              		.cfi_endproc
+ 765              	.LFE1:
+ 767              		.text
+ 768              	.Letext0:
+ 769              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 770              		.file 3 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 771              		.file 4 "/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h"
+ 1453              		.section	.note.gnu.property,"a"
+ 1454              		.align 8
+ 1455 0000 04000000 		.long	 1f - 0f
+ 1456 0004 10000000 		.long	 4f - 1f
+ 1457 0008 05000000 		.long	 5
+ 1458              	0:
+ 1459 000c 474E5500 		.string	 "GNU"
+ 1460              	1:
+ 1461              		.align 8
+ 1462 0010 020000C0 		.long	 0xc0000002
+ 1463 0014 04000000 		.long	 3f - 2f
+ 1464              	2:
+ 1465 0018 03000000 		.long	 0x3
+ 1466              	3:
+ 1467 001c 00000000 		.align 8
+ 1468              	4:
+GAS LISTING /tmp/cc5Bv4w7.s 			page 21
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 base64.c
+     /tmp/cc5Bv4w7.s:8      .rodata.base64_enc_map:0000000000000000 base64_enc_map
+     /tmp/cc5Bv4w7.s:15     .rodata.base64_dec_map:0000000000000000 base64_dec_map
+     /tmp/cc5Bv4w7.s:23     .text.mbedtls_base64_encode:0000000000000000 mbedtls_base64_encode
+     /tmp/cc5Bv4w7.s:382    .text.mbedtls_base64_decode:0000000000000000 mbedtls_base64_decode
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+__stack_chk_fail

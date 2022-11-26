@@ -15,5 +15,3 @@ else ifeq ($(CONFIG_MACOS_ENABLE), y)
 else ifeq ($(CONFIG_NOVAOS_ENABLE), y)
 	include $(iot_link_root)/os/novaos/novaos_imp.mk		
 endif
-
-

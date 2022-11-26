@@ -32,7 +32,6 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-
 #ifndef SOTRAGE_SOTRAGE_H
 #define SOTRAGE_SOTRAGE_H
 

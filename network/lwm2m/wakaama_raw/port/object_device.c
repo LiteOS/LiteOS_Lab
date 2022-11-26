@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,17 +22,17 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
-/*******************************************************************************
+/* ******************************************************************************
  *
  * Copyright (c) 2013, 2014 Intel Corporation and others.
  * All rights reserved. This program and the accompanying materials
@@ -40,19 +40,19 @@
  * and Eclipse Distribution License v1.0 which accompany this distribution.
  *
  * The Eclipse Public License is available at
- *    http://www.eclipse.org/legal/epl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * The Eclipse Distribution License is available at
- *    http://www.eclipse.org/org/documents/edl-v10.php.
+ * http://www.eclipse.org/org/documents/edl-v10.php.
  *
  * Contributors:
- *    David Navarro, Intel Corporation - initial API and implementation
- *    domedambrosio - Please refer to git log
- *    Fabien Fleutot - Please refer to git log
- *    Axel Lorente - Please refer to git log
- *    Bosch Software Innovations GmbH - Please refer to git log
- *    Pascal Rieux - Please refer to git log
+ * David Navarro, Intel Corporation - initial API and implementation
+ * domedambrosio - Please refer to git log
+ * Fabien Fleutot - Please refer to git log
+ * Axel Lorente - Please refer to git log
+ * Bosch Software Innovations GmbH - Please refer to git log
+ * Pascal Rieux - Please refer to git log
  *
- *******************************************************************************/
+ * ***************************************************************************** */
 
 /*
  Copyright (c) 2013, 2014 Intel Corporation
@@ -91,9 +91,9 @@
 
 #include "object_comm.h"
 
-#define PRV_OFFSET_MAXLEN           7 //+HH:MM\0 at max
-#define PRV_TIMEZONE_MAXLEN         25
-#define MAX_STRING_LEN              64
+#define PRV_OFFSET_MAXLEN       7 // +HH:MM\0 at max
+#define PRV_TIMEZONE_MAXLEN     25
+#define MAX_STRING_LEN          64
 
 // Resource Id's:
 #define RES_O_MANUFACTURER          0
@@ -122,24 +122,26 @@
 
 // basic check that the time offset value is at ISO 8601 format
 // bug: +12:30 is considered a valid value by this function
-static int prv_check_time_offset(char *buffer,
-                                 int length)
+static int prv_check_time_offset(char *buffer, int length)
 {
     int min_index;
 
-    if ((3 != length) && (5 != length) && (6 != length)) return 0;
+    if ((3 != length) && (5 != length) && (6 != length))
+        return 0;
 
-    if (('-' != buffer[0]) && ('+' != buffer[0])) return 0;
+    if (('-' != buffer[0]) && ('+' != buffer[0]))
+        return 0;
 
-    switch (buffer[1])
-    {
+    switch (buffer[1]) {
         case '0':
-            if (buffer[2] < '0' || buffer[2] > '9') return 0;
+            if (buffer[2] < '0' || buffer[2] > '9')
+                return 0;
 
             break;
 
         case '1':
-            if (buffer[2] < '0' || buffer[2] > '2') return 0;
+            if (buffer[2] < '0' || buffer[2] > '2')
+                return 0;
 
             break;
 
@@ -147,8 +149,7 @@ static int prv_check_time_offset(char *buffer,
             return 0;
     }
 
-    switch (length)
-    {
+    switch (length) {
         case 3:
             return 1;
 
@@ -157,7 +158,8 @@ static int prv_check_time_offset(char *buffer,
             break;
 
         case 6:
-            if (':' != buffer[3]) return 0;
+            if (':' != buffer[3])
+                return 0;
 
             min_index = 4;
             break;
@@ -167,9 +169,11 @@ static int prv_check_time_offset(char *buffer,
             return 0;
     }
 
-    if (buffer[min_index] < '0' || buffer[min_index] > '5') return 0;
+    if (buffer[min_index] < '0' || buffer[min_index] > '5')
+        return 0;
 
-    if (buffer[min_index + 1] < '0' || buffer[min_index + 1] > '9') return 0;
+    if (buffer[min_index + 1] < '0' || buffer[min_index + 1] > '9')
+        return 0;
 
     return 1;
 }
@@ -189,57 +193,44 @@ static uint8_t prv_set_value(lwm2m_data_t *dataP)
     int result;
 
     // a simple switch structure is used to respond at the specified resource asked
-    switch (dataP->id)
-    {
+    switch (dataP->id) {
         case RES_O_MANUFACTURER:
             result = lwm2m_cmd_ioctl(LWM2M_GET_MANUFACTURER, str, MAX_STRING_LEN);
 
-            if (LWM2M_OK == result)
-            {
+            if (LWM2M_OK == result) {
                 lwm2m_data_encode_string(str, dataP);
                 return COAP_205_CONTENT;
-            }
-            else
-            {
+            } else {
                 return COAP_400_BAD_REQUEST;
             }
 
         case RES_O_MODEL_NUMBER:
             result = lwm2m_cmd_ioctl(LWM2M_GET_MODEL_NUMBER, str, MAX_STRING_LEN);
 
-            if (LWM2M_OK == result)
-            {
+            if (LWM2M_OK == result) {
                 lwm2m_data_encode_string(str, dataP);
                 return COAP_205_CONTENT;
-            }
-            else
-            {
+            } else {
                 return COAP_400_BAD_REQUEST;
             }
 
         case RES_O_SERIAL_NUMBER:
             result = lwm2m_cmd_ioctl(LWM2M_GET_SERIAL_NUMBER, str, MAX_STRING_LEN);
 
-            if (LWM2M_OK == result)
-            {
+            if (LWM2M_OK == result) {
                 lwm2m_data_encode_string(str, dataP);
                 return COAP_205_CONTENT;
-            }
-            else
-            {
+            } else {
                 return COAP_400_BAD_REQUEST;
             }
 
         case RES_O_FIRMWARE_VERSION:
             result = lwm2m_cmd_ioctl(LWM2M_GET_FIRMWARE_VER, str, MAX_STRING_LEN);
 
-            if (LWM2M_OK == result)
-            {
+            if (LWM2M_OK == result) {
                 lwm2m_data_encode_string(str, dataP);
                 return COAP_205_CONTENT;
-            }
-            else
-            {
+            } else {
                 return COAP_400_BAD_REQUEST;
             }
 
@@ -249,119 +240,99 @@ static uint8_t prv_set_value(lwm2m_data_t *dataP)
         case RES_O_FACTORY_RESET:
             return COAP_405_METHOD_NOT_ALLOWED;
 
-        case RES_O_AVL_POWER_SOURCES:
-        {
+        case RES_O_AVL_POWER_SOURCES: {
             subTlvP = lwm2m_data_new(1);
 
-            if (NULL == subTlvP) return COAP_500_INTERNAL_SERVER_ERROR;
+            if (NULL == subTlvP)
+                return COAP_500_INTERNAL_SERVER_ERROR;
 
             subTlvP[0].id = 0;
             result = lwm2m_cmd_ioctl(LWM2M_GET_POWER_SOURCE, (char *)&power, sizeof(int));
 
-            if (LWM2M_OK == result)
-            {
+            if (LWM2M_OK == result) {
                 lwm2m_data_encode_int(power, subTlvP);
                 lwm2m_data_encode_instances(subTlvP, 1, dataP);
                 return COAP_205_CONTENT;
-            }
-            else
-            {
+            } else {
                 lwm2m_free(subTlvP);
                 return COAP_400_BAD_REQUEST;
             }
         }
 
-        case RES_O_POWER_SOURCE_VOLTAGE:
-        {
+        case RES_O_POWER_SOURCE_VOLTAGE: {
             subTlvP = lwm2m_data_new(1);
 
-            if (NULL == subTlvP) return COAP_500_INTERNAL_SERVER_ERROR;
+            if (NULL == subTlvP)
+                return COAP_500_INTERNAL_SERVER_ERROR;
 
             subTlvP[0].id = 0;
             result = lwm2m_cmd_ioctl(LWM2M_GET_SOURCE_VOLTAGE, (char *)&voltage, sizeof(int));
 
-            if (LWM2M_OK == result)
-            {
+            if (LWM2M_OK == result) {
                 lwm2m_data_encode_int(voltage, subTlvP);
                 lwm2m_data_encode_instances(subTlvP, 1, dataP);
                 return COAP_205_CONTENT;
-            }
-            else
-            {
+            } else {
                 lwm2m_free(subTlvP);
                 return COAP_400_BAD_REQUEST;
             }
         }
 
-        case RES_O_POWER_SOURCE_CURRENT:
-        {
+        case RES_O_POWER_SOURCE_CURRENT: {
             subTlvP = lwm2m_data_new(1);
 
-            if (NULL == subTlvP) return COAP_500_INTERNAL_SERVER_ERROR;
+            if (NULL == subTlvP)
+                return COAP_500_INTERNAL_SERVER_ERROR;
 
             subTlvP[0].id = 0;
             result = lwm2m_cmd_ioctl(LWM2M_GET_POWER_CURRENT, (char *)&power, sizeof(int));
 
-            if (LWM2M_OK == result)
-            {
+            if (LWM2M_OK == result) {
                 lwm2m_data_encode_int(power, &subTlvP[0]);
                 lwm2m_data_encode_instances(subTlvP, 1, dataP);
                 return COAP_205_CONTENT;
-            }
-            else
-            {
+            } else {
                 lwm2m_free(subTlvP);
                 return COAP_400_BAD_REQUEST;
             }
         }
 
-        case RES_O_BATTERY_LEVEL:
-        {
+        case RES_O_BATTERY_LEVEL: {
             result = lwm2m_cmd_ioctl(LWM2M_GET_BATERRY_LEVEL, (char *)&battery_level, sizeof(int));
 
-            if (LWM2M_OK == result)
-            {
+            if (LWM2M_OK == result) {
                 lwm2m_data_encode_int(battery_level, dataP);
                 return COAP_205_CONTENT;
-            }
-            else
-            {
+            } else {
                 return COAP_400_BAD_REQUEST;
             }
         }
 
-        case RES_O_MEMORY_FREE:
-        {
+        case RES_O_MEMORY_FREE: {
             result = lwm2m_cmd_ioctl(LWM2M_GET_MEMORY_FREE, (char *)&free_memory, sizeof(int));
 
-            if (LWM2M_OK == result)
-            {
+            if (LWM2M_OK == result) {
                 lwm2m_data_encode_int(free_memory, dataP);
                 return COAP_205_CONTENT;
-            }
-            else
-            {
+            } else {
                 return COAP_400_BAD_REQUEST;
             }
         }
 
-        case RES_M_ERROR_CODE:
-        {
+        case RES_M_ERROR_CODE: {
             subTlvP = lwm2m_data_new(1);
 
-            if (NULL == subTlvP) return COAP_500_INTERNAL_SERVER_ERROR;
+            if (NULL == subTlvP)
+                return COAP_500_INTERNAL_SERVER_ERROR;
 
             subTlvP[0].id = 0;
             result = lwm2m_cmd_ioctl(LWM2M_GET_DEV_ERR, (char *)&err, sizeof(int));
 
-            if (LWM2M_OK == result)
-            {
+            if (LWM2M_OK == result) {
                 lwm2m_data_encode_int(err, subTlvP);
                 lwm2m_data_encode_instances(subTlvP, 1, dataP);
                 return COAP_205_CONTENT;
-            }
-            else
-            {
+            } else {
                 lwm2m_free(subTlvP);
                 return COAP_400_BAD_REQUEST;
             }
@@ -373,52 +344,40 @@ static uint8_t prv_set_value(lwm2m_data_t *dataP)
         case RES_O_CURRENT_TIME:
             result = lwm2m_cmd_ioctl(LWM2M_GET_CURRENT_TIME, (char *)&current_time, sizeof(int64_t));
 
-            if (LWM2M_OK == result)
-            {
+            if (LWM2M_OK == result) {
                 lwm2m_data_encode_int(current_time, dataP);
                 return COAP_205_CONTENT;
-            }
-            else
-            {
+            } else {
                 return COAP_400_BAD_REQUEST;
             }
 
         case RES_O_UTC_OFFSET:
             result = lwm2m_cmd_ioctl(LWM2M_GET_UTC_OFFSET, UTC_offset, PRV_OFFSET_MAXLEN);
 
-            if (LWM2M_OK == result)
-            {
+            if (LWM2M_OK == result) {
                 lwm2m_data_encode_string(UTC_offset, dataP);
                 return COAP_205_CONTENT;
-            }
-            else
-            {
+            } else {
                 return COAP_400_BAD_REQUEST;
             }
 
         case RES_O_TIMEZONE:
             result = lwm2m_cmd_ioctl(LWM2M_GET_TIMEZONE, timezone, PRV_TIMEZONE_MAXLEN);
 
-            if (LWM2M_OK == result)
-            {
+            if (LWM2M_OK == result) {
                 lwm2m_data_encode_string(timezone, dataP);
                 return COAP_205_CONTENT;
-            }
-            else
-            {
+            } else {
                 return COAP_400_BAD_REQUEST;
             }
 
         case RES_M_BINDING_MODES:
             result = lwm2m_cmd_ioctl(LWM2M_GET_BINDING_MODES, str, MAX_STRING_LEN);
 
-            if (LWM2M_OK == result)
-            {
+            if (LWM2M_OK == result) {
                 lwm2m_data_encode_string(str, dataP);
                 return COAP_205_CONTENT;
-            }
-            else
-            {
+            } else {
                 return COAP_400_BAD_REQUEST;
             }
 
@@ -427,39 +386,34 @@ static uint8_t prv_set_value(lwm2m_data_t *dataP)
     }
 }
 
-static uint8_t prv_device_read(uint16_t instanceId,
-                               int *numDataP,
-                               lwm2m_data_t **dataArrayP,
-                               lwm2m_data_cfg_t *dataCfg,
-                               lwm2m_object_t *objectP)
+static uint8_t prv_device_read(uint16_t instanceId, int *numDataP, lwm2m_data_t **dataArrayP, lwm2m_data_cfg_t *dataCfg,
+    lwm2m_object_t *objectP)
 {
     uint8_t result;
     int i;
 
     // this is a single instance object
-    if (0 != instanceId)
-    {
+    if (0 != instanceId) {
         return COAP_404_NOT_FOUND;
     }
 
     // is the server asking for the full object ?
-    if (0 == *numDataP)
-    {
+    if (0 == *numDataP) {
         uint16_t resList[] =
         {
             RES_O_MANUFACTURER,
             RES_O_MODEL_NUMBER,
             RES_O_SERIAL_NUMBER,
             RES_O_FIRMWARE_VERSION,
-            //E: RES_M_REBOOT,
-            //E: RES_O_FACTORY_RESET,
+                               // E: RES_M_REBOOT,
+                               // E: RES_O_FACTORY_RESET,
             RES_O_AVL_POWER_SOURCES,
             RES_O_POWER_SOURCE_VOLTAGE,
             RES_O_POWER_SOURCE_CURRENT,
             RES_O_BATTERY_LEVEL,
             RES_O_MEMORY_FREE,
             RES_M_ERROR_CODE,
-            //E: RES_O_RESET_ERROR_CODE,
+                               // E: RES_O_RESET_ERROR_CODE,
             RES_O_CURRENT_TIME,
             RES_O_UTC_OFFSET,
             RES_O_TIMEZONE,
@@ -468,47 +422,41 @@ static uint8_t prv_device_read(uint16_t instanceId,
         int nbRes = sizeof(resList) / sizeof(uint16_t);
         *dataArrayP = lwm2m_data_new(nbRes);
 
-        if (NULL == *dataArrayP) return COAP_500_INTERNAL_SERVER_ERROR;
+        if (NULL == *dataArrayP)
+            return COAP_500_INTERNAL_SERVER_ERROR;
 
         *numDataP = nbRes;
 
-        for (i = 0 ; i < nbRes ; i++)
-        {
+        for (i = 0; i < nbRes; i++) {
             (*dataArrayP)[i].id = resList[i];
         }
     }
 
     i = 0;
 
-    do
-    {
+    do {
         result = prv_set_value((*dataArrayP) + i);
         i++;
-    }
-    while ((i < *numDataP) && (COAP_205_CONTENT == result));
+    } while ((i < *numDataP) && (COAP_205_CONTENT == result));
 
     return result;
 }
 
-static uint8_t prv_device_discover(uint16_t instanceId,
-                                   int *numDataP,
-                                   lwm2m_data_t **dataArrayP,
-                                   lwm2m_object_t *objectP)
+static uint8_t prv_device_discover(uint16_t instanceId, int *numDataP, lwm2m_data_t **dataArrayP,
+    lwm2m_object_t *objectP)
 {
     uint8_t result;
     int i;
 
     // this is a single instance object
-    if (0 != instanceId)
-    {
+    if (0 != instanceId) {
         return COAP_404_NOT_FOUND;
     }
 
     result = COAP_205_CONTENT;
 
     // is the server asking for the full object ?
-    if (*numDataP == 0)
-    {
+    if (*numDataP == 0) {
         uint16_t resList[] =
         {
             RES_O_MANUFACTURER,
@@ -532,21 +480,17 @@ static uint8_t prv_device_discover(uint16_t instanceId,
         int nbRes = sizeof(resList) / sizeof(uint16_t);
         *dataArrayP = lwm2m_data_new(nbRes);
 
-        if (NULL == *dataArrayP) return COAP_500_INTERNAL_SERVER_ERROR;
+        if (NULL == *dataArrayP)
+            return COAP_500_INTERNAL_SERVER_ERROR;
 
         *numDataP = nbRes;
 
-        for (i = 0; i < nbRes; i++)
-        {
+        for (i = 0; i < nbRes; i++) {
             (*dataArrayP)[i].id = resList[i];
         }
-    }
-    else
-    {
-        for (i = 0; i < *numDataP && result == COAP_205_CONTENT; i++)
-        {
-            switch ((*dataArrayP)[i].id)
-            {
+    } else {
+        for (i = 0; i < *numDataP && result == COAP_205_CONTENT; i++) {
+            switch ((*dataArrayP)[i].id) {
                 case RES_O_MANUFACTURER:
                 case RES_O_MODEL_NUMBER:
                 case RES_O_SERIAL_NUMBER:
@@ -575,112 +519,89 @@ static uint8_t prv_device_discover(uint16_t instanceId,
     return result;
 }
 
-static uint8_t prv_device_write(uint16_t instanceId,
-                                int numData,
-                                lwm2m_data_t *dataArray,
-                                lwm2m_object_t *objectP)
+static uint8_t prv_device_write(uint16_t instanceId, int numData, lwm2m_data_t *dataArray, lwm2m_object_t *objectP)
 {
     int i;
     uint8_t result;
     int64_t current_time;
 
     // this is a single instance object
-    if (0 != instanceId)
-    {
+    if (0 != instanceId) {
         return COAP_404_NOT_FOUND;
     }
 
     i = 0;
 
-    do
-    {
-        switch (dataArray[i].id)
-        {
+    do {
+        switch (dataArray[i].id) {
             case RES_O_CURRENT_TIME:
-                if (1 == lwm2m_data_decode_int(dataArray + i, &current_time))
-                {
+                if (1 == lwm2m_data_decode_int(dataArray + i, &current_time)) {
                     result = lwm2m_cmd_ioctl(LWM2M_SET_CURRENT_TIME, (char *)&current_time, sizeof(int64_t));
 
-                    if (LWM2M_OK == result)
-                    {
+                    if (LWM2M_OK == result) {
                         return COAP_204_CHANGED;
-                    }
-                    else
-                    {
+                    } else {
                         return COAP_400_BAD_REQUEST;
                     }
-                }
-                else
-                {
+                } else {
                     result = COAP_400_BAD_REQUEST;
                 }
 
                 break;
 
             case RES_O_UTC_OFFSET:
-                if (1 == prv_check_time_offset((char *)dataArray[i].value.asBuffer.buffer, dataArray[i].value.asBuffer.length))
-                {
-                    result = lwm2m_cmd_ioctl(LWM2M_SET_UTC_OFFSET, (char *)dataArray[i].value.asBuffer.buffer, dataArray[i].value.asBuffer.length);
+                if (1 == prv_check_time_offset((char *)dataArray[i].value.asBuffer.buffer,
+                    dataArray[i].value.asBuffer.length)) {
+                    result = lwm2m_cmd_ioctl(LWM2M_SET_UTC_OFFSET, (char *)dataArray[i].value.asBuffer.buffer,
+                        dataArray[i].value.asBuffer.length);
 
-                    if (LWM2M_OK == result)
-                    {
+                    if (LWM2M_OK == result) {
                         return COAP_204_CHANGED;
-                    }
-                    else
-                    {
+                    } else {
                         return COAP_400_BAD_REQUEST;
                     }
-                }
-                else
-                {
+                } else {
                     result = COAP_400_BAD_REQUEST;
                 }
 
                 break;
 
             case RES_O_TIMEZONE:
-                result = lwm2m_cmd_ioctl(LWM2M_SET_TIMEZONE, (char *)dataArray[i].value.asBuffer.buffer, dataArray[i].value.asBuffer.length);
+                result = lwm2m_cmd_ioctl(LWM2M_SET_TIMEZONE, (char *)dataArray[i].value.asBuffer.buffer,
+                    dataArray[i].value.asBuffer.length);
 
-                if (LWM2M_OK == result)
-                {
+                if (LWM2M_OK == result) {
                     return COAP_204_CHANGED;
-                }
-                else
-                {
+                } else {
                     return COAP_400_BAD_REQUEST;
                 }
 
-            //break;
+                // break;
 
             default:
                 result = COAP_405_METHOD_NOT_ALLOWED;
         }
 
         i++;
-    }
-    while ((i < numData) && (COAP_204_CHANGED == result));
+    } while ((i < numData) && (COAP_204_CHANGED == result));
 
     return result;
 }
 
-static uint8_t prv_device_execute(uint16_t instanceId,
-                                  uint16_t resourceId,
-                                  uint8_t *buffer,
-                                  int length,
-                                  lwm2m_object_t *objectP)
+static uint8_t prv_device_execute(uint16_t instanceId, uint16_t resourceId, uint8_t *buffer, int length,
+    lwm2m_object_t *objectP)
 {
     int result;
 
     // this is a single instance object
-    if (0 != instanceId)
-    {
+    if (0 != instanceId) {
         return COAP_404_NOT_FOUND;
     }
 
-    if (0 != length) return COAP_400_BAD_REQUEST;
+    if (0 != length)
+        return COAP_400_BAD_REQUEST;
 
-    switch (resourceId)
-    {
+    switch (resourceId) {
         case RES_M_REBOOT:
             g_reboot = 1;
             return COAP_204_CHANGED;
@@ -688,24 +609,18 @@ static uint8_t prv_device_execute(uint16_t instanceId,
         case RES_O_FACTORY_RESET:
             result = lwm2m_cmd_ioctl(LWM2M_DO_FACTORY_RESET, NULL, 0);
 
-            if (LWM2M_OK == result)
-            {
+            if (LWM2M_OK == result) {
                 return COAP_204_CHANGED;
-            }
-            else
-            {
+            } else {
                 return COAP_503_SERVICE_UNAVAILABLE;
             }
 
         case RES_O_RESET_ERROR_CODE:
             result = lwm2m_cmd_ioctl(LWM2M_DO_RESET_DEV_ERR, NULL, 0);
 
-            if (LWM2M_OK == result)
-            {
+            if (LWM2M_OK == result) {
                 return COAP_204_CHANGED;
-            }
-            else
-            {
+            } else {
                 return COAP_503_SERVICE_UNAVAILABLE;
             }
 
@@ -722,8 +637,7 @@ void display_device_object(lwm2m_object_t *object)
 
 int add_device_object_instance(lwm2m_object_t *obj, int object_instance_id)
 {
-    if (NULL == obj)
-    {
+    if (NULL == obj) {
         return LWM2M_ARG_INVALID;
     }
 
@@ -733,45 +647,41 @@ int add_device_object_instance(lwm2m_object_t *obj, int object_instance_id)
      */
     obj->instanceList = (lwm2m_list_t *)lwm2m_malloc(sizeof(lwm2m_list_t));
 
-    if (NULL == obj->instanceList)
-    {
+    if (NULL == obj->instanceList) {
         return LWM2M_MALLOC_FAILED;
     }
 
-    (void) memset(obj->instanceList, 0, sizeof(lwm2m_list_t));
+    (void)memset(obj->instanceList, 0, sizeof(lwm2m_list_t));
     obj->instanceList->id = object_instance_id;
     return LWM2M_OK;
 }
 
 int config_device_object(lwm2m_object_t *obj, void *param)
 {
-    if (NULL == obj)
-    {
+    if (NULL == obj) {
         return LWM2M_ARG_INVALID;
     }
 
     /*
      * And the private function that will access the object.
-     * Those function will be called when a read/write/execute query is made by the server. In fact the library don't need to
-     * know the resources of the object, only the server does.
+     * Those function will be called when a read/write/execute query is made by the server. In fact the library don't
+     * need to know the resources of the object, only the server does.
      */
-    obj->readFunc     = prv_device_read;
+    obj->readFunc = prv_device_read;
     obj->discoverFunc = prv_device_discover;
-    obj->writeFunc    = prv_device_write;
-    obj->executeFunc  = prv_device_execute;
+    obj->writeFunc = prv_device_write;
+    obj->executeFunc = prv_device_execute;
     return LWM2M_OK;
 }
 
 void free_object_device(lwm2m_object_t *objectP)
 {
-    if (NULL != objectP->userData)
-    {
+    if (NULL != objectP->userData) {
         lwm2m_free(objectP->userData);
         objectP->userData = NULL;
     }
 
-    if (NULL != objectP->instanceList)
-    {
+    if (NULL != objectP->instanceList) {
         lwm2m_list_free(objectP->instanceList);
         objectP->instanceList = NULL;
     }

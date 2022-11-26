@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2016-2019>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,15 +22,15 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 #include "usip.h"
 
 #ifdef USIP_MCU
@@ -45,18 +45,16 @@
 #include "hlink_coap.h"
 #endif
 
-struct usip_io_cb
-{
-    unsigned short        write_index;    //the index of buf to be write when receive data
-    unsigned short        is_ESC;   //1:the last receive data is ESC
-    unsigned char         rcvbuf[USIP_UART_RCV_BUFF];//usip receive buffer
-    unsigned short        is_receive_frame_head;
-    UINT32  usip_uart_rx_sem;//if a frame has been written to the receive buffer, then active it
-    UINT32  usip_wait_ack_sem;//if ack has been received, then active it
+struct usip_io_cb {
+    unsigned short write_index;               // the index of buf to be write when receive data
+    unsigned short is_ESC;                    // 1:the last receive data is ESC
+    unsigned char rcvbuf[USIP_UART_RCV_BUFF]; // usip receive buffer
+    unsigned short is_receive_frame_head;
+    UINT32 usip_uart_rx_sem;  // if a frame has been written to the receive buffer, then active it
+    UINT32 usip_wait_ack_sem; // if ack has been received, then active it
 };
 
-struct usip_frame_postion
-{
+struct usip_frame_postion {
     unsigned short pos;
     unsigned short len;
 };
@@ -64,7 +62,7 @@ struct usip_frame_postion
 typedef struct {
     unsigned short tag;
     unsigned short len;
-    unsigned char* val;
+    unsigned char *val;
 } usip_tlv;
 
 typedef struct {
@@ -77,18 +75,18 @@ typedef struct {
     struct frame_data_list *next;
 } frame_data_list;
 
-static struct usip_io_cb   g_usipio_cb;
+static struct usip_io_cb g_usipio_cb;
 static struct usip_frame_postion g_skb[USIP_UART_SKB_NUM];
 static unsigned short g_skb_write_index = 0;
 static unsigned short g_skb_read_index = 0;
 
 unsigned char g_usip_send_buf[USIP_FRM_MAX_LEN];
 
-static unsigned short g_frame_len = 0;// frame length
+static unsigned short g_frame_len = 0; // frame length
 
-unsigned short g_seq = 0;//seq of cmd 0X00~0X7F
+unsigned short g_seq = 0; // seq of cmd 0X00~0X7F
 unsigned short g_wait_seq = 0;
-unsigned short g_last_pkgnum_received = 0; //0 not received 1 received
+unsigned short g_last_pkgnum_received = 0; // 0 not received 1 received
 
 static UINT32 g_send_timeout = 0;
 
@@ -119,25 +117,24 @@ void register_cmd_process_callback(cmd_process_callback cmd_process)
     g_cmd_process_callback = cmd_process;
 }
 
-unsigned short g_received_devreg_result = 0;//only used for mcu demo
+unsigned short g_received_devreg_result = 0; // only used for mcu demo
 
-void* usip_malloc(uint16_t size)
+void *usip_malloc(uint16_t size)
 {
-    return LOS_MemAlloc(m_aucSysMem0,size);
+    return LOS_MemAlloc(m_aucSysMem0, size);
 }
 
-UINT32 usip_free(void* addr)
+UINT32 usip_free(void *addr)
 {
-    return LOS_MemFree(m_aucSysMem0,addr);
+    return LOS_MemFree(m_aucSysMem0, addr);
 }
 
-void list_insert(frame_data_list *head,frame_data_list *node)
+void list_insert(frame_data_list *head, frame_data_list *node)
 {
     frame_data_list *temp;
     temp = head;
-    while(temp->next !=NULL)
-    {
-        temp = temp->next;//find the last node
+    while (temp->next != NULL) {
+        temp = temp->next; // find the last node
     }
     temp->next = node;
 }
@@ -147,26 +144,24 @@ unsigned short calc_total_len_from_frame_list(frame_data_list *head)
     unsigned short len = 0;
     frame_data_list *temp;
     temp = head->next;
-    while(NULL!=temp)
-    {
-    	len = len + temp->tlv_len;
-    	temp=temp->next;
+    while (NULL != temp) {
+        len = len + temp->tlv_len;
+        temp = temp->next;
     }
     return len;
 }
 
-void get_data_frame_list(frame_data_list *head,unsigned char* out_data)
+void get_data_frame_list(frame_data_list *head, unsigned char *out_data)
 {
     frame_data_list *temp;
-    unsigned char* out_tmp = out_data;
+    unsigned char *out_tmp = out_data;
     unsigned short len = 0;
     temp = head->next;
-    while(NULL!=temp)
-    {
+    while (NULL != temp) {
         len = temp->tlv_len;
-        unsigned char* source_data =temp->tlv_val;
-        (void) memcpy(out_tmp, source_data,len);
-        temp=temp->next;
+        unsigned char *source_data = temp->tlv_val;
+        (void)memcpy(out_tmp, source_data, len);
+        temp = temp->next;
         out_tmp = out_tmp + len;
     }
 }
@@ -175,8 +170,7 @@ void free_frame_list(frame_data_list *head)
 {
     frame_data_list *p = head;
     frame_data_list *pr = NULL;
-    while (p != NULL)
-    {
+    while (p != NULL) {
         pr = p;
         p = p->next;
         usip_free(pr);
@@ -184,55 +178,48 @@ void free_frame_list(frame_data_list *head)
     }
 }
 
-
 int usip_rec_task(void *args)
 {
     frame_data_list *head = (frame_data_list *)usip_malloc(sizeof(frame_data_list));
-    (void) memset(head, 0, sizeof(frame_data_list));
-    unsigned int rec_times=0;
-    unsigned short json_data_len=0;
+    (void)memset(head, 0, sizeof(frame_data_list));
+    unsigned int rec_times = 0;
+    unsigned short json_data_len = 0;
 
-    unsigned char* json_data = NULL;
+    unsigned char *json_data = NULL;
     unsigned short cmd = 0;
-    while(1)//do the loop here
-    {
-        rec_times ++ ;
-        if(g_cmd_process_callback == NULL)
-        {
+    while (1) { // do the loop here
+        rec_times++;
+        if (g_cmd_process_callback == NULL) {
 #ifdef USIP_LOG
             USIP_PRINTF("====cmd_process_callback is NULL!\r\n");
 #endif
-           break;
+            break;
         }
-        if(LOS_SemPend(g_usipio_cb.usip_uart_rx_sem, LOS_WAIT_FOREVER ) == LOS_OK)
-        {
+        if (LOS_SemPend(g_usipio_cb.usip_uart_rx_sem, LOS_WAIT_FOREVER) == LOS_OK) {
             frame_data_list *node = (frame_data_list *)usip_malloc(sizeof(frame_data_list));
-            (void) memset(node, 0, sizeof(frame_data_list));
+            (void)memset(node, 0, sizeof(frame_data_list));
             UINT8 ret = receive_one_frame_to_list(node);
-            if((ret > USIP_OK))
-            {
+            if ((ret > USIP_OK)) {
 #ifdef USIP_LOG
-                USIP_PRINTF("====usip_rec_task pkg_num %d\r\n",node->pkg_num);
-                USIP_PRINTF("====usip_rec_task tlv_len %d\r\n",node->tlv_len);
+                USIP_PRINTF("====usip_rec_task pkg_num %d\r\n", node->pkg_num);
+                USIP_PRINTF("====usip_rec_task tlv_len %d\r\n", node->tlv_len);
 #endif
                 json_data_len = json_data_len + node->tlv_len;
-                list_insert(head,node);
-                if(g_last_pkgnum_received == 1)
-                {
+                list_insert(head, node);
+                if (g_last_pkgnum_received == 1) {
                     g_last_pkgnum_received = 0;
                     cmd = node->cmd;
-                    json_data = (unsigned char*)usip_malloc(json_data_len + 1);
-                    (void) memset(json_data, 0, json_data_len + 1);
-                    get_data_frame_list(head,json_data);
-                    g_cmd_process_callback(cmd,json_data,json_data_len);
+                    json_data = (unsigned char *)usip_malloc(json_data_len + 1);
+                    (void)memset(json_data, 0, json_data_len + 1);
+                    get_data_frame_list(head, json_data);
+                    g_cmd_process_callback(cmd, json_data, json_data_len);
                     usip_free(json_data);
                     json_data = NULL;
                     json_data_len = 0;
                     free_frame_list(head->next);
                     head->next = NULL;
                 }
-            }else
-            {
+            } else {
                 usip_free(node);
             }
         }
@@ -241,70 +228,62 @@ int usip_rec_task(void *args)
     head = NULL;
 }
 
-
 int usip_rec_task_entry()
 {
-
     int ret = -1;
     UINT32 uwRet = LOS_OK;
-    UINT32  handle;
+    UINT32 handle;
     TSK_INIT_PARAM_S task_init_param;
 
-    (void) memset (&task_init_param, 0, sizeof (TSK_INIT_PARAM_S));
+    (void)memset(&task_init_param, 0, sizeof(TSK_INIT_PARAM_S));
     task_init_param.uwArg = (unsigned int)NULL;
     task_init_param.usTaskPrio = 6;
-    task_init_param.pcName =(char *) "usip_rec_task";
+    task_init_param.pcName = (char *)"usip_rec_task";
     task_init_param.pfnTaskEntry = (TSK_ENTRY_FUNC)usip_rec_task;
     task_init_param.uwStackSize = 0x1000;
     uwRet = LOS_TaskCreate(&handle, &task_init_param);
-    if(LOS_OK == uwRet){
+    if (LOS_OK == uwRet) {
         ret = 0;
     }
     return ret;
 }
 
-
 UINT32 usip_init()
 {
-	UINT32 ret = LOS_OK;
+    UINT32 ret = LOS_OK;
 
-    (void) memset(&g_usipio_cb,0,sizeof(g_usipio_cb));
-    (void) memset(&g_skb,0,sizeof(g_skb));
+    (void)memset(&g_usipio_cb, 0, sizeof(g_usipio_cb));
+    (void)memset(&g_skb, 0, sizeof(g_skb));
     g_send_timeout = LOS_MS2Tick(USIP_WAIT_ACK_TIMEOUT);
-    ret = LOS_BinarySemCreate(0,&g_usipio_cb.usip_uart_rx_sem);
-    if (ret != LOS_OK)
-    {
+    ret = LOS_BinarySemCreate(0, &g_usipio_cb.usip_uart_rx_sem);
+    if (ret != LOS_OK) {
 #ifdef USIP_LOG
-        USIP_PRINTF("====LOS_BinarySemCreate g_usipio_cb.usip_uart_rx_sema failed!error:0x%X\n",ret);
+        USIP_PRINTF("====LOS_BinarySemCreate g_usipio_cb.usip_uart_rx_sema failed!error:0x%X\n", ret);
 #endif
         return ret;
     }
 
-    ret = LOS_BinarySemCreate(0,&g_usipio_cb.usip_wait_ack_sem);
-    if (ret != LOS_OK)
-    {
+    ret = LOS_BinarySemCreate(0, &g_usipio_cb.usip_wait_ack_sem);
+    if (ret != LOS_OK) {
 #ifdef USIP_LOG
-        USIP_PRINTF("====LOS_BinarySemCreate g_usipio_cb.usip_uart_hw_sem failed!error:0x%X\n",ret);
+        USIP_PRINTF("====LOS_BinarySemCreate g_usipio_cb.usip_uart_hw_sem failed!error:0x%X\n", ret);
 #endif
-    	return ret;
+        return ret;
     }
 
-	return ret;
+    return ret;
 }
 
-//change short data to EA format data
-static short short_to_EA(unsigned short data,unsigned char* EA_data,unsigned short* EA_data_len)
+// change short data to EA format data
+static short short_to_EA(unsigned short data, unsigned char *EA_data, unsigned short *EA_data_len)
 {
     unsigned short len = 0;
 
-    if (data < USIP_EA_BIT)
-    {// one byte
+    if (data < USIP_EA_BIT) { // one byte
         EA_data[0] = (((unsigned char)data) | USIP_EA_BIT);
         len = 1;
-    }
-    else
-    {//two bytes
-    	unsigned char tmp_data;
+    } else { // two bytes
+        unsigned char tmp_data;
         EA_data[0] = (unsigned char)(data >> USIP_EA_VALID_BITS);
         tmp_data = (unsigned char)(data & (~USIP_EA_BIT));
         EA_data[1] = tmp_data | USIP_EA_BIT;
@@ -314,23 +293,19 @@ static short short_to_EA(unsigned short data,unsigned char* EA_data,unsigned sho
     return USIP_OK;
 }
 
-//change EA format data to short data
-static short EA_to_short(unsigned char* EA_data,unsigned short* data,unsigned short* len)
+// change EA format data to short data
+static short EA_to_short(unsigned char *EA_data, unsigned short *data, unsigned short *len)
 {
     unsigned char tmp = EA_data[0];
-    if((tmp & USIP_EA_BIT) != 0)
-    {
-        //one byte
+    if ((tmp & USIP_EA_BIT) != 0) {
+        // one byte
         *data = tmp & (~USIP_EA_BIT);
         *len = 1;
         return USIP_OK;
-    }
-    else
-    {
+    } else {
         *data = tmp << USIP_EA_VALID_BITS;
         tmp = EA_data[1];
-        if((tmp & USIP_EA_BIT) == 0)
-        {
+        if ((tmp & USIP_EA_BIT) == 0) {
             return USIP_ERROR;
         }
         tmp = tmp & (~USIP_EA_BIT);
@@ -340,8 +315,8 @@ static short EA_to_short(unsigned char* EA_data,unsigned short* data,unsigned sh
     return USIP_OK;
 }
 
-//Support one frame
-unsigned short convert_tlv_to_usip_frame(unsigned char pkg_num,unsigned char seq,unsigned short cmd,usip_tlv data)
+// Support one frame
+unsigned short convert_tlv_to_usip_frame(unsigned char pkg_num, unsigned char seq, unsigned short cmd, usip_tlv data)
 {
     unsigned short j = 0;
     unsigned char crc = 0;
@@ -355,7 +330,7 @@ unsigned short convert_tlv_to_usip_frame(unsigned char pkg_num,unsigned char seq
     j++;
 
     g_usip_send_buf[j] = pkg_num;
-    //calc crc from package_num
+    // calc crc from package_num
     crc = g_usip_crc_table[crc ^ g_usip_send_buf[j]];
     j++;
 
@@ -363,11 +338,10 @@ unsigned short convert_tlv_to_usip_frame(unsigned char pkg_num,unsigned char seq
     crc = g_usip_crc_table[crc ^ g_usip_send_buf[j]];
     j++;
 
-    //cmd
+    // cmd
     unsigned char EA_cmd[2] = {0};
     unsigned short EA_cmd_len = 0;
-    if(short_to_EA(cmd,EA_cmd,&EA_cmd_len) != USIP_OK)
-    {
+    if (short_to_EA(cmd, EA_cmd, &EA_cmd_len) != USIP_OK) {
         return USIP_ERROR;
     }
     for (i = 0; i < EA_cmd_len; i++) {
@@ -376,11 +350,10 @@ unsigned short convert_tlv_to_usip_frame(unsigned char pkg_num,unsigned char seq
         j++;
     }
 
-    //tlv tag
+    // tlv tag
     unsigned char EA_tlv_tag[2] = {0};
     unsigned short EA_tlv_tag_len = 0;
-    if(short_to_EA(data.tag,EA_tlv_tag,&EA_tlv_tag_len) != USIP_OK)
-    {
+    if (short_to_EA(data.tag, EA_tlv_tag, &EA_tlv_tag_len) != USIP_OK) {
         return USIP_ERROR;
     }
 
@@ -390,11 +363,10 @@ unsigned short convert_tlv_to_usip_frame(unsigned char pkg_num,unsigned char seq
         j++;
     }
 
-    //tlv len
+    // tlv len
     unsigned char EA_tlv_len[2] = {0};
     unsigned short EA_tlv_len_len = 0;
-    if(short_to_EA(data.len,EA_tlv_len,&EA_tlv_len_len) != USIP_OK)
-    {
+    if (short_to_EA(data.len, EA_tlv_len, &EA_tlv_len_len) != USIP_OK) {
         return USIP_ERROR;
     }
 
@@ -421,17 +393,16 @@ unsigned short convert_tlv_to_usip_frame(unsigned char pkg_num,unsigned char seq
     return j + 1;
 }
 
-void send_one_frame(unsigned char* buf, unsigned short len)
+void send_one_frame(unsigned char *buf, unsigned short len)
 {
     unsigned short i = 0;
 
-    //send frame head END
+    // send frame head END
     send_one_byte(buf[0]);
     i++;
 
-    //deal END or ESC of frame data
-    for (; i < len - 1; i++)
-    {
+    // deal END or ESC of frame data
+    for (; i < len - 1; i++) {
         switch (buf[i]) {
             case END:
                 send_one_byte(ESC);
@@ -447,102 +418,94 @@ void send_one_frame(unsigned char* buf, unsigned short len)
         }
     }
 
-    //send frame end END
+    // send frame end END
     send_one_byte(buf[i]);
 }
 
 unsigned char get_seq()
 {
     unsigned char seq = g_seq++;
-    if(g_seq > USIP_SEQ_MAX)
-    {
+    if (g_seq > USIP_SEQ_MAX) {
         g_seq = USIP_SEQ_MIN;
     }
     return seq;
 }
 
-int usip_send_tlv(unsigned char pkg_num,unsigned char seq,unsigned short cmd,usip_tlv data)
+int usip_send_tlv(unsigned char pkg_num, unsigned char seq, unsigned short cmd, usip_tlv data)
 {
-    unsigned short frame_len = convert_tlv_to_usip_frame(pkg_num,seq,cmd,data);
+    unsigned short frame_len = convert_tlv_to_usip_frame(pkg_num, seq, cmd, data);
     unsigned short loop_cnt = 0;
-    while(1)  //do the loop here for wait ack
-    {
-        send_one_frame(g_usip_send_buf,frame_len);
-        if(loop_cnt == USIP_MAX_ARQ_TIMES)
-        {
+    while (1) { // do the loop here for wait ack
+        send_one_frame(g_usip_send_buf, frame_len);
+        if (loop_cnt == USIP_MAX_ARQ_TIMES) {
 #ifdef USIP_LOG
-            USIP_PRINTF("====Retransmission send times = %d\r\n",USIP_MAX_ARQ_TIMES);
+            USIP_PRINTF("====Retransmission send times = %d\r\n", USIP_MAX_ARQ_TIMES);
 #endif
             return USIP_ERROR;
         }
-        if(LOS_SemPend(g_usipio_cb.usip_wait_ack_sem, g_send_timeout) == LOS_OK)
-        {
+        if (LOS_SemPend(g_usipio_cb.usip_wait_ack_sem, g_send_timeout) == LOS_OK) {
             return USIP_OK;
         }
-        loop_cnt ++ ;
+        loop_cnt++;
     }
     return USIP_OK;
 }
 
-//return 0 means success
-int usip_send_data(unsigned short cmd,unsigned char* data, unsigned short len)
+// return 0 means success
+int usip_send_data(unsigned short cmd, unsigned char *data, unsigned short len)
 {
 #ifdef USIP_LOG
-    USIP_PRINTF("====usip_send_data cmd:%d\r\n",cmd);
-    USIP_PRINTF("====usip_send_data data:%s\r\n",data);
-    USIP_PRINTF("====usip_send_data len:%d\r\n",len);
+    USIP_PRINTF("====usip_send_data cmd:%d\r\n", cmd);
+    USIP_PRINTF("====usip_send_data data:%s\r\n", data);
+    USIP_PRINTF("====usip_send_data len:%d\r\n", len);
 #endif
 
     unsigned short ret = USIP_OK;
     unsigned char package_num = 0;
     unsigned short left_len = len;
-    unsigned char* tmp_data = data;
+    unsigned char *tmp_data = data;
     unsigned char EA_cmd[2] = {0};
     unsigned short EA_cmd_len = 0;
-    usip_tlv tlv = {0};
-    if(short_to_EA(cmd,EA_cmd,&EA_cmd_len) != USIP_OK)
-    {
+    usip_tlv tlv = { 0 };
+    if (short_to_EA(cmd, EA_cmd, &EA_cmd_len) != USIP_OK) {
         return USIP_ERROR;
     }
 
-    unsigned short tlv_val_max_len = USIP_FRM_CMD_AND_TLVS_MAX_LEN - EA_cmd_len - 2*USIP_TLV_TAG_LEN;
+    unsigned short tlv_val_max_len = USIP_FRM_CMD_AND_TLVS_MAX_LEN - EA_cmd_len - 2 * USIP_TLV_TAG_LEN;
 
-    if(left_len > ((USIP_PKGNUM_MAX+1) * tlv_val_max_len))
-    {//data is too long,128 packages are not enough
+    if (left_len > ((USIP_PKGNUM_MAX + 1) * tlv_val_max_len)) { // data is too long,128 packages are not enough
         return USIP_ERROR;
     }
 
     unsigned char seq = get_seq();
     g_wait_seq = seq;
 
-//HEAD+PKGNUM+SEQ+CMD+TLV.tag+TLV.len+TLV.val+CRC8+END <=128
+    // HEAD+PKGNUM+SEQ+CMD+TLV.tag+TLV.len+TLV.val+CRC8+END <=128
     while (left_len > tlv_val_max_len) {
         tlv.tag = USIP_TLV_TAG_RST;
         tlv.len = tlv_val_max_len;
         tlv.val = tmp_data;
-        if(usip_send_tlv(package_num,seq,cmd,tlv) != USIP_OK)
-        {
+        if (usip_send_tlv(package_num, seq, cmd, tlv) != USIP_OK) {
 #ifdef USIP_LOG
-        USIP_PRINTF("====usip_send_tlv failed!\r\n");
+            USIP_PRINTF("====usip_send_tlv failed!\r\n");
 #endif
             return USIP_ERROR;
         }
 #ifdef USIP_LOG
-        USIP_PRINTF("====usip_send_data package_num:%d\r\n",package_num);
+        USIP_PRINTF("====usip_send_data package_num:%d\r\n", package_num);
 #endif
         package_num++;
         tmp_data += tlv_val_max_len;
         left_len -= tlv_val_max_len;
     }
-    tlv.tag = USIP_TLV_TAG_RST;//the last package
+    tlv.tag = USIP_TLV_TAG_RST; // the last package
     tlv.len = left_len;
     tlv.val = tmp_data;
-    if(usip_send_tlv(package_num|USIP_EA_BIT,seq,cmd,tlv) != USIP_OK)
-    {
+    if (usip_send_tlv(package_num | USIP_EA_BIT, seq, cmd, tlv) != USIP_OK) {
         return USIP_ERROR;
     }
 #ifdef USIP_LOG
-    USIP_PRINTF("====usip_send_data package_num:%d\r\n",package_num);
+    USIP_PRINTF("====usip_send_data package_num:%d\r\n", package_num);
 #endif
     return USIP_OK;
 }
@@ -552,7 +515,7 @@ void receive_one_byte(unsigned char data)
 {
     unsigned char receive_data = data;
 
-    //the last received data is ESC
+    // the last received data is ESC
     if (g_usipio_cb.is_ESC == 1) {
         // data is not ESC_END or ESC_ESC,ignore this frame
         if ((receive_data != ESC_END) && (receive_data != ESC_ESC)) {
@@ -565,21 +528,18 @@ void receive_one_byte(unsigned char data)
         }
     }
 
-    //received frame head
-    if((receive_data == END)&&(g_usipio_cb.is_receive_frame_head == 0))
-    {
+    // received frame head
+    if ((receive_data == END) && (g_usipio_cb.is_receive_frame_head == 0)) {
         g_usipio_cb.is_receive_frame_head = 1;
-        //todo:optimize if the recbuf will full
-        if ((USIP_UART_RCV_BUFF - g_usipio_cb.write_index) < USIP_FRM_DATA_MAX_LEN)
-        {
+        // todo:optimize if the recbuf will full
+        if ((USIP_UART_RCV_BUFF - g_usipio_cb.write_index) < USIP_FRM_DATA_MAX_LEN) {
             g_usipio_cb.write_index = 0;
         }
         g_skb[g_skb_write_index].pos = g_usipio_cb.write_index;
         return;
     }
 
-    if(g_usipio_cb.is_receive_frame_head == 1)
-    {
+    if (g_usipio_cb.is_receive_frame_head == 1) {
         switch (receive_data) {
             case END:
                 // receive two END
@@ -590,7 +550,7 @@ void receive_one_byte(unsigned char data)
                 g_frame_len = 0;
                 g_usipio_cb.is_ESC = 0;
                 g_skb_write_index++;
-                LOS_SemPost(g_usipio_cb.usip_uart_rx_sem);//receive one frame
+                LOS_SemPost(g_usipio_cb.usip_uart_rx_sem); // receive one frame
                 break;
             case ESC:
                 g_usipio_cb.is_ESC = 1;
@@ -621,19 +581,16 @@ void receive_one_byte(unsigned char data)
         }
     }
 
-    if (g_usipio_cb.write_index == USIP_UART_RCV_BUFF)
-    {
+    if (g_usipio_cb.write_index == USIP_UART_RCV_BUFF) {
         g_usipio_cb.write_index = 0;
     }
 
-    if(g_skb_write_index == USIP_UART_SKB_NUM)
-    {
+    if (g_skb_write_index == USIP_UART_SKB_NUM) {
         g_skb_write_index = 0;
     }
 }
 
-
-unsigned short usip_send_ack(unsigned short seq,unsigned short cmd,unsigned char pkg_num)
+unsigned short usip_send_ack(unsigned short seq, unsigned short cmd, unsigned char pkg_num)
 {
     unsigned char ack_pkg_num = 0 | USIP_EA_BIT;
     usip_tlv data;
@@ -641,154 +598,143 @@ unsigned short usip_send_ack(unsigned short seq,unsigned short cmd,unsigned char
     data.len = 1;
     data.val = &pkg_num;
 
-    unsigned short frame_len = convert_tlv_to_usip_frame(ack_pkg_num,seq,cmd,data);
-    send_one_frame(g_usip_send_buf,frame_len);
+    unsigned short frame_len = convert_tlv_to_usip_frame(ack_pkg_num, seq, cmd, data);
+    send_one_frame(g_usip_send_buf, frame_len);
 }
 
 INT8 receive_one_frame_to_list(frame_data_list *frame_list)
 {
-    if(g_skb_read_index == USIP_UART_SKB_NUM) {
+    if (g_skb_read_index == USIP_UART_SKB_NUM) {
         g_skb_read_index = 0;
     }
     unsigned short frame_pos = g_skb[g_skb_read_index].pos;
     unsigned short frame_len = g_skb[g_skb_read_index].len;
-    unsigned char* data = g_usipio_cb.rcvbuf;
+    unsigned char *data = g_usipio_cb.rcvbuf;
     unsigned char crc = 0;
-    data = data +frame_pos;
+    data = data + frame_pos;
 
-    if(frame_len == 0) {
+    if (frame_len == 0) {
         g_skb_read_index++;
         return USIP_ERROR;
     }
     if (frame_len > USIP_FRM_DATA_MAX_LEN) {
 #ifdef USIP_LOG
-        USIP_PRINTF("====receive frame data len more than %d\r\n",USIP_FRM_DATA_MAX_LEN);
+        USIP_PRINTF("====receive frame data len more than %d\r\n", USIP_FRM_DATA_MAX_LEN);
 #endif
-        //ignor this frame
+        // ignor this frame
         g_skb[g_skb_read_index].len = 0;
-        g_skb_read_index ++;
+        g_skb_read_index++;
         return USIP_ERROR;
     }
-    //check crc
-    for (unsigned short i = 0; i < (frame_len - 1); i++)
-    {
+    // check crc
+    for (unsigned short i = 0; i < (frame_len - 1); i++) {
         crc = g_usip_crc_table[crc ^ (g_usipio_cb.rcvbuf[frame_pos + i])];
     }
-    if (crc != g_usipio_cb.rcvbuf[frame_pos + frame_len - 1])
-    {
+    if (crc != g_usipio_cb.rcvbuf[frame_pos + frame_len - 1]) {
         g_skb[g_skb_read_index].len = 0;
-        g_skb_read_index ++;
+        g_skb_read_index++;
 #ifdef USIP_LOG
         USIP_PRINTF("====crc error\r\n");
 #endif
         return USIP_ERROR;
     }
 
-    //get pkg_num
+    // get pkg_num
     unsigned char pkg_num = *data;
-    if((pkg_num & USIP_EA_BIT) != 0)//the last package
-    {
+    if ((pkg_num & USIP_EA_BIT) != 0) { // the last package
         g_last_pkgnum_received = 1;
         frame_list->pkg_num = (pkg_num & (~USIP_EA_BIT));
-    }
-    else
-    {
+    } else {
         frame_list->pkg_num = pkg_num;
     }
     data++;
 
-    //get seq
+    // get seq
     frame_list->seq = *data;
-    if((frame_list->seq & USIP_EA_BIT) != 0)// EA = 1 ack,ack not need store to list
-    {
+    if ((frame_list->seq & USIP_EA_BIT) != 0) { // EA = 1 ack,ack not need store to list
         g_last_pkgnum_received = 0;
-        if(g_wait_seq == (frame_list->seq & (~USIP_EA_BIT)))
-        {
+        if (g_wait_seq == (frame_list->seq & (~USIP_EA_BIT))) {
             LOS_SemPost(g_usipio_cb.usip_wait_ack_sem);
             g_skb[g_skb_read_index].len = 0;
-            g_skb_read_index ++;
+            g_skb_read_index++;
             return USIP_OK;
-        }
-        else
-        {
+        } else {
             return USIP_ERROR;
         }
     }
     data++;
 
-// get cmd
+    // get cmd
     unsigned short frame_cmd_num = 0;
-    EA_to_short(data,&(frame_list->cmd),&frame_cmd_num);
+    EA_to_short(data, &(frame_list->cmd), &frame_cmd_num);
     data = data + frame_cmd_num;
 
-//get tlv_tag
+    // get tlv_tag
     unsigned short tlv_tag_num = 0;
-    EA_to_short(data,&(frame_list->tlv_tag),&tlv_tag_num);
+    EA_to_short(data, &(frame_list->tlv_tag), &tlv_tag_num);
     data = data + tlv_tag_num;
 
-//get tlv_len
+    // get tlv_len
     unsigned short tlv_len_num = 0;
-    EA_to_short(data,&(frame_list->tlv_len),&tlv_len_num);
+    EA_to_short(data, &(frame_list->tlv_len), &tlv_len_num);
     data = data + tlv_len_num;
 
-//get tlv_val
-    for (int i = 0; i < frame_list->tlv_len; i++)
-    {
-        frame_list->tlv_val[i]= *data;
+    // get tlv_val
+    for (int i = 0; i < frame_list->tlv_len; i++) {
+        frame_list->tlv_val[i] = *data;
         data++;
     }
 
-    usip_send_ack(frame_list->seq | USIP_EA_BIT,frame_list->cmd,frame_list->pkg_num);
-    g_skb_read_index ++;
+    usip_send_ack(frame_list->seq | USIP_EA_BIT, frame_list->cmd, frame_list->pkg_num);
+    g_skb_read_index++;
     return frame_list->tlv_len;
 }
-void usip_cmd_process(unsigned short cmd,unsigned char* data, unsigned short len)
+void usip_cmd_process(unsigned short cmd, unsigned char *data, unsigned short len)
 {
 #ifdef USIP_LOG
-    USIP_PRINTF("====cmd_process cmd =%d\r\n",cmd);
-    USIP_PRINTF("====cmd_process data =%s\r\n",data);
-    USIP_PRINTF("====cmd_process len =%d\r\n",len);
+    USIP_PRINTF("====cmd_process cmd =%d\r\n", cmd);
+    USIP_PRINTF("====cmd_process data =%s\r\n", data);
+    USIP_PRINTF("====cmd_process len =%d\r\n", len);
 #endif
     switch (cmd) {
         case USIP_CMD_DEV_REG:
 #ifdef USIP_WIFI
-            hlink_coap_api_dev_reg(data,len);
+            hlink_coap_api_dev_reg(data, len);
 #endif
             break;
         case USIP_CMD_SESS_MNGR:
 #ifdef USIP_WIFI
-            hlink_coap_api_session_add(data,len);
+            hlink_coap_api_session_add(data, len);
 #endif
             break;
         case USIP_CMD_FILE_MNGR:
 #ifdef USIP_WIFI
-            hlink_coap_api_file_mngr(data,len);
+            hlink_coap_api_file_mngr(data, len);
 #endif
             break;
         case USIP_CMD_DATA_REPORT:
 #ifdef USIP_WIFI
-            hlink_coap_api_srv_data_report(data,len);
+            hlink_coap_api_srv_data_report(data, len);
 #endif
             break;
         case USIP_CMD_DEV_REG_RSP:
-            //todo
-            g_received_devreg_result = 1;//only used for mcu demo
+            // todo
+            g_received_devreg_result = 1; // only used for mcu demo
             break;
         case USIP_CMD_SESS_MNGR_RSP:
-            //todo
+            // todo
             break;
         case USIP_CMD_FILE_MNGR_RSP:
-            //todo
+            // todo
             break;
         case USIP_CMD_DATA_REPORT_RSP:
-            //todo
+            // todo
             break;
         default:
-            //unknown cmd
+            // unknown cmd
 #ifdef USIP_LOG
             USIP_PRINTF("====unknown cmd\r\n");
 #endif
             return;
     }
 }
-

@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,15 +22,15 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 /*
 PPP interface for lwIP
 
@@ -90,7 +90,7 @@ int gConnect = 0;
 u32_t sys_jiffies(void)
 {
     UINT32 ret;
-    extern UINT64      g_ullTickCount;
+    extern UINT64 g_ullTickCount;
 
     ret = (UINT32)g_ullTickCount;
     return ret;
@@ -118,97 +118,81 @@ static void status_cb(ppp_pcb *pcb, int err_code, void *ctx)
     struct netif *pppif = ppp_netif(pcb);
     LWIP_UNUSED_ARG(ctx);
 
-    switch(err_code)
-    {
-    case PPPERR_NONE:
-    {
+    switch (err_code) {
+        case PPPERR_NONE: {
 #if LWIP_DNS
-        const ip_addr_t *ns;
+            const ip_addr_t *ns;
 #endif /* LWIP_DNS */
-        LINK_LOG_DEBUG("status_cb: Connected\n");
+            LINK_LOG_DEBUG("status_cb: Connected\n");
 #if PPP_IPV4_SUPPORT
-        LINK_LOG_DEBUG("   our_ipaddr  = %s\n", ipaddr_ntoa(&pppif->ip_addr));
-        LINK_LOG_DEBUG("   his_ipaddr  = %s\n", ipaddr_ntoa(&pppif->gw));
-        LINK_LOG_DEBUG("   netmask     = %s\n", ipaddr_ntoa(&pppif->netmask));
+            LINK_LOG_DEBUG("   our_ipaddr  = %s\n", ipaddr_ntoa(&pppif->ip_addr));
+            LINK_LOG_DEBUG("   his_ipaddr  = %s\n", ipaddr_ntoa(&pppif->gw));
+            LINK_LOG_DEBUG("   netmask     = %s\n", ipaddr_ntoa(&pppif->netmask));
 #if LWIP_DNS
-        ns = dns_getserver(0);
-        LINK_LOG_DEBUG("   dns1        = %s\n", ipaddr_ntoa(ns));
-        ns = dns_getserver(1);
-        LINK_LOG_DEBUG("   dns2        = %s\n", ipaddr_ntoa(ns));
-        gConnect = 1;
+            ns = dns_getserver(0);
+            LINK_LOG_DEBUG("   dns1        = %s\n", ipaddr_ntoa(ns));
+            ns = dns_getserver(1);
+            LINK_LOG_DEBUG("   dns2        = %s\n", ipaddr_ntoa(ns));
+            gConnect = 1;
 #endif /* LWIP_DNS */
 #endif /* PPP_IPV4_SUPPORT */
 #if PPP_IPV6_SUPPORT
-        LINK_LOG_DEBUG("   our6_ipaddr = %s\n", ip6addr_ntoa(netif_ip6_addr(
-                    pppif, 0)));
+            LINK_LOG_DEBUG("   our6_ipaddr = %s\n", ip6addr_ntoa(netif_ip6_addr(pppif, 0)));
 #endif /* PPP_IPV6_SUPPORT */
-        break;
-    }
-    case PPPERR_PARAM:
-    {
-        LINK_LOG_DEBUG("status_cb: Invalid parameter\n");
-        break;
-    }
-    case PPPERR_OPEN:
-    {
-        LINK_LOG_DEBUG("status_cb: Unable to open PPP session\n");
-        break;
-    }
-    case PPPERR_DEVICE:
-    {
-        LINK_LOG_DEBUG("status_cb: Invalid I/O device for PPP\n");
-        break;
-    }
-    case PPPERR_ALLOC:
-    {
-        LINK_LOG_DEBUG("status_cb: Unable to allocate resources\n");
-        break;
-    }
-    case PPPERR_USER:
-    {
-        LINK_LOG_DEBUG("status_cb: User interrupt\n");
-        break;
-    }
-    case PPPERR_CONNECT:
-    {
-        LINK_LOG_DEBUG("status_cb: Connection lost\n");
-        break;
-    }
-    case PPPERR_AUTHFAIL:
-    {
-        LINK_LOG_DEBUG("status_cb: Failed authentication challenge\n");
-        break;
-    }
-    case PPPERR_PROTOCOL:
-    {
-        LINK_LOG_DEBUG("status_cb: Failed to meet protocol\n");
-        break;
-    }
-    case PPPERR_PEERDEAD:
-    {
-        LINK_LOG_DEBUG("status_cb: Connection timeout\n");
-        break;
-    }
-    case PPPERR_IDLETIMEOUT:
-    {
-        LINK_LOG_DEBUG("status_cb: Idle Timeout\n");
-        break;
-    }
-    case PPPERR_CONNECTTIME:
-    {
-        LINK_LOG_DEBUG("status_cb: Max connect time reached\n");
-        break;
-    }
-    case PPPERR_LOOPBACK:
-    {
-        LINK_LOG_DEBUG("status_cb: Loopback detected\n");
-        break;
-    }
-    default:
-    {
-        LINK_LOG_DEBUG("status_cb: Unknown error code %d\n", err_code);
-        break;
-    }
+            break;
+        }
+        case PPPERR_PARAM: {
+            LINK_LOG_DEBUG("status_cb: Invalid parameter\n");
+            break;
+        }
+        case PPPERR_OPEN: {
+            LINK_LOG_DEBUG("status_cb: Unable to open PPP session\n");
+            break;
+        }
+        case PPPERR_DEVICE: {
+            LINK_LOG_DEBUG("status_cb: Invalid I/O device for PPP\n");
+            break;
+        }
+        case PPPERR_ALLOC: {
+            LINK_LOG_DEBUG("status_cb: Unable to allocate resources\n");
+            break;
+        }
+        case PPPERR_USER: {
+            LINK_LOG_DEBUG("status_cb: User interrupt\n");
+            break;
+        }
+        case PPPERR_CONNECT: {
+            LINK_LOG_DEBUG("status_cb: Connection lost\n");
+            break;
+        }
+        case PPPERR_AUTHFAIL: {
+            LINK_LOG_DEBUG("status_cb: Failed authentication challenge\n");
+            break;
+        }
+        case PPPERR_PROTOCOL: {
+            LINK_LOG_DEBUG("status_cb: Failed to meet protocol\n");
+            break;
+        }
+        case PPPERR_PEERDEAD: {
+            LINK_LOG_DEBUG("status_cb: Connection timeout\n");
+            break;
+        }
+        case PPPERR_IDLETIMEOUT: {
+            LINK_LOG_DEBUG("status_cb: Idle Timeout\n");
+            break;
+        }
+        case PPPERR_CONNECTTIME: {
+            LINK_LOG_DEBUG("status_cb: Max connect time reached\n");
+            break;
+        }
+        case PPPERR_LOOPBACK: {
+            LINK_LOG_DEBUG("status_cb: Loopback detected\n");
+            break;
+        }
+        default: {
+            LINK_LOG_DEBUG("status_cb: Unknown error code %d\n", err_code);
+            break;
+        }
     }
 
     /*
@@ -216,14 +200,12 @@ static void status_cb(ppp_pcb *pcb, int err_code, void *ctx)
      * case for example readability.
      */
 
-    if (err_code == PPPERR_NONE)
-    {
+    if (err_code == PPPERR_NONE) {
         return;
     }
 
     /* ppp_close() was previously called, don't reconnect */
-    if (err_code == PPPERR_USER)
-    {
+    if (err_code == PPPERR_USER) {
         /* ppp_free(); -- can be called here */
         return;
     }
@@ -240,38 +222,32 @@ static u32_t output_cb(ppp_pcb *pcb, u8_t *data, u32_t len, void *ctx)
     return iodev_write(0, data, len, 100);
 }
 
-
 void *main_pppinput(unsigned int args)
 {
     int ret;
     unsigned char buf[256];
-    while(1)
-    {
-        if(gPppRcvMode)
-        {
+    while (1) {
+        if (gPppRcvMode) {
             iodev_debugmode(2, 2);
             ret = iodev_read(0, buf, 256, 10);
-            if(ret > 0)
-            {
+            if (ret > 0) {
                 pppos_input(ppp, (unsigned char *)buf, ret);
             }
         }
     }
 }
-VOID *main_ppp(UINT32  args)
+VOID *main_ppp(UINT32 args)
 {
     /* Initilialize the LwIP stack without RTOS */
     tcpip_init(NULL, NULL);
 
-    //here we make the modem to data mode
+    // here we make the modem to data mode
     iodev_debugmode(2, 1);
     extern int AtDial(char *devname, char *apn);
-    while(0 != AtDial("uart3", NULL))
-    {
+    while (0 != AtDial("uart3", NULL)) {
     }
     ppp = pppos_create(&ppp_netif, (pppos_output_cb_fn)output_cb, status_cb, NULL);
-    if(NULL != ppp)
-    {
+    if (NULL != ppp) {
         extern void *main_pppinput(unsigned int args);
         task_create("main_pppinput", main_pppinput, 0x800, NULL, NULL, 0);
 
@@ -285,8 +261,7 @@ VOID *main_ppp(UINT32  args)
         gPppRcvMode = 1;
         u16_t holdoff = 0;
         ppp_connect(ppp, holdoff);
-        while(gConnect == 0) //wait to do the connect
-        {
+        while (gConnect == 0) { // wait to do the connect
             LOS_TaskDelay(10);
         }
         extern void agent_tiny_entry(void);
@@ -298,8 +273,3 @@ VOID *main_ppp(UINT32  args)
     return NULL;
 }
 #endif
-
-
-
-
-

@@ -1,0 +1,2264 @@
+GAS LISTING /tmp/ccgEjh0r.s 			page 1
+
+
+   1              		.file	"MQTTPacket.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.MQTTPacket_encode,"ax",@progbits
+   5              		.globl	MQTTPacket_encode
+   7              	MQTTPacket_encode:
+   8              	.LFB0:
+   9              		.file 1 "/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c"
+   1:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** /*******************************************************************************
+   2:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * Copyright (c) 2014 IBM Corp.
+   3:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  *
+   4:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * All rights reserved. This program and the accompanying materials
+   5:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * are made available under the terms of the Eclipse Public License v1.0
+   6:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * and Eclipse Distribution License v1.0 which accompany this distribution.
+   7:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  *
+   8:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * The Eclipse Public License is available at
+   9:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  *    http://www.eclipse.org/legal/epl-v10.html
+  10:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * and the Eclipse Distribution License is available at
+  11:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  *   http://www.eclipse.org/org/documents/edl-v10.php.
+  12:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  *
+  13:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * Contributors:
+  14:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  *    Ian Craggs - initial API and implementation and/or initial documentation
+  15:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  *    Sergio R. Caprile - non-blocking packet read functions for stream transport
+  16:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  *******************************************************************************/
+  17:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+  18:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** #include "StackTrace.h"
+  19:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** #include "MQTTPacket.h"
+  20:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+  21:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** #include <string.h>
+  22:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+  23:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** /**
+  24:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * Encodes the message length according to the MQTT algorithm
+  25:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param buf the buffer into which the encoded data is written
+  26:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param length the length to be encoded
+  27:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @return the number of bytes written to buffer
+  28:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  */
+  29:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** int MQTTPacket_encode(unsigned char* buf, int length)
+  30:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** {
+  10              		.loc 1 30 1
+  11              		.cfi_startproc
+  12 0000 F30F1EFA 		endbr64
+  13 0004 55       		pushq	%rbp
+  14              	.LCFI0:
+  15              		.cfi_def_cfa_offset 16
+  16              		.cfi_offset 6, -16
+  17 0005 4889E5   		movq	%rsp, %rbp
+  18              	.LCFI1:
+  19              		.cfi_def_cfa_register 6
+  20 0008 4883EC20 		subq	$32, %rsp
+  21 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  22 0010 8975E4   		movl	%esi, -28(%rbp)
+  23              		.loc 1 30 1
+  24 0013 64488B04 		movq	%fs:40, %rax
+  24      25280000 
+  24      00
+  25 001c 488945F8 		movq	%rax, -8(%rbp)
+  26 0020 31C0     		xorl	%eax, %eax
+GAS LISTING /tmp/ccgEjh0r.s 			page 2
+
+
+  31:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	int rc = 0;
+  27              		.loc 1 31 6
+  28 0022 C745F400 		movl	$0, -12(%rbp)
+  28      000000
+  29              	.L3:
+  30              	.LBB2:
+  32:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+  33:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	FUNC_ENTRY;
+  34:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	do
+  35:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	{
+  36:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		char d = length % 128;
+  31              		.loc 1 36 19
+  32 0029 8B45E4   		movl	-28(%rbp), %eax
+  33 002c 99       		cltd
+  34 002d C1EA19   		shrl	$25, %edx
+  35 0030 01D0     		addl	%edx, %eax
+  36 0032 83E07F   		andl	$127, %eax
+  37 0035 29D0     		subl	%edx, %eax
+  38              		.loc 1 36 8
+  39 0037 8845F3   		movb	%al, -13(%rbp)
+  37:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		length /= 128;
+  40              		.loc 1 37 10
+  41 003a 8B45E4   		movl	-28(%rbp), %eax
+  42 003d 8D507F   		leal	127(%rax), %edx
+  43 0040 85C0     		testl	%eax, %eax
+  44 0042 0F48C2   		cmovs	%edx, %eax
+  45 0045 C1F807   		sarl	$7, %eax
+  46 0048 8945E4   		movl	%eax, -28(%rbp)
+  38:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		/* if there are more digits to encode, set the top bit of this digit */
+  39:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		if (length > 0)
+  47              		.loc 1 39 6
+  48 004b 837DE400 		cmpl	$0, -28(%rbp)
+  49 004f 7E04     		jle	.L2
+  40:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			d |= 0x80;
+  50              		.loc 1 40 6
+  51 0051 804DF380 		orb	$-128, -13(%rbp)
+  52              	.L2:
+  41:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		buf[rc++] = d;
+  53              		.loc 1 41 9
+  54 0055 8B45F4   		movl	-12(%rbp), %eax
+  55 0058 8D5001   		leal	1(%rax), %edx
+  56 005b 8955F4   		movl	%edx, -12(%rbp)
+  57 005e 4863D0   		movslq	%eax, %rdx
+  58              		.loc 1 41 6
+  59 0061 488B45E8 		movq	-24(%rbp), %rax
+  60 0065 4801C2   		addq	%rax, %rdx
+  61              		.loc 1 41 13
+  62 0068 0FB645F3 		movzbl	-13(%rbp), %eax
+  63 006c 8802     		movb	%al, (%rdx)
+  64              	.LBE2:
+  42:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	} while (length > 0);
+  65              		.loc 1 42 2
+  66 006e 837DE400 		cmpl	$0, -28(%rbp)
+  67 0072 7FB5     		jg	.L3
+  43:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	FUNC_EXIT_RC(rc);
+  44:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	return rc;
+  68              		.loc 1 44 9
+GAS LISTING /tmp/ccgEjh0r.s 			page 3
+
+
+  69 0074 8B45F4   		movl	-12(%rbp), %eax
+  45:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** }
+  70              		.loc 1 45 1
+  71 0077 488B4DF8 		movq	-8(%rbp), %rcx
+  72 007b 6448330C 		xorq	%fs:40, %rcx
+  72      25280000 
+  72      00
+  73 0084 7405     		je	.L5
+  74 0086 E8000000 		call	__stack_chk_fail@PLT
+  74      00
+  75              	.L5:
+  76 008b C9       		leave
+  77              	.LCFI2:
+  78              		.cfi_def_cfa 7, 8
+  79 008c C3       		ret
+  80              		.cfi_endproc
+  81              	.LFE0:
+  83              		.section	.text.MQTTPacket_decode,"ax",@progbits
+  84              		.globl	MQTTPacket_decode
+  86              	MQTTPacket_decode:
+  87              	.LFB1:
+  46:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+  47:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+  48:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** /**
+  49:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * Decodes the message length according to the MQTT algorithm
+  50:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param getcharfn pointer to function to read the next character from the data source
+  51:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param value the decoded length returned
+  52:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @return the number of bytes read from the socket
+  53:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  */
+  54:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** int MQTTPacket_decode(int (*getcharfn)(unsigned char*, int), int* value)
+  55:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** {
+  88              		.loc 1 55 1
+  89              		.cfi_startproc
+  90 0000 F30F1EFA 		endbr64
+  91 0004 55       		pushq	%rbp
+  92              	.LCFI3:
+  93              		.cfi_def_cfa_offset 16
+  94              		.cfi_offset 6, -16
+  95 0005 4889E5   		movq	%rsp, %rbp
+  96              	.LCFI4:
+  97              		.cfi_def_cfa_register 6
+  98 0008 4883EC30 		subq	$48, %rsp
+  99 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 100 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 101              		.loc 1 55 1
+ 102 0014 64488B04 		movq	%fs:40, %rax
+ 102      25280000 
+ 102      00
+ 103 001d 488945F8 		movq	%rax, -8(%rbp)
+ 104 0021 31C0     		xorl	%eax, %eax
+  56:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	unsigned char c;
+  57:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	int multiplier = 1;
+ 105              		.loc 1 57 6
+ 106 0023 C745EC01 		movl	$1, -20(%rbp)
+ 106      000000
+  58:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	int len = 0;
+ 107              		.loc 1 58 6
+GAS LISTING /tmp/ccgEjh0r.s 			page 4
+
+
+ 108 002a C745F000 		movl	$0, -16(%rbp)
+ 108      000000
+  59:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** #define MAX_NO_OF_REMAINING_LENGTH_BYTES 4
+  60:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+  61:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	FUNC_ENTRY;
+  62:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	*value = 0;
+ 109              		.loc 1 62 9
+ 110 0031 488B45D0 		movq	-48(%rbp), %rax
+ 111 0035 C7000000 		movl	$0, (%rax)
+ 111      0000
+ 112              	.L10:
+ 113              	.LBB3:
+  63:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	do
+  64:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	{
+  65:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		int rc = MQTTPACKET_READ_ERROR;
+ 114              		.loc 1 65 7
+ 115 003b C745F4FF 		movl	$-1, -12(%rbp)
+ 115      FFFFFF
+  66:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+  67:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		if (++len > MAX_NO_OF_REMAINING_LENGTH_BYTES)
+ 116              		.loc 1 67 6
+ 117 0042 8345F001 		addl	$1, -16(%rbp)
+ 118 0046 837DF004 		cmpl	$4, -16(%rbp)
+ 119 004a 7E09     		jle	.L7
+  68:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		{
+  69:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			rc = MQTTPACKET_READ_ERROR;	/* bad data */
+ 120              		.loc 1 69 7
+ 121 004c C745F4FF 		movl	$-1, -12(%rbp)
+ 121      FFFFFF
+  70:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			goto exit;
+ 122              		.loc 1 70 4
+ 123 0053 EB46     		jmp	.L8
+ 124              	.L7:
+  71:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		}
+  72:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		rc = (*getcharfn)(&c, 1);
+ 125              		.loc 1 72 9
+ 126 0055 488D45EB 		leaq	-21(%rbp), %rax
+ 127 0059 488B55D8 		movq	-40(%rbp), %rdx
+ 128 005d BE010000 		movl	$1, %esi
+ 128      00
+ 129 0062 4889C7   		movq	%rax, %rdi
+ 130 0065 FFD2     		call	*%rdx
+ 131              	.LVL0:
+ 132 0067 8945F4   		movl	%eax, -12(%rbp)
+  73:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		if (rc != 1)
+ 133              		.loc 1 73 6
+ 134 006a 837DF401 		cmpl	$1, -12(%rbp)
+ 135 006e 752A     		jne	.L13
+  74:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			goto exit;
+  75:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		*value += (c & 127) * multiplier;
+ 136              		.loc 1 75 10
+ 137 0070 488B45D0 		movq	-48(%rbp), %rax
+ 138 0074 8B10     		movl	(%rax), %edx
+ 139              		.loc 1 75 16
+ 140 0076 0FB645EB 		movzbl	-21(%rbp), %eax
+ 141 007a 0FB6C0   		movzbl	%al, %eax
+ 142 007d 83E07F   		andl	$127, %eax
+GAS LISTING /tmp/ccgEjh0r.s 			page 5
+
+
+ 143              		.loc 1 75 23
+ 144 0080 0FAF45EC 		imull	-20(%rbp), %eax
+ 145              		.loc 1 75 10
+ 146 0084 01C2     		addl	%eax, %edx
+ 147 0086 488B45D0 		movq	-48(%rbp), %rax
+ 148 008a 8910     		movl	%edx, (%rax)
+  76:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		multiplier *= 128;
+ 149              		.loc 1 76 14
+ 150 008c C165EC07 		sall	$7, -20(%rbp)
+ 151              	.LBE3:
+  77:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	} while ((c & 128) != 0);
+ 152              		.loc 1 77 21
+ 153 0090 0FB645EB 		movzbl	-21(%rbp), %eax
+ 154              		.loc 1 77 2
+ 155 0094 84C0     		testb	%al, %al
+ 156 0096 78A3     		js	.L10
+  78:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** exit:
+ 157              		.loc 1 78 1
+ 158 0098 EB01     		jmp	.L8
+ 159              	.L13:
+ 160              	.LBB4:
+  74:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		*value += (c & 127) * multiplier;
+ 161              		.loc 1 74 4
+ 162 009a 90       		nop
+ 163              	.L8:
+ 164              	.LBE4:
+  79:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	FUNC_EXIT_RC(len);
+  80:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	return len;
+ 165              		.loc 1 80 9
+ 166 009b 8B45F0   		movl	-16(%rbp), %eax
+  81:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** }
+ 167              		.loc 1 81 1
+ 168 009e 488B4DF8 		movq	-8(%rbp), %rcx
+ 169 00a2 6448330C 		xorq	%fs:40, %rcx
+ 169      25280000 
+ 169      00
+ 170 00ab 7405     		je	.L12
+ 171 00ad E8000000 		call	__stack_chk_fail@PLT
+ 171      00
+ 172              	.L12:
+ 173 00b2 C9       		leave
+ 174              	.LCFI5:
+ 175              		.cfi_def_cfa 7, 8
+ 176 00b3 C3       		ret
+ 177              		.cfi_endproc
+ 178              	.LFE1:
+ 180              		.section	.text.MQTTPacket_len,"ax",@progbits
+ 181              		.globl	MQTTPacket_len
+ 183              	MQTTPacket_len:
+ 184              	.LFB2:
+  82:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+  83:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+  84:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** int MQTTPacket_len(int rem_len)
+  85:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** {
+ 185              		.loc 1 85 1
+ 186              		.cfi_startproc
+ 187 0000 F30F1EFA 		endbr64
+GAS LISTING /tmp/ccgEjh0r.s 			page 6
+
+
+ 188 0004 55       		pushq	%rbp
+ 189              	.LCFI6:
+ 190              		.cfi_def_cfa_offset 16
+ 191              		.cfi_offset 6, -16
+ 192 0005 4889E5   		movq	%rsp, %rbp
+ 193              	.LCFI7:
+ 194              		.cfi_def_cfa_register 6
+ 195 0008 4883EC20 		subq	$32, %rsp
+ 196 000c 897DEC   		movl	%edi, -20(%rbp)
+ 197              		.loc 1 85 1
+ 198 000f 64488B04 		movq	%fs:40, %rax
+ 198      25280000 
+ 198      00
+ 199 0018 488945F8 		movq	%rax, -8(%rbp)
+ 200 001c 31C0     		xorl	%eax, %eax
+  86:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	rem_len += 1; /* header byte */
+ 201              		.loc 1 86 10
+ 202 001e 8345EC01 		addl	$1, -20(%rbp)
+  87:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+  88:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	/* now remaining_length field */
+  89:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	if (rem_len < 128)
+ 203              		.loc 1 89 5
+ 204 0022 837DEC7F 		cmpl	$127, -20(%rbp)
+ 205 0026 7F06     		jg	.L15
+  90:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		rem_len += 1;
+ 206              		.loc 1 90 11
+ 207 0028 8345EC01 		addl	$1, -20(%rbp)
+ 208 002c EB22     		jmp	.L16
+ 209              	.L15:
+  91:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	else if (rem_len < 16384)
+ 210              		.loc 1 91 10
+ 211 002e 817DECFF 		cmpl	$16383, -20(%rbp)
+ 211      3F0000
+ 212 0035 7F06     		jg	.L17
+  92:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		rem_len += 2;
+ 213              		.loc 1 92 11
+ 214 0037 8345EC02 		addl	$2, -20(%rbp)
+ 215 003b EB13     		jmp	.L16
+ 216              	.L17:
+  93:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	else if (rem_len < 2097151)
+ 217              		.loc 1 93 10
+ 218 003d 817DECFE 		cmpl	$2097150, -20(%rbp)
+ 218      FF1F00
+ 219 0044 7F06     		jg	.L18
+  94:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		rem_len += 3;
+ 220              		.loc 1 94 11
+ 221 0046 8345EC03 		addl	$3, -20(%rbp)
+ 222 004a EB04     		jmp	.L16
+ 223              	.L18:
+  95:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	else
+  96:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		rem_len += 4;
+ 224              		.loc 1 96 11
+ 225 004c 8345EC04 		addl	$4, -20(%rbp)
+ 226              	.L16:
+  97:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	return rem_len;
+ 227              		.loc 1 97 9
+ 228 0050 8B45EC   		movl	-20(%rbp), %eax
+GAS LISTING /tmp/ccgEjh0r.s 			page 7
+
+
+  98:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** }
+ 229              		.loc 1 98 1
+ 230 0053 488B55F8 		movq	-8(%rbp), %rdx
+ 231 0057 64483314 		xorq	%fs:40, %rdx
+ 231      25280000 
+ 231      00
+ 232 0060 7405     		je	.L20
+ 233 0062 E8000000 		call	__stack_chk_fail@PLT
+ 233      00
+ 234              	.L20:
+ 235 0067 C9       		leave
+ 236              	.LCFI8:
+ 237              		.cfi_def_cfa 7, 8
+ 238 0068 C3       		ret
+ 239              		.cfi_endproc
+ 240              	.LFE2:
+ 242              		.section	.bss.bufptr,"aw",@nobits
+ 243              		.align 8
+ 246              	bufptr:
+ 247 0000 00000000 		.zero	8
+ 247      00000000 
+ 248              		.section	.text.bufchar,"ax",@progbits
+ 249              		.globl	bufchar
+ 251              	bufchar:
+ 252              	.LFB3:
+  99:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 100:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 101:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** static unsigned char* bufptr;
+ 102:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 103:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** int bufchar(unsigned char* c, int count)
+ 104:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** {
+ 253              		.loc 1 104 1
+ 254              		.cfi_startproc
+ 255 0000 F30F1EFA 		endbr64
+ 256 0004 55       		pushq	%rbp
+ 257              	.LCFI9:
+ 258              		.cfi_def_cfa_offset 16
+ 259              		.cfi_offset 6, -16
+ 260 0005 4889E5   		movq	%rsp, %rbp
+ 261              	.LCFI10:
+ 262              		.cfi_def_cfa_register 6
+ 263 0008 4883EC20 		subq	$32, %rsp
+ 264 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 265 0010 8975E4   		movl	%esi, -28(%rbp)
+ 266              		.loc 1 104 1
+ 267 0013 64488B04 		movq	%fs:40, %rax
+ 267      25280000 
+ 267      00
+ 268 001c 488945F8 		movq	%rax, -8(%rbp)
+ 269 0020 31C0     		xorl	%eax, %eax
+ 105:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	int i;
+ 106:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 107:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	for (i = 0; i < count; ++i)
+ 270              		.loc 1 107 9
+ 271 0022 C745F400 		movl	$0, -12(%rbp)
+ 271      000000
+ 272              		.loc 1 107 2
+GAS LISTING /tmp/ccgEjh0r.s 			page 8
+
+
+ 273 0029 EB1F     		jmp	.L22
+ 274              	.L23:
+ 108:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		*c = *bufptr++;
+ 275              		.loc 1 108 15 discriminator 3
+ 276 002b 488B0500 		movq	bufptr(%rip), %rax
+ 276      000000
+ 277 0032 488D5001 		leaq	1(%rax), %rdx
+ 278 0036 48891500 		movq	%rdx, bufptr(%rip)
+ 278      000000
+ 279              		.loc 1 108 8 discriminator 3
+ 280 003d 0FB610   		movzbl	(%rax), %edx
+ 281              		.loc 1 108 6 discriminator 3
+ 282 0040 488B45E8 		movq	-24(%rbp), %rax
+ 283 0044 8810     		movb	%dl, (%rax)
+ 107:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		*c = *bufptr++;
+ 284              		.loc 1 107 25 discriminator 3
+ 285 0046 8345F401 		addl	$1, -12(%rbp)
+ 286              	.L22:
+ 107:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		*c = *bufptr++;
+ 287              		.loc 1 107 2 discriminator 1
+ 288 004a 8B45F4   		movl	-12(%rbp), %eax
+ 289 004d 3B45E4   		cmpl	-28(%rbp), %eax
+ 290 0050 7CD9     		jl	.L23
+ 109:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	return count;
+ 291              		.loc 1 109 9
+ 292 0052 8B45E4   		movl	-28(%rbp), %eax
+ 110:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** }
+ 293              		.loc 1 110 1
+ 294 0055 488B4DF8 		movq	-8(%rbp), %rcx
+ 295 0059 6448330C 		xorq	%fs:40, %rcx
+ 295      25280000 
+ 295      00
+ 296 0062 7405     		je	.L25
+ 297 0064 E8000000 		call	__stack_chk_fail@PLT
+ 297      00
+ 298              	.L25:
+ 299 0069 C9       		leave
+ 300              	.LCFI11:
+ 301              		.cfi_def_cfa 7, 8
+ 302 006a C3       		ret
+ 303              		.cfi_endproc
+ 304              	.LFE3:
+ 306              		.section	.text.MQTTPacket_decodeBuf,"ax",@progbits
+ 307              		.globl	MQTTPacket_decodeBuf
+ 309              	MQTTPacket_decodeBuf:
+ 310              	.LFB4:
+ 111:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 112:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 113:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** int MQTTPacket_decodeBuf(unsigned char* buf, int* value)
+ 114:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** {
+ 311              		.loc 1 114 1
+ 312              		.cfi_startproc
+ 313 0000 F30F1EFA 		endbr64
+ 314 0004 55       		pushq	%rbp
+ 315              	.LCFI12:
+ 316              		.cfi_def_cfa_offset 16
+ 317              		.cfi_offset 6, -16
+GAS LISTING /tmp/ccgEjh0r.s 			page 9
+
+
+ 318 0005 4889E5   		movq	%rsp, %rbp
+ 319              	.LCFI13:
+ 320              		.cfi_def_cfa_register 6
+ 321 0008 4883EC20 		subq	$32, %rsp
+ 322 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 323 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 324              		.loc 1 114 1
+ 325 0014 64488B04 		movq	%fs:40, %rax
+ 325      25280000 
+ 325      00
+ 326 001d 488945F8 		movq	%rax, -8(%rbp)
+ 327 0021 31C0     		xorl	%eax, %eax
+ 115:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	bufptr = buf;
+ 328              		.loc 1 115 9
+ 329 0023 488B45E8 		movq	-24(%rbp), %rax
+ 330 0027 48890500 		movq	%rax, bufptr(%rip)
+ 330      000000
+ 116:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	return MQTTPacket_decode(bufchar, value);
+ 331              		.loc 1 116 9
+ 332 002e 488B45E0 		movq	-32(%rbp), %rax
+ 333 0032 4889C6   		movq	%rax, %rsi
+ 334 0035 488D3D00 		leaq	bufchar(%rip), %rdi
+ 334      000000
+ 335 003c E8000000 		call	MQTTPacket_decode
+ 335      00
+ 117:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** }
+ 336              		.loc 1 117 1
+ 337 0041 488B55F8 		movq	-8(%rbp), %rdx
+ 338 0045 64483314 		xorq	%fs:40, %rdx
+ 338      25280000 
+ 338      00
+ 339 004e 7405     		je	.L28
+ 340 0050 E8000000 		call	__stack_chk_fail@PLT
+ 340      00
+ 341              	.L28:
+ 342 0055 C9       		leave
+ 343              	.LCFI14:
+ 344              		.cfi_def_cfa 7, 8
+ 345 0056 C3       		ret
+ 346              		.cfi_endproc
+ 347              	.LFE4:
+ 349              		.section	.text.readInt,"ax",@progbits
+ 350              		.globl	readInt
+ 352              	readInt:
+ 353              	.LFB5:
+ 118:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 119:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 120:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** /**
+ 121:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * Calculates an integer from two bytes read from the input buffer
+ 122:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param pptr pointer to the input buffer - incremented by the number of bytes used & returned
+ 123:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @return the integer value calculated
+ 124:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  */
+ 125:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** int readInt(unsigned char** pptr)
+ 126:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** {
+ 354              		.loc 1 126 1
+ 355              		.cfi_startproc
+ 356 0000 F30F1EFA 		endbr64
+GAS LISTING /tmp/ccgEjh0r.s 			page 10
+
+
+ 357 0004 55       		pushq	%rbp
+ 358              	.LCFI15:
+ 359              		.cfi_def_cfa_offset 16
+ 360              		.cfi_offset 6, -16
+ 361 0005 4889E5   		movq	%rsp, %rbp
+ 362              	.LCFI16:
+ 363              		.cfi_def_cfa_register 6
+ 364 0008 4883EC30 		subq	$48, %rsp
+ 365 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 366              		.loc 1 126 1
+ 367 0010 64488B04 		movq	%fs:40, %rax
+ 367      25280000 
+ 367      00
+ 368 0019 488945F8 		movq	%rax, -8(%rbp)
+ 369 001d 31C0     		xorl	%eax, %eax
+ 127:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	unsigned char* ptr = *pptr;
+ 370              		.loc 1 127 17
+ 371 001f 488B45D8 		movq	-40(%rbp), %rax
+ 372 0023 488B00   		movq	(%rax), %rax
+ 373 0026 488945F0 		movq	%rax, -16(%rbp)
+ 128:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	int len = 256*(*ptr) + (*(ptr+1));
+ 374              		.loc 1 128 17
+ 375 002a 488B45F0 		movq	-16(%rbp), %rax
+ 376 002e 0FB600   		movzbl	(%rax), %eax
+ 377 0031 0FB6C0   		movzbl	%al, %eax
+ 378              		.loc 1 128 15
+ 379 0034 C1E008   		sall	$8, %eax
+ 380 0037 89C2     		movl	%eax, %edx
+ 381              		.loc 1 128 31
+ 382 0039 488B45F0 		movq	-16(%rbp), %rax
+ 383 003d 4883C001 		addq	$1, %rax
+ 384              		.loc 1 128 26
+ 385 0041 0FB600   		movzbl	(%rax), %eax
+ 386 0044 0FB6C0   		movzbl	%al, %eax
+ 387              		.loc 1 128 6
+ 388 0047 01D0     		addl	%edx, %eax
+ 389 0049 8945EC   		movl	%eax, -20(%rbp)
+ 129:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	*pptr += 2;
+ 390              		.loc 1 129 8
+ 391 004c 488B45D8 		movq	-40(%rbp), %rax
+ 392 0050 488B00   		movq	(%rax), %rax
+ 393 0053 488D5002 		leaq	2(%rax), %rdx
+ 394 0057 488B45D8 		movq	-40(%rbp), %rax
+ 395 005b 488910   		movq	%rdx, (%rax)
+ 130:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	return len;
+ 396              		.loc 1 130 9
+ 397 005e 8B45EC   		movl	-20(%rbp), %eax
+ 131:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** }
+ 398              		.loc 1 131 1
+ 399 0061 488B4DF8 		movq	-8(%rbp), %rcx
+ 400 0065 6448330C 		xorq	%fs:40, %rcx
+ 400      25280000 
+ 400      00
+ 401 006e 7405     		je	.L31
+ 402 0070 E8000000 		call	__stack_chk_fail@PLT
+ 402      00
+ 403              	.L31:
+GAS LISTING /tmp/ccgEjh0r.s 			page 11
+
+
+ 404 0075 C9       		leave
+ 405              	.LCFI17:
+ 406              		.cfi_def_cfa 7, 8
+ 407 0076 C3       		ret
+ 408              		.cfi_endproc
+ 409              	.LFE5:
+ 411              		.section	.text.readChar,"ax",@progbits
+ 412              		.globl	readChar
+ 414              	readChar:
+ 415              	.LFB6:
+ 132:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 133:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 134:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** /**
+ 135:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * Reads one character from the input buffer.
+ 136:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param pptr pointer to the input buffer - incremented by the number of bytes used & returned
+ 137:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @return the character read
+ 138:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  */
+ 139:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** char readChar(unsigned char** pptr)
+ 140:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** {
+ 416              		.loc 1 140 1
+ 417              		.cfi_startproc
+ 418 0000 F30F1EFA 		endbr64
+ 419 0004 55       		pushq	%rbp
+ 420              	.LCFI18:
+ 421              		.cfi_def_cfa_offset 16
+ 422              		.cfi_offset 6, -16
+ 423 0005 4889E5   		movq	%rsp, %rbp
+ 424              	.LCFI19:
+ 425              		.cfi_def_cfa_register 6
+ 426 0008 4883EC20 		subq	$32, %rsp
+ 427 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 428              		.loc 1 140 1
+ 429 0010 64488B04 		movq	%fs:40, %rax
+ 429      25280000 
+ 429      00
+ 430 0019 488945F8 		movq	%rax, -8(%rbp)
+ 431 001d 31C0     		xorl	%eax, %eax
+ 141:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	char c = **pptr;
+ 432              		.loc 1 141 12
+ 433 001f 488B45E8 		movq	-24(%rbp), %rax
+ 434 0023 488B00   		movq	(%rax), %rax
+ 435              		.loc 1 141 11
+ 436 0026 0FB600   		movzbl	(%rax), %eax
+ 437              		.loc 1 141 7
+ 438 0029 8845F7   		movb	%al, -9(%rbp)
+ 142:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	(*pptr)++;
+ 439              		.loc 1 142 3
+ 440 002c 488B45E8 		movq	-24(%rbp), %rax
+ 441 0030 488B00   		movq	(%rax), %rax
+ 442              		.loc 1 142 9
+ 443 0033 488D5001 		leaq	1(%rax), %rdx
+ 444 0037 488B45E8 		movq	-24(%rbp), %rax
+ 445 003b 488910   		movq	%rdx, (%rax)
+ 143:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	return c;
+ 446              		.loc 1 143 9
+ 447 003e 0FB645F7 		movzbl	-9(%rbp), %eax
+ 144:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** }
+GAS LISTING /tmp/ccgEjh0r.s 			page 12
+
+
+ 448              		.loc 1 144 1
+ 449 0042 488B4DF8 		movq	-8(%rbp), %rcx
+ 450 0046 6448330C 		xorq	%fs:40, %rcx
+ 450      25280000 
+ 450      00
+ 451 004f 7405     		je	.L34
+ 452 0051 E8000000 		call	__stack_chk_fail@PLT
+ 452      00
+ 453              	.L34:
+ 454 0056 C9       		leave
+ 455              	.LCFI20:
+ 456              		.cfi_def_cfa 7, 8
+ 457 0057 C3       		ret
+ 458              		.cfi_endproc
+ 459              	.LFE6:
+ 461              		.section	.text.writeChar,"ax",@progbits
+ 462              		.globl	writeChar
+ 464              	writeChar:
+ 465              	.LFB7:
+ 145:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 146:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 147:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** /**
+ 148:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * Writes one character to an output buffer.
+ 149:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param pptr pointer to the output buffer - incremented by the number of bytes used & returned
+ 150:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param c the character to write
+ 151:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  */
+ 152:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** void writeChar(unsigned char** pptr, char c)
+ 153:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** {
+ 466              		.loc 1 153 1
+ 467              		.cfi_startproc
+ 468 0000 F30F1EFA 		endbr64
+ 469 0004 55       		pushq	%rbp
+ 470              	.LCFI21:
+ 471              		.cfi_def_cfa_offset 16
+ 472              		.cfi_offset 6, -16
+ 473 0005 4889E5   		movq	%rsp, %rbp
+ 474              	.LCFI22:
+ 475              		.cfi_def_cfa_register 6
+ 476 0008 4883EC20 		subq	$32, %rsp
+ 477 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 478 0010 89F0     		movl	%esi, %eax
+ 479 0012 8845E4   		movb	%al, -28(%rbp)
+ 480              		.loc 1 153 1
+ 481 0015 64488B04 		movq	%fs:40, %rax
+ 481      25280000 
+ 481      00
+ 482 001e 488945F8 		movq	%rax, -8(%rbp)
+ 483 0022 31C0     		xorl	%eax, %eax
+ 154:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	**pptr = c;
+ 484              		.loc 1 154 3
+ 485 0024 488B45E8 		movq	-24(%rbp), %rax
+ 486 0028 488B00   		movq	(%rax), %rax
+ 487              		.loc 1 154 9
+ 488 002b 0FB655E4 		movzbl	-28(%rbp), %edx
+ 489 002f 8810     		movb	%dl, (%rax)
+ 155:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	(*pptr)++;
+ 490              		.loc 1 155 3
+GAS LISTING /tmp/ccgEjh0r.s 			page 13
+
+
+ 491 0031 488B45E8 		movq	-24(%rbp), %rax
+ 492 0035 488B00   		movq	(%rax), %rax
+ 493              		.loc 1 155 9
+ 494 0038 488D5001 		leaq	1(%rax), %rdx
+ 495 003c 488B45E8 		movq	-24(%rbp), %rax
+ 496 0040 488910   		movq	%rdx, (%rax)
+ 156:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** }
+ 497              		.loc 1 156 1
+ 498 0043 90       		nop
+ 499 0044 488B45F8 		movq	-8(%rbp), %rax
+ 500 0048 64483304 		xorq	%fs:40, %rax
+ 500      25280000 
+ 500      00
+ 501 0051 7405     		je	.L36
+ 502 0053 E8000000 		call	__stack_chk_fail@PLT
+ 502      00
+ 503              	.L36:
+ 504 0058 C9       		leave
+ 505              	.LCFI23:
+ 506              		.cfi_def_cfa 7, 8
+ 507 0059 C3       		ret
+ 508              		.cfi_endproc
+ 509              	.LFE7:
+ 511              		.section	.text.writeInt,"ax",@progbits
+ 512              		.globl	writeInt
+ 514              	writeInt:
+ 515              	.LFB8:
+ 157:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 158:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 159:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** /**
+ 160:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * Writes an integer as 2 bytes to an output buffer.
+ 161:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param pptr pointer to the output buffer - incremented by the number of bytes used & returned
+ 162:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param anInt the integer to write
+ 163:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  */
+ 164:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** void writeInt(unsigned char** pptr, int anInt)
+ 165:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** {
+ 516              		.loc 1 165 1
+ 517              		.cfi_startproc
+ 518 0000 F30F1EFA 		endbr64
+ 519 0004 55       		pushq	%rbp
+ 520              	.LCFI24:
+ 521              		.cfi_def_cfa_offset 16
+ 522              		.cfi_offset 6, -16
+ 523 0005 4889E5   		movq	%rsp, %rbp
+ 524              	.LCFI25:
+ 525              		.cfi_def_cfa_register 6
+ 526 0008 4883EC20 		subq	$32, %rsp
+ 527 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 528 0010 8975E4   		movl	%esi, -28(%rbp)
+ 529              		.loc 1 165 1
+ 530 0013 64488B04 		movq	%fs:40, %rax
+ 530      25280000 
+ 530      00
+ 531 001c 488945F8 		movq	%rax, -8(%rbp)
+ 532 0020 31C0     		xorl	%eax, %eax
+ 166:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	**pptr = (unsigned char)(anInt / 256);
+ 533              		.loc 1 166 33
+GAS LISTING /tmp/ccgEjh0r.s 			page 14
+
+
+ 534 0022 8B45E4   		movl	-28(%rbp), %eax
+ 535 0025 8D90FF00 		leal	255(%rax), %edx
+ 535      0000
+ 536 002b 85C0     		testl	%eax, %eax
+ 537 002d 0F48C2   		cmovs	%edx, %eax
+ 538 0030 C1F808   		sarl	$8, %eax
+ 539 0033 89C2     		movl	%eax, %edx
+ 540              		.loc 1 166 3
+ 541 0035 488B45E8 		movq	-24(%rbp), %rax
+ 542 0039 488B00   		movq	(%rax), %rax
+ 543              		.loc 1 166 9
+ 544 003c 8810     		movb	%dl, (%rax)
+ 167:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	(*pptr)++;
+ 545              		.loc 1 167 3
+ 546 003e 488B45E8 		movq	-24(%rbp), %rax
+ 547 0042 488B00   		movq	(%rax), %rax
+ 548              		.loc 1 167 9
+ 549 0045 488D5001 		leaq	1(%rax), %rdx
+ 550 0049 488B45E8 		movq	-24(%rbp), %rax
+ 551 004d 488910   		movq	%rdx, (%rax)
+ 168:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	**pptr = (unsigned char)(anInt % 256);
+ 552              		.loc 1 168 33
+ 553 0050 8B45E4   		movl	-28(%rbp), %eax
+ 554 0053 99       		cltd
+ 555 0054 C1EA18   		shrl	$24, %edx
+ 556 0057 01D0     		addl	%edx, %eax
+ 557 0059 0FB6C0   		movzbl	%al, %eax
+ 558 005c 29D0     		subl	%edx, %eax
+ 559 005e 89C2     		movl	%eax, %edx
+ 560              		.loc 1 168 3
+ 561 0060 488B45E8 		movq	-24(%rbp), %rax
+ 562 0064 488B00   		movq	(%rax), %rax
+ 563              		.loc 1 168 9
+ 564 0067 8810     		movb	%dl, (%rax)
+ 169:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	(*pptr)++;
+ 565              		.loc 1 169 3
+ 566 0069 488B45E8 		movq	-24(%rbp), %rax
+ 567 006d 488B00   		movq	(%rax), %rax
+ 568              		.loc 1 169 9
+ 569 0070 488D5001 		leaq	1(%rax), %rdx
+ 570 0074 488B45E8 		movq	-24(%rbp), %rax
+ 571 0078 488910   		movq	%rdx, (%rax)
+ 170:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** }
+ 572              		.loc 1 170 1
+ 573 007b 90       		nop
+ 574 007c 488B45F8 		movq	-8(%rbp), %rax
+ 575 0080 64483304 		xorq	%fs:40, %rax
+ 575      25280000 
+ 575      00
+ 576 0089 7405     		je	.L38
+ 577 008b E8000000 		call	__stack_chk_fail@PLT
+ 577      00
+ 578              	.L38:
+ 579 0090 C9       		leave
+ 580              	.LCFI26:
+ 581              		.cfi_def_cfa 7, 8
+ 582 0091 C3       		ret
+GAS LISTING /tmp/ccgEjh0r.s 			page 15
+
+
+ 583              		.cfi_endproc
+ 584              	.LFE8:
+ 586              		.section	.text.writeCString,"ax",@progbits
+ 587              		.globl	writeCString
+ 589              	writeCString:
+ 590              	.LFB9:
+ 171:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 172:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 173:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** /**
+ 174:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * Writes a "UTF" string to an output buffer.  Converts C string to length-delimited.
+ 175:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param pptr pointer to the output buffer - incremented by the number of bytes used & returned
+ 176:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param string the C string to write
+ 177:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  */
+ 178:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** void writeCString(unsigned char** pptr, const char* string)
+ 179:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** {
+ 591              		.loc 1 179 1
+ 592              		.cfi_startproc
+ 593 0000 F30F1EFA 		endbr64
+ 594 0004 55       		pushq	%rbp
+ 595              	.LCFI27:
+ 596              		.cfi_def_cfa_offset 16
+ 597              		.cfi_offset 6, -16
+ 598 0005 4889E5   		movq	%rsp, %rbp
+ 599              	.LCFI28:
+ 600              		.cfi_def_cfa_register 6
+ 601 0008 4883EC20 		subq	$32, %rsp
+ 602 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 603 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 604              		.loc 1 179 1
+ 605 0014 64488B04 		movq	%fs:40, %rax
+ 605      25280000 
+ 605      00
+ 606 001d 488945F8 		movq	%rax, -8(%rbp)
+ 607 0021 31C0     		xorl	%eax, %eax
+ 180:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	int len = strlen(string);
+ 608              		.loc 1 180 12
+ 609 0023 488B45E0 		movq	-32(%rbp), %rax
+ 610 0027 4889C7   		movq	%rax, %rdi
+ 611 002a E8000000 		call	strlen@PLT
+ 611      00
+ 612              		.loc 1 180 6
+ 613 002f 8945F4   		movl	%eax, -12(%rbp)
+ 181:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	writeInt(pptr, len);
+ 614              		.loc 1 181 2
+ 615 0032 8B55F4   		movl	-12(%rbp), %edx
+ 616 0035 488B45E8 		movq	-24(%rbp), %rax
+ 617 0039 89D6     		movl	%edx, %esi
+ 618 003b 4889C7   		movq	%rax, %rdi
+ 619 003e E8000000 		call	writeInt
+ 619      00
+ 182:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	memcpy(*pptr, string, len);
+ 620              		.loc 1 182 2
+ 621 0043 8B45F4   		movl	-12(%rbp), %eax
+ 622 0046 4863D0   		movslq	%eax, %rdx
+ 623 0049 488B45E8 		movq	-24(%rbp), %rax
+ 624 004d 488B00   		movq	(%rax), %rax
+ 625 0050 488B4DE0 		movq	-32(%rbp), %rcx
+GAS LISTING /tmp/ccgEjh0r.s 			page 16
+
+
+ 626 0054 4889CE   		movq	%rcx, %rsi
+ 627 0057 4889C7   		movq	%rax, %rdi
+ 628 005a E8000000 		call	memcpy@PLT
+ 628      00
+ 183:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	*pptr += len;
+ 629              		.loc 1 183 8
+ 630 005f 488B45E8 		movq	-24(%rbp), %rax
+ 631 0063 488B10   		movq	(%rax), %rdx
+ 632 0066 8B45F4   		movl	-12(%rbp), %eax
+ 633 0069 4898     		cltq
+ 634 006b 4801C2   		addq	%rax, %rdx
+ 635 006e 488B45E8 		movq	-24(%rbp), %rax
+ 636 0072 488910   		movq	%rdx, (%rax)
+ 184:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** }
+ 637              		.loc 1 184 1
+ 638 0075 90       		nop
+ 639 0076 488B45F8 		movq	-8(%rbp), %rax
+ 640 007a 64483304 		xorq	%fs:40, %rax
+ 640      25280000 
+ 640      00
+ 641 0083 7405     		je	.L40
+ 642 0085 E8000000 		call	__stack_chk_fail@PLT
+ 642      00
+ 643              	.L40:
+ 644 008a C9       		leave
+ 645              	.LCFI29:
+ 646              		.cfi_def_cfa 7, 8
+ 647 008b C3       		ret
+ 648              		.cfi_endproc
+ 649              	.LFE9:
+ 651              		.section	.text.getLenStringLen,"ax",@progbits
+ 652              		.globl	getLenStringLen
+ 654              	getLenStringLen:
+ 655              	.LFB10:
+ 185:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 186:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 187:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** int getLenStringLen(char* ptr)
+ 188:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** {
+ 656              		.loc 1 188 1
+ 657              		.cfi_startproc
+ 658 0000 F30F1EFA 		endbr64
+ 659 0004 55       		pushq	%rbp
+ 660              	.LCFI30:
+ 661              		.cfi_def_cfa_offset 16
+ 662              		.cfi_offset 6, -16
+ 663 0005 4889E5   		movq	%rsp, %rbp
+ 664              	.LCFI31:
+ 665              		.cfi_def_cfa_register 6
+ 666 0008 4883EC20 		subq	$32, %rsp
+ 667 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 668              		.loc 1 188 1
+ 669 0010 64488B04 		movq	%fs:40, %rax
+ 669      25280000 
+ 669      00
+ 670 0019 488945F8 		movq	%rax, -8(%rbp)
+ 671 001d 31C0     		xorl	%eax, %eax
+ 189:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	int len = 256*((unsigned char)(*ptr)) + (unsigned char)(*(ptr+1));
+GAS LISTING /tmp/ccgEjh0r.s 			page 17
+
+
+ 672              		.loc 1 189 33
+ 673 001f 488B45E8 		movq	-24(%rbp), %rax
+ 674 0023 0FB600   		movzbl	(%rax), %eax
+ 675              		.loc 1 189 17
+ 676 0026 0FB6C0   		movzbl	%al, %eax
+ 677              		.loc 1 189 15
+ 678 0029 C1E008   		sall	$8, %eax
+ 679 002c 89C2     		movl	%eax, %edx
+ 680              		.loc 1 189 63
+ 681 002e 488B45E8 		movq	-24(%rbp), %rax
+ 682 0032 4883C001 		addq	$1, %rax
+ 683              		.loc 1 189 58
+ 684 0036 0FB600   		movzbl	(%rax), %eax
+ 685              		.loc 1 189 42
+ 686 0039 0FB6C0   		movzbl	%al, %eax
+ 687              		.loc 1 189 6
+ 688 003c 01D0     		addl	%edx, %eax
+ 689 003e 8945F4   		movl	%eax, -12(%rbp)
+ 190:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	return len;
+ 690              		.loc 1 190 9
+ 691 0041 8B45F4   		movl	-12(%rbp), %eax
+ 191:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** }
+ 692              		.loc 1 191 1
+ 693 0044 488B4DF8 		movq	-8(%rbp), %rcx
+ 694 0048 6448330C 		xorq	%fs:40, %rcx
+ 694      25280000 
+ 694      00
+ 695 0051 7405     		je	.L43
+ 696 0053 E8000000 		call	__stack_chk_fail@PLT
+ 696      00
+ 697              	.L43:
+ 698 0058 C9       		leave
+ 699              	.LCFI32:
+ 700              		.cfi_def_cfa 7, 8
+ 701 0059 C3       		ret
+ 702              		.cfi_endproc
+ 703              	.LFE10:
+ 705              		.section	.text.writeMQTTString,"ax",@progbits
+ 706              		.globl	writeMQTTString
+ 708              	writeMQTTString:
+ 709              	.LFB11:
+ 192:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 193:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 194:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** void writeMQTTString(unsigned char** pptr, MQTTString mqttstring)
+ 195:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** {
+ 710              		.loc 1 195 1
+ 711              		.cfi_startproc
+ 712 0000 F30F1EFA 		endbr64
+ 713 0004 55       		pushq	%rbp
+ 714              	.LCFI33:
+ 715              		.cfi_def_cfa_offset 16
+ 716              		.cfi_offset 6, -16
+ 717 0005 4889E5   		movq	%rsp, %rbp
+ 718              	.LCFI34:
+ 719              		.cfi_def_cfa_register 6
+ 720 0008 4883EC30 		subq	$48, %rsp
+ 721 000c 48897DE8 		movq	%rdi, -24(%rbp)
+GAS LISTING /tmp/ccgEjh0r.s 			page 18
+
+
+ 722 0010 488B4510 		movq	16(%rbp), %rax
+ 723 0014 488B5518 		movq	24(%rbp), %rdx
+ 724 0018 488945D0 		movq	%rax, -48(%rbp)
+ 725 001c 488955D8 		movq	%rdx, -40(%rbp)
+ 726 0020 488B4520 		movq	32(%rbp), %rax
+ 727 0024 488945E0 		movq	%rax, -32(%rbp)
+ 728              		.loc 1 195 1
+ 729 0028 64488B04 		movq	%fs:40, %rax
+ 729      25280000 
+ 729      00
+ 730 0031 488945F8 		movq	%rax, -8(%rbp)
+ 731 0035 31C0     		xorl	%eax, %eax
+ 196:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	if (mqttstring.lenstring.len > 0)
+ 732              		.loc 1 196 26
+ 733 0037 8B45D8   		movl	-40(%rbp), %eax
+ 734              		.loc 1 196 5
+ 735 003a 85C0     		testl	%eax, %eax
+ 736 003c 7E45     		jle	.L45
+ 197:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	{
+ 198:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		writeInt(pptr, mqttstring.lenstring.len);
+ 737              		.loc 1 198 3
+ 738 003e 8B55D8   		movl	-40(%rbp), %edx
+ 739 0041 488B45E8 		movq	-24(%rbp), %rax
+ 740 0045 89D6     		movl	%edx, %esi
+ 741 0047 4889C7   		movq	%rax, %rdi
+ 742 004a E8000000 		call	writeInt
+ 742      00
+ 199:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		memcpy(*pptr, mqttstring.lenstring.data, mqttstring.lenstring.len);
+ 743              		.loc 1 199 64
+ 744 004f 8B45D8   		movl	-40(%rbp), %eax
+ 745              		.loc 1 199 3
+ 746 0052 4863D0   		movslq	%eax, %rdx
+ 747              		.loc 1 199 37
+ 748 0055 488B4DE0 		movq	-32(%rbp), %rcx
+ 749              		.loc 1 199 3
+ 750 0059 488B45E8 		movq	-24(%rbp), %rax
+ 751 005d 488B00   		movq	(%rax), %rax
+ 752 0060 4889CE   		movq	%rcx, %rsi
+ 753 0063 4889C7   		movq	%rax, %rdi
+ 754 0066 E8000000 		call	memcpy@PLT
+ 754      00
+ 200:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		*pptr += mqttstring.lenstring.len;
+ 755              		.loc 1 200 9
+ 756 006b 488B45E8 		movq	-24(%rbp), %rax
+ 757 006f 488B10   		movq	(%rax), %rdx
+ 758              		.loc 1 200 32
+ 759 0072 8B45D8   		movl	-40(%rbp), %eax
+ 760 0075 4898     		cltq
+ 761              		.loc 1 200 9
+ 762 0077 4801C2   		addq	%rax, %rdx
+ 763 007a 488B45E8 		movq	-24(%rbp), %rax
+ 764 007e 488910   		movq	%rdx, (%rax)
+ 201:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	}
+ 202:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	else if (mqttstring.cstring)
+ 203:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		writeCString(pptr, mqttstring.cstring);
+ 204:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	else
+ 205:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		writeInt(pptr, 0);
+GAS LISTING /tmp/ccgEjh0r.s 			page 19
+
+
+ 206:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** }
+ 765              		.loc 1 206 1
+ 766 0081 EB2F     		jmp	.L49
+ 767              	.L45:
+ 202:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		writeCString(pptr, mqttstring.cstring);
+ 768              		.loc 1 202 21
+ 769 0083 488B45D0 		movq	-48(%rbp), %rax
+ 202:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		writeCString(pptr, mqttstring.cstring);
+ 770              		.loc 1 202 10
+ 771 0087 4885C0   		testq	%rax, %rax
+ 772 008a 7415     		je	.L47
+ 203:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	else
+ 773              		.loc 1 203 32
+ 774 008c 488B55D0 		movq	-48(%rbp), %rdx
+ 203:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	else
+ 775              		.loc 1 203 3
+ 776 0090 488B45E8 		movq	-24(%rbp), %rax
+ 777 0094 4889D6   		movq	%rdx, %rsi
+ 778 0097 4889C7   		movq	%rax, %rdi
+ 779 009a E8000000 		call	writeCString
+ 779      00
+ 780              		.loc 1 206 1
+ 781 009f EB11     		jmp	.L49
+ 782              	.L47:
+ 205:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** }
+ 783              		.loc 1 205 3
+ 784 00a1 488B45E8 		movq	-24(%rbp), %rax
+ 785 00a5 BE000000 		movl	$0, %esi
+ 785      00
+ 786 00aa 4889C7   		movq	%rax, %rdi
+ 787 00ad E8000000 		call	writeInt
+ 787      00
+ 788              	.L49:
+ 789              		.loc 1 206 1
+ 790 00b2 90       		nop
+ 791 00b3 488B45F8 		movq	-8(%rbp), %rax
+ 792 00b7 64483304 		xorq	%fs:40, %rax
+ 792      25280000 
+ 792      00
+ 793 00c0 7405     		je	.L48
+ 794 00c2 E8000000 		call	__stack_chk_fail@PLT
+ 794      00
+ 795              	.L48:
+ 796 00c7 C9       		leave
+ 797              	.LCFI35:
+ 798              		.cfi_def_cfa 7, 8
+ 799 00c8 C3       		ret
+ 800              		.cfi_endproc
+ 801              	.LFE11:
+ 803              		.section	.text.readMQTTLenString,"ax",@progbits
+ 804              		.globl	readMQTTLenString
+ 806              	readMQTTLenString:
+ 807              	.LFB12:
+ 207:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 208:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 209:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** /**
+ 210:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param mqttstring the MQTTString structure into which the data is to be read
+GAS LISTING /tmp/ccgEjh0r.s 			page 20
+
+
+ 211:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param pptr pointer to the output buffer - incremented by the number of bytes used & returned
+ 212:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param enddata pointer to the end of the data: do not read beyond
+ 213:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @return 1 if successful, 0 if not
+ 214:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  */
+ 215:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** int readMQTTLenString(MQTTString* mqttstring, unsigned char** pptr, unsigned char* enddata)
+ 216:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** {
+ 808              		.loc 1 216 1
+ 809              		.cfi_startproc
+ 810 0000 F30F1EFA 		endbr64
+ 811 0004 55       		pushq	%rbp
+ 812              	.LCFI36:
+ 813              		.cfi_def_cfa_offset 16
+ 814              		.cfi_offset 6, -16
+ 815 0005 4889E5   		movq	%rsp, %rbp
+ 816              	.LCFI37:
+ 817              		.cfi_def_cfa_register 6
+ 818 0008 4883EC30 		subq	$48, %rsp
+ 819 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 820 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 821 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 822              		.loc 1 216 1
+ 823 0018 64488B04 		movq	%fs:40, %rax
+ 823      25280000 
+ 823      00
+ 824 0021 488945F8 		movq	%rax, -8(%rbp)
+ 825 0025 31C0     		xorl	%eax, %eax
+ 217:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	int rc = 0;
+ 826              		.loc 1 217 6
+ 827 0027 C745F400 		movl	$0, -12(%rbp)
+ 827      000000
+ 218:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 219:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	FUNC_ENTRY;
+ 220:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	/* the first two bytes are the length of the string */
+ 221:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	if (enddata - (*pptr) > 1) /* enough length to read the integer? */
+ 828              		.loc 1 221 17
+ 829 002e 488B45E0 		movq	-32(%rbp), %rax
+ 830 0032 488B00   		movq	(%rax), %rax
+ 831              		.loc 1 221 14
+ 832 0035 488B55D8 		movq	-40(%rbp), %rdx
+ 833 0039 4829C2   		subq	%rax, %rdx
+ 834 003c 4889D0   		movq	%rdx, %rax
+ 835              		.loc 1 221 5
+ 836 003f 4883F801 		cmpq	$1, %rax
+ 837 0043 7E5C     		jle	.L51
+ 222:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	{
+ 223:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		mqttstring->lenstring.len = readInt(pptr); /* increments pptr to point past length */
+ 838              		.loc 1 223 31
+ 839 0045 488B45E0 		movq	-32(%rbp), %rax
+ 840 0049 4889C7   		movq	%rax, %rdi
+ 841 004c E8000000 		call	readInt
+ 841      00
+ 842              		.loc 1 223 29
+ 843 0051 488B55E8 		movq	-24(%rbp), %rdx
+ 844 0055 894208   		movl	%eax, 8(%rdx)
+ 224:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		if (&(*pptr)[mqttstring->lenstring.len] <= enddata)
+ 845              		.loc 1 224 9
+ 846 0058 488B45E0 		movq	-32(%rbp), %rax
+GAS LISTING /tmp/ccgEjh0r.s 			page 21
+
+
+ 847 005c 488B10   		movq	(%rax), %rdx
+ 848              		.loc 1 224 37
+ 849 005f 488B45E8 		movq	-24(%rbp), %rax
+ 850 0063 8B4008   		movl	8(%rax), %eax
+ 851 0066 4898     		cltq
+ 852              		.loc 1 224 7
+ 853 0068 4801D0   		addq	%rdx, %rax
+ 854              		.loc 1 224 6
+ 855 006b 483945D8 		cmpq	%rax, -40(%rbp)
+ 856 006f 7230     		jb	.L51
+ 225:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		{
+ 226:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			mqttstring->lenstring.data = (char*)*pptr;
+ 857              		.loc 1 226 40
+ 858 0071 488B45E0 		movq	-32(%rbp), %rax
+ 859 0075 488B10   		movq	(%rax), %rdx
+ 860              		.loc 1 226 31
+ 861 0078 488B45E8 		movq	-24(%rbp), %rax
+ 862 007c 48895010 		movq	%rdx, 16(%rax)
+ 227:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			*pptr += mqttstring->lenstring.len;
+ 863              		.loc 1 227 10
+ 864 0080 488B45E0 		movq	-32(%rbp), %rax
+ 865 0084 488B10   		movq	(%rax), %rdx
+ 866              		.loc 1 227 34
+ 867 0087 488B45E8 		movq	-24(%rbp), %rax
+ 868 008b 8B4008   		movl	8(%rax), %eax
+ 869 008e 4898     		cltq
+ 870              		.loc 1 227 10
+ 871 0090 4801C2   		addq	%rax, %rdx
+ 872 0093 488B45E0 		movq	-32(%rbp), %rax
+ 873 0097 488910   		movq	%rdx, (%rax)
+ 228:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			rc = 1;
+ 874              		.loc 1 228 7
+ 875 009a C745F401 		movl	$1, -12(%rbp)
+ 875      000000
+ 876              	.L51:
+ 229:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		}
+ 230:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	}
+ 231:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	mqttstring->cstring = NULL;
+ 877              		.loc 1 231 22
+ 878 00a1 488B45E8 		movq	-24(%rbp), %rax
+ 879 00a5 48C70000 		movq	$0, (%rax)
+ 879      000000
+ 232:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	FUNC_EXIT_RC(rc);
+ 233:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	return rc;
+ 880              		.loc 1 233 9
+ 881 00ac 8B45F4   		movl	-12(%rbp), %eax
+ 234:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** }
+ 882              		.loc 1 234 1
+ 883 00af 488B4DF8 		movq	-8(%rbp), %rcx
+ 884 00b3 6448330C 		xorq	%fs:40, %rcx
+ 884      25280000 
+ 884      00
+ 885 00bc 7405     		je	.L53
+ 886 00be E8000000 		call	__stack_chk_fail@PLT
+ 886      00
+ 887              	.L53:
+ 888 00c3 C9       		leave
+GAS LISTING /tmp/ccgEjh0r.s 			page 22
+
+
+ 889              	.LCFI38:
+ 890              		.cfi_def_cfa 7, 8
+ 891 00c4 C3       		ret
+ 892              		.cfi_endproc
+ 893              	.LFE12:
+ 895              		.section	.text.MQTTstrlen,"ax",@progbits
+ 896              		.globl	MQTTstrlen
+ 898              	MQTTstrlen:
+ 899              	.LFB13:
+ 235:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 236:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 237:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** /**
+ 238:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * Return the length of the MQTTstring - C string if there is one, otherwise the length delimited s
+ 239:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param mqttstring the string to return the length of
+ 240:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @return the length of the string
+ 241:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  */
+ 242:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** int MQTTstrlen(MQTTString mqttstring)
+ 243:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** {
+ 900              		.loc 1 243 1
+ 901              		.cfi_startproc
+ 902 0000 F30F1EFA 		endbr64
+ 903 0004 55       		pushq	%rbp
+ 904              	.LCFI39:
+ 905              		.cfi_def_cfa_offset 16
+ 906              		.cfi_offset 6, -16
+ 907 0005 4889E5   		movq	%rsp, %rbp
+ 908              	.LCFI40:
+ 909              		.cfi_def_cfa_register 6
+ 910 0008 4883EC30 		subq	$48, %rsp
+ 911 000c 488B4510 		movq	16(%rbp), %rax
+ 912 0010 488B5518 		movq	24(%rbp), %rdx
+ 913 0014 488945D8 		movq	%rax, -40(%rbp)
+ 914 0018 488955E0 		movq	%rdx, -32(%rbp)
+ 915 001c 488B4520 		movq	32(%rbp), %rax
+ 916 0020 488945E8 		movq	%rax, -24(%rbp)
+ 917              		.loc 1 243 1
+ 918 0024 64488B04 		movq	%fs:40, %rax
+ 918      25280000 
+ 918      00
+ 919 002d 488945F8 		movq	%rax, -8(%rbp)
+ 920 0031 31C0     		xorl	%eax, %eax
+ 244:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	int rc = 0;
+ 921              		.loc 1 244 6
+ 922 0033 C745F400 		movl	$0, -12(%rbp)
+ 922      000000
+ 245:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 246:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	if (mqttstring.cstring)
+ 923              		.loc 1 246 16
+ 924 003a 488B45D8 		movq	-40(%rbp), %rax
+ 925              		.loc 1 246 5
+ 926 003e 4885C0   		testq	%rax, %rax
+ 927 0041 7411     		je	.L55
+ 247:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		rc = strlen(mqttstring.cstring);
+ 928              		.loc 1 247 25
+ 929 0043 488B45D8 		movq	-40(%rbp), %rax
+ 930              		.loc 1 247 8
+ 931 0047 4889C7   		movq	%rax, %rdi
+GAS LISTING /tmp/ccgEjh0r.s 			page 23
+
+
+ 932 004a E8000000 		call	strlen@PLT
+ 932      00
+ 933              		.loc 1 247 6
+ 934 004f 8945F4   		movl	%eax, -12(%rbp)
+ 935 0052 EB06     		jmp	.L56
+ 936              	.L55:
+ 248:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	else
+ 249:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		rc = mqttstring.lenstring.len;
+ 937              		.loc 1 249 6
+ 938 0054 8B45E0   		movl	-32(%rbp), %eax
+ 939 0057 8945F4   		movl	%eax, -12(%rbp)
+ 940              	.L56:
+ 250:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	return rc;
+ 941              		.loc 1 250 9
+ 942 005a 8B45F4   		movl	-12(%rbp), %eax
+ 251:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** }
+ 943              		.loc 1 251 1
+ 944 005d 488B55F8 		movq	-8(%rbp), %rdx
+ 945 0061 64483314 		xorq	%fs:40, %rdx
+ 945      25280000 
+ 945      00
+ 946 006a 7405     		je	.L58
+ 947 006c E8000000 		call	__stack_chk_fail@PLT
+ 947      00
+ 948              	.L58:
+ 949 0071 C9       		leave
+ 950              	.LCFI41:
+ 951              		.cfi_def_cfa 7, 8
+ 952 0072 C3       		ret
+ 953              		.cfi_endproc
+ 954              	.LFE13:
+ 956              		.section	.text.MQTTPacket_equals,"ax",@progbits
+ 957              		.globl	MQTTPacket_equals
+ 959              	MQTTPacket_equals:
+ 960              	.LFB14:
+ 252:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 253:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 254:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** /**
+ 255:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * Compares an MQTTString to a C string
+ 256:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param a the MQTTString to compare
+ 257:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param bptr the C string to compare
+ 258:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @return boolean - equal or not
+ 259:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  */
+ 260:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** int MQTTPacket_equals(MQTTString* a, char* bptr)
+ 261:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** {
+ 961              		.loc 1 261 1
+ 962              		.cfi_startproc
+ 963 0000 F30F1EFA 		endbr64
+ 964 0004 55       		pushq	%rbp
+ 965              	.LCFI42:
+ 966              		.cfi_def_cfa_offset 16
+ 967              		.cfi_offset 6, -16
+ 968 0005 4889E5   		movq	%rsp, %rbp
+ 969              	.LCFI43:
+ 970              		.cfi_def_cfa_register 6
+ 971 0008 4883EC30 		subq	$48, %rsp
+ 972 000c 48897DD8 		movq	%rdi, -40(%rbp)
+GAS LISTING /tmp/ccgEjh0r.s 			page 24
+
+
+ 973 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 974              		.loc 1 261 1
+ 975 0014 64488B04 		movq	%fs:40, %rax
+ 975      25280000 
+ 975      00
+ 976 001d 488945F8 		movq	%rax, -8(%rbp)
+ 977 0021 31C0     		xorl	%eax, %eax
+ 262:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	int alen = 0,
+ 978              		.loc 1 262 6
+ 979 0023 C745E800 		movl	$0, -24(%rbp)
+ 979      000000
+ 263:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		blen = 0;
+ 980              		.loc 1 263 3
+ 981 002a C745EC00 		movl	$0, -20(%rbp)
+ 981      000000
+ 264:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	char *aptr;
+ 265:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	
+ 266:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	if (a->cstring)
+ 982              		.loc 1 266 7
+ 983 0031 488B45D8 		movq	-40(%rbp), %rax
+ 984 0035 488B00   		movq	(%rax), %rax
+ 985              		.loc 1 266 5
+ 986 0038 4885C0   		testq	%rax, %rax
+ 987 003b 741F     		je	.L60
+ 267:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	{
+ 268:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		aptr = a->cstring;
+ 988              		.loc 1 268 8
+ 989 003d 488B45D8 		movq	-40(%rbp), %rax
+ 990 0041 488B00   		movq	(%rax), %rax
+ 991 0044 488945F0 		movq	%rax, -16(%rbp)
+ 269:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		alen = strlen(a->cstring);
+ 992              		.loc 1 269 18
+ 993 0048 488B45D8 		movq	-40(%rbp), %rax
+ 994 004c 488B00   		movq	(%rax), %rax
+ 995              		.loc 1 269 10
+ 996 004f 4889C7   		movq	%rax, %rdi
+ 997 0052 E8000000 		call	strlen@PLT
+ 997      00
+ 998              		.loc 1 269 8
+ 999 0057 8945E8   		movl	%eax, -24(%rbp)
+ 1000 005a EB16     		jmp	.L61
+ 1001              	.L60:
+ 270:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	}
+ 271:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	else
+ 272:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	{
+ 273:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		aptr = a->lenstring.data;
+ 1002              		.loc 1 273 8
+ 1003 005c 488B45D8 		movq	-40(%rbp), %rax
+ 1004 0060 488B4010 		movq	16(%rax), %rax
+ 1005 0064 488945F0 		movq	%rax, -16(%rbp)
+ 274:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		alen = a->lenstring.len;
+ 1006              		.loc 1 274 8
+ 1007 0068 488B45D8 		movq	-40(%rbp), %rax
+ 1008 006c 8B4008   		movl	8(%rax), %eax
+ 1009 006f 8945E8   		movl	%eax, -24(%rbp)
+ 1010              	.L61:
+ 275:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	}
+GAS LISTING /tmp/ccgEjh0r.s 			page 25
+
+
+ 276:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	blen = strlen(bptr);
+ 1011              		.loc 1 276 9
+ 1012 0072 488B45D0 		movq	-48(%rbp), %rax
+ 1013 0076 4889C7   		movq	%rax, %rdi
+ 1014 0079 E8000000 		call	strlen@PLT
+ 1014      00
+ 1015              		.loc 1 276 7
+ 1016 007e 8945EC   		movl	%eax, -20(%rbp)
+ 277:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	
+ 278:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	return (alen == blen) && (strncmp(aptr, bptr, alen) == 0);
+ 1017              		.loc 1 278 24
+ 1018 0081 8B45E8   		movl	-24(%rbp), %eax
+ 1019 0084 3B45EC   		cmpl	-20(%rbp), %eax
+ 1020 0087 7524     		jne	.L62
+ 1021              		.loc 1 278 28 discriminator 1
+ 1022 0089 8B45E8   		movl	-24(%rbp), %eax
+ 1023 008c 4863D0   		movslq	%eax, %rdx
+ 1024 008f 488B4DD0 		movq	-48(%rbp), %rcx
+ 1025 0093 488B45F0 		movq	-16(%rbp), %rax
+ 1026 0097 4889CE   		movq	%rcx, %rsi
+ 1027 009a 4889C7   		movq	%rax, %rdi
+ 1028 009d E8000000 		call	strncmp@PLT
+ 1028      00
+ 1029              		.loc 1 278 24 discriminator 1
+ 1030 00a2 85C0     		testl	%eax, %eax
+ 1031 00a4 7507     		jne	.L62
+ 1032              		.loc 1 278 24 is_stmt 0 discriminator 3
+ 1033 00a6 B8010000 		movl	$1, %eax
+ 1033      00
+ 1034 00ab EB05     		jmp	.L64
+ 1035              	.L62:
+ 1036              		.loc 1 278 24 discriminator 4
+ 1037 00ad B8000000 		movl	$0, %eax
+ 1037      00
+ 1038              	.L64:
+ 279:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** }
+ 1039              		.loc 1 279 1 is_stmt 1 discriminator 7
+ 1040 00b2 488B4DF8 		movq	-8(%rbp), %rcx
+ 1041 00b6 6448330C 		xorq	%fs:40, %rcx
+ 1041      25280000 
+ 1041      00
+ 1042 00bf 7405     		je	.L65
+ 1043              		.loc 1 279 1 is_stmt 0
+ 1044 00c1 E8000000 		call	__stack_chk_fail@PLT
+ 1044      00
+ 1045              	.L65:
+ 1046 00c6 C9       		leave
+ 1047              	.LCFI44:
+ 1048              		.cfi_def_cfa 7, 8
+ 1049 00c7 C3       		ret
+ 1050              		.cfi_endproc
+ 1051              	.LFE14:
+ 1053              		.section	.text.MQTTPacket_read,"ax",@progbits
+ 1054              		.globl	MQTTPacket_read
+ 1056              	MQTTPacket_read:
+ 1057              	.LFB15:
+ 280:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+GAS LISTING /tmp/ccgEjh0r.s 			page 26
+
+
+ 281:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 282:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** /**
+ 283:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * Helper function to read packet data from some source into a buffer
+ 284:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param buf the buffer into which the packet will be serialized
+ 285:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param buflen the length in bytes of the supplied buffer
+ 286:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param getfn pointer to a function which will read any number of bytes from the needed source
+ 287:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @return integer MQTT packet type, or -1 on error
+ 288:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @note  the whole message must fit into the caller's buffer
+ 289:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  */
+ 290:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** int MQTTPacket_read(unsigned char* buf, int buflen, int (*getfn)(unsigned char*, int))
+ 291:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** {
+ 1058              		.loc 1 291 1 is_stmt 1
+ 1059              		.cfi_startproc
+ 1060 0000 F30F1EFA 		endbr64
+ 1061 0004 55       		pushq	%rbp
+ 1062              	.LCFI45:
+ 1063              		.cfi_def_cfa_offset 16
+ 1064              		.cfi_offset 6, -16
+ 1065 0005 4889E5   		movq	%rsp, %rbp
+ 1066              	.LCFI46:
+ 1067              		.cfi_def_cfa_register 6
+ 1068 0008 4883EC40 		subq	$64, %rsp
+ 1069 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 1070 0010 8975D4   		movl	%esi, -44(%rbp)
+ 1071 0013 488955C8 		movq	%rdx, -56(%rbp)
+ 1072              		.loc 1 291 1
+ 1073 0017 64488B04 		movq	%fs:40, %rax
+ 1073      25280000 
+ 1073      00
+ 1074 0020 488945F8 		movq	%rax, -8(%rbp)
+ 1075 0024 31C0     		xorl	%eax, %eax
+ 292:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	int rc = -1;
+ 1076              		.loc 1 292 6
+ 1077 0026 C745F0FF 		movl	$-1, -16(%rbp)
+ 1077      FFFFFF
+ 293:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	MQTTHeader header = {0};
+ 1078              		.loc 1 293 13
+ 1079 002d C745E800 		movl	$0, -24(%rbp)
+ 1079      000000
+ 294:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	int len = 0;
+ 1080              		.loc 1 294 6
+ 1081 0034 C745F400 		movl	$0, -12(%rbp)
+ 1081      000000
+ 295:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	int rem_len = 0;
+ 1082              		.loc 1 295 6
+ 1083 003b C745EC00 		movl	$0, -20(%rbp)
+ 1083      000000
+ 296:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 297:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	/* 1. read the header byte.  This has the packet type in it */
+ 298:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	if ((*getfn)(buf, 1) != 1)
+ 1084              		.loc 1 298 7
+ 1085 0042 488B45D8 		movq	-40(%rbp), %rax
+ 1086 0046 488B55C8 		movq	-56(%rbp), %rdx
+ 1087 004a BE010000 		movl	$1, %esi
+ 1087      00
+ 1088 004f 4889C7   		movq	%rax, %rdi
+ 1089 0052 FFD2     		call	*%rdx
+GAS LISTING /tmp/ccgEjh0r.s 			page 27
+
+
+ 1090              	.LVL1:
+ 1091              		.loc 1 298 5
+ 1092 0054 83F801   		cmpl	$1, %eax
+ 1093 0057 0F858100 		jne	.L73
+ 1093      0000
+ 299:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		goto exit;
+ 300:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 301:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	len = 1;
+ 1094              		.loc 1 301 6
+ 1095 005d C745F401 		movl	$1, -12(%rbp)
+ 1095      000000
+ 302:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	/* 2. read the remaining length.  This is variable in itself */
+ 303:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	MQTTPacket_decode(getfn, &rem_len);
+ 1096              		.loc 1 303 2
+ 1097 0064 488D55EC 		leaq	-20(%rbp), %rdx
+ 1098 0068 488B45C8 		movq	-56(%rbp), %rax
+ 1099 006c 4889D6   		movq	%rdx, %rsi
+ 1100 006f 4889C7   		movq	%rax, %rdi
+ 1101 0072 E8000000 		call	MQTTPacket_decode
+ 1101      00
+ 304:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	len += MQTTPacket_encode(buf + 1, rem_len); /* put the original remaining length back into the buf
+ 1102              		.loc 1 304 9
+ 1103 0077 8B45EC   		movl	-20(%rbp), %eax
+ 1104 007a 488B55D8 		movq	-40(%rbp), %rdx
+ 1105 007e 4883C201 		addq	$1, %rdx
+ 1106 0082 89C6     		movl	%eax, %esi
+ 1107 0084 4889D7   		movq	%rdx, %rdi
+ 1108 0087 E8000000 		call	MQTTPacket_encode
+ 1108      00
+ 1109              		.loc 1 304 6
+ 1110 008c 0145F4   		addl	%eax, -12(%rbp)
+ 305:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 306:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	/* 3. read the rest of the buffer using a callback to supply the rest of the data */
+ 307:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	if((rem_len + len) > buflen)
+ 1111              		.loc 1 307 14
+ 1112 008f 8B55EC   		movl	-20(%rbp), %edx
+ 1113 0092 8B45F4   		movl	-12(%rbp), %eax
+ 1114 0095 01D0     		addl	%edx, %eax
+ 1115              		.loc 1 307 4
+ 1116 0097 3945D4   		cmpl	%eax, -44(%rbp)
+ 1117 009a 7C45     		jl	.L74
+ 308:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		goto exit;
+ 309:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	if (rem_len && ((*getfn)(buf + len, rem_len) != rem_len))
+ 1118              		.loc 1 309 6
+ 1119 009c 8B45EC   		movl	-20(%rbp), %eax
+ 1120              		.loc 1 309 5
+ 1121 009f 85C0     		testl	%eax, %eax
+ 1122 00a1 7422     		je	.L70
+ 1123              		.loc 1 309 19 discriminator 1
+ 1124 00a3 8B45EC   		movl	-20(%rbp), %eax
+ 1125 00a6 8B55F4   		movl	-12(%rbp), %edx
+ 1126 00a9 4863CA   		movslq	%edx, %rcx
+ 1127 00ac 488B55D8 		movq	-40(%rbp), %rdx
+ 1128 00b0 4801D1   		addq	%rdx, %rcx
+ 1129 00b3 488B55C8 		movq	-56(%rbp), %rdx
+ 1130 00b7 89C6     		movl	%eax, %esi
+ 1131 00b9 4889CF   		movq	%rcx, %rdi
+GAS LISTING /tmp/ccgEjh0r.s 			page 28
+
+
+ 1132 00bc FFD2     		call	*%rdx
+ 1133              	.LVL2:
+ 1134              		.loc 1 309 47 discriminator 1
+ 1135 00be 8B55EC   		movl	-20(%rbp), %edx
+ 1136              		.loc 1 309 14 discriminator 1
+ 1137 00c1 39D0     		cmpl	%edx, %eax
+ 1138 00c3 751F     		jne	.L75
+ 1139              	.L70:
+ 310:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		goto exit;
+ 311:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 312:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	header.byte = buf[0];
+ 1140              		.loc 1 312 19
+ 1141 00c5 488B45D8 		movq	-40(%rbp), %rax
+ 1142 00c9 0FB600   		movzbl	(%rax), %eax
+ 1143              		.loc 1 312 14
+ 1144 00cc 8845E8   		movb	%al, -24(%rbp)
+ 313:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	rc = header.bits.type;
+ 1145              		.loc 1 313 18
+ 1146 00cf 0FB645E8 		movzbl	-24(%rbp), %eax
+ 1147 00d3 C0E804   		shrb	$4, %al
+ 1148              		.loc 1 313 5
+ 1149 00d6 0FB6C0   		movzbl	%al, %eax
+ 1150 00d9 8945F0   		movl	%eax, -16(%rbp)
+ 1151 00dc EB07     		jmp	.L68
+ 1152              	.L73:
+ 299:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 1153              		.loc 1 299 3
+ 1154 00de 90       		nop
+ 1155 00df EB04     		jmp	.L68
+ 1156              	.L74:
+ 308:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	if (rem_len && ((*getfn)(buf + len, rem_len) != rem_len))
+ 1157              		.loc 1 308 3
+ 1158 00e1 90       		nop
+ 1159 00e2 EB01     		jmp	.L68
+ 1160              	.L75:
+ 310:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 1161              		.loc 1 310 3
+ 1162 00e4 90       		nop
+ 1163              	.L68:
+ 314:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** exit:
+ 315:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	return rc;
+ 1164              		.loc 1 315 9
+ 1165 00e5 8B45F0   		movl	-16(%rbp), %eax
+ 316:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** }
+ 1166              		.loc 1 316 1
+ 1167 00e8 488B4DF8 		movq	-8(%rbp), %rcx
+ 1168 00ec 6448330C 		xorq	%fs:40, %rcx
+ 1168      25280000 
+ 1168      00
+ 1169 00f5 7405     		je	.L72
+ 1170 00f7 E8000000 		call	__stack_chk_fail@PLT
+ 1170      00
+ 1171              	.L72:
+ 1172 00fc C9       		leave
+ 1173              	.LCFI47:
+ 1174              		.cfi_def_cfa 7, 8
+ 1175 00fd C3       		ret
+GAS LISTING /tmp/ccgEjh0r.s 			page 29
+
+
+ 1176              		.cfi_endproc
+ 1177              	.LFE15:
+ 1179              		.section	.text.MQTTPacket_decodenb,"ax",@progbits
+ 1181              	MQTTPacket_decodenb:
+ 1182              	.LFB16:
+ 317:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 318:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** /**
+ 319:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * Decodes the message length according to the MQTT algorithm, non-blocking
+ 320:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param trp pointer to a transport structure holding what is needed to solve getting data from it
+ 321:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param value the decoded length returned
+ 322:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @return integer the number of bytes read from the socket, 0 for call again, or -1 on error
+ 323:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  */
+ 324:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** static int MQTTPacket_decodenb(MQTTTransport *trp)
+ 325:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** {
+ 1183              		.loc 1 325 1
+ 1184              		.cfi_startproc
+ 1185 0000 F30F1EFA 		endbr64
+ 1186 0004 55       		pushq	%rbp
+ 1187              	.LCFI48:
+ 1188              		.cfi_def_cfa_offset 16
+ 1189              		.cfi_offset 6, -16
+ 1190 0005 4889E5   		movq	%rsp, %rbp
+ 1191              	.LCFI49:
+ 1192              		.cfi_def_cfa_register 6
+ 1193 0008 4883EC30 		subq	$48, %rsp
+ 1194 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 1195              		.loc 1 325 1
+ 1196 0010 64488B04 		movq	%fs:40, %rax
+ 1196      25280000 
+ 1196      00
+ 1197 0019 488945F8 		movq	%rax, -8(%rbp)
+ 1198 001d 31C0     		xorl	%eax, %eax
+ 326:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	unsigned char c;
+ 327:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	int rc = MQTTPACKET_READ_ERROR;
+ 1199              		.loc 1 327 6
+ 1200 001f C745F0FF 		movl	$-1, -16(%rbp)
+ 1200      FFFFFF
+ 328:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 329:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	FUNC_ENTRY;
+ 330:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	if(trp->len == 0){		/* initialize on first call */
+ 1201              		.loc 1 330 8
+ 1202 0026 488B45D8 		movq	-40(%rbp), %rax
+ 1203 002a 8B4018   		movl	24(%rax), %eax
+ 1204              		.loc 1 330 4
+ 1205 002d 85C0     		testl	%eax, %eax
+ 1206 002f 7516     		jne	.L82
+ 331:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		trp->multiplier = 1;
+ 1207              		.loc 1 331 19
+ 1208 0031 488B45D8 		movq	-40(%rbp), %rax
+ 1209 0035 C7401001 		movl	$1, 16(%rax)
+ 1209      000000
+ 332:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		trp->rem_len = 0;
+ 1210              		.loc 1 332 16
+ 1211 003c 488B45D8 		movq	-40(%rbp), %rax
+ 1212 0040 C7401400 		movl	$0, 20(%rax)
+ 1212      000000
+ 1213              	.L82:
+GAS LISTING /tmp/ccgEjh0r.s 			page 30
+
+
+ 1214              	.LBB5:
+ 333:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	}
+ 334:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	do {
+ 335:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		int frc;
+ 336:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		if (trp->len >= MAX_NO_OF_REMAINING_LENGTH_BYTES)
+ 1215              		.loc 1 336 10
+ 1216 0047 488B45D8 		movq	-40(%rbp), %rax
+ 1217 004b 8B4018   		movl	24(%rax), %eax
+ 1218              		.loc 1 336 6
+ 1219 004e 83F803   		cmpl	$3, %eax
+ 1220 0051 0F8F9B00 		jg	.L85
+ 1220      0000
+ 337:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			goto exit;
+ 338:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		if ((frc=(*trp->getfn)(trp->sck, &c, 1)) == -1)
+ 1221              		.loc 1 338 13
+ 1222 0057 488B45D8 		movq	-40(%rbp), %rax
+ 1223 005b 4C8B00   		movq	(%rax), %r8
+ 1224 005e 488B45D8 		movq	-40(%rbp), %rax
+ 1225 0062 488B4008 		movq	8(%rax), %rax
+ 1226 0066 488D4DEF 		leaq	-17(%rbp), %rcx
+ 1227 006a BA010000 		movl	$1, %edx
+ 1227      00
+ 1228 006f 4889CE   		movq	%rcx, %rsi
+ 1229 0072 4889C7   		movq	%rax, %rdi
+ 1230 0075 41FFD0   		call	*%r8
+ 1231              	.LVL3:
+ 1232 0078 8945F4   		movl	%eax, -12(%rbp)
+ 1233              		.loc 1 338 6
+ 1234 007b 837DF4FF 		cmpl	$-1, -12(%rbp)
+ 1235 007f 7474     		je	.L86
+ 339:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			goto exit;
+ 340:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		if (frc == 0){
+ 1236              		.loc 1 340 6
+ 1237 0081 837DF400 		cmpl	$0, -12(%rbp)
+ 1238 0085 7509     		jne	.L81
+ 341:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			rc = 0;
+ 1239              		.loc 1 341 7
+ 1240 0087 C745F000 		movl	$0, -16(%rbp)
+ 1240      000000
+ 342:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			goto exit;
+ 1241              		.loc 1 342 4
+ 1242 008e EB66     		jmp	.L79
+ 1243              	.L81:
+ 343:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		}
+ 344:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		++(trp->len);
+ 1244              		.loc 1 344 9
+ 1245 0090 488B45D8 		movq	-40(%rbp), %rax
+ 1246 0094 8B4018   		movl	24(%rax), %eax
+ 1247              		.loc 1 344 3
+ 1248 0097 8D5001   		leal	1(%rax), %edx
+ 1249 009a 488B45D8 		movq	-40(%rbp), %rax
+ 1250 009e 895018   		movl	%edx, 24(%rax)
+ 345:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		trp->rem_len += (c & 127) * trp->multiplier;
+ 1251              		.loc 1 345 16
+ 1252 00a1 488B45D8 		movq	-40(%rbp), %rax
+ 1253 00a5 8B5014   		movl	20(%rax), %edx
+ 1254              		.loc 1 345 22
+GAS LISTING /tmp/ccgEjh0r.s 			page 31
+
+
+ 1255 00a8 0FB645EF 		movzbl	-17(%rbp), %eax
+ 1256 00ac 0FB6C0   		movzbl	%al, %eax
+ 1257 00af 83E07F   		andl	$127, %eax
+ 1258 00b2 89C1     		movl	%eax, %ecx
+ 1259              		.loc 1 345 34
+ 1260 00b4 488B45D8 		movq	-40(%rbp), %rax
+ 1261 00b8 8B4010   		movl	16(%rax), %eax
+ 1262              		.loc 1 345 29
+ 1263 00bb 0FAFC1   		imull	%ecx, %eax
+ 1264              		.loc 1 345 16
+ 1265 00be 01C2     		addl	%eax, %edx
+ 1266 00c0 488B45D8 		movq	-40(%rbp), %rax
+ 1267 00c4 895014   		movl	%edx, 20(%rax)
+ 346:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		trp->multiplier *= 128;
+ 1268              		.loc 1 346 19
+ 1269 00c7 488B45D8 		movq	-40(%rbp), %rax
+ 1270 00cb 8B4010   		movl	16(%rax), %eax
+ 1271 00ce C1E007   		sall	$7, %eax
+ 1272 00d1 89C2     		movl	%eax, %edx
+ 1273 00d3 488B45D8 		movq	-40(%rbp), %rax
+ 1274 00d7 895010   		movl	%edx, 16(%rax)
+ 1275              	.LBE5:
+ 347:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	} while ((c & 128) != 0);
+ 1276              		.loc 1 347 21
+ 1277 00da 0FB645EF 		movzbl	-17(%rbp), %eax
+ 1278              		.loc 1 347 2
+ 1279 00de 84C0     		testb	%al, %al
+ 1280 00e0 0F8861FF 		js	.L82
+ 1280      FFFF
+ 348:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	rc = trp->len;
+ 1281              		.loc 1 348 5
+ 1282 00e6 488B45D8 		movq	-40(%rbp), %rax
+ 1283 00ea 8B4018   		movl	24(%rax), %eax
+ 1284 00ed 8945F0   		movl	%eax, -16(%rbp)
+ 1285 00f0 EB04     		jmp	.L79
+ 1286              	.L85:
+ 1287              	.LBB6:
+ 337:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		if ((frc=(*trp->getfn)(trp->sck, &c, 1)) == -1)
+ 1288              		.loc 1 337 4
+ 1289 00f2 90       		nop
+ 1290 00f3 EB01     		jmp	.L79
+ 1291              	.L86:
+ 339:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		if (frc == 0){
+ 1292              		.loc 1 339 4
+ 1293 00f5 90       		nop
+ 1294              	.L79:
+ 1295              	.LBE6:
+ 349:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** exit:
+ 350:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	FUNC_EXIT_RC(rc);
+ 351:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	return rc;
+ 1296              		.loc 1 351 9
+ 1297 00f6 8B45F0   		movl	-16(%rbp), %eax
+ 352:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** }
+ 1298              		.loc 1 352 1
+ 1299 00f9 488B75F8 		movq	-8(%rbp), %rsi
+ 1300 00fd 64483334 		xorq	%fs:40, %rsi
+ 1300      25280000 
+GAS LISTING /tmp/ccgEjh0r.s 			page 32
+
+
+ 1300      00
+ 1301 0106 7405     		je	.L84
+ 1302 0108 E8000000 		call	__stack_chk_fail@PLT
+ 1302      00
+ 1303              	.L84:
+ 1304 010d C9       		leave
+ 1305              	.LCFI50:
+ 1306              		.cfi_def_cfa 7, 8
+ 1307 010e C3       		ret
+ 1308              		.cfi_endproc
+ 1309              	.LFE16:
+ 1311              		.section	.text.MQTTPacket_readnb,"ax",@progbits
+ 1312              		.globl	MQTTPacket_readnb
+ 1314              	MQTTPacket_readnb:
+ 1315              	.LFB17:
+ 353:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 354:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** /**
+ 355:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * Helper function to read packet data from some source into a buffer, non-blocking
+ 356:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param buf the buffer into which the packet will be serialized
+ 357:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param buflen the length in bytes of the supplied buffer
+ 358:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @param trp pointer to a transport structure holding what is needed to solve getting data from it
+ 359:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @return integer MQTT packet type, 0 for call again, or -1 on error
+ 360:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  * @note  the whole message must fit into the caller's buffer
+ 361:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c ****  */
+ 362:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** int MQTTPacket_readnb(unsigned char* buf, int buflen, MQTTTransport *trp)
+ 363:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** {
+ 1316              		.loc 1 363 1
+ 1317              		.cfi_startproc
+ 1318 0000 F30F1EFA 		endbr64
+ 1319 0004 55       		pushq	%rbp
+ 1320              	.LCFI51:
+ 1321              		.cfi_def_cfa_offset 16
+ 1322              		.cfi_offset 6, -16
+ 1323 0005 4889E5   		movq	%rsp, %rbp
+ 1324              	.LCFI52:
+ 1325              		.cfi_def_cfa_register 6
+ 1326 0008 4883EC40 		subq	$64, %rsp
+ 1327 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 1328 0010 8975D4   		movl	%esi, -44(%rbp)
+ 1329 0013 488955C8 		movq	%rdx, -56(%rbp)
+ 1330              		.loc 1 363 1
+ 1331 0017 64488B04 		movq	%fs:40, %rax
+ 1331      25280000 
+ 1331      00
+ 1332 0020 488945F8 		movq	%rax, -8(%rbp)
+ 1333 0024 31C0     		xorl	%eax, %eax
+ 364:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	int rc = -1, frc;
+ 1334              		.loc 1 364 6
+ 1335 0026 C745F0FF 		movl	$-1, -16(%rbp)
+ 1335      FFFFFF
+ 365:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	MQTTHeader header = {0};
+ 1336              		.loc 1 365 13
+ 1337 002d C745EC00 		movl	$0, -20(%rbp)
+ 1337      000000
+ 366:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 367:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	switch(trp->state){
+ 1338              		.loc 1 367 12
+GAS LISTING /tmp/ccgEjh0r.s 			page 33
+
+
+ 1339 0034 488B45C8 		movq	-56(%rbp), %rax
+ 1340 0038 0FB6401C 		movzbl	28(%rax), %eax
+ 1341 003c 0FBEC0   		movsbl	%al, %eax
+ 1342              		.loc 1 367 2
+ 1343 003f 83F802   		cmpl	$2, %eax
+ 1344 0042 0F84EC00 		je	.L88
+ 1344      0000
+ 1345 0048 83F802   		cmpl	$2, %eax
+ 1346 004b 7F09     		jg	.L89
+ 1347 004d 85C0     		testl	%eax, %eax
+ 1348 004f 740D     		je	.L90
+ 1349 0051 83F801   		cmpl	$1, %eax
+ 1350 0054 7465     		je	.L91
+ 1351              	.L89:
+ 368:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	default:
+ 369:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		trp->state = 0;
+ 1352              		.loc 1 369 14
+ 1353 0056 488B45C8 		movq	-56(%rbp), %rax
+ 1354 005a C6401C00 		movb	$0, 28(%rax)
+ 1355              	.L90:
+ 370:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		/*FALLTHROUGH*/
+ 371:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	case 0:
+ 372:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		/* read the header byte.  This has the packet type in it */
+ 373:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		if ((frc=(*trp->getfn)(trp->sck, buf, 1)) == -1)
+ 1356              		.loc 1 373 13
+ 1357 005e 488B45C8 		movq	-56(%rbp), %rax
+ 1358 0062 4C8B00   		movq	(%rax), %r8
+ 1359 0065 488B45C8 		movq	-56(%rbp), %rax
+ 1360 0069 488B4008 		movq	8(%rax), %rax
+ 1361 006d 488B4DD8 		movq	-40(%rbp), %rcx
+ 1362 0071 BA010000 		movl	$1, %edx
+ 1362      00
+ 1363 0076 4889CE   		movq	%rcx, %rsi
+ 1364 0079 4889C7   		movq	%rax, %rdi
+ 1365 007c 41FFD0   		call	*%r8
+ 1366              	.LVL4:
+ 1367 007f 8945F4   		movl	%eax, -12(%rbp)
+ 1368              		.loc 1 373 6
+ 1369 0082 837DF4FF 		cmpl	$-1, -12(%rbp)
+ 1370 0086 0F844601 		je	.L104
+ 1370      0000
+ 374:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			goto exit;
+ 375:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		if (frc == 0)
+ 1371              		.loc 1 375 6
+ 1372 008c 837DF400 		cmpl	$0, -12(%rbp)
+ 1373 0090 750A     		jne	.L94
+ 376:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			return 0;
+ 1374              		.loc 1 376 11
+ 1375 0092 B8000000 		movl	$0, %eax
+ 1375      00
+ 1376 0097 E94B0100 		jmp	.L102
+ 1376      00
+ 1377              	.L94:
+ 377:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		trp->len = 0;
+ 1378              		.loc 1 377 12
+ 1379 009c 488B45C8 		movq	-56(%rbp), %rax
+ 1380 00a0 C7401800 		movl	$0, 24(%rax)
+GAS LISTING /tmp/ccgEjh0r.s 			page 34
+
+
+ 1380      000000
+ 378:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		++trp->state;
+ 1381              		.loc 1 378 8
+ 1382 00a7 488B45C8 		movq	-56(%rbp), %rax
+ 1383 00ab 0FB6401C 		movzbl	28(%rax), %eax
+ 1384              		.loc 1 378 3
+ 1385 00af 83C001   		addl	$1, %eax
+ 1386 00b2 89C2     		movl	%eax, %edx
+ 1387 00b4 488B45C8 		movq	-56(%rbp), %rax
+ 1388 00b8 88501C   		movb	%dl, 28(%rax)
+ 1389              	.L91:
+ 379:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		/*FALLTHROUGH*/
+ 380:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		/* read the remaining length.  This is variable in itself */
+ 381:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	case 1:
+ 382:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		if((frc=MQTTPacket_decodenb(trp)) == MQTTPACKET_READ_ERROR)
+ 1390              		.loc 1 382 11
+ 1391 00bb 488B45C8 		movq	-56(%rbp), %rax
+ 1392 00bf 4889C7   		movq	%rax, %rdi
+ 1393 00c2 E8000000 		call	MQTTPacket_decodenb
+ 1393      00
+ 1394 00c7 8945F4   		movl	%eax, -12(%rbp)
+ 1395              		.loc 1 382 5
+ 1396 00ca 837DF4FF 		cmpl	$-1, -12(%rbp)
+ 1397 00ce 0F840101 		je	.L105
+ 1397      0000
+ 383:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			goto exit;
+ 384:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		if(frc == 0)
+ 1398              		.loc 1 384 5
+ 1399 00d4 837DF400 		cmpl	$0, -12(%rbp)
+ 1400 00d8 750A     		jne	.L97
+ 385:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			return 0;
+ 1401              		.loc 1 385 11
+ 1402 00da B8000000 		movl	$0, %eax
+ 1402      00
+ 1403 00df E9030100 		jmp	.L102
+ 1403      00
+ 1404              	.L97:
+ 386:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		trp->len = 1 + MQTTPacket_encode(buf + 1, trp->rem_len); /* put the original remaining length bac
+ 1405              		.loc 1 386 18
+ 1406 00e4 488B45C8 		movq	-56(%rbp), %rax
+ 1407 00e8 8B4014   		movl	20(%rax), %eax
+ 1408 00eb 488B55D8 		movq	-40(%rbp), %rdx
+ 1409 00ef 4883C201 		addq	$1, %rdx
+ 1410 00f3 89C6     		movl	%eax, %esi
+ 1411 00f5 4889D7   		movq	%rdx, %rdi
+ 1412 00f8 E8000000 		call	MQTTPacket_encode
+ 1412      00
+ 1413              		.loc 1 386 16
+ 1414 00fd 8D5001   		leal	1(%rax), %edx
+ 1415              		.loc 1 386 12
+ 1416 0100 488B45C8 		movq	-56(%rbp), %rax
+ 1417 0104 895018   		movl	%edx, 24(%rax)
+ 387:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		if((trp->rem_len + trp->len) > buflen)
+ 1418              		.loc 1 387 10
+ 1419 0107 488B45C8 		movq	-56(%rbp), %rax
+ 1420 010b 8B5014   		movl	20(%rax), %edx
+ 1421              		.loc 1 387 25
+GAS LISTING /tmp/ccgEjh0r.s 			page 35
+
+
+ 1422 010e 488B45C8 		movq	-56(%rbp), %rax
+ 1423 0112 8B4018   		movl	24(%rax), %eax
+ 1424              		.loc 1 387 20
+ 1425 0115 01D0     		addl	%edx, %eax
+ 1426              		.loc 1 387 5
+ 1427 0117 3945D4   		cmpl	%eax, -44(%rbp)
+ 1428 011a 0F8CB800 		jl	.L106
+ 1428      0000
+ 388:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			goto exit;
+ 389:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		++trp->state;
+ 1429              		.loc 1 389 8
+ 1430 0120 488B45C8 		movq	-56(%rbp), %rax
+ 1431 0124 0FB6401C 		movzbl	28(%rax), %eax
+ 1432              		.loc 1 389 3
+ 1433 0128 83C001   		addl	$1, %eax
+ 1434 012b 89C2     		movl	%eax, %edx
+ 1435 012d 488B45C8 		movq	-56(%rbp), %rax
+ 1436 0131 88501C   		movb	%dl, 28(%rax)
+ 1437              	.L88:
+ 390:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		/*FALLTHROUGH*/
+ 391:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	case 2:
+ 392:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		if(trp->rem_len){
+ 1438              		.loc 1 392 9
+ 1439 0134 488B45C8 		movq	-56(%rbp), %rax
+ 1440 0138 8B4014   		movl	20(%rax), %eax
+ 1441              		.loc 1 392 5
+ 1442 013b 85C0     		testl	%eax, %eax
+ 1443 013d 747A     		je	.L99
+ 393:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			/* read the rest of the buffer using a callback to supply the rest of the data */
+ 394:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			if ((frc=(*trp->getfn)(trp->sck, buf + trp->len, trp->rem_len)) == -1)
+ 1444              		.loc 1 394 14
+ 1445 013f 488B45C8 		movq	-56(%rbp), %rax
+ 1446 0143 488B08   		movq	(%rax), %rcx
+ 1447 0146 488B45C8 		movq	-56(%rbp), %rax
+ 1448 014a 8B5014   		movl	20(%rax), %edx
+ 1449              		.loc 1 394 46
+ 1450 014d 488B45C8 		movq	-56(%rbp), %rax
+ 1451 0151 8B4018   		movl	24(%rax), %eax
+ 1452 0154 4863F0   		movslq	%eax, %rsi
+ 1453              		.loc 1 394 14
+ 1454 0157 488B45D8 		movq	-40(%rbp), %rax
+ 1455 015b 4801C6   		addq	%rax, %rsi
+ 1456 015e 488B45C8 		movq	-56(%rbp), %rax
+ 1457 0162 488B4008 		movq	8(%rax), %rax
+ 1458 0166 4889C7   		movq	%rax, %rdi
+ 1459 0169 FFD1     		call	*%rcx
+ 1460              	.LVL5:
+ 1461 016b 8945F4   		movl	%eax, -12(%rbp)
+ 1462              		.loc 1 394 7
+ 1463 016e 837DF4FF 		cmpl	$-1, -12(%rbp)
+ 1464 0172 7467     		je	.L107
+ 395:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 				goto exit;
+ 396:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			if (frc == 0)
+ 1465              		.loc 1 396 7
+ 1466 0174 837DF400 		cmpl	$0, -12(%rbp)
+ 1467 0178 7507     		jne	.L101
+ 397:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 				return 0;
+GAS LISTING /tmp/ccgEjh0r.s 			page 36
+
+
+ 1468              		.loc 1 397 12
+ 1469 017a B8000000 		movl	$0, %eax
+ 1469      00
+ 1470 017f EB66     		jmp	.L102
+ 1471              	.L101:
+ 398:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			trp->rem_len -= frc;
+ 1472              		.loc 1 398 17
+ 1473 0181 488B45C8 		movq	-56(%rbp), %rax
+ 1474 0185 8B4014   		movl	20(%rax), %eax
+ 1475 0188 2B45F4   		subl	-12(%rbp), %eax
+ 1476 018b 89C2     		movl	%eax, %edx
+ 1477 018d 488B45C8 		movq	-56(%rbp), %rax
+ 1478 0191 895014   		movl	%edx, 20(%rax)
+ 399:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			trp->len += frc;
+ 1479              		.loc 1 399 13
+ 1480 0194 488B45C8 		movq	-56(%rbp), %rax
+ 1481 0198 8B5018   		movl	24(%rax), %edx
+ 1482 019b 8B45F4   		movl	-12(%rbp), %eax
+ 1483 019e 01C2     		addl	%eax, %edx
+ 1484 01a0 488B45C8 		movq	-56(%rbp), %rax
+ 1485 01a4 895018   		movl	%edx, 24(%rax)
+ 400:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			if(trp->rem_len)
+ 1486              		.loc 1 400 10
+ 1487 01a7 488B45C8 		movq	-56(%rbp), %rax
+ 1488 01ab 8B4014   		movl	20(%rax), %eax
+ 1489              		.loc 1 400 6
+ 1490 01ae 85C0     		testl	%eax, %eax
+ 1491 01b0 7407     		je	.L99
+ 401:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 				return 0;
+ 1492              		.loc 1 401 12
+ 1493 01b2 B8000000 		movl	$0, %eax
+ 1493      00
+ 1494 01b7 EB2E     		jmp	.L102
+ 1495              	.L99:
+ 402:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		}
+ 403:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		header.byte = buf[0];
+ 1496              		.loc 1 403 20
+ 1497 01b9 488B45D8 		movq	-40(%rbp), %rax
+ 1498 01bd 0FB600   		movzbl	(%rax), %eax
+ 1499              		.loc 1 403 15
+ 1500 01c0 8845EC   		movb	%al, -20(%rbp)
+ 404:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		rc = header.bits.type;
+ 1501              		.loc 1 404 19
+ 1502 01c3 0FB645EC 		movzbl	-20(%rbp), %eax
+ 1503 01c7 C0E804   		shrb	$4, %al
+ 1504              		.loc 1 404 6
+ 1505 01ca 0FB6C0   		movzbl	%al, %eax
+ 1506 01cd 8945F0   		movl	%eax, -16(%rbp)
+ 405:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		break;
+ 1507              		.loc 1 405 3
+ 1508 01d0 EB0A     		jmp	.L93
+ 1509              	.L104:
+ 374:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		if (frc == 0)
+ 1510              		.loc 1 374 4
+ 1511 01d2 90       		nop
+ 1512 01d3 EB07     		jmp	.L93
+ 1513              	.L105:
+GAS LISTING /tmp/ccgEjh0r.s 			page 37
+
+
+ 383:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		if(frc == 0)
+ 1514              		.loc 1 383 4
+ 1515 01d5 90       		nop
+ 1516 01d6 EB04     		jmp	.L93
+ 1517              	.L106:
+ 388:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 		++trp->state;
+ 1518              		.loc 1 388 4
+ 1519 01d8 90       		nop
+ 1520 01d9 EB01     		jmp	.L93
+ 1521              	.L107:
+ 395:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 			if (frc == 0)
+ 1522              		.loc 1 395 5
+ 1523 01db 90       		nop
+ 1524              	.L93:
+ 406:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	}
+ 407:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 
+ 408:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** exit:
+ 409:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	trp->state = 0;
+ 1525              		.loc 1 409 13
+ 1526 01dc 488B45C8 		movq	-56(%rbp), %rax
+ 1527 01e0 C6401C00 		movb	$0, 28(%rax)
+ 410:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** 	return rc;
+ 1528              		.loc 1 410 9
+ 1529 01e4 8B45F0   		movl	-16(%rbp), %eax
+ 1530              	.L102:
+ 411:/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c **** }
+ 1531              		.loc 1 411 1 discriminator 1
+ 1532 01e7 488B4DF8 		movq	-8(%rbp), %rcx
+ 1533 01eb 6448330C 		xorq	%fs:40, %rcx
+ 1533      25280000 
+ 1533      00
+ 1534 01f4 7405     		je	.L103
+ 1535              		.loc 1 411 1 is_stmt 0
+ 1536 01f6 E8000000 		call	__stack_chk_fail@PLT
+ 1536      00
+ 1537              	.L103:
+ 1538 01fb C9       		leave
+ 1539              	.LCFI53:
+ 1540              		.cfi_def_cfa 7, 8
+ 1541 01fc C3       		ret
+ 1542              		.cfi_endproc
+ 1543              	.LFE17:
+ 1545              		.text
+ 1546              	.Letext0:
+ 1547              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 1548              		.file 3 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 1549              		.file 4 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 1550              		.file 5 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 1551              		.file 6 "/usr/include/stdio.h"
+ 1552              		.file 7 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 1553              		.file 8 "/home/xingli/share/LiteOS_Lab/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.h"
+ 4505              		.section	.note.gnu.property,"a"
+ 4506              		.align 8
+ 4507 0000 04000000 		.long	 1f - 0f
+ 4508 0004 10000000 		.long	 4f - 1f
+ 4509 0008 05000000 		.long	 5
+ 4510              	0:
+GAS LISTING /tmp/ccgEjh0r.s 			page 38
+
+
+ 4511 000c 474E5500 		.string	 "GNU"
+ 4512              	1:
+ 4513              		.align 8
+ 4514 0010 020000C0 		.long	 0xc0000002
+ 4515 0014 04000000 		.long	 3f - 2f
+ 4516              	2:
+ 4517 0018 03000000 		.long	 0x3
+ 4518              	3:
+ 4519 001c 00000000 		.align 8
+ 4520              	4:
+GAS LISTING /tmp/ccgEjh0r.s 			page 39
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 MQTTPacket.c
+     /tmp/ccgEjh0r.s:7      .text.MQTTPacket_encode:0000000000000000 MQTTPacket_encode
+     /tmp/ccgEjh0r.s:86     .text.MQTTPacket_decode:0000000000000000 MQTTPacket_decode
+     /tmp/ccgEjh0r.s:183    .text.MQTTPacket_len:0000000000000000 MQTTPacket_len
+     /tmp/ccgEjh0r.s:246    .bss.bufptr:0000000000000000 bufptr
+     /tmp/ccgEjh0r.s:251    .text.bufchar:0000000000000000 bufchar
+     /tmp/ccgEjh0r.s:309    .text.MQTTPacket_decodeBuf:0000000000000000 MQTTPacket_decodeBuf
+     /tmp/ccgEjh0r.s:352    .text.readInt:0000000000000000 readInt
+     /tmp/ccgEjh0r.s:414    .text.readChar:0000000000000000 readChar
+     /tmp/ccgEjh0r.s:464    .text.writeChar:0000000000000000 writeChar
+     /tmp/ccgEjh0r.s:514    .text.writeInt:0000000000000000 writeInt
+     /tmp/ccgEjh0r.s:589    .text.writeCString:0000000000000000 writeCString
+     /tmp/ccgEjh0r.s:654    .text.getLenStringLen:0000000000000000 getLenStringLen
+     /tmp/ccgEjh0r.s:708    .text.writeMQTTString:0000000000000000 writeMQTTString
+     /tmp/ccgEjh0r.s:806    .text.readMQTTLenString:0000000000000000 readMQTTLenString
+     /tmp/ccgEjh0r.s:898    .text.MQTTstrlen:0000000000000000 MQTTstrlen
+     /tmp/ccgEjh0r.s:959    .text.MQTTPacket_equals:0000000000000000 MQTTPacket_equals
+     /tmp/ccgEjh0r.s:1056   .text.MQTTPacket_read:0000000000000000 MQTTPacket_read
+     /tmp/ccgEjh0r.s:1181   .text.MQTTPacket_decodenb:0000000000000000 MQTTPacket_decodenb
+     /tmp/ccgEjh0r.s:1314   .text.MQTTPacket_readnb:0000000000000000 MQTTPacket_readnb
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+__stack_chk_fail
+strlen
+memcpy
+strncmp

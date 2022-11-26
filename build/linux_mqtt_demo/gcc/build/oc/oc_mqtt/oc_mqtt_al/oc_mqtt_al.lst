@@ -1,0 +1,1198 @@
+GAS LISTING /tmp/cc6PySna.s 			page 1
+
+
+   1              		.file	"oc_mqtt_al.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.bss.s_oc_mqtt,"aw",@nobits
+   5              		.align 8
+   8              	s_oc_mqtt:
+   9 0000 00000000 		.zero	8
+   9      00000000 
+  10              		.section	.text.oc_mqtt_register,"ax",@progbits
+  11              		.globl	oc_mqtt_register
+  13              	oc_mqtt_register:
+  14              	.LFB0:
+  15              		.file 1 "/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c"
+   1:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** /* ----------------------------------------------------------------------------
+   2:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * All rights reserved.
+   4:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * are permitted provided that the following conditions are met:
+   6:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * conditions and the following disclaimer.
+   8:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * provided with the distribution.
+  11:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * permission.
+  14:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * --------------------------------------------------------------------------- */
+  26:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** /* ----------------------------------------------------------------------------
+  27:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * Notice of Export Control Law
+  28:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * ===============================================
+  29:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * applicable export control laws and regulations.
+  33:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****  * --------------------------------------------------------------------------- */
+  34:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** #include "oc_mqtt_al.h"
+  35:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** #include "link_log.h"
+  36:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** #include "oc_mqtt_tiny.h"
+  37:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+  38:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** static oc_mqtt_t *s_oc_mqtt = NULL;
+  39:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+  40:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** // /////////////////////OC AGENT INSTALL INTERFACE///////////////////////////////
+  41:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** int oc_mqtt_register(const oc_mqtt_t *opt)
+  42:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** {
+  16              		.loc 1 42 1
+  17              		.cfi_startproc
+GAS LISTING /tmp/cc6PySna.s 			page 2
+
+
+  18 0000 F30F1EFA 		endbr64
+  19 0004 55       		pushq	%rbp
+  20              	.LCFI0:
+  21              		.cfi_def_cfa_offset 16
+  22              		.cfi_offset 6, -16
+  23 0005 4889E5   		movq	%rsp, %rbp
+  24              	.LCFI1:
+  25              		.cfi_def_cfa_register 6
+  26 0008 4883EC20 		subq	$32, %rsp
+  27 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  28              		.loc 1 42 1
+  29 0010 64488B04 		movq	%fs:40, %rax
+  29      25280000 
+  29      00
+  30 0019 488945F8 		movq	%rax, -8(%rbp)
+  31 001d 31C0     		xorl	%eax, %eax
+  43:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     int ret = (int)en_oc_mqtt_err_system;
+  32              		.loc 1 43 9
+  33 001f C745F410 		movl	$16, -12(%rbp)
+  33      000000
+  44:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+  45:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     if (NULL != opt) {
+  34              		.loc 1 45 8
+  35 0026 48837DE8 		cmpq	$0, -24(%rbp)
+  35      00
+  36 002b 7412     		je	.L2
+  46:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****         s_oc_mqtt = (oc_mqtt_t *)opt;
+  37              		.loc 1 46 19
+  38 002d 488B45E8 		movq	-24(%rbp), %rax
+  39 0031 48890500 		movq	%rax, s_oc_mqtt(%rip)
+  39      000000
+  47:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****         ret = (int)en_oc_mqtt_err_ok;
+  40              		.loc 1 47 13
+  41 0038 C745F400 		movl	$0, -12(%rbp)
+  41      000000
+  42              	.L2:
+  48:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     }
+  49:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+  50:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     return ret;
+  43              		.loc 1 50 12
+  44 003f 8B45F4   		movl	-12(%rbp), %eax
+  51:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** }
+  45              		.loc 1 51 1
+  46 0042 488B55F8 		movq	-8(%rbp), %rdx
+  47 0046 64483314 		xorq	%fs:40, %rdx
+  47      25280000 
+  47      00
+  48 004f 7405     		je	.L4
+  49 0051 E8000000 		call	__stack_chk_fail@PLT
+  49      00
+  50              	.L4:
+  51 0056 C9       		leave
+  52              	.LCFI2:
+  53              		.cfi_def_cfa 7, 8
+  54 0057 C3       		ret
+  55              		.cfi_endproc
+  56              	.LFE0:
+GAS LISTING /tmp/cc6PySna.s 			page 3
+
+
+  58              		.section	.text.oc_mqtt_config,"ax",@progbits
+  59              		.globl	oc_mqtt_config
+  61              	oc_mqtt_config:
+  62              	.LFB1:
+  52:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+  53:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** // ////////////////////////APPLICATION INTERFACE/////////////////////////////////
+  54:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** int oc_mqtt_config(oc_mqtt_config_t *param)
+  55:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** {
+  63              		.loc 1 55 1
+  64              		.cfi_startproc
+  65 0000 F30F1EFA 		endbr64
+  66 0004 55       		pushq	%rbp
+  67              	.LCFI3:
+  68              		.cfi_def_cfa_offset 16
+  69              		.cfi_offset 6, -16
+  70 0005 4889E5   		movq	%rsp, %rbp
+  71              	.LCFI4:
+  72              		.cfi_def_cfa_register 6
+  73 0008 4883EC20 		subq	$32, %rsp
+  74 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  75              		.loc 1 55 1
+  76 0010 64488B04 		movq	%fs:40, %rax
+  76      25280000 
+  76      00
+  77 0019 488945F8 		movq	%rax, -8(%rbp)
+  78 001d 31C0     		xorl	%eax, %eax
+  56:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     int ret = (int)en_oc_mqtt_err_system;
+  79              		.loc 1 56 9
+  80 001f C745F410 		movl	$16, -12(%rbp)
+  80      000000
+  57:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     if ((NULL != s_oc_mqtt) && (NULL != s_oc_mqtt->op.config)) {
+  81              		.loc 1 57 15
+  82 0026 488B0500 		movq	s_oc_mqtt(%rip), %rax
+  82      000000
+  83              		.loc 1 57 8
+  84 002d 4885C0   		testq	%rax, %rax
+  85 0030 7427     		je	.L6
+  86              		.loc 1 57 50 discriminator 1
+  87 0032 488B0500 		movq	s_oc_mqtt(%rip), %rax
+  87      000000
+  88              		.loc 1 57 54 discriminator 1
+  89 0039 488B4008 		movq	8(%rax), %rax
+  90              		.loc 1 57 29 discriminator 1
+  91 003d 4885C0   		testq	%rax, %rax
+  92 0040 7417     		je	.L6
+  58:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****         ret = s_oc_mqtt->op.config(param);
+  93              		.loc 1 58 24
+  94 0042 488B0500 		movq	s_oc_mqtt(%rip), %rax
+  94      000000
+  95              		.loc 1 58 28
+  96 0049 488B5008 		movq	8(%rax), %rdx
+  97              		.loc 1 58 15
+  98 004d 488B45E8 		movq	-24(%rbp), %rax
+  99 0051 4889C7   		movq	%rax, %rdi
+ 100 0054 FFD2     		call	*%rdx
+ 101              	.LVL0:
+ 102 0056 8945F4   		movl	%eax, -12(%rbp)
+GAS LISTING /tmp/cc6PySna.s 			page 4
+
+
+ 103              	.L6:
+  59:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     }
+  60:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+  61:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     return ret;
+ 104              		.loc 1 61 12
+ 105 0059 8B45F4   		movl	-12(%rbp), %eax
+  62:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** }
+ 106              		.loc 1 62 1
+ 107 005c 488B4DF8 		movq	-8(%rbp), %rcx
+ 108 0060 6448330C 		xorq	%fs:40, %rcx
+ 108      25280000 
+ 108      00
+ 109 0069 7405     		je	.L8
+ 110 006b E8000000 		call	__stack_chk_fail@PLT
+ 110      00
+ 111              	.L8:
+ 112 0070 C9       		leave
+ 113              	.LCFI5:
+ 114              		.cfi_def_cfa 7, 8
+ 115 0071 C3       		ret
+ 116              		.cfi_endproc
+ 117              	.LFE1:
+ 119              		.section	.text.oc_mqtt_deconfig,"ax",@progbits
+ 120              		.globl	oc_mqtt_deconfig
+ 122              	oc_mqtt_deconfig:
+ 123              	.LFB2:
+  63:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+  64:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** int oc_mqtt_deconfig(void)
+  65:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** {
+ 124              		.loc 1 65 1
+ 125              		.cfi_startproc
+ 126 0000 F30F1EFA 		endbr64
+ 127 0004 55       		pushq	%rbp
+ 128              	.LCFI6:
+ 129              		.cfi_def_cfa_offset 16
+ 130              		.cfi_offset 6, -16
+ 131 0005 4889E5   		movq	%rsp, %rbp
+ 132              	.LCFI7:
+ 133              		.cfi_def_cfa_register 6
+ 134 0008 4883EC10 		subq	$16, %rsp
+ 135              		.loc 1 65 1
+ 136 000c 64488B04 		movq	%fs:40, %rax
+ 136      25280000 
+ 136      00
+ 137 0015 488945F8 		movq	%rax, -8(%rbp)
+ 138 0019 31C0     		xorl	%eax, %eax
+  66:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     int ret = (int)en_oc_mqtt_err_system;
+ 139              		.loc 1 66 9
+ 140 001b C745F410 		movl	$16, -12(%rbp)
+ 140      000000
+  67:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+  68:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     if ((NULL != s_oc_mqtt) && (NULL != s_oc_mqtt->op.config)) {
+ 141              		.loc 1 68 15
+ 142 0022 488B0500 		movq	s_oc_mqtt(%rip), %rax
+ 142      000000
+ 143              		.loc 1 68 8
+ 144 0029 4885C0   		testq	%rax, %rax
+GAS LISTING /tmp/cc6PySna.s 			page 5
+
+
+ 145 002c 7420     		je	.L10
+ 146              		.loc 1 68 50 discriminator 1
+ 147 002e 488B0500 		movq	s_oc_mqtt(%rip), %rax
+ 147      000000
+ 148              		.loc 1 68 54 discriminator 1
+ 149 0035 488B4008 		movq	8(%rax), %rax
+ 150              		.loc 1 68 29 discriminator 1
+ 151 0039 4885C0   		testq	%rax, %rax
+ 152 003c 7410     		je	.L10
+  69:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****         ret = s_oc_mqtt->op.deconfig();
+ 153              		.loc 1 69 24
+ 154 003e 488B0500 		movq	s_oc_mqtt(%rip), %rax
+ 154      000000
+ 155              		.loc 1 69 28
+ 156 0045 488B4010 		movq	16(%rax), %rax
+ 157              		.loc 1 69 15
+ 158 0049 FFD0     		call	*%rax
+ 159              	.LVL1:
+ 160 004b 8945F4   		movl	%eax, -12(%rbp)
+ 161              	.L10:
+  70:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     }
+  71:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+  72:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     return ret;
+ 162              		.loc 1 72 12
+ 163 004e 8B45F4   		movl	-12(%rbp), %eax
+  73:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** }
+ 164              		.loc 1 73 1
+ 165 0051 488B55F8 		movq	-8(%rbp), %rdx
+ 166 0055 64483314 		xorq	%fs:40, %rdx
+ 166      25280000 
+ 166      00
+ 167 005e 7405     		je	.L12
+ 168 0060 E8000000 		call	__stack_chk_fail@PLT
+ 168      00
+ 169              	.L12:
+ 170 0065 C9       		leave
+ 171              	.LCFI8:
+ 172              		.cfi_def_cfa 7, 8
+ 173 0066 C3       		ret
+ 174              		.cfi_endproc
+ 175              	.LFE2:
+ 177              		.section	.text.oc_mqtt_publish,"ax",@progbits
+ 178              		.globl	oc_mqtt_publish
+ 180              	oc_mqtt_publish:
+ 181              	.LFB3:
+  74:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+  75:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** int oc_mqtt_publish(char *topic, uint8_t *msg, int msg_len, int qos)
+  76:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** {
+ 182              		.loc 1 76 1
+ 183              		.cfi_startproc
+ 184 0000 F30F1EFA 		endbr64
+ 185 0004 55       		pushq	%rbp
+ 186              	.LCFI9:
+ 187              		.cfi_def_cfa_offset 16
+ 188              		.cfi_offset 6, -16
+ 189 0005 4889E5   		movq	%rsp, %rbp
+ 190              	.LCFI10:
+GAS LISTING /tmp/cc6PySna.s 			page 6
+
+
+ 191              		.cfi_def_cfa_register 6
+ 192 0008 4883EC30 		subq	$48, %rsp
+ 193 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 194 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 195 0014 8955DC   		movl	%edx, -36(%rbp)
+ 196 0017 894DD8   		movl	%ecx, -40(%rbp)
+ 197              		.loc 1 76 1
+ 198 001a 64488B04 		movq	%fs:40, %rax
+ 198      25280000 
+ 198      00
+ 199 0023 488945F8 		movq	%rax, -8(%rbp)
+ 200 0027 31C0     		xorl	%eax, %eax
+  77:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     int ret = (int)en_oc_mqtt_err_system;
+ 201              		.loc 1 77 9
+ 202 0029 C745F410 		movl	$16, -12(%rbp)
+ 202      000000
+  78:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+  79:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     if ((NULL != s_oc_mqtt) && (NULL != s_oc_mqtt->op.publish)) {
+ 203              		.loc 1 79 15
+ 204 0030 488B0500 		movq	s_oc_mqtt(%rip), %rax
+ 204      000000
+ 205              		.loc 1 79 8
+ 206 0037 4885C0   		testq	%rax, %rax
+ 207 003a 7432     		je	.L14
+ 208              		.loc 1 79 50 discriminator 1
+ 209 003c 488B0500 		movq	s_oc_mqtt(%rip), %rax
+ 209      000000
+ 210              		.loc 1 79 54 discriminator 1
+ 211 0043 488B4018 		movq	24(%rax), %rax
+ 212              		.loc 1 79 29 discriminator 1
+ 213 0047 4885C0   		testq	%rax, %rax
+ 214 004a 7422     		je	.L14
+  80:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****         ret = s_oc_mqtt->op.publish(topic, msg, msg_len, qos);
+ 215              		.loc 1 80 24
+ 216 004c 488B0500 		movq	s_oc_mqtt(%rip), %rax
+ 216      000000
+ 217              		.loc 1 80 28
+ 218 0053 4C8B4018 		movq	24(%rax), %r8
+ 219              		.loc 1 80 15
+ 220 0057 8B4DD8   		movl	-40(%rbp), %ecx
+ 221 005a 8B55DC   		movl	-36(%rbp), %edx
+ 222 005d 488B75E0 		movq	-32(%rbp), %rsi
+ 223 0061 488B45E8 		movq	-24(%rbp), %rax
+ 224 0065 4889C7   		movq	%rax, %rdi
+ 225 0068 41FFD0   		call	*%r8
+ 226              	.LVL2:
+ 227 006b 8945F4   		movl	%eax, -12(%rbp)
+ 228              	.L14:
+  81:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     }
+  82:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+  83:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     return ret;
+ 229              		.loc 1 83 12
+ 230 006e 8B45F4   		movl	-12(%rbp), %eax
+  84:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** }
+ 231              		.loc 1 84 1
+ 232 0071 488B7DF8 		movq	-8(%rbp), %rdi
+ 233 0075 6448333C 		xorq	%fs:40, %rdi
+GAS LISTING /tmp/cc6PySna.s 			page 7
+
+
+ 233      25280000 
+ 233      00
+ 234 007e 7405     		je	.L16
+ 235 0080 E8000000 		call	__stack_chk_fail@PLT
+ 235      00
+ 236              	.L16:
+ 237 0085 C9       		leave
+ 238              	.LCFI11:
+ 239              		.cfi_def_cfa 7, 8
+ 240 0086 C3       		ret
+ 241              		.cfi_endproc
+ 242              	.LFE3:
+ 244              		.section	.text.oc_mqtt_report,"ax",@progbits
+ 245              		.globl	oc_mqtt_report
+ 247              	oc_mqtt_report:
+ 248              	.LFB4:
+  85:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+  86:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** int oc_mqtt_report(uint8_t *msg, int len, int qos)
+  87:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** {
+ 249              		.loc 1 87 1
+ 250              		.cfi_startproc
+ 251 0000 F30F1EFA 		endbr64
+ 252 0004 55       		pushq	%rbp
+ 253              	.LCFI12:
+ 254              		.cfi_def_cfa_offset 16
+ 255              		.cfi_offset 6, -16
+ 256 0005 4889E5   		movq	%rsp, %rbp
+ 257              	.LCFI13:
+ 258              		.cfi_def_cfa_register 6
+ 259 0008 4883EC20 		subq	$32, %rsp
+ 260 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 261 0010 8975E4   		movl	%esi, -28(%rbp)
+ 262 0013 8955E0   		movl	%edx, -32(%rbp)
+ 263              		.loc 1 87 1
+ 264 0016 64488B04 		movq	%fs:40, %rax
+ 264      25280000 
+ 264      00
+ 265 001f 488945F8 		movq	%rax, -8(%rbp)
+ 266 0023 31C0     		xorl	%eax, %eax
+  88:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     int ret = (int)en_oc_mqtt_err_system;
+ 267              		.loc 1 88 9
+ 268 0025 C745F410 		movl	$16, -12(%rbp)
+ 268      000000
+  89:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+  90:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     ret = oc_mqtt_publish(NULL, msg, len, qos);
+ 269              		.loc 1 90 11
+ 270 002c 8B4DE0   		movl	-32(%rbp), %ecx
+ 271 002f 8B55E4   		movl	-28(%rbp), %edx
+ 272 0032 488B45E8 		movq	-24(%rbp), %rax
+ 273 0036 4889C6   		movq	%rax, %rsi
+ 274 0039 BF000000 		movl	$0, %edi
+ 274      00
+ 275 003e E8000000 		call	oc_mqtt_publish
+ 275      00
+ 276 0043 8945F4   		movl	%eax, -12(%rbp)
+  91:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+  92:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     return ret;
+GAS LISTING /tmp/cc6PySna.s 			page 8
+
+
+ 277              		.loc 1 92 12
+ 278 0046 8B45F4   		movl	-12(%rbp), %eax
+  93:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** }
+ 279              		.loc 1 93 1
+ 280 0049 488B75F8 		movq	-8(%rbp), %rsi
+ 281 004d 64483334 		xorq	%fs:40, %rsi
+ 281      25280000 
+ 281      00
+ 282 0056 7405     		je	.L19
+ 283 0058 E8000000 		call	__stack_chk_fail@PLT
+ 283      00
+ 284              	.L19:
+ 285 005d C9       		leave
+ 286              	.LCFI14:
+ 287              		.cfi_def_cfa 7, 8
+ 288 005e C3       		ret
+ 289              		.cfi_endproc
+ 290              	.LFE4:
+ 292              		.section	.text.oc_mqtt_subscribe,"ax",@progbits
+ 293              		.globl	oc_mqtt_subscribe
+ 295              	oc_mqtt_subscribe:
+ 296              	.LFB5:
+  94:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+  95:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** int oc_mqtt_subscribe(char *topic, int qos)
+  96:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** {
+ 297              		.loc 1 96 1
+ 298              		.cfi_startproc
+ 299 0000 F30F1EFA 		endbr64
+ 300 0004 55       		pushq	%rbp
+ 301              	.LCFI15:
+ 302              		.cfi_def_cfa_offset 16
+ 303              		.cfi_offset 6, -16
+ 304 0005 4889E5   		movq	%rsp, %rbp
+ 305              	.LCFI16:
+ 306              		.cfi_def_cfa_register 6
+ 307 0008 4883EC20 		subq	$32, %rsp
+ 308 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 309 0010 8975E4   		movl	%esi, -28(%rbp)
+ 310              		.loc 1 96 1
+ 311 0013 64488B04 		movq	%fs:40, %rax
+ 311      25280000 
+ 311      00
+ 312 001c 488945F8 		movq	%rax, -8(%rbp)
+ 313 0020 31C0     		xorl	%eax, %eax
+  97:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     int ret = (int)en_oc_mqtt_err_system;
+ 314              		.loc 1 97 9
+ 315 0022 C745F410 		movl	$16, -12(%rbp)
+ 315      000000
+  98:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+  99:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     if ((NULL != s_oc_mqtt) && (NULL != s_oc_mqtt->op.subscribe)) {
+ 316              		.loc 1 99 15
+ 317 0029 488B0500 		movq	s_oc_mqtt(%rip), %rax
+ 317      000000
+ 318              		.loc 1 99 8
+ 319 0030 4885C0   		testq	%rax, %rax
+ 320 0033 742C     		je	.L21
+ 321              		.loc 1 99 50 discriminator 1
+GAS LISTING /tmp/cc6PySna.s 			page 9
+
+
+ 322 0035 488B0500 		movq	s_oc_mqtt(%rip), %rax
+ 322      000000
+ 323              		.loc 1 99 54 discriminator 1
+ 324 003c 488B4020 		movq	32(%rax), %rax
+ 325              		.loc 1 99 29 discriminator 1
+ 326 0040 4885C0   		testq	%rax, %rax
+ 327 0043 741C     		je	.L21
+ 100:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****         ret = s_oc_mqtt->op.subscribe(topic, qos);
+ 328              		.loc 1 100 24
+ 329 0045 488B0500 		movq	s_oc_mqtt(%rip), %rax
+ 329      000000
+ 330              		.loc 1 100 28
+ 331 004c 488B4820 		movq	32(%rax), %rcx
+ 332              		.loc 1 100 15
+ 333 0050 8B55E4   		movl	-28(%rbp), %edx
+ 334 0053 488B45E8 		movq	-24(%rbp), %rax
+ 335 0057 89D6     		movl	%edx, %esi
+ 336 0059 4889C7   		movq	%rax, %rdi
+ 337 005c FFD1     		call	*%rcx
+ 338              	.LVL3:
+ 339 005e 8945F4   		movl	%eax, -12(%rbp)
+ 340              	.L21:
+ 101:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     }
+ 102:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+ 103:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     return ret;
+ 341              		.loc 1 103 12
+ 342 0061 8B45F4   		movl	-12(%rbp), %eax
+ 104:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** }
+ 343              		.loc 1 104 1
+ 344 0064 488B55F8 		movq	-8(%rbp), %rdx
+ 345 0068 64483314 		xorq	%fs:40, %rdx
+ 345      25280000 
+ 345      00
+ 346 0071 7405     		je	.L23
+ 347 0073 E8000000 		call	__stack_chk_fail@PLT
+ 347      00
+ 348              	.L23:
+ 349 0078 C9       		leave
+ 350              	.LCFI17:
+ 351              		.cfi_def_cfa 7, 8
+ 352 0079 C3       		ret
+ 353              		.cfi_endproc
+ 354              	.LFE5:
+ 356              		.section	.text.oc_mqtt_unsubscribe,"ax",@progbits
+ 357              		.globl	oc_mqtt_unsubscribe
+ 359              	oc_mqtt_unsubscribe:
+ 360              	.LFB6:
+ 105:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+ 106:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** int oc_mqtt_unsubscribe(char *topic)
+ 107:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** {
+ 361              		.loc 1 107 1
+ 362              		.cfi_startproc
+ 363 0000 F30F1EFA 		endbr64
+ 364 0004 55       		pushq	%rbp
+ 365              	.LCFI18:
+ 366              		.cfi_def_cfa_offset 16
+ 367              		.cfi_offset 6, -16
+GAS LISTING /tmp/cc6PySna.s 			page 10
+
+
+ 368 0005 4889E5   		movq	%rsp, %rbp
+ 369              	.LCFI19:
+ 370              		.cfi_def_cfa_register 6
+ 371 0008 4883EC20 		subq	$32, %rsp
+ 372 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 373              		.loc 1 107 1
+ 374 0010 64488B04 		movq	%fs:40, %rax
+ 374      25280000 
+ 374      00
+ 375 0019 488945F8 		movq	%rax, -8(%rbp)
+ 376 001d 31C0     		xorl	%eax, %eax
+ 108:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     int ret = (int)en_oc_mqtt_err_system;
+ 377              		.loc 1 108 9
+ 378 001f C745F410 		movl	$16, -12(%rbp)
+ 378      000000
+ 109:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+ 110:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     if ((NULL != s_oc_mqtt) && (NULL != s_oc_mqtt->op.unsubscribe)) {
+ 379              		.loc 1 110 15
+ 380 0026 488B0500 		movq	s_oc_mqtt(%rip), %rax
+ 380      000000
+ 381              		.loc 1 110 8
+ 382 002d 4885C0   		testq	%rax, %rax
+ 383 0030 7427     		je	.L25
+ 384              		.loc 1 110 50 discriminator 1
+ 385 0032 488B0500 		movq	s_oc_mqtt(%rip), %rax
+ 385      000000
+ 386              		.loc 1 110 54 discriminator 1
+ 387 0039 488B4028 		movq	40(%rax), %rax
+ 388              		.loc 1 110 29 discriminator 1
+ 389 003d 4885C0   		testq	%rax, %rax
+ 390 0040 7417     		je	.L25
+ 111:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****         ret = s_oc_mqtt->op.unsubscribe(topic);
+ 391              		.loc 1 111 24
+ 392 0042 488B0500 		movq	s_oc_mqtt(%rip), %rax
+ 392      000000
+ 393              		.loc 1 111 28
+ 394 0049 488B5028 		movq	40(%rax), %rdx
+ 395              		.loc 1 111 15
+ 396 004d 488B45E8 		movq	-24(%rbp), %rax
+ 397 0051 4889C7   		movq	%rax, %rdi
+ 398 0054 FFD2     		call	*%rdx
+ 399              	.LVL4:
+ 400 0056 8945F4   		movl	%eax, -12(%rbp)
+ 401              	.L25:
+ 112:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     }
+ 113:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+ 114:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     return ret;
+ 402              		.loc 1 114 12
+ 403 0059 8B45F4   		movl	-12(%rbp), %eax
+ 115:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** }
+ 404              		.loc 1 115 1
+ 405 005c 488B4DF8 		movq	-8(%rbp), %rcx
+ 406 0060 6448330C 		xorq	%fs:40, %rcx
+ 406      25280000 
+ 406      00
+ 407 0069 7405     		je	.L27
+ 408 006b E8000000 		call	__stack_chk_fail@PLT
+GAS LISTING /tmp/cc6PySna.s 			page 11
+
+
+ 408      00
+ 409              	.L27:
+ 410 0070 C9       		leave
+ 411              	.LCFI20:
+ 412              		.cfi_def_cfa 7, 8
+ 413 0071 C3       		ret
+ 414              		.cfi_endproc
+ 415              	.LFE6:
+ 417              		.section	.rodata
+ 418              		.align 8
+ 419              	.LC0:
+ 420 0000 5B25735D 		.string	"[%s][%u][%s] %s:###please implement oc mqtt by yourself####\r\n"
+ 420      5B25755D 
+ 420      5B25735D 
+ 420      2025733A 
+ 420      23232370 
+ 421              		.section	.text.oc_mqtt_imp_init,"ax",@progbits
+ 422              		.weak	oc_mqtt_imp_init
+ 424              	oc_mqtt_imp_init:
+ 425              	.LFB7:
+ 116:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+ 117:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** // /////////////////////OC MQTT TINY AGENT INITIALIZE////////////////////////////
+ 118:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+ 119:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** __attribute__((weak)) int oc_mqtt_imp_init(void)
+ 120:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** {
+ 426              		.loc 1 120 1
+ 427              		.cfi_startproc
+ 428 0000 F30F1EFA 		endbr64
+ 429 0004 55       		pushq	%rbp
+ 430              	.LCFI21:
+ 431              		.cfi_def_cfa_offset 16
+ 432              		.cfi_offset 6, -16
+ 433 0005 4889E5   		movq	%rsp, %rbp
+ 434              	.LCFI22:
+ 435              		.cfi_def_cfa_register 6
+ 436 0008 53       		pushq	%rbx
+ 437 0009 4883EC18 		subq	$24, %rsp
+ 438              		.cfi_offset 3, -24
+ 439              		.loc 1 120 1
+ 440 000d 64488B04 		movq	%fs:40, %rax
+ 440      25280000 
+ 440      00
+ 441 0016 488945E8 		movq	%rax, -24(%rbp)
+ 442 001a 31C0     		xorl	%eax, %eax
+ 121:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     LINK_LOG_DEBUG("%s:###please implement oc mqtt by yourself####", __FUNCTION__);
+ 443              		.loc 1 121 5
+ 444 001c E8000000 		call	link_log_level_get@PLT
+ 444      00
+ 445 0021 83F801   		cmpl	$1, %eax
+ 446 0024 7744     		ja	.L29
+ 447              		.loc 1 121 5 is_stmt 0 discriminator 1
+ 448 0026 E8000000 		call	osal_sys_time@PLT
+ 448      00
+ 449 002b 89C3     		movl	%eax, %ebx
+ 450 002d BF010000 		movl	$1, %edi
+ 450      00
+ 451 0032 E8000000 		call	link_log_level_name@PLT
+GAS LISTING /tmp/cc6PySna.s 			page 12
+
+
+ 451      00
+ 452 0037 4C8D0500 		leaq	__FUNCTION__.2715(%rip), %r8
+ 452      000000
+ 453 003e 488D0D00 		leaq	__FUNCTION__.2715(%rip), %rcx
+ 453      000000
+ 454 0045 89DA     		movl	%ebx, %edx
+ 455 0047 4889C6   		movq	%rax, %rsi
+ 456 004a 488D3D00 		leaq	.LC0(%rip), %rdi
+ 456      000000
+ 457 0051 B8000000 		movl	$0, %eax
+ 457      00
+ 458 0056 E8000000 		call	printf@PLT
+ 458      00
+ 459 005b 488B0500 		movq	stdout(%rip), %rax
+ 459      000000
+ 460 0062 4889C7   		movq	%rax, %rdi
+ 461 0065 E8000000 		call	fflush@PLT
+ 461      00
+ 462              	.L29:
+ 122:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     return 0;
+ 463              		.loc 1 122 12 is_stmt 1
+ 464 006a B8000000 		movl	$0, %eax
+ 464      00
+ 123:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** }
+ 465              		.loc 1 123 1
+ 466 006f 488B55E8 		movq	-24(%rbp), %rdx
+ 467 0073 64483314 		xorq	%fs:40, %rdx
+ 467      25280000 
+ 467      00
+ 468 007c 7405     		je	.L31
+ 469 007e E8000000 		call	__stack_chk_fail@PLT
+ 469      00
+ 470              	.L31:
+ 471 0083 4883C418 		addq	$24, %rsp
+ 472 0087 5B       		popq	%rbx
+ 473 0088 5D       		popq	%rbp
+ 474              	.LCFI23:
+ 475              		.cfi_def_cfa 7, 8
+ 476 0089 C3       		ret
+ 477              		.cfi_endproc
+ 478              	.LFE7:
+ 480              		.section	.rodata
+ 481 003e 0000     		.align 8
+ 482              	.LC1:
+ 483 0040 5B25735D 		.string	"[%s][%u][%s] Please implement the oc mqtt v5 demo yourself\r\n"
+ 483      5B25755D 
+ 483      5B25735D 
+ 483      20506C65 
+ 483      61736520 
+ 484              		.section	.text.oc_mqtt_demo_main,"ax",@progbits
+ 485              		.weak	oc_mqtt_demo_main
+ 487              	oc_mqtt_demo_main:
+ 488              	.LFB8:
+ 124:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+ 125:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** __attribute__((weak)) int oc_mqtt_demo_main(void)
+ 126:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** {
+ 489              		.loc 1 126 1
+GAS LISTING /tmp/cc6PySna.s 			page 13
+
+
+ 490              		.cfi_startproc
+ 491 0000 F30F1EFA 		endbr64
+ 492 0004 55       		pushq	%rbp
+ 493              	.LCFI24:
+ 494              		.cfi_def_cfa_offset 16
+ 495              		.cfi_offset 6, -16
+ 496 0005 4889E5   		movq	%rsp, %rbp
+ 497              	.LCFI25:
+ 498              		.cfi_def_cfa_register 6
+ 499 0008 53       		pushq	%rbx
+ 500 0009 4883EC18 		subq	$24, %rsp
+ 501              		.cfi_offset 3, -24
+ 502              		.loc 1 126 1
+ 503 000d 64488B04 		movq	%fs:40, %rax
+ 503      25280000 
+ 503      00
+ 504 0016 488945E8 		movq	%rax, -24(%rbp)
+ 505 001a 31C0     		xorl	%eax, %eax
+ 127:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     LINK_LOG_WARN("Please implement the oc mqtt v5 demo yourself");
+ 506              		.loc 1 127 5
+ 507 001c E8000000 		call	osal_sys_time@PLT
+ 507      00
+ 508 0021 89C3     		movl	%eax, %ebx
+ 509 0023 BF030000 		movl	$3, %edi
+ 509      00
+ 510 0028 E8000000 		call	link_log_level_name@PLT
+ 510      00
+ 511 002d 488D0D00 		leaq	__FUNCTION__.2719(%rip), %rcx
+ 511      000000
+ 512 0034 89DA     		movl	%ebx, %edx
+ 513 0036 4889C6   		movq	%rax, %rsi
+ 514 0039 488D3D00 		leaq	.LC1(%rip), %rdi
+ 514      000000
+ 515 0040 B8000000 		movl	$0, %eax
+ 515      00
+ 516 0045 E8000000 		call	printf@PLT
+ 516      00
+ 517 004a 488B0500 		movq	stdout(%rip), %rax
+ 517      000000
+ 518 0051 4889C7   		movq	%rax, %rdi
+ 519 0054 E8000000 		call	fflush@PLT
+ 519      00
+ 128:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     return -1;
+ 520              		.loc 1 128 12
+ 521 0059 B8FFFFFF 		movl	$-1, %eax
+ 521      FF
+ 129:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** }
+ 522              		.loc 1 129 1
+ 523 005e 488B55E8 		movq	-24(%rbp), %rdx
+ 524 0062 64483314 		xorq	%fs:40, %rdx
+ 524      25280000 
+ 524      00
+ 525 006b 7405     		je	.L34
+ 526 006d E8000000 		call	__stack_chk_fail@PLT
+ 526      00
+ 527              	.L34:
+ 528 0072 4883C418 		addq	$24, %rsp
+GAS LISTING /tmp/cc6PySna.s 			page 14
+
+
+ 529 0076 5B       		popq	%rbx
+ 530 0077 5D       		popq	%rbp
+ 531              	.LCFI26:
+ 532              		.cfi_def_cfa 7, 8
+ 533 0078 C3       		ret
+ 534              		.cfi_endproc
+ 535              	.LFE8:
+ 537              		.section	.rodata
+ 538 007d 000000   		.align 8
+ 539              	.LC2:
+ 540 0080 5B25735D 		.string	"[%s][%u][%s] IOT_LINK:DO OC MQTT LOAD-IMPLEMENT RET:%d\r\n"
+ 540      5B25755D 
+ 540      5B25735D 
+ 540      20494F54 
+ 540      5F4C494E 
+ 541              		.section	.text.oc_mqtt_init,"ax",@progbits
+ 542              		.globl	oc_mqtt_init
+ 544              	oc_mqtt_init:
+ 545              	.LFB9:
+ 130:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+ 131:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** int oc_mqtt_init(void)
+ 132:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** {
+ 546              		.loc 1 132 1
+ 547              		.cfi_startproc
+ 548 0000 F30F1EFA 		endbr64
+ 549 0004 55       		pushq	%rbp
+ 550              	.LCFI27:
+ 551              		.cfi_def_cfa_offset 16
+ 552              		.cfi_offset 6, -16
+ 553 0005 4889E5   		movq	%rsp, %rbp
+ 554              	.LCFI28:
+ 555              		.cfi_def_cfa_register 6
+ 556 0008 53       		pushq	%rbx
+ 557 0009 4883EC18 		subq	$24, %rsp
+ 558              		.cfi_offset 3, -24
+ 559              		.loc 1 132 1
+ 560 000d 64488B04 		movq	%fs:40, %rax
+ 560      25280000 
+ 560      00
+ 561 0016 488945E8 		movq	%rax, -24(%rbp)
+ 562 001a 31C0     		xorl	%eax, %eax
+ 133:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     int ret;
+ 134:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+ 135:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     ret = oc_mqtt_imp_init();
+ 563              		.loc 1 135 11
+ 564 001c E8000000 		call	oc_mqtt_imp_init
+ 564      00
+ 565 0021 8945E4   		movl	%eax, -28(%rbp)
+ 136:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     LINK_LOG_DEBUG("IOT_LINK:DO OC MQTT LOAD-IMPLEMENT RET:%d", ret);
+ 566              		.loc 1 136 5
+ 567 0024 E8000000 		call	link_log_level_get@PLT
+ 567      00
+ 568 0029 83F801   		cmpl	$1, %eax
+ 569 002c 7743     		ja	.L36
+ 570              		.loc 1 136 5 is_stmt 0 discriminator 1
+ 571 002e E8000000 		call	osal_sys_time@PLT
+ 571      00
+GAS LISTING /tmp/cc6PySna.s 			page 15
+
+
+ 572 0033 89C3     		movl	%eax, %ebx
+ 573 0035 BF010000 		movl	$1, %edi
+ 573      00
+ 574 003a E8000000 		call	link_log_level_name@PLT
+ 574      00
+ 575 003f 8B55E4   		movl	-28(%rbp), %edx
+ 576 0042 4189D0   		movl	%edx, %r8d
+ 577 0045 488D0D00 		leaq	__FUNCTION__.2724(%rip), %rcx
+ 577      000000
+ 578 004c 89DA     		movl	%ebx, %edx
+ 579 004e 4889C6   		movq	%rax, %rsi
+ 580 0051 488D3D00 		leaq	.LC2(%rip), %rdi
+ 580      000000
+ 581 0058 B8000000 		movl	$0, %eax
+ 581      00
+ 582 005d E8000000 		call	printf@PLT
+ 582      00
+ 583 0062 488B0500 		movq	stdout(%rip), %rax
+ 583      000000
+ 584 0069 4889C7   		movq	%rax, %rdi
+ 585 006c E8000000 		call	fflush@PLT
+ 585      00
+ 586              	.L36:
+ 137:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** #ifdef CONFIG_OCMQTT_DEMOENABLE
+ 138:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     (void)oc_mqtt_demo_main();
+ 139:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** #endif
+ 140:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+ 141:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     return ret;
+ 587              		.loc 1 141 12 is_stmt 1
+ 588 0071 8B45E4   		movl	-28(%rbp), %eax
+ 142:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** }
+ 589              		.loc 1 142 1
+ 590 0074 488B4DE8 		movq	-24(%rbp), %rcx
+ 591 0078 6448330C 		xorq	%fs:40, %rcx
+ 591      25280000 
+ 591      00
+ 592 0081 7405     		je	.L38
+ 593 0083 E8000000 		call	__stack_chk_fail@PLT
+ 593      00
+ 594              	.L38:
+ 595 0088 4883C418 		addq	$24, %rsp
+ 596 008c 5B       		popq	%rbx
+ 597 008d 5D       		popq	%rbp
+ 598              	.LCFI29:
+ 599              		.cfi_def_cfa 7, 8
+ 600 008e C3       		ret
+ 601              		.cfi_endproc
+ 602              	.LFE9:
+ 604              		.section	.rodata
+ 605              	.LC3:
+ 606 00b9 73756363 		.string	"success"
+ 606      65737300 
+ 607              	.LC4:
+ 608 00c1 70617261 		.string	"parameter_err"
+ 608      6D657465 
+ 608      725F6572 
+ 608      7200
+GAS LISTING /tmp/cc6PySna.s 			page 16
+
+
+ 609              	.LC5:
+ 610 00cf 6E657477 		.string	"network_err"
+ 610      6F726B5F 
+ 610      65727200 
+ 611              	.LC6:
+ 612 00db 76657273 		.string	"version_err"
+ 612      696F6E5F 
+ 612      65727200 
+ 613              	.LC7:
+ 614 00e7 636C6965 		.string	"clientid_err"
+ 614      6E746964 
+ 614      5F657272 
+ 614      00
+ 615              	.LC8:
+ 616 00f4 73657276 		.string	"server_err"
+ 616      65725F65 
+ 616      727200
+ 617              	.LC9:
+ 618 00ff 75736572 		.string	"userpwd_err"
+ 618      7077645F 
+ 618      65727200 
+ 619              	.LC10:
+ 620 010b 636C6965 		.string	"clientauth_err"
+ 620      6E746175 
+ 620      74685F65 
+ 620      727200
+ 621              	.LC11:
+ 622 011a 73756273 		.string	"subscribe_err"
+ 622      63726962 
+ 622      655F6572 
+ 622      7200
+ 623              	.LC12:
+ 624 0128 7075626C 		.string	"publish_err"
+ 624      6973685F 
+ 624      65727200 
+ 625              	.LC13:
+ 626 0134 7265636F 		.string	"reconfigure_err"
+ 626      6E666967 
+ 626      7572655F 
+ 626      65727200 
+ 627              	.LC14:
+ 628 0144 6E6F6E63 		.string	"nonconfigure_err"
+ 628      6F6E6669 
+ 628      67757265 
+ 628      5F657272 
+ 628      00
+ 629              	.LC15:
+ 630 0155 6D717474 		.string	"mqttconnect_err"
+ 630      636F6E6E 
+ 630      6563745F 
+ 630      65727200 
+ 631              	.LC16:
+ 632 0165 62736164 		.string	"bsaddrtimeout_err"
+ 632      64727469 
+ 632      6D656F75 
+ 632      745F6572 
+ 632      7200
+GAS LISTING /tmp/cc6PySna.s 			page 17
+
+
+ 633              	.LC17:
+ 634 0177 7379736D 		.string	"sysmemory_err"
+ 634      656D6F72 
+ 634      795F6572 
+ 634      7200
+ 635              	.LC18:
+ 636 0185 73797374 		.string	"system_err"
+ 636      656D5F65 
+ 636      727200
+ 637              		.section	.data.rel.local.s_oc_mqtt_err_tab,"aw"
+ 638              		.align 32
+ 641              	s_oc_mqtt_err_tab:
+ 642 0000 00000000 		.quad	.LC3
+ 642      00000000 
+ 643 0008 00000000 		.quad	.LC4
+ 643      00000000 
+ 644 0010 00000000 		.quad	.LC5
+ 644      00000000 
+ 645 0018 00000000 		.quad	.LC6
+ 645      00000000 
+ 646 0020 00000000 		.quad	.LC7
+ 646      00000000 
+ 647 0028 00000000 		.quad	.LC8
+ 647      00000000 
+ 648 0030 00000000 		.quad	.LC9
+ 648      00000000 
+ 649 0038 00000000 		.quad	.LC10
+ 649      00000000 
+ 650 0040 00000000 		.quad	.LC11
+ 650      00000000 
+ 651 0048 00000000 		.quad	.LC12
+ 651      00000000 
+ 652 0050 00000000 		.quad	.LC13
+ 652      00000000 
+ 653 0058 00000000 		.quad	.LC14
+ 653      00000000 
+ 654 0060 00000000 		.quad	.LC15
+ 654      00000000 
+ 655 0068 00000000 		.quad	.LC16
+ 655      00000000 
+ 656 0070 00000000 		.quad	.LC17
+ 656      00000000 
+ 657 0078 00000000 		.quad	.LC18
+ 657      00000000 
+ 658              		.section	.rodata
+ 659              	.LC19:
+ 660 0190 554E4B4E 		.string	"UNKNOWN"
+ 660      4F574E00 
+ 661              		.section	.text.oc_mqtt_err,"ax",@progbits
+ 662              		.globl	oc_mqtt_err
+ 664              	oc_mqtt_err:
+ 665              	.LFB10:
+ 143:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+ 144:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** static const char *s_oc_mqtt_err_tab[] =
+ 145:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** {
+ 146:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     "success",
+ 147:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     "parameter_err",
+GAS LISTING /tmp/cc6PySna.s 			page 18
+
+
+ 148:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     "network_err",
+ 149:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     "version_err",
+ 150:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     "clientid_err",
+ 151:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     "server_err",
+ 152:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     "userpwd_err",
+ 153:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     "clientauth_err",
+ 154:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     "subscribe_err",
+ 155:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     "publish_err",
+ 156:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     "reconfigure_err",
+ 157:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     "nonconfigure_err",
+ 158:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     "mqttconnect_err",
+ 159:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     "bsaddrtimeout_err",
+ 160:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     "sysmemory_err",
+ 161:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     "system_err",
+ 162:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** };
+ 163:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+ 164:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** #define CN_ERR_TABITEM (sizeof(s_oc_mqtt_err_tab) / sizeof(const char *))
+ 165:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** 
+ 166:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** const char *oc_mqtt_err(en_oc_mqtt_err_code_t code)
+ 167:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** {
+ 666              		.loc 1 167 1
+ 667              		.cfi_startproc
+ 668 0000 F30F1EFA 		endbr64
+ 669 0004 55       		pushq	%rbp
+ 670              	.LCFI30:
+ 671              		.cfi_def_cfa_offset 16
+ 672              		.cfi_offset 6, -16
+ 673 0005 4889E5   		movq	%rsp, %rbp
+ 674              	.LCFI31:
+ 675              		.cfi_def_cfa_register 6
+ 676 0008 4883EC20 		subq	$32, %rsp
+ 677 000c 897DEC   		movl	%edi, -20(%rbp)
+ 678              		.loc 1 167 1
+ 679 000f 64488B04 		movq	%fs:40, %rax
+ 679      25280000 
+ 679      00
+ 680 0018 488945F8 		movq	%rax, -8(%rbp)
+ 681 001c 31C0     		xorl	%eax, %eax
+ 168:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     const char *ret = NULL;
+ 682              		.loc 1 168 17
+ 683 001e 48C745F0 		movq	$0, -16(%rbp)
+ 683      00000000 
+ 169:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     if ((unsigned int)code < CN_ERR_TABITEM) {
+ 684              		.loc 1 169 8
+ 685 0026 837DEC0F 		cmpl	$15, -20(%rbp)
+ 686 002a 771E     		ja	.L40
+ 170:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****         ret = s_oc_mqtt_err_tab[(int)code];
+ 687              		.loc 1 170 33
+ 688 002c 8B45EC   		movl	-20(%rbp), %eax
+ 689              		.loc 1 170 13
+ 690 002f 4898     		cltq
+ 691 0031 488D14C5 		leaq	0(,%rax,8), %rdx
+ 691      00000000 
+ 692 0039 488D0500 		leaq	s_oc_mqtt_err_tab(%rip), %rax
+ 692      000000
+ 693 0040 488B0402 		movq	(%rdx,%rax), %rax
+ 694 0044 488945F0 		movq	%rax, -16(%rbp)
+GAS LISTING /tmp/cc6PySna.s 			page 19
+
+
+ 695 0048 EB0B     		jmp	.L41
+ 696              	.L40:
+ 171:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     } else {
+ 172:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****         ret = "UNKNOWN";
+ 697              		.loc 1 172 13
+ 698 004a 488D0500 		leaq	.LC19(%rip), %rax
+ 698      000000
+ 699 0051 488945F0 		movq	%rax, -16(%rbp)
+ 700              	.L41:
+ 173:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     }
+ 174:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c ****     return ret;
+ 701              		.loc 1 174 12
+ 702 0055 488B45F0 		movq	-16(%rbp), %rax
+ 175:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.c **** }
+ 703              		.loc 1 175 1
+ 704 0059 488B4DF8 		movq	-8(%rbp), %rcx
+ 705 005d 6448330C 		xorq	%fs:40, %rcx
+ 705      25280000 
+ 705      00
+ 706 0066 7405     		je	.L43
+ 707 0068 E8000000 		call	__stack_chk_fail@PLT
+ 707      00
+ 708              	.L43:
+ 709 006d C9       		leave
+ 710              	.LCFI32:
+ 711              		.cfi_def_cfa 7, 8
+ 712 006e C3       		ret
+ 713              		.cfi_endproc
+ 714              	.LFE10:
+ 716              		.section	.rodata.__FUNCTION__.2715,"a"
+ 717              		.align 16
+ 720              	__FUNCTION__.2715:
+ 721 0000 6F635F6D 		.string	"oc_mqtt_imp_init"
+ 721      7174745F 
+ 721      696D705F 
+ 721      696E6974 
+ 721      00
+ 722              		.section	.rodata.__FUNCTION__.2719,"a"
+ 723              		.align 16
+ 726              	__FUNCTION__.2719:
+ 727 0000 6F635F6D 		.string	"oc_mqtt_demo_main"
+ 727      7174745F 
+ 727      64656D6F 
+ 727      5F6D6169 
+ 727      6E00
+ 728              		.section	.rodata.__FUNCTION__.2724,"a"
+ 729              		.align 8
+ 732              	__FUNCTION__.2724:
+ 733 0000 6F635F6D 		.string	"oc_mqtt_init"
+ 733      7174745F 
+ 733      696E6974 
+ 733      00
+ 734              		.text
+ 735              	.Letext0:
+ 736              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 737              		.file 3 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 738              		.file 4 "/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h"
+GAS LISTING /tmp/cc6PySna.s 			page 20
+
+
+ 739              		.file 5 "/home/xingli/share/LiteOS_Lab/inc/dtls_al.h"
+ 740              		.file 6 "/home/xingli/share/LiteOS_Lab/inc/mqtt_al.h"
+ 741              		.file 7 "/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.h"
+ 742              		.file 8 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 743              		.file 9 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 744              		.file 10 "/usr/include/stdio.h"
+ 745              		.file 11 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 746              		.file 12 "/home/xingli/share/LiteOS_Lab/inc/link_log.h"
+ 3551              		.section	.note.gnu.property,"a"
+ 3552              		.align 8
+ 3553 0000 04000000 		.long	 1f - 0f
+ 3554 0004 10000000 		.long	 4f - 1f
+ 3555 0008 05000000 		.long	 5
+ 3556              	0:
+ 3557 000c 474E5500 		.string	 "GNU"
+ 3558              	1:
+ 3559              		.align 8
+ 3560 0010 020000C0 		.long	 0xc0000002
+ 3561 0014 04000000 		.long	 3f - 2f
+ 3562              	2:
+ 3563 0018 03000000 		.long	 0x3
+ 3564              	3:
+ 3565 001c 00000000 		.align 8
+ 3566              	4:
+GAS LISTING /tmp/cc6PySna.s 			page 21
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 oc_mqtt_al.c
+     /tmp/cc6PySna.s:8      .bss.s_oc_mqtt:0000000000000000 s_oc_mqtt
+     /tmp/cc6PySna.s:13     .text.oc_mqtt_register:0000000000000000 oc_mqtt_register
+     /tmp/cc6PySna.s:61     .text.oc_mqtt_config:0000000000000000 oc_mqtt_config
+     /tmp/cc6PySna.s:122    .text.oc_mqtt_deconfig:0000000000000000 oc_mqtt_deconfig
+     /tmp/cc6PySna.s:180    .text.oc_mqtt_publish:0000000000000000 oc_mqtt_publish
+     /tmp/cc6PySna.s:247    .text.oc_mqtt_report:0000000000000000 oc_mqtt_report
+     /tmp/cc6PySna.s:295    .text.oc_mqtt_subscribe:0000000000000000 oc_mqtt_subscribe
+     /tmp/cc6PySna.s:359    .text.oc_mqtt_unsubscribe:0000000000000000 oc_mqtt_unsubscribe
+     /tmp/cc6PySna.s:424    .text.oc_mqtt_imp_init:0000000000000000 oc_mqtt_imp_init
+     /tmp/cc6PySna.s:720    .rodata.__FUNCTION__.2715:0000000000000000 __FUNCTION__.2715
+     /tmp/cc6PySna.s:487    .text.oc_mqtt_demo_main:0000000000000000 oc_mqtt_demo_main
+     /tmp/cc6PySna.s:726    .rodata.__FUNCTION__.2719:0000000000000000 __FUNCTION__.2719
+     /tmp/cc6PySna.s:544    .text.oc_mqtt_init:0000000000000000 oc_mqtt_init
+     /tmp/cc6PySna.s:732    .rodata.__FUNCTION__.2724:0000000000000000 __FUNCTION__.2724
+     /tmp/cc6PySna.s:641    .data.rel.local.s_oc_mqtt_err_tab:0000000000000000 s_oc_mqtt_err_tab
+     /tmp/cc6PySna.s:664    .text.oc_mqtt_err:0000000000000000 oc_mqtt_err
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+__stack_chk_fail
+link_log_level_get
+osal_sys_time
+link_log_level_name
+printf
+stdout
+fflush

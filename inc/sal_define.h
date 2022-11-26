@@ -3,17 +3,14 @@
  *
 */
 
-#ifndef __SAL_DEFINE_H
-#define __SAL_DEFINE_H
-
+#ifndef SAL_DEFINE_H
+#define SAL_DEFINE_H
 
 /**
  * @brief: these defines used for the application, if your tcpip stack need these
  *         defines,please include this file, and what's more, if your stack has defined
  *         these values, please check if they have the same value.
- *
  * */
-
 
 /* list out all the address families, they are implememt by the tcpip stack
  *  *  Thanks to BSD && linux, which must be compatible
@@ -63,10 +60,7 @@
 #define AF_VSOCK    40  /* vSockets         */
 #define AF_KCM      41  /* Kernel Connection Multiplexor*/
 #define AF_QIPCRTR  42  /* Qualcomm IPC Router          */
-#define AF_SMC      43  /* smc sockets: reserve number for
-                 * PF_SMC protocol family that
-                 * reuses AF_INET address family
-                 */
+#define AF_SMC      43  /* smc sockets: reserve number for PF_SMC protocol family that reuses AF_INET address family */
 #define AF_XDP      44  /* XDP sockets          */
 #define AF_MAX      45  /* For now.. */
 /* Protocol families, same as address families.maybe we don't need it, but some
@@ -121,10 +115,8 @@
 #define PF_MAX      AF_MAX
 
 /**
- *
  * @brief: defines the type for socket,the support depends on the implement of the stack
  * */
-
 #define SOCK_STREAM     1
 #define SOCK_DGRAM      2
 #define SOCK_RAW        3
@@ -160,12 +152,10 @@
 #define MSG_NO_SHARED_FRAGS   0x80000     /* sendpage() internal : page frags are not shared */
 #define MSG_ZEROCOPY          0x4000000   /* Use user data in kernel path */
 #define MSG_FASTOPEN          0x20000000  /* Send data in TCP SYN */
-#define MSG_CMSG_CLOEXEC      0x40000000  /* Set close_on_exec for file
-                       descriptor received through
-                       SCM_RIGHTS */
+#define MSG_CMSG_CLOEXEC      0x40000000  /* Set close_on_exec for file descriptor received through SCM_RIGHTS */
 
 /*
- *@brief:list all the setsockopt level,supported depends on the implement of
+ * @brief:list all the setsockopt level,supported depends on the implement of
  *       the tcpip stack
  *  Thanks to BSD && linux, which must be compatible
  *  */
@@ -209,7 +199,7 @@
 #define SOL_SOCKET      0xffff
 
 /**
- *@brief:list all the option name for option level SOL_SOCKET,supported depends on the implement of
+ * @brief:list all the option name for option level SOL_SOCKET,supported depends on the implement of
  *       the tcpip stack
  *  Thanks to BSD && linux, which must be compatible
  *  */
@@ -244,7 +234,7 @@
 #define SO_TIMESTAMPNS  0x4013
 
 /**
- *@brief:list all the option name used for option level IPPROTO_IP,supported depends on the implement of
+ * @brief:list all the option name used for option level IPPROTO_IP,supported depends on the implement of
  *       the tcpip stack
  *  Thanks to BSD && linux, which must be compatible
  *  */
@@ -270,7 +260,7 @@
 
 /**
  *
- *@brief: list all the option name used for option level IPPROTO_TCP,supported depends on the implement of
+ * @brief: list all the option name used for option level IPPROTO_TCP,supported depends on the implement of
  *       the tcpip stack
  *  Thanks to BSD && linux, which must be compatible
  *  */
@@ -317,12 +307,9 @@
 #define SHUT_RDWR 2
 #endif
 
-
 ///< defines the address
 #define INADDR_NONE  0
 #define INADDR_ANY   ((unsigned long)0x00000000UL)  /* 0.0.0.0 */
 
 
-
-
-#endif /* __SAL_DEFINE_H */
+#endif /* SAL_DEFINE_H */

@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,45 +22,37 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
-#ifndef _LWM2M_LIST_H
+#ifndef LWM2M_LIST_H
+#define LWM2M_LIST_H
 
-#define _LWM2M_LIST_H
 #define LWM2M_INLINE static inline
-
 
 #ifdef __cplusplus
 #if __cplusplus
 
 extern "C" {
-
 #endif /* __cplusplus */
 
 #endif /* __cplusplus */
-
 
 /**
-
- *@ingroup atiny_list
-
- *Structure of a node in a doubly linked list.
-
+ * @ingroup atiny_list
+ * Structure of a node in a doubly linked list.
  */
 
-typedef struct lwm2m_dl_list
-{
-    struct lwm2m_dl_list *prev;            /**< Current node's pointer to the previous node*/
-    struct lwm2m_dl_list *next;            /**< Current node's pointer to the next node*/
-
+typedef struct lwm2m_dl_list {
+    struct lwm2m_dl_list *prev; /* *< Current node's pointer to the previous node */
+    struct lwm2m_dl_list *next; /* *< Current node's pointer to the next node */
 } lwm2m_dl_list;
 
 
@@ -103,26 +95,21 @@ LWM2M_INLINE int lwm2m_list_empty(lwm2m_dl_list *node)
     return (node->next == node);
 }
 
-#define LWM2M_OFFSET_OF_FIELD(type, field)    ((UINT32)&(((type *)0)->field))
-#define LWM2M_OFF_SET_OF(type, member) ((long)&((type *)0)->member)   /*lint -e(413) */
-#define LWM2M_FIELD_TO_STRUCT(field_addr, type, member) \
-    ((type *)((char *)(field_addr) - LWM2M_OFF_SET_OF(type, member)))
+#define LWM2M_OFFSET_OF_FIELD(type, field) ((UINT32) & (((type *)0)->field))
+#define LWM2M_OFF_SET_OF(type, member) ((long)&((type *)0)->member) /*lint -e(413) */
+#define LWM2M_FIELD_TO_STRUCT(field_addr, type, member) ((type *)((char *)(field_addr)-LWM2M_OFF_SET_OF(type, member)))
 
-#define LWM2M_DL_LIST_ENTRY(item, type, member)\
-    ((type *)((char *)item - LWM2M_OFF_SET_OF(type, member)))\
+#define LWM2M_DL_LIST_ENTRY(item, type, member) ((type *)((char *)item - LWM2M_OFF_SET_OF(type, member)))
 
 
-#define LWM2M_DL_LIST_FOR_EACH_ENTRY(item, list, type, member)\
-    for (item = LWM2M_DL_LIST_ENTRY((list)->next, type, member);\
-        &item->member != (list);\
+#define LWM2M_DL_LIST_FOR_EACH_ENTRY(item, list, type, member)                            \
+    for (item = LWM2M_DL_LIST_ENTRY((list)->next, type, member); &item->member != (list); \
         item = LWM2M_DL_LIST_ENTRY(item->member.next, type, member))
 
-
-#define LWM2M_DL_LIST_FOR_EACH_ENTRY_SAFE(item, next, list, type, member)\
-    for (item = LWM2M_DL_LIST_ENTRY((list)->next, type, member),\
-        next = LWM2M_DL_LIST_ENTRY(item->member->next, type, member);\
-        &item->member != (list);\
-        item = next, item = LWM2M_DL_LIST_ENTRY(item->member.next, type, member))
+#define LWM2M_DL_LIST_FOR_EACH_ENTRY_SAFE(item, next, list, type, member) \
+    for (item = LWM2M_DL_LIST_ENTRY((list)->next, type, member),          \
+        next = LWM2M_DL_LIST_ENTRY(item->member->next, type, member);     \
+        &item->member != (list); item = next, item = LWM2M_DL_LIST_ENTRY(item->member.next, type, member))
 
 LWM2M_INLINE void LWM2M_ListDel(lwm2m_dl_list *pstPrevNode, lwm2m_dl_list *pstNextNode)
 {
@@ -136,24 +123,18 @@ LWM2M_INLINE void LWM2M_ListDelInit(lwm2m_dl_list *pstList)
     lwm2m_list_init(pstList);
 }
 
-#define LWM2M_DL_LIST_FOR_EACH(item, list)\
-    for ((item) = (list)->next;\
-        (item) != (list);\
-        (item) = (item)->next)
+#define LWM2M_DL_LIST_FOR_EACH(item, list) for ((item) = (list)->next; (item) != (list); (item) = (item)->next)
 
-#define LWM2M_DL_LIST_FOR_EACH_SAFE(item, next, list)\
-    for (item = (list)->next, next = item->next; item != (list);\
-        item = next, next = item->next)
+#define LWM2M_DL_LIST_FOR_EACH_SAFE(item, next, list) \
+    for (item = (list)->next, next = item->next; item != (list); item = next, next = item->next)
 
-#define LWM2M_DL_LIST_HEAD(list)\
-            lwm2m_dl_list list = { &(list), &(list) }
+#define LWM2M_DL_LIST_HEAD(list) lwm2m_dl_list list = { &(list), &(list) }
 
 #ifdef __cplusplus
 
 #if __cplusplus
-
 }
 
 #endif /* __cplusplus */
 #endif /* __cplusplus */
-#endif /* _ATINY_LIST_H */
+#endif /* LWM2M_LIST_H */

@@ -1,0 +1,36 @@
+GAS LISTING /tmp/ccHc6YHk.s 			page 1
+
+
+   1              		.file	"timing.c"
+   2              		.text
+   3              	.Ltext0:
+   4              	.Letext0:
+   5              		.file 1 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+   6              		.file 2 "/usr/include/x86_64-linux-gnu/bits/types.h"
+   7              		.file 3 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+   8              		.file 4 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+   9              		.file 5 "/usr/include/stdio.h"
+  10              		.file 6 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 757              		.section	.note.gnu.property,"a"
+ 758              		.align 8
+ 759 0000 04000000 		.long	 1f - 0f
+ 760 0004 10000000 		.long	 4f - 1f
+ 761 0008 05000000 		.long	 5
+ 762              	0:
+ 763 000c 474E5500 		.string	 "GNU"
+ 764              	1:
+ 765              		.align 8
+ 766 0010 020000C0 		.long	 0xc0000002
+ 767 0014 04000000 		.long	 3f - 2f
+ 768              	2:
+ 769 0018 03000000 		.long	 0x3
+ 770              	3:
+ 771 001c 00000000 		.align 8
+ 772              	4:
+GAS LISTING /tmp/ccHc6YHk.s 			page 2
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 timing.c
+
+NO UNDEFINED SYMBOLS

@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,18 +22,18 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of CHN and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
- 
-#ifndef _LITECOAP_H
-#define _LITECOAP_H
+ * --------------------------------------------------------------------------- */
+
+#ifndef LITECOAP_H
+#define LITECOAP_H
 
 #include "coap_core.h"
 
@@ -53,20 +53,15 @@ int litecoap_delete_resource(void *res);
 coap_context_t *litecoap_malloc_context(void *res);
 int litecoap_free_context(coap_context_t *ctx);
 
-coap_option_t * litecoap_add_option_to_list(coap_option_t *head,
-								unsigned short option, 
-								char *value, int len);
+coap_option_t *litecoap_add_option_to_list(coap_option_t *head, unsigned short option, char *value, int len);
 int litecoap_free_option(coap_option_t *head);
 int litecoap_add_option(coap_msg_t *msg, coap_option_t *opts);
 int litecoap_generate_token(unsigned char *token);
 int litecoap_add_token(coap_msg_t *msg, char *tok, int tklen);
 int litecoap_add_paylaod(coap_msg_t *msg, char *payload, int len);
-coap_msg_t *litecoap_new_msg(coap_context_t *ctx,
-								unsigned char msgtype, 
-								unsigned char code, 
-								coap_option_t *optlist, 
-								unsigned char *paylaod, 
-								int payloadlen);
+
+coap_msg_t *litecoap_new_msg(coap_context_t *ctx, unsigned char msgtype, unsigned char code, coap_option_t *optlist,
+    unsigned char *paylaod, int payloadlen);
 int litecoap_delete_msg(coap_msg_t *msg);
 
 int litecoap_register_handler(coap_context_t *ctx, msghandler func);
@@ -77,4 +72,5 @@ int litecoap_send(coap_context_t *ctx, coap_msg_t *msg);
 int litecoap_addto_sndqueue(coap_context_t *ctx, coap_msg_t *msg);
 int litecoap_remove_sndqueue(coap_context_t *ctx, coap_msg_t *msg);
 int litecoap_discard_resndqueue(coap_context_t *ctx);
+
 #endif

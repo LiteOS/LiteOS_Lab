@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2016-2019>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,15 +22,15 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
 #include "internals.h"
 
@@ -39,8 +39,7 @@
 
 void prv_resetBootstrapServer(lwm2m_server_t *serverP, void *userData)
 {
-    if (NULL != serverP->sessionH)
-    {
+    if (NULL != serverP->sessionH) {
         lwm2m_close_connection(serverP->sessionH, userData);
         serverP->sessionH = NULL;
     }
@@ -49,23 +48,19 @@ void prv_resetBootstrapServer(lwm2m_server_t *serverP, void *userData)
     serverP->block1Data = NULL;
 }
 
-
 void bootstrap_createBsConnection(lwm2m_context_t *contextP, lwm2m_server_t *targetP)
 {
     prv_resetBootstrapServer(targetP, contextP->userData);
     targetP->sessionH = lwm2m_connect_server(targetP->secObjInstID, contextP->userData);
 }
 
-
 bool bootstrap_isBsServerIpValid(const lwm2m_context_t *contextP)
 {
     lwm2m_server_t *targetP;
     targetP = contextP->bootstrapServerList;
 
-    while (NULL != targetP)
-    {
-        if (lwm2m_is_sec_obj_uri_valid(targetP->secObjInstID, contextP->userData))
-        {
+    while (NULL != targetP) {
+        if (lwm2m_is_sec_obj_uri_valid(targetP->secObjInstID, contextP->userData)) {
             return true;
         }
 

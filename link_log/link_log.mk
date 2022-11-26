@@ -13,8 +13,3 @@ ifeq ($(CONFIG_LINKLOG_ENABLE), y)
     C_DEFS += -D CONFIG_LINK_LOG_ENABLE=1
 
 endif
-
-
-
-
-

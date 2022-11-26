@@ -1,0 +1,559 @@
+GAS LISTING /tmp/ccbpOxHi.s 			page 1
+
+
+   1              		.file	"oc_mqtt_event.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.rodata
+   5              	.LC0:
+   6 0000 73775F76 		.string	"sw_version"
+   6      65727369 
+   6      6F6E00
+   7              	.LC1:
+   8 000b 66775F76 		.string	"fw_version"
+   8      65727369 
+   8      6F6E00
+   9              	.LC2:
+  10 0016 76657273 		.string	"version_report"
+  10      696F6E5F 
+  10      7265706F 
+  10      727400
+  11              	.LC3:
+  12 0025 246F7461 		.string	"$ota"
+  12      00
+  13              		.section	.text.oc_mqtt_report_version,"ax",@progbits
+  14              		.globl	oc_mqtt_report_version
+  16              	oc_mqtt_report_version:
+  17              	.LFB0:
+  18              		.file 1 "/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c"
+   1:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** /* ----------------------------------------------------------------------------
+   2:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * All rights reserved.
+   4:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * are permitted provided that the following conditions are met:
+   6:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * conditions and the following disclaimer.
+   8:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * provided with the distribution.
+  11:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * permission.
+  14:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * --------------------------------------------------------------------------- */
+  26:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** /* ----------------------------------------------------------------------------
+  27:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * Notice of Export Control Law
+  28:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * ===============================================
+  29:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * applicable export control laws and regulations.
+GAS LISTING /tmp/ccbpOxHi.s 			page 2
+
+
+  33:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * --------------------------------------------------------------------------- */
+  34:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** /**
+  35:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * DATE                      INSTRUCTION
+  36:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  * 2020-07-21 18:43   The first version
+  37:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  *
+  38:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****  */
+  39:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** 
+  40:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** #include "oc_mqtt_event.h"
+  41:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** #include "oc_mqtt_profile.h"
+  42:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** 
+  43:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** /**
+  44:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** Topic: $oc/devices/{device_id}/sys/events/up
+  45:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** 数据格式：
+  46:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** {
+  47:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     "object_device_id": "{object_device_id}",
+  48:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     "services": [{
+  49:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         "service_id": "$ota",
+  50:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         "event_type": "version_report",
+  51:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         "event_time": "20151212T121212Z",
+  52:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         "paras": {
+  53:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****             "sw_version": "v1.0",
+  54:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****             "fw_version": "v1.0"
+  55:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         }
+  56:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     }]
+  57:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** }
+  58:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** */
+  59:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** // /< you could use this function to report the software or firmware version
+  60:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** int oc_mqtt_report_version(const char *deviceID, const char *objectDeviceID, const char *softVersio
+  61:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     const char *firmVersion)
+  62:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** {
+  19              		.loc 1 62 1
+  20              		.cfi_startproc
+  21 0000 F30F1EFA 		endbr64
+  22 0004 55       		pushq	%rbp
+  23              	.LCFI0:
+  24              		.cfi_def_cfa_offset 16
+  25              		.cfi_offset 6, -16
+  26 0005 4889E5   		movq	%rsp, %rbp
+  27              	.LCFI1:
+  28              		.cfi_def_cfa_register 6
+  29 0008 4881ECC0 		subq	$192, %rsp
+  29      000000
+  30 000f 4889BD58 		movq	%rdi, -168(%rbp)
+  30      FFFFFF
+  31 0016 4889B550 		movq	%rsi, -176(%rbp)
+  31      FFFFFF
+  32 001d 48899548 		movq	%rdx, -184(%rbp)
+  32      FFFFFF
+  33 0024 48898D40 		movq	%rcx, -192(%rbp)
+  33      FFFFFF
+  34              		.loc 1 62 1
+  35 002b 64488B04 		movq	%fs:40, %rax
+  35      25280000 
+  35      00
+  36 0034 488945F8 		movq	%rax, -8(%rbp)
+  37 0038 31C0     		xorl	%eax, %eax
+  63:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     int ret = -1;
+GAS LISTING /tmp/ccbpOxHi.s 			page 3
+
+
+  38              		.loc 1 63 9
+  39 003a C78564FF 		movl	$-1, -156(%rbp)
+  39      FFFFFFFF 
+  39      FFFF
+  64:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     oc_mqtt_profile_kv_t firmVer;
+  65:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     oc_mqtt_profile_kv_t softVer;
+  66:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     oc_mqtt_profile_kv_t *cur = NULL;
+  40              		.loc 1 66 27
+  41 0044 48C78568 		movq	$0, -152(%rbp)
+  41      FFFFFF00 
+  41      000000
+  67:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     oc_mqtt_profile_event_t event;
+  68:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** 
+  69:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     if (softVersion != NULL) {
+  42              		.loc 1 69 8
+  43 004f 4883BD48 		cmpq	$0, -184(%rbp)
+  43      FFFFFF00 
+  44 0057 7433     		je	.L2
+  70:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         softVer.key = CN_OC_JSON_KEY_SWVERSION;
+  45              		.loc 1 70 21
+  46 0059 488D0500 		leaq	.LC0(%rip), %rax
+  46      000000
+  47 0060 488945A8 		movq	%rax, -88(%rbp)
+  71:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         softVer.type = EN_OC_MQTT_PROFILE_VALUE_STRING;
+  48              		.loc 1 71 22
+  49 0064 C745B004 		movl	$4, -80(%rbp)
+  49      000000
+  72:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         softVer.value = (void *)softVersion;
+  50              		.loc 1 72 23
+  51 006b 488B8548 		movq	-184(%rbp), %rax
+  51      FFFFFF
+  52 0072 488945B8 		movq	%rax, -72(%rbp)
+  73:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         softVer.nxt = cur;
+  53              		.loc 1 73 21
+  54 0076 488B8568 		movq	-152(%rbp), %rax
+  54      FFFFFF
+  55 007d 488945A0 		movq	%rax, -96(%rbp)
+  74:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         cur = &softVer;
+  56              		.loc 1 74 13
+  57 0081 488D45A0 		leaq	-96(%rbp), %rax
+  58 0085 48898568 		movq	%rax, -152(%rbp)
+  58      FFFFFF
+  59              	.L2:
+  75:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     }
+  76:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** 
+  77:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     if (firmVersion != NULL) {
+  60              		.loc 1 77 8
+  61 008c 4883BD40 		cmpq	$0, -192(%rbp)
+  61      FFFFFF00 
+  62 0094 743C     		je	.L3
+  78:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         firmVer.key = CN_OC_JSON_KEY_FWVERSION;
+  63              		.loc 1 78 21
+  64 0096 488D0500 		leaq	.LC1(%rip), %rax
+  64      000000
+  65 009d 48898578 		movq	%rax, -136(%rbp)
+  65      FFFFFF
+  79:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         firmVer.type = EN_OC_MQTT_PROFILE_VALUE_STRING;
+GAS LISTING /tmp/ccbpOxHi.s 			page 4
+
+
+  66              		.loc 1 79 22
+  67 00a4 C7458004 		movl	$4, -128(%rbp)
+  67      000000
+  80:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         firmVer.value = (void *)firmVersion;
+  68              		.loc 1 80 23
+  69 00ab 488B8540 		movq	-192(%rbp), %rax
+  69      FFFFFF
+  70 00b2 48894588 		movq	%rax, -120(%rbp)
+  81:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         firmVer.nxt = cur;
+  71              		.loc 1 81 21
+  72 00b6 488B8568 		movq	-152(%rbp), %rax
+  72      FFFFFF
+  73 00bd 48898570 		movq	%rax, -144(%rbp)
+  73      FFFFFF
+  82:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         cur = &firmVer;
+  74              		.loc 1 82 13
+  75 00c4 488D8570 		leaq	-144(%rbp), %rax
+  75      FFFFFF
+  76 00cb 48898568 		movq	%rax, -152(%rbp)
+  76      FFFFFF
+  77              	.L3:
+  83:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     }
+  84:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** 
+  85:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     event.object_device_id = (char *)objectDeviceID;
+  78              		.loc 1 85 28
+  79 00d2 488B8550 		movq	-176(%rbp), %rax
+  79      FFFFFF
+  80 00d9 488945D0 		movq	%rax, -48(%rbp)
+  86:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     event.event_time = NULL;
+  81              		.loc 1 86 22
+  82 00dd 48C745E8 		movq	$0, -24(%rbp)
+  82      00000000 
+  87:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     event.event_type = CN_OC_MQTT_EVENTTYPE_VERSIONREPORT;
+  83              		.loc 1 87 22
+  84 00e5 488D0500 		leaq	.LC2(%rip), %rax
+  84      000000
+  85 00ec 488945E0 		movq	%rax, -32(%rbp)
+  88:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     event.service_id = "$ota";
+  86              		.loc 1 88 22
+  87 00f0 488D0500 		leaq	.LC3(%rip), %rax
+  87      000000
+  88 00f7 488945D8 		movq	%rax, -40(%rbp)
+  89:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     event.paras = cur;
+  89              		.loc 1 89 17
+  90 00fb 488B8568 		movq	-152(%rbp), %rax
+  90      FFFFFF
+  91 0102 488945F0 		movq	%rax, -16(%rbp)
+  90:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** 
+  91:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     ret = oc_mqtt_profile_reportevent((char *)deviceID, &event);
+  92              		.loc 1 91 11
+  93 0106 488D55D0 		leaq	-48(%rbp), %rdx
+  94 010a 488B8558 		movq	-168(%rbp), %rax
+  94      FFFFFF
+  95 0111 4889D6   		movq	%rdx, %rsi
+  96 0114 4889C7   		movq	%rax, %rdi
+  97 0117 E8000000 		call	oc_mqtt_profile_reportevent@PLT
+  97      00
+GAS LISTING /tmp/ccbpOxHi.s 			page 5
+
+
+  98 011c 898564FF 		movl	%eax, -156(%rbp)
+  98      FFFF
+  92:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** 
+  93:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     return ret;
+  99              		.loc 1 93 12
+ 100 0122 8B8564FF 		movl	-156(%rbp), %eax
+ 100      FFFF
+  94:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** }
+ 101              		.loc 1 94 1
+ 102 0128 488B4DF8 		movq	-8(%rbp), %rcx
+ 103 012c 6448330C 		xorq	%fs:40, %rcx
+ 103      25280000 
+ 103      00
+ 104 0135 7405     		je	.L5
+ 105 0137 E8000000 		call	__stack_chk_fail@PLT
+ 105      00
+ 106              	.L5:
+ 107 013c C9       		leave
+ 108              	.LCFI2:
+ 109              		.cfi_def_cfa 7, 8
+ 110 013d C3       		ret
+ 111              		.cfi_endproc
+ 112              	.LFE0:
+ 114              		.section	.rodata
+ 115              	.LC4:
+ 116 002a 72657375 		.string	"result_code"
+ 116      6C745F63 
+ 116      6F646500 
+ 117              	.LC5:
+ 118 0036 76657273 		.string	"version"
+ 118      696F6E00 
+ 119              	.LC6:
+ 120 003e 70726F67 		.string	"progress"
+ 120      72657373 
+ 120      00
+ 121              	.LC7:
+ 122 0047 75706772 		.string	"upgrade_progress_report"
+ 122      6164655F 
+ 122      70726F67 
+ 122      72657373 
+ 122      5F726570 
+ 123              		.section	.text.oc_mqtt_report_upgradeprogress,"ax",@progbits
+ 124              		.globl	oc_mqtt_report_upgradeprogress
+ 126              	oc_mqtt_report_upgradeprogress:
+ 127              	.LFB1:
+  95:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** 
+  96:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** // /< data format
+  97:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** // Topic: $oc/devices/{device_id}/sys/events/up
+  98:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** // {
+  99:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** //    "object_device_id": "{object_device_id}",
+ 100:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** //    "services": [{
+ 101:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** //        "service_id": "$ota",
+ 102:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** //        "event_type": "upgrade_progress_report",
+ 103:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** //        "event_time": "20151212T121212Z",
+ 104:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** //        "paras": {
+ 105:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** //            "result_code": 0,
+ 106:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** //            "progress": 80,
+GAS LISTING /tmp/ccbpOxHi.s 			page 6
+
+
+ 107:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** //            "version": "V2.0",
+ 108:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** //            "description": "upgrade processing"
+ 109:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** //        }
+ 110:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** //    }]
+ 111:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** // }
+ 112:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** int oc_mqtt_report_upgradeprogress(const char *deviceID, const char *objectDeviceID, int upgraderet
+ 113:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     const char *version, int progress)
+ 114:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** {
+ 128              		.loc 1 114 1
+ 129              		.cfi_startproc
+ 130 0000 F30F1EFA 		endbr64
+ 131 0004 55       		pushq	%rbp
+ 132              	.LCFI3:
+ 133              		.cfi_def_cfa_offset 16
+ 134              		.cfi_offset 6, -16
+ 135 0005 4889E5   		movq	%rsp, %rbp
+ 136              	.LCFI4:
+ 137              		.cfi_def_cfa_register 6
+ 138 0008 4881ECF0 		subq	$240, %rsp
+ 138      000000
+ 139 000f 4889BD28 		movq	%rdi, -216(%rbp)
+ 139      FFFFFF
+ 140 0016 4889B520 		movq	%rsi, -224(%rbp)
+ 140      FFFFFF
+ 141 001d 89951CFF 		movl	%edx, -228(%rbp)
+ 141      FFFF
+ 142 0023 48898D10 		movq	%rcx, -240(%rbp)
+ 142      FFFFFF
+ 143 002a 44898518 		movl	%r8d, -232(%rbp)
+ 143      FFFFFF
+ 144              		.loc 1 114 1
+ 145 0031 64488B04 		movq	%fs:40, %rax
+ 145      25280000 
+ 145      00
+ 146 003a 488945F8 		movq	%rax, -8(%rbp)
+ 147 003e 31C0     		xorl	%eax, %eax
+ 115:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     int ret = -1;
+ 148              		.loc 1 115 9
+ 149 0040 C78534FF 		movl	$-1, -204(%rbp)
+ 149      FFFFFFFF 
+ 149      FFFF
+ 116:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     oc_mqtt_profile_kv_t prog;
+ 117:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     oc_mqtt_profile_kv_t resultCode;
+ 118:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     oc_mqtt_profile_kv_t ver;
+ 119:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     oc_mqtt_profile_kv_t *cur = NULL;
+ 150              		.loc 1 119 27
+ 151 004a 48C78538 		movq	$0, -200(%rbp)
+ 151      FFFFFF00 
+ 151      000000
+ 120:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     oc_mqtt_profile_event_t event;
+ 121:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** 
+ 122:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     resultCode.key = CN_OC_JSON_KEY_RESULTCODE;
+ 152              		.loc 1 122 20
+ 153 0055 488D0500 		leaq	.LC4(%rip), %rax
+ 153      000000
+ 154 005c 48898578 		movq	%rax, -136(%rbp)
+ 154      FFFFFF
+GAS LISTING /tmp/ccbpOxHi.s 			page 7
+
+
+ 123:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     resultCode.type = EN_OC_MQTT_PROFILE_VALUE_INT;
+ 155              		.loc 1 123 21
+ 156 0063 C7458000 		movl	$0, -128(%rbp)
+ 156      000000
+ 124:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     resultCode.value = &upgraderet;
+ 157              		.loc 1 124 22
+ 158 006a 488D851C 		leaq	-228(%rbp), %rax
+ 158      FFFFFF
+ 159 0071 48894588 		movq	%rax, -120(%rbp)
+ 125:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     resultCode.nxt = cur;
+ 160              		.loc 1 125 20
+ 161 0075 488B8538 		movq	-200(%rbp), %rax
+ 161      FFFFFF
+ 162 007c 48898570 		movq	%rax, -144(%rbp)
+ 162      FFFFFF
+ 126:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     cur = &resultCode;
+ 163              		.loc 1 126 9
+ 164 0083 488D8570 		leaq	-144(%rbp), %rax
+ 164      FFFFFF
+ 165 008a 48898538 		movq	%rax, -200(%rbp)
+ 165      FFFFFF
+ 127:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** 
+ 128:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     if (version != NULL) {
+ 166              		.loc 1 128 8
+ 167 0091 4883BD10 		cmpq	$0, -240(%rbp)
+ 167      FFFFFF00 
+ 168 0099 7433     		je	.L7
+ 129:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         ver.key = CN_OC_JSON_KEY_VERSION;
+ 169              		.loc 1 129 17
+ 170 009b 488D0500 		leaq	.LC5(%rip), %rax
+ 170      000000
+ 171 00a2 488945A8 		movq	%rax, -88(%rbp)
+ 130:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         ver.type = EN_OC_MQTT_PROFILE_VALUE_STRING;
+ 172              		.loc 1 130 18
+ 173 00a6 C745B004 		movl	$4, -80(%rbp)
+ 173      000000
+ 131:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         ver.value = (void *)version;
+ 174              		.loc 1 131 19
+ 175 00ad 488B8510 		movq	-240(%rbp), %rax
+ 175      FFFFFF
+ 176 00b4 488945B8 		movq	%rax, -72(%rbp)
+ 132:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         ver.nxt = cur;
+ 177              		.loc 1 132 17
+ 178 00b8 488B8538 		movq	-200(%rbp), %rax
+ 178      FFFFFF
+ 179 00bf 488945A0 		movq	%rax, -96(%rbp)
+ 133:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         cur = &ver;
+ 180              		.loc 1 133 13
+ 181 00c3 488D45A0 		leaq	-96(%rbp), %rax
+ 182 00c7 48898538 		movq	%rax, -200(%rbp)
+ 182      FFFFFF
+ 183              	.L7:
+ 134:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     }
+ 135:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** 
+ 136:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     if ((progress >= 0) && (progress <= 100)) {
+ 184              		.loc 1 136 19
+ 185 00ce 8B8518FF 		movl	-232(%rbp), %eax
+GAS LISTING /tmp/ccbpOxHi.s 			page 8
+
+
+ 185      FFFF
+ 186              		.loc 1 136 8
+ 187 00d4 85C0     		testl	%eax, %eax
+ 188 00d6 784D     		js	.L8
+ 189              		.loc 1 136 38 discriminator 1
+ 190 00d8 8B8518FF 		movl	-232(%rbp), %eax
+ 190      FFFF
+ 191              		.loc 1 136 25 discriminator 1
+ 192 00de 83F864   		cmpl	$100, %eax
+ 193 00e1 7F42     		jg	.L8
+ 137:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         prog.key = CN_OC_JSON_KEY_PROGRESS;
+ 194              		.loc 1 137 18
+ 195 00e3 488D0500 		leaq	.LC6(%rip), %rax
+ 195      000000
+ 196 00ea 48898548 		movq	%rax, -184(%rbp)
+ 196      FFFFFF
+ 138:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         prog.type = EN_OC_MQTT_PROFILE_VALUE_INT;
+ 197              		.loc 1 138 19
+ 198 00f1 C78550FF 		movl	$0, -176(%rbp)
+ 198      FFFF0000 
+ 198      0000
+ 139:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         prog.value = &progress;
+ 199              		.loc 1 139 20
+ 200 00fb 488D8518 		leaq	-232(%rbp), %rax
+ 200      FFFFFF
+ 201 0102 48898558 		movq	%rax, -168(%rbp)
+ 201      FFFFFF
+ 140:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         prog.nxt = cur;
+ 202              		.loc 1 140 18
+ 203 0109 488B8538 		movq	-200(%rbp), %rax
+ 203      FFFFFF
+ 204 0110 48898540 		movq	%rax, -192(%rbp)
+ 204      FFFFFF
+ 141:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****         cur = &prog;
+ 205              		.loc 1 141 13
+ 206 0117 488D8540 		leaq	-192(%rbp), %rax
+ 206      FFFFFF
+ 207 011e 48898538 		movq	%rax, -200(%rbp)
+ 207      FFFFFF
+ 208              	.L8:
+ 142:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     }
+ 143:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** 
+ 144:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     event.object_device_id = (char *)objectDeviceID;
+ 209              		.loc 1 144 28
+ 210 0125 488B8520 		movq	-224(%rbp), %rax
+ 210      FFFFFF
+ 211 012c 488945D0 		movq	%rax, -48(%rbp)
+ 145:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     event.event_time = NULL;
+ 212              		.loc 1 145 22
+ 213 0130 48C745E8 		movq	$0, -24(%rbp)
+ 213      00000000 
+ 146:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     event.event_type = CN_OC_MQTT_EVENTTYPE_UPGRADEPROGRESSREPORT;
+ 214              		.loc 1 146 22
+ 215 0138 488D0500 		leaq	.LC7(%rip), %rax
+ 215      000000
+ 216 013f 488945E0 		movq	%rax, -32(%rbp)
+ 147:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     event.service_id = "$ota";
+GAS LISTING /tmp/ccbpOxHi.s 			page 9
+
+
+ 217              		.loc 1 147 22
+ 218 0143 488D0500 		leaq	.LC3(%rip), %rax
+ 218      000000
+ 219 014a 488945D8 		movq	%rax, -40(%rbp)
+ 148:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     event.paras = cur;
+ 220              		.loc 1 148 17
+ 221 014e 488B8538 		movq	-200(%rbp), %rax
+ 221      FFFFFF
+ 222 0155 488945F0 		movq	%rax, -16(%rbp)
+ 149:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** 
+ 150:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     ret = oc_mqtt_profile_reportevent((char *)deviceID, &event);
+ 223              		.loc 1 150 11
+ 224 0159 488D55D0 		leaq	-48(%rbp), %rdx
+ 225 015d 488B8528 		movq	-216(%rbp), %rax
+ 225      FFFFFF
+ 226 0164 4889D6   		movq	%rdx, %rsi
+ 227 0167 4889C7   		movq	%rax, %rdi
+ 228 016a E8000000 		call	oc_mqtt_profile_reportevent@PLT
+ 228      00
+ 229 016f 898534FF 		movl	%eax, -204(%rbp)
+ 229      FFFF
+ 151:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** 
+ 152:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c ****     return ret;
+ 230              		.loc 1 152 12
+ 231 0175 8B8534FF 		movl	-204(%rbp), %eax
+ 231      FFFF
+ 153:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_event.c **** }
+ 232              		.loc 1 153 1
+ 233 017b 488B4DF8 		movq	-8(%rbp), %rcx
+ 234 017f 6448330C 		xorq	%fs:40, %rcx
+ 234      25280000 
+ 234      00
+ 235 0188 7405     		je	.L10
+ 236 018a E8000000 		call	__stack_chk_fail@PLT
+ 236      00
+ 237              	.L10:
+ 238 018f C9       		leave
+ 239              	.LCFI5:
+ 240              		.cfi_def_cfa 7, 8
+ 241 0190 C3       		ret
+ 242              		.cfi_endproc
+ 243              	.LFE1:
+ 245              		.text
+ 246              	.Letext0:
+ 247              		.file 2 "/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.h"
+ 1180              		.section	.note.gnu.property,"a"
+ 1181              		.align 8
+ 1182 0000 04000000 		.long	 1f - 0f
+ 1183 0004 10000000 		.long	 4f - 1f
+ 1184 0008 05000000 		.long	 5
+ 1185              	0:
+ 1186 000c 474E5500 		.string	 "GNU"
+ 1187              	1:
+ 1188              		.align 8
+ 1189 0010 020000C0 		.long	 0xc0000002
+ 1190 0014 04000000 		.long	 3f - 2f
+ 1191              	2:
+GAS LISTING /tmp/ccbpOxHi.s 			page 10
+
+
+ 1192 0018 03000000 		.long	 0x3
+ 1193              	3:
+ 1194 001c 00000000 		.align 8
+ 1195              	4:
+GAS LISTING /tmp/ccbpOxHi.s 			page 11
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 oc_mqtt_event.c
+     /tmp/ccbpOxHi.s:16     .text.oc_mqtt_report_version:0000000000000000 oc_mqtt_report_version
+     /tmp/ccbpOxHi.s:126    .text.oc_mqtt_report_upgradeprogress:0000000000000000 oc_mqtt_report_upgradeprogress
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+oc_mqtt_profile_reportevent
+__stack_chk_fail

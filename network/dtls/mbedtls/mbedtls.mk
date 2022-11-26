@@ -46,6 +46,3 @@ else ifeq ($(CONFIG_MBEDTLS_CERT_PSK), y)
 else
     C_DEFS += -D NO_DTLS
 endif
-
-
-

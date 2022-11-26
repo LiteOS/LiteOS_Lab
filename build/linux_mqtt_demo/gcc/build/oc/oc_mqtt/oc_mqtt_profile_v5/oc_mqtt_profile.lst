@@ -1,0 +1,2569 @@
+GAS LISTING /tmp/ccYXZdXF.s 			page 1
+
+
+   1              		.file	"oc_mqtt_profile.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.bss.s_oc_mqtt_profile_cb,"aw",@nobits
+   5              		.align 16
+   8              	s_oc_mqtt_profile_cb:
+   9 0000 00000000 		.zero	16
+   9      00000000 
+   9      00000000 
+   9      00000000 
+  10              		.section	.rodata
+  11              	.LC0:
+  12 0000 72657175 		.string	"request_id="
+  12      6573745F 
+  12      69643D00 
+  13              	.LC1:
+  14 000c 2F737973 		.string	"/sys/messages/down"
+  14      2F6D6573 
+  14      73616765 
+  14      732F646F 
+  14      776E00
+  15              	.LC2:
+  16 001f 2F737973 		.string	"/sys/properties/set/"
+  16      2F70726F 
+  16      70657274 
+  16      6965732F 
+  16      7365742F 
+  17              	.LC3:
+  18 0034 2F737973 		.string	"/sys/properties/get/"
+  18      2F70726F 
+  18      70657274 
+  18      6965732F 
+  18      6765742F 
+  19              	.LC4:
+  20 0049 2F737973 		.string	"/sys/commands/"
+  20      2F636F6D 
+  20      6D616E64 
+  20      732F00
+  21              	.LC5:
+  22 0058 2F737973 		.string	"/sys/events/down"
+  22      2F657665 
+  22      6E74732F 
+  22      646F776E 
+  22      00
+  23              	.LC6:
+  24 0069 2F737973 		.string	"/sys/bootstrap/down"
+  24      2F626F6F 
+  24      74737472 
+  24      61702F64 
+  24      6F776E00 
+  25              	.LC7:
+  26 007d 2F737973 		.string	"/sys/shadow/get"
+  26      2F736861 
+  26      646F772F 
+  26      67657400 
+  27              		.section	.text.app_msg_deal,"ax",@progbits
+  29              	app_msg_deal:
+GAS LISTING /tmp/ccYXZdXF.s 			page 2
+
+
+  30              	.LFB0:
+  31              		.file 1 "/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c"
+   1:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** /* ----------------------------------------------------------------------------
+   2:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * All rights reserved.
+   4:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * are permitted provided that the following conditions are met:
+   6:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * conditions and the following disclaimer.
+   8:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * provided with the distribution.
+  11:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * permission.
+  14:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * --------------------------------------------------------------------------- */
+  26:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** /* ----------------------------------------------------------------------------
+  27:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * Notice of Export Control Law
+  28:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * ===============================================
+  29:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * applicable export control laws and regulations.
+  33:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * --------------------------------------------------------------------------- */
+  34:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+  35:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #include <string.h>
+  36:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #include <stdio.h>
+  37:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+  38:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #include "oc_mqtt_profile.h"
+  39:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #include "link_misc.h"
+  40:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #include "osal.h"
+  41:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #include "oc_mqtt_al.h"
+  42:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #include "oc_mqtt_profile_package.h"
+  43:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+  44:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** typedef struct {
+  45:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     char *device_id;
+  46:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     fn_oc_mqtt_profile_rcvdeal rcvfunc;
+  47:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** } oc_mqtt_profile_cb_t;
+  48:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+  49:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** static oc_mqtt_profile_cb_t s_oc_mqtt_profile_cb;
+  50:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+  51:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** /**
+  52:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * @brief: we use this function to deal all the received message and passed to the user
+  53:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  * @return: 0 success while -1 failed, not used yet
+  54:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****  *  */
+  55:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+GAS LISTING /tmp/ccYXZdXF.s 			page 3
+
+
+  56:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** // use this function to push all the message to the buffer
+  57:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+  58:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #define CN_OC_MQTT_PROFILE_REQUESTID_INDEX      "request_id="
+  59:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #define CN_OC_MQTT_PROFILE_MSGDOWN_INDEX        "/sys/messages/down"
+  60:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #define CN_OC_MQTT_PROFILE_SETPROPERTY_INDEX    "/sys/properties/set/"
+  61:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #define CN_OC_MQTT_PROFILE_GETPROPERTY_INDEX    "/sys/properties/get/"
+  62:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #define CN_OC_MQTT_PROFILE_CMD_INDEX            "/sys/commands/"
+  63:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #define CN_OC_MQTT_PROFILE_EVENTDOWN_INDEX      "/sys/events/down"
+  64:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #define CN_OC_MQTT_PROFILE_BS_INDEX             "/sys/bootstrap/down"
+  65:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #define CN_OC_MQTT_PROFILE_GETSHADOW_INDEX      "/sys/shadow/get"
+  66:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+  67:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** static int app_msg_deal(void *arg, mqtt_al_msgrcv_t *msg)
+  68:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** {
+  32              		.loc 1 68 1
+  33              		.cfi_startproc
+  34 0000 F30F1EFA 		endbr64
+  35 0004 55       		pushq	%rbp
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 16
+  38              		.cfi_offset 6, -16
+  39 0005 4889E5   		movq	%rsp, %rbp
+  40              	.LCFI1:
+  41              		.cfi_def_cfa_register 6
+  42 0008 4883EC60 		subq	$96, %rsp
+  43 000c 48897DA8 		movq	%rdi, -88(%rbp)
+  44 0010 488975A0 		movq	%rsi, -96(%rbp)
+  45              		.loc 1 68 1
+  46 0014 64488B04 		movq	%fs:40, %rax
+  46      25280000 
+  46      00
+  47 001d 488945F8 		movq	%rax, -8(%rbp)
+  48 0021 31C0     		xorl	%eax, %eax
+  69:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     int ret = -1;
+  49              		.loc 1 69 9
+  50 0023 C745BCFF 		movl	$-1, -68(%rbp)
+  50      FFFFFF
+  70:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+  71:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     char *request_id = NULL;
+  51              		.loc 1 71 11
+  52 002a 48C745C0 		movq	$0, -64(%rbp)
+  52      00000000 
+  72:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     char *topicbuf;
+  73:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     oc_mqtt_profile_msgrcv_t message;
+  74:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+  75:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     topicbuf = osal_malloc(msg->topic.len + 1);
+  53              		.loc 1 75 38
+  54 0032 488B45A0 		movq	-96(%rbp), %rax
+  55 0036 8B4008   		movl	8(%rax), %eax
+  56              		.loc 1 75 43
+  57 0039 83C001   		addl	$1, %eax
+  58              		.loc 1 75 16
+  59 003c 4898     		cltq
+  60 003e 4889C7   		movq	%rax, %rdi
+  61 0041 E8000000 		call	osal_malloc@PLT
+  61      00
+  62 0046 488945C8 		movq	%rax, -56(%rbp)
+  76:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if (NULL == topicbuf) {
+GAS LISTING /tmp/ccYXZdXF.s 			page 4
+
+
+  63              		.loc 1 76 8
+  64 004a 48837DC8 		cmpq	$0, -56(%rbp)
+  64      00
+  65 004f 7508     		jne	.L2
+  77:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         return ret;
+  66              		.loc 1 77 16
+  67 0051 8B45BC   		movl	-68(%rbp), %eax
+  68 0054 E9B10100 		jmp	.L15
+  68      00
+  69              	.L2:
+  78:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+  79:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     memcpy(topicbuf, msg->topic.data, msg->topic.len);
+  70              		.loc 1 79 49
+  71 0059 488B45A0 		movq	-96(%rbp), %rax
+  72 005d 8B4008   		movl	8(%rax), %eax
+  73              		.loc 1 79 5
+  74 0060 4863D0   		movslq	%eax, %rdx
+  75              		.loc 1 79 32
+  76 0063 488B45A0 		movq	-96(%rbp), %rax
+  77 0067 488B08   		movq	(%rax), %rcx
+  78              		.loc 1 79 5
+  79 006a 488B45C8 		movq	-56(%rbp), %rax
+  80 006e 4889CE   		movq	%rcx, %rsi
+  81 0071 4889C7   		movq	%rax, %rdi
+  82 0074 E8000000 		call	memcpy@PLT
+  82      00
+  80:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     topicbuf[msg->topic.len] = '\0';
+  83              		.loc 1 80 24
+  84 0079 488B45A0 		movq	-96(%rbp), %rax
+  85 007d 8B4008   		movl	8(%rax), %eax
+  86 0080 4863D0   		movslq	%eax, %rdx
+  87              		.loc 1 80 13
+  88 0083 488B45C8 		movq	-56(%rbp), %rax
+  89 0087 4801D0   		addq	%rdx, %rax
+  90              		.loc 1 80 30
+  91 008a C60000   		movb	$0, (%rax)
+  81:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if (NULL != s_oc_mqtt_profile_cb.rcvfunc) {
+  92              		.loc 1 81 37
+  93 008d 488B0500 		movq	8+s_oc_mqtt_profile_cb(%rip), %rax
+  93      000000
+  94              		.loc 1 81 8
+  95 0094 4885C0   		testq	%rax, %rax
+  96 0097 0F845E01 		je	.L4
+  96      0000
+  82:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         message.msg = msg->msg.data;
+  97              		.loc 1 82 31
+  98 009d 488B45A0 		movq	-96(%rbp), %rax
+  99 00a1 488B4010 		movq	16(%rax), %rax
+ 100              		.loc 1 82 21
+ 101 00a5 488945E0 		movq	%rax, -32(%rbp)
+  83:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         message.msg_len = msg->msg.len;
+ 102              		.loc 1 83 35
+ 103 00a9 488B45A0 		movq	-96(%rbp), %rax
+ 104 00ad 8B4018   		movl	24(%rax), %eax
+ 105              		.loc 1 83 25
+ 106 00b0 8945E8   		movl	%eax, -24(%rbp)
+  84:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+GAS LISTING /tmp/ccYXZdXF.s 			page 5
+
+
+  85:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         request_id = strstr(topicbuf, CN_OC_MQTT_PROFILE_REQUESTID_INDEX);
+ 107              		.loc 1 85 22
+ 108 00b3 488B45C8 		movq	-56(%rbp), %rax
+ 109 00b7 488D3500 		leaq	.LC0(%rip), %rsi
+ 109      000000
+ 110 00be 4889C7   		movq	%rax, %rdi
+ 111 00c1 E8000000 		call	strstr@PLT
+ 111      00
+ 112 00c6 488945C0 		movq	%rax, -64(%rbp)
+  86:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         if (NULL != request_id) {
+ 113              		.loc 1 86 12
+ 114 00ca 48837DC0 		cmpq	$0, -64(%rbp)
+ 114      00
+ 115 00cf 740F     		je	.L5
+  87:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             request_id += strlen(CN_OC_MQTT_PROFILE_REQUESTID_INDEX);
+ 116              		.loc 1 87 24
+ 117 00d1 488345C0 		addq	$11, -64(%rbp)
+ 117      0B
+  88:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             message.request_id = request_id;
+ 118              		.loc 1 88 32
+ 119 00d6 488B45C0 		movq	-64(%rbp), %rax
+ 120 00da 488945D8 		movq	%rax, -40(%rbp)
+ 121 00de EB08     		jmp	.L6
+ 122              	.L5:
+  89:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         } else {
+  90:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             message.request_id = NULL;
+ 123              		.loc 1 90 32
+ 124 00e0 48C745D8 		movq	$0, -40(%rbp)
+ 124      00000000 
+ 125              	.L6:
+  91:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         }
+  92:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+  93:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         if (NULL != strstr(topicbuf, CN_OC_MQTT_PROFILE_MSGDOWN_INDEX)) {
+ 126              		.loc 1 93 21
+ 127 00e8 488B45C8 		movq	-56(%rbp), %rax
+ 128 00ec 488D3500 		leaq	.LC1(%rip), %rsi
+ 128      000000
+ 129 00f3 4889C7   		movq	%rax, %rdi
+ 130 00f6 E8000000 		call	strstr@PLT
+ 130      00
+ 131              		.loc 1 93 12
+ 132 00fb 4885C0   		testq	%rax, %rax
+ 133 00fe 740C     		je	.L7
+  94:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             message.type = EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_MSGDOWN;
+ 134              		.loc 1 94 26
+ 135 0100 C745D000 		movl	$0, -48(%rbp)
+ 135      000000
+ 136 0107 E9D30000 		jmp	.L8
+ 136      00
+ 137              	.L7:
+  95:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         } else if (NULL != strstr(topicbuf, CN_OC_MQTT_PROFILE_SETPROPERTY_INDEX)) {
+ 138              		.loc 1 95 28
+ 139 010c 488B45C8 		movq	-56(%rbp), %rax
+ 140 0110 488D3500 		leaq	.LC2(%rip), %rsi
+ 140      000000
+ 141 0117 4889C7   		movq	%rax, %rdi
+ 142 011a E8000000 		call	strstr@PLT
+GAS LISTING /tmp/ccYXZdXF.s 			page 6
+
+
+ 142      00
+ 143              		.loc 1 95 19
+ 144 011f 4885C0   		testq	%rax, %rax
+ 145 0122 740C     		je	.L9
+  96:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             message.type = EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_PROPERTYSET;
+ 146              		.loc 1 96 26
+ 147 0124 C745D002 		movl	$2, -48(%rbp)
+ 147      000000
+ 148 012b E9AF0000 		jmp	.L8
+ 148      00
+ 149              	.L9:
+  97:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         } else if (NULL != strstr(topicbuf, CN_OC_MQTT_PROFILE_GETPROPERTY_INDEX)) {
+ 150              		.loc 1 97 28
+ 151 0130 488B45C8 		movq	-56(%rbp), %rax
+ 152 0134 488D3500 		leaq	.LC3(%rip), %rsi
+ 152      000000
+ 153 013b 4889C7   		movq	%rax, %rdi
+ 154 013e E8000000 		call	strstr@PLT
+ 154      00
+ 155              		.loc 1 97 19
+ 156 0143 4885C0   		testq	%rax, %rax
+ 157 0146 740C     		je	.L10
+  98:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             message.type = EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_PROPERTYGET;
+ 158              		.loc 1 98 26
+ 159 0148 C745D003 		movl	$3, -48(%rbp)
+ 159      000000
+ 160 014f E98B0000 		jmp	.L8
+ 160      00
+ 161              	.L10:
+  99:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         } else if (NULL != strstr(topicbuf, CN_OC_MQTT_PROFILE_CMD_INDEX)) {
+ 162              		.loc 1 99 28
+ 163 0154 488B45C8 		movq	-56(%rbp), %rax
+ 164 0158 488D3500 		leaq	.LC4(%rip), %rsi
+ 164      000000
+ 165 015f 4889C7   		movq	%rax, %rdi
+ 166 0162 E8000000 		call	strstr@PLT
+ 166      00
+ 167              		.loc 1 99 19
+ 168 0167 4885C0   		testq	%rax, %rax
+ 169 016a 7409     		je	.L11
+ 100:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             message.type = EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_COMMANDS;
+ 170              		.loc 1 100 26
+ 171 016c C745D001 		movl	$1, -48(%rbp)
+ 171      000000
+ 172 0173 EB6A     		jmp	.L8
+ 173              	.L11:
+ 101:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         } else if (NULL != strstr(topicbuf, CN_OC_MQTT_PROFILE_EVENTDOWN_INDEX)) {
+ 174              		.loc 1 101 28
+ 175 0175 488B45C8 		movq	-56(%rbp), %rax
+ 176 0179 488D3500 		leaq	.LC5(%rip), %rsi
+ 176      000000
+ 177 0180 4889C7   		movq	%rax, %rdi
+ 178 0183 E8000000 		call	strstr@PLT
+ 178      00
+ 179              		.loc 1 101 19
+ 180 0188 4885C0   		testq	%rax, %rax
+ 181 018b 7409     		je	.L12
+GAS LISTING /tmp/ccYXZdXF.s 			page 7
+
+
+ 102:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             message.type = EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_EVENT;
+ 182              		.loc 1 102 26
+ 183 018d C745D004 		movl	$4, -48(%rbp)
+ 183      000000
+ 184 0194 EB49     		jmp	.L8
+ 185              	.L12:
+ 103:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         } else if (NULL != strstr(topicbuf, CN_OC_MQTT_PROFILE_BS_INDEX)) {
+ 186              		.loc 1 103 28
+ 187 0196 488B45C8 		movq	-56(%rbp), %rax
+ 188 019a 488D3500 		leaq	.LC6(%rip), %rsi
+ 188      000000
+ 189 01a1 4889C7   		movq	%rax, %rdi
+ 190 01a4 E8000000 		call	strstr@PLT
+ 190      00
+ 191              		.loc 1 103 19
+ 192 01a9 4885C0   		testq	%rax, %rax
+ 193 01ac 7409     		je	.L13
+ 104:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             message.type = EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_BS;
+ 194              		.loc 1 104 26
+ 195 01ae C745D005 		movl	$5, -48(%rbp)
+ 195      000000
+ 196 01b5 EB28     		jmp	.L8
+ 197              	.L13:
+ 105:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         } else if (NULL != strstr(topicbuf, CN_OC_MQTT_PROFILE_GETSHADOW_INDEX)) {
+ 198              		.loc 1 105 28
+ 199 01b7 488B45C8 		movq	-56(%rbp), %rax
+ 200 01bb 488D3500 		leaq	.LC7(%rip), %rsi
+ 200      000000
+ 201 01c2 4889C7   		movq	%rax, %rdi
+ 202 01c5 E8000000 		call	strstr@PLT
+ 202      00
+ 203              		.loc 1 105 19
+ 204 01ca 4885C0   		testq	%rax, %rax
+ 205 01cd 7409     		je	.L14
+ 106:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             message.type = EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_SHADOWGET;
+ 206              		.loc 1 106 26
+ 207 01cf C745D006 		movl	$6, -48(%rbp)
+ 207      000000
+ 208 01d6 EB07     		jmp	.L8
+ 209              	.L14:
+ 107:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         } else {
+ 108:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             message.type = EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_LAST;
+ 210              		.loc 1 108 26
+ 211 01d8 C745D007 		movl	$7, -48(%rbp)
+ 211      000000
+ 212              	.L8:
+ 109:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         }
+ 110:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         if (NULL != s_oc_mqtt_profile_cb.rcvfunc) {
+ 213              		.loc 1 110 41
+ 214 01df 488B0500 		movq	8+s_oc_mqtt_profile_cb(%rip), %rax
+ 214      000000
+ 215              		.loc 1 110 12
+ 216 01e6 4885C0   		testq	%rax, %rax
+ 217 01e9 7410     		je	.L4
+ 111:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             s_oc_mqtt_profile_cb.rcvfunc(&message);
+ 218              		.loc 1 111 33
+ 219 01eb 488B1500 		movq	8+s_oc_mqtt_profile_cb(%rip), %rdx
+GAS LISTING /tmp/ccYXZdXF.s 			page 8
+
+
+ 219      000000
+ 220              		.loc 1 111 13
+ 221 01f2 488D45D0 		leaq	-48(%rbp), %rax
+ 222 01f6 4889C7   		movq	%rax, %rdi
+ 223 01f9 FFD2     		call	*%rdx
+ 224              	.LVL0:
+ 225              	.L4:
+ 112:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         }
+ 113:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 114:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 115:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     osal_free(topicbuf);
+ 226              		.loc 1 115 5
+ 227 01fb 488B45C8 		movq	-56(%rbp), %rax
+ 228 01ff 4889C7   		movq	%rax, %rdi
+ 229 0202 E8000000 		call	osal_free@PLT
+ 229      00
+ 116:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     return ret;
+ 230              		.loc 1 116 12
+ 231 0207 8B45BC   		movl	-68(%rbp), %eax
+ 232              	.L15:
+ 117:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** }
+ 233              		.loc 1 117 1 discriminator 1
+ 234 020a 488B4DF8 		movq	-8(%rbp), %rcx
+ 235 020e 6448330C 		xorq	%fs:40, %rcx
+ 235      25280000 
+ 235      00
+ 236 0217 7405     		je	.L16
+ 237              		.loc 1 117 1 is_stmt 0
+ 238 0219 E8000000 		call	__stack_chk_fail@PLT
+ 238      00
+ 239              	.L16:
+ 240 021e C9       		leave
+ 241              	.LCFI2:
+ 242              		.cfi_def_cfa 7, 8
+ 243 021f C3       		ret
+ 244              		.cfi_endproc
+ 245              	.LFE0:
+ 247              		.section	.text.oc_mqtt_profile_connect,"ax",@progbits
+ 248              		.globl	oc_mqtt_profile_connect
+ 250              	oc_mqtt_profile_connect:
+ 251              	.LFB1:
+ 118:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 119:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** // /< use this function to connect to the cloud platform
+ 120:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** int oc_mqtt_profile_connect(oc_mqtt_profile_connect_t *payload)
+ 121:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** {
+ 252              		.loc 1 121 1 is_stmt 1
+ 253              		.cfi_startproc
+ 254 0000 F30F1EFA 		endbr64
+ 255 0004 55       		pushq	%rbp
+ 256              	.LCFI3:
+ 257              		.cfi_def_cfa_offset 16
+ 258              		.cfi_offset 6, -16
+ 259 0005 4889E5   		movq	%rsp, %rbp
+ 260              	.LCFI4:
+ 261              		.cfi_def_cfa_register 6
+ 262 0008 53       		pushq	%rbx
+ 263 0009 4881ECB8 		subq	$184, %rsp
+GAS LISTING /tmp/ccYXZdXF.s 			page 9
+
+
+ 263      000000
+ 264              		.cfi_offset 3, -24
+ 265 0010 4889BD48 		movq	%rdi, -184(%rbp)
+ 265      FFFFFF
+ 266              		.loc 1 121 1
+ 267 0017 64488B04 		movq	%fs:40, %rax
+ 267      25280000 
+ 267      00
+ 268 0020 488945E8 		movq	%rax, -24(%rbp)
+ 269 0024 31C0     		xorl	%eax, %eax
+ 122:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     int ret = (int)en_oc_mqtt_err_parafmt;
+ 270              		.loc 1 122 9
+ 271 0026 C7855CFF 		movl	$1, -164(%rbp)
+ 271      FFFF0100 
+ 271      0000
+ 123:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     oc_mqtt_config_t config;
+ 124:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 125:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if (NULL == payload) {
+ 272              		.loc 1 125 8
+ 273 0030 4883BD48 		cmpq	$0, -184(%rbp)
+ 273      FFFFFF00 
+ 274 0038 750B     		jne	.L18
+ 126:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         return ret;
+ 275              		.loc 1 126 16
+ 276 003a 8B855CFF 		movl	-164(%rbp), %eax
+ 276      FFFF
+ 277 0040 E97B0100 		jmp	.L23
+ 277      00
+ 278              	.L18:
+ 127:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 128:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 129:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     (void)memset(&config, 0, sizeof(config));
+ 279              		.loc 1 129 11
+ 280 0045 488D8560 		leaq	-160(%rbp), %rax
+ 280      FFFFFF
+ 281 004c BA880000 		movl	$136, %edx
+ 281      00
+ 282 0051 BE000000 		movl	$0, %esi
+ 282      00
+ 283 0056 4889C7   		movq	%rax, %rdi
+ 284 0059 E8000000 		call	memset@PLT
+ 284      00
+ 130:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     config.boot_mode = payload->boostrap;
+ 285              		.loc 1 130 31
+ 286 005e 488B8548 		movq	-184(%rbp), %rax
+ 286      FFFFFF
+ 287 0065 8B00     		movl	(%rax), %eax
+ 288              		.loc 1 130 22
+ 289 0067 898560FF 		movl	%eax, -160(%rbp)
+ 289      FFFF
+ 131:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     config.id = payload->device_id;
+ 290              		.loc 1 131 24
+ 291 006d 488B8548 		movq	-184(%rbp), %rax
+ 291      FFFFFF
+ 292 0074 488B4018 		movq	24(%rax), %rax
+ 293              		.loc 1 131 15
+ 294 0078 488945B8 		movq	%rax, -72(%rbp)
+GAS LISTING /tmp/ccYXZdXF.s 			page 10
+
+
+ 132:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     config.pwd = payload->device_passwd;
+ 295              		.loc 1 132 25
+ 296 007c 488B8548 		movq	-184(%rbp), %rax
+ 296      FFFFFF
+ 297 0083 488B4020 		movq	32(%rax), %rax
+ 298              		.loc 1 132 16
+ 299 0087 488945C0 		movq	%rax, -64(%rbp)
+ 133:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     config.scope_id = payload->scope_id;
+ 300              		.loc 1 133 30
+ 301 008b 488B8548 		movq	-184(%rbp), %rax
+ 301      FFFFFF
+ 302 0092 488B4028 		movq	40(%rax), %rax
+ 303              		.loc 1 133 21
+ 304 0096 488945C8 		movq	%rax, -56(%rbp)
+ 134:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     config.server_addr = payload->server_addr;
+ 305              		.loc 1 134 33
+ 306 009a 488B8548 		movq	-184(%rbp), %rax
+ 306      FFFFFF
+ 307 00a1 488B4008 		movq	8(%rax), %rax
+ 308              		.loc 1 134 24
+ 309 00a5 48898568 		movq	%rax, -152(%rbp)
+ 309      FFFFFF
+ 135:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     config.server_port = payload->server_port;
+ 310              		.loc 1 135 33
+ 311 00ac 488B8548 		movq	-184(%rbp), %rax
+ 311      FFFFFF
+ 312 00b3 488B4010 		movq	16(%rax), %rax
+ 313              		.loc 1 135 24
+ 314 00b7 48898570 		movq	%rax, -144(%rbp)
+ 314      FFFFFF
+ 136:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     config.lifetime = payload->life_time;
+ 315              		.loc 1 136 30
+ 316 00be 488B8548 		movq	-184(%rbp), %rax
+ 316      FFFFFF
+ 317 00c5 8B4004   		movl	4(%rax), %eax
+ 318              		.loc 1 136 21
+ 319 00c8 66898564 		movw	%ax, -156(%rbp)
+ 319      FFFFFF
+ 137:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     config.msg_deal = app_msg_deal;
+ 320              		.loc 1 137 21
+ 321 00cf 488D0500 		leaq	app_msg_deal(%rip), %rax
+ 321      000000
+ 322 00d6 488945D0 		movq	%rax, -48(%rbp)
+ 138:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     config.msg_deal_arg = NULL;
+ 323              		.loc 1 138 25
+ 324 00da 48C745D8 		movq	$0, -40(%rbp)
+ 324      00000000 
+ 139:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     config.security = payload->security;
+ 325              		.loc 1 139 21
+ 326 00e2 488B8548 		movq	-184(%rbp), %rax
+ 326      FFFFFF
+ 327 00e9 488B4830 		movq	48(%rax), %rcx
+ 328 00ed 488B5838 		movq	56(%rax), %rbx
+ 329 00f1 48898D78 		movq	%rcx, -136(%rbp)
+ 329      FFFFFF
+ 330 00f8 48895D80 		movq	%rbx, -128(%rbp)
+ 331 00fc 488B4840 		movq	64(%rax), %rcx
+GAS LISTING /tmp/ccYXZdXF.s 			page 11
+
+
+ 332 0100 488B5848 		movq	72(%rax), %rbx
+ 333 0104 48894D88 		movq	%rcx, -120(%rbp)
+ 334 0108 48895D90 		movq	%rbx, -112(%rbp)
+ 335 010c 488B4850 		movq	80(%rax), %rcx
+ 336 0110 488B5858 		movq	88(%rax), %rbx
+ 337 0114 48894D98 		movq	%rcx, -104(%rbp)
+ 338 0118 48895DA0 		movq	%rbx, -96(%rbp)
+ 339 011c 488B5068 		movq	104(%rax), %rdx
+ 340 0120 488B4060 		movq	96(%rax), %rax
+ 341 0124 488945A8 		movq	%rax, -88(%rbp)
+ 342 0128 488955B0 		movq	%rdx, -80(%rbp)
+ 140:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     config.log_dealer = payload->logfunc;
+ 343              		.loc 1 140 32
+ 344 012c 488B8548 		movq	-184(%rbp), %rax
+ 344      FFFFFF
+ 345 0133 488B4078 		movq	120(%rax), %rax
+ 346              		.loc 1 140 23
+ 347 0137 488945E0 		movq	%rax, -32(%rbp)
+ 141:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 142:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if (payload->boostrap) {
+ 348              		.loc 1 142 16
+ 349 013b 488B8548 		movq	-184(%rbp), %rax
+ 349      FFFFFF
+ 350 0142 8B00     		movl	(%rax), %eax
+ 351              		.loc 1 142 8
+ 352 0144 85C0     		testl	%eax, %eax
+ 353 0146 740C     		je	.L20
+ 143:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         config.boot_mode = en_oc_mqtt_mode_bs_static_nodeid_hmacsha256_notimecheck_json;
+ 354              		.loc 1 143 26
+ 355 0148 C78560FF 		movl	$0, -160(%rbp)
+ 355      FFFF0000 
+ 355      0000
+ 356 0152 EB0A     		jmp	.L21
+ 357              	.L20:
+ 144:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     } else {
+ 145:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         config.boot_mode = en_oc_mqtt_mode_nobs_static_nodeid_hmacsha256_notimecheck_json;
+ 358              		.loc 1 145 26
+ 359 0154 C78560FF 		movl	$1, -160(%rbp)
+ 359      FFFF0100 
+ 359      0000
+ 360              	.L21:
+ 146:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 147:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 148:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if (NULL != s_oc_mqtt_profile_cb.device_id) {
+ 361              		.loc 1 148 37
+ 362 015e 488B0500 		movq	s_oc_mqtt_profile_cb(%rip), %rax
+ 362      000000
+ 363              		.loc 1 148 8
+ 364 0165 4885C0   		testq	%rax, %rax
+ 365 0168 740F     		je	.L22
+ 149:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         osal_free(s_oc_mqtt_profile_cb.device_id);
+ 366              		.loc 1 149 39
+ 367 016a 488B0500 		movq	s_oc_mqtt_profile_cb(%rip), %rax
+ 367      000000
+ 368              		.loc 1 149 9
+ 369 0171 4889C7   		movq	%rax, %rdi
+ 370 0174 E8000000 		call	osal_free@PLT
+GAS LISTING /tmp/ccYXZdXF.s 			page 12
+
+
+ 370      00
+ 371              	.L22:
+ 150:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 151:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     s_oc_mqtt_profile_cb.device_id = osal_strdup(payload->device_id);
+ 372              		.loc 1 151 57
+ 373 0179 488B8548 		movq	-184(%rbp), %rax
+ 373      FFFFFF
+ 374 0180 488B4018 		movq	24(%rax), %rax
+ 375              		.loc 1 151 38
+ 376 0184 4889C7   		movq	%rax, %rdi
+ 377 0187 E8000000 		call	osal_strdup@PLT
+ 377      00
+ 378              		.loc 1 151 36
+ 379 018c 48890500 		movq	%rax, s_oc_mqtt_profile_cb(%rip)
+ 379      000000
+ 152:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     s_oc_mqtt_profile_cb.rcvfunc = payload->rcvfunc;
+ 380              		.loc 1 152 43
+ 381 0193 488B8548 		movq	-184(%rbp), %rax
+ 381      FFFFFF
+ 382 019a 488B4070 		movq	112(%rax), %rax
+ 383              		.loc 1 152 34
+ 384 019e 48890500 		movq	%rax, 8+s_oc_mqtt_profile_cb(%rip)
+ 384      000000
+ 153:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     ret = oc_mqtt_config(&config);
+ 385              		.loc 1 153 11
+ 386 01a5 488D8560 		leaq	-160(%rbp), %rax
+ 386      FFFFFF
+ 387 01ac 4889C7   		movq	%rax, %rdi
+ 388 01af E8000000 		call	oc_mqtt_config@PLT
+ 388      00
+ 389 01b4 89855CFF 		movl	%eax, -164(%rbp)
+ 389      FFFF
+ 154:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 155:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     return ret;
+ 390              		.loc 1 155 12
+ 391 01ba 8B855CFF 		movl	-164(%rbp), %eax
+ 391      FFFF
+ 392              	.L23:
+ 156:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** }
+ 393              		.loc 1 156 1 discriminator 1
+ 394 01c0 488B5DE8 		movq	-24(%rbp), %rbx
+ 395 01c4 6448331C 		xorq	%fs:40, %rbx
+ 395      25280000 
+ 395      00
+ 396 01cd 7405     		je	.L24
+ 397              		.loc 1 156 1 is_stmt 0
+ 398 01cf E8000000 		call	__stack_chk_fail@PLT
+ 398      00
+ 399              	.L24:
+ 400 01d4 4881C4B8 		addq	$184, %rsp
+ 400      000000
+ 401 01db 5B       		popq	%rbx
+ 402 01dc 5D       		popq	%rbp
+ 403              	.LCFI5:
+ 404              		.cfi_def_cfa 7, 8
+ 405 01dd C3       		ret
+ 406              		.cfi_endproc
+GAS LISTING /tmp/ccYXZdXF.s 			page 13
+
+
+ 407              	.LFE1:
+ 409              		.section	.text.oc_mqtt_profile_disconnect,"ax",@progbits
+ 410              		.globl	oc_mqtt_profile_disconnect
+ 412              	oc_mqtt_profile_disconnect:
+ 413              	.LFB2:
+ 157:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 158:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** // /< use this function to disconnect from the cloudplatform
+ 159:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** int oc_mqtt_profile_disconnect(void)
+ 160:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** {
+ 414              		.loc 1 160 1 is_stmt 1
+ 415              		.cfi_startproc
+ 416 0000 F30F1EFA 		endbr64
+ 417 0004 55       		pushq	%rbp
+ 418              	.LCFI6:
+ 419              		.cfi_def_cfa_offset 16
+ 420              		.cfi_offset 6, -16
+ 421 0005 4889E5   		movq	%rsp, %rbp
+ 422              	.LCFI7:
+ 423              		.cfi_def_cfa_register 6
+ 424 0008 4883EC10 		subq	$16, %rsp
+ 425              		.loc 1 160 1
+ 426 000c 64488B04 		movq	%fs:40, %rax
+ 426      25280000 
+ 426      00
+ 427 0015 488945F8 		movq	%rax, -8(%rbp)
+ 428 0019 31C0     		xorl	%eax, %eax
+ 161:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     int ret;
+ 162:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 163:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     ret = oc_mqtt_deconfig();
+ 429              		.loc 1 163 11
+ 430 001b E8000000 		call	oc_mqtt_deconfig@PLT
+ 430      00
+ 431 0020 8945F4   		movl	%eax, -12(%rbp)
+ 164:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if (ret == (int)en_oc_mqtt_err_ok) {
+ 432              		.loc 1 164 8
+ 433 0023 837DF400 		cmpl	$0, -12(%rbp)
+ 434 0027 7525     		jne	.L26
+ 165:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         osal_free(s_oc_mqtt_profile_cb.device_id);
+ 435              		.loc 1 165 39
+ 436 0029 488B0500 		movq	s_oc_mqtt_profile_cb(%rip), %rax
+ 436      000000
+ 437              		.loc 1 165 9
+ 438 0030 4889C7   		movq	%rax, %rdi
+ 439 0033 E8000000 		call	osal_free@PLT
+ 439      00
+ 166:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         s_oc_mqtt_profile_cb.device_id = NULL;
+ 440              		.loc 1 166 40
+ 441 0038 48C70500 		movq	$0, s_oc_mqtt_profile_cb(%rip)
+ 441      00000000 
+ 441      000000
+ 167:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         s_oc_mqtt_profile_cb.rcvfunc = NULL;
+ 442              		.loc 1 167 38
+ 443 0043 48C70500 		movq	$0, 8+s_oc_mqtt_profile_cb(%rip)
+ 443      00000000 
+ 443      000000
+ 444              	.L26:
+ 168:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+GAS LISTING /tmp/ccYXZdXF.s 			page 14
+
+
+ 169:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 170:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     return ret;
+ 445              		.loc 1 170 12
+ 446 004e 8B45F4   		movl	-12(%rbp), %eax
+ 171:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** }
+ 447              		.loc 1 171 1
+ 448 0051 488B55F8 		movq	-8(%rbp), %rdx
+ 449 0055 64483314 		xorq	%fs:40, %rdx
+ 449      25280000 
+ 449      00
+ 450 005e 7405     		je	.L28
+ 451 0060 E8000000 		call	__stack_chk_fail@PLT
+ 451      00
+ 452              	.L28:
+ 453 0065 C9       		leave
+ 454              	.LCFI8:
+ 455              		.cfi_def_cfa 7, 8
+ 456 0066 C3       		ret
+ 457              		.cfi_endproc
+ 458              	.LFE2:
+ 460              		.section	.text.topic_make,"ax",@progbits
+ 462              	topic_make:
+ 463              	.LFB3:
+ 172:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 173:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** // /< use this function to make a topic to publish
+ 174:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** // /< if request_id  is needed depends on the fmt
+ 175:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** static char *topic_make(char *fmt, char *device_id, char *request_id)
+ 176:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** {
+ 464              		.loc 1 176 1
+ 465              		.cfi_startproc
+ 466 0000 F30F1EFA 		endbr64
+ 467 0004 55       		pushq	%rbp
+ 468              	.LCFI9:
+ 469              		.cfi_def_cfa_offset 16
+ 470              		.cfi_offset 6, -16
+ 471 0005 4889E5   		movq	%rsp, %rbp
+ 472              	.LCFI10:
+ 473              		.cfi_def_cfa_register 6
+ 474 0008 53       		pushq	%rbx
+ 475 0009 4883EC48 		subq	$72, %rsp
+ 476              		.cfi_offset 3, -24
+ 477 000d 48897DC8 		movq	%rdi, -56(%rbp)
+ 478 0011 488975C0 		movq	%rsi, -64(%rbp)
+ 479 0015 488955B8 		movq	%rdx, -72(%rbp)
+ 480              		.loc 1 176 1
+ 481 0019 64488B04 		movq	%fs:40, %rax
+ 481      25280000 
+ 481      00
+ 482 0022 488945E8 		movq	%rax, -24(%rbp)
+ 483 0026 31C0     		xorl	%eax, %eax
+ 177:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     int len;
+ 178:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     char *ret = NULL;
+ 484              		.loc 1 178 11
+ 485 0028 48C745E0 		movq	$0, -32(%rbp)
+ 485      00000000 
+ 179:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 180:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if (NULL == device_id) {
+GAS LISTING /tmp/ccYXZdXF.s 			page 15
+
+
+ 486              		.loc 1 180 8
+ 487 0030 48837DC0 		cmpq	$0, -64(%rbp)
+ 487      00
+ 488 0035 7506     		jne	.L30
+ 181:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         return ret;
+ 489              		.loc 1 181 16
+ 490 0037 488B45E0 		movq	-32(%rbp), %rax
+ 491 003b EB7E     		jmp	.L31
+ 492              	.L30:
+ 182:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 183:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     len = strlen(fmt) + strlen(device_id);
+ 493              		.loc 1 183 11
+ 494 003d 488B45C8 		movq	-56(%rbp), %rax
+ 495 0041 4889C7   		movq	%rax, %rdi
+ 496 0044 E8000000 		call	strlen@PLT
+ 496      00
+ 497              		.loc 1 183 23
+ 498 0049 89C3     		movl	%eax, %ebx
+ 499              		.loc 1 183 25
+ 500 004b 488B45C0 		movq	-64(%rbp), %rax
+ 501 004f 4889C7   		movq	%rax, %rdi
+ 502 0052 E8000000 		call	strlen@PLT
+ 502      00
+ 503              		.loc 1 183 23
+ 504 0057 01D8     		addl	%ebx, %eax
+ 505              		.loc 1 183 9
+ 506 0059 8945DC   		movl	%eax, -36(%rbp)
+ 184:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if (NULL != request_id) {
+ 507              		.loc 1 184 8
+ 508 005c 48837DB8 		cmpq	$0, -72(%rbp)
+ 508      00
+ 509 0061 7416     		je	.L32
+ 185:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         len += strlen(request_id);
+ 510              		.loc 1 185 16
+ 511 0063 488B45B8 		movq	-72(%rbp), %rax
+ 512 0067 4889C7   		movq	%rax, %rdi
+ 513 006a E8000000 		call	strlen@PLT
+ 513      00
+ 514              		.loc 1 185 13
+ 515 006f 89C2     		movl	%eax, %edx
+ 516 0071 8B45DC   		movl	-36(%rbp), %eax
+ 517 0074 01D0     		addl	%edx, %eax
+ 518 0076 8945DC   		movl	%eax, -36(%rbp)
+ 519              	.L32:
+ 186:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 187:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 188:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     ret = osal_malloc(len);
+ 520              		.loc 1 188 11
+ 521 0079 8B45DC   		movl	-36(%rbp), %eax
+ 522 007c 4898     		cltq
+ 523 007e 4889C7   		movq	%rax, %rdi
+ 524 0081 E8000000 		call	osal_malloc@PLT
+ 524      00
+ 525 0086 488945E0 		movq	%rax, -32(%rbp)
+ 189:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if (NULL != ret) {
+ 526              		.loc 1 189 8
+ 527 008a 48837DE0 		cmpq	$0, -32(%rbp)
+GAS LISTING /tmp/ccYXZdXF.s 			page 16
+
+
+ 527      00
+ 528 008f 7426     		je	.L33
+ 190:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         (void)snprintf(ret, len, fmt, device_id, request_id);
+ 529              		.loc 1 190 15
+ 530 0091 8B45DC   		movl	-36(%rbp), %eax
+ 531 0094 4863F0   		movslq	%eax, %rsi
+ 532 0097 488B7DB8 		movq	-72(%rbp), %rdi
+ 533 009b 488B4DC0 		movq	-64(%rbp), %rcx
+ 534 009f 488B55C8 		movq	-56(%rbp), %rdx
+ 535 00a3 488B45E0 		movq	-32(%rbp), %rax
+ 536 00a7 4989F8   		movq	%rdi, %r8
+ 537 00aa 4889C7   		movq	%rax, %rdi
+ 538 00ad B8000000 		movl	$0, %eax
+ 538      00
+ 539 00b2 E8000000 		call	snprintf@PLT
+ 539      00
+ 540              	.L33:
+ 191:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 192:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     return ret;
+ 541              		.loc 1 192 12
+ 542 00b7 488B45E0 		movq	-32(%rbp), %rax
+ 543              	.L31:
+ 193:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** }
+ 544              		.loc 1 193 1
+ 545 00bb 488B5DE8 		movq	-24(%rbp), %rbx
+ 546 00bf 6448331C 		xorq	%fs:40, %rbx
+ 546      25280000 
+ 546      00
+ 547 00c8 7405     		je	.L34
+ 548 00ca E8000000 		call	__stack_chk_fail@PLT
+ 548      00
+ 549              	.L34:
+ 550 00cf 4883C448 		addq	$72, %rsp
+ 551 00d3 5B       		popq	%rbx
+ 552 00d4 5D       		popq	%rbp
+ 553              	.LCFI11:
+ 554              		.cfi_def_cfa 7, 8
+ 555 00d5 C3       		ret
+ 556              		.cfi_endproc
+ 557              	.LFE3:
+ 559              		.section	.rodata
+ 560 008d 000000   		.align 8
+ 561              	.LC8:
+ 562 0090 246F632F 		.string	"$oc/devices/%s/sys/messages/up"
+ 562      64657669 
+ 562      6365732F 
+ 562      25732F73 
+ 562      79732F6D 
+ 563              		.section	.text.oc_mqtt_profile_msgup,"ax",@progbits
+ 564              		.globl	oc_mqtt_profile_msgup
+ 566              	oc_mqtt_profile_msgup:
+ 567              	.LFB4:
+ 194:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 195:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** // /< use this function to report the messsage
+ 196:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #define CN_OC_MQTT_PROFILE_MSGUP_TOPICFMT "$oc/devices/%s/sys/messages/up"
+ 197:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** int oc_mqtt_profile_msgup(char *deviceid, oc_mqtt_profile_msgup_t *payload)
+ 198:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** {
+GAS LISTING /tmp/ccYXZdXF.s 			page 17
+
+
+ 568              		.loc 1 198 1
+ 569              		.cfi_startproc
+ 570 0000 F30F1EFA 		endbr64
+ 571 0004 55       		pushq	%rbp
+ 572              	.LCFI12:
+ 573              		.cfi_def_cfa_offset 16
+ 574              		.cfi_offset 6, -16
+ 575 0005 4889E5   		movq	%rsp, %rbp
+ 576              	.LCFI13:
+ 577              		.cfi_def_cfa_register 6
+ 578 0008 4883EC30 		subq	$48, %rsp
+ 579 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 580 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 581              		.loc 1 198 1
+ 582 0014 64488B04 		movq	%fs:40, %rax
+ 582      25280000 
+ 582      00
+ 583 001d 488945F8 		movq	%rax, -8(%rbp)
+ 584 0021 31C0     		xorl	%eax, %eax
+ 199:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     int ret = (int)en_oc_mqtt_err_parafmt;
+ 585              		.loc 1 199 9
+ 586 0023 C745E401 		movl	$1, -28(%rbp)
+ 586      000000
+ 200:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     char *topic;
+ 201:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     char *msg;
+ 202:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 203:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if (NULL == deviceid) {
+ 587              		.loc 1 203 8
+ 588 002a 48837DD8 		cmpq	$0, -40(%rbp)
+ 588      00
+ 589 002f 751F     		jne	.L36
+ 204:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         if (NULL == s_oc_mqtt_profile_cb.device_id) {
+ 590              		.loc 1 204 41
+ 591 0031 488B0500 		movq	s_oc_mqtt_profile_cb(%rip), %rax
+ 591      000000
+ 592              		.loc 1 204 12
+ 593 0038 4885C0   		testq	%rax, %rax
+ 594 003b 7508     		jne	.L37
+ 205:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             return ret;
+ 595              		.loc 1 205 20
+ 596 003d 8B45E4   		movl	-28(%rbp), %eax
+ 597 0040 E9AB0000 		jmp	.L38
+ 597      00
+ 598              	.L37:
+ 206:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         } else {
+ 207:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             deviceid = s_oc_mqtt_profile_cb.device_id;
+ 599              		.loc 1 207 22
+ 600 0045 488B0500 		movq	s_oc_mqtt_profile_cb(%rip), %rax
+ 600      000000
+ 601 004c 488945D8 		movq	%rax, -40(%rbp)
+ 602              	.L36:
+ 208:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         }
+ 209:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 210:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 211:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if ((NULL == payload) || (NULL == payload->msg)) {
+ 603              		.loc 1 211 8
+ 604 0050 48837DD0 		cmpq	$0, -48(%rbp)
+GAS LISTING /tmp/ccYXZdXF.s 			page 18
+
+
+ 604      00
+ 605 0055 740D     		je	.L39
+ 606              		.loc 1 211 46 discriminator 1
+ 607 0057 488B45D0 		movq	-48(%rbp), %rax
+ 608 005b 488B4018 		movq	24(%rax), %rax
+ 609              		.loc 1 211 27 discriminator 1
+ 610 005f 4885C0   		testq	%rax, %rax
+ 611 0062 7508     		jne	.L40
+ 612              	.L39:
+ 212:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         return ret;
+ 613              		.loc 1 212 16
+ 614 0064 8B45E4   		movl	-28(%rbp), %eax
+ 615 0067 E9840000 		jmp	.L38
+ 615      00
+ 616              	.L40:
+ 213:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 214:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 215:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     topic = topic_make(CN_OC_MQTT_PROFILE_MSGUP_TOPICFMT, deviceid, NULL);
+ 617              		.loc 1 215 13
+ 618 006c 488B45D8 		movq	-40(%rbp), %rax
+ 619 0070 BA000000 		movl	$0, %edx
+ 619      00
+ 620 0075 4889C6   		movq	%rax, %rsi
+ 621 0078 488D3D00 		leaq	.LC8(%rip), %rdi
+ 621      000000
+ 622 007f E8000000 		call	topic_make
+ 622      00
+ 623 0084 488945E8 		movq	%rax, -24(%rbp)
+ 216:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     msg = oc_mqtt_profile_package_msgup(payload);
+ 624              		.loc 1 216 11
+ 625 0088 488B45D0 		movq	-48(%rbp), %rax
+ 626 008c 4889C7   		movq	%rax, %rdi
+ 627 008f E8000000 		call	oc_mqtt_profile_package_msgup@PLT
+ 627      00
+ 628 0094 488945F0 		movq	%rax, -16(%rbp)
+ 217:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 218:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if ((NULL != topic) && (NULL != msg)) {
+ 629              		.loc 1 218 8
+ 630 0098 48837DE8 		cmpq	$0, -24(%rbp)
+ 630      00
+ 631 009d 742F     		je	.L41
+ 632              		.loc 1 218 25 discriminator 1
+ 633 009f 48837DF0 		cmpq	$0, -16(%rbp)
+ 633      00
+ 634 00a4 7428     		je	.L41
+ 219:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         ret = oc_mqtt_publish(topic, (uint8_t *)msg, strlen(msg), (int)en_mqtt_al_qos_1);
+ 635              		.loc 1 219 54
+ 636 00a6 488B45F0 		movq	-16(%rbp), %rax
+ 637 00aa 4889C7   		movq	%rax, %rdi
+ 638 00ad E8000000 		call	strlen@PLT
+ 638      00
+ 639              		.loc 1 219 15
+ 640 00b2 89C2     		movl	%eax, %edx
+ 641 00b4 488B75F0 		movq	-16(%rbp), %rsi
+ 642 00b8 488B45E8 		movq	-24(%rbp), %rax
+ 643 00bc B9010000 		movl	$1, %ecx
+ 643      00
+GAS LISTING /tmp/ccYXZdXF.s 			page 19
+
+
+ 644 00c1 4889C7   		movq	%rax, %rdi
+ 645 00c4 E8000000 		call	oc_mqtt_publish@PLT
+ 645      00
+ 646 00c9 8945E4   		movl	%eax, -28(%rbp)
+ 647              		.loc 1 219 13
+ 648 00cc EB07     		jmp	.L42
+ 649              	.L41:
+ 220:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     } else {
+ 221:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         ret = (int)en_oc_mqtt_err_sysmem;
+ 650              		.loc 1 221 13
+ 651 00ce C745E40F 		movl	$15, -28(%rbp)
+ 651      000000
+ 652              	.L42:
+ 222:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 223:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 224:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     osal_free(topic);
+ 653              		.loc 1 224 5
+ 654 00d5 488B45E8 		movq	-24(%rbp), %rax
+ 655 00d9 4889C7   		movq	%rax, %rdi
+ 656 00dc E8000000 		call	osal_free@PLT
+ 656      00
+ 225:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     osal_free(msg);
+ 657              		.loc 1 225 5
+ 658 00e1 488B45F0 		movq	-16(%rbp), %rax
+ 659 00e5 4889C7   		movq	%rax, %rdi
+ 660 00e8 E8000000 		call	osal_free@PLT
+ 660      00
+ 226:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 227:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     return ret;
+ 661              		.loc 1 227 12
+ 662 00ed 8B45E4   		movl	-28(%rbp), %eax
+ 663              	.L38:
+ 228:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** }
+ 664              		.loc 1 228 1
+ 665 00f0 488B4DF8 		movq	-8(%rbp), %rcx
+ 666 00f4 6448330C 		xorq	%fs:40, %rcx
+ 666      25280000 
+ 666      00
+ 667 00fd 7405     		je	.L43
+ 668 00ff E8000000 		call	__stack_chk_fail@PLT
+ 668      00
+ 669              	.L43:
+ 670 0104 C9       		leave
+ 671              	.LCFI14:
+ 672              		.cfi_def_cfa 7, 8
+ 673 0105 C3       		ret
+ 674              		.cfi_endproc
+ 675              	.LFE4:
+ 677              		.section	.rodata
+ 678 00af 00       		.align 8
+ 679              	.LC9:
+ 680 00b0 246F632F 		.string	"$oc/devices/%s/sys/properties/report"
+ 680      64657669 
+ 680      6365732F 
+ 680      25732F73 
+ 680      79732F70 
+ 681              		.section	.text.oc_mqtt_profile_propertyreport,"ax",@progbits
+GAS LISTING /tmp/ccYXZdXF.s 			page 20
+
+
+ 682              		.globl	oc_mqtt_profile_propertyreport
+ 684              	oc_mqtt_profile_propertyreport:
+ 685              	.LFB5:
+ 229:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 230:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #define CN_OC_MQTT_PROFILE_PROPERTYREPORT_TOPICFMT "$oc/devices/%s/sys/properties/report"
+ 231:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** int oc_mqtt_profile_propertyreport(char *deviceid, oc_mqtt_profile_service_t *payload)
+ 232:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** {
+ 686              		.loc 1 232 1
+ 687              		.cfi_startproc
+ 688 0000 F30F1EFA 		endbr64
+ 689 0004 55       		pushq	%rbp
+ 690              	.LCFI15:
+ 691              		.cfi_def_cfa_offset 16
+ 692              		.cfi_offset 6, -16
+ 693 0005 4889E5   		movq	%rsp, %rbp
+ 694              	.LCFI16:
+ 695              		.cfi_def_cfa_register 6
+ 696 0008 4883EC30 		subq	$48, %rsp
+ 697 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 698 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 699              		.loc 1 232 1
+ 700 0014 64488B04 		movq	%fs:40, %rax
+ 700      25280000 
+ 700      00
+ 701 001d 488945F8 		movq	%rax, -8(%rbp)
+ 702 0021 31C0     		xorl	%eax, %eax
+ 233:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     int ret = (int)en_oc_mqtt_err_parafmt;
+ 703              		.loc 1 233 9
+ 704 0023 C745E401 		movl	$1, -28(%rbp)
+ 704      000000
+ 234:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     char *topic;
+ 235:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     char *msg;
+ 236:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 237:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if (NULL == deviceid) {
+ 705              		.loc 1 237 8
+ 706 002a 48837DD8 		cmpq	$0, -40(%rbp)
+ 706      00
+ 707 002f 751F     		jne	.L45
+ 238:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         if (NULL == s_oc_mqtt_profile_cb.device_id) {
+ 708              		.loc 1 238 41
+ 709 0031 488B0500 		movq	s_oc_mqtt_profile_cb(%rip), %rax
+ 709      000000
+ 710              		.loc 1 238 12
+ 711 0038 4885C0   		testq	%rax, %rax
+ 712 003b 7508     		jne	.L46
+ 239:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             return ret;
+ 713              		.loc 1 239 20
+ 714 003d 8B45E4   		movl	-28(%rbp), %eax
+ 715 0040 E9B80000 		jmp	.L47
+ 715      00
+ 716              	.L46:
+ 240:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         } else {
+ 241:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             deviceid = s_oc_mqtt_profile_cb.device_id;
+ 717              		.loc 1 241 22
+ 718 0045 488B0500 		movq	s_oc_mqtt_profile_cb(%rip), %rax
+ 718      000000
+ 719 004c 488945D8 		movq	%rax, -40(%rbp)
+GAS LISTING /tmp/ccYXZdXF.s 			page 21
+
+
+ 720              	.L45:
+ 242:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         }
+ 243:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 244:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 245:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if ((NULL == payload) || (NULL == payload->service_id) || (NULL == payload->service_property)) 
+ 721              		.loc 1 245 8
+ 722 0050 48837DD0 		cmpq	$0, -48(%rbp)
+ 722      00
+ 723 0055 741A     		je	.L48
+ 724              		.loc 1 245 46 discriminator 1
+ 725 0057 488B45D0 		movq	-48(%rbp), %rax
+ 726 005b 488B4008 		movq	8(%rax), %rax
+ 727              		.loc 1 245 27 discriminator 1
+ 728 005f 4885C0   		testq	%rax, %rax
+ 729 0062 740D     		je	.L48
+ 730              		.loc 1 245 79 discriminator 2
+ 731 0064 488B45D0 		movq	-48(%rbp), %rax
+ 732 0068 488B4018 		movq	24(%rax), %rax
+ 733              		.loc 1 245 60 discriminator 2
+ 734 006c 4885C0   		testq	%rax, %rax
+ 735 006f 7508     		jne	.L49
+ 736              	.L48:
+ 246:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         return ret;
+ 737              		.loc 1 246 16
+ 738 0071 8B45E4   		movl	-28(%rbp), %eax
+ 739 0074 E9840000 		jmp	.L47
+ 739      00
+ 740              	.L49:
+ 247:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 248:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 249:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     topic = topic_make(CN_OC_MQTT_PROFILE_PROPERTYREPORT_TOPICFMT, deviceid, NULL);
+ 741              		.loc 1 249 13
+ 742 0079 488B45D8 		movq	-40(%rbp), %rax
+ 743 007d BA000000 		movl	$0, %edx
+ 743      00
+ 744 0082 4889C6   		movq	%rax, %rsi
+ 745 0085 488D3D00 		leaq	.LC9(%rip), %rdi
+ 745      000000
+ 746 008c E8000000 		call	topic_make
+ 746      00
+ 747 0091 488945E8 		movq	%rax, -24(%rbp)
+ 250:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     msg = oc_mqtt_profile_package_propertyreport(payload);
+ 748              		.loc 1 250 11
+ 749 0095 488B45D0 		movq	-48(%rbp), %rax
+ 750 0099 4889C7   		movq	%rax, %rdi
+ 751 009c E8000000 		call	oc_mqtt_profile_package_propertyreport@PLT
+ 751      00
+ 752 00a1 488945F0 		movq	%rax, -16(%rbp)
+ 251:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 252:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if ((NULL != topic) && (NULL != msg)) {
+ 753              		.loc 1 252 8
+ 754 00a5 48837DE8 		cmpq	$0, -24(%rbp)
+ 754      00
+ 755 00aa 742F     		je	.L50
+ 756              		.loc 1 252 25 discriminator 1
+ 757 00ac 48837DF0 		cmpq	$0, -16(%rbp)
+ 757      00
+GAS LISTING /tmp/ccYXZdXF.s 			page 22
+
+
+ 758 00b1 7428     		je	.L50
+ 253:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         ret = oc_mqtt_publish(topic, (uint8_t *)msg, strlen(msg), (int)en_mqtt_al_qos_1);
+ 759              		.loc 1 253 54
+ 760 00b3 488B45F0 		movq	-16(%rbp), %rax
+ 761 00b7 4889C7   		movq	%rax, %rdi
+ 762 00ba E8000000 		call	strlen@PLT
+ 762      00
+ 763              		.loc 1 253 15
+ 764 00bf 89C2     		movl	%eax, %edx
+ 765 00c1 488B75F0 		movq	-16(%rbp), %rsi
+ 766 00c5 488B45E8 		movq	-24(%rbp), %rax
+ 767 00c9 B9010000 		movl	$1, %ecx
+ 767      00
+ 768 00ce 4889C7   		movq	%rax, %rdi
+ 769 00d1 E8000000 		call	oc_mqtt_publish@PLT
+ 769      00
+ 770 00d6 8945E4   		movl	%eax, -28(%rbp)
+ 771              		.loc 1 253 13
+ 772 00d9 EB07     		jmp	.L51
+ 773              	.L50:
+ 254:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     } else {
+ 255:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         ret = (int)en_oc_mqtt_err_sysmem;
+ 774              		.loc 1 255 13
+ 775 00db C745E40F 		movl	$15, -28(%rbp)
+ 775      000000
+ 776              	.L51:
+ 256:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 257:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 258:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     osal_free(topic);
+ 777              		.loc 1 258 5
+ 778 00e2 488B45E8 		movq	-24(%rbp), %rax
+ 779 00e6 4889C7   		movq	%rax, %rdi
+ 780 00e9 E8000000 		call	osal_free@PLT
+ 780      00
+ 259:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     osal_free(msg);
+ 781              		.loc 1 259 5
+ 782 00ee 488B45F0 		movq	-16(%rbp), %rax
+ 783 00f2 4889C7   		movq	%rax, %rdi
+ 784 00f5 E8000000 		call	osal_free@PLT
+ 784      00
+ 260:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 261:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     return ret;
+ 785              		.loc 1 261 12
+ 786 00fa 8B45E4   		movl	-28(%rbp), %eax
+ 787              	.L47:
+ 262:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** }
+ 788              		.loc 1 262 1
+ 789 00fd 488B4DF8 		movq	-8(%rbp), %rcx
+ 790 0101 6448330C 		xorq	%fs:40, %rcx
+ 790      25280000 
+ 790      00
+ 791 010a 7405     		je	.L52
+ 792 010c E8000000 		call	__stack_chk_fail@PLT
+ 792      00
+ 793              	.L52:
+ 794 0111 C9       		leave
+ 795              	.LCFI17:
+GAS LISTING /tmp/ccYXZdXF.s 			page 23
+
+
+ 796              		.cfi_def_cfa 7, 8
+ 797 0112 C3       		ret
+ 798              		.cfi_endproc
+ 799              	.LFE5:
+ 801              		.section	.rodata
+ 802 00d5 000000   		.align 8
+ 803              	.LC10:
+ 804 00d8 246F632F 		.string	"$oc/devices/%s/sys/gateway/sub_devices/properties/report"
+ 804      64657669 
+ 804      6365732F 
+ 804      25732F73 
+ 804      79732F67 
+ 805              		.section	.text.oc_mqtt_profile_gwpropertyreport,"ax",@progbits
+ 806              		.globl	oc_mqtt_profile_gwpropertyreport
+ 808              	oc_mqtt_profile_gwpropertyreport:
+ 809              	.LFB6:
+ 263:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 264:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #define CN_OC_MQTT_PROFILE_GWPROPERTYREPORT_TOPICFMT "$oc/devices/%s/sys/gateway/sub_devices/proper
+ 265:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** int oc_mqtt_profile_gwpropertyreport(char *deviceid, oc_mqtt_profile_device_t *payload)
+ 266:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** {
+ 810              		.loc 1 266 1
+ 811              		.cfi_startproc
+ 812 0000 F30F1EFA 		endbr64
+ 813 0004 55       		pushq	%rbp
+ 814              	.LCFI18:
+ 815              		.cfi_def_cfa_offset 16
+ 816              		.cfi_offset 6, -16
+ 817 0005 4889E5   		movq	%rsp, %rbp
+ 818              	.LCFI19:
+ 819              		.cfi_def_cfa_register 6
+ 820 0008 4883EC30 		subq	$48, %rsp
+ 821 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 822 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 823              		.loc 1 266 1
+ 824 0014 64488B04 		movq	%fs:40, %rax
+ 824      25280000 
+ 824      00
+ 825 001d 488945F8 		movq	%rax, -8(%rbp)
+ 826 0021 31C0     		xorl	%eax, %eax
+ 267:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     int ret = (int)en_oc_mqtt_err_parafmt;
+ 827              		.loc 1 267 9
+ 828 0023 C745E401 		movl	$1, -28(%rbp)
+ 828      000000
+ 268:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     char *topic;
+ 269:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     char *msg;
+ 270:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 271:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if (NULL == deviceid) {
+ 829              		.loc 1 271 8
+ 830 002a 48837DD8 		cmpq	$0, -40(%rbp)
+ 830      00
+ 831 002f 751F     		jne	.L54
+ 272:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         if (NULL == s_oc_mqtt_profile_cb.device_id) {
+ 832              		.loc 1 272 41
+ 833 0031 488B0500 		movq	s_oc_mqtt_profile_cb(%rip), %rax
+ 833      000000
+ 834              		.loc 1 272 12
+ 835 0038 4885C0   		testq	%rax, %rax
+GAS LISTING /tmp/ccYXZdXF.s 			page 24
+
+
+ 836 003b 7508     		jne	.L55
+ 273:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             return ret;
+ 837              		.loc 1 273 20
+ 838 003d 8B45E4   		movl	-28(%rbp), %eax
+ 839 0040 E9DA0000 		jmp	.L56
+ 839      00
+ 840              	.L55:
+ 274:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         } else {
+ 275:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             deviceid = s_oc_mqtt_profile_cb.device_id;
+ 841              		.loc 1 275 22
+ 842 0045 488B0500 		movq	s_oc_mqtt_profile_cb(%rip), %rax
+ 842      000000
+ 843 004c 488945D8 		movq	%rax, -40(%rbp)
+ 844              	.L54:
+ 276:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         }
+ 277:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 278:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 279:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if ((NULL == payload) || (NULL == payload->subdevice_id) || (NULL == payload->subdevice_propert
+ 845              		.loc 1 279 8
+ 846 0050 48837DD0 		cmpq	$0, -48(%rbp)
+ 846      00
+ 847 0055 743C     		je	.L57
+ 848              		.loc 1 279 46 discriminator 1
+ 849 0057 488B45D0 		movq	-48(%rbp), %rax
+ 850 005b 488B4008 		movq	8(%rax), %rax
+ 851              		.loc 1 279 27 discriminator 1
+ 852 005f 4885C0   		testq	%rax, %rax
+ 853 0062 742F     		je	.L57
+ 854              		.loc 1 279 81 discriminator 2
+ 855 0064 488B45D0 		movq	-48(%rbp), %rax
+ 856 0068 488B4010 		movq	16(%rax), %rax
+ 857              		.loc 1 279 62 discriminator 2
+ 858 006c 4885C0   		testq	%rax, %rax
+ 859 006f 7422     		je	.L57
+ 280:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         (NULL == payload->subdevice_property->service_id) || (NULL == payload->subdevice_property->
+ 860              		.loc 1 280 25 discriminator 3
+ 861 0071 488B45D0 		movq	-48(%rbp), %rax
+ 862 0075 488B4010 		movq	16(%rax), %rax
+ 863              		.loc 1 280 45 discriminator 3
+ 864 0079 488B4008 		movq	8(%rax), %rax
+ 279:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         (NULL == payload->subdevice_property->service_id) || (NULL == payload->subdevice_property->
+ 865              		.loc 1 279 103 discriminator 3
+ 866 007d 4885C0   		testq	%rax, %rax
+ 867 0080 7411     		je	.L57
+ 868              		.loc 1 280 78
+ 869 0082 488B45D0 		movq	-48(%rbp), %rax
+ 870 0086 488B4010 		movq	16(%rax), %rax
+ 871              		.loc 1 280 98
+ 872 008a 488B4018 		movq	24(%rax), %rax
+ 873              		.loc 1 280 59
+ 874 008e 4885C0   		testq	%rax, %rax
+ 875 0091 7508     		jne	.L58
+ 876              	.L57:
+ 281:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         return ret;
+ 877              		.loc 1 281 16
+ 878 0093 8B45E4   		movl	-28(%rbp), %eax
+ 879 0096 E9840000 		jmp	.L56
+GAS LISTING /tmp/ccYXZdXF.s 			page 25
+
+
+ 879      00
+ 880              	.L58:
+ 282:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 283:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 284:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     topic = topic_make(CN_OC_MQTT_PROFILE_GWPROPERTYREPORT_TOPICFMT, deviceid, NULL);
+ 881              		.loc 1 284 13
+ 882 009b 488B45D8 		movq	-40(%rbp), %rax
+ 883 009f BA000000 		movl	$0, %edx
+ 883      00
+ 884 00a4 4889C6   		movq	%rax, %rsi
+ 885 00a7 488D3D00 		leaq	.LC10(%rip), %rdi
+ 885      000000
+ 886 00ae E8000000 		call	topic_make
+ 886      00
+ 887 00b3 488945E8 		movq	%rax, -24(%rbp)
+ 285:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     msg = oc_mqtt_profile_package_gwpropertyreport(payload);
+ 888              		.loc 1 285 11
+ 889 00b7 488B45D0 		movq	-48(%rbp), %rax
+ 890 00bb 4889C7   		movq	%rax, %rdi
+ 891 00be E8000000 		call	oc_mqtt_profile_package_gwpropertyreport@PLT
+ 891      00
+ 892 00c3 488945F0 		movq	%rax, -16(%rbp)
+ 286:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 287:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if ((NULL != topic) && (NULL != msg)) {
+ 893              		.loc 1 287 8
+ 894 00c7 48837DE8 		cmpq	$0, -24(%rbp)
+ 894      00
+ 895 00cc 742F     		je	.L59
+ 896              		.loc 1 287 25 discriminator 1
+ 897 00ce 48837DF0 		cmpq	$0, -16(%rbp)
+ 897      00
+ 898 00d3 7428     		je	.L59
+ 288:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         ret = oc_mqtt_publish(topic, (uint8_t *)msg, strlen(msg), (int)en_mqtt_al_qos_1);
+ 899              		.loc 1 288 54
+ 900 00d5 488B45F0 		movq	-16(%rbp), %rax
+ 901 00d9 4889C7   		movq	%rax, %rdi
+ 902 00dc E8000000 		call	strlen@PLT
+ 902      00
+ 903              		.loc 1 288 15
+ 904 00e1 89C2     		movl	%eax, %edx
+ 905 00e3 488B75F0 		movq	-16(%rbp), %rsi
+ 906 00e7 488B45E8 		movq	-24(%rbp), %rax
+ 907 00eb B9010000 		movl	$1, %ecx
+ 907      00
+ 908 00f0 4889C7   		movq	%rax, %rdi
+ 909 00f3 E8000000 		call	oc_mqtt_publish@PLT
+ 909      00
+ 910 00f8 8945E4   		movl	%eax, -28(%rbp)
+ 911              		.loc 1 288 13
+ 912 00fb EB07     		jmp	.L60
+ 913              	.L59:
+ 289:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     } else {
+ 290:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         ret = (int)en_oc_mqtt_err_sysmem;
+ 914              		.loc 1 290 13
+ 915 00fd C745E40F 		movl	$15, -28(%rbp)
+ 915      000000
+ 916              	.L60:
+GAS LISTING /tmp/ccYXZdXF.s 			page 26
+
+
+ 291:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 292:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 293:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     osal_free(topic);
+ 917              		.loc 1 293 5
+ 918 0104 488B45E8 		movq	-24(%rbp), %rax
+ 919 0108 4889C7   		movq	%rax, %rdi
+ 920 010b E8000000 		call	osal_free@PLT
+ 920      00
+ 294:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     osal_free(msg);
+ 921              		.loc 1 294 5
+ 922 0110 488B45F0 		movq	-16(%rbp), %rax
+ 923 0114 4889C7   		movq	%rax, %rdi
+ 924 0117 E8000000 		call	osal_free@PLT
+ 924      00
+ 295:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 296:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     return ret;
+ 925              		.loc 1 296 12
+ 926 011c 8B45E4   		movl	-28(%rbp), %eax
+ 927              	.L56:
+ 297:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** }
+ 928              		.loc 1 297 1
+ 929 011f 488B4DF8 		movq	-8(%rbp), %rcx
+ 930 0123 6448330C 		xorq	%fs:40, %rcx
+ 930      25280000 
+ 930      00
+ 931 012c 7405     		je	.L61
+ 932 012e E8000000 		call	__stack_chk_fail@PLT
+ 932      00
+ 933              	.L61:
+ 934 0133 C9       		leave
+ 935              	.LCFI20:
+ 936              		.cfi_def_cfa 7, 8
+ 937 0134 C3       		ret
+ 938              		.cfi_endproc
+ 939              	.LFE6:
+ 941              		.section	.rodata
+ 942 0111 00000000 		.align 8
+ 942      000000
+ 943              	.LC11:
+ 944 0118 246F632F 		.string	"$oc/devices/%s/sys/properties/set/response/request_id=%s"
+ 944      64657669 
+ 944      6365732F 
+ 944      25732F73 
+ 944      79732F70 
+ 945              		.section	.text.oc_mqtt_profile_propertysetresp,"ax",@progbits
+ 946              		.globl	oc_mqtt_profile_propertysetresp
+ 948              	oc_mqtt_profile_propertysetresp:
+ 949              	.LFB7:
+ 298:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 299:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #define CN_OC_MQTT_PROFILE_ROPERTYSETRESP_TOPICFMT "$oc/devices/%s/sys/properties/set/response/requ
+ 300:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** int oc_mqtt_profile_propertysetresp(char *deviceid, oc_mqtt_profile_propertysetresp_t *payload)
+ 301:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** {
+ 950              		.loc 1 301 1
+ 951              		.cfi_startproc
+ 952 0000 F30F1EFA 		endbr64
+ 953 0004 55       		pushq	%rbp
+ 954              	.LCFI21:
+GAS LISTING /tmp/ccYXZdXF.s 			page 27
+
+
+ 955              		.cfi_def_cfa_offset 16
+ 956              		.cfi_offset 6, -16
+ 957 0005 4889E5   		movq	%rsp, %rbp
+ 958              	.LCFI22:
+ 959              		.cfi_def_cfa_register 6
+ 960 0008 4883EC30 		subq	$48, %rsp
+ 961 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 962 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 963              		.loc 1 301 1
+ 964 0014 64488B04 		movq	%fs:40, %rax
+ 964      25280000 
+ 964      00
+ 965 001d 488945F8 		movq	%rax, -8(%rbp)
+ 966 0021 31C0     		xorl	%eax, %eax
+ 302:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     int ret = (int)en_oc_mqtt_err_parafmt;
+ 967              		.loc 1 302 9
+ 968 0023 C745E401 		movl	$1, -28(%rbp)
+ 968      000000
+ 303:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     char *topic;
+ 304:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     char *msg;
+ 305:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 306:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if (NULL == deviceid) {
+ 969              		.loc 1 306 8
+ 970 002a 48837DD8 		cmpq	$0, -40(%rbp)
+ 970      00
+ 971 002f 751F     		jne	.L63
+ 307:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         if (NULL == s_oc_mqtt_profile_cb.device_id) {
+ 972              		.loc 1 307 41
+ 973 0031 488B0500 		movq	s_oc_mqtt_profile_cb(%rip), %rax
+ 973      000000
+ 974              		.loc 1 307 12
+ 975 0038 4885C0   		testq	%rax, %rax
+ 976 003b 7508     		jne	.L64
+ 308:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             return ret;
+ 977              		.loc 1 308 20
+ 978 003d 8B45E4   		movl	-28(%rbp), %eax
+ 979 0040 E9AE0000 		jmp	.L65
+ 979      00
+ 980              	.L64:
+ 309:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         } else {
+ 310:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             deviceid = s_oc_mqtt_profile_cb.device_id;
+ 981              		.loc 1 310 22
+ 982 0045 488B0500 		movq	s_oc_mqtt_profile_cb(%rip), %rax
+ 982      000000
+ 983 004c 488945D8 		movq	%rax, -40(%rbp)
+ 984              	.L63:
+ 311:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         }
+ 312:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 313:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 314:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if ((NULL == payload) || (NULL == payload->request_id)) {
+ 985              		.loc 1 314 8
+ 986 0050 48837DD0 		cmpq	$0, -48(%rbp)
+ 986      00
+ 987 0055 740D     		je	.L66
+ 988              		.loc 1 314 46 discriminator 1
+ 989 0057 488B45D0 		movq	-48(%rbp), %rax
+ 990 005b 488B4010 		movq	16(%rax), %rax
+GAS LISTING /tmp/ccYXZdXF.s 			page 28
+
+
+ 991              		.loc 1 314 27 discriminator 1
+ 992 005f 4885C0   		testq	%rax, %rax
+ 993 0062 7508     		jne	.L67
+ 994              	.L66:
+ 315:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         return ret;
+ 995              		.loc 1 315 16
+ 996 0064 8B45E4   		movl	-28(%rbp), %eax
+ 997 0067 E9870000 		jmp	.L65
+ 997      00
+ 998              	.L67:
+ 316:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 317:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     topic = topic_make(CN_OC_MQTT_PROFILE_ROPERTYSETRESP_TOPICFMT, deviceid, payload->request_id);
+ 999              		.loc 1 317 13
+ 1000 006c 488B45D0 		movq	-48(%rbp), %rax
+ 1001 0070 488B5010 		movq	16(%rax), %rdx
+ 1002 0074 488B45D8 		movq	-40(%rbp), %rax
+ 1003 0078 4889C6   		movq	%rax, %rsi
+ 1004 007b 488D3D00 		leaq	.LC11(%rip), %rdi
+ 1004      000000
+ 1005 0082 E8000000 		call	topic_make
+ 1005      00
+ 1006 0087 488945E8 		movq	%rax, -24(%rbp)
+ 318:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     msg = oc_mqtt_profile_package_propertysetresp(payload);
+ 1007              		.loc 1 318 11
+ 1008 008b 488B45D0 		movq	-48(%rbp), %rax
+ 1009 008f 4889C7   		movq	%rax, %rdi
+ 1010 0092 E8000000 		call	oc_mqtt_profile_package_propertysetresp@PLT
+ 1010      00
+ 1011 0097 488945F0 		movq	%rax, -16(%rbp)
+ 319:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 320:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if ((NULL != topic) && (NULL != msg)) {
+ 1012              		.loc 1 320 8
+ 1013 009b 48837DE8 		cmpq	$0, -24(%rbp)
+ 1013      00
+ 1014 00a0 742F     		je	.L68
+ 1015              		.loc 1 320 25 discriminator 1
+ 1016 00a2 48837DF0 		cmpq	$0, -16(%rbp)
+ 1016      00
+ 1017 00a7 7428     		je	.L68
+ 321:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         ret = oc_mqtt_publish(topic, (uint8_t *)msg, strlen(msg), (int)en_mqtt_al_qos_1);
+ 1018              		.loc 1 321 54
+ 1019 00a9 488B45F0 		movq	-16(%rbp), %rax
+ 1020 00ad 4889C7   		movq	%rax, %rdi
+ 1021 00b0 E8000000 		call	strlen@PLT
+ 1021      00
+ 1022              		.loc 1 321 15
+ 1023 00b5 89C2     		movl	%eax, %edx
+ 1024 00b7 488B75F0 		movq	-16(%rbp), %rsi
+ 1025 00bb 488B45E8 		movq	-24(%rbp), %rax
+ 1026 00bf B9010000 		movl	$1, %ecx
+ 1026      00
+ 1027 00c4 4889C7   		movq	%rax, %rdi
+ 1028 00c7 E8000000 		call	oc_mqtt_publish@PLT
+ 1028      00
+ 1029 00cc 8945E4   		movl	%eax, -28(%rbp)
+ 1030              		.loc 1 321 13
+ 1031 00cf EB07     		jmp	.L69
+GAS LISTING /tmp/ccYXZdXF.s 			page 29
+
+
+ 1032              	.L68:
+ 322:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     } else {
+ 323:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         ret = (int)en_oc_mqtt_err_sysmem;
+ 1033              		.loc 1 323 13
+ 1034 00d1 C745E40F 		movl	$15, -28(%rbp)
+ 1034      000000
+ 1035              	.L69:
+ 324:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 325:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 326:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     osal_free(topic);
+ 1036              		.loc 1 326 5
+ 1037 00d8 488B45E8 		movq	-24(%rbp), %rax
+ 1038 00dc 4889C7   		movq	%rax, %rdi
+ 1039 00df E8000000 		call	osal_free@PLT
+ 1039      00
+ 327:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     osal_free(msg);
+ 1040              		.loc 1 327 5
+ 1041 00e4 488B45F0 		movq	-16(%rbp), %rax
+ 1042 00e8 4889C7   		movq	%rax, %rdi
+ 1043 00eb E8000000 		call	osal_free@PLT
+ 1043      00
+ 328:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 329:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     return ret;
+ 1044              		.loc 1 329 12
+ 1045 00f0 8B45E4   		movl	-28(%rbp), %eax
+ 1046              	.L65:
+ 330:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** }
+ 1047              		.loc 1 330 1
+ 1048 00f3 488B4DF8 		movq	-8(%rbp), %rcx
+ 1049 00f7 6448330C 		xorq	%fs:40, %rcx
+ 1049      25280000 
+ 1049      00
+ 1050 0100 7405     		je	.L70
+ 1051 0102 E8000000 		call	__stack_chk_fail@PLT
+ 1051      00
+ 1052              	.L70:
+ 1053 0107 C9       		leave
+ 1054              	.LCFI23:
+ 1055              		.cfi_def_cfa 7, 8
+ 1056 0108 C3       		ret
+ 1057              		.cfi_endproc
+ 1058              	.LFE7:
+ 1060              		.section	.rodata
+ 1061 0151 00000000 		.align 8
+ 1061      000000
+ 1062              	.LC12:
+ 1063 0158 246F632F 		.string	"$oc/devices/%s/sys/properties/get/response/request_id=%s"
+ 1063      64657669 
+ 1063      6365732F 
+ 1063      25732F73 
+ 1063      79732F70 
+ 1064              		.section	.text.oc_mqtt_profile_propertygetresp,"ax",@progbits
+ 1065              		.globl	oc_mqtt_profile_propertygetresp
+ 1067              	oc_mqtt_profile_propertygetresp:
+ 1068              	.LFB8:
+ 331:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 332:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #define CN_OC_MQTT_PROFILE_ROPERTYGETRESP_TOPICFMT "$oc/devices/%s/sys/properties/get/response/requ
+GAS LISTING /tmp/ccYXZdXF.s 			page 30
+
+
+ 333:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** int oc_mqtt_profile_propertygetresp(char *deviceid, oc_mqtt_profile_propertygetresp_t *payload)
+ 334:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** {
+ 1069              		.loc 1 334 1
+ 1070              		.cfi_startproc
+ 1071 0000 F30F1EFA 		endbr64
+ 1072 0004 55       		pushq	%rbp
+ 1073              	.LCFI24:
+ 1074              		.cfi_def_cfa_offset 16
+ 1075              		.cfi_offset 6, -16
+ 1076 0005 4889E5   		movq	%rsp, %rbp
+ 1077              	.LCFI25:
+ 1078              		.cfi_def_cfa_register 6
+ 1079 0008 4883EC30 		subq	$48, %rsp
+ 1080 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 1081 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 1082              		.loc 1 334 1
+ 1083 0014 64488B04 		movq	%fs:40, %rax
+ 1083      25280000 
+ 1083      00
+ 1084 001d 488945F8 		movq	%rax, -8(%rbp)
+ 1085 0021 31C0     		xorl	%eax, %eax
+ 335:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     int ret = (int)en_oc_mqtt_err_parafmt;
+ 1086              		.loc 1 335 9
+ 1087 0023 C745E401 		movl	$1, -28(%rbp)
+ 1087      000000
+ 336:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     char *topic;
+ 337:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     char *msg;
+ 338:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 339:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if (NULL == deviceid) {
+ 1088              		.loc 1 339 8
+ 1089 002a 48837DD8 		cmpq	$0, -40(%rbp)
+ 1089      00
+ 1090 002f 751F     		jne	.L72
+ 340:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         if (NULL == s_oc_mqtt_profile_cb.device_id) {
+ 1091              		.loc 1 340 41
+ 1092 0031 488B0500 		movq	s_oc_mqtt_profile_cb(%rip), %rax
+ 1092      000000
+ 1093              		.loc 1 340 12
+ 1094 0038 4885C0   		testq	%rax, %rax
+ 1095 003b 7508     		jne	.L73
+ 341:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             return ret;
+ 1096              		.loc 1 341 20
+ 1097 003d 8B45E4   		movl	-28(%rbp), %eax
+ 1098 0040 E9CE0000 		jmp	.L74
+ 1098      00
+ 1099              	.L73:
+ 342:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         } else {
+ 343:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             deviceid = s_oc_mqtt_profile_cb.device_id;
+ 1100              		.loc 1 343 22
+ 1101 0045 488B0500 		movq	s_oc_mqtt_profile_cb(%rip), %rax
+ 1101      000000
+ 1102 004c 488945D8 		movq	%rax, -40(%rbp)
+ 1103              	.L72:
+ 344:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         }
+ 345:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 346:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 347:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if ((NULL == payload) || (NULL == payload->request_id) || (NULL == payload->services->service_i
+GAS LISTING /tmp/ccYXZdXF.s 			page 31
+
+
+ 1104              		.loc 1 347 8
+ 1105 0050 48837DD0 		cmpq	$0, -48(%rbp)
+ 1105      00
+ 1106 0055 742E     		je	.L75
+ 1107              		.loc 1 347 46 discriminator 1
+ 1108 0057 488B45D0 		movq	-48(%rbp), %rax
+ 1109 005b 488B00   		movq	(%rax), %rax
+ 1110              		.loc 1 347 27 discriminator 1
+ 1111 005e 4885C0   		testq	%rax, %rax
+ 1112 0061 7422     		je	.L75
+ 1113              		.loc 1 347 79 discriminator 2
+ 1114 0063 488B45D0 		movq	-48(%rbp), %rax
+ 1115 0067 488B4008 		movq	8(%rax), %rax
+ 1116              		.loc 1 347 89 discriminator 2
+ 1117 006b 488B4008 		movq	8(%rax), %rax
+ 1118              		.loc 1 347 60 discriminator 2
+ 1119 006f 4885C0   		testq	%rax, %rax
+ 1120 0072 7411     		je	.L75
+ 348:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         (NULL == payload->services->service_property)) {
+ 1121              		.loc 1 348 25 discriminator 3
+ 1122 0074 488B45D0 		movq	-48(%rbp), %rax
+ 1123 0078 488B4008 		movq	8(%rax), %rax
+ 1124              		.loc 1 348 35 discriminator 3
+ 1125 007c 488B4018 		movq	24(%rax), %rax
+ 347:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         (NULL == payload->services->service_property)) {
+ 1126              		.loc 1 347 103 discriminator 3
+ 1127 0080 4885C0   		testq	%rax, %rax
+ 1128 0083 7508     		jne	.L76
+ 1129              	.L75:
+ 349:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         return ret;
+ 1130              		.loc 1 349 16
+ 1131 0085 8B45E4   		movl	-28(%rbp), %eax
+ 1132 0088 E9860000 		jmp	.L74
+ 1132      00
+ 1133              	.L76:
+ 350:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 351:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 352:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     topic = topic_make(CN_OC_MQTT_PROFILE_ROPERTYGETRESP_TOPICFMT, deviceid, payload->request_id);
+ 1134              		.loc 1 352 13
+ 1135 008d 488B45D0 		movq	-48(%rbp), %rax
+ 1136 0091 488B10   		movq	(%rax), %rdx
+ 1137 0094 488B45D8 		movq	-40(%rbp), %rax
+ 1138 0098 4889C6   		movq	%rax, %rsi
+ 1139 009b 488D3D00 		leaq	.LC12(%rip), %rdi
+ 1139      000000
+ 1140 00a2 E8000000 		call	topic_make
+ 1140      00
+ 1141 00a7 488945E8 		movq	%rax, -24(%rbp)
+ 353:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     msg = oc_mqtt_profile_package_propertygetresp(payload);
+ 1142              		.loc 1 353 11
+ 1143 00ab 488B45D0 		movq	-48(%rbp), %rax
+ 1144 00af 4889C7   		movq	%rax, %rdi
+ 1145 00b2 E8000000 		call	oc_mqtt_profile_package_propertygetresp@PLT
+ 1145      00
+ 1146 00b7 488945F0 		movq	%rax, -16(%rbp)
+ 354:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 355:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if ((NULL != topic) && (NULL != msg)) {
+GAS LISTING /tmp/ccYXZdXF.s 			page 32
+
+
+ 1147              		.loc 1 355 8
+ 1148 00bb 48837DE8 		cmpq	$0, -24(%rbp)
+ 1148      00
+ 1149 00c0 742F     		je	.L77
+ 1150              		.loc 1 355 25 discriminator 1
+ 1151 00c2 48837DF0 		cmpq	$0, -16(%rbp)
+ 1151      00
+ 1152 00c7 7428     		je	.L77
+ 356:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         ret = oc_mqtt_publish(topic, (uint8_t *)msg, strlen(msg), (int)en_mqtt_al_qos_1);
+ 1153              		.loc 1 356 54
+ 1154 00c9 488B45F0 		movq	-16(%rbp), %rax
+ 1155 00cd 4889C7   		movq	%rax, %rdi
+ 1156 00d0 E8000000 		call	strlen@PLT
+ 1156      00
+ 1157              		.loc 1 356 15
+ 1158 00d5 89C2     		movl	%eax, %edx
+ 1159 00d7 488B75F0 		movq	-16(%rbp), %rsi
+ 1160 00db 488B45E8 		movq	-24(%rbp), %rax
+ 1161 00df B9010000 		movl	$1, %ecx
+ 1161      00
+ 1162 00e4 4889C7   		movq	%rax, %rdi
+ 1163 00e7 E8000000 		call	oc_mqtt_publish@PLT
+ 1163      00
+ 1164 00ec 8945E4   		movl	%eax, -28(%rbp)
+ 1165              		.loc 1 356 13
+ 1166 00ef EB07     		jmp	.L78
+ 1167              	.L77:
+ 357:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     } else {
+ 358:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         ret = (int)en_oc_mqtt_err_sysmem;
+ 1168              		.loc 1 358 13
+ 1169 00f1 C745E40F 		movl	$15, -28(%rbp)
+ 1169      000000
+ 1170              	.L78:
+ 359:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 360:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 361:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     osal_free(topic);
+ 1171              		.loc 1 361 5
+ 1172 00f8 488B45E8 		movq	-24(%rbp), %rax
+ 1173 00fc 4889C7   		movq	%rax, %rdi
+ 1174 00ff E8000000 		call	osal_free@PLT
+ 1174      00
+ 362:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     osal_free(msg);
+ 1175              		.loc 1 362 5
+ 1176 0104 488B45F0 		movq	-16(%rbp), %rax
+ 1177 0108 4889C7   		movq	%rax, %rdi
+ 1178 010b E8000000 		call	osal_free@PLT
+ 1178      00
+ 363:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 364:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     return ret;
+ 1179              		.loc 1 364 12
+ 1180 0110 8B45E4   		movl	-28(%rbp), %eax
+ 1181              	.L74:
+ 365:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** }
+ 1182              		.loc 1 365 1
+ 1183 0113 488B4DF8 		movq	-8(%rbp), %rcx
+ 1184 0117 6448330C 		xorq	%fs:40, %rcx
+ 1184      25280000 
+GAS LISTING /tmp/ccYXZdXF.s 			page 33
+
+
+ 1184      00
+ 1185 0120 7405     		je	.L79
+ 1186 0122 E8000000 		call	__stack_chk_fail@PLT
+ 1186      00
+ 1187              	.L79:
+ 1188 0127 C9       		leave
+ 1189              	.LCFI26:
+ 1190              		.cfi_def_cfa 7, 8
+ 1191 0128 C3       		ret
+ 1192              		.cfi_endproc
+ 1193              	.LFE8:
+ 1195              		.section	.rodata
+ 1196 0191 00000000 		.align 8
+ 1196      000000
+ 1197              	.LC13:
+ 1198 0198 246F632F 		.string	"$oc/devices/%s/sys/commands/response/request_id=%s"
+ 1198      64657669 
+ 1198      6365732F 
+ 1198      25732F73 
+ 1198      79732F63 
+ 1199              		.section	.text.oc_mqtt_profile_cmdresp,"ax",@progbits
+ 1200              		.globl	oc_mqtt_profile_cmdresp
+ 1202              	oc_mqtt_profile_cmdresp:
+ 1203              	.LFB9:
+ 366:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 367:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #define CN_OC_MQTT_PROFILE_CMDRESP_TOPICFMT "$oc/devices/%s/sys/commands/response/request_id=%s"
+ 368:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** int oc_mqtt_profile_cmdresp(char *deviceid, oc_mqtt_profile_cmdresp_t *payload)
+ 369:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** {
+ 1204              		.loc 1 369 1
+ 1205              		.cfi_startproc
+ 1206 0000 F30F1EFA 		endbr64
+ 1207 0004 55       		pushq	%rbp
+ 1208              	.LCFI27:
+ 1209              		.cfi_def_cfa_offset 16
+ 1210              		.cfi_offset 6, -16
+ 1211 0005 4889E5   		movq	%rsp, %rbp
+ 1212              	.LCFI28:
+ 1213              		.cfi_def_cfa_register 6
+ 1214 0008 4883EC30 		subq	$48, %rsp
+ 1215 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 1216 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 1217              		.loc 1 369 1
+ 1218 0014 64488B04 		movq	%fs:40, %rax
+ 1218      25280000 
+ 1218      00
+ 1219 001d 488945F8 		movq	%rax, -8(%rbp)
+ 1220 0021 31C0     		xorl	%eax, %eax
+ 370:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     int ret = (int)en_oc_mqtt_err_parafmt;
+ 1221              		.loc 1 370 9
+ 1222 0023 C745E401 		movl	$1, -28(%rbp)
+ 1222      000000
+ 371:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     char *topic;
+ 372:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     char *msg;
+ 373:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 374:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if (NULL == deviceid) {
+ 1223              		.loc 1 374 8
+ 1224 002a 48837DD8 		cmpq	$0, -40(%rbp)
+GAS LISTING /tmp/ccYXZdXF.s 			page 34
+
+
+ 1224      00
+ 1225 002f 751F     		jne	.L81
+ 375:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         if (NULL == s_oc_mqtt_profile_cb.device_id) {
+ 1226              		.loc 1 375 41
+ 1227 0031 488B0500 		movq	s_oc_mqtt_profile_cb(%rip), %rax
+ 1227      000000
+ 1228              		.loc 1 375 12
+ 1229 0038 4885C0   		testq	%rax, %rax
+ 1230 003b 7508     		jne	.L82
+ 376:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             return ret;
+ 1231              		.loc 1 376 20
+ 1232 003d 8B45E4   		movl	-28(%rbp), %eax
+ 1233 0040 E9AE0000 		jmp	.L83
+ 1233      00
+ 1234              	.L82:
+ 377:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         } else {
+ 378:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             deviceid = s_oc_mqtt_profile_cb.device_id;
+ 1235              		.loc 1 378 22
+ 1236 0045 488B0500 		movq	s_oc_mqtt_profile_cb(%rip), %rax
+ 1236      000000
+ 1237 004c 488945D8 		movq	%rax, -40(%rbp)
+ 1238              	.L81:
+ 379:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         }
+ 380:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 381:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 382:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if ((NULL == payload) || (NULL == payload->request_id)) {
+ 1239              		.loc 1 382 8
+ 1240 0050 48837DD0 		cmpq	$0, -48(%rbp)
+ 1240      00
+ 1241 0055 740D     		je	.L84
+ 1242              		.loc 1 382 46 discriminator 1
+ 1243 0057 488B45D0 		movq	-48(%rbp), %rax
+ 1244 005b 488B4010 		movq	16(%rax), %rax
+ 1245              		.loc 1 382 27 discriminator 1
+ 1246 005f 4885C0   		testq	%rax, %rax
+ 1247 0062 7508     		jne	.L85
+ 1248              	.L84:
+ 383:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         return ret;
+ 1249              		.loc 1 383 16
+ 1250 0064 8B45E4   		movl	-28(%rbp), %eax
+ 1251 0067 E9870000 		jmp	.L83
+ 1251      00
+ 1252              	.L85:
+ 384:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 385:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 386:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     topic = topic_make(CN_OC_MQTT_PROFILE_CMDRESP_TOPICFMT, deviceid, payload->request_id);
+ 1253              		.loc 1 386 13
+ 1254 006c 488B45D0 		movq	-48(%rbp), %rax
+ 1255 0070 488B5010 		movq	16(%rax), %rdx
+ 1256 0074 488B45D8 		movq	-40(%rbp), %rax
+ 1257 0078 4889C6   		movq	%rax, %rsi
+ 1258 007b 488D3D00 		leaq	.LC13(%rip), %rdi
+ 1258      000000
+ 1259 0082 E8000000 		call	topic_make
+ 1259      00
+ 1260 0087 488945E8 		movq	%rax, -24(%rbp)
+ 387:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     msg = oc_mqtt_profile_package_cmdresp(payload);
+GAS LISTING /tmp/ccYXZdXF.s 			page 35
+
+
+ 1261              		.loc 1 387 11
+ 1262 008b 488B45D0 		movq	-48(%rbp), %rax
+ 1263 008f 4889C7   		movq	%rax, %rdi
+ 1264 0092 E8000000 		call	oc_mqtt_profile_package_cmdresp@PLT
+ 1264      00
+ 1265 0097 488945F0 		movq	%rax, -16(%rbp)
+ 388:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 389:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if ((NULL != topic) && (NULL != msg)) {
+ 1266              		.loc 1 389 8
+ 1267 009b 48837DE8 		cmpq	$0, -24(%rbp)
+ 1267      00
+ 1268 00a0 742F     		je	.L86
+ 1269              		.loc 1 389 25 discriminator 1
+ 1270 00a2 48837DF0 		cmpq	$0, -16(%rbp)
+ 1270      00
+ 1271 00a7 7428     		je	.L86
+ 390:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         ret = oc_mqtt_publish(topic, (uint8_t *)msg, strlen(msg), (int)en_mqtt_al_qos_1);
+ 1272              		.loc 1 390 54
+ 1273 00a9 488B45F0 		movq	-16(%rbp), %rax
+ 1274 00ad 4889C7   		movq	%rax, %rdi
+ 1275 00b0 E8000000 		call	strlen@PLT
+ 1275      00
+ 1276              		.loc 1 390 15
+ 1277 00b5 89C2     		movl	%eax, %edx
+ 1278 00b7 488B75F0 		movq	-16(%rbp), %rsi
+ 1279 00bb 488B45E8 		movq	-24(%rbp), %rax
+ 1280 00bf B9010000 		movl	$1, %ecx
+ 1280      00
+ 1281 00c4 4889C7   		movq	%rax, %rdi
+ 1282 00c7 E8000000 		call	oc_mqtt_publish@PLT
+ 1282      00
+ 1283 00cc 8945E4   		movl	%eax, -28(%rbp)
+ 1284              		.loc 1 390 13
+ 1285 00cf EB07     		jmp	.L87
+ 1286              	.L86:
+ 391:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     } else {
+ 392:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         ret = (int)en_oc_mqtt_err_sysmem;
+ 1287              		.loc 1 392 13
+ 1288 00d1 C745E40F 		movl	$15, -28(%rbp)
+ 1288      000000
+ 1289              	.L87:
+ 393:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 394:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 395:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     osal_free(topic);
+ 1290              		.loc 1 395 5
+ 1291 00d8 488B45E8 		movq	-24(%rbp), %rax
+ 1292 00dc 4889C7   		movq	%rax, %rdi
+ 1293 00df E8000000 		call	osal_free@PLT
+ 1293      00
+ 396:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     osal_free(msg);
+ 1294              		.loc 1 396 5
+ 1295 00e4 488B45F0 		movq	-16(%rbp), %rax
+ 1296 00e8 4889C7   		movq	%rax, %rdi
+ 1297 00eb E8000000 		call	osal_free@PLT
+ 1297      00
+ 397:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 398:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     return ret;
+GAS LISTING /tmp/ccYXZdXF.s 			page 36
+
+
+ 1298              		.loc 1 398 12
+ 1299 00f0 8B45E4   		movl	-28(%rbp), %eax
+ 1300              	.L83:
+ 399:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** }
+ 1301              		.loc 1 399 1
+ 1302 00f3 488B4DF8 		movq	-8(%rbp), %rcx
+ 1303 00f7 6448330C 		xorq	%fs:40, %rcx
+ 1303      25280000 
+ 1303      00
+ 1304 0100 7405     		je	.L88
+ 1305 0102 E8000000 		call	__stack_chk_fail@PLT
+ 1305      00
+ 1306              	.L88:
+ 1307 0107 C9       		leave
+ 1308              	.LCFI29:
+ 1309              		.cfi_def_cfa 7, 8
+ 1310 0108 C3       		ret
+ 1311              		.cfi_endproc
+ 1312              	.LFE9:
+ 1314              		.section	.rodata
+ 1315 01cb 00000000 		.align 8
+ 1315      00
+ 1316              	.LC14:
+ 1317 01d0 246F632F 		.string	"$oc/devices/%s/sys/shadow/get/request_id=%s"
+ 1317      64657669 
+ 1317      6365732F 
+ 1317      25732F73 
+ 1317      79732F73 
+ 1318              		.section	.text.oc_mqtt_profile_getshadow,"ax",@progbits
+ 1319              		.globl	oc_mqtt_profile_getshadow
+ 1321              	oc_mqtt_profile_getshadow:
+ 1322              	.LFB10:
+ 400:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 401:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #define CN_OC_MQTT_PROFILE_GETSHADOW_TOPICFMT "$oc/devices/%s/sys/shadow/get/request_id=%s"
+ 402:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** int oc_mqtt_profile_getshadow(char *deviceid, oc_mqtt_profile_shadowget_t *payload)
+ 403:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** {
+ 1323              		.loc 1 403 1
+ 1324              		.cfi_startproc
+ 1325 0000 F30F1EFA 		endbr64
+ 1326 0004 55       		pushq	%rbp
+ 1327              	.LCFI30:
+ 1328              		.cfi_def_cfa_offset 16
+ 1329              		.cfi_offset 6, -16
+ 1330 0005 4889E5   		movq	%rsp, %rbp
+ 1331              	.LCFI31:
+ 1332              		.cfi_def_cfa_register 6
+ 1333 0008 4883EC30 		subq	$48, %rsp
+ 1334 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 1335 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 1336              		.loc 1 403 1
+ 1337 0014 64488B04 		movq	%fs:40, %rax
+ 1337      25280000 
+ 1337      00
+ 1338 001d 488945F8 		movq	%rax, -8(%rbp)
+ 1339 0021 31C0     		xorl	%eax, %eax
+ 404:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     int ret = (int)en_oc_mqtt_err_parafmt;
+ 1340              		.loc 1 404 9
+GAS LISTING /tmp/ccYXZdXF.s 			page 37
+
+
+ 1341 0023 C745E401 		movl	$1, -28(%rbp)
+ 1341      000000
+ 405:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     char *topic;
+ 406:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     char *msg;
+ 407:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 408:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if (NULL == deviceid) {
+ 1342              		.loc 1 408 8
+ 1343 002a 48837DD8 		cmpq	$0, -40(%rbp)
+ 1343      00
+ 1344 002f 751F     		jne	.L90
+ 409:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         if (NULL == s_oc_mqtt_profile_cb.device_id) {
+ 1345              		.loc 1 409 41
+ 1346 0031 488B0500 		movq	s_oc_mqtt_profile_cb(%rip), %rax
+ 1346      000000
+ 1347              		.loc 1 409 12
+ 1348 0038 4885C0   		testq	%rax, %rax
+ 1349 003b 7508     		jne	.L91
+ 410:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             return ret;
+ 1350              		.loc 1 410 20
+ 1351 003d 8B45E4   		movl	-28(%rbp), %eax
+ 1352 0040 E9AE0000 		jmp	.L92
+ 1352      00
+ 1353              	.L91:
+ 411:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         } else {
+ 412:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             deviceid = s_oc_mqtt_profile_cb.device_id;
+ 1354              		.loc 1 412 22
+ 1355 0045 488B0500 		movq	s_oc_mqtt_profile_cb(%rip), %rax
+ 1355      000000
+ 1356 004c 488945D8 		movq	%rax, -40(%rbp)
+ 1357              	.L90:
+ 413:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         }
+ 414:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 415:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 416:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if ((NULL == payload) || (NULL == payload->request_id)) {
+ 1358              		.loc 1 416 8
+ 1359 0050 48837DD0 		cmpq	$0, -48(%rbp)
+ 1359      00
+ 1360 0055 740D     		je	.L93
+ 1361              		.loc 1 416 46 discriminator 1
+ 1362 0057 488B45D0 		movq	-48(%rbp), %rax
+ 1363 005b 488B4010 		movq	16(%rax), %rax
+ 1364              		.loc 1 416 27 discriminator 1
+ 1365 005f 4885C0   		testq	%rax, %rax
+ 1366 0062 7508     		jne	.L94
+ 1367              	.L93:
+ 417:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         return ret;
+ 1368              		.loc 1 417 16
+ 1369 0064 8B45E4   		movl	-28(%rbp), %eax
+ 1370 0067 E9870000 		jmp	.L92
+ 1370      00
+ 1371              	.L94:
+ 418:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 419:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 420:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     topic = topic_make(CN_OC_MQTT_PROFILE_GETSHADOW_TOPICFMT, deviceid, payload->request_id);
+ 1372              		.loc 1 420 13
+ 1373 006c 488B45D0 		movq	-48(%rbp), %rax
+ 1374 0070 488B5010 		movq	16(%rax), %rdx
+GAS LISTING /tmp/ccYXZdXF.s 			page 38
+
+
+ 1375 0074 488B45D8 		movq	-40(%rbp), %rax
+ 1376 0078 4889C6   		movq	%rax, %rsi
+ 1377 007b 488D3D00 		leaq	.LC14(%rip), %rdi
+ 1377      000000
+ 1378 0082 E8000000 		call	topic_make
+ 1378      00
+ 1379 0087 488945E8 		movq	%rax, -24(%rbp)
+ 421:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     msg = oc_mqtt_profile_package_shadowget(payload);
+ 1380              		.loc 1 421 11
+ 1381 008b 488B45D0 		movq	-48(%rbp), %rax
+ 1382 008f 4889C7   		movq	%rax, %rdi
+ 1383 0092 E8000000 		call	oc_mqtt_profile_package_shadowget@PLT
+ 1383      00
+ 1384 0097 488945F0 		movq	%rax, -16(%rbp)
+ 422:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 423:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if ((NULL != topic) && (NULL != msg)) {
+ 1385              		.loc 1 423 8
+ 1386 009b 48837DE8 		cmpq	$0, -24(%rbp)
+ 1386      00
+ 1387 00a0 742F     		je	.L95
+ 1388              		.loc 1 423 25 discriminator 1
+ 1389 00a2 48837DF0 		cmpq	$0, -16(%rbp)
+ 1389      00
+ 1390 00a7 7428     		je	.L95
+ 424:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         ret = oc_mqtt_publish(topic, (uint8_t *)msg, strlen(msg), (int)en_mqtt_al_qos_1);
+ 1391              		.loc 1 424 54
+ 1392 00a9 488B45F0 		movq	-16(%rbp), %rax
+ 1393 00ad 4889C7   		movq	%rax, %rdi
+ 1394 00b0 E8000000 		call	strlen@PLT
+ 1394      00
+ 1395              		.loc 1 424 15
+ 1396 00b5 89C2     		movl	%eax, %edx
+ 1397 00b7 488B75F0 		movq	-16(%rbp), %rsi
+ 1398 00bb 488B45E8 		movq	-24(%rbp), %rax
+ 1399 00bf B9010000 		movl	$1, %ecx
+ 1399      00
+ 1400 00c4 4889C7   		movq	%rax, %rdi
+ 1401 00c7 E8000000 		call	oc_mqtt_publish@PLT
+ 1401      00
+ 1402 00cc 8945E4   		movl	%eax, -28(%rbp)
+ 1403              		.loc 1 424 13
+ 1404 00cf EB07     		jmp	.L96
+ 1405              	.L95:
+ 425:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     } else {
+ 426:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         ret = (int)en_oc_mqtt_err_sysmem;
+ 1406              		.loc 1 426 13
+ 1407 00d1 C745E40F 		movl	$15, -28(%rbp)
+ 1407      000000
+ 1408              	.L96:
+ 427:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 428:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 429:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     osal_free(topic);
+ 1409              		.loc 1 429 5
+ 1410 00d8 488B45E8 		movq	-24(%rbp), %rax
+ 1411 00dc 4889C7   		movq	%rax, %rdi
+ 1412 00df E8000000 		call	osal_free@PLT
+ 1412      00
+GAS LISTING /tmp/ccYXZdXF.s 			page 39
+
+
+ 430:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     osal_free(msg);
+ 1413              		.loc 1 430 5
+ 1414 00e4 488B45F0 		movq	-16(%rbp), %rax
+ 1415 00e8 4889C7   		movq	%rax, %rdi
+ 1416 00eb E8000000 		call	osal_free@PLT
+ 1416      00
+ 431:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 432:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     return ret;
+ 1417              		.loc 1 432 12
+ 1418 00f0 8B45E4   		movl	-28(%rbp), %eax
+ 1419              	.L92:
+ 433:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** }
+ 1420              		.loc 1 433 1
+ 1421 00f3 488B4DF8 		movq	-8(%rbp), %rcx
+ 1422 00f7 6448330C 		xorq	%fs:40, %rcx
+ 1422      25280000 
+ 1422      00
+ 1423 0100 7405     		je	.L97
+ 1424 0102 E8000000 		call	__stack_chk_fail@PLT
+ 1424      00
+ 1425              	.L97:
+ 1426 0107 C9       		leave
+ 1427              	.LCFI32:
+ 1428              		.cfi_def_cfa 7, 8
+ 1429 0108 C3       		ret
+ 1430              		.cfi_endproc
+ 1431              	.LFE10:
+ 1433              		.section	.rodata
+ 1434              	.LC15:
+ 1435 01fc 246F632F 		.string	"$oc/devices/%s/sys/events/up"
+ 1435      64657669 
+ 1435      6365732F 
+ 1435      25732F73 
+ 1435      79732F65 
+ 1436              		.section	.text.oc_mqtt_profile_reportevent,"ax",@progbits
+ 1437              		.globl	oc_mqtt_profile_reportevent
+ 1439              	oc_mqtt_profile_reportevent:
+ 1440              	.LFB11:
+ 434:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 435:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** #define CN_OC_MQTT_PROFILE_EVENT_TOPICFMT "$oc/devices/%s/sys/events/up"
+ 436:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** int oc_mqtt_profile_reportevent(char *deviceid, oc_mqtt_profile_event_t *event)
+ 437:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** {
+ 1441              		.loc 1 437 1
+ 1442              		.cfi_startproc
+ 1443 0000 F30F1EFA 		endbr64
+ 1444 0004 55       		pushq	%rbp
+ 1445              	.LCFI33:
+ 1446              		.cfi_def_cfa_offset 16
+ 1447              		.cfi_offset 6, -16
+ 1448 0005 4889E5   		movq	%rsp, %rbp
+ 1449              	.LCFI34:
+ 1450              		.cfi_def_cfa_register 6
+ 1451 0008 4883EC30 		subq	$48, %rsp
+ 1452 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 1453 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 1454              		.loc 1 437 1
+ 1455 0014 64488B04 		movq	%fs:40, %rax
+GAS LISTING /tmp/ccYXZdXF.s 			page 40
+
+
+ 1455      25280000 
+ 1455      00
+ 1456 001d 488945F8 		movq	%rax, -8(%rbp)
+ 1457 0021 31C0     		xorl	%eax, %eax
+ 438:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     int ret = (int)en_oc_mqtt_err_parafmt;
+ 1458              		.loc 1 438 9
+ 1459 0023 C745E401 		movl	$1, -28(%rbp)
+ 1459      000000
+ 439:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     char *topic;
+ 440:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     char *msg;
+ 441:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 442:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if (NULL == deviceid) {
+ 1460              		.loc 1 442 8
+ 1461 002a 48837DD8 		cmpq	$0, -40(%rbp)
+ 1461      00
+ 1462 002f 751F     		jne	.L99
+ 443:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         if (NULL == s_oc_mqtt_profile_cb.device_id) {
+ 1463              		.loc 1 443 41
+ 1464 0031 488B0500 		movq	s_oc_mqtt_profile_cb(%rip), %rax
+ 1464      000000
+ 1465              		.loc 1 443 12
+ 1466 0038 4885C0   		testq	%rax, %rax
+ 1467 003b 7508     		jne	.L100
+ 444:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             return ret;
+ 1468              		.loc 1 444 20
+ 1469 003d 8B45E4   		movl	-28(%rbp), %eax
+ 1470 0040 E9AB0000 		jmp	.L101
+ 1470      00
+ 1471              	.L100:
+ 445:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         } else {
+ 446:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****             deviceid = s_oc_mqtt_profile_cb.device_id;
+ 1472              		.loc 1 446 22
+ 1473 0045 488B0500 		movq	s_oc_mqtt_profile_cb(%rip), %rax
+ 1473      000000
+ 1474 004c 488945D8 		movq	%rax, -40(%rbp)
+ 1475              	.L99:
+ 447:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         }
+ 448:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 449:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 450:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if ((event == NULL) || (event->event_type == NULL)) {
+ 1476              		.loc 1 450 8
+ 1477 0050 48837DD0 		cmpq	$0, -48(%rbp)
+ 1477      00
+ 1478 0055 740D     		je	.L102
+ 1479              		.loc 1 450 34 discriminator 1
+ 1480 0057 488B45D0 		movq	-48(%rbp), %rax
+ 1481 005b 488B4010 		movq	16(%rax), %rax
+ 1482              		.loc 1 450 25 discriminator 1
+ 1483 005f 4885C0   		testq	%rax, %rax
+ 1484 0062 7508     		jne	.L103
+ 1485              	.L102:
+ 451:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         return ret;
+ 1486              		.loc 1 451 16
+ 1487 0064 8B45E4   		movl	-28(%rbp), %eax
+ 1488 0067 E9840000 		jmp	.L101
+ 1488      00
+ 1489              	.L103:
+GAS LISTING /tmp/ccYXZdXF.s 			page 41
+
+
+ 452:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 453:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 454:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     topic = topic_make(CN_OC_MQTT_PROFILE_EVENT_TOPICFMT, deviceid, NULL);
+ 1490              		.loc 1 454 13
+ 1491 006c 488B45D8 		movq	-40(%rbp), %rax
+ 1492 0070 BA000000 		movl	$0, %edx
+ 1492      00
+ 1493 0075 4889C6   		movq	%rax, %rsi
+ 1494 0078 488D3D00 		leaq	.LC15(%rip), %rdi
+ 1494      000000
+ 1495 007f E8000000 		call	topic_make
+ 1495      00
+ 1496 0084 488945E8 		movq	%rax, -24(%rbp)
+ 455:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     msg = oc_mqtt_profile_package_event(event);
+ 1497              		.loc 1 455 11
+ 1498 0088 488B45D0 		movq	-48(%rbp), %rax
+ 1499 008c 4889C7   		movq	%rax, %rdi
+ 1500 008f E8000000 		call	oc_mqtt_profile_package_event@PLT
+ 1500      00
+ 1501 0094 488945F0 		movq	%rax, -16(%rbp)
+ 456:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 457:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     if ((topic != NULL) && (msg != NULL)) {
+ 1502              		.loc 1 457 8
+ 1503 0098 48837DE8 		cmpq	$0, -24(%rbp)
+ 1503      00
+ 1504 009d 742F     		je	.L104
+ 1505              		.loc 1 457 25 discriminator 1
+ 1506 009f 48837DF0 		cmpq	$0, -16(%rbp)
+ 1506      00
+ 1507 00a4 7428     		je	.L104
+ 458:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         ret = oc_mqtt_publish(topic, (uint8_t *)msg, strlen(msg), (int)en_mqtt_al_qos_1);
+ 1508              		.loc 1 458 54
+ 1509 00a6 488B45F0 		movq	-16(%rbp), %rax
+ 1510 00aa 4889C7   		movq	%rax, %rdi
+ 1511 00ad E8000000 		call	strlen@PLT
+ 1511      00
+ 1512              		.loc 1 458 15
+ 1513 00b2 89C2     		movl	%eax, %edx
+ 1514 00b4 488B75F0 		movq	-16(%rbp), %rsi
+ 1515 00b8 488B45E8 		movq	-24(%rbp), %rax
+ 1516 00bc B9010000 		movl	$1, %ecx
+ 1516      00
+ 1517 00c1 4889C7   		movq	%rax, %rdi
+ 1518 00c4 E8000000 		call	oc_mqtt_publish@PLT
+ 1518      00
+ 1519 00c9 8945E4   		movl	%eax, -28(%rbp)
+ 1520              		.loc 1 458 13
+ 1521 00cc EB07     		jmp	.L105
+ 1522              	.L104:
+ 459:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     } else {
+ 460:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****         ret = (int)en_oc_mqtt_err_sysmem;
+ 1523              		.loc 1 460 13
+ 1524 00ce C745E40F 		movl	$15, -28(%rbp)
+ 1524      000000
+ 1525              	.L105:
+ 461:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     }
+ 462:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+GAS LISTING /tmp/ccYXZdXF.s 			page 42
+
+
+ 463:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     osal_free(topic);
+ 1526              		.loc 1 463 5
+ 1527 00d5 488B45E8 		movq	-24(%rbp), %rax
+ 1528 00d9 4889C7   		movq	%rax, %rdi
+ 1529 00dc E8000000 		call	osal_free@PLT
+ 1529      00
+ 464:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     osal_free(msg);
+ 1530              		.loc 1 464 5
+ 1531 00e1 488B45F0 		movq	-16(%rbp), %rax
+ 1532 00e5 4889C7   		movq	%rax, %rdi
+ 1533 00e8 E8000000 		call	osal_free@PLT
+ 1533      00
+ 465:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** 
+ 466:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c ****     return ret;
+ 1534              		.loc 1 466 12
+ 1535 00ed 8B45E4   		movl	-28(%rbp), %eax
+ 1536              	.L101:
+ 467:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.c **** }
+ 1537              		.loc 1 467 1
+ 1538 00f0 488B4DF8 		movq	-8(%rbp), %rcx
+ 1539 00f4 6448330C 		xorq	%fs:40, %rcx
+ 1539      25280000 
+ 1539      00
+ 1540 00fd 7405     		je	.L106
+ 1541 00ff E8000000 		call	__stack_chk_fail@PLT
+ 1541      00
+ 1542              	.L106:
+ 1543 0104 C9       		leave
+ 1544              	.LCFI35:
+ 1545              		.cfi_def_cfa 7, 8
+ 1546 0105 C3       		ret
+ 1547              		.cfi_endproc
+ 1548              	.LFE11:
+ 1550              		.text
+ 1551              	.Letext0:
+ 1552              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 1553              		.file 3 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 1554              		.file 4 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 1555              		.file 5 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 1556              		.file 6 "/usr/include/stdio.h"
+ 1557              		.file 7 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 1558              		.file 8 "/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h"
+ 1559              		.file 9 "/home/xingli/share/LiteOS_Lab/inc/dtls_al.h"
+ 1560              		.file 10 "/home/xingli/share/LiteOS_Lab/inc/mqtt_al.h"
+ 1561              		.file 11 "/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_al/oc_mqtt_al.h"
+ 1562              		.file 12 "/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.h"
+ 5399              		.section	.note.gnu.property,"a"
+ 5400              		.align 8
+ 5401 0000 04000000 		.long	 1f - 0f
+ 5402 0004 10000000 		.long	 4f - 1f
+ 5403 0008 05000000 		.long	 5
+ 5404              	0:
+ 5405 000c 474E5500 		.string	 "GNU"
+ 5406              	1:
+ 5407              		.align 8
+ 5408 0010 020000C0 		.long	 0xc0000002
+ 5409 0014 04000000 		.long	 3f - 2f
+GAS LISTING /tmp/ccYXZdXF.s 			page 43
+
+
+ 5410              	2:
+ 5411 0018 03000000 		.long	 0x3
+ 5412              	3:
+ 5413 001c 00000000 		.align 8
+ 5414              	4:
+GAS LISTING /tmp/ccYXZdXF.s 			page 44
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 oc_mqtt_profile.c
+     /tmp/ccYXZdXF.s:8      .bss.s_oc_mqtt_profile_cb:0000000000000000 s_oc_mqtt_profile_cb
+     /tmp/ccYXZdXF.s:29     .text.app_msg_deal:0000000000000000 app_msg_deal
+     /tmp/ccYXZdXF.s:250    .text.oc_mqtt_profile_connect:0000000000000000 oc_mqtt_profile_connect
+     /tmp/ccYXZdXF.s:412    .text.oc_mqtt_profile_disconnect:0000000000000000 oc_mqtt_profile_disconnect
+     /tmp/ccYXZdXF.s:462    .text.topic_make:0000000000000000 topic_make
+     /tmp/ccYXZdXF.s:566    .text.oc_mqtt_profile_msgup:0000000000000000 oc_mqtt_profile_msgup
+     /tmp/ccYXZdXF.s:684    .text.oc_mqtt_profile_propertyreport:0000000000000000 oc_mqtt_profile_propertyreport
+     /tmp/ccYXZdXF.s:808    .text.oc_mqtt_profile_gwpropertyreport:0000000000000000 oc_mqtt_profile_gwpropertyreport
+     /tmp/ccYXZdXF.s:948    .text.oc_mqtt_profile_propertysetresp:0000000000000000 oc_mqtt_profile_propertysetresp
+     /tmp/ccYXZdXF.s:1067   .text.oc_mqtt_profile_propertygetresp:0000000000000000 oc_mqtt_profile_propertygetresp
+     /tmp/ccYXZdXF.s:1202   .text.oc_mqtt_profile_cmdresp:0000000000000000 oc_mqtt_profile_cmdresp
+     /tmp/ccYXZdXF.s:1321   .text.oc_mqtt_profile_getshadow:0000000000000000 oc_mqtt_profile_getshadow
+     /tmp/ccYXZdXF.s:1439   .text.oc_mqtt_profile_reportevent:0000000000000000 oc_mqtt_profile_reportevent
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+osal_malloc
+memcpy
+strstr
+osal_free
+__stack_chk_fail
+memset
+osal_strdup
+oc_mqtt_config
+oc_mqtt_deconfig
+strlen
+snprintf
+oc_mqtt_profile_package_msgup
+oc_mqtt_publish
+oc_mqtt_profile_package_propertyreport
+oc_mqtt_profile_package_gwpropertyreport
+oc_mqtt_profile_package_propertysetresp
+oc_mqtt_profile_package_propertygetresp
+oc_mqtt_profile_package_cmdresp
+oc_mqtt_profile_package_shadowget
+oc_mqtt_profile_package_event

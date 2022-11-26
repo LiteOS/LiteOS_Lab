@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,43 +22,41 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 /**
- *  DATE                AUTHOR      INSTRUCTION
- *  2021-10-15          chenxingli  The first version
+ * DATE                AUTHOR      INSTRUCTION
+ * 2021-10-15          chenxingli  The first version
  *
  */
 
-//include the file which implement the function
+// include the file which implement the function
 #include <string.h>
 #include <stdlib.h>
 #include "osal_imp.h"
 #include "cmsis_os2.h"
 #include "ohos_imp.h"
 
-
-///< this is implement for the task
+// /< this is implement for the task
 
 static void __task_sleep(int ms)
 {
-    (void)osDelay(ms / 10);//which tick is ms that hi3861 tick is 10ms
+    (void)osDelay(ms / 10); // which tick is ms that hi3861 tick is 10ms
     return;
 }
 
-
-static void *__task_create(const char *name,int (*task_entry)(void *args),\
-        void *args,int stack_size,void *stack,int prior)
-{  
+static void *__task_create(const char *name, int (*task_entry)(void *args), void *args, int stack_size, void *stack,
+    int prior)
+{
     osThreadAttr_t attr;
-    attr.name = (char *) name;
+    attr.name = (char *)name;
     attr.attr_bits = 0U;
     attr.cb_mem = NULL;
     attr.cb_size = 0U;
@@ -68,20 +66,17 @@ static void *__task_create(const char *name,int (*task_entry)(void *args),\
 
     osThreadId_t ret = osThreadNew((osThreadFunc_t)task_entry, args, &attr);
 
-    if(ret == NULL){
-       printf("Falied to create task in ohos_imp!\n");
+    if (ret == NULL) {
+        printf("Falied to create task in ohos_imp!\n");
     }
     return ret;
 }
 
 static int __task_kill(void *task)
 {
-
     int ret = -1;
-    if(NULL != task)
-    {
-        if(OHOS_OK == osThreadTerminate(task))
-        {
+    if (NULL != task) {
+        if (OHOS_OK == osThreadTerminate(task)) {
             ret = 0;
         }
     }
@@ -91,126 +86,102 @@ static int __task_kill(void *task)
 
 static void __task_exit(void)
 {
-    osThreadExit ();
+    osThreadExit();
     return;
 }
 
-///< this is implement for the mutex
+// /< this is implement for the mutex
 
-//creat a mutex for the os
-static bool_t  __mutex_create(osal_mutex_t *mutex)
+// creat a mutex for the os
+static bool_t __mutex_create(osal_mutex_t *mutex)
 {
     osMutexId_t ret = osMutexNew(NULL);
     *mutex = ret;
-    if(NULL != ret)
-    {
+    if (NULL != ret) {
         return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-//lock the mutex
-static bool_t  __mutex_lock(osal_mutex_t mutex)
-{
-    if(OHOS_OK == osMutexAcquire((void *)mutex,OHOS_WAIT_FOREVER))
-    {
-        return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
 
-//unlock the mutex
-static bool_t  __mutex_unlock(osal_mutex_t mutex)
+// lock the mutex
+static bool_t __mutex_lock(osal_mutex_t mutex)
 {
-    if(OHOS_OK == osMutexRelease((void*)mutex))
-    {
+    if (OHOS_OK == osMutexAcquire((void *)mutex, OHOS_WAIT_FOREVER)) {
         return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-//delete the mutex
-static bool_t  __mutex_del(osal_mutex_t mutex)
-{
-    if(OHOS_OK == osMutexDelete((void *)mutex))
-    {
-        return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
 
+// unlock the mutex
+static bool_t __mutex_unlock(osal_mutex_t mutex)
+{
+    if (OHOS_OK == osMutexRelease((void *)mutex)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// delete the mutex
+static bool_t __mutex_del(osal_mutex_t mutex)
+{
+    if (OHOS_OK == osMutexDelete((void *)mutex)) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 ///< this is implement for the semp
-
-//semp of the os
-static bool_t  __semp_create(osal_semp_t *semp,int limit,int initvalue)
+// semp of the os
+static bool_t __semp_create(osal_semp_t *semp, int limit, int initvalue)
 {
     osSemaphoreId_t ret = osSemaphoreNew(limit, initvalue, NULL);
     *semp = ret;
-    if(NULL != ret)
-    {
+    if (NULL != ret) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
-static bool_t  __semp_pend(osal_semp_t semp,unsigned int timeout)
+
+static bool_t __semp_pend(osal_semp_t semp, unsigned int timeout)
 {
-    if(timeout == cn_osal_timeout_forever)
-    {
+    if (timeout == cn_osal_timeout_forever) {
         timeout = OHOS_WAIT_FOREVER;
     }
-    if(OHOS_OK == osSemaphoreAcquire(semp,(UINT32)timeout))
-    {
+    if (OHOS_OK == osSemaphoreAcquire(semp, (UINT32)timeout)) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
-static bool_t  __semp_post(osal_semp_t semp)
+
+static bool_t __semp_post(osal_semp_t semp)
 {
-    if(OHOS_OK == osSemaphoreRelease((void *)semp))
-    {
+    if (OHOS_OK == osSemaphoreRelease((void *)semp)) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
 
-static bool_t  __semp_del(osal_semp_t semp)
+static bool_t __semp_del(osal_semp_t semp)
 {
-    if(OHOS_OK == osSemaphoreDelete((void *)semp))
-    {
+    if (OHOS_OK == osSemaphoreDelete((void *)semp)) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
 
-
-static bool_t __queue_create(osal_queue_t *queue,int len,int msgsize)
+static bool_t __queue_create(osal_queue_t *queue, int len, int msgsize)
 {
     osMessageQueueId_t ret = osMessageQueueNew((UINT32)len, (UINT32)msgsize, NULL);
     *queue = ret;
-    if(NULL != ret)
+    if (NULL != ret)
         return true;
     else
         return false;
@@ -220,13 +191,13 @@ static bool_t __queue_send(osal_queue_t queue, void *pbuf, unsigned int bufsize,
 {
     UINT32 ret = OHOS_OK;
 
-    if(timeout == cn_osal_timeout_forever)
+    if (timeout == cn_osal_timeout_forever)
         timeout = OHOS_WAIT_FOREVER;
 
-    ret=osMessageQueuePut(queue, pbuf, 0, timeout);
+    ret = osMessageQueuePut(queue, pbuf, 0, timeout);
 
-    if(ret==OHOS_OK)
-        return  true;
+    if (ret == OHOS_OK)
+        return true;
     else
         return false;
 }
@@ -236,33 +207,29 @@ static bool_t __queue_recv(osal_queue_t queue, void *pbuf, unsigned int *bufsize
     UINT32 ret = OHOS_OK;
 
     ret = osMessageQueueGet(queue, pbuf, NULL, timeout);
-    if(ret==OHOS_OK){
+    if (ret == OHOS_OK) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
 
 static bool_t __queue_del(osal_queue_t queue)
 {
-    if(osMessageQueueDelete((osMessageQueueId_t)queue)==OHOS_OK)
+    if (osMessageQueueDelete((osMessageQueueId_t)queue) == OHOS_OK)
         return true;
     else
         return false;
 }
 
 
-///< this implement for the memory management
-
+// /< this implement for the memory management
 
 static void *__mem_malloc(int size)
 {
     void *ret = NULL;
 
-    if(size > 0)
-    {
+    if (size > 0) {
         ret = malloc(size);
     }
 
@@ -271,18 +238,17 @@ static void *__mem_malloc(int size)
 
 static void __mem_free(void *addr)
 {
-    (void) free(addr);
+    (void)free(addr);
 }
 
-///< sys time
+// /< sys time
 
 static unsigned long long __get_sys_time(void)
 {
     return osKernelGetTickCount() * (OHOS_SYS_MS_PER_SECOND / OHOSCFG_BASE_CORE_TICK_PER_SECOND);
 }
 
-static const tag_os_ops s_ohos_ops =
-{
+static const tag_os_ops s_ohos_ops = {
     .task_sleep = __task_sleep,
     .task_create = __task_create,
     .task_kill = __task_kill,
@@ -309,9 +275,7 @@ static const tag_os_ops s_ohos_ops =
     .get_sys_time = __get_sys_time,
 };
 
-
-static const tag_os s_link_ohos =
-{
+static const tag_os s_link_ohos = {
     .name = "ohos",
     .ops = &s_ohos_ops,
 };
@@ -319,8 +283,6 @@ static const tag_os s_link_ohos =
 int os_imp_init(void)
 {
     int ret = -1;
-
     ret = osal_install(&s_link_ohos);
-
     return ret;
 }

@@ -12,4 +12,3 @@ ifeq ($(CONFIG_DTLS_AL_ENABLE), y)
     endif
 
 endif
-

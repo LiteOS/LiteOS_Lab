@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,28 +22,27 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
 
 #include "sinn_if_cbs.h"
 
-void sinn_dispatch_event(sinn_connection_t *nc, sinn_event_handler event_handler, void *user_data, int event, void *event_data)
+void sinn_dispatch_event(sinn_connection_t *nc, sinn_event_handler event_handler, void *user_data, int event,
+    void *event_data)
 {
-    if (event_handler == NULL)
-    {
+    if (event_handler == NULL) {
         event_handler = nc->proto_handler ? nc->proto_handler : nc->user_handler;
     }
 
-    if (event_handler)
-    {
+    if (event_handler) {
         event_handler(nc, event, event_data);
     }
 }
@@ -53,7 +52,7 @@ void sinn_nc_connect_cb(sinn_connection_t *nc)
 {
     nc->flags &= ~SINN_FG_CONNECTING;
 
-    sinn_dispatch_event(nc, NULL, NULL, SINN_EV_CONNECTED,NULL);
+    sinn_dispatch_event(nc, NULL, NULL, SINN_EV_CONNECTED, NULL);
 }
 
 void sinn_nc_can_write_cb(sinn_connection_t *nc)
@@ -62,28 +61,24 @@ void sinn_nc_can_write_cb(sinn_connection_t *nc)
     const unsigned char *buf = nc->send_buf.data;
     size_t len = nc->send_buf.len;
 
-    if(nc->sock_fd == -1)
+    if (nc->sock_fd == -1)
         return;
 
     nc->flags &= ~SINN_FG_CAN_WR;
     if (len > 0)
         rc = nc->mgr->interface->ifuncs->if_send(nc, buf, len);
 
-    if (rc < 0)
-    {
+    if (rc < 0) {
         perror("sinn write error\r\n");
         nc->flags &= ~SINN_FG_CAN_WR;
         return;
-    }
-    else if (rc > 0)
-    {
+    } else if (rc > 0) {
         nc->last_time = sinn_gettime_ms();
-        if(nc->send_buf.len > rc)
+        if (nc->send_buf.len > rc)
             memmove(nc->send_buf.data, nc->send_buf.data + rc, nc->send_buf.len - rc);
         nc->send_buf.len -= rc;
         nc->flags |= SINN_FG_CAN_WR;
-    }
-    else if (rc == 0)
+    } else if (rc == 0)
         nc->flags |= SINN_FG_CAN_WR;
 
     sinn_dispatch_event(nc, NULL, NULL, SINN_EV_SEND, NULL);
@@ -96,24 +91,19 @@ void sinn_nc_can_read_cb(sinn_connection_t *nc)
     size_t len = nc->recv_buf.size - nc->recv_buf.len;
     nc->flags &= ~SINN_FG_CAN_RD;
 
-    if(nc->sock_fd == -1)
+    if (nc->sock_fd == -1)
         return;
 
     if (len > 0)
         rc = nc->mgr->interface->ifuncs->if_recv(nc, buf, len);
 
-    if (rc < 0)
-    {
+    if (rc < 0) {
         perror("read error");
         nc->flags &= ~SINN_FG_CAN_RD;
         return;
-    }
-    else if (rc == 0)
-    {
+    } else if (rc == 0) {
         nc->flags |= SINN_FG_CAN_RD;
-    }
-    else if (rc > 0)
-    {
+    } else if (rc > 0) {
         nc->last_time = sinn_gettime_ms();
         nc->recv_buf.len += rc;
         sinn_dispatch_event(nc, NULL, NULL, SINN_EV_RECV, NULL);
@@ -125,8 +115,7 @@ int sinn_nc_poll_cb(sinn_connection_t *nc)
 {
     unsigned long int now = sinn_gettime_ms();
 
-    if (nc->flags & SINN_FG_RECONNECT)
-    {
+    if (nc->flags & SINN_FG_RECONNECT) {
         LINK_LOG_DEBUG("reconnect ~~~~~~\r\n");
         nc->flags &= ~SINN_FG_RECONNECT;
         sinn_dispatch_event(nc, NULL, NULL, SINN_EV_RECONN, &now);
@@ -141,18 +130,15 @@ void sinn_mgr_handle_conn(sinn_connection_t *nc)
     if (sinn_nc_poll_cb(nc))
         return;
 
-    if (nc->flags & SINN_FG_CONNECTING)
-    {
+    if (nc->flags & SINN_FG_CONNECTING) {
         sinn_nc_connect_cb(nc);
     }
 
-    if (nc->flags & SINN_FG_CAN_RD)
-    {
+    if (nc->flags & SINN_FG_CAN_RD) {
         sinn_nc_can_read_cb(nc);
     }
 
-    if (nc->flags & SINN_FG_CAN_WR)
-    {
+    if (nc->flags & SINN_FG_CAN_WR) {
         sinn_nc_can_write_cb(nc);
     }
 }

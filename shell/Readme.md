@@ -50,9 +50,3 @@ static u32_t gs_shell_test_var =123;
 OSSHELL_EXPORT_VAR(gs_shell_test_var,"shell_test_var","shell test var");
 OSSHELL_EXPORT_CMD(shell_test_func,"shell_test_func","shell test func");
 ```
-
-
-  ​              
-
-  
-

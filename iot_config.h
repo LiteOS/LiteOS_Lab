@@ -10,8 +10,8 @@
 
 // Enable OS
 #define CONFIG_LITEOS_ENABLE 1
-//#define CONFIG_FREERTOS_ENABLE 1
-//#define CONFIG_OPENHARMONYOS_ENABLE 1 
+// #define CONFIG_FREERTOS_ENABLE 1
+// #define CONFIG_OPENHARMONYOS_ENABLE 1
 
 #define CONFIG_LINKLOG_ENABLE 1
 #define CONFIG_LINKQUEUE_ENABLE 1
@@ -22,11 +22,11 @@
 // #define CONFIG_SHELL_TASK_PRIOR 10
 
 // Enable Demo
-//#define CONFIG_LINKDEMO_ENABLE 1
-//#define CONFIG_USER_DEMO "oc_mqtt_demo"
+// #define CONFIG_LINKDEMO_ENABLE 1
+// #define CONFIG_USER_DEMO "oc_mqtt_demo"
 
 // Enable NB-IoT
-//#define CONFIG_BOUDICA150_ENABLE 1
+// #define CONFIG_BOUDICA150_ENABLE 1
 
 // Enable LWM2M
 /*
@@ -70,7 +70,7 @@
 #define CONFIG_PAHO_SNDBUF_SIZE 2048
 #define CONFIG_PAHO_RCVBUF_SIZE 2048
 
-/*DTLS*/
+/* DTLS */
 #define CONFIG_DTLS_AL_ENABLE 1
 #define CONFIG_MBEDTLS_ENABLE 1
 #define CONFIG_MBEDTLS_PSK 1
@@ -78,9 +78,8 @@
 // Enable iot_config.h
 #define CONFIG_IOT_LINK_CONFIGFILE "iot_config.h"
 
-// Enable message storage in abnormal scene demo 
-//#define CONFIG_MSG_STORAGE_ABNORMAL_SCENE_DEMO 1
+// Enable message storage in abnormal scene demo
+// #define CONFIG_MSG_STORAGE_ABNORMAL_SCENE_DEMO 1
 
-//Enable reconnection avoidance algorithm demo
-//#define CONFIG_BACKOFF_RECNONNECT 1
-
+// Enable reconnection avoidance algorithm demo
+// #define CONFIG_BACKOFF_RECNONNECT 1

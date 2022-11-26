@@ -1,0 +1,4245 @@
+GAS LISTING /tmp/cc5VCnXS.s 			page 1
+
+
+   1              		.file	"sha256.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.mbedtls_sha256_init,"ax",@progbits
+   5              		.globl	mbedtls_sha256_init
+   7              	mbedtls_sha256_init:
+   8              	.LFB0:
+   9              		.file 1 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c"
+   1:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** /*
+   2:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  *  FIPS-180-2 compliant SHA-256 implementation
+   3:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  *
+   4:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
+   5:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  *  SPDX-License-Identifier: Apache-2.0
+   6:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  *
+   7:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
+   8:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  *  not use this file except in compliance with the License.
+   9:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  *  You may obtain a copy of the License at
+  10:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  *
+  11:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  *  http://www.apache.org/licenses/LICENSE-2.0
+  12:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  *
+  13:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  *  Unless required by applicable law or agreed to in writing, software
+  14:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  15:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  16:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  *  See the License for the specific language governing permissions and
+  17:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  *  limitations under the License.
+  18:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  *
+  19:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  *  This file is part of mbed TLS (https://tls.mbed.org)
+  20:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  */
+  21:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** /*
+  22:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  *  The SHA-256 Secure Hash Standard was published by NIST in 2002.
+  23:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  *
+  24:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  *  http://csrc.nist.gov/publications/fips/fips180-2/fips180-2.pdf
+  25:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  */
+  26:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+  27:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #if !defined(MBEDTLS_CONFIG_FILE)
+  28:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #include "mbedtls/config.h"
+  29:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #else
+  30:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #include MBEDTLS_CONFIG_FILE
+  31:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #endif
+  32:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+  33:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #if defined(MBEDTLS_SHA256_C)
+  34:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+  35:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #include "mbedtls/sha256.h"
+  36:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #include "mbedtls/platform_util.h"
+  37:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+  38:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #include <string.h>
+  39:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+  40:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #if defined(MBEDTLS_SELF_TEST)
+  41:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #if defined(MBEDTLS_PLATFORM_C)
+  42:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #include "mbedtls/platform.h"
+  43:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #else
+  44:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #include <stdio.h>
+  45:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #include <stdlib.h>
+  46:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #define mbedtls_printf printf
+  47:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #define mbedtls_calloc    calloc
+  48:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #define mbedtls_free       free
+  49:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #endif /* MBEDTLS_PLATFORM_C */
+GAS LISTING /tmp/cc5VCnXS.s 			page 2
+
+
+  50:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #endif /* MBEDTLS_SELF_TEST */
+  51:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+  52:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #define SHA256_VALIDATE_RET(cond)                           \
+  53:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     MBEDTLS_INTERNAL_VALIDATE_RET( cond, MBEDTLS_ERR_SHA256_BAD_INPUT_DATA )
+  54:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #define SHA256_VALIDATE(cond)  MBEDTLS_INTERNAL_VALIDATE( cond )
+  55:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+  56:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #if !defined(MBEDTLS_SHA256_ALT)
+  57:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+  58:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** /*
+  59:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  * 32-bit integer manipulation macros (big endian)
+  60:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  */
+  61:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #ifndef GET_UINT32_BE
+  62:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #define GET_UINT32_BE(n,b,i)                            \
+  63:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** do {                                                    \
+  64:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     (n) = ( (uint32_t) (b)[(i)    ] << 24 )             \
+  65:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         | ( (uint32_t) (b)[(i) + 1] << 16 )             \
+  66:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         | ( (uint32_t) (b)[(i) + 2] <<  8 )             \
+  67:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         | ( (uint32_t) (b)[(i) + 3]       );            \
+  68:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** } while( 0 )
+  69:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #endif
+  70:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+  71:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #ifndef PUT_UINT32_BE
+  72:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #define PUT_UINT32_BE(n,b,i)                            \
+  73:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** do {                                                    \
+  74:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     (b)[(i)    ] = (unsigned char) ( (n) >> 24 );       \
+  75:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     (b)[(i) + 1] = (unsigned char) ( (n) >> 16 );       \
+  76:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     (b)[(i) + 2] = (unsigned char) ( (n) >>  8 );       \
+  77:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     (b)[(i) + 3] = (unsigned char) ( (n)       );       \
+  78:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** } while( 0 )
+  79:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #endif
+  80:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+  81:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** void mbedtls_sha256_init( mbedtls_sha256_context *ctx )
+  82:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** {
+  10              		.loc 1 82 1
+  11              		.cfi_startproc
+  12 0000 F30F1EFA 		endbr64
+  13 0004 55       		pushq	%rbp
+  14              	.LCFI0:
+  15              		.cfi_def_cfa_offset 16
+  16              		.cfi_offset 6, -16
+  17 0005 4889E5   		movq	%rsp, %rbp
+  18              	.LCFI1:
+  19              		.cfi_def_cfa_register 6
+  20 0008 4883EC20 		subq	$32, %rsp
+  21 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  22              		.loc 1 82 1
+  23 0010 64488B04 		movq	%fs:40, %rax
+  23      25280000 
+  23      00
+  24 0019 488945F8 		movq	%rax, -8(%rbp)
+  25 001d 31C0     		xorl	%eax, %eax
+  83:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     SHA256_VALIDATE( ctx != NULL );
+  84:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+  85:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     memset( ctx, 0, sizeof( mbedtls_sha256_context ) );
+  26              		.loc 1 85 5
+  27 001f 488B45E8 		movq	-24(%rbp), %rax
+  28 0023 BA6C0000 		movl	$108, %edx
+GAS LISTING /tmp/cc5VCnXS.s 			page 3
+
+
+  28      00
+  29 0028 BE000000 		movl	$0, %esi
+  29      00
+  30 002d 4889C7   		movq	%rax, %rdi
+  31 0030 E8000000 		call	memset@PLT
+  31      00
+  86:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** }
+  32              		.loc 1 86 1
+  33 0035 90       		nop
+  34 0036 488B45F8 		movq	-8(%rbp), %rax
+  35 003a 64483304 		xorq	%fs:40, %rax
+  35      25280000 
+  35      00
+  36 0043 7405     		je	.L2
+  37 0045 E8000000 		call	__stack_chk_fail@PLT
+  37      00
+  38              	.L2:
+  39 004a C9       		leave
+  40              	.LCFI2:
+  41              		.cfi_def_cfa 7, 8
+  42 004b C3       		ret
+  43              		.cfi_endproc
+  44              	.LFE0:
+  46              		.section	.text.mbedtls_sha256_free,"ax",@progbits
+  47              		.globl	mbedtls_sha256_free
+  49              	mbedtls_sha256_free:
+  50              	.LFB1:
+  87:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+  88:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** void mbedtls_sha256_free( mbedtls_sha256_context *ctx )
+  89:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** {
+  51              		.loc 1 89 1
+  52              		.cfi_startproc
+  53 0000 F30F1EFA 		endbr64
+  54 0004 55       		pushq	%rbp
+  55              	.LCFI3:
+  56              		.cfi_def_cfa_offset 16
+  57              		.cfi_offset 6, -16
+  58 0005 4889E5   		movq	%rsp, %rbp
+  59              	.LCFI4:
+  60              		.cfi_def_cfa_register 6
+  61 0008 4883EC20 		subq	$32, %rsp
+  62 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  63              		.loc 1 89 1
+  64 0010 64488B04 		movq	%fs:40, %rax
+  64      25280000 
+  64      00
+  65 0019 488945F8 		movq	%rax, -8(%rbp)
+  66 001d 31C0     		xorl	%eax, %eax
+  90:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     if( ctx == NULL )
+  67              		.loc 1 90 7
+  68 001f 48837DE8 		cmpq	$0, -24(%rbp)
+  68      00
+  69 0024 7413     		je	.L7
+  91:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         return;
+  92:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+  93:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     mbedtls_platform_zeroize( ctx, sizeof( mbedtls_sha256_context ) );
+  70              		.loc 1 93 5
+GAS LISTING /tmp/cc5VCnXS.s 			page 4
+
+
+  71 0026 488B45E8 		movq	-24(%rbp), %rax
+  72 002a BE6C0000 		movl	$108, %esi
+  72      00
+  73 002f 4889C7   		movq	%rax, %rdi
+  74 0032 E8000000 		call	mbedtls_platform_zeroize@PLT
+  74      00
+  75 0037 EB01     		jmp	.L3
+  76              	.L7:
+  91:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         return;
+  77              		.loc 1 91 9
+  78 0039 90       		nop
+  79              	.L3:
+  94:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** }
+  80              		.loc 1 94 1
+  81 003a 488B45F8 		movq	-8(%rbp), %rax
+  82 003e 64483304 		xorq	%fs:40, %rax
+  82      25280000 
+  82      00
+  83 0047 7405     		je	.L6
+  84 0049 E8000000 		call	__stack_chk_fail@PLT
+  84      00
+  85              	.L6:
+  86 004e C9       		leave
+  87              	.LCFI5:
+  88              		.cfi_def_cfa 7, 8
+  89 004f C3       		ret
+  90              		.cfi_endproc
+  91              	.LFE1:
+  93              		.section	.text.mbedtls_sha256_clone,"ax",@progbits
+  94              		.globl	mbedtls_sha256_clone
+  96              	mbedtls_sha256_clone:
+  97              	.LFB2:
+  95:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+  96:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** void mbedtls_sha256_clone( mbedtls_sha256_context *dst,
+  97:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****                            const mbedtls_sha256_context *src )
+  98:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** {
+  98              		.loc 1 98 1
+  99              		.cfi_startproc
+ 100 0000 F30F1EFA 		endbr64
+ 101 0004 55       		pushq	%rbp
+ 102              	.LCFI6:
+ 103              		.cfi_def_cfa_offset 16
+ 104              		.cfi_offset 6, -16
+ 105 0005 4889E5   		movq	%rsp, %rbp
+ 106              	.LCFI7:
+ 107              		.cfi_def_cfa_register 6
+ 108 0008 53       		pushq	%rbx
+ 109 0009 4883EC28 		subq	$40, %rsp
+ 110              		.cfi_offset 3, -24
+ 111 000d 48897DD8 		movq	%rdi, -40(%rbp)
+ 112 0011 488975D0 		movq	%rsi, -48(%rbp)
+ 113              		.loc 1 98 1
+ 114 0015 64488B04 		movq	%fs:40, %rax
+ 114      25280000 
+ 114      00
+ 115 001e 488945E8 		movq	%rax, -24(%rbp)
+ 116 0022 31C0     		xorl	%eax, %eax
+GAS LISTING /tmp/cc5VCnXS.s 			page 5
+
+
+  99:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     SHA256_VALIDATE( dst != NULL );
+ 100:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     SHA256_VALIDATE( src != NULL );
+ 101:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 102:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     *dst = *src;
+ 117              		.loc 1 102 10
+ 118 0024 488B45D8 		movq	-40(%rbp), %rax
+ 119 0028 488B55D0 		movq	-48(%rbp), %rdx
+ 120 002c 488B0A   		movq	(%rdx), %rcx
+ 121 002f 488B5A08 		movq	8(%rdx), %rbx
+ 122 0033 488908   		movq	%rcx, (%rax)
+ 123 0036 48895808 		movq	%rbx, 8(%rax)
+ 124 003a 488B4A10 		movq	16(%rdx), %rcx
+ 125 003e 488B5A18 		movq	24(%rdx), %rbx
+ 126 0042 48894810 		movq	%rcx, 16(%rax)
+ 127 0046 48895818 		movq	%rbx, 24(%rax)
+ 128 004a 488B4A20 		movq	32(%rdx), %rcx
+ 129 004e 488B5A28 		movq	40(%rdx), %rbx
+ 130 0052 48894820 		movq	%rcx, 32(%rax)
+ 131 0056 48895828 		movq	%rbx, 40(%rax)
+ 132 005a 488B4A30 		movq	48(%rdx), %rcx
+ 133 005e 488B5A38 		movq	56(%rdx), %rbx
+ 134 0062 48894830 		movq	%rcx, 48(%rax)
+ 135 0066 48895838 		movq	%rbx, 56(%rax)
+ 136 006a 488B4A40 		movq	64(%rdx), %rcx
+ 137 006e 488B5A48 		movq	72(%rdx), %rbx
+ 138 0072 48894840 		movq	%rcx, 64(%rax)
+ 139 0076 48895848 		movq	%rbx, 72(%rax)
+ 140 007a 488B4A50 		movq	80(%rdx), %rcx
+ 141 007e 488B5A58 		movq	88(%rdx), %rbx
+ 142 0082 48894850 		movq	%rcx, 80(%rax)
+ 143 0086 48895858 		movq	%rbx, 88(%rax)
+ 144 008a 488B4A60 		movq	96(%rdx), %rcx
+ 145 008e 48894860 		movq	%rcx, 96(%rax)
+ 146 0092 8B5268   		movl	104(%rdx), %edx
+ 147 0095 895068   		movl	%edx, 104(%rax)
+ 103:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** }
+ 148              		.loc 1 103 1
+ 149 0098 90       		nop
+ 150 0099 488B45E8 		movq	-24(%rbp), %rax
+ 151 009d 64483304 		xorq	%fs:40, %rax
+ 151      25280000 
+ 151      00
+ 152 00a6 7405     		je	.L9
+ 153 00a8 E8000000 		call	__stack_chk_fail@PLT
+ 153      00
+ 154              	.L9:
+ 155 00ad 4883C428 		addq	$40, %rsp
+ 156 00b1 5B       		popq	%rbx
+ 157 00b2 5D       		popq	%rbp
+ 158              	.LCFI8:
+ 159              		.cfi_def_cfa 7, 8
+ 160 00b3 C3       		ret
+ 161              		.cfi_endproc
+ 162              	.LFE2:
+ 164              		.section	.text.mbedtls_sha256_starts_ret,"ax",@progbits
+ 165              		.globl	mbedtls_sha256_starts_ret
+ 167              	mbedtls_sha256_starts_ret:
+GAS LISTING /tmp/cc5VCnXS.s 			page 6
+
+
+ 168              	.LFB3:
+ 104:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 105:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** /*
+ 106:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  * SHA-256 context setup
+ 107:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  */
+ 108:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** int mbedtls_sha256_starts_ret( mbedtls_sha256_context *ctx, int is224 )
+ 109:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** {
+ 169              		.loc 1 109 1
+ 170              		.cfi_startproc
+ 171 0000 F30F1EFA 		endbr64
+ 172 0004 55       		pushq	%rbp
+ 173              	.LCFI9:
+ 174              		.cfi_def_cfa_offset 16
+ 175              		.cfi_offset 6, -16
+ 176 0005 4889E5   		movq	%rsp, %rbp
+ 177              	.LCFI10:
+ 178              		.cfi_def_cfa_register 6
+ 179 0008 4883EC20 		subq	$32, %rsp
+ 180 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 181 0010 8975E4   		movl	%esi, -28(%rbp)
+ 182              		.loc 1 109 1
+ 183 0013 64488B04 		movq	%fs:40, %rax
+ 183      25280000 
+ 183      00
+ 184 001c 488945F8 		movq	%rax, -8(%rbp)
+ 185 0020 31C0     		xorl	%eax, %eax
+ 110:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     SHA256_VALIDATE_RET( ctx != NULL );
+ 111:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     SHA256_VALIDATE_RET( is224 == 0 || is224 == 1 );
+ 112:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 113:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     ctx->total[0] = 0;
+ 186              		.loc 1 113 19
+ 187 0022 488B45E8 		movq	-24(%rbp), %rax
+ 188 0026 C7000000 		movl	$0, (%rax)
+ 188      0000
+ 114:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     ctx->total[1] = 0;
+ 189              		.loc 1 114 19
+ 190 002c 488B45E8 		movq	-24(%rbp), %rax
+ 191 0030 C7400400 		movl	$0, 4(%rax)
+ 191      000000
+ 115:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 116:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     if( is224 == 0 )
+ 192              		.loc 1 116 7
+ 193 0037 837DE400 		cmpl	$0, -28(%rbp)
+ 194 003b 755A     		jne	.L11
+ 117:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     {
+ 118:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         /* SHA-256 */
+ 119:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         ctx->state[0] = 0x6A09E667;
+ 195              		.loc 1 119 23
+ 196 003d 488B45E8 		movq	-24(%rbp), %rax
+ 197 0041 C7400867 		movl	$1779033703, 8(%rax)
+ 197      E6096A
+ 120:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         ctx->state[1] = 0xBB67AE85;
+ 198              		.loc 1 120 23
+ 199 0048 488B45E8 		movq	-24(%rbp), %rax
+ 200 004c C7400C85 		movl	$-1150833019, 12(%rax)
+ 200      AE67BB
+ 121:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         ctx->state[2] = 0x3C6EF372;
+GAS LISTING /tmp/cc5VCnXS.s 			page 7
+
+
+ 201              		.loc 1 121 23
+ 202 0053 488B45E8 		movq	-24(%rbp), %rax
+ 203 0057 C7401072 		movl	$1013904242, 16(%rax)
+ 203      F36E3C
+ 122:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         ctx->state[3] = 0xA54FF53A;
+ 204              		.loc 1 122 23
+ 205 005e 488B45E8 		movq	-24(%rbp), %rax
+ 206 0062 C740143A 		movl	$-1521486534, 20(%rax)
+ 206      F54FA5
+ 123:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         ctx->state[4] = 0x510E527F;
+ 207              		.loc 1 123 23
+ 208 0069 488B45E8 		movq	-24(%rbp), %rax
+ 209 006d C740187F 		movl	$1359893119, 24(%rax)
+ 209      520E51
+ 124:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         ctx->state[5] = 0x9B05688C;
+ 210              		.loc 1 124 23
+ 211 0074 488B45E8 		movq	-24(%rbp), %rax
+ 212 0078 C7401C8C 		movl	$-1694144372, 28(%rax)
+ 212      68059B
+ 125:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         ctx->state[6] = 0x1F83D9AB;
+ 213              		.loc 1 125 23
+ 214 007f 488B45E8 		movq	-24(%rbp), %rax
+ 215 0083 C74020AB 		movl	$528734635, 32(%rax)
+ 215      D9831F
+ 126:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         ctx->state[7] = 0x5BE0CD19;
+ 216              		.loc 1 126 23
+ 217 008a 488B45E8 		movq	-24(%rbp), %rax
+ 218 008e C7402419 		movl	$1541459225, 36(%rax)
+ 218      CDE05B
+ 219 0095 EB58     		jmp	.L12
+ 220              	.L11:
+ 127:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     }
+ 128:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     else
+ 129:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     {
+ 130:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         /* SHA-224 */
+ 131:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         ctx->state[0] = 0xC1059ED8;
+ 221              		.loc 1 131 23
+ 222 0097 488B45E8 		movq	-24(%rbp), %rax
+ 223 009b C74008D8 		movl	$-1056596264, 8(%rax)
+ 223      9E05C1
+ 132:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         ctx->state[1] = 0x367CD507;
+ 224              		.loc 1 132 23
+ 225 00a2 488B45E8 		movq	-24(%rbp), %rax
+ 226 00a6 C7400C07 		movl	$914150663, 12(%rax)
+ 226      D57C36
+ 133:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         ctx->state[2] = 0x3070DD17;
+ 227              		.loc 1 133 23
+ 228 00ad 488B45E8 		movq	-24(%rbp), %rax
+ 229 00b1 C7401017 		movl	$812702999, 16(%rax)
+ 229      DD7030
+ 134:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         ctx->state[3] = 0xF70E5939;
+ 230              		.loc 1 134 23
+ 231 00b8 488B45E8 		movq	-24(%rbp), %rax
+ 232 00bc C7401439 		movl	$-150054599, 20(%rax)
+ 232      590EF7
+ 135:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         ctx->state[4] = 0xFFC00B31;
+ 233              		.loc 1 135 23
+GAS LISTING /tmp/cc5VCnXS.s 			page 8
+
+
+ 234 00c3 488B45E8 		movq	-24(%rbp), %rax
+ 235 00c7 C7401831 		movl	$-4191439, 24(%rax)
+ 235      0BC0FF
+ 136:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         ctx->state[5] = 0x68581511;
+ 236              		.loc 1 136 23
+ 237 00ce 488B45E8 		movq	-24(%rbp), %rax
+ 238 00d2 C7401C11 		movl	$1750603025, 28(%rax)
+ 238      155868
+ 137:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         ctx->state[6] = 0x64F98FA7;
+ 239              		.loc 1 137 23
+ 240 00d9 488B45E8 		movq	-24(%rbp), %rax
+ 241 00dd C74020A7 		movl	$1694076839, 32(%rax)
+ 241      8FF964
+ 138:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         ctx->state[7] = 0xBEFA4FA4;
+ 242              		.loc 1 138 23
+ 243 00e4 488B45E8 		movq	-24(%rbp), %rax
+ 244 00e8 C74024A4 		movl	$-1090891868, 36(%rax)
+ 244      4FFABE
+ 245              	.L12:
+ 139:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     }
+ 140:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 141:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     ctx->is224 = is224;
+ 246              		.loc 1 141 16
+ 247 00ef 488B45E8 		movq	-24(%rbp), %rax
+ 248 00f3 8B55E4   		movl	-28(%rbp), %edx
+ 249 00f6 895068   		movl	%edx, 104(%rax)
+ 142:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 143:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     return( 0 );
+ 250              		.loc 1 143 11
+ 251 00f9 B8000000 		movl	$0, %eax
+ 251      00
+ 144:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** }
+ 252              		.loc 1 144 1
+ 253 00fe 488B4DF8 		movq	-8(%rbp), %rcx
+ 254 0102 6448330C 		xorq	%fs:40, %rcx
+ 254      25280000 
+ 254      00
+ 255 010b 7405     		je	.L14
+ 256 010d E8000000 		call	__stack_chk_fail@PLT
+ 256      00
+ 257              	.L14:
+ 258 0112 C9       		leave
+ 259              	.LCFI11:
+ 260              		.cfi_def_cfa 7, 8
+ 261 0113 C3       		ret
+ 262              		.cfi_endproc
+ 263              	.LFE3:
+ 265              		.section	.text.mbedtls_sha256_starts,"ax",@progbits
+ 266              		.globl	mbedtls_sha256_starts
+ 268              	mbedtls_sha256_starts:
+ 269              	.LFB4:
+ 145:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 146:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #if !defined(MBEDTLS_DEPRECATED_REMOVED)
+ 147:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** void mbedtls_sha256_starts( mbedtls_sha256_context *ctx,
+ 148:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****                             int is224 )
+ 149:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** {
+ 270              		.loc 1 149 1
+GAS LISTING /tmp/cc5VCnXS.s 			page 9
+
+
+ 271              		.cfi_startproc
+ 272 0000 F30F1EFA 		endbr64
+ 273 0004 55       		pushq	%rbp
+ 274              	.LCFI12:
+ 275              		.cfi_def_cfa_offset 16
+ 276              		.cfi_offset 6, -16
+ 277 0005 4889E5   		movq	%rsp, %rbp
+ 278              	.LCFI13:
+ 279              		.cfi_def_cfa_register 6
+ 280 0008 4883EC20 		subq	$32, %rsp
+ 281 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 282 0010 8975E4   		movl	%esi, -28(%rbp)
+ 283              		.loc 1 149 1
+ 284 0013 64488B04 		movq	%fs:40, %rax
+ 284      25280000 
+ 284      00
+ 285 001c 488945F8 		movq	%rax, -8(%rbp)
+ 286 0020 31C0     		xorl	%eax, %eax
+ 150:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     mbedtls_sha256_starts_ret( ctx, is224 );
+ 287              		.loc 1 150 5
+ 288 0022 8B55E4   		movl	-28(%rbp), %edx
+ 289 0025 488B45E8 		movq	-24(%rbp), %rax
+ 290 0029 89D6     		movl	%edx, %esi
+ 291 002b 4889C7   		movq	%rax, %rdi
+ 292 002e E8000000 		call	mbedtls_sha256_starts_ret
+ 292      00
+ 151:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** }
+ 293              		.loc 1 151 1
+ 294 0033 90       		nop
+ 295 0034 488B45F8 		movq	-8(%rbp), %rax
+ 296 0038 64483304 		xorq	%fs:40, %rax
+ 296      25280000 
+ 296      00
+ 297 0041 7405     		je	.L16
+ 298 0043 E8000000 		call	__stack_chk_fail@PLT
+ 298      00
+ 299              	.L16:
+ 300 0048 C9       		leave
+ 301              	.LCFI14:
+ 302              		.cfi_def_cfa 7, 8
+ 303 0049 C3       		ret
+ 304              		.cfi_endproc
+ 305              	.LFE4:
+ 307              		.section	.rodata.K,"a"
+ 308              		.align 32
+ 311              	K:
+ 312 0000 982F8A42 		.long	1116352408
+ 313 0004 91443771 		.long	1899447441
+ 314 0008 CFFBC0B5 		.long	-1245643825
+ 315 000c A5DBB5E9 		.long	-373957723
+ 316 0010 5BC25639 		.long	961987163
+ 317 0014 F111F159 		.long	1508970993
+ 318 0018 A4823F92 		.long	-1841331548
+ 319 001c D55E1CAB 		.long	-1424204075
+ 320 0020 98AA07D8 		.long	-670586216
+ 321 0024 015B8312 		.long	310598401
+ 322 0028 BE853124 		.long	607225278
+GAS LISTING /tmp/cc5VCnXS.s 			page 10
+
+
+ 323 002c C37D0C55 		.long	1426881987
+ 324 0030 745DBE72 		.long	1925078388
+ 325 0034 FEB1DE80 		.long	-2132889090
+ 326 0038 A706DC9B 		.long	-1680079193
+ 327 003c 74F19BC1 		.long	-1046744716
+ 328 0040 C1699BE4 		.long	-459576895
+ 329 0044 8647BEEF 		.long	-272742522
+ 330 0048 C69DC10F 		.long	264347078
+ 331 004c CCA10C24 		.long	604807628
+ 332 0050 6F2CE92D 		.long	770255983
+ 333 0054 AA84744A 		.long	1249150122
+ 334 0058 DCA9B05C 		.long	1555081692
+ 335 005c DA88F976 		.long	1996064986
+ 336 0060 52513E98 		.long	-1740746414
+ 337 0064 6DC631A8 		.long	-1473132947
+ 338 0068 C82703B0 		.long	-1341970488
+ 339 006c C77F59BF 		.long	-1084653625
+ 340 0070 F30BE0C6 		.long	-958395405
+ 341 0074 4791A7D5 		.long	-710438585
+ 342 0078 5163CA06 		.long	113926993
+ 343 007c 67292914 		.long	338241895
+ 344 0080 850AB727 		.long	666307205
+ 345 0084 38211B2E 		.long	773529912
+ 346 0088 FC6D2C4D 		.long	1294757372
+ 347 008c 130D3853 		.long	1396182291
+ 348 0090 54730A65 		.long	1695183700
+ 349 0094 BB0A6A76 		.long	1986661051
+ 350 0098 2EC9C281 		.long	-2117940946
+ 351 009c 852C7292 		.long	-1838011259
+ 352 00a0 A1E8BFA2 		.long	-1564481375
+ 353 00a4 4B661AA8 		.long	-1474664885
+ 354 00a8 708B4BC2 		.long	-1035236496
+ 355 00ac A3516CC7 		.long	-949202525
+ 356 00b0 19E892D1 		.long	-778901479
+ 357 00b4 240699D6 		.long	-694614492
+ 358 00b8 85350EF4 		.long	-200395387
+ 359 00bc 70A06A10 		.long	275423344
+ 360 00c0 16C1A419 		.long	430227734
+ 361 00c4 086C371E 		.long	506948616
+ 362 00c8 4C774827 		.long	659060556
+ 363 00cc B5BCB034 		.long	883997877
+ 364 00d0 B30C1C39 		.long	958139571
+ 365 00d4 4AAAD84E 		.long	1322822218
+ 366 00d8 4FCA9C5B 		.long	1537002063
+ 367 00dc F36F2E68 		.long	1747873779
+ 368 00e0 EE828F74 		.long	1955562222
+ 369 00e4 6F63A578 		.long	2024104815
+ 370 00e8 1478C884 		.long	-2067236844
+ 371 00ec 0802C78C 		.long	-1933114872
+ 372 00f0 FAFFBE90 		.long	-1866530822
+ 373 00f4 EB6C50A4 		.long	-1538233109
+ 374 00f8 F7A3F9BE 		.long	-1090935817
+ 375 00fc F27871C6 		.long	-965641998
+ 376              		.section	.text.mbedtls_internal_sha256_process,"ax",@progbits
+ 377              		.globl	mbedtls_internal_sha256_process
+ 379              	mbedtls_internal_sha256_process:
+ 380              	.LFB5:
+GAS LISTING /tmp/cc5VCnXS.s 			page 11
+
+
+ 152:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #endif
+ 153:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 154:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #if !defined(MBEDTLS_SHA256_PROCESS_ALT)
+ 155:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** static const uint32_t K[] =
+ 156:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** {
+ 157:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     0x428A2F98, 0x71374491, 0xB5C0FBCF, 0xE9B5DBA5,
+ 158:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     0x3956C25B, 0x59F111F1, 0x923F82A4, 0xAB1C5ED5,
+ 159:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     0xD807AA98, 0x12835B01, 0x243185BE, 0x550C7DC3,
+ 160:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     0x72BE5D74, 0x80DEB1FE, 0x9BDC06A7, 0xC19BF174,
+ 161:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     0xE49B69C1, 0xEFBE4786, 0x0FC19DC6, 0x240CA1CC,
+ 162:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     0x2DE92C6F, 0x4A7484AA, 0x5CB0A9DC, 0x76F988DA,
+ 163:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     0x983E5152, 0xA831C66D, 0xB00327C8, 0xBF597FC7,
+ 164:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     0xC6E00BF3, 0xD5A79147, 0x06CA6351, 0x14292967,
+ 165:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     0x27B70A85, 0x2E1B2138, 0x4D2C6DFC, 0x53380D13,
+ 166:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     0x650A7354, 0x766A0ABB, 0x81C2C92E, 0x92722C85,
+ 167:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     0xA2BFE8A1, 0xA81A664B, 0xC24B8B70, 0xC76C51A3,
+ 168:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     0xD192E819, 0xD6990624, 0xF40E3585, 0x106AA070,
+ 169:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     0x19A4C116, 0x1E376C08, 0x2748774C, 0x34B0BCB5,
+ 170:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     0x391C0CB3, 0x4ED8AA4A, 0x5B9CCA4F, 0x682E6FF3,
+ 171:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     0x748F82EE, 0x78A5636F, 0x84C87814, 0x8CC70208,
+ 172:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     0x90BEFFFA, 0xA4506CEB, 0xBEF9A3F7, 0xC67178F2,
+ 173:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** };
+ 174:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 175:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #define  SHR(x,n) (((x) & 0xFFFFFFFF) >> (n))
+ 176:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #define ROTR(x,n) (SHR(x,n) | ((x) << (32 - (n))))
+ 177:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 178:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #define S0(x) (ROTR(x, 7) ^ ROTR(x,18) ^  SHR(x, 3))
+ 179:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #define S1(x) (ROTR(x,17) ^ ROTR(x,19) ^  SHR(x,10))
+ 180:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 181:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #define S2(x) (ROTR(x, 2) ^ ROTR(x,13) ^ ROTR(x,22))
+ 182:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #define S3(x) (ROTR(x, 6) ^ ROTR(x,11) ^ ROTR(x,25))
+ 183:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 184:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #define F0(x,y,z) (((x) & (y)) | ((z) & ((x) | (y))))
+ 185:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #define F1(x,y,z) ((z) ^ ((x) & ((y) ^ (z))))
+ 186:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 187:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #define R(t)                                    \
+ 188:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     (                                           \
+ 189:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         W[t] = S1(W[(t) -  2]) + W[(t) -  7] +  \
+ 190:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****                S0(W[(t) - 15]) + W[(t) - 16]    \
+ 191:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     )
+ 192:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 193:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #define P(a,b,c,d,e,f,g,h,x,K)                          \
+ 194:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     do                                                  \
+ 195:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     {                                                   \
+ 196:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         temp1 = (h) + S3(e) + F1((e),(f),(g)) + (K) + (x);      \
+ 197:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         temp2 = S2(a) + F0((a),(b),(c));                        \
+ 198:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         (d) += temp1; (h) = temp1 + temp2;              \
+ 199:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     } while( 0 )
+ 200:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 201:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** int mbedtls_internal_sha256_process( mbedtls_sha256_context *ctx,
+ 202:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****                                 const unsigned char data[64] )
+ 203:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** {
+ 381              		.loc 1 203 1
+ 382              		.cfi_startproc
+ 383 0000 F30F1EFA 		endbr64
+ 384 0004 55       		pushq	%rbp
+ 385              	.LCFI15:
+GAS LISTING /tmp/cc5VCnXS.s 			page 12
+
+
+ 386              		.cfi_def_cfa_offset 16
+ 387              		.cfi_offset 6, -16
+ 388 0005 4889E5   		movq	%rsp, %rbp
+ 389              	.LCFI16:
+ 390              		.cfi_def_cfa_register 6
+ 391 0008 4881EC50 		subq	$336, %rsp
+ 391      010000
+ 392 000f 4889BDB8 		movq	%rdi, -328(%rbp)
+ 392      FEFFFF
+ 393 0016 4889B5B0 		movq	%rsi, -336(%rbp)
+ 393      FEFFFF
+ 394              		.loc 1 203 1
+ 395 001d 64488B04 		movq	%fs:40, %rax
+ 395      25280000 
+ 395      00
+ 396 0026 488945F8 		movq	%rax, -8(%rbp)
+ 397 002a 31C0     		xorl	%eax, %eax
+ 204:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     uint32_t temp1, temp2, W[64];
+ 205:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     uint32_t A[8];
+ 206:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     unsigned int i;
+ 207:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 208:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     SHA256_VALIDATE_RET( ctx != NULL );
+ 209:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     SHA256_VALIDATE_RET( (const unsigned char *)data != NULL );
+ 210:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 211:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     for( i = 0; i < 8; i++ )
+ 398              		.loc 1 211 12
+ 399 002c C785C4FE 		movl	$0, -316(%rbp)
+ 399      FFFF0000 
+ 399      0000
+ 400              		.loc 1 211 5
+ 401 0036 EB25     		jmp	.L18
+ 402              	.L19:
+ 212:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         A[i] = ctx->state[i];
+ 403              		.loc 1 212 26 discriminator 3
+ 404 0038 488B85B8 		movq	-328(%rbp), %rax
+ 404      FEFFFF
+ 405 003f 8B95C4FE 		movl	-316(%rbp), %edx
+ 405      FFFF
+ 406 0045 8B549008 		movl	8(%rax,%rdx,4), %edx
+ 407              		.loc 1 212 14 discriminator 3
+ 408 0049 8B85C4FE 		movl	-316(%rbp), %eax
+ 408      FFFF
+ 409 004f 899485D0 		movl	%edx, -304(%rbp,%rax,4)
+ 409      FEFFFF
+ 211:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         A[i] = ctx->state[i];
+ 410              		.loc 1 211 25 discriminator 3
+ 411 0056 8385C4FE 		addl	$1, -316(%rbp)
+ 411      FFFF01
+ 412              	.L18:
+ 211:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         A[i] = ctx->state[i];
+ 413              		.loc 1 211 5 discriminator 1
+ 414 005d 83BDC4FE 		cmpl	$7, -316(%rbp)
+ 414      FFFF07
+ 415 0064 76D2     		jbe	.L19
+ 213:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 214:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #if defined(MBEDTLS_SHA256_SMALLER)
+ 215:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     for( i = 0; i < 64; i++ )
+GAS LISTING /tmp/cc5VCnXS.s 			page 13
+
+
+ 216:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     {
+ 217:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         if( i < 16 )
+ 218:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****             GET_UINT32_BE( W[i], data, 4 * i );
+ 219:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         else
+ 220:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****             R( i );
+ 221:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 222:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         P( A[0], A[1], A[2], A[3], A[4], A[5], A[6], A[7], W[i], K[i] );
+ 223:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 224:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         temp1 = A[7]; A[7] = A[6]; A[6] = A[5]; A[5] = A[4]; A[4] = A[3];
+ 225:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         A[3] = A[2]; A[2] = A[1]; A[1] = A[0]; A[0] = temp1;
+ 226:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     }
+ 227:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #else /* MBEDTLS_SHA256_SMALLER */
+ 228:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     for( i = 0; i < 16; i++ )
+ 416              		.loc 1 228 12
+ 417 0066 C785C4FE 		movl	$0, -316(%rbp)
+ 417      FFFF0000 
+ 417      0000
+ 418              		.loc 1 228 5
+ 419 0070 E99A0000 		jmp	.L20
+ 419      00
+ 420              	.L21:
+ 229:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         GET_UINT32_BE( W[i], data, 4 * i );
+ 421              		.loc 1 229 9 discriminator 3
+ 422 0075 8B85C4FE 		movl	-316(%rbp), %eax
+ 422      FFFF
+ 423 007b C1E002   		sall	$2, %eax
+ 424 007e 89C2     		movl	%eax, %edx
+ 425 0080 488B85B0 		movq	-336(%rbp), %rax
+ 425      FEFFFF
+ 426 0087 4801D0   		addq	%rdx, %rax
+ 427 008a 0FB600   		movzbl	(%rax), %eax
+ 428 008d 0FB6C0   		movzbl	%al, %eax
+ 429 0090 C1E018   		sall	$24, %eax
+ 430 0093 89C2     		movl	%eax, %edx
+ 431 0095 8B85C4FE 		movl	-316(%rbp), %eax
+ 431      FFFF
+ 432 009b C1E002   		sall	$2, %eax
+ 433 009e 83C001   		addl	$1, %eax
+ 434 00a1 89C1     		movl	%eax, %ecx
+ 435 00a3 488B85B0 		movq	-336(%rbp), %rax
+ 435      FEFFFF
+ 436 00aa 4801C8   		addq	%rcx, %rax
+ 437 00ad 0FB600   		movzbl	(%rax), %eax
+ 438 00b0 0FB6C0   		movzbl	%al, %eax
+ 439 00b3 C1E010   		sall	$16, %eax
+ 440 00b6 09C2     		orl	%eax, %edx
+ 441 00b8 8B85C4FE 		movl	-316(%rbp), %eax
+ 441      FFFF
+ 442 00be C1E002   		sall	$2, %eax
+ 443 00c1 83C002   		addl	$2, %eax
+ 444 00c4 89C1     		movl	%eax, %ecx
+ 445 00c6 488B85B0 		movq	-336(%rbp), %rax
+ 445      FEFFFF
+ 446 00cd 4801C8   		addq	%rcx, %rax
+ 447 00d0 0FB600   		movzbl	(%rax), %eax
+ 448 00d3 0FB6C0   		movzbl	%al, %eax
+ 449 00d6 C1E008   		sall	$8, %eax
+GAS LISTING /tmp/cc5VCnXS.s 			page 14
+
+
+ 450 00d9 09C2     		orl	%eax, %edx
+ 451 00db 8B85C4FE 		movl	-316(%rbp), %eax
+ 451      FFFF
+ 452 00e1 C1E002   		sall	$2, %eax
+ 453 00e4 83C003   		addl	$3, %eax
+ 454 00e7 89C1     		movl	%eax, %ecx
+ 455 00e9 488B85B0 		movq	-336(%rbp), %rax
+ 455      FEFFFF
+ 456 00f0 4801C8   		addq	%rcx, %rax
+ 457 00f3 0FB600   		movzbl	(%rax), %eax
+ 458 00f6 0FB6C0   		movzbl	%al, %eax
+ 459 00f9 09C2     		orl	%eax, %edx
+ 460 00fb 8B85C4FE 		movl	-316(%rbp), %eax
+ 460      FFFF
+ 461 0101 899485F0 		movl	%edx, -272(%rbp,%rax,4)
+ 461      FEFFFF
+ 228:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         GET_UINT32_BE( W[i], data, 4 * i );
+ 462              		.loc 1 228 26 discriminator 3
+ 463 0108 8385C4FE 		addl	$1, -316(%rbp)
+ 463      FFFF01
+ 464              	.L20:
+ 228:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         GET_UINT32_BE( W[i], data, 4 * i );
+ 465              		.loc 1 228 5 discriminator 1
+ 466 010f 83BDC4FE 		cmpl	$15, -316(%rbp)
+ 466      FFFF0F
+ 467 0116 0F8659FF 		jbe	.L21
+ 467      FFFF
+ 230:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 231:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     for( i = 0; i < 16; i += 8 )
+ 468              		.loc 1 231 12
+ 469 011c C785C4FE 		movl	$0, -316(%rbp)
+ 469      FFFF0000 
+ 469      0000
+ 470              		.loc 1 231 5
+ 471 0126 E9FD0700 		jmp	.L22
+ 471      00
+ 472              	.L23:
+ 232:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     {
+ 233:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         P( A[0], A[1], A[2], A[3], A[4], A[5], A[6], A[7], W[i+0], K[i+0] );
+ 473              		.loc 1 233 9 discriminator 3
+ 474 012b 8B85ECFE 		movl	-276(%rbp), %eax
+ 474      FFFF
+ 475 0131 8B95E0FE 		movl	-288(%rbp), %edx
+ 475      FFFF
+ 476 0137 89D1     		movl	%edx, %ecx
+ 477 0139 C1C906   		rorl	$6, %ecx
+ 478 013c 8B95E0FE 		movl	-288(%rbp), %edx
+ 478      FFFF
+ 479 0142 C1CA0B   		rorl	$11, %edx
+ 480 0145 31D1     		xorl	%edx, %ecx
+ 481 0147 8B95E0FE 		movl	-288(%rbp), %edx
+ 481      FFFF
+ 482 014d C1C207   		roll	$7, %edx
+ 483 0150 31CA     		xorl	%ecx, %edx
+ 484 0152 8D3C10   		leal	(%rax,%rdx), %edi
+ 485 0155 8B85E8FE 		movl	-280(%rbp), %eax
+ 485      FFFF
+GAS LISTING /tmp/cc5VCnXS.s 			page 15
+
+
+ 486 015b 8B95E0FE 		movl	-288(%rbp), %edx
+ 486      FFFF
+ 487 0161 8BB5E4FE 		movl	-284(%rbp), %esi
+ 487      FFFF
+ 488 0167 8B8DE8FE 		movl	-280(%rbp), %ecx
+ 488      FFFF
+ 489 016d 31F1     		xorl	%esi, %ecx
+ 490 016f 21CA     		andl	%ecx, %edx
+ 491 0171 31D0     		xorl	%edx, %eax
+ 492 0173 8D0C07   		leal	(%rdi,%rax), %ecx
+ 493 0176 8B85C4FE 		movl	-316(%rbp), %eax
+ 493      FFFF
+ 494 017c 488D1485 		leaq	0(,%rax,4), %rdx
+ 494      00000000 
+ 495 0184 488D0500 		leaq	K(%rip), %rax
+ 495      000000
+ 496 018b 8B0402   		movl	(%rdx,%rax), %eax
+ 497 018e 8D1401   		leal	(%rcx,%rax), %edx
+ 498 0191 8B85C4FE 		movl	-316(%rbp), %eax
+ 498      FFFF
+ 499 0197 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 499      FEFFFF
+ 500 019e 01D0     		addl	%edx, %eax
+ 501 01a0 8985C8FE 		movl	%eax, -312(%rbp)
+ 501      FFFF
+ 502 01a6 8B85D0FE 		movl	-304(%rbp), %eax
+ 502      FFFF
+ 503 01ac C1C802   		rorl	$2, %eax
+ 504 01af 89C2     		movl	%eax, %edx
+ 505 01b1 8B85D0FE 		movl	-304(%rbp), %eax
+ 505      FFFF
+ 506 01b7 C1C80D   		rorl	$13, %eax
+ 507 01ba 31C2     		xorl	%eax, %edx
+ 508 01bc 8B85D0FE 		movl	-304(%rbp), %eax
+ 508      FFFF
+ 509 01c2 C1C00A   		roll	$10, %eax
+ 510 01c5 89D6     		movl	%edx, %esi
+ 511 01c7 31C6     		xorl	%eax, %esi
+ 512 01c9 8B95D0FE 		movl	-304(%rbp), %edx
+ 512      FFFF
+ 513 01cf 8B85D4FE 		movl	-300(%rbp), %eax
+ 513      FFFF
+ 514 01d5 89D7     		movl	%edx, %edi
+ 515 01d7 21C7     		andl	%eax, %edi
+ 516 01d9 8B85D8FE 		movl	-296(%rbp), %eax
+ 516      FFFF
+ 517 01df 8B8DD0FE 		movl	-304(%rbp), %ecx
+ 517      FFFF
+ 518 01e5 8B95D4FE 		movl	-300(%rbp), %edx
+ 518      FFFF
+ 519 01eb 09CA     		orl	%ecx, %edx
+ 520 01ed 21D0     		andl	%edx, %eax
+ 521 01ef 09F8     		orl	%edi, %eax
+ 522 01f1 01F0     		addl	%esi, %eax
+ 523 01f3 8985CCFE 		movl	%eax, -308(%rbp)
+ 523      FFFF
+ 524 01f9 8B95DCFE 		movl	-292(%rbp), %edx
+GAS LISTING /tmp/cc5VCnXS.s 			page 16
+
+
+ 524      FFFF
+ 525 01ff 8B85C8FE 		movl	-312(%rbp), %eax
+ 525      FFFF
+ 526 0205 01D0     		addl	%edx, %eax
+ 527 0207 8985DCFE 		movl	%eax, -292(%rbp)
+ 527      FFFF
+ 528 020d 8B95C8FE 		movl	-312(%rbp), %edx
+ 528      FFFF
+ 529 0213 8B85CCFE 		movl	-308(%rbp), %eax
+ 529      FFFF
+ 530 0219 01D0     		addl	%edx, %eax
+ 531 021b 8985ECFE 		movl	%eax, -276(%rbp)
+ 531      FFFF
+ 234:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         P( A[7], A[0], A[1], A[2], A[3], A[4], A[5], A[6], W[i+1], K[i+1] );
+ 532              		.loc 1 234 9 discriminator 3
+ 533 0221 8B85E8FE 		movl	-280(%rbp), %eax
+ 533      FFFF
+ 534 0227 8B95DCFE 		movl	-292(%rbp), %edx
+ 534      FFFF
+ 535 022d 89D1     		movl	%edx, %ecx
+ 536 022f C1C906   		rorl	$6, %ecx
+ 537 0232 8B95DCFE 		movl	-292(%rbp), %edx
+ 537      FFFF
+ 538 0238 C1CA0B   		rorl	$11, %edx
+ 539 023b 31D1     		xorl	%edx, %ecx
+ 540 023d 8B95DCFE 		movl	-292(%rbp), %edx
+ 540      FFFF
+ 541 0243 C1C207   		roll	$7, %edx
+ 542 0246 31CA     		xorl	%ecx, %edx
+ 543 0248 8D3C10   		leal	(%rax,%rdx), %edi
+ 544 024b 8B85E4FE 		movl	-284(%rbp), %eax
+ 544      FFFF
+ 545 0251 8B95DCFE 		movl	-292(%rbp), %edx
+ 545      FFFF
+ 546 0257 8BB5E0FE 		movl	-288(%rbp), %esi
+ 546      FFFF
+ 547 025d 8B8DE4FE 		movl	-284(%rbp), %ecx
+ 547      FFFF
+ 548 0263 31F1     		xorl	%esi, %ecx
+ 549 0265 21CA     		andl	%ecx, %edx
+ 550 0267 31D0     		xorl	%edx, %eax
+ 551 0269 8D0C07   		leal	(%rdi,%rax), %ecx
+ 552 026c 8B85C4FE 		movl	-316(%rbp), %eax
+ 552      FFFF
+ 553 0272 83C001   		addl	$1, %eax
+ 554 0275 89C0     		movl	%eax, %eax
+ 555 0277 488D1485 		leaq	0(,%rax,4), %rdx
+ 555      00000000 
+ 556 027f 488D0500 		leaq	K(%rip), %rax
+ 556      000000
+ 557 0286 8B0402   		movl	(%rdx,%rax), %eax
+ 558 0289 8D1401   		leal	(%rcx,%rax), %edx
+ 559 028c 8B85C4FE 		movl	-316(%rbp), %eax
+ 559      FFFF
+ 560 0292 83C001   		addl	$1, %eax
+ 561 0295 89C0     		movl	%eax, %eax
+ 562 0297 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+GAS LISTING /tmp/cc5VCnXS.s 			page 17
+
+
+ 562      FEFFFF
+ 563 029e 01D0     		addl	%edx, %eax
+ 564 02a0 8985C8FE 		movl	%eax, -312(%rbp)
+ 564      FFFF
+ 565 02a6 8B85ECFE 		movl	-276(%rbp), %eax
+ 565      FFFF
+ 566 02ac C1C802   		rorl	$2, %eax
+ 567 02af 89C2     		movl	%eax, %edx
+ 568 02b1 8B85ECFE 		movl	-276(%rbp), %eax
+ 568      FFFF
+ 569 02b7 C1C80D   		rorl	$13, %eax
+ 570 02ba 31C2     		xorl	%eax, %edx
+ 571 02bc 8B85ECFE 		movl	-276(%rbp), %eax
+ 571      FFFF
+ 572 02c2 C1C00A   		roll	$10, %eax
+ 573 02c5 89D6     		movl	%edx, %esi
+ 574 02c7 31C6     		xorl	%eax, %esi
+ 575 02c9 8B95ECFE 		movl	-276(%rbp), %edx
+ 575      FFFF
+ 576 02cf 8B85D0FE 		movl	-304(%rbp), %eax
+ 576      FFFF
+ 577 02d5 89D7     		movl	%edx, %edi
+ 578 02d7 21C7     		andl	%eax, %edi
+ 579 02d9 8B85D4FE 		movl	-300(%rbp), %eax
+ 579      FFFF
+ 580 02df 8B8DECFE 		movl	-276(%rbp), %ecx
+ 580      FFFF
+ 581 02e5 8B95D0FE 		movl	-304(%rbp), %edx
+ 581      FFFF
+ 582 02eb 09CA     		orl	%ecx, %edx
+ 583 02ed 21D0     		andl	%edx, %eax
+ 584 02ef 09F8     		orl	%edi, %eax
+ 585 02f1 01F0     		addl	%esi, %eax
+ 586 02f3 8985CCFE 		movl	%eax, -308(%rbp)
+ 586      FFFF
+ 587 02f9 8B95D8FE 		movl	-296(%rbp), %edx
+ 587      FFFF
+ 588 02ff 8B85C8FE 		movl	-312(%rbp), %eax
+ 588      FFFF
+ 589 0305 01D0     		addl	%edx, %eax
+ 590 0307 8985D8FE 		movl	%eax, -296(%rbp)
+ 590      FFFF
+ 591 030d 8B95C8FE 		movl	-312(%rbp), %edx
+ 591      FFFF
+ 592 0313 8B85CCFE 		movl	-308(%rbp), %eax
+ 592      FFFF
+ 593 0319 01D0     		addl	%edx, %eax
+ 594 031b 8985E8FE 		movl	%eax, -280(%rbp)
+ 594      FFFF
+ 235:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         P( A[6], A[7], A[0], A[1], A[2], A[3], A[4], A[5], W[i+2], K[i+2] );
+ 595              		.loc 1 235 9 discriminator 3
+ 596 0321 8B85E4FE 		movl	-284(%rbp), %eax
+ 596      FFFF
+ 597 0327 8B95D8FE 		movl	-296(%rbp), %edx
+ 597      FFFF
+ 598 032d 89D1     		movl	%edx, %ecx
+ 599 032f C1C906   		rorl	$6, %ecx
+GAS LISTING /tmp/cc5VCnXS.s 			page 18
+
+
+ 600 0332 8B95D8FE 		movl	-296(%rbp), %edx
+ 600      FFFF
+ 601 0338 C1CA0B   		rorl	$11, %edx
+ 602 033b 31D1     		xorl	%edx, %ecx
+ 603 033d 8B95D8FE 		movl	-296(%rbp), %edx
+ 603      FFFF
+ 604 0343 C1C207   		roll	$7, %edx
+ 605 0346 31CA     		xorl	%ecx, %edx
+ 606 0348 8D3C10   		leal	(%rax,%rdx), %edi
+ 607 034b 8B85E0FE 		movl	-288(%rbp), %eax
+ 607      FFFF
+ 608 0351 8B95D8FE 		movl	-296(%rbp), %edx
+ 608      FFFF
+ 609 0357 8BB5DCFE 		movl	-292(%rbp), %esi
+ 609      FFFF
+ 610 035d 8B8DE0FE 		movl	-288(%rbp), %ecx
+ 610      FFFF
+ 611 0363 31F1     		xorl	%esi, %ecx
+ 612 0365 21CA     		andl	%ecx, %edx
+ 613 0367 31D0     		xorl	%edx, %eax
+ 614 0369 8D0C07   		leal	(%rdi,%rax), %ecx
+ 615 036c 8B85C4FE 		movl	-316(%rbp), %eax
+ 615      FFFF
+ 616 0372 83C002   		addl	$2, %eax
+ 617 0375 89C0     		movl	%eax, %eax
+ 618 0377 488D1485 		leaq	0(,%rax,4), %rdx
+ 618      00000000 
+ 619 037f 488D0500 		leaq	K(%rip), %rax
+ 619      000000
+ 620 0386 8B0402   		movl	(%rdx,%rax), %eax
+ 621 0389 8D1401   		leal	(%rcx,%rax), %edx
+ 622 038c 8B85C4FE 		movl	-316(%rbp), %eax
+ 622      FFFF
+ 623 0392 83C002   		addl	$2, %eax
+ 624 0395 89C0     		movl	%eax, %eax
+ 625 0397 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 625      FEFFFF
+ 626 039e 01D0     		addl	%edx, %eax
+ 627 03a0 8985C8FE 		movl	%eax, -312(%rbp)
+ 627      FFFF
+ 628 03a6 8B85E8FE 		movl	-280(%rbp), %eax
+ 628      FFFF
+ 629 03ac C1C802   		rorl	$2, %eax
+ 630 03af 89C2     		movl	%eax, %edx
+ 631 03b1 8B85E8FE 		movl	-280(%rbp), %eax
+ 631      FFFF
+ 632 03b7 C1C80D   		rorl	$13, %eax
+ 633 03ba 31C2     		xorl	%eax, %edx
+ 634 03bc 8B85E8FE 		movl	-280(%rbp), %eax
+ 634      FFFF
+ 635 03c2 C1C00A   		roll	$10, %eax
+ 636 03c5 89D6     		movl	%edx, %esi
+ 637 03c7 31C6     		xorl	%eax, %esi
+ 638 03c9 8B95E8FE 		movl	-280(%rbp), %edx
+ 638      FFFF
+ 639 03cf 8B85ECFE 		movl	-276(%rbp), %eax
+ 639      FFFF
+GAS LISTING /tmp/cc5VCnXS.s 			page 19
+
+
+ 640 03d5 89D7     		movl	%edx, %edi
+ 641 03d7 21C7     		andl	%eax, %edi
+ 642 03d9 8B85D0FE 		movl	-304(%rbp), %eax
+ 642      FFFF
+ 643 03df 8B8DE8FE 		movl	-280(%rbp), %ecx
+ 643      FFFF
+ 644 03e5 8B95ECFE 		movl	-276(%rbp), %edx
+ 644      FFFF
+ 645 03eb 09CA     		orl	%ecx, %edx
+ 646 03ed 21D0     		andl	%edx, %eax
+ 647 03ef 09F8     		orl	%edi, %eax
+ 648 03f1 01F0     		addl	%esi, %eax
+ 649 03f3 8985CCFE 		movl	%eax, -308(%rbp)
+ 649      FFFF
+ 650 03f9 8B95D4FE 		movl	-300(%rbp), %edx
+ 650      FFFF
+ 651 03ff 8B85C8FE 		movl	-312(%rbp), %eax
+ 651      FFFF
+ 652 0405 01D0     		addl	%edx, %eax
+ 653 0407 8985D4FE 		movl	%eax, -300(%rbp)
+ 653      FFFF
+ 654 040d 8B95C8FE 		movl	-312(%rbp), %edx
+ 654      FFFF
+ 655 0413 8B85CCFE 		movl	-308(%rbp), %eax
+ 655      FFFF
+ 656 0419 01D0     		addl	%edx, %eax
+ 657 041b 8985E4FE 		movl	%eax, -284(%rbp)
+ 657      FFFF
+ 236:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         P( A[5], A[6], A[7], A[0], A[1], A[2], A[3], A[4], W[i+3], K[i+3] );
+ 658              		.loc 1 236 9 discriminator 3
+ 659 0421 8B85E0FE 		movl	-288(%rbp), %eax
+ 659      FFFF
+ 660 0427 8B95D4FE 		movl	-300(%rbp), %edx
+ 660      FFFF
+ 661 042d 89D1     		movl	%edx, %ecx
+ 662 042f C1C906   		rorl	$6, %ecx
+ 663 0432 8B95D4FE 		movl	-300(%rbp), %edx
+ 663      FFFF
+ 664 0438 C1CA0B   		rorl	$11, %edx
+ 665 043b 31D1     		xorl	%edx, %ecx
+ 666 043d 8B95D4FE 		movl	-300(%rbp), %edx
+ 666      FFFF
+ 667 0443 C1C207   		roll	$7, %edx
+ 668 0446 31CA     		xorl	%ecx, %edx
+ 669 0448 8D3C10   		leal	(%rax,%rdx), %edi
+ 670 044b 8B85DCFE 		movl	-292(%rbp), %eax
+ 670      FFFF
+ 671 0451 8B95D4FE 		movl	-300(%rbp), %edx
+ 671      FFFF
+ 672 0457 8BB5D8FE 		movl	-296(%rbp), %esi
+ 672      FFFF
+ 673 045d 8B8DDCFE 		movl	-292(%rbp), %ecx
+ 673      FFFF
+ 674 0463 31F1     		xorl	%esi, %ecx
+ 675 0465 21CA     		andl	%ecx, %edx
+ 676 0467 31D0     		xorl	%edx, %eax
+ 677 0469 8D0C07   		leal	(%rdi,%rax), %ecx
+GAS LISTING /tmp/cc5VCnXS.s 			page 20
+
+
+ 678 046c 8B85C4FE 		movl	-316(%rbp), %eax
+ 678      FFFF
+ 679 0472 83C003   		addl	$3, %eax
+ 680 0475 89C0     		movl	%eax, %eax
+ 681 0477 488D1485 		leaq	0(,%rax,4), %rdx
+ 681      00000000 
+ 682 047f 488D0500 		leaq	K(%rip), %rax
+ 682      000000
+ 683 0486 8B0402   		movl	(%rdx,%rax), %eax
+ 684 0489 8D1401   		leal	(%rcx,%rax), %edx
+ 685 048c 8B85C4FE 		movl	-316(%rbp), %eax
+ 685      FFFF
+ 686 0492 83C003   		addl	$3, %eax
+ 687 0495 89C0     		movl	%eax, %eax
+ 688 0497 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 688      FEFFFF
+ 689 049e 01D0     		addl	%edx, %eax
+ 690 04a0 8985C8FE 		movl	%eax, -312(%rbp)
+ 690      FFFF
+ 691 04a6 8B85E4FE 		movl	-284(%rbp), %eax
+ 691      FFFF
+ 692 04ac C1C802   		rorl	$2, %eax
+ 693 04af 89C2     		movl	%eax, %edx
+ 694 04b1 8B85E4FE 		movl	-284(%rbp), %eax
+ 694      FFFF
+ 695 04b7 C1C80D   		rorl	$13, %eax
+ 696 04ba 31C2     		xorl	%eax, %edx
+ 697 04bc 8B85E4FE 		movl	-284(%rbp), %eax
+ 697      FFFF
+ 698 04c2 C1C00A   		roll	$10, %eax
+ 699 04c5 89D6     		movl	%edx, %esi
+ 700 04c7 31C6     		xorl	%eax, %esi
+ 701 04c9 8B95E4FE 		movl	-284(%rbp), %edx
+ 701      FFFF
+ 702 04cf 8B85E8FE 		movl	-280(%rbp), %eax
+ 702      FFFF
+ 703 04d5 89D7     		movl	%edx, %edi
+ 704 04d7 21C7     		andl	%eax, %edi
+ 705 04d9 8B85ECFE 		movl	-276(%rbp), %eax
+ 705      FFFF
+ 706 04df 8B8DE4FE 		movl	-284(%rbp), %ecx
+ 706      FFFF
+ 707 04e5 8B95E8FE 		movl	-280(%rbp), %edx
+ 707      FFFF
+ 708 04eb 09CA     		orl	%ecx, %edx
+ 709 04ed 21D0     		andl	%edx, %eax
+ 710 04ef 09F8     		orl	%edi, %eax
+ 711 04f1 01F0     		addl	%esi, %eax
+ 712 04f3 8985CCFE 		movl	%eax, -308(%rbp)
+ 712      FFFF
+ 713 04f9 8B95D0FE 		movl	-304(%rbp), %edx
+ 713      FFFF
+ 714 04ff 8B85C8FE 		movl	-312(%rbp), %eax
+ 714      FFFF
+ 715 0505 01D0     		addl	%edx, %eax
+ 716 0507 8985D0FE 		movl	%eax, -304(%rbp)
+ 716      FFFF
+GAS LISTING /tmp/cc5VCnXS.s 			page 21
+
+
+ 717 050d 8B95C8FE 		movl	-312(%rbp), %edx
+ 717      FFFF
+ 718 0513 8B85CCFE 		movl	-308(%rbp), %eax
+ 718      FFFF
+ 719 0519 01D0     		addl	%edx, %eax
+ 720 051b 8985E0FE 		movl	%eax, -288(%rbp)
+ 720      FFFF
+ 237:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         P( A[4], A[5], A[6], A[7], A[0], A[1], A[2], A[3], W[i+4], K[i+4] );
+ 721              		.loc 1 237 9 discriminator 3
+ 722 0521 8B85DCFE 		movl	-292(%rbp), %eax
+ 722      FFFF
+ 723 0527 8B95D0FE 		movl	-304(%rbp), %edx
+ 723      FFFF
+ 724 052d 89D1     		movl	%edx, %ecx
+ 725 052f C1C906   		rorl	$6, %ecx
+ 726 0532 8B95D0FE 		movl	-304(%rbp), %edx
+ 726      FFFF
+ 727 0538 C1CA0B   		rorl	$11, %edx
+ 728 053b 31D1     		xorl	%edx, %ecx
+ 729 053d 8B95D0FE 		movl	-304(%rbp), %edx
+ 729      FFFF
+ 730 0543 C1C207   		roll	$7, %edx
+ 731 0546 31CA     		xorl	%ecx, %edx
+ 732 0548 8D3C10   		leal	(%rax,%rdx), %edi
+ 733 054b 8B85D8FE 		movl	-296(%rbp), %eax
+ 733      FFFF
+ 734 0551 8B95D0FE 		movl	-304(%rbp), %edx
+ 734      FFFF
+ 735 0557 8BB5D4FE 		movl	-300(%rbp), %esi
+ 735      FFFF
+ 736 055d 8B8DD8FE 		movl	-296(%rbp), %ecx
+ 736      FFFF
+ 737 0563 31F1     		xorl	%esi, %ecx
+ 738 0565 21CA     		andl	%ecx, %edx
+ 739 0567 31D0     		xorl	%edx, %eax
+ 740 0569 8D0C07   		leal	(%rdi,%rax), %ecx
+ 741 056c 8B85C4FE 		movl	-316(%rbp), %eax
+ 741      FFFF
+ 742 0572 83C004   		addl	$4, %eax
+ 743 0575 89C0     		movl	%eax, %eax
+ 744 0577 488D1485 		leaq	0(,%rax,4), %rdx
+ 744      00000000 
+ 745 057f 488D0500 		leaq	K(%rip), %rax
+ 745      000000
+ 746 0586 8B0402   		movl	(%rdx,%rax), %eax
+ 747 0589 8D1401   		leal	(%rcx,%rax), %edx
+ 748 058c 8B85C4FE 		movl	-316(%rbp), %eax
+ 748      FFFF
+ 749 0592 83C004   		addl	$4, %eax
+ 750 0595 89C0     		movl	%eax, %eax
+ 751 0597 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 751      FEFFFF
+ 752 059e 01D0     		addl	%edx, %eax
+ 753 05a0 8985C8FE 		movl	%eax, -312(%rbp)
+ 753      FFFF
+ 754 05a6 8B85E0FE 		movl	-288(%rbp), %eax
+ 754      FFFF
+GAS LISTING /tmp/cc5VCnXS.s 			page 22
+
+
+ 755 05ac C1C802   		rorl	$2, %eax
+ 756 05af 89C2     		movl	%eax, %edx
+ 757 05b1 8B85E0FE 		movl	-288(%rbp), %eax
+ 757      FFFF
+ 758 05b7 C1C80D   		rorl	$13, %eax
+ 759 05ba 31C2     		xorl	%eax, %edx
+ 760 05bc 8B85E0FE 		movl	-288(%rbp), %eax
+ 760      FFFF
+ 761 05c2 C1C00A   		roll	$10, %eax
+ 762 05c5 89D6     		movl	%edx, %esi
+ 763 05c7 31C6     		xorl	%eax, %esi
+ 764 05c9 8B95E0FE 		movl	-288(%rbp), %edx
+ 764      FFFF
+ 765 05cf 8B85E4FE 		movl	-284(%rbp), %eax
+ 765      FFFF
+ 766 05d5 89D7     		movl	%edx, %edi
+ 767 05d7 21C7     		andl	%eax, %edi
+ 768 05d9 8B85E8FE 		movl	-280(%rbp), %eax
+ 768      FFFF
+ 769 05df 8B8DE0FE 		movl	-288(%rbp), %ecx
+ 769      FFFF
+ 770 05e5 8B95E4FE 		movl	-284(%rbp), %edx
+ 770      FFFF
+ 771 05eb 09CA     		orl	%ecx, %edx
+ 772 05ed 21D0     		andl	%edx, %eax
+ 773 05ef 09F8     		orl	%edi, %eax
+ 774 05f1 01F0     		addl	%esi, %eax
+ 775 05f3 8985CCFE 		movl	%eax, -308(%rbp)
+ 775      FFFF
+ 776 05f9 8B95ECFE 		movl	-276(%rbp), %edx
+ 776      FFFF
+ 777 05ff 8B85C8FE 		movl	-312(%rbp), %eax
+ 777      FFFF
+ 778 0605 01D0     		addl	%edx, %eax
+ 779 0607 8985ECFE 		movl	%eax, -276(%rbp)
+ 779      FFFF
+ 780 060d 8B95C8FE 		movl	-312(%rbp), %edx
+ 780      FFFF
+ 781 0613 8B85CCFE 		movl	-308(%rbp), %eax
+ 781      FFFF
+ 782 0619 01D0     		addl	%edx, %eax
+ 783 061b 8985DCFE 		movl	%eax, -292(%rbp)
+ 783      FFFF
+ 238:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         P( A[3], A[4], A[5], A[6], A[7], A[0], A[1], A[2], W[i+5], K[i+5] );
+ 784              		.loc 1 238 9 discriminator 3
+ 785 0621 8B85D8FE 		movl	-296(%rbp), %eax
+ 785      FFFF
+ 786 0627 8B95ECFE 		movl	-276(%rbp), %edx
+ 786      FFFF
+ 787 062d 89D1     		movl	%edx, %ecx
+ 788 062f C1C906   		rorl	$6, %ecx
+ 789 0632 8B95ECFE 		movl	-276(%rbp), %edx
+ 789      FFFF
+ 790 0638 C1CA0B   		rorl	$11, %edx
+ 791 063b 31D1     		xorl	%edx, %ecx
+ 792 063d 8B95ECFE 		movl	-276(%rbp), %edx
+ 792      FFFF
+GAS LISTING /tmp/cc5VCnXS.s 			page 23
+
+
+ 793 0643 C1C207   		roll	$7, %edx
+ 794 0646 31CA     		xorl	%ecx, %edx
+ 795 0648 8D3C10   		leal	(%rax,%rdx), %edi
+ 796 064b 8B85D4FE 		movl	-300(%rbp), %eax
+ 796      FFFF
+ 797 0651 8B95ECFE 		movl	-276(%rbp), %edx
+ 797      FFFF
+ 798 0657 8BB5D0FE 		movl	-304(%rbp), %esi
+ 798      FFFF
+ 799 065d 8B8DD4FE 		movl	-300(%rbp), %ecx
+ 799      FFFF
+ 800 0663 31F1     		xorl	%esi, %ecx
+ 801 0665 21CA     		andl	%ecx, %edx
+ 802 0667 31D0     		xorl	%edx, %eax
+ 803 0669 8D0C07   		leal	(%rdi,%rax), %ecx
+ 804 066c 8B85C4FE 		movl	-316(%rbp), %eax
+ 804      FFFF
+ 805 0672 83C005   		addl	$5, %eax
+ 806 0675 89C0     		movl	%eax, %eax
+ 807 0677 488D1485 		leaq	0(,%rax,4), %rdx
+ 807      00000000 
+ 808 067f 488D0500 		leaq	K(%rip), %rax
+ 808      000000
+ 809 0686 8B0402   		movl	(%rdx,%rax), %eax
+ 810 0689 8D1401   		leal	(%rcx,%rax), %edx
+ 811 068c 8B85C4FE 		movl	-316(%rbp), %eax
+ 811      FFFF
+ 812 0692 83C005   		addl	$5, %eax
+ 813 0695 89C0     		movl	%eax, %eax
+ 814 0697 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 814      FEFFFF
+ 815 069e 01D0     		addl	%edx, %eax
+ 816 06a0 8985C8FE 		movl	%eax, -312(%rbp)
+ 816      FFFF
+ 817 06a6 8B85DCFE 		movl	-292(%rbp), %eax
+ 817      FFFF
+ 818 06ac C1C802   		rorl	$2, %eax
+ 819 06af 89C2     		movl	%eax, %edx
+ 820 06b1 8B85DCFE 		movl	-292(%rbp), %eax
+ 820      FFFF
+ 821 06b7 C1C80D   		rorl	$13, %eax
+ 822 06ba 31C2     		xorl	%eax, %edx
+ 823 06bc 8B85DCFE 		movl	-292(%rbp), %eax
+ 823      FFFF
+ 824 06c2 C1C00A   		roll	$10, %eax
+ 825 06c5 89D6     		movl	%edx, %esi
+ 826 06c7 31C6     		xorl	%eax, %esi
+ 827 06c9 8B95DCFE 		movl	-292(%rbp), %edx
+ 827      FFFF
+ 828 06cf 8B85E0FE 		movl	-288(%rbp), %eax
+ 828      FFFF
+ 829 06d5 89D7     		movl	%edx, %edi
+ 830 06d7 21C7     		andl	%eax, %edi
+ 831 06d9 8B85E4FE 		movl	-284(%rbp), %eax
+ 831      FFFF
+ 832 06df 8B8DDCFE 		movl	-292(%rbp), %ecx
+ 832      FFFF
+GAS LISTING /tmp/cc5VCnXS.s 			page 24
+
+
+ 833 06e5 8B95E0FE 		movl	-288(%rbp), %edx
+ 833      FFFF
+ 834 06eb 09CA     		orl	%ecx, %edx
+ 835 06ed 21D0     		andl	%edx, %eax
+ 836 06ef 09F8     		orl	%edi, %eax
+ 837 06f1 01F0     		addl	%esi, %eax
+ 838 06f3 8985CCFE 		movl	%eax, -308(%rbp)
+ 838      FFFF
+ 839 06f9 8B95E8FE 		movl	-280(%rbp), %edx
+ 839      FFFF
+ 840 06ff 8B85C8FE 		movl	-312(%rbp), %eax
+ 840      FFFF
+ 841 0705 01D0     		addl	%edx, %eax
+ 842 0707 8985E8FE 		movl	%eax, -280(%rbp)
+ 842      FFFF
+ 843 070d 8B95C8FE 		movl	-312(%rbp), %edx
+ 843      FFFF
+ 844 0713 8B85CCFE 		movl	-308(%rbp), %eax
+ 844      FFFF
+ 845 0719 01D0     		addl	%edx, %eax
+ 846 071b 8985D8FE 		movl	%eax, -296(%rbp)
+ 846      FFFF
+ 239:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         P( A[2], A[3], A[4], A[5], A[6], A[7], A[0], A[1], W[i+6], K[i+6] );
+ 847              		.loc 1 239 9 discriminator 3
+ 848 0721 8B85D4FE 		movl	-300(%rbp), %eax
+ 848      FFFF
+ 849 0727 8B95E8FE 		movl	-280(%rbp), %edx
+ 849      FFFF
+ 850 072d 89D1     		movl	%edx, %ecx
+ 851 072f C1C906   		rorl	$6, %ecx
+ 852 0732 8B95E8FE 		movl	-280(%rbp), %edx
+ 852      FFFF
+ 853 0738 C1CA0B   		rorl	$11, %edx
+ 854 073b 31D1     		xorl	%edx, %ecx
+ 855 073d 8B95E8FE 		movl	-280(%rbp), %edx
+ 855      FFFF
+ 856 0743 C1C207   		roll	$7, %edx
+ 857 0746 31CA     		xorl	%ecx, %edx
+ 858 0748 8D3C10   		leal	(%rax,%rdx), %edi
+ 859 074b 8B85D0FE 		movl	-304(%rbp), %eax
+ 859      FFFF
+ 860 0751 8B95E8FE 		movl	-280(%rbp), %edx
+ 860      FFFF
+ 861 0757 8BB5ECFE 		movl	-276(%rbp), %esi
+ 861      FFFF
+ 862 075d 8B8DD0FE 		movl	-304(%rbp), %ecx
+ 862      FFFF
+ 863 0763 31F1     		xorl	%esi, %ecx
+ 864 0765 21CA     		andl	%ecx, %edx
+ 865 0767 31D0     		xorl	%edx, %eax
+ 866 0769 8D0C07   		leal	(%rdi,%rax), %ecx
+ 867 076c 8B85C4FE 		movl	-316(%rbp), %eax
+ 867      FFFF
+ 868 0772 83C006   		addl	$6, %eax
+ 869 0775 89C0     		movl	%eax, %eax
+ 870 0777 488D1485 		leaq	0(,%rax,4), %rdx
+ 870      00000000 
+GAS LISTING /tmp/cc5VCnXS.s 			page 25
+
+
+ 871 077f 488D0500 		leaq	K(%rip), %rax
+ 871      000000
+ 872 0786 8B0402   		movl	(%rdx,%rax), %eax
+ 873 0789 8D1401   		leal	(%rcx,%rax), %edx
+ 874 078c 8B85C4FE 		movl	-316(%rbp), %eax
+ 874      FFFF
+ 875 0792 83C006   		addl	$6, %eax
+ 876 0795 89C0     		movl	%eax, %eax
+ 877 0797 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 877      FEFFFF
+ 878 079e 01D0     		addl	%edx, %eax
+ 879 07a0 8985C8FE 		movl	%eax, -312(%rbp)
+ 879      FFFF
+ 880 07a6 8B85D8FE 		movl	-296(%rbp), %eax
+ 880      FFFF
+ 881 07ac C1C802   		rorl	$2, %eax
+ 882 07af 89C2     		movl	%eax, %edx
+ 883 07b1 8B85D8FE 		movl	-296(%rbp), %eax
+ 883      FFFF
+ 884 07b7 C1C80D   		rorl	$13, %eax
+ 885 07ba 31C2     		xorl	%eax, %edx
+ 886 07bc 8B85D8FE 		movl	-296(%rbp), %eax
+ 886      FFFF
+ 887 07c2 C1C00A   		roll	$10, %eax
+ 888 07c5 89D6     		movl	%edx, %esi
+ 889 07c7 31C6     		xorl	%eax, %esi
+ 890 07c9 8B95D8FE 		movl	-296(%rbp), %edx
+ 890      FFFF
+ 891 07cf 8B85DCFE 		movl	-292(%rbp), %eax
+ 891      FFFF
+ 892 07d5 89D7     		movl	%edx, %edi
+ 893 07d7 21C7     		andl	%eax, %edi
+ 894 07d9 8B85E0FE 		movl	-288(%rbp), %eax
+ 894      FFFF
+ 895 07df 8B8DD8FE 		movl	-296(%rbp), %ecx
+ 895      FFFF
+ 896 07e5 8B95DCFE 		movl	-292(%rbp), %edx
+ 896      FFFF
+ 897 07eb 09CA     		orl	%ecx, %edx
+ 898 07ed 21D0     		andl	%edx, %eax
+ 899 07ef 09F8     		orl	%edi, %eax
+ 900 07f1 01F0     		addl	%esi, %eax
+ 901 07f3 8985CCFE 		movl	%eax, -308(%rbp)
+ 901      FFFF
+ 902 07f9 8B95E4FE 		movl	-284(%rbp), %edx
+ 902      FFFF
+ 903 07ff 8B85C8FE 		movl	-312(%rbp), %eax
+ 903      FFFF
+ 904 0805 01D0     		addl	%edx, %eax
+ 905 0807 8985E4FE 		movl	%eax, -284(%rbp)
+ 905      FFFF
+ 906 080d 8B95C8FE 		movl	-312(%rbp), %edx
+ 906      FFFF
+ 907 0813 8B85CCFE 		movl	-308(%rbp), %eax
+ 907      FFFF
+ 908 0819 01D0     		addl	%edx, %eax
+ 909 081b 8985D4FE 		movl	%eax, -300(%rbp)
+GAS LISTING /tmp/cc5VCnXS.s 			page 26
+
+
+ 909      FFFF
+ 240:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         P( A[1], A[2], A[3], A[4], A[5], A[6], A[7], A[0], W[i+7], K[i+7] );
+ 910              		.loc 1 240 9 discriminator 3
+ 911 0821 8B85D0FE 		movl	-304(%rbp), %eax
+ 911      FFFF
+ 912 0827 8B95E4FE 		movl	-284(%rbp), %edx
+ 912      FFFF
+ 913 082d 89D1     		movl	%edx, %ecx
+ 914 082f C1C906   		rorl	$6, %ecx
+ 915 0832 8B95E4FE 		movl	-284(%rbp), %edx
+ 915      FFFF
+ 916 0838 C1CA0B   		rorl	$11, %edx
+ 917 083b 31D1     		xorl	%edx, %ecx
+ 918 083d 8B95E4FE 		movl	-284(%rbp), %edx
+ 918      FFFF
+ 919 0843 C1C207   		roll	$7, %edx
+ 920 0846 31CA     		xorl	%ecx, %edx
+ 921 0848 8D3C10   		leal	(%rax,%rdx), %edi
+ 922 084b 8B85ECFE 		movl	-276(%rbp), %eax
+ 922      FFFF
+ 923 0851 8B95E4FE 		movl	-284(%rbp), %edx
+ 923      FFFF
+ 924 0857 8BB5E8FE 		movl	-280(%rbp), %esi
+ 924      FFFF
+ 925 085d 8B8DECFE 		movl	-276(%rbp), %ecx
+ 925      FFFF
+ 926 0863 31F1     		xorl	%esi, %ecx
+ 927 0865 21CA     		andl	%ecx, %edx
+ 928 0867 31D0     		xorl	%edx, %eax
+ 929 0869 8D0C07   		leal	(%rdi,%rax), %ecx
+ 930 086c 8B85C4FE 		movl	-316(%rbp), %eax
+ 930      FFFF
+ 931 0872 83C007   		addl	$7, %eax
+ 932 0875 89C0     		movl	%eax, %eax
+ 933 0877 488D1485 		leaq	0(,%rax,4), %rdx
+ 933      00000000 
+ 934 087f 488D0500 		leaq	K(%rip), %rax
+ 934      000000
+ 935 0886 8B0402   		movl	(%rdx,%rax), %eax
+ 936 0889 8D1401   		leal	(%rcx,%rax), %edx
+ 937 088c 8B85C4FE 		movl	-316(%rbp), %eax
+ 937      FFFF
+ 938 0892 83C007   		addl	$7, %eax
+ 939 0895 89C0     		movl	%eax, %eax
+ 940 0897 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 940      FEFFFF
+ 941 089e 01D0     		addl	%edx, %eax
+ 942 08a0 8985C8FE 		movl	%eax, -312(%rbp)
+ 942      FFFF
+ 943 08a6 8B85D4FE 		movl	-300(%rbp), %eax
+ 943      FFFF
+ 944 08ac C1C802   		rorl	$2, %eax
+ 945 08af 89C2     		movl	%eax, %edx
+ 946 08b1 8B85D4FE 		movl	-300(%rbp), %eax
+ 946      FFFF
+ 947 08b7 C1C80D   		rorl	$13, %eax
+ 948 08ba 31C2     		xorl	%eax, %edx
+GAS LISTING /tmp/cc5VCnXS.s 			page 27
+
+
+ 949 08bc 8B85D4FE 		movl	-300(%rbp), %eax
+ 949      FFFF
+ 950 08c2 C1C00A   		roll	$10, %eax
+ 951 08c5 89D6     		movl	%edx, %esi
+ 952 08c7 31C6     		xorl	%eax, %esi
+ 953 08c9 8B95D4FE 		movl	-300(%rbp), %edx
+ 953      FFFF
+ 954 08cf 8B85D8FE 		movl	-296(%rbp), %eax
+ 954      FFFF
+ 955 08d5 89D7     		movl	%edx, %edi
+ 956 08d7 21C7     		andl	%eax, %edi
+ 957 08d9 8B85DCFE 		movl	-292(%rbp), %eax
+ 957      FFFF
+ 958 08df 8B8DD4FE 		movl	-300(%rbp), %ecx
+ 958      FFFF
+ 959 08e5 8B95D8FE 		movl	-296(%rbp), %edx
+ 959      FFFF
+ 960 08eb 09CA     		orl	%ecx, %edx
+ 961 08ed 21D0     		andl	%edx, %eax
+ 962 08ef 09F8     		orl	%edi, %eax
+ 963 08f1 01F0     		addl	%esi, %eax
+ 964 08f3 8985CCFE 		movl	%eax, -308(%rbp)
+ 964      FFFF
+ 965 08f9 8B95E0FE 		movl	-288(%rbp), %edx
+ 965      FFFF
+ 966 08ff 8B85C8FE 		movl	-312(%rbp), %eax
+ 966      FFFF
+ 967 0905 01D0     		addl	%edx, %eax
+ 968 0907 8985E0FE 		movl	%eax, -288(%rbp)
+ 968      FFFF
+ 969 090d 8B95C8FE 		movl	-312(%rbp), %edx
+ 969      FFFF
+ 970 0913 8B85CCFE 		movl	-308(%rbp), %eax
+ 970      FFFF
+ 971 0919 01D0     		addl	%edx, %eax
+ 972 091b 8985D0FE 		movl	%eax, -304(%rbp)
+ 972      FFFF
+ 231:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     {
+ 973              		.loc 1 231 27 discriminator 3
+ 974 0921 8385C4FE 		addl	$8, -316(%rbp)
+ 974      FFFF08
+ 975              	.L22:
+ 231:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     {
+ 976              		.loc 1 231 5 discriminator 1
+ 977 0928 83BDC4FE 		cmpl	$15, -316(%rbp)
+ 977      FFFF0F
+ 978 092f 0F86F6F7 		jbe	.L23
+ 978      FFFF
+ 241:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     }
+ 242:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 243:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     for( i = 16; i < 64; i += 8 )
+ 979              		.loc 1 243 12
+ 980 0935 C785C4FE 		movl	$16, -316(%rbp)
+ 980      FFFF1000 
+ 980      0000
+ 981              		.loc 1 243 5
+ 982 093f E9D40D00 		jmp	.L24
+GAS LISTING /tmp/cc5VCnXS.s 			page 28
+
+
+ 982      00
+ 983              	.L25:
+ 244:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     {
+ 245:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         P( A[0], A[1], A[2], A[3], A[4], A[5], A[6], A[7], R(i+0), K[i+0] );
+ 984              		.loc 1 245 9 discriminator 3
+ 985 0944 8B85ECFE 		movl	-276(%rbp), %eax
+ 985      FFFF
+ 986 094a 8B95E0FE 		movl	-288(%rbp), %edx
+ 986      FFFF
+ 987 0950 89D1     		movl	%edx, %ecx
+ 988 0952 C1C906   		rorl	$6, %ecx
+ 989 0955 8B95E0FE 		movl	-288(%rbp), %edx
+ 989      FFFF
+ 990 095b C1CA0B   		rorl	$11, %edx
+ 991 095e 31D1     		xorl	%edx, %ecx
+ 992 0960 8B95E0FE 		movl	-288(%rbp), %edx
+ 992      FFFF
+ 993 0966 C1C207   		roll	$7, %edx
+ 994 0969 31CA     		xorl	%ecx, %edx
+ 995 096b 8D3C10   		leal	(%rax,%rdx), %edi
+ 996 096e 8B85E8FE 		movl	-280(%rbp), %eax
+ 996      FFFF
+ 997 0974 8B95E0FE 		movl	-288(%rbp), %edx
+ 997      FFFF
+ 998 097a 8BB5E4FE 		movl	-284(%rbp), %esi
+ 998      FFFF
+ 999 0980 8B8DE8FE 		movl	-280(%rbp), %ecx
+ 999      FFFF
+ 1000 0986 31F1     		xorl	%esi, %ecx
+ 1001 0988 21CA     		andl	%ecx, %edx
+ 1002 098a 31D0     		xorl	%edx, %eax
+ 1003 098c 8D0C07   		leal	(%rdi,%rax), %ecx
+ 1004 098f 8B85C4FE 		movl	-316(%rbp), %eax
+ 1004      FFFF
+ 1005 0995 488D1485 		leaq	0(,%rax,4), %rdx
+ 1005      00000000 
+ 1006 099d 488D0500 		leaq	K(%rip), %rax
+ 1006      000000
+ 1007 09a4 8B0402   		movl	(%rdx,%rax), %eax
+ 1008 09a7 01C1     		addl	%eax, %ecx
+ 1009 09a9 8B85C4FE 		movl	-316(%rbp), %eax
+ 1009      FFFF
+ 1010 09af 83E802   		subl	$2, %eax
+ 1011 09b2 89C0     		movl	%eax, %eax
+ 1012 09b4 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1012      FEFFFF
+ 1013 09bb C1C00F   		roll	$15, %eax
+ 1014 09be 89C2     		movl	%eax, %edx
+ 1015 09c0 8B85C4FE 		movl	-316(%rbp), %eax
+ 1015      FFFF
+ 1016 09c6 83E802   		subl	$2, %eax
+ 1017 09c9 89C0     		movl	%eax, %eax
+ 1018 09cb 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1018      FEFFFF
+ 1019 09d2 C1C00D   		roll	$13, %eax
+ 1020 09d5 31C2     		xorl	%eax, %edx
+ 1021 09d7 8B85C4FE 		movl	-316(%rbp), %eax
+GAS LISTING /tmp/cc5VCnXS.s 			page 29
+
+
+ 1021      FFFF
+ 1022 09dd 83E802   		subl	$2, %eax
+ 1023 09e0 89C0     		movl	%eax, %eax
+ 1024 09e2 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1024      FEFFFF
+ 1025 09e9 C1E80A   		shrl	$10, %eax
+ 1026 09ec 31C2     		xorl	%eax, %edx
+ 1027 09ee 8B85C4FE 		movl	-316(%rbp), %eax
+ 1027      FFFF
+ 1028 09f4 83E807   		subl	$7, %eax
+ 1029 09f7 89C0     		movl	%eax, %eax
+ 1030 09f9 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1030      FEFFFF
+ 1031 0a00 01C2     		addl	%eax, %edx
+ 1032 0a02 8B85C4FE 		movl	-316(%rbp), %eax
+ 1032      FFFF
+ 1033 0a08 83E80F   		subl	$15, %eax
+ 1034 0a0b 89C0     		movl	%eax, %eax
+ 1035 0a0d 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1035      FEFFFF
+ 1036 0a14 C1C807   		rorl	$7, %eax
+ 1037 0a17 89C6     		movl	%eax, %esi
+ 1038 0a19 8B85C4FE 		movl	-316(%rbp), %eax
+ 1038      FFFF
+ 1039 0a1f 83E80F   		subl	$15, %eax
+ 1040 0a22 89C0     		movl	%eax, %eax
+ 1041 0a24 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1041      FEFFFF
+ 1042 0a2b C1C00E   		roll	$14, %eax
+ 1043 0a2e 31C6     		xorl	%eax, %esi
+ 1044 0a30 8B85C4FE 		movl	-316(%rbp), %eax
+ 1044      FFFF
+ 1045 0a36 83E80F   		subl	$15, %eax
+ 1046 0a39 89C0     		movl	%eax, %eax
+ 1047 0a3b 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1047      FEFFFF
+ 1048 0a42 C1E803   		shrl	$3, %eax
+ 1049 0a45 31F0     		xorl	%esi, %eax
+ 1050 0a47 01C2     		addl	%eax, %edx
+ 1051 0a49 8B85C4FE 		movl	-316(%rbp), %eax
+ 1051      FFFF
+ 1052 0a4f 83E810   		subl	$16, %eax
+ 1053 0a52 89C0     		movl	%eax, %eax
+ 1054 0a54 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1054      FEFFFF
+ 1055 0a5b 01C2     		addl	%eax, %edx
+ 1056 0a5d 8B85C4FE 		movl	-316(%rbp), %eax
+ 1056      FFFF
+ 1057 0a63 899485F0 		movl	%edx, -272(%rbp,%rax,4)
+ 1057      FEFFFF
+ 1058 0a6a 8B85C4FE 		movl	-316(%rbp), %eax
+ 1058      FFFF
+ 1059 0a70 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1059      FEFFFF
+ 1060 0a77 01C8     		addl	%ecx, %eax
+ 1061 0a79 8985C8FE 		movl	%eax, -312(%rbp)
+ 1061      FFFF
+GAS LISTING /tmp/cc5VCnXS.s 			page 30
+
+
+ 1062 0a7f 8B85D0FE 		movl	-304(%rbp), %eax
+ 1062      FFFF
+ 1063 0a85 C1C802   		rorl	$2, %eax
+ 1064 0a88 89C2     		movl	%eax, %edx
+ 1065 0a8a 8B85D0FE 		movl	-304(%rbp), %eax
+ 1065      FFFF
+ 1066 0a90 C1C80D   		rorl	$13, %eax
+ 1067 0a93 31C2     		xorl	%eax, %edx
+ 1068 0a95 8B85D0FE 		movl	-304(%rbp), %eax
+ 1068      FFFF
+ 1069 0a9b C1C00A   		roll	$10, %eax
+ 1070 0a9e 89D6     		movl	%edx, %esi
+ 1071 0aa0 31C6     		xorl	%eax, %esi
+ 1072 0aa2 8B95D0FE 		movl	-304(%rbp), %edx
+ 1072      FFFF
+ 1073 0aa8 8B85D4FE 		movl	-300(%rbp), %eax
+ 1073      FFFF
+ 1074 0aae 89D7     		movl	%edx, %edi
+ 1075 0ab0 21C7     		andl	%eax, %edi
+ 1076 0ab2 8B85D8FE 		movl	-296(%rbp), %eax
+ 1076      FFFF
+ 1077 0ab8 8B8DD0FE 		movl	-304(%rbp), %ecx
+ 1077      FFFF
+ 1078 0abe 8B95D4FE 		movl	-300(%rbp), %edx
+ 1078      FFFF
+ 1079 0ac4 09CA     		orl	%ecx, %edx
+ 1080 0ac6 21D0     		andl	%edx, %eax
+ 1081 0ac8 09F8     		orl	%edi, %eax
+ 1082 0aca 01F0     		addl	%esi, %eax
+ 1083 0acc 8985CCFE 		movl	%eax, -308(%rbp)
+ 1083      FFFF
+ 1084 0ad2 8B95DCFE 		movl	-292(%rbp), %edx
+ 1084      FFFF
+ 1085 0ad8 8B85C8FE 		movl	-312(%rbp), %eax
+ 1085      FFFF
+ 1086 0ade 01D0     		addl	%edx, %eax
+ 1087 0ae0 8985DCFE 		movl	%eax, -292(%rbp)
+ 1087      FFFF
+ 1088 0ae6 8B95C8FE 		movl	-312(%rbp), %edx
+ 1088      FFFF
+ 1089 0aec 8B85CCFE 		movl	-308(%rbp), %eax
+ 1089      FFFF
+ 1090 0af2 01D0     		addl	%edx, %eax
+ 1091 0af4 8985ECFE 		movl	%eax, -276(%rbp)
+ 1091      FFFF
+ 246:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         P( A[7], A[0], A[1], A[2], A[3], A[4], A[5], A[6], R(i+1), K[i+1] );
+ 1092              		.loc 1 246 9 discriminator 3
+ 1093 0afa 8B85E8FE 		movl	-280(%rbp), %eax
+ 1093      FFFF
+ 1094 0b00 8B95DCFE 		movl	-292(%rbp), %edx
+ 1094      FFFF
+ 1095 0b06 89D1     		movl	%edx, %ecx
+ 1096 0b08 C1C906   		rorl	$6, %ecx
+ 1097 0b0b 8B95DCFE 		movl	-292(%rbp), %edx
+ 1097      FFFF
+ 1098 0b11 C1CA0B   		rorl	$11, %edx
+ 1099 0b14 31D1     		xorl	%edx, %ecx
+GAS LISTING /tmp/cc5VCnXS.s 			page 31
+
+
+ 1100 0b16 8B95DCFE 		movl	-292(%rbp), %edx
+ 1100      FFFF
+ 1101 0b1c C1C207   		roll	$7, %edx
+ 1102 0b1f 31CA     		xorl	%ecx, %edx
+ 1103 0b21 8D3C10   		leal	(%rax,%rdx), %edi
+ 1104 0b24 8B85E4FE 		movl	-284(%rbp), %eax
+ 1104      FFFF
+ 1105 0b2a 8B95DCFE 		movl	-292(%rbp), %edx
+ 1105      FFFF
+ 1106 0b30 8BB5E0FE 		movl	-288(%rbp), %esi
+ 1106      FFFF
+ 1107 0b36 8B8DE4FE 		movl	-284(%rbp), %ecx
+ 1107      FFFF
+ 1108 0b3c 31F1     		xorl	%esi, %ecx
+ 1109 0b3e 21CA     		andl	%ecx, %edx
+ 1110 0b40 31D0     		xorl	%edx, %eax
+ 1111 0b42 8D0C07   		leal	(%rdi,%rax), %ecx
+ 1112 0b45 8B85C4FE 		movl	-316(%rbp), %eax
+ 1112      FFFF
+ 1113 0b4b 83C001   		addl	$1, %eax
+ 1114 0b4e 89C0     		movl	%eax, %eax
+ 1115 0b50 488D1485 		leaq	0(,%rax,4), %rdx
+ 1115      00000000 
+ 1116 0b58 488D0500 		leaq	K(%rip), %rax
+ 1116      000000
+ 1117 0b5f 8B0402   		movl	(%rdx,%rax), %eax
+ 1118 0b62 01C1     		addl	%eax, %ecx
+ 1119 0b64 8B85C4FE 		movl	-316(%rbp), %eax
+ 1119      FFFF
+ 1120 0b6a 83E801   		subl	$1, %eax
+ 1121 0b6d 89C0     		movl	%eax, %eax
+ 1122 0b6f 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1122      FEFFFF
+ 1123 0b76 C1C00F   		roll	$15, %eax
+ 1124 0b79 89C2     		movl	%eax, %edx
+ 1125 0b7b 8B85C4FE 		movl	-316(%rbp), %eax
+ 1125      FFFF
+ 1126 0b81 83E801   		subl	$1, %eax
+ 1127 0b84 89C0     		movl	%eax, %eax
+ 1128 0b86 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1128      FEFFFF
+ 1129 0b8d C1C00D   		roll	$13, %eax
+ 1130 0b90 31C2     		xorl	%eax, %edx
+ 1131 0b92 8B85C4FE 		movl	-316(%rbp), %eax
+ 1131      FFFF
+ 1132 0b98 83E801   		subl	$1, %eax
+ 1133 0b9b 89C0     		movl	%eax, %eax
+ 1134 0b9d 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1134      FEFFFF
+ 1135 0ba4 C1E80A   		shrl	$10, %eax
+ 1136 0ba7 31C2     		xorl	%eax, %edx
+ 1137 0ba9 8B85C4FE 		movl	-316(%rbp), %eax
+ 1137      FFFF
+ 1138 0baf 83E806   		subl	$6, %eax
+ 1139 0bb2 89C0     		movl	%eax, %eax
+ 1140 0bb4 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1140      FEFFFF
+GAS LISTING /tmp/cc5VCnXS.s 			page 32
+
+
+ 1141 0bbb 01C2     		addl	%eax, %edx
+ 1142 0bbd 8B85C4FE 		movl	-316(%rbp), %eax
+ 1142      FFFF
+ 1143 0bc3 83E80E   		subl	$14, %eax
+ 1144 0bc6 89C0     		movl	%eax, %eax
+ 1145 0bc8 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1145      FEFFFF
+ 1146 0bcf C1C807   		rorl	$7, %eax
+ 1147 0bd2 89C6     		movl	%eax, %esi
+ 1148 0bd4 8B85C4FE 		movl	-316(%rbp), %eax
+ 1148      FFFF
+ 1149 0bda 83E80E   		subl	$14, %eax
+ 1150 0bdd 89C0     		movl	%eax, %eax
+ 1151 0bdf 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1151      FEFFFF
+ 1152 0be6 C1C00E   		roll	$14, %eax
+ 1153 0be9 31C6     		xorl	%eax, %esi
+ 1154 0beb 8B85C4FE 		movl	-316(%rbp), %eax
+ 1154      FFFF
+ 1155 0bf1 83E80E   		subl	$14, %eax
+ 1156 0bf4 89C0     		movl	%eax, %eax
+ 1157 0bf6 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1157      FEFFFF
+ 1158 0bfd C1E803   		shrl	$3, %eax
+ 1159 0c00 31F0     		xorl	%esi, %eax
+ 1160 0c02 8D3402   		leal	(%rdx,%rax), %esi
+ 1161 0c05 8B85C4FE 		movl	-316(%rbp), %eax
+ 1161      FFFF
+ 1162 0c0b 83E80F   		subl	$15, %eax
+ 1163 0c0e 89C0     		movl	%eax, %eax
+ 1164 0c10 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1164      FEFFFF
+ 1165 0c17 8B95C4FE 		movl	-316(%rbp), %edx
+ 1165      FFFF
+ 1166 0c1d 8D7A01   		leal	1(%rdx), %edi
+ 1167 0c20 01F0     		addl	%esi, %eax
+ 1168 0c22 89FA     		movl	%edi, %edx
+ 1169 0c24 898495F0 		movl	%eax, -272(%rbp,%rdx,4)
+ 1169      FEFFFF
+ 1170 0c2b 89F8     		movl	%edi, %eax
+ 1171 0c2d 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1171      FEFFFF
+ 1172 0c34 01C8     		addl	%ecx, %eax
+ 1173 0c36 8985C8FE 		movl	%eax, -312(%rbp)
+ 1173      FFFF
+ 1174 0c3c 8B85ECFE 		movl	-276(%rbp), %eax
+ 1174      FFFF
+ 1175 0c42 C1C802   		rorl	$2, %eax
+ 1176 0c45 89C2     		movl	%eax, %edx
+ 1177 0c47 8B85ECFE 		movl	-276(%rbp), %eax
+ 1177      FFFF
+ 1178 0c4d C1C80D   		rorl	$13, %eax
+ 1179 0c50 31C2     		xorl	%eax, %edx
+ 1180 0c52 8B85ECFE 		movl	-276(%rbp), %eax
+ 1180      FFFF
+ 1181 0c58 C1C00A   		roll	$10, %eax
+ 1182 0c5b 89D6     		movl	%edx, %esi
+GAS LISTING /tmp/cc5VCnXS.s 			page 33
+
+
+ 1183 0c5d 31C6     		xorl	%eax, %esi
+ 1184 0c5f 8B95ECFE 		movl	-276(%rbp), %edx
+ 1184      FFFF
+ 1185 0c65 8B85D0FE 		movl	-304(%rbp), %eax
+ 1185      FFFF
+ 1186 0c6b 89D7     		movl	%edx, %edi
+ 1187 0c6d 21C7     		andl	%eax, %edi
+ 1188 0c6f 8B85D4FE 		movl	-300(%rbp), %eax
+ 1188      FFFF
+ 1189 0c75 8B8DECFE 		movl	-276(%rbp), %ecx
+ 1189      FFFF
+ 1190 0c7b 8B95D0FE 		movl	-304(%rbp), %edx
+ 1190      FFFF
+ 1191 0c81 09CA     		orl	%ecx, %edx
+ 1192 0c83 21D0     		andl	%edx, %eax
+ 1193 0c85 09F8     		orl	%edi, %eax
+ 1194 0c87 01F0     		addl	%esi, %eax
+ 1195 0c89 8985CCFE 		movl	%eax, -308(%rbp)
+ 1195      FFFF
+ 1196 0c8f 8B95D8FE 		movl	-296(%rbp), %edx
+ 1196      FFFF
+ 1197 0c95 8B85C8FE 		movl	-312(%rbp), %eax
+ 1197      FFFF
+ 1198 0c9b 01D0     		addl	%edx, %eax
+ 1199 0c9d 8985D8FE 		movl	%eax, -296(%rbp)
+ 1199      FFFF
+ 1200 0ca3 8B95C8FE 		movl	-312(%rbp), %edx
+ 1200      FFFF
+ 1201 0ca9 8B85CCFE 		movl	-308(%rbp), %eax
+ 1201      FFFF
+ 1202 0caf 01D0     		addl	%edx, %eax
+ 1203 0cb1 8985E8FE 		movl	%eax, -280(%rbp)
+ 1203      FFFF
+ 247:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         P( A[6], A[7], A[0], A[1], A[2], A[3], A[4], A[5], R(i+2), K[i+2] );
+ 1204              		.loc 1 247 9 discriminator 3
+ 1205 0cb7 8B85E4FE 		movl	-284(%rbp), %eax
+ 1205      FFFF
+ 1206 0cbd 8B95D8FE 		movl	-296(%rbp), %edx
+ 1206      FFFF
+ 1207 0cc3 89D1     		movl	%edx, %ecx
+ 1208 0cc5 C1C906   		rorl	$6, %ecx
+ 1209 0cc8 8B95D8FE 		movl	-296(%rbp), %edx
+ 1209      FFFF
+ 1210 0cce C1CA0B   		rorl	$11, %edx
+ 1211 0cd1 31D1     		xorl	%edx, %ecx
+ 1212 0cd3 8B95D8FE 		movl	-296(%rbp), %edx
+ 1212      FFFF
+ 1213 0cd9 C1C207   		roll	$7, %edx
+ 1214 0cdc 31CA     		xorl	%ecx, %edx
+ 1215 0cde 8D3C10   		leal	(%rax,%rdx), %edi
+ 1216 0ce1 8B85E0FE 		movl	-288(%rbp), %eax
+ 1216      FFFF
+ 1217 0ce7 8B95D8FE 		movl	-296(%rbp), %edx
+ 1217      FFFF
+ 1218 0ced 8BB5DCFE 		movl	-292(%rbp), %esi
+ 1218      FFFF
+ 1219 0cf3 8B8DE0FE 		movl	-288(%rbp), %ecx
+GAS LISTING /tmp/cc5VCnXS.s 			page 34
+
+
+ 1219      FFFF
+ 1220 0cf9 31F1     		xorl	%esi, %ecx
+ 1221 0cfb 21CA     		andl	%ecx, %edx
+ 1222 0cfd 31D0     		xorl	%edx, %eax
+ 1223 0cff 8D0C07   		leal	(%rdi,%rax), %ecx
+ 1224 0d02 8B85C4FE 		movl	-316(%rbp), %eax
+ 1224      FFFF
+ 1225 0d08 83C002   		addl	$2, %eax
+ 1226 0d0b 89C0     		movl	%eax, %eax
+ 1227 0d0d 488D1485 		leaq	0(,%rax,4), %rdx
+ 1227      00000000 
+ 1228 0d15 488D0500 		leaq	K(%rip), %rax
+ 1228      000000
+ 1229 0d1c 8B0402   		movl	(%rdx,%rax), %eax
+ 1230 0d1f 01C1     		addl	%eax, %ecx
+ 1231 0d21 8B85C4FE 		movl	-316(%rbp), %eax
+ 1231      FFFF
+ 1232 0d27 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1232      FEFFFF
+ 1233 0d2e C1C00F   		roll	$15, %eax
+ 1234 0d31 89C2     		movl	%eax, %edx
+ 1235 0d33 8B85C4FE 		movl	-316(%rbp), %eax
+ 1235      FFFF
+ 1236 0d39 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1236      FEFFFF
+ 1237 0d40 C1C00D   		roll	$13, %eax
+ 1238 0d43 31C2     		xorl	%eax, %edx
+ 1239 0d45 8B85C4FE 		movl	-316(%rbp), %eax
+ 1239      FFFF
+ 1240 0d4b 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1240      FEFFFF
+ 1241 0d52 C1E80A   		shrl	$10, %eax
+ 1242 0d55 31C2     		xorl	%eax, %edx
+ 1243 0d57 8B85C4FE 		movl	-316(%rbp), %eax
+ 1243      FFFF
+ 1244 0d5d 83E805   		subl	$5, %eax
+ 1245 0d60 89C0     		movl	%eax, %eax
+ 1246 0d62 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1246      FEFFFF
+ 1247 0d69 01C2     		addl	%eax, %edx
+ 1248 0d6b 8B85C4FE 		movl	-316(%rbp), %eax
+ 1248      FFFF
+ 1249 0d71 83E80D   		subl	$13, %eax
+ 1250 0d74 89C0     		movl	%eax, %eax
+ 1251 0d76 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1251      FEFFFF
+ 1252 0d7d C1C807   		rorl	$7, %eax
+ 1253 0d80 89C6     		movl	%eax, %esi
+ 1254 0d82 8B85C4FE 		movl	-316(%rbp), %eax
+ 1254      FFFF
+ 1255 0d88 83E80D   		subl	$13, %eax
+ 1256 0d8b 89C0     		movl	%eax, %eax
+ 1257 0d8d 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1257      FEFFFF
+ 1258 0d94 C1C00E   		roll	$14, %eax
+ 1259 0d97 31C6     		xorl	%eax, %esi
+ 1260 0d99 8B85C4FE 		movl	-316(%rbp), %eax
+GAS LISTING /tmp/cc5VCnXS.s 			page 35
+
+
+ 1260      FFFF
+ 1261 0d9f 83E80D   		subl	$13, %eax
+ 1262 0da2 89C0     		movl	%eax, %eax
+ 1263 0da4 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1263      FEFFFF
+ 1264 0dab C1E803   		shrl	$3, %eax
+ 1265 0dae 31F0     		xorl	%esi, %eax
+ 1266 0db0 8D3402   		leal	(%rdx,%rax), %esi
+ 1267 0db3 8B85C4FE 		movl	-316(%rbp), %eax
+ 1267      FFFF
+ 1268 0db9 83E80E   		subl	$14, %eax
+ 1269 0dbc 89C0     		movl	%eax, %eax
+ 1270 0dbe 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1270      FEFFFF
+ 1271 0dc5 8B95C4FE 		movl	-316(%rbp), %edx
+ 1271      FFFF
+ 1272 0dcb 8D7A02   		leal	2(%rdx), %edi
+ 1273 0dce 01F0     		addl	%esi, %eax
+ 1274 0dd0 89FA     		movl	%edi, %edx
+ 1275 0dd2 898495F0 		movl	%eax, -272(%rbp,%rdx,4)
+ 1275      FEFFFF
+ 1276 0dd9 89F8     		movl	%edi, %eax
+ 1277 0ddb 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1277      FEFFFF
+ 1278 0de2 01C8     		addl	%ecx, %eax
+ 1279 0de4 8985C8FE 		movl	%eax, -312(%rbp)
+ 1279      FFFF
+ 1280 0dea 8B85E8FE 		movl	-280(%rbp), %eax
+ 1280      FFFF
+ 1281 0df0 C1C802   		rorl	$2, %eax
+ 1282 0df3 89C2     		movl	%eax, %edx
+ 1283 0df5 8B85E8FE 		movl	-280(%rbp), %eax
+ 1283      FFFF
+ 1284 0dfb C1C80D   		rorl	$13, %eax
+ 1285 0dfe 31C2     		xorl	%eax, %edx
+ 1286 0e00 8B85E8FE 		movl	-280(%rbp), %eax
+ 1286      FFFF
+ 1287 0e06 C1C00A   		roll	$10, %eax
+ 1288 0e09 89D6     		movl	%edx, %esi
+ 1289 0e0b 31C6     		xorl	%eax, %esi
+ 1290 0e0d 8B95E8FE 		movl	-280(%rbp), %edx
+ 1290      FFFF
+ 1291 0e13 8B85ECFE 		movl	-276(%rbp), %eax
+ 1291      FFFF
+ 1292 0e19 89D7     		movl	%edx, %edi
+ 1293 0e1b 21C7     		andl	%eax, %edi
+ 1294 0e1d 8B85D0FE 		movl	-304(%rbp), %eax
+ 1294      FFFF
+ 1295 0e23 8B8DE8FE 		movl	-280(%rbp), %ecx
+ 1295      FFFF
+ 1296 0e29 8B95ECFE 		movl	-276(%rbp), %edx
+ 1296      FFFF
+ 1297 0e2f 09CA     		orl	%ecx, %edx
+ 1298 0e31 21D0     		andl	%edx, %eax
+ 1299 0e33 09F8     		orl	%edi, %eax
+ 1300 0e35 01F0     		addl	%esi, %eax
+ 1301 0e37 8985CCFE 		movl	%eax, -308(%rbp)
+GAS LISTING /tmp/cc5VCnXS.s 			page 36
+
+
+ 1301      FFFF
+ 1302 0e3d 8B95D4FE 		movl	-300(%rbp), %edx
+ 1302      FFFF
+ 1303 0e43 8B85C8FE 		movl	-312(%rbp), %eax
+ 1303      FFFF
+ 1304 0e49 01D0     		addl	%edx, %eax
+ 1305 0e4b 8985D4FE 		movl	%eax, -300(%rbp)
+ 1305      FFFF
+ 1306 0e51 8B95C8FE 		movl	-312(%rbp), %edx
+ 1306      FFFF
+ 1307 0e57 8B85CCFE 		movl	-308(%rbp), %eax
+ 1307      FFFF
+ 1308 0e5d 01D0     		addl	%edx, %eax
+ 1309 0e5f 8985E4FE 		movl	%eax, -284(%rbp)
+ 1309      FFFF
+ 248:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         P( A[5], A[6], A[7], A[0], A[1], A[2], A[3], A[4], R(i+3), K[i+3] );
+ 1310              		.loc 1 248 9 discriminator 3
+ 1311 0e65 8B85E0FE 		movl	-288(%rbp), %eax
+ 1311      FFFF
+ 1312 0e6b 8B95D4FE 		movl	-300(%rbp), %edx
+ 1312      FFFF
+ 1313 0e71 89D1     		movl	%edx, %ecx
+ 1314 0e73 C1C906   		rorl	$6, %ecx
+ 1315 0e76 8B95D4FE 		movl	-300(%rbp), %edx
+ 1315      FFFF
+ 1316 0e7c C1CA0B   		rorl	$11, %edx
+ 1317 0e7f 31D1     		xorl	%edx, %ecx
+ 1318 0e81 8B95D4FE 		movl	-300(%rbp), %edx
+ 1318      FFFF
+ 1319 0e87 C1C207   		roll	$7, %edx
+ 1320 0e8a 31CA     		xorl	%ecx, %edx
+ 1321 0e8c 8D3C10   		leal	(%rax,%rdx), %edi
+ 1322 0e8f 8B85DCFE 		movl	-292(%rbp), %eax
+ 1322      FFFF
+ 1323 0e95 8B95D4FE 		movl	-300(%rbp), %edx
+ 1323      FFFF
+ 1324 0e9b 8BB5D8FE 		movl	-296(%rbp), %esi
+ 1324      FFFF
+ 1325 0ea1 8B8DDCFE 		movl	-292(%rbp), %ecx
+ 1325      FFFF
+ 1326 0ea7 31F1     		xorl	%esi, %ecx
+ 1327 0ea9 21CA     		andl	%ecx, %edx
+ 1328 0eab 31D0     		xorl	%edx, %eax
+ 1329 0ead 8D0C07   		leal	(%rdi,%rax), %ecx
+ 1330 0eb0 8B85C4FE 		movl	-316(%rbp), %eax
+ 1330      FFFF
+ 1331 0eb6 83C003   		addl	$3, %eax
+ 1332 0eb9 89C0     		movl	%eax, %eax
+ 1333 0ebb 488D1485 		leaq	0(,%rax,4), %rdx
+ 1333      00000000 
+ 1334 0ec3 488D0500 		leaq	K(%rip), %rax
+ 1334      000000
+ 1335 0eca 8B0402   		movl	(%rdx,%rax), %eax
+ 1336 0ecd 01C1     		addl	%eax, %ecx
+ 1337 0ecf 8B85C4FE 		movl	-316(%rbp), %eax
+ 1337      FFFF
+ 1338 0ed5 83C001   		addl	$1, %eax
+GAS LISTING /tmp/cc5VCnXS.s 			page 37
+
+
+ 1339 0ed8 89C0     		movl	%eax, %eax
+ 1340 0eda 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1340      FEFFFF
+ 1341 0ee1 C1C00F   		roll	$15, %eax
+ 1342 0ee4 89C2     		movl	%eax, %edx
+ 1343 0ee6 8B85C4FE 		movl	-316(%rbp), %eax
+ 1343      FFFF
+ 1344 0eec 83C001   		addl	$1, %eax
+ 1345 0eef 89C0     		movl	%eax, %eax
+ 1346 0ef1 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1346      FEFFFF
+ 1347 0ef8 C1C00D   		roll	$13, %eax
+ 1348 0efb 31C2     		xorl	%eax, %edx
+ 1349 0efd 8B85C4FE 		movl	-316(%rbp), %eax
+ 1349      FFFF
+ 1350 0f03 83C001   		addl	$1, %eax
+ 1351 0f06 89C0     		movl	%eax, %eax
+ 1352 0f08 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1352      FEFFFF
+ 1353 0f0f C1E80A   		shrl	$10, %eax
+ 1354 0f12 31C2     		xorl	%eax, %edx
+ 1355 0f14 8B85C4FE 		movl	-316(%rbp), %eax
+ 1355      FFFF
+ 1356 0f1a 83E804   		subl	$4, %eax
+ 1357 0f1d 89C0     		movl	%eax, %eax
+ 1358 0f1f 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1358      FEFFFF
+ 1359 0f26 01C2     		addl	%eax, %edx
+ 1360 0f28 8B85C4FE 		movl	-316(%rbp), %eax
+ 1360      FFFF
+ 1361 0f2e 83E80C   		subl	$12, %eax
+ 1362 0f31 89C0     		movl	%eax, %eax
+ 1363 0f33 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1363      FEFFFF
+ 1364 0f3a C1C807   		rorl	$7, %eax
+ 1365 0f3d 89C6     		movl	%eax, %esi
+ 1366 0f3f 8B85C4FE 		movl	-316(%rbp), %eax
+ 1366      FFFF
+ 1367 0f45 83E80C   		subl	$12, %eax
+ 1368 0f48 89C0     		movl	%eax, %eax
+ 1369 0f4a 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1369      FEFFFF
+ 1370 0f51 C1C00E   		roll	$14, %eax
+ 1371 0f54 31C6     		xorl	%eax, %esi
+ 1372 0f56 8B85C4FE 		movl	-316(%rbp), %eax
+ 1372      FFFF
+ 1373 0f5c 83E80C   		subl	$12, %eax
+ 1374 0f5f 89C0     		movl	%eax, %eax
+ 1375 0f61 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1375      FEFFFF
+ 1376 0f68 C1E803   		shrl	$3, %eax
+ 1377 0f6b 31F0     		xorl	%esi, %eax
+ 1378 0f6d 8D3402   		leal	(%rdx,%rax), %esi
+ 1379 0f70 8B85C4FE 		movl	-316(%rbp), %eax
+ 1379      FFFF
+ 1380 0f76 83E80D   		subl	$13, %eax
+ 1381 0f79 89C0     		movl	%eax, %eax
+GAS LISTING /tmp/cc5VCnXS.s 			page 38
+
+
+ 1382 0f7b 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1382      FEFFFF
+ 1383 0f82 8B95C4FE 		movl	-316(%rbp), %edx
+ 1383      FFFF
+ 1384 0f88 8D7A03   		leal	3(%rdx), %edi
+ 1385 0f8b 01F0     		addl	%esi, %eax
+ 1386 0f8d 89FA     		movl	%edi, %edx
+ 1387 0f8f 898495F0 		movl	%eax, -272(%rbp,%rdx,4)
+ 1387      FEFFFF
+ 1388 0f96 89F8     		movl	%edi, %eax
+ 1389 0f98 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1389      FEFFFF
+ 1390 0f9f 01C8     		addl	%ecx, %eax
+ 1391 0fa1 8985C8FE 		movl	%eax, -312(%rbp)
+ 1391      FFFF
+ 1392 0fa7 8B85E4FE 		movl	-284(%rbp), %eax
+ 1392      FFFF
+ 1393 0fad C1C802   		rorl	$2, %eax
+ 1394 0fb0 89C2     		movl	%eax, %edx
+ 1395 0fb2 8B85E4FE 		movl	-284(%rbp), %eax
+ 1395      FFFF
+ 1396 0fb8 C1C80D   		rorl	$13, %eax
+ 1397 0fbb 31C2     		xorl	%eax, %edx
+ 1398 0fbd 8B85E4FE 		movl	-284(%rbp), %eax
+ 1398      FFFF
+ 1399 0fc3 C1C00A   		roll	$10, %eax
+ 1400 0fc6 89D6     		movl	%edx, %esi
+ 1401 0fc8 31C6     		xorl	%eax, %esi
+ 1402 0fca 8B95E4FE 		movl	-284(%rbp), %edx
+ 1402      FFFF
+ 1403 0fd0 8B85E8FE 		movl	-280(%rbp), %eax
+ 1403      FFFF
+ 1404 0fd6 89D7     		movl	%edx, %edi
+ 1405 0fd8 21C7     		andl	%eax, %edi
+ 1406 0fda 8B85ECFE 		movl	-276(%rbp), %eax
+ 1406      FFFF
+ 1407 0fe0 8B8DE4FE 		movl	-284(%rbp), %ecx
+ 1407      FFFF
+ 1408 0fe6 8B95E8FE 		movl	-280(%rbp), %edx
+ 1408      FFFF
+ 1409 0fec 09CA     		orl	%ecx, %edx
+ 1410 0fee 21D0     		andl	%edx, %eax
+ 1411 0ff0 09F8     		orl	%edi, %eax
+ 1412 0ff2 01F0     		addl	%esi, %eax
+ 1413 0ff4 8985CCFE 		movl	%eax, -308(%rbp)
+ 1413      FFFF
+ 1414 0ffa 8B95D0FE 		movl	-304(%rbp), %edx
+ 1414      FFFF
+ 1415 1000 8B85C8FE 		movl	-312(%rbp), %eax
+ 1415      FFFF
+ 1416 1006 01D0     		addl	%edx, %eax
+ 1417 1008 8985D0FE 		movl	%eax, -304(%rbp)
+ 1417      FFFF
+ 1418 100e 8B95C8FE 		movl	-312(%rbp), %edx
+ 1418      FFFF
+ 1419 1014 8B85CCFE 		movl	-308(%rbp), %eax
+ 1419      FFFF
+GAS LISTING /tmp/cc5VCnXS.s 			page 39
+
+
+ 1420 101a 01D0     		addl	%edx, %eax
+ 1421 101c 8985E0FE 		movl	%eax, -288(%rbp)
+ 1421      FFFF
+ 249:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         P( A[4], A[5], A[6], A[7], A[0], A[1], A[2], A[3], R(i+4), K[i+4] );
+ 1422              		.loc 1 249 9 discriminator 3
+ 1423 1022 8B85DCFE 		movl	-292(%rbp), %eax
+ 1423      FFFF
+ 1424 1028 8B95D0FE 		movl	-304(%rbp), %edx
+ 1424      FFFF
+ 1425 102e 89D1     		movl	%edx, %ecx
+ 1426 1030 C1C906   		rorl	$6, %ecx
+ 1427 1033 8B95D0FE 		movl	-304(%rbp), %edx
+ 1427      FFFF
+ 1428 1039 C1CA0B   		rorl	$11, %edx
+ 1429 103c 31D1     		xorl	%edx, %ecx
+ 1430 103e 8B95D0FE 		movl	-304(%rbp), %edx
+ 1430      FFFF
+ 1431 1044 C1C207   		roll	$7, %edx
+ 1432 1047 31CA     		xorl	%ecx, %edx
+ 1433 1049 8D3C10   		leal	(%rax,%rdx), %edi
+ 1434 104c 8B85D8FE 		movl	-296(%rbp), %eax
+ 1434      FFFF
+ 1435 1052 8B95D0FE 		movl	-304(%rbp), %edx
+ 1435      FFFF
+ 1436 1058 8BB5D4FE 		movl	-300(%rbp), %esi
+ 1436      FFFF
+ 1437 105e 8B8DD8FE 		movl	-296(%rbp), %ecx
+ 1437      FFFF
+ 1438 1064 31F1     		xorl	%esi, %ecx
+ 1439 1066 21CA     		andl	%ecx, %edx
+ 1440 1068 31D0     		xorl	%edx, %eax
+ 1441 106a 8D0C07   		leal	(%rdi,%rax), %ecx
+ 1442 106d 8B85C4FE 		movl	-316(%rbp), %eax
+ 1442      FFFF
+ 1443 1073 83C004   		addl	$4, %eax
+ 1444 1076 89C0     		movl	%eax, %eax
+ 1445 1078 488D1485 		leaq	0(,%rax,4), %rdx
+ 1445      00000000 
+ 1446 1080 488D0500 		leaq	K(%rip), %rax
+ 1446      000000
+ 1447 1087 8B0402   		movl	(%rdx,%rax), %eax
+ 1448 108a 01C1     		addl	%eax, %ecx
+ 1449 108c 8B85C4FE 		movl	-316(%rbp), %eax
+ 1449      FFFF
+ 1450 1092 83C002   		addl	$2, %eax
+ 1451 1095 89C0     		movl	%eax, %eax
+ 1452 1097 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1452      FEFFFF
+ 1453 109e C1C00F   		roll	$15, %eax
+ 1454 10a1 89C2     		movl	%eax, %edx
+ 1455 10a3 8B85C4FE 		movl	-316(%rbp), %eax
+ 1455      FFFF
+ 1456 10a9 83C002   		addl	$2, %eax
+ 1457 10ac 89C0     		movl	%eax, %eax
+ 1458 10ae 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1458      FEFFFF
+ 1459 10b5 C1C00D   		roll	$13, %eax
+GAS LISTING /tmp/cc5VCnXS.s 			page 40
+
+
+ 1460 10b8 31C2     		xorl	%eax, %edx
+ 1461 10ba 8B85C4FE 		movl	-316(%rbp), %eax
+ 1461      FFFF
+ 1462 10c0 83C002   		addl	$2, %eax
+ 1463 10c3 89C0     		movl	%eax, %eax
+ 1464 10c5 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1464      FEFFFF
+ 1465 10cc C1E80A   		shrl	$10, %eax
+ 1466 10cf 31C2     		xorl	%eax, %edx
+ 1467 10d1 8B85C4FE 		movl	-316(%rbp), %eax
+ 1467      FFFF
+ 1468 10d7 83E803   		subl	$3, %eax
+ 1469 10da 89C0     		movl	%eax, %eax
+ 1470 10dc 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1470      FEFFFF
+ 1471 10e3 01C2     		addl	%eax, %edx
+ 1472 10e5 8B85C4FE 		movl	-316(%rbp), %eax
+ 1472      FFFF
+ 1473 10eb 83E80B   		subl	$11, %eax
+ 1474 10ee 89C0     		movl	%eax, %eax
+ 1475 10f0 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1475      FEFFFF
+ 1476 10f7 C1C807   		rorl	$7, %eax
+ 1477 10fa 89C6     		movl	%eax, %esi
+ 1478 10fc 8B85C4FE 		movl	-316(%rbp), %eax
+ 1478      FFFF
+ 1479 1102 83E80B   		subl	$11, %eax
+ 1480 1105 89C0     		movl	%eax, %eax
+ 1481 1107 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1481      FEFFFF
+ 1482 110e C1C00E   		roll	$14, %eax
+ 1483 1111 31C6     		xorl	%eax, %esi
+ 1484 1113 8B85C4FE 		movl	-316(%rbp), %eax
+ 1484      FFFF
+ 1485 1119 83E80B   		subl	$11, %eax
+ 1486 111c 89C0     		movl	%eax, %eax
+ 1487 111e 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1487      FEFFFF
+ 1488 1125 C1E803   		shrl	$3, %eax
+ 1489 1128 31F0     		xorl	%esi, %eax
+ 1490 112a 8D3402   		leal	(%rdx,%rax), %esi
+ 1491 112d 8B85C4FE 		movl	-316(%rbp), %eax
+ 1491      FFFF
+ 1492 1133 83E80C   		subl	$12, %eax
+ 1493 1136 89C0     		movl	%eax, %eax
+ 1494 1138 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1494      FEFFFF
+ 1495 113f 8B95C4FE 		movl	-316(%rbp), %edx
+ 1495      FFFF
+ 1496 1145 8D7A04   		leal	4(%rdx), %edi
+ 1497 1148 01F0     		addl	%esi, %eax
+ 1498 114a 89FA     		movl	%edi, %edx
+ 1499 114c 898495F0 		movl	%eax, -272(%rbp,%rdx,4)
+ 1499      FEFFFF
+ 1500 1153 89F8     		movl	%edi, %eax
+ 1501 1155 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1501      FEFFFF
+GAS LISTING /tmp/cc5VCnXS.s 			page 41
+
+
+ 1502 115c 01C8     		addl	%ecx, %eax
+ 1503 115e 8985C8FE 		movl	%eax, -312(%rbp)
+ 1503      FFFF
+ 1504 1164 8B85E0FE 		movl	-288(%rbp), %eax
+ 1504      FFFF
+ 1505 116a C1C802   		rorl	$2, %eax
+ 1506 116d 89C2     		movl	%eax, %edx
+ 1507 116f 8B85E0FE 		movl	-288(%rbp), %eax
+ 1507      FFFF
+ 1508 1175 C1C80D   		rorl	$13, %eax
+ 1509 1178 31C2     		xorl	%eax, %edx
+ 1510 117a 8B85E0FE 		movl	-288(%rbp), %eax
+ 1510      FFFF
+ 1511 1180 C1C00A   		roll	$10, %eax
+ 1512 1183 89D6     		movl	%edx, %esi
+ 1513 1185 31C6     		xorl	%eax, %esi
+ 1514 1187 8B95E0FE 		movl	-288(%rbp), %edx
+ 1514      FFFF
+ 1515 118d 8B85E4FE 		movl	-284(%rbp), %eax
+ 1515      FFFF
+ 1516 1193 89D7     		movl	%edx, %edi
+ 1517 1195 21C7     		andl	%eax, %edi
+ 1518 1197 8B85E8FE 		movl	-280(%rbp), %eax
+ 1518      FFFF
+ 1519 119d 8B8DE0FE 		movl	-288(%rbp), %ecx
+ 1519      FFFF
+ 1520 11a3 8B95E4FE 		movl	-284(%rbp), %edx
+ 1520      FFFF
+ 1521 11a9 09CA     		orl	%ecx, %edx
+ 1522 11ab 21D0     		andl	%edx, %eax
+ 1523 11ad 09F8     		orl	%edi, %eax
+ 1524 11af 01F0     		addl	%esi, %eax
+ 1525 11b1 8985CCFE 		movl	%eax, -308(%rbp)
+ 1525      FFFF
+ 1526 11b7 8B95ECFE 		movl	-276(%rbp), %edx
+ 1526      FFFF
+ 1527 11bd 8B85C8FE 		movl	-312(%rbp), %eax
+ 1527      FFFF
+ 1528 11c3 01D0     		addl	%edx, %eax
+ 1529 11c5 8985ECFE 		movl	%eax, -276(%rbp)
+ 1529      FFFF
+ 1530 11cb 8B95C8FE 		movl	-312(%rbp), %edx
+ 1530      FFFF
+ 1531 11d1 8B85CCFE 		movl	-308(%rbp), %eax
+ 1531      FFFF
+ 1532 11d7 01D0     		addl	%edx, %eax
+ 1533 11d9 8985DCFE 		movl	%eax, -292(%rbp)
+ 1533      FFFF
+ 250:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         P( A[3], A[4], A[5], A[6], A[7], A[0], A[1], A[2], R(i+5), K[i+5] );
+ 1534              		.loc 1 250 9 discriminator 3
+ 1535 11df 8B85D8FE 		movl	-296(%rbp), %eax
+ 1535      FFFF
+ 1536 11e5 8B95ECFE 		movl	-276(%rbp), %edx
+ 1536      FFFF
+ 1537 11eb 89D1     		movl	%edx, %ecx
+ 1538 11ed C1C906   		rorl	$6, %ecx
+ 1539 11f0 8B95ECFE 		movl	-276(%rbp), %edx
+GAS LISTING /tmp/cc5VCnXS.s 			page 42
+
+
+ 1539      FFFF
+ 1540 11f6 C1CA0B   		rorl	$11, %edx
+ 1541 11f9 31D1     		xorl	%edx, %ecx
+ 1542 11fb 8B95ECFE 		movl	-276(%rbp), %edx
+ 1542      FFFF
+ 1543 1201 C1C207   		roll	$7, %edx
+ 1544 1204 31CA     		xorl	%ecx, %edx
+ 1545 1206 8D3C10   		leal	(%rax,%rdx), %edi
+ 1546 1209 8B85D4FE 		movl	-300(%rbp), %eax
+ 1546      FFFF
+ 1547 120f 8B95ECFE 		movl	-276(%rbp), %edx
+ 1547      FFFF
+ 1548 1215 8BB5D0FE 		movl	-304(%rbp), %esi
+ 1548      FFFF
+ 1549 121b 8B8DD4FE 		movl	-300(%rbp), %ecx
+ 1549      FFFF
+ 1550 1221 31F1     		xorl	%esi, %ecx
+ 1551 1223 21CA     		andl	%ecx, %edx
+ 1552 1225 31D0     		xorl	%edx, %eax
+ 1553 1227 8D0C07   		leal	(%rdi,%rax), %ecx
+ 1554 122a 8B85C4FE 		movl	-316(%rbp), %eax
+ 1554      FFFF
+ 1555 1230 83C005   		addl	$5, %eax
+ 1556 1233 89C0     		movl	%eax, %eax
+ 1557 1235 488D1485 		leaq	0(,%rax,4), %rdx
+ 1557      00000000 
+ 1558 123d 488D0500 		leaq	K(%rip), %rax
+ 1558      000000
+ 1559 1244 8B0402   		movl	(%rdx,%rax), %eax
+ 1560 1247 01C1     		addl	%eax, %ecx
+ 1561 1249 8B85C4FE 		movl	-316(%rbp), %eax
+ 1561      FFFF
+ 1562 124f 83C003   		addl	$3, %eax
+ 1563 1252 89C0     		movl	%eax, %eax
+ 1564 1254 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1564      FEFFFF
+ 1565 125b C1C00F   		roll	$15, %eax
+ 1566 125e 89C2     		movl	%eax, %edx
+ 1567 1260 8B85C4FE 		movl	-316(%rbp), %eax
+ 1567      FFFF
+ 1568 1266 83C003   		addl	$3, %eax
+ 1569 1269 89C0     		movl	%eax, %eax
+ 1570 126b 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1570      FEFFFF
+ 1571 1272 C1C00D   		roll	$13, %eax
+ 1572 1275 31C2     		xorl	%eax, %edx
+ 1573 1277 8B85C4FE 		movl	-316(%rbp), %eax
+ 1573      FFFF
+ 1574 127d 83C003   		addl	$3, %eax
+ 1575 1280 89C0     		movl	%eax, %eax
+ 1576 1282 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1576      FEFFFF
+ 1577 1289 C1E80A   		shrl	$10, %eax
+ 1578 128c 31C2     		xorl	%eax, %edx
+ 1579 128e 8B85C4FE 		movl	-316(%rbp), %eax
+ 1579      FFFF
+ 1580 1294 83E802   		subl	$2, %eax
+GAS LISTING /tmp/cc5VCnXS.s 			page 43
+
+
+ 1581 1297 89C0     		movl	%eax, %eax
+ 1582 1299 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1582      FEFFFF
+ 1583 12a0 01C2     		addl	%eax, %edx
+ 1584 12a2 8B85C4FE 		movl	-316(%rbp), %eax
+ 1584      FFFF
+ 1585 12a8 83E80A   		subl	$10, %eax
+ 1586 12ab 89C0     		movl	%eax, %eax
+ 1587 12ad 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1587      FEFFFF
+ 1588 12b4 C1C807   		rorl	$7, %eax
+ 1589 12b7 89C6     		movl	%eax, %esi
+ 1590 12b9 8B85C4FE 		movl	-316(%rbp), %eax
+ 1590      FFFF
+ 1591 12bf 83E80A   		subl	$10, %eax
+ 1592 12c2 89C0     		movl	%eax, %eax
+ 1593 12c4 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1593      FEFFFF
+ 1594 12cb C1C00E   		roll	$14, %eax
+ 1595 12ce 31C6     		xorl	%eax, %esi
+ 1596 12d0 8B85C4FE 		movl	-316(%rbp), %eax
+ 1596      FFFF
+ 1597 12d6 83E80A   		subl	$10, %eax
+ 1598 12d9 89C0     		movl	%eax, %eax
+ 1599 12db 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1599      FEFFFF
+ 1600 12e2 C1E803   		shrl	$3, %eax
+ 1601 12e5 31F0     		xorl	%esi, %eax
+ 1602 12e7 8D3402   		leal	(%rdx,%rax), %esi
+ 1603 12ea 8B85C4FE 		movl	-316(%rbp), %eax
+ 1603      FFFF
+ 1604 12f0 83E80B   		subl	$11, %eax
+ 1605 12f3 89C0     		movl	%eax, %eax
+ 1606 12f5 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1606      FEFFFF
+ 1607 12fc 8B95C4FE 		movl	-316(%rbp), %edx
+ 1607      FFFF
+ 1608 1302 8D7A05   		leal	5(%rdx), %edi
+ 1609 1305 01F0     		addl	%esi, %eax
+ 1610 1307 89FA     		movl	%edi, %edx
+ 1611 1309 898495F0 		movl	%eax, -272(%rbp,%rdx,4)
+ 1611      FEFFFF
+ 1612 1310 89F8     		movl	%edi, %eax
+ 1613 1312 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1613      FEFFFF
+ 1614 1319 01C8     		addl	%ecx, %eax
+ 1615 131b 8985C8FE 		movl	%eax, -312(%rbp)
+ 1615      FFFF
+ 1616 1321 8B85DCFE 		movl	-292(%rbp), %eax
+ 1616      FFFF
+ 1617 1327 C1C802   		rorl	$2, %eax
+ 1618 132a 89C2     		movl	%eax, %edx
+ 1619 132c 8B85DCFE 		movl	-292(%rbp), %eax
+ 1619      FFFF
+ 1620 1332 C1C80D   		rorl	$13, %eax
+ 1621 1335 31C2     		xorl	%eax, %edx
+ 1622 1337 8B85DCFE 		movl	-292(%rbp), %eax
+GAS LISTING /tmp/cc5VCnXS.s 			page 44
+
+
+ 1622      FFFF
+ 1623 133d C1C00A   		roll	$10, %eax
+ 1624 1340 89D6     		movl	%edx, %esi
+ 1625 1342 31C6     		xorl	%eax, %esi
+ 1626 1344 8B95DCFE 		movl	-292(%rbp), %edx
+ 1626      FFFF
+ 1627 134a 8B85E0FE 		movl	-288(%rbp), %eax
+ 1627      FFFF
+ 1628 1350 89D7     		movl	%edx, %edi
+ 1629 1352 21C7     		andl	%eax, %edi
+ 1630 1354 8B85E4FE 		movl	-284(%rbp), %eax
+ 1630      FFFF
+ 1631 135a 8B8DDCFE 		movl	-292(%rbp), %ecx
+ 1631      FFFF
+ 1632 1360 8B95E0FE 		movl	-288(%rbp), %edx
+ 1632      FFFF
+ 1633 1366 09CA     		orl	%ecx, %edx
+ 1634 1368 21D0     		andl	%edx, %eax
+ 1635 136a 09F8     		orl	%edi, %eax
+ 1636 136c 01F0     		addl	%esi, %eax
+ 1637 136e 8985CCFE 		movl	%eax, -308(%rbp)
+ 1637      FFFF
+ 1638 1374 8B95E8FE 		movl	-280(%rbp), %edx
+ 1638      FFFF
+ 1639 137a 8B85C8FE 		movl	-312(%rbp), %eax
+ 1639      FFFF
+ 1640 1380 01D0     		addl	%edx, %eax
+ 1641 1382 8985E8FE 		movl	%eax, -280(%rbp)
+ 1641      FFFF
+ 1642 1388 8B95C8FE 		movl	-312(%rbp), %edx
+ 1642      FFFF
+ 1643 138e 8B85CCFE 		movl	-308(%rbp), %eax
+ 1643      FFFF
+ 1644 1394 01D0     		addl	%edx, %eax
+ 1645 1396 8985D8FE 		movl	%eax, -296(%rbp)
+ 1645      FFFF
+ 251:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         P( A[2], A[3], A[4], A[5], A[6], A[7], A[0], A[1], R(i+6), K[i+6] );
+ 1646              		.loc 1 251 9 discriminator 3
+ 1647 139c 8B85D4FE 		movl	-300(%rbp), %eax
+ 1647      FFFF
+ 1648 13a2 8B95E8FE 		movl	-280(%rbp), %edx
+ 1648      FFFF
+ 1649 13a8 89D1     		movl	%edx, %ecx
+ 1650 13aa C1C906   		rorl	$6, %ecx
+ 1651 13ad 8B95E8FE 		movl	-280(%rbp), %edx
+ 1651      FFFF
+ 1652 13b3 C1CA0B   		rorl	$11, %edx
+ 1653 13b6 31D1     		xorl	%edx, %ecx
+ 1654 13b8 8B95E8FE 		movl	-280(%rbp), %edx
+ 1654      FFFF
+ 1655 13be C1C207   		roll	$7, %edx
+ 1656 13c1 31CA     		xorl	%ecx, %edx
+ 1657 13c3 8D3C10   		leal	(%rax,%rdx), %edi
+ 1658 13c6 8B85D0FE 		movl	-304(%rbp), %eax
+ 1658      FFFF
+ 1659 13cc 8B95E8FE 		movl	-280(%rbp), %edx
+ 1659      FFFF
+GAS LISTING /tmp/cc5VCnXS.s 			page 45
+
+
+ 1660 13d2 8BB5ECFE 		movl	-276(%rbp), %esi
+ 1660      FFFF
+ 1661 13d8 8B8DD0FE 		movl	-304(%rbp), %ecx
+ 1661      FFFF
+ 1662 13de 31F1     		xorl	%esi, %ecx
+ 1663 13e0 21CA     		andl	%ecx, %edx
+ 1664 13e2 31D0     		xorl	%edx, %eax
+ 1665 13e4 8D0C07   		leal	(%rdi,%rax), %ecx
+ 1666 13e7 8B85C4FE 		movl	-316(%rbp), %eax
+ 1666      FFFF
+ 1667 13ed 83C006   		addl	$6, %eax
+ 1668 13f0 89C0     		movl	%eax, %eax
+ 1669 13f2 488D1485 		leaq	0(,%rax,4), %rdx
+ 1669      00000000 
+ 1670 13fa 488D0500 		leaq	K(%rip), %rax
+ 1670      000000
+ 1671 1401 8B0402   		movl	(%rdx,%rax), %eax
+ 1672 1404 01C1     		addl	%eax, %ecx
+ 1673 1406 8B85C4FE 		movl	-316(%rbp), %eax
+ 1673      FFFF
+ 1674 140c 83C004   		addl	$4, %eax
+ 1675 140f 89C0     		movl	%eax, %eax
+ 1676 1411 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1676      FEFFFF
+ 1677 1418 C1C00F   		roll	$15, %eax
+ 1678 141b 89C2     		movl	%eax, %edx
+ 1679 141d 8B85C4FE 		movl	-316(%rbp), %eax
+ 1679      FFFF
+ 1680 1423 83C004   		addl	$4, %eax
+ 1681 1426 89C0     		movl	%eax, %eax
+ 1682 1428 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1682      FEFFFF
+ 1683 142f C1C00D   		roll	$13, %eax
+ 1684 1432 31C2     		xorl	%eax, %edx
+ 1685 1434 8B85C4FE 		movl	-316(%rbp), %eax
+ 1685      FFFF
+ 1686 143a 83C004   		addl	$4, %eax
+ 1687 143d 89C0     		movl	%eax, %eax
+ 1688 143f 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1688      FEFFFF
+ 1689 1446 C1E80A   		shrl	$10, %eax
+ 1690 1449 31C2     		xorl	%eax, %edx
+ 1691 144b 8B85C4FE 		movl	-316(%rbp), %eax
+ 1691      FFFF
+ 1692 1451 83E801   		subl	$1, %eax
+ 1693 1454 89C0     		movl	%eax, %eax
+ 1694 1456 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1694      FEFFFF
+ 1695 145d 01C2     		addl	%eax, %edx
+ 1696 145f 8B85C4FE 		movl	-316(%rbp), %eax
+ 1696      FFFF
+ 1697 1465 83E809   		subl	$9, %eax
+ 1698 1468 89C0     		movl	%eax, %eax
+ 1699 146a 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1699      FEFFFF
+ 1700 1471 C1C807   		rorl	$7, %eax
+ 1701 1474 89C6     		movl	%eax, %esi
+GAS LISTING /tmp/cc5VCnXS.s 			page 46
+
+
+ 1702 1476 8B85C4FE 		movl	-316(%rbp), %eax
+ 1702      FFFF
+ 1703 147c 83E809   		subl	$9, %eax
+ 1704 147f 89C0     		movl	%eax, %eax
+ 1705 1481 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1705      FEFFFF
+ 1706 1488 C1C00E   		roll	$14, %eax
+ 1707 148b 31C6     		xorl	%eax, %esi
+ 1708 148d 8B85C4FE 		movl	-316(%rbp), %eax
+ 1708      FFFF
+ 1709 1493 83E809   		subl	$9, %eax
+ 1710 1496 89C0     		movl	%eax, %eax
+ 1711 1498 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1711      FEFFFF
+ 1712 149f C1E803   		shrl	$3, %eax
+ 1713 14a2 31F0     		xorl	%esi, %eax
+ 1714 14a4 8D3402   		leal	(%rdx,%rax), %esi
+ 1715 14a7 8B85C4FE 		movl	-316(%rbp), %eax
+ 1715      FFFF
+ 1716 14ad 83E80A   		subl	$10, %eax
+ 1717 14b0 89C0     		movl	%eax, %eax
+ 1718 14b2 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1718      FEFFFF
+ 1719 14b9 8B95C4FE 		movl	-316(%rbp), %edx
+ 1719      FFFF
+ 1720 14bf 8D7A06   		leal	6(%rdx), %edi
+ 1721 14c2 01F0     		addl	%esi, %eax
+ 1722 14c4 89FA     		movl	%edi, %edx
+ 1723 14c6 898495F0 		movl	%eax, -272(%rbp,%rdx,4)
+ 1723      FEFFFF
+ 1724 14cd 89F8     		movl	%edi, %eax
+ 1725 14cf 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1725      FEFFFF
+ 1726 14d6 01C8     		addl	%ecx, %eax
+ 1727 14d8 8985C8FE 		movl	%eax, -312(%rbp)
+ 1727      FFFF
+ 1728 14de 8B85D8FE 		movl	-296(%rbp), %eax
+ 1728      FFFF
+ 1729 14e4 C1C802   		rorl	$2, %eax
+ 1730 14e7 89C2     		movl	%eax, %edx
+ 1731 14e9 8B85D8FE 		movl	-296(%rbp), %eax
+ 1731      FFFF
+ 1732 14ef C1C80D   		rorl	$13, %eax
+ 1733 14f2 31C2     		xorl	%eax, %edx
+ 1734 14f4 8B85D8FE 		movl	-296(%rbp), %eax
+ 1734      FFFF
+ 1735 14fa C1C00A   		roll	$10, %eax
+ 1736 14fd 89D6     		movl	%edx, %esi
+ 1737 14ff 31C6     		xorl	%eax, %esi
+ 1738 1501 8B95D8FE 		movl	-296(%rbp), %edx
+ 1738      FFFF
+ 1739 1507 8B85DCFE 		movl	-292(%rbp), %eax
+ 1739      FFFF
+ 1740 150d 89D7     		movl	%edx, %edi
+ 1741 150f 21C7     		andl	%eax, %edi
+ 1742 1511 8B85E0FE 		movl	-288(%rbp), %eax
+ 1742      FFFF
+GAS LISTING /tmp/cc5VCnXS.s 			page 47
+
+
+ 1743 1517 8B8DD8FE 		movl	-296(%rbp), %ecx
+ 1743      FFFF
+ 1744 151d 8B95DCFE 		movl	-292(%rbp), %edx
+ 1744      FFFF
+ 1745 1523 09CA     		orl	%ecx, %edx
+ 1746 1525 21D0     		andl	%edx, %eax
+ 1747 1527 09F8     		orl	%edi, %eax
+ 1748 1529 01F0     		addl	%esi, %eax
+ 1749 152b 8985CCFE 		movl	%eax, -308(%rbp)
+ 1749      FFFF
+ 1750 1531 8B95E4FE 		movl	-284(%rbp), %edx
+ 1750      FFFF
+ 1751 1537 8B85C8FE 		movl	-312(%rbp), %eax
+ 1751      FFFF
+ 1752 153d 01D0     		addl	%edx, %eax
+ 1753 153f 8985E4FE 		movl	%eax, -284(%rbp)
+ 1753      FFFF
+ 1754 1545 8B95C8FE 		movl	-312(%rbp), %edx
+ 1754      FFFF
+ 1755 154b 8B85CCFE 		movl	-308(%rbp), %eax
+ 1755      FFFF
+ 1756 1551 01D0     		addl	%edx, %eax
+ 1757 1553 8985D4FE 		movl	%eax, -300(%rbp)
+ 1757      FFFF
+ 252:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         P( A[1], A[2], A[3], A[4], A[5], A[6], A[7], A[0], R(i+7), K[i+7] );
+ 1758              		.loc 1 252 9 discriminator 3
+ 1759 1559 8B85D0FE 		movl	-304(%rbp), %eax
+ 1759      FFFF
+ 1760 155f 8B95E4FE 		movl	-284(%rbp), %edx
+ 1760      FFFF
+ 1761 1565 89D1     		movl	%edx, %ecx
+ 1762 1567 C1C906   		rorl	$6, %ecx
+ 1763 156a 8B95E4FE 		movl	-284(%rbp), %edx
+ 1763      FFFF
+ 1764 1570 C1CA0B   		rorl	$11, %edx
+ 1765 1573 31D1     		xorl	%edx, %ecx
+ 1766 1575 8B95E4FE 		movl	-284(%rbp), %edx
+ 1766      FFFF
+ 1767 157b C1C207   		roll	$7, %edx
+ 1768 157e 31CA     		xorl	%ecx, %edx
+ 1769 1580 8D3C10   		leal	(%rax,%rdx), %edi
+ 1770 1583 8B85ECFE 		movl	-276(%rbp), %eax
+ 1770      FFFF
+ 1771 1589 8B95E4FE 		movl	-284(%rbp), %edx
+ 1771      FFFF
+ 1772 158f 8BB5E8FE 		movl	-280(%rbp), %esi
+ 1772      FFFF
+ 1773 1595 8B8DECFE 		movl	-276(%rbp), %ecx
+ 1773      FFFF
+ 1774 159b 31F1     		xorl	%esi, %ecx
+ 1775 159d 21CA     		andl	%ecx, %edx
+ 1776 159f 31D0     		xorl	%edx, %eax
+ 1777 15a1 8D0C07   		leal	(%rdi,%rax), %ecx
+ 1778 15a4 8B85C4FE 		movl	-316(%rbp), %eax
+ 1778      FFFF
+ 1779 15aa 83C007   		addl	$7, %eax
+ 1780 15ad 89C0     		movl	%eax, %eax
+GAS LISTING /tmp/cc5VCnXS.s 			page 48
+
+
+ 1781 15af 488D1485 		leaq	0(,%rax,4), %rdx
+ 1781      00000000 
+ 1782 15b7 488D0500 		leaq	K(%rip), %rax
+ 1782      000000
+ 1783 15be 8B0402   		movl	(%rdx,%rax), %eax
+ 1784 15c1 01C1     		addl	%eax, %ecx
+ 1785 15c3 8B85C4FE 		movl	-316(%rbp), %eax
+ 1785      FFFF
+ 1786 15c9 83C005   		addl	$5, %eax
+ 1787 15cc 89C0     		movl	%eax, %eax
+ 1788 15ce 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1788      FEFFFF
+ 1789 15d5 C1C00F   		roll	$15, %eax
+ 1790 15d8 89C2     		movl	%eax, %edx
+ 1791 15da 8B85C4FE 		movl	-316(%rbp), %eax
+ 1791      FFFF
+ 1792 15e0 83C005   		addl	$5, %eax
+ 1793 15e3 89C0     		movl	%eax, %eax
+ 1794 15e5 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1794      FEFFFF
+ 1795 15ec C1C00D   		roll	$13, %eax
+ 1796 15ef 31C2     		xorl	%eax, %edx
+ 1797 15f1 8B85C4FE 		movl	-316(%rbp), %eax
+ 1797      FFFF
+ 1798 15f7 83C005   		addl	$5, %eax
+ 1799 15fa 89C0     		movl	%eax, %eax
+ 1800 15fc 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1800      FEFFFF
+ 1801 1603 C1E80A   		shrl	$10, %eax
+ 1802 1606 31C2     		xorl	%eax, %edx
+ 1803 1608 8B85C4FE 		movl	-316(%rbp), %eax
+ 1803      FFFF
+ 1804 160e 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1804      FEFFFF
+ 1805 1615 01C2     		addl	%eax, %edx
+ 1806 1617 8B85C4FE 		movl	-316(%rbp), %eax
+ 1806      FFFF
+ 1807 161d 83E808   		subl	$8, %eax
+ 1808 1620 89C0     		movl	%eax, %eax
+ 1809 1622 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1809      FEFFFF
+ 1810 1629 C1C807   		rorl	$7, %eax
+ 1811 162c 89C6     		movl	%eax, %esi
+ 1812 162e 8B85C4FE 		movl	-316(%rbp), %eax
+ 1812      FFFF
+ 1813 1634 83E808   		subl	$8, %eax
+ 1814 1637 89C0     		movl	%eax, %eax
+ 1815 1639 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1815      FEFFFF
+ 1816 1640 C1C00E   		roll	$14, %eax
+ 1817 1643 31C6     		xorl	%eax, %esi
+ 1818 1645 8B85C4FE 		movl	-316(%rbp), %eax
+ 1818      FFFF
+ 1819 164b 83E808   		subl	$8, %eax
+ 1820 164e 89C0     		movl	%eax, %eax
+ 1821 1650 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1821      FEFFFF
+GAS LISTING /tmp/cc5VCnXS.s 			page 49
+
+
+ 1822 1657 C1E803   		shrl	$3, %eax
+ 1823 165a 31F0     		xorl	%esi, %eax
+ 1824 165c 8D3402   		leal	(%rdx,%rax), %esi
+ 1825 165f 8B85C4FE 		movl	-316(%rbp), %eax
+ 1825      FFFF
+ 1826 1665 83E809   		subl	$9, %eax
+ 1827 1668 89C0     		movl	%eax, %eax
+ 1828 166a 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1828      FEFFFF
+ 1829 1671 8B95C4FE 		movl	-316(%rbp), %edx
+ 1829      FFFF
+ 1830 1677 8D7A07   		leal	7(%rdx), %edi
+ 1831 167a 01F0     		addl	%esi, %eax
+ 1832 167c 89FA     		movl	%edi, %edx
+ 1833 167e 898495F0 		movl	%eax, -272(%rbp,%rdx,4)
+ 1833      FEFFFF
+ 1834 1685 89F8     		movl	%edi, %eax
+ 1835 1687 8B8485F0 		movl	-272(%rbp,%rax,4), %eax
+ 1835      FEFFFF
+ 1836 168e 01C8     		addl	%ecx, %eax
+ 1837 1690 8985C8FE 		movl	%eax, -312(%rbp)
+ 1837      FFFF
+ 1838 1696 8B85D4FE 		movl	-300(%rbp), %eax
+ 1838      FFFF
+ 1839 169c C1C802   		rorl	$2, %eax
+ 1840 169f 89C2     		movl	%eax, %edx
+ 1841 16a1 8B85D4FE 		movl	-300(%rbp), %eax
+ 1841      FFFF
+ 1842 16a7 C1C80D   		rorl	$13, %eax
+ 1843 16aa 31C2     		xorl	%eax, %edx
+ 1844 16ac 8B85D4FE 		movl	-300(%rbp), %eax
+ 1844      FFFF
+ 1845 16b2 C1C00A   		roll	$10, %eax
+ 1846 16b5 89D6     		movl	%edx, %esi
+ 1847 16b7 31C6     		xorl	%eax, %esi
+ 1848 16b9 8B95D4FE 		movl	-300(%rbp), %edx
+ 1848      FFFF
+ 1849 16bf 8B85D8FE 		movl	-296(%rbp), %eax
+ 1849      FFFF
+ 1850 16c5 89D7     		movl	%edx, %edi
+ 1851 16c7 21C7     		andl	%eax, %edi
+ 1852 16c9 8B85DCFE 		movl	-292(%rbp), %eax
+ 1852      FFFF
+ 1853 16cf 8B8DD4FE 		movl	-300(%rbp), %ecx
+ 1853      FFFF
+ 1854 16d5 8B95D8FE 		movl	-296(%rbp), %edx
+ 1854      FFFF
+ 1855 16db 09CA     		orl	%ecx, %edx
+ 1856 16dd 21D0     		andl	%edx, %eax
+ 1857 16df 09F8     		orl	%edi, %eax
+ 1858 16e1 01F0     		addl	%esi, %eax
+ 1859 16e3 8985CCFE 		movl	%eax, -308(%rbp)
+ 1859      FFFF
+ 1860 16e9 8B95E0FE 		movl	-288(%rbp), %edx
+ 1860      FFFF
+ 1861 16ef 8B85C8FE 		movl	-312(%rbp), %eax
+ 1861      FFFF
+GAS LISTING /tmp/cc5VCnXS.s 			page 50
+
+
+ 1862 16f5 01D0     		addl	%edx, %eax
+ 1863 16f7 8985E0FE 		movl	%eax, -288(%rbp)
+ 1863      FFFF
+ 1864 16fd 8B95C8FE 		movl	-312(%rbp), %edx
+ 1864      FFFF
+ 1865 1703 8B85CCFE 		movl	-308(%rbp), %eax
+ 1865      FFFF
+ 1866 1709 01D0     		addl	%edx, %eax
+ 1867 170b 8985D0FE 		movl	%eax, -304(%rbp)
+ 1867      FFFF
+ 243:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     {
+ 1868              		.loc 1 243 28 discriminator 3
+ 1869 1711 8385C4FE 		addl	$8, -316(%rbp)
+ 1869      FFFF08
+ 1870              	.L24:
+ 243:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     {
+ 1871              		.loc 1 243 5 discriminator 1
+ 1872 1718 83BDC4FE 		cmpl	$63, -316(%rbp)
+ 1872      FFFF3F
+ 1873 171f 0F861FF2 		jbe	.L25
+ 1873      FFFF
+ 253:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     }
+ 254:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #endif /* MBEDTLS_SHA256_SMALLER */
+ 255:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 256:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     for( i = 0; i < 8; i++ )
+ 1874              		.loc 1 256 12
+ 1875 1725 C785C4FE 		movl	$0, -316(%rbp)
+ 1875      FFFF0000 
+ 1875      0000
+ 1876              		.loc 1 256 5
+ 1877 172f EB39     		jmp	.L26
+ 1878              	.L27:
+ 257:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         ctx->state[i] += A[i];
+ 1879              		.loc 1 257 23 discriminator 3
+ 1880 1731 488B85B8 		movq	-328(%rbp), %rax
+ 1880      FEFFFF
+ 1881 1738 8B95C4FE 		movl	-316(%rbp), %edx
+ 1881      FFFF
+ 1882 173e 8B549008 		movl	8(%rax,%rdx,4), %edx
+ 1883              		.loc 1 257 27 discriminator 3
+ 1884 1742 8B85C4FE 		movl	-316(%rbp), %eax
+ 1884      FFFF
+ 1885 1748 8B8485D0 		movl	-304(%rbp,%rax,4), %eax
+ 1885      FEFFFF
+ 1886              		.loc 1 257 23 discriminator 3
+ 1887 174f 8D0C02   		leal	(%rdx,%rax), %ecx
+ 1888 1752 488B85B8 		movq	-328(%rbp), %rax
+ 1888      FEFFFF
+ 1889 1759 8B95C4FE 		movl	-316(%rbp), %edx
+ 1889      FFFF
+ 1890 175f 894C9008 		movl	%ecx, 8(%rax,%rdx,4)
+ 256:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         ctx->state[i] += A[i];
+ 1891              		.loc 1 256 25 discriminator 3
+ 1892 1763 8385C4FE 		addl	$1, -316(%rbp)
+ 1892      FFFF01
+ 1893              	.L26:
+ 256:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         ctx->state[i] += A[i];
+GAS LISTING /tmp/cc5VCnXS.s 			page 51
+
+
+ 1894              		.loc 1 256 5 discriminator 1
+ 1895 176a 83BDC4FE 		cmpl	$7, -316(%rbp)
+ 1895      FFFF07
+ 1896 1771 76BE     		jbe	.L27
+ 258:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 259:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     return( 0 );
+ 1897              		.loc 1 259 11
+ 1898 1773 B8000000 		movl	$0, %eax
+ 1898      00
+ 260:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** }
+ 1899              		.loc 1 260 1
+ 1900 1778 488B7DF8 		movq	-8(%rbp), %rdi
+ 1901 177c 6448333C 		xorq	%fs:40, %rdi
+ 1901      25280000 
+ 1901      00
+ 1902 1785 7405     		je	.L29
+ 1903 1787 E8000000 		call	__stack_chk_fail@PLT
+ 1903      00
+ 1904              	.L29:
+ 1905 178c C9       		leave
+ 1906              	.LCFI17:
+ 1907              		.cfi_def_cfa 7, 8
+ 1908 178d C3       		ret
+ 1909              		.cfi_endproc
+ 1910              	.LFE5:
+ 1912              		.section	.text.mbedtls_sha256_process,"ax",@progbits
+ 1913              		.globl	mbedtls_sha256_process
+ 1915              	mbedtls_sha256_process:
+ 1916              	.LFB6:
+ 261:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 262:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #if !defined(MBEDTLS_DEPRECATED_REMOVED)
+ 263:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** void mbedtls_sha256_process( mbedtls_sha256_context *ctx,
+ 264:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****                              const unsigned char data[64] )
+ 265:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** {
+ 1917              		.loc 1 265 1
+ 1918              		.cfi_startproc
+ 1919 0000 F30F1EFA 		endbr64
+ 1920 0004 55       		pushq	%rbp
+ 1921              	.LCFI18:
+ 1922              		.cfi_def_cfa_offset 16
+ 1923              		.cfi_offset 6, -16
+ 1924 0005 4889E5   		movq	%rsp, %rbp
+ 1925              	.LCFI19:
+ 1926              		.cfi_def_cfa_register 6
+ 1927 0008 4883EC20 		subq	$32, %rsp
+ 1928 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1929 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 1930              		.loc 1 265 1
+ 1931 0014 64488B04 		movq	%fs:40, %rax
+ 1931      25280000 
+ 1931      00
+ 1932 001d 488945F8 		movq	%rax, -8(%rbp)
+ 1933 0021 31C0     		xorl	%eax, %eax
+ 266:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     mbedtls_internal_sha256_process( ctx, data );
+ 1934              		.loc 1 266 5
+ 1935 0023 488B55E0 		movq	-32(%rbp), %rdx
+ 1936 0027 488B45E8 		movq	-24(%rbp), %rax
+GAS LISTING /tmp/cc5VCnXS.s 			page 52
+
+
+ 1937 002b 4889D6   		movq	%rdx, %rsi
+ 1938 002e 4889C7   		movq	%rax, %rdi
+ 1939 0031 E8000000 		call	mbedtls_internal_sha256_process
+ 1939      00
+ 267:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** }
+ 1940              		.loc 1 267 1
+ 1941 0036 90       		nop
+ 1942 0037 488B45F8 		movq	-8(%rbp), %rax
+ 1943 003b 64483304 		xorq	%fs:40, %rax
+ 1943      25280000 
+ 1943      00
+ 1944 0044 7405     		je	.L31
+ 1945 0046 E8000000 		call	__stack_chk_fail@PLT
+ 1945      00
+ 1946              	.L31:
+ 1947 004b C9       		leave
+ 1948              	.LCFI20:
+ 1949              		.cfi_def_cfa 7, 8
+ 1950 004c C3       		ret
+ 1951              		.cfi_endproc
+ 1952              	.LFE6:
+ 1954              		.section	.text.mbedtls_sha256_update_ret,"ax",@progbits
+ 1955              		.globl	mbedtls_sha256_update_ret
+ 1957              	mbedtls_sha256_update_ret:
+ 1958              	.LFB7:
+ 268:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #endif
+ 269:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #endif /* !MBEDTLS_SHA256_PROCESS_ALT */
+ 270:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 271:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** /*
+ 272:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  * SHA-256 process buffer
+ 273:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  */
+ 274:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** int mbedtls_sha256_update_ret( mbedtls_sha256_context *ctx,
+ 275:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****                                const unsigned char *input,
+ 276:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****                                size_t ilen )
+ 277:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** {
+ 1959              		.loc 1 277 1
+ 1960              		.cfi_startproc
+ 1961 0000 F30F1EFA 		endbr64
+ 1962 0004 55       		pushq	%rbp
+ 1963              	.LCFI21:
+ 1964              		.cfi_def_cfa_offset 16
+ 1965              		.cfi_offset 6, -16
+ 1966 0005 4889E5   		movq	%rsp, %rbp
+ 1967              	.LCFI22:
+ 1968              		.cfi_def_cfa_register 6
+ 1969 0008 4883EC40 		subq	$64, %rsp
+ 1970 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 1971 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 1972 0014 488955C8 		movq	%rdx, -56(%rbp)
+ 1973              		.loc 1 277 1
+ 1974 0018 64488B04 		movq	%fs:40, %rax
+ 1974      25280000 
+ 1974      00
+ 1975 0021 488945F8 		movq	%rax, -8(%rbp)
+ 1976 0025 31C0     		xorl	%eax, %eax
+ 278:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     int ret;
+ 279:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     size_t fill;
+GAS LISTING /tmp/cc5VCnXS.s 			page 53
+
+
+ 280:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     uint32_t left;
+ 281:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 282:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     SHA256_VALIDATE_RET( ctx != NULL );
+ 283:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     SHA256_VALIDATE_RET( ilen == 0 || input != NULL );
+ 284:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 285:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     if( ilen == 0 )
+ 1977              		.loc 1 285 7
+ 1978 0027 48837DC8 		cmpq	$0, -56(%rbp)
+ 1978      00
+ 1979 002c 750A     		jne	.L33
+ 286:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         return( 0 );
+ 1980              		.loc 1 286 15
+ 1981 002e B8000000 		movl	$0, %eax
+ 1981      00
+ 1982 0033 E92F0100 		jmp	.L34
+ 1982      00
+ 1983              	.L33:
+ 287:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 288:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     left = ctx->total[0] & 0x3F;
+ 1984              		.loc 1 288 22
+ 1985 0038 488B45D8 		movq	-40(%rbp), %rax
+ 1986 003c 8B00     		movl	(%rax), %eax
+ 1987              		.loc 1 288 10
+ 1988 003e 83E03F   		andl	$63, %eax
+ 1989 0041 8945E8   		movl	%eax, -24(%rbp)
+ 289:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     fill = 64 - left;
+ 1990              		.loc 1 289 15
+ 1991 0044 B8400000 		movl	$64, %eax
+ 1991      00
+ 1992 0049 2B45E8   		subl	-24(%rbp), %eax
+ 1993              		.loc 1 289 10
+ 1994 004c 89C0     		movl	%eax, %eax
+ 1995 004e 488945F0 		movq	%rax, -16(%rbp)
+ 290:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 291:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     ctx->total[0] += (uint32_t) ilen;
+ 1996              		.loc 1 291 19
+ 1997 0052 488B45D8 		movq	-40(%rbp), %rax
+ 1998 0056 8B00     		movl	(%rax), %eax
+ 1999              		.loc 1 291 22
+ 2000 0058 488B55C8 		movq	-56(%rbp), %rdx
+ 2001              		.loc 1 291 19
+ 2002 005c 01C2     		addl	%eax, %edx
+ 2003 005e 488B45D8 		movq	-40(%rbp), %rax
+ 2004 0062 8910     		movl	%edx, (%rax)
+ 292:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     ctx->total[0] &= 0xFFFFFFFF;
+ 2005              		.loc 1 292 19
+ 2006 0064 488B45D8 		movq	-40(%rbp), %rax
+ 2007 0068 8B10     		movl	(%rax), %edx
+ 2008 006a 488B45D8 		movq	-40(%rbp), %rax
+ 2009 006e 8910     		movl	%edx, (%rax)
+ 293:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 294:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     if( ctx->total[0] < (uint32_t) ilen )
+ 2010              		.loc 1 294 19
+ 2011 0070 488B45D8 		movq	-40(%rbp), %rax
+ 2012 0074 8B00     		movl	(%rax), %eax
+ 2013              		.loc 1 294 25
+ 2014 0076 488B55C8 		movq	-56(%rbp), %rdx
+GAS LISTING /tmp/cc5VCnXS.s 			page 54
+
+
+ 2015              		.loc 1 294 7
+ 2016 007a 39D0     		cmpl	%edx, %eax
+ 2017 007c 7311     		jnb	.L35
+ 295:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         ctx->total[1]++;
+ 2018              		.loc 1 295 19
+ 2019 007e 488B45D8 		movq	-40(%rbp), %rax
+ 2020 0082 8B4004   		movl	4(%rax), %eax
+ 2021              		.loc 1 295 22
+ 2022 0085 8D5001   		leal	1(%rax), %edx
+ 2023 0088 488B45D8 		movq	-40(%rbp), %rax
+ 2024 008c 895004   		movl	%edx, 4(%rax)
+ 2025              	.L35:
+ 296:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 297:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     if( left && ilen >= fill )
+ 2026              		.loc 1 297 7
+ 2027 008f 837DE800 		cmpl	$0, -24(%rbp)
+ 2028 0093 0F849900 		je	.L38
+ 2028      0000
+ 2029              		.loc 1 297 14 discriminator 1
+ 2030 0099 488B45C8 		movq	-56(%rbp), %rax
+ 2031 009d 483B45F0 		cmpq	-16(%rbp), %rax
+ 2032 00a1 0F828B00 		jb	.L38
+ 2032      0000
+ 298:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     {
+ 299:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         memcpy( (void *) (ctx->buffer + left), input, fill );
+ 2033              		.loc 1 299 27
+ 2034 00a7 488B45D8 		movq	-40(%rbp), %rax
+ 2035 00ab 488D5028 		leaq	40(%rax), %rdx
+ 2036              		.loc 1 299 9
+ 2037 00af 8B45E8   		movl	-24(%rbp), %eax
+ 2038 00b2 488D0C02 		leaq	(%rdx,%rax), %rcx
+ 2039 00b6 488B55F0 		movq	-16(%rbp), %rdx
+ 2040 00ba 488B45D0 		movq	-48(%rbp), %rax
+ 2041 00be 4889C6   		movq	%rax, %rsi
+ 2042 00c1 4889CF   		movq	%rcx, %rdi
+ 2043 00c4 E8000000 		call	memcpy@PLT
+ 2043      00
+ 300:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 301:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         if( ( ret = mbedtls_internal_sha256_process( ctx, ctx->buffer ) ) != 0 )
+ 2044              		.loc 1 301 62
+ 2045 00c9 488B45D8 		movq	-40(%rbp), %rax
+ 2046 00cd 488D5028 		leaq	40(%rax), %rdx
+ 2047              		.loc 1 301 21
+ 2048 00d1 488B45D8 		movq	-40(%rbp), %rax
+ 2049 00d5 4889D6   		movq	%rdx, %rsi
+ 2050 00d8 4889C7   		movq	%rax, %rdi
+ 2051 00db E8000000 		call	mbedtls_internal_sha256_process
+ 2051      00
+ 2052 00e0 8945EC   		movl	%eax, -20(%rbp)
+ 2053              		.loc 1 301 11
+ 2054 00e3 837DEC00 		cmpl	$0, -20(%rbp)
+ 2055 00e7 7405     		je	.L37
+ 302:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****             return( ret );
+ 2056              		.loc 1 302 19
+ 2057 00e9 8B45EC   		movl	-20(%rbp), %eax
+ 2058 00ec EB79     		jmp	.L34
+ 2059              	.L37:
+GAS LISTING /tmp/cc5VCnXS.s 			page 55
+
+
+ 303:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 304:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         input += fill;
+ 2060              		.loc 1 304 15
+ 2061 00ee 488B45F0 		movq	-16(%rbp), %rax
+ 2062 00f2 480145D0 		addq	%rax, -48(%rbp)
+ 305:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         ilen  -= fill;
+ 2063              		.loc 1 305 15
+ 2064 00f6 488B45F0 		movq	-16(%rbp), %rax
+ 2065 00fa 482945C8 		subq	%rax, -56(%rbp)
+ 306:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         left = 0;
+ 2066              		.loc 1 306 14
+ 2067 00fe C745E800 		movl	$0, -24(%rbp)
+ 2067      000000
+ 307:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     }
+ 308:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 309:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     while( ilen >= 64 )
+ 2068              		.loc 1 309 10
+ 2069 0105 EB2B     		jmp	.L38
+ 2070              	.L40:
+ 310:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     {
+ 311:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         if( ( ret = mbedtls_internal_sha256_process( ctx, input ) ) != 0 )
+ 2071              		.loc 1 311 21
+ 2072 0107 488B55D0 		movq	-48(%rbp), %rdx
+ 2073 010b 488B45D8 		movq	-40(%rbp), %rax
+ 2074 010f 4889D6   		movq	%rdx, %rsi
+ 2075 0112 4889C7   		movq	%rax, %rdi
+ 2076 0115 E8000000 		call	mbedtls_internal_sha256_process
+ 2076      00
+ 2077 011a 8945EC   		movl	%eax, -20(%rbp)
+ 2078              		.loc 1 311 11
+ 2079 011d 837DEC00 		cmpl	$0, -20(%rbp)
+ 2080 0121 7405     		je	.L39
+ 312:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****             return( ret );
+ 2081              		.loc 1 312 19
+ 2082 0123 8B45EC   		movl	-20(%rbp), %eax
+ 2083 0126 EB3F     		jmp	.L34
+ 2084              	.L39:
+ 313:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 314:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         input += 64;
+ 2085              		.loc 1 314 15
+ 2086 0128 488345D0 		addq	$64, -48(%rbp)
+ 2086      40
+ 315:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         ilen  -= 64;
+ 2087              		.loc 1 315 15
+ 2088 012d 48836DC8 		subq	$64, -56(%rbp)
+ 2088      40
+ 2089              	.L38:
+ 309:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     {
+ 2090              		.loc 1 309 10
+ 2091 0132 48837DC8 		cmpq	$63, -56(%rbp)
+ 2091      3F
+ 2092 0137 77CE     		ja	.L40
+ 316:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     }
+ 317:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 318:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     if( ilen > 0 )
+ 2093              		.loc 1 318 7
+ 2094 0139 48837DC8 		cmpq	$0, -56(%rbp)
+GAS LISTING /tmp/cc5VCnXS.s 			page 56
+
+
+ 2094      00
+ 2095 013e 7422     		je	.L41
+ 319:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         memcpy( (void *) (ctx->buffer + left), input, ilen );
+ 2096              		.loc 1 319 27
+ 2097 0140 488B45D8 		movq	-40(%rbp), %rax
+ 2098 0144 488D5028 		leaq	40(%rax), %rdx
+ 2099              		.loc 1 319 9
+ 2100 0148 8B45E8   		movl	-24(%rbp), %eax
+ 2101 014b 488D0C02 		leaq	(%rdx,%rax), %rcx
+ 2102 014f 488B55C8 		movq	-56(%rbp), %rdx
+ 2103 0153 488B45D0 		movq	-48(%rbp), %rax
+ 2104 0157 4889C6   		movq	%rax, %rsi
+ 2105 015a 4889CF   		movq	%rcx, %rdi
+ 2106 015d E8000000 		call	memcpy@PLT
+ 2106      00
+ 2107              	.L41:
+ 320:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 321:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     return( 0 );
+ 2108              		.loc 1 321 11
+ 2109 0162 B8000000 		movl	$0, %eax
+ 2109      00
+ 2110              	.L34:
+ 322:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** }
+ 2111              		.loc 1 322 1
+ 2112 0167 488B4DF8 		movq	-8(%rbp), %rcx
+ 2113 016b 6448330C 		xorq	%fs:40, %rcx
+ 2113      25280000 
+ 2113      00
+ 2114 0174 7405     		je	.L42
+ 2115 0176 E8000000 		call	__stack_chk_fail@PLT
+ 2115      00
+ 2116              	.L42:
+ 2117 017b C9       		leave
+ 2118              	.LCFI23:
+ 2119              		.cfi_def_cfa 7, 8
+ 2120 017c C3       		ret
+ 2121              		.cfi_endproc
+ 2122              	.LFE7:
+ 2124              		.section	.text.mbedtls_sha256_update,"ax",@progbits
+ 2125              		.globl	mbedtls_sha256_update
+ 2127              	mbedtls_sha256_update:
+ 2128              	.LFB8:
+ 323:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 324:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #if !defined(MBEDTLS_DEPRECATED_REMOVED)
+ 325:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** void mbedtls_sha256_update( mbedtls_sha256_context *ctx,
+ 326:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****                             const unsigned char *input,
+ 327:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****                             size_t ilen )
+ 328:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** {
+ 2129              		.loc 1 328 1
+ 2130              		.cfi_startproc
+ 2131 0000 F30F1EFA 		endbr64
+ 2132 0004 55       		pushq	%rbp
+ 2133              	.LCFI24:
+ 2134              		.cfi_def_cfa_offset 16
+ 2135              		.cfi_offset 6, -16
+ 2136 0005 4889E5   		movq	%rsp, %rbp
+ 2137              	.LCFI25:
+GAS LISTING /tmp/cc5VCnXS.s 			page 57
+
+
+ 2138              		.cfi_def_cfa_register 6
+ 2139 0008 4883EC30 		subq	$48, %rsp
+ 2140 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 2141 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 2142 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 2143              		.loc 1 328 1
+ 2144 0018 64488B04 		movq	%fs:40, %rax
+ 2144      25280000 
+ 2144      00
+ 2145 0021 488945F8 		movq	%rax, -8(%rbp)
+ 2146 0025 31C0     		xorl	%eax, %eax
+ 329:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     mbedtls_sha256_update_ret( ctx, input, ilen );
+ 2147              		.loc 1 329 5
+ 2148 0027 488B55D8 		movq	-40(%rbp), %rdx
+ 2149 002b 488B4DE0 		movq	-32(%rbp), %rcx
+ 2150 002f 488B45E8 		movq	-24(%rbp), %rax
+ 2151 0033 4889CE   		movq	%rcx, %rsi
+ 2152 0036 4889C7   		movq	%rax, %rdi
+ 2153 0039 E8000000 		call	mbedtls_sha256_update_ret
+ 2153      00
+ 330:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** }
+ 2154              		.loc 1 330 1
+ 2155 003e 90       		nop
+ 2156 003f 488B45F8 		movq	-8(%rbp), %rax
+ 2157 0043 64483304 		xorq	%fs:40, %rax
+ 2157      25280000 
+ 2157      00
+ 2158 004c 7405     		je	.L44
+ 2159 004e E8000000 		call	__stack_chk_fail@PLT
+ 2159      00
+ 2160              	.L44:
+ 2161 0053 C9       		leave
+ 2162              	.LCFI26:
+ 2163              		.cfi_def_cfa 7, 8
+ 2164 0054 C3       		ret
+ 2165              		.cfi_endproc
+ 2166              	.LFE8:
+ 2168              		.section	.text.mbedtls_sha256_finish_ret,"ax",@progbits
+ 2169              		.globl	mbedtls_sha256_finish_ret
+ 2171              	mbedtls_sha256_finish_ret:
+ 2172              	.LFB9:
+ 331:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #endif
+ 332:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 333:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** /*
+ 334:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  * SHA-256 final digest
+ 335:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  */
+ 336:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** int mbedtls_sha256_finish_ret( mbedtls_sha256_context *ctx,
+ 337:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****                                unsigned char output[32] )
+ 338:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** {
+ 2173              		.loc 1 338 1
+ 2174              		.cfi_startproc
+ 2175 0000 F30F1EFA 		endbr64
+ 2176 0004 55       		pushq	%rbp
+ 2177              	.LCFI27:
+ 2178              		.cfi_def_cfa_offset 16
+ 2179              		.cfi_offset 6, -16
+ 2180 0005 4889E5   		movq	%rsp, %rbp
+GAS LISTING /tmp/cc5VCnXS.s 			page 58
+
+
+ 2181              	.LCFI28:
+ 2182              		.cfi_def_cfa_register 6
+ 2183 0008 4883EC30 		subq	$48, %rsp
+ 2184 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 2185 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 2186              		.loc 1 338 1
+ 2187 0014 64488B04 		movq	%fs:40, %rax
+ 2187      25280000 
+ 2187      00
+ 2188 001d 488945F8 		movq	%rax, -8(%rbp)
+ 2189 0021 31C0     		xorl	%eax, %eax
+ 339:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     int ret;
+ 340:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     uint32_t used;
+ 341:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     uint32_t high, low;
+ 342:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 343:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     SHA256_VALIDATE_RET( ctx != NULL );
+ 344:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     SHA256_VALIDATE_RET( (unsigned char *)output != NULL );
+ 345:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 346:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     /*
+ 347:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****      * Add padding: 0x80 then 0x00 until 8 bytes remain for the length
+ 348:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****      */
+ 349:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     used = ctx->total[0] & 0x3F;
+ 2190              		.loc 1 349 22
+ 2191 0023 488B45D8 		movq	-40(%rbp), %rax
+ 2192 0027 8B00     		movl	(%rax), %eax
+ 2193              		.loc 1 349 10
+ 2194 0029 83E03F   		andl	$63, %eax
+ 2195 002c 8945E8   		movl	%eax, -24(%rbp)
+ 350:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 351:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     ctx->buffer[used++] = 0x80;
+ 2196              		.loc 1 351 21
+ 2197 002f 8B45E8   		movl	-24(%rbp), %eax
+ 2198 0032 8D5001   		leal	1(%rax), %edx
+ 2199 0035 8955E8   		movl	%edx, -24(%rbp)
+ 2200              		.loc 1 351 25
+ 2201 0038 488B55D8 		movq	-40(%rbp), %rdx
+ 2202 003c 89C0     		movl	%eax, %eax
+ 2203 003e C6440228 		movb	$-128, 40(%rdx,%rax)
+ 2203      80
+ 352:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 353:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     if( used <= 56 )
+ 2204              		.loc 1 353 7
+ 2205 0043 837DE838 		cmpl	$56, -24(%rbp)
+ 2206 0047 772A     		ja	.L46
+ 354:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     {
+ 355:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         /* Enough room for padding + length in current block */
+ 356:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         memset( ctx->buffer + used, 0, 56 - used );
+ 2207              		.loc 1 356 43
+ 2208 0049 B8380000 		movl	$56, %eax
+ 2208      00
+ 2209 004e 2B45E8   		subl	-24(%rbp), %eax
+ 2210              		.loc 1 356 9
+ 2211 0051 89C1     		movl	%eax, %ecx
+ 2212              		.loc 1 356 17
+ 2213 0053 488B45D8 		movq	-40(%rbp), %rax
+ 2214 0057 488D5028 		leaq	40(%rax), %rdx
+ 2215              		.loc 1 356 9
+GAS LISTING /tmp/cc5VCnXS.s 			page 59
+
+
+ 2216 005b 8B45E8   		movl	-24(%rbp), %eax
+ 2217 005e 4801D0   		addq	%rdx, %rax
+ 2218 0061 4889CA   		movq	%rcx, %rdx
+ 2219 0064 BE000000 		movl	$0, %esi
+ 2219      00
+ 2220 0069 4889C7   		movq	%rax, %rdi
+ 2221 006c E8000000 		call	memset@PLT
+ 2221      00
+ 2222 0071 EB6A     		jmp	.L47
+ 2223              	.L46:
+ 357:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     }
+ 358:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     else
+ 359:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     {
+ 360:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         /* We'll need an extra block */
+ 361:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         memset( ctx->buffer + used, 0, 64 - used );
+ 2224              		.loc 1 361 43
+ 2225 0073 B8400000 		movl	$64, %eax
+ 2225      00
+ 2226 0078 2B45E8   		subl	-24(%rbp), %eax
+ 2227              		.loc 1 361 9
+ 2228 007b 89C1     		movl	%eax, %ecx
+ 2229              		.loc 1 361 17
+ 2230 007d 488B45D8 		movq	-40(%rbp), %rax
+ 2231 0081 488D5028 		leaq	40(%rax), %rdx
+ 2232              		.loc 1 361 9
+ 2233 0085 8B45E8   		movl	-24(%rbp), %eax
+ 2234 0088 4801D0   		addq	%rdx, %rax
+ 2235 008b 4889CA   		movq	%rcx, %rdx
+ 2236 008e BE000000 		movl	$0, %esi
+ 2236      00
+ 2237 0093 4889C7   		movq	%rax, %rdi
+ 2238 0096 E8000000 		call	memset@PLT
+ 2238      00
+ 362:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 363:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         if( ( ret = mbedtls_internal_sha256_process( ctx, ctx->buffer ) ) != 0 )
+ 2239              		.loc 1 363 62
+ 2240 009b 488B45D8 		movq	-40(%rbp), %rax
+ 2241 009f 488D5028 		leaq	40(%rax), %rdx
+ 2242              		.loc 1 363 21
+ 2243 00a3 488B45D8 		movq	-40(%rbp), %rax
+ 2244 00a7 4889D6   		movq	%rdx, %rsi
+ 2245 00aa 4889C7   		movq	%rax, %rdi
+ 2246 00ad E8000000 		call	mbedtls_internal_sha256_process
+ 2246      00
+ 2247 00b2 8945EC   		movl	%eax, -20(%rbp)
+ 2248              		.loc 1 363 11
+ 2249 00b5 837DEC00 		cmpl	$0, -20(%rbp)
+ 2250 00b9 7408     		je	.L48
+ 364:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****             return( ret );
+ 2251              		.loc 1 364 19
+ 2252 00bb 8B45EC   		movl	-20(%rbp), %eax
+ 2253 00be E97E0300 		jmp	.L49
+ 2253      00
+ 2254              	.L48:
+ 365:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 366:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         memset( ctx->buffer, 0, 56 );
+ 2255              		.loc 1 366 20
+GAS LISTING /tmp/cc5VCnXS.s 			page 60
+
+
+ 2256 00c3 488B45D8 		movq	-40(%rbp), %rax
+ 2257 00c7 4883C028 		addq	$40, %rax
+ 2258              		.loc 1 366 9
+ 2259 00cb BA380000 		movl	$56, %edx
+ 2259      00
+ 2260 00d0 BE000000 		movl	$0, %esi
+ 2260      00
+ 2261 00d5 4889C7   		movq	%rax, %rdi
+ 2262 00d8 E8000000 		call	memset@PLT
+ 2262      00
+ 2263              	.L47:
+ 367:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     }
+ 368:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 369:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     /*
+ 370:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****      * Add message length
+ 371:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****      */
+ 372:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     high = ( ctx->total[0] >> 29 )
+ 2264              		.loc 1 372 24
+ 2265 00dd 488B45D8 		movq	-40(%rbp), %rax
+ 2266 00e1 8B00     		movl	(%rax), %eax
+ 2267              		.loc 1 372 28
+ 2268 00e3 C1E81D   		shrl	$29, %eax
+ 2269 00e6 89C2     		movl	%eax, %edx
+ 373:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****          | ( ctx->total[1] <<  3 );
+ 2270              		.loc 1 373 24
+ 2271 00e8 488B45D8 		movq	-40(%rbp), %rax
+ 2272 00ec 8B4004   		movl	4(%rax), %eax
+ 2273              		.loc 1 373 28
+ 2274 00ef C1E003   		sall	$3, %eax
+ 372:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****          | ( ctx->total[1] <<  3 );
+ 2275              		.loc 1 372 10
+ 2276 00f2 09D0     		orl	%edx, %eax
+ 2277 00f4 8945F0   		movl	%eax, -16(%rbp)
+ 374:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     low  = ( ctx->total[0] <<  3 );
+ 2278              		.loc 1 374 24
+ 2279 00f7 488B45D8 		movq	-40(%rbp), %rax
+ 2280 00fb 8B00     		movl	(%rax), %eax
+ 2281              		.loc 1 374 10
+ 2282 00fd C1E003   		sall	$3, %eax
+ 2283 0100 8945F4   		movl	%eax, -12(%rbp)
+ 375:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 376:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     PUT_UINT32_BE( high, ctx->buffer, 56 );
+ 2284              		.loc 1 376 5
+ 2285 0103 8B45F0   		movl	-16(%rbp), %eax
+ 2286 0106 C1E818   		shrl	$24, %eax
+ 2287 0109 89C2     		movl	%eax, %edx
+ 2288 010b 488B45D8 		movq	-40(%rbp), %rax
+ 2289 010f 885060   		movb	%dl, 96(%rax)
+ 2290 0112 8B45F0   		movl	-16(%rbp), %eax
+ 2291 0115 C1E810   		shrl	$16, %eax
+ 2292 0118 89C2     		movl	%eax, %edx
+ 2293 011a 488B45D8 		movq	-40(%rbp), %rax
+ 2294 011e 885061   		movb	%dl, 97(%rax)
+ 2295 0121 8B45F0   		movl	-16(%rbp), %eax
+ 2296 0124 C1E808   		shrl	$8, %eax
+ 2297 0127 89C2     		movl	%eax, %edx
+ 2298 0129 488B45D8 		movq	-40(%rbp), %rax
+GAS LISTING /tmp/cc5VCnXS.s 			page 61
+
+
+ 2299 012d 885062   		movb	%dl, 98(%rax)
+ 2300 0130 8B45F0   		movl	-16(%rbp), %eax
+ 2301 0133 89C2     		movl	%eax, %edx
+ 2302 0135 488B45D8 		movq	-40(%rbp), %rax
+ 2303 0139 885063   		movb	%dl, 99(%rax)
+ 377:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     PUT_UINT32_BE( low,  ctx->buffer, 60 );
+ 2304              		.loc 1 377 5
+ 2305 013c 8B45F4   		movl	-12(%rbp), %eax
+ 2306 013f C1E818   		shrl	$24, %eax
+ 2307 0142 89C2     		movl	%eax, %edx
+ 2308 0144 488B45D8 		movq	-40(%rbp), %rax
+ 2309 0148 885064   		movb	%dl, 100(%rax)
+ 2310 014b 8B45F4   		movl	-12(%rbp), %eax
+ 2311 014e C1E810   		shrl	$16, %eax
+ 2312 0151 89C2     		movl	%eax, %edx
+ 2313 0153 488B45D8 		movq	-40(%rbp), %rax
+ 2314 0157 885065   		movb	%dl, 101(%rax)
+ 2315 015a 8B45F4   		movl	-12(%rbp), %eax
+ 2316 015d C1E808   		shrl	$8, %eax
+ 2317 0160 89C2     		movl	%eax, %edx
+ 2318 0162 488B45D8 		movq	-40(%rbp), %rax
+ 2319 0166 885066   		movb	%dl, 102(%rax)
+ 2320 0169 8B45F4   		movl	-12(%rbp), %eax
+ 2321 016c 89C2     		movl	%eax, %edx
+ 2322 016e 488B45D8 		movq	-40(%rbp), %rax
+ 2323 0172 885067   		movb	%dl, 103(%rax)
+ 378:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 379:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     if( ( ret = mbedtls_internal_sha256_process( ctx, ctx->buffer ) ) != 0 )
+ 2324              		.loc 1 379 58
+ 2325 0175 488B45D8 		movq	-40(%rbp), %rax
+ 2326 0179 488D5028 		leaq	40(%rax), %rdx
+ 2327              		.loc 1 379 17
+ 2328 017d 488B45D8 		movq	-40(%rbp), %rax
+ 2329 0181 4889D6   		movq	%rdx, %rsi
+ 2330 0184 4889C7   		movq	%rax, %rdi
+ 2331 0187 E8000000 		call	mbedtls_internal_sha256_process
+ 2331      00
+ 2332 018c 8945EC   		movl	%eax, -20(%rbp)
+ 2333              		.loc 1 379 7
+ 2334 018f 837DEC00 		cmpl	$0, -20(%rbp)
+ 2335 0193 7408     		je	.L50
+ 380:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         return( ret );
+ 2336              		.loc 1 380 15
+ 2337 0195 8B45EC   		movl	-20(%rbp), %eax
+ 2338 0198 E9A40200 		jmp	.L49
+ 2338      00
+ 2339              	.L50:
+ 381:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 382:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     /*
+ 383:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****      * Output final state
+ 384:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****      */
+ 385:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     PUT_UINT32_BE( ctx->state[0], output,  0 );
+ 2340              		.loc 1 385 5
+ 2341 019d 488B45D8 		movq	-40(%rbp), %rax
+ 2342 01a1 8B4008   		movl	8(%rax), %eax
+ 2343 01a4 C1E818   		shrl	$24, %eax
+ 2344 01a7 89C2     		movl	%eax, %edx
+GAS LISTING /tmp/cc5VCnXS.s 			page 62
+
+
+ 2345 01a9 488B45D0 		movq	-48(%rbp), %rax
+ 2346 01ad 8810     		movb	%dl, (%rax)
+ 2347 01af 488B45D8 		movq	-40(%rbp), %rax
+ 2348 01b3 8B4008   		movl	8(%rax), %eax
+ 2349 01b6 C1E810   		shrl	$16, %eax
+ 2350 01b9 89C2     		movl	%eax, %edx
+ 2351 01bb 488B45D0 		movq	-48(%rbp), %rax
+ 2352 01bf 4883C001 		addq	$1, %rax
+ 2353 01c3 8810     		movb	%dl, (%rax)
+ 2354 01c5 488B45D8 		movq	-40(%rbp), %rax
+ 2355 01c9 8B4008   		movl	8(%rax), %eax
+ 2356 01cc C1E808   		shrl	$8, %eax
+ 2357 01cf 89C2     		movl	%eax, %edx
+ 2358 01d1 488B45D0 		movq	-48(%rbp), %rax
+ 2359 01d5 4883C002 		addq	$2, %rax
+ 2360 01d9 8810     		movb	%dl, (%rax)
+ 2361 01db 488B45D8 		movq	-40(%rbp), %rax
+ 2362 01df 8B5008   		movl	8(%rax), %edx
+ 2363 01e2 488B45D0 		movq	-48(%rbp), %rax
+ 2364 01e6 4883C003 		addq	$3, %rax
+ 2365 01ea 8810     		movb	%dl, (%rax)
+ 386:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     PUT_UINT32_BE( ctx->state[1], output,  4 );
+ 2366              		.loc 1 386 5
+ 2367 01ec 488B45D8 		movq	-40(%rbp), %rax
+ 2368 01f0 8B400C   		movl	12(%rax), %eax
+ 2369 01f3 C1E818   		shrl	$24, %eax
+ 2370 01f6 89C2     		movl	%eax, %edx
+ 2371 01f8 488B45D0 		movq	-48(%rbp), %rax
+ 2372 01fc 4883C004 		addq	$4, %rax
+ 2373 0200 8810     		movb	%dl, (%rax)
+ 2374 0202 488B45D8 		movq	-40(%rbp), %rax
+ 2375 0206 8B400C   		movl	12(%rax), %eax
+ 2376 0209 C1E810   		shrl	$16, %eax
+ 2377 020c 89C2     		movl	%eax, %edx
+ 2378 020e 488B45D0 		movq	-48(%rbp), %rax
+ 2379 0212 4883C005 		addq	$5, %rax
+ 2380 0216 8810     		movb	%dl, (%rax)
+ 2381 0218 488B45D8 		movq	-40(%rbp), %rax
+ 2382 021c 8B400C   		movl	12(%rax), %eax
+ 2383 021f C1E808   		shrl	$8, %eax
+ 2384 0222 89C2     		movl	%eax, %edx
+ 2385 0224 488B45D0 		movq	-48(%rbp), %rax
+ 2386 0228 4883C006 		addq	$6, %rax
+ 2387 022c 8810     		movb	%dl, (%rax)
+ 2388 022e 488B45D8 		movq	-40(%rbp), %rax
+ 2389 0232 8B500C   		movl	12(%rax), %edx
+ 2390 0235 488B45D0 		movq	-48(%rbp), %rax
+ 2391 0239 4883C007 		addq	$7, %rax
+ 2392 023d 8810     		movb	%dl, (%rax)
+ 387:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     PUT_UINT32_BE( ctx->state[2], output,  8 );
+ 2393              		.loc 1 387 5
+ 2394 023f 488B45D8 		movq	-40(%rbp), %rax
+ 2395 0243 8B4010   		movl	16(%rax), %eax
+ 2396 0246 C1E818   		shrl	$24, %eax
+ 2397 0249 89C2     		movl	%eax, %edx
+ 2398 024b 488B45D0 		movq	-48(%rbp), %rax
+ 2399 024f 4883C008 		addq	$8, %rax
+GAS LISTING /tmp/cc5VCnXS.s 			page 63
+
+
+ 2400 0253 8810     		movb	%dl, (%rax)
+ 2401 0255 488B45D8 		movq	-40(%rbp), %rax
+ 2402 0259 8B4010   		movl	16(%rax), %eax
+ 2403 025c C1E810   		shrl	$16, %eax
+ 2404 025f 89C2     		movl	%eax, %edx
+ 2405 0261 488B45D0 		movq	-48(%rbp), %rax
+ 2406 0265 4883C009 		addq	$9, %rax
+ 2407 0269 8810     		movb	%dl, (%rax)
+ 2408 026b 488B45D8 		movq	-40(%rbp), %rax
+ 2409 026f 8B4010   		movl	16(%rax), %eax
+ 2410 0272 C1E808   		shrl	$8, %eax
+ 2411 0275 89C2     		movl	%eax, %edx
+ 2412 0277 488B45D0 		movq	-48(%rbp), %rax
+ 2413 027b 4883C00A 		addq	$10, %rax
+ 2414 027f 8810     		movb	%dl, (%rax)
+ 2415 0281 488B45D8 		movq	-40(%rbp), %rax
+ 2416 0285 8B5010   		movl	16(%rax), %edx
+ 2417 0288 488B45D0 		movq	-48(%rbp), %rax
+ 2418 028c 4883C00B 		addq	$11, %rax
+ 2419 0290 8810     		movb	%dl, (%rax)
+ 388:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     PUT_UINT32_BE( ctx->state[3], output, 12 );
+ 2420              		.loc 1 388 5
+ 2421 0292 488B45D8 		movq	-40(%rbp), %rax
+ 2422 0296 8B4014   		movl	20(%rax), %eax
+ 2423 0299 C1E818   		shrl	$24, %eax
+ 2424 029c 89C2     		movl	%eax, %edx
+ 2425 029e 488B45D0 		movq	-48(%rbp), %rax
+ 2426 02a2 4883C00C 		addq	$12, %rax
+ 2427 02a6 8810     		movb	%dl, (%rax)
+ 2428 02a8 488B45D8 		movq	-40(%rbp), %rax
+ 2429 02ac 8B4014   		movl	20(%rax), %eax
+ 2430 02af C1E810   		shrl	$16, %eax
+ 2431 02b2 89C2     		movl	%eax, %edx
+ 2432 02b4 488B45D0 		movq	-48(%rbp), %rax
+ 2433 02b8 4883C00D 		addq	$13, %rax
+ 2434 02bc 8810     		movb	%dl, (%rax)
+ 2435 02be 488B45D8 		movq	-40(%rbp), %rax
+ 2436 02c2 8B4014   		movl	20(%rax), %eax
+ 2437 02c5 C1E808   		shrl	$8, %eax
+ 2438 02c8 89C2     		movl	%eax, %edx
+ 2439 02ca 488B45D0 		movq	-48(%rbp), %rax
+ 2440 02ce 4883C00E 		addq	$14, %rax
+ 2441 02d2 8810     		movb	%dl, (%rax)
+ 2442 02d4 488B45D8 		movq	-40(%rbp), %rax
+ 2443 02d8 8B5014   		movl	20(%rax), %edx
+ 2444 02db 488B45D0 		movq	-48(%rbp), %rax
+ 2445 02df 4883C00F 		addq	$15, %rax
+ 2446 02e3 8810     		movb	%dl, (%rax)
+ 389:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     PUT_UINT32_BE( ctx->state[4], output, 16 );
+ 2447              		.loc 1 389 5
+ 2448 02e5 488B45D8 		movq	-40(%rbp), %rax
+ 2449 02e9 8B4018   		movl	24(%rax), %eax
+ 2450 02ec C1E818   		shrl	$24, %eax
+ 2451 02ef 89C2     		movl	%eax, %edx
+ 2452 02f1 488B45D0 		movq	-48(%rbp), %rax
+ 2453 02f5 4883C010 		addq	$16, %rax
+ 2454 02f9 8810     		movb	%dl, (%rax)
+GAS LISTING /tmp/cc5VCnXS.s 			page 64
+
+
+ 2455 02fb 488B45D8 		movq	-40(%rbp), %rax
+ 2456 02ff 8B4018   		movl	24(%rax), %eax
+ 2457 0302 C1E810   		shrl	$16, %eax
+ 2458 0305 89C2     		movl	%eax, %edx
+ 2459 0307 488B45D0 		movq	-48(%rbp), %rax
+ 2460 030b 4883C011 		addq	$17, %rax
+ 2461 030f 8810     		movb	%dl, (%rax)
+ 2462 0311 488B45D8 		movq	-40(%rbp), %rax
+ 2463 0315 8B4018   		movl	24(%rax), %eax
+ 2464 0318 C1E808   		shrl	$8, %eax
+ 2465 031b 89C2     		movl	%eax, %edx
+ 2466 031d 488B45D0 		movq	-48(%rbp), %rax
+ 2467 0321 4883C012 		addq	$18, %rax
+ 2468 0325 8810     		movb	%dl, (%rax)
+ 2469 0327 488B45D8 		movq	-40(%rbp), %rax
+ 2470 032b 8B5018   		movl	24(%rax), %edx
+ 2471 032e 488B45D0 		movq	-48(%rbp), %rax
+ 2472 0332 4883C013 		addq	$19, %rax
+ 2473 0336 8810     		movb	%dl, (%rax)
+ 390:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     PUT_UINT32_BE( ctx->state[5], output, 20 );
+ 2474              		.loc 1 390 5
+ 2475 0338 488B45D8 		movq	-40(%rbp), %rax
+ 2476 033c 8B401C   		movl	28(%rax), %eax
+ 2477 033f C1E818   		shrl	$24, %eax
+ 2478 0342 89C2     		movl	%eax, %edx
+ 2479 0344 488B45D0 		movq	-48(%rbp), %rax
+ 2480 0348 4883C014 		addq	$20, %rax
+ 2481 034c 8810     		movb	%dl, (%rax)
+ 2482 034e 488B45D8 		movq	-40(%rbp), %rax
+ 2483 0352 8B401C   		movl	28(%rax), %eax
+ 2484 0355 C1E810   		shrl	$16, %eax
+ 2485 0358 89C2     		movl	%eax, %edx
+ 2486 035a 488B45D0 		movq	-48(%rbp), %rax
+ 2487 035e 4883C015 		addq	$21, %rax
+ 2488 0362 8810     		movb	%dl, (%rax)
+ 2489 0364 488B45D8 		movq	-40(%rbp), %rax
+ 2490 0368 8B401C   		movl	28(%rax), %eax
+ 2491 036b C1E808   		shrl	$8, %eax
+ 2492 036e 89C2     		movl	%eax, %edx
+ 2493 0370 488B45D0 		movq	-48(%rbp), %rax
+ 2494 0374 4883C016 		addq	$22, %rax
+ 2495 0378 8810     		movb	%dl, (%rax)
+ 2496 037a 488B45D8 		movq	-40(%rbp), %rax
+ 2497 037e 8B501C   		movl	28(%rax), %edx
+ 2498 0381 488B45D0 		movq	-48(%rbp), %rax
+ 2499 0385 4883C017 		addq	$23, %rax
+ 2500 0389 8810     		movb	%dl, (%rax)
+ 391:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     PUT_UINT32_BE( ctx->state[6], output, 24 );
+ 2501              		.loc 1 391 5
+ 2502 038b 488B45D8 		movq	-40(%rbp), %rax
+ 2503 038f 8B4020   		movl	32(%rax), %eax
+ 2504 0392 C1E818   		shrl	$24, %eax
+ 2505 0395 89C2     		movl	%eax, %edx
+ 2506 0397 488B45D0 		movq	-48(%rbp), %rax
+ 2507 039b 4883C018 		addq	$24, %rax
+ 2508 039f 8810     		movb	%dl, (%rax)
+ 2509 03a1 488B45D8 		movq	-40(%rbp), %rax
+GAS LISTING /tmp/cc5VCnXS.s 			page 65
+
+
+ 2510 03a5 8B4020   		movl	32(%rax), %eax
+ 2511 03a8 C1E810   		shrl	$16, %eax
+ 2512 03ab 89C2     		movl	%eax, %edx
+ 2513 03ad 488B45D0 		movq	-48(%rbp), %rax
+ 2514 03b1 4883C019 		addq	$25, %rax
+ 2515 03b5 8810     		movb	%dl, (%rax)
+ 2516 03b7 488B45D8 		movq	-40(%rbp), %rax
+ 2517 03bb 8B4020   		movl	32(%rax), %eax
+ 2518 03be C1E808   		shrl	$8, %eax
+ 2519 03c1 89C2     		movl	%eax, %edx
+ 2520 03c3 488B45D0 		movq	-48(%rbp), %rax
+ 2521 03c7 4883C01A 		addq	$26, %rax
+ 2522 03cb 8810     		movb	%dl, (%rax)
+ 2523 03cd 488B45D8 		movq	-40(%rbp), %rax
+ 2524 03d1 8B5020   		movl	32(%rax), %edx
+ 2525 03d4 488B45D0 		movq	-48(%rbp), %rax
+ 2526 03d8 4883C01B 		addq	$27, %rax
+ 2527 03dc 8810     		movb	%dl, (%rax)
+ 392:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 393:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     if( ctx->is224 == 0 )
+ 2528              		.loc 1 393 12
+ 2529 03de 488B45D8 		movq	-40(%rbp), %rax
+ 2530 03e2 8B4068   		movl	104(%rax), %eax
+ 2531              		.loc 1 393 7
+ 2532 03e5 85C0     		testl	%eax, %eax
+ 2533 03e7 7553     		jne	.L51
+ 394:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         PUT_UINT32_BE( ctx->state[7], output, 28 );
+ 2534              		.loc 1 394 9
+ 2535 03e9 488B45D8 		movq	-40(%rbp), %rax
+ 2536 03ed 8B4024   		movl	36(%rax), %eax
+ 2537 03f0 C1E818   		shrl	$24, %eax
+ 2538 03f3 89C2     		movl	%eax, %edx
+ 2539 03f5 488B45D0 		movq	-48(%rbp), %rax
+ 2540 03f9 4883C01C 		addq	$28, %rax
+ 2541 03fd 8810     		movb	%dl, (%rax)
+ 2542 03ff 488B45D8 		movq	-40(%rbp), %rax
+ 2543 0403 8B4024   		movl	36(%rax), %eax
+ 2544 0406 C1E810   		shrl	$16, %eax
+ 2545 0409 89C2     		movl	%eax, %edx
+ 2546 040b 488B45D0 		movq	-48(%rbp), %rax
+ 2547 040f 4883C01D 		addq	$29, %rax
+ 2548 0413 8810     		movb	%dl, (%rax)
+ 2549 0415 488B45D8 		movq	-40(%rbp), %rax
+ 2550 0419 8B4024   		movl	36(%rax), %eax
+ 2551 041c C1E808   		shrl	$8, %eax
+ 2552 041f 89C2     		movl	%eax, %edx
+ 2553 0421 488B45D0 		movq	-48(%rbp), %rax
+ 2554 0425 4883C01E 		addq	$30, %rax
+ 2555 0429 8810     		movb	%dl, (%rax)
+ 2556 042b 488B45D8 		movq	-40(%rbp), %rax
+ 2557 042f 8B5024   		movl	36(%rax), %edx
+ 2558 0432 488B45D0 		movq	-48(%rbp), %rax
+ 2559 0436 4883C01F 		addq	$31, %rax
+ 2560 043a 8810     		movb	%dl, (%rax)
+ 2561              	.L51:
+ 395:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 396:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     return( 0 );
+GAS LISTING /tmp/cc5VCnXS.s 			page 66
+
+
+ 2562              		.loc 1 396 11
+ 2563 043c B8000000 		movl	$0, %eax
+ 2563      00
+ 2564              	.L49:
+ 397:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** }
+ 2565              		.loc 1 397 1
+ 2566 0441 488B4DF8 		movq	-8(%rbp), %rcx
+ 2567 0445 6448330C 		xorq	%fs:40, %rcx
+ 2567      25280000 
+ 2567      00
+ 2568 044e 7405     		je	.L52
+ 2569 0450 E8000000 		call	__stack_chk_fail@PLT
+ 2569      00
+ 2570              	.L52:
+ 2571 0455 C9       		leave
+ 2572              	.LCFI29:
+ 2573              		.cfi_def_cfa 7, 8
+ 2574 0456 C3       		ret
+ 2575              		.cfi_endproc
+ 2576              	.LFE9:
+ 2578              		.section	.text.mbedtls_sha256_finish,"ax",@progbits
+ 2579              		.globl	mbedtls_sha256_finish
+ 2581              	mbedtls_sha256_finish:
+ 2582              	.LFB10:
+ 398:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 399:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #if !defined(MBEDTLS_DEPRECATED_REMOVED)
+ 400:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** void mbedtls_sha256_finish( mbedtls_sha256_context *ctx,
+ 401:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****                             unsigned char output[32] )
+ 402:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** {
+ 2583              		.loc 1 402 1
+ 2584              		.cfi_startproc
+ 2585 0000 F30F1EFA 		endbr64
+ 2586 0004 55       		pushq	%rbp
+ 2587              	.LCFI30:
+ 2588              		.cfi_def_cfa_offset 16
+ 2589              		.cfi_offset 6, -16
+ 2590 0005 4889E5   		movq	%rsp, %rbp
+ 2591              	.LCFI31:
+ 2592              		.cfi_def_cfa_register 6
+ 2593 0008 4883EC20 		subq	$32, %rsp
+ 2594 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 2595 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 2596              		.loc 1 402 1
+ 2597 0014 64488B04 		movq	%fs:40, %rax
+ 2597      25280000 
+ 2597      00
+ 2598 001d 488945F8 		movq	%rax, -8(%rbp)
+ 2599 0021 31C0     		xorl	%eax, %eax
+ 403:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     mbedtls_sha256_finish_ret( ctx, output );
+ 2600              		.loc 1 403 5
+ 2601 0023 488B55E0 		movq	-32(%rbp), %rdx
+ 2602 0027 488B45E8 		movq	-24(%rbp), %rax
+ 2603 002b 4889D6   		movq	%rdx, %rsi
+ 2604 002e 4889C7   		movq	%rax, %rdi
+ 2605 0031 E8000000 		call	mbedtls_sha256_finish_ret
+ 2605      00
+ 404:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** }
+GAS LISTING /tmp/cc5VCnXS.s 			page 67
+
+
+ 2606              		.loc 1 404 1
+ 2607 0036 90       		nop
+ 2608 0037 488B45F8 		movq	-8(%rbp), %rax
+ 2609 003b 64483304 		xorq	%fs:40, %rax
+ 2609      25280000 
+ 2609      00
+ 2610 0044 7405     		je	.L54
+ 2611 0046 E8000000 		call	__stack_chk_fail@PLT
+ 2611      00
+ 2612              	.L54:
+ 2613 004b C9       		leave
+ 2614              	.LCFI32:
+ 2615              		.cfi_def_cfa 7, 8
+ 2616 004c C3       		ret
+ 2617              		.cfi_endproc
+ 2618              	.LFE10:
+ 2620              		.section	.text.mbedtls_sha256_ret,"ax",@progbits
+ 2621              		.globl	mbedtls_sha256_ret
+ 2623              	mbedtls_sha256_ret:
+ 2624              	.LFB11:
+ 405:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #endif
+ 406:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 407:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #endif /* !MBEDTLS_SHA256_ALT */
+ 408:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 409:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** /*
+ 410:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  * output = SHA-256( input buffer )
+ 411:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****  */
+ 412:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** int mbedtls_sha256_ret( const unsigned char *input,
+ 413:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****                         size_t ilen,
+ 414:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****                         unsigned char output[32],
+ 415:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****                         int is224 )
+ 416:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** {
+ 2625              		.loc 1 416 1
+ 2626              		.cfi_startproc
+ 2627 0000 F30F1EFA 		endbr64
+ 2628 0004 55       		pushq	%rbp
+ 2629              	.LCFI33:
+ 2630              		.cfi_def_cfa_offset 16
+ 2631              		.cfi_offset 6, -16
+ 2632 0005 4889E5   		movq	%rsp, %rbp
+ 2633              	.LCFI34:
+ 2634              		.cfi_def_cfa_register 6
+ 2635 0008 4881ECB0 		subq	$176, %rsp
+ 2635      000000
+ 2636 000f 4889BD68 		movq	%rdi, -152(%rbp)
+ 2636      FFFFFF
+ 2637 0016 4889B560 		movq	%rsi, -160(%rbp)
+ 2637      FFFFFF
+ 2638 001d 48899558 		movq	%rdx, -168(%rbp)
+ 2638      FFFFFF
+ 2639 0024 898D54FF 		movl	%ecx, -172(%rbp)
+ 2639      FFFF
+ 2640              		.loc 1 416 1
+ 2641 002a 64488B04 		movq	%fs:40, %rax
+ 2641      25280000 
+ 2641      00
+ 2642 0033 488945F8 		movq	%rax, -8(%rbp)
+GAS LISTING /tmp/cc5VCnXS.s 			page 68
+
+
+ 2643 0037 31C0     		xorl	%eax, %eax
+ 417:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     int ret;
+ 418:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     mbedtls_sha256_context ctx;
+ 419:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 420:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     SHA256_VALIDATE_RET( is224 == 0 || is224 == 1 );
+ 421:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     SHA256_VALIDATE_RET( ilen == 0 || input != NULL );
+ 422:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     SHA256_VALIDATE_RET( (unsigned char *)output != NULL );
+ 423:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 424:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     mbedtls_sha256_init( &ctx );
+ 2644              		.loc 1 424 5
+ 2645 0039 488D4580 		leaq	-128(%rbp), %rax
+ 2646 003d 4889C7   		movq	%rax, %rdi
+ 2647 0040 E8000000 		call	mbedtls_sha256_init
+ 2647      00
+ 425:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 426:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     if( ( ret = mbedtls_sha256_starts_ret( &ctx, is224 ) ) != 0 )
+ 2648              		.loc 1 426 17
+ 2649 0045 8B9554FF 		movl	-172(%rbp), %edx
+ 2649      FFFF
+ 2650 004b 488D4580 		leaq	-128(%rbp), %rax
+ 2651 004f 89D6     		movl	%edx, %esi
+ 2652 0051 4889C7   		movq	%rax, %rdi
+ 2653 0054 E8000000 		call	mbedtls_sha256_starts_ret
+ 2653      00
+ 2654 0059 89857CFF 		movl	%eax, -132(%rbp)
+ 2654      FFFF
+ 2655              		.loc 1 426 7
+ 2656 005f 83BD7CFF 		cmpl	$0, -132(%rbp)
+ 2656      FFFF00
+ 2657 0066 7551     		jne	.L61
+ 427:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         goto exit;
+ 428:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 429:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     if( ( ret = mbedtls_sha256_update_ret( &ctx, input, ilen ) ) != 0 )
+ 2658              		.loc 1 429 17
+ 2659 0068 488B9560 		movq	-160(%rbp), %rdx
+ 2659      FFFFFF
+ 2660 006f 488B8D68 		movq	-152(%rbp), %rcx
+ 2660      FFFFFF
+ 2661 0076 488D4580 		leaq	-128(%rbp), %rax
+ 2662 007a 4889CE   		movq	%rcx, %rsi
+ 2663 007d 4889C7   		movq	%rax, %rdi
+ 2664 0080 E8000000 		call	mbedtls_sha256_update_ret
+ 2664      00
+ 2665 0085 89857CFF 		movl	%eax, -132(%rbp)
+ 2665      FFFF
+ 2666              		.loc 1 429 7
+ 2667 008b 83BD7CFF 		cmpl	$0, -132(%rbp)
+ 2667      FFFF00
+ 2668 0092 7528     		jne	.L62
+ 430:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         goto exit;
+ 431:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 432:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     if( ( ret = mbedtls_sha256_finish_ret( &ctx, output ) ) != 0 )
+ 2669              		.loc 1 432 17
+ 2670 0094 488B9558 		movq	-168(%rbp), %rdx
+ 2670      FFFFFF
+ 2671 009b 488D4580 		leaq	-128(%rbp), %rax
+ 2672 009f 4889D6   		movq	%rdx, %rsi
+GAS LISTING /tmp/cc5VCnXS.s 			page 69
+
+
+ 2673 00a2 4889C7   		movq	%rax, %rdi
+ 2674 00a5 E8000000 		call	mbedtls_sha256_finish_ret
+ 2674      00
+ 2675 00aa 89857CFF 		movl	%eax, -132(%rbp)
+ 2675      FFFF
+ 2676              		.loc 1 432 7
+ 2677 00b0 83BD7CFF 		cmpl	$0, -132(%rbp)
+ 2677      FFFF00
+ 433:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         goto exit;
+ 434:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 435:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** exit:
+ 2678              		.loc 1 435 1
+ 2679 00b7 EB04     		jmp	.L57
+ 2680              	.L61:
+ 427:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 2681              		.loc 1 427 9
+ 2682 00b9 90       		nop
+ 2683 00ba EB01     		jmp	.L57
+ 2684              	.L62:
+ 430:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****         goto exit;
+ 2685              		.loc 1 430 9
+ 2686 00bc 90       		nop
+ 2687              	.L57:
+ 436:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     mbedtls_sha256_free( &ctx );
+ 2688              		.loc 1 436 5
+ 2689 00bd 488D4580 		leaq	-128(%rbp), %rax
+ 2690 00c1 4889C7   		movq	%rax, %rdi
+ 2691 00c4 E8000000 		call	mbedtls_sha256_free
+ 2691      00
+ 437:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 438:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     return( ret );
+ 2692              		.loc 1 438 11
+ 2693 00c9 8B857CFF 		movl	-132(%rbp), %eax
+ 2693      FFFF
+ 439:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** }
+ 2694              		.loc 1 439 1
+ 2695 00cf 488B4DF8 		movq	-8(%rbp), %rcx
+ 2696 00d3 6448330C 		xorq	%fs:40, %rcx
+ 2696      25280000 
+ 2696      00
+ 2697 00dc 7405     		je	.L60
+ 2698 00de E8000000 		call	__stack_chk_fail@PLT
+ 2698      00
+ 2699              	.L60:
+ 2700 00e3 C9       		leave
+ 2701              	.LCFI35:
+ 2702              		.cfi_def_cfa 7, 8
+ 2703 00e4 C3       		ret
+ 2704              		.cfi_endproc
+ 2705              	.LFE11:
+ 2707              		.section	.text.mbedtls_sha256,"ax",@progbits
+ 2708              		.globl	mbedtls_sha256
+ 2710              	mbedtls_sha256:
+ 2711              	.LFB12:
+ 440:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** 
+ 441:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** #if !defined(MBEDTLS_DEPRECATED_REMOVED)
+ 442:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** void mbedtls_sha256( const unsigned char *input,
+GAS LISTING /tmp/cc5VCnXS.s 			page 70
+
+
+ 443:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****                      size_t ilen,
+ 444:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****                      unsigned char output[32],
+ 445:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****                      int is224 )
+ 446:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** {
+ 2712              		.loc 1 446 1
+ 2713              		.cfi_startproc
+ 2714 0000 F30F1EFA 		endbr64
+ 2715 0004 55       		pushq	%rbp
+ 2716              	.LCFI36:
+ 2717              		.cfi_def_cfa_offset 16
+ 2718              		.cfi_offset 6, -16
+ 2719 0005 4889E5   		movq	%rsp, %rbp
+ 2720              	.LCFI37:
+ 2721              		.cfi_def_cfa_register 6
+ 2722 0008 4883EC30 		subq	$48, %rsp
+ 2723 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 2724 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 2725 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 2726 0018 894DD4   		movl	%ecx, -44(%rbp)
+ 2727              		.loc 1 446 1
+ 2728 001b 64488B04 		movq	%fs:40, %rax
+ 2728      25280000 
+ 2728      00
+ 2729 0024 488945F8 		movq	%rax, -8(%rbp)
+ 2730 0028 31C0     		xorl	%eax, %eax
+ 447:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c ****     mbedtls_sha256_ret( input, ilen, output, is224 );
+ 2731              		.loc 1 447 5
+ 2732 002a 8B4DD4   		movl	-44(%rbp), %ecx
+ 2733 002d 488B55D8 		movq	-40(%rbp), %rdx
+ 2734 0031 488B75E0 		movq	-32(%rbp), %rsi
+ 2735 0035 488B45E8 		movq	-24(%rbp), %rax
+ 2736 0039 4889C7   		movq	%rax, %rdi
+ 2737 003c E8000000 		call	mbedtls_sha256_ret
+ 2737      00
+ 448:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/sha256.c **** }
+ 2738              		.loc 1 448 1
+ 2739 0041 90       		nop
+ 2740 0042 488B45F8 		movq	-8(%rbp), %rax
+ 2741 0046 64483304 		xorq	%fs:40, %rax
+ 2741      25280000 
+ 2741      00
+ 2742 004f 7405     		je	.L64
+ 2743 0051 E8000000 		call	__stack_chk_fail@PLT
+ 2743      00
+ 2744              	.L64:
+ 2745 0056 C9       		leave
+ 2746              	.LCFI38:
+ 2747              		.cfi_def_cfa 7, 8
+ 2748 0057 C3       		ret
+ 2749              		.cfi_endproc
+ 2750              	.LFE12:
+ 2752              		.text
+ 2753              	.Letext0:
+ 2754              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 2755              		.file 3 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 2756              		.file 4 "/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h"
+ 2757              		.file 5 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/sha256.
+GAS LISTING /tmp/cc5VCnXS.s 			page 71
+
+
+ 4404              		.section	.note.gnu.property,"a"
+ 4405              		.align 8
+ 4406 0000 04000000 		.long	 1f - 0f
+ 4407 0004 10000000 		.long	 4f - 1f
+ 4408 0008 05000000 		.long	 5
+ 4409              	0:
+ 4410 000c 474E5500 		.string	 "GNU"
+ 4411              	1:
+ 4412              		.align 8
+ 4413 0010 020000C0 		.long	 0xc0000002
+ 4414 0014 04000000 		.long	 3f - 2f
+ 4415              	2:
+ 4416 0018 03000000 		.long	 0x3
+ 4417              	3:
+ 4418 001c 00000000 		.align 8
+ 4419              	4:
+GAS LISTING /tmp/cc5VCnXS.s 			page 72
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 sha256.c
+     /tmp/cc5VCnXS.s:7      .text.mbedtls_sha256_init:0000000000000000 mbedtls_sha256_init
+     /tmp/cc5VCnXS.s:49     .text.mbedtls_sha256_free:0000000000000000 mbedtls_sha256_free
+     /tmp/cc5VCnXS.s:96     .text.mbedtls_sha256_clone:0000000000000000 mbedtls_sha256_clone
+     /tmp/cc5VCnXS.s:167    .text.mbedtls_sha256_starts_ret:0000000000000000 mbedtls_sha256_starts_ret
+     /tmp/cc5VCnXS.s:268    .text.mbedtls_sha256_starts:0000000000000000 mbedtls_sha256_starts
+     /tmp/cc5VCnXS.s:311    .rodata.K:0000000000000000 K
+     /tmp/cc5VCnXS.s:379    .text.mbedtls_internal_sha256_process:0000000000000000 mbedtls_internal_sha256_process
+     /tmp/cc5VCnXS.s:1915   .text.mbedtls_sha256_process:0000000000000000 mbedtls_sha256_process
+     /tmp/cc5VCnXS.s:1957   .text.mbedtls_sha256_update_ret:0000000000000000 mbedtls_sha256_update_ret
+     /tmp/cc5VCnXS.s:2127   .text.mbedtls_sha256_update:0000000000000000 mbedtls_sha256_update
+     /tmp/cc5VCnXS.s:2171   .text.mbedtls_sha256_finish_ret:0000000000000000 mbedtls_sha256_finish_ret
+     /tmp/cc5VCnXS.s:2581   .text.mbedtls_sha256_finish:0000000000000000 mbedtls_sha256_finish
+     /tmp/cc5VCnXS.s:2623   .text.mbedtls_sha256_ret:0000000000000000 mbedtls_sha256_ret
+     /tmp/cc5VCnXS.s:2710   .text.mbedtls_sha256:0000000000000000 mbedtls_sha256
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+memset
+__stack_chk_fail
+mbedtls_platform_zeroize
+memcpy

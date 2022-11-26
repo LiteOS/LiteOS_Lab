@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,18 +22,18 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
-#ifndef LITEOS_LAB_IOT_LINK_CRC_CRC_H_
-#define LITEOS_LAB_IOT_LINK_CRC_CRC_H_
+#ifndef CRC_CRC_H_
+#define CRC_CRC_H_
 
 #include <stdint.h>
 #include <stddef.h>
@@ -42,5 +42,4 @@ uint32_t calc_crc32(uint32_t origin, const void *buf, int32_t len);
 
 uint16_t calc_crc16(uint16_t reg_init, const unsigned char *massage, int len);
 
-
-#endif /* LITEOS_LAB_IOT_LINK_CRC_CRC_H_ */
+#endif /* CRC_CRC_H */

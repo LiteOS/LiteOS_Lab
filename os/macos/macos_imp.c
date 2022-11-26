@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,17 +22,17 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
-#include  "osal_imp.h"
+#include "osal_imp.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,25 +41,23 @@
 #include <pthread.h>
 #include <semaphore.h>
 
-
 ///< the macos has not implement the sem_init and sem_timedwait, so we must do
 ///< something instead of it
 
-
-typedef void *(*pthread_entry) (void *);
+typedef void *(*pthread_entry)(void *);
 
 static void __task_sleep(int ms)
 {
-    usleep(ms*1000);
+    usleep(ms * 1000);
 }
 
-static void *__task_create(const char *name,int (*task_entry)(void *args),\
-        void *args,int stack_size,void *stack,int prior)
+static void *__task_create(const char *name, int (*task_entry)(void *args), void *args, int stack_size, void *stack,
+    int prior)
 {
     void *ret = NULL;
     pthread_t pid;
     LINK_LOG_DEBUG("task create name:%s\r\n", name);
-    if(pthread_create(&pid, NULL, (pthread_entry)task_entry, args))
+    if (pthread_create(&pid, NULL, (pthread_entry)task_entry, args))
         return ret;
 
     ret = (void *)pid;
@@ -68,21 +66,19 @@ static void *__task_create(const char *name,int (*task_entry)(void *args),\
 
 static int __task_kill(void *task)
 {
-//    pthread_t pid;
-//
-//    pid = (pthread_t)task;
-//    return pthread_cancel(pid);
+    //    pthread_t pid;
+    //
+    //    pid = (pthread_t)task;
+    //    return pthread_cancel(pid);
     int ret;
     pthread_t pid;
 
     pid = (pthread_t)task;
-    (void)pthread_cancel(pid);  //MAYBE NOT EXIT YET, MAKE SURE YOU ARE THE THREAD OWNER
+    (void)pthread_cancel(pid); // MAYBE NOT EXIT YET, MAKE SURE YOU ARE THE THREAD OWNER
 
     ret = pthread_join(pid, NULL);
     return ret;
-
 }
-
 
 static void __task_exit()
 {
@@ -90,49 +86,46 @@ static void __task_exit()
 }
 
 ///< this is implement for the mutex
-//creat a mutex for the os
-static bool_t  __mutex_create(osal_mutex_t *mutex)
+// creat a mutex for the os
+static bool_t __mutex_create(osal_mutex_t *mutex)
 {
     pthread_mutex_t *m;
     m = malloc(sizeof(pthread_mutex_t));
     *mutex = m;
-    if(!pthread_mutex_init((pthread_mutex_t *)m,NULL))
-    {
+    if (!pthread_mutex_init((pthread_mutex_t *)m, NULL)) {
         return true;
     }
 
     return false;
 }
 
-//lock the mutex
-static bool_t  __mutex_lock(osal_mutex_t mutex)
+// lock the mutex
+static bool_t __mutex_lock(osal_mutex_t mutex)
 {
-    int ret ;
+    int ret;
     ret = pthread_mutex_lock((pthread_mutex_t *)mutex);
-    if(!ret)
-    {
+    if (!ret) {
         return true;
     }
 
     return false;
 }
 
-//unlock the mutex
-static bool_t  __mutex_unlock(osal_mutex_t mutex)
+// unlock the mutex
+static bool_t __mutex_unlock(osal_mutex_t mutex)
 {
-    if(!pthread_mutex_unlock((pthread_mutex_t *)mutex))
-    {
+    if (!pthread_mutex_unlock((pthread_mutex_t *)mutex)) {
         usleep(1000);
         return true;
     }
 
     return false;
 }
-//delete the mutex
-static bool_t  __mutex_del(osal_mutex_t mutex)
+
+// delete the mutex
+static bool_t __mutex_del(osal_mutex_t mutex)
 {
-    if(!pthread_mutex_destroy((pthread_mutex_t *)mutex))
-    {
+    if (!pthread_mutex_destroy((pthread_mutex_t *)mutex)) {
         free(mutex);
         return true;
     }
@@ -140,96 +133,77 @@ static bool_t  __mutex_del(osal_mutex_t mutex)
     return false;
 }
 
-
 ///< this is implement for the semp
 ///< semp of the os
 #include <errno.h>
 
-///< for the macos could not use the unnamed sem,so we use time as the name for semaphore
-typedef struct
-{
+// /< for the macos could not use the unnamed sem,so we use time as the name for semaphore
+typedef struct {
     sem_t *sem;
-    char  *time;
-}macos_sem_t;
+    char *time;
+} macos_sem_t;
 
 #include <time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 
-static bool_t  __semp_create(osal_semp_t *semp,int limit,int initvalue)
+static bool_t __semp_create(osal_semp_t *semp, int limit, int initvalue)
 {
-    time_t       timenow;
+    time_t timenow;
     macos_sem_t *macos_sem;
 
     sleep(2);
     macos_sem = malloc(sizeof(macos_sem_t));
-    if(NULL != macos_sem)
-    {
+    if (NULL != macos_sem) {
         time(&timenow);
         macos_sem->time = strdup(ctime(&timenow));
-        macos_sem->sem = sem_open(macos_sem->time,O_CREAT, S_IRUSR | S_IWUSR, initvalue);
+        macos_sem->sem = sem_open(macos_sem->time, O_CREAT, S_IRUSR | S_IWUSR, initvalue);
 
-        if(NULL == macos_sem->sem)
-        {
+        if (NULL == macos_sem->sem) {
             free(macos_sem->time);
             free(macos_sem);
             return false;
-        }
-        else
-        {
+        } else {
             *semp = macos_sem;
             return true;
         }
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
 
-static bool_t  __semp_del(osal_semp_t semp)
+static bool_t __semp_del(osal_semp_t semp)
 {
     macos_sem_t *macos_sem = semp;
 
-    if(NULL != macos_sem)
-    {
+    if (NULL != macos_sem) {
         sem_close(macos_sem->sem);
         free(macos_sem->time);
         free(macos_sem);
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
 
-
-static bool_t  __semp_pend(osal_semp_t semp,unsigned int timeout)
+static bool_t __semp_pend(osal_semp_t semp, unsigned int timeout)
 {
     bool_t ret = false;
     macos_sem_t *macos_sem = semp;
-    if(NULL == macos_sem)
-    {
+    if (NULL == macos_sem) {
         return ret;
     }
 
-    if(timeout == cn_osal_timeout_forever)
-    {
-        if(0 == sem_wait(macos_sem->sem))
-        {
+    if (timeout == cn_osal_timeout_forever) {
+        if (0 == sem_wait(macos_sem->sem)) {
             ret = true;
         }
-    }
-    else
-    {
-        while(timeout >0)
-        {
+    } else {
+        while (timeout > 0) {
             timeout--;
             usleep(1000);
-            if(0 == sem_trywait(macos_sem->sem))
-            {
+            if (0 == sem_trywait(macos_sem->sem)) {
                 ret = true;
                 break;
             }
@@ -239,34 +213,26 @@ static bool_t  __semp_pend(osal_semp_t semp,unsigned int timeout)
     return ret;
 }
 
-static bool_t  __semp_post(osal_semp_t semp)
+static bool_t __semp_post(osal_semp_t semp)
 {
     macos_sem_t *macos_sem = semp;
-    if(NULL == macos_sem)
-    {
+    if (NULL == macos_sem) {
         return false;
     }
 
-
-    if(sem_post(macos_sem->sem))
-    {
+    if (sem_post(macos_sem->sem)) {
         return false;
-    }
-    else
-    {
+    } else {
         return true;
     }
 }
-
-
 
 static void *__mem_malloc(int size)
 {
     void *ret = NULL;
 
-    if(size > 0)
-    {
-         ret = malloc(size);
+    if (size > 0) {
+        ret = malloc(size);
     }
 
     return ret;
@@ -277,20 +243,18 @@ static void __mem_free(void *addr)
     free(addr);
 }
 
-///< sys time
+// /< sys time
 #include <sys/time.h>
 static unsigned long long __get_sys_time()
 {
-    struct    timeval    tv;
+    struct timeval tv;
 
     gettimeofday(&tv, NULL);
 
     return (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 }
 
-
-static const tag_os_ops s_macos_ops =
-{
+static const tag_os_ops s_macos_ops = {
     .task_sleep = __task_sleep,
     .task_create = __task_create,
     .task_kill = __task_kill,
@@ -312,8 +276,7 @@ static const tag_os_ops s_macos_ops =
     .get_sys_time = __get_sys_time,
 };
 
-static const tag_os s_link_macos =
-{
+static const tag_os s_link_macos = {
     .name = "macos",
     .ops = &s_macos_ops,
 };
@@ -321,8 +284,6 @@ static const tag_os s_link_macos =
 int os_imp_init(void)
 {
     int ret = -1;
-
     ret = osal_install(&s_link_macos);
-
     return ret;
 }

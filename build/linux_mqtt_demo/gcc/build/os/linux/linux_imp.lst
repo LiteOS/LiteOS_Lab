@@ -1,0 +1,1373 @@
+GAS LISTING /tmp/ccLgMtXU.s 			page 1
+
+
+   1              		.file	"linux_imp.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.__task_sleep,"ax",@progbits
+   6              	__task_sleep:
+   7              	.LFB6:
+   8              		.file 1 "/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c"
+   1:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** /* ----------------------------------------------------------------------------
+   2:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * All rights reserved.
+   4:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * are permitted provided that the following conditions are met:
+   6:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * conditions and the following disclaimer.
+   8:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * provided with the distribution.
+  11:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * permission.
+  14:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * --------------------------------------------------------------------------- */
+  26:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** /* ----------------------------------------------------------------------------
+  27:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * Notice of Export Control Law
+  28:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * ===============================================
+  29:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * applicable export control laws and regulations.
+  33:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****  * --------------------------------------------------------------------------- */
+  34:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+  35:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** #include "osal_imp.h"
+  36:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+  37:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** #include <string.h>
+  38:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** #include <stdio.h>
+  39:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** #include <stdlib.h>
+  40:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** #include <unistd.h>
+  41:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** #include <time.h>
+  42:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** #include <pthread.h>
+  43:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** #include <semaphore.h>
+  44:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** #include <fcntl.h>
+  45:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** #include <sys/stat.h>
+  46:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** #include <signal.h>
+  47:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+  48:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** typedef void *(*pthread_entry)(void *);
+  49:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+  50:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** static void __task_sleep(int ms)
+GAS LISTING /tmp/ccLgMtXU.s 			page 2
+
+
+  51:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** {
+   9              		.loc 1 51 1
+  10              		.cfi_startproc
+  11 0000 F30F1EFA 		endbr64
+  12 0004 55       		pushq	%rbp
+  13              	.LCFI0:
+  14              		.cfi_def_cfa_offset 16
+  15              		.cfi_offset 6, -16
+  16 0005 4889E5   		movq	%rsp, %rbp
+  17              	.LCFI1:
+  18              		.cfi_def_cfa_register 6
+  19 0008 4883EC20 		subq	$32, %rsp
+  20 000c 897DEC   		movl	%edi, -20(%rbp)
+  21              		.loc 1 51 1
+  22 000f 64488B04 		movq	%fs:40, %rax
+  22      25280000 
+  22      00
+  23 0018 488945F8 		movq	%rax, -8(%rbp)
+  24 001c 31C0     		xorl	%eax, %eax
+  52:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     usleep(ms * 1000);
+  25              		.loc 1 52 15
+  26 001e 8B45EC   		movl	-20(%rbp), %eax
+  27 0021 69C0E803 		imull	$1000, %eax, %eax
+  27      0000
+  28              		.loc 1 52 5
+  29 0027 89C7     		movl	%eax, %edi
+  30 0029 E8000000 		call	usleep@PLT
+  30      00
+  53:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** }
+  31              		.loc 1 53 1
+  32 002e 90       		nop
+  33 002f 488B45F8 		movq	-8(%rbp), %rax
+  34 0033 64483304 		xorq	%fs:40, %rax
+  34      25280000 
+  34      00
+  35 003c 7405     		je	.L2
+  36 003e E8000000 		call	__stack_chk_fail@PLT
+  36      00
+  37              	.L2:
+  38 0043 C9       		leave
+  39              	.LCFI2:
+  40              		.cfi_def_cfa 7, 8
+  41 0044 C3       		ret
+  42              		.cfi_endproc
+  43              	.LFE6:
+  45              		.section	.text.__task_create,"ax",@progbits
+  47              	__task_create:
+  48              	.LFB7:
+  54:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+  55:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** static void *__task_create(const char *name, int (*task_entry)(void *args), void *args, int stack_s
+  56:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     int prior)
+  57:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** {
+  49              		.loc 1 57 1
+  50              		.cfi_startproc
+  51 0000 F30F1EFA 		endbr64
+  52 0004 55       		pushq	%rbp
+  53              	.LCFI3:
+GAS LISTING /tmp/ccLgMtXU.s 			page 3
+
+
+  54              		.cfi_def_cfa_offset 16
+  55              		.cfi_offset 6, -16
+  56 0005 4889E5   		movq	%rsp, %rbp
+  57              	.LCFI4:
+  58              		.cfi_def_cfa_register 6
+  59 0008 4883EC50 		subq	$80, %rsp
+  60 000c 48897DD8 		movq	%rdi, -40(%rbp)
+  61 0010 488975D0 		movq	%rsi, -48(%rbp)
+  62 0014 488955C8 		movq	%rdx, -56(%rbp)
+  63 0018 894DC4   		movl	%ecx, -60(%rbp)
+  64 001b 4C8945B8 		movq	%r8, -72(%rbp)
+  65 001f 44894DC0 		movl	%r9d, -64(%rbp)
+  66              		.loc 1 57 1
+  67 0023 64488B04 		movq	%fs:40, %rax
+  67      25280000 
+  67      00
+  68 002c 488945F8 		movq	%rax, -8(%rbp)
+  69 0030 31C0     		xorl	%eax, %eax
+  58:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     void *ret = NULL;
+  70              		.loc 1 58 11
+  71 0032 48C745F0 		movq	$0, -16(%rbp)
+  71      00000000 
+  59:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     pthread_t pid;
+  60:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+  61:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     if (pthread_create(&pid, NULL, (pthread_entry)task_entry, args))
+  72              		.loc 1 61 9
+  73 003a 488B4DC8 		movq	-56(%rbp), %rcx
+  74 003e 488B55D0 		movq	-48(%rbp), %rdx
+  75 0042 488D45E8 		leaq	-24(%rbp), %rax
+  76 0046 BE000000 		movl	$0, %esi
+  76      00
+  77 004b 4889C7   		movq	%rax, %rdi
+  78 004e E8000000 		call	pthread_create@PLT
+  78      00
+  79              		.loc 1 61 8
+  80 0053 85C0     		testl	%eax, %eax
+  81 0055 7406     		je	.L4
+  62:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         return ret;
+  82              		.loc 1 62 16
+  83 0057 488B45F0 		movq	-16(%rbp), %rax
+  84 005b EB0C     		jmp	.L6
+  85              	.L4:
+  63:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+  64:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     ret = (void *)pid;
+  86              		.loc 1 64 11
+  87 005d 488B45E8 		movq	-24(%rbp), %rax
+  88              		.loc 1 64 9
+  89 0061 488945F0 		movq	%rax, -16(%rbp)
+  65:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     return ret;
+  90              		.loc 1 65 12
+  91 0065 488B45F0 		movq	-16(%rbp), %rax
+  92              	.L6:
+  66:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** }
+  93              		.loc 1 66 1 discriminator 1
+  94 0069 488B75F8 		movq	-8(%rbp), %rsi
+  95 006d 64483334 		xorq	%fs:40, %rsi
+  95      25280000 
+GAS LISTING /tmp/ccLgMtXU.s 			page 4
+
+
+  95      00
+  96 0076 7405     		je	.L7
+  97              		.loc 1 66 1 is_stmt 0
+  98 0078 E8000000 		call	__stack_chk_fail@PLT
+  98      00
+  99              	.L7:
+ 100 007d C9       		leave
+ 101              	.LCFI5:
+ 102              		.cfi_def_cfa 7, 8
+ 103 007e C3       		ret
+ 104              		.cfi_endproc
+ 105              	.LFE7:
+ 107              		.section	.text.__task_kill,"ax",@progbits
+ 109              	__task_kill:
+ 110              	.LFB8:
+  67:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+  68:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** static int __task_kill(void *task)
+  69:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** {
+ 111              		.loc 1 69 1 is_stmt 1
+ 112              		.cfi_startproc
+ 113 0000 F30F1EFA 		endbr64
+ 114 0004 55       		pushq	%rbp
+ 115              	.LCFI6:
+ 116              		.cfi_def_cfa_offset 16
+ 117              		.cfi_offset 6, -16
+ 118 0005 4889E5   		movq	%rsp, %rbp
+ 119              	.LCFI7:
+ 120              		.cfi_def_cfa_register 6
+ 121 0008 4883EC30 		subq	$48, %rsp
+ 122 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 123              		.loc 1 69 1
+ 124 0010 64488B04 		movq	%fs:40, %rax
+ 124      25280000 
+ 124      00
+ 125 0019 488945F8 		movq	%rax, -8(%rbp)
+ 126 001d 31C0     		xorl	%eax, %eax
+  70:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     int ret;
+  71:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     pthread_t pid;
+  72:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+  73:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     pid = (pthread_t)task;
+ 127              		.loc 1 73 9
+ 128 001f 488B45D8 		movq	-40(%rbp), %rax
+ 129 0023 488945F0 		movq	%rax, -16(%rbp)
+  74:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     (void)pthread_cancel(pid); // MAYBE NOT EXIT YET, MAKE SURE YOU ARE THE THREAD OWNER
+ 130              		.loc 1 74 11
+ 131 0027 488B45F0 		movq	-16(%rbp), %rax
+ 132 002b 4889C7   		movq	%rax, %rdi
+ 133 002e E8000000 		call	pthread_cancel@PLT
+ 133      00
+  75:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+  76:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     ret = pthread_join(pid, NULL);
+ 134              		.loc 1 76 11
+ 135 0033 488B45F0 		movq	-16(%rbp), %rax
+ 136 0037 BE000000 		movl	$0, %esi
+ 136      00
+ 137 003c 4889C7   		movq	%rax, %rdi
+ 138 003f E8000000 		call	pthread_join@PLT
+GAS LISTING /tmp/ccLgMtXU.s 			page 5
+
+
+ 138      00
+ 139 0044 8945EC   		movl	%eax, -20(%rbp)
+  77:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     return ret;
+ 140              		.loc 1 77 12
+ 141 0047 8B45EC   		movl	-20(%rbp), %eax
+  78:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** }
+ 142              		.loc 1 78 1
+ 143 004a 488B55F8 		movq	-8(%rbp), %rdx
+ 144 004e 64483314 		xorq	%fs:40, %rdx
+ 144      25280000 
+ 144      00
+ 145 0057 7405     		je	.L10
+ 146 0059 E8000000 		call	__stack_chk_fail@PLT
+ 146      00
+ 147              	.L10:
+ 148 005e C9       		leave
+ 149              	.LCFI8:
+ 150              		.cfi_def_cfa 7, 8
+ 151 005f C3       		ret
+ 152              		.cfi_endproc
+ 153              	.LFE8:
+ 155              		.section	.text.__task_exit,"ax",@progbits
+ 157              	__task_exit:
+ 158              	.LFB9:
+  79:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+  80:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** static void __task_exit()
+  81:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** {
+ 159              		.loc 1 81 1
+ 160              		.cfi_startproc
+ 161 0000 F30F1EFA 		endbr64
+ 162 0004 55       		pushq	%rbp
+ 163              	.LCFI9:
+ 164              		.cfi_def_cfa_offset 16
+ 165              		.cfi_offset 6, -16
+ 166 0005 4889E5   		movq	%rsp, %rbp
+ 167              	.LCFI10:
+ 168              		.cfi_def_cfa_register 6
+ 169 0008 4883EC10 		subq	$16, %rsp
+ 170              		.loc 1 81 1
+ 171 000c 64488B04 		movq	%fs:40, %rax
+ 171      25280000 
+ 171      00
+ 172 0015 488945F8 		movq	%rax, -8(%rbp)
+ 173 0019 31C0     		xorl	%eax, %eax
+  82:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     pthread_exit(NULL);
+ 174              		.loc 1 82 5
+ 175 001b BF000000 		movl	$0, %edi
+ 175      00
+ 176 0020 E8000000 		call	pthread_exit@PLT
+ 176      00
+ 177              		.cfi_endproc
+ 178              	.LFE9:
+ 180              		.section	.text.__mutex_create,"ax",@progbits
+ 182              	__mutex_create:
+ 183              	.LFB10:
+  83:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** }
+  84:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+GAS LISTING /tmp/ccLgMtXU.s 			page 6
+
+
+  85:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** // /< this is implement for the mutex
+  86:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** // creat a mutex for the os
+  87:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** static bool_t __mutex_create(osal_mutex_t *mutex)
+  88:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** {
+ 184              		.loc 1 88 1
+ 185              		.cfi_startproc
+ 186 0000 F30F1EFA 		endbr64
+ 187 0004 55       		pushq	%rbp
+ 188              	.LCFI11:
+ 189              		.cfi_def_cfa_offset 16
+ 190              		.cfi_offset 6, -16
+ 191 0005 4889E5   		movq	%rsp, %rbp
+ 192              	.LCFI12:
+ 193              		.cfi_def_cfa_register 6
+ 194 0008 4883EC20 		subq	$32, %rsp
+ 195 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 196              		.loc 1 88 1
+ 197 0010 64488B04 		movq	%fs:40, %rax
+ 197      25280000 
+ 197      00
+ 198 0019 488945F8 		movq	%rax, -8(%rbp)
+ 199 001d 31C0     		xorl	%eax, %eax
+  89:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     pthread_mutex_t *m;
+  90:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     m = malloc(sizeof(pthread_mutex_t));
+ 200              		.loc 1 90 9
+ 201 001f BF280000 		movl	$40, %edi
+ 201      00
+ 202 0024 E8000000 		call	malloc@PLT
+ 202      00
+ 203 0029 488945F0 		movq	%rax, -16(%rbp)
+  91:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     *mutex = m;
+ 204              		.loc 1 91 12
+ 205 002d 488B45E8 		movq	-24(%rbp), %rax
+ 206 0031 488B55F0 		movq	-16(%rbp), %rdx
+ 207 0035 488910   		movq	%rdx, (%rax)
+  92:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     if (!pthread_mutex_init((pthread_mutex_t *)m, NULL)) {
+ 208              		.loc 1 92 10
+ 209 0038 488B45F0 		movq	-16(%rbp), %rax
+ 210 003c BE000000 		movl	$0, %esi
+ 210      00
+ 211 0041 4889C7   		movq	%rax, %rdi
+ 212 0044 E8000000 		call	pthread_mutex_init@PLT
+ 212      00
+ 213              		.loc 1 92 8
+ 214 0049 85C0     		testl	%eax, %eax
+ 215 004b 7507     		jne	.L14
+  93:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         return true;
+ 216              		.loc 1 93 16
+ 217 004d B8010000 		movl	$1, %eax
+ 217      00
+ 218 0052 EB05     		jmp	.L15
+ 219              	.L14:
+  94:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     }
+  95:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+  96:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     return false;
+ 220              		.loc 1 96 12
+ 221 0054 B8000000 		movl	$0, %eax
+GAS LISTING /tmp/ccLgMtXU.s 			page 7
+
+
+ 221      00
+ 222              	.L15:
+  97:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** }
+ 223              		.loc 1 97 1
+ 224 0059 488B4DF8 		movq	-8(%rbp), %rcx
+ 225 005d 6448330C 		xorq	%fs:40, %rcx
+ 225      25280000 
+ 225      00
+ 226 0066 7405     		je	.L16
+ 227 0068 E8000000 		call	__stack_chk_fail@PLT
+ 227      00
+ 228              	.L16:
+ 229 006d C9       		leave
+ 230              	.LCFI13:
+ 231              		.cfi_def_cfa 7, 8
+ 232 006e C3       		ret
+ 233              		.cfi_endproc
+ 234              	.LFE10:
+ 236              		.section	.text.__mutex_lock,"ax",@progbits
+ 238              	__mutex_lock:
+ 239              	.LFB11:
+  98:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+  99:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** // lock the mutex
+ 100:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** static bool_t __mutex_lock(osal_mutex_t mutex)
+ 101:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** {
+ 240              		.loc 1 101 1
+ 241              		.cfi_startproc
+ 242 0000 F30F1EFA 		endbr64
+ 243 0004 55       		pushq	%rbp
+ 244              	.LCFI14:
+ 245              		.cfi_def_cfa_offset 16
+ 246              		.cfi_offset 6, -16
+ 247 0005 4889E5   		movq	%rsp, %rbp
+ 248              	.LCFI15:
+ 249              		.cfi_def_cfa_register 6
+ 250 0008 4883EC20 		subq	$32, %rsp
+ 251 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 252              		.loc 1 101 1
+ 253 0010 64488B04 		movq	%fs:40, %rax
+ 253      25280000 
+ 253      00
+ 254 0019 488945F8 		movq	%rax, -8(%rbp)
+ 255 001d 31C0     		xorl	%eax, %eax
+ 102:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     if (!pthread_mutex_lock((pthread_mutex_t *)mutex)) {
+ 256              		.loc 1 102 10
+ 257 001f 488B45E8 		movq	-24(%rbp), %rax
+ 258 0023 4889C7   		movq	%rax, %rdi
+ 259 0026 E8000000 		call	pthread_mutex_lock@PLT
+ 259      00
+ 260              		.loc 1 102 8
+ 261 002b 85C0     		testl	%eax, %eax
+ 262 002d 7507     		jne	.L18
+ 103:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         return true;
+ 263              		.loc 1 103 16
+ 264 002f B8010000 		movl	$1, %eax
+ 264      00
+ 265 0034 EB05     		jmp	.L19
+GAS LISTING /tmp/ccLgMtXU.s 			page 8
+
+
+ 266              	.L18:
+ 104:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     }
+ 105:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 106:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     return false;
+ 267              		.loc 1 106 12
+ 268 0036 B8000000 		movl	$0, %eax
+ 268      00
+ 269              	.L19:
+ 107:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** }
+ 270              		.loc 1 107 1
+ 271 003b 488B55F8 		movq	-8(%rbp), %rdx
+ 272 003f 64483314 		xorq	%fs:40, %rdx
+ 272      25280000 
+ 272      00
+ 273 0048 7405     		je	.L20
+ 274 004a E8000000 		call	__stack_chk_fail@PLT
+ 274      00
+ 275              	.L20:
+ 276 004f C9       		leave
+ 277              	.LCFI16:
+ 278              		.cfi_def_cfa 7, 8
+ 279 0050 C3       		ret
+ 280              		.cfi_endproc
+ 281              	.LFE11:
+ 283              		.section	.text.__mutex_unlock,"ax",@progbits
+ 285              	__mutex_unlock:
+ 286              	.LFB12:
+ 108:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 109:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** // unlock the mutex
+ 110:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** static bool_t __mutex_unlock(osal_mutex_t mutex)
+ 111:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** {
+ 287              		.loc 1 111 1
+ 288              		.cfi_startproc
+ 289 0000 F30F1EFA 		endbr64
+ 290 0004 55       		pushq	%rbp
+ 291              	.LCFI17:
+ 292              		.cfi_def_cfa_offset 16
+ 293              		.cfi_offset 6, -16
+ 294 0005 4889E5   		movq	%rsp, %rbp
+ 295              	.LCFI18:
+ 296              		.cfi_def_cfa_register 6
+ 297 0008 4883EC20 		subq	$32, %rsp
+ 298 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 299              		.loc 1 111 1
+ 300 0010 64488B04 		movq	%fs:40, %rax
+ 300      25280000 
+ 300      00
+ 301 0019 488945F8 		movq	%rax, -8(%rbp)
+ 302 001d 31C0     		xorl	%eax, %eax
+ 112:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     if (!pthread_mutex_unlock((pthread_mutex_t *)mutex)) {
+ 303              		.loc 1 112 10
+ 304 001f 488B45E8 		movq	-24(%rbp), %rax
+ 305 0023 4889C7   		movq	%rax, %rdi
+ 306 0026 E8000000 		call	pthread_mutex_unlock@PLT
+ 306      00
+ 307              		.loc 1 112 8
+ 308 002b 85C0     		testl	%eax, %eax
+GAS LISTING /tmp/ccLgMtXU.s 			page 9
+
+
+ 309 002d 7511     		jne	.L22
+ 113:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         usleep(1000); // /< make sure that other thread could get the mutex
+ 310              		.loc 1 113 9
+ 311 002f BFE80300 		movl	$1000, %edi
+ 311      00
+ 312 0034 E8000000 		call	usleep@PLT
+ 312      00
+ 114:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         return true;
+ 313              		.loc 1 114 16
+ 314 0039 B8010000 		movl	$1, %eax
+ 314      00
+ 315 003e EB05     		jmp	.L23
+ 316              	.L22:
+ 115:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     }
+ 116:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 117:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     return false;
+ 317              		.loc 1 117 12
+ 318 0040 B8000000 		movl	$0, %eax
+ 318      00
+ 319              	.L23:
+ 118:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** }
+ 320              		.loc 1 118 1
+ 321 0045 488B55F8 		movq	-8(%rbp), %rdx
+ 322 0049 64483314 		xorq	%fs:40, %rdx
+ 322      25280000 
+ 322      00
+ 323 0052 7405     		je	.L24
+ 324 0054 E8000000 		call	__stack_chk_fail@PLT
+ 324      00
+ 325              	.L24:
+ 326 0059 C9       		leave
+ 327              	.LCFI19:
+ 328              		.cfi_def_cfa 7, 8
+ 329 005a C3       		ret
+ 330              		.cfi_endproc
+ 331              	.LFE12:
+ 333              		.section	.text.__mutex_del,"ax",@progbits
+ 335              	__mutex_del:
+ 336              	.LFB13:
+ 119:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 120:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** // delete the mutex
+ 121:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** static bool_t __mutex_del(osal_mutex_t mutex)
+ 122:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** {
+ 337              		.loc 1 122 1
+ 338              		.cfi_startproc
+ 339 0000 F30F1EFA 		endbr64
+ 340 0004 55       		pushq	%rbp
+ 341              	.LCFI20:
+ 342              		.cfi_def_cfa_offset 16
+ 343              		.cfi_offset 6, -16
+ 344 0005 4889E5   		movq	%rsp, %rbp
+ 345              	.LCFI21:
+ 346              		.cfi_def_cfa_register 6
+ 347 0008 4883EC20 		subq	$32, %rsp
+ 348 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 349              		.loc 1 122 1
+ 350 0010 64488B04 		movq	%fs:40, %rax
+GAS LISTING /tmp/ccLgMtXU.s 			page 10
+
+
+ 350      25280000 
+ 350      00
+ 351 0019 488945F8 		movq	%rax, -8(%rbp)
+ 352 001d 31C0     		xorl	%eax, %eax
+ 123:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     if (!pthread_mutex_destroy((pthread_mutex_t *)mutex)) {
+ 353              		.loc 1 123 10
+ 354 001f 488B45E8 		movq	-24(%rbp), %rax
+ 355 0023 4889C7   		movq	%rax, %rdi
+ 356 0026 E8000000 		call	pthread_mutex_destroy@PLT
+ 356      00
+ 357              		.loc 1 123 8
+ 358 002b 85C0     		testl	%eax, %eax
+ 359 002d 7513     		jne	.L26
+ 124:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         free(mutex);
+ 360              		.loc 1 124 9
+ 361 002f 488B45E8 		movq	-24(%rbp), %rax
+ 362 0033 4889C7   		movq	%rax, %rdi
+ 363 0036 E8000000 		call	free@PLT
+ 363      00
+ 125:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         return true;
+ 364              		.loc 1 125 16
+ 365 003b B8010000 		movl	$1, %eax
+ 365      00
+ 366 0040 EB05     		jmp	.L27
+ 367              	.L26:
+ 126:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     }
+ 127:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 128:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     return false;
+ 368              		.loc 1 128 12
+ 369 0042 B8000000 		movl	$0, %eax
+ 369      00
+ 370              	.L27:
+ 129:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** }
+ 371              		.loc 1 129 1
+ 372 0047 488B55F8 		movq	-8(%rbp), %rdx
+ 373 004b 64483314 		xorq	%fs:40, %rdx
+ 373      25280000 
+ 373      00
+ 374 0054 7405     		je	.L28
+ 375 0056 E8000000 		call	__stack_chk_fail@PLT
+ 375      00
+ 376              	.L28:
+ 377 005b C9       		leave
+ 378              	.LCFI22:
+ 379              		.cfi_def_cfa 7, 8
+ 380 005c C3       		ret
+ 381              		.cfi_endproc
+ 382              	.LFE13:
+ 384              		.section	.text.__semp_create,"ax",@progbits
+ 386              	__semp_create:
+ 387              	.LFB14:
+ 130:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 131:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** // /< this is implement for the semp
+ 132:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** // semp of the os
+ 133:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** static bool_t __semp_create(osal_semp_t *semp, int limit, int initvalue)
+ 134:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** {
+ 388              		.loc 1 134 1
+GAS LISTING /tmp/ccLgMtXU.s 			page 11
+
+
+ 389              		.cfi_startproc
+ 390 0000 F30F1EFA 		endbr64
+ 391 0004 55       		pushq	%rbp
+ 392              	.LCFI23:
+ 393              		.cfi_def_cfa_offset 16
+ 394              		.cfi_offset 6, -16
+ 395 0005 4889E5   		movq	%rsp, %rbp
+ 396              	.LCFI24:
+ 397              		.cfi_def_cfa_register 6
+ 398 0008 4883EC20 		subq	$32, %rsp
+ 399 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 400 0010 8975E4   		movl	%esi, -28(%rbp)
+ 401 0013 8955E0   		movl	%edx, -32(%rbp)
+ 402              		.loc 1 134 1
+ 403 0016 64488B04 		movq	%fs:40, %rax
+ 403      25280000 
+ 403      00
+ 404 001f 488945F8 		movq	%rax, -8(%rbp)
+ 405 0023 31C0     		xorl	%eax, %eax
+ 135:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     sem_t *s;
+ 136:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 137:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     s = malloc(sizeof(sem_t));
+ 406              		.loc 1 137 9
+ 407 0025 BF200000 		movl	$32, %edi
+ 407      00
+ 408 002a E8000000 		call	malloc@PLT
+ 408      00
+ 409 002f 488945F0 		movq	%rax, -16(%rbp)
+ 138:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     if (NULL == s) {
+ 410              		.loc 1 138 8
+ 411 0033 48837DF0 		cmpq	$0, -16(%rbp)
+ 411      00
+ 412 0038 7507     		jne	.L30
+ 139:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         return false;
+ 413              		.loc 1 139 16
+ 414 003a B8000000 		movl	$0, %eax
+ 414      00
+ 415 003f EB3B     		jmp	.L31
+ 416              	.L30:
+ 140:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     }
+ 141:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 142:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 143:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     if (sem_init(s, 0, initvalue)) {
+ 417              		.loc 1 143 9
+ 418 0041 8B55E0   		movl	-32(%rbp), %edx
+ 419 0044 488B45F0 		movq	-16(%rbp), %rax
+ 420 0048 BE000000 		movl	$0, %esi
+ 420      00
+ 421 004d 4889C7   		movq	%rax, %rdi
+ 422 0050 E8000000 		call	sem_init@PLT
+ 422      00
+ 423              		.loc 1 143 8
+ 424 0055 85C0     		testl	%eax, %eax
+ 425 0057 7413     		je	.L32
+ 144:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         free(s);
+ 426              		.loc 1 144 9
+ 427 0059 488B45F0 		movq	-16(%rbp), %rax
+GAS LISTING /tmp/ccLgMtXU.s 			page 12
+
+
+ 428 005d 4889C7   		movq	%rax, %rdi
+ 429 0060 E8000000 		call	free@PLT
+ 429      00
+ 145:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         return false;
+ 430              		.loc 1 145 16
+ 431 0065 B8000000 		movl	$0, %eax
+ 431      00
+ 432 006a EB10     		jmp	.L31
+ 433              	.L32:
+ 146:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     } else {
+ 147:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         *semp = s;
+ 434              		.loc 1 147 15
+ 435 006c 488B45E8 		movq	-24(%rbp), %rax
+ 436 0070 488B55F0 		movq	-16(%rbp), %rdx
+ 437 0074 488910   		movq	%rdx, (%rax)
+ 148:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         return true;
+ 438              		.loc 1 148 16
+ 439 0077 B8010000 		movl	$1, %eax
+ 439      00
+ 440              	.L31:
+ 149:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     }
+ 150:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** }
+ 441              		.loc 1 150 1
+ 442 007c 488B4DF8 		movq	-8(%rbp), %rcx
+ 443 0080 6448330C 		xorq	%fs:40, %rcx
+ 443      25280000 
+ 443      00
+ 444 0089 7405     		je	.L33
+ 445 008b E8000000 		call	__stack_chk_fail@PLT
+ 445      00
+ 446              	.L33:
+ 447 0090 C9       		leave
+ 448              	.LCFI25:
+ 449              		.cfi_def_cfa 7, 8
+ 450 0091 C3       		ret
+ 451              		.cfi_endproc
+ 452              	.LFE14:
+ 454              		.section	.text.__semp_pend,"ax",@progbits
+ 456              	__semp_pend:
+ 457              	.LFB15:
+ 151:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 152:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** static bool_t __semp_pend(osal_semp_t semp, unsigned int timeout)
+ 153:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** {
+ 458              		.loc 1 153 1
+ 459              		.cfi_startproc
+ 460 0000 F30F1EFA 		endbr64
+ 461 0004 55       		pushq	%rbp
+ 462              	.LCFI26:
+ 463              		.cfi_def_cfa_offset 16
+ 464              		.cfi_offset 6, -16
+ 465 0005 4889E5   		movq	%rsp, %rbp
+ 466              	.LCFI27:
+ 467              		.cfi_def_cfa_register 6
+ 468 0008 4883EC30 		subq	$48, %rsp
+ 469 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 470 0010 8975D4   		movl	%esi, -44(%rbp)
+ 471              		.loc 1 153 1
+GAS LISTING /tmp/ccLgMtXU.s 			page 13
+
+
+ 472 0013 64488B04 		movq	%fs:40, %rax
+ 472      25280000 
+ 472      00
+ 473 001c 488945F8 		movq	%rax, -8(%rbp)
+ 474 0020 31C0     		xorl	%eax, %eax
+ 154:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     struct timespec ts;
+ 155:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 156:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     if (timeout == cn_osal_timeout_forever) {
+ 475              		.loc 1 156 8
+ 476 0022 837DD4FF 		cmpl	$-1, -44(%rbp)
+ 477 0026 7524     		jne	.L35
+ 157:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         // /< wait until we get the semaphore
+ 158:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         if (0 == sem_wait((sem_t *)semp)) {
+ 478              		.loc 1 158 18
+ 479 0028 488B45D8 		movq	-40(%rbp), %rax
+ 480 002c 4889C7   		movq	%rax, %rdi
+ 481 002f E8000000 		call	sem_wait@PLT
+ 481      00
+ 482              		.loc 1 158 12
+ 483 0034 85C0     		testl	%eax, %eax
+ 484 0036 750A     		jne	.L36
+ 159:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****             return true;
+ 485              		.loc 1 159 20
+ 486 0038 B8010000 		movl	$1, %eax
+ 486      00
+ 487 003d E9C30000 		jmp	.L42
+ 487      00
+ 488              	.L36:
+ 160:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         } else {
+ 161:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****             return false;
+ 489              		.loc 1 161 20
+ 490 0042 B8000000 		movl	$0, %eax
+ 490      00
+ 491 0047 E9B90000 		jmp	.L42
+ 491      00
+ 492              	.L35:
+ 162:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         }
+ 163:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     } else if (timeout > 0) {
+ 493              		.loc 1 163 15
+ 494 004c 837DD400 		cmpl	$0, -44(%rbp)
+ 495 0050 0F848600 		je	.L38
+ 495      0000
+ 164:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         clock_gettime(CLOCK_REALTIME, &ts);
+ 496              		.loc 1 164 9
+ 497 0056 488D45E0 		leaq	-32(%rbp), %rax
+ 498 005a 4889C6   		movq	%rax, %rsi
+ 499 005d BF000000 		movl	$0, %edi
+ 499      00
+ 500 0062 E8000000 		call	clock_gettime@PLT
+ 500      00
+ 165:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 166:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         ts.tv_sec += (timeout / 1000);
+ 501              		.loc 1 166 19
+ 502 0067 488B45E0 		movq	-32(%rbp), %rax
+ 503              		.loc 1 166 31
+ 504 006b 8B55D4   		movl	-44(%rbp), %edx
+ 505 006e 89D2     		movl	%edx, %edx
+GAS LISTING /tmp/ccLgMtXU.s 			page 14
+
+
+ 506 0070 4869D2D3 		imulq	$274877907, %rdx, %rdx
+ 506      4D6210
+ 507 0077 48C1EA20 		shrq	$32, %rdx
+ 508 007b C1EA06   		shrl	$6, %edx
+ 509 007e 89D2     		movl	%edx, %edx
+ 510              		.loc 1 166 19
+ 511 0080 4801D0   		addq	%rdx, %rax
+ 512 0083 488945E0 		movq	%rax, -32(%rbp)
+ 167:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         ts.tv_nsec += ((timeout % 1000) * 1000);
+ 513              		.loc 1 167 20
+ 514 0087 488B4DE8 		movq	-24(%rbp), %rcx
+ 515              		.loc 1 167 33
+ 516 008b 8B55D4   		movl	-44(%rbp), %edx
+ 517 008e 89D0     		movl	%edx, %eax
+ 518 0090 4869C0D3 		imulq	$274877907, %rax, %rax
+ 518      4D6210
+ 519 0097 48C1E820 		shrq	$32, %rax
+ 520 009b C1E806   		shrl	$6, %eax
+ 521 009e 69C0E803 		imull	$1000, %eax, %eax
+ 521      0000
+ 522 00a4 29C2     		subl	%eax, %edx
+ 523 00a6 89D0     		movl	%edx, %eax
+ 524              		.loc 1 167 41
+ 525 00a8 69C0E803 		imull	$1000, %eax, %eax
+ 525      0000
+ 526 00ae 89C0     		movl	%eax, %eax
+ 527              		.loc 1 167 20
+ 528 00b0 4801C8   		addq	%rcx, %rax
+ 529 00b3 488945E8 		movq	%rax, -24(%rbp)
+ 168:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         if (sem_timedwait((sem_t *)semp, &ts)) {
+ 530              		.loc 1 168 13
+ 531 00b7 488D55E0 		leaq	-32(%rbp), %rdx
+ 532 00bb 488B45D8 		movq	-40(%rbp), %rax
+ 533 00bf 4889D6   		movq	%rdx, %rsi
+ 534 00c2 4889C7   		movq	%rax, %rdi
+ 535 00c5 E8000000 		call	sem_timedwait@PLT
+ 535      00
+ 536              		.loc 1 168 12
+ 537 00ca 85C0     		testl	%eax, %eax
+ 538 00cc 7407     		je	.L39
+ 169:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****             return false;
+ 539              		.loc 1 169 20
+ 540 00ce B8000000 		movl	$0, %eax
+ 540      00
+ 541 00d3 EB30     		jmp	.L42
+ 542              	.L39:
+ 170:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         } else {
+ 171:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****             return true;
+ 543              		.loc 1 171 20
+ 544 00d5 B8010000 		movl	$1, %eax
+ 544      00
+ 545 00da EB29     		jmp	.L42
+ 546              	.L38:
+ 172:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         }
+ 173:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     } else if (timeout == 0) {
+ 547              		.loc 1 173 15
+ 548 00dc 837DD400 		cmpl	$0, -44(%rbp)
+GAS LISTING /tmp/ccLgMtXU.s 			page 15
+
+
+ 549 00e0 751E     		jne	.L40
+ 174:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         // /< try to wait the semaphore
+ 175:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         if (0 == sem_trywait((sem_t *)semp)) {
+ 550              		.loc 1 175 18
+ 551 00e2 488B45D8 		movq	-40(%rbp), %rax
+ 552 00e6 4889C7   		movq	%rax, %rdi
+ 553 00e9 E8000000 		call	sem_trywait@PLT
+ 553      00
+ 554              		.loc 1 175 12
+ 555 00ee 85C0     		testl	%eax, %eax
+ 556 00f0 7507     		jne	.L41
+ 176:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****             return true;
+ 557              		.loc 1 176 20
+ 558 00f2 B8010000 		movl	$1, %eax
+ 558      00
+ 559 00f7 EB0C     		jmp	.L42
+ 560              	.L41:
+ 177:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         } else {
+ 178:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****             return false;
+ 561              		.loc 1 178 20
+ 562 00f9 B8000000 		movl	$0, %eax
+ 562      00
+ 563 00fe EB05     		jmp	.L42
+ 564              	.L40:
+ 179:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         }
+ 180:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     } else {
+ 181:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         // /< this is a overflow time, i think
+ 182:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         return false;
+ 565              		.loc 1 182 16
+ 566 0100 B8000000 		movl	$0, %eax
+ 566      00
+ 567              	.L42:
+ 183:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     }
+ 184:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** }
+ 568              		.loc 1 184 1 discriminator 1
+ 569 0105 488B4DF8 		movq	-8(%rbp), %rcx
+ 570 0109 6448330C 		xorq	%fs:40, %rcx
+ 570      25280000 
+ 570      00
+ 571 0112 7405     		je	.L43
+ 572              		.loc 1 184 1 is_stmt 0
+ 573 0114 E8000000 		call	__stack_chk_fail@PLT
+ 573      00
+ 574              	.L43:
+ 575 0119 C9       		leave
+ 576              	.LCFI28:
+ 577              		.cfi_def_cfa 7, 8
+ 578 011a C3       		ret
+ 579              		.cfi_endproc
+ 580              	.LFE15:
+ 582              		.section	.text.__semp_post,"ax",@progbits
+ 584              	__semp_post:
+ 585              	.LFB16:
+ 185:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 186:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** static bool_t __semp_post(osal_semp_t semp)
+ 187:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** {
+ 586              		.loc 1 187 1 is_stmt 1
+GAS LISTING /tmp/ccLgMtXU.s 			page 16
+
+
+ 587              		.cfi_startproc
+ 588 0000 F30F1EFA 		endbr64
+ 589 0004 55       		pushq	%rbp
+ 590              	.LCFI29:
+ 591              		.cfi_def_cfa_offset 16
+ 592              		.cfi_offset 6, -16
+ 593 0005 4889E5   		movq	%rsp, %rbp
+ 594              	.LCFI30:
+ 595              		.cfi_def_cfa_register 6
+ 596 0008 4883EC20 		subq	$32, %rsp
+ 597 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 598              		.loc 1 187 1
+ 599 0010 64488B04 		movq	%fs:40, %rax
+ 599      25280000 
+ 599      00
+ 600 0019 488945F8 		movq	%rax, -8(%rbp)
+ 601 001d 31C0     		xorl	%eax, %eax
+ 188:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     if (sem_post((sem_t *)semp)) {
+ 602              		.loc 1 188 9
+ 603 001f 488B45E8 		movq	-24(%rbp), %rax
+ 604 0023 4889C7   		movq	%rax, %rdi
+ 605 0026 E8000000 		call	sem_post@PLT
+ 605      00
+ 606              		.loc 1 188 8
+ 607 002b 85C0     		testl	%eax, %eax
+ 608 002d 7407     		je	.L45
+ 189:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         return false;
+ 609              		.loc 1 189 16
+ 610 002f B8000000 		movl	$0, %eax
+ 610      00
+ 611 0034 EB05     		jmp	.L46
+ 612              	.L45:
+ 190:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     } else {
+ 191:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         return true;
+ 613              		.loc 1 191 16
+ 614 0036 B8010000 		movl	$1, %eax
+ 614      00
+ 615              	.L46:
+ 192:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     }
+ 193:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** }
+ 616              		.loc 1 193 1
+ 617 003b 488B55F8 		movq	-8(%rbp), %rdx
+ 618 003f 64483314 		xorq	%fs:40, %rdx
+ 618      25280000 
+ 618      00
+ 619 0048 7405     		je	.L47
+ 620 004a E8000000 		call	__stack_chk_fail@PLT
+ 620      00
+ 621              	.L47:
+ 622 004f C9       		leave
+ 623              	.LCFI31:
+ 624              		.cfi_def_cfa 7, 8
+ 625 0050 C3       		ret
+ 626              		.cfi_endproc
+ 627              	.LFE16:
+ 629              		.section	.text.__semp_del,"ax",@progbits
+ 631              	__semp_del:
+GAS LISTING /tmp/ccLgMtXU.s 			page 17
+
+
+ 632              	.LFB17:
+ 194:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 195:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** static bool_t __semp_del(osal_semp_t semp)
+ 196:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** {
+ 633              		.loc 1 196 1
+ 634              		.cfi_startproc
+ 635 0000 F30F1EFA 		endbr64
+ 636 0004 55       		pushq	%rbp
+ 637              	.LCFI32:
+ 638              		.cfi_def_cfa_offset 16
+ 639              		.cfi_offset 6, -16
+ 640 0005 4889E5   		movq	%rsp, %rbp
+ 641              	.LCFI33:
+ 642              		.cfi_def_cfa_register 6
+ 643 0008 4883EC20 		subq	$32, %rsp
+ 644 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 645              		.loc 1 196 1
+ 646 0010 64488B04 		movq	%fs:40, %rax
+ 646      25280000 
+ 646      00
+ 647 0019 488945F8 		movq	%rax, -8(%rbp)
+ 648 001d 31C0     		xorl	%eax, %eax
+ 197:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     if (sem_destroy((sem_t *)semp))
+ 649              		.loc 1 197 9
+ 650 001f 488B45E8 		movq	-24(%rbp), %rax
+ 651 0023 4889C7   		movq	%rax, %rdi
+ 652 0026 E8000000 		call	sem_destroy@PLT
+ 652      00
+ 653              		.loc 1 197 8
+ 654 002b 85C0     		testl	%eax, %eax
+ 655 002d 7407     		je	.L49
+ 198:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         return false;
+ 656              		.loc 1 198 16
+ 657 002f B8000000 		movl	$0, %eax
+ 657      00
+ 658 0034 EB11     		jmp	.L50
+ 659              	.L49:
+ 199:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     else {
+ 200:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         free(semp);
+ 660              		.loc 1 200 9
+ 661 0036 488B45E8 		movq	-24(%rbp), %rax
+ 662 003a 4889C7   		movq	%rax, %rdi
+ 663 003d E8000000 		call	free@PLT
+ 663      00
+ 201:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****         return true;
+ 664              		.loc 1 201 16
+ 665 0042 B8010000 		movl	$1, %eax
+ 665      00
+ 666              	.L50:
+ 202:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     }
+ 203:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** }
+ 667              		.loc 1 203 1
+ 668 0047 488B55F8 		movq	-8(%rbp), %rdx
+ 669 004b 64483314 		xorq	%fs:40, %rdx
+ 669      25280000 
+ 669      00
+ 670 0054 7405     		je	.L51
+GAS LISTING /tmp/ccLgMtXU.s 			page 18
+
+
+ 671 0056 E8000000 		call	__stack_chk_fail@PLT
+ 671      00
+ 672              	.L51:
+ 673 005b C9       		leave
+ 674              	.LCFI34:
+ 675              		.cfi_def_cfa 7, 8
+ 676 005c C3       		ret
+ 677              		.cfi_endproc
+ 678              	.LFE17:
+ 680              		.section	.text.__get_sys_time,"ax",@progbits
+ 682              	__get_sys_time:
+ 683              	.LFB18:
+ 204:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 205:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** // /< sys time
+ 206:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** #include <sys/time.h>
+ 207:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** static unsigned long long __get_sys_time()
+ 208:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** {
+ 684              		.loc 1 208 1
+ 685              		.cfi_startproc
+ 686 0000 F30F1EFA 		endbr64
+ 687 0004 55       		pushq	%rbp
+ 688              	.LCFI35:
+ 689              		.cfi_def_cfa_offset 16
+ 690              		.cfi_offset 6, -16
+ 691 0005 4889E5   		movq	%rsp, %rbp
+ 692              	.LCFI36:
+ 693              		.cfi_def_cfa_register 6
+ 694 0008 4883EC20 		subq	$32, %rsp
+ 695              		.loc 1 208 1
+ 696 000c 64488B04 		movq	%fs:40, %rax
+ 696      25280000 
+ 696      00
+ 697 0015 488945F8 		movq	%rax, -8(%rbp)
+ 698 0019 31C0     		xorl	%eax, %eax
+ 209:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     struct timeval tv;
+ 210:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 211:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     gettimeofday(&tv, NULL);
+ 699              		.loc 1 211 5
+ 700 001b 488D45E0 		leaq	-32(%rbp), %rax
+ 701 001f BE000000 		movl	$0, %esi
+ 701      00
+ 702 0024 4889C7   		movq	%rax, %rdi
+ 703 0027 E8000000 		call	gettimeofday@PLT
+ 703      00
+ 212:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 213:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     return ((unsigned long long)tv.tv_sec * 1000) + (tv.tv_usec / 1000);
+ 704              		.loc 1 213 35
+ 705 002c 488B45E0 		movq	-32(%rbp), %rax
+ 706              		.loc 1 213 43
+ 707 0030 4869F0E8 		imulq	$1000, %rax, %rsi
+ 707      030000
+ 708              		.loc 1 213 56
+ 709 0037 488B4DE8 		movq	-24(%rbp), %rcx
+ 710              		.loc 1 213 65
+ 711 003b 48BACFF7 		movabsq	$2361183241434822607, %rdx
+ 711      53E3A59B 
+ 711      C420
+GAS LISTING /tmp/ccLgMtXU.s 			page 19
+
+
+ 712 0045 4889C8   		movq	%rcx, %rax
+ 713 0048 48F7EA   		imulq	%rdx
+ 714 004b 48C1FA07 		sarq	$7, %rdx
+ 715 004f 4889C8   		movq	%rcx, %rax
+ 716 0052 48C1F83F 		sarq	$63, %rax
+ 717 0056 4829C2   		subq	%rax, %rdx
+ 718 0059 4889D0   		movq	%rdx, %rax
+ 719              		.loc 1 213 51
+ 720 005c 4801F0   		addq	%rsi, %rax
+ 214:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** }
+ 721              		.loc 1 214 1
+ 722 005f 488B7DF8 		movq	-8(%rbp), %rdi
+ 723 0063 6448333C 		xorq	%fs:40, %rdi
+ 723      25280000 
+ 723      00
+ 724 006c 7405     		je	.L54
+ 725 006e E8000000 		call	__stack_chk_fail@PLT
+ 725      00
+ 726              	.L54:
+ 727 0073 C9       		leave
+ 728              	.LCFI37:
+ 729              		.cfi_def_cfa 7, 8
+ 730 0074 C3       		ret
+ 731              		.cfi_endproc
+ 732              	.LFE18:
+ 734              		.section	.data.rel.ro.s_linux_ops,"aw"
+ 735              		.align 32
+ 738              	s_linux_ops:
+ 739 0000 00000000 		.quad	__task_create
+ 739      00000000 
+ 740 0008 00000000 		.quad	__task_kill
+ 740      00000000 
+ 741 0010 00000000 		.quad	__task_exit
+ 741      00000000 
+ 742 0018 00000000 		.quad	__task_sleep
+ 742      00000000 
+ 743 0020 00000000 		.quad	__mutex_create
+ 743      00000000 
+ 744 0028 00000000 		.quad	__mutex_lock
+ 744      00000000 
+ 745 0030 00000000 		.quad	__mutex_unlock
+ 745      00000000 
+ 746 0038 00000000 		.quad	__mutex_del
+ 746      00000000 
+ 747 0040 00000000 		.quad	__semp_create
+ 747      00000000 
+ 748 0048 00000000 		.quad	__semp_pend
+ 748      00000000 
+ 749 0050 00000000 		.quad	__semp_post
+ 749      00000000 
+ 750 0058 00000000 		.quad	__semp_del
+ 750      00000000 
+ 751 0060 00000000 		.zero	32
+ 751      00000000 
+ 751      00000000 
+ 751      00000000 
+ 751      00000000 
+GAS LISTING /tmp/ccLgMtXU.s 			page 20
+
+
+ 752 0080 00000000 		.quad	malloc
+ 752      00000000 
+ 753 0088 00000000 		.quad	free
+ 753      00000000 
+ 754 0090 00000000 		.quad	realloc
+ 754      00000000 
+ 755 0098 00000000 		.quad	__get_sys_time
+ 755      00000000 
+ 756 00a0 00000000 		.zero	16
+ 756      00000000 
+ 756      00000000 
+ 756      00000000 
+ 757              		.section	.rodata
+ 758              	.LC0:
+ 759 0000 4C696E75 		.string	"Linux"
+ 759      7800
+ 760              		.section	.data.rel.ro.local.s_link_linux,"aw"
+ 761              		.align 16
+ 764              	s_link_linux:
+ 765 0000 00000000 		.quad	.LC0
+ 765      00000000 
+ 766 0008 00000000 		.quad	s_linux_ops
+ 766      00000000 
+ 767              		.section	.text.os_imp_init,"ax",@progbits
+ 768              		.globl	os_imp_init
+ 770              	os_imp_init:
+ 771              	.LFB19:
+ 215:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 216:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** static const tag_os_ops s_linux_ops = {
+ 217:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     .task_sleep = __task_sleep,
+ 218:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     .task_create = __task_create,
+ 219:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     .task_kill = __task_kill,
+ 220:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     .task_exit = __task_exit,
+ 221:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 222:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     .mutex_create = __mutex_create,
+ 223:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     .mutex_lock = __mutex_lock,
+ 224:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     .mutex_unlock = __mutex_unlock,
+ 225:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     .mutex_del = __mutex_del,
+ 226:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 227:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     .semp_create = __semp_create,
+ 228:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     .semp_pend = __semp_pend,
+ 229:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     .semp_post = __semp_post,
+ 230:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     .semp_del = __semp_del,
+ 231:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 232:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     .malloc = malloc,
+ 233:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     .free = free,
+ 234:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     .realloc = realloc,
+ 235:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 236:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     .get_sys_time = __get_sys_time,
+ 237:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** };
+ 238:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 239:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** static const tag_os s_link_linux = {
+ 240:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     .name = "Linux",
+ 241:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     .ops = &s_linux_ops,
+ 242:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** };
+ 243:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 244:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** int os_imp_init(void)
+GAS LISTING /tmp/ccLgMtXU.s 			page 21
+
+
+ 245:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** {
+ 772              		.loc 1 245 1
+ 773              		.cfi_startproc
+ 774 0000 F30F1EFA 		endbr64
+ 775 0004 55       		pushq	%rbp
+ 776              	.LCFI38:
+ 777              		.cfi_def_cfa_offset 16
+ 778              		.cfi_offset 6, -16
+ 779 0005 4889E5   		movq	%rsp, %rbp
+ 780              	.LCFI39:
+ 781              		.cfi_def_cfa_register 6
+ 782 0008 4881ECB0 		subq	$176, %rsp
+ 782      000000
+ 783              		.loc 1 245 1
+ 784 000f 64488B04 		movq	%fs:40, %rax
+ 784      25280000 
+ 784      00
+ 785 0018 488945F8 		movq	%rax, -8(%rbp)
+ 786 001c 31C0     		xorl	%eax, %eax
+ 246:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     int ret = -1;
+ 787              		.loc 1 246 9
+ 788 001e C7855CFF 		movl	$-1, -164(%rbp)
+ 788      FFFFFFFF 
+ 788      FFFF
+ 247:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+ 248:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     ret = osal_install(&s_link_linux);
+ 789              		.loc 1 248 11
+ 790 0028 488D3D00 		leaq	s_link_linux(%rip), %rdi
+ 790      000000
+ 791 002f E8000000 		call	osal_install@PLT
+ 791      00
+ 792 0034 89855CFF 		movl	%eax, -164(%rbp)
+ 792      FFFF
+ 249:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     sigaction(SIGPIPE, &(struct sigaction) { { SIG_IGN } }, NULL);
+ 793              		.loc 1 249 44
+ 794 003a 488D9560 		leaq	-160(%rbp), %rdx
+ 794      FFFFFF
+ 795 0041 B8000000 		movl	$0, %eax
+ 795      00
+ 796 0046 B9130000 		movl	$19, %ecx
+ 796      00
+ 797 004b 4889D7   		movq	%rdx, %rdi
+ 798 004e F348AB   		rep stosq
+ 799 0051 48C78560 		movq	$1, -160(%rbp)
+ 799      FFFFFF01 
+ 799      000000
+ 800              		.loc 1 249 5
+ 801 005c 488D8560 		leaq	-160(%rbp), %rax
+ 801      FFFFFF
+ 802 0063 BA000000 		movl	$0, %edx
+ 802      00
+ 803 0068 4889C6   		movq	%rax, %rsi
+ 804 006b BF0D0000 		movl	$13, %edi
+ 804      00
+ 805 0070 E8000000 		call	sigaction@PLT
+ 805      00
+ 250:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** 
+GAS LISTING /tmp/ccLgMtXU.s 			page 22
+
+
+ 251:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c ****     return ret;
+ 806              		.loc 1 251 12
+ 807 0075 8B855CFF 		movl	-164(%rbp), %eax
+ 807      FFFF
+ 252:/home/xingli/share/LiteOS_Lab/os/linux/linux_imp.c **** }
+ 808              		.loc 1 252 1
+ 809 007b 488B75F8 		movq	-8(%rbp), %rsi
+ 810 007f 64483334 		xorq	%fs:40, %rsi
+ 810      25280000 
+ 810      00
+ 811 0088 7405     		je	.L57
+ 812 008a E8000000 		call	__stack_chk_fail@PLT
+ 812      00
+ 813              	.L57:
+ 814 008f C9       		leave
+ 815              	.LCFI40:
+ 816              		.cfi_def_cfa 7, 8
+ 817 0090 C3       		ret
+ 818              		.cfi_endproc
+ 819              	.LFE19:
+ 821              		.text
+ 822              	.Letext0:
+ 823              		.file 2 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 824              		.file 3 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 825              		.file 4 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 826              		.file 5 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 827              		.file 6 "/usr/include/stdio.h"
+ 828              		.file 7 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 829              		.file 8 "/home/xingli/share/LiteOS_Lab/os/osal/osal_types.h"
+ 830              		.file 9 "/home/xingli/share/LiteOS_Lab/os/osal/osal_imp.h"
+ 831              		.file 10 "/usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h"
+ 832              		.file 11 "/usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h"
+ 833              		.file 12 "/usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h"
+ 834              		.file 13 "/usr/include/x86_64-linux-gnu/bits/thread-shared-types.h"
+ 835              		.file 14 "/usr/include/x86_64-linux-gnu/bits/struct_mutex.h"
+ 836              		.file 15 "/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h"
+ 837              		.file 16 "/usr/include/unistd.h"
+ 838              		.file 17 "/usr/include/x86_64-linux-gnu/bits/getopt_core.h"
+ 839              		.file 18 "/usr/include/time.h"
+ 840              		.file 19 "/usr/include/x86_64-linux-gnu/bits/semaphore.h"
+ 841              		.file 20 "/usr/include/x86_64-linux-gnu/bits/types/__sigval_t.h"
+ 842              		.file 21 "/usr/include/x86_64-linux-gnu/bits/types/siginfo_t.h"
+ 843              		.file 22 "/usr/include/signal.h"
+ 844              		.file 23 "/usr/include/x86_64-linux-gnu/bits/sigaction.h"
+ 4562              		.section	.note.gnu.property,"a"
+ 4563              		.align 8
+ 4564 0000 04000000 		.long	 1f - 0f
+ 4565 0004 10000000 		.long	 4f - 1f
+ 4566 0008 05000000 		.long	 5
+ 4567              	0:
+ 4568 000c 474E5500 		.string	 "GNU"
+ 4569              	1:
+ 4570              		.align 8
+ 4571 0010 020000C0 		.long	 0xc0000002
+ 4572 0014 04000000 		.long	 3f - 2f
+ 4573              	2:
+ 4574 0018 03000000 		.long	 0x3
+GAS LISTING /tmp/ccLgMtXU.s 			page 23
+
+
+ 4575              	3:
+ 4576 001c 00000000 		.align 8
+ 4577              	4:
+GAS LISTING /tmp/ccLgMtXU.s 			page 24
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 linux_imp.c
+     /tmp/ccLgMtXU.s:6      .text.__task_sleep:0000000000000000 __task_sleep
+     /tmp/ccLgMtXU.s:47     .text.__task_create:0000000000000000 __task_create
+     /tmp/ccLgMtXU.s:109    .text.__task_kill:0000000000000000 __task_kill
+     /tmp/ccLgMtXU.s:157    .text.__task_exit:0000000000000000 __task_exit
+     /tmp/ccLgMtXU.s:182    .text.__mutex_create:0000000000000000 __mutex_create
+     /tmp/ccLgMtXU.s:238    .text.__mutex_lock:0000000000000000 __mutex_lock
+     /tmp/ccLgMtXU.s:285    .text.__mutex_unlock:0000000000000000 __mutex_unlock
+     /tmp/ccLgMtXU.s:335    .text.__mutex_del:0000000000000000 __mutex_del
+     /tmp/ccLgMtXU.s:386    .text.__semp_create:0000000000000000 __semp_create
+     /tmp/ccLgMtXU.s:456    .text.__semp_pend:0000000000000000 __semp_pend
+     /tmp/ccLgMtXU.s:584    .text.__semp_post:0000000000000000 __semp_post
+     /tmp/ccLgMtXU.s:631    .text.__semp_del:0000000000000000 __semp_del
+     /tmp/ccLgMtXU.s:682    .text.__get_sys_time:0000000000000000 __get_sys_time
+     /tmp/ccLgMtXU.s:738    .data.rel.ro.s_linux_ops:0000000000000000 s_linux_ops
+     /tmp/ccLgMtXU.s:764    .data.rel.ro.local.s_link_linux:0000000000000000 s_link_linux
+     /tmp/ccLgMtXU.s:770    .text.os_imp_init:0000000000000000 os_imp_init
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+usleep
+__stack_chk_fail
+pthread_create
+pthread_cancel
+pthread_join
+pthread_exit
+malloc
+pthread_mutex_init
+pthread_mutex_lock
+pthread_mutex_unlock
+pthread_mutex_destroy
+free
+sem_init
+sem_wait
+clock_gettime
+sem_timedwait
+sem_trywait
+sem_post
+sem_destroy
+gettimeofday
+realloc
+osal_install
+sigaction

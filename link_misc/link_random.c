@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,15 +22,15 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
 #include <stdint.h>
 #include <stddef.h>
@@ -39,25 +39,23 @@
 
 #include "osal.h"
 
-__attribute__((weak)) int link_random(void* output, int len)
+__attribute__((weak)) int link_random(void *output, int len)
 {
     int i;
     int random_number;
-    char* pbuf;
+    char *pbuf;
 
-    if (NULL == output)
-    {
+    if (NULL == output) {
         return -1;
     }
 
     pbuf = output;
     srand(osal_sys_time());
 
-    for (i = 0; i < len; i += sizeof(int))
-    {
+    for (i = 0; i < len; i += sizeof(int)) {
         random_number = rand();
-        (void) memcpy(pbuf + i, &random_number,
-               sizeof(int) > (unsigned int)(len - i)? (unsigned int)(len - i): sizeof(int));
+        (void)memcpy(pbuf + i, &random_number,
+            sizeof(int) > (unsigned int)(len - i) ? (unsigned int)(len - i) : sizeof(int));
     }
 
     return 0;

@@ -120,7 +120,6 @@ static void __sinn_sock_discon(sinn_connection_t *nc)
     nc->sock_fd = -1;
 }
 
-
 static sinn_time_t __sinn_sock_poll(sinn_connection_t *nc, int timeout_ms)
 {
     sinn_time_t now;

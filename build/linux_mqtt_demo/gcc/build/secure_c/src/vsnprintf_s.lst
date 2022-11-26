@@ -1,0 +1,454 @@
+GAS LISTING /tmp/ccFzgsOo.s 			page 1
+
+
+   1              		.file	"vsnprintf_s.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.vsnprintf_s,"ax",@progbits
+   5              		.globl	vsnprintf_s
+   7              	vsnprintf_s:
+   8              	.LFB6:
+   9              		.file 1 "/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c"
+   1:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** /*
+   2:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  * Copyright (c) [2019] Huawei Technologies Co.,Ltd.All rights reserved.
+   3:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *
+   4:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  * OpenArkCompiler is licensed under the Mulan PSL v1. 
+   5:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  * You can use this software according to the terms and conditions of the Mulan PSL v1.
+   6:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  * You may obtain a copy of Mulan PSL v1 at:
+   7:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *
+   8:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  * 	http://license.coscl.org.cn/MulanPSL 
+   9:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *
+  10:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER 
+  11:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
+  12:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  * FIT FOR A PARTICULAR PURPOSE.  
+  13:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  * See the Mulan PSL v1 for more details.  
+  14:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  */
+  15:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** 
+  16:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** #include "secureprintoutput.h"
+  17:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** 
+  18:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** #if SECUREC_ENABLE_VSNPRINTF
+  19:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** /*
+  20:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  * <FUNCTION DESCRIPTION>
+  21:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    The vsnprintf_s function is equivalent to the vsnprintf function
+  22:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *     except for the parameter destMax/count and the explicit runtime-constraints violation
+  23:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    The vsnprintf_s function takes a pointer to an argument list, then formats
+  24:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    and writes up to count characters of the given data to the memory pointed
+  25:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    to by strDest and appends a terminating null.
+  26:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *
+  27:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  * <INPUT PARAMETERS>
+  28:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    strDest                  Storage location for the output.
+  29:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    destMax                The size of the strDest for output.
+  30:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    count                    Maximum number of character to write(not including
+  31:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *                                the terminating NULL)
+  32:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    format                   Format-control string.
+  33:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    argList                     pointer to list of arguments.
+  34:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *
+  35:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  * <OUTPUT PARAMETERS>
+  36:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    strDest                is updated
+  37:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *
+  38:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  * <RETURN VALUE>
+  39:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    return  the number of characters written, not including the terminating null
+  40:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    return -1 if an  error occurs.
+  41:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    return -1 if count < destMax and the output string  has been truncated
+  42:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *
+  43:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  * If there is a runtime-constraint violation, strDest[0] will be set to the '\0' when strDest and 
+  44:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  */
+  45:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** int vsnprintf_s(char *strDest, size_t destMax, size_t count, const char *format, va_list argList)
+  46:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** {
+  10              		.loc 1 46 1
+  11              		.cfi_startproc
+  12 0000 F30F1EFA 		endbr64
+GAS LISTING /tmp/ccFzgsOo.s 			page 2
+
+
+  13 0004 55       		pushq	%rbp
+  14              	.LCFI0:
+  15              		.cfi_def_cfa_offset 16
+  16              		.cfi_offset 6, -16
+  17 0005 4889E5   		movq	%rsp, %rbp
+  18              	.LCFI1:
+  19              		.cfi_def_cfa_register 6
+  20 0008 4883EC40 		subq	$64, %rsp
+  21 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  22 0010 488975E0 		movq	%rsi, -32(%rbp)
+  23 0014 488955D8 		movq	%rdx, -40(%rbp)
+  24 0018 48894DD0 		movq	%rcx, -48(%rbp)
+  25 001c 4C8945C8 		movq	%r8, -56(%rbp)
+  26              		.loc 1 46 1
+  27 0020 64488B04 		movq	%fs:40, %rax
+  27      25280000 
+  27      00
+  28 0029 488945F8 		movq	%rax, -8(%rbp)
+  29 002d 31C0     		xorl	%eax, %eax
+  47:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****     int retVal;
+  48:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** 
+  49:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****     if (format == NULL || strDest == NULL || destMax == 0 || destMax > SECUREC_STRING_MAX_LEN ||
+  30              		.loc 1 49 8
+  31 002f 48837DD0 		cmpq	$0, -48(%rbp)
+  31      00
+  32 0034 742A     		je	.L2
+  33              		.loc 1 49 24 discriminator 1
+  34 0036 48837DE8 		cmpq	$0, -24(%rbp)
+  34      00
+  35 003b 7423     		je	.L2
+  36              		.loc 1 49 43 discriminator 2
+  37 003d 48837DE0 		cmpq	$0, -32(%rbp)
+  37      00
+  38 0042 741C     		je	.L2
+  39              		.loc 1 49 59 discriminator 3
+  40 0044 B8000000 		movl	$2147483648, %eax
+  40      80
+  41 0049 483945E0 		cmpq	%rax, -32(%rbp)
+  42 004d 7311     		jnb	.L2
+  43              		.loc 1 49 95 discriminator 4
+  44 004f 48817DD8 		cmpq	$2147483646, -40(%rbp)
+  44      FEFFFF7F 
+  45 0057 762E     		jbe	.L3
+  50:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         (count > (SECUREC_STRING_MAX_LEN - 1) && count != (size_t)(-1))) {
+  46              		.loc 1 50 47
+  47 0059 48837DD8 		cmpq	$-1, -40(%rbp)
+  47      FF
+  48 005e 7427     		je	.L3
+  49              	.L2:
+  51:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         if (strDest != NULL && destMax > 0 && destMax <= SECUREC_STRING_MAX_LEN) {
+  50              		.loc 1 51 12
+  51 0060 48837DE8 		cmpq	$0, -24(%rbp)
+  51      00
+  52 0065 7419     		je	.L4
+  53              		.loc 1 51 29 discriminator 1
+  54 0067 48837DE0 		cmpq	$0, -32(%rbp)
+  54      00
+GAS LISTING /tmp/ccFzgsOo.s 			page 3
+
+
+  55 006c 7412     		je	.L4
+  56              		.loc 1 51 44 discriminator 2
+  57 006e B8000000 		movl	$2147483648, %eax
+  57      80
+  58 0073 483945E0 		cmpq	%rax, -32(%rbp)
+  59 0077 7307     		jnb	.L4
+  52:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****             strDest[0] = '\0';
+  60              		.loc 1 52 24
+  61 0079 488B45E8 		movq	-24(%rbp), %rax
+  62 007d C60000   		movb	$0, (%rax)
+  63              	.L4:
+  53:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         }
+  54:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         SECUREC_ERROR_INVALID_PARAMTER("vsnprintf_s");
+  55:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         return -1;
+  64              		.loc 1 55 16
+  65 0080 B8FFFFFF 		movl	$-1, %eax
+  65      FF
+  66 0085 EB68     		jmp	.L5
+  67              	.L3:
+  56:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****     }
+  57:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** 
+  58:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****     if (destMax > count) {
+  68              		.loc 1 58 8
+  69 0087 488B45E0 		movq	-32(%rbp), %rax
+  70 008b 483B45D8 		cmpq	-40(%rbp), %rax
+  71 008f 762C     		jbe	.L6
+  59:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         retVal = SecVsnprintfImpl(strDest, count + 1, format, argList);
+  72              		.loc 1 59 18
+  73 0091 488B45D8 		movq	-40(%rbp), %rax
+  74 0095 488D7001 		leaq	1(%rax), %rsi
+  75 0099 488B4DC8 		movq	-56(%rbp), %rcx
+  76 009d 488B55D0 		movq	-48(%rbp), %rdx
+  77 00a1 488B45E8 		movq	-24(%rbp), %rax
+  78 00a5 4889C7   		movq	%rax, %rdi
+  79 00a8 E8000000 		call	SecVsnprintfImpl@PLT
+  79      00
+  80 00ad 8945F4   		movl	%eax, -12(%rbp)
+  60:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         if (retVal == SECUREC_PRINTF_TRUNCATE) {  /* lsd add to keep dest buffer not destroyed 2014
+  81              		.loc 1 60 12
+  82 00b0 837DF4FE 		cmpl	$-2, -12(%rbp)
+  83 00b4 7522     		jne	.L7
+  61:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****             /* the string has been truncated, return  -1 */
+  62:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****             return -1;          /* to skip error handler,  return strlen(strDest) or -1 */
+  84              		.loc 1 62 20
+  85 00b6 B8FFFFFF 		movl	$-1, %eax
+  85      FF
+  86 00bb EB32     		jmp	.L5
+  87              	.L6:
+  63:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         }
+  64:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****     } else {
+  65:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         retVal = SecVsnprintfImpl(strDest, destMax, format, argList);
+  88              		.loc 1 65 18
+  89 00bd 488B4DC8 		movq	-56(%rbp), %rcx
+  90 00c1 488B55D0 		movq	-48(%rbp), %rdx
+  91 00c5 488B75E0 		movq	-32(%rbp), %rsi
+  92 00c9 488B45E8 		movq	-24(%rbp), %rax
+  93 00cd 4889C7   		movq	%rax, %rdi
+GAS LISTING /tmp/ccFzgsOo.s 			page 4
+
+
+  94 00d0 E8000000 		call	SecVsnprintfImpl@PLT
+  94      00
+  95 00d5 8945F4   		movl	%eax, -12(%rbp)
+  96              	.L7:
+  66:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** #ifdef SECUREC_COMPATIBLE_WIN_FORMAT
+  67:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         if (retVal == SECUREC_PRINTF_TRUNCATE && count == (size_t)(-1)) {
+  68:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****             return -1;
+  69:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         }
+  70:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** #endif
+  71:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****     }
+  72:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** 
+  73:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****     if (retVal < 0) {
+  97              		.loc 1 73 8
+  98 00d8 837DF400 		cmpl	$0, -12(%rbp)
+  99 00dc 790E     		jns	.L8
+  74:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         strDest[0] = '\0';      /* empty the dest strDest */
+ 100              		.loc 1 74 20
+ 101 00de 488B45E8 		movq	-24(%rbp), %rax
+ 102 00e2 C60000   		movb	$0, (%rax)
+  75:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** 
+  76:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         if (retVal == SECUREC_PRINTF_TRUNCATE) {
+  77:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****             /* Buffer too small */
+  78:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****             SECUREC_ERROR_INVALID_RANGE("vsnprintf_s");
+  79:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         }
+  80:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** 
+  81:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         SECUREC_ERROR_INVALID_PARAMTER("vsnprintf_s");
+  82:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         return -1;
+ 103              		.loc 1 82 16
+ 104 00e5 B8FFFFFF 		movl	$-1, %eax
+ 104      FF
+ 105 00ea EB03     		jmp	.L5
+ 106              	.L8:
+  83:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****     }
+  84:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** 
+  85:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****     return retVal;
+ 107              		.loc 1 85 12
+ 108 00ec 8B45F4   		movl	-12(%rbp), %eax
+ 109              	.L5:
+  86:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** }
+ 110              		.loc 1 86 1
+ 111 00ef 488B7DF8 		movq	-8(%rbp), %rdi
+ 112 00f3 6448333C 		xorq	%fs:40, %rdi
+ 112      25280000 
+ 112      00
+ 113 00fc 7405     		je	.L9
+ 114 00fe E8000000 		call	__stack_chk_fail@PLT
+ 114      00
+ 115              	.L9:
+ 116 0103 C9       		leave
+ 117              	.LCFI2:
+ 118              		.cfi_def_cfa 7, 8
+ 119 0104 C3       		ret
+ 120              		.cfi_endproc
+ 121              	.LFE6:
+ 123              		.section	.text.vsnprintf_truncated_s,"ax",@progbits
+ 124              		.globl	vsnprintf_truncated_s
+ 126              	vsnprintf_truncated_s:
+GAS LISTING /tmp/ccFzgsOo.s 			page 5
+
+
+ 127              	.LFB7:
+  87:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** #if SECUREC_IN_KERNEL
+  88:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** EXPORT_SYMBOL(vsnprintf_s);
+  89:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** #endif
+  90:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** #endif
+  91:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** 
+  92:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** #if SECUREC_SNPRINTF_TRUNCATED
+  93:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** /*
+  94:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  * <FUNCTION DESCRIPTION>
+  95:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    The vsnprintf_truncated_s function is equivalent to the vsnprintf function
+  96:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *     except for the parameter destMax/count and the explicit runtime-constraints violation
+  97:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    The vsnprintf_truncated_s function takes a pointer to an argument list, then formats
+  98:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    and writes up to count characters of the given data to the memory pointed
+  99:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    to by strDest and appends a terminating null.
+ 100:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *
+ 101:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  * <INPUT PARAMETERS>
+ 102:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    strDest                  Storage location for the output.
+ 103:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    destMax                The size of the strDest for output.
+ 104:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *                                the terminating NULL)
+ 105:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    format                   Format-control string.
+ 106:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    argList                     pointer to list of arguments.
+ 107:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *
+ 108:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  * <OUTPUT PARAMETERS>
+ 109:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    strDest                is updated
+ 110:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *
+ 111:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  * <RETURN VALUE>
+ 112:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    return  the number of characters written, not including the terminating null
+ 113:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    return -1 if an  error occurs.
+ 114:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *    return destMax-1 if output string  has been truncated
+ 115:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  *
+ 116:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  * If there is a runtime-constraint violation, strDest[0] will be set to the '\0' when strDest and 
+ 117:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****  */
+ 118:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** int vsnprintf_truncated_s(char *strDest, size_t destMax, const char *format, va_list argList)
+ 119:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** {
+ 128              		.loc 1 119 1
+ 129              		.cfi_startproc
+ 130 0000 F30F1EFA 		endbr64
+ 131 0004 55       		pushq	%rbp
+ 132              	.LCFI3:
+ 133              		.cfi_def_cfa_offset 16
+ 134              		.cfi_offset 6, -16
+ 135 0005 4889E5   		movq	%rsp, %rbp
+ 136              	.LCFI4:
+ 137              		.cfi_def_cfa_register 6
+ 138 0008 4883EC30 		subq	$48, %rsp
+ 139 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 140 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 141 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 142 0018 48894DD0 		movq	%rcx, -48(%rbp)
+ 143              		.loc 1 119 1
+ 144 001c 64488B04 		movq	%fs:40, %rax
+ 144      25280000 
+ 144      00
+ 145 0025 488945F8 		movq	%rax, -8(%rbp)
+ 146 0029 31C0     		xorl	%eax, %eax
+ 120:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****     int retVal;
+ 121:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** 
+GAS LISTING /tmp/ccFzgsOo.s 			page 6
+
+
+ 122:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****     if (format == NULL || strDest == NULL || destMax == 0 || destMax > SECUREC_STRING_MAX_LEN) {
+ 147              		.loc 1 122 8
+ 148 002b 48837DD8 		cmpq	$0, -40(%rbp)
+ 148      00
+ 149 0030 7419     		je	.L11
+ 150              		.loc 1 122 24 discriminator 1
+ 151 0032 48837DE8 		cmpq	$0, -24(%rbp)
+ 151      00
+ 152 0037 7412     		je	.L11
+ 153              		.loc 1 122 43 discriminator 2
+ 154 0039 48837DE0 		cmpq	$0, -32(%rbp)
+ 154      00
+ 155 003e 740B     		je	.L11
+ 156              		.loc 1 122 59 discriminator 3
+ 157 0040 B8000000 		movl	$2147483648, %eax
+ 157      80
+ 158 0045 483945E0 		cmpq	%rax, -32(%rbp)
+ 159 0049 7227     		jb	.L12
+ 160              	.L11:
+ 123:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         if (strDest != NULL && destMax > 0 && destMax <= SECUREC_STRING_MAX_LEN) {
+ 161              		.loc 1 123 12
+ 162 004b 48837DE8 		cmpq	$0, -24(%rbp)
+ 162      00
+ 163 0050 7419     		je	.L13
+ 164              		.loc 1 123 29 discriminator 1
+ 165 0052 48837DE0 		cmpq	$0, -32(%rbp)
+ 165      00
+ 166 0057 7412     		je	.L13
+ 167              		.loc 1 123 44 discriminator 2
+ 168 0059 B8000000 		movl	$2147483648, %eax
+ 168      80
+ 169 005e 483945E0 		cmpq	%rax, -32(%rbp)
+ 170 0062 7307     		jnb	.L13
+ 124:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****             strDest[0] = '\0';
+ 171              		.loc 1 124 24
+ 172 0064 488B45E8 		movq	-24(%rbp), %rax
+ 173 0068 C60000   		movb	$0, (%rax)
+ 174              	.L13:
+ 125:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         }
+ 126:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         SECUREC_ERROR_INVALID_PARAMTER("vsnprintf_truncated_s");
+ 127:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         return -1;
+ 175              		.loc 1 127 16
+ 176 006b B8FFFFFF 		movl	$-1, %eax
+ 176      FF
+ 177 0070 EB41     		jmp	.L14
+ 178              	.L12:
+ 128:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****     }
+ 129:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** 
+ 130:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****     retVal = SecVsnprintfImpl(strDest, destMax, format, argList);
+ 179              		.loc 1 130 14
+ 180 0072 488B4DD0 		movq	-48(%rbp), %rcx
+ 181 0076 488B55D8 		movq	-40(%rbp), %rdx
+ 182 007a 488B75E0 		movq	-32(%rbp), %rsi
+ 183 007e 488B45E8 		movq	-24(%rbp), %rax
+ 184 0082 4889C7   		movq	%rax, %rdi
+ 185 0085 E8000000 		call	SecVsnprintfImpl@PLT
+ 185      00
+GAS LISTING /tmp/ccFzgsOo.s 			page 7
+
+
+ 186 008a 8945F4   		movl	%eax, -12(%rbp)
+ 131:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** 
+ 132:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****     if (retVal < 0) {
+ 187              		.loc 1 132 8
+ 188 008d 837DF400 		cmpl	$0, -12(%rbp)
+ 189 0091 791D     		jns	.L15
+ 133:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         if (retVal == SECUREC_PRINTF_TRUNCATE) {
+ 190              		.loc 1 133 12
+ 191 0093 837DF4FE 		cmpl	$-2, -12(%rbp)
+ 192 0097 7509     		jne	.L16
+ 134:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****             return (int)(destMax - 1);  /* to skip error handler,  return strlen(strDest) */
+ 193              		.loc 1 134 34
+ 194 0099 488B45E0 		movq	-32(%rbp), %rax
+ 195 009d 83E801   		subl	$1, %eax
+ 196              		.loc 1 134 20
+ 197 00a0 EB11     		jmp	.L14
+ 198              	.L16:
+ 135:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         }
+ 136:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         strDest[0] = '\0';      /* empty the dest strDest */
+ 199              		.loc 1 136 20
+ 200 00a2 488B45E8 		movq	-24(%rbp), %rax
+ 201 00a6 C60000   		movb	$0, (%rax)
+ 137:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         SECUREC_ERROR_INVALID_PARAMTER("vsnprintf_truncated_s");
+ 138:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****         return -1;
+ 202              		.loc 1 138 16
+ 203 00a9 B8FFFFFF 		movl	$-1, %eax
+ 203      FF
+ 204 00ae EB03     		jmp	.L14
+ 205              	.L15:
+ 139:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****     }
+ 140:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** 
+ 141:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c ****     return retVal;
+ 206              		.loc 1 141 12
+ 207 00b0 8B45F4   		movl	-12(%rbp), %eax
+ 208              	.L14:
+ 142:/home/xingli/share/LiteOS_Lab/secure_c/src/vsnprintf_s.c **** }
+ 209              		.loc 1 142 1
+ 210 00b3 488B7DF8 		movq	-8(%rbp), %rdi
+ 211 00b7 6448333C 		xorq	%fs:40, %rdi
+ 211      25280000 
+ 211      00
+ 212 00c0 7405     		je	.L17
+ 213 00c2 E8000000 		call	__stack_chk_fail@PLT
+ 213      00
+ 214              	.L17:
+ 215 00c7 C9       		leave
+ 216              	.LCFI5:
+ 217              		.cfi_def_cfa 7, 8
+ 218 00c8 C3       		ret
+ 219              		.cfi_endproc
+ 220              	.LFE7:
+ 222              		.text
+ 223              	.Letext0:
+ 224              		.file 2 "<built-in>"
+ 225              		.file 3 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 226              		.file 4 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 227              		.file 5 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+GAS LISTING /tmp/ccFzgsOo.s 			page 8
+
+
+ 228              		.file 6 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 229              		.file 7 "/usr/include/stdio.h"
+ 230              		.file 8 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 1378              		.section	.note.gnu.property,"a"
+ 1379              		.align 8
+ 1380 0000 04000000 		.long	 1f - 0f
+ 1381 0004 10000000 		.long	 4f - 1f
+ 1382 0008 05000000 		.long	 5
+ 1383              	0:
+ 1384 000c 474E5500 		.string	 "GNU"
+ 1385              	1:
+ 1386              		.align 8
+ 1387 0010 020000C0 		.long	 0xc0000002
+ 1388 0014 04000000 		.long	 3f - 2f
+ 1389              	2:
+ 1390 0018 03000000 		.long	 0x3
+ 1391              	3:
+ 1392 001c 00000000 		.align 8
+ 1393              	4:
+GAS LISTING /tmp/ccFzgsOo.s 			page 9
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 vsnprintf_s.c
+     /tmp/ccFzgsOo.s:7      .text.vsnprintf_s:0000000000000000 vsnprintf_s
+     /tmp/ccFzgsOo.s:126    .text.vsnprintf_truncated_s:0000000000000000 vsnprintf_truncated_s
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+SecVsnprintfImpl
+__stack_chk_fail

@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,17 +22,17 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
-/*******************************************************************************
+/* ******************************************************************************
  *
  * Copyright (c) 2014 Bosch Software Innovations GmbH, Germany.
  * All rights reserved. This program and the accompanying materials
@@ -40,14 +40,14 @@
  * and Eclipse Distribution License v1.0 which accompany this distribution.
  *
  * The Eclipse Public License is available at
- *    http://www.eclipse.org/legal/epl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * The Eclipse Distribution License is available at
- *    http://www.eclipse.org/org/documents/edl-v10.php.
+ * http://www.eclipse.org/org/documents/edl-v10.php.
  *
  * Contributors:
- *    Bosch Software Innovations GmbH - Please refer to git log
+ * Bosch Software Innovations GmbH - Please refer to git log
  *
- *******************************************************************************/
+ * ***************************************************************************** */
 
 #ifndef LWM2M_FOTA_STATE_H_
 #define LWM2M_FOTA_STATE_H_
@@ -56,28 +56,22 @@
 #include "object_comm.h"
 #include "ota_flag.h"
 
-
-
-#define ASSERT_THIS(do_something) \
-        if(NULL == thi)\
-        {\
-            ATINY_LOG(LOG_ERR, "this null pointer");\
-            do_something;\
-        }
+#define ASSERT_THIS(do_something)                \
+    if (NULL == thi) {                           \
+        ATINY_LOG(LOG_ERR, "this null pointer"); \
+        do_something;                            \
+    }
 
 #define LWM2M_GET_STATE(state) (&((state).interface))
 
-#define CALL_MEM_FUNCTION_R(object, func,  ret, ...) do\
-{\
-    if(NULL != (object) && (NULL != (object)->func))\
-    {\
-        (ret) = (object)->func(__VA_ARGS__);\
-    }\
-}while(0)
+#define CALL_MEM_FUNCTION_R(object, func, ret, ...)         \
+    do {                                                    \
+        if (NULL != (object) && (NULL != (object)->func)) { \
+            (ret) = (object)->func(__VA_ARGS__);            \
+        }                                                   \
+    } while (0)
 
-
-typedef struct lwm2m_fota_state_tag_s
-{
+typedef struct lwm2m_fota_state_tag_s {
     int (*start_download)(struct lwm2m_fota_state_tag_s *thi, const char *uri);
     int (*execute_update)(struct lwm2m_fota_state_tag_s *thi);
     int (*finish_download)(struct lwm2m_fota_state_tag_s *thi, int result);
@@ -86,34 +80,28 @@ typedef struct lwm2m_fota_state_tag_s
     lwm2m_fota_manager_s *manager;
 } lwm2m_fota_state_s;
 
-typedef struct
-{
-    lwm2m_fota_state_s interface;
-    lwm2m_observe_info_t observe_info;
-    int report_result;
-    bool report_flag;
+typedef struct {
+    lwm2m_fota_state_s      interface;
+    lwm2m_observe_info_t    observe_info;
+    int                     report_result;
+    bool                    report_flag;
 } lwm2m_fota_idle_state_s;
 
-typedef struct lwm2m_fota_downloading_state_tag_s
-{
+typedef struct lwm2m_fota_downloading_state_tag_s {
     lwm2m_fota_state_s interface;
 } lwm2m_fota_downloading_state_s;
 
 typedef lwm2m_fota_downloading_state_s lwm2m_fota_downloaded_state_s;
 typedef lwm2m_fota_downloading_state_s lwm2m_fota_updating_state_s;
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 
 void lwm2m_fota_state_init(lwm2m_fota_state_s *thi, lwm2m_fota_manager_s *manager);
 
 void lwm2m_fota_idle_state_init(lwm2m_fota_idle_state_s *thi, lwm2m_fota_manager_s *manager);
 int lwm2m_fota_idle_state_int_report_result(lwm2m_fota_idle_state_s *thi);
-
-
 
 void lwm2m_fota_downloading_state_init(lwm2m_fota_downloading_state_s *thi, lwm2m_fota_manager_s *manager);
 

@@ -1,0 +1,200 @@
+GAS LISTING /tmp/ccAmts2F.s 			page 1
+
+
+   1              		.file	"sscanf_s.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.sscanf_s,"ax",@progbits
+   5              		.globl	sscanf_s
+   7              	sscanf_s:
+   8              	.LFB6:
+   9              		.file 1 "/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c"
+   1:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c **** /*
+   2:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  * Copyright (c) [2019] Huawei Technologies Co.,Ltd.All rights reserved.
+   3:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *
+   4:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  * OpenArkCompiler is licensed under the Mulan PSL v1. 
+   5:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  * You can use this software according to the terms and conditions of the Mulan PSL v1.
+   6:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  * You may obtain a copy of Mulan PSL v1 at:
+   7:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *
+   8:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  * 	http://license.coscl.org.cn/MulanPSL 
+   9:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *
+  10:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER 
+  11:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
+  12:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  * FIT FOR A PARTICULAR PURPOSE.  
+  13:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  * See the Mulan PSL v1 for more details.  
+  14:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  */
+  15:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c **** 
+  16:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c **** #include "securec.h"
+  17:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c **** 
+  18:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c **** /*
+  19:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  * <FUNCTION DESCRIPTION>
+  20:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *    The sscanf_s function is equivalent to fscanf_s,
+  21:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *     except that input is obtained from a string (specified by the argument buffer) rather than f
+  22:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *    The sscanf function reads data from buffer into the location given by each
+  23:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *    argument. Every argument must be a pointer to a variable with a type that
+  24:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *    corresponds to a type specifier in format. The format argument controls the
+  25:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *    interpretation of the input fields and has the same form and function as
+  26:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *    the format argument for the scanf function.
+  27:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *    If copying takes place between strings that overlap, the behavior is undefined.
+  28:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *
+  29:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  * <INPUT PARAMETERS>
+  30:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *    buffer                 Stored data.
+  31:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *    format                 Format control string, see Format Specifications.
+  32:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *    ...                    Optional arguments.
+  33:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *
+  34:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  * <OUTPUT PARAMETERS>
+  35:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *    ...                    The converted value stored in user assigned address
+  36:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *
+  37:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  * <RETURN VALUE>
+  38:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *    Each of these functions returns the number of fields successfully converted
+  39:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *    and assigned; the return value does not include fields that were read but
+  40:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *    not assigned.
+  41:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *    A return value of 0 indicates that no fields were assigned.
+  42:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  *    return -1 if an error occurs.
+  43:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****  */
+  44:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c **** int sscanf_s(const char *buffer, const char *format, ...)
+  45:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c **** {
+  10              		.loc 1 45 1
+  11              		.cfi_startproc
+  12 0000 F30F1EFA 		endbr64
+  13 0004 55       		pushq	%rbp
+GAS LISTING /tmp/ccAmts2F.s 			page 2
+
+
+  14              	.LCFI0:
+  15              		.cfi_def_cfa_offset 16
+  16              		.cfi_offset 6, -16
+  17 0005 4889E5   		movq	%rsp, %rbp
+  18              	.LCFI1:
+  19              		.cfi_def_cfa_register 6
+  20 0008 4881ECF0 		subq	$240, %rsp
+  20      000000
+  21 000f 4889BD18 		movq	%rdi, -232(%rbp)
+  21      FFFFFF
+  22 0016 4889B510 		movq	%rsi, -240(%rbp)
+  22      FFFFFF
+  23 001d 48899560 		movq	%rdx, -160(%rbp)
+  23      FFFFFF
+  24 0024 48898D68 		movq	%rcx, -152(%rbp)
+  24      FFFFFF
+  25 002b 4C898570 		movq	%r8, -144(%rbp)
+  25      FFFFFF
+  26 0032 4C898D78 		movq	%r9, -136(%rbp)
+  26      FFFFFF
+  27 0039 84C0     		testb	%al, %al
+  28 003b 7420     		je	.L2
+  29 003d 0F294580 		movaps	%xmm0, -128(%rbp)
+  30 0041 0F294D90 		movaps	%xmm1, -112(%rbp)
+  31 0045 0F2955A0 		movaps	%xmm2, -96(%rbp)
+  32 0049 0F295DB0 		movaps	%xmm3, -80(%rbp)
+  33 004d 0F2965C0 		movaps	%xmm4, -64(%rbp)
+  34 0051 0F296DD0 		movaps	%xmm5, -48(%rbp)
+  35 0055 0F2975E0 		movaps	%xmm6, -32(%rbp)
+  36 0059 0F297DF0 		movaps	%xmm7, -16(%rbp)
+  37              	.L2:
+  38              		.loc 1 45 1
+  39 005d 64488B04 		movq	%fs:40, %rax
+  39      25280000 
+  39      00
+  40 0066 48898548 		movq	%rax, -184(%rbp)
+  40      FFFFFF
+  41 006d 31C0     		xorl	%eax, %eax
+  46:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****     int ret;                    /* If initialization causes  e838 */
+  47:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****     va_list argList;
+  48:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c **** 
+  49:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****     va_start(argList, format);
+  42              		.loc 1 49 5
+  43 006f C78530FF 		movl	$16, -208(%rbp)
+  43      FFFF1000 
+  43      0000
+  44 0079 C78534FF 		movl	$48, -204(%rbp)
+  44      FFFF3000 
+  44      0000
+  45 0083 488D4510 		leaq	16(%rbp), %rax
+  46 0087 48898538 		movq	%rax, -200(%rbp)
+  46      FFFFFF
+  47 008e 488D8550 		leaq	-176(%rbp), %rax
+  47      FFFFFF
+  48 0095 48898540 		movq	%rax, -192(%rbp)
+  48      FFFFFF
+  50:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****     ret = vsscanf_s(buffer, format, argList);
+GAS LISTING /tmp/ccAmts2F.s 			page 3
+
+
+  49              		.loc 1 50 11
+  50 009c 488D9530 		leaq	-208(%rbp), %rdx
+  50      FFFFFF
+  51 00a3 488B8D10 		movq	-240(%rbp), %rcx
+  51      FFFFFF
+  52 00aa 488B8518 		movq	-232(%rbp), %rax
+  52      FFFFFF
+  53 00b1 4889CE   		movq	%rcx, %rsi
+  54 00b4 4889C7   		movq	%rax, %rdi
+  55 00b7 E8000000 		call	vsscanf_s@PLT
+  55      00
+  56 00bc 89852CFF 		movl	%eax, -212(%rbp)
+  56      FFFF
+  51:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****     va_end(argList);
+  52:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****     (void)argList;              /* to clear e438 last value assigned not used , the compiler will o
+  53:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c **** 
+  54:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c ****     return ret;
+  57              		.loc 1 54 12
+  58 00c2 8B852CFF 		movl	-212(%rbp), %eax
+  58      FFFF
+  55:/home/xingli/share/LiteOS_Lab/secure_c/src/sscanf_s.c **** }
+  59              		.loc 1 55 1
+  60 00c8 488BB548 		movq	-184(%rbp), %rsi
+  60      FFFFFF
+  61 00cf 64483334 		xorq	%fs:40, %rsi
+  61      25280000 
+  61      00
+  62 00d8 7405     		je	.L4
+  63 00da E8000000 		call	__stack_chk_fail@PLT
+  63      00
+  64              	.L4:
+  65 00df C9       		leave
+  66              	.LCFI2:
+  67              		.cfi_def_cfa 7, 8
+  68 00e0 C3       		ret
+  69              		.cfi_endproc
+  70              	.LFE6:
+  72              		.text
+  73              	.Letext0:
+  74              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+  75              		.file 3 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stdarg.h"
+  76              		.file 4 "<built-in>"
+  77              		.file 5 "/usr/include/x86_64-linux-gnu/bits/types.h"
+  78              		.file 6 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+  79              		.file 7 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+  80              		.file 8 "/usr/include/stdio.h"
+  81              		.file 9 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 1145              		.section	.note.gnu.property,"a"
+ 1146              		.align 8
+ 1147 0000 04000000 		.long	 1f - 0f
+ 1148 0004 10000000 		.long	 4f - 1f
+ 1149 0008 05000000 		.long	 5
+ 1150              	0:
+ 1151 000c 474E5500 		.string	 "GNU"
+ 1152              	1:
+ 1153              		.align 8
+ 1154 0010 020000C0 		.long	 0xc0000002
+GAS LISTING /tmp/ccAmts2F.s 			page 4
+
+
+ 1155 0014 04000000 		.long	 3f - 2f
+ 1156              	2:
+ 1157 0018 03000000 		.long	 0x3
+ 1158              	3:
+ 1159 001c 00000000 		.align 8
+ 1160              	4:
+GAS LISTING /tmp/ccAmts2F.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 sscanf_s.c
+     /tmp/ccAmts2F.s:7      .text.sscanf_s:0000000000000000 sscanf_s
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+vsscanf_s
+__stack_chk_fail

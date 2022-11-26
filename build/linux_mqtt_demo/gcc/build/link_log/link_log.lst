@@ -1,0 +1,320 @@
+GAS LISTING /tmp/cccsqjwv.s 			page 1
+
+
+   1              		.file	"link_log.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.bss.s_link_log_level,"aw",@nobits
+   5              		.align 4
+   8              	s_link_log_level:
+   9 0000 00000000 		.zero	4
+  10              		.section	.rodata
+  11              	.LC0:
+  12 0000 54524143 		.string	"TRACE"
+  12      4500
+  13              	.LC1:
+  14 0006 44454255 		.string	"DEBUG"
+  14      4700
+  15              	.LC2:
+  16 000c 494E464F 		.string	"INFO "
+  16      2000
+  17              	.LC3:
+  18 0012 5741524E 		.string	"WARN "
+  18      2000
+  19              	.LC4:
+  20 0018 4552524F 		.string	"ERROR"
+  20      5200
+  21              	.LC5:
+  22 001e 46415441 		.string	"FATAL"
+  22      4C00
+  23              		.section	.data.rel.local.s_link_log_names,"aw"
+  24              		.align 32
+  27              	s_link_log_names:
+  28 0000 00000000 		.quad	.LC0
+  28      00000000 
+  29 0008 00000000 		.quad	.LC1
+  29      00000000 
+  30 0010 00000000 		.quad	.LC2
+  30      00000000 
+  31 0018 00000000 		.quad	.LC3
+  31      00000000 
+  32 0020 00000000 		.quad	.LC4
+  32      00000000 
+  33 0028 00000000 		.quad	.LC5
+  33      00000000 
+  34              		.section	.text.link_log_level_set,"ax",@progbits
+  35              		.globl	link_log_level_set
+  37              	link_log_level_set:
+  38              	.LFB0:
+  39              		.file 1 "/home/xingli/share/LiteOS_Lab/link_log/link_log.c"
+   1:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** /* ----------------------------------------------------------------------------
+   2:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * All rights reserved.
+   4:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * are permitted provided that the following conditions are met:
+   6:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * conditions and the following disclaimer.
+   8:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * provided with the distribution.
+  11:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+GAS LISTING /tmp/cccsqjwv.s 			page 2
+
+
+  12:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * permission.
+  14:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * --------------------------------------------------------------------------- */
+  26:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** /* ----------------------------------------------------------------------------
+  27:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * Notice of Export Control Law
+  28:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * ===============================================
+  29:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * applicable export control laws and regulations.
+  33:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****  * --------------------------------------------------------------------------- */
+  34:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** 
+  35:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** #include <string.h>
+  36:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** #include <stdio.h>
+  37:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** #include "link_log.h"
+  38:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** 
+  39:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** static en_link_log_level_t s_link_log_level = EN_LINK_LOG_LEVEL_TRACE;
+  40:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** static const char *s_link_log_names[] =
+  41:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** {
+  42:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****     "TRACE",
+  43:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****     "DEBUG",
+  44:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****     "INFO ",
+  45:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****     "WARN ",
+  46:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****     "ERROR",
+  47:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****     "FATAL"
+  48:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** };
+  49:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** 
+  50:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** int link_log_level_set(en_link_log_level_t level)
+  51:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** {
+  40              		.loc 1 51 1
+  41              		.cfi_startproc
+  42 0000 F30F1EFA 		endbr64
+  43 0004 55       		pushq	%rbp
+  44              	.LCFI0:
+  45              		.cfi_def_cfa_offset 16
+  46              		.cfi_offset 6, -16
+  47 0005 4889E5   		movq	%rsp, %rbp
+  48              	.LCFI1:
+  49              		.cfi_def_cfa_register 6
+  50 0008 4883EC20 		subq	$32, %rsp
+  51 000c 897DEC   		movl	%edi, -20(%rbp)
+  52              		.loc 1 51 1
+  53 000f 64488B04 		movq	%fs:40, %rax
+  53      25280000 
+  53      00
+  54 0018 488945F8 		movq	%rax, -8(%rbp)
+GAS LISTING /tmp/cccsqjwv.s 			page 3
+
+
+  55 001c 31C0     		xorl	%eax, %eax
+  52:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****     int ret = -1;
+  56              		.loc 1 52 9
+  57 001e C745F4FF 		movl	$-1, -12(%rbp)
+  57      FFFFFF
+  53:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****     if (level < EN_LINK_LOG_LEVEL_MAX) {
+  58              		.loc 1 53 8
+  59 0025 837DEC05 		cmpl	$5, -20(%rbp)
+  60 0029 7710     		ja	.L2
+  54:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****         s_link_log_level = level;
+  61              		.loc 1 54 26
+  62 002b 8B45EC   		movl	-20(%rbp), %eax
+  63 002e 89050000 		movl	%eax, s_link_log_level(%rip)
+  63      0000
+  55:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****         ret = 0;
+  64              		.loc 1 55 13
+  65 0034 C745F400 		movl	$0, -12(%rbp)
+  65      000000
+  66              	.L2:
+  56:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****     }
+  57:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****     return ret;
+  67              		.loc 1 57 12
+  68 003b 8B45F4   		movl	-12(%rbp), %eax
+  58:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** }
+  69              		.loc 1 58 1
+  70 003e 488B55F8 		movq	-8(%rbp), %rdx
+  71 0042 64483314 		xorq	%fs:40, %rdx
+  71      25280000 
+  71      00
+  72 004b 7405     		je	.L4
+  73 004d E8000000 		call	__stack_chk_fail@PLT
+  73      00
+  74              	.L4:
+  75 0052 C9       		leave
+  76              	.LCFI2:
+  77              		.cfi_def_cfa 7, 8
+  78 0053 C3       		ret
+  79              		.cfi_endproc
+  80              	.LFE0:
+  82              		.section	.text.link_log_level_get,"ax",@progbits
+  83              		.globl	link_log_level_get
+  85              	link_log_level_get:
+  86              	.LFB1:
+  59:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** 
+  60:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** en_link_log_level_t link_log_level_get(void)
+  61:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** {
+  87              		.loc 1 61 1
+  88              		.cfi_startproc
+  89 0000 F30F1EFA 		endbr64
+  90 0004 55       		pushq	%rbp
+  91              	.LCFI3:
+  92              		.cfi_def_cfa_offset 16
+  93              		.cfi_offset 6, -16
+  94 0005 4889E5   		movq	%rsp, %rbp
+  95              	.LCFI4:
+  96              		.cfi_def_cfa_register 6
+  97 0008 4883EC10 		subq	$16, %rsp
+GAS LISTING /tmp/cccsqjwv.s 			page 4
+
+
+  98              		.loc 1 61 1
+  99 000c 64488B04 		movq	%fs:40, %rax
+  99      25280000 
+  99      00
+ 100 0015 488945F8 		movq	%rax, -8(%rbp)
+ 101 0019 31C0     		xorl	%eax, %eax
+  62:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****     return s_link_log_level;
+ 102              		.loc 1 62 12
+ 103 001b 8B050000 		movl	s_link_log_level(%rip), %eax
+ 103      0000
+  63:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** }
+ 104              		.loc 1 63 1
+ 105 0021 488B55F8 		movq	-8(%rbp), %rdx
+ 106 0025 64483314 		xorq	%fs:40, %rdx
+ 106      25280000 
+ 106      00
+ 107 002e 7405     		je	.L7
+ 108 0030 E8000000 		call	__stack_chk_fail@PLT
+ 108      00
+ 109              	.L7:
+ 110 0035 C9       		leave
+ 111              	.LCFI5:
+ 112              		.cfi_def_cfa 7, 8
+ 113 0036 C3       		ret
+ 114              		.cfi_endproc
+ 115              	.LFE1:
+ 117              		.section	.rodata
+ 118              	.LC6:
+ 119 0024 4E554C4C 		.string	"NULL "
+ 119      2000
+ 120              		.section	.text.link_log_level_name,"ax",@progbits
+ 121              		.globl	link_log_level_name
+ 123              	link_log_level_name:
+ 124              	.LFB2:
+  64:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** 
+  65:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** const char *link_log_level_name(en_link_log_level_t log_level)
+  66:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** {
+ 125              		.loc 1 66 1
+ 126              		.cfi_startproc
+ 127 0000 F30F1EFA 		endbr64
+ 128 0004 55       		pushq	%rbp
+ 129              	.LCFI6:
+ 130              		.cfi_def_cfa_offset 16
+ 131              		.cfi_offset 6, -16
+ 132 0005 4889E5   		movq	%rsp, %rbp
+ 133              	.LCFI7:
+ 134              		.cfi_def_cfa_register 6
+ 135 0008 4883EC20 		subq	$32, %rsp
+ 136 000c 897DEC   		movl	%edi, -20(%rbp)
+ 137              		.loc 1 66 1
+ 138 000f 64488B04 		movq	%fs:40, %rax
+ 138      25280000 
+ 138      00
+ 139 0018 488945F8 		movq	%rax, -8(%rbp)
+ 140 001c 31C0     		xorl	%eax, %eax
+  67:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****     if (log_level >= EN_LINK_LOG_LEVEL_MAX) {
+ 141              		.loc 1 67 8
+GAS LISTING /tmp/cccsqjwv.s 			page 5
+
+
+ 142 001e 837DEC05 		cmpl	$5, -20(%rbp)
+ 143 0022 7609     		jbe	.L9
+  68:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****         return "NULL ";
+ 144              		.loc 1 68 16
+ 145 0024 488D0500 		leaq	.LC6(%rip), %rax
+ 145      000000
+ 146 002b EB16     		jmp	.L10
+ 147              	.L9:
+  69:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****     } else {
+  70:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****         return s_link_log_names[log_level];
+ 148              		.loc 1 70 32
+ 149 002d 8B45EC   		movl	-20(%rbp), %eax
+ 150 0030 488D14C5 		leaq	0(,%rax,8), %rdx
+ 150      00000000 
+ 151 0038 488D0500 		leaq	s_link_log_names(%rip), %rax
+ 151      000000
+ 152 003f 488B0402 		movq	(%rdx,%rax), %rax
+ 153              	.L10:
+  71:/home/xingli/share/LiteOS_Lab/link_log/link_log.c ****     }
+  72:/home/xingli/share/LiteOS_Lab/link_log/link_log.c **** }
+ 154              		.loc 1 72 1
+ 155 0043 488B4DF8 		movq	-8(%rbp), %rcx
+ 156 0047 6448330C 		xorq	%fs:40, %rcx
+ 156      25280000 
+ 156      00
+ 157 0050 7405     		je	.L11
+ 158 0052 E8000000 		call	__stack_chk_fail@PLT
+ 158      00
+ 159              	.L11:
+ 160 0057 C9       		leave
+ 161              	.LCFI8:
+ 162              		.cfi_def_cfa 7, 8
+ 163 0058 C3       		ret
+ 164              		.cfi_endproc
+ 165              	.LFE2:
+ 167              		.text
+ 168              	.Letext0:
+ 169              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 170              		.file 3 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 171              		.file 4 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 172              		.file 5 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 173              		.file 6 "/usr/include/stdio.h"
+ 174              		.file 7 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 175              		.file 8 "/home/xingli/share/LiteOS_Lab/inc/link_log.h"
+ 1349              		.section	.note.gnu.property,"a"
+ 1350              		.align 8
+ 1351 0000 04000000 		.long	 1f - 0f
+ 1352 0004 10000000 		.long	 4f - 1f
+ 1353 0008 05000000 		.long	 5
+ 1354              	0:
+ 1355 000c 474E5500 		.string	 "GNU"
+ 1356              	1:
+ 1357              		.align 8
+ 1358 0010 020000C0 		.long	 0xc0000002
+ 1359 0014 04000000 		.long	 3f - 2f
+ 1360              	2:
+ 1361 0018 03000000 		.long	 0x3
+GAS LISTING /tmp/cccsqjwv.s 			page 6
+
+
+ 1362              	3:
+ 1363 001c 00000000 		.align 8
+ 1364              	4:
+GAS LISTING /tmp/cccsqjwv.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 link_log.c
+     /tmp/cccsqjwv.s:8      .bss.s_link_log_level:0000000000000000 s_link_log_level
+     /tmp/cccsqjwv.s:27     .data.rel.local.s_link_log_names:0000000000000000 s_link_log_names
+     /tmp/cccsqjwv.s:37     .text.link_log_level_set:0000000000000000 link_log_level_set
+     /tmp/cccsqjwv.s:85     .text.link_log_level_get:0000000000000000 link_log_level_get
+     /tmp/cccsqjwv.s:123    .text.link_log_level_name:0000000000000000 link_log_level_name
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+__stack_chk_fail

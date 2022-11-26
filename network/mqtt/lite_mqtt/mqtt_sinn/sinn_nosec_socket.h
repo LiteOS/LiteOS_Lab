@@ -32,9 +32,9 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef __SINN_NOSEC_SOCKET_H__
-#define __SINN_NOSEC_SOCKET_H__
+#ifndef SINN_NOSEC_SOCKET_H
+#define SINN_NOSEC_SOCKET_H
 
 #include "sinn_client.h"
 
-#endif /* __SINN_NOSEC_SOCKET_H__ */
+#endif /* SINN_NOSEC_SOCKET_H */

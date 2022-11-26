@@ -1,0 +1,1850 @@
+GAS LISTING /tmp/cc3hSM0O.s 			page 1
+
+
+   1              		.file	"x509_csr.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.x509_csr_get_version,"ax",@progbits
+   6              	x509_csr_get_version:
+   7              	.LFB16:
+   8              		.file 1 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c"
+   1:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** /*
+   2:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *  X.509 Certificate Signing Request (CSR) parsing
+   3:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *
+   4:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
+   5:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *  SPDX-License-Identifier: Apache-2.0
+   6:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *
+   7:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
+   8:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *  not use this file except in compliance with the License.
+   9:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *  You may obtain a copy of the License at
+  10:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *
+  11:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *  http://www.apache.org/licenses/LICENSE-2.0
+  12:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *
+  13:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *  Unless required by applicable law or agreed to in writing, software
+  14:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  15:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  16:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *  See the License for the specific language governing permissions and
+  17:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *  limitations under the License.
+  18:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *
+  19:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *  This file is part of mbed TLS (https://tls.mbed.org)
+  20:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  */
+  21:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** /*
+  22:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *  The ITU-T X.509 standard defines a certificate format for PKI.
+  23:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *
+  24:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *  http://www.ietf.org/rfc/rfc5280.txt (Certificates and CRLs)
+  25:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *  http://www.ietf.org/rfc/rfc3279.txt (Alg IDs for CRLs)
+  26:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *  http://www.ietf.org/rfc/rfc2986.txt (CSRs, aka PKCS#10)
+  27:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *
+  28:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *  http://www.itu.int/ITU-T/studygroups/com17/languages/X.680-0207.pdf
+  29:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *  http://www.itu.int/ITU-T/studygroups/com17/languages/X.690-0207.pdf
+  30:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  */
+  31:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+  32:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #if !defined(MBEDTLS_CONFIG_FILE)
+  33:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #include "mbedtls/config.h"
+  34:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #else
+  35:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #include MBEDTLS_CONFIG_FILE
+  36:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #endif
+  37:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+  38:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #if defined(MBEDTLS_X509_CSR_PARSE_C)
+  39:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+  40:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #include "mbedtls/x509_csr.h"
+  41:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #include "mbedtls/oid.h"
+  42:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #include "mbedtls/platform_util.h"
+  43:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+  44:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #include <string.h>
+  45:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+  46:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #if defined(MBEDTLS_PEM_PARSE_C)
+  47:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #include "mbedtls/pem.h"
+  48:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #endif
+  49:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+  50:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #if defined(MBEDTLS_PLATFORM_C)
+GAS LISTING /tmp/cc3hSM0O.s 			page 2
+
+
+  51:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #include "mbedtls/platform.h"
+  52:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #else
+  53:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #include <stdlib.h>
+  54:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #include <stdio.h>
+  55:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #define mbedtls_free       free
+  56:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #define mbedtls_calloc    calloc
+  57:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #define mbedtls_snprintf   snprintf
+  58:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #endif
+  59:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+  60:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #if defined(MBEDTLS_FS_IO) || defined(EFIX64) || defined(EFI32)
+  61:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #include <stdio.h>
+  62:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #endif
+  63:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+  64:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** /*
+  65:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  *  Version  ::=  INTEGER  {  v1(0)  }
+  66:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  */
+  67:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** static int x509_csr_get_version( unsigned char **p,
+  68:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****                              const unsigned char *end,
+  69:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****                              int *ver )
+  70:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** {
+   9              		.loc 1 70 1
+  10              		.cfi_startproc
+  11 0000 F30F1EFA 		endbr64
+  12 0004 55       		pushq	%rbp
+  13              	.LCFI0:
+  14              		.cfi_def_cfa_offset 16
+  15              		.cfi_offset 6, -16
+  16 0005 4889E5   		movq	%rsp, %rbp
+  17              	.LCFI1:
+  18              		.cfi_def_cfa_register 6
+  19 0008 4883EC30 		subq	$48, %rsp
+  20 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  21 0010 488975E0 		movq	%rsi, -32(%rbp)
+  22 0014 488955D8 		movq	%rdx, -40(%rbp)
+  23              		.loc 1 70 1
+  24 0018 64488B04 		movq	%fs:40, %rax
+  24      25280000 
+  24      00
+  25 0021 488945F8 		movq	%rax, -8(%rbp)
+  26 0025 31C0     		xorl	%eax, %eax
+  71:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     int ret;
+  72:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+  73:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     if( ( ret = mbedtls_asn1_get_int( p, end, ver ) ) != 0 )
+  27              		.loc 1 73 17
+  28 0027 488B55D8 		movq	-40(%rbp), %rdx
+  29 002b 488B4DE0 		movq	-32(%rbp), %rcx
+  30 002f 488B45E8 		movq	-24(%rbp), %rax
+  31 0033 4889CE   		movq	%rcx, %rsi
+  32 0036 4889C7   		movq	%rax, %rdi
+  33 0039 E8000000 		call	mbedtls_asn1_get_int@PLT
+  33      00
+  34 003e 8945F4   		movl	%eax, -12(%rbp)
+  35              		.loc 1 73 7
+  36 0041 837DF400 		cmpl	$0, -12(%rbp)
+  37 0045 7421     		je	.L2
+  74:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     {
+  75:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         if( ret == MBEDTLS_ERR_ASN1_UNEXPECTED_TAG )
+GAS LISTING /tmp/cc3hSM0O.s 			page 3
+
+
+  38              		.loc 1 75 11
+  39 0047 837DF49E 		cmpl	$-98, -12(%rbp)
+  40 004b 7511     		jne	.L3
+  76:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         {
+  77:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****             *ver = 0;
+  41              		.loc 1 77 18
+  42 004d 488B45D8 		movq	-40(%rbp), %rax
+  43 0051 C7000000 		movl	$0, (%rax)
+  43      0000
+  78:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****             return( 0 );
+  44              		.loc 1 78 19
+  45 0057 B8000000 		movl	$0, %eax
+  45      00
+  46 005c EB0F     		jmp	.L4
+  47              	.L3:
+  79:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         }
+  80:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+  81:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         return( MBEDTLS_ERR_X509_INVALID_VERSION + ret );
+  48              		.loc 1 81 50
+  49 005e 8B45F4   		movl	-12(%rbp), %eax
+  50 0061 2D002200 		subl	$8704, %eax
+  50      00
+  51 0066 EB05     		jmp	.L4
+  52              	.L2:
+  82:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     }
+  83:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+  84:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     return( 0 );
+  53              		.loc 1 84 11
+  54 0068 B8000000 		movl	$0, %eax
+  54      00
+  55              	.L4:
+  85:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** }
+  56              		.loc 1 85 1
+  57 006d 488B4DF8 		movq	-8(%rbp), %rcx
+  58 0071 6448330C 		xorq	%fs:40, %rcx
+  58      25280000 
+  58      00
+  59 007a 7405     		je	.L5
+  60 007c E8000000 		call	__stack_chk_fail@PLT
+  60      00
+  61              	.L5:
+  62 0081 C9       		leave
+  63              	.LCFI2:
+  64              		.cfi_def_cfa 7, 8
+  65 0082 C3       		ret
+  66              		.cfi_endproc
+  67              	.LFE16:
+  69              		.section	.text.mbedtls_x509_csr_parse_der,"ax",@progbits
+  70              		.globl	mbedtls_x509_csr_parse_der
+  72              	mbedtls_x509_csr_parse_der:
+  73              	.LFB17:
+  86:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+  87:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** /*
+  88:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  * Parse a CSR in DER format
+  89:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  */
+  90:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** int mbedtls_x509_csr_parse_der( mbedtls_x509_csr *csr,
+  91:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****                         const unsigned char *buf, size_t buflen )
+GAS LISTING /tmp/cc3hSM0O.s 			page 4
+
+
+  92:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** {
+  74              		.loc 1 92 1
+  75              		.cfi_startproc
+  76 0000 F30F1EFA 		endbr64
+  77 0004 55       		pushq	%rbp
+  78              	.LCFI3:
+  79              		.cfi_def_cfa_offset 16
+  80              		.cfi_offset 6, -16
+  81 0005 4889E5   		movq	%rsp, %rbp
+  82              	.LCFI4:
+  83              		.cfi_def_cfa_register 6
+  84 0008 4883EC60 		subq	$96, %rsp
+  85 000c 48897DB8 		movq	%rdi, -72(%rbp)
+  86 0010 488975B0 		movq	%rsi, -80(%rbp)
+  87 0014 488955A8 		movq	%rdx, -88(%rbp)
+  88              		.loc 1 92 1
+  89 0018 64488B04 		movq	%fs:40, %rax
+  89      25280000 
+  89      00
+  90 0021 488945F8 		movq	%rax, -8(%rbp)
+  91 0025 31C0     		xorl	%eax, %eax
+  93:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     int ret;
+  94:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     size_t len;
+  95:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     unsigned char *p, *end;
+  96:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     mbedtls_x509_buf sig_params;
+  97:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+  98:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     memset( &sig_params, 0, sizeof( mbedtls_x509_buf ) );
+  92              		.loc 1 98 5
+  93 0027 488D45E0 		leaq	-32(%rbp), %rax
+  94 002b BA180000 		movl	$24, %edx
+  94      00
+  95 0030 BE000000 		movl	$0, %esi
+  95      00
+  96 0035 4889C7   		movq	%rax, %rdi
+  97 0038 E8000000 		call	memset@PLT
+  97      00
+  99:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 100:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     /*
+ 101:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      * Check for valid input
+ 102:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      */
+ 103:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     if( csr == NULL || buf == NULL || buflen == 0 )
+  98              		.loc 1 103 7
+  99 003d 48837DB8 		cmpq	$0, -72(%rbp)
+  99      00
+ 100 0042 740E     		je	.L7
+ 101              		.loc 1 103 21 discriminator 1
+ 102 0044 48837DB0 		cmpq	$0, -80(%rbp)
+ 102      00
+ 103 0049 7407     		je	.L7
+ 104              		.loc 1 103 36 discriminator 2
+ 105 004b 48837DA8 		cmpq	$0, -88(%rbp)
+ 105      00
+ 106 0050 750A     		jne	.L8
+ 107              	.L7:
+ 104:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         return( MBEDTLS_ERR_X509_BAD_INPUT_DATA );
+ 108              		.loc 1 104 15
+ 109 0052 B800D8FF 		movl	$-10240, %eax
+GAS LISTING /tmp/cc3hSM0O.s 			page 5
+
+
+ 109      FF
+ 110 0057 E9EB0300 		jmp	.L24
+ 110      00
+ 111              	.L8:
+ 105:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 106:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     mbedtls_x509_csr_init( csr );
+ 112              		.loc 1 106 5
+ 113 005c 488B45B8 		movq	-72(%rbp), %rax
+ 114 0060 4889C7   		movq	%rax, %rdi
+ 115 0063 E8000000 		call	mbedtls_x509_csr_init
+ 115      00
+ 107:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 108:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     /*
+ 109:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      * first copy the raw DER data
+ 110:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      */
+ 111:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     p = mbedtls_calloc( 1, len = buflen );
+ 116              		.loc 1 111 9
+ 117 0068 488B45A8 		movq	-88(%rbp), %rax
+ 118 006c 488945C8 		movq	%rax, -56(%rbp)
+ 119 0070 488B45C8 		movq	-56(%rbp), %rax
+ 120 0074 4889C6   		movq	%rax, %rsi
+ 121 0077 BF010000 		movl	$1, %edi
+ 121      00
+ 122 007c E8000000 		call	mbedtls_calloc@PLT
+ 122      00
+ 123              		.loc 1 111 7
+ 124 0081 488945D0 		movq	%rax, -48(%rbp)
+ 112:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 113:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     if( p == NULL )
+ 125              		.loc 1 113 11
+ 126 0085 488B45D0 		movq	-48(%rbp), %rax
+ 127              		.loc 1 113 7
+ 128 0089 4885C0   		testq	%rax, %rax
+ 129 008c 750A     		jne	.L10
+ 114:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         return( MBEDTLS_ERR_X509_ALLOC_FAILED );
+ 130              		.loc 1 114 15
+ 131 008e B880D7FF 		movl	$-10368, %eax
+ 131      FF
+ 132 0093 E9AF0300 		jmp	.L24
+ 132      00
+ 133              	.L10:
+ 115:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 116:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     memcpy( p, buf, buflen );
+ 134              		.loc 1 116 5
+ 135 0098 488B45D0 		movq	-48(%rbp), %rax
+ 136 009c 488B55A8 		movq	-88(%rbp), %rdx
+ 137 00a0 488B4DB0 		movq	-80(%rbp), %rcx
+ 138 00a4 4889CE   		movq	%rcx, %rsi
+ 139 00a7 4889C7   		movq	%rax, %rdi
+ 140 00aa E8000000 		call	memcpy@PLT
+ 140      00
+ 117:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 118:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     csr->raw.p = p;
+ 141              		.loc 1 118 16
+ 142 00af 488B55D0 		movq	-48(%rbp), %rdx
+ 143 00b3 488B45B8 		movq	-72(%rbp), %rax
+ 144 00b7 48895010 		movq	%rdx, 16(%rax)
+GAS LISTING /tmp/cc3hSM0O.s 			page 6
+
+
+ 119:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     csr->raw.len = len;
+ 145              		.loc 1 119 18
+ 146 00bb 488B55C8 		movq	-56(%rbp), %rdx
+ 147 00bf 488B45B8 		movq	-72(%rbp), %rax
+ 148 00c3 48895008 		movq	%rdx, 8(%rax)
+ 120:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     end = p + len;
+ 149              		.loc 1 120 13
+ 150 00c7 488B55D0 		movq	-48(%rbp), %rdx
+ 151 00cb 488B45C8 		movq	-56(%rbp), %rax
+ 152              		.loc 1 120 9
+ 153 00cf 4801D0   		addq	%rdx, %rax
+ 154 00d2 488945D8 		movq	%rax, -40(%rbp)
+ 121:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 122:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     /*
+ 123:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      *  CertificationRequest ::= SEQUENCE {
+ 124:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      *       certificationRequestInfo CertificationRequestInfo,
+ 125:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      *       signatureAlgorithm AlgorithmIdentifier,
+ 126:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      *       signature          BIT STRING
+ 127:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      *  }
+ 128:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      */
+ 129:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     if( ( ret = mbedtls_asn1_get_tag( &p, end, &len,
+ 155              		.loc 1 129 17
+ 156 00d6 488D55C8 		leaq	-56(%rbp), %rdx
+ 157 00da 488B75D8 		movq	-40(%rbp), %rsi
+ 158 00de 488D45D0 		leaq	-48(%rbp), %rax
+ 159 00e2 B9300000 		movl	$48, %ecx
+ 159      00
+ 160 00e7 4889C7   		movq	%rax, %rdi
+ 161 00ea E8000000 		call	mbedtls_asn1_get_tag@PLT
+ 161      00
+ 162 00ef 8945C4   		movl	%eax, -60(%rbp)
+ 163              		.loc 1 129 7
+ 164 00f2 837DC400 		cmpl	$0, -60(%rbp)
+ 165 00f6 7416     		je	.L11
+ 130:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****             MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE ) ) != 0 )
+ 131:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     {
+ 132:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         mbedtls_x509_csr_free( csr );
+ 166              		.loc 1 132 9
+ 167 00f8 488B45B8 		movq	-72(%rbp), %rax
+ 168 00fc 4889C7   		movq	%rax, %rdi
+ 169 00ff E8000000 		call	mbedtls_x509_csr_free
+ 169      00
+ 133:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         return( MBEDTLS_ERR_X509_INVALID_FORMAT );
+ 170              		.loc 1 133 15
+ 171 0104 B880DEFF 		movl	$-8576, %eax
+ 171      FF
+ 172 0109 E9390300 		jmp	.L24
+ 172      00
+ 173              	.L11:
+ 134:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     }
+ 135:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 136:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     if( len != (size_t) ( end - p ) )
+ 174              		.loc 1 136 31
+ 175 010e 488B45D0 		movq	-48(%rbp), %rax
+ 176 0112 488B55D8 		movq	-40(%rbp), %rdx
+ 177 0116 4829C2   		subq	%rax, %rdx
+ 178              		.loc 1 136 13
+GAS LISTING /tmp/cc3hSM0O.s 			page 7
+
+
+ 179 0119 488B45C8 		movq	-56(%rbp), %rax
+ 180              		.loc 1 136 7
+ 181 011d 4839C2   		cmpq	%rax, %rdx
+ 182 0120 7416     		je	.L12
+ 137:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     {
+ 138:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         mbedtls_x509_csr_free( csr );
+ 183              		.loc 1 138 9
+ 184 0122 488B45B8 		movq	-72(%rbp), %rax
+ 185 0126 4889C7   		movq	%rax, %rdi
+ 186 0129 E8000000 		call	mbedtls_x509_csr_free
+ 186      00
+ 139:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         return( MBEDTLS_ERR_X509_INVALID_FORMAT +
+ 187              		.loc 1 139 15
+ 188 012e B81ADEFF 		movl	$-8678, %eax
+ 188      FF
+ 189 0133 E90F0300 		jmp	.L24
+ 189      00
+ 190              	.L12:
+ 140:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****                 MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
+ 141:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     }
+ 142:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 143:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     /*
+ 144:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      *  CertificationRequestInfo ::= SEQUENCE {
+ 145:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      */
+ 146:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     csr->cri.p = p;
+ 191              		.loc 1 146 16
+ 192 0138 488B55D0 		movq	-48(%rbp), %rdx
+ 193 013c 488B45B8 		movq	-72(%rbp), %rax
+ 194 0140 48895028 		movq	%rdx, 40(%rax)
+ 147:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 148:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     if( ( ret = mbedtls_asn1_get_tag( &p, end, &len,
+ 195              		.loc 1 148 17
+ 196 0144 488D55C8 		leaq	-56(%rbp), %rdx
+ 197 0148 488B75D8 		movq	-40(%rbp), %rsi
+ 198 014c 488D45D0 		leaq	-48(%rbp), %rax
+ 199 0150 B9300000 		movl	$48, %ecx
+ 199      00
+ 200 0155 4889C7   		movq	%rax, %rdi
+ 201 0158 E8000000 		call	mbedtls_asn1_get_tag@PLT
+ 201      00
+ 202 015d 8945C4   		movl	%eax, -60(%rbp)
+ 203              		.loc 1 148 7
+ 204 0160 837DC400 		cmpl	$0, -60(%rbp)
+ 205 0164 7419     		je	.L13
+ 149:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****             MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE ) ) != 0 )
+ 150:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     {
+ 151:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         mbedtls_x509_csr_free( csr );
+ 206              		.loc 1 151 9
+ 207 0166 488B45B8 		movq	-72(%rbp), %rax
+ 208 016a 4889C7   		movq	%rax, %rdi
+ 209 016d E8000000 		call	mbedtls_x509_csr_free
+ 209      00
+ 152:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         return( MBEDTLS_ERR_X509_INVALID_FORMAT + ret );
+ 210              		.loc 1 152 49
+ 211 0172 8B45C4   		movl	-60(%rbp), %eax
+ 212 0175 2D802100 		subl	$8576, %eax
+ 212      00
+GAS LISTING /tmp/cc3hSM0O.s 			page 8
+
+
+ 213 017a E9C80200 		jmp	.L24
+ 213      00
+ 214              	.L13:
+ 153:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     }
+ 154:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 155:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     end = p + len;
+ 215              		.loc 1 155 13
+ 216 017f 488B55D0 		movq	-48(%rbp), %rdx
+ 217 0183 488B45C8 		movq	-56(%rbp), %rax
+ 218              		.loc 1 155 9
+ 219 0187 4801D0   		addq	%rdx, %rax
+ 220 018a 488945D8 		movq	%rax, -40(%rbp)
+ 156:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     csr->cri.len = end - csr->cri.p;
+ 221              		.loc 1 156 34
+ 222 018e 488B45B8 		movq	-72(%rbp), %rax
+ 223 0192 488B4028 		movq	40(%rax), %rax
+ 224              		.loc 1 156 24
+ 225 0196 488B55D8 		movq	-40(%rbp), %rdx
+ 226 019a 4829C2   		subq	%rax, %rdx
+ 227 019d 4889D0   		movq	%rdx, %rax
+ 228 01a0 4889C2   		movq	%rax, %rdx
+ 229              		.loc 1 156 18
+ 230 01a3 488B45B8 		movq	-72(%rbp), %rax
+ 231 01a7 48895020 		movq	%rdx, 32(%rax)
+ 157:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 158:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     /*
+ 159:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      *  Version  ::=  INTEGER {  v1(0) }
+ 160:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      */
+ 161:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     if( ( ret = x509_csr_get_version( &p, end, &csr->version ) ) != 0 )
+ 232              		.loc 1 161 17
+ 233 01ab 488B45B8 		movq	-72(%rbp), %rax
+ 234 01af 488D5030 		leaq	48(%rax), %rdx
+ 235 01b3 488B4DD8 		movq	-40(%rbp), %rcx
+ 236 01b7 488D45D0 		leaq	-48(%rbp), %rax
+ 237 01bb 4889CE   		movq	%rcx, %rsi
+ 238 01be 4889C7   		movq	%rax, %rdi
+ 239 01c1 E8000000 		call	x509_csr_get_version
+ 239      00
+ 240 01c6 8945C4   		movl	%eax, -60(%rbp)
+ 241              		.loc 1 161 7
+ 242 01c9 837DC400 		cmpl	$0, -60(%rbp)
+ 243 01cd 7414     		je	.L14
+ 162:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     {
+ 163:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         mbedtls_x509_csr_free( csr );
+ 244              		.loc 1 163 9
+ 245 01cf 488B45B8 		movq	-72(%rbp), %rax
+ 246 01d3 4889C7   		movq	%rax, %rdi
+ 247 01d6 E8000000 		call	mbedtls_x509_csr_free
+ 247      00
+ 164:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         return( ret );
+ 248              		.loc 1 164 15
+ 249 01db 8B45C4   		movl	-60(%rbp), %eax
+ 250 01de E9640200 		jmp	.L24
+ 250      00
+ 251              	.L14:
+ 165:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     }
+ 166:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+GAS LISTING /tmp/cc3hSM0O.s 			page 9
+
+
+ 167:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     if( csr->version != 0 )
+ 252              		.loc 1 167 12
+ 253 01e3 488B45B8 		movq	-72(%rbp), %rax
+ 254 01e7 8B4030   		movl	48(%rax), %eax
+ 255              		.loc 1 167 7
+ 256 01ea 85C0     		testl	%eax, %eax
+ 257 01ec 7416     		je	.L15
+ 168:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     {
+ 169:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         mbedtls_x509_csr_free( csr );
+ 258              		.loc 1 169 9
+ 259 01ee 488B45B8 		movq	-72(%rbp), %rax
+ 260 01f2 4889C7   		movq	%rax, %rdi
+ 261 01f5 E8000000 		call	mbedtls_x509_csr_free
+ 261      00
+ 170:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         return( MBEDTLS_ERR_X509_UNKNOWN_VERSION );
+ 262              		.loc 1 170 15
+ 263 01fa B880DAFF 		movl	$-9600, %eax
+ 263      FF
+ 264 01ff E9430200 		jmp	.L24
+ 264      00
+ 265              	.L15:
+ 171:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     }
+ 172:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 173:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     csr->version++;
+ 266              		.loc 1 173 8
+ 267 0204 488B45B8 		movq	-72(%rbp), %rax
+ 268 0208 8B4030   		movl	48(%rax), %eax
+ 269              		.loc 1 173 17
+ 270 020b 8D5001   		leal	1(%rax), %edx
+ 271 020e 488B45B8 		movq	-72(%rbp), %rax
+ 272 0212 895030   		movl	%edx, 48(%rax)
+ 174:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 175:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     /*
+ 176:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      *  subject               Name
+ 177:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      */
+ 178:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     csr->subject_raw.p = p;
+ 273              		.loc 1 178 24
+ 274 0215 488B55D0 		movq	-48(%rbp), %rdx
+ 275 0219 488B45B8 		movq	-72(%rbp), %rax
+ 276 021d 48895048 		movq	%rdx, 72(%rax)
+ 179:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 180:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     if( ( ret = mbedtls_asn1_get_tag( &p, end, &len,
+ 277              		.loc 1 180 17
+ 278 0221 488D55C8 		leaq	-56(%rbp), %rdx
+ 279 0225 488B75D8 		movq	-40(%rbp), %rsi
+ 280 0229 488D45D0 		leaq	-48(%rbp), %rax
+ 281 022d B9300000 		movl	$48, %ecx
+ 281      00
+ 282 0232 4889C7   		movq	%rax, %rdi
+ 283 0235 E8000000 		call	mbedtls_asn1_get_tag@PLT
+ 283      00
+ 284 023a 8945C4   		movl	%eax, -60(%rbp)
+ 285              		.loc 1 180 7
+ 286 023d 837DC400 		cmpl	$0, -60(%rbp)
+ 287 0241 7419     		je	.L16
+ 181:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****             MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE ) ) != 0 )
+ 182:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     {
+GAS LISTING /tmp/cc3hSM0O.s 			page 10
+
+
+ 183:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         mbedtls_x509_csr_free( csr );
+ 288              		.loc 1 183 9
+ 289 0243 488B45B8 		movq	-72(%rbp), %rax
+ 290 0247 4889C7   		movq	%rax, %rdi
+ 291 024a E8000000 		call	mbedtls_x509_csr_free
+ 291      00
+ 184:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         return( MBEDTLS_ERR_X509_INVALID_FORMAT + ret );
+ 292              		.loc 1 184 49
+ 293 024f 8B45C4   		movl	-60(%rbp), %eax
+ 294 0252 2D802100 		subl	$8576, %eax
+ 294      00
+ 295 0257 E9EB0100 		jmp	.L24
+ 295      00
+ 296              	.L16:
+ 185:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     }
+ 186:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 187:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     if( ( ret = mbedtls_x509_get_name( &p, p + len, &csr->subject ) ) != 0 )
+ 297              		.loc 1 187 17
+ 298 025c 488B45B8 		movq	-72(%rbp), %rax
+ 299 0260 488D5050 		leaq	80(%rax), %rdx
+ 300 0264 488B4DD0 		movq	-48(%rbp), %rcx
+ 301 0268 488B45C8 		movq	-56(%rbp), %rax
+ 302              		.loc 1 187 46
+ 303 026c 4801C1   		addq	%rax, %rcx
+ 304              		.loc 1 187 17
+ 305 026f 488D45D0 		leaq	-48(%rbp), %rax
+ 306 0273 4889CE   		movq	%rcx, %rsi
+ 307 0276 4889C7   		movq	%rax, %rdi
+ 308 0279 E8000000 		call	mbedtls_x509_get_name@PLT
+ 308      00
+ 309 027e 8945C4   		movl	%eax, -60(%rbp)
+ 310              		.loc 1 187 7
+ 311 0281 837DC400 		cmpl	$0, -60(%rbp)
+ 312 0285 7414     		je	.L17
+ 188:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     {
+ 189:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         mbedtls_x509_csr_free( csr );
+ 313              		.loc 1 189 9
+ 314 0287 488B45B8 		movq	-72(%rbp), %rax
+ 315 028b 4889C7   		movq	%rax, %rdi
+ 316 028e E8000000 		call	mbedtls_x509_csr_free
+ 316      00
+ 190:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         return( ret );
+ 317              		.loc 1 190 15
+ 318 0293 8B45C4   		movl	-60(%rbp), %eax
+ 319 0296 E9AC0100 		jmp	.L24
+ 319      00
+ 320              	.L17:
+ 191:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     }
+ 192:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 193:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     csr->subject_raw.len = p - csr->subject_raw.p;
+ 321              		.loc 1 193 30
+ 322 029b 488B55D0 		movq	-48(%rbp), %rdx
+ 323              		.loc 1 193 48
+ 324 029f 488B45B8 		movq	-72(%rbp), %rax
+ 325 02a3 488B4048 		movq	72(%rax), %rax
+ 326              		.loc 1 193 30
+ 327 02a7 4829C2   		subq	%rax, %rdx
+GAS LISTING /tmp/cc3hSM0O.s 			page 11
+
+
+ 328 02aa 4889D0   		movq	%rdx, %rax
+ 329 02ad 4889C2   		movq	%rax, %rdx
+ 330              		.loc 1 193 26
+ 331 02b0 488B45B8 		movq	-72(%rbp), %rax
+ 332 02b4 48895040 		movq	%rdx, 64(%rax)
+ 194:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 195:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     /*
+ 196:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      *  subjectPKInfo SubjectPublicKeyInfo
+ 197:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      */
+ 198:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     if( ( ret = mbedtls_pk_parse_subpubkey( &p, end, &csr->pk ) ) != 0 )
+ 333              		.loc 1 198 17
+ 334 02b8 488B45B8 		movq	-72(%rbp), %rax
+ 335 02bc 488D9090 		leaq	144(%rax), %rdx
+ 335      000000
+ 336 02c3 488B4DD8 		movq	-40(%rbp), %rcx
+ 337 02c7 488D45D0 		leaq	-48(%rbp), %rax
+ 338 02cb 4889CE   		movq	%rcx, %rsi
+ 339 02ce 4889C7   		movq	%rax, %rdi
+ 340 02d1 E8000000 		call	mbedtls_pk_parse_subpubkey@PLT
+ 340      00
+ 341 02d6 8945C4   		movl	%eax, -60(%rbp)
+ 342              		.loc 1 198 7
+ 343 02d9 837DC400 		cmpl	$0, -60(%rbp)
+ 344 02dd 7414     		je	.L18
+ 199:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     {
+ 200:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         mbedtls_x509_csr_free( csr );
+ 345              		.loc 1 200 9
+ 346 02df 488B45B8 		movq	-72(%rbp), %rax
+ 347 02e3 4889C7   		movq	%rax, %rdi
+ 348 02e6 E8000000 		call	mbedtls_x509_csr_free
+ 348      00
+ 201:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         return( ret );
+ 349              		.loc 1 201 15
+ 350 02eb 8B45C4   		movl	-60(%rbp), %eax
+ 351 02ee E9540100 		jmp	.L24
+ 351      00
+ 352              	.L18:
+ 202:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     }
+ 203:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 204:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     /*
+ 205:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      *  attributes    [0] Attributes
+ 206:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      *
+ 207:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      *  The list of possible attributes is open-ended, though RFC 2985
+ 208:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      *  (PKCS#9) defines a few in section 5.4. We currently don't support any,
+ 209:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      *  so we just ignore them. This is a safe thing to do as the worst thing
+ 210:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      *  that could happen is that we issue a certificate that does not match
+ 211:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      *  the requester's expectations - this cannot cause a violation of our
+ 212:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      *  signature policies.
+ 213:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      */
+ 214:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     if( ( ret = mbedtls_asn1_get_tag( &p, end, &len,
+ 353              		.loc 1 214 17
+ 354 02f3 488D55C8 		leaq	-56(%rbp), %rdx
+ 355 02f7 488B75D8 		movq	-40(%rbp), %rsi
+ 356 02fb 488D45D0 		leaq	-48(%rbp), %rax
+ 357 02ff B9A00000 		movl	$160, %ecx
+ 357      00
+ 358 0304 4889C7   		movq	%rax, %rdi
+GAS LISTING /tmp/cc3hSM0O.s 			page 12
+
+
+ 359 0307 E8000000 		call	mbedtls_asn1_get_tag@PLT
+ 359      00
+ 360 030c 8945C4   		movl	%eax, -60(%rbp)
+ 361              		.loc 1 214 7
+ 362 030f 837DC400 		cmpl	$0, -60(%rbp)
+ 363 0313 7419     		je	.L19
+ 215:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****             MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_CONTEXT_SPECIFIC ) ) != 0 )
+ 216:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     {
+ 217:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         mbedtls_x509_csr_free( csr );
+ 364              		.loc 1 217 9
+ 365 0315 488B45B8 		movq	-72(%rbp), %rax
+ 366 0319 4889C7   		movq	%rax, %rdi
+ 367 031c E8000000 		call	mbedtls_x509_csr_free
+ 367      00
+ 218:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         return( MBEDTLS_ERR_X509_INVALID_FORMAT + ret );
+ 368              		.loc 1 218 49
+ 369 0321 8B45C4   		movl	-60(%rbp), %eax
+ 370 0324 2D802100 		subl	$8576, %eax
+ 370      00
+ 371 0329 E9190100 		jmp	.L24
+ 371      00
+ 372              	.L19:
+ 219:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     }
+ 220:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 221:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     p += len;
+ 373              		.loc 1 221 7
+ 374 032e 488B55D0 		movq	-48(%rbp), %rdx
+ 375 0332 488B45C8 		movq	-56(%rbp), %rax
+ 376 0336 4801D0   		addq	%rdx, %rax
+ 377 0339 488945D0 		movq	%rax, -48(%rbp)
+ 222:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 223:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     end = csr->raw.p + csr->raw.len;
+ 378              		.loc 1 223 19
+ 379 033d 488B45B8 		movq	-72(%rbp), %rax
+ 380 0341 488B5010 		movq	16(%rax), %rdx
+ 381              		.loc 1 223 32
+ 382 0345 488B45B8 		movq	-72(%rbp), %rax
+ 383 0349 488B4008 		movq	8(%rax), %rax
+ 384              		.loc 1 223 9
+ 385 034d 4801D0   		addq	%rdx, %rax
+ 386 0350 488945D8 		movq	%rax, -40(%rbp)
+ 224:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 225:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     /*
+ 226:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      *  signatureAlgorithm   AlgorithmIdentifier,
+ 227:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      *  signature            BIT STRING
+ 228:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      */
+ 229:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     if( ( ret = mbedtls_x509_get_alg( &p, end, &csr->sig_oid, &sig_params ) ) != 0 )
+ 387              		.loc 1 229 17
+ 388 0354 488B45B8 		movq	-72(%rbp), %rax
+ 389 0358 488DB8A0 		leaq	160(%rax), %rdi
+ 389      000000
+ 390 035f 488D55E0 		leaq	-32(%rbp), %rdx
+ 391 0363 488B75D8 		movq	-40(%rbp), %rsi
+ 392 0367 488D45D0 		leaq	-48(%rbp), %rax
+ 393 036b 4889D1   		movq	%rdx, %rcx
+ 394 036e 4889FA   		movq	%rdi, %rdx
+ 395 0371 4889C7   		movq	%rax, %rdi
+GAS LISTING /tmp/cc3hSM0O.s 			page 13
+
+
+ 396 0374 E8000000 		call	mbedtls_x509_get_alg@PLT
+ 396      00
+ 397 0379 8945C4   		movl	%eax, -60(%rbp)
+ 398              		.loc 1 229 7
+ 399 037c 837DC400 		cmpl	$0, -60(%rbp)
+ 400 0380 7414     		je	.L20
+ 230:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     {
+ 231:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         mbedtls_x509_csr_free( csr );
+ 401              		.loc 1 231 9
+ 402 0382 488B45B8 		movq	-72(%rbp), %rax
+ 403 0386 4889C7   		movq	%rax, %rdi
+ 404 0389 E8000000 		call	mbedtls_x509_csr_free
+ 404      00
+ 232:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         return( ret );
+ 405              		.loc 1 232 15
+ 406 038e 8B45C4   		movl	-60(%rbp), %eax
+ 407 0391 E9B10000 		jmp	.L24
+ 407      00
+ 408              	.L20:
+ 233:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     }
+ 234:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 235:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     if( ( ret = mbedtls_x509_get_sig_alg( &csr->sig_oid, &sig_params,
+ 409              		.loc 1 235 17
+ 410 0396 488B45B8 		movq	-72(%rbp), %rax
+ 411 039a 488DB0D8 		leaq	216(%rax), %rsi
+ 411      000000
+ 412 03a1 488B45B8 		movq	-72(%rbp), %rax
+ 413 03a5 488D88D4 		leaq	212(%rax), %rcx
+ 413      000000
+ 414 03ac 488B45B8 		movq	-72(%rbp), %rax
+ 415 03b0 488D90D0 		leaq	208(%rax), %rdx
+ 415      000000
+ 416              		.loc 1 235 43
+ 417 03b7 488B45B8 		movq	-72(%rbp), %rax
+ 418 03bb 488DB8A0 		leaq	160(%rax), %rdi
+ 418      000000
+ 419              		.loc 1 235 17
+ 420 03c2 488D45E0 		leaq	-32(%rbp), %rax
+ 421 03c6 4989F0   		movq	%rsi, %r8
+ 422 03c9 4889C6   		movq	%rax, %rsi
+ 423 03cc E8000000 		call	mbedtls_x509_get_sig_alg@PLT
+ 423      00
+ 424 03d1 8945C4   		movl	%eax, -60(%rbp)
+ 425              		.loc 1 235 7
+ 426 03d4 837DC400 		cmpl	$0, -60(%rbp)
+ 427 03d8 7413     		je	.L21
+ 236:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****                                   &csr->sig_md, &csr->sig_pk,
+ 237:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****                                   &csr->sig_opts ) ) != 0 )
+ 238:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     {
+ 239:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         mbedtls_x509_csr_free( csr );
+ 428              		.loc 1 239 9
+ 429 03da 488B45B8 		movq	-72(%rbp), %rax
+ 430 03de 4889C7   		movq	%rax, %rdi
+ 431 03e1 E8000000 		call	mbedtls_x509_csr_free
+ 431      00
+ 240:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         return( MBEDTLS_ERR_X509_UNKNOWN_SIG_ALG );
+ 432              		.loc 1 240 15
+GAS LISTING /tmp/cc3hSM0O.s 			page 14
+
+
+ 433 03e6 B800DAFF 		movl	$-9728, %eax
+ 433      FF
+ 434 03eb EB5A     		jmp	.L24
+ 435              	.L21:
+ 241:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     }
+ 242:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 243:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     if( ( ret = mbedtls_x509_get_sig( &p, end, &csr->sig ) ) != 0 )
+ 436              		.loc 1 243 17
+ 437 03ed 488B45B8 		movq	-72(%rbp), %rax
+ 438 03f1 488D90B8 		leaq	184(%rax), %rdx
+ 438      000000
+ 439 03f8 488B4DD8 		movq	-40(%rbp), %rcx
+ 440 03fc 488D45D0 		leaq	-48(%rbp), %rax
+ 441 0400 4889CE   		movq	%rcx, %rsi
+ 442 0403 4889C7   		movq	%rax, %rdi
+ 443 0406 E8000000 		call	mbedtls_x509_get_sig@PLT
+ 443      00
+ 444 040b 8945C4   		movl	%eax, -60(%rbp)
+ 445              		.loc 1 243 7
+ 446 040e 837DC400 		cmpl	$0, -60(%rbp)
+ 447 0412 7411     		je	.L22
+ 244:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     {
+ 245:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         mbedtls_x509_csr_free( csr );
+ 448              		.loc 1 245 9
+ 449 0414 488B45B8 		movq	-72(%rbp), %rax
+ 450 0418 4889C7   		movq	%rax, %rdi
+ 451 041b E8000000 		call	mbedtls_x509_csr_free
+ 451      00
+ 246:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         return( ret );
+ 452              		.loc 1 246 15
+ 453 0420 8B45C4   		movl	-60(%rbp), %eax
+ 454 0423 EB22     		jmp	.L24
+ 455              	.L22:
+ 247:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     }
+ 248:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 249:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     if( p != end )
+ 456              		.loc 1 249 11
+ 457 0425 488B45D0 		movq	-48(%rbp), %rax
+ 458              		.loc 1 249 7
+ 459 0429 483945D8 		cmpq	%rax, -40(%rbp)
+ 460 042d 7413     		je	.L23
+ 250:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     {
+ 251:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         mbedtls_x509_csr_free( csr );
+ 461              		.loc 1 251 9
+ 462 042f 488B45B8 		movq	-72(%rbp), %rax
+ 463 0433 4889C7   		movq	%rax, %rdi
+ 464 0436 E8000000 		call	mbedtls_x509_csr_free
+ 464      00
+ 252:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         return( MBEDTLS_ERR_X509_INVALID_FORMAT +
+ 465              		.loc 1 252 15
+ 466 043b B81ADEFF 		movl	$-8678, %eax
+ 466      FF
+ 467 0440 EB05     		jmp	.L24
+ 468              	.L23:
+ 253:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****                 MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
+ 254:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     }
+ 255:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+GAS LISTING /tmp/cc3hSM0O.s 			page 15
+
+
+ 256:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     return( 0 );
+ 469              		.loc 1 256 11
+ 470 0442 B8000000 		movl	$0, %eax
+ 470      00
+ 471              	.L24:
+ 257:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** }
+ 472              		.loc 1 257 1 discriminator 1
+ 473 0447 488B4DF8 		movq	-8(%rbp), %rcx
+ 474 044b 6448330C 		xorq	%fs:40, %rcx
+ 474      25280000 
+ 474      00
+ 475 0454 7405     		je	.L25
+ 476              		.loc 1 257 1 is_stmt 0
+ 477 0456 E8000000 		call	__stack_chk_fail@PLT
+ 477      00
+ 478              	.L25:
+ 479 045b C9       		leave
+ 480              	.LCFI5:
+ 481              		.cfi_def_cfa 7, 8
+ 482 045c C3       		ret
+ 483              		.cfi_endproc
+ 484              	.LFE17:
+ 486              		.section	.rodata
+ 487              		.align 8
+ 488              	.LC0:
+ 489 0000 2D2D2D2D 		.string	"-----END CERTIFICATE REQUEST-----"
+ 489      2D454E44 
+ 489      20434552 
+ 489      54494649 
+ 489      43415445 
+ 490 0022 00000000 		.align 8
+ 490      0000
+ 491              	.LC1:
+ 492 0028 2D2D2D2D 		.string	"-----BEGIN CERTIFICATE REQUEST-----"
+ 492      2D424547 
+ 492      494E2043 
+ 492      45525449 
+ 492      46494341 
+ 493 004c 00000000 		.align 8
+ 494              	.LC2:
+ 495 0050 2D2D2D2D 		.string	"-----END NEW CERTIFICATE REQUEST-----"
+ 495      2D454E44 
+ 495      204E4557 
+ 495      20434552 
+ 495      54494649 
+ 496 0076 0000     		.align 8
+ 497              	.LC3:
+ 498 0078 2D2D2D2D 		.string	"-----BEGIN NEW CERTIFICATE REQUEST-----"
+ 498      2D424547 
+ 498      494E204E 
+ 498      45572043 
+ 498      45525449 
+ 499              		.section	.text.mbedtls_x509_csr_parse,"ax",@progbits
+ 500              		.globl	mbedtls_x509_csr_parse
+ 502              	mbedtls_x509_csr_parse:
+ 503              	.LFB18:
+ 258:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+GAS LISTING /tmp/cc3hSM0O.s 			page 16
+
+
+ 259:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** /*
+ 260:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  * Parse a CSR, allowing for PEM or raw DER encoding
+ 261:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  */
+ 262:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** int mbedtls_x509_csr_parse( mbedtls_x509_csr *csr, const unsigned char *buf, size_t buflen )
+ 263:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** {
+ 504              		.loc 1 263 1 is_stmt 1
+ 505              		.cfi_startproc
+ 506 0000 F30F1EFA 		endbr64
+ 507 0004 55       		pushq	%rbp
+ 508              	.LCFI6:
+ 509              		.cfi_def_cfa_offset 16
+ 510              		.cfi_offset 6, -16
+ 511 0005 4889E5   		movq	%rsp, %rbp
+ 512              	.LCFI7:
+ 513              		.cfi_def_cfa_register 6
+ 514 0008 4883EC50 		subq	$80, %rsp
+ 515 000c 48897DC8 		movq	%rdi, -56(%rbp)
+ 516 0010 488975C0 		movq	%rsi, -64(%rbp)
+ 517 0014 488955B8 		movq	%rdx, -72(%rbp)
+ 518              		.loc 1 263 1
+ 519 0018 64488B04 		movq	%fs:40, %rax
+ 519      25280000 
+ 519      00
+ 520 0021 488945F8 		movq	%rax, -8(%rbp)
+ 521 0025 31C0     		xorl	%eax, %eax
+ 264:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #if defined(MBEDTLS_PEM_PARSE_C)
+ 265:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     int ret;
+ 266:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     size_t use_len;
+ 267:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     mbedtls_pem_context pem;
+ 268:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #endif
+ 269:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 270:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     /*
+ 271:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      * Check for valid input
+ 272:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****      */
+ 273:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     if( csr == NULL || buf == NULL || buflen == 0 )
+ 522              		.loc 1 273 7
+ 523 0027 48837DC8 		cmpq	$0, -56(%rbp)
+ 523      00
+ 524 002c 740E     		je	.L27
+ 525              		.loc 1 273 21 discriminator 1
+ 526 002e 48837DC0 		cmpq	$0, -64(%rbp)
+ 526      00
+ 527 0033 7407     		je	.L27
+ 528              		.loc 1 273 36 discriminator 2
+ 529 0035 48837DB8 		cmpq	$0, -72(%rbp)
+ 529      00
+ 530 003a 750A     		jne	.L28
+ 531              	.L27:
+ 274:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         return( MBEDTLS_ERR_X509_BAD_INPUT_DATA );
+ 532              		.loc 1 274 15
+ 533 003c B800D8FF 		movl	$-10240, %eax
+ 533      FF
+ 534 0041 E9FA0000 		jmp	.L33
+ 534      00
+ 535              	.L28:
+ 275:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 276:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #if defined(MBEDTLS_PEM_PARSE_C)
+GAS LISTING /tmp/cc3hSM0O.s 			page 17
+
+
+ 277:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     /* Avoid calling mbedtls_pem_read_buffer() on non-null-terminated string */
+ 278:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     if( buf[buflen - 1] == '\0' )
+ 536              		.loc 1 278 12
+ 537 0046 488B45B8 		movq	-72(%rbp), %rax
+ 538 004a 488D50FF 		leaq	-1(%rax), %rdx
+ 539 004e 488B45C0 		movq	-64(%rbp), %rax
+ 540 0052 4801D0   		addq	%rdx, %rax
+ 541 0055 0FB600   		movzbl	(%rax), %eax
+ 542              		.loc 1 278 7
+ 543 0058 84C0     		testb	%al, %al
+ 544 005a 0F85C900 		jne	.L30
+ 544      0000
+ 279:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     {
+ 280:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         mbedtls_pem_init( &pem );
+ 545              		.loc 1 280 9
+ 546 0060 488D45E0 		leaq	-32(%rbp), %rax
+ 547 0064 4889C7   		movq	%rax, %rdi
+ 548 0067 E8000000 		call	mbedtls_pem_init@PLT
+ 548      00
+ 281:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         ret = mbedtls_pem_read_buffer( &pem,
+ 549              		.loc 1 281 15
+ 550 006c 488B55C0 		movq	-64(%rbp), %rdx
+ 551 0070 488D45E0 		leaq	-32(%rbp), %rax
+ 552 0074 4883EC08 		subq	$8, %rsp
+ 553 0078 488D4DD8 		leaq	-40(%rbp), %rcx
+ 554 007c 51       		pushq	%rcx
+ 555 007d 41B90000 		movl	$0, %r9d
+ 555      0000
+ 556 0083 41B80000 		movl	$0, %r8d
+ 556      0000
+ 557 0089 4889D1   		movq	%rdx, %rcx
+ 558 008c 488D1500 		leaq	.LC0(%rip), %rdx
+ 558      000000
+ 559 0093 488D3500 		leaq	.LC1(%rip), %rsi
+ 559      000000
+ 560 009a 4889C7   		movq	%rax, %rdi
+ 561 009d E8000000 		call	mbedtls_pem_read_buffer@PLT
+ 561      00
+ 562 00a2 4883C410 		addq	$16, %rsp
+ 563 00a6 8945D4   		movl	%eax, -44(%rbp)
+ 282:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****                                        "-----BEGIN CERTIFICATE REQUEST-----",
+ 283:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****                                        "-----END CERTIFICATE REQUEST-----",
+ 284:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****                                        buf, NULL, 0, &use_len );
+ 285:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         if( ret == MBEDTLS_ERR_PEM_NO_HEADER_FOOTER_PRESENT )
+ 564              		.loc 1 285 11
+ 565 00a9 817DD480 		cmpl	$-4224, -44(%rbp)
+ 565      EFFFFF
+ 566 00b0 753D     		jne	.L31
+ 286:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         {
+ 287:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****             ret = mbedtls_pem_read_buffer( &pem,
+ 567              		.loc 1 287 19
+ 568 00b2 488B55C0 		movq	-64(%rbp), %rdx
+ 569 00b6 488D45E0 		leaq	-32(%rbp), %rax
+ 570 00ba 4883EC08 		subq	$8, %rsp
+ 571 00be 488D4DD8 		leaq	-40(%rbp), %rcx
+ 572 00c2 51       		pushq	%rcx
+ 573 00c3 41B90000 		movl	$0, %r9d
+GAS LISTING /tmp/cc3hSM0O.s 			page 18
+
+
+ 573      0000
+ 574 00c9 41B80000 		movl	$0, %r8d
+ 574      0000
+ 575 00cf 4889D1   		movq	%rdx, %rcx
+ 576 00d2 488D1500 		leaq	.LC2(%rip), %rdx
+ 576      000000
+ 577 00d9 488D3500 		leaq	.LC3(%rip), %rsi
+ 577      000000
+ 578 00e0 4889C7   		movq	%rax, %rdi
+ 579 00e3 E8000000 		call	mbedtls_pem_read_buffer@PLT
+ 579      00
+ 580 00e8 4883C410 		addq	$16, %rsp
+ 581 00ec 8945D4   		movl	%eax, -44(%rbp)
+ 582              	.L31:
+ 288:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****                                            "-----BEGIN NEW CERTIFICATE REQUEST-----",
+ 289:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****                                            "-----END NEW CERTIFICATE REQUEST-----",
+ 290:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****                                            buf, NULL, 0, &use_len );
+ 291:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         }
+ 292:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 293:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         if( ret == 0 )
+ 583              		.loc 1 293 11
+ 584 00ef 837DD400 		cmpl	$0, -44(%rbp)
+ 585 00f3 751A     		jne	.L32
+ 294:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         {
+ 295:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****             /*
+ 296:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****              * Was PEM encoded, parse the result
+ 297:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****              */
+ 298:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****             ret = mbedtls_x509_csr_parse_der( csr, pem.buf, pem.buflen );
+ 586              		.loc 1 298 19
+ 587 00f5 488B55E8 		movq	-24(%rbp), %rdx
+ 588              		.loc 1 298 55
+ 589 00f9 488B4DE0 		movq	-32(%rbp), %rcx
+ 590              		.loc 1 298 19
+ 591 00fd 488B45C8 		movq	-56(%rbp), %rax
+ 592 0101 4889CE   		movq	%rcx, %rsi
+ 593 0104 4889C7   		movq	%rax, %rdi
+ 594 0107 E8000000 		call	mbedtls_x509_csr_parse_der
+ 594      00
+ 595 010c 8945D4   		movl	%eax, -44(%rbp)
+ 596              	.L32:
+ 299:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         }
+ 300:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 301:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         mbedtls_pem_free( &pem );
+ 597              		.loc 1 301 9
+ 598 010f 488D45E0 		leaq	-32(%rbp), %rax
+ 599 0113 4889C7   		movq	%rax, %rdi
+ 600 0116 E8000000 		call	mbedtls_pem_free@PLT
+ 600      00
+ 302:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         if( ret != MBEDTLS_ERR_PEM_NO_HEADER_FOOTER_PRESENT )
+ 601              		.loc 1 302 11
+ 602 011b 817DD480 		cmpl	$-4224, -44(%rbp)
+ 602      EFFFFF
+ 603 0122 7405     		je	.L30
+ 303:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****             return( ret );
+ 604              		.loc 1 303 19
+ 605 0124 8B45D4   		movl	-44(%rbp), %eax
+ 606 0127 EB17     		jmp	.L33
+GAS LISTING /tmp/cc3hSM0O.s 			page 19
+
+
+ 607              	.L30:
+ 304:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     }
+ 305:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #endif /* MBEDTLS_PEM_PARSE_C */
+ 306:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     return( mbedtls_x509_csr_parse_der( csr, buf, buflen ) );
+ 608              		.loc 1 306 13
+ 609 0129 488B55B8 		movq	-72(%rbp), %rdx
+ 610 012d 488B4DC0 		movq	-64(%rbp), %rcx
+ 611 0131 488B45C8 		movq	-56(%rbp), %rax
+ 612 0135 4889CE   		movq	%rcx, %rsi
+ 613 0138 4889C7   		movq	%rax, %rdi
+ 614 013b E8000000 		call	mbedtls_x509_csr_parse_der
+ 614      00
+ 615              	.L33:
+ 307:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** }
+ 616              		.loc 1 307 1 discriminator 1
+ 617 0140 488B75F8 		movq	-8(%rbp), %rsi
+ 618 0144 64483334 		xorq	%fs:40, %rsi
+ 618      25280000 
+ 618      00
+ 619 014d 7405     		je	.L34
+ 620              		.loc 1 307 1 is_stmt 0
+ 621 014f E8000000 		call	__stack_chk_fail@PLT
+ 621      00
+ 622              	.L34:
+ 623 0154 C9       		leave
+ 624              	.LCFI8:
+ 625              		.cfi_def_cfa 7, 8
+ 626 0155 C3       		ret
+ 627              		.cfi_endproc
+ 628              	.LFE18:
+ 630              		.section	.rodata
+ 631              	.LC4:
+ 632 00a0 25734353 		.string	"%sCSR version   : %d"
+ 632      52207665 
+ 632      7273696F 
+ 632      6E202020 
+ 632      3A202564 
+ 633              	.LC5:
+ 634 00b5 0A257373 		.string	"\n%ssubject name  : "
+ 634      75626A65 
+ 634      6374206E 
+ 634      616D6520 
+ 634      203A2000 
+ 635              	.LC6:
+ 636 00c9 0A257373 		.string	"\n%ssigned using  : "
+ 636      69676E65 
+ 636      64207573 
+ 636      696E6720 
+ 636      203A2000 
+ 637              	.LC7:
+ 638 00dd 0A257325 		.string	"\n%s%-14s: %d bits\n"
+ 638      2D313473 
+ 638      3A202564 
+ 638      20626974 
+ 638      730A00
+ 639              		.section	.text.mbedtls_x509_csr_info,"ax",@progbits
+ 640              		.globl	mbedtls_x509_csr_info
+GAS LISTING /tmp/cc3hSM0O.s 			page 20
+
+
+ 642              	mbedtls_x509_csr_info:
+ 643              	.LFB19:
+ 308:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 309:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #if defined(MBEDTLS_FS_IO)
+ 310:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** /*
+ 311:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  * Load a CSR into the structure
+ 312:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  */
+ 313:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** int mbedtls_x509_csr_parse_file( mbedtls_x509_csr *csr, const char *path )
+ 314:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** {
+ 315:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     int ret;
+ 316:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     size_t n;
+ 317:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     unsigned char *buf;
+ 318:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 319:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     if( ( ret = mbedtls_pk_load_file( path, &buf, &n ) ) != 0 )
+ 320:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         return( ret );
+ 321:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 322:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     ret = mbedtls_x509_csr_parse( csr, buf, n );
+ 323:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 324:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     mbedtls_platform_zeroize( buf, n );
+ 325:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     mbedtls_free( buf );
+ 326:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 327:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     return( ret );
+ 328:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** }
+ 329:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #endif /* MBEDTLS_FS_IO */
+ 330:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 331:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #define BEFORE_COLON    14
+ 332:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #define BC              "14"
+ 333:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** /*
+ 334:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  * Return an informational string about the CSR.
+ 335:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  */
+ 336:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** int mbedtls_x509_csr_info( char *buf, size_t size, const char *prefix,
+ 337:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****                    const mbedtls_x509_csr *csr )
+ 338:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** {
+ 644              		.loc 1 338 1 is_stmt 1
+ 645              		.cfi_startproc
+ 646 0000 F30F1EFA 		endbr64
+ 647 0004 55       		pushq	%rbp
+ 648              	.LCFI9:
+ 649              		.cfi_def_cfa_offset 16
+ 650              		.cfi_offset 6, -16
+ 651 0005 4889E5   		movq	%rsp, %rbp
+ 652              	.LCFI10:
+ 653              		.cfi_def_cfa_register 6
+ 654 0008 53       		pushq	%rbx
+ 655 0009 4883EC58 		subq	$88, %rsp
+ 656              		.cfi_offset 3, -24
+ 657 000d 48897DB8 		movq	%rdi, -72(%rbp)
+ 658 0011 488975B0 		movq	%rsi, -80(%rbp)
+ 659 0015 488955A8 		movq	%rdx, -88(%rbp)
+ 660 0019 48894DA0 		movq	%rcx, -96(%rbp)
+ 661              		.loc 1 338 1
+ 662 001d 64488B04 		movq	%fs:40, %rax
+ 662      25280000 
+ 662      00
+ 663 0026 488945E8 		movq	%rax, -24(%rbp)
+ 664 002a 31C0     		xorl	%eax, %eax
+ 339:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     int ret;
+GAS LISTING /tmp/cc3hSM0O.s 			page 21
+
+
+ 340:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     size_t n;
+ 341:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     char *p;
+ 342:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     char key_size_str[BEFORE_COLON];
+ 343:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 344:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     p = buf;
+ 665              		.loc 1 344 7
+ 666 002c 488B45B8 		movq	-72(%rbp), %rax
+ 667 0030 488945C8 		movq	%rax, -56(%rbp)
+ 345:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     n = size;
+ 668              		.loc 1 345 7
+ 669 0034 488B45B0 		movq	-80(%rbp), %rax
+ 670 0038 488945D0 		movq	%rax, -48(%rbp)
+ 346:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 347:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     ret = mbedtls_snprintf( p, n, "%sCSR version   : %d",
+ 671              		.loc 1 347 11
+ 672 003c 4C8B0D00 		movq	mbedtls_snprintf(%rip), %r9
+ 672      000000
+ 673 0043 488B45A0 		movq	-96(%rbp), %rax
+ 674 0047 8B4830   		movl	48(%rax), %ecx
+ 675 004a 488B55A8 		movq	-88(%rbp), %rdx
+ 676 004e 488B75D0 		movq	-48(%rbp), %rsi
+ 677 0052 488B45C8 		movq	-56(%rbp), %rax
+ 678 0056 4189C8   		movl	%ecx, %r8d
+ 679 0059 4889D1   		movq	%rdx, %rcx
+ 680 005c 488D1500 		leaq	.LC4(%rip), %rdx
+ 680      000000
+ 681 0063 4889C7   		movq	%rax, %rdi
+ 682 0066 B8000000 		movl	$0, %eax
+ 682      00
+ 683 006b 41FFD1   		call	*%r9
+ 684              	.LVL0:
+ 685 006e 8945C4   		movl	%eax, -60(%rbp)
+ 348:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****                                prefix, csr->version );
+ 349:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     MBEDTLS_X509_SAFE_SNPRINTF;
+ 686              		.loc 1 349 5
+ 687 0071 837DC400 		cmpl	$0, -60(%rbp)
+ 688 0075 780B     		js	.L36
+ 689              		.loc 1 349 5 is_stmt 0 discriminator 2
+ 690 0077 8B45C4   		movl	-60(%rbp), %eax
+ 691 007a 4898     		cltq
+ 692 007c 483945D0 		cmpq	%rax, -48(%rbp)
+ 693 0080 770A     		ja	.L37
+ 694              	.L36:
+ 695              		.loc 1 349 5 discriminator 3
+ 696 0082 B880D6FF 		movl	$-10624, %eax
+ 696      FF
+ 697 0087 E9390200 		jmp	.L50
+ 697      00
+ 698              	.L37:
+ 699              		.loc 1 349 5 discriminator 4
+ 700 008c 8B45C4   		movl	-60(%rbp), %eax
+ 701 008f 4898     		cltq
+ 702 0091 482945D0 		subq	%rax, -48(%rbp)
+ 703 0095 8B45C4   		movl	-60(%rbp), %eax
+ 704 0098 4898     		cltq
+ 705 009a 480145C8 		addq	%rax, -56(%rbp)
+ 350:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+GAS LISTING /tmp/cc3hSM0O.s 			page 22
+
+
+ 351:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     ret = mbedtls_snprintf( p, n, "\n%ssubject name  : ", prefix );
+ 706              		.loc 1 351 11 is_stmt 1 discriminator 4
+ 707 009e 4C8B0500 		movq	mbedtls_snprintf(%rip), %r8
+ 707      000000
+ 708 00a5 488B55A8 		movq	-88(%rbp), %rdx
+ 709 00a9 488B75D0 		movq	-48(%rbp), %rsi
+ 710 00ad 488B45C8 		movq	-56(%rbp), %rax
+ 711 00b1 4889D1   		movq	%rdx, %rcx
+ 712 00b4 488D1500 		leaq	.LC5(%rip), %rdx
+ 712      000000
+ 713 00bb 4889C7   		movq	%rax, %rdi
+ 714 00be B8000000 		movl	$0, %eax
+ 714      00
+ 715 00c3 41FFD0   		call	*%r8
+ 716              	.LVL1:
+ 717 00c6 8945C4   		movl	%eax, -60(%rbp)
+ 352:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     MBEDTLS_X509_SAFE_SNPRINTF;
+ 718              		.loc 1 352 5 discriminator 4
+ 719 00c9 837DC400 		cmpl	$0, -60(%rbp)
+ 720 00cd 780B     		js	.L39
+ 721              		.loc 1 352 5 is_stmt 0 discriminator 2
+ 722 00cf 8B45C4   		movl	-60(%rbp), %eax
+ 723 00d2 4898     		cltq
+ 724 00d4 483945D0 		cmpq	%rax, -48(%rbp)
+ 725 00d8 770A     		ja	.L40
+ 726              	.L39:
+ 727              		.loc 1 352 5 discriminator 3
+ 728 00da B880D6FF 		movl	$-10624, %eax
+ 728      FF
+ 729 00df E9E10100 		jmp	.L50
+ 729      00
+ 730              	.L40:
+ 731              		.loc 1 352 5 discriminator 4
+ 732 00e4 8B45C4   		movl	-60(%rbp), %eax
+ 733 00e7 4898     		cltq
+ 734 00e9 482945D0 		subq	%rax, -48(%rbp)
+ 735 00ed 8B45C4   		movl	-60(%rbp), %eax
+ 736 00f0 4898     		cltq
+ 737 00f2 480145C8 		addq	%rax, -56(%rbp)
+ 353:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     ret = mbedtls_x509_dn_gets( p, n, &csr->subject );
+ 738              		.loc 1 353 11 is_stmt 1 discriminator 4
+ 739 00f6 488B45A0 		movq	-96(%rbp), %rax
+ 740 00fa 488D5050 		leaq	80(%rax), %rdx
+ 741 00fe 488B4DD0 		movq	-48(%rbp), %rcx
+ 742 0102 488B45C8 		movq	-56(%rbp), %rax
+ 743 0106 4889CE   		movq	%rcx, %rsi
+ 744 0109 4889C7   		movq	%rax, %rdi
+ 745 010c E8000000 		call	mbedtls_x509_dn_gets@PLT
+ 745      00
+ 746 0111 8945C4   		movl	%eax, -60(%rbp)
+ 354:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     MBEDTLS_X509_SAFE_SNPRINTF;
+ 747              		.loc 1 354 5 discriminator 4
+ 748 0114 837DC400 		cmpl	$0, -60(%rbp)
+ 749 0118 780B     		js	.L41
+ 750              		.loc 1 354 5 is_stmt 0 discriminator 2
+ 751 011a 8B45C4   		movl	-60(%rbp), %eax
+ 752 011d 4898     		cltq
+GAS LISTING /tmp/cc3hSM0O.s 			page 23
+
+
+ 753 011f 483945D0 		cmpq	%rax, -48(%rbp)
+ 754 0123 770A     		ja	.L42
+ 755              	.L41:
+ 756              		.loc 1 354 5 discriminator 3
+ 757 0125 B880D6FF 		movl	$-10624, %eax
+ 757      FF
+ 758 012a E9960100 		jmp	.L50
+ 758      00
+ 759              	.L42:
+ 760              		.loc 1 354 5 discriminator 4
+ 761 012f 8B45C4   		movl	-60(%rbp), %eax
+ 762 0132 4898     		cltq
+ 763 0134 482945D0 		subq	%rax, -48(%rbp)
+ 764 0138 8B45C4   		movl	-60(%rbp), %eax
+ 765 013b 4898     		cltq
+ 766 013d 480145C8 		addq	%rax, -56(%rbp)
+ 355:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 356:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     ret = mbedtls_snprintf( p, n, "\n%ssigned using  : ", prefix );
+ 767              		.loc 1 356 11 is_stmt 1 discriminator 4
+ 768 0141 4C8B0500 		movq	mbedtls_snprintf(%rip), %r8
+ 768      000000
+ 769 0148 488B55A8 		movq	-88(%rbp), %rdx
+ 770 014c 488B75D0 		movq	-48(%rbp), %rsi
+ 771 0150 488B45C8 		movq	-56(%rbp), %rax
+ 772 0154 4889D1   		movq	%rdx, %rcx
+ 773 0157 488D1500 		leaq	.LC6(%rip), %rdx
+ 773      000000
+ 774 015e 4889C7   		movq	%rax, %rdi
+ 775 0161 B8000000 		movl	$0, %eax
+ 775      00
+ 776 0166 41FFD0   		call	*%r8
+ 777              	.LVL2:
+ 778 0169 8945C4   		movl	%eax, -60(%rbp)
+ 357:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     MBEDTLS_X509_SAFE_SNPRINTF;
+ 779              		.loc 1 357 5 discriminator 4
+ 780 016c 837DC400 		cmpl	$0, -60(%rbp)
+ 781 0170 780B     		js	.L43
+ 782              		.loc 1 357 5 is_stmt 0 discriminator 2
+ 783 0172 8B45C4   		movl	-60(%rbp), %eax
+ 784 0175 4898     		cltq
+ 785 0177 483945D0 		cmpq	%rax, -48(%rbp)
+ 786 017b 770A     		ja	.L44
+ 787              	.L43:
+ 788              		.loc 1 357 5 discriminator 3
+ 789 017d B880D6FF 		movl	$-10624, %eax
+ 789      FF
+ 790 0182 E93E0100 		jmp	.L50
+ 790      00
+ 791              	.L44:
+ 792              		.loc 1 357 5 discriminator 4
+ 793 0187 8B45C4   		movl	-60(%rbp), %eax
+ 794 018a 4898     		cltq
+ 795 018c 482945D0 		subq	%rax, -48(%rbp)
+ 796 0190 8B45C4   		movl	-60(%rbp), %eax
+ 797 0193 4898     		cltq
+ 798 0195 480145C8 		addq	%rax, -56(%rbp)
+ 358:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+GAS LISTING /tmp/cc3hSM0O.s 			page 24
+
+
+ 359:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     ret = mbedtls_x509_sig_alg_gets( p, n, &csr->sig_oid, csr->sig_pk, csr->sig_md,
+ 360:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****                              csr->sig_opts );
+ 799              		.loc 1 360 33 is_stmt 1 discriminator 4
+ 800 0199 488B45A0 		movq	-96(%rbp), %rax
+ 801 019d 4C8B80D8 		movq	216(%rax), %r8
+ 801      000000
+ 359:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****                              csr->sig_opts );
+ 802              		.loc 1 359 11 discriminator 4
+ 803 01a4 488B45A0 		movq	-96(%rbp), %rax
+ 804 01a8 8B88D000 		movl	208(%rax), %ecx
+ 804      0000
+ 805 01ae 488B45A0 		movq	-96(%rbp), %rax
+ 806 01b2 8B90D400 		movl	212(%rax), %edx
+ 806      0000
+ 807 01b8 488B45A0 		movq	-96(%rbp), %rax
+ 808 01bc 488DB8A0 		leaq	160(%rax), %rdi
+ 808      000000
+ 809 01c3 488B75D0 		movq	-48(%rbp), %rsi
+ 810 01c7 488B45C8 		movq	-56(%rbp), %rax
+ 811 01cb 4D89C1   		movq	%r8, %r9
+ 812 01ce 4189C8   		movl	%ecx, %r8d
+ 813 01d1 89D1     		movl	%edx, %ecx
+ 814 01d3 4889FA   		movq	%rdi, %rdx
+ 815 01d6 4889C7   		movq	%rax, %rdi
+ 816 01d9 E8000000 		call	mbedtls_x509_sig_alg_gets@PLT
+ 816      00
+ 817 01de 8945C4   		movl	%eax, -60(%rbp)
+ 361:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     MBEDTLS_X509_SAFE_SNPRINTF;
+ 818              		.loc 1 361 5 discriminator 4
+ 819 01e1 837DC400 		cmpl	$0, -60(%rbp)
+ 820 01e5 780B     		js	.L45
+ 821              		.loc 1 361 5 is_stmt 0 discriminator 2
+ 822 01e7 8B45C4   		movl	-60(%rbp), %eax
+ 823 01ea 4898     		cltq
+ 824 01ec 483945D0 		cmpq	%rax, -48(%rbp)
+ 825 01f0 770A     		ja	.L46
+ 826              	.L45:
+ 827              		.loc 1 361 5 discriminator 3
+ 828 01f2 B880D6FF 		movl	$-10624, %eax
+ 828      FF
+ 829 01f7 E9C90000 		jmp	.L50
+ 829      00
+ 830              	.L46:
+ 831              		.loc 1 361 5 discriminator 4
+ 832 01fc 8B45C4   		movl	-60(%rbp), %eax
+ 833 01ff 4898     		cltq
+ 834 0201 482945D0 		subq	%rax, -48(%rbp)
+ 835 0205 8B45C4   		movl	-60(%rbp), %eax
+ 836 0208 4898     		cltq
+ 837 020a 480145C8 		addq	%rax, -56(%rbp)
+ 362:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 363:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     if( ( ret = mbedtls_x509_key_size_helper( key_size_str, BEFORE_COLON,
+ 838              		.loc 1 363 17 is_stmt 1 discriminator 4
+ 839 020e 488B45A0 		movq	-96(%rbp), %rax
+ 840 0212 48059000 		addq	$144, %rax
+ 840      0000
+ 841 0218 4889C7   		movq	%rax, %rdi
+GAS LISTING /tmp/cc3hSM0O.s 			page 25
+
+
+ 842 021b E8000000 		call	mbedtls_pk_get_name@PLT
+ 842      00
+ 843 0220 4889C2   		movq	%rax, %rdx
+ 844 0223 488D45DA 		leaq	-38(%rbp), %rax
+ 845 0227 BE0E0000 		movl	$14, %esi
+ 845      00
+ 846 022c 4889C7   		movq	%rax, %rdi
+ 847 022f E8000000 		call	mbedtls_x509_key_size_helper@PLT
+ 847      00
+ 848 0234 8945C4   		movl	%eax, -60(%rbp)
+ 849              		.loc 1 363 7 discriminator 4
+ 850 0237 837DC400 		cmpl	$0, -60(%rbp)
+ 851 023b 7408     		je	.L47
+ 364:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****                                       mbedtls_pk_get_name( &csr->pk ) ) ) != 0 )
+ 365:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     {
+ 366:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         return( ret );
+ 852              		.loc 1 366 15
+ 853 023d 8B45C4   		movl	-60(%rbp), %eax
+ 854 0240 E9800000 		jmp	.L50
+ 854      00
+ 855              	.L47:
+ 367:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     }
+ 368:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 369:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     ret = mbedtls_snprintf( p, n, "\n%s%-" BC "s: %d bits\n", prefix, key_size_str,
+ 856              		.loc 1 369 11
+ 857 0245 488B1D00 		movq	mbedtls_snprintf(%rip), %rbx
+ 857      000000
+ 370:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****                           (int) mbedtls_pk_get_bitlen( &csr->pk ) );
+ 858              		.loc 1 370 33
+ 859 024c 488B45A0 		movq	-96(%rbp), %rax
+ 860 0250 48059000 		addq	$144, %rax
+ 860      0000
+ 861 0256 4889C7   		movq	%rax, %rdi
+ 862 0259 E8000000 		call	mbedtls_pk_get_bitlen@PLT
+ 862      00
+ 369:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****                           (int) mbedtls_pk_get_bitlen( &csr->pk ) );
+ 863              		.loc 1 369 11
+ 864 025e 89C7     		movl	%eax, %edi
+ 865 0260 488D4DDA 		leaq	-38(%rbp), %rcx
+ 866 0264 488B55A8 		movq	-88(%rbp), %rdx
+ 867 0268 488B75D0 		movq	-48(%rbp), %rsi
+ 868 026c 488B45C8 		movq	-56(%rbp), %rax
+ 869 0270 4189F9   		movl	%edi, %r9d
+ 870 0273 4989C8   		movq	%rcx, %r8
+ 871 0276 4889D1   		movq	%rdx, %rcx
+ 872 0279 488D1500 		leaq	.LC7(%rip), %rdx
+ 872      000000
+ 873 0280 4889C7   		movq	%rax, %rdi
+ 874 0283 B8000000 		movl	$0, %eax
+ 874      00
+ 875 0288 FFD3     		call	*%rbx
+ 876              	.LVL3:
+ 877 028a 8945C4   		movl	%eax, -60(%rbp)
+ 371:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     MBEDTLS_X509_SAFE_SNPRINTF;
+ 878              		.loc 1 371 5
+ 879 028d 837DC400 		cmpl	$0, -60(%rbp)
+ 880 0291 780B     		js	.L48
+GAS LISTING /tmp/cc3hSM0O.s 			page 26
+
+
+ 881              		.loc 1 371 5 is_stmt 0 discriminator 2
+ 882 0293 8B45C4   		movl	-60(%rbp), %eax
+ 883 0296 4898     		cltq
+ 884 0298 483945D0 		cmpq	%rax, -48(%rbp)
+ 885 029c 7707     		ja	.L49
+ 886              	.L48:
+ 887              		.loc 1 371 5 discriminator 3
+ 888 029e B880D6FF 		movl	$-10624, %eax
+ 888      FF
+ 889 02a3 EB20     		jmp	.L50
+ 890              	.L49:
+ 891              		.loc 1 371 5 discriminator 4
+ 892 02a5 8B45C4   		movl	-60(%rbp), %eax
+ 893 02a8 4898     		cltq
+ 894 02aa 482945D0 		subq	%rax, -48(%rbp)
+ 895 02ae 8B45C4   		movl	-60(%rbp), %eax
+ 896 02b1 4898     		cltq
+ 897 02b3 480145C8 		addq	%rax, -56(%rbp)
+ 372:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 373:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     return( (int) ( size - n ) );
+ 898              		.loc 1 373 26 is_stmt 1 discriminator 4
+ 899 02b7 488B45B0 		movq	-80(%rbp), %rax
+ 900 02bb 89C2     		movl	%eax, %edx
+ 901 02bd 488B45D0 		movq	-48(%rbp), %rax
+ 902 02c1 29C2     		subl	%eax, %edx
+ 903 02c3 89D0     		movl	%edx, %eax
+ 904              	.L50:
+ 374:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** }
+ 905              		.loc 1 374 1 discriminator 1
+ 906 02c5 488B5DE8 		movq	-24(%rbp), %rbx
+ 907 02c9 6448331C 		xorq	%fs:40, %rbx
+ 907      25280000 
+ 907      00
+ 908 02d2 7405     		je	.L51
+ 909              		.loc 1 374 1 is_stmt 0
+ 910 02d4 E8000000 		call	__stack_chk_fail@PLT
+ 910      00
+ 911              	.L51:
+ 912 02d9 4883C458 		addq	$88, %rsp
+ 913 02dd 5B       		popq	%rbx
+ 914 02de 5D       		popq	%rbp
+ 915              	.LCFI11:
+ 916              		.cfi_def_cfa 7, 8
+ 917 02df C3       		ret
+ 918              		.cfi_endproc
+ 919              	.LFE19:
+ 921              		.section	.text.mbedtls_x509_csr_init,"ax",@progbits
+ 922              		.globl	mbedtls_x509_csr_init
+ 924              	mbedtls_x509_csr_init:
+ 925              	.LFB20:
+ 375:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 376:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** /*
+ 377:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  * Initialize a CSR
+ 378:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  */
+ 379:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** void mbedtls_x509_csr_init( mbedtls_x509_csr *csr )
+ 380:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** {
+ 926              		.loc 1 380 1 is_stmt 1
+GAS LISTING /tmp/cc3hSM0O.s 			page 27
+
+
+ 927              		.cfi_startproc
+ 928 0000 F30F1EFA 		endbr64
+ 929 0004 55       		pushq	%rbp
+ 930              	.LCFI12:
+ 931              		.cfi_def_cfa_offset 16
+ 932              		.cfi_offset 6, -16
+ 933 0005 4889E5   		movq	%rsp, %rbp
+ 934              	.LCFI13:
+ 935              		.cfi_def_cfa_register 6
+ 936 0008 4883EC20 		subq	$32, %rsp
+ 937 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 938              		.loc 1 380 1
+ 939 0010 64488B04 		movq	%fs:40, %rax
+ 939      25280000 
+ 939      00
+ 940 0019 488945F8 		movq	%rax, -8(%rbp)
+ 941 001d 31C0     		xorl	%eax, %eax
+ 381:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     memset( csr, 0, sizeof(mbedtls_x509_csr) );
+ 942              		.loc 1 381 5
+ 943 001f 488B45E8 		movq	-24(%rbp), %rax
+ 944 0023 BAE00000 		movl	$224, %edx
+ 944      00
+ 945 0028 BE000000 		movl	$0, %esi
+ 945      00
+ 946 002d 4889C7   		movq	%rax, %rdi
+ 947 0030 E8000000 		call	memset@PLT
+ 947      00
+ 382:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** }
+ 948              		.loc 1 382 1
+ 949 0035 90       		nop
+ 950 0036 488B45F8 		movq	-8(%rbp), %rax
+ 951 003a 64483304 		xorq	%fs:40, %rax
+ 951      25280000 
+ 951      00
+ 952 0043 7405     		je	.L53
+ 953 0045 E8000000 		call	__stack_chk_fail@PLT
+ 953      00
+ 954              	.L53:
+ 955 004a C9       		leave
+ 956              	.LCFI14:
+ 957              		.cfi_def_cfa 7, 8
+ 958 004b C3       		ret
+ 959              		.cfi_endproc
+ 960              	.LFE20:
+ 962              		.section	.text.mbedtls_x509_csr_free,"ax",@progbits
+ 963              		.globl	mbedtls_x509_csr_free
+ 965              	mbedtls_x509_csr_free:
+ 966              	.LFB21:
+ 383:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 384:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** /*
+ 385:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  * Unallocate all CSR data
+ 386:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****  */
+ 387:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** void mbedtls_x509_csr_free( mbedtls_x509_csr *csr )
+ 388:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** {
+ 967              		.loc 1 388 1
+ 968              		.cfi_startproc
+ 969 0000 F30F1EFA 		endbr64
+GAS LISTING /tmp/cc3hSM0O.s 			page 28
+
+
+ 970 0004 55       		pushq	%rbp
+ 971              	.LCFI15:
+ 972              		.cfi_def_cfa_offset 16
+ 973              		.cfi_offset 6, -16
+ 974 0005 4889E5   		movq	%rsp, %rbp
+ 975              	.LCFI16:
+ 976              		.cfi_def_cfa_register 6
+ 977 0008 4883EC30 		subq	$48, %rsp
+ 978 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 979              		.loc 1 388 1
+ 980 0010 64488B04 		movq	%fs:40, %rax
+ 980      25280000 
+ 980      00
+ 981 0019 488945F8 		movq	%rax, -8(%rbp)
+ 982 001d 31C0     		xorl	%eax, %eax
+ 389:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     mbedtls_x509_name *name_cur;
+ 390:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     mbedtls_x509_name *name_prv;
+ 391:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 392:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     if( csr == NULL )
+ 983              		.loc 1 392 7
+ 984 001f 48837DD8 		cmpq	$0, -40(%rbp)
+ 984      00
+ 985 0024 0F84B900 		je	.L61
+ 985      0000
+ 393:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         return;
+ 394:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 395:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     mbedtls_pk_free( &csr->pk );
+ 986              		.loc 1 395 5
+ 987 002a 488B45D8 		movq	-40(%rbp), %rax
+ 988 002e 48059000 		addq	$144, %rax
+ 988      0000
+ 989 0034 4889C7   		movq	%rax, %rdi
+ 990 0037 E8000000 		call	mbedtls_pk_free@PLT
+ 990      00
+ 396:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 397:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #if defined(MBEDTLS_X509_RSASSA_PSS_SUPPORT)
+ 398:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     mbedtls_free( csr->sig_opts );
+ 991              		.loc 1 398 5
+ 992 003c 488B45D8 		movq	-40(%rbp), %rax
+ 993 0040 488B80D8 		movq	216(%rax), %rax
+ 993      000000
+ 994 0047 4889C7   		movq	%rax, %rdi
+ 995 004a E8000000 		call	mbedtls_free@PLT
+ 995      00
+ 399:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** #endif
+ 400:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 401:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     name_cur = csr->subject.next;
+ 996              		.loc 1 401 14
+ 997 004f 488B45D8 		movq	-40(%rbp), %rax
+ 998 0053 488B8080 		movq	128(%rax), %rax
+ 998      000000
+ 999 005a 488945E8 		movq	%rax, -24(%rbp)
+ 402:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     while( name_cur != NULL )
+ 1000              		.loc 1 402 10
+ 1001 005e EB31     		jmp	.L57
+ 1002              	.L58:
+ 403:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     {
+GAS LISTING /tmp/cc3hSM0O.s 			page 29
+
+
+ 404:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         name_prv = name_cur;
+ 1003              		.loc 1 404 18
+ 1004 0060 488B45E8 		movq	-24(%rbp), %rax
+ 1005 0064 488945F0 		movq	%rax, -16(%rbp)
+ 405:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         name_cur = name_cur->next;
+ 1006              		.loc 1 405 18
+ 1007 0068 488B45E8 		movq	-24(%rbp), %rax
+ 1008 006c 488B4030 		movq	48(%rax), %rax
+ 1009 0070 488945E8 		movq	%rax, -24(%rbp)
+ 406:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         mbedtls_platform_zeroize( name_prv, sizeof( mbedtls_x509_name ) );
+ 1010              		.loc 1 406 9
+ 1011 0074 488B45F0 		movq	-16(%rbp), %rax
+ 1012 0078 BE400000 		movl	$64, %esi
+ 1012      00
+ 1013 007d 4889C7   		movq	%rax, %rdi
+ 1014 0080 E8000000 		call	mbedtls_platform_zeroize@PLT
+ 1014      00
+ 407:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         mbedtls_free( name_prv );
+ 1015              		.loc 1 407 9
+ 1016 0085 488B45F0 		movq	-16(%rbp), %rax
+ 1017 0089 4889C7   		movq	%rax, %rdi
+ 1018 008c E8000000 		call	mbedtls_free@PLT
+ 1018      00
+ 1019              	.L57:
+ 402:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     {
+ 1020              		.loc 1 402 10
+ 1021 0091 48837DE8 		cmpq	$0, -24(%rbp)
+ 1021      00
+ 1022 0096 75C8     		jne	.L58
+ 408:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     }
+ 409:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 410:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     if( csr->raw.p != NULL )
+ 1023              		.loc 1 410 17
+ 1024 0098 488B45D8 		movq	-40(%rbp), %rax
+ 1025 009c 488B4010 		movq	16(%rax), %rax
+ 1026              		.loc 1 410 7
+ 1027 00a0 4885C0   		testq	%rax, %rax
+ 1028 00a3 742B     		je	.L59
+ 411:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     {
+ 412:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         mbedtls_platform_zeroize( csr->raw.p, csr->raw.len );
+ 1029              		.loc 1 412 9
+ 1030 00a5 488B45D8 		movq	-40(%rbp), %rax
+ 1031 00a9 488B5008 		movq	8(%rax), %rdx
+ 1032              		.loc 1 412 43
+ 1033 00ad 488B45D8 		movq	-40(%rbp), %rax
+ 1034 00b1 488B4010 		movq	16(%rax), %rax
+ 1035              		.loc 1 412 9
+ 1036 00b5 4889D6   		movq	%rdx, %rsi
+ 1037 00b8 4889C7   		movq	%rax, %rdi
+ 1038 00bb E8000000 		call	mbedtls_platform_zeroize@PLT
+ 1038      00
+ 413:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****         mbedtls_free( csr->raw.p );
+ 1039              		.loc 1 413 31
+ 1040 00c0 488B45D8 		movq	-40(%rbp), %rax
+ 1041 00c4 488B4010 		movq	16(%rax), %rax
+ 1042              		.loc 1 413 9
+ 1043 00c8 4889C7   		movq	%rax, %rdi
+GAS LISTING /tmp/cc3hSM0O.s 			page 30
+
+
+ 1044 00cb E8000000 		call	mbedtls_free@PLT
+ 1044      00
+ 1045              	.L59:
+ 414:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     }
+ 415:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 416:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c ****     mbedtls_platform_zeroize( csr, sizeof( mbedtls_x509_csr ) );
+ 1046              		.loc 1 416 5
+ 1047 00d0 488B45D8 		movq	-40(%rbp), %rax
+ 1048 00d4 BEE00000 		movl	$224, %esi
+ 1048      00
+ 1049 00d9 4889C7   		movq	%rax, %rdi
+ 1050 00dc E8000000 		call	mbedtls_platform_zeroize@PLT
+ 1050      00
+ 1051 00e1 EB01     		jmp	.L54
+ 1052              	.L61:
+ 393:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** 
+ 1053              		.loc 1 393 9
+ 1054 00e3 90       		nop
+ 1055              	.L54:
+ 417:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/x509_csr.c **** }
+ 1056              		.loc 1 417 1
+ 1057 00e4 488B45F8 		movq	-8(%rbp), %rax
+ 1058 00e8 64483304 		xorq	%fs:40, %rax
+ 1058      25280000 
+ 1058      00
+ 1059 00f1 7405     		je	.L60
+ 1060 00f3 E8000000 		call	__stack_chk_fail@PLT
+ 1060      00
+ 1061              	.L60:
+ 1062 00f8 C9       		leave
+ 1063              	.LCFI17:
+ 1064              		.cfi_def_cfa 7, 8
+ 1065 00f9 C3       		ret
+ 1066              		.cfi_endproc
+ 1067              	.LFE21:
+ 1069              		.text
+ 1070              	.Letext0:
+ 1071              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 1072              		.file 3 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 1073              		.file 4 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/asn1.h"
+ 1074              		.file 5 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/md.h"
+ 1075              		.file 6 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h"
+ 1076              		.file 7 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/x509.h"
+ 1077              		.file 8 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/x509_cs
+ 1078              		.file 9 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pem.h"
+ 1079              		.file 10 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 1080              		.file 11 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 1081              		.file 12 "/usr/include/stdio.h"
+ 1082              		.file 13 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 1083              		.file 14 "/usr/include/time.h"
+ 1084              		.file 15 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/platfo
+ 3337              		.section	.note.gnu.property,"a"
+ 3338              		.align 8
+ 3339 0000 04000000 		.long	 1f - 0f
+ 3340 0004 10000000 		.long	 4f - 1f
+ 3341 0008 05000000 		.long	 5
+ 3342              	0:
+GAS LISTING /tmp/cc3hSM0O.s 			page 31
+
+
+ 3343 000c 474E5500 		.string	 "GNU"
+ 3344              	1:
+ 3345              		.align 8
+ 3346 0010 020000C0 		.long	 0xc0000002
+ 3347 0014 04000000 		.long	 3f - 2f
+ 3348              	2:
+ 3349 0018 03000000 		.long	 0x3
+ 3350              	3:
+ 3351 001c 00000000 		.align 8
+ 3352              	4:
+GAS LISTING /tmp/cc3hSM0O.s 			page 32
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 x509_csr.c
+     /tmp/cc3hSM0O.s:6      .text.x509_csr_get_version:0000000000000000 x509_csr_get_version
+     /tmp/cc3hSM0O.s:72     .text.mbedtls_x509_csr_parse_der:0000000000000000 mbedtls_x509_csr_parse_der
+     /tmp/cc3hSM0O.s:924    .text.mbedtls_x509_csr_init:0000000000000000 mbedtls_x509_csr_init
+     /tmp/cc3hSM0O.s:965    .text.mbedtls_x509_csr_free:0000000000000000 mbedtls_x509_csr_free
+     /tmp/cc3hSM0O.s:502    .text.mbedtls_x509_csr_parse:0000000000000000 mbedtls_x509_csr_parse
+     /tmp/cc3hSM0O.s:642    .text.mbedtls_x509_csr_info:0000000000000000 mbedtls_x509_csr_info
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+mbedtls_asn1_get_int
+__stack_chk_fail
+memset
+mbedtls_calloc
+memcpy
+mbedtls_asn1_get_tag
+mbedtls_x509_get_name
+mbedtls_pk_parse_subpubkey
+mbedtls_x509_get_alg
+mbedtls_x509_get_sig_alg
+mbedtls_x509_get_sig
+mbedtls_pem_init
+mbedtls_pem_read_buffer
+mbedtls_pem_free
+mbedtls_snprintf
+mbedtls_x509_dn_gets
+mbedtls_x509_sig_alg_gets
+mbedtls_pk_get_name
+mbedtls_x509_key_size_helper
+mbedtls_pk_get_bitlen
+mbedtls_pk_free
+mbedtls_free
+mbedtls_platform_zeroize

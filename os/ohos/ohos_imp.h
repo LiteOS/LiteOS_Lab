@@ -1,5 +1,5 @@
-#ifndef __OHOS_IMP_H
-#define __OHOSIMPL_H
+#ifndef OHOS_IMP_H
+#define OHOSIMPL_H
 
 #define OHOS_WAIT_FOREVER 0xFFFFFFFF
 #define OHOS_SYS_MS_PER_SECOND 1000

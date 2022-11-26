@@ -1,0 +1,2782 @@
+GAS LISTING /tmp/ccXG49uY.s 			page 1
+
+
+   1              		.file	"oc_mqtt_profile_package.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.JsonCreateKv,"ax",@progbits
+   6              	JsonCreateKv:
+   7              	.LFB0:
+   8              		.file 1 "/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c"
+   1:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** /* ----------------------------------------------------------------------------
+   2:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * All rights reserved.
+   4:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * are permitted provided that the following conditions are met:
+   6:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * conditions and the following disclaimer.
+   8:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * provided with the distribution.
+  11:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * permission.
+  14:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * --------------------------------------------------------------------------- */
+  26:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** /* ----------------------------------------------------------------------------
+  27:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * Notice of Export Control Law
+  28:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * ===============================================
+  29:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * applicable export control laws and regulations.
+  33:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****  * --------------------------------------------------------------------------- */
+  34:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+  35:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** // //< this file used to package the data for the profile and you must make sure the data format is
+  36:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** #include "oc_mqtt_profile_package.h"
+  37:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** #include "oc_mqtt_profile.h"
+  38:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** #include "cJSON.h"
+  39:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+  40:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** static cJSON *JsonCreateKvLst(oc_mqtt_profile_kv_t *kvlst);
+  41:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** // /< format the report data to json string mode
+  42:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** static cJSON *JsonCreateKv(oc_mqtt_profile_kv_t *kv)
+  43:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** {
+   9              		.loc 1 43 1
+  10              		.cfi_startproc
+  11 0000 F30F1EFA 		endbr64
+  12 0004 55       		pushq	%rbp
+  13              	.LCFI0:
+  14              		.cfi_def_cfa_offset 16
+  15              		.cfi_offset 6, -16
+GAS LISTING /tmp/ccXG49uY.s 			page 2
+
+
+  16 0005 4889E5   		movq	%rsp, %rbp
+  17              	.LCFI1:
+  18              		.cfi_def_cfa_register 6
+  19 0008 4883EC20 		subq	$32, %rsp
+  20 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  21              		.loc 1 43 1
+  22 0010 64488B04 		movq	%fs:40, %rax
+  22      25280000 
+  22      00
+  23 0019 488945F8 		movq	%rax, -8(%rbp)
+  24 001d 31C0     		xorl	%eax, %eax
+  44:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *ret = NULL;
+  25              		.loc 1 44 12
+  26 001f 48C745F0 		movq	$0, -16(%rbp)
+  26      00000000 
+  45:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     switch (kv->type) {
+  27              		.loc 1 45 15
+  28 0027 488B45E8 		movq	-24(%rbp), %rax
+  29 002b 8B4010   		movl	16(%rax), %eax
+  30 002e 83F809   		cmpl	$9, %eax
+  31 0031 0F874401 		ja	.L17
+  31      0000
+  32 0037 89C0     		movl	%eax, %eax
+  33 0039 488D1485 		leaq	0(,%rax,4), %rdx
+  33      00000000 
+  34 0041 488D0500 		leaq	.L4(%rip), %rax
+  34      000000
+  35 0048 8B0402   		movl	(%rdx,%rax), %eax
+  36 004b 4898     		cltq
+  37 004d 488D1500 		leaq	.L4(%rip), %rdx
+  37      000000
+  38 0054 4801D0   		addq	%rdx, %rax
+  39 0057 3EFFE0   		notrack jmp	*%rax
+  40              		.section	.rodata.JsonCreateKv,"a",@progbits
+  41              		.align 4
+  42              		.align 4
+  43              	.L4:
+  44 0000 00000000 		.long	.L13-.L4
+  45 0004 00000000 		.long	.L12-.L4
+  46 0008 00000000 		.long	.L11-.L4
+  47 000c 00000000 		.long	.L10-.L4
+  48 0010 00000000 		.long	.L9-.L4
+  49 0014 00000000 		.long	.L8-.L4
+  50 0018 00000000 		.long	.L7-.L4
+  51 001c 00000000 		.long	.L6-.L4
+  52 0020 00000000 		.long	.L5-.L4
+  53 0024 00000000 		.long	.L3-.L4
+  54              		.section	.text.JsonCreateKv
+  55              	.L13:
+  46:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         case EN_OC_MQTT_PROFILE_VALUE_INT:
+  47:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             ret = cJSON_CreateNumber((double)(*(int *)kv->value));
+  56              		.loc 1 47 57
+  57 005a 488B45E8 		movq	-24(%rbp), %rax
+  58 005e 488B4018 		movq	24(%rax), %rax
+  59              		.loc 1 47 47
+  60 0062 8B00     		movl	(%rax), %eax
+  61              		.loc 1 47 19
+GAS LISTING /tmp/ccXG49uY.s 			page 3
+
+
+  62 0064 F20F2AC0 		cvtsi2sdl	%eax, %xmm0
+  63 0068 E8000000 		call	cJSON_CreateNumber@PLT
+  63      00
+  64 006d 488945F0 		movq	%rax, -16(%rbp)
+  48:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             break;
+  65              		.loc 1 48 13
+  66 0071 E9060100 		jmp	.L14
+  66      00
+  67              	.L12:
+  49:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         case EN_OC_MQTT_PROFILE_VALUE_LONG:
+  50:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             ret = cJSON_CreateNumber((double)(*(long *)kv->value));
+  68              		.loc 1 50 58
+  69 0076 488B45E8 		movq	-24(%rbp), %rax
+  70 007a 488B4018 		movq	24(%rax), %rax
+  71              		.loc 1 50 47
+  72 007e 488B00   		movq	(%rax), %rax
+  73              		.loc 1 50 19
+  74 0081 F2480F2A 		cvtsi2sdq	%rax, %xmm0
+  74      C0
+  75 0086 E8000000 		call	cJSON_CreateNumber@PLT
+  75      00
+  76 008b 488945F0 		movq	%rax, -16(%rbp)
+  51:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             break;
+  77              		.loc 1 51 13
+  78 008f E9E80000 		jmp	.L14
+  78      00
+  79              	.L11:
+  52:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         case EN_OC_MQTT_PROFILE_VALUE_FLOAT:
+  53:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             ret = cJSON_CreateNumber((double)(*(float *)kv->value));
+  80              		.loc 1 53 59
+  81 0094 488B45E8 		movq	-24(%rbp), %rax
+  82 0098 488B4018 		movq	24(%rax), %rax
+  83              		.loc 1 53 47
+  84 009c F30F1000 		movss	(%rax), %xmm0
+  85              		.loc 1 53 19
+  86 00a0 F30F5AC0 		cvtss2sd	%xmm0, %xmm0
+  87 00a4 E8000000 		call	cJSON_CreateNumber@PLT
+  87      00
+  88 00a9 488945F0 		movq	%rax, -16(%rbp)
+  54:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             break;
+  89              		.loc 1 54 13
+  90 00ad E9CA0000 		jmp	.L14
+  90      00
+  91              	.L10:
+  55:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         case EN_OC_MQTT_PROFILE_VALUE_DOUBLE:
+  56:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             ret = cJSON_CreateNumber((*(double *)kv->value));
+  92              		.loc 1 56 52
+  93 00b2 488B45E8 		movq	-24(%rbp), %rax
+  94 00b6 488B4018 		movq	24(%rax), %rax
+  95              		.loc 1 56 19
+  96 00ba 488B00   		movq	(%rax), %rax
+  97 00bd 66480F6E 		movq	%rax, %xmm0
+  97      C0
+  98 00c2 E8000000 		call	cJSON_CreateNumber@PLT
+  98      00
+  99 00c7 488945F0 		movq	%rax, -16(%rbp)
+  57:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             break;
+GAS LISTING /tmp/ccXG49uY.s 			page 4
+
+
+ 100              		.loc 1 57 13
+ 101 00cb E9AC0000 		jmp	.L14
+ 101      00
+ 102              	.L9:
+  58:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         case EN_OC_MQTT_PROFILE_VALUE_STRING:
+  59:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             ret = cJSON_CreateString((const char *)kv->value);
+ 103              		.loc 1 59 54
+ 104 00d0 488B45E8 		movq	-24(%rbp), %rax
+ 105 00d4 488B4018 		movq	24(%rax), %rax
+ 106              		.loc 1 59 19
+ 107 00d8 4889C7   		movq	%rax, %rdi
+ 108 00db E8000000 		call	cJSON_CreateString@PLT
+ 108      00
+ 109 00e0 488945F0 		movq	%rax, -16(%rbp)
+  60:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             break;
+ 110              		.loc 1 60 13
+ 111 00e4 E9930000 		jmp	.L14
+ 111      00
+ 112              	.L8:
+  61:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         case EN_OC_MQTT_PROFILE_VALUE_INT_ARRAY:
+  62:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             ret = cJSON_CreateIntArray((const int *)kv->value, kv->array_size);
+ 113              		.loc 1 62 19
+ 114 00e9 488B45E8 		movq	-24(%rbp), %rax
+ 115 00ed 8B5020   		movl	32(%rax), %edx
+ 116              		.loc 1 62 55
+ 117 00f0 488B45E8 		movq	-24(%rbp), %rax
+ 118 00f4 488B4018 		movq	24(%rax), %rax
+ 119              		.loc 1 62 19
+ 120 00f8 89D6     		movl	%edx, %esi
+ 121 00fa 4889C7   		movq	%rax, %rdi
+ 122 00fd E8000000 		call	cJSON_CreateIntArray@PLT
+ 122      00
+ 123 0102 488945F0 		movq	%rax, -16(%rbp)
+  63:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             break;
+ 124              		.loc 1 63 13
+ 125 0106 EB74     		jmp	.L14
+ 126              	.L7:
+  64:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         case EN_OC_MQTT_PROFILE_VALUE_FLOAT_ARRAY:
+  65:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             ret = cJSON_CreateFloatArray((const float *)kv->value, kv->array_size);
+ 127              		.loc 1 65 19
+ 128 0108 488B45E8 		movq	-24(%rbp), %rax
+ 129 010c 8B5020   		movl	32(%rax), %edx
+ 130              		.loc 1 65 59
+ 131 010f 488B45E8 		movq	-24(%rbp), %rax
+ 132 0113 488B4018 		movq	24(%rax), %rax
+ 133              		.loc 1 65 19
+ 134 0117 89D6     		movl	%edx, %esi
+ 135 0119 4889C7   		movq	%rax, %rdi
+ 136 011c E8000000 		call	cJSON_CreateFloatArray@PLT
+ 136      00
+ 137 0121 488945F0 		movq	%rax, -16(%rbp)
+  66:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             break;
+ 138              		.loc 1 66 13
+ 139 0125 EB55     		jmp	.L14
+ 140              	.L6:
+  67:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         case EN_OC_MQTT_PROFILE_VALUE_DOUBLE_ARRAY:
+  68:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             ret = cJSON_CreateDoubleArray((const double *)kv->value, kv->array_size);
+GAS LISTING /tmp/ccXG49uY.s 			page 5
+
+
+ 141              		.loc 1 68 19
+ 142 0127 488B45E8 		movq	-24(%rbp), %rax
+ 143 012b 8B5020   		movl	32(%rax), %edx
+ 144              		.loc 1 68 61
+ 145 012e 488B45E8 		movq	-24(%rbp), %rax
+ 146 0132 488B4018 		movq	24(%rax), %rax
+ 147              		.loc 1 68 19
+ 148 0136 89D6     		movl	%edx, %esi
+ 149 0138 4889C7   		movq	%rax, %rdi
+ 150 013b E8000000 		call	cJSON_CreateDoubleArray@PLT
+ 150      00
+ 151 0140 488945F0 		movq	%rax, -16(%rbp)
+  69:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             break;
+ 152              		.loc 1 69 13
+ 153 0144 EB36     		jmp	.L14
+ 154              	.L5:
+  70:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         case EN_OC_MQTT_PROFILE_VALUE_STRING_ARRAY:
+  71:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             ret = cJSON_CreateStringArray((const char **)kv->value, kv->array_size);
+ 155              		.loc 1 71 19
+ 156 0146 488B45E8 		movq	-24(%rbp), %rax
+ 157 014a 8B5020   		movl	32(%rax), %edx
+ 158              		.loc 1 71 60
+ 159 014d 488B45E8 		movq	-24(%rbp), %rax
+ 160 0151 488B4018 		movq	24(%rax), %rax
+ 161              		.loc 1 71 19
+ 162 0155 89D6     		movl	%edx, %esi
+ 163 0157 4889C7   		movq	%rax, %rdi
+ 164 015a E8000000 		call	cJSON_CreateStringArray@PLT
+ 164      00
+ 165 015f 488945F0 		movq	%rax, -16(%rbp)
+  72:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             break;
+ 166              		.loc 1 72 13
+ 167 0163 EB17     		jmp	.L14
+ 168              	.L3:
+  73:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         case EN_OC_MQTT_PROFILE_VALUE_KV_T:
+  74:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             ret = JsonCreateKvLst(kv->value);
+ 169              		.loc 1 74 37
+ 170 0165 488B45E8 		movq	-24(%rbp), %rax
+ 171 0169 488B4018 		movq	24(%rax), %rax
+ 172              		.loc 1 74 19
+ 173 016d 4889C7   		movq	%rax, %rdi
+ 174 0170 E8000000 		call	JsonCreateKvLst
+ 174      00
+ 175 0175 488945F0 		movq	%rax, -16(%rbp)
+  75:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             break;
+ 176              		.loc 1 75 13
+ 177 0179 EB01     		jmp	.L14
+ 178              	.L17:
+  76:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         default:
+  77:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             break;
+ 179              		.loc 1 77 13
+ 180 017b 90       		nop
+ 181              	.L14:
+  78:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+  79:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+  80:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return ret;
+ 182              		.loc 1 80 12
+GAS LISTING /tmp/ccXG49uY.s 			page 6
+
+
+ 183 017c 488B45F0 		movq	-16(%rbp), %rax
+  81:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** }
+ 184              		.loc 1 81 1
+ 185 0180 488B4DF8 		movq	-8(%rbp), %rcx
+ 186 0184 6448330C 		xorq	%fs:40, %rcx
+ 186      25280000 
+ 186      00
+ 187 018d 7405     		je	.L16
+ 188 018f E8000000 		call	__stack_chk_fail@PLT
+ 188      00
+ 189              	.L16:
+ 190 0194 C9       		leave
+ 191              	.LCFI2:
+ 192              		.cfi_def_cfa 7, 8
+ 193 0195 C3       		ret
+ 194              		.cfi_endproc
+ 195              	.LFE0:
+ 197              		.section	.rodata
+ 198              	.LC0:
+ 199 0000 6F626A65 		.string	"object_device_id"
+ 199      63745F64 
+ 199      65766963 
+ 199      655F6964 
+ 199      00
+ 200              	.LC1:
+ 201 0011 6E616D65 		.string	"name"
+ 201      00
+ 202              	.LC2:
+ 203 0016 696400   		.string	"id"
+ 204              	.LC3:
+ 205 0019 636F6E74 		.string	"content"
+ 205      656E7400 
+ 206              		.section	.text.oc_mqtt_profile_package_msgup,"ax",@progbits
+ 207              		.globl	oc_mqtt_profile_package_msgup
+ 209              	oc_mqtt_profile_package_msgup:
+ 210              	.LFB1:
+  82:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+  83:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** char *oc_mqtt_profile_package_msgup(oc_mqtt_profile_msgup_t *payload)
+  84:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** {
+ 211              		.loc 1 84 1
+ 212              		.cfi_startproc
+ 213 0000 F30F1EFA 		endbr64
+ 214 0004 55       		pushq	%rbp
+ 215              	.LCFI3:
+ 216              		.cfi_def_cfa_offset 16
+ 217              		.cfi_offset 6, -16
+ 218 0005 4889E5   		movq	%rsp, %rbp
+ 219              	.LCFI4:
+ 220              		.cfi_def_cfa_register 6
+ 221 0008 4883EC50 		subq	$80, %rsp
+ 222 000c 48897DB8 		movq	%rdi, -72(%rbp)
+ 223              		.loc 1 84 1
+ 224 0010 64488B04 		movq	%fs:40, %rax
+ 224      25280000 
+ 224      00
+ 225 0019 488945F8 		movq	%rax, -8(%rbp)
+ 226 001d 31C0     		xorl	%eax, %eax
+GAS LISTING /tmp/ccXG49uY.s 			page 7
+
+
+  85:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     char *ret = NULL;
+ 227              		.loc 1 85 11
+ 228 001f 48C745C8 		movq	$0, -56(%rbp)
+ 228      00000000 
+  86:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *root = NULL;
+ 229              		.loc 1 86 12
+ 230 0027 48C745D0 		movq	$0, -48(%rbp)
+ 230      00000000 
+  87:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *device_id = NULL;
+ 231              		.loc 1 87 12
+ 232 002f 48C745D8 		movq	$0, -40(%rbp)
+ 232      00000000 
+  88:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *msg_name;
+  89:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *msg_id;
+  90:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *msg_conntent;
+  91:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+  92:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     root = cJSON_CreateObject();
+ 233              		.loc 1 92 12
+ 234 0037 E8000000 		call	cJSON_CreateObject@PLT
+ 234      00
+ 235 003c 488945D0 		movq	%rax, -48(%rbp)
+  93:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL == root) {
+ 236              		.loc 1 93 8
+ 237 0040 48837DD0 		cmpq	$0, -48(%rbp)
+ 237      00
+ 238 0045 0F841701 		je	.L31
+ 238      0000
+  94:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+  95:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+  96:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+  97:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL != payload->device_id) {
+ 239              		.loc 1 97 24
+ 240 004b 488B45B8 		movq	-72(%rbp), %rax
+ 241 004f 488B00   		movq	(%rax), %rax
+ 242              		.loc 1 97 8
+ 243 0052 4885C0   		testq	%rax, %rax
+ 244 0055 7435     		je	.L21
+  98:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         device_id = cJSON_CreateString(payload->device_id);
+ 245              		.loc 1 98 47
+ 246 0057 488B45B8 		movq	-72(%rbp), %rax
+ 247 005b 488B00   		movq	(%rax), %rax
+ 248              		.loc 1 98 21
+ 249 005e 4889C7   		movq	%rax, %rdi
+ 250 0061 E8000000 		call	cJSON_CreateString@PLT
+ 250      00
+ 251 0066 488945D8 		movq	%rax, -40(%rbp)
+  99:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         if (NULL == device_id) {
+ 252              		.loc 1 99 12
+ 253 006a 48837DD8 		cmpq	$0, -40(%rbp)
+ 253      00
+ 254 006f 0F84F000 		je	.L32
+ 254      0000
+ 100:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             goto EXIT_MEM;
+ 101:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 102:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_AddItemToObjectCS(root, CN_OC_JSON_KEY_OBJECTDEVICEID, device_id);
+ 255              		.loc 1 102 9
+ 256 0075 488B55D8 		movq	-40(%rbp), %rdx
+GAS LISTING /tmp/ccXG49uY.s 			page 8
+
+
+ 257 0079 488B45D0 		movq	-48(%rbp), %rax
+ 258 007d 488D3500 		leaq	.LC0(%rip), %rsi
+ 258      000000
+ 259 0084 4889C7   		movq	%rax, %rdi
+ 260 0087 E8000000 		call	cJSON_AddItemToObjectCS@PLT
+ 260      00
+ 261              	.L21:
+ 103:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 104:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 105:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL != payload->name) {
+ 262              		.loc 1 105 24
+ 263 008c 488B45B8 		movq	-72(%rbp), %rax
+ 264 0090 488B4008 		movq	8(%rax), %rax
+ 265              		.loc 1 105 8
+ 266 0094 4885C0   		testq	%rax, %rax
+ 267 0097 7436     		je	.L23
+ 106:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         msg_name = cJSON_CreateString(payload->name);
+ 268              		.loc 1 106 46
+ 269 0099 488B45B8 		movq	-72(%rbp), %rax
+ 270 009d 488B4008 		movq	8(%rax), %rax
+ 271              		.loc 1 106 20
+ 272 00a1 4889C7   		movq	%rax, %rdi
+ 273 00a4 E8000000 		call	cJSON_CreateString@PLT
+ 273      00
+ 274 00a9 488945E0 		movq	%rax, -32(%rbp)
+ 107:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         if (NULL == msg_name) {
+ 275              		.loc 1 107 12
+ 276 00ad 48837DE0 		cmpq	$0, -32(%rbp)
+ 276      00
+ 277 00b2 0F84B000 		je	.L33
+ 277      0000
+ 108:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             goto EXIT_MEM;
+ 109:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 110:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_AddItemToObjectCS(root, CN_OC_JSON_KEY_NAME, msg_name);
+ 278              		.loc 1 110 9
+ 279 00b8 488B55E0 		movq	-32(%rbp), %rdx
+ 280 00bc 488B45D0 		movq	-48(%rbp), %rax
+ 281 00c0 488D3500 		leaq	.LC1(%rip), %rsi
+ 281      000000
+ 282 00c7 4889C7   		movq	%rax, %rdi
+ 283 00ca E8000000 		call	cJSON_AddItemToObjectCS@PLT
+ 283      00
+ 284              	.L23:
+ 111:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 112:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 113:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL != payload->id) {
+ 285              		.loc 1 113 24
+ 286 00cf 488B45B8 		movq	-72(%rbp), %rax
+ 287 00d3 488B4010 		movq	16(%rax), %rax
+ 288              		.loc 1 113 8
+ 289 00d7 4885C0   		testq	%rax, %rax
+ 290 00da 7432     		je	.L25
+ 114:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         msg_id = cJSON_CreateString(payload->id);
+ 291              		.loc 1 114 44
+ 292 00dc 488B45B8 		movq	-72(%rbp), %rax
+ 293 00e0 488B4010 		movq	16(%rax), %rax
+ 294              		.loc 1 114 18
+GAS LISTING /tmp/ccXG49uY.s 			page 9
+
+
+ 295 00e4 4889C7   		movq	%rax, %rdi
+ 296 00e7 E8000000 		call	cJSON_CreateString@PLT
+ 296      00
+ 297 00ec 488945E8 		movq	%rax, -24(%rbp)
+ 115:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         if (NULL == msg_id) {
+ 298              		.loc 1 115 12
+ 299 00f0 48837DE8 		cmpq	$0, -24(%rbp)
+ 299      00
+ 300 00f5 7474     		je	.L34
+ 116:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             goto EXIT_MEM;
+ 117:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 118:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_AddItemToObjectCS(root, CN_OC_JSON_KEY_ID, msg_id);
+ 301              		.loc 1 118 9
+ 302 00f7 488B55E8 		movq	-24(%rbp), %rdx
+ 303 00fb 488B45D0 		movq	-48(%rbp), %rax
+ 304 00ff 488D3500 		leaq	.LC2(%rip), %rsi
+ 304      000000
+ 305 0106 4889C7   		movq	%rax, %rdi
+ 306 0109 E8000000 		call	cJSON_AddItemToObjectCS@PLT
+ 306      00
+ 307              	.L25:
+ 119:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 120:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 121:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     msg_conntent = cJSON_CreateString(payload->msg);
+ 308              		.loc 1 121 46
+ 309 010e 488B45B8 		movq	-72(%rbp), %rax
+ 310 0112 488B4018 		movq	24(%rax), %rax
+ 311              		.loc 1 121 20
+ 312 0116 4889C7   		movq	%rax, %rdi
+ 313 0119 E8000000 		call	cJSON_CreateString@PLT
+ 313      00
+ 314 011e 488945F0 		movq	%rax, -16(%rbp)
+ 122:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL == msg_conntent) {
+ 315              		.loc 1 122 8
+ 316 0122 48837DF0 		cmpq	$0, -16(%rbp)
+ 316      00
+ 317 0127 7445     		je	.L35
+ 123:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+ 124:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 125:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON_AddItemToObjectCS(root, CN_OC_JSON_KEY_CONTENT, msg_conntent);
+ 318              		.loc 1 125 5
+ 319 0129 488B55F0 		movq	-16(%rbp), %rdx
+ 320 012d 488B45D0 		movq	-48(%rbp), %rax
+ 321 0131 488D3500 		leaq	.LC3(%rip), %rsi
+ 321      000000
+ 322 0138 4889C7   		movq	%rax, %rdi
+ 323 013b E8000000 		call	cJSON_AddItemToObjectCS@PLT
+ 323      00
+ 126:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 127:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< OK, now we make it to a buffer
+ 128:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     ret = cJSON_PrintUnformatted(root);
+ 324              		.loc 1 128 11
+ 325 0140 488B45D0 		movq	-48(%rbp), %rax
+ 326 0144 4889C7   		movq	%rax, %rdi
+ 327 0147 E8000000 		call	cJSON_PrintUnformatted@PLT
+ 327      00
+ 328 014c 488945C8 		movq	%rax, -56(%rbp)
+GAS LISTING /tmp/ccXG49uY.s 			page 10
+
+
+ 129:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON_Delete(root);
+ 329              		.loc 1 129 5
+ 330 0150 488B45D0 		movq	-48(%rbp), %rax
+ 331 0154 4889C7   		movq	%rax, %rdi
+ 332 0157 E8000000 		call	cJSON_Delete@PLT
+ 332      00
+ 130:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return ret;
+ 333              		.loc 1 130 12
+ 334 015c 488B45C8 		movq	-56(%rbp), %rax
+ 335 0160 EB24     		jmp	.L28
+ 336              	.L31:
+  94:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 337              		.loc 1 94 9
+ 338 0162 90       		nop
+ 339 0163 EB0A     		jmp	.L20
+ 340              	.L32:
+ 100:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 341              		.loc 1 100 13
+ 342 0165 90       		nop
+ 343 0166 EB07     		jmp	.L20
+ 344              	.L33:
+ 108:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 345              		.loc 1 108 13
+ 346 0168 90       		nop
+ 347 0169 EB04     		jmp	.L20
+ 348              	.L34:
+ 116:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 349              		.loc 1 116 13
+ 350 016b 90       		nop
+ 351 016c EB01     		jmp	.L20
+ 352              	.L35:
+ 123:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 353              		.loc 1 123 9
+ 354 016e 90       		nop
+ 355              	.L20:
+ 131:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 132:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** EXIT_MEM:
+ 133:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL != root) {
+ 356              		.loc 1 133 8
+ 357 016f 48837DD0 		cmpq	$0, -48(%rbp)
+ 357      00
+ 358 0174 740C     		je	.L29
+ 134:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_Delete(root);
+ 359              		.loc 1 134 9
+ 360 0176 488B45D0 		movq	-48(%rbp), %rax
+ 361 017a 4889C7   		movq	%rax, %rdi
+ 362 017d E8000000 		call	cJSON_Delete@PLT
+ 362      00
+ 363              	.L29:
+ 135:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 136:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return ret;
+ 364              		.loc 1 136 12
+ 365 0182 488B45C8 		movq	-56(%rbp), %rax
+ 366              	.L28:
+ 137:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** }
+ 367              		.loc 1 137 1
+ 368 0186 488B4DF8 		movq	-8(%rbp), %rcx
+GAS LISTING /tmp/ccXG49uY.s 			page 11
+
+
+ 369 018a 6448330C 		xorq	%fs:40, %rcx
+ 369      25280000 
+ 369      00
+ 370 0193 7405     		je	.L30
+ 371 0195 E8000000 		call	__stack_chk_fail@PLT
+ 371      00
+ 372              	.L30:
+ 373 019a C9       		leave
+ 374              	.LCFI5:
+ 375              		.cfi_def_cfa 7, 8
+ 376 019b C3       		ret
+ 377              		.cfi_endproc
+ 378              	.LFE1:
+ 380              		.section	.text.JsonCreateKvLst,"ax",@progbits
+ 382              	JsonCreateKvLst:
+ 383              	.LFB2:
+ 138:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 139:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** static cJSON *JsonCreateKvLst(oc_mqtt_profile_kv_t *kvlst)
+ 140:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** {
+ 384              		.loc 1 140 1
+ 385              		.cfi_startproc
+ 386 0000 F30F1EFA 		endbr64
+ 387 0004 55       		pushq	%rbp
+ 388              	.LCFI6:
+ 389              		.cfi_def_cfa_offset 16
+ 390              		.cfi_offset 6, -16
+ 391 0005 4889E5   		movq	%rsp, %rbp
+ 392              	.LCFI7:
+ 393              		.cfi_def_cfa_register 6
+ 394 0008 4883EC30 		subq	$48, %rsp
+ 395 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 396              		.loc 1 140 1
+ 397 0010 64488B04 		movq	%fs:40, %rax
+ 397      25280000 
+ 397      00
+ 398 0019 488945F8 		movq	%rax, -8(%rbp)
+ 399 001d 31C0     		xorl	%eax, %eax
+ 141:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *root;
+ 142:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *kv;
+ 143:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     oc_mqtt_profile_kv_t *kv_info;
+ 144:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 145:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< build a root node
+ 146:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     root = cJSON_CreateObject();
+ 400              		.loc 1 146 12
+ 401 001f E8000000 		call	cJSON_CreateObject@PLT
+ 401      00
+ 402 0024 488945E0 		movq	%rax, -32(%rbp)
+ 147:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL == root) {
+ 403              		.loc 1 147 8
+ 404 0028 48837DE0 		cmpq	$0, -32(%rbp)
+ 404      00
+ 405 002d 7454     		je	.L45
+ 148:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+ 149:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 150:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 151:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< add all the property to the properties
+ 152:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     kv_info = kvlst;
+GAS LISTING /tmp/ccXG49uY.s 			page 12
+
+
+ 406              		.loc 1 152 13
+ 407 002f 488B45D8 		movq	-40(%rbp), %rax
+ 408 0033 488945E8 		movq	%rax, -24(%rbp)
+ 153:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     while (NULL != kv_info) {
+ 409              		.loc 1 153 11
+ 410 0037 EB3D     		jmp	.L39
+ 411              	.L41:
+ 154:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         kv = JsonCreateKv(kv_info);
+ 412              		.loc 1 154 14
+ 413 0039 488B45E8 		movq	-24(%rbp), %rax
+ 414 003d 4889C7   		movq	%rax, %rdi
+ 415 0040 E8000000 		call	JsonCreateKv
+ 415      00
+ 416 0045 488945F0 		movq	%rax, -16(%rbp)
+ 155:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         if (NULL == kv) {
+ 417              		.loc 1 155 12
+ 418 0049 48837DF0 		cmpq	$0, -16(%rbp)
+ 418      00
+ 419 004e 7436     		je	.L46
+ 156:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             goto EXIT_MEM;
+ 157:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 158:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 159:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_AddItemToObject(root, kv_info->key, kv);
+ 420              		.loc 1 159 44
+ 421 0050 488B45E8 		movq	-24(%rbp), %rax
+ 422 0054 488B4808 		movq	8(%rax), %rcx
+ 423              		.loc 1 159 9
+ 424 0058 488B55F0 		movq	-16(%rbp), %rdx
+ 425 005c 488B45E0 		movq	-32(%rbp), %rax
+ 426 0060 4889CE   		movq	%rcx, %rsi
+ 427 0063 4889C7   		movq	%rax, %rdi
+ 428 0066 E8000000 		call	cJSON_AddItemToObject@PLT
+ 428      00
+ 160:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         kv_info = kv_info->nxt;
+ 429              		.loc 1 160 17
+ 430 006b 488B45E8 		movq	-24(%rbp), %rax
+ 431 006f 488B00   		movq	(%rax), %rax
+ 432 0072 488945E8 		movq	%rax, -24(%rbp)
+ 433              	.L39:
+ 153:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         kv = JsonCreateKv(kv_info);
+ 434              		.loc 1 153 11
+ 435 0076 48837DE8 		cmpq	$0, -24(%rbp)
+ 435      00
+ 436 007b 75BC     		jne	.L41
+ 161:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 162:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 163:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< OK, now we return it
+ 164:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return root;
+ 437              		.loc 1 164 12
+ 438 007d 488B45E0 		movq	-32(%rbp), %rax
+ 439 0081 EB23     		jmp	.L42
+ 440              	.L45:
+ 148:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 441              		.loc 1 148 9
+ 442 0083 90       		nop
+ 443 0084 EB01     		jmp	.L38
+ 444              	.L46:
+GAS LISTING /tmp/ccXG49uY.s 			page 13
+
+
+ 156:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 445              		.loc 1 156 13
+ 446 0086 90       		nop
+ 447              	.L38:
+ 165:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 166:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** EXIT_MEM:
+ 167:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL != root) {
+ 448              		.loc 1 167 8
+ 449 0087 48837DE0 		cmpq	$0, -32(%rbp)
+ 449      00
+ 450 008c 7414     		je	.L43
+ 168:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_Delete(root);
+ 451              		.loc 1 168 9
+ 452 008e 488B45E0 		movq	-32(%rbp), %rax
+ 453 0092 4889C7   		movq	%rax, %rdi
+ 454 0095 E8000000 		call	cJSON_Delete@PLT
+ 454      00
+ 169:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         root = NULL;
+ 455              		.loc 1 169 14
+ 456 009a 48C745E0 		movq	$0, -32(%rbp)
+ 456      00000000 
+ 457              	.L43:
+ 170:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 171:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return root;
+ 458              		.loc 1 171 12
+ 459 00a2 488B45E0 		movq	-32(%rbp), %rax
+ 460              	.L42:
+ 172:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** }
+ 461              		.loc 1 172 1
+ 462 00a6 488B75F8 		movq	-8(%rbp), %rsi
+ 463 00aa 64483334 		xorq	%fs:40, %rsi
+ 463      25280000 
+ 463      00
+ 464 00b3 7405     		je	.L44
+ 465 00b5 E8000000 		call	__stack_chk_fail@PLT
+ 465      00
+ 466              	.L44:
+ 467 00ba C9       		leave
+ 468              	.LCFI8:
+ 469              		.cfi_def_cfa 7, 8
+ 470 00bb C3       		ret
+ 471              		.cfi_endproc
+ 472              	.LFE2:
+ 474              		.section	.rodata
+ 475              	.LC4:
+ 476 0021 73657276 		.string	"service_id"
+ 476      6963655F 
+ 476      696400
+ 477              	.LC5:
+ 478 002c 70726F70 		.string	"properties"
+ 478      65727469 
+ 478      657300
+ 479              	.LC6:
+ 480 0037 6576656E 		.string	"event_time"
+ 480      745F7469 
+ 480      6D6500
+ 481              		.section	.text.JsonCreateService,"ax",@progbits
+GAS LISTING /tmp/ccXG49uY.s 			page 14
+
+
+ 483              	JsonCreateService:
+ 484              	.LFB3:
+ 173:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 174:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** static cJSON *JsonCreateService(oc_mqtt_profile_service_t *service_info)
+ 175:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** {
+ 485              		.loc 1 175 1
+ 486              		.cfi_startproc
+ 487 0000 F30F1EFA 		endbr64
+ 488 0004 55       		pushq	%rbp
+ 489              	.LCFI9:
+ 490              		.cfi_def_cfa_offset 16
+ 491              		.cfi_offset 6, -16
+ 492 0005 4889E5   		movq	%rsp, %rbp
+ 493              	.LCFI10:
+ 494              		.cfi_def_cfa_register 6
+ 495 0008 4883EC40 		subq	$64, %rsp
+ 496 000c 48897DC8 		movq	%rdi, -56(%rbp)
+ 497              		.loc 1 175 1
+ 498 0010 64488B04 		movq	%fs:40, %rax
+ 498      25280000 
+ 498      00
+ 499 0019 488945F8 		movq	%rax, -8(%rbp)
+ 500 001d 31C0     		xorl	%eax, %eax
+ 176:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *root;
+ 177:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *service_id;
+ 178:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *properties;
+ 179:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *event_time;
+ 180:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 181:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< build a root node
+ 182:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     root = cJSON_CreateObject();
+ 501              		.loc 1 182 12
+ 502 001f E8000000 		call	cJSON_CreateObject@PLT
+ 502      00
+ 503 0024 488945D8 		movq	%rax, -40(%rbp)
+ 183:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL == root) {
+ 504              		.loc 1 183 8
+ 505 0028 48837DD8 		cmpq	$0, -40(%rbp)
+ 505      00
+ 506 002d 0F84AD00 		je	.L57
+ 506      0000
+ 184:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+ 185:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 186:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 187:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< add the service_id node to the root node
+ 188:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     service_id = cJSON_CreateString(service_info->service_id);
+ 507              		.loc 1 188 49
+ 508 0033 488B45C8 		movq	-56(%rbp), %rax
+ 509 0037 488B4008 		movq	8(%rax), %rax
+ 510              		.loc 1 188 18
+ 511 003b 4889C7   		movq	%rax, %rdi
+ 512 003e E8000000 		call	cJSON_CreateString@PLT
+ 512      00
+ 513 0043 488945E0 		movq	%rax, -32(%rbp)
+ 189:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL == service_id) {
+ 514              		.loc 1 189 8
+ 515 0047 48837DE0 		cmpq	$0, -32(%rbp)
+ 515      00
+GAS LISTING /tmp/ccXG49uY.s 			page 15
+
+
+ 516 004c 0F849100 		je	.L58
+ 516      0000
+ 190:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+ 191:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 192:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON_AddItemToObjectCS(root, CN_OC_JSON_KEY_SERVICEID, service_id);
+ 517              		.loc 1 192 5
+ 518 0052 488B55E0 		movq	-32(%rbp), %rdx
+ 519 0056 488B45D8 		movq	-40(%rbp), %rax
+ 520 005a 488D3500 		leaq	.LC4(%rip), %rsi
+ 520      000000
+ 521 0061 4889C7   		movq	%rax, %rdi
+ 522 0064 E8000000 		call	cJSON_AddItemToObjectCS@PLT
+ 522      00
+ 193:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 194:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< add the properties node to the root
+ 195:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     properties = JsonCreateKvLst(service_info->service_property);
+ 523              		.loc 1 195 18
+ 524 0069 488B45C8 		movq	-56(%rbp), %rax
+ 525 006d 488B4018 		movq	24(%rax), %rax
+ 526 0071 4889C7   		movq	%rax, %rdi
+ 527 0074 E8000000 		call	JsonCreateKvLst
+ 527      00
+ 528 0079 488945E8 		movq	%rax, -24(%rbp)
+ 196:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL == properties) {
+ 529              		.loc 1 196 8
+ 530 007d 48837DE8 		cmpq	$0, -24(%rbp)
+ 530      00
+ 531 0082 7462     		je	.L59
+ 197:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+ 198:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 199:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON_AddItemToObjectCS(root, CN_OC_JSON_KEY_PROPERTIES, properties);
+ 532              		.loc 1 199 5
+ 533 0084 488B55E8 		movq	-24(%rbp), %rdx
+ 534 0088 488B45D8 		movq	-40(%rbp), %rax
+ 535 008c 488D3500 		leaq	.LC5(%rip), %rsi
+ 535      000000
+ 536 0093 4889C7   		movq	%rax, %rdi
+ 537 0096 E8000000 		call	cJSON_AddItemToObjectCS@PLT
+ 537      00
+ 200:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 201:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< add the event time (optional) to the root
+ 202:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL != service_info->event_time) {
+ 538              		.loc 1 202 29
+ 539 009b 488B45C8 		movq	-56(%rbp), %rax
+ 540 009f 488B4010 		movq	16(%rax), %rax
+ 541              		.loc 1 202 8
+ 542 00a3 4885C0   		testq	%rax, %rax
+ 543 00a6 7432     		je	.L52
+ 203:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         event_time = cJSON_CreateString(service_info->event_time);
+ 544              		.loc 1 203 53
+ 545 00a8 488B45C8 		movq	-56(%rbp), %rax
+ 546 00ac 488B4010 		movq	16(%rax), %rax
+ 547              		.loc 1 203 22
+ 548 00b0 4889C7   		movq	%rax, %rdi
+ 549 00b3 E8000000 		call	cJSON_CreateString@PLT
+ 549      00
+ 550 00b8 488945F0 		movq	%rax, -16(%rbp)
+GAS LISTING /tmp/ccXG49uY.s 			page 16
+
+
+ 204:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         if (NULL == event_time) {
+ 551              		.loc 1 204 12
+ 552 00bc 48837DF0 		cmpq	$0, -16(%rbp)
+ 552      00
+ 553 00c1 7426     		je	.L60
+ 205:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             goto EXIT_MEM;
+ 206:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 207:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_AddItemToObjectCS(root, CN_OC_JSON_KEY_EVENTTIME, event_time);
+ 554              		.loc 1 207 9
+ 555 00c3 488B55F0 		movq	-16(%rbp), %rdx
+ 556 00c7 488B45D8 		movq	-40(%rbp), %rax
+ 557 00cb 488D3500 		leaq	.LC6(%rip), %rsi
+ 557      000000
+ 558 00d2 4889C7   		movq	%rax, %rdi
+ 559 00d5 E8000000 		call	cJSON_AddItemToObjectCS@PLT
+ 559      00
+ 560              	.L52:
+ 208:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 209:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 210:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< OK, now we return it
+ 211:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return root;
+ 561              		.loc 1 211 12
+ 562 00da 488B45D8 		movq	-40(%rbp), %rax
+ 563 00de EB29     		jmp	.L54
+ 564              	.L57:
+ 184:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 565              		.loc 1 184 9
+ 566 00e0 90       		nop
+ 567 00e1 EB07     		jmp	.L49
+ 568              	.L58:
+ 190:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 569              		.loc 1 190 9
+ 570 00e3 90       		nop
+ 571 00e4 EB04     		jmp	.L49
+ 572              	.L59:
+ 197:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 573              		.loc 1 197 9
+ 574 00e6 90       		nop
+ 575 00e7 EB01     		jmp	.L49
+ 576              	.L60:
+ 205:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 577              		.loc 1 205 13
+ 578 00e9 90       		nop
+ 579              	.L49:
+ 212:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 213:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** EXIT_MEM:
+ 214:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL != root) {
+ 580              		.loc 1 214 8
+ 581 00ea 48837DD8 		cmpq	$0, -40(%rbp)
+ 581      00
+ 582 00ef 7414     		je	.L55
+ 215:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_Delete(root);
+ 583              		.loc 1 215 9
+ 584 00f1 488B45D8 		movq	-40(%rbp), %rax
+ 585 00f5 4889C7   		movq	%rax, %rdi
+ 586 00f8 E8000000 		call	cJSON_Delete@PLT
+ 586      00
+GAS LISTING /tmp/ccXG49uY.s 			page 17
+
+
+ 216:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         root = NULL;
+ 587              		.loc 1 216 14
+ 588 00fd 48C745D8 		movq	$0, -40(%rbp)
+ 588      00000000 
+ 589              	.L55:
+ 217:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 218:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return root;
+ 590              		.loc 1 218 12
+ 591 0105 488B45D8 		movq	-40(%rbp), %rax
+ 592              	.L54:
+ 219:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** }
+ 593              		.loc 1 219 1
+ 594 0109 488B4DF8 		movq	-8(%rbp), %rcx
+ 595 010d 6448330C 		xorq	%fs:40, %rcx
+ 595      25280000 
+ 595      00
+ 596 0116 7405     		je	.L56
+ 597 0118 E8000000 		call	__stack_chk_fail@PLT
+ 597      00
+ 598              	.L56:
+ 599 011d C9       		leave
+ 600              	.LCFI11:
+ 601              		.cfi_def_cfa 7, 8
+ 602 011e C3       		ret
+ 603              		.cfi_endproc
+ 604              	.LFE3:
+ 606              		.section	.text.JsonCreateServices,"ax",@progbits
+ 608              	JsonCreateServices:
+ 609              	.LFB4:
+ 220:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 221:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** static cJSON *JsonCreateServices(oc_mqtt_profile_service_t *service_info)
+ 222:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** {
+ 610              		.loc 1 222 1
+ 611              		.cfi_startproc
+ 612 0000 F30F1EFA 		endbr64
+ 613 0004 55       		pushq	%rbp
+ 614              	.LCFI12:
+ 615              		.cfi_def_cfa_offset 16
+ 616              		.cfi_offset 6, -16
+ 617 0005 4889E5   		movq	%rsp, %rbp
+ 618              	.LCFI13:
+ 619              		.cfi_def_cfa_register 6
+ 620 0008 4883EC30 		subq	$48, %rsp
+ 621 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 622              		.loc 1 222 1
+ 623 0010 64488B04 		movq	%fs:40, %rax
+ 623      25280000 
+ 623      00
+ 624 0019 488945F8 		movq	%rax, -8(%rbp)
+ 625 001d 31C0     		xorl	%eax, %eax
+ 223:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *services = NULL;
+ 626              		.loc 1 223 12
+ 627 001f 48C745E0 		movq	$0, -32(%rbp)
+ 627      00000000 
+ 224:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *service;
+ 225:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     oc_mqtt_profile_service_t *service_tmp;
+ 226:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+GAS LISTING /tmp/ccXG49uY.s 			page 18
+
+
+ 227:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< create the services array node
+ 228:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     services = cJSON_CreateArray();
+ 628              		.loc 1 228 16
+ 629 0027 E8000000 		call	cJSON_CreateArray@PLT
+ 629      00
+ 630 002c 488945E0 		movq	%rax, -32(%rbp)
+ 229:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL == services) {
+ 631              		.loc 1 229 8
+ 632 0030 48837DE0 		cmpq	$0, -32(%rbp)
+ 632      00
+ 633 0035 744C     		je	.L70
+ 230:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+ 231:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 232:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 233:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     service_tmp = service_info;
+ 634              		.loc 1 233 17
+ 635 0037 488B45D8 		movq	-40(%rbp), %rax
+ 636 003b 488945E8 		movq	%rax, -24(%rbp)
+ 234:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     while (NULL != service_tmp) {
+ 637              		.loc 1 234 11
+ 638 003f EB35     		jmp	.L64
+ 639              	.L66:
+ 235:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         service = JsonCreateService(service_tmp);
+ 640              		.loc 1 235 19
+ 641 0041 488B45E8 		movq	-24(%rbp), %rax
+ 642 0045 4889C7   		movq	%rax, %rdi
+ 643 0048 E8000000 		call	JsonCreateService
+ 643      00
+ 644 004d 488945F0 		movq	%rax, -16(%rbp)
+ 236:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         if (NULL == service) {
+ 645              		.loc 1 236 12
+ 646 0051 48837DF0 		cmpq	$0, -16(%rbp)
+ 646      00
+ 647 0056 742E     		je	.L71
+ 237:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             goto EXIT_MEM;
+ 238:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 239:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 240:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_AddItemToArray(services, service);
+ 648              		.loc 1 240 9
+ 649 0058 488B55F0 		movq	-16(%rbp), %rdx
+ 650 005c 488B45E0 		movq	-32(%rbp), %rax
+ 651 0060 4889D6   		movq	%rdx, %rsi
+ 652 0063 4889C7   		movq	%rax, %rdi
+ 653 0066 E8000000 		call	cJSON_AddItemToArray@PLT
+ 653      00
+ 241:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         service_tmp = service_tmp->nxt;
+ 654              		.loc 1 241 21
+ 655 006b 488B45E8 		movq	-24(%rbp), %rax
+ 656 006f 488B00   		movq	(%rax), %rax
+ 657 0072 488945E8 		movq	%rax, -24(%rbp)
+ 658              	.L64:
+ 234:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         service = JsonCreateService(service_tmp);
+ 659              		.loc 1 234 11
+ 660 0076 48837DE8 		cmpq	$0, -24(%rbp)
+ 660      00
+ 661 007b 75C4     		jne	.L66
+ 242:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+GAS LISTING /tmp/ccXG49uY.s 			page 19
+
+
+ 243:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 244:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< now we return the services
+ 245:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return services;
+ 662              		.loc 1 245 12
+ 663 007d 488B45E0 		movq	-32(%rbp), %rax
+ 664 0081 EB23     		jmp	.L67
+ 665              	.L70:
+ 230:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 666              		.loc 1 230 9
+ 667 0083 90       		nop
+ 668 0084 EB01     		jmp	.L63
+ 669              	.L71:
+ 237:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 670              		.loc 1 237 13
+ 671 0086 90       		nop
+ 672              	.L63:
+ 246:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 247:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** EXIT_MEM:
+ 248:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL != services) {
+ 673              		.loc 1 248 8
+ 674 0087 48837DE0 		cmpq	$0, -32(%rbp)
+ 674      00
+ 675 008c 7414     		je	.L68
+ 249:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_Delete(services);
+ 676              		.loc 1 249 9
+ 677 008e 488B45E0 		movq	-32(%rbp), %rax
+ 678 0092 4889C7   		movq	%rax, %rdi
+ 679 0095 E8000000 		call	cJSON_Delete@PLT
+ 679      00
+ 250:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         services = NULL;
+ 680              		.loc 1 250 18
+ 681 009a 48C745E0 		movq	$0, -32(%rbp)
+ 681      00000000 
+ 682              	.L68:
+ 251:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 252:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return services;
+ 683              		.loc 1 252 12
+ 684 00a2 488B45E0 		movq	-32(%rbp), %rax
+ 685              	.L67:
+ 253:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** }
+ 686              		.loc 1 253 1
+ 687 00a6 488B4DF8 		movq	-8(%rbp), %rcx
+ 688 00aa 6448330C 		xorq	%fs:40, %rcx
+ 688      25280000 
+ 688      00
+ 689 00b3 7405     		je	.L69
+ 690 00b5 E8000000 		call	__stack_chk_fail@PLT
+ 690      00
+ 691              	.L69:
+ 692 00ba C9       		leave
+ 693              	.LCFI14:
+ 694              		.cfi_def_cfa 7, 8
+ 695 00bb C3       		ret
+ 696              		.cfi_endproc
+ 697              	.LFE4:
+ 699              		.section	.rodata
+ 700              	.LC7:
+GAS LISTING /tmp/ccXG49uY.s 			page 20
+
+
+ 701 0042 73657276 		.string	"services"
+ 701      69636573 
+ 701      00
+ 702              		.section	.text.oc_mqtt_profile_package_propertyreport,"ax",@progbits
+ 703              		.globl	oc_mqtt_profile_package_propertyreport
+ 705              	oc_mqtt_profile_package_propertyreport:
+ 706              	.LFB5:
+ 254:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 255:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** char *oc_mqtt_profile_package_propertyreport(oc_mqtt_profile_service_t *payload)
+ 256:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** {
+ 707              		.loc 1 256 1
+ 708              		.cfi_startproc
+ 709 0000 F30F1EFA 		endbr64
+ 710 0004 55       		pushq	%rbp
+ 711              	.LCFI15:
+ 712              		.cfi_def_cfa_offset 16
+ 713              		.cfi_offset 6, -16
+ 714 0005 4889E5   		movq	%rsp, %rbp
+ 715              	.LCFI16:
+ 716              		.cfi_def_cfa_register 6
+ 717 0008 4883EC30 		subq	$48, %rsp
+ 718 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 719              		.loc 1 256 1
+ 720 0010 64488B04 		movq	%fs:40, %rax
+ 720      25280000 
+ 720      00
+ 721 0019 488945F8 		movq	%rax, -8(%rbp)
+ 722 001d 31C0     		xorl	%eax, %eax
+ 257:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     char *ret = NULL;
+ 723              		.loc 1 257 11
+ 724 001f 48C745E0 		movq	$0, -32(%rbp)
+ 724      00000000 
+ 258:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *root;
+ 259:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *services;
+ 260:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 261:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< create the root node
+ 262:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     root = cJSON_CreateObject();
+ 725              		.loc 1 262 12
+ 726 0027 E8000000 		call	cJSON_CreateObject@PLT
+ 726      00
+ 727 002c 488945E8 		movq	%rax, -24(%rbp)
+ 263:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL == root) {
+ 728              		.loc 1 263 8
+ 729 0030 48837DE8 		cmpq	$0, -24(%rbp)
+ 729      00
+ 730 0035 7450     		je	.L79
+ 264:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+ 265:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 266:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 267:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< create the services array node to the root
+ 268:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     services = JsonCreateServices(payload);
+ 731              		.loc 1 268 16
+ 732 0037 488B45D8 		movq	-40(%rbp), %rax
+ 733 003b 4889C7   		movq	%rax, %rdi
+ 734 003e E8000000 		call	JsonCreateServices
+ 734      00
+ 735 0043 488945F0 		movq	%rax, -16(%rbp)
+GAS LISTING /tmp/ccXG49uY.s 			page 21
+
+
+ 269:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL == services) {
+ 736              		.loc 1 269 8
+ 737 0047 48837DF0 		cmpq	$0, -16(%rbp)
+ 737      00
+ 738 004c 743C     		je	.L80
+ 270:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+ 271:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 272:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON_AddItemToObjectCS(root, CN_OC_JSON_KEY_SERVICES, services);
+ 739              		.loc 1 272 5
+ 740 004e 488B55F0 		movq	-16(%rbp), %rdx
+ 741 0052 488B45E8 		movq	-24(%rbp), %rax
+ 742 0056 488D3500 		leaq	.LC7(%rip), %rsi
+ 742      000000
+ 743 005d 4889C7   		movq	%rax, %rdi
+ 744 0060 E8000000 		call	cJSON_AddItemToObjectCS@PLT
+ 744      00
+ 273:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 274:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< OK, now we make it to a buffer
+ 275:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     ret = cJSON_PrintUnformatted(root);
+ 745              		.loc 1 275 11
+ 746 0065 488B45E8 		movq	-24(%rbp), %rax
+ 747 0069 4889C7   		movq	%rax, %rdi
+ 748 006c E8000000 		call	cJSON_PrintUnformatted@PLT
+ 748      00
+ 749 0071 488945E0 		movq	%rax, -32(%rbp)
+ 276:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON_Delete(root);
+ 750              		.loc 1 276 5
+ 751 0075 488B45E8 		movq	-24(%rbp), %rax
+ 752 0079 4889C7   		movq	%rax, %rdi
+ 753 007c E8000000 		call	cJSON_Delete@PLT
+ 753      00
+ 277:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return ret;
+ 754              		.loc 1 277 12
+ 755 0081 488B45E0 		movq	-32(%rbp), %rax
+ 756 0085 EB1B     		jmp	.L76
+ 757              	.L79:
+ 264:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 758              		.loc 1 264 9
+ 759 0087 90       		nop
+ 760 0088 EB01     		jmp	.L74
+ 761              	.L80:
+ 270:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 762              		.loc 1 270 9
+ 763 008a 90       		nop
+ 764              	.L74:
+ 278:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 279:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** EXIT_MEM:
+ 280:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL != root) {
+ 765              		.loc 1 280 8
+ 766 008b 48837DE8 		cmpq	$0, -24(%rbp)
+ 766      00
+ 767 0090 740C     		je	.L77
+ 281:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_Delete(root);
+ 768              		.loc 1 281 9
+ 769 0092 488B45E8 		movq	-24(%rbp), %rax
+ 770 0096 4889C7   		movq	%rax, %rdi
+ 771 0099 E8000000 		call	cJSON_Delete@PLT
+GAS LISTING /tmp/ccXG49uY.s 			page 22
+
+
+ 771      00
+ 772              	.L77:
+ 282:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 283:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return ret;
+ 773              		.loc 1 283 12
+ 774 009e 488B45E0 		movq	-32(%rbp), %rax
+ 775              	.L76:
+ 284:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** }
+ 776              		.loc 1 284 1
+ 777 00a2 488B4DF8 		movq	-8(%rbp), %rcx
+ 778 00a6 6448330C 		xorq	%fs:40, %rcx
+ 778      25280000 
+ 778      00
+ 779 00af 7405     		je	.L78
+ 780 00b1 E8000000 		call	__stack_chk_fail@PLT
+ 780      00
+ 781              	.L78:
+ 782 00b6 C9       		leave
+ 783              	.LCFI17:
+ 784              		.cfi_def_cfa 7, 8
+ 785 00b7 C3       		ret
+ 786              		.cfi_endproc
+ 787              	.LFE5:
+ 789              		.section	.rodata
+ 790              	.LC8:
+ 791 004b 64657669 		.string	"devices"
+ 791      63657300 
+ 792              	.LC9:
+ 793 0053 64657669 		.string	"device_id"
+ 793      63655F69 
+ 793      6400
+ 794              		.section	.text.oc_mqtt_profile_package_gwpropertyreport,"ax",@progbits
+ 795              		.globl	oc_mqtt_profile_package_gwpropertyreport
+ 797              	oc_mqtt_profile_package_gwpropertyreport:
+ 798              	.LFB6:
+ 285:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 286:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** char *oc_mqtt_profile_package_gwpropertyreport(oc_mqtt_profile_device_t *payload)
+ 287:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** {
+ 799              		.loc 1 287 1
+ 800              		.cfi_startproc
+ 801 0000 F30F1EFA 		endbr64
+ 802 0004 55       		pushq	%rbp
+ 803              	.LCFI18:
+ 804              		.cfi_def_cfa_offset 16
+ 805              		.cfi_offset 6, -16
+ 806 0005 4889E5   		movq	%rsp, %rbp
+ 807              	.LCFI19:
+ 808              		.cfi_def_cfa_register 6
+ 809 0008 4883EC50 		subq	$80, %rsp
+ 810 000c 48897DB8 		movq	%rdi, -72(%rbp)
+ 811              		.loc 1 287 1
+ 812 0010 64488B04 		movq	%fs:40, %rax
+ 812      25280000 
+ 812      00
+ 813 0019 488945F8 		movq	%rax, -8(%rbp)
+ 814 001d 31C0     		xorl	%eax, %eax
+ 288:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     char *ret = NULL;
+GAS LISTING /tmp/ccXG49uY.s 			page 23
+
+
+ 815              		.loc 1 288 11
+ 816 001f 48C745C8 		movq	$0, -56(%rbp)
+ 816      00000000 
+ 289:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *root;
+ 290:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *services;
+ 291:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *devices;
+ 292:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *device;
+ 293:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *device_id;
+ 294:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 295:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     oc_mqtt_profile_device_t *device_info;
+ 296:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 297:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< create the root node
+ 298:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     root = cJSON_CreateObject();
+ 817              		.loc 1 298 12
+ 818 0027 E8000000 		call	cJSON_CreateObject@PLT
+ 818      00
+ 819 002c 488945D0 		movq	%rax, -48(%rbp)
+ 299:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL == root) {
+ 820              		.loc 1 299 8
+ 821 0030 48837DD0 		cmpq	$0, -48(%rbp)
+ 821      00
+ 822 0035 0F84FF00 		je	.L93
+ 822      0000
+ 300:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+ 301:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 302:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 303:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< create the devices node and add it to root
+ 304:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     devices = cJSON_CreateArray();
+ 823              		.loc 1 304 15
+ 824 003b E8000000 		call	cJSON_CreateArray@PLT
+ 824      00
+ 825 0040 488945D8 		movq	%rax, -40(%rbp)
+ 305:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL == devices) {
+ 826              		.loc 1 305 8
+ 827 0044 48837DD8 		cmpq	$0, -40(%rbp)
+ 827      00
+ 828 0049 0F84EE00 		je	.L94
+ 828      0000
+ 306:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+ 307:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 308:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON_AddItemToObjectCS(root, CN_OC_JSON_KEY_DEVICES, devices);
+ 829              		.loc 1 308 5
+ 830 004f 488B55D8 		movq	-40(%rbp), %rdx
+ 831 0053 488B45D0 		movq	-48(%rbp), %rax
+ 832 0057 488D3500 		leaq	.LC8(%rip), %rsi
+ 832      000000
+ 833 005e 4889C7   		movq	%rax, %rdi
+ 834 0061 E8000000 		call	cJSON_AddItemToObjectCS@PLT
+ 834      00
+ 309:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 310:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< loop all the devices and add it to devices
+ 311:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     device_info = payload;
+ 835              		.loc 1 311 17
+ 836 0066 488B45B8 		movq	-72(%rbp), %rax
+ 837 006a 488945C0 		movq	%rax, -64(%rbp)
+ 312:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     while (NULL != device_info) {
+ 838              		.loc 1 312 11
+GAS LISTING /tmp/ccXG49uY.s 			page 24
+
+
+ 839 006e E99A0000 		jmp	.L85
+ 839      00
+ 840              	.L89:
+ 313:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         device = cJSON_CreateObject();
+ 841              		.loc 1 313 18
+ 842 0073 E8000000 		call	cJSON_CreateObject@PLT
+ 842      00
+ 843 0078 488945E0 		movq	%rax, -32(%rbp)
+ 314:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         if (NULL == device) {
+ 844              		.loc 1 314 12
+ 845 007c 48837DE0 		cmpq	$0, -32(%rbp)
+ 845      00
+ 846 0081 0F84B900 		je	.L95
+ 846      0000
+ 315:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             goto EXIT_MEM;
+ 316:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 317:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_AddItemToArray(devices, device);
+ 847              		.loc 1 317 9
+ 848 0087 488B55E0 		movq	-32(%rbp), %rdx
+ 849 008b 488B45D8 		movq	-40(%rbp), %rax
+ 850 008f 4889D6   		movq	%rdx, %rsi
+ 851 0092 4889C7   		movq	%rax, %rdi
+ 852 0095 E8000000 		call	cJSON_AddItemToArray@PLT
+ 852      00
+ 318:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 319:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         device_id = cJSON_CreateString(device_info->subdevice_id);
+ 853              		.loc 1 319 51
+ 854 009a 488B45C0 		movq	-64(%rbp), %rax
+ 855 009e 488B4008 		movq	8(%rax), %rax
+ 856              		.loc 1 319 21
+ 857 00a2 4889C7   		movq	%rax, %rdi
+ 858 00a5 E8000000 		call	cJSON_CreateString@PLT
+ 858      00
+ 859 00aa 488945E8 		movq	%rax, -24(%rbp)
+ 320:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         if (NULL == device_id) {
+ 860              		.loc 1 320 12
+ 861 00ae 48837DE8 		cmpq	$0, -24(%rbp)
+ 861      00
+ 862 00b3 0F848A00 		je	.L96
+ 862      0000
+ 321:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             goto EXIT_MEM;
+ 322:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 323:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_AddItemToObjectCS(device, CN_OC_JSON_KEY_DEVICEID, device_id);
+ 863              		.loc 1 323 9
+ 864 00b9 488B55E8 		movq	-24(%rbp), %rdx
+ 865 00bd 488B45E0 		movq	-32(%rbp), %rax
+ 866 00c1 488D3500 		leaq	.LC9(%rip), %rsi
+ 866      000000
+ 867 00c8 4889C7   		movq	%rax, %rdi
+ 868 00cb E8000000 		call	cJSON_AddItemToObjectCS@PLT
+ 868      00
+ 324:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 325:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         services = JsonCreateServices(device_info->subdevice_property);
+ 869              		.loc 1 325 20
+ 870 00d0 488B45C0 		movq	-64(%rbp), %rax
+ 871 00d4 488B4010 		movq	16(%rax), %rax
+ 872 00d8 4889C7   		movq	%rax, %rdi
+GAS LISTING /tmp/ccXG49uY.s 			page 25
+
+
+ 873 00db E8000000 		call	JsonCreateServices
+ 873      00
+ 874 00e0 488945F0 		movq	%rax, -16(%rbp)
+ 326:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         if (NULL == services) {
+ 875              		.loc 1 326 12
+ 876 00e4 48837DF0 		cmpq	$0, -16(%rbp)
+ 876      00
+ 877 00e9 745B     		je	.L97
+ 327:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             goto EXIT_MEM;
+ 328:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 329:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_AddItemToObjectCS(device, CN_OC_JSON_KEY_SERVICES, services);
+ 878              		.loc 1 329 9
+ 879 00eb 488B55F0 		movq	-16(%rbp), %rdx
+ 880 00ef 488B45E0 		movq	-32(%rbp), %rax
+ 881 00f3 488D3500 		leaq	.LC7(%rip), %rsi
+ 881      000000
+ 882 00fa 4889C7   		movq	%rax, %rdi
+ 883 00fd E8000000 		call	cJSON_AddItemToObjectCS@PLT
+ 883      00
+ 330:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 331:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         device_info = device_info->nxt;
+ 884              		.loc 1 331 21
+ 885 0102 488B45C0 		movq	-64(%rbp), %rax
+ 886 0106 488B00   		movq	(%rax), %rax
+ 887 0109 488945C0 		movq	%rax, -64(%rbp)
+ 888              	.L85:
+ 312:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         device = cJSON_CreateObject();
+ 889              		.loc 1 312 11
+ 890 010d 48837DC0 		cmpq	$0, -64(%rbp)
+ 890      00
+ 891 0112 0F855BFF 		jne	.L89
+ 891      FFFF
+ 332:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 333:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 334:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< OK, now we make it to a buffer
+ 335:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     ret = cJSON_PrintUnformatted(root);
+ 892              		.loc 1 335 11
+ 893 0118 488B45D0 		movq	-48(%rbp), %rax
+ 894 011c 4889C7   		movq	%rax, %rdi
+ 895 011f E8000000 		call	cJSON_PrintUnformatted@PLT
+ 895      00
+ 896 0124 488945C8 		movq	%rax, -56(%rbp)
+ 336:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON_Delete(root);
+ 897              		.loc 1 336 5
+ 898 0128 488B45D0 		movq	-48(%rbp), %rax
+ 899 012c 4889C7   		movq	%rax, %rdi
+ 900 012f E8000000 		call	cJSON_Delete@PLT
+ 900      00
+ 337:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return ret;
+ 901              		.loc 1 337 12
+ 902 0134 488B45C8 		movq	-56(%rbp), %rax
+ 903 0138 EB24     		jmp	.L90
+ 904              	.L93:
+ 300:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 905              		.loc 1 300 9
+ 906 013a 90       		nop
+ 907 013b EB0A     		jmp	.L83
+GAS LISTING /tmp/ccXG49uY.s 			page 26
+
+
+ 908              	.L94:
+ 306:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 909              		.loc 1 306 9
+ 910 013d 90       		nop
+ 911 013e EB07     		jmp	.L83
+ 912              	.L95:
+ 315:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 913              		.loc 1 315 13
+ 914 0140 90       		nop
+ 915 0141 EB04     		jmp	.L83
+ 916              	.L96:
+ 321:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 917              		.loc 1 321 13
+ 918 0143 90       		nop
+ 919 0144 EB01     		jmp	.L83
+ 920              	.L97:
+ 327:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 921              		.loc 1 327 13
+ 922 0146 90       		nop
+ 923              	.L83:
+ 338:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 339:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** EXIT_MEM:
+ 340:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL != root) {
+ 924              		.loc 1 340 8
+ 925 0147 48837DD0 		cmpq	$0, -48(%rbp)
+ 925      00
+ 926 014c 740C     		je	.L91
+ 341:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_Delete(root);
+ 927              		.loc 1 341 9
+ 928 014e 488B45D0 		movq	-48(%rbp), %rax
+ 929 0152 4889C7   		movq	%rax, %rdi
+ 930 0155 E8000000 		call	cJSON_Delete@PLT
+ 930      00
+ 931              	.L91:
+ 342:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 343:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return ret;
+ 932              		.loc 1 343 12
+ 933 015a 488B45C8 		movq	-56(%rbp), %rax
+ 934              	.L90:
+ 344:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** }
+ 935              		.loc 1 344 1
+ 936 015e 488B4DF8 		movq	-8(%rbp), %rcx
+ 937 0162 6448330C 		xorq	%fs:40, %rcx
+ 937      25280000 
+ 937      00
+ 938 016b 7405     		je	.L92
+ 939 016d E8000000 		call	__stack_chk_fail@PLT
+ 939      00
+ 940              	.L92:
+ 941 0172 C9       		leave
+ 942              	.LCFI20:
+ 943              		.cfi_def_cfa 7, 8
+ 944 0173 C3       		ret
+ 945              		.cfi_endproc
+ 946              	.LFE6:
+ 948              		.section	.rodata
+ 949              	.LC10:
+GAS LISTING /tmp/ccXG49uY.s 			page 27
+
+
+ 950 005d 72657375 		.string	"result_code"
+ 950      6C745F63 
+ 950      6F646500 
+ 951              	.LC11:
+ 952 0069 72657375 		.string	"result_desc"
+ 952      6C745F64 
+ 952      65736300 
+ 953              		.section	.text.oc_mqtt_profile_package_propertysetresp,"ax",@progbits
+ 954              		.globl	oc_mqtt_profile_package_propertysetresp
+ 956              	oc_mqtt_profile_package_propertysetresp:
+ 957              	.LFB7:
+ 345:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 346:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** char *oc_mqtt_profile_package_propertysetresp(oc_mqtt_profile_propertysetresp_t *payload)
+ 347:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** {
+ 958              		.loc 1 347 1
+ 959              		.cfi_startproc
+ 960 0000 F30F1EFA 		endbr64
+ 961 0004 55       		pushq	%rbp
+ 962              	.LCFI21:
+ 963              		.cfi_def_cfa_offset 16
+ 964              		.cfi_offset 6, -16
+ 965 0005 4889E5   		movq	%rsp, %rbp
+ 966              	.LCFI22:
+ 967              		.cfi_def_cfa_register 6
+ 968 0008 4883EC40 		subq	$64, %rsp
+ 969 000c 48897DC8 		movq	%rdi, -56(%rbp)
+ 970              		.loc 1 347 1
+ 971 0010 64488B04 		movq	%fs:40, %rax
+ 971      25280000 
+ 971      00
+ 972 0019 488945F8 		movq	%rax, -8(%rbp)
+ 973 001d 31C0     		xorl	%eax, %eax
+ 348:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     char *ret = NULL;
+ 974              		.loc 1 348 11
+ 975 001f 48C745D8 		movq	$0, -40(%rbp)
+ 975      00000000 
+ 349:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *root;
+ 350:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *ret_code;
+ 351:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *ret_desc;
+ 352:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 353:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< create the root node
+ 354:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     root = cJSON_CreateObject();
+ 976              		.loc 1 354 12
+ 977 0027 E8000000 		call	cJSON_CreateObject@PLT
+ 977      00
+ 978 002c 488945E0 		movq	%rax, -32(%rbp)
+ 355:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL == root) {
+ 979              		.loc 1 355 8
+ 980 0030 48837DE0 		cmpq	$0, -32(%rbp)
+ 980      00
+ 981 0035 0F849900 		je	.L107
+ 981      0000
+ 356:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+ 357:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 358:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 359:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< create retcode and retdesc and add it to the root
+ 360:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL != payload) {
+GAS LISTING /tmp/ccXG49uY.s 			page 28
+
+
+ 982              		.loc 1 360 8
+ 983 003b 48837DC8 		cmpq	$0, -56(%rbp)
+ 983      00
+ 984 0040 7470     		je	.L101
+ 361:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         ret_code = cJSON_CreateNumber(payload->ret_code);
+ 985              		.loc 1 361 46
+ 986 0042 488B45C8 		movq	-56(%rbp), %rax
+ 987 0046 8B00     		movl	(%rax), %eax
+ 988              		.loc 1 361 20
+ 989 0048 F20F2AC0 		cvtsi2sdl	%eax, %xmm0
+ 990 004c E8000000 		call	cJSON_CreateNumber@PLT
+ 990      00
+ 991 0051 488945E8 		movq	%rax, -24(%rbp)
+ 362:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         if (NULL == ret_code) {
+ 992              		.loc 1 362 12
+ 993 0055 48837DE8 		cmpq	$0, -24(%rbp)
+ 993      00
+ 994 005a 747B     		je	.L108
+ 363:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             goto EXIT_MEM;
+ 364:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 365:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_AddItemToObjectCS(root, CN_OC_JSON_KEY_RESULTCODE, ret_code);
+ 995              		.loc 1 365 9
+ 996 005c 488B55E8 		movq	-24(%rbp), %rdx
+ 997 0060 488B45E0 		movq	-32(%rbp), %rax
+ 998 0064 488D3500 		leaq	.LC10(%rip), %rsi
+ 998      000000
+ 999 006b 4889C7   		movq	%rax, %rdi
+ 1000 006e E8000000 		call	cJSON_AddItemToObjectCS@PLT
+ 1000      00
+ 366:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 367:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         if (NULL != payload->ret_description) {
+ 1001              		.loc 1 367 28
+ 1002 0073 488B45C8 		movq	-56(%rbp), %rax
+ 1003 0077 488B4008 		movq	8(%rax), %rax
+ 1004              		.loc 1 367 12
+ 1005 007b 4885C0   		testq	%rax, %rax
+ 1006 007e 7432     		je	.L101
+ 368:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             ret_desc = cJSON_CreateString(payload->ret_description);
+ 1007              		.loc 1 368 50
+ 1008 0080 488B45C8 		movq	-56(%rbp), %rax
+ 1009 0084 488B4008 		movq	8(%rax), %rax
+ 1010              		.loc 1 368 24
+ 1011 0088 4889C7   		movq	%rax, %rdi
+ 1012 008b E8000000 		call	cJSON_CreateString@PLT
+ 1012      00
+ 1013 0090 488945F0 		movq	%rax, -16(%rbp)
+ 369:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             if (NULL == ret_desc) {
+ 1014              		.loc 1 369 16
+ 1015 0094 48837DF0 		cmpq	$0, -16(%rbp)
+ 1015      00
+ 1016 0099 743F     		je	.L109
+ 370:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****                 goto EXIT_MEM;
+ 371:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             }
+ 372:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             cJSON_AddItemToObjectCS(root, CN_OC_JSON_KEY_RESULTDESC, ret_desc);
+ 1017              		.loc 1 372 13
+ 1018 009b 488B55F0 		movq	-16(%rbp), %rdx
+ 1019 009f 488B45E0 		movq	-32(%rbp), %rax
+GAS LISTING /tmp/ccXG49uY.s 			page 29
+
+
+ 1020 00a3 488D3500 		leaq	.LC11(%rip), %rsi
+ 1020      000000
+ 1021 00aa 4889C7   		movq	%rax, %rdi
+ 1022 00ad E8000000 		call	cJSON_AddItemToObjectCS@PLT
+ 1022      00
+ 1023              	.L101:
+ 373:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 374:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 375:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< OK, now we make it to a buffer
+ 376:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     ret = cJSON_PrintUnformatted(root);
+ 1024              		.loc 1 376 11
+ 1025 00b2 488B45E0 		movq	-32(%rbp), %rax
+ 1026 00b6 4889C7   		movq	%rax, %rdi
+ 1027 00b9 E8000000 		call	cJSON_PrintUnformatted@PLT
+ 1027      00
+ 1028 00be 488945D8 		movq	%rax, -40(%rbp)
+ 377:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON_Delete(root);
+ 1029              		.loc 1 377 5
+ 1030 00c2 488B45E0 		movq	-32(%rbp), %rax
+ 1031 00c6 4889C7   		movq	%rax, %rdi
+ 1032 00c9 E8000000 		call	cJSON_Delete@PLT
+ 1032      00
+ 378:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return ret;
+ 1033              		.loc 1 378 12
+ 1034 00ce 488B45D8 		movq	-40(%rbp), %rax
+ 1035 00d2 EB1E     		jmp	.L104
+ 1036              	.L107:
+ 356:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 1037              		.loc 1 356 9
+ 1038 00d4 90       		nop
+ 1039 00d5 EB04     		jmp	.L100
+ 1040              	.L108:
+ 363:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 1041              		.loc 1 363 13
+ 1042 00d7 90       		nop
+ 1043 00d8 EB01     		jmp	.L100
+ 1044              	.L109:
+ 370:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             }
+ 1045              		.loc 1 370 17
+ 1046 00da 90       		nop
+ 1047              	.L100:
+ 379:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 380:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** EXIT_MEM:
+ 381:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL != root) {
+ 1048              		.loc 1 381 8
+ 1049 00db 48837DE0 		cmpq	$0, -32(%rbp)
+ 1049      00
+ 1050 00e0 740C     		je	.L105
+ 382:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_Delete(root);
+ 1051              		.loc 1 382 9
+ 1052 00e2 488B45E0 		movq	-32(%rbp), %rax
+ 1053 00e6 4889C7   		movq	%rax, %rdi
+ 1054 00e9 E8000000 		call	cJSON_Delete@PLT
+ 1054      00
+ 1055              	.L105:
+ 383:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 384:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return ret;
+GAS LISTING /tmp/ccXG49uY.s 			page 30
+
+
+ 1056              		.loc 1 384 12
+ 1057 00ee 488B45D8 		movq	-40(%rbp), %rax
+ 1058              	.L104:
+ 385:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** }
+ 1059              		.loc 1 385 1
+ 1060 00f2 488B4DF8 		movq	-8(%rbp), %rcx
+ 1061 00f6 6448330C 		xorq	%fs:40, %rcx
+ 1061      25280000 
+ 1061      00
+ 1062 00ff 7405     		je	.L106
+ 1063 0101 E8000000 		call	__stack_chk_fail@PLT
+ 1063      00
+ 1064              	.L106:
+ 1065 0106 C9       		leave
+ 1066              	.LCFI23:
+ 1067              		.cfi_def_cfa 7, 8
+ 1068 0107 C3       		ret
+ 1069              		.cfi_endproc
+ 1070              	.LFE7:
+ 1072              		.section	.text.oc_mqtt_profile_package_propertygetresp,"ax",@progbits
+ 1073              		.globl	oc_mqtt_profile_package_propertygetresp
+ 1075              	oc_mqtt_profile_package_propertygetresp:
+ 1076              	.LFB8:
+ 386:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 387:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** char *oc_mqtt_profile_package_propertygetresp(oc_mqtt_profile_propertygetresp_t *payload)
+ 388:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** {
+ 1077              		.loc 1 388 1
+ 1078              		.cfi_startproc
+ 1079 0000 F30F1EFA 		endbr64
+ 1080 0004 55       		pushq	%rbp
+ 1081              	.LCFI24:
+ 1082              		.cfi_def_cfa_offset 16
+ 1083              		.cfi_offset 6, -16
+ 1084 0005 4889E5   		movq	%rsp, %rbp
+ 1085              	.LCFI25:
+ 1086              		.cfi_def_cfa_register 6
+ 1087 0008 4883EC30 		subq	$48, %rsp
+ 1088 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 1089              		.loc 1 388 1
+ 1090 0010 64488B04 		movq	%fs:40, %rax
+ 1090      25280000 
+ 1090      00
+ 1091 0019 488945F8 		movq	%rax, -8(%rbp)
+ 1092 001d 31C0     		xorl	%eax, %eax
+ 389:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     char *ret = NULL;
+ 1093              		.loc 1 389 11
+ 1094 001f 48C745E0 		movq	$0, -32(%rbp)
+ 1094      00000000 
+ 390:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *root;
+ 391:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *services;
+ 392:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 393:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< create the root node
+ 394:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     root = cJSON_CreateObject();
+ 1095              		.loc 1 394 12
+ 1096 0027 E8000000 		call	cJSON_CreateObject@PLT
+ 1096      00
+ 1097 002c 488945E8 		movq	%rax, -24(%rbp)
+GAS LISTING /tmp/ccXG49uY.s 			page 31
+
+
+ 395:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL == root) {
+ 1098              		.loc 1 395 8
+ 1099 0030 48837DE8 		cmpq	$0, -24(%rbp)
+ 1099      00
+ 1100 0035 7454     		je	.L117
+ 396:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+ 397:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 398:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 399:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< create the services array node to the root
+ 400:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     services = JsonCreateServices(payload->services);
+ 1101              		.loc 1 400 16
+ 1102 0037 488B45D8 		movq	-40(%rbp), %rax
+ 1103 003b 488B4008 		movq	8(%rax), %rax
+ 1104 003f 4889C7   		movq	%rax, %rdi
+ 1105 0042 E8000000 		call	JsonCreateServices
+ 1105      00
+ 1106 0047 488945F0 		movq	%rax, -16(%rbp)
+ 401:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL == services) {
+ 1107              		.loc 1 401 8
+ 1108 004b 48837DF0 		cmpq	$0, -16(%rbp)
+ 1108      00
+ 1109 0050 743C     		je	.L118
+ 402:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+ 403:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 404:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON_AddItemToObjectCS(root, CN_OC_JSON_KEY_SERVICES, services);
+ 1110              		.loc 1 404 5
+ 1111 0052 488B55F0 		movq	-16(%rbp), %rdx
+ 1112 0056 488B45E8 		movq	-24(%rbp), %rax
+ 1113 005a 488D3500 		leaq	.LC7(%rip), %rsi
+ 1113      000000
+ 1114 0061 4889C7   		movq	%rax, %rdi
+ 1115 0064 E8000000 		call	cJSON_AddItemToObjectCS@PLT
+ 1115      00
+ 405:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 406:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< OK, now we make it to a buffer
+ 407:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     ret = cJSON_PrintUnformatted(root);
+ 1116              		.loc 1 407 11
+ 1117 0069 488B45E8 		movq	-24(%rbp), %rax
+ 1118 006d 4889C7   		movq	%rax, %rdi
+ 1119 0070 E8000000 		call	cJSON_PrintUnformatted@PLT
+ 1119      00
+ 1120 0075 488945E0 		movq	%rax, -32(%rbp)
+ 408:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON_Delete(root);
+ 1121              		.loc 1 408 5
+ 1122 0079 488B45E8 		movq	-24(%rbp), %rax
+ 1123 007d 4889C7   		movq	%rax, %rdi
+ 1124 0080 E8000000 		call	cJSON_Delete@PLT
+ 1124      00
+ 409:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return ret;
+ 1125              		.loc 1 409 12
+ 1126 0085 488B45E0 		movq	-32(%rbp), %rax
+ 1127 0089 EB1B     		jmp	.L114
+ 1128              	.L117:
+ 396:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 1129              		.loc 1 396 9
+ 1130 008b 90       		nop
+ 1131 008c EB01     		jmp	.L112
+GAS LISTING /tmp/ccXG49uY.s 			page 32
+
+
+ 1132              	.L118:
+ 402:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 1133              		.loc 1 402 9
+ 1134 008e 90       		nop
+ 1135              	.L112:
+ 410:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 411:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** EXIT_MEM:
+ 412:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL != root) {
+ 1136              		.loc 1 412 8
+ 1137 008f 48837DE8 		cmpq	$0, -24(%rbp)
+ 1137      00
+ 1138 0094 740C     		je	.L115
+ 413:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_Delete(root);
+ 1139              		.loc 1 413 9
+ 1140 0096 488B45E8 		movq	-24(%rbp), %rax
+ 1141 009a 4889C7   		movq	%rax, %rdi
+ 1142 009d E8000000 		call	cJSON_Delete@PLT
+ 1142      00
+ 1143              	.L115:
+ 414:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 415:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return ret;
+ 1144              		.loc 1 415 12
+ 1145 00a2 488B45E0 		movq	-32(%rbp), %rax
+ 1146              	.L114:
+ 416:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** }
+ 1147              		.loc 1 416 1
+ 1148 00a6 488B4DF8 		movq	-8(%rbp), %rcx
+ 1149 00aa 6448330C 		xorq	%fs:40, %rcx
+ 1149      25280000 
+ 1149      00
+ 1150 00b3 7405     		je	.L116
+ 1151 00b5 E8000000 		call	__stack_chk_fail@PLT
+ 1151      00
+ 1152              	.L116:
+ 1153 00ba C9       		leave
+ 1154              	.LCFI26:
+ 1155              		.cfi_def_cfa 7, 8
+ 1156 00bb C3       		ret
+ 1157              		.cfi_endproc
+ 1158              	.LFE8:
+ 1160              		.section	.rodata
+ 1161              	.LC12:
+ 1162 0075 70617261 		.string	"paras"
+ 1162      7300
+ 1163              		.section	.text.oc_mqtt_profile_package_cmdresp,"ax",@progbits
+ 1164              		.globl	oc_mqtt_profile_package_cmdresp
+ 1166              	oc_mqtt_profile_package_cmdresp:
+ 1167              	.LFB9:
+ 417:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 418:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 419:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** char *oc_mqtt_profile_package_cmdresp(oc_mqtt_profile_cmdresp_t *payload)
+ 420:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** {
+ 1168              		.loc 1 420 1
+ 1169              		.cfi_startproc
+ 1170 0000 F30F1EFA 		endbr64
+ 1171 0004 55       		pushq	%rbp
+ 1172              	.LCFI27:
+GAS LISTING /tmp/ccXG49uY.s 			page 33
+
+
+ 1173              		.cfi_def_cfa_offset 16
+ 1174              		.cfi_offset 6, -16
+ 1175 0005 4889E5   		movq	%rsp, %rbp
+ 1176              	.LCFI28:
+ 1177              		.cfi_def_cfa_register 6
+ 1178 0008 4883EC40 		subq	$64, %rsp
+ 1179 000c 48897DC8 		movq	%rdi, -56(%rbp)
+ 1180              		.loc 1 420 1
+ 1181 0010 64488B04 		movq	%fs:40, %rax
+ 1181      25280000 
+ 1181      00
+ 1182 0019 488945F8 		movq	%rax, -8(%rbp)
+ 1183 001d 31C0     		xorl	%eax, %eax
+ 421:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     char *ret = NULL;
+ 1184              		.loc 1 421 11
+ 1185 001f 48C745D0 		movq	$0, -48(%rbp)
+ 1185      00000000 
+ 422:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *root;
+ 423:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *ret_code;
+ 424:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *ret_name;
+ 425:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *paras;
+ 426:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 427:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 428:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< create the root node
+ 429:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     root = cJSON_CreateObject();
+ 1186              		.loc 1 429 12
+ 1187 0027 E8000000 		call	cJSON_CreateObject@PLT
+ 1187      00
+ 1188 002c 488945D8 		movq	%rax, -40(%rbp)
+ 430:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL == root) {
+ 1189              		.loc 1 430 8
+ 1190 0030 48837DD8 		cmpq	$0, -40(%rbp)
+ 1190      00
+ 1191 0035 0F84D500 		je	.L130
+ 1191      0000
+ 431:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+ 432:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 433:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 434:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< create retcode and retdesc and add it to the root
+ 435:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     ret_code = cJSON_CreateNumber(payload->ret_code);
+ 1192              		.loc 1 435 42
+ 1193 003b 488B45C8 		movq	-56(%rbp), %rax
+ 1194 003f 8B00     		movl	(%rax), %eax
+ 1195              		.loc 1 435 16
+ 1196 0041 F20F2AC0 		cvtsi2sdl	%eax, %xmm0
+ 1197 0045 E8000000 		call	cJSON_CreateNumber@PLT
+ 1197      00
+ 1198 004a 488945E0 		movq	%rax, -32(%rbp)
+ 436:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL == ret_code) {
+ 1199              		.loc 1 436 8
+ 1200 004e 48837DE0 		cmpq	$0, -32(%rbp)
+ 1200      00
+ 1201 0053 0F84BA00 		je	.L131
+ 1201      0000
+ 437:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+ 438:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 439:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON_AddItemToObjectCS(root, CN_OC_JSON_KEY_RESULTCODE, ret_code);
+GAS LISTING /tmp/ccXG49uY.s 			page 34
+
+
+ 1202              		.loc 1 439 5
+ 1203 0059 488B55E0 		movq	-32(%rbp), %rdx
+ 1204 005d 488B45D8 		movq	-40(%rbp), %rax
+ 1205 0061 488D3500 		leaq	.LC10(%rip), %rsi
+ 1205      000000
+ 1206 0068 4889C7   		movq	%rax, %rdi
+ 1207 006b E8000000 		call	cJSON_AddItemToObjectCS@PLT
+ 1207      00
+ 440:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 441:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL != payload->ret_name) {
+ 1208              		.loc 1 441 24
+ 1209 0070 488B45C8 		movq	-56(%rbp), %rax
+ 1210 0074 488B4008 		movq	8(%rax), %rax
+ 1211              		.loc 1 441 8
+ 1212 0078 4885C0   		testq	%rax, %rax
+ 1213 007b 7432     		je	.L123
+ 442:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         ret_name = cJSON_CreateString(payload->ret_name);
+ 1214              		.loc 1 442 46
+ 1215 007d 488B45C8 		movq	-56(%rbp), %rax
+ 1216 0081 488B4008 		movq	8(%rax), %rax
+ 1217              		.loc 1 442 20
+ 1218 0085 4889C7   		movq	%rax, %rdi
+ 1219 0088 E8000000 		call	cJSON_CreateString@PLT
+ 1219      00
+ 1220 008d 488945E8 		movq	%rax, -24(%rbp)
+ 443:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         if (NULL == ret_name) {
+ 1221              		.loc 1 443 12
+ 1222 0091 48837DE8 		cmpq	$0, -24(%rbp)
+ 1222      00
+ 1223 0096 747E     		je	.L132
+ 444:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             goto EXIT_MEM;
+ 445:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 446:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_AddItemToObjectCS(root, CN_OC_JSON_KEY_RESULTDESC, ret_name);
+ 1224              		.loc 1 446 9
+ 1225 0098 488B55E8 		movq	-24(%rbp), %rdx
+ 1226 009c 488B45D8 		movq	-40(%rbp), %rax
+ 1227 00a0 488D3500 		leaq	.LC11(%rip), %rsi
+ 1227      000000
+ 1228 00a7 4889C7   		movq	%rax, %rdi
+ 1229 00aa E8000000 		call	cJSON_AddItemToObjectCS@PLT
+ 1229      00
+ 1230              	.L123:
+ 447:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 448:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 449:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL != payload->paras) {
+ 1231              		.loc 1 449 24
+ 1232 00af 488B45C8 		movq	-56(%rbp), %rax
+ 1233 00b3 488B4018 		movq	24(%rax), %rax
+ 1234              		.loc 1 449 8
+ 1235 00b7 4885C0   		testq	%rax, %rax
+ 1236 00ba 7432     		je	.L125
+ 450:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         paras = JsonCreateKvLst(payload->paras);
+ 1237              		.loc 1 450 17
+ 1238 00bc 488B45C8 		movq	-56(%rbp), %rax
+ 1239 00c0 488B4018 		movq	24(%rax), %rax
+ 1240 00c4 4889C7   		movq	%rax, %rdi
+ 1241 00c7 E8000000 		call	JsonCreateKvLst
+GAS LISTING /tmp/ccXG49uY.s 			page 35
+
+
+ 1241      00
+ 1242 00cc 488945F0 		movq	%rax, -16(%rbp)
+ 451:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         if (NULL == paras) {
+ 1243              		.loc 1 451 12
+ 1244 00d0 48837DF0 		cmpq	$0, -16(%rbp)
+ 1244      00
+ 1245 00d5 7442     		je	.L133
+ 452:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             goto EXIT_MEM;
+ 453:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 454:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_AddItemToObjectCS(root, CN_OC_JSON_KEY_PARAS, paras);
+ 1246              		.loc 1 454 9
+ 1247 00d7 488B55F0 		movq	-16(%rbp), %rdx
+ 1248 00db 488B45D8 		movq	-40(%rbp), %rax
+ 1249 00df 488D3500 		leaq	.LC12(%rip), %rsi
+ 1249      000000
+ 1250 00e6 4889C7   		movq	%rax, %rdi
+ 1251 00e9 E8000000 		call	cJSON_AddItemToObjectCS@PLT
+ 1251      00
+ 1252              	.L125:
+ 455:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 456:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 457:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< OK, now we make it to a buffer
+ 458:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     ret = cJSON_PrintUnformatted(root);
+ 1253              		.loc 1 458 11
+ 1254 00ee 488B45D8 		movq	-40(%rbp), %rax
+ 1255 00f2 4889C7   		movq	%rax, %rdi
+ 1256 00f5 E8000000 		call	cJSON_PrintUnformatted@PLT
+ 1256      00
+ 1257 00fa 488945D0 		movq	%rax, -48(%rbp)
+ 459:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON_Delete(root);
+ 1258              		.loc 1 459 5
+ 1259 00fe 488B45D8 		movq	-40(%rbp), %rax
+ 1260 0102 4889C7   		movq	%rax, %rdi
+ 1261 0105 E8000000 		call	cJSON_Delete@PLT
+ 1261      00
+ 460:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return ret;
+ 1262              		.loc 1 460 12
+ 1263 010a 488B45D0 		movq	-48(%rbp), %rax
+ 1264 010e EB21     		jmp	.L127
+ 1265              	.L130:
+ 431:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 1266              		.loc 1 431 9
+ 1267 0110 90       		nop
+ 1268 0111 EB07     		jmp	.L121
+ 1269              	.L131:
+ 437:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 1270              		.loc 1 437 9
+ 1271 0113 90       		nop
+ 1272 0114 EB04     		jmp	.L121
+ 1273              	.L132:
+ 444:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 1274              		.loc 1 444 13
+ 1275 0116 90       		nop
+ 1276 0117 EB01     		jmp	.L121
+ 1277              	.L133:
+ 452:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 1278              		.loc 1 452 13
+GAS LISTING /tmp/ccXG49uY.s 			page 36
+
+
+ 1279 0119 90       		nop
+ 1280              	.L121:
+ 461:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 462:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** EXIT_MEM:
+ 463:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL != root) {
+ 1281              		.loc 1 463 8
+ 1282 011a 48837DD8 		cmpq	$0, -40(%rbp)
+ 1282      00
+ 1283 011f 740C     		je	.L128
+ 464:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_Delete(root);
+ 1284              		.loc 1 464 9
+ 1285 0121 488B45D8 		movq	-40(%rbp), %rax
+ 1286 0125 4889C7   		movq	%rax, %rdi
+ 1287 0128 E8000000 		call	cJSON_Delete@PLT
+ 1287      00
+ 1288              	.L128:
+ 465:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 466:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 467:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return ret;
+ 1289              		.loc 1 467 12
+ 1290 012d 488B45D0 		movq	-48(%rbp), %rax
+ 1291              	.L127:
+ 468:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** }
+ 1292              		.loc 1 468 1
+ 1293 0131 488B4DF8 		movq	-8(%rbp), %rcx
+ 1294 0135 6448330C 		xorq	%fs:40, %rcx
+ 1294      25280000 
+ 1294      00
+ 1295 013e 7405     		je	.L129
+ 1296 0140 E8000000 		call	__stack_chk_fail@PLT
+ 1296      00
+ 1297              	.L129:
+ 1298 0145 C9       		leave
+ 1299              	.LCFI29:
+ 1300              		.cfi_def_cfa 7, 8
+ 1301 0146 C3       		ret
+ 1302              		.cfi_endproc
+ 1303              	.LFE9:
+ 1305              		.section	.text.oc_mqtt_profile_package_shadowget,"ax",@progbits
+ 1306              		.globl	oc_mqtt_profile_package_shadowget
+ 1308              	oc_mqtt_profile_package_shadowget:
+ 1309              	.LFB10:
+ 469:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 470:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** char *oc_mqtt_profile_package_shadowget(oc_mqtt_profile_shadowget_t *payload)
+ 471:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** {
+ 1310              		.loc 1 471 1
+ 1311              		.cfi_startproc
+ 1312 0000 F30F1EFA 		endbr64
+ 1313 0004 55       		pushq	%rbp
+ 1314              	.LCFI30:
+ 1315              		.cfi_def_cfa_offset 16
+ 1316              		.cfi_offset 6, -16
+ 1317 0005 4889E5   		movq	%rsp, %rbp
+ 1318              	.LCFI31:
+ 1319              		.cfi_def_cfa_register 6
+ 1320 0008 4883EC40 		subq	$64, %rsp
+ 1321 000c 48897DC8 		movq	%rdi, -56(%rbp)
+GAS LISTING /tmp/ccXG49uY.s 			page 37
+
+
+ 1322              		.loc 1 471 1
+ 1323 0010 64488B04 		movq	%fs:40, %rax
+ 1323      25280000 
+ 1323      00
+ 1324 0019 488945F8 		movq	%rax, -8(%rbp)
+ 1325 001d 31C0     		xorl	%eax, %eax
+ 472:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     char *ret = NULL;
+ 1326              		.loc 1 472 11
+ 1327 001f 48C745D8 		movq	$0, -40(%rbp)
+ 1327      00000000 
+ 473:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *root = NULL;
+ 1328              		.loc 1 473 12
+ 1329 0027 48C745E0 		movq	$0, -32(%rbp)
+ 1329      00000000 
+ 474:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *object_device_id = NULL;
+ 1330              		.loc 1 474 12
+ 1331 002f 48C745E8 		movq	$0, -24(%rbp)
+ 1331      00000000 
+ 475:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *service_id = NULL;
+ 1332              		.loc 1 475 12
+ 1333 0037 48C745F0 		movq	$0, -16(%rbp)
+ 1333      00000000 
+ 476:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 477:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< create the root node
+ 478:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     root = cJSON_CreateObject();
+ 1334              		.loc 1 478 12
+ 1335 003f E8000000 		call	cJSON_CreateObject@PLT
+ 1335      00
+ 1336 0044 488945E0 		movq	%rax, -32(%rbp)
+ 479:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL == root) {
+ 1337              		.loc 1 479 8
+ 1338 0048 48837DE0 		cmpq	$0, -32(%rbp)
+ 1338      00
+ 1339 004d 0F849E00 		je	.L144
+ 1339      0000
+ 480:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+ 481:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 482:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< create retcode and retdesc and add it to the root
+ 483:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL != payload->object_device_id) {
+ 1340              		.loc 1 483 24
+ 1341 0053 488B45C8 		movq	-56(%rbp), %rax
+ 1342 0057 488B00   		movq	(%rax), %rax
+ 1343              		.loc 1 483 8
+ 1344 005a 4885C0   		testq	%rax, %rax
+ 1345 005d 7431     		je	.L137
+ 484:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         object_device_id = cJSON_CreateString(payload->object_device_id);
+ 1346              		.loc 1 484 54
+ 1347 005f 488B45C8 		movq	-56(%rbp), %rax
+ 1348 0063 488B00   		movq	(%rax), %rax
+ 1349              		.loc 1 484 28
+ 1350 0066 4889C7   		movq	%rax, %rdi
+ 1351 0069 E8000000 		call	cJSON_CreateString@PLT
+ 1351      00
+ 1352 006e 488945E8 		movq	%rax, -24(%rbp)
+ 485:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         if (NULL == object_device_id) {
+ 1353              		.loc 1 485 12
+ 1354 0072 48837DE8 		cmpq	$0, -24(%rbp)
+GAS LISTING /tmp/ccXG49uY.s 			page 38
+
+
+ 1354      00
+ 1355 0077 747B     		je	.L145
+ 486:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             goto EXIT_MEM;
+ 487:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 488:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_AddItemToObjectCS(root, CN_OC_JSON_KEY_OBJECTDEVICEID, object_device_id);
+ 1356              		.loc 1 488 9
+ 1357 0079 488B55E8 		movq	-24(%rbp), %rdx
+ 1358 007d 488B45E0 		movq	-32(%rbp), %rax
+ 1359 0081 488D3500 		leaq	.LC0(%rip), %rsi
+ 1359      000000
+ 1360 0088 4889C7   		movq	%rax, %rdi
+ 1361 008b E8000000 		call	cJSON_AddItemToObjectCS@PLT
+ 1361      00
+ 1362              	.L137:
+ 489:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 490:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 491:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL != payload->service_id) {
+ 1363              		.loc 1 491 24
+ 1364 0090 488B45C8 		movq	-56(%rbp), %rax
+ 1365 0094 488B4008 		movq	8(%rax), %rax
+ 1366              		.loc 1 491 8
+ 1367 0098 4885C0   		testq	%rax, %rax
+ 1368 009b 7432     		je	.L139
+ 492:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         service_id = cJSON_CreateString(payload->service_id);
+ 1369              		.loc 1 492 48
+ 1370 009d 488B45C8 		movq	-56(%rbp), %rax
+ 1371 00a1 488B4008 		movq	8(%rax), %rax
+ 1372              		.loc 1 492 22
+ 1373 00a5 4889C7   		movq	%rax, %rdi
+ 1374 00a8 E8000000 		call	cJSON_CreateString@PLT
+ 1374      00
+ 1375 00ad 488945F0 		movq	%rax, -16(%rbp)
+ 493:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         if (NULL == service_id) {
+ 1376              		.loc 1 493 12
+ 1377 00b1 48837DF0 		cmpq	$0, -16(%rbp)
+ 1377      00
+ 1378 00b6 743F     		je	.L146
+ 494:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             goto EXIT_MEM;
+ 495:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 496:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_AddItemToObjectCS(root, CN_OC_JSON_KEY_SERVICEID, service_id);
+ 1379              		.loc 1 496 9
+ 1380 00b8 488B55F0 		movq	-16(%rbp), %rdx
+ 1381 00bc 488B45E0 		movq	-32(%rbp), %rax
+ 1382 00c0 488D3500 		leaq	.LC4(%rip), %rsi
+ 1382      000000
+ 1383 00c7 4889C7   		movq	%rax, %rdi
+ 1384 00ca E8000000 		call	cJSON_AddItemToObjectCS@PLT
+ 1384      00
+ 1385              	.L139:
+ 497:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 498:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 499:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< OK, now we make it to a buffer
+ 500:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     ret = cJSON_PrintUnformatted(root);
+ 1386              		.loc 1 500 11
+ 1387 00cf 488B45E0 		movq	-32(%rbp), %rax
+ 1388 00d3 4889C7   		movq	%rax, %rdi
+ 1389 00d6 E8000000 		call	cJSON_PrintUnformatted@PLT
+GAS LISTING /tmp/ccXG49uY.s 			page 39
+
+
+ 1389      00
+ 1390 00db 488945D8 		movq	%rax, -40(%rbp)
+ 501:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON_Delete(root);
+ 1391              		.loc 1 501 5
+ 1392 00df 488B45E0 		movq	-32(%rbp), %rax
+ 1393 00e3 4889C7   		movq	%rax, %rdi
+ 1394 00e6 E8000000 		call	cJSON_Delete@PLT
+ 1394      00
+ 502:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return ret;
+ 1395              		.loc 1 502 12
+ 1396 00eb 488B45D8 		movq	-40(%rbp), %rax
+ 1397 00ef EB1E     		jmp	.L141
+ 1398              	.L144:
+ 480:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 1399              		.loc 1 480 9
+ 1400 00f1 90       		nop
+ 1401 00f2 EB04     		jmp	.L136
+ 1402              	.L145:
+ 486:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 1403              		.loc 1 486 13
+ 1404 00f4 90       		nop
+ 1405 00f5 EB01     		jmp	.L136
+ 1406              	.L146:
+ 494:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 1407              		.loc 1 494 13
+ 1408 00f7 90       		nop
+ 1409              	.L136:
+ 503:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 504:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** EXIT_MEM:
+ 505:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL != root) {
+ 1410              		.loc 1 505 8
+ 1411 00f8 48837DE0 		cmpq	$0, -32(%rbp)
+ 1411      00
+ 1412 00fd 740C     		je	.L142
+ 506:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_Delete(root);
+ 1413              		.loc 1 506 9
+ 1414 00ff 488B45E0 		movq	-32(%rbp), %rax
+ 1415 0103 4889C7   		movq	%rax, %rdi
+ 1416 0106 E8000000 		call	cJSON_Delete@PLT
+ 1416      00
+ 1417              	.L142:
+ 507:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 508:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 509:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return ret;
+ 1418              		.loc 1 509 12
+ 1419 010b 488B45D8 		movq	-40(%rbp), %rax
+ 1420              	.L141:
+ 510:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** }
+ 1421              		.loc 1 510 1
+ 1422 010f 488B4DF8 		movq	-8(%rbp), %rcx
+ 1423 0113 6448330C 		xorq	%fs:40, %rcx
+ 1423      25280000 
+ 1423      00
+ 1424 011c 7405     		je	.L143
+ 1425 011e E8000000 		call	__stack_chk_fail@PLT
+ 1425      00
+ 1426              	.L143:
+GAS LISTING /tmp/ccXG49uY.s 			page 40
+
+
+ 1427 0123 C9       		leave
+ 1428              	.LCFI32:
+ 1429              		.cfi_def_cfa 7, 8
+ 1430 0124 C3       		ret
+ 1431              		.cfi_endproc
+ 1432              	.LFE10:
+ 1434              		.section	.rodata
+ 1435              	.LC13:
+ 1436 007b 6576656E 		.string	"event_type"
+ 1436      745F7479 
+ 1436      706500
+ 1437              		.section	.text.oc_mqtt_profile_package_event,"ax",@progbits
+ 1438              		.globl	oc_mqtt_profile_package_event
+ 1440              	oc_mqtt_profile_package_event:
+ 1441              	.LFB11:
+ 511:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 512:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** /* ** event json data format
+ 513:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** Topic: $oc/devices/{device_id}/sys/events/down
+ 514:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** {
+ 515:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     "object_device_id": "{object_device_id}",
+ 516:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     "services": [{
+ 517:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         "service_id": "$ota",
+ 518:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         "event_type": "version_query",
+ 519:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         "event_time": "20151212T121212Z",
+ 520:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****          "paras": {
+ 521:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****          }
+ 522:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }]
+ 523:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** }
+ 524:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** */
+ 525:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 526:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** char *oc_mqtt_profile_package_event(oc_mqtt_profile_event_t *payload)
+ 527:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** {
+ 1442              		.loc 1 527 1
+ 1443              		.cfi_startproc
+ 1444 0000 F30F1EFA 		endbr64
+ 1445 0004 55       		pushq	%rbp
+ 1446              	.LCFI33:
+ 1447              		.cfi_def_cfa_offset 16
+ 1448              		.cfi_offset 6, -16
+ 1449 0005 4889E5   		movq	%rsp, %rbp
+ 1450              	.LCFI34:
+ 1451              		.cfi_def_cfa_register 6
+ 1452 0008 4883EC60 		subq	$96, %rsp
+ 1453 000c 48897DA8 		movq	%rdi, -88(%rbp)
+ 1454              		.loc 1 527 1
+ 1455 0010 64488B04 		movq	%fs:40, %rax
+ 1455      25280000 
+ 1455      00
+ 1456 0019 488945F8 		movq	%rax, -8(%rbp)
+ 1457 001d 31C0     		xorl	%eax, %eax
+ 528:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     char *ret = NULL;
+ 1458              		.loc 1 528 11
+ 1459 001f 48C745B0 		movq	$0, -80(%rbp)
+ 1459      00000000 
+ 529:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *root;
+ 530:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *objectDeviceID;
+ 531:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *services;
+GAS LISTING /tmp/ccXG49uY.s 			page 41
+
+
+ 532:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *service;
+ 533:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *serviceID;
+ 534:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *eventTime;
+ 535:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *eventType;
+ 536:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON *paras;
+ 537:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 538:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< create the root node
+ 539:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     root = cJSON_CreateObject();
+ 1460              		.loc 1 539 12
+ 1461 0027 E8000000 		call	cJSON_CreateObject@PLT
+ 1461      00
+ 1462 002c 488945B8 		movq	%rax, -72(%rbp)
+ 540:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL == root) {
+ 1463              		.loc 1 540 8
+ 1464 0030 48837DB8 		cmpq	$0, -72(%rbp)
+ 1464      00
+ 1465 0035 0F849201 		je	.L162
+ 1465      0000
+ 541:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+ 542:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 543:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 544:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< if the device object_device_id is not NULL then add it
+ 545:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (payload->object_device_id != NULL) {
+ 1466              		.loc 1 545 16
+ 1467 003b 488B45A8 		movq	-88(%rbp), %rax
+ 1468 003f 488B00   		movq	(%rax), %rax
+ 1469              		.loc 1 545 8
+ 1470 0042 4885C0   		testq	%rax, %rax
+ 1471 0045 7435     		je	.L150
+ 546:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         objectDeviceID = cJSON_CreateString(payload->object_device_id);
+ 1472              		.loc 1 546 52
+ 1473 0047 488B45A8 		movq	-88(%rbp), %rax
+ 1474 004b 488B00   		movq	(%rax), %rax
+ 1475              		.loc 1 546 26
+ 1476 004e 4889C7   		movq	%rax, %rdi
+ 1477 0051 E8000000 		call	cJSON_CreateString@PLT
+ 1477      00
+ 1478 0056 488945C0 		movq	%rax, -64(%rbp)
+ 547:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         if (objectDeviceID == NULL) {
+ 1479              		.loc 1 547 12
+ 1480 005a 48837DC0 		cmpq	$0, -64(%rbp)
+ 1480      00
+ 1481 005f 0F846B01 		je	.L163
+ 1481      0000
+ 548:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             goto EXIT_MEM;
+ 549:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 550:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_AddItemToObject(root, CN_OC_JSON_KEY_OBJECTDEVICEID, objectDeviceID);
+ 1482              		.loc 1 550 9
+ 1483 0065 488B55C0 		movq	-64(%rbp), %rdx
+ 1484 0069 488B45B8 		movq	-72(%rbp), %rax
+ 1485 006d 488D3500 		leaq	.LC0(%rip), %rsi
+ 1485      000000
+ 1486 0074 4889C7   		movq	%rax, %rdi
+ 1487 0077 E8000000 		call	cJSON_AddItemToObject@PLT
+ 1487      00
+ 1488              	.L150:
+ 551:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+GAS LISTING /tmp/ccXG49uY.s 			page 42
+
+
+ 552:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 553:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     services = cJSON_CreateArray();
+ 1489              		.loc 1 553 16
+ 1490 007c E8000000 		call	cJSON_CreateArray@PLT
+ 1490      00
+ 1491 0081 488945C8 		movq	%rax, -56(%rbp)
+ 554:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (services == NULL) {
+ 1492              		.loc 1 554 8
+ 1493 0085 48837DC8 		cmpq	$0, -56(%rbp)
+ 1493      00
+ 1494 008a 0F844301 		je	.L164
+ 1494      0000
+ 555:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+ 556:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 557:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON_AddItemToObject(root, CN_OC_JSON_KEY_SERVICES, services);
+ 1495              		.loc 1 557 5
+ 1496 0090 488B55C8 		movq	-56(%rbp), %rdx
+ 1497 0094 488B45B8 		movq	-72(%rbp), %rax
+ 1498 0098 488D3500 		leaq	.LC7(%rip), %rsi
+ 1498      000000
+ 1499 009f 4889C7   		movq	%rax, %rdi
+ 1500 00a2 E8000000 		call	cJSON_AddItemToObject@PLT
+ 1500      00
+ 558:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 559:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     service = cJSON_CreateObject();
+ 1501              		.loc 1 559 15
+ 1502 00a7 E8000000 		call	cJSON_CreateObject@PLT
+ 1502      00
+ 1503 00ac 488945D0 		movq	%rax, -48(%rbp)
+ 560:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (service == NULL) {
+ 1504              		.loc 1 560 8
+ 1505 00b0 48837DD0 		cmpq	$0, -48(%rbp)
+ 1505      00
+ 1506 00b5 0F841B01 		je	.L165
+ 1506      0000
+ 561:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+ 562:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 563:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON_AddItemToArray(services, service);
+ 1507              		.loc 1 563 5
+ 1508 00bb 488B55D0 		movq	-48(%rbp), %rdx
+ 1509 00bf 488B45C8 		movq	-56(%rbp), %rax
+ 1510 00c3 4889D6   		movq	%rdx, %rsi
+ 1511 00c6 4889C7   		movq	%rax, %rdi
+ 1512 00c9 E8000000 		call	cJSON_AddItemToArray@PLT
+ 1512      00
+ 564:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 565:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     serviceID = cJSON_CreateString(payload->service_id);
+ 1513              		.loc 1 565 43
+ 1514 00ce 488B45A8 		movq	-88(%rbp), %rax
+ 1515 00d2 488B4008 		movq	8(%rax), %rax
+ 1516              		.loc 1 565 17
+ 1517 00d6 4889C7   		movq	%rax, %rdi
+ 1518 00d9 E8000000 		call	cJSON_CreateString@PLT
+ 1518      00
+ 1519 00de 488945D8 		movq	%rax, -40(%rbp)
+ 566:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (serviceID == NULL) {
+ 1520              		.loc 1 566 8
+GAS LISTING /tmp/ccXG49uY.s 			page 43
+
+
+ 1521 00e2 48837DD8 		cmpq	$0, -40(%rbp)
+ 1521      00
+ 1522 00e7 0F84EC00 		je	.L166
+ 1522      0000
+ 567:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+ 568:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 569:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON_AddItemToObject(service, CN_OC_JSON_KEY_SERVICEID, serviceID);
+ 1523              		.loc 1 569 5
+ 1524 00ed 488B55D8 		movq	-40(%rbp), %rdx
+ 1525 00f1 488B45D0 		movq	-48(%rbp), %rax
+ 1526 00f5 488D3500 		leaq	.LC4(%rip), %rsi
+ 1526      000000
+ 1527 00fc 4889C7   		movq	%rax, %rdi
+ 1528 00ff E8000000 		call	cJSON_AddItemToObject@PLT
+ 1528      00
+ 570:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 571:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (payload->event_time != NULL) {
+ 1529              		.loc 1 571 16
+ 1530 0104 488B45A8 		movq	-88(%rbp), %rax
+ 1531 0108 488B4018 		movq	24(%rax), %rax
+ 1532              		.loc 1 571 8
+ 1533 010c 4885C0   		testq	%rax, %rax
+ 1534 010f 7436     		je	.L155
+ 572:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         eventTime = cJSON_CreateString(payload->event_time);
+ 1535              		.loc 1 572 47
+ 1536 0111 488B45A8 		movq	-88(%rbp), %rax
+ 1537 0115 488B4018 		movq	24(%rax), %rax
+ 1538              		.loc 1 572 21
+ 1539 0119 4889C7   		movq	%rax, %rdi
+ 1540 011c E8000000 		call	cJSON_CreateString@PLT
+ 1540      00
+ 1541 0121 488945E0 		movq	%rax, -32(%rbp)
+ 573:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         if (eventTime == NULL) {
+ 1542              		.loc 1 573 12
+ 1543 0125 48837DE0 		cmpq	$0, -32(%rbp)
+ 1543      00
+ 1544 012a 0F84AC00 		je	.L167
+ 1544      0000
+ 574:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****             goto EXIT_MEM;
+ 575:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 576:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_AddItemToObject(service, CN_OC_JSON_KEY_EVENTTIME, eventTime);
+ 1545              		.loc 1 576 9
+ 1546 0130 488B55E0 		movq	-32(%rbp), %rdx
+ 1547 0134 488B45D0 		movq	-48(%rbp), %rax
+ 1548 0138 488D3500 		leaq	.LC6(%rip), %rsi
+ 1548      000000
+ 1549 013f 4889C7   		movq	%rax, %rdi
+ 1550 0142 E8000000 		call	cJSON_AddItemToObject@PLT
+ 1550      00
+ 1551              	.L155:
+ 577:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 578:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 579:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     eventType = cJSON_CreateString(payload->event_type);
+ 1552              		.loc 1 579 43
+ 1553 0147 488B45A8 		movq	-88(%rbp), %rax
+ 1554 014b 488B4010 		movq	16(%rax), %rax
+ 1555              		.loc 1 579 17
+GAS LISTING /tmp/ccXG49uY.s 			page 44
+
+
+ 1556 014f 4889C7   		movq	%rax, %rdi
+ 1557 0152 E8000000 		call	cJSON_CreateString@PLT
+ 1557      00
+ 1558 0157 488945E8 		movq	%rax, -24(%rbp)
+ 580:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (eventType == NULL) {
+ 1559              		.loc 1 580 8
+ 1560 015b 48837DE8 		cmpq	$0, -24(%rbp)
+ 1560      00
+ 1561 0160 747D     		je	.L168
+ 581:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+ 582:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 583:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON_AddItemToObject(service, CN_OC_JSON_KEY_EVENTTYPE, eventType);
+ 1562              		.loc 1 583 5
+ 1563 0162 488B55E8 		movq	-24(%rbp), %rdx
+ 1564 0166 488B45D0 		movq	-48(%rbp), %rax
+ 1565 016a 488D3500 		leaq	.LC13(%rip), %rsi
+ 1565      000000
+ 1566 0171 4889C7   		movq	%rax, %rdi
+ 1567 0174 E8000000 		call	cJSON_AddItemToObject@PLT
+ 1567      00
+ 584:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 585:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     paras = JsonCreateKvLst(payload->paras);
+ 1568              		.loc 1 585 13
+ 1569 0179 488B45A8 		movq	-88(%rbp), %rax
+ 1570 017d 488B4020 		movq	32(%rax), %rax
+ 1571 0181 4889C7   		movq	%rax, %rdi
+ 1572 0184 E8000000 		call	JsonCreateKvLst
+ 1572      00
+ 1573 0189 488945F0 		movq	%rax, -16(%rbp)
+ 586:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (paras == NULL) {
+ 1574              		.loc 1 586 8
+ 1575 018d 48837DF0 		cmpq	$0, -16(%rbp)
+ 1575      00
+ 1576 0192 744E     		je	.L169
+ 587:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         goto EXIT_MEM;
+ 588:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 589:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON_AddItemToObject(service, CN_OC_JSON_KEY_PARAS, paras);
+ 1577              		.loc 1 589 5
+ 1578 0194 488B55F0 		movq	-16(%rbp), %rdx
+ 1579 0198 488B45D0 		movq	-48(%rbp), %rax
+ 1580 019c 488D3500 		leaq	.LC12(%rip), %rsi
+ 1580      000000
+ 1581 01a3 4889C7   		movq	%rax, %rdi
+ 1582 01a6 E8000000 		call	cJSON_AddItemToObject@PLT
+ 1582      00
+ 590:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 591:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     // /< OK, now we make it to a buffer
+ 592:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     ret = cJSON_PrintUnformatted(root);
+ 1583              		.loc 1 592 11
+ 1584 01ab 488B45B8 		movq	-72(%rbp), %rax
+ 1585 01af 4889C7   		movq	%rax, %rdi
+ 1586 01b2 E8000000 		call	cJSON_PrintUnformatted@PLT
+ 1586      00
+ 1587 01b7 488945B0 		movq	%rax, -80(%rbp)
+ 593:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     cJSON_Delete(root);
+ 1588              		.loc 1 593 5
+ 1589 01bb 488B45B8 		movq	-72(%rbp), %rax
+GAS LISTING /tmp/ccXG49uY.s 			page 45
+
+
+ 1590 01bf 4889C7   		movq	%rax, %rdi
+ 1591 01c2 E8000000 		call	cJSON_Delete@PLT
+ 1591      00
+ 594:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return ret;
+ 1592              		.loc 1 594 12
+ 1593 01c7 488B45B0 		movq	-80(%rbp), %rax
+ 1594 01cb EB2D     		jmp	.L159
+ 1595              	.L162:
+ 541:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 1596              		.loc 1 541 9
+ 1597 01cd 90       		nop
+ 1598 01ce EB13     		jmp	.L149
+ 1599              	.L163:
+ 548:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 1600              		.loc 1 548 13
+ 1601 01d0 90       		nop
+ 1602 01d1 EB10     		jmp	.L149
+ 1603              	.L164:
+ 555:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 1604              		.loc 1 555 9
+ 1605 01d3 90       		nop
+ 1606 01d4 EB0D     		jmp	.L149
+ 1607              	.L165:
+ 561:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 1608              		.loc 1 561 9
+ 1609 01d6 90       		nop
+ 1610 01d7 EB0A     		jmp	.L149
+ 1611              	.L166:
+ 567:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 1612              		.loc 1 567 9
+ 1613 01d9 90       		nop
+ 1614 01da EB07     		jmp	.L149
+ 1615              	.L167:
+ 574:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         }
+ 1616              		.loc 1 574 13
+ 1617 01dc 90       		nop
+ 1618 01dd EB04     		jmp	.L149
+ 1619              	.L168:
+ 581:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 1620              		.loc 1 581 9
+ 1621 01df 90       		nop
+ 1622 01e0 EB01     		jmp	.L149
+ 1623              	.L169:
+ 587:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 1624              		.loc 1 587 9
+ 1625 01e2 90       		nop
+ 1626              	.L149:
+ 595:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** 
+ 596:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** EXIT_MEM:
+ 597:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     if (NULL != root) {
+ 1627              		.loc 1 597 8
+ 1628 01e3 48837DB8 		cmpq	$0, -72(%rbp)
+ 1628      00
+ 1629 01e8 740C     		je	.L160
+ 598:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****         cJSON_Delete(root);
+ 1630              		.loc 1 598 9
+ 1631 01ea 488B45B8 		movq	-72(%rbp), %rax
+GAS LISTING /tmp/ccXG49uY.s 			page 46
+
+
+ 1632 01ee 4889C7   		movq	%rax, %rdi
+ 1633 01f1 E8000000 		call	cJSON_Delete@PLT
+ 1633      00
+ 1634              	.L160:
+ 599:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     }
+ 600:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c ****     return ret;
+ 1635              		.loc 1 600 12
+ 1636 01f6 488B45B0 		movq	-80(%rbp), %rax
+ 1637              	.L159:
+ 601:/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile_package.c **** }
+ 1638              		.loc 1 601 1
+ 1639 01fa 488B4DF8 		movq	-8(%rbp), %rcx
+ 1640 01fe 6448330C 		xorq	%fs:40, %rcx
+ 1640      25280000 
+ 1640      00
+ 1641 0207 7405     		je	.L161
+ 1642 0209 E8000000 		call	__stack_chk_fail@PLT
+ 1642      00
+ 1643              	.L161:
+ 1644 020e C9       		leave
+ 1645              	.LCFI35:
+ 1646              		.cfi_def_cfa 7, 8
+ 1647 020f C3       		ret
+ 1648              		.cfi_endproc
+ 1649              	.LFE11:
+ 1651              		.text
+ 1652              	.Letext0:
+ 1653              		.file 2 "/home/xingli/share/LiteOS_Lab/oc/oc_mqtt/oc_mqtt_profile_v5/oc_mqtt_profile.h"
+ 1654              		.file 3 "/home/xingli/share/LiteOS_Lab/cJSON/cJSON.h"
+ 4129              		.section	.note.gnu.property,"a"
+ 4130              		.align 8
+ 4131 0000 04000000 		.long	 1f - 0f
+ 4132 0004 10000000 		.long	 4f - 1f
+ 4133 0008 05000000 		.long	 5
+ 4134              	0:
+ 4135 000c 474E5500 		.string	 "GNU"
+ 4136              	1:
+ 4137              		.align 8
+ 4138 0010 020000C0 		.long	 0xc0000002
+ 4139 0014 04000000 		.long	 3f - 2f
+ 4140              	2:
+ 4141 0018 03000000 		.long	 0x3
+ 4142              	3:
+ 4143 001c 00000000 		.align 8
+ 4144              	4:
+GAS LISTING /tmp/ccXG49uY.s 			page 47
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 oc_mqtt_profile_package.c
+     /tmp/ccXG49uY.s:6      .text.JsonCreateKv:0000000000000000 JsonCreateKv
+     /tmp/ccXG49uY.s:382    .text.JsonCreateKvLst:0000000000000000 JsonCreateKvLst
+     /tmp/ccXG49uY.s:209    .text.oc_mqtt_profile_package_msgup:0000000000000000 oc_mqtt_profile_package_msgup
+     /tmp/ccXG49uY.s:483    .text.JsonCreateService:0000000000000000 JsonCreateService
+     /tmp/ccXG49uY.s:608    .text.JsonCreateServices:0000000000000000 JsonCreateServices
+     /tmp/ccXG49uY.s:705    .text.oc_mqtt_profile_package_propertyreport:0000000000000000 oc_mqtt_profile_package_propertyreport
+     /tmp/ccXG49uY.s:797    .text.oc_mqtt_profile_package_gwpropertyreport:0000000000000000 oc_mqtt_profile_package_gwpropertyreport
+     /tmp/ccXG49uY.s:956    .text.oc_mqtt_profile_package_propertysetresp:0000000000000000 oc_mqtt_profile_package_propertysetresp
+     /tmp/ccXG49uY.s:1075   .text.oc_mqtt_profile_package_propertygetresp:0000000000000000 oc_mqtt_profile_package_propertygetresp
+     /tmp/ccXG49uY.s:1166   .text.oc_mqtt_profile_package_cmdresp:0000000000000000 oc_mqtt_profile_package_cmdresp
+     /tmp/ccXG49uY.s:1308   .text.oc_mqtt_profile_package_shadowget:0000000000000000 oc_mqtt_profile_package_shadowget
+     /tmp/ccXG49uY.s:1440   .text.oc_mqtt_profile_package_event:0000000000000000 oc_mqtt_profile_package_event
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+cJSON_CreateNumber
+cJSON_CreateString
+cJSON_CreateIntArray
+cJSON_CreateFloatArray
+cJSON_CreateDoubleArray
+cJSON_CreateStringArray
+__stack_chk_fail
+cJSON_CreateObject
+cJSON_AddItemToObjectCS
+cJSON_PrintUnformatted
+cJSON_Delete
+cJSON_AddItemToObject
+cJSON_CreateArray
+cJSON_AddItemToArray

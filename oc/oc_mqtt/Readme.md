@@ -28,10 +28,3 @@ OC MQTT AL的api接口声明在<oc_mqtt_al.h>中，使用相关的接口需要�
 对于模组厂商而言，就是调用OC MQTT AL的应用接口，封装为对应的AT命令。
 
 关于封装的方法可以参考./oc_mqtt_al/oc_mqtt_at.c
-
-
-
-
-
-
-

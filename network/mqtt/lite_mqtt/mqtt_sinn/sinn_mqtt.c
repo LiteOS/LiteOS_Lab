@@ -9,7 +9,6 @@ int sinn_mqtt_packetid(sinn_connection_t *nc)
     return pd->next_packetid = (pd->next_packetid == MAX_PACKET_ID) ? 1 : pd->next_packetid + 1;
 }
 
-
 int sinn_mqtt_parser(sinn_buf_t *io, sinn_mqtt_msg_t *amm)
 {
     int len = 0;

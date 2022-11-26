@@ -1,0 +1,2899 @@
+GAS LISTING /tmp/ccdVsfTq.s 			page 1
+
+
+   1              		.file	"sal.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.bss.s_sal_cb,"aw",@nobits
+   5              		.align 32
+   8              	s_sal_cb:
+   9 0000 00000000 		.zero	32
+   9      00000000 
+   9      00000000 
+   9      00000000 
+   9      00000000 
+  10              		.section	.rodata
+  11              		.align 8
+  12              	.LC0:
+  13 0000 5B25735D 		.string	"[%s][%u][%s] %s:###please implement this function by yourself####\n\r\r\n"
+  13      5B25755D 
+  13      5B25735D 
+  13      2025733A 
+  13      23232370 
+  14              		.section	.text.link_tcpip_imp_init,"ax",@progbits
+  15              		.weak	link_tcpip_imp_init
+  17              	link_tcpip_imp_init:
+  18              	.LFB0:
+  19              		.file 1 "/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c"
+   1:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** /*
+   2:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****  * sal.c
+   3:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****  */
+   4:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+   5:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** // /< attention that this file is the main implement
+   6:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** #include "osal.h"
+   7:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** #include "sal.h"
+   8:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** #include "sal_imp.h"
+   9:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  10:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  11:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** #define CN_LINK_SOCKET_NUM 10
+  12:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  13:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  14:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** typedef struct {
+  15:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     const tag_tcpip_ops *ops;
+  16:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int fd;
+  17:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int sock; // /< returned by the implement functions
+  18:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** } tag_sock_cb;
+  19:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  20:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** typedef struct {
+  21:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     const tag_tcpip_domain *domain; // /< tcpip stack operations
+  22:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int sock_cb_num;                // /< how many socket control block could be used
+  23:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     osal_mutex_t sock_cb_mutex;     // /< used to protect the sock control block
+  24:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     void **sock_cb_tab;             // /< which used to
+  25:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** } tag_sal_cb;
+  26:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  27:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** static tag_sal_cb s_sal_cb;
+  28:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  29:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  30:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** __attribute__((weak)) int link_tcpip_imp_init(void)
+  31:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+  20              		.loc 1 31 1
+  21              		.cfi_startproc
+GAS LISTING /tmp/ccdVsfTq.s 			page 2
+
+
+  22 0000 F30F1EFA 		endbr64
+  23 0004 55       		pushq	%rbp
+  24              	.LCFI0:
+  25              		.cfi_def_cfa_offset 16
+  26              		.cfi_offset 6, -16
+  27 0005 4889E5   		movq	%rsp, %rbp
+  28              	.LCFI1:
+  29              		.cfi_def_cfa_register 6
+  30 0008 53       		pushq	%rbx
+  31 0009 4883EC18 		subq	$24, %rsp
+  32              		.cfi_offset 3, -24
+  33              		.loc 1 31 1
+  34 000d 64488B04 		movq	%fs:40, %rax
+  34      25280000 
+  34      00
+  35 0016 488945E8 		movq	%rax, -24(%rbp)
+  36 001a 31C0     		xorl	%eax, %eax
+  32:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     LINK_LOG_DEBUG("%s:###please implement this function by yourself####\n\r", __FUNCTION__);
+  37              		.loc 1 32 5
+  38 001c E8000000 		call	link_log_level_get@PLT
+  38      00
+  39 0021 83F801   		cmpl	$1, %eax
+  40 0024 7744     		ja	.L2
+  41              		.loc 1 32 5 is_stmt 0 discriminator 1
+  42 0026 E8000000 		call	osal_sys_time@PLT
+  42      00
+  43 002b 89C3     		movl	%eax, %ebx
+  44 002d BF010000 		movl	$1, %edi
+  44      00
+  45 0032 E8000000 		call	link_log_level_name@PLT
+  45      00
+  46 0037 4C8D0500 		leaq	__FUNCTION__.2951(%rip), %r8
+  46      000000
+  47 003e 488D0D00 		leaq	__FUNCTION__.2951(%rip), %rcx
+  47      000000
+  48 0045 89DA     		movl	%ebx, %edx
+  49 0047 4889C6   		movq	%rax, %rsi
+  50 004a 488D3D00 		leaq	.LC0(%rip), %rdi
+  50      000000
+  51 0051 B8000000 		movl	$0, %eax
+  51      00
+  52 0056 E8000000 		call	printf@PLT
+  52      00
+  53 005b 488B0500 		movq	stdout(%rip), %rax
+  53      000000
+  54 0062 4889C7   		movq	%rax, %rdi
+  55 0065 E8000000 		call	fflush@PLT
+  55      00
+  56              	.L2:
+  33:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return -1;
+  57              		.loc 1 33 12 is_stmt 1
+  58 006a B8FFFFFF 		movl	$-1, %eax
+  58      FF
+  34:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+  59              		.loc 1 34 1
+  60 006f 488B55E8 		movq	-24(%rbp), %rdx
+  61 0073 64483314 		xorq	%fs:40, %rdx
+GAS LISTING /tmp/ccdVsfTq.s 			page 3
+
+
+  61      25280000 
+  61      00
+  62 007c 7405     		je	.L4
+  63 007e E8000000 		call	__stack_chk_fail@PLT
+  63      00
+  64              	.L4:
+  65 0083 4883C418 		addq	$24, %rsp
+  66 0087 5B       		popq	%rbx
+  67 0088 5D       		popq	%rbp
+  68              	.LCFI2:
+  69              		.cfi_def_cfa 7, 8
+  70 0089 C3       		ret
+  71              		.cfi_endproc
+  72              	.LFE0:
+  74              		.section	.rodata
+  75 0046 0000     		.align 8
+  76              	.LC1:
+  77 0048 5B25735D 		.string	"[%s][%u][%s] IOT_LINK:DO TCPIP LOAD-IMPLEMENT RET:%d\r\n"
+  77      5B25755D 
+  77      5B25735D 
+  77      20494F54 
+  77      5F4C494E 
+  78              		.section	.text.link_tcpip_init,"ax",@progbits
+  79              		.globl	link_tcpip_init
+  81              	link_tcpip_init:
+  82              	.LFB1:
+  35:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  36:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** int link_tcpip_init(void)
+  37:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+  83              		.loc 1 37 1
+  84              		.cfi_startproc
+  85 0000 F30F1EFA 		endbr64
+  86 0004 55       		pushq	%rbp
+  87              	.LCFI3:
+  88              		.cfi_def_cfa_offset 16
+  89              		.cfi_offset 6, -16
+  90 0005 4889E5   		movq	%rsp, %rbp
+  91              	.LCFI4:
+  92              		.cfi_def_cfa_register 6
+  93 0008 53       		pushq	%rbx
+  94 0009 4883EC18 		subq	$24, %rsp
+  95              		.cfi_offset 3, -24
+  96              		.loc 1 37 1
+  97 000d 64488B04 		movq	%fs:40, %rax
+  97      25280000 
+  97      00
+  98 0016 488945E8 		movq	%rax, -24(%rbp)
+  99 001a 31C0     		xorl	%eax, %eax
+  38:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int ret = -1;
+ 100              		.loc 1 38 9
+ 101 001c C745E4FF 		movl	$-1, -28(%rbp)
+ 101      FFFFFF
+  39:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  40:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (NULL != s_sal_cb.sock_cb_tab) {
+ 102              		.loc 1 40 25
+ 103 0023 488B0500 		movq	24+s_sal_cb(%rip), %rax
+ 103      000000
+GAS LISTING /tmp/ccdVsfTq.s 			page 4
+
+
+ 104              		.loc 1 40 8
+ 105 002a 4885C0   		testq	%rax, %rax
+ 106 002d 0F85DF00 		jne	.L16
+ 106      0000
+  41:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         goto EXIT_INIT_ERR;
+  42:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+  43:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  44:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (false == osal_mutex_create(&s_sal_cb.sock_cb_mutex)) {
+ 107              		.loc 1 44 18
+ 108 0033 488D3D00 		leaq	16+s_sal_cb(%rip), %rdi
+ 108      000000
+ 109 003a E8000000 		call	osal_mutex_create@PLT
+ 109      00
+ 110              		.loc 1 44 8
+ 111 003f 85C0     		testl	%eax, %eax
+ 112 0041 0F84CE00 		je	.L17
+ 112      0000
+  45:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         goto EXIT_MUTEX_ERR;
+  46:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+  47:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  48:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     s_sal_cb.sock_cb_tab = osal_malloc(CN_LINK_SOCKET_NUM * sizeof(void *));
+ 113              		.loc 1 48 28
+ 114 0047 BF500000 		movl	$80, %edi
+ 114      00
+ 115 004c E8000000 		call	osal_malloc@PLT
+ 115      00
+ 116              		.loc 1 48 26
+ 117 0051 48890500 		movq	%rax, 24+s_sal_cb(%rip)
+ 117      000000
+  49:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (NULL == s_sal_cb.sock_cb_tab) {
+ 118              		.loc 1 49 25
+ 119 0058 488B0500 		movq	24+s_sal_cb(%rip), %rax
+ 119      000000
+ 120              		.loc 1 49 8
+ 121 005f 4885C0   		testq	%rax, %rax
+ 122 0062 0F848800 		je	.L18
+ 122      0000
+  50:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         goto EXIT_MEM_ERR;
+  51:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+  52:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  53:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     (void)memset(s_sal_cb.sock_cb_tab, 0, CN_LINK_SOCKET_NUM * sizeof(void *));
+ 123              		.loc 1 53 26
+ 124 0068 488B0500 		movq	24+s_sal_cb(%rip), %rax
+ 124      000000
+ 125              		.loc 1 53 11
+ 126 006f BA500000 		movl	$80, %edx
+ 126      00
+ 127 0074 BE000000 		movl	$0, %esi
+ 127      00
+ 128 0079 4889C7   		movq	%rax, %rdi
+ 129 007c E8000000 		call	memset@PLT
+ 129      00
+  54:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     s_sal_cb.sock_cb_num = CN_LINK_SOCKET_NUM;
+ 130              		.loc 1 54 26
+ 131 0081 C7050000 		movl	$10, 8+s_sal_cb(%rip)
+ 131      00000A00 
+ 131      0000
+GAS LISTING /tmp/ccdVsfTq.s 			page 5
+
+
+  55:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     s_sal_cb.domain = NULL;
+ 132              		.loc 1 55 21
+ 133 008b 48C70500 		movq	$0, s_sal_cb(%rip)
+ 133      00000000 
+ 133      000000
+  56:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  57:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     ret = link_tcpip_imp_init();
+ 134              		.loc 1 57 11
+ 135 0096 E8000000 		call	link_tcpip_imp_init
+ 135      00
+ 136 009b 8945E4   		movl	%eax, -28(%rbp)
+  58:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     LINK_LOG_DEBUG("IOT_LINK:DO TCPIP LOAD-IMPLEMENT RET:%d", ret);
+ 137              		.loc 1 58 5
+ 138 009e E8000000 		call	link_log_level_get@PLT
+ 138      00
+ 139 00a3 83F801   		cmpl	$1, %eax
+ 140 00a6 7743     		ja	.L11
+ 141              		.loc 1 58 5 is_stmt 0 discriminator 1
+ 142 00a8 E8000000 		call	osal_sys_time@PLT
+ 142      00
+ 143 00ad 89C3     		movl	%eax, %ebx
+ 144 00af BF010000 		movl	$1, %edi
+ 144      00
+ 145 00b4 E8000000 		call	link_log_level_name@PLT
+ 145      00
+ 146 00b9 8B55E4   		movl	-28(%rbp), %edx
+ 147 00bc 4189D0   		movl	%edx, %r8d
+ 148 00bf 488D0D00 		leaq	__FUNCTION__.2959(%rip), %rcx
+ 148      000000
+ 149 00c6 89DA     		movl	%ebx, %edx
+ 150 00c8 4889C6   		movq	%rax, %rsi
+ 151 00cb 488D3D00 		leaq	.LC1(%rip), %rdi
+ 151      000000
+ 152 00d2 B8000000 		movl	$0, %eax
+ 152      00
+ 153 00d7 E8000000 		call	printf@PLT
+ 153      00
+ 154 00dc 488B0500 		movq	stdout(%rip), %rax
+ 154      000000
+ 155 00e3 4889C7   		movq	%rax, %rdi
+ 156 00e6 E8000000 		call	fflush@PLT
+ 156      00
+ 157              	.L11:
+  59:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  60:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return ret;
+ 158              		.loc 1 60 12 is_stmt 1
+ 159 00eb 8B45E4   		movl	-28(%rbp), %eax
+ 160 00ee EB29     		jmp	.L12
+ 161              	.L18:
+  50:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 162              		.loc 1 50 9
+ 163 00f0 90       		nop
+ 164              	.L10:
+ 165 00f1 F30F1EFA 		endbr64
+  61:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  62:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** EXIT_MEM_ERR:
+  63:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     (void)osal_mutex_del(s_sal_cb.sock_cb_mutex);
+GAS LISTING /tmp/ccdVsfTq.s 			page 6
+
+
+ 166              		.loc 1 63 11
+ 167 00f5 488B0500 		movq	16+s_sal_cb(%rip), %rax
+ 167      000000
+ 168 00fc 4889C7   		movq	%rax, %rdi
+ 169 00ff E8000000 		call	osal_mutex_del@PLT
+ 169      00
+  64:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     s_sal_cb.sock_cb_mutex = cn_mutex_invalid;
+ 170              		.loc 1 64 28
+ 171 0104 B8FFFFFF 		movl	$4294967295, %eax
+ 171      FF
+ 172 0109 48890500 		movq	%rax, 16+s_sal_cb(%rip)
+ 172      000000
+ 173 0110 EB04     		jmp	.L13
+ 174              	.L7:
+ 175              	.L16:
+  41:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 176              		.loc 1 41 9
+ 177 0112 90       		nop
+ 178 0113 EB01     		jmp	.L13
+ 179              	.L17:
+  45:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 180              		.loc 1 45 9
+ 181 0115 90       		nop
+ 182              	.L13:
+  65:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  66:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** EXIT_MUTEX_ERR:
+  67:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** EXIT_INIT_ERR:
+  68:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return ret;
+ 183              		.loc 1 68 12
+ 184 0116 8B45E4   		movl	-28(%rbp), %eax
+ 185              	.L12:
+  69:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+ 186              		.loc 1 69 1
+ 187 0119 488B4DE8 		movq	-24(%rbp), %rcx
+ 188 011d 6448330C 		xorq	%fs:40, %rcx
+ 188      25280000 
+ 188      00
+ 189 0126 7405     		je	.L14
+ 190 0128 E8000000 		call	__stack_chk_fail@PLT
+ 190      00
+ 191              	.L14:
+ 192 012d 4883C418 		addq	$24, %rsp
+ 193 0131 5B       		popq	%rbx
+ 194 0132 5D       		popq	%rbp
+ 195              	.LCFI5:
+ 196              		.cfi_def_cfa 7, 8
+ 197 0133 C3       		ret
+ 198              		.cfi_endproc
+ 199              	.LFE1:
+ 201              		.section	.text.link_sal_install,"ax",@progbits
+ 202              		.globl	link_sal_install
+ 204              	link_sal_install:
+ 205              	.LFB2:
+  70:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  71:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** int link_sal_install(const tag_tcpip_domain *domain)
+  72:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+ 206              		.loc 1 72 1
+GAS LISTING /tmp/ccdVsfTq.s 			page 7
+
+
+ 207              		.cfi_startproc
+ 208 0000 F30F1EFA 		endbr64
+ 209 0004 55       		pushq	%rbp
+ 210              	.LCFI6:
+ 211              		.cfi_def_cfa_offset 16
+ 212              		.cfi_offset 6, -16
+ 213 0005 4889E5   		movq	%rsp, %rbp
+ 214              	.LCFI7:
+ 215              		.cfi_def_cfa_register 6
+ 216 0008 4883EC20 		subq	$32, %rsp
+ 217 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 218              		.loc 1 72 1
+ 219 0010 64488B04 		movq	%fs:40, %rax
+ 219      25280000 
+ 219      00
+ 220 0019 488945F8 		movq	%rax, -8(%rbp)
+ 221 001d 31C0     		xorl	%eax, %eax
+  73:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int ret = -1;
+ 222              		.loc 1 73 9
+ 223 001f C745F4FF 		movl	$-1, -12(%rbp)
+ 223      FFFFFF
+  74:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  75:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (NULL == s_sal_cb.domain) {
+ 224              		.loc 1 75 25
+ 225 0026 488B0500 		movq	s_sal_cb(%rip), %rax
+ 225      000000
+ 226              		.loc 1 75 8
+ 227 002d 4885C0   		testq	%rax, %rax
+ 228 0030 7512     		jne	.L20
+  76:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         s_sal_cb.domain = domain;
+ 229              		.loc 1 76 25
+ 230 0032 488B45E8 		movq	-24(%rbp), %rax
+ 231 0036 48890500 		movq	%rax, s_sal_cb(%rip)
+ 231      000000
+  77:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         ret = 0;
+ 232              		.loc 1 77 13
+ 233 003d C745F400 		movl	$0, -12(%rbp)
+ 233      000000
+ 234              	.L20:
+  78:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+  79:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  80:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return ret;
+ 235              		.loc 1 80 12
+ 236 0044 8B45F4   		movl	-12(%rbp), %eax
+  81:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+ 237              		.loc 1 81 1
+ 238 0047 488B55F8 		movq	-8(%rbp), %rdx
+ 239 004b 64483314 		xorq	%fs:40, %rdx
+ 239      25280000 
+ 239      00
+ 240 0054 7405     		je	.L22
+ 241 0056 E8000000 		call	__stack_chk_fail@PLT
+ 241      00
+ 242              	.L22:
+ 243 005b C9       		leave
+ 244              	.LCFI8:
+ 245              		.cfi_def_cfa 7, 8
+GAS LISTING /tmp/ccdVsfTq.s 			page 8
+
+
+ 246 005c C3       		ret
+ 247              		.cfi_endproc
+ 248              	.LFE2:
+ 250              		.section	.text.__sal_sockcb_malloc,"ax",@progbits
+ 252              	__sal_sockcb_malloc:
+ 253              	.LFB3:
+  82:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  83:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** // /< malloc a sock fd and memory
+  84:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** static void *__sal_sockcb_malloc(void)
+  85:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+ 254              		.loc 1 85 1
+ 255              		.cfi_startproc
+ 256 0000 F30F1EFA 		endbr64
+ 257 0004 55       		pushq	%rbp
+ 258              	.LCFI9:
+ 259              		.cfi_def_cfa_offset 16
+ 260              		.cfi_offset 6, -16
+ 261 0005 4889E5   		movq	%rsp, %rbp
+ 262              	.LCFI10:
+ 263              		.cfi_def_cfa_register 6
+ 264 0008 4883EC20 		subq	$32, %rsp
+ 265              		.loc 1 85 1
+ 266 000c 64488B04 		movq	%fs:40, %rax
+ 266      25280000 
+ 266      00
+ 267 0015 488945F8 		movq	%rax, -8(%rbp)
+ 268 0019 31C0     		xorl	%eax, %eax
+  86:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int i = 0;
+ 269              		.loc 1 86 9
+ 270 001b C745EC00 		movl	$0, -20(%rbp)
+ 270      000000
+  87:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  88:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     tag_sock_cb *sockcb;
+  89:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  90:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     sockcb = osal_malloc(sizeof(tag_sock_cb));
+ 271              		.loc 1 90 14
+ 272 0022 BF100000 		movl	$16, %edi
+ 272      00
+ 273 0027 E8000000 		call	osal_malloc@PLT
+ 273      00
+ 274 002c 488945F0 		movq	%rax, -16(%rbp)
+  91:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  92:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (NULL == sockcb) {
+ 275              		.loc 1 92 8
+ 276 0030 48837DF0 		cmpq	$0, -16(%rbp)
+ 276      00
+ 277 0035 7509     		jne	.L24
+  93:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         return sockcb;
+ 278              		.loc 1 93 16
+ 279 0037 488B45F0 		movq	-16(%rbp), %rax
+ 280 003b E9C10000 		jmp	.L25
+ 280      00
+ 281              	.L24:
+  94:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+  95:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+  96:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (osal_mutex_lock(s_sal_cb.sock_cb_mutex)) {
+ 282              		.loc 1 96 9
+GAS LISTING /tmp/ccdVsfTq.s 			page 9
+
+
+ 283 0040 488B0500 		movq	16+s_sal_cb(%rip), %rax
+ 283      000000
+ 284 0047 4889C7   		movq	%rax, %rdi
+ 285 004a E8000000 		call	osal_mutex_lock@PLT
+ 285      00
+ 286              		.loc 1 96 8
+ 287 004f 85C0     		testl	%eax, %eax
+ 288 0051 0F84A600 		je	.L26
+ 288      0000
+  97:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         for (i = 0; i < s_sal_cb.sock_cb_num; i++) {
+ 289              		.loc 1 97 16
+ 290 0057 C745EC00 		movl	$0, -20(%rbp)
+ 290      000000
+ 291              		.loc 1 97 9
+ 292 005e EB64     		jmp	.L27
+ 293              	.L30:
+  98:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             if (s_sal_cb.sock_cb_tab[i] == NULL) {
+ 294              		.loc 1 98 25
+ 295 0060 488B0500 		movq	24+s_sal_cb(%rip), %rax
+ 295      000000
+ 296              		.loc 1 98 37
+ 297 0067 8B55EC   		movl	-20(%rbp), %edx
+ 298 006a 4863D2   		movslq	%edx, %rdx
+ 299 006d 48C1E203 		salq	$3, %rdx
+ 300 0071 4801D0   		addq	%rdx, %rax
+ 301 0074 488B00   		movq	(%rax), %rax
+ 302              		.loc 1 98 16
+ 303 0077 4885C0   		testq	%rax, %rax
+ 304 007a 7544     		jne	.L28
+  99:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****                 sockcb->ops = s_sal_cb.domain->ops;
+ 305              		.loc 1 99 39
+ 306 007c 488B0500 		movq	s_sal_cb(%rip), %rax
+ 306      000000
+ 307              		.loc 1 99 46
+ 308 0083 488B5010 		movq	16(%rax), %rdx
+ 309              		.loc 1 99 29
+ 310 0087 488B45F0 		movq	-16(%rbp), %rax
+ 311 008b 488910   		movq	%rdx, (%rax)
+ 100:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****                 sockcb->fd = i;
+ 312              		.loc 1 100 28
+ 313 008e 488B45F0 		movq	-16(%rbp), %rax
+ 314 0092 8B55EC   		movl	-20(%rbp), %edx
+ 315 0095 895008   		movl	%edx, 8(%rax)
+ 101:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****                 sockcb->sock = -1;
+ 316              		.loc 1 101 30
+ 317 0098 488B45F0 		movq	-16(%rbp), %rax
+ 318 009c C7400CFF 		movl	$-1, 12(%rax)
+ 318      FFFFFF
+ 102:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 103:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****                 s_sal_cb.sock_cb_tab[i] = sockcb;
+ 319              		.loc 1 103 25
+ 320 00a3 488B0500 		movq	24+s_sal_cb(%rip), %rax
+ 320      000000
+ 321              		.loc 1 103 37
+ 322 00aa 8B55EC   		movl	-20(%rbp), %edx
+ 323 00ad 4863D2   		movslq	%edx, %rdx
+ 324 00b0 48C1E203 		salq	$3, %rdx
+GAS LISTING /tmp/ccdVsfTq.s 			page 10
+
+
+ 325 00b4 4801C2   		addq	%rax, %rdx
+ 326              		.loc 1 103 41
+ 327 00b7 488B45F0 		movq	-16(%rbp), %rax
+ 328 00bb 488902   		movq	%rax, (%rdx)
+ 104:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 105:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****                 break;
+ 329              		.loc 1 105 17
+ 330 00be EB0F     		jmp	.L29
+ 331              	.L28:
+  97:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             if (s_sal_cb.sock_cb_tab[i] == NULL) {
+ 332              		.loc 1 97 48 discriminator 2
+ 333 00c0 8345EC01 		addl	$1, -20(%rbp)
+ 334              	.L27:
+  97:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             if (s_sal_cb.sock_cb_tab[i] == NULL) {
+ 335              		.loc 1 97 33 discriminator 1
+ 336 00c4 8B050000 		movl	8+s_sal_cb(%rip), %eax
+ 336      0000
+  97:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             if (s_sal_cb.sock_cb_tab[i] == NULL) {
+ 337              		.loc 1 97 9 discriminator 1
+ 338 00ca 3945EC   		cmpl	%eax, -20(%rbp)
+ 339 00cd 7C91     		jl	.L30
+ 340              	.L29:
+ 106:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             }
+ 107:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         }
+ 108:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 109:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         (void)osal_mutex_unlock(s_sal_cb.sock_cb_mutex);
+ 341              		.loc 1 109 15
+ 342 00cf 488B0500 		movq	16+s_sal_cb(%rip), %rax
+ 342      000000
+ 343 00d6 4889C7   		movq	%rax, %rdi
+ 344 00d9 E8000000 		call	osal_mutex_unlock@PLT
+ 344      00
+ 110:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 111:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         if (i == s_sal_cb.sock_cb_num) {
+ 345              		.loc 1 111 26
+ 346 00de 8B050000 		movl	8+s_sal_cb(%rip), %eax
+ 346      0000
+ 347              		.loc 1 111 12
+ 348 00e4 3945EC   		cmpl	%eax, -20(%rbp)
+ 349 00e7 7514     		jne	.L26
+ 112:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             osal_free(sockcb);
+ 350              		.loc 1 112 13
+ 351 00e9 488B45F0 		movq	-16(%rbp), %rax
+ 352 00ed 4889C7   		movq	%rax, %rdi
+ 353 00f0 E8000000 		call	osal_free@PLT
+ 353      00
+ 113:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 114:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             sockcb = NULL;
+ 354              		.loc 1 114 20
+ 355 00f5 48C745F0 		movq	$0, -16(%rbp)
+ 355      00000000 
+ 356              	.L26:
+ 115:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         }
+ 116:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 117:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 118:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return sockcb;
+ 357              		.loc 1 118 12
+GAS LISTING /tmp/ccdVsfTq.s 			page 11
+
+
+ 358 00fd 488B45F0 		movq	-16(%rbp), %rax
+ 359              	.L25:
+ 119:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+ 360              		.loc 1 119 1
+ 361 0101 488B4DF8 		movq	-8(%rbp), %rcx
+ 362 0105 6448330C 		xorq	%fs:40, %rcx
+ 362      25280000 
+ 362      00
+ 363 010e 7405     		je	.L31
+ 364 0110 E8000000 		call	__stack_chk_fail@PLT
+ 364      00
+ 365              	.L31:
+ 366 0115 C9       		leave
+ 367              	.LCFI11:
+ 368              		.cfi_def_cfa 7, 8
+ 369 0116 C3       		ret
+ 370              		.cfi_endproc
+ 371              	.LFE3:
+ 373              		.section	.text.__sal_sockcb_free,"ax",@progbits
+ 375              	__sal_sockcb_free:
+ 376              	.LFB4:
+ 120:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 121:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** // /< free the sockfd and the memory in it
+ 122:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** static void __sal_sockcb_free(int sockfd)
+ 123:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+ 377              		.loc 1 123 1
+ 378              		.cfi_startproc
+ 379 0000 F30F1EFA 		endbr64
+ 380 0004 55       		pushq	%rbp
+ 381              	.LCFI12:
+ 382              		.cfi_def_cfa_offset 16
+ 383              		.cfi_offset 6, -16
+ 384 0005 4889E5   		movq	%rsp, %rbp
+ 385              	.LCFI13:
+ 386              		.cfi_def_cfa_register 6
+ 387 0008 4883EC20 		subq	$32, %rsp
+ 388 000c 897DEC   		movl	%edi, -20(%rbp)
+ 389              		.loc 1 123 1
+ 390 000f 64488B04 		movq	%fs:40, %rax
+ 390      25280000 
+ 390      00
+ 391 0018 488945F8 		movq	%rax, -8(%rbp)
+ 392 001c 31C0     		xorl	%eax, %eax
+ 124:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     tag_sock_cb *sockcb = NULL;
+ 393              		.loc 1 124 18
+ 394 001e 48C745F0 		movq	$0, -16(%rbp)
+ 394      00000000 
+ 125:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 126:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if ((sockfd < 0) || (sockfd >= s_sal_cb.sock_cb_num)) {
+ 395              		.loc 1 126 8
+ 396 0026 837DEC00 		cmpl	$0, -20(%rbp)
+ 397 002a 7871     		js	.L38
+ 398              		.loc 1 126 44 discriminator 1
+ 399 002c 8B050000 		movl	8+s_sal_cb(%rip), %eax
+ 399      0000
+ 400              		.loc 1 126 22 discriminator 1
+ 401 0032 3945EC   		cmpl	%eax, -20(%rbp)
+GAS LISTING /tmp/ccdVsfTq.s 			page 12
+
+
+ 402 0035 7D66     		jge	.L38
+ 127:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         return;
+ 128:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 129:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 130:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (osal_mutex_lock(s_sal_cb.sock_cb_mutex)) {
+ 403              		.loc 1 130 9
+ 404 0037 488B0500 		movq	16+s_sal_cb(%rip), %rax
+ 404      000000
+ 405 003e 4889C7   		movq	%rax, %rdi
+ 406 0041 E8000000 		call	osal_mutex_lock@PLT
+ 406      00
+ 407              		.loc 1 130 8
+ 408 0046 85C0     		testl	%eax, %eax
+ 409 0048 7456     		je	.L39
+ 131:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         sockcb = s_sal_cb.sock_cb_tab[sockfd];
+ 410              		.loc 1 131 26
+ 411 004a 488B0500 		movq	24+s_sal_cb(%rip), %rax
+ 411      000000
+ 412              		.loc 1 131 38
+ 413 0051 8B55EC   		movl	-20(%rbp), %edx
+ 414 0054 4863D2   		movslq	%edx, %rdx
+ 415 0057 48C1E203 		salq	$3, %rdx
+ 416 005b 4801D0   		addq	%rdx, %rax
+ 417              		.loc 1 131 16
+ 418 005e 488B00   		movq	(%rax), %rax
+ 419 0061 488945F0 		movq	%rax, -16(%rbp)
+ 132:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         s_sal_cb.sock_cb_tab[sockfd] = NULL;
+ 420              		.loc 1 132 17
+ 421 0065 488B0500 		movq	24+s_sal_cb(%rip), %rax
+ 421      000000
+ 422              		.loc 1 132 29
+ 423 006c 8B55EC   		movl	-20(%rbp), %edx
+ 424 006f 4863D2   		movslq	%edx, %rdx
+ 425 0072 48C1E203 		salq	$3, %rdx
+ 426 0076 4801D0   		addq	%rdx, %rax
+ 427              		.loc 1 132 38
+ 428 0079 48C70000 		movq	$0, (%rax)
+ 428      000000
+ 133:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 134:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         (void)osal_mutex_unlock(s_sal_cb.sock_cb_mutex);
+ 429              		.loc 1 134 15
+ 430 0080 488B0500 		movq	16+s_sal_cb(%rip), %rax
+ 430      000000
+ 431 0087 4889C7   		movq	%rax, %rdi
+ 432 008a E8000000 		call	osal_mutex_unlock@PLT
+ 432      00
+ 135:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 136:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         osal_free(sockcb);
+ 433              		.loc 1 136 9
+ 434 008f 488B45F0 		movq	-16(%rbp), %rax
+ 435 0093 4889C7   		movq	%rax, %rdi
+ 436 0096 E8000000 		call	osal_free@PLT
+ 436      00
+ 137:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 138:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 139:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return;
+ 437              		.loc 1 139 5
+GAS LISTING /tmp/ccdVsfTq.s 			page 13
+
+
+ 438 009b EB03     		jmp	.L39
+ 439              	.L38:
+ 127:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 440              		.loc 1 127 9
+ 441 009d 90       		nop
+ 442 009e EB01     		jmp	.L32
+ 443              	.L39:
+ 444              		.loc 1 139 5
+ 445 00a0 90       		nop
+ 446              	.L32:
+ 140:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+ 447              		.loc 1 140 1
+ 448 00a1 488B45F8 		movq	-8(%rbp), %rax
+ 449 00a5 64483304 		xorq	%fs:40, %rax
+ 449      25280000 
+ 449      00
+ 450 00ae 7405     		je	.L37
+ 451 00b0 E8000000 		call	__stack_chk_fail@PLT
+ 451      00
+ 452              	.L37:
+ 453 00b5 C9       		leave
+ 454              	.LCFI14:
+ 455              		.cfi_def_cfa 7, 8
+ 456 00b6 C3       		ret
+ 457              		.cfi_endproc
+ 458              	.LFE4:
+ 460              		.section	.text.__sal_sockcb_getcb,"ax",@progbits
+ 462              	__sal_sockcb_getcb:
+ 463              	.LFB5:
+ 141:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 142:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** // /< use this function to get the sockcb
+ 143:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** static tag_sock_cb *__sal_sockcb_getcb(int sockfd)
+ 144:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+ 464              		.loc 1 144 1
+ 465              		.cfi_startproc
+ 466 0000 F30F1EFA 		endbr64
+ 467 0004 55       		pushq	%rbp
+ 468              	.LCFI15:
+ 469              		.cfi_def_cfa_offset 16
+ 470              		.cfi_offset 6, -16
+ 471 0005 4889E5   		movq	%rsp, %rbp
+ 472              	.LCFI16:
+ 473              		.cfi_def_cfa_register 6
+ 474 0008 4883EC20 		subq	$32, %rsp
+ 475 000c 897DEC   		movl	%edi, -20(%rbp)
+ 476              		.loc 1 144 1
+ 477 000f 64488B04 		movq	%fs:40, %rax
+ 477      25280000 
+ 477      00
+ 478 0018 488945F8 		movq	%rax, -8(%rbp)
+ 479 001c 31C0     		xorl	%eax, %eax
+ 145:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     tag_sock_cb *sockcb = NULL;
+ 480              		.loc 1 145 18
+ 481 001e 48C745F0 		movq	$0, -16(%rbp)
+ 481      00000000 
+ 146:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 147:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if ((sockfd >= 0) && (sockfd < s_sal_cb.sock_cb_num)) {
+GAS LISTING /tmp/ccdVsfTq.s 			page 14
+
+
+ 482              		.loc 1 147 8
+ 483 0026 837DEC00 		cmpl	$0, -20(%rbp)
+ 484 002a 7826     		js	.L41
+ 485              		.loc 1 147 44 discriminator 1
+ 486 002c 8B050000 		movl	8+s_sal_cb(%rip), %eax
+ 486      0000
+ 487              		.loc 1 147 23 discriminator 1
+ 488 0032 3945EC   		cmpl	%eax, -20(%rbp)
+ 489 0035 7D1B     		jge	.L41
+ 148:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         sockcb = s_sal_cb.sock_cb_tab[sockfd];
+ 490              		.loc 1 148 26
+ 491 0037 488B0500 		movq	24+s_sal_cb(%rip), %rax
+ 491      000000
+ 492              		.loc 1 148 38
+ 493 003e 8B55EC   		movl	-20(%rbp), %edx
+ 494 0041 4863D2   		movslq	%edx, %rdx
+ 495 0044 48C1E203 		salq	$3, %rdx
+ 496 0048 4801D0   		addq	%rdx, %rax
+ 497              		.loc 1 148 16
+ 498 004b 488B00   		movq	(%rax), %rax
+ 499 004e 488945F0 		movq	%rax, -16(%rbp)
+ 500              	.L41:
+ 149:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 150:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 151:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return sockcb;
+ 501              		.loc 1 151 12
+ 502 0052 488B45F0 		movq	-16(%rbp), %rax
+ 152:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+ 503              		.loc 1 152 1
+ 504 0056 488B4DF8 		movq	-8(%rbp), %rcx
+ 505 005a 6448330C 		xorq	%fs:40, %rcx
+ 505      25280000 
+ 505      00
+ 506 0063 7405     		je	.L43
+ 507 0065 E8000000 		call	__stack_chk_fail@PLT
+ 507      00
+ 508              	.L43:
+ 509 006a C9       		leave
+ 510              	.LCFI17:
+ 511              		.cfi_def_cfa 7, 8
+ 512 006b C3       		ret
+ 513              		.cfi_endproc
+ 514              	.LFE5:
+ 516              		.section	.text.__sal_sockcb_getfd,"ax",@progbits
+ 518              	__sal_sockcb_getfd:
+ 519              	.LFB6:
+ 153:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 154:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** static int __sal_sockcb_getfd(tag_sock_cb *sockcb)
+ 155:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+ 520              		.loc 1 155 1
+ 521              		.cfi_startproc
+ 522 0000 F30F1EFA 		endbr64
+ 523 0004 55       		pushq	%rbp
+ 524              	.LCFI18:
+ 525              		.cfi_def_cfa_offset 16
+ 526              		.cfi_offset 6, -16
+ 527 0005 4889E5   		movq	%rsp, %rbp
+GAS LISTING /tmp/ccdVsfTq.s 			page 15
+
+
+ 528              	.LCFI19:
+ 529              		.cfi_def_cfa_register 6
+ 530 0008 4883EC20 		subq	$32, %rsp
+ 531 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 532              		.loc 1 155 1
+ 533 0010 64488B04 		movq	%fs:40, %rax
+ 533      25280000 
+ 533      00
+ 534 0019 488945F8 		movq	%rax, -8(%rbp)
+ 535 001d 31C0     		xorl	%eax, %eax
+ 156:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int sockfd = -1;
+ 536              		.loc 1 156 9
+ 537 001f C745F4FF 		movl	$-1, -12(%rbp)
+ 537      FFFFFF
+ 157:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 158:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (NULL != sockcb) {
+ 538              		.loc 1 158 8
+ 539 0026 48837DE8 		cmpq	$0, -24(%rbp)
+ 539      00
+ 540 002b 740A     		je	.L45
+ 159:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         sockfd = sockcb->fd;
+ 541              		.loc 1 159 16
+ 542 002d 488B45E8 		movq	-24(%rbp), %rax
+ 543 0031 8B4008   		movl	8(%rax), %eax
+ 544 0034 8945F4   		movl	%eax, -12(%rbp)
+ 545              	.L45:
+ 160:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 161:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 162:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return sockfd;
+ 546              		.loc 1 162 12
+ 547 0037 8B45F4   		movl	-12(%rbp), %eax
+ 163:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+ 548              		.loc 1 163 1
+ 549 003a 488B55F8 		movq	-8(%rbp), %rdx
+ 550 003e 64483314 		xorq	%fs:40, %rdx
+ 550      25280000 
+ 550      00
+ 551 0047 7405     		je	.L47
+ 552 0049 E8000000 		call	__stack_chk_fail@PLT
+ 552      00
+ 553              	.L47:
+ 554 004e C9       		leave
+ 555              	.LCFI20:
+ 556              		.cfi_def_cfa 7, 8
+ 557 004f C3       		ret
+ 558              		.cfi_endproc
+ 559              	.LFE6:
+ 561              		.section	.text.sal_socket,"ax",@progbits
+ 562              		.globl	sal_socket
+ 564              	sal_socket:
+ 565              	.LFB7:
+ 164:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 165:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** int sal_socket(int domain, int type, int protocol)
+ 166:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+ 566              		.loc 1 166 1
+ 567              		.cfi_startproc
+ 568 0000 F30F1EFA 		endbr64
+GAS LISTING /tmp/ccdVsfTq.s 			page 16
+
+
+ 569 0004 55       		pushq	%rbp
+ 570              	.LCFI21:
+ 571              		.cfi_def_cfa_offset 16
+ 572              		.cfi_offset 6, -16
+ 573 0005 4889E5   		movq	%rsp, %rbp
+ 574              	.LCFI22:
+ 575              		.cfi_def_cfa_register 6
+ 576 0008 4883EC30 		subq	$48, %rsp
+ 577 000c 897DDC   		movl	%edi, -36(%rbp)
+ 578 000f 8975D8   		movl	%esi, -40(%rbp)
+ 579 0012 8955D4   		movl	%edx, -44(%rbp)
+ 580              		.loc 1 166 1
+ 581 0015 64488B04 		movq	%fs:40, %rax
+ 581      25280000 
+ 581      00
+ 582 001e 488945F8 		movq	%rax, -8(%rbp)
+ 583 0022 31C0     		xorl	%eax, %eax
+ 167:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int sockfd = -1;
+ 584              		.loc 1 167 9
+ 585 0024 C745E8FF 		movl	$-1, -24(%rbp)
+ 585      FFFFFF
+ 168:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int sock = -1;
+ 586              		.loc 1 168 9
+ 587 002b C745ECFF 		movl	$-1, -20(%rbp)
+ 587      FFFFFF
+ 169:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 170:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     tag_sock_cb *sockcb;
+ 171:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 172:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     sockcb = __sal_sockcb_malloc();
+ 588              		.loc 1 172 14
+ 589 0032 E8000000 		call	__sal_sockcb_malloc
+ 589      00
+ 590 0037 488945F0 		movq	%rax, -16(%rbp)
+ 173:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 174:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (NULL != sockcb) {
+ 591              		.loc 1 174 8
+ 592 003b 48837DF0 		cmpq	$0, -16(%rbp)
+ 592      00
+ 593 0040 747F     		je	.L49
+ 175:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         if ((NULL != s_sal_cb.domain) && (NULL != s_sal_cb.domain->ops) && (NULL != s_sal_cb.domain
+ 594              		.loc 1 175 30
+ 595 0042 488B0500 		movq	s_sal_cb(%rip), %rax
+ 595      000000
+ 596              		.loc 1 175 12
+ 597 0049 4885C0   		testq	%rax, %rax
+ 598 004c 7444     		je	.L50
+ 599              		.loc 1 175 59 discriminator 1
+ 600 004e 488B0500 		movq	s_sal_cb(%rip), %rax
+ 600      000000
+ 601              		.loc 1 175 66 discriminator 1
+ 602 0055 488B4010 		movq	16(%rax), %rax
+ 603              		.loc 1 175 39 discriminator 1
+ 604 0059 4885C0   		testq	%rax, %rax
+ 605 005c 7434     		je	.L50
+ 606              		.loc 1 175 93 discriminator 2
+ 607 005e 488B0500 		movq	s_sal_cb(%rip), %rax
+ 607      000000
+GAS LISTING /tmp/ccdVsfTq.s 			page 17
+
+
+ 608              		.loc 1 175 100 discriminator 2
+ 609 0065 488B4010 		movq	16(%rax), %rax
+ 610              		.loc 1 175 105 discriminator 2
+ 611 0069 488B00   		movq	(%rax), %rax
+ 612              		.loc 1 175 73 discriminator 2
+ 613 006c 4885C0   		testq	%rax, %rax
+ 614 006f 7421     		je	.L50
+ 176:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             sock = s_sal_cb.domain->ops->socket(domain, type, protocol);
+ 615              		.loc 1 176 28
+ 616 0071 488B0500 		movq	s_sal_cb(%rip), %rax
+ 616      000000
+ 617              		.loc 1 176 35
+ 618 0078 488B4010 		movq	16(%rax), %rax
+ 619              		.loc 1 176 40
+ 620 007c 4C8B00   		movq	(%rax), %r8
+ 621              		.loc 1 176 20
+ 622 007f 8B55D4   		movl	-44(%rbp), %edx
+ 623 0082 8B4DD8   		movl	-40(%rbp), %ecx
+ 624 0085 8B45DC   		movl	-36(%rbp), %eax
+ 625 0088 89CE     		movl	%ecx, %esi
+ 626 008a 89C7     		movl	%eax, %edi
+ 627 008c 41FFD0   		call	*%r8
+ 628              	.LVL0:
+ 629 008f 8945EC   		movl	%eax, -20(%rbp)
+ 630              	.L50:
+ 177:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         }
+ 178:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         if (-1 != sock) {
+ 631              		.loc 1 178 12
+ 632 0092 837DECFF 		cmpl	$-1, -20(%rbp)
+ 633 0096 741B     		je	.L51
+ 179:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             sockcb->sock = sock;
+ 634              		.loc 1 179 26
+ 635 0098 488B45F0 		movq	-16(%rbp), %rax
+ 636 009c 8B55EC   		movl	-20(%rbp), %edx
+ 637 009f 89500C   		movl	%edx, 12(%rax)
+ 180:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             sockfd = __sal_sockcb_getfd(sockcb);
+ 638              		.loc 1 180 22
+ 639 00a2 488B45F0 		movq	-16(%rbp), %rax
+ 640 00a6 4889C7   		movq	%rax, %rdi
+ 641 00a9 E8000000 		call	__sal_sockcb_getfd
+ 641      00
+ 642 00ae 8945E8   		movl	%eax, -24(%rbp)
+ 643 00b1 EB0E     		jmp	.L49
+ 644              	.L51:
+ 181:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         } else {
+ 182:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             __sal_sockcb_free(sockcb->fd);
+ 645              		.loc 1 182 13
+ 646 00b3 488B45F0 		movq	-16(%rbp), %rax
+ 647 00b7 8B4008   		movl	8(%rax), %eax
+ 648 00ba 89C7     		movl	%eax, %edi
+ 649 00bc E8000000 		call	__sal_sockcb_free
+ 649      00
+ 650              	.L49:
+ 183:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         }
+ 184:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 185:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 186:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return sockfd;
+GAS LISTING /tmp/ccdVsfTq.s 			page 18
+
+
+ 651              		.loc 1 186 12
+ 652 00c1 8B45E8   		movl	-24(%rbp), %eax
+ 187:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+ 653              		.loc 1 187 1
+ 654 00c4 488B4DF8 		movq	-8(%rbp), %rcx
+ 655 00c8 6448330C 		xorq	%fs:40, %rcx
+ 655      25280000 
+ 655      00
+ 656 00d1 7405     		je	.L53
+ 657 00d3 E8000000 		call	__stack_chk_fail@PLT
+ 657      00
+ 658              	.L53:
+ 659 00d8 C9       		leave
+ 660              	.LCFI23:
+ 661              		.cfi_def_cfa 7, 8
+ 662 00d9 C3       		ret
+ 663              		.cfi_endproc
+ 664              	.LFE7:
+ 666              		.section	.text.sal_bind,"ax",@progbits
+ 667              		.globl	sal_bind
+ 669              	sal_bind:
+ 670              	.LFB8:
+ 188:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 189:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** int sal_bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
+ 190:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+ 671              		.loc 1 190 1
+ 672              		.cfi_startproc
+ 673 0000 F30F1EFA 		endbr64
+ 674 0004 55       		pushq	%rbp
+ 675              	.LCFI24:
+ 676              		.cfi_def_cfa_offset 16
+ 677              		.cfi_offset 6, -16
+ 678 0005 4889E5   		movq	%rsp, %rbp
+ 679              	.LCFI25:
+ 680              		.cfi_def_cfa_register 6
+ 681 0008 4883EC30 		subq	$48, %rsp
+ 682 000c 897DDC   		movl	%edi, -36(%rbp)
+ 683 000f 488975D0 		movq	%rsi, -48(%rbp)
+ 684 0013 8955D8   		movl	%edx, -40(%rbp)
+ 685              		.loc 1 190 1
+ 686 0016 64488B04 		movq	%fs:40, %rax
+ 686      25280000 
+ 686      00
+ 687 001f 488945F8 		movq	%rax, -8(%rbp)
+ 688 0023 31C0     		xorl	%eax, %eax
+ 191:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int ret = -1;
+ 689              		.loc 1 191 9
+ 690 0025 C745ECFF 		movl	$-1, -20(%rbp)
+ 690      FFFFFF
+ 192:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     tag_sock_cb *sockcb;
+ 193:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 194:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     sockcb = __sal_sockcb_getcb(sockfd);
+ 691              		.loc 1 194 14
+ 692 002c 8B45DC   		movl	-36(%rbp), %eax
+ 693 002f 89C7     		movl	%eax, %edi
+ 694 0031 E8000000 		call	__sal_sockcb_getcb
+ 694      00
+GAS LISTING /tmp/ccdVsfTq.s 			page 19
+
+
+ 695 0036 488945F0 		movq	%rax, -16(%rbp)
+ 195:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (NULL != sockcb) {
+ 696              		.loc 1 195 8
+ 697 003a 48837DF0 		cmpq	$0, -16(%rbp)
+ 697      00
+ 698 003f 7440     		je	.L55
+ 196:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         if ((NULL != sockcb->ops) && (NULL != sockcb->ops->bind)) {
+ 699              		.loc 1 196 28
+ 700 0041 488B45F0 		movq	-16(%rbp), %rax
+ 701 0045 488B00   		movq	(%rax), %rax
+ 702              		.loc 1 196 12
+ 703 0048 4885C0   		testq	%rax, %rax
+ 704 004b 7434     		je	.L55
+ 705              		.loc 1 196 53 discriminator 1
+ 706 004d 488B45F0 		movq	-16(%rbp), %rax
+ 707 0051 488B00   		movq	(%rax), %rax
+ 708              		.loc 1 196 58 discriminator 1
+ 709 0054 488B4008 		movq	8(%rax), %rax
+ 710              		.loc 1 196 35 discriminator 1
+ 711 0058 4885C0   		testq	%rax, %rax
+ 712 005b 7424     		je	.L55
+ 197:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             ret = sockcb->ops->bind(sockcb->sock, addr, addrlen);
+ 713              		.loc 1 197 25
+ 714 005d 488B45F0 		movq	-16(%rbp), %rax
+ 715 0061 488B00   		movq	(%rax), %rax
+ 716              		.loc 1 197 30
+ 717 0064 4C8B4008 		movq	8(%rax), %r8
+ 718              		.loc 1 197 19
+ 719 0068 488B45F0 		movq	-16(%rbp), %rax
+ 720 006c 8B400C   		movl	12(%rax), %eax
+ 721 006f 8B55D8   		movl	-40(%rbp), %edx
+ 722 0072 488B4DD0 		movq	-48(%rbp), %rcx
+ 723 0076 4889CE   		movq	%rcx, %rsi
+ 724 0079 89C7     		movl	%eax, %edi
+ 725 007b 41FFD0   		call	*%r8
+ 726              	.LVL1:
+ 727 007e 8945EC   		movl	%eax, -20(%rbp)
+ 728              	.L55:
+ 198:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         }
+ 199:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 200:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 201:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return ret;
+ 729              		.loc 1 201 12
+ 730 0081 8B45EC   		movl	-20(%rbp), %eax
+ 202:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+ 731              		.loc 1 202 1
+ 732 0084 488B4DF8 		movq	-8(%rbp), %rcx
+ 733 0088 6448330C 		xorq	%fs:40, %rcx
+ 733      25280000 
+ 733      00
+ 734 0091 7405     		je	.L57
+ 735 0093 E8000000 		call	__stack_chk_fail@PLT
+ 735      00
+ 736              	.L57:
+ 737 0098 C9       		leave
+ 738              	.LCFI26:
+ 739              		.cfi_def_cfa 7, 8
+GAS LISTING /tmp/ccdVsfTq.s 			page 20
+
+
+ 740 0099 C3       		ret
+ 741              		.cfi_endproc
+ 742              	.LFE8:
+ 744              		.section	.text.sal_listen,"ax",@progbits
+ 745              		.globl	sal_listen
+ 747              	sal_listen:
+ 748              	.LFB9:
+ 203:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 204:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** int sal_listen(int sockfd, int backlog)
+ 205:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+ 749              		.loc 1 205 1
+ 750              		.cfi_startproc
+ 751 0000 F30F1EFA 		endbr64
+ 752 0004 55       		pushq	%rbp
+ 753              	.LCFI27:
+ 754              		.cfi_def_cfa_offset 16
+ 755              		.cfi_offset 6, -16
+ 756 0005 4889E5   		movq	%rsp, %rbp
+ 757              	.LCFI28:
+ 758              		.cfi_def_cfa_register 6
+ 759 0008 4883EC30 		subq	$48, %rsp
+ 760 000c 897DDC   		movl	%edi, -36(%rbp)
+ 761 000f 8975D8   		movl	%esi, -40(%rbp)
+ 762              		.loc 1 205 1
+ 763 0012 64488B04 		movq	%fs:40, %rax
+ 763      25280000 
+ 763      00
+ 764 001b 488945F8 		movq	%rax, -8(%rbp)
+ 765 001f 31C0     		xorl	%eax, %eax
+ 206:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int ret = -1;
+ 766              		.loc 1 206 9
+ 767 0021 C745ECFF 		movl	$-1, -20(%rbp)
+ 767      FFFFFF
+ 207:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     tag_sock_cb *sockcb;
+ 208:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 209:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     sockcb = __sal_sockcb_getcb(sockfd);
+ 768              		.loc 1 209 14
+ 769 0028 8B45DC   		movl	-36(%rbp), %eax
+ 770 002b 89C7     		movl	%eax, %edi
+ 771 002d E8000000 		call	__sal_sockcb_getcb
+ 771      00
+ 772 0032 488945F0 		movq	%rax, -16(%rbp)
+ 210:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (NULL != sockcb) {
+ 773              		.loc 1 210 8
+ 774 0036 48837DF0 		cmpq	$0, -16(%rbp)
+ 774      00
+ 775 003b 743A     		je	.L59
+ 211:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         if ((NULL != sockcb->ops) && (NULL != sockcb->ops->listen)) {
+ 776              		.loc 1 211 28
+ 777 003d 488B45F0 		movq	-16(%rbp), %rax
+ 778 0041 488B00   		movq	(%rax), %rax
+ 779              		.loc 1 211 12
+ 780 0044 4885C0   		testq	%rax, %rax
+ 781 0047 742E     		je	.L59
+ 782              		.loc 1 211 53 discriminator 1
+ 783 0049 488B45F0 		movq	-16(%rbp), %rax
+ 784 004d 488B00   		movq	(%rax), %rax
+GAS LISTING /tmp/ccdVsfTq.s 			page 21
+
+
+ 785              		.loc 1 211 58 discriminator 1
+ 786 0050 488B4010 		movq	16(%rax), %rax
+ 787              		.loc 1 211 35 discriminator 1
+ 788 0054 4885C0   		testq	%rax, %rax
+ 789 0057 741E     		je	.L59
+ 212:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             ret = sockcb->ops->listen(sockcb->sock, backlog);
+ 790              		.loc 1 212 25
+ 791 0059 488B45F0 		movq	-16(%rbp), %rax
+ 792 005d 488B00   		movq	(%rax), %rax
+ 793              		.loc 1 212 30
+ 794 0060 488B4810 		movq	16(%rax), %rcx
+ 795              		.loc 1 212 19
+ 796 0064 488B45F0 		movq	-16(%rbp), %rax
+ 797 0068 8B400C   		movl	12(%rax), %eax
+ 798 006b 8B55D8   		movl	-40(%rbp), %edx
+ 799 006e 89D6     		movl	%edx, %esi
+ 800 0070 89C7     		movl	%eax, %edi
+ 801 0072 FFD1     		call	*%rcx
+ 802              	.LVL2:
+ 803 0074 8945EC   		movl	%eax, -20(%rbp)
+ 804              	.L59:
+ 213:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         }
+ 214:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 215:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 216:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return ret;
+ 805              		.loc 1 216 12
+ 806 0077 8B45EC   		movl	-20(%rbp), %eax
+ 217:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+ 807              		.loc 1 217 1
+ 808 007a 488B55F8 		movq	-8(%rbp), %rdx
+ 809 007e 64483314 		xorq	%fs:40, %rdx
+ 809      25280000 
+ 809      00
+ 810 0087 7405     		je	.L61
+ 811 0089 E8000000 		call	__stack_chk_fail@PLT
+ 811      00
+ 812              	.L61:
+ 813 008e C9       		leave
+ 814              	.LCFI29:
+ 815              		.cfi_def_cfa 7, 8
+ 816 008f C3       		ret
+ 817              		.cfi_endproc
+ 818              	.LFE9:
+ 820              		.section	.text.sal_accept,"ax",@progbits
+ 821              		.globl	sal_accept
+ 823              	sal_accept:
+ 824              	.LFB10:
+ 218:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 219:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** int sal_accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
+ 220:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+ 825              		.loc 1 220 1
+ 826              		.cfi_startproc
+ 827 0000 F30F1EFA 		endbr64
+ 828 0004 55       		pushq	%rbp
+ 829              	.LCFI30:
+ 830              		.cfi_def_cfa_offset 16
+ 831              		.cfi_offset 6, -16
+GAS LISTING /tmp/ccdVsfTq.s 			page 22
+
+
+ 832 0005 4889E5   		movq	%rsp, %rbp
+ 833              	.LCFI31:
+ 834              		.cfi_def_cfa_register 6
+ 835 0008 4883EC40 		subq	$64, %rsp
+ 836 000c 897DDC   		movl	%edi, -36(%rbp)
+ 837 000f 488975D0 		movq	%rsi, -48(%rbp)
+ 838 0013 488955C8 		movq	%rdx, -56(%rbp)
+ 839              		.loc 1 220 1
+ 840 0017 64488B04 		movq	%fs:40, %rax
+ 840      25280000 
+ 840      00
+ 841 0020 488945F8 		movq	%rax, -8(%rbp)
+ 842 0024 31C0     		xorl	%eax, %eax
+ 221:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int sockfd_client = -1;
+ 843              		.loc 1 221 9
+ 844 0026 C745E0FF 		movl	$-1, -32(%rbp)
+ 844      FFFFFF
+ 222:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int sock_client = -1;
+ 845              		.loc 1 222 9
+ 846 002d C745E4FF 		movl	$-1, -28(%rbp)
+ 846      FFFFFF
+ 223:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     tag_sock_cb *sockcb_client;
+ 224:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 225:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     tag_sock_cb *sockcb_server;
+ 226:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 227:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     sockcb_server = __sal_sockcb_getcb(sockfd);
+ 847              		.loc 1 227 21
+ 848 0034 8B45DC   		movl	-36(%rbp), %eax
+ 849 0037 89C7     		movl	%eax, %edi
+ 850 0039 E8000000 		call	__sal_sockcb_getcb
+ 850      00
+ 851 003e 488945E8 		movq	%rax, -24(%rbp)
+ 228:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (NULL == sockcb_server) {
+ 852              		.loc 1 228 8
+ 853 0042 48837DE8 		cmpq	$0, -24(%rbp)
+ 853      00
+ 854 0047 7508     		jne	.L63
+ 229:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         return sockfd_client;
+ 855              		.loc 1 229 16
+ 856 0049 8B45E0   		movl	-32(%rbp), %eax
+ 857 004c E9830000 		jmp	.L64
+ 857      00
+ 858              	.L63:
+ 230:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 231:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 232:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     sockcb_client = __sal_sockcb_malloc();
+ 859              		.loc 1 232 21
+ 860 0051 E8000000 		call	__sal_sockcb_malloc
+ 860      00
+ 861 0056 488945F0 		movq	%rax, -16(%rbp)
+ 233:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 234:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (NULL != sockcb_client) {
+ 862              		.loc 1 234 8
+ 863 005a 48837DF0 		cmpq	$0, -16(%rbp)
+ 863      00
+ 864 005f 7470     		je	.L65
+ 235:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         if ((NULL != sockcb_server->ops) && (NULL != sockcb_server->ops->accept)) {
+GAS LISTING /tmp/ccdVsfTq.s 			page 23
+
+
+ 865              		.loc 1 235 35
+ 866 0061 488B45E8 		movq	-24(%rbp), %rax
+ 867 0065 488B00   		movq	(%rax), %rax
+ 868              		.loc 1 235 12
+ 869 0068 4885C0   		testq	%rax, %rax
+ 870 006b 7435     		je	.L66
+ 871              		.loc 1 235 67 discriminator 1
+ 872 006d 488B45E8 		movq	-24(%rbp), %rax
+ 873 0071 488B00   		movq	(%rax), %rax
+ 874              		.loc 1 235 72 discriminator 1
+ 875 0074 488B4018 		movq	24(%rax), %rax
+ 876              		.loc 1 235 42 discriminator 1
+ 877 0078 4885C0   		testq	%rax, %rax
+ 878 007b 7425     		je	.L66
+ 236:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             sock_client = sockcb_server->ops->accept(sockcb_server->sock, addr, addrlen);
+ 879              		.loc 1 236 40
+ 880 007d 488B45E8 		movq	-24(%rbp), %rax
+ 881 0081 488B00   		movq	(%rax), %rax
+ 882              		.loc 1 236 45
+ 883 0084 4C8B4018 		movq	24(%rax), %r8
+ 884              		.loc 1 236 27
+ 885 0088 488B45E8 		movq	-24(%rbp), %rax
+ 886 008c 8B400C   		movl	12(%rax), %eax
+ 887 008f 488B55C8 		movq	-56(%rbp), %rdx
+ 888 0093 488B4DD0 		movq	-48(%rbp), %rcx
+ 889 0097 4889CE   		movq	%rcx, %rsi
+ 890 009a 89C7     		movl	%eax, %edi
+ 891 009c 41FFD0   		call	*%r8
+ 892              	.LVL3:
+ 893 009f 8945E4   		movl	%eax, -28(%rbp)
+ 894              	.L66:
+ 237:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         }
+ 238:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         if (-1 != sock_client) {
+ 895              		.loc 1 238 12
+ 896 00a2 837DE4FF 		cmpl	$-1, -28(%rbp)
+ 897 00a6 741B     		je	.L67
+ 239:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             sockcb_client->sock = sock_client;
+ 898              		.loc 1 239 33
+ 899 00a8 488B45F0 		movq	-16(%rbp), %rax
+ 900 00ac 8B55E4   		movl	-28(%rbp), %edx
+ 901 00af 89500C   		movl	%edx, 12(%rax)
+ 240:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             sockfd_client = __sal_sockcb_getfd(sockcb_client);
+ 902              		.loc 1 240 29
+ 903 00b2 488B45F0 		movq	-16(%rbp), %rax
+ 904 00b6 4889C7   		movq	%rax, %rdi
+ 905 00b9 E8000000 		call	__sal_sockcb_getfd
+ 905      00
+ 906 00be 8945E0   		movl	%eax, -32(%rbp)
+ 907 00c1 EB0E     		jmp	.L65
+ 908              	.L67:
+ 241:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         } else {
+ 242:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             __sal_sockcb_free(sockcb_client->fd);
+ 909              		.loc 1 242 13
+ 910 00c3 488B45F0 		movq	-16(%rbp), %rax
+ 911 00c7 8B4008   		movl	8(%rax), %eax
+ 912 00ca 89C7     		movl	%eax, %edi
+ 913 00cc E8000000 		call	__sal_sockcb_free
+GAS LISTING /tmp/ccdVsfTq.s 			page 24
+
+
+ 913      00
+ 914              	.L65:
+ 243:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         }
+ 244:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 245:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 246:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return sockfd_client;
+ 915              		.loc 1 246 12
+ 916 00d1 8B45E0   		movl	-32(%rbp), %eax
+ 917              	.L64:
+ 247:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+ 918              		.loc 1 247 1
+ 919 00d4 488B4DF8 		movq	-8(%rbp), %rcx
+ 920 00d8 6448330C 		xorq	%fs:40, %rcx
+ 920      25280000 
+ 920      00
+ 921 00e1 7405     		je	.L68
+ 922 00e3 E8000000 		call	__stack_chk_fail@PLT
+ 922      00
+ 923              	.L68:
+ 924 00e8 C9       		leave
+ 925              	.LCFI32:
+ 926              		.cfi_def_cfa 7, 8
+ 927 00e9 C3       		ret
+ 928              		.cfi_endproc
+ 929              	.LFE10:
+ 931              		.section	.text.sal_connect,"ax",@progbits
+ 932              		.globl	sal_connect
+ 934              	sal_connect:
+ 935              	.LFB11:
+ 248:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 249:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** int sal_connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
+ 250:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+ 936              		.loc 1 250 1
+ 937              		.cfi_startproc
+ 938 0000 F30F1EFA 		endbr64
+ 939 0004 55       		pushq	%rbp
+ 940              	.LCFI33:
+ 941              		.cfi_def_cfa_offset 16
+ 942              		.cfi_offset 6, -16
+ 943 0005 4889E5   		movq	%rsp, %rbp
+ 944              	.LCFI34:
+ 945              		.cfi_def_cfa_register 6
+ 946 0008 4883EC30 		subq	$48, %rsp
+ 947 000c 897DDC   		movl	%edi, -36(%rbp)
+ 948 000f 488975D0 		movq	%rsi, -48(%rbp)
+ 949 0013 8955D8   		movl	%edx, -40(%rbp)
+ 950              		.loc 1 250 1
+ 951 0016 64488B04 		movq	%fs:40, %rax
+ 951      25280000 
+ 951      00
+ 952 001f 488945F8 		movq	%rax, -8(%rbp)
+ 953 0023 31C0     		xorl	%eax, %eax
+ 251:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int ret = -1;
+ 954              		.loc 1 251 9
+ 955 0025 C745ECFF 		movl	$-1, -20(%rbp)
+ 955      FFFFFF
+ 252:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     tag_sock_cb *sockcb;
+GAS LISTING /tmp/ccdVsfTq.s 			page 25
+
+
+ 253:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 254:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     sockcb = __sal_sockcb_getcb(sockfd);
+ 956              		.loc 1 254 14
+ 957 002c 8B45DC   		movl	-36(%rbp), %eax
+ 958 002f 89C7     		movl	%eax, %edi
+ 959 0031 E8000000 		call	__sal_sockcb_getcb
+ 959      00
+ 960 0036 488945F0 		movq	%rax, -16(%rbp)
+ 255:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (NULL != sockcb) {
+ 961              		.loc 1 255 8
+ 962 003a 48837DF0 		cmpq	$0, -16(%rbp)
+ 962      00
+ 963 003f 7440     		je	.L70
+ 256:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         if ((NULL != sockcb->ops) && (NULL != sockcb->ops->connect)) {
+ 964              		.loc 1 256 28
+ 965 0041 488B45F0 		movq	-16(%rbp), %rax
+ 966 0045 488B00   		movq	(%rax), %rax
+ 967              		.loc 1 256 12
+ 968 0048 4885C0   		testq	%rax, %rax
+ 969 004b 7434     		je	.L70
+ 970              		.loc 1 256 53 discriminator 1
+ 971 004d 488B45F0 		movq	-16(%rbp), %rax
+ 972 0051 488B00   		movq	(%rax), %rax
+ 973              		.loc 1 256 58 discriminator 1
+ 974 0054 488B4020 		movq	32(%rax), %rax
+ 975              		.loc 1 256 35 discriminator 1
+ 976 0058 4885C0   		testq	%rax, %rax
+ 977 005b 7424     		je	.L70
+ 257:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             ret = sockcb->ops->connect(sockcb->sock, addr, addrlen);
+ 978              		.loc 1 257 25
+ 979 005d 488B45F0 		movq	-16(%rbp), %rax
+ 980 0061 488B00   		movq	(%rax), %rax
+ 981              		.loc 1 257 30
+ 982 0064 4C8B4020 		movq	32(%rax), %r8
+ 983              		.loc 1 257 19
+ 984 0068 488B45F0 		movq	-16(%rbp), %rax
+ 985 006c 8B400C   		movl	12(%rax), %eax
+ 986 006f 8B55D8   		movl	-40(%rbp), %edx
+ 987 0072 488B4DD0 		movq	-48(%rbp), %rcx
+ 988 0076 4889CE   		movq	%rcx, %rsi
+ 989 0079 89C7     		movl	%eax, %edi
+ 990 007b 41FFD0   		call	*%r8
+ 991              	.LVL4:
+ 992 007e 8945EC   		movl	%eax, -20(%rbp)
+ 993              	.L70:
+ 258:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         }
+ 259:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 260:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 261:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return ret;
+ 994              		.loc 1 261 12
+ 995 0081 8B45EC   		movl	-20(%rbp), %eax
+ 262:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+ 996              		.loc 1 262 1
+ 997 0084 488B4DF8 		movq	-8(%rbp), %rcx
+ 998 0088 6448330C 		xorq	%fs:40, %rcx
+ 998      25280000 
+ 998      00
+GAS LISTING /tmp/ccdVsfTq.s 			page 26
+
+
+ 999 0091 7405     		je	.L72
+ 1000 0093 E8000000 		call	__stack_chk_fail@PLT
+ 1000      00
+ 1001              	.L72:
+ 1002 0098 C9       		leave
+ 1003              	.LCFI35:
+ 1004              		.cfi_def_cfa 7, 8
+ 1005 0099 C3       		ret
+ 1006              		.cfi_endproc
+ 1007              	.LFE11:
+ 1009              		.section	.text.sal_getsockname,"ax",@progbits
+ 1010              		.globl	sal_getsockname
+ 1012              	sal_getsockname:
+ 1013              	.LFB12:
+ 263:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 264:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** int sal_getsockname(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
+ 265:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+ 1014              		.loc 1 265 1
+ 1015              		.cfi_startproc
+ 1016 0000 F30F1EFA 		endbr64
+ 1017 0004 55       		pushq	%rbp
+ 1018              	.LCFI36:
+ 1019              		.cfi_def_cfa_offset 16
+ 1020              		.cfi_offset 6, -16
+ 1021 0005 4889E5   		movq	%rsp, %rbp
+ 1022              	.LCFI37:
+ 1023              		.cfi_def_cfa_register 6
+ 1024 0008 4883EC40 		subq	$64, %rsp
+ 1025 000c 897DDC   		movl	%edi, -36(%rbp)
+ 1026 000f 488975D0 		movq	%rsi, -48(%rbp)
+ 1027 0013 488955C8 		movq	%rdx, -56(%rbp)
+ 1028              		.loc 1 265 1
+ 1029 0017 64488B04 		movq	%fs:40, %rax
+ 1029      25280000 
+ 1029      00
+ 1030 0020 488945F8 		movq	%rax, -8(%rbp)
+ 1031 0024 31C0     		xorl	%eax, %eax
+ 266:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int ret = -1;
+ 1032              		.loc 1 266 9
+ 1033 0026 C745ECFF 		movl	$-1, -20(%rbp)
+ 1033      FFFFFF
+ 267:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     tag_sock_cb *sockcb;
+ 268:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 269:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     sockcb = __sal_sockcb_getcb(sockfd);
+ 1034              		.loc 1 269 14
+ 1035 002d 8B45DC   		movl	-36(%rbp), %eax
+ 1036 0030 89C7     		movl	%eax, %edi
+ 1037 0032 E8000000 		call	__sal_sockcb_getcb
+ 1037      00
+ 1038 0037 488945F0 		movq	%rax, -16(%rbp)
+ 270:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (NULL != sockcb) {
+ 1039              		.loc 1 270 8
+ 1040 003b 48837DF0 		cmpq	$0, -16(%rbp)
+ 1040      00
+ 1041 0040 7441     		je	.L74
+ 271:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         if ((NULL != sockcb->ops) && (NULL != sockcb->ops->getsockname)) {
+ 1042              		.loc 1 271 28
+GAS LISTING /tmp/ccdVsfTq.s 			page 27
+
+
+ 1043 0042 488B45F0 		movq	-16(%rbp), %rax
+ 1044 0046 488B00   		movq	(%rax), %rax
+ 1045              		.loc 1 271 12
+ 1046 0049 4885C0   		testq	%rax, %rax
+ 1047 004c 7435     		je	.L74
+ 1048              		.loc 1 271 53 discriminator 1
+ 1049 004e 488B45F0 		movq	-16(%rbp), %rax
+ 1050 0052 488B00   		movq	(%rax), %rax
+ 1051              		.loc 1 271 58 discriminator 1
+ 1052 0055 488B4028 		movq	40(%rax), %rax
+ 1053              		.loc 1 271 35 discriminator 1
+ 1054 0059 4885C0   		testq	%rax, %rax
+ 1055 005c 7425     		je	.L74
+ 272:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             ret = sockcb->ops->getsockname(sockcb->sock, addr, addrlen);
+ 1056              		.loc 1 272 25
+ 1057 005e 488B45F0 		movq	-16(%rbp), %rax
+ 1058 0062 488B00   		movq	(%rax), %rax
+ 1059              		.loc 1 272 30
+ 1060 0065 4C8B4028 		movq	40(%rax), %r8
+ 1061              		.loc 1 272 19
+ 1062 0069 488B45F0 		movq	-16(%rbp), %rax
+ 1063 006d 8B400C   		movl	12(%rax), %eax
+ 1064 0070 488B55C8 		movq	-56(%rbp), %rdx
+ 1065 0074 488B4DD0 		movq	-48(%rbp), %rcx
+ 1066 0078 4889CE   		movq	%rcx, %rsi
+ 1067 007b 89C7     		movl	%eax, %edi
+ 1068 007d 41FFD0   		call	*%r8
+ 1069              	.LVL5:
+ 1070 0080 8945EC   		movl	%eax, -20(%rbp)
+ 1071              	.L74:
+ 273:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         }
+ 274:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 275:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 276:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return ret;
+ 1072              		.loc 1 276 12
+ 1073 0083 8B45EC   		movl	-20(%rbp), %eax
+ 277:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+ 1074              		.loc 1 277 1
+ 1075 0086 488B4DF8 		movq	-8(%rbp), %rcx
+ 1076 008a 6448330C 		xorq	%fs:40, %rcx
+ 1076      25280000 
+ 1076      00
+ 1077 0093 7405     		je	.L76
+ 1078 0095 E8000000 		call	__stack_chk_fail@PLT
+ 1078      00
+ 1079              	.L76:
+ 1080 009a C9       		leave
+ 1081              	.LCFI38:
+ 1082              		.cfi_def_cfa 7, 8
+ 1083 009b C3       		ret
+ 1084              		.cfi_endproc
+ 1085              	.LFE12:
+ 1087              		.section	.text.sal_getpeername,"ax",@progbits
+ 1088              		.globl	sal_getpeername
+ 1090              	sal_getpeername:
+ 1091              	.LFB13:
+ 278:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+GAS LISTING /tmp/ccdVsfTq.s 			page 28
+
+
+ 279:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** int sal_getpeername(int sockfd, struct sockaddr *addr, socklen_t *addrlen)
+ 280:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+ 1092              		.loc 1 280 1
+ 1093              		.cfi_startproc
+ 1094 0000 F30F1EFA 		endbr64
+ 1095 0004 55       		pushq	%rbp
+ 1096              	.LCFI39:
+ 1097              		.cfi_def_cfa_offset 16
+ 1098              		.cfi_offset 6, -16
+ 1099 0005 4889E5   		movq	%rsp, %rbp
+ 1100              	.LCFI40:
+ 1101              		.cfi_def_cfa_register 6
+ 1102 0008 4883EC40 		subq	$64, %rsp
+ 1103 000c 897DDC   		movl	%edi, -36(%rbp)
+ 1104 000f 488975D0 		movq	%rsi, -48(%rbp)
+ 1105 0013 488955C8 		movq	%rdx, -56(%rbp)
+ 1106              		.loc 1 280 1
+ 1107 0017 64488B04 		movq	%fs:40, %rax
+ 1107      25280000 
+ 1107      00
+ 1108 0020 488945F8 		movq	%rax, -8(%rbp)
+ 1109 0024 31C0     		xorl	%eax, %eax
+ 281:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int ret = -1;
+ 1110              		.loc 1 281 9
+ 1111 0026 C745ECFF 		movl	$-1, -20(%rbp)
+ 1111      FFFFFF
+ 282:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     tag_sock_cb *sockcb;
+ 283:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 284:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     sockcb = __sal_sockcb_getcb(sockfd);
+ 1112              		.loc 1 284 14
+ 1113 002d 8B45DC   		movl	-36(%rbp), %eax
+ 1114 0030 89C7     		movl	%eax, %edi
+ 1115 0032 E8000000 		call	__sal_sockcb_getcb
+ 1115      00
+ 1116 0037 488945F0 		movq	%rax, -16(%rbp)
+ 285:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (NULL != sockcb) {
+ 1117              		.loc 1 285 8
+ 1118 003b 48837DF0 		cmpq	$0, -16(%rbp)
+ 1118      00
+ 1119 0040 7441     		je	.L78
+ 286:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         if ((NULL != sockcb->ops) && (NULL != sockcb->ops->getpeername)) {
+ 1120              		.loc 1 286 28
+ 1121 0042 488B45F0 		movq	-16(%rbp), %rax
+ 1122 0046 488B00   		movq	(%rax), %rax
+ 1123              		.loc 1 286 12
+ 1124 0049 4885C0   		testq	%rax, %rax
+ 1125 004c 7435     		je	.L78
+ 1126              		.loc 1 286 53 discriminator 1
+ 1127 004e 488B45F0 		movq	-16(%rbp), %rax
+ 1128 0052 488B00   		movq	(%rax), %rax
+ 1129              		.loc 1 286 58 discriminator 1
+ 1130 0055 488B4030 		movq	48(%rax), %rax
+ 1131              		.loc 1 286 35 discriminator 1
+ 1132 0059 4885C0   		testq	%rax, %rax
+ 1133 005c 7425     		je	.L78
+ 287:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             ret = sockcb->ops->getpeername(sockcb->sock, addr, addrlen);
+ 1134              		.loc 1 287 25
+GAS LISTING /tmp/ccdVsfTq.s 			page 29
+
+
+ 1135 005e 488B45F0 		movq	-16(%rbp), %rax
+ 1136 0062 488B00   		movq	(%rax), %rax
+ 1137              		.loc 1 287 30
+ 1138 0065 4C8B4030 		movq	48(%rax), %r8
+ 1139              		.loc 1 287 19
+ 1140 0069 488B45F0 		movq	-16(%rbp), %rax
+ 1141 006d 8B400C   		movl	12(%rax), %eax
+ 1142 0070 488B55C8 		movq	-56(%rbp), %rdx
+ 1143 0074 488B4DD0 		movq	-48(%rbp), %rcx
+ 1144 0078 4889CE   		movq	%rcx, %rsi
+ 1145 007b 89C7     		movl	%eax, %edi
+ 1146 007d 41FFD0   		call	*%r8
+ 1147              	.LVL6:
+ 1148 0080 8945EC   		movl	%eax, -20(%rbp)
+ 1149              	.L78:
+ 288:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         }
+ 289:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 290:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 291:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return ret;
+ 1150              		.loc 1 291 12
+ 1151 0083 8B45EC   		movl	-20(%rbp), %eax
+ 292:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+ 1152              		.loc 1 292 1
+ 1153 0086 488B4DF8 		movq	-8(%rbp), %rcx
+ 1154 008a 6448330C 		xorq	%fs:40, %rcx
+ 1154      25280000 
+ 1154      00
+ 1155 0093 7405     		je	.L80
+ 1156 0095 E8000000 		call	__stack_chk_fail@PLT
+ 1156      00
+ 1157              	.L80:
+ 1158 009a C9       		leave
+ 1159              	.LCFI41:
+ 1160              		.cfi_def_cfa 7, 8
+ 1161 009b C3       		ret
+ 1162              		.cfi_endproc
+ 1163              	.LFE13:
+ 1165              		.section	.text.sal_getsockopt,"ax",@progbits
+ 1166              		.globl	sal_getsockopt
+ 1168              	sal_getsockopt:
+ 1169              	.LFB14:
+ 293:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 294:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** int sal_getsockopt(int sockfd, int level, int optname, void *optval, int *optlen)
+ 295:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+ 1170              		.loc 1 295 1
+ 1171              		.cfi_startproc
+ 1172 0000 F30F1EFA 		endbr64
+ 1173 0004 55       		pushq	%rbp
+ 1174              	.LCFI42:
+ 1175              		.cfi_def_cfa_offset 16
+ 1176              		.cfi_offset 6, -16
+ 1177 0005 4889E5   		movq	%rsp, %rbp
+ 1178              	.LCFI43:
+ 1179              		.cfi_def_cfa_register 6
+ 1180 0008 4883EC40 		subq	$64, %rsp
+ 1181 000c 897DDC   		movl	%edi, -36(%rbp)
+ 1182 000f 8975D8   		movl	%esi, -40(%rbp)
+GAS LISTING /tmp/ccdVsfTq.s 			page 30
+
+
+ 1183 0012 8955D4   		movl	%edx, -44(%rbp)
+ 1184 0015 48894DC8 		movq	%rcx, -56(%rbp)
+ 1185 0019 4C8945C0 		movq	%r8, -64(%rbp)
+ 1186              		.loc 1 295 1
+ 1187 001d 64488B04 		movq	%fs:40, %rax
+ 1187      25280000 
+ 1187      00
+ 1188 0026 488945F8 		movq	%rax, -8(%rbp)
+ 1189 002a 31C0     		xorl	%eax, %eax
+ 296:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int ret = -1;
+ 1190              		.loc 1 296 9
+ 1191 002c C745ECFF 		movl	$-1, -20(%rbp)
+ 1191      FFFFFF
+ 297:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     tag_sock_cb *sockcb;
+ 298:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 299:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     sockcb = __sal_sockcb_getcb(sockfd);
+ 1192              		.loc 1 299 14
+ 1193 0033 8B45DC   		movl	-36(%rbp), %eax
+ 1194 0036 89C7     		movl	%eax, %edi
+ 1195 0038 E8000000 		call	__sal_sockcb_getcb
+ 1195      00
+ 1196 003d 488945F0 		movq	%rax, -16(%rbp)
+ 300:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (NULL != sockcb) {
+ 1197              		.loc 1 300 8
+ 1198 0041 48837DF0 		cmpq	$0, -16(%rbp)
+ 1198      00
+ 1199 0046 7447     		je	.L82
+ 301:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         if ((NULL != sockcb->ops) && (NULL != sockcb->ops->getsockopt)) {
+ 1200              		.loc 1 301 28
+ 1201 0048 488B45F0 		movq	-16(%rbp), %rax
+ 1202 004c 488B00   		movq	(%rax), %rax
+ 1203              		.loc 1 301 12
+ 1204 004f 4885C0   		testq	%rax, %rax
+ 1205 0052 743B     		je	.L82
+ 1206              		.loc 1 301 53 discriminator 1
+ 1207 0054 488B45F0 		movq	-16(%rbp), %rax
+ 1208 0058 488B00   		movq	(%rax), %rax
+ 1209              		.loc 1 301 58 discriminator 1
+ 1210 005b 488B4040 		movq	64(%rax), %rax
+ 1211              		.loc 1 301 35 discriminator 1
+ 1212 005f 4885C0   		testq	%rax, %rax
+ 1213 0062 742B     		je	.L82
+ 302:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             ret = sockcb->ops->getsockopt(sockcb->sock, level, optname, optval, optlen);
+ 1214              		.loc 1 302 25
+ 1215 0064 488B45F0 		movq	-16(%rbp), %rax
+ 1216 0068 488B00   		movq	(%rax), %rax
+ 1217              		.loc 1 302 30
+ 1218 006b 4C8B4840 		movq	64(%rax), %r9
+ 1219              		.loc 1 302 19
+ 1220 006f 488B45F0 		movq	-16(%rbp), %rax
+ 1221 0073 8B400C   		movl	12(%rax), %eax
+ 1222 0076 488B7DC0 		movq	-64(%rbp), %rdi
+ 1223 007a 488B4DC8 		movq	-56(%rbp), %rcx
+ 1224 007e 8B55D4   		movl	-44(%rbp), %edx
+ 1225 0081 8B75D8   		movl	-40(%rbp), %esi
+ 1226 0084 4989F8   		movq	%rdi, %r8
+ 1227 0087 89C7     		movl	%eax, %edi
+GAS LISTING /tmp/ccdVsfTq.s 			page 31
+
+
+ 1228 0089 41FFD1   		call	*%r9
+ 1229              	.LVL7:
+ 1230 008c 8945EC   		movl	%eax, -20(%rbp)
+ 1231              	.L82:
+ 303:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         }
+ 304:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 305:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 306:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return ret;
+ 1232              		.loc 1 306 12
+ 1233 008f 8B45EC   		movl	-20(%rbp), %eax
+ 307:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+ 1234              		.loc 1 307 1
+ 1235 0092 488B55F8 		movq	-8(%rbp), %rdx
+ 1236 0096 64483314 		xorq	%fs:40, %rdx
+ 1236      25280000 
+ 1236      00
+ 1237 009f 7405     		je	.L84
+ 1238 00a1 E8000000 		call	__stack_chk_fail@PLT
+ 1238      00
+ 1239              	.L84:
+ 1240 00a6 C9       		leave
+ 1241              	.LCFI44:
+ 1242              		.cfi_def_cfa 7, 8
+ 1243 00a7 C3       		ret
+ 1244              		.cfi_endproc
+ 1245              	.LFE14:
+ 1247              		.section	.text.sal_setsockopt,"ax",@progbits
+ 1248              		.globl	sal_setsockopt
+ 1250              	sal_setsockopt:
+ 1251              	.LFB15:
+ 308:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 309:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** int sal_setsockopt(int sockfd, int level, int optname, const void *optval, int optlen)
+ 310:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+ 1252              		.loc 1 310 1
+ 1253              		.cfi_startproc
+ 1254 0000 F30F1EFA 		endbr64
+ 1255 0004 55       		pushq	%rbp
+ 1256              	.LCFI45:
+ 1257              		.cfi_def_cfa_offset 16
+ 1258              		.cfi_offset 6, -16
+ 1259 0005 4889E5   		movq	%rsp, %rbp
+ 1260              	.LCFI46:
+ 1261              		.cfi_def_cfa_register 6
+ 1262 0008 4883EC40 		subq	$64, %rsp
+ 1263 000c 897DDC   		movl	%edi, -36(%rbp)
+ 1264 000f 8975D8   		movl	%esi, -40(%rbp)
+ 1265 0012 8955D4   		movl	%edx, -44(%rbp)
+ 1266 0015 48894DC8 		movq	%rcx, -56(%rbp)
+ 1267 0019 448945D0 		movl	%r8d, -48(%rbp)
+ 1268              		.loc 1 310 1
+ 1269 001d 64488B04 		movq	%fs:40, %rax
+ 1269      25280000 
+ 1269      00
+ 1270 0026 488945F8 		movq	%rax, -8(%rbp)
+ 1271 002a 31C0     		xorl	%eax, %eax
+ 311:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int ret = -1;
+ 1272              		.loc 1 311 9
+GAS LISTING /tmp/ccdVsfTq.s 			page 32
+
+
+ 1273 002c C745ECFF 		movl	$-1, -20(%rbp)
+ 1273      FFFFFF
+ 312:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     tag_sock_cb *sockcb;
+ 313:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 314:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     sockcb = __sal_sockcb_getcb(sockfd);
+ 1274              		.loc 1 314 14
+ 1275 0033 8B45DC   		movl	-36(%rbp), %eax
+ 1276 0036 89C7     		movl	%eax, %edi
+ 1277 0038 E8000000 		call	__sal_sockcb_getcb
+ 1277      00
+ 1278 003d 488945F0 		movq	%rax, -16(%rbp)
+ 315:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (NULL != sockcb) {
+ 1279              		.loc 1 315 8
+ 1280 0041 48837DF0 		cmpq	$0, -16(%rbp)
+ 1280      00
+ 1281 0046 7446     		je	.L86
+ 316:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         if ((NULL != sockcb->ops) && (NULL != sockcb->ops->setsockopt)) {
+ 1282              		.loc 1 316 28
+ 1283 0048 488B45F0 		movq	-16(%rbp), %rax
+ 1284 004c 488B00   		movq	(%rax), %rax
+ 1285              		.loc 1 316 12
+ 1286 004f 4885C0   		testq	%rax, %rax
+ 1287 0052 743A     		je	.L86
+ 1288              		.loc 1 316 53 discriminator 1
+ 1289 0054 488B45F0 		movq	-16(%rbp), %rax
+ 1290 0058 488B00   		movq	(%rax), %rax
+ 1291              		.loc 1 316 58 discriminator 1
+ 1292 005b 488B4038 		movq	56(%rax), %rax
+ 1293              		.loc 1 316 35 discriminator 1
+ 1294 005f 4885C0   		testq	%rax, %rax
+ 1295 0062 742A     		je	.L86
+ 317:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             ret = sockcb->ops->setsockopt(sockcb->sock, level, optname, optval, optlen);
+ 1296              		.loc 1 317 25
+ 1297 0064 488B45F0 		movq	-16(%rbp), %rax
+ 1298 0068 488B00   		movq	(%rax), %rax
+ 1299              		.loc 1 317 30
+ 1300 006b 4C8B4838 		movq	56(%rax), %r9
+ 1301              		.loc 1 317 19
+ 1302 006f 488B45F0 		movq	-16(%rbp), %rax
+ 1303 0073 8B400C   		movl	12(%rax), %eax
+ 1304 0076 8B7DD0   		movl	-48(%rbp), %edi
+ 1305 0079 488B4DC8 		movq	-56(%rbp), %rcx
+ 1306 007d 8B55D4   		movl	-44(%rbp), %edx
+ 1307 0080 8B75D8   		movl	-40(%rbp), %esi
+ 1308 0083 4189F8   		movl	%edi, %r8d
+ 1309 0086 89C7     		movl	%eax, %edi
+ 1310 0088 41FFD1   		call	*%r9
+ 1311              	.LVL8:
+ 1312 008b 8945EC   		movl	%eax, -20(%rbp)
+ 1313              	.L86:
+ 318:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         }
+ 319:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 320:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 321:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return ret;
+ 1314              		.loc 1 321 12
+ 1315 008e 8B45EC   		movl	-20(%rbp), %eax
+ 322:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+GAS LISTING /tmp/ccdVsfTq.s 			page 33
+
+
+ 1316              		.loc 1 322 1
+ 1317 0091 488B55F8 		movq	-8(%rbp), %rdx
+ 1318 0095 64483314 		xorq	%fs:40, %rdx
+ 1318      25280000 
+ 1318      00
+ 1319 009e 7405     		je	.L88
+ 1320 00a0 E8000000 		call	__stack_chk_fail@PLT
+ 1320      00
+ 1321              	.L88:
+ 1322 00a5 C9       		leave
+ 1323              	.LCFI47:
+ 1324              		.cfi_def_cfa 7, 8
+ 1325 00a6 C3       		ret
+ 1326              		.cfi_endproc
+ 1327              	.LFE15:
+ 1329              		.section	.text.sal_recv,"ax",@progbits
+ 1330              		.globl	sal_recv
+ 1332              	sal_recv:
+ 1333              	.LFB16:
+ 323:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 324:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** int sal_recv(int sockfd, void *buf, size_t len, int flags)
+ 325:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+ 1334              		.loc 1 325 1
+ 1335              		.cfi_startproc
+ 1336 0000 F30F1EFA 		endbr64
+ 1337 0004 55       		pushq	%rbp
+ 1338              	.LCFI48:
+ 1339              		.cfi_def_cfa_offset 16
+ 1340              		.cfi_offset 6, -16
+ 1341 0005 4889E5   		movq	%rsp, %rbp
+ 1342              	.LCFI49:
+ 1343              		.cfi_def_cfa_register 6
+ 1344 0008 4883EC40 		subq	$64, %rsp
+ 1345 000c 897DDC   		movl	%edi, -36(%rbp)
+ 1346 000f 488975D0 		movq	%rsi, -48(%rbp)
+ 1347 0013 488955C8 		movq	%rdx, -56(%rbp)
+ 1348 0017 894DD8   		movl	%ecx, -40(%rbp)
+ 1349              		.loc 1 325 1
+ 1350 001a 64488B04 		movq	%fs:40, %rax
+ 1350      25280000 
+ 1350      00
+ 1351 0023 488945F8 		movq	%rax, -8(%rbp)
+ 1352 0027 31C0     		xorl	%eax, %eax
+ 326:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int ret = -1;
+ 1353              		.loc 1 326 9
+ 1354 0029 C745ECFF 		movl	$-1, -20(%rbp)
+ 1354      FFFFFF
+ 327:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     tag_sock_cb *sockcb;
+ 328:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 329:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     sockcb = __sal_sockcb_getcb(sockfd);
+ 1355              		.loc 1 329 14
+ 1356 0030 8B45DC   		movl	-36(%rbp), %eax
+ 1357 0033 89C7     		movl	%eax, %edi
+ 1358 0035 E8000000 		call	__sal_sockcb_getcb
+ 1358      00
+ 1359 003a 488945F0 		movq	%rax, -16(%rbp)
+ 330:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (NULL != sockcb) {
+GAS LISTING /tmp/ccdVsfTq.s 			page 34
+
+
+ 1360              		.loc 1 330 8
+ 1361 003e 48837DF0 		cmpq	$0, -16(%rbp)
+ 1361      00
+ 1362 0043 7447     		je	.L90
+ 331:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         if ((NULL != sockcb->ops) && (NULL != sockcb->ops->recv)) {
+ 1363              		.loc 1 331 28
+ 1364 0045 488B45F0 		movq	-16(%rbp), %rax
+ 1365 0049 488B00   		movq	(%rax), %rax
+ 1366              		.loc 1 331 12
+ 1367 004c 4885C0   		testq	%rax, %rax
+ 1368 004f 743B     		je	.L90
+ 1369              		.loc 1 331 53 discriminator 1
+ 1370 0051 488B45F0 		movq	-16(%rbp), %rax
+ 1371 0055 488B00   		movq	(%rax), %rax
+ 1372              		.loc 1 331 58 discriminator 1
+ 1373 0058 488B4058 		movq	88(%rax), %rax
+ 1374              		.loc 1 331 35 discriminator 1
+ 1375 005c 4885C0   		testq	%rax, %rax
+ 1376 005f 742B     		je	.L90
+ 332:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             ret = sockcb->ops->recv(sockcb->sock, buf, len, flags);
+ 1377              		.loc 1 332 25
+ 1378 0061 488B45F0 		movq	-16(%rbp), %rax
+ 1379 0065 488B00   		movq	(%rax), %rax
+ 1380              		.loc 1 332 30
+ 1381 0068 4C8B4058 		movq	88(%rax), %r8
+ 1382              		.loc 1 332 19
+ 1383 006c 488B45C8 		movq	-56(%rbp), %rax
+ 1384 0070 89C7     		movl	%eax, %edi
+ 1385 0072 488B45F0 		movq	-16(%rbp), %rax
+ 1386 0076 8B400C   		movl	12(%rax), %eax
+ 1387 0079 8B55D8   		movl	-40(%rbp), %edx
+ 1388 007c 488B75D0 		movq	-48(%rbp), %rsi
+ 1389 0080 89D1     		movl	%edx, %ecx
+ 1390 0082 89FA     		movl	%edi, %edx
+ 1391 0084 89C7     		movl	%eax, %edi
+ 1392 0086 41FFD0   		call	*%r8
+ 1393              	.LVL9:
+ 1394 0089 8945EC   		movl	%eax, -20(%rbp)
+ 1395              	.L90:
+ 333:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         }
+ 334:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 335:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 336:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return ret;
+ 1396              		.loc 1 336 12
+ 1397 008c 8B45EC   		movl	-20(%rbp), %eax
+ 337:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+ 1398              		.loc 1 337 1
+ 1399 008f 488B4DF8 		movq	-8(%rbp), %rcx
+ 1400 0093 6448330C 		xorq	%fs:40, %rcx
+ 1400      25280000 
+ 1400      00
+ 1401 009c 7405     		je	.L92
+ 1402 009e E8000000 		call	__stack_chk_fail@PLT
+ 1402      00
+ 1403              	.L92:
+ 1404 00a3 C9       		leave
+ 1405              	.LCFI50:
+GAS LISTING /tmp/ccdVsfTq.s 			page 35
+
+
+ 1406              		.cfi_def_cfa 7, 8
+ 1407 00a4 C3       		ret
+ 1408              		.cfi_endproc
+ 1409              	.LFE16:
+ 1411              		.section	.text.sal_recvfrom,"ax",@progbits
+ 1412              		.globl	sal_recvfrom
+ 1414              	sal_recvfrom:
+ 1415              	.LFB17:
+ 338:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 339:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** int sal_recvfrom(int sockfd, void *buf, size_t len, int flags, struct sockaddr *from, socklen_t *fr
+ 340:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+ 1416              		.loc 1 340 1
+ 1417              		.cfi_startproc
+ 1418 0000 F30F1EFA 		endbr64
+ 1419 0004 55       		pushq	%rbp
+ 1420              	.LCFI51:
+ 1421              		.cfi_def_cfa_offset 16
+ 1422              		.cfi_offset 6, -16
+ 1423 0005 4889E5   		movq	%rsp, %rbp
+ 1424              	.LCFI52:
+ 1425              		.cfi_def_cfa_register 6
+ 1426 0008 4883EC50 		subq	$80, %rsp
+ 1427 000c 897DDC   		movl	%edi, -36(%rbp)
+ 1428 000f 488975D0 		movq	%rsi, -48(%rbp)
+ 1429 0013 488955C8 		movq	%rdx, -56(%rbp)
+ 1430 0017 894DD8   		movl	%ecx, -40(%rbp)
+ 1431 001a 4C8945C0 		movq	%r8, -64(%rbp)
+ 1432 001e 4C894DB8 		movq	%r9, -72(%rbp)
+ 1433              		.loc 1 340 1
+ 1434 0022 64488B04 		movq	%fs:40, %rax
+ 1434      25280000 
+ 1434      00
+ 1435 002b 488945F8 		movq	%rax, -8(%rbp)
+ 1436 002f 31C0     		xorl	%eax, %eax
+ 341:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int ret = -1;
+ 1437              		.loc 1 341 9
+ 1438 0031 C745ECFF 		movl	$-1, -20(%rbp)
+ 1438      FFFFFF
+ 342:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     tag_sock_cb *sockcb;
+ 343:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 344:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     sockcb = __sal_sockcb_getcb(sockfd);
+ 1439              		.loc 1 344 14
+ 1440 0038 8B45DC   		movl	-36(%rbp), %eax
+ 1441 003b 89C7     		movl	%eax, %edi
+ 1442 003d E8000000 		call	__sal_sockcb_getcb
+ 1442      00
+ 1443 0042 488945F0 		movq	%rax, -16(%rbp)
+ 345:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (NULL != sockcb) {
+ 1444              		.loc 1 345 8
+ 1445 0046 48837DF0 		cmpq	$0, -16(%rbp)
+ 1445      00
+ 1446 004b 7457     		je	.L94
+ 346:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         if ((NULL != sockcb->ops) && (NULL != sockcb->ops->recvfrom)) {
+ 1447              		.loc 1 346 28
+ 1448 004d 488B45F0 		movq	-16(%rbp), %rax
+ 1449 0051 488B00   		movq	(%rax), %rax
+ 1450              		.loc 1 346 12
+GAS LISTING /tmp/ccdVsfTq.s 			page 36
+
+
+ 1451 0054 4885C0   		testq	%rax, %rax
+ 1452 0057 744B     		je	.L94
+ 1453              		.loc 1 346 53 discriminator 1
+ 1454 0059 488B45F0 		movq	-16(%rbp), %rax
+ 1455 005d 488B00   		movq	(%rax), %rax
+ 1456              		.loc 1 346 58 discriminator 1
+ 1457 0060 488B4060 		movq	96(%rax), %rax
+ 1458              		.loc 1 346 35 discriminator 1
+ 1459 0064 4885C0   		testq	%rax, %rax
+ 1460 0067 743B     		je	.L94
+ 347:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             ret = sockcb->ops->recvfrom(sockcb->sock, buf, len, flags, from, fromlen);
+ 1461              		.loc 1 347 25
+ 1462 0069 488B45F0 		movq	-16(%rbp), %rax
+ 1463 006d 488B00   		movq	(%rax), %rax
+ 1464              		.loc 1 347 30
+ 1465 0070 4C8B5060 		movq	96(%rax), %r10
+ 1466              		.loc 1 347 19
+ 1467 0074 488B45C8 		movq	-56(%rbp), %rax
+ 1468 0078 4189C3   		movl	%eax, %r11d
+ 1469 007b 488B45F0 		movq	-16(%rbp), %rax
+ 1470 007f 8B400C   		movl	12(%rax), %eax
+ 1471 0082 488B7DB8 		movq	-72(%rbp), %rdi
+ 1472 0086 488B4DC0 		movq	-64(%rbp), %rcx
+ 1473 008a 8B55D8   		movl	-40(%rbp), %edx
+ 1474 008d 488B75D0 		movq	-48(%rbp), %rsi
+ 1475 0091 4989F9   		movq	%rdi, %r9
+ 1476 0094 4989C8   		movq	%rcx, %r8
+ 1477 0097 89D1     		movl	%edx, %ecx
+ 1478 0099 4489DA   		movl	%r11d, %edx
+ 1479 009c 89C7     		movl	%eax, %edi
+ 1480 009e 41FFD2   		call	*%r10
+ 1481              	.LVL10:
+ 1482 00a1 8945EC   		movl	%eax, -20(%rbp)
+ 1483              	.L94:
+ 348:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         }
+ 349:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 350:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 351:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return ret;
+ 1484              		.loc 1 351 12
+ 1485 00a4 8B45EC   		movl	-20(%rbp), %eax
+ 352:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+ 1486              		.loc 1 352 1
+ 1487 00a7 488B55F8 		movq	-8(%rbp), %rdx
+ 1488 00ab 64483314 		xorq	%fs:40, %rdx
+ 1488      25280000 
+ 1488      00
+ 1489 00b4 7405     		je	.L96
+ 1490 00b6 E8000000 		call	__stack_chk_fail@PLT
+ 1490      00
+ 1491              	.L96:
+ 1492 00bb C9       		leave
+ 1493              	.LCFI53:
+ 1494              		.cfi_def_cfa 7, 8
+ 1495 00bc C3       		ret
+ 1496              		.cfi_endproc
+ 1497              	.LFE17:
+ 1499              		.section	.text.sal_send,"ax",@progbits
+GAS LISTING /tmp/ccdVsfTq.s 			page 37
+
+
+ 1500              		.globl	sal_send
+ 1502              	sal_send:
+ 1503              	.LFB18:
+ 353:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 354:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** int sal_send(int sockfd, const void *buf, size_t len, int flags)
+ 355:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+ 1504              		.loc 1 355 1
+ 1505              		.cfi_startproc
+ 1506 0000 F30F1EFA 		endbr64
+ 1507 0004 55       		pushq	%rbp
+ 1508              	.LCFI54:
+ 1509              		.cfi_def_cfa_offset 16
+ 1510              		.cfi_offset 6, -16
+ 1511 0005 4889E5   		movq	%rsp, %rbp
+ 1512              	.LCFI55:
+ 1513              		.cfi_def_cfa_register 6
+ 1514 0008 4883EC40 		subq	$64, %rsp
+ 1515 000c 897DDC   		movl	%edi, -36(%rbp)
+ 1516 000f 488975D0 		movq	%rsi, -48(%rbp)
+ 1517 0013 488955C8 		movq	%rdx, -56(%rbp)
+ 1518 0017 894DD8   		movl	%ecx, -40(%rbp)
+ 1519              		.loc 1 355 1
+ 1520 001a 64488B04 		movq	%fs:40, %rax
+ 1520      25280000 
+ 1520      00
+ 1521 0023 488945F8 		movq	%rax, -8(%rbp)
+ 1522 0027 31C0     		xorl	%eax, %eax
+ 356:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int ret = -1;
+ 1523              		.loc 1 356 9
+ 1524 0029 C745ECFF 		movl	$-1, -20(%rbp)
+ 1524      FFFFFF
+ 357:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     tag_sock_cb *sockcb;
+ 358:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 359:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     sockcb = __sal_sockcb_getcb(sockfd);
+ 1525              		.loc 1 359 14
+ 1526 0030 8B45DC   		movl	-36(%rbp), %eax
+ 1527 0033 89C7     		movl	%eax, %edi
+ 1528 0035 E8000000 		call	__sal_sockcb_getcb
+ 1528      00
+ 1529 003a 488945F0 		movq	%rax, -16(%rbp)
+ 360:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (NULL != sockcb) {
+ 1530              		.loc 1 360 8
+ 1531 003e 48837DF0 		cmpq	$0, -16(%rbp)
+ 1531      00
+ 1532 0043 7447     		je	.L98
+ 361:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         if ((NULL != sockcb->ops) && (NULL != sockcb->ops->send)) {
+ 1533              		.loc 1 361 28
+ 1534 0045 488B45F0 		movq	-16(%rbp), %rax
+ 1535 0049 488B00   		movq	(%rax), %rax
+ 1536              		.loc 1 361 12
+ 1537 004c 4885C0   		testq	%rax, %rax
+ 1538 004f 743B     		je	.L98
+ 1539              		.loc 1 361 53 discriminator 1
+ 1540 0051 488B45F0 		movq	-16(%rbp), %rax
+ 1541 0055 488B00   		movq	(%rax), %rax
+ 1542              		.loc 1 361 58 discriminator 1
+ 1543 0058 488B4048 		movq	72(%rax), %rax
+GAS LISTING /tmp/ccdVsfTq.s 			page 38
+
+
+ 1544              		.loc 1 361 35 discriminator 1
+ 1545 005c 4885C0   		testq	%rax, %rax
+ 1546 005f 742B     		je	.L98
+ 362:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             ret = sockcb->ops->send(sockcb->sock, buf, len, flags);
+ 1547              		.loc 1 362 25
+ 1548 0061 488B45F0 		movq	-16(%rbp), %rax
+ 1549 0065 488B00   		movq	(%rax), %rax
+ 1550              		.loc 1 362 30
+ 1551 0068 4C8B4048 		movq	72(%rax), %r8
+ 1552              		.loc 1 362 19
+ 1553 006c 488B45C8 		movq	-56(%rbp), %rax
+ 1554 0070 89C7     		movl	%eax, %edi
+ 1555 0072 488B45F0 		movq	-16(%rbp), %rax
+ 1556 0076 8B400C   		movl	12(%rax), %eax
+ 1557 0079 8B55D8   		movl	-40(%rbp), %edx
+ 1558 007c 488B75D0 		movq	-48(%rbp), %rsi
+ 1559 0080 89D1     		movl	%edx, %ecx
+ 1560 0082 89FA     		movl	%edi, %edx
+ 1561 0084 89C7     		movl	%eax, %edi
+ 1562 0086 41FFD0   		call	*%r8
+ 1563              	.LVL11:
+ 1564 0089 8945EC   		movl	%eax, -20(%rbp)
+ 1565              	.L98:
+ 363:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         }
+ 364:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 365:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 366:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return ret;
+ 1566              		.loc 1 366 12
+ 1567 008c 8B45EC   		movl	-20(%rbp), %eax
+ 367:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+ 1568              		.loc 1 367 1
+ 1569 008f 488B4DF8 		movq	-8(%rbp), %rcx
+ 1570 0093 6448330C 		xorq	%fs:40, %rcx
+ 1570      25280000 
+ 1570      00
+ 1571 009c 7405     		je	.L100
+ 1572 009e E8000000 		call	__stack_chk_fail@PLT
+ 1572      00
+ 1573              	.L100:
+ 1574 00a3 C9       		leave
+ 1575              	.LCFI56:
+ 1576              		.cfi_def_cfa 7, 8
+ 1577 00a4 C3       		ret
+ 1578              		.cfi_endproc
+ 1579              	.LFE18:
+ 1581              		.section	.text.sal_sendto,"ax",@progbits
+ 1582              		.globl	sal_sendto
+ 1584              	sal_sendto:
+ 1585              	.LFB19:
+ 368:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 369:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** int sal_sendto(int sockfd, const void *buf, size_t len, int flags, const struct sockaddr *to, sockl
+ 370:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+ 1586              		.loc 1 370 1
+ 1587              		.cfi_startproc
+ 1588 0000 F30F1EFA 		endbr64
+ 1589 0004 55       		pushq	%rbp
+ 1590              	.LCFI57:
+GAS LISTING /tmp/ccdVsfTq.s 			page 39
+
+
+ 1591              		.cfi_def_cfa_offset 16
+ 1592              		.cfi_offset 6, -16
+ 1593 0005 4889E5   		movq	%rsp, %rbp
+ 1594              	.LCFI58:
+ 1595              		.cfi_def_cfa_register 6
+ 1596 0008 4883EC50 		subq	$80, %rsp
+ 1597 000c 897DDC   		movl	%edi, -36(%rbp)
+ 1598 000f 488975D0 		movq	%rsi, -48(%rbp)
+ 1599 0013 488955C8 		movq	%rdx, -56(%rbp)
+ 1600 0017 894DD8   		movl	%ecx, -40(%rbp)
+ 1601 001a 4C8945C0 		movq	%r8, -64(%rbp)
+ 1602 001e 44894DBC 		movl	%r9d, -68(%rbp)
+ 1603              		.loc 1 370 1
+ 1604 0022 64488B04 		movq	%fs:40, %rax
+ 1604      25280000 
+ 1604      00
+ 1605 002b 488945F8 		movq	%rax, -8(%rbp)
+ 1606 002f 31C0     		xorl	%eax, %eax
+ 371:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int ret = -1;
+ 1607              		.loc 1 371 9
+ 1608 0031 C745ECFF 		movl	$-1, -20(%rbp)
+ 1608      FFFFFF
+ 372:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     tag_sock_cb *sockcb;
+ 373:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 374:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     sockcb = __sal_sockcb_getcb(sockfd);
+ 1609              		.loc 1 374 14
+ 1610 0038 8B45DC   		movl	-36(%rbp), %eax
+ 1611 003b 89C7     		movl	%eax, %edi
+ 1612 003d E8000000 		call	__sal_sockcb_getcb
+ 1612      00
+ 1613 0042 488945F0 		movq	%rax, -16(%rbp)
+ 375:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (NULL != sockcb) {
+ 1614              		.loc 1 375 8
+ 1615 0046 48837DF0 		cmpq	$0, -16(%rbp)
+ 1615      00
+ 1616 004b 7456     		je	.L102
+ 376:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         if ((NULL != sockcb->ops) && (NULL != sockcb->ops->sendto)) {
+ 1617              		.loc 1 376 28
+ 1618 004d 488B45F0 		movq	-16(%rbp), %rax
+ 1619 0051 488B00   		movq	(%rax), %rax
+ 1620              		.loc 1 376 12
+ 1621 0054 4885C0   		testq	%rax, %rax
+ 1622 0057 744A     		je	.L102
+ 1623              		.loc 1 376 53 discriminator 1
+ 1624 0059 488B45F0 		movq	-16(%rbp), %rax
+ 1625 005d 488B00   		movq	(%rax), %rax
+ 1626              		.loc 1 376 58 discriminator 1
+ 1627 0060 488B4050 		movq	80(%rax), %rax
+ 1628              		.loc 1 376 35 discriminator 1
+ 1629 0064 4885C0   		testq	%rax, %rax
+ 1630 0067 743A     		je	.L102
+ 377:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             ret = sockcb->ops->sendto(sockcb->sock, buf, len, flags, to, tolen);
+ 1631              		.loc 1 377 25
+ 1632 0069 488B45F0 		movq	-16(%rbp), %rax
+ 1633 006d 488B00   		movq	(%rax), %rax
+ 1634              		.loc 1 377 30
+ 1635 0070 4C8B5050 		movq	80(%rax), %r10
+GAS LISTING /tmp/ccdVsfTq.s 			page 40
+
+
+ 1636              		.loc 1 377 19
+ 1637 0074 488B45C8 		movq	-56(%rbp), %rax
+ 1638 0078 4189C3   		movl	%eax, %r11d
+ 1639 007b 488B45F0 		movq	-16(%rbp), %rax
+ 1640 007f 8B400C   		movl	12(%rax), %eax
+ 1641 0082 8B7DBC   		movl	-68(%rbp), %edi
+ 1642 0085 488B4DC0 		movq	-64(%rbp), %rcx
+ 1643 0089 8B55D8   		movl	-40(%rbp), %edx
+ 1644 008c 488B75D0 		movq	-48(%rbp), %rsi
+ 1645 0090 4189F9   		movl	%edi, %r9d
+ 1646 0093 4989C8   		movq	%rcx, %r8
+ 1647 0096 89D1     		movl	%edx, %ecx
+ 1648 0098 4489DA   		movl	%r11d, %edx
+ 1649 009b 89C7     		movl	%eax, %edi
+ 1650 009d 41FFD2   		call	*%r10
+ 1651              	.LVL12:
+ 1652 00a0 8945EC   		movl	%eax, -20(%rbp)
+ 1653              	.L102:
+ 378:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         }
+ 379:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 380:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 381:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return ret;
+ 1654              		.loc 1 381 12
+ 1655 00a3 8B45EC   		movl	-20(%rbp), %eax
+ 382:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+ 1656              		.loc 1 382 1
+ 1657 00a6 488B55F8 		movq	-8(%rbp), %rdx
+ 1658 00aa 64483314 		xorq	%fs:40, %rdx
+ 1658      25280000 
+ 1658      00
+ 1659 00b3 7405     		je	.L104
+ 1660 00b5 E8000000 		call	__stack_chk_fail@PLT
+ 1660      00
+ 1661              	.L104:
+ 1662 00ba C9       		leave
+ 1663              	.LCFI59:
+ 1664              		.cfi_def_cfa 7, 8
+ 1665 00bb C3       		ret
+ 1666              		.cfi_endproc
+ 1667              	.LFE19:
+ 1669              		.section	.text.sal_shutdown,"ax",@progbits
+ 1670              		.globl	sal_shutdown
+ 1672              	sal_shutdown:
+ 1673              	.LFB20:
+ 383:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 384:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** int sal_shutdown(int sockfd, int how)
+ 385:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+ 1674              		.loc 1 385 1
+ 1675              		.cfi_startproc
+ 1676 0000 F30F1EFA 		endbr64
+ 1677 0004 55       		pushq	%rbp
+ 1678              	.LCFI60:
+ 1679              		.cfi_def_cfa_offset 16
+ 1680              		.cfi_offset 6, -16
+ 1681 0005 4889E5   		movq	%rsp, %rbp
+ 1682              	.LCFI61:
+ 1683              		.cfi_def_cfa_register 6
+GAS LISTING /tmp/ccdVsfTq.s 			page 41
+
+
+ 1684 0008 4883EC30 		subq	$48, %rsp
+ 1685 000c 897DDC   		movl	%edi, -36(%rbp)
+ 1686 000f 8975D8   		movl	%esi, -40(%rbp)
+ 1687              		.loc 1 385 1
+ 1688 0012 64488B04 		movq	%fs:40, %rax
+ 1688      25280000 
+ 1688      00
+ 1689 001b 488945F8 		movq	%rax, -8(%rbp)
+ 1690 001f 31C0     		xorl	%eax, %eax
+ 386:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int ret = -1;
+ 1691              		.loc 1 386 9
+ 1692 0021 C745ECFF 		movl	$-1, -20(%rbp)
+ 1692      FFFFFF
+ 387:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     tag_sock_cb *sockcb;
+ 388:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 389:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     sockcb = __sal_sockcb_getcb(sockfd);
+ 1693              		.loc 1 389 14
+ 1694 0028 8B45DC   		movl	-36(%rbp), %eax
+ 1695 002b 89C7     		movl	%eax, %edi
+ 1696 002d E8000000 		call	__sal_sockcb_getcb
+ 1696      00
+ 1697 0032 488945F0 		movq	%rax, -16(%rbp)
+ 390:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (NULL != sockcb) {
+ 1698              		.loc 1 390 8
+ 1699 0036 48837DF0 		cmpq	$0, -16(%rbp)
+ 1699      00
+ 1700 003b 743A     		je	.L106
+ 391:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         if ((NULL != sockcb->ops) && (NULL != sockcb->ops->shutdown)) {
+ 1701              		.loc 1 391 28
+ 1702 003d 488B45F0 		movq	-16(%rbp), %rax
+ 1703 0041 488B00   		movq	(%rax), %rax
+ 1704              		.loc 1 391 12
+ 1705 0044 4885C0   		testq	%rax, %rax
+ 1706 0047 742E     		je	.L106
+ 1707              		.loc 1 391 53 discriminator 1
+ 1708 0049 488B45F0 		movq	-16(%rbp), %rax
+ 1709 004d 488B00   		movq	(%rax), %rax
+ 1710              		.loc 1 391 58 discriminator 1
+ 1711 0050 488B4068 		movq	104(%rax), %rax
+ 1712              		.loc 1 391 35 discriminator 1
+ 1713 0054 4885C0   		testq	%rax, %rax
+ 1714 0057 741E     		je	.L106
+ 392:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             ret = sockcb->ops->shutdown(sockcb->sock, how);
+ 1715              		.loc 1 392 25
+ 1716 0059 488B45F0 		movq	-16(%rbp), %rax
+ 1717 005d 488B00   		movq	(%rax), %rax
+ 1718              		.loc 1 392 30
+ 1719 0060 488B4868 		movq	104(%rax), %rcx
+ 1720              		.loc 1 392 19
+ 1721 0064 488B45F0 		movq	-16(%rbp), %rax
+ 1722 0068 8B400C   		movl	12(%rax), %eax
+ 1723 006b 8B55D8   		movl	-40(%rbp), %edx
+ 1724 006e 89D6     		movl	%edx, %esi
+ 1725 0070 89C7     		movl	%eax, %edi
+ 1726 0072 FFD1     		call	*%rcx
+ 1727              	.LVL13:
+ 1728 0074 8945EC   		movl	%eax, -20(%rbp)
+GAS LISTING /tmp/ccdVsfTq.s 			page 42
+
+
+ 1729              	.L106:
+ 393:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         }
+ 394:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 395:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 396:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return ret;
+ 1730              		.loc 1 396 12
+ 1731 0077 8B45EC   		movl	-20(%rbp), %eax
+ 397:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+ 1732              		.loc 1 397 1
+ 1733 007a 488B55F8 		movq	-8(%rbp), %rdx
+ 1734 007e 64483314 		xorq	%fs:40, %rdx
+ 1734      25280000 
+ 1734      00
+ 1735 0087 7405     		je	.L108
+ 1736 0089 E8000000 		call	__stack_chk_fail@PLT
+ 1736      00
+ 1737              	.L108:
+ 1738 008e C9       		leave
+ 1739              	.LCFI62:
+ 1740              		.cfi_def_cfa 7, 8
+ 1741 008f C3       		ret
+ 1742              		.cfi_endproc
+ 1743              	.LFE20:
+ 1745              		.section	.text.sal_closesocket,"ax",@progbits
+ 1746              		.globl	sal_closesocket
+ 1748              	sal_closesocket:
+ 1749              	.LFB21:
+ 398:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 399:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** int sal_closesocket(int sockfd)
+ 400:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+ 1750              		.loc 1 400 1
+ 1751              		.cfi_startproc
+ 1752 0000 F30F1EFA 		endbr64
+ 1753 0004 55       		pushq	%rbp
+ 1754              	.LCFI63:
+ 1755              		.cfi_def_cfa_offset 16
+ 1756              		.cfi_offset 6, -16
+ 1757 0005 4889E5   		movq	%rsp, %rbp
+ 1758              	.LCFI64:
+ 1759              		.cfi_def_cfa_register 6
+ 1760 0008 4883EC30 		subq	$48, %rsp
+ 1761 000c 897DDC   		movl	%edi, -36(%rbp)
+ 1762              		.loc 1 400 1
+ 1763 000f 64488B04 		movq	%fs:40, %rax
+ 1763      25280000 
+ 1763      00
+ 1764 0018 488945F8 		movq	%rax, -8(%rbp)
+ 1765 001c 31C0     		xorl	%eax, %eax
+ 401:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int ret = -1;
+ 1766              		.loc 1 401 9
+ 1767 001e C745ECFF 		movl	$-1, -20(%rbp)
+ 1767      FFFFFF
+ 402:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     tag_sock_cb *sockcb;
+ 403:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 404:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     sockcb = __sal_sockcb_getcb(sockfd);
+ 1768              		.loc 1 404 14
+ 1769 0025 8B45DC   		movl	-36(%rbp), %eax
+GAS LISTING /tmp/ccdVsfTq.s 			page 43
+
+
+ 1770 0028 89C7     		movl	%eax, %edi
+ 1771 002a E8000000 		call	__sal_sockcb_getcb
+ 1771      00
+ 1772 002f 488945F0 		movq	%rax, -16(%rbp)
+ 405:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (NULL != sockcb) {
+ 1773              		.loc 1 405 8
+ 1774 0033 48837DF0 		cmpq	$0, -16(%rbp)
+ 1774      00
+ 1775 0038 7443     		je	.L110
+ 406:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         if ((NULL != sockcb->ops) && (NULL != sockcb->ops->closesocket)) {
+ 1776              		.loc 1 406 28
+ 1777 003a 488B45F0 		movq	-16(%rbp), %rax
+ 1778 003e 488B00   		movq	(%rax), %rax
+ 1779              		.loc 1 406 12
+ 1780 0041 4885C0   		testq	%rax, %rax
+ 1781 0044 7429     		je	.L111
+ 1782              		.loc 1 406 53 discriminator 1
+ 1783 0046 488B45F0 		movq	-16(%rbp), %rax
+ 1784 004a 488B00   		movq	(%rax), %rax
+ 1785              		.loc 1 406 58 discriminator 1
+ 1786 004d 488B4070 		movq	112(%rax), %rax
+ 1787              		.loc 1 406 35 discriminator 1
+ 1788 0051 4885C0   		testq	%rax, %rax
+ 1789 0054 7419     		je	.L111
+ 407:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             ret = sockcb->ops->closesocket(sockcb->sock);
+ 1790              		.loc 1 407 25
+ 1791 0056 488B45F0 		movq	-16(%rbp), %rax
+ 1792 005a 488B00   		movq	(%rax), %rax
+ 1793              		.loc 1 407 30
+ 1794 005d 488B5070 		movq	112(%rax), %rdx
+ 1795              		.loc 1 407 19
+ 1796 0061 488B45F0 		movq	-16(%rbp), %rax
+ 1797 0065 8B400C   		movl	12(%rax), %eax
+ 1798 0068 89C7     		movl	%eax, %edi
+ 1799 006a FFD2     		call	*%rdx
+ 1800              	.LVL14:
+ 1801 006c 8945EC   		movl	%eax, -20(%rbp)
+ 1802              	.L111:
+ 408:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         }
+ 409:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 410:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         __sal_sockcb_free(sockcb->fd);
+ 1803              		.loc 1 410 9
+ 1804 006f 488B45F0 		movq	-16(%rbp), %rax
+ 1805 0073 8B4008   		movl	8(%rax), %eax
+ 1806 0076 89C7     		movl	%eax, %edi
+ 1807 0078 E8000000 		call	__sal_sockcb_free
+ 1807      00
+ 1808              	.L110:
+ 411:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 412:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 413:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return ret;
+ 1809              		.loc 1 413 12
+ 1810 007d 8B45EC   		movl	-20(%rbp), %eax
+ 414:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+ 1811              		.loc 1 414 1
+ 1812 0080 488B4DF8 		movq	-8(%rbp), %rcx
+ 1813 0084 6448330C 		xorq	%fs:40, %rcx
+GAS LISTING /tmp/ccdVsfTq.s 			page 44
+
+
+ 1813      25280000 
+ 1813      00
+ 1814 008d 7405     		je	.L113
+ 1815 008f E8000000 		call	__stack_chk_fail@PLT
+ 1815      00
+ 1816              	.L113:
+ 1817 0094 C9       		leave
+ 1818              	.LCFI65:
+ 1819              		.cfi_def_cfa 7, 8
+ 1820 0095 C3       		ret
+ 1821              		.cfi_endproc
+ 1822              	.LFE21:
+ 1824              		.section	.text.sal_gethostbyname,"ax",@progbits
+ 1825              		.globl	sal_gethostbyname
+ 1827              	sal_gethostbyname:
+ 1828              	.LFB22:
+ 415:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 416:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** struct hostent *sal_gethostbyname(const char *name)
+ 417:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+ 1829              		.loc 1 417 1
+ 1830              		.cfi_startproc
+ 1831 0000 F30F1EFA 		endbr64
+ 1832 0004 55       		pushq	%rbp
+ 1833              	.LCFI66:
+ 1834              		.cfi_def_cfa_offset 16
+ 1835              		.cfi_offset 6, -16
+ 1836 0005 4889E5   		movq	%rsp, %rbp
+ 1837              	.LCFI67:
+ 1838              		.cfi_def_cfa_register 6
+ 1839 0008 4883EC20 		subq	$32, %rsp
+ 1840 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1841              		.loc 1 417 1
+ 1842 0010 64488B04 		movq	%fs:40, %rax
+ 1842      25280000 
+ 1842      00
+ 1843 0019 488945F8 		movq	%rax, -8(%rbp)
+ 1844 001d 31C0     		xorl	%eax, %eax
+ 418:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     struct hostent *ret = NULL;
+ 1845              		.loc 1 418 21
+ 1846 001f 48C745F0 		movq	$0, -16(%rbp)
+ 1846      00000000 
+ 419:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if ((NULL != s_sal_cb.domain) && (NULL != s_sal_cb.domain->ops) && (NULL != s_sal_cb.domain->op
+ 1847              		.loc 1 419 26
+ 1848 0027 488B0500 		movq	s_sal_cb(%rip), %rax
+ 1848      000000
+ 1849              		.loc 1 419 8
+ 1850 002e 4885C0   		testq	%rax, %rax
+ 1851 0031 7440     		je	.L115
+ 1852              		.loc 1 419 55 discriminator 1
+ 1853 0033 488B0500 		movq	s_sal_cb(%rip), %rax
+ 1853      000000
+ 1854              		.loc 1 419 62 discriminator 1
+ 1855 003a 488B4010 		movq	16(%rax), %rax
+ 1856              		.loc 1 419 35 discriminator 1
+ 1857 003e 4885C0   		testq	%rax, %rax
+ 1858 0041 7430     		je	.L115
+ 1859              		.loc 1 419 89 discriminator 2
+GAS LISTING /tmp/ccdVsfTq.s 			page 45
+
+
+ 1860 0043 488B0500 		movq	s_sal_cb(%rip), %rax
+ 1860      000000
+ 1861              		.loc 1 419 96 discriminator 2
+ 1862 004a 488B4010 		movq	16(%rax), %rax
+ 1863              		.loc 1 419 101 discriminator 2
+ 1864 004e 488B4078 		movq	120(%rax), %rax
+ 1865              		.loc 1 419 69 discriminator 2
+ 1866 0052 4885C0   		testq	%rax, %rax
+ 1867 0055 741C     		je	.L115
+ 420:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         ret = (struct hostent *)s_sal_cb.domain->ops->gethostbyname(name);
+ 1868              		.loc 1 420 41
+ 1869 0057 488B0500 		movq	s_sal_cb(%rip), %rax
+ 1869      000000
+ 1870              		.loc 1 420 48
+ 1871 005e 488B4010 		movq	16(%rax), %rax
+ 1872              		.loc 1 420 53
+ 1873 0062 488B5078 		movq	120(%rax), %rdx
+ 1874              		.loc 1 420 33
+ 1875 0066 488B45E8 		movq	-24(%rbp), %rax
+ 1876 006a 4889C7   		movq	%rax, %rdi
+ 1877 006d FFD2     		call	*%rdx
+ 1878              	.LVL15:
+ 1879 006f 488945F0 		movq	%rax, -16(%rbp)
+ 1880              	.L115:
+ 421:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 422:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return ret;
+ 1881              		.loc 1 422 12
+ 1882 0073 488B45F0 		movq	-16(%rbp), %rax
+ 423:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+ 1883              		.loc 1 423 1
+ 1884 0077 488B4DF8 		movq	-8(%rbp), %rcx
+ 1885 007b 6448330C 		xorq	%fs:40, %rcx
+ 1885      25280000 
+ 1885      00
+ 1886 0084 7405     		je	.L117
+ 1887 0086 E8000000 		call	__stack_chk_fail@PLT
+ 1887      00
+ 1888              	.L117:
+ 1889 008b C9       		leave
+ 1890              	.LCFI68:
+ 1891              		.cfi_def_cfa 7, 8
+ 1892 008c C3       		ret
+ 1893              		.cfi_endproc
+ 1894              	.LFE22:
+ 1896              		.section	.text.sal_select,"ax",@progbits
+ 1897              		.globl	sal_select
+ 1899              	sal_select:
+ 1900              	.LFB23:
+ 424:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 425:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** int sal_select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds, struct timeval *time
+ 426:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** {
+ 1901              		.loc 1 426 1
+ 1902              		.cfi_startproc
+ 1903 0000 F30F1EFA 		endbr64
+ 1904 0004 55       		pushq	%rbp
+ 1905              	.LCFI69:
+ 1906              		.cfi_def_cfa_offset 16
+GAS LISTING /tmp/ccdVsfTq.s 			page 46
+
+
+ 1907              		.cfi_offset 6, -16
+ 1908 0005 4889E5   		movq	%rsp, %rbp
+ 1909              	.LCFI70:
+ 1910              		.cfi_def_cfa_register 6
+ 1911 0008 4883EC50 		subq	$80, %rsp
+ 1912 000c 897DDC   		movl	%edi, -36(%rbp)
+ 1913 000f 488975D0 		movq	%rsi, -48(%rbp)
+ 1914 0013 488955C8 		movq	%rdx, -56(%rbp)
+ 1915 0017 48894DC0 		movq	%rcx, -64(%rbp)
+ 1916 001b 4C8945B8 		movq	%r8, -72(%rbp)
+ 1917              		.loc 1 426 1
+ 1918 001f 64488B04 		movq	%fs:40, %rax
+ 1918      25280000 
+ 1918      00
+ 1919 0028 488945F8 		movq	%rax, -8(%rbp)
+ 1920 002c 31C0     		xorl	%eax, %eax
+ 427:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     int ret = -1;
+ 1921              		.loc 1 427 9
+ 1922 002e C745ECFF 		movl	$-1, -20(%rbp)
+ 1922      FFFFFF
+ 428:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     tag_sock_cb *sockcb;
+ 429:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 430:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     sockcb = __sal_sockcb_getcb(nfds - 1);
+ 1923              		.loc 1 430 14
+ 1924 0035 8B45DC   		movl	-36(%rbp), %eax
+ 1925 0038 83E801   		subl	$1, %eax
+ 1926 003b 89C7     		movl	%eax, %edi
+ 1927 003d E8000000 		call	__sal_sockcb_getcb
+ 1927      00
+ 1928 0042 488945F0 		movq	%rax, -16(%rbp)
+ 431:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     if (NULL != sockcb) {
+ 1929              		.loc 1 431 8
+ 1930 0046 48837DF0 		cmpq	$0, -16(%rbp)
+ 1930      00
+ 1931 004b 7453     		je	.L119
+ 432:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         if ((NULL != sockcb->ops) && (NULL != sockcb->ops->select)) {
+ 1932              		.loc 1 432 28
+ 1933 004d 488B45F0 		movq	-16(%rbp), %rax
+ 1934 0051 488B00   		movq	(%rax), %rax
+ 1935              		.loc 1 432 12
+ 1936 0054 4885C0   		testq	%rax, %rax
+ 1937 0057 7447     		je	.L119
+ 1938              		.loc 1 432 53 discriminator 1
+ 1939 0059 488B45F0 		movq	-16(%rbp), %rax
+ 1940 005d 488B00   		movq	(%rax), %rax
+ 1941              		.loc 1 432 58 discriminator 1
+ 1942 0060 488B8080 		movq	128(%rax), %rax
+ 1942      000000
+ 1943              		.loc 1 432 35 discriminator 1
+ 1944 0067 4885C0   		testq	%rax, %rax
+ 1945 006a 7434     		je	.L119
+ 433:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****             ret = sockcb->ops->select(sockcb->sock + 1, readfds, writefds, exceptfds, timeout);
+ 1946              		.loc 1 433 25
+ 1947 006c 488B45F0 		movq	-16(%rbp), %rax
+ 1948 0070 488B00   		movq	(%rax), %rax
+ 1949              		.loc 1 433 30
+ 1950 0073 4C8B8880 		movq	128(%rax), %r9
+GAS LISTING /tmp/ccdVsfTq.s 			page 47
+
+
+ 1950      000000
+ 1951              		.loc 1 433 45
+ 1952 007a 488B45F0 		movq	-16(%rbp), %rax
+ 1953 007e 8B400C   		movl	12(%rax), %eax
+ 1954              		.loc 1 433 19
+ 1955 0081 8D7801   		leal	1(%rax), %edi
+ 1956 0084 488B75B8 		movq	-72(%rbp), %rsi
+ 1957 0088 488B4DC0 		movq	-64(%rbp), %rcx
+ 1958 008c 488B55C8 		movq	-56(%rbp), %rdx
+ 1959 0090 488B45D0 		movq	-48(%rbp), %rax
+ 1960 0094 4989F0   		movq	%rsi, %r8
+ 1961 0097 4889C6   		movq	%rax, %rsi
+ 1962 009a 41FFD1   		call	*%r9
+ 1963              	.LVL16:
+ 1964 009d 8945EC   		movl	%eax, -20(%rbp)
+ 1965              	.L119:
+ 434:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****         }
+ 435:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     }
+ 436:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** 
+ 437:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c ****     return ret;
+ 1966              		.loc 1 437 12
+ 1967 00a0 8B45EC   		movl	-20(%rbp), %eax
+ 438:/home/xingli/share/LiteOS_Lab/network/tcpip/sal/sal.c **** }
+ 1968              		.loc 1 438 1
+ 1969 00a3 488B55F8 		movq	-8(%rbp), %rdx
+ 1970 00a7 64483314 		xorq	%fs:40, %rdx
+ 1970      25280000 
+ 1970      00
+ 1971 00b0 7405     		je	.L121
+ 1972 00b2 E8000000 		call	__stack_chk_fail@PLT
+ 1972      00
+ 1973              	.L121:
+ 1974 00b7 C9       		leave
+ 1975              	.LCFI71:
+ 1976              		.cfi_def_cfa 7, 8
+ 1977 00b8 C3       		ret
+ 1978              		.cfi_endproc
+ 1979              	.LFE23:
+ 1981              		.section	.rodata.__FUNCTION__.2951,"a"
+ 1982              		.align 16
+ 1985              	__FUNCTION__.2951:
+ 1986 0000 6C696E6B 		.string	"link_tcpip_imp_init"
+ 1986      5F746370 
+ 1986      69705F69 
+ 1986      6D705F69 
+ 1986      6E697400 
+ 1987              		.section	.rodata.__FUNCTION__.2959,"a"
+ 1988              		.align 16
+ 1991              	__FUNCTION__.2959:
+ 1992 0000 6C696E6B 		.string	"link_tcpip_init"
+ 1992      5F746370 
+ 1992      69705F69 
+ 1992      6E697400 
+ 1993              		.text
+ 1994              	.Letext0:
+ 1995              		.file 2 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 1996              		.file 3 "/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h"
+GAS LISTING /tmp/ccdVsfTq.s 			page 48
+
+
+ 1997              		.file 4 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 1998              		.file 5 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 1999              		.file 6 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 2000              		.file 7 "/usr/include/stdio.h"
+ 2001              		.file 8 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 2002              		.file 9 "/home/xingli/share/LiteOS_Lab/os/osal/osal_types.h"
+ 2003              		.file 10 "/usr/include/x86_64-linux-gnu/bits/types/struct_timeval.h"
+ 2004              		.file 11 "/usr/include/x86_64-linux-gnu/sys/select.h"
+ 2005              		.file 12 "/home/xingli/share/LiteOS_Lab/inc/sal_types.h"
+ 2006              		.file 13 "/home/xingli/share/LiteOS_Lab/inc/sal_imp.h"
+ 2007              		.file 14 "/home/xingli/share/LiteOS_Lab/inc/link_log.h"
+ 6214              		.section	.note.gnu.property,"a"
+ 6215              		.align 8
+ 6216 0000 04000000 		.long	 1f - 0f
+ 6217 0004 10000000 		.long	 4f - 1f
+ 6218 0008 05000000 		.long	 5
+ 6219              	0:
+ 6220 000c 474E5500 		.string	 "GNU"
+ 6221              	1:
+ 6222              		.align 8
+ 6223 0010 020000C0 		.long	 0xc0000002
+ 6224 0014 04000000 		.long	 3f - 2f
+ 6225              	2:
+ 6226 0018 03000000 		.long	 0x3
+ 6227              	3:
+ 6228 001c 00000000 		.align 8
+ 6229              	4:
+GAS LISTING /tmp/ccdVsfTq.s 			page 49
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 sal.c
+     /tmp/ccdVsfTq.s:8      .bss.s_sal_cb:0000000000000000 s_sal_cb
+     /tmp/ccdVsfTq.s:17     .text.link_tcpip_imp_init:0000000000000000 link_tcpip_imp_init
+     /tmp/ccdVsfTq.s:1985   .rodata.__FUNCTION__.2951:0000000000000000 __FUNCTION__.2951
+     /tmp/ccdVsfTq.s:81     .text.link_tcpip_init:0000000000000000 link_tcpip_init
+     /tmp/ccdVsfTq.s:1991   .rodata.__FUNCTION__.2959:0000000000000000 __FUNCTION__.2959
+     /tmp/ccdVsfTq.s:204    .text.link_sal_install:0000000000000000 link_sal_install
+     /tmp/ccdVsfTq.s:252    .text.__sal_sockcb_malloc:0000000000000000 __sal_sockcb_malloc
+     /tmp/ccdVsfTq.s:375    .text.__sal_sockcb_free:0000000000000000 __sal_sockcb_free
+     /tmp/ccdVsfTq.s:462    .text.__sal_sockcb_getcb:0000000000000000 __sal_sockcb_getcb
+     /tmp/ccdVsfTq.s:518    .text.__sal_sockcb_getfd:0000000000000000 __sal_sockcb_getfd
+     /tmp/ccdVsfTq.s:564    .text.sal_socket:0000000000000000 sal_socket
+     /tmp/ccdVsfTq.s:669    .text.sal_bind:0000000000000000 sal_bind
+     /tmp/ccdVsfTq.s:747    .text.sal_listen:0000000000000000 sal_listen
+     /tmp/ccdVsfTq.s:823    .text.sal_accept:0000000000000000 sal_accept
+     /tmp/ccdVsfTq.s:934    .text.sal_connect:0000000000000000 sal_connect
+     /tmp/ccdVsfTq.s:1012   .text.sal_getsockname:0000000000000000 sal_getsockname
+     /tmp/ccdVsfTq.s:1090   .text.sal_getpeername:0000000000000000 sal_getpeername
+     /tmp/ccdVsfTq.s:1168   .text.sal_getsockopt:0000000000000000 sal_getsockopt
+     /tmp/ccdVsfTq.s:1250   .text.sal_setsockopt:0000000000000000 sal_setsockopt
+     /tmp/ccdVsfTq.s:1332   .text.sal_recv:0000000000000000 sal_recv
+     /tmp/ccdVsfTq.s:1414   .text.sal_recvfrom:0000000000000000 sal_recvfrom
+     /tmp/ccdVsfTq.s:1502   .text.sal_send:0000000000000000 sal_send
+     /tmp/ccdVsfTq.s:1584   .text.sal_sendto:0000000000000000 sal_sendto
+     /tmp/ccdVsfTq.s:1672   .text.sal_shutdown:0000000000000000 sal_shutdown
+     /tmp/ccdVsfTq.s:1748   .text.sal_closesocket:0000000000000000 sal_closesocket
+     /tmp/ccdVsfTq.s:1827   .text.sal_gethostbyname:0000000000000000 sal_gethostbyname
+     /tmp/ccdVsfTq.s:1899   .text.sal_select:0000000000000000 sal_select
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+link_log_level_get
+osal_sys_time
+link_log_level_name
+printf
+stdout
+fflush
+__stack_chk_fail
+osal_mutex_create
+osal_malloc
+memset
+osal_mutex_del
+osal_mutex_lock
+osal_mutex_unlock
+osal_free

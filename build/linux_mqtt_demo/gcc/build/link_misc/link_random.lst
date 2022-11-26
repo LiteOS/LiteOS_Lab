@@ -1,0 +1,225 @@
+GAS LISTING /tmp/cczSJMmp.s 			page 1
+
+
+   1              		.file	"link_random.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.link_random,"ax",@progbits
+   5              		.weak	link_random
+   7              	link_random:
+   8              	.LFB6:
+   9              		.file 1 "/home/xingli/share/LiteOS_Lab/link_misc/link_random.c"
+   1:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c **** /* ----------------------------------------------------------------------------
+   2:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * All rights reserved.
+   4:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * are permitted provided that the following conditions are met:
+   6:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * conditions and the following disclaimer.
+   8:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * provided with the distribution.
+  11:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * permission.
+  14:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * --------------------------------------------------------------------------- */
+  26:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c **** /* ----------------------------------------------------------------------------
+  27:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * Notice of Export Control Law
+  28:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * ===============================================
+  29:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * applicable export control laws and regulations.
+  33:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****  * --------------------------------------------------------------------------- */
+  34:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c **** 
+  35:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c **** #include <stdint.h>
+  36:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c **** #include <stddef.h>
+  37:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c **** #include <stdlib.h>
+  38:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c **** #include <string.h>
+  39:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c **** 
+  40:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c **** #include "osal.h"
+  41:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c **** 
+  42:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c **** __attribute__((weak)) int link_random(void *output, int len)
+  43:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c **** {
+  10              		.loc 1 43 1
+  11              		.cfi_startproc
+  12 0000 F30F1EFA 		endbr64
+  13 0004 55       		pushq	%rbp
+  14              	.LCFI0:
+  15              		.cfi_def_cfa_offset 16
+GAS LISTING /tmp/cczSJMmp.s 			page 2
+
+
+  16              		.cfi_offset 6, -16
+  17 0005 4889E5   		movq	%rsp, %rbp
+  18              	.LCFI1:
+  19              		.cfi_def_cfa_register 6
+  20 0008 4883EC30 		subq	$48, %rsp
+  21 000c 48897DD8 		movq	%rdi, -40(%rbp)
+  22 0010 8975D4   		movl	%esi, -44(%rbp)
+  23              		.loc 1 43 1
+  24 0013 64488B04 		movq	%fs:40, %rax
+  24      25280000 
+  24      00
+  25 001c 488945F8 		movq	%rax, -8(%rbp)
+  26 0020 31C0     		xorl	%eax, %eax
+  44:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****     int i;
+  45:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****     int random_number;
+  46:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****     char *pbuf;
+  47:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c **** 
+  48:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****     if (NULL == output) {
+  27              		.loc 1 48 8
+  28 0022 48837DD8 		cmpq	$0, -40(%rbp)
+  28      00
+  29 0027 7507     		jne	.L2
+  49:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****         return -1;
+  30              		.loc 1 49 16
+  31 0029 B8FFFFFF 		movl	$-1, %eax
+  31      FF
+  32 002e EB6E     		jmp	.L6
+  33              	.L2:
+  50:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****     }
+  51:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c **** 
+  52:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****     pbuf = output;
+  34              		.loc 1 52 10
+  35 0030 488B45D8 		movq	-40(%rbp), %rax
+  36 0034 488945F0 		movq	%rax, -16(%rbp)
+  53:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****     srand(osal_sys_time());
+  37              		.loc 1 53 11
+  38 0038 E8000000 		call	osal_sys_time@PLT
+  38      00
+  39              		.loc 1 53 5
+  40 003d 89C7     		movl	%eax, %edi
+  41 003f E8000000 		call	srand@PLT
+  41      00
+  54:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c **** 
+  55:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****     for (i = 0; i < len; i += sizeof(int)) {
+  42              		.loc 1 55 12
+  43 0044 C745EC00 		movl	$0, -20(%rbp)
+  43      000000
+  44              		.loc 1 55 5
+  45 004b EB44     		jmp	.L4
+  46              	.L5:
+  56:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****         random_number = rand();
+  47              		.loc 1 56 25 discriminator 3
+  48 004d E8000000 		call	rand@PLT
+  48      00
+  49              		.loc 1 56 23 discriminator 3
+  50 0052 8945E8   		movl	%eax, -24(%rbp)
+  57:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****         (void)memcpy(pbuf + i, &random_number,
+GAS LISTING /tmp/cczSJMmp.s 			page 3
+
+
+  58:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****             sizeof(int) > (unsigned int)(len - i) ? (unsigned int)(len - i) : sizeof(int));
+  51              		.loc 1 58 46 discriminator 3
+  52 0055 8B45D4   		movl	-44(%rbp), %eax
+  53 0058 2B45EC   		subl	-20(%rbp), %eax
+  54              		.loc 1 58 77 discriminator 3
+  55 005b BA040000 		movl	$4, %edx
+  55      00
+  56 0060 83F804   		cmpl	$4, %eax
+  57 0063 0F47C2   		cmova	%edx, %eax
+  57:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****         (void)memcpy(pbuf + i, &random_number,
+  58              		.loc 1 57 15 discriminator 3
+  59 0066 89C6     		movl	%eax, %esi
+  60 0068 8B45EC   		movl	-20(%rbp), %eax
+  61 006b 4863D0   		movslq	%eax, %rdx
+  57:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****         (void)memcpy(pbuf + i, &random_number,
+  62              		.loc 1 57 27 discriminator 3
+  63 006e 488B45F0 		movq	-16(%rbp), %rax
+  64 0072 488D0C02 		leaq	(%rdx,%rax), %rcx
+  57:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****         (void)memcpy(pbuf + i, &random_number,
+  65              		.loc 1 57 15 discriminator 3
+  66 0076 488D45E8 		leaq	-24(%rbp), %rax
+  67 007a 4889F2   		movq	%rsi, %rdx
+  68 007d 4889C6   		movq	%rax, %rsi
+  69 0080 4889CF   		movq	%rcx, %rdi
+  70 0083 E8000000 		call	memcpy@PLT
+  70      00
+  55:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****         random_number = rand();
+  71              		.loc 1 55 28 discriminator 3
+  72 0088 8B45EC   		movl	-20(%rbp), %eax
+  73 008b 83C004   		addl	$4, %eax
+  74 008e 8945EC   		movl	%eax, -20(%rbp)
+  75              	.L4:
+  55:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****         random_number = rand();
+  76              		.loc 1 55 5 discriminator 1
+  77 0091 8B45EC   		movl	-20(%rbp), %eax
+  78 0094 3B45D4   		cmpl	-44(%rbp), %eax
+  79 0097 7CB4     		jl	.L5
+  59:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****     }
+  60:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c **** 
+  61:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c ****     return 0;
+  80              		.loc 1 61 12
+  81 0099 B8000000 		movl	$0, %eax
+  81      00
+  82              	.L6:
+  62:/home/xingli/share/LiteOS_Lab/link_misc/link_random.c **** }
+  83              		.loc 1 62 1 discriminator 1
+  84 009e 488B4DF8 		movq	-8(%rbp), %rcx
+  85 00a2 6448330C 		xorq	%fs:40, %rcx
+  85      25280000 
+  85      00
+  86 00ab 7405     		je	.L7
+  87              		.loc 1 62 1 is_stmt 0
+  88 00ad E8000000 		call	__stack_chk_fail@PLT
+  88      00
+  89              	.L7:
+  90 00b2 C9       		leave
+  91              	.LCFI2:
+GAS LISTING /tmp/cczSJMmp.s 			page 4
+
+
+  92              		.cfi_def_cfa 7, 8
+  93 00b3 C3       		ret
+  94              		.cfi_endproc
+  95              	.LFE6:
+  97              		.text
+  98              	.Letext0:
+  99              		.file 2 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 100              		.file 3 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 101              		.file 4 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 102              		.file 5 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 103              		.file 6 "/usr/include/stdio.h"
+ 104              		.file 7 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 1072              		.section	.note.gnu.property,"a"
+ 1073              		.align 8
+ 1074 0000 04000000 		.long	 1f - 0f
+ 1075 0004 10000000 		.long	 4f - 1f
+ 1076 0008 05000000 		.long	 5
+ 1077              	0:
+ 1078 000c 474E5500 		.string	 "GNU"
+ 1079              	1:
+ 1080              		.align 8
+ 1081 0010 020000C0 		.long	 0xc0000002
+ 1082 0014 04000000 		.long	 3f - 2f
+ 1083              	2:
+ 1084 0018 03000000 		.long	 0x3
+ 1085              	3:
+ 1086 001c 00000000 		.align 8
+ 1087              	4:
+GAS LISTING /tmp/cczSJMmp.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 link_random.c
+     /tmp/cczSJMmp.s:7      .text.link_random:0000000000000000 link_random
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+osal_sys_time
+srand
+rand
+memcpy
+__stack_chk_fail

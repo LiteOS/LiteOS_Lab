@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,16 +22,15 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
-
+ * --------------------------------------------------------------------------- */
 
 #include <stddef.h>
 #include <stdint.h>
@@ -43,20 +42,18 @@
 static void stimer_handler(void *args)
 {
     const char *timer_name = args;
-
-    (void) printf("timer:%s triggered ---systime:%d\n\r",timer_name,(int)osal_sys_time());
-
+    (void)printf("timer:%s triggered ---systime:%d\n\r", timer_name, (int)osal_sys_time());
     return;
 }
 
 int stimer_demo_main()
 {
-    stimer_create("stimer1",stimer_handler,"stimer1",1*1000,cn_stimer_flag_start);
-    stimer_create("stimer2",stimer_handler,"stimer2",2*1000,cn_stimer_flag_start);
-    stimer_create("stimer3",stimer_handler,"stimer3",3*1000,cn_stimer_flag_start);
-    stimer_create("stimer4",stimer_handler,"stimer4",4*1000,cn_stimer_flag_start);
-    stimer_create("stimer5",stimer_handler,"stimer5",5*1000,cn_stimer_flag_start);
-    stimer_create("stimer6",stimer_handler,"stimer6",6*1000,cn_stimer_flag_start|cn_stimer_flag_once);
+    stimer_create("stimer1", stimer_handler, "stimer1", 1 * 1000, cn_stimer_flag_start);
+    stimer_create("stimer2", stimer_handler, "stimer2", 2 * 1000, cn_stimer_flag_start);
+    stimer_create("stimer3", stimer_handler, "stimer3", 3 * 1000, cn_stimer_flag_start);
+    stimer_create("stimer4", stimer_handler, "stimer4", 4 * 1000, cn_stimer_flag_start);
+    stimer_create("stimer5", stimer_handler, "stimer5", 5 * 1000, cn_stimer_flag_start);
+    stimer_create("stimer6", stimer_handler, "stimer6", 6 * 1000, cn_stimer_flag_start | cn_stimer_flag_once);
 
     return 0;
 }

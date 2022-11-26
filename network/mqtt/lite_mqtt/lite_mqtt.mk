@@ -13,6 +13,3 @@ mqtt_sinn_inc = \
 C_INCLUDES += $(mqtt_sinn_inc)
 
 C_DEFS += -D CONFIG_MQTT_SINN_ENABLE=1
-
-
-

@@ -32,6 +32,5 @@ ifeq ($(CONFIG_TCPIP_AL_ENABLE), y)
     ifeq ($(CONFIG_FIBOCOML716_ENABLE), y)
         include $(iot_link_root)/network/tcpip/fibocom_l716/build.mk        
     endif
-
-    
+ 
 endif

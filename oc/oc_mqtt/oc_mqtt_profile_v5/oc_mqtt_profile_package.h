@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,24 +22,22 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
-#ifndef LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_PROFILE_OC_MQTT_PROFILE_PACKAGE_H_
-#define LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_PROFILE_OC_MQTT_PROFILE_PACKAGE_H_
-
+#ifndef OC_MQTT_PROFILE_PACKAGE_H
+#define OC_MQTT_PROFILE_PACKAGE_H
 
 #include "oc_mqtt_profile.h"
 
-
-///< defines for the package tools
+// /< defines for the package tools
 char *oc_mqtt_profile_package_msgup(oc_mqtt_profile_msgup_t *payload);
 char *oc_mqtt_profile_package_propertyreport(oc_mqtt_profile_service_t *payload);
 char *oc_mqtt_profile_package_gwpropertyreport(oc_mqtt_profile_device_t *payload);
@@ -49,4 +47,4 @@ char *oc_mqtt_profile_package_cmdresp(oc_mqtt_profile_cmdresp_t *payload);
 char *oc_mqtt_profile_package_shadowget(oc_mqtt_profile_shadowget_t *payload);
 char *oc_mqtt_profile_package_event(oc_mqtt_profile_event_t *event);
 
-#endif /* LITEOS_LAB_IOT_LINK_OC_OC_MQTT_OC_MQTT_PROFILE_OC_MQTT_PROFILE_PACKAGE_H_ */
+#endif /* OC_MQTT_PROFILE_PACKAGE_H */

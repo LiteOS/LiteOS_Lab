@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2019>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,18 +22,18 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
-#ifndef LITEOS_LAB_IOT_LINK_NETWORK_LWM2M_LWM2M_AL_LWM2M_AL_H_
-#define LITEOS_LAB_IOT_LINK_NETWORK_LWM2M_LWM2M_AL_LWM2M_AL_H_
+#ifndef LWM2M_AL_H
+#define LWM2M_AL_H
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -43,15 +43,13 @@
 
 #define URI_TRIGER_SERVER_INITIATED_BS "/1/0/9"
 
-
 #define LWM2M_AL_OP_READ                1
 #define LWM2M_AL_OP_WRITE               2
 #define LWM2M_AL_OP_EXCUTE              3
 #define LWM2M_AL_OP_DISCOVER            4
 #define LWM2M_AL_OP_SERVERREBS          5
 
-typedef enum
-{
+typedef enum {
     LWM2M_OK                            = 0,
     LWM2M_ARG_INVALID                   = -1,
     LWM2M_BUF_OVERFLOW                  = -2,
@@ -111,8 +109,7 @@ typedef enum
 #endif
 } lwm2m_errorcode_e;
 
-typedef enum
-{
+typedef enum {
     OBJ_SECURITY_ID = 0,
     OBJ_SERVER_ID,
     OBJ_ACCESS_CONTROL_ID,
@@ -124,8 +121,7 @@ typedef enum
     OBJ_APP_DATA_ID = 19
 } lwm2m_object_id_e;
 
-typedef struct
-{
+typedef struct {
     uint16_t            server_id;
     bool                is_bootstrap;
     int                 hold_off_time;  /* bootstrap hold off time for server initiated bootstrap */
@@ -136,8 +132,7 @@ typedef struct
     uint16_t            psk_len;
 } lwm2m_al_sec_obj_param_t;
 
-typedef struct
-{
+typedef struct {
     uint16_t            server_id;
     char               *binding;        /* support U and UQ bind mode */
     int                 life_time;      /* required option */
@@ -146,16 +141,14 @@ typedef struct
 
 typedef int (*fn_lwm2m_msg_deal)(int op, const char *uri, char *msg, int len);
 
-typedef struct
-{
+typedef struct {
     char               *endpoint_name;
     fn_lwm2m_msg_deal   dealer;         /* command dealer, called to process iot platform */
     void               *user_data;
     int                 bootstrap_type;
 } lwm2m_al_init_param_t;
 
-typedef struct
-{
+typedef struct {
     int                 object_id;
     int                 object_instance_id;
     int                 resource_id;
@@ -165,8 +158,7 @@ typedef struct
 } lwm2m_al_send_param_t;
 
 /* opertate interface */
-typedef struct
-{
+typedef struct {
     /* lwm2m config, prepare endpoint name and message deal callback */
     int (*config)(void **handle, lwm2m_al_init_param_t *init_param);
 
@@ -192,7 +184,7 @@ typedef struct
 /**
  * @brief     : the lwm2m service should call this function to init necessary parameters
  *
- *@param[in] init_param  refer to the data of lwm2m_al_init_param_t
+ * @param[in] init_param  refer to the data of lwm2m_al_init_param_t
  *
  * @return 0 success,otherwise it's a special error code if failed
  */
@@ -201,7 +193,7 @@ int lwm2m_al_config(void **handle, lwm2m_al_init_param_t *init_param);
 /**
  * @brief     : when you don't want to use the lwm2m service ,please call this function
  *
- *@param[in] void
+ * @param[in] void
  *
  * @return 0 success,otherwise it's a special error code if failed
  */
@@ -210,7 +202,7 @@ int lwm2m_al_deconfig(void *handle);
 /**
  * @brief     : the lwm2m service should call this function to add some necessary objects
  *
- *@param[in] op  refer to the data  lwm2m_al_op_t
+ * @param[in] op  refer to the data  lwm2m_al_op_t
  *
  * @return 0 success,otherwise it's a special error code if failed
  */
@@ -219,7 +211,7 @@ int lwm2m_al_add_object(void *handle, int object_id, int object_instance_id, int
 /**
  * @brief     : you could call this function to delete the object by given object id
  *
- *@param[in] object_id
+ * @param[in] object_id
  *
  * @return 0 success,otherwise it's a special error code if failed
  */
@@ -228,7 +220,7 @@ int lwm2m_al_delete_object(void *handle, int object_id);
 /**
  * @brief     : you could use this function to connect to the lwm2m server
  *
- *@param[in] void
+ * @param[in] void
  *
  * @return 0 success,otherwise it's a special error code if failed
  */
@@ -237,7 +229,7 @@ int lwm2m_al_connect(void *handle);
 /**
  * @brief     : you could use this function to disconnect from the lwm2m server
  *
- *@param[in] void
+ * @param[in] void
  *
  * @return 0 success,otherwise it's a special error code if failed
  */
@@ -246,7 +238,7 @@ int lwm2m_al_disconnect(void *handle);
 /**
  * @brief     : you could use this function to send a message to the server
  *
- *@param[in] send_param refer to the data of lwm2m_al_send_param_t
+ * @param[in] send_param refer to the data of lwm2m_al_send_param_t
  *
  * @return 0 success,otherwise it's a special error code if failed
  */
@@ -255,7 +247,7 @@ int lwm2m_al_send(void *handle, lwm2m_al_send_param_t *send_param);
 /**
  * @brief     : the lwm2m lib should call this function to register its implement as a service
  *
- *@param[in] op  refer to the data of lwm2m_al_op_t
+ * @param[in] op  refer to the data of lwm2m_al_op_t
  *
  * @return 0 success,otherwise it's a special error code if failed
  */
@@ -264,24 +256,20 @@ int lwm2m_al_install(lwm2m_al_op_t *op);
 /**
  * @brief     : call this function to unregister the lwm2m service
  *
- *@param[in] void
+ * @param[in] void
  *
  * @return 0 success,otherwise it's a special error code if failed
  */
 int lwm2m_al_uninstall(void);
 
-
 /*
  * @brief: initialize the lwm2m abstract layer
  *
- *         and will call the lwm2m implement internal
+ * and will call the lwm2m implement internal
  *
  * @ return 0 success while others failed
- * */
-
-
+ *  */
 int lwm2m_al_init(void);
 
 
-#endif /* LITEOS_LAB_IOT_LINK_NETWORK_LWM2M_LWM2M_AL_LWM2M_AL_H_ */
-
+#endif /* LWM2M_AL_H */

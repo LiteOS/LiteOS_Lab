@@ -41,8 +41,7 @@ C_SOURCES += \
             $(NOVA_ROOT)/core/services/src/errno.c  \
             $(NOVA_ROOT)/core/services/src/nova_init.c
 
-            
-                        
+                         
 novaos_inc = \
              -I $(NOVA_ROOT)/include \
              -I $(NOVA_ROOT)/arch/h \
@@ -63,7 +62,3 @@ C_DEFS += -D CONFIG_NOVAOS_ENABLE=1 -D STM32F429xx
 
 C_SOURCES += $(NOVA_ROOT)/novaos_imp.c
 C_INCLUDES += -I $(NOVA_ROOT)
-
-
-
-

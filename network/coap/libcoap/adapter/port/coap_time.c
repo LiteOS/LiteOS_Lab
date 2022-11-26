@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2019>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,15 +22,15 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
 #include "osal.h"
 #include "libcoap.h"
@@ -50,8 +50,7 @@ void coap_ticks(coap_tick_t *t)
 {
     unsigned long long ms = osal_sys_time();
 
-    *t = (ms / 1000 - coap_clock_offset) * COAP_TICKS_PER_SECOND +
-          (ms % 1000) * COAP_TICKS_PER_SECOND / 1000;
+    *t = (ms / 1000 - coap_clock_offset) * COAP_TICKS_PER_SECOND + (ms % 1000) * COAP_TICKS_PER_SECOND / 1000;
 }
 
 /**
@@ -62,7 +61,7 @@ void coap_ticks(coap_tick_t *t)
  * @param t Internal system ticks.
  *
  * @return  The number of seconds that has passed since a specific reference
- *          point (seconds since epoch on POSIX).
+ * point (seconds since epoch on POSIX).
  */
 coap_time_t coap_ticks_to_rt(coap_tick_t t)
 {
@@ -70,27 +69,26 @@ coap_time_t coap_ticks_to_rt(coap_tick_t t)
 }
 
 /**
-* Helper function that converts coap ticks to POSIX wallclock time in us.
-*
-* @param t Internal system ticks.
-*
-* @return  The number of seconds that has passed since a specific reference
-*          point (seconds since epoch on POSIX).
-*/
+ * Helper function that converts coap ticks to POSIX wallclock time in us.
+ *
+ * @param t Internal system ticks.
+ *
+ * @return  The number of seconds that has passed since a specific reference
+ * point (seconds since epoch on POSIX).
+ */
 uint64_t coap_ticks_to_rt_us(coap_tick_t t)
 {
     return (uint64_t)coap_clock_offset * 1000000 + (uint64_t)t * 1000000 / COAP_TICKS_PER_SECOND;
 }
 
 /**
-* Helper function that converts POSIX wallclock time in us to coap ticks.
-*
-* @param t POSIX time is us
-*
-* @return  coap ticks
-*/
+ * Helper function that converts POSIX wallclock time in us to coap ticks.
+ *
+ * @param t POSIX time is us
+ *
+ * @return  coap ticks
+ */
 coap_tick_t coap_ticks_from_rt_us(uint64_t t)
 {
     return (coap_tick_t)((t - (uint64_t)coap_clock_offset * 1000000) * COAP_TICKS_PER_SECOND / 1000000);
 }
-

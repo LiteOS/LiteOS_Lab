@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,55 +22,51 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
-//include the file which implement the function
-#include  <string.h>
-#include  "osal_imp.h"
+// include the file which implement the function
+#include <string.h>
+#include "osal_imp.h"
 
-///< this is implement for the task
+// /< this is implement for the task
 #include "task.h"
 #include "kconfig.h"
 
-///< we need to translate the time mini-second to ticks: use the CONFIG_SYS_TICK_HZ
-#define FN_MS_2_TICKS(ms)     (ms*CONFIG_SYS_TICK_HZ/1000)
-#define FN_TICKS_2_MS(ticks)  (ticks*1000/CONFIG_SYS_TICK_HZ)
+// /< we need to translate the time mini-second to ticks: use the CONFIG_SYS_TICK_HZ
+#define FN_MS_2_TICKS(ms) (ms * CONFIG_SYS_TICK_HZ / 1000)
+#define FN_TICKS_2_MS(ticks) (ticks * 1000 / CONFIG_SYS_TICK_HZ)
 
 static void __task_sleep(int ms)
 {
     task_delay(FN_MS_2_TICKS(ms));
-
     return;
 }
 
-static void *__task_create(const char *name,int (*task_entry)(void *args),\
-        void *args,int stack_size,void *stack,int prior)
+static void *__task_create(const char *name, int (*task_entry)(void *args), void *args, int stack_size, void *stack,
+    int prior)
 {
-    task_id  ret = NULL;
+    task_id ret = NULL;
 
-    if((stack_size > 0) && (NULL == stack))
-    {
-        ret = task_spawn(name,prior, 0,stack_size ,task_entry,(uintptr_t)args);
+    if ((stack_size > 0) && (NULL == stack)) {
+        ret = task_spawn(name, prior, 0, stack_size, task_entry, (uintptr_t)args);
     }
 
     return ret;
 }
 
-
 static int __task_kill(void *task)
 {
     int ret = -1;
-    if(NULL != task)
-    {
-        ret = task_delete ((task_id) task);
+    if (NULL != task) {
+        ret = task_delete((task_id)task);
     }
 
     return ret;
@@ -82,85 +78,74 @@ static void __task_exit()
     return;
 }
 
-///< this is implement for the mutex
+// /< this is implement for the mutex
 #include <mutex.h>
-//creat a mutex for the os
-static bool_t  __mutex_create(osal_mutex_t *mutex)
+
+// creat a mutex for the os
+static bool_t __mutex_create(osal_mutex_t *mutex)
 {
     bool_t ret = false;
     mutex_id id = NULL;
 
-    if (NULL == mutex)
-    {
+    if (NULL == mutex) {
         return ret;
     }
 
     id = mutex_create();
-    if(NULL != id)
-    {
+    if (NULL != id) {
         *mutex = id;
         ret = true;
     }
 
     return ret;
-
 }
-//lock the mutex
-static bool_t  __mutex_lock(osal_mutex_t mutex)
+
+// lock the mutex
+static bool_t __mutex_lock(osal_mutex_t mutex)
 {
-    if(0 == mutex_lock(mutex))
-    {
+    if (0 == mutex_lock(mutex)) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
 
-//unlock the mutex
-static bool_t  __mutex_unlock(osal_mutex_t mutex)
+// unlock the mutex
+static bool_t __mutex_unlock(osal_mutex_t mutex)
 {
-    if(0 == mutex_unlock(mutex))
-    {
+    if (0 == mutex_unlock(mutex)) {
         return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-//delete the mutex
-static bool_t  __mutex_del(osal_mutex_t mutex)
-{
-    if( 0 == mutex_destroy(mutex))
-    {
-        return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
 
-///< this is implement for the semp
+// delete the mutex
+static bool_t __mutex_del(osal_mutex_t mutex)
+{
+    if (0 == mutex_destroy(mutex)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// /< this is implement for the semp
 #include <sem.h>
-//semp of the os
-static bool_t  __semp_create(osal_semp_t *semp,int limit,int initvalue)
+// semp of the os
+static bool_t __semp_create(osal_semp_t *semp, int limit, int initvalue)
 {
     bool_t ret = false;
 
     sem_id id;
 
-    if(NULL == semp)
-    {
+    if (NULL == semp) {
         return ret;
     }
 
     id = sem_create(initvalue);
 
-    if(NULL != id)
-    {
+    if (NULL != id) {
         *semp = id;
         ret = true;
     }
@@ -168,43 +153,32 @@ static bool_t  __semp_create(osal_semp_t *semp,int limit,int initvalue)
     return ret;
 }
 
-static bool_t  __semp_pend(osal_semp_t semp,unsigned int timeout)
+static bool_t __semp_pend(osal_semp_t semp, unsigned int timeout)
 {
-    if(0 == sem_timedwait(semp,FN_MS_2_TICKS(timeout)))
-    {
+    if (0 == sem_timedwait(semp, FN_MS_2_TICKS(timeout))) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
 
-
-static bool_t  __semp_post(osal_semp_t semp)
+static bool_t __semp_post(osal_semp_t semp)
 {
-    if(0 == sem_post(semp))
-    {
+    if (0 == sem_post(semp)) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
 
-static bool_t  __semp_del(osal_semp_t semp)
+static bool_t __semp_del(osal_semp_t semp)
 {
-    if(0 == sem_destroy(semp))
-    {
+    if (0 == sem_destroy(semp)) {
         return true;
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
-
 
 ///< this implement for the memory management
 #include <stdlib.h>
@@ -223,7 +197,7 @@ static void __mem_free(void *addr)
     return;
 }
 
-///< sys time
+// /< sys time
 #include <tick.h>
 
 static unsigned long long __get_sys_time()
@@ -237,14 +211,12 @@ static unsigned long long __get_sys_time()
 
 __attribute__((weak)) int os_reboot()
 {
-    while(1);   ///< waiting for the dog if not impelment. you could implement it your self
+    while (1)
+        ; // /< waiting for the dog if not impelment. you could implement it your self
     return 0;
 }
 
-
-
-static const tag_os_ops s_novaos_ops =
-{
+static const tag_os_ops s_novaos_ops = {
     .task_sleep = __task_sleep,
     .task_create = __task_create,
     .task_kill = __task_kill,
@@ -265,13 +237,9 @@ static const tag_os_ops s_novaos_ops =
 
     .get_sys_time = __get_sys_time,
     .reboot = os_reboot,
-
 };
 
-
-
-static const tag_os s_link_novaos =
-{
+static const tag_os s_link_novaos = {
     .name = "NovaOS",
     .ops = &s_novaos_ops,
 };
@@ -279,11 +247,6 @@ static const tag_os s_link_novaos =
 int os_imp_init(void)
 {
     int ret = -1;
-
     ret = osal_install(&s_link_novaos);
-
     return ret;
 }
-
-
-

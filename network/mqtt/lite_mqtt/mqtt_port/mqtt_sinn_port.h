@@ -32,8 +32,8 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef __MQTT_SINN_PORT_H__
-#define __MQTT_SINN_PORT_H__
+#ifndef MQTT_SINN_PORT_H
+#define MQTT_SINN_PORT_H
 /**
  * @brief   : this function for install the sinn mqtt to the mqtt_al, must be call only once
  *

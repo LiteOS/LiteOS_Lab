@@ -5,7 +5,7 @@
  * You can use this software according to the terms and conditions of the Mulan PSL v1.
  * You may obtain a copy of Mulan PSL v1 at:
  *
- *    http://license.coscl.org.cn/MulanPSL
+ * http://license.coscl.org.cn/MulanPSL
  *
  * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
@@ -13,8 +13,8 @@
  * See the Mulan PSL v1 for more details.
  */
 
-#ifndef __LWM2M_URI_H__
-#define __LWM2M_URI_H__
+#ifndef LWM2M_URI_H
+#define LWM2M_URI_H
 
 #include "liblwm2m.h"
 
@@ -34,4 +34,4 @@ int lwm2m_uri_equal(const lwm2m_uri_t *uri0, const lwm2m_uri_t *uri1);
 }
 #endif /* __cplusplus */
 
-#endif /* __LWM2M_URI_H__ */
+#endif /* LWM2M_URI_H */

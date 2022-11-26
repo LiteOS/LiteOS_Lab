@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,19 +22,18 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * ---------------------------------------------------------------------------*/
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of CHN and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * ---------------------------------------------------------------------------*/
  
-#ifndef _LITECOAP_CORE_H
-#define _LITECOAP_CORE_H
-
+#ifndef LITECOAP_CORE_H
+#define LITECOAP_CORE_H
 
 #define LITECOAP_CONSTRAINED_BUF_SIZE 256
 
@@ -56,7 +55,7 @@
 #define COAP_REQUEST_PUT       3
 #define COAP_REQUEST_DELETE    4
 
-/* CoAP timeout*/
+/* CoAP timeout */
 
 typedef struct _coap_point_t {
     unsigned short integer;
@@ -123,7 +122,7 @@ typedef struct _coap_point_t {
 #define LITECOAP_RESP_701      COAP_RESP_CODE(701)  /* 7.01 SIGNALING CSM */
 
 #define LITECOAP_IS_CLIENT                   0
-#define LITECOAP_IS_SERVER                   1     //not supported yet
+#define LITECOAP_IS_SERVER                   1     // not supported yet
 
 typedef enum
 {
@@ -138,108 +137,98 @@ typedef enum
 
 #define COAP_PAYLOAD_MARKER 0xFF
 
-typedef struct _coap_header_t
-{
+typedef struct _coap_header_t {
     /* version, must be 0x1 */
-	unsigned char ver;  
+    unsigned char ver;
     /*
-        type  Indicates if this message is of type 
-        Confirmable  (0), 
-        Non-confirmable (1), 
-        Acknowledgement (2), 
+        type  Indicates if this message is of type
+        Confirmable  (0),
+        Non-confirmable (1),
+        Acknowledgement (2),
         Reset (3)
     */
-	unsigned char t;    
+    unsigned char t;
 	/*
         token length, Indicates the length of the variable-length Token field (0-8 bytes). Lengths 9-15 are
         reserved, MUST NOT be sent, and MUST be processed as a message format error
     */
-	unsigned char tkl;			
+    unsigned char tkl;
     /*
-        split into a 3-bit class and a 5-bit detail documented as "c.dd" "c" is a digit from 0 to 7 
+        split into a 3-bit class and a 5-bit detail documented as "c.dd" "c" is a digit from 0 to 7
         "dd" are two digits from 00 to 31
-        The class can indicate a request (0), a success response (2), 
-        a client error response (4), or a server error response (5). 
+        The class can indicate a request (0), a success response (2),
+        a client error response (4), or a server error response (5).
         (All other class values are reserved.) Code 0.00 indicates an Empty message
     */
-	unsigned char code;	
+    unsigned char code;
 	/*
         16-bit unsigned integer in network byte order. Used to detect message duplication and to match messages of type
         Acknowledgement/Reset to messages of type Confirmable/Nonconfirmable.
     */
-	unsigned char msgid[2]; 
-	
+    unsigned char msgid[2];
 } coap_header_t;
 
-typedef struct _coap_token_t 
-{
-	unsigned char *token;
-	unsigned char tklen;/* token length */
+typedef struct _coap_token_t {
+    unsigned char *token;
+    unsigned char tklen; /* token length */
 } coap_token_t;
 
-typedef struct _coap_option_t 
-{
-	unsigned short optnum;/* option number */
-	unsigned short optlen;/* option length */
-	unsigned char *value; /* option valude */
-	struct _coap_option_t *next;
+typedef struct _coap_option_t {
+    unsigned short optnum; /* option number */
+    unsigned short optlen; /* option length */
+    unsigned char *value;  /* option valude */
+    struct _coap_option_t *next;
 } coap_option_t;
 
-typedef struct _coap_msg_t
-{
-	coap_header_t head;
-	coap_token_t *tok;
-	coap_option_t *option;
-	unsigned short optcnt;
-	unsigned char payloadmarker;
-	unsigned char *payload;
-	unsigned int payloadlen;
-}coap_msg_t;
+typedef struct _coap_msg_t {
+    coap_header_t head;
+    coap_token_t *tok;
+    coap_option_t *option;
+    unsigned short optcnt;
+    unsigned char payloadmarker;
+    unsigned char *payload;
+    unsigned int payloadlen;
+} coap_msg_t;
 
-typedef struct _coap_rwbuf_t
-{
+typedef struct _coap_rwbuf_t {
     unsigned char *buf;
     int len;
-}coap_rwbuf_t;
+} coap_rwbuf_t;
 
 #define LITECOAP_MAX_SEGMENTS 2
-
 
 typedef int (*send_func)(void *handle, char *buf, int size);
 typedef int (*read_func)(void *handle, char *buf, int size);
 
 typedef int (*res_handler)(coap_msg_t *rcvmsg, coap_msg_t *outmsg);
-typedef struct
-{
+typedef struct {
     int count;
     char *elems[LITECOAP_MAX_SEGMENTS];
 } coap_res_path_t;
-typedef struct
-{
+typedef struct {
     /* (i.e. POST, PUT or GET) */
-    unsigned char method;       
-    /*  
-        callback function which handles this 
-        type of endpoint (and calls 
-        coap_make_response() at some point) 
-    */ 
-    res_handler handler;      
-    /* path towards a resource (i.e. foo/bar/) */     
-    const coap_res_path_t *path;    
-    /*  
+    unsigned char method;
+    /*
+        callback function which handles this
+        type of endpoint (and calls
+        coap_make_response() at some point)
+    */
+    res_handler handler;
+    /* path towards a resource (i.e. foo/bar/) */
+    const coap_res_path_t *path;
+    /*
         the 'ct' attribute, as defined in RFC7252, section 7.2.1.:
-        "The Content-Format code "ct" attribute 
-        provides a hint about the 
-        Content-Formats this resource returns." 
+        "The Content-Format code "ct" attribute
+        provides a hint about the
+        Content-Formats this resource returns."
         (Section 12.3. lists possible ct values.)
     */
-    const char *core_attr;          
+    const char *core_attr;
 } coap_res_t;
 
-struct udp_ops
-{
-	read_func network_read;
-	send_func network_send;
+struct udp_ops {
+    read_func network_read;
+    send_func network_send;
 };
 
 typedef unsigned char coap_proto_t;
@@ -250,8 +239,7 @@ typedef unsigned char coap_proto_t;
 #define COAP_PROTO_TCP                 3
 #define COAP_PROTO_TLS                 4
 
-typedef struct _coap_send_queue_t
-{
+typedef struct _coap_send_queue_t {
     unsigned long long timeout;                // the random timeout
     unsigned long long time;                   // when to send msg for the next time
     coap_msg_t *msg;
@@ -261,11 +249,11 @@ typedef struct _coap_send_queue_t
 
 struct _coap_context_t;
 typedef int (*msghandler)(struct _coap_context_t *ctx, coap_msg_t *msg);
-typedef struct _coap_context_t
-{
+typedef struct _coap_context_t {
     coap_proto_t proto;
-    void *udpio;            /* this is used to save remote server info , like address ¡¢ port ¡¢ socket fd etc... */
-    unsigned short msgid;   /* The last message id that was used is stored in this field, fist value usually a random value */
+    void *udpio;            /* this is used to save remote server info , like address ï¿½ï¿½ port ï¿½ï¿½ socket fd etc... */
+    unsigned short msgid;   /* The last message id that was used is stored in this field,
+                            // fist value usually a random value */
     coap_rwbuf_t sndbuf;    /* to give real buf to store input package and output package data */
     coap_rwbuf_t rcvbuf;    /* to give real buf to store input package and output package data */
     struct udp_ops *netops;
@@ -278,6 +266,6 @@ typedef struct _coap_context_t
     coap_point_t ack_timeout;
     coap_point_t ack_random_factor;
     unsigned long long base_time;
-}coap_context_t;
+} coap_context_t;
 
 #endif

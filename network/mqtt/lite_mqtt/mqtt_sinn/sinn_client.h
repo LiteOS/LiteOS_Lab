@@ -10,8 +10,6 @@
 #include <errno.h>
 #endif
 
-
-
 #define SINN_FG_UDP (1 << 0)
 #define SINN_FG_CONNECTING (1 << 1)
 
@@ -20,7 +18,6 @@
 #define SINN_FG_ERR    (1 << 4)
 
 #define SINN_FG_RECONNECT  (1 << 5)
-
 
 #define SINN_EV_POLL       (1)
 #define SINN_EV_CONNECTED  (2)
@@ -117,7 +114,6 @@ typedef struct sinn_ssl_unica
     size_t ca_cert_len;
 } sinn_ssl_unica_t;
 
-
 typedef struct sinn_ssl_bica
 {
     const  char *server_name;
@@ -155,12 +151,10 @@ typedef struct sinn_connect_param
 
 void sinn_register_proto(sinn_connection_t *nc, sinn_event_handler proto_handler);
 
-
 void sinn_init(sinn_manager_t *m,  sinn_device_info_t *param);
 sinn_connection_t* sinn_connect(sinn_manager_t *m, sinn_event_handler cb, sinn_connect_param_t *param);
 void sinn_poll(sinn_manager_t *m, int timeout_ms);
 void sinn_destory(sinn_connection_t* nc);
-
 
 unsigned long int sinn_gettime_ms(void);
 

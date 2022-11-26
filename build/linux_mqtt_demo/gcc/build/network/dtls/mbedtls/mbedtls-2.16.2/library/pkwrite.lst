@@ -1,0 +1,2941 @@
+GAS LISTING /tmp/ccNilhrx.s 			page 1
+
+
+   1              		.file	"pkwrite.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.mbedtls_pk_rsa,"ax",@progbits
+   6              	mbedtls_pk_rsa:
+   7              	.LFB0:
+   8              		.file 1 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h"
+   1:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** /**
+   2:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  * \file pk.h
+   3:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  *
+   4:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  * \brief Public Key abstraction layer
+   5:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  */
+   6:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** /*
+   7:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
+   8:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  *  SPDX-License-Identifier: Apache-2.0
+   9:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  *
+  10:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
+  11:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  *  not use this file except in compliance with the License.
+  12:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  *  You may obtain a copy of the License at
+  13:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  *
+  14:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  *  http://www.apache.org/licenses/LICENSE-2.0
+  15:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  *
+  16:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  *  Unless required by applicable law or agreed to in writing, software
+  17:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  18:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  19:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  *  See the License for the specific language governing permissions and
+  20:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  *  limitations under the License.
+  21:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  *
+  22:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  *  This file is part of mbed TLS (https://tls.mbed.org)
+  23:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  */
+  24:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** 
+  25:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #ifndef MBEDTLS_PK_H
+  26:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #define MBEDTLS_PK_H
+  27:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** 
+  28:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #if !defined(MBEDTLS_CONFIG_FILE)
+  29:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #include "config.h"
+  30:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #else
+  31:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #include MBEDTLS_CONFIG_FILE
+  32:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #endif
+  33:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** 
+  34:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #include "md.h"
+  35:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** 
+  36:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #if defined(MBEDTLS_RSA_C)
+  37:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #include "rsa.h"
+  38:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #endif
+  39:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** 
+  40:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #if defined(MBEDTLS_ECP_C)
+  41:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #include "ecp.h"
+  42:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #endif
+  43:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** 
+  44:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #if defined(MBEDTLS_ECDSA_C)
+  45:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #include "ecdsa.h"
+  46:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #endif
+  47:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** 
+  48:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #if ( defined(__ARMCC_VERSION) || defined(_MSC_VER) ) && \
+  49:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****     !defined(inline) && !defined(__cplusplus)
+  50:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #define inline __inline
+GAS LISTING /tmp/ccNilhrx.s 			page 2
+
+
+  51:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #endif
+  52:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** 
+  53:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #define MBEDTLS_ERR_PK_ALLOC_FAILED        -0x3F80  /**< Memory allocation failed. */
+  54:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #define MBEDTLS_ERR_PK_TYPE_MISMATCH       -0x3F00  /**< Type mismatch, eg attempt to encrypt with 
+  55:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #define MBEDTLS_ERR_PK_BAD_INPUT_DATA      -0x3E80  /**< Bad input parameters to function. */
+  56:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #define MBEDTLS_ERR_PK_FILE_IO_ERROR       -0x3E00  /**< Read/write of file failed. */
+  57:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #define MBEDTLS_ERR_PK_KEY_INVALID_VERSION -0x3D80  /**< Unsupported key version */
+  58:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #define MBEDTLS_ERR_PK_KEY_INVALID_FORMAT  -0x3D00  /**< Invalid key tag or value. */
+  59:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #define MBEDTLS_ERR_PK_UNKNOWN_PK_ALG      -0x3C80  /**< Key algorithm is unsupported (only RSA and
+  60:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #define MBEDTLS_ERR_PK_PASSWORD_REQUIRED   -0x3C00  /**< Private key password can't be empty. */
+  61:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #define MBEDTLS_ERR_PK_PASSWORD_MISMATCH   -0x3B80  /**< Given private key password does not allow 
+  62:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #define MBEDTLS_ERR_PK_INVALID_PUBKEY      -0x3B00  /**< The pubkey tag or value is invalid (only R
+  63:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #define MBEDTLS_ERR_PK_INVALID_ALG         -0x3A80  /**< The algorithm tag or value is invalid. */
+  64:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #define MBEDTLS_ERR_PK_UNKNOWN_NAMED_CURVE -0x3A00  /**< Elliptic curve is unsupported (only NIST c
+  65:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #define MBEDTLS_ERR_PK_FEATURE_UNAVAILABLE -0x3980  /**< Unavailable feature, e.g. RSA disabled for
+  66:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #define MBEDTLS_ERR_PK_SIG_LEN_MISMATCH    -0x3900  /**< The buffer contains a valid signature foll
+  67:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** 
+  68:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** /* MBEDTLS_ERR_PK_HW_ACCEL_FAILED is deprecated and should not be used. */
+  69:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #define MBEDTLS_ERR_PK_HW_ACCEL_FAILED     -0x3880  /**< PK hardware accelerator failed. */
+  70:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** 
+  71:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #ifdef __cplusplus
+  72:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** extern "C" {
+  73:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #endif
+  74:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** 
+  75:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** /**
+  76:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  * \brief          Public key types
+  77:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  */
+  78:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** typedef enum {
+  79:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****     MBEDTLS_PK_NONE=0,
+  80:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****     MBEDTLS_PK_RSA,
+  81:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****     MBEDTLS_PK_ECKEY,
+  82:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****     MBEDTLS_PK_ECKEY_DH,
+  83:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****     MBEDTLS_PK_ECDSA,
+  84:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****     MBEDTLS_PK_RSA_ALT,
+  85:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****     MBEDTLS_PK_RSASSA_PSS,
+  86:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** } mbedtls_pk_type_t;
+  87:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** 
+  88:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** /**
+  89:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  * \brief           Options for RSASSA-PSS signature verification.
+  90:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  *                  See \c mbedtls_rsa_rsassa_pss_verify_ext()
+  91:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  */
+  92:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** typedef struct mbedtls_pk_rsassa_pss_options
+  93:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** {
+  94:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****     mbedtls_md_type_t mgf1_hash_id;
+  95:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****     int expected_salt_len;
+  96:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** 
+  97:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** } mbedtls_pk_rsassa_pss_options;
+  98:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** 
+  99:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** /**
+ 100:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  * \brief           Types for interfacing with the debug module
+ 101:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  */
+ 102:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** typedef enum
+ 103:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** {
+ 104:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****     MBEDTLS_PK_DEBUG_NONE = 0,
+ 105:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****     MBEDTLS_PK_DEBUG_MPI,
+ 106:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****     MBEDTLS_PK_DEBUG_ECP,
+ 107:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** } mbedtls_pk_debug_type;
+GAS LISTING /tmp/ccNilhrx.s 			page 3
+
+
+ 108:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** 
+ 109:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** /**
+ 110:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  * \brief           Item to send to the debug module
+ 111:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  */
+ 112:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** typedef struct mbedtls_pk_debug_item
+ 113:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** {
+ 114:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****     mbedtls_pk_debug_type type;
+ 115:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****     const char *name;
+ 116:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****     void *value;
+ 117:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** } mbedtls_pk_debug_item;
+ 118:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** 
+ 119:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** /** Maximum number of item send for debugging, plus 1 */
+ 120:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #define MBEDTLS_PK_DEBUG_MAX_ITEMS 3
+ 121:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** 
+ 122:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** /**
+ 123:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  * \brief           Public key information and operations
+ 124:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  */
+ 125:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** typedef struct mbedtls_pk_info_t mbedtls_pk_info_t;
+ 126:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** 
+ 127:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** /**
+ 128:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  * \brief           Public key container
+ 129:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  */
+ 130:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** typedef struct mbedtls_pk_context
+ 131:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** {
+ 132:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****     const mbedtls_pk_info_t *   pk_info; /**< Public key information         */
+ 133:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****     void *                      pk_ctx;  /**< Underlying public key context  */
+ 134:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** } mbedtls_pk_context;
+ 135:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** 
+ 136:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #if defined(MBEDTLS_ECDSA_C) && defined(MBEDTLS_ECP_RESTARTABLE)
+ 137:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** /**
+ 138:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  * \brief           Context for resuming operations
+ 139:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  */
+ 140:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** typedef struct
+ 141:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** {
+ 142:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****     const mbedtls_pk_info_t *   pk_info; /**< Public key information         */
+ 143:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****     void *                      rs_ctx;  /**< Underlying restart context     */
+ 144:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** } mbedtls_pk_restart_ctx;
+ 145:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #else /* MBEDTLS_ECDSA_C && MBEDTLS_ECP_RESTARTABLE */
+ 146:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** /* Now we can declare functions that take a pointer to that */
+ 147:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** typedef void mbedtls_pk_restart_ctx;
+ 148:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #endif /* MBEDTLS_ECDSA_C && MBEDTLS_ECP_RESTARTABLE */
+ 149:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** 
+ 150:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #if defined(MBEDTLS_RSA_C)
+ 151:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** /**
+ 152:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  * Quick access to an RSA context inside a PK context.
+ 153:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  *
+ 154:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  * \warning You must make sure the PK context actually holds an RSA context
+ 155:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  * before using this function!
+ 156:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  */
+ 157:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** static inline mbedtls_rsa_context *mbedtls_pk_rsa( const mbedtls_pk_context pk )
+ 158:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** {
+   9              		.loc 1 158 1
+  10              		.cfi_startproc
+  11 0000 55       		pushq	%rbp
+  12              	.LCFI0:
+  13              		.cfi_def_cfa_offset 16
+  14              		.cfi_offset 6, -16
+GAS LISTING /tmp/ccNilhrx.s 			page 4
+
+
+  15 0001 4889E5   		movq	%rsp, %rbp
+  16              	.LCFI1:
+  17              		.cfi_def_cfa_register 6
+  18 0004 4883EC20 		subq	$32, %rsp
+  19 0008 4889F8   		movq	%rdi, %rax
+  20 000b 4889F1   		movq	%rsi, %rcx
+  21 000e 4889CA   		movq	%rcx, %rdx
+  22 0011 488945E0 		movq	%rax, -32(%rbp)
+  23 0015 488955E8 		movq	%rdx, -24(%rbp)
+  24              		.loc 1 158 1
+  25 0019 64488B04 		movq	%fs:40, %rax
+  25      25280000 
+  25      00
+  26 0022 488945F8 		movq	%rax, -8(%rbp)
+  27 0026 31C0     		xorl	%eax, %eax
+ 159:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****     return( (mbedtls_rsa_context *) (pk).pk_ctx );
+  28              		.loc 1 159 13
+  29 0028 488B45E8 		movq	-24(%rbp), %rax
+ 160:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** }
+  30              		.loc 1 160 1
+  31 002c 488B55F8 		movq	-8(%rbp), %rdx
+  32 0030 64483314 		xorq	%fs:40, %rdx
+  32      25280000 
+  32      00
+  33 0039 7405     		je	.L3
+  34 003b E8000000 		call	__stack_chk_fail@PLT
+  34      00
+  35              	.L3:
+  36 0040 C9       		leave
+  37              	.LCFI2:
+  38              		.cfi_def_cfa 7, 8
+  39 0041 C3       		ret
+  40              		.cfi_endproc
+  41              	.LFE0:
+  43              		.section	.text.mbedtls_pk_ec,"ax",@progbits
+  45              	mbedtls_pk_ec:
+  46              	.LFB1:
+ 161:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #endif /* MBEDTLS_RSA_C */
+ 162:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** 
+ 163:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** #if defined(MBEDTLS_ECP_C)
+ 164:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** /**
+ 165:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  * Quick access to an EC context inside a PK context.
+ 166:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  *
+ 167:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  * \warning You must make sure the PK context actually holds an EC context
+ 168:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  * before using this function!
+ 169:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****  */
+ 170:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** static inline mbedtls_ecp_keypair *mbedtls_pk_ec( const mbedtls_pk_context pk )
+ 171:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** {
+  47              		.loc 1 171 1
+  48              		.cfi_startproc
+  49 0000 55       		pushq	%rbp
+  50              	.LCFI3:
+  51              		.cfi_def_cfa_offset 16
+  52              		.cfi_offset 6, -16
+  53 0001 4889E5   		movq	%rsp, %rbp
+  54              	.LCFI4:
+  55              		.cfi_def_cfa_register 6
+GAS LISTING /tmp/ccNilhrx.s 			page 5
+
+
+  56 0004 4883EC20 		subq	$32, %rsp
+  57 0008 4889F8   		movq	%rdi, %rax
+  58 000b 4889F1   		movq	%rsi, %rcx
+  59 000e 4889CA   		movq	%rcx, %rdx
+  60 0011 488945E0 		movq	%rax, -32(%rbp)
+  61 0015 488955E8 		movq	%rdx, -24(%rbp)
+  62              		.loc 1 171 1
+  63 0019 64488B04 		movq	%fs:40, %rax
+  63      25280000 
+  63      00
+  64 0022 488945F8 		movq	%rax, -8(%rbp)
+  65 0026 31C0     		xorl	%eax, %eax
+ 172:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h ****     return( (mbedtls_ecp_keypair *) (pk).pk_ctx );
+  66              		.loc 1 172 13
+  67 0028 488B45E8 		movq	-24(%rbp), %rax
+ 173:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h **** }
+  68              		.loc 1 173 1
+  69 002c 488B55F8 		movq	-8(%rbp), %rdx
+  70 0030 64483314 		xorq	%fs:40, %rdx
+  70      25280000 
+  70      00
+  71 0039 7405     		je	.L6
+  72 003b E8000000 		call	__stack_chk_fail@PLT
+  72      00
+  73              	.L6:
+  74 0040 C9       		leave
+  75              	.LCFI5:
+  76              		.cfi_def_cfa 7, 8
+  77 0041 C3       		ret
+  78              		.cfi_endproc
+  79              	.LFE1:
+  81              		.section	.text.pk_write_rsa_pubkey,"ax",@progbits
+  83              	pk_write_rsa_pubkey:
+  84              	.LFB16:
+  85              		.file 2 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c"
+   1:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** /*
+   2:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *  Public Key layer for writing key files and structures
+   3:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *
+   4:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
+   5:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *  SPDX-License-Identifier: Apache-2.0
+   6:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *
+   7:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
+   8:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *  not use this file except in compliance with the License.
+   9:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *  You may obtain a copy of the License at
+  10:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *
+  11:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *  http://www.apache.org/licenses/LICENSE-2.0
+  12:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *
+  13:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *  Unless required by applicable law or agreed to in writing, software
+  14:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  15:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  16:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *  See the License for the specific language governing permissions and
+  17:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *  limitations under the License.
+  18:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *
+  19:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *  This file is part of mbed TLS (https://tls.mbed.org)
+  20:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  */
+  21:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+  22:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #if !defined(MBEDTLS_CONFIG_FILE)
+GAS LISTING /tmp/ccNilhrx.s 			page 6
+
+
+  23:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #include "mbedtls/config.h"
+  24:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #else
+  25:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #include MBEDTLS_CONFIG_FILE
+  26:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #endif
+  27:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+  28:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #if defined(MBEDTLS_PK_WRITE_C)
+  29:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+  30:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #include "mbedtls/pk.h"
+  31:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #include "mbedtls/asn1write.h"
+  32:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #include "mbedtls/oid.h"
+  33:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #include "mbedtls/platform_util.h"
+  34:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+  35:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #include <string.h>
+  36:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+  37:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #if defined(MBEDTLS_RSA_C)
+  38:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #include "mbedtls/rsa.h"
+  39:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #endif
+  40:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #if defined(MBEDTLS_ECP_C)
+  41:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #include "mbedtls/ecp.h"
+  42:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #endif
+  43:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #if defined(MBEDTLS_ECDSA_C)
+  44:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #include "mbedtls/ecdsa.h"
+  45:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #endif
+  46:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #if defined(MBEDTLS_PEM_WRITE_C)
+  47:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #include "mbedtls/pem.h"
+  48:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #endif
+  49:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+  50:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #if defined(MBEDTLS_PLATFORM_C)
+  51:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #include "mbedtls/platform.h"
+  52:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #else
+  53:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #include <stdlib.h>
+  54:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #define mbedtls_calloc    calloc
+  55:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #define mbedtls_free       free
+  56:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #endif
+  57:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+  58:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** /* Parameter validation macros based on platform_util.h */
+  59:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #define PK_VALIDATE_RET( cond )    \
+  60:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     MBEDTLS_INTERNAL_VALIDATE_RET( cond, MBEDTLS_ERR_PK_BAD_INPUT_DATA )
+  61:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #define PK_VALIDATE( cond )        \
+  62:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     MBEDTLS_INTERNAL_VALIDATE( cond )
+  63:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+  64:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #if defined(MBEDTLS_RSA_C)
+  65:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** /*
+  66:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *  RSAPublicKey ::= SEQUENCE {
+  67:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *      modulus           INTEGER,  -- n
+  68:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *      publicExponent    INTEGER   -- e
+  69:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *  }
+  70:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  */
+  71:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** static int pk_write_rsa_pubkey( unsigned char **p, unsigned char *start,
+  72:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                 mbedtls_rsa_context *rsa )
+  73:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** {
+  86              		.loc 2 73 1
+  87              		.cfi_startproc
+  88 0000 F30F1EFA 		endbr64
+  89 0004 55       		pushq	%rbp
+  90              	.LCFI6:
+  91              		.cfi_def_cfa_offset 16
+GAS LISTING /tmp/ccNilhrx.s 			page 7
+
+
+  92              		.cfi_offset 6, -16
+  93 0005 4889E5   		movq	%rsp, %rbp
+  94              	.LCFI7:
+  95              		.cfi_def_cfa_register 6
+  96 0008 4883EC50 		subq	$80, %rsp
+  97 000c 48897DC8 		movq	%rdi, -56(%rbp)
+  98 0010 488975C0 		movq	%rsi, -64(%rbp)
+  99 0014 488955B8 		movq	%rdx, -72(%rbp)
+ 100              		.loc 2 73 1
+ 101 0018 64488B04 		movq	%fs:40, %rax
+ 101      25280000 
+ 101      00
+ 102 0021 488945F8 		movq	%rax, -8(%rbp)
+ 103 0025 31C0     		xorl	%eax, %eax
+  74:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     int ret;
+  75:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     size_t len = 0;
+ 104              		.loc 2 75 12
+ 105 0027 48C745D8 		movq	$0, -40(%rbp)
+ 105      00000000 
+  76:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     mbedtls_mpi T;
+  77:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+  78:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     mbedtls_mpi_init( &T );
+ 106              		.loc 2 78 5
+ 107 002f 488D45E0 		leaq	-32(%rbp), %rax
+ 108 0033 4889C7   		movq	%rax, %rdi
+ 109 0036 E8000000 		call	mbedtls_mpi_init@PLT
+ 109      00
+  79:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+  80:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     /* Export E */
+  81:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     if ( ( ret = mbedtls_rsa_export( rsa, NULL, NULL, NULL, NULL, &T ) ) != 0 ||
+ 110              		.loc 2 81 18
+ 111 003b 488D55E0 		leaq	-32(%rbp), %rdx
+ 112 003f 488B45B8 		movq	-72(%rbp), %rax
+ 113 0043 4989D1   		movq	%rdx, %r9
+ 114 0046 41B80000 		movl	$0, %r8d
+ 114      0000
+ 115 004c B9000000 		movl	$0, %ecx
+ 115      00
+ 116 0051 BA000000 		movl	$0, %edx
+ 116      00
+ 117 0056 BE000000 		movl	$0, %esi
+ 117      00
+ 118 005b 4889C7   		movq	%rax, %rdi
+ 119 005e E8000000 		call	mbedtls_rsa_export@PLT
+ 119      00
+ 120 0063 8945D4   		movl	%eax, -44(%rbp)
+ 121              		.loc 2 81 8
+ 122 0066 837DD400 		cmpl	$0, -44(%rbp)
+ 123 006a 0F858300 		jne	.L19
+ 123      0000
+  82:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****          ( ret = mbedtls_asn1_write_mpi( p, start, &T ) ) < 0 )
+ 124              		.loc 2 82 18 discriminator 1
+ 125 0070 488D55E0 		leaq	-32(%rbp), %rdx
+ 126 0074 488B4DC0 		movq	-64(%rbp), %rcx
+ 127 0078 488B45C8 		movq	-56(%rbp), %rax
+ 128 007c 4889CE   		movq	%rcx, %rsi
+ 129 007f 4889C7   		movq	%rax, %rdi
+GAS LISTING /tmp/ccNilhrx.s 			page 8
+
+
+ 130 0082 E8000000 		call	mbedtls_asn1_write_mpi@PLT
+ 130      00
+ 131 0087 8945D4   		movl	%eax, -44(%rbp)
+  81:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****          ( ret = mbedtls_asn1_write_mpi( p, start, &T ) ) < 0 )
+ 132              		.loc 2 81 79 discriminator 1
+ 133 008a 837DD400 		cmpl	$0, -44(%rbp)
+ 134 008e 7863     		js	.L19
+  83:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         goto end_of_export;
+  84:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     len += ret;
+ 135              		.loc 2 84 9
+ 136 0090 8B45D4   		movl	-44(%rbp), %eax
+ 137 0093 4898     		cltq
+ 138 0095 480145D8 		addq	%rax, -40(%rbp)
+  85:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+  86:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     /* Export N */
+  87:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     if ( ( ret = mbedtls_rsa_export( rsa, &T, NULL, NULL, NULL, NULL ) ) != 0 ||
+ 139              		.loc 2 87 18
+ 140 0099 488D75E0 		leaq	-32(%rbp), %rsi
+ 141 009d 488B45B8 		movq	-72(%rbp), %rax
+ 142 00a1 41B90000 		movl	$0, %r9d
+ 142      0000
+ 143 00a7 41B80000 		movl	$0, %r8d
+ 143      0000
+ 144 00ad B9000000 		movl	$0, %ecx
+ 144      00
+ 145 00b2 BA000000 		movl	$0, %edx
+ 145      00
+ 146 00b7 4889C7   		movq	%rax, %rdi
+ 147 00ba E8000000 		call	mbedtls_rsa_export@PLT
+ 147      00
+ 148 00bf 8945D4   		movl	%eax, -44(%rbp)
+ 149              		.loc 2 87 8
+ 150 00c2 837DD400 		cmpl	$0, -44(%rbp)
+ 151 00c6 752E     		jne	.L20
+  88:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****          ( ret = mbedtls_asn1_write_mpi( p, start, &T ) ) < 0 )
+ 152              		.loc 2 88 18 discriminator 1
+ 153 00c8 488D55E0 		leaq	-32(%rbp), %rdx
+ 154 00cc 488B4DC0 		movq	-64(%rbp), %rcx
+ 155 00d0 488B45C8 		movq	-56(%rbp), %rax
+ 156 00d4 4889CE   		movq	%rcx, %rsi
+ 157 00d7 4889C7   		movq	%rax, %rdi
+ 158 00da E8000000 		call	mbedtls_asn1_write_mpi@PLT
+ 158      00
+ 159 00df 8945D4   		movl	%eax, -44(%rbp)
+  87:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****          ( ret = mbedtls_asn1_write_mpi( p, start, &T ) ) < 0 )
+ 160              		.loc 2 87 79 discriminator 1
+ 161 00e2 837DD400 		cmpl	$0, -44(%rbp)
+ 162 00e6 780E     		js	.L20
+  89:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         goto end_of_export;
+  90:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     len += ret;
+ 163              		.loc 2 90 9
+ 164 00e8 8B45D4   		movl	-44(%rbp), %eax
+ 165 00eb 4898     		cltq
+ 166 00ed 480145D8 		addq	%rax, -40(%rbp)
+ 167 00f1 EB04     		jmp	.L10
+ 168              	.L19:
+  83:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     len += ret;
+GAS LISTING /tmp/ccNilhrx.s 			page 9
+
+
+ 169              		.loc 2 83 9
+ 170 00f3 90       		nop
+ 171 00f4 EB01     		jmp	.L10
+ 172              	.L20:
+  89:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         goto end_of_export;
+ 173              		.loc 2 89 9
+ 174 00f6 90       		nop
+ 175              	.L10:
+  91:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+  92:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** end_of_export:
+  93:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+  94:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     mbedtls_mpi_free( &T );
+ 176              		.loc 2 94 5
+ 177 00f7 488D45E0 		leaq	-32(%rbp), %rax
+ 178 00fb 4889C7   		movq	%rax, %rdi
+ 179 00fe E8000000 		call	mbedtls_mpi_free@PLT
+ 179      00
+  95:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     if( ret < 0 )
+ 180              		.loc 2 95 7
+ 181 0103 837DD400 		cmpl	$0, -44(%rbp)
+ 182 0107 7905     		jns	.L13
+  96:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         return( ret );
+ 183              		.loc 2 96 15
+ 184 0109 8B45D4   		movl	-44(%rbp), %eax
+ 185 010c EB61     		jmp	.L17
+ 186              	.L13:
+  97:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+  98:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( p, start, len ) );
+ 187              		.loc 2 98 5
+ 188 010e 488B55D8 		movq	-40(%rbp), %rdx
+ 189 0112 488B4DC0 		movq	-64(%rbp), %rcx
+ 190 0116 488B45C8 		movq	-56(%rbp), %rax
+ 191 011a 4889CE   		movq	%rcx, %rsi
+ 192 011d 4889C7   		movq	%rax, %rdi
+ 193 0120 E8000000 		call	mbedtls_asn1_write_len@PLT
+ 193      00
+ 194 0125 8945D4   		movl	%eax, -44(%rbp)
+ 195 0128 837DD400 		cmpl	$0, -44(%rbp)
+ 196 012c 7905     		jns	.L15
+ 197              		.loc 2 98 5 is_stmt 0 discriminator 1
+ 198 012e 8B45D4   		movl	-44(%rbp), %eax
+ 199 0131 EB3C     		jmp	.L17
+ 200              	.L15:
+ 201              		.loc 2 98 5 discriminator 2
+ 202 0133 8B45D4   		movl	-44(%rbp), %eax
+ 203 0136 4898     		cltq
+ 204 0138 480145D8 		addq	%rax, -40(%rbp)
+  99:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( p, start, MBEDTLS_ASN1_CONSTRUCTED |
+ 205              		.loc 2 99 5 is_stmt 1 discriminator 2
+ 206 013c 488B4DC0 		movq	-64(%rbp), %rcx
+ 207 0140 488B45C8 		movq	-56(%rbp), %rax
+ 208 0144 BA300000 		movl	$48, %edx
+ 208      00
+ 209 0149 4889CE   		movq	%rcx, %rsi
+ 210 014c 4889C7   		movq	%rax, %rdi
+ 211 014f E8000000 		call	mbedtls_asn1_write_tag@PLT
+ 211      00
+GAS LISTING /tmp/ccNilhrx.s 			page 10
+
+
+ 212 0154 8945D4   		movl	%eax, -44(%rbp)
+ 213 0157 837DD400 		cmpl	$0, -44(%rbp)
+ 214 015b 7905     		jns	.L16
+ 215              		.loc 2 99 5 is_stmt 0 discriminator 1
+ 216 015d 8B45D4   		movl	-44(%rbp), %eax
+ 217 0160 EB0D     		jmp	.L17
+ 218              	.L16:
+ 219              		.loc 2 99 5 discriminator 2
+ 220 0162 8B45D4   		movl	-44(%rbp), %eax
+ 221 0165 4898     		cltq
+ 222 0167 480145D8 		addq	%rax, -40(%rbp)
+ 100:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                                  MBEDTLS_ASN1_SEQUENCE ) );
+ 101:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 102:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     return( (int) len );
+ 223              		.loc 2 102 13 is_stmt 1 discriminator 2
+ 224 016b 488B45D8 		movq	-40(%rbp), %rax
+ 225              	.L17:
+ 103:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** }
+ 226              		.loc 2 103 1 discriminator 1
+ 227 016f 488B75F8 		movq	-8(%rbp), %rsi
+ 228 0173 64483334 		xorq	%fs:40, %rsi
+ 228      25280000 
+ 228      00
+ 229 017c 7405     		je	.L18
+ 230              		.loc 2 103 1 is_stmt 0
+ 231 017e E8000000 		call	__stack_chk_fail@PLT
+ 231      00
+ 232              	.L18:
+ 233 0183 C9       		leave
+ 234              	.LCFI8:
+ 235              		.cfi_def_cfa 7, 8
+ 236 0184 C3       		ret
+ 237              		.cfi_endproc
+ 238              	.LFE16:
+ 240              		.section	.text.pk_write_ec_pubkey,"ax",@progbits
+ 242              	pk_write_ec_pubkey:
+ 243              	.LFB17:
+ 104:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #endif /* MBEDTLS_RSA_C */
+ 105:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 106:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #if defined(MBEDTLS_ECP_C)
+ 107:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** /*
+ 108:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  * EC public key is an EC point
+ 109:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  */
+ 110:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** static int pk_write_ec_pubkey( unsigned char **p, unsigned char *start,
+ 111:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                mbedtls_ecp_keypair *ec )
+ 112:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** {
+ 244              		.loc 2 112 1 is_stmt 1
+ 245              		.cfi_startproc
+ 246 0000 F30F1EFA 		endbr64
+ 247 0004 55       		pushq	%rbp
+ 248              	.LCFI9:
+ 249              		.cfi_def_cfa_offset 16
+ 250              		.cfi_offset 6, -16
+ 251 0005 4889E5   		movq	%rsp, %rbp
+ 252              	.LCFI10:
+ 253              		.cfi_def_cfa_register 6
+ 254 0008 4881ECC0 		subq	$192, %rsp
+GAS LISTING /tmp/ccNilhrx.s 			page 11
+
+
+ 254      000000
+ 255 000f 4889BD58 		movq	%rdi, -168(%rbp)
+ 255      FFFFFF
+ 256 0016 4889B550 		movq	%rsi, -176(%rbp)
+ 256      FFFFFF
+ 257 001d 48899548 		movq	%rdx, -184(%rbp)
+ 257      FFFFFF
+ 258              		.loc 2 112 1
+ 259 0024 64488B04 		movq	%fs:40, %rax
+ 259      25280000 
+ 259      00
+ 260 002d 488945F8 		movq	%rax, -8(%rbp)
+ 261 0031 31C0     		xorl	%eax, %eax
+ 113:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     int ret;
+ 114:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     size_t len = 0;
+ 262              		.loc 2 114 12
+ 263 0033 48C78568 		movq	$0, -152(%rbp)
+ 263      FFFFFF00 
+ 263      000000
+ 115:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     unsigned char buf[MBEDTLS_ECP_MAX_PT_LEN];
+ 116:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 117:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     if( ( ret = mbedtls_ecp_point_write_binary( &ec->grp, &ec->Q,
+ 264              		.loc 2 117 59
+ 265 003e 488B8548 		movq	-184(%rbp), %rax
+ 265      FFFFFF
+ 266 0045 488DB010 		leaq	272(%rax), %rsi
+ 266      010000
+ 267              		.loc 2 117 49
+ 268 004c 488B8548 		movq	-184(%rbp), %rax
+ 268      FFFFFF
+ 269              		.loc 2 117 17
+ 270 0053 488D8D70 		leaq	-144(%rbp), %rcx
+ 270      FFFFFF
+ 271 005a 488D9568 		leaq	-152(%rbp), %rdx
+ 271      FFFFFF
+ 272 0061 41B98500 		movl	$133, %r9d
+ 272      0000
+ 273 0067 4989C8   		movq	%rcx, %r8
+ 274 006a 4889D1   		movq	%rdx, %rcx
+ 275 006d BA000000 		movl	$0, %edx
+ 275      00
+ 276 0072 4889C7   		movq	%rax, %rdi
+ 277 0075 E8000000 		call	mbedtls_ecp_point_write_binary@PLT
+ 277      00
+ 278 007a 898564FF 		movl	%eax, -156(%rbp)
+ 278      FFFF
+ 279              		.loc 2 117 7
+ 280 0080 83BD64FF 		cmpl	$0, -156(%rbp)
+ 280      FFFF00
+ 281 0087 740B     		je	.L22
+ 118:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                         MBEDTLS_ECP_PF_UNCOMPRESSED,
+ 119:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                         &len, buf, sizeof( buf ) ) ) != 0 )
+ 120:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     {
+ 121:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         return( ret );
+ 282              		.loc 2 121 15
+ 283 0089 8B8564FF 		movl	-156(%rbp), %eax
+ 283      FFFF
+GAS LISTING /tmp/ccNilhrx.s 			page 12
+
+
+ 284 008f E9850000 		jmp	.L26
+ 284      00
+ 285              	.L22:
+ 122:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     }
+ 123:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 124:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     if( *p < start || (size_t)( *p - start ) < len )
+ 286              		.loc 2 124 9
+ 287 0094 488B8558 		movq	-168(%rbp), %rax
+ 287      FFFFFF
+ 288 009b 488B00   		movq	(%rax), %rax
+ 289              		.loc 2 124 7
+ 290 009e 48398550 		cmpq	%rax, -176(%rbp)
+ 290      FFFFFF
+ 291 00a5 7720     		ja	.L24
+ 292              		.loc 2 124 33 discriminator 1
+ 293 00a7 488B8558 		movq	-168(%rbp), %rax
+ 293      FFFFFF
+ 294 00ae 488B00   		movq	(%rax), %rax
+ 295              		.loc 2 124 36 discriminator 1
+ 296 00b1 482B8550 		subq	-176(%rbp), %rax
+ 296      FFFFFF
+ 297              		.loc 2 124 23 discriminator 1
+ 298 00b8 4889C2   		movq	%rax, %rdx
+ 299              		.loc 2 124 46 discriminator 1
+ 300 00bb 488B8568 		movq	-152(%rbp), %rax
+ 300      FFFFFF
+ 301              		.loc 2 124 20 discriminator 1
+ 302 00c2 4839C2   		cmpq	%rax, %rdx
+ 303 00c5 7307     		jnb	.L25
+ 304              	.L24:
+ 125:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
+ 305              		.loc 2 125 15
+ 306 00c7 B894FFFF 		movl	$-108, %eax
+ 306      FF
+ 307 00cc EB4B     		jmp	.L26
+ 308              	.L25:
+ 126:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 127:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     *p -= len;
+ 309              		.loc 2 127 8
+ 310 00ce 488B8558 		movq	-168(%rbp), %rax
+ 310      FFFFFF
+ 311 00d5 488B00   		movq	(%rax), %rax
+ 312 00d8 488B9568 		movq	-152(%rbp), %rdx
+ 312      FFFFFF
+ 313 00df 48F7DA   		negq	%rdx
+ 314 00e2 4801C2   		addq	%rax, %rdx
+ 315 00e5 488B8558 		movq	-168(%rbp), %rax
+ 315      FFFFFF
+ 316 00ec 488910   		movq	%rdx, (%rax)
+ 128:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     memcpy( *p, buf, len );
+ 317              		.loc 2 128 5
+ 318 00ef 488B9568 		movq	-152(%rbp), %rdx
+ 318      FFFFFF
+ 319 00f6 488B8558 		movq	-168(%rbp), %rax
+ 319      FFFFFF
+ 320 00fd 488B00   		movq	(%rax), %rax
+ 321 0100 488D8D70 		leaq	-144(%rbp), %rcx
+GAS LISTING /tmp/ccNilhrx.s 			page 13
+
+
+ 321      FFFFFF
+ 322 0107 4889CE   		movq	%rcx, %rsi
+ 323 010a 4889C7   		movq	%rax, %rdi
+ 324 010d E8000000 		call	memcpy@PLT
+ 324      00
+ 129:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 130:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     return( (int) len );
+ 325              		.loc 2 130 13
+ 326 0112 488B8568 		movq	-152(%rbp), %rax
+ 326      FFFFFF
+ 327              	.L26:
+ 131:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** }
+ 328              		.loc 2 131 1 discriminator 1
+ 329 0119 488B7DF8 		movq	-8(%rbp), %rdi
+ 330 011d 6448333C 		xorq	%fs:40, %rdi
+ 330      25280000 
+ 330      00
+ 331 0126 7405     		je	.L27
+ 332              		.loc 2 131 1 is_stmt 0
+ 333 0128 E8000000 		call	__stack_chk_fail@PLT
+ 333      00
+ 334              	.L27:
+ 335 012d C9       		leave
+ 336              	.LCFI11:
+ 337              		.cfi_def_cfa 7, 8
+ 338 012e C3       		ret
+ 339              		.cfi_endproc
+ 340              	.LFE17:
+ 342              		.section	.text.pk_write_ec_param,"ax",@progbits
+ 344              	pk_write_ec_param:
+ 345              	.LFB18:
+ 132:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 133:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** /*
+ 134:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  * ECParameters ::= CHOICE {
+ 135:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *   namedCurve         OBJECT IDENTIFIER
+ 136:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  * }
+ 137:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  */
+ 138:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** static int pk_write_ec_param( unsigned char **p, unsigned char *start,
+ 139:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                               mbedtls_ecp_keypair *ec )
+ 140:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** {
+ 346              		.loc 2 140 1 is_stmt 1
+ 347              		.cfi_startproc
+ 348 0000 F30F1EFA 		endbr64
+ 349 0004 55       		pushq	%rbp
+ 350              	.LCFI12:
+ 351              		.cfi_def_cfa_offset 16
+ 352              		.cfi_offset 6, -16
+ 353 0005 4889E5   		movq	%rsp, %rbp
+ 354              	.LCFI13:
+ 355              		.cfi_def_cfa_register 6
+ 356 0008 4883EC50 		subq	$80, %rsp
+ 357 000c 48897DC8 		movq	%rdi, -56(%rbp)
+ 358 0010 488975C0 		movq	%rsi, -64(%rbp)
+ 359 0014 488955B8 		movq	%rdx, -72(%rbp)
+ 360              		.loc 2 140 1
+ 361 0018 64488B04 		movq	%fs:40, %rax
+ 361      25280000 
+GAS LISTING /tmp/ccNilhrx.s 			page 14
+
+
+ 361      00
+ 362 0021 488945F8 		movq	%rax, -8(%rbp)
+ 363 0025 31C0     		xorl	%eax, %eax
+ 141:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     int ret;
+ 142:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     size_t len = 0;
+ 364              		.loc 2 142 12
+ 365 0027 48C745F0 		movq	$0, -16(%rbp)
+ 365      00000000 
+ 143:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     const char *oid;
+ 144:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     size_t oid_len;
+ 145:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 146:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     if( ( ret = mbedtls_oid_get_oid_by_ec_grp( ec->grp.id, &oid, &oid_len ) ) != 0 )
+ 366              		.loc 2 146 17
+ 367 002f 488B45B8 		movq	-72(%rbp), %rax
+ 368 0033 8B00     		movl	(%rax), %eax
+ 369 0035 488D55E8 		leaq	-24(%rbp), %rdx
+ 370 0039 488D4DE0 		leaq	-32(%rbp), %rcx
+ 371 003d 4889CE   		movq	%rcx, %rsi
+ 372 0040 89C7     		movl	%eax, %edi
+ 373 0042 E8000000 		call	mbedtls_oid_get_oid_by_ec_grp@PLT
+ 373      00
+ 374 0047 8945DC   		movl	%eax, -36(%rbp)
+ 375              		.loc 2 146 7
+ 376 004a 837DDC00 		cmpl	$0, -36(%rbp)
+ 377 004e 7405     		je	.L29
+ 147:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         return( ret );
+ 378              		.loc 2 147 15
+ 379 0050 8B45DC   		movl	-36(%rbp), %eax
+ 380 0053 EB33     		jmp	.L32
+ 381              	.L29:
+ 148:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 149:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_oid( p, start, oid, oid_len ) );
+ 382              		.loc 2 149 5
+ 383 0055 488B4DE8 		movq	-24(%rbp), %rcx
+ 384 0059 488B55E0 		movq	-32(%rbp), %rdx
+ 385 005d 488B75C0 		movq	-64(%rbp), %rsi
+ 386 0061 488B45C8 		movq	-56(%rbp), %rax
+ 387 0065 4889C7   		movq	%rax, %rdi
+ 388 0068 E8000000 		call	mbedtls_asn1_write_oid@PLT
+ 388      00
+ 389 006d 8945DC   		movl	%eax, -36(%rbp)
+ 390 0070 837DDC00 		cmpl	$0, -36(%rbp)
+ 391 0074 7905     		jns	.L31
+ 392              		.loc 2 149 5 is_stmt 0 discriminator 1
+ 393 0076 8B45DC   		movl	-36(%rbp), %eax
+ 394 0079 EB0D     		jmp	.L32
+ 395              	.L31:
+ 396              		.loc 2 149 5 discriminator 2
+ 397 007b 8B45DC   		movl	-36(%rbp), %eax
+ 398 007e 4898     		cltq
+ 399 0080 480145F0 		addq	%rax, -16(%rbp)
+ 150:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 151:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     return( (int) len );
+ 400              		.loc 2 151 13 is_stmt 1 discriminator 2
+ 401 0084 488B45F0 		movq	-16(%rbp), %rax
+ 402              	.L32:
+ 152:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** }
+GAS LISTING /tmp/ccNilhrx.s 			page 15
+
+
+ 403              		.loc 2 152 1 discriminator 1
+ 404 0088 488B7DF8 		movq	-8(%rbp), %rdi
+ 405 008c 6448333C 		xorq	%fs:40, %rdi
+ 405      25280000 
+ 405      00
+ 406 0095 7405     		je	.L33
+ 407              		.loc 2 152 1 is_stmt 0
+ 408 0097 E8000000 		call	__stack_chk_fail@PLT
+ 408      00
+ 409              	.L33:
+ 410 009c C9       		leave
+ 411              	.LCFI14:
+ 412              		.cfi_def_cfa 7, 8
+ 413 009d C3       		ret
+ 414              		.cfi_endproc
+ 415              	.LFE18:
+ 417              		.section	.text.mbedtls_pk_write_pubkey,"ax",@progbits
+ 418              		.globl	mbedtls_pk_write_pubkey
+ 420              	mbedtls_pk_write_pubkey:
+ 421              	.LFB19:
+ 153:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #endif /* MBEDTLS_ECP_C */
+ 154:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 155:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** int mbedtls_pk_write_pubkey( unsigned char **p, unsigned char *start,
+ 156:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                              const mbedtls_pk_context *key )
+ 157:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** {
+ 422              		.loc 2 157 1 is_stmt 1
+ 423              		.cfi_startproc
+ 424 0000 F30F1EFA 		endbr64
+ 425 0004 55       		pushq	%rbp
+ 426              	.LCFI15:
+ 427              		.cfi_def_cfa_offset 16
+ 428              		.cfi_offset 6, -16
+ 429 0005 4889E5   		movq	%rsp, %rbp
+ 430              	.LCFI16:
+ 431              		.cfi_def_cfa_register 6
+ 432 0008 4883EC40 		subq	$64, %rsp
+ 433 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 434 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 435 0014 488955C8 		movq	%rdx, -56(%rbp)
+ 436              		.loc 2 157 1
+ 437 0018 64488B04 		movq	%fs:40, %rax
+ 437      25280000 
+ 437      00
+ 438 0021 488945F8 		movq	%rax, -8(%rbp)
+ 439 0025 31C0     		xorl	%eax, %eax
+ 158:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     int ret;
+ 159:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     size_t len = 0;
+ 440              		.loc 2 159 12
+ 441 0027 48C745F0 		movq	$0, -16(%rbp)
+ 441      00000000 
+ 160:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 161:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     PK_VALIDATE_RET( p != NULL );
+ 162:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     PK_VALIDATE_RET( *p != NULL );
+ 163:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     PK_VALIDATE_RET( start != NULL );
+ 164:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     PK_VALIDATE_RET( key != NULL );
+ 165:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 166:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #if defined(MBEDTLS_RSA_C)
+GAS LISTING /tmp/ccNilhrx.s 			page 16
+
+
+ 167:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     if( mbedtls_pk_get_type( key ) == MBEDTLS_PK_RSA )
+ 442              		.loc 2 167 9
+ 443 002f 488B45C8 		movq	-56(%rbp), %rax
+ 444 0033 4889C7   		movq	%rax, %rdi
+ 445 0036 E8000000 		call	mbedtls_pk_get_type@PLT
+ 445      00
+ 446              		.loc 2 167 7
+ 447 003b 83F801   		cmpl	$1, %eax
+ 448 003e 7545     		jne	.L35
+ 168:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         MBEDTLS_ASN1_CHK_ADD( len, pk_write_rsa_pubkey( p, start, mbedtls_pk_rsa( *key ) ) );
+ 449              		.loc 2 168 9
+ 450 0040 488B45C8 		movq	-56(%rbp), %rax
+ 451 0044 488B10   		movq	(%rax), %rdx
+ 452 0047 488B4008 		movq	8(%rax), %rax
+ 453 004b 4889D7   		movq	%rdx, %rdi
+ 454 004e 4889C6   		movq	%rax, %rsi
+ 455 0051 E8000000 		call	mbedtls_pk_rsa
+ 455      00
+ 456 0056 4889C2   		movq	%rax, %rdx
+ 457 0059 488B4DD0 		movq	-48(%rbp), %rcx
+ 458 005d 488B45D8 		movq	-40(%rbp), %rax
+ 459 0061 4889CE   		movq	%rcx, %rsi
+ 460 0064 4889C7   		movq	%rax, %rdi
+ 461 0067 E8000000 		call	pk_write_rsa_pubkey
+ 461      00
+ 462 006c 8945EC   		movl	%eax, -20(%rbp)
+ 463 006f 837DEC00 		cmpl	$0, -20(%rbp)
+ 464 0073 7905     		jns	.L36
+ 465              		.loc 2 168 9 is_stmt 0 discriminator 1
+ 466 0075 8B45EC   		movl	-20(%rbp), %eax
+ 467 0078 EB6C     		jmp	.L37
+ 468              	.L36:
+ 469              		.loc 2 168 9 discriminator 2
+ 470 007a 8B45EC   		movl	-20(%rbp), %eax
+ 471 007d 4898     		cltq
+ 472 007f 480145F0 		addq	%rax, -16(%rbp)
+ 473 0083 EB5D     		jmp	.L38
+ 474              	.L35:
+ 169:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     else
+ 170:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #endif
+ 171:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #if defined(MBEDTLS_ECP_C)
+ 172:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     if( mbedtls_pk_get_type( key ) == MBEDTLS_PK_ECKEY )
+ 475              		.loc 2 172 9 is_stmt 1
+ 476 0085 488B45C8 		movq	-56(%rbp), %rax
+ 477 0089 4889C7   		movq	%rax, %rdi
+ 478 008c E8000000 		call	mbedtls_pk_get_type@PLT
+ 478      00
+ 479              		.loc 2 172 7
+ 480 0091 83F802   		cmpl	$2, %eax
+ 481 0094 7545     		jne	.L39
+ 173:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         MBEDTLS_ASN1_CHK_ADD( len, pk_write_ec_pubkey( p, start, mbedtls_pk_ec( *key ) ) );
+ 482              		.loc 2 173 9
+ 483 0096 488B45C8 		movq	-56(%rbp), %rax
+ 484 009a 488B10   		movq	(%rax), %rdx
+ 485 009d 488B4008 		movq	8(%rax), %rax
+ 486 00a1 4889D7   		movq	%rdx, %rdi
+ 487 00a4 4889C6   		movq	%rax, %rsi
+GAS LISTING /tmp/ccNilhrx.s 			page 17
+
+
+ 488 00a7 E8000000 		call	mbedtls_pk_ec
+ 488      00
+ 489 00ac 4889C2   		movq	%rax, %rdx
+ 490 00af 488B4DD0 		movq	-48(%rbp), %rcx
+ 491 00b3 488B45D8 		movq	-40(%rbp), %rax
+ 492 00b7 4889CE   		movq	%rcx, %rsi
+ 493 00ba 4889C7   		movq	%rax, %rdi
+ 494 00bd E8000000 		call	pk_write_ec_pubkey
+ 494      00
+ 495 00c2 8945EC   		movl	%eax, -20(%rbp)
+ 496 00c5 837DEC00 		cmpl	$0, -20(%rbp)
+ 497 00c9 7905     		jns	.L40
+ 498              		.loc 2 173 9 is_stmt 0 discriminator 1
+ 499 00cb 8B45EC   		movl	-20(%rbp), %eax
+ 500 00ce EB16     		jmp	.L37
+ 501              	.L40:
+ 502              		.loc 2 173 9 discriminator 2
+ 503 00d0 8B45EC   		movl	-20(%rbp), %eax
+ 504 00d3 4898     		cltq
+ 505 00d5 480145F0 		addq	%rax, -16(%rbp)
+ 506 00d9 EB07     		jmp	.L38
+ 507              	.L39:
+ 174:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     else
+ 175:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #endif
+ 176:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         return( MBEDTLS_ERR_PK_FEATURE_UNAVAILABLE );
+ 508              		.loc 2 176 15 is_stmt 1
+ 509 00db B880C6FF 		movl	$-14720, %eax
+ 509      FF
+ 510 00e0 EB04     		jmp	.L37
+ 511              	.L38:
+ 177:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 178:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     return( (int) len );
+ 512              		.loc 2 178 13
+ 513 00e2 488B45F0 		movq	-16(%rbp), %rax
+ 514              	.L37:
+ 179:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** }
+ 515              		.loc 2 179 1
+ 516 00e6 488B4DF8 		movq	-8(%rbp), %rcx
+ 517 00ea 6448330C 		xorq	%fs:40, %rcx
+ 517      25280000 
+ 517      00
+ 518 00f3 7405     		je	.L41
+ 519 00f5 E8000000 		call	__stack_chk_fail@PLT
+ 519      00
+ 520              	.L41:
+ 521 00fa C9       		leave
+ 522              	.LCFI17:
+ 523              		.cfi_def_cfa 7, 8
+ 524 00fb C3       		ret
+ 525              		.cfi_endproc
+ 526              	.LFE19:
+ 528              		.section	.text.mbedtls_pk_write_pubkey_der,"ax",@progbits
+ 529              		.globl	mbedtls_pk_write_pubkey_der
+ 531              	mbedtls_pk_write_pubkey_der:
+ 532              	.LFB20:
+ 180:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 181:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** int mbedtls_pk_write_pubkey_der( mbedtls_pk_context *key, unsigned char *buf, size_t size )
+GAS LISTING /tmp/ccNilhrx.s 			page 18
+
+
+ 182:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** {
+ 533              		.loc 2 182 1
+ 534              		.cfi_startproc
+ 535 0000 F30F1EFA 		endbr64
+ 536 0004 55       		pushq	%rbp
+ 537              	.LCFI18:
+ 538              		.cfi_def_cfa_offset 16
+ 539              		.cfi_offset 6, -16
+ 540 0005 4889E5   		movq	%rsp, %rbp
+ 541              	.LCFI19:
+ 542              		.cfi_def_cfa_register 6
+ 543 0008 4883EC60 		subq	$96, %rsp
+ 544 000c 48897DB8 		movq	%rdi, -72(%rbp)
+ 545 0010 488975B0 		movq	%rsi, -80(%rbp)
+ 546 0014 488955A8 		movq	%rdx, -88(%rbp)
+ 547              		.loc 2 182 1
+ 548 0018 64488B04 		movq	%fs:40, %rax
+ 548      25280000 
+ 548      00
+ 549 0021 488945F8 		movq	%rax, -8(%rbp)
+ 550 0025 31C0     		xorl	%eax, %eax
+ 183:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     int ret;
+ 184:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     unsigned char *c;
+ 185:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     size_t len = 0, par_len = 0, oid_len;
+ 551              		.loc 2 185 12
+ 552 0027 48C745F0 		movq	$0, -16(%rbp)
+ 552      00000000 
+ 553              		.loc 2 185 21
+ 554 002f 48C745E8 		movq	$0, -24(%rbp)
+ 554      00000000 
+ 186:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     const char *oid;
+ 187:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 188:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     PK_VALIDATE_RET( key != NULL );
+ 189:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     if( size == 0 )
+ 555              		.loc 2 189 7
+ 556 0037 48837DA8 		cmpq	$0, -88(%rbp)
+ 556      00
+ 557 003c 750A     		jne	.L43
+ 190:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
+ 558              		.loc 2 190 15
+ 559 003e B894FFFF 		movl	$-108, %eax
+ 559      FF
+ 560 0043 E9F10100 		jmp	.L55
+ 560      00
+ 561              	.L43:
+ 191:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     PK_VALIDATE_RET( buf != NULL );
+ 192:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 193:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     c = buf + size;
+ 562              		.loc 2 193 13
+ 563 0048 488B55B0 		movq	-80(%rbp), %rdx
+ 564 004c 488B45A8 		movq	-88(%rbp), %rax
+ 565 0050 4801D0   		addq	%rdx, %rax
+ 566              		.loc 2 193 7
+ 567 0053 488945D0 		movq	%rax, -48(%rbp)
+ 194:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 195:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_pk_write_pubkey( &c, buf, key ) );
+ 568              		.loc 2 195 5
+GAS LISTING /tmp/ccNilhrx.s 			page 19
+
+
+ 569 0057 488B55B8 		movq	-72(%rbp), %rdx
+ 570 005b 488B4DB0 		movq	-80(%rbp), %rcx
+ 571 005f 488D45D0 		leaq	-48(%rbp), %rax
+ 572 0063 4889CE   		movq	%rcx, %rsi
+ 573 0066 4889C7   		movq	%rax, %rdi
+ 574 0069 E8000000 		call	mbedtls_pk_write_pubkey
+ 574      00
+ 575 006e 8945CC   		movl	%eax, -52(%rbp)
+ 576 0071 837DCC00 		cmpl	$0, -52(%rbp)
+ 577 0075 7908     		jns	.L45
+ 578              		.loc 2 195 5 is_stmt 0 discriminator 1
+ 579 0077 8B45CC   		movl	-52(%rbp), %eax
+ 580 007a E9BA0100 		jmp	.L55
+ 580      00
+ 581              	.L45:
+ 582              		.loc 2 195 5 discriminator 2
+ 583 007f 8B45CC   		movl	-52(%rbp), %eax
+ 584 0082 4898     		cltq
+ 585 0084 480145F0 		addq	%rax, -16(%rbp)
+ 196:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 197:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     if( c - buf < 1 )
+ 586              		.loc 2 197 11 is_stmt 1 discriminator 2
+ 587 0088 488B45D0 		movq	-48(%rbp), %rax
+ 588 008c 482B45B0 		subq	-80(%rbp), %rax
+ 589              		.loc 2 197 7 discriminator 2
+ 590 0090 4885C0   		testq	%rax, %rax
+ 591 0093 7F0A     		jg	.L46
+ 198:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
+ 592              		.loc 2 198 15
+ 593 0095 B894FFFF 		movl	$-108, %eax
+ 593      FF
+ 594 009a E99A0100 		jmp	.L55
+ 594      00
+ 595              	.L46:
+ 199:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 200:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     /*
+ 201:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****      *  SubjectPublicKeyInfo  ::=  SEQUENCE  {
+ 202:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****      *       algorithm            AlgorithmIdentifier,
+ 203:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****      *       subjectPublicKey     BIT STRING }
+ 204:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****      */
+ 205:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     *--c = 0;
+ 596              		.loc 2 205 6
+ 597 009f 488B45D0 		movq	-48(%rbp), %rax
+ 598 00a3 4883E801 		subq	$1, %rax
+ 599              		.loc 2 205 10
+ 600 00a7 488945D0 		movq	%rax, -48(%rbp)
+ 601              		.loc 2 205 6
+ 602 00ab 488B45D0 		movq	-48(%rbp), %rax
+ 603              		.loc 2 205 10
+ 604 00af C60000   		movb	$0, (%rax)
+ 206:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     len += 1;
+ 605              		.loc 2 206 9
+ 606 00b2 488345F0 		addq	$1, -16(%rbp)
+ 606      01
+ 207:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 208:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( &c, buf, len ) );
+ 607              		.loc 2 208 5
+GAS LISTING /tmp/ccNilhrx.s 			page 20
+
+
+ 608 00b7 488B55F0 		movq	-16(%rbp), %rdx
+ 609 00bb 488B4DB0 		movq	-80(%rbp), %rcx
+ 610 00bf 488D45D0 		leaq	-48(%rbp), %rax
+ 611 00c3 4889CE   		movq	%rcx, %rsi
+ 612 00c6 4889C7   		movq	%rax, %rdi
+ 613 00c9 E8000000 		call	mbedtls_asn1_write_len@PLT
+ 613      00
+ 614 00ce 8945CC   		movl	%eax, -52(%rbp)
+ 615 00d1 837DCC00 		cmpl	$0, -52(%rbp)
+ 616 00d5 7908     		jns	.L47
+ 617              		.loc 2 208 5 is_stmt 0 discriminator 1
+ 618 00d7 8B45CC   		movl	-52(%rbp), %eax
+ 619 00da E95A0100 		jmp	.L55
+ 619      00
+ 620              	.L47:
+ 621              		.loc 2 208 5 discriminator 2
+ 622 00df 8B45CC   		movl	-52(%rbp), %eax
+ 623 00e2 4898     		cltq
+ 624 00e4 480145F0 		addq	%rax, -16(%rbp)
+ 209:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( &c, buf, MBEDTLS_ASN1_BIT_STRING ) );
+ 625              		.loc 2 209 5 is_stmt 1 discriminator 2
+ 626 00e8 488B4DB0 		movq	-80(%rbp), %rcx
+ 627 00ec 488D45D0 		leaq	-48(%rbp), %rax
+ 628 00f0 BA030000 		movl	$3, %edx
+ 628      00
+ 629 00f5 4889CE   		movq	%rcx, %rsi
+ 630 00f8 4889C7   		movq	%rax, %rdi
+ 631 00fb E8000000 		call	mbedtls_asn1_write_tag@PLT
+ 631      00
+ 632 0100 8945CC   		movl	%eax, -52(%rbp)
+ 633 0103 837DCC00 		cmpl	$0, -52(%rbp)
+ 634 0107 7908     		jns	.L48
+ 635              		.loc 2 209 5 is_stmt 0 discriminator 1
+ 636 0109 8B45CC   		movl	-52(%rbp), %eax
+ 637 010c E9280100 		jmp	.L55
+ 637      00
+ 638              	.L48:
+ 639              		.loc 2 209 5 discriminator 2
+ 640 0111 8B45CC   		movl	-52(%rbp), %eax
+ 641 0114 4898     		cltq
+ 642 0116 480145F0 		addq	%rax, -16(%rbp)
+ 210:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 211:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     if( ( ret = mbedtls_oid_get_oid_by_pk_alg( mbedtls_pk_get_type( key ),
+ 643              		.loc 2 211 17 is_stmt 1 discriminator 2
+ 644 011a 488B45B8 		movq	-72(%rbp), %rax
+ 645 011e 4889C7   		movq	%rax, %rdi
+ 646 0121 E8000000 		call	mbedtls_pk_get_type@PLT
+ 646      00
+ 647 0126 89C1     		movl	%eax, %ecx
+ 648 0128 488D55D8 		leaq	-40(%rbp), %rdx
+ 649 012c 488D45E0 		leaq	-32(%rbp), %rax
+ 650 0130 4889C6   		movq	%rax, %rsi
+ 651 0133 89CF     		movl	%ecx, %edi
+ 652 0135 E8000000 		call	mbedtls_oid_get_oid_by_pk_alg@PLT
+ 652      00
+ 653 013a 8945CC   		movl	%eax, -52(%rbp)
+ 654              		.loc 2 211 7 discriminator 2
+GAS LISTING /tmp/ccNilhrx.s 			page 21
+
+
+ 655 013d 837DCC00 		cmpl	$0, -52(%rbp)
+ 656 0141 7408     		je	.L49
+ 212:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                        &oid, &oid_len ) ) != 0 )
+ 213:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     {
+ 214:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         return( ret );
+ 657              		.loc 2 214 15
+ 658 0143 8B45CC   		movl	-52(%rbp), %eax
+ 659 0146 E9EE0000 		jmp	.L55
+ 659      00
+ 660              	.L49:
+ 215:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     }
+ 216:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 217:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #if defined(MBEDTLS_ECP_C)
+ 218:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     if( mbedtls_pk_get_type( key ) == MBEDTLS_PK_ECKEY )
+ 661              		.loc 2 218 9
+ 662 014b 488B45B8 		movq	-72(%rbp), %rax
+ 663 014f 4889C7   		movq	%rax, %rdi
+ 664 0152 E8000000 		call	mbedtls_pk_get_type@PLT
+ 664      00
+ 665              		.loc 2 218 7
+ 666 0157 83F802   		cmpl	$2, %eax
+ 667 015a 7546     		jne	.L50
+ 219:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     {
+ 220:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         MBEDTLS_ASN1_CHK_ADD( par_len, pk_write_ec_param( &c, buf, mbedtls_pk_ec( *key ) ) );
+ 668              		.loc 2 220 9
+ 669 015c 488B45B8 		movq	-72(%rbp), %rax
+ 670 0160 488B10   		movq	(%rax), %rdx
+ 671 0163 488B4008 		movq	8(%rax), %rax
+ 672 0167 4889D7   		movq	%rdx, %rdi
+ 673 016a 4889C6   		movq	%rax, %rsi
+ 674 016d E8000000 		call	mbedtls_pk_ec
+ 674      00
+ 675 0172 4889C2   		movq	%rax, %rdx
+ 676 0175 488B4DB0 		movq	-80(%rbp), %rcx
+ 677 0179 488D45D0 		leaq	-48(%rbp), %rax
+ 678 017d 4889CE   		movq	%rcx, %rsi
+ 679 0180 4889C7   		movq	%rax, %rdi
+ 680 0183 E8000000 		call	pk_write_ec_param
+ 680      00
+ 681 0188 8945CC   		movl	%eax, -52(%rbp)
+ 682 018b 837DCC00 		cmpl	$0, -52(%rbp)
+ 683 018f 7908     		jns	.L51
+ 684              		.loc 2 220 9 is_stmt 0 discriminator 1
+ 685 0191 8B45CC   		movl	-52(%rbp), %eax
+ 686 0194 E9A00000 		jmp	.L55
+ 686      00
+ 687              	.L51:
+ 688              		.loc 2 220 9 discriminator 2
+ 689 0199 8B45CC   		movl	-52(%rbp), %eax
+ 690 019c 4898     		cltq
+ 691 019e 480145E8 		addq	%rax, -24(%rbp)
+ 692              	.L50:
+ 221:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     }
+ 222:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #endif
+ 223:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 224:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_algorithm_identifier( &c, buf, oid, oid_len,
+ 693              		.loc 2 224 5 is_stmt 1
+GAS LISTING /tmp/ccNilhrx.s 			page 22
+
+
+ 694 01a2 488B4DD8 		movq	-40(%rbp), %rcx
+ 695 01a6 488B55E0 		movq	-32(%rbp), %rdx
+ 696 01aa 488B7DE8 		movq	-24(%rbp), %rdi
+ 697 01ae 488B75B0 		movq	-80(%rbp), %rsi
+ 698 01b2 488D45D0 		leaq	-48(%rbp), %rax
+ 699 01b6 4989F8   		movq	%rdi, %r8
+ 700 01b9 4889C7   		movq	%rax, %rdi
+ 701 01bc E8000000 		call	mbedtls_asn1_write_algorithm_identifier@PLT
+ 701      00
+ 702 01c1 8945CC   		movl	%eax, -52(%rbp)
+ 703 01c4 837DCC00 		cmpl	$0, -52(%rbp)
+ 704 01c8 7905     		jns	.L52
+ 705              		.loc 2 224 5 is_stmt 0 discriminator 1
+ 706 01ca 8B45CC   		movl	-52(%rbp), %eax
+ 707 01cd EB6A     		jmp	.L55
+ 708              	.L52:
+ 709              		.loc 2 224 5 discriminator 2
+ 710 01cf 8B45CC   		movl	-52(%rbp), %eax
+ 711 01d2 4898     		cltq
+ 712 01d4 480145F0 		addq	%rax, -16(%rbp)
+ 225:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                                         par_len ) );
+ 226:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 227:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( &c, buf, len ) );
+ 713              		.loc 2 227 5 is_stmt 1 discriminator 2
+ 714 01d8 488B55F0 		movq	-16(%rbp), %rdx
+ 715 01dc 488B4DB0 		movq	-80(%rbp), %rcx
+ 716 01e0 488D45D0 		leaq	-48(%rbp), %rax
+ 717 01e4 4889CE   		movq	%rcx, %rsi
+ 718 01e7 4889C7   		movq	%rax, %rdi
+ 719 01ea E8000000 		call	mbedtls_asn1_write_len@PLT
+ 719      00
+ 720 01ef 8945CC   		movl	%eax, -52(%rbp)
+ 721 01f2 837DCC00 		cmpl	$0, -52(%rbp)
+ 722 01f6 7905     		jns	.L53
+ 723              		.loc 2 227 5 is_stmt 0 discriminator 1
+ 724 01f8 8B45CC   		movl	-52(%rbp), %eax
+ 725 01fb EB3C     		jmp	.L55
+ 726              	.L53:
+ 727              		.loc 2 227 5 discriminator 2
+ 728 01fd 8B45CC   		movl	-52(%rbp), %eax
+ 729 0200 4898     		cltq
+ 730 0202 480145F0 		addq	%rax, -16(%rbp)
+ 228:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( &c, buf, MBEDTLS_ASN1_CONSTRUCTED |
+ 731              		.loc 2 228 5 is_stmt 1 discriminator 2
+ 732 0206 488B4DB0 		movq	-80(%rbp), %rcx
+ 733 020a 488D45D0 		leaq	-48(%rbp), %rax
+ 734 020e BA300000 		movl	$48, %edx
+ 734      00
+ 735 0213 4889CE   		movq	%rcx, %rsi
+ 736 0216 4889C7   		movq	%rax, %rdi
+ 737 0219 E8000000 		call	mbedtls_asn1_write_tag@PLT
+ 737      00
+ 738 021e 8945CC   		movl	%eax, -52(%rbp)
+ 739 0221 837DCC00 		cmpl	$0, -52(%rbp)
+ 740 0225 7905     		jns	.L54
+ 741              		.loc 2 228 5 is_stmt 0 discriminator 1
+ 742 0227 8B45CC   		movl	-52(%rbp), %eax
+GAS LISTING /tmp/ccNilhrx.s 			page 23
+
+
+ 743 022a EB0D     		jmp	.L55
+ 744              	.L54:
+ 745              		.loc 2 228 5 discriminator 2
+ 746 022c 8B45CC   		movl	-52(%rbp), %eax
+ 747 022f 4898     		cltq
+ 748 0231 480145F0 		addq	%rax, -16(%rbp)
+ 229:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                                 MBEDTLS_ASN1_SEQUENCE ) );
+ 230:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 231:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     return( (int) len );
+ 749              		.loc 2 231 13 is_stmt 1 discriminator 2
+ 750 0235 488B45F0 		movq	-16(%rbp), %rax
+ 751              	.L55:
+ 232:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** }
+ 752              		.loc 2 232 1 discriminator 1
+ 753 0239 488B75F8 		movq	-8(%rbp), %rsi
+ 754 023d 64483334 		xorq	%fs:40, %rsi
+ 754      25280000 
+ 754      00
+ 755 0246 7405     		je	.L56
+ 756              		.loc 2 232 1 is_stmt 0
+ 757 0248 E8000000 		call	__stack_chk_fail@PLT
+ 757      00
+ 758              	.L56:
+ 759 024d C9       		leave
+ 760              	.LCFI20:
+ 761              		.cfi_def_cfa 7, 8
+ 762 024e C3       		ret
+ 763              		.cfi_endproc
+ 764              	.LFE20:
+ 766              		.section	.text.mbedtls_pk_write_key_der,"ax",@progbits
+ 767              		.globl	mbedtls_pk_write_key_der
+ 769              	mbedtls_pk_write_key_der:
+ 770              	.LFB21:
+ 233:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 234:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** int mbedtls_pk_write_key_der( mbedtls_pk_context *key, unsigned char *buf, size_t size )
+ 235:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** {
+ 771              		.loc 2 235 1 is_stmt 1
+ 772              		.cfi_startproc
+ 773 0000 F30F1EFA 		endbr64
+ 774 0004 55       		pushq	%rbp
+ 775              	.LCFI21:
+ 776              		.cfi_def_cfa_offset 16
+ 777              		.cfi_offset 6, -16
+ 778 0005 4889E5   		movq	%rsp, %rbp
+ 779              	.LCFI22:
+ 780              		.cfi_def_cfa_register 6
+ 781 0008 4883C480 		addq	$-128, %rsp
+ 782 000c 48897D98 		movq	%rdi, -104(%rbp)
+ 783 0010 48897590 		movq	%rsi, -112(%rbp)
+ 784 0014 48895588 		movq	%rdx, -120(%rbp)
+ 785              		.loc 2 235 1
+ 786 0018 64488B04 		movq	%fs:40, %rax
+ 786      25280000 
+ 786      00
+ 787 0021 488945F8 		movq	%rax, -8(%rbp)
+ 788 0025 31C0     		xorl	%eax, %eax
+ 236:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     int ret;
+GAS LISTING /tmp/ccNilhrx.s 			page 24
+
+
+ 237:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     unsigned char *c;
+ 238:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     size_t len = 0;
+ 789              		.loc 2 238 12
+ 790 0027 48C745B8 		movq	$0, -72(%rbp)
+ 790      00000000 
+ 239:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 240:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     PK_VALIDATE_RET( key != NULL );
+ 241:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     if( size == 0 )
+ 791              		.loc 2 241 7
+ 792 002f 48837D88 		cmpq	$0, -120(%rbp)
+ 792      00
+ 793 0034 750A     		jne	.L58
+ 242:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
+ 794              		.loc 2 242 15
+ 795 0036 B894FFFF 		movl	$-108, %eax
+ 795      FF
+ 796 003b E9D10600 		jmp	.L98
+ 796      00
+ 797              	.L58:
+ 243:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     PK_VALIDATE_RET( buf != NULL );
+ 244:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 245:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     c = buf + size;
+ 798              		.loc 2 245 13
+ 799 0040 488B5590 		movq	-112(%rbp), %rdx
+ 800 0044 488B4588 		movq	-120(%rbp), %rax
+ 801 0048 4801D0   		addq	%rdx, %rax
+ 802              		.loc 2 245 7
+ 803 004b 488945B0 		movq	%rax, -80(%rbp)
+ 246:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 247:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #if defined(MBEDTLS_RSA_C)
+ 248:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     if( mbedtls_pk_get_type( key ) == MBEDTLS_PK_RSA )
+ 804              		.loc 2 248 9
+ 805 004f 488B4598 		movq	-104(%rbp), %rax
+ 806 0053 4889C7   		movq	%rax, %rdi
+ 807 0056 E8000000 		call	mbedtls_pk_get_type@PLT
+ 807      00
+ 808              		.loc 2 248 7
+ 809 005b 83F801   		cmpl	$1, %eax
+ 810 005e 0F85CC03 		jne	.L60
+ 810      0000
+ 811              	.LBB2:
+ 249:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     {
+ 250:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         mbedtls_mpi T; /* Temporary holding the exported parameters */
+ 251:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         mbedtls_rsa_context *rsa = mbedtls_pk_rsa( *key );
+ 812              		.loc 2 251 36
+ 813 0064 488B4598 		movq	-104(%rbp), %rax
+ 814 0068 488B10   		movq	(%rax), %rdx
+ 815 006b 488B4008 		movq	8(%rax), %rax
+ 816 006f 4889D7   		movq	%rdx, %rdi
+ 817 0072 4889C6   		movq	%rax, %rsi
+ 818 0075 E8000000 		call	mbedtls_pk_rsa
+ 818      00
+ 819 007a 488945D8 		movq	%rax, -40(%rbp)
+ 252:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 253:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         /*
+ 254:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****          * Export the parameters one after another to avoid simultaneous copies.
+ 255:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****          */
+GAS LISTING /tmp/ccNilhrx.s 			page 25
+
+
+ 256:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 257:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         mbedtls_mpi_init( &T );
+ 820              		.loc 2 257 9
+ 821 007e 488D45E0 		leaq	-32(%rbp), %rax
+ 822 0082 4889C7   		movq	%rax, %rdi
+ 823 0085 E8000000 		call	mbedtls_mpi_init@PLT
+ 823      00
+ 258:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 259:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         /* Export QP */
+ 260:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         if( ( ret = mbedtls_rsa_export_crt( rsa, NULL, NULL, &T ) ) != 0 ||
+ 824              		.loc 2 260 21
+ 825 008a 488D55E0 		leaq	-32(%rbp), %rdx
+ 826 008e 488B45D8 		movq	-40(%rbp), %rax
+ 827 0092 4889D1   		movq	%rdx, %rcx
+ 828 0095 BA000000 		movl	$0, %edx
+ 828      00
+ 829 009a BE000000 		movl	$0, %esi
+ 829      00
+ 830 009f 4889C7   		movq	%rax, %rdi
+ 831 00a2 E8000000 		call	mbedtls_rsa_export_crt@PLT
+ 831      00
+ 832 00a7 8945AC   		movl	%eax, -84(%rbp)
+ 833              		.loc 2 260 11
+ 834 00aa 837DAC00 		cmpl	$0, -84(%rbp)
+ 835 00ae 0F85B202 		jne	.L100
+ 835      0000
+ 261:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****             ( ret = mbedtls_asn1_write_mpi( &c, buf, &T ) ) < 0 )
+ 836              		.loc 2 261 21 discriminator 1
+ 837 00b4 488D55E0 		leaq	-32(%rbp), %rdx
+ 838 00b8 488B4D90 		movq	-112(%rbp), %rcx
+ 839 00bc 488D45B0 		leaq	-80(%rbp), %rax
+ 840 00c0 4889CE   		movq	%rcx, %rsi
+ 841 00c3 4889C7   		movq	%rax, %rdi
+ 842 00c6 E8000000 		call	mbedtls_asn1_write_mpi@PLT
+ 842      00
+ 843 00cb 8945AC   		movl	%eax, -84(%rbp)
+ 260:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****             ( ret = mbedtls_asn1_write_mpi( &c, buf, &T ) ) < 0 )
+ 844              		.loc 2 260 74 discriminator 1
+ 845 00ce 837DAC00 		cmpl	$0, -84(%rbp)
+ 846 00d2 0F888E02 		js	.L100
+ 846      0000
+ 262:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****             goto end_of_export;
+ 263:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         len += ret;
+ 847              		.loc 2 263 13
+ 848 00d8 8B45AC   		movl	-84(%rbp), %eax
+ 849 00db 4898     		cltq
+ 850 00dd 480145B8 		addq	%rax, -72(%rbp)
+ 264:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 265:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         /* Export DQ */
+ 266:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         if( ( ret = mbedtls_rsa_export_crt( rsa, NULL, &T, NULL ) ) != 0 ||
+ 851              		.loc 2 266 21
+ 852 00e1 488D55E0 		leaq	-32(%rbp), %rdx
+ 853 00e5 488B45D8 		movq	-40(%rbp), %rax
+ 854 00e9 B9000000 		movl	$0, %ecx
+ 854      00
+ 855 00ee BE000000 		movl	$0, %esi
+ 855      00
+GAS LISTING /tmp/ccNilhrx.s 			page 26
+
+
+ 856 00f3 4889C7   		movq	%rax, %rdi
+ 857 00f6 E8000000 		call	mbedtls_rsa_export_crt@PLT
+ 857      00
+ 858 00fb 8945AC   		movl	%eax, -84(%rbp)
+ 859              		.loc 2 266 11
+ 860 00fe 837DAC00 		cmpl	$0, -84(%rbp)
+ 861 0102 0F856102 		jne	.L101
+ 861      0000
+ 267:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****             ( ret = mbedtls_asn1_write_mpi( &c, buf, &T ) ) < 0 )
+ 862              		.loc 2 267 21 discriminator 1
+ 863 0108 488D55E0 		leaq	-32(%rbp), %rdx
+ 864 010c 488B4D90 		movq	-112(%rbp), %rcx
+ 865 0110 488D45B0 		leaq	-80(%rbp), %rax
+ 866 0114 4889CE   		movq	%rcx, %rsi
+ 867 0117 4889C7   		movq	%rax, %rdi
+ 868 011a E8000000 		call	mbedtls_asn1_write_mpi@PLT
+ 868      00
+ 869 011f 8945AC   		movl	%eax, -84(%rbp)
+ 266:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****             ( ret = mbedtls_asn1_write_mpi( &c, buf, &T ) ) < 0 )
+ 870              		.loc 2 266 74 discriminator 1
+ 871 0122 837DAC00 		cmpl	$0, -84(%rbp)
+ 872 0126 0F883D02 		js	.L101
+ 872      0000
+ 268:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****             goto end_of_export;
+ 269:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         len += ret;
+ 873              		.loc 2 269 13
+ 874 012c 8B45AC   		movl	-84(%rbp), %eax
+ 875 012f 4898     		cltq
+ 876 0131 480145B8 		addq	%rax, -72(%rbp)
+ 270:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 271:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         /* Export DP */
+ 272:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         if( ( ret = mbedtls_rsa_export_crt( rsa, &T, NULL, NULL ) ) != 0 ||
+ 877              		.loc 2 272 21
+ 878 0135 488D75E0 		leaq	-32(%rbp), %rsi
+ 879 0139 488B45D8 		movq	-40(%rbp), %rax
+ 880 013d B9000000 		movl	$0, %ecx
+ 880      00
+ 881 0142 BA000000 		movl	$0, %edx
+ 881      00
+ 882 0147 4889C7   		movq	%rax, %rdi
+ 883 014a E8000000 		call	mbedtls_rsa_export_crt@PLT
+ 883      00
+ 884 014f 8945AC   		movl	%eax, -84(%rbp)
+ 885              		.loc 2 272 11
+ 886 0152 837DAC00 		cmpl	$0, -84(%rbp)
+ 887 0156 0F851002 		jne	.L102
+ 887      0000
+ 273:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****             ( ret = mbedtls_asn1_write_mpi( &c, buf, &T ) ) < 0 )
+ 888              		.loc 2 273 21 discriminator 1
+ 889 015c 488D55E0 		leaq	-32(%rbp), %rdx
+ 890 0160 488B4D90 		movq	-112(%rbp), %rcx
+ 891 0164 488D45B0 		leaq	-80(%rbp), %rax
+ 892 0168 4889CE   		movq	%rcx, %rsi
+ 893 016b 4889C7   		movq	%rax, %rdi
+ 894 016e E8000000 		call	mbedtls_asn1_write_mpi@PLT
+ 894      00
+ 895 0173 8945AC   		movl	%eax, -84(%rbp)
+GAS LISTING /tmp/ccNilhrx.s 			page 27
+
+
+ 272:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****             ( ret = mbedtls_asn1_write_mpi( &c, buf, &T ) ) < 0 )
+ 896              		.loc 2 272 74 discriminator 1
+ 897 0176 837DAC00 		cmpl	$0, -84(%rbp)
+ 898 017a 0F88EC01 		js	.L102
+ 898      0000
+ 274:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****             goto end_of_export;
+ 275:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         len += ret;
+ 899              		.loc 2 275 13
+ 900 0180 8B45AC   		movl	-84(%rbp), %eax
+ 901 0183 4898     		cltq
+ 902 0185 480145B8 		addq	%rax, -72(%rbp)
+ 276:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 277:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         /* Export Q */
+ 278:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         if ( ( ret = mbedtls_rsa_export( rsa, NULL, NULL,
+ 903              		.loc 2 278 22
+ 904 0189 488D55E0 		leaq	-32(%rbp), %rdx
+ 905 018d 488B45D8 		movq	-40(%rbp), %rax
+ 906 0191 41B90000 		movl	$0, %r9d
+ 906      0000
+ 907 0197 41B80000 		movl	$0, %r8d
+ 907      0000
+ 908 019d 4889D1   		movq	%rdx, %rcx
+ 909 01a0 BA000000 		movl	$0, %edx
+ 909      00
+ 910 01a5 BE000000 		movl	$0, %esi
+ 910      00
+ 911 01aa 4889C7   		movq	%rax, %rdi
+ 912 01ad E8000000 		call	mbedtls_rsa_export@PLT
+ 912      00
+ 913 01b2 8945AC   		movl	%eax, -84(%rbp)
+ 914              		.loc 2 278 12
+ 915 01b5 837DAC00 		cmpl	$0, -84(%rbp)
+ 916 01b9 0F85B001 		jne	.L103
+ 916      0000
+ 279:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                          &T, NULL, NULL ) ) != 0 ||
+ 280:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****              ( ret = mbedtls_asn1_write_mpi( &c, buf, &T ) ) < 0 )
+ 917              		.loc 2 280 22
+ 918 01bf 488D55E0 		leaq	-32(%rbp), %rdx
+ 919 01c3 488B4D90 		movq	-112(%rbp), %rcx
+ 920 01c7 488D45B0 		leaq	-80(%rbp), %rax
+ 921 01cb 4889CE   		movq	%rcx, %rsi
+ 922 01ce 4889C7   		movq	%rax, %rdi
+ 923 01d1 E8000000 		call	mbedtls_asn1_write_mpi@PLT
+ 923      00
+ 924 01d6 8945AC   		movl	%eax, -84(%rbp)
+ 279:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                          &T, NULL, NULL ) ) != 0 ||
+ 925              		.loc 2 279 66
+ 926 01d9 837DAC00 		cmpl	$0, -84(%rbp)
+ 927 01dd 0F888C01 		js	.L103
+ 927      0000
+ 281:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****             goto end_of_export;
+ 282:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         len += ret;
+ 928              		.loc 2 282 13
+ 929 01e3 8B45AC   		movl	-84(%rbp), %eax
+ 930 01e6 4898     		cltq
+ 931 01e8 480145B8 		addq	%rax, -72(%rbp)
+ 283:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+GAS LISTING /tmp/ccNilhrx.s 			page 28
+
+
+ 284:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         /* Export P */
+ 285:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         if ( ( ret = mbedtls_rsa_export( rsa, NULL, &T,
+ 932              		.loc 2 285 22
+ 933 01ec 488D55E0 		leaq	-32(%rbp), %rdx
+ 934 01f0 488B45D8 		movq	-40(%rbp), %rax
+ 935 01f4 41B90000 		movl	$0, %r9d
+ 935      0000
+ 936 01fa 41B80000 		movl	$0, %r8d
+ 936      0000
+ 937 0200 B9000000 		movl	$0, %ecx
+ 937      00
+ 938 0205 BE000000 		movl	$0, %esi
+ 938      00
+ 939 020a 4889C7   		movq	%rax, %rdi
+ 940 020d E8000000 		call	mbedtls_rsa_export@PLT
+ 940      00
+ 941 0212 8945AC   		movl	%eax, -84(%rbp)
+ 942              		.loc 2 285 12
+ 943 0215 837DAC00 		cmpl	$0, -84(%rbp)
+ 944 0219 0F855301 		jne	.L104
+ 944      0000
+ 286:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                          NULL, NULL, NULL ) ) != 0 ||
+ 287:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****              ( ret = mbedtls_asn1_write_mpi( &c, buf, &T ) ) < 0 )
+ 945              		.loc 2 287 22
+ 946 021f 488D55E0 		leaq	-32(%rbp), %rdx
+ 947 0223 488B4D90 		movq	-112(%rbp), %rcx
+ 948 0227 488D45B0 		leaq	-80(%rbp), %rax
+ 949 022b 4889CE   		movq	%rcx, %rsi
+ 950 022e 4889C7   		movq	%rax, %rdi
+ 951 0231 E8000000 		call	mbedtls_asn1_write_mpi@PLT
+ 951      00
+ 952 0236 8945AC   		movl	%eax, -84(%rbp)
+ 286:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                          NULL, NULL, NULL ) ) != 0 ||
+ 953              		.loc 2 286 68
+ 954 0239 837DAC00 		cmpl	$0, -84(%rbp)
+ 955 023d 0F882F01 		js	.L104
+ 955      0000
+ 288:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****             goto end_of_export;
+ 289:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         len += ret;
+ 956              		.loc 2 289 13
+ 957 0243 8B45AC   		movl	-84(%rbp), %eax
+ 958 0246 4898     		cltq
+ 959 0248 480145B8 		addq	%rax, -72(%rbp)
+ 290:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 291:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         /* Export D */
+ 292:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         if ( ( ret = mbedtls_rsa_export( rsa, NULL, NULL,
+ 960              		.loc 2 292 22
+ 961 024c 488D55E0 		leaq	-32(%rbp), %rdx
+ 962 0250 488B45D8 		movq	-40(%rbp), %rax
+ 963 0254 41B90000 		movl	$0, %r9d
+ 963      0000
+ 964 025a 4989D0   		movq	%rdx, %r8
+ 965 025d B9000000 		movl	$0, %ecx
+ 965      00
+ 966 0262 BA000000 		movl	$0, %edx
+ 966      00
+ 967 0267 BE000000 		movl	$0, %esi
+GAS LISTING /tmp/ccNilhrx.s 			page 29
+
+
+ 967      00
+ 968 026c 4889C7   		movq	%rax, %rdi
+ 969 026f E8000000 		call	mbedtls_rsa_export@PLT
+ 969      00
+ 970 0274 8945AC   		movl	%eax, -84(%rbp)
+ 971              		.loc 2 292 12
+ 972 0277 837DAC00 		cmpl	$0, -84(%rbp)
+ 973 027b 0F85F400 		jne	.L105
+ 973      0000
+ 293:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                          NULL, &T, NULL ) ) != 0 ||
+ 294:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****              ( ret = mbedtls_asn1_write_mpi( &c, buf, &T ) ) < 0 )
+ 974              		.loc 2 294 22
+ 975 0281 488D55E0 		leaq	-32(%rbp), %rdx
+ 976 0285 488B4D90 		movq	-112(%rbp), %rcx
+ 977 0289 488D45B0 		leaq	-80(%rbp), %rax
+ 978 028d 4889CE   		movq	%rcx, %rsi
+ 979 0290 4889C7   		movq	%rax, %rdi
+ 980 0293 E8000000 		call	mbedtls_asn1_write_mpi@PLT
+ 980      00
+ 981 0298 8945AC   		movl	%eax, -84(%rbp)
+ 293:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                          NULL, &T, NULL ) ) != 0 ||
+ 982              		.loc 2 293 66
+ 983 029b 837DAC00 		cmpl	$0, -84(%rbp)
+ 984 029f 0F88D000 		js	.L105
+ 984      0000
+ 295:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****             goto end_of_export;
+ 296:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         len += ret;
+ 985              		.loc 2 296 13
+ 986 02a5 8B45AC   		movl	-84(%rbp), %eax
+ 987 02a8 4898     		cltq
+ 988 02aa 480145B8 		addq	%rax, -72(%rbp)
+ 297:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 298:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         /* Export E */
+ 299:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         if ( ( ret = mbedtls_rsa_export( rsa, NULL, NULL,
+ 989              		.loc 2 299 22
+ 990 02ae 488D55E0 		leaq	-32(%rbp), %rdx
+ 991 02b2 488B45D8 		movq	-40(%rbp), %rax
+ 992 02b6 4989D1   		movq	%rdx, %r9
+ 993 02b9 41B80000 		movl	$0, %r8d
+ 993      0000
+ 994 02bf B9000000 		movl	$0, %ecx
+ 994      00
+ 995 02c4 BA000000 		movl	$0, %edx
+ 995      00
+ 996 02c9 BE000000 		movl	$0, %esi
+ 996      00
+ 997 02ce 4889C7   		movq	%rax, %rdi
+ 998 02d1 E8000000 		call	mbedtls_rsa_export@PLT
+ 998      00
+ 999 02d6 8945AC   		movl	%eax, -84(%rbp)
+ 1000              		.loc 2 299 12
+ 1001 02d9 837DAC00 		cmpl	$0, -84(%rbp)
+ 1002 02dd 0F859500 		jne	.L106
+ 1002      0000
+ 300:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                          NULL, NULL, &T ) ) != 0 ||
+ 301:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****              ( ret = mbedtls_asn1_write_mpi( &c, buf, &T ) ) < 0 )
+ 1003              		.loc 2 301 22
+GAS LISTING /tmp/ccNilhrx.s 			page 30
+
+
+ 1004 02e3 488D55E0 		leaq	-32(%rbp), %rdx
+ 1005 02e7 488B4D90 		movq	-112(%rbp), %rcx
+ 1006 02eb 488D45B0 		leaq	-80(%rbp), %rax
+ 1007 02ef 4889CE   		movq	%rcx, %rsi
+ 1008 02f2 4889C7   		movq	%rax, %rdi
+ 1009 02f5 E8000000 		call	mbedtls_asn1_write_mpi@PLT
+ 1009      00
+ 1010 02fa 8945AC   		movl	%eax, -84(%rbp)
+ 300:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                          NULL, NULL, &T ) ) != 0 ||
+ 1011              		.loc 2 300 66
+ 1012 02fd 837DAC00 		cmpl	$0, -84(%rbp)
+ 1013 0301 7875     		js	.L106
+ 302:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****             goto end_of_export;
+ 303:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         len += ret;
+ 1014              		.loc 2 303 13
+ 1015 0303 8B45AC   		movl	-84(%rbp), %eax
+ 1016 0306 4898     		cltq
+ 1017 0308 480145B8 		addq	%rax, -72(%rbp)
+ 304:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 305:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         /* Export N */
+ 306:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         if ( ( ret = mbedtls_rsa_export( rsa, &T, NULL,
+ 1018              		.loc 2 306 22
+ 1019 030c 488D75E0 		leaq	-32(%rbp), %rsi
+ 1020 0310 488B45D8 		movq	-40(%rbp), %rax
+ 1021 0314 41B90000 		movl	$0, %r9d
+ 1021      0000
+ 1022 031a 41B80000 		movl	$0, %r8d
+ 1022      0000
+ 1023 0320 B9000000 		movl	$0, %ecx
+ 1023      00
+ 1024 0325 BA000000 		movl	$0, %edx
+ 1024      00
+ 1025 032a 4889C7   		movq	%rax, %rdi
+ 1026 032d E8000000 		call	mbedtls_rsa_export@PLT
+ 1026      00
+ 1027 0332 8945AC   		movl	%eax, -84(%rbp)
+ 1028              		.loc 2 306 12
+ 1029 0335 837DAC00 		cmpl	$0, -84(%rbp)
+ 1030 0339 7540     		jne	.L107
+ 307:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                          NULL, NULL, NULL ) ) != 0 ||
+ 308:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****              ( ret = mbedtls_asn1_write_mpi( &c, buf, &T ) ) < 0 )
+ 1031              		.loc 2 308 22
+ 1032 033b 488D55E0 		leaq	-32(%rbp), %rdx
+ 1033 033f 488B4D90 		movq	-112(%rbp), %rcx
+ 1034 0343 488D45B0 		leaq	-80(%rbp), %rax
+ 1035 0347 4889CE   		movq	%rcx, %rsi
+ 1036 034a 4889C7   		movq	%rax, %rdi
+ 1037 034d E8000000 		call	mbedtls_asn1_write_mpi@PLT
+ 1037      00
+ 1038 0352 8945AC   		movl	%eax, -84(%rbp)
+ 307:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                          NULL, NULL, NULL ) ) != 0 ||
+ 1039              		.loc 2 307 68
+ 1040 0355 837DAC00 		cmpl	$0, -84(%rbp)
+ 1041 0359 7820     		js	.L107
+ 309:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****             goto end_of_export;
+ 310:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         len += ret;
+ 1042              		.loc 2 310 13
+GAS LISTING /tmp/ccNilhrx.s 			page 31
+
+
+ 1043 035b 8B45AC   		movl	-84(%rbp), %eax
+ 1044 035e 4898     		cltq
+ 1045 0360 480145B8 		addq	%rax, -72(%rbp)
+ 1046 0364 EB16     		jmp	.L63
+ 1047              	.L100:
+ 262:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         len += ret;
+ 1048              		.loc 2 262 13
+ 1049 0366 90       		nop
+ 1050 0367 EB13     		jmp	.L63
+ 1051              	.L101:
+ 268:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         len += ret;
+ 1052              		.loc 2 268 13
+ 1053 0369 90       		nop
+ 1054 036a EB10     		jmp	.L63
+ 1055              	.L102:
+ 274:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         len += ret;
+ 1056              		.loc 2 274 13
+ 1057 036c 90       		nop
+ 1058 036d EB0D     		jmp	.L63
+ 1059              	.L103:
+ 281:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         len += ret;
+ 1060              		.loc 2 281 13
+ 1061 036f 90       		nop
+ 1062 0370 EB0A     		jmp	.L63
+ 1063              	.L104:
+ 288:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         len += ret;
+ 1064              		.loc 2 288 13
+ 1065 0372 90       		nop
+ 1066 0373 EB07     		jmp	.L63
+ 1067              	.L105:
+ 295:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         len += ret;
+ 1068              		.loc 2 295 13
+ 1069 0375 90       		nop
+ 1070 0376 EB04     		jmp	.L63
+ 1071              	.L106:
+ 302:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         len += ret;
+ 1072              		.loc 2 302 13
+ 1073 0378 90       		nop
+ 1074 0379 EB01     		jmp	.L63
+ 1075              	.L107:
+ 309:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         len += ret;
+ 1076              		.loc 2 309 13
+ 1077 037b 90       		nop
+ 1078              	.L63:
+ 311:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 312:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     end_of_export:
+ 313:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 314:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         mbedtls_mpi_free( &T );
+ 1079              		.loc 2 314 9
+ 1080 037c 488D45E0 		leaq	-32(%rbp), %rax
+ 1081 0380 4889C7   		movq	%rax, %rdi
+ 1082 0383 E8000000 		call	mbedtls_mpi_free@PLT
+ 1082      00
+ 315:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         if( ret < 0 )
+ 1083              		.loc 2 315 11
+ 1084 0388 837DAC00 		cmpl	$0, -84(%rbp)
+ 1085 038c 7908     		jns	.L78
+GAS LISTING /tmp/ccNilhrx.s 			page 32
+
+
+ 316:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****             return( ret );
+ 1086              		.loc 2 316 19
+ 1087 038e 8B45AC   		movl	-84(%rbp), %eax
+ 1088 0391 E97B0300 		jmp	.L98
+ 1088      00
+ 1089              	.L78:
+ 317:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 318:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_int( &c, buf, 0 ) );
+ 1090              		.loc 2 318 9
+ 1091 0396 488B4D90 		movq	-112(%rbp), %rcx
+ 1092 039a 488D45B0 		leaq	-80(%rbp), %rax
+ 1093 039e BA000000 		movl	$0, %edx
+ 1093      00
+ 1094 03a3 4889CE   		movq	%rcx, %rsi
+ 1095 03a6 4889C7   		movq	%rax, %rdi
+ 1096 03a9 E8000000 		call	mbedtls_asn1_write_int@PLT
+ 1096      00
+ 1097 03ae 8945AC   		movl	%eax, -84(%rbp)
+ 1098 03b1 837DAC00 		cmpl	$0, -84(%rbp)
+ 1099 03b5 7908     		jns	.L80
+ 1100              		.loc 2 318 9 is_stmt 0 discriminator 1
+ 1101 03b7 8B45AC   		movl	-84(%rbp), %eax
+ 1102 03ba E9520300 		jmp	.L98
+ 1102      00
+ 1103              	.L80:
+ 1104              		.loc 2 318 9 discriminator 2
+ 1105 03bf 8B45AC   		movl	-84(%rbp), %eax
+ 1106 03c2 4898     		cltq
+ 1107 03c4 480145B8 		addq	%rax, -72(%rbp)
+ 319:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( &c, buf, len ) );
+ 1108              		.loc 2 319 9 is_stmt 1 discriminator 2
+ 1109 03c8 488B55B8 		movq	-72(%rbp), %rdx
+ 1110 03cc 488B4D90 		movq	-112(%rbp), %rcx
+ 1111 03d0 488D45B0 		leaq	-80(%rbp), %rax
+ 1112 03d4 4889CE   		movq	%rcx, %rsi
+ 1113 03d7 4889C7   		movq	%rax, %rdi
+ 1114 03da E8000000 		call	mbedtls_asn1_write_len@PLT
+ 1114      00
+ 1115 03df 8945AC   		movl	%eax, -84(%rbp)
+ 1116 03e2 837DAC00 		cmpl	$0, -84(%rbp)
+ 1117 03e6 7908     		jns	.L81
+ 1118              		.loc 2 319 9 is_stmt 0 discriminator 1
+ 1119 03e8 8B45AC   		movl	-84(%rbp), %eax
+ 1120 03eb E9210300 		jmp	.L98
+ 1120      00
+ 1121              	.L81:
+ 1122              		.loc 2 319 9 discriminator 2
+ 1123 03f0 8B45AC   		movl	-84(%rbp), %eax
+ 1124 03f3 4898     		cltq
+ 1125 03f5 480145B8 		addq	%rax, -72(%rbp)
+ 320:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( &c,
+ 1126              		.loc 2 320 9 is_stmt 1 discriminator 2
+ 1127 03f9 488B4D90 		movq	-112(%rbp), %rcx
+ 1128 03fd 488D45B0 		leaq	-80(%rbp), %rax
+ 1129 0401 BA300000 		movl	$48, %edx
+ 1129      00
+ 1130 0406 4889CE   		movq	%rcx, %rsi
+GAS LISTING /tmp/ccNilhrx.s 			page 33
+
+
+ 1131 0409 4889C7   		movq	%rax, %rdi
+ 1132 040c E8000000 		call	mbedtls_asn1_write_tag@PLT
+ 1132      00
+ 1133 0411 8945AC   		movl	%eax, -84(%rbp)
+ 1134 0414 837DAC00 		cmpl	$0, -84(%rbp)
+ 1135 0418 7908     		jns	.L82
+ 1136              		.loc 2 320 9 is_stmt 0 discriminator 1
+ 1137 041a 8B45AC   		movl	-84(%rbp), %eax
+ 1138 041d E9EF0200 		jmp	.L98
+ 1138      00
+ 1139              	.L82:
+ 1140              		.loc 2 320 9 discriminator 2
+ 1141 0422 8B45AC   		movl	-84(%rbp), %eax
+ 1142 0425 4898     		cltq
+ 1143 0427 480145B8 		addq	%rax, -72(%rbp)
+ 1144              	.LBE2:
+ 1145 042b E9DD0200 		jmp	.L83
+ 1145      00
+ 1146              	.L60:
+ 321:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                                buf, MBEDTLS_ASN1_CONSTRUCTED |
+ 322:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                                MBEDTLS_ASN1_SEQUENCE ) );
+ 323:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     }
+ 324:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     else
+ 325:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #endif /* MBEDTLS_RSA_C */
+ 326:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #if defined(MBEDTLS_ECP_C)
+ 327:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     if( mbedtls_pk_get_type( key ) == MBEDTLS_PK_ECKEY )
+ 1147              		.loc 2 327 9 is_stmt 1
+ 1148 0430 488B4598 		movq	-104(%rbp), %rax
+ 1149 0434 4889C7   		movq	%rax, %rdi
+ 1150 0437 E8000000 		call	mbedtls_pk_get_type@PLT
+ 1150      00
+ 1151              		.loc 2 327 7
+ 1152 043c 83F802   		cmpl	$2, %eax
+ 1153 043f 0F85C102 		jne	.L84
+ 1153      0000
+ 1154              	.LBB3:
+ 328:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     {
+ 329:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         mbedtls_ecp_keypair *ec = mbedtls_pk_ec( *key );
+ 1155              		.loc 2 329 35
+ 1156 0445 488B4598 		movq	-104(%rbp), %rax
+ 1157 0449 488B10   		movq	(%rax), %rdx
+ 1158 044c 488B4008 		movq	8(%rax), %rax
+ 1159 0450 4889D7   		movq	%rdx, %rdi
+ 1160 0453 4889C6   		movq	%rax, %rsi
+ 1161 0456 E8000000 		call	mbedtls_pk_ec
+ 1161      00
+ 1162 045b 488945C0 		movq	%rax, -64(%rbp)
+ 330:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         size_t pub_len = 0, par_len = 0;
+ 1163              		.loc 2 330 16
+ 1164 045f 48C745C8 		movq	$0, -56(%rbp)
+ 1164      00000000 
+ 1165              		.loc 2 330 29
+ 1166 0467 48C745D0 		movq	$0, -48(%rbp)
+ 1166      00000000 
+ 331:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 332:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         /*
+ 333:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****          * RFC 5915, or SEC1 Appendix C.4
+GAS LISTING /tmp/ccNilhrx.s 			page 34
+
+
+ 334:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****          *
+ 335:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****          * ECPrivateKey ::= SEQUENCE {
+ 336:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****          *      version        INTEGER { ecPrivkeyVer1(1) } (ecPrivkeyVer1),
+ 337:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****          *      privateKey     OCTET STRING,
+ 338:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****          *      parameters [0] ECParameters {{ NamedCurve }} OPTIONAL,
+ 339:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****          *      publicKey  [1] BIT STRING OPTIONAL
+ 340:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****          *    }
+ 341:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****          */
+ 342:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 343:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         /* publicKey */
+ 344:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         MBEDTLS_ASN1_CHK_ADD( pub_len, pk_write_ec_pubkey( &c, buf, ec ) );
+ 1167              		.loc 2 344 9
+ 1168 046f 488B55C0 		movq	-64(%rbp), %rdx
+ 1169 0473 488B4D90 		movq	-112(%rbp), %rcx
+ 1170 0477 488D45B0 		leaq	-80(%rbp), %rax
+ 1171 047b 4889CE   		movq	%rcx, %rsi
+ 1172 047e 4889C7   		movq	%rax, %rdi
+ 1173 0481 E8000000 		call	pk_write_ec_pubkey
+ 1173      00
+ 1174 0486 8945AC   		movl	%eax, -84(%rbp)
+ 1175 0489 837DAC00 		cmpl	$0, -84(%rbp)
+ 1176 048d 7908     		jns	.L85
+ 1177              		.loc 2 344 9 is_stmt 0 discriminator 1
+ 1178 048f 8B45AC   		movl	-84(%rbp), %eax
+ 1179 0492 E97A0200 		jmp	.L98
+ 1179      00
+ 1180              	.L85:
+ 1181              		.loc 2 344 9 discriminator 2
+ 1182 0497 8B45AC   		movl	-84(%rbp), %eax
+ 1183 049a 4898     		cltq
+ 1184 049c 480145C8 		addq	%rax, -56(%rbp)
+ 345:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 346:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         if( c - buf < 1 )
+ 1185              		.loc 2 346 15 is_stmt 1 discriminator 2
+ 1186 04a0 488B45B0 		movq	-80(%rbp), %rax
+ 1187 04a4 482B4590 		subq	-112(%rbp), %rax
+ 1188              		.loc 2 346 11 discriminator 2
+ 1189 04a8 4885C0   		testq	%rax, %rax
+ 1190 04ab 7F0A     		jg	.L86
+ 347:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****             return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
+ 1191              		.loc 2 347 19
+ 1192 04ad B894FFFF 		movl	$-108, %eax
+ 1192      FF
+ 1193 04b2 E95A0200 		jmp	.L98
+ 1193      00
+ 1194              	.L86:
+ 348:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         *--c = 0;
+ 1195              		.loc 2 348 10
+ 1196 04b7 488B45B0 		movq	-80(%rbp), %rax
+ 1197 04bb 4883E801 		subq	$1, %rax
+ 1198              		.loc 2 348 14
+ 1199 04bf 488945B0 		movq	%rax, -80(%rbp)
+ 1200              		.loc 2 348 10
+ 1201 04c3 488B45B0 		movq	-80(%rbp), %rax
+ 1202              		.loc 2 348 14
+ 1203 04c7 C60000   		movb	$0, (%rax)
+ 349:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         pub_len += 1;
+GAS LISTING /tmp/ccNilhrx.s 			page 35
+
+
+ 1204              		.loc 2 349 17
+ 1205 04ca 488345C8 		addq	$1, -56(%rbp)
+ 1205      01
+ 350:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 351:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         MBEDTLS_ASN1_CHK_ADD( pub_len, mbedtls_asn1_write_len( &c, buf, pub_len ) );
+ 1206              		.loc 2 351 9
+ 1207 04cf 488B55C8 		movq	-56(%rbp), %rdx
+ 1208 04d3 488B4D90 		movq	-112(%rbp), %rcx
+ 1209 04d7 488D45B0 		leaq	-80(%rbp), %rax
+ 1210 04db 4889CE   		movq	%rcx, %rsi
+ 1211 04de 4889C7   		movq	%rax, %rdi
+ 1212 04e1 E8000000 		call	mbedtls_asn1_write_len@PLT
+ 1212      00
+ 1213 04e6 8945AC   		movl	%eax, -84(%rbp)
+ 1214 04e9 837DAC00 		cmpl	$0, -84(%rbp)
+ 1215 04ed 7908     		jns	.L87
+ 1216              		.loc 2 351 9 is_stmt 0 discriminator 1
+ 1217 04ef 8B45AC   		movl	-84(%rbp), %eax
+ 1218 04f2 E91A0200 		jmp	.L98
+ 1218      00
+ 1219              	.L87:
+ 1220              		.loc 2 351 9 discriminator 2
+ 1221 04f7 8B45AC   		movl	-84(%rbp), %eax
+ 1222 04fa 4898     		cltq
+ 1223 04fc 480145C8 		addq	%rax, -56(%rbp)
+ 352:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         MBEDTLS_ASN1_CHK_ADD( pub_len, mbedtls_asn1_write_tag( &c, buf, MBEDTLS_ASN1_BIT_STRING ) )
+ 1224              		.loc 2 352 9 is_stmt 1 discriminator 2
+ 1225 0500 488B4D90 		movq	-112(%rbp), %rcx
+ 1226 0504 488D45B0 		leaq	-80(%rbp), %rax
+ 1227 0508 BA030000 		movl	$3, %edx
+ 1227      00
+ 1228 050d 4889CE   		movq	%rcx, %rsi
+ 1229 0510 4889C7   		movq	%rax, %rdi
+ 1230 0513 E8000000 		call	mbedtls_asn1_write_tag@PLT
+ 1230      00
+ 1231 0518 8945AC   		movl	%eax, -84(%rbp)
+ 1232 051b 837DAC00 		cmpl	$0, -84(%rbp)
+ 1233 051f 7908     		jns	.L88
+ 1234              		.loc 2 352 9 is_stmt 0 discriminator 1
+ 1235 0521 8B45AC   		movl	-84(%rbp), %eax
+ 1236 0524 E9E80100 		jmp	.L98
+ 1236      00
+ 1237              	.L88:
+ 1238              		.loc 2 352 9 discriminator 2
+ 1239 0529 8B45AC   		movl	-84(%rbp), %eax
+ 1240 052c 4898     		cltq
+ 1241 052e 480145C8 		addq	%rax, -56(%rbp)
+ 353:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 354:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         MBEDTLS_ASN1_CHK_ADD( pub_len, mbedtls_asn1_write_len( &c, buf, pub_len ) );
+ 1242              		.loc 2 354 9 is_stmt 1 discriminator 2
+ 1243 0532 488B55C8 		movq	-56(%rbp), %rdx
+ 1244 0536 488B4D90 		movq	-112(%rbp), %rcx
+ 1245 053a 488D45B0 		leaq	-80(%rbp), %rax
+ 1246 053e 4889CE   		movq	%rcx, %rsi
+ 1247 0541 4889C7   		movq	%rax, %rdi
+ 1248 0544 E8000000 		call	mbedtls_asn1_write_len@PLT
+ 1248      00
+GAS LISTING /tmp/ccNilhrx.s 			page 36
+
+
+ 1249 0549 8945AC   		movl	%eax, -84(%rbp)
+ 1250 054c 837DAC00 		cmpl	$0, -84(%rbp)
+ 1251 0550 7908     		jns	.L89
+ 1252              		.loc 2 354 9 is_stmt 0 discriminator 1
+ 1253 0552 8B45AC   		movl	-84(%rbp), %eax
+ 1254 0555 E9B70100 		jmp	.L98
+ 1254      00
+ 1255              	.L89:
+ 1256              		.loc 2 354 9 discriminator 2
+ 1257 055a 8B45AC   		movl	-84(%rbp), %eax
+ 1258 055d 4898     		cltq
+ 1259 055f 480145C8 		addq	%rax, -56(%rbp)
+ 355:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         MBEDTLS_ASN1_CHK_ADD( pub_len, mbedtls_asn1_write_tag( &c, buf,
+ 1260              		.loc 2 355 9 is_stmt 1 discriminator 2
+ 1261 0563 488B4D90 		movq	-112(%rbp), %rcx
+ 1262 0567 488D45B0 		leaq	-80(%rbp), %rax
+ 1263 056b BAA10000 		movl	$161, %edx
+ 1263      00
+ 1264 0570 4889CE   		movq	%rcx, %rsi
+ 1265 0573 4889C7   		movq	%rax, %rdi
+ 1266 0576 E8000000 		call	mbedtls_asn1_write_tag@PLT
+ 1266      00
+ 1267 057b 8945AC   		movl	%eax, -84(%rbp)
+ 1268 057e 837DAC00 		cmpl	$0, -84(%rbp)
+ 1269 0582 7908     		jns	.L90
+ 1270              		.loc 2 355 9 is_stmt 0 discriminator 1
+ 1271 0584 8B45AC   		movl	-84(%rbp), %eax
+ 1272 0587 E9850100 		jmp	.L98
+ 1272      00
+ 1273              	.L90:
+ 1274              		.loc 2 355 9 discriminator 2
+ 1275 058c 8B45AC   		movl	-84(%rbp), %eax
+ 1276 058f 4898     		cltq
+ 1277 0591 480145C8 		addq	%rax, -56(%rbp)
+ 356:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                             MBEDTLS_ASN1_CONTEXT_SPECIFIC | MBEDTLS_ASN1_CONSTRUCTED | 1 ) );
+ 357:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         len += pub_len;
+ 1278              		.loc 2 357 13 is_stmt 1 discriminator 2
+ 1279 0595 488B45C8 		movq	-56(%rbp), %rax
+ 1280 0599 480145B8 		addq	%rax, -72(%rbp)
+ 358:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 359:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         /* parameters */
+ 360:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         MBEDTLS_ASN1_CHK_ADD( par_len, pk_write_ec_param( &c, buf, ec ) );
+ 1281              		.loc 2 360 9 discriminator 2
+ 1282 059d 488B55C0 		movq	-64(%rbp), %rdx
+ 1283 05a1 488B4D90 		movq	-112(%rbp), %rcx
+ 1284 05a5 488D45B0 		leaq	-80(%rbp), %rax
+ 1285 05a9 4889CE   		movq	%rcx, %rsi
+ 1286 05ac 4889C7   		movq	%rax, %rdi
+ 1287 05af E8000000 		call	pk_write_ec_param
+ 1287      00
+ 1288 05b4 8945AC   		movl	%eax, -84(%rbp)
+ 1289 05b7 837DAC00 		cmpl	$0, -84(%rbp)
+ 1290 05bb 7908     		jns	.L91
+ 1291              		.loc 2 360 9 is_stmt 0 discriminator 1
+ 1292 05bd 8B45AC   		movl	-84(%rbp), %eax
+ 1293 05c0 E94C0100 		jmp	.L98
+ 1293      00
+GAS LISTING /tmp/ccNilhrx.s 			page 37
+
+
+ 1294              	.L91:
+ 1295              		.loc 2 360 9 discriminator 2
+ 1296 05c5 8B45AC   		movl	-84(%rbp), %eax
+ 1297 05c8 4898     		cltq
+ 1298 05ca 480145D0 		addq	%rax, -48(%rbp)
+ 361:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 362:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         MBEDTLS_ASN1_CHK_ADD( par_len, mbedtls_asn1_write_len( &c, buf, par_len ) );
+ 1299              		.loc 2 362 9 is_stmt 1 discriminator 2
+ 1300 05ce 488B55D0 		movq	-48(%rbp), %rdx
+ 1301 05d2 488B4D90 		movq	-112(%rbp), %rcx
+ 1302 05d6 488D45B0 		leaq	-80(%rbp), %rax
+ 1303 05da 4889CE   		movq	%rcx, %rsi
+ 1304 05dd 4889C7   		movq	%rax, %rdi
+ 1305 05e0 E8000000 		call	mbedtls_asn1_write_len@PLT
+ 1305      00
+ 1306 05e5 8945AC   		movl	%eax, -84(%rbp)
+ 1307 05e8 837DAC00 		cmpl	$0, -84(%rbp)
+ 1308 05ec 7908     		jns	.L92
+ 1309              		.loc 2 362 9 is_stmt 0 discriminator 1
+ 1310 05ee 8B45AC   		movl	-84(%rbp), %eax
+ 1311 05f1 E91B0100 		jmp	.L98
+ 1311      00
+ 1312              	.L92:
+ 1313              		.loc 2 362 9 discriminator 2
+ 1314 05f6 8B45AC   		movl	-84(%rbp), %eax
+ 1315 05f9 4898     		cltq
+ 1316 05fb 480145D0 		addq	%rax, -48(%rbp)
+ 363:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         MBEDTLS_ASN1_CHK_ADD( par_len, mbedtls_asn1_write_tag( &c, buf,
+ 1317              		.loc 2 363 9 is_stmt 1 discriminator 2
+ 1318 05ff 488B4D90 		movq	-112(%rbp), %rcx
+ 1319 0603 488D45B0 		leaq	-80(%rbp), %rax
+ 1320 0607 BAA00000 		movl	$160, %edx
+ 1320      00
+ 1321 060c 4889CE   		movq	%rcx, %rsi
+ 1322 060f 4889C7   		movq	%rax, %rdi
+ 1323 0612 E8000000 		call	mbedtls_asn1_write_tag@PLT
+ 1323      00
+ 1324 0617 8945AC   		movl	%eax, -84(%rbp)
+ 1325 061a 837DAC00 		cmpl	$0, -84(%rbp)
+ 1326 061e 7908     		jns	.L93
+ 1327              		.loc 2 363 9 is_stmt 0 discriminator 1
+ 1328 0620 8B45AC   		movl	-84(%rbp), %eax
+ 1329 0623 E9E90000 		jmp	.L98
+ 1329      00
+ 1330              	.L93:
+ 1331              		.loc 2 363 9 discriminator 2
+ 1332 0628 8B45AC   		movl	-84(%rbp), %eax
+ 1333 062b 4898     		cltq
+ 1334 062d 480145D0 		addq	%rax, -48(%rbp)
+ 364:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                             MBEDTLS_ASN1_CONTEXT_SPECIFIC | MBEDTLS_ASN1_CONSTRUCTED | 0 ) );
+ 365:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         len += par_len;
+ 1335              		.loc 2 365 13 is_stmt 1 discriminator 2
+ 1336 0631 488B45D0 		movq	-48(%rbp), %rax
+ 1337 0635 480145B8 		addq	%rax, -72(%rbp)
+ 366:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 367:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         /* privateKey: write as MPI then fix tag */
+ 368:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_mpi( &c, buf, &ec->d ) );
+GAS LISTING /tmp/ccNilhrx.s 			page 38
+
+
+ 1338              		.loc 2 368 9 discriminator 2
+ 1339 0639 488B45C0 		movq	-64(%rbp), %rax
+ 1340 063d 488D90F8 		leaq	248(%rax), %rdx
+ 1340      000000
+ 1341 0644 488B4D90 		movq	-112(%rbp), %rcx
+ 1342 0648 488D45B0 		leaq	-80(%rbp), %rax
+ 1343 064c 4889CE   		movq	%rcx, %rsi
+ 1344 064f 4889C7   		movq	%rax, %rdi
+ 1345 0652 E8000000 		call	mbedtls_asn1_write_mpi@PLT
+ 1345      00
+ 1346 0657 8945AC   		movl	%eax, -84(%rbp)
+ 1347 065a 837DAC00 		cmpl	$0, -84(%rbp)
+ 1348 065e 7908     		jns	.L94
+ 1349              		.loc 2 368 9 is_stmt 0 discriminator 1
+ 1350 0660 8B45AC   		movl	-84(%rbp), %eax
+ 1351 0663 E9A90000 		jmp	.L98
+ 1351      00
+ 1352              	.L94:
+ 1353              		.loc 2 368 9 discriminator 2
+ 1354 0668 8B45AC   		movl	-84(%rbp), %eax
+ 1355 066b 4898     		cltq
+ 1356 066d 480145B8 		addq	%rax, -72(%rbp)
+ 369:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         *c = MBEDTLS_ASN1_OCTET_STRING;
+ 1357              		.loc 2 369 9 is_stmt 1 discriminator 2
+ 1358 0671 488B45B0 		movq	-80(%rbp), %rax
+ 1359              		.loc 2 369 12 discriminator 2
+ 1360 0675 C60004   		movb	$4, (%rax)
+ 370:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 371:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         /* version */
+ 372:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_int( &c, buf, 1 ) );
+ 1361              		.loc 2 372 9 discriminator 2
+ 1362 0678 488B4D90 		movq	-112(%rbp), %rcx
+ 1363 067c 488D45B0 		leaq	-80(%rbp), %rax
+ 1364 0680 BA010000 		movl	$1, %edx
+ 1364      00
+ 1365 0685 4889CE   		movq	%rcx, %rsi
+ 1366 0688 4889C7   		movq	%rax, %rdi
+ 1367 068b E8000000 		call	mbedtls_asn1_write_int@PLT
+ 1367      00
+ 1368 0690 8945AC   		movl	%eax, -84(%rbp)
+ 1369 0693 837DAC00 		cmpl	$0, -84(%rbp)
+ 1370 0697 7905     		jns	.L95
+ 1371              		.loc 2 372 9 is_stmt 0 discriminator 1
+ 1372 0699 8B45AC   		movl	-84(%rbp), %eax
+ 1373 069c EB73     		jmp	.L98
+ 1374              	.L95:
+ 1375              		.loc 2 372 9 discriminator 2
+ 1376 069e 8B45AC   		movl	-84(%rbp), %eax
+ 1377 06a1 4898     		cltq
+ 1378 06a3 480145B8 		addq	%rax, -72(%rbp)
+ 373:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 374:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( &c, buf, len ) );
+ 1379              		.loc 2 374 9 is_stmt 1 discriminator 2
+ 1380 06a7 488B55B8 		movq	-72(%rbp), %rdx
+ 1381 06ab 488B4D90 		movq	-112(%rbp), %rcx
+ 1382 06af 488D45B0 		leaq	-80(%rbp), %rax
+ 1383 06b3 4889CE   		movq	%rcx, %rsi
+GAS LISTING /tmp/ccNilhrx.s 			page 39
+
+
+ 1384 06b6 4889C7   		movq	%rax, %rdi
+ 1385 06b9 E8000000 		call	mbedtls_asn1_write_len@PLT
+ 1385      00
+ 1386 06be 8945AC   		movl	%eax, -84(%rbp)
+ 1387 06c1 837DAC00 		cmpl	$0, -84(%rbp)
+ 1388 06c5 7905     		jns	.L96
+ 1389              		.loc 2 374 9 is_stmt 0 discriminator 1
+ 1390 06c7 8B45AC   		movl	-84(%rbp), %eax
+ 1391 06ca EB45     		jmp	.L98
+ 1392              	.L96:
+ 1393              		.loc 2 374 9 discriminator 2
+ 1394 06cc 8B45AC   		movl	-84(%rbp), %eax
+ 1395 06cf 4898     		cltq
+ 1396 06d1 480145B8 		addq	%rax, -72(%rbp)
+ 375:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( &c, buf, MBEDTLS_ASN1_CONSTRUCTED |
+ 1397              		.loc 2 375 9 is_stmt 1 discriminator 2
+ 1398 06d5 488B4D90 		movq	-112(%rbp), %rcx
+ 1399 06d9 488D45B0 		leaq	-80(%rbp), %rax
+ 1400 06dd BA300000 		movl	$48, %edx
+ 1400      00
+ 1401 06e2 4889CE   		movq	%rcx, %rsi
+ 1402 06e5 4889C7   		movq	%rax, %rdi
+ 1403 06e8 E8000000 		call	mbedtls_asn1_write_tag@PLT
+ 1403      00
+ 1404 06ed 8945AC   		movl	%eax, -84(%rbp)
+ 1405 06f0 837DAC00 		cmpl	$0, -84(%rbp)
+ 1406 06f4 7905     		jns	.L97
+ 1407              		.loc 2 375 9 is_stmt 0 discriminator 1
+ 1408 06f6 8B45AC   		movl	-84(%rbp), %eax
+ 1409 06f9 EB16     		jmp	.L98
+ 1410              	.L97:
+ 1411              		.loc 2 375 9 discriminator 2
+ 1412 06fb 8B45AC   		movl	-84(%rbp), %eax
+ 1413 06fe 4898     		cltq
+ 1414 0700 480145B8 		addq	%rax, -72(%rbp)
+ 1415              	.LBE3:
+ 1416 0704 EB07     		jmp	.L83
+ 1417              	.L84:
+ 376:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                                     MBEDTLS_ASN1_SEQUENCE ) );
+ 377:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     }
+ 378:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     else
+ 379:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #endif /* MBEDTLS_ECP_C */
+ 380:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         return( MBEDTLS_ERR_PK_FEATURE_UNAVAILABLE );
+ 1418              		.loc 2 380 15 is_stmt 1
+ 1419 0706 B880C6FF 		movl	$-14720, %eax
+ 1419      FF
+ 1420 070b EB04     		jmp	.L98
+ 1421              	.L83:
+ 381:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 382:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     return( (int) len );
+ 1422              		.loc 2 382 13
+ 1423 070d 488B45B8 		movq	-72(%rbp), %rax
+ 1424              	.L98:
+ 383:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** }
+ 1425              		.loc 2 383 1 discriminator 2
+ 1426 0711 488B75F8 		movq	-8(%rbp), %rsi
+ 1427 0715 64483334 		xorq	%fs:40, %rsi
+GAS LISTING /tmp/ccNilhrx.s 			page 40
+
+
+ 1427      25280000 
+ 1427      00
+ 1428 071e 7405     		je	.L99
+ 1429              		.loc 2 383 1 is_stmt 0
+ 1430 0720 E8000000 		call	__stack_chk_fail@PLT
+ 1430      00
+ 1431              	.L99:
+ 1432 0725 C9       		leave
+ 1433              	.LCFI23:
+ 1434              		.cfi_def_cfa 7, 8
+ 1435 0726 C3       		ret
+ 1436              		.cfi_endproc
+ 1437              	.LFE21:
+ 1439              		.section	.rodata
+ 1440              	.LC0:
+ 1441 0000 2D2D2D2D 		.string	"-----END PUBLIC KEY-----\n"
+ 1441      2D454E44 
+ 1441      20505542 
+ 1441      4C494320 
+ 1441      4B45592D 
+ 1442              	.LC1:
+ 1443 001a 2D2D2D2D 		.string	"-----BEGIN PUBLIC KEY-----\n"
+ 1443      2D424547 
+ 1443      494E2050 
+ 1443      55424C49 
+ 1443      43204B45 
+ 1444              		.section	.text.mbedtls_pk_write_pubkey_pem,"ax",@progbits
+ 1445              		.globl	mbedtls_pk_write_pubkey_pem
+ 1447              	mbedtls_pk_write_pubkey_pem:
+ 1448              	.LFB22:
+ 384:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 385:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #if defined(MBEDTLS_PEM_WRITE_C)
+ 386:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 387:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #define PEM_BEGIN_PUBLIC_KEY    "-----BEGIN PUBLIC KEY-----\n"
+ 388:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #define PEM_END_PUBLIC_KEY      "-----END PUBLIC KEY-----\n"
+ 389:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 390:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #define PEM_BEGIN_PRIVATE_KEY_RSA   "-----BEGIN RSA PRIVATE KEY-----\n"
+ 391:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #define PEM_END_PRIVATE_KEY_RSA     "-----END RSA PRIVATE KEY-----\n"
+ 392:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #define PEM_BEGIN_PRIVATE_KEY_EC    "-----BEGIN EC PRIVATE KEY-----\n"
+ 393:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #define PEM_END_PRIVATE_KEY_EC      "-----END EC PRIVATE KEY-----\n"
+ 394:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 395:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** /*
+ 396:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  * Max sizes of key per types. Shown as tag + len (+ content).
+ 397:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  */
+ 398:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 399:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #if defined(MBEDTLS_RSA_C)
+ 400:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** /*
+ 401:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  * RSA public keys:
+ 402:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *  SubjectPublicKeyInfo  ::=  SEQUENCE  {          1 + 3
+ 403:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *       algorithm            AlgorithmIdentifier,  1 + 1 (sequence)
+ 404:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *                                                + 1 + 1 + 9 (rsa oid)
+ 405:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *                                                + 1 + 1 (params null)
+ 406:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *       subjectPublicKey     BIT STRING }          1 + 3 + (1 + below)
+ 407:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *  RSAPublicKey ::= SEQUENCE {                     1 + 3
+ 408:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *      modulus           INTEGER,  -- n            1 + 3 + MPI_MAX + 1
+ 409:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *      publicExponent    INTEGER   -- e            1 + 3 + MPI_MAX + 1
+ 410:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *  }
+GAS LISTING /tmp/ccNilhrx.s 			page 41
+
+
+ 411:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  */
+ 412:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #define RSA_PUB_DER_MAX_BYTES   38 + 2 * MBEDTLS_MPI_MAX_SIZE
+ 413:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 414:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** /*
+ 415:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  * RSA private keys:
+ 416:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *  RSAPrivateKey ::= SEQUENCE {                    1 + 3
+ 417:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *      version           Version,                  1 + 1 + 1
+ 418:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *      modulus           INTEGER,                  1 + 3 + MPI_MAX + 1
+ 419:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *      publicExponent    INTEGER,                  1 + 3 + MPI_MAX + 1
+ 420:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *      privateExponent   INTEGER,                  1 + 3 + MPI_MAX + 1
+ 421:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *      prime1            INTEGER,                  1 + 3 + MPI_MAX / 2 + 1
+ 422:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *      prime2            INTEGER,                  1 + 3 + MPI_MAX / 2 + 1
+ 423:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *      exponent1         INTEGER,                  1 + 3 + MPI_MAX / 2 + 1
+ 424:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *      exponent2         INTEGER,                  1 + 3 + MPI_MAX / 2 + 1
+ 425:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *      coefficient       INTEGER,                  1 + 3 + MPI_MAX / 2 + 1
+ 426:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *      otherPrimeInfos   OtherPrimeInfos OPTIONAL  0 (not supported)
+ 427:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *  }
+ 428:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  */
+ 429:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #define MPI_MAX_SIZE_2          MBEDTLS_MPI_MAX_SIZE / 2 + \
+ 430:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                 MBEDTLS_MPI_MAX_SIZE % 2
+ 431:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #define RSA_PRV_DER_MAX_BYTES   47 + 3 * MBEDTLS_MPI_MAX_SIZE \
+ 432:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                    + 5 * MPI_MAX_SIZE_2
+ 433:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 434:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #else /* MBEDTLS_RSA_C */
+ 435:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 436:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #define RSA_PUB_DER_MAX_BYTES   0
+ 437:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #define RSA_PRV_DER_MAX_BYTES   0
+ 438:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 439:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #endif /* MBEDTLS_RSA_C */
+ 440:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 441:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #if defined(MBEDTLS_ECP_C)
+ 442:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** /*
+ 443:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  * EC public keys:
+ 444:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *  SubjectPublicKeyInfo  ::=  SEQUENCE  {      1 + 2
+ 445:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *    algorithm         AlgorithmIdentifier,    1 + 1 (sequence)
+ 446:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *                                            + 1 + 1 + 7 (ec oid)
+ 447:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *                                            + 1 + 1 + 9 (namedCurve oid)
+ 448:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *    subjectPublicKey  BIT STRING              1 + 2 + 1               [1]
+ 449:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *                                            + 1 (point format)        [1]
+ 450:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *                                            + 2 * ECP_MAX (coords)    [1]
+ 451:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *  }
+ 452:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  */
+ 453:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #define ECP_PUB_DER_MAX_BYTES   30 + 2 * MBEDTLS_ECP_MAX_BYTES
+ 454:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 455:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** /*
+ 456:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  * EC private keys:
+ 457:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  * ECPrivateKey ::= SEQUENCE {                  1 + 2
+ 458:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *      version        INTEGER ,                1 + 1 + 1
+ 459:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *      privateKey     OCTET STRING,            1 + 1 + ECP_MAX
+ 460:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *      parameters [0] ECParameters OPTIONAL,   1 + 1 + (1 + 1 + 9)
+ 461:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *      publicKey  [1] BIT STRING OPTIONAL      1 + 2 + [1] above
+ 462:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  *    }
+ 463:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****  */
+ 464:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #define ECP_PRV_DER_MAX_BYTES   29 + 3 * MBEDTLS_ECP_MAX_BYTES
+ 465:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 466:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #else /* MBEDTLS_ECP_C */
+ 467:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+GAS LISTING /tmp/ccNilhrx.s 			page 42
+
+
+ 468:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #define ECP_PUB_DER_MAX_BYTES   0
+ 469:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #define ECP_PRV_DER_MAX_BYTES   0
+ 470:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 471:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #endif /* MBEDTLS_ECP_C */
+ 472:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 473:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #define PUB_DER_MAX_BYTES   RSA_PUB_DER_MAX_BYTES > ECP_PUB_DER_MAX_BYTES ? \
+ 474:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                             RSA_PUB_DER_MAX_BYTES : ECP_PUB_DER_MAX_BYTES
+ 475:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #define PRV_DER_MAX_BYTES   RSA_PRV_DER_MAX_BYTES > ECP_PRV_DER_MAX_BYTES ? \
+ 476:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                             RSA_PRV_DER_MAX_BYTES : ECP_PRV_DER_MAX_BYTES
+ 477:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 478:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** int mbedtls_pk_write_pubkey_pem( mbedtls_pk_context *key, unsigned char *buf, size_t size )
+ 479:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** {
+ 1449              		.loc 2 479 1 is_stmt 1
+ 1450              		.cfi_startproc
+ 1451 0000 F30F1EFA 		endbr64
+ 1452 0004 55       		pushq	%rbp
+ 1453              	.LCFI24:
+ 1454              		.cfi_def_cfa_offset 16
+ 1455              		.cfi_offset 6, -16
+ 1456 0005 4889E5   		movq	%rsp, %rbp
+ 1457              	.LCFI25:
+ 1458              		.cfi_def_cfa_register 6
+ 1459 0008 4881EC60 		subq	$2144, %rsp
+ 1459      080000
+ 1460 000f 4889BDB8 		movq	%rdi, -2120(%rbp)
+ 1460      F7FFFF
+ 1461 0016 4889B5B0 		movq	%rsi, -2128(%rbp)
+ 1461      F7FFFF
+ 1462 001d 488995A8 		movq	%rdx, -2136(%rbp)
+ 1462      F7FFFF
+ 1463              		.loc 2 479 1
+ 1464 0024 64488B04 		movq	%fs:40, %rax
+ 1464      25280000 
+ 1464      00
+ 1465 002d 488945F8 		movq	%rax, -8(%rbp)
+ 1466 0031 31C0     		xorl	%eax, %eax
+ 480:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     int ret;
+ 481:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     unsigned char output_buf[PUB_DER_MAX_BYTES];
+ 482:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     size_t olen = 0;
+ 1467              		.loc 2 482 12
+ 1468 0033 48C785C8 		movq	$0, -2104(%rbp)
+ 1468      F7FFFF00 
+ 1468      000000
+ 483:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 484:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     PK_VALIDATE_RET( key != NULL );
+ 485:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     PK_VALIDATE_RET( buf != NULL || size == 0 );
+ 486:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 487:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     if( ( ret = mbedtls_pk_write_pubkey_der( key, output_buf,
+ 1469              		.loc 2 487 17
+ 1470 003e 488D8DD0 		leaq	-2096(%rbp), %rcx
+ 1470      F7FFFF
+ 1471 0045 488B85B8 		movq	-2120(%rbp), %rax
+ 1471      F7FFFF
+ 1472 004c BA260800 		movl	$2086, %edx
+ 1472      00
+ 1473 0051 4889CE   		movq	%rcx, %rsi
+ 1474 0054 4889C7   		movq	%rax, %rdi
+GAS LISTING /tmp/ccNilhrx.s 			page 43
+
+
+ 1475 0057 E8000000 		call	mbedtls_pk_write_pubkey_der
+ 1475      00
+ 1476 005c 8985C4F7 		movl	%eax, -2108(%rbp)
+ 1476      FFFF
+ 1477              		.loc 2 487 7
+ 1478 0062 83BDC4F7 		cmpl	$0, -2108(%rbp)
+ 1478      FFFF00
+ 1479 0069 7908     		jns	.L109
+ 488:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                      sizeof(output_buf) ) ) < 0 )
+ 489:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     {
+ 490:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         return( ret );
+ 1480              		.loc 2 490 15
+ 1481 006b 8B85C4F7 		movl	-2108(%rbp), %eax
+ 1481      FFFF
+ 1482 0071 EB79     		jmp	.L112
+ 1483              	.L109:
+ 491:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     }
+ 492:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 493:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     if( ( ret = mbedtls_pem_write_buffer( PEM_BEGIN_PUBLIC_KEY, PEM_END_PUBLIC_KEY,
+ 1484              		.loc 2 493 17
+ 1485 0073 8B85C4F7 		movl	-2108(%rbp), %eax
+ 1485      FFFF
+ 1486 0079 4898     		cltq
+ 494:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                   output_buf + sizeof(output_buf) - ret,
+ 1487              		.loc 2 494 67
+ 1488 007b 8B95C4F7 		movl	-2108(%rbp), %edx
+ 1488      FFFF
+ 1489 0081 4863D2   		movslq	%edx, %rdx
+ 1490 0084 B9260800 		movl	$2086, %ecx
+ 1490      00
+ 1491 0089 4829D1   		subq	%rdx, %rcx
+ 493:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                   output_buf + sizeof(output_buf) - ret,
+ 1492              		.loc 2 493 17
+ 1493 008c 488D95D0 		leaq	-2096(%rbp), %rdx
+ 1493      F7FFFF
+ 1494 0093 4801CA   		addq	%rcx, %rdx
+ 1495 0096 488BBDA8 		movq	-2136(%rbp), %rdi
+ 1495      F7FFFF
+ 1496 009d 488BB5B0 		movq	-2128(%rbp), %rsi
+ 1496      F7FFFF
+ 1497 00a4 4883EC08 		subq	$8, %rsp
+ 1498 00a8 488D8DC8 		leaq	-2104(%rbp), %rcx
+ 1498      F7FFFF
+ 1499 00af 51       		pushq	%rcx
+ 1500 00b0 4989F9   		movq	%rdi, %r9
+ 1501 00b3 4989F0   		movq	%rsi, %r8
+ 1502 00b6 4889C1   		movq	%rax, %rcx
+ 1503 00b9 488D3500 		leaq	.LC0(%rip), %rsi
+ 1503      000000
+ 1504 00c0 488D3D00 		leaq	.LC1(%rip), %rdi
+ 1504      000000
+ 1505 00c7 E8000000 		call	mbedtls_pem_write_buffer@PLT
+ 1505      00
+ 1506 00cc 4883C410 		addq	$16, %rsp
+ 1507 00d0 8985C4F7 		movl	%eax, -2108(%rbp)
+ 1507      FFFF
+ 493:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                   output_buf + sizeof(output_buf) - ret,
+GAS LISTING /tmp/ccNilhrx.s 			page 44
+
+
+ 1508              		.loc 2 493 7
+ 1509 00d6 83BDC4F7 		cmpl	$0, -2108(%rbp)
+ 1509      FFFF00
+ 1510 00dd 7408     		je	.L111
+ 495:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                   ret, buf, size, &olen ) ) != 0 )
+ 496:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     {
+ 497:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         return( ret );
+ 1511              		.loc 2 497 15
+ 1512 00df 8B85C4F7 		movl	-2108(%rbp), %eax
+ 1512      FFFF
+ 1513 00e5 EB05     		jmp	.L112
+ 1514              	.L111:
+ 498:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     }
+ 499:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 500:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     return( 0 );
+ 1515              		.loc 2 500 11
+ 1516 00e7 B8000000 		movl	$0, %eax
+ 1516      00
+ 1517              	.L112:
+ 501:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** }
+ 1518              		.loc 2 501 1 discriminator 1
+ 1519 00ec 488B75F8 		movq	-8(%rbp), %rsi
+ 1520 00f0 64483334 		xorq	%fs:40, %rsi
+ 1520      25280000 
+ 1520      00
+ 1521 00f9 7405     		je	.L113
+ 1522              		.loc 2 501 1 is_stmt 0
+ 1523 00fb E8000000 		call	__stack_chk_fail@PLT
+ 1523      00
+ 1524              	.L113:
+ 1525 0100 C9       		leave
+ 1526              	.LCFI26:
+ 1527              		.cfi_def_cfa 7, 8
+ 1528 0101 C3       		ret
+ 1529              		.cfi_endproc
+ 1530              	.LFE22:
+ 1532              		.section	.rodata
+ 1533 0036 0000     		.align 8
+ 1534              	.LC2:
+ 1535 0038 2D2D2D2D 		.string	"-----BEGIN RSA PRIVATE KEY-----\n"
+ 1535      2D424547 
+ 1535      494E2052 
+ 1535      53412050 
+ 1535      52495641 
+ 1536 0059 00000000 		.align 8
+ 1536      000000
+ 1537              	.LC3:
+ 1538 0060 2D2D2D2D 		.string	"-----END RSA PRIVATE KEY-----\n"
+ 1538      2D454E44 
+ 1538      20525341 
+ 1538      20505249 
+ 1538      56415445 
+ 1539 007f 00       		.align 8
+ 1540              	.LC4:
+ 1541 0080 2D2D2D2D 		.string	"-----BEGIN EC PRIVATE KEY-----\n"
+ 1541      2D424547 
+ 1541      494E2045 
+GAS LISTING /tmp/ccNilhrx.s 			page 45
+
+
+ 1541      43205052 
+ 1541      49564154 
+ 1542              	.LC5:
+ 1543 00a0 2D2D2D2D 		.string	"-----END EC PRIVATE KEY-----\n"
+ 1543      2D454E44 
+ 1543      20454320 
+ 1543      50524956 
+ 1543      41544520 
+ 1544              		.section	.text.mbedtls_pk_write_key_pem,"ax",@progbits
+ 1545              		.globl	mbedtls_pk_write_key_pem
+ 1547              	mbedtls_pk_write_key_pem:
+ 1548              	.LFB23:
+ 502:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 503:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** int mbedtls_pk_write_key_pem( mbedtls_pk_context *key, unsigned char *buf, size_t size )
+ 504:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** {
+ 1549              		.loc 2 504 1 is_stmt 1
+ 1550              		.cfi_startproc
+ 1551 0000 F30F1EFA 		endbr64
+ 1552 0004 55       		pushq	%rbp
+ 1553              	.LCFI27:
+ 1554              		.cfi_def_cfa_offset 16
+ 1555              		.cfi_offset 6, -16
+ 1556 0005 4889E5   		movq	%rsp, %rbp
+ 1557              	.LCFI28:
+ 1558              		.cfi_def_cfa_register 6
+ 1559 0008 4881EC00 		subq	$4096, %rsp
+ 1559      100000
+ 1560 000f 48830C24 		orq	$0, (%rsp)
+ 1560      00
+ 1561 0014 4881EC80 		subq	$1664, %rsp
+ 1561      060000
+ 1562 001b 4889BD98 		movq	%rdi, -5736(%rbp)
+ 1562      E9FFFF
+ 1563 0022 4889B590 		movq	%rsi, -5744(%rbp)
+ 1563      E9FFFF
+ 1564 0029 48899588 		movq	%rdx, -5752(%rbp)
+ 1564      E9FFFF
+ 1565              		.loc 2 504 1
+ 1566 0030 64488B04 		movq	%fs:40, %rax
+ 1566      25280000 
+ 1566      00
+ 1567 0039 488945F8 		movq	%rax, -8(%rbp)
+ 1568 003d 31C0     		xorl	%eax, %eax
+ 505:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     int ret;
+ 506:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     unsigned char output_buf[PRV_DER_MAX_BYTES];
+ 507:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     const char *begin, *end;
+ 508:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     size_t olen = 0;
+ 1569              		.loc 2 508 12
+ 1570 003f 48C785A8 		movq	$0, -5720(%rbp)
+ 1570      E9FFFF00 
+ 1570      000000
+ 509:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 510:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     PK_VALIDATE_RET( key != NULL );
+ 511:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     PK_VALIDATE_RET( buf != NULL || size == 0 );
+ 512:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 513:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     if( ( ret = mbedtls_pk_write_key_der( key, output_buf, sizeof(output_buf) ) ) < 0 )
+ 1571              		.loc 2 513 17
+GAS LISTING /tmp/ccNilhrx.s 			page 46
+
+
+ 1572 004a 488D8DC0 		leaq	-5696(%rbp), %rcx
+ 1572      E9FFFF
+ 1573 0051 488B8598 		movq	-5736(%rbp), %rax
+ 1573      E9FFFF
+ 1574 0058 BA2F1600 		movl	$5679, %edx
+ 1574      00
+ 1575 005d 4889CE   		movq	%rcx, %rsi
+ 1576 0060 4889C7   		movq	%rax, %rdi
+ 1577 0063 E8000000 		call	mbedtls_pk_write_key_der
+ 1577      00
+ 1578 0068 8985A4E9 		movl	%eax, -5724(%rbp)
+ 1578      FFFF
+ 1579              		.loc 2 513 7
+ 1580 006e 83BDA4E9 		cmpl	$0, -5724(%rbp)
+ 1580      FFFF00
+ 1581 0075 790B     		jns	.L115
+ 514:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         return( ret );
+ 1582              		.loc 2 514 15
+ 1583 0077 8B85A4E9 		movl	-5724(%rbp), %eax
+ 1583      FFFF
+ 1584 007d E9E50000 		jmp	.L121
+ 1584      00
+ 1585              	.L115:
+ 515:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 516:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #if defined(MBEDTLS_RSA_C)
+ 517:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     if( mbedtls_pk_get_type( key ) == MBEDTLS_PK_RSA )
+ 1586              		.loc 2 517 9
+ 1587 0082 488B8598 		movq	-5736(%rbp), %rax
+ 1587      E9FFFF
+ 1588 0089 4889C7   		movq	%rax, %rdi
+ 1589 008c E8000000 		call	mbedtls_pk_get_type@PLT
+ 1589      00
+ 1590              		.loc 2 517 7
+ 1591 0091 83F801   		cmpl	$1, %eax
+ 1592 0094 751E     		jne	.L117
+ 518:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     {
+ 519:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         begin = PEM_BEGIN_PRIVATE_KEY_RSA;
+ 1593              		.loc 2 519 15
+ 1594 0096 488D0500 		leaq	.LC2(%rip), %rax
+ 1594      000000
+ 1595 009d 488985B0 		movq	%rax, -5712(%rbp)
+ 1595      E9FFFF
+ 520:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         end = PEM_END_PRIVATE_KEY_RSA;
+ 1596              		.loc 2 520 13
+ 1597 00a4 488D0500 		leaq	.LC3(%rip), %rax
+ 1597      000000
+ 1598 00ab 488985B8 		movq	%rax, -5704(%rbp)
+ 1598      E9FFFF
+ 1599 00b2 EB39     		jmp	.L118
+ 1600              	.L117:
+ 521:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     }
+ 522:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     else
+ 523:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #endif
+ 524:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #if defined(MBEDTLS_ECP_C)
+ 525:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     if( mbedtls_pk_get_type( key ) == MBEDTLS_PK_ECKEY )
+ 1601              		.loc 2 525 9
+ 1602 00b4 488B8598 		movq	-5736(%rbp), %rax
+GAS LISTING /tmp/ccNilhrx.s 			page 47
+
+
+ 1602      E9FFFF
+ 1603 00bb 4889C7   		movq	%rax, %rdi
+ 1604 00be E8000000 		call	mbedtls_pk_get_type@PLT
+ 1604      00
+ 1605              		.loc 2 525 7
+ 1606 00c3 83F802   		cmpl	$2, %eax
+ 1607 00c6 751E     		jne	.L119
+ 526:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     {
+ 527:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         begin = PEM_BEGIN_PRIVATE_KEY_EC;
+ 1608              		.loc 2 527 15
+ 1609 00c8 488D0500 		leaq	.LC4(%rip), %rax
+ 1609      000000
+ 1610 00cf 488985B0 		movq	%rax, -5712(%rbp)
+ 1610      E9FFFF
+ 528:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         end = PEM_END_PRIVATE_KEY_EC;
+ 1611              		.loc 2 528 13
+ 1612 00d6 488D0500 		leaq	.LC5(%rip), %rax
+ 1612      000000
+ 1613 00dd 488985B8 		movq	%rax, -5704(%rbp)
+ 1613      E9FFFF
+ 1614 00e4 EB07     		jmp	.L118
+ 1615              	.L119:
+ 529:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     }
+ 530:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     else
+ 531:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** #endif
+ 532:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         return( MBEDTLS_ERR_PK_FEATURE_UNAVAILABLE );
+ 1616              		.loc 2 532 15
+ 1617 00e6 B880C6FF 		movl	$-14720, %eax
+ 1617      FF
+ 1618 00eb EB7A     		jmp	.L121
+ 1619              	.L118:
+ 533:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 534:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     if( ( ret = mbedtls_pem_write_buffer( begin, end,
+ 1620              		.loc 2 534 17
+ 1621 00ed 8B85A4E9 		movl	-5724(%rbp), %eax
+ 1621      FFFF
+ 1622 00f3 4863D0   		movslq	%eax, %rdx
+ 535:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                   output_buf + sizeof(output_buf) - ret,
+ 1623              		.loc 2 535 67
+ 1624 00f6 8B85A4E9 		movl	-5724(%rbp), %eax
+ 1624      FFFF
+ 1625 00fc 4898     		cltq
+ 1626 00fe B92F1600 		movl	$5679, %ecx
+ 1626      00
+ 1627 0103 4829C1   		subq	%rax, %rcx
+ 534:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                   output_buf + sizeof(output_buf) - ret,
+ 1628              		.loc 2 534 17
+ 1629 0106 488D85C0 		leaq	-5696(%rbp), %rax
+ 1629      E9FFFF
+ 1630 010d 488D3C08 		leaq	(%rax,%rcx), %rdi
+ 1631 0111 4C8B8D88 		movq	-5752(%rbp), %r9
+ 1631      E9FFFF
+ 1632 0118 4C8B8590 		movq	-5744(%rbp), %r8
+ 1632      E9FFFF
+ 1633 011f 488BB5B8 		movq	-5704(%rbp), %rsi
+ 1633      E9FFFF
+ 1634 0126 488B85B0 		movq	-5712(%rbp), %rax
+GAS LISTING /tmp/ccNilhrx.s 			page 48
+
+
+ 1634      E9FFFF
+ 1635 012d 4883EC08 		subq	$8, %rsp
+ 1636 0131 488D8DA8 		leaq	-5720(%rbp), %rcx
+ 1636      E9FFFF
+ 1637 0138 51       		pushq	%rcx
+ 1638 0139 4889D1   		movq	%rdx, %rcx
+ 1639 013c 4889FA   		movq	%rdi, %rdx
+ 1640 013f 4889C7   		movq	%rax, %rdi
+ 1641 0142 E8000000 		call	mbedtls_pem_write_buffer@PLT
+ 1641      00
+ 1642 0147 4883C410 		addq	$16, %rsp
+ 1643 014b 8985A4E9 		movl	%eax, -5724(%rbp)
+ 1643      FFFF
+ 534:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                   output_buf + sizeof(output_buf) - ret,
+ 1644              		.loc 2 534 7
+ 1645 0151 83BDA4E9 		cmpl	$0, -5724(%rbp)
+ 1645      FFFF00
+ 1646 0158 7408     		je	.L120
+ 536:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****                                   ret, buf, size, &olen ) ) != 0 )
+ 537:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     {
+ 538:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****         return( ret );
+ 1647              		.loc 2 538 15
+ 1648 015a 8B85A4E9 		movl	-5724(%rbp), %eax
+ 1648      FFFF
+ 1649 0160 EB05     		jmp	.L121
+ 1650              	.L120:
+ 539:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     }
+ 540:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** 
+ 541:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c ****     return( 0 );
+ 1651              		.loc 2 541 11
+ 1652 0162 B8000000 		movl	$0, %eax
+ 1652      00
+ 1653              	.L121:
+ 542:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/pkwrite.c **** }
+ 1654              		.loc 2 542 1 discriminator 1
+ 1655 0167 488B55F8 		movq	-8(%rbp), %rdx
+ 1656 016b 64483314 		xorq	%fs:40, %rdx
+ 1656      25280000 
+ 1656      00
+ 1657 0174 7405     		je	.L122
+ 1658              		.loc 2 542 1 is_stmt 0
+ 1659 0176 E8000000 		call	__stack_chk_fail@PLT
+ 1659      00
+ 1660              	.L122:
+ 1661 017b C9       		leave
+ 1662              	.LCFI29:
+ 1663              		.cfi_def_cfa 7, 8
+ 1664 017c C3       		ret
+ 1665              		.cfi_endproc
+ 1666              	.LFE23:
+ 1668              		.text
+ 1669              	.Letext0:
+ 1670              		.file 3 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 1671              		.file 4 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 1672              		.file 5 "/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h"
+ 1673              		.file 6 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/bignum.
+ 1674              		.file 7 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/rsa.h"
+GAS LISTING /tmp/ccNilhrx.s 			page 49
+
+
+ 1675              		.file 8 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/ecp.h"
+ 1676              		.file 9 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 1677              		.file 10 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 1678              		.file 11 "/usr/include/stdio.h"
+ 1679              		.file 12 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 1680              		.file 13 "/usr/include/time.h"
+ 1681              		.file 14 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/platfo
+ 4770              		.section	.note.gnu.property,"a"
+ 4771              		.align 8
+ 4772 0000 04000000 		.long	 1f - 0f
+ 4773 0004 10000000 		.long	 4f - 1f
+ 4774 0008 05000000 		.long	 5
+ 4775              	0:
+ 4776 000c 474E5500 		.string	 "GNU"
+ 4777              	1:
+ 4778              		.align 8
+ 4779 0010 020000C0 		.long	 0xc0000002
+ 4780 0014 04000000 		.long	 3f - 2f
+ 4781              	2:
+ 4782 0018 03000000 		.long	 0x3
+ 4783              	3:
+ 4784 001c 00000000 		.align 8
+ 4785              	4:
+GAS LISTING /tmp/ccNilhrx.s 			page 50
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 pkwrite.c
+     /tmp/ccNilhrx.s:6      .text.mbedtls_pk_rsa:0000000000000000 mbedtls_pk_rsa
+     /tmp/ccNilhrx.s:45     .text.mbedtls_pk_ec:0000000000000000 mbedtls_pk_ec
+     /tmp/ccNilhrx.s:83     .text.pk_write_rsa_pubkey:0000000000000000 pk_write_rsa_pubkey
+     /tmp/ccNilhrx.s:242    .text.pk_write_ec_pubkey:0000000000000000 pk_write_ec_pubkey
+     /tmp/ccNilhrx.s:344    .text.pk_write_ec_param:0000000000000000 pk_write_ec_param
+     /tmp/ccNilhrx.s:420    .text.mbedtls_pk_write_pubkey:0000000000000000 mbedtls_pk_write_pubkey
+     /tmp/ccNilhrx.s:531    .text.mbedtls_pk_write_pubkey_der:0000000000000000 mbedtls_pk_write_pubkey_der
+     /tmp/ccNilhrx.s:769    .text.mbedtls_pk_write_key_der:0000000000000000 mbedtls_pk_write_key_der
+     /tmp/ccNilhrx.s:1447   .text.mbedtls_pk_write_pubkey_pem:0000000000000000 mbedtls_pk_write_pubkey_pem
+     /tmp/ccNilhrx.s:1547   .text.mbedtls_pk_write_key_pem:0000000000000000 mbedtls_pk_write_key_pem
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+__stack_chk_fail
+mbedtls_mpi_init
+mbedtls_rsa_export
+mbedtls_asn1_write_mpi
+mbedtls_mpi_free
+mbedtls_asn1_write_len
+mbedtls_asn1_write_tag
+mbedtls_ecp_point_write_binary
+memcpy
+mbedtls_oid_get_oid_by_ec_grp
+mbedtls_asn1_write_oid
+mbedtls_pk_get_type
+mbedtls_oid_get_oid_by_pk_alg
+mbedtls_asn1_write_algorithm_identifier
+mbedtls_rsa_export_crt
+mbedtls_asn1_write_int
+mbedtls_pem_write_buffer

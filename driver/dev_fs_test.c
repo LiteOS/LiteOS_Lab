@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,16 +22,15 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
-
+ * --------------------------------------------------------------------------- */
 
 #include <string.h>
 #include <stdlib.h>
@@ -41,117 +40,107 @@
 #include "fs/inc/los_vfs.h"
 #include "sys/fcntl.h"
 
-//this file implement some demo to test the device module
+// this file implement some demo to test the device module
 #define cn_testdriv_buf_len 256
 
-typedef struct
-{
+typedef struct {
     int refers;
-}testdriv_cb_test_t;
+} testdriv_cb_test_t;
 static testdriv_cb_test_t s_testdriv_cb_test;
-//cached only one frame here
+// cached only one frame here
 
-static bool_t testdriv_open(void *pri,int flag)
+static bool_t testdriv_open(void *pri, int flag)
 {
-    LINK_LOG_DEBUG("TESTDRIV:PRI:0x%08X OPEN\n\r",(unsigned int)pri);
+    LINK_LOG_DEBUG("TESTDRIV:PRI:0x%08X OPEN\n\r", (unsigned int)pri);
 
     s_testdriv_cb_test.refers++;
     return true;
 }
+
 static void testdriv_close(void *pri)
 {
-    LINK_LOG_DEBUG("TESTDRIV:PRI:0x%08X CLOSE\n\r",(unsigned int)pri);
+    LINK_LOG_DEBUG("TESTDRIV:PRI:0x%08X CLOSE\n\r", (unsigned int)pri);
     s_testdriv_cb_test.refers--;
-    return ;
+    return;
 }
 
-static bool_t testdriv_write(void *pri,unsigned int offset,unsigned char *buf,int len,unsigned int timeout)
+static bool_t testdriv_write(void *pri, unsigned int offset, unsigned char *buf, int len, unsigned int timeout)
 {
-    LINK_LOG_DEBUG("TESTDRIV:PRI:0x%08X WTRITE: buf:0x%08x len:%d timeout:%d\n\r",(unsigned int)pri,(unsigned int)buf,len,timeout);
+    LINK_LOG_DEBUG("TESTDRIV:PRI:0x%08X WTRITE: buf:0x%08x len:%d timeout:%d\n\r", (unsigned int)pri, (unsigned int)buf,
+        len, timeout);
     return len;
 }
 
-static bool_t testdriv_read(void *pri,unsigned int offset,unsigned char *buf,int len,unsigned int timeout)
+static bool_t testdriv_read(void *pri, unsigned int offset, unsigned char *buf, int len, unsigned int timeout)
 {
-    LINK_LOG_DEBUG("TESTDRIV:PRI:0x%08X READ: buf:0x%08x len:%d timeout:%d\n\r",(unsigned int)pri,(unsigned int)buf,len,timeout);
+    LINK_LOG_DEBUG("TESTDRIV:PRI:0x%08X READ: buf:0x%08x len:%d timeout:%d\n\r", (unsigned int)pri, (unsigned int)buf,
+        len, timeout);
     return len;
 }
-
 
 static bool_t testdriv_init(void *pri)
 {
-    LINK_LOG_DEBUG("TESTDRIV:PRI:0x%08X INIT\n\r",(unsigned int)pri);
+    LINK_LOG_DEBUG("TESTDRIV:PRI:0x%08X INIT\n\r", (unsigned int)pri);
     return true;
 }
 
 static void testdriv_deinit(void *pri)
 {
-    LINK_LOG_DEBUG("TESTDRIV:PRI:0x%08X DEINIT\n\r",(unsigned int)pri);
-    return ;
+    LINK_LOG_DEBUG("TESTDRIV:PRI:0x%08X DEINIT\n\r", (unsigned int)pri);
+    return;
 }
 
-static bool_t testdriv_ioctl(void *pri,unsigned int cmd, void *para,int paralen)
+static bool_t testdriv_ioctl(void *pri, unsigned int cmd, void *para, int paralen)
 {
-    LINK_LOG_DEBUG("TESTDRIV:PRI:0x%08X IOCTL:cmd:%d para:0x%08x paralen:%d \n\r",(unsigned int)pri,cmd,(unsigned int)para,paralen);
-    return  true;
+    LINK_LOG_DEBUG("TESTDRIV:PRI:0x%08X IOCTL:cmd:%d para:0x%08x paralen:%d \n\r", (unsigned int)pri, cmd,
+        (unsigned int)para, paralen);
+    return true;
 }
 
-static const  los_driv_op_t  s_testdriv =
-{
+static const los_driv_op_t s_testdriv = {
     .open = testdriv_open,
     .close = testdriv_close,
-    .ioctl= testdriv_ioctl,
+    .ioctl = testdriv_ioctl,
     .read = testdriv_read,
     .write = testdriv_write,
     .init = testdriv_init,
     .deinit = testdriv_deinit,
 };
 
-OSDRIV_EXPORT(drivpara1,"dev1",(los_driv_op_t *)&s_testdriv,NULL,O_RDWR);
-OSDRIV_EXPORT(drivpara2,"dev1",(los_driv_op_t *)&s_testdriv,NULL,O_RDWR);
-OSDRIV_EXPORT(drivpara3,"dev2",(los_driv_op_t *)&s_testdriv,NULL,O_RDWR);
-OSDRIV_EXPORT(drivpara4,"dev3",(los_driv_op_t *)&s_testdriv,NULL,O_RDWR);
-OSDRIV_EXPORT(drivpara5,"dev2",(los_driv_op_t *)&s_testdriv,NULL,O_RDWR);
-OSDRIV_EXPORT(drivpara6,"dev1",(los_driv_op_t *)&s_testdriv,NULL,O_RDWR);
+OSDRIV_EXPORT(drivpara1, "dev1", (los_driv_op_t *)&s_testdriv, NULL, O_RDWR);
+OSDRIV_EXPORT(drivpara2, "dev1", (los_driv_op_t *)&s_testdriv, NULL, O_RDWR);
+OSDRIV_EXPORT(drivpara3, "dev2", (los_driv_op_t *)&s_testdriv, NULL, O_RDWR);
+OSDRIV_EXPORT(drivpara4, "dev3", (los_driv_op_t *)&s_testdriv, NULL, O_RDWR);
+OSDRIV_EXPORT(drivpara5, "dev2", (los_driv_op_t *)&s_testdriv, NULL, O_RDWR);
+OSDRIV_EXPORT(drivpara6, "dev1", (los_driv_op_t *)&s_testdriv, NULL, O_RDWR);
 
 static int s_shell_opendev = NULL;
-static int __driv_open(int argc,const char *argv[]) //dirvopen drivname flag
+static int __driv_open(int argc, const char *argv[]) // dirvopen drivname flag
 {
     int dev;
     const char *drivname = 0;
     unsigned int flag = 0;
-    if(argc != 3 )
-    {
+    if (argc != 3) {
         LINK_LOG_DEBUG("paraerr");
         return 0;
     }
     drivname = argv[1];
-    if( 0 == strcmp(argv[2],"O_RDWR"))
-    {
+    if (0 == strcmp(argv[2], "O_RDWR")) {
         flag = O_RDWR;
-    }
-    else if( 0 == strcmp(argv[2],"O_RDONLY"))
-    {
+    } else if (0 == strcmp(argv[2], "O_RDONLY")) {
         flag = O_RDONLY;
-    }
-    else if(0 == strcmp(argv[2],"O_WRONLY"))
-    {
+    } else if (0 == strcmp(argv[2], "O_WRONLY")) {
         flag = O_WRONLY;
-    }
-    else
-    {
+    } else {
         LINK_LOG_DEBUG("open flag err\r\n");
         return 0;
     }
 
-    dev = open(drivname,flag);
-    if(dev < 0)
-    {
+    dev = open(drivname, flag);
+    if (dev < 0) {
         LINK_LOG_DEBUG("open err\r\n");
         return 0;
-    }
-    else
-    {
+    } else {
         LINK_LOG_DEBUG("open OK\r\n");
     }
 
@@ -159,100 +148,85 @@ static int __driv_open(int argc,const char *argv[]) //dirvopen drivname flag
     return 0;
 }
 
-OSSHELL_EXPORT_CMD(__driv_open,"open","open name flag");
+OSSHELL_EXPORT_CMD(__driv_open, "open", "open name flag");
 
-
-static int __driv_write(int argc,const char *argv[]) //drivewrite string timeout
+static int __driv_write(int argc, const char *argv[]) // drivewrite string timeout
 {
     int ret;
     unsigned int timeout = 0;
 
-    if(argc != 3)
-    {
+    if (argc != 3) {
         LINK_LOG_DEBUG("paraerr");
         return 0;
     }
 
-    timeout = strtoul(argv[2],NULL,0);
-    ret = write(s_shell_opendev,(unsigned char *)argv[1],strlen(argv[1]));
-    LINK_LOG_DEBUG("write:%d bytes\n\r",ret);
+    timeout = strtoul(argv[2], NULL, 0);
+    ret = write(s_shell_opendev, (unsigned char *)argv[1], strlen(argv[1]));
+    LINK_LOG_DEBUG("write:%d bytes\n\r", ret);
 
     return 0;
 }
 
-OSSHELL_EXPORT_CMD(__driv_write,"write","write string timeout");
+OSSHELL_EXPORT_CMD(__driv_write, "write", "write string timeout");
 
-
-static int __driv_read(int argc,const char *argv[]) //driveread len timeout
+static int __driv_read(int argc, const char *argv[]) // driveread len timeout
 {
     int ret;
     unsigned int timeout = 0;
-    int len ;
+    int len;
     unsigned char *buf;
 
-    if(argc != 3)
-    {
+    if (argc != 3) {
         LINK_LOG_DEBUG("paraerr");
         return 0;
     }
 
-    len = strtoul(argv[1],NULL,0);
-    timeout = strtoul(argv[2],NULL,0);
-
+    len = strtoul(argv[1], NULL, 0);
+    timeout = strtoul(argv[2], NULL, 0);
     buf = malloc(len);
-    ret = read(s_shell_opendev,buf,len);
-    LINK_LOG_DEBUG("read:%d bytes\n\r",ret);
+    ret = read(s_shell_opendev, buf, len);
+    LINK_LOG_DEBUG("read:%d bytes\n\r", ret);
     free(buf);
     return 0;
 }
 
-OSSHELL_EXPORT_CMD(__driv_read,"read","read len timeout");
+OSSHELL_EXPORT_CMD(__driv_read, "read", "read len timeout");
 
-static int __driv_ioctl(int argc,const char *argv[]) //drivioctl cmd cmdpara
+static int __driv_ioctl(int argc, const char *argv[]) // drivioctl cmd cmdpara
 {
     bool_t ret;
     unsigned int cmd = 0;
 
-    if(argc != 3)
-    {
+    if (argc != 3) {
         LINK_LOG_DEBUG("paraerr");
         return 0;
     }
 
-    cmd = strtoul(argv[1],NULL,0);
-
-    ret = ioctl(s_shell_opendev,cmd,(unsigned int)argv[2]);
-    if(ret)
-    {
+    cmd = strtoul(argv[1], NULL, 0);
+    ret = ioctl(s_shell_opendev, cmd, (unsigned int)argv[2]);
+    if (ret) {
         LINK_LOG_DEBUG("IOCTL OK\r\n");
-    }
-    else
-    {
+    } else {
         LINK_LOG_DEBUG("IOCTL ERR\r\n");
     }
-
 
     return 0;
 }
 
-OSSHELL_EXPORT_CMD(__driv_ioctl,"ioctl","ioctl cmd cmdpara");
+OSSHELL_EXPORT_CMD(__driv_ioctl, "ioctl", "ioctl cmd cmdpara");
 
-static int __driv_close(int argc,const char *argv[]) //drivclose
+static int __driv_close(int argc, const char *argv[]) // drivclose
 {
     int ret;
 
     ret = close(s_shell_opendev);
-    if(ret)
-    {
+    if (ret) {
         LINK_LOG_DEBUG("CLOSE OK\r\n");
-    }
-    else
-    {
+    } else {
         LINK_LOG_DEBUG("CLOSE ERR\r\n");
-
     }
 
     return 0;
 }
 
-OSSHELL_EXPORT_CMD(__driv_close,"close","close");
+OSSHELL_EXPORT_CMD(__driv_close, "close", "close");

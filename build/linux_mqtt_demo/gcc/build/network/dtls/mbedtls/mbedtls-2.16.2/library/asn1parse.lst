@@ -1,0 +1,2214 @@
+GAS LISTING /tmp/cc3mxwt5.s 			page 1
+
+
+   1              		.file	"asn1parse.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.mbedtls_asn1_get_len,"ax",@progbits
+   5              		.globl	mbedtls_asn1_get_len
+   7              	mbedtls_asn1_get_len:
+   8              	.LFB6:
+   9              		.file 1 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c"
+   1:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** /*
+   2:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  *  Generic ASN.1 parsing
+   3:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  *
+   4:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
+   5:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  *  SPDX-License-Identifier: Apache-2.0
+   6:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  *
+   7:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
+   8:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  *  not use this file except in compliance with the License.
+   9:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  *  You may obtain a copy of the License at
+  10:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  *
+  11:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  *  http://www.apache.org/licenses/LICENSE-2.0
+  12:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  *
+  13:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  *  Unless required by applicable law or agreed to in writing, software
+  14:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  15:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  16:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  *  See the License for the specific language governing permissions and
+  17:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  *  limitations under the License.
+  18:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  *
+  19:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  *  This file is part of mbed TLS (https://tls.mbed.org)
+  20:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  */
+  21:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+  22:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** #if !defined(MBEDTLS_CONFIG_FILE)
+  23:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** #include "mbedtls/config.h"
+  24:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** #else
+  25:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** #include MBEDTLS_CONFIG_FILE
+  26:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** #endif
+  27:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+  28:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** #if defined(MBEDTLS_ASN1_PARSE_C)
+  29:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+  30:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** #include "mbedtls/asn1.h"
+  31:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** #include "mbedtls/platform_util.h"
+  32:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+  33:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** #include <string.h>
+  34:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+  35:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** #if defined(MBEDTLS_BIGNUM_C)
+  36:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** #include "mbedtls/bignum.h"
+  37:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** #endif
+  38:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+  39:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** #if defined(MBEDTLS_PLATFORM_C)
+  40:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** #include "mbedtls/platform.h"
+  41:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** #else
+  42:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** #include <stdlib.h>
+  43:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** #define mbedtls_calloc    calloc
+  44:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** #define mbedtls_free       free
+  45:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** #endif
+  46:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+  47:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** /*
+  48:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  * ASN.1 DER decoding routines
+  49:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  */
+GAS LISTING /tmp/cc3mxwt5.s 			page 2
+
+
+  50:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** int mbedtls_asn1_get_len( unsigned char **p,
+  51:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                   const unsigned char *end,
+  52:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                   size_t *len )
+  53:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** {
+  10              		.loc 1 53 1
+  11              		.cfi_startproc
+  12 0000 F30F1EFA 		endbr64
+  13 0004 55       		pushq	%rbp
+  14              	.LCFI0:
+  15              		.cfi_def_cfa_offset 16
+  16              		.cfi_offset 6, -16
+  17 0005 4889E5   		movq	%rsp, %rbp
+  18              	.LCFI1:
+  19              		.cfi_def_cfa_register 6
+  20 0008 4883EC30 		subq	$48, %rsp
+  21 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  22 0010 488975E0 		movq	%rsi, -32(%rbp)
+  23 0014 488955D8 		movq	%rdx, -40(%rbp)
+  24              		.loc 1 53 1
+  25 0018 64488B04 		movq	%fs:40, %rax
+  25      25280000 
+  25      00
+  26 0021 488945F8 		movq	%rax, -8(%rbp)
+  27 0025 31C0     		xorl	%eax, %eax
+  54:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( ( end - *p ) < 1 )
+  28              		.loc 1 54 17
+  29 0027 488B45E8 		movq	-24(%rbp), %rax
+  30 002b 488B00   		movq	(%rax), %rax
+  31              		.loc 1 54 15
+  32 002e 488B55E0 		movq	-32(%rbp), %rdx
+  33 0032 4829C2   		subq	%rax, %rdx
+  34 0035 4889D0   		movq	%rdx, %rax
+  35              		.loc 1 54 7
+  36 0038 4885C0   		testq	%rax, %rax
+  37 003b 7F0A     		jg	.L2
+  55:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+  38              		.loc 1 55 15
+  39 003d B8A0FFFF 		movl	$-96, %eax
+  39      FF
+  40 0042 E97B0200 		jmp	.L3
+  40      00
+  41              	.L2:
+  56:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+  57:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( ( **p & 0x80 ) == 0 )
+  42              		.loc 1 57 12
+  43 0047 488B45E8 		movq	-24(%rbp), %rax
+  44 004b 488B00   		movq	(%rax), %rax
+  45              		.loc 1 57 11
+  46 004e 0FB600   		movzbl	(%rax), %eax
+  47              		.loc 1 57 7
+  48 0051 84C0     		testb	%al, %al
+  49 0053 7824     		js	.L4
+  58:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         *len = *(*p)++;
+  50              		.loc 1 58 18
+  51 0055 488B45E8 		movq	-24(%rbp), %rax
+  52 0059 488B00   		movq	(%rax), %rax
+  53              		.loc 1 58 21
+GAS LISTING /tmp/cc3mxwt5.s 			page 3
+
+
+  54 005c 488D4801 		leaq	1(%rax), %rcx
+  55 0060 488B55E8 		movq	-24(%rbp), %rdx
+  56 0064 48890A   		movq	%rcx, (%rdx)
+  57              		.loc 1 58 16
+  58 0067 0FB600   		movzbl	(%rax), %eax
+  59 006a 0FB6D0   		movzbl	%al, %edx
+  60              		.loc 1 58 14
+  61 006d 488B45D8 		movq	-40(%rbp), %rax
+  62 0071 488910   		movq	%rdx, (%rax)
+  63 0074 E9200200 		jmp	.L5
+  63      00
+  64              	.L4:
+  59:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     else
+  60:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     {
+  61:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         switch( **p & 0x7F )
+  65              		.loc 1 61 18
+  66 0079 488B45E8 		movq	-24(%rbp), %rax
+  67 007d 488B00   		movq	(%rax), %rax
+  68              		.loc 1 61 17
+  69 0080 0FB600   		movzbl	(%rax), %eax
+  70              		.loc 1 61 21
+  71 0083 0FB6C0   		movzbl	%al, %eax
+  72 0086 83E07F   		andl	$127, %eax
+  73              		.loc 1 61 9
+  74 0089 83F804   		cmpl	$4, %eax
+  75 008c 0F846801 		je	.L6
+  75      0000
+  76 0092 83F804   		cmpl	$4, %eax
+  77 0095 0F8FF701 		jg	.L7
+  77      0000
+  78 009b 83F803   		cmpl	$3, %eax
+  79 009e 0F84D300 		je	.L8
+  79      0000
+  80 00a4 83F803   		cmpl	$3, %eax
+  81 00a7 0F8FE501 		jg	.L7
+  81      0000
+  82 00ad 83F801   		cmpl	$1, %eax
+  83 00b0 740A     		je	.L9
+  84 00b2 83F802   		cmpl	$2, %eax
+  85 00b5 7455     		je	.L10
+  86 00b7 E9D60100 		jmp	.L7
+  86      00
+  87              	.L9:
+  62:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         {
+  63:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         case 1:
+  64:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             if( ( end - *p ) < 2 )
+  88              		.loc 1 64 25
+  89 00bc 488B45E8 		movq	-24(%rbp), %rax
+  90 00c0 488B00   		movq	(%rax), %rax
+  91              		.loc 1 64 23
+  92 00c3 488B55E0 		movq	-32(%rbp), %rdx
+  93 00c7 4829C2   		subq	%rax, %rdx
+  94 00ca 4889D0   		movq	%rdx, %rax
+  95              		.loc 1 64 15
+  96 00cd 4883F801 		cmpq	$1, %rax
+  97 00d1 7F0A     		jg	.L11
+  65:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                 return( MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+GAS LISTING /tmp/cc3mxwt5.s 			page 4
+
+
+  98              		.loc 1 65 23
+  99 00d3 B8A0FFFF 		movl	$-96, %eax
+  99      FF
+ 100 00d8 E9E50100 		jmp	.L3
+ 100      00
+ 101              	.L11:
+  66:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+  67:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             *len = (*p)[1];
+ 102              		.loc 1 67 21
+ 103 00dd 488B45E8 		movq	-24(%rbp), %rax
+ 104 00e1 488B00   		movq	(%rax), %rax
+ 105              		.loc 1 67 24
+ 106 00e4 4883C001 		addq	$1, %rax
+ 107 00e8 0FB600   		movzbl	(%rax), %eax
+ 108 00eb 0FB6D0   		movzbl	%al, %edx
+ 109              		.loc 1 67 18
+ 110 00ee 488B45D8 		movq	-40(%rbp), %rax
+ 111 00f2 488910   		movq	%rdx, (%rax)
+  68:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             (*p) += 2;
+ 112              		.loc 1 68 18
+ 113 00f5 488B45E8 		movq	-24(%rbp), %rax
+ 114 00f9 488B00   		movq	(%rax), %rax
+ 115 00fc 488D5002 		leaq	2(%rax), %rdx
+ 116 0100 488B45E8 		movq	-24(%rbp), %rax
+ 117 0104 488910   		movq	%rdx, (%rax)
+  69:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             break;
+ 118              		.loc 1 69 13
+ 119 0107 E98D0100 		jmp	.L5
+ 119      00
+ 120              	.L10:
+  70:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+  71:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         case 2:
+  72:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             if( ( end - *p ) < 3 )
+ 121              		.loc 1 72 25
+ 122 010c 488B45E8 		movq	-24(%rbp), %rax
+ 123 0110 488B00   		movq	(%rax), %rax
+ 124              		.loc 1 72 23
+ 125 0113 488B55E0 		movq	-32(%rbp), %rdx
+ 126 0117 4829C2   		subq	%rax, %rdx
+ 127 011a 4889D0   		movq	%rdx, %rax
+ 128              		.loc 1 72 15
+ 129 011d 4883F802 		cmpq	$2, %rax
+ 130 0121 7F0A     		jg	.L12
+  73:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                 return( MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+ 131              		.loc 1 73 23
+ 132 0123 B8A0FFFF 		movl	$-96, %eax
+ 132      FF
+ 133 0128 E9950100 		jmp	.L3
+ 133      00
+ 134              	.L12:
+  74:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+  75:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             *len = ( (size_t)(*p)[1] << 8 ) | (*p)[2];
+ 135              		.loc 1 75 31
+ 136 012d 488B45E8 		movq	-24(%rbp), %rax
+ 137 0131 488B00   		movq	(%rax), %rax
+ 138              		.loc 1 75 34
+ 139 0134 4883C001 		addq	$1, %rax
+GAS LISTING /tmp/cc3mxwt5.s 			page 5
+
+
+ 140 0138 0FB600   		movzbl	(%rax), %eax
+ 141              		.loc 1 75 22
+ 142 013b 0FB6C0   		movzbl	%al, %eax
+ 143              		.loc 1 75 38
+ 144 013e 48C1E008 		salq	$8, %rax
+ 145 0142 4889C2   		movq	%rax, %rdx
+ 146              		.loc 1 75 48
+ 147 0145 488B45E8 		movq	-24(%rbp), %rax
+ 148 0149 488B00   		movq	(%rax), %rax
+ 149              		.loc 1 75 51
+ 150 014c 4883C002 		addq	$2, %rax
+ 151 0150 0FB600   		movzbl	(%rax), %eax
+ 152 0153 0FB6C0   		movzbl	%al, %eax
+ 153              		.loc 1 75 45
+ 154 0156 4809C2   		orq	%rax, %rdx
+ 155              		.loc 1 75 18
+ 156 0159 488B45D8 		movq	-40(%rbp), %rax
+ 157 015d 488910   		movq	%rdx, (%rax)
+  76:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             (*p) += 3;
+ 158              		.loc 1 76 18
+ 159 0160 488B45E8 		movq	-24(%rbp), %rax
+ 160 0164 488B00   		movq	(%rax), %rax
+ 161 0167 488D5003 		leaq	3(%rax), %rdx
+ 162 016b 488B45E8 		movq	-24(%rbp), %rax
+ 163 016f 488910   		movq	%rdx, (%rax)
+  77:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             break;
+ 164              		.loc 1 77 13
+ 165 0172 E9220100 		jmp	.L5
+ 165      00
+ 166              	.L8:
+  78:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+  79:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         case 3:
+  80:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             if( ( end - *p ) < 4 )
+ 167              		.loc 1 80 25
+ 168 0177 488B45E8 		movq	-24(%rbp), %rax
+ 169 017b 488B00   		movq	(%rax), %rax
+ 170              		.loc 1 80 23
+ 171 017e 488B55E0 		movq	-32(%rbp), %rdx
+ 172 0182 4829C2   		subq	%rax, %rdx
+ 173 0185 4889D0   		movq	%rdx, %rax
+ 174              		.loc 1 80 15
+ 175 0188 4883F803 		cmpq	$3, %rax
+ 176 018c 7F0A     		jg	.L13
+  81:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                 return( MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+ 177              		.loc 1 81 23
+ 178 018e B8A0FFFF 		movl	$-96, %eax
+ 178      FF
+ 179 0193 E92A0100 		jmp	.L3
+ 179      00
+ 180              	.L13:
+  82:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+  83:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             *len = ( (size_t)(*p)[1] << 16 ) |
+ 181              		.loc 1 83 31
+ 182 0198 488B45E8 		movq	-24(%rbp), %rax
+ 183 019c 488B00   		movq	(%rax), %rax
+ 184              		.loc 1 83 34
+ 185 019f 4883C001 		addq	$1, %rax
+GAS LISTING /tmp/cc3mxwt5.s 			page 6
+
+
+ 186 01a3 0FB600   		movzbl	(%rax), %eax
+ 187              		.loc 1 83 22
+ 188 01a6 0FB6C0   		movzbl	%al, %eax
+ 189              		.loc 1 83 38
+ 190 01a9 48C1E010 		salq	$16, %rax
+ 191 01ad 4889C2   		movq	%rax, %rdx
+  84:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                    ( (size_t)(*p)[2] << 8  ) | (*p)[3];
+ 192              		.loc 1 84 31
+ 193 01b0 488B45E8 		movq	-24(%rbp), %rax
+ 194 01b4 488B00   		movq	(%rax), %rax
+ 195              		.loc 1 84 34
+ 196 01b7 4883C002 		addq	$2, %rax
+ 197 01bb 0FB600   		movzbl	(%rax), %eax
+ 198              		.loc 1 84 22
+ 199 01be 0FB6C0   		movzbl	%al, %eax
+ 200              		.loc 1 84 38
+ 201 01c1 48C1E008 		salq	$8, %rax
+  83:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                    ( (size_t)(*p)[2] << 8  ) | (*p)[3];
+ 202              		.loc 1 83 46
+ 203 01c5 4809C2   		orq	%rax, %rdx
+ 204              		.loc 1 84 49
+ 205 01c8 488B45E8 		movq	-24(%rbp), %rax
+ 206 01cc 488B00   		movq	(%rax), %rax
+ 207              		.loc 1 84 52
+ 208 01cf 4883C003 		addq	$3, %rax
+ 209 01d3 0FB600   		movzbl	(%rax), %eax
+ 210 01d6 0FB6C0   		movzbl	%al, %eax
+ 211              		.loc 1 84 46
+ 212 01d9 4809C2   		orq	%rax, %rdx
+  83:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                    ( (size_t)(*p)[2] << 8  ) | (*p)[3];
+ 213              		.loc 1 83 18
+ 214 01dc 488B45D8 		movq	-40(%rbp), %rax
+ 215 01e0 488910   		movq	%rdx, (%rax)
+  85:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             (*p) += 4;
+ 216              		.loc 1 85 18
+ 217 01e3 488B45E8 		movq	-24(%rbp), %rax
+ 218 01e7 488B00   		movq	(%rax), %rax
+ 219 01ea 488D5004 		leaq	4(%rax), %rdx
+ 220 01ee 488B45E8 		movq	-24(%rbp), %rax
+ 221 01f2 488910   		movq	%rdx, (%rax)
+  86:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             break;
+ 222              		.loc 1 86 13
+ 223 01f5 E99F0000 		jmp	.L5
+ 223      00
+ 224              	.L6:
+  87:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+  88:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         case 4:
+  89:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             if( ( end - *p ) < 5 )
+ 225              		.loc 1 89 25
+ 226 01fa 488B45E8 		movq	-24(%rbp), %rax
+ 227 01fe 488B00   		movq	(%rax), %rax
+ 228              		.loc 1 89 23
+ 229 0201 488B55E0 		movq	-32(%rbp), %rdx
+ 230 0205 4829C2   		subq	%rax, %rdx
+ 231 0208 4889D0   		movq	%rdx, %rax
+ 232              		.loc 1 89 15
+ 233 020b 4883F804 		cmpq	$4, %rax
+GAS LISTING /tmp/cc3mxwt5.s 			page 7
+
+
+ 234 020f 7F0A     		jg	.L14
+  90:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                 return( MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+ 235              		.loc 1 90 23
+ 236 0211 B8A0FFFF 		movl	$-96, %eax
+ 236      FF
+ 237 0216 E9A70000 		jmp	.L3
+ 237      00
+ 238              	.L14:
+  91:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+  92:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             *len = ( (size_t)(*p)[1] << 24 ) | ( (size_t)(*p)[2] << 16 ) |
+ 239              		.loc 1 92 31
+ 240 021b 488B45E8 		movq	-24(%rbp), %rax
+ 241 021f 488B00   		movq	(%rax), %rax
+ 242              		.loc 1 92 34
+ 243 0222 4883C001 		addq	$1, %rax
+ 244 0226 0FB600   		movzbl	(%rax), %eax
+ 245              		.loc 1 92 22
+ 246 0229 0FB6C0   		movzbl	%al, %eax
+ 247              		.loc 1 92 38
+ 248 022c 48C1E018 		salq	$24, %rax
+ 249 0230 4889C2   		movq	%rax, %rdx
+ 250              		.loc 1 92 59
+ 251 0233 488B45E8 		movq	-24(%rbp), %rax
+ 252 0237 488B00   		movq	(%rax), %rax
+ 253              		.loc 1 92 62
+ 254 023a 4883C002 		addq	$2, %rax
+ 255 023e 0FB600   		movzbl	(%rax), %eax
+ 256              		.loc 1 92 50
+ 257 0241 0FB6C0   		movzbl	%al, %eax
+ 258              		.loc 1 92 66
+ 259 0244 48C1E010 		salq	$16, %rax
+ 260              		.loc 1 92 46
+ 261 0248 4809C2   		orq	%rax, %rdx
+  93:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                    ( (size_t)(*p)[3] << 8  ) |           (*p)[4];
+ 262              		.loc 1 93 31
+ 263 024b 488B45E8 		movq	-24(%rbp), %rax
+ 264 024f 488B00   		movq	(%rax), %rax
+ 265              		.loc 1 93 34
+ 266 0252 4883C003 		addq	$3, %rax
+ 267 0256 0FB600   		movzbl	(%rax), %eax
+ 268              		.loc 1 93 22
+ 269 0259 0FB6C0   		movzbl	%al, %eax
+ 270              		.loc 1 93 38
+ 271 025c 48C1E008 		salq	$8, %rax
+  92:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                    ( (size_t)(*p)[3] << 8  ) |           (*p)[4];
+ 272              		.loc 1 92 74
+ 273 0260 4809C2   		orq	%rax, %rdx
+ 274              		.loc 1 93 59
+ 275 0263 488B45E8 		movq	-24(%rbp), %rax
+ 276 0267 488B00   		movq	(%rax), %rax
+ 277              		.loc 1 93 62
+ 278 026a 4883C004 		addq	$4, %rax
+ 279 026e 0FB600   		movzbl	(%rax), %eax
+ 280 0271 0FB6C0   		movzbl	%al, %eax
+ 281              		.loc 1 93 46
+ 282 0274 4809C2   		orq	%rax, %rdx
+  92:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                    ( (size_t)(*p)[3] << 8  ) |           (*p)[4];
+GAS LISTING /tmp/cc3mxwt5.s 			page 8
+
+
+ 283              		.loc 1 92 18
+ 284 0277 488B45D8 		movq	-40(%rbp), %rax
+ 285 027b 488910   		movq	%rdx, (%rax)
+  94:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             (*p) += 5;
+ 286              		.loc 1 94 18
+ 287 027e 488B45E8 		movq	-24(%rbp), %rax
+ 288 0282 488B00   		movq	(%rax), %rax
+ 289 0285 488D5005 		leaq	5(%rax), %rdx
+ 290 0289 488B45E8 		movq	-24(%rbp), %rax
+ 291 028d 488910   		movq	%rdx, (%rax)
+  95:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             break;
+ 292              		.loc 1 95 13
+ 293 0290 EB07     		jmp	.L5
+ 294              	.L7:
+  96:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+  97:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         default:
+  98:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             return( MBEDTLS_ERR_ASN1_INVALID_LENGTH );
+ 295              		.loc 1 98 19
+ 296 0292 B89CFFFF 		movl	$-100, %eax
+ 296      FF
+ 297 0297 EB29     		jmp	.L3
+ 298              	.L5:
+  99:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         }
+ 100:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     }
+ 101:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 102:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( *len > (size_t) ( end - *p ) )
+ 299              		.loc 1 102 9
+ 300 0299 488B45D8 		movq	-40(%rbp), %rax
+ 301 029d 488B10   		movq	(%rax), %rdx
+ 302              		.loc 1 102 33
+ 303 02a0 488B45E8 		movq	-24(%rbp), %rax
+ 304 02a4 488B00   		movq	(%rax), %rax
+ 305              		.loc 1 102 31
+ 306 02a7 488B4DE0 		movq	-32(%rbp), %rcx
+ 307 02ab 4829C1   		subq	%rax, %rcx
+ 308 02ae 4889C8   		movq	%rcx, %rax
+ 309              		.loc 1 102 7
+ 310 02b1 4839C2   		cmpq	%rax, %rdx
+ 311 02b4 7607     		jbe	.L15
+ 103:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+ 312              		.loc 1 103 15
+ 313 02b6 B8A0FFFF 		movl	$-96, %eax
+ 313      FF
+ 314 02bb EB05     		jmp	.L3
+ 315              	.L15:
+ 104:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 105:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     return( 0 );
+ 316              		.loc 1 105 11
+ 317 02bd B8000000 		movl	$0, %eax
+ 317      00
+ 318              	.L3:
+ 106:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** }
+ 319              		.loc 1 106 1
+ 320 02c2 488B75F8 		movq	-8(%rbp), %rsi
+ 321 02c6 64483334 		xorq	%fs:40, %rsi
+ 321      25280000 
+ 321      00
+GAS LISTING /tmp/cc3mxwt5.s 			page 9
+
+
+ 322 02cf 7405     		je	.L16
+ 323 02d1 E8000000 		call	__stack_chk_fail@PLT
+ 323      00
+ 324              	.L16:
+ 325 02d6 C9       		leave
+ 326              	.LCFI2:
+ 327              		.cfi_def_cfa 7, 8
+ 328 02d7 C3       		ret
+ 329              		.cfi_endproc
+ 330              	.LFE6:
+ 332              		.section	.text.mbedtls_asn1_get_tag,"ax",@progbits
+ 333              		.globl	mbedtls_asn1_get_tag
+ 335              	mbedtls_asn1_get_tag:
+ 336              	.LFB7:
+ 107:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 108:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** int mbedtls_asn1_get_tag( unsigned char **p,
+ 109:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                   const unsigned char *end,
+ 110:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                   size_t *len, int tag )
+ 111:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** {
+ 337              		.loc 1 111 1
+ 338              		.cfi_startproc
+ 339 0000 F30F1EFA 		endbr64
+ 340 0004 55       		pushq	%rbp
+ 341              	.LCFI3:
+ 342              		.cfi_def_cfa_offset 16
+ 343              		.cfi_offset 6, -16
+ 344 0005 4889E5   		movq	%rsp, %rbp
+ 345              	.LCFI4:
+ 346              		.cfi_def_cfa_register 6
+ 347 0008 4883EC30 		subq	$48, %rsp
+ 348 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 349 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 350 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 351 0018 894DD4   		movl	%ecx, -44(%rbp)
+ 352              		.loc 1 111 1
+ 353 001b 64488B04 		movq	%fs:40, %rax
+ 353      25280000 
+ 353      00
+ 354 0024 488945F8 		movq	%rax, -8(%rbp)
+ 355 0028 31C0     		xorl	%eax, %eax
+ 112:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( ( end - *p ) < 1 )
+ 356              		.loc 1 112 17
+ 357 002a 488B45E8 		movq	-24(%rbp), %rax
+ 358 002e 488B00   		movq	(%rax), %rax
+ 359              		.loc 1 112 15
+ 360 0031 488B55E0 		movq	-32(%rbp), %rdx
+ 361 0035 4829C2   		subq	%rax, %rdx
+ 362 0038 4889D0   		movq	%rdx, %rax
+ 363              		.loc 1 112 7
+ 364 003b 4885C0   		testq	%rax, %rax
+ 365 003e 7F07     		jg	.L18
+ 113:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+ 366              		.loc 1 113 15
+ 367 0040 B8A0FFFF 		movl	$-96, %eax
+ 367      FF
+ 368 0045 EB42     		jmp	.L19
+ 369              	.L18:
+GAS LISTING /tmp/cc3mxwt5.s 			page 10
+
+
+ 114:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 115:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( **p != tag )
+ 370              		.loc 1 115 10
+ 371 0047 488B45E8 		movq	-24(%rbp), %rax
+ 372 004b 488B00   		movq	(%rax), %rax
+ 373              		.loc 1 115 9
+ 374 004e 0FB600   		movzbl	(%rax), %eax
+ 375 0051 0FB6C0   		movzbl	%al, %eax
+ 376              		.loc 1 115 7
+ 377 0054 3945D4   		cmpl	%eax, -44(%rbp)
+ 378 0057 7407     		je	.L20
+ 116:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
+ 379              		.loc 1 116 15
+ 380 0059 B89EFFFF 		movl	$-98, %eax
+ 380      FF
+ 381 005e EB29     		jmp	.L19
+ 382              	.L20:
+ 117:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 118:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     (*p)++;
+ 383              		.loc 1 118 6
+ 384 0060 488B45E8 		movq	-24(%rbp), %rax
+ 385 0064 488B00   		movq	(%rax), %rax
+ 386              		.loc 1 118 9
+ 387 0067 488D5001 		leaq	1(%rax), %rdx
+ 388 006b 488B45E8 		movq	-24(%rbp), %rax
+ 389 006f 488910   		movq	%rdx, (%rax)
+ 119:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 120:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     return( mbedtls_asn1_get_len( p, end, len ) );
+ 390              		.loc 1 120 13
+ 391 0072 488B55D8 		movq	-40(%rbp), %rdx
+ 392 0076 488B4DE0 		movq	-32(%rbp), %rcx
+ 393 007a 488B45E8 		movq	-24(%rbp), %rax
+ 394 007e 4889CE   		movq	%rcx, %rsi
+ 395 0081 4889C7   		movq	%rax, %rdi
+ 396 0084 E8000000 		call	mbedtls_asn1_get_len
+ 396      00
+ 397              	.L19:
+ 121:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** }
+ 398              		.loc 1 121 1
+ 399 0089 488B75F8 		movq	-8(%rbp), %rsi
+ 400 008d 64483334 		xorq	%fs:40, %rsi
+ 400      25280000 
+ 400      00
+ 401 0096 7405     		je	.L21
+ 402 0098 E8000000 		call	__stack_chk_fail@PLT
+ 402      00
+ 403              	.L21:
+ 404 009d C9       		leave
+ 405              	.LCFI5:
+ 406              		.cfi_def_cfa 7, 8
+ 407 009e C3       		ret
+ 408              		.cfi_endproc
+ 409              	.LFE7:
+ 411              		.section	.text.mbedtls_asn1_get_bool,"ax",@progbits
+ 412              		.globl	mbedtls_asn1_get_bool
+ 414              	mbedtls_asn1_get_bool:
+ 415              	.LFB8:
+GAS LISTING /tmp/cc3mxwt5.s 			page 11
+
+
+ 122:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 123:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** int mbedtls_asn1_get_bool( unsigned char **p,
+ 124:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                    const unsigned char *end,
+ 125:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                    int *val )
+ 126:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** {
+ 416              		.loc 1 126 1
+ 417              		.cfi_startproc
+ 418 0000 F30F1EFA 		endbr64
+ 419 0004 55       		pushq	%rbp
+ 420              	.LCFI6:
+ 421              		.cfi_def_cfa_offset 16
+ 422              		.cfi_offset 6, -16
+ 423 0005 4889E5   		movq	%rsp, %rbp
+ 424              	.LCFI7:
+ 425              		.cfi_def_cfa_register 6
+ 426 0008 4883EC40 		subq	$64, %rsp
+ 427 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 428 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 429 0014 488955C8 		movq	%rdx, -56(%rbp)
+ 430              		.loc 1 126 1
+ 431 0018 64488B04 		movq	%fs:40, %rax
+ 431      25280000 
+ 431      00
+ 432 0021 488945F8 		movq	%rax, -8(%rbp)
+ 433 0025 31C0     		xorl	%eax, %eax
+ 127:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     int ret;
+ 128:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     size_t len;
+ 129:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 130:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( ( ret = mbedtls_asn1_get_tag( p, end, &len, MBEDTLS_ASN1_BOOLEAN ) ) != 0 )
+ 434              		.loc 1 130 17
+ 435 0027 488D55F0 		leaq	-16(%rbp), %rdx
+ 436 002b 488B75D0 		movq	-48(%rbp), %rsi
+ 437 002f 488B45D8 		movq	-40(%rbp), %rax
+ 438 0033 B9010000 		movl	$1, %ecx
+ 438      00
+ 439 0038 4889C7   		movq	%rax, %rdi
+ 440 003b E8000000 		call	mbedtls_asn1_get_tag
+ 440      00
+ 441 0040 8945EC   		movl	%eax, -20(%rbp)
+ 442              		.loc 1 130 7
+ 443 0043 837DEC00 		cmpl	$0, -20(%rbp)
+ 444 0047 7405     		je	.L23
+ 131:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( ret );
+ 445              		.loc 1 131 15
+ 446 0049 8B45EC   		movl	-20(%rbp), %eax
+ 447 004c EB40     		jmp	.L26
+ 448              	.L23:
+ 132:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 133:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( len != 1 )
+ 449              		.loc 1 133 13
+ 450 004e 488B45F0 		movq	-16(%rbp), %rax
+ 451              		.loc 1 133 7
+ 452 0052 4883F801 		cmpq	$1, %rax
+ 453 0056 7407     		je	.L25
+ 134:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( MBEDTLS_ERR_ASN1_INVALID_LENGTH );
+ 454              		.loc 1 134 15
+ 455 0058 B89CFFFF 		movl	$-100, %eax
+GAS LISTING /tmp/cc3mxwt5.s 			page 12
+
+
+ 455      FF
+ 456 005d EB2F     		jmp	.L26
+ 457              	.L25:
+ 135:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 136:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     *val = ( **p != 0 ) ? 1 : 0;
+ 458              		.loc 1 136 15
+ 459 005f 488B45D8 		movq	-40(%rbp), %rax
+ 460 0063 488B00   		movq	(%rax), %rax
+ 461              		.loc 1 136 14
+ 462 0066 0FB600   		movzbl	(%rax), %eax
+ 463              		.loc 1 136 29
+ 464 0069 84C0     		testb	%al, %al
+ 465 006b 0F95C0   		setne	%al
+ 466 006e 0FB6D0   		movzbl	%al, %edx
+ 467              		.loc 1 136 10
+ 468 0071 488B45C8 		movq	-56(%rbp), %rax
+ 469 0075 8910     		movl	%edx, (%rax)
+ 137:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     (*p)++;
+ 470              		.loc 1 137 6
+ 471 0077 488B45D8 		movq	-40(%rbp), %rax
+ 472 007b 488B00   		movq	(%rax), %rax
+ 473              		.loc 1 137 9
+ 474 007e 488D5001 		leaq	1(%rax), %rdx
+ 475 0082 488B45D8 		movq	-40(%rbp), %rax
+ 476 0086 488910   		movq	%rdx, (%rax)
+ 138:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 139:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     return( 0 );
+ 477              		.loc 1 139 11
+ 478 0089 B8000000 		movl	$0, %eax
+ 478      00
+ 479              	.L26:
+ 140:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** }
+ 480              		.loc 1 140 1 discriminator 1
+ 481 008e 488B4DF8 		movq	-8(%rbp), %rcx
+ 482 0092 6448330C 		xorq	%fs:40, %rcx
+ 482      25280000 
+ 482      00
+ 483 009b 7405     		je	.L27
+ 484              		.loc 1 140 1 is_stmt 0
+ 485 009d E8000000 		call	__stack_chk_fail@PLT
+ 485      00
+ 486              	.L27:
+ 487 00a2 C9       		leave
+ 488              	.LCFI8:
+ 489              		.cfi_def_cfa 7, 8
+ 490 00a3 C3       		ret
+ 491              		.cfi_endproc
+ 492              	.LFE8:
+ 494              		.section	.text.mbedtls_asn1_get_int,"ax",@progbits
+ 495              		.globl	mbedtls_asn1_get_int
+ 497              	mbedtls_asn1_get_int:
+ 498              	.LFB9:
+ 141:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 142:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** int mbedtls_asn1_get_int( unsigned char **p,
+ 143:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                   const unsigned char *end,
+ 144:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                   int *val )
+ 145:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** {
+GAS LISTING /tmp/cc3mxwt5.s 			page 13
+
+
+ 499              		.loc 1 145 1 is_stmt 1
+ 500              		.cfi_startproc
+ 501 0000 F30F1EFA 		endbr64
+ 502 0004 55       		pushq	%rbp
+ 503              	.LCFI9:
+ 504              		.cfi_def_cfa_offset 16
+ 505              		.cfi_offset 6, -16
+ 506 0005 4889E5   		movq	%rsp, %rbp
+ 507              	.LCFI10:
+ 508              		.cfi_def_cfa_register 6
+ 509 0008 4883EC40 		subq	$64, %rsp
+ 510 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 511 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 512 0014 488955C8 		movq	%rdx, -56(%rbp)
+ 513              		.loc 1 145 1
+ 514 0018 64488B04 		movq	%fs:40, %rax
+ 514      25280000 
+ 514      00
+ 515 0021 488945F8 		movq	%rax, -8(%rbp)
+ 516 0025 31C0     		xorl	%eax, %eax
+ 146:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     int ret;
+ 147:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     size_t len;
+ 148:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 149:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( ( ret = mbedtls_asn1_get_tag( p, end, &len, MBEDTLS_ASN1_INTEGER ) ) != 0 )
+ 517              		.loc 1 149 17
+ 518 0027 488D55F0 		leaq	-16(%rbp), %rdx
+ 519 002b 488B75D0 		movq	-48(%rbp), %rsi
+ 520 002f 488B45D8 		movq	-40(%rbp), %rax
+ 521 0033 B9020000 		movl	$2, %ecx
+ 521      00
+ 522 0038 4889C7   		movq	%rax, %rdi
+ 523 003b E8000000 		call	mbedtls_asn1_get_tag
+ 523      00
+ 524 0040 8945EC   		movl	%eax, -20(%rbp)
+ 525              		.loc 1 149 7
+ 526 0043 837DEC00 		cmpl	$0, -20(%rbp)
+ 527 0047 7405     		je	.L29
+ 150:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( ret );
+ 528              		.loc 1 150 15
+ 529 0049 8B45EC   		movl	-20(%rbp), %eax
+ 530 004c EB7C     		jmp	.L35
+ 531              	.L29:
+ 151:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 152:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( len == 0 || len > sizeof( int ) || ( **p & 0x80 ) != 0 )
+ 532              		.loc 1 152 13
+ 533 004e 488B45F0 		movq	-16(%rbp), %rax
+ 534              		.loc 1 152 7
+ 535 0052 4885C0   		testq	%rax, %rax
+ 536 0055 7418     		je	.L31
+ 537              		.loc 1 152 25 discriminator 1
+ 538 0057 488B45F0 		movq	-16(%rbp), %rax
+ 539              		.loc 1 152 18 discriminator 1
+ 540 005b 4883F804 		cmpq	$4, %rax
+ 541 005f 770E     		ja	.L31
+ 542              		.loc 1 152 47 discriminator 2
+ 543 0061 488B45D8 		movq	-40(%rbp), %rax
+ 544 0065 488B00   		movq	(%rax), %rax
+GAS LISTING /tmp/cc3mxwt5.s 			page 14
+
+
+ 545              		.loc 1 152 46 discriminator 2
+ 546 0068 0FB600   		movzbl	(%rax), %eax
+ 547              		.loc 1 152 41 discriminator 2
+ 548 006b 84C0     		testb	%al, %al
+ 549 006d 7907     		jns	.L32
+ 550              	.L31:
+ 153:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( MBEDTLS_ERR_ASN1_INVALID_LENGTH );
+ 551              		.loc 1 153 15
+ 552 006f B89CFFFF 		movl	$-100, %eax
+ 552      FF
+ 553 0074 EB54     		jmp	.L35
+ 554              	.L32:
+ 154:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 155:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     *val = 0;
+ 555              		.loc 1 155 10
+ 556 0076 488B45C8 		movq	-56(%rbp), %rax
+ 557 007a C7000000 		movl	$0, (%rax)
+ 557      0000
+ 156:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 157:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     while( len-- > 0 )
+ 558              		.loc 1 157 10
+ 559 0080 EB32     		jmp	.L33
+ 560              	.L34:
+ 158:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     {
+ 159:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         *val = ( *val << 8 ) | **p;
+ 561              		.loc 1 159 18
+ 562 0082 488B45C8 		movq	-56(%rbp), %rax
+ 563 0086 8B00     		movl	(%rax), %eax
+ 564              		.loc 1 159 23
+ 565 0088 C1E008   		sall	$8, %eax
+ 566 008b 89C2     		movl	%eax, %edx
+ 567              		.loc 1 159 33
+ 568 008d 488B45D8 		movq	-40(%rbp), %rax
+ 569 0091 488B00   		movq	(%rax), %rax
+ 570              		.loc 1 159 32
+ 571 0094 0FB600   		movzbl	(%rax), %eax
+ 572 0097 0FB6C0   		movzbl	%al, %eax
+ 573              		.loc 1 159 30
+ 574 009a 09C2     		orl	%eax, %edx
+ 575              		.loc 1 159 14
+ 576 009c 488B45C8 		movq	-56(%rbp), %rax
+ 577 00a0 8910     		movl	%edx, (%rax)
+ 160:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         (*p)++;
+ 578              		.loc 1 160 10
+ 579 00a2 488B45D8 		movq	-40(%rbp), %rax
+ 580 00a6 488B00   		movq	(%rax), %rax
+ 581              		.loc 1 160 13
+ 582 00a9 488D5001 		leaq	1(%rax), %rdx
+ 583 00ad 488B45D8 		movq	-40(%rbp), %rax
+ 584 00b1 488910   		movq	%rdx, (%rax)
+ 585              	.L33:
+ 157:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     {
+ 586              		.loc 1 157 15
+ 587 00b4 488B45F0 		movq	-16(%rbp), %rax
+ 588 00b8 488D50FF 		leaq	-1(%rax), %rdx
+ 589 00bc 488955F0 		movq	%rdx, -16(%rbp)
+ 157:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     {
+GAS LISTING /tmp/cc3mxwt5.s 			page 15
+
+
+ 590              		.loc 1 157 10
+ 591 00c0 4885C0   		testq	%rax, %rax
+ 592 00c3 75BD     		jne	.L34
+ 161:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     }
+ 162:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 163:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     return( 0 );
+ 593              		.loc 1 163 11
+ 594 00c5 B8000000 		movl	$0, %eax
+ 594      00
+ 595              	.L35:
+ 164:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** }
+ 596              		.loc 1 164 1 discriminator 1
+ 597 00ca 488B4DF8 		movq	-8(%rbp), %rcx
+ 598 00ce 6448330C 		xorq	%fs:40, %rcx
+ 598      25280000 
+ 598      00
+ 599 00d7 7405     		je	.L36
+ 600              		.loc 1 164 1 is_stmt 0
+ 601 00d9 E8000000 		call	__stack_chk_fail@PLT
+ 601      00
+ 602              	.L36:
+ 603 00de C9       		leave
+ 604              	.LCFI11:
+ 605              		.cfi_def_cfa 7, 8
+ 606 00df C3       		ret
+ 607              		.cfi_endproc
+ 608              	.LFE9:
+ 610              		.section	.text.mbedtls_asn1_get_mpi,"ax",@progbits
+ 611              		.globl	mbedtls_asn1_get_mpi
+ 613              	mbedtls_asn1_get_mpi:
+ 614              	.LFB10:
+ 165:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 166:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** #if defined(MBEDTLS_BIGNUM_C)
+ 167:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** int mbedtls_asn1_get_mpi( unsigned char **p,
+ 168:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                   const unsigned char *end,
+ 169:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                   mbedtls_mpi *X )
+ 170:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** {
+ 615              		.loc 1 170 1 is_stmt 1
+ 616              		.cfi_startproc
+ 617 0000 F30F1EFA 		endbr64
+ 618 0004 55       		pushq	%rbp
+ 619              	.LCFI12:
+ 620              		.cfi_def_cfa_offset 16
+ 621              		.cfi_offset 6, -16
+ 622 0005 4889E5   		movq	%rsp, %rbp
+ 623              	.LCFI13:
+ 624              		.cfi_def_cfa_register 6
+ 625 0008 4883EC40 		subq	$64, %rsp
+ 626 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 627 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 628 0014 488955C8 		movq	%rdx, -56(%rbp)
+ 629              		.loc 1 170 1
+ 630 0018 64488B04 		movq	%fs:40, %rax
+ 630      25280000 
+ 630      00
+ 631 0021 488945F8 		movq	%rax, -8(%rbp)
+ 632 0025 31C0     		xorl	%eax, %eax
+GAS LISTING /tmp/cc3mxwt5.s 			page 16
+
+
+ 171:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     int ret;
+ 172:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     size_t len;
+ 173:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 174:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( ( ret = mbedtls_asn1_get_tag( p, end, &len, MBEDTLS_ASN1_INTEGER ) ) != 0 )
+ 633              		.loc 1 174 17
+ 634 0027 488D55F0 		leaq	-16(%rbp), %rdx
+ 635 002b 488B75D0 		movq	-48(%rbp), %rsi
+ 636 002f 488B45D8 		movq	-40(%rbp), %rax
+ 637 0033 B9020000 		movl	$2, %ecx
+ 637      00
+ 638 0038 4889C7   		movq	%rax, %rdi
+ 639 003b E8000000 		call	mbedtls_asn1_get_tag
+ 639      00
+ 640 0040 8945EC   		movl	%eax, -20(%rbp)
+ 641              		.loc 1 174 7
+ 642 0043 837DEC00 		cmpl	$0, -20(%rbp)
+ 643 0047 7405     		je	.L38
+ 175:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( ret );
+ 644              		.loc 1 175 15
+ 645 0049 8B45EC   		movl	-20(%rbp), %eax
+ 646 004c EB35     		jmp	.L40
+ 647              	.L38:
+ 176:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 177:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     ret = mbedtls_mpi_read_binary( X, *p, len );
+ 648              		.loc 1 177 11
+ 649 004e 488B55F0 		movq	-16(%rbp), %rdx
+ 650 0052 488B45D8 		movq	-40(%rbp), %rax
+ 651 0056 488B08   		movq	(%rax), %rcx
+ 652 0059 488B45C8 		movq	-56(%rbp), %rax
+ 653 005d 4889CE   		movq	%rcx, %rsi
+ 654 0060 4889C7   		movq	%rax, %rdi
+ 655 0063 E8000000 		call	mbedtls_mpi_read_binary@PLT
+ 655      00
+ 656 0068 8945EC   		movl	%eax, -20(%rbp)
+ 178:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 179:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     *p += len;
+ 657              		.loc 1 179 8
+ 658 006b 488B45D8 		movq	-40(%rbp), %rax
+ 659 006f 488B10   		movq	(%rax), %rdx
+ 660 0072 488B45F0 		movq	-16(%rbp), %rax
+ 661 0076 4801C2   		addq	%rax, %rdx
+ 662 0079 488B45D8 		movq	-40(%rbp), %rax
+ 663 007d 488910   		movq	%rdx, (%rax)
+ 180:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 181:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     return( ret );
+ 664              		.loc 1 181 11
+ 665 0080 8B45EC   		movl	-20(%rbp), %eax
+ 666              	.L40:
+ 182:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** }
+ 667              		.loc 1 182 1 discriminator 1
+ 668 0083 488B4DF8 		movq	-8(%rbp), %rcx
+ 669 0087 6448330C 		xorq	%fs:40, %rcx
+ 669      25280000 
+ 669      00
+ 670 0090 7405     		je	.L41
+ 671              		.loc 1 182 1 is_stmt 0
+ 672 0092 E8000000 		call	__stack_chk_fail@PLT
+GAS LISTING /tmp/cc3mxwt5.s 			page 17
+
+
+ 672      00
+ 673              	.L41:
+ 674 0097 C9       		leave
+ 675              	.LCFI14:
+ 676              		.cfi_def_cfa 7, 8
+ 677 0098 C3       		ret
+ 678              		.cfi_endproc
+ 679              	.LFE10:
+ 681              		.section	.text.mbedtls_asn1_get_bitstring,"ax",@progbits
+ 682              		.globl	mbedtls_asn1_get_bitstring
+ 684              	mbedtls_asn1_get_bitstring:
+ 685              	.LFB11:
+ 183:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** #endif /* MBEDTLS_BIGNUM_C */
+ 184:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 185:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** int mbedtls_asn1_get_bitstring( unsigned char **p, const unsigned char *end,
+ 186:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                         mbedtls_asn1_bitstring *bs)
+ 187:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** {
+ 686              		.loc 1 187 1 is_stmt 1
+ 687              		.cfi_startproc
+ 688 0000 F30F1EFA 		endbr64
+ 689 0004 55       		pushq	%rbp
+ 690              	.LCFI15:
+ 691              		.cfi_def_cfa_offset 16
+ 692              		.cfi_offset 6, -16
+ 693 0005 4889E5   		movq	%rsp, %rbp
+ 694              	.LCFI16:
+ 695              		.cfi_def_cfa_register 6
+ 696 0008 4883EC30 		subq	$48, %rsp
+ 697 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 698 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 699 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 700              		.loc 1 187 1
+ 701 0018 64488B04 		movq	%fs:40, %rax
+ 701      25280000 
+ 701      00
+ 702 0021 488945F8 		movq	%rax, -8(%rbp)
+ 703 0025 31C0     		xorl	%eax, %eax
+ 188:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     int ret;
+ 189:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 190:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     /* Certificate type is a single byte bitstring */
+ 191:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( ( ret = mbedtls_asn1_get_tag( p, end, &bs->len, MBEDTLS_ASN1_BIT_STRING ) ) != 0 )
+ 704              		.loc 1 191 17
+ 705 0027 488B55D8 		movq	-40(%rbp), %rdx
+ 706 002b 488B75E0 		movq	-32(%rbp), %rsi
+ 707 002f 488B45E8 		movq	-24(%rbp), %rax
+ 708 0033 B9030000 		movl	$3, %ecx
+ 708      00
+ 709 0038 4889C7   		movq	%rax, %rdi
+ 710 003b E8000000 		call	mbedtls_asn1_get_tag
+ 710      00
+ 711 0040 8945F4   		movl	%eax, -12(%rbp)
+ 712              		.loc 1 191 7
+ 713 0043 837DF400 		cmpl	$0, -12(%rbp)
+ 714 0047 7408     		je	.L43
+ 192:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( ret );
+ 715              		.loc 1 192 15
+ 716 0049 8B45F4   		movl	-12(%rbp), %eax
+GAS LISTING /tmp/cc3mxwt5.s 			page 18
+
+
+ 717 004c E99E0000 		jmp	.L44
+ 717      00
+ 718              	.L43:
+ 193:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 194:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     /* Check length, subtract one for actual bit string length */
+ 195:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( bs->len < 1 )
+ 719              		.loc 1 195 11
+ 720 0051 488B45D8 		movq	-40(%rbp), %rax
+ 721 0055 488B00   		movq	(%rax), %rax
+ 722              		.loc 1 195 7
+ 723 0058 4885C0   		testq	%rax, %rax
+ 724 005b 750A     		jne	.L45
+ 196:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+ 725              		.loc 1 196 15
+ 726 005d B8A0FFFF 		movl	$-96, %eax
+ 726      FF
+ 727 0062 E9880000 		jmp	.L44
+ 727      00
+ 728              	.L45:
+ 197:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     bs->len -= 1;
+ 729              		.loc 1 197 13
+ 730 0067 488B45D8 		movq	-40(%rbp), %rax
+ 731 006b 488B00   		movq	(%rax), %rax
+ 732 006e 488D50FF 		leaq	-1(%rax), %rdx
+ 733 0072 488B45D8 		movq	-40(%rbp), %rax
+ 734 0076 488910   		movq	%rdx, (%rax)
+ 198:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 199:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     /* Get number of unused bits, ensure unused bits <= 7 */
+ 200:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     bs->unused_bits = **p;
+ 735              		.loc 1 200 24
+ 736 0079 488B45E8 		movq	-24(%rbp), %rax
+ 737 007d 488B00   		movq	(%rax), %rax
+ 738              		.loc 1 200 23
+ 739 0080 0FB610   		movzbl	(%rax), %edx
+ 740              		.loc 1 200 21
+ 741 0083 488B45D8 		movq	-40(%rbp), %rax
+ 742 0087 885008   		movb	%dl, 8(%rax)
+ 201:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( bs->unused_bits > 7 )
+ 743              		.loc 1 201 11
+ 744 008a 488B45D8 		movq	-40(%rbp), %rax
+ 745 008e 0FB64008 		movzbl	8(%rax), %eax
+ 746              		.loc 1 201 7
+ 747 0092 3C07     		cmpb	$7, %al
+ 748 0094 7607     		jbe	.L46
+ 202:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( MBEDTLS_ERR_ASN1_INVALID_LENGTH );
+ 749              		.loc 1 202 15
+ 750 0096 B89CFFFF 		movl	$-100, %eax
+ 750      FF
+ 751 009b EB52     		jmp	.L44
+ 752              	.L46:
+ 203:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     (*p)++;
+ 753              		.loc 1 203 6
+ 754 009d 488B45E8 		movq	-24(%rbp), %rax
+ 755 00a1 488B00   		movq	(%rax), %rax
+ 756              		.loc 1 203 9
+ 757 00a4 488D5001 		leaq	1(%rax), %rdx
+ 758 00a8 488B45E8 		movq	-24(%rbp), %rax
+GAS LISTING /tmp/cc3mxwt5.s 			page 19
+
+
+ 759 00ac 488910   		movq	%rdx, (%rax)
+ 204:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 205:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     /* Get actual bitstring */
+ 206:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     bs->p = *p;
+ 760              		.loc 1 206 13
+ 761 00af 488B45E8 		movq	-24(%rbp), %rax
+ 762 00b3 488B10   		movq	(%rax), %rdx
+ 763              		.loc 1 206 11
+ 764 00b6 488B45D8 		movq	-40(%rbp), %rax
+ 765 00ba 48895010 		movq	%rdx, 16(%rax)
+ 207:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     *p += bs->len;
+ 766              		.loc 1 207 8
+ 767 00be 488B45E8 		movq	-24(%rbp), %rax
+ 768 00c2 488B10   		movq	(%rax), %rdx
+ 769              		.loc 1 207 13
+ 770 00c5 488B45D8 		movq	-40(%rbp), %rax
+ 771 00c9 488B00   		movq	(%rax), %rax
+ 772              		.loc 1 207 8
+ 773 00cc 4801C2   		addq	%rax, %rdx
+ 774 00cf 488B45E8 		movq	-24(%rbp), %rax
+ 775 00d3 488910   		movq	%rdx, (%rax)
+ 208:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 209:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( *p != end )
+ 776              		.loc 1 209 9
+ 777 00d6 488B45E8 		movq	-24(%rbp), %rax
+ 778 00da 488B00   		movq	(%rax), %rax
+ 779              		.loc 1 209 7
+ 780 00dd 483945E0 		cmpq	%rax, -32(%rbp)
+ 781 00e1 7407     		je	.L47
+ 210:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
+ 782              		.loc 1 210 15
+ 783 00e3 B89AFFFF 		movl	$-102, %eax
+ 783      FF
+ 784 00e8 EB05     		jmp	.L44
+ 785              	.L47:
+ 211:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 212:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     return( 0 );
+ 786              		.loc 1 212 11
+ 787 00ea B8000000 		movl	$0, %eax
+ 787      00
+ 788              	.L44:
+ 213:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** }
+ 789              		.loc 1 213 1
+ 790 00ef 488B4DF8 		movq	-8(%rbp), %rcx
+ 791 00f3 6448330C 		xorq	%fs:40, %rcx
+ 791      25280000 
+ 791      00
+ 792 00fc 7405     		je	.L48
+ 793 00fe E8000000 		call	__stack_chk_fail@PLT
+ 793      00
+ 794              	.L48:
+ 795 0103 C9       		leave
+ 796              	.LCFI17:
+ 797              		.cfi_def_cfa 7, 8
+ 798 0104 C3       		ret
+ 799              		.cfi_endproc
+ 800              	.LFE11:
+GAS LISTING /tmp/cc3mxwt5.s 			page 20
+
+
+ 802              		.section	.text.mbedtls_asn1_get_bitstring_null,"ax",@progbits
+ 803              		.globl	mbedtls_asn1_get_bitstring_null
+ 805              	mbedtls_asn1_get_bitstring_null:
+ 806              	.LFB12:
+ 214:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 215:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** /*
+ 216:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  * Get a bit string without unused bits
+ 217:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  */
+ 218:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** int mbedtls_asn1_get_bitstring_null( unsigned char **p, const unsigned char *end,
+ 219:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                              size_t *len )
+ 220:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** {
+ 807              		.loc 1 220 1
+ 808              		.cfi_startproc
+ 809 0000 F30F1EFA 		endbr64
+ 810 0004 55       		pushq	%rbp
+ 811              	.LCFI18:
+ 812              		.cfi_def_cfa_offset 16
+ 813              		.cfi_offset 6, -16
+ 814 0005 4889E5   		movq	%rsp, %rbp
+ 815              	.LCFI19:
+ 816              		.cfi_def_cfa_register 6
+ 817 0008 4883EC30 		subq	$48, %rsp
+ 818 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 819 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 820 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 821              		.loc 1 220 1
+ 822 0018 64488B04 		movq	%fs:40, %rax
+ 822      25280000 
+ 822      00
+ 823 0021 488945F8 		movq	%rax, -8(%rbp)
+ 824 0025 31C0     		xorl	%eax, %eax
+ 221:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     int ret;
+ 222:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 223:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( ( ret = mbedtls_asn1_get_tag( p, end, len, MBEDTLS_ASN1_BIT_STRING ) ) != 0 )
+ 825              		.loc 1 223 17
+ 826 0027 488B55D8 		movq	-40(%rbp), %rdx
+ 827 002b 488B75E0 		movq	-32(%rbp), %rsi
+ 828 002f 488B45E8 		movq	-24(%rbp), %rax
+ 829 0033 B9030000 		movl	$3, %ecx
+ 829      00
+ 830 0038 4889C7   		movq	%rax, %rdi
+ 831 003b E8000000 		call	mbedtls_asn1_get_tag
+ 831      00
+ 832 0040 8945F4   		movl	%eax, -12(%rbp)
+ 833              		.loc 1 223 7
+ 834 0043 837DF400 		cmpl	$0, -12(%rbp)
+ 835 0047 7405     		je	.L50
+ 224:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( ret );
+ 836              		.loc 1 224 15
+ 837 0049 8B45F4   		movl	-12(%rbp), %eax
+ 838 004c EB3D     		jmp	.L51
+ 839              	.L50:
+ 225:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 226:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( (*len)-- < 2 || *(*p)++ != 0 )
+ 840              		.loc 1 226 10
+ 841 004e 488B45D8 		movq	-40(%rbp), %rax
+ 842 0052 488B00   		movq	(%rax), %rax
+GAS LISTING /tmp/cc3mxwt5.s 			page 21
+
+
+ 843              		.loc 1 226 15
+ 844 0055 488D48FF 		leaq	-1(%rax), %rcx
+ 845 0059 488B55D8 		movq	-40(%rbp), %rdx
+ 846 005d 48890A   		movq	%rcx, (%rdx)
+ 847              		.loc 1 226 7
+ 848 0060 4883F801 		cmpq	$1, %rax
+ 849 0064 7619     		jbe	.L52
+ 850              		.loc 1 226 27 discriminator 1
+ 851 0066 488B45E8 		movq	-24(%rbp), %rax
+ 852 006a 488B00   		movq	(%rax), %rax
+ 853              		.loc 1 226 30 discriminator 1
+ 854 006d 488D4801 		leaq	1(%rax), %rcx
+ 855 0071 488B55E8 		movq	-24(%rbp), %rdx
+ 856 0075 48890A   		movq	%rcx, (%rdx)
+ 857              		.loc 1 226 25 discriminator 1
+ 858 0078 0FB600   		movzbl	(%rax), %eax
+ 859              		.loc 1 226 22 discriminator 1
+ 860 007b 84C0     		testb	%al, %al
+ 861 007d 7407     		je	.L53
+ 862              	.L52:
+ 227:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( MBEDTLS_ERR_ASN1_INVALID_DATA );
+ 863              		.loc 1 227 15
+ 864 007f B898FFFF 		movl	$-104, %eax
+ 864      FF
+ 865 0084 EB05     		jmp	.L51
+ 866              	.L53:
+ 228:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 229:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     return( 0 );
+ 867              		.loc 1 229 11
+ 868 0086 B8000000 		movl	$0, %eax
+ 868      00
+ 869              	.L51:
+ 230:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** }
+ 870              		.loc 1 230 1
+ 871 008b 488B7DF8 		movq	-8(%rbp), %rdi
+ 872 008f 6448333C 		xorq	%fs:40, %rdi
+ 872      25280000 
+ 872      00
+ 873 0098 7405     		je	.L54
+ 874 009a E8000000 		call	__stack_chk_fail@PLT
+ 874      00
+ 875              	.L54:
+ 876 009f C9       		leave
+ 877              	.LCFI20:
+ 878              		.cfi_def_cfa 7, 8
+ 879 00a0 C3       		ret
+ 880              		.cfi_endproc
+ 881              	.LFE12:
+ 883              		.section	.text.mbedtls_asn1_get_sequence_of,"ax",@progbits
+ 884              		.globl	mbedtls_asn1_get_sequence_of
+ 886              	mbedtls_asn1_get_sequence_of:
+ 887              	.LFB13:
+ 231:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 232:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 233:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 234:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** /*
+ 235:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  *  Parses and splits an ASN.1 "SEQUENCE OF <tag>"
+GAS LISTING /tmp/cc3mxwt5.s 			page 22
+
+
+ 236:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****  */
+ 237:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** int mbedtls_asn1_get_sequence_of( unsigned char **p,
+ 238:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                           const unsigned char *end,
+ 239:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                           mbedtls_asn1_sequence *cur,
+ 240:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                           int tag)
+ 241:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** {
+ 888              		.loc 1 241 1
+ 889              		.cfi_startproc
+ 890 0000 F30F1EFA 		endbr64
+ 891 0004 55       		pushq	%rbp
+ 892              	.LCFI21:
+ 893              		.cfi_def_cfa_offset 16
+ 894              		.cfi_offset 6, -16
+ 895 0005 4889E5   		movq	%rsp, %rbp
+ 896              	.LCFI22:
+ 897              		.cfi_def_cfa_register 6
+ 898 0008 4883EC40 		subq	$64, %rsp
+ 899 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 900 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 901 0014 488955C8 		movq	%rdx, -56(%rbp)
+ 902 0018 894DC4   		movl	%ecx, -60(%rbp)
+ 903              		.loc 1 241 1
+ 904 001b 64488B04 		movq	%fs:40, %rax
+ 904      25280000 
+ 904      00
+ 905 0024 488945F8 		movq	%rax, -8(%rbp)
+ 906 0028 31C0     		xorl	%eax, %eax
+ 242:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     int ret;
+ 243:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     size_t len;
+ 244:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     mbedtls_asn1_buf *buf;
+ 245:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 246:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     /* Get main sequence tag */
+ 247:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( ( ret = mbedtls_asn1_get_tag( p, end, &len,
+ 907              		.loc 1 247 17
+ 908 002a 488D55E8 		leaq	-24(%rbp), %rdx
+ 909 002e 488B75D0 		movq	-48(%rbp), %rsi
+ 910 0032 488B45D8 		movq	-40(%rbp), %rax
+ 911 0036 B9300000 		movl	$48, %ecx
+ 911      00
+ 912 003b 4889C7   		movq	%rax, %rdi
+ 913 003e E8000000 		call	mbedtls_asn1_get_tag
+ 913      00
+ 914 0043 8945E4   		movl	%eax, -28(%rbp)
+ 915              		.loc 1 247 7
+ 916 0046 837DE400 		cmpl	$0, -28(%rbp)
+ 917 004a 7408     		je	.L56
+ 248:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE ) ) != 0 )
+ 249:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( ret );
+ 918              		.loc 1 249 15
+ 919 004c 8B45E4   		movl	-28(%rbp), %eax
+ 920 004f E9100100 		jmp	.L64
+ 920      00
+ 921              	.L56:
+ 250:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 251:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( *p + len != end )
+ 922              		.loc 1 251 9
+ 923 0054 488B45D8 		movq	-40(%rbp), %rax
+GAS LISTING /tmp/cc3mxwt5.s 			page 23
+
+
+ 924 0058 488B10   		movq	(%rax), %rdx
+ 925              		.loc 1 251 12
+ 926 005b 488B45E8 		movq	-24(%rbp), %rax
+ 927 005f 4801D0   		addq	%rdx, %rax
+ 928              		.loc 1 251 7
+ 929 0062 483945D0 		cmpq	%rax, -48(%rbp)
+ 930 0066 0F84C200 		je	.L59
+ 930      0000
+ 252:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
+ 931              		.loc 1 252 15
+ 932 006c B89AFFFF 		movl	$-102, %eax
+ 932      FF
+ 933 0071 E9EE0000 		jmp	.L64
+ 933      00
+ 934              	.L62:
+ 253:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 254:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     while( *p < end )
+ 255:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     {
+ 256:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         buf = &(cur->buf);
+ 935              		.loc 1 256 13
+ 936 0076 488B45C8 		movq	-56(%rbp), %rax
+ 937 007a 488945F0 		movq	%rax, -16(%rbp)
+ 257:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         buf->tag = **p;
+ 938              		.loc 1 257 21
+ 939 007e 488B45D8 		movq	-40(%rbp), %rax
+ 940 0082 488B00   		movq	(%rax), %rax
+ 941              		.loc 1 257 20
+ 942 0085 0FB600   		movzbl	(%rax), %eax
+ 943 0088 0FB6D0   		movzbl	%al, %edx
+ 944              		.loc 1 257 18
+ 945 008b 488B45F0 		movq	-16(%rbp), %rax
+ 946 008f 8910     		movl	%edx, (%rax)
+ 258:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 259:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         if( ( ret = mbedtls_asn1_get_tag( p, end, &buf->len, tag ) ) != 0 )
+ 947              		.loc 1 259 21
+ 948 0091 488B45F0 		movq	-16(%rbp), %rax
+ 949 0095 488D7808 		leaq	8(%rax), %rdi
+ 950 0099 8B55C4   		movl	-60(%rbp), %edx
+ 951 009c 488B75D0 		movq	-48(%rbp), %rsi
+ 952 00a0 488B45D8 		movq	-40(%rbp), %rax
+ 953 00a4 89D1     		movl	%edx, %ecx
+ 954 00a6 4889FA   		movq	%rdi, %rdx
+ 955 00a9 4889C7   		movq	%rax, %rdi
+ 956 00ac E8000000 		call	mbedtls_asn1_get_tag
+ 956      00
+ 957 00b1 8945E4   		movl	%eax, -28(%rbp)
+ 958              		.loc 1 259 11
+ 959 00b4 837DE400 		cmpl	$0, -28(%rbp)
+ 960 00b8 7408     		je	.L60
+ 260:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             return( ret );
+ 961              		.loc 1 260 19
+ 962 00ba 8B45E4   		movl	-28(%rbp), %eax
+ 963 00bd E9A20000 		jmp	.L64
+ 963      00
+ 964              	.L60:
+ 261:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 262:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         buf->p = *p;
+GAS LISTING /tmp/cc3mxwt5.s 			page 24
+
+
+ 965              		.loc 1 262 18
+ 966 00c2 488B45D8 		movq	-40(%rbp), %rax
+ 967 00c6 488B10   		movq	(%rax), %rdx
+ 968              		.loc 1 262 16
+ 969 00c9 488B45F0 		movq	-16(%rbp), %rax
+ 970 00cd 48895010 		movq	%rdx, 16(%rax)
+ 263:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         *p += buf->len;
+ 971              		.loc 1 263 12
+ 972 00d1 488B45D8 		movq	-40(%rbp), %rax
+ 973 00d5 488B10   		movq	(%rax), %rdx
+ 974              		.loc 1 263 18
+ 975 00d8 488B45F0 		movq	-16(%rbp), %rax
+ 976 00dc 488B4008 		movq	8(%rax), %rax
+ 977              		.loc 1 263 12
+ 978 00e0 4801C2   		addq	%rax, %rdx
+ 979 00e3 488B45D8 		movq	-40(%rbp), %rax
+ 980 00e7 488910   		movq	%rdx, (%rax)
+ 264:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 265:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         /* Allocate and assign next pointer */
+ 266:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         if( *p < end )
+ 981              		.loc 1 266 13
+ 982 00ea 488B45D8 		movq	-40(%rbp), %rax
+ 983 00ee 488B00   		movq	(%rax), %rax
+ 984              		.loc 1 266 11
+ 985 00f1 483945D0 		cmpq	%rax, -48(%rbp)
+ 986 00f5 7637     		jbe	.L59
+ 267:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         {
+ 268:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             cur->next = (mbedtls_asn1_sequence*)mbedtls_calloc( 1,
+ 987              		.loc 1 268 49
+ 988 00f7 BE200000 		movl	$32, %esi
+ 988      00
+ 989 00fc BF010000 		movl	$1, %edi
+ 989      00
+ 990 0101 E8000000 		call	mbedtls_calloc@PLT
+ 990      00
+ 991              		.loc 1 268 23
+ 992 0106 488B55C8 		movq	-56(%rbp), %rdx
+ 993 010a 48894218 		movq	%rax, 24(%rdx)
+ 269:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                                             sizeof( mbedtls_asn1_sequence ) );
+ 270:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 271:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             if( cur->next == NULL )
+ 994              		.loc 1 271 20
+ 995 010e 488B45C8 		movq	-56(%rbp), %rax
+ 996 0112 488B4018 		movq	24(%rax), %rax
+ 997              		.loc 1 271 15
+ 998 0116 4885C0   		testq	%rax, %rax
+ 999 0119 7507     		jne	.L61
+ 272:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                 return( MBEDTLS_ERR_ASN1_ALLOC_FAILED );
+ 1000              		.loc 1 272 23
+ 1001 011b B896FFFF 		movl	$-106, %eax
+ 1001      FF
+ 1002 0120 EB42     		jmp	.L64
+ 1003              	.L61:
+ 273:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 274:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             cur = cur->next;
+ 1004              		.loc 1 274 17
+ 1005 0122 488B45C8 		movq	-56(%rbp), %rax
+GAS LISTING /tmp/cc3mxwt5.s 			page 25
+
+
+ 1006 0126 488B4018 		movq	24(%rax), %rax
+ 1007 012a 488945C8 		movq	%rax, -56(%rbp)
+ 1008              	.L59:
+ 254:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     {
+ 1009              		.loc 1 254 12
+ 1010 012e 488B45D8 		movq	-40(%rbp), %rax
+ 1011 0132 488B00   		movq	(%rax), %rax
+ 254:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     {
+ 1012              		.loc 1 254 10
+ 1013 0135 483945D0 		cmpq	%rax, -48(%rbp)
+ 1014 0139 0F8737FF 		ja	.L62
+ 1014      FFFF
+ 275:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         }
+ 276:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     }
+ 277:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 278:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     /* Set final sequence entry's next pointer to NULL */
+ 279:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     cur->next = NULL;
+ 1015              		.loc 1 279 15
+ 1016 013f 488B45C8 		movq	-56(%rbp), %rax
+ 1017 0143 48C74018 		movq	$0, 24(%rax)
+ 1017      00000000 
+ 280:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 281:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( *p != end )
+ 1018              		.loc 1 281 9
+ 1019 014b 488B45D8 		movq	-40(%rbp), %rax
+ 1020 014f 488B00   		movq	(%rax), %rax
+ 1021              		.loc 1 281 7
+ 1022 0152 483945D0 		cmpq	%rax, -48(%rbp)
+ 1023 0156 7407     		je	.L63
+ 282:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
+ 1024              		.loc 1 282 15
+ 1025 0158 B89AFFFF 		movl	$-102, %eax
+ 1025      FF
+ 1026 015d EB05     		jmp	.L64
+ 1027              	.L63:
+ 283:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 284:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     return( 0 );
+ 1028              		.loc 1 284 11
+ 1029 015f B8000000 		movl	$0, %eax
+ 1029      00
+ 1030              	.L64:
+ 285:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** }
+ 1031              		.loc 1 285 1 discriminator 1
+ 1032 0164 488B4DF8 		movq	-8(%rbp), %rcx
+ 1033 0168 6448330C 		xorq	%fs:40, %rcx
+ 1033      25280000 
+ 1033      00
+ 1034 0171 7405     		je	.L65
+ 1035              		.loc 1 285 1 is_stmt 0
+ 1036 0173 E8000000 		call	__stack_chk_fail@PLT
+ 1036      00
+ 1037              	.L65:
+ 1038 0178 C9       		leave
+ 1039              	.LCFI23:
+ 1040              		.cfi_def_cfa 7, 8
+ 1041 0179 C3       		ret
+ 1042              		.cfi_endproc
+GAS LISTING /tmp/cc3mxwt5.s 			page 26
+
+
+ 1043              	.LFE13:
+ 1045              		.section	.text.mbedtls_asn1_get_alg,"ax",@progbits
+ 1046              		.globl	mbedtls_asn1_get_alg
+ 1048              	mbedtls_asn1_get_alg:
+ 1049              	.LFB14:
+ 286:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 287:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** int mbedtls_asn1_get_alg( unsigned char **p,
+ 288:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                   const unsigned char *end,
+ 289:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                   mbedtls_asn1_buf *alg, mbedtls_asn1_buf *params )
+ 290:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** {
+ 1050              		.loc 1 290 1 is_stmt 1
+ 1051              		.cfi_startproc
+ 1052 0000 F30F1EFA 		endbr64
+ 1053 0004 55       		pushq	%rbp
+ 1054              	.LCFI24:
+ 1055              		.cfi_def_cfa_offset 16
+ 1056              		.cfi_offset 6, -16
+ 1057 0005 4889E5   		movq	%rsp, %rbp
+ 1058              	.LCFI25:
+ 1059              		.cfi_def_cfa_register 6
+ 1060 0008 4883EC40 		subq	$64, %rsp
+ 1061 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 1062 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 1063 0014 488955C8 		movq	%rdx, -56(%rbp)
+ 1064 0018 48894DC0 		movq	%rcx, -64(%rbp)
+ 1065              		.loc 1 290 1
+ 1066 001c 64488B04 		movq	%fs:40, %rax
+ 1066      25280000 
+ 1066      00
+ 1067 0025 488945F8 		movq	%rax, -8(%rbp)
+ 1068 0029 31C0     		xorl	%eax, %eax
+ 291:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     int ret;
+ 292:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     size_t len;
+ 293:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 294:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( ( ret = mbedtls_asn1_get_tag( p, end, &len,
+ 1069              		.loc 1 294 17
+ 1070 002b 488D55F0 		leaq	-16(%rbp), %rdx
+ 1071 002f 488B75D0 		movq	-48(%rbp), %rsi
+ 1072 0033 488B45D8 		movq	-40(%rbp), %rax
+ 1073 0037 B9300000 		movl	$48, %ecx
+ 1073      00
+ 1074 003c 4889C7   		movq	%rax, %rdi
+ 1075 003f E8000000 		call	mbedtls_asn1_get_tag
+ 1075      00
+ 1076 0044 8945EC   		movl	%eax, -20(%rbp)
+ 1077              		.loc 1 294 7
+ 1078 0047 837DEC00 		cmpl	$0, -20(%rbp)
+ 1079 004b 7408     		je	.L67
+ 295:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE ) ) != 0 )
+ 296:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( ret );
+ 1080              		.loc 1 296 15
+ 1081 004d 8B45EC   		movl	-20(%rbp), %eax
+ 1082 0050 E9520100 		jmp	.L74
+ 1082      00
+ 1083              	.L67:
+ 297:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 298:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( ( end - *p ) < 1 )
+GAS LISTING /tmp/cc3mxwt5.s 			page 27
+
+
+ 1084              		.loc 1 298 17
+ 1085 0055 488B45D8 		movq	-40(%rbp), %rax
+ 1086 0059 488B00   		movq	(%rax), %rax
+ 1087              		.loc 1 298 15
+ 1088 005c 488B55D0 		movq	-48(%rbp), %rdx
+ 1089 0060 4829C2   		subq	%rax, %rdx
+ 1090 0063 4889D0   		movq	%rdx, %rax
+ 1091              		.loc 1 298 7
+ 1092 0066 4885C0   		testq	%rax, %rax
+ 1093 0069 7F0A     		jg	.L69
+ 299:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( MBEDTLS_ERR_ASN1_OUT_OF_DATA );
+ 1094              		.loc 1 299 15
+ 1095 006b B8A0FFFF 		movl	$-96, %eax
+ 1095      FF
+ 1096 0070 E9320100 		jmp	.L74
+ 1096      00
+ 1097              	.L69:
+ 300:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 301:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     alg->tag = **p;
+ 1098              		.loc 1 301 17
+ 1099 0075 488B45D8 		movq	-40(%rbp), %rax
+ 1100 0079 488B00   		movq	(%rax), %rax
+ 1101              		.loc 1 301 16
+ 1102 007c 0FB600   		movzbl	(%rax), %eax
+ 1103 007f 0FB6D0   		movzbl	%al, %edx
+ 1104              		.loc 1 301 14
+ 1105 0082 488B45C8 		movq	-56(%rbp), %rax
+ 1106 0086 8910     		movl	%edx, (%rax)
+ 302:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     end = *p + len;
+ 1107              		.loc 1 302 11
+ 1108 0088 488B45D8 		movq	-40(%rbp), %rax
+ 1109 008c 488B10   		movq	(%rax), %rdx
+ 1110              		.loc 1 302 14
+ 1111 008f 488B45F0 		movq	-16(%rbp), %rax
+ 1112              		.loc 1 302 9
+ 1113 0093 4801D0   		addq	%rdx, %rax
+ 1114 0096 488945D0 		movq	%rax, -48(%rbp)
+ 303:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 304:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( ( ret = mbedtls_asn1_get_tag( p, end, &alg->len, MBEDTLS_ASN1_OID ) ) != 0 )
+ 1115              		.loc 1 304 17
+ 1116 009a 488B45C8 		movq	-56(%rbp), %rax
+ 1117 009e 488D5008 		leaq	8(%rax), %rdx
+ 1118 00a2 488B75D0 		movq	-48(%rbp), %rsi
+ 1119 00a6 488B45D8 		movq	-40(%rbp), %rax
+ 1120 00aa B9060000 		movl	$6, %ecx
+ 1120      00
+ 1121 00af 4889C7   		movq	%rax, %rdi
+ 1122 00b2 E8000000 		call	mbedtls_asn1_get_tag
+ 1122      00
+ 1123 00b7 8945EC   		movl	%eax, -20(%rbp)
+ 1124              		.loc 1 304 7
+ 1125 00ba 837DEC00 		cmpl	$0, -20(%rbp)
+ 1126 00be 7408     		je	.L70
+ 305:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( ret );
+ 1127              		.loc 1 305 15
+ 1128 00c0 8B45EC   		movl	-20(%rbp), %eax
+ 1129 00c3 E9DF0000 		jmp	.L74
+GAS LISTING /tmp/cc3mxwt5.s 			page 28
+
+
+ 1129      00
+ 1130              	.L70:
+ 306:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 307:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     alg->p = *p;
+ 1131              		.loc 1 307 14
+ 1132 00c8 488B45D8 		movq	-40(%rbp), %rax
+ 1133 00cc 488B10   		movq	(%rax), %rdx
+ 1134              		.loc 1 307 12
+ 1135 00cf 488B45C8 		movq	-56(%rbp), %rax
+ 1136 00d3 48895010 		movq	%rdx, 16(%rax)
+ 308:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     *p += alg->len;
+ 1137              		.loc 1 308 8
+ 1138 00d7 488B45D8 		movq	-40(%rbp), %rax
+ 1139 00db 488B10   		movq	(%rax), %rdx
+ 1140              		.loc 1 308 14
+ 1141 00de 488B45C8 		movq	-56(%rbp), %rax
+ 1142 00e2 488B4008 		movq	8(%rax), %rax
+ 1143              		.loc 1 308 8
+ 1144 00e6 4801C2   		addq	%rax, %rdx
+ 1145 00e9 488B45D8 		movq	-40(%rbp), %rax
+ 1146 00ed 488910   		movq	%rdx, (%rax)
+ 309:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 310:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( *p == end )
+ 1147              		.loc 1 310 9
+ 1148 00f0 488B45D8 		movq	-40(%rbp), %rax
+ 1149 00f4 488B00   		movq	(%rax), %rax
+ 1150              		.loc 1 310 7
+ 1151 00f7 483945D0 		cmpq	%rax, -48(%rbp)
+ 1152 00fb 751B     		jne	.L71
+ 311:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     {
+ 312:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         mbedtls_platform_zeroize( params, sizeof(mbedtls_asn1_buf) );
+ 1153              		.loc 1 312 9
+ 1154 00fd 488B45C0 		movq	-64(%rbp), %rax
+ 1155 0101 BE180000 		movl	$24, %esi
+ 1155      00
+ 1156 0106 4889C7   		movq	%rax, %rdi
+ 1157 0109 E8000000 		call	mbedtls_platform_zeroize@PLT
+ 1157      00
+ 313:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( 0 );
+ 1158              		.loc 1 313 15
+ 1159 010e B8000000 		movl	$0, %eax
+ 1159      00
+ 1160 0113 E98F0000 		jmp	.L74
+ 1160      00
+ 1161              	.L71:
+ 314:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     }
+ 315:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 316:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     params->tag = **p;
+ 1162              		.loc 1 316 20
+ 1163 0118 488B45D8 		movq	-40(%rbp), %rax
+ 1164 011c 488B00   		movq	(%rax), %rax
+ 1165              		.loc 1 316 19
+ 1166 011f 0FB600   		movzbl	(%rax), %eax
+ 1167 0122 0FB6D0   		movzbl	%al, %edx
+ 1168              		.loc 1 316 17
+ 1169 0125 488B45C0 		movq	-64(%rbp), %rax
+ 1170 0129 8910     		movl	%edx, (%rax)
+GAS LISTING /tmp/cc3mxwt5.s 			page 29
+
+
+ 317:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     (*p)++;
+ 1171              		.loc 1 317 6
+ 1172 012b 488B45D8 		movq	-40(%rbp), %rax
+ 1173 012f 488B00   		movq	(%rax), %rax
+ 1174              		.loc 1 317 9
+ 1175 0132 488D5001 		leaq	1(%rax), %rdx
+ 1176 0136 488B45D8 		movq	-40(%rbp), %rax
+ 1177 013a 488910   		movq	%rdx, (%rax)
+ 318:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 319:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( ( ret = mbedtls_asn1_get_len( p, end, &params->len ) ) != 0 )
+ 1178              		.loc 1 319 17
+ 1179 013d 488B45C0 		movq	-64(%rbp), %rax
+ 1180 0141 488D5008 		leaq	8(%rax), %rdx
+ 1181 0145 488B4DD0 		movq	-48(%rbp), %rcx
+ 1182 0149 488B45D8 		movq	-40(%rbp), %rax
+ 1183 014d 4889CE   		movq	%rcx, %rsi
+ 1184 0150 4889C7   		movq	%rax, %rdi
+ 1185 0153 E8000000 		call	mbedtls_asn1_get_len
+ 1185      00
+ 1186 0158 8945EC   		movl	%eax, -20(%rbp)
+ 1187              		.loc 1 319 7
+ 1188 015b 837DEC00 		cmpl	$0, -20(%rbp)
+ 1189 015f 7405     		je	.L72
+ 320:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( ret );
+ 1190              		.loc 1 320 15
+ 1191 0161 8B45EC   		movl	-20(%rbp), %eax
+ 1192 0164 EB41     		jmp	.L74
+ 1193              	.L72:
+ 321:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 322:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     params->p = *p;
+ 1194              		.loc 1 322 17
+ 1195 0166 488B45D8 		movq	-40(%rbp), %rax
+ 1196 016a 488B10   		movq	(%rax), %rdx
+ 1197              		.loc 1 322 15
+ 1198 016d 488B45C0 		movq	-64(%rbp), %rax
+ 1199 0171 48895010 		movq	%rdx, 16(%rax)
+ 323:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     *p += params->len;
+ 1200              		.loc 1 323 8
+ 1201 0175 488B45D8 		movq	-40(%rbp), %rax
+ 1202 0179 488B10   		movq	(%rax), %rdx
+ 1203              		.loc 1 323 17
+ 1204 017c 488B45C0 		movq	-64(%rbp), %rax
+ 1205 0180 488B4008 		movq	8(%rax), %rax
+ 1206              		.loc 1 323 8
+ 1207 0184 4801C2   		addq	%rax, %rdx
+ 1208 0187 488B45D8 		movq	-40(%rbp), %rax
+ 1209 018b 488910   		movq	%rdx, (%rax)
+ 324:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 325:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( *p != end )
+ 1210              		.loc 1 325 9
+ 1211 018e 488B45D8 		movq	-40(%rbp), %rax
+ 1212 0192 488B00   		movq	(%rax), %rax
+ 1213              		.loc 1 325 7
+ 1214 0195 483945D0 		cmpq	%rax, -48(%rbp)
+ 1215 0199 7407     		je	.L73
+ 326:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
+ 1216              		.loc 1 326 15
+GAS LISTING /tmp/cc3mxwt5.s 			page 30
+
+
+ 1217 019b B89AFFFF 		movl	$-102, %eax
+ 1217      FF
+ 1218 01a0 EB05     		jmp	.L74
+ 1219              	.L73:
+ 327:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 328:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     return( 0 );
+ 1220              		.loc 1 328 11
+ 1221 01a2 B8000000 		movl	$0, %eax
+ 1221      00
+ 1222              	.L74:
+ 329:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** }
+ 1223              		.loc 1 329 1 discriminator 1
+ 1224 01a7 488B4DF8 		movq	-8(%rbp), %rcx
+ 1225 01ab 6448330C 		xorq	%fs:40, %rcx
+ 1225      25280000 
+ 1225      00
+ 1226 01b4 7405     		je	.L75
+ 1227              		.loc 1 329 1 is_stmt 0
+ 1228 01b6 E8000000 		call	__stack_chk_fail@PLT
+ 1228      00
+ 1229              	.L75:
+ 1230 01bb C9       		leave
+ 1231              	.LCFI26:
+ 1232              		.cfi_def_cfa 7, 8
+ 1233 01bc C3       		ret
+ 1234              		.cfi_endproc
+ 1235              	.LFE14:
+ 1237              		.section	.text.mbedtls_asn1_get_alg_null,"ax",@progbits
+ 1238              		.globl	mbedtls_asn1_get_alg_null
+ 1240              	mbedtls_asn1_get_alg_null:
+ 1241              	.LFB15:
+ 330:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 331:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** int mbedtls_asn1_get_alg_null( unsigned char **p,
+ 332:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                        const unsigned char *end,
+ 333:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                        mbedtls_asn1_buf *alg )
+ 334:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** {
+ 1242              		.loc 1 334 1 is_stmt 1
+ 1243              		.cfi_startproc
+ 1244 0000 F30F1EFA 		endbr64
+ 1245 0004 55       		pushq	%rbp
+ 1246              	.LCFI27:
+ 1247              		.cfi_def_cfa_offset 16
+ 1248              		.cfi_offset 6, -16
+ 1249 0005 4889E5   		movq	%rsp, %rbp
+ 1250              	.LCFI28:
+ 1251              		.cfi_def_cfa_register 6
+ 1252 0008 4883EC50 		subq	$80, %rsp
+ 1253 000c 48897DC8 		movq	%rdi, -56(%rbp)
+ 1254 0010 488975C0 		movq	%rsi, -64(%rbp)
+ 1255 0014 488955B8 		movq	%rdx, -72(%rbp)
+ 1256              		.loc 1 334 1
+ 1257 0018 64488B04 		movq	%fs:40, %rax
+ 1257      25280000 
+ 1257      00
+ 1258 0021 488945F8 		movq	%rax, -8(%rbp)
+ 1259 0025 31C0     		xorl	%eax, %eax
+ 335:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     int ret;
+GAS LISTING /tmp/cc3mxwt5.s 			page 31
+
+
+ 336:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     mbedtls_asn1_buf params;
+ 337:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 338:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     memset( &params, 0, sizeof(mbedtls_asn1_buf) );
+ 1260              		.loc 1 338 5
+ 1261 0027 488D45E0 		leaq	-32(%rbp), %rax
+ 1262 002b BA180000 		movl	$24, %edx
+ 1262      00
+ 1263 0030 BE000000 		movl	$0, %esi
+ 1263      00
+ 1264 0035 4889C7   		movq	%rax, %rdi
+ 1265 0038 E8000000 		call	memset@PLT
+ 1265      00
+ 339:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 340:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( ( ret = mbedtls_asn1_get_alg( p, end, alg, &params ) ) != 0 )
+ 1266              		.loc 1 340 17
+ 1267 003d 488D4DE0 		leaq	-32(%rbp), %rcx
+ 1268 0041 488B55B8 		movq	-72(%rbp), %rdx
+ 1269 0045 488B75C0 		movq	-64(%rbp), %rsi
+ 1270 0049 488B45C8 		movq	-56(%rbp), %rax
+ 1271 004d 4889C7   		movq	%rax, %rdi
+ 1272 0050 E8000000 		call	mbedtls_asn1_get_alg
+ 1272      00
+ 1273 0055 8945DC   		movl	%eax, -36(%rbp)
+ 1274              		.loc 1 340 7
+ 1275 0058 837DDC00 		cmpl	$0, -36(%rbp)
+ 1276 005c 7405     		je	.L77
+ 341:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( ret );
+ 1277              		.loc 1 341 15
+ 1278 005e 8B45DC   		movl	-36(%rbp), %eax
+ 1279 0061 EB24     		jmp	.L82
+ 1280              	.L77:
+ 342:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 343:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( ( params.tag != MBEDTLS_ASN1_NULL && params.tag != 0 ) || params.len != 0 )
+ 1281              		.loc 1 343 17
+ 1282 0063 8B45E0   		movl	-32(%rbp), %eax
+ 1283              		.loc 1 343 7
+ 1284 0066 83F805   		cmpl	$5, %eax
+ 1285 0069 7407     		je	.L79
+ 1286              		.loc 1 343 52 discriminator 1
+ 1287 006b 8B45E0   		movl	-32(%rbp), %eax
+ 1288              		.loc 1 343 43 discriminator 1
+ 1289 006e 85C0     		testl	%eax, %eax
+ 1290 0070 7509     		jne	.L80
+ 1291              	.L79:
+ 1292              		.loc 1 343 73 discriminator 3
+ 1293 0072 488B45E8 		movq	-24(%rbp), %rax
+ 1294              		.loc 1 343 64 discriminator 3
+ 1295 0076 4885C0   		testq	%rax, %rax
+ 1296 0079 7407     		je	.L81
+ 1297              	.L80:
+ 344:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return( MBEDTLS_ERR_ASN1_INVALID_DATA );
+ 1298              		.loc 1 344 15
+ 1299 007b B898FFFF 		movl	$-104, %eax
+ 1299      FF
+ 1300 0080 EB05     		jmp	.L82
+ 1301              	.L81:
+ 345:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+GAS LISTING /tmp/cc3mxwt5.s 			page 32
+
+
+ 346:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     return( 0 );
+ 1302              		.loc 1 346 11
+ 1303 0082 B8000000 		movl	$0, %eax
+ 1303      00
+ 1304              	.L82:
+ 347:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** }
+ 1305              		.loc 1 347 1 discriminator 1
+ 1306 0087 488B4DF8 		movq	-8(%rbp), %rcx
+ 1307 008b 6448330C 		xorq	%fs:40, %rcx
+ 1307      25280000 
+ 1307      00
+ 1308 0094 7405     		je	.L83
+ 1309              		.loc 1 347 1 is_stmt 0
+ 1310 0096 E8000000 		call	__stack_chk_fail@PLT
+ 1310      00
+ 1311              	.L83:
+ 1312 009b C9       		leave
+ 1313              	.LCFI29:
+ 1314              		.cfi_def_cfa 7, 8
+ 1315 009c C3       		ret
+ 1316              		.cfi_endproc
+ 1317              	.LFE15:
+ 1319              		.section	.text.mbedtls_asn1_free_named_data,"ax",@progbits
+ 1320              		.globl	mbedtls_asn1_free_named_data
+ 1322              	mbedtls_asn1_free_named_data:
+ 1323              	.LFB16:
+ 348:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 349:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** void mbedtls_asn1_free_named_data( mbedtls_asn1_named_data *cur )
+ 350:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** {
+ 1324              		.loc 1 350 1 is_stmt 1
+ 1325              		.cfi_startproc
+ 1326 0000 F30F1EFA 		endbr64
+ 1327 0004 55       		pushq	%rbp
+ 1328              	.LCFI30:
+ 1329              		.cfi_def_cfa_offset 16
+ 1330              		.cfi_offset 6, -16
+ 1331 0005 4889E5   		movq	%rsp, %rbp
+ 1332              	.LCFI31:
+ 1333              		.cfi_def_cfa_register 6
+ 1334 0008 4883EC20 		subq	$32, %rsp
+ 1335 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1336              		.loc 1 350 1
+ 1337 0010 64488B04 		movq	%fs:40, %rax
+ 1337      25280000 
+ 1337      00
+ 1338 0019 488945F8 		movq	%rax, -8(%rbp)
+ 1339 001d 31C0     		xorl	%eax, %eax
+ 351:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     if( cur == NULL )
+ 1340              		.loc 1 351 7
+ 1341 001f 48837DE8 		cmpq	$0, -24(%rbp)
+ 1341      00
+ 1342 0024 7433     		je	.L88
+ 352:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         return;
+ 353:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 354:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     mbedtls_free( cur->oid.p );
+ 1343              		.loc 1 354 27
+ 1344 0026 488B45E8 		movq	-24(%rbp), %rax
+GAS LISTING /tmp/cc3mxwt5.s 			page 33
+
+
+ 1345 002a 488B4010 		movq	16(%rax), %rax
+ 1346              		.loc 1 354 5
+ 1347 002e 4889C7   		movq	%rax, %rdi
+ 1348 0031 E8000000 		call	mbedtls_free@PLT
+ 1348      00
+ 355:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     mbedtls_free( cur->val.p );
+ 1349              		.loc 1 355 27
+ 1350 0036 488B45E8 		movq	-24(%rbp), %rax
+ 1351 003a 488B4028 		movq	40(%rax), %rax
+ 1352              		.loc 1 355 5
+ 1353 003e 4889C7   		movq	%rax, %rdi
+ 1354 0041 E8000000 		call	mbedtls_free@PLT
+ 1354      00
+ 356:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 357:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     mbedtls_platform_zeroize( cur, sizeof( mbedtls_asn1_named_data ) );
+ 1355              		.loc 1 357 5
+ 1356 0046 488B45E8 		movq	-24(%rbp), %rax
+ 1357 004a BE400000 		movl	$64, %esi
+ 1357      00
+ 1358 004f 4889C7   		movq	%rax, %rdi
+ 1359 0052 E8000000 		call	mbedtls_platform_zeroize@PLT
+ 1359      00
+ 1360 0057 EB01     		jmp	.L84
+ 1361              	.L88:
+ 352:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 1362              		.loc 1 352 9
+ 1363 0059 90       		nop
+ 1364              	.L84:
+ 358:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** }
+ 1365              		.loc 1 358 1
+ 1366 005a 488B45F8 		movq	-8(%rbp), %rax
+ 1367 005e 64483304 		xorq	%fs:40, %rax
+ 1367      25280000 
+ 1367      00
+ 1368 0067 7405     		je	.L87
+ 1369 0069 E8000000 		call	__stack_chk_fail@PLT
+ 1369      00
+ 1370              	.L87:
+ 1371 006e C9       		leave
+ 1372              	.LCFI32:
+ 1373              		.cfi_def_cfa 7, 8
+ 1374 006f C3       		ret
+ 1375              		.cfi_endproc
+ 1376              	.LFE16:
+ 1378              		.section	.text.mbedtls_asn1_free_named_data_list,"ax",@progbits
+ 1379              		.globl	mbedtls_asn1_free_named_data_list
+ 1381              	mbedtls_asn1_free_named_data_list:
+ 1382              	.LFB17:
+ 359:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 360:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** void mbedtls_asn1_free_named_data_list( mbedtls_asn1_named_data **head )
+ 361:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** {
+ 1383              		.loc 1 361 1
+ 1384              		.cfi_startproc
+ 1385 0000 F30F1EFA 		endbr64
+ 1386 0004 55       		pushq	%rbp
+ 1387              	.LCFI33:
+ 1388              		.cfi_def_cfa_offset 16
+GAS LISTING /tmp/cc3mxwt5.s 			page 34
+
+
+ 1389              		.cfi_offset 6, -16
+ 1390 0005 4889E5   		movq	%rsp, %rbp
+ 1391              	.LCFI34:
+ 1392              		.cfi_def_cfa_register 6
+ 1393 0008 4883EC20 		subq	$32, %rsp
+ 1394 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1395              		.loc 1 361 1
+ 1396 0010 64488B04 		movq	%fs:40, %rax
+ 1396      25280000 
+ 1396      00
+ 1397 0019 488945F8 		movq	%rax, -8(%rbp)
+ 1398 001d 31C0     		xorl	%eax, %eax
+ 362:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     mbedtls_asn1_named_data *cur;
+ 363:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 364:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     while( ( cur = *head ) != NULL )
+ 1399              		.loc 1 364 10
+ 1400 001f EB27     		jmp	.L90
+ 1401              	.L91:
+ 365:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     {
+ 366:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         *head = cur->next;
+ 1402              		.loc 1 366 20
+ 1403 0021 488B45F0 		movq	-16(%rbp), %rax
+ 1404 0025 488B5030 		movq	48(%rax), %rdx
+ 1405              		.loc 1 366 15
+ 1406 0029 488B45E8 		movq	-24(%rbp), %rax
+ 1407 002d 488910   		movq	%rdx, (%rax)
+ 367:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         mbedtls_asn1_free_named_data( cur );
+ 1408              		.loc 1 367 9
+ 1409 0030 488B45F0 		movq	-16(%rbp), %rax
+ 1410 0034 4889C7   		movq	%rax, %rdi
+ 1411 0037 E8000000 		call	mbedtls_asn1_free_named_data
+ 1411      00
+ 368:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         mbedtls_free( cur );
+ 1412              		.loc 1 368 9
+ 1413 003c 488B45F0 		movq	-16(%rbp), %rax
+ 1414 0040 4889C7   		movq	%rax, %rdi
+ 1415 0043 E8000000 		call	mbedtls_free@PLT
+ 1415      00
+ 1416              	.L90:
+ 364:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     {
+ 1417              		.loc 1 364 18
+ 1418 0048 488B45E8 		movq	-24(%rbp), %rax
+ 1419 004c 488B00   		movq	(%rax), %rax
+ 1420 004f 488945F0 		movq	%rax, -16(%rbp)
+ 364:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     {
+ 1421              		.loc 1 364 10
+ 1422 0053 48837DF0 		cmpq	$0, -16(%rbp)
+ 1422      00
+ 1423 0058 75C7     		jne	.L91
+ 369:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     }
+ 370:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** }
+ 1424              		.loc 1 370 1
+ 1425 005a 90       		nop
+ 1426 005b 488B45F8 		movq	-8(%rbp), %rax
+ 1427 005f 64483304 		xorq	%fs:40, %rax
+ 1427      25280000 
+ 1427      00
+GAS LISTING /tmp/cc3mxwt5.s 			page 35
+
+
+ 1428 0068 7405     		je	.L92
+ 1429 006a E8000000 		call	__stack_chk_fail@PLT
+ 1429      00
+ 1430              	.L92:
+ 1431 006f C9       		leave
+ 1432              	.LCFI35:
+ 1433              		.cfi_def_cfa 7, 8
+ 1434 0070 C3       		ret
+ 1435              		.cfi_endproc
+ 1436              	.LFE17:
+ 1438              		.section	.text.mbedtls_asn1_find_named_data,"ax",@progbits
+ 1439              		.globl	mbedtls_asn1_find_named_data
+ 1441              	mbedtls_asn1_find_named_data:
+ 1442              	.LFB18:
+ 371:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 372:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** mbedtls_asn1_named_data *mbedtls_asn1_find_named_data( mbedtls_asn1_named_data *list,
+ 373:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****                                        const char *oid, size_t len )
+ 374:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** {
+ 1443              		.loc 1 374 1
+ 1444              		.cfi_startproc
+ 1445 0000 F30F1EFA 		endbr64
+ 1446 0004 55       		pushq	%rbp
+ 1447              	.LCFI36:
+ 1448              		.cfi_def_cfa_offset 16
+ 1449              		.cfi_offset 6, -16
+ 1450 0005 4889E5   		movq	%rsp, %rbp
+ 1451              	.LCFI37:
+ 1452              		.cfi_def_cfa_register 6
+ 1453 0008 4883EC30 		subq	$48, %rsp
+ 1454 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1455 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 1456 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 1457              		.loc 1 374 1
+ 1458 0018 64488B04 		movq	%fs:40, %rax
+ 1458      25280000 
+ 1458      00
+ 1459 0021 488945F8 		movq	%rax, -8(%rbp)
+ 1460 0025 31C0     		xorl	%eax, %eax
+ 375:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     while( list != NULL )
+ 1461              		.loc 1 375 10
+ 1462 0027 EB39     		jmp	.L94
+ 1463              	.L97:
+ 376:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     {
+ 377:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         if( list->oid.len == len &&
+ 1464              		.loc 1 377 22
+ 1465 0029 488B45E8 		movq	-24(%rbp), %rax
+ 1466 002d 488B4008 		movq	8(%rax), %rax
+ 1467              		.loc 1 377 11
+ 1468 0031 483945D8 		cmpq	%rax, -40(%rbp)
+ 1469 0035 751F     		jne	.L95
+ 378:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             memcmp( list->oid.p, oid, len ) == 0 )
+ 1470              		.loc 1 378 30 discriminator 1
+ 1471 0037 488B45E8 		movq	-24(%rbp), %rax
+ 1472 003b 488B4010 		movq	16(%rax), %rax
+ 1473              		.loc 1 378 13 discriminator 1
+ 1474 003f 488B55D8 		movq	-40(%rbp), %rdx
+ 1475 0043 488B4DE0 		movq	-32(%rbp), %rcx
+GAS LISTING /tmp/cc3mxwt5.s 			page 36
+
+
+ 1476 0047 4889CE   		movq	%rcx, %rsi
+ 1477 004a 4889C7   		movq	%rax, %rdi
+ 1478 004d E8000000 		call	memcmp@PLT
+ 1478      00
+ 377:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             memcmp( list->oid.p, oid, len ) == 0 )
+ 1479              		.loc 1 377 34 discriminator 1
+ 1480 0052 85C0     		testl	%eax, %eax
+ 1481 0054 7415     		je	.L100
+ 1482              	.L95:
+ 379:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         {
+ 380:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****             break;
+ 381:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         }
+ 382:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 383:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         list = list->next;
+ 1483              		.loc 1 383 14
+ 1484 0056 488B45E8 		movq	-24(%rbp), %rax
+ 1485 005a 488B4030 		movq	48(%rax), %rax
+ 1486 005e 488945E8 		movq	%rax, -24(%rbp)
+ 1487              	.L94:
+ 375:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     {
+ 1488              		.loc 1 375 10
+ 1489 0062 48837DE8 		cmpq	$0, -24(%rbp)
+ 1489      00
+ 1490 0067 75C0     		jne	.L97
+ 1491 0069 EB01     		jmp	.L96
+ 1492              	.L100:
+ 380:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****         }
+ 1493              		.loc 1 380 13
+ 1494 006b 90       		nop
+ 1495              	.L96:
+ 384:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     }
+ 385:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** 
+ 386:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c ****     return( list );
+ 1496              		.loc 1 386 11
+ 1497 006c 488B45E8 		movq	-24(%rbp), %rax
+ 387:/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1parse.c **** }
+ 1498              		.loc 1 387 1
+ 1499 0070 488B4DF8 		movq	-8(%rbp), %rcx
+ 1500 0074 6448330C 		xorq	%fs:40, %rcx
+ 1500      25280000 
+ 1500      00
+ 1501 007d 7405     		je	.L99
+ 1502 007f E8000000 		call	__stack_chk_fail@PLT
+ 1502      00
+ 1503              	.L99:
+ 1504 0084 C9       		leave
+ 1505              	.LCFI38:
+ 1506              		.cfi_def_cfa 7, 8
+ 1507 0085 C3       		ret
+ 1508              		.cfi_endproc
+ 1509              	.LFE18:
+ 1511              		.text
+ 1512              	.Letext0:
+ 1513              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 1514              		.file 3 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 1515              		.file 4 "/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h"
+ 1516              		.file 5 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/bignum.
+GAS LISTING /tmp/cc3mxwt5.s 			page 37
+
+
+ 1517              		.file 6 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/asn1.h"
+ 1518              		.file 7 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 1519              		.file 8 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 1520              		.file 9 "/usr/include/stdio.h"
+ 1521              		.file 10 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 1522              		.file 11 "/usr/include/time.h"
+ 1523              		.file 12 "/home/xingli/share/LiteOS_Lab/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/platfo
+ 4013              		.section	.note.gnu.property,"a"
+ 4014              		.align 8
+ 4015 0000 04000000 		.long	 1f - 0f
+ 4016 0004 10000000 		.long	 4f - 1f
+ 4017 0008 05000000 		.long	 5
+ 4018              	0:
+ 4019 000c 474E5500 		.string	 "GNU"
+ 4020              	1:
+ 4021              		.align 8
+ 4022 0010 020000C0 		.long	 0xc0000002
+ 4023 0014 04000000 		.long	 3f - 2f
+ 4024              	2:
+ 4025 0018 03000000 		.long	 0x3
+ 4026              	3:
+ 4027 001c 00000000 		.align 8
+ 4028              	4:
+GAS LISTING /tmp/cc3mxwt5.s 			page 38
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 asn1parse.c
+     /tmp/cc3mxwt5.s:7      .text.mbedtls_asn1_get_len:0000000000000000 mbedtls_asn1_get_len
+     /tmp/cc3mxwt5.s:335    .text.mbedtls_asn1_get_tag:0000000000000000 mbedtls_asn1_get_tag
+     /tmp/cc3mxwt5.s:414    .text.mbedtls_asn1_get_bool:0000000000000000 mbedtls_asn1_get_bool
+     /tmp/cc3mxwt5.s:497    .text.mbedtls_asn1_get_int:0000000000000000 mbedtls_asn1_get_int
+     /tmp/cc3mxwt5.s:613    .text.mbedtls_asn1_get_mpi:0000000000000000 mbedtls_asn1_get_mpi
+     /tmp/cc3mxwt5.s:684    .text.mbedtls_asn1_get_bitstring:0000000000000000 mbedtls_asn1_get_bitstring
+     /tmp/cc3mxwt5.s:805    .text.mbedtls_asn1_get_bitstring_null:0000000000000000 mbedtls_asn1_get_bitstring_null
+     /tmp/cc3mxwt5.s:886    .text.mbedtls_asn1_get_sequence_of:0000000000000000 mbedtls_asn1_get_sequence_of
+     /tmp/cc3mxwt5.s:1048   .text.mbedtls_asn1_get_alg:0000000000000000 mbedtls_asn1_get_alg
+     /tmp/cc3mxwt5.s:1240   .text.mbedtls_asn1_get_alg_null:0000000000000000 mbedtls_asn1_get_alg_null
+     /tmp/cc3mxwt5.s:1322   .text.mbedtls_asn1_free_named_data:0000000000000000 mbedtls_asn1_free_named_data
+     /tmp/cc3mxwt5.s:1381   .text.mbedtls_asn1_free_named_data_list:0000000000000000 mbedtls_asn1_free_named_data_list
+     /tmp/cc3mxwt5.s:1441   .text.mbedtls_asn1_find_named_data:0000000000000000 mbedtls_asn1_find_named_data
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+__stack_chk_fail
+mbedtls_mpi_read_binary
+mbedtls_calloc
+mbedtls_platform_zeroize
+memset
+mbedtls_free
+memcmp

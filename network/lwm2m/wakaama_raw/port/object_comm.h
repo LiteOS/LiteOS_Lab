@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,17 +22,17 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
-/*******************************************************************************
+/* ******************************************************************************
  *
  * Copyright (c) 2014 Bosch Software Innovations GmbH, Germany.
  * All rights reserved. This program and the accompanying materials
@@ -40,22 +40,22 @@
  * and Eclipse Distribution License v1.0 which accompany this distribution.
  *
  * The Eclipse Public License is available at
- *    http://www.eclipse.org/legal/epl-v10.html
+ * http://www.eclipse.org/legal/epl-v10.html
  * The Eclipse Distribution License is available at
- *    http://www.eclipse.org/org/documents/edl-v10.php.
+ * http://www.eclipse.org/org/documents/edl-v10.php.
  *
  * Contributors:
- *    Bosch Software Innovations GmbH - Please refer to git log
+ * Bosch Software Innovations GmbH - Please refer to git log
  *
- *******************************************************************************/
+ * ***************************************************************************** */
 /*
  * object_comm.h
  *
- *  General functions of lwm2m test client.
+ * General functions of lwm2m test client.
  *
- *  Created on: 22.01.2015
- *  Author: Achim Kraus
- *  Copyright (c) 2015 Bosch Software Innovations GmbH, Germany. All rights reserved.
+ * Created on: 22.01.2015
+ * Author: Achim Kraus
+ * Copyright (c) 2015 Bosch Software Innovations GmbH, Germany. All rights reserved.
  */
 
 #ifndef OBJECT_COMM_H_
@@ -67,44 +67,41 @@
 #include "lwm2m_list.h"
 
 #ifndef MAX
-    #define MAX(a, b) ((a) >= (b)? (a) : (b))
+#define MAX(a, b) ((a) >= (b) ? (a) : (b))
 #endif
 
 extern int g_reboot;
 
-typedef struct
-{
-    lwm2m_object_t     *securityObjP;
-    lwm2m_object_t     *serverObject;
-    connection_t       *connList;
-    lwm2m_context_t    *lwm2mH;
+typedef struct {
+    lwm2m_object_t      *securityObjP;
+    lwm2m_object_t      *serverObject;
+    connection_t        *connList;
+    lwm2m_context_t     *lwm2mH;
 } client_data_t;
 
-typedef struct _security_instance_
-{
-    struct _security_instance_  *next;         // matches lwm2m_list_t::next
-    uint16_t                     instanceId;  // matches lwm2m_list_t::id
+typedef struct _security_instance_ {
+    struct _security_instance_  *next;       // matches lwm2m_list_t::next
+    uint16_t                    instanceId;  // matches lwm2m_list_t::id
     char                        *uri;
-    bool                         isBootstrap;
-    uint8_t                      securityMode;
+    bool                        isBootstrap;
+    uint8_t                     securityMode;
     char                        *publicIdentity;
-    uint16_t                     publicIdLen;
+    uint16_t                    publicIdLen;
     char                        *serverPublicKey;
-    uint16_t                     serverPublicKeyLen;
+    uint16_t                    serverPublicKeyLen;
     char                        *secretKey;
-    uint16_t                     secretKeyLen;
-    uint8_t                      smsSecurityMode;
+    uint16_t                    secretKeyLen;
+    uint8_t                     smsSecurityMode;
     char                        *smsParams; // SMS binding key parameters
-    uint16_t                     smsParamsLen;
+    uint16_t                    smsParamsLen;
     char                        *smsSecret; // SMS binding secret key
-    uint16_t                     smsSecretLen;
-    uint16_t                     shortID;
-    uint32_t                     clientHoldOffTime;
-    uint32_t                     bootstrapServerAccountTimeout;
+    uint16_t                    smsSecretLen;
+    uint16_t                    shortID;
+    uint32_t                    clientHoldOffTime;
+    uint32_t                    bootstrapServerAccountTimeout;
 } security_instance_t;
 
-typedef struct _data_node_t
-{
+typedef struct _data_node_t {
     lwm2m_dl_list list;
     data_report_t data;
 } data_node_t;
@@ -143,7 +140,6 @@ void free_binary_app_data_object(lwm2m_object_t *object);
 void display_binary_app_data_object(lwm2m_object_t *objectP);
 void set_binary_app_data_object_rpt_max_cnt(uint32_t max_rpt_cnt);
 
-
 /*
  * object_server.c
  */
@@ -170,34 +166,31 @@ extern void conn_s_updateRxStatistic(lwm2m_object_t *objectP, uint16_t rxDataByt
 /*
  * object_access_control.c
  */
-typedef enum
-{
-    OBJ_ACC_READ       = 0,
-    OBJ_ACC_WRITE_ATTR = 0,
-    OBJ_ACC_OBSERVE    = 0,
-    OBJ_ACC_NOTIFY     = 0,
-    OBJ_ACC_WRITE      = 1,
-    OBJ_ACC_EXCUTE     = 2,
-    OBJ_ACC_DELETE     = 3,
-    OBJ_ACC_CREATE     = 4,
-    OBJ_ACC_DISCOVER   = 5,
+typedef enum {
+    OBJ_ACC_READ            = 0,
+    OBJ_ACC_WRITE_ATTR      = 0,
+    OBJ_ACC_OBSERVE         = 0,
+    OBJ_ACC_NOTIFY          = 0,
+    OBJ_ACC_WRITE           = 1,
+    OBJ_ACC_EXCUTE          = 2,
+    OBJ_ACC_DELETE          = 3,
+    OBJ_ACC_CREATE          = 4,
+    OBJ_ACC_DISCOVER        = 5,
 
 } OBJ_ACC_OPERATE;
 
-#define ACC_AUTH_R     (0x01 << OBJ_ACC_READ)
-#define ACC_AUTH_W     (0x01 << OBJ_ACC_WRITE)
-#define ACC_AUTH_E     (0x01 << OBJ_ACC_EXCUTE)
-#define ACC_AUTH_D     (0x01 << OBJ_ACC_DELETE)
-#define ACC_AUTH_C     (0x01 << OBJ_ACC_CREATE)
+#define ACC_AUTH_R (0x01 << OBJ_ACC_READ)
+#define ACC_AUTH_W (0x01 << OBJ_ACC_WRITE)
+#define ACC_AUTH_E (0x01 << OBJ_ACC_EXCUTE)
+#define ACC_AUTH_D (0x01 << OBJ_ACC_DELETE)
+#define ACC_AUTH_C (0x01 << OBJ_ACC_CREATE)
 
 lwm2m_object_t *acc_ctrl_create_object(void);
 void acl_ctrl_free_object(lwm2m_object_t *objectP);
-bool  acc_ctrl_obj_add_inst(lwm2m_object_t *accCtrlObjP, uint16_t instId,
-                            uint16_t acObjectId, uint16_t acObjInstId, uint16_t acOwner);
-bool  acc_ctrl_oi_add_ac_val(lwm2m_object_t *accCtrlObjP, uint16_t instId,
-                             uint16_t aclResId, uint16_t acValue);
-uint8_t acc_auth_operate(lwm2m_context_t *contextP, lwm2m_uri_t *uri,
-                         OBJ_ACC_OPERATE op, uint16_t serverId);
+bool acc_ctrl_obj_add_inst(lwm2m_object_t *accCtrlObjP, uint16_t instId, uint16_t acObjectId, uint16_t acObjInstId,
+    uint16_t acOwner);
+bool acc_ctrl_oi_add_ac_val(lwm2m_object_t *accCtrlObjP, uint16_t instId, uint16_t aclResId, uint16_t acValue);
+uint8_t acc_auth_operate(lwm2m_context_t *contextP, lwm2m_uri_t *uri, OBJ_ACC_OPERATE op, uint16_t serverId);
 
 /*
  * object_comm.c
