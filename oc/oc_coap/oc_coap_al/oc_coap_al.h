@@ -42,61 +42,61 @@
 //#include "coap_al.h"
 
 /** @brief this is the message dealer module for the application*/
-typedef int (*fn_oc_coap_msg_deal)(void *msg, int len);
+typedef int (*FnOcCoapMsgDeal)(void *msg, int len);
 
 typedef enum
 {
-    en_oc_boot_strap_mode_factory = 0,
-    en_oc_boot_strap_mode_client_initialize,
-    en_oc_boot_strap_mode_sequence,
-}en_oc_boot_strap_mode_t;
+    EN_OC_BOOT_STRAP_MODE_FACTORY = 0,
+    EN_OC_BOOT_STRAP_MODE_CLINET_INITIALIZE,
+    EN_OC_BOOT_STRAP_MODE_SMARTCARD,
+}EnOcBootStrapModeT;
 
 typedef struct
 {
-    char *ep_id;                  ///< endpoint identifier, which could be recognized by the server
+    char *epId;                  ///< endpoint identifier, which could be recognized by the server
     char *address;                ///< server address,maybe domain name
     char *port;                   ///< server port
-    char *psk_id;                 ///< server encode by psk, if not set NULL here
+    char *pskId;                 ///< server encode by psk, if not set NULL here
     char *psk;
-    int   psk_len;
-}oc_server_t;
+    int   pskLen;
+}OcServerT;
 
 /** @brief this is the agent configuration */
 typedef struct
 {
-    en_oc_boot_strap_mode_t  boot_mode;       ///< bootmode,if boot client_initialize, then the bs must be set
-    oc_server_t              boot_server;     ///< which will be used by the bootstrap, if not, set NULL here
-    oc_server_t              app_server;      ///< if factory or smart boot, must be set here
-    fn_oc_coap_msg_deal      rcv_func;        ///< receive function caller here
-    void                    *usr_data;        ///< used for the user
-}oc_config_parm_t;
+    EnOcBootStrapModeT     bootMode;       ///< bootmode,if boot client_initialize, then the bs must be set
+    OcServerT              bootServer;     ///< which will be used by the bootstrap, if not, set NULL here
+    OcServerT              appServer;      ///< if factory or smart boot, must be set here
+    FnOcCoapMsgDeal        rcvFunc;        ///< receive function caller here
+    void                  *usrData;        ///< used for the user
+}OcConfigParmT;
 
 typedef enum
 {
-    en_oc_coap_err_ok          = 0,      ///< this means the status ok
-    en_oc_coap_err_parafmt,              ///< this means the parameter err format
-    en_oc_coap_err_network,              ///< this means the network wrong status
-    en_oc_coap_err_conserver,            ///< this means the server refused the service for some reason(likely the id and pwd)
-    en_oc_coap_err_noconfigured,         ///< this means we have not configure it yet,so could not connect
-    en_oc_coap_err_configured,           ///< this means we has configured it, so could not reconfigure it
-    en_oc_coap_err_noconected,           ///< this means the connection has not been built, so you could not send data
-    en_oc_coap_err_gethubaddrtimeout,    ///< this means get the hub address timeout
-    en_oc_coap_err_sysmem,               ///< this means the system memory is not enough
-    en_oc_coap_err_system,               ///< this means that the system porting may have some problem,maybe not install yet
-    en_oc_coap_err_last,
-}en_oc_coap_err_code_t;
+    EN_OC_COAP_ERR_OK          = 0,      ///< this means the status ok
+    EN_OC_COAP_ERR_PARAFMT,              ///< this means the parameter err format
+    EN_OC_COAP_ERR_NETWORK,              ///< this means the network wrong status
+    EN_OC_COAP_ERR_CONSERVER,            ///< this means the server refused the service for some reason(likely the id and pwd)
+    EN_OC_COAP_ERR_NOCONFIGURED,         ///< this means we have not configure it yet,so could not connect
+    EN_OC_COAP_ERR_CONFIGURED,           ///< this means we has configured it, so could not reconfigure it
+    EN_OC_COAP_ERR_NOCONNECTED,          ///< this means the connection has not been built, so you could not send data
+    EN_OC_COAP_ERR_GETHUBADDRTIMEOUT,    ///< this means get the hub address timeout
+    EN_OC_COAP_ERR_SYSMEM,               ///< this means the system memory is not enough
+    EN_OC_COAP_ERR_SYSTEM,               ///< this means that the system porting may have some problem,maybe not install yet
+    en_oc_coap_err_last = 255,           ///< not defined
+}EnOcCoapErrCodeT;
 ///////////////////////////COAP AGENT INTERFACE////////////////////////////////
-typedef void* (*fn_oc_coap_config)(oc_config_parm_t *param);                        ///< return the handle here
-typedef int (*fn_oc_coap_deconfig)(void *handle);                                    ///< use the handle as the params
-typedef int (*fn_oc_coap_report)(void *handle,char *msg,int len);                    ///< use the handle and report params
+typedef void* (*FnOcCoapConnect)(OcConfigParmT *param);                        ///< return the handle here
+typedef int (*OcCoapDisConnect)(void *handle);                                    ///< use the handle as the params
+typedef int (*FnOcCoapReport)(void *handle,char *msg,int len);                    ///< use the handle and report params
 /**
  * @brief this data structure defines the coap agent implement
  */
 typedef struct
 {
-    fn_oc_coap_config   config;   ///< this function used for the configuration
-    fn_oc_coap_report   report;   ///< this function used for the report data to the cdp
-    fn_oc_coap_deconfig deconfig; ///< this function used for the deconfig
+    FnOcCoapConnect   config;   ///< this function used for the configuration
+    FnOcCoapReport    report;   ///< this function used for the report data to the cdp
+    OcCoapDisConnect  deconfig; ///< this function used for the deconfig
 }oc_coap_opt_t;
 
 /**
@@ -112,23 +112,23 @@ int oc_coap_register(const char *name,const oc_coap_opt_t *opt);
 
 /**
  * @brief the application use this function to configure the coap agent
- * @param[in] param, refer to tag_oc_coap_config
+ * @param[in] param, refer to tag_OcCoapConnect
  * @return oc coap handle else NULL failed
  */
-void *oc_coap_config(oc_config_parm_t *param);
+void *OcCoapConnect(OcConfigParmT *param);
 /**
  * @brief the application use this function to send the message to the cdp
- * @param[in] hanlde:the coap handle returned by oc_coap_config
+ * @param[in] hanlde:the coap handle returned by OcCoapConnect
  * @param[in] report:the message to report
  *
  * @return 0 success while <0 failed
  */
-int oc_coap_report(void *handle,char *msg,int len);
+int OcCoapReport(void *handle,char *msg,int len);
 
 /**
  *@brief: the application use this function to deconfigure the coap agent
  *
- *@param[in] handle: returned by oc_coap_config
+ *@param[in] handle: returned by OcCoapConnect
  *
  * return 0 success while <0 failed
  */

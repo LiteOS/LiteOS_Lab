@@ -188,7 +188,7 @@ int OcMqttConnect(OcMqttConnectT *connectPara)
 }
 
 ///< use this function to disconnect from the cloudplatform
-int OcMqttDisconnect(void)
+int OcMqttDisConnect(void)
 {
     int ret;
 

@@ -41,21 +41,21 @@
 
 typedef struct
 {
-    char *ep_id;                  ///< endpoint identifier, which could be recognized by the server
+    char *epId;                  ///< endpoint identifier, which could be recognized by the server
     char *address;                ///< server address,maybe domain name
     char *port;                   ///< server port
-    char *psk_id;                 ///< server encode by psk, if not set NULL here
+    char *pskId;                 ///< server encode by psk, if not set NULL here
     char *psk;
-    int   psk_len;
-} oc_server_t;
+    int   pskLen;
+} OcServerT;
 
 
 typedef enum
 {
-    en_oc_boot_strap_mode_factory = 0,
-    en_oc_boot_strap_mode_client_initialize,
-    en_oc_boot_strap_mode_sequence,
-} en_oc_boot_strap_mode_t;
+    EN_OC_BOOT_STRAP_MODE_FACTORY = 0,
+    EN_OC_BOOT_STRAP_MODE_CLINET_INITIALIZE,
+    EN_OC_BOOT_STRAP_MODE_SMARTCARD,
+} EnOcBootStrapModeT;
 
 
 typedef enum
@@ -64,49 +64,49 @@ typedef enum
     EN_OC_LWM2M_MSG_APPDISCOVER,
     EN_OC_LWM2M_MSG_APPEXECUTE,
     EN_OC_LWM2M_MSG_SERVERREBS,    ///<we  have received the rebootstrap command from the platform
-} en_oc_lwm2m_msg_t;
+} EnOcLwm2mMsgT;
 
 /** @brief this is the message dealer module for the application*/
-typedef int (*fn_oc_lwm2m_msg_deal)(void *usr_data, en_oc_lwm2m_msg_t type, void *msg, int len);
+typedef int (*FnOcLwm2mMsgDeal)(void *usrData, EnOcLwm2mMsgT type, void *msg, int len);
 
 /** @brief this is the agent configuration */
 typedef struct
 {
-    en_oc_boot_strap_mode_t  boot_mode;       ///< bootmode,if boot client_initialize, then the bs must be set
-    oc_server_t              boot_server;     ///< which will be used by the bootstrap, if not, set NULL here
-    oc_server_t              app_server;      ///< if factory or smart boot, must be set here
-    fn_oc_lwm2m_msg_deal     rcvfunc;        ///< receive function caller here
-    void                    *usr_data;        ///< used for the user
-} oc_config_parm_t;
+    EnOcBootStrapModeT     bootMode;       ///< bootmode,if boot client_initialize, then the bs must be set
+    OcServerT              bootServer;     ///< which will be used by the bootstrap, if not, set NULL here
+    OcServerT              appServer;      ///< if factory or smart boot, must be set here
+    FnOcLwm2mMsgDeal       rcvFunc;        ///< receive function caller here
+    void                  *usrData;        ///< used for the user
+} OcConfigParmT;
 
 
 typedef enum
 {
-    en_oc_lwm2m_err_ok          = 0,      ///< this means the status ok
-    en_oc_lwm2m_err_parafmt,              ///< this means the parameter err format
-    en_oc_lwm2m_err_network,              ///< this means the network wrong status
-    en_oc_lwm2m_err_conserver,            ///< this means the server refused the service for some reason(likely the id and pwd)
-    en_oc_lwm2m_err_noconfigured,         ///< this means we have not configure it yet,so could not connect
-    en_oc_lwm2m_err_configured,           ///< this means we has configured it, so could not reconfigure it
-    en_oc_lwm2m_err_noconected,           ///< this means the connection has not been built, so you could not send data
-    en_oc_lwm2m_err_gethubaddrtimeout,    ///< this means get the hub address timeout
-    en_oc_lwm2m_err_sysmem,               ///< this means the system memory is not enough
-    en_oc_lwm2m_err_system,               ///< this means that the system porting may have some problem,maybe not install yet
-    en_oc_lwm2m_err_last,
-}en_oc_lwm2m_err_code_t;
+    EN_OC_LWM2M_ERR_OK          = 0,      ///< this means the status ok
+    EN_OC_LWM2M_ERR_PARAFMT,              ///< this means the parameter err format
+    EN_OC_LWM2M_ERR_NETWORK,              ///< this means the network wrong status
+    EN_OC_LWM2M_ERR_CONSERVER,            ///< this means the server refused the service for some reason(likely the id and pwd)
+    EN_OC_LWM2M_ERR_NOCONFIGURED,         ///< this means we have not configure it yet,so could not connect
+    EN_OC_LWM2M_ERR_CONFIGURED,           ///< this means we has configured it, so could not reconfigure it
+    EN_OC_LWM2M_ERR_NOCONNECTED,          ///< this means the connection has not been built, so you could not send data
+    EN_OC_LWM2M_ERR_GETHUBADDRTIMEOUT,    ///< this means get the hub address timeout
+    EN_OC_LWM2M_ERR_SYSMEM,               ///< this means the system memory is not enough
+    EN_OC_LWM2M_ERR_SYSTEM,               ///< this means that the system porting may have some problem,maybe not install yet
+    EN_OC_LWM2M_ERR_LAST = 255,           ///< not defined
+}EnOcLwm2mErrCodeT;
 
 ///////////////////////////LWM2M AGENT INTERFACE////////////////////////////////
-typedef int (*fn_oc_lwm2m_report)(char *buf, int len, int timeout);
-typedef int (*fn_oc_lwm2m_config)(oc_config_parm_t *param);
-typedef int (*fn_oc_lwm2m_deconfig)(void);
+typedef int (*FnOcLwm2mReport)(char *buf, int len, int timeout);
+typedef int (*FnOcLwm2mConnect)(OcConfigParmT *param);
+typedef int (*fn_OcLwm2mDisConnect)(void);
 /**
  * @brief this data structure defines the lwm2m agent implement
  */
 typedef struct
 {
-    fn_oc_lwm2m_config   config;   ///< this function used for the configuration
-    fn_oc_lwm2m_report   report;   ///< this function used for the report data to the cdp
-    fn_oc_lwm2m_deconfig deconfig; ///< this function used for the deconfig
+    FnOcLwm2mConnect   config;   ///< this function used for the configuration
+    FnOcLwm2mReport   report;   ///< this function used for the report data to the cdp
+    fn_OcLwm2mDisConnect deconfig; ///< this function used for the deconfig
 } oc_lwm2m_opt_t;
 
 
@@ -130,27 +130,27 @@ int oc_lwm2m_unregister(const char *name);
 //////////////////////////APPLICATION INTERFACE/////////////////////////////////
 /**
  * @brief the application use this function to configure the lwm2m agent
- * @param[in] param, refer to oc_config_parm_t
- * @return 0 success while others the error code described as en_oc_lwm2m_err_code_t
+ * @param[in] param, refer to OcConfigParmT
+ * @return 0 success while others the error code described as EnOcLwm2mErrCodeT
  */
-int oc_lwm2m_config(oc_config_parm_t *param);
+int OcLwm2mConnect(OcConfigParmT *param);
 
 /**
  * @brief the application use this function to send the message to the cdp
  * @param[in] buf the message to send
  * @param[in] len the message length
  * @param[in] timeout block time
- * @return 0 success while others the error code described as en_oc_lwm2m_err_code_t
+ * @return 0 success while others the error code described as EnOcLwm2mErrCodeT
  */
-int oc_lwm2m_report(char *buf, int len, int timeout);
+int OcLwm2mReport(char *buf, int len, int timeout);
 
 /**
  *@brief: the application use this function to deconfigure the lwm2m agent
  *
- * @return 0 success while others the error code described as en_oc_lwm2m_err_code_t
+ * @return 0 success while others the error code described as EnOcLwm2mErrCodeT
  */
 
-int oc_lwm2m_deconfig(void);
+int OcLwm2mDisConnect(void);
 
 /**
  *@brief this is the oc lwm2m agent initialize function,must be called first
@@ -167,6 +167,6 @@ int oc_lwm2m_init(void);
  * @return: the string of the code
  *
  * */
-const char *oc_lwm2m_errcode(en_oc_lwm2m_err_code_t code);
+const char *oc_lwm2m_errcode(EnOcLwm2mErrCodeT code);
 
 #endif /* LITEOS_LAB_IOT_LINK_OC_OC_LWM2M_OC_LWM2M_AL_OC_LWM2M_AL_H_ */

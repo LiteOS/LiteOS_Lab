@@ -101,7 +101,7 @@ typedef struct
 {
     atiny_device_info_t device_info;
     atiny_param_t       tiny_param;
-    oc_config_parm_t   config_para;
+    OcConfigParmT       config_para;
     void               *agent_handle;
     void               *task_handle;
 } oc_lwm2m_imp_agent_t;
@@ -125,7 +125,7 @@ typedef struct object_uri_list_t
 
 static object_uri_list *uri_list;
 
-static int lwm2m_agent_receive(en_oc_lwm2m_msg_t type, char *msg, int len)
+static int lwm2m_agent_receive(EnOcLwm2mMsgT type, char *msg, int len)
 {
     if ((NULL != s_oc_lwm2m_agent) && (NULL != s_oc_lwm2m_agent->config_para.rcv_func))
     {
@@ -700,27 +700,27 @@ static int agent_delete_object(void *handle)
     return 0;
 }
 
-static int __agent_config(oc_config_parm_t *param)
+static int __agent_config(OcConfigParmT *param)
 {
-    int ret = (int ) en_oc_lwm2m_err_system;
+    int ret = (int ) EN_OC_LWM2M_ERR_SYSTEM;
     oc_lwm2m_imp_agent_t  *agent = NULL;
 
     if (NULL != s_oc_lwm2m_agent)
     {
-        ret = (int ) en_oc_lwm2m_err_configured;
+        ret = (int ) EN_OC_LWM2M_ERR_CONFIGURED;
         return ret;
     }
 
     if (NULL == param)
     {
-        ret =(int ) en_oc_lwm2m_err_parafmt;
+        ret =(int ) EN_OC_LWM2M_ERR_PARAFMT;
         return ret;
     }
 
     agent = osal_zalloc(sizeof(oc_lwm2m_imp_agent_t));
     if (NULL == agent)
     {
-        ret = (int ) en_oc_lwm2m_err_sysmem;
+        ret = (int ) EN_OC_LWM2M_ERR_SYSMEM;
         return ret;
     }
 
@@ -759,7 +759,7 @@ static int __agent_config(oc_config_parm_t *param)
     {
         osal_free(agent);
 
-        ret = (int ) en_oc_lwm2m_err_parafmt;
+        ret = (int ) EN_OC_LWM2M_ERR_PARAFMT;
         return ret;
     }
 
@@ -767,13 +767,13 @@ static int __agent_config(oc_config_parm_t *param)
     lwm2m_al_init_param_t init_param;
     init_param.endpoint_name =  device_info->endpoint_name;
     init_param.dealer = agent_dealer_callback;
-    init_param.bootstrap_type = (int)(param->boot_mode);
+    init_param.bootstrap_type = (int)(param->bootMode);
     ret = lwm2m_al_config(&(agent->agent_handle), &init_param);
 
     if ((int)ATINY_OK != ret)
     {
         osal_free(agent);
-        ret = (int ) en_oc_lwm2m_err_parafmt;
+        ret = (int ) EN_OC_LWM2M_ERR_PARAFMT;
         return ret;
     }
 
@@ -782,7 +782,7 @@ static int __agent_config(oc_config_parm_t *param)
     if (0 != ret)
     {
         osal_free(agent);
-        ret = (int ) en_oc_lwm2m_err_system;
+        ret = (int ) EN_OC_LWM2M_ERR_SYSTEM;
         return ret;
     }
 
@@ -791,12 +791,12 @@ static int __agent_config(oc_config_parm_t *param)
     if ((int)ATINY_OK != ret)
     {
         osal_free(agent);
-        ret = (int ) en_oc_lwm2m_err_network;
+        ret = (int ) EN_OC_LWM2M_ERR_NETWORK;
         return ret;
     }
 
     s_oc_lwm2m_agent = agent;
-    ret = (int ) en_oc_lwm2m_err_ok;
+    ret = (int ) EN_OC_LWM2M_ERR_OK;
 
     return ret;
 }
@@ -808,7 +808,7 @@ static int __agent_deconfig(void)
 
     if (NULL == handle)
     {
-        ret = (int ) en_oc_lwm2m_err_noconfigured;
+        ret = (int ) EN_OC_LWM2M_ERR_NOCONFIGURED;
         return ret;
     }
 
@@ -818,13 +818,13 @@ static int __agent_deconfig(void)
     osal_free(handle);
     s_oc_lwm2m_agent = NULL;
 
-    ret = (int ) en_oc_lwm2m_err_ok;
+    ret = (int ) EN_OC_LWM2M_ERR_OK;
     return ret;
 }
 
 static int __agent_report(char *msg, int len, int timeout)
 {
-    int ret = (int ) en_oc_lwm2m_err_noconfigured;
+    int ret = (int ) EN_OC_LWM2M_ERR_NOCONFIGURED;
     lwm2m_al_send_param_t send_param;
 
     if(NULL != s_oc_lwm2m_agent)
@@ -838,11 +838,11 @@ static int __agent_report(char *msg, int len, int timeout)
 
         if(0 == lwm2m_al_send(s_oc_lwm2m_agent,&send_param))
         {
-            ret = (int ) en_oc_lwm2m_err_ok;
+            ret = (int ) EN_OC_LWM2M_ERR_OK;
         }
         else
         {
-            ret  = (int ) en_oc_lwm2m_err_network;
+            ret  = (int ) EN_OC_LWM2M_ERR_NETWORK;
         }
     }
 

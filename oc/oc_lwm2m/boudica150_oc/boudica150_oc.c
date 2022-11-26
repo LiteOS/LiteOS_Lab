@@ -57,7 +57,7 @@ typedef struct
     const char *bands;
 
     //initialized by the applicaiton
-    oc_config_parm_t  oc_param;
+    OcConfigParmT  oc_param;
 
     //this is the control block
     bool_t            sndenable;
@@ -127,7 +127,7 @@ static int byte_to_hexstr(const unsigned char *bufin, int len, char *bufout)
 
 static int boudica150_oc_report(unsigned char *buf,int len, int timeout)
 {
-    int ret = en_oc_lwm2m_err_noconfigured;
+    int ret = EN_OC_LWM2M_ERR_NOCONFIGURED;
     const char *cmd = "AT+NMGS=";
     const char *index = "OK";
 
@@ -138,7 +138,7 @@ static int boudica150_oc_report(unsigned char *buf,int len, int timeout)
 
     if ((NULL == buf) || (len >= cn_boudica150_cachelen/2 )||(false == s_boudica150_oc_cb.sndenable))
     {
-        ret = en_oc_lwm2m_err_parafmt;
+        ret = EN_OC_LWM2M_ERR_PARAFMT;
         return ret;
     }
     osal_mutex_lock(s_report_mutex);
@@ -151,11 +151,11 @@ static int boudica150_oc_report(unsigned char *buf,int len, int timeout)
     (void) osal_mutex_unlock(s_report_mutex);
     if(ret >= 0)
     {
-        ret = en_oc_lwm2m_err_ok;
+        ret = EN_OC_LWM2M_ERR_OK;
     }
     else
     {
-        ret = en_oc_lwm2m_err_network;
+        ret = EN_OC_LWM2M_ERR_NETWORK;
     }
 
     return ret;
@@ -615,13 +615,13 @@ static bool_t boudica150_boot(const char *plmn, const char *apn, const char *ban
 }
 
 
-static int boudica150_oc_config(oc_config_parm_t *param)
+static int boudica150_oc_config(OcConfigParmT *param)
 {
-    int ret = en_oc_lwm2m_err_configured;
+    int ret = EN_OC_LWM2M_ERR_CONFIGURED;
 
     if(NULL == param)
     {
-        ret = en_oc_lwm2m_err_parafmt;
+        ret = EN_OC_LWM2M_ERR_PARAFMT;
         return ret;
     }
 
@@ -633,11 +633,11 @@ static int boudica150_oc_config(oc_config_parm_t *param)
                 s_boudica150_oc_cb.oc_param.app_server.address,s_boudica150_oc_cb.oc_param.app_server.port))
         {
             s_oc_handle = &s_boudica150_oc_cb;
-            ret = en_oc_lwm2m_err_ok;
+            ret = EN_OC_LWM2M_ERR_OK;
         }
         else
         {
-            ret = en_oc_lwm2m_err_network;
+            ret = EN_OC_LWM2M_ERR_NETWORK;
         }
     }
 
@@ -646,12 +646,12 @@ static int boudica150_oc_config(oc_config_parm_t *param)
 
 static int boudica150_oc_deconfig(void)
 {
-    int ret = en_oc_lwm2m_err_noconfigured;
+    int ret = EN_OC_LWM2M_ERR_NOCONFIGURED;
 
     if(NULL != s_oc_handle)
     {
         s_oc_handle = NULL;
-        ret = en_oc_lwm2m_err_ok;
+        ret = EN_OC_LWM2M_ERR_OK;
     }
     return ret;
 }
@@ -752,7 +752,7 @@ const oc_lwm2m_opt_t  g_boudica150_oc_opt = \
 {
     .config = boudica150_oc_config,
     .deconfig = boudica150_oc_deconfig,
-    .report = (fn_oc_lwm2m_report)boudica150_oc_report,
+    .report = (FnOcLwm2mReport)boudica150_oc_report,
 };
 
 

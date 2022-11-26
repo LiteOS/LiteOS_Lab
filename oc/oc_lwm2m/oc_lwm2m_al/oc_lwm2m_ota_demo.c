@@ -115,12 +115,12 @@ static queue_t *s_queue_msgrcv = NULL;   ///< this is used to cached the message
 static int ota_msg_send(void *msg,int len)
 {
     int ret;
-    ret = oc_lwm2m_report((char *)msg,len,1000);
+    ret = OcLwm2mReport((char *)msg,len,1000);
     return ret;
 }
 
 //use this function to push all the message to the buffer
-static int app_msg_deal(void *usr_data,en_oc_lwm2m_msg_t type,void *msg, int len)
+static int app_msg_deal(void *usr_data,EnOcLwm2mMsgT type,void *msg, int len)
 {
     int ret = -1;
 
@@ -185,20 +185,20 @@ static int app_report_task_entry(void *args)
 {
     int ret = -1;
 
-    oc_config_parm_t      oc_param;
+    OcConfigParmT      oc_param;
     app_light_intensity_t  light;
     int                    lux = 0;
 
     (void) memset(&oc_param,0,sizeof(oc_param));
 
-    oc_param.app_server.address = cn_app_server;
-    oc_param.app_server.port = cn_app_port;
-    oc_param.app_server.ep_id = cn_endpoint_id;
+    oc_param.appServer.address = cn_app_server;
+    oc_param.appServer.port = cn_app_port;
+    oc_param.appServer.epId = cn_endpoint_id;
 
-    oc_param.boot_mode = en_oc_boot_strap_mode_factory;
+    oc_param.boot_mode = EN_OC_BOOT_STRAP_MODE_FACTORY;
     oc_param.rcv_func = app_msg_deal;
 
-    ret = oc_lwm2m_config(&oc_param);
+    ret = OcLwm2mConnect(&oc_param);
     if (0 != ret)
     {
         return ret;
@@ -213,7 +213,7 @@ static int app_report_task_entry(void *args)
 
             light.msgid = cn_app_light;
             light.intensity = htons(lux);
-            oc_lwm2m_report((char *)&light,sizeof(light),1000); ///< report the light message
+            OcLwm2mReport((char *)&light,sizeof(light),1000); ///< report the light message
         }
 
         osal_task_sleep(10*1000);

@@ -55,7 +55,7 @@ typedef struct
 
 typedef struct
 {
-    oc_config_parm_t       config_para;
+    OcConfigParmT           config_para;
     atiny_security_param_t  security_params[2];
     void                   *task_handle;
     void                   *coap_context;
@@ -415,7 +415,7 @@ int __agent_report(void *handle, char *buf, int len)
     return ATINY_OK;
 }
 
-static void *__agent_config(oc_config_parm_t *param)
+static void *__agent_config(OcConfigParmT *param)
 {
 
     oc_coap_imp_agent_t  *ret = NULL;

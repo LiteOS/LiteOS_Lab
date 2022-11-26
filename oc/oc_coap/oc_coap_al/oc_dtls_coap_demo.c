@@ -151,7 +151,7 @@ static int app_cmd_task_entry()
                         replymsg.curstats[0] = 'O';
                         replymsg.curstats[1] = 'N';
                         replymsg.curstats[2] = ' ';
-                        oc_coap_report(s_coap_handle,(char *)&replymsg,sizeof(replymsg));    ///< report cmd reply message
+                        OcCoapReport(s_coap_handle,(char *)&replymsg,sizeof(replymsg));    ///< report cmd reply message
                     }
 
                     else if (led_cmd->led[0] == 'O' && led_cmd->led[1] == 'F' && led_cmd->led[2] == 'F')
@@ -165,7 +165,7 @@ static int app_cmd_task_entry()
                         replymsg.curstats[0] = 'O';
                         replymsg.curstats[1] = 'F';
                         replymsg.curstats[2] = 'F';
-                        oc_coap_report(s_coap_handle,(char *)&replymsg,sizeof(replymsg));    ///< report cmd reply message
+                        OcCoapReport(s_coap_handle,(char *)&replymsg,sizeof(replymsg));    ///< report cmd reply message
                     }
                     else
                     {
@@ -188,21 +188,21 @@ static int app_report_task_entry()
     int ret = -1;
     int lux = 0;
 
-    oc_config_parm_t      oc_param;
+    OcConfigParmT      oc_param;
     app_light_intensity_t  light;
 
     (void) memset(&oc_param,0,sizeof(oc_param));
 
-    oc_param.app_server.address = cn_app_server;
-    oc_param.app_server.port = cn_app_port;
-    oc_param.app_server.ep_id = cn_endpoint_id;
-    oc_param.app_server.psk = (char *)s_app_psk;
-    oc_param.app_server.psk_len = sizeof(s_app_psk);
-    oc_param.app_server.psk_id = cn_endpoint_id;
-    oc_param.boot_mode = en_oc_boot_strap_mode_factory;
-    oc_param.rcv_func = app_msg_deal;
+    oc_param.appServer.address = cn_app_server;
+    oc_param.appServer.port = cn_app_port;
+    oc_param.appServer.epId = cn_endpoint_id;
+    oc_param.appServer.psk = (char *)s_app_psk;
+    oc_param.appServer.pskLen = sizeof(s_app_psk);
+    oc_param.appServer.pskId = cn_endpoint_id;
+    oc_param.bootMode = EN_OC_BOOT_STRAP_MODE_FACTORY;
+    oc_param.rcvFunc = app_msg_deal;
 
-    s_coap_handle = oc_coap_config(&oc_param);
+    s_coap_handle = OcCoapConnect(&oc_param);
 
     if(NULL != s_coap_handle)   //success ,so we could receive and send
     {
@@ -215,7 +215,7 @@ static int app_report_task_entry()
 
             light.msgid = cn_app_light;
             light.intensity = htons(lux);
-            oc_coap_report(s_coap_handle,(char *)&light,sizeof(light)); ///< report the light message
+            OcCoapReport(s_coap_handle,(char *)&light,sizeof(light)); ///< report the light message
             osal_task_sleep(10*1000);
         }
     }

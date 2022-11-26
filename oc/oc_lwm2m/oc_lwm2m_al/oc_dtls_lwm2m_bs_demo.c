@@ -103,7 +103,7 @@ static int             s_rcv_datalen;
 static osal_semp_t     s_rcv_sync;
 
 //use this function to push all the message to the buffer
-static int app_msg_deal(void *usr_data,en_oc_lwm2m_msg_t type,void *msg, int len)
+static int app_msg_deal(void *usr_data,EnOcLwm2mMsgT type,void *msg, int len)
 {
     int ret = -1;
 
@@ -149,7 +149,7 @@ static int app_cmd_task_entry()
                         replymsg.curstats[0] = 'O';
                         replymsg.curstats[1] = 'N';
                         replymsg.curstats[2] = ' ';
-                        oc_lwm2m_report((char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
+                        OcLwm2mReport((char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
                     }
 
                     else if (led_cmd->led[0] == 'O' && led_cmd->led[1] == 'F' && led_cmd->led[2] == 'F')
@@ -163,7 +163,7 @@ static int app_cmd_task_entry()
                         replymsg.curstats[0] = 'O';
                         replymsg.curstats[1] = 'F';
                         replymsg.curstats[2] = 'F';
-                        oc_lwm2m_report((char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
+                        OcLwm2mReport((char *)&replymsg,sizeof(replymsg),1000);    ///< report cmd reply message
                     }
                     else
                     {
@@ -186,27 +186,27 @@ static int app_report_task_entry()
     int ret = -1;
     int lux = 0;
 
-    oc_config_parm_t      oc_param;
+    OcConfigParmT      oc_param;
     app_light_intensity_t  light;
 
     (void) memset(&oc_param,0,sizeof(oc_param));
 
-    oc_param.app_server.ep_id = cn_endpoint_id;
-    oc_param.app_server.psk = (char *)s_app_psk;
-    oc_param.app_server.psk_len = sizeof(s_app_psk);
-    oc_param.app_server.psk_id = cn_endpoint_id;
+    oc_param.appServer.epId = cn_endpoint_id;
+    oc_param.appServer.psk = (char *)s_app_psk;
+    oc_param.appServer.pskLen = sizeof(s_app_psk);
+    oc_param.appServer.pskId = cn_endpoint_id;
 
-    oc_param.boot_server.address = cn_app_server;
-    oc_param.boot_server.port = cn_app_port;
-    oc_param.boot_server.ep_id = cn_endpoint_id;
-    oc_param.boot_server.psk = (char *)s_app_psk;
-    oc_param.boot_server.psk_len = sizeof(s_app_psk);
-    oc_param.boot_server.psk_id = cn_endpoint_id;
+    oc_param.bootServer.address = cn_app_server;
+    oc_param.bootServer.port = cn_app_port;
+    oc_param.bootServer.epId = cn_endpoint_id;
+    oc_param.bootServer.psk = (char *)s_app_psk;
+    oc_param.bootServer.pskLen = sizeof(s_app_psk);
+    oc_param.bootServer.pskId = cn_endpoint_id;
 
-    oc_param.boot_mode = en_oc_boot_strap_mode_client_initialize;
-    oc_param.rcv_func = app_msg_deal;
+    oc_param.bootMode = EN_OC_BOOT_STRAP_MODE_CLINET_INITIALIZE;
+    oc_param.rcvFunc = app_msg_deal;
 
-    ret = oc_lwm2m_config(&oc_param);
+    ret = OcLwm2mConnect(&oc_param);
     if (0 != ret)
     {
         return ret;
@@ -221,7 +221,7 @@ static int app_report_task_entry()
 
         light.msgid = cn_app_light;
         light.intensity = htons(lux);
-        oc_lwm2m_report((char *)&light,sizeof(light),1000); ///< report the light message
+        OcLwm2mReport((char *)&light,sizeof(light),1000); ///< report the light message
         osal_task_sleep(10*1000);
     }
 

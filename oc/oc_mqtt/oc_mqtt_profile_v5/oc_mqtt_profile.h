@@ -165,7 +165,7 @@ int OcMqttConnect(OcMqttConnectT *connectPara);
  * @return :defined as EnOcMqttErrCodeT
  *
  * */
-int OcMqttDisconnect(void);
+int OcMqttDisConnect(void);
 
 typedef struct
 {

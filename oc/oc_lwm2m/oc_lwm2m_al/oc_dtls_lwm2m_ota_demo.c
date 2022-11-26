@@ -37,7 +37,7 @@
 #include <string.h>
 
 #include "link_endian.h"
-#include "osal.h>
+#include "osal.h>"
 #include "oc_lwm2m_al.h"
 #include "ota_flag.h"
 #include "pcp.h"
@@ -116,12 +116,12 @@ static queue_t *s_queue_msgrcv = NULL;   ///< this is used to cached the message
 static int ota_msg_send(void *msg,int len)
 {
     int ret;
-    ret = oc_lwm2m_report((char *)msg,len,1000);
+    ret = OcLwm2mReport((char *)msg,len,1000);
     return ret;
 }
 
 //use this function to push all the message to the buffer
-static int app_msg_deal(void *usr_data,en_oc_lwm2m_msg_t type,void *msg, int len)
+static int app_msg_deal(void *usr_data,EnOcLwm2mMsgT type,void *msg, int len)
 {
     int ret = -1;
 
@@ -186,24 +186,24 @@ static int app_report_task_entry()
 {
     int ret = -1;
 
-    oc_config_parm_t      oc_param;
+    OcConfigParmT      oc_param;
     app_light_intensity_t  light;
     void                  *context;
     int                    lux = 0;
 
     (void) memset(&oc_param,0,sizeof(oc_param));
 
-    oc_param.app_server.address = cn_app_server;
-    oc_param.app_server.port = cn_app_port;
-    oc_param.app_server.ep_id = cn_endpoint_id;
-    oc_param.app_server.psk = (char *)s_app_psk;
-    oc_param.app_server.psk_len = sizeof(s_app_psk);
-    oc_param.app_server.psk_id = cn_endpoint_id;
+    oc_param.appServer.address = cn_app_server;
+    oc_param.appServer.port = cn_app_port;
+    oc_param.appServer.epId = cn_endpoint_id;
+    oc_param.appServer.psk = (char *)s_app_psk;
+    oc_param.appServer.pskLen = sizeof(s_app_psk);
+    oc_param.appServer.pskId = cn_endpoint_id;
 
-    oc_param.boot_mode = en_oc_boot_strap_mode_factory;
-    oc_param.rcv_func = app_msg_deal;
+    oc_param.bootMode = EN_OC_BOOT_STRAP_MODE_FACTORY;
+    oc_param.rcvFunc = app_msg_deal;
 
-    ret = oc_lwm2m_config( &oc_param);
+    ret = OcLwm2mConnect( &oc_param);
     if (0 != ret)
     {
         return ret;
@@ -218,7 +218,7 @@ static int app_report_task_entry()
 
             light.msgid = cn_app_light;
             light.intensity = htons(lux);
-            oc_lwm2m_report((char *)&light,sizeof(light),1000); ///< report the light message
+            OcLwm2mReport((char *)&light,sizeof(light),1000); ///< report the light message
         }
 
         osal_task_sleep(10*1000);

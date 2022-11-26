@@ -83,7 +83,7 @@ int oc_lwm2m_unregister(const char *name)
 //////////////////////////APPLICATION INTERFACE/////////////////////////////////
 int oc_lwm2m_report(char  *buf, int len, int timeout)
 {
-    int ret = (int)en_oc_lwm2m_err_system;
+    int ret = (int)EN_OC_LWM2M_ERR_SYSTEM;
 
     if ((NULL != s_oc_lwm2m_ops.opt) && (NULL != s_oc_lwm2m_ops.opt->report))
     {
@@ -94,9 +94,9 @@ int oc_lwm2m_report(char  *buf, int len, int timeout)
 }
 
 
-int oc_lwm2m_config( oc_config_parm_t *param)
+int OcLwm2mConnect( OcConfigParmT *param)
 {
-    int ret = (int)en_oc_lwm2m_err_system;
+    int ret = (int)EN_OC_LWM2M_ERR_SYSTEM;
 
     if ((NULL != s_oc_lwm2m_ops.opt) && (NULL != s_oc_lwm2m_ops.opt->config))
     {
@@ -106,7 +106,7 @@ int oc_lwm2m_config( oc_config_parm_t *param)
         }
         else
         {
-            ret = (int)en_oc_lwm2m_err_parafmt;
+            ret = (int)EN_OC_LWM2M_ERR_PARAFMT;
         }
     }
 
@@ -114,9 +114,9 @@ int oc_lwm2m_config( oc_config_parm_t *param)
 }
 
 
-int oc_lwm2m_deconfig(void)
+int OcLwm2mDisConnect(void)
 {
-    int ret = (int)en_oc_lwm2m_err_system;
+    int ret = (int)EN_OC_LWM2M_ERR_SYSTEM;
 
     if ((NULL != s_oc_lwm2m_ops.opt) && (NULL != s_oc_lwm2m_ops.opt->deconfig))
     {

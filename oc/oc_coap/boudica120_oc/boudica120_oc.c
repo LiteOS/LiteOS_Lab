@@ -57,7 +57,7 @@ typedef struct
     const char *bands;
 
     //initialized by the applicaiton
-    oc_config_parm_t  oc_param;
+    OcConfigParmT  oc_param;
 
     //this is the control block
     bool_t            sndenable;
@@ -136,7 +136,7 @@ static int byte_to_hexstr(const unsigned char *bufin, int len, char *bufout)
  */
 static int boudica120_oc_report(void *handle,char *buf,int len)
 {
-    int ret = en_oc_coap_err_noconfigured;
+    int ret = EN_OC_COAP_ERR_NOCONFIGURED;
 	int timeout = cn_boudica120_cmd_timeout;
     const char *cmd = "AT+NMGS=";
     const char *index = "OK";
@@ -148,7 +148,7 @@ static int boudica120_oc_report(void *handle,char *buf,int len)
 
     if ((NULL == buf) || (len >= cn_boudica120_cachelen/2 )||(false == s_boudica120_oc_cb.sndenable))
     {
-        ret = en_oc_coap_err_parafmt;
+        ret = EN_OC_COAP_ERR_PARAFMT;
         return ret;
     }
     osal_mutex_lock(s_report_mutex);
@@ -161,11 +161,11 @@ static int boudica120_oc_report(void *handle,char *buf,int len)
     (void) osal_mutex_unlock(s_report_mutex);
     if(ret >= 0)
     {
-        ret = en_oc_coap_err_ok;
+        ret = EN_OC_COAP_ERR_OK;
     }
     else
     {
-        ret = en_oc_coap_err_network;
+        ret = EN_OC_COAP_ERR_NETWORK;
     }
 
     return ret;
@@ -596,14 +596,14 @@ static bool_t boudica120_boot(const char *plmn, const char *apn, const char *ban
 }
 
 
-static int* boudica120_oc_config(oc_config_parm_t *param)
+static int* boudica120_oc_config(OcConfigParmT *param)
 {
     int ret = en_oc_coap_err_configured;
 
     if(NULL == param)
     {
-        ret = en_oc_coap_err_parafmt;
-		LINK_LOG_DEBUG("en_oc_coap_err_parafmt");
+        ret = EN_OC_COAP_ERR_PARAFMT;
+		LINK_LOG_DEBUG("EN_OC_COAP_ERR_PARAFMT");
         return NULL;
     }
 
@@ -615,12 +615,12 @@ static int* boudica120_oc_config(oc_config_parm_t *param)
                 s_boudica120_oc_cb.oc_param.app_server.address,s_boudica120_oc_cb.oc_param.app_server.port))
         {
             s_oc_handle = &s_boudica120_oc_cb;
-            ret = en_oc_coap_err_ok;
-			LINK_LOG_DEBUG("en_oc_coap_err_ok");
+            ret = EN_OC_COAP_ERR_OK;
+			LINK_LOG_DEBUG("EN_OC_COAP_ERR_OK");
         }
         else
         {
-			LINK_LOG_DEBUG("en_oc_coap_err_network");
+			LINK_LOG_DEBUG("EN_OC_COAP_ERR_NETWORK");
             return NULL;
         }
     }
@@ -630,12 +630,12 @@ static int* boudica120_oc_config(oc_config_parm_t *param)
 
 static int boudica120_oc_deconfig(void *handle)
 {
-    int ret = en_oc_coap_err_noconfigured;
+    int ret = EN_OC_COAP_ERR_NOCONFIGURED;
 
     if(NULL != handle)
     {
         handle = NULL;
-        ret = en_oc_coap_err_ok;
+        ret = EN_OC_COAP_ERR_OK;
     }
     return ret;
 }
@@ -736,7 +736,7 @@ const oc_coap_opt_t  g_boudica120_oc_opt = \
 {
     .config = boudica120_oc_config,
     .deconfig = boudica120_oc_deconfig,
-    .report = (fn_oc_coap_report)boudica120_oc_report,
+    .report = (FnOcCoapReport)boudica120_oc_report,
 };
 
 

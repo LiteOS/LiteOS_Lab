@@ -321,7 +321,7 @@ static void deal_conn_msg(void)
 static void deal_disconn_msg(void)
 {
     int ret;
-    ret = OcMqttDisconnect();
+    ret = OcMqttDisConnect();
     if((int)EN_OC_MQTT_ERR_OK == ret){
         g_app_cb.connected = 0;
     }
