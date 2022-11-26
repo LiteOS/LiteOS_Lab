@@ -69,7 +69,7 @@ typedef struct
     oc_server_t              app_server;      ///< if factory or smart boot, must be set here
     fn_oc_coap_msg_deal      rcv_func;        ///< receive function caller here
     void                    *usr_data;        ///< used for the user
-}oc_config_param_t;
+}oc_config_parm_t;
 
 typedef enum
 {
@@ -86,7 +86,7 @@ typedef enum
     en_oc_coap_err_last,
 }en_oc_coap_err_code_t;
 ///////////////////////////COAP AGENT INTERFACE////////////////////////////////
-typedef void* (*fn_oc_coap_config)(oc_config_param_t *param);                        ///< return the handle here
+typedef void* (*fn_oc_coap_config)(oc_config_parm_t *param);                        ///< return the handle here
 typedef int (*fn_oc_coap_deconfig)(void *handle);                                    ///< use the handle as the params
 typedef int (*fn_oc_coap_report)(void *handle,char *msg,int len);                    ///< use the handle and report params
 /**
@@ -115,7 +115,7 @@ int oc_coap_register(const char *name,const oc_coap_opt_t *opt);
  * @param[in] param, refer to tag_oc_coap_config
  * @return oc coap handle else NULL failed
  */
-void *oc_coap_config(oc_config_param_t *param);
+void *oc_coap_config(oc_config_parm_t *param);
 /**
  * @brief the application use this function to send the message to the cdp
  * @param[in] hanlde:the coap handle returned by oc_coap_config

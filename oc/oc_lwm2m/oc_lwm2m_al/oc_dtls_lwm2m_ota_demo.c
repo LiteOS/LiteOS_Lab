@@ -186,7 +186,7 @@ static int app_report_task_entry()
 {
     int ret = -1;
 
-    oc_config_param_t      oc_param;
+    oc_config_parm_t      oc_param;
     app_light_intensity_t  light;
     void                  *context;
     int                    lux = 0;

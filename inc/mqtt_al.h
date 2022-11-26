@@ -36,7 +36,7 @@
 #define MQTT_AL_H
 
 #include <stdint.h>
-#include "dtls_al.h"
+#include "tls_al.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -126,7 +126,7 @@ typedef struct
 {
     mqtt_al_string_t               serveraddr;   ///< mqtt server:support domain name and dot format
     int                            serverport;   ///< mqtt server port
-    dtls_al_security_t            *security;     ///< if NULL,will use en_mqtt_security_none
+    TlsAlSecurityT                *security;     ///< if NULL,will use en_mqtt_security_none
     en_mqtt_al_verison             version;      ///< mqtt version will be used
     mqtt_al_string_t               clientid;     ///< mqtt connect client identifier
     mqtt_al_string_t               user;         ///< mqtt connect user

@@ -1,5 +1,10 @@
 {
     "files.associations": {
-        "iot_config.h": "c"
+        "iot_config.h": "c",
+        "dtls_interface.h": "c",
+        "tls_al.h": "c",
+        "cjson.h": "c",
+        "link_log.h": "c",
+        "osal.h": "c"
     }
 }

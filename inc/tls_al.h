@@ -32,8 +32,8 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef LITEOS_LAB_IOT_LINK_NETWORK_DTLS_DTLS_AL_DTLS_AL_H_
-#define LITEOS_LAB_IOT_LINK_NETWORK_DTLS_DTLS_AL_DTLS_AL_H_
+#ifndef TLS_AL_H
+#define TLS_AL_H
 
 
 #include <stdint.h>
@@ -41,102 +41,102 @@
 
 typedef enum
 {
-    EN_DTLS_AL_ERR_OK = 0,
-    EN_DTLS_AL_ERR_PARA,
-    EN_DTLS_AL_ERR_SYS,
-    EN_DTLS_AL_ERR_SYSMEM,
-    EN_DTLS_AL_ERR_NOCONFIG,
-    EN_DTLS_AL_ERR_NETWORK,
-    EN_DTLS_AL_ERR_SERVERCERTPARSE,
-    EN_DTLS_AL_ERR_CLIENTCERTPARSE,
-    EN_DTLS_AL_ERR_CLIENTPKPARSE,
-}en_dtls_al_err_t;
+    EN_TLS_AL_ERR_OK = 0,
+    EN_TLS_AL_ERR_PARA,
+    EN_TLS_AL_ERR_SYS,
+    EN_TLS_AL_ERR_SYSMEM,
+    EN_TLS_AL_ERR_NOCONFIG,
+    EN_TLS_AL_ERR_NETWORK,
+    EN_TLS_AL_ERR_SERVERCERTPARSE,
+    EN_TLS_AL_ERR_CLIENTCERTPARSE,
+    EN_TLS_AL_ERR_CLIENTPKPARSE,
+}EnTlsAlErrT;
 
 /** @brief  this enum all the transport encode we support now*/
 typedef enum
 {
-    EN_DTLS_AL_SECURITY_TYPE_NONE = 0,   ///< no encode
-    EN_DTLS_AL_SECURITY_TYPE_PSK,        ///< use the psk mode in transport layer
-    EN_DTLS_AL_SECURITY_TYPE_CERT,       ///< use the ca mode in transport layer,only check the server
-}en_dtls_al_security_type_t;
+    EN_TLS_AL_SECURITY_TYPE_NONE = 0,   ///< no encode
+    EN_TLS_AL_SECURITY_TYPE_PSK,        ///< use the psk mode in transport layer
+    EN_TLS_AL_SECURITY_TYPE_CERT,       ///< use the ca mode in transport layer,only check the server
+}EnTlsAlSecurityTypeT;
 
 /** @brief this data defines for the psk mode*/
 typedef struct
 {
-    uint8_t     *psk_id;           ///< the psk id
-    uint8_t     *psk_key;          ///< the psk key
-    int          psk_id_len;       ///< the psk id length
-    int          psk_key_len;      ///< the psk key length
-}dtls_al_security_psk_t;
+    uint8_t     *pskId;           ///< the psk id
+    uint8_t     *pskKey;          ///< the psk key
+    int          pskIdLen;       ///< the psk id length
+    int          pskKeyLen;      ///< the psk key length
+}TlsAlSecurityPskT;
 
 
 /** @brief this data defines for the cas mode:only check the server  */
 typedef struct
 {
-    uint8_t    *server_ca;
-    uint8_t    *client_ca;
-    uint8_t    *client_pk;
-    uint8_t    *client_pk_pwd;
-    int         server_ca_len;
-    int         client_ca_len;
-    int         client_pk_len;
-    int         client_pk_pwd_len;
-    char       *server_name;
-}dtls_al_security_cert_t;
+    uint8_t    *serverCa;
+    uint8_t    *clientCert;
+    uint8_t    *clientPriKey;
+    uint8_t    *clientPriKeyPwd;
+    int         serverCaLen;
+    int         clientCertLen;
+    int         clientPriKeyLen;
+    int         clientPriKeyPwdLen;
+    char       *serverName;
+}TlsAlSecurityCertT;
 
 
 /** @brief this data defines for the encode parameter for the connect */
 typedef struct
 {
-    en_dtls_al_security_type_t    type;         ///< which security type of the data
+    EnTlsAlSecurityTypeT      type;         ///< which security type of the data
     union
     {
-        dtls_al_security_psk_t     psk;         ///< psk data  if the type is EN_DTSL_SECURITY_TYPE_PSK
-        dtls_al_security_cert_t    cert;         ///< cert data  if the type is EN_DTSL_SECURITY_TYPE_CERT
+        TlsAlSecurityPskT     psk;         ///< psk data  if the type is EN_DTSL_SECURITY_TYPE_PSK
+        TlsAlSecurityCertT    cert;         ///< cert data  if the type is EN_DTSL_SECURITY_TYPE_CERT
     }u;
-}dtls_al_security_t;
+}TlsAlSecurityT;
 
 typedef struct
 {
     int                 istcp;
     int                 isclient;
-    dtls_al_security_t  security;
-}dtls_al_para_t;
+    TlsAlSecurityT  security;
+}TlsAlParaT;
 
-en_dtls_al_err_t  dtls_al_new(dtls_al_para_t *para,void **handle);
-int   dtls_al_connect(void *handle,const char *ip, const char *port, int timeout );
-int   dtls_al_write(void *handle, uint8_t *msg, size_t len, int timeout );
-int   dtls_al_read(void *handle,uint8_t *buf, size_t len,int timeout );
-en_dtls_al_err_t   dtls_al_destroy(void *handle);
+EnTlsAlErrT  TlsAlNew(TlsAlParaT *para,void **handle);
+int   TlsAlConnect(void *handle,const char *ip, const char *port, int timeout );
+int   TlsAlWrite(void *handle, uint8_t *msg, size_t len, int timeout );
+int   TlsAlRead(void *handle,uint8_t *buf, size_t len,int timeout );
+EnTlsAlErrT   TlsAlDestroy(void *handle);
 
-typedef en_dtls_al_err_t (*fn_dtls_al_new)(dtls_al_para_t *para,void **handle);
-typedef int (*fn_dtls_al_connect)(void *handle,const char *server_ip, const char *server_port,int timeout);
-typedef int (*fn_dtls_al_write)(void *handle,uint8_t *msg, size_t len, int timeout);
-typedef int (*fn_dtls_al_read)(void *handle, uint8_t *buf, size_t len, int timeout);
-typedef en_dtls_al_err_t (*fn_dtls_al_destroy)(void *handle);
+typedef EnTlsAlErrT (*FnTlsAlNew)(TlsAlParaT *para,void **handle);
+typedef int (*FnTlsAlConnect)(void *handle,const char *server_ip, const char *server_port,int timeout);
+typedef int (*FnTlsAlWrite)(void *handle,uint8_t *msg, size_t len, int timeout);
+typedef int (*FnTlsAlRead)(void *handle, uint8_t *buf, size_t len, int timeout);
+typedef EnTlsAlErrT (*FnTlsAlDestroy)(void *handle);
 
 typedef struct
 {
-    fn_dtls_al_new            io_new;
-    fn_dtls_al_connect        io_connect;
-    fn_dtls_al_write          io_write;
-    fn_dtls_al_read           io_read;
-    fn_dtls_al_destroy        io_destroy;
-}dtls_al_io_t;
+    FnTlsAlNew            io_new;
+    FnTlsAlConnect        io_connect;
+    FnTlsAlWrite          io_write;
+    FnTlsAlRead           io_read;
+    FnTlsAlDestroy        io_destroy;
+}TlsAlIoT;
 
 typedef struct
 {
     const char     *name;
-    dtls_al_io_t    io;
-}dtls_al_t;
+    TlsAlIoT        io;
+}TlsAlT;
 
-int dtls_al_install(const dtls_al_t *dtls);
-int dtls_al_uninstall(const char*name);
+int TlsAlInstall(const TlsAlT *tls);
+int TlsAlUninstall(const char*name);
 
 ///< this function should implemented by the developer of the tls
-int dtls_imp_init(void);
-int dtls_al_init(void) ;  ///< this function will call dtls_imp_init()
+int TlsImpInit(void);
+int TlsAlInit(void) ;  ///< this function will call TlsImpInit()
 
 
 
-#endif /* LITEOS_LAB_IOT_LINK_NETWORK_DTLS_DTLS_AL_DTLS_AL_H_ */
+#endif /* TLS_AL_H_ */

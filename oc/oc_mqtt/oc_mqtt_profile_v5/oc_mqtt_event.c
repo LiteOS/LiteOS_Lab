@@ -60,10 +60,10 @@ Topic: $oc/devices/{device_id}/sys/events/up
 int oc_mqtt_report_version(const char *deviceID,const char *objectDeviceID, const char *softVersion, const char *firmVersion)
 {
     int ret = -1;
-    oc_mqtt_profile_kv_t    firmVer;
-    oc_mqtt_profile_kv_t    softVer;
-    oc_mqtt_profile_kv_t *cur = NULL;
-    oc_mqtt_profile_event_t event;
+    OcMqttKvT    firmVer;
+    OcMqttKvT    softVer;
+    OcMqttKvT *cur = NULL;
+    OcMqttEventT event;
 
     if(softVersion != NULL){
         softVer.key = CN_OC_JSON_KEY_SWVERSION;
@@ -81,13 +81,13 @@ int oc_mqtt_report_version(const char *deviceID,const char *objectDeviceID, cons
         cur = &firmVer;
     }
 
-    event.object_device_id = (char *)objectDeviceID;
-    event.event_time = NULL;
-    event.event_type = CN_OC_MQTT_EVENTTYPE_VERSIONREPORT;
-    event.service_id = "$ota";
+    event.objectDeviceId = (char *)objectDeviceID;
+    event.eventTime = NULL;
+    event.eventType = CN_OC_MQTT_EVENTTYPE_VERSIONREPORT;
+    event.serviceId = "$ota";
     event.paras = cur;
 
-    ret = oc_mqtt_profile_reportevent((char *)deviceID, &event);
+    ret = OcMqttEventReport((char *)deviceID, &event);
 
     return ret;
 }
@@ -113,11 +113,11 @@ int oc_mqtt_report_version(const char *deviceID,const char *objectDeviceID, cons
 int oc_mqtt_report_upgradeprogress(const char *deviceID, const char *objectDeviceID, int upgraderet, const char *version, int progress)
 {
     int ret = -1;
-    oc_mqtt_profile_kv_t    prog;
-    oc_mqtt_profile_kv_t    resultCode;
-    oc_mqtt_profile_kv_t    ver;
-    oc_mqtt_profile_kv_t   *cur = NULL;
-    oc_mqtt_profile_event_t event;
+    OcMqttKvT    prog;
+    OcMqttKvT    resultCode;
+    OcMqttKvT    ver;
+    OcMqttKvT   *cur = NULL;
+    OcMqttEventT event;
 
     resultCode.key = CN_OC_JSON_KEY_RESULTCODE;
     resultCode.type = EN_OC_MQTT_PROFILE_VALUE_INT;
@@ -141,13 +141,13 @@ int oc_mqtt_report_upgradeprogress(const char *deviceID, const char *objectDevic
         cur = &prog;
     }
 
-    event.object_device_id = (char *)objectDeviceID;
-    event.event_time = NULL;
-    event.event_type = CN_OC_MQTT_EVENTTYPE_UPGRADEPROGRESSREPORT;
-    event.service_id = "$ota";
+    event.objectDeviceId = (char *)objectDeviceID;
+    event.eventTime = NULL;
+    event.eventType = CN_OC_MQTT_EVENTTYPE_UPGRADEPROGRESSREPORT;
+    event.serviceId = "$ota";
     event.paras = cur;
 
-    ret = oc_mqtt_profile_reportevent((char *)deviceID, &event);
+    ret = OcMqttEventReport((char *)deviceID, &event);
 
     return ret;
 }

@@ -56,34 +56,34 @@ typedef enum
 
 typedef enum
 {
-    en_oc_mqtt_err_ok          = 0,      ///< this means the status ok
-    en_oc_mqtt_err_parafmt,              ///< this means the parameter err format
-    en_oc_mqtt_err_network,              ///< this means the network wrong status
-    en_oc_mqtt_err_conversion,           ///< this means the mqtt version err
-    en_oc_mqtt_err_conclientid,          ///< this means the client id is err
-    en_oc_mqtt_err_conserver,            ///< this means the server refused the service for some reason(likely the id and pwd)
-    en_oc_mqtt_err_conuserpwd,           ///< bad user name or pwd
-    en_oc_mqtt_err_conclient,            ///< the client id /user/pwd is right, but does not allowed
-    en_oc_mqtt_err_subscribe,            ///< this means subscribe the topic failed
-    en_oc_mqtt_err_unsubscribe,          ///< this means un-subscribe failed
-    en_oc_mqtt_err_publish,              ///< this means publish the topic failed
-    en_oc_mqtt_err_configured,           ///< this means we has configured, please deconfigured it and then do configure again
-    en_oc_mqtt_err_noconfigured,         ///< this means we have not configure it yet,so could not connect
-    en_oc_mqtt_err_noconected,           ///< this means the connection has not been built, so you could not send data
-    en_oc_mqtt_err_gethubaddrtimeout,    ///< this means get the hub address timeout
-    en_oc_mqtt_err_sysmem,               ///< this means the system memory is not enough
-    en_oc_mqtt_err_system,               ///< this means that the system porting may have some problem,maybe not install yet
-    en_oc_mqtt_err_last,
-}en_oc_mqtt_err_code_t;
+    EN_OC_MQTT_ERR_OK          = 0,      ///< this means the status ok
+    EN_OC_MQTT_ERR_PARAFMT,              ///< this means the parameter err format
+    EN_OC_MQTT_ERR_NETWORK,              ///< this means the network wrong status
+    EN_OC_MQTT_ERR_CONVERSION,           ///< this means the mqtt version err
+    EN_OC_MQTT_ERR_CONCLIENTID,          ///< this means the client id is err
+    EN_OC_MQTT_ERR_CONSERVER,            ///< this means the server refused the service for some reason(likely the id and pwd)
+    EN_OC_MQTT_ERR_CONUSERPWD,           ///< bad user name or pwd
+    EN_OC_MQTT_ERR_CONCLIENT,            ///< the client id /user/pwd is right, but does not allowed
+    EN_OC_MQTT_ERR_SUBSCRIBE,            ///< this means subscribe the topic failed
+    EN_OC_MQTT_ERR_UNSUBSCRIBE,          ///< this means un-subscribe failed
+    EN_OC_MQTT_ERR_PUBLISH,              ///< this means publish the topic failed
+    EN_OC_MQTT_ERR_CONFIGURED,           ///< this means we has configured, please deconfigured it and then do configure again
+    EN_OC_MQTT_ERR_NOCONFIGURED,         ///< this means we have not configure it yet,so could not connect
+    EN_OC_MQTT_ERR_NOCONNECTED,           ///< this means the connection has not been built, so you could not send data
+    EN_OC_MQTT_ERR_GETHUBADDRTIMEOUT,    ///< this means get the hub address timeout
+    EN_OC_MQTT_ERR_SYSMEM,               ///< this means the system memory is not enough
+    EN_OC_MQTT_ERR_SYSTEM,               ///< this means that the system porting may have some problem,maybe not install yet
+    EN_OC_MQTT_ERR_LAST = 255,           ///< not defined
+}EnOcMqttErrCodeT;
 
 
 typedef enum
 {
-    en_oc_mqtt_log_connected = 0,
-    en_oc_mqtt_log_disconnected,
-}en_oc_mqtt_log_t;
+    EN_OC_MQTT_LOG_CONNECTED = 0,
+    EN_OC_MQTT_LOG_DISCONNECTED,
+}EnOcMqttLogT;
 
-typedef void (*fn_oc_mqtt_log)(en_oc_mqtt_log_t  logtype);
+typedef void (*FnOcMqttLog)(EnOcMqttLogT  logType);
 
 
 /** @brief this is the message dealer module for the application*/
@@ -96,14 +96,14 @@ typedef struct
     char            *server_addr;          ///< server address:domain name or ip address
     char            *server_port;          ///< server port:
     ///< define for the tls
-    dtls_al_security_t  security;          ///< used for the transport
+    TlsAlSecurityT  security;          ///< used for the transport
     ///< define for the mqtt
     char                              *id;
     char                              *pwd;
     char                              *scope_id;
     fn_oc_mqtt_msg_deal                msg_deal;       ///< when the agent receive any applciation data, please call this function
     void                              *msg_deal_arg;   ///< call back for the fn_oc_mqtt_msg_deal
-    fn_oc_mqtt_log                     log_dealer;
+    FnOcMqttLog                     log_dealer;
 }oc_mqtt_config_t;
 
 ///////////////////////////MQTT AGENT INTERFACE//////////////////////////////////
@@ -230,7 +230,7 @@ int oc_mqtt_init(void);
  *
  *@return the  reason  corresponding to the code
  */
-const char *oc_mqtt_err(en_oc_mqtt_err_code_t code);
+const char *oc_mqtt_err(EnOcMqttErrCodeT code);
 
 
 

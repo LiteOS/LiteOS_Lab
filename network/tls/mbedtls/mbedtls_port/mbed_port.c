@@ -35,7 +35,7 @@
 
 #include <string.h>
 #include "osal.h"
-#include "dtls_al.h"
+#include "tls_al.h"
 #include "dtls_interface.h"
 
 #if defined(MBEDTLS_DEBUG_C)
@@ -54,33 +54,33 @@ static void mbed_port_debug( void *ctx, int level,
 }
 #endif
 
-en_dtls_al_err_t mbed_new(dtls_al_para_t *para, void **handle)
+EnTlsAlErrT mbed_new(TlsAlParaT *para, void **handle)
 {
 
-    en_dtls_al_err_t ret = EN_DTLS_AL_ERR_PARA;
+    EnTlsAlErrT ret = EN_TLS_AL_ERR_PARA;
     mbedtls_ssl_context  *ssl;
     dtls_establish_info_s einfo;
     char  plat_type;
 
-    if(para->security.type == EN_DTLS_AL_SECURITY_TYPE_CERT)
+    if(para->security.type == EN_TLS_AL_SECURITY_TYPE_CERT)
     {
         einfo.psk_or_cert = VERIFY_WITH_CERT;
 
-        einfo.v.c.ca_cert = para->security.u.cert.server_ca;
-        einfo.v.c.cert_len = para->security.u.cert.server_ca_len;
-        einfo.v.c.client_ca = para->security.u.cert.client_ca;
-        einfo.v.c.client_ca_len = para->security.u.cert.client_ca_len;
-        einfo.v.c.client_pk = para->security.u.cert.client_pk;
-        einfo.v.c.client_pk_len = para->security.u.cert.client_pk_len;
-        einfo.v.c.client_pk_pwd = para->security.u.cert.client_pk_pwd;
-        einfo.v.c.client_pk_pwd_len = para->security.u.cert.client_pk_pwd_len;
+        einfo.v.c.ca_cert = para->security.u.cert.serverCa;
+        einfo.v.c.cert_len = para->security.u.cert.serverCaLen;
+        einfo.v.c.client_ca = para->security.u.cert.clientCert;
+        einfo.v.c.client_ca_len = para->security.u.cert.clientCertLen;
+        einfo.v.c.client_pk = para->security.u.cert.clientPriKey;
+        einfo.v.c.client_pk_len = para->security.u.cert.clientPriKeyLen;
+        einfo.v.c.client_pk_pwd = para->security.u.cert.clientPriKeyPwd;
+        einfo.v.c.client_pk_pwd_len = para->security.u.cert.clientPriKeyPwdLen;
     }
     else
     {
         einfo.psk_or_cert  = VERIFY_WITH_PSK;
-        einfo.v.p.psk = para->security.u.psk.psk_key;
-        einfo.v.p.psk_len = para->security.u.psk.psk_key_len;
-        einfo.v.p.psk_identity = para->security.u.psk.psk_id;
+        einfo.v.p.psk = para->security.u.psk.pskKey;
+        einfo.v.p.psk_len = para->security.u.psk.pskKeyLen;
+        einfo.v.p.psk_identity = para->security.u.psk.pskId;
     }
 
     if(para->istcp)
@@ -107,7 +107,7 @@ en_dtls_al_err_t mbed_new(dtls_al_para_t *para, void **handle)
     if(NULL != ssl)
     {
         *handle = ssl;
-        ret = EN_DTLS_AL_ERR_OK;
+        ret = EN_TLS_AL_ERR_OK;
 
         #if defined(MBEDTLS_DEBUG_C)
             mbedtls_debug_set_threshold(10);
@@ -119,13 +119,13 @@ en_dtls_al_err_t mbed_new(dtls_al_para_t *para, void **handle)
 }
 
 
-en_dtls_al_err_t mbed_destroy(void *handle)
+EnTlsAlErrT mbed_destroy(void *handle)
 {
-    en_dtls_al_err_t ret = EN_DTLS_AL_ERR_PARA;
+    EnTlsAlErrT ret = EN_TLS_AL_ERR_PARA;
     if(NULL != handle)
     {
         dtls_ssl_destroy(handle);
-        ret = EN_DTLS_AL_ERR_OK;
+        ret = EN_TLS_AL_ERR_OK;
     }
     return ret;
 }
@@ -177,7 +177,7 @@ int mbed_connect(void *handle,const char *server_ip, const char *server_port,int
     return ret;
 }
 
-static const dtls_al_t  s_mbedtls_io =
+static const TlsAlT  s_mbedtls_io =
 {
     .name = "mbed",
     .io = {
@@ -191,14 +191,14 @@ static const dtls_al_t  s_mbedtls_io =
 
 
 
-int dtls_imp_init(void)
+int TlsImpInit(void)
 {
     int ret =-1;
 
     (void)mbedtls_platform_set_calloc_free(osal_calloc, osal_free);
     (void)mbedtls_platform_set_snprintf(snprintf);
     (void)mbedtls_platform_set_printf(printf);
-    ret = dtls_al_install(&s_mbedtls_io);
+    ret = TlsAlInstall(&s_mbedtls_io);
 
     return ret;
 }

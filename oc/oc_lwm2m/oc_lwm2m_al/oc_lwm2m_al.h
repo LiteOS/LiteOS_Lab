@@ -75,9 +75,9 @@ typedef struct
     en_oc_boot_strap_mode_t  boot_mode;       ///< bootmode,if boot client_initialize, then the bs must be set
     oc_server_t              boot_server;     ///< which will be used by the bootstrap, if not, set NULL here
     oc_server_t              app_server;      ///< if factory or smart boot, must be set here
-    fn_oc_lwm2m_msg_deal     rcv_func;        ///< receive function caller here
+    fn_oc_lwm2m_msg_deal     rcvfunc;        ///< receive function caller here
     void                    *usr_data;        ///< used for the user
-} oc_config_param_t;
+} oc_config_parm_t;
 
 
 typedef enum
@@ -97,7 +97,7 @@ typedef enum
 
 ///////////////////////////LWM2M AGENT INTERFACE////////////////////////////////
 typedef int (*fn_oc_lwm2m_report)(char *buf, int len, int timeout);
-typedef int (*fn_oc_lwm2m_config)(oc_config_param_t *param);
+typedef int (*fn_oc_lwm2m_config)(oc_config_parm_t *param);
 typedef int (*fn_oc_lwm2m_deconfig)(void);
 /**
  * @brief this data structure defines the lwm2m agent implement
@@ -130,10 +130,10 @@ int oc_lwm2m_unregister(const char *name);
 //////////////////////////APPLICATION INTERFACE/////////////////////////////////
 /**
  * @brief the application use this function to configure the lwm2m agent
- * @param[in] param, refer to oc_config_param_t
+ * @param[in] param, refer to oc_config_parm_t
  * @return 0 success while others the error code described as en_oc_lwm2m_err_code_t
  */
-int oc_lwm2m_config(oc_config_param_t *param);
+int oc_lwm2m_config(oc_config_parm_t *param);
 
 /**
  * @brief the application use this function to send the message to the cdp

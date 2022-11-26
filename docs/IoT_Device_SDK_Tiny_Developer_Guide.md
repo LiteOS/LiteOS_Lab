@@ -143,7 +143,7 @@
 || link_misc         | ——       | 杂项                                                         |
 ||link_ota|——|OTA升级代码实现|
 ||network|coap|CoAP的适配及协议实现|
-|||dtls|mbedtls的适配及协议实现|
+|||tls|mbedtls的适配及协议实现|
 |||lwm2m|LwM2M的开源协议栈wakaama的适配|
 |||mqtt|MQTT的适配及协议实现|
 |||tcpip|TCPIP适配及协议栈实现、lwIP驱动、OS适配及协议栈实现、MacOS_socket适配及协议栈实现|

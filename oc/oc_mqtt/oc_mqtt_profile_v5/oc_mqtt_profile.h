@@ -83,8 +83,8 @@ typedef enum
     EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_EVENT,              ///< THIS IS THE EVENT
     EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_BS,                 ///< THIS IS THE BOOTSTRAP
     EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_SHADOWGET,          ///< THIS IS THE GET SHADOW
-    EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_LAST,
-}en_oc_mqtt_profile_msg_type_down_t;
+    EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_LAST = 255,         ///< NOT DEFINED
+}EnOcMqttMsgTypeDownT;
 
 
 ////< enum all the data type for the oc profile
@@ -100,103 +100,103 @@ typedef enum
     EN_OC_MQTT_PROFILE_VALUE_DOUBLE_ARRAY,
     EN_OC_MQTT_PROFILE_VALUE_STRING_ARRAY,
     EN_OC_MQTT_PROFILE_VALUE_KV_T,
-    EN_OC_MQTT_PROFILE_VALUE_LAST,
-}en_oc_profile_data_t;
+    EN_OC_MQTT_PROFILE_VALUE_LAST = 255,   // not defined
+}EnOcDataT;
 
 
 typedef struct
 {
     void                 *nxt;   ///< ponit to the next key
     char                 *key;
-    en_oc_profile_data_t  type;
+    EnOcDataT             type;
     void                 *value;
-    int                  array_size;
-}oc_mqtt_profile_kv_t;
+    int                   arraySize;
+}OcMqttKvT;
 
 
 typedef struct
 {
-    en_oc_mqtt_profile_msg_type_down_t type;       ///< defined as en_oc_mqtt_profile_msg_type_down_t
-    char *request_id;                              ///< get from the topic, NULL if not supplied
-    void *msg;                                     ///< the send from the cloud platform
-    int   msg_len;                                 ///< the message length
-}oc_mqtt_profile_msgrcv_t;
+    EnOcMqttMsgTypeDownT type;       ///< defined as EnOcMqttMsgTypeDownT
+    char *requestId;                              ///< get from the topic, NULL if not supplied
+    void *msgContent;                                     ///< the send from the cloud platform
+    int   msgLen;                                 ///< the message length
+}OcMqttMsgRcvT;
 
 /**
  * @brief: this the message from the cloud call back function
  *
- * @param[in] payload:defined as oc_mqtt_profile_msgrcv_t
+ * @param[in] message:defined as OcMqttMsgRcvT
  *
  * @return: not used yet
  *
  * */
-typedef int (*fn_oc_mqtt_profile_rcvdeal)(oc_mqtt_profile_msgrcv_t *payload);
+typedef int (*FnOcMqttRcvDeal)(OcMqttMsgRcvT *message);
 
 typedef struct
 {
     int boostrap;              ///< we use the bootstrap mode or not
 
-    int life_time;             ///< ping echo cycle
-    char             *server_addr;
-    char             *server_port;
-    char             *device_id;
-    char             *device_passwd;
-    char             *scope_id;
-    dtls_al_security_t security;
+    int lifeTime;             ///< ping echo cycle
+    char             *serverAddr;
+    char             *serverPort;
+    char             *deviceId;
+    char             *devicePasswd;
+    char             *scopeId;
+    TlsAlSecurityT    security;
 
-    fn_oc_mqtt_profile_rcvdeal   rcvfunc;
-    fn_oc_mqtt_log               logfunc;
+    FnOcMqttRcvDeal   rcvFunc;
+    FnOcMqttLog       logFunc;
 
-}oc_mqtt_profile_connect_t;
+}OcMqttConnectT;
 
 /**
  * @brief: use this function to connect to the cloud
  *
- * @param[in] payload: defined as oc_mqtt_profile_connect_t
+ * @param[in] connectPara: defined as OcMqttConnectT
  *
- * @return :defined as en_oc_mqtt_err_code_t
+ * @return :defined as EnOcMqttErrCodeT
  *
  * */
-int oc_mqtt_profile_connect(oc_mqtt_profile_connect_t *payload);
+int OcMqttConnect(OcMqttConnectT *connectPara);
 
 /**
  * @brief: use this function to disconnect to the cloud
  *
- * @return :defined as en_oc_mqtt_err_code_t
+ * @return :defined as EnOcMqttErrCodeT
  *
  * */
-int oc_mqtt_profile_disconnect(void);
+int OcMqttDisconnect(void);
 
 typedef struct
 {
-    char *device_id;   ///< you could specify it,if NULL,then use the device_id which used to connect
-    char *name;        ///< message name, could be NULL
-    char *id;          ///< message id, could be NULL
-    void *msg;         ///< message to send
-    int   msg_len;     ///< message length
-}oc_mqtt_profile_msgup_t;
+    char *deviceId;   ///< you could specify it,if NULL,then use the device_id which used to connect
+    char *msgName;        ///< message name, could be NULL
+    char *msgId;          ///< message id, could be NULL
+    void *msgContent;         ///< message to send
+    int   msgLen;     ///< message length
+}OcMqttMessageReportT;
 
 
 /**
  * @brief: use this function to send data to the platform without profile decode
  *
- * @param[in] deviceid: the cloud message receiver, if NULL then send to the connected one
+ * @param[in] deviceId: the cloud message receiver, if NULL then send to the connected one
  *
- * @param[in] payload: defined as oc_mqtt_profile_msgup_t
+ * @param[in] message: defined as OcMqttMessageReportT
  *
- * @return :defined as en_oc_mqtt_err_code_t
+ * @return :defined as EnOcMqttErrCodeT
  *
  * */
-int oc_mqtt_profile_msgup(char *deviceid,oc_mqtt_profile_msgup_t *payload);
+int OcMqttMessageReport(char *deviceId,OcMqttMessageReportT *message);
 
 
 typedef struct
 {
    void *nxt;
-   char *service_id;                         ///< the service id in the profile, which could not be NULL
-   char *event_time;                         ///< eventtime, which could be NULL means use the platform time
-   oc_mqtt_profile_kv_t *service_property;   ///< the property in the profile, which could not be NULL
-}oc_mqtt_profile_service_t;
+   char *serviceId;                         ///< the service id in the profile, which could not be NULL
+   char *eventTime;                         ///< eventtime, which could be NULL means use the platform time
+   OcMqttKvT *serviceProperty;   ///< the property in the profile, which could not be NULL
+}OcMqttServiceT;
 
 /**
  * @brief: use this function to send data to the platform with profile decode
@@ -205,16 +205,16 @@ typedef struct
  *
  * @param[in] payload: properties list to send to the platform
  *
- * @return :defined as en_oc_mqtt_err_code_t
+ * @return :defined as EnOcMqttErrCodeT
  *
  * */
-int oc_mqtt_profile_propertyreport(char *deviceid,oc_mqtt_profile_service_t *payload);
+int OcMqttPropertiesReport(char *deviceId, OcMqttServiceT *property);
 
 typedef struct
 {
     void *nxt;                                                  ///< maybe much more
     char                                *subdevice_id;          ///< the specified device, which could not be NULL
-    oc_mqtt_profile_service_t           *subdevice_property;    ///< the property of the specified device, which could not be NULL
+    OcMqttServiceT           *subdevice_property;    ///< the property of the specified device, which could not be NULL
 }oc_mqtt_profile_device_t;
 
 /**
@@ -224,7 +224,7 @@ typedef struct
  *
  * @param[in] payload:defined as oc_mqtt_profile_device_t
  *
- * @return :defined as en_oc_mqtt_err_code_t
+ * @return :defined as EnOcMqttErrCodeT
  *
  * */
 int oc_mqtt_profile_gwpropertyreport(char *deviceid,oc_mqtt_profile_device_t *payload);
@@ -232,82 +232,82 @@ int oc_mqtt_profile_gwpropertyreport(char *deviceid,oc_mqtt_profile_device_t *pa
 
 typedef struct
 {
-    int     ret_code;           ///< response code, 0 success while others failed
-    char   *ret_description;    ///< response description,maybe used when failed
-    char   *request_id;         ///< specified by the setproperty command
-}oc_mqtt_profile_propertysetresp_t;
+    int     retCode;           ///< response code, 0 success while others failed
+    char   *retDescription;    ///< response description,maybe used when failed
+    char   *requestId;         ///< specified by the setproperty command
+}OcMqttPropertiesSetResponseT;
 /**
  * @brief: use this function to send the response to the setproperty command
  *
- * @param[in] deviceid: the cloud message receiver, if NULL then send to the connected one
+ * @param[in] deviceId: the cloud message receiver, if NULL then send to the connected one
  *
- * @param[in] payload: description as oc_mqtt_profile_propertysetresp_t
+ * @param[in] resp: description as OcMqttPropertiesSetResponseT
  *
- * @return :defined as en_oc_mqtt_err_code_t
+ * @return :defined as EnOcMqttErrCodeT
  *
  * */
-int oc_mqtt_profile_propertysetresp(char *deviceid,oc_mqtt_profile_propertysetresp_t *payload);
+int OcMqttPropertiesSetResponse(char *deviceId,OcMqttPropertiesSetResponseT *resp);
 
 
 typedef struct
 {
-    char *request_id;                              ///< specified by the getproperty command
-    oc_mqtt_profile_service_t  *services;          ///< defined as oc_mqtt_profile_service_t
-}oc_mqtt_profile_propertygetresp_t;
+    char *requestId;                              ///< specified by the getproperty command
+    OcMqttServiceT  *services;          ///< defined as OcMqttServiceT
+}OcMqttPropertiesGetResponseT;
 
 /**
  * @brief: use this function to send the response to the setproperty command
 
- * @param[in] deviceid: the cloud message receiver, if NULL then send to the connected one
+ * @param[in] deviceId: the cloud message receiver, if NULL then send to the connected one
 
- * @param[in] payload: description as oc_mqtt_profile_propertygetresp_t
+ * @param[in] resp: description as OcMqttPropertiesGetResponseT
  *
- * @return :defined as en_oc_mqtt_err_code_t
+ * @return :defined as EnOcMqttErrCodeT
  *
  * */
-int oc_mqtt_profile_propertygetresp(char *deviceid,oc_mqtt_profile_propertygetresp_t *payload);
+int OcMqttPropertiesGetResponse(char *deviceId,OcMqttPropertiesGetResponseT *resp);
 
 
 typedef struct
 {
-    int     ret_code;           ///< response code, 0 success while others failed
-    char   *ret_name;           ///< response description,maybe used when failed
-    char   *request_id;         ///< specified by the message command
-    oc_mqtt_profile_kv_t  *paras;///< the command paras
+    int     retCode;           ///< response code, 0 success while others failed
+    char   *retName;           ///< response description,maybe used when failed
+    char   *requestId;         ///< specified by the message command
+    OcMqttKvT  *paras;///< the command paras
 
-}oc_mqtt_profile_cmdresp_t;
+}OcMqttCommandResponseT;
 /**
  * @brief: use this function to send the response to the setproperty command
  *
- * @param[in] deviceid: the cloud message receiver, if NULL then send to the connected one
+ * @param[in] deviceId: the cloud message receiver, if NULL then send to the connected one
  *
- * @param[in] payload: description as oc_mqtt_profile_cmdresp_t
+ * @param[in] cmdResponse: description as OcMqttCommandResponseT
  *
- * @return :defined as en_oc_mqtt_err_code_t
+ * @return :defined as EnOcMqttErrCodeT
  *
  * */
-int oc_mqtt_profile_cmdresp(char *deviceid,oc_mqtt_profile_cmdresp_t *payload);
+int OcMqttCommandResponse(char *deviceId,OcMqttCommandResponseT *cmdResponse);
 
 
 
 typedef struct
 {
 
-    char   *object_device_id;           ///< target deice_id, optional
-    char   *service_id;                 ///< service_id, optional
-    char   *request_id;                 ///< the request_id, must be supplied by the service
-}oc_mqtt_profile_shadowget_t;
+    char   *objectDeviceId;           ///< target deice_id, optional
+    char   *serviceId;                 ///< service_id, optional
+    char   *requestId;                 ///< the request_id, must be supplied by the service
+}OcMqttGetDeviceShadowT;
 /**
  * @brief: use this function to send get the platform shadow data
  *
- * @param[in] deviceid: the device we registered
+ * @param[in] deviceId: the device we registered
  *
- * @param[in] payload: description as oc_mqtt_profile_p_t
+ * @param[in] shadow: description as oc_mqtt_profile_p_t
  *
- * @return :defined as en_oc_mqtt_err_code_t
+ * @return :defined as EnOcMqttErrCodeT
  *
  * */
-int oc_mqtt_profile_getshadow(char *deviceid,oc_mqtt_profile_shadowget_t *payload);
+int OcMqttGetDeviceShadow(char *deviceId,OcMqttGetDeviceShadowT *shadow);
 
 
 #define CN_OC_MQTT_EVENTTYPE_VERSIONQUERY   "version_query"
@@ -318,24 +318,24 @@ int oc_mqtt_profile_getshadow(char *deviceid,oc_mqtt_profile_shadowget_t *payloa
 
 typedef struct
 {
-    char *object_device_id;
-    char *service_id;
-    char *event_type;
-    char *event_time;
-    oc_mqtt_profile_kv_t *paras;
-}oc_mqtt_profile_event_t;
+    char *objectDeviceId;
+    char *serviceId;
+    char *eventType;
+    char *eventTime;
+    OcMqttKvT *paras;
+}OcMqttEventT;
 
 /**
  * @brief: use this fucntion to make the event
  *
  * @param:deviceid: the deviceID
  *
- * @param:event:defines as the oc_mqtt_profile_event_t
+ * @param:event:defines as the OcMqttEventT
  *
  * @return: the json string of the event.
  *
  * */
-int oc_mqtt_profile_reportevent(char *deviceid,oc_mqtt_profile_event_t *event);
+int OcMqttEventReport(char *deviceId,OcMqttEventT *event);
 
 
 

@@ -360,7 +360,7 @@ static int ec2x_oc_msg_deal(void *args,void *msg,size_t len)
 
 static int ec2x_oc_deconfig(void)
 {
-    int ret = en_oc_mqtt_err_system;
+    int ret = EN_OC_MQTT_ERR_SYSTEM;
     char cmd[256];
     char resp[64];
 
@@ -372,7 +372,7 @@ static int ec2x_oc_deconfig(void)
     {
         if(NULL != strstr(resp,"+DISCONNECT OK"))
         {
-            ret = en_oc_mqtt_err_ok;
+            ret = EN_OC_MQTT_ERR_OK;
             s_ec2x_cb.configured = 0;
             s_ec2x_cb.connected = 0;
             s_ec2x_cb.msg_dealer = NULL;
@@ -382,20 +382,20 @@ static int ec2x_oc_deconfig(void)
         {
             if(1 != sscanf(resp,"\r\n\r\n+DISCONNECT ERR:%d",&ret))
             {
-                ret = en_oc_mqtt_err_system;
+                ret = EN_OC_MQTT_ERR_SYSTEM;
             }
         }
     }
     else
     {
-        ret = en_oc_mqtt_err_system;///< not response for the at command
+        ret = EN_OC_MQTT_ERR_SYSTEM;///< not response for the at command
     }
     return ret;
 }
 
 static int ec2x_oc_config(oc_mqtt_config_t *param)
 {
-    int ret = en_oc_mqtt_err_system;
+    int ret = EN_OC_MQTT_ERR_SYSTEM;
     int bs_mode = 0;
     char cmd[256];
     char resp[64];
@@ -418,19 +418,19 @@ static int ec2x_oc_config(oc_mqtt_config_t *param)
             s_ec2x_cb.bsmode = bs_mode;
             s_ec2x_cb.msg_dealer = param->msg_deal;
             s_ec2x_cb.msg_dealer_args = param->msg_deal_arg;
-            ret = en_oc_mqtt_err_ok;
+            ret = EN_OC_MQTT_ERR_OK;
         }
         else
         {
             if(1 != sscanf(resp,"\r\n\r\n+CONNECTED ERR:%d",&ret))
             {
-                ret = en_oc_mqtt_err_system;
+                ret = EN_OC_MQTT_ERR_SYSTEM;
             }
         }
     }
     else
     {
-        ret = en_oc_mqtt_err_system;///< not response for the at command
+        ret = EN_OC_MQTT_ERR_SYSTEM;///< not response for the at command
     }
 
     return ret;
@@ -443,18 +443,18 @@ static int ec2x_oc_config(oc_mqtt_config_t *param)
 
 static int ec2x_oc_publish(char *topic,uint8_t *msg,int len,int qos)
 {
-    int ret = en_oc_mqtt_err_system;
+    int ret = EN_OC_MQTT_ERR_SYSTEM;
     char *cmd = NULL;
     char resp[64];
     int cmdlen;
 
     if(NULL != topic) ///< NOW WE DON'T SUPPORT THE TOPIC MODE:--todo
     {
-        ret = en_oc_mqtt_err_parafmt;
+        ret = EN_OC_MQTT_ERR_PARAFMT;
     }
     else if((NULL == msg) || (0 == len ) ||(qos >= en_mqtt_al_qos_err))
     {
-        ret = en_oc_mqtt_err_parafmt;
+        ret = EN_OC_MQTT_ERR_PARAFMT;
     }
     else
     {
@@ -472,26 +472,26 @@ static int ec2x_oc_publish(char *topic,uint8_t *msg,int len,int qos)
             {
                 if(NULL != strstr(resp,"+SEND OK"))
                 {
-                    ret = en_oc_mqtt_err_ok;
+                    ret = EN_OC_MQTT_ERR_OK;
                 }
                 else
                 {
                     if(1 != sscanf(resp,"\r\n\r\n+SEND ERR:%d",&ret))
                     {
-                        ret = en_oc_mqtt_err_system;
+                        ret = EN_OC_MQTT_ERR_SYSTEM;
                     }
                 }
             }
             else
             {
-                ret = en_oc_mqtt_err_system;///< not response for the at command
+                ret = EN_OC_MQTT_ERR_SYSTEM;///< not response for the at command
             }
             osal_free(cmd);
 
         }
         else
         {
-            ret = en_oc_mqtt_err_sysmem;
+            ret = EN_OC_MQTT_ERR_SYSMEM;
         }
     }
 

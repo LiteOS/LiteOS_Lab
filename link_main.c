@@ -118,9 +118,9 @@ int link_main(void *args)
 #endif
 
 //////////////////////////  DTLS PROTOCOL  /////////////////////////////////////
-#ifdef CONFIG_DTLS_AL_ENABLE
-    #include "dtls_al.h"
-    (void)dtls_al_init();
+#ifdef CONFIG_TLS_AL_ENABLE
+    #include "tls_al.h"
+    (void)TlsAlInit();
 #endif
 
 //////////////////////////  MQTT PROTOCOL  /////////////////////////////////////
@@ -167,8 +167,8 @@ int link_main(void *args)
 
 ////////////////////////////  LINK DEMO ////////////////////////////////////////
 #ifdef CONFIG_LINKDEMO_ENABLE
-    extern int standard_app_demo_main(void);
-    (void) standard_app_demo_main();
+    // extern int standard_app_demo_main(void);
+    // (void) standard_app_demo_main();
 #endif
 
     return 0;

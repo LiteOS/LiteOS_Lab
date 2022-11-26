@@ -38,15 +38,15 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdio.h>
-#include "dtls_al.h"
+#include "tls_al.h"
 #include "link_log.h"
 
 
-static const dtls_al_t  *s_dtls_al;
+static const TlsAlT  *s_dtls_al;
 
-en_dtls_al_err_t dtls_al_new(dtls_al_para_t *para,void **handle)
+EnTlsAlErrT TlsAlNew(TlsAlParaT *para,void **handle)
 {
-    en_dtls_al_err_t ret = EN_DTLS_AL_ERR_NOCONFIG;
+    EnTlsAlErrT ret = EN_TLS_AL_ERR_NOCONFIG;
     if( (NULL != s_dtls_al) && (NULL != s_dtls_al->io.io_new) )
     {
         ret = s_dtls_al->io.io_new(para, handle);
@@ -55,7 +55,7 @@ en_dtls_al_err_t dtls_al_new(dtls_al_para_t *para,void **handle)
 }
 
 
-int   dtls_al_connect(void *handle,const char *server_ip, const char *server_port, int timeout)
+int   TlsAlConnect(void *handle,const char *server_ip, const char *server_port, int timeout)
 {
     int ret = -1;
     if( (NULL != s_dtls_al) && (NULL != s_dtls_al->io.io_connect))
@@ -65,7 +65,7 @@ int   dtls_al_connect(void *handle,const char *server_ip, const char *server_por
     return ret;
 }
 
-int   dtls_al_write(void *handle, uint8_t *msg, size_t len, int timeout)
+int   TlsAlWrite(void *handle, uint8_t *msg, size_t len, int timeout)
 {
     int ret = 0;
     if( (NULL != s_dtls_al) && (NULL != s_dtls_al->io.io_write))
@@ -75,7 +75,7 @@ int   dtls_al_write(void *handle, uint8_t *msg, size_t len, int timeout)
     return ret;
 }
 
-int  dtls_al_read(void *handle, uint8_t *buf, size_t len, int timeout)
+int  TlsAlRead(void *handle, uint8_t *buf, size_t len, int timeout)
 {
     int ret = 0;
     if( (NULL != s_dtls_al) && (NULL != s_dtls_al->io.io_read))
@@ -85,9 +85,9 @@ int  dtls_al_read(void *handle, uint8_t *buf, size_t len, int timeout)
     return ret;
 }
 
-en_dtls_al_err_t   dtls_al_destroy(void *handle)
+EnTlsAlErrT   TlsAlDestroy(void *handle)
 {
-    en_dtls_al_err_t ret = EN_DTLS_AL_ERR_NOCONFIG;
+    EnTlsAlErrT ret = EN_TLS_AL_ERR_NOCONFIG;
     if( (NULL != s_dtls_al) && (NULL != s_dtls_al->io.io_destroy))
     {
         ret = s_dtls_al->io.io_destroy( handle );
@@ -96,19 +96,19 @@ en_dtls_al_err_t   dtls_al_destroy(void *handle)
 }
 
 
-int dtls_al_install(const dtls_al_t *dtls)
+int TlsAlInstall(const TlsAlT *tls)
 {
     int ret = -1;
     if (NULL == s_dtls_al )
     {
-        s_dtls_al = dtls;
+        s_dtls_al = tls;
         ret = 0;
     }
 
     return ret;
 }
 
-int dtls_al_uninstall(const char*name)
+int TlsAlUninstall(const char*name)
 {
     int ret = -1;
 
@@ -120,17 +120,17 @@ int dtls_al_uninstall(const char*name)
     return ret;
 }
 
-__attribute__((weak))  int dtls_imp_init(void)
+__attribute__((weak))  int TlsImpInit(void)
 {
     LINK_LOG_DEBUG("%s:###please implement dtls by yourself####",__FUNCTION__);
     return -1;
 }
 
-int dtls_al_init(void)
+int TlsAlInit(void)
 {
     int ret;
 
-    ret = dtls_imp_init();
+    ret = TlsImpInit();
     LINK_LOG_DEBUG("IOT_LINK:DO DTLS LOAD-IMPLEMENT RET:%d",ret);
 
     return ret;

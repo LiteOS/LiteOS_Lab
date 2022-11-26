@@ -38,12 +38,12 @@ static oc_mqtt_t *s_oc_mqtt = NULL;
 ///////////////////////OC AGENT INSTALL INTERFACE///////////////////////////////
 int oc_mqtt_register(const oc_mqtt_t *opt)
 {
-    int ret =(int)en_oc_mqtt_err_system;
+    int ret =(int)EN_OC_MQTT_ERR_SYSTEM;
 
     if(NULL != opt)
     {
         s_oc_mqtt = (oc_mqtt_t *) opt;
-        ret =(int)en_oc_mqtt_err_ok;
+        ret =(int)EN_OC_MQTT_ERR_OK;
     }
 
     return ret;
@@ -52,7 +52,7 @@ int oc_mqtt_register(const oc_mqtt_t *opt)
 //////////////////////////APPLICATION INTERFACE/////////////////////////////////
 int oc_mqtt_config(oc_mqtt_config_t *param)
 {
-    int ret =(int)en_oc_mqtt_err_system ;
+    int ret =(int)EN_OC_MQTT_ERR_SYSTEM ;
     if((NULL != s_oc_mqtt) &&(NULL != s_oc_mqtt->op.config))
     {
        ret = s_oc_mqtt->op.config(param);
@@ -63,7 +63,7 @@ int oc_mqtt_config(oc_mqtt_config_t *param)
 
 int oc_mqtt_deconfig(void)
 {
-    int ret =(int)en_oc_mqtt_err_system;
+    int ret =(int)EN_OC_MQTT_ERR_SYSTEM;
 
     if((NULL != s_oc_mqtt) \
        &&(NULL != s_oc_mqtt->op.config))
@@ -76,7 +76,7 @@ int oc_mqtt_deconfig(void)
 
 int oc_mqtt_publish(char  *topic,uint8_t *msg,int msg_len,int qos)
 {
-    int ret =(int)en_oc_mqtt_err_system;
+    int ret =(int)EN_OC_MQTT_ERR_SYSTEM;
 
     if((NULL != s_oc_mqtt) &&(NULL != s_oc_mqtt->op.publish))
     {
@@ -88,7 +88,7 @@ int oc_mqtt_publish(char  *topic,uint8_t *msg,int msg_len,int qos)
 
 int oc_mqtt_report(uint8_t *msg, int len, int qos)
 {
-    int ret =(int)en_oc_mqtt_err_system;
+    int ret =(int)EN_OC_MQTT_ERR_SYSTEM;
 
     ret = oc_mqtt_publish(NULL,msg,len,qos);
 
@@ -97,7 +97,7 @@ int oc_mqtt_report(uint8_t *msg, int len, int qos)
 
 int oc_mqtt_subscribe(char *topic,int qos)
 {
-    int ret =(int)en_oc_mqtt_err_system;
+    int ret =(int)EN_OC_MQTT_ERR_SYSTEM;
 
     if((NULL != s_oc_mqtt) &&(NULL != s_oc_mqtt->op.subscribe))
     {
@@ -110,7 +110,7 @@ int oc_mqtt_subscribe(char *topic,int qos)
 
 int oc_mqtt_unsubscribe(char *topic)
 {
-    int ret =(int)en_oc_mqtt_err_system;
+    int ret =(int)EN_OC_MQTT_ERR_SYSTEM;
 
     if((NULL != s_oc_mqtt) &&(NULL != s_oc_mqtt->op.unsubscribe))
     {
@@ -172,7 +172,7 @@ static const char *s_oc_mqtt_err_tab[] =
 
 #define CN_ERR_TABITEM     (sizeof(s_oc_mqtt_err_tab)/sizeof(const char *))
 
-const char *oc_mqtt_err(en_oc_mqtt_err_code_t code)
+const char *oc_mqtt_err(EnOcMqttErrCodeT code)
 {
     const char *ret = NULL;
     if((unsigned int)code < CN_ERR_TABITEM)

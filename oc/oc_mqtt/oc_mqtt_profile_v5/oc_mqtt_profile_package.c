@@ -37,9 +37,9 @@
 #include "oc_mqtt_profile.h"
 #include "cJSON.h"
 
-static cJSON *JsonCreateKvLst(oc_mqtt_profile_kv_t *kvlst);
+static cJSON *JsonCreateKvLst(OcMqttKvT *kvlst);
 ///< format the report data to json string mode
-static cJSON  *JsonCreateKv(oc_mqtt_profile_kv_t  *kv)
+static cJSON  *JsonCreateKv(OcMqttKvT  *kv)
 {
     cJSON  *ret = NULL;
     switch (kv->type)
@@ -60,16 +60,16 @@ static cJSON  *JsonCreateKv(oc_mqtt_profile_kv_t  *kv)
             ret = cJSON_CreateString((const char *)kv->value);
             break;
         case EN_OC_MQTT_PROFILE_VALUE_INT_ARRAY:
-            ret = cJSON_CreateIntArray((const int*)kv->value, kv->array_size);
+            ret = cJSON_CreateIntArray((const int*)kv->value, kv->arraySize);
             break;
         case EN_OC_MQTT_PROFILE_VALUE_FLOAT_ARRAY:
-            ret = cJSON_CreateFloatArray((const float*)kv->value, kv->array_size);
+            ret = cJSON_CreateFloatArray((const float*)kv->value, kv->arraySize);
             break;
         case EN_OC_MQTT_PROFILE_VALUE_DOUBLE_ARRAY:
-            ret = cJSON_CreateDoubleArray((const double*)kv->value, kv->array_size);
+            ret = cJSON_CreateDoubleArray((const double*)kv->value, kv->arraySize);
             break;
         case EN_OC_MQTT_PROFILE_VALUE_STRING_ARRAY:
-            ret = cJSON_CreateStringArray((const char**)kv->value, kv->array_size);
+            ret = cJSON_CreateStringArray((const char**)kv->value, kv->arraySize);
             break;
         case EN_OC_MQTT_PROFILE_VALUE_KV_T:
             ret = JsonCreateKvLst(kv->value);
@@ -81,7 +81,7 @@ static cJSON  *JsonCreateKv(oc_mqtt_profile_kv_t  *kv)
     return ret;
 }
 
-char *oc_mqtt_profile_package_msgup(oc_mqtt_profile_msgup_t *payload)
+char *oc_mqtt_profile_package_msgup(OcMqttMessageReportT *message)
 {
 
     char *ret = NULL;
@@ -97,9 +97,9 @@ char *oc_mqtt_profile_package_msgup(oc_mqtt_profile_msgup_t *payload)
         goto EXIT_MEM;
     }
 
-    if(NULL != payload->device_id)
+    if(NULL != message->deviceId)
     {
-        device_id = cJSON_CreateString(payload->device_id);
+        device_id = cJSON_CreateString(message->deviceId);
         if(NULL == device_id)
         {
             goto EXIT_MEM;
@@ -107,9 +107,9 @@ char *oc_mqtt_profile_package_msgup(oc_mqtt_profile_msgup_t *payload)
         cJSON_AddItemToObjectCS(root,CN_OC_JSON_KEY_OBJECTDEVICEID,device_id);
     }
 
-    if(NULL != payload->name)
+    if(NULL != message->msgName)
     {
-        msg_name = cJSON_CreateString(payload->name);
+        msg_name = cJSON_CreateString(message->msgName);
         if(NULL == msg_name)
         {
             goto EXIT_MEM;
@@ -117,9 +117,9 @@ char *oc_mqtt_profile_package_msgup(oc_mqtt_profile_msgup_t *payload)
         cJSON_AddItemToObjectCS(root,CN_OC_JSON_KEY_NAME,msg_name);
     }
 
-    if(NULL != payload->id)
+    if(NULL != message->msgId)
     {
-        msg_id = cJSON_CreateString(payload->id);
+        msg_id = cJSON_CreateString(message->msgId);
         if(NULL == msg_id)
         {
             goto EXIT_MEM;
@@ -127,7 +127,7 @@ char *oc_mqtt_profile_package_msgup(oc_mqtt_profile_msgup_t *payload)
         cJSON_AddItemToObjectCS(root,CN_OC_JSON_KEY_ID,msg_id);
     }
 
-    msg_conntent = cJSON_CreateString(payload->msg);
+    msg_conntent = cJSON_CreateString(message->msgContent);
     if(NULL == msg_conntent)
     {
         goto EXIT_MEM;
@@ -148,12 +148,12 @@ EXIT_MEM:
 }
 
 
-static cJSON *JsonCreateKvLst(oc_mqtt_profile_kv_t *kvlst)
+static cJSON *JsonCreateKvLst(OcMqttKvT *kvlst)
 {
 
     cJSON *root;
     cJSON *kv;
-    oc_mqtt_profile_kv_t  *kv_info;
+    OcMqttKvT  *kv_info;
 
     ///< build a root node
     root = cJSON_CreateObject();
@@ -192,7 +192,7 @@ EXIT_MEM:
 
 
 
-static cJSON *JsonCreateService(oc_mqtt_profile_service_t *service_info)
+static cJSON *JsonCreateService(OcMqttServiceT *service_info)
 {
 
     cJSON *root;
@@ -208,7 +208,7 @@ static cJSON *JsonCreateService(oc_mqtt_profile_service_t *service_info)
     }
 
     ///< add the service_id node to the root node
-    service_id = cJSON_CreateString(service_info->service_id);
+    service_id = cJSON_CreateString(service_info->serviceId);
     if(NULL == service_id)
     {
        goto EXIT_MEM;
@@ -216,7 +216,7 @@ static cJSON *JsonCreateService(oc_mqtt_profile_service_t *service_info)
     cJSON_AddItemToObjectCS(root,CN_OC_JSON_KEY_SERVICEID,service_id);
 
     ///< add the properties node to the root
-    properties = JsonCreateKvLst(service_info->service_property);
+    properties = JsonCreateKvLst(service_info->serviceProperty);
     if(NULL == properties)
     {
        goto EXIT_MEM;
@@ -224,9 +224,9 @@ static cJSON *JsonCreateService(oc_mqtt_profile_service_t *service_info)
     cJSON_AddItemToObjectCS(root,CN_OC_JSON_KEY_PROPERTIES,properties);
 
     ///< add the event time (optional) to the root
-    if(NULL != service_info->event_time)
+    if(NULL != service_info->eventTime)
     {
-        event_time = cJSON_CreateString(service_info->event_time);
+        event_time = cJSON_CreateString(service_info->eventTime);
         if(NULL == event_time)
         {
            goto EXIT_MEM;
@@ -246,11 +246,11 @@ EXIT_MEM:
     return root;
 }
 
-static cJSON *JsonCreateServices(oc_mqtt_profile_service_t *service_info)
+static cJSON *JsonCreateServices(OcMqttServiceT *service_info)
 {
     cJSON *services = NULL;
     cJSON *service;
-    oc_mqtt_profile_service_t  *service_tmp;
+    OcMqttServiceT  *service_tmp;
 
     ///< create the services array node
     services = cJSON_CreateArray();
@@ -284,7 +284,7 @@ EXIT_MEM:
     return services;
 }
 
-char *oc_mqtt_profile_package_propertyreport(oc_mqtt_profile_service_t *payload)
+char *oc_mqtt_profile_package_propertyreport(OcMqttServiceT *payload)
 {
     char *ret = NULL;
     cJSON *root;
@@ -389,7 +389,7 @@ EXIT_MEM:
 
 
 
-char *oc_mqtt_profile_package_propertysetresp(oc_mqtt_profile_propertysetresp_t *payload)
+char *oc_mqtt_profile_package_propertysetresp(OcMqttPropertiesSetResponseT *payload)
 {
 
     char *ret = NULL;
@@ -407,16 +407,16 @@ char *oc_mqtt_profile_package_propertysetresp(oc_mqtt_profile_propertysetresp_t 
     ///< create retcode and retdesc and add it to the root
     if(NULL != payload)
     {
-        ret_code = cJSON_CreateNumber(payload->ret_code);
+        ret_code = cJSON_CreateNumber(payload->retCode);
         if(NULL == ret_code)
         {
             goto EXIT_MEM;
         }
         cJSON_AddItemToObjectCS(root,CN_OC_JSON_KEY_RESULTCODE,ret_code);
 
-        if(NULL != payload->ret_description)
+        if(NULL != payload->retDescription)
         {
-            ret_desc = cJSON_CreateString(payload->ret_description);
+            ret_desc = cJSON_CreateString(payload->retDescription);
             if(NULL == ret_desc)
             {
                 goto EXIT_MEM;
@@ -439,7 +439,7 @@ EXIT_MEM:
 
 }
 
-char *oc_mqtt_profile_package_propertygetresp(oc_mqtt_profile_propertygetresp_t *payload)
+char *oc_mqtt_profile_package_propertygetresp(OcMqttPropertiesGetResponseT *payload)
 {
 
     char *ret = NULL;
@@ -476,7 +476,7 @@ EXIT_MEM:
 }
 
 
-char *oc_mqtt_profile_package_cmdresp(oc_mqtt_profile_cmdresp_t *payload)
+char *oc_mqtt_profile_package_cmdresp(OcMqttCommandResponseT *payload)
 {
     char *ret = NULL;
     cJSON *root;
@@ -493,16 +493,16 @@ char *oc_mqtt_profile_package_cmdresp(oc_mqtt_profile_cmdresp_t *payload)
     }
 
     ///< create retcode and retdesc and add it to the root
-    ret_code = cJSON_CreateNumber(payload->ret_code);
+    ret_code = cJSON_CreateNumber(payload->retCode);
     if(NULL == ret_code)
     {
         goto EXIT_MEM;
     }
     cJSON_AddItemToObjectCS(root,CN_OC_JSON_KEY_RESULTCODE,ret_code);
 
-    if(NULL != payload->ret_name)
+    if(NULL != payload->retName)
     {
-        ret_name = cJSON_CreateString(payload->ret_name);
+        ret_name = cJSON_CreateString(payload->retName);
         if(NULL == ret_name)
         {
             goto EXIT_MEM;
@@ -538,7 +538,7 @@ EXIT_MEM:
 
 
 
-char *oc_mqtt_profile_package_shadowget(oc_mqtt_profile_shadowget_t *payload)
+char *oc_mqtt_profile_package_shadowget(OcMqttGetDeviceShadowT *payload)
 {
     char *ret = NULL;
     cJSON *root = NULL;
@@ -552,9 +552,9 @@ char *oc_mqtt_profile_package_shadowget(oc_mqtt_profile_shadowget_t *payload)
        goto EXIT_MEM;
     }
     ///< create retcode and retdesc and add it to the root
-    if(NULL != payload->object_device_id)
+    if(NULL != payload->objectDeviceId)
     {
-        object_device_id = cJSON_CreateString(payload->object_device_id);
+        object_device_id = cJSON_CreateString(payload->objectDeviceId);
         if(NULL == object_device_id)
         {
             goto EXIT_MEM;
@@ -562,9 +562,9 @@ char *oc_mqtt_profile_package_shadowget(oc_mqtt_profile_shadowget_t *payload)
         cJSON_AddItemToObjectCS(root,CN_OC_JSON_KEY_OBJECTDEVICEID,object_device_id);
     }
 
-    if(NULL != payload->service_id)
+    if(NULL != payload->serviceId)
     {
-        service_id = cJSON_CreateString(payload->service_id);
+        service_id = cJSON_CreateString(payload->serviceId);
         if(NULL == service_id)
         {
             goto EXIT_MEM;
@@ -601,7 +601,7 @@ Topic: $oc/devices/{device_id}/sys/events/down
 }
 */
 
-char *oc_mqtt_profile_package_event(oc_mqtt_profile_event_t *payload)
+char *oc_mqtt_profile_package_event(OcMqttEventT *payload)
 {
     char *ret = NULL;
     cJSON *root;
@@ -620,8 +620,8 @@ char *oc_mqtt_profile_package_event(oc_mqtt_profile_event_t *payload)
     }
 
     ///< if the device object_device_id is not NULL then add it
-    if(payload->object_device_id != NULL){
-        objectDeviceID = cJSON_CreateString(payload->object_device_id);
+    if(payload->objectDeviceId != NULL){
+        objectDeviceID = cJSON_CreateString(payload->objectDeviceId);
         if(objectDeviceID == NULL){
             goto EXIT_MEM;
         }
@@ -640,21 +640,21 @@ char *oc_mqtt_profile_package_event(oc_mqtt_profile_event_t *payload)
     }
     cJSON_AddItemToArray(services, service);
 
-    serviceID = cJSON_CreateString(payload->service_id);
+    serviceID = cJSON_CreateString(payload->serviceId);
     if(serviceID == NULL){
         goto EXIT_MEM;
     }
     cJSON_AddItemToObject(service, CN_OC_JSON_KEY_SERVICEID,serviceID);
 
-    if(payload->event_time != NULL){
-        eventTime = cJSON_CreateString(payload->event_time);
+    if(payload->eventTime != NULL){
+        eventTime = cJSON_CreateString(payload->eventTime);
         if(eventTime == NULL){
             goto EXIT_MEM;
         }
         cJSON_AddItemToObject(service, CN_OC_JSON_KEY_EVENTTIME, eventTime);
     }
 
-    eventType = cJSON_CreateString(payload->event_type);
+    eventType = cJSON_CreateString(payload->eventType);
     if(eventType == NULL){
         goto EXIT_MEM;
     }

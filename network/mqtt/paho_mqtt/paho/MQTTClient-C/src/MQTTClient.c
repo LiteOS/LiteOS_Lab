@@ -899,7 +899,7 @@ int MQTTPublish(MQTTClient* c, const char* topicName, MQTTMessage* message)
             #ifdef CONFIG_MSG_STORAGE_ABNORMAL_SCENE_DEMO 
             else {
                 #include "oc_mqtt_profile.h"
-                oc_mqtt_profile_service_t *success_msg;
+                OcMqttServiceT *success_msg;
                 success_msg = NULL;
                 queue_pop(g_queue_msg_report_fail, (void **)&success_msg, (int) cn_osal_timeout_forever);
                 printf("hello i am xingli \n");

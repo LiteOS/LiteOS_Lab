@@ -57,7 +57,7 @@
 
 #ifdef  CONFIG_OC_MQTTV5_DEMO_TLS
 #define CN_SERVER_PORT       "8883"
-#define CN_SECURITY_TYPE     EN_DTLS_AL_SECURITY_TYPE_CERT
+#define CN_SECURITY_TYPE     EN_TLS_AL_SECURITY_TYPE_CERT
 ///< server key
 static const char s_server_ca[] =
 " -----BEGIN CERTIFICATE-----\r\n"
@@ -141,7 +141,7 @@ static const char *s_client_pk_pwd = "123456";
 
 #else
 #define CN_SERVER_PORT       "1883"
-#define CN_SECURITY_TYPE     EN_DTLS_AL_SECURITY_TYPE_NONE
+#define CN_SECURITY_TYPE     EN_TLS_AL_SECURITY_TYPE_NONE
 #endif
 
 
@@ -153,7 +153,7 @@ static const char *s_client_pk_pwd = "123456";
 #define CN_EP_PASSWD   "f62fcf47d62c4ed18913"
 #define CN_LIFE_TIME   60   ///< the platform need more
 static queue_t *s_queue_rcvmsg = NULL;   ///< this is used to cached the message
-static oc_mqtt_profile_service_t  s_device_service;
+static OcMqttServiceT  s_device_service;
 
 
 
@@ -183,51 +183,51 @@ static const char g_data_msg[] =
 
 
 //use this function to push all the message to the buffer
-static int app_msg_deal(oc_mqtt_profile_msgrcv_t *msg)
+static int app_msg_deal(OcMqttMsgRcvT *msg)
 {
     int    ret = -1;
     char  *buf;
     int    buflen;
     int    datalen = 0;
-    oc_mqtt_profile_msgrcv_t *demo_msg;
+    OcMqttMsgRcvT *demo_msg;
 
     ///< clone the message
-    buflen = sizeof(oc_mqtt_profile_msgrcv_t) + msg->msg_len + 1;///< we copy with '\0' endings
-    if(NULL != msg->request_id)
+    buflen = sizeof(OcMqttMsgRcvT) + msg->msgLen + 1;///< we copy with '\0' endings
+    if(NULL != msg->requestId)
     {
-        buflen += strlen(msg->request_id) +1; ///< ending with '\0'
+        buflen += strlen(msg->requestId) +1; ///< ending with '\0'
     }
 
     buf = osal_malloc(buflen);
     if(NULL != buf)
     {
-        demo_msg = (oc_mqtt_profile_msgrcv_t *)(uintptr_t)buf;
-        buf += sizeof(oc_mqtt_profile_msgrcv_t);
+        demo_msg = (OcMqttMsgRcvT *)(uintptr_t)buf;
+        buf += sizeof(OcMqttMsgRcvT);
         ///< copy the message and push it to the queue
         demo_msg->type = msg->type;
 
-        if(NULL != msg->request_id)
+        if(NULL != msg->requestId)
         {
-            demo_msg->request_id = buf;
-            datalen = strlen(msg->request_id);
-            (void) memcpy(buf,msg->request_id,datalen);
+            demo_msg->requestId = buf;
+            datalen = strlen(msg->requestId);
+            (void) memcpy(buf,msg->requestId,datalen);
             buf[datalen] = '\0';
             buf += (datalen+1);
         }
         else
         {
-            demo_msg->request_id = NULL;
+            demo_msg->requestId = NULL;
         }
 
-        demo_msg->msg = buf;
-        demo_msg->msg_len = msg->msg_len;
-        datalen = msg->msg_len;
-        (void) memcpy(buf,msg->msg,datalen);
+        demo_msg->msgContent = buf;
+        demo_msg->msgLen = msg->msgLen;
+        datalen = msg->msgLen;
+        (void) memcpy(buf,msg->msgContent,datalen);
         buf[datalen] = '\0';
 
         (void) printf("RCVMSG:type:%d reuqestID:%s payloadlen:%d payload:%s\n\r",\
-                (int) demo_msg->type,demo_msg->request_id==NULL?"NULL":demo_msg->request_id,\
-                demo_msg->msg_len,(char *)demo_msg->msg);
+                (int) demo_msg->type,demo_msg->requestId==NULL?"NULL":demo_msg->requestId,\
+                demo_msg->msgLen,(char *)demo_msg->msgContent);
 
         ret = queue_push(s_queue_rcvmsg,demo_msg,10);
         if(ret != 0)
@@ -240,12 +240,12 @@ static int app_msg_deal(oc_mqtt_profile_msgrcv_t *msg)
 }
 
 ///< now we deal the message here
-static int  oc_cmd_normal(oc_mqtt_profile_msgrcv_t *demo_msg)
+static int  oc_cmd_normal(OcMqttMsgRcvT *demo_msg)
 {
     static int value = 0;
-    oc_mqtt_profile_cmdresp_t  cmdresp;
-    oc_mqtt_profile_propertysetresp_t propertysetresp;
-    oc_mqtt_profile_propertygetresp_t propertygetresp;
+    OcMqttCommandResponseT  cmdresp;
+    OcMqttPropertiesSetResponseT propertysetresp;
+    OcMqttPropertiesGetResponseT propertygetresp;
 
     switch(demo_msg->type)
     {
@@ -257,20 +257,20 @@ static int  oc_cmd_normal(oc_mqtt_profile_msgrcv_t *demo_msg)
 
             ///< do the response
             cmdresp.paras = NULL;
-            cmdresp.request_id = demo_msg->request_id;
-            cmdresp.ret_code = 0;
-            cmdresp.ret_name = NULL;
-            (void)oc_mqtt_profile_cmdresp(NULL,&cmdresp);
+            cmdresp.requestId = demo_msg->requestId;
+            cmdresp.retCode = 0;
+            cmdresp.retName = NULL;
+            (void)OcMqttCommandResponse(NULL,&cmdresp);
             break;
 
         case EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_PROPERTYSET:
             ///< add your own deal here
 
             ///< do the response
-            propertysetresp.request_id = demo_msg->request_id;
-            propertysetresp.ret_code = 0;
-            propertysetresp.ret_description = NULL;
-            (void)oc_mqtt_profile_propertysetresp(NULL,&propertysetresp);
+            propertysetresp.requestId = demo_msg->requestId;
+            propertysetresp.retCode = 0;
+            propertysetresp.retDescription = NULL;
+            (void)OcMqttPropertiesSetResponse(NULL,&propertysetresp);
             break;
 
         case  EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_PROPERTYGET:
@@ -278,13 +278,13 @@ static int  oc_cmd_normal(oc_mqtt_profile_msgrcv_t *demo_msg)
 
             ///< do the response
             value  = (value+1)%100;
-            s_device_service.service_property->key = "radioValue";
-            s_device_service.service_property->value = &value;
-            s_device_service.service_property->type = EN_OC_MQTT_PROFILE_VALUE_INT;
+            s_device_service.serviceProperty->key = "radioValue";
+            s_device_service.serviceProperty->value = &value;
+            s_device_service.serviceProperty->type = EN_OC_MQTT_PROFILE_VALUE_INT;
 
-            propertygetresp.request_id = demo_msg->request_id;
+            propertygetresp.requestId = demo_msg->requestId;
             propertygetresp.services = &s_device_service;
-            (void)oc_mqtt_profile_propertygetresp(NULL,&propertygetresp);
+            (void)OcMqttPropertiesGetResponse(NULL,&propertygetresp);
             break;
         case EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_EVENT:
             break;
@@ -341,29 +341,29 @@ static int demo_userpub(void)
 
 static int demo_msgup_shortdata(void)   ///< big data test
 {
-    int ret = (int)en_oc_mqtt_err_ok;
-    oc_mqtt_profile_msgup_t msgup;
+    int ret = (int)EN_OC_MQTT_ERR_OK;
+    OcMqttMessageReportT message;
 
-    msgup.device_id = CN_EP_DEVICEID;
-    msgup.id = "54321";
-    msgup.name = "MSGUP";
-    msgup.msg = (void *)"Hello, new world";
-    msgup.msg_len = strlen(msgup.msg);
-    ret = oc_mqtt_profile_msgup(NULL,&msgup);
+    message.deviceId = CN_EP_DEVICEID;
+    message.msgId = "54321";
+    message.msgName = "MSGUP";
+    message.msgContent = (void *)"Hello, new world";
+    message.msgLen = strlen(message.msgContent);
+    ret = OcMqttMessageReport(NULL,&message);
     return ret;
 }
 
 static int demo_msgup_longdata(void)   ///< big data test
 {
-    int ret = (int)en_oc_mqtt_err_ok;
-    oc_mqtt_profile_msgup_t msgup;
+    int ret = (int)EN_OC_MQTT_ERR_OK;
+    OcMqttMessageReportT message;
 
-    msgup.device_id = CN_EP_DEVICEID;
-    msgup.id = "12345";
-    msgup.name = "MSGUP";
-    msgup.msg = (void *)g_data_msg;
-    msgup.msg_len = sizeof(g_data_msg);
-    ret = oc_mqtt_profile_msgup(NULL,&msgup);
+    message.deviceId = CN_EP_DEVICEID;
+    message.msgId = "12345";
+    message.msgName = "MSGUP";
+    message.msgContent = (void *)g_data_msg;
+    message.msgLen = sizeof(g_data_msg);
+    ret = OcMqttMessageReport(NULL,&message);
     return ret;
 }
 
@@ -373,10 +373,10 @@ static int demo_propertireport(void)
     static int value = 1;
 
     value++;
-    s_device_service.service_property->key = "radioValue";
-    s_device_service.service_property->value = &value;
-    s_device_service.service_property->type = EN_OC_MQTT_PROFILE_VALUE_INT;
-    ret = oc_mqtt_profile_propertyreport(NULL,&s_device_service);
+    s_device_service.serviceProperty->key = "radioValue";
+    s_device_service.serviceProperty->value = &value;
+    s_device_service.serviceProperty->type = EN_OC_MQTT_PROFILE_VALUE_INT;
+    ret = OcMqttPropertiesReport(NULL,&s_device_service);
 
     return ret;
 }
@@ -392,12 +392,12 @@ static int demo_pubdefault(void)
 static int demo_getshadow(void)
 {
     int ret;
-    oc_mqtt_profile_shadowget_t  payload;
-    payload.object_device_id = NULL;
-    payload.request_id = "123456789";
-    payload.service_id = NULL;
+    OcMqttGetDeviceShadowT  payload;
+    payload.objectDeviceId = NULL;
+    payload.requestId = "123456789";
+    payload.serviceId = NULL;
 
-    ret = oc_mqtt_profile_getshadow(NULL,&payload);
+    ret = OcMqttGetDeviceShadow(NULL,&payload);
     return ret;
 }
 
@@ -458,7 +458,7 @@ static void  oc_report_normal(void)
 
 static int task_rcvmsg_entry( void *args)
 {
-    oc_mqtt_profile_msgrcv_t *demo_msg;
+    OcMqttMsgRcvT *demo_msg;
     while(1)
     {
         demo_msg = NULL;
@@ -472,10 +472,10 @@ static int task_rcvmsg_entry( void *args)
     return 0;
 }
 
-void  hwoc_mqtt_log(en_oc_mqtt_log_t  logtype)
+void  hwoc_mqtt_log(EnOcMqttLogT  logtype)
 {
 
-    if(logtype == en_oc_mqtt_log_connected)
+    if(logtype == EN_OC_MQTT_LOG_CONNECTED)
     {
         (void)printf("%s:connected %d\n\r",__FUNCTION__,(int)logtype);
     }
@@ -490,37 +490,37 @@ void  hwoc_mqtt_log(en_oc_mqtt_log_t  logtype)
 static int task_reportmsg_entry(void *args)
 {
     int ret;
-    oc_mqtt_profile_connect_t  connect_para;
+    OcMqttConnectT  connectPara;
 
-    (void) memset( &connect_para, 0, sizeof(connect_para));
+    (void) memset( &connectPara, 0, sizeof(connectPara));
 
-    connect_para.boostrap =      CN_BOOT_MODE;
-    connect_para.device_id =     CN_EP_DEVICEID;
-    connect_para.device_passwd = CN_EP_PASSWD;
-    connect_para.server_addr =   CN_SERVER_IPV4;
-    connect_para.server_port =   CN_SERVER_PORT;
-    connect_para.life_time =     CN_LIFE_TIME;
-    connect_para.rcvfunc =       app_msg_deal;
-    connect_para.logfunc  = hwoc_mqtt_log;
+    connectPara.boostrap =      CN_BOOT_MODE;
+    connectPara.deviceId =     CN_EP_DEVICEID;
+    connectPara.devicePasswd = CN_EP_PASSWD;
+    connectPara.serverAddr =   CN_SERVER_IPV4;
+    connectPara.serverPort =   CN_SERVER_PORT;
+    connectPara.lifeTime =     CN_LIFE_TIME;
+    connectPara.rcvFunc =       app_msg_deal;
+    connectPara.logFunc  = hwoc_mqtt_log;
 
-    connect_para.security.type = CN_SECURITY_TYPE;
+    connectPara.security.type = CN_SECURITY_TYPE;
 
 #ifdef CONFIG_OC_MQTTV5_DEMO_TLS
-    connect_para.security.u.cert.server_ca = (uint8_t *)s_server_ca;
-    connect_para.security.u.cert.server_ca_len = sizeof(s_server_ca);
+    connectPara.security.u.cert.server_ca = (uint8_t *)s_server_ca;
+    connectPara.security.u.cert.server_ca_len = sizeof(s_server_ca);
 #ifdef CONFIG_OC_MQTTV5_TLS_BIDIRECTION
-    connect_para.device_passwd = NULL;
-    connect_para.security.u.cert.client_ca = (uint8_t *)s_client_ca;
-    connect_para.security.u.cert.client_ca_len = sizeof(s_client_ca);
-    connect_para.security.u.cert.client_pk = (uint8_t *)s_client_pk;
-    connect_para.security.u.cert.client_pk_len = sizeof(s_client_pk);
-    connect_para.security.u.cert.client_pk_pwd = (uint8_t *)s_client_pk_pwd;
-    connect_para.security.u.cert.client_pk_pwd_len = strlen(s_client_pk_pwd);
+    connectPara.device_passwd = NULL;
+    connectPara.security.u.cert.client_ca = (uint8_t *)s_client_ca;
+    connectPara.security.u.cert.client_ca_len = sizeof(s_client_ca);
+    connectPara.security.u.cert.client_pk = (uint8_t *)s_client_pk;
+    connectPara.security.u.cert.client_pk_len = sizeof(s_client_pk);
+    connectPara.security.u.cert.client_pk_pwd = (uint8_t *)s_client_pk_pwd;
+    connectPara.security.u.cert.client_pk_pwd_len = strlen(s_client_pk_pwd);
 #endif   ///<endfor bidirection
 #endif   ///<endfor tls
 
-    ret = oc_mqtt_profile_connect(&connect_para);
-    if((ret != (int)en_oc_mqtt_err_ok))
+    ret = OcMqttConnect(&connectPara);
+    if((ret != (int)EN_OC_MQTT_ERR_OK))
     {
         (void) printf("config:err :code:%d\r\n",ret);
         return -1;
@@ -535,14 +535,14 @@ static int task_reportmsg_entry(void *args)
 
 int oc_mqtt_demo_main()
 {
-    static oc_mqtt_profile_kv_t  property;
+    static OcMqttKvT  property;
     (void)printf("DO THE OC MQTT V5 DEMOS\n\r");
     s_queue_rcvmsg = queue_create("queue_rcvmsg",2,1);
     ///< initialize the service
     property.nxt   = NULL;
-    s_device_service.event_time = NULL;
-    s_device_service.service_id = "DeviceStatus";
-    s_device_service.service_property = &property;
+    s_device_service.eventTime = NULL;
+    s_device_service.serviceId = "DeviceStatus";
+    s_device_service.serviceProperty = &property;
     s_device_service.nxt = NULL;
 
     (void) osal_task_create("demo_reportmsg",task_reportmsg_entry,NULL,0x800,NULL,8);

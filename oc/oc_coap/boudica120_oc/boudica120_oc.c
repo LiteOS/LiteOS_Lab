@@ -57,7 +57,7 @@ typedef struct
     const char *bands;
 
     //initialized by the applicaiton
-    oc_config_param_t  oc_param;
+    oc_config_parm_t  oc_param;
 
     //this is the control block
     bool_t            sndenable;
@@ -596,7 +596,7 @@ static bool_t boudica120_boot(const char *plmn, const char *apn, const char *ban
 }
 
 
-static int* boudica120_oc_config(oc_config_param_t *param)
+static int* boudica120_oc_config(oc_config_parm_t *param)
 {
     int ret = en_oc_coap_err_configured;
 

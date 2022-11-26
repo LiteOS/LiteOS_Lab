@@ -94,7 +94,7 @@ int oc_lwm2m_report(char  *buf, int len, int timeout)
 }
 
 
-int oc_lwm2m_config( oc_config_param_t *param)
+int oc_lwm2m_config( oc_config_parm_t *param)
 {
     int ret = (int)en_oc_lwm2m_err_system;
 

@@ -116,12 +116,12 @@ static int ec2x_oc_msg_deal(void *args,void *msg,size_t len)
 #define CN_HMDIS_INDEX "\r\n+HMDIS OK"
 static int iot_deconfig(void)
 {
-    int ret = en_oc_mqtt_err_system;
+    int ret = EN_OC_MQTT_ERR_SYSTEM;
     char cmd[CONFIG_EC2X_CMDLEN];
 
     snprintf(cmd, CONFIG_EC2X_CMDLEN, "%s\r\n","AT+HMDIS");
     if(0 == atcmd_response(cmd,CN_HMDIS_INDEX,NULL, 0, CONFIG_EC2X_CMD_BASETIME*5)){
-        ret = en_oc_mqtt_err_ok;
+        ret = EN_OC_MQTT_ERR_OK;
     }
     return ret;
 }
@@ -129,7 +129,7 @@ static int iot_deconfig(void)
 #define CN_HMCON_INDEX    "\r\n+HMCON "
 static int iot_config(oc_mqtt_config_t *param)
 {
-    int ret = en_oc_mqtt_err_system;
+    int ret = EN_OC_MQTT_ERR_SYSTEM;
     char cmd[CONFIG_EC2X_CMDLEN];
     uint8_t cmd_resp[CONFIG_EC2X_CMDRESPLEN];
 
@@ -148,7 +148,7 @@ static int iot_config(oc_mqtt_config_t *param)
     }
     if(0 == atcmd_response(cmd,CN_HMCON_INDEX,cmd_resp, CONFIG_EC2X_CMDRESPLEN, CONFIG_EC2X_CMD_BASETIME*5)){
         if(NULL != strstr((char *)cmd_resp, "+HMCON OK")){
-            ret = en_oc_mqtt_err_ok;
+            ret = EN_OC_MQTT_ERR_OK;
             g_ec2xv5_cb.msg_dealer = param->msg_deal;
             g_ec2xv5_cb.msg_dealer_args = param->msg_deal_arg;
         }
@@ -165,7 +165,7 @@ static int iot_config(oc_mqtt_config_t *param)
 #define CN_HMPUB_INDEX  "\r\n+HMPUB OK"
 static int iot_publish(char *topic,uint8_t *msg,int len,int qos)
 {
-    int ret = en_oc_mqtt_err_system;
+    int ret = EN_OC_MQTT_ERR_SYSTEM;
     char *cmd;
     int  cmd_len;
 
@@ -185,7 +185,7 @@ static int iot_publish(char *topic,uint8_t *msg,int len,int qos)
     }
     if(cmd != NULL){
         if(0 ==  atcmd_response(cmd,CN_HMPUB_INDEX,NULL,0,CONFIG_EC2X_CMD_BASETIME*5)){
-            ret = en_oc_mqtt_err_ok;
+            ret = EN_OC_MQTT_ERR_OK;
         }
         osal_free(cmd);
     }
@@ -197,7 +197,7 @@ static int iot_publish(char *topic,uint8_t *msg,int len,int qos)
 #define CN_HMSUB_INDEX  "\r\n+HMSUB OK"
 static int iot_subscribe(char *topic,int qos)
 {
-    int ret = en_oc_mqtt_err_system;
+    int ret = EN_OC_MQTT_ERR_SYSTEM;
     char *cmd;
     int  cmd_len;
 
@@ -209,7 +209,7 @@ static int iot_subscribe(char *topic,int qos)
     if(cmd != NULL){
         snprintf(cmd, cmd_len,CN_SUB_USERTOPICMDT,qos,topic);
         if(0 ==  atcmd_response(cmd,CN_HMSUB_INDEX,NULL,0,CONFIG_EC2X_CMD_BASETIME*5)){
-            ret = en_oc_mqtt_err_ok;
+            ret = EN_OC_MQTT_ERR_OK;
         }
         osal_free(cmd);
     }
@@ -220,7 +220,7 @@ static int iot_subscribe(char *topic,int qos)
 #define CN_HMUNS_INDEX "\r\n+HMUNS OK"
 static int iot_unsubscribe(char *topic)
 {
-    int ret = en_oc_mqtt_err_system;
+    int ret = EN_OC_MQTT_ERR_SYSTEM;
     char *cmd;
     int  cmd_len;
 
@@ -233,7 +233,7 @@ static int iot_unsubscribe(char *topic)
     if(cmd != NULL){
         snprintf(cmd, cmd_len,CN_UNSUB_USERTOPICMDT,topic);
         if(0 ==  atcmd_response(cmd,CN_HMUNS_INDEX,NULL,0,CONFIG_EC2X_CMD_BASETIME*5)){
-            ret = en_oc_mqtt_err_ok;
+            ret = EN_OC_MQTT_ERR_OK;
         }
         osal_free(cmd);
     }

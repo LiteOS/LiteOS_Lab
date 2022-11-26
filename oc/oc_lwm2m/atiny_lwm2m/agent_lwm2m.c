@@ -101,7 +101,7 @@ typedef struct
 {
     atiny_device_info_t device_info;
     atiny_param_t       tiny_param;
-    oc_config_param_t   config_para;
+    oc_config_parm_t   config_para;
     void               *agent_handle;
     void               *task_handle;
 } oc_lwm2m_imp_agent_t;
@@ -700,7 +700,7 @@ static int agent_delete_object(void *handle)
     return 0;
 }
 
-static int __agent_config(oc_config_param_t *param)
+static int __agent_config(oc_config_parm_t *param)
 {
     int ret = (int ) en_oc_lwm2m_err_system;
     oc_lwm2m_imp_agent_t  *agent = NULL;

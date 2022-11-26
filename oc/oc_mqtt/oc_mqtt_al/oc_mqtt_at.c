@@ -58,9 +58,9 @@ __attribute__((weak)) void hwoc_mqtt_recvpub(const char *topic,int topiclen,uint
 }
 
 ///<ATCOMMAND:
-__attribute__((weak)) void  hwoc_mqtt_log(en_oc_mqtt_log_t  logtype)
+__attribute__((weak)) void  hwoc_mqtt_log(EnOcMqttLogT  logtype)
 {
-    if(logtype == en_oc_mqtt_log_connected)
+    if(logtype == EN_OC_MQTT_LOG_CONNECTED)
     {
         LINK_LOG_DEBUG("connected %d\n\r",(int)logtype);
     }
@@ -95,7 +95,7 @@ static int app_msg_deal(void *arg,mqtt_al_msgrcv_t *msg)
 ///< ATCOMMAND:    AT+HWOCMQTTPUBLISH=1,"PUBTOPIC",3,001020
 ///< ATRESPONSE:   +PUBLISH OK when success
 //<                +PUBLISH ERR:code
-///<               code:reference to en_oc_mqtt_err_code_t defines
+///<               code:reference to EnOcMqttErrCodeT defines
 int hwoc_mqtt_publish(int qos,char *topic,uint8_t *payload,int len)
 {
     (void)link_main(NULL);
@@ -107,7 +107,7 @@ int hwoc_mqtt_publish(int qos,char *topic,uint8_t *payload,int len)
 ///< ATCOMMAND:    AT+HWOCMQTTCONNECT=1,10,"192.168.1.20","8883","DEVICEID","DEVICEPWD"
 ///< ATRESPONSE:   +CONNECTED OK when success
 ///<               +CONNECTED ERR:code
-///<               code:reference to en_oc_mqtt_err_code_t defines
+///<               code:reference to EnOcMqttErrCodeT defines
 
 #define CN_CONNECT_TIMESPACE  2000   ///< unit:ms
 #define CN_TLS_DEFAULT_PORT   "8883"
@@ -116,7 +116,7 @@ int hwoc_mqtt_publish(int qos,char *topic,uint8_t *payload,int len)
 int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const char *port,
                                const char *deviceid, const char *devicepasswd)
 {
-    int ret = (int)en_oc_mqtt_err_parafmt;
+    int ret = (int)EN_OC_MQTT_ERR_PARAFMT;
     static unsigned long long time_last = 0;
     unsigned long long time_now;
 
@@ -151,31 +151,31 @@ int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const
     config.id = (char *)deviceid;
     config.pwd = (char *)devicepasswd;
     config.log_dealer = hwoc_mqtt_log;
-    config.security.type = EN_DTLS_AL_SECURITY_TYPE_CERT;
+    config.security.type = EN_TLS_AL_SECURITY_TYPE_CERT;
     if( NULL != s_server_ca)
     {
-        config.security.u.cert.server_ca  = (uint8_t *)s_server_ca;
-        config.security.u.cert.server_ca_len = strlen(s_server_ca) +1;///< must include the '\0'
+        config.security.u.cert.serverCa  = (uint8_t *)s_server_ca;
+        config.security.u.cert.serverCaLen = strlen(s_server_ca) +1;///< must include the '\0'
     }
 
     if(( NULL != s_client_ca ) && ((NULL != s_client_pk)))
     {
-        config.security.u.cert.client_ca  = (uint8_t *)s_client_ca;
-        config.security.u.cert.client_ca_len = strlen(s_client_ca) +1;///< must include the '\0'
+        config.security.u.cert.clientCert  = (uint8_t *)s_client_ca;
+        config.security.u.cert.clientCertLen = strlen(s_client_ca) +1;///< must include the '\0'
 
-        config.security.u.cert.client_pk = (uint8_t *)s_client_pk;
-        config.security.u.cert.client_pk_len = strlen(s_client_pk) +1;
+        config.security.u.cert.clientPriKey = (uint8_t *)s_client_pk;
+        config.security.u.cert.clientPriKeyLen = strlen(s_client_pk) +1;
 
-        config.security.u.cert.client_pk_pwd = (uint8_t *)s_client_pk_pwd;
+        config.security.u.cert.clientPriKeyPwd = (uint8_t *)s_client_pk_pwd;
         if(NULL != s_client_pk_pwd)
         {
-            config.security.u.cert.client_pk_pwd_len = strlen(s_client_pk_pwd);
+            config.security.u.cert.clientPriKeyPwdLen = strlen(s_client_pk_pwd);
         }
     }
 
     if(0 == strcmp(port,CN_NOTLS_PORT))
     {
-        config.security.type = EN_DTLS_AL_SECURITY_TYPE_NONE;
+        config.security.type = EN_TLS_AL_SECURITY_TYPE_NONE;
     }
 
     ret = oc_mqtt_config(&config);
@@ -187,7 +187,7 @@ int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const
 ///< ATCOMMAND:    AT+HWOCMQTTDISCONNECT
 ///< ATRESPONSE:   +DISCONNECT OK  when succes
 ///                +DISCONNECT ERR:code  when succes
-///<               code:reference to en_oc_mqtt_err_code_t defines
+///<               code:reference to EnOcMqttErrCodeT defines
 
 int hwoc_mqtt_disconnect(void)
 {
@@ -206,7 +206,7 @@ int hwoc_mqtt_disconnect(void)
 ///<               AT+HWOCMQTTSUBSCRIBE=0,"$oc/devices/54f107da-f251-436c-af4c-624f33b7d7b6/user/demo_sub"
 ///< ATRESPONSE:   +SUBSCRIBE OK  when succes
 ///                +SUBSCRIBE ERR:code  when failed
-///<               code:reference to en_oc_mqtt_err_code_t defines
+///<               code:reference to EnOcMqttErrCodeT defines
 int hwoc_mqtt_subscribe(int qos,char *topic)
 {
     int ret = -1;
@@ -223,7 +223,7 @@ int hwoc_mqtt_subscribe(int qos,char *topic)
 ///<               AT+HWOCMQTTUNSUBSCRIBE="$oc/devices/54f107da-f251-436c-af4c-624f33b7d7b6/user/demo_sub"
 ///< ATRESPONSE:   +UNSUBSCRIBE OK  when succes
 ///                +UNSUBSCRIBE ERR:code  when failed
-///<               code:reference to en_oc_mqtt_err_code_t defines
+///<               code:reference to EnOcMqttErrCodeT defines
 int hwoc_mqtt_unsubscribe(char *topic)
 {
     int ret = -1;
@@ -251,7 +251,7 @@ char *hwoc_mqtt_version(void)
 ///<             +HWOCMQTTSERVERCA ERR:CODE
 int hwoc_mqtt_serverca(const char *server_ca)
 {
-    int ret = (int)en_oc_mqtt_err_ok;
+    int ret = (int)EN_OC_MQTT_ERR_OK;
     (void)link_main(NULL);
 
     if(NULL != s_server_ca)
@@ -266,7 +266,7 @@ int hwoc_mqtt_serverca(const char *server_ca)
         s_server_ca = osal_strdup(server_ca);
         if( NULL == s_server_ca)
         {
-            ret = (int)en_oc_mqtt_err_sysmem;
+            ret = (int)EN_OC_MQTT_ERR_SYSMEM;
         }
     }
     return ret;
@@ -279,7 +279,7 @@ int hwoc_mqtt_serverca(const char *server_ca)
 
 int hwoc_mqtt_clientca(const char *client_ca)
 {
-    int ret = (int)en_oc_mqtt_err_ok;
+    int ret = (int)EN_OC_MQTT_ERR_OK;
     (void)link_main(NULL);
 
     if(NULL != s_client_ca)
@@ -293,7 +293,7 @@ int hwoc_mqtt_clientca(const char *client_ca)
         s_client_ca = osal_strdup(client_ca);
         if(NULL == s_client_ca)
         {
-            ret = (int)en_oc_mqtt_err_sysmem;
+            ret = (int)EN_OC_MQTT_ERR_SYSMEM;
         }
     }
 
@@ -308,7 +308,7 @@ int hwoc_mqtt_clientca(const char *client_ca)
 
 int hwoc_mqtt_clientpk(const char *client_pk, const char *client_pk_pwd)
 {
-    int ret = (int)en_oc_mqtt_err_ok;
+    int ret = (int)EN_OC_MQTT_ERR_OK;
     (void)link_main(NULL);
 
     if(NULL != s_client_pk)
@@ -328,7 +328,7 @@ int hwoc_mqtt_clientpk(const char *client_pk, const char *client_pk_pwd)
         s_client_pk = osal_strdup(client_pk);
         if(NULL == s_client_pk)
         {
-            ret = (int)en_oc_mqtt_err_sysmem;
+            ret = (int)EN_OC_MQTT_ERR_SYSMEM;
             return ret;
         }
 
@@ -340,7 +340,7 @@ int hwoc_mqtt_clientpk(const char *client_pk, const char *client_pk_pwd)
                 osal_free(s_client_pk);
                 s_client_pk = NULL;
 
-                ret = (int)en_oc_mqtt_err_sysmem;
+                ret = (int)EN_OC_MQTT_ERR_SYSMEM;
                 return ret;
             }
         }

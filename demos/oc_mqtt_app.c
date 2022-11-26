@@ -111,12 +111,12 @@ extern link_main_task_entry(void);
 
 static void deal_report_msg(report_t *report)
 {
-    oc_mqtt_profile_service_t    service;
-    oc_mqtt_profile_kv_t         temperature;
-    oc_mqtt_profile_kv_t         humidity;
-    oc_mqtt_profile_kv_t         luminance;
-    oc_mqtt_profile_kv_t         led;
-    oc_mqtt_profile_kv_t         motor;
+    OcMqttServiceT    service;
+    OcMqttKvT         temperature;
+    OcMqttKvT         humidity;
+    OcMqttKvT         luminance;
+    OcMqttKvT         led;
+    OcMqttKvT         motor;
 
     if(g_app_cb.connected != 1){
         return;
@@ -152,11 +152,11 @@ static void deal_report_msg(report_t *report)
     motor.type = EN_OC_MQTT_PROFILE_VALUE_STRING;
     motor.nxt = NULL;
 
-    oc_mqtt_profile_propertyreport(NULL,&service);
+    OcMqttPropertiesReport(NULL,&service);
     return;
 }
 //use this function to push all the message to the buffer
-static int msg_rcv_callback(oc_mqtt_profile_msgrcv_t *msg)
+static int msg_rcv_callback(OcMqttMsgRcvT *msg)
 {
     int    ret = 0;
     char  *buf;
@@ -205,7 +205,7 @@ static void deal_cmd_msg(cmd_t *cmd)
     cJSON *obj_para;
 
     int cmdret = 1;
-    oc_mqtt_profile_cmdresp_t  cmdresp;
+    OcMqttCommandResponseT  cmdresp;
     obj_root = cJSON_Parse(cmd->payload);
     if(NULL == obj_root){
         goto EXIT_JSONPARSE;
@@ -267,28 +267,28 @@ EXIT_CMDOBJ:
 EXIT_JSONPARSE:
     ///< do the response
     cmdresp.paras = NULL;
-    cmdresp.request_id = cmd->request_id;
-    cmdresp.ret_code = cmdret;
-    cmdresp.ret_name = NULL;
-    (void)oc_mqtt_profile_cmdresp(NULL,&cmdresp);
+    cmdresp.requestId = cmd->request_id;
+    cmdresp.retCode = cmdret;
+    cmdresp.retName = NULL;
+    (void)OcMqttCommandResponse(NULL,&cmdresp);
     return;
 }
 
 static void deal_conn_msg(void)
 {
     int ret;
-    oc_mqtt_profile_connect_t  connect_para;
-    (void) memset( &connect_para, 0, sizeof(connect_para));
+    OcMqttConnectT  connectPara;
+    (void) memset( &connectPara, 0, sizeof(connectPara));
 
-    connect_para.boostrap =      0;
-    connect_para.device_id =     CONFIG_APP_DEVICEID;
-    connect_para.device_passwd = CONFIG_APP_DEVICEPWD;
-    connect_para.server_addr =   CONFIG_APP_SERVERIP;
-    connect_para.server_port =   CONFIG_APP_SERVERPORT;
-    connect_para.life_time =     CONFIG_APP_LIFETIME;
-    connect_para.rcvfunc =       msg_rcv_callback;
-    connect_para.security.type = EN_DTLS_AL_SECURITY_TYPE_NONE;
-    ret = oc_mqtt_profile_connect(&connect_para);
+    connectPara.boostrap =      0;
+    connectPara.deviceId =      CONFIG_APP_DEVICEID;
+    connectPara.devicePasswd =  CONFIG_APP_DEVICEPWD;
+    connectPara.serverAddr =    CONFIG_APP_SERVERIP;
+    connectPara.serverPort =    CONFIG_APP_SERVERPORT;
+    connectPara.lifeTime =      CONFIG_APP_LIFETIME;
+    connectPara.rcvFunc =       msg_rcv_callback;
+    connectPara.security.type = EN_TLS_AL_SECURITY_TYPE_NONE;
+    ret = OcMqttConnect(&connectPara);
 
 #ifdef CONFIG_BACKOFF_RECNONNECT
     // a simple reconnection avoidance algorithm demo
@@ -297,7 +297,7 @@ static void deal_conn_msg(void)
     int max_back_off = 30 * 1000;
     int retry_times = 0;
     int max_retry_times = 20;
-    while ((int)en_oc_mqtt_err_ok != ret && (int)en_oc_mqtt_err_conuserpwd != ret) {
+    while ((int)EN_OC_MQTT_ERR_OK != ret && (int)EN_OC_MQTT_ERR_CONUSERPWD != ret) {
         int low_bound = (int) default_back_off * 0.8;
         int high_bound = (int) default_back_off * 1.0;
         int random_back_off = (int) rand() % (high_bound - low_bound);
@@ -308,11 +308,11 @@ static void deal_conn_msg(void)
         if (retry_times > max_retry_times) {
             retry_times = 0;
         }
-        ret = oc_mqtt_profile_connect(&connect_para);
+        ret = OcMqttConnect(&connectPara);
     }
 #endif
 
-    if((int)en_oc_mqtt_err_ok == ret){
+    if((int)EN_OC_MQTT_ERR_OK == ret){
         g_app_cb.connected = 1;
     }
     return;
@@ -321,8 +321,8 @@ static void deal_conn_msg(void)
 static void deal_disconn_msg(void)
 {
     int ret;
-    ret = oc_mqtt_profile_disconnect();
-    if((int)en_oc_mqtt_err_ok == ret){
+    ret = OcMqttDisconnect();
+    if((int)EN_OC_MQTT_ERR_OK == ret){
         g_app_cb.connected = 0;
     }
     return;
@@ -360,10 +360,10 @@ static int task_main_entry( void *args)
 #ifdef CONFIG_MSG_STORAGE_ABNORMAL_SCENE_DEMO
 void push_msg_into_queue(report_t *report)
 {
-    oc_mqtt_profile_service_t service;
-    oc_mqtt_profile_kv_t temperature;
-    oc_mqtt_profile_kv_t humidity;
-    oc_mqtt_profile_kv_t luminance;
+    OcMqttServiceT service;
+    OcMqttKvT temperature;
+    OcMqttKvT humidity;
+    OcMqttKvT luminance;
 
     service.event_time = NULL;
     service.service_id = "Agriculture";

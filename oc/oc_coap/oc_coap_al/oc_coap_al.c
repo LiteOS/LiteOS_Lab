@@ -53,7 +53,7 @@ typedef struct
 {
     void                   *handle;
     const oc_coap_opt_t    *ops;
-    oc_config_param_t       param;
+    oc_config_parm_t       param;
 }oc_coap_context_t;
 
 
@@ -104,7 +104,7 @@ int oc_coap_report(void *context, char  *buf, int len)
 }
 
 
-void *oc_coap_config(oc_config_param_t *param)
+void *oc_coap_config(oc_config_parm_t *param)
 {
     void *ret = NULL;
     oc_coap_context_t  *oc_coap;
