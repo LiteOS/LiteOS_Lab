@@ -38,7 +38,7 @@
 #include <unistd.h>
 
 #include "cJSON.h"
-#include "dtls_al.h"
+#include "tls_al.h"
 #include "mqtt_al.h"
 #include "oc_mqtt_al.h"
 #include "oc_mqtt_profile.h"
@@ -46,7 +46,7 @@
 #include "iot_config.h"
 #include "securec.h"
 
-//#define CONFIG_OC_MQTTV5_DEMO_TLS 1
+#define CONFIG_OC_MQTTV5_DEMO_TLS 1
 
 #ifdef CONFIG_OC_MQTTV5_BS
 #define CN_SERVER_IPV4         "iot-bs.cn-north-4.myhuaweicloud.com"
@@ -60,7 +60,7 @@
 
 #ifdef CONFIG_OC_MQTTV5_DEMO_TLS
 #define CN_SERVER_PORT "8883"
-#define CN_SECURITY_TYPE EN_DTLS_AL_SECURITY_TYPE_CERT
+#define CN_SECURITY_TYPE EN_TLS_AL_SECURITY_TYPE_CERT
 
 ///< server key
 static const char s_server_ca[] =
@@ -145,7 +145,7 @@ static const char *s_client_pk_pwd = "123456";
 
 #else
 #define CN_SERVER_PORT "1883"
-#define CN_SECURITY_TYPE EN_DTLS_AL_SECURITY_TYPE_NONE
+#define CN_SECURITY_TYPE EN_TLS_AL_SECURITY_TYPE_NONE
 #endif
 
 #define CN_APP_DEVICEID  "60bf519cb86d7b02bc518aa9_202106081919" // "6364ba6d21819d54ca312b_mqtt_tiny_sdk"  // 替换为注册设备后生成的deviceid

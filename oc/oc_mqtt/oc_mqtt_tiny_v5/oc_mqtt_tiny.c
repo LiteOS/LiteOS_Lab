@@ -362,13 +362,13 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb, oc_mqtt_config_t *confi
     int mem_len = 0;
     char *mem_buf = NULL;
 
-    if (config->security.type == EN_DTLS_AL_SECURITY_TYPE_CERT) {
+    if (config->security.type == EN_TLS_AL_SECURITY_TYPE_CERT) {
         mem_len += config->security.u.cert.server_ca_len + config->security.u.cert.client_ca_len +
             config->security.u.cert.client_pk_len + config->security.u.cert.client_pk_pwd_len;
         if (NULL != config->security.u.cert.server_name) {
             mem_len += strlen(config->security.u.cert.server_name) + 1;
         }
-    } else if (config->security.type == EN_DTLS_AL_SECURITY_TYPE_PSK) {
+    } else if (config->security.type == EN_TLS_AL_SECURITY_TYPE_PSK) {
         mem_len += config->security.u.psk.psk_id_len + config->security.u.psk.psk_key_len;
     }
 
@@ -432,7 +432,7 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb, oc_mqtt_config_t *confi
     mem_buf += strlen(config->server_port) + 1;
 
     cb->config.security.type = config->security.type;
-    if (config->security.type == EN_DTLS_AL_SECURITY_TYPE_CERT) {
+    if (config->security.type == EN_TLS_AL_SECURITY_TYPE_CERT) {
         if (0 != config->security.u.cert.server_ca_len) {
             cb->config.security.u.cert.server_ca_len = config->security.u.cert.server_ca_len;
             (void)memcpy(mem_buf, config->security.u.cert.server_ca, config->security.u.cert.server_ca_len);
@@ -1067,12 +1067,12 @@ static int tiny_config(oc_mqtt_config_t *config)
             return ret;
         }
 
-        if ((config->security.type != EN_DTLS_AL_SECURITY_TYPE_CERT) &&
-            (config->security.type != EN_DTLS_AL_SECURITY_TYPE_NONE)) { // /< we only suport the two
+        if ((config->security.type != EN_TLS_AL_SECURITY_TYPE_CERT) &&
+            (config->security.type != EN_TLS_AL_SECURITY_TYPE_NONE)) { // /< we only suport the two
             return ret;
         }
 
-        if (config->security.type == EN_DTLS_AL_SECURITY_TYPE_CERT) {
+        if (config->security.type == EN_TLS_AL_SECURITY_TYPE_CERT) {
             if ((NULL != config->security.u.cert.client_ca) && (NULL != config->security.u.cert.client_pk)) {
                 cert_mode = 1;
             }

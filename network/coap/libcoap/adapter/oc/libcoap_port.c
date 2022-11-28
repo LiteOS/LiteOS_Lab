@@ -565,7 +565,7 @@ static void message_handler(struct coap_context_t *ctx, coap_session_t *session,
 int dtls_setup(coap_al_initpara_t *initparam, int client_or_server)
 {
     int ret;
-    dtls_shakehand_info_s info;
+    tls_shakehand_info_s info;
     dtls_establish_info_s establish_info;
 
     establish_info.psk_or_cert = VERIFY_WITH_PSK;
@@ -595,10 +595,10 @@ int dtls_setup(coap_al_initpara_t *initparam, int client_or_server)
         info.timeout = DTLS_UDP_CLIENT_SHAKEHAND_TIMEOUT;
     }
 
-    ret = dtls_shakehand(initparam->ssl, &info);
+    ret = tls_shakehand(initparam->ssl, &info);
 
     if (ret != 0) {
-        dtls_ssl_destroy((mbedtls_ssl_context *)initparam->ssl);
+        tls_ssl_destroy((mbedtls_ssl_context *)initparam->ssl);
         initparam->ssl = NULL;
         return -1;
     }

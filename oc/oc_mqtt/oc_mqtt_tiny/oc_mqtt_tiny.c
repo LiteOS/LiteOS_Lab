@@ -361,7 +361,7 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb, oc_mqtt_config_t *confi
     }
 
     cb->config.security.type = config->security.type;
-    if (config->security.type == EN_DTLS_AL_SECURITY_TYPE_CERT) {
+    if (config->security.type == EN_TLS_AL_SECURITY_TYPE_CERT) {
         cb->config.security.u.cert.server_ca = (uint8_t *)s_oc_mqtt_ca_crt;
         cb->config.security.u.cert.server_ca_len = sizeof(s_oc_mqtt_ca_crt);
     }

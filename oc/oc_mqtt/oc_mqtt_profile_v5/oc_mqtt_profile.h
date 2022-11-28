@@ -132,7 +132,7 @@ typedef struct {
     char *device_id;
     char *device_passwd;
     char *scope_id;
-    dtls_al_security_t security;
+    tls_al_security_t security;
 
     fn_oc_mqtt_profile_rcvdeal rcvfunc;
     fn_oc_mqtt_log logfunc;

@@ -150,7 +150,7 @@ int connection_connect_dtls(connection_t *connP, security_instance_t *targetP, c
     int client_or_server)
 {
     int ret;
-    dtls_shakehand_info_s info;
+    tls_shakehand_info_s info;
     dtls_establish_info_s establish_info;
     establish_info.psk_or_cert = VERIFY_WITH_PSK;
     establish_info.udp_or_tcp = MBEDTLS_NET_PROTO_UDP;
@@ -189,14 +189,14 @@ int connection_connect_dtls(connection_t *connP, security_instance_t *targetP, c
 #endif
     }
 
-    ret = dtls_shakehand(connP->net_context, &info);
+    ret = tls_shakehand(connP->net_context, &info);
 #ifdef LWM2M_BOOTSTRAP
     timer_stop(&connP->server_triger_timer);
 #endif
 
     if (0 != ret) {
         ATINY_LOG(LOG_INFO, "ret is %d in connection_create", ret);
-        dtls_ssl_destroy((mbedtls_ssl_context *)connP->net_context);
+        tls_ssl_destroy((mbedtls_ssl_context *)connP->net_context);
         connP->net_context = NULL;
         return COAP_500_INTERNAL_SERVER_ERROR;
     }
@@ -410,7 +410,7 @@ void connection_free(connection_t *connP)
 #ifdef WITH_DTLS
 
     if (true == connP->dtls_flag) {
-        dtls_ssl_destroy(connP->net_context);
+        tls_ssl_destroy(connP->net_context);
     } else
 #endif
     {
@@ -489,7 +489,7 @@ int lwm2m_buffer_recv(void *sessionH, uint8_t *buffer, size_t length, uint32_t t
 
     if (true == connP->dtls_flag) {
         // security
-        ret = dtls_read(connP->net_context, buffer, length, timeout);
+        ret = tls_read(connP->net_context, buffer, length, timeout);
 
         if (0 == ret) {
             inc_connection_stat(connP, CONNECTION_RECV_ERR);
@@ -549,7 +549,7 @@ uint8_t lwm2m_buffer_send(void *sessionH, uint8_t *buffer, size_t length, void *
 
     if (true == connP->dtls_flag) {
         // security
-        ret = dtls_write(connP->net_context, buffer, length);
+        ret = tls_write(connP->net_context, buffer, length);
 
         if (0 == ret) {
             inc_connection_stat(connP, CONNECTION_SEND_ERR);

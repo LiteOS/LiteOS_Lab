@@ -122,7 +122,7 @@ int handle_cmd_request(coap_msg_t *rcvmsg, coap_msg_t *outmsg)
 int dtls_setup(coap_al_initpara_t *initparam, int client_or_server)
 {
     int ret;
-    dtls_shakehand_info_s info;
+    tls_shakehand_info_s info;
     dtls_establish_info_s establish_info;
 
     establish_info.psk_or_cert = VERIFY_WITH_PSK;
@@ -152,10 +152,10 @@ int dtls_setup(coap_al_initpara_t *initparam, int client_or_server)
         info.timeout = DTLS_UDP_CLIENT_SHAKEHAND_TIMEOUT;
     }
 
-    ret = dtls_shakehand(initparam->ssl, &info);
+    ret = tls_shakehand(initparam->ssl, &info);
 
     if (ret != 0) {
-        dtls_ssl_destroy((mbedtls_ssl_context *)initparam->ssl);
+        tls_ssl_destroy((mbedtls_ssl_context *)initparam->ssl);
         initparam->ssl = NULL;
         return LITECOAP_NG;
     }
@@ -173,7 +173,7 @@ static int __tls_read(mbedtls_ssl_context *ssl, unsigned char *buffer, int len, 
         return -1;
     }
 
-    rcvlen = dtls_read(ssl,buffer,len, timeout);
+    rcvlen = tls_read(ssl,buffer,len, timeout);
 
     if(rcvlen == 0)
     {
@@ -200,7 +200,7 @@ static int __tls_write(mbedtls_ssl_context *ssl, unsigned char *buffer, int len,
         return -1;
     }
 
-    sndlen = dtls_write(ssl,buffer,len);
+    sndlen = tls_write(ssl,buffer,len);
 
     if(sndlen == 0)
     {

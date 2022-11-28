@@ -3,6 +3,7 @@
         "iot_config.h": "c",
         "sinn_client.h": "c",
         "oc_lwm2m_al.h": "c",
-        "oc_mqtt_profile.h": "c"
+        "oc_mqtt_profile.h": "c",
+        "tls_al.h": "c"
     }
 }

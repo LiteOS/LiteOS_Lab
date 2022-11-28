@@ -58,7 +58,7 @@
 
 #ifdef CONFIG_OC_MQTTV5_DEMO_TLS
 #define CN_SERVER_PORT "8883"
-#define CN_SECURITY_TYPE EN_DTLS_AL_SECURITY_TYPE_CERT
+#define CN_SECURITY_TYPE EN_TLS_AL_SECURITY_TYPE_CERT
 // /< server key
 static const char s_server_ca[] = " -----BEGIN CERTIFICATE-----\r\n"
     "MIIDrzCCApegAwIBAgIQCDvgVpBCRrGhdWrJWZHHSjANBgkqhkiG9w0BAQUFADBh\r\n"
@@ -139,7 +139,7 @@ static const char *s_client_pk_pwd = "123456";
 
 #else
 #define CN_SERVER_PORT "1883"
-#define CN_SECURITY_TYPE EN_DTLS_AL_SECURITY_TYPE_NONE
+#define CN_SECURITY_TYPE EN_TLS_AL_SECURITY_TYPE_NONE
 #endif
 
 #ifndef CONFIG_OCMQTTV5_DEMO_REPORTCYCLE

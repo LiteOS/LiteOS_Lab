@@ -351,7 +351,7 @@ int litecoap_sal_send(void *handle, char *buf, int size)
         return LITECOAP_SOCKET_HANDLER_ERR;
     }
 #ifdef WITH_DTLS
-    n = dtls_write((mbedtls_ssl_context *)(res->ssl), (unsigned char *)buf, size);
+    n = tls_write((mbedtls_ssl_context *)(res->ssl), (unsigned char *)buf, size);
 #else
     n = sal_sendto(res->fd, buf, size, 0, (struct sockaddr *)&res->remoteAddr, sizeof(struct sockaddr_in));
 #endif
@@ -395,7 +395,7 @@ int litecoap_sal_read(void *handle, char *buf, int size)
     fromLen = sizeof(fromAddr);
 
 #ifdef WITH_DTLS
-    n = dtls_read((mbedtls_ssl_context *)(res->ssl), (unsigned char *)buf, size, 1000);
+    n = tls_read((mbedtls_ssl_context *)(res->ssl), (unsigned char *)buf, size, 1000);
 #else
     n = sal_recvfrom(res->fd, buf, size, 0, (struct sockaddr *)&fromAddr, &fromLen);
 #endif

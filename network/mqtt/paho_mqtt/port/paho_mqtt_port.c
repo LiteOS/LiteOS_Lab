@@ -82,7 +82,7 @@ static int __tls_read(void *ssl, unsigned char *buffer, int len, int timeout)
         return -1;
     }
 
-    rcvlen = dtls_al_read(ssl, buffer, len, timeout);
+    rcvlen = tls_al_read(ssl, buffer, len, timeout);
 
     if (rcvlen == 0) {
         ret = -1;
@@ -104,7 +104,7 @@ static int __tls_write(void *ssl, unsigned char *buffer, int len, int timeout)
         return -1;
     }
 
-    sndlen = dtls_al_write(ssl, buffer, len, timeout);
+    sndlen = tls_al_write(ssl, buffer, len, timeout);
 
     if (sndlen == 0) {
         ret = -1;
@@ -124,26 +124,26 @@ static int __tls_connect(Network *n, const char *addr, int port)
 
     void *handle = NULL;
 
-    dtls_al_para_t para;
+    tls_al_para_t para;
 
     char port_buf[PORT_BUF_LEN];
 
     (void)memset(&para, 0, sizeof(para));
 
-    para.security.type = EN_DTLS_AL_SECURITY_TYPE_CERT;
+    para.security.type = EN_TLS_AL_SECURITY_TYPE_CERT;
     para.istcp = 1;
     para.isclient = 1;
     para.security = n->arg;
 
-    if (EN_DTLS_AL_ERR_OK != dtls_al_new(&para, &handle)) {
+    if (EN_TLS_AL_ERR_OK != tls_al_new(&para, &handle)) {
         return ret;
     }
 
     (void)snprintf(port_buf, PORT_BUF_LEN, "%d", port);
 
-    ret = dtls_al_connect(handle, addr, port_buf, CONFIG_PAHO_CONNECT_TIMEOUT);
-    if (ret != EN_DTLS_AL_ERR_OK) {
-        dtls_al_destroy(handle);
+    ret = tls_al_connect(handle, addr, port_buf, CONFIG_PAHO_CONNECT_TIMEOUT);
+    if (ret != EN_TLS_AL_ERR_OK) {
+        tls_al_destroy(handle);
 
         ret = -1;
         return ret;
@@ -158,7 +158,7 @@ static int __tls_connect(Network *n, const char *addr, int port)
 static void __tls_disconnect(void *ctx)
 {
     if (NULL != ctx) {
-        dtls_al_destroy(ctx);
+        tls_al_destroy(ctx);
     }
 
     return;
@@ -275,7 +275,7 @@ static int __io_read(Network *n, unsigned char *buffer, int len, int timeout_ms)
 {
     int ret = -1;
 
-    if (n->arg.type == EN_DTLS_AL_SECURITY_TYPE_NONE) {
+    if (n->arg.type == EN_TLS_AL_SECURITY_TYPE_NONE) {
         ret = __socket_read(n->ctx, buffer, len, timeout_ms);
     } else {
         ret = __tls_read(n->ctx, buffer, len, timeout_ms);
@@ -288,7 +288,7 @@ static int __io_write(Network *n, unsigned char *buffer, int len, int timeout_ms
 {
     int ret = -1;
 
-    if (n->arg.type == EN_DTLS_AL_SECURITY_TYPE_NONE) {
+    if (n->arg.type == EN_TLS_AL_SECURITY_TYPE_NONE) {
         ret = __socket_write(n->ctx, buffer, len, timeout_ms);
     } else {
         ret = __tls_write(n->ctx, buffer, len, timeout_ms);
@@ -304,7 +304,7 @@ static int __io_connect(Network *n, const char *addr, int port)
         return -1;
     }
 
-    if (n->arg.type == EN_DTLS_AL_SECURITY_TYPE_NONE) {
+    if (n->arg.type == EN_TLS_AL_SECURITY_TYPE_NONE) {
         ret = __socket_connect(n, addr, port);
     } else {
         ret = __tls_connect(n, (const char *)addr, port);
@@ -314,7 +314,7 @@ static int __io_connect(Network *n, const char *addr, int port)
 
 static void __io_disconnect(Network *n)
 {
-    if (n->arg.type == EN_DTLS_AL_SECURITY_TYPE_NONE) {
+    if (n->arg.type == EN_TLS_AL_SECURITY_TYPE_NONE) {
         __socket_disconnect(n->ctx);
     } else {
         __tls_disconnect(n->ctx);
@@ -431,7 +431,7 @@ static void *__connect(mqtt_al_conpara_t *conparam)
     n->mqttwrite = mqtt_io_write;
 
     if (NULL == conparam->security) {
-        n->arg.type = EN_DTLS_AL_SECURITY_TYPE_NONE;
+        n->arg.type = EN_TLS_AL_SECURITY_TYPE_NONE;
     } else {
         n->arg = *conparam->security;
     }

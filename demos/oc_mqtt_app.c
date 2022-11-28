@@ -279,7 +279,7 @@ static void deal_conn_msg(void)
     connect_para.server_port = CONFIG_APP_SERVERPORT;
     connect_para.life_time = CONFIG_APP_LIFETIME;
     connect_para.rcvfunc = msg_rcv_callback;
-    connect_para.security.type = EN_DTLS_AL_SECURITY_TYPE_NONE;
+    connect_para.security.type = EN_TLS_AL_SECURITY_TYPE_NONE;
     ret = oc_mqtt_profile_connect(&connect_para);
 
 #ifdef CONFIG_BACKOFF_RECNONNECT

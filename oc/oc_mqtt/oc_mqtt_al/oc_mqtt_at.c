@@ -137,7 +137,7 @@ int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const
     config.id = (char *)deviceid;
     config.pwd = (char *)devicepasswd;
     config.log_dealer = hwoc_mqtt_log;
-    config.security.type = EN_DTLS_AL_SECURITY_TYPE_CERT;
+    config.security.type = EN_TLS_AL_SECURITY_TYPE_CERT;
     if (NULL != s_server_ca) {
         config.security.u.cert.server_ca = (uint8_t *)s_server_ca;
         config.security.u.cert.server_ca_len = strlen(s_server_ca) + 1; // /< must include the '\0'
@@ -157,7 +157,7 @@ int hwoc_mqtt_connect(int bsmode, unsigned short lifetime, const char *ip, const
     }
 
     if (0 == strcmp(port, CN_NOTLS_PORT)) {
-        config.security.type = EN_DTLS_AL_SECURITY_TYPE_NONE;
+        config.security.type = EN_TLS_AL_SECURITY_TYPE_NONE;
     }
 
     ret = oc_mqtt_config(&config);

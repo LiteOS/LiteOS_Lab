@@ -65,7 +65,7 @@ int ThreadStart(Thread *thread, void (*fn)(void *), void *arg);
 
 typedef struct Network {
     void *ctx;                      ///< if it is tls, then it is tls context, else it is socket fd
-    dtls_al_security_t arg;
+    tls_al_security_t arg;
     int (*mqttread) (struct Network*, unsigned char*, int, int);
     int (*mqttwrite) (struct Network*, unsigned char*, int, int);
 } Network;

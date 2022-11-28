@@ -111,10 +111,10 @@ int link_main(void *args)
     (void)link_tcpip_init();
 #endif
 
-//////////////////////////  DTLS PROTOCOL  /////////////////////////////////////
-#ifdef CONFIG_DTLS_AL_ENABLE
-#include "dtls_al.h"
-    (void)dtls_al_init();
+//////////////////////////  TLS PROTOCOL  /////////////////////////////////////
+#ifdef CONFIG_TLS_AL_ENABLE
+#include "tls_al.h"
+    (void)tls_al_init();
 #endif
 
 //////////////////////////  MQTT PROTOCOL  /////////////////////////////////////

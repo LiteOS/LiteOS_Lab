@@ -55,11 +55,11 @@ static int __sinn_sock_connect(sinn_connection_t *nc)
     mbedtls_ssl_context *ssl;
     sinn_ssl_param_t *ssl_param;
     sinn_connect_param_t *conn_param;
-    dtls_shakehand_info_s shakehand_info;
+    tls_shakehand_info_s shakehand_info;
     dtls_establish_info_s establish_info;
     char port_buf[PORT_BUF_LEN];
 
-    (void) memset(&shakehand_info, 0, sizeof(dtls_shakehand_info_s));
+    (void) memset(&shakehand_info, 0, sizeof(tls_shakehand_info_s));
     conn_param = (sinn_connect_param_t *)(nc->user_data);
     ssl_param = &conn_param->ssl_param;
     if (ssl_param->type == e_sinn_ssl_type_psk)
@@ -92,7 +92,7 @@ static int __sinn_sock_connect(sinn_connection_t *nc)
     snprintf(port_buf, PORT_BUF_LEN, "%d", nc->server_port);
     shakehand_info.u.c.port = port_buf;
 
-    rc = dtls_shakehand(ssl, &shakehand_info);
+    rc = tls_shakehand(ssl, &shakehand_info);
     if(!rc)
     {
         mbedtls_net_context *nfd;
@@ -175,7 +175,7 @@ static int __sinn_sock_send(sinn_connection_t *nc, const void *buf, size_t len)
         return -1;
     }
 
-    sndlen = dtls_write(nc->ssl_handler, buf, len);
+    sndlen = tls_write(nc->ssl_handler, buf, len);
 
     if(sndlen == 0)
     {
@@ -203,7 +203,7 @@ static int __sinn_sock_recv(sinn_connection_t *nc, void *buf, size_t len)
         return -1;
     }
 
-    rcvlen = dtls_read(nc->ssl_handler,buf,len, 1000);
+    rcvlen = tls_read(nc->ssl_handler,buf,len, 1000);
 
     if(rcvlen == 0)
     {

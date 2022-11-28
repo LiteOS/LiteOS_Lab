@@ -38,7 +38,7 @@
 #include <string.h>
 #include "link_log.h"
 #include "osal.h"
-#include "dtls_al.h"
+#include "tls_al.h"
 #include "ota_img.h"
 #include "ota_flag.h"
 
@@ -206,7 +206,7 @@ static int loop_netwrite(void *handle,const uint8_t *buffer, int len,uint32_t ti
     const uint8_t *data = buffer;
     while(len > 0)
     {
-        sndret = dtls_al_write(handle,(uint8_t *)data,len,timeout);
+        sndret = tls_al_write(handle,(uint8_t *)data,len,timeout);
         if(sndret > 0)
         {
             len -= sndret;
@@ -226,7 +226,7 @@ static int loop_netread(void *handle,uint8_t *buffer, int len,uint32_t timeout)
     const uint8_t *data = buffer;
     while(len > 0)
     {
-        rcvret = dtls_al_read(handle,(uint8_t *)data,len,timeout);
+        rcvret = tls_al_read(handle,(uint8_t *)data,len,timeout);
         if(rcvret > 0)
         {
             len -= rcvret;
@@ -386,7 +386,7 @@ static int https_filedownload(ota_https_para_t  *param,http_section_t *section)
     int ret = 1;
     int file_off;
     int file_lenleft;
-    dtls_al_para_t dtls_para;
+    tls_al_para_t dtls_para;
     void *handle = NULL;
     int try_times = 0;
 
@@ -409,20 +409,20 @@ static int https_filedownload(ota_https_para_t  *param,http_section_t *section)
         try_times++;
 
         (void) memset( &dtls_para,0, sizeof(dtls_para));
-        dtls_para.security.type = EN_DTLS_AL_SECURITY_TYPE_CERT;
+        dtls_para.security.type = EN_TLS_AL_SECURITY_TYPE_CERT;
         dtls_para.istcp = 1;
         dtls_para.isclient = 1;
         dtls_para.security.u.cert.server_ca = (uint8_t *)g_https_serverca;
         dtls_para.security.u.cert.server_ca_len = sizeof(g_https_serverca);
 
-        if(EN_DTLS_AL_ERR_OK != dtls_al_new(&dtls_para,&handle))
+        if(EN_TLS_AL_ERR_OK != tls_al_new(&dtls_para,&handle))
         {
             LINK_LOG_ERROR("TLS HANDLE BUILD ERR");
             continue;
         }
 
-        ret = dtls_al_connect( handle, section->host, section->port, CONFIG_HTTPS_DOWNLOADING_RWTIMEOUT);
-        if (ret != EN_DTLS_AL_ERR_OK)
+        ret = tls_al_connect( handle, section->host, section->port, CONFIG_HTTPS_DOWNLOADING_RWTIMEOUT);
+        if (ret != EN_TLS_AL_ERR_OK)
         {
             LINK_LOG_ERROR("TLS CONNECT ERR");
             goto EXIT_TLSCONNECT;
@@ -450,7 +450,7 @@ static int https_filedownload(ota_https_para_t  *param,http_section_t *section)
         }
 
 EXIT_TLSCONNECT:
-        dtls_al_destroy(handle);
+        tls_al_destroy(handle);
     }
 
     (void)ota_img_flush(param->ota_type, EN_OTA_IMG_DOWNLOAD);

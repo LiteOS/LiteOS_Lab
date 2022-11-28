@@ -88,7 +88,7 @@ typedef struct {
     char *server_addr;         // /< server address:domain name or ip address
     char *server_port;         // /< server port:
     // /< define for the tls
-    dtls_al_security_t security; // /< used for the transport
+    tls_al_security_t security; // /< used for the transport
     // /< define for the mqtt
     char *id;
     char *pwd;

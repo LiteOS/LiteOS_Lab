@@ -20,7 +20,7 @@ IoT Device SDK Tiny具备可裁剪特性，可以根据需要进行定制化组�
 |            | link_misc         | ——       | 杂项                                                         |
 |            | link_ota          | ——       | OTA升级代码实现                                              |
 |            | network           | coap     | CoAP的适配及协议实现                                         |
-|            |                   | dtls     | mbedtls的适配及协议实现                                      |
+|            |                   | tls      | mbedtls的适配及协议实现                                      |
 |            |                   | lwm2m    | LwM2M的开源协议栈wakaama的适配                               |
 |            |                   | mqtt     | MQTT的适配及协议实现                                         |
 |            |                   | tcpip    | TCPIP适配及协议栈实现、lwIP驱动、OS适配及协议栈实现、MacOS_socket适配及协议栈实现 |
@@ -47,12 +47,13 @@ IoT Device SDK Tiny具备可裁剪特性，可以根据需要进行定制化组�
 - 本SDK脱离OS，因此必定需要osal层以及相应的操作系统适配文件，如该SDK中的 xx_imp.c文件。
 - MQTT底层采用tcpip因此也需要移植或者适配TCPIP
 - 同时MQTT协议的数据收发都是使用JSON格式完成的，因此需要cJson。
-- 如果加密还需要使用dtls文件
+- 如果加密还需要使用tls文件,在生成username和password的时候需要使用hash256算法，此时需要调用mbedtls
 - 对接云的oc层各个协议中均使用到了队列，因此要用到queue。
 - inc中存放的是内核内部使用头文件，link_misc以及日志link_log也是较为必要的。
 - 宏定义开关可以参考makefile文件以及iot_config.h文件。
+- 至于其他组件如at、stimer、shell等可以根据用户需求自行添加
 
-因此轻量级SDK中应该包含如下文件夹：cJSON、inc、link_log、link_misc、network中的dtls、mqtt、tcpip等文件、oc中的oc_mqtt以及os中的osal文件、queue文件。
+因此轻量级SDK中应该包含如下文件夹：cJSON、inc、link_log、link_misc、network中的tls、mqtt、tcpip等文件、oc中的oc_mqtt以及os中的osal文件、queue文件。
 
 ## 移植步骤
 
@@ -151,8 +152,8 @@ IoT Device SDK Tiny也提供了抽象层sal，用户可以调用link_sal_install
 //enable queue
 #define CONFIG_LINKQUEUE_ENABLE 1
 
-//enable DTLS_AL link_main
-#define CONFIG_DTLS_AL_ENABLE 1
+//enable TLS_AL link_main
+#define CONFIG_TLS_AL_ENABLE 1
 #define CONFIG_MBEDTLS_ENABLE 1
 #define CONFIG_MBEDTLS_PSK 1
 
@@ -184,4 +185,3 @@ IoT Device SDK Tiny也提供了抽象层sal，用户可以调用link_sal_install
 
 #define CONFIG_IOT_LINK_CONFIGFILE "iot_config.h"
 ```
-

@@ -37,7 +37,7 @@ coap_dtls_is_supported(void) {
 }
 
 void coap_dtls_startup(void) {
-  dtls_init();
+  tls_init();
   dtls_ticks(&dtls_tick_0);
   coap_ticks(&coap_tick_0);
 }
@@ -347,12 +347,12 @@ coap_dtls_send(coap_session_t *session,
   int res;
   uint8_t *data_rw;
 
-  coap_log(LOG_DEBUG, "call dtls_write\n");
+  coap_log(LOG_DEBUG, "call tls_write\n");
 
   coap_event_dtls = -1;
   /* Need to do this to not get a compiler warning about const parameters */
   memcpy (&data_rw, &data, sizeof(data_rw));
-  res = dtls_write((struct dtls_context_t *)session->context->dtls_context,
+  res = tls_write((struct dtls_context_t *)session->context->dtls_context,
     (session_t *)session->tls, data_rw, data_len);
 
   if (res < 0)

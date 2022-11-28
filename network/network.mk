@@ -5,7 +5,7 @@
 include $(iot_link_root)/network/tcpip/tcpip.mk
 
 #configure the dtls for the iot link
-include $(iot_link_root)/network/dtls/dtls.mk
+include $(iot_link_root)/network/tls/tls.mk
 
 #configure the mqtt
 include $(iot_link_root)/network/mqtt/mqtt.mk
@@ -15,5 +15,3 @@ include $(iot_link_root)/network/lwm2m/lwm2m.mk
 
 #configure the coap
 include $(iot_link_root)/network/coap/coap.mk
-
-
