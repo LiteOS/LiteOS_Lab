@@ -35,6 +35,11 @@
 #ifndef OC_MQTT_EVENT_H
 #define OC_MQTT_EVENT_H
 
+#define SOFT_BUS_EVENT_REQ        "soft_bus_config_request"
+#define SOFT_BUS_SERVICEID        "$oh_soft_bus"
+#define BUS_ID                    "bus_id"
+#define BUS_INFOS                 "bus_infos"
+#define BUS_KEY                   "bus_key"
 /**
  * @brief:the user could use this function to report the version to the iot platform
  *
@@ -86,4 +91,16 @@ typedef enum {
 int oc_mqtt_report_upgradeprogress(const char *deviceID, const char *objectDeviceID, int upgraderet,
     const char *version, int progress);
 
+/**
+ * @brief get latest information of softbus from iotda
+ *
+ * @param busId if NULL, get all information of softbus, else get by busId
+ */
+void OcMqttGetLatestSoftBusInfo(char *busId);
+
+/**
+ * @brief report the information of device, include SDK version and so on.
+ *
+ */
+void OcMqttReportDeviceInfo();
 #endif /* OC_MQTT_EVENT_H */

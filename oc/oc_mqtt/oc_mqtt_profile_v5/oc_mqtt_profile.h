@@ -58,6 +58,8 @@
 #define CN_OC_JSON_KEY_FWVERSION        "fw_version"
 #define CN_OC_JSON_KEY_VERSION          "version"
 #define CN_OC_JSON_KEY_PROGRESS         "progress"
+#define CN_OC_JSON_KEY_DESIRED          "desired"
+#define CN_OC_JSON_KEY_SHADOW           "shadow"
 
 // /< UP means the device send data to the cloud
 typedef enum {
@@ -184,7 +186,19 @@ typedef struct {
 } oc_mqtt_profile_service_t;
 
 /**
- * @brief: use this function to send data to the platform with profile decode
+ * @brief: use this function to send raw data to the platform with profile decode
+ *
+ * @param[in] deviceid: the cloud message receiver, if NULL then send to the connected one
+ *
+ * @param[in] payload: properties list to send to the platform
+ *
+ * @return :defined as en_oc_mqtt_err_code_t
+ *
+ *  */
+int oc_mqtt_profile_raw_propertyreport(char *deviceid, char *msg);
+
+/**
+ * @brief: use this function to send struct data to the platform with profile decode
  *
  * @param[in] deviceid: the cloud message receiver, if NULL then send to the connected one
  *
@@ -194,6 +208,14 @@ typedef struct {
  *
  *  */
 int oc_mqtt_profile_propertyreport(char *deviceid, oc_mqtt_profile_service_t *payload);
+
+/**
+ * @brief report the shadow get from IoTDA
+ *
+ * @param service_id the service id of the shadow
+ * @param shadow the shadow get from IoTDA
+ */
+void OcMqttPropertiesReportByService(char *service_id, cJSON* shadow);
 
 typedef struct {
     void *nxt;                                     // /< maybe much more

@@ -227,38 +227,74 @@ int oc_mqtt_profile_msgup(char *deviceid, oc_mqtt_profile_msgup_t *payload)
     return ret;
 }
 
-#define CN_OC_MQTT_PROFILE_PROPERTYREPORT_TOPICFMT "$oc/devices/%s/sys/properties/report"
-int oc_mqtt_profile_propertyreport(char *deviceid, oc_mqtt_profile_service_t *payload)
+#define CN_OC_MQTT_PROFILE_PROPERTYREPORT_TOPICFMT   "$oc/devices/%s/sys/properties/report"
+int oc_mqtt_profile_raw_propertyreport(const char *deviceid, const char *msg)
 {
     int ret = (int)en_oc_mqtt_err_parafmt;
     char *topic;
-    char *msg;
 
-    if (NULL == deviceid) {
-        if (NULL == s_oc_mqtt_profile_cb.device_id) {
+    if(NULL == deviceid)
+    {
+        if(NULL == s_oc_mqtt_profile_cb.device_id)
+        {
             return ret;
-        } else {
+        }
+        else
+        {
             deviceid = s_oc_mqtt_profile_cb.device_id;
         }
     }
 
-    if ((NULL == payload) || (NULL == payload->service_id) || (NULL == payload->service_property)) {
-        return ret;
+    topic = topic_make(CN_OC_MQTT_PROFILE_PROPERTYREPORT_TOPICFMT, deviceid,NULL);
+
+    if((NULL != topic) && (NULL != msg))
+    {
+        ret = oc_mqtt_publish(topic,(uint8_t *)msg,strlen(msg),(int)en_mqtt_al_qos_1);
     }
-
-    topic = topic_make(CN_OC_MQTT_PROFILE_PROPERTYREPORT_TOPICFMT, deviceid, NULL);
-    msg = oc_mqtt_profile_package_propertyreport(payload);
-
-    if ((NULL != topic) && (NULL != msg)) {
-        ret = oc_mqtt_publish(topic, (uint8_t *)msg, strlen(msg), (int)en_mqtt_al_qos_1);
-    } else {
+    else
+    {
         ret = (int)en_oc_mqtt_err_sysmem;
     }
 
     osal_free(topic);
+
+    return ret;
+}
+
+int oc_mqtt_profile_propertyreport(char *deviceid,oc_mqtt_profile_service_t *payload)
+{
+    int ret = (int)en_oc_mqtt_err_parafmt;
+    char *msg;
+
+    if((NULL== payload) || (NULL== payload->service_id) || (NULL == payload->service_property))
+    {
+        return ret;
+    }
+
+    msg = oc_mqtt_profile_package_propertyreport(payload);
+    ret = oc_mqtt_profile_raw_propertyreport(deviceid, msg);
+
     osal_free(msg);
 
     return ret;
+}
+
+void OcMqttPropertiesReportByService(char *service_id, cJSON* properties)
+{
+    cJSON *services = cJSON_CreateArray();
+    cJSON *service = cJSON_CreateObject();
+    cJSON * payload = cJSON_CreateObject();
+    cJSON_AddItemReferenceToObject(service, CN_OC_JSON_KEY_PROPERTIES, properties);
+    cJSON_AddStringToObject(service, CN_OC_JSON_KEY_SERVICEID, service_id);
+    cJSON_AddNullToObject(service, CN_OC_JSON_KEY_EVENTTIME);
+    cJSON_AddItemToArray(services, service);
+    cJSON_AddItemToObject(payload, CN_OC_JSON_KEY_SERVICES, services);
+    if (!strcmp(service_id, cJSON_GetStringValue(cJSON_GetObjectItem(shadow, CN_OC_JSON_KEY_SERVICEID)))) {
+        char *msg = cJSON_Print(payload);
+        oc_mqtt_profile_raw_propertyreport(NULL, msg);
+        free(msg);
+        cJSON_Delete(payload);
+    }
 }
 
 #define CN_OC_MQTT_PROFILE_GWPROPERTYREPORT_TOPICFMT "$oc/devices/%s/sys/gateway/sub_devices/properties/report"

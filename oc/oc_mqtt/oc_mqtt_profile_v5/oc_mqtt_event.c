@@ -40,6 +40,18 @@
 #include "oc_mqtt_event.h"
 #include "oc_mqtt_profile.h"
 
+#include SDK_INFO                             "$sdk_info"
+#include SDK_INFO_TYPE                        "sdk_info_report"
+#include CN_OC_JSON_KEY_SDK_VERSION           "device_sdk_version"
+#include CN_OC_JSON_KEY_SW_VERSION            "sw_version"
+#include CN_OC_JSON_KEY_FW_VERSION            "fw_version"
+#include CN_OC_JSON_KEY_DEVICE_IP             "device_ip"
+
+#include CN_OC_JSON_VALUE_SDK_VERSION         "C_v2.2.2"
+#include CN_OC_JSON_VALUE_SW_VERSION          "v1.0"
+#include CN_OC_JSON_VALUE_FW_VERSION          "v1.0"
+#include CN_OC_JSON_VALUE_DEVICE_IP           "127.0.0.1"
+
 /**
 Topic: $oc/devices/{device_id}/sys/events/up
 数据格式：
@@ -150,4 +162,64 @@ int oc_mqtt_report_upgradeprogress(const char *deviceID, const char *objectDevic
     ret = oc_mqtt_profile_reportevent((char *)deviceID, &event);
 
     return ret;
+}
+
+void OcMqttGetLatestSoftBusInfo(char *busId)
+{
+    oc_mqtt_profile_kv_t busIdInfo;
+    oc_mqtt_profile_event_t softBus;
+
+    softBus.event_time = NULL;
+    softBus.event_type = SOFT_BUS_EVENT_REQ;
+    softBus.service_id = SOFT_BUS_SERVICEID;
+    softBus.object_device_id = NULL;
+    if (busId == NULL) {
+        softBus.paras = NULL;
+    } else {
+        softBus.paras = &busIdInfo;
+        busIdInfo.key = BUS_ID;
+        busIdInfo.value = busId;
+        busIdInfo.type = EN_OC_MQTT_PROFILE_VALUE_STRING;
+        busIdInfo.nxt = NULL;
+    }
+
+    oc_mqtt_profile_reportevent(NULL, &softBus);
+    return;
+}
+
+void OcMqttReportDeviceInfo()
+{
+    oc_mqtt_profile_event_t service;
+    oc_mqtt_profile_kv_t sdk;
+    oc_mqtt_profile_kv_t sw;
+    oc_mqtt_profile_kv_t fw;
+    oc_mqtt_profile_kv_t device_ip;
+
+    service.event_time = NULL;
+    service.service_id = SDK_INFO;
+    service.event_type = SDK_INFO_TYPE;
+    service.paras = &sdk;
+
+    sdk.key = CN_OC_JSON_KEY_SDK_VERSION;
+    sdk.value = CN_OC_JSON_VALUE_SDK_VERSION;
+    sdk.type = EN_OC_MQTT_PROFILE_VALUE_STRING;
+    sdk.nxt = &sw;
+
+    sw.key = CN_OC_JSON_KEY_SW_VERSION;
+    sw.value = CN_OC_JSON_VALUE_SW_VERSION;
+    sw.type = EN_OC_MQTT_PROFILE_VALUE_STRING;
+    sw.nxt = &fw;
+
+    fw.key = CN_OC_JSON_KEY_FW_VERSION;
+    fw.value = CN_OC_JSON_VALUE_FW_VERSION;
+    fw.type = EN_OC_MQTT_PROFILE_VALUE_STRING;
+    fw.nxt = &device_ip;
+
+    device_ip.key = CN_OC_JSON_KEY_DEVICE_IP;
+    device_ip.value = CN_OC_JSON_VALUE_DEVICE_IP;
+    device_ip.type = EN_OC_MQTT_PROFILE_VALUE_STRING;
+    device_ip.nxt = NULL;
+
+    oc_mqtt_profile_reportevent(NULL, &service);
+    return;
 }

@@ -41,6 +41,7 @@
 #include "tls_al.h"
 #include "mqtt_al.h"
 #include "oc_mqtt_al.h"
+#include "oc_mqtt_event.h"
 #include "oc_mqtt_profile.h"
 #include "queue.h"
 #include "iot_config.h"
@@ -154,13 +155,14 @@ static const char *s_client_pk_pwd = "123456";
 
 #define CN_APP_LIFETIME 60 // seconds
 typedef enum {
-    en_msg_cmd = 0,
-    en_msg_report,
+    en_msg_receive = 0,
+    en_msg_report = EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_LAST + 1,
     en_msg_conn,
     en_msg_disconn,
 } en_msg_type_t;
 
 typedef struct {
+    en_oc_mqtt_profile_msg_type_down_t type;
     char* request_id;
     char* payload;
 } cmd_t;
@@ -236,6 +238,19 @@ static void deal_report_msg(report_t* report)
     return;
 }
 
+int GetShadowByServiceId(char *serviceId)
+{
+    int ret;
+    oc_mqtt_profile_shadowget_t payload;
+    payload.object_device_id = NULL;
+    payload.request_id = "$get_device_shadow";
+
+    // if service_id is NULL can get all service shadow
+    payload.service_id = serviceId;
+    ret = oc_mqtt_profile_getshadow(NULL, &payload);
+    return ret;
+}
+
 // use this function to push all the message to the buffer
 static int msg_rcv_callback(oc_mqtt_profile_msgrcv_t* msg)
 {
@@ -244,11 +259,16 @@ static int msg_rcv_callback(oc_mqtt_profile_msgrcv_t* msg)
     int buf_len;
     app_msg_t* app_msg;
 
-    if ((msg == NULL) || (msg->request_id == NULL) || (msg->type != EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_COMMANDS)) {
+    if (msg == NULL) {
         return ret;
     }
 
-    buf_len = sizeof(app_msg_t) + strlen(msg->request_id) + 1 + msg->msg_len + 1;
+    if (msg->request_id == NULL) {
+        buf_len = sizeof(app_msg_t) + msg->msg_len + 1;
+    } else {
+        buf_len = sizeof(app_msg_t) + strlen(msg->request_id) + 1 + msg->msg_len + 1;
+    }
+
     buf = malloc(buf_len);
     if (buf == NULL) {
         return ret;
@@ -256,12 +276,15 @@ static int msg_rcv_callback(oc_mqtt_profile_msgrcv_t* msg)
     app_msg = (app_msg_t*)buf;
     buf += sizeof(app_msg_t);
 
-    app_msg->msg_type = en_msg_cmd;
+    app_msg->msg_type = en_msg_receive;
+    app_msg->msg.cmd.type = msg->type;
     app_msg->msg.cmd.request_id = buf;
-    buf_len = strlen(msg->request_id);
-    buf += (buf_len + 1);
-    memcpy_s(app_msg->msg.cmd.request_id, buf_len, msg->request_id, buf_len);
-    app_msg->msg.cmd.request_id[buf_len] = '\0';
+    if (msg->request_id != NULL) {
+        buf_len = strlen(msg->request_id);
+        buf += (buf_len + 1);
+        memcpy_s(app_msg->msg.cmd.request_id, buf_len, msg->request_id, buf_len);
+        app_msg->msg.cmd.request_id[buf_len] = '\0';
+    }
 
     buf_len = msg->msg_len;
     app_msg->msg.cmd.payload = buf;
@@ -274,6 +297,15 @@ static int msg_rcv_callback(oc_mqtt_profile_msgrcv_t* msg)
     }
 
     return ret;
+}
+
+static void oc_propertysetresp(char *reqyest_id, int ret_code)
+{
+    oc_mqtt_profile_propertysetresp_t setresp;
+    setresp.request_id = reqyest_id;
+    setresp.ret_code = ret_code;
+    setresp.ret_description = NULL;
+    (void)oc_mqtt_profile_propertysetresp(NULL, &setresp);
 }
 
 static void oc_cmdresp(cmd_t* cmd, int cmdret)
@@ -315,6 +347,91 @@ EXIT_CMDOBJ:
 EXIT_JSONPRASE:
     oc_cmdresp(cmd, cmdret);
     return;
+}
+
+static void deal_event_down(cmd_t* cmd)
+{
+    cJSON *payload = cJSON_Parse(cmd->payload);
+    cJSON *services = cJSON_GetObjectItem(payload, CN_OC_JSON_KEY_SERVICES);
+    cJSON *service = NULL;
+    cJSON_ArrayForEach(service, services) {
+        cJSON *serviceId = cJSON_GetObjectItem(service, CN_OC_JSON_KEY_SERVICEID);
+        if (strcmp(cJSON_GetStringValue(serviceId), SOFT_BUS_SERVICEID) == 0) {
+           cJSON *paras = cJSON_GetObjectItem(service, CN_OC_JSON_KEY_PARAS);
+           cJSON *busInfos = cJSON_GetObjectItem(paras, BUS_INFOS);
+           cJSON *busInfo;
+           cJSON_ArrayForEach(busInfo, busInfos) {
+               cJSON *busKey = cJSON_GetObjectItem(busInfo, BUS_KEY);
+               char *pin = cJSON_GetStringValue(busKey);
+               printf("========the pin is %s=======\n", pin);
+           }
+        }
+    }
+    cJSON_Delete(payload);
+    return;
+}
+
+static void deal_property_set(cmd_t *cmd)
+{
+    cJSON *payload = cJSON_Parse(cmd->payload);
+    cJSON *services = cJSON_GetObjectItem(payload, CN_OC_JSON_KEY_SERVICES);
+    cJSON *service = NULL;
+    cJSON_ArrayForEach(service, services) {
+        cJSON *serviceId = cJSON_GetObjectItem(service, CN_OC_JSON_KEY_SERVICEID);
+        if (!strcmp(cJSON_GetStringValue(serviceId), SOFT_BUS_SERVICEID)) {
+            cJSON *properties = cJSON_GetObjectItem(service, CN_OC_JSON_KEY_PROPERTIES);
+            cJSON *property = NULL;
+            cJSON_ArrayForEach(property, properties) {
+                char *busId = property->string;
+                OcMqttGetLatestSoftBusInfo(busId);
+            }
+        }
+    }
+    cJSON_Delete(payload);
+    oc_setresp(cmd->request_id, 0);
+    return;
+}
+
+static void deal_shadow_get(cmd_t* cmd)
+{
+    cJSON *payload = cJSON_Parse(cmd->payload);
+    cJSON *shadow = cJSON_GetObjectItem(payload, CN_OC_JSON_KEY_SHADOW);
+    cJSON *service = NULL;
+    cJSON_ArrayForEach(service, shadow) {
+        cJSON *serviceId = cJSON_GetObjectItem(service, CN_OC_JSON_KEY_SERVICEID);
+        if (!strcmp(cJSON_GetStringValue(serviceId), SOFT_BUS_SERVICEID)) {
+            cJSON *desired = cJSON_GetObjectItem(service, CN_OC_JSON_KEY_DESIRED);
+            cJSON *properties = cJSON_GetObjectItem(desired, CN_OC_JSON_KEY_PROPERTIES);
+            cJSON *property = NULL;
+            cJSON_ArrayForEach(property, properties) {
+                char *busId = property->string;
+                OcMqttGetLatestSoftBusInfo(busId);
+            }
+            OcMqttPropertiesReportByService(SOFT_BUS_SERVICEID, service);
+        }
+    }
+    cJSON_Delete(payload);
+    return;
+}
+
+static void deal_receive_msg(cmd_t *cmd)
+{
+    switch (cmd->type) {
+    case EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_COMMANDS:
+        deal_cmd_msg(cmd);
+        break;
+    case EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_PROPERTYSET:
+        deal_property_set(cmd);
+        break;
+    case EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_EVENT:
+        deal_event_down(cmd);
+        break;
+    case EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_SHADOWGET:
+        deal_shadow_get(cmd);
+        break;
+    default:
+        break;
+    }
 }
 
 static int CloudMainTaskEntry(void *args)
@@ -361,13 +478,14 @@ static int CloudMainTaskEntry(void *args)
         printf("oc_mqtt_profile_connect faild!\r\n");
     }
 
+    GetShadowByServiceId(NULL);
     while (1) {
         app_msg = NULL;
         (void)queue_pop(g_app_cb.app_msg, (void**)&app_msg, (int)cn_osal_timeout_forever);
         if (app_msg != NULL) {
             switch (app_msg->msg_type) {
-                case en_msg_cmd:
-                    deal_cmd_msg(&app_msg->msg.cmd);
+                case en_msg_receive:
+                    deal_receive_msg(&app_msg->msg.cmd);
                     break;
                 case en_msg_report:
                     deal_report_msg(&app_msg->msg.report);
