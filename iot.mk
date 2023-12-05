@@ -1,7 +1,7 @@
 ################################################################################
 # this is used for compile the iotlink
 ################################################################################
-iot_link_root = $(SDK_DIR)/iot_link
+iot_link_root = $(SDK_DIR)
 
 #configure the common includes
 include $(iot_link_root)/inc/inc.mk
@@ -42,9 +42,6 @@ include $(iot_link_root)/network/network.mk
 #configure the oceanconnect
 include $(iot_link_root)/oc/oc.mk
 
-#configure the ota	
-include $(iot_link_root)/link_ota/build.mk
-
 #configure demos
 include $(iot_link_root)/demos/demos.mk
 
@@ -55,5 +52,3 @@ C_SOURCES += $(iot_link_src)
 		
 iot_link_inc = -I $(iot_link_root)
 C_INCLUDES += $(iot_link_inc)
-
-
